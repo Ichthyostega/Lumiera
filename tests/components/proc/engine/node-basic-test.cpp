@@ -62,6 +62,12 @@ namespace test  {
         
       };
   
+      
+    inline PEffect
+    createTestEffectMObject()
+    {
+      UNIMPLEMENTED ("how to create a dummy Effect for tests");
+    }
   }
   
   
@@ -82,10 +88,7 @@ namespace test  {
           
           WiringSituation setup(testSource);
           
-          setup.defineInput (4, predecessor1, 2);
-          setup.defineInput (2, predecessor2);
-          
-          PEffect pEffect;  /////////////////TODO how to get an simple Effect MObject for Tests???
+          PEffect pEffect = createTestEffectMObject();
           ProcNode* pNode = nodeFab (pEffect, setup);
           ASSERT (pNode);
           

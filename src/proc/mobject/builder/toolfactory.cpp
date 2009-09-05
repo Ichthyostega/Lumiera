@@ -40,7 +40,7 @@ namespace builder {
       session::Fixture & fixedTimeline_;
       auto_ptr<engine::RenderGraph> procSegment_;
       
-      scoped_ptr<SegementationTool> segmentation_;
+      scoped_ptr<SegmentationTool> segmentation_;
       scoped_ptr<NodeCreatorTool> fabrication_;
       
       
@@ -55,7 +55,7 @@ namespace builder {
     : state_(new BuildProcessState (theTimeline))
   {
     ENSURE (state_->fixedTimeline_.isValid());
-    ENSURE (state_->procSegment_);
+    ENSURE (state_->procSegment_.get());
   }
   
   
@@ -63,21 +63,21 @@ namespace builder {
   ToolFactory::configureSegmentation ()
   {
     REQUIRE (state_->fixedTimeline_.isValid());
-    REQUIRE (state_->procSegment_);
+    REQUIRE (state_->procSegment_.get());
     
-    state->segmentation_.reset (new SegmentationTool (state->fixedTimeline_));
-    return *(state->segmentation_);
+    state_->segmentation_.reset (new SegmentationTool (state_->fixedTimeline_));
+    return *(state_->segmentation_);
   }
   
   
   NodeCreatorTool &
   ToolFactory::configureFabrication () //////////////////////TODO: should iterate in some way!
   {
-    REQUIRE (state_->procSegment_);
-    REQUIRE (!isnil (*(state_>segmentation)));
+    REQUIRE (state_->procSegment_.get());
+    REQUIRE (!isnil (*(state_->segmentation_)));
     
-    state->fabrication_.reset (new NodeCreatorTool(*this));
-    return *(state->fabrication_);
+    state_->fabrication_.reset (new NodeCreatorTool(*this, *state_->procSegment_));
+    return *(state_->fabrication_);
   }
   
   

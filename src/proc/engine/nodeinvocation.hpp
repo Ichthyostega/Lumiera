@@ -88,7 +88,7 @@ namespace engine {
       
       
       
-    private: /* === proxying the State interface === */
+    public: /* === proxying the State interface === */
       
       virtual void releaseBuffer (BuffHandle& bh)       { current_.releaseBuffer (bh); }
       
@@ -96,6 +96,8 @@ namespace engine {
       
       virtual BuffHandle fetch (FrameID const& fID)     { return current_.fetch (fID); }
       
+      virtual BuffTableStorage& getBuffTableStorage()   { return current_.getBuffTableStorage(); } 
+
       // note: allocateBuffer()  is chosen specifically based on the actual node wiring
       
     };
@@ -132,9 +134,10 @@ namespace engine {
           buffTab(0)
         { }
       
-      const uint nrO()          const { return wiring.nrO; }
-      const uint nrI()          const { return wiring.nrI; }
-      const uint buffTabSize()  const { return nrO()+nrI(); }
+    public:
+      uint nrO()          const { return wiring.nrO; }
+      uint nrI()          const { return wiring.nrI; }
+      uint buffTabSize()  const { return nrO()+nrI(); }
       
       /** setup the link to an externally allocated buffer table */
       void setBuffTab (BuffTable* b) { this->buffTab = b; }
@@ -208,6 +211,7 @@ namespace engine {
   template<class Strategy, class BufferProvider>
   class ActualInvocationProcess
     : public BufferProvider
+    , private Strategy
     {
     public:
       ActualInvocationProcess (State& callingProcess, WiringDescriptor const& w, const uint outCh)

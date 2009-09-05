@@ -61,17 +61,15 @@ namespace engine {
     : public WiringDescriptor
     {
       
-      NodeWiring(WiringSituation& setup)
+    public:
+      NodeWiring(WiringSituation const& setup)
         : WiringDescriptor(setup.makeOutDescriptor(), 
                            setup.makeInDescriptor(),
                            setup.resolveProcessingFunction(),
                            setup.createNodeID())
         { }
       
-      friend class WiringFactory;
-      
-      
-    protected:
+    private:
       virtual BuffHandle
       callDown (State& currentProcess, uint requestedOutputNr)  const 
         {

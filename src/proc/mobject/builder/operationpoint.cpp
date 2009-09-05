@@ -22,7 +22,9 @@
 
 
 #include "proc/mobject/builder/operationpoint.hpp"
+#include "proc/engine/procnode.hpp"
 #include "proc/asset/media.hpp"
+#include "proc/asset/proc.hpp"
 #include "proc/engine/nodefactory.hpp"
 #include "lib/streamtype.hpp"
 //#include "common/util.hpp"
@@ -55,18 +57,33 @@ namespace builder {
         { }
       
       /** initiate a connection chain at a real source */
-      RefPoint (NodeFactory& nFactory, asset::Media srcMedia)
+      RefPoint (NodeFactory& nFactory, asset::Media const& srcMedia)
         : alloc_(nFactory),
-          sources_(establishMediaChannels (srcMedia)),
           sType_(0)
         {
+          establishMediaChannels (srcMedia);
           deriveSourceStreamType ();
         }
+      
+      
+    private:
+      void
+      establishMediaChannels (asset::Media const& srcMedia)
+        {
+          UNIMPLEMENTED ("find out about the actual channels for this stream to connect");
+        }
+      
+      void
+      deriveSourceStreamType ()
+        {
+          UNIMPLEMENTED ("calculate / decide on the effective stream type used within this pipe");
+        }
+      
     };
   
   
   
-  OperationPoint::OperationPoint (NodeFactory& nFact,, asset::Media const& srcMedia)
+  OperationPoint::OperationPoint (NodeFactory& nFact, asset::Media const& srcMedia)
     : refPoint_(new RefPoint (nFact, srcMedia))
   { }
   
@@ -77,7 +94,7 @@ namespace builder {
   
   
   void
-  OperationPoint::attach (asset::PProc const& mediaProc)
+  OperationPoint::attach (asset::Proc const& mediaProc)
   {
     UNIMPLEMENTED ("Actually-really-finally create a node corresponding to this processing asset");
   }

@@ -75,13 +75,32 @@ namespace engine {
       long flags_;
       asset::Proc::ProcFunc* function_;
       
-    protected:
-      RefArray<ChannelDescriptor>& makeOutDescriptor() ;
-      RefArray<InChanDescriptor>&  makeInDescriptor() ;
-      WiringDescriptor::ProcFunc*  resolveProcessingFunction() ;
-      lumiera::NodeID const&       createNodeID() ;
+    public: /* === API for querying collected data === */
+      RefArray<ChannelDescriptor>&
+      makeOutDescriptor()  const
+        {
+          UNIMPLEMENTED ("build new output descriptors for the node under construction");  //////////TODO: where to get the information about the output channels???
+        }
       
-      friend class NodeWiring;
+      RefArray<InChanDescriptor>&
+      makeInDescriptor()   const
+        {
+          UNIMPLEMENTED ("build new input descriptors for the node under construction");
+        }
+      
+      WiringDescriptor::ProcFunc*
+      resolveProcessingFunction()  const
+        {
+          REQUIRE (function_);
+          return function_;
+        }
+      
+      lumiera::NodeID const&
+      createNodeID()  const
+        {
+          UNIMPLEMENTED ("initiate generation of a new unique node-ID"); // see rendergraph.cpp
+        }
+      
       
       
     public: /* === API for specifying the desired wiring === */

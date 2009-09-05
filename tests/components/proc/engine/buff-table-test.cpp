@@ -108,12 +108,12 @@ namespace test  {
       return (b.outHandle == lastLevel )  // storage is allocated continuously
           && (b.outBuff   <= b.inBuff  )  // input slots are behind the output slots
           && (b.outHandle <= b.inHandle)
-          && (b.inBuff   == &b.outBuff  [num.getNrO()])
-          && (b.inHandle == &b.outHandle[num.getNrO()])
-          && (not_within(b.outBuff, b.outHandle, &b.inHandle[num.getNrO()])) // storage doesn't overlap
-          && (not_within(b.inBuff,  b.outHandle, &b.inHandle[num.getNrO()]))
-          && (not_within(b.outHandle, b.outBuff, &b.inBuff[num.getNrO()]))
-          && (not_within(b.inHandle,  b.outBuff, &b.inBuff[num.getNrO()]))
+          && (b.inBuff   == &b.outBuff  [num.nrO])
+          && (b.inHandle == &b.outHandle[num.nrO])
+          && (not_within(b.outBuff, b.outHandle, &b.inHandle[num.nrO])) // storage doesn't overlap
+          && (not_within(b.inBuff,  b.outHandle, &b.inHandle[num.nrO]))
+          && (not_within(b.outHandle, b.outBuff, &b.inBuff[num.nrO]))
+          && (not_within(b.inHandle,  b.outBuff, &b.inBuff[num.nrO]))
            ;
     }
   } // (End) internal defs

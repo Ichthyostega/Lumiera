@@ -137,7 +137,7 @@ namespace engine {
           tab_(storage.claim (siz_)),
           sto_(storage)
         {
-          const uint nrO(wd.getNrO());
+          const uint nrO(wd.nrO);
           
           // Setup the public visible table locations
           this->outHandle = &tab_.first[ 0 ];

@@ -76,15 +76,37 @@ namespace config {
   
   /**
    * Base class of all concrete invocation sequences.
-   * Could contain a collection of functions used to build up the invocation sequence.
-   * Currently contains just a marker used to detect the existence of an concrete
+   * Provides a collection of functions used to build up the invocation sequence.
+   * Additionally providing a marker used to detect the existence of an concrete
    * definition/specialisation for a given specific configuration.
    */
-  class OperationBase
+  struct OperationBase
     {
       typedef lumiera::Yes_t is_defined;
       
+      BuffHandle
+      getSource (Invocation& ivo, uint chanNo)
+        {
+          UNIMPLEMENTED ("retrieve source data provided by the backend/scheduler");
+        }
       
+      BuffHandle
+      pullPredecessor (Invocation& ivo, uint chanNo)
+        {
+          UNIMPLEMENTED ("invoke pull() on the denoted predecessor node");
+        }
+      
+      void
+      releaseBuffers(BuffHandle* table, uint slotCnt, uint slot_to_retain) //////////////TODO this is going to be implemented rather by smart-handle, Ticket #249
+        {
+          UNIMPLEMENTED ("release all buffers with the exception of the desired output");
+        }
+      
+      bool
+      validateBuffers (Invocation& ivo)
+        {
+          UNIMPLEMENTED ("Do a final, specifically tailored validation step on the buffers prior to invoking the procees function");
+        }
     };
   
   
@@ -130,8 +152,8 @@ namespace config {
           
           for (uint i = 0; i < ivo.nrI(); ++i )
             {
-              inBuff[i] =
-                *(inH[i] = this->pullPredecessor(ivo,i)); // invoke predecessor
+              inBuff[i] = 
+               &*(inH[i] = this->pullPredecessor(ivo,i)); // invoke predecessor
               // now Input #i is ready...
             }
           return NEXT::step (ivo);
@@ -155,7 +177,7 @@ namespace config {
           for (uint i = 0; i < ivo.nrI(); ++i )
             {
               inBuff[i] = outBuff[i] =
-                *(inH[i] = outH[i] = this->getSource(ivo,i));
+               &*(inH[i] = outH[i] = this->getSource(ivo,i));
               // now Input #i is ready...
             }
           return NEXT::step (ivo);
@@ -177,7 +199,7 @@ namespace config {
           for (uint i = 0; i < ivo.nrO(); ++i )
             {
               outBuff[i] =
-                 *(outH[i] = ivo.allocateBuffer (ivo.wiring.out[i].bufferType));
+                &*(outH[i] = ivo.allocateBuffer (ivo.wiring.out[i].bufferType));
               // now Output buffer for channel #i is available...
             }
           return NEXT::step (ivo);
@@ -197,7 +219,7 @@ namespace config {
           
            // Invoke our own process() function,
           //  providing the array of outBuffer+inBuffer ptrs
-          ivo.wiring.procFunction (ivo.buffTab->outBuff);
+          (*ivo.wiring.procFunction) (*ivo.buffTab->outBuff);
           
           return NEXT::step (ivo);
         }
@@ -254,25 +276,21 @@ namespace config {
     };
   
   
-  
-  template< char CACHE_Fl   =NOT_SET
-          , char INPLACE_Fl =NOT_SET
-          >
-  struct SelectBuffProvider;
-  
-  template<> struct SelectBuffProvider<CACHING>         { typedef AllocBufferFromCache  Type; };
-  template<> struct SelectBuffProvider<NOT_SET,INPLACE> { typedef AllocBufferFromParent Type; };
-  template<> struct SelectBuffProvider<CACHING,INPLACE> { typedef AllocBufferFromCache  Type; };
-  template<> struct SelectBuffProvider<>                { typedef AllocBufferFromParent Type; };
+  using lumiera::typelist::Config;
+                                              ///////////////////////TODO: selecting this way isn't especially readable,
+                                              ///////////////////////////: but BufferProvider selection is going to be solved differently anyway, see Ticket #249
+  template<class CONF>
+  struct SelectBuffProvider                                          { typedef AllocBufferFromParent Type; };
+  template<char PROC_ign, char INPLA_ign>
+  struct SelectBuffProvider< Config<CACHING, PROC_ign, INPLA_ign> >  { typedef AllocBufferFromCache  Type; };
   
   
   template<class Config>
   struct Strategy ;
   
-  using lumiera::typelist::Config;
   
-  template<char INPLACE>
-  struct Strategy< Config<CACHING,PROCESS,INPLACE> >
+  template<char INPLACE_ign>
+  struct Strategy< Config<CACHING,PROCESS,INPLACE_ign> >
     : QueryCache<
        AllocBufferTable<
         PullInput<
@@ -283,8 +301,8 @@ namespace config {
              OperationBase > > > > > > >
     { };
   
-  template<char INPLACE>
-  struct Strategy< Config<PROCESS,INPLACE> >
+  template<char INPLACE_ign>
+  struct Strategy< Config<PROCESS,INPLACE_ign> >
     : AllocBufferTable<
        PullInput<
         AllocOutput<

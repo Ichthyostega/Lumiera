@@ -21,57 +21,55 @@
 */
 
 
-#ifndef MOBJECT_BUILDER_NODECREATERTOOL_H
-#define MOBJECT_BUILDER_NODECREATERTOOL_H
+#ifndef MOBJECT_BUILDER_NODECREATORTOOL_H
+#define MOBJECT_BUILDER_NODECREATORTOOL_H
 
 
 #include "proc/mobject/builder/applicablebuildertargettypes.hpp"
 
 #include "proc/engine/rendergraph.hpp"
-#include "proc/mobject/builder/toolfactory.hpp"
 
 
 
 namespace mobject {
-  namespace builder {
-
-
-
-
-    /**
-     * This Tool implementation plays the central role in the build process:
-     * given a MObject from Session, it is able to attach ProcNodes to the 
-     * render engine under construction such as to reflect the properties 
-     * of the MObject in the actual render.
-     */
-    class NodeCreatorTool 
-      : public ApplicableBuilderTargetTypes<NodeCreatorTool>
-      {
-        ToolFactory& toolKit_;
-        
-        /** holds the RenderGraph (Render Engine Element)
-         *  to be built by the current build step */
-        engine::RenderGraph& proc_;
-        
-        
-        NodeCreatorTool (ToolFactory& tofa, engine::RenderGraph& proc)
-          : toolKit_(tofa),
-            proc_(proc)
-          { }
-        
-        friend class ToolFactory;
-        
-      public:
-        virtual void treat (mobject::session::Clip& clip) ;
-        virtual void treat (mobject::session::Effect& effect) ;
-        virtual void treat (mobject::session::Auto<double>& automation) ;  //TODO: the automation-type-problem
-        virtual void treat (mobject::Buildable& something) ;
-
-
-
-      };
-
-  } // namespace mobject::builder
-
-} // namespace mobject
+namespace builder {
+  
+  class ToolFactory;
+  
+  
+  /**
+   * This Tool implementation plays the central role in the build process:
+   * given a MObject from Session, it is able to attach ProcNodes to the
+   * render engine under construction such as to reflect the properties
+   * of the MObject in the actual render.
+   */
+  class NodeCreatorTool 
+    : public ApplicableBuilderTargetTypes<NodeCreatorTool>
+    {
+      ToolFactory& toolKit_;
+      
+      /** holds the RenderGraph (Render Engine Element)
+       *  to be built by the current build step */
+      engine::RenderGraph& proc_;
+      
+      
+      NodeCreatorTool (ToolFactory& tofa, engine::RenderGraph& proc)
+        : toolKit_(tofa),
+          proc_(proc)
+        { }
+      
+      friend class ToolFactory;
+      
+    public:
+      virtual void treat (mobject::session::Clip& clip) ;
+      virtual void treat (mobject::session::Effect& effect) ;
+      virtual void treat (mobject::session::Auto<double>& automation) ;  //TODO: the automation-type-problem
+      virtual void treat (mobject::Buildable& something) ;
+      
+      void onUnknown (Buildable& target) ;             /////////TODO why doesn't the treat(Buildable) function shaddow this??
+    };
+  
+  
+  
+}} // namespace mobject::builder
 #endif

@@ -55,12 +55,6 @@ namespace engine {
     typedef Filter<AllConfigs::List, Instantiation<Strategy>::Test> PossibleConfigs;
     
     
-    #define PICK_FLAG(_FLAG_) config::FlagInfo<CONF>::CODE & (_FLAG_)
-    
-    template<class CONF>
-    struct UseBufferProvider
-      : config::SelectBuffProvider< PICK_FLAG (CACHING), PICK_FLAG (INPLACE) >
-      { };
     
     // internal details: setting up a factory for each required configuration
     
@@ -76,9 +70,8 @@ namespace engine {
         AllocationCluster& alloc_;
         
         /* ==== pick actual wiring code ==== */
-        typedef Strategy<CONF> Strategy;
-        typedef typename UseBufferProvider<CONF>::Type BuffProvider;
-        typedef ActualInvocationProcess<Strategy, BuffProvider> InvocationStateType;
+        typedef typename SelectBuffProvider<CONF>::Type BuffProvider;
+        typedef ActualInvocationProcess<Strategy<CONF>, BuffProvider> InvocationStateType;
         
         // the concrete implementation of the glue code...
         typedef NodeWiring<InvocationStateType> ActualWiring;

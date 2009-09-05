@@ -48,7 +48,7 @@ namespace mobject {
       {
 
         /** segments of the engine in ordered sequence. */
-        list<Segement> segments_;
+        list<Segment> segments_;
 
       };
 

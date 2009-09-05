@@ -22,7 +22,15 @@
 
 
 #include "proc/engine/rendergraph.hpp"
+#include "lib/frameid.hpp"
 #include "proc/state.hpp"
+
+namespace lumiera {
+
+  /** storage for the unique node-ID counter */
+  ulong NodeID::currID (0);
+}
+
 
 namespace engine {
 

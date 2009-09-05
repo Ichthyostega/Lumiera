@@ -32,6 +32,10 @@
 #include <string>
 
 
+namespace asset { class Proc; }
+namespace asset { class Media; }
+namespace engine { class NodeFactory; }
+
 namespace mobject {
 namespace builder {
   
@@ -52,11 +56,16 @@ namespace builder {
       boost::scoped_ptr<RefPoint> refPoint_;
       
     public:
+      OperationPoint (engine::NodeFactory&, asset::Media const& srcMedia);
+      OperationPoint (RefPoint const& sourcePoint);
+      
+      
+      
       /** create node(s) corresponding to the given Processor-Asset
        *  and wire them as a successor to this OperationPoint; then
        *  move this point to refer to the resulting new exit node(s)
        */
-      void attach (asset::PProc const&);
+      void attach (asset::Proc const&);
       
       /** connect the output this OperationPoint refers such as to
        *  connect or combine with the input of the already existing

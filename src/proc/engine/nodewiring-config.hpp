@@ -63,8 +63,8 @@
 namespace engine {
 namespace config {
   
-  using lumiera::typelist::FlagInfo;
   using util::contains;
+  using lumiera::typelist::FlagInfo;
   
   using lumiera::typelist::CONFIG_FLAGS_MAX;
   

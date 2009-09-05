@@ -47,10 +47,9 @@ namespace engine {
     intendedWiring.resolveProcessor(effect->getProcAsset());
     WiringDescriptor& wiring = wiringFac_(intendedWiring);
     
-    PNode newNode = alloc_.create<ProcNode> (wiring);
-    ENSURE (newNode);
-    ENSURE (newNode->isValid());
-    return newNode;
+    ProcNode& newNode = alloc_.create<ProcNode> (wiring);
+    ENSURE (newNode.isValid());
+    return &newNode;
   }
 
 

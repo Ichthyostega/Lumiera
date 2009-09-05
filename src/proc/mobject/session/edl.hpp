@@ -62,7 +62,8 @@ namespace mobject {
         bool isValid() { return this->validate(); }
         
       private:
-        virtual bool validate() =0;
+        virtual bool validate();
+        
       };
 
 

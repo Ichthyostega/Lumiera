@@ -51,7 +51,7 @@ namespace lumiera {
       static ulong currID;
     };
   
-  ulong NodeID::currID (0);
+  
   
   
   /**

@@ -48,7 +48,8 @@ namespace session {
       
     public:
       /** access the underlying processing asset */
-      PProc getProcAsset ()  const;
+      asset::Proc const& getProcAsset ()  const;
+                                                //////////////////////TODO: clarify asset->mobject relation and asset dependencies; Ticket #255
       
     };
   

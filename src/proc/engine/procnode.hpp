@@ -113,6 +113,13 @@ namespace engine {
   
   /**
    * Key abstraction of the Render Engine: A Data processing Node
+   * 
+   * @todo it's not clear as of 9/09 if ProcNode shall be an ABC/Interface
+   *       It might be used as ABC (as was the original intention) when implementing
+   *       several query/information functions. In that case, the ctor will become protected.
+   *       The alternative would be to push down these information-retrieval part into a
+   *       configurable element within WiringDescriptor, in which case we even might drop
+   *       ProcNode as a frontent entirely.
    */
   class ProcNode
     {
@@ -121,19 +128,15 @@ namespace engine {
       
       const WiringDescriptor& wiringConfig_;
       
-    protected:
+    public:
       ProcNode (WiringDescriptor const& wd)
         : wiringConfig_(wd)
         { }
-        
       
-      friend class NodeFactory;
-      
+      virtual ~ProcNode() {};  /////////////////////////TODO: do we still intend to build a hierarchy below ProcNode???
       
       
     public:
-      virtual ~ProcNode() {};  /////////////////////////TODO: do we still intend to build a hierarchy below ProcNode???
-      
       bool isValid()  const;
       
       /** output channel count */
@@ -161,7 +164,7 @@ namespace engine {
     };
   
   
-  bool
+  inline bool
   ProcNode::isValid()  const
   {
     UNIMPLEMENTED ("ProcNode validity self-check");

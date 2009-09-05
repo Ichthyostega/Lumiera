@@ -58,6 +58,13 @@ namespace mobject {
     NodeCreatorTool::treat (Auto<double>& automation)
     {
     }
+    
+    
+    void
+    NodeCreatorTool::onUnknown (Buildable& target)
+    {
+      UNIMPLEMENTED ("catch-all when partitioning timeline");  ////////TODO: verify why this gets enfoced here...
+    }
 
 
 

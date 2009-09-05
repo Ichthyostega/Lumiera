@@ -51,21 +51,24 @@ namespace mobject {
       : public ApplicableBuilderTargetTypes<SegmentationTool>
       {
         
+      public:
         SegmentationTool (session::Fixture &) ;
         
-      public:
         void treat (mobject::session::Clip& clip) ;
         void treat (mobject::session::Effect& effect) ;
 
         void treat (mobject::Buildable& something) ;
         
-        //////////////////////////////////////////////////////////TODO make it respond to the util::isnil test!
+        void onUnknown (Buildable& target) ;             /////////TODO why doesn't the treat(Buildable) function shaddow this??
+        
+        bool empty()  const;
 
       private:
         typedef mobject::session::Segment Segment;
 
         /** Partitioning of the Timeline to be created by this tool. */
-        session::Segmentation& segments_;
+        //session::Segmentation& segments_;
+        ///////////////////////////////////////////TODO: either put it inline, or use a scopend_ptr!!!!!!!!!!
 
       };
 
