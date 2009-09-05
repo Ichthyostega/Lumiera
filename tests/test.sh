@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #  Copyright (C)         Lumiera.org
 #    2007 - 2008,        Christian Thaeter <ct@pipapo.org>
 #
@@ -26,10 +26,11 @@
 #   stop testing on the first failure
 
 export LC_ALL=C
-NOBUG_LOGREGEX='^\(\*\*[0-9]*\*\* \)\?[0-9]\{10,\}: \(TRACE\|INFO\|NOTICE\|WARNING\|ERR\|TODO\|PLANNED\|FIXME\|DEPRECATED\|UNIMPLEMENTED\|NOTREACHED\):'
+NOBUG_LOGREGEX='^\(\*\*[0-9]*\*\* \)\?[0-9]\{10,\}: \(TRACE\|INFO\|NOTICE\|WARNING\|ERR\|TODO\|PLANNED\|FIXME\|DEPRECATED\|UNIMPLEMENTED\):'
 
 arg0="$0"
 srcdir="$(dirname "$arg0")"
+vgsuppression_mangle='/^\(\(==\)\|\(\*\*\)[0-9]*\(==\)\|\(\*\*\)\)\|\(\(\*\*[0-9]*\*\* \)\?[0-9]\{10,\}: ECHO:\)/d;'
 
 ulimit -S -t 5 -v 524288
 valgrind=""
@@ -44,10 +45,10 @@ else
 
                 if [[ -x ".libs/vgsuppression" ]]; then
                     ./libtool --mode=execute valgrind --leak-check=yes --show-reachable=yes -q --gen-suppressions=all vgsuppression 2>&1 \
-                        | sed '/^\(==\)\|\(\*\*\)[0-9]*\(==\)\|\(\*\*\)/d;' >vgsuppression.supp
+                        | sed -e "$vgsuppression_mangle" >vgsuppression.supp
                 else
                     valgrind --leak-check=yes --show-reachable=yes -q --gen-suppressions=all ./vgsuppression 2>&1 \
-                        | sed '/^\(==\)\|\(\*\*\)[0-9]*\(==\)\|\(\*\*\)/d;' >vgsuppression.supp
+                        | sed -e "$vgsuppression_mangle" >vgsuppression.supp
                 fi
             fi
             valgrind="$(which valgrind) --leak-check=yes --show-reachable=no --suppressions=vgsuppression.supp -q $VALGRINDFLAGS"
@@ -117,6 +118,7 @@ function TEST()
         rm -f ,send_stdin
         rm -f ,expect_stdout
         rm -f ,expect_stderr
+        expect_return=0
 
 	while read -r line; do
             cmd="${line%%:*}"
@@ -125,7 +127,6 @@ function TEST()
             if [[ ! "$arg" ]]; then
                 arg='^$'
             fi
-            expect_return=0
 
             case $cmd in
             'in')
@@ -180,17 +181,24 @@ function TEST()
 
         echo -n >,testtmp
 
-        if ! test -x $TESTBIN; then
+        local CALL
+        if declare -F | grep $TESTBIN >&/dev/null; then
+            CALL=
+        elif test -x $TESTBIN; then
+            CALL="env $TESTBIN_PREFIX"
+        else
+            CALL='-'
             echo -n >,stdout
             echo "test binary '$TESTBIN' not found" >,stderr
             ((fails+=1))
+        fi
 
-        else
+        if test "$CALL" != '-'; then
 
             if test -f ,send_stdin; then
-                env $TESTBIN_PREFIX $TESTBIN "$@" <,send_stdin 2>,stderr >,stdout
+                $CALL $TESTBIN "$@" <,send_stdin 2>,stderr >,stdout
             else
-                env $TESTBIN_PREFIX $TESTBIN "$@" 2>,stderr >,stdout
+                $CALL $TESTBIN "$@" 2>,stderr >,stdout
             fi &>/dev/null
             return=$?
 
