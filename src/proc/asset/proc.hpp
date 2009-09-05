@@ -82,6 +82,20 @@ namespace asset {
       typedef void (ProcFunc) (PBuff);
       
       
+      /** resolve any plugin and configuration info
+       *  to yield the actual media data processing function.
+       *  @return a function ready to be invoked; either the 
+       *          "real thing" or a suitable placeholder.
+       *  @throw lumiera::error::Fatal if unable to provide
+       *         any usable function or placeholder. This case
+       *         can be considered exceptional and justifies a
+       *         subsystem failure.
+       */
+      virtual ProcFunc*
+      resolveProcessor()  const =0;
+      
+
+      
     protected:
       Proc (const Asset::Ident& idi) : Asset(idi) {}  //////////////TODO
       friend class ProcFactory;

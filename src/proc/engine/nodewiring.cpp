@@ -109,7 +109,7 @@ namespace engine {
       {
         WiringSelector selector;
         
-        WiringFactoryImpl (Alloc& alloc)
+        WiringFactoryImpl (AllocationCluster& alloc)
           : selector(config::PossibleConfigs::List(), alloc)
           { }
       };
@@ -119,42 +119,40 @@ namespace engine {
   
   
   
-  /** As the WiringFactory (an all the embedded factories
+  /** As the WiringFactory (and all the embedded factories
    *  for the specific wiring situations) use the AllocationCluster
    *  of the current build process, we need to create a new instance
    *  for each newly built segment of the low-level model.
+   *  @note As this ctor creates a WiringFactoryImpl instance, 
+   *        compiling this invocation actually drives the necessary
+   *        template instantiations for all cases encountered while
+   *        building the node network.
    */
   WiringFactory::WiringFactory (lib::AllocationCluster& a)
     : alloc_(a),
       pImpl_(new config::WiringFactoryImpl (alloc_))
     { }
+  
+  
+  WiringFactory::~WiringFactory () {}
+
       
 
   
   /** create and configure a concrete wiring descriptor to tie
    *  a ProcNode to its predecessor nodes. This includes selecting
-   *  the actual StateAdapter type, configuring it out of some operation
-   *  control templates (policy classes). Compiling this operator function
-   *  actually drives the necessary template instantiations for all cases
-   *  encountered while building the node network.
+   *  the actual StateAdapter type, configuring it based on operation
+   *  control templates (policy classes).
    *  The created WiringDescriptor object is bulk allocated similar to the ProcNode
    *  objects for a given segment of the Timeline. It should be further configured
    *  with the actual predecessor nodes pointers and can then be used to create
    *  the new processing node to be wired up.  
    */
   WiringDescriptor&
-  WiringFactory::operator() (WiringSituation& setup, bool cache)
+  WiringFactory::operator() (WiringSituation const& setup)
   {
-    UNIMPLEMENTED ("build the actual wiring descriptor based on given operation options");
-
-            ///////////////////////////////////////////////////////////////////////////////TODO: how to get the WiringSituation into the factory????
-    
-    
-//    Bits config (FlagInfo<Config>::CODE);
-//    return pImpl_->selector[config]();
-    ////
-   /////TODO: change the FunctionType to take an "input/output description pattern"
-   /////TODO: invent such a pattern ---> buffhandle.hpp
+    long config = setup.getFlags();
+    return pImpl_->selector[config] (setup);
   }
   
   

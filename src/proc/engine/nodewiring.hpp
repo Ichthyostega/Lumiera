@@ -90,9 +90,10 @@ namespace engine {
       
     public:
       WiringFactory (lib::AllocationCluster& a);
+     ~WiringFactory ();
       
       WiringDescriptor&
-      operator() (WiringSituation& setup, bool cache);  //////////////////TODO: of course this will accept *all* the relevant flags (not only "cache")
+      operator() (WiringSituation const& setup);
     };
   
   

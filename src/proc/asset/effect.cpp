@@ -23,8 +23,13 @@
 
 #include "proc/asset/effect.hpp"
 
-namespace asset
+namespace asset {
+  
+  Proc::ProcFunc*
+  Effect::resolveProcessor()  const
   {
+    UNIMPLEMENTED ("do the actual resolution plugin -> callable processing function");
+  }
 
 
 

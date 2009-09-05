@@ -41,6 +41,7 @@
 
 
 #include "proc/engine/procnode.hpp"
+#include "lib/refarray.hpp"
 
 #include <boost/noncopyable.hpp>
 //#include <boost/scoped_ptr.hpp>
@@ -50,6 +51,7 @@
 
 namespace engine {
   
+  using lib::RefArray;
   
   
   /**
@@ -70,6 +72,9 @@ namespace engine {
   class WiringSituation
     : boost::noncopyable
     {
+      long flags_;
+      asset::Proc::ProcFunc* function_;
+      
     protected:
       RefArray<ChannelDescriptor>& makeOutDescriptor() ;
       RefArray<InChanDescriptor>&  makeInDescriptor() ;
@@ -86,6 +91,8 @@ namespace engine {
        *  with connection informations later on.
        */
       WiringSituation()
+        : flags_(0)
+        , function_(0)
         {
           UNIMPLEMENTED ("representation of the intended wiring");
         }
@@ -95,6 +102,8 @@ namespace engine {
        *  of an existing predecessor node
        */
       WiringSituation (PNode predecessor)
+        : flags_(0)
+        , function_(0)
         {
           UNIMPLEMENTED ("wiring representation; hook up connections 1:1");
           REQUIRE (predecessor);
@@ -105,6 +114,51 @@ namespace engine {
         }
       
       
+      /** set up a connection leading to a specific input pin of the new node */
+      WiringSituation&
+      defineInput (uint inPin, PNode pred, uint outPin)
+        {
+          UNIMPLEMENTED ("wiring representation; define new connection");
+          return *this;
+        }
+      
+      /** set up the next input connection,
+       *  originating at a specific output pin of the predecessor */
+      WiringSituation&
+      defineInput (PNode pred, uint outPin)
+        {
+          UNIMPLEMENTED ("wiring representation; define new connection");
+          return *this;
+        }
+      
+      /** set up the next input connection to a specific input pin,
+       *  originating at a the next/sole output pin of the predecessor */
+      WiringSituation&
+      defineInput (uint inPin, PNode pred)
+        {
+          UNIMPLEMENTED ("wiring representation; define new connection");
+          return *this;
+        }
+      
+      
+      /** set detail flags regarding the desired node operation mode */
+      WiringSituation&
+      setFlag (long code)
+        {
+          flags_ |= code;
+          return *this;
+        }
+      
+      long getFlags ()  const { return flags_; }
+      
+      
+      /** trigger resolving of the actual processing function */
+      WiringSituation&
+      resolveProcessor (asset::Proc const& procAsset)
+        {
+          function_ = procAsset.resolveProcessor();
+          ENSURE (function_);
+        }
       
     };
   

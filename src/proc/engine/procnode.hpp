@@ -101,7 +101,8 @@ namespace engine {
        *  holding the actual buffer pointers and issuing the recursive pull() calls
        *  @see NodeWiring#callDown default implementation
        */
-      virtual BuffHandle  callDown (State& currentProcess, uint requiredOutputNr)  const =0; 
+      virtual BuffHandle
+      callDown (State& currentProcess, uint requiredOutputNr)  const =0; 
       
       friend class ProcNode;
       
@@ -125,16 +126,19 @@ namespace engine {
         : wiringConfig_(wd)
         { }
         
-      virtual ~ProcNode() {};
       
       friend class NodeFactory;
       
       
       
     public:
+      virtual ~ProcNode() {};  /////////////////////////TODO: do we still intend to build a hierarchy below ProcNode???
+      
+      bool isValid()  const;
       
       /** output channel count */
       uint nrO() { return wiringConfig_.nrO; }
+      
       
       /** Engine Core operation: render and pull output from this node.
        *  On return, currentProcess will hold onto output buffer(s)
@@ -155,6 +159,15 @@ namespace engine {
         }
       
     };
+  
+  
+  bool
+  ProcNode::isValid()  const
+  {
+    UNIMPLEMENTED ("ProcNode validity self-check");
+    return false; //////////////////////////TODO
+  }
+  
   
 } // namespace engine
 #endif

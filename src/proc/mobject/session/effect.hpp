@@ -37,6 +37,8 @@ using std::string;
 namespace mobject {
 namespace session {
   
+  using asset::PProc;
+  
   
   class Effect : public AbstractMO
     {
@@ -45,6 +47,8 @@ namespace session {
       string pluginID;
       
     public:
+      /** access the underlying processing asset */
+      PProc getProcAsset ()  const;
       
     };
   

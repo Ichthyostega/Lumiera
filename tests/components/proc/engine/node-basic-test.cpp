@@ -77,9 +77,15 @@ namespace test  {
           AllocationCluster alloc;
           NodeFactory nodeFab(alloc);
           
-          PEffect pEffect;  /////////////////TODO how to get an simple Effect MObject for Tests???
-          WiringSituation setup;
+          ProcNode * testSource;  ///////////TODO: how to fabricate a test-Node???
           
+          
+          WiringSituation setup(testSource);
+          
+          setup.defineInput (4, predecessor1, 2);
+          setup.defineInput (2, predecessor2);
+          
+          PEffect pEffect;  /////////////////TODO how to get an simple Effect MObject for Tests???
           ProcNode* pNode = nodeFab (pEffect, setup);
           ASSERT (pNode);
           

@@ -31,45 +31,8 @@ namespace engine {
   
   namespace { // Details of node fabrication
 
-    using lib::AllocationCluster;
-    
-    template<class NODE>
-    NODE &
-    makeNode ()
-    {
-      ////TODO: this is a draft how it /might/ work
-      ////TODO: of course this can't be hard wired....
-      
-      ProcNode * predecessor1, predecessor2;
-      
-      WiringSituation setup;
-      setup.defineInput (4, predecessor1, 2);
-      setup.defineInput (2, predecessor2);
-      
-      WiringFactory* wFac;
-      
-      AllocationCluster allocator;
-      bool doCache = (2 == 2); // find out Cache should be used for this node
-      
-      WiringDescriptor & wDesc = (*wFac)(setup,doCache);
-      
-      NODE* newNode = allocator.create<NODE> (wDesc);
-      
-      return *newNode;
-      
-      /*
-       * Problems to be solved:                                                                        /////////////TODO: see Ticket #247
-       * - write a generic allocator, which later on can be augmented to do block wise bulk allocation /////////////DONE: AllocationCluster
-       * - the allocator needs to keep track of the objects; actually he owns the objects              /////////////DONE
-       * - we need to access the wiring descriptor of the predecessor nodes. Which means, the code
-       *   must be in the body of NodeFactory (because the latter is friend of ProcNode and can access the wiring descriptor)
-       * - btw reconsider if this level of protection is necessary, or if the const WiringDescriptor cant be just on the public interface of ProcNode
-       * - find out how the Caching/ReadInput/InPlace detection can work
-       * - think about a sensible Ctor for NodeFactory. This one must create the WiringFactory and pass the Allocator.
-       * - all of this will be installed into the ToolFactory, i.e. it is part of the build process
-       */
-    }
-    
+    ////////////////////////////////////////////////TODO: still needed?
+  
   } // (END) Details of node fabrication
   
   
@@ -78,10 +41,16 @@ namespace engine {
   
   
   /** create a processing node able to render an effect */
-  PTrafo
-  NodeFactory::operator() (Placement<Effect> const&)
+  PNode
+  NodeFactory::operator() (Placement<Effect> const& effect, WiringSituation& intendedWiring)
   {
-    UNIMPLEMENTED ("create proc node for Effect/Plugin");
+    intendedWiring.resolveProcessor(effect->getProcAsset());
+    WiringDescriptor& wiring = wiringFac_(intendedWiring);
+    
+    PNode newNode = alloc_.create<ProcNode> (wiring);
+    ENSURE (newNode);
+    ENSURE (newNode->isValid());
+    return newNode;
   }
 
 

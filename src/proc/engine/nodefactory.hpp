@@ -26,8 +26,12 @@
 
 #include "proc/engine/procnode.hpp"
 #include "proc/mobject/placement.hpp"
+#include "proc/engine/nodewiring.hpp"
 
 
+  ////////////////////////////////////TODO: make inclusions / forward definitions a bit more orthogonal....
+
+namespace lib { class AllocationCluster; }
 
 namespace mobject {
 namespace session {
@@ -43,9 +47,13 @@ namespace session {
 namespace engine {
 
   using std::vector;
+  using lib::AllocationCluster;
   
+  ///////////////////////////// TODO: as of 9/09, it seems no longer necessary to use any subclasses of ProcNode
   class Trafo;
-  typedef Trafo* PTrafo;    ///< @note ProcNode is handled by pointer and bulk allocated/deallocated 
+  typedef Trafo* PTrafo;    ///< @note ProcNode is handled by pointer and bulk allocated/deallocated
+  
+  class WiringSituation;
 
 
   /**
@@ -53,10 +61,17 @@ namespace engine {
    */
   class NodeFactory
     {
+      AllocationCluster& alloc_;
+      WiringFactory wiringFac_;
       
-      public:
-        
-        PTrafo  operator() (mobject::session::PEffect const&);
+    public:
+      NodeFactory (AllocationCluster& a)
+        : alloc_(a)
+        , wiringFac_(alloc_)
+        { }
+      
+      
+      PNode operator() (mobject::session::PEffect const&, WiringSituation&);
         
     };
 

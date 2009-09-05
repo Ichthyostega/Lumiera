@@ -43,6 +43,7 @@
  ** @see proc::engine::config::Strategy
  ** @see nodewiring.hpp
  ** @see configflags.hpp
+ ** @see config-flags-test.cpp
  ** 
  */
 

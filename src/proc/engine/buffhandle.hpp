@@ -30,9 +30,10 @@
  ** thus it makes sense to utilise a single large buffer pointer array per pull() calldown
  ** sequence and dynamically claim small chunks for each node.
  **
+ ** @see nodewiring-def.hpp
  ** @see nodeoperation.hpp
  ** @see bufftable.hpp       storage for the buffer table
- ** @see engine::Invocation
+ ** @see engine::RenderInvocation
  */
 
 #ifndef ENGINE_BUFFHANDLE_H
@@ -116,7 +117,6 @@ namespace engine {
     };
   
   
-  //////TODO: invent an input/output description pattern, which can be passed to the wiring factory
   
 } // namespace engine
 #endif
