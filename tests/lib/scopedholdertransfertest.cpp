@@ -52,18 +52,18 @@ namespace lib {
         public:
           FixedDummy()
             {
-              TRACE  (test, "CTOR      FixedDummy() --> this=%x val=%d", this, getVal());
+              TRACE  (test, "CTOR      FixedDummy() --> this=%p val=%d", this, getVal());
             }
           
           ~FixedDummy()
             {
-              TRACE  (test, "DTOR     ~FixedDummy()  this=%x val=%d", this, getVal());
+              TRACE  (test, "DTOR     ~FixedDummy()  this=%p val=%d", this, getVal());
             }
           
           friend void
           transfer_control (FixedDummy& from, FixedDummy& to)
           {
-            TRACE  (test, "TRANSFER  target=%x   <-- source=%x  (%d,%d)", &to,&from, to.getVal(),from.getVal());
+            TRACE  (test, "TRANSFER  target=%p   <-- source=%p  (%d,%d)", &to,&from, to.getVal(),from.getVal());
             
             if (throw_in_transfer)
               throw to.getVal();
@@ -199,7 +199,7 @@ namespace lib {
               try
                 {
                   create_contained_object (table[3]);
-                  NOTREACHED ;
+                  NOTREACHED ();
                 }
               catch (int val)
                 {

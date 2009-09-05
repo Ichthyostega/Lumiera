@@ -40,6 +40,7 @@ AC_PROG_CXX
 
 AC_LIBTOOL_DLOPEN
 AC_PROG_LIBTOOL
+PKG_PROG_PKG_CONFIG([0.22])
 
 #
 # test for headers
@@ -84,9 +85,6 @@ AC_ARG_ENABLE(release, AC_HELP_STRING([--enable-release], [select NoBug RELEASE 
 
 # C headers and libraries
 AC_LANG_PUSH([C])
-
-AC_CHECK_HEADER([execinfo.h], AC_DEFINE(HAVE_EXECINFO_H))
-# there is a warning in nobug, disabled til fixed AC_CHECK_HEADER([valgrind/valgrind.h], AC_DEFINE(HAVE_VALGRIND_VALGRIND_H))
 
 AC_CHECK_LIB(dl, dlopen, [LUMIERA_PLUGIN_LIBS="$LUMIERA_PLUGIN_LIBS -ldl"],
                    [AC_MSG_ERROR([Dynamic linking not supported, report a bug])]
@@ -186,15 +184,14 @@ AC_SUBST(LUMIERA_GUI_LIBS)
 AC_SUBST(LUMIERA_GUI_CFLAGS)
 
 ############## Nobug Dependancies
-PKG_CHECK_MODULES(NOBUG_LUMIERA, [nobug >= 0.3rc1],
-				 AC_DEFINE(HAVE_NOBUG_H),
-				 AC_MSG_ERROR([NoBug pkg-config metadata missing                      (http://www.pipapo.org/pipawiki/NoBug)])
-)
-PKG_CHECK_MODULES(NOBUGMT_LUMIERA, [nobugmt >= 0.3rc1],
+AC_CHECK_HEADER([execinfo.h], AC_DEFINE(HAVE_EXECINFO_H))
+PKG_CHECK_MODULES(VALGRIND, [valgrind], AC_DEFINE(HAVE_VALGRIND_H),
+                             AC_MSG_NOTICE([valgrind not found                                 (optional)]))
+
+PKG_CHECK_MODULES(NOBUGMT_LUMIERA, [nobugmt >= 200909.1],
 				 AC_DEFINE(HAVE_NOBUGMT_H),
 				 AC_MSG_ERROR([NoBug pkg-config metadata missing                      (http://www.pipapo.org/pipawiki/NoBug)])
 )
-
 # END Nobug Dependancies
 
 # Print a summary

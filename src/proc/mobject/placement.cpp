@@ -49,7 +49,7 @@ namespace mobject {
   
   Placement<MObject>::operator string ()  const 
   {
-    static format fmt("Placement<%s> %|50T.| use-cnt=%x ID(%x) adr=%x pointee=%x");
+    static format fmt("Placement<%s> %|50T.| use-cnt=%u ID(%x) adr=%p pointee=%p");
     return str(fmt % typeid(*get()).name() % use_count()
                                            % (size_t)getID() 
                                            % this 

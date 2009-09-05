@@ -71,7 +71,7 @@ namespace control {
    */
   class CommandRegistry
     : public lib::Sync<>
-    , protected TypedAllocationManager
+    , public TypedAllocationManager
     {
       
     public:

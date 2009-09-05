@@ -298,7 +298,7 @@ lumiera_filedescriptor_delete (LumieraFiledescriptor self, const char* name)
 
       if (self->handle && name && ((self->flags & O_RDWR) == O_RDWR))
         {
-          TRACE (filedescriptor_dbg, "truncate %s to %lld", name, self->realsize);
+          TRACE (filedescriptor_dbg, "truncate %s to %lld", name, (long long)self->realsize);
           lumiera_filehandlecache_checkout (lumiera_fhcache, self->handle);
           int dummy = ftruncate (lumiera_filehandle_handle (self->handle), self->realsize);
           (void) dummy; /* this is present to silence a warning */

@@ -186,7 +186,7 @@ namespace lumiera {
   AppState::abort (lumiera::Error& problem)
   {
     
-    INFO (common, "Address of Config Facade = %x", &lumiera::Config::instance());   //////////TODO: a temp hack to force configfacade.cpp to be linked into lumiera exe. 
+    INFO (common, "Address of Config Facade = %p", &lumiera::Config::instance());   //////////TODO: a temp hack to force configfacade.cpp to be linked into lumiera exe. 
     
     ERROR (common, "Aborting Lumiera after unhandled error: %s", cStr(problem.what()));
     
