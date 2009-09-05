@@ -39,6 +39,7 @@
 
 #include "proc/asset.hpp"
 #include "lib/factory.hpp"
+#include "lib/streamtype.hpp"
 
 
 
@@ -75,6 +76,11 @@ namespace asset {
         { 
           return static_cast<const ID<Proc>& > (Asset::getID()); 
         }
+      
+      typedef lumiera::StreamType::ImplFacade::DataBuffer Buff;
+      typedef Buff* PBuff;
+      typedef void (ProcFunc) (PBuff);
+      
       
     protected:
       Proc (const Asset::Ident& idi) : Asset(idi) {}  //////////////TODO

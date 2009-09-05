@@ -36,7 +36,21 @@ namespace asset
    */
   class Effect : public Proc
     {
+    
+    public:
+      /** resolve any plugin and configuration info
+       *  to yield the actual media data processing function.
+       *  @return a function ready to be invoked; either the 
+       *          "real thing" or a suitable placeholder.
+       *  @throw lumiera::error::Fatal if unable to provide
+       *         any usable function or placeholder. This case
+       *         can be considered exceptional and justifies a
+       *         subsystem failure.
+       */
+      ProcFunc*
+      resolveProcessor();
       
+
     };
     
     

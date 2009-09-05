@@ -24,9 +24,11 @@
 #ifndef MOBJECT_SESSION_EFFECT_H
 #define MOBJECT_SESSION_EFFECT_H
 
-#include <string>
 
 #include "proc/mobject/session/abstractmo.hpp"
+#include "proc/asset/effect.hpp"
+
+#include <string>
 
 
 using std::string;
@@ -41,6 +43,8 @@ namespace session {
     protected:
       /** Identifier of the Plug-in to be used */
       string pluginID;
+      
+    public:
       
     };
   

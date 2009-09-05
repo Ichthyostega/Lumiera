@@ -44,6 +44,7 @@
 
 #include "proc/common.hpp"
 #include "proc/state.hpp"
+#include "proc/asset/proc.hpp"
 #include "proc/mobject/parameter.hpp"
 #include "lib/frameid.hpp"
 #include "lib/refarray.hpp"
@@ -75,7 +76,7 @@ namespace engine {
       lib::RefArray<ChannelDescriptor>& out;
       lib::RefArray<InChanDescriptor>&  in;
       
-      typedef void (ProcFunc) (BuffHandle::PBuff);
+      typedef asset::Proc::ProcFunc ProcFunc;
       
       ProcFunc* procFunction;
       
