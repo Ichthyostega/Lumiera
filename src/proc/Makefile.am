@@ -71,7 +71,6 @@ liblumiprocengine_la_SOURCES =					\
 	$(liblumiprocengine_la_srcdir)/nodefactory.cpp		\
 	$(liblumiprocengine_la_srcdir)/nodewiring.cpp		\
 	$(liblumiprocengine_la_srcdir)/pluginadapter.cpp	\
-	$(liblumiprocengine_la_srcdir)/procnode.cpp		\
 	$(liblumiprocengine_la_srcdir)/projector.cpp		\
 	$(liblumiprocengine_la_srcdir)/rendergraph.cpp		\
 	$(liblumiprocengine_la_srcdir)/renderengine.cpp		\
@@ -213,7 +212,6 @@ noinst_HEADERS +=							\
 	$(liblumiproc_la_srcdir)/mobject/builder/toolfactory.hpp	\
 	$(liblumiproc_la_srcdir)/mobject/builderfacade.hpp		\
 	$(liblumiproc_la_srcdir)/control/pathmanager.hpp		\
-	$(liblumiproc_la_srcdir)/control/renderstate.hpp		\
 	$(liblumiproc_la_srcdir)/play/tick-service.hpp			\
 	$(liblumiproc_la_srcdir)/play/dummy-image-generator.hpp		\
 	$(liblumiproc_la_srcdir)/mobject/interpolator.hpp		\
