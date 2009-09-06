@@ -23,9 +23,9 @@
 
 /** @file proc.hpp
  ** Data processing Plugins and Codecs can be treated as a specific Kind of Asset.
- ** For the different <i>Kinds</i> of Assets, we use sub-intefaces inheriting
+ ** For the different <i>Kinds</i> of Assets, we use sub-interfaces inheriting
  ** from the general Asset interface. To be able to get asset::Proc instances
- ** directly from the AssetManager, we define a specialization of the Asset ID.
+ ** directly from the AssetManager, we define a specialisation of the Asset ID.
  **
  ** @see asset.hpp for explanation
  ** @see ProcFactory creating concrete asset::Proc instances
@@ -39,6 +39,7 @@
 
 #include "proc/asset.hpp"
 #include "lib/factory.hpp"
+#include "lib/streamtype.hpp"
 
 
 
@@ -75,6 +76,25 @@ namespace asset {
         { 
           return static_cast<const ID<Proc>& > (Asset::getID()); 
         }
+      
+      typedef lumiera::StreamType::ImplFacade::DataBuffer Buff;
+      typedef Buff* PBuff;
+      typedef void (ProcFunc) (PBuff);
+      
+      
+      /** resolve any plugin and configuration info
+       *  to yield the actual media data processing function.
+       *  @return a function ready to be invoked; either the 
+       *          "real thing" or a suitable placeholder.
+       *  @throw lumiera::error::Fatal if unable to provide
+       *         any usable function or placeholder. This case
+       *         can be considered exceptional and justifies a
+       *         subsystem failure.
+       */
+      virtual ProcFunc*
+      resolveProcessor()  const =0;
+      
+
       
     protected:
       Proc (const Asset::Ident& idi) : Asset(idi) {}  //////////////TODO

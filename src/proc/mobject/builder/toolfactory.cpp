@@ -22,21 +22,73 @@
 
 
 #include "proc/mobject/builder/toolfactory.hpp"
+#include "lib/util.hpp"
 
-namespace mobject
+//#include <boost/ptr_container/ptr_vector.hpp>
+
+namespace mobject {
+namespace builder {
+  
+  using util::isnil;
+  using std::auto_ptr;
+  using boost::scoped_ptr;
+  
+  
+  struct BuildProcessState
+    {
+      
+      session::Fixture & fixedTimeline_;
+      auto_ptr<engine::RenderGraph> procSegment_;
+      
+      scoped_ptr<SegmentationTool> segmentation_;
+      scoped_ptr<NodeCreatorTool> fabrication_;
+      
+      
+      BuildProcessState (session::Fixture& theTimeline)
+        : fixedTimeline_(theTimeline),
+          procSegment_(new engine::RenderGraph())
+        { }
+      
+    };
+  
+  ToolFactory::ToolFactory (session::Fixture& theTimeline)
+    : state_(new BuildProcessState (theTimeline))
   {
-  namespace builder
-    {
-
-
-
-    BuilderTool &
-    ToolFactory::configure ()
-    {
-    }
-
-
-
-  } // namespace mobject::builder
-
-} // namespace mobject
+    ENSURE (state_->fixedTimeline_.isValid());
+    ENSURE (state_->procSegment_.get());
+  }
+  
+  
+  SegmentationTool &
+  ToolFactory::configureSegmentation ()
+  {
+    REQUIRE (state_->fixedTimeline_.isValid());
+    REQUIRE (state_->procSegment_.get());
+    
+    state_->segmentation_.reset (new SegmentationTool (state_->fixedTimeline_));
+    return *(state_->segmentation_);
+  }
+  
+  
+  NodeCreatorTool &
+  ToolFactory::configureFabrication () //////////////////////TODO: should iterate in some way!
+  {
+    REQUIRE (state_->procSegment_.get());
+    REQUIRE (!isnil (*(state_->segmentation_)));
+    
+    state_->fabrication_.reset (new NodeCreatorTool(*this, *state_->procSegment_));
+    return *(state_->fabrication_);
+  }
+  
+  
+  auto_ptr<engine::RenderGraph>
+  ToolFactory::getProduct ()
+  {
+    state_->segmentation_.reset(0);
+    state_->fabrication_.reset(0);
+    return state_->procSegment_;
+  }
+  
+  
+  
+}} // namespace mobject::builder

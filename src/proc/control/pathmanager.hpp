@@ -24,7 +24,6 @@
 #ifndef CONTROL_PATHMANAGER_H
 #define CONTROL_PATHMANAGER_H
 
-#include "proc/engine/processor.hpp"
 
 
 
@@ -39,7 +38,7 @@ namespace control {
   class PathManager
     {
     public:
-      engine::Processor* buildProcessor () ;
+      // TODO: find out about public interface
       // TODO: allocation, GC??
     };
 

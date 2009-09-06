@@ -24,9 +24,11 @@
 #ifndef MOBJECT_SESSION_EFFECT_H
 #define MOBJECT_SESSION_EFFECT_H
 
-#include <string>
 
 #include "proc/mobject/session/abstractmo.hpp"
+#include "proc/asset/effect.hpp"
+
+#include <string>
 
 
 using std::string;
@@ -35,12 +37,19 @@ using std::string;
 namespace mobject {
 namespace session {
   
+  using asset::PProc;
+  
   
   class Effect : public AbstractMO
     {
     protected:
-      /** Identifier of the Plugin to be used */
-      string plugID;
+      /** Identifier of the Plug-in to be used */
+      string pluginID;
+      
+    public:
+      /** access the underlying processing asset */
+      asset::Proc const& getProcAsset ()  const;
+                                                //////////////////////TODO: clarify asset->mobject relation and asset dependencies; Ticket #255
       
     };
   

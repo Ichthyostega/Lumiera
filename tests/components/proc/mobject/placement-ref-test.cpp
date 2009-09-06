@@ -154,7 +154,7 @@ namespace test    {
           try
             {
               *ref1;
-              NOTREACHED;
+              NOTREACHED();
             }
           catch (...)
             {
@@ -170,7 +170,7 @@ namespace test    {
           try
             {
               *ref2;
-              NOTREACHED;
+              NOTREACHED();
             }
           catch (...)
             {

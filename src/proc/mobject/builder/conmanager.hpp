@@ -34,7 +34,7 @@ namespace mobject {
      * Connection Manager: used to build the connections between render engine nodes
      * if these nodes need to cooperate besides the normal "data pull" operation. 
      * Esp. the Connection Manager knows how to wire up the effect's parameters 
-     * with the corresponding ParamProviders (autmation) in the Session.
+     * with the corresponding ParamProviders (automation) in the Session.
      * Questions regarding the possibility of a media stream connection are 
      * delegated internally to the STypeManager.
      * \par

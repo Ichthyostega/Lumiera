@@ -28,18 +28,27 @@
 
 
 
-namespace asset
-  {
+namespace asset {
   
   /**
    * Effect or media processing component
    */
   class Effect : public Proc
     {
+    
+    public:
+      
+      
+    private:
+      /** implementation of how to resolve the corresponding plugin
+       *  to yield an actual media data processing function. */
+      ProcFunc*
+      resolveProcessor()  const;
+      
       
     };
-    
-    
-    
+  
+  
+  
 } // namespace asset
 #endif

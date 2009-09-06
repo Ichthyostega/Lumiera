@@ -1,5 +1,5 @@
 /*
-  ProcNode  -  Key abstraction of the Render Engine: a Processing Node
+  RENDERSTATE.hpp  -  renderengine state management
  
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
@@ -18,18 +18,38 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  
-* *****************************************************/
+*/
 
 
-#include "proc/engine/procnode.hpp"
-#include "proc/engine/nodefactory.hpp"
+#ifndef MOBJECT_BUILDER_RENDERSTATE_H
+#define MOBJECT_BUILDER_RENDERSTATE_H
 
-namespace engine {
-
-
-  /** Storage for the (single, static) ProcNode factory object.
-   */
-  NodeFactory ProcNode::create;
+#include "proc/state.hpp"
 
 
-} // namespace engine
+
+namespace mobject {
+  namespace builder {
+    
+    typedef proc_interface::State State;
+    
+    
+    /**
+     * Encapsulates the logic used to get a "render process".
+     * The provided StateProxy serves to hold any mutalbe state used
+     * in the render process, so the rest of the render engine 
+     * can be stateless.
+     * @todo probably the state management will work different (6/08)
+     */
+    class RenderState
+      {
+      public:
+        State& getRenderProcess () ;
+      };
+  
+  
+  
+  } // namespace mobject::session
+
+} // namespace mobject
+#endif

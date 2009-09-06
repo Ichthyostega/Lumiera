@@ -1,5 +1,5 @@
 /*
-  SEGMENT.hpp  -  Segment of the Timeline.
+  SEGMENT.hpp  -  Segment of the timeline for rendering.
  
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
@@ -33,18 +33,15 @@
 using std::list;
 
 
-namespace mobject
-  {
-  namespace session
-    {
+namespace mobject {
+  namespace session {
 
 
     /**
-     * Used at the moment (7/07) for partitioning the timeline/fixture into segments
-     * to be rendered by a specialized render node network for each, without the need
-     * to change any connections within a given segment.
-     * Note this concept may be superfluos alltogether; is a draft and the real
-     * use still needs to be worked out...
+     * For the purpose of building and rendering, the fixture (for each timeline) 
+     * is partitioned such that each segment is <i>structurally constant</i>. 
+     * For each segment there is a RenderGraph (unit of the render engine) which
+     * is able to render all ExitNodes for this segment.
      */
     class Segment
       {
@@ -57,8 +54,9 @@ namespace mobject
         Time length;
 
         /** relevant MObjects comprising this segment. */
-        list<ExplicitPlacement *> elements;
+        list<ExplicitPlacement> elements;
         // TODO: actually necessary??
+        // TODO: ownership??
 
       };
 

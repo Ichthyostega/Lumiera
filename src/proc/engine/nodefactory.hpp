@@ -1,5 +1,5 @@
 /*
-  NODEFACTORY.hpp  -  Interface for creating processing nodes of variouos kinds
+  NODEFACTORY.hpp  -  Interface for creating processing nodes of various kinds
  
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
@@ -26,28 +26,34 @@
 
 #include "proc/engine/procnode.hpp"
 #include "proc/mobject/placement.hpp"
+#include "proc/engine/nodewiring.hpp"
 
 
+  ////////////////////////////////////TODO: make inclusions / forward definitions a bit more orthogonal....
+
+namespace lib { class AllocationCluster; }
 
 namespace mobject {
-  namespace session {
+namespace session {
   
-    class Clip;
-    class Effect;
-    typedef Placement<Effect> PEffect;
-    // TODO: class Transition;
-
-  } // namespace mobject::session
-
-} // namespace mobject
+  class Clip;
+  class Effect;
+  typedef Placement<Effect> PEffect;
+  // TODO: class Transition;
+  
+}} // namespace mobject::session
 
 
 namespace engine {
 
   using std::vector;
+  using lib::AllocationCluster;
   
+  ///////////////////////////// TODO: as of 9/09, it seems no longer necessary to use any subclasses of ProcNode
   class Trafo;
-  typedef Trafo* PTrafo;    ///< @note ProcNode is handled by pointer and bulk allocated/dealocated 
+  typedef Trafo* PTrafo;    ///< @note ProcNode is handled by pointer and bulk allocated/deallocated
+  
+  class WiringSituation;
 
 
   /**
@@ -55,10 +61,17 @@ namespace engine {
    */
   class NodeFactory
     {
+      AllocationCluster& alloc_;
+      WiringFactory wiringFac_;
       
-      public:
-        
-        PTrafo  operator() (mobject::session::PEffect const&);
+    public:
+      NodeFactory (AllocationCluster& a)
+        : alloc_(a)
+        , wiringFac_(alloc_)
+        { }
+      
+      
+      PNode operator() (mobject::session::PEffect const&, WiringSituation&);
         
     };
 

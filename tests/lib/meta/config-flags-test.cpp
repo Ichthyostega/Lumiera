@@ -32,7 +32,7 @@
  **
  ** @see configflags.hpp
  ** @see typelistmanip.hpp
- ** @see nodewiringconfig.hpp real world usage example
+ ** @see nodewiring-config.hpp real world usage example
  **
  */
 
@@ -43,7 +43,7 @@
 #include "lib/meta/typelist-util.hpp"
 #include "lib/meta/configflags.hpp"
 #include "meta/typelist-diagnostics.hpp"
-#include "proc/engine/nodewiringconfig.hpp"
+#include "proc/engine/nodewiring-config.hpp"
 #include "lib/util.hpp"
 
 #include <boost/format.hpp>
@@ -230,7 +230,8 @@ namespace test {
           
             struct TestVisitor
               {
-                string result;
+                string result;  ///< metafunction result
+                
                 TestVisitor() : result ("TestVisitor application:\n") {}
                 
                 /* === visitation interface === */
@@ -314,12 +315,12 @@ namespace test {
               try
                 {
                   INVOKE_CONFIG_SELECTOR (23);
-                  NOTREACHED ;
+                  NOTREACHED ();
                 }
               catch (lumiera::error::Invalid& err)
                 {
                   cout << err.what() << "\n";
-                  lumiera_error (); // reset errorflag
+                  lumiera_error (); // reset error flag
                 }
             }
           

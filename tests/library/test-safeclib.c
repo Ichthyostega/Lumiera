@@ -27,7 +27,7 @@ TESTS_BEGIN
 TEST ("allocation0")
 {
   lumiera_malloc (0);
-  NOTREACHED;
+  NOTREACHED();
 }
 
 TEST ("allocation1024")
@@ -51,7 +51,7 @@ TEST ("allocationtoobig")
   rl.rlim_max = 100*1024*1024;
   setrlimit (RLIMIT_AS, &rl);
   lumiera_malloc (200*1024*1024);
-  NOTREACHED;
+  NOTREACHED();
 }
 
 TEST ("streq")

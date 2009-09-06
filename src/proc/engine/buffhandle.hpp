@@ -27,12 +27,13 @@
  ** different "buffer providers" (for example the frame cache). For accessing those buffers,
  ** the node needs to keep a table of buffer pointers, and for releasing the buffers later
  ** on, we need some handles. The usage pattern of those buffer pointer tables is stack-like,
- ** thus it makes sense to utilize a single large buffer pointer array per pull() calldown
+ ** thus it makes sense to utilise a single large buffer pointer array per pull() calldown
  ** sequence and dynamically claim small chunks for each node.
  **
+ ** @see nodewiring-def.hpp
  ** @see nodeoperation.hpp
  ** @see bufftable.hpp       storage for the buffer table
- ** @see engine::Invocation
+ ** @see engine::RenderInvocation
  */
 
 #ifndef ENGINE_BUFFHANDLE_H
@@ -41,6 +42,7 @@
 
 #include "lib/error.hpp"
 #include "lib/streamtype.hpp"
+#include "lib/bool-checkable.hpp"
 
 
 namespace engine {
@@ -52,23 +54,37 @@ namespace engine {
    * The real buffer pointer can be retrieved by dereferencing this smart-handle class.
    */
   struct BuffHandle
+    : lib::BoolCheckable<BuffHandle>
     {
       typedef lumiera::StreamType::ImplFacade::DataBuffer Buff;
-      typedef Buff* PBuff;//////TODO define the Buffer type(s)
+      typedef Buff* PBuff;
       
       PBuff 
-      operator->() const 
+      operator->()  const 
         { 
           return pBuffer_; 
         }
       Buff&
-      operator* () const
+      operator* ()  const
         {
           ENSURE (pBuffer_);
           return *pBuffer_;
         }
       
-    protected:
+      bool
+      isValid()  const
+        {
+          return pBuffer_;
+        }
+      
+      
+      //////////////////////TODO: the whole logic how to create a BuffHandle needs to be solved in a more clever way. --> Ticket 249
+      BuffHandle()
+        : pBuffer_(0),
+          sourceID_(0)
+        { }
+      
+    private:
       PBuff pBuffer_; 
       long sourceID_;
     };
@@ -81,7 +97,7 @@ namespace engine {
    */
   struct BufferDescriptor
     {
-      char typeID_; ///////TODO define the Buffer type(s)
+      lumiera::StreamType& sType_;
     };
   
   
@@ -99,6 +115,7 @@ namespace engine {
       PNode dataSrc;    ///< the ProcNode to pull this input from
       uint srcChannel; ///<  output channel to use on the predecessor node
     };
+  
   
   
 } // namespace engine

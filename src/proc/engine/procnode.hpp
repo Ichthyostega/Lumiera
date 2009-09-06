@@ -31,7 +31,7 @@
  **
  ** By using the builder interface, concrete node and wiring descriptor classes are created,
  ** based on some templates. These concrete classes form the "glue" to tie the node network
- ** together and contain much of the operation beahviour in a hard wired fashion.
+ ** together and contain much of the operation behaviour in a hard wired fashion.
  **
  ** @see nodefactory.hpp
  ** @see operationpoint.hpp
@@ -44,7 +44,10 @@
 
 #include "proc/common.hpp"
 #include "proc/state.hpp"
+#include "proc/asset/proc.hpp"
 #include "proc/mobject/parameter.hpp"
+#include "lib/frameid.hpp"
+#include "lib/refarray.hpp"
 
 #include <vector>
 
@@ -54,18 +57,11 @@ namespace engine {
 
   using std::vector;
   using proc_interface::State;
+  using lumiera::NodeID;
   
   class ProcNode;
-  class NodeFactory;
-  
   typedef ProcNode* PNode;
   
-  template<class E>
-  struct RefArray    ///< @todo need an implementation and then probably move it into library
-    {
-      virtual E const& operator[] (uint i)  const =0;
-      virtual ~RefArray() {}
-    };
   
   /**
    * Interface: Description of the input and output ports,
@@ -74,32 +70,39 @@ namespace engine {
   class WiringDescriptor
     {
     public:
+      uint nrO;
+      uint nrI;
+      
+      lib::RefArray<ChannelDescriptor>& out;
+      lib::RefArray<InChanDescriptor>&  in;
+      
+      typedef asset::Proc::ProcFunc ProcFunc;
+      
+      ProcFunc* procFunction;
+      
+      NodeID const& nodeID;
+      
       virtual ~WiringDescriptor() {}
       
-      virtual uint getNrI()  const =0;           ///////////TODO: indeed need a virtual function??
-      virtual uint getNrO()  const =0;
-      
-      RefArray<ChannelDescriptor>& out;
-      RefArray<InChanDescriptor>&  in;
-      
-      typedef void (ProcFunc) (BuffHandle::PBuff, uint);
-      
-      ProcFunc* processFunction;
-      
     protected:
-      WiringDescriptor (RefArray<ChannelDescriptor>& o, 
-                        RefArray<InChanDescriptor>& i,
-                        ProcFunc pFunc)
+      WiringDescriptor (lib::RefArray<ChannelDescriptor>& o, 
+                        lib::RefArray<InChanDescriptor>& i,
+                        ProcFunc pFunc, NodeID const& nID)
         : out(o), in(i),
-          processFunction(pFunc)
-        { }  
+          procFunction(pFunc),
+          nodeID(nID)
+        {
+          nrO = out.size();
+          nrI = in.size();
+        }
       
       /** the wiring-dependent part of the node operation.
        *  Includes the creation of a one-way state object on the stack
-       *  holding the actual buffer pointers and issuing the recrusive pull() calls
+       *  holding the actual buffer pointers and issuing the recursive pull() calls
        *  @see NodeWiring#callDown default implementation
        */
-      virtual BuffHandle  callDown (State& currentProcess, uint requiredOutputNr)  const =0; 
+      virtual BuffHandle
+      callDown (State& currentProcess, uint requiredOutputNr)  const =0; 
       
       friend class ProcNode;
       
@@ -110,6 +113,13 @@ namespace engine {
   
   /**
    * Key abstraction of the Render Engine: A Data processing Node
+   * 
+   * @todo it's not clear as of 9/09 if ProcNode shall be an ABC/Interface
+   *       It might be used as ABC (as was the original intention) when implementing
+   *       several query/information functions. In that case, the ctor will become protected.
+   *       The alternative would be to push down these information-retrieval part into a
+   *       configurable element within WiringDescriptor, in which case we even might drop
+   *       ProcNode as a frontent entirely.
    */
   class ProcNode
     {
@@ -118,39 +128,49 @@ namespace engine {
       
       const WiringDescriptor& wiringConfig_;
       
-    protected:
+    public:
       ProcNode (WiringDescriptor const& wd)
         : wiringConfig_(wd)
         { }
-        
-      virtual ~ProcNode() {};
       
-      friend class NodeFactory;
-      
+      virtual ~ProcNode() {};  /////////////////////////TODO: do we still intend to build a hierarchy below ProcNode???
       
       
     public:
-      static NodeFactory create; ///////TODO: really? probably we'll rather have a NodeFactory object in the builder...
+      bool isValid()  const;
+      
+      /** output channel count */
+      uint nrO() { return wiringConfig_.nrO; }
+      
       
       /** Engine Core operation: render and pull output from this node.
-       *  On return, currentProcess will hold onto output buffer(s) 
+       *  On return, currentProcess will hold onto output buffer(s)
        *  containing the calculated result frames. In case this node
-       *  calculates a multi channel output, only one channel can be 
+       *  calculates a multichannel output, only one channel can be
        *  retrieved by such a \c pull() call, but you can expect data
        *  of the other channels to be processed and fed to cache.
        *  @param currentProcess the current processing state for 
        *         managing buffers and accessing current parameter values
-       *  @param requiredOutputNr the output channel requested (in case
-       *         this node delivers more than one output channel)
-       *  @return handle to the buffer containing the calculated result. 
+       *  @param requestedOutputNr the output channel requested
+       *         (in case this node delivers more than one output channel)
+       *  @return handle to the buffer containing the calculated result.
        */
       BuffHandle
-      pull (State& currentProcess, uint requiredOutputNr=0)  const
+      pull (State& currentProcess, uint requestedOutputNr=0)  const
         {
-          return this->wiringConfig_.callDown (currentProcess, requiredOutputNr);
+          return this->wiringConfig_.callDown (currentProcess, requestedOutputNr);
         }
       
     };
+  
+  
+  inline bool
+  ProcNode::isValid()  const
+  {
+    UNIMPLEMENTED ("ProcNode validity self-check");
+    return false; //////////////////////////TODO
+  }
+  
   
 } // namespace engine
 #endif

@@ -128,7 +128,7 @@ namespace test{
           try                             \
             {                             \
               ERRONEOUS_STATEMENT ;       \
-              NOTREACHED;                 \
+              NOTREACHED();               \
             }                             \
           catch (...)                     \
             {                             \

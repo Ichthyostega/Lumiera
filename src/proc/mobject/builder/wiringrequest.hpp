@@ -32,7 +32,7 @@ namespace mobject {
     
     /**
      * A stateful value object denoting the wish to establish a link or connection
-     * between two entities. Used to organize the proper working of the build process.
+     * between two entities. Used to organise the proper working of the build process.
      * Wiring requests are first to be checked and can be deemed impossible to 
      * satisfy. Internally, wiring requests contain specific information about
      * the objects to be connected. This information is exposed only to the

@@ -1,5 +1,5 @@
 /*
-  PROCESSOR.hpp  -  a single render pipeline for one segment of the timeline
+  NodeSource(Test)  -  unit test of the source reading render node
  
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
@@ -18,36 +18,42 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  
-*/
+* *****************************************************/
 
 
-#ifndef ENGINE_PROCESSOR_H
-#define ENGINE_PROCESSOR_H
+#include "lib/test/run.hpp"
+//#include "lib/factory.hpp"
+//#include "lib/util.hpp"
 
-#include "proc/common.hpp"
-#include "proc/state.hpp"
+//#include <boost/format.hpp>
+#include <iostream>
+
+//using boost::format;
+using std::string;
+using std::cout;
 
 
-
-namespace engine
-  {
-
-  class ExitNode;
-
-  class Processor
+namespace engine{
+namespace test  {
+  
+  
+  
+  
+  /*******************************************************************
+   * @test the source reading render node.
+   */
+  class NodeSource_test : public Test
     {
-    protected:
-      ExitNode * output;
-
-      /** begin of the timerange covered by this processor */
-      lumiera::Time start;
-
-      /**end (exclusive) of the timerange  */
-      lumiera::Time end;
-
+      virtual void run(Arg) 
+        {
+          UNIMPLEMENTED ("render node pulling source data from backend");
+        } 
     };
-
-
-
-} // namespace engine
-#endif
+  
+  
+  /** Register this test class... */
+  LAUNCHER (NodeSource_test, "unit engine");
+  
+  
+  
+}} // namespace engine::test

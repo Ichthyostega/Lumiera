@@ -27,7 +27,9 @@
 
 #include "proc/mobject/builder/applicablebuildertargettypes.hpp"
 
-#include "proc/mobject/session/segment.hpp"
+#include "proc/mobject/session/segmentation.hpp"
+#include "proc/mobject/session/fixture.hpp"   //////TODO really on the header??
+
 
 #include <list>
 using std::list;
@@ -40,7 +42,7 @@ namespace mobject {
 
     /**
      * Tool implementation for deriving a partitioning of the current 
-     * timeline, such that each segement has a constant configuration. 
+     * timeline, such that each Segment has a constant configuration. 
      * "Constant" means here, that any remaining changes over time
      * can be represented by automation solely, without the need 
      * to change the node connections.
@@ -49,19 +51,24 @@ namespace mobject {
       : public ApplicableBuilderTargetTypes<SegmentationTool>
       {
         
-        
       public:
+        SegmentationTool (session::Fixture &) ;
+        
         void treat (mobject::session::Clip& clip) ;
         void treat (mobject::session::Effect& effect) ;
 
         void treat (mobject::Buildable& something) ;
+        
+        void onUnknown (Buildable& target) ;             /////////TODO why doesn't the treat(Buildable) function shaddow this??
+        
+        bool empty()  const;
 
-      protected:
+      private:
         typedef mobject::session::Segment Segment;
 
         /** Partitioning of the Timeline to be created by this tool. */
-        list<Segment*> segments;
-        // TODO handle alloc!!!!
+        //session::Segmentation& segments_;
+        ///////////////////////////////////////////TODO: either put it inline, or use a scopend_ptr!!!!!!!!!!
 
       };
 

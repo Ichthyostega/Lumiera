@@ -288,7 +288,7 @@ namespace lumiera {
             try 
               { 
                 runner.maybeRun (unit2);
-                NOTREACHED;
+                NOTREACHED();
               }
             catch (lumiera::Error&)
               {
@@ -297,7 +297,7 @@ namespace lumiera {
             try 
               { 
                 runner.maybeRun (unit3);
-                NOTREACHED;
+                NOTREACHED();
               }
             catch (lumiera::Error&)
               {
@@ -398,7 +398,7 @@ namespace lumiera {
             try 
               { 
                 runner.maybeRun (unit4);
-                NOTREACHED;
+                NOTREACHED();
               }
             catch (lumiera::Error&)
               {

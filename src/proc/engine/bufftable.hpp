@@ -133,11 +133,11 @@ namespace engine {
       
     public:
       BuffTableChunk (WiringDescriptor const& wd, BuffTableStorage& storage)
-        : siz_(wd.getNrI() + wd.getNrO()),
+        : siz_(wd.nrI + wd.nrO),
           tab_(storage.claim (siz_)),
           sto_(storage)
         {
-          const uint nrO(wd.getNrO());
+          const uint nrO(wd.nrO);
           
           // Setup the public visible table locations
           this->outHandle = &tab_.first[ 0 ];

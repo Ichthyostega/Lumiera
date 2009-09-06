@@ -1,5 +1,5 @@
 /*
-  NODEINVOCATION.hpp  -  Organize the invocation state within a single pull() call
+  NODEINVOCATION.hpp  -  Organise the invocation state within a single pull() call
  
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
@@ -21,14 +21,14 @@
 */
 
 /** @file nodeinvocation.hpp
- ** Organize the state related to the invocation of s single ProcNode::pull() call
+ ** Organise the state related to the invocation of s single ProcNode::pull() call
  ** This header defines part of the "glue" which holds together the render node network
  ** and enables to pull result frames from the nodes. Doing so requires some invocation
  ** local state to be maintained, especially a table of buffers used to carry out the
  ** calculations. Further, getting the input buffers filled requires to issue recursive
  ** \c pull() calls, which on the whole creates a stack-like assembly of local invocation
  ** state.
- ** The actual steps to be carried out for a \c pull() call are dependant on the configuration
+ ** The actual steps to be carried out for a \c pull() call are dependent on the configuration
  ** of the node to pull. Each node has been preconfigured by the builder with a WiringDescriptor
  ** and a concrete type of a StateAdapter. The actual sequence of steps is defined in the header
  ** nodeoperation.hpp out of a set of basic operation steps. These steps all use the passed in
@@ -96,6 +96,8 @@ namespace engine {
       
       virtual BuffHandle fetch (FrameID const& fID)     { return current_.fetch (fID); }
       
+      virtual BuffTableStorage& getBuffTableStorage()   { return current_.getBuffTableStorage(); } 
+
       // note: allocateBuffer()  is chosen specifically based on the actual node wiring
       
     };
@@ -132,9 +134,10 @@ namespace engine {
           buffTab(0)
         { }
       
-      const uint nrO()          const { return wiring.getNrO(); }
-      const uint nrI()          const { return wiring.getNrI(); }
-      const uint buffTabSize()  const { return nrO()+nrI(); }
+    public:
+      uint nrO()          const { return wiring.nrO; }
+      uint nrI()          const { return wiring.nrI; }
+      uint buffTabSize()  const { return nrO()+nrI(); }
       
       /** setup the link to an externally allocated buffer table */
       void setBuffTab (BuffTable* b) { this->buffTab = b; }
@@ -151,6 +154,21 @@ namespace engine {
         }
       
       
+    public:
+      /** specialised version filling in the additional information, i.e
+       *  the concrete node id and the channel number in question */
+      virtual FrameID const&
+      genFrameID ()
+        {
+          return current_.genFrameID(wiring.nodeID, outNr);
+        }
+      
+      virtual FrameID const&
+      genFrameID (NodeID const& nID, uint chanNo)
+        {
+          return current_.genFrameID (nID,chanNo);
+        }
+      
     };
     
     
@@ -161,7 +179,7 @@ namespace engine {
           : Invocation(sta, w, outCh) {}
         
         virtual BuffHandle
-        allocateBuffer (BufferDescriptor const& bd) { return parent_.allocateBuffer(bd); }
+        allocateBuffer (BufferDescriptor const& bd) { return parent_.allocateBuffer(bd); }          ////////////TODO: actually implement the "allocate from parent" logic!
       };
     
     struct AllocBufferFromCache   ///< using the global current State, which will delegate to Cache
@@ -179,20 +197,21 @@ namespace engine {
    * The real invocation context state implementation. It is created
    * by the NodeWiring (WiringDescriptor) of the processing node which
    * is pulled by this invocation, hereby using the internal configuration
-   * information to guide the selecton of the real call sequence 
+   * information to guide the selection of the real call sequence 
    * 
    * \par assembling the call sequence implementation
    * Each ProcNode#pull() call creates such a StateAdapter subclass on the stack,
    * with a concrete type according to the WiringDescriptor of the node to pull.
    * This concrete type encodes a calculation Strategy, which is assembled
    * as a chain of policy templates on top of OperationBase. For each of the
-   * possible configuratons we define such a chain (see bottom of nodeoperation.hpp).
+   * possible configurations we define such a chain (see bottom of nodeoperation.hpp).
    * The WiringFactory defined in nodewiring.cpp actually drives the instantiation
    * of all those possible combinations.
    */
   template<class Strategy, class BufferProvider>
   class ActualInvocationProcess
     : public BufferProvider
+    , private Strategy
     {
     public:
       ActualInvocationProcess (State& callingProcess, WiringDescriptor const& w, const uint outCh)

@@ -1,5 +1,5 @@
 /*
-  NodeFactory  -  Interface for creating processing nodes of variouos kinds
+  NodeFactory  -  Interface for creating processing nodes of various kinds
  
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
@@ -23,18 +23,33 @@
 
 #include "proc/engine/nodefactory.hpp"
 #include "proc/mobject/session/effect.hpp"
+#include "lib/allocationcluster.hpp"
+
+#include "proc/engine/nodewiring.hpp"
 
 namespace engine {
+  
+  namespace { // Details of node fabrication
 
+    ////////////////////////////////////////////////TODO: still needed?
+  
+  } // (END) Details of node fabrication
+  
+  
   using mobject::Placement;
   using mobject::session::Effect;
   
-
+  
   /** create a processing node able to render an effect */
-  PTrafo
-  NodeFactory::operator() (Placement<Effect> const&)
+  PNode
+  NodeFactory::operator() (Placement<Effect> const& effect, WiringSituation& intendedWiring)
   {
-    UNIMPLEMENTED ("create proc node for Effect/Plugin");
+    intendedWiring.resolveProcessor(effect->getProcAsset());
+    WiringDescriptor& wiring = wiringFac_(intendedWiring);
+    
+    ProcNode& newNode = alloc_.create<ProcNode> (wiring);
+    ENSURE (newNode.isValid());
+    return &newNode;
   }
 
 

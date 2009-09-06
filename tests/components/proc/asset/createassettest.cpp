@@ -113,13 +113,13 @@ namespace asset
             try 
               { // can't be found if specifying wrong Asset kind.... 
                 aMang.getAsset (ID<asset::Proc>(mm1->getID()));
-                NOTREACHED;
+                NOTREACHED();
               }
             catch (lumiera::error::Invalid& xxx) {ASSERT (xxx.getID()==LUMIERA_ERROR_WRONG_ASSET_KIND);}
             try 
               { // try accessing nonexistant ID 
                 aMang.getAsset (ID<Asset> (1234567890));
-                NOTREACHED;
+                NOTREACHED();
               }
             catch (lumiera::error::Invalid& xxx) {ASSERT (xxx.getID()==LUMIERA_ERROR_UNKNOWN_ASSET_ID);}
             lumiera_error (); // reset errorflag

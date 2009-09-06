@@ -26,7 +26,6 @@
 
 
 #include <boost/format.hpp>
-#include <cstdlib>
 
 using boost::format;
 using std::string;

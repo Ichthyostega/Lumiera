@@ -64,19 +64,20 @@ noinst_LTLIBRARIES += liblumiprocengine.la
 liblumiprocengine_la_CFLAGS = $(AM_CFLAGS) -std=gnu99 -Wall -Wextra -Werror
 liblumiprocengine_la_CXXFLAGS = $(AM_CXXFLAGS) -Wall -Wextra
 
-liblumiprocengine_la_SOURCES =						\
-	$(liblumiprocengine_la_srcdir)/buffhandle.cpp			\
-	$(liblumiprocengine_la_srcdir)/link.cpp				\
-	$(liblumiprocengine_la_srcdir)/mask.cpp				\
-	$(liblumiprocengine_la_srcdir)/nodefactory.cpp			\
-	$(liblumiprocengine_la_srcdir)/nodewiring.cpp			\
-	$(liblumiprocengine_la_srcdir)/pluginadapter.cpp		\
-	$(liblumiprocengine_la_srcdir)/processor.cpp			\
-	$(liblumiprocengine_la_srcdir)/procnode.cpp			\
-	$(liblumiprocengine_la_srcdir)/projector.cpp			\
-	$(liblumiprocengine_la_srcdir)/renderengine.cpp			\
-	$(liblumiprocengine_la_srcdir)/source.cpp			\
-	$(liblumiprocengine_la_srcdir)/stateproxy.cpp			\
+liblumiprocengine_la_SOURCES =					\
+	$(liblumiprocengine_la_srcdir)/buffhandle.cpp		\
+	$(liblumiprocengine_la_srcdir)/link.cpp			\
+	$(liblumiprocengine_la_srcdir)/mask.cpp			\
+	$(liblumiprocengine_la_srcdir)/nodefactory.cpp		\
+	$(liblumiprocengine_la_srcdir)/nodewiring.cpp		\
+	$(liblumiprocengine_la_srcdir)/pluginadapter.cpp	\
+	$(liblumiprocengine_la_srcdir)/procnode.cpp		\
+	$(liblumiprocengine_la_srcdir)/projector.cpp		\
+	$(liblumiprocengine_la_srcdir)/rendergraph.cpp		\
+	$(liblumiprocengine_la_srcdir)/renderengine.cpp		\
+	$(liblumiprocengine_la_srcdir)/source.cpp		\
+	$(liblumiprocengine_la_srcdir)/stateproxy.cpp		\
+	$(liblumiprocengine_la_srcdir)/render-invocation.cpp	\
 	$(liblumiprocengine_la_srcdir)/trafo.cpp
 
 
@@ -161,6 +162,7 @@ liblumiprocmobjectsession_la_SOURCES =					\
 	$(liblumiprocmobjectsession_la_srcdir)/meta.cpp			\
 	$(liblumiprocmobjectsession_la_srcdir)/relativelocation.cpp	\
 	$(liblumiprocmobjectsession_la_srcdir)/segment.cpp		\
+	$(liblumiprocmobjectsession_la_srcdir)/segmentation.cpp		\
 	$(liblumiprocmobjectsession_la_srcdir)/simpleclip.cpp		\
 	$(liblumiprocmobjectsession_la_srcdir)/plug.cpp			\
 	$(liblumiprocmobjectsession_la_srcdir)/session-impl.cpp		\
@@ -203,7 +205,7 @@ noinst_HEADERS +=							\
 	$(liblumiproc_la_srcdir)/engine/renderengine.hpp		\
 	$(liblumiproc_la_srcdir)/engine/source.hpp			\
 	$(liblumiproc_la_srcdir)/engine/trafo.hpp			\
-	$(liblumiproc_la_srcdir)/engine/processor.hpp			\
+	$(liblumiproc_la_srcdir)/engine/rendergraph.hpp			\
 	$(liblumiproc_la_srcdir)/mobject/builder/assembler.hpp		\
 	$(liblumiproc_la_srcdir)/mobject/builder/buildertool.hpp	\
 	$(liblumiproc_la_srcdir)/mobject/builder/conmanager.hpp		\
@@ -229,6 +231,7 @@ noinst_HEADERS +=							\
 	$(liblumiproc_la_srcdir)/mobject/session/simpleclip.hpp		\
 	$(liblumiproc_la_srcdir)/mobject/session/mobjectfactory.hpp	\
 	$(liblumiproc_la_srcdir)/mobject/session/segment.hpp		\
+	$(liblumiproc_la_srcdir)/mobject/session/segmentation.hpp	\
 	$(liblumiproc_la_srcdir)/mobject/session/track.hpp		\
 	$(liblumiproc_la_srcdir)/mobject/session/wish.hpp		\
 	$(liblumiproc_la_srcdir)/mobject/session/clip.hpp		\

@@ -24,50 +24,57 @@
 #ifndef MOBJECT_BUILDER_OPERATIONPOINT_H
 #define MOBJECT_BUILDER_OPERATIONPOINT_H
 
-#include "proc/engine/procnode.hpp"
+//#include "proc/engine/procnode.hpp"         /////TODO can we get rid of this header here?
 #include "lib/query.hpp"
 
+#include <boost/scoped_ptr.hpp>
 #include <vector>
 #include <string>
 
 
+namespace asset { class Proc; }
+namespace asset { class Media; }
+namespace engine { class NodeFactory; }
+
 namespace mobject {
-  namespace builder {
-
-    using std::vector;
-    using std::string;
-
-    /**
-     * A point in the render node network under construction.
-     * By means of this unspecific reference, a ProcPatt is able
-     * to deal with this location and to execute a single elementary
-     * building operation denoted by a BuildInstruct at this point.
-     * Usually, the actual point is retrieved from a Mould
-     */
-    class OperationPoint
-      {
-        typedef engine::PNode PNode;
-        
-        vector<PNode> refPoint_;
-        const string streamID_;
-        
-      public:
-        /** create node(s) corresponding to the given Processor-Asset
-         *  and wire them as a successor to this OperationPoint; then
-         *  move this point to refer to the resulting new exit node(s)
-         */
-        void attach (asset::PProc const&);
-        
-        /** connect the output this OperationPoint referes such as to
-         *  connect or combine with the input of the already existing
-         *  nodes accessible via the target OperationPoint. 
-         */
-        void join (OperationPoint& target);
-      };
-
-
-
-  } // namespace mobject::builder
-
-} // namespace mobject
+namespace builder {
+  
+  using std::vector;
+  using std::string;
+  
+  struct RefPoint;
+  
+  /**
+   * A point in the render node network under construction.
+   * By means of this unspecific reference, a ProcPatt is able
+   * to deal with this location and to execute a single elementary
+   * building operation denoted by a BuildInstruct at this point.
+   * Usually, the actual point is retrieved from a Mould
+   */
+  class OperationPoint
+    {
+      boost::scoped_ptr<RefPoint> refPoint_;
+      
+    public:
+      OperationPoint (engine::NodeFactory&, asset::Media const& srcMedia);
+      OperationPoint (RefPoint const& sourcePoint);
+      
+      
+      
+      /** create node(s) corresponding to the given Processor-Asset
+       *  and wire them as a successor to this OperationPoint; then
+       *  move this point to refer to the resulting new exit node(s)
+       */
+      void attach (asset::Proc const&);
+      
+      /** connect the output this OperationPoint refers such as to
+       *  connect or combine with the input of the already existing
+       *  nodes accessible via the target OperationPoint.
+       */
+      void join (OperationPoint& target);
+    };
+  
+  
+  
+}} // namespace mobject::builder
 #endif

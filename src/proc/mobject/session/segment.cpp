@@ -1,5 +1,5 @@
 /*
-  Segment  -  Segment of the Timeline.
+  Segment  -  Segment of the timeline for rendering.
  
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
@@ -23,17 +23,10 @@
 #include "proc/mobject/session/segment.hpp"
 #include "proc/mobject/explicitplacement.hpp"
 
-// Used at the moment (7/07) for partitioning the timeline/fixture into segments
-// to be rendered by a specialized render node network for each, without the need
-// to change any connections within a given segment.
-// Note this concept may be superfluos alltogether; is a draft and the real
-// use still needs to be worked out...
 
 
-namespace mobject
-  {
-  namespace session
-    {
+namespace mobject {
+  namespace session {
 
     /** */
 

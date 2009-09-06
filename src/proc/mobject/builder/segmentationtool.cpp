@@ -35,24 +35,46 @@ namespace mobject {
   namespace builder {
 
 
+  
+    SegmentationTool::SegmentationTool(mobject::session::Fixture&)
+    {
+      UNIMPLEMENTED ("create new SegmentationTool");
+    }
+    
 
     void
     SegmentationTool::treat (Buildable& something)
     {
+      UNIMPLEMENTED ("??? when partitioning timeline");
     }
 
 
     void
     SegmentationTool::treat (Clip& clip)
     {
+      UNIMPLEMENTED ("consider clip when partitioning timeline");
     }
 
 
     void
     SegmentationTool::treat (Effect& effect)
     {
+      UNIMPLEMENTED ("note applied effect when partitioning timeline");
+    }
+    
+    
+    void
+    SegmentationTool::onUnknown (Buildable& target)
+    {
+      UNIMPLEMENTED ("catch-all when partitioning timeline");
     }
 
+    
+    bool
+    SegmentationTool::empty()  const
+    {
+      UNIMPLEMENTED ("detect an empty segmentation");
+    }
 
 
   } // namespace mobject::builder

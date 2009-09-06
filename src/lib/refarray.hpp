@@ -1,5 +1,5 @@
 /*
-  Processor  -  a single render pipeline for one segment of the timeline
+  REFARRAY.hpp  -  abstraction providing array-like access to a list of references
  
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
@@ -18,18 +18,33 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  
-* *****************************************************/
+*/
 
 
-#include "proc/engine/processor.hpp"
-#include "proc/state.hpp"
-
-namespace engine
-  {
-
-  /** */
+#ifndef LIB_REFARRAY_H
+#define LIB_REFARRAY_H
 
 
+#include <boost/noncopyable.hpp>
 
 
-} // namespace engine
+namespace lib {
+  
+  /**
+   * Abstraction: Array of const references.
+   * Typically the return type is an interface, 
+   * and the Implementation wraps some datastructure
+   * holding subclasses.
+   */
+  template<class T>
+  struct RefArray : boost::noncopyable
+    {
+      virtual T const& operator[] (size_t i)  const =0;
+      virtual size_t size()                   const =0;
+      
+      virtual ~RefArray() {}
+    };
+  
+  
+} // namespace lib
+#endif

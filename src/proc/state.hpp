@@ -37,25 +37,23 @@
 namespace engine { 
   
   using lumiera::FrameID;
+  using lumiera::NodeID;
 
   class StateAdapter;
   class BuffTableStorage;
   
+  
+  /**
+   * Abstraction denoting the state of a currently ongoing render/calculation
+   * process, as it is tied to the supporting facilities of the backend.
+   * An State (subclass) instance is the sole connection for the render node
+   * to invoke services of the backend needed to carry out the calculations.
+   * 
+   * @see engine::RenderInvocation top-level entrance point
+   * @see nodeinvocation.hpp impl. used from \em within the nodes
+   */
   class State
     {
-    protected:
-      virtual ~State() {};
-      
-      /** resolves to the State object currently "in charge".
-       *  Intended as a performance shortcut to avoid calling
-       *  up through a chain of virtual functions when deep down
-       *  in chained ProcNode::pull() calls. This allows derived
-       *  classes to proxy the state interface.
-       */ 
-      virtual State& getCurrentImplementation () =0;
-      
-      friend class engine::StateAdapter;
-      
     public:
       /** allocate a new writable buffer with type and size according to
        *  the BufferDescriptor. The actual provider of this buffer depends
@@ -76,8 +74,19 @@ namespace engine {
        */
       virtual void is_calculated (BuffHandle const&)  =0;
       
-      /** try to fetch an existing buffer containing the denoted frame from
-       *  a cache or similar backing system (e.g. peer over the network).
+      /** generate (or calculate) an ID denoting a media data frame
+       *  appearing at the given position in the render network,
+       *  for the time point this rendering process is currently 
+       *  calculating data for.
+       *  @param NodeID the unique identification of a specific node
+       *  @param chanNo the number of the output channel of this node
+       *  @return a complete FrameID which unambiguously denotes this
+       *        specific frame and can be used for caching 
+       */
+      virtual FrameID const& genFrameID (NodeID const&, uint chanNo)  =0;
+      
+      /** try to fetch an existing buffer containing the denoted frame
+       *  from a cache or similar backing system (e.g. network peer).
        *  @return either a handle to a readonly buffer, or a null handle
        *  @note the client is responsible for not modifying the provided data
        */
@@ -86,6 +95,19 @@ namespace engine {
       /** necessary for creating a local BuffTableChunk */
       virtual BuffTableStorage& getBuffTableStorage()  =0; 
       
+      
+    protected:
+      virtual ~State() {};
+      
+      /** resolves to the State object currently "in charge".
+       *  Intended as a performance shortcut to avoid calling
+       *  up through a chain of virtual functions when deep down
+       *  in chained ProcNode::pull() calls. This allows derived
+       *  classes to proxy the state interface.
+       */ 
+      virtual State& getCurrentImplementation () =0;
+      
+      friend class engine::StateAdapter;
     };
   
 } // namespace engine

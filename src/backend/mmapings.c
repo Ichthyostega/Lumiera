@@ -121,7 +121,7 @@ lumiera_mmapings_mmap_acquire (LumieraMMapings self, LumieraFile file, LList acq
       else
         {
           /* create new mmap */
-          TRACE (mmapings_dbg, "mmap not found, creating", mmap);
+          TRACE (mmapings_dbg, "mmap not found, creating");
           ret = lumiera_mmap_new (file, start, size);
 
           llist_insert_head (&self->mmaps, &ret->searchnode);

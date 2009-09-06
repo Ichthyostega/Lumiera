@@ -25,9 +25,10 @@
 #define MOBJECT_SESSION_FIXTURE_H
 
 #include <list>
-#include <tr1/memory>
+#include <boost/scoped_ptr.hpp>
 
 #include "proc/mobject/session/edl.hpp"
+#include "proc/mobject/session/segmentation.hpp"
 #include "proc/mobject/session/track.hpp"
 #include "proc/mobject/explicitplacement.hpp"
 #include "proc/mobject/session/auto.hpp"
@@ -38,22 +39,30 @@ using std::tr1::shared_ptr;
 
 
 
-namespace mobject
-  {
-  namespace session
-    {
+namespace mobject {
+  namespace session {
 
 
 
     class Fixture : public EDL
       {
       protected:
-        list<ExplicitPlacement*> timeline;
+        list<ExplicitPlacement> content_;
+        boost::scoped_ptr<Segmentation> partitioning_;
 
+        /////////////TODO: who creates this?
 
       public:
-        list<ExplicitPlacement*> & getPlaylistForRender () ;
+        list<ExplicitPlacement> & getPlaylistForRender () ;
         Auto<double>* getAutomation () ; ///< @todo: just a placeholder at the moment!!!
+        
+      private:
+        virtual bool validate() 
+          {
+            TODO ("how to validate a Fixture?");
+            return false;
+          }
+
       };
     
     

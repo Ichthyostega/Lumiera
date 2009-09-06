@@ -26,24 +26,31 @@
 
 
 #include "proc/engine/procnode.hpp"
+#include "lib/allocationcluster.hpp"
+#include "proc/engine/nodewiring-def.hpp"
 
+//#include <boost/noncopyable.hpp>
 #include <boost/scoped_ptr.hpp>
-#include <cstddef>
+//#include <cstddef>
 
 
 
 namespace engine {
-
-
+  
+  
   class WiringFactory;
   
-  namespace { class WiringFactoryImpl; }  ////TODO: better use a named implementation namespace! (produces warings on gcc 4.3)
+  namespace config { class WiringFactoryImpl; }
+  
+  using lib::RefArray;
+  
+  
   
   
   /**
    * Actual implementation of the link between nodes,
    * also acting as "track switch" for the execution path
-   * choosen while operating the node network for rendering.
+   * chosen while operating the node network for rendering.
    * @param STATE Invocation state object controlling the
    *        behaviour of callDown() while rendering.
    * @see StateAdapter
@@ -53,35 +60,38 @@ namespace engine {
   class NodeWiring
     : public WiringDescriptor
     {
-      const uint siz_;
-      const uint nrO_; 
-      
-      friend class WiringFactory;
       
     public:
-      virtual uint getNrI()  const { return siz_ - nrO_; }
-      virtual uint getNrO()  const { return nrO_; }
-
+      NodeWiring(WiringSituation const& setup)
+        : WiringDescriptor(setup.makeOutDescriptor(), 
+                           setup.makeInDescriptor(),
+                           setup.resolveProcessingFunction(),
+                           setup.createNodeID())
+        { }
       
-    protected:
+    private:
       virtual BuffHandle
-      callDown (State& currentProcess, uint requiredOutputNr)  const 
+      callDown (State& currentProcess, uint requestedOutputNr)  const 
         {
-          STATE thisStep (currentProcess, *this);
-          return thisStep.retrieve (requiredOutputNr); // fetch or calculate results
+          STATE thisStep (currentProcess, *this, requestedOutputNr);
+          return thisStep.retrieve (); // fetch or calculate results
         }
       
     };
-
-    
-    
+  
+  
+  
   class WiringFactory
     {
-      boost::scoped_ptr<WiringFactoryImpl> pImpl_;
+      lib::AllocationCluster& alloc_;
+      boost::scoped_ptr<config::WiringFactoryImpl> pImpl_;
       
     public:
+      WiringFactory (lib::AllocationCluster& a);
+     ~WiringFactory ();
+      
       WiringDescriptor&
-      operator() (uint nrOut, uint nrIn, bool cache);
+      operator() (WiringSituation const& setup);
     };
   
   

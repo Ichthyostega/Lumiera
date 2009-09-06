@@ -528,7 +528,7 @@ Even if the low-level memory manager(s) may use raw storage, we require that the
 &amp;rarr; see MemoryManagement
 </pre>
 </div>
-<div title="Asset" modifier="Ichthyostega" modified="200906071813" created="200708100337" tags="def classes img" changecount="16">
+<div title="Asset" modifier="Ichthyostega" modified="200906071813" created="200708100337" tags="def classes img" changecount="17">
 <pre>Asset management is a subsystem on its own. Assets are &quot;things&quot; that can be loaded into a session, like Media, Clips, Effects, Transitions. It is the &quot;bookkeeping view&quot;, while the EDL is the &quot;manipulation and process view&quot;. Some Assets can be //loaded// and a collection of Assets is saved with each Session. Besides, there is a collection of basic Assets always available by default.
 
 The Assets are important reference points holding the information needed to access external resources. For example, an Clip asset can reference a Media asset, which in turn holds the external filename from which to get the media stream. For Effects, the situation is similar. Assets thus serve two quite distinct purposes. One is to load, list, group search and browse them, and to provide an entry point to create new or get at existing MObjects in the EDL, while the other purpose is to provide attribute and property informations to the inner parts of the engine, while at the same time isolating and decoupling them from environmental details. 
@@ -545,9 +545,9 @@ Some piece of Media Data accessible at some external Location and able to be pro
 
 !Processing Asset
 Some software component able to work on media data in the Lumiera Render engine Framework. This includes all sorts of loadable effects, as well as some of the standard, internal facilities (Mask, Projector). Note that Processing Assets typically provide some attachment Point or means of communication with GUI facilities.
-* __outward interface operations__ include...
-* __inward interface operations__ include...
-&amp;rarr; ProcAsset {{red{to be defined}}}
+* __outward interface operations__ include getting name and description, investigating the media types the processor is able to handle, cause the underlying module to be acutally loaded...
+* __inward interface operations__ include resolving the actual processing function.
+&amp;rarr; ProcAsset
 
 !Structural Asset
 Some of the building blocks providing the framework for the objects placed into the current Session. Notable examples are [[processing pipes|Pipe]] within the high-level-model, Viewer attachment points, Tracks, etc.
@@ -811,7 +811,7 @@ With regard to the build process, the wiring of data connections translates into
 In many cases, the parameter values provided by these connections aren't frame based data, rather, the processing function needs a call interface to get the current value (value for a given time), which is provided by the parameter object. Here, the wiring needs to link to the suitable parameter instance, which is located within the high-level model (!). As an additional complication, calculating the actual parameter value may require a context data frame (typically for caching purposes to speed up the interpolation). While these parameter context data frames are completely opaque for the render node, they have to be passed in and out similar to the state needed by the node itself, and the wiring has to prepare for accessing these frames too.
 </pre>
 </div>
-<div title="Builder" modifier="Ichthyostega" modified="200805300043" created="200706220317" tags="def overview" changecount="27">
+<div title="Builder" modifier="Ichthyostega" modified="200810170221" created="200706220317" tags="def overview" changecount="28">
 <pre>The Builder takes some MObject/[[Placement]] information (called Timeline) and generates out of this a Render Engine configuration able to render this Objects. It does all decisions and retrieves the current configuration of all objects and plugins, so the Render Engine can just process them stright forward.
 
 The Builder is the central part of the [[Builder Pattern|http://en.wikipedia.org/wiki/Builder_pattern]]
@@ -819,21 +819,25 @@ The Builder is the central part of the [[Builder Pattern|http://en.wikipedia.org
 As the builder has to create a render node network implementing most of the features and wiring possible with the various MObject kinds and placement types, it is a rather complicated piece of software. In order to keep it manageable, it is broken down into several specialized sub components:
 * clients access builder functionality via the BuilderFacade
 * the [[Proc-Layer-Controller|Controller]] initiates the BuildProcess and does the overall coordination of scheduling edit operations, rebuilding the fixture and triggering the Builder
-* to carry out the building, we use several primary tools (SegmentationTool, NodeCreaterTool,...),  together with a BuilderToolKit to be supplied by the [[tool factory|BuilderToolFactory]]
+* to carry out the building, we use several primary tools (SegmentationTool, NodeCreatorTool,...),  together with a BuilderToolKit to be supplied by the [[tool factory|BuilderToolFactory]]
 * //operating the Builder// can be viewed at from two different angles, either emphasizing the [[basic building operations|BasicBuildingOperations]] employed to assemble the render node network, or focussing rather at the [[mechanics|BuilderMechanics]] of cooperating parts while processing.
 * besides, we can identify a small set of elementary situations we call [[builder primitives|BuilderPrimitives]], to be covered by the mentioned BuilderToolKit; by virtue of [[processing patterns|ProcPatt]] they form an [[interface to the rule based configuration|BuilderRulesInterface]].
 * the actual building (i.e. the application of tools to the timeline) is done by the [[Assembler|BuilderAssembler]], which is basically a collection of functions (but has a small amount of global configuration state)
 * any non-trivial wiring of render nodes, tracks, pipes and [[automation|Automation]] is done by the services of the [[connection manager|ConManager]]
 </pre>
 </div>
-<div title="BuilderMechanics" modifier="Ichthyostega" created="200805210256" tags="design dynamic Builder" changecount="1">
+<div title="BuilderMechanics" modifier="Ichthyostega" modified="200810170220" created="200805210256" tags="design dynamic Builder" changecount="3">
 <pre>The cooperation of several components creates a context of operation for the primary builder working tool, the [[node creator|PlanningNodeCreatorTool]]:
 * the BuilderToolFactory acts as the &quot;builder for the builder tools&quot;, i.e. we can assume to be able to retrive all needed primary tools and elementary tools from this factory, completely configured and ready to use.
 * the [[Assembler|BuilderAssembler]] has the ability to consume objects from the high level model and feed them to the node creator (which translates into a dispatch of individual operations suited to the objects to be treated). This involves some sort of scheduling or ordering of the operaions, which is the only means to direct the overall process such as to create a sensible and usable result. //This is an fundamental design decision:// the actual working tools have no hard wired knowledge of the &quot;right process&quot;, which makes the whole Builder highly configurable (&quot;open&quot;).
 * the [[connection manager|ConManager]] on the contrary is a passive service provider. Fed with [[wiring requests|WiringRequest]], he can determine if a desired connection is possible, and what steps to take to implement it; the latter recursively creates further building requests to satisfy by the assembler, and possibly new wiring requests.
 
 !!pattern of operation
-The working pattern of this builder mechanics can be described as triggering, enqueuing, priorizing, recursing and exhausting. Without the priorizing part, it would be a depth-first call graph without any context state, forcing us to have all cross reference information available at every node or element to be treated. We prefer to avoid this overhead by ordering the operations into several phases and within these phases into correlated entities with the help of a ''weighting function'' and scheduling with a ''priority queue''</pre>
+The working pattern of this builder mechanics can be described as triggering, enqueuing, priorizing, recursing and exhausting. Without the priorizing part, it would be a depth-first call graph without any context state, forcing us to have all cross reference information available at every node or element to be treated. We prefer to avoid this overhead by ordering the operations into several phases and within these phases into correlated entities with the help of a ''weighting function'' and scheduling with a ''priority queue''
+
+!!call chain
+After preparing the tools with the context state of this build process, the assembler drives the visitation process in the right order. The functions embedded within the visitor (NodeCreatorTool) for treating specific kinds of objects in turn use the toolkit (=the fully configured tool factory) to get the mould(s) for the individual steps they need to carry out. This involves preparing the mould (with the high-level object currently in-the-works, a suitable processing pattern and additional references), followed by operating the mould. The latter &quot;plays&quot; the processing pattern in the context of the mould, which, especially with the help of the operation point, carries out the actual building and/or connecting step. While doing so, the node factory will be invoked, which in turn invokes the wiring factory and thus pre-determines the node's prospective mode of operation when later called for rendering.
+</pre>
 </div>
 <div title="BuilderMould" modifier="Ichthyostega" modified="200805270325" created="200805260248" tags="def" changecount="2">
 <pre>The [[Builder]] uses different kinds of tools for creating a network of render nodes from a given high-level model. When breaking down this (necessarily complex) process into small manageable chunks, we arrive at [[elementary building situations|BuilderPrimitives]]. For each of these there is a specialized tool. We denote these tools as &quot;moulds&quot; because they are a rather passive holder for the objects to be attached and wired up. They are shaped according to the basic form the connections have to follow for each of these basic situations:
@@ -1304,6 +1308,16 @@ Basically, each elementary operation has to record the informations necessary to
 {{red{to be defined in more detail later...}}}
 </pre>
 </div>
+<div title="EffectHandling" modifier="Ichthyostega" modified="200810170025" created="200810162300" tags="design dynamic" changecount="3">
+<pre>We have to deal with effects on various different levels. One thing is to decide if an effect is applicable, another question is to find out about variable and automatable parameters, find a module which can be used as an effect GUI and finally to access a processing function which can be executed on a buffer filled with suitable data.
+
+The effect asset (which is a [[processing asset|ProcAsset]]) provides an unified interface for loading external processing modules and querying their properties. As usual with assets, this is the &quot;bookkeeping view&quot; to start with, but we can create a //processor// from such an asset, i.e. an instance of the processing facility which can be used and wired into the model. Such a processor is an MObject and can be placed into the session (high level model); moreover it holds a concrete wiring for the various control parameters and it has an active link to the effect GUI module. As every ~MObject, it could be placed multiple times to affect several pipes, but all those different Placements would behave as being linked together (with respect to the control parameter sources and the GUI)
+
+When building the low-level model, the actual processing code is resolved and a processing function is installed into the processing node representing the effect. This step includes checking of actual [[media type information|StreamType]], which may result in selecting a specifically tailored implementation function. The parameter wiring on the other hand is //shared// between the effect ~MObject, the corresponding GUI module and all low-level processing nodes. Actually, parameters are more of a reference than actually being values: they provide a {{{getValue()}}} function, which also works with automation. This way, any parameter or automation changes are reflected immediately into the produced output.
+
+Initially, only the parameter (descriptors) are present on the effect ~MObject, while the actual [[parameter providers|ParamProvider]] are created or wired (by the ConManager) on demand.
+</pre>
+</div>
 <div title="Example1" modifier="Ichthyostega" modified="200906071812" created="200706220239" tags="example img" changecount="5">
 <pre>The &amp;raquo;Timeline&amp;laquo; is a sequence of ~MObjects -- here clips -- together with an ExplicitPlacement, locating each clip at a given time and track. (Note: I simplified the time format and wrote frame numbers to make it more clear)
 [img[Example1: Objects in the EDL/Fixture|uml/fig128773.png]]
@@ -1606,6 +1620,7 @@ Finally, this example shows an ''automation'' data set controlling some paramete
 * [[how to handle »attached placement«|AttachedPlacementProblem]]
 * working out the [[basic building situations|BuilderPrimitives]] and [[mechanics of rendering|RenderMechanics]]
 * how to classify and [[describe media stream types|StreamType]] and how to [[use them|StreamTypeUse]]
+* the [[identification of frames and nodes|NodeFrameNumbering]]
 * the relation of [[Project, Timelines and Sequences|TimelineSequences]]
 * how to [[start the GUI|GuiStart]] and how to [[communicate|GuiCommunication]]
 * build the first LayerSeparationInterfaces
@@ -2042,7 +2057,7 @@ The general idea is, that each facade interface actually provides access to a sp
 * it is allways //placed// in some manner, i.e. it is allways accessed via a [[Placement]]
 * {{red{and what else?}}}
 
-&amp;rarr; overview [[MObject class hierarchy|MObjects]]</pre>
+&amp;rarr; [[overview of the MObject hierarchy|MObjects]]</pre>
 </div>
 <div title="MObjectRef" modifier="Ichthyostega" modified="200906020120" created="200904242107" tags="SessionLogic GuiIntegration design draft discuss" changecount="21">
 <pre>''The Problem of referring to an [[MObject]]'' stems from the object //as a concept// encompassing a wider scope then just the current implementation instance. If the object was just a runtime entity in memory, we could use a simple (language) reference or pointer. Actually, this isn't sufficient, as the object reference will pass LayerSeparationInterfaces, will be handed over to code not written in the same implementation language, will be included in an ''UNDO'' record for the UndoManager, and thus will need to be serialized and stored permanently within the SessionStorage.
@@ -2081,7 +2096,7 @@ Presumably, none of the both models is usable as-is; rather we try to reconstruc
 <div title="MObjects" modifier="Ichthyostega" modified="200906071811" created="200706190636" tags="overview img" changecount="17">
 <pre>The ~MObjects Subsystem contains everything related to the [[EDL]] and the various Media Objects placed within. It is complemented by the Asset Management (see &amp;rarr; [[Asset]]). Examples for [[MObjects |MObject]](&amp;rarr; def) being:
 * audio/video clips
-* effects and plugins
+* [[effects and plugins|EffectHandling]]
 * special facilities like mask and projector
 * [[Automation]] sets
 * labels and other (maybe functional) markup
@@ -2122,8 +2137,8 @@ This Design strives to achieve a StrongSeparation between the low-level Structur
 {{red{let's see if this approach works...}}}
 </pre>
 </div>
-<div title="ManagementRenderNodes" modifier="Ichthyostega" modified="200810180026" created="200805280200" tags="impl decision" changecount="5">
-<pre>Contrary to the &amp;rarr;[[Assets and MObjects|ManagementAssetRelation]], the usage pattern for [[render nodes|ProcNode]] is quite simple: All nodes are created together every time a new segment of the network is being build and are all needed together until this segment is re-built, at which point they can be thrown away altogether. While it would be easy to handle the nodes automatically by smart-ptr (the creation is accessible only by use of the {{{NodeFactory}}} anyways), it //seems advisable to care for a bulk allocation/deallocation here.// The reason being not so much the amount of memory (which is expected to be moderate), but the fact the build process can be triggered repeatedly several times a second when tweaking the EDL, which could lead to fragmentation and memory pressure.
+<div title="ManagementRenderNodes" modifier="Ichthyostega" modified="200810160131" created="200805280200" tags="impl decision" changecount="5">
+<pre>Contrary to the &amp;rarr;[[Assets and MObjects|ManagementAssetRelation]], the usage pattern for [[render nodes|ProcNode]] is quite simple: All nodes are created together every time a new segment of the network is being build and will be used together until this segment is re-built, at which point they can be thrown away altogether. While it would be easy to handle the nodes automatically by smart-ptr (the creation is accessible only by use of the {{{NodeFactory}}} anyways), it //seems advisable to care for a bulk allocation/deallocation here.// The reason being not so much the amount of memory (which is expected to be moderate), but the fact the build process can be triggered repeatedly several times a second when tweaking the EDL, which could lead to fragmentation and memory pressure.
 
 __10/2008__: the allocation mechanism can surely be improved later, but for now I am going for a simple implementation based on heap allocated objects owned by a vector or smart-ptrs. For each segment of the render nodes network, we have several families of objects, each of with will be maintained by a separate low-level memory manager (as said, for now implemented as vector of smart-ptrs). Together, they form an AllocationCluster; all objects contained in such a cluster will be destroyed together.
 </pre>
@@ -2212,15 +2227,32 @@ So, when creating a clip out of such a compound media asset, the clip has to be 
 * we distinguish elementay (non-compound) Clips from compound clips by concrete subtype. The builder can only handle elementary clips, because he needs to build a separate pipeline for every output channel. So the work of splitting common effect stacks for clips with several channels needs to be done when calculating the Fixture for the current EDL. The Builder expects to be able to build the render nodes corresponding to each entity found in the Fixture one by one.
 * the Builder gets at the ProcPatt (descriptor) of the underlying media for each clip and uses this description as a template to build the render pipeline. That is, the ProcPatt specifies the codec asset and maybe some additional effect assets (deinterlace, scale) necessary for feeding media data corresponding to this clip/media into the render nodes network.</pre>
 </div>
-<div title="NodeCreaterTool" modifier="Ichthyostega" created="200712100626" tags="def" changecount="1">
-<pre>NodeCreaterTool is a [[visiting tool|VisitorUse]] used as second step in the [[Builder]]. Starting out from a [[Fixture]], the builder first [[divides the Timeline into segments|SegmentationTool]] and then processes each segment with the NodeCreaterTool to build a render nodes network (Render Engine) for this part of the timeline. While visiting individual Objects and Placements, the NodeCreaterTool creates and wires the necessary [[nodes|ProcNode]]</pre>
+<div title="NodeConfiguration" modifier="Ichthyostega" modified="200909041807" created="200909041806" tags="spec Builder Rendering" changecount="2">
+<pre>Various aspects of the individual [[render node|ProcNode]] are subject to configuration and may influence the output quality or the behaviour of the render process.
+* the selection //what// actual implementation (plugin) to used for a formally defined &amp;raquo;[[Effect|EffectHandling]]&amp;laquo;
+* the intermediary/common StreamType to use within a [[Pipe]]
+* the render technology (CPU, hardware accelerated {{red{&amp;rarr; Future}}})
+* the ScheduleStrategy (possibly subdividing the calculation of a single frame)
+* if this node becomes a possible CachePoint or DataMigrationPoint in RenderFarm mode
+* details of picking a suitable [[operation mode|RenderImplDetails]] of the node (e.g. utilitsing &quot;in-place&quot; calculation)
+</pre>
 </div>
-<div title="NodeOperationProtocol" modifier="Ichthyostega" modified="200807072147" created="200806010251" tags="Rendering dynamic" changecount="15">
+<div title="NodeCreatorTool" modifier="Ichthyostega" modified="200909041744" created="200712100626" tags="def" changecount="3">
+<pre>~NodeCreatorTool is a [[visiting tool|VisitorUse]] used as second step in the [[Builder]]. Starting out from a [[Fixture]], the builder first [[divides the Timeline into segments|SegmentationTool]] and then processes each segment with the ~NodeCreatorTool to build a render nodes network (Render Engine) for this part of the timeline. While visiting individual Objects and Placements, the NodeCreaterTool creates and wires the necessary [[nodes|ProcNode]]</pre>
+</div>
+<div title="NodeFrameNumbering" modifier="Ichthyostega" modified="200810160129" created="200810140254" tags="spec draft" changecount="3">
+<pre>!Problem of Frame identification
+
+!Problem of Node numbering
+In the most general case the render network may be just a DAG (not just a tree). Especially, multiple exit points may lead down to the same node, and following each of this possible paths the node may be at a different depth on each. This rules out a simple counter starting from the exit level, leaving us with the possibility of either employing a rather convoluted addressing scheme or using arbitrary ID numbers.{{red{...which is what we do for now}}}
+</pre>
+</div>
+<div title="NodeOperationProtocol" modifier="Ichthyostega" modified="200909031217" created="200806010251" tags="Rendering dynamic" changecount="16">
 <pre>The [[nodes|ProcNode]] are wired to form a &quot;Directed Acyclic Graph&quot;; each node knows its predecessor(s), but not its successor(s).  The RenderProcess is organized according to the ''pull principle'', thus we find an operation {{{pull()}}} at the core of this process. There is no such thing as an &quot;engine object&quot; calling nodes iteratively or table driven, rather, the nodes themselves issue recursive calls to their predecessor(s). For this to work, we need the nodes to adhere to a specific protocol:
 # Node is pulled, with a StateProxy object as parameter (encapsulating the access to the frames or buffers)
 # Node may now access current parameter values, using the state accessible via the StateProxy
 # using it's //input-output and wiring descriptor,// the Node creates a StateAdapter wrapping the StateProxy for allocating buffers and accessing the required input
-# StateAdapter first tries to get the output frames from the Cache in the Backend. In case of failure, a {{{process()}}} call is prepared by generating {{{pull()}}} call(s) for the input
+# StateAdapter might first try to get the output frames from the Cache in the Backend. In case of failure, a {{{process()}}} call is prepared by generating {{{pull()}}} call(s) for the input
 # as late as possible, typically on return, these recursive pull-calls have allocated a buffer containing the input data.
 # when input is ready prior to the {{{process()}}} call, output buffers will be allocated, either from the cache, or (if not caching) from the &quot;parent&quot; StateAdapter up the callstack.
 # after all buffers are available, the StateAdapter issues the {{{process()}}} call back to the originating node, which now may dereference the frame pointers and do its calculations
@@ -2276,12 +2308,12 @@ But because I know the opinions on this topc are varying (users tend to be delig
 My proposed aproach is to treat OpenGL as a separate video raw data type, requiring separete and specialized [[Processing Nodes|ProcNode]] for all calculations. Thus the Builder could connect OpenGL nodes if it is possible to cover the whole render path for preview and fall back to the normal ~ProcNodes for all relevant renders
 </pre>
 </div>
-<div title="OperationPoint" modifier="Ichthyostega" modified="200806050155" created="200805270334" tags="def impl" changecount="5">
-<pre>A low-level abstraction within the [[Builder]] &amp;mdash; it serves to encapsulate the details of making multi-channel connections between the render nodes: In some cases, a node can handle N channels internally, while in other cases we need to replicate the node N times and wire each channel individually.
+<div title="OperationPoint" modifier="Ichthyostega" modified="200909041742" created="200805270334" tags="def impl Builder" changecount="8">
+<pre>A low-level abstraction within the [[Builder]] &amp;mdash; it serves to encapsulate the details of making multi-channel connections between the render nodes: In some cases, a node can handle N channels internally, while in other cases we need to replicate the node N times and wire each channel individually. As it stands, the OperationPoint marks the ''borderline between high-level and low-level model'': it is invoked in terms of ~MObjects and other entities of the high-level view, but internally it manages to create ProcNode and similar entities of the low-level model.
 
 The operation point is provided by the current BuilderMould and used by the [[processing pattern|ProcPatt]] executing within this mould and conducting the current build step. The operation point's interface allows //to abstract//&amp;nbsp; these details, as well as to //gain additional control//&amp;nbsp; if necessary (e.g. addressing only one of the channels). The most prominent build instruction used within the processing patterns (which is the instruction {{{&quot;attach&quot;}}}) relies on the aforementioned //approach of abstracted handling,// letting the operation point determine automatically how to make the connection.
 
-This is possible because the operation point has been provided (by the mould) with informations about the media stream type to be wired, which, together with information accessible at the the [[render node interface|ProcNode]] and from the [[referred processing assets|ProcAsset]], with the help of the [[connection manager|ConManager]] allows to figure out what's possible and how to do the desired connections.
+This is possible because the operation point has been provided (by the mould) with informations about the media stream type to be wired, which, together with information accessible at the the [[render node interface|ProcNode]] and from the [[referred processing assets|ProcAsset]], with the help of the [[connection manager|ConManager]] allows to figure out what's possible and how to do the desired connections. Additionally, in the course of deciding about possible connections, the PathManager is consulted to guide strategic decisions regarding the [[render node configuration|NodeConfiguration]], possible type conversions and the rendering technology to employ.
 </pre>
 </div>
 <div title="Overview" modifier="Ichthyostega" modified="200906071810" created="200706190300" tags="overview img" changecount="13">
@@ -2332,7 +2364,7 @@ see also: RenderEntities, [[two Examples (Object diagrams)|Examples]]
 &lt;!--}}}--&gt;
 </pre>
 </div>
-<div title="ParamProvider" modifier="Ichthyostega" modified="200805300124" created="200706220517" tags="def automation" changecount="9">
+<div title="ParamProvider" modifier="Ichthyostega" modified="200810170040" created="200706220517" tags="def automation" changecount="12">
 <pre>A ParamProvider is the counterpart for (one or many) [[Parameter]] instances. It implements the value access function made available by the Parameter object to its clients.
 
 To give a concrete example: 
@@ -2340,9 +2372,13 @@ To give a concrete example:
 * the Plugin has a Parameter Object (from which we could query the information of this parameter being a continuous float function)
 * this Parameter Object provides a getValue() function, which is internally linked (i.e. by configuration) to a //Parameter Provider//
 * the actual object implementing the ParamProvider Interface could be a Automation MObject located somewhere in the EDL and would do bezier interpolation on a given keyframe set.
-* while building the Render Engine configuration actually at work, the Builder would have to setup this link between the Plugin Parameter Object and the ParamProvider; he can do so, because he sees the link between the Automation MObject and the corresponding Effect MObject
+* Param providers are created on demand; while building the Render Engine configuration actually at work, the Builder would have to setup a link between the Plugin Parameter Object and the ParamProvider; he can do so, because he sees the link between the Automation MObject and the corresponding Effect MObject
+
+!!ParamProvider ownership and lifecycle
+Actually, ParamProvider is just an interface which is implemented either by a constant or an [[Automation]] function. In both cases, access is via direct reference, while the link to the ParamProvider is maintained by a smart-ptr, which &amp;mdash; in the case of automation may share ownership with the [[Placement]] of the automation data set.
 
 &amp;rarr; see the class diagram for [[Automation]]
+&amp;rarr; see EffectHandling
 </pre>
 </div>
 <div title="Parameter" modifier="Ichthyostega" modified="200805300124" created="200706220505" tags="def automation" changecount="1">
@@ -2853,6 +2889,9 @@ DAMAGE.
 &lt;html&gt;&lt;sub&gt;&lt;a href=&quot;javascript:;&quot; onclick=&quot;scrollAnchorVisible('Top',null, event)&quot;&gt;[Top]&lt;/sub&gt;&lt;/a&gt;&lt;/html&gt;
 ***/</pre>
 </div>
+<div title="PathManager" modifier="Ichthyostega" created="200909041748" tags="def Builder" changecount="1">
+<pre>Facility guiding decisions regarding the strategy to employ for rendering or wiring up connections. The PathManager is querried through the OperationPoint, when executing the connection steps within the Build process.</pre>
+</div>
 <div title="Pipe" modifier="Ichthyostega" modified="200804110301" created="200801062110" tags="def decision" changecount="6">
 <pre>Pipes play an central role within the Proc Layer, because for everything placed and handled within the EDL, the final goal is to get it transformed into data which can be retrieved at some pipe's exit port. Pipes are special facilities, rather like inventory, separate and not treated like all the other objects.
 We don't distinguish between &quot;input&quot; and &quot;output&quot; ports &amp;mdash; rather, pipes are thought to be ''hooks for making connections to''. By following this line of thought, each pipe has an input side and an output side and is in itself something like a ''Bus'' or ''processing chain''. Other processing entities like effects and transitions can be placed (attached) at the pipe, resulting them to be appended to form this chain. Likewise, we can place [[wiring requests|WiringRequest]] to the pipe, meaning we want it connected so to send it's output to another destination pipe. The [[Builder]] may generate further wiring requests to fulfil the placement of other entities.
@@ -3044,10 +3083,10 @@ afterwards.
 &lt;&lt;tasksum end&gt;&gt;
 </pre>
 </div>
-<div title="PlanningNodeCreatorTool" modifier="Ichthyostega" modified="200802031829" created="200712090659" tags="impl Builder draft" changecount="1">
+<div title="PlanningNodeCreatorTool" modifier="Ichthyostega" modified="200810170221" created="200712090659" tags="impl Builder draft" changecount="2">
 <pre>//This page is a scrapbook for working out the implementation of the builder//
 
-* NodeCreaterTool is a [[visiting tool|VisitorUse]]
+* NodeCreatorTool is a [[visiting tool|VisitorUse]]
 * the render engine to be built is contained as state within this tool object while it is passed around
 !!!prerequisites
 * Session and ~EDLs exist.
@@ -3210,7 +3249,7 @@ While the Backend is responsible for Data access and management and for carrying
 <div title="ProcAsset" modifier="Ichthyostega" modified="200906071810" created="200709221343" tags="def classes img" changecount="2">
 <pre>All Assets of kind asset::Proc represent //processing algorithms// in the bookkeeping view. They enable loading, browsing and maybe even parametrizing all the Effects, Plugins and Codecs available for use within the Lumiera Session.
 
-Besides, they provide an important __inward interface__ for the [[ProcNode]]s, which will use these asset entries to dispatch the actual processing call when rendering. 
+Besides, they provide an __inward interface__ for the [[ProcNode]]s, enabling them to dispatch the actual processing call while rendering. Actually, this interface is always accessed via an ~Effect-MObject; mostly it is investigated and queried in the build process when creating the corresponding processor nodes. &amp;rarr; see EffectHandling for details
 
 {{red{todo: the naming scheme??}}}
 
@@ -3561,7 +3600,7 @@ At first sight the link between asset and clip-MO is a simple logical relation b
 [img[Entities comprising the Render Engine|uml/fig128389.png]]
 </pre>
 </div>
-<div title="RenderImplDetails" modifier="Ichthyostega" modified="200807132338" created="200806220211" tags="Rendering impl img" changecount="20">
+<div title="RenderImplDetails" modifier="Ichthyostega" modified="200810140245" created="200806220211" tags="Rendering impl img" changecount="22">
 <pre>Below are some notes regarding details of the actual implementation of the render process and processing node operation. In the description of the [[render node operation protocol|NodeOperationProtocol]] and the [[mechanics of the render process|RenderMechanics]], these details were left out deliberately.
 
 !Layered structure of State
@@ -3572,6 +3611,8 @@ For the purpose of node operation, Buffers are identified by a //Buffer-handle,/
 
 !Problem of multi-channel nodes
 Some data processors simply require to work on multiple channels simultanously, while others work just on a single channel and will be replicated by the builder for each channel invoved. Thus, we are struck with the nasty situation that the node graph may go through some nodes spanning the chain of several channels. Now the decision is //not to care for this complexity within a single chain calculating a single channel.// We rely solely on the cache to avoid duplicated calculations. When a given node happens to produce multiple output buffers, we are bound to allocate them for the purpose of this nodes {{{process()}}} call, but we just &quot;let go&quot; the buffers not needed immediately for the channel acutally to be processed. For this to work, it is supposed that the builder has wired in a caching, and that the cache will hit when we touch the same node again for the other channels.
+
+Closely related to this is the problem how to number and identify nodes and thus to be able to find calculated frames in cache (&amp;rarr; [[here|NodeFrameNumbering]])
 
 !Configuration of the processing nodes
 [&gt;img[uml/fig132357.png]]
@@ -3849,9 +3890,9 @@ Consequently, as we can't get away with an fixed Enum of all stream prototypes, 
 NTSC and PAL video, video versus digitized film, HD video versus SD video, 3D versus flat video, cinemascope versus 4:3, stereophonic versus monaural, periphonic versus panoramic sound, Ambisonics versus 5.1, dolby versus linear PCM...
 </pre>
 </div>
-<div title="StreamType" modifier="Ichthyostega" modified="200809280108" created="200808060244" tags="spec discuss draft" changecount="9">
+<div title="StreamType" modifier="Ichthyostega" modified="200908302143" created="200808060244" tags="spec discuss draft" changecount="11">
 <pre>//how to classify and describe media streams//
-Media data is understood to appear structured as stream(s) over time. While there may be an inherent internal structuring, at a given perspective ''any stream is a unit and homogeneous''. In the context of digital media data processing, streams are always ''quantized'', which means they appear as a temporal sequence of data chunks called ''frames''.
+Media data is supposed to appear structured as stream(s) over time. While there may be an inherent internal structuring, at a given perspective ''any stream is a unit and homogeneous''. In the context of digital media data processing, streams are always ''quantized'', which means they appear as a temporal sequence of data chunks called ''frames''.
 
 ! Terminology
 * __Media__ is comprised of a set of streams or channels
@@ -3872,7 +3913,7 @@ A stream type is denoted by a StreamTypeID, which is an identifier, acting as an
 Within the Proc-Layer, media streams are treated largely in a similar manner. But, looking closer, note everything can be connected together, while on the other hand there may be some classes of media streams which can be considered //equivalent// in most respects. Thus, it seems reasonable to separate the distinction between various media streams into several levels
 * Each media belongs to a fundamental ''kind'' of media, examples being __Video__, __Image__, __Audio__, __MIDI__,... Media streams of different kind can be considered somewhat &quot;completely separate&quot; &amp;mdash; just the handling of each of those media kinds follows a common //generic pattern// augmented with specialisations. Basically, it is //impossible to connect// media streams of different kind. Under some circumstances there may be the possibility of a //transformation// though. For example, a still image can be incorporated into video, sound may be visualized, MIDI may control a sound synthesizer.
 * Below the level of distinct kinds of media streams, within every kind we have an open ended collection of ''prototypes'', which, when compared directly, may each be quite distinct and different, but which may be //rendered//&amp;nbsp; into each other. For example, we have stereoscopic (3D) video and we have the common flat video lacking depth information, we have several spatial audio systems (Ambisonics, Wave Field Synthesis), we have panorama simulating sound systems (5.1, 7.1,...), we have common stereophonic and monaural audio. It is considered important to retain some openness and configurability within this level of distinction, which means this classification should better be done by rules then by setting up a fixed property table. For example, it may be desirable for some production to distinguish between digitized film and video NTSC and PAL, while in another production everything is just &quot;video&quot; and can be converted automatically. The most noticeable consequence of such a distinction is that any Bus or [[Pipe]] is always limited to a media stream of a single prototype. (&amp;rarr; [[more|StreamPrototype]])
-* Besides the distinction by prototypes, there are the various media ''implementation types''. This classification is not necessarily hierarchically related to the prototype classification, while in practice commonly there will be some sort of dependency. For example, both stereophonic and monaural audio may be implemented as 96kHz 24bit PCM with just a different number of channel streams, as well we may have a dedicated stereo audio stream with two channels multiplexed into a single stream. For dealing with media streams of various implementation type, we need //library// routines, which also yield a //type classification system.// Most notably, for raw sound and video data we use the [[GAVL]] library, which defines a classification system for buffers and streams.
+* Besides the distinction by prototypes, there are the various media ''implementation types''. This classification is not necessarily hierarchically related to the prototype classification, while in practice commonly there will be some sort of dependency. For example, both stereophonic and monaural audio may be implemented as 96kHz 24bit PCM with just a different number of channel streams, but we may as well get a dedicated stereo audio stream with two channels multiplexed into a single stream. For dealing with media streams of various implementation type, we need //library// routines, which also yield a //type classification system.// Most notably, for raw sound and video data we use the [[GAVL]] library, which defines a classification system for buffers and streams.
 * Besides the type classification detailed thus far, we introduce an ''intention tag''. This is a synthetic classification owned by Lumiera and used for internal wiring decisions. Currently (8/08), we recognize the following intention tags: __Source__, __Raw__, __Intermediary__ and __Target__. Only media streams tagged as __Raw__ can be processed.
 
 !! Media handling requirements involving stream type classification

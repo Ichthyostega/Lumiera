@@ -73,6 +73,14 @@ namespace mobject
     {
       UNIMPLEMENTED ("serch for a given 'thing' within the EDL");
     }
+    
+    
+    bool
+    EDL::validate()
+    {
+      UNIMPLEMENTED ("self-check");
+      return false;
+    }
 
 
 

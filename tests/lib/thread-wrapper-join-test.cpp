@@ -97,7 +97,7 @@ namespace backend {
             try 
               { 
                 waitingHandle.join(); // protocol error: handle wasn't passed for starting a Thread; 
-                NOTREACHED;
+                NOTREACHED();
               }
             catch (lumiera::error::Logic& logo)
               { lumiera_error(); }
@@ -115,7 +115,7 @@ namespace backend {
                 Thread("test Thread joining-3",
                        bind (&ThreadWrapperJoin_test::theAction, this, 333),
                        waitingHandle);    // but then pass it again for another thread....
-                NOTREACHED;
+                NOTREACHED();
               }
             catch (...)
               {

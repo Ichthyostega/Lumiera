@@ -52,7 +52,7 @@
          ({                                                                                     \
            lumiera_cond_section_.lock = (cnd);                                                  \
            NOBUG_IF_ALPHA(lumiera_cond_section_.flag = &NOBUG_FLAG(nobugflag);)                 \
-             RESOURCE_ENTER (nobugflag, (cnd)->rh, "acquire condmutex", &lumiera_cond_section_, \
+             RESOURCE_ENTER (nobugflag, (cnd)->rh, "acquire condmutex",                         \
                              NOBUG_RESOURCE_WAITING, lumiera_cond_section_.rh);                 \
            if (pthread_mutex_lock (&(cnd)->cndmutex))                                           \
              LUMIERA_DIE (LOCK_ACQUIRE);                                                        \
@@ -74,7 +74,7 @@
            REQUIRE (lumiera_lock_section_old_->lock, "section prematurely unlocked");           \
            lumiera_cond_section_.lock = cnd;                                                    \
            NOBUG_IF_ALPHA(lumiera_cond_section_.flag = &NOBUG_FLAG(nobugflag);)                 \
-           RESOURCE_ENTER (nobugflag, (cnd)->rh, "acquire condmutex", &lumiera_cond_section_,   \
+           RESOURCE_ENTER (nobugflag, (cnd)->rh, "acquire condmutex",                           \
                            NOBUG_RESOURCE_WAITING, lumiera_cond_section_.rh);                   \
            if (pthread_mutex_lock (&(cnd)->cndmutex))                                           \
              LUMIERA_DIE (LOCK_ACQUIRE);                                                        \

@@ -24,7 +24,7 @@
 #include "proc/engine/procnode.hpp"
 #include "proc/engine/nodewiring.hpp"
 #include "proc/engine/nodeoperation.hpp"
-#include "proc/engine/nodewiringconfig.hpp"
+#include "proc/engine/nodewiring-config.hpp"
 
 #include "lib/meta/typelist-util.hpp"
 
@@ -40,6 +40,8 @@ namespace engine {
     using lumiera::typelist::Apply;
     using lumiera::typelist::Filter;
     
+    using lib::AllocationCluster;
+    
     
     typedef Flags<CACHING,PROCESS,INPLACE>::Tuple AllFlags;
     
@@ -52,48 +54,47 @@ namespace engine {
     /** filter those configurations which actually define a wiring strategy */
     typedef Filter<AllConfigs::List, Instantiation<Strategy>::Test> PossibleConfigs;
     
-  } // namespace config
-  
-  
-  
-  
-  namespace { // internal: setting up a factory for each required configuration
-    
-    using config::ConfigSelector;
-    
-    class Alloc {}; ///////////////TODO
     
     
+    // internal details: setting up a factory for each required configuration
+    
+    
+    
+    /**
+     * Fabricating a WiringDescriptor
+     * tailored for a specific node wiring situation.
+     */
     template<class CONF>
     class WiringDescriptorFactory
       {
-        Alloc& alloc_;
+        AllocationCluster& alloc_;
+        
+        /* ==== pick actual wiring code ==== */
+        typedef typename SelectBuffProvider<CONF>::Type BuffProvider;
+        typedef ActualInvocationProcess<Strategy<CONF>, BuffProvider> InvocationStateType;
+        
+        // the concrete implementation of the glue code...
+        typedef NodeWiring<InvocationStateType> ActualWiring;
+        
         
       public:
-        WiringDescriptorFactory(Alloc& a) 
+        WiringDescriptorFactory(AllocationCluster& a) 
         : alloc_(a) {}
         
         WiringDescriptor&
-        operator() ()  
+        operator() (WiringSituation const& intendedWiring)  
           { 
-            /////////////////////////////////////////////TODO
-            
-            typedef config::Strategy<CONF> Strategy;
-            typedef typename config::SelectBuffProvider<>::Type BuffProvider; ////////////////////////TODO: how to extract the required flags from CONF??
-            typedef ActualInvocationProcess<Strategy, BuffProvider> InvocationStateType;
-            
-            typedef NodeWiring<InvocationStateType> Product;
-            
-            Product * dummy (0);
-            return *dummy;
+            return alloc_.create<ActualWiring> (intendedWiring);
           }
       };
     
-    typedef WiringDescriptor& (FunctionType)(void);
+    /** invocation signature of the factories */
+    typedef WiringDescriptor& (FunctionType)(WiringSituation const&);
     
-    typedef ConfigSelector< WiringDescriptorFactory  ///< Factory template
-                          , FunctionType            ///<  function signature of the Factory
-                          , Alloc&                 ///<   allocator fed to all factories
+    /** preconfigured table of all possible factories */
+    typedef ConfigSelector< WiringDescriptorFactory  ///< Factory template to instantiate 
+                          , FunctionType            ///<  function signature of the Factories
+                          , AllocationCluster&     ///<   allocator fed to all factories
                           > WiringSelector;
     
     
@@ -101,38 +102,51 @@ namespace engine {
       {
         WiringSelector selector;
         
-        WiringFactoryImpl (Alloc& alloc)
+        WiringFactoryImpl (AllocationCluster& alloc)
           : selector(config::PossibleConfigs::List(), alloc)
           { }
       };
   
-  } // (END) internals
+  } // (END) internals (namespace config)
   
   
-  /////////////////////////////TODO: define the ctor
   
+  
+  /** As the WiringFactory (and all the embedded factories
+   *  for the specific wiring situations) use the AllocationCluster
+   *  of the current build process, we need to create a new instance
+   *  for each newly built segment of the low-level model.
+   *  @note As this ctor creates a WiringFactoryImpl instance, 
+   *        compiling this invocation actually drives the necessary
+   *        template instantiations for all cases encountered while
+   *        building the node network.
+   */
+  WiringFactory::WiringFactory (lib::AllocationCluster& a)
+    : alloc_(a),
+      pImpl_(new config::WiringFactoryImpl (alloc_))
+    { }
+  
+  
+  WiringFactory::~WiringFactory () {}
+
+      
+
   
   /** create and configure a concrete wiring descriptor to tie
    *  a ProcNode to its predecessor nodes. This includes selecting
-   *  the actual StateProxy type, configuring it out of some operation
-   *  control templates (policy classes). Compiling this operator function
-   *  actually drives the necessary template instantiations for all cases
-   *  encountered while building the node network.
+   *  the actual StateAdapter type, configuring it based on operation
+   *  control templates (policy classes).
    *  The created WiringDescriptor object is bulk allocated similar to the ProcNode
    *  objects for a given segment of the Timeline. It should be further configured
    *  with the actual predecessor nodes pointers and can then be used to create
    *  the new processing node to be wired up.  
    */
   WiringDescriptor&
-  WiringFactory::operator() (uint nrOut, uint nrIn, bool cache)
+  WiringFactory::operator() (WiringSituation const& setup)
   {
-    UNIMPLEMENTED ("build the actual wiring descriptor based on given operation options");
-    
-//    Bits config (FlagInfo<Config>::CODE);
-    size_t config = 13;  /////////////////////////////////////////TODO
-//    return pImpl_->selector[config]();
+    long config = setup.getFlags();
+    return pImpl_->selector[config] (setup);
   }
-  // BlockAlloc<NodeWiring< StateAdapter< Config<cache, process, inplace> > > >::fabricate();
   
   
 } // namespace engine

@@ -56,8 +56,11 @@ test_components_SOURCES =							\
 	$(testcomponents_srcdir)/proc/control/command-registry-test.cpp		\
 	$(testcomponents_srcdir)/proc/control/argument-tuple-accept-test.cpp	\
 	$(testcomponents_srcdir)/proc/control/memento-tie-test.cpp		\
-	$(testcomponents_srcdir)/proc/engine/bufftabletest.cpp			\
-	$(testcomponents_srcdir)/proc/engine/sourcenodetest.cpp         	\
+	$(testcomponents_srcdir)/proc/engine/buff-table-test.cpp		\
+	$(testcomponents_srcdir)/proc/engine/node-basic-test.cpp         	\
+	$(testcomponents_srcdir)/proc/engine/node-fabrication-test.cpp         	\
+	$(testcomponents_srcdir)/proc/engine/node-operation-test.cpp         	\
+	$(testcomponents_srcdir)/proc/engine/node-source-test.cpp         	\
 	$(testcomponents_srcdir)/proc/mobject/builder/buildertooltest.cpp	\
 	$(testcomponents_srcdir)/proc/mobject/builder/buildsegmenttest.cpp	\
 	$(testcomponents_srcdir)/proc/mobject/controller/rendersegmenttest.cpp	\

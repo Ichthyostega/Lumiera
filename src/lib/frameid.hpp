@@ -26,10 +26,34 @@
 
 
 
-namespace lumiera
-  {
-
-
+namespace lumiera {
+  
+  
+  /**
+   * Identification tuple for denoting render nodes unambiguously.
+   * 
+   * @todo currently (10/08) this is a dummy implementation. We'll find out
+   *       what is needed once the outline of the render engine is complete.
+   */
+  struct NodeID
+    {
+      /////////TODO: include the segment?
+      ulong id;
+      ulong generation;
+      ulong childSum;
+      
+      NodeID()
+        : id (++currID),
+          generation(0),
+          childSum(0)
+        { }
+      
+      static ulong currID;
+    };
+  
+  
+  
+  
   /**
    * Identification tuple for addressing frames unambiguously.
    * 
@@ -45,12 +69,12 @@ namespace lumiera
       FrameID(long dum=0) : dummy(dum) {}
       operator long () { return dummy; }
       
-      bool operator<  (const FrameID& of)  const { return dummy <  of.dummy; }
-      bool operator== (const FrameID& of)  const { return dummy == of.dummy; }
+      bool operator<  (const FrameID& other)  const { return dummy <  other.dummy; }
+      bool operator== (const FrameID& other)  const { return dummy == other.dummy; }
     };
-    
   
-
+  
+  
    
 } // namespace lumiera
 #endif
