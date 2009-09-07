@@ -43,8 +43,7 @@
  ** there might be some type erasure involved, leaving the (otherwise opaque) implementation
  ** class as the only entity with a limited knowledge about the actual memory layout, and
  ** thus the only way of creating a clone properly would be to forward down into this
- ** implementation class). As we can't expect to create a one-size-fits-all implementation,
- ** we'll allow for customising the TypedAllocationManager through policy classes. 
+ ** implementation class).
  ** 
  ** Thus, TypedAllocationManager provides the classical operations of an allocator
  ** - allocate
@@ -104,10 +103,6 @@ namespace control { ////////////////////////////////////////////////////////////
       typedef TypedAllocationManager _TheManager;
       
     public:
-
-      /** this is an ABC */
-      virtual ~TypedAllocationManager() {}   ////////////////////////////////////TODO: seems superfluous? We don't have any extension points (and this is a good thing!)
-      
       
       
       /* ======= managing the created objects ============= */
@@ -287,6 +282,7 @@ namespace control { ////////////////////////////////////////////////////////////
       destroyElement (XX* entry)
         {
           if (!entry) return;
+          ////////////////////////////////////////////////TODO: when actually implementing a custom allocation, please assert here that the entry is indeed managed by us
           try
             {
               entry->~XX();
@@ -298,6 +294,9 @@ namespace control { ////////////////////////////////////////////////////////////
             }
           releaseSlot<XX> (entry);
         }
+      
+      template<class>
+      friend class Killer;  ///< especially all Killers are entitled to desroyElement()
       
     };
   
