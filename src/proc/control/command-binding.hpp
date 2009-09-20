@@ -56,6 +56,7 @@ namespace com { ///< Proc-Layer command implementation details
   
   
   
+////////////////////////TODO: Ticket #266  - can this be merged into argument-tuple-accept.hpp ??
   
   
   /**
@@ -63,7 +64,7 @@ namespace com { ///< Proc-Layer command implementation details
    * a set of \c bind(...) function for up to nine arbitrary arguments.
    * All these functions will package the argument values into a Tuple
    * (record) and forward the call to a \c bindArg(Tuple<TYPES...>) function
-   * on the target class. The latter function is asumed to perform a 
+   * on the target class. The latter function is assumed to perform a 
    * run-time check to detect calls with invalid signature.
    */
   template<class TAR, class BA>

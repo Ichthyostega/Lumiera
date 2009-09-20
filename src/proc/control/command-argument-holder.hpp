@@ -107,7 +107,10 @@ namespace control {
     : public AcceptArgumentBinding< SIG                      // to derive the desired bind(..) signature
                                   , ArgumentHolder<SIG,MEM>  // target class providing the implementation
                                   , CmdClosure               // base class to inherit from
-                                  > 
+                                  >
+    
+////////////////////////TODO: Ticket #266
+//  : public CmdClosure
     {
       /** copy construction allowed(but no assignment)*/
       ArgumentHolder& operator= (ArgumentHolder const&);
@@ -202,7 +205,7 @@ namespace control {
       
       
       /** store a new argument tuple within this ArgumentHolder,
-       *  discarding and previously stored arguments */
+       *  discarding any previously stored arguments */
       void
       bindArg (ArgTuple const& argTup)
         {

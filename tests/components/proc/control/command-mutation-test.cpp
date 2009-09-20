@@ -24,6 +24,7 @@
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
 #include "proc/control/command-mutation.hpp"
+#include "proc/control/command-argument-holder.hpp"
 #include "proc/control/memento-tie.hpp"
 #include "lib/meta/typelist.hpp"
 #include "lib/meta/tuple.hpp"
@@ -91,9 +92,8 @@ namespace test    {
       
       
       /** @test check the Mutation functor which is bound to our \c testFunc(int) .
-       *        Then close this Mutation by providing a parameter tuple.
-       *        Verify finally that by invoking the Mutation functor
-       *        actually \c testFunc(param) is executed.
+       *        Then create a argument closure and use this to invoke the Mutation
+       *        and verify actually \c testFunc(param) is executed.
        */
       void
       checkMutation ()
@@ -101,24 +101,25 @@ namespace test    {
           function<void(int)> funky  = testFunc;
           
           Mutation functor (funky);
-          ASSERT (!functor);
-          VERIFY_ERROR (UNBOUND_ARGUMENTS, functor() );
-          cout << functor << endl;
           
+          MissingArguments nullClosure;
+          ASSERT (!nullClosure);
+          cout << "empty placeholder closure: " << nullClosure << endl;
+          VERIFY_ERROR (UNBOUND_ARGUMENTS, functor(nullClosure) );
+          
+          // now create a real closure....
           Tuple<Types<int> > param = tuple::make(23);
           Closure<void(int)> close_over (param);
           
-          CmdClosure& clo (close_over);
-          functor.close(clo);
-          ASSERT (functor);
+          CmdClosure& closure (close_over);
+          ASSERT (closure);
           
-          cout << "param values: " << clo << endl;
-          cout << functor << endl;
+          cout << "param values: " << closure << endl;
           
           testVal = 0;
-          functor();
+          functor(closure);
           ASSERT (testVal == 23);
-          functor();
+          functor(closure);
           ASSERT (testVal == 2*23);
         }
       
@@ -148,48 +149,49 @@ namespace test    {
           
           MemHolder mementoHolder (undo_func,cap_func);
           UndoMutation undoFunctor (mementoHolder);
-          ASSERT (!undoFunctor);
           ASSERT (!mementoHolder);
-          VERIFY_ERROR (UNBOUND_ARGUMENTS, undoFunctor() );
+          
+          MissingArguments nullClosure;
+          VERIFY_ERROR (UNBOUND_ARGUMENTS, undoFunctor(nullClosure) );
+          VERIFY_ERROR (UNBOUND_ARGUMENTS, undoFunctor.captureState(nullClosure) );
           
           Tuple<Types<> > param;
           Closure<void()> clo (param);
           
           undoFunctor.close(clo);
-          ASSERT ( undoFunctor);
           ASSERT (!mementoHolder);
-          VERIFY_ERROR (MISSING_MEMENTO, undoFunctor() );
+          VERIFY_ERROR (MISSING_MEMENTO, undoFunctor (clo) );
           VERIFY_ERROR (MISSING_MEMENTO, mementoHolder.getState() );
           
           testVal = 11;
-          undoFunctor.captureState();
+          undoFunctor.captureState(clo);
           ASSERT (mementoHolder);
           ASSERT (testVal == 11);
           
           int mem = mementoHolder.getState();
           cout << "saved state: " << mem << endl;
           
-          undoFunctor();
+          undoFunctor(clo);
           ASSERT (testVal == 11 + 11);
-          undoFunctor();
+          undoFunctor(clo);
           ASSERT (testVal == 11 + 11 + 11);
-          undoFunctor.captureState();
+          undoFunctor.captureState(clo);
           ASSERT (33 == mementoHolder.getState());
-          undoFunctor();
+          undoFunctor(clo);
           ASSERT (testVal == 33 + 33);
           testVal = 9;
-          undoFunctor();
+          undoFunctor(clo);
           ASSERT (testVal == 42);
           
           UndoMutation clonedFunc (undoFunctor);    // refers to the same state
           ASSERT (clonedFunc);
           
           ASSERT (33 == mementoHolder.getState());
-          clonedFunc.captureState();
+          clonedFunc.captureState(clo);
           ASSERT (42 == mementoHolder.getState());  // and captures into the same storage
           
           testVal = 0;
-          clonedFunc();
+          clonedFunc(clo);
           ASSERT (testVal == 42);
         }
       

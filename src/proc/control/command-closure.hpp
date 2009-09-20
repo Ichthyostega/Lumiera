@@ -34,10 +34,31 @@
  ** internally contains an Closure<SIG> instance (where SIG is the signature of the
  ** actual command operation function), which implements the invocation of the
  ** operation function with the stored argument tuple.
- ** //TODO
- **  
+ ** 
+ ** \par Command Closure and Lifecycle
+ ** When defining a command, Mutation objects are to be created based on a concrete function.
+ ** These are stored embedded into a type erasure container, thus disposing the specific type
+ ** information of the function and function arguments. Each command needs an Mutation object
+ ** holding the command operation and an UndoMutation holding the undo functor. 
+ ** 
+ ** Later on, any command needs to be made ready for execution by binding it to a specific
+ ** execution environment, which especially includes the target objects to be mutated by the
+ ** command. Effectively, this means "closing" the Mutation (and UNDO) functor(s) with the
+ ** actual function arguments. These arguments are stored embedded within an ArgumentHolder,
+ ** which thereby acts as closure. Besides, the ArgumentHolder also has to accommodate for
+ ** storage holding the captured UNDO state (memento). Thus, internally the ArgumentHolder
+ ** has to keep track of the actual types, thus allowing to re-construct the concrete
+ ** function signature when closing the Mutation.
+ ** 
+ ** Finally, when invoking the command, it passes a \c CmdClosure& to the Mutation object,
+ ** which allows the embedded function to be called with the concrete arguments. Besides
+ ** just invoking it, a command can also be used like a prototype object. To support this
+ ** use case it is possible to re-bind to a new set of command arguments, and to create
+ ** a clone copy of the argument (holder) without disclosing the actual types involved. 
+ ** 
  ** @see Command
  ** @see ProcDispatcher
+ ** @see command-argument-holder.hpp
  **
  */
 
@@ -192,7 +213,7 @@ namespace control {
       typedef typename FunctionSignature< function<SIG> >::Args Args;
       
       
-      typedef BuildTupleAccessor<Args,ParamAccessor> BuildAccessor;
+      typedef BuildTupleAccessor<Args,ParamAccessor> Accessor;
       typedef typename BuildAccessor::Accessor ParamStorageTuple;
       
       ParamStorageTuple params_;
@@ -201,7 +222,7 @@ namespace control {
       typedef Tuple<Args> ArgTuple;
       
       Closure (ArgTuple const& args)
-        : params_(BuildAccessor(args))
+        : params_(Accessor(args))
         { }
       
       /** create a clone copy of this, without disclosing the exact type */

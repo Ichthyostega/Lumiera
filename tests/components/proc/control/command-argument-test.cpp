@@ -213,6 +213,7 @@ namespace test    {
           
           for_each (tup, showIt);
           
+////////////////////////TODO: Ticket #266
           arg1->bind ();
           arg2->bind (rand() % 10);
           arg3->bind (rand() % 10, randTime());
