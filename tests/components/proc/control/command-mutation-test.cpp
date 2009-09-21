@@ -98,11 +98,12 @@ namespace test    {
       void
       checkMutation ()
         {
-          function<void(int)> funky  = testFunc;
+          typedef void SIG_fun(int);
+          function<SIG_fun> funky  = testFunc;
           
           Mutation functor (funky);
           
-          MissingArguments nullClosure;
+          MissingArguments<SIG_fun> nullClosure;
           ASSERT (!nullClosure);
           cout << "empty placeholder closure: " << nullClosure << endl;
           VERIFY_ERROR (UNBOUND_ARGUMENTS, functor(nullClosure) );
@@ -151,14 +152,13 @@ namespace test    {
           UndoMutation undoFunctor (mementoHolder);
           ASSERT (!mementoHolder);
           
-          MissingArguments nullClosure;
+          MissingArguments<void(void)> nullClosure;
           VERIFY_ERROR (UNBOUND_ARGUMENTS, undoFunctor(nullClosure) );
           VERIFY_ERROR (UNBOUND_ARGUMENTS, undoFunctor.captureState(nullClosure) );
           
           Tuple<Types<> > param;
           Closure<void()> clo (param);
           
-          undoFunctor.close(clo);
           ASSERT (!mementoHolder);
           VERIFY_ERROR (MISSING_MEMENTO, undoFunctor (clo) );
           VERIFY_ERROR (MISSING_MEMENTO, mementoHolder.getState() );
@@ -181,17 +181,6 @@ namespace test    {
           ASSERT (testVal == 33 + 33);
           testVal = 9;
           undoFunctor(clo);
-          ASSERT (testVal == 42);
-          
-          UndoMutation clonedFunc (undoFunctor);    // refers to the same state
-          ASSERT (clonedFunc);
-          
-          ASSERT (33 == mementoHolder.getState());
-          clonedFunc.captureState(clo);
-          ASSERT (42 == mementoHolder.getState());  // and captures into the same storage
-          
-          testVal = 0;
-          clonedFunc(clo);
           ASSERT (testVal == 42);
         }
       

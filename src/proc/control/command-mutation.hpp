@@ -84,7 +84,7 @@ namespace control {
       
       
       void
-      operator() (CmdClosure const& clo)
+      operator() (CmdClosure& clo)
         {
           if (!clo)
             throw lumiera::error::State ("Lifecycle error: function arguments not ready",
@@ -128,7 +128,7 @@ namespace control {
       
       
       Mutation&
-      captureState (CmdClosure const& clo)
+      captureState (CmdClosure& clo)
         {
           if (!clo)
             throw lumiera::error::State ("need additional function arguments to be able to capture UNDO state",

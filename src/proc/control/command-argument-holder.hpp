@@ -151,14 +151,14 @@ namespace control {
       }
       
       
-      virtual CmdFunctor closeArguments (CmdFunctor const& func)
+      virtual void invoke (CmdFunctor const& func)
         {
           if (!isValid())
             throw lumiera::error::State ("Lifecycle error: can't bind functor, "
                                          "command arguments not yet provided",
                                          LUMIERA_ERROR_UNBOUND_ARGUMENTS);
           
-          return arguments_->closeArguments(func);
+          arguments_->invoke(func);
         }
       
       
