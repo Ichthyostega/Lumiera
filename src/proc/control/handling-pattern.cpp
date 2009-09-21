@@ -22,7 +22,6 @@
 
 
 
-#include "proc/control/command.hpp"
 #include "proc/control/handling-pattern.hpp"
 #include "proc/control/handling-patterns.hpp"
 
@@ -58,9 +57,9 @@ namespace control {
   /** @note: does error handling, but delegates the actual
    *         execution to the protected (subclass) member */
   ExecResult
-  HandlingPattern::operator() (Command& command)  const
+  HandlingPattern::invoke (CommandImpl& command, Symbol name)  const
   {
-    TRACE (proc_dbg, "invoking %s...", cStr(command));
+    TRACE (proc_dbg, "invoking %s...", name);
     static format err_pre ("Error state detected, %s *NOT* invoked.");
     static format err_post ("Error state after %s invocation.");
     static format err_fatal ("Execution of %s raised unknown error.");
@@ -84,21 +83,21 @@ namespace control {
     catch (lumiera::Error& problem)
       {
         Symbol errID = lumiera_error();
-        WARN (command, "Invocation of %s failed: %s", cStr(command), problem.what());
+        WARN (command, "Invocation of %s failed: %s", name, problem.what());
         TRACE (proc_dbg, "Error flag was: %s", errID);
         return ExecResult (problem);
       }
     catch (std::exception& library_problem)
       {
         Symbol errID = lumiera_error();
-        WARN (command, "Invocation of %s failed: %s", cStr(command), library_problem.what());
+        WARN (command, "Invocation of %s failed: %s", name, library_problem.what());
         TRACE (proc_dbg, "Error flag was: %s", errID);
         return ExecResult (error::External (library_problem));
       }
     catch (...)
       {
         Symbol errID = lumiera_error();
-        ERROR (command, "Invocation of %s failed with unknown exception; error flag is: %s", cStr(command), errID);
+        ERROR (command, "Invocation of %s failed with unknown exception; error flag is: %s", name, errID);
         throw error::Fatal (str (err_fatal % command), errID);
       }
   }
@@ -115,7 +114,7 @@ namespace control {
   /* ====== execution result state object ======= */
   
   
-  /** @note we just grab an retain the error message.
+  /** @note we just grab and retain the error message.
    *  @todo rather keep the exception object around. */
   ExecResult::ExecResult (lumiera::Error const& problem)
     : log_(problem.what())

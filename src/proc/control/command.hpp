@@ -132,6 +132,7 @@ namespace control {
       ExecResult exec (HandlingPattern const& execPattern);
       ExecResult exec (HandlingPattern::ID);
       
+      /** invoke using a default "synchronous" execution pattern */
       ExecResult execSync ();
       
       /** @return ID of the execution pattern used by operator() */

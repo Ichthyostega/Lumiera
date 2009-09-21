@@ -22,7 +22,17 @@
 
 
 /** @file handling-pattern.hpp
- ** //TODO 
+ ** Pre-defined command execution templates.
+ ** Any command can be configured to use a specific handling pattern
+ ** on invocation. Moreover, there is a default handling pattern for commands.
+ ** These patterns define the steps necessary for getting the command actually
+ ** invoked (template method pattern). A pattern may cause the command to be
+ ** enqueued, registered for UNDO or dispatched into a background thread.
+ ** To carry out the work, HandlingPattern implementations are allowed to
+ ** invoke the CommandImpl API directly. 
+ **
+ ** @todo it is not clear what's the difference between "throw" and "no-throw" pattern
+ ** @todo any integration with the (yet undefined as of 9/09) ProcDispatcher is missing.
  **
  ** @see ProcDispatcher
  ** @see Session
@@ -37,7 +47,7 @@
 //#include "pre.hpp"
 #include "lib/error.hpp"
 #include "lib/bool-checkable.hpp"
-//#include "include/symbol.hpp"
+#include "include/symbol.hpp"
 
 //#include <tr1/memory>
 #include <string>
@@ -47,11 +57,11 @@
 namespace control {
   
   using std::string;
-//  using lumiera::Symbol;
+  using lumiera::Symbol;
 //  using std::tr1::shared_ptr;
   
   
-  class Command;
+  class CommandImpl;
   
   
   /**
@@ -101,7 +111,7 @@ namespace control {
       /** main functionality: invoke a command, detect errors.
        *  @return ExecResult object, which might later be used to 
        *          detect errors on execution */
-      ExecResult operator() (Command& command)  const;
+      ExecResult invoke (CommandImpl& command, Symbol name)  const;
       
       /** @return HandlingPatter describing how the UNDO operation is to be performed */
       HandlingPattern const& howtoUNDO()  const;
@@ -111,7 +121,7 @@ namespace control {
       
     protected:
       
-      virtual void perform (Command& command)  const  =0;
+      virtual void perform (CommandImpl& command)  const  =0;
       
       virtual HandlingPattern const& defineUNDO()  const  =0;
       

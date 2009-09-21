@@ -132,12 +132,12 @@ namespace control {
       setArguments (Arguments& args)
         {
           pClo_->bindArguments(args);
-          
-          TODO ("this will break when re-binding to new arguments");
-          
-          do_  .close(*pClo_);
-          undo_.close(*pClo_);
         }
+      
+      void invokeOperation() { do_(*pClo_); }
+      void invokeCapture()   { undo_.captureState(*pClo_); }
+      void invokeUndo()      { undo_(*pClo_); }
+      
       
       
       typedef HandlingPattern::ID PattID;
