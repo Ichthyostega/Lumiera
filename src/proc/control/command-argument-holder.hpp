@@ -140,6 +140,12 @@ namespace control {
           return arguments_->isValid();
         }
       
+      virtual bool isCaptured() const
+        {
+          return memento_->isValid();
+        }
+
+      
       
       /** assign a new parameter tuple to this */
       virtual void bindArguments (Arguments& args)

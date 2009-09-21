@@ -183,15 +183,13 @@ namespace control {
       bool
       canUndo()  const    ///< state check: has undo state been captured? 
         {
-          return isValid() && hasUndoState(*pClo_);
+          return isValid() && pClo_->isCaptured();
         }
       
       
       ////////////////////////////////////////////////////////////////////////////////////TODO comparisons
       
     private:
-      
-      static bool hasUndoState (CmdClosure const&);
       
     };
   

@@ -50,13 +50,6 @@ namespace control {
   /////////////////////////////////////////TODO: is this impl file actually necessary??
 
   
-  bool
-  CommandImpl::hasUndoState (CmdClosure const& closure)
-  {
-    UNIMPLEMENTED ("how the hell do we get at the memento-captured state???");
-//    REQUIRE (INSTANCEOF (ArgumentHolder, &closure));
-//    return static_cast<ArgumentHolder const&> (closure).canUndo();
-  }
   
   
   

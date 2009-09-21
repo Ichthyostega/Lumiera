@@ -127,14 +127,11 @@ namespace control {
       virtual ~CmdClosure() {}
       
       virtual operator string() const                    =0;
-      
-      virtual bool isValid ()   const                    =0;
-      
-      virtual void bindArguments (Arguments&)            =0;
-      
-      virtual void invoke (CmdFunctor const&)            =0;
-      
-      virtual PClo createClone (TypedAllocationManager&) =0;
+      virtual bool isValid ()   const                    =0;      ///< does this closure hold a valid argument tuple?
+      virtual bool isCaptured () const                   =0;      ///< does this closure hold captured UNDO state?
+      virtual void bindArguments (Arguments&)            =0;      ///< store a set of parameter values within this closure
+      virtual void invoke (CmdFunctor const&)            =0;      ///< invoke functor using the stored parameter values
+      virtual PClo createClone (TypedAllocationManager&) =0;      ///< create clone allocation without disclosing concrete type
     };
   
   
@@ -271,7 +268,8 @@ namespace control {
         }
       
       
-      bool isValid ()  const { return true; }
+      bool isValid ()   const { return true; }
+      bool isCaptured() const { return false; }
       
       
       /// Supporting equality comparisons...
