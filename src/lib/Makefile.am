@@ -46,6 +46,7 @@ liblumiera_la_SOURCES =						\
 	$(liblumiera_la_srcdir)/test/testoption.cpp 		\
 	$(liblumiera_la_srcdir)/test/test-helper.cpp 		\
 	$(liblumiera_la_srcdir)/test/suite.cpp 			\
+	$(liblumiera_la_srcdir)/symbol-impl.cpp			\
 	$(liblumiera_la_srcdir)/cmdline.cpp			\
 	$(liblumiera_la_srcdir)/logging.cpp
 

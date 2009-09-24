@@ -77,13 +77,13 @@ namespace control {
     : public lib::Sync<>
     , noncopyable
     {
-      TypedAllocationManager allocator_;
-      
+      // using a hashtable to implement the index
       typedef std::tr1::unordered_map<Symbol, Command> CmdIndex;
       typedef std::map<void*, Symbol> ReverseIndex;
       
       CmdIndex index_;
       ReverseIndex ridx_;
+      TypedAllocationManager allocator_;
       
       
     public:

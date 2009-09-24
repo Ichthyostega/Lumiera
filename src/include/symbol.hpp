@@ -32,6 +32,7 @@
  ** - automatically maintain a symbol table at runtime to support this
  ** - provide some magic (macros) allowing to build distinct types based on symbols.
  ** 
+ ** @see symbol-impl.cpp 
  ** @see configrules.hpp
  ** @see query.hpp
  */

@@ -198,16 +198,16 @@ namespace control {
   
   inline bool
   operator== (Command const& c1, Command const& c2)
-    {
-      return (!c1 && !c2)
-          || ( c1 &&  c2  && (&c1.impl() == &c2.impl())); 
-    }
+  {
+    return (!c1 && !c2)
+        || ( c1 &&  c2  && (&c1.impl() == &c2.impl())); 
+  }
   
   inline bool
   operator!= (Command const& c1, Command const& c2)
-    {
-      return ! (c1 == c2); 
-    }
+  {
+    return ! (c1 == c2); 
+  }
   
   
   

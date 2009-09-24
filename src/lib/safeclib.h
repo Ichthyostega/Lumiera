@@ -25,7 +25,7 @@
 
 /**
  * @file
- * Portable and safe wrapers around some clib functions and some tools
+ * Portable and safe wrappers around some clib functions and some tools
  */
 LUMIERA_ERROR_DECLARE(NO_MEMORY);
 
