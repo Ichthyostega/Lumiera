@@ -124,8 +124,7 @@ namespace test    {
           // represented internally by a prototype instance
           ASSERT (1+cnt_inst == registry.instance_count());
           cnt_inst++;
-
-          UNIMPLEMENTED ("cover all relevant API functions");
+          
           checkRegistration (registry);
           checkAllocation(registry);
           
@@ -226,7 +225,6 @@ namespace test    {
           ASSERT (!isSameObject (*pImpl, *clone));
           ASSERT (*pImpl == *clone);
           
-                                ///////////////////////////////////////////////TODO: maybe do a simulated command lifecycle here?
           ASSERT (!pImpl->canExec());
           typedef Types<int> ArgType;
           TypedArguments<Tuple<ArgType> > arg (Tuple<ArgType>(98765));

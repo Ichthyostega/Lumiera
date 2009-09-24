@@ -51,14 +51,18 @@
 #include "proc/control/typed-allocation-manager.hpp"
 //#include "proc/control/memento-tie.hpp"
 
+#include <boost/noncopyable.hpp>
+#include <tr1/unordered_map>
 #include <tr1/memory>
 //#include <iostream>
 #include <string>
+#include <map>
 
 
 
 namespace control {
   
+  using boost::noncopyable;
   using std::tr1::shared_ptr;
 //  using std::ostream;
   using std::string;
@@ -71,8 +75,15 @@ namespace control {
    */
   class CommandRegistry
     : public lib::Sync<>
+    , noncopyable
     {
       TypedAllocationManager allocator_;
+      
+      typedef std::tr1::unordered_map<Symbol, Command> CmdIndex;
+      typedef std::map<void*, Symbol> ReverseIndex;
+      
+      CmdIndex index_;
+      ReverseIndex ridx_;
       
       
     public:
@@ -87,6 +98,14 @@ namespace control {
         {
           Lock sync(this);
           UNIMPLEMENTED ("place a commandHandle into the command index, or return the command already registered there");
+          Command& indexSlot (index_[cmdID]);
+          if (!indexSlot)
+            {
+              indexSlot = commandHandle;
+              ridx_[&indexSlot] = cmdID;
+            }
+          return indexSlot;
+          ///////////////////////////TODO possible to return a const& ??
         }
       
       
