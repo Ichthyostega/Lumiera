@@ -55,7 +55,7 @@ namespace lib {
   bool
   operator== (Literal sy1, Literal sy2)
   {
-    return lumiera_strncmp (sy1,sy2, STRING_MAX_RELEVANT); 
+    return !lumiera_strncmp (sy1,sy2, STRING_MAX_RELEVANT); 
   }
   
   

@@ -456,6 +456,20 @@ return: 0
 END
 
 
+TEST "Symbol_test" Symbol_test  <<END
+out: one
+out: sizeof.+lib.Literal.+  =   (4|8)
+out: Ss
+out: one\.\.\.\.one
+return: 0
+END
+
+
+TEST "Hashtable with Symbol keys" SymbolHashtable_test  <<END
+return: 0
+END
+
+
 TEST "Test support functions" TestHelper_test <<END
 out: Displaying types and sizes....
 out: sizeof..theUniverse.+ =  42
