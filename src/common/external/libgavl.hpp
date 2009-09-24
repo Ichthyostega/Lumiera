@@ -33,7 +33,7 @@ namespace lib {
   namespace external {
   
   
-  using lumiera::Symbol;
+  using lib::Symbol;
   
   using lumiera::StreamType;
   typedef StreamType::ImplFacade ImplFacade;

@@ -33,7 +33,7 @@
 
 namespace control {
   
-  using lumiera::Symbol;
+  using lib::Symbol;
   using lumiera::StreamType;
   
   
@@ -90,7 +90,7 @@ namespace control {
       ImplFacade const& fetchImpl (StreamType::ImplFacade::TypeTag);
     };
   
-  extern Symbol ON_STREAMTYPES_RESET;  ///< triggered to load the generic pristine default
+  extern const char* ON_STREAMTYPES_RESET;  ///< triggered to load the generic pristine default
   
   
   template<class TY>

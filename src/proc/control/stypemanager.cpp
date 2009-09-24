@@ -30,7 +30,7 @@
 namespace control {
   
   using lumiera::StreamType;
-  using lumiera::Symbol;
+  using lib::Symbol;
   
   /* ======= stream type manager lifecycle ==========*/
   
@@ -63,7 +63,7 @@ namespace control {
    *        their basic setup functions using this hook, which can be done via
    *        the C interface functions 
    */
-  Symbol ON_STREAMTYPES_RESET ("ON_STREAMTYPES_RESET");
+  const char* ON_STREAMTYPES_RESET ("ON_STREAMTYPES_RESET");
   
   
   

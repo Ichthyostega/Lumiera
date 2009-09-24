@@ -40,7 +40,7 @@ namespace backend {
   
   using std::tr1::bind;
   using std::tr1::function;
-  using lumiera::Literal;
+  using lib::Literal;
   using lib::Sync;
   using lib::RecursiveLock_Waitable;
   using lib::NonrecursiveLock_Waitable;
@@ -180,7 +180,7 @@ namespace backend {
                              , &run         // invoking the run helper and..
                              , this         // passing this start context as parameter
                              , joinCond     // maybe wait-blocking for the thread to terminate
-                             , purpose.c_str()
+                             , purpose.c()
                              , logging_flag
                              );
           
@@ -205,7 +205,7 @@ namespace backend {
        *         copied onto the stack of the new thread, thus it can be transient.
        * 
        */
-      Thread (Literal& purpose, Operation const& operation, NoBugFlag logging_flag = &NOBUG_FLAG(thread))
+      Thread (Literal purpose, Operation const& operation, NoBugFlag logging_flag = &NOBUG_FLAG(thread))
         : started_(false),
           operation_(operation)
         {
@@ -217,7 +217,7 @@ namespace backend {
        *         to wait-blocking on the termination of this newly created thread 
        * 
        */
-      Thread (Literal& purpose, Operation const& operation, 
+      Thread (Literal purpose, Operation const& operation, 
               JoinHandle& join, NoBugFlag logging_flag = &NOBUG_FLAG(thread))
         : started_(false),
           operation_(operation)

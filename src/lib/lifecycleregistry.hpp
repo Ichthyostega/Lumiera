@@ -74,14 +74,14 @@ namespace lumiera {
       
       
       /** @note only one copy of each distinct callback remembered */ 
-      bool enrol (const string label, Hook toCall)
+      bool enrol (Symbol label, Hook toCall)
         {
           return table_[label]
                         .insert(toCall)
                         .second;  // true if actually stored 
         }
       
-      void execute (const string label)
+      void execute (Symbol label)
         {
           Callbacks& cbs (table_[label]);
           Iter e = cbs.end();
@@ -102,7 +102,7 @@ namespace lumiera {
       
       
     private:
-      std::map<const string, Callbacks> table_;
+      std::map<Symbol, Callbacks> table_;
       
       LifecycleRegistry ()  {
         execute (ON_BASIC_INIT);   // just to be sure, typically a NOP, because nothing is registered yet 

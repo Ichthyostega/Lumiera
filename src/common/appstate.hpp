@@ -35,7 +35,7 @@
 #ifndef LUMIERA_APPSTATE_H
 #define LUMIERA_APPSTATE_H
 
-#include "include/symbol.hpp"
+#include "lib/symbol.hpp"
 #include "common/option.hpp"
 #include "common/subsys.hpp"
 

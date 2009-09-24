@@ -27,7 +27,7 @@
 #include "common/subsystem-runner.hpp"
 #include "common/option.hpp"
 
-#include "include/symbol.hpp"
+#include "lib/symbol.hpp"
 #include "backend/thread-wrapper.hpp"
 #include "lib/error.hpp"
 #include "lib/query.hpp"
@@ -89,7 +89,7 @@ namespace test  {
           public Sync<RecursiveLock_Waitable>
         {
           Literal id_;
-          Literal spec_;
+          const string spec_;
           
           volatile bool isUp_;
           volatile bool didRun_;
@@ -101,7 +101,7 @@ namespace test  {
           bool
           shouldStart (lumiera::Option&)
             {
-              Literal startSpec (extractID ("start",spec_));
+              string startSpec (extractID ("start",spec_));
               return "true" ==startSpec 
                   || "fail" ==startSpec
                   || "throw"==startSpec;
@@ -160,7 +160,7 @@ namespace test  {
           void
           run (Subsys::SigTerm termination)
             {
-              Literal runSpec (extractID ("run",spec_));
+              string runSpec (extractID ("run",spec_));
               ASSERT (!isnil (runSpec));
               
               { // run-status handshake

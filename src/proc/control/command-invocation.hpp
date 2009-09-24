@@ -40,7 +40,7 @@
 #define CONTROL_COMMAND_INVOCACTION_H
 
 //#include "pre.hpp"
-//#include "include/symbol.hpp"
+//#include "lib/symbol.hpp"
 //#include "lib/meta/typelist.hpp"
 //#include "lib/meta/tuple.hpp"
 #include "proc/control/command.hpp"
@@ -55,7 +55,7 @@
 
 namespace control {
   
-//  using lumiera::Symbol;
+//  using lib::Symbol;
 //  using std::tr1::shared_ptr;
   using namespace lumiera::typelist;
   
@@ -157,6 +157,15 @@ namespace control {
     ASSERT (command);
     return com::RuntimeCheckedCommandInvoker (command);
   }
+  
+  
+  inline
+  com::RuntimeCheckedCommandInvoker
+  invoke (const char* cmdID)
+  {
+    return invoke(Symbol(cmdID));
+  }
+  
   
 } // namespace control
 #endif

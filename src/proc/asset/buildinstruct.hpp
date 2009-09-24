@@ -32,6 +32,8 @@
 #define ASSET_BUILDINSTRUCT_H
 
 
+#include "lib/symbol.hpp"
+
 #include <boost/variant.hpp>
 #include <string>
 
@@ -39,9 +41,11 @@ using std::string;
 
 
 
-namespace asset
-  {
+namespace asset {
+
   using lumiera::P;
+  using lib::Symbol;
+  using lib::Literal;
   
   class Proc;
   class ProcPatt;
@@ -57,7 +61,7 @@ namespace asset
       vector<PProc> nodes;
 
       /** identifying the point where the nodes should be attached */
-      string point;
+      Literal point;
       
       DoAttach (Symbol where = CURRENT) 
         : point(where) 

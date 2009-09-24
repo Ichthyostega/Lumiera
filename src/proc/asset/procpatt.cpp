@@ -64,7 +64,7 @@ namespace asset
   ProcPatt::newCopy (string newID)  const
   {
     TODO ("implement the Pattern-ID within the propDescriptor!");
-    TODO ("implement a consitent struct asset naming scheme at one central location!!!!!");
+    TODO ("implement a consistent struct asset naming scheme at one central location!!!!!");
     const Asset::Ident newIdi ( this->ident.name+".X"
                               , this->ident.category
                               );

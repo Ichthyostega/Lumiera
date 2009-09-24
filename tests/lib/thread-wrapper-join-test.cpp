@@ -23,7 +23,7 @@
 
 #include "lib/test/run.hpp"
 
-#include "include/symbol.hpp"
+#include "lib/symbol.hpp"
 #include "backend/thread-wrapper.hpp"
 #include "lib/error.hpp"
 #include "lib/sync.hpp"

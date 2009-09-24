@@ -25,7 +25,7 @@
 #include "proc/control/handling-pattern.hpp"
 #include "proc/control/handling-patterns.hpp"
 
-#include "include/symbol.hpp"
+#include "lib/symbol.hpp"
 #include "include/logging.h"
 #include "lib/util.hpp"
 //#include "proc/mobject/mobject-ref.hpp"
@@ -59,7 +59,7 @@ namespace control {
   ExecResult
   HandlingPattern::invoke (CommandImpl& command, Symbol name)  const
   {
-    TRACE (proc_dbg, "invoking %s...", name);
+    TRACE (proc_dbg, "invoking %s...", name.c());
     static format err_pre ("Error state detected, %s *NOT* invoked.");
     static format err_post ("Error state after %s invocation.");
     static format err_fatal ("Execution of %s raised unknown error.");
@@ -83,21 +83,21 @@ namespace control {
     catch (lumiera::Error& problem)
       {
         Symbol errID = lumiera_error();
-        WARN (command, "Invocation of %s failed: %s", name, problem.what());
-        TRACE (proc_dbg, "Error flag was: %s", errID);
+        WARN (command, "Invocation of %s failed: %s", name.c(), problem.what());
+        TRACE (proc_dbg, "Error flag was: %s", errID.c());
         return ExecResult (problem);
       }
     catch (std::exception& library_problem)
       {
         Symbol errID = lumiera_error();
-        WARN (command, "Invocation of %s failed: %s", name, library_problem.what());
-        TRACE (proc_dbg, "Error flag was: %s", errID);
+        WARN (command, "Invocation of %s failed: %s", name.c(), library_problem.what());
+        TRACE (proc_dbg, "Error flag was: %s", errID.c());
         return ExecResult (error::External (library_problem));
       }
     catch (...)
       {
         Symbol errID = lumiera_error();
-        ERROR (command, "Invocation of %s failed with unknown exception; error flag is: %s", name, errID);
+        ERROR (command, "Invocation of %s failed with unknown exception; error flag is: %s", name.c(), errID.c());
         throw error::Fatal (str (err_fatal % command), errID);
       }
   }

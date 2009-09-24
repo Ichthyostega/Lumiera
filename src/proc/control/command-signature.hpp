@@ -47,7 +47,7 @@
 #define CONTROL_COMMAND_SIGNATURE_H
 
 //#include "pre.hpp"
-//#include "include/symbol.hpp"
+//#include "lib/symbol.hpp"
 #include "lib/meta/function.hpp"
 #include "lib/meta/typelist.hpp"
 #include "lib/meta/typelist-util.hpp"
@@ -62,7 +62,7 @@
 
 namespace control {
   
-//  using lumiera::Symbol;
+//  using lib::Symbol;
 //  using std::tr1::shared_ptr;
   using std::tr1::function;
   

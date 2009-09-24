@@ -57,11 +57,11 @@ namespace lumiera
         TestSingletonO(Symbol ty="TestSingletonO")
             : callCnt (0), typid(ty), msg ("%s::doIt() call=%d\n")
         {
-          TRACE (test, "ctor %s", typid);
+          TRACE (test, "ctor %s", typid.c());
         }
         virtual ~TestSingletonO()
         {
-          TRACE (test, "dtor %s", typid);
+          TRACE (test, "dtor %s", typid.c());
         }
 
         void doIt ()
@@ -158,7 +158,7 @@ namespace lumiera
           sing->doIt();
           ASSERT (sing->getCnt() == 1);
 
-          instance.injectSubclass (0); // unshaddowing original instance
+          instance.injectSubclass (0); // un-shadowing original instance
           sing = &instance();
           ASSERT (sing->getCnt() == 2);
           sing->doIt();

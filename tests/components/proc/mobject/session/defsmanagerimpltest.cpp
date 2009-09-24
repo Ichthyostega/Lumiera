@@ -43,7 +43,7 @@ namespace asset {
   namespace test {
     
     using mobject::Session;
-    using lumiera::Symbol;
+    using lib::Symbol;
     using lumiera::Query;
     using lumiera::query::normaliseID;
     

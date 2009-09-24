@@ -36,7 +36,7 @@
 #define CONTROL_PROC_DISPATCHER_H
 
 //#include "pre.hpp"
-//#include "include/symbol.hpp"
+//#include "lib/symbol.hpp"
 #include "proc/control/command.hpp"
 
 //#include <tr1/memory>
@@ -45,7 +45,7 @@
 
 namespace control {
   
-//  using lumiera::Symbol;
+//  using lib::Symbol;
 //  using std::tr1::shared_ptr;
   
   

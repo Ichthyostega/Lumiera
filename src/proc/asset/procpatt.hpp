@@ -36,7 +36,7 @@ using std::vector;
 namespace asset
   {
   using lumiera::P;
-  using lumiera::Symbol;
+  using lib::Symbol;
 
   class Proc;
   class ProcPatt;

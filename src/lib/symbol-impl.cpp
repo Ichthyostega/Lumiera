@@ -21,21 +21,23 @@
 * *****************************************************/
 
 /** @file symbol-impl.hpp
- ** Collection of helpers for working with the lumiera::Symbol.
+ ** Collection of helpers for working with the lib::Symbol.
  ** 
  ** @todo currently as of 9/09 this is more of a placeholder.
  ** And maybe a location for collecting small bits of implementation,
  ** which could be usable later for real Symbol and Literal datatypes.
  ** 
- ** lumiera::Symbol
+ ** lib::Symbol
  ** control::CommandRegistry for usage example of the hash function.
  ** 
  */
 
 
 
-#include "include/symbol.hpp"
+#include "lib/symbol.hpp"
+extern "C" {
 #include "lib/safeclib.h"
+}
 
 #include <boost/functional/hash.hpp>
 #include <cstddef>
@@ -46,12 +48,12 @@ using boost::hash_combine;
 
 
 
-namespace lumiera {
+namespace lib {
   
   /** equality on Symbol values is defined
    *  based on the content, not the address. */
-  inline bool
-  operator== (Symbol sy1, Symbol sy2)
+  bool
+  operator== (Literal sy1, Literal sy2)
   {
     return lumiera_strncmp (sy1,sy2, STRING_MAX_RELEVANT); 
   }
@@ -62,7 +64,7 @@ namespace lumiera {
       and should be usable both with  \c std::tr1 and 
       \c <boost/functional/hash.hpp> . It is implemented
       similar as the boost::hash specialisation for std::string */
-  size_t hash_value (Symbol sym)
+  size_t hash_value (Literal sym)
   {
     size_t hash=0;
     const char *pos = sym;
@@ -75,4 +77,4 @@ namespace lumiera {
   
   
   
-} // namespace lumiera
+} // namespace lib

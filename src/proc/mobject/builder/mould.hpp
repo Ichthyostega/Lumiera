@@ -35,7 +35,7 @@ namespace mobject {
   
     using std::vector;
     using asset::PProcPatt;
-    using lumiera::Symbol;
+    using lib::Symbol;
 
 
     /**

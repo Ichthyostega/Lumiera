@@ -43,7 +43,7 @@
 #include "proc/mobject/builder/buildertool.hpp"
 #include "proc/mobject/session/abstractmo.hpp"
 #include "proc/mobject/placement.hpp"
-#include "include/symbol.hpp"
+#include "lib/symbol.hpp"
 #include "lib/util.hpp"
 
 #include <boost/format.hpp>
@@ -61,7 +61,7 @@ using std::cout;
 namespace mobject {
 namespace test    {
   
-  using lumiera::Symbol;
+  using lib::Symbol;
   using builder::BuilderTool;
   
   

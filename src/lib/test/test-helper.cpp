@@ -34,7 +34,7 @@ namespace test{
   
   
   string
-  showSizeof (size_t siz, Symbol name)
+  showSizeof (size_t siz, const char* name)
   {
     static format fmt ("sizeof( %s ) %|30t|= %3d");
     return str (fmt % (name? name:"?") % siz);

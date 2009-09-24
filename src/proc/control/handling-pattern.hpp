@@ -47,7 +47,7 @@
 //#include "pre.hpp"
 #include "lib/error.hpp"
 #include "lib/bool-checkable.hpp"
-#include "include/symbol.hpp"
+#include "lib/symbol.hpp"
 
 //#include <tr1/memory>
 #include <string>
@@ -57,7 +57,7 @@
 namespace control {
   
   using std::string;
-  using lumiera::Symbol;
+  using lib::Symbol;
 //  using std::tr1::shared_ptr;
   
   

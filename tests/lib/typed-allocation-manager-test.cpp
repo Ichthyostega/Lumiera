@@ -27,7 +27,7 @@
 #include "proc/control/typed-allocation-manager.hpp"
 //#include "proc/control/command-def.hpp"
 //#include "lib/lumitime.hpp"
-//#include "include/symbol.hpp"
+//#include "lib/symbol.hpp"
 #include "lib/util.hpp"
 
 
@@ -58,7 +58,7 @@ namespace test    {
 //  using util::contains;
 
 //  using session::test::TestClip;
-//  using lumiera::Symbol;
+//  using lib::Symbol;
 //  using lumiera::P;
   
   

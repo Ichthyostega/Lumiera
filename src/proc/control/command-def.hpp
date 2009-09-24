@@ -50,7 +50,7 @@
 //#include "pre.hpp"
 #include "lib/error.hpp"
 #include "include/logging.h"
-#include "include/symbol.hpp"
+#include "lib/symbol.hpp"
 #include "proc/control/command.hpp"
 #include "proc/control/command-impl.hpp"                   /////TODO: any chance to get rid of this import here??
 #include "proc/control/command-registry.hpp"
@@ -75,7 +75,7 @@ namespace control {
   
   using std::tr1::shared_ptr;
   using std::tr1::function;
-  using lumiera::Symbol;
+  using lib::Symbol;
   using util::cStr;
   
   using lumiera::typelist::FunctionSignature;
@@ -240,7 +240,7 @@ namespace control {
         : id_(cmdID)
         , prototype_(Command::fetchDef(cmdID))
         {
-          TRACE (command_dbg, "starting CommandDef('%s')...", cmdID);
+          TRACE (command_dbg, "starting CommandDef('%s')...", cmdID.c() );
         }
       
       template<typename SIG>

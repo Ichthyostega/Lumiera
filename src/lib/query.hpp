@@ -30,11 +30,13 @@
 
 #include <boost/format.hpp>
 
-#include "include/symbol.hpp"
+#include "lib/symbol.hpp"
 
 
 namespace lumiera {
-
+  
+  using lib::Symbol;
+  using lib::Literal;
   using std::string;
   using boost::format;
 
@@ -50,7 +52,7 @@ namespace lumiera {
   class Query : public std::string
     {
     public:
-      explicit Query (const string& predicate="") : string(predicate) {}
+      explicit Query (string const& predicate="") : string(predicate) {}
       explicit Query (format& pattern)            : string(str(pattern)) {}
       
       const string asKey()  const
@@ -62,8 +64,7 @@ namespace lumiera {
     };                                          //        for calling removeTerm on the string-ref....
 
     
-  namespace query
-    {
+  namespace query {
     
     /** ensure standard format for a given id string.
      *  Trim, sanitise and ensure the first letter is lower case.
@@ -84,7 +85,5 @@ namespace lumiera {
     const string removeTerm (Symbol, string& termString);
 
     
-  } // namespace query
-    
-} // namespace lumiera
+}} // namespace lumiera::query
 #endif

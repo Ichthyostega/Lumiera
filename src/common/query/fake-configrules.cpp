@@ -59,11 +59,12 @@ namespace lumiera {
       
       /** helper especially for creating structural assets from a capability query */
       template<class STRU>
-      AnyPair entry_Struct(Symbol caps)
+      AnyPair entry_Struct(Literal caps)
       {
         typedef typename WrapReturn<STRU>::Wrapper Ptr;
         
-        Query<STRU> query(caps); 
+        string capabilities (caps);
+        Query<STRU> query (capabilities); 
         Ptr obj = Struct::create (query);
         return AnyPair(query.asKey(), obj);
       }
@@ -125,7 +126,7 @@ namespace lumiera {
     {
       typedef WrapReturn<Pipe>::Wrapper Ptr;
       
-      Ptr newPipe (Struct::create (Query<Pipe> ("make(PP), "+q)));
+      Ptr newPipe (Struct::create (Query<Pipe> (string("make(PP), ")+q)));
       answer_->insert (entry<Pipe> (q, newPipe));
       return true;
     }

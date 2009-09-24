@@ -24,6 +24,8 @@
 #ifndef ASSET_CATEGORY_H
 #define ASSET_CATEGORY_H
 
+#include "lib/symbol.hpp"
+
 #include <string>
 #include <iostream>
 #include <boost/functional/hash.hpp>
@@ -31,6 +33,8 @@
 
 
 namespace asset {
+
+  using lib::Literal;
   
   using std::string;
   using std::ostream;
@@ -70,7 +74,7 @@ namespace asset {
       string path_;
       
     public:
-      Category (const Kind root, string subfolder ="")
+      Category (const Kind root, Literal subfolder ="")
         : kind_(root), path_(subfolder) {};
       
       bool operator== (Category const& other) const { return kind_== other.kind_ && path_== other.path_; }

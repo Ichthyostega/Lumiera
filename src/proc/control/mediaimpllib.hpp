@@ -31,7 +31,7 @@
 
 namespace control {
   
-  using lumiera::Symbol;
+  using lib::Symbol;
   
   
   class MediaImplLib

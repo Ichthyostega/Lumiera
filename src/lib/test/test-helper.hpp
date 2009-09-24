@@ -25,7 +25,7 @@
 #define LIB_TEST_TESTHELPER_H
 
 
-#include "include/symbol.hpp"
+#include "lib/symbol.hpp"
 #include "lib/lumitime.hpp"
 
 #include <typeinfo>
@@ -37,7 +37,7 @@
 namespace lib {
 namespace test{
   
-  using lumiera::Symbol;
+  using lib::Literal;
   using lumiera::Time;
   using std::string;
   using std::rand;
@@ -52,10 +52,10 @@ namespace test{
    *          type identification as implemented by the compiler.
    */
   template<typename T>
-  inline const char*
-  showType (T const& obj, Symbol name=0)
+  inline Literal
+  showType (T const& obj, Literal name=0)
   {
-    return name? name : typeid(obj).name();
+    return name? name : Literal(typeid(obj).name());
   }
   
   /** get a sensible display for a type 
@@ -65,36 +65,36 @@ namespace test{
    *          type identification as implemented by the compiler.
    */
   template<typename T>
-  inline const char*
-  showType (Symbol name=0)
+  inline Literal
+  showType (Literal name=0)
   {
-    return name? name : typeid(T).name();
+    return name? name : Literal(typeid(T).name());
   }
   
   
   /** for printing sizeof().
    *  prints the given size and name literally, without any further magic */
   string
-  showSizeof (size_t siz, Symbol name);
+  showSizeof (size_t siz, const char* name);
   
   /** for printing sizeof(), trying to figure out the type name automatically */
   template<typename T>
   inline string
-  showSizeof(Symbol name=0)
+  showSizeof(const char* name=0)
   {
     return showSizeof (sizeof (T), showType<T> (name));
   }
   
   template<typename T>
   inline string
-  showSizeof(T const& obj, Symbol name=0)
+  showSizeof(T const& obj, const char* name=0)
   {
     return showSizeof (sizeof (obj), showType (obj,name));
   }
   
   template<typename T>
   inline string
-  showSizeof(T *obj, Symbol name=0)
+  showSizeof(T *obj, const char* name=0)
   {
     return obj? showSizeof (*obj, name)
               : showSizeof<T> (name);

@@ -48,6 +48,7 @@
 
 #include "lib/p.hpp"
 #include "lib/query.hpp"
+#include "lib/symbol.hpp"
 #include "lib/meta/generator.hpp"
 #include "lib/singleton-subclass.hpp"
 
@@ -92,8 +93,17 @@ namespace lumiera
       };
     
     
+    using lib::Symbol;
+    using lib::Literal;
+    
+/** placeholder definition for later.
+ *  @todo intention is to integrate with lib::Symbol
+ */
+#define SYMBOL uint
+    
+    
     template
-      < const Symbol SYM,            // Predicate symbol
+      < SYMBOL SYM,                  // Predicate symbol
         typename SIG = bool(string) //  Signature
       >
     class Pred
@@ -119,10 +129,10 @@ namespace lumiera
       {
         static const TY NIL;
         
-        template<Symbol SYM, typename SIG>
+        template<SYMBOL SYM, typename SIG>
         TY find (Pred<SYM,SIG> capability);
         
-        template<Symbol SYM, typename SIG>
+        template<SYMBOL SYM, typename SIG>
         TY make (Pred<SYM,SIG> capability, TY& refObj =NIL);
       };
     

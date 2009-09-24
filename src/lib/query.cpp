@@ -81,7 +81,7 @@ namespace lumiera {
       getTermRegex (Symbol sym)
       {
         if (!contains (regexTable, sym))
-          regexTable[sym] = regex (string(sym)+=matchArgument);
+          regexTable[sym] = regex (string(sym)+matchArgument);
         return regexTable[sym];
       }
     }

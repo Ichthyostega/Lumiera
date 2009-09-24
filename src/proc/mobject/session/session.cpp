@@ -35,11 +35,11 @@
 #include "proc/mobject/session/defsmanager.hpp"
 #include "proc/mobject/session/session-impl.hpp"
 
-#include "include/symbol.hpp"
+#include "lib/symbol.hpp"
 #include "lib/singleton.hpp"
 
 
-using lumiera::Symbol;
+using lib::Symbol;
 using lumiera::Singleton;
 using mobject::session::SessManager;
 using mobject::session::SessManagerImpl;
@@ -69,7 +69,7 @@ namespace mobject {
    *        session should register their basic setup functions using this hook, which can be
    *        done via the C interface functions defined in lifecycle.h
    */
-  Symbol ON_SESSION_START ("ON_SESSION_START");
+  const char* ON_SESSION_START ("ON_SESSION_START");
   
   /** \par
    *  LifecycleHook, to perform any initialisation, wiring and registrations necessary
@@ -77,7 +77,7 @@ namespace mobject {
    *  and configuration has already be loaded. Any subsystems requiring to build some indices
    *  or wiring to keep track of the session's content should register here.
    */
-  Symbol ON_SESSION_INIT ("ON_SESSION_INIT");
+  const char* ON_SESSION_INIT ("ON_SESSION_INIT");
   
   /** \par
    *  LifecycleHook, to perform any state saving, deregistration or de-activation necessary 
@@ -87,7 +87,7 @@ namespace mobject {
    *        specific/internal information into the persisted state, besides actually attaching
    *        data to objects within the session?
    */
-  Symbol ON_SESSION_END ("ON_SESSION_END");
+  const char* ON_SESSION_END ("ON_SESSION_END");
   
   
   

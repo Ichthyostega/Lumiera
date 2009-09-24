@@ -49,7 +49,7 @@
 #include "proc/control/command-impl.hpp"
 #include "proc/mobject/session.hpp"
 #include "include/lifecycle.h"
-//#include "include/symbol.hpp"
+//#include "lib/symbol.hpp"
 
 //#include <tr1/memory>
 //#include <string>
@@ -63,7 +63,7 @@ namespace control {
   
     using std::vector;
 //  using std::string;
-//  using lumiera::Symbol;
+//  using lib::Symbol;
 //  using std::tr1::shared_ptr;
     
     

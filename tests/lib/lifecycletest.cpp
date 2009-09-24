@@ -39,7 +39,7 @@ namespace test   {
   void basicInitHook () { ++basicInit; }
   void myCallback() { ++customCallback; }
   
-  Symbol MY_DEADLY_EVENT = "dial M for murder";
+  const char* MY_DEADLY_EVENT = "dial M for murder";
   
   
   namespace // register them to be invoked by lifecycle event id

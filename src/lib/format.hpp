@@ -34,7 +34,7 @@
 
 //#include "lib/util.hpp"
 #include "lib/meta/trait.hpp"
-#include "include/symbol.hpp"
+#include "lib/symbol.hpp"
 
 #include <string>
 #include <cstring>
@@ -48,7 +48,7 @@ namespace util {
   
   using lumiera::typelist::can_ToString;
   using lumiera::typelist::can_lexical2string;
-  using lumiera::Symbol;
+  using lib::Symbol;
   using boost::enable_if;
   using boost::disable_if;
   using std::string;
@@ -121,7 +121,7 @@ namespace util {
               return string(prefix) + res;
           }
       
-        return fallback? fallback
+        return fallback? string(fallback)
                        : tyStr(val);
       }
   }

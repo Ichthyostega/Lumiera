@@ -139,7 +139,7 @@ namespace lumiera {
             }
           
           void
-          ASSERT_removeTerm (Symbol sym, string input, Symbol extracted, Symbol modified)
+          ASSERT_removeTerm (Symbol sym, string input, string extracted, string modified)
             {
               ASSERT (extracted == removeTerm (sym, input));
               ASSERT (modified  == input);

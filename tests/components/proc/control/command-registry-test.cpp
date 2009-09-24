@@ -36,7 +36,7 @@
 #include "proc/control/command-registry.hpp"
 #include "proc/control/command-def.hpp"
 //#include "lib/lumitime.hpp"
-#include "include/symbol.hpp"
+#include "lib/symbol.hpp"
 #include "lib/util.hpp"
 
 #include "proc/control/test-dummy-commands.hpp"
@@ -68,7 +68,7 @@ namespace test    {
 //  using util::contains;
 
 //  using session::test::TestClip;
-  using lumiera::Symbol;
+  using lib::Symbol;
 //  using lumiera::P;
   
   

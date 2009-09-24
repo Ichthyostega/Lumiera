@@ -54,7 +54,7 @@
 
 #include "pre.hpp"
 #include "lib/error.hpp"
-#include "include/symbol.hpp"
+#include "lib/symbol.hpp"
 #include "proc/control/command-binding.hpp"
 #include "proc/control/argument-erasure.hpp"
 #include "proc/control/handling-pattern.hpp"
@@ -71,7 +71,7 @@
 namespace control {
   
   using std::string;
-  using lumiera::Symbol;
+  using lib::Symbol;
   using std::tr1::shared_ptr;
   using lumiera::typelist::Tuple;
   

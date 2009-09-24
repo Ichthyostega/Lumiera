@@ -35,14 +35,17 @@
 #define LUMIERA_STREAMTYPE_HPP
 
 
+#include "lib/symbol.hpp"
 #include "lib/query.hpp"
 
 #include <boost/noncopyable.hpp>
 
 
 namespace lumiera {
-
-
+  
+  using lib::Symbol;
+  
+  
   /**
    * 
    */
@@ -160,7 +163,7 @@ namespace lumiera {
      * opaque placeholder (type erasure) 
      * for implementation specific type info.
      * Intended to be passed to a concrete
-     * MediaImplLib to build an ImplFacade. 
+     * MediaImplLib to build an ImplFacade.
      */
   class StreamType::ImplFacade::TypeTag
     {

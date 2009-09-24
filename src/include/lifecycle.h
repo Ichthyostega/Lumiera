@@ -39,18 +39,20 @@
 
 #ifdef __cplusplus
 
-#include "include/symbol.hpp"
+#include "lib/symbol.hpp"
 #include <boost/noncopyable.hpp>
 
 
 
 namespace lumiera {
   
-  extern Symbol ON_BASIC_INIT;      ///< automatic static init. treated specially
-  extern Symbol ON_GLOBAL_INIT;     ///< to be triggered in main()             @note no magic!
-  extern Symbol ON_GLOBAL_SHUTDOWN; ///< to be triggered at the end of main()  @note no magic!
+  using lib::Symbol;
   
-  extern Symbol ON_EMERGENCY;       ///< activated on shutdown after premature failure of a subsystem
+  extern const char * ON_BASIC_INIT;      ///< automatic static init. treated specially
+  extern const char * ON_GLOBAL_INIT;     ///< to be triggered in main()             @note no magic!
+  extern const char * ON_GLOBAL_SHUTDOWN; ///< to be triggered at the end of main()  @note no magic!
+  
+  extern const char * ON_EMERGENCY;       ///< activated on shutdown after premature failure of a subsystem
 
   
   // client code is free to register and use additional lifecycle events
