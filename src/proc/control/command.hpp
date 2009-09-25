@@ -116,7 +116,8 @@ namespace control {
       static Command get (FuncPtr func);
       static bool remove (Symbol cmdID); 
       
-      Command storeDef (Symbol newCmdID);
+      /** create a clone definition */
+      Command storeDef (Symbol newCmdID)  const;
       
       Command() { } ///< undefined command
      ~Command();
@@ -165,7 +166,7 @@ namespace control {
       
       
     protected:
-      static Command fetchDef (Symbol cmdID);
+      static Command const& fetchDef (Symbol cmdID);
       
       friend class CommandDef;
       

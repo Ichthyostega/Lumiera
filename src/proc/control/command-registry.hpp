@@ -43,6 +43,7 @@
 #include "lib/sync.hpp"
 #include "lib/format.hpp"
 #include "include/logging.h"
+#include "lib/util.hpp"
 //#include "lib/bool-checkable.hpp"
 
 #include "proc/control/command.hpp"
@@ -51,6 +52,7 @@
 #include "proc/control/typed-allocation-manager.hpp"
 //#include "proc/control/memento-tie.hpp"
 
+#include <boost/functional/hash.hpp>
 #include <boost/noncopyable.hpp>
 #include <tr1/unordered_map>
 #include <tr1/memory>
@@ -62,10 +64,13 @@
 
 namespace control {
   
+  using boost::hash;
   using boost::noncopyable;
   using std::tr1::shared_ptr;
+  using std::tr1::unordered_map;
 //  using std::ostream;
   using std::string;
+  using util::contains;
   
   
   
@@ -78,8 +83,8 @@ namespace control {
     , noncopyable
     {
       // using a hashtable to implement the index
-      typedef std::tr1::unordered_map<Symbol, Command> CmdIndex;
-      typedef std::map<void*, Symbol> ReverseIndex;
+      typedef unordered_map<Symbol, Command, hash<Symbol> > CmdIndex;
+      typedef std::map< void*, Symbol> ReverseIndex;
       
       CmdIndex index_;
       ReverseIndex ridx_;
@@ -93,11 +98,11 @@ namespace control {
       /** register a command (Frontend) under the given ID
        *  @return either the new command, or an already existing
        *          command registered under the given ID  */ 
-      Command
+      Command&
       track (Symbol cmdID, Command const& commandHandle)
         {
           Lock sync(this);
-          UNIMPLEMENTED ("place a commandHandle into the command index, or return the command already registered there");
+          
           Command& indexSlot (index_[cmdID]);
           if (!indexSlot)
             {
@@ -105,7 +110,6 @@ namespace control {
               ridx_[&indexSlot] = cmdID;
             }
           return indexSlot;
-          ///////////////////////////TODO possible to return a const& ??
         }
       
       
@@ -117,7 +121,15 @@ namespace control {
       remove (Symbol cmdID)
         {
           Lock sync(this);
-          UNIMPLEMENTED ("de-register a command definition.");
+          
+          bool actually_remove = contains (index_,cmdID);
+          if (actually_remove)
+            {
+              ridx_.erase(& index_[cmdID]);
+              index_.erase(cmdID);
+            }
+          ENSURE (!contains (index_,cmdID));
+          return actually_remove;
         }
       
       
@@ -128,11 +140,11 @@ namespace control {
       queryIndex (Symbol cmdID)
         {
           Lock sync(this);
-          UNIMPLEMENTED ("retrieve the command registered under the given ID, maybe return an »empty« command");
-          // if index.contains(cmdID)
-          //   return index[cmdID]
-          // else
-          return Command();
+          
+          if (contains (index_,cmdID))
+            return index_[cmdID];
+          else
+            return Command();
         }
       
       

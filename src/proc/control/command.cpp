@@ -105,7 +105,7 @@ namespace control {
   }
   
   
-  Command
+  Command const&
   Command::fetchDef (Symbol cmdID)
   {
     CommandRegistry& registry = CommandRegistry::instance();
@@ -150,18 +150,22 @@ namespace control {
   
   
   Command
-  Command::storeDef (Symbol newCmdID)
+  Command::storeDef (Symbol newCmdID)  const
   {
     CommandRegistry& registry = CommandRegistry::instance();
+    
+    if (!registry.queryIndex (newCmdID))
+      {
+        Command cloneDefinition;
+        cloneDefinition.activate (registry.createCloneImpl(impl()));
+        
+        Command& registeredCloneDef = registry.track (newCmdID, cloneDefinition);
+        if (cloneDefinition == registeredCloneDef)
+          return registeredCloneDef; 
+      }
+    
     static format fmt("Unable to store %s as new command. ID \"%s\" is already in use");
-    
-    if (registry.queryIndex (newCmdID))
-      throw error::Logic (str (fmt % *this % newCmdID), LUMIERA_ERROR_DUPLICATE_COMMAND);
-    
-    Command cloneDefinition;
-    cloneDefinition.activate (registry.createCloneImpl(impl()));
-    
-    return registry.track (newCmdID, cloneDefinition);
+    throw error::Logic (str (fmt % *this % newCmdID), LUMIERA_ERROR_DUPLICATE_COMMAND);
   }
   
   
