@@ -83,7 +83,7 @@ namespace control {
   struct order_by_impl
     {
       bool
-      operator() (Command* pC1, Command* pC2)
+      operator() (const Command *pC1, const Command *pC2)  const
         {
           return ( pC1 &&  pC2  && (*pC1 < *pC2));
         }
@@ -99,7 +99,7 @@ namespace control {
     {
       // using a hashtable to implement the index
       typedef unordered_map<Symbol, Command, hash<Symbol> > CmdIndex;
-      typedef std::map<Command*, Symbol, order_by_impl> ReverseIndex;
+      typedef std::map<const Command*, Symbol, order_by_impl> ReverseIndex;
       
       CmdIndex index_;
       ReverseIndex ridx_;

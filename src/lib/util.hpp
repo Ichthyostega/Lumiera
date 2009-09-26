@@ -134,11 +134,11 @@ namespace util {
   
   /** fetch value from a Map, or return a default if not found */
   template <typename MAP>
-  inline typename MAP::value_type
+  inline typename MAP::mapped_type
   getValue_or_default (MAP& map, typename MAP::key_type const& key
-                               , typename MAP::value_type defaultVal)
+                               , typename MAP::mapped_type defaultVal)
   {
-    typename MAP::iterator pos = map.find (key);
+    typename MAP::const_iterator pos = map.find (key);
     if (pos != map.end())
       return pos->second;
     else
