@@ -145,8 +145,14 @@ namespace test    {
               ASSERT (2 == pD2x.use_count());
               ASSERT (isSameObject (*pD21, *pD2x));
               
+              ASSERT (2 == allocator.numSlots<DummyObj<1> >());
+              ASSERT (2 == allocator.numSlots<DummyObj<22> >());
+              
+              ASSERT (0 == allocator.numSlots<long>()); // query just some unrelated type...
             }
           
+          ASSERT (0 == allocator.numSlots<DummyObj<1> >());
+          ASSERT (0 == allocator.numSlots<DummyObj<22> >());
           ASSERT (0 == checksum_);
         }
     };

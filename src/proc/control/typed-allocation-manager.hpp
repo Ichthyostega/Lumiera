@@ -33,7 +33,7 @@
  ** then to provide a general-purpose allocator to be used by any instance of a given
  ** type. Typically, the goal is to handle memory management for an index or registry,
  ** holding implementation objects to be shielded from the client code. Moreover, we'll
- ** have to deal with families of types rather then with individual types, and typically
+ ** have to deal with families of types rather then with individual types; usually
  ** there will be some common or combined handling for all family members.
  ** 
  ** The intention is for this TypedAllocationManager template to be used both as a base
@@ -103,6 +103,8 @@ namespace control { ////////////////////////////////////////////////////////////
       typedef TypedAllocationManager _TheManager;
       
     public:
+      template<class XX>
+      size_t numSlots()  const;
       
       
       /* ======= managing the created objects ============= */
@@ -264,6 +266,7 @@ namespace control { ////////////////////////////////////////////////////////////
         {
           TODO ("redirect to the corresponding pool allocator");
           void* space = new char[sizeof(XX)];
+          allocCnt_.inc<XX>();
           return Slot<XX> (this, space);
         }
       
@@ -274,6 +277,7 @@ namespace control { ////////////////////////////////////////////////////////////
           TODO ("redirect to the corresponding pool allocator");
           typedef char Storage[sizeof(XX)];
           delete[] reinterpret_cast<Storage*> (entry);
+          allocCnt_.dec<XX>();
         }
       
       
@@ -289,8 +293,9 @@ namespace control { ////////////////////////////////////////////////////////////
             }
           catch(...)
             {
+              lumiera_err errorID = lumiera_error();
               WARN (command_dbg, "dtor of %s failed: %s", util::tyStr(entry).c_str()
-                                                        , lumiera_error() );
+                                                        , errorID );
             }
           releaseSlot<XX> (entry);
         }
@@ -298,8 +303,50 @@ namespace control { ////////////////////////////////////////////////////////////
       template<class>
       friend class Killer;  ///< especially all Killers are entitled to desroyElement()
       
+      
+    private:
+      /** 
+       * temporary helper to count the number of allocations
+       * for diagnostic purpose. When actually implementing a
+       * custom allocation, this information should be available
+       * from the allocator. 
+       */
+      class SlotCounter
+        {
+        public:
+          template<class X>
+          size_t 
+          get()  const
+            {
+              UNIMPLEMENTED ("get typed count");
+            }
+          
+          template<class X>
+          void 
+          inc()
+            {
+              UNIMPLEMENTED ("increment typed count");
+            }
+          
+          template<class X>
+          void 
+          dec()
+            {
+              UNIMPLEMENTED ("decrement typed count");
+            }
+        };
+      
+      SlotCounter allocCnt_;
     };
   
   
+  
+  template<class XX>
+  size_t
+  TypedAllocationManager::numSlots()  const
+  {
+    return allocCnt_.get<XX>();
+  }
+
 } // namespace control
 #endif
