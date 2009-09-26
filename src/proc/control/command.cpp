@@ -79,12 +79,15 @@ namespace control {
   
   
   
-  /** */
+  /** Access existing command for use.
+   *  @throw error::Invalid if command not 
+   *         registered or incompletely defined.
+   */
   Command 
   Command::get (Symbol cmdID)
   {
     Command cmd = CommandRegistry::instance().queryIndex (cmdID);
-    static format fmt("Command definition \"%s\" not found");
+    static format fmt("Command \"%s\" not found");
     if (!cmd)
       throw error::Invalid(str(fmt % cmdID), LUMIERA_ERROR_INVALID_COMMAND);
       
@@ -99,13 +102,15 @@ namespace control {
    *        thus this feature is unimplemented for the time being.
    */
   Command
-  Command::get (FuncPtr funcP)
+  Command::get (FuncPtr)
   {
     UNIMPLEMENTED ("find a command definition which was based on the given function (ptr)");
   }
   
   
-  Command const&
+  /** @internal to be invoked by CommandDef
+   *  when starting a new definition  */
+  Command
   Command::fetchDef (Symbol cmdID)
   {
     CommandRegistry& registry = CommandRegistry::instance();
@@ -120,10 +125,11 @@ namespace control {
   }              // return new or currently registered cmd...
   
   
-  /** @internal to be invoked by CommandDef
+  /** @internal to be invoked through CommandDef to make a command ready
    *  @throw std::bad_alloc, in which case
-   *         CommandRegistry::killCommandImpl is invoked */
-  Command&
+   *         CommandRegistry::killCommandImpl is invoked.
+   *  @throw error::Logic when this is already activated. */
+  void
   Command::activate (shared_ptr<CommandImpl> const& implFrame)
   {
     static format fmt("Command \"%s\" already defined");
@@ -135,7 +141,6 @@ namespace control {
     _Handle::activate (implFrame);
             
     INFO (command, "Command \"%s\" defined OK", cStr(*this));
-    return *this;
   }
   
   

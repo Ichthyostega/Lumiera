@@ -122,6 +122,16 @@ namespace control {
       Command() { } ///< undefined command
      ~Command();
       
+      
+      
+      /* === command lifecycle === */
+      
+      void activate (shared_ptr<CommandImpl> const&);
+      
+      template<typename TYPES>
+      Command& bindArg (Tuple<TYPES> const&);
+      
+      
       ExecResult operator() () ;
       ExecResult undo () ;
       
@@ -145,14 +155,6 @@ namespace control {
       
       
       
-      /* === command lifecycle === */
-      
-      Command& activate (shared_ptr<CommandImpl> const&);
-      
-      template<typename TYPES>
-      Command& bindArg (Tuple<TYPES> const&);
-      
-      
       /* === diagnostics === */
       
       static size_t definition_count();
@@ -166,7 +168,7 @@ namespace control {
       
       
     protected:
-      static Command const& fetchDef (Symbol cmdID);
+      static Command fetchDef (Symbol cmdID);
       
       friend class CommandDef;
       
