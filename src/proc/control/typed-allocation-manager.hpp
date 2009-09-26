@@ -69,6 +69,7 @@
 //#include "pre.hpp"
 #include "lib/error.hpp"
 #include "lib/format.hpp"
+#include "lib/typed-counter.hpp"
 #include "include/logging.h"
 
 
@@ -305,38 +306,7 @@ namespace control { ////////////////////////////////////////////////////////////
       
       
     private:
-      /** 
-       * temporary helper to count the number of allocations
-       * for diagnostic purpose. When actually implementing a
-       * custom allocation, this information should be available
-       * from the allocator. 
-       */
-      class SlotCounter
-        {
-        public:
-          template<class X>
-          size_t 
-          get()  const
-            {
-              UNIMPLEMENTED ("get typed count");
-            }
-          
-          template<class X>
-          void 
-          inc()
-            {
-              UNIMPLEMENTED ("increment typed count");
-            }
-          
-          template<class X>
-          void 
-          dec()
-            {
-              UNIMPLEMENTED ("decrement typed count");
-            }
-        };
-      
-      SlotCounter allocCnt_;
+      lib::TypedCounter allocCnt_;
     };
   
   
