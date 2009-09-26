@@ -165,6 +165,7 @@ namespace control {
       
       operator string() const;
       friend bool operator== (Command const&, Command const&);
+      friend bool operator<  (Command const&, Command const&);
       
       
     protected:
@@ -210,6 +211,13 @@ namespace control {
   operator!= (Command const& c1, Command const& c2)
   {
     return ! (c1 == c2); 
+  }
+  
+  /** allow for sets and associative containers */
+  inline bool
+  operator< (Command const& c1, Command const& c2)
+  {
+    return ( c1 &&  c2  && (&c1.impl() < &c2.impl())); 
   }
   
   

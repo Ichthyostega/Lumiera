@@ -99,7 +99,7 @@ namespace util {
   /** shortcut for containment test on a map */
   template <typename MAP>
   inline bool 
-  contains (MAP& map, typename MAP::key_type& key)
+  contains (MAP& map, typename MAP::key_type const& key)
   {
     return map.find(key) != map.end();
   }
@@ -130,6 +130,19 @@ namespace util {
     typename SEQ::const_iterator end   = cont.end();
     
     return end != std::find(begin,end, val);
+  }
+  
+  /** fetch value from a Map, or return a default if not found */
+  template <typename MAP>
+  inline typename MAP::value_type
+  getValue_or_default (MAP& map, typename MAP::key_type const& key
+                               , typename MAP::value_type defaultVal)
+  {
+    typename MAP::iterator pos = map.find (key);
+    if (pos != map.end())
+      return pos->second;
+    else
+      return defaultVal;
   }
   
   /** shortcut for removing all copies of an Element

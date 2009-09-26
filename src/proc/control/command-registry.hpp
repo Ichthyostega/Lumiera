@@ -71,8 +71,23 @@ namespace control {
 //  using std::ostream;
   using std::string;
   using util::contains;
+  using util::getValue_or_default;
   
   
+  /**
+   * Helper for building a std::map with
+   * Command* as keys. Defines the order
+   * by the address of the Command's 
+   * implementation object.
+   */
+  struct order_by_impl
+    {
+      bool
+      operator() (Command* pC1, Command* pC2)
+        {
+          return ( pC1 &&  pC2  && (*pC1 < *pC2));
+        }
+    };
   
   
   /**
@@ -84,7 +99,7 @@ namespace control {
     {
       // using a hashtable to implement the index
       typedef unordered_map<Symbol, Command, hash<Symbol> > CmdIndex;
-      typedef std::map< void*, Symbol> ReverseIndex;
+      typedef std::map<Command*, Symbol, order_by_impl> ReverseIndex;
       
       CmdIndex index_;
       ReverseIndex ridx_;
@@ -140,12 +155,8 @@ namespace control {
       queryIndex (Symbol cmdID)
         {
           Lock sync(this);
-          
-          if (contains (index_,cmdID))
-            return index_[cmdID];
-          else
-            return Command();
-        }
+          return getValue_or_default (index_, cmdID, Command() );
+        }                                           //if not found
       
       
       /** search the command index for a definition
@@ -155,14 +166,15 @@ namespace control {
       const char*
       findDefinition (Command const& cmdInstance)  const
         {
-          UNIMPLEMENTED ("try to find a registration in the index for a given command instance");
-        }
+//        Lock sync(this);                                     ////////////////////////////////////TICKET #272  Lock should also be usable in const methods
+          return getValue_or_default (ridx_, &cmdInstance, 0 );
+        }                                   //used as Key
       
       
       size_t
       index_size()  const
         {
-          UNIMPLEMENTED ("number of defs in the index");
+          return index_.size();
         }
       
       

@@ -200,7 +200,7 @@ namespace control {
   
   
   
-  /** is this a valid command definition frame? especially
+  /** is this a valid command definition? especially..
    *  - the prototype command is initialised properly
    *  - there is a command definition registered for our command ID
    *  - and the registered command uses the same underlying command impl
