@@ -23,9 +23,29 @@
 
 /** @file command-registry.hpp
  ** Managing command definitions and the storage of individual command objects.
- ** @todo WIP WIP.
+ ** The CommandRegistry is an singleton object, accessible only at the implementation level
+ ** of control::Command (note: CommandImpl isn't tied to the registry). For the other parts
+ ** of the command system, it serves all "get me this command object"-services. Actually,
+ ** these can be decomposed into two distinct parts:
+ ** - allocation of CommandImpl frames and argument holders, which is delegated
+ **   to the TypedAllocationManager
+ ** - maintaining an index to find pre-build command definitions (prototypes)
  ** 
- ** \par Lifecycle
+ ** \par Services during command lifecycle
+ ** Each command starts out as command definition, accessed by client code through CommandDef.
+ ** While collecting the necessary parts of such a definition, there is just an empty (pending)
+ ** Command (smart-ptr frontend), which is already registered with the intended command-ID.
+ ** A lookup on this ID would still fail in this phase, as the \link #queryIndex search function \endlink
+ ** treats missing and incomplete command definitions similar. When the definition is complete,
+ ** a CommandImpl frame is allocated, configured and used to activate the Command (smart-ptr frontend).
+ ** 
+ ** Later on, client code is assumed to re-access the command by ID. It may bind arguments, which are
+ ** stored in the already allocated ArgumentHolder. (-->Ticket #269). As the Command frontend is a
+ ** smart-ptr, commands may be copied, stored away and passed on. When finally the ref-count of
+ ** a given definition goes to zero, de-allocation happens automatically. This can't happen for
+ ** a registered command definition though, as a Command instance is stored within the index
+ ** table, keeping the linked data alive. Thus, any registered commands will remain in memory
+ ** until de-registered explicitly, or until application shutdown.
  ** 
  ** @see Command
  ** @see ProcDispatcher
@@ -44,19 +64,16 @@
 #include "lib/format.hpp"
 #include "include/logging.h"
 #include "lib/util.hpp"
-//#include "lib/bool-checkable.hpp"
 
 #include "proc/control/command.hpp"
 #include "proc/control/command-signature.hpp"
 #include "proc/control/command-argument-holder.hpp"
 #include "proc/control/typed-allocation-manager.hpp"
-//#include "proc/control/memento-tie.hpp"
 
 #include <boost/functional/hash.hpp>
 #include <boost/noncopyable.hpp>
 #include <tr1/unordered_map>
 #include <tr1/memory>
-//#include <iostream>
 #include <string>
 #include <map>
 
@@ -68,10 +85,10 @@ namespace control {
   using boost::noncopyable;
   using std::tr1::shared_ptr;
   using std::tr1::unordered_map;
-//  using std::ostream;
-  using std::string;
-  using util::contains;
   using util::getValue_or_default;
+  using util::contains;
+  using std::string;
+  using std::map;
   
   
   /**
@@ -91,7 +108,11 @@ namespace control {
   
   
   /**
-   * TODO type comment
+   * Registry managing command implementation objects (Singleton).
+   * Relies on TypedAllocationManager for pooled custom allocation (TODO: not implemented as of 9/09)
+   * Registered command (definitions) are accessible by command ID;
+   * as this mapping is bidirectional, it is also possible to find
+   * out the ID for a given command.
    */
   class CommandRegistry
     : public lib::Sync<>
@@ -99,7 +120,7 @@ namespace control {
     {
       // using a hashtable to implement the index
       typedef unordered_map<Symbol, Command, hash<Symbol> > CmdIndex;
-      typedef std::map<const Command*, Symbol, order_by_impl> ReverseIndex;
+      typedef map< const Command*, Symbol, order_by_impl> ReverseIndex;
       
       CmdIndex index_;
       ReverseIndex ridx_;
@@ -181,14 +202,14 @@ namespace control {
       size_t
       instance_count()  const
         {
-          UNIMPLEMENTED ("number of active command impl instances");
+          return allocator_.numSlots<CommandImpl>();
         }
       
       
       /** set up a new command implementation frame
-       *  @return shared-ptr owning a newly created CommandImpl, allocated 
-       *          through the registry and wired internally to invoke 
-       *          TypedAllocationManager#destroyElement for cleanup. 
+       *  @return shared-ptr owning a newly created CommandImpl, allocated
+       *          through the registry and wired internally to invoke
+       *          TypedAllocationManager#destroyElement for cleanup.
        */
       template< typename SIG_OPER    ///< signature of the command operation
               , typename SIG_CAPT    ///< signature for capturing undo state
@@ -222,11 +243,10 @@ namespace control {
        *  to the memory manager for allocating the clone. 
        */
       shared_ptr<CommandImpl>
-      createCloneImpl (CommandImpl const& reference)
+      createCloneImpl (CommandImpl const& refObject)
         {
-          return allocator_.create<CommandImpl> (reference, allocator_);
+          return allocator_.create<CommandImpl> (refObject, allocator_);
         }
-      
       
       
     };
