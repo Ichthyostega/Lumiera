@@ -30,7 +30,7 @@
  ** typically will utilise different sets of types.
  ** @todo WIP WIP... this is the first, preliminary version of a facility,
  **       which is expected to get quite important for custom allocation management.
-  ** 
+ ** 
  ** @see typed-counter-test.cpp
  ** @see TypedAllocationManager
  ** @see AllocationCluster (custom allocation scheme using a similar idea inline)
@@ -44,47 +44,128 @@
 
 //#include "pre.hpp"
 #include "lib/error.hpp"
-//#include "lib/format.hpp"
-//#include "include/logging.h"
+#include "lib/sync-classlock.hpp"
 
-
-//#include <tr1/memory>
+#include <vector>
 
 
 
 namespace lib {
   
-//using std::tr1::shared_ptr;
+  using std::vector;
+  
+  
+  /** 
+   * Providing type-IDs for a specific context.
+   * This facility allows to access a numeric ID for each
+   * provided distinct type. Type-IDs may be used e.g. for
+   * dispatcher tables or for custom allocators. 
+   * The type-IDs generated here are not completely global though.
+   * Rather, they are tied to a specific type context, e.g. a class
+   * implementing a custom allocator.
+   */
+  template<class CX>
+  class TypedContext
+    {
+      static size_t lastGeneratedTypeID;
+      
+    public:
+      static size_t
+      newTypeID (size_t& typeID)
+        {
+          ClassLock<TypedContext> synchronised();
+          if (!typeID)
+            typeID = ++lastGeneratedTypeID;
+          return typeID;
+        }
+      
+      /** type-ID */
+      template<typename TY>
+      class ID
+        {
+          static size_t typeID;
+          
+        public:
+          static size_t
+          get()
+            {
+              if (typeID)
+                return typeID;
+              else
+                return newTypeID(typeID);
+            }
+        };
+    };
+  
+  /** storage for the type-ID generation mechanism */
+  template<class CX>
+  size_t TypedContext<CX>::lastGeneratedTypeID (0);
+  
+  /** table holding all the generated type-IDs */
+  template<class CX>
+  template<typename TY>
+  size_t TypedContext<CX>::ID<TY>::typeID (0);
   
   
   
   
   /** 
-   * Helper providing a set of counters, each tied to a specific type. 
+   * Helper providing a set of counters, each tied to a specific type.
    */
   class TypedCounter
+    : public Sync<>
     {
+      mutable vector<long> counters_;
+      
+      template<typename TY>
+      size_t
+      slot()  const
+        {
+          size_t typeID = TypedContext<TypedCounter>::ID<TY>::get();
+          if (size() < typeID)
+            counters_.resize (typeID);
+          
+          ENSURE (counters_.capacity() >= typeID);
+          return (typeID - 1);
+        }
+      
+      
     public:
+      TypedCounter()
+        {
+          counters_.reserve(5);  // pre-allocated 5 slots
+        }
+      
+      
       template<class X>
-      size_t 
+      long 
       get()  const
         {
-          UNIMPLEMENTED ("get typed count");
+          Lock sync(this);
+          return counters_[slot<X>()];
         }
       
       template<class X>
-      void 
+      long 
       inc()
         {
-          UNIMPLEMENTED ("increment typed count");
+          Lock sync(this);
+          return ++counters_[slot<X>()];
         }
       
       template<class X>
-      void 
+      long 
       dec()
         {
-          UNIMPLEMENTED ("decrement typed count");
+          Lock sync(this);
+          return --counters_[slot<X>()];
         }
+      
+      
+      /* == diagnostics == */
+      
+      size_t size() const { return counters_.size(); }
+      bool empty()  const { return counters_.empty();}
     };
   
   

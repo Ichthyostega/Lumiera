@@ -60,7 +60,6 @@ namespace visitor {
     size_t tagID; ///< tag value
     static size_t lastRegisteredID;
     
-  private:
     static void
     generateID (size_t& id)
       {

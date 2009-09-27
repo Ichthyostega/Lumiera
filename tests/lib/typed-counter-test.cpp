@@ -21,66 +21,59 @@
 * *****************************************************/
 
 
+/** @file typed-counter-test.cpp
+ ** Stress test to verify type-based contexts.
+ ** Besides a simple usage (unit) test, this test performs a massively multithreaded
+ ** test of the type-based contexts, through use of the TypedCounter. The idea behind
+ ** this facility is to provide a context, in which type-IDs can be allocated. In the
+ ** case of the TypedCounter, these type-IDs are used to index into a vector of counters,
+ ** this way allowing to access a counter for a given type.
+ ** <P>
+ ** This test builds several "families", which each share a TypedCounter. Each of these
+ ** families runs a set of member threads, which concurrently access the TypedCounter of
+ ** this family. After waiting for all threads to finish, we compare the checksum built
+ ** within the target objects with the checksum collected through the TypedCounters.
+ ** 
+ ** @see thread-wrapper-test.cpp
+ ** @see thread-wrapper-join-test.cpp
+ **
+ */
+
+
+
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
-//#include "proc/control/command.hpp"
 #include "lib/typed-counter.hpp"
-//#include "proc/control/command-def.hpp"
-//#include "lib/lumitime.hpp"
-//#include "lib/symbol.hpp"
-#include "lib/sync.hpp"
 #include "lib/scoped-ptrvect.hpp"
 #include "backend/thread-wrapper.hpp"
+#include "lib/sync.hpp"
 #include "lib/util.hpp"
 
 #include <tr1/functional>
-
-//#include <tr1/memory>
-//#include <boost/ref.hpp>
-//#include <boost/format.hpp>
-//#include <iostream>
 #include <vector>
 #include <cstdlib>
-//#include <string>
 
 
 namespace lib {
 namespace test{
-
-
-//  using boost::format;
-//  using boost::str;
-  //using lumiera::Time;
-  //using util::contains;
+  
+  
   using backend::Thread;
   using backend::JoinHandle;
-//  using std::tr1::shared_ptr;
+  using util::for_each;
+  using util::isnil;
   using std::tr1::bind;
   using std::tr1::placeholders::_1;
-//  using std::string;
   using std::vector;
   using std::rand;
-  //using std::cout;
-  //using std::endl;
-//  using lib::test::showSizeof;
-//  using util::isSameObject;
-  using util::for_each;
-//  using util::contains;
-
-//  using session::test::TestClip;
-//  using lib::Symbol;
-//  using lumiera::P;
   
-  
-  //using lumiera::typelist::BuildTupleAccessor;
-//  using lumiera::error::LUMIERA_ERROR_EXTERNAL;
   
   namespace { // test data and helpers...
       
       const uint MAX_FAMILIES   = 20;  ///< maximum separate "families", each sharing a TypedCounter
       const uint MAX_MEMBERS    =  5;  ///< maximum members per family (member == test thread)
       const uint MAX_ITERATIONS =  5;  ///< maximum iterations within a single test thread
-      const uint MAX_DELAY_ms   = 50;  ///< maximum delay between check iterations
+      const uint MAX_DELAY_ms   =  3;  ///< maximum delay between check iterations
       
       
       /** 
@@ -159,6 +152,7 @@ namespace test{
           void
           collect_externalCount (TypedCounter& counter)
             {
+              // Lock not necessary, because of invocation sequence
               sum_TypedCounter_  += counter.get<Dummy>();
             }
           
@@ -171,11 +165,11 @@ namespace test{
         public:
           Dummy() : localChecksum_(0) {}
         };
-
-    
       
-  
-        
+      
+      
+      
+      
       
       /** 
        * Collection of target functions,
@@ -264,8 +258,8 @@ namespace test{
        */
       struct TestFamily
         {
-          ScopedPtrVect<SingleCheck> checks_;
           TypedCounter ourCounter_;
+          ScopedPtrVect<SingleCheck> checks_;
           
           TestFamily()
             : checks_(MAX_MEMBERS)
@@ -273,6 +267,12 @@ namespace test{
               uint members (1 + rand() % MAX_MEMBERS);
               while (members--)
                 checks_.manage (new SingleCheck (ourCounter_));
+            }
+          
+         ~TestFamily()
+            {
+              checks_.clear(); // blocks until all test threads finished
+              account();
             }
           
           void
@@ -310,6 +310,41 @@ namespace test{
       void
       run (Arg) 
         {
+          simpleUsageTest();
+          tortureTest();
+        }
+      
+      
+      void
+      simpleUsageTest ()
+        {
+          TypedCounter myCounter;
+          ASSERT (isnil (myCounter));
+          ASSERT (0==myCounter.size());
+          
+          ASSERT (0 == myCounter.get<short>());
+          ASSERT (1 == myCounter.size());
+          
+          ASSERT (0 == myCounter.get<long>());
+          ASSERT (2 == myCounter.size());
+          
+          ASSERT (-1 == myCounter.dec<short>());
+          ASSERT (-2 == myCounter.dec<short>());
+          ASSERT (+1 == myCounter.inc<long>());
+          
+          ASSERT (-2 == myCounter.get<short>());
+          ASSERT (+1 == myCounter.get<long>());
+          
+          
+          ASSERT (1 == TypedContext<TypedCounter>::ID<short>::get());
+          ASSERT (2 == TypedContext<TypedCounter>::ID<long>::get());
+          ASSERT (2 == myCounter.size());
+        }
+      
+      
+      void 
+      tortureTest () 
+        {
           sum_TypedCounter_ = 0;
           sum_internal_     = 0;
           
@@ -321,10 +356,7 @@ namespace test{
           
           testFamilies.clear(); // blocks until all threads have terminated
           
-          for (uint i=0; i<num_Families; ++i)
-            testFamilies[i].account();
           for_each (targetCollection, accountInternal);
-          
           ASSERT (sum_TypedCounter_ == sum_internal_);
         }
     };
