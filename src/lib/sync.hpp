@@ -387,10 +387,10 @@ namespace lib {
     class Sync
       {
         typedef sync::Monitor<CONF> Monitor;
-        Monitor objectMonitor_;
+        mutable Monitor objectMonitor_;
         
         static Monitor&
-        getMonitor(Sync* forThis)
+        getMonitor(const Sync* forThis)
           {
             REQUIRE (forThis);
             return forThis->objectMonitor_;
