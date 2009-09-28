@@ -848,7 +848,7 @@ return: 0
 END
 
 
-PLANNED "building type based contexts" TypedCounter_test <<END
+TEST "Type-based contexts" TypedCounter_test <<END
 return: 0
 END
 

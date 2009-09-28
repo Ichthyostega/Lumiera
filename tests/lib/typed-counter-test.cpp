@@ -29,7 +29,7 @@
  ** case of the TypedCounter, these type-IDs are used to index into a vector of counters,
  ** this way allowing to access a counter for a given type.
  ** <P>
- ** This test builds several "families", which each share a TypedCounter. Each of these
+ ** This test builds several "families", each sharing a TypedCounter. Each of these
  ** families runs a set of member threads, which concurrently access the TypedCounter of
  ** this family. After waiting for all threads to finish, we compare the checksum built
  ** within the target objects with the checksum collected through the TypedCounters.
@@ -62,8 +62,9 @@ namespace test{
   using backend::JoinHandle;
   using util::for_each;
   using util::isnil;
-  using std::tr1::bind;
   using std::tr1::placeholders::_1;
+  using std::tr1::bind;
+  using std::tr1::ref;
   using std::vector;
   using std::rand;
   
@@ -71,8 +72,8 @@ namespace test{
   namespace { // test data and helpers...
       
       const uint MAX_FAMILIES   = 20;  ///< maximum separate "families", each sharing a TypedCounter
-      const uint MAX_MEMBERS    =  5;  ///< maximum members per family (member == test thread)
-      const uint MAX_ITERATIONS =  5;  ///< maximum iterations within a single test thread
+      const uint MAX_MEMBERS    = 30;  ///< maximum members per family (member == test thread)
+      const uint MAX_ITERATIONS = 50;  ///< maximum iterations within a single test thread
       const uint MAX_DELAY_ms   =  3;  ///< maximum delay between check iterations
       
       
@@ -225,30 +226,27 @@ namespace test{
         : JoinHandle,
           Thread
         {
-          TypedCounter& counterSet_;
-          long localChecksum_;
-          
         public:
           SingleCheck (TypedCounter& counter_to_use)
-            : Thread("TypedCounter_test worker Thread",
-                     bind (&SingleCheck::runCheckSequence, this, (rand() % MAX_ITERATIONS)),
-                     (backend::JoinHandle&)*this 
+            : Thread("TypedCounter_test worker Thread"
+                    , bind (&SingleCheck::runCheckSequence, this, ref(counter_to_use), (rand() % MAX_ITERATIONS))
+                    , (backend::JoinHandle&)*this 
                     )
-            , counterSet_(counter_to_use)
-            , localChecksum_(0)
             { }
           
          ~SingleCheck () { this->join(); }
           
           
         private:
-          void runCheckSequence(uint iterations)
+          void runCheckSequence(TypedCounter& counter, uint iterations)
             {
-              while (--iterations)
+              do
                 {
                   usleep (1000 * (rand() % MAX_DELAY_ms));
-                  targetCollection.torture (counterSet_);
-            }   }
+                  targetCollection.torture (counter);
+                }
+              while (iterations--);
+            }
         };
       
       
@@ -297,10 +295,6 @@ namespace test{
    *       in each of them concurrently. Check the proper allocation of type-IDs in each
    *       context and verify correct counting operation by checksum.
    * 
-   * @todo using currently (9/09) a simple implementation based on static variables.
-   *       This causes waste of storage for the type-based tables. It would be better
-   *       if each set would build it's own Type-IDs. Ticket #
-   *        
    * @see TypedAllocationManager
    * @see typed-counter.hpp
    */

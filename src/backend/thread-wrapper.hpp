@@ -62,12 +62,11 @@ namespace backend {
    * wait state, the contained mutex remains locked and prevents the thread
    * manager from invoking the broadcast() on the condition var. 
    * 
-   * @note this is a draft. It doesn't even work, because Cehteh is still planning
-   *       details of the thread handling and didn't implement the waiting feature. 
+   * @see thread-wrapper-join-test.cpp 
    */
   class JoinHandle
     : public Sync<RecursiveLock_Waitable>
-    , Sync<RecursiveLock_Waitable>::Lock
+    , Sync<RecursiveLock_Waitable>::Lock   // noncopyable, immediately acquire the lock
     {
       typedef Sync<RecursiveLock_Waitable> SyncBase;
       
@@ -95,8 +94,7 @@ namespace backend {
               isWaiting_ = true;
               return false; // causes entering the blocking wait
             }
-          TODO ("any possibility to detect spurious wakeups? can they happen?");
-          return true; // causes end of the blocking wait
+          return true;    //   causes end of blocking wait
         }
       
       
