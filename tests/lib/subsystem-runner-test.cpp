@@ -90,6 +90,7 @@ namespace lumiera {
           
           volatile bool isUp_;
           volatile bool didRun_;
+          volatile bool started_;
           volatile bool termRequest_;
           int running_duration_;
           
@@ -107,16 +108,16 @@ namespace lumiera {
           bool
           start (lumiera::Option&, Subsys::SigTerm termination)
             {
-              REQUIRE (!isUp_, "attempt to start %s twice!", cStr(*this));
+              REQUIRE (!(isUp_|started_|didRun_), "attempt to start %s twice!", cStr(*this));
               
-              Lock guard (this);
-              Literal startSpec (extractID ("start",spec_));
+              Lock sync(this);
+              string startSpec (extractID ("start",spec_));
               ASSERT (!isnil (startSpec));
               
               if ("true"==startSpec) //----simulate successful subsystem start
                 { 
                   Thread (id_, bind (&MockSys::run, this, termination));            /////TODO: the thread description should be rather "Test: "+string(*this), but this requires to implement the class Literal as planned
-                  isUp_ = true;
+                  sync.wait(started_); // run-status handshake
                 }
               else
               if ("fail"==startSpec) //----not starting, incorrectly reporting success
@@ -125,7 +126,7 @@ namespace lumiera {
               if ("throw"==startSpec) //---starting flounders
                 throw error::Fatal("simulated failure to start the subsystem", LUMIERA_ERROR_TEST);
               
-              return isUp_;
+              return started_;
             }
           
           void
@@ -145,49 +146,61 @@ namespace lumiera {
             }
           
           
+          /** executes in a separate thread and
+           *  simulates a "running" subsystem.
+           *  Behaviour determined by run(XX) spec:
+           *  - run(true) : start, run, terminate normally
+           *  - run(throw): start, run, signal abnormal termination
+           *  - run(fail) : set didRun_, but abort, never enter running state
+           *  - run(false): just handshake, but then abort without further action
+           */
           void
-          run (Subsys::SigTerm termination)  ///< simulates a "running" subsystem
+          run (Subsys::SigTerm termination)
             {
               Literal runSpec (extractID ("run",spec_));
               ASSERT (!isnil (runSpec));
               
-              if ("false"!=runSpec) //----actually enter running state for some time
+              { // run-status handshake
+                Lock sync(this);
+                started_ = true;
+                isUp_    = ("true"==runSpec || "throw"==runSpec);
+                didRun_  = ("false"!=runSpec); // includes "fail" and "throw"
+                sync.notify();
+              }
+              
+              if (isUp_) //-------------actually enter running state for some time
                 {
-                  didRun_ = true;
                   running_duration_  =  MIN_RUNNING_TIME_ms;
                   running_duration_ += (rand() % (MAX_RUNNING_TIME_ms - MIN_RUNNING_TIME_ms));
                   
                   INFO (test, "thread %s now running....", cStr(*this));
                   
-                  Lock wait_blocking (this, &MockSys::tick);
+                  Lock sync_condition(this);
+                  while (!sync_condition.wait (*this, &MockSys::tick, TICK_DURATION_ms))
+                    running_duration_ -= TICK_DURATION_ms;
+                  
+                  INFO (test, "thread %s about to terminate...", cStr(*this));
+                  isUp_ = false;
                 }
               
-              Error problemIndicator("simulated Problem killing a subsystem",LUMIERA_ERROR_TEST);
-              lumiera_error();   //  reset error state....
-                                //   Note: in real life this actually
-                               //    would be an catched exception!
-              string problemReport (problemIndicator.what());
+              if ("fail" ==runSpec) return; // terminate without further notice
+              if ("true" ==runSpec) termination(0); // signal regular termination
+              if ("throw"==runSpec)
+                {
+                  Error problemIndicator("simulated Problem terminating subsystem",LUMIERA_ERROR_TEST);
+                  lumiera_error();    //  reset error state....
+                                     //   Note: in real life this actually
+                                    //    would be an catched exception!
+                  string problemReport (problemIndicator.what());
+                  termination (&problemReport);
+                }
               
-              {
-                Lock guard (this);
-                isUp_ = false;
-              }
-              INFO (test, "thread %s terminates.", cStr(*this));
-              termination ("true"==runSpec? 0 : &problemReport);
             }
           
           
           bool
           tick ()   ///< simulates async termination, either on request or by timing
             {
-              Lock sync(this);
-              if (!sync.isTimedWait())
-                {
-                  sync.setTimeout(TICK_DURATION_ms);
-                  running_duration_ += TICK_DURATION_ms;
-                }
-              
-              running_duration_ -= TICK_DURATION_ms;
               return termRequest_ || running_duration_ <= 0;
             }
           
@@ -199,6 +212,7 @@ namespace lumiera {
               spec_(spec),
               isUp_(false),
               didRun_(false),
+              started_(false),
               termRequest_(false),
               running_duration_(0)
             { }

@@ -411,11 +411,21 @@ namespace lib {
             void notify()                     { mon_.signal(false);}
             void notifyAll()                  { mon_.signal(true); }
             void setTimeout(ulong time)       { mon_.setTimeout(time); }
-            
-            template<typename C>
-            bool wait (C& cond, ulong time=0) { return mon_.wait(cond,time);}
             bool isTimedWait()                { return mon_.isTimedWait(); }
             
+            template<typename C>
+            bool
+            wait (C& cond, ulong timeout=0)
+              {
+                return mon_.wait(cond,timeout);
+              }
+            
+            template<typename X>
+            bool
+            wait  (X& instance, bool (X::*predicate)(void), ulong timeout=0)
+              {
+                return mon_.wait(instance,predicate,timeout);
+              }
             
             /** convenience shortcut: 
              *  Locks and immediately enters wait state,
