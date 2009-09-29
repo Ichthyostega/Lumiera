@@ -1167,6 +1167,9 @@ This is an very important external Interface, because it links together all thre
 * completely hide the Session object behind a ''~PImpl'' smart pointer, so the session object can be switched when reloading.
 * the [[Fixture]] acts as isolation layer, and all objects refered from the Fixture are refcounting smart pointers. So, even when the session gets switched, the old objects remain valid as long as needed.</pre>
 </div>
+<div title="DataFrame" modifier="Ichthyostega" created="200909291346" tags="def spec" changecount="1">
+<pre>A ''frame of data'' is the central low-level abstraction when dealing with media data and media processing.</pre>
+</div>
 <div title="DefaultTiddlers" modifier="Ichthyostega" modified="200802031805" created="200706172308" changecount="6">
 <pre>[[ProcLayer and Engine]]
 </pre>
@@ -1201,18 +1204,20 @@ As we don't have a Prolog interpreter on board yet, we utilize a mock store with
 {{{default(Obj)}}} is a predicate expressing that the object {{{Obj}}} can be considered the default setup under the given conditions. Using the //default// can be considered as a shortcut for actually finding a exact and unique solution. The latter would require to specify all sorts of detailed properties up to the point where only one single object can satisfy all conditions. On the other hand, leaving some properties unspecified would yield a set of solutions (and the user code issuing the query had to provide means for selecting one soltution from this set). Just falling back on the //default// means that the user code actually doesn't care for any additional properties (as long as the properties he //does// care for are satisfied). Nothing is said specifically on //how//&amp;nbsp; this default gets configured; actually there can be rules //somewhere,// and, additionally, anything encountered once while asking for a default can be re-used as default under similar circumstances.
 &amp;rarr; [[implementing defaults|DefaultsImplementation]]</pre>
 </div>
-<div title="DesignDecisions" modifier="Ichthyostega" modified="200809230234" created="200801062209" tags="decision design discuss" changecount="20">
+<div title="DesignDecisions" modifier="Ichthyostega" modified="200909291401" created="200801062209" tags="decision design discuss" changecount="24">
 <pre>Along the way of working out various [[implementation details|ImplementationDetails]], decisions need to be made on how to understand the different facilities and entities and how to tackle some of the problems. This page is mainly a collection of keywords, summaries and links to further the discussion. And the various decisions should allways be read as proposals to solve some problem at hand...
 
-''Everything is an object'' &amp;mdash; of course, that's a //no-brainer // todays. Rather, important is what is not &quot;an object&quot;, meaning it can't be arranged arbitrarily
-* we have one and only one global [[Session]] which directly contains a collection of multiple [[EDLs|EDL]] and is associated with a globally managed collection of [[assets|Asset]] (no, we don't have scoped variables here; if e.g. a media has been &quot;opened&quot;, it is just plain globally known as asset.)
-* we have some global [[pipes|Pipe]], which are treated in a unique manner and don't behave like other objects (e.g. effects)
+''Everything is an object'' &amp;mdash; of course, that's a //no-brainer,// todays. Rather, important is what is not &quot;an object&quot;, meaning it can't be arranged arbitrarily
+* we have one and only one global [[Session]] which directly contains a collection of multiple [[Sequences|EDL]] and is associated with a globally managed collection of [[assets|Asset]]. We don't utilise scoped variables here (no &quot;mandantisation&quot;); if e.g. a media has been //opened,// it is just plain //globally known//&amp;nbsp; as asset.
+* the [[knowledge base|ConfigRules]] is just available globally. Obviously, the session gets a chance to install rules into this knowledge base, but we don't stress ownership here.
 * we have a [[Fixture]] which acts as isolation layer towards the render engine and is (re)built automatically.
 
 We ''separate'' processing (rendering) and configuration (building). We have a [[Builder]] which creates a network of [[render nodes|ProcNode]], to be processed by //pulling data // from some [[Pipe]]
 
 ''Objects are [[placed|Placement]] rather'' than assembled, connected, wired, attached. This is more of a rule-based approach and gives us one central metaphor and abstraction, allowing us to treat everything in an uniform manner. You can place it as you like, and the builder tries to make sense out of it, silently disabling what doesn't make sense.
 An [[EDL]] is just a collection of configured and placed objects (and has no additional, fixed structure). [[Tracks|Track]] form a mere organisational grid, they are grouping devices not first-class entities (a track doesn't &quot;have&quot; a pipe or &quot;is&quot; a video track and the like; it can be configured to behave in such manner by using placements though). [[Pipes|Pipe]] are hooks for making connections and are the only facility to build processing chains. We have global pipes, and each clip is built around a lokal [[source port|ClipSourcePort]] &amp;mdash; and that's all. No special &quot;media viewer&quot; and &quot;arranger&quot;, no special role for media sources, no commitment to some fixed media stream types (video and audio). All of this is sort of pushed down to be configuration, represented as asset of some kind. For example, we have [[processing pattern|ProcPatt]] assets to represent the way of building the source network for reading from some media file (including codecs treated like effect plugin nodes)
+
+Actual ''media data and handling'' is abstracted rigorously. Media is conceived as being stream-like data of distinct StreamType. When it comes to more low-level media handling, we build on the DataFrame abstraction. Media processing isn't the focus of Lumiera; we organise the processing but otherwise ''rely on media handling libraries.'' In a similar vein, multiplicity is understood as type variation. Consequently, we don't build an audio and video &quot;section&quot; and we don't even have audio tracks and video tracks. Lumiera uses tracks and clips, and clips build on media, but we're able to deal with multichannel mixed-typed media.
 
 ''State'' is rigorously ''externalized'' and operations are to be ''scheduled'', to simplify locking and error handling. State is either treated similar to media stream data (as addressable and cacheable data frame), or is represented as &quot;parameter&quot; to be served by some [[parameter provider|ParamProvider]]. Consequently, [[Automation]] is just another kind of parameter, i.e. a function &amp;mdash; how this function is calculated is an encapsulated implementation detail (we don't have &quot;bezier automation&quot;, and then maybe a &quot;linear automation&quot;, a &quot;mask automation&quot; and yet another way to handle transitions)
 
@@ -1420,10 +1425,10 @@ Some further details
 
 As the builder and thus render engine //only consults the fixture,// while all editing operations finally propagate to the fixture as well, we get an isolation layer between the high level part of the Proc layer (editing, object manipulation) and the render engine. Creating the Fixture can be seen as a preprocessing step to simplify the build process. For this reason, the process of [[(re)building the fixture|PlanningBuildFixture]] has been designed together with the [[Builder]]</pre>
 </div>
-<div title="Frame" modifier="Ichthyostega" modified="200706220333" created="200706220332" tags="def" changecount="2">
+<div title="Frame" modifier="Ichthyostega" modified="200909291345" created="200706220332" tags="def" changecount="3">
 <pre>This term has //two meanings, //so care has to be taken for not confusing them.
 # in general use, a Frame means one full image of a video clip, i.e an array of rows of pixels. For interlaced footage, one Frame contains two halfimages, commonly called Fields. (Cinelerra2 confuses this terms)
-# here in this design, we use Frame as an abstraction for a buffer of raw media data to be processed. If in doubt, we should label this &quot;Dataframe&quot;.
+# here in this design, we use Frame as an abstraction for a buffer of raw media data to be processed. If in doubt, we should label this &quot;DataFrame&quot;.
 #* one video Dataframe contains a single video frame
 #* one audio Dataframe contains a block of raw audio samples
 #* one OpenGL Dataframe could contain raw texture data (but I am lacking expertise for this topic)
@@ -1601,7 +1606,7 @@ Besides routing to a global pipe, wiring plugs can also connect to the source po
 Finally, this example shows an ''automation'' data set controlling some parameter of an effect contained in one of the global pipes. From the effect's POV, the automation is simply a ParamProvider, i.e a function yielding a scalar value over time. The automation data set may be implemented as a bézier curve, or by a mathematical function (e.g. sine or fractal pseudo random) or by some captured and interpolated data values. Interestingly, in this example the automation data set has been placed relatively to the meta clip (albeit on another track), thus it will follow and adjust when the latter is moved.
 </pre>
 </div>
-<div title="ImplementationDetails" modifier="Ichthyostega" modified="200904252305" created="200708080322" tags="overview" changecount="33">
+<div title="ImplementationDetails" modifier="Ichthyostega" modified="200909291328" created="200708080322" tags="overview" changecount="35">
 <pre>This wiki page is the entry point to detail notes covering some technical decisions, details and problems encountered in the course of the implementation of the Lumiera Renderengine, the Builder and the related parts.
 
 * [[Packages, Interfaces and Namespaces|InterfaceNamespaces]]
@@ -1625,11 +1630,13 @@ Finally, this example shows an ''automation'' data set controlling some paramete
 * how to [[start the GUI|GuiStart]] and how to [[communicate|GuiCommunication]]
 * build the first LayerSeparationInterfaces
 * decide on SessionInterface and create [[Session datastructure layout|SessionDataMem]]
-</pre>
+* shaping the GUI/~Proc-Interface, based on MObjectRef and the [[Command frontend|CommandHandling]]</pre>
 </div>
-<div title="ImplementationGuidelines" modifier="Ichthyostega" modified="200906060443" created="200711210531" tags="discuss draft" changecount="12">
+<div title="ImplementationGuidelines" modifier="Ichthyostega" modified="200909291414" created="200711210531" tags="discuss draft" changecount="15">
 <pre>!Observations, Ideas, Proposals
-''this page is a scrapbook for collecting ideas'' &amp;mdash; please don't take anything noted here too literal. While writing code, I observe that I (ichthyo) follow certain informal guidelines, some of which I'd like to note down because they could evolve into general style guidelines for the proc layer code.
+''this page is a scrapbook for collecting ideas'' &amp;mdash; please don't take anything noted here too literal. While writing code, I observe that I (ichthyo) follow certain informal guidelines, some of which I'd like to note down because they could evolve into general style guidelines for the Proc-Layer code.
+* ''Inversion of Control'' is the leading design principle.
+* but deliberately we stay just below the level of using Dependency Injection. Singletons and call-by-name are good enough. We're going to build //one// application, not any conceivable application.
 * avoid doing anything non-local during the startup phase or shutdown phase of the application. consequently, always prefer using an explicit lumiera::Singleton&lt;T&gt; over using an static instance directly, thus yielding better control when the ctor and dtor will be invoked.
 * write error handling code only if the error situation can be actually //handled// at this place. Otherwise, be prepared for exceptions just passing by and thus handle any resources by &quot;resource acquisition is initialisation&quot; (RAII). Remember: error handling defeats decoupling and encapsulation
 * (almost) never {{{delete}}} an object directly, use {{{new}}} only when some smart pointer is at hand.
@@ -3263,15 +3270,16 @@ Besides, they provide an __inward interface__ for the [[ProcNode]]s, enabling th
 
 </pre>
 </div>
-<div title="ProcLayer and Engine" modifier="Ichthyostega" modified="200907212232" created="200706190056" tags="overview" changecount="19">
+<div title="ProcLayer and Engine" modifier="Ichthyostega" modified="200909291327" created="200706190056" tags="overview" changecount="20">
 <pre>The Render Engine is the part of the application doing the actual video calculations. Its operations are guided by the Objects and Parameters edited by the user in [[the EDL|EDL]] and it retrieves the raw audio and video data from the [[Data backend|backend.html]]. Because the inner workings of the Render Engine are closely related to the structures used in the EDL, this design covers [[the aspect of objects placed into the EDL|MObjects]] as well.
 &lt;&lt;&lt;
 ''Status'': started out as design draft in summer '07, Ichthyo is now in the middle of a implementing the foundations and main structures in C++
 * basic [[AssetManager]] working
 * [[Builder]] implementation is on the way (&amp;rarr;[[more|BuilderPrimitives]])
-* made a first draft of how to wire and operate procesing nodes (&amp;rarr;[[more|RenderMechanics]])
+* made a first draft of how to wire and operate processing nodes (&amp;rarr;[[more|RenderMechanics]])
 * first attempts to [[integrate with the GUI|GuiIntegration]]
 * first outline of the [[session implementation|PlanningSessionInMem]]
+* as a prerequisite, defined and implemented [[Proc-Layer Command frontend|CommandHandling]]
 &lt;&lt;&lt;
 
 !Summary
