@@ -47,7 +47,6 @@
 #include "lib/singleton-subclass.hpp"
 #include "proc/control/handling-pattern.hpp"
 #include "proc/control/command-impl.hpp"
-#include "proc/mobject/session.hpp"
 #include "include/lifecycle.h"
 //#include "lib/symbol.hpp"
 
@@ -187,7 +186,7 @@ namespace control {
     }
     
     
-    lumiera::LifecycleHook _schedule (mobject::ON_SESSION_START, &prepareCommandHandlingPatterns);
+    lumiera::LifecycleHook _schedule (lumiera::ON_GLOBAL_INIT, &prepareCommandHandlingPatterns);
   
   } // (END) definition of concrete handling patterns
   

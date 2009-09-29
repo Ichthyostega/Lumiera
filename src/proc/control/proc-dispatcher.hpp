@@ -38,6 +38,7 @@
 //#include "pre.hpp"
 //#include "lib/symbol.hpp"
 #include "proc/control/command.hpp"
+#include "lib/singleton.hpp"
 
 //#include <tr1/memory>
 
@@ -56,6 +57,17 @@ namespace control {
     {
       
     public:
+      static lumiera::Singleton<ProcDispatcher> instance;
+      
+      void activate();
+      void deactivate();
+      void clear();
+      
+      
+      /* == diagnostics == */
+      
+//    size_t size() const ;
+      bool empty()  const ;
       
     };
   ////////////////TODO currently just fleshing  out the API....

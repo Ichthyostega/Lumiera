@@ -23,6 +23,8 @@
 
 
 #include "proc/control/proc-dispatcher.hpp"
+#include "proc/mobject/session.hpp"
+#include "include/logging.h"
 //#include "proc/mobject/mobject-ref.hpp"
 //#include "proc/mobject/mobject.hpp"
 //#include "proc/mobject/placement.hpp"
@@ -32,7 +34,61 @@
 
 namespace control {
   
+  
+  namespace {
+  
+    /** when session gets ready,
+     *  open the command processing interface.
+     */
+    void
+    activateCommandProcessing()
+    {
+      ProcDispatcher::instance().activate();
+    }
+    
+    
+    lumiera::LifecycleHook _schedule (mobject::ON_SESSION_INIT, &activateCommandProcessing);
+  
+  }
+  
+  /** storage for Singleton access */
+  lumiera::Singleton<ProcDispatcher> ProcDispatcher::instance;
+  
+  
+  
   /** */
+  void
+  ProcDispatcher::activate()
+  {
+    INFO (command, "Session command processing activated.");
+    TODO ("implement command processing queue");
+  }
+  
+  
+  void
+  ProcDispatcher::deactivate()
+  {
+    INFO (command, "Session command interface closed.");
+    TODO ("implement command processing queue");
+  }
+
+  
+  void
+  ProcDispatcher::clear()
+  {
+    if (!empty())
+      WARN (command, "DISCARDING pending Session commands.");
+    TODO ("implement command processing queue");
+  }
+  
+  
+  bool
+  ProcDispatcher::empty()  const
+  {
+    TODO ("implement command processing queue");
+    return true;
+  }
+
   
   
   
