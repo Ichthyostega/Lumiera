@@ -27,7 +27,6 @@
 
 #include "proc/mobject/session.hpp"
 #include "lib/error.hpp"
-//#include "lib/factory.hpp"
 //#include "lib/util.hpp"
 
 //#include <boost/format.hpp>

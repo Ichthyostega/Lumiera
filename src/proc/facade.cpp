@@ -104,8 +104,8 @@ namespace proc {
     };
   
   namespace {
-    lumiera::Singleton<BuilderSubsysDescriptor> theBuilderDescriptor;   
-    lumiera::Singleton<SessionSubsysDescriptor> theSessionDescriptor;
+    lib::Singleton<BuilderSubsysDescriptor> theBuilderDescriptor;   
+    lib::Singleton<SessionSubsysDescriptor> theSessionDescriptor;
   }
   
   

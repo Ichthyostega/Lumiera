@@ -57,7 +57,7 @@ namespace control {
     {
       
     public:
-      static lumiera::Singleton<ProcDispatcher> instance;
+      static lib::Singleton<ProcDispatcher> instance;
       
       void activate();
       void deactivate();

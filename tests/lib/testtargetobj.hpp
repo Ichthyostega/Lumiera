@@ -26,7 +26,6 @@
 
 
 #include "lib/test/run.hpp"
-#include "lib/factory.hpp"
 //#include "lib/util.hpp"
 
 #include <boost/algorithm/string/join.hpp>
@@ -41,71 +40,68 @@ using std::string;
 using std::cout;
 
 
-namespace lumiera
-  {
-  namespace test
-    {
-    /**
-     * Target object to be created by Test-Factories or as Singleton.
-     * Allocates a variable amount of additional heap memory
-     * and prints diagnostic messages.
-     */
-    class TestTargetObj
-      {
-        uint cnt_;
-        string* heapData_; 
-        string* heapArray_; 
-        
-      public:
-        TestTargetObj(uint num);
-        ~TestTargetObj()  throw();
-        
-        operator string () const;
-      };
-    
-    
-    
-    inline
-    TestTargetObj::TestTargetObj(uint num)
-      : cnt_ (num),
-        heapData_ (new string(num,'*')),
-        heapArray_ (new string[num])
-    {
-      for (uint i=0; i<cnt_; ++i)
-        heapArray_[i] = lexical_cast<string>(i);
-      cout << format("ctor TargetObj(%i) successful\n") % cnt_;
-    }
-    
-    
-    inline
-    TestTargetObj::~TestTargetObj()  throw()
-    {
-      delete heapData_;
-      delete[] heapArray_;
-      cout << format("dtor ~TargetObj(%i) successful\n") % cnt_;
-    }
-    
-    
-    
-    inline
-    TestTargetObj::operator string () const
-    {
-      string array_contents = "{";
-      for (uint i=0; i<cnt_; ++i)
-        array_contents += heapArray_[i]+",";
-      array_contents+="}";
-      
-      return str (format(".....TargetObj(%1%): data=\"%2%\", array[%1%]=%3%")
-                        % cnt_ 
-                        % *heapData_ 
-                        % array_contents
-                 );
-    }
-    
-    
-    
-    
-  } // namespace test
+namespace lib {
+namespace test{
 
-} // namespace lumiera
+  /**
+   * Target object to be created by Test-Factories or as Singleton.
+   * Allocates a variable amount of additional heap memory
+   * and prints diagnostic messages.
+   */
+  class TestTargetObj
+    {
+      uint cnt_;
+      string* heapData_; 
+      string* heapArray_; 
+      
+    public:
+      TestTargetObj(uint num);
+      ~TestTargetObj()  throw();
+      
+      operator string () const;
+    };
+  
+  
+  
+  inline
+  TestTargetObj::TestTargetObj(uint num)
+    : cnt_ (num),
+      heapData_ (new string(num,'*')),
+      heapArray_ (new string[num])
+  {
+    for (uint i=0; i<cnt_; ++i)
+      heapArray_[i] = lexical_cast<string>(i);
+    cout << format("ctor TargetObj(%i) successful\n") % cnt_;
+  }
+  
+  
+  inline
+  TestTargetObj::~TestTargetObj()  throw()
+  {
+    delete heapData_;
+    delete[] heapArray_;
+    cout << format("dtor ~TargetObj(%i) successful\n") % cnt_;
+  }
+  
+  
+  
+  inline
+  TestTargetObj::operator string () const
+  {
+    string array_contents = "{";
+    for (uint i=0; i<cnt_; ++i)
+      array_contents += heapArray_[i]+",";
+    array_contents+="}";
+    
+    return str (format(".....TargetObj(%1%): data=\"%2%\", array[%1%]=%3%")
+                      % cnt_ 
+                      % *heapData_ 
+                      % array_contents
+               );
+  }
+  
+  
+  
+  
+}} // namespace lib::test
 #endif

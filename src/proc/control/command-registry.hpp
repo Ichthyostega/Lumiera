@@ -128,7 +128,7 @@ namespace control {
       
       
     public:
-      static lumiera::Singleton<CommandRegistry> instance;
+      static lib::Singleton<CommandRegistry> instance;
       
       
       /** register a command (Frontend) under the given ID

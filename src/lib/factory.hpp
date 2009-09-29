@@ -21,14 +21,14 @@
 */
 
 
-#ifndef LUMIERA_FACTORY_H
-#define LUMIERA_FACTORY_H
+#ifndef LIB_FACTORY_H
+#define LIB_FACTORY_H
 
 #include <tr1/memory>
 
 
 
-namespace lumiera {
+namespace lib {
   namespace factory {
     
     /**
@@ -46,7 +46,7 @@ namespace lumiera {
         {
         protected:
           SMP wrap (T* product) { return SMP (product); }
-
+          
         public:
           typedef SMP PType;
         };
@@ -82,10 +82,10 @@ namespace lumiera {
     
     
     
-    /* -- some example and default instantiations -- */  
+    /* -- some example and default instantiations -- */
     
     using std::tr1::shared_ptr;
-
+    
     /** 
      * a frequently used instantiation of the Wrapper,
      * Utilising the refcounting tr1::shared_ptr.
@@ -95,7 +95,7 @@ namespace lumiera {
       {
       protected:
         shared_ptr<T> wrap (T* product) { return shared_ptr<T> (product); }
-
+        
       public:
         typedef shared_ptr<T> PType;
       };
@@ -104,7 +104,7 @@ namespace lumiera {
     /** 
      * Shortcut: commonly used (partial) instantiation of the Factory,
      * generating refcounting shared_ptr wrapped Objects. Built upon
-     * the corresponding special instantiation of the Wrapper template. 
+     * the corresponding special instantiation of the Wrapper template.
      */
     template<class T>
     class RefcountFac : public Factory<T, Wrapper<T,shared_ptr<T> > >
@@ -135,10 +135,10 @@ namespace lumiera {
       
       
   } // namespace factory
-
+  
   /// @note Factory can be usable as-is (wraps into std::auto_ptr)
   using factory::Factory;
   
   
-} // namespace lumiera
+} // namespace lib
 #endif

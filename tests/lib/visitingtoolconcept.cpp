@@ -60,7 +60,7 @@
 #include <iostream>
 #include <vector>
 
-using lumiera::Singleton;
+using lib::Singleton;
 using boost::format;
 using std::string;
 using std::cout;

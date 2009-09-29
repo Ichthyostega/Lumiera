@@ -40,8 +40,8 @@
  */
 
 
-#ifndef LUMIERA_SINGLETON_H
-#define LUMIERA_SINGLETON_H
+#ifndef LIB_SINGLETON_H
+#define LIB_SINGLETON_H
 
 
 #include "lib/singletonpolicies.hpp"

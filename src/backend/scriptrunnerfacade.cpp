@@ -67,7 +67,7 @@ namespace backend {
     };
   
   namespace {
-    lumiera::Singleton<ScriptRunnerSubsysDescriptor> theDescriptor;
+    lib::Singleton<ScriptRunnerSubsysDescriptor> theDescriptor;
   }
   
   

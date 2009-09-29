@@ -36,7 +36,7 @@ using std::tr1::placeholders::_1;
 using boost::format;
 using util::for_each;
 
-using lumiera::Singleton;
+using lib::Singleton;
 using lib::Sync;
 
 

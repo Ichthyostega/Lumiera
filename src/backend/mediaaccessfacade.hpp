@@ -30,16 +30,16 @@
 
 
 
-namespace backend_interface
-  {
+namespace backend_interface {
   
   struct ChanDesc;
-
+  
+  
   /******************************************************************
    * Interface to the backend layer:
    * provides functions for querying (opening) a media file,
    * detecting the channels or streams found within this file etc. 
-   * Implemention delegating to the actual backend functions.
+   * Implementation delegating to the actual backend functions.
    * 
    * convention: data passed by pointer is owned by the originator;
    * it should be copied if needed byond the control flow 
@@ -52,17 +52,17 @@ namespace backend_interface
       
       static Singleton<MediaAccessFacade> instance;
       
-      /** request for testing the denoted files accessability 
+      /** request for testing the denoted files accessibility 
        *  @param name path and filename of the media file.
        *  @throw invalid when passing empty filename
        *  @return opaque handle usable for querying channel
        *          information from this file, NULL if the
-       *          file is not acessible.
+       *          file is not accessible.
        */
       virtual FileHandle queryFile (const char* name)  throw(lumiera::error::Invalid);
       
       /** request for information about the n-th channel 
-       *  of the file refered by FileHandle.
+       *  of the file referred by FileHandle.
        *  @return ChanDesc which may contain \c NULL values if
        *          the file doesn't contain this much channels.
        *  @todo   throw or return NULL-ChanDesc if Filehandle is invalid?
@@ -85,7 +85,7 @@ namespace backend_interface
        */
       const char* chanID;
       
-      /** identifier characterizing the access method (or codec)
+      /** identifier characterising the access method (or codec)
        *  needed to get at the media data. This should be rather
        *  a high level description of the media stream type, 
        *  e.g. "H264" -- anyhow, it will be used to find a 

@@ -26,7 +26,6 @@
 
 
 #include "lib/test/run.hpp"
-//#include "lib/factory.hpp"
 //#include "lib/util.hpp"
 
 //#include <boost/format.hpp>

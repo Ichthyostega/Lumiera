@@ -110,7 +110,7 @@ namespace asset {
   /** 
    * Factory specialised for creating Structural Asset objects.
    */ 
-  class StructFactory : public lumiera::Factory<asset::Struct>
+  class StructFactory : public lib::Factory<asset::Struct>
     {
       scoped_ptr<StructFactoryImpl> impl_;
 

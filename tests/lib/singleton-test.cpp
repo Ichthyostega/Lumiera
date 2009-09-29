@@ -40,8 +40,8 @@ using std::string;
 using std::cout;
 
 
-namespace lumiera {
-namespace test    {
+namespace lib {
+namespace test{
   
   
   /**
@@ -72,9 +72,9 @@ namespace test    {
   /*******************************************************************
    * @test implement a Singleton class using our Singleton Template.
    * Expected results: no memory leaks.
-   * @see  lumiera::Singleton
-   * @see  lumiera::singleton::StaticCreate
-   * @see  lumiera::singleton::HeapCreate
+   * @see  lib::Singleton
+   * @see  lib::singleton::StaticCreate
+   * @see  lib::singleton::HeapCreate
    */
   class Singleton_test : public Test
     {
@@ -90,7 +90,7 @@ namespace test    {
         }
       
       
-      /** @test parametrize the Singleton creation such as to create
+      /** @test parametrise the Singleton creation such as to create
        *        the single TargetObj instance as a static variable.
        */
       void testStaticallyAllocatedSingleton (uint num)
@@ -100,7 +100,7 @@ namespace test    {
           useInstance (num, "statically allocated");
         }
       
-      /** @test parametrize the Singleton creation such as to create
+      /** @test parametrise the Singleton creation such as to create
        *        the single TargetObj instance allocated on the Heap
        *        and deleted automatically at application shutdown.
        */
@@ -134,4 +134,4 @@ namespace test    {
   
   
   
-}} // namespace lumiera::test
+}} // namespace lib::test

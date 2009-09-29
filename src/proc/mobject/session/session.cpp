@@ -40,7 +40,7 @@
 
 
 using lib::Symbol;
-using lumiera::Singleton;
+using lib::Singleton;
 using mobject::session::SessManager;
 using mobject::session::SessManagerImpl;
 

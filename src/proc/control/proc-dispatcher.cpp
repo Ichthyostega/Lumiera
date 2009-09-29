@@ -52,7 +52,7 @@ namespace control {
   }
   
   /** storage for Singleton access */
-  lumiera::Singleton<ProcDispatcher> ProcDispatcher::instance;
+  lib::Singleton<ProcDispatcher> ProcDispatcher::instance;
   
   
   

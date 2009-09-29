@@ -21,11 +21,11 @@
 */
 
 /** @file singletonpreconfigure.hpp
- ** Preconfiguration of some Singleton types, done by template specialisation.
+ ** Pre-configuration of some Singleton types, done by template specialisation.
  ** Typically the client code just includes singleton.h and uses the Singleton
  ** type. But in some cases, we want to configure specific (dependency injection)
  ** behaviour at a central location. At some point, we may well have a full blown
- ** Dependency Manager, but for the moment using just some specialized Singleton
+ ** Dependency Manager, but for the moment using just some specialised Singleton
  ** type for some instances seems sufficient.
  **
  ** One reason why one wants special Singleton behaviour is testing: Without
@@ -33,22 +33,22 @@
  ** in place of some service object, so we can verify the behaviour of the code
  ** <i>using</i> this service. For this, we mix lumiera::test::MockInjector
  ** into the actual Singleton type.
- **
+ ** 
  ** @note we declare the specialisations into the target namespace
- **
+ ** 
  ** @see SingletonFactory
  ** @see singletontestmocktest.hpp
  */
 
 
-#ifndef LUMIERA_SINGLETONPRECONFIGURE_H
-#define LUMIERA_SINGLETONPRECONFIGURE_H
+#ifndef LIB_SINGLETONPRECONFIGURE_H
+#define LIB_SINGLETONPRECONFIGURE_H
 
 #include "lib/test/mockinjector.hpp"
 
 
-namespace lumiera
-  {
+namespace lib {
+  
   /**
    * Default Singleton configuration
    * @note all Policy template parameters taking default values
@@ -58,25 +58,23 @@ namespace lumiera
     : public SingletonFactory<SI>
     { }
     ;
-    
-    
+  
+  
   /* ********************************************************************** */
   /* Forward declarations of all Classes we want to specialise the template */
   /* ********************************************************************** */
-    
+  
   namespace test {
-    
     class TestSingletonO;
-    using lumiera::Singleton;
+    using lib::Singleton;
     
   } // namespace test
 }  // namespace lumiera
 
-namespace backend_interface
-  {
+namespace backend_interface {
   class MediaAccessFacade;
-  using lumiera::Singleton;
-    
+  using lib::Singleton;
+  
 } // namespace backend_interface
 
 
@@ -87,23 +85,23 @@ namespace backend_interface
   /* Specialisation Definitions */
   /* ************************** */
 
-namespace lumiera {
+namespace lib {
   
   using test::MockInjector;
   
-    
+  
   template<>
   class Singleton<test::TestSingletonO>
     : public MockInjector<test::TestSingletonO>
     { };
-
-    
+  
+  
   template<>
   class Singleton<backend_interface::MediaAccessFacade>
     : public MockInjector<backend_interface::MediaAccessFacade>
     { };
 
-} // namespace lumiera
+} // namespace lib
 
 
 

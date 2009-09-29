@@ -31,8 +31,8 @@ This code is heavily inspired by
 
 
 
-#ifndef LUMIERA_SINGLETONPOLICIES_H
-#define LUMIERA_SINGLETONPOLICIES_H
+#ifndef LIB_SINGLETONPOLICIES_H
+#define LIB_SINGLETONPOLICIES_H
 
 #include "lib/nobug-init.hpp"
 #include "lib/error.hpp"
@@ -40,101 +40,99 @@ This code is heavily inspired by
 #include <vector>
 
 
-namespace lumiera {
+namespace lib {
   namespace singleton {
     
     
-      /* === several Policies usable in conjunction with lumiera::Singleton === */
-      
-      /** 
-       * Policy placing the Singleton instance into a statically allocated buffer
-       */
-      template<class S>
-      struct StaticCreate
-        {
-          static S* create ()
-            {
+    /* === several Policies usable in conjunction with lib::Singleton === */
+    
+    /** 
+     * Policy placing the Singleton instance into a statically allocated buffer
+     */
+    template<class S>
+    struct StaticCreate
+      {
+        static S* create ()
+          {
 #ifdef DEBUG
-              static uint callCount = 0;
-              ASSERT ( 0 == callCount++ );
+            static uint callCount = 0;
+            ASSERT ( 0 == callCount++ );
 #endif              
-              static char buff[sizeof(S)];
-              return new(buff) S();
-            }
-          static void destroy (S* pSi)
-            {
-              pSi-> ~S();
-            }
-        };
-      
-      
-      /**
-       * Policy for creating the Singleton instance heap allocated
-       */
-      template<class S>
-      struct HeapCreate
-        {
-          static S* create ()         { return new S; }
-          static void destroy (S* pS) { delete pS;    }
-        };
-      
-      
-      
-      
-      
-      typedef void (*DelFunc)(void);
-      using std::vector;
-      
-      /**
-       * Policy relying on the compiler/runtime system for Singleton Lifecycle
-       */
-      template<class S>
-      struct AutoDestroy
-        {
-          /** implements the Singleton removal by calling
-           *  the provided deleter function(s) at application shutdown,
-           *  relying on the runtime system calling destructors of static
-           *  objects. Because this Policy class can be shared between 
-           *  several Singletons, we need to memorise all registered
-           *  deleter functions for calling them at shutdown.
-           */ 
-          static void
-          scheduleDelete (DelFunc kill_the_singleton)
-            {
-                 class DeleteTrigger
-                        {
-                          vector<DelFunc> dels_;
-                          
-                        public:
-                          void schedule (DelFunc del) 
-                            { 
-                              dels_.push_back(del); 
-                            }
-                         ~DeleteTrigger()        
-                            { 
-                              vector<DelFunc>::iterator i = dels_.begin();
-                              for ( ; i != dels_.end(); ++i )
-                                (*i)(); // invoke deleter func 
-                            }
-                        };
+            static char buff[sizeof(S)];
+            return new(buff) S();
+          }
+        static void destroy (S* pSi)
+          {
+            pSi-> ~S();
+          }
+      };
+    
+    
+    /**
+     * Policy for creating the Singleton instance heap allocated
+     */
+    template<class S>
+    struct HeapCreate
+      {
+        static S* create ()         { return new S; }
+        static void destroy (S* pS) { delete pS;    }
+      };
+    
+    
+    
+    
+    
+    typedef void (*DelFunc)(void);
+    using std::vector;
+    
+    /**
+     * Policy relying on the compiler/runtime system for Singleton Lifecycle
+     */
+    template<class S>
+    struct AutoDestroy
+      {
+        /** implements the Singleton removal by calling
+         *  the provided deleter function(s) at application shutdown,
+         *  relying on the runtime system calling destructors of static
+         *  objects. Because this Policy class can be shared between 
+         *  several Singletons, we need to memorise all registered
+         *  deleter functions for calling them at shutdown.
+         */ 
+        static void
+        scheduleDelete (DelFunc kill_the_singleton)
+          {
+               class DeleteTrigger
+                      {
+                        vector<DelFunc> dels_;
                         
-              REQUIRE (kill_the_singleton);
-              static DeleteTrigger finally;
-              finally.schedule (kill_the_singleton);
-            }
-          
-          static void
-          onDeadReference ()
-            {
-              throw error::Logic ("Trying to access the a Singleton instance that has "
-                                  "already been released or finished its lifecycle.");
-            }
-        };
+                      public:
+                        void schedule (DelFunc del) 
+                          { 
+                            dels_.push_back(del); 
+                          }
+                       ~DeleteTrigger()        
+                          { 
+                            vector<DelFunc>::iterator i = dels_.begin();
+                            for ( ; i != dels_.end(); ++i )
+                              (*i)(); // invoke deleter func 
+                          }
+                      };
+                      
+            REQUIRE (kill_the_singleton);
+            static DeleteTrigger finally;
+            finally.schedule (kill_the_singleton);
+          }
+        
+        static void
+        onDeadReference ()
+          {
+            throw lumiera::error::Logic ("Trying to access the a Singleton instance that has "
+                                         "already been released or finished its lifecycle.");
+          }
+      };
     
     
     
     
-  } // namespace singleton
-  
-} // namespace lumiera
+}} // namespace lib::singleton
 #endif

@@ -163,7 +163,7 @@ namespace gui {
           }
       };
     
-    lumiera::Singleton<GuiSubsysDescriptor> theDescriptor;
+    lib::Singleton<GuiSubsysDescriptor> theDescriptor;
     
   } // (End) impl details
   

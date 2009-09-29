@@ -156,7 +156,7 @@ namespace control {
     
     /* ======== Handling Pattern Table ========== */
     
-    typedef lumiera::SingletonSub<HandlingPattern> SingletonFac;
+    typedef lib::SingletonSub<HandlingPattern> SingletonFac;
     
     /** Table of available command handling patterns */
     vector<SingletonFac> patternTable;
@@ -178,7 +178,7 @@ namespace control {
     void
     prepareCommandHandlingPatterns()
     {
-      using lumiera::singleton::UseSubclass;
+      using lib::singleton::UseSubclass;
       
       patternTable[HandlingPattern::SYNC      ]  = SingletonFac(UseSubclass<InvokeSyncNoThrow>());
       patternTable[HandlingPattern::SYNC_THROW]  = SingletonFac(UseSubclass<InvokeSyncThrow>());

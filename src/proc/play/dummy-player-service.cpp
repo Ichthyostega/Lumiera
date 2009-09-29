@@ -91,7 +91,7 @@ namespace proc  {
             }
         };
       
-      lumiera::Singleton<DummyPlayerSubsysDescriptor> theDummyPlayerDescriptor;
+      lib::Singleton<DummyPlayerSubsysDescriptor> theDummyPlayerDescriptor;
       
       
       

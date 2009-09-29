@@ -71,7 +71,7 @@ namespace control {
   
   
   /** storage for the singleton factory used to access CommandRegistry */
-  lumiera::Singleton<CommandRegistry> CommandRegistry::instance;
+  lib::Singleton<CommandRegistry> CommandRegistry::instance;
   
   
   

@@ -35,8 +35,8 @@
  */
 
 
-#ifndef LUMIERA_SINGLETON_SUBCLASS_H
-#define LUMIERA_SINGLETON_SUBCLASS_H
+#ifndef LIB_SINGLETON_SUBCLASS_H
+#define LIB_SINGLETON_SUBCLASS_H
 
 
 #include "lib/singleton.hpp"
@@ -45,7 +45,7 @@
 #include <typeinfo>
 
 
-namespace lumiera {
+namespace lib {
   
   using boost::scoped_ptr;
   
@@ -53,7 +53,7 @@ namespace lumiera {
   namespace singleton {
     
       /** 
-       * Helper template to use the general policy classes of the lumiera::Singleton,
+       * Helper template to use the general policy classes of the lib::Singleton,
        * but change the way they are parametrised on-the-fly. 
        */
       template<template<class> class POL, class I>
@@ -172,6 +172,6 @@ namespace lumiera {
     };
 
 
-} // namespace lumiera
+} // namespace lib
 
 #endif

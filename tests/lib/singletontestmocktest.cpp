@@ -37,88 +37,88 @@ using std::string;
 using std::cout;
 
 
-namespace lumiera
-  {
-  namespace test
+namespace lib {
+namespace test{
+  
+  
+  /**
+   * Client Class normally to be instantiated as Singleton.
+   * But for tests, this class should be replaced by a Mock....
+   */
+  class TestSingletonO
     {
-
-
-    /**
-     * Client Class normally to be instantiated as Singleton.
-     * But for tests, this class should be replaced by a Mock....
-     */
-    class TestSingletonO
+      int callCnt;
+      Symbol typid;
+      format msg;
+      
+    public:
+      TestSingletonO(Symbol ty="TestSingletonO")
+          : callCnt (0), typid(ty), msg ("%s::doIt() call=%d\n")
       {
-        int callCnt;
-        Symbol typid;
-        format msg;
-
-      public:
-        TestSingletonO(Symbol ty="TestSingletonO")
-            : callCnt (0), typid(ty), msg ("%s::doIt() call=%d\n")
-        {
-          TRACE (test, "ctor %s", typid.c());
-        }
-        virtual ~TestSingletonO()
-        {
-          TRACE (test, "dtor %s", typid.c());
-        }
-
-        void doIt ()
-        {
-          ++callCnt;
-          cout << msg % typid % callCnt;
-        }
-        int getCnt ()
-        {
-          return callCnt;
-        }
-
-      };
-
-
-    /**
-     * Mock-1 to replace the Client Class...
-     */
-    struct Mock_1 : TestSingletonO
+        TRACE (test, "ctor %s", typid.c());
+      }
+      virtual ~TestSingletonO()
       {
-        Mock_1() : TestSingletonO("Mock_1")
-        {};
-      };
-
-    /**
-     * Mock-2 to replace the Client Class...
-     */
-    struct Mock_2 : TestSingletonO
+        TRACE (test, "dtor %s", typid.c());
+      }
+      
+      void doIt ()
       {
-        Mock_2() : TestSingletonO("Mock_2")
-        {};
-      };
-
-
-
-
-
-
-
-
-
-
-    /*******************************************************************
-     * @test inject a Mock object into the Singleton Factory, 
-     *       to be returned and used in place of the original object.
-     * Expected results: Mock(s) called, no memory leaks.
-     * @see  lumiera::Singleton
-     * @see  lumiera::singleton::Static
-     */
-    class SingletonTestMock_test : public Test
+        ++callCnt;
+        cout << msg % typid % callCnt;
+      }
+      int getCnt ()
       {
-        Singleton<TestSingletonO> instance;
-
-        virtual void run(Arg arg)
+        return callCnt;
+      }
+      
+    };
+  
+  
+  /**
+   * Mock-1 to replace the Client Class...
+   */
+  struct Mock_1 : TestSingletonO
+    {
+      Mock_1() : TestSingletonO("Mock_1")
+      {};
+    };
+  
+  /**
+   * Mock-2 to replace the Client Class...
+   */
+  struct Mock_2 : TestSingletonO
+    {
+      Mock_2() : TestSingletonO("Mock_2")
+      {};
+    };
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  /*******************************************************************
+   * @test inject a Mock object into the Singleton Factory,
+   *       to be returned and used in place of the original object.
+   * Expected results: Mock(s) called, no memory leaks.
+   * @see  lib::Singleton
+   * @see  lib::singleton::Static
+   */
+  class SingletonTestMock_test : public Test
+    {
+      
+      Singleton<TestSingletonO> instance;
+      
+      void
+      run (Arg arg)
         {
           string scenario = isnil(arg)? "default" : arg[1];
-
+          
           if (scenario == "default")
             injectBoth();
           else
@@ -131,19 +131,20 @@ namespace lumiera
                 if (scenario == "firstMock")
                   firstMock();
         }
-
-
-        /** @test complete use sequence: first access the Client Object,
-         *        then replace it by two different mocks, and finally
-         *        restore the original Client Object 
-         */
-        void injectBoth ()
+      
+      
+      /** @test complete use sequence: first access the Client Object,
+       *        then replace it by two different mocks, and finally
+       *        restore the original Client Object 
+       */
+      void
+      injectBoth ()
         {
           TestSingletonO* sing = &instance();
           sing->doIt();
           sing->doIt();
           ASSERT (sing->getCnt() == 2);
-
+          
           instance.injectSubclass (new Mock_1);
           sing = &instance();
           sing->doIt();
@@ -152,66 +153,65 @@ namespace lumiera
           sing->doIt();
           sing->doIt();
           ASSERT (sing->getCnt() == 5);
-
+          
           instance.injectSubclass (new Mock_2);
           sing = &instance();
           sing->doIt();
           ASSERT (sing->getCnt() == 1);
-
+          
           instance.injectSubclass (0); // un-shadowing original instance
           sing = &instance();
           ASSERT (sing->getCnt() == 2);
           sing->doIt();
           ASSERT (sing->getCnt() == 3);
         }
-
-
-        /** @test just use Singleton Factory normally without any Mock.
-         */
-        void noMock ()
+      
+      
+      /** @test just use Singleton Factory normally without any Mock. */
+      void
+      noMock ()
         {
           TestSingletonO& sing = instance();
           sing.doIt();
         }
-
-
-        /** @test inject the Mock prior to using the Singleton Factory,
-         *        thus the original Client Object shouldn't be created. 
-         */
-        void onlyMock ()
+      
+      
+      /** @test inject the Mock prior to using the Singleton Factory,
+       *        thus the original Client Object shouldn't be created.*/
+      void
+      onlyMock ()
         {
           instance.injectSubclass (new Mock_1);
           TestSingletonO& sing = instance();
           sing.doIt();
         }
-
-
-        /** @test inject the Mock prior to using the Singleton Factory,
-         *        but then reset the Mock, so following calls should
-         *        create the original Client Object. 
-         */
-        void firstMock ()
+      
+      
+      /** @test inject the Mock prior to using the Singleton Factory,
+       *        but then reset the Mock, so following calls should
+       *        create the original Client Object. 
+       */
+      void
+      firstMock ()
         {
           instance.injectSubclass (new Mock_1);
           TestSingletonO* sing = &instance();
           sing->doIt();
           sing->doIt();
           ASSERT (sing->getCnt() == 2);
-
+          
           instance.injectSubclass (0);
           sing = &instance();
           sing->doIt();
           ASSERT (sing->getCnt() == 1);
         }
-      };
-
-
-
-    /** Register this test class... */
-    LAUNCHER (SingletonTestMock_test, "unit common");
-
-
-
-  } // namespace test
-
-} // namespace lumiera
+    };
+  
+  
+  
+  /** Register this test class... */
+  LAUNCHER (SingletonTestMock_test, "unit common");
+  
+  
+  
+}} // namespace lib::test

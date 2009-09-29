@@ -22,6 +22,7 @@
 
 
 #include "lib/test/run.hpp"
+#include "lib/test/test-helper.hpp"
 #include "lib/util.hpp"
 
 #include "testtargetobj.hpp"
@@ -38,9 +39,10 @@ using std::string;
 using std::cout;
 
 
-namespace lumiera {
-namespace test    {
+namespace lib {
+namespace test{
   
+  using lumiera::error::LUMIERA_ERROR_ASSERTION;
   
   /**
    * Target object to be instantiated as Singleton
@@ -85,9 +87,9 @@ namespace test    {
    *       subclasses (implementation classes) without coupling the 
    *       caller to the concrete class type.
    * Expected results: an instance of the subclass is created.
-   * @see  lumiera::Singleton
-   * @see  lumiera::SingletonSubclassFactory
-   * @see  lumiera::singleton::Adapter
+   * @see  lib::Singleton
+   * @see  lib::SingletonSubclassFactory
+   * @see  lib::singleton::Adapter
    */
   class SingletonSubclass_test : public Test
     {
@@ -131,18 +133,12 @@ namespace test    {
       void verify_error_detection ()
         {
           
-          singleton::UseSubclass<Impl_XXX> more_special_type;                       
+          singleton::UseSubclass<Impl_XXX> more_special_type;
           
-          try
-            {
-              SingletonSubclassFactory<Interface> instance (more_special_type);
-              cout << "was able to re-configure the SingletonSubclassFactory "
-                      "with another type. This should be detected in debug mode\n";
-            }
-          catch (...)
-            {
-              ASSERT (lumiera_error () == error::LUMIERA_ERROR_ASSERTION);
-            }
+          VERIFY_ERROR (ASSERTION, SingletonSubclassFactory<Interface> instance (more_special_type) );
+              /* in debug mode, an attempt to re-configure an already
+               * configured SingletonSubclassFactory with another type
+               * should be detected and spotted by assertion failure */
           
           
           // Note: the following won't compile, because the "subclass" isn't a subclass...
@@ -159,4 +155,4 @@ namespace test    {
   
   
   
-}} // namespace lumiera::test
+}} // namespace lib::test

@@ -31,63 +31,61 @@
 #include <boost/scoped_ptr.hpp>
 
 
-namespace lumiera {
-  namespace test {
-    
-    using boost::scoped_ptr;
-    
-    /**
-     * Special SingletonFactory allowing to inject some instance of the Singleton
-     * class, thus shadowing "the" (default) Singleton instance temporarily.
-     * This allows installing a Mock Subclass of the Singleton for running tests,
-     * while the Singleton can be used as usual in production code.
-     * @note we use the default policies or SingletonFactory 
-     */
-    template<class SI>
-    class MockInjector : public SingletonFactory<SI>
-      {
-        scoped_ptr<SI> mock_;
-        
-      public:
-        /** Overwriting the normal Singleton creation Interface
-         *  to return some mock if defined, falling back to the
-         *  default Singleton creation behaviour else.
-         */
-        SI& operator() ()
-          {
-            if (mock_)
-              return *mock_;
-            else
-              return SingletonFactory<SI>::operator() ();
-          }
-        
-        void injectSubclass (SI* mockobj)
-          {
-            TRACE_IF (mockobj,  test, "Singleton: installing Mock object");
-            TRACE_IF (!mockobj, test, "Singleton: removing Mock object");
-            mock_.reset (mockobj);
-          }
-        
-        
-        MockInjector () {};
-        
-        /** @note MockInjector singleton factory objects can be copied,
-         *        but the copy will start out with clean internal state,
-         *        i.e. exhibiting normal SingletonFactory behaviour
-         *        without mock object.
-         */
-        MockInjector (const MockInjector& other) 
-          : SingletonFactory<SI>(other), mock_(0) { }
-        
-        MockInjector<SI>& operator= (const MockInjector<SI>& other)
-          {
-            return SingletonFactory<SI>::operator= (other);
-          }
-      };
+namespace lib {
+namespace test{
+  
+  using boost::scoped_ptr;
+  
+  /**
+   * Special SingletonFactory allowing to inject some instance of the Singleton
+   * class, thus shadowing "the" (default) Singleton instance temporarily.
+   * This allows installing a Mock Subclass of the Singleton for running tests,
+   * while the Singleton can be used as usual in production code.
+   * @note we use the default policies or SingletonFactory 
+   */
+  template<class SI>
+  class MockInjector : public SingletonFactory<SI>
+    {
+      scoped_ptr<SI> mock_;
+      
+    public:
+      /** Overwriting the normal Singleton creation Interface
+       *  to return some mock if defined, falling back to the
+       *  default Singleton creation behaviour else.
+       */
+      SI& operator() ()
+        {
+          if (mock_)
+            return *mock_;
+          else
+            return SingletonFactory<SI>::operator() ();
+        }
+      
+      void injectSubclass (SI* mockobj)
+        {
+          TRACE_IF (mockobj,  test, "Singleton: installing Mock object");
+          TRACE_IF (!mockobj, test, "Singleton: removing Mock object");
+          mock_.reset (mockobj);
+        }
       
       
+      MockInjector () {};
       
-  } // namespace test
-
-} // namespace lumiera
+      /** @note MockInjector singleton factory objects can be copied,
+       *        but the copy will start out with clean internal state,
+       *        i.e. exhibiting normal SingletonFactory behaviour
+       *        without mock object.
+       */
+      MockInjector (const MockInjector& other) 
+        : SingletonFactory<SI>(other), mock_(0) { }
+      
+      MockInjector<SI>& operator= (const MockInjector<SI>& other)
+        {
+          return SingletonFactory<SI>::operator= (other);
+        }
+    };
+  
+  
+  
+}} // namespace lib::test
 #endif

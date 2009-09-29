@@ -114,7 +114,7 @@ namespace asset {
   /** 
    * Factory specialised for creating Processor Asset objects.
    */ 
-  class ProcFactory : public lumiera::Factory<asset::Proc>
+  class ProcFactory : public lib::Factory<asset::Proc>
     {
     public:
       typedef P<asset::Proc> PType;

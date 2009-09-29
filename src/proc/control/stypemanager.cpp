@@ -46,7 +46,7 @@ namespace control {
   
   /** access the system-wide stream type manager instance.
    *  Implemented as singleton. */
-  lumiera::Singleton<STypeManager> STypeManager::instance;
+  lib::Singleton<STypeManager> STypeManager::instance;
   
   
   void 

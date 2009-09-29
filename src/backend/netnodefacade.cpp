@@ -66,7 +66,7 @@ namespace backend {
     };
   
   namespace {
-    lumiera::Singleton<NetNodeSubsysDescriptor> theDescriptor;
+    lib::Singleton<NetNodeSubsysDescriptor> theDescriptor;
   }
   
   

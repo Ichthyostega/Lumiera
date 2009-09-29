@@ -97,7 +97,7 @@ namespace asset {
       DB () : table() { }
       ~DB ()          {clear();}
       
-      friend class lumiera::singleton::StaticCreate<DB>;
+      friend class lib::singleton::StaticCreate<DB>;
       
       
     public:

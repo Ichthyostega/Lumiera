@@ -234,7 +234,7 @@ namespace lumiera
       {
       protected:
         MockConfigRules ();                                   ///< to be used only by the singleton factory
-        friend class lumiera::singleton::StaticCreate<MockConfigRules>;
+        friend class lib::singleton::StaticCreate<MockConfigRules>;
 
         virtual ~MockConfigRules() {}
         

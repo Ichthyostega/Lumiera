@@ -44,7 +44,7 @@ namespace control {
       boost::scoped_ptr<Registry> reg_;
       
     public:
-      static lumiera::Singleton<STypeManager> instance;
+      static lib::Singleton<STypeManager> instance;
       
       typedef StreamType::ImplFacade ImplFacade;
       
@@ -77,7 +77,7 @@ namespace control {
       STypeManager() ;
       ~STypeManager();
       
-      friend class lumiera::singleton::StaticCreate<STypeManager>;
+      friend class lib::singleton::StaticCreate<STypeManager>;
       
       /** Lifecycle: reset all type registration information
        *  to the <i>generic pristine default</i> state. This includes

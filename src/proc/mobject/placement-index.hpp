@@ -49,7 +49,7 @@
 
 namespace mobject {
   
-  using lumiera::factory::RefcountFac;
+  using lib::factory::RefcountFac;
   using std::tr1::shared_ptr;
   using boost::scoped_ptr;
   using std::vector;
@@ -110,7 +110,7 @@ namespace mobject {
     protected:
       PlacementIndex() ;
       
-      friend class lumiera::factory::Factory<PlacementIndex, lumiera::factory::Wrapper<PlacementIndex, shared_ptr<PlacementIndex> > >;
+      friend class lib::factory::Factory<PlacementIndex, lib::factory::Wrapper<PlacementIndex, shared_ptr<PlacementIndex> > >;
     };
   ////////////////TODO currently just fleshing  out the API; probably have to split off an impl.class; but for now a PImpl is sufficient...
   

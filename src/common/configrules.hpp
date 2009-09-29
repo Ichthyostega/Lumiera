@@ -227,7 +227,7 @@ namespace lumiera
     {
   
     public:
-      static SingletonSub<ConfigRules> instance;
+      static lib::SingletonSub<ConfigRules> instance;
       
     };
   

@@ -43,12 +43,12 @@ namespace lumiera
   namespace {
   
     /** type of the actual ConfigRules implementation to use */
-    singleton::UseSubclass<query::MockConfigRules> typeinfo;
+    lib::singleton::UseSubclass<query::MockConfigRules> typeinfo;
   }
   
       
   /** Singleton factory instance, parametrised to actual impl. type. */
-  SingletonSub<ConfigRules> ConfigRules::instance (typeinfo); 
+  lib::SingletonSub<ConfigRules> ConfigRules::instance (typeinfo); 
 
 
   

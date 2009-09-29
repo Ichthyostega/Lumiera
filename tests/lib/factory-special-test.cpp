@@ -38,8 +38,8 @@ using std::string;
 using std::cout;
 
 
-namespace lumiera {
-namespace test {
+namespace lib {
+namespace test{
   
   /**
    * Example Allocator using plain C memory management.
@@ -319,4 +319,4 @@ namespace test {
   
   
   
-}} // namespace lumiera::test
+}} // lib::test

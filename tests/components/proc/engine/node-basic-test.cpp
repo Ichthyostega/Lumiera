@@ -22,7 +22,6 @@
 
 
 #include "lib/test/run.hpp"
-//#include "lib/factory.hpp"
 //#include "lib/util.hpp"
 #include "proc/engine/nodefactory.hpp"
 #include "proc/engine/nodewiring.hpp"

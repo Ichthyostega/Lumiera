@@ -90,9 +90,9 @@ namespace asset
   
   
   /** 
-   * Factory specialized for createing Metadata Asset objects.
+   * Factory specialised for creating Metadata Asset objects.
    */ 
-  class MetaFactory : public lumiera::Factory<asset::Meta>
+  class MetaFactory : public lib::Factory<asset::Meta>
     {
     public:
       typedef P<asset::Meta> PType;

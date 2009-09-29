@@ -68,7 +68,7 @@ namespace test    {
         { }
     };
       
-  lumiera::Singleton<Testbed> testbed_1; // invoke ctor when creating first TestClip...
+  lib::Singleton<Testbed> testbed_1; // invoke ctor when creating first TestClip...
   
   
   

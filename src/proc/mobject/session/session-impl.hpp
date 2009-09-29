@@ -94,7 +94,7 @@ namespace session {
       scoped_ptr<SessionImpl> pImpl_;
       
       SessManagerImpl()  throw();
-      friend class lumiera::singleton::StaticCreate<SessManagerImpl>;
+      friend class lib::singleton::StaticCreate<SessManagerImpl>;
       
       virtual ~SessManagerImpl() {}
       

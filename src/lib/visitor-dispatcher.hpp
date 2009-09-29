@@ -38,6 +38,7 @@ namespace lumiera {
 namespace visitor {
   
   using lib::ClassLock;
+  using lib::Singleton;
   
   
   template<class TOOL> class Tag;

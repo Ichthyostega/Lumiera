@@ -31,8 +31,8 @@ This code is heavily inspired by
 
 
 
-#ifndef LUMIERA_SINGLETONFACTORY_H
-#define LUMIERA_SINGLETONFACTORY_H
+#ifndef LIB_SINGLETONFACTORY_H
+#define LIB_SINGLETONFACTORY_H
 
 
 #include "lib/singletonpolicies.hpp"  // several Policies usable together with SingletonFactory
@@ -42,7 +42,7 @@ This code is heavily inspired by
 #include "lib/util.hpp"
 #include "lib/sync-classlock.hpp"
 
-namespace lumiera {
+namespace lib {
   
   /**
    * A configurable Template for implementing Singletons. 
@@ -143,12 +143,5 @@ namespace lumiera {
 /////       But the whole point of my pervasive use of this singleton template is to remain
 /////       below this borderline of integration ("IoC yes, but avoid DI").
   
-} // namespace lumiera
+} // namespace lib
 #endif
-/*
-// Local Variables:
-// mode: C++
-// c-file-style: "gnu"
-// indent-tabs-mode: nil
-// End:
-*/

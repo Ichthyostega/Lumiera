@@ -55,13 +55,13 @@ namespace lumiera {
       static const string get (string const& key);
       
       
-      static lumiera::Singleton<Config> instance;
+      static lib::Singleton<Config> instance;
       
     private:
       Config();
       ~Config();
       
-      friend class lumiera::singleton::StaticCreate<Config>;
+      friend class lib::singleton::StaticCreate<Config>;
       
       //////////////////TODO: define startup/shutdown and loading of the config interface
       

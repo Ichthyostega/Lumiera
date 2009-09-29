@@ -139,7 +139,7 @@ namespace asset {
   /** 
    * Factory specialised for creating Media Asset objects.
    */ 
-  class MediaFactory : public lumiera::Factory<asset::Media>
+  class MediaFactory : public lib::Factory<asset::Media>
     {
     public:
       typedef P<asset::Media> PType;

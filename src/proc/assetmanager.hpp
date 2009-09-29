@@ -68,7 +68,7 @@ namespace asset {
     
     
     public:
-      static lumiera::Singleton<AssetManager> instance;
+      static lib::Singleton<AssetManager> instance;
       
       /** provide the unique ID for given Asset::Ident tuple */
       static ID<Asset> getID (const Asset::Ident&);
@@ -112,7 +112,7 @@ namespace asset {
       
       AssetManager ();
       
-      friend class lumiera::singleton::StaticCreate<AssetManager>;
+      friend class lib::singleton::StaticCreate<AssetManager>;
       
     };
     
