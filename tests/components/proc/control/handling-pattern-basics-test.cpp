@@ -1,0 +1,194 @@
+/*
+  HandlingPatternBasics(Test)  -  verify elementary operation of a command handling pattern
+ 
+  Copyright (C)         Lumiera.org
+    2009,               Hermann Vosseler <Ichthyostega@web.de>
+ 
+  This program is free software; you can redistribute it and/or
+  modify it under the terms of the GNU General Public License as
+  published by the Free Software Foundation; either version 2 of the
+  License, or (at your option) any later version.
+ 
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+ 
+  You should have received a copy of the GNU General Public License
+  along with this program; if not, write to the Free Software
+  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+ 
+* *****************************************************/
+
+
+#include "lib/test/run.hpp"
+//#include "lib/test/test-helper.hpp"
+#include "proc/control/command.hpp"
+#include "proc/control/command-impl.hpp"
+#include "proc/control/command-registry.hpp"
+#include "proc/control/argument-erasure.hpp"
+#include "proc/control/handling-pattern.hpp"
+//#include "lib/lumitime.hpp"
+#include "lib/symbol.hpp"
+//#include "lib/util.hpp"
+
+#include "proc/control/test-dummy-commands.hpp"
+
+//#include <tr1/functional>
+//#include <boost/ref.hpp>
+//#include <boost/format.hpp>
+//#include <iostream>
+#include <cstdlib>
+//#include <string>
+
+
+namespace control {
+namespace test    {
+
+
+//  using boost::format;
+//  using boost::str;
+  //using lumiera::Time;
+  //using util::contains;
+  using std::tr1::function;
+//  using std::tr1::bind;
+//  using std::string;
+  using std::rand;
+  //using std::cout;
+  //using std::endl;
+//  using lib::test::showSizeof;
+//  using util::isSameObject;
+//  using util::contains;
+  using lib::Symbol;
+
+  
+  
+  //using lumiera::typelist::BuildTupleAccessor;
+//  using lumiera::error::LUMIERA_ERROR_EXTERNAL;
+  
+  namespace { // test data and helpers...
+  
+    Symbol TEST_CMD  = "test.command1.handling";
+    HandlingPattern::ID TEST_PATTERN = HandlingPattern::DUMMY;
+  }
+  
+  typedef shared_ptr<CommandImpl> PCommandImpl;
+  typedef HandlingPattern const& HaPatt;
+  
+  
+  
+  /**********************************************************************************
+   * @test operate and verify a simple dummy command handling pattern.
+   *       interface. Add/remove a command instance to the index, allocate an
+   *       CommandImpl frame and verify it is removed properly on ref count zero.
+   * @note this test covers mainly the behaviour of a handling pattern as a concept,
+   *       not so much the behaviour of the (standard) handling pattern implementations. 
+   * 
+   * @see HandlingPattern
+   * @see CommandRegistry
+   * @see command.hpp
+   * @see command-basic-test.cpp
+   */
+  class HandlingPatternBasics_test : public Test
+    {
+      
+      uint cnt_inst;
+      
+      
+      virtual void
+      run (Arg) 
+        {
+          CommandRegistry& registry = CommandRegistry::instance();
+          ASSERT (&registry);
+          
+          cnt_inst = registry.instance_count();
+      
+          {
+            PCommandImpl pCom = buildTestCommand(registry);
+            checkExec (pCom);
+            checkUndo (pCom);
+          }
+          
+          ASSERT (cnt_inst == registry.instance_count());
+        }
+      
+      
+      /** create a command implementation frame usable for tests.
+       *  This simulates what normally happens within a CommandDef.
+       *  The created CommandImpl isn't registered, and thus will
+       *  just go away when the smart-ptr leaves scope.
+       */
+      PCommandImpl
+      buildTestCommand (CommandRegistry& registry)
+        {
+          
+          typedef void Sig_oper(int);
+          typedef long Sig_capt(int);
+          typedef void Sig_undo(int,long);
+          
+          function<Sig_oper> o_Fun (command1::operate);
+          function<Sig_capt> c_Fun (command1::capture);
+          function<Sig_undo> u_Fun (command1::undoIt);
+          
+          ASSERT (o_Fun && c_Fun && u_Fun);
+          
+          // when the CommandDef is complete, it issues the
+          // allocation call to the registry behind the scenes....
+          
+          PCommandImpl pImpl = registry.newCommandImpl(o_Fun,c_Fun,u_Fun);
+          ASSERT (pImpl); 
+          ASSERT (*pImpl);
+          return pImpl;
+        }
+      
+      
+      void
+      checkExec (PCommandImpl com)
+        {
+          ASSERT (com);
+          ASSERT (!com->canExec());
+          
+          typedef Types<int> ArgType;
+          const int ARGU (1 + rand() % 1000);
+          Tuple<ArgType> tuple(ARGU);
+          TypedArguments<Tuple<ArgType> > arg(tuple);
+          com->setArguments(arg);
+          
+          ASSERT (com->canExec());
+          ASSERT (!com->canUndo());
+          command1::check_ = 0;
+          
+          HaPatt patt = HandlingPattern::get(TEST_PATTERN);
+          ExecResult res = patt.invoke(*com, TEST_CMD);
+          
+          ASSERT (res);
+          ASSERT (ARGU == command1::check_);
+          ASSERT (com->canUndo());
+        }
+      
+      
+      void
+      checkUndo (PCommandImpl com)
+        {
+          ASSERT (com);
+          ASSERT (com->canExec());
+          ASSERT (com->canUndo());
+          
+          ASSERT (command1::check_ > 0);
+          
+          HaPatt ePatt = HandlingPattern::get(TEST_PATTERN);
+          HaPatt uPatt = ePatt.howtoUNDO();
+          ExecResult res = uPatt.invoke(*com, TEST_CMD);
+          
+          ASSERT (res);
+          ASSERT (command1::check_ == 0);
+        }
+      
+    };
+  
+  
+  /** Register this test class... */
+  LAUNCHER (HandlingPatternBasics_test, "function controller");
+      
+      
+}} // namespace control::test

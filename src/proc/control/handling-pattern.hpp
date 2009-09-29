@@ -96,6 +96,7 @@ namespace control {
         { SYNC
         , SYNC_THROW
         , ASYNC
+        , DUMMY
         
         , NUM_IDS
         };

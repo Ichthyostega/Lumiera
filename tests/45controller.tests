@@ -35,18 +35,18 @@ out: RESET...undoIt\(time=00:..:....00\)----memento-:START...doIt\( Time=00:..:.
 END
 
 
-TEST "Command functor and UNDO functor" CommandMutation_test <<END
-out: empty placeholder closure: Closure\(0\)
-out: param values: Closure\(23\)
-out: saved state: 11
-END
-
-
 TEST "build argument accepting function" AcceptArgumentTuple_test <<END
 out: sizeof\( .+control.+TestClass.+ \) =   1
 out: sizeof\( .+control.+TestClass.+lumiera.Time.+ \) =  (12)|(16)
 out: 00:..:..\.000
 return: 0
+END
+
+
+TEST "Command functor and UNDO functor" CommandMutation_test <<END
+out: empty placeholder closure: Closure\(0\)
+out: param values: Closure\(23\)
+out: saved state: 11
 END
 
 
@@ -56,6 +56,16 @@ END
 
 
 PLANNED "Command index and allocation" CommandRegistry_test <<END
+return: 0
+END
+
+
+PLANNED "handling pattern basics" HandlingPatternBasics_test <<END
+return: 0
+END
+
+
+PLANNED "handling patterns" HandlingPatternStandardImpl_test <<END
 return: 0
 END
 

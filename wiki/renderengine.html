@@ -995,7 +995,7 @@ While generally there is //no limitation// on the number and type of parameters,
 Usually, parameters should be passed //by value// &amp;mdash; with the exception of target object(s), which are typically bound as MObjectRef, causing them to be resolved at commad execution time (late binding).
 </pre>
 </div>
-<div title="CommandHandling" modifier="Ichthyostega" modified="200907212323" created="200906072048" tags="SessionLogic spec draft decision design img" changecount="26">
+<div title="CommandHandling" modifier="Ichthyostega" modified="200909291418" created="200906072048" tags="SessionLogic spec draft decision design img" changecount="27">
 <pre>Organising any ''mutating'' operations executable by the user (via GUI) by means of the [[command pattern|http://en.wikipedia.org/wiki/Command_pattern]] can be considered //state of the art//&amp;nbsp; today. First of all, it allows to discern the specific implementation operations to be called on one or several objects within the HighLevelModel from the operation requested by the user, the latter being rather a concept. A command can be labeled clearly, executed under controlled circumstances, allowing transactional behaviour.
 
 
@@ -1014,7 +1014,24 @@ While the usual »Memento« implementation might automatically capture the whole
 A command may be [[defined|CommandDefinition]] completely from scratch, or it might just serve as a CommandPrototype with specific targets and parameters. The command could then be serialised and later be recovered and re-bound with the parameters, but usually it will be handed over to the ProcDispatcher, pending execution. When ''invoking'', the handling sequence is to [[log the command|SessionStorage]], then call the ''undo capture function'', followed from calling the actual ''operation function''. After success, the logging and [[undo registration|UndoManager]] is completed. In any case, finally the ''result signal'' (a functor previously stored within the command) is emitted.
 
 By design, commands are single-serving value objects; executing an operation repeatedly requires creating a collection of command objects, one for each invocation. While nothing prevents you from invoking the command operation functor several times, each invocation will overwrite the undo state captrued by the previous invocation. Thus, each command instance should bes seen as the promise (or later the trace) of a single operation execution. In a similar vein, the undo capturing should be defined as to be self sufficient, so that invoking just the undo functor of a single command performes any necessary steps to restore the situation found before invoking the corresponding mutation functor &amp;mdash; of course only //with respect to the topic covered by this command.// So, while commands provide a lot of flexibility and allow to do a multitude of things, certainly there is an intended CommandLifecycle.
-&amp;rarr; more on possible [[command usage scenarios|CommandUsage]]</pre>
+&amp;rarr; more on possible [[command usage scenarios|CommandUsage]]
+&amp;rarr; more details regarding [[command implementation|CommandImpl]]
+</pre>
+</div>
+<div title="CommandImpl" modifier="Ichthyostega" modified="200909291434" created="200909291424" tags="spec impl" changecount="9">
+<pre>Commands are separated in a handle (the {{{control::Command}}}-object), to be used by the client code, and an implementation level, which is managed transparently behind the stages. Client code is assumed to build a CommandDefinition at some point, and from then on to access the command ''by ID'', yielding the command handle.
+Binding of arguments, invocation and UNDO all are accessible through this frontend.
+
+!Infrastructure
+To support this handling scheme, some infrastructure is in place:
+* a command registry maintains the ID &amp;harr; Command relation.
+* indirectly, through a custom alloctaor, the registry is also involved into allocation of the command implementation frame
+* this implementation frame combines
+** an operation mutation and an undo mutation
+** a closure, implemented through an argument holder
+** an undo state capturing mechanism, based on a capturing function provided on definition
+* performing the actual execution is delegated to a handling pattern object, accessed by name.
+</pre>
 </div>
 <div title="CommandLifecycle" modifier="Ichthyostega" modified="200907240010" created="200907210135" tags="SessionLogic spec draft design img" changecount="10">
 <pre>[&lt;img[Structure of Commands|uml/fig135173.png]]
