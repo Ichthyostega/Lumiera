@@ -22,6 +22,7 @@
 
 
 #include "lib/test/run.hpp"
+#include "lib/test/test-helper.hpp"
 #include "common/subsys.hpp"
 #include "common/subsystem-runner.hpp"
 #include "common/option.hpp"
@@ -47,7 +48,7 @@ using backend::Thread;
 
 
 namespace lumiera {
-  namespace test  {
+namespace test  {
     
     namespace { // private test classes and data...
       
@@ -56,7 +57,7 @@ namespace lumiera {
       /** limit for the randomly selected duration of
        *  subsystem's running phase (milliseconds) */
       const uint MAX_RUNNING_TIME_ms = 80;
-      const uint MIN_RUNNING_TIME_ms = 10;
+      const uint MIN_RUNNING_TIME_ms = 20;
       
       /** the "running" subsystem checks for a
        *  shutdown request every XX milliseconds */
@@ -68,6 +69,8 @@ namespace lumiera {
       
       /** marker for simulated failure exceptions */
       LUMIERA_ERROR_DEFINE( TEST, "simulated failure.");
+      
+      using error::LUMIERA_ERROR_LOGIC;
       
       
       
@@ -294,40 +297,14 @@ namespace lumiera {
             MockSys unit1 ("U1", "start(false), run(false).");
             MockSys unit2 ("U2", "start(throw), run(false).");
             MockSys unit3 ("U3", "start(fail),  run(false).");  // simulates incorrect behaviour
-            MockSys unit4 ("U4", "start(true),  run(false).");
+            MockSys unit4 ("U4", "start(true),  run(fail)." );  // simulates failure immediately after start
             SubsystemRunner runner(dummyOpt);
             
             runner.maybeRun (unit1);  // this one doesn't start at all, which isn't considered an error
             
-            try 
-              { 
-                runner.maybeRun (unit2);
-                NOTREACHED();
-              }
-            catch (lumiera::Error&)
-              {
-                ASSERT (lumiera_error() == LUMIERA_ERROR_TEST);
-              }
-            try 
-              { 
-                runner.maybeRun (unit3);
-                NOTREACHED();
-              }
-            catch (lumiera::Error&)
-              {
-                ASSERT (lumiera_error() == error::LUMIERA_ERROR_LOGIC); // incorrect behaviour trapped
-              }
-            try 
-              { 
-                runner.maybeRun (unit4);
-              }
-            catch (lumiera::Error&)
-              {
-                ASSERT (lumiera_error() == error::LUMIERA_ERROR_LOGIC); // detected that the subsystem didn't come up
-              }                                                         //   (due to the way the test subsystem is written,
-                                                                        //    this may not always be detected, because there
-                                                                        //    is a short time window where isUp_==true )
-            
+            VERIFY_ERROR (TEST,  runner.maybeRun (unit2) );
+            VERIFY_ERROR (LOGIC, runner.maybeRun (unit3) );     // incorrect behaviour trapped
+            VERIFY_ERROR (LOGIC, runner.maybeRun (unit4) );     // detected that the subsystem didn't come up
             
             runner.wait();
             
@@ -338,7 +315,7 @@ namespace lumiera {
             ASSERT (!unit1.didRun());
             ASSERT (!unit2.didRun());
             ASSERT (!unit3.didRun());
-            ASSERT (!unit4.didRun());
+            ASSERT ( unit4.didRun()); // ...but it failed immediately
           }
         
         
@@ -347,7 +324,7 @@ namespace lumiera {
           {
             cout << "-----singleSubsys_emegency_exit-----\n";
             
-            MockSys unit ("one", "start(true), run(fail).");
+            MockSys unit ("one", "start(true), run(throw).");
             SubsystemRunner runner(dummyOpt);
             
             runner.maybeRun (unit);
@@ -409,15 +386,7 @@ namespace lumiera {
             unit3.depends (unit2);
             SubsystemRunner runner(dummyOpt);
             
-            try 
-              { 
-                runner.maybeRun (unit4);
-                NOTREACHED();
-              }
-            catch (lumiera::Error&)
-              {
-                ASSERT (lumiera_error() == error::LUMIERA_ERROR_LOGIC); // failure to bring up prerequisites is detected
-              }
+            VERIFY_ERROR (LOGIC, runner.maybeRun (unit4) );   // failure to bring up prerequisites is detected
             ASSERT ( unit1.isRunning());
             ASSERT ( unit2.isRunning());
             ASSERT (!unit3.isRunning());
@@ -444,6 +413,4 @@ namespace lumiera {
     
     
     
-  } // namespace test
-
-} // namespace lumiera
+}} // namespace lumiera::test

@@ -58,7 +58,8 @@ namespace lib {
             {
               Lock guard (this); // note recursive lock
               
-              for ( uint i=0, lim=(rand() % MAX_PAUSE); i<lim; ++i);
+              for ( uint i=0, lim=(rand() % MAX_PAUSE); i<lim; ++i)
+                ;
             }
           
           void 
