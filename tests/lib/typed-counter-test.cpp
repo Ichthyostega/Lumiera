@@ -339,6 +339,7 @@ namespace test{
       void 
       tortureTest () 
         {
+          std::srand (time (NULL));
           sum_TypedCounter_ = 0;
           sum_internal_     = 0;
           
