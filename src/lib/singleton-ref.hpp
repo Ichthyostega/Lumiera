@@ -24,7 +24,7 @@
  ** Helper for singleton-kind access without managing object creation and lifecycle. 
  ** A typical usage scenario is when implementing C Language Interfaces without any
  ** canonical access to some "this" pointer.  
- **
+ ** 
  ** @see gui::NotificationService usage example
  */
 
@@ -34,12 +34,13 @@
 
 
 #include "lib/error.hpp"
+#include "lib/bool-checkable.hpp"
 
 #include <boost/noncopyable.hpp>
 
 
 namespace lib {
-
+  
   namespace singleton {
   
     /***************************************
@@ -48,7 +49,8 @@ namespace lib {
      */
     template<class TY>
     class AccessAsReference
-      : boost::noncopyable
+      : public lib::BoolCheckable<AccessAsReference<TY>
+             , boost::noncopyable>
       {
         TY* obj_;
         
@@ -72,22 +74,13 @@ namespace lib {
         TY* 
         operator-> ()  const
           {
-            if (!obj_)
+            if (!isValid())
               throw lumiera::error::State("Target currently not available.");
             return obj_;
           }
         
         
-        typedef TY* _ThisType::*unspecified_bool_type;
-        
-        /** implicit conversion to "bool" */
-        operator unspecified_bool_type()  const // never throws
-          {
-            return obj_?  &_ThisType::obj_ : 0;
-          }
-        
-        bool operator! ()  const { return !obj_; }
-        
+        bool isValid()  const { return obj_; }
       };
     
   } // namespace Singleton
