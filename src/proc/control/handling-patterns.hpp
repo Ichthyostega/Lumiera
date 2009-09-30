@@ -151,6 +151,37 @@ namespace control {
     
     
     
+    /**
+     * Handling Pattern: invoke command directly and without any integration
+     * with other facilities. This pattern is intended to be used for unit tests.
+     */
+    class InvokeDirectly
+      : public HandlingPattern
+      {
+        void
+        perform (CommandImpl& command)  const
+          {
+            REQUIRE (command.canExec());
+            command.invokeCapture();
+            command.invokeOperation();
+          }
+        
+        void
+        revert(CommandImpl& command)  const
+          {
+            REQUIRE (command.canUndo());
+            command.invokeUndo();
+          }
+        
+        bool
+        isValid()  const
+          {
+            return true;
+          }
+      };
+    
+    
+    
     
     
     
