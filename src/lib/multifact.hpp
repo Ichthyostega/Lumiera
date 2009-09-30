@@ -35,6 +35,7 @@
 
 
 #include "lib/error.hpp"
+#include "lib/singleton.hpp"
 //#include <tr1/memory>
 
 #include <tr1/functional>
@@ -45,6 +46,18 @@ namespace lib {
   namespace factory {
     
     /**
+     * Dummy "wrapper",
+     * just returning a target-ref
+     */
+    template<typename TAR>
+    struct PassReference
+      {
+        typedef TAR& PType;
+        
+        PType wrap (TAR& object) { return object; }
+      };
+    
+    /**
      * Repository of registered production lines.
      * @todo write type comment
      */
@@ -52,10 +65,11 @@ namespace lib {
     class Fab
       {
         typedef TY& RawProduct;
-        typedef std::tr1::function<RawProduct(void)> & FactoryFunc;
         
       public:
-        static FactoryFunc
+        typedef std::tr1::function<RawProduct(void)> FactoryFunc;
+        
+        static FactoryFunc&
         select (ID id)
           {
             UNIMPLEMENTED ("how to store/select the production line");
@@ -82,13 +96,13 @@ namespace lib {
       {
         typedef Fab<TY,ID> _Fab;
         typedef typename _Fab::FactoryFunc Creator;
-        typedef typename WR::PType Product;
+        typedef typename Wrapper<TY>::PType Product;
         
       public:
         Product
         operator() (ID id)
           {
-            Creator func = _Fab::select(id);
+            Creator& func = _Fab::select(id);
             return wrap (func());
           }
         
@@ -107,10 +121,47 @@ namespace lib {
               }
           };
         
+        /**
+         * Convenience shortcut for automatically setting up
+         * a production line, fabricating a singleton instance
+         * of the given target type (TAR)
+         */
+        template<class TAR>
+        class ProduceSingleton
+          {
+            static Produce autoRegistration;
+            
+            typedef std::tr1::function<TAR&(void)> AccessSingleton_Func;
+            
+            static AccessSingleton_Func
+            createSingleton_accessFunction()
+              {
+                static Singleton<TAR> theSingletonFactory;
+                // using this static singleton factory for
+                // "fabricating" the TAR instance. Consequently,
+                // the created TAR object lives within this static
+                // allocated memory.
+                return std::tr1::bind (&Singleton<TAR>::operator(), theSingletonFactory);
+              }
+          };
+        
       };
-      
-      
-      
+    
+    
+    /** define a static instance variable
+     *  to trigger the sideeffect of automatic registration.
+     *  This templated definition actually happens, when the
+     *  ProduceSingleton template gets instantiated. This may be
+     *  triggered explicitly, or by inheriting from ProduceSingleton.
+     */
+    template< typename TY, typename ID
+            , template<class> class Wrapper>
+    template< class TAR>
+    typename MultiFact<TY,ID,Wrapper>::Produce
+    MultiFact<TY,ID,Wrapper>::ProduceSingleton<TAR>::autoRegistration ( TY::getID()  // required within target type!
+                                                                      , createSingleton_accessFunction());
+    
+    
   } // namespace factory
   
 //using factory::Factory;

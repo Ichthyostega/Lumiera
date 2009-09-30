@@ -22,6 +22,7 @@
 
 
 #include "lib/test/run.hpp"
+#include "lib/test/test-helper.hpp"
 #include "lib/multifact.hpp"
 #include "lib/util.hpp"
 
@@ -35,10 +36,13 @@ namespace lib {
 namespace test{
   
   using boost::lexical_cast;
+  using lib::test::showSizeof;
   //using util::isnil;
   using util::isSameObject;
+  using std::ostream;
   using std::string;
   using std::cout;
+  using std::endl;
   
   
   namespace { // hierarchy of test dummy objects
@@ -49,6 +53,9 @@ namespace test{
         virtual operator string ();
       };
     
+    inline ostream& operator<< (ostream& os, Interface& ifa) { return os << string(ifa); }
+    
+    
     enum theID
       { ONE = 1
       , TWO
@@ -56,12 +63,13 @@ namespace test{
       , FOU
       };
     
-    typedef MultiFact<Interface, theID, PassReference> TestFactory;
+    typedef factory::MultiFact<Interface, theID, factory::PassReference> TestFactory;
     
     
     template<theID ii>
     class Implementation
       : public Interface
+      , TestFactory::ProduceSingleton<Implementation<ii> >
       {
         operator string()
           {
@@ -69,10 +77,10 @@ namespace test{
           }
       };
     
-    TestFactory::ProduceSingleton<Implementation<ONE> > _register_for_fabrication_ONE;
-    TestFactory::ProduceSingleton<Implementation<TWO> > _register_for_fabrication_TWO;
-    TestFactory::ProduceSingleton<Implementation<THR> > _register_for_fabrication_THR;
-    TestFactory::ProduceSingleton<Implementation<FOU> > _register_for_fabrication_FOU;
+    template class Implementation<ONE>;
+    template class Implementation<TWO>;
+    template class Implementation<THR>;
+    template class Implementation<FOU>;
   }
   
   
