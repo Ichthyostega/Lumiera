@@ -122,9 +122,10 @@ namespace control {
       
     protected:
       
-      virtual void perform (CommandImpl& command)  const  =0;
+      virtual void dispatch(CommandImpl& command)  const;
       
-      virtual HandlingPattern const& defineUNDO()  const  =0;
+      virtual void perform (CommandImpl& command)  const  =0;
+      virtual void revert  (CommandImpl& command)  const  =0;
       
       
       

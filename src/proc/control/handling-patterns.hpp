@@ -80,10 +80,10 @@ namespace control {
             UNIMPLEMENTED ("actually invoke a command, according to this pattern");
           }
         
-        HandlingPattern const&
-        defineUNDO()  const
+        void
+        revert(CommandImpl& command)  const
           {
-            UNIMPLEMENTED ("yield a handling pattern suitable for UNDOing a command, according to this pattern");
+            UNIMPLEMENTED ("actually undo the effect of a command, according to this pattern");
           }
         
         bool
@@ -108,10 +108,10 @@ namespace control {
             UNIMPLEMENTED ("actually invoke a command, according to this pattern");
           }
         
-        HandlingPattern const&
-        defineUNDO()  const
+        void
+        revert(CommandImpl& command)  const
           {
-            UNIMPLEMENTED ("yield a handling pattern suitable for UNDOing a command, according to this pattern");
+            UNIMPLEMENTED ("actually undo the effect of a command, according to this pattern");
           }
         
         bool
@@ -136,10 +136,10 @@ namespace control {
             UNIMPLEMENTED ("actually invoke a command, according to this pattern");
           }
         
-        HandlingPattern const&
-        defineUNDO()  const
+        void
+        revert(CommandImpl& command)  const
           {
-            UNIMPLEMENTED ("yield a handling pattern suitable for UNDOing a command, according to this pattern");
+            UNIMPLEMENTED ("actually undo the effect of a command, according to this pattern");
           }
         
         bool

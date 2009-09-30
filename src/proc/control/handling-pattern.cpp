@@ -70,7 +70,7 @@ namespace control {
           return ExecResult (error::Logic (str (err_pre % command), errID_pre));
         
         // Execute the command
-        perform (command);
+        dispatch (command);
         
         Symbol errID = lumiera_error();
         if (errID)
@@ -103,10 +103,17 @@ namespace control {
   }
   
   
+  void
+  HandlingPattern::dispatch (CommandImpl& command)
+  {
+    perform (command);
+  }
+  
+  
   HandlingPattern const&
   HandlingPattern::howtoUNDO()  const
   {
-    return defineUNDO();
+    UNIMPLEMENTED ("yield a handling pattern suitable for UNDOing a command, according to this pattern");
   }
   
   
