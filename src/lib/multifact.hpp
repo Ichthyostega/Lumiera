@@ -39,6 +39,7 @@
 //#include <tr1/memory>
 
 #include <tr1/functional>
+#include <map>
 
 
 
@@ -62,24 +63,26 @@ namespace lib {
      * @todo write type comment
      */
     template<typename TY, typename ID>
-    class Fab
+    struct Fab
       {
         typedef TY& RawProduct;
-        
-      public:
         typedef std::tr1::function<RawProduct(void)> FactoryFunc;
+        
         
         static FactoryFunc&
         select (ID id)
           {
-            UNIMPLEMENTED ("how to store/select the production line");
+            return producerTable_[id];
           }
         
         static void
-        defineProduction (ID id, FactoryFunc fun)
+        defineProduction (ID id, FactoryFunc& fun)
           {
-            UNIMPLEMENTED ("how to store/select the production line");
+            producerTable_[id] = fun;
           }
+        
+      private:
+        std::map<ID, FactoryFunc> producerTable_;
       };
     
     
@@ -128,38 +131,48 @@ namespace lib {
          */
         template<class TAR>
         class ProduceSingleton
+          : Singleton<TAR>
+          , Produce
           {
-            static Produce autoRegistration;
-            
             typedef std::tr1::function<TAR&(void)> AccessSingleton_Func;
             
-            static AccessSingleton_Func
-            createSingleton_accessFunction()
+            AccessSingleton_Func
+            createSingleton_accessFunction(Singleton<TAR>* theFactory)
               {
-                static Singleton<TAR> theSingletonFactory;
-                // using this static singleton factory for
-                // "fabricating" the TAR instance. Consequently,
-                // the created TAR object lives within this static
-                // allocated memory.
-                return std::tr1::bind (&Singleton<TAR>::operator(), theSingletonFactory);
+                return std::tr1::bind (&Singleton<TAR>::operator(), theFactory);
+              }
+            
+          public:
+            ProduceSingleton()
+              : Produce ( TAR::getTypeID()  // required within target type!
+                        , createSingleton_accessFunction(this))
+              {
+                INFO (test, "zoing");
               }
           };
-        
       };
     
+    template<class X>
+    struct AutoInstantiation
+      {
+        static X autoRegistration;
+      };
     
-    /** define a static instance variable
-     *  to trigger the sideeffect of automatic registration.
-     *  This templated definition actually happens, when the
-     *  ProduceSingleton template gets instantiated. This may be
-     *  triggered explicitly, or by inheriting from ProduceSingleton.
-     */
-    template< typename TY, typename ID
-            , template<class> class Wrapper>
-    template< class TAR>
-    typename MultiFact<TY,ID,Wrapper>::Produce
-    MultiFact<TY,ID,Wrapper>::ProduceSingleton<TAR>::autoRegistration ( TY::getID()  // required within target type!
-                                                                      , createSingleton_accessFunction());
+    template<class X>
+    X AutoInstantiation<X>::autoRegistration;
+    
+//    /** define a static instance variable
+//     *  to trigger the sideeffect of automatic registration.
+//     *  This templated definition actually happens, when the
+//     *  ProduceSingleton template gets instantiated. This may be
+//     *  triggered explicitly, or by inheriting from ProduceSingleton.
+//     */
+//    template< typename TY, typename ID
+//            , template<class> class Wrapper>
+//    template< class TAR>
+//    typename MultiFact<TY,ID,Wrapper>::Produce
+//    MultiFact<TY,ID,Wrapper>::ProduceSingleton<TAR>::autoRegistration ( TY::getID()  // required within target type!
+//                                                                      , createSingleton_accessFunction());
     
     
   } // namespace factory

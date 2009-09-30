@@ -181,8 +181,8 @@ namespace control {
       using lib::singleton::UseSubclass;
       
       patternTable[HandlingPattern::SYNC      ]  = SingletonFac(UseSubclass<InvokeSyncNoThrow>());
-      patternTable[HandlingPattern::SYNC_THROW]  = SingletonFac(UseSubclass<InvokeSyncThrow>());
-      patternTable[HandlingPattern::ASYNC     ]  = SingletonFac(UseSubclass<InvokeAsync>());
+//      patternTable[HandlingPattern::SYNC_THROW]  = SingletonFac(UseSubclass<InvokeSyncThrow>());
+//      patternTable[HandlingPattern::ASYNC     ]  = SingletonFac(UseSubclass<InvokeAsync>());
     }
     
     

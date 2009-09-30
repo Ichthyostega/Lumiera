@@ -50,7 +50,7 @@ namespace test{
     struct Interface
       {
         virtual ~Interface() {};
-        virtual operator string ();
+        virtual operator string () =0;
       };
     
     inline ostream& operator<< (ostream& os, Interface& ifa) { return os << string(ifa); }
@@ -69,18 +69,20 @@ namespace test{
     template<theID ii>
     class Implementation
       : public Interface
-      , TestFactory::ProduceSingleton<Implementation<ii> >
       {
         operator string()
           {
             return "Impl-"+lexical_cast<string> (ii);
           }
+        
+      public:
+        static theID getTypeID() { return ii; }
       };
     
-    template class Implementation<ONE>;
-    template class Implementation<TWO>;
-    template class Implementation<THR>;
-    template class Implementation<FOU>;
+    TestFactory::ProduceSingleton<Implementation<ONE> > singletonInstantiation_ONE;
+    TestFactory::ProduceSingleton<Implementation<TWO> > singletonInstantiation_TWO;
+    TestFactory::ProduceSingleton<Implementation<THR> > singletonInstantiation_THR;
+    TestFactory::ProduceSingleton<Implementation<FOU> > singletonInstantiation_FOU;
   }
   
   
