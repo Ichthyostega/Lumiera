@@ -36,7 +36,7 @@
 
 #include "lib/error.hpp"
 #include "lib/singleton.hpp"
-//#include <tr1/memory>
+#include "util.hpp"
 
 #include <tr1/functional>
 #include <map>
@@ -45,6 +45,8 @@
 
 namespace lib {
   namespace factory {
+    
+    using util::contains;
     
     /**
      * Dummy "wrapper",
@@ -69,14 +71,17 @@ namespace lib {
         typedef std::tr1::function<RawProduct(void)> FactoryFunc;
         
         
-        static FactoryFunc&
+        FactoryFunc&
         select (ID id)
           {
+            if (!contains (producerTable_,id))
+              throw lumiera::error::Invalid("unknown factory product requested.");
+            
             return producerTable_[id];
           }
         
-        static void
-        defineProduction (ID id, FactoryFunc& fun)
+        void
+        defineProduction (ID id, FactoryFunc fun)
           {
             producerTable_[id] = fun;
           }
@@ -101,28 +106,25 @@ namespace lib {
         typedef typename _Fab::FactoryFunc Creator;
         typedef typename Wrapper<TY>::PType Product;
         
+        _Fab funcTable_;
+        
       public:
         Product
         operator() (ID id)
           {
-            Creator& func = _Fab::select(id);
+            Creator& func = funcTable_.select(id);
             return wrap (func());
           }
         
-        /**
-         * to set up a production line,
-         * associated with a specific ID
+        /** to set up a production line,
+         *  associated with a specific ID
          */
-        struct Produce
-          : Creator
+        template<typename FUNC>
+        void
+        defineProduction (ID id, FUNC fun)
           {
-            template<typename FUNC>
-            Produce (ID id, FUNC fun)
-              : Creator(fun)
-              {
-                _Fab::defineProduction (id, *this);
-              }
-          };
+            funcTable_.defineProduction (id, fun);
+          }
         
         /**
          * Convenience shortcut for automatically setting up
@@ -130,49 +132,27 @@ namespace lib {
          * of the given target type (TAR)
          */
         template<class TAR>
-        class ProduceSingleton
-          : Singleton<TAR>
-          , Produce
+        class Singleton
+          : lib::Singleton<TAR>
           {
-            typedef std::tr1::function<TAR&(void)> AccessSingleton_Func;
+            typedef lib::Singleton<TAR> SingFac;
+//            typedef std::tr1::function<TAR&(void)> AccessSingleton_Func;
             
-            AccessSingleton_Func
-            createSingleton_accessFunction(Singleton<TAR>* theFactory)
+            Creator
+            createSingleton_accessFunction()
               {
-                return std::tr1::bind (&Singleton<TAR>::operator(), theFactory);
+                return std::tr1::bind (&SingFac::operator()
+                                      , static_cast<SingFac*>(this));
               }
             
           public:
-            ProduceSingleton()
-              : Produce ( TAR::getTypeID()  // required within target type!
-                        , createSingleton_accessFunction(this))
+            Singleton (MultiFact& factory, ID id)
               {
-                INFO (test, "zoing");
+                factory.defineProduction(id, createSingleton_accessFunction());
               }
           };
       };
     
-    template<class X>
-    struct AutoInstantiation
-      {
-        static X autoRegistration;
-      };
-    
-    template<class X>
-    X AutoInstantiation<X>::autoRegistration;
-    
-//    /** define a static instance variable
-//     *  to trigger the sideeffect of automatic registration.
-//     *  This templated definition actually happens, when the
-//     *  ProduceSingleton template gets instantiated. This may be
-//     *  triggered explicitly, or by inheriting from ProduceSingleton.
-//     */
-//    template< typename TY, typename ID
-//            , template<class> class Wrapper>
-//    template< class TAR>
-//    typename MultiFact<TY,ID,Wrapper>::Produce
-//    MultiFact<TY,ID,Wrapper>::ProduceSingleton<TAR>::autoRegistration ( TY::getID()  // required within target type!
-//                                                                      , createSingleton_accessFunction());
     
     
   } // namespace factory

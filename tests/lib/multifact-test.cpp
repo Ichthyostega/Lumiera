@@ -44,6 +44,7 @@ namespace test{
   using std::cout;
   using std::endl;
   
+  using lumiera::error::LUMIERA_ERROR_INVALID;
   
   namespace { // hierarchy of test dummy objects
     
@@ -79,10 +80,12 @@ namespace test{
         static theID getTypeID() { return ii; }
       };
     
-    TestFactory::ProduceSingleton<Implementation<ONE> > singletonInstantiation_ONE;
-    TestFactory::ProduceSingleton<Implementation<TWO> > singletonInstantiation_TWO;
-    TestFactory::ProduceSingleton<Implementation<THR> > singletonInstantiation_THR;
-    TestFactory::ProduceSingleton<Implementation<FOU> > singletonInstantiation_FOU;
+    TestFactory theFact;
+    
+    TestFactory::Singleton<Implementation<ONE> > holder1 (theFact,ONE);
+    TestFactory::Singleton<Implementation<TWO> > holder2 (theFact,TWO);
+    TestFactory::Singleton<Implementation<THR> > holder3 (theFact,THR);
+    TestFactory::Singleton<Implementation<FOU> > holder4 (theFact,FOU);
   }
   
   
@@ -102,7 +105,6 @@ namespace test{
       void
       run (Arg) 
         {
-          TestFactory theFact;
           cout << theFact(ONE) << endl;
           cout << theFact(TWO) << endl;
           cout << theFact(THR) << endl;
@@ -114,6 +116,9 @@ namespace test{
           ASSERT (isSameObject(o1,o2));
           
           TestFactory anotherFact;
+          VERIFY_ERROR (INVALID, anotherFact(ONE) );
+          
+          TestFactory::Singleton<Implementation<ONE> > anotherSingletonHolder (anotherFact,ONE);
           Interface & o3 = anotherFact(ONE);
           ASSERT (isSameObject(o2,o3));
         } 
