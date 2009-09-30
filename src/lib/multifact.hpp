@@ -46,7 +46,6 @@
 namespace lib {
   namespace factory {
     
-    using util::contains;
     
     /**
      * Dummy "wrapper",
@@ -60,9 +59,11 @@ namespace lib {
         PType wrap (TAR& object) { return object; }
       };
     
+    
     /**
-     * Repository of registered production lines.
-     * @todo write type comment
+     * Table of registered production functions for MultiFact.
+     * Each stored function can be accessed by ID and is able
+     * to fabricate a specific object, which is assignable to TY
      */
     template<typename TY, typename ID>
     struct Fab
@@ -74,7 +75,7 @@ namespace lib {
         FactoryFunc&
         select (ID id)
           {
-            if (!contains (producerTable_,id))
+            if (!contains (id))
               throw lumiera::error::Invalid("unknown factory product requested.");
             
             return producerTable_[id];
@@ -86,6 +87,12 @@ namespace lib {
             producerTable_[id] = fun;
           }
         
+        
+        /* === diagnostics === */
+        
+        bool empty ()         const { return producerTable_.empty(); }
+        bool contains (ID id) const { return util::contains (producerTable_,id); }
+        
       private:
         std::map<ID, FactoryFunc> producerTable_;
       };
@@ -93,7 +100,14 @@ namespace lib {
     
     
     /**
-     * @todo write type comment
+     * Factory for creating a family of objects by ID.
+     * The actual factory functions are to be installed
+     * from the usage site through calls to #defineProduction .
+     * Each generated object will be treated by the Wrapper template,
+     * allowing for the generation of smart-ptrs. The embedded class
+     * Singleton allows to build a family of singleton objects; it is
+     * to be instantiated at the call site and acts as singleton factory,
+     * accessible through a MultiFact instance as frontend.
      */
     template< typename TY
             , typename ID
@@ -108,6 +122,7 @@ namespace lib {
         
         _Fab funcTable_;
         
+        
       public:
         Product
         operator() (ID id)
@@ -115,6 +130,7 @@ namespace lib {
             Creator& func = funcTable_.select(id);
             return wrap (func());
           }
+        
         
         /** to set up a production line,
          *  associated with a specific ID
@@ -126,17 +142,17 @@ namespace lib {
             funcTable_.defineProduction (id, fun);
           }
         
+        
         /**
          * Convenience shortcut for automatically setting up
          * a production line, fabricating a singleton instance
          * of the given target type (TAR)
          */
-        template<class TAR>
+        template<class IMP>
         class Singleton
-          : lib::Singleton<TAR>
+          : lib::Singleton<IMP>
           {
-            typedef lib::Singleton<TAR> SingFac;
-//            typedef std::tr1::function<TAR&(void)> AccessSingleton_Func;
+            typedef lib::Singleton<IMP> SingFac;
             
             Creator
             createSingleton_accessFunction()
@@ -151,13 +167,30 @@ namespace lib {
                 factory.defineProduction(id, createSingleton_accessFunction());
               }
           };
+          
+        
+        /* === diagnostics === */
+          
+        bool empty ()         const { return funcTable_.empty();       }
+        bool contains (ID id) const { return funcTable_.contains (id); }
       };
     
     
     
   } // namespace factory
   
-//using factory::Factory;
+  
+  
+  /** 
+   * Standard configuration of the family-of-object factory
+   * @todo this is rather guesswork... find out what the best and most used configuration could be....
+   */
+  template< typename TY
+          , typename ID
+          >
+  class MultiFact
+    : public factory::MultiFact<TY,ID, factory::PassReference>
+    { };
   
   
 } // namespace lib

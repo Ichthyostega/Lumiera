@@ -37,14 +37,15 @@ namespace test{
   
   using boost::lexical_cast;
   using lib::test::showSizeof;
-  //using util::isnil;
   using util::isSameObject;
+  using util::isnil;
   using std::ostream;
   using std::string;
   using std::cout;
   using std::endl;
   
   using lumiera::error::LUMIERA_ERROR_INVALID;
+  
   
   namespace { // hierarchy of test dummy objects
     
@@ -80,8 +81,10 @@ namespace test{
         static theID getTypeID() { return ii; }
       };
     
+    /** Factory instance for the tests... */
     TestFactory theFact;
     
+    // Configure the products to be fabricated....
     TestFactory::Singleton<Implementation<ONE> > holder1 (theFact,ONE);
     TestFactory::Singleton<Implementation<TWO> > holder2 (theFact,TWO);
     TestFactory::Singleton<Implementation<THR> > holder3 (theFact,THR);
@@ -116,6 +119,7 @@ namespace test{
           ASSERT (isSameObject(o1,o2));
           
           TestFactory anotherFact;
+          ASSERT (isnil (anotherFact));
           VERIFY_ERROR (INVALID, anotherFact(ONE) );
           
           TestFactory::Singleton<Implementation<ONE> > anotherSingletonHolder (anotherFact,ONE);

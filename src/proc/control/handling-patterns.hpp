@@ -44,7 +44,7 @@
 
 //#include "pre.hpp"
 #include "lib/error.hpp"
-#include "lib/singleton-subclass.hpp"
+#include "lib/multifact.hpp"
 #include "proc/control/handling-pattern.hpp"
 #include "proc/control/command-impl.hpp"
 #include "include/lifecycle.h"
@@ -156,39 +156,27 @@ namespace control {
     
     /* ======== Handling Pattern Table ========== */
     
-    typedef lib::SingletonSub<HandlingPattern> SingletonFac;
+    typedef lib::MultiFact<HandlingPattern, HandlingPattern::ID> HandlingPatternFactory;
     
     /** Table of available command handling patterns */
-    vector<SingletonFac> patternTable;
+    HandlingPatternFactory patternTable;
+    
+    HandlingPatternFactory::Singleton<InvokeSyncNoThrow> holder1 (patternTable, HandlingPattern::SYNC);
+    HandlingPatternFactory::Singleton<InvokeSyncThrow>   holder2 (patternTable, HandlingPattern::SYNC_THROW);
+    HandlingPatternFactory::Singleton<InvokeAsync>       holder3 (patternTable, HandlingPattern::ASYNC);
     
     
     /** access the singleton instance for a given ID */
     inline HandlingPattern const&
-    getPatternInstance (size_t id)
+    getPatternInstance (HandlingPattern::ID id)
     {
-      REQUIRE (id < patternTable.size());
-      return patternTable[id] ();
-    }
-    
-    
-    /** populate the handling pattern table.
-     *  This init-function will be invoked each time
-     *  a new session is created or loaded.
-     */
-    void
-    prepareCommandHandlingPatterns()
-    {
-      using lib::singleton::UseSubclass;
+      REQUIRE (patternTable.contains(id));
       
-      patternTable[HandlingPattern::SYNC      ]  = SingletonFac(UseSubclass<InvokeSyncNoThrow>());
-//      patternTable[HandlingPattern::SYNC_THROW]  = SingletonFac(UseSubclass<InvokeSyncThrow>());
-//      patternTable[HandlingPattern::ASYNC     ]  = SingletonFac(UseSubclass<InvokeAsync>());
+      return patternTable (id);
     }
     
-    
-    lumiera::LifecycleHook _schedule (lumiera::ON_GLOBAL_INIT, &prepareCommandHandlingPatterns);
   
-  } // (END) definition of concrete handling patterns
+  } // (END) definition of concrete handling patterns
   
   
   
