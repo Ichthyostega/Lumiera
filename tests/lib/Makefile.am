@@ -36,6 +36,7 @@ test_lib_LDADD =			\
 	$(NOBUGMT_LUMIERA_LIBS) -ldl -lboost_program_options-mt -lboost_regex-mt
 
 test_lib_SOURCES =						\
+	$(testlib_srcdir)/mainsuite.cpp				\
 	$(testlib_srcdir)/allocationclustertest.cpp		\
 	$(testlib_srcdir)/appconfigtest.cpp			\
 	$(testlib_srcdir)/customsharedptrtest.cpp		\
@@ -48,8 +49,8 @@ test_lib_SOURCES =						\
 	$(testlib_srcdir)/hash-indexed-test.cpp			\
 	$(testlib_srcdir)/helloworldtest.cpp			\
 	$(testlib_srcdir)/lifecycletest.cpp			\
+	$(testlib_srcdir)/multifact-test.cpp			\
 	$(testlib_srcdir)/iter-adapter-test.cpp			\
-	$(testlib_srcdir)/mainsuite.cpp				\
 	$(testlib_srcdir)/meta/typelist-test.cpp         	\
 	$(testlib_srcdir)/meta/typelist-manip-test.cpp    	\
 	$(testlib_srcdir)/meta/typeseq-manip-test.cpp    	\
