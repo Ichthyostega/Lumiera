@@ -863,6 +863,11 @@ return: 0
 END
 
 
+PLANNED "extensible symbolic identifier" SubID_test <<END
+return: 0
+END
+
+
 TEST "VectorTransfer_test" VectorTransfer_test <<END
 return: 0
 END
