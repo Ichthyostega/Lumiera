@@ -112,7 +112,7 @@ namespace control {
         , NUM_IDS
         };
       
-      static ID defaultID() { return SYNC; }
+      static ID defaultID() { return DUMMY; }   ///////////TODO: should be ID::SYNC   Ticket #211
       
       
       static HandlingPattern const& get (ID id);

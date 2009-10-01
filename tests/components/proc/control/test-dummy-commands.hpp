@@ -1,5 +1,5 @@
 /*
-  TEST-DUMMY-COMMANDS.hpp  -  dummy function used to build test commands
+  TEST-DUMMY-COMMANDS.hpp  -  dummy functions used to build test commands
  
   Copyright (C)         Lumiera.org
     2009,               Hermann Vosseler <Ichthyostega@web.de>
@@ -40,6 +40,7 @@
 
 //#include "pre.hpp"
 //#include "lib/test/run.hpp"
+#include "lib/error.hpp"
 #include "lib/test/test-helper.hpp"
 //#include "proc/asset/media.hpp"
 //#include "proc/mobject/session.hpp"
@@ -86,7 +87,7 @@ namespace test    {
   
   namespace command1 { ///< test command just adding a given value
     
-    static long check_ = 0;
+    extern long check_;
       
     inline void
     operate (int someVal)
@@ -117,7 +118,7 @@ namespace test    {
     using lumiera::error::External;
     
     
-    static ostringstream check_;
+    extern ostringstream check_;
       
     
     typedef function<string()> FunS;
