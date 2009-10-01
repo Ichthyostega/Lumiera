@@ -47,23 +47,72 @@
 #include "lib/multifact.hpp"
 #include "proc/control/handling-pattern.hpp"
 #include "proc/control/command-impl.hpp"
-#include "include/lifecycle.h"
-//#include "lib/symbol.hpp"
-
-//#include <tr1/memory>
-//#include <string>
-#include<vector>
 
 
 
 namespace control {
 
   namespace { // concrete command handling patterns 
-  
-    using std::vector;
-//  using std::string;
-//  using lib::Symbol;
-//  using std::tr1::shared_ptr;
+    
+    
+    
+    
+    /**
+     * Handling Pattern Foundation: invoke command directly and without
+     * any external intervention. This pattern is intended as implementation
+     * base class, but can be used as-is for unit tests.
+     */
+    class BasicHandlingPattern
+      : public HandlingPattern
+      {
+        bool isValid()  const { return true; }
+        
+        void
+        exec (CommandImpl& command)  const
+          {
+            REQUIRE (command.canExec());
+            command.invokeCapture();
+            command.invokeOperation();
+          }
+        
+        void
+        undo (CommandImpl& command)  const
+          {
+            REQUIRE (command.canUndo());
+            command.invokeUndo();
+          }
+        
+        /* == invoking operation or undo == */
+        
+        void perform (CommandImpl& command)  const { return exec(command); }
+        
+        class UndoProxyPattern
+          : public HandlingPattern
+          {
+            BasicHandlingPattern& basePatt_;
+            
+            bool isValid()                       const { return basePatt_.isValid();     }
+            void exec (CommandImpl& command)     const { return basePatt_.exec(command); }
+            void undo (CommandImpl& command)     const { return basePatt_.undo(command); }
+            
+            void perform (CommandImpl& command)  const { return undo(command); }
+            HandlingPattern const& getUndoPatt() const { return basePatt_; }
+            
+          public:
+            UndoProxyPattern (BasicHandlingPattern& refPattern)
+              : basePatt_(refPattern)
+              { }
+          };
+        
+        HandlingPattern const& getUndoPatt() const { return standardUndoPattern_; }
+        UndoProxyPattern standardUndoPattern_;
+        friend class UndoProxyPattern;
+        
+      public:
+        BasicHandlingPattern()
+          : standardUndoPattern_(*this)
+          { }
+      };
     
     
     
@@ -72,16 +121,16 @@ namespace control {
      * @todo describe this pattern in more detail....
      */
     class InvokeSyncNoThrow
-      : public HandlingPattern
+      : public BasicHandlingPattern
       {
         void
-        perform (CommandImpl& command)  const
+        exec (CommandImpl& command)  const
           {
             UNIMPLEMENTED ("actually invoke a command, according to this pattern");
           }
         
         void
-        revert(CommandImpl& command)  const
+        undo (CommandImpl& command)  const
           {
             UNIMPLEMENTED ("actually undo the effect of a command, according to this pattern");
           }
@@ -100,16 +149,16 @@ namespace control {
      * @todo describe this pattern in more detail....
      */
     class InvokeSyncThrow
-      : public HandlingPattern
+      : public BasicHandlingPattern
       {
         void
-        perform (CommandImpl& command)  const
+        exec (CommandImpl& command)  const
           {
             UNIMPLEMENTED ("actually invoke a command, according to this pattern");
           }
         
         void
-        revert(CommandImpl& command)  const
+        undo (CommandImpl& command)  const
           {
             UNIMPLEMENTED ("actually undo the effect of a command, according to this pattern");
           }
@@ -128,16 +177,16 @@ namespace control {
      * @todo describe this pattern in more detail....
      */
     class InvokeAsync
-      : public HandlingPattern
+      : public BasicHandlingPattern
       {
         void
-        perform (CommandImpl& command)  const
+        exec (CommandImpl& command)  const
           {
             UNIMPLEMENTED ("actually invoke a command, according to this pattern");
           }
         
         void
-        revert(CommandImpl& command)  const
+        undo (CommandImpl& command)  const
           {
             UNIMPLEMENTED ("actually undo the effect of a command, according to this pattern");
           }
@@ -151,37 +200,6 @@ namespace control {
     
     
     
-    /**
-     * Handling Pattern: invoke command directly and without any integration
-     * with other facilities. This pattern is intended to be used for unit tests.
-     */
-    class InvokeDirectly
-      : public HandlingPattern
-      {
-        void
-        perform (CommandImpl& command)  const
-          {
-            REQUIRE (command.canExec());
-            command.invokeCapture();
-            command.invokeOperation();
-          }
-        
-        void
-        revert(CommandImpl& command)  const
-          {
-            REQUIRE (command.canUndo());
-            command.invokeUndo();
-          }
-        
-        bool
-        isValid()  const
-          {
-            return true;
-          }
-      };
-    
-    
-    
     
     
     
@@ -189,12 +207,13 @@ namespace control {
     
     typedef lib::MultiFact<HandlingPattern, HandlingPattern::ID> HandlingPatternFactory;
     
-    /** Table of available command handling patterns */
+    /** holds singleton pattern instances by ID */
     HandlingPatternFactory patternTable;
     
-    HandlingPatternFactory::Singleton<InvokeSyncNoThrow> holder1 (patternTable, HandlingPattern::SYNC);
-    HandlingPatternFactory::Singleton<InvokeSyncThrow>   holder2 (patternTable, HandlingPattern::SYNC_THROW);
-    HandlingPatternFactory::Singleton<InvokeAsync>       holder3 (patternTable, HandlingPattern::ASYNC);
+    HandlingPatternFactory::Singleton<InvokeSyncNoThrow>    holder1 (patternTable, HandlingPattern::SYNC);
+    HandlingPatternFactory::Singleton<InvokeSyncThrow>      holder2 (patternTable, HandlingPattern::SYNC_THROW);
+    HandlingPatternFactory::Singleton<InvokeAsync>          holder3 (patternTable, HandlingPattern::ASYNC);
+    HandlingPatternFactory::Singleton<BasicHandlingPattern> holder4 (patternTable, HandlingPattern::DUMMY);
     
     
     /** access the singleton instance for a given ID */

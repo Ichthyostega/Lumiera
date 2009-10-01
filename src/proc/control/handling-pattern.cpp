@@ -25,12 +25,8 @@
 #include "proc/control/handling-pattern.hpp"
 #include "proc/control/handling-patterns.hpp"
 
-#include "lib/symbol.hpp"
 #include "include/logging.h"
 #include "lib/util.hpp"
-//#include "proc/mobject/mobject-ref.hpp"
-//#include "proc/mobject/mobject.hpp"
-//#include "proc/mobject/placement.hpp"
 
 #include <boost/format.hpp>
 
@@ -44,16 +40,14 @@ using util::isnil;
 
 namespace control {
   
-  /** */
+  /** retrieve pre-configured pattern */
   HandlingPattern const&
   HandlingPattern::get (ID id)
   {
-    REQUIRE ((0 <= id) && (id < NUM_IDS));
-    
     return getPatternInstance(id); 
   }
   
-
+  
   /** @note: does error handling, but delegates the actual
    *         execution to the protected (subclass) member */
   ExecResult
@@ -69,8 +63,8 @@ namespace control {
         if (errID_pre)
           return ExecResult (error::Logic (str (err_pre % command), errID_pre));
         
-        // Execute the command
-        dispatch (command);
+        // execute or undo it...
+        perform (command);
         
         Symbol errID = lumiera_error();
         if (errID)
@@ -103,20 +97,6 @@ namespace control {
   }
   
   
-  void
-  HandlingPattern::dispatch (CommandImpl& command)
-  {
-    perform (command);
-  }
-  
-  
-  HandlingPattern const&
-  HandlingPattern::howtoUNDO()  const
-  {
-    UNIMPLEMENTED ("yield a handling pattern suitable for UNDOing a command, according to this pattern");
-  }
-  
-  
   
   /* ====== execution result state object ======= */
   
@@ -141,6 +121,6 @@ namespace control {
     if (!isnil (log_))
       throw error::Logic ("Command execution failed: "+log_);
   }
-      
+  
   
 } // namespace control

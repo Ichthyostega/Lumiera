@@ -22,7 +22,7 @@
 
 
 /** @file handling-pattern.hpp
- ** Pre-defined command execution templates.
+ ** Pre-defined command execution skeletons.
  ** Any command can be configured to use a specific handling pattern
  ** on invocation. Moreover, there is a default handling pattern for commands.
  ** These patterns define the steps necessary for getting the command actually
@@ -46,10 +46,9 @@
 
 //#include "pre.hpp"
 #include "lib/error.hpp"
-#include "lib/bool-checkable.hpp"
 #include "lib/symbol.hpp"
+#include "lib/bool-checkable.hpp"
 
-//#include <tr1/memory>
 #include <string>
 
 
@@ -58,14 +57,16 @@ namespace control {
   
   using std::string;
   using lib::Symbol;
-//  using std::tr1::shared_ptr;
   
   
   class CommandImpl;
   
   
   /**
-   * @todo Type-comment
+   * Result (Status) of command execution.
+   * It is returned when invoking a HandlingPattern
+   * and can be used to check for success and/or re-throw
+   * any Exception encountered during the command execution.
    */
   class ExecResult
     : public lib::BoolCheckable<ExecResult>
@@ -83,8 +84,18 @@ namespace control {
       friend class HandlingPattern;
     };
   
+  
+  
   /**
-   * @todo Type-comment
+   * Operation Skeleton how to invoke or undo a command.
+   * Concrete implementations may be retrieved by ID;
+   * they range from just invoking the command operations
+   * straight forward to dispatching with the ProcDispatcher
+   * or running the command asynchronously in a background thread.
+   * A HandlingPattern first of all describes how to invoke the
+   * command operation, but for each pattern it is possible to
+   * get a special "undo pattern", which, on activation, will
+   * reverse the effect of the basic pattern.  
    */
   class HandlingPattern
     : public lib::BoolCheckable<HandlingPattern>
@@ -114,23 +125,23 @@ namespace control {
        *          detect errors on execution */
       ExecResult invoke (CommandImpl& command, Symbol name)  const;
       
-      /** @return HandlingPatter describing how the UNDO operation is to be performed */
-      HandlingPattern const& howtoUNDO()  const;
+      /** @return HandlingPattern describing how the UNDO operation is to be performed */
+      HandlingPattern const& howtoUNDO()  const { return getUndoPatt(); }
       
       
       virtual bool isValid()  const  =0;
       
     protected:
       
-      virtual void dispatch(CommandImpl& command)  const;
+      virtual HandlingPattern const& getUndoPatt() const =0;
+      virtual void perform (CommandImpl& command)  const =0;
       
-      virtual void perform (CommandImpl& command)  const  =0;
-      virtual void revert  (CommandImpl& command)  const  =0;
+      virtual void exec (CommandImpl& command)  const  =0;
+      virtual void undo (CommandImpl& command)  const  =0;
       
       
       
     };
-  ////////////////TODO currently just fleshing  out the API....
   
   
   
