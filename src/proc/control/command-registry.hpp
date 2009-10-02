@@ -68,7 +68,7 @@
 #include "proc/control/command.hpp"
 #include "proc/control/command-signature.hpp"
 #include "proc/control/command-argument-holder.hpp"
-#include "proc/control/typed-allocation-manager.hpp"
+#include "lib/typed-allocation-manager.hpp"
 
 #include <boost/functional/hash.hpp>
 #include <boost/noncopyable.hpp>
@@ -85,6 +85,7 @@ namespace control {
   using boost::noncopyable;
   using std::tr1::shared_ptr;
   using std::tr1::unordered_map;
+  using lib::TypedAllocationManager;
   using util::getValue_or_default;
   using util::contains;
   using std::string;

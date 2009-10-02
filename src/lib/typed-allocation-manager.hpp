@@ -77,7 +77,7 @@
 
 
 
-namespace control { ////////////////////////////////////////////////////////////TODO: should go into namespace lib
+namespace lib {
   
   using std::tr1::shared_ptr;
   
@@ -318,5 +318,5 @@ namespace control { ////////////////////////////////////////////////////////////
     return allocCnt_.get<XX>();
   }
 
-} // namespace control
+} // namespace lib
 #endif

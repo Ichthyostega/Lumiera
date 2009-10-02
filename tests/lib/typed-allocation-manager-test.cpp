@@ -22,48 +22,23 @@
 
 
 #include "lib/test/run.hpp"
-#include "lib/test/test-helper.hpp"
-//#include "proc/control/command.hpp"
-#include "proc/control/typed-allocation-manager.hpp"
-//#include "proc/control/command-def.hpp"
-//#include "lib/lumitime.hpp"
-//#include "lib/symbol.hpp"
+#include "lib/typed-allocation-manager.hpp"
 #include "lib/util.hpp"
 
 
 #include <tr1/memory>
-//#include <boost/ref.hpp>
-//#include <boost/format.hpp>
-//#include <iostream>
 #include <cstdlib>
-//#include <string>
 
 
-namespace control {
-namespace test    {
-
-
-//  using boost::format;
-//  using boost::str;
-  //using lumiera::Time;
-  //using util::contains;
-  using std::tr1::shared_ptr;
-//  using std::tr1::bind;
-//  using std::string;
-  using std::rand;
-  //using std::cout;
-  //using std::endl;
-//  using lib::test::showSizeof;
+namespace lib {
+namespace test{
+  
+  
   using util::isSameObject;
-//  using util::contains;
-
-//  using session::test::TestClip;
-//  using lib::Symbol;
-//  using lumiera::P;
+  using std::tr1::shared_ptr;
+  using std::rand;
   
   
-  //using lumiera::typelist::BuildTupleAccessor;
-//  using lumiera::error::LUMIERA_ERROR_EXTERNAL;
   
   namespace { // test data and helpers...
   
@@ -99,7 +74,7 @@ namespace test    {
    * @test cover the basic implementation of a custom allocator, delegating to mpool.
    *       TypedAllocationManager is a base class, used e.g. to build the CommandRegistry.
    * 
-   * @todo planned but not implemented as of 8/09   see also Ticket #217
+   * @todo as of 9/09 we do heap allocation, but we should use mpool --   see also Ticket #219
    *        
    * @see CommandRegistry
    * @see command-registry-test.cpp
@@ -162,4 +137,4 @@ namespace test    {
   LAUNCHER (TypedAllocationManager_test, "unit common");
   
   
-}} // namespace control::test
+}} // namespace lib::test

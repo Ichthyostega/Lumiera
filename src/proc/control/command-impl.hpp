@@ -45,7 +45,7 @@
 #include "proc/control/command.hpp"
 #include "proc/control/command-closure.hpp"
 #include "proc/control/command-mutation.hpp"
-#include "proc/control/typed-allocation-manager.hpp"
+#include "lib/typed-allocation-manager.hpp"
 #include "lib/bool-checkable.hpp"
 
 #include <boost/noncopyable.hpp>
@@ -57,6 +57,7 @@
 
 namespace control {
   
+  using lib::TypedAllocationManager;
   using std::tr1::function;
   using std::tr1::shared_ptr;
   

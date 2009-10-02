@@ -42,7 +42,7 @@
 #ifndef CONTROL_COMMAND_ARGUMENT_HOLDER_H
 #define CONTROL_COMMAND_ARGUMENT_HOLDER_H
 
-#include "proc/control/typed-allocation-manager.hpp"
+#include "lib/typed-allocation-manager.hpp"
 #include "proc/control/argument-tuple-accept.hpp"
 #include "proc/control/command-closure.hpp"
 #include "proc/control/memento-tie.hpp"
@@ -54,6 +54,7 @@
 
 namespace control {
   
+  using lib::TypedAllocationManager;
   using lib::InPlaceBuffer;
   using std::string;
   

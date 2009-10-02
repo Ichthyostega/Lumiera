@@ -77,7 +77,7 @@
 #include "lib/format.hpp"
 #include "lib/util.hpp"
 #include "proc/control/argument-erasure.hpp"
-#include "proc/control/typed-allocation-manager.hpp"
+#include "lib/typed-allocation-manager.hpp"
 
 #include <tr1/memory>
 #include <tr1/functional>
@@ -98,6 +98,7 @@ namespace control {
   using lumiera::typelist::StoreFunction;
   using lumiera::typelist::NullType;
   
+  using lib::TypedAllocationManager;
   using util::unConst;
   using std::tr1::function;
   using std::ostream;
