@@ -32,6 +32,7 @@
 #include <string>
 
 
+
 namespace lib {
 namespace test{
   
@@ -41,10 +42,14 @@ namespace test{
   using boost::hash;
   using std::vector;
   using std::string;
-  
+  using std::cout;
+  using std::endl;
+
   
   namespace { // test data
   
+    enum Colour { R,G,B };
+    
   }
   
   
@@ -64,11 +69,11 @@ namespace test{
       virtual void
       run (Arg)
         {
-          UNIMPLEMENTED ("SubID brainstorming");
           
           checkBaseType();
           checkExtension();
           
+          TODO ("Hash functions, better implementation");
 //        buildHashtable<ID_A> (buildIDs<ID_A>() );
 //        buildHashtable<ID_B> (buildIDs<ID_B>() );
         }
@@ -77,12 +82,28 @@ namespace test{
       void
       checkBaseType ()
         {
+          typedef SubId<Colour> CID;
+          CID c1 (R);
+          CID c2 (G);
+          CID c3 (B);
+          
+          cout << "..." << c1 << c2 << c3 << endl;
         }
       
       
       void
       checkExtension ()
         {
+          typedef SubId<Colour> CID;
+          typedef SubId<uint>   UID;
+          
+          typedef ExtendedSubId<Colour, UID> CUID;
+          
+          SubID const& id1 = CUID(R, 12);
+          SubID const& id2 = CUID(G, 13);
+          
+          cout << "id1=" << id1 << endl;
+          cout << "id2=" << id2 << endl;
         }
       
       

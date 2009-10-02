@@ -33,6 +33,9 @@
  ** - possibility of structured adornments and variations
  ** - optionally concealing these extensions from the interface level
  ** 
+ ** The first attempt to build such an entity is based on standard techniques,
+ ** disregarding performance and memory footprint considerations.
+ ** 
  ** @see SubID_test
  ** @see MultiFact
  **
@@ -43,11 +46,17 @@
 #ifndef LIB_SUB_ID_H
 #define LIB_SUB_ID_H
 
+#include "lib/format.hpp"
+
 //#include <functional>
+#include <iostream>
+#include <string>
 
 
 namespace lib {
-  
+
+  using std::string;
+  using std::ostream;
   
   
   
@@ -55,10 +64,64 @@ namespace lib {
    * 
    */
   template<typename I>
-  struct SubID
+  class SubId;
+  
+  class SubID
     {
+    public:
+      virtual ~SubID()  { }
+      
+      virtual operator string()  const =0;
+    };
+
+      
+  ostream&
+  operator<< (ostream& os, SubID const& sID)
+    {
+      return os << string(sID);
+    }
+  
+
+  
+  template<typename I>
+  class SubId
+    : public SubID
+    {
+      I baseID_;
+      
+    public:
+      SubId (I id)
+        : baseID_(id)
+        { }
+      
+      operator string()  const
+        {
+          return util::str (baseID_);   
+        }
     };
   
+  
+  template<typename I, class SUZ>
+  class ExtendedSubId
+    : public SubId<I>
+    {
+      typedef SubId<I> _baID;
+      
+      SUZ extID_;
+      
+    public:
+      ExtendedSubId (I i, SUZ const& chain)
+        : _baID(i)
+        , extID_(chain)
+        { }
+      
+      operator string()  const
+        {
+          return _baID::operator string()
+               + '.'
+               + string (extID_);   
+        }
+    };
   
   
   
