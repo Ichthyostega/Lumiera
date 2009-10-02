@@ -48,7 +48,7 @@ namespace lumiera {
     inline void
     log_and_clear_unexpected_errorstate ()
     {
-      if (const char * errorstate = lumiera_error ())
+      if (lumiera_err errorstate = lumiera_error ())
         ALERT (common, "*** Unexpected error: %s\n     Triggering emergency exit.", errorstate);
     }
     

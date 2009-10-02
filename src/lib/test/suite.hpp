@@ -20,6 +20,22 @@
  
 */
 
+/** @file suite.hpp
+ ** Building and running a suite of tests, implemented as test classes.
+ ** This simple test suite runner is intended to be linked into a standalone C++ application,
+ ** allowing to invoke individual tests by ID, invoking groups of tests and producing a
+ ** report of all registered tests. Registration of individual testcases happens 
+ ** automatically through static test::Launcher instances.
+ ** 
+ ** @todo as of 9/09, the implementation seems OKish but a bit clumsy. See Ticket #289 
+ ** 
+ ** @see HelloWorld_test
+ ** @see test::Test
+ ** @see test::TestOption
+ ** @see run.hpp
+ ** @see mainsuite.cpp
+ */
+
 
 #ifndef TESTHELPER_SUITE_H
 #define TESTHELPER_SUITE_H
@@ -29,21 +45,21 @@
 
 
 
-namespace test
-  {
+namespace test {
+  
   using std::string;
   
-  // Forward decls needed for run.hpp
+  // Forward declarations for run.hpp
   class Test;
   class Launcher;
-
+  
   typedef std::vector<string> & Arg; 
   
   
   /**
    * Enables running a collection of tests.
    * An internal registration service #enrol() is provided
-   * for the individual Test - inscances to be recognized as 
+   * for the individual Test - instances to be recognised as
    * testcases. The groupID passed to the constructor selects
    * all testcases declared as belonging to this Group.
    */

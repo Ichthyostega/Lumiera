@@ -22,26 +22,29 @@
 
 
 
-#include <map>
-#include <vector>
-#include <memory>
-#include <tr1/memory>
-#include <iostream>
-#include <sstream>
-#include <boost/algorithm/string.hpp>
-
 #include "include/logging.h"
 #include "lib/cmdline.hpp"
+#include "lib/test/test-helper.hpp"
 #include "lib/test/suite.hpp"
 #include "lib/test/run.hpp"
 #include "lib/error.hpp"
 #include "lib/util.hpp"
 
+#include <boost/algorithm/string.hpp>
+#include <tr1/memory>
+#include <iostream>
+#include <sstream>
+#include <memory>
+#include <vector>
+#include <map>
 
 
 namespace test {
   
   using std::map;
+  using std::cout;
+  using std::cerr;
+  using std::endl;
   using std::vector;
   using std::auto_ptr;
   using std::tr1::shared_ptr;
@@ -49,6 +52,7 @@ namespace test {
   
   using util::isnil;
   using util::contains;
+  using lib::test::showType;
   
   typedef map<string, Launcher*> TestMap;
   typedef shared_ptr<TestMap>  PTestMap;
@@ -133,12 +137,28 @@ namespace test {
     TRACE(test, "Test-Suite( groupID=%s )\n", groupID.c_str () );
     
     if (!testcases.getGroup(groupID))
-      throw lumiera::error::Invalid ();
-      //throw "empty testsuite";     /////////// TODO Errorhandling!
+      throw lumiera::error::Invalid ("empty testsuite");
   }
     
 #define VALID(test,testID) \
   ASSERT ((test), "NULL testcase launcher for test '%s' found in testsuite '%s'", groupID_.c_str(),testID.c_str());
+  
+  
+  namespace { // internal helper for launching with error logging
+    
+    void
+    invokeTestCase (Test& theTest, Arg cmdline)
+    {
+      try { theTest.run (cmdline); }
+      catch (lumiera::Error& failure)
+        {
+          lumiera_err errorID = lumiera_error(); // reset error flag
+          cerr << "*** Test Failure " << showType(theTest) << endl;
+          cerr << "***            : " << failure.what() << endl;
+          ERROR (test,     "Error state %s", errorID);
+          WARN  (progress, "Caught exception %s", failure.what());
+    }   }
+  }
   
   
   /** run all testcases contained in this Suite.
@@ -155,7 +175,7 @@ namespace test {
   {
     PTestMap tests = testcases.getGroup(groupID_);
     if (!tests)
-      throw lumiera::error::Invalid (); ///////// TODO: pass error description
+      throw lumiera::error::Invalid ("test group not found"); ///////// TODO: pass error description
     
     if (0 < cmdline.size())
       {
@@ -168,7 +188,7 @@ namespace test {
             Launcher* test = (*tests)[testID];
             cmdline.erase (cmdline.begin());
             VALID (test,testID);
-            (*test)()->run(cmdline);
+            invokeTestCase (*(*test)(), cmdline);  // TODO confusing statement, improve definition of test collection datatype Ticket #289
             return;
       }   }
     
@@ -179,7 +199,7 @@ namespace test {
         std::cout << "\n  ----------"<< i->first<< "----------\n";
         Launcher* test = (i->second);
         VALID (test, i->first);
-        (*test)()->run(cmdline); // actually no cmdline arguments
+        invokeTestCase (*(*test)(), cmdline); // actually no cmdline arguments
       }
   }
   
@@ -194,13 +214,13 @@ namespace test {
     PTestMap tests = testcases.getGroup(groupID_);
     ASSERT (tests);
     
-    std::cout << "TESTING \"Component Test Suite: " << groupID_ << "\" ./test-components\n\n";
+    cout << "TESTING \"Component Test Suite: " << groupID_ << "\" ./test-components\n\n";
     
     for ( TestMap::iterator i=tests->begin(); i!=tests->end(); ++i )
       {
         string key (i->first);
-        std::cout << "\n\n";
-        std::cout << "TEST \""<<key<<"\" "<<key<<" <<END\n";
+        cout << "\n\n";
+        cout << "TEST \""<<key<<"\" "<<key<<" <<END\n";
         Launcher* test = (i->second);
         VALID (test, i->first);
         try
@@ -209,9 +229,9 @@ namespace test {
           }
         catch (...) 
           {
-            std::cout << "PLANNED ============= " << lumiera_error() << "\n";
+            cout << "PLANNED ============= " << lumiera_error() << "\n";
           }
-        std::cout << "END\n";
+        cout << "END\n";
       }
   }
   

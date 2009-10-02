@@ -21,6 +21,17 @@
  
 */
 
+/** @file run.hpp
+ ** Simple test class runner. Allows for writing unit tests as subclass of
+ ** test::Test . They may be installed for automatic invocation through test::Suite
+ ** by defining a Launcher instance, which can be done conveniently by the macro LAUNCHER
+ ** 
+ ** @see HelloWorld_test
+ ** @see test::Suite
+ ** @see mainsuite.cpp
+ ** @see main.cpp
+ */
+
 
 #ifndef TESTHELPER_RUN_H
 #define TESTHELPER_RUN_H
@@ -37,12 +48,11 @@
 #include <string>
 
 
-namespace test
-  {
-
+namespace test {
+  
   using std::string;
   using std::auto_ptr;
-
+  
   typedef std::vector<string> & Arg; 
   
   
@@ -60,7 +70,7 @@ namespace test
     
     
     
-  /** interface: generic testcase creating functor. */  
+  /** interface: generic testcase creating functor. */
   class Launcher
     {
     public:
@@ -86,7 +96,7 @@ namespace test
     public:
       Launch (string testID, string groups)  { Suite::enrol (this,testID,groups); };
       virtual auto_ptr<Test> operator() ()   { return auto_ptr<Test> (new TEST ); };
-    };   
+    };
     
 } // namespace test
 
