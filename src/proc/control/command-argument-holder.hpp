@@ -43,7 +43,6 @@
 #define CONTROL_COMMAND_ARGUMENT_HOLDER_H
 
 #include "lib/typed-allocation-manager.hpp"
-#include "proc/control/argument-tuple-accept.hpp"
 #include "proc/control/command-closure.hpp"
 #include "proc/control/memento-tie.hpp"
 #include "lib/opaque-holder.hpp"
@@ -105,13 +104,7 @@ namespace control {
    */
   template<typename SIG, typename MEM>
   class ArgumentHolder
-    : public AcceptArgumentBinding< SIG                      // to derive the desired bind(..) signature
-                                  , ArgumentHolder<SIG,MEM>  // target class providing the implementation
-                                  , CmdClosure               // base class to inherit from
-                                  >
-    
-////////////////////////TODO: Ticket #266
-//  : public CmdClosure
+    : public CmdClosure
     {
       /** copy construction allowed(but no assignment)*/
       ArgumentHolder& operator= (ArgumentHolder const&);
@@ -152,7 +145,7 @@ namespace control {
       virtual void bindArguments (Arguments& args)
       {
         if (!arguments_->isValid())
-          bindArg(args.get<ArgTuple>());
+          storeTuple (args.get<ArgTuple>());
         else
           arguments_->bindArguments(args);
       }
@@ -214,7 +207,7 @@ namespace control {
       /** store a new argument tuple within this ArgumentHolder,
        *  discarding any previously stored arguments */
       void
-      bindArg (ArgTuple const& argTup)
+      storeTuple (ArgTuple const& argTup)
         {
           arguments_.template create<ArgHolder> (argTup);
         }

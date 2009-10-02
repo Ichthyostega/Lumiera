@@ -26,6 +26,7 @@
 #include "proc/control/command-argument-holder.hpp"
 #include "lib/scoped-ptrvect.hpp"
 #include "lib/lumitime-fmt.hpp"
+#include "lib/meta/tuple.hpp"
 #include "lib/util.hpp"
 
 #include <boost/format.hpp>
@@ -52,7 +53,7 @@ namespace test    {
   
   using lib::test::showSizeof;
   using lib::test::randTime;
-  
+  using namespace lumiera::typelist;
   
   
   
@@ -214,13 +215,12 @@ namespace test    {
           
           for_each (tup, showIt);
           
-////////////////////////TODO: Ticket #266
-          arg1->bind ();
-          arg2->bind (rand() % 10);
-          arg3->bind (rand() % 10, randTime());
-          arg4->bind (rand() % 10, randTime());
+          arg1->storeTuple (tuple::makeNullTuple());
+          arg2->storeTuple (tuple::make (rand() % 10));
+          arg3->storeTuple (tuple::make (rand() % 10, randTime()));
+          arg4->storeTuple (tuple::make (rand() % 10, randTime()));
           
-          arg5->bind (TTime (randTime()), Tstr("glorious"), rand() % 25);
+          arg5->storeTuple (tuple::make (TTime (randTime()), Tstr("glorious"), rand() % 25));
           
           ASSERT (!arg5->canUndo());
           
@@ -265,23 +265,23 @@ namespace test    {
           two.memento() = one.memento();     // put the same UNDO state in both
           ASSERT (one == two);               // ...makes them equal again 
           
-          one.bind (1,2);                    // verify argument tuple comparison
-          ASSERT (one != two);
+          one.storeTuple (tuple::make (1,2));
+          ASSERT (one != two);               // verify argument tuple comparison
           ASSERT (two != one);
           ASSERT (!isnil (one));
           ASSERT ( isnil (two));
           
-          two.bind (3,4);
+          two.storeTuple (tuple::make (3,4));
           ASSERT (!isnil (two));
           ASSERT (one != two);
           ASSERT (two != one);
           
-          one.bind (1,4);
+          one.storeTuple (tuple::make (1,4));
           ASSERT (!isnil (one));
           ASSERT (one != two);
           ASSERT (two != one);
           
-          one.bind (3,4);
+          one.storeTuple (tuple::make (3,4));
           ASSERT (!isnil (one));
           ASSERT (one == two);
           ASSERT (two == one);
@@ -308,7 +308,8 @@ namespace test    {
           cout << showSizeof(args) << endl;
           
           // store a set of parameter values, later to be used on invocation
-          args.bind (TTime(randTime()), Tstr("Lumiera rocks"), rand() % 100);
+          args.storeTuple (
+            tuple::make (TTime(randTime()), Tstr("Lumiera rocks"), rand() % 100));
           ASSERT (!isnil (args));
           cout << args << endl;
           
@@ -351,7 +352,8 @@ namespace test    {
           protocol.seekp(0);
           protocol << "RESET...";
           
-          args.bind (TTime(Time(123456)), Tstr("unbelievable"), rand() %100);
+          args.storeTuple (
+            tuple::make (TTime(Time(123456)), Tstr("unbelievable"), rand() %100));
           cout << "modified: " << args     << endl;
           cout << "copied  : " << argsCopy << endl;    // holds still the old params & memento
           
