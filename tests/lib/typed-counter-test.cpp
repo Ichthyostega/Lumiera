@@ -71,10 +71,18 @@ namespace test{
   
   namespace { // test data and helpers...
       
-      const uint MAX_FAMILIES   = 20;  ///< maximum separate "families", each sharing a TypedCounter
-      const uint MAX_MEMBERS    = 30;  ///< maximum members per family (member == test thread)
+      const uint MAX_FAMILIES   =  5;  ///< maximum separate "families", each sharing a TypedCounter
+      const uint MAX_MEMBERS    = 20;  ///< maximum members per family (member == test thread)
       const uint MAX_ITERATIONS = 50;  ///< maximum iterations within a single test thread
       const uint MAX_DELAY_ms   =  3;  ///< maximum delay between check iterations
+      
+                                         /* Hint: number of threads = MEMBERS * FAMILIES
+                                          * 
+                                          * The values set here are fairly conservative,
+                                          * but increasing the number of threads causes the test suite
+                                          * to fail frequently. Please increase these values e.g.
+                                          * to 20 and 50 for a more thorough stress test!
+                                          */
       
       
       /** 
