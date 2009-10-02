@@ -123,6 +123,10 @@ namespace test {
   /** "magic" groupID containing all registered testcases */
   const string Suite::ALLGROUP = "ALL";
   
+  /** exit code returned when any individual test threw */
+  const int Suite::EXCEPTION_THROWN = 5;
+  const int Suite::TEST_OK = 0;
+
   
   
   /** create a suite comprised of all the testcases 
@@ -132,6 +136,7 @@ namespace test {
    */
   Suite::Suite(string groupID) 
     : groupID_(groupID)
+    , exitCode_(0)
   {
     REQUIRE( !isnil(groupID) );
     TRACE(test, "Test-Suite( groupID=%s )\n", groupID.c_str () );
@@ -139,6 +144,15 @@ namespace test {
     if (!testcases.getGroup(groupID))
       throw lumiera::error::Invalid ("empty testsuite");
   }
+  
+  
+  int
+  Suite::getExitCode ()  const
+    {
+      return exitCode_;
+    }
+  
+  
     
 #define VALID(test,testID) \
   ASSERT ((test), "NULL testcase launcher for test '%s' found in testsuite '%s'", groupID_.c_str(),testID.c_str());
@@ -146,10 +160,14 @@ namespace test {
   
   namespace { // internal helper for launching with error logging
     
-    void
+    int
     invokeTestCase (Test& theTest, Arg cmdline)
     {
-      try { theTest.run (cmdline); }
+      try 
+        {
+          theTest.run (cmdline);
+          return Suite::TEST_OK;
+        }
       catch (lumiera::Error& failure)
         {
           lumiera_err errorID = lumiera_error(); // reset error flag
@@ -157,6 +175,7 @@ namespace test {
           cerr << "***            : " << failure.what() << endl;
           ERROR (test,     "Error state %s", errorID);
           WARN  (progress, "Caught exception %s", failure.what());
+          return Suite::EXCEPTION_THROWN;
     }   }
   }
   
@@ -188,7 +207,7 @@ namespace test {
             Launcher* test = (*tests)[testID];
             cmdline.erase (cmdline.begin());
             VALID (test,testID);
-            invokeTestCase (*(*test)(), cmdline);  // TODO confusing statement, improve definition of test collection datatype Ticket #289
+            exitCode_ |= invokeTestCase (*(*test)(), cmdline);  // TODO confusing statement, improve definition of test collection datatype Ticket #289
             return;
       }   }
     
@@ -199,7 +218,7 @@ namespace test {
         std::cout << "\n  ----------"<< i->first<< "----------\n";
         Launcher* test = (i->second);
         VALID (test, i->first);
-        invokeTestCase (*(*test)(), cmdline); // actually no cmdline arguments
+        exitCode_ |= invokeTestCase (*(*test)(), cmdline); // actually no cmdline arguments
       }
   }
   

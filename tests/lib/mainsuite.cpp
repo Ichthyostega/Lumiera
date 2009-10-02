@@ -32,7 +32,10 @@ using lumiera::ON_GLOBAL_SHUTDOWN;
 
 /** run all tests or any single test specified in the first
  *  command line argument.
- *  Note: to ease debugging, we don't catch any exceptions. 
+ *  @return exit code signalling if any exception was caught
+ *          at the level of individual test cases
+ *  @throws any further exceptions raised outside of test cases
+ *  @throws any library and external exceptions (not lumiera::Exception)  
  */
 int main (int argc, const char* argv[])
 {
@@ -47,5 +50,5 @@ int main (int argc, const char* argv[])
     suite.run (args);
 
   LifecycleHook::trigger (ON_GLOBAL_SHUTDOWN);
-  return 0;
+  return suite.getExitCode();
 }

@@ -66,14 +66,18 @@ namespace test {
   class Suite
     {
       string groupID_;
+      int exitCode_;
       
     public:
       Suite (string groupID);
       void run (Arg cmdline);
       void describe ();
+      int getExitCode ()  const;
       static void enrol (Launcher *test, string testID, string groups);
       
       static const string ALLGROUP;
+      static const int TEST_OK;
+      static const int EXCEPTION_THROWN;
     };
   
   
