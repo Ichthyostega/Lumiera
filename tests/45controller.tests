@@ -60,7 +60,7 @@ return: 0
 END
 
 
-PLANNED "handling pattern basics" HandlingPatternBasics_test <<END
+TEST "handling pattern basics" HandlingPatternBasics_test <<END
 return: 0
 END
 

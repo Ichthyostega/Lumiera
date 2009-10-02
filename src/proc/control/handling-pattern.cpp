@@ -34,8 +34,8 @@
 using boost::str;
 using boost::format;
 using namespace lumiera;
-using util::cStr;
 using util::isnil;
+using util::cStr;
 
 
 namespace control {
@@ -48,7 +48,8 @@ namespace control {
   }
   
   
-  /** @note: does error handling, but delegates the actual
+  /** @param name to use in log and error messages
+   *  @note  does error handling, but delegates the actual
    *         execution to the protected (subclass) member */
   ExecResult
   HandlingPattern::invoke (CommandImpl& command, Symbol name)  const

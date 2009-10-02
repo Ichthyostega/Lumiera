@@ -86,7 +86,7 @@ namespace control {
         
         void perform (CommandImpl& command)  const { return exec(command); }
         
-        class UndoProxyPattern
+        class UndoProxyPattern     ///< standard UNDO implementation by reconfiguring a base Pattern
           : public HandlingPattern
           {
             BasicHandlingPattern& basePatt_;
@@ -119,6 +119,7 @@ namespace control {
     /**
      * Handling Pattern: invoke blocking, translate exceptions into an error state
      * @todo describe this pattern in more detail....
+     * @todo unimplemented...
      */
     class InvokeSyncNoThrow
       : public BasicHandlingPattern
@@ -146,7 +147,9 @@ namespace control {
     
     /**
      * Handling Pattern: invoke blocking, propagating any exceptions immediately
+     * @todo is throwing here helpful, and how to integrate it into ExecResult...?
      * @todo describe this pattern in more detail....
+     * @todo unimplemented...
      */
     class InvokeSyncThrow
       : public BasicHandlingPattern
@@ -174,7 +177,9 @@ namespace control {
     
     /**
      * Handling Pattern: just schedule command to be invoked asynchronously
+     * @todo clarify what "async" means and if we need it.....
      * @todo describe this pattern in more detail....
+     * @todo unimplemented...
      */
     class InvokeAsync
       : public BasicHandlingPattern

@@ -22,49 +22,26 @@
 
 
 #include "lib/test/run.hpp"
-//#include "lib/test/test-helper.hpp"
 #include "proc/control/command.hpp"
 #include "proc/control/command-impl.hpp"
 #include "proc/control/command-registry.hpp"
 #include "proc/control/argument-erasure.hpp"
 #include "proc/control/handling-pattern.hpp"
-//#include "lib/lumitime.hpp"
 #include "lib/symbol.hpp"
-//#include "lib/util.hpp"
 
 #include "proc/control/test-dummy-commands.hpp"
 
-//#include <tr1/functional>
-//#include <boost/ref.hpp>
-//#include <boost/format.hpp>
-//#include <iostream>
 #include <cstdlib>
-//#include <string>
 
 
 namespace control {
 namespace test    {
-
-
-//  using boost::format;
-//  using boost::str;
-  //using lumiera::Time;
-  //using util::contains;
-  using std::tr1::function;
-//  using std::tr1::bind;
-//  using std::string;
-  using std::rand;
-  //using std::cout;
-  //using std::endl;
-//  using lib::test::showSizeof;
-//  using util::isSameObject;
-//  using util::contains;
+  
+  
   using lib::Symbol;
-
+  using std::tr1::function;
+  using std::rand;
   
-  
-  //using lumiera::typelist::BuildTupleAccessor;
-//  using lumiera::error::LUMIERA_ERROR_EXTERNAL;
   
   namespace { // test data and helpers...
   
@@ -79,13 +56,11 @@ namespace test    {
   
   /**********************************************************************************
    * @test operate and verify a simple dummy command handling pattern.
-   *       interface. Add/remove a command instance to the index, allocate an
-   *       CommandImpl frame and verify it is removed properly on ref count zero.
    * @note this test covers mainly the behaviour of a handling pattern as a concept,
-   *       not so much the behaviour of the (standard) handling pattern implementations. 
+   *       not so much the behaviour of the (standard) handling pattern implementations.
    * 
    * @see HandlingPattern
-   * @see CommandRegistry
+   * @see BasicHandlingPattern
    * @see command.hpp
    * @see command-basic-test.cpp
    */
@@ -189,6 +164,6 @@ namespace test    {
   
   /** Register this test class... */
   LAUNCHER (HandlingPatternBasics_test, "function controller");
-      
-      
+  
+  
 }} // namespace control::test
