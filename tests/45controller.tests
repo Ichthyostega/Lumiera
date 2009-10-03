@@ -55,6 +55,11 @@ return: 0
 END
 
 
+PLANNED "Equality comparisons" CommandEquality_test <<END
+return: 0
+END
+
+
 PLANNED "Command index and allocation" CommandRegistry_test <<END
 return: 0
 END

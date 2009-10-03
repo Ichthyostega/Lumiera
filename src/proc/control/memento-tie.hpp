@@ -76,6 +76,9 @@ namespace control {
    *  which needs to be stored within the MementoTie. On UNDO, the undo-operation functor needs
    *  to be provided with a reference to this stored memento value through an additional
    *  parameter (which by convention is always the last argument of the undo function).
+   *  
+   *  @param SIG signature of the command operation
+   *  @param MEM type of the memento state to capture. Needs to be default constructible and copyable
    */
   template<typename SIG, typename MEM>
   class MementoTie

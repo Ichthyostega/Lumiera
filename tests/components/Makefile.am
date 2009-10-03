@@ -49,6 +49,7 @@ test_components_SOURCES =							\
 	$(testcomponents_srcdir)/proc/asset/testasset.cpp			\
 	$(testcomponents_srcdir)/proc/control/command-basic-test.cpp		\
 	$(testcomponents_srcdir)/proc/control/command-argument-test.cpp		\
+	$(testcomponents_srcdir)/proc/control/command-equality-test.cpp		\
 	$(testcomponents_srcdir)/proc/control/command-mutation-test.cpp		\
 	$(testcomponents_srcdir)/proc/control/command-use1-test.cpp		\
 	$(testcomponents_srcdir)/proc/control/command-use2-test.cpp		\
