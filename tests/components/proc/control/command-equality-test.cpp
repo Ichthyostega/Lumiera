@@ -23,12 +23,17 @@
 
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
+#include "proc/control/command-def.hpp"
 #include "proc/control/command-mutation.hpp"
+#include "proc/control/argument-erasure.hpp"
 #include "proc/control/command-argument-holder.hpp"
 #include "proc/control/memento-tie.hpp"
 #include "lib/meta/tuple.hpp"
+#include "lib/symbol.hpp"
+#include "lib/util.hpp"
 
 #include <tr1/functional>
+#include <iostream>
 #include <string>
 
 namespace control {
@@ -37,15 +42,24 @@ namespace test    {
   
   
   using namespace lumiera::typelist;
+  using lib::Symbol;
+  using util::isnil;
+  using util::isSameObject;
   
   using std::tr1::function;
   using std::tr1::bind;
   using std::string;
+  using std::cout;
+  using std::endl;
+  
   
   
   namespace {
     
     string check_;
+    
+    Symbol COMMAND1 ("test.equalityCommand1");
+    Symbol COMMAND2 ("test.equalityCommand2");
     
     const string MARK_1 ("|_1_");
     const string MARK_2 ("|_2_");
@@ -65,8 +79,8 @@ namespace test    {
     typedef void   Sig_undo(char,string);
     
     typedef Tuple<Types<char> > ArgTuple;
+    typedef Closure<Sig_oper> ArgHolder;
     typedef MementoTie<Sig_oper, string> MemHolder;
-    typedef ArgumentHolder<Sig_oper,string> ArgHolder;
     
     
     struct Testframe ///< test data set
@@ -79,6 +93,10 @@ namespace test    {
       };
     
     
+    Testframe data1 = {'a', &oper_1, &capt_1, &undo_1};
+    Testframe data2 = {'z', &oper_2, &capt_2, &undo_2};
+    
+    Testframe nullD;
   }
   
   
@@ -113,42 +131,87 @@ namespace test    {
           ASSERT (&capt_1 != &capt_2);
           ASSERT (&undo_1 != &undo_2);
           
-          Testframe data1 = {'a', &oper_1, &capt_1, &undo_1};
-          Testframe data2 = {'z', &oper_2, &capt_2, &undo_2};
-          
-          verifyMutationEquality (data1,data2);
-          verifyMementoEquality  (data1,data2);
-          verifyClosureEquality  (data1,data2);
-          verifyCommandEquality  (data1,data2);
+          verifyMutationEquality();
+          verifyMementoEquality();
+          verifyClosureEquality();
+          verifyCommandEquality();
         }
       
       
       
       void
-      verifyMutationEquality (Testframe d1, Testframe d2)
+      verifyMutationEquality()
         {
-          UNIMPLEMENTED ("cover Mutation equality test");
+          Mutation mut1 (data1.o_Fun);
+          Mutation muti (data1.o_Fun);
+          Mutation mut2 (data2.o_Fun);
+          ASSERT (mut1 == mut1);
+          ASSERT (mut1 == muti);
+          ASSERT (muti == mut1);
+          ASSERT (mut1 != mut2);
+          ASSERT (mut2 != mut1);
+          ASSERT (muti != mut2);
+          ASSERT (mut2 != muti);
+          
+          Mutation umu (nullD.o_Fun);
+          ASSERT (mut1 != umu);
+          
+          Mutation omu (nullD.u_Fun);
+          ASSERT (omu != umu);
+          ASSERT (omu != muti);
+          
+          omu = Mutation(data1.u_Fun);
+          ASSERT (omu != muti);
         }
       
       
+      void
+      verifyClosureEquality()
+        {
+          ArgHolder a1 (tuple::make (data1.param));
+          ArgHolder a2 (tuple::make (data2.param));
+          ASSERT (a1 == a1);
+          ASSERT (a1 != a2);
+          ASSERT (a2 != a1);
+          
+          TypedArguments<ArgTuple> newArgs (tuple::make (data2.param));
+          a1.bindArguments(newArgs);
+          ASSERT (a1 == a2);
+          ASSERT (a2 == a1);
+          
+          typedef ArgumentHolder<Sig_oper,string> AHImpl;
+          AHImpl abuff1;
+          AHImpl abuff2;
+          ASSERT (abuff1 == abuff2);
+          abuff1.bindArguments(newArgs);
+          ASSERT (abuff1 != abuff2);
+          abuff2.bindArguments(newArgs);
+          ASSERT (abuff1 == abuff2);
+          UndoMutation umu1 (abuff1.tie (data1.u_Fun, data1.c_Fun));
+          ASSERT (abuff1 == abuff2);                                 // not detected, as the new memento holder isn't valid yet
+          
+          UndoMutation umu2 (abuff1.tie (data1.u_Fun, data2.c_Fun)); // note: using different capture function!
+          ASSERT (abuff1 == abuff2);
+          
+          umu1.captureState(a1);
+          umu2.captureState(a1);
+          ASSERT (abuff1 != abuff2); // and now the different state (due to the differing capture function) is detected
+          
+          umu2 = UndoMutation(abuff1.tie (data1.u_Fun, data1.c_Fun)); // re-bind, now using the "right" capture function
+          ASSERT (abuff1 != abuff2);
+          umu2.captureState(a1);    
+          ASSERT (abuff1 == abuff2); // same functions, same memento state
+        }
+      
       
       void
-      verifyMementoEquality (Testframe d1, Testframe d2)
+      verifyMementoEquality()
         {
-          UNIMPLEMENTED ("cover Memento equality test");
+          MemHolder m11 (data1.u_Fun, data1.c_Fun);
+          MemHolder m12 (data1.u_Fun, data2.c_Fun);
+          MemHolder m21 (data2.u_Fun, nullD.c_Fun); // note: unbound capture function
+          MemHolder m22 (data2.u_Fun, data2.c_Fun);
           
-#if false //////////////////////////////////////////////////////////////////////////////////////////////copied just for reference          
-          function<void(short,int)> u1_fun;             // deliberately unbound
-          function<void(short,int)> u2_fun  = undo;
-          function< int(short)>     c1_fun;
-          function< int(short)>     c2_fun  = capture;
-          
-          MemHolder m11 (u1_fun, c1_fun);
-          MemHolder m12 (u1_fun, c2_fun);
-          MemHolder m21 (u2_fun, c1_fun);
-          MemHolder m22 (u2_fun, c2_fun);
-          
-          ASSERT (!m11 && !m12 && !m21 && !m22);
           ASSERT ( (m11 == m11));
           ASSERT (!(m11 != m11));
           
@@ -169,28 +232,75 @@ namespace test    {
           ASSERT (!m22x);
           ASSERT (m22 == m22x); // same functions, no state --> equal
           
-          testVal = 0;
-          m22x.tieCaptureFunc() (1 + (rand() % 9));   // produce a random memento value != 0
-          ASSERT (0 < m22x.getState());
+          m22x.tieCaptureFunc() ('x');   // produce a memento state
+          ASSERT (!isnil (m22x.getState()));
           
           ASSERT (m22 != m22x);
-          m22.tieCaptureFunc() (m22x.getState()); // get the same value into the memento within m22
+          m22.tieCaptureFunc() ('x'); // get same value into the memento within m22
           ASSERT (m22 == m22x);
-#endif          
+          
+          // document shortcomings on UndoMutation comparisons
+          UndoMutation umu11 (m11);
+          UndoMutation umu12 (m12);
+          UndoMutation umu21 (m21);
+          UndoMutation umu22 (m22);
+          ASSERT (m11 == m12);       // note: differing capture function not detected
+          ASSERT (m11 != m21);
+          ASSERT (m11 != m22);
+          ASSERT (m12 != m21);
+          ASSERT (m12 != m22);
+          ASSERT (m21 == m22);       // note
         }
       
       
       void
-      verifyClosureEquality (Testframe d1, Testframe d2)
+      verifyCommandEquality()
         {
-          UNIMPLEMENTED ("cover Closure equality test");
+          CommandDef (COMMAND1)
+            .operation (data1.o_Fun)
+            .captureUndo (data1.c_Fun)
+            .undoOperation (data1.u_Fun)
+            ;
+          CommandDef (COMMAND2)
+            .operation (data2.o_Fun)
+            .captureUndo (data2.c_Fun)
+            .undoOperation (data2.u_Fun)
+            ;
+          
+          Command c1 = Command::get(COMMAND1); 
+          Command c2 = Command::get(COMMAND2); 
+          ASSERT (c1 == c1);
+          ASSERT (c1 != c2);
+          ASSERT (c2 != c1);
+          
+          Command cx = c1;
+          ASSERT (c1 == cx);
+          ASSERT (cx == c1);
+          ASSERT (!isSameObject (c1, c2));
+          
+          // verify equality matches behaviour
+          string protocol1 = execCommand(c1); 
+          string protocolX = execCommand(cx); 
+          string protocol2 = execCommand(c2);
+          
+          ASSERT (protocol1 == protocolX);
+          ASSERT (protocol1 != protocol2);
         }
       
       
-      void
-      verifyCommandEquality (Testframe d1, Testframe d2)
+      /** Helper: invoke and undo a command, 
+       *  @return resulting operation protocol
+       */
+      string
+      execCommand (Command com)
         {
-          UNIMPLEMENTED ("cover complete Command equality test");
+          check_ = "(start)";
+          com.bind('o');
+          com();
+          cout << com << ":" << check_ << endl;
+          com.undo();
+          cout << com << ":" << check_ << endl;
+          return check_;
         }
     };
   
