@@ -22,15 +22,33 @@
 
 
 /** @file argument-tuple-accept.hpp
+ ** Mixin-templates providing arbitrary function call operators and argument
+ ** binding functions. By inheriting from one of these templates, a class can
+ ** accept a specifically typed binding or function call, as specified by the
+ ** template parameters, or alternatively it can inherit a complete set of
+ ** templated argument binding functions, assuming that the matching signature
+ ** can be detected at runtime. These templates are used for the Proc-Layer
+ ** command frontend, to bind to the actual command arguments.
+ **   
  ** The AcceptArgumentBinding template allows to mix in a \c bind(...) function.
  ** Thereby, the correct number and types of arguments is derived according to
- ** the function signature given as template parameter. This helper template is
- ** used for the ArgumentHolder and generally for binding the arguments when
- ** defining Proc-Layer commands.
+ ** the function signature given as template parameter. The class mixing in this
+ ** template needs to provide a suitable member function \c bindArg(Tuple<...>) ,
+ ** which accepts all the command arguments packaged together into a tuple (record).
+ ** AcceptArgumentTuple works similar, but provides function call operators rather.
  ** 
+ ** Contrary to this, the AcceptAnyBinding mixin template provides a complete
+ ** set of \c bind(...) functions, accepting up to 9 arbitrary call parameters and
+ ** again forwarding the call to a template member function \c bindArg(Tuple<...>)
+ ** This helper template is used on the control::Command frontend objects; in this
+ ** case, there is a runtime type-check built into CommandImpl which will throw
+ ** when the provided arguments don't fit the (hidden) function signature embedded
+ ** within the CommandMutation (functor).
+ ** 
+ ** @see Command
  ** @see CommandDef
- ** @see ArgumentHolder
  ** @see argument-tuple-accept-test.cpp
+ ** @see command-invocation.hpp
  **
  */
 
@@ -53,6 +71,8 @@ namespace control {
     using namespace lumiera::typelist;
     
     
+      //
+     // _______________________________________________________________________________________________________________
     /** @internal mix in a function operator */
     template< class TAR, class BA, class RET
             , typename TYPES
@@ -238,6 +258,11 @@ namespace control {
     
     
     
+    
+    
+    
+      //
+     // _______________________________________________________________________________________________________________
     /** @internal mix in a \c bind() function
      */
     template< class TAR, class BA, class RET
@@ -424,6 +449,144 @@ namespace control {
     
     
     
+    
+    
+    
+      //
+     // _______________________________________________________________________________________________________________
+    /** @internal mix in complete set of templated \c bind() functions
+     */
+    template< class TAR, class BA, class RET>
+    struct AcceptAnyBind
+      : BA
+      {
+        
+        RET                                                                          //________________________________
+        bind ()                                                                     ///< Accept dummy binding (0 Arg)
+          {
+            return static_cast<TAR*> (this) -> bindArg (tuple::makeNullTuple());
+          }
+        
+        
+        template<typename T1>
+        RET                                                                          //________________________________
+        bind (T1 a1)                                                                ///< Accept binding with 1 Argument
+          {
+            return static_cast<TAR*> (this) -> bindArg (tuple::make (a1));
+          }
+        
+        
+        template< typename T1
+                , typename T2
+                >
+        RET                                                                          //________________________________
+        bind (T1 a1, T2 a2)                                                         ///< Accept binding for 2 Arguments
+          {
+            return static_cast<TAR*> (this) -> bindArg (tuple::make (a1,a2));
+          }
+        
+        
+        template< typename T1
+                , typename T2
+                , typename T3
+                >
+        RET                                                                          //________________________________
+        bind (T1 a1, T2 a2, T3 a3)                                                  ///< Accept binding for 3 Arguments
+          {
+            return static_cast<TAR*> (this) -> bindArg (tuple::make (a1,a2,a3));
+          }
+        
+        
+        template< typename T1
+                , typename T2
+                , typename T3
+                , typename T4
+                >
+        RET                                                                          //________________________________
+        bind (T1 a1, T2 a2, T3 a3, T4 a4)                                           ///< Accept binding for 4 Arguments
+          {
+            return static_cast<TAR*> (this) -> bindArg (tuple::make (a1,a2,a3,a4));
+          }
+        
+        
+        template< typename T1
+                , typename T2
+                , typename T3
+                , typename T4
+                , typename T5
+                >
+        RET                                                                          //________________________________
+        bind (T1 a1, T2 a2, T3 a3, T4 a4, T5 a5)                                    ///< Accept binding for 5 Arguments
+          {
+            return static_cast<TAR*> (this) -> bindArg (tuple::make (a1,a2,a3,a4,a5));
+          }
+        
+        
+        template< typename T1
+                , typename T2
+                , typename T3
+                , typename T4
+                , typename T5
+                , typename T6
+                >
+        RET                                                                          //________________________________
+        bind (T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6)                             ///< Accept binding for 6 Arguments
+          {
+            return static_cast<TAR*> (this) -> bindArg (tuple::make (a1,a2,a3,a4,a5,a6));
+          }
+        
+        
+        template< typename T1
+                , typename T2
+                , typename T3
+                , typename T4
+                , typename T5
+                , typename T6
+                , typename T7
+                >
+        RET                                                                          //________________________________
+        bind (T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6, T7 a7)                      ///< Accept binding for 7 Arguments
+          {
+            return static_cast<TAR*> (this) -> bindArg (tuple::make (a1,a2,a3,a4,a5,a6,a7));
+          }
+        
+        
+        template< typename T1
+                , typename T2
+                , typename T3
+                , typename T4
+                , typename T5
+                , typename T6
+                , typename T7
+                , typename T8
+                >
+        RET                                                                          //________________________________
+        bind (T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6, T7 a7, T8 a8)               ///< Accept binding for 8 Arguments
+          {
+            return static_cast<TAR*> (this) -> bindArg (tuple::make (a1,a2,a3,a4,a5,a6,a7,a8));
+          }
+        
+        
+        template< typename T1
+                , typename T2
+                , typename T3
+                , typename T4
+                , typename T5
+                , typename T6
+                , typename T7
+                , typename T8
+                , typename T9
+                >
+        RET                                                                          //________________________________
+        bind (T1 a1, T2 a2, T3 a3, T4 a4, T5 a5, T6 a6, T7 a7, T8 a8, T9 a9)        ///< Accept binding for 9 Arguments
+          {
+            return static_cast<TAR*> (this) -> bindArg (tuple::make (a1,a2,a3,a4,a5,a6,a7,a8,a9));
+          }
+        
+      };
+    
+    
+    
     template<typename SIG>
     struct _Type
       {
@@ -484,6 +647,21 @@ namespace control {
   class AcceptArgumentBindingRet
     : public bind_arg::AcceptBind<TAR,BASE, RET
                                           , typename bind_arg::_Type<SIG>::Args>
+    {
+    };
+  
+  
+  /** Helper Template for control::Command, mix-in complete set of \c bind(...) functions
+   *  @param TAR  the target class providing a function \c bindArg(Tuple<Types<T1...> >)
+   *  @param RET  common return type of \c bindArg() and all \c bind() functions  
+   *  @param BASE the base class for inheritance chaining
+   */
+  template< class TAR
+          , class RET  =TAR&
+          , class BASE =bind_arg::Dummy
+          >
+  class AcceptAnyBinding
+    : public bind_arg::AcceptAnyBind<TAR,BASE,RET>
     {
     };
   

@@ -1,5 +1,5 @@
 /*
-  AcceptArgumentTuple(Test)  -  verify synthesising a bind(...) function
+  ArgumentTupleAccept(Test)  -  verify synthesising a bind(...) function
  
   Copyright (C)         Lumiera.org
     2009,               Hermann Vosseler <Ichthyostega@web.de>
@@ -54,7 +54,7 @@ namespace test    {
   namespace { // build a test dummy class....
     
     template<typename SIG>
-    struct Tup
+    struct _Tup
       {
         typedef typename FunctionSignature< function<SIG> >::Args Args;
         typedef typename FunctionSignature< function<SIG> >::Ret  Ret;
@@ -66,11 +66,11 @@ namespace test    {
     class TestClass
       : public AcceptArgumentBinding< SIG                     // to derive the desired signature
                                     , TestClass<SIG>          // the target class providing the implementation
-                                    , typename Tup<SIG>::Ty   // base class to inherit from
+                                    , typename _Tup<SIG>::Ty  // base class to inherit from
                                     >
       {
-        typedef typename Tup<SIG>::Ty ATuple;
-        typedef typename Tup<SIG>::Ret RetType;
+        typedef typename _Tup<SIG>::Ty  ATuple;
+        typedef typename _Tup<SIG>::Ret RetType;
         
       public:
         
@@ -78,6 +78,7 @@ namespace test    {
         bindArg (ATuple const& tuple)
           {
             static_cast<ATuple&> (*this) = tuple;
+            return RetType();
           }
       };
     
@@ -95,7 +96,7 @@ namespace test    {
    *       
    * @see  control::CommandArgumentHolder
    */
-  class AcceptArgumentTuple_test : public Test
+  class ArgumentTupleAccept_test : public Test
     {
       
       virtual void
@@ -119,7 +120,7 @@ namespace test    {
   
   
   /** Register this test class... */
-  LAUNCHER (AcceptArgumentTuple_test, "unit controller");
+  LAUNCHER (ArgumentTupleAccept_test, "unit controller");
   
   
 }} // namespace control::test

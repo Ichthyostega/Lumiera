@@ -55,8 +55,8 @@
 #include "pre.hpp"
 #include "lib/error.hpp"
 #include "lib/symbol.hpp"
-#include "proc/control/command-binding.hpp"
 #include "proc/control/argument-erasure.hpp"
+#include "proc/control/argument-tuple-accept.hpp"
 #include "proc/control/handling-pattern.hpp"
 #include "lib/bool-checkable.hpp"
 #include "lib/meta/tuple.hpp"
@@ -104,9 +104,10 @@ namespace control {
    *  - maybe checks the return value for errors
    */
   class Command
-    : public com::ArgumentBinder<Command    // accepts arbitrary bind(..) calls (with runtime check)
-           , lib::Handle<CommandImpl>      //  actually implemented as ref counting Handle
-           >                              //
+    : public AcceptAnyBinding<Command       // accepts arbitrary bind(..) calls (with runtime check)
+           , Command&                      //  (return value of bind() functions is *this)
+           , lib::Handle<CommandImpl>     //   actually implemented as ref counting Handle
+           >                             //
     {
       typedef lib::Handle<CommandImpl> _Handle;
       

@@ -26,7 +26,14 @@
  ** Especially, this header defines a set of free \c invoke(...) functions,
  ** allowing to bind to specific arguments and then invoke through the default
  ** HandlingPatern in a single call.
- **
+ ** 
+ ** While in some cases, a command will be set up completely finished and closed
+ ** over all it's arguments, usually the CommandDef will just specify the command operation
+ ** and undo function, thus leaving the task of binding concrete arguments to the client code.
+ ** Thus, depending on the circumstances, there might be usage situations where the exact number
+ ** and type of arguments can be detected and checked at compile time, while otherwise this check
+ ** needs to be deferred to happen at runtime, when the binding is actually invoked.
+ ** 
  ** @see Command
  ** @see CommandDef
  ** @see command-binding.hpp
@@ -40,34 +47,28 @@
 #define CONTROL_COMMAND_INVOCACTION_H
 
 //#include "pre.hpp"
-//#include "lib/symbol.hpp"
-//#include "lib/meta/typelist.hpp"
-//#include "lib/meta/tuple.hpp"
 #include "proc/control/command.hpp"
 #include "proc/control/handling-pattern.hpp"
 #include "proc/control/argument-tuple-accept.hpp"
-
-//#include <tr1/memory>
-#include <tr1/functional>
 
 
 
 
 namespace control {
   
-//  using lib::Symbol;
-//  using std::tr1::shared_ptr;
   using namespace lumiera::typelist;
   
-
-  namespace com { // define transient invoker objects, to allow for arbitrary bindings
   
+  
+  namespace com { ///< Proc-Layer command implementation details
+                 //    define transient invoker objects, to allow for arbitrary bindings
+    
     template<typename SIG>
     struct _DefineBindFunc
       {
         typedef ExecResult SIG_Bind(int);
       };
-  
+    
     
     /** @internal transient invoker object for invoking the command based
      *            on a function provided at compile time. Because of the
@@ -81,7 +82,7 @@ namespace control {
                            >
       {
         Command com_;
-
+        
         CommandInvoker (Command c)
           : com_(c)
           { }
@@ -101,14 +102,14 @@ namespace control {
     
     /** @internal transient invoker object, usable when the exact signature
      *            of the command's operation isn't known at compile time.
-     *            In this case, we allow any invocation call to compile, 
+     *            In this case, we allow any invocation call to compile,
      *            but the command will reject unsuitable signatures
      *            at runtime, when fetching the operation functor.
      */
     struct RuntimeCheckedCommandInvoker
       {
         Command com_;
-
+        
         RuntimeCheckedCommandInvoker (Command c)
           : com_(c)
           { }
