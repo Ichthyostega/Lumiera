@@ -1,5 +1,5 @@
 /*
-  COMMAND-REGISTRY.hpp  -  proc-Command object registration and storage management 
+  COMMAND-REGISTRY.hpp  -  proc-Command object registration and storage management
  
   Copyright (C)         Lumiera.org
     2009,               Hermann Vosseler <Ichthyostega@web.de>
@@ -25,17 +25,17 @@
  ** Managing command definitions and the storage of individual command objects.
  ** The CommandRegistry is an singleton object, accessible only at the implementation level
  ** of control::Command (note: CommandImpl isn't tied to the registry). For the other parts
- ** of the command system, it serves all "get me this command object"-services. Actually,
+ ** of the command system, it provides all "get me this command object"-services. Actually,
  ** these can be decomposed into two distinct parts:
  ** - allocation of CommandImpl frames and argument holders, which is delegated
  **   to the TypedAllocationManager
- ** - maintaining an index to find pre-build command definitions (prototypes)
+ ** - maintaining an index to find pre-built command definitions (prototypes)
  ** 
  ** \par Services during command lifecycle
  ** Each command starts out as command definition, accessed by client code through CommandDef.
  ** While collecting the necessary parts of such a definition, there is just an empty (pending)
  ** Command (smart-ptr frontend), which is already registered with the intended command-ID.
- ** A lookup on this ID would still fail in this phase, as the \link #queryIndex search function \endlink
+ ** A lookup on this ID would still fail at this point, as the \link #queryIndex search function \endlink
  ** treats missing and incomplete command definitions similar. When the definition is complete,
  ** a CommandImpl frame is allocated, configured and used to activate the Command (smart-ptr frontend).
  ** 
@@ -188,7 +188,7 @@ namespace control {
       const char*
       findDefinition (Command const& cmdInstance)  const
         {
-//        Lock sync(this);                                     ////////////////////////////////////TICKET #272  Lock should also be usable in const methods
+          Lock sync(this);
           return getValue_or_default (ridx_, &cmdInstance, 0 );
         }                                   //used as Key
       

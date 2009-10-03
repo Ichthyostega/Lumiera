@@ -23,57 +23,24 @@
 
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
-//#include "proc/asset/media.hpp"
-//#include "proc/mobject/session.hpp"
-//#include "proc/mobject/session/edl.hpp"
-//#include "proc/mobject/session/testclip.hpp"
-//#include "proc/mobject/test-dummy-mobject.hpp"
-//#include "lib/p.hpp"
-//#include "proc/mobject/placement.hpp"
-//#include "proc/mobject/placement-index.hpp"
-//#include "proc/mobject/explicitplacement.hpp"
-#include "proc/control/command.hpp"
-#include "proc/control/command-registry.hpp"
 #include "proc/control/command-def.hpp"
-//#include "lib/lumitime.hpp"
+#include "proc/control/command-registry.hpp"
 #include "lib/symbol.hpp"
 #include "lib/util.hpp"
 
 #include "proc/control/test-dummy-commands.hpp"
 
 #include <tr1/functional>
-//#include <boost/ref.hpp>
-//#include <boost/format.hpp>
-//#include <iostream>
-//#include <cstdlib>
-//#include <string>
 
 
 namespace control {
 namespace test    {
-
-
-//  using boost::format;
-//  using boost::str;
-  //using lumiera::Time;
-  //using util::contains;
+  
+  
   using std::tr1::function;
-//  using std::tr1::bind;
-//  using std::string;
-  //using std::rand;
-  //using std::cout;
-  //using std::endl;
-//  using lib::test::showSizeof;
   using util::isSameObject;
-//  using util::contains;
-
-//  using session::test::TestClip;
   using lib::Symbol;
-//  using lumiera::P;
   
-  
-  //using lumiera::typelist::BuildTupleAccessor;
-//  using lumiera::error::LUMIERA_ERROR_EXTERNAL;
   
   namespace { // test data and helpers...
   
@@ -90,8 +57,6 @@ namespace test    {
    * @note this test covers the internal bits of functionality,
    *       not the behaviour of the (integrated) command framework 
    * 
-   * @todo planned but not implemented as of 8/09   see also Ticket #217
-   *        
    * @see Command
    * @see CommandRegistry
    * @see command.cpp
@@ -122,8 +87,8 @@ namespace test    {
           
           // this command definition is
           // represented internally by a prototype instance
-          ASSERT (1+cnt_inst == registry.instance_count());
-          cnt_inst++;
+          ASSERT (++cnt_inst == registry.instance_count());
+          ASSERT (++cnt_defs == registry.index_size());
           
           checkRegistration (registry);
           checkAllocation(registry);
@@ -150,12 +115,13 @@ namespace test    {
           
           // now create a clone, registered under a different ID
           Command cmd2 = cmd1.storeDef(TEST_CMD2);
-          ASSERT (cmd2 == cmd1);
-          cmd2.bind(54321);
           ASSERT (cmd2 != cmd1);
+          cmd2.bind(54321);
           
           // this created exactly one additional instance allocation:
           ASSERT (1+cnt_inst == registry.instance_count());
+          ASSERT (1+cnt_defs == registry.index_size());
+          // ...and another index entry
           
           
           Command cmdX = registry.queryIndex(TEST_CMD2);
@@ -164,7 +130,7 @@ namespace test    {
           
           ASSERT (registry.remove(TEST_CMD2));
           ASSERT (!registry.queryIndex(TEST_CMD2));
-          ASSERT (cnt_inst == registry.instance_count());
+          ASSERT (cnt_defs == registry.index_size()); // removed from index
           
           // create a new registration..
           cmdX = registry.track(TEST_CMD, cmd2);  // but "accidentally" use an existing ID
@@ -176,6 +142,7 @@ namespace test    {
           ASSERT (cmdX != cmd1);
           
           ASSERT (1+cnt_inst == registry.instance_count());
+          ASSERT (1+cnt_defs == registry.index_size());
           
           ASSERT (string(TEST_CMD2) == registry.findDefinition(cmdX));
           
@@ -184,8 +151,13 @@ namespace test    {
           
           ASSERT (!registry.queryIndex(TEST_CMD2));
           ASSERT ( registry.queryIndex(TEST_CMD));
+          ASSERT (cnt_defs == registry.index_size());       // the index entry is gone,
           
-          ASSERT (cnt_inst == registry.instance_count());
+          ASSERT (1+cnt_inst == registry.instance_count()); // but the allocation still lives
+          cmdX.close();
+          ASSERT (1+cnt_inst == registry.instance_count());
+          cmd2.close();
+          ASSERT (0+cnt_inst == registry.instance_count()); // ...as long as it's still referred
         }
       
       
@@ -223,7 +195,7 @@ namespace test    {
           ASSERT (2+cnt_inst == registry.instance_count());
           
           ASSERT (!isSameObject (*pImpl, *clone));
-          ASSERT (*pImpl == *clone);
+//          ASSERT (*pImpl == *clone);             ///////////////////////////////////////TODO: comparison on CommandImpl ??
           
           ASSERT (!pImpl->canExec());
           typedef Types<int> ArgType;
@@ -231,13 +203,13 @@ namespace test    {
           pImpl->setArguments(arg);
           ASSERT (pImpl->canExec());
           
-          ASSERT (*pImpl != *clone);  // this proves the clone has indeed a separate identity
+//          ASSERT (*pImpl != *clone);  // this proves the clone has indeed a separate identity
           ASSERT (!clone->canExec());
           
           // discard the first clone and overwrite with a new one
           clone = registry.createCloneImpl(*pImpl);
           ASSERT (2+cnt_inst == registry.instance_count());
-          ASSERT (*pImpl == *clone);
+//          ASSERT (*pImpl == *clone);
           ASSERT (clone->canExec());
           
           clone.reset();

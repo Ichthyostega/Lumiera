@@ -108,21 +108,23 @@ namespace control {
   }
   
   
-  /** @internal to be invoked by CommandDef
-   *  when starting a new definition  */
-  Command
+  /** @internal to be invoked by CommandDef when starting a new definition.
+   *  @note we hand out a direct reference to the registered object. When this
+   *        command is "activated" later on, this deliberately has the side effect
+   *        of detaching any further references which may be held outside.
+   *        They will continue to live on as "anonymous" commands, until
+   *        going out of scope.
+   */
+  Command&
   Command::fetchDef (Symbol cmdID)
   {
     CommandRegistry& registry = CommandRegistry::instance();
-    Command cmd = registry.queryIndex (cmdID);
-    if (cmd)
-      return cmd;
     
-    // create an empty definition, later to be activated
-    Command newDefinition;
+    Command newDefinition = registry.queryIndex (cmdID);
+                 // will be empty on first invocation
     
     return registry.track (cmdID, newDefinition);
-  }              // return new or currently registered cmd...
+  }              // return direct ref to new or currently registered cmd...
   
   
   /** @internal to be invoked through CommandDef to make a command ready
@@ -295,7 +297,7 @@ namespace control {
   ExecResult
   Command::execSync ()
   {
-    return exec (HandlingPattern::get(HandlingPattern::SYNC_THROW));
+    return exec (HandlingPattern::get(HandlingPattern::DUMMY));       ///////////TICKET #211 : should be ID::SYNC_THROW
   }
   
   

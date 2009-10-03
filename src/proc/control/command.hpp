@@ -170,7 +170,7 @@ namespace control {
       
       
     protected:
-      static Command fetchDef (Symbol cmdID);
+      static Command& fetchDef (Symbol cmdID);
       
       friend class CommandDef;
       

@@ -164,6 +164,7 @@ namespace control {
                                                                ,captFunctor_
                                                                ,undoFunctor_);
             prototype_.activate(completedDef);
+            // activated the instance in the registry 
             ENSURE (prototype_);
             return CompletedDefinition<SIG> (prototype_);
           }
@@ -233,7 +234,7 @@ namespace control {
     : public lib::BoolCheckable<CommandDef>
     {
       Symbol id_;
-      Command prototype_;
+      Command& prototype_;
       
     public:
       CommandDef (Symbol cmdID)
