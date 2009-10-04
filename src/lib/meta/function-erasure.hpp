@@ -184,7 +184,9 @@ namespace typelist{
       operator== (StoreFunPtr const& o1,
                   StoreFunPtr const& o2)
         {
-          return o1.asBase() == o2.asBase();
+          void * *fun1 = reinterpret_cast<void**> (o1.asBase());
+          void * *fun2 = reinterpret_cast<void**> (o2.asBase());
+          return *fun1 == *fun2;
         }
     };
   

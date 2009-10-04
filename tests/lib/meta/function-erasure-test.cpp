@@ -98,6 +98,13 @@ namespace test {
           check_Comparisons (Efp(testFunc),   Efp(returnIt));
           check_Comparisons (Evoid(testFunc), Evoid(returnIt));
           
+          ASSERT ( detect_Clone (Efun(testFunc)));
+          ASSERT (!detect_Clone (Efun(bindFunc)));  //note equality not detected when cloning a bind term
+          ASSERT (!detect_Clone (Efun(pAplFunc)));  //similarly
+          ASSERT (!detect_Clone (Efun(membFunc)));  //analogous for bound member function
+          ASSERT ( detect_Clone (Efp(testFunc) ));
+          ASSERT ( detect_Clone (Evoid(testFunc)));
+          
           detect_unboundFunctor(Efun(testFunc), Efun(getterFunc), Efun(membFunc));
           detect_unboundFunctor(Efp(testFunc),Efp(&testFunc), Efp(returnIt));
           detect_unboundFunctor(Evoid(testFunc),Evoid(&testFunc),Evoid(returnIt));
@@ -227,12 +234,17 @@ namespace test {
           ASSERT (h1 == h1); ASSERT (!(h1 != h1));
           ASSERT (h2 == h2); ASSERT (!(h2 != h2));
           
-          ASSERT (h1 != h2);      
+          ASSERT (h1 != h2);
           ASSERT (h2 != h1);
-          
+        }
+      
+      
+      template<class HOL>
+      bool
+      detect_Clone (HOL const& h1)
+        {
           HOL clone (h1);
-          ASSERT (clone == h1);
-          ASSERT (clone != h2);
+          return (clone == h1);
         }
       
       
