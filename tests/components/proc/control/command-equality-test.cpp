@@ -85,16 +85,14 @@ namespace test    {
     
     struct Testframe ///< test data set
       {
-        char param;
-        
-        function<Sig_oper> o_Fun;
-        function<Sig_capt> c_Fun;
-        function<Sig_undo> u_Fun;
+        Sig_oper & o_Fun;
+        Sig_capt & c_Fun;
+        Sig_undo & u_Fun;
       };
     
     
-    Testframe data1 = {'a', &oper_1, &capt_1, &undo_1};
-    Testframe data2 = {'z', &oper_2, &capt_2, &undo_2};
+    Testframe data1 = {oper_1, capt_1, undo_1};
+    Testframe data2 = {oper_2, capt_2, undo_2};
     
     Testframe nullD;
   }
@@ -168,13 +166,13 @@ namespace test    {
       void
       verifyClosureEquality()
         {
-          ArgHolder a1 (tuple::make (data1.param));
-          ArgHolder a2 (tuple::make (data2.param));
+          ArgHolder a1 (tuple::make ('a'));
+          ArgHolder a2 (tuple::make ('z'));
           ASSERT (a1 == a1);
           ASSERT (a1 != a2);
           ASSERT (a2 != a1);
           
-          TypedArguments<ArgTuple> newArgs (tuple::make (data2.param));
+          TypedArguments<ArgTuple> newArgs (tuple::make ('z'));
           a1.bindArguments(newArgs);
           ASSERT (a1 == a2);
           ASSERT (a2 == a1);

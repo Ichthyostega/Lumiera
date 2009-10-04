@@ -84,6 +84,20 @@ namespace test {
           check_FunctPtrHolder(Efp(testFunc),Efp(&testFunc), Efp(returnIt));
           check_VoidPtrHolder(Evoid(testFunc),Evoid(&testFunc),Evoid(returnIt));
           
+          check_Comparisons (Efun(testFunc), Efun(bindFunc));
+          check_Comparisons (Efun(testFunc), Efun(pAplFunc));
+          check_Comparisons (Efun(testFunc), Efun(membFunc));
+          check_Comparisons (Efun(testFunc), Efun(getterFunc));
+          check_Comparisons (Efun(bindFunc), Efun(pAplFunc));
+          check_Comparisons (Efun(bindFunc), Efun(membFunc));
+          check_Comparisons (Efun(bindFunc), Efun(getterFunc));
+          check_Comparisons (Efun(pAplFunc), Efun(membFunc));
+          check_Comparisons (Efun(pAplFunc), Efun(getterFunc));
+          check_Comparisons (Efun(membFunc), Efun(getterFunc));
+          
+          check_Comparisons (Efp(testFunc),   Efun(returnIt));
+          check_Comparisons (Evoid(testFunc), Evoid(returnIt));
+          
           detect_unboundFunctor(Efun(testFunc), Efun(getterFunc), Efun(membFunc));
           detect_unboundFunctor(Efp(testFunc),Efp(&testFunc), Efp(returnIt));
           detect_unboundFunctor(Evoid(testFunc),Evoid(&testFunc),Evoid(returnIt));
@@ -208,7 +222,20 @@ namespace test {
       
       template<class HOL>
       void
-      detect_unboundFunctor(HOL h1, HOL h2, HOL h3)
+      check_Comparisons (HOL h1, HOL h2)
+        {
+          ASSERT (h1 != h2);      
+          ASSERT (h2 != h1);
+          
+          HOL clone (h1);
+          ASSERT (clone == h1);
+          ASSERT (clone != h2);
+        }
+      
+      
+      template<class HOL>
+      void
+      detect_unboundFunctor (HOL h1, HOL h2, HOL h3)
         {
           // fabricate an unbound functor...
           

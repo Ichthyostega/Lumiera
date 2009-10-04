@@ -57,8 +57,10 @@
 #include "lib/error.hpp"
 #include "lib/bool-checkable.hpp"
 #include "lib/opaque-holder.hpp"
+#include "lib/functor-util.hpp"
 
 #include <tr1/functional>
+#include <boost/operators.hpp>
 
 
 namespace lumiera {
@@ -67,6 +69,33 @@ namespace typelist{
   using std::tr1::function;
   using util::unConst;
   
+  namespace { // comparison access helper functions
+    
+    typedef void* RawFunc; ///////////////////TODO
+    
+    template<class FH>
+    RawFunc 
+    accessRaw (FH funHolder)
+    {
+      ////////////////TODO
+    };
+    
+    template<class FH>
+    struct IsEqualTo
+      {
+        RawFunc ofunc_;
+        
+        IsEqualTo (FH o)
+          : ofunc_(o)
+          { }
+        
+        bool
+        operator() (RawFunc func)
+          {
+            return util::rawComparison(func, ofunc_);
+          }
+      };
+  }
   
   
   /******************************************************
@@ -86,12 +115,19 @@ namespace typelist{
    */
   template<class FH>
   struct FunErasure
-    : FH
+    : boost::equality_comparable< FunErasure
+    , FH >
     {
       template<typename FUN>
       FunErasure (FUN const& functor)
         : FH(functor)
         { }
+      
+      friend bool
+      operator== (FunErasure const& fe1, FunErasure const& fe2)
+        {
+          return fe1.query (IsEqualTo (fe2));
+        }
     };
   
   
@@ -193,6 +229,13 @@ namespace typelist{
       getFun ()
         {
           return *reinterpret_cast<SIG*> (funP_);
+        }
+      
+      template<class FUN>
+      bool
+      query (FUN predicate)
+        {
+          return predicate (funP_);
         }
       
       

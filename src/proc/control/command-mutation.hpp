@@ -51,6 +51,7 @@
 #include "proc/control/command-closure.hpp"
 #include "proc/control/memento-tie.hpp"
 
+#include <boost/operators.hpp>
 #include <iostream>
 #include <string>
 
@@ -72,6 +73,7 @@ namespace control {
    * concealed (erased) on the interface.
    */
   class Mutation
+    : public boost::equality_comparable<Mutation>
     {
       const CmdFunctor func_;
       
@@ -92,6 +94,14 @@ namespace control {
           clo.invoke (func_);
         }
       
+      
+      
+      /// Supporting equality comparisons...
+      friend bool
+      operator== (Mutation const& m1, Mutation const& m2)
+        {
+          return (m1.func_ == m2.func_);
+        }
     };
   
   
