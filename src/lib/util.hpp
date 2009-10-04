@@ -227,6 +227,13 @@ namespace util {
     return const_cast<OBJ*> (o);
   }
   
+  template<class OBJ>
+  OBJ&
+  unConst (OBJ const& ro)
+  {
+    return const_cast<OBJ&> (ro);
+  }
+  
   
   /** compare plain object identity,
    *  bypassing any custom comparison operators.

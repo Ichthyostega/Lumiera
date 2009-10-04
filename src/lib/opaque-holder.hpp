@@ -359,6 +359,15 @@ namespace lib {
           ref.buff().clone (storage_);
         }
       
+      BaseP
+      asBase ()  const   ///< @internal backdoor e.g. for comparisons
+        {
+          BaseP asBase = buff().getBase();
+          ASSERT (asBase);
+          return asBase;
+        }
+      
+      
       
       
     public:
@@ -462,9 +471,7 @@ namespace lib {
           
           // second try: maybe we can perform a dynamic downcast
           // or direct conversion to the actual target type.
-          BaseP asBase = buff().getBase(); 
-          ASSERT (asBase);
-          SUB* content = AccessPolicy::template access<SUB> (asBase);
+          SUB* content = AccessPolicy::template access<SUB> (asBase());
           if (content) 
             return *content;
           
@@ -474,20 +481,6 @@ namespace lib {
                                       );
         }
       
-      
-      /** invoke a query function on the embedded object,
-       *  accessing it as through the common base type.
-       *  @note this accessor doesn't require any knowledge
-       *        about the concrete type of the target object
-       */
-      template<typename RET, typename FUN>
-      RET
-      apply (FUN query)
-        {
-          BaseP asBase = buff().getBase();
-          ASSERT (asBase);
-          return query (asBase);
-        }
       
       
       bool

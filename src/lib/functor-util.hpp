@@ -152,7 +152,7 @@ namespace util { ////////////TODO: refactor it. But probably not directly into n
    *        "different" erroneously, due to garbage in 
    *        the internal functor data's storage */
   template<typename SIG>
-  bool
+  inline bool
   rawComparison (function<SIG> const& f1,
                  function<SIG> const& f2)
   {
@@ -165,11 +165,22 @@ namespace util { ////////////TODO: refactor it. But probably not directly into n
   /** catch-all for the comparison: functors with
    *  different base type are always "different" */
   template<typename SIG1, typename SIG2>
-  bool
+  inline bool
   rawComparison (function<SIG1> const&,
                  function<SIG2> const&)
   {
     return false;
+  }
+  
+  /** variant with unchecked access */
+  inline bool
+  rawComparison (void* f1, void* f2)
+  {
+    typedef HijackedFunction * HijP;
+    
+    return (!f1 && !f2)
+        || *reinterpret_cast<HijP> (f1)
+        == *reinterpret_cast<HijP> (f2);
   }
   
   

@@ -78,23 +78,13 @@ namespace test    {
     typedef string Sig_capt(char);
     typedef void   Sig_undo(char,string);
     
+    typedef function<Sig_oper> Fun_o;
+    typedef function<Sig_capt> Fun_c;
+    typedef function<Sig_undo> Fun_u;
+    
     typedef Tuple<Types<char> > ArgTuple;
     typedef Closure<Sig_oper> ArgHolder;
     typedef MementoTie<Sig_oper, string> MemHolder;
-    
-    
-    struct Testframe ///< test data set
-      {
-        Sig_oper & o_Fun;
-        Sig_capt & c_Fun;
-        Sig_undo & u_Fun;
-      };
-    
-    
-    Testframe data1 = {oper_1, capt_1, undo_1};
-    Testframe data2 = {oper_2, capt_2, undo_2};
-    
-    Testframe nullD;
   }
   
   
@@ -140,9 +130,16 @@ namespace test    {
       void
       verifyMutationEquality()
         {
-          Mutation mut1 (data1.o_Fun);
-          Mutation muti (data1.o_Fun);
-          Mutation mut2 (data2.o_Fun);
+          Fun_o oFun_1 (oper_1);
+          Fun_o oFun_2 (oper_2);
+          Fun_o oFun_empty;
+          
+          Fun_u uFun_1 (undo_1);
+          Fun_u uFun_empty;
+          
+          Mutation mut1 (oFun_1);
+          Mutation muti (oFun_1);
+          Mutation mut2 (oFun_2);
           ASSERT (mut1 == mut1);
           ASSERT (mut1 == muti);
           ASSERT (muti == mut1);
@@ -151,15 +148,15 @@ namespace test    {
           ASSERT (muti != mut2);
           ASSERT (mut2 != muti);
           
-          Mutation umu (nullD.o_Fun);
+          Mutation umu (oFun_empty);    // empty operation function
           ASSERT (mut1 != umu);
           
-          Mutation omu (nullD.u_Fun);
-          ASSERT (omu != umu);
-          ASSERT (omu != muti);
+          Mutation mut_u0 (uFun_empty); // empty undo function
+          ASSERT (mut_u0 != umu);
+          ASSERT (mut_u0 != muti);
           
-          omu = Mutation(data1.u_Fun);
-          ASSERT (omu != muti);
+          Mutation mut_u1 (uFun_1); 
+          ASSERT (mut_u0 != mut_u1);    // function signatures differing
         }
       
       
@@ -185,19 +182,19 @@ namespace test    {
           ASSERT (abuff1 != abuff2);
           abuff2.bindArguments(newArgs);
           ASSERT (abuff1 == abuff2);
-          UndoMutation umu1 (abuff1.tie (data1.u_Fun, data1.c_Fun));
-          ASSERT (abuff1 == abuff2);                                 // not detected, as the new memento holder isn't valid yet
+          UndoMutation umu1 (abuff1.tie (undo_1, capt_1));
+          ASSERT (abuff1 == abuff2);                         // not detected, as the new memento holder isn't valid yet
           
-          UndoMutation umu2 (abuff1.tie (data1.u_Fun, data2.c_Fun)); // note: using different capture function!
+          UndoMutation umu2 (abuff1.tie (undo_1, capt_2)); // note: using different capture function!
           ASSERT (abuff1 == abuff2);
           
           umu1.captureState(a1);
           umu2.captureState(a1);
           ASSERT (abuff1 != abuff2); // and now the different state (due to the differing capture function) is detected
           
-          umu2 = UndoMutation(abuff1.tie (data1.u_Fun, data1.c_Fun)); // re-bind, now using the "right" capture function
+          UndoMutation umu3 (abuff1.tie (undo_1, capt_1)); // now using the "right" capture function
           ASSERT (abuff1 != abuff2);
-          umu2.captureState(a1);    
+          umu3.captureState(a1);    
           ASSERT (abuff1 == abuff2); // same functions, same memento state
         }
       
@@ -205,10 +202,18 @@ namespace test    {
       void
       verifyMementoEquality()
         {
-          MemHolder m11 (data1.u_Fun, data1.c_Fun);
-          MemHolder m12 (data1.u_Fun, data2.c_Fun);
-          MemHolder m21 (data2.u_Fun, nullD.c_Fun); // note: unbound capture function
-          MemHolder m22 (data2.u_Fun, data2.c_Fun);
+          Fun_u uFun_1 (undo_1);
+          Fun_u uFun_2 (undo_2);
+          Fun_c cFun_1 (capt_1);
+          Fun_c cFun_2 (capt_2);
+          Fun_c cFun_empty;
+          
+          Fun_c empty_c;
+          
+          MemHolder m11 (uFun_1, cFun_1);
+          MemHolder m12 (uFun_1, cFun_2);
+          MemHolder m21 (uFun_2, cFun_empty);   // note: unbound capture function
+          MemHolder m22 (uFun_2, cFun_2);
           
           ASSERT ( (m11 == m11));
           ASSERT (!(m11 != m11));
@@ -255,14 +260,14 @@ namespace test    {
       verifyCommandEquality()
         {
           CommandDef (COMMAND1)
-            .operation (data1.o_Fun)
-            .captureUndo (data1.c_Fun)
-            .undoOperation (data1.u_Fun)
+            .operation (oper_1)
+            .captureUndo (capt_1)
+            .undoOperation (undo_1)
             ;
           CommandDef (COMMAND2)
-            .operation (data2.o_Fun)
-            .captureUndo (data2.c_Fun)
-            .undoOperation (data2.u_Fun)
+            .operation (oper_2)
+            .captureUndo (capt_2)
+            .undoOperation (undo_2)
             ;
           
           Command c1 = Command::get(COMMAND1); 

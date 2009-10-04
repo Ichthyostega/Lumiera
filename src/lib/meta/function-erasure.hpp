@@ -60,7 +60,6 @@
 #include "lib/functor-util.hpp"
 
 #include <tr1/functional>
-#include <boost/operators.hpp>
 
 
 namespace lumiera {
@@ -69,33 +68,6 @@ namespace typelist{
   using std::tr1::function;
   using util::unConst;
   
-  namespace { // comparison access helper functions
-    
-    typedef void* RawFunc; ///////////////////TODO
-    
-    template<class FH>
-    RawFunc 
-    accessRaw (FH funHolder)
-    {
-      ////////////////TODO
-    };
-    
-    template<class FH>
-    struct IsEqualTo
-      {
-        RawFunc ofunc_;
-        
-        IsEqualTo (FH o)
-          : ofunc_(o)
-          { }
-        
-        bool
-        operator() (RawFunc func)
-          {
-            return util::rawComparison(func, ofunc_);
-          }
-      };
-  }
   
   
   /******************************************************
@@ -115,8 +87,7 @@ namespace typelist{
    */
   template<class FH>
   struct FunErasure
-    : boost::equality_comparable< FunErasure
-    , FH >
+    : FH
     {
       template<typename FUN>
       FunErasure (FUN const& functor)
@@ -124,9 +95,9 @@ namespace typelist{
         { }
       
       friend bool
-      operator== (FunErasure const& fe1, FunErasure const& fe2)
+      operator!= (FunErasure const& fer1, FunErasure const& fer2)
         {
-          return fe1.query (IsEqualTo (fe2));
+          return !(fer1==fer2);  // use equality defined by FH       
         }
     };
   
@@ -168,6 +139,14 @@ namespace typelist{
         {
           return get<function<SIG> >();
         }
+      
+      
+      friend bool
+      operator== (StoreFunction const& o1,
+                  StoreFunction const& o2)
+        {
+          return util::rawComparison (o1.asBase(),o2.asBase());
+        }
     };
   
   
@@ -198,6 +177,14 @@ namespace typelist{
           SIG *fun = get<SIG*>();
           REQUIRE (fun);
           return *fun;
+        }
+      
+      
+      friend bool
+      operator== (StoreFunPtr const& o1,
+                  StoreFunPtr const& o2)
+        {
+          return o1.asBase() == o2.asBase();
         }
     };
   
@@ -231,18 +218,18 @@ namespace typelist{
           return *reinterpret_cast<SIG*> (funP_);
         }
       
-      template<class FUN>
-      bool
-      query (FUN predicate)
-        {
-          return predicate (funP_);
-        }
-      
       
       bool
       isValid()  const
         {
           return funP_;
+        }
+      
+      friend bool
+      operator== (StoreUncheckedFunPtr const& o1,
+                  StoreUncheckedFunPtr const& o2)
+        {
+          return unConst(o1).funP_ == unConst(o2).funP_;
         }
     };
   

@@ -95,7 +95,7 @@ namespace test {
           check_Comparisons (Efun(pAplFunc), Efun(getterFunc));
           check_Comparisons (Efun(membFunc), Efun(getterFunc));
           
-          check_Comparisons (Efp(testFunc),   Efun(returnIt));
+          check_Comparisons (Efp(testFunc),   Efp(returnIt));
           check_Comparisons (Evoid(testFunc), Evoid(returnIt));
           
           detect_unboundFunctor(Efun(testFunc), Efun(getterFunc), Efun(membFunc));
@@ -224,6 +224,9 @@ namespace test {
       void
       check_Comparisons (HOL h1, HOL h2)
         {
+          ASSERT (h1 == h1); ASSERT (!(h1 != h1));
+          ASSERT (h2 == h2); ASSERT (!(h2 != h2));
+          
           ASSERT (h1 != h2);      
           ASSERT (h2 != h1);
           
