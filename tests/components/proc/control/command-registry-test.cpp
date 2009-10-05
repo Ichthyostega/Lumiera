@@ -64,10 +64,10 @@ namespace test    {
    */
   class CommandRegistry_test : public Test
     {
-
+      
       uint cnt_defs;
       uint cnt_inst;
-
+      
       
       virtual void
       run (Arg) 
@@ -101,6 +101,10 @@ namespace test    {
         }
       
       
+      
+      /** @test verify the index operation.
+       *        Add, search, remove, store copy.
+       */
       void
       checkRegistration (CommandRegistry& registry)
         {
@@ -161,6 +165,12 @@ namespace test    {
         }
       
       
+      
+      /** @test verify the allocation/de-allocation handling as
+       *        embedded into the CommandRegistry operation.
+       *        Simulates on low level what normally happens
+       *        during command lifecycle.
+       */
       void
       checkAllocation (CommandRegistry& registry)
         {
@@ -186,16 +196,18 @@ namespace test    {
           
           ASSERT (pImpl);
           ASSERT (pImpl->isValid());
+          ASSERT (!pImpl->canExec());
           ASSERT (1 == pImpl.use_count());   // no magic involved, we hold the only instance
           
           PImpl clone = registry.createCloneImpl(*pImpl);
           ASSERT (clone->isValid());
+          ASSERT (!clone->canExec());
           ASSERT (1 == clone.use_count());
           ASSERT (1 == pImpl.use_count());
           ASSERT (2+cnt_inst == registry.instance_count());
           
           ASSERT (!isSameObject (*pImpl, *clone));
-//          ASSERT (*pImpl == *clone);             ///////////////////////////////////////TODO: comparison on CommandImpl ??
+          ASSERT (*pImpl == *clone);
           
           ASSERT (!pImpl->canExec());
           typedef Types<int> ArgType;
@@ -203,13 +215,13 @@ namespace test    {
           pImpl->setArguments(arg);
           ASSERT (pImpl->canExec());
           
-//          ASSERT (*pImpl != *clone);  // this proves the clone has indeed a separate identity
-          ASSERT (!clone->canExec());
+          ASSERT (!clone->canExec()); // this proves the clone has indeed a separate identity
+          ASSERT (*pImpl != *clone);
           
           // discard the first clone and overwrite with a new one
           clone = registry.createCloneImpl(*pImpl);
           ASSERT (2+cnt_inst == registry.instance_count());
-//          ASSERT (*pImpl == *clone);
+          ASSERT (*pImpl == *clone);
           ASSERT (clone->canExec());
           
           clone.reset();
@@ -223,6 +235,6 @@ namespace test    {
   
   /** Register this test class... */
   LAUNCHER (CommandRegistry_test, "function controller");
-      
-      
+  
+  
 }} // namespace control::test

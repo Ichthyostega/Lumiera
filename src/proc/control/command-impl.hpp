@@ -178,7 +178,7 @@ namespace control {
       canExec()  const    ///< state check: sufficiently defined to be invoked 
         {
           return isValid()
-              && *pClo_;
+              && pClo_->isValid();
         }
       
       bool
@@ -188,17 +188,23 @@ namespace control {
         }
       
       
-  
+      
       friend bool
       operator== (CommandImpl const& ci1, CommandImpl const& ci2)
       {
         return (ci1.do_ == ci2.do_)
-            && (ci1.undo_ == ci2.undo_)
+//          && (ci1.undo_ == ci2.undo_)                     // causes failure regularly, due to the missing equality on boost::function. See Ticket #294
             && (ci1.defaultPatt_ == ci2.defaultPatt_)
             && (ci1.canExec() == ci2.canExec())
             && (ci1.canUndo() == ci2.canUndo())
             && (ci1.pClo_->equals(*ci2.pClo_))
              ;
+      }
+      
+      friend bool
+      operator!= (CommandImpl const& ci1, CommandImpl const& ci2)
+      {
+        return !(ci1==ci2);
       }
     };
   

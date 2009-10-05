@@ -60,7 +60,7 @@ return: 0
 END
 
 
-PLANNED "Command index and allocation" CommandRegistry_test <<END
+TEST "Command index and allocation" CommandRegistry_test <<END
 return: 0
 END
 
