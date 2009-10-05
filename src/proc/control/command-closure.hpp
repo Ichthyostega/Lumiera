@@ -74,6 +74,7 @@
 #include "lib/meta/function-closure.hpp"
 #include "lib/meta/function-erasure.hpp"
 #include "lib/meta/tuple.hpp"
+#include "lib/meta/maybe-compare.hpp"
 #include "lib/format.hpp"
 #include "lib/util.hpp"
 #include "proc/control/argument-erasure.hpp"
@@ -98,6 +99,7 @@ namespace control {
   using lumiera::typelist::StoreFunction;
   using lumiera::typelist::NullType;
   
+  using lumiera::typelist::equals_safeInvoke;
   using lib::TypedAllocationManager;
   using util::unConst;
   using std::tr1::function;
@@ -130,6 +132,7 @@ namespace control {
       virtual operator string() const                    =0;
       virtual bool isValid ()   const                    =0;      ///< does this closure hold a valid argument tuple?
       virtual bool isCaptured () const                   =0;      ///< does this closure hold captured UNDO state?
+      virtual bool equals (CmdClosure const&)  const     =0;      ///< is equivalent to the given other closure?
       virtual void bindArguments (Arguments&)            =0;      ///< store a set of parameter values within this closure
       virtual void invoke (CmdFunctor const&)            =0;      ///< invoke functor using the stored parameter values
       virtual PClo createClone (TypedAllocationManager&) =0;      ///< create clone allocation without disclosing concrete type
@@ -172,7 +175,7 @@ namespace control {
       friend bool
       compare (ParamAccessor const& p1, ParamAccessor const& p2)
         {
-          return (p1.element() == p2.element())
+          return equals_safeInvoke (p1.element(), p2.element())
               && compare ( static_cast<BASE>(p1)
                          , static_cast<BASE>(p2) );
         }
@@ -272,10 +275,17 @@ namespace control {
       bool isValid ()   const { return true; }
       bool isCaptured() const { return false; }
       
-      
       /// Supporting equality comparisons...
       friend bool operator== (Closure const& c1, Closure const& c2)  { return compare (c1.params_, c2.params_); }
       friend bool operator!= (Closure const& c1, Closure const& c2)  { return ! (c1 == c2); }
+      
+      bool
+      equals (CmdClosure const& other)  const
+        {
+          const Closure* toCompare = dynamic_cast<const Closure*> (&other);
+          return (toCompare)
+              && (*this == *toCompare);
+        }
     };
   
   

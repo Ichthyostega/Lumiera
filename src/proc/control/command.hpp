@@ -177,6 +177,7 @@ namespace control {
       
     private:
       void setArguments (Arguments&);
+      static bool equivalentImpl (Command const&, Command const&);
     };
   
   
@@ -205,7 +206,9 @@ namespace control {
   operator== (Command const& c1, Command const& c2)
   {
     return (!c1 && !c2)
-        || ( c1 &&  c2  && (&c1.impl() == &c2.impl())); 
+        || ( c1 &&  c2  && ( &c1.impl() == &c2.impl()
+                           || Command::equivalentImpl (c1,c2)
+                           )); 
   }
   
   inline bool

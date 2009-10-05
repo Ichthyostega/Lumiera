@@ -32,12 +32,10 @@
 #include <boost/utility/enable_if.hpp>
 #include <string>
 
-  
+
 namespace lumiera {
 namespace typelist {
-
-  using boost::enable_if;
-  using boost::is_arithmetic;
+  
   
   
   /** Trait template for detecting if a type can be converted to string.
@@ -66,7 +64,7 @@ namespace typelist {
   template<typename X>
   struct can_lexical2string
     {
-      enum { value = is_arithmetic<X>::value
+      enum { value = boost::is_arithmetic<X>::value
            };
     };
   

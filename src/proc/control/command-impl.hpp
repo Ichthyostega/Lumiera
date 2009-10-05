@@ -188,10 +188,18 @@ namespace control {
         }
       
       
-      ////////////////////////////////////////////////////////////////////////////////////TODO comparisons
-      
-    private:
-      
+  
+      friend bool
+      operator== (CommandImpl const& ci1, CommandImpl const& ci2)
+      {
+        return (ci1.do_ == ci2.do_)
+            && (ci1.undo_ == ci2.undo_)
+            && (ci1.defaultPatt_ == ci2.defaultPatt_)
+            && (ci1.canExec() == ci2.canExec())
+            && (ci1.canUndo() == ci2.canUndo())
+            && (ci1.pClo_->equals(*ci2.pClo_))
+             ;
+      }
     };
   
   

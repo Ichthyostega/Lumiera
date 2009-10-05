@@ -238,6 +238,14 @@ namespace control {
           return memento_->getState();
         }
       
+      bool
+      equals (CmdClosure const& other)  const
+        {
+          const ArgumentHolder* toCompare = dynamic_cast<const ArgumentHolder*> (&other);
+          return (toCompare)
+              && (*this == *toCompare);
+        }
+      
       /// Supporting equality comparisons...
       friend bool
       operator== (ArgumentHolder const& a1, ArgumentHolder const& a2)

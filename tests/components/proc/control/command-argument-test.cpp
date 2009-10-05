@@ -77,24 +77,46 @@ namespace test    {
         Tracker (TY init = TY())     : element_(init)         { ++instanceCnt; }
         Tracker (Tracker const& otr) : element_(otr.element_) { ++instanceCnt; }
        ~Tracker()                                             { --instanceCnt; }
-       
-       TY&
-       operator* ()
-         {
-           return element_;
-         }
-       
-       friend ostream&
-       operator<< (ostream& out, const Tracker& tra)
-         {
-           return out << tra.element_;
-         }
-       
-       operator string()  const { return element_; }
+        
+        TY&
+        operator* ()
+          {
+            return element_;
+          }
+        
+        operator string()  const { return element_; }
+        
+        friend ostream&
+        operator<< (ostream& out, const Tracker& tra)
+          {
+            return out << tra.element_;
+          }
+        
+        friend bool
+        operator== (Tracker const& tra1, Tracker const& tra2)
+          {
+            return tra1.element_ == tra2.element_;
+          }
       };
     
     template<typename TY>
     int Tracker<TY>::instanceCnt (0);
+    
+    
+    /** Dummy custom memento datatype
+     *  @note memento needs to be equality comparable
+     */
+    struct Sint5
+      {
+        int i[5];
+        
+        friend bool
+        operator== (Sint5 const& i1, Sint5 const& i2)
+          {
+            return i1.i == i2.i;
+          }
+      };
+      
     
     
     /* === functions to implement test-"operation" & UNDO === */
@@ -184,7 +206,6 @@ namespace test    {
       
       typedef Tracker<Time> TTime;
       typedef Tracker<string> Tstr;
-      typedef struct{ int i[5]; } Sint5;
       
       
       

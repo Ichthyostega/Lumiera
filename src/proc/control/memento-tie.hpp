@@ -41,6 +41,7 @@
 #define CONTROL_MEMENTO_TIE_H
 
 #include "lib/bool-checkable.hpp"
+#include "lib/meta/maybe-compare.hpp"
 #include "lib/meta/function-closure.hpp"
 #include "proc/control/command-signature.hpp"
 #include "lib/functor-util.hpp"
@@ -57,6 +58,7 @@ namespace control {
   using boost::equality_comparable;
   using lumiera::typelist::func::bindLast;
   using lumiera::typelist::func::chained;
+  using lumiera::typelist::equals_safeInvoke;
     
   LUMIERA_ERROR_DECLARE (MISSING_MEMENTO);  ///<  Undo functor not yet usable, because no undo state has been captured
   
@@ -202,7 +204,7 @@ namespace control {
                  )
               && (m1.isCaptured_  == m2.isCaptured_)  // either both not captured or identical state
               && (!m1.isCaptured_
-                  || (m1.memento_ == m2.memento_));
+                  || equals_safeInvoke (m1.memento_, m2.memento_));
         }
     };
   

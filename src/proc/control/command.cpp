@@ -239,6 +239,14 @@ namespace control {
   }
   
   
+  bool
+  Command::equivalentImpl (Command const& c1, Command const& c2)
+  {
+    return c1.impl() == c2.impl();
+  }
+  
+  
+  
   
   /** diagnostics: shows the commandID, if any,
    *  and the degree of definition of this command */
