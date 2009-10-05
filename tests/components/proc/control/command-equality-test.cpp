@@ -67,8 +67,8 @@ namespace test    {
     void oper_1 (char par)             { check_ += MARK_1 + par; }
     void oper_2 (char par)             { check_ += MARK_2 + par; }
     
-    string capt_1 (char par)           { return MARK_1 + "|"+par+"|"; }
-    string capt_2 (char par)           { return MARK_2 + "|"+par+"|"; }
+    string capt_1 (char par)           { return check_ + MARK_1 + "|"+par+"|"; }
+    string capt_2 (char par)           { return check_ + MARK_2 + "|"+par+"|"; }
     
     void undo_1 (char par, string mem) { check_ = mem + MARK_1 + par + "|";}
     void undo_2 (char par, string mem) { check_ = mem + MARK_2 + par + "|";}
@@ -97,10 +97,14 @@ namespace test    {
    *       - hold equivalent undo state (memento)
    * To conduct this test, we set up two sets of functions, and then build both complete
    * command objects and command implementation facilities based on them.
-   *   
-   * The hidden problem with those comparisons is the equivalence of function objects,
-   * which is required by TR1, but refused to implement by libboost.
-   *       
+   * 
+   * @note The hidden problem with those comparisons is the equivalence of function objects,
+   *       which is required by TR1, but refused to implement by lib boost. We use a low level
+   *       hack, based on internals of the boost function implementation, but this solution
+   *       fails to detect equivalent functions under some circumstances (e.g. when there is
+   *       binding involved, and / or the binders have been cloned). Bottom line: \c == is
+   *       reliable, \c != might be wrong.
+   * 
    * @see  control::Command
    * @see  control::CmdClosure
    * @see  control::Mutation
@@ -183,19 +187,22 @@ namespace test    {
           abuff2.bindArguments(newArgs);
           ASSERT (abuff1 == abuff2);
           UndoMutation umu1 (abuff1.tie (undo_1, capt_1));
-          ASSERT (abuff1 == abuff2);                         // not detected, as the new memento holder isn't valid yet
-          
-          UndoMutation umu2 (abuff1.tie (undo_1, capt_2)); // note: using different capture function!
-          ASSERT (abuff1 == abuff2);
+          ASSERT (abuff1 != abuff2);                       // abuff2 isn't tied yet, i.e. has no undo/capture function
+          UndoMutation umu2 (abuff2.tie (undo_1, capt_1));
+          ASSERT (abuff1 == abuff2);                       // same capture function, no memento state!
           
           umu1.captureState(a1);
-          umu2.captureState(a1);
-          ASSERT (abuff1 != abuff2); // and now the different state (due to the differing capture function) is detected
-          
-          UndoMutation umu3 (abuff1.tie (undo_1, capt_1)); // now using the "right" capture function
           ASSERT (abuff1 != abuff2);
-          umu3.captureState(a1);    
+          umu2.captureState(a1);
           ASSERT (abuff1 == abuff2); // same functions, same memento state
+          
+          check_ += "fake";          // manipulate the "state" to be captured
+          umu2.captureState(a1);     // capture again...
+          ASSERT (abuff1 != abuff2); // captured memento differs!
+          
+          UndoMutation umu3 (abuff2.tie (undo_1, capt_2));
+          umu3.captureState(a1);
+          ASSERT (abuff1 != abuff2); // differing functions detected
         }
       
       
@@ -215,7 +222,10 @@ namespace test    {
           MemHolder m21 (uFun_2, cFun_empty);   // note: unbound capture function
           MemHolder m22 (uFun_2, cFun_2);
           
-          ASSERT ( (m11 == m11));
+          ASSERT (m11 == m11);
+          ASSERT (m12 == m12);
+          ASSERT (m21 == m21);
+          ASSERT (m22 == m22);
           ASSERT (!(m11 != m11));
           
           ASSERT (m11 != m12);
@@ -230,7 +240,7 @@ namespace test    {
           ASSERT (m22 != m11);
           ASSERT (m22 != m12);
           ASSERT (m22 != m21);
-         
+          
           MemHolder m22x (m22); // clone copy
           ASSERT (!m22x);
           ASSERT (m22 == m22x); // same functions, no state --> equal
@@ -244,15 +254,8 @@ namespace test    {
           
           // document shortcomings on UndoMutation comparisons
           UndoMutation umu11 (m11);
-          UndoMutation umu12 (m12);
-          UndoMutation umu21 (m21);
-          UndoMutation umu22 (m22);
-          ASSERT (m11 == m12);       // note: differing capture function not detected
-          ASSERT (m11 != m21);
-          ASSERT (m11 != m22);
-          ASSERT (m12 != m21);
-          ASSERT (m12 != m22);
-          ASSERT (m21 == m22);       // note
+          UndoMutation umu12 (m11);    // note: due to cloning the embedded functor,
+          ASSERT (umu11 != umu12);     //       our hacked-in comparison operator fails
         }
       
       
@@ -270,8 +273,8 @@ namespace test    {
             .undoOperation (undo_2)
             ;
           
-          Command c1 = Command::get(COMMAND1); 
-          Command c2 = Command::get(COMMAND2); 
+          Command c1 = Command::get(COMMAND1);
+          Command c2 = Command::get(COMMAND2);
           ASSERT (c1 == c1);
           ASSERT (c1 != c2);
           ASSERT (c2 != c1);
@@ -282,8 +285,8 @@ namespace test    {
           ASSERT (!isSameObject (c1, c2));
           
           // verify equality matches behaviour
-          string protocol1 = execCommand(c1); 
-          string protocolX = execCommand(cx); 
+          string protocol1 = execCommand(c1);
+          string protocolX = execCommand(cx);
           string protocol2 = execCommand(c2);
           
           ASSERT (protocol1 == protocolX);
