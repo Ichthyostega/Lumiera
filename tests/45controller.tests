@@ -3,7 +3,7 @@ TESTING "Component Test Suite: Proc-Layer controller" ./test-components --group=
 
 
 
-PLANNED "CommandBasic_test" CommandBasic_test <<END
+TEST "CommandBasic_test" CommandBasic_test <<END
 END
 
 
@@ -55,7 +55,7 @@ return: 0
 END
 
 
-PLANNED "Equality comparisons" CommandEquality_test <<END
+TEST "Equality comparisons" CommandEquality_test <<END
 return: 0
 END
 

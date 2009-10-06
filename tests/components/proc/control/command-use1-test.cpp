@@ -23,15 +23,6 @@
 
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
-//#include "proc/asset/media.hpp"
-//#include "proc/mobject/session.hpp"
-//#include "proc/mobject/session/edl.hpp"
-//#include "proc/mobject/session/testclip.hpp"
-//#include "proc/mobject/test-dummy-mobject.hpp"
-//#include "lib/p.hpp"
-//#include "proc/mobject/placement.hpp"
-//#include "proc/mobject/placement-index.hpp"
-//#include "proc/mobject/explicitplacement.hpp"
 #include "proc/control/command-invocation.hpp"
 #include "proc/control/command-def.hpp"
 //#include "lib/lumitime.hpp"
@@ -61,12 +52,7 @@ namespace test    {
   using util::isSameObject;
   using util::contains;
   using util::str;
-
-//  using session::test::TestClip;
-//  using lumiera::P;
   
-  
-  //using lumiera::typelist::BuildTupleAccessor;
   
   
   
@@ -161,8 +147,8 @@ namespace test    {
           ASSERT ( 1234 == command1::check_);
           
           // another shortcut, with static type check:
-          invoke (command1::operate) (5678);
-          ASSERT ( 1234+5678 == command1::check_);
+//        invoke (command1::operate) (5678);                                  //////////////////TICKET #291  : unimplemented for now (9/09)
+//        ASSERT ( 1234+5678 == command1::check_);
           
           com.undo();
           ASSERT ( 0 == command1::check_);

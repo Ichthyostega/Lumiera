@@ -123,13 +123,23 @@ namespace control {
       typedef unordered_map<Symbol, Command, hash<Symbol> > CmdIndex;
       typedef map< const Command*, Symbol, order_by_impl> ReverseIndex;
       
+      TypedAllocationManager allocator_;
       CmdIndex index_;
       ReverseIndex ridx_;
-      TypedAllocationManager allocator_;
       
       
     public:
       static lib::Singleton<CommandRegistry> instance;
+      
+      
+     ~CommandRegistry()
+        {
+          INFO (command, "Shutting down Command system...");
+                                                                //////////////////////TICKET #295 : possibly remotely trigger Command mass suicide here....
+          ridx_.clear();
+          index_.clear();
+        }
+      
       
       
       /** register a command (Frontend) under the given ID

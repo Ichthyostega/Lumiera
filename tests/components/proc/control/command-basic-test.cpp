@@ -22,16 +22,13 @@
 
 
 #include "lib/test/run.hpp"
-#include "lib/test/test-helper.hpp"
 #include "proc/control/command-def.hpp"
 #include "lib/lumitime.hpp"
 #include "lib/p.hpp"
-//#include "lib/util.hpp"
 
 #include <cstdlib>
 
 using lumiera::Time;
-//using util::contains;
 using std::rand;
 
 
@@ -45,7 +42,7 @@ namespace test    {
   
   
   namespace  { // functions to be invoked through the command system
-  
+    
     void
     operate (P<Time> dummyObj, int randVal)
     {
@@ -73,6 +70,12 @@ namespace test    {
    *       Shows how to define a simple command inline and how to
    *       trigger execution and UNDO. Verifies the command action
    *       takes place and is reverted again by the UNDO function.
+   *       
+   * This is a simplified demonstration. Usually, commands would be defined
+   * in bulk and without specifying parameters. Later, typically client code
+   * accesses a handle by ID, binds to the concrete argument and dispatches
+   * the invocation. Note in this example that by using a smart-ptr as
+   * argument allows accessing an object by reference and late binding.
    * 
    * @see  control::Command
    * @see  control::CommandDef
@@ -111,6 +114,6 @@ namespace test    {
   
   /** Register this test class... */
   LAUNCHER (CommandBasic_test, "unit controller");
-      
-      
+  
+  
 }} // namespace control::test

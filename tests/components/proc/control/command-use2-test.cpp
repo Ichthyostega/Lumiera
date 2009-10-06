@@ -23,15 +23,6 @@
 
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
-//#include "proc/asset/media.hpp"
-//#include "proc/mobject/session.hpp"
-//#include "proc/mobject/session/edl.hpp"
-//#include "proc/mobject/session/testclip.hpp"
-//#include "proc/mobject/test-dummy-mobject.hpp"
-//#include "lib/p.hpp"
-//#include "proc/mobject/placement.hpp"
-//#include "proc/mobject/placement-index.hpp"
-//#include "proc/mobject/explicitplacement.hpp"
 #include "proc/control/command.hpp"
 #include "proc/control/command-def.hpp"
 #include "proc/control/handling-pattern.hpp"
@@ -68,12 +59,8 @@ namespace test    {
   using boost::lexical_cast;
   using util::contains;
   using boost::ref;
-
-//  using session::test::TestClip;
-//  using lumiera::P;
   
   
-  //using lumiera::typelist::BuildTupleAccessor;
   using lumiera::error::LUMIERA_ERROR_EXTERNAL;
   
   

@@ -265,7 +265,8 @@ namespace lib {
       Slot<XX>
       allocateSlot ()
         {
-          TODO ("redirect to the corresponding pool allocator");
+          ////////////////////////////////////////////////TICKET #231 :redirect to the corresponding pool allocator
+          TRACE (memory, "allocate %s", util::tyStr<XX>().c_str());
           void* space = new char[sizeof(XX)];
           allocCnt_.inc<XX>();
           return Slot<XX> (this, space);
@@ -275,7 +276,8 @@ namespace lib {
       void
       releaseSlot (void* entry)
         {
-          TODO ("redirect to the corresponding pool allocator");
+          ////////////////////////////////////////////////TICKET #231 :redirect to the corresponding pool allocator
+          TRACE (memory, "release %s", util::tyStr<XX>().c_str());
           typedef char Storage[sizeof(XX)];
           delete[] reinterpret_cast<Storage*> (entry);
           allocCnt_.dec<XX>();

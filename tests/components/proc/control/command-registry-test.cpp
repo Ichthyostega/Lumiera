@@ -119,8 +119,9 @@ namespace test    {
           
           // now create a clone, registered under a different ID
           Command cmd2 = cmd1.storeDef(TEST_CMD2);
-          ASSERT (cmd2 != cmd1);
+          ASSERT (cmd2 == cmd1);
           cmd2.bind(54321);
+          ASSERT (cmd2 != cmd1);
           
           // this created exactly one additional instance allocation:
           ASSERT (1+cnt_inst == registry.instance_count());
