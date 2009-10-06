@@ -141,8 +141,8 @@ namespace control {
         
         
         UndoDefinition (Command& underConstruction, 
-                        OperFunc& commandOperation,
-                        CaptFunc& undoCapOperation)
+                        OperFunc const& commandOperation,
+                        CaptFunc const& undoCapOperation)
           : prototype_(underConstruction)
           , operFunctor_(commandOperation)
           , captFunctor_(undoCapOperation)
@@ -190,9 +190,9 @@ namespace control {
     struct BasicDefinition
       {
         Command& prototype_;
-        function<SIG>& operation_;
+        function<SIG> operation_;
         
-        BasicDefinition(Command& underConstruction, function<SIG>& operation)
+        BasicDefinition(Command& underConstruction, function<SIG> const& operation)
           : prototype_(underConstruction)
           , operation_(operation)
           { }

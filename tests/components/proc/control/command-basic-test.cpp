@@ -23,67 +23,28 @@
 
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
-//#include "proc/asset/media.hpp"
-//#include "proc/mobject/session.hpp"
-//#include "proc/mobject/session/edl.hpp"
-//#include "proc/mobject/session/testclip.hpp"
-//#include "proc/mobject/test-dummy-mobject.hpp"
-#include "lib/p.hpp"
-//#include "proc/mobject/placement.hpp"
-//#include "proc/mobject/placement-index.hpp"
-//#include "proc/mobject/explicitplacement.hpp"
 #include "proc/control/command-def.hpp"
 #include "lib/lumitime.hpp"
+#include "lib/p.hpp"
 //#include "lib/util.hpp"
 
-#include "lib/meta/typelist.hpp"
-#include "lib/meta/typelist-util.hpp"
-#include "lib/meta/generator.hpp"
-
-
-#include <tr1/functional>
-//#include <boost/format.hpp>
-#include <iostream>
 #include <cstdlib>
-#include <string>
 
-using std::tr1::bind;
-//using std::tr1::placeholders::_1;
-//using std::tr1::placeholders::_2;
-using std::tr1::function;
-//using boost::format;
 using lumiera::Time;
 //using util::contains;
-using std::string;
 using std::rand;
-using std::cout;
-using std::endl;
 
 
 namespace control {
 namespace test    {
-
-  using lib::test::showSizeof;
-
-//  using session::test::TestClip;
+  
   using lumiera::P;
   
   
-  //using lumiera::typelist::BuildTupleAccessor;
   
   
   
-  
-  
-  
-  /////////////////////////////
-  /////////////////////////////
-  
-  //////////////////////////// start of the actual Test....
-  
-  
-  
-  namespace  {
+  namespace  { // functions to be invoked through the command system
   
     void
     operate (P<Time> dummyObj, int randVal)
@@ -109,13 +70,10 @@ namespace test    {
   
   /***************************************************************************
    * @test basic usage of the Proc-Layer command dispatch system.
-   *       Shows how to define a simple command inline and another
-   *       simple command as dedicated class. Finally triggers
-   *       execution of both commands and verifies the command
-   *       action has been invoked.
-   *       
-   * @todo currently rather a scrapbook for trying out first ideas on the command system !!!!!!!!!!!!!!!
-   *       
+   *       Shows how to define a simple command inline and how to
+   *       trigger execution and UNDO. Verifies the command action
+   *       takes place and is reverted again by the UNDO function.
+   * 
    * @see  control::Command
    * @see  control::CommandDef
    * @see  mobject::ProcDispatcher
@@ -138,7 +96,6 @@ namespace test    {
           
           
           Command ourCmd = Command::get("test.command1");
-          ////////////////////////////////////////////////////////////////////TODO: isn't this unlogical? Do I want a *definition* or an *instance* ??
           
           // invoke the command
           ASSERT (*obj == Time(5));
