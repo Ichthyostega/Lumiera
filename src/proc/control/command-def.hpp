@@ -244,6 +244,9 @@ namespace control {
           TRACE (command_dbg, "starting CommandDef('%s')...", cmdID.c() );
         }
       
+     ~CommandDef();
+      
+      
       template<typename SIG>
       stage::BasicDefinition<SIG>
       operation (SIG& operation_to_define)

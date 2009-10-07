@@ -202,6 +202,36 @@ namespace control {
   
   
   
+  namespace {
+    inline bool
+    was_activated (Command& com)
+    {
+      typedef lib::Handle<CommandImpl>& _Handle;
+      _Handle h = static_cast<_Handle> (com);
+      return h.isValid();
+    }
+    
+    inline Command
+    registered_for (Symbol id)
+    {
+      return CommandRegistry::instance().queryIndex (id);
+    }
+  }
+  
+  
+  /** when starting a CommandDef, we immediately place a yet empty
+   *  Command object into the index, just assuming it will be defined
+   *  properly and consequently get valid at some point. But in case
+   *  this doesn't happen (e.g. because the definition is aborted),
+   *  we need to clean up this empty pre-registration...
+   */
+  CommandDef::~CommandDef()
+  {
+    if (!was_activated (prototype_))
+      CommandRegistry::instance().remove (this->id_);
+  }
+  
+  
   /** is this a valid command definition? especially..
    *  - the prototype command is initialised properly
    *  - there is a command definition registered for our command ID
@@ -211,13 +241,19 @@ namespace control {
   bool
   CommandDef::isValid()  const
   {
-    if (prototype_)
-      {
-        Command cmd = CommandRegistry::instance().queryIndex (this->id_);
-        return cmd.isValid()
-            && (prototype_ == cmd);
-      }
-    return false;
+    return (was_activated (prototype_))
+        && (prototype_ == registered_for (this->id_))
+         ;
+  }
+  
+  
+  
+  /** a \em command gets valid when the arguments are bound */
+  bool
+  Command::isValid()  const
+  {
+    return _Handle::isValid()
+        && impl().canExec();
   }
   
   
@@ -225,8 +261,7 @@ namespace control {
   bool
   Command::canExec()  const
   {
-    return isValid()
-        && impl().canExec();
+    return isValid();
   }
   
   

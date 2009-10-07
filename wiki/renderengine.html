@@ -995,12 +995,12 @@ While generally there is //no limitation// on the number and type of parameters,
 Usually, parameters should be passed //by value// &amp;mdash; with the exception of target object(s), which are typically bound as MObjectRef, causing them to be resolved at commad execution time (late binding).
 </pre>
 </div>
-<div title="CommandHandling" modifier="Ichthyostega" modified="200909291418" created="200906072048" tags="SessionLogic spec draft decision design img" changecount="27">
+<div title="CommandHandling" modifier="Ichthyostega" modified="200910072005" created="200906072048" tags="SessionLogic spec draft decision design img" changecount="30">
 <pre>Organising any ''mutating'' operations executable by the user (via GUI) by means of the [[command pattern|http://en.wikipedia.org/wiki/Command_pattern]] can be considered //state of the art//&amp;nbsp; today. First of all, it allows to discern the specific implementation operations to be called on one or several objects within the HighLevelModel from the operation requested by the user, the latter being rather a concept. A command can be labeled clearly, executed under controlled circumstances, allowing transactional behaviour.
 
 
 !Defining commands
-[&gt;img[Structure of Commands|uml/fig134021.png]] Basically, a command could contain arbitrary operations, but we'll assume that it causes a well defined mutation within the HighLevelModel, which can be ''undone''. Thus, when defining a command, we need to specify not only a function doing the mutation, but also another function which might be called later to reverse the effect of the action. Besides, the action operates on a number of ''target'' objects and additionally may require a set of ''parameter'' values. These are to be stored explicitly within the command object, thus creating a ''closure'' &amp;mdash; the operation //must not//&amp;nbsp; rely on other hidden parameters (maybe with the exception of very generic singleton system services?).
+[&gt;img[Structure of Commands|uml/fig134021.png]] Basically, a command could contain arbitrary operations, but we'll assume that it causes a well defined mutation within the HighLevelModel, which can be ''undone''. Thus, when defining (&amp;rarr;[[syntax|CommandDefinition]]) a command, we need to specify not only a function doing the mutation, but also another function which might be called later to reverse the effect of the action. Besides, the action operates on a number of ''target'' objects and additionally may require a set of ''parameter'' values. These are to be stored explicitly within the command object, thus creating a ''closure'' &amp;mdash; the operation //must not//&amp;nbsp; rely on other hidden parameters (maybe with the exception of very generic singleton system services?).
 
 Theoretically, defining the &quot;undo&quot; operation might utilise two different approaches:
 * specifying an //inverse operation,// known to cancel out the effect of the command
@@ -1014,6 +1014,7 @@ While the usual »Memento« implementation might automatically capture the whole
 A command may be [[defined|CommandDefinition]] completely from scratch, or it might just serve as a CommandPrototype with specific targets and parameters. The command could then be serialised and later be recovered and re-bound with the parameters, but usually it will be handed over to the ProcDispatcher, pending execution. When ''invoking'', the handling sequence is to [[log the command|SessionStorage]], then call the ''undo capture function'', followed from calling the actual ''operation function''. After success, the logging and [[undo registration|UndoManager]] is completed. In any case, finally the ''result signal'' (a functor previously stored within the command) is emitted.
 
 By design, commands are single-serving value objects; executing an operation repeatedly requires creating a collection of command objects, one for each invocation. While nothing prevents you from invoking the command operation functor several times, each invocation will overwrite the undo state captrued by the previous invocation. Thus, each command instance should bes seen as the promise (or later the trace) of a single operation execution. In a similar vein, the undo capturing should be defined as to be self sufficient, so that invoking just the undo functor of a single command performes any necessary steps to restore the situation found before invoking the corresponding mutation functor &amp;mdash; of course only //with respect to the topic covered by this command.// So, while commands provide a lot of flexibility and allow to do a multitude of things, certainly there is an intended CommandLifecycle.
+&amp;rarr; command [[definition|CommandDefinition]] and [[-lifecycle|CommandLifecycle]]
 &amp;rarr; more on possible [[command usage scenarios|CommandUsage]]
 &amp;rarr; more details regarding [[command implementation|CommandImpl]]
 </pre>
@@ -1033,7 +1034,7 @@ To support this handling scheme, some infrastructure is in place:
 * performing the actual execution is delegated to a handling pattern object, accessed by name.
 </pre>
 </div>
-<div title="CommandLifecycle" modifier="Ichthyostega" modified="200907240010" created="200907210135" tags="SessionLogic spec draft design img" changecount="10">
+<div title="CommandLifecycle" modifier="Ichthyostega" modified="200910072016" created="200907210135" tags="SessionLogic spec draft design img" changecount="14">
 <pre>[&lt;img[Structure of Commands|uml/fig135173.png]]
 While generally the command framework was designed to be flexible and allow a lot of different use cases, execution paths and to serve various goals, there is an ''intended lifecycle'' &amp;mdash; commands are expected to go through several distinct states.
 
@@ -1044,6 +1045,12 @@ By ''binding'' to specific operation arguments, the definition is //armed up//&a
 A command is operated or executed by passing it to an ''execution pattern'' &amp;mdash; there is a multitude of possible execution patterns to choose from, depending on the situation. 
 {{red{WIP}}}
 When a command has been executed (and maybe undone), it's best to leave it alone, because the UndoManager might hold a reference. Anyway, a ''clone of the command'' could be created, maybe bound with different arguments and treated separately from the original command.
+
+!State predicates
+* fetching an non-existent command raises an ~LUMIERA_ERROR_INVALID_COMMAND
+* a command //definition// becomes //valid// ({{{bool true}}}) when all necessary functions are specified. Technically this coincides with the creation of a CommandImpl frame behind the scenes
+* contrary to this, the {{{bool}}}-check on the Command (frontend/handle object) still yields {{{false}}} at this point &amp;mdash; generally speaking a command counts as //valid// only if it can be //executed,// i.e. when all arguments are bound.
+* after the (fist) execution, the command gets also //undo-able.//
 </pre>
 </div>
 <div title="CommandUsage" modifier="Ichthyostega" modified="200908091509" created="200907212338" tags="SessionLogic draft dynamic" changecount="8">

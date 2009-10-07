@@ -161,6 +161,7 @@ namespace control {
       static size_t definition_count();
       static size_t instance_count();
       
+      bool isValid()  const;
       bool canExec()  const;
       bool canUndo()  const;
       
