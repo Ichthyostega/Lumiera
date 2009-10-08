@@ -112,7 +112,7 @@ namespace test    {
           
           Command cmd1 = registry.queryIndex (TEST_CMD);
           ASSERT (cmd1);
-          ASSERT (string(TEST_CMD) == registry.findDefinition(cmd1));
+          ASSERT (TEST_CMD == registry.findDefinition(cmd1));
           
           Command nonexistant = registry.queryIndex("miraculous");
           ASSERT (!nonexistant);
@@ -149,7 +149,7 @@ namespace test    {
           ASSERT (1+cnt_inst == registry.instance_count());
           ASSERT (1+cnt_defs == registry.index_size());
           
-          ASSERT (string(TEST_CMD2) == registry.findDefinition(cmdX));
+          ASSERT (TEST_CMD2 == registry.findDefinition(cmdX));
           
           ASSERT ( registry.remove(TEST_CMD2));
           ASSERT (!registry.remove("miraculous"));

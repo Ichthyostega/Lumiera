@@ -195,7 +195,7 @@ namespace control {
        *  @param cmdInstance using the definition to look up
        *  @return the ID used to register this definition 
        *          or \c NULL in case of an "anonymous" command */
-      const char*
+      Symbol
       findDefinition (Command const& cmdInstance)  const
         {
           Lock sync(this);
