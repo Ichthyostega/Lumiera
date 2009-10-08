@@ -204,11 +204,9 @@ namespace control {
   
   namespace {
     inline bool
-    was_activated (Command& com)
+    was_activated (Command const& com)
     {
-      typedef lib::Handle<CommandImpl>& _Handle;
-      _Handle h = static_cast<_Handle> (com);
-      return h.isValid();
+      return com.isValid();
     }
     
     inline Command
@@ -248,22 +246,12 @@ namespace control {
   
   
   
-  /** a \em command gets valid when the arguments are bound */
-  bool
-  Command::isValid()  const
-  {
-    return _Handle::isValid()
-        && impl().canExec();
-  }
-  
-  
-  
   bool
   Command::canExec()  const
   {
-    return isValid();
+    return isValid()
+        && impl().canExec();
   }
-  
   
   
   bool

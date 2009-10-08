@@ -25,30 +25,16 @@
 #include "lib/test/test-helper.hpp"
 #include "proc/control/command-invocation.hpp"
 #include "proc/control/command-def.hpp"
-//#include "lib/lumitime.hpp"
 #include "lib/format.hpp"
 #include "lib/util.hpp"
 
 #include "proc/control/test-dummy-commands.hpp"
 
-//#include <boost/format.hpp>
-//#include <iostream>
-//#include <cstdlib>
-//#include <string>
-
-//using boost::format;
-//using lumiera::Time;
-//using util::contains;
-//using std::string;
-//using std::rand;
-//using std::cout;
-//using std::endl;
 
 
 namespace control {
 namespace test    {
-
-//  using lib::test::showSizeof;
+  
   using util::isSameObject;
   using util::contains;
   using util::str;
@@ -84,6 +70,7 @@ namespace test    {
           
           allInOneStep();
           standardUse();
+          statePredicates();
           definePrototype();
           usePrototype();
           preventDuplicates();
@@ -124,24 +111,25 @@ namespace test    {
                 .undoOperation (command1::undoIt)
                 ;
           }
-          ASSERT ( CommandDef("test.command1.2"));
-          ASSERT (!Command::get("test.command1.2"));
+          ASSERT (CommandDef("test.command1.2"));
           
           Command com = Command::get("test.command1.2");
+          ASSERT (com);
           ASSERT (contains (str(com), "test.command1.2"));
           ASSERT (contains (str(com), "{def}"));
-          ASSERT (!com);                                                      ////////////////////TODO: mismatch: shall bool() < canExec() ????
-          ASSERT (!com.canUndo());
+          ASSERT (!com.canExec());
           VERIFY_ERROR (UNBOUND_ARGUMENTS, com() );
+          ASSERT ( 0 == command1::check_); 
           
-          ASSERT ( 0 == command1::check_);
           VERIFY_ERROR (INVALID_ARGUMENTS, com.bind ("foo") );
           com.bind (random());             // note: run-time type check only
+          ASSERT ( com.canExec());
+          ASSERT (!com.canUndo());
           com();
           ASSERT (randVal == command1::check_);
           com.undo();
           ASSERT ( 0 == command1::check_);
-
+          
           // the following shortcut does the same:
           invoke ("test.command1.2") (1234);
           ASSERT ( 1234 == command1::check_);
@@ -152,6 +140,53 @@ namespace test    {
           
           com.undo();
           ASSERT ( 0 == command1::check_);
+        }
+      
+      
+      void
+      statePredicates()
+        {
+          Command::remove("test.command1.2");
+          VERIFY_ERROR (INVALID_COMMAND, Command::get("test.command1.2") );
+          
+          CommandDef def ("test.command1.2");
+          ASSERT (!def);
+          
+          def.operation (command1::operate)
+             .captureUndo (command1::capture); 
+          ASSERT (!def);                       // undo functor still missing
+          ASSERT (!Command::get("test.command1.2"));
+          
+          def.operation (command1::operate)
+             .captureUndo (command1::capture)
+             .undoOperation (command1::undoIt);
+          ASSERT (def);
+          ASSERT (CommandDef("test.command1.2"));
+          ASSERT (Command::get("test.command1.2"));
+          
+          ASSERT ( Command::defined("test.command1.2"));
+          ASSERT (!Command::canExec("test.command1.2"));
+          ASSERT (!Command::canUndo("test.command1.2"));
+          
+          Command com = Command::get("test.command1.2");
+          ASSERT (com);
+          ASSERT (!com.canExec());
+          ASSERT (!com.canUndo());
+          
+          com.bind (11111);
+          ASSERT ( Command::defined("test.command1.2"));
+          ASSERT ( Command::canExec("test.command1.2"));
+          ASSERT (!Command::canUndo("test.command1.2"));
+          
+          com();
+          ASSERT ( Command::defined("test.command1.2"));
+          ASSERT ( Command::canExec("test.command1.2"));
+          ASSERT ( Command::canUndo("test.command1.2"));
+          
+          com.undo();
+          ASSERT ( Command::defined("test.command1.2"));
+          ASSERT ( Command::canExec("test.command1.2"));
+          ASSERT ( Command::canUndo("test.command1.2"));
         }
       
       
@@ -243,14 +278,20 @@ namespace test    {
       void
       preventDuplicates()
         {
+          #define BUILD_NEW_COMMAND_DEF(_ID_) \
+          CommandDef (_ID_)                    \
+              .operation (command1::operate)    \
+              .captureUndo (command1::capture)   \
+              .undoOperation (command1::undoIt)
+          
           ASSERT (CommandDef ("test.command1.1"));
-          VERIFY_ERROR (DUPLICATE_COMMAND, CommandDef ("test.command1.1").operation (command1::operate) );    
+          VERIFY_ERROR (DUPLICATE_COMMAND, BUILD_NEW_COMMAND_DEF ("test.command1.1") );    
           ASSERT (CommandDef ("test.command1.2"));
-          VERIFY_ERROR (DUPLICATE_COMMAND, CommandDef ("test.command1.2").operation (command1::operate) );    
+          VERIFY_ERROR (DUPLICATE_COMMAND, BUILD_NEW_COMMAND_DEF ("test.command1.2") );    
           ASSERT (CommandDef ("test.command1.3"));
-          VERIFY_ERROR (DUPLICATE_COMMAND, CommandDef ("test.command1.3").operation (command1::operate) );    
+          VERIFY_ERROR (DUPLICATE_COMMAND, BUILD_NEW_COMMAND_DEF ("test.command1.3") );    
           ASSERT (CommandDef ("test.command1.4"));
-          VERIFY_ERROR (DUPLICATE_COMMAND, CommandDef ("test.command1.4").operation (command1::operate) );    
+          VERIFY_ERROR (DUPLICATE_COMMAND, BUILD_NEW_COMMAND_DEF ("test.command1.4") );    
         }
       
       

@@ -26,7 +26,6 @@
 #include "proc/control/command.hpp"
 #include "proc/control/command-def.hpp"
 #include "proc/control/handling-pattern.hpp"
-//#include "lib/lumitime.hpp"
 #include "lib/util.hpp"
 
 #include "proc/control/test-dummy-commands.hpp"
@@ -35,8 +34,6 @@
 #include <boost/ref.hpp>
 #include <boost/format.hpp>
 #include <boost/lexical_cast.hpp>
-//#include <iostream>
-//#include <cstdlib>
 #include <string>
 
 
@@ -44,21 +41,14 @@ namespace control {
 namespace test    {
 
 
+  using std::string;
   using boost::format;
   using boost::str;
-  //using lumiera::Time;
-  //using util::contains;
   using std::tr1::function;
   using std::tr1::bind;
-  using std::string;
-  //using std::rand;
-  //using std::cout;
-  //using std::endl;
-//  using lib::test::showSizeof;
-//  using util::isSameObject;
+  using boost::ref;
   using boost::lexical_cast;
   using util::contains;
-  using boost::ref;
   
   
   using lumiera::error::LUMIERA_ERROR_EXTERNAL;
@@ -77,13 +67,15 @@ namespace test    {
                       , lexical_cast<string> (val2check)
                       );
     }
-      
+  
   
   
   
   /***************************************************************************
    * @test command usage aspects II: patterns of invoking commands.
-   *       
+   * 
+   * @todo this test is still on hold, as the non-trivial patterns aren't implemented as of 10/09
+   * 
    * @see Command
    * @see command-basic-test.cpp (simple usage example)
    */

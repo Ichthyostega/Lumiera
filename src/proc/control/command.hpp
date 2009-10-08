@@ -161,9 +161,12 @@ namespace control {
       static size_t definition_count();
       static size_t instance_count();
       
-      bool isValid()  const;
       bool canExec()  const;
       bool canUndo()  const;
+      
+      static bool defined (Symbol cmdID);
+      static bool canExec (Symbol cmdID);
+      static bool canUndo (Symbol cmdID);
       
       operator string() const;
       friend bool operator== (Command const&, Command const&);
@@ -200,6 +203,45 @@ namespace control {
       this->setArguments (args);
       return *this;
     }
+  
+  
+  
+  /* == state predicate shortcuts == */
+  
+#define _FAILSAFE_COMMAND_QUERY(_ID_, _QUERY_) \
+      try                                       \
+        {                                        \
+          return Command::get(_ID_)._QUERY_;      \
+        }                                          \
+      catch(lumiera::error::Invalid&)              \
+        {                                          \
+          lumiera_error(); /* ignore errorstate */ \
+          return false;                            \
+        }
+  
+  
+  inline bool
+  Command::defined (Symbol cmdID)
+    {
+      _FAILSAFE_COMMAND_QUERY (cmdID, isValid() );
+    }
+  
+  
+  inline bool
+  Command::canExec (Symbol cmdID)
+    {
+      _FAILSAFE_COMMAND_QUERY (cmdID, canExec() );
+    }
+  
+  
+  inline bool
+  Command::canUndo (Symbol cmdID)
+    {
+      _FAILSAFE_COMMAND_QUERY (cmdID, canUndo() );
+    }
+
+#undef _FAILSAFE_COMMAND_QUERY
+  
   
   
   
