@@ -103,7 +103,8 @@ namespace control {
       bool
       operator() (const Command *pC1, const Command *pC2)  const
         {
-          return ( pC1 &&  pC2  && (*pC1 < *pC2));
+          return (!pC1 && pC2)
+              || ( pC1 && pC2  && (*pC1 < *pC2));
         }
     };
   

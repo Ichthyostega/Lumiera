@@ -90,7 +90,8 @@ namespace control {
     static format fmt("Command \"%s\" not found");
     if (!cmd)
       throw error::Invalid(str(fmt % cmdID), LUMIERA_ERROR_INVALID_COMMAND);
-      
+    
+    ENSURE (cmdID == CommandRegistry::instance().findDefinition(cmd));
     return cmd;
   }
   
