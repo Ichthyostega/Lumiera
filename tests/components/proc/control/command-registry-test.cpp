@@ -135,20 +135,18 @@ namespace test    {
           
           ASSERT (registry.remove(TEST_CMD2));
           ASSERT (!registry.queryIndex(TEST_CMD2));
-          ASSERT (cnt_defs == registry.index_size()); // removed from index
+          ASSERT (cnt_defs == registry.index_size());        //  removed from index
+          ASSERT (1+cnt_inst == registry.instance_count()); //...but still alive
           
           // create a new registration..
-          cmdX = registry.track(TEST_CMD, cmd2);  // but "accidentally" use an existing ID
-          ASSERT (cmdX == cmd1);                  // Oops, we got the existing registration...
-          
-          cmdX = registry.track(TEST_CMD2, cmd2);
+          registry.track(TEST_CMD2, cmd2);
           ASSERT (registry.queryIndex(TEST_CMD2));
+          ASSERT (1+cnt_defs == registry.index_size()); // again holding two distinct entries
           ASSERT (cmdX == cmd2);
           ASSERT (cmdX != cmd1);
           
-          ASSERT (1+cnt_inst == registry.instance_count());
-          ASSERT (1+cnt_defs == registry.index_size());
-          
+          ASSERT (TEST_CMD  == registry.findDefinition(cmd1));
+          ASSERT (TEST_CMD2 == registry.findDefinition(cmd2));
           ASSERT (TEST_CMD2 == registry.findDefinition(cmdX));
           
           ASSERT ( registry.remove(TEST_CMD2));

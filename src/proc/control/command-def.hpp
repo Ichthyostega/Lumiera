@@ -26,14 +26,20 @@
  ** While the header command.hpp contains everything needed for executing and
  ** commands and referring to them, this more heavy-weight header is needed when
  ** \em defining the concrete operations to be encapsulated into a command. To
- ** create a command, you need to provide three functors (for the actual operation,
+ ** create a command, you need to provide three functions (for the actual operation,
  ** the undo operation and for capturing undo state prior to invoking the operation).
- ** Besides, you provide a \em binding, thus creating a closure out of these three
- ** function objects and a set of actual parameters. This closure effectively is 
- ** the command, which in a last step can be either dispatched, stored or 
- ** invoked immediately.
- ** //TODO 
- **
+ ** 
+ ** For actually providing these operations, the client is expected to call the
+ ** definition functions in a chained manner ("fluent interface"). When  finally all the
+ ** required informations are available, a \em prototype object is  built and registered
+ ** with the CommandRegistry. From this point on, the corresponding Command (frontend object)
+ ** can be accessed directly by ID (and only relying on the header command.hpp).
+ ** 
+ ** In addition to the bare definition, it is possible to provide a binding for the command's
+ ** parameters immediately during the command definition. Of course it's also possible (and
+ ** indeed this is the standard case) to provide these concrete arguments just immediately
+ ** prior to invoking the command.
+ ** 
  ** @see Command
  ** @see Mutation
  ** @see CommandClosure
@@ -75,6 +81,8 @@ namespace control {
   
   using std::tr1::shared_ptr;
   using std::tr1::function;
+  using std::tr1::bind;
+  using std::tr1::placeholders::_1;
   using lib::Symbol;
   using util::cStr;
   
@@ -83,6 +91,10 @@ namespace control {
   using lumiera::typelist::Types;
   using lumiera::typelist::NullType;
   using lumiera::typelist::Tuple;
+  
+  typedef shared_ptr<CommandImpl> ImplInstance;
+  typedef function<Command&(ImplInstance const&)> Activation;
+  
   
   
   namespace stage { ///< helpers for building up a command definition
@@ -102,6 +114,7 @@ namespace control {
         CompletedDefinition (Command& definedCommand)
           : prototype_(definedCommand)
           {
+            REQUIRE (prototype_);
             TRACE (command_dbg, "Completed definition of %s.", cStr(prototype_));
           }
         
@@ -134,16 +147,16 @@ namespace control {
         typedef function<UndoOperationSig>    UndoFunc;
         typedef function<UndoCaptureSig>      CaptFunc;
         
-        Command& prototype_;
+        Activation activatePrototype_;
         OperFunc operFunctor_;
         CaptFunc captFunctor_;
         UndoFunc undoFunctor_;
         
         
-        UndoDefinition (Command& underConstruction, 
+        UndoDefinition (Activation const& whenComplete, 
                         OperFunc const& commandOperation,
                         CaptFunc const& undoCapOperation)
-          : prototype_(underConstruction)
+          : activatePrototype_(whenComplete)
           , operFunctor_(commandOperation)
           , captFunctor_(undoCapOperation)
           , undoFunctor_()
@@ -158,15 +171,11 @@ namespace control {
             REQUIRE (undoFunctor_);
             REQUIRE (captFunctor_);
             
-            typedef shared_ptr<CommandImpl> ImplInstance;
             CommandRegistry& registry = CommandRegistry::instance();
             ImplInstance completedDef = registry.newCommandImpl(operFunctor_
                                                                ,captFunctor_
                                                                ,undoFunctor_);
-            prototype_.activate(completedDef);
-            // activated the instance in the registry 
-            ENSURE (prototype_);
-            return CompletedDefinition<SIG> (prototype_);
+            return CompletedDefinition<SIG> (activatePrototype_(completedDef));
           }
       };
     
@@ -189,11 +198,11 @@ namespace control {
     template<typename SIG>
     struct BasicDefinition
       {
-        Command& prototype_;
+        Activation callback_;
         function<SIG> operation_;
         
-        BasicDefinition(Command& underConstruction, function<SIG> const& operation)
-          : prototype_(underConstruction)
+        BasicDefinition(Activation const& whenComplete, function<SIG> const& operation)
+          : callback_(whenComplete)
           , operation_(operation)
           { }
         
@@ -206,7 +215,7 @@ namespace control {
             typedef typename BuildUndoDefType<UndoSignature<SIG2> >::Type SpecificUndoDefinition;
             
             function<UndoCapSig> captureOperation (how_to_capture_UndoState);
-            return SpecificUndoDefinition (prototype_, operation_, captureOperation);
+            return SpecificUndoDefinition (callback_, operation_, captureOperation);
           }
       };
     
@@ -234,7 +243,7 @@ namespace control {
     : public lib::BoolCheckable<CommandDef>
     {
       Symbol id_;
-      Command& prototype_;
+      Command prototype_;
       
     public:
       CommandDef (Symbol cmdID)
@@ -247,16 +256,31 @@ namespace control {
      ~CommandDef();
       
       
+      
       template<typename SIG>
       stage::BasicDefinition<SIG>
       operation (SIG& operation_to_define)
         {
           function<SIG> opera1 (operation_to_define);
-          return stage::BasicDefinition<SIG>(prototype_, opera1);
+          Activation callback_when_defined = bind (&CommandDef::activate, this, _1);
+          
+          return stage::BasicDefinition<SIG>(callback_when_defined, opera1);
         }
       
       
       bool isValid()  const;
+      
+      
+    private:
+      /** callback from completed command definition stage:
+       *  "arm up" the command handle object and register it
+       *  with the CommandRegistry.  */ 
+      Command& activate (ImplInstance const& completedDef)
+        {
+          prototype_.activate (id_,completedDef);
+          ENSURE (prototype_);
+          return prototype_;
+        }
     };
   
   

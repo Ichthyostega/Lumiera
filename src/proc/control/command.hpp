@@ -127,8 +127,6 @@ namespace control {
       
       /* === command lifecycle === */
       
-      void activate (shared_ptr<CommandImpl> const&);
-      
       template<typename TYPES>
       Command& bindArg (Tuple<TYPES> const&);
       
@@ -168,15 +166,18 @@ namespace control {
       static bool canExec (Symbol cmdID);
       static bool canUndo (Symbol cmdID);
       
+      void duplicate_detected (Symbol)  const;
+      
       operator string() const;
       friend bool operator== (Command const&, Command const&);
       friend bool operator<  (Command const&, Command const&);
       
       
     protected:
-      static Command& fetchDef (Symbol cmdID);
+      static Command fetchDef (Symbol cmdID);
+      void activate (Symbol cmdID, shared_ptr<CommandImpl> const&);
       
-      friend class CommandDef;
+      friend class CommandDef; //...invoking those two functions during definition stage
       
       
     private:
@@ -208,6 +209,13 @@ namespace control {
   
   /* == state predicate shortcuts == */
   
+  inline bool
+  Command::defined (Symbol cmdID)
+    {
+      return fetchDef(cmdID).isValid();
+    }
+  
+  
 #define _FAILSAFE_COMMAND_QUERY(_ID_, _QUERY_) \
       try                                       \
         {                                        \
@@ -218,13 +226,6 @@ namespace control {
           lumiera_error(); /* ignore errorstate */ \
           return false;                            \
         }
-  
-  
-  inline bool
-  Command::defined (Symbol cmdID)
-    {
-      _FAILSAFE_COMMAND_QUERY (cmdID, isValid() );
-    }
   
   
   inline bool

@@ -109,41 +109,59 @@ namespace control {
   }
   
   
-  /** @internal to be invoked by CommandDef when starting a new definition.
-   *  @note we hand out a direct reference to the registered object. When this
-   *        command is "activated" later on, this deliberately has the side effect
-   *        of detaching any further references which may be held outside.
-   *        They will continue to live on as "anonymous" commands, until
-   *        going out of scope.
-   */
-  Command&
+  /** @internal just query an existing instance, if any. */
+  Command
   Command::fetchDef (Symbol cmdID)
+  {
+    return CommandRegistry::instance().queryIndex (cmdID);
+  }
+  
+  
+  /** @internal to be invoked through CommandDef to make a command ready for use
+   *  @throw error::Logic when this is already activated. */
+  void
+  Command::activate (Symbol cmdID, shared_ptr<CommandImpl> const& implFrame)
+  {
+    REQUIRE (implFrame);
+    static format fmt("Command \"%s\" already defined");
+    
+    if (this->isValid())
+      duplicate_detected (cmdID);
+    
+    _Handle::activate (implFrame);
+    CommandRegistry::instance().track (cmdID, *this);
+    
+    INFO (command, "Command \"%s\" defined OK", cStr(*this));
+  }
+  
+  
+  Command
+  Command::storeDef (Symbol newCmdID)  const
   {
     CommandRegistry& registry = CommandRegistry::instance();
     
-    Command newDefinition = registry.queryIndex (cmdID);
-                 // will be empty on first invocation
+    if (registry.queryIndex (newCmdID))
+      duplicate_detected (newCmdID);
     
-    return registry.track (cmdID, newDefinition);
-  }              // return direct ref to new or currently registered cmd...
+    Command cloneDefinition;
+    cloneDefinition.activate (newCmdID, registry.createCloneImpl(impl()));
+    ENSURE (cloneDefinition);
+    return cloneDefinition; 
+  }
   
   
-  /** @internal to be invoked through CommandDef to make a command ready
-   *  @throw std::bad_alloc, in which case
-   *         CommandRegistry::killCommandImpl is invoked.
-   *  @throw error::Logic when this is already activated. */
   void
-  Command::activate (shared_ptr<CommandImpl> const& implFrame)
+  Command::duplicate_detected (Symbol newCmdID)  const
   {
-    static format fmt("Command \"%s\" already defined");
-    REQUIRE (implFrame);
-    
-    if (this->isValid())
-      throw error::Logic (str (fmt % *this), LUMIERA_ERROR_DUPLICATE_COMMAND);
-          
-    _Handle::activate (implFrame);
-            
-    INFO (command, "Command \"%s\" defined OK", cStr(*this));
+    static format fmt("Unable to store %s as new command. ID \"%s\" is already in use");
+    throw error::Logic (str (fmt % *this % newCmdID), LUMIERA_ERROR_DUPLICATE_COMMAND);
+  }
+  
+  
+  bool
+  Command::remove (Symbol cmdID)
+  {
+    return CommandRegistry::instance().remove (cmdID); 
   }
   
   
@@ -154,33 +172,6 @@ namespace control {
   Command::setArguments (Arguments& args)
   {
     _Handle::impl().setArguments(args);
-  }
-  
-  
-  Command
-  Command::storeDef (Symbol newCmdID)  const
-  {
-    CommandRegistry& registry = CommandRegistry::instance();
-    
-    if (!registry.queryIndex (newCmdID))
-      {
-        Command cloneDefinition;
-        cloneDefinition.activate (registry.createCloneImpl(impl()));
-        
-        Command& registeredCloneDef = registry.track (newCmdID, cloneDefinition);
-        if (cloneDefinition == registeredCloneDef)
-          return registeredCloneDef; 
-      }
-    
-    static format fmt("Unable to store %s as new command. ID \"%s\" is already in use");
-    throw error::Logic (str (fmt % *this % newCmdID), LUMIERA_ERROR_DUPLICATE_COMMAND);
-  }
-  
-  
-  bool
-  Command::remove (Symbol cmdID)
-  {
-    return CommandRegistry::instance().remove (cmdID); 
   }
   
   

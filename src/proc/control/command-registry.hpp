@@ -143,21 +143,24 @@ namespace control {
       
       
       
-      /** register a command (Frontend) under the given ID
-       *  @return either the new command, or an already existing
-       *          command registered under the given ID  */ 
-      Command&
+      /** register a command (Frontend) under the given ID.
+       *  Any previously existing registration is detached from the index
+       */ 
+      void
       track (Symbol cmdID, Command const& commandHandle)
         {
           Lock sync(this);
           
-          Command& indexSlot (index_[cmdID]);
-          if (!indexSlot)
-            {
-              indexSlot = commandHandle;
-              ridx_[&indexSlot] = cmdID;
-            }
-          return indexSlot;
+          REQUIRE (commandHandle);
+          if (contains (index_,cmdID) || contains(ridx_, &commandHandle))
+            commandHandle.duplicate_detected(cmdID);
+          
+          Command& indexSlot = index_[cmdID];
+          indexSlot = commandHandle;
+          ridx_[&indexSlot] = cmdID;
+          
+          ENSURE (contains(ridx_, &indexSlot));
+          ENSURE (contains(index_, cmdID));
         }
       
       
