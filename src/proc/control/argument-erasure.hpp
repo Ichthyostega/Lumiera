@@ -32,8 +32,7 @@
 namespace control {
   
   
-  
-  
+  LUMIERA_ERROR_DECLARE (INVALID_ARGUMENTS);  ///< Arguments provided for binding doesn't match stored command function parameters
   
   
   
@@ -63,7 +62,8 @@ namespace control {
         {
           TypedArguments<TUP>* dest = dynamic_cast<TypedArguments<TUP>*> (this);
           if (!dest)
-            throw lumiera::error::Invalid("Wrong type or number of arguments");
+            throw lumiera::error::Invalid("Wrong type or number of arguments"
+                                         , LUMIERA_ERROR_INVALID_ARGUMENTS);
           
           return dest->args_;
         }

@@ -155,7 +155,7 @@ namespace test    {
           def.operation (command1::operate)
              .captureUndo (command1::capture); 
           ASSERT (!def);                       // undo functor still missing
-          ASSERT (!Command::get("test.command1.2"));
+          VERIFY_ERROR (INVALID_COMMAND, Command::get("test.command1.2") );
           
           def.operation (command1::operate)
              .captureUndo (command1::capture)
@@ -213,10 +213,10 @@ namespace test    {
           ASSERT (c1.canExec());
           ASSERT (!c1.canUndo());
           
-          Command c2 = Command::get("test.command1.3");
-          ASSERT (c1);
-          ASSERT (c1.canExec());
-          ASSERT (!c1.canUndo());
+          Command c2 = c1.newInstance();
+          ASSERT (c2);
+          ASSERT (c2.canExec());
+          ASSERT (!c2.canUndo());
           
           ASSERT (c1 == c2);
           ASSERT (!isSameObject(c1, c2));
@@ -226,9 +226,9 @@ namespace test    {
           c1();
           
           ASSERT (randVal == command1::check_);
-          ASSERT (c1.canUndo());
-          ASSERT (c1 != c2);
+          ASSERT ( c1.canUndo());
           ASSERT (!c2.canUndo());
+          ASSERT (c1 != c2);
           
           c2();
           ASSERT (randVal + randVal == command1::check_);

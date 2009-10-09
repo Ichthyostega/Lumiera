@@ -119,6 +119,7 @@ namespace control {
       
       /** create a clone definition */
       Command storeDef (Symbol newCmdID)  const;
+      Command newInstance ()  const;
       
       Command() { } ///< undefined command
      ~Command();
@@ -175,7 +176,7 @@ namespace control {
       
     protected:
       static Command fetchDef (Symbol cmdID);
-      void activate (Symbol cmdID, shared_ptr<CommandImpl> const&);
+      void activate (shared_ptr<CommandImpl> const&, Symbol cmdID =0);
       
       friend class CommandDef; //...invoking those two functions during definition stage
       

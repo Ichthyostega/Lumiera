@@ -92,13 +92,13 @@ namespace control {
   using lumiera::typelist::NullType;
   using lumiera::typelist::Tuple;
   
-  typedef shared_ptr<CommandImpl> ImplInstance;
-  typedef function<Command&(ImplInstance const&)> Activation;
   
   
   
   namespace stage { ///< helpers for building up a command definition
     
+    typedef shared_ptr<CommandImpl> ImplInstance;
+    typedef function<Command&(ImplInstance const&)> Activation;
     
     
     template<typename SIG>
@@ -245,6 +245,9 @@ namespace control {
       Symbol id_;
       Command prototype_;
       
+      typedef stage::ImplInstance PImpl;
+      typedef stage::Activation Activation;
+      
     public:
       CommandDef (Symbol cmdID)
         : id_(cmdID)
@@ -275,9 +278,9 @@ namespace control {
       /** callback from completed command definition stage:
        *  "arm up" the command handle object and register it
        *  with the CommandRegistry.  */ 
-      Command& activate (ImplInstance const& completedDef)
+      Command& activate (PImpl const& completedDef)
         {
-          prototype_.activate (id_,completedDef);
+          prototype_.activate (completedDef, id_);
           ENSURE (prototype_);
           return prototype_;
         }

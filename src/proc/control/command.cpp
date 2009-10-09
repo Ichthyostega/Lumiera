@@ -117,10 +117,13 @@ namespace control {
   }
   
   
-  /** @internal to be invoked through CommandDef to make a command ready for use
-   *  @throw error::Logic when this is already activated. */
+  /** @internal make a command ready for use. Typically to be invoked
+   *  through CommandDef during the definition stage, but also used
+   *  for activating clone instances.
+   *  @param cmdID new ID for creating a separate command registration when provided
+   *  @throw error::Logic when \c this is already activated. */
   void
-  Command::activate (Symbol cmdID, shared_ptr<CommandImpl> const& implFrame)
+  Command::activate (shared_ptr<CommandImpl> const& implFrame, Symbol cmdID)
   {
     REQUIRE (implFrame);
     static format fmt("Command \"%s\" already defined");
@@ -129,12 +132,15 @@ namespace control {
       duplicate_detected (cmdID);
     
     _Handle::activate (implFrame);
-    CommandRegistry::instance().track (cmdID, *this);
+    if (cmdID)
+      CommandRegistry::instance().track (cmdID, *this);
     
     INFO (command, "Command \"%s\" defined OK", cStr(*this));
   }
   
   
+  /** create an independent clone copy of this command
+   *  and register it as new command definition under a different ID */
   Command
   Command::storeDef (Symbol newCmdID)  const
   {
@@ -144,9 +150,23 @@ namespace control {
       duplicate_detected (newCmdID);
     
     Command cloneDefinition;
-    cloneDefinition.activate (newCmdID, registry.createCloneImpl(impl()));
+    cloneDefinition.activate (registry.createCloneImpl(this->impl()), newCmdID);
     ENSURE (cloneDefinition);
     return cloneDefinition; 
+  }
+  
+  
+  /** create independent clone copy of this command */
+  Command
+  Command::newInstance ()  const
+  {
+    CommandRegistry& registry = CommandRegistry::instance();
+    shared_ptr<CommandImpl> cloneImpl = registry.createCloneImpl(this->impl());
+    
+    Command clone;
+    clone.activate (cloneImpl);
+    ENSURE (clone);
+    return clone; 
   }
   
   
@@ -305,6 +325,10 @@ namespace control {
   ExecResult
   Command::exec (HandlingPattern const& execPattern)
   {
+    if (!canExec())
+      throw error::State ("Lifecycle error: command arguments not bound",
+                          LUMIERA_ERROR_UNBOUND_ARGUMENTS);
+    
     CommandImpl& thisCommand (_Handle::impl());
     return execPattern.invoke (thisCommand, cStr(*this));
   }
