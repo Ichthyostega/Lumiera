@@ -107,7 +107,7 @@ namespace lumiera {
   
       template<typename _O_>
       friend inline bool
-      operator<  (P const& p, P<_O_> const& q) { return (p && q) && (*p < *q); }
+      operator<  (P const& p, P<_O_> const& q) { return (p && q) && (*p < *q); }   ////TICKET #307  : problem with equality test in associative containers, where equal(a,b) := !(a < b) && !(b < a)
   
       template<typename _O_>
       friend inline bool

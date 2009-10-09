@@ -25,30 +25,36 @@
 #include "lib/test/test-helper.hpp"
 //#include "proc/control/command-def.hpp"
 #include "proc/control/command-registry.hpp"
-#include "proc/control/command-impl-clone-builder.hpp"
+#include "proc/control/command-impl.hpp"
+//#include "proc/control/command-impl-clone-builder.hpp"
+#include "proc/control/argument-erasure.hpp"
+#include "proc/control/handling-pattern.hpp"
+#include "lib/meta/tuple.hpp"
 #include "lib/symbol.hpp"
 #include "lib/util.hpp"
+#include "lib/p.hpp"
 
 #include "proc/control/test-dummy-commands.hpp"
 
-#include <tr1/functional>
+//#include <tr1/functional>
 
 
 namespace control {
 namespace test    {
   
   
-  using std::tr1::function;
-  using util::isSameObject;
-  using lib::Symbol;
+//  using std::tr1::function;
+//  using util::isSameObject;
+//  using lib::Symbol;
+  using namespace lumiera::typelist;
   
   
   namespace { // test data and helpers...
-  
-    Symbol TEST_CMD  = "test.command1.1";
-    Symbol TEST_CMD2 = "test.command1.2";
+    
+    HandlingPattern::ID TEST_HANDLING_PATTERN = HandlingPattern::DUMMY;
   }
   
+  typedef lumiera::P<CommandImpl> PCmdImpl;
   
   
   /********************************************************************************
@@ -68,113 +74,28 @@ namespace test    {
   class CommandCloneBuilder_test : public Test
     {
       
-      uint cnt_defs;
-      uint cnt_inst;
-      
       
       virtual void
       run (Arg) 
         {
           CommandRegistry& registry = CommandRegistry::instance();
           ASSERT (&registry);
+          uint cnt_inst = registry.instance_count();
           
-          cnt_defs = registry.index_size();
-          cnt_inst = registry.instance_count();
-          
-          // prepare a command definition (prototype)
-          CommandDef (TEST_CMD)
-              .operation (command1::operate)
-              .captureUndo (command1::capture)
-              .undoOperation (command1::undoIt)
-              .bind(123);
-          
-          // this command definition is
-          // represented internally by a prototype instance
-          ASSERT (++cnt_inst == registry.instance_count());
-          ASSERT (++cnt_defs == registry.index_size());
-          
-          checkRegistration (registry);
-          checkAllocation(registry);
+          {
+            PCmdImpl source = buildTestImplFrame (registry);
+            PCmdImpl clone  = registry.createCloneImpl (*source);
+            
+            verifySeparation (source, clone);
+          }
           
           ASSERT (cnt_inst == registry.instance_count());
-          ASSERT (cnt_defs == registry.index_size());
-          
-          Command::remove (TEST_CMD);
-          ASSERT (--cnt_inst == registry.instance_count());
         }
       
       
       
-      /** @test verify the index operation.
-       *        Add, search, remove, store copy.
-       */
-      void
-      checkRegistration (CommandRegistry& registry)
-        {
-          ASSERT (cnt_inst == registry.instance_count());
-          
-          Command cmd1 = registry.queryIndex (TEST_CMD);
-          ASSERT (cmd1);
-          ASSERT (TEST_CMD == registry.findDefinition(cmd1));
-          
-          Command nonexistant = registry.queryIndex("miraculous");
-          ASSERT (!nonexistant);
-          
-          // now create a clone, registered under a different ID
-          Command cmd2 = cmd1.storeDef(TEST_CMD2);
-          ASSERT (cmd2 == cmd1);
-          cmd2.bind(54321);
-          ASSERT (cmd2 != cmd1);
-          
-          // this created exactly one additional instance allocation:
-          ASSERT (1+cnt_inst == registry.instance_count());
-          ASSERT (1+cnt_defs == registry.index_size());
-          // ...and another index entry
-          
-          
-          Command cmdX = registry.queryIndex(TEST_CMD2);
-          ASSERT (cmdX == cmd2);
-          ASSERT (cmdX != cmd1);
-          
-          ASSERT (registry.remove(TEST_CMD2));
-          ASSERT (!registry.queryIndex(TEST_CMD2));
-          ASSERT (cnt_defs == registry.index_size());        //  removed from index
-          ASSERT (1+cnt_inst == registry.instance_count()); //...but still alive
-          
-          // create a new registration..
-          registry.track(TEST_CMD2, cmd2);
-          ASSERT (registry.queryIndex(TEST_CMD2));
-          ASSERT (1+cnt_defs == registry.index_size()); // again holding two distinct entries
-          ASSERT (cmdX == cmd2);
-          ASSERT (cmdX != cmd1);
-          
-          ASSERT (TEST_CMD  == registry.findDefinition(cmd1));
-          ASSERT (TEST_CMD2 == registry.findDefinition(cmd2));
-          ASSERT (TEST_CMD2 == registry.findDefinition(cmdX));
-          
-          ASSERT ( registry.remove(TEST_CMD2));
-          ASSERT (!registry.remove("miraculous"));
-          
-          ASSERT (!registry.queryIndex(TEST_CMD2));
-          ASSERT ( registry.queryIndex(TEST_CMD));
-          ASSERT (cnt_defs == registry.index_size());       // the index entry is gone,
-          
-          ASSERT (1+cnt_inst == registry.instance_count()); // but the allocation still lives
-          cmdX.close();
-          ASSERT (1+cnt_inst == registry.instance_count());
-          cmd2.close();
-          ASSERT (0+cnt_inst == registry.instance_count()); // ...as long as it's still referred
-        }
-      
-      
-      
-      /** @test verify the allocation/de-allocation handling as
-       *        embedded into the CommandRegistry operation.
-       *        Simulates on low level what normally happens
-       *        during command lifecycle.
-       */
-      void
-      checkAllocation (CommandRegistry& registry)
+      PCmdImpl
+      buildTestImplFrame (CommandRegistry& registry)
         {
           // simulate what normally happens within a CommandDef
           typedef void Sig_oper(int);
@@ -186,50 +107,69 @@ namespace test    {
           function<Sig_undo> u_Fun (command1::undoIt);
           
           ASSERT (o_Fun && c_Fun && u_Fun);
-          ASSERT (cnt_inst == registry.instance_count());
+          PCmdImpl cmd = registry.newCommandImpl(o_Fun,c_Fun,u_Fun);
           
-          // when the CommandDef is complete, it issues the
-          // allocation call to the registry behind the scenes....
-          
-          typedef shared_ptr<CommandImpl> PImpl;
-          
-          PImpl pImpl = registry.newCommandImpl(o_Fun,c_Fun,u_Fun);
-          ASSERT (1+cnt_inst == registry.instance_count());
-          
-          ASSERT (pImpl);
-          ASSERT (pImpl->isValid());
-          ASSERT (!pImpl->canExec());
-          ASSERT (1 == pImpl.use_count());   // no magic involved, we hold the only instance
-          
-          PImpl clone = registry.createCloneImpl(*pImpl);
-          ASSERT (clone->isValid());
-          ASSERT (!clone->canExec());
-          ASSERT (1 == clone.use_count());
-          ASSERT (1 == pImpl.use_count());
-          ASSERT (2+cnt_inst == registry.instance_count());
-          
-          ASSERT (!isSameObject (*pImpl, *clone));
-          ASSERT (*pImpl == *clone);
-          
-          ASSERT (!pImpl->canExec());
+          // make ready for execution
+          bindRandArgument (*cmd);
+          ASSERT (cmd->canExec());
+          return cmd;
+        }
+      
+      
+      /** Helper: create random command parameter binding */
+      void
+      bindRandArgument (CommandImpl& cmd)
+        {
           typedef Types<int> ArgType;
-          TypedArguments<Tuple<ArgType> > arg (Tuple<ArgType>(98765));
-          pImpl->setArguments(arg);
-          ASSERT (pImpl->canExec());
+          TypedArguments<Tuple<ArgType> > arg (tuple::make (rand() % 10000));
+          cmd.setArguments (arg);
+          ASSERT (cmd.canExec());
+        }
+      
+      
+      /** @test verify the two command implementation frames are
+       *        indeed separate objects without interconnection.
+       *        Performing an simulated command execution-undo
+       *        cycle on both instances and verify difference.
+       */
+      void
+      verifySeparation (PCmdImpl orig, PCmdImpl copy)
+        {
+          ASSERT (orig && copy);
+          ASSERT (orig->canExec());
+          ASSERT (copy->canExec());
+          ASSERT (orig == copy);
           
-          ASSERT (!clone->canExec()); // this proves the clone has indeed a separate identity
-          ASSERT (*pImpl != *clone);
           
-          // discard the first clone and overwrite with a new one
-          clone = registry.createCloneImpl(*pImpl);
-          ASSERT (2+cnt_inst == registry.instance_count());
-          ASSERT (*pImpl == *clone);
-          ASSERT (clone->canExec());
+          // prepare for command invocation on implementation level....
+          HandlingPattern const& testExec = HandlingPattern::get(TEST_HANDLING_PATTERN);
+          HandlingPattern const& testUndo = testExec.howtoUNDO();
+          command1::check_ = 0;
           
-          clone.reset();
-          pImpl.reset();
-          // corresponding allocation slots cleared automatically
-          ASSERT (cnt_inst == registry.instance_count());
+          bindRandArgument (*orig);
+          ASSERT ( orig->canExec());
+          ASSERT (!orig->canUndo());
+          testExec.invoke (*orig, "Execute original");     // EXEC 1
+          long state_after_exec1 = command1::check_;
+          ASSERT (command1::check_ > 0);
+          ASSERT (orig->canUndo());
+          ASSERT (orig != copy);
+          
+          ASSERT (!copy->canUndo());
+          testExec.invoke (*copy, "Execute clone");        // EXEC 2
+          ASSERT (command1::check_ != state_after_exec1);
+          ASSERT (copy->canUndo());
+          ASSERT (copy != orig);
+          
+          // invoke UNDO on the clone
+          testUndo.invoke (*copy, "Undo clone");           // UNDO 2
+          ASSERT (command1::check_ == state_after_exec1);
+          
+          // invoke UNDO on original
+          testUndo.invoke (*orig, "Undo original");        // UNDO 1
+          ASSERT (command1::check_ ==0);
+          
+          ASSERT (copy != orig);
         }
       
     };
