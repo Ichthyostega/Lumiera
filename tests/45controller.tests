@@ -55,6 +55,11 @@ return: 0
 END
 
 
+PLANNED "Opaque cloning of implementation" CommandCloneBuilder_test <<END
+return: 0
+END
+
+
 TEST "Equality comparisons" CommandEquality_test <<END
 return: 0
 END
