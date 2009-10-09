@@ -120,15 +120,24 @@ namespace control {
      ~CommandImpl();
       
       
+      /** TODO: kill kill kill */
+      CommandImpl (CommandImpl const& orig, TypedAllocationManager& storageManager)
+        : do_(orig.do_)
+        , undo_(orig.undo_)
+        , pClo_(orig.pClo_->createClone(storageManager))
+        , defaultPatt_(orig.defaultPatt_)
+        { }
+      
+      
       /** cloning service for the CommandRegistry:
        *  effectively this is a copy ctor, but as we rely
        *  on a argument holder (without knowing the exact type),
        *  we need to delegate the cloning of the arguments down
        *  while providing a means of allocating storage for the clone */
-      CommandImpl (CommandImpl const& orig, TypedAllocationManager& storageManager)
+      CommandImpl (CommandImpl const& orig, UndoMutation const& newUndo, shared_ptr<CmdClosure>& newClosure)
         : do_(orig.do_)
-        , undo_(orig.undo_)
-        , pClo_(orig.pClo_->createClone(storageManager))
+        , undo_(newUndo)
+        , pClo_(newClosure)
         , defaultPatt_(orig.defaultPatt_)
         { }
       

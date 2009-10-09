@@ -78,13 +78,11 @@ namespace control {
 //    : public lib::BoolCheckable<CommandImpl
 //           , boost::noncopyable
 //           >
+    : public boost::noncopyable
     {
-      Mutation do_;
-      UndoMutation undo_;
+      TypedAllocationManager& allocator_;
+      shared_ptr<CmdClosure> newClo_;
       
-      shared_ptr<CmdClosure> pClo_;
-      
-      HandlingPattern::ID defaultPatt_;
       
       
       template<typename ARG>
@@ -101,115 +99,54 @@ namespace control {
 #define _TY(_ID_) typename _Type<ARG>::_ID_
       
     public:
-      /** build a new implementation frame, and do the initial wiring.
-       *  On the interface the specific type is discarded afterwards.
-       *  This information is still kept though, as encoded into the vtable
-       *  of the embedded FunErasure objects holding the command operation
-       *  and undo functors, and the vtable of the embedded CmdClosure */
-      template<typename ARG>
-      CommandImpl (shared_ptr<ARG> pArgHolder
-                  ,_TY (Func_op) const& operFunctor
-                  ,_TY (Func_cap) const& captFunctor
-                  ,_TY (Func_undo) const& undoFunctor
-                  )
-        : do_(operFunctor)
-        , undo_(pArgHolder->tie (undoFunctor, captFunctor))
-        , pClo_(pArgHolder)
-        , defaultPatt_(HandlingPattern::defaultID())
+      CommandImplCloneBuilder (TypedAllocationManager allo)
+        : allocator_(allo)
+        , newClo_()
         { }
+      
+      
+      /** visit the CommandImpl given as reference 
+       *  to re-gain the contained Closure type context
+       */
+      void
+      visit (CommandImpl const& sourceImpl)
+        {
+          UNIMPLEMENTED ("get access to source context");
+        }
+      
+      
+      /** to be executed from within the specifically typed context
+       *  of a concrete command ArgumentHolder; prepare the objects
+       *  necessary to re-build a "clone" of the UNDO-Functor.
+       */
+      template<typename ARG>
+      void
+      buildCloneContext (shared_ptr<ARG> pArgHolder)
+        {
+          UNIMPLEMENTED ("how to reflect context back");
+          newClo_ = pArgHolder; 
+        }
       
 #undef _TY
       
       
-     ~CommandImpl();
-      
-      
-      /** cloning service for the CommandRegistry:
-       *  effectively this is a copy ctor, but as we rely
-       *  on a argument holder (without knowing the exact type),
-       *  we need to delegate the cloning of the arguments down
-       *  while providing a means of allocating storage for the clone */
-      CommandImpl (CommandImpl const& orig, TypedAllocationManager& storageManager)
-        : do_(orig.do_)
-        , undo_(orig.undo_)
-        , pClo_(orig.pClo_->createClone(storageManager))
-        , defaultPatt_(orig.defaultPatt_)
-        { }
-      
-      
-      void
-      setArguments (Arguments& args)
+      /** after visitation: use pre-built bits to provide a cloned UndoFunctor */
+      UndoMutation const&
+      clonedUndoMutation ()
         {
-          pClo_->bindArguments(args);
-        }
-      
-      void invokeOperation() { do_(*pClo_); }
-      void invokeCapture()   { undo_.captureState(*pClo_); }
-      void invokeUndo()      { undo_(*pClo_); }
-      
-      
-      
-      typedef HandlingPattern::ID PattID;
-      
-      PattID
-      getDefaultHandlingPattern()  const
-        {
-          return defaultPatt_;
-        }
-      
-      /** define a handling pattern to be used by default
-       *  @return ID of the currently defined default pattern */
-      PattID
-      setHandlingPattern (PattID newID)
-        {
-          PattID currID = defaultPatt_;
-          defaultPatt_ = newID;
-          return currID;
+          UNIMPLEMENTED (" getNewUndoMutation ()" );
         }
       
       
-      
-      /* === diagnostics === */
-      
-      bool
-      isValid()  const    ///< validity self-check: is basically usable.
+      /** after visitation: provide cloned ArgumentHolder,
+       *  but already stripped down to the generic usage type */
+      shared_ptr<CmdClosure> const&
+      clonedClosuere ()
         {
-          return bool(pClo_) 
-              && HandlingPattern::get(defaultPatt_).isValid();
+          REQUIRE (newClo_);
+          return newClo_;
         }
       
-      bool
-      canExec()  const    ///< state check: sufficiently defined to be invoked 
-        {
-          return isValid()
-              && pClo_->isValid();
-        }
-      
-      bool
-      canUndo()  const    ///< state check: has undo state been captured? 
-        {
-          return isValid() && pClo_->isCaptured();
-        }
-      
-      
-      
-      friend bool
-      operator== (CommandImpl const& ci1, CommandImpl const& ci2)
-      {
-        return (ci1.do_ == ci2.do_)
-//          && (ci1.undo_ == ci2.undo_)                     // causes failure regularly, due to the missing equality on boost::function. See Ticket #294
-            && (ci1.defaultPatt_ == ci2.defaultPatt_)
-            && (ci1.canExec() == ci2.canExec())
-            && (ci1.canUndo() == ci2.canUndo())
-            && (ci1.pClo_->equals(*ci2.pClo_))
-             ;
-      }
-      
-      friend bool
-      operator!= (CommandImpl const& ci1, CommandImpl const& ci2)
-      {
-        return !(ci1==ci2);
-      }
     };
   
   
