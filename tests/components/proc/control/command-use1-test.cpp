@@ -74,6 +74,7 @@ namespace test    {
           definePrototype();
           usePrototype();
           preventDuplicates();
+          stringRepresentation();
           undef();
           
           ASSERT (0 == command1::check_);
@@ -292,6 +293,27 @@ namespace test    {
           VERIFY_ERROR (DUPLICATE_COMMAND, BUILD_NEW_COMMAND_DEF ("test.command1.3") );    
           ASSERT (CommandDef ("test.command1.4"));
           VERIFY_ERROR (DUPLICATE_COMMAND, BUILD_NEW_COMMAND_DEF ("test.command1.4") );    
+        }
+      
+      
+      void
+      stringRepresentation()
+        {
+          cout << string (Command::get("test.command1.1")) << endl;
+          cout << string (Command::get("test.command1.2")) << endl;
+          cout << string (Command::get("test.command1.3")) << endl;
+          cout << string (Command::get("test.command1.4")) << endl;
+          cout << string (Command()                      ) << endl;
+          
+          Command com = Command::get("test.command1.4").newInstance();
+          
+          cout << string (com) << endl;
+          com.bind(123);
+          cout << string (com) << endl;
+          com();
+          cout << string (com) << endl;
+          com.undo();
+          cout << string (com) << endl;
         }
       
       
