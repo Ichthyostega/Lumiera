@@ -41,4 +41,10 @@ namespace test    {
   }
   
   
+  
+  namespace command3 {
+    ulong check_;
+  }
+  
+  
 }} // namespace control::test

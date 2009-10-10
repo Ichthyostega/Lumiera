@@ -91,6 +91,7 @@ namespace control {
   using lumiera::typelist::Types;
   using lumiera::typelist::NullType;
   using lumiera::typelist::Tuple;
+  using lumiera::typelist::tuple::makeNullTuple;
   
   
   
@@ -99,6 +100,8 @@ namespace control {
     
     typedef shared_ptr<CommandImpl> ImplInstance;
     typedef function<Command&(ImplInstance const&)> Activation;
+    
+    
     
     
     template<typename SIG>
@@ -115,18 +118,51 @@ namespace control {
           : prototype_(definedCommand)
           {
             REQUIRE (prototype_);
+            maybeArm_if_zero_parameters();
             TRACE (command_dbg, "Completed definition of %s.", cStr(prototype_));
           }
         
+        
         typedef HandlingPattern::ID PattID;
         
-        PattID getDefaultHandlingPattern()  const { return prototype_.getDefaultHandlingPattern();}
-        PattID setHandlingPattern (PattID newID)  { return prototype_.setHandlingPattern(newID); }
+        /** allow for defining the default execution pattern,
+         *  which is used by Command::operator()  */
+        CompletedDefinition
+        setHandlingPattern (PattID newID)
+          {
+            prototype_.setHandlingPattern(newID);
+            return *this;
+          }
         
+        
+        /** allow to bind immediately to a set of arguments.
+         *  @return standard Command handle, usable for invocation
+         */
         Command&
         bindArg (Tuple<CmdArgs> const& params)
           {
             return prototype_.bindArg(params);
+          }
+        
+        
+        /** a completed definition can be retrieved and
+         *  manipulated further through a standard Command handle
+         */
+        operator Command ()
+          {
+            return prototype_;
+          }
+        
+      private:
+        /** Helper: automatically "bind" and make executable a command,
+         *  for the case when the command operation takes zero arguments.
+         *  Because even in that case we need to build a CmdClosure internally.
+         */ 
+        void
+        maybeArm_if_zero_parameters()
+          {
+            if (0 == Tuple<CmdArgs>::SIZE )
+              prototype_.bindArg (makeNullTuple());
           }
       };
     

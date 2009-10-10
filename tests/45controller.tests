@@ -70,12 +70,18 @@ return: 0
 END
 
 
-TEST "handling pattern basics" HandlingPatternBasics_test <<END
+TEST "Handling Pattern basics" HandlingPatternBasics_test <<END
 return: 0
 END
 
 
-PLANNED "handling patterns" HandlingPatternStandardImpl_test <<END
+PLANNED "Handling Patterns" HandlingPatternStandardImpl_test <<END
+return: 0
+END
+
+
+TEST "Command argument binding" CommandBinding_test <<END
+out: Command\("test.command3.2"\) \{exec\}
 return: 0
 END
 

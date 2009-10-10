@@ -312,12 +312,12 @@ namespace test    {
           cout << string (Command::get("test.command1.4")) << endl;
           cout << string (Command()                      ) << endl;
           
-          CommandDef ("test.command1.5")
-              .operation (command1::operate)
-              .captureUndo (command1::capture)
-              .undoOperation (command1::undoIt);
+          Command com
+            = CommandDef ("test.command1.5")
+                  .operation (command1::operate)
+                  .captureUndo (command1::capture)
+                  .undoOperation (command1::undoIt);
           
-          Command com("test.command1.5");
           cout << string (com) << endl;
           com.bind(123);
           cout << string (com) << endl;
