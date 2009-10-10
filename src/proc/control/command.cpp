@@ -46,6 +46,7 @@
 #include "proc/control/command-def.hpp"
 #include "proc/control/command-impl.hpp"
 #include "proc/control/command-registry.hpp"
+#include "proc/control/command-impl-clone-builder.hpp"
 #include "proc/control/handling-pattern.hpp"
 
 #include <boost/format.hpp>
@@ -168,6 +169,22 @@ namespace control {
     ENSURE (clone);
     return clone; 
   }
+  
+  
+  /** @note this bit of implementation from CommandRegistry rather
+   *  heavily relies on implementation details from CommandImpl and
+   *  the help of CommandImplCloneBuilder and ArgumentHolder. It's
+   *  implemented within command.cpp to keep the includes of
+   *  the handling patterns clean. */
+  shared_ptr<CommandImpl>
+  CommandRegistry::createCloneImpl (CommandImpl const& refObject)
+  {
+    CommandImplCloneBuilder cloneBuilder(allocator_);
+    refObject.prepareClone(cloneBuilder);
+    return allocator_.create<CommandImpl> (refObject, cloneBuilder.clonedUndoMutation() 
+                                                    , cloneBuilder.clonedClosuere());
+  }
+  
   
   
   void

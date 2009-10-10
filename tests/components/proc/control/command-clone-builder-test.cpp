@@ -22,11 +22,8 @@
 
 
 #include "lib/test/run.hpp"
-//#include "lib/test/test-helper.hpp"
-//#include "proc/control/command-def.hpp"
-#include "proc/control/command-registry.hpp"
 #include "proc/control/command-impl.hpp"
-#include "proc/control/command-impl-clone-builder.hpp"
+#include "proc/control/command-registry.hpp"
 #include "proc/control/argument-erasure.hpp"
 #include "proc/control/handling-pattern.hpp"
 #include "lib/meta/tuple.hpp"
@@ -36,25 +33,22 @@
 
 #include "proc/control/test-dummy-commands.hpp"
 
-//#include <tr1/functional>
-
 
 namespace control {
 namespace test    {
   
-  
-//  using std::tr1::function;
-//  using util::isSameObject;
-//  using lib::Symbol;
   using namespace lumiera::typelist;
   
+  typedef lumiera::P<CommandImpl> PCmdImpl;
   
-  namespace { // test data and helpers...
-    
+  
+  namespace { // test config...
     HandlingPattern::ID TEST_HANDLING_PATTERN = HandlingPattern::DUMMY;
   }
   
-  typedef lumiera::P<CommandImpl> PCmdImpl;
+  
+  
+  
   
   
   /********************************************************************************
@@ -62,7 +56,7 @@ namespace test    {
    *       without disclosing specific type information about the involved closure.
    *       This includes verifying sane allocation management.
    * @note this test covers a very specific low-level perspective, but on an
-   *       integration level, including TypedAllocationManager, CommandRegistry,
+   *       integration level, involving TypedAllocationManager, CommandRegistry,
    *       CommandImpl, CmdClosure, ArgumentHolder, UndoMutation, MementoTie.
    *       Closes: Ticket #298
    * 
@@ -79,24 +73,16 @@ namespace test    {
       run (Arg) 
         {
           CommandRegistry& registry = CommandRegistry::instance();
-          TypedAllocationManager allo; /////////////////////////////////////////////TODO
           ASSERT (&registry);
           uint cnt_inst = registry.instance_count();
           
           {
             PCmdImpl source = buildTestImplFrame (registry);
-////////////////////////////////////////////////////////////////////////////////////TODO            
-//          PCmdImpl clone  = registry.createCloneImpl (*source);
-            CommandImplCloneBuilder cloneBuilder(allo);
-            source->prepareClone(cloneBuilder);
-            PCmdImpl clone  = allo.create<CommandImpl> (*source, cloneBuilder.clonedUndoMutation() 
-                                                               , cloneBuilder.clonedClosuere());
-////////////////////////////////////////////////////////////////////////////////////TODO        
+            PCmdImpl clone  = registry.createCloneImpl (*source);
             
             verifySeparation (source, clone);
           }
           
-          ASSERT ( 0 == allo.numSlots<CommandImpl>()); /////////////////////////////TODO
           ASSERT (cnt_inst == registry.instance_count());
         }
       

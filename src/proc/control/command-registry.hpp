@@ -255,13 +255,15 @@ namespace control {
        *  type information is vital for determining the exact allocation size for
        *  the clone ArgumentHolder. The only solution is to delegate the cloning
        *  of the arguments down into the ArgumentHolder, passing a reference
-       *  to the memory manager for allocating the clone. 
+       *  to the memory manager for allocating the clone. Actually, we perform
+       *  this operation through the help of a visitor, which re-gains the
+       *  complete type context and prepares the necessary clone objects;
+       *  in a final step, we allocate a new CommandImpl frame and 
+       *  initialise it with the prepared clone objects.
+       *  @see command.cpp (implementation)
        */
       shared_ptr<CommandImpl>
-      createCloneImpl (CommandImpl const& refObject)
-        {
-          return allocator_.create<CommandImpl> (refObject, allocator_);
-        }
+      createCloneImpl (CommandImpl const& refObject);
       
       
     };
