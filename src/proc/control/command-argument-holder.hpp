@@ -237,7 +237,6 @@ namespace control {
       MementoTie<SIG,MEM>&
       getMementoWiring ()
         {
-          REQUIRE (!empty());
           return *memento_;
         }
       

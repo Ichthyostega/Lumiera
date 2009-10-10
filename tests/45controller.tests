@@ -55,7 +55,7 @@ return: 0
 END
 
 
-PLANNED "Opaque cloning of implementation" CommandCloneBuilder_test <<END
+TEST "Opaque cloning of implementation" CommandCloneBuilder_test <<END
 return: 0
 END
 
@@ -80,7 +80,15 @@ return: 0
 END
 
 
-PLANNED "Command usage aspects I"  CommandUse1_test <<END
+TEST "Command usage aspects I"  CommandUse1_test <<END
+out: Command\("test.command1.1"\) \{undo\}
+out: Command\("test.command1.2"\) \{undo\}
+out: Command\("test.command1.3"\) \{undo\}
+out: Command\("test.command1.4"\) \{undo\}
+out: Command\(_xxx_\) NIL
+out: Command\("test.command1.5"\) \{def\}
+out: Command\("test.command1.5"\) \{exec\}
+out: Command\("test.command1.5"\) \{undo\}
 return: 0
 END
 

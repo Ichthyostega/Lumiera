@@ -30,6 +30,7 @@
 
 #include "proc/control/test-dummy-commands.hpp"
 
+#include <iostream>
 
 
 namespace control {
@@ -38,6 +39,8 @@ namespace test    {
   using util::isSameObject;
   using util::contains;
   using util::str;
+  using std::cout;
+  using std::endl;
   
   
   
@@ -49,7 +52,7 @@ namespace test    {
    * @test command usage aspects I: defining commands in various ways,
    *       then re-accessing those definitions, create instances,
    *       invoke them and undo the effect. Clean up finally.
-   *       
+   * 
    * @see Command
    * @see command-basic-test.cpp (simple usage example)
    */
@@ -101,26 +104,27 @@ namespace test    {
           ASSERT ( 0 == command1::check_);
         }
       
-            
+      
       void
       standardUse()
         {
           {
             CommandDef ("test.command1.2")
-                .operation (command1::operate)
-                .captureUndo (command1::capture)
-                .undoOperation (command1::undoIt)
-                ;
+                 .operation (command1::operate)
+                 .captureUndo (command1::capture)
+                 .undoOperation (command1::undoIt)
+                 ;
           }
           ASSERT (CommandDef("test.command1.2"));
           
-          Command com = Command::get("test.command1.2");
+          Command com ("test.command1.2");
           ASSERT (com);
+          ASSERT (com == Command::get("test.command1.2"));
           ASSERT (contains (str(com), "test.command1.2"));
           ASSERT (contains (str(com), "{def}"));
           ASSERT (!com.canExec());
           VERIFY_ERROR (UNBOUND_ARGUMENTS, com() );
-          ASSERT ( 0 == command1::check_); 
+          ASSERT ( 0 == command1::check_);
           
           VERIFY_ERROR (INVALID_ARGUMENTS, com.bind ("foo") );
           com.bind (random());             // note: run-time type check only
@@ -154,7 +158,7 @@ namespace test    {
           ASSERT (!def);
           
           def.operation (command1::operate)
-             .captureUndo (command1::capture); 
+             .captureUndo (command1::capture);
           ASSERT (!def);                       // undo functor still missing
           VERIFY_ERROR (INVALID_COMMAND, Command::get("test.command1.2") );
           
@@ -195,12 +199,11 @@ namespace test    {
       definePrototype()
         {
           CommandDef ("test.command1.3")
-              .operation (command1::operate)
-              .captureUndo (command1::capture)
-              .undoOperation (command1::undoIt)
-              .bind (random())
-              ;
-          
+               .operation (command1::operate)
+               .captureUndo (command1::capture)
+               .undoOperation (command1::undoIt)
+               .bind (random())
+               ;
           
           ASSERT (Command::get("test.command1.3").canExec());
         }
@@ -262,11 +265,15 @@ namespace test    {
           c2.storeDef ("test.command1.4");
           Command c4 = Command::get("test.command1.4");
           ASSERT (c4);
-          ASSERT (!c4.canUndo());
+          ASSERT (c4.canExec());
+          ASSERT (c4.canUndo());
+          ASSERT (c4 == c2);
+          ASSERT (c4 != c1);
           c4();
+          ASSERT (c4 != c2); // now lives independently from the original
           ASSERT (randVal + 2*23 == command1::check_);
           
-          c4.bind(-command1::check_);
+          c4.bind(int(-command1::check_)); // new command argument binding
           c4();
           ASSERT (0 == command1::check_);
           c2();
@@ -286,13 +293,13 @@ namespace test    {
               .undoOperation (command1::undoIt)
           
           ASSERT (CommandDef ("test.command1.1"));
-          VERIFY_ERROR (DUPLICATE_COMMAND, BUILD_NEW_COMMAND_DEF ("test.command1.1") );    
+          VERIFY_ERROR (DUPLICATE_COMMAND, BUILD_NEW_COMMAND_DEF ("test.command1.1") );
           ASSERT (CommandDef ("test.command1.2"));
-          VERIFY_ERROR (DUPLICATE_COMMAND, BUILD_NEW_COMMAND_DEF ("test.command1.2") );    
+          VERIFY_ERROR (DUPLICATE_COMMAND, BUILD_NEW_COMMAND_DEF ("test.command1.2") );
           ASSERT (CommandDef ("test.command1.3"));
-          VERIFY_ERROR (DUPLICATE_COMMAND, BUILD_NEW_COMMAND_DEF ("test.command1.3") );    
+          VERIFY_ERROR (DUPLICATE_COMMAND, BUILD_NEW_COMMAND_DEF ("test.command1.3") );
           ASSERT (CommandDef ("test.command1.4"));
-          VERIFY_ERROR (DUPLICATE_COMMAND, BUILD_NEW_COMMAND_DEF ("test.command1.4") );    
+          VERIFY_ERROR (DUPLICATE_COMMAND, BUILD_NEW_COMMAND_DEF ("test.command1.4") );
         }
       
       
@@ -305,8 +312,12 @@ namespace test    {
           cout << string (Command::get("test.command1.4")) << endl;
           cout << string (Command()                      ) << endl;
           
-          Command com = Command::get("test.command1.4").newInstance();
+          CommandDef ("test.command1.5")
+              .operation (command1::operate)
+              .captureUndo (command1::capture)
+              .undoOperation (command1::undoIt);
           
+          Command com("test.command1.5");
           cout << string (com) << endl;
           com.bind(123);
           cout << string (com) << endl;
@@ -346,33 +357,36 @@ namespace test    {
           ASSERT (!miracle.canUndo());
           ASSERT (!miracle);
           
-          Command c4 (Command::get("test.command1.4"));
+          Command c5 (Command::get("test.command1.5"));
           
           ASSERT (Command::remove("test.command1.1"));
           ASSERT (Command::remove("test.command1.2"));
           ASSERT (Command::remove("test.command1.3"));
           ASSERT (Command::remove("test.command1.4"));
+          ASSERT (Command::remove("test.command1.5"));
           
           ASSERT (!Command::remove("miracle")); // there is no such thing...
-
+          
           VERIFY_ERROR (INVALID_COMMAND,   Command::get("test.command1.1"));
           VERIFY_ERROR (INVALID_COMMAND,   Command::get("test.command1.2"));
           VERIFY_ERROR (INVALID_COMMAND,   Command::get("test.command1.3"));
           VERIFY_ERROR (INVALID_COMMAND,   Command::get("test.command1.4"));
+          VERIFY_ERROR (INVALID_COMMAND,   Command::get("test.command1.5"));
           VERIFY_ERROR (INVALID_COMMAND,   Command::get("miracle"));
           
           
           // note, removed the registered definitions,
           // but existing instances remain valid...
           // thus we're free to create new instances...
-          ASSERT (c4.isValid());
-          ASSERT (c4.canExec());
+          ASSERT (c5.isValid());
+          ASSERT (c5.canExec());
         }
     };
   
   
+  
   /** Register this test class... */
   LAUNCHER (CommandUse1_test, "function controller");
-      
-      
+  
+  
 }} // namespace control::test

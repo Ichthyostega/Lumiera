@@ -91,11 +91,11 @@ namespace control {
   
   /**
    *  Handle object representing a single Command instance to be used by client code.
-   *  Commands are accessed \link #get through a symbolic ID \endlink; there need to be
+   *  Commands are accessed \link #get through a symbolic ID \endlink; there needs to be
    *  a CommandDef somewhere to specify the actual operation and to define, how the
    *  effect of the command can be undone. Moreover, the command's definition 
    *  refers to a HandlingPattern, which describes how the command is actually
-   *  to be executed (the default is to schedule it within the ProcDispatcher)
+   *  to be executed (the default is scheduling it within the ProcDispatcher)
    *  
    *  Client code usually just
    *  - creates a command instance by referring to a command ID
@@ -121,7 +121,8 @@ namespace control {
       Command storeDef (Symbol newCmdID)  const;
       Command newInstance ()  const;
       
-      Command() { } ///< undefined command
+      Command (Symbol cmdID) { *this = get (cmdID); }
+      Command() { }          ///< undefined command
      ~Command();
       
       

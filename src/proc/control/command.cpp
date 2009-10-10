@@ -41,6 +41,7 @@
 
 #include "lib/util.hpp"
 #include "lib/error.hpp"
+#include "lib/symbol.hpp"
 #include "include/logging.h"
 #include "proc/control/command.hpp"
 #include "proc/control/command-def.hpp"
@@ -70,10 +71,33 @@ namespace control {
   LUMIERA_ERROR_DEFINE (MISSING_MEMENTO,   "Undo functor not yet usable, because no undo state has been captured");
   
   
+  namespace { // some common error checks...
+    
+    void
+    ___check_notBottom (const Command *handle, lib::Literal operation_descr)
+    {
+      REQUIRE (handle);
+      if (!handle->isValid())
+        throw error::Invalid (operation_descr+" an undefined command"
+                             , LUMIERA_ERROR_INVALID_COMMAND);
+    }
+    
+    void
+    ___check_isBound (const Command *handle)
+    {
+      REQUIRE (handle);
+      if (!handle->canExec())
+        throw error::State ("Lifecycle error: command arguments not bound"
+                           , LUMIERA_ERROR_UNBOUND_ARGUMENTS);
+    }
+    
+  }
+  
+  
+  
   
   /** storage for the singleton factory used to access CommandRegistry */
   lib::Singleton<CommandRegistry> CommandRegistry::instance;
-  
   
   
   Command::~Command() { }
@@ -147,6 +171,7 @@ namespace control {
   {
     CommandRegistry& registry = CommandRegistry::instance();
     
+    ___check_notBottom (this,"Cloning");
     if (registry.queryIndex (newCmdID))
       duplicate_detected (newCmdID);
     
@@ -161,6 +186,7 @@ namespace control {
   Command
   Command::newInstance ()  const
   {
+    ___check_notBottom (this,"Cloning");
     CommandRegistry& registry = CommandRegistry::instance();
     shared_ptr<CommandImpl> cloneImpl = registry.createCloneImpl(this->impl());
     
@@ -208,6 +234,7 @@ namespace control {
   void
   Command::setArguments (Arguments& args)
   {
+    ___check_notBottom (this, "Binding arguments of");
     _Handle::impl().setArguments(args);
   }
   
@@ -332,8 +359,10 @@ namespace control {
   ExecResult
   Command::undo ()
   {
+    ___check_notBottom (this,"Un-doing");
+    
     HandlingPattern const& defaultPattern
-      = HandlingPattern::get (getDefaultHandlingPattern()); 
+      = HandlingPattern::get (getDefaultHandlingPattern());
     
     return exec (defaultPattern.howtoUNDO());
   }
@@ -342,9 +371,8 @@ namespace control {
   ExecResult
   Command::exec (HandlingPattern const& execPattern)
   {
-    if (!canExec())
-      throw error::State ("Lifecycle error: command arguments not bound",
-                          LUMIERA_ERROR_UNBOUND_ARGUMENTS);
+    ___check_notBottom (this,"Invoking");
+    ___check_isBound   (this);
     
     CommandImpl& thisCommand (_Handle::impl());
     return execPattern.invoke (thisCommand, cStr(*this));
@@ -368,6 +396,7 @@ namespace control {
   HandlingPattern::ID
   Command::getDefaultHandlingPattern()  const
   {
+    ___check_notBottom (this,"Accessing");
     return impl().getDefaultHandlingPattern();
   }
   
@@ -375,6 +404,7 @@ namespace control {
   HandlingPattern::ID
   Command::setHandlingPattern (HandlingPattern::ID pattID)
   {
+    ___check_notBottom (this, "Configuring");
     return impl().setHandlingPattern(pattID);
   }
   
