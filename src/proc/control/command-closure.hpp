@@ -117,6 +117,9 @@ namespace control {
    */
   typedef FunErasure<StoreFunction> CmdFunctor;
   
+  class CommandImplCloneBuilder;
+  
+  
   class CmdClosure;
   typedef std::tr1::shared_ptr<CmdClosure> PClo;
   
@@ -129,17 +132,27 @@ namespace control {
     public:
       virtual ~CmdClosure() {}
       
-      virtual operator string() const                    =0;
-      virtual bool isValid ()   const                    =0;      ///< does this closure hold a valid argument tuple?
-      virtual bool isCaptured () const                   =0;      ///< does this closure hold captured UNDO state?
-      virtual bool equals (CmdClosure const&)  const     =0;      ///< is equivalent to the given other closure?
-      virtual void bindArguments (Arguments&)            =0;      ///< store a set of parameter values within this closure
-      virtual void invoke (CmdFunctor const&)            =0;      ///< invoke functor using the stored parameter values
-      virtual PClo createClone (TypedAllocationManager&) =0;      ///< create clone allocation without disclosing concrete type
+      virtual operator string() const                      =0;
+      virtual bool isValid ()   const                      =0;    ///< does this closure hold a valid argument tuple?
+      virtual bool isCaptured () const                     =0;    ///< does this closure hold captured UNDO state?
+      virtual bool equals (CmdClosure const&)  const       =0;    ///< is equivalent to the given other closure?
+      virtual void bindArguments (Arguments&)              =0;    ///< store a set of parameter values within this closure
+      virtual void invoke (CmdFunctor const&)              =0;    ///< invoke functor using the stored parameter values
+      virtual void accept (CommandImplCloneBuilder&) const =0;    ///< assist with creating clone closure without disclosing concrete type
     };
   
   
   inline ostream& operator<< (ostream& os, const CmdClosure& clo) { return os << string(clo); }
+  
+  class AbstractClosure
+    : public CmdClosure
+    {
+      bool isValid()    const { return false; }
+      bool isCaptured() const { return false; }
+      void accept (CommandImplCloneBuilder&) const {}
+    };
+  
+  
   
   
   
@@ -209,7 +222,7 @@ namespace control {
   
   template<typename SIG>
   class Closure
-    : public CmdClosure
+    : public AbstractClosure
     {
       typedef typename FunctionSignature< function<SIG> >::Args Args;
       
@@ -273,7 +286,6 @@ namespace control {
       
       
       bool isValid ()   const { return true; }
-      bool isCaptured() const { return false; }
       
       /// Supporting equality comparisons...
       friend bool operator== (Closure const& c1, Closure const& c2)  { return compare (c1.params_, c2.params_); }

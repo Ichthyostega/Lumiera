@@ -104,7 +104,7 @@ namespace control {
    */
   template<typename SIG, typename MEM>
   class ArgumentHolder
-    : public CmdClosure
+    : public AbstractClosure
     {
       /** copy construction allowed(but no assignment)*/
       ArgumentHolder& operator= (ArgumentHolder const&);
