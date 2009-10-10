@@ -50,12 +50,13 @@
 //#include "proc/control/command-closure.hpp"
 #include "proc/control/command-mutation.hpp"
 #include "lib/typed-allocation-manager.hpp"
+#include "lib/opaque-holder.hpp"
 //#include "lib/bool-checkable.hpp"
 
 #include <boost/noncopyable.hpp>
 //#include <boost/operators.hpp>
 
-#include <tr1/memory>
+//#include <tr1/memory>
 //#include <tr1/functional>
 
 
@@ -63,7 +64,61 @@ namespace control {
   
   using lib::TypedAllocationManager;
 //  using std::tr1::function;
-  using std::tr1::shared_ptr;
+//  using std::tr1::shared_ptr;
+  using lib::InPlaceBuffer;
+  
+  
+  namespace impl { // Helper: type erased context for creating command clones
+    
+    struct CloneContext  ///< Interface and empty state
+      {
+        virtual ~CloneContext() {}
+        
+        virtual UndoMutation const& getUndoFunc() { NOTREACHED(); }
+        virtual PClo         const& getClosure()  { NOTREACHED(); }
+        virtual bool                isValid()     { return false; }
+      };
+    
+    class ClonedContext
+      : public CloneContext
+      {
+        PClo newClosure_;
+        UndoMutation newUndoFunctor_;
+        
+        virtual UndoMutation const& getUndoFunc() { return newUndoFunctor_; }
+        virtual PClo         const& getClosure()  { return newClosure_; }
+        virtual bool                isValid()     { return true; }
+        
+        
+        /** helper for accessing the new cloned closure
+         *  through the specific concrete type. As we need
+         *  to access the closure later, after discarding the
+         *  exact type, we can store only a baseclass pointer.
+         */
+        template<typename ARG>
+        ARG&
+        downcast()
+          {
+            REQUIRE (INSTANCEOF (ARG, newClosure_.get()));
+            
+            return static_cast<ARG&> (*newClosure_);
+          }
+        
+        
+      public:
+        
+        template<typename ARG>
+        ClonedContext ( ARG const& origArgHolder
+                      , TypedAllocationManager& allocator
+                      )
+          : newClosure_(allocator.create<ARG> (origArgHolder))
+          , newUndoFunctor_(downcast<ARG>().getMementoWiring())
+          { }
+      };
+    
+  }//(End) impl namespace
+  
+  
   
   
   
@@ -75,76 +130,55 @@ namespace control {
    * and the memento storage within the cloned parts.
    */
   class CommandImplCloneBuilder
-//    : public lib::BoolCheckable<CommandImpl
-//           , boost::noncopyable
-//           >
     : public boost::noncopyable
     {
+      typedef InPlaceBuffer<impl::CloneContext, sizeof(impl::ClonedContext)> ContextHolder;
+      
       TypedAllocationManager& allocator_;
-      shared_ptr<CmdClosure> newClo_;
-      
-      
-      
-      template<typename ARG>
-      struct _Type
-        {
-          typedef typename ARG::SIG_op SIG_op;
-          typedef typename ARG::SIG_cap SIG_cap;
-          typedef typename ARG::SIG_undo SIG_undo;
-          
-          typedef function<SIG_op> Func_op;
-          typedef function<SIG_cap> Func_cap;
-          typedef function<SIG_undo> Func_undo;
-        };
-#define _TY(_ID_) typename _Type<ARG>::_ID_
+      ContextHolder newContext_;
       
     public:
-      CommandImplCloneBuilder (TypedAllocationManager allo)
+      CommandImplCloneBuilder (TypedAllocationManager& allo)
         : allocator_(allo)
-        , newClo_()
         { }
       
       
-      /** visit the CommandImpl given as reference 
-       *  to re-gain the contained Closure type context
-       */
-      void
-      visit (CommandImpl const& sourceImpl)
-        {
-          UNIMPLEMENTED ("get access to source context");
-        }
-      
-      
       /** to be executed from within the specifically typed context
-       *  of a concrete command ArgumentHolder; prepare the objects
-       *  necessary to re-build a "clone" of the UNDO-Functor.
+       *  of a concrete command ArgumentHolder; allocate a clone copy
+       *  and then prepare a new UNDO-Functor, which is correctly wired
+       *  with the memento holder within this new \em clone closure.
+       *  After that point, these prepared parts can be retrieved
+       *  through the public accessor functions; they will be 
+       *  used by the command registry to put together a complete
+       *  clone copy of the original CommandImpl.
        */
       template<typename ARG>
       void
-      buildCloneContext (shared_ptr<ARG> pArgHolder)
+      buildCloneContext (ARG const& origArgHolder)
         {
-          UNIMPLEMENTED ("how to reflect context back");
-          newClo_ = pArgHolder; 
+          REQUIRE (!newContext_->isValid(), "Lifecycle-Error");
+          
+          newContext_.create<impl::ClonedContext> (origArgHolder, allocator_); 
         }
       
-#undef _TY
       
       
       /** after visitation: use pre-built bits to provide a cloned UndoFunctor */
       UndoMutation const&
       clonedUndoMutation ()
         {
-          UNIMPLEMENTED (" getNewUndoMutation ()" );
+          REQUIRE (newContext_->isValid());
+          return newContext_->getUndoFunc();
         }
       
       
       /** after visitation: provide cloned ArgumentHolder,
        *  but already stripped down to the generic usage type */
-      shared_ptr<CmdClosure> const&
+      PClo const&
       clonedClosuere ()
         {
-          REQUIRE (newClo_);
-          return newClo_;
+          REQUIRE (newContext_->isValid());
+          return newContext_->getClosure();
         }
       
     };

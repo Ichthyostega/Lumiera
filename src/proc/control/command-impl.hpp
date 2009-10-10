@@ -124,7 +124,7 @@ namespace control {
       CommandImpl (CommandImpl const& orig, TypedAllocationManager& storageManager)
         : do_(orig.do_)
         , undo_(orig.undo_)
-        , pClo_(orig.pClo_->createClone(storageManager))
+//        , pClo_(orig.pClo_->createClone(storageManager))
         , defaultPatt_(orig.defaultPatt_)
         { }
       
@@ -134,12 +134,31 @@ namespace control {
        *  on a argument holder (without knowing the exact type),
        *  we need to delegate the cloning of the arguments down
        *  while providing a means of allocating storage for the clone */
-      CommandImpl (CommandImpl const& orig, UndoMutation const& newUndo, shared_ptr<CmdClosure>& newClosure)
+      CommandImpl (CommandImpl const& orig
+                  ,UndoMutation const& newUndo
+                  ,shared_ptr<CmdClosure> const& newClosure)
         : do_(orig.do_)
         , undo_(newUndo)
         , pClo_(newClosure)
         , defaultPatt_(orig.defaultPatt_)
         { }
+      
+      
+      /** assist with building a clone copy of this CommandImpl.
+       *  By accepting the clone builder as a visitor and dispatching
+       *  this visitation down into the concrete closure, the builder
+       *  can re-gain the fully typed context available on creation
+       *  of the ComandImpl. Within this context, for the clone 
+       *  to be created, the UndoMutation has to be re-wired,
+       *  otherwise it would continue to cooperate with
+       *  original closure.
+       */
+      void
+      prepareClone (CommandImplCloneBuilder& visitor)  const
+        {
+          ASSERT (pClo_);
+          pClo_->accept(visitor);
+        }
       
       
       void

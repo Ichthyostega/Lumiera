@@ -45,6 +45,7 @@
 #include "lib/typed-allocation-manager.hpp"
 #include "proc/control/command-closure.hpp"
 #include "proc/control/memento-tie.hpp"
+#include "proc/control/command-impl-clone-builder.hpp"
 #include "lib/opaque-holder.hpp"
 
 #include <string>
@@ -194,11 +195,12 @@ namespace control {
           memento_.template  create<MemHolder> (*oAh.memento_);
         }
       
-      /** create a clone copy, without disclosing the exact type */
-      PClo
-      createClone (TypedAllocationManager& storageManager)
+      /** assist with creating a clone copy;
+       *  this results in invocation of the copy ctor */
+      void
+      accept (CommandImplCloneBuilder& visitor)  const
         {
-          return storageManager.create<ArgumentHolder> (*this);
+          visitor.buildCloneContext (*this);
         }
       
       
@@ -228,6 +230,15 @@ namespace control {
            function<SIG_cap> const& captureFunc)
         {
           return memento_.template create<MemHolder> (undoFunc,captureFunc);
+        }
+      
+      /** just re-access an existing memento storage wiring.
+       *  Used when cloning the closure */
+      MementoTie<SIG,MEM>&
+      getMementoWiring ()
+        {
+          REQUIRE (!empty());
+          return *memento_;
         }
       
       

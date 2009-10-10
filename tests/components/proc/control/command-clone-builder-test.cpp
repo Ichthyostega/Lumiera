@@ -88,7 +88,7 @@ namespace test    {
 ////////////////////////////////////////////////////////////////////////////////////TODO            
 //          PCmdImpl clone  = registry.createCloneImpl (*source);
             CommandImplCloneBuilder cloneBuilder(allo);
-            cloneBuilder.visit (*source);
+            source->prepareClone(cloneBuilder);
             PCmdImpl clone  = allo.create<CommandImpl> (*source, cloneBuilder.clonedUndoMutation() 
                                                                , cloneBuilder.clonedClosuere());
 ////////////////////////////////////////////////////////////////////////////////////TODO        
@@ -166,16 +166,16 @@ namespace test    {
           ASSERT (!copy->canUndo());
           testExec.invoke (*copy, "Execute clone");        // EXEC 2
           ASSERT (command1::check_ != state_after_exec1);
-//          ASSERT (copy->canUndo());
+          ASSERT (copy->canUndo());
           ASSERT (copy != orig);
           
           // invoke UNDO on the clone
-//          testUndo.invoke (*copy, "Undo clone");           // UNDO 2
-//          ASSERT (command1::check_ == state_after_exec1);
+          testUndo.invoke (*copy, "Undo clone");           // UNDO 2
+          ASSERT (command1::check_ == state_after_exec1);
           
           // invoke UNDO on original
           testUndo.invoke (*orig, "Undo original");        // UNDO 1
-//          ASSERT (command1::check_ ==0);
+          ASSERT (command1::check_ ==0);
           
           ASSERT (copy != orig);
         }
