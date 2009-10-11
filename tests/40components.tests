@@ -829,6 +829,11 @@ return: 0
 END
 
 
+TEST "TypedAllocationManager_test" TypedAllocationManager_test <<END
+return: 0
+END
+
+
 TEST "VectorTransfer_test" VectorTransfer_test <<END
 return: 0
 END

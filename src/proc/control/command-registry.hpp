@@ -71,8 +71,9 @@ namespace control {
    */
   class CommandRegistry
     : public lib::Sync<>
-    , public TypedAllocationManager
     {
+      TypedAllocationManager allocator_;
+      
       
     public:
       static lumiera::Singleton<CommandRegistry> instance;
@@ -121,30 +122,30 @@ namespace control {
        *  @return the ID used to register this definition 
        *          or \c NULL in case of an "anonymous" command */
       const char*
-      findDefinition (Command const& cmdInstance)
+      findDefinition (Command const& cmdInstance)  const
         {
           UNIMPLEMENTED ("try to find a registration in the index for a given command instance");
         }
       
       
       size_t
-      index_size()
+      index_size()  const
         {
           UNIMPLEMENTED ("number of defs in the index");
         }
       
       
       size_t
-      instance_count()
+      instance_count()  const
         {
           UNIMPLEMENTED ("number of active command impl instances");
         }
       
       
       /** set up a new command implementation frame
-       *  @return pointer to a newly created CommandImpl, allocated 
-       *          through the registry. The caller is responsible for
-       *          deallocating this frame by calling #killCommandImpl 
+       *  @return shared-ptr owning a newly created CommandImpl, allocated 
+       *          through the registry and wired internally to invoke 
+       *          TypedAllocationManager#destroyElement for cleanup. 
        */
       template< typename SIG_OPER    ///< signature of the command operation
               , typename SIG_CAPT    ///< signature for capturing undo state
@@ -155,16 +156,15 @@ namespace control {
                      ,function<SIG_CAPT>& captFunctor
                      ,function<SIG_UNDO>& undoFunctor)
         {
-          Lock sync(this);
           
           // derive the storage type necessary
           // to hold the command arguments and UNDO memento
           typedef typename UndoSignature<SIG_CAPT>::Memento Mem;
           typedef ArgumentHolder<SIG_OPER,Mem> Arguments;
           
-          shared_ptr<Arguments> pArg (this->create<Arguments>());
+          shared_ptr<Arguments> pArg (allocator_.create<Arguments>());
           
-          return this->create<CommandImpl> (pArg, operFunctor,captFunctor,undoFunctor);
+          return allocator_.create<CommandImpl> (pArg, operFunctor,captFunctor,undoFunctor);
         }
       
       
@@ -176,12 +176,12 @@ namespace control {
        *  type information is vital for determining the exact allocation size for
        *  the clone ArgumentHolder. The only solution is to delegate the cloning
        *  of the arguments down into the ArgumentHolder, passing a reference
-       *  to the memory manager (=this object) for allocating the clone. 
+       *  to the memory manager for allocating the clone. 
        */
       shared_ptr<CommandImpl>
       createCloneImpl (CommandImpl const& reference)
         {
-          return this->create<CommandImpl> (reference, *this);
+          return allocator_.create<CommandImpl> (reference, allocator_);
         }
       
       

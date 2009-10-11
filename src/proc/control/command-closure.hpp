@@ -34,10 +34,31 @@
  ** internally contains an Closure<SIG> instance (where SIG is the signature of the
  ** actual command operation function), which implements the invocation of the
  ** operation function with the stored argument tuple.
- ** //TODO
- **  
+ ** 
+ ** \par Command Closure and Lifecycle
+ ** When defining a command, Mutation objects are to be created based on a concrete function.
+ ** These are stored embedded into a type erasure container, thus disposing the specific type
+ ** information of the function and function arguments. Each command needs an Mutation object
+ ** holding the command operation and an UndoMutation holding the undo functor. 
+ ** 
+ ** Later on, any command needs to be made ready for execution by binding it to a specific
+ ** execution environment, which especially includes the target objects to be mutated by the
+ ** command. Effectively, this means "closing" the Mutation (and UNDO) functor(s) with the
+ ** actual function arguments. These arguments are stored embedded within an ArgumentHolder,
+ ** which thereby acts as closure. Besides, the ArgumentHolder also has to accommodate for
+ ** storage holding the captured UNDO state (memento). Thus, internally the ArgumentHolder
+ ** has to keep track of the actual types, thus allowing to re-construct the concrete
+ ** function signature when closing the Mutation.
+ ** 
+ ** Finally, when invoking the command, it passes a \c CmdClosure& to the Mutation object,
+ ** which allows the embedded function to be called with the concrete arguments. Besides
+ ** just invoking it, a command can also be used like a prototype object. To support this
+ ** use case it is possible to re-bind to a new set of command arguments, and to create
+ ** a clone copy of the argument (holder) without disclosing the actual types involved. 
+ ** 
  ** @see Command
  ** @see ProcDispatcher
+ ** @see command-argument-holder.hpp
  **
  */
 
@@ -105,15 +126,12 @@ namespace control {
     public:
       virtual ~CmdClosure() {}
       
-      virtual operator string() const =0;
-      
-      virtual bool isValid ()   const =0;
-      
-      virtual void bindArguments (Arguments&) =0;
-      
-      virtual CmdFunctor closeArguments (CmdFunctor const&) =0;
-      
-      virtual PClo createClone (TypedAllocationManager&) =0;
+      virtual operator string() const                    =0;
+      virtual bool isValid ()   const                    =0;      ///< does this closure hold a valid argument tuple?
+      virtual bool isCaptured () const                   =0;      ///< does this closure hold captured UNDO state?
+      virtual void bindArguments (Arguments&)            =0;      ///< store a set of parameter values within this closure
+      virtual void invoke (CmdFunctor const&)            =0;      ///< invoke functor using the stored parameter values
+      virtual PClo createClone (TypedAllocationManager&) =0;      ///< create clone allocation without disclosing concrete type
     };
   
   
@@ -192,8 +210,8 @@ namespace control {
       typedef typename FunctionSignature< function<SIG> >::Args Args;
       
       
-      typedef BuildTupleAccessor<Args,ParamAccessor> BuildAccessor;
-      typedef typename BuildAccessor::Accessor ParamStorageTuple;
+      typedef BuildTupleAccessor<Args,ParamAccessor> Builder;
+      typedef typename Builder::Accessor ParamStorageTuple;
       
       ParamStorageTuple params_;
       
@@ -201,7 +219,7 @@ namespace control {
       typedef Tuple<Args> ArgTuple;
       
       Closure (ArgTuple const& args)
-        : params_(BuildAccessor(args))
+        : params_(Builder (args))
         { }
       
       /** create a clone copy of this, without disclosing the exact type */
@@ -219,26 +237,19 @@ namespace control {
       }
       
       
-      /** Core operation: use the embedded argument tuple
-       *  to close a given functor over its arguments.
-       *  @param unboundFunctor an function object, whose
-       *         function arguments are required to match 
-       *         the types of the embedded ParamStorageTuple
-       *  @return new functor object containing the function<void()>,
-       *         which is created by binding all arguments of the
-       *         input functor.
+      /** Core operation: use the embedded argument tuple for invoking a functor
+       *  @param unboundFunctor an function object, whose function arguments are
+       *         required to match the types of the embedded ParamStorageTuple
        *  @note  ASSERTION failure if the function signature 
        *         doesn't match the argument types tuple.
-       *  @note  when finally invoked, the functor, which is
-       *         bound here to the argument tuple, might actually
-       *         \em modify the param values. Thus this function
-       *         can't be const.
+       *  @note  the functor might actually \em modify the param values.
+       *         Thus this function can't be const.
        */
-      CmdFunctor
-      closeArguments (CmdFunctor const& unboundFunctor)
+      void
+      invoke (CmdFunctor const& unboundFunctor)
         {
-          return CmdFunctor (TupleApplicator<SIG> (params_)
-                               .bind ( unboundFunctor.getFun<SIG>()) );
+          TupleApplicator<SIG> apply_this_arguments(params_);
+          apply_this_arguments (unboundFunctor.getFun<SIG>());
         }
       
       
@@ -257,14 +268,14 @@ namespace control {
         }
       
       
-      bool isValid ()  const { return true; }
+      bool isValid ()   const { return true; }
+      bool isCaptured() const { return false; }
       
       
       /// Supporting equality comparisons...
       friend bool operator== (Closure const& c1, Closure const& c2)  { return compare (c1.params_, c2.params_); }
       friend bool operator!= (Closure const& c1, Closure const& c2)  { return ! (c1 == c2); }
     };
-  
   
   
   

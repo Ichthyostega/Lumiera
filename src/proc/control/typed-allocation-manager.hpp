@@ -43,8 +43,7 @@
  ** there might be some type erasure involved, leaving the (otherwise opaque) implementation
  ** class as the only entity with a limited knowledge about the actual memory layout, and
  ** thus the only way of creating a clone properly would be to forward down into this
- ** implementation class). As we can't expect to create a one-size-fits-all implementation,
- ** we'll allow for customising the TypedAllocationManager through policy classes. 
+ ** implementation class).
  ** 
  ** Thus, TypedAllocationManager provides the classical operations of an allocator
  ** - allocate
@@ -53,6 +52,9 @@
  ** But each of these operations is to be invoked in a \em typed context. Besides,
  ** there is a facility allowing to create ref-counting handles and smart-pointers,
  ** which are internally tied to this memory manager through a deleter function.
+ ** 
+ ** @todo using a quick-n-dirty heap allocation implementation for now (8/09),
+ **       but should write a custom allocator based on cehteh's mpool!
  ** 
  ** @see CommandRegistry
  ** @see AllocationCluster (another custom allocation scheme, which could be united)
@@ -66,40 +68,41 @@
 
 //#include "pre.hpp"
 #include "lib/error.hpp"
-//#include "lib/singleton.hpp"
-//#include "lib/sync.hpp"
 #include "lib/format.hpp"
 #include "include/logging.h"
-//#include "lib/bool-checkable.hpp"
 
 
 #include <tr1/memory>
-//#include <iostream>
-//#include <string>
 
 
 
-namespace control {
+namespace control { ////////////////////////////////////////////////////////////TODO: should go into namespace lib
   
   using std::tr1::shared_ptr;
-//  using std::ostream;
-//  using std::string;
   
   
   
   
   /**
-   * TODO type comment
+   * Foundation for a custom allocation manager,
+   * tracking the created objects by smart-ptrs.
+   * The public interface provides forwarding functions
+   * to invoke the ctor of the objects to be created, thereby
+   * placing them into the storage maintained by a low-level
+   * allocator or pooled storage manager. The created smart-ptr
+   * owns the new object and is wired internally to #releaseSlot.
+   * Subclasses may also directly allocate and de-allocate 
+   * such a (typed) storage slot.
+   * 
+   * @todo currently (as of 8/09) the low-level pooled allocator
+   *       isn't implemented; instead we do just heap allocations.
+   *       see Ticket 231
    */
   class TypedAllocationManager
     {
       typedef TypedAllocationManager _TheManager;
       
     public:
-
-      /** this is an ABC */
-      virtual ~TypedAllocationManager() {}
-      
       
       
       /* ======= managing the created objects ============= */
@@ -259,8 +262,8 @@ namespace control {
       Slot<XX>
       allocateSlot ()
         {
-          UNIMPLEMENTED ("redirect to the corresponding pool allocator");
-          void* space = 0;
+          TODO ("redirect to the corresponding pool allocator");
+          void* space = new char[sizeof(XX)];
           return Slot<XX> (this, space);
         }
       
@@ -268,7 +271,9 @@ namespace control {
       void
       releaseSlot (void* entry)
         {
-          UNIMPLEMENTED ("redirect to the corresponding pool allocator");
+          TODO ("redirect to the corresponding pool allocator");
+          typedef char Storage[sizeof(XX)];
+          delete[] reinterpret_cast<Storage*> (entry);
         }
       
       
@@ -277,6 +282,7 @@ namespace control {
       destroyElement (XX* entry)
         {
           if (!entry) return;
+          ////////////////////////////////////////////////TODO: when actually implementing a custom allocation, please assert here that the entry is indeed managed by us
           try
             {
               entry->~XX();
@@ -288,6 +294,9 @@ namespace control {
             }
           releaseSlot<XX> (entry);
         }
+      
+      template<class>
+      friend class Killer;  ///< especially all Killers are entitled to desroyElement()
       
     };
   

@@ -83,7 +83,7 @@ namespace lib {
   void
   AllocationCluster::MemoryManager::reset (TypeInfo info)
   {
-    Lock instance();
+    Lock sync(this);
     
     if (0 < mem_.size()) purge();
     type_ = info;
@@ -98,7 +98,7 @@ namespace lib {
   void
   AllocationCluster::MemoryManager::purge()
   {
-    Lock instance();
+    Lock sync(this);
     
     REQUIRE (type_.killIt, "we need a deleter function");
     REQUIRE (0 < type_.allocSize, "allocation size unknown");
@@ -122,7 +122,7 @@ namespace lib {
   inline void*
   AllocationCluster::MemoryManager::allocate()
   {
-    Lock instance();
+    Lock sync(this);
     
     REQUIRE (0 < type_.allocSize);
     REQUIRE (top_ <= mem_.size());
@@ -142,7 +142,7 @@ namespace lib {
   inline void
   AllocationCluster::MemoryManager::commit (void* pendingAlloc)
   {
-    Lock instance();
+    Lock sync(this);
     
     REQUIRE (pendingAlloc);
     ASSERT (top_ < mem_.size());

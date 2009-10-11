@@ -1,5 +1,5 @@
 /*
-  HANDLILNG-PATTERNS.hpp  -  Collection of predefinded command handling patterns
+  HANDLILNG-PATTERNS.hpp  -  Collection of predefined command handling patterns
  
   Copyright (C)         Lumiera.org
     2009,               Hermann Vosseler <Ichthyostega@web.de>
@@ -26,7 +26,7 @@
  ** There is a small number of different possibilities to handle execution
  ** and UNDO of proc-Layer commands. Each of these is defined as a subclass
  ** in this header and then hard wired into a small table. Handling patterns
- ** are stateless singleton objects, thus we build use SingletonSubclass
+ ** are stateless singleton objects, thus we build using SingletonSubclass
  ** factory objects and configure them hard wired with the respective
  ** implementation classes. The index positions in this table match
  ** the sequence within the enum HandlingPattern::ID; all of this
@@ -46,6 +46,7 @@
 #include "lib/error.hpp"
 #include "lib/singleton-subclass.hpp"
 #include "proc/control/handling-pattern.hpp"
+#include "proc/control/command-impl.hpp"
 #include "proc/mobject/session.hpp"
 #include "include/lifecycle.h"
 //#include "include/symbol.hpp"
@@ -75,7 +76,7 @@ namespace control {
       : public HandlingPattern
       {
         void
-        perform (Command& command)  const
+        perform (CommandImpl& command)  const
           {
             UNIMPLEMENTED ("actually invoke a command, according to this pattern");
           }
@@ -103,7 +104,7 @@ namespace control {
       : public HandlingPattern
       {
         void
-        perform (Command& command)  const
+        perform (CommandImpl& command)  const
           {
             UNIMPLEMENTED ("actually invoke a command, according to this pattern");
           }
@@ -131,7 +132,7 @@ namespace control {
       : public HandlingPattern
       {
         void
-        perform (Command& command)  const
+        perform (CommandImpl& command)  const
           {
             UNIMPLEMENTED ("actually invoke a command, according to this pattern");
           }
@@ -180,9 +181,9 @@ namespace control {
     {
       using lumiera::singleton::UseSubclass;
       
-      patternTable[HandlingPattern::SYNC]        = SingletonFac(UseSubclass<InvokeSyncNoThrow>());
+      patternTable[HandlingPattern::SYNC      ]  = SingletonFac(UseSubclass<InvokeSyncNoThrow>());
       patternTable[HandlingPattern::SYNC_THROW]  = SingletonFac(UseSubclass<InvokeSyncThrow>());
-      patternTable[HandlingPattern::ASYNC]       = SingletonFac(UseSubclass<InvokeAsync>());
+      patternTable[HandlingPattern::ASYNC     ]  = SingletonFac(UseSubclass<InvokeAsync>());
     }
     
     

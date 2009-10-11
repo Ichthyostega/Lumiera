@@ -271,14 +271,15 @@ namespace control {
   ExecResult
   Command::exec (HandlingPattern const& execPattern)
   {
-    return execPattern (*this);
+    CommandImpl& thisCommand (_Handle::impl());
+    return execPattern.invoke (thisCommand, cStr(*this));
   }
   
   
   ExecResult
   Command::exec (HandlingPattern::ID pattID)
   {
-    return HandlingPattern::get(pattID) (*this);
+    return exec (HandlingPattern::get(pattID));
   }
   
   

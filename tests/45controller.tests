@@ -36,9 +36,8 @@ END
 
 
 TEST "Command functor and UNDO functor" CommandMutation_test <<END
-out: Mutation\(untied\)
+out: empty placeholder closure: Closure\(0\)
 out: param values: Closure\(23\)
-out: Mutation\(Closure\(23\)\)
 out: saved state: 11
 END
 

@@ -29,6 +29,7 @@
 #include "lib/util.hpp"
 
 #include <boost/format.hpp>
+#include <tr1/functional>
 #include <iostream>
 #include <sstream>
 #include <cstdlib>
@@ -213,6 +214,7 @@ namespace test    {
           
           for_each (tup, showIt);
           
+////////////////////////TODO: Ticket #266
           arg1->bind ();
           arg2->bind (rand() % 10);
           arg3->bind (rand() % 10, randTime());
@@ -324,9 +326,9 @@ namespace test    {
           typedef function<void()> OpFun;
           
           // now close all the functions with the stored parameter values... 
-          OpFun bound_doItFun = args.closeArguments (CmdFunctor(doItFun)).getFun<void()>();
-          OpFun bound_undoFun = args.closeArguments (CmdFunctor(undoFun)).getFun<void()>();
-          OpFun bound_captFun = args.closeArguments (CmdFunctor(captFun)).getFun<void()>();
+          OpFun bound_doItFun = std::tr1::bind (&CmdClosure::invoke, args, CmdFunctor(doItFun));
+          OpFun bound_undoFun = std::tr1::bind (&CmdClosure::invoke, args, CmdFunctor(undoFun));
+          OpFun bound_captFun = std::tr1::bind (&CmdClosure::invoke, args, CmdFunctor(captFun));
           
           protocol.seekp(0);
           protocol << "START...";

@@ -197,21 +197,21 @@ namespace lib {
   //-----implementation-details------------------------
   
   struct AllocationCluster::TypeInfo
-        {
-          size_t allocSize;
-          void (*killIt)(void*);  ///< deleter function
-          
-          template<class TY>
-          TypeInfo(TY*)
-            : allocSize(sizeof(TY)),
-              killIt(&TypeSlot<TY>::kill)
-            { }
-          
-          TypeInfo()  ///< denotes "unknown" type
-            : allocSize(0),
-              killIt(0)
-            { }  
-        };
+    {
+      size_t allocSize;
+      void (*killIt)(void*);  ///< deleter function
+      
+      template<class TY>
+      TypeInfo(TY*)
+        : allocSize(sizeof(TY)),
+          killIt(&TypeSlot<TY>::kill)
+        { }
+      
+      TypeInfo()  ///< denotes "unknown" type
+        : allocSize(0),
+          killIt(0)
+        { }  
+    };
   
   
   

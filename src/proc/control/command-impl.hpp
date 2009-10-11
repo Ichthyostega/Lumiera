@@ -43,8 +43,8 @@
 #define CONTROL_COMMAND_IMPL_H
 
 #include "proc/control/command.hpp"
+#include "proc/control/command-closure.hpp"
 #include "proc/control/command-mutation.hpp"
-#include "proc/control/command-argument-holder.hpp"
 #include "proc/control/typed-allocation-manager.hpp"
 #include "lib/bool-checkable.hpp"
 
@@ -59,11 +59,15 @@ namespace control {
   
   using std::tr1::function;
   using std::tr1::shared_ptr;
-
+  
   
   
   /**
-   * @todo Type-comment
+   * Proc-Layer Command implementation.
+   * Data record holding together the parts necessary for command execution
+   * - command operation functor
+   * - a functor to UNDO the command effect
+   * - closure holding actual parameters and UNDO state
    */
   class CommandImpl
     : public lib::BoolCheckable<CommandImpl
@@ -132,12 +136,12 @@ namespace control {
       setArguments (Arguments& args)
         {
           pClo_->bindArguments(args);
-          
-          TODO ("this will break when re-binding to new arguments");
-          
-          do_  .close(*pClo_);
-          undo_.close(*pClo_);
         }
+      
+      void invokeOperation() { do_(*pClo_); }
+      void invokeCapture()   { undo_.captureState(*pClo_); }
+      void invokeUndo()      { undo_(*pClo_); }
+      
       
       
       typedef HandlingPattern::ID PattID;
@@ -173,25 +177,24 @@ namespace control {
       canExec()  const    ///< state check: sufficiently defined to be invoked 
         {
           return isValid()
-              && *pClo_ && do_;
+              && *pClo_;
         }
       
       bool
       canUndo()  const    ///< state check: has undo state been captured? 
         {
-          return isValid() && undo_;
+          return isValid() && pClo_->isCaptured();
         }
       
       
       ////////////////////////////////////////////////////////////////////////////////////TODO comparisons
       
-    protected:
+    private:
       
     };
-  ////////////////TODO currently just fleshing  out the API....
   
-
-
+  
+  
   
   
 } // namespace control

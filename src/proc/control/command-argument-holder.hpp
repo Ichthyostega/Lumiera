@@ -107,7 +107,10 @@ namespace control {
     : public AcceptArgumentBinding< SIG                      // to derive the desired bind(..) signature
                                   , ArgumentHolder<SIG,MEM>  // target class providing the implementation
                                   , CmdClosure               // base class to inherit from
-                                  > 
+                                  >
+    
+////////////////////////TODO: Ticket #266
+//  : public CmdClosure
     {
       /** copy construction allowed(but no assignment)*/
       ArgumentHolder& operator= (ArgumentHolder const&);
@@ -137,6 +140,12 @@ namespace control {
           return arguments_->isValid();
         }
       
+      virtual bool isCaptured() const
+        {
+          return memento_->isValid();
+        }
+
+      
       
       /** assign a new parameter tuple to this */
       virtual void bindArguments (Arguments& args)
@@ -148,14 +157,14 @@ namespace control {
       }
       
       
-      virtual CmdFunctor closeArguments (CmdFunctor const& func)
+      virtual void invoke (CmdFunctor const& func)
         {
           if (!isValid())
             throw lumiera::error::State ("Lifecycle error: can't bind functor, "
                                          "command arguments not yet provided",
                                          LUMIERA_ERROR_UNBOUND_ARGUMENTS);
           
-          return arguments_->closeArguments(func);
+          arguments_->invoke(func);
         }
       
       
@@ -202,7 +211,7 @@ namespace control {
       
       
       /** store a new argument tuple within this ArgumentHolder,
-       *  discarding and previously stored arguments */
+       *  discarding any previously stored arguments */
       void
       bindArg (ArgTuple const& argTup)
         {
