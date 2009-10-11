@@ -20,7 +20,6 @@
 #include <iostream>
 
 
-using std::rand;
 using std::string;
 using std::cout;
 
@@ -30,20 +29,6 @@ main (int, char**) //(int argc, char* argv[])
   {
     
     NOBUG_INIT;
-    
-    for (int i=0; i<10; ++i)
-      {
-        TestIt1 testrosteron (i);
-        
-        if (testrosteron)
-          cout << "doIt \n";
-        if (!testrosteron)
-          cout << i << "\n";
-      }
-    cout << "size=" << sizeof(TestIt1) <<"\n";
-    
-    char* horror = 0;
-    ERROR (all, "note: %s is a horrible thing", horror);
     
     cout <<  "\n.gulp.\n";
     

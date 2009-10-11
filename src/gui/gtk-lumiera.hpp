@@ -17,8 +17,6 @@
 #include <boost/weak_ptr.hpp>
 #include <boost/scoped_ptr.hpp>
 
-#include "lib/lumitime.hpp"
-
 #include <gdl/gdl-dock-layout.h>
 
 extern "C" {
