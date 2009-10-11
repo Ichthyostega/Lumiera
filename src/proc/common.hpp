@@ -43,7 +43,8 @@
 
 #include "include/nobugcfg.h"
 #include "common/dummy-func.hpp"
-#include "include/symbol.hpp"
+#include "lib/lumitime.hpp"
+#include "lib/symbol.hpp"
 
 
 /**
