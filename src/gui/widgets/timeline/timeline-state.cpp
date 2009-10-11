@@ -25,6 +25,7 @@
 using namespace boost;
 using namespace Gtk;
 using namespace sigc;
+using namespace lumiera;
 
 namespace gui {
 namespace widgets {
@@ -33,17 +34,17 @@ namespace timeline {
 TimelineState::TimelineState(
   boost::shared_ptr<model::Sequence> source_sequence) :
   sequence(source_sequence),
-  viewWindow(0, 1),
+  viewWindow(Time(0), 1),
   selectionStart(0),
   selectionEnd(0),
   playbackPeriodStart(0),
   playbackPeriodEnd(0),
-  playbackPoint(GAVL_TIME_UNDEFINED)
+  playbackPoint(Time(GAVL_TIME_UNDEFINED))
 {
   REQUIRE(sequence);
   
   viewWindow.set_time_scale(GAVL_TIME_SCALE / 200);
-  set_selection(2000000, 4000000);
+  set_selection(Time(2000000), Time(4000000));
 }
 
 boost::shared_ptr<model::Sequence>
@@ -58,20 +59,20 @@ TimelineState::get_view_window()
   return viewWindow;
 }
 
-gavl_time_t
+Time
 TimelineState::get_selection_start() const
 {
   return selectionStart;
 }
 
-gavl_time_t
+Time
 TimelineState::get_selection_end() const
 {
   return selectionEnd;
 }
 
 void
-TimelineState::set_selection(gavl_time_t start, gavl_time_t end,
+TimelineState::set_selection(Time start, Time end,
   bool reset_playback_period)
 {    
   if(start < end)
@@ -95,20 +96,20 @@ TimelineState::set_selection(gavl_time_t start, gavl_time_t end,
   selectionChangedSignal.emit();
 }
 
-gavl_time_t
+Time
 TimelineState::get_playback_period_start() const
 {
   return playbackPeriodStart;
 }
   
-gavl_time_t
+Time
 TimelineState::get_playback_period_end() const
 {
   return playbackPeriodEnd;
 }
   
 void
-TimelineState::set_playback_period(gavl_time_t start, gavl_time_t end)
+TimelineState::set_playback_period(Time start, Time end)
 {
   
   if(start < end)
@@ -127,13 +128,13 @@ TimelineState::set_playback_period(gavl_time_t start, gavl_time_t end)
 }
 
 void
-TimelineState::set_playback_point(gavl_time_t point)
+TimelineState::set_playback_point(Time point)
 {
   playbackPoint = point;
   playbackChangedSignal.emit();
 }
 
-gavl_time_t
+Time
 TimelineState::get_playback_point() const
 {
   return playbackPoint;

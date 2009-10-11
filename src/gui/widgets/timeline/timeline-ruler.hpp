@@ -198,7 +198,7 @@ private:
    * the mouse, the other is pinned. pinnedDragTime specifies the time
    * of that point.
    */
-  gavl_time_t pinnedDragTime;
+  lumiera::Time pinnedDragTime;
   
   // Indicated values
   /**

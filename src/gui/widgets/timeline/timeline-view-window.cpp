@@ -25,26 +25,27 @@
 
 using namespace Gtk;
 using namespace gui::widgets;
+using namespace lumiera;
 
 namespace gui {
 namespace widgets {
 namespace timeline {
 
 TimelineViewWindow::TimelineViewWindow(
-  gavl_time_t offset, int64_t scale) :
+  Time offset, int64_t scale) :
   timeOffset(offset),
   timeScale(scale)
 {
 }
 
-gavl_time_t
+Time
 TimelineViewWindow::get_time_offset() const
 {
   return timeOffset;
 }
 
 void
-TimelineViewWindow::set_time_offset(gavl_time_t offset)
+TimelineViewWindow::set_time_offset(Time offset)
 {
   timeOffset = offset;
   changedSignal.emit();
@@ -80,8 +81,8 @@ TimelineViewWindow::zoom_view(int point, int zoom_size)
     new_time_scale = TimelineWidget::MaxScale;
   
   // The view must be shifted so that the zoom is centred on the cursor
-  set_time_offset(get_time_offset() +
-    (timeScale - new_time_scale) * point);
+  set_time_offset(Time((gavl_time_t)get_time_offset() +
+    (timeScale - new_time_scale) * point));
     
   // Apply the new scale
   set_time_scale(new_time_scale);
@@ -90,8 +91,8 @@ TimelineViewWindow::zoom_view(int point, int zoom_size)
 void
 TimelineViewWindow::shift_view(int view_width, int shift_size)
 {
-  set_time_offset(get_time_offset() +
-    shift_size * timeScale * view_width / 256);
+  set_time_offset(Time((gavl_time_t)get_time_offset() +
+    shift_size * timeScale * view_width / 256));
 }
 
 int
@@ -100,10 +101,10 @@ TimelineViewWindow::time_to_x(gavl_time_t time) const
   return (int)((time - timeOffset) / timeScale);
 }
 
-gavl_time_t
+Time
 TimelineViewWindow::x_to_time(int x) const
 {
-  return (gavl_time_t)((int64_t)x * timeScale + timeOffset);
+  return Time((gavl_time_t)((int64_t)x * timeScale + timeOffset));
 }
 
 sigc::signal<void>

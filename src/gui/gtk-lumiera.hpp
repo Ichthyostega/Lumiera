@@ -39,6 +39,7 @@
 #include <boost/scoped_ptr.hpp>
 #include <boost/enable_shared_from_this.hpp>
 #include "lib/util.hpp"
+#include "lib/lumitime.hpp"
 
 #include "window-manager.hpp"
 

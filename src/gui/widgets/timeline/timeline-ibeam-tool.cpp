@@ -25,6 +25,7 @@
 
 using namespace boost;
 using namespace gui::widgets;
+using namespace lumiera;
 
 namespace gui {
 namespace widgets {
@@ -95,7 +96,7 @@ IBeamTool::on_button_press_event(GdkEventButton* event)
   
   if(event->button == 1)
     {
-      const gavl_time_t time =
+      const Time time =
         state->get_view_window().x_to_time(event->x);
       
       if(is_mouse_in_start_drag_zone())
@@ -187,7 +188,7 @@ IBeamTool::set_leading_x(const int x)
   shared_ptr<TimelineState> state = get_state();
 
   const bool set_playback_period = dragType == Selection;
-  const gavl_time_t time = state->get_view_window().x_to_time(x);
+  const Time time = state->get_view_window().x_to_time(x);
   if(time > pinnedDragTime)
     state->set_selection(pinnedDragTime, time, set_playback_period);
   else

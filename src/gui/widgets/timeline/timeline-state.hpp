@@ -70,12 +70,12 @@ public:
   /**
    * Gets the time at which the selection begins.
    */
-  gavl_time_t get_selection_start() const;
+  lumiera::Time get_selection_start() const;
   
   /**
    * Gets the time at which the selection begins.
    */
-  gavl_time_t get_selection_end() const;
+  lumiera::Time get_selection_end() const;
   
   /**
    * Sets the period of the selection.
@@ -84,39 +84,39 @@ public:
    * @param reset_playback_period Specifies whether to set the playback
    * period to the same as this new selection.
    */
-  void set_selection(gavl_time_t start, gavl_time_t end,
+  void set_selection(lumiera::Time start, lumiera::Time end,
     bool reset_playback_period = true);
   
   /**
    * Gets the time at which the playback period begins.
    */
-  gavl_time_t get_playback_period_start() const;
+  lumiera::Time get_playback_period_start() const;
   
   /**
    * Gets the time at which the playback period ends.
    */
-  gavl_time_t get_playback_period_end() const;
+  lumiera::Time get_playback_period_end() const;
   
   /**
    * Sets the playback period.
    * @param start The start time.
    * @param end The end time.
    */
-  void set_playback_period(gavl_time_t start, gavl_time_t end);
+  void set_playback_period(lumiera::Time start, lumiera::Time end);
   
   /**
    * Sets the time which is currenty being played back.
    * @param point The time index being played. This value may be
    * GAVL_TIME_UNDEFINED, if there is no playback point.
    */
-  void set_playback_point(gavl_time_t point);
+  void set_playback_point(lumiera::Time point);
   
   /**
    * Gets the current playback point.
    * @return The time index of the playback point. This value may be
    * GAVL_TIME_UNDEFINED, if there is no playback point.
    */
-  gavl_time_t get_playback_point() const;
+  lumiera::Time get_playback_point() const;
   
   /**
    * A signal to notify when the selected period has changed.
@@ -150,27 +150,27 @@ private:
   /**
    * The start time of the selection period.
    **/
-  gavl_time_t selectionStart;
+  lumiera::Time selectionStart;
   
   /**
    * The end time of the selection period.
    **/
-  gavl_time_t selectionEnd;
+  lumiera::Time selectionEnd;
   
   /**
    * The start time of the playback period.
    **/
-  gavl_time_t playbackPeriodStart;
+  lumiera::Time playbackPeriodStart;
   
   /**
    * The end time of the playback period.
    **/
-  gavl_time_t playbackPeriodEnd;
+  lumiera::Time playbackPeriodEnd;
   
   /**
    * The time of the playback point.
    **/
-  gavl_time_t playbackPoint;
+  lumiera::Time playbackPoint;
   
   // Signals
   
