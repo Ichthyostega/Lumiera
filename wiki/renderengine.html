@@ -3050,21 +3050,24 @@ Placement references mimic the behaviour of a real placement, i.e. they proxy th
 {{red{WIP}}}
 </pre>
 </div>
-<div title="PlacementScope" modifier="Ichthyostega" modified="200905210132" created="200905120304" tags="SessionLogic spec draft" changecount="5">
+<div title="PlacementScope" modifier="Ichthyostega" modified="200910120543" created="200905120304" tags="SessionLogic spec img" changecount="13">
 <pre>MObjects are attached into the [[Session]] by adding a [[Placement]]. Because this especially includes the case of //grouping or container objects,// e.g. tracks or [[meta-clips|VirtualClip]], any placement may optionally define and root a scope, and every placement is at least contained in one encompassing scope &amp;mdash; of course with the exception of the absolute top level, which can be thought off as being contained in a scope of handling rules.
 
-Thus, while the [[sequences (former called EDL)|EDL]] act as generic container holding a pile of placments, actually there is a more fine grained structure based on the nesting of the tracks, which especially in Lumiera's HighLevelModel belong to the sequence (they aren't a property of the top level timeline as one might expect). Building upon these observations, we actually require each addition of a placement to specify a scope. The implementation of this tie-to-scope is provided by the same mechanism as utilized for relative placements, i.e. an directional placement relation.
+Thus, while the [[sequences (former called EDL)|EDL]] act as generic container holding a pile of placments, actually there is a more fine grained structure based on the nesting of the tracks, which especially in Lumiera's HighLevelModel belong to the sequence (they aren't a property of the top level timeline as one might expect). Building upon these observations, we actually require each addition of a placement to specify a scope. The implementation of this tie-to-scope is provided by the same mechanism as utilised for relative placements, i.e. an directional placement relation. This relation actually is implemented by the PlacementIndex
 
+
+[&gt;img[Structure of Placment Scopes|draw/ScopeStructure1.png]]
 !Kinds of scopes
 There is only a limited number of situations constituting a scope
-* conceptually, the very top level is a scope of general rules. It is implemented as {{{Placement&lt;Binding&gt;}}}, where [[the binding|BindingMO]] is a meta-object representing the relation.
-* similarily, the link binding a [[Sequence|EDL]] into either a (top-level) timeline or as virtual media into a VirtualClip is rather special.
+* conceptually, the very top level is a scope of general rules.
+* the next level is the link of [[binding|BindingMO]] of a [[Sequence|EDL]] into either a (top-level) [[Timeline]] or as virtual media into a VirtualClip. It is implemented through a {{{Placement&lt;Binding&gt;}}}.
 * each sequence has at least one (manadtory) top-level placement holding its root track
 * tracks may contain nested sub tracks.
 * clips and (track-level) effects likewise are associated with an enclosing track.
 * an important special case of relative placement is when an object is [[attached|AttachedPlacementProblem]] to another leading object, like e.g. an effect modifying a clip
 
-In any case, adding a placement to a scope is to be implemented such as to ensure the presence of a suitable LocatingPin, serving to tie the placement into the scope. This LocatingPin in turn will manage a relation to the scope-defining placement, and by doing so, it will insert the relation information into the [[index|PlacementIndex]]. The remaining problem for the implementation is to find a suitable factory function to set up the mentioned pin.
+!Purpose of Placement scoping
+Similar to the common mechanisms of object visibility in programming languages, placement scopes guide the search for and resolution of properties of placement. Any such property //not defined locally// within the placement is queried ascending through the sequence of nested scopes. Thus, global definitions can be shadowed by local ones.
 </pre>
 </div>
 <div title="PlanningBuildFixture" modifier="Ichthyostega" modified="200801061937" created="200712100445" tags="impl Builder draft" changecount="11">
@@ -3161,7 +3164,7 @@ We need a way of addressing existing [[pipes|Pipe]]. Besides, as the Pipes and T
 &lt;&lt;tasksum end&gt;&gt;
 </pre>
 </div>
-<div title="PlanningSessionInMem" modifier="Ichthyostega" modified="200907212231" created="200904252258" tags="impl SessionLogic draft" changecount="33">
+<div title="PlanningSessionInMem" modifier="Ichthyostega" modified="200910112133" created="200904252258" tags="impl SessionLogic draft" changecount="48">
 <pre>//This page is a scrapbook for working out the implementation of the [[Session Datastructure in Memory|SessionDataMem]]//
 This is a difficult untertaking, because there are several dependencies (most of which aren't fully designed yet as of 5/09)
 * the GUI uses an adapted version of the HighLevelModel; these datastructures are intended to be backed by the Session
@@ -3181,13 +3184,11 @@ This is a difficult untertaking, because there are several dependencies (most of
 
 &lt;&lt;tasksum start&gt;&gt;
 &lt;&lt;taskadder below&gt;&gt;
-&lt;&lt;task 3 3 3&gt;&gt; how to deal with UNDO
-&lt;&lt;task 2 2 2&gt;&gt; how to deal with CommandDefinition
-&lt;&lt;task &gt;&gt; outline the CommandLifecycle
-&lt;&lt;task 5 15 15&gt;&gt; implement a system for defining parameters and targets
-&lt;&lt;task &gt;&gt; implement a system for generating operations
-&lt;&lt;task 2 2 1&gt;&gt; define the general structure of operations
-&lt;&lt;task &gt;&gt; specify the editing operations
+&lt;&lt;task &gt;&gt; standard implementation of a query, including use of lumiera forward iterators
+&lt;&lt;task &gt;&gt; identify and plan the possible queries
+&lt;&lt;task &gt;&gt; BindingMO
+&lt;&lt;task &gt;&gt; scope concept
+&lt;&lt;task &gt;&gt; outline the general style of the [[(query) interface|SessionQueryStructure]]
 
 !Interface
 &lt;&lt;task 1 1 1&gt;&gt; evaluate models for the [[reference problem|MObjectRef]]
@@ -3195,8 +3196,17 @@ This is a difficult untertaking, because there are several dependencies (most of
 &lt;&lt;task 1 2 2&gt;&gt; incorporate this ID into class Placement
 &lt;&lt;task 2 2&gt;&gt; define PlacementRef and MObjectRef behaviour
 &lt;&lt;task 1 0&gt;&gt; wire up [[Session]] interface as a LayerSeparationInterface
-&lt;&lt;task 1 1 0&gt;&gt; implement PlacementRef
+&lt;&lt;task 1 1 1&gt;&gt; implement PlacementRef
 &lt;&lt;task 2 2 0&gt;&gt; implement MObjectRef
+
+!Mutations
+&lt;&lt;task 3 3 3&gt;&gt; how to deal with UNDO
+&lt;&lt;task 2 2 2&gt;&gt; how to deal with CommandDefinition
+&lt;&lt;task 1 1&gt;&gt; outline the CommandLifecycle
+&lt;&lt;task 14 45 45&gt;&gt; design and implement CommandHandling framework
+&lt;&lt;task 2 2 1&gt;&gt; define the general structure of operations
+&lt;&lt;task &gt;&gt; implement a system for generating operations
+&lt;&lt;task &gt;&gt; specify the editing operations
 
 !Datastructure
 &lt;&lt;task&gt;&gt;investigate the best granularity for object collections
@@ -3759,21 +3769,22 @@ Currently as of 5/09, this is an ongoing [[implementation and planning effort|Pl
 
 {{red{TODO...}}}</pre>
 </div>
-<div title="SessionInterface" modifier="Ichthyostega" modified="200906071959" created="200904242108" tags="SessionLogic GuiIntegration design draft discuss" changecount="7">
+<div title="SessionInterface" modifier="Ichthyostega" modified="200910112324" created="200904242108" tags="SessionLogic GuiIntegration design draft discuss" changecount="8">
 <pre>&quot;Session Interface&quot;, when used in a more general sense, denotes a compound of several interfaces and facilities, together forming the primary access point to the user visible contents and state of the editing project.
 * the API of the session class
 * the accompanying management interface (SessionManager API)
 * an LayerSeparationInterfaces allowing to access these interfaces from outside the Proc-Layer
-* the primary public ~APIs exposed on the objects to be queried and retrieved via the session class API
+* the primary public ~APIs exposed on the objects to be [[queried and retrieved|SessionQueryStructure]] via the session class API
+** Timeline
 ** Sequence
 ** Placement
 ** Clip
 ** Track
 ** Effect
 ** Automation
-* the [[command|CommandHandling]] interface, including the [[undo|UndoManager]] facility
+* the [[command|CommandHandling]] interface, including the [[UNDO|UndoManager]] facility
 
-{{red{WIP}}}</pre>
+{{red{WIP ... just emerging}}}</pre>
 </div>
 <div title="SessionLogic" modifier="Ichthyostega" modified="200906072005" created="200904242110" tags="overview" changecount="13">
 <pre>The Session contains all informations, state and objects to be edited by the User (&amp;rarr;[[def|Session]]).
@@ -3819,6 +3830,41 @@ It will contain a global video and audio out pipe, just one EDL with a single tr
 &amp;rarr; considerations regarding [[Tracks and Pipes within the EDL|TrackPipeEDL]]
 &amp;rarr; see [[Relation of Project, Timelines and Sequences|TimelineSequences]]
 </pre>
+</div>
+<div title="SessionStructureQuery" modifier="Ichthyostega" modified="200910120607" created="200910112322" tags="SessionLogic design draft discuss" changecount="12">
+<pre>The frontside interface of the session allows to query for contained objects; it is used to discover the structure and contents of the currently opened session/project. Access point is the public API of the Session class, which, besides exposing those queries, also provides functionality for adding and removing session contents.
+
+!discovering structure
+The session can be seen as an agglomeration of nested and typed containers.
+Thus, at any point, we can explore the structure by asking for //contained objects of a specific type.// For example, at top level, it may be of interest to enumerate the [[timelines within this session|Timeline]] and to ennumerate the [[sequences|EDL]]. And in turn, on a given Sequence, it would be of interest to explore the tracks, and also maybe to iterate over all clips within this sequence.
+So, clearly, there are two flavours of such an contents exploration query: it could either be issued as an dedicated member function on the public API of the respective container object, e.g. {{{Track::getClips()}}} &amp;mdash; or it could be exposed as generic query function, relying on the implicit knowledge of the //current location//&amp;nbsp; rather.
+
+!problem of context and access path
+The (planned) session structure of Lumiera allows for quite some flexibility, which, of course comes at a price tag. Especially, as there can be multiple independent top level timelines, and as a given sequence can be used simultaneously within multiple timelines and even as virtual media within a [[meta-clip|VirtualClip]], and &amp;mdash; moreover &amp;mdash; properties of any Placement are rather queried and discovered within the PlacementScope of this object, as a consequence, the discovered values may depend on //how you look at this object.// More specifically, it depends on the ''access path'' used to discover this object, because this path constitutes the actual scope visible to this object.
+
+To give an example, let's assume a clip within a sequence, and this sequence is both linked to the top-level timeline, but also used within a meta-clip. (see the drawing &amp;rarr; [[here|PlacementScope]])
+In this case, the sequence has an 1:n [[binding|BindingMO]]. A binding is (by definition) also a PlacementScope, and in the case of the sequence, the binding also translates //logical// output designations into global pipes of the top-level timeline, while in the other case they get mapped onto &quot;channels&quot; of the virtual media used by the virtual clip. Thus, the absolute time position as well as the output connection of a given clip within this sequence //depends on how we look at this clip.// Does this clip apear as part of the global timeline, or did we discover it as contained within the meta-clip?
+
+!!solution requirements
+The baseline of any solution to this problem is clear: at the point where the query is issued, a context information is necessary; this context yields an access path from top level down to the object to be queried, and this access path constitutes the effective scope this object utilises for resolving the query.
+
+!!introducing a QueryFocus
+A secondary goal of the design here is to ease the use of the session query interface. Thus the proposal is to treat this context and access path as part of the current state. To do so, we can introduce a QueryFocus following the queries and remembering the access path; this focus should be maintained mostly automatically. It allows for stack-like organisation, to allow sub-queries without affecting the current focus, where the handling of such a temporary sub-focus is handled automatically by a scoped local (RAII) object. The focus follows the issued queries and re-binds as necessary.
+
+!!using QueryFocus as generic query interface
+Solving the problem this way has the nice side effect, that we get a quite natural location where to put an unspecific query interface: Just let the current QueryFocus expose the basic set of query API functions. Such an generic query interface can be seen as a complement to the query functions exposed on specific objects (&quot;get me the clips within this track&quot;) according to the structure. Because a generic interface especially allows for writing simple diagnostics and discovery code, with only a weak link to the actual session structure.
+
+!Implementation strategy
+The solution is being built starting from the generic part, as the actual session structure isn't hard coded into the session implementation, but rather created by convention.
+The query API on specific objects (i.e. Session, Timeline, Sequence, Track and Clip) is then easily coded up on top, mostly with inlined one-liners of the kind
+{{{
+ITER getClips() { return QueryFocus::push(this).query&lt;Clip&gt;(); } 
+}}}
+To make this work, QueryFocus exposes an static API (and especially the focus stack is a singleton). The //current// QueryFocus object can easily re-bound to another point of interest (and ajusts the contained path info automatically), and the {{{push()}}}-function creates a local scoped object (which pops automatically).
+
+And last but not least: the difficult part of this whole concept is encapsulated and ''can be left out for now''. Because, according to Lumiera's [[roadmap|http://issues.lumiera.org/roadmap]], meta-clips are to be postponed until well into beta! Thus, we can start with a trivial (no-op) implementation, but immediately gain the benefit of making the relevant parts of the session implementation aware of the problem.
+
+{{red{WIP ... draft}}}</pre>
 </div>
 <div title="SideBarOptions" modifier="CehTeh" created="200706200048" changecount="1">
 <pre>&lt;&lt;search&gt;&gt;&lt;&lt;closeAll&gt;&gt;&lt;&lt;permaview&gt;&gt;&lt;&lt;newTiddler&gt;&gt;&lt;&lt;saveChanges&gt;&gt;&lt;&lt;slider chkSliderOptionsPanel OptionsPanel &quot;options »&quot; &quot;Change TiddlyWiki advanced options&quot;&gt;&gt;</pre>
