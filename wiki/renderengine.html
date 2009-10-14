@@ -3381,6 +3381,25 @@ Viewed as a micro program, the processing patterns are ''weak typed'' &amp;mdash
 <pre>a given Render Engine configuration is a list of Processors. Each Processor in turn contains a Graph of ProcNode.s to do the acutal data processing. In order to cary out any calculations, the Processor needs to be called with a StateProxy containing the state information for this RenderProcess
 </pre>
 </div>
+<div title="QueryFocus" modifier="Ichthyostega" modified="200910140245" created="200910140244" tags="def spec" changecount="4">
+<pre>When querying contents of the session or sub-containers within the session, the QueryFocus follows the current point-of-query. As such queries can be issued to explore the content of container-like objects holding other MObjects, the focus is always attached to a container, which also acts as [[scope|PlacementScope]] for the contained objects. QueryFocus is an implicit state (the current point of interrest). This sate especially remembers the path down from the root of the HighLevelModel, which was used to access the current scope. Because this path constitutes a hierarchy of scopes, it can be relevant for querying and resolving placement properties. (&amp;rarr; SessionStructureQuery)
+
+!provided operations
+* attach to a given scope-like object. Causes the current focus to //navigate//
+* open a new focus, thereby pushing the existing focus onto a ''focus stack''
+* return (pop) to the previous focus
+* get the current scope, which is implemented as Placement
+* get the current ScopePath from root (session globals) down to the current scope
+
+!implementation notes
+we provide a static access API, meaning that there is a singleton behind the scenes, which manages the mentioned scope stack. Moreover, there is an link to the current session. This link works by the current session grabbing the query focus and attaching to it. This attachment is shallow, i.e. the QueryFocus doesn't have knowledge about the session, which allows the focus to be unit tested.
+
+The stack of scopes must not be confused with the ScopePath. Each single frame on the stack is a QueryFocus and as such contains a current ScopePath. The purpose of the stack is to make the scope handling mostly transparent; especially this stack allows to write dedicated query functions directed at a given object: they work by pushing and then navigating to the object to use as new starting point. Not every placement is a scope, but every placement has an immediately enclosing scope, which is used as //current scope.//
+
+!!!simplifications
+The full implementation of this scope navigation is tricky, especially when it comes to determining the relation of two positions. It should be ''postponed'' and replaced by a ''dummy'' (no-op) implementation for the first integration round.
+</pre>
+</div>
 <div title="QueryImplProlog" modifier="Ichthyostega" modified="200802291526" created="200801202321" tags="draft design" changecount="17">
 <pre>//obviously, getting this one to work requires quite a lot of technical details to be planned and implemented.// This said...
 The intention is to get much more readable (&quot;declarative&quot;) and changeable configuration as by programming the decision logic literately within the implementation of some object.
@@ -3831,7 +3850,7 @@ It will contain a global video and audio out pipe, just one EDL with a single tr
 &amp;rarr; see [[Relation of Project, Timelines and Sequences|TimelineSequences]]
 </pre>
 </div>
-<div title="SessionStructureQuery" modifier="Ichthyostega" modified="200910120607" created="200910112322" tags="SessionLogic design draft discuss" changecount="12">
+<div title="SessionStructureQuery" modifier="Ichthyostega" modified="200910140133" created="200910112322" tags="SessionLogic design draft discuss" changecount="13">
 <pre>The frontside interface of the session allows to query for contained objects; it is used to discover the structure and contents of the currently opened session/project. Access point is the public API of the Session class, which, besides exposing those queries, also provides functionality for adding and removing session contents.
 
 !discovering structure
@@ -3840,10 +3859,10 @@ Thus, at any point, we can explore the structure by asking for //contained objec
 So, clearly, there are two flavours of such an contents exploration query: it could either be issued as an dedicated member function on the public API of the respective container object, e.g. {{{Track::getClips()}}} &amp;mdash; or it could be exposed as generic query function, relying on the implicit knowledge of the //current location//&amp;nbsp; rather.
 
 !problem of context and access path
-The (planned) session structure of Lumiera allows for quite some flexibility, which, of course comes at a price tag. Especially, as there can be multiple independent top level timelines, and as a given sequence can be used simultaneously within multiple timelines and even as virtual media within a [[meta-clip|VirtualClip]], and &amp;mdash; moreover &amp;mdash; properties of any Placement are rather queried and discovered within the PlacementScope of this object, as a consequence, the discovered values may depend on //how you look at this object.// More specifically, it depends on the ''access path'' used to discover this object, because this path constitutes the actual scope visible to this object.
+The (planned) session structure of Lumiera allows for quite some flexibility, which, of course comes at a price tag. Especially, as there can be multiple independent top level timelines, where a given sequence can be used simultaneously within multiple timelines and even as virtual media within a [[meta-clip|VirtualClip]], and moreover, as properties of any Placement are rather queried and discovered within the PlacementScope of this object &amp;mdash; consequently the discovered values may depend on //how you look at this object.// More specifically, it depends on the ''access path'' used to discover this object, because this path constitutes the actual scope visible to this object.
 
 To give an example, let's assume a clip within a sequence, and this sequence is both linked to the top-level timeline, but also used within a meta-clip. (see the drawing &amp;rarr; [[here|PlacementScope]])
-In this case, the sequence has an 1:n [[binding|BindingMO]]. A binding is (by definition) also a PlacementScope, and in the case of the sequence, the binding also translates //logical// output designations into global pipes of the top-level timeline, while in the other case they get mapped onto &quot;channels&quot; of the virtual media used by the virtual clip. Thus, the absolute time position as well as the output connection of a given clip within this sequence //depends on how we look at this clip.// Does this clip apear as part of the global timeline, or did we discover it as contained within the meta-clip?
+In this case, the sequence has an 1:n [[binding|BindingMO]]. A binding is (by definition) also a PlacementScope, and, incidentally, in the case of binding the sequence into a timeline, the binding also translates //logical// output designations into global pipes found within the timeline, while otherwise they get mapped onto &quot;channels&quot; of the virtual media used by the virtual clip. Thus, the absolute time position as well as the output connection of a given clip within this sequence //depends on how we look at this clip.// Does this clip apear as part of the global timeline, or did we discover it as contained within the meta-clip?
 
 !!solution requirements
 The baseline of any solution to this problem is clear: at the point where the query is issued, a context information is necessary; this context yields an access path from top level down to the object to be queried, and this access path constitutes the effective scope this object utilises for resolving the query.

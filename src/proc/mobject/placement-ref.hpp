@@ -235,6 +235,9 @@ namespace mobject {
     };
   
   
+  /** frequently-used shorthand */
+  typedef PlacementRef<MObject> RefPlacement;
+  
   
   
 } // namespace mobject
