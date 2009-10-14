@@ -55,6 +55,14 @@ PLANNED "PlacementRef_test" PlacementRef_test <<END
 END
 
 
+PLANNED "Path of nested scopes" ScopePath_test <<END
+END
+
+
+PLANNED "Query focus management" QueryFocus_test <<END
+END
+
+
 PLANNED "RebuildFixture_test" RebuildFixture_test <<END
 END
 
