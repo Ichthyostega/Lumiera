@@ -2092,7 +2092,7 @@ The general idea is, that each facade interface actually provides access to a sp
 
 &amp;rarr; [[overview of the MObject hierarchy|MObjects]]</pre>
 </div>
-<div title="MObjectRef" modifier="Ichthyostega" modified="200906020120" created="200904242107" tags="SessionLogic GuiIntegration design draft discuss" changecount="21">
+<div title="MObjectRef" modifier="Ichthyostega" modified="200910152353" created="200904242107" tags="SessionLogic GuiIntegration design img" changecount="24">
 <pre>''The Problem of referring to an [[MObject]]'' stems from the object //as a concept// encompassing a wider scope then just the current implementation instance. If the object was just a runtime entity in memory, we could use a simple (language) reference or pointer. Actually, this isn't sufficient, as the object reference will pass LayerSeparationInterfaces, will be handed over to code not written in the same implementation language, will be included in an ''UNDO'' record for the UndoManager, and thus will need to be serialized and stored permanently within the SessionStorage.
 Moreover [[MObject instances|MObject]] have a 2-level structure: the core object holds just the properties in a strict sense, i.e. the properties which the object //owns.// Any properties due to putting the object into a specific context, i.e. all relation properties are represented as [[Placement]] of the object. Thus, when viewed from the client side, a reference to a specific ~MObject //instance,// actually denotes a //specific//&amp;nbsp; Placement of this object into the Session.
 
@@ -2116,6 +2116,7 @@ Obviously, the second approach has quite some appeal &amp;mdash; but, in order t
 
 !Implementation concept
 Presumably, none of the both models is usable as-is; rather we try to reconstruct the viable properties of both, starting out with the more elegant second model. Thus, basically the ''reference is a smart-ptr'' referring to the core object. Additionally, it incorporates a ''systematic ID denoting the location of the placement''. This ID without the smart-ptr part is used for the C-implementation, making the full handle implementation a shortcut for an access sequence, which first querries the placement from the Session, followed by dereferencing the placement to get at the core object. Thus, the implementation builds upon another abstraction, the &amp;rarr; PlacementRef, which in turn assumes for an index within the implementation of the [[session datastructure|SessionDataMem]] to track and retrieve the actual Placement.
+[img[Structure of MObjectRef and PlacementRef|uml/fig136581.png]]
 
 
 !using ~MObject references
@@ -3381,7 +3382,7 @@ Viewed as a micro program, the processing patterns are ''weak typed'' &amp;mdash
 <pre>a given Render Engine configuration is a list of Processors. Each Processor in turn contains a Graph of ProcNode.s to do the acutal data processing. In order to cary out any calculations, the Processor needs to be called with a StateProxy containing the state information for this RenderProcess
 </pre>
 </div>
-<div title="QueryFocus" modifier="Ichthyostega" modified="200910140245" created="200910140244" tags="def spec" changecount="4">
+<div title="QueryFocus" modifier="Ichthyostega" modified="200910152346" created="200910140244" tags="def spec img" changecount="9">
 <pre>When querying contents of the session or sub-containers within the session, the QueryFocus follows the current point-of-query. As such queries can be issued to explore the content of container-like objects holding other MObjects, the focus is always attached to a container, which also acts as [[scope|PlacementScope]] for the contained objects. QueryFocus is an implicit state (the current point of interrest). This sate especially remembers the path down from the root of the HighLevelModel, which was used to access the current scope. Because this path constitutes a hierarchy of scopes, it can be relevant for querying and resolving placement properties. (&amp;rarr; SessionStructureQuery)
 
 !provided operations
@@ -3390,6 +3391,7 @@ Viewed as a micro program, the processing patterns are ''weak typed'' &amp;mdash
 * return (pop) to the previous focus
 * get the current scope, which is implemented as Placement
 * get the current ScopePath from root (session globals) down to the current scope
+[&gt;img[Scope Locating|uml/fig136325.png]]
 
 !implementation notes
 we provide a static access API, meaning that there is a singleton behind the scenes, which manages the mentioned scope stack. Moreover, there is an link to the current session. This link works by the current session grabbing the query focus and attaching to it. This attachment is shallow, i.e. the QueryFocus doesn't have knowledge about the session, which allows the focus to be unit tested.
