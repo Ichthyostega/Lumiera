@@ -1,5 +1,5 @@
 /*
-  QueryFocus(Test)  -  verify proper management of current scope
+  TEST-SCOPES.hpp  -  builds a test PlacementIndex containing dummy Placements as nested scopes
  
   Copyright (C)         Lumiera.org
     2009,               Hermann Vosseler <Ichthyostega@web.de>
@@ -18,16 +18,21 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  
-* *****************************************************/
+*/
 
 
-#include "lib/test/run.hpp"
+#ifndef MOBJECT_SESSION_TEST_TEST_SCOPES_H
+#define MOBJECT_SESSION_TEST_TEST_SCOPES_H
+
+
 //#include "lib/lumitime.hpp"
 //#include "proc/mobject/placement-ref.hpp"
 #include "proc/mobject/session/test-scopes.hpp"
+#include "proc/mobject/test-dummy-mobject.hpp"
 #include "proc/mobject/placement-index.hpp"
 //#include "lib/util.hpp"
 
+#include <tr1/memory>
 //#include <iostream>
 //#include <string>
 
@@ -42,38 +47,26 @@ namespace mobject {
 namespace session {
 namespace test    {
   
+  using std::tr1::shared_ptr;
+
+  using namespace mobject::test;
+  typedef TestPlacement<TestSubMO21> PSub;
+  typedef shared_ptr<PlacementIndex> PIdx;
   
   
-  /**********************************************************************************
-   * @test handling of current query focus when navigating a system of nested scopes.
-   *       Using a pseudo-session (actually just a PlacementIndex), this test
-   *       creates some nested scopes and then checks moving the "current scope".
-   *       
-   * @see  mobject::PlacementIndex
-   * @see  mobject::session::ScopePath
-   * @see  mobject::session::QueryFocus
+  
+  /** helper for tests: create a pseudo-session (actually just a PlacementIndex),
+   *  which contains some nested placement scopes.
+   *  @return new PlacementIndex, which has already been activated to be used
+   *          by all Placements from now on. This activation will be cleared
+   *          automatically, when this object goes out of scope.
+   * 
+   * @see mobject::PlacementIndex
+   * @see session::SessManagerImpl::getCurrentIndex()
+   * @see mobject::reset_PlacementIndex
    */
-  class QueryFocus_test : public Test
-    {
-      
-      virtual void
-      run (Arg) 
-        {
-          
-          // Prepare an (test)Index backing the PlacementRefs
-          PIdx index = build_testScopes();
-//          PMO& root = index->getRoot();
-          
-          UNIMPLEMENTED ("unit test to cover query focus management");
-          
-//??      ASSERT (0 == index->size());
-        }
-          
-    };
-  
-  
-  /** Register this test class... */
-  LAUNCHER (QueryFocus_test, "unit session");
+  PIdx build_testScopes();
   
   
 }}} // namespace mobject::session::test
+#endif

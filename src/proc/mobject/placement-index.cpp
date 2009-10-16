@@ -135,6 +135,13 @@ namespace mobject {
   }
   
   
+  void
+  PlacementIndex::clear()
+  {
+    UNIMPLEMENTED  ("purge the PlacementIndex, discarding any contained placements");
+  }
+  
+  
   
   
   namespace { // implementation detail: default global placement index access

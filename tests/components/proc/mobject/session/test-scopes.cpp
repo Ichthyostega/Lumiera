@@ -1,5 +1,5 @@
 /*
-  QueryFocus(Test)  -  verify proper management of current scope
+  TEST-SCOPES.cpp  -  builds a test PlacementIndex containing dummy Placements as nested scopes
  
   Copyright (C)         Lumiera.org
     2009,               Hermann Vosseler <Ichthyostega@web.de>
@@ -21,11 +21,7 @@
 * *****************************************************/
 
 
-#include "lib/test/run.hpp"
-//#include "lib/lumitime.hpp"
-//#include "proc/mobject/placement-ref.hpp"
 #include "proc/mobject/session/test-scopes.hpp"
-#include "proc/mobject/placement-index.hpp"
 //#include "lib/util.hpp"
 
 //#include <iostream>
@@ -43,37 +39,46 @@ namespace session {
 namespace test    {
   
   
-  
-  /**********************************************************************************
-   * @test handling of current query focus when navigating a system of nested scopes.
-   *       Using a pseudo-session (actually just a PlacementIndex), this test
-   *       creates some nested scopes and then checks moving the "current scope".
-   *       
-   * @see  mobject::PlacementIndex
-   * @see  mobject::session::ScopePath
-   * @see  mobject::session::QueryFocus
-   */
-  class QueryFocus_test : public Test
+  namespace { // deleter function to clean up Test fixture
+    void
+    remove_testIndex (PlacementIndex* testIdx)
     {
+      REQUIRE (testIdx);
+      testIdx->clear();
+      ASSERT (0 == testIdx->size());
+      reset_PlacementIndex();  // restore default Index from Session
       
-      virtual void
-      run (Arg) 
-        {
-          
-          // Prepare an (test)Index backing the PlacementRefs
-          PIdx index = build_testScopes();
-//          PMO& root = index->getRoot();
-          
-          UNIMPLEMENTED ("unit test to cover query focus management");
-          
-//??      ASSERT (0 == index->size());
-        }
-          
-    };
+      delete testIdx;
+    }
+  }
   
   
-  /** Register this test class... */
-  LAUNCHER (QueryFocus_test, "unit session");
+  /** @note when this object goes out of scope, the activation of this
+   *        test PlacementIndex will be cleared automatically, and the
+   *        default Index within the session will be re-activated. 
+   */
+  PIdx
+  build_testScopes()
+  {
+    PSub p1(*new TestSubMO21);
+    PSub p2(*new TestSubMO21);
+    PSub p3(*new TestSubMO21);
+    PSub p4(*new TestSubMO21);
+    PSub p5(*new TestSubMO21);
+    
+    // Prepare an (test)Index backing the PlacementRefs
+    PIdx index (PlacementIndex::create().get(), &remove_testIndex); // taking ownership
+    reset_PlacementIndex(index);
+    PMO& root = index->getRoot();
+
+    index->insert (p1, root);
+    index->insert (p2,  p1 );
+    index->insert (p3,  p2 );
+    index->insert (p4,  p3 );
+    index->insert (p5,  p4 );
+    
+    return index;
+  }
   
   
 }}} // namespace mobject::session::test

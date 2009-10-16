@@ -31,7 +31,7 @@
  **       these cases will just be a subclass or Placement<MObject>
  **       (which in the mentioned example would mean it couldn't be
  **       passed to a API function expecting a Placement<Meta>).
- **       This is uggly, but doesn't seem to bear any danger.
+ **       This is ugly, but doesn't seem to bear any danger.
  **
  ** @see Placement
  ** @see PlacementRef_test
@@ -71,6 +71,7 @@ namespace mobject {
   LUMIERA_ERROR_DECLARE (INVALID_PLACEMENTREF);  ///< unresolvable placement reference, or of incompatible type
   
   /**
+   * TODO type comment
    */
   template<class MO =MObject>
   class PlacementRef

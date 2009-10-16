@@ -22,6 +22,7 @@
 
 
 #include "lib/test/run.hpp"
+#include "proc/mobject/session/test-scopes.hpp"
 //#include "lib/lumitime.hpp"
 //#include "proc/mobject/placement-ref.hpp"
 //#include "proc/mobject/placement-index.hpp"
@@ -60,6 +61,9 @@ namespace test    {
       virtual void
       run (Arg) 
         {
+          // Prepare an (test)Index backing the PlacementRefs
+          PIdx index = build_testScopes();
+          
           UNIMPLEMENTED ("unit test regarding placement scope handling");
         }
           

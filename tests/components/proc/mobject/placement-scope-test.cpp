@@ -1,5 +1,5 @@
 /*
-  QueryFocus(Test)  -  verify proper management of current scope
+  PlacementScope(Test)  -  accessing and navigating placement scope
  
   Copyright (C)         Lumiera.org
     2009,               Hermann Vosseler <Ichthyostega@web.de>
@@ -22,10 +22,11 @@
 
 
 #include "lib/test/run.hpp"
+#include "proc/mobject/session/test-scopes.hpp"
 //#include "lib/lumitime.hpp"
 //#include "proc/mobject/placement-ref.hpp"
-#include "proc/mobject/session/test-scopes.hpp"
-#include "proc/mobject/placement-index.hpp"
+//#include "proc/mobject/placement-index.hpp"
+//#include "proc/mobject/test-dummy-mobject.hpp"
 //#include "lib/util.hpp"
 
 //#include <iostream>
@@ -42,38 +43,39 @@ namespace mobject {
 namespace session {
 namespace test    {
   
+//  using namespace mobject::test;
+//  typedef TestPlacement<TestSubMO21> PSub;
   
   
-  /**********************************************************************************
-   * @test handling of current query focus when navigating a system of nested scopes.
+  /***************************************************************************
+   * @test basic behaviour of the nested placement search scopes.
    *       Using a pseudo-session (actually just a PlacementIndex), this test
-   *       creates some nested scopes and then checks moving the "current scope".
-   *       
-   * @see  mobject::PlacementIndex
+   *       creates some nested scopes and then...
+   *       - discovers the scope of a placement
+   *       - finds the parent scope
+   *       - enumerates a scope path up to root
+   * 
+   * @see  mobject::Placement
    * @see  mobject::session::ScopePath
    * @see  mobject::session::QueryFocus
    */
-  class QueryFocus_test : public Test
+  class PlacementScope_test : public Test
     {
       
       virtual void
       run (Arg) 
         {
-          
           // Prepare an (test)Index backing the PlacementRefs
           PIdx index = build_testScopes();
-//          PMO& root = index->getRoot();
           
-          UNIMPLEMENTED ("unit test to cover query focus management");
-          
-//??      ASSERT (0 == index->size());
+          UNIMPLEMENTED ("function test of placement scope interface");
         }
-          
+      
     };
   
   
   /** Register this test class... */
-  LAUNCHER (QueryFocus_test, "unit session");
+  LAUNCHER (PlacementScope_test, "function session");
   
   
 }}} // namespace mobject::session::test

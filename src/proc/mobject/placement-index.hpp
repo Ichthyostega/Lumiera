@@ -107,6 +107,8 @@ namespace mobject {
       
       ~PlacementIndex();
       
+      void clear();
+      
     protected:
       PlacementIndex() ;
       

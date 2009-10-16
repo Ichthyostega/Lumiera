@@ -55,6 +55,10 @@ PLANNED "PlacementRef_test" PlacementRef_test <<END
 END
 
 
+PLANNED "Placement search scope" PlacementScope_test <<END
+END
+
+
 PLANNED "Path of nested scopes" ScopePath_test <<END
 END
 
