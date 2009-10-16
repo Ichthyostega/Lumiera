@@ -30,6 +30,7 @@
 #include "proc/mobject/placement-ref.hpp"
 #include "lib/singleton.hpp"
 
+#include <boost/scoped_ptr.hpp>
 //#include <vector>
 //#include <string>
 
@@ -39,8 +40,10 @@
 namespace mobject {
 namespace session {
   
+  using boost::scoped_ptr;
   
   class ScopeLocator;
+  class QueryFocusStack;
   
 
   /**
@@ -53,11 +56,16 @@ namespace session {
     public:
       Scope (PlacementMO const& constitutingPlacement);
       
+      static Scope const& containing (PlacementMO const& aPlacement);
+      static Scope const& containing (RefPlacement const& refPlacement);
+      
+      Scope const& getParent()  const;
     };
   
   
   class ScopeLocator
     {
+     scoped_ptr<QueryFocusStack> focusStack_; 
       
     public:
       ScopeLocator();

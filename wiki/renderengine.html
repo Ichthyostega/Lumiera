@@ -3051,10 +3051,10 @@ Placement references mimic the behaviour of a real placement, i.e. they proxy th
 {{red{WIP}}}
 </pre>
 </div>
-<div title="PlacementScope" modifier="Ichthyostega" modified="200910120543" created="200905120304" tags="SessionLogic spec img" changecount="13">
+<div title="PlacementScope" modifier="Ichthyostega" modified="200910161841" created="200905120304" tags="SessionLogic spec img" changecount="15">
 <pre>MObjects are attached into the [[Session]] by adding a [[Placement]]. Because this especially includes the case of //grouping or container objects,// e.g. tracks or [[meta-clips|VirtualClip]], any placement may optionally define and root a scope, and every placement is at least contained in one encompassing scope &amp;mdash; of course with the exception of the absolute top level, which can be thought off as being contained in a scope of handling rules.
 
-Thus, while the [[sequences (former called EDL)|EDL]] act as generic container holding a pile of placments, actually there is a more fine grained structure based on the nesting of the tracks, which especially in Lumiera's HighLevelModel belong to the sequence (they aren't a property of the top level timeline as one might expect). Building upon these observations, we actually require each addition of a placement to specify a scope. The implementation of this tie-to-scope is provided by the same mechanism as utilised for relative placements, i.e. an directional placement relation. This relation actually is implemented by the PlacementIndex
+Thus, while the [[sequences (former called EDL)|EDL]] act as generic container holding a pile of placments, actually there is a more fine grained structure based on the nesting of the tracks, which especially in Lumiera's HighLevelModel belong to the sequence (they aren't a property of the top level timeline as one might expect). Building upon these observations, we actually require each addition of a placement to specify a scope. Consequently, for each Placement at hand it is possible to determine an //containing scope,// which in turn is associated with some Placement of a top-level ~MObject for this scope. An example would be the {{{Placement&lt;Track&gt;}}} acting as scope of all the clips placed onto this track. The //implementation//&amp;nbsp; of this tie-to-scope is provided by the same mechanism as utilised for relative placements, i.e. an directional placement relation. Actually, this relation is implemented by the PlacementIndex within the current [[Session]].
 
 
 [&gt;img[Structure of Placment Scopes|draw/ScopeStructure1.png]]
@@ -3382,7 +3382,7 @@ Viewed as a micro program, the processing patterns are ''weak typed'' &amp;mdash
 <pre>a given Render Engine configuration is a list of Processors. Each Processor in turn contains a Graph of ProcNode.s to do the acutal data processing. In order to cary out any calculations, the Processor needs to be called with a StateProxy containing the state information for this RenderProcess
 </pre>
 </div>
-<div title="QueryFocus" modifier="Ichthyostega" modified="200910152346" created="200910140244" tags="def spec img" changecount="9">
+<div title="QueryFocus" modifier="Ichthyostega" modified="200910161910" created="200910140244" tags="def spec img" changecount="10">
 <pre>When querying contents of the session or sub-containers within the session, the QueryFocus follows the current point-of-query. As such queries can be issued to explore the content of container-like objects holding other MObjects, the focus is always attached to a container, which also acts as [[scope|PlacementScope]] for the contained objects. QueryFocus is an implicit state (the current point of interrest). This sate especially remembers the path down from the root of the HighLevelModel, which was used to access the current scope. Because this path constitutes a hierarchy of scopes, it can be relevant for querying and resolving placement properties. (&amp;rarr; SessionStructureQuery)
 
 !provided operations
@@ -3392,6 +3392,8 @@ Viewed as a micro program, the processing patterns are ''weak typed'' &amp;mdash
 * get the current scope, which is implemented as Placement
 * get the current ScopePath from root (session globals) down to the current scope
 [&gt;img[Scope Locating|uml/fig136325.png]]
+!!!relation to Scope
+There is a tight integration with PlacementScope through the ScopeLocator, which establishes the //current scope.// But QueryFocus is more of a //binding// &amp;mdash; it links or focusses the current state and into a specific scope with a ScopePath depending on the current state. Thus, while Scope is just a passive container allowing locate and navigate, QueryFocus by virtue of this binding allows to query this current location.
 
 !implementation notes
 we provide a static access API, meaning that there is a singleton behind the scenes, which manages the mentioned scope stack. Moreover, there is an link to the current session. This link works by the current session grabbing the query focus and attaching to it. This attachment is shallow, i.e. the QueryFocus doesn't have knowledge about the session, which allows the focus to be unit tested.

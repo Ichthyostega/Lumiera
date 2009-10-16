@@ -1,6 +1,6 @@
 format 58
 "Placement" // ProcessingLayer::MObject::Placement
-  revision 1
+  revision 2
   modified_by 5 "hiv"
   // class settings
   //class diagram settings
@@ -69,6 +69,23 @@ ${inlines}
 	    classrelation_ref 177541 // <unidirectional association>
 	  b multiplicity "1" parent class_ref 152453 // PlacementRef
       end
+
+      operation 138885 "getParent"
+	public return_type class_ref 153349 // Scope
+	nparams 0
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name} ${(}${)}${const}${volatile} ${throw}${abstract};"
+	cpp_def "${comment}${inline}${type}
+${class}::${name} ${(}${)}${const}${volatile} ${throw}${staticnl}
+{
+  ${body}
+}
+
+"
+	
+	
+	
+	
+      end
     end
 
     class 153477 "ScopePath"
@@ -110,7 +127,7 @@ ${inlines}
       
       classrelation 177797 // scopes (<unidirectional association>)
 	relation 167813 --->
-	  stereotype "has_a"
+	  stereotype "owns"
 	  a role_name "scopes" protected
 	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
 "
@@ -176,7 +193,7 @@ ${inlines}
 
       classrelation 178565 // <unidirectional association>
 	relation 168581 --->
-	  stereotype "use"
+	  stereotype "uses"
 	  a role_name "" protected
 	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
 "

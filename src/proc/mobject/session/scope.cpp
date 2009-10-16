@@ -22,6 +22,7 @@
 
 
 #include "proc/mobject/session/scope.hpp"
+#include "proc/mobject/session/query-focus-stack.hpp"
 #include "proc/mobject/mobject.hpp"
 //#include "proc/mobject/session/track.hpp"
 //#include "proc/mobject/placement.hpp"
@@ -42,6 +43,7 @@ namespace session {
   
   
   ScopeLocator::ScopeLocator()
+    : focusStack_(new QueryFocusStack)
   {
     
   }
