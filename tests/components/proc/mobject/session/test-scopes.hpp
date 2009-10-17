@@ -50,8 +50,7 @@ namespace test    {
   using std::tr1::shared_ptr;
 
   using namespace mobject::test;
-  typedef TestPlacement<TestSubMO21> PSub;
-  typedef shared_ptr<PlacementIndex> PIdx;
+  typedef TestPlacement<DummyMO> PDum;
   
   
   
@@ -65,7 +64,7 @@ namespace test    {
    * @see session::SessManagerImpl::getCurrentIndex()
    * @see mobject::reset_PlacementIndex
    */
-  PIdx build_testScopes();
+  PPIdx build_testScopes();
   
   
 }}} // namespace mobject::session::test

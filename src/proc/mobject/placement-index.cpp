@@ -59,7 +59,6 @@ namespace mobject {
   
   
   /* some type shorthands */
-  typedef shared_ptr<PlacementIndex> PIdx;
   typedef PlacementIndex::PlacementMO PlacementMO; 
   typedef PlacementIndex::PRef PRef;
   typedef PlacementIndex::ID ID;
@@ -146,9 +145,9 @@ namespace mobject {
   
   namespace { // implementation detail: default global placement index access
     
-    PIdx globalIndex;
+    PPIdx globalIndex;
     
-    PIdx const&
+    PPIdx const&
     getGlobalIndex()
     {
       if (globalIndex)
@@ -164,7 +163,7 @@ namespace mobject {
   
   
   void
-  reset_PlacementIndex (PIdx const& alternativeIndex)
+  reset_PlacementIndex (PPIdx const& alternativeIndex)
   {
     globalIndex = alternativeIndex;
   }

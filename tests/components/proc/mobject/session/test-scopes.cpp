@@ -57,17 +57,21 @@ namespace test    {
    *        test PlacementIndex will be cleared automatically, and the
    *        default Index within the session will be re-activated. 
    */
-  PIdx
+  PPIdx
   build_testScopes()
   {
-    PSub p1(*new TestSubMO21);
-    PSub p2(*new TestSubMO21);
-    PSub p3(*new TestSubMO21);
-    PSub p4(*new TestSubMO21);
-    PSub p5(*new TestSubMO21);
+    PDum p1(*new TestSubMO21);
+    PDum p2(*new TestSubMO21);
+    PDum p3(*new TestSubMO21);
+    PDum p4(*new TestSubMO21);
+    PDum p5(*new TestSubMO21);
+    
+    PDum ps1(*new DummyMO);
+    PDum ps2(*new TestSubMO1);
+    PDum ps2(*new TestSubMO2);
     
     // Prepare an (test)Index backing the PlacementRefs
-    PIdx index (PlacementIndex::create().get(), &remove_testIndex); // taking ownership
+    PPIdx index (PlacementIndex::create().get(), &remove_testIndex); // taking ownership
     reset_PlacementIndex(index);
     PMO& root = index->getRoot();
 
@@ -76,6 +80,10 @@ namespace test    {
     index->insert (p3,  p2 );
     index->insert (p4,  p3 );
     index->insert (p5,  p4 );
+    
+    index->insert (ps1,root);
+    index->insert (ps2,root);
+    index->insert (ps3,root);
     
     return index;
   }

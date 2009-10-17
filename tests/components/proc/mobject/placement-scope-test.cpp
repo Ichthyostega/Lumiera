@@ -69,7 +69,7 @@ namespace test    {
       run (Arg) 
         {
           // Prepare an (test)Index backing the PlacementRefs
-          PIdx index = build_testScopes();
+          PPIdx index = build_testScopes();
           
           UNIMPLEMENTED ("function test of placement scope interface");
           verifyLookup (index);

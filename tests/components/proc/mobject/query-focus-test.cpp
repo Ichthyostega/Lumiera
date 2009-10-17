@@ -61,7 +61,7 @@ namespace test    {
         {
           
           // Prepare an (test)Index backing the PlacementRefs
-          PIdx index = build_testScopes();
+          PPIdx index = build_testScopes();
 //          PMO& root = index->getRoot();
           
           UNIMPLEMENTED ("unit test to cover query focus management");

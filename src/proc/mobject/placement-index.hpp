@@ -116,13 +116,16 @@ namespace mobject {
     };
   ////////////////TODO currently just fleshing  out the API; probably have to split off an impl.class; but for now a PImpl is sufficient...
   
+    
+  typedef shared_ptr<PlacementIndex> PPIdx;
+
   
   
   /** @internal there is an implicit PlacementIndex available on a global scale,
    *            by default implemented within the current session. This function allows
    *            to re-define this implicit index temporarily, e.g. for unit tests. */
   void
-  reset_PlacementIndex(shared_ptr<PlacementIndex> const&) ;
+  reset_PlacementIndex(PPIdx const&) ;
   
   /** @internal restore the implicit PlacementIndex to its default implementation (=the session) */
   void

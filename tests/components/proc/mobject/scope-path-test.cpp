@@ -62,7 +62,7 @@ namespace test    {
       run (Arg) 
         {
           // Prepare an (test)Index backing the PlacementRefs
-          PIdx index = build_testScopes();
+          PPIdx index = build_testScopes();
           
           UNIMPLEMENTED ("unit test regarding placement scope handling");
         }
