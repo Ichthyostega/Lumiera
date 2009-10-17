@@ -167,7 +167,7 @@ namespace mobject {
       bool operator!= (PlacementRef<O> const& o)  const { return id_ != o; }
       
       
-      typedef _Id PlacementRef::*__unspecified_bool_type;
+      typedef _Id PlacementRef::*__unspecified_bool_type; ////////TICKET #178 :  implement by lib::BoolCheckable?
       
       /** implicit conversion to "bool" */ 
       operator __unspecified_bool_type()  const { return  isValid()? &PlacementRef::id_ : 0; }  // never throws

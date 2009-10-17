@@ -28,6 +28,7 @@
 //#include "proc/mobject/mobject.hpp"
 #include "proc/mobject/placement.hpp"
 #include "proc/mobject/placement-ref.hpp"
+#include "lib/iter-adapter.hpp"
 #include "lib/singleton.hpp"
 
 #include <boost/scoped_ptr.hpp>
@@ -41,6 +42,7 @@ namespace mobject {
 namespace session {
   
   using boost::scoped_ptr;
+  using lib::IterAdapter;
   
   class ScopeLocator;
   class QueryFocusStack;
@@ -53,6 +55,8 @@ namespace session {
     {
       RefPlacement anchor_;
       
+      typedef IterAdapter<PlacementMO*, Scope> IterType_;
+      
     public:
       Scope (PlacementMO const& constitutingPlacement);
       
@@ -60,6 +64,11 @@ namespace session {
       static Scope const& containing (RefPlacement const& refPlacement);
       
       Scope const& getParent()  const;
+      PlacementMO& getTop()  const;
+      bool isRoot()  const;
+      
+      typedef IterType_ iterator;
+      iterator ascend()  const;
     };
   
   
@@ -72,6 +81,22 @@ namespace session {
       
     };
 ///////////////////////////TODO currently just fleshing the API
+  
+  
+  
+  inline Scope const&
+  Scope::containing (RefPlacement const& refPlacement)
+  {
+    return containing (*refPlacement);
+  }
+  
+  
+  inline PlacementMO&
+  Scope::getTop()  const
+  {
+    ASSERT (anchor_);
+    return *anchor_;
+  }
   
   
 }} // namespace mobject::session

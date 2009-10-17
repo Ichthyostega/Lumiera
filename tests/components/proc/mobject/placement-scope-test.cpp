@@ -47,12 +47,13 @@ namespace test    {
   
 //  using namespace mobject::test;
 //  typedef TestPlacement<TestSubMO21> PSub;
+  using lumiera::error::LUMIERA_ERROR_INVALID;
   
   
   /***************************************************************************
    * @test basic behaviour of the nested placement search scopes.
-   *       Using a pseudo-session (actually just a PlacementIndex), this test
-   *       creates some nested scopes and then...
+   *       Using a pseudo-session (actually just a PlacementIndex),
+   *       this test creates some nested scopes and then...
    *       - discovers the scope of a placement
    *       - finds the parent scope
    *       - enumerates a scope path up to root

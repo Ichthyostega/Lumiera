@@ -50,6 +50,44 @@ namespace session {
   
   
   
+  /** discover the enclosing scope of a given Placement */
+  Scope const&
+  Scope::containing (PlacementMO const& aPlacement)
+  {
+    UNIMPLEMENTED ("scope discovery");
+  }
+  
+  
+  /** retrieve the parent scope which encloses this scope.
+   *  @throw error::Invalid if this is the root scope
+   */
+  Scope const&
+  Scope::getParent()  const
+  {
+    UNIMPLEMENTED ("retrieve the enclosing parent scope");
+  }
+  
+  
+  /** @return true if this is the outmost (root) scope */
+  bool
+  Scope::isRoot()  const
+  {
+    UNIMPLEMENTED ("detection of root scope");
+  }
+  
+  
+  /** enumerate the path of nested scopes up to root scope.
+   *  @return an iterator which starts with this scope and
+   *          successively yields outer scopes, stopping at root.
+   */
+  Scope::IterType_
+  Scope::ascend()  const
+  {
+    UNIMPLEMENTED ("ascend scope hierarchy up to root");
+  }
+
+  
+  
   
   
   
