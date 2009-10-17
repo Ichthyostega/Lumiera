@@ -41,6 +41,8 @@ classcanvas 130437 class_ref 153989 // QueryResolver
 end
 note 131333 "this connection is established by the current session"
   xyzwh 361 39 2000 158 47
+textcanvas 131461 "the \"scope top\""
+  xyzwh 357 180 2010 73 13
 relationcanvas 128389 relation_ref 167557 // <unidirectional association>
   from ref 128261 z 1999 stereotype "<<holds>>" xyz 281 219 3000 to ref 128133
   no_role_a no_role_b

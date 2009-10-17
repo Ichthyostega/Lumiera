@@ -22,21 +22,23 @@
 
 
 #include "lib/test/run.hpp"
+#include "lib/test/test-helper.hpp"
+#include "proc/mobject/session/scope.hpp"
 #include "proc/mobject/session/test-scopes.hpp"
 //#include "lib/lumitime.hpp"
 //#include "proc/mobject/placement-ref.hpp"
 //#include "proc/mobject/placement-index.hpp"
 //#include "proc/mobject/test-dummy-mobject.hpp"
-//#include "lib/util.hpp"
+#include "lib/util.hpp"
 
-//#include <iostream>
+#include <iostream>
 //#include <string>
 
-//using util::isSameObject;
+using util::isSameObject;
 //using lumiera::Time;
 //using std::string;
-//using std::cout;
-//using std::endl;
+using std::cout;
+using std::endl;
 
 
 namespace mobject {
@@ -69,6 +71,65 @@ namespace test    {
           PIdx index = build_testScopes();
           
           UNIMPLEMENTED ("function test of placement scope interface");
+          verifyLookup (index);
+          verifyNavigation (index);
+        }
+      
+      
+      typedef PlacementIndex::Query<DummyMO>::iterator _Iter;
+      
+      /** @test for each Placement in our test "session",
+       *        find the scope and verify it's in line with the index
+       */
+      void
+      verifyLookup (PIdx ref_index)
+        {
+          for (_Iter elm = ref_index.query<DummyMO>(); elm; ++elm)
+            {
+              ASSERT (elm->isValid());
+              cout << *elm << endl;
+              Scope& scope1 = Scope::containing(*elm);
+              
+              RefPlacement ref (*elm);
+              Scope& scope2 = Scope::containing(ref);
+              
+              // verify this with the scope registered within the index...
+              PlacementMO& scopeTop = ref_index->getScope(*elm);
+              ASSERT (scope1 == scopeTop);
+              ASSERT (scope2 == scopeTop);
+              ASSERT (scope1 == scope2);
+              
+              ASSERT (isSameObject (scope1,scope2));
+            }
+        }
+      
+      
+      /** @test navigate to root, starting from each Placement */
+      void
+      verifyNavigation (PIdx ref_index)
+        {
+          for (_Iter elm = ref_index.query<DummyMO>(); elm; ++elm)
+            {
+              Scope& scope = Scope::containing(*elm);
+              ASSERT (scope == *scope.ascend());
+              for (Scope::iterator sco = scope.ascend(); sco; ++sco)
+                if (sco->isRoot())
+                  {
+                    VERIFY_ERROR (INVALID, sco->getParent() );
+                    RefPlacement top = sco->getTop();
+                    RefPlacement root = ref_index->getRoot();
+                    
+                    ASSERT (isSameObject (top,root));
+                  }
+                else
+                  {
+                    Scope& parent = sco->getParent();
+                    RefPlacement top = sco->getTop();
+                    Scope& parentsScope = Scope::containing(top);
+                    RefPlacement topsTop = ref_index->getScope(top); ///////////////////TODO impact of Binding a Sequence? see Ticket #311
+                    ASSERT (topsTop == parentsScope);
+                    ASSERT (isSameObject (topsTop, parentsScope.getTop()));
+            }     }
         }
       
     };
