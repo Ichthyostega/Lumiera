@@ -40,6 +40,7 @@
 #include "lib/factory.hpp"
 #include "proc/mobject/placement.hpp"
 #include "proc/mobject/placement-ref.hpp"
+#include "proc/mobject/session/query-resolver.hpp"
 
 #include <tr1/memory>
 #include <boost/noncopyable.hpp>
@@ -47,7 +48,7 @@
 #include <vector>
 
 
-namespace mobject {
+namespace mobject { ///////////////////////////////////////////TODO: shouldn't this go into namespace session ?
   
   using lib::factory::RefcountFac;
   using std::tr1::shared_ptr;
@@ -60,7 +61,8 @@ namespace mobject {
   /**
    */
   class PlacementIndex
-    : boost::noncopyable
+    : public session::QueryResolver        ////////TODO: really inherit here?
+    , boost::noncopyable
     {
       class Table;
       
@@ -88,10 +90,13 @@ namespace mobject {
       /** retrieve the logical root scope */
       PlacementMO& getRoot()                      const;
       
-      /** diagnostic: number of indexed entries */
       size_t size()                               const;
       bool contains (PlacementMO const&)          const;
       bool contains (ID)                          const;
+      
+      template<class MO>
+      typename session::Query<Placement<MO> >::iterator
+      query (PlacementMO& scope)                  const;
       
       
       /* == mutating operations == */
@@ -158,6 +163,13 @@ namespace mobject {
     return find (id);
   }
   
+  
+  template<class MO>
+  inline typename session::Query<Placement<MO> >::iterator
+  PlacementIndex::query (PlacementMO& scope)  const
+  {
+    UNIMPLEMENTED ("actually run the containment query"); 
+  }
   
   inline Placement<MObject>&
   PlacementIndex::getScope (PlacementMO const& p)  const

@@ -34,11 +34,6 @@
 #include <iostream>
 //#include <string>
 
-using util::isSameObject;
-//using lumiera::Time;
-//using std::string;
-using std::cout;
-using std::endl;
 
 
 namespace mobject {
@@ -46,8 +41,14 @@ namespace session {
 namespace test    {
   
 //  using namespace mobject::test;
-//  typedef TestPlacement<TestSubMO21> PSub;
   using lumiera::error::LUMIERA_ERROR_INVALID;
+  
+  using util::isSameObject;
+  //using lumiera::Time;
+  //using std::string;
+  using std::cout;
+  using std::endl;
+  
   
   
   /***************************************************************************
@@ -77,22 +78,28 @@ namespace test    {
         }
       
       
-      typedef PlacementIndex::Query<DummyMO>::iterator _Iter;
+      typedef Query<Placement<DummyMO> >::iterator _Iter;
+      
+      _Iter
+      getContents(PPIdx index)
+        {
+          return index->query<DummyMO>(index->getRoot());
+        }
       
       /** @test for each Placement in our test "session",
        *        find the scope and verify it's in line with the index
        */
       void
-      verifyLookup (PIdx ref_index)
+      verifyLookup (PPIdx ref_index)
         {
-          for (_Iter elm = ref_index.query<DummyMO>(); elm; ++elm)
+          for (_Iter elm = getContents(ref_index); elm; ++elm)
             {
               ASSERT (elm->isValid());
-              cout << *elm << endl;
-              Scope& scope1 = Scope::containing(*elm);
+              cout << string(*elm) << endl;
+              Scope const& scope1 = Scope::containing(*elm);
               
               RefPlacement ref (*elm);
-              Scope& scope2 = Scope::containing(ref);
+              Scope const& scope2 = Scope::containing(ref);
               
               // verify this with the scope registered within the index...
               PlacementMO& scopeTop = ref_index->getScope(*elm);
@@ -107,11 +114,11 @@ namespace test    {
       
       /** @test navigate to root, starting from each Placement */
       void
-      verifyNavigation (PIdx ref_index)
+      verifyNavigation (PPIdx ref_index)
         {
-          for (_Iter elm = ref_index.query<DummyMO>(); elm; ++elm)
+          for (_Iter elm = getContents(ref_index); elm; ++elm)
             {
-              Scope& scope = Scope::containing(*elm);
+              Scope const& scope = Scope::containing(*elm);
               ASSERT (scope == *scope.ascend());
               for (Scope::iterator sco = scope.ascend(); sco; ++sco)
                 if (sco->isRoot())

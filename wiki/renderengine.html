@@ -1151,7 +1151,7 @@ For this to work, we need each of the //participating object types// to implemen
 
 @@clear(left):display(block):@@</pre>
 </div>
-<div title="ConfigRules" modifier="Ichthyostega" modified="200804110334" created="200801171352" tags="overview spec" changecount="13">
+<div title="ConfigRules" modifier="Ichthyostega" modified="200910171607" created="200801171352" tags="overview spec Rules" changecount="14">
 <pre>Many features can be implemented by specifically configuring and wiring some unspecific components. Rather than tie the client code in need of some given feature to these configuration internals, in Lumiera the client can //query // for some kind of object providing the //needed capabilities. // Right from start (summer 2007), Ichthyo had the intention to implement such a feature using sort of a ''declarative database'', e.g. by embedding a Prolog system. By adding rules to the basic session configuration, users should be able to customize the semi-automatic part of Lumiera's behaviour to great extent.
 
 [[Configuration Queries|ConfigQuery]] are used at various places, when creating and adding new objects, as well when building or optimizing the render engine node network.
@@ -1632,7 +1632,7 @@ Besides routing to a global pipe, wiring plugs can also connect to the source po
 Finally, this example shows an ''automation'' data set controlling some parameter of an effect contained in one of the global pipes. From the effect's POV, the automation is simply a ParamProvider, i.e a function yielding a scalar value over time. The automation data set may be implemented as a bézier curve, or by a mathematical function (e.g. sine or fractal pseudo random) or by some captured and interpolated data values. Interestingly, in this example the automation data set has been placed relatively to the meta clip (albeit on another track), thus it will follow and adjust when the latter is moved.
 </pre>
 </div>
-<div title="ImplementationDetails" modifier="Ichthyostega" modified="200909291328" created="200708080322" tags="overview" changecount="35">
+<div title="ImplementationDetails" modifier="Ichthyostega" modified="200910171655" created="200708080322" tags="overview" changecount="36">
 <pre>This wiki page is the entry point to detail notes covering some technical decisions, details and problems encountered in the course of the implementation of the Lumiera Renderengine, the Builder and the related parts.
 
 * [[Packages, Interfaces and Namespaces|InterfaceNamespaces]]
@@ -1656,7 +1656,8 @@ Finally, this example shows an ''automation'' data set controlling some paramete
 * how to [[start the GUI|GuiStart]] and how to [[communicate|GuiCommunication]]
 * build the first LayerSeparationInterfaces
 * decide on SessionInterface and create [[Session datastructure layout|SessionDataMem]]
-* shaping the GUI/~Proc-Interface, based on MObjectRef and the [[Command frontend|CommandHandling]]</pre>
+* shaping the GUI/~Proc-Interface, based on MObjectRef and the [[Command frontend|CommandHandling]]
+* defining PlacementScope in order to allow for [[discovering session contents|Query]]</pre>
 </div>
 <div title="ImplementationGuidelines" modifier="Ichthyostega" modified="200909291414" created="200711210531" tags="discuss draft" changecount="15">
 <pre>!Observations, Ideas, Proposals
@@ -3051,10 +3052,10 @@ Placement references mimic the behaviour of a real placement, i.e. they proxy th
 {{red{WIP}}}
 </pre>
 </div>
-<div title="PlacementScope" modifier="Ichthyostega" modified="200910161841" created="200905120304" tags="SessionLogic spec img" changecount="15">
+<div title="PlacementScope" modifier="Ichthyostega" modified="200910162011" created="200905120304" tags="SessionLogic spec img" changecount="16">
 <pre>MObjects are attached into the [[Session]] by adding a [[Placement]]. Because this especially includes the case of //grouping or container objects,// e.g. tracks or [[meta-clips|VirtualClip]], any placement may optionally define and root a scope, and every placement is at least contained in one encompassing scope &amp;mdash; of course with the exception of the absolute top level, which can be thought off as being contained in a scope of handling rules.
 
-Thus, while the [[sequences (former called EDL)|EDL]] act as generic container holding a pile of placments, actually there is a more fine grained structure based on the nesting of the tracks, which especially in Lumiera's HighLevelModel belong to the sequence (they aren't a property of the top level timeline as one might expect). Building upon these observations, we actually require each addition of a placement to specify a scope. Consequently, for each Placement at hand it is possible to determine an //containing scope,// which in turn is associated with some Placement of a top-level ~MObject for this scope. An example would be the {{{Placement&lt;Track&gt;}}} acting as scope of all the clips placed onto this track. The //implementation//&amp;nbsp; of this tie-to-scope is provided by the same mechanism as utilised for relative placements, i.e. an directional placement relation. Actually, this relation is implemented by the PlacementIndex within the current [[Session]].
+Thus, while the [[sequences (former called EDL)|EDL]] act as generic container holding a pile of placments, actually there is a more fine grained structure based on the nesting of the tracks, which especially in Lumiera's HighLevelModel belong to the sequence (they aren't a property of the top level timeline as one might expect). Building upon these observations, we actually require each addition of a placement to specify a scope. Consequently, for each Placement at hand it is possible to determine an //containing scope,// which in turn is associated with some Placement of a top-level ~MObject for this scope. The latter is called the ''scope top''. An example would be the {{{Placement&lt;Track&gt;}}} acting as scope of all the clips placed onto this track. The //implementation//&amp;nbsp; of this tie-to-scope is provided by the same mechanism as utilised for relative placements, i.e. an directional placement relation. Actually, this relation is implemented by the PlacementIndex within the current [[Session]].
 
 
 [&gt;img[Structure of Placment Scopes|draw/ScopeStructure1.png]]
@@ -3307,7 +3308,7 @@ Besides, they provide an __inward interface__ for the [[ProcNode]]s, enabling th
 
 </pre>
 </div>
-<div title="ProcLayer and Engine" modifier="Ichthyostega" modified="200909291327" created="200706190056" tags="overview" changecount="20">
+<div title="ProcLayer and Engine" modifier="Ichthyostega" modified="200910171656" created="200706190056" tags="overview" changecount="21">
 <pre>The Render Engine is the part of the application doing the actual video calculations. Its operations are guided by the Objects and Parameters edited by the user in [[the EDL|EDL]] and it retrieves the raw audio and video data from the [[Data backend|backend.html]]. Because the inner workings of the Render Engine are closely related to the structures used in the EDL, this design covers [[the aspect of objects placed into the EDL|MObjects]] as well.
 &lt;&lt;&lt;
 ''Status'': started out as design draft in summer '07, Ichthyo is now in the middle of a implementing the foundations and main structures in C++
@@ -3382,7 +3383,23 @@ Viewed as a micro program, the processing patterns are ''weak typed'' &amp;mdash
 <pre>a given Render Engine configuration is a list of Processors. Each Processor in turn contains a Graph of ProcNode.s to do the acutal data processing. In order to cary out any calculations, the Processor needs to be called with a StateProxy containing the state information for this RenderProcess
 </pre>
 </div>
-<div title="QueryFocus" modifier="Ichthyostega" modified="200910161910" created="200910140244" tags="def spec img" changecount="10">
+<div title="Query" modifier="Ichthyostega" modified="200910171644" created="200910171621" tags="Rules spec draft discuss" changecount="8">
+<pre>{{red{WIP as of 10/09}}}...//brainstorming about the first ideas towards a query subsystem//
+
+!use case: discovering the contents of a container in the HighLevelModel
+In the course of shaping the session API, __joel__ and __ichthyo__ realised that we're moving towards some sort of discovery or introspection. This gives rise to the quest for a //generic// pattern how to issue and run these discovery operations. The idea is to understand such a discovery as running a query &amp;mdash; using this specific problem to shape the foundation of a query subsystem to come.
+* a ''query'' is a polymorphic, noncopyable, non-singleton type; a query instance corresponds to one distinctly issued query
+* issuing a query yields a result set, which is hidden within the concrete query implementation.
+* the transactional behaviour needs still to be defined: how to deal with concurrent modifications? COW?
+* the query instance remains property of the entity exposing the query capability.
+* client code gets a result iterator, which can be explored //only once until exhaustion.//
+* the handed out result iterator is used to manage the allocation for the query result set by sideeffect (smart handle). &amp;rarr; Ticket #353
+
+----
+See also the notes on &amp;rarr; QueryImplProlog
+</pre>
+</div>
+<div title="QueryFocus" modifier="Ichthyostega" modified="200910171718" created="200910140244" tags="def spec img" changecount="12">
 <pre>When querying contents of the session or sub-containers within the session, the QueryFocus follows the current point-of-query. As such queries can be issued to explore the content of container-like objects holding other MObjects, the focus is always attached to a container, which also acts as [[scope|PlacementScope]] for the contained objects. QueryFocus is an implicit state (the current point of interrest). This sate especially remembers the path down from the root of the HighLevelModel, which was used to access the current scope. Because this path constitutes a hierarchy of scopes, it can be relevant for querying and resolving placement properties. (&amp;rarr; SessionStructureQuery)
 
 !provided operations
@@ -3393,7 +3410,7 @@ Viewed as a micro program, the processing patterns are ''weak typed'' &amp;mdash
 * get the current ScopePath from root (session globals) down to the current scope
 [&gt;img[Scope Locating|uml/fig136325.png]]
 !!!relation to Scope
-There is a tight integration with PlacementScope through the ScopeLocator, which establishes the //current scope.// But QueryFocus is more of a //binding// &amp;mdash; it links or focusses the current state and into a specific scope with a ScopePath depending on the current state. Thus, while Scope is just a passive container allowing locate and navigate, QueryFocus by virtue of this binding allows to query this current location.
+There is a tight integration with PlacementScope through the ScopeLocator, which establishes the //current scope.// But QueryFocus is more of a //binding// &amp;mdash; it links or focusses the current state and into a specific scope with a ScopePath depending on the current state. Thus, while Scope is just a passive container allowing to locate and navigate, QueryFocus by virtue of this binding allows to [[Query]] at this current location.
 
 !implementation notes
 we provide a static access API, meaning that there is a singleton behind the scenes, which manages the mentioned scope stack. Moreover, there is an link to the current session. This link works by the current session grabbing the query focus and attaching to it. This attachment is shallow, i.e. the QueryFocus doesn't have knowledge about the session, which allows the focus to be unit tested.
@@ -3404,7 +3421,7 @@ The stack of scopes must not be confused with the ScopePath. Each single frame o
 The full implementation of this scope navigation is tricky, especially when it comes to determining the relation of two positions. It should be ''postponed'' and replaced by a ''dummy'' (no-op) implementation for the first integration round.
 </pre>
 </div>
-<div title="QueryImplProlog" modifier="Ichthyostega" modified="200802291526" created="200801202321" tags="draft design" changecount="17">
+<div title="QueryImplProlog" modifier="Ichthyostega" modified="200910171607" created="200801202321" tags="draft design Rules" changecount="18">
 <pre>//obviously, getting this one to work requires quite a lot of technical details to be planned and implemented.// This said...
 The intention is to get much more readable (&quot;declarative&quot;) and changeable configuration as by programming the decision logic literately within the implementation of some object.
 
@@ -3773,6 +3790,17 @@ __see also__
 
 Rendering can be seen as a passive service available to the Backend, which remains in charge what to render and when. Render processes may be running in parallel without any limitations. All of the storage and data management falls into the realm of the Backend. The render nodes themselves are ''completely stateless'' &amp;mdash; if some state is necessary for carrying out the calculations, the backend will provide a //state frame// in addition to the data frames.</pre>
 </div>
+<div title="Rules" modifier="Ichthyostega" modified="200910171620" created="200910171618" tags="overview" changecount="5">
+<pre>A distinct property of the Lumiera application is to rely on a rules based approach rather then on hard wired logic. When it comes to deciding and branching, a [[Query]] is issued, resulting either immediately in a {{{bool}}} result, or creating a //binding// for the variables used within the query. Commonly, there is more than one solution for a given query, allowing the result set to be enumerated.
+
+
+
+
+!current state {{red{WIP as of 10/09}}}
+We are still fighting to get the outline of the application settled down.
+For now, the above remains in the status of a general concept and typical solution pattern: ''create query points instead of hard wiring things''.
+Later on we expect a distinct __query subsystem__ to emerge, presumably embedding a YAP Prolog interpreter.</pre>
+</div>
 <div title="STypeManager" modifier="Ichthyostega" created="200809220230" changecount="1">
 <pre>A facility allowing the Proc-Layer to work with abstracted [[media stream types|StreamType]], linking (abstract or opaque) [[type tags|StreamTypeDescriptor]] to an [[library|MediaImplLib]], which provides functionality for acutally dealing with data of this media stream type. Thus, the stream type manager is a kind of registry of all the external libraries which can be bridged and accessed by Lumiera (for working with media data, that is). The most basic set of libraries is instelled here automatically at application start, most notably the [[GAVL]] library for working with uncompressed video and audio data. //Later on, when plugins will introduce further external libraries, these need to be registered here too.//</pre>
 </div>
@@ -3792,12 +3820,12 @@ Currently as of 5/09, this is an ongoing [[implementation and planning effort|Pl
 
 {{red{TODO...}}}</pre>
 </div>
-<div title="SessionInterface" modifier="Ichthyostega" modified="200910112324" created="200904242108" tags="SessionLogic GuiIntegration design draft discuss" changecount="8">
+<div title="SessionInterface" modifier="Ichthyostega" modified="200910171721" created="200904242108" tags="SessionLogic GuiIntegration design draft discuss" changecount="9">
 <pre>&quot;Session Interface&quot;, when used in a more general sense, denotes a compound of several interfaces and facilities, together forming the primary access point to the user visible contents and state of the editing project.
 * the API of the session class
 * the accompanying management interface (SessionManager API)
 * an LayerSeparationInterfaces allowing to access these interfaces from outside the Proc-Layer
-* the primary public ~APIs exposed on the objects to be [[queried and retrieved|SessionQueryStructure]] via the session class API
+* the primary public ~APIs exposed on the objects to be [[queried and retrieved|SessionStructureQuery]] via the session class API
 ** Timeline
 ** Sequence
 ** Placement
@@ -3854,7 +3882,7 @@ It will contain a global video and audio out pipe, just one EDL with a single tr
 &amp;rarr; see [[Relation of Project, Timelines and Sequences|TimelineSequences]]
 </pre>
 </div>
-<div title="SessionStructureQuery" modifier="Ichthyostega" modified="200910140133" created="200910112322" tags="SessionLogic design draft discuss" changecount="13">
+<div title="SessionStructureQuery" modifier="Ichthyostega" modified="200910171255" created="200910112322" tags="SessionLogic design draft discuss" changecount="14">
 <pre>The frontside interface of the session allows to query for contained objects; it is used to discover the structure and contents of the currently opened session/project. Access point is the public API of the Session class, which, besides exposing those queries, also provides functionality for adding and removing session contents.
 
 !discovering structure
@@ -3869,7 +3897,7 @@ To give an example, let's assume a clip within a sequence, and this sequence is 
 In this case, the sequence has an 1:n [[binding|BindingMO]]. A binding is (by definition) also a PlacementScope, and, incidentally, in the case of binding the sequence into a timeline, the binding also translates //logical// output designations into global pipes found within the timeline, while otherwise they get mapped onto &quot;channels&quot; of the virtual media used by the virtual clip. Thus, the absolute time position as well as the output connection of a given clip within this sequence //depends on how we look at this clip.// Does this clip apear as part of the global timeline, or did we discover it as contained within the meta-clip?
 
 !!solution requirements
-The baseline of any solution to this problem is clear: at the point where the query is issued, a context information is necessary; this context yields an access path from top level down to the object to be queried, and this access path constitutes the effective scope this object utilises for resolving the query.
+The baseline of any solution to this problem is clear: at the point where the query is issued, a context information is necessary; this context yields an access path from top level down to the object to be queried, and this access path constitutes the effective scope this object can utilise for resolving the query.
 
 !!introducing a QueryFocus
 A secondary goal of the design here is to ease the use of the session query interface. Thus the proposal is to treat this context and access path as part of the current state. To do so, we can introduce a QueryFocus following the queries and remembering the access path; this focus should be maintained mostly automatically. It allows for stack-like organisation, to allow sub-queries without affecting the current focus, where the handling of such a temporary sub-focus is handled automatically by a scoped local (RAII) object. The focus follows the issued queries and re-binds as necessary.

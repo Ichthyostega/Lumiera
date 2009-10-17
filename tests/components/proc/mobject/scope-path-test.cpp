@@ -44,7 +44,6 @@ namespace session {
 namespace test    {
   
 //  using namespace mobject::test;
-//  typedef TestPlacement<TestSubMO21> PSub;
   
   
   /***************************************************************************

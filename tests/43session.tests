@@ -6,6 +6,10 @@ PLANNED "AddClip_test" AddClip_test <<END
 END
 
 
+PLANNED "discovering contents" ContentsQuery_test <<END
+END
+
+
 TEST "DefsManager_test" DefsManager_test <<END
 return: 0
 END

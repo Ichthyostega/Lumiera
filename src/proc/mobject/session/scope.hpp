@@ -60,7 +60,7 @@ namespace session {
     public:
       Scope (PlacementMO const& constitutingPlacement);
       
-      static Scope const& containing (PlacementMO const& aPlacement);
+      static Scope const& containing (PlacementMO const& aPlacement);              //////////////TODO really returning a const& here??
       static Scope const& containing (RefPlacement const& refPlacement);
       
       Scope const& getParent()  const;
