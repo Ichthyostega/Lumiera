@@ -59,6 +59,7 @@ namespace session {
       
     public:
       Scope (PlacementMO const& constitutingPlacement);
+      Scope (); ///< unlocated NIL scope
       
       static Scope const& containing (PlacementMO const& aPlacement);              //////////////TODO really returning a const& here??
       static Scope const& containing (RefPlacement const& refPlacement);

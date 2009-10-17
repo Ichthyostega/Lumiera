@@ -106,6 +106,13 @@ namespace mobject {
           validate(id_); 
         }
       
+      /** Default is an NIL Placement ref. It throws on any access. */
+      PlacementRef ()
+        : id_()
+        {
+          REQUIRE (!isValid(), "hash-ID clash with existing ID");
+        }
+      
       PlacementRef (PlacementRef const& r)    ///< copy ctor
         : id_(r.id_)
         { 

@@ -43,7 +43,7 @@ namespace session {
    */
   class ScopePath
     {
-      vector<RefPlacement> path_;
+      vector<Scope> path_;
       
     public:
       ScopePath();

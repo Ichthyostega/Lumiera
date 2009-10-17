@@ -42,6 +42,13 @@ namespace session {
   }
   
   
+  Scope::Scope ()
+    : anchor_()
+  {
+    REQUIRE (!anchor_.isValid());
+  }
+  
+  
   ScopeLocator::ScopeLocator()
     : focusStack_(new QueryFocusStack)
   {
