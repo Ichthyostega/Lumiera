@@ -129,6 +129,19 @@ namespace lib {
    * - we need friendship to access the callbacks on the container 
    * - the end-of-iteration can be detected by bool check
    * 
+   * \par Stipulations
+   * - POS refers to the current position within the data source of this iterator.
+   *       -# it should be default constructible
+   *       -# it should be copy constructible
+   *       -# when IterAdapter is supposed to be assignable, then POS should be
+   *       -# it should provide embedded typedefs for pointer, reference and value_type
+   *       -# it should be convertible to the pointer type it declares
+   *       -# dereferencing it should yield type that is convertible to the reference type
+   * - CON refers to the data source of this iterator (typically a data container type)
+   *       We store a backlink to this object to invoke a special iteration control API:
+   *       -# \c hasNext yields true iff the source has yet more result values to yield
+   *       -# \c iterNext advances the POS to the next element 
+   * 
    * @see scoped-ptrvect.hpp usage example
    * @see iter-adaptor-test.cpp
    */
@@ -153,7 +166,7 @@ namespace lib {
       
       IterAdapter ()
         : source_(0)
-        , pos_(0)
+        , pos_()
         { }
       
       
