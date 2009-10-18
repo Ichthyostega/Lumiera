@@ -67,8 +67,8 @@ namespace test    {
     PDum p5(*new TestSubMO21);
     
     PDum ps1(*new DummyMO);
-    PDum ps2(*new TestSubMO1);
     PDum ps2(*new TestSubMO2);
+    PDum ps3(*new TestSubMO1);
     
     // Prepare an (test)Index backing the PlacementRefs
     PPIdx index (PlacementIndex::create().get(), &remove_testIndex); // taking ownership
@@ -83,7 +83,7 @@ namespace test    {
     
     index->insert (ps1,root);
     index->insert (ps2,root);
-    index->insert (ps3,root);
+    index->insert (ps3, ps2);
     
     return index;
   }

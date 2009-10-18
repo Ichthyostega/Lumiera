@@ -767,6 +767,22 @@ config.macros.timeline.handler = function(place,macroName,params,wikifier,paramS
 On the implementation side, we use a special kind of MObject, acting as an anchor and providing an unique identity. Like any ~MObject, actually a placement establishes the connection and the scope, and typically constitutes a nested scope (e.g. the scope of all objects //within// the sequence to be bound into a timeline)
 </pre>
 </div>
+<div title="BindingScopeProblem" modifier="Ichthyostega" modified="200910181440" created="200910181435" tags="SessionLogic spec" changecount="4">
+<pre>There is some flexibility in the HighLevelModel, allowing to attach the same [[Sequence|EDL]] onto multiple [[timelines|Timeline]] or even into a [[meta-clip|VirtualClip]]. Thus, while there is always an containment relation which can be used to define the current PlacementScope, we can't always establish an unique path from any given location up to the model root. In the most general case, we have to deal with a DAG, not a tree.
+
+!solution idea
+Transform the DAG into a tree by //focussing//&amp;nbsp; on the current situation and context. Have a state containing the //current path.//  &amp;rarr; QueryFocus
+
+!!detail decisions
+!!!!how to represent scoping
+We us a 2-layer approach: initially, containment is implemented through a registration in the PlacementIndex. Building on that, scope is layered on top as an abstraction, which uses the registered containment relation, but takes the current access path into account at the  critical points (where a [[binding|BindingMO]] comes into play)
+
+!!!!the basic containment tree
+each Placement (with the exception of the root) gets registered as contained in yet another Placement. This registration is entirely a tree, and thus differs from the real scope nesting at the Sequence level: The scopes constituting Sequences and Timelines are registered as siblings, immediately below the root. This has some consequences
+# Sequences as well as Timelines can be discovered as contents of the model root
+# ScopePath digresses at Sequence level from the basic containment tree
+</pre>
+</div>
 <div title="BuildProcess" modifier="Ichthyostega" modified="200906071813" created="200706190658" tags="dynamic Builder img" changecount="30">
 <pre>All decisions on //how // the RenderProcess has to be carried out are concentrated in this rather complicated Builder Subsystem. The benefit of this approach is, besides decoupling of subsystems, to keep the actual performance-intensive video processing code as simple and transparent as possible. The price, in terms of increased complexity &amp;mdash; to pay in the Builder &amp;mdash; can be handled by making the Build Process generic to a large degree. Using a Design By Contract approach we can decompose the various decisions into small decision modules without having to trace the actual workings of the Build Process as a whole.
 
@@ -3052,7 +3068,7 @@ Placement references mimic the behaviour of a real placement, i.e. they proxy th
 {{red{WIP}}}
 </pre>
 </div>
-<div title="PlacementScope" modifier="Ichthyostega" modified="200910162011" created="200905120304" tags="SessionLogic spec img" changecount="16">
+<div title="PlacementScope" modifier="Ichthyostega" modified="200910181415" created="200905120304" tags="SessionLogic spec img" changecount="18">
 <pre>MObjects are attached into the [[Session]] by adding a [[Placement]]. Because this especially includes the case of //grouping or container objects,// e.g. tracks or [[meta-clips|VirtualClip]], any placement may optionally define and root a scope, and every placement is at least contained in one encompassing scope &amp;mdash; of course with the exception of the absolute top level, which can be thought off as being contained in a scope of handling rules.
 
 Thus, while the [[sequences (former called EDL)|EDL]] act as generic container holding a pile of placments, actually there is a more fine grained structure based on the nesting of the tracks, which especially in Lumiera's HighLevelModel belong to the sequence (they aren't a property of the top level timeline as one might expect). Building upon these observations, we actually require each addition of a placement to specify a scope. Consequently, for each Placement at hand it is possible to determine an //containing scope,// which in turn is associated with some Placement of a top-level ~MObject for this scope. The latter is called the ''scope top''. An example would be the {{{Placement&lt;Track&gt;}}} acting as scope of all the clips placed onto this track. The //implementation//&amp;nbsp; of this tie-to-scope is provided by the same mechanism as utilised for relative placements, i.e. an directional placement relation. Actually, this relation is implemented by the PlacementIndex within the current [[Session]].
@@ -3067,6 +3083,7 @@ There is only a limited number of situations constituting a scope
 * tracks may contain nested sub tracks.
 * clips and (track-level) effects likewise are associated with an enclosing track.
 * an important special case of relative placement is when an object is [[attached|AttachedPlacementProblem]] to another leading object, like e.g. an effect modifying a clip
+__note__: attaching a Sequence in multiple ways &amp;rarr; [[causes scoping problems|BindingScopeProblem]]
 
 !Purpose of Placement scoping
 Similar to the common mechanisms of object visibility in programming languages, placement scopes guide the search for and resolution of properties of placement. Any such property //not defined locally// within the placement is queried ascending through the sequence of nested scopes. Thus, global definitions can be shadowed by local ones.
@@ -3882,7 +3899,7 @@ It will contain a global video and audio out pipe, just one EDL with a single tr
 &amp;rarr; see [[Relation of Project, Timelines and Sequences|TimelineSequences]]
 </pre>
 </div>
-<div title="SessionStructureQuery" modifier="Ichthyostega" modified="200910171255" created="200910112322" tags="SessionLogic design draft discuss" changecount="14">
+<div title="SessionStructureQuery" modifier="Ichthyostega" modified="200910181417" created="200910112322" tags="SessionLogic design draft discuss" changecount="15">
 <pre>The frontside interface of the session allows to query for contained objects; it is used to discover the structure and contents of the currently opened session/project. Access point is the public API of the Session class, which, besides exposing those queries, also provides functionality for adding and removing session contents.
 
 !discovering structure
@@ -3894,7 +3911,7 @@ So, clearly, there are two flavours of such an contents exploration query: it co
 The (planned) session structure of Lumiera allows for quite some flexibility, which, of course comes at a price tag. Especially, as there can be multiple independent top level timelines, where a given sequence can be used simultaneously within multiple timelines and even as virtual media within a [[meta-clip|VirtualClip]], and moreover, as properties of any Placement are rather queried and discovered within the PlacementScope of this object &amp;mdash; consequently the discovered values may depend on //how you look at this object.// More specifically, it depends on the ''access path'' used to discover this object, because this path constitutes the actual scope visible to this object.
 
 To give an example, let's assume a clip within a sequence, and this sequence is both linked to the top-level timeline, but also used within a meta-clip. (see the drawing &amp;rarr; [[here|PlacementScope]])
-In this case, the sequence has an 1:n [[binding|BindingMO]]. A binding is (by definition) also a PlacementScope, and, incidentally, in the case of binding the sequence into a timeline, the binding also translates //logical// output designations into global pipes found within the timeline, while otherwise they get mapped onto &quot;channels&quot; of the virtual media used by the virtual clip. Thus, the absolute time position as well as the output connection of a given clip within this sequence //depends on how we look at this clip.// Does this clip apear as part of the global timeline, or did we discover it as contained within the meta-clip?
+In this case, the sequence has an 1:n [[binding|BindingMO]]. A binding is (by definition) also a PlacementScope, and, incidentally, in the case of binding the sequence into a timeline, the binding also translates //logical// output designations into global pipes found within the timeline, while otherwise they get mapped onto &quot;channels&quot; of the virtual media used by the virtual clip. Thus, the absolute time position as well as the output connection of a given clip within this sequence //depends on how we look at this clip.// Does this clip apear as part of the global timeline, or did we discover it as contained within the meta-clip? &amp;rarr; see [[discussion of this scope-binding problem|BindingScopeProblem]]
 
 !!solution requirements
 The baseline of any solution to this problem is clear: at the point where the query is issued, a context information is necessary; this context yields an access path from top level down to the object to be queried, and this access path constitutes the effective scope this object can utilise for resolving the query.

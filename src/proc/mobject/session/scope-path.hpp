@@ -25,7 +25,8 @@
 #define MOBJECT_SESSION_SCOPE_PATH_H
 
 //#include "proc/mobject/mobject.hpp"
-#include "proc/mobject/placement-ref.hpp"
+//#include "proc/mobject/placement-ref.hpp"
+#include "proc/mobject/session/scope.hpp"
 
 #include <vector>
 //#include <string>

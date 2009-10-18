@@ -65,6 +65,21 @@ namespace session {
   }
   
   
+  Scope const&
+  Scope::containing (RefPlacement const& refPlacement)
+  {
+    return containing (*refPlacement);
+  }
+  
+  
+  PlacementMO&
+  Scope::getTop()  const
+  {
+    ASSERT (anchor_);
+    return *anchor_;
+  }
+  
+  
   /** retrieve the parent scope which encloses this scope.
    *  @throw error::Invalid if this is the root scope
    */

@@ -50,6 +50,10 @@ namespace session {
 
   /**
    * TODO type comment
+   * @note Scope is a passive entity,
+   *       basically just wrapping up a Scope-top Placement.
+   *       Contrast this to QueryFocus, which actively
+   *       maintains the current focus location.
    */
   class Scope
     {
@@ -83,21 +87,6 @@ namespace session {
     };
 ///////////////////////////TODO currently just fleshing the API
   
-  
-  
-  inline Scope const&
-  Scope::containing (RefPlacement const& refPlacement)
-  {
-    return containing (*refPlacement);
-  }
-  
-  
-  inline PlacementMO&
-  Scope::getTop()  const
-  {
-    ASSERT (anchor_);
-    return *anchor_;
-  }
   
   
 }} // namespace mobject::session
