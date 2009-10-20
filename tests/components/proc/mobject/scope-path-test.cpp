@@ -72,6 +72,7 @@ namespace test    {
           invalildPath (testPath,startPlacement);
           check_Identity_and_Copy (startPlacement);
           navigate (testPath, index);
+          clear (testPath, index);
         }
       
       
@@ -267,6 +268,19 @@ namespace test    {
           ASSERT (other.getTop() == separatePlacement);
           ScopePath rootPrefix = commonPrefix (path,refPath);
           ASSERT (rootPrefix.endsAt (root));
+        }
+      
+      
+      void
+      clear (ScopePath& testPath, PPIdx index)
+        {
+          ASSERT (path);
+          PMO rootNode = index->getRoot();
+          ASSERT (path.getLeaf() != rootNode);
+          
+          path.clear();
+          ASSERT (path);
+          ASSERT (path.getLeaf() == rootNode);
         }
           
     };

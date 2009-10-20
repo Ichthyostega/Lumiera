@@ -45,10 +45,12 @@ namespace session {
   class QueryFocus
     {
       ScopePath scopes_;
+      /////////////////////////////////////////////////////////////////////////////////////TODO how to integrate the ref-counting handle?
       
     public:
       QueryFocus();
       
+      QueryFocus& reset ();
       QueryFocus& attach (Scope const&);
       static QueryFocus push (Scope const&);
       QueryFocus pop();
@@ -57,16 +59,16 @@ namespace session {
       ScopePath currentPath() const { return scopes_; }
       
       template<class MO>
-      void query(); ////////////////////////////////////////////////////////////////TODO obviously needs to return an Iterator
+      void query()  const; ////////////////////////////////////////////////////////////////TODO obviously needs to return an Iterator
     };
 ///////////////////////////TODO currently just fleshing the API
 
   
   template<class MO>
   void
-  QueryFocus::query()
+  QueryFocus::query()  const
   {
-    UNIMPLEMENTED ("how the hell do we issue typed queries?????");
+    UNIMPLEMENTED ("how the hell do we issue typed queries?????");  ///////////////////////TICKET #352
   }
   
   

@@ -37,6 +37,16 @@ namespace session {
   { }
   
   
+  /** discard any state and clear
+      the current focus path */
+  QueryFocus&
+  QueryFocus::reset ()
+  {
+    scopes_.clear();
+    return *this;
+  }
+  
+  
   /** attach this QueryFocus to a container-like scope,
       causing it to \em navigate, changing the
       current ScopePath as a side-effect 
