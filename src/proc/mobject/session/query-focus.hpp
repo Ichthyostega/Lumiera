@@ -49,8 +49,25 @@ namespace session {
     public:
       QueryFocus();
       
+      QueryFocus& attach (Scope const&);
+      static QueryFocus push (Scope const&);
+      QueryFocus pop();
+      
+      operator Scope()        const { return scopes_.getLeaf(); }      
+      ScopePath currentPath() const { return scopes_; }
+      
+      template<class MO>
+      void query(); ////////////////////////////////////////////////////////////////TODO obviously needs to return an Iterator
     };
 ///////////////////////////TODO currently just fleshing the API
+
+  
+  template<class MO>
+  void
+  QueryFocus::query()
+  {
+    UNIMPLEMENTED ("how the hell do we issue typed queries?????");
+  }
   
   
 }} // namespace mobject::session

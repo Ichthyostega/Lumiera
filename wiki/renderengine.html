@@ -3416,15 +3416,16 @@ In the course of shaping the session API, __joel__ and __ichthyo__ realised that
 See also the notes on &amp;rarr; QueryImplProlog
 </pre>
 </div>
-<div title="QueryFocus" modifier="Ichthyostega" modified="200910171718" created="200910140244" tags="def spec img" changecount="12">
+<div title="QueryFocus" modifier="Ichthyostega" modified="200910200138" created="200910140244" tags="def spec img" changecount="16">
 <pre>When querying contents of the session or sub-containers within the session, the QueryFocus follows the current point-of-query. As such queries can be issued to explore the content of container-like objects holding other MObjects, the focus is always attached to a container, which also acts as [[scope|PlacementScope]] for the contained objects. QueryFocus is an implicit state (the current point of interrest). This sate especially remembers the path down from the root of the HighLevelModel, which was used to access the current scope. Because this path constitutes a hierarchy of scopes, it can be relevant for querying and resolving placement properties. (&amp;rarr; SessionStructureQuery)
 
 !provided operations
 * attach to a given scope-like object. Causes the current focus to //navigate//
-* open a new focus, thereby pushing the existing focus onto a ''focus stack''
+* open a new focus, thereby pushing the existing focus onto a [[focus stack|QueryFocusStack]]
 * return (pop) to the previous focus
-* get the current scope, which is implemented as Placement
+* get the current scope, represented by the &quot;top&quot; Placement of this scope
 * get the current ScopePath from root (session globals) down to the current scope
+* (typed) content discovery query on the current scope
 [&gt;img[Scope Locating|uml/fig136325.png]]
 !!!relation to Scope
 There is a tight integration with PlacementScope through the ScopeLocator, which establishes the //current scope.// But QueryFocus is more of a //binding// &amp;mdash; it links or focusses the current state and into a specific scope with a ScopePath depending on the current state. Thus, while Scope is just a passive container allowing to locate and navigate, QueryFocus by virtue of this binding allows to [[Query]] at this current location.
@@ -3436,6 +3437,19 @@ The stack of scopes must not be confused with the ScopePath. Each single frame o
 
 !!!simplifications
 The full implementation of this scope navigation is tricky, especially when it comes to determining the relation of two positions. It should be ''postponed'' and replaced by a ''dummy'' (no-op) implementation for the first integration round.
+</pre>
+</div>
+<div title="QueryFocusStack" modifier="Ichthyostega" modified="200910200159" created="200910200158" tags="SessionLogic spec dynamic" changecount="3">
+<pre>What is the ''current'' QueryFocus? There is a state-dependent part involved, inasmuch the effective ScopePath depends on how the invoking client has navigated the //current location// down into the HighLevelModel structures. Especially, when a VirtualClip is involved, there can be discrepancies between the paths resulting when descending down through different paths. (See &amp;rarr; BindingScopeProblem).
+
+Thus, doing something with the current location, and especially descending or querying adjacent scopes can modify this current path state. Thus we need a means of invoking a query in a way not interfering with the current path state, otherwise we wouldn't be able to provide side-effect free specific query operations.
+
+!maintaining the current QueryFocus
+As long as client code is just interested to use the current query location, we can provide a handle referring to it. But when a query needs to be run without side effect on the current location, we //push//&amp;nbsp; it aside and start using a new QueryFocus on top, which starts out as a clone copy of the current QueryFocus. Client code again gets a handle (smart-ptr) to this location, and additionally may access the new &quot;current location&quot;. When all references are out of scope and gone, we'll drop back to the focus put aside previously.
+
+!concurrency
+This concept deliberately ignores parallelism. But, as the current path state is already encapsulated (and ref-counting is in place), the only central access point is to reach the current scope. Instead of using a plain-flat singleton here, this access can easily be routed through thread local storage.
+{{red{As of 10/09 it is not clear if there will be any concurrent access to this discovery API}}} &amp;mdash; but it seems not unlikely to happen...
 </pre>
 </div>
 <div title="QueryImplProlog" modifier="Ichthyostega" modified="200910171607" created="200801202321" tags="draft design Rules" changecount="18">

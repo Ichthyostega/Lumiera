@@ -37,7 +37,42 @@ namespace session {
   { }
   
   
+  /** attach this QueryFocus to a container-like scope,
+      causing it to \em navigate, changing the
+      current ScopePath as a side-effect 
+  */
+  QueryFocus&
+  QueryFocus::attach (Scope const& container)
+  {
+    UNIMPLEMENTED ("navigate this focus to attach to the given container scop");
+    return *this;
+  }
   
+  
+  /** push the "current QueryFocus" aside and open a new focus frame.
+      This new QueryFocus will act as "current" until going out of scope
+   */
+  QueryFocus
+  QueryFocus::push (Scope const& otherContainer)
+  {
+    UNIMPLEMENTED ("push current, open a new QueryFocus frame");
+    QueryFocus newFocus; // = do push and open new frame
+    newFocus.attach (otherContainer);
+    return newFocus;
+  }
+  
+  
+  /** cease to use \em this specific reference to the current frame.
+      This operation immediately tries to re-access what is "current"
+      and returns a new handle. But when the previously released reference
+      was the last one, releasing it will cause the QueryFocusStack to pop,
+      in which case we'll re-attach to the now uncovered previous stack top.
+  */
+  QueryFocus
+  QueryFocus::pop()
+  {
+    
+  }
   
   
   
