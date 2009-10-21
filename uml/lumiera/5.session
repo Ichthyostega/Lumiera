@@ -2,10 +2,12 @@ window_sizes 1302 1004 270 1022 856 71
 diagrams
   classdiagram_ref 134021 // Command structure
     575 622 100 4 0 0
-  active  classdiagram_ref 136325 // Focus of Query
+  classdiagram_ref 136325 // Focus of Query
     582 515 100 4 0 0
   classdiagram_ref 136581 // MObjectRef
     651 533 100 4 0 38
+  active  classdiagram_ref 137733 // Query Interface
+    688 570 100 4 0 0
 end
 show_stereotypes
 selected 
@@ -17,16 +19,16 @@ open
   
   package_ref 128133 // Asset
   classview_ref 128389 // Controller Workings
-  classview_ref 128005 // Session parts
   classview_ref 131973 // Object ref
   class_ref 152069 // PlacementIndex
   classview_ref 131845 // Scopes
-  
-  package_ref 128901 // Builder
+  classview_ref 128261 // Builder Workings
   usecaseview_ref 128261 // config examples
-  classview_ref 128133 // Engine Workings
+  class_ref 133253 // Frame
   classview_ref 129541 // InterfaceSystem
   classview_ref 129285 // StreamType
+  class_ref 153989 // QueryResolver
+  class_ref 155141 // Query
   classview_ref 132229 // Custom holders
   classview_ref 128266 // SmartPointers
 end

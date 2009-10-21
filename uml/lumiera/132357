@@ -1,6 +1,6 @@
 format 58
 "Placement" // ProcessingLayer::MObject::Placement
-  revision 2
+  revision 3
   modified_by 5 "hiv"
   // class settings
   //class diagram settings
@@ -200,27 +200,6 @@ ${inlines}
 	    classrelation_ref 178565 // <unidirectional association>
 	  b parent class_ref 153989 // QueryResolver
       end
-    end
-
-    class 153989 "QueryResolver"
-      visibility package stereotype "interface"
-      cpp_decl "${comment}${template}class ${name}${inherit}
-  {
-${members}  };
-${inlines}
-"
-      java_decl "${comment}${@}${visibility}interface ${name}${extends} {
-${members}}
-"
-      php_decl "${comment}${visibility}interface ${name} {
-${members}}
-"
-      python_2_2 python_decl ""
-      idl_decl "${comment}${abstract}${local}interface ${name}${inherit} {
-${members}};
-"
-      explicit_switch_type ""
-      
     end
   end
 end

@@ -3400,7 +3400,7 @@ Viewed as a micro program, the processing patterns are ''weak typed'' &amp;mdash
 <pre>a given Render Engine configuration is a list of Processors. Each Processor in turn contains a Graph of ProcNode.s to do the acutal data processing. In order to cary out any calculations, the Processor needs to be called with a StateProxy containing the state information for this RenderProcess
 </pre>
 </div>
-<div title="Query" modifier="Ichthyostega" modified="200910171644" created="200910171621" tags="Rules spec draft discuss" changecount="8">
+<div title="Query" modifier="Ichthyostega" modified="200910210243" created="200910171621" tags="Rules spec draft discuss" changecount="9">
 <pre>{{red{WIP as of 10/09}}}...//brainstorming about the first ideas towards a query subsystem//
 
 !use case: discovering the contents of a container in the HighLevelModel
@@ -3411,6 +3411,8 @@ In the course of shaping the session API, __joel__ and __ichthyo__ realised that
 * the query instance remains property of the entity exposing the query capability.
 * client code gets a result iterator, which can be explored //only once until exhaustion.//
 * the handed out result iterator is used to manage the allocation for the query result set by sideeffect (smart handle). &amp;rarr; Ticket #353
+
+For decoupling the query invocation from the facility actually processing the query, we need to come up with common pattern. In 10/09, there is an immediate demand for such a solution pattern for implementing the QueryFocus and PlacementScope framework, which is crucial for contents discovery in general on the session interface. &amp;rarr; QueryResolver was shaped to deal with this situation, but has the potential to evolve into a general solution for issuing queries.
 
 ----
 See also the notes on &amp;rarr; QueryImplProlog
@@ -3472,6 +3474,16 @@ Then, running the goal {{{:-resolve(T, stream(T,mpeg)).}}} would search a Track 
 
 !!a note on Plugins
 In the design of the Lumiera Proc Layer done thus far, we provide //no possibility to introduce a new object kind// into the system via plugin interface. The system uses a fixed collection of classes intended to cover all needs (Clip, Effect, Track, Pipe, Label, Automation, ~Macro-Clips). Thus, plugins will only be able to provide new parametrisations of existing classes. This should not be any real limitation, because the whole system is designed to achieve most of its functionality by freely combining rather basic object kinds. As a plus, it plays nicely with any plain-C based plugin interface. For example, we will have C++ adapter classes for the most common sorts of effect plugin (pull system and synchronous frame-by-frame push with buffering) with a thin C adaptation layer for the specific external plugin systems used. Everything beyond this point can be considered &quot;condiguration data&quot; (including the actual plugin implementation to be loaded)
+</pre>
+</div>
+<div title="QueryResolver" modifier="Ichthyostega" modified="200910210330" created="200910210300" tags="Rules spec draft img" changecount="2">
+<pre>Within the Lumiera Proc-Layer, there is a general preference for issuing [[queries|Query]] over hard wired configuration (or even mere table based configuration). This leads to the demand of exposing a //possibility to issue queries// &amp;mdash; without actually disclosing much details of the facility implementing this service. For example, for shaping the general session interface (in 10/09), we need a means of exposing a hook to discover HighLevelModel contents, without disclosing how the model is actually organised internally (namely by using an PlacementIndex).
+
+!Analysis of the problem
+The situation can be decomposed as follows.[&gt;img[QueryResolver|uml/fig137733.png]]
+* first off, we need a way to state //what kind of query we want to run.// This includes stipulations on the type of the result set contents expected
+* as the requirement is to keep the facility actually implementing the query service hidden behind an interface, we're forced to erase specific type information and pass on an encapsulated version of the query
+* providing an iterator for exploring the results poses the additional constraint of having an fairly generic iterator type, while still being able to communicate with the actual query implementation behind the interface.
 </pre>
 </div>
 <div title="RSSReaderPlugin" modifier="Ichthyostega" created="200708081515" tags="systemConfig" changecount="1">
