@@ -71,6 +71,10 @@ PLANNED "Query focus management" QueryFocus_test <<END
 END
 
 
+PLANNED "issuing typed queries" QueryResolver_test <<END
+END
+
+
 PLANNED "RebuildFixture_test" RebuildFixture_test <<END
 END
 
