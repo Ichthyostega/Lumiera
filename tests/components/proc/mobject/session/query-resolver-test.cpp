@@ -23,6 +23,7 @@
 
 #include "lib/test/run.hpp"
 //#include "lib/lumitime.hpp"
+#include "lib/test/test-helper.hpp"
 //#include "proc/mobject/placement-ref.hpp"
 //#include "proc/mobject/session/test-scopes.hpp"
 //#include "proc/mobject/placement-index.hpp"
@@ -41,6 +42,7 @@ namespace mobject {
 namespace session {
 namespace test    {
   
+  using lib::test::showSizeof;
   //using util::isSameObject;
   //using lumiera::Time;
   using std::string;
@@ -50,11 +52,17 @@ namespace test    {
   namespace { // a test query resolving facility
     
   
-    struct TypeMatchFilter
+    class TypeMatchFilter
+      : public QueryResolver
       {
         
       };
   
+    QueryResolver&
+    buildTestQueryResolver ()
+    {
+      UNIMPLEMENTED("build a special resolver just for this test and register it.");
+    }
   }
   
   
@@ -74,13 +82,23 @@ namespace test    {
       virtual void
       run (Arg) 
         {
-          Iterator ii = subF2.query<TestSubMO21>();
+          QueryResolver& resolver = buildTestQueryResolver();
+          Query<int> firstQuery;
+          Query<int>::iterator ii = resolver.issue (firstQuery);
+          explore (ii);
+          
+          Query<string> secondtQuery;
+          Query<string>::iterator iii = resolver.issue (secondQuery);
+          explore (iii);
+        }
+      
+      template<typename ELM>
+      static void
+      explore (typename Query<ELM>::iterator const& ii)
+        {
+          cout << "Query-Results: " << showSizeof(ii) << endl;;
           while (ii)
-            {
-              subF2.attach(*ii);
-              cout << string(subF2) << endl;
-              ii = subF2.query<TestSubMO21>();
-            }
+              cout << *ii << endl;
         }
           
     };
