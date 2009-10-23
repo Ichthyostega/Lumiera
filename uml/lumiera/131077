@@ -1,6 +1,6 @@
 format 58
 "ConfigQuery" // CommonLib::ConfigQuery
-  revision 12
+  revision 13
   modified_by 5 "hiv"
   // class settings
   //class diagram settings
@@ -476,7 +476,7 @@ ${members}};
       operation 141317 "issue"
 	public explicit_return_type ""
 	nparams 1
-	  param in name "query" type class_ref 156805 // QuerY
+	  param in name "query" type class_ref 156805 // Goal
 	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name} ${(}${)}${const}${volatile} ${throw}${abstract};"
 	cpp_def "${comment}${inline}${type}
 ${class}::${name} ${(}${)}${const}${volatile} ${throw}${staticnl}
@@ -492,7 +492,7 @@ ${class}::${name} ${(}${)}${const}${volatile} ${throw}${staticnl}
       end
     end
 
-    class 156805 "QuerY"
+    class 156805 "Goal"
       abstract visibility public stereotype "interface"
       cpp_decl "${comment}${template}class ${name}${inherit}
   {
@@ -619,7 +619,7 @@ ${inlines}
 	  a public
 	    cpp default "${type}"
 	    classrelation_ref 181125 // <realization>
-	  b parent class_ref 156805 // QuerY
+	  b parent class_ref 156805 // Goal
       end
 
       classrelation 184837 // <unidirectional association>
@@ -674,8 +674,43 @@ ${inlines}
 	  b parent class_ref 153989 // QueryResolver
       end
 
+      classrelation 186117 // <unidirectional association>
+	relation 175749 --->
+	  stereotype "produce"
+	  a role_name "" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 186117 // <unidirectional association>
+	  b parent class_ref 158085 // Solution
+      end
     end
 
+    class 158085 "Solution"
+      visibility package 
+      nactuals 2
+      actual class class_ref 155141 // Query
+        rank 0 explicit_value ""
+      actual class class_ref 155269 // Cursor
+        rank 0 explicit_value ""
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 185989 // <generalisation>
+	relation 175621 ---|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 185989 // <generalisation>
+	  b parent class_ref 155269 // Cursor
+      end
+    end
   end
 
   usecaseview 128389 "query use"

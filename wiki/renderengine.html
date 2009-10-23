@@ -3476,14 +3476,23 @@ Then, running the goal {{{:-resolve(T, stream(T,mpeg)).}}} would search a Track 
 In the design of the Lumiera Proc Layer done thus far, we provide //no possibility to introduce a new object kind// into the system via plugin interface. The system uses a fixed collection of classes intended to cover all needs (Clip, Effect, Track, Pipe, Label, Automation, ~Macro-Clips). Thus, plugins will only be able to provide new parametrisations of existing classes. This should not be any real limitation, because the whole system is designed to achieve most of its functionality by freely combining rather basic object kinds. As a plus, it plays nicely with any plain-C based plugin interface. For example, we will have C++ adapter classes for the most common sorts of effect plugin (pull system and synchronous frame-by-frame push with buffering) with a thin C adaptation layer for the specific external plugin systems used. Everything beyond this point can be considered &quot;condiguration data&quot; (including the actual plugin implementation to be loaded)
 </pre>
 </div>
-<div title="QueryResolver" modifier="Ichthyostega" modified="200910210330" created="200910210300" tags="Rules spec draft img" changecount="2">
+<div title="QueryResolver" modifier="Ichthyostega" modified="200910230109" created="200910210300" tags="Rules spec draft img" changecount="6">
 <pre>Within the Lumiera Proc-Layer, there is a general preference for issuing [[queries|Query]] over hard wired configuration (or even mere table based configuration). This leads to the demand of exposing a //possibility to issue queries// &amp;mdash; without actually disclosing much details of the facility implementing this service. For example, for shaping the general session interface (in 10/09), we need a means of exposing a hook to discover HighLevelModel contents, without disclosing how the model is actually organised internally (namely by using an PlacementIndex).
 
 !Analysis of the problem
 The situation can be decomposed as follows.[&gt;img[QueryResolver|uml/fig137733.png]]
-* first off, we need a way to state //what kind of query we want to run.// This includes stipulations on the type of the result set contents expected
+* first off, we need a way to state //what kind of query we want to run.// This includes stipulations on the type of the expected result set contents
 * as the requirement is to keep the facility actually implementing the query service hidden behind an interface, we're forced to erase specific type information and pass on an encapsulated version of the query
 * providing an iterator for exploring the results poses the additional constraint of having an fairly generic iterator type, while still being able to communicate with the actual query implementation behind the interface.
+
+
+!!!Difficulties
+*it's not clear which usage pattern I'm after
+*# client creates a specific {{{Query&lt;TY&gt;}}} to be resolved by an concealed entity
+*# client creates just a goal, which is then translated into a specific query mechanism behind the invocation interface
+*# client issues a query and expect it just to be handled by //some//&amp;nbsp; suitable resolver
+* thus it's difficult to determine, //what// part of the issued query needs automatic management. More specifically, is it possible for the client to dispose the query after issuing it, but keeping and exploring the iterator obtained as result of the query?
+* and then there is the notorious problem of re-gaining the specifically typed context //behind//&amp;nbsp; the invocation interface. Especially, the facility processing the query needs to know both the expected result type and details about the concrete query and its parametrisation
 </pre>
 </div>
 <div title="RSSReaderPlugin" modifier="Ichthyostega" created="200708081515" tags="systemConfig" changecount="1">
