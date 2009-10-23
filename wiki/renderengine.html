@@ -3325,8 +3325,8 @@ Besides, they provide an __inward interface__ for the [[ProcNode]]s, enabling th
 
 </pre>
 </div>
-<div title="ProcLayer and Engine" modifier="Ichthyostega" modified="200910171656" created="200706190056" tags="overview" changecount="21">
-<pre>The Render Engine is the part of the application doing the actual video calculations. Its operations are guided by the Objects and Parameters edited by the user in [[the EDL|EDL]] and it retrieves the raw audio and video data from the [[Data backend|backend.html]]. Because the inner workings of the Render Engine are closely related to the structures used in the EDL, this design covers [[the aspect of objects placed into the EDL|MObjects]] as well.
+<div title="ProcLayer and Engine" modifier="Ichthyostega" modified="200910231535" created="200706190056" tags="overview" changecount="23">
+<pre>The Render Engine is the part of the application doing the actual video calculations. Utilising system level services and retrieving raw audio and video data through [[Lumiera's Backend|backend.html]], its operations are guided by the objects and parameters edited by the user in [[the session|Session]]. Thus, the Lumiera Proc-Layer covers the (abstract) edit operations available to the user, the representation of [[&quot;editable things&quot;|MObjects]] and the translation of those into facilities allowing to [[drive the rendering|Rendering]].
 &lt;&lt;&lt;
 ''Status'': started out as design draft in summer '07, Ichthyo is now in the middle of a implementing the foundations and main structures in C++
 * basic [[AssetManager]] working
@@ -3856,15 +3856,19 @@ Later on we expect a distinct __query subsystem__ to emerge, presumably embeddin
 <div title="STypeManager" modifier="Ichthyostega" created="200809220230" changecount="1">
 <pre>A facility allowing the Proc-Layer to work with abstracted [[media stream types|StreamType]], linking (abstract or opaque) [[type tags|StreamTypeDescriptor]] to an [[library|MediaImplLib]], which provides functionality for acutally dealing with data of this media stream type. Thus, the stream type manager is a kind of registry of all the external libraries which can be bridged and accessed by Lumiera (for working with media data, that is). The most basic set of libraries is instelled here automatically at application start, most notably the [[GAVL]] library for working with uncompressed video and audio data. //Later on, when plugins will introduce further external libraries, these need to be registered here too.//</pre>
 </div>
-<div title="Session" modifier="Ichthyostega" modified="200904252215" created="200712100525" tags="def SessionLogic" changecount="4">
+<div title="Session" modifier="Ichthyostega" modified="200910231542" created="200712100525" tags="def SessionLogic" changecount="5">
 <pre>The Session contains all informations, state and objects to be edited by the User. From a users view, the Session is synonymous to the //current Project//. It can be saved and loaded. The individual Objects within the Session, i.e. Clips, Media, Effects, are contained in one (or several) collections within the Session, which we call [[EDL (Edit Decision List)|EDL]]. &amp;rarr; [[Session design overview|SessionOverview]]
 
 !Session structure
-The Session object is a singleton &amp;mdash; actually it is a »~PImpl«-Facade object (because the actual implementation object can be swapped for (re)loading Sessions).&lt;br/&gt;The Session is comprised of
-* a collection of ''EDL'' objects
-* a ''current EDL'', which can be switched and accessed {{red{TODO not sure if I keep this design...}}}
-* a collection of ''global Pipes''
-* the ''Fixture'' with a possibility to [[(re)build it|PlanningBuildFixture]]</pre>
+The Session object is a singleton &amp;mdash; actually it is a »~PImpl«-Facade object (because the actual implementation object can be swapped for (re)loading Sessions).&lt;br/&gt;The Session is the access point to the HighLevelModel; it is comprised of
+* a number of (independent) top-level [[time-lines|Timeline]]
+* some [[sequences|EDL]] to be used within these timelines
+* a [[scope structure|PlacementScope]] backed by an index, and a current QueryFocus
+* a set of ConfigRules to guide default behaviour {{red{planned as of 10/09}}}
+* the ''Fixture'' with a possibility to [[(re)build it|PlanningBuildFixture]] {{red{just partially designed as of 10/09}}}
+
+&amp;rarr; see [[relation of timeline, sequences and objects|TimelineSequences]]
+</pre>
 </div>
 <div title="SessionDataMem" modifier="Ichthyostega" modified="200905082325" created="200904252303" tags="impl design SessionLogic draft" changecount="2">
 <pre>The Layout of the Session datastructure in memory is bound by several dependencies: GUI, HighLevelModel, SessionStorage, [[Builder]].
