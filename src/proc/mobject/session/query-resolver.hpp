@@ -26,7 +26,9 @@
 
 //#include "proc/mobject/mobject.hpp"
 //#include "proc/mobject/placement.hpp"
+#include "lib/typed-counter.hpp"
 #include "lib/iter-adapter.hpp"
+#include "lib/util.hpp"
 
 //#include <vector>
 //#include <string>
@@ -37,37 +39,104 @@
 namespace mobject {
 namespace session {
   
-  class Scope;
+  using util::unConst;
+  
+  
+//  class Scope;
+  class QueryResolver;
+  
   
   /**
    * TODO type comment
+   * Query ABC
    */
-  template<class MO>        ///////////////////////TODO: can we get rid of that type parameter? in conjunction with the virtual functions, it causes template code bloat
-  class Query
+  class Goal
     {
     public:
-      virtual ~Query() {}
+      virtual ~Goal() {}
       
-      /* results retrieval */
+      enum Kind
+        { GENERIC = 0
+        , DISCOVERY
+        };
       
-      typedef MO* Cur;
-      typedef lib::IterAdapter<Cur,Query> iterator;
+      struct QueryID
+        {
+          Kind kind;
+          size_t type;
+        };
       
-      iterator operator()(){ return this->runQuery(); }
+      QueryID getQID() { return id_; }
       
-      static bool hasNext  (const Query* thisQuery, Cur& pos) { return thisQuery->isValid(pos); }
-      static void iterNext (const Query* thisQuery, Cur& pos) { pos = thisQuery->nextResult(); }
       
-      /* diagnostics */
-      static size_t query_cnt();      
+      class Result
+        {
+          void *cur_;
+          
+        protected:
+          template<typename RES>
+          RES& access()
+            {
+              REQUIRE (cur_);
+              return *reinterpret_cast<RES*> (cur_);
+            }
+        };
       
+      static bool hasNext  (const Goal* thisQuery, Result& pos) { return unConst(thisQuery)->isValid(pos);   }   ////TICKET #375
+      static void iterNext (const Goal* thisQuery, Result& pos) { return unConst(thisQuery)->nextResult(pos);}
       
     protected:
-      virtual iterator runQuery()            =0;
-    
+      QueryID id_;
+      
+      Goal (QueryID qid)
+        : id_(quid)
+        { }
+      
       /* iteration control */
-      virtual bool isValid (Cur& pos)  const =0;
-      virtual Cur const& nextResult()  const =0;
+      virtual bool isValid (Result& pos)             =0;      /////TODO danger of template bloat?
+      virtual Result const& nextResult(Result& pos)  =0;
+    };
+  
+  
+  
+  /** Context used for generating type-IDs to denote
+   *  the specific result types of issued queries  */
+  typedef lib::TypedContext<Goal::Result> ResultType;
+  
+  
+  /**
+   * TODO type comment
+   * Concrete query to yield specifically typed result elements
+   */
+  template<class RES>
+  class Query
+    : public Goal
+    {
+      static QueryID
+      defineQueryTypeID ()
+        {
+          QueryID id = {Goal::GENERIC, ResultType::ID<RES>::get()};
+          return id;
+        }
+      
+    public:
+      Query()
+        : Goal (defineQueryTypeID())
+        { }
+      
+      /* results retrieval */
+      class Cursor : public Goal::Result
+        {
+        public:
+          RES& operator* () { return   access<RES>(); }
+          RES* operator->() { return & access<RES>(); }
+        };
+      
+      typedef lib::IterAdapter<Cursor,Goal> iterator;
+      
+      operator iterator() ;
+      iterator operator() (QueryResolver const& resolver);
+      
     };
   
   
@@ -79,25 +148,41 @@ namespace session {
       
     public:
       
-      virtual ~QueryResolver() {}
+      virtual ~QueryResolver() ;
       
       
       /** issue a query to retrieve contents
-       *  @param scope or container on which to discover contents
-       *  @return an iterator to yield all elements of suitable type
-       *  
-       *  @todo doesn't this create a circular dependency? scope indirectly relies on QueryResolver, right??
+       *  The query is handed over internally to a suitable resolver implementation.
+       *  After returning, results can be obtained from the query by iteration.
+       *  @throw lumiera::Error subclass if query evaluation flounders.
+       *         This might be broken logic, invalid input, misconfiguration
+       *         or failure of an external facility used for resolution.
+       *  @note a query may yield no results, in which case the iterator is empty.
        */
-      template<class RES>
-      typename Query<RES>::iterator
-      query (Scope const& scope)
-        {
-          UNIMPLEMENTED ("create a specific contents query to enumerate contents of scope");
-        }
+      void issue (Goal& query);
       
+      
+    protected:
+      virtual bool canHandleQuery (Goal::QueryID qID)  const =0;
       
     };
 ///////////////////////////TODO currently just fleshing the API
+  
+  
+  template<typename RES>
+  inline typename Query<RES>::iterator
+  Query<RES>::operator() (QueryResolver const& resolver)
+    {
+      resolver.issue (*this);
+      return *this;
+    }
+  
+  
+  template<typename RES>
+  Query<RES>::operator iterator()
+    {
+      UNIMPLEMENTED ("how to get the result iterator");
+    }
   
   
 }} // namespace mobject::session

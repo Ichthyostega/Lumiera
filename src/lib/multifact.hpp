@@ -146,7 +146,7 @@ namespace lib {
         /**
          * Convenience shortcut for automatically setting up
          * a production line, fabricating a singleton instance
-         * of the given target type (TAR)
+         * of the given target type (IMP)
          */
         template<class IMP>
         class Singleton

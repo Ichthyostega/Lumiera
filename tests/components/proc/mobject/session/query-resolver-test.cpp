@@ -84,12 +84,12 @@ namespace test    {
         {
           QueryResolver& resolver = buildTestQueryResolver();
           Query<int> firstQuery;
-          Query<int>::iterator ii = resolver.issue (firstQuery);
-          explore (ii);
+          resolver.issue (firstQuery);
+          explore (firstQuery);
           
-          Query<string> secondtQuery;
-          Query<string>::iterator iii = resolver.issue (secondQuery);
-          explore (iii);
+          Query<string> secondQuery;
+          resolver.issue (secondQuery);
+          explore (secondQuery);
         }
       
       template<typename ELM>
