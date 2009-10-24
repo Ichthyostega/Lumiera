@@ -1,6 +1,6 @@
 format 58
 "ConfigQuery" // CommonLib::ConfigQuery
-  revision 13
+  revision 14
   modified_by 5 "hiv"
   // class settings
   //class diagram settings
@@ -651,6 +651,23 @@ ${inlines}
       idl_decl ""
       explicit_switch_type ""
       
+      classrelation 187397 // pos_ (<unidirectional association>)
+	relation 177029 --->
+	  a role_name "pos_" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 187397 // pos_ (<unidirectional association>)
+	  b parent class_ref 156933 // Result
+      end
+
+      classrelation 187525 // source_ (<unidirectional association>)
+	relation 177157 --->
+	  a role_name "source_" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 187525 // source_ (<unidirectional association>)
+	  b parent class_ref 158085 // SolutionResultSet
+      end
     end
 
     class 155525 "ResolvingFacility"
@@ -681,16 +698,14 @@ ${inlines}
 	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
 "
 	    classrelation_ref 186117 // <unidirectional association>
-	  b parent class_ref 158085 // Solution
+	  b parent class_ref 158085 // SolutionResultSet
       end
     end
 
-    class 158085 "Solution"
+    class 158085 "SolutionResultSet"
       visibility package 
-      nactuals 2
+      nactuals 1
       actual class class_ref 155141 // Query
-        rank 0 explicit_value ""
-      actual class class_ref 155269 // Cursor
         rank 0 explicit_value ""
       cpp_decl "${comment}${template}class ${name}${inherit}
   {
@@ -703,12 +718,12 @@ ${inlines}
       idl_decl ""
       explicit_switch_type ""
       
-      classrelation 185989 // <generalisation>
-	relation 175621 ---|>
+      classrelation 187269 // <generalisation>
+	relation 176901 ---|>
 	  a public
 	    cpp default "${type}"
-	    classrelation_ref 185989 // <generalisation>
-	  b parent class_ref 155269 // Cursor
+	    classrelation_ref 187269 // <generalisation>
+	  b parent class_ref 155141 // Query
       end
     end
   end

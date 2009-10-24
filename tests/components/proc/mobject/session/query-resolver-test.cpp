@@ -84,17 +84,15 @@ namespace test    {
         {
           QueryResolver& resolver = buildTestQueryResolver();
           Query<int> firstQuery;
-          resolver.issue (firstQuery);
-          explore (firstQuery);
+          explore (firstQuery (resolver));
           
           Query<string> secondQuery;
-          resolver.issue (secondQuery);
-          explore (secondQuery);
+          explore (secondQuery(resolver));
         }
       
       template<typename ELM>
       static void
-      explore (typename Query<ELM>::iterator const& ii)
+      explore (typename Query<ELM>::iterator ii)
         {
           cout << "Query-Results: " << showSizeof(ii) << endl;;
           while (ii)

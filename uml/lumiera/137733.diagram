@@ -10,7 +10,7 @@ classcanvas 128133 class_ref 155141 // Query
 end
 classcanvas 128517 class_ref 155397 // IterAdapter
   draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default show_stereotype_properties default
-  xyz 46 222 2000
+  xyz 24 222 2000
 end
 classcanvas 128645 class_ref 155525 // ResolvingFacility
   draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default show_stereotype_properties default
@@ -28,7 +28,7 @@ classcanvas 131205 class_ref 155269 // Cursor
   draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default show_stereotype_properties default
   xyz 246 339 2005
 end
-classcanvas 133509 class_ref 158085 // Solution
+classcanvas 133509 class_ref 158085 // SolutionResultSet
   draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default show_stereotype_properties default
   xyz 355 444 2000
 end
@@ -56,23 +56,37 @@ relationcanvas 132357 relation_ref 169733 // <realization>
 end
 relationcanvas 133125 relation_ref 174469 // <unidirectional association>
   geometry VHr
-  from ref 128133 z 1999 stereotype "<<type-def>>" xyz 95 319 3000 to point 77 317
+  from ref 128133 z 1999 stereotype "<<type-def>>" xyz 64 319 3000 to point 55 317
   line 133381 z 1999 to ref 128517
-  no_role_a no_role_b
-  no_multiplicity_a no_multiplicity_b
-end
-relationcanvas 133637 relation_ref 175621 // <generalisation>
-  geometry VHV unfixed
-  from ref 133509 z 1999 to point 379 411
-  line 133765 z 1999 to point 266 411
-  line 133893 z 1999 to ref 131205
   no_role_a no_role_b
   no_multiplicity_a no_multiplicity_b
 end
 relationcanvas 134021 relation_ref 175749 // <unidirectional association>
   decenter_end 830
-  from ref 128645 z 1999 stereotype "<<produce>>" xyz 428 406 3000 to ref 133509
+  from ref 128645 z 1999 stereotype "<<produce>>" xyz 450 406 3000 to ref 133509
   no_role_a no_role_b
+  no_multiplicity_a no_multiplicity_b
+end
+relationcanvas 134149 relation_ref 176901 // <generalisation>
+  geometry VHV unfixed
+  from ref 133509 z 1999 to point 402 422
+  line 134277 z 1999 to point 195 422
+  line 134405 z 1999 to ref 128133
+  no_role_a no_role_b
+  no_multiplicity_a no_multiplicity_b
+end
+relationcanvas 134789 relation_ref 177029 // <unidirectional association>
+  from ref 128517 z 1999 to point 89 239
+  line 135301 z 1999 to ref 131077
+  role_a_pos 101 240 3000 no_role_b
+  no_multiplicity_a no_multiplicity_b
+end
+relationcanvas 134917 relation_ref 177157 // <unidirectional association>
+  from ref 128517 z 1999 to point 89 251
+  line 135557 z 1999 to point 144 251
+  line 135173 z 1999 to point 195 461
+  line 135045 z 1999 to ref 133509
+  role_a_pos 101 253 3000 no_role_b
   no_multiplicity_a no_multiplicity_b
 end
 preferred_whz 629 529 1
