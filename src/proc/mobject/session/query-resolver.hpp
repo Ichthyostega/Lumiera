@@ -44,12 +44,12 @@ namespace session {
   using util::unConst;
   
   
-//  class Scope;
   class Goal;
   class QueryResolver;
+  class QueryResolver::Resolution;
   
   /** Allow for taking ownership of a result set */
-  typedef std::tr1::shared_ptr<Goal> PGoal;
+  typedef std::tr1::shared_ptr<QueryResolver::Resolution> PReso;
   
   
   
@@ -60,7 +60,7 @@ namespace session {
   class Goal
     {
     public:
-      virtual ~Goal() {}
+      virtual ~Goal() ;
       
       enum Kind
         { GENERIC = 0
@@ -99,8 +99,6 @@ namespace session {
         };
       
       
-      static bool hasNext  (PGoal thisQuery, Result& pos) { return thisQuery->isValid(pos); }   ////TICKET #375
-      static void iterNext (PGoal thisQuery, Result& pos) { thisQuery->nextResult(pos);     }
       
     protected:
       QueryID id_;
@@ -109,9 +107,6 @@ namespace session {
         : id_(quid)
         { }
       
-      /* iteration control */
-      virtual bool isValid (Result& pos)             =0;      /////TODO danger of template bloat?
-      virtual Result const& nextResult(Result& pos)  =0;
     };
   
   
@@ -153,7 +148,7 @@ namespace session {
         };
       
       
-      typedef lib::IterAdapter<Cursor,PGoal> iterator;
+      typedef lib::IterAdapter<Cursor,PResolution> iterator;
       
       iterator operator() (QueryResolver const& resolver);
       
@@ -171,23 +166,46 @@ namespace session {
       
       virtual ~QueryResolver() ;
       
-      
-      struct Invocation
+      /** 
+       * ABC denoting the result set
+       * of an individual query resolution
+       */
+      class Resolution
         {
-          PGoal        resultSet;
-          Goal::Result firstResult;
+          typedef Goal::Result Result;
+          
+        public:
+          virtual ~Resolution();
+          
+          static bool
+          hasNext  (PReso&, Result& pos)          ////TICKET #375
+            {
+              return bool(pos);
+            }
+          
+          static void
+          iterNext (PReso& resultSet, Result& pos)
+            {
+              resultSet->nextResult(pos);
+            }
+          
+          virtual Result prepareResolution()             =0;
+          
+        protected:
+          
+          virtual Result const& nextResult(Result& pos)  =0;
         };
+      
       
       /** issue a query to retrieve contents
        *  The query is handed over internally to a suitable resolver implementation.
-       *  @return Invocation data, containing a smart-pointer which \em owns the result set,
-       *          and the first result or NULL result. Usable for building an IterAdapter.
+       *  @return concrete Resolution of the query (ResultSet), \em managed by smart-pointer.
        *  @throw lumiera::Error subclass if query evaluation flounders.
        *         This might be broken logic, invalid input, misconfiguration
        *         or failure of an external facility used for resolution.
        *  @note a query may yield no results, in which case the iterator is empty.
        */
-      Invocation issue (Goal& query);
+      PReso issue (Goal& query);
       
       
     protected:
@@ -201,8 +219,9 @@ namespace session {
   inline typename Query<RES>::iterator
   Query<RES>::operator() (QueryResolver const& resolver)
     {
-      resolver.issue (*this);
-      return iterator ();
+      PReso resultSet = resolver.issue (*this);
+      Result first = prepareResolution();
+      return iterator (resultSet, first);
     }
   
   

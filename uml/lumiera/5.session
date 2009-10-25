@@ -5,7 +5,7 @@ diagrams
   classdiagram_ref 136325 // Focus of Query
     582 515 100 4 0 0
   active  classdiagram_ref 137733 // Query Interface
-    629 542 100 4 0 0
+    612 547 100 4 0 0
 end
 show_stereotypes
 selected 
@@ -25,11 +25,14 @@ open
   class_ref 133253 // Frame
   classview_ref 129541 // InterfaceSystem
   classview_ref 129285 // StreamType
-  class_ref 153989 // QueryResolver
+  classdiagram_ref 137733 // Query Interface
+  operation_ref 140037 // isValid
+  operation_ref 140165 // nextResult
   class_ref 156933 // Result
   classrelation_ref 181765 // <dependency>
   class_ref 155141 // Query
   class_ref 155525 // ResolvingFacility
+  class_ref 158085 // ResultSet
   classview_ref 132229 // Custom holders
   classview_ref 128266 // SmartPointers
 end

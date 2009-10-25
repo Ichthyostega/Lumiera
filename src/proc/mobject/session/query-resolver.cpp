@@ -32,12 +32,19 @@ namespace session {
   
   
   
+  /* generate vtables here */  
+
+  Goal::~Goal() { }
+
   QueryResolver::~QueryResolver() { }
+  
+  QueryResolver::Resolution::~Resolution() { }
+  
   
   
   
   /** TODO??? */
-  QueryResolver::Invocation  
+  QueryResolver::Resolution  
   QueryResolver::issue (Goal& query)
   {
     if (!canHandleQuery (query.getQID()))
