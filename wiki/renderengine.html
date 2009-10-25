@@ -3476,7 +3476,7 @@ Then, running the goal {{{:-resolve(T, stream(T,mpeg)).}}} would search a Track 
 In the design of the Lumiera Proc Layer done thus far, we provide //no possibility to introduce a new object kind// into the system via plugin interface. The system uses a fixed collection of classes intended to cover all needs (Clip, Effect, Track, Pipe, Label, Automation, ~Macro-Clips). Thus, plugins will only be able to provide new parametrisations of existing classes. This should not be any real limitation, because the whole system is designed to achieve most of its functionality by freely combining rather basic object kinds. As a plus, it plays nicely with any plain-C based plugin interface. For example, we will have C++ adapter classes for the most common sorts of effect plugin (pull system and synchronous frame-by-frame push with buffering) with a thin C adaptation layer for the specific external plugin systems used. Everything beyond this point can be considered &quot;condiguration data&quot; (including the actual plugin implementation to be loaded)
 </pre>
 </div>
-<div title="QueryResolver" modifier="Ichthyostega" modified="200910241336" created="200910210300" tags="Rules spec draft img" changecount="10">
+<div title="QueryResolver" modifier="Ichthyostega" modified="200910251518" created="200910210300" tags="Rules spec draft img" changecount="11">
 <pre>Within the Lumiera Proc-Layer, there is a general preference for issuing [[queries|Query]] over hard wired configuration (or even mere table based configuration). This leads to the demand of exposing a //possibility to issue queries// &amp;mdash; without actually disclosing much details of the facility implementing this service. For example, for shaping the general session interface (in 10/09), we need a means of exposing a hook to discover HighLevelModel contents, without disclosing how the model is actually organised internally (namely by using an PlacementIndex).
 
 !Analysis of the problem
@@ -3496,7 +3496,7 @@ The situation can be decomposed as follows.[&gt;img[QueryResolver|uml/fig137733.
 
 !!!Decisions
 * while, in the use case currently at hand, the query instance is created by the client on the stack, the possibility of managing the queries internally is deliberately kept open. Because otherwise, we had to commit to a specific way of obtaining results, for example by assuming always to use an embedded STL iterator.
-* we endorse that uttermost performance is less important than clean separation an extensibility. Thus we accept accessing the current position pointer through reference and we package a ref-counting mechanism together with this current position (&quot;Cursor&quot;)
+* we endorse that uttermost performance is less important than clean separation an extensibility. Thus we accept accessing the current position pointer through reference and we use a ref-counting mechanism alongside with the handed out iterator
 * the result set is not tied to the query &amp;mdash; at least not by design. The query can be discarded while further exploring the result set.
 </pre>
 </div>

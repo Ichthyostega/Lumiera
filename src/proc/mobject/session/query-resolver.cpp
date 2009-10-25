@@ -37,7 +37,7 @@ namespace session {
   
   
   /** TODO??? */
-  void
+  QueryResolver::Invocation  
   QueryResolver::issue (Goal& query)
   {
     if (!canHandleQuery (query.getQID()))

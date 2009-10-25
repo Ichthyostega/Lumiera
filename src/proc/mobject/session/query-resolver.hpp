@@ -26,10 +26,12 @@
 
 //#include "proc/mobject/mobject.hpp"
 //#include "proc/mobject/placement.hpp"
+#include "lib/bool-checkable.hpp"
 #include "lib/typed-counter.hpp"
 #include "lib/iter-adapter.hpp"
 #include "lib/util.hpp"
 
+#include <tr1/memory>
 //#include <vector>
 //#include <string>
 
@@ -43,7 +45,12 @@ namespace session {
   
   
 //  class Scope;
+  class Goal;
   class QueryResolver;
+  
+  /** Allow for taking ownership of a result set */
+  typedef std::tr1::shared_ptr<Goal> PGoal;
+  
   
   
   /**
@@ -70,20 +77,30 @@ namespace session {
       
       
       class Result
+        : public lib::BoolCheckable<Result>
         {
           void *cur_;
           
         protected:
+          void pointAt(void* p) { cur_ = p; }
+          
           template<typename RES>
-          RES& access()
+          RES&
+          access()
             {
               REQUIRE (cur_);
               return *reinterpret_cast<RES*> (cur_);
             }
+          
+        public:
+          bool isValid()  const { return bool(cur_); }
+          
+          Result() : cur_(0)  { } ///< create an NIL result
         };
       
-      static bool hasNext  (const Goal* thisQuery, Result& pos) { return unConst(thisQuery)->isValid(pos);   }   ////TICKET #375
-      static void iterNext (const Goal* thisQuery, Result& pos) { return unConst(thisQuery)->nextResult(pos);}
+      
+      static bool hasNext  (PGoal thisQuery, Result& pos) { return thisQuery->isValid(pos); }   ////TICKET #375
+      static void iterNext (PGoal thisQuery, Result& pos) { thisQuery->nextResult(pos);     }
       
     protected:
       QueryID id_;
@@ -125,19 +142,23 @@ namespace session {
         { }
       
       /* results retrieval */
-      class Cursor : public Goal::Result
+      class Cursor
+        : public Goal::Result
         {
         public:
-          RES& operator* () { return   access<RES>(); }
-          RES* operator->() { return & access<RES>(); }
+          RES& operator* ()   { return   access<RES>();  }
+          RES* operator->()   { return & access<RES>();  }
+          
+          void pointAt(RES* r){ Goal::Result::pointAt(r);}
         };
       
-      typedef lib::IterAdapter<Cursor,Goal> iterator;
       
-      operator iterator() ;
+      typedef lib::IterAdapter<Cursor,PGoal> iterator;
+      
       iterator operator() (QueryResolver const& resolver);
       
     };
+  
   
   
   /**
@@ -151,15 +172,22 @@ namespace session {
       virtual ~QueryResolver() ;
       
       
+      struct Invocation
+        {
+          PGoal        resultSet;
+          Goal::Result firstResult;
+        };
+      
       /** issue a query to retrieve contents
        *  The query is handed over internally to a suitable resolver implementation.
-       *  After returning, results can be obtained from the query by iteration.
+       *  @return Invocation data, containing a smart-pointer which \em owns the result set,
+       *          and the first result or NULL result. Usable for building an IterAdapter.
        *  @throw lumiera::Error subclass if query evaluation flounders.
        *         This might be broken logic, invalid input, misconfiguration
        *         or failure of an external facility used for resolution.
        *  @note a query may yield no results, in which case the iterator is empty.
        */
-      void issue (Goal& query);
+      Invocation issue (Goal& query);
       
       
     protected:
@@ -174,14 +202,7 @@ namespace session {
   Query<RES>::operator() (QueryResolver const& resolver)
     {
       resolver.issue (*this);
-      return *this;
-    }
-  
-  
-  template<typename RES>
-  Query<RES>::operator iterator()
-    {
-      UNIMPLEMENTED ("how to get the result iterator");
+      return iterator ();
     }
   
   

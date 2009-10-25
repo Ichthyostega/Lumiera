@@ -82,10 +82,11 @@ namespace test{
         
         /* ==== Exposing Iterator interface(s) for the clients ====== */
         
-        typedef IterAdapter<_Vec::iterator,       TestContainer> iterator;
-        typedef IterAdapter<_Vec::const_iterator, TestContainer> const_iterator;
-        typedef PtrDerefIter<iterator      >                     ref_iterator;
-        typedef PtrDerefIter<const_iterator>                     const_ref_iter;
+        typedef IterAdapter<_Vec::iterator,       const TestContainer*> iterator;
+        typedef IterAdapter<_Vec::const_iterator, const TestContainer*> const_iterator;
+        
+        typedef PtrDerefIter<iterator      > ref_iterator;
+        typedef PtrDerefIter<const_iterator> const_ref_iter;
         
         
         iterator       begin ()           { return iterator       (this, numberz_.begin()); }

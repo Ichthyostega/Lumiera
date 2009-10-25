@@ -138,8 +138,8 @@ namespace lib {
    *          or alternatively resolve these types through a specialisation if IterTraits.
    *       -# it should be convertible to the pointer type it declares
    *       -# dereferencing it should yield type that is convertible to the reference type
-   * - CON refers to the data source of this iterator (typically a data container type)
-   *       We store a backlink to this object to invoke a special iteration control API:
+   * - CON points to the data source of this iterator (typically a data container type)
+   *       We store a pointer-like backlink to invoke a special iteration control API:
    *       -# \c hasNext yields true iff the source has yet more result values to yield
    *       -# \c iterNext advances the POS to the next element 
    * 
@@ -150,7 +150,7 @@ namespace lib {
   class IterAdapter
     : public lib::BoolCheckable<IterAdapter<POS,CON> >
     {
-      const CON* source_;
+      CON source_;
       mutable POS pos_;
       
     public:
@@ -158,7 +158,7 @@ namespace lib {
       typedef typename IterTraits<POS>::reference reference;
       typedef typename IterTraits<POS>::value_type value_type;
       
-      IterAdapter (const CON* src, const POS& startpos)
+      IterAdapter (CON src, POS const& startpos)
         : source_(src)
         , pos_(startpos)
         { 
