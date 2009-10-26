@@ -28,6 +28,7 @@
 //#include "proc/mobject/session/test-scopes.hpp"
 //#include "proc/mobject/placement-index.hpp"
 #include "proc/mobject/session/query-resolver.hpp"
+//#include "lib/symbol.hpp"
 //#include "lib/access-casted.hpp"
 //#include "lib/variant.hpp"
 //#include "lib/meta/typelist.hpp"
@@ -51,10 +52,81 @@ namespace test    {
   
   namespace { // a test query resolving facility
     
-  
+    
+    template<typename TY>
+    class DummySolution;
+    
+    class DummySolution<int>
+      {
+        int resNr_;
+        
+      public:
+        DummySolution() : resNr_(7) {}
+        
+        int* next () { --resNr_; return &resNr_; }
+        bool exhausted() { return bool(resNr_); }
+      };
+    
+    class DummySolution<string>
+      : DummySolution<int> 
+      {
+        string currentText_;
+        
+      public:
+        string*
+        next ()
+          { 
+            static char* lumi ="Lumiera";
+            currentText_ = string (lumi[*DummySolution<int>::next()]);
+            return &currentText_;
+          }
+      };
+    
+    template<typename TY>
+    struct DummyResultSet
+      : QueryResolver::Resolution
+      {
+        DummySolution<TY> solution_;
+
+        typedef typename Query<TY>::Cursor Cursor;
+
+        Result
+        prepareResolution()
+          {
+            Cursor cursor;
+            cursor.pointAt (solution_.next());
+            return cursor;
+          }
+        
+        void
+        nextResult(Result& pos)
+          {
+            Cursor& cursor = static_cast<Cursor&> (pos);
+            
+            if (solution_.exhausted())
+              cursor.point_at (0);
+            else
+              cursor.point_at (solution_.next());
+          }
+      };
+      
     class TypeMatchFilter
       : public QueryResolver
       {
+        bool
+        canHandleQuery (Goal::QueryID qID)  const
+          {
+            return Goal::GENERIC == qID.kind 
+                && (wantResultType<int> (qID)
+                  ||wantResultType<string>(qID));
+          }
+        
+        template<typename TY>
+        bool
+        wantResultType (Goal::QueryID qID)
+          {
+            return qID.type == ResultType::ID<TY>::get();
+          }
         
       };
   

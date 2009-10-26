@@ -41,10 +41,14 @@ namespace session {
   QueryResolver::Resolution::~Resolution() { }
   
   
+  struct QueryDispatcher
+    {
+      
+    };
   
   
   /** TODO??? */
-  QueryResolver::Resolution  
+  PReso  
   QueryResolver::issue (Goal& query)
   {
     if (!canHandleQuery (query.getQID()))

@@ -31,6 +31,7 @@
 #include "lib/iter-adapter.hpp"
 #include "lib/util.hpp"
 
+#include <boost/scoped_ptr.hpp>
 #include <tr1/memory>
 //#include <vector>
 //#include <string>
@@ -46,6 +47,7 @@ namespace session {
   
   class Goal;
   class QueryResolver;
+  class QueryDispatcher;
   class QueryResolver::Resolution;
   
   /** Allow for taking ownership of a result set */
@@ -82,7 +84,7 @@ namespace session {
           void *cur_;
           
         protected:
-          void pointAt(void* p) { cur_ = p; }
+          void point_at(void* p) { cur_ = p; }
           
           template<typename RES>
           RES&
@@ -141,10 +143,10 @@ namespace session {
         : public Goal::Result
         {
         public:
-          RES& operator* ()   { return   access<RES>();  }
-          RES* operator->()   { return & access<RES>();  }
+          RES& operator* ()    { return   access<RES>();  }
+          RES* operator->()    { return & access<RES>();  }
           
-          void pointAt(RES* r){ Goal::Result::pointAt(r);}
+          void point_at(RES* r){ Goal::Result::pointAt(r);}
         };
       
       
@@ -161,6 +163,7 @@ namespace session {
    */
   class QueryResolver
     {
+      boost::scoped_ptr<QueryDispatcher> dispatcher_;
       
     public:
       
@@ -189,11 +192,11 @@ namespace session {
               resultSet->nextResult(pos);
             }
           
-          virtual Result prepareResolution()             =0;
+          virtual Result prepareResolution()    =0;
           
         protected:
           
-          virtual Result const& nextResult(Result& pos)  =0;
+          virtual void nextResult(Result& pos)  =0;
         };
       
       
