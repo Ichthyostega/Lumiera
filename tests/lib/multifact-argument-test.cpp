@@ -1,5 +1,5 @@
 /*
-  MultiFact(Test)  -  unittest for the configurable object-family creating factory
+  MultiFactArgument(Test)  -  passing additional invocation arguments to registered factory functions
  
   Copyright (C)         Lumiera.org
     2009,               Hermann Vosseler <Ichthyostega@web.de>
@@ -24,71 +24,60 @@
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
 #include "lib/multifact.hpp"
-#include "lib/util.hpp"
+//#include "lib/util.hpp"
 
-#include <boost/lexical_cast.hpp>
+//#include <boost/lexical_cast.hpp>
 #include <iostream>
-#include <string>
+//#include <string>
+#include <tr1/functional>
 
 
 
 namespace lib {
 namespace test{
   
-  using boost::lexical_cast;
+//  using boost::lexical_cast;
   using lib::test::showSizeof;
-  using util::isSameObject;
-  using util::isnil;
-  using std::ostream;
-  using std::string;
+//  using util::isSameObject;
+//  using util::isnil;
+//  using std::ostream;
+//  using std::string;
   using std::cout;
   using std::endl;
+  using std::tr1::bind;
   
-  using lumiera::error::LUMIERA_ERROR_INVALID;
+//  using lumiera::error::LUMIERA_ERROR_INVALID;
   
   
-  namespace { // hierarchy of test dummy objects
+  namespace { // a test-dummy ID type, used to encapsulate additional arguments
     
-    struct Interface
-      {
-        virtual ~Interface() {};
-        virtual operator string () =0;
-      };
-    
-    inline ostream& operator<< (ostream& os, Interface& ifa) { return os << string(ifa); }
-    
-    
-    enum theID
+    enum baseType
       { ONE = 1
       , TWO
-      , THR
-      , FOU
       };
     
-    typedef factory::MultiFact<Interface, theID, factory::PassReference> TestFactory;
-    
-    
-    template<theID ii>
-    class Implementation
-      : public Interface
+    struct DummyID
       {
-        operator string()
-          {
-            return "Impl-"+lexical_cast<string> (ii);
-          }
-        
-      public:
-        static theID getTypeID() { return ii; }
+        baseType bas;
+        int additionalInfo;
       };
     
-    /** Factory instance for the tests... */
-    TestFactory theFact;
     
-    // Configure the products to be fabricated....
-    TestFactory::Singleton<Implementation<ONE> > holder1 (theFact,ONE);
-    TestFactory::Singleton<Implementation<TWO> > holder2 (theFact,TWO);
-    TestFactory::Singleton<Implementation<THR> > holder3 (theFact,THR);
-    TestFactory::Singleton<Implementation<FOU> > holder4 (theFact,FOU);
+    struct Num { int n_; };
+    
+    /** dummy "factory" function to be invoked */
+    Num*
+    fabricateNumberz (int base, int offset)
+    {
+      cout << "fabricate("<<base<<", "<<offset<<")" << endl;
+      Num* product = new Num;
+      product->n_ = base*offset;
+      return product;
+    }
+    
+    
+    typedef factory::MultiFact<Num, DummyID, factory::BuildRefcountPtr> TestFactory;
+    
   }
   
   
@@ -96,41 +85,38 @@ namespace test{
   
   
   /*******************************************************************
-   * @test verify simple setup of the MultiFact template.
-   *       Define a hierarchy of test dummy objects, such as to
-   *       register them automatically for creation through a suitable
-   *       instantiation of MultiFact. Verify we get the correct product
-   *       when invoking this MultiFac flavour.
+   * @test define a MultiFact (factory with dynamic registration),
+   *       which accepts additional arguments and passes them
+   *       through to the registered factory function(s).
    * @see  lib::MultiFact
+   * @see  query-resolver.cpp
    */
-  class MultiFact_test : public Test
+  class MultiFactArgument_test : public Test
     {
       void
       run (Arg) 
         {
-          cout << theFact(ONE) << endl;
-          cout << theFact(TWO) << endl;
-          cout << theFact(THR) << endl;
-          cout << theFact(FOU) << endl;
+          TestFactory theFact;
+          theFact.defineProduction (ONE, bind (&fabricateNumberz, 1, _1));
+          theFact.defineProduction (TWO, bind (&fabricateNumberz, 2, _1));
+          
           cout << showSizeof (theFact) << endl;
           
-          Interface & o1 = theFact(ONE);
-          Interface & o2 = theFact(ONE);
-          ASSERT (isSameObject(o1,o2));
+          typedef TestFactory::PType PP;
           
-          TestFactory anotherFact;
-          ASSERT (isnil (anotherFact));
-          VERIFY_ERROR (INVALID, anotherFact(ONE) );
+          DummyID id1 = {ONE, 2};
+          DummyID id1 = {TWO, 3};
           
-          TestFactory::Singleton<Implementation<ONE> > anotherSingletonHolder (anotherFact,ONE);
-          Interface & o3 = anotherFact(ONE);
-          ASSERT (isSameObject(o2,o3));
+          PP p1 = theFact(id1);
+          PP p2 = theFact(id2);
+          ASSERT (1*2 == p1->n_);
+          ASSERT (2*3 == p2->n_);
         } 
     };
   
   
   /** Register this test class... */
-  LAUNCHER (MultiFact_test, "unit common");
+  LAUNCHER (MultiFactArgument_test, "unit common");
   
   
   
