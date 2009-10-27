@@ -102,7 +102,7 @@ namespace test{
           
           cout << showSizeof (theFact) << endl;
           
-          typedef TestFactory::PType PP;
+          typedef TestFactory::Product PP;
           
           DummyID id1 = {ONE, 2};
           DummyID id1 = {TWO, 3};

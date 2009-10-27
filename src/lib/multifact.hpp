@@ -25,6 +25,7 @@
  ** 
  ** @todo WIP-WIP-WIP ... currently collecting various bits of implementation here. TICKET #277
  ** 
+ ** @see multifact-test.cpp
  ** @see SingletonFactory
  ** @see lib::factory::Factory
  */
@@ -60,6 +61,15 @@ namespace lib {
       };
     
     
+    template<typename TY>
+    struct FabTraits
+      {
+        typedef TY RawProduct;
+        typedef RawProduct FacSig(void);
+      };
+    
+    
+    
     /**
      * Table of registered production functions for MultiFact.
      * Each stored function can be accessed by ID and is able
@@ -68,12 +78,12 @@ namespace lib {
     template<typename TY, typename ID>
     struct Fab
       {
-        typedef TY& RawProduct;
-        typedef std::tr1::function<RawProduct(void)> FactoryFunc;
+        typedef typename FabTraits<TY>::FacSig Signature;
+        typedef std::tr1::function<Signature> FactoryFunc;
         
         
         FactoryFunc&
-        select (ID id)
+        select (ID const& id)
           {
             if (!contains (id))
               throw lumiera::error::Invalid("unknown factory product requested.");
@@ -82,7 +92,7 @@ namespace lib {
           }
         
         void
-        defineProduction (ID id, FactoryFunc fun)
+        defineProduction (ID const& id, FactoryFunc fun)
           {
             producerTable_[id] = fun;
           }
@@ -114,20 +124,30 @@ namespace lib {
             , template<class> class Wrapper
             >
     class MultiFact
-      : Wrapper<TY>
+      : Wrapper<typename FabTraits<TY>::RawProduct>
       {
         typedef Fab<TY,ID> _Fab;
-        typedef typename _Fab::FactoryFunc Creator;
-        typedef typename Wrapper<TY>::PType Product;
         
         _Fab funcTable_;
+        
+      protected:
+        typedef typename FabTraits<TY>::RawProduct RawType;
+        typedef typename Wrapper<RawType>::PType Product;
+        typedef typename _Fab::FactoryFunc Creator;
+        
+        
+        Creator&
+        selectProducer (ID const& id)
+          {
+            return funcTable_.select(id);
+          }
         
         
       public:
         Product
-        operator() (ID id)
+        operator() (ID const& id)
           {
-            Creator& func = funcTable_.select(id);
+            Creator& func = selectProducer (id);
             return wrap (func());
           }
         
