@@ -40,6 +40,7 @@
 #include "util.hpp"
 
 #include <tr1/functional>
+#include <tr1/memory>
 #include <map>
 
 
@@ -55,17 +56,33 @@ namespace lib {
     template<typename TAR>
     struct PassReference
       {
+        typedef TAR& RType;
         typedef TAR& PType;
         
-        PType wrap (TAR& object) { return object; }
+        PType wrap (RType object) { return object; }
       };
+    
+    
+    /**
+     * Wrapper taking ownership,
+     * by wrapping into smart-ptr
+     */
+    template<typename TAR>
+    struct BuildRefcountPtr
+      {
+        typedef TAR*                      RType;
+        typedef std::tr1::shared_ptr<TAR> PType;
+        
+        PType wrap (RType ptr) { return PType (ptr); }
+      };
+    
     
     
     template<typename TY>
     struct FabTraits
       {
         typedef TY RawProduct;
-        typedef RawProduct FacSig(void);
+        typedef RawProduct FabSig(void);
       };
     
     
@@ -78,7 +95,7 @@ namespace lib {
     template<typename TY, typename ID>
     struct Fab
       {
-        typedef typename FabTraits<TY>::FacSig Signature;
+        typedef typename FabTraits<TY>::FabSig Signature;
         typedef std::tr1::function<Signature> FactoryFunc;
         
         
@@ -126,15 +143,18 @@ namespace lib {
     class MultiFact
       : Wrapper<typename FabTraits<TY>::RawProduct>
       {
-        typedef Fab<TY,ID> _Fab;
+        typedef Wrapper<typename FabTraits<TY>::RawProduct> _Wrap;
+        typedef typename FabTraits<TY>::RawProduct RawType;
+        typedef typename _Wrap::PType WrappedProduct;
+        typedef typename _Wrap::RType FabProduct;
+        typedef Fab<FabProduct,ID> _Fab;
         
         _Fab funcTable_;
         
-      protected:
-        typedef typename FabTraits<TY>::RawProduct RawType;
-        typedef typename Wrapper<RawType>::PType Product;
-        typedef typename _Fab::FactoryFunc Creator;
         
+      protected:
+        typedef typename _Fab::FactoryFunc Creator;
+        typedef WrappedProduct Product;
         
         Creator&
         selectProducer (ID const& id)

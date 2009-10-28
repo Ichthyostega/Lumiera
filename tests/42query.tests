@@ -2,6 +2,14 @@ TESTING "Proc Layer config rules Test Suite" ./test-lib --group=query
 
 
 
+PLANNED "issuing typed queries" QueryResolver_test <<END
+END
+
+
+PLANNED "sub-extensible ID" SubID_test <<END
+END
+
+
 TEST "simple query" QueryUtils_test  Query  <<END
 out: N7lumiera5query4test5ThingE: I am writing a test sentence.
 END

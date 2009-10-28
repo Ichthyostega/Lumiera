@@ -41,6 +41,8 @@
 
 #include "lib/multifact.hpp"
 
+#include <tr1/functional>
+
 
 
 namespace lib {
@@ -54,7 +56,7 @@ namespace lib {
     struct FabTraits<TY(ARG)>
       {
         typedef TY RawProduct;
-        typedef RawProduct FacSig(ARG);
+        typedef RawProduct FabSig(ARG);
         typedef ARG Argument;
       };
     

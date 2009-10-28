@@ -23,7 +23,7 @@
 
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
-#include "lib/multifact.hpp"
+#include "lib/multifact-arg.hpp"
 //#include "lib/util.hpp"
 
 //#include <boost/lexical_cast.hpp>
@@ -45,27 +45,27 @@ namespace test{
   using std::cout;
   using std::endl;
   using std::tr1::bind;
+  using std::tr1::function;
+  using std::tr1::placeholders::_1;
   
 //  using lumiera::error::LUMIERA_ERROR_INVALID;
   
   
-  namespace { // a test-dummy ID type, used to encapsulate additional arguments
+  namespace { // dummy fabrication function, creating wrapped numbers, controlled by an additional argument
     
-    enum baseType
+    enum prodID
       { ONE = 1
       , TWO
       };
     
-    struct DummyID
-      {
-        baseType bas;
-        int additionalInfo;
-      };
-    
-    
     struct Num { int n_; };
     
-    /** dummy "factory" function to be invoked */
+    /** dummy "factory" function to be invoked
+     *  @return pointer to heap allocated product object 
+     *  @note this function needs to deliver the product in a form
+     *        which can be accepted by the concrete wrapper, which
+     *        is going to be configured into the factory. 
+     */
     Num*
     fabricateNumberz (int base, int offset)
     {
@@ -76,7 +76,11 @@ namespace test{
     }
     
     
-    typedef factory::MultiFact<Num, DummyID, factory::BuildRefcountPtr> TestFactory;
+    /** the factory instantiation used for this test */
+    typedef factory::MultiFact< function<Num(int)>          // nominal signature of fabrication
+                              , prodID                     //  select factory function by prodID
+                              , factory::BuildRefcountPtr //   wrapper: manage product by smart-ptr
+                              > TestFactory;
     
   }
   
@@ -88,6 +92,11 @@ namespace test{
    * @test define a MultiFact (factory with dynamic registration),
    *       which accepts additional arguments and passes them
    *       through to the registered factory function(s).
+   * @note we set up fabrication functions by binding such as to match
+   *       the function signature declared in the factory; thereby one
+   *       argument remains unclosed, which is the argument to be
+   *       supplied on each factory invocation by the client code.
+   * 
    * @see  lib::MultiFact
    * @see  query-resolver.cpp
    */
@@ -104,11 +113,8 @@ namespace test{
           
           typedef TestFactory::Product PP;
           
-          DummyID id1 = {ONE, 2};
-          DummyID id1 = {TWO, 3};
-          
-          PP p1 = theFact(id1);
-          PP p2 = theFact(id2);
+          PP p1 = theFact(ONE, 2);
+          PP p2 = theFact(TWO, 3);
           ASSERT (1*2 == p1->n_);
           ASSERT (2*3 == p2->n_);
         } 
