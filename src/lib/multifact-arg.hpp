@@ -41,7 +41,7 @@
 
 #include "lib/multifact.hpp"
 
-#include <tr1/functional>
+#include "lib/meta/function.hpp"
 
 
 
@@ -49,42 +49,63 @@ namespace lib {
   namespace factory {
     
     
+    using lumiera::typelist::Types;
+    using lumiera::typelist::FunctionSignature;
+    using lumiera::typelist::FunctionTypedef;
     using std::tr1::function;
     
     
-    template<typename TY, typename ARG>
-    struct FabTraits<TY(ARG)>
+    /**
+     * Extended MultiFact configuration for arbitrary fabrication functions.
+     * Contrary to the (simple) standard case, such fabrication functions 
+     * take additional arguments on each invocation. These arguments need
+     * to be passed through by MultiFact. Moreover, the actual Wrapper
+     * used may require these fabrication functions to deliver their
+     * product in a specific form, e.g. as pointer or reference.
+     * Thus, we have to re-build the actual signature of the
+     * fabrication functions to be installed into MultiFact. 
+     */
+    template< typename SIG
+            , template<class> class Wrapper
+            >
+    struct FabWiring<function<SIG>, Wrapper>
+      : Wrapper<typename FunctionSignature<function<SIG> >::Ret>
       {
-        typedef TY RawProduct;
-        typedef RawProduct FabSig(ARG);
-        typedef ARG Argument;
+        typedef typename FunctionSignature<function<SIG> >::Args Args;
+        typedef typename FunctionSignature<function<SIG> >::Ret Element;
+        typedef typename Wrapper<Element>::PType WrappedProduct;
+        typedef typename Wrapper<Element>::RType FabProduct;
+        typedef typename FunctionTypedef<FabProduct, Args>::Sig SIG_Fab;
       };
     
     
     
     
     /**
-     * Variant of MultiFact, selecting a creator function by ID
-     * with the ability to pass additional argument(s) to this
-     * creator function on invocation.
-     * TODO type comment
+     * Variant of MultiFact, accepting additional invocation argument.
+     * Similar to the (simple) standard case, this MultiFact specialisation
+     * allows to install suitable fabrication function(s) at runtime and
+     * will select the function to use on invocation based on the given ID.
+     * One additional argument will be passed on to this function.
+     * @todo with a bit more metaprogramming it would be possible to
+     *       accept multiple arguments; maybe we'll need this later on.
      */
-    template< typename SIG
+    template< typename ELM, typename ARG
             , typename ID
             , template<class> class Wrapper
             >
-    class MultiFact<function<SIG>, ID, Wrapper>
-      : public MultiFact<SIG,ID,Wrapper>
+    class MultiFact<ELM(ARG), ID, Wrapper>
+      : public MultiFact<function<ELM(ARG)>,ID,Wrapper>
       {
-        typedef MultiFact<SIG,ID,Wrapper> _Base;
-        typedef typename FabTraits<SIG>::Argument ArgType;
+        typedef MultiFact<function<ELM(ARG)>,ID,Wrapper> _Base;
         
-        typedef typename _Base::Product Product;
         typedef typename _Base::Creator Creator;
         
       public:
+        typedef typename _Base::Product Product;
+        
         Product
-        operator() (ID const& id, ArgType arg)
+        operator() (ID const& id, ARG arg)
           {
             Creator& func = selectProducer (id);
             return wrap (func(arg));

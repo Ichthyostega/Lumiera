@@ -78,25 +78,16 @@ namespace lib {
     
     
     
-    template<typename TY>
-    struct FabTraits
-      {
-        typedef TY RawProduct;
-        typedef RawProduct FabSig(void);
-      };
-    
-    
-    
     /**
      * Table of registered production functions for MultiFact.
      * Each stored function can be accessed by ID and is able
-     * to fabricate a specific object, which is assignable to TY
+     * to fabricate a specific object, which is assignable to
+     * the nominal target type in the MultiFact definition.
      */
-    template<typename TY, typename ID>
+    template<typename SIG, typename ID>
     struct Fab
       {
-        typedef typename FabTraits<TY>::FabSig Signature;
-        typedef std::tr1::function<Signature> FactoryFunc;
+        typedef std::tr1::function<SIG> FactoryFunc;
         
         
         FactoryFunc&
@@ -126,6 +117,23 @@ namespace lib {
     
     
     
+    /** 
+     * @internal configuration of the elements
+     * to be combined into a MultiFact instance
+     */
+    template< typename TY
+            , template<class> class Wrapper
+            >
+    struct FabWiring
+      : Wrapper<TY>
+      {
+        typedef typename Wrapper<TY>::PType WrappedProduct;
+        typedef typename Wrapper<TY>::RType FabProduct;
+        typedef FabProduct SIG_Fab(void);
+      };
+    
+    
+    
     /**
      * Factory for creating a family of objects by ID.
      * The actual factory functions are to be installed
@@ -141,20 +149,17 @@ namespace lib {
             , template<class> class Wrapper
             >
     class MultiFact
-      : Wrapper<typename FabTraits<TY>::RawProduct>
+      : public FabWiring<TY,Wrapper>
       {
-        typedef Wrapper<typename FabTraits<TY>::RawProduct> _Wrap;
-        typedef typename FabTraits<TY>::RawProduct RawType;
-        typedef typename _Wrap::PType WrappedProduct;
-        typedef typename _Wrap::RType FabProduct;
-        typedef Fab<FabProduct,ID> _Fab;
+        typedef FabWiring<TY,Wrapper> _Conf;
+        typedef typename _Conf::SIG_Fab SIG_Fab;
+        typedef Fab<SIG_Fab,ID> _Fab;
         
         _Fab funcTable_;
         
         
       protected:
         typedef typename _Fab::FactoryFunc Creator;
-        typedef WrappedProduct Product;
         
         Creator&
         selectProducer (ID const& id)
@@ -164,6 +169,8 @@ namespace lib {
         
         
       public:
+        typedef typename _Conf::WrappedProduct Product;
+        
         Product
         operator() (ID const& id)
           {

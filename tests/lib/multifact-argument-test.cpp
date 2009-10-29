@@ -77,7 +77,7 @@ namespace test{
     
     
     /** the factory instantiation used for this test */
-    typedef factory::MultiFact< function<Num(int)>          // nominal signature of fabrication
+    typedef factory::MultiFact< Num(int)                    // nominal signature of fabrication
                               , prodID                     //  select factory function by prodID
                               , factory::BuildRefcountPtr //   wrapper: manage product by smart-ptr
                               > TestFactory;
