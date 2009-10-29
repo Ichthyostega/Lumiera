@@ -56,6 +56,7 @@ namespace test    {
     template<typename TY>
     class DummySolution;
     
+    template<>
     class DummySolution<int>
       {
         int resNr_;
@@ -67,6 +68,7 @@ namespace test    {
         bool exhausted() { return bool(resNr_); }
       };
     
+    template<>
     class DummySolution<string>
       : DummySolution<int> 
       {
@@ -76,15 +78,15 @@ namespace test    {
         string*
         next ()
           { 
-            static char* lumi ="Lumiera";
-            currentText_ = string (lumi[*DummySolution<int>::next()]);
+            static const char* lumi ="Lumiera";
+            currentText_ = string (lumi + *DummySolution<int>::next());
             return &currentText_;
           }
       };
     
     template<typename TY>
     struct DummyResultSet
-      : QueryResolver::Resolution
+      : Resolution
       {
         DummySolution<TY> solution_;
 
@@ -123,7 +125,7 @@ namespace test    {
         
         template<typename TY>
         bool
-        wantResultType (Goal::QueryID qID)
+        wantResultType (Goal::QueryID qID)  const
           {
             return qID.type == ResultType::ID<TY>::get();
           }
@@ -162,9 +164,9 @@ namespace test    {
           explore (secondQuery(resolver));
         }
       
-      template<typename ELM>
+      template<typename ITER>
       static void
-      explore (typename Query<ELM>::iterator ii)
+      explore (ITER ii)
         {
           cout << "Query-Results: " << showSizeof(ii) << endl;;
           while (ii)

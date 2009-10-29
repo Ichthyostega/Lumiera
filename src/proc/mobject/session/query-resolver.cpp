@@ -54,7 +54,7 @@ namespace session {
   
   /** TODO??? */
   PReso  
-  QueryResolver::issue (Goal& query)
+  QueryResolver::issue (Goal& query)  const
   {
     if (!canHandleQuery (query.getQID()))
       throw lumiera::error::Invalid ("unable to resolve this kind of query"); ////TICKET #197

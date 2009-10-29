@@ -143,6 +143,10 @@ namespace session {
         : public Goal::Result
         {
         public:
+          typedef RES value_type;
+          typedef RES& reference;
+          typedef RES* pointer;
+          
           RES& operator* ()    { return   access<RES>();  }
           RES* operator->()    { return & access<RES>();  }
           
@@ -163,22 +167,24 @@ namespace session {
    */
   class Resolution
     {
+    public:
       typedef Goal::Result Result;
       
-    public:
       virtual ~Resolution();
       
-      static bool
-      hasNext  (PReso&, Result& pos)          ////TICKET #375
+      
+      friend bool
+      hasNext  (PReso const&, Result const& pos)          ////TICKET #375
         {
           return bool(pos);
         }
       
-      static void
+      friend void
       iterNext (PReso& resultSet, Result& pos)
         {
           resultSet->nextResult(pos);
         }
+      
       
       virtual Result prepareResolution()    =0;
       
@@ -209,7 +215,7 @@ namespace session {
        *         or failure of an external facility used for resolution.
        *  @note a query may yield no results, in which case the iterator is empty.
        */
-      PReso issue (Goal& query);
+      PReso issue (Goal& query)  const;
       
       
     protected:
@@ -226,7 +232,8 @@ namespace session {
     {
       PReso resultSet = resolver.issue (*this);
       Result first = resultSet->prepareResolution();
-      return iterator (resultSet, first);
+      Cursor& start = static_cast<Cursor&> (first);
+      return iterator (resultSet, start);
     }
   
   

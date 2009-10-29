@@ -50,28 +50,12 @@ namespace session {
     : public Query<Placement<MO> >
     , boost::noncopyable
     {
+      typedef Query<Placement<MO> > _Query;
+      typedef typename _Query::iterator iterator;
+      
       PPIdx index_;
       PlacementMO const& container_;
       
-      iterator
-      runQuery()
-        {
-          UNIMPLEMENTED ("actually query the index");
-        }
-    
-      
-      bool
-      isValid (Cur& pos)
-        {
-          UNIMPLEMENTED ("how to manager result set position"); 
-        }
-      
-      
-      Cur const&
-      nextResult()
-        {
-          UNIMPLEMENTED ("how to manager result set position"); 
-        }
       
       
     public:
