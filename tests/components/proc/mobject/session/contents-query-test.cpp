@@ -81,9 +81,11 @@ namespace test    {
       void
       discover (Query<MO> const& query)
         {
+#if false  //////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET 384  !!!!!!!!!
           Query<MO>::iterator elm = query();
           while (elm)
             cout << *elm++ << endl;
+#endif ////////////////////////////////////////////////////////////////////////////////////////TODO lots of things unimplemented.....!!!!!
         }
           
     };

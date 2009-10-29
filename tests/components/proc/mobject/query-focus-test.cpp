@@ -70,6 +70,7 @@ namespace test    {
           
           QueryFocus theFocus;
           theFocus.reset();
+#ifdef false  ////////////////////////////////////////////////////////////////////////////////TICKET 384
           ASSERT (Scope(root) == Scope(theFocus));
           
           checkNavigation (theFocus);
@@ -80,6 +81,7 @@ namespace test    {
           QueryFocus currentFocus;
           ASSERT (scopePosition == Scope(currentFocus));
           ASSERT (currentFocus == theFocus);
+#endif          
         }
       
       
@@ -91,6 +93,7 @@ namespace test    {
           focus.reset();
           ASSERT (Scope(focus).isRoot());
           
+#ifdef false  ////////////////////////////////////////////////////////////////////////////////TICKET 384
           PMO& someObj = focus.query<TestSubMO1>();
                          // by construction of the test fixture,
                          // we know this object is root -> ps2 -> ps3
@@ -107,6 +110,7 @@ namespace test    {
           ASSERT (someObj != Scope(focus));
           ASSERT (path.contains (focus.currentPath()));
           ASSERT (focus.currentPath().getParent().isRoot());
+#endif
         }
       
       
@@ -114,6 +118,7 @@ namespace test    {
       void
       manipulate_subFocus()
         {
+#ifdef false  ////////////////////////////////////////////////////////////////////////////////TICKET 384
           QueryFocus original;
           uint num_refs = original.ref_count();
           ASSERT (num_refs > 1);
@@ -152,6 +157,7 @@ namespace test    {
           ASSERT (       1 == subF.ref_count());
           ASSERT (num_refs == original.ref_count());
          // when subF goes out of scope now, auto-pop will happen...
+#endif
         }
           
     };

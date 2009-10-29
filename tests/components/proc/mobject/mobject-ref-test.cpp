@@ -84,7 +84,7 @@ namespace test    {
           ASSERT (2 == pClip2.use_count());
           
           
-#if 0 /////////////////////////////////////////////////////////////////////////////////////////TODO lots of things unimplemented.....!!!!!
+#if false  //////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET 384  !!!!!!!!!
           // Prepare an (test)Index
           typedef shared_ptr<PlacementIndex> PIdx;
           PIdx index (PlacementIndex::create());
@@ -136,7 +136,7 @@ namespace test    {
       void
       checkBuildMObjectRef (REF refObj, void* placementAdr)
         {
-#if 0 /////////////////////////////////////////////////////////////////////////////////////////TODO lots of things unimplemented.....!!!!!
+#if false  //////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET 384  !!!!!!!!!
           MORef<Clip> rMO;
           ASSERT (!rMO);                    // still empty (not bound)
           cout << rMO             << endl;
@@ -177,7 +177,7 @@ namespace test    {
       void
       checkLifecylce (PMObj const& p1, PMObj const& p2)
         {
-#if 0 /////////////////////////////////////////////////////////////////////////////////////////TODO lots of things unimplemented.....!!!!!
+#if false  //////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET 384  !!!!!!!!!
           ASSERT (2 == p1.use_count());
           ASSERT (2 == p2.use_count());
           
@@ -215,7 +215,7 @@ namespace test    {
       void
       checkTypeHandling (LumieraUid luid)
         {
-#if 0 /////////////////////////////////////////////////////////////////////////////////////////TODO lots of things unimplemented.....!!!!!
+#if false  //////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET 384  !!!!!!!!!
           MObjectRef rMObj;
           MORef<Clip> rClip;
           MORef<TestSubMO1> rSub1;

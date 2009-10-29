@@ -73,6 +73,7 @@ namespace test    {
           PPIdx index = build_testScopes();
           
           UNIMPLEMENTED ("function test of placement scope interface");
+#if false  //////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET 384  !!!!!!!!!
           verifyLookup (index);
           verifyNavigation (index);
         }
@@ -84,6 +85,7 @@ namespace test    {
       getContents(PPIdx index)
         {
           return index->query<DummyMO>(index->getRoot());
+#endif     //////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET 384  !!!!!!!!!
         }
       
       /** @test for each Placement in our test "session",
@@ -92,6 +94,7 @@ namespace test    {
       void
       verifyLookup (PPIdx ref_index)
         {
+#if false  //////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET 384  !!!!!!!!!
           for (_Iter elm = getContents(ref_index); elm; ++elm)
             {
               ASSERT (elm->isValid());
@@ -109,6 +112,7 @@ namespace test    {
               
               ASSERT (isSameObject (scope1,scope2));
             }
+#endif     //////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET 384  !!!!!!!!!
         }
       
       
@@ -116,6 +120,7 @@ namespace test    {
       void
       verifyNavigation (PPIdx ref_index)
         {
+#if false  //////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET 384  !!!!!!!!!
           for (_Iter elm = getContents(ref_index); elm; ++elm)
             {
               Scope const& scope = Scope::containing(*elm);
@@ -138,6 +143,7 @@ namespace test    {
                     ASSERT (topsTop == parentsScope);
                     ASSERT (isSameObject (topsTop, parentsScope.getTop()));
             }     }
+#endif     //////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET 384  !!!!!!!!!
         }
       
     };

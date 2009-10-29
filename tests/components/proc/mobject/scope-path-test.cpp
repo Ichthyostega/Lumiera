@@ -24,6 +24,7 @@
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
 #include "proc/mobject/session/test-scopes.hpp"
+#include "proc/mobject/session/scope-path.hpp"
 //#include "lib/lumitime.hpp"
 //#include "proc/mobject/placement-ref.hpp"
 //#include "proc/mobject/placement-index.hpp"
@@ -64,6 +65,7 @@ namespace test    {
         {
           // Prepare an (test)Index backing the PlacementRefs
           PPIdx index = build_testScopes();
+#if false     ////////////////////////////////////////////////////////////////////////////////TICKET 384
           PMO& startPlacement = *(index->query<TestSubMO1>(index->getRoot()));
           ASSERT (startPlacement);
           
@@ -73,6 +75,7 @@ namespace test    {
           check_Identity_and_Copy (startPlacement);
           navigate (testPath, index);
           clear (testPath, index);
+#endif
         }
       
       
@@ -80,6 +83,7 @@ namespace test    {
       buildPath (PMO& startPla)
         {
           Scope startScope (startPla);
+#if false     ////////////////////////////////////////////////////////////////////////////////TICKET 384
           ScopePath path (startScope);
           ASSERT (path);
           ASSERT (path.contains (startScope));
@@ -88,12 +92,14 @@ namespace test    {
           
           ScopePath path2 (startScope);
           ScopePath path3 (path2);
+#endif
         }
       
       
       void
       checkRelations (ScopePath path1, PMO& refPla)
         {
+#if false     ////////////////////////////////////////////////////////////////////////////////TICKET 384
           ASSERT (path1.contains (refPla));
           
           Scope refScope (refPla);
@@ -119,12 +125,14 @@ namespace test    {
           ASSERT (path2 == commonPrefix(path2,path1));
           ASSERT (path1 != commonPrefix(path1,path2));
           ASSERT (path1 != commonPrefix(path2,path1));
+#endif        ////////////////////////////////////////////////////////////////////////////////TICKET 384
         }
       
       
       void
       invalidPath (ScopePath refPath, PMO& refPla)
         {
+#if false     ////////////////////////////////////////////////////////////////////////////////TICKET 384
           ASSERT (refPath);
           ASSERT (!ScopePath::INVALID);
           
@@ -160,12 +168,14 @@ namespace test    {
           ASSERT (refPath);
           
         //ScopePath::INVALID.navigate(root);  // doesn't compile
+#endif        ////////////////////////////////////////////////////////////////////////////////TICKET 384
         }
       
       
       void
       check_Identity_and_Copy (PMO& refPla)
         {
+#if false     ////////////////////////////////////////////////////////////////////////////////TICKET 384
           Scope startScope (startPla);
           ScopePath path1 (startScope);
           ScopePath path2 (startScope);
@@ -196,6 +206,7 @@ namespace test    {
           ASSERT (path1 != path2);
           ASSERT (path2 != path3);
           ASSERT (path1 != path3);
+#endif        ////////////////////////////////////////////////////////////////////////////////TICKET 384
         }
       
       
@@ -211,6 +222,7 @@ namespace test    {
       void
       navigate (const ScopePath refPath, PPIdx index)
         {
+#if false     ////////////////////////////////////////////////////////////////////////////////TICKET 384
           ScopePath path (refPath);
           ASSERT (path == refPath);
           
@@ -268,12 +280,14 @@ namespace test    {
           ASSERT (other.getTop() == separatePlacement);
           ScopePath rootPrefix = commonPrefix (path,refPath);
           ASSERT (rootPrefix.endsAt (root));
+#endif        ////////////////////////////////////////////////////////////////////////////////TICKET 384
         }
       
       
       void
       clear (ScopePath& testPath, PPIdx index)
         {
+#if false     ////////////////////////////////////////////////////////////////////////////////TICKET 384
           ASSERT (path);
           PMO rootNode = index->getRoot();
           ASSERT (path.getLeaf() != rootNode);
@@ -281,6 +295,7 @@ namespace test    {
           path.clear();
           ASSERT (path);
           ASSERT (path.getLeaf() == rootNode);
+#endif        ////////////////////////////////////////////////////////////////////////////////TICKET 384
         }
           
     };
