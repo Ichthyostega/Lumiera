@@ -27,7 +27,12 @@
  ** factory class exposes a function call operator matching this signature, additionally
  ** expecting the ID (to select the specific fabrication function) as first parameter.
  ** 
- ** @todo WIP-WIP-WIP ... does this work out as intended?? TICKET #377
+ ** @note the function signature used for this variant of MultiFact should specify
+ **       the raw/base (interface) type of the produced objects as a return type.
+ **       Depending on the used wrapper, the actual fabrication functions indeed
+ **       should yield the product in a form suitable to be accepted by the
+ **       wrapper. E.g., when building smart-ptrs, the fabrication function
+ **       should actually deliver a raw pointer to a heap allocated object.
  ** 
  ** @see multifact-argument-test.cpp
  ** @see query-resolver.cpp usage example
@@ -63,7 +68,7 @@ namespace lib {
      * used may require these fabrication functions to deliver their
      * product in a specific form, e.g. as pointer or reference.
      * Thus, we have to re-build the actual signature of the
-     * fabrication functions to be installed into MultiFact. 
+     * fabrication functions to be installed into MultiFact.
      */
     template< typename SIG
             , template<class> class Wrapper
@@ -82,7 +87,7 @@ namespace lib {
     
     
     /**
-     * Variant of MultiFact, accepting additional invocation argument.
+     * Variant of MultiFact, accepting an additional invocation argument.
      * Similar to the (simple) standard case, this MultiFact specialisation
      * allows to install suitable fabrication function(s) at runtime and
      * will select the function to use on invocation based on the given ID.
@@ -98,7 +103,6 @@ namespace lib {
       : public MultiFact<function<ELM(ARG)>,ID,Wrapper>
       {
         typedef MultiFact<function<ELM(ARG)>,ID,Wrapper> _Base;
-        
         typedef typename _Base::Creator Creator;
         
       public:

@@ -24,11 +24,8 @@
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
 #include "lib/multifact-arg.hpp"
-//#include "lib/util.hpp"
 
-//#include <boost/lexical_cast.hpp>
 #include <iostream>
-//#include <string>
 #include <tr1/functional>
 
 
@@ -36,19 +33,13 @@
 namespace lib {
 namespace test{
   
-//  using boost::lexical_cast;
-  using lib::test::showSizeof;
-//  using util::isSameObject;
-//  using util::isnil;
-//  using std::ostream;
-//  using std::string;
   using std::cout;
   using std::endl;
   using std::tr1::bind;
   using std::tr1::function;
   using std::tr1::placeholders::_1;
+  using lib::test::showSizeof;
   
-//  using lumiera::error::LUMIERA_ERROR_INVALID;
   
   
   namespace { // dummy fabrication function, creating wrapped numbers, controlled by an additional argument
@@ -61,10 +52,10 @@ namespace test{
     struct Num { int n_; };
     
     /** dummy "factory" function to be invoked
-     *  @return pointer to heap allocated product object 
+     *  @return pointer to heap allocated product object
      *  @note this function needs to deliver the product in a form
      *        which can be accepted by the concrete wrapper, which
-     *        is going to be configured into the factory. 
+     *        is going to be configured into the factory.
      */
     Num*
     fabricateNumberz (int base, int offset)
@@ -82,6 +73,8 @@ namespace test{
                               , factory::BuildRefcountPtr //   wrapper: manage product by smart-ptr
                               > TestFactory;
     
+    // for reference: type of an equivalent dispatcher table...
+    typedef std::map<prodID, function<Num(int)> > DispatcherMap;
   }
   
   
@@ -103,13 +96,14 @@ namespace test{
   class MultiFactArgument_test : public Test
     {
       void
-      run (Arg) 
+      run (Arg)
         {
           TestFactory theFact;
-          theFact.defineProduction (ONE, bind (&fabricateNumberz, 1, _1));
-          theFact.defineProduction (TWO, bind (&fabricateNumberz, 2, _1));
+          theFact.defineProduction (ONE, bind (&fabricateNumberz, 1, _1 ));
+          theFact.defineProduction (TWO, bind (&fabricateNumberz, 2, _1 ));
           
           cout << showSizeof (theFact) << endl;
+          ASSERT (sizeof(theFact) == sizeof(DispatcherMap));
           
           typedef TestFactory::Product PP;
           
@@ -117,7 +111,7 @@ namespace test{
           PP p2 = theFact(TWO, 3);
           ASSERT (1*2 == p1->n_);
           ASSERT (2*3 == p2->n_);
-        } 
+        }
     };
   
   

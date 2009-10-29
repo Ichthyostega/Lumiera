@@ -284,7 +284,7 @@ return: 0
 END
 
 
-PLANNED "configurable Factory" MultiFact_test <<END
+TEST "configurable Factory" MultiFact_test <<END
 out: Impl-1
 out: Impl-2
 out: Impl-3
@@ -294,7 +294,10 @@ return: 0
 END
 
 
-PLANNED "Factory argument handling" MultiFactArgument_test  <<END
+TEST "Factory argument handling" MultiFactArgument_test  <<END
+out: sizeof\( .+MultiFact.+Num.+prodID.+BuildRefcountPtr.+ \) =
+out: fabricate\(1, 2\)
+out: fabricate\(2, 3\)
 return: 0
 END
 
