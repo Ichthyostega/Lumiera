@@ -106,7 +106,7 @@ namespace test{
         
         /** Implementation of Iteration-logic: pull next element. */
         template<class ITER>
-        static void
+        friend void
         iterNext (const TestContainer*, ITER& pos)
           {
             ++pos;
@@ -121,7 +121,7 @@ namespace test{
          *        immediately transform this into the official "bottom"
          */
         template<class ITER>
-        static bool
+        friend bool
         hasNext (const TestContainer* src, ITER& pos)
           {
             REQUIRE (src);

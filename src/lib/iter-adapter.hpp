@@ -125,8 +125,8 @@ namespace lib {
    * - it is not just a disguised pointer (meaning, it's more expensive)
    * - it checks validity on every operation and may throw
    * - it has a distinct back-link to the source container
-   * - the source container needs to implement iterStart() and iterInc()
-   * - we need friendship to access the callbacks on the container 
+   * - the source container needs to provide hasNext() and iterNext() free functions.
+   * - we may need friendship to implement those extension points on the container 
    * - the end-of-iteration can be detected by bool check
    * 
    * \par Stipulations
@@ -227,7 +227,7 @@ namespace lib {
       bool
       checkPos()  const
       {
-        return source_ && CON::hasNext (source_,pos_);
+        return source_ && hasNext (source_,pos_);
       }
       
       /** ask the controlling container to yield the next position.
@@ -240,7 +240,7 @@ namespace lib {
       {
         if (!checkPos()) return false;
         
-        CON::iterNext (source_,pos_);
+        iterNext (source_,pos_);
         return checkPos();
       }
       
