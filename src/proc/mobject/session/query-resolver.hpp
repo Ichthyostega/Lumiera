@@ -46,12 +46,12 @@ namespace session {
   
   
   class Goal;
+  class Resolution;
   class QueryResolver;
   class QueryDispatcher;
-  class QueryResolver::Resolution;
   
   /** Allow for taking ownership of a result set */
-  typedef std::tr1::shared_ptr<QueryResolver::Resolution> PReso;
+  typedef std::tr1::shared_ptr<Resolution> PReso;
   
   
   
@@ -106,7 +106,7 @@ namespace session {
       QueryID id_;
       
       Goal (QueryID qid)
-        : id_(quid)
+        : id_(qid)
         { }
       
     };
@@ -146,18 +146,48 @@ namespace session {
           RES& operator* ()    { return   access<RES>();  }
           RES* operator->()    { return & access<RES>();  }
           
-          void point_at(RES* r){ Goal::Result::pointAt(r);}
+          void point_at(RES* r){ Goal::Result::point_at(r);}
         };
       
       
-      typedef lib::IterAdapter<Cursor,PResolution> iterator;
+      typedef lib::IterAdapter<Cursor,PReso> iterator;
       
       iterator operator() (QueryResolver const& resolver);
       
     };
   
   
-  
+  /** 
+   * ABC denoting the result set
+   * of an individual query resolution
+   */
+  class Resolution
+    {
+      typedef Goal::Result Result;
+      
+    public:
+      virtual ~Resolution();
+      
+      static bool
+      hasNext  (PReso&, Result& pos)          ////TICKET #375
+        {
+          return bool(pos);
+        }
+      
+      static void
+      iterNext (PReso& resultSet, Result& pos)
+        {
+          resultSet->nextResult(pos);
+        }
+      
+      virtual Result prepareResolution()    =0;
+      
+    protected:
+      
+      virtual void nextResult(Result& pos)  =0;
+    };
+
+
   /**
    * TODO type comment
    */
@@ -169,35 +199,6 @@ namespace session {
       
       virtual ~QueryResolver() ;
       
-      /** 
-       * ABC denoting the result set
-       * of an individual query resolution
-       */
-      class Resolution
-        {
-          typedef Goal::Result Result;
-          
-        public:
-          virtual ~Resolution();
-          
-          static bool
-          hasNext  (PReso&, Result& pos)          ////TICKET #375
-            {
-              return bool(pos);
-            }
-          
-          static void
-          iterNext (PReso& resultSet, Result& pos)
-            {
-              resultSet->nextResult(pos);
-            }
-          
-          virtual Result prepareResolution()    =0;
-          
-        protected:
-          
-          virtual void nextResult(Result& pos)  =0;
-        };
       
       
       /** issue a query to retrieve contents
@@ -214,6 +215,7 @@ namespace session {
     protected:
       virtual bool canHandleQuery (Goal::QueryID qID)  const =0;
       
+      QueryResolver();
     };
 ///////////////////////////TODO currently just fleshing the API
   
@@ -223,7 +225,7 @@ namespace session {
   Query<RES>::operator() (QueryResolver const& resolver)
     {
       PReso resultSet = resolver.issue (*this);
-      Result first = prepareResolution();
+      Result first = resultSet->prepareResolution();
       return iterator (resultSet, first);
     }
   

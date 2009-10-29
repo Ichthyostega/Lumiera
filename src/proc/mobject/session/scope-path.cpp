@@ -41,6 +41,22 @@ namespace session {
   }
   
   
+  Scope
+  ScopePath::getLeaf()  const
+  {
+    UNIMPLEMENTED ("access end node of current path");
+  }
+  
+
+  /* == Mutations == */
+  
+  void
+  ScopePath::clear()
+  {
+    UNIMPLEMENTED ("reset the current path to empty state");
+  }
+  
+  
   
   
   

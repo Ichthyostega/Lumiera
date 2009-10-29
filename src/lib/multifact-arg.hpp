@@ -69,15 +69,18 @@ namespace lib {
      * creator function on invocation.
      * TODO type comment
      */
-    template< typename SIG,
+    template< typename SIG
             , typename ID
             , template<class> class Wrapper
             >
     class MultiFact<function<SIG>, ID, Wrapper>
       : public MultiFact<SIG,ID,Wrapper>
       {
-        
+        typedef MultiFact<SIG,ID,Wrapper> _Base;
         typedef typename FabTraits<SIG>::Argument ArgType;
+        
+        typedef typename _Base::Product Product;
+        typedef typename _Base::Creator Creator;
         
       public:
         Product

@@ -76,6 +76,13 @@ namespace mobject {
   PlacementIndex::~PlacementIndex() { }
  
 
+  bool
+  PlacementIndex::canHandleQuery (session::Goal::QueryID qID) const
+  {
+    UNIMPLEMENTED ("decide by hard-wired check if the given Query can be resolved by PlacementIndex");
+  }
+  
+  
   PlacementMO&
   PlacementIndex::getRoot()  const
   {

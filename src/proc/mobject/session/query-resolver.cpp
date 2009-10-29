@@ -38,13 +38,18 @@ namespace session {
 
   QueryResolver::~QueryResolver() { }
   
-  QueryResolver::Resolution::~Resolution() { }
+  Resolution::~Resolution() { }
   
   
   struct QueryDispatcher
     {
       
     };
+  
+  
+  QueryResolver::QueryResolver ()
+    : dispatcher_(new QueryDispatcher)
+    { }
   
   
   /** TODO??? */

@@ -49,6 +49,20 @@ namespace session {
   }
   
   
+  Scope::Scope (Scope const& o)
+    : anchor_(o.anchor_)
+  { }
+  
+  
+  Scope&
+  Scope::operator= (Scope const& o)
+  {
+    anchor_ = o.anchor_;  ////////////////////////////TODO verify correctness
+    return *this;
+  }
+  
+  
+  
   ScopeLocator::ScopeLocator()
     : focusStack_(new QueryFocusStack)
   {

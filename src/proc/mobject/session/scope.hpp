@@ -65,6 +65,9 @@ namespace session {
       Scope (PlacementMO const& constitutingPlacement);
       Scope (); ///< unlocated NIL scope
       
+      Scope (Scope const&);
+      Scope& operator= (Scope const&);
+      
       static Scope const& containing (PlacementMO const& aPlacement);              //////////////TODO really returning a const& here??
       static Scope const& containing (RefPlacement const& refPlacement);
       

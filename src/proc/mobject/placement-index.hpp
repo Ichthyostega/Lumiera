@@ -99,6 +99,9 @@ namespace mobject { ///////////////////////////////////////////TODO: shouldn't t
       query (PlacementMO& scope)                  const;
       
       
+      bool canHandleQuery(session::Goal::QueryID) const;
+      
+      
       /* == mutating operations == */
       
       ID   insert (PlacementMO& newObj, PlacementMO& targetScope);

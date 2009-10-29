@@ -49,6 +49,11 @@ namespace session {
     public:
       ScopePath();
       
+      
+      Scope getLeaf()  const;
+      
+      void clear();
+      
     };
 ///////////////////////////TODO currently just fleshing the API
   
