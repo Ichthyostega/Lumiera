@@ -22,29 +22,65 @@
 
 
 #include "proc/mobject/session/query-resolver.hpp"
-//#include "proc/mobject/session/track.hpp"
-//#include "proc/mobject/placement.hpp"
-//#include "proc/mobject/session/mobjectfactory.hpp"
-//#include "proc/asset/track.hpp"
+#include "lib/multifact-arg.hpp"
 
 namespace mobject {
 namespace session {
   
+  using lib::factory::MultiFact;
+  using lib::factory::BuildRefcountPtr;
   
   
-  /* generate vtables here */  
-
+  /* generate vtables here... */
+  
   Goal::~Goal() { }
-
-  QueryResolver::~QueryResolver() { }
   
   Resolution::~Resolution() { }
   
+  QueryResolver::~QueryResolver() { }
+  
+  
+  
+  
+  typedef Goal::QueryID const& QID;
+  
+  /** we're going to use QueryID as Map key... */
+  inline bool
+  operator< (QID q1, QID q2)
+  {
+    return (q1.kind < q2.kind)
+        || (q1.kind == q2.kind
+         && q1.type < q2.type
+           );
+  }
+  
+  
+  
+  
+  
+  /* == dispatch to resolve typed queries == */
+  
+  /** factory used as dispatcher table
+   *  for resolving typed queries  */
+  typedef MultiFact< Resolution(Goal&)   // nominal signature of fabrication
+                   , Goal::QueryID      //  select resolution function by kind-of-Query
+                   , BuildRefcountPtr  //   wrapper: manage result set by smart-ptr
+                   > DispatcherTable; //
   
   struct QueryDispatcher
+    : DispatcherTable
     {
       
+      PReso
+      handle (Goal& query)
+        {
+          QID qID = query.getQID();
+          ENSURE (contains (qID));
+          
+          return (*this) (qID, query); 
+        }               //qID picks the resolution function
     };
+  
   
   
   QueryResolver::QueryResolver ()
@@ -52,15 +88,25 @@ namespace session {
     { }
   
   
-  /** TODO??? */
+  /** @par implementation
+   *  For actually building a result set, the QueryResolver base implementation
+   *  uses an embedded dispatcher table. The concrete query resolving facilities,
+   *  when implementing the QueryResolver interface, are expected to register
+   *  individual resolution functions into this QueryDispatcher table.
+   *  Whenever issuing a Goal, a suitable resolution function is picked
+   *  based on the Goal::QueryID, which contains an embedded type code.
+   *  Thus, the individual resolution function can (re)establish a
+   *  typed context and downcast the Goal appropriately
+   */
   PReso  
   QueryResolver::issue (Goal& query)  const
   {
+    TODO ("ensure proper initialisation");  
+    
     if (!canHandleQuery (query.getQID()))
       throw lumiera::error::Invalid ("unable to resolve this kind of query"); ////TICKET #197
     
-    UNIMPLEMENTED ("dispatch-mechanism for re-discovering specific type-context");
-    
+    return dispatcher_->handle(query);
   }
   
   

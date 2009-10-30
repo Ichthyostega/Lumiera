@@ -54,23 +54,23 @@ namespace test    {
     
     
     template<typename TY>
-    class DummySolution;
+    class DummySolutions;
     
     template<>
-    class DummySolution<int>
+    class DummySolutions<int>
       {
         int resNr_;
         
       public:
-        DummySolution() : resNr_(7) {}
+        DummySolutions() : resNr_(7) {}
         
         int* next () { --resNr_; return &resNr_; }
         bool exhausted() { return bool(resNr_); }
       };
     
     template<>
-    class DummySolution<string>
-      : DummySolution<int> 
+    class DummySolutions<string>
+      : DummySolutions<int> 
       {
         string currentText_;
         
@@ -79,7 +79,7 @@ namespace test    {
         next ()
           { 
             static const char* lumi ="Lumiera";
-            currentText_ = string (lumi + *DummySolution<int>::next());
+            currentText_ = string (lumi + *DummySolutions<int>::next());
             return &currentText_;
           }
       };
@@ -88,7 +88,7 @@ namespace test    {
     struct DummyResultSet
       : Resolution
       {
-        DummySolution<TY> solution_;
+        DummySolutions<TY> solutions_;
 
         typedef typename Query<TY>::Cursor Cursor;
 
@@ -96,7 +96,7 @@ namespace test    {
         prepareResolution()
           {
             Cursor cursor;
-            cursor.pointAt (solution_.next());
+            cursor.pointAt (solutions_.next());
             return cursor;
           }
         
@@ -105,10 +105,10 @@ namespace test    {
           {
             Cursor& cursor = static_cast<Cursor&> (pos);
             
-            if (solution_.exhausted())
+            if (solutions_.exhausted())
               cursor.point_at (0);
             else
-              cursor.point_at (solution_.next());
+              cursor.point_at (solutions_.next());
           }
       };
       
@@ -127,7 +127,7 @@ namespace test    {
         bool
         wantResultType (Goal::QueryID qID)  const
           {
-            return qID.type == ResultType::ID<TY>::get();
+            return qID.type == getResultTypeID<TY>();
           }
         
       };

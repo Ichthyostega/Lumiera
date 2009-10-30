@@ -31,6 +31,7 @@
 #include "lib/iter-adapter.hpp"
 #include "lib/util.hpp"
 
+#include <boost/noncopyable.hpp>
 #include <boost/scoped_ptr.hpp>
 #include <tr1/memory>
 //#include <vector>
@@ -43,6 +44,7 @@ namespace mobject {
 namespace session {
   
   using util::unConst;
+  using boost::noncopyable;
   
   
   class Goal;
@@ -60,6 +62,7 @@ namespace session {
    * Query ABC
    */
   class Goal
+    : noncopyable
     {
     public:
       virtual ~Goal() ;
@@ -78,6 +81,12 @@ namespace session {
       QueryID getQID() { return id_; }
       
       
+      /** 
+       * Single Solution, possibly part of a result set.
+       * A pointer-like object, usually to be down-casted
+       * to a specifically typed Query::Cursor
+       * @see Resolution
+       */
       class Result
         : public lib::BoolCheckable<Result>
         {
@@ -117,6 +126,15 @@ namespace session {
    *  the specific result types of issued queries  */
   typedef lib::TypedContext<Goal::Result> ResultType;
   
+  template<typename RES>
+  inline size_t
+  getResultTypeID()  ///< @return unique ID denoting result type RES
+  {
+    return ResultType::ID<RES>::get();
+  }
+  
+  
+  
   
   /**
    * TODO type comment
@@ -129,7 +147,7 @@ namespace session {
       static QueryID
       defineQueryTypeID ()
         {
-          QueryID id = {Goal::GENERIC, ResultType::ID<RES>::get()};
+          QueryID id = {Goal::GENERIC, getResultTypeID<RES>() };
           return id;
         }
       
@@ -137,6 +155,7 @@ namespace session {
       Query()
         : Goal (defineQueryTypeID())
         { }
+      
       
       /* results retrieval */
       class Cursor
@@ -156,7 +175,8 @@ namespace session {
       
       typedef lib::IterAdapter<Cursor,PReso> iterator;
       
-      iterator operator() (QueryResolver const& resolver);
+      iterator
+      operator() (QueryResolver const& resolver);
       
     };
   
@@ -166,6 +186,7 @@ namespace session {
    * of an individual query resolution
    */
   class Resolution
+    : noncopyable
     {
     public:
       typedef Goal::Result Result;
@@ -195,9 +216,11 @@ namespace session {
 
 
   /**
+   * Interface: a facility for resolving (some) queries
    * TODO type comment
    */
   class QueryResolver
+    : noncopyable
     {
       boost::scoped_ptr<QueryDispatcher> dispatcher_;
       

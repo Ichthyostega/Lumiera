@@ -62,7 +62,7 @@ namespace mobject { ///////////////////////////////////////////TODO: shouldn't t
    */
   class PlacementIndex
     : public session::QueryResolver        ////////TODO: really inherit here?
-    , boost::noncopyable
+//  , boost::noncopyable                  ////////TODO : where to put the "noncopyable" base
     {
       class Table;
       
