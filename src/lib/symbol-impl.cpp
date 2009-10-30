@@ -67,10 +67,13 @@ namespace lib {
   size_t hash_value (Literal sym)
   {
     size_t hash=0;
-    const char *pos = sym;
-    size_t maxpos = STRING_MAX_RELEVANT;
-    for ( ; pos && --maxpos; ++pos)
-      hash_combine(hash, *pos);
+    if (sym)
+      {
+        const char *pos = sym;
+        size_t maxpos = STRING_MAX_RELEVANT;
+        for ( ; *pos && --maxpos; ++pos)
+          hash_combine(hash, *pos);
+      }
     
     return hash;
   }
