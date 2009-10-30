@@ -24,14 +24,24 @@
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
 #include "lib/error.hpp"
+#include "lib/util.hpp"
 
+#include <boost/algorithm/string.hpp>
+#include <tr1/functional>
 #include <iostream>
+#include <string>
 
-using std::cout;
-using std::endl;
+using util::for_each;
 using lumiera::Error;
 using lumiera::LUMIERA_ERROR_EXCEPTION;
 using lumiera::error::LUMIERA_ERROR_ASSERTION;
+
+using boost::algorithm::is_lower;
+using boost::algorithm::is_digit;
+using std::tr1::function;
+using std::string;
+using std::cout;
+using std::endl;
 
 
 namespace lib {
@@ -61,6 +71,7 @@ namespace test{
       void
       run (Arg)
         {
+          checkGarbageStr();
           checkTypeDisplay();
           checkThrowChecker();
         }
@@ -96,6 +107,24 @@ namespace test{
           Wrmpf1 *p2 = 0;
           cout << showSizeof(p1)  << endl;
           cout << showSizeof(p2)  << endl;
+        }
+      
+      
+  
+      
+      void
+      checkGarbageStr()
+        {
+          string garN = randStr(0);
+          ASSERT (0 == garN.size());
+          
+          typedef function<bool(string::value_type)> ChPredicate;
+          ChPredicate is_OK (is_lower() || is_digit());
+          
+          string garM = randStr(1000000);
+          for_each (garM, is_OK);
+          
+          cout << randStr(80) << endl;
         }
       
       
