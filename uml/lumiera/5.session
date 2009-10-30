@@ -1,7 +1,5 @@
 window_sizes 1302 1004 270 1022 856 71
 diagrams
-  classdiagram_ref 134021 // Command structure
-    575 622 100 4 0 0
   classdiagram_ref 136325 // Focus of Query
     582 515 100 4 0 0
   active  classdiagram_ref 137733 // Query Interface

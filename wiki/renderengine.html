@@ -3476,7 +3476,7 @@ Then, running the goal {{{:-resolve(T, stream(T,mpeg)).}}} would search a Track 
 In the design of the Lumiera Proc Layer done thus far, we provide //no possibility to introduce a new object kind// into the system via plugin interface. The system uses a fixed collection of classes intended to cover all needs (Clip, Effect, Track, Pipe, Label, Automation, ~Macro-Clips). Thus, plugins will only be able to provide new parametrisations of existing classes. This should not be any real limitation, because the whole system is designed to achieve most of its functionality by freely combining rather basic object kinds. As a plus, it plays nicely with any plain-C based plugin interface. For example, we will have C++ adapter classes for the most common sorts of effect plugin (pull system and synchronous frame-by-frame push with buffering) with a thin C adaptation layer for the specific external plugin systems used. Everything beyond this point can be considered &quot;condiguration data&quot; (including the actual plugin implementation to be loaded)
 </pre>
 </div>
-<div title="QueryResolver" modifier="Ichthyostega" modified="200910251907" created="200910210300" tags="Rules spec draft img" changecount="15">
+<div title="QueryResolver" modifier="Ichthyostega" modified="200910301615" created="200910210300" tags="Rules spec draft img" changecount="25">
 <pre>Within the Lumiera Proc-Layer, there is a general preference for issuing [[queries|Query]] over hard wired configuration (or even mere table based configuration). This leads to the demand of exposing a //possibility to issue queries// &amp;mdash; without actually disclosing much details of the facility implementing this service. For example, for shaping the general session interface (in 10/09), we need a means of exposing a hook to discover HighLevelModel contents, without disclosing how the model is actually organised internally (namely by using an PlacementIndex).
 
 !Analysis of the problem
@@ -3487,12 +3487,15 @@ The situation can be decomposed as follows.[&gt;img[QueryResolver|uml/fig137733.
 
 
 !!!Difficulties
-*it's not clear which usage pattern I'm after
-*# client creates a specific {{{Query&lt;TY&gt;}}} to be resolved by an concealed entity
-*# client creates just a goal, which is then translated into a specific query mechanism behind the invocation interface
+*the usage pattern is not clear &amp;mdash; mostly it's just //planned//
+*# client might create a specific {{{Query&lt;TY&gt;}}} and demand resolution
+*# client might create just a goal, which is then translated into a specific query mechanism behind the invocation interface
 *# client issues a query and expect it just to be handled by //some//&amp;nbsp; suitable resolver
 * thus it's difficult to determine, //what// part of the issued query needs automatic management. More specifically, is it possible for the client to dispose the query after issuing it, but keeping and exploring the iterator obtained as result of the query?
-* and then there is the notorious problem of re-gaining the specifically typed context //behind//&amp;nbsp; the invocation interface. Especially, the facility processing the query needs to know both the expected result type and details about the concrete query and its parametrisation. &amp;rarr; TypedQueryProblem
+* and then there is the notorious problem of re-gaining the specifically typed context //behind//&amp;nbsp; the invocation interface. Especially, the facility processing the query needs to know both the expected result type and details about the concrete query and its parametrisation. &lt;br/&gt;&amp;rarr; TypedQueryProblem
+
+!!!Entities and Operations
+The //client// &amp;nbsp;(code using query-resolver.hpp) either wants a ''goal'' or ''query'' to be resolved; the former is just implicitly typed and usually given in predicate logic from, while the latter may be a specialised subclass templated to yield objects of a specific type as results. A ''query resolver'' is an (abstracted) entity capable of //resolving//&amp;nbsp; such a goal. Actually, behind the scenes there is somehow a registration of the concrete resolving facilities, which are asumed to decide about their ability of handling a given goal. Issuing a goal or query yields a ''resolution'' &amp;mdash; practically speaking, a set of indivitual solutions. These individual solution ''results'' can be explored by ''iteration'', thereby moving an embedded ''cursor'' through the ''result set''. Any result can be retrieved at most once &amp;mdash; after that, the resolution is ''exhausted'' and will be released automatically when the expolration iterator goes out of scope.
 
 !!!Decisions
 * while, in the use case currently at hand, the query instance is created by the client on the stack, the possibility of managing the queries internally is deliberately kept open. Because otherwise, we had to commit to a specific way of obtaining results, for example by assuming always to use an embedded STL iterator.

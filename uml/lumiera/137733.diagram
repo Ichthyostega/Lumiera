@@ -46,6 +46,8 @@ classcanvas 137221 class_ref 155525 // ResolvingFacility
   draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default show_stereotype_properties default
   xyz 492 327 1994
 end
+textcanvas 139269 "invoke for resolution"
+  xyzwh 289 91 2004 100 15
 line 128389 ---+
   from ref 131077 z 1999 to ref 129797
 line 131845 ---+
@@ -81,8 +83,6 @@ relationcanvas 134021 relation_ref 175749 // <unidirectional association>
   no_role_a no_role_b
   no_multiplicity_a no_multiplicity_b
 end
-line 135813 ---+
-  from ref 135685 z 1999 to ref 128005
 relationcanvas 135941 relation_ref 178309 // <generalisation>
   from ref 133509 z 1999 to ref 135685
   no_role_a no_role_b
@@ -121,6 +121,18 @@ relationcanvas 138373 relation_ref 179973 // <dependency>
 end
 relationcanvas 138757 relation_ref 180101 // <unidirectional association>
   from ref 135685 z 1999 to ref 131077
+  no_role_a no_role_b
+  no_multiplicity_a no_multiplicity_b
+end
+relationcanvas 138885 relation_ref 181253 // <unidirectional association>
+  from ref 128005 z 1999 to ref 135685
+  no_role_a no_role_b
+  no_multiplicity_a no_multiplicity_b
+end
+relationcanvas 139013 relation_ref 181381 // <dependency>
+  decenter_end 805
+  from ref 129797 z 1999 to point 227 100
+  line 139141 z 1999 to ref 128005
   no_role_a no_role_b
   no_multiplicity_a no_multiplicity_b
 end

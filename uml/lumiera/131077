@@ -1,6 +1,6 @@
 format 58
 "ConfigQuery" // CommonLib::ConfigQuery
-  revision 17
+  revision 18
   modified_by 5 "hiv"
   // class settings
   //class diagram settings
@@ -548,6 +548,15 @@ ${class}::${name} ${(}${)}${const}${volatile} ${throw}${staticnl}
 	    b parent class_ref 156933 // Result
 	end
       end
+
+      classrelation 191621 // <unidirectional association>
+	relation 181253 --->
+	  a role_name "" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 191621 // <unidirectional association>
+	  b parent class_ref 159237 // Resolution
+      end
     end
 
     class 156805 "Goal"
@@ -593,6 +602,14 @@ ${inlines}
 "
 	    classrelation_ref 182533 // <unidirectional association>
 	  b parent class_ref 156933 // Result
+      end
+
+      classrelation 191749 // <dependency>
+	relation 181381 -_->
+	  a default
+	    cpp default "#include in source"
+	    classrelation_ref 191749 // <dependency>
+	  b parent class_ref 153989 // QueryResolver
       end
     end
 
