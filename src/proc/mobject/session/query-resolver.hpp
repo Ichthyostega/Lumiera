@@ -33,6 +33,7 @@
 
 #include <boost/noncopyable.hpp>
 #include <boost/scoped_ptr.hpp>
+#include <tr1/functional>
 #include <tr1/memory>
 //#include <vector>
 //#include <string>
@@ -45,6 +46,8 @@ namespace session {
   
   using util::unConst;
   using boost::noncopyable;
+  using boost::scoped_ptr;
+  using std::tr1::function;
   
   
   class Goal;
@@ -181,6 +184,9 @@ namespace session {
     };
   
   
+  
+  
+  
   /** 
    * ABC denoting the result set
    * of an individual query resolution
@@ -222,12 +228,11 @@ namespace session {
   class QueryResolver
     : noncopyable
     {
-      boost::scoped_ptr<QueryDispatcher> dispatcher_;
+      scoped_ptr<QueryDispatcher> dispatcher_;
+      
       
     public:
-      
       virtual ~QueryResolver() ;
-      
       
       
       /** issue a query to retrieve contents
@@ -241,8 +246,13 @@ namespace session {
       PReso issue (Goal& query)  const;
       
       
-    protected:
-      virtual bool canHandleQuery (Goal::QueryID qID)  const =0;
+      
+    protected: /* === API for concrete query resolvers === */
+      
+      virtual bool canHandleQuery (Goal::QueryID)  const =0;
+      
+      void installResolutionCase (Goal::QueryID const&,
+                                  function<Resolution*(Goal&)>);
       
       QueryResolver();
     };

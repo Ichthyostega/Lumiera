@@ -22,17 +22,9 @@
 
 
 #include "lib/test/run.hpp"
-//#include "lib/lumitime.hpp"
 #include "lib/test/test-helper.hpp"
-//#include "proc/mobject/placement-ref.hpp"
-//#include "proc/mobject/session/test-scopes.hpp"
-//#include "proc/mobject/placement-index.hpp"
 #include "proc/mobject/session/query-resolver.hpp"
-//#include "lib/symbol.hpp"
-//#include "lib/access-casted.hpp"
-//#include "lib/variant.hpp"
-//#include "lib/meta/typelist.hpp"
-//#include "lib/util.hpp"
+#include "lib/singleton.hpp"
 
 #include <iostream>
 #include <string>
@@ -44,15 +36,17 @@ namespace session {
 namespace test    {
   
   using lib::test::showSizeof;
-  //using util::isSameObject;
-  //using lumiera::Time;
   using std::string;
   using std::cout;
   using std::endl;
   
-  namespace { // a test query resolving facility
+  
+  
+  
+  namespace { // providing a test query resolving facility...
     
     
+    /** an sequence of "solutions" to be "found" */
     template<typename TY>
     class DummySolutions;
     
@@ -65,12 +59,12 @@ namespace test    {
         DummySolutions() : resNr_(7) {}
         
         int* next () { --resNr_; return &resNr_; }
-        bool exhausted() { return bool(resNr_); }
+        bool exhausted() { return !bool(resNr_); }
       };
     
     template<>
     class DummySolutions<string>
-      : DummySolutions<int> 
+      : public DummySolutions<int> 
       {
         string currentText_;
         
@@ -84,19 +78,27 @@ namespace test    {
           }
       };
     
+    
+    /**
+     * a concrete "resolution" of the query
+     * is a set of "solutions", which can be 
+     * explored by iteration. Thus, the result set
+     * has to implement the iteration control API
+     * as required by IterAdapter
+     */
     template<typename TY>
     struct DummyResultSet
       : Resolution
       {
         DummySolutions<TY> solutions_;
-
+        
         typedef typename Query<TY>::Cursor Cursor;
-
+        
         Result
         prepareResolution()
           {
             Cursor cursor;
-            cursor.pointAt (solutions_.next());
+            cursor.point_at (solutions_.next());
             return cursor;
           }
         
@@ -111,8 +113,15 @@ namespace test    {
               cursor.point_at (solutions_.next());
           }
       };
-      
-    class TypeMatchFilter
+    
+    
+    
+    /**
+     * a (dummy) concrete query resolution facility.
+     * It is hard-wired to accept queries on int and string,
+     * generating a sequence of results for both cases
+     */
+    class DummyTypedSolutionProducer
       : public QueryResolver
       {
         bool
@@ -130,14 +139,44 @@ namespace test    {
             return qID.type == getResultTypeID<TY>();
           }
         
+        
+        template<typename TY>
+        static Resolution*
+        resolutionFunction (Goal& goal)
+          {
+            Goal::QueryID const& qID = goal.getQID();
+            REQUIRE (qID.kind == Goal::GENERIC
+                  && qID.type == getResultTypeID<TY>());
+            
+            return new DummyResultSet<TY>(); 
+          }
+        
+      public:
+        DummyTypedSolutionProducer()
+          : QueryResolver()
+          {
+            Goal::QueryID case1 = {Goal::GENERIC, getResultTypeID<int>()};
+            Goal::QueryID case2 = {Goal::GENERIC, getResultTypeID<string>()};
+            
+            installResolutionCase(case1, &resolutionFunction<int> );
+            installResolutionCase(case2, &resolutionFunction<string> );
+          }
       };
-  
+    
+    
+    lib::Singleton<DummyTypedSolutionProducer> testResolver;
+    
     QueryResolver&
     buildTestQueryResolver ()
     {
-      UNIMPLEMENTED("build a special resolver just for this test and register it.");
+      return testResolver();
     }
-  }
+    
+  } // (END) implementation of a test query resolving facility
+  
+  
+  
+  
   
   
   /***********************************************************************************
@@ -168,11 +207,11 @@ namespace test    {
       static void
       explore (ITER ii)
         {
-          cout << "Query-Results: " << showSizeof(ii) << endl;;
-          while (ii)
+          cout << "Query-Results: " << showSizeof(ii) << endl;
+          for ( ; ii; ++ii )
               cout << *ii << endl;
         }
-          
+      
     };
   
   

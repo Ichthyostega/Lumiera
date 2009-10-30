@@ -67,6 +67,26 @@ PLANNED "Path of nested scopes" ScopePath_test <<END
 END
 
 
+TEST "issuing typed queries" QueryResolver_test <<END
+out: Query-Results: sizeof\( .+IterAdapter.+Cursor.+shared_ptr.+Resolution
+out: ^6$
+out: ^5$
+out: ^4$
+out: ^3$
+out: ^2$
+out: ^1$
+out: ^0$
+out: Query-Results: sizeof\( .+IterAdapter.+Cursor.+shared_ptr.+Resolution
+out: ^a$
+out: ^ra$
+out: ^era$
+out: ^iera$
+out: ^miera$
+out: ^umiera$
+out: ^Lumiera$
+END
+
+
 PLANNED "Query focus management" QueryFocus_test <<END
 END
 

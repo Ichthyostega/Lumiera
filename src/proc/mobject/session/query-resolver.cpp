@@ -110,6 +110,16 @@ namespace session {
   }
   
   
+  void
+  QueryResolver::installResolutionCase (QID qID, function<Resolution*(Goal&)> resolutionFun)
+  {
+    ENSURE (!dispatcher_->contains (qID),
+            "duplicate registration of query resolution function");
+    
+    dispatcher_->defineProduction (qID, resolutionFun);
+  }
+  
+  
   
   
 }} // namespace mobject::session
