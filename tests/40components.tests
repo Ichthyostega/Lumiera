@@ -872,7 +872,14 @@ return: 0
 END
 
 
-PLANNED "extensible symbolic identifier" SubID_test <<END
+TEST "extensible symbolic identifier" SubID_test <<END
+out: ....RGB
+out: id1=R.12
+out: id2=G.13
+out: verify...
+out: Elements in hashtable: 3
+out: verify...
+out: Elements in hashtable: 5
 return: 0
 END
 

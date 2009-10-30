@@ -22,6 +22,7 @@
 
 
 #include "lib/test/run.hpp"
+#include "lib/util.hpp"
 
 #include "lib/sub-id.hpp"
 
@@ -36,7 +37,8 @@
 namespace lib {
 namespace test{
   
-//  using std::tr1::function;
+  using util::cStr;
+  using util::for_each;
   using std::tr1::bind;
   using std::tr1::placeholders::_1;
   using boost::hash;
@@ -44,11 +46,20 @@ namespace test{
   using std::string;
   using std::cout;
   using std::endl;
-
+  
+  
   
   namespace { // test data
-  
+    
     enum Colour { R,G,B };
+    
+    
+    inline string
+    str (Colour c) ///< make the enum printable
+    {
+      static string sym("RGB");
+      return sym.substr(c,1);
+    }
     
   }
   
@@ -69,13 +80,9 @@ namespace test{
       virtual void
       run (Arg)
         {
-          
           checkBaseType();
           checkExtension();
-          
-          TODO ("Hash functions, better implementation");
-//        buildHashtable<ID_A> (buildIDs<ID_A>() );
-//        buildHashtable<ID_B> (buildIDs<ID_B>() );
+          checkSubIDHash();
         }
       
       
@@ -87,7 +94,7 @@ namespace test{
           CID c2 (G);
           CID c3 (B);
           
-          cout << "..." << c1 << c2 << c3 << endl;
+          cout << "...." << c1 << c2 << c3 << endl;
         }
       
       
@@ -107,6 +114,33 @@ namespace test{
         }
       
       
+      void
+      checkSubIDHash()
+        {
+          typedef SubId<Colour> CID;
+          typedef SubId<uint>   UID;
+          typedef ExtendedSubId<Colour, UID> CUID;
+          
+          vector<CID> simpleIDs;
+          simpleIDs.push_back(CID(R));
+          simpleIDs.push_back(CID(R));
+          simpleIDs.push_back(CID(G));
+          simpleIDs.push_back(CID(B));
+          
+          vector<CUID> extendedIDs;
+          extendedIDs.push_back(CUID(R,22));
+          extendedIDs.push_back(CUID(R,22));  // note the duplicates get dropped
+          extendedIDs.push_back(CUID(R,23));
+          extendedIDs.push_back(CUID(R,24));
+          extendedIDs.push_back(CUID(G,24));
+          extendedIDs.push_back(CUID(B,25));
+          
+          buildHashtable<CID>  (simpleIDs);
+          buildHashtable<CUID> (extendedIDs);
+        }
+      
+      
+      
       template<class KEY>
       struct HashTable
         : std::tr1::unordered_map<KEY, string, hash<KEY> >
@@ -114,13 +148,14 @@ namespace test{
           void
           add (KEY key)
             {
-              *this[key] = string(key);
+              (*this)[key] = string(key);
             }
           
           void
           verify (KEY key)
             {
-              ASSERT (string(key) == *this[key]);
+              cout << "verify....." << key << endl;
+              ASSERT (string(key) == (*this)[key]);
             }
         };
       
@@ -133,8 +168,10 @@ namespace test{
           typedef HashTable<KEY> HTab;
           HTab tab;
           
-          for_each (keys, bind (&HTab::add,    tab, _1 ));
-          for_each (keys, bind (&HTab::verify, tab, _1 ));
+          for_each (keys, bind (&HTab::add,    ref(tab), _1 ));
+          for_each (keys, bind (&HTab::verify, ref(tab), _1 ));
+          
+          cout << "Elements in hashtable: " << tab.size() << endl;
         }
       
       

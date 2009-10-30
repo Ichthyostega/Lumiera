@@ -49,14 +49,19 @@
 #include "lib/format.hpp"
 
 //#include <functional>
+#include <boost/functional/hash.hpp>      /////TODO better push the hash implementation into a cpp file (and btw, do it more seriously!)
+
 #include <iostream>
 #include <string>
 
 
 namespace lib {
 
-  using std::string;
+  using boost::hash_value;
+  
   using std::ostream;
+  using std::string;
+  using std::cout;
   
   
   
@@ -73,15 +78,32 @@ namespace lib {
       
       virtual operator string()  const =0;
     };
-
-      
-  ostream&
-  operator<< (ostream& os, SubID const& sID)
-    {
-      return os << string(sID);
-    }
   
-
+  
+  inline ostream&
+  operator<< (ostream& os, SubID const& sID)
+  {
+    return os << string(sID);
+  }
+  
+  inline size_t
+  hash_value (SubID const& sID)
+  {
+    return hash_value (string (sID));
+  }
+  
+  inline bool
+  operator== (SubID const& id1, SubID const& id2)
+  {
+    return (string (id1) == string (id2));
+  }
+  
+  ////////TODO a serious implementation should descend recursively, instead of relying on the string representation
+  
+  
+  
+  
+  
   
   template<typename I>
   class SubId
@@ -96,7 +118,8 @@ namespace lib {
       
       operator string()  const
         {
-          return util::str (baseID_);   
+          using util::str;
+          return str (baseID_);  // note: extension point   
         }
     };
   
