@@ -514,6 +514,18 @@ ColorPalette
 
 SiteUrl</pre>
 </div>
+<div title="Advice" modifier="Ichthyostega" modified="200910311849" created="200910311755" tags="Concepts def spec" changecount="2">
+<pre>{{red{WIP 11/09}}}...//about to explicate a pattern which I'm aiming at within the design almost since the beginning//
+Expecting Advice and giving Advice &amp;mdash; this collaboration ranges somewhere between messaging and dynamic properties, but cross-cutting the primary, often hierarchical relation of dependencies. Always happening at a certain //point of advice,// which creates a distinct, static nature different of being just a convention, on the other hand, Advice is deliberately kept optional and received synchronously, albeit possibly within an continuation.
+
+!Specification
+''Definition'': Advice is an optional, mediated collaboration between entities taking on the roles of advisor and advised, thereby passing a custom piece of advice data, managed by the advice support system. The possibility of advice is created by the advised entity by exposing a point of advice, while the advising entity can discover this advice possibility.
+!!Collaborators
+* the ''advised'' entity 
+* the ''advisor''
+* ''advice system''
+</pre>
+</div>
 <div title="AllocationCluster" modifier="Ichthyostega" modified="200810200127" created="200810180031" tags="def img" changecount="9">
 <pre>Memory management facility for the low-level model (render nodes network). The model is organised into temporal segments, which are considered to be structurally constant and uniform. The objects within each segment are strongly interconnected, and thus each segment is being built in a single build process and is replaced or released as a whole. __~AllocationCluster__ implements memory management to support this usage pattern. He owns a number of object families of various types.[&gt;img[draw/AllocationCluster.png]]
 * [[processing nodes|ProcNode]] &amp;mdash; probably with several subclasses (?)
@@ -1122,6 +1134,10 @@ Connecting data streams of differing type involves a StreamConversion. Mostly, t
 * retrieve a //strategy// for implementing a connection
 </pre>
 </div>
+<div title="Concepts" modifier="Ichthyostega" modified="200910311750" created="200910311729" tags="overview" changecount="4">
+<pre>This index refers to the conceptual, more abstract and formally specified aspects of the Proc-Layer and Lumiera in general.
+More often than not, these emerge from immediate solutions, being percieved as especially expressive, when taken on, yielding guidance by themselves. Some others, [[Placements|Placement]] and [[Advice]] to mention here, immediately substantiate the vision.</pre>
+</div>
 <div title="ConfigQuery" modifier="Ichthyostega" modified="200804110335" created="200801181308" tags="def" changecount="5">
 <pre>Configuration Queries are requests to the system to &quot;create or retrieve an object with //this and that // capabilities&quot;. They are resolved by a rule based system ({{red{planned feature}}}) and the user can extend the used rules for each Session. Syntactically, they are stated in ''prolog'' syntax as a conjunction (=logical and) of ''predicates'', for example {{{stream(mpeg), pipe(myPipe)}}}. Queries are typed to the kind of expected result object: {{{Query&lt;Pipe&gt; (&quot;stream(mpeg)&quot;)}}} requests a pipe excepting/delivering mpeg stream data &amp;mdash; and it depends on the current configuration what &quot;mpeg&quot; means. If there is any stream data producing component in the system, which advertises to deliver {{{stream(mpeg)}}}, and a pipe can be configured or connected with this component, then the [[defaults manager|DefaultsManagement]] will create/deliver a [[Pipe|PipeHandling]] object configured accordingly.
 &amp;rarr; [[Configuration Rules system|ConfigRules]]
@@ -1675,7 +1691,7 @@ Finally, this example shows an ''automation'' data set controlling some paramete
 * shaping the GUI/~Proc-Interface, based on MObjectRef and the [[Command frontend|CommandHandling]]
 * defining PlacementScope in order to allow for [[discovering session contents|Query]]</pre>
 </div>
-<div title="ImplementationGuidelines" modifier="Ichthyostega" modified="200909291414" created="200711210531" tags="discuss draft" changecount="15">
+<div title="ImplementationGuidelines" modifier="Ichthyostega" modified="200910311727" created="200711210531" tags="Concepts design discuss" changecount="16">
 <pre>!Observations, Ideas, Proposals
 ''this page is a scrapbook for collecting ideas'' &amp;mdash; please don't take anything noted here too literal. While writing code, I observe that I (ichthyo) follow certain informal guidelines, some of which I'd like to note down because they could evolve into general style guidelines for the Proc-Layer code.
 * ''Inversion of Control'' is the leading design principle.
@@ -2970,8 +2986,8 @@ there is not much you can do directly with a pipe asset. It is an point of refer
 Pipes are integrated with the [[management of defaults|DefaultsManagement]]. For example, any pipe uses implicitly some [[processing pattern|ProcPatt]] &amp;mdash; it may default to the empty pattern. This feature enables to apply some standard wiring to the pipes (e.g a fader for audio, similar to the classic mixing consoles). This //is // a global property of the pipe, but &amp;mdash; contrary to the stream type &amp;mdash; this pattern may be switched
 </pre>
 </div>
-<div title="Placement" modifier="Ichthyostega" modified="200905090045" created="200706220306" tags="def" changecount="9">
-<pre>A Placement represents a //relation:// it is always linked to a //Subject// (this being a [[Media Object|MObject]]) and has the meaning to //place// this Subject in some manner, either relatively to other Media Objects, or by some Constraint or simply absolute at (time, output). The latter case is especially important for the build process and thus represented by a special [[Sub-Interface ExplicitPlacement|ExplicitPlacement]]. Besides this simple cases, Placements can also express more specific kinds of &quot;locating&quot; an object, like placing a sound source at a pan position or placing a video clip at a given layer (above or below another video clip)
+<div title="Placement" modifier="Ichthyostega" modified="200910311753" created="200706220306" tags="Concepts def" changecount="11">
+<pre>A Placement represents a //relation:// it is always linked to a //Subject// (this being a [[Media Object|MObject]]) and has the meaning to //place// this Subject in some manner, either relatively to other Media Objects, by some Constraint or simply absolute at (time, output). The latter case is especially important for the build process and thus represented by a special [[Sub-Interface ExplicitPlacement|ExplicitPlacement]]. Besides this simple cases, Placements can also express more specific kinds of &quot;locating&quot; an object, like placing a sound source at a pan position or placing a video clip at a given layer (above or below another video clip)
 
 So basically placements represent a query interface: you can allways ask the placement to find out about the position of the related object in terms of (time, output), and &amp;mdash; depending on the specific object and situation &amp;mdash; also about these additional [[placement derived dimensions|PlacementDerivedDimension]] like sound pan or layer order or similar things which also fit into the general concept of &quot;placing&quot; an object.
 
@@ -3325,7 +3341,7 @@ Besides, they provide an __inward interface__ for the [[ProcNode]]s, enabling th
 
 </pre>
 </div>
-<div title="ProcLayer and Engine" modifier="Ichthyostega" modified="200910231535" created="200706190056" tags="overview" changecount="23">
+<div title="ProcLayer and Engine" modifier="Ichthyostega" modified="200910311726" created="200706190056" tags="overview" changecount="26">
 <pre>The Render Engine is the part of the application doing the actual video calculations. Utilising system level services and retrieving raw audio and video data through [[Lumiera's Backend|backend.html]], its operations are guided by the objects and parameters edited by the user in [[the session|Session]]. Thus, the Lumiera Proc-Layer covers the (abstract) edit operations available to the user, the representation of [[&quot;editable things&quot;|MObjects]] and the translation of those into facilities allowing to [[drive the rendering|Rendering]].
 &lt;&lt;&lt;
 ''Status'': started out as design draft in summer '07, Ichthyo is now in the middle of a implementing the foundations and main structures in C++
@@ -3353,6 +3369,7 @@ The system is ''open'' inasmuch every part mirrors the structure of correspondin
 &amp;rarr; [[Two Examples|Examples]] (Object diagrams) 
 &amp;rarr; how [[Automation]] works
 &amp;rarr; [[Problems|ProblemsTodo]] to be solved and notable [[design decisions|DesignDecisions]]
+&amp;rarr; [[Concepts, Abstractions and Formalities|Concepts]]
 &amp;rarr; [[Implementation Details|ImplementationDetails]] {{red{WIP}}}
 </pre>
 </div>
