@@ -128,6 +128,7 @@ namespace lib {
    * - the source container needs to provide hasNext() and iterNext() free functions.
    * - we may need friendship to implement those extension points on the container 
    * - the end-of-iteration can be detected by bool check
+   * @note it is possible to "hide" a smart-ptr within the CON template parameter.
    * 
    * \par Stipulations
    * - POS refers to the current position within the data source of this iterator.

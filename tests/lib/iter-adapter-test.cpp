@@ -98,11 +98,8 @@ namespace test{
         const_iterator end ()       const { return const_iterator(); }
         
         
+        
       protected: /* ==== API for the IterAdapter ==== */
-        
-        friend class IterAdapter<_Vec::iterator,      TestContainer>;
-        friend class IterAdapter<_Vec::const_iterator,TestContainer>;
-        
         
         /** Implementation of Iteration-logic: pull next element. */
         template<class ITER>
