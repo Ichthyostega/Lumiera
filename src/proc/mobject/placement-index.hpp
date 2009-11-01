@@ -73,13 +73,15 @@ namespace mobject { ///////////////////////////////////////////TODO: shouldn't t
       typedef PlacementRef<MObject> PRef;
       typedef PlacementMO::ID const& ID;
       
+      typedef session::Goal::QueryID const& QID;
+      
       
       PlacementMO& find (ID)  const;
       
       template<class MO>
       Placement<MO>&  find (PlacementMO::Id<MO>)  const;
       template<class MO>
-      Placement<MO>&  find (PlacementRef<MO> const&)  const;
+      Placement<MO>&  find (PlacementRef<MO> const&) const;
       
       PlacementMO& getScope (PlacementMO const&)  const;
       PlacementMO& getScope (ID)                  const;
@@ -99,7 +101,7 @@ namespace mobject { ///////////////////////////////////////////TODO: shouldn't t
       query (PlacementMO& scope)                  const;
       
       
-      bool canHandleQuery(session::Goal::QueryID) const;
+      bool canHandleQuery(QID)                    const;
       
       
       /* == mutating operations == */
@@ -167,11 +169,16 @@ namespace mobject { ///////////////////////////////////////////TODO: shouldn't t
   }
   
   
+  /** @todo use query-resolver-test as an example.....
+   *        return a result set object derived from Resolution
+   *        For the additional type filtering: build a filter iterator,
+   *        using a type-filtering predicate, based on Placement#isCompatible
+   */
   template<class MO>
   inline typename session::Query<Placement<MO> >::iterator
   PlacementIndex::query (PlacementMO& scope)  const
   {
-    UNIMPLEMENTED ("actually run the containment query"); 
+    UNIMPLEMENTED ("actually run the containment query");
   }
   
   inline Placement<MObject>&

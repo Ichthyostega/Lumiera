@@ -26,11 +26,9 @@
 
 //#include "proc/mobject/mobject.hpp"
 #include "proc/mobject/placement.hpp"
-#include "proc/mobject/placement-index.hpp"
 #include "proc/mobject/session/query-resolver.hpp"
 //#include "lib/iter-adapter.hpp"
 
-#include <boost/noncopyable.hpp>
 //#include <vector>
 //#include <string>
 
@@ -48,21 +46,35 @@ namespace session {
   template<class MO>
   class ContentsQuery
     : public Query<Placement<MO> >
-    , boost::noncopyable
     {
       typedef Query<Placement<MO> > _Query;
-      typedef typename _Query::iterator iterator;
       
-      PPIdx index_;
+      QueryResolver const&  index_;
       PlacementMO const& container_;
       
       
-      
     public:
-      ContentsQuery (PPIdx index, PlacementMO const& scope)
-        : index_(index)
+      ContentsQuery (QueryResolver const& resolver, PlacementMO const& scope)
+        : _Query (_Query::defineQueryTypeID (Goal::DISCOVERY))
+        , index_(resolver)
         , container_(scope)
         { }
+      
+      typedef typename _Query::iterator iterator;
+      
+      iterator
+      operator() ()  const
+        {
+          return _Query::resolveBy (index_);
+        }
+      
+      PlacementMO const&
+      searchScope ()
+        {
+          return container_;
+        }
+      
+      /////////////////////TODO maybe exposing a content filter predicate from here?
       
     };
 ///////////////////////////TODO currently just fleshing the API

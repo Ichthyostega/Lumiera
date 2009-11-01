@@ -62,17 +62,17 @@ namespace session {
   
   /** factory used as dispatcher table
    *  for resolving typed queries  */
-  typedef MultiFact< Resolution(Goal&)   // nominal signature of fabrication
-                   , Goal::QueryID      //  select resolution function by kind-of-Query
-                   , BuildRefcountPtr  //   wrapper: manage result set by smart-ptr
-                   > DispatcherTable; //
+  typedef MultiFact< Resolution(Goal const&) // nominal signature of fabrication
+                   , Goal::QueryID          //  select resolution function by kind-of-Query
+                   , BuildRefcountPtr      //   wrapper: manage result set by smart-ptr
+                   > DispatcherTable;     //
   
   struct QueryDispatcher
     : DispatcherTable
     {
       
       PReso
-      handle (Goal& query)
+      handle (Goal const& query)
         {
           QID qID = query.getQID();
           ENSURE (contains (qID));
@@ -99,7 +99,7 @@ namespace session {
    *  typed context and downcast the Goal appropriately
    */
   PReso  
-  QueryResolver::issue (Goal& query)  const
+  QueryResolver::issue (Goal const& query)  const
   {
     TODO ("ensure proper initialisation");  
     
@@ -111,7 +111,7 @@ namespace session {
   
   
   void
-  QueryResolver::installResolutionCase (QID qID, function<Resolution*(Goal&)> resolutionFun)
+  QueryResolver::installResolutionCase (QID qID, function<Resolution*(Goal const&)> resolutionFun)
   {
     ENSURE (!dispatcher_->contains (qID),
             "duplicate registration of query resolution function");

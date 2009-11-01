@@ -45,6 +45,7 @@ namespace test    {
   
   namespace { // providing a test query resolving facility...
     
+    typedef Goal::QueryID const& QID;
     
     /** an sequence of "solutions" to be "found" */
     template<typename TY>
@@ -125,7 +126,7 @@ namespace test    {
       : public QueryResolver
       {
         bool
-        canHandleQuery (Goal::QueryID qID)  const
+        canHandleQuery (QID qID)  const
           {
             return Goal::GENERIC == qID.kind 
                 && (wantResultType<int> (qID)
@@ -134,7 +135,7 @@ namespace test    {
         
         template<typename TY>
         bool
-        wantResultType (Goal::QueryID qID)  const
+        wantResultType (QID qID)  const
           {
             return qID.type == getResultTypeID<TY>();
           }
@@ -142,9 +143,9 @@ namespace test    {
         
         template<typename TY>
         static Resolution*
-        resolutionFunction (Goal& goal)
+        resolutionFunction (Goal const& goal)
           {
-            Goal::QueryID const& qID = goal.getQID();
+            QID qID = goal.getQID();
             REQUIRE (qID.kind == Goal::GENERIC
                   && qID.type == getResultTypeID<TY>());
             

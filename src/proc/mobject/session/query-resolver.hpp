@@ -81,7 +81,11 @@ namespace session {
           size_t type;
         };
       
-      QueryID getQID() { return id_; }
+      QueryID const&
+      getQID()  const
+        {
+          return id_;
+        }
       
       
       /** 
@@ -147,10 +151,11 @@ namespace session {
   class Query
     : public Goal
     {
+    protected:
       static QueryID
-      defineQueryTypeID ()
+      defineQueryTypeID (Kind queryType = Goal::GENERIC)
         {
-          QueryID id = {Goal::GENERIC, getResultTypeID<RES>() };
+          QueryID id = {queryType, getResultTypeID<RES>() };
           return id;
         }
       
@@ -178,8 +183,14 @@ namespace session {
       
       typedef lib::IterAdapter<Cursor,PReso> iterator;
       
-      iterator
-      operator() (QueryResolver const& resolver);
+      iterator operator() (QueryResolver const& resolver)  const;
+      iterator resolveBy  (QueryResolver const& resolver)  const;
+      
+      
+    protected:
+      Query (QueryID qID)
+        : Goal (qID)
+        { }
       
     };
   
@@ -243,31 +254,42 @@ namespace session {
        *         or failure of an external facility used for resolution.
        *  @note a query may yield no results, in which case the iterator is empty.
        */
-      PReso issue (Goal& query)  const;
+      PReso issue (Goal const& query)  const;
       
       
       
-    protected: /* === API for concrete query resolvers === */
+    protected:  /* ===== API for concrete query resolvers ===== */
       
-      virtual bool canHandleQuery (Goal::QueryID)  const =0;
+      virtual bool canHandleQuery (Goal::QueryID const&)  const =0;
       
       void installResolutionCase (Goal::QueryID const&,
-                                  function<Resolution*(Goal&)>);
+                                  function<Resolution*(Goal const&)>);
       
       QueryResolver();
     };
-///////////////////////////TODO currently just fleshing the API
+  
+  
   
   
   template<typename RES>
   inline typename Query<RES>::iterator
-  Query<RES>::operator() (QueryResolver const& resolver)
-    {
-      PReso resultSet = resolver.issue (*this);
-      Result first = resultSet->prepareResolution();
-      Cursor& start = static_cast<Cursor&> (first);
-      return iterator (resultSet, start);
-    }
+  Query<RES>::resolveBy (QueryResolver const& resolver)  const
+  {
+    PReso resultSet = resolver.issue (*this);
+    Result first = resultSet->prepareResolution();
+    Cursor& start = static_cast<Cursor&> (first);
+    return iterator (resultSet, start);
+  }
+  
+  
+  /** notational convenience shortcut,
+   *  synonymous to #resolveBy */
+  template<typename RES>
+  inline typename Query<RES>::iterator
+  Query<RES>::operator() (QueryResolver const& resolver)  const
+  {
+    return resolveBy (resolver);
+  }
   
   
 }} // namespace mobject::session

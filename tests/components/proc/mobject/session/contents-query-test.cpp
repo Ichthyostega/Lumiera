@@ -27,11 +27,11 @@
 #include "proc/mobject/session/query-resolver.hpp"
 #include "proc/mobject/session/contents-query.hpp"
 #include "proc/mobject/session/test-scopes.hpp"
-//#include "proc/mobject/placement-index.hpp"
+//#include "proc/mobject/placement-resolver.hpp"
 //#include "lib/util.hpp"
 
 #include <iostream>
-//#include <string>
+#include <string>
 
 
 
@@ -43,7 +43,7 @@ namespace test    {
   using session::Query;
   //using util::isSameObject;
   //using lumiera::Time;
-  //using std::string;
+  using std::string;
   using std::cout;
   using std::endl;
 
@@ -68,24 +68,24 @@ namespace test    {
           // Prepare an (test)Index backing the PlacementRefs
           PPIdx index = build_testScopes();
           PlacementMO scope (index->getRoot());
+          QueryResolver const& resolver (*index);
           
-          discover (ContentsQuery<MObject>    (index,scope));
-          discover (ContentsQuery<DummyMO>    (index,scope));
-          discover (ContentsQuery<TestSubMO1> (index,scope));
-          discover (ContentsQuery<TestSubMO2> (index,scope));
-          discover (ContentsQuery<TestSubMO21>(index,scope));
+          discover (ContentsQuery<MObject>    (resolver,scope));
+          discover (ContentsQuery<DummyMO>    (resolver,scope));
+          discover (ContentsQuery<TestSubMO1> (resolver,scope));
+          discover (ContentsQuery<TestSubMO2> (resolver,scope));
+          discover (ContentsQuery<TestSubMO21>(resolver,scope));
         }
       
       
       template<class MO>
       void
-      discover (Query<MO> const& query)
+      discover (ContentsQuery<MO> const& query)
         {
-#if false  //////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET 384  !!!!!!!!!
-          Query<MO>::iterator elm = query();
-          while (elm)
-            cout << *elm++ << endl;
-#endif ////////////////////////////////////////////////////////////////////////////////////////TODO lots of things unimplemented.....!!!!!
+          for (typename ContentsQuery<MO>::iterator elm = query();
+               elm;
+             ++elm)
+            cout << string(*elm) << endl;
         }
           
     };
