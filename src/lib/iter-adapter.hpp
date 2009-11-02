@@ -113,6 +113,14 @@ namespace lib {
         typedef const TY* pointer;
       };
     
+    
+    void
+    _throwIterExhausted()
+    {
+      throw lumiera::error::Invalid ("Can't iterate further",
+            lumiera::error::LUMIERA_ERROR_ITER_EXHAUST);
+    }
+    
   }
   
   
@@ -252,8 +260,7 @@ namespace lib {
       _maybe_throw()  const
         {
           if (!isValid())
-            throw lumiera::error::Invalid ("Can't iterate further",
-                  lumiera::error::LUMIERA_ERROR_ITER_EXHAUST);
+            _throwIterExhausted();
         }
       
       /// comparison is allowed to access impl iterator
@@ -371,8 +378,7 @@ namespace lib {
       _maybe_throw()  const
         {
           if (!isValid())
-            throw lumiera::error::Invalid ("Can't iterate further",
-                  lumiera::error::LUMIERA_ERROR_ITER_EXHAUST);
+            _throwIterExhausted();
         }
     };
   
