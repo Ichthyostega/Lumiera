@@ -22,12 +22,9 @@
 
 
 #include "lib/test/run.hpp"
-//#include "lib/lumitime.hpp"
-//#include "proc/mobject/placement-ref.hpp"
 #include "proc/mobject/session/query-resolver.hpp"
 #include "proc/mobject/session/contents-query.hpp"
 #include "proc/mobject/session/test-scopes.hpp"
-//#include "proc/mobject/placement-resolver.hpp"
 //#include "lib/util.hpp"
 
 #include <iostream>
@@ -38,21 +35,20 @@
 namespace mobject {
 namespace session {
 namespace test    {
-
+  
   using session::ContentsQuery;
-  using session::Query;
-  //using util::isSameObject;
-  //using lumiera::Time;
   using std::string;
   using std::cout;
   using std::endl;
-
+  
   
   /***************************************************************************************
    * @test how to discover the contents of a container-like part of the high-level model.
    *       As this container-like object is just a concept and actually implemented
    *       by the PlacementIndex, this includes enumerating a scope. The discovered
-   *       contents may be additionally filtered by a runtime type check.
+   *       contents will be filtered by a runtime type check.
+   *       
+   * @todo cover using an additional dynamic filter on the results
    *       
    * @see  mobject::PlacementIndex
    * @see  mobject::session::QueryResolver
@@ -82,12 +78,13 @@ namespace test    {
       void
       discover (ContentsQuery<MO> const& query)
         {
-          for (typename ContentsQuery<MO>::iterator elm = query();
-               elm;
-             ++elm)
+          typedef typename ContentsQuery<MO>::iterator I;
+          
+          for (I elm(query);
+               elm; ++elm)
             cout << string(*elm) << endl;
         }
-          
+      
     };
   
   

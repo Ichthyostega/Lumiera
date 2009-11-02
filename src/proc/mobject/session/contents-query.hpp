@@ -24,28 +24,51 @@
 #ifndef MOBJECT_SESSION_CONTENTS_QUERY_H
 #define MOBJECT_SESSION_CONTENTS_QUERY_H
 
-//#include "proc/mobject/mobject.hpp"
+
 #include "proc/mobject/placement.hpp"
 #include "proc/mobject/session/query-resolver.hpp"
-//#include "lib/iter-adapter.hpp"
 
-//#include <vector>
-//#include <string>
+#include <tr1/functional>
 
-//using std::vector;
-//using std::string;
 
 namespace mobject {
 namespace session {
   
+  using std::tr1::bind;
+  using std::tr1::function;
+  using std::tr1::placeholders::_1;
+  
   
   
   /**
-   * TODO type comment
+   * Query a scope to discover it's contents.
+   * This is a special kind of query, wired up such as to
+   * enumerate the contents of a scope, filtered by a subtype-check.
+   * For the actual resolution of the scope's contents, this query
+   * relies on an index like facility (usually Session's PlacementIndex),
+   * which is abstracted as a QueryResolver, but actually is expected to
+   * cooperate especially with this Query subclass to retrieve the scope
+   * to be enumerated and the definition of the actual filter predicate.
+   * Currently (11/09), there is a special, hard-wired Query-kind-ID
+   * \c Goal::DISCOVERY to distinguish this special kind of a Query.
+   * 
+   * Contrary to the usual handling of a generic query, a ContentsQuery
+   * object holds it's own discovery iterator and thus is completely
+   * self contained. The query is issued automatically on construction,
+   * thus the embedded iterator immediately points at the first result.
+   * Moreover, as any Lumiera Forward Iterator is \c bool checkable,
+   * a ContentsQuery not yielding any results will evaluate to \c false
+   * immediately after construction, allowing convenient inline checks.
+   * The query can be re-issued by the function operator, and the
+   * embedded result iterator can of course be copied to a bare
+   * iterator instance, e.g. for passing it on (ContentsQuery
+   * itself is intended to be used polymorphically and thus
+   * defined to be non-copyable)
    */
   template<class MO>
   class ContentsQuery
     : public Query<Placement<MO> >
+    , public Query<Placement<MO> >::iterator
     {
       typedef Query<Placement<MO> > _Query;
       
@@ -53,14 +76,26 @@ namespace session {
       PlacementMO const& container_;
       
       
+      typedef typename _Query::iterator _QIter;
+      typedef typename _QIter::reference Val;
+      
+      
     public:
-      ContentsQuery (QueryResolver const& resolver, PlacementMO const& scope)
+      typedef _QIter              iterator;
+      typedef function<bool(Val)> ContentFilter;
+      
+      
+      ContentsQuery (QueryResolver const& resolver,
+                     PlacementMO  const& scope)
         : _Query (_Query::defineQueryTypeID (Goal::DISCOVERY))
+        , _QIter ()
         , index_(resolver)
         , container_(scope)
-        { }
+        {
+          resetResultIteration (_Query::resolveBy(index_));
+        }
       
-      typedef typename _Query::iterator iterator;
+      
       
       iterator
       operator() ()  const
@@ -69,15 +104,38 @@ namespace session {
         }
       
       PlacementMO const&
-      searchScope ()
+      searchScope ()  const
         {
           return container_;
         }
       
-      /////////////////////TODO maybe exposing a content filter predicate from here?
+      ContentFilter
+      contentFilter () const
+        {
+          return buildContentFilter();
+        }
       
+      
+    protected:
+      /** the default implementation of the content filtering
+       *  builds on the downcast-function available on each 
+       *  Placement instance. By parametrising this function
+       *  with our template parameter MO, we pick out only
+       *  those elements of the scope being subclasses of MO
+       */
+      virtual ContentFilter
+      buildContentFilter()  const
+        {
+          return bind (&PlacementMO::isCompatible<MO>, _1 );
+        }
+      
+    private:
+      void
+      resetResultIteration (iterator const& newQueryResults)
+        {
+          static_cast<iterator&> (*this) = newQueryResults;
+        }
     };
-///////////////////////////TODO currently just fleshing the API
   
   
 }} // namespace mobject::session

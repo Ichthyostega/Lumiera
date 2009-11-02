@@ -175,7 +175,7 @@ namespace lib {
         }
       
       IterAdapter ()
-        : source_(0)
+        : source_()
         , pos_()
         { }
       
