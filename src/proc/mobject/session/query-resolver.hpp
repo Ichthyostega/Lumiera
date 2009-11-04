@@ -36,7 +36,7 @@
 #include <tr1/functional>
 #include <tr1/memory>
 //#include <vector>
-//#include <string>
+#include <string>
 
 //using std::vector;
 //using std::string;
@@ -48,6 +48,7 @@ namespace session {
   using boost::noncopyable;
   using boost::scoped_ptr;
   using std::tr1::function;
+  using std::string;
   
   
   class Goal;
@@ -244,6 +245,8 @@ namespace session {
       
     public:
       virtual ~QueryResolver() ;
+      
+      operator string ()     =0; ///< short characterisation of the actual facility
       
       
       /** issue a query to retrieve contents

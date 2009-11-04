@@ -69,6 +69,8 @@ namespace session {
   QueryFocus::query()  const
   {
     UNIMPLEMENTED ("how the hell do we issue typed queries?????");  ///////////////////////TICKET #352
+    
+    ////////////yeah! we know now ---> ScopeLocator::explore(..)
   }
   
   

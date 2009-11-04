@@ -1,6 +1,5 @@
 /*
   SCOPE.hpp  -  nested search scope for properties of placement
-
  
   Copyright (C)         Lumiera.org
     2009,               Hermann Vosseler <Ichthyostega@web.de>
@@ -28,10 +27,12 @@
 //#include "proc/mobject/mobject.hpp"
 #include "proc/mobject/placement.hpp"
 #include "proc/mobject/placement-ref.hpp"
+//#include "proc/mobject/session/query-resolver.hpp"  ///////////TODO: really?
 #include "lib/iter-adapter.hpp"
-#include "lib/singleton.hpp"
+//#include "lib/singleton.hpp"
 
-#include <boost/scoped_ptr.hpp>
+//#include <boost/scoped_ptr.hpp>
+//#include <tr1/memory>
 //#include <vector>
 //#include <string>
 
@@ -41,11 +42,8 @@
 namespace mobject {
 namespace session {
   
-  using boost::scoped_ptr;
   using lib::IterAdapter;
   
-  class ScopeLocator;
-  class QueryFocusStack;
   
 
   /**
@@ -80,14 +78,6 @@ namespace session {
     };
   
   
-  class ScopeLocator
-    {
-     scoped_ptr<QueryFocusStack> focusStack_; 
-      
-    public:
-      ScopeLocator();
-      
-    };
 ///////////////////////////TODO currently just fleshing the API
   
   
