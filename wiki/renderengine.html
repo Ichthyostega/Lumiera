@@ -3464,7 +3464,7 @@ For decoupling the query invocation from the facility actually processing the qu
 See also the notes on &amp;rarr; QueryImplProlog
 </pre>
 </div>
-<div title="QueryFocus" modifier="Ichthyostega" modified="200911040256" created="200910140244" tags="def spec img" changecount="18">
+<div title="QueryFocus" modifier="Ichthyostega" modified="200911050236" created="200910140244" tags="def spec img" changecount="19">
 <pre>When querying contents of the session or sub-containers within the session, the QueryFocus follows the current point-of-query. As such queries can be issued to explore the content of container-like objects holding other MObjects, the focus is always attached to a container, which also acts as [[scope|PlacementScope]] for the contained objects. QueryFocus is an implicit state (the current point of interrest). This sate especially remembers the path down from the root of the HighLevelModel, which was used to access the current scope. Because this path constitutes a hierarchy of scopes, it can be relevant for querying and resolving placement properties. (&amp;rarr; SessionStructureQuery)
 
 !provided operations
@@ -3476,7 +3476,7 @@ See also the notes on &amp;rarr; QueryImplProlog
 * (typed) content discovery query on the current scope
 [&gt;img[Scope Locating|uml/fig136325.png]]
 !!!relation to Scope
-There is a tight integration with PlacementScope through the ScopeLocator, which establishes the //current scope.// But QueryFocus is more of a //binding// &amp;mdash; it links or focusses the current state and into a specific scope with a ScopePath depending on the current state. Thus, while Scope is just a passive container allowing to locate and navigate, QueryFocus by virtue of this binding allows to [[Query]] at this current location.
+There is a tight integration with PlacementScope through the ScopeLocator, which establishes the //current scope.// But QueryFocus is more of a //binding// &amp;mdash; it links or focusses the current state into a specific scope with a ScopePath in turn depending on this current state. Thus, while Scope is just a passive container allowing to locate and navigate, QueryFocus by virtue of this binding allows to [[Query]] at this current location.
 
 !implementation notes
 we provide a static access API, meaning that there is a singleton behind the scenes, which manages the mentioned scope stack. Moreover, there is an link to the current session. This link works by the current session contacting the query focus system (~ScopeLocator) and attaching to it. This attachment is shallow, i.e. the QueryFocus doesn't have knowledge about the session, which allows the focus to be unit tested.

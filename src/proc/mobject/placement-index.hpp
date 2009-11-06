@@ -96,9 +96,13 @@ namespace mobject { ///////////////////////////////////////////TODO: shouldn't t
       bool contains (PlacementMO const&)          const;
       bool contains (ID)                          const;
       
+////////////////////////////////////////////////////////////////TODO: refactor into explicit query resolving wrapper      
       template<class MO>
       typename session::Query<Placement<MO> >::iterator
       query (PlacementMO& scope)                  const;
+      
+      operator string()  const { return "PlacementIndex"; }
+////////////////////////////////////////////////////////////////TODO: refactor into explicit query resolving wrapper      
       
       
       bool canHandleQuery(QID)                    const;

@@ -27,6 +27,7 @@
 //#include "proc/mobject/mobject.hpp"
 //#include "proc/mobject/placement.hpp"
 #include "proc/mobject/session/scope-path.hpp"
+#include "proc/mobject/session/scope-locator.hpp"
 
 //#include <vector>
 //#include <string>
@@ -59,19 +60,15 @@ namespace session {
       ScopePath currentPath() const { return scopes_; }
       
       template<class MO>
-      void query()  const; ////////////////////////////////////////////////////////////////TODO obviously needs to return an Iterator
+      typename ContentsQuery<MO>::iterator
+      query()  const
+        {
+          ScopeLocator::instance().explore<MO> (*this);
+        }
     };
 ///////////////////////////TODO currently just fleshing the API
 
   
-  template<class MO>
-  void
-  QueryFocus::query()  const
-  {
-    UNIMPLEMENTED ("how the hell do we issue typed queries?????");  ///////////////////////TICKET #352
-    
-    ////////////yeah! we know now ---> ScopeLocator::explore(..)
-  }
   
   
 }} // namespace mobject::session

@@ -53,19 +53,23 @@ namespace session {
   
   class ScopeLocator
     {
-     scoped_ptr<QueryFocusStack> focusStack_;
-     shared_ptr<QueryResolver> index_;
+      scoped_ptr<QueryFocusStack> focusStack_;
+      shared_ptr<QueryResolver> index_;
       
     public:
-      ScopeLocator();
+      static lib::Singleton<ScopeLocator> instance;
       
       void
       activate (shared_ptr<QueryResolver> resolvingFacility);
       
       template<typename MO>
       typename ContentsQuery<MO>::iterator
-      explore (Scope const&);
+      explore (Scope);
       
+    protected:
+      ScopeLocator();
+      
+      friend class lib::singleton::StaticCreate<ScopeLocator>;
     };
 ///////////////////////////TODO currently just fleshing the API
   
@@ -75,7 +79,7 @@ namespace session {
    *  This is done by a link to a contents-query resolving facility,
    *  typically the PlacementIndex within the current session.  
    */
-  void
+  inline void
   ScopeLocator::activate (shared_ptr<QueryResolver> resolvingFacility)
   {
     index_ = resolvingFacility;
@@ -91,8 +95,8 @@ namespace session {
    *  to enumerate the contents of the given scope
    */
   template<typename MO>
-  typename ContentsQuery<MO>::iterator
-  ScopeLocator::explore (Scope const& scope)
+  inline typename ContentsQuery<MO>::iterator
+  ScopeLocator::explore (Scope scope)
   {
     REQUIRE (index_);
     return ContentsQuery<MO> (*index_, scope.getTop());

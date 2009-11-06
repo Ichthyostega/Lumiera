@@ -246,7 +246,7 @@ namespace session {
     public:
       virtual ~QueryResolver() ;
       
-      operator string ()     =0; ///< short characterisation of the actual facility
+      virtual operator string ()  const    =0; ///< short characterisation of the actual facility
       
       
       /** issue a query to retrieve contents

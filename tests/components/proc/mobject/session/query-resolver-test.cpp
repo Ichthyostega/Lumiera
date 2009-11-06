@@ -152,6 +152,8 @@ namespace test    {
             return new DummyResultSet<TY>(); 
           }
         
+        operator string()  const { return "Test-DummyQueryResolver"; }
+        
       public:
         DummyTypedSolutionProducer()
           : QueryResolver()

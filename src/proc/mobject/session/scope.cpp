@@ -22,6 +22,7 @@
 
 
 #include "proc/mobject/session/scope.hpp"
+#include "proc/mobject/session/scope-locator.hpp"
 #include "proc/mobject/session/query-focus-stack.hpp"
 #include "proc/mobject/mobject.hpp"
 //#include "proc/mobject/session/track.hpp"
@@ -68,6 +69,9 @@ namespace session {
   {
     
   }
+  
+  /** Storage holding the single ScopeLocator instance */
+  lib::Singleton<ScopeLocator> ScopeLocator::instance;
   
   
   
