@@ -48,14 +48,17 @@
 #include <vector>
 
 
-namespace mobject { ///////////////////////////////////////////TODO: shouldn't this go into namespace session ?
+namespace mobject {
+
+  class MObject;
+  
+namespace session {
   
   using lib::factory::RefcountFac;
   using std::tr1::shared_ptr;
   using boost::scoped_ptr;
   using std::vector;
   
-  class MObject;
   
   
   /**
@@ -205,5 +208,5 @@ namespace mobject { ///////////////////////////////////////////TODO: shouldn't t
   
   
   
-} // namespace mobject
+}} // namespace mobject::session
 #endif

@@ -25,7 +25,7 @@
 #include "lib/lumitime.hpp"
 #include "proc/mobject/placement.hpp"
 #include "proc/mobject/placement-ref.hpp"
-#include "proc/mobject/placement-index.hpp"
+#include "proc/mobject/session/placement-index.hpp"
 #include "proc/mobject/explicitplacement.hpp"
 #include "proc/mobject/test-dummy-mobject.hpp"
 #include "lib/util.hpp"

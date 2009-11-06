@@ -29,7 +29,7 @@
 //#include "proc/mobject/placement-ref.hpp"
 #include "proc/mobject/session/test-scopes.hpp"
 #include "proc/mobject/test-dummy-mobject.hpp"
-#include "proc/mobject/placement-index.hpp"
+#include "proc/mobject/session/placement-index.hpp"
 //#include "lib/util.hpp"
 
 #include <tr1/memory>

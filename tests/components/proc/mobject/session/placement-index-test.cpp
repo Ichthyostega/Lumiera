@@ -25,9 +25,9 @@
 //#include "proc/asset/media.hpp"
 //#include "proc/mobject/session.hpp"
 //#include "proc/mobject/session/edl.hpp"
+#include "proc/mobject/session/placement-index.hpp"
 #include "proc/mobject/session/testclip.hpp"
 #include "proc/mobject/placement.hpp"
-#include "proc/mobject/placement-index.hpp"
 //#include "proc/mobject/explicitplacement.hpp"
 //#include "lib/util.hpp"
 
@@ -42,6 +42,7 @@ using std::string;
 
 
 namespace mobject {
+namespace session {
 namespace test    {
       
   using asset::VIDEO;
@@ -96,4 +97,4 @@ namespace test    {
   LAUNCHER (PlacementIndex_test, "unit session");
       
       
-}} // namespace mobject::test
+}}} // namespace mobject::session::test

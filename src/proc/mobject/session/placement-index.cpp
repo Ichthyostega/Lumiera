@@ -33,13 +33,14 @@
  */
 
 
-#include "proc/mobject/placement-index.hpp"
+#include "proc/mobject/session/placement-index.hpp"
 #include "proc/mobject/session/session-impl.hpp"
 
 //#include <boost/format.hpp>
 //using boost::str;
 
 namespace mobject {
+namespace session {
 
 
   class PlacementIndex::Table 
@@ -204,4 +205,4 @@ namespace mobject {
   }
 
 
-} // namespace mobject
+}} // namespace mobject::session

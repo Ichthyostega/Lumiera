@@ -28,7 +28,7 @@
 #include "proc/mobject/mobject-ref.hpp"
 #include "proc/mobject/placement.hpp"
 #include "proc/mobject/placement-ref.hpp"
-#include "proc/mobject/placement-index.hpp"
+#include "proc/mobject/session/placement-index.hpp"
 #include "proc/mobject/session/clip.hpp"
 #include "proc/mobject/explicitplacement.hpp"
 #include "proc/mobject/test-dummy-mobject.hpp"
@@ -46,6 +46,8 @@ namespace test    {
   
   using lumiera::Time;
   using session::Clip;
+  
+  using session::reset_PlacementIndex;
 
   
   /***************************************************************************

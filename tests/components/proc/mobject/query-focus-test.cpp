@@ -25,7 +25,7 @@
 //#include "lib/lumitime.hpp"
 //#include "proc/mobject/placement-ref.hpp"
 #include "proc/mobject/session/test-scopes.hpp"
-#include "proc/mobject/placement-index.hpp"
+#include "proc/mobject/session/placement-index.hpp"
 #include "proc/mobject/session/query-focus.hpp"
 #include "proc/mobject/session/scope.hpp"
 //#include "lib/util.hpp"

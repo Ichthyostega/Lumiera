@@ -60,12 +60,13 @@ namespace mobject {
   
   class MObject;
   
-  // see placement-index.cpp 
-  Placement<MObject> &
-  fetch_PlacementIndex(Placement<MObject>::ID const&) ;
-  
-  bool
-  checkContains_PlacementIndex (Placement<MObject>::ID const& pID) ;
+  namespace session {
+    
+    // see placement-index.cpp 
+    Placement<MObject> & fetch_PlacementIndex(Placement<MObject>::ID const&) ;
+    bool checkContains_PlacementIndex (Placement<MObject>::ID const& pID) ;
+    
+  }
   
   
   LUMIERA_ERROR_DECLARE (INVALID_PLACEMENTREF);  ///< unresolvable placement reference, or of incompatible type
@@ -205,7 +206,7 @@ namespace mobject {
       bool
       checkValidity ()  const
         {
-          return checkContains_PlacementIndex(this->id_);
+          return session::checkContains_PlacementIndex(this->id_);
         }
       
       static void
@@ -235,7 +236,7 @@ namespace mobject {
       static PlacementMO&
       access (_Id const& placementID)
         {
-          Placement<MObject> & pla (fetch_PlacementIndex (placementID));  // may throw
+          Placement<MObject> & pla (session::fetch_PlacementIndex (placementID));  // may throw
           REQUIRE (pla.isValid());
           ASSERT (pla.isCompatible<MO>());
           return static_cast<PlacementMO&> (pla);

@@ -39,7 +39,7 @@
 #include "proc/mobject/session.hpp"
 #include "proc/mobject/session/edl.hpp"
 #include "proc/mobject/session/fixture.hpp"
-#include "proc/mobject/placement-index.hpp"
+#include "proc/mobject/session/placement-index.hpp"
 
 #include <boost/scoped_ptr.hpp>
 #include <vector>
