@@ -99,5 +99,9 @@ PLANNED "SessionManager_test" SessionManager_test <<END
 END
 
 
+PLANNED "Accessing implementation level services" SessionServiceAccess_test <<END
+END
+
+
 PLANNED "SessionStructure_test" SessionStructure_test <<END
 END
