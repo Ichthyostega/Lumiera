@@ -6,7 +6,7 @@ PLANNED "AddClip_test" AddClip_test <<END
 END
 
 
-PLANNED "discovering contents" ContentsQuery_test <<END
+PLANNED "discovering scopes" ScopeQuery_test <<END
 END
 
 

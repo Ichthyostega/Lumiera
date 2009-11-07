@@ -27,7 +27,7 @@
 //#include "proc/mobject/mobject.hpp"
 #include "proc/mobject/session/scope.hpp"
 #include "proc/mobject/placement.hpp"
-#include "proc/mobject/session/contents-query.hpp"
+#include "proc/mobject/session/scope-query.hpp"
 #include "lib/singleton.hpp"
 #include "lib/util.hpp"
 

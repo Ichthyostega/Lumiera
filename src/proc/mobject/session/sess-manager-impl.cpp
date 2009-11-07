@@ -115,7 +115,7 @@ namespace session {
     scoped_ptr<SessionImpl> tmpS (new SessionImpl (*tmpD));
     
     TODO ("reset the assets registered with AssetManager");
-    // Ichthyo-intern: ticket #95
+    /////////////////////////////////////////////////////////////////// TICKET #154
     
     TODO ("thread lock");
     pDefs_.swap (tmpD);

@@ -27,6 +27,7 @@
 
 #include "proc/mobject/placement.hpp"
 #include "proc/mobject/session/query-resolver.hpp"
+#include "lib/symbol.hpp"
 
 #include <tr1/functional>
 
@@ -34,6 +35,7 @@
 namespace mobject {
 namespace session {
   
+  using lib::Literal;
   using std::tr1::bind;
   using std::tr1::function;
   using std::tr1::placeholders::_1;
@@ -41,10 +43,10 @@ namespace session {
   
   
   /**
-   * Query a scope to discover it's contents.
-   * This is a special kind of query, wired up such as to
-   * enumerate the contents of a scope, filtered by a subtype-check.
-   * For the actual resolution of the scope's contents, this query
+   * Query a scope to discover it's contents or location.
+   * This is a special kind of query, wired up such as to enumerate
+   * the contents or parents of a scope, filtered by a subtype-check.
+   * For the actual resolution of the elements to discover, this query
    * relies on an index like facility (usually Session's PlacementIndex),
    * which is abstracted as a QueryResolver, but actually is expected to
    * cooperate especially with this Query subclass to retrieve the scope
@@ -66,14 +68,15 @@ namespace session {
    * defined to be non-copyable)
    */
   template<class MO>
-  class ContentsQuery
+  class ScopeQuery
     : public Query<Placement<MO> >
     , public Query<Placement<MO> >::iterator
     {
       typedef Query<Placement<MO> > _Query;
       
-      QueryResolver const&  index_;
-      PlacementMO const& container_;
+      QueryResolver const&    index_;
+      PlacementMO const& startPoint_;
+      Literal what_to_discover_;
       
       
       typedef typename _Query::iterator _QIter;
@@ -85,12 +88,14 @@ namespace session {
       typedef function<bool(Val)> ContentFilter;
       
       
-      ContentsQuery (QueryResolver const& resolver,
-                     PlacementMO  const& scope)
+      ScopeQuery (QueryResolver const& resolver,
+                  PlacementMO  const& scope,
+                  Literal direction)
         : _Query (_Query::defineQueryTypeID (Goal::DISCOVERY))
         , _QIter ()
         , index_(resolver)
-        , container_(scope)
+        , startPoint_(scope)
+        , what_to_discover_(direction)
         {
           resetResultIteration (_Query::resolveBy(index_));
         }
@@ -106,7 +111,13 @@ namespace session {
       PlacementMO const&
       searchScope ()  const
         {
-          return container_;
+          return startPoint_;
+        }
+      
+      Literal
+      searchDirection ()  const
+        {
+          return what_to_discover_;
         }
       
       ContentFilter
@@ -135,6 +146,30 @@ namespace session {
         {
           static_cast<iterator&> (*this) = newQueryResults;
         }
+    };
+  
+  
+  template<class MO>
+  struct ContentsQuery
+    : ScopeQuery<MO>
+    {
+      ContentsQuery (QueryResolver const& resolver,
+                     PlacementMO  const& scope)
+        : ScopeQuery<MO> (resolver,scope, "content")
+        { }
+      
+    };
+  
+  
+  template<class MO>
+  struct PathQuery
+    : ScopeQuery<MO>
+    {
+      PathQuery (QueryResolver const& resolver,
+                 PlacementMO  const& scope)
+        : ScopeQuery<MO> (resolver,scope, "parents")
+        { }
+      
     };
   
   

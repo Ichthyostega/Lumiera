@@ -23,7 +23,7 @@
 
 #include "lib/test/run.hpp"
 #include "proc/mobject/session/query-resolver.hpp"
-#include "proc/mobject/session/contents-query.hpp"
+#include "proc/mobject/session/scope-query.hpp"
 #include "proc/mobject/session/test-scopes.hpp"
 //#include "lib/util.hpp"
 
@@ -36,49 +36,55 @@ namespace mobject {
 namespace session {
 namespace test    {
   
-  using session::ContentsQuery;
+  using ContentsQuery;
   using std::string;
   using std::cout;
   using std::endl;
   
   
-  /***************************************************************************************
-   * @test how to discover the contents of a container-like part of the high-level model.
-   *       As this container-like object is just a concept and actually implemented
-   *       by the PlacementIndex, this includes enumerating a scope. The discovered
-   *       contents will be filtered by a runtime type check.
+  /**********************************************************************************************
+   * @test how to discover contents or location of a container-like part of the high-level model.
+   *       As this container-like object is just a concept and actually implemented by the
+   *       PlacementIndex, this means querying the index for elements registered with
+   *       a given scope or finding the enclosing scopes. The discovered
+   *       elements will be filtered by a runtime type check.
    *       
    * @todo cover using an additional dynamic filter on the results
    *       
-   * @see  mobject::PlacementIndex
+   * @see  mobject::session::PlacementIndex
    * @see  mobject::session::QueryResolver
    * @see  mobject::session::ContentsQuery
    */
-  class ContentsQuery_test : public Test
+  class ScopeQuery_test : public Test
     {
       
       virtual void
       run (Arg) 
         {
-          
-          // Prepare an (test)Index backing the PlacementRefs
+          // Prepare an (test)Index (dummy "session")
           PPIdx index = build_testScopes();
-          PlacementMO scope (index->getRoot());
+          PlacementMO& scope (index->getRoot());
           QueryResolver const& resolver (*index);
           
-          discover (ContentsQuery<MObject>    (resolver,scope));
-          discover (ContentsQuery<DummyMO>    (resolver,scope));
-          discover (ContentsQuery<TestSubMO1> (resolver,scope));
-          discover (ContentsQuery<TestSubMO2> (resolver,scope));
-          discover (ContentsQuery<TestSubMO21>(resolver,scope));
+          discover (ScopeQuery<MObject>    (resolver,scope, "contents"));
+          discover (ScopeQuery<DummyMO>    (resolver,scope, "contents"));
+          discover (ScopeQuery<TestSubMO1> (resolver,scope, "contents"));
+          discover (ScopeQuery<TestSubMO2> (resolver,scope, "contents"));
+          
+          ScopeQuery<TestSubMO21> specialEl(resolver,scope, "contents");
+          
+          discover (specialEl);
+          discover (ScopeQuery<MObject>    (resolver,specialEL, "parents"));
+          discover (ScopeQuery<MObject>    (resolver,specialEL, "path"));
+          discover (ScopeQuery<TestSubMO2> (resolver,specialEL, "path"));
         }
       
       
       template<class MO>
       void
-      discover (ContentsQuery<MO> const& query)
+      discover (ScopeQuery<MO> const& query)
         {
-          typedef typename ContentsQuery<MO>::iterator I;
+          typedef typename ScopeQuery<MO>::iterator I;
           
           for (I elm(query);
                elm; ++elm)
@@ -89,7 +95,7 @@ namespace test    {
   
   
   /** Register this test class... */
-  LAUNCHER (ContentsQuery_test, "unit session");
+  LAUNCHER (ScopeQuery_test, "unit session");
   
   
 }}} // namespace mobject::session::test
