@@ -3911,8 +3911,8 @@ Later on we expect a distinct __query subsystem__ to emerge, presumably embeddin
 <div title="STypeManager" modifier="Ichthyostega" created="200809220230" changecount="1">
 <pre>A facility allowing the Proc-Layer to work with abstracted [[media stream types|StreamType]], linking (abstract or opaque) [[type tags|StreamTypeDescriptor]] to an [[library|MediaImplLib]], which provides functionality for acutally dealing with data of this media stream type. Thus, the stream type manager is a kind of registry of all the external libraries which can be bridged and accessed by Lumiera (for working with media data, that is). The most basic set of libraries is instelled here automatically at application start, most notably the [[GAVL]] library for working with uncompressed video and audio data. //Later on, when plugins will introduce further external libraries, these need to be registered here too.//</pre>
 </div>
-<div title="Session" modifier="Ichthyostega" modified="200910231542" created="200712100525" tags="def SessionLogic" changecount="5">
-<pre>The Session contains all informations, state and objects to be edited by the User. From a users view, the Session is synonymous to the //current Project//. It can be saved and loaded. The individual Objects within the Session, i.e. Clips, Media, Effects, are contained in one (or several) collections within the Session, which we call [[EDL (Edit Decision List)|EDL]]. &amp;rarr; [[Session design overview|SessionOverview]]
+<div title="Session" modifier="Ichthyostega" modified="200911070313" created="200712100525" tags="def SessionLogic" changecount="6">
+<pre>The Session contains all informations, state and objects to be edited by the User. From a users view, the Session is synonymous to the //current Project//. It can be [[saved and loaded|SessionLifecycle]]. The individual Objects within the Session, i.e. Clips, Media, Effects, are contained in one (or several) collections within the Session, which we call [[EDL (Edit Decision List)|EDL]]. &amp;rarr; [[Session design overview|SessionOverview]]
 
 !Session structure
 The Session object is a singleton &amp;mdash; actually it is a »~PImpl«-Facade object (because the actual implementation object can be swapped for (re)loading Sessions).&lt;br/&gt;The Session is the access point to the HighLevelModel; it is comprised of
@@ -3948,9 +3948,28 @@ Currently as of 5/09, this is an ongoing [[implementation and planning effort|Pl
 
 {{red{WIP ... just emerging}}}</pre>
 </div>
-<div title="SessionLogic" modifier="Ichthyostega" modified="200906072005" created="200904242110" tags="overview" changecount="13">
+<div title="SessionLifecycle" modifier="Ichthyostega" modified="200911070400" created="200911070329" tags="SessionLogic spec" changecount="7">
+<pre>The current [[Session]] is the root of any state found within Proc-Layer. Thus, events defining the session's lifecycle influence and synchronise the cooperative behaviour of the entities within the model, the ProcDispatcher, [[Fixture]] and any facility below.
+* when ''starting'', by default an empty session is created, which puts any related facility into a defined initial state.
+* when ''closing'' the session, any dependent facilities are disabled, disconnected, halted or closed
+* ''loading'' an existing session &amp;mdash; after closing the previous session &amp;mdash; sets up an empty (default) session an populates it with de-serialised content.
+* when encountering a ''mutation point'', [[command processing|ProcDispatcher]] is temporarily halted to trigger off an BuildProcess.
+
+!Role of the session manager
+The session manager is responsible for conducting the session lifecycle. Accessible through the static interface {{{Session::current}}}, it exposes the actual session as a ~PImpl. Both session manager and session are indeed interfaces, backed by implementation classes belonging to ~Proc-Layer's internals. Loading, saving, resetting and closing are the primary public operations of the session manager, each causing the respective lifecycle event.
+
+!Synchronising access to session's implementation facilities
+Some other parts and subsystems within the ~Proc-Layer need specialised access to implementation facilities within the session. Informations about some conditions and configurations might be retrieved through [[querrying the session|Query]], and especially default configurations for many objects are [[bound to the session|DefaultsImplementation]]. The [[discovery of session contents|SessionStructureQuery]] relies on an [[index facility|PlacementIndex]] embedded within the session implementation. Moreover, some &quot;properties&quot; of the [[media objects|MObject]] are actually due to the respective object being [[placed|Placement]] in some way into the session; consequently, there might be an dependency on the actual [[location as visible to the placement|PlacementScope]], which in turn is constituted by [[querying the index|QueryFocus]].
+
+Each of these facilities relies on a separate access point to session services, corresponding to distinct service interfaces. But &amp;mdash; on the implementation side &amp;mdash; all these services are provided by a (compound) implementation object. This approach allows to switch the actual implementation of all these services instantaneous by swapping the ~PImpl maintained by the session manager.
+
+!Interface and lifecycle hooks
+{{red{draft as of 11/09}}}
+</pre>
+</div>
+<div title="SessionLogic" modifier="Ichthyostega" modified="200911070310" created="200904242110" tags="overview" changecount="14">
 <pre>The Session contains all informations, state and objects to be edited by the User (&amp;rarr;[[def|Session]]).
-As such, the SessionInterface is the main entrance point to Proc-Layer functionality, both for the primary EditingOperations and for playback/rendering processes.
+As such, the SessionInterface is the main entrance point to Proc-Layer functionality, both for the primary EditingOperations and for playback/rendering processes. Proc-Layer state is rooted within the session and guided by the [[session's lifecycle events|SessionLifecycle]].
 
 Currently (as of 5/09), Ichthyo is [[targeting|PlanningSessionInMem]] a first preliminary implementation of the [[Session in Memory|SessionDataMem]]
 
@@ -3958,15 +3977,16 @@ Currently (as of 5/09), Ichthyo is [[targeting|PlanningSessionInMem]] a first pr
 Objects are attached and manipulated by [[placements|Placement]]; thus the organisation of these placements is part of the session data layout. Effectively, such a placement within the session behaves like an //instances// of a given object, and at the same time it defines the &quot;non-substantial&quot; properties of the object, e.g. its positions and relations. [[References|MObjectRef]] to these placement entries are handed out as parameters, both down to the [[Builder]] and from there to the render processes within the engine, but also to external parts within the GUI and in plugins. The actual implementation of these object references is built on top of the PlacementRef tags, thus relying on the PlacementIndex the session maintains to keep track of all placements and their relations. While &amp;mdash; using these references &amp;mdash; an external client can access the objects and structures within the session, any actual ''mutations'' should be done based on the CommandHandling: a single operation of a sequence of operations is defined as [[Command]], to be [[dispatched as mutation operation|ProcDispatcher]]. Following this policy ensures integration with the&amp;nbsp;SessionStorage and provides (unlimited) [[UNDO|UndoManager]].
 </pre>
 </div>
-<div title="SessionOverview" modifier="Ichthyostega" modified="200811011805" created="200709272105" tags="design img" changecount="29">
+<div title="SessionOverview" modifier="Ichthyostega" modified="200911070318" created="200709272105" tags="design img" changecount="30">
 <pre>&lt;&lt;&lt;
 {{red{WARNING: Naming is currently being discussed (11/08)}}}
 * [[EDL]] probably will be called ''Sequence'' (or maybe ''Arrangement'')
 * [[Session]] maybe renamed to ''Project''
 * there seems to be a new entity called [[Timeline]] which holds the global Pipes
 &lt;&lt;&lt;
-The [[Session]] (sometimes also called //Project// ) contains all informations and objects to be edited by the User. It can be saved and loaded. The individual Objects within the Session, i.e. Clips, Media, Effects, are contained in one (or several) collections within the Session, which we call [[EDL (Edit Decision List)|EDL]]. Moreover, the sesion contains references to all the Media files used, and it contains various default or user defined configuration, all being represented as [[Asset]]. At any given time, there is //only one current session// opened within the application.
-The Session is close to what is visible in the GUI. From a user's perspective, you'll find a [[Timeline]]-like structure, containing an [[EDL (or Sequence)|EDL]], where various Media Objects are arranged and placed. The available building blocks and the rules how they can be combined together form Lumiera's [[high-level data model|HighLevelModel]]. Basically, besides the [[media objects|MObjects]] there are data connections and all processing is organized around processing chains or [[pipes|Pipe]], which can be either global (in the Session) or local (in real or virtual clips)
+The [[Session]] (sometimes also called //Project// ) contains all informations and objects to be edited by the User. Any state within the Proc-Layer is directly or indirectly rooted in the session. It can be saved and loaded. The individual Objects within the Session, i.e. Clips, Media, Effects, are contained in one or multiple collections within the Session, which we call [[Sequence(s)|EDL]]. Moreover, the sesion contains references to all the Media files used, and it contains various default or user defined configuration, all being represented as [[Asset]]. At any given time, there is //only one current session// opened within the application. The [[lifecycle events|SessionLifecycle]] of the session define the lifecycle of ~Proc-Layer as a whole.
+
+The Session is close to what is visible in the GUI. From a user's perspective, you'll find a [[Timeline]]-like structure, containing an [[Sequence|EDL]], where various Media Objects are arranged and placed. The available building blocks and the rules how they can be combined together form Lumiera's [[high-level data model|HighLevelModel]]. Basically, besides the [[media objects|MObjects]] there are data connections and all processing is organized around processing chains or [[pipes|Pipe]], which can be either global (in the Session) or local (in real or virtual clips).
 
 !!!larger projects
 For larger editing projects the simple structure of a session containing &quot;the&quot; timeline is not sufficient. Rather
