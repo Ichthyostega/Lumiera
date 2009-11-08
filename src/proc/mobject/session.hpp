@@ -80,7 +80,7 @@ namespace mobject {
     {
     protected:
       Session (session::DefsManager&)  throw();
-      virtual ~Session () = 0;
+      virtual ~Session ();
 
     public:
       static session::SessManager& current;
@@ -128,13 +128,13 @@ namespace mobject {
         /** replace the current session by a new
          *  session loaded from serialised state.
          */
-        virtual void load () =0;
+        virtual void load ()  =0;
 
         /** create a complete, serialised representation
          *  of the current session config and contents.
          *  @todo how to serialise, parameters, return value?
          */
-        virtual void save () =0;
+        virtual void save ()  =0;
         
         /** access to the current session object instance.
          *  This is the sole access path available for clients.
@@ -142,7 +142,7 @@ namespace mobject {
          */
         virtual Session* operator-> ()  throw() =0;
         
-        virtual ~SessManager() {};
+        virtual ~SessManager();
       };
 
       

@@ -92,12 +92,13 @@ namespace mobject {
   
   
   
-  Session::~Session () 
-  { }
-  
   Session::Session (session::DefsManager& def)  throw()
     : defaults(def)
   { }
+  
+  // Emit the vtables and other magic stuff here...
+  SessManager::~SessManager() { }
+  Session::~Session () { }
 
 
 
