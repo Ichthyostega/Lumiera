@@ -1,5 +1,5 @@
 /*
-  ContentsQuery(Test)  -  running queries to discover container contents, filtering (sub)types 
+  ScopeQuery(Test)  -  running queries to discover container contents, filtering (sub)types 
  
   Copyright (C)         Lumiera.org
     2009,               Hermann Vosseler <Ichthyostega@web.de>
@@ -36,7 +36,7 @@ namespace mobject {
 namespace session {
 namespace test    {
   
-  using ContentsQuery;
+  using session::ContentsQuery;
   using std::string;
   using std::cout;
   using std::endl;
@@ -73,10 +73,10 @@ namespace test    {
           
           ScopeQuery<TestSubMO21> specialEl(resolver,scope, "contents");
           
+          discover (ScopeQuery<MObject>    (resolver,*specialEl, "parents"));
+          discover (ScopeQuery<MObject>    (resolver,*specialEl, "path"));
+          discover (ScopeQuery<TestSubMO2> (resolver,*specialEl, "path"));
           discover (specialEl);
-          discover (ScopeQuery<MObject>    (resolver,specialEL, "parents"));
-          discover (ScopeQuery<MObject>    (resolver,specialEL, "path"));
-          discover (ScopeQuery<TestSubMO2> (resolver,specialEL, "path"));
         }
       
       

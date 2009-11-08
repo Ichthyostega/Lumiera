@@ -23,9 +23,22 @@
 
 /** @file session.hpp
  ** Primary Interface to the current Session.
+ ** The session interface can be used to discover session's contents.
+ ** Mostly, these objects within the session are MObject subclasses, but they
+ ** are attached into the session by a Placement. Usually, you'd want to use
+ ** the discovered objects to invoke operations on them; in most cases,
+ ** invoking any mutating operation should be wrapped into a Command.
+ ** 
  ** The Interface Session is abstract and only accessible via the
  ** static field Session::current, which actually refers to a SessManager 
- ** singleton instance. The latter acts as smart ptr-to-Impl.
+ ** singleton instance. The latter acts as smart ptr-to-Impl for accessing the
+ ** current session, but at the same time exposes a lifecycle/management API.
+ ** 
+ ** @note if interested in the interplay of Session, SessManager and the
+ **       internal service APIs (SessionServices), you should have a look
+ **       at session-service-access-test.cpp, as this test creates a complete
+ **       but simplified mock setup of the session and session manager, without
+ **       any access and synchronisation and similar concerns, to read top down.
  **
  */
 

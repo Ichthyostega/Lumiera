@@ -21,8 +21,8 @@
 */
 
 
-#ifndef MOBJECT_SESSION_CONTENTS_QUERY_H
-#define MOBJECT_SESSION_CONTENTS_QUERY_H
+#ifndef MOBJECT_SESSION_SCOPE_QUERY_H
+#define MOBJECT_SESSION_SCOPE_QUERY_H
 
 
 #include "proc/mobject/placement.hpp"

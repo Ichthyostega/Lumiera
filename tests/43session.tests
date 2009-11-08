@@ -99,7 +99,7 @@ PLANNED "SessionManager_test" SessionManager_test <<END
 END
 
 
-PLANNED "Accessing implementation level services" SessionServiceAccess_test <<END
+PLANNED "Accessing session APIs" SessionServiceAccess_test <<END
 END
 
 

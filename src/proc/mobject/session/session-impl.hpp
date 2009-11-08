@@ -29,6 +29,8 @@
  **
  ** This file contains the implementation classes, it should never
  ** be included by client code.
+ ** 
+ ** @see session-service-access-test.cpp for a complete simplified mock session manager 
  **
  */
 

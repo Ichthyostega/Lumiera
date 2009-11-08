@@ -25,13 +25,20 @@
 #include "proc/mobject/session.hpp"
 //#include "proc/mobject/session/testsession1.hpp"
 #include "proc/mobject/session/session-services.hpp"
+#include "lib/singleton.hpp"
 //#include "lib/util.hpp"
 //#include <boost/format.hpp>
-//#include <iostream>
+#include <boost/lexical_cast.hpp>
+#include <iostream>
+#include <string>
 
 //using boost::format;
-//using std::string;
-//using std::cout;
+  using lib::Singleton;
+  using boost::lexical_cast;
+  using std::ostream;
+  using std::string;
+  using std::cout;
+  using std::endl;
 
 
 namespace mobject {
@@ -39,36 +46,164 @@ namespace session {
 namespace test    {
   
   
+  namespace { // what follows is a simulated (simplified) version
+             //  of the complete Session + SessionManager setup.....
+    
+    
+    /* === Interface level === */
+    
+    struct TSessManager;
+    typedef TSessManager& PSess;
+    
+    struct TSession
+      {
+        virtual ~TSession () { }
+        static TSessManager& current;
+        
+        virtual void externalOperation ()    =0;
+      };
+    
+    struct TSessManager
+      {
+        /** access to the current session */
+        virtual TSession* operator-> ()      =0;
+        
+        virtual void reset ()                =0;
+        virtual ~TSessManager() { };
+      };
+    
+    
+    /* === Implementation level === */
+    
+    struct TSessionImpl : TSession
+      {
+        static uint magic_;
+        
+        /* ==== Session API ==== */
+        void externalOperation() ;
+        
+        /* ==== Implementation level API ==== */
+        void implementationService() ;
+        
+        /* ==== internals ==== */
+        TSessionImpl()
+          {
+            ++magic_;
+            cout << "creating new Session " << magic_ << endl;
+          }
+        
+        operator string() const
+          {
+            return string("Session-Impl(")
+                 + lexical_cast<string>(magic_)
+                 + ")"; 
+          }
+      };
+    
+    inline ostream&
+    operator<< (ostream& os, TSessionImpl const& simpl)
+      {
+        return os << string(simpl);
+      }
+    
+    void
+    TSessionImpl::externalOperation()
+      {
+        cout << *this << "::externalOperation()" << endl;
+      }
+    
+    /* ==== Implementation level API ==== */
+    void
+    TSessionImpl::implementationService()
+      {
+        cout << *this << "::implementationService()" << endl;
+      }
+    
+    
+    
+    struct TSessManagerImpl : TSessManager
+      {
+        scoped_ptr<TSessionImpl> pImpl_;
+        
+        TSessManagerImpl()
+          : pImpl_(0)
+          { }
+        
+        TSessionImpl*
+        operator-> ()
+          {
+            if (!pImpl_)
+              this->reset();
+            return pImpl_.get();
+          }
+        
+        
+        /* ==== Manager API ==== */
+        void
+        reset ()
+          {
+            scoped_ptr<TSessionImpl> tmpS (new TSessionImpl);
+            pImpl_.swap (tmpS);
+          }
+      };
+    
+    
+    /* === storage and basic configuration === */
+    
+    uint TSessionImpl::magic_;
+    
+    TSessManager& TSession::current = Singleton<TSessManagerImpl>()();
+                                    //note: comes up already during static initialisation
+    
+    
+  } // (END) simulated session management
+  
+  
+  
+  
+  
   /*******************************************************************************
    * Verify the access mechanism used by Proc-Layer internals for 
    * accessing implementation level APIs of the session.
    * 
-   * @todo WIP-WIP
+   * Actually, this test uses setup of the real session,
+   * complete with interfaces, implementation and a
+   * session manager frontend.
+   *
+   * @see session-impl.hpp the real thing
+   * @see SessionServices; 
    */
   class SessionServiceAccess_test : public Test
     {
       virtual void
-      run (Arg arg) 
+      run (Arg) 
         {
-//          getCurrentSession ();
-//          clearSession();
-//          loadMockSession();
-//          
-//          clearSession();
-//          buildTestsession1();
-//          string serialized;
-//          saveSession (serialized);
-//          loadSession (serialized);
-//          ASSERT (checkTestsession1());
+          access_defaultSession();
+          make_newSession();
+          invoke_implService();
         } 
       
       
-      /** @test accessing the current (global) session */
       void
-      getCurrentSession ()
+      access_defaultSession ()
         {
-//          PSess sess = Session::current;
-//          ASSERT (sess->isValid());
+          cout << "Session not yet used...." << endl;
+          TSession::current->externalOperation();
+        }
+      
+      
+      void
+      make_newSession ()
+        {
+          TSession::current.reset();
+          TSession::current->externalOperation();
+        }
+      
+      
+      void
+      invoke_implService ()
+        {
+          ///////////////////////////////TODO
         }
       
       
