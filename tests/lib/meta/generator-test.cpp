@@ -56,7 +56,7 @@ namespace test {
       struct Block
         {
           static string name;
-          string talk()   { return name+"::eat(..)"; }  
+          string talk()   { return "__"+name+"__"; }  
         };
       
       
@@ -85,7 +85,7 @@ namespace test {
           DoIt ()         { cout << "ctor DoIt<"<< X::name << " >\n";}
           virtual ~DoIt() { cout << "dtor DoIt<"<< X::name << " >\n";}
         public:
-          void eat (X& x) { cout << x.talk() << "\n";}
+          void eat (X& x) { cout << "devouring" << x.talk() << "\n";}
           using BASE::eat; // prevent shadowing
         };
       

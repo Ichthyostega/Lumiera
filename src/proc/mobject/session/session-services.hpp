@@ -33,6 +33,7 @@
 #define MOBJECT_SESSION_SESSION_SERVICES_H
 
 #include "proc/mobject/session.hpp"
+#include "lib/meta/generator.hpp"
 
 //#include <boost/scoped_ptr.hpp>
 //#include <vector>
@@ -46,8 +47,32 @@ namespace session {
 //using std::vector;
 //using boost::scoped_ptr;
 //using std::tr1::shared_ptr;
-
+  using lumiera::typelist::InstantiateChained;
+  using lumiera::typelist::InheritFrom;
+  using lumiera::typelist::NullType;
   
+  
+  
+  template<class API, class IMPL>
+  struct ServiceAccessPoint;
+  
+  
+  /**
+   * Collection of configured implementation-level services
+   * to provide by the Session. An instance of this template
+   * is created on top of SessionImpl, configured such as
+   * to inherit from all the concrete services to be
+   * exposed for use by Proc-Lyer's internals. 
+   */
+  template< typename IMPS
+          , class FRONT
+          , class BA =NullType
+          >
+  class SessionServicesX
+    : public InstantiateChained<typename IMPS::List, ServiceAccessPoint, BA>
+    {
+      static FRONT& entrance_;
+    };
   
   
   
