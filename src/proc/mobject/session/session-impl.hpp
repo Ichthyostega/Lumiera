@@ -89,6 +89,7 @@ namespace session {
   /**
    * Session manager implementation class holding the
    * actual smart pointer to the current Session impl.
+   * @todo couldn't this be pushed down into session.cpp?
    */
   class SessManagerImpl : public SessManager
     {

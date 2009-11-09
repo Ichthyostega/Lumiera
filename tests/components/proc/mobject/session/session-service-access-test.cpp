@@ -23,39 +23,34 @@
 
 #include "lib/test/run.hpp"
 #include "proc/mobject/session.hpp"
-//#include "proc/mobject/session/testsession1.hpp"
-#include "proc/mobject/session/session-services.hpp"
+#include "lib/meta/generator.hpp"
 #include "lib/singleton.hpp"
-//#include "lib/util.hpp"
-//#include <boost/format.hpp>
 #include <boost/lexical_cast.hpp>
 #include <iostream>
 #include <string>
-
-//using boost::format;
-  using lib::Singleton;
-  using boost::lexical_cast;
-  using std::ostream;
-  using std::string;
-  using std::cout;
-  using std::endl;
 
 
 namespace mobject {
 namespace session {
 namespace test    {
   
+  using lib::Singleton;
+  using boost::lexical_cast;
+  using std::ostream;
+  using std::string;
+  using std::cout;
+  using std::endl;
+  
   
   namespace { // what follows is a simulated (simplified) version
              //  of the complete Session + SessionManager setup.....
   
-//    using boost::noncopyable;
-//    using session::SessionServices;
     using lumiera::typelist::Types;
+    using lumiera::typelist::InstantiateChained;
     
     
     
-    /* === Interface level === */
+    /* === Interface level === */                              //----------------corresponding-to-session.hpp
     
     struct TSessManager;
     typedef TSessManager& PSess;
@@ -78,7 +73,9 @@ namespace test    {
       };
     
     
-    /* === Service level API === */
+    
+    
+    /* === Service level API === */                            //----------------internal-API-definition-headers
     
     struct InternalAPI_1
       {
@@ -95,7 +92,7 @@ namespace test    {
     
     
     
-    /* === Implementation level === */
+    /* === Implementation level === */                         //----------------corresponding-to-session-impl.hpp
     
     struct TSessionImpl : TSession
       {
@@ -116,10 +113,10 @@ namespace test    {
     
     
     template<class API, class IMPL>
-    struct ServiceAccessPoint;
+    struct TServiceAccessPoint;
     
     template<class IMPL>
-    struct ServiceAccessPoint<InternalAPI_1, IMPL>
+    struct TServiceAccessPoint<InternalAPI_1, IMPL>
       : IMPL
       , InternalAPI_1
       {
@@ -131,7 +128,7 @@ namespace test    {
       };
     
     template<class IMPL>
-    struct ServiceAccessPoint<InternalAPI_2, IMPL>
+    struct TServiceAccessPoint<InternalAPI_2, IMPL>
       : IMPL
       {
         void
@@ -145,8 +142,8 @@ namespace test    {
             , class FRONT
             , class SESS
             >
-    class SessionServices
-      : public InstantiateChained<typename IMPS::List, ServiceAccessPoint, SESS>
+    class TSessionServices
+      : public InstantiateChained<typename IMPS::List, TServiceAccessPoint, SESS>
       {
       public:
         
@@ -159,16 +156,19 @@ namespace test    {
             return *this;
           }
       };
-      
-      
-    /* === storage and basic configuration === */
+    
+    
+    
+    
+    
+    /* === storage and basic session manager configuration === */
     
     struct TSessManagerImpl;
     
-    typedef SessionServices< Types<InternalAPI_1,InternalAPI_2>
-                           , TSessManagerImpl
-                           , TSessionImpl
-                           > SessionImplAPI;
+    typedef TSessionServices< Types<InternalAPI_1,InternalAPI_2>
+                            , TSessManagerImpl
+                            , TSessionImpl
+                            > SessionImplAPI;
     
     
     
@@ -203,13 +203,18 @@ namespace test    {
     
     TSessManager& TSession::current = Singleton<TSessManagerImpl>()();
                                      //note: already during static initialisation
-
+    
     template<>
     TSessManagerImpl& SessionImplAPI::current = static_cast<TSessManagerImpl&> (TSession::current);
     
-      
-      
-    /* === Implementation of service access === */
+    
+    
+    
+    
+    
+    
+    
+    /* === Implementation of service access === */             //----------------corresponding-to-session-services.cpp
     
     InternalAPI_1&
     InternalAPI_1::access()
@@ -224,9 +229,10 @@ namespace test    {
     }
     
     
-
     
-    /* === Implementation of Session internals === */
+    
+    
+    /* === Implementation of Session internals === */          //----------------corresponding-to-session-impl.cpp
       
     inline ostream&
     operator<< (ostream& os, TSessionImpl const& simpl)
@@ -267,14 +273,18 @@ namespace test    {
   
   
   
+  
+  
+  
+  
+  
   /*******************************************************************************
-   * Verify the access mechanism used by Proc-Layer internals for 
-   * accessing implementation level APIs of the session.
+   * Verify the access mechanism both to the pubic session API and
+   * to implementation level APIs used by Proc-Layer internals.
    * 
-   * Actually, this test uses setup of the real session,
-   * complete with interfaces, implementation and a
-   * session manager frontend.
-   *
+   * Actually, this test uses a simulated setup of the real session,
+   * complete with interfaces, implementation and session manager frontend.
+   * 
    * @see session-impl.hpp the real thing
    * @see SessionServices; 
    */
@@ -289,6 +299,10 @@ namespace test    {
         } 
       
       
+      /** @test accessing an non-existing session
+       *        causes creation of a new TSessionImpl instance.
+       *        After that, the public API function gets invoked. 
+       */
       void
       access_defaultSession ()
         {
@@ -297,6 +311,10 @@ namespace test    {
         }
       
       
+      /** @test invoking the management API to close the session.
+       *        The next public API invocation will create
+       *        a new TSessionImpl instance. 
+       */
       void
       make_newSession ()
         {
@@ -305,17 +323,23 @@ namespace test    {
         }
       
       
+      /** example of an one-liner, as it might be used
+       *  internally by implementation code within Proc-Layer */
+      uint magic() { return InternalAPI_1::access().getMagic(); }
+      
+      /** @test accessing implementation-level APIs */
       void
       invoke_implServices ()
         {
-          cout << "current Session-Impl-ID = " << InternalAPI_1::access().getMagic() << endl;
+          cout << "current Session-Impl-ID = " << magic() << endl;
           InternalAPI_2::invokeImplementationService();
           
+          cout << "now resetting this session." << endl;
           TSession::current.reset();
+          
           InternalAPI_2::invokeImplementationService();  // invocation creates new session as side effect
+          cout << "current Session-Impl-ID = " << magic() << endl;
         }
-      
-      
     };
   
   

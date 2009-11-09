@@ -114,6 +114,7 @@ namespace mobject {
   
   extern const char* ON_SESSION_START;  ///< triggered before loading any content into a newly created session
   extern const char* ON_SESSION_INIT;   ///< triggered when initialising a new session, after adding content
+  extern const char* ON_SESSION_READY;  ///< triggered after session is completely functional and all APIs are open.
   extern const char* ON_SESSION_END;    ///< triggered before discarding an existing session
   
   

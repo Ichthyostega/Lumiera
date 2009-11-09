@@ -3950,9 +3950,9 @@ Currently as of 5/09, this is an ongoing [[implementation and planning effort|Pl
 
 {{red{WIP ... just emerging}}}</pre>
 </div>
-<div title="SessionLifecycle" modifier="Ichthyostega" modified="200911071835" created="200911070329" tags="SessionLogic spec" changecount="8">
+<div title="SessionLifecycle" modifier="Ichthyostega" modified="200911090241" created="200911070329" tags="SessionLogic spec" changecount="20">
 <pre>The current [[Session]] is the root of any state found within Proc-Layer. Thus, events defining the session's lifecycle influence and synchronise the cooperative behaviour of the entities within the model, the ProcDispatcher, [[Fixture]] and any facility below.
-* when ''starting'', by default an empty session is created, which puts any related facility into a defined initial state.
+* when ''starting'', on first access an empty session is created, which puts any related facility into a defined initial state.
 * when ''closing'' the session, any dependent facilities are disabled, disconnected, halted or closed
 * ''loading'' an existing session &amp;mdash; after closing the previous session &amp;mdash; sets up an empty (default) session an populates it with de-serialised content.
 * when encountering a ''mutation point'', [[command processing|ProcDispatcher]] is temporarily halted to trigger off an BuildProcess.
@@ -3963,10 +3963,34 @@ The SessionManager is responsible for conducting the session lifecycle. Accessib
 !Synchronising access to session's implementation facilities
 Some other parts and subsystems within the ~Proc-Layer need specialised access to implementation facilities within the session. Informations about some conditions and configurations might be retrieved through [[querrying the session|Query]], and especially default configurations for many objects are [[bound to the session|DefaultsImplementation]]. The [[discovery of session contents|SessionStructureQuery]] relies on an [[index facility|PlacementIndex]] embedded within the session implementation. Moreover, some &quot;properties&quot; of the [[media objects|MObject]] are actually due to the respective object being [[placed|Placement]] in some way into the session; consequently, there might be an dependency on the actual [[location as visible to the placement|PlacementScope]], which in turn is constituted by [[querying the index|QueryFocus]].
 
-Each of these facilities relies on a separate access point to session services, corresponding to distinct service interfaces. But &amp;mdash; on the implementation side &amp;mdash; all these services are provided by a (compound) implementation object. This approach allows to switch the actual implementation of all these services instantaneous by swapping the ~PImpl maintained by the session manager.
+Each of these facilities relies on a separate access point to session services, corresponding to distinct service interfaces. But &amp;mdash; on the implementation side &amp;mdash; all these services are provided by a (compound) SessionServices implementation object. This approach allows to switch the actual implementation of all these services simply by swapping the ~PImpl maintained by the session manager. A new implementation level service can thus be added to the ~SessionImpl just by hooking it into the ~SessionServices compound object. But note, this mechanism as such is ''not thread safe'', unless the //implementation// of the invoked functions is synchronised in some way to prevent switching to a new session implementation while another thread is still executing session implementation code.
+
+Currently, the understanding is for some global mechanism to hold any command execution, script running and further object access by the GUI //prior//&amp;nbsp; to invoking any of the session management operations (loading, closing, resetting). An alternative would be to change the top-level access to the session ~PImpl to go through an accessor value object, to acquire some lock automatically before any access can happen. C++ ensures the lifespan of any temporaries to surpass evaluation of the enclosing expression, which would be sufficient to prevent another thread to pull away the session during that timespan. Of course, any value returned from such an session API call isn't covered by this protection. Usually, objects are handed out as MObjectRef, which in turn means to resolve them (automatically) on dereferentiation by another session API access. But while it seems we could get locking to work automatically this way, still such a technique seems risky and involved; a plain flat lock at top level seems to be more appropriate.
 
 !Interface and lifecycle hooks
 {{red{draft as of 11/09}}}
+As detailed above, {{{Session::current}}} exposes the management / lifecycle API, and at the same time can be dereferenced into the primary [[session API|SessionInterface]]. An default configured ~SessionImpl instance will be built automatically, in case no session implementation instance exists on executing this dereferentiation.
+
+!!!building (or loading) a session
+# as a preparation step, a new implementation instance is created, alongside with any supporting facilities (especially the PlacementIndex)
+# the basic default configuration is loaded into this new session instance
+# when the new session is (technically) complete and usable, the switch on the ~PImpl happens
+# the {{{ON_SESSION_START}}} LifecycleEvent is emitted
+# content is loaded into the session, including hard wired content and any de-serialised data from persistent storage
+# the {{{ON_SESSION_INIT}}} event is emitted
+# additional initialisation, wiring and registration takes place; basically anything to make the session fully functional
+# the session LayerSeparationInterface is opened and any further top-level blocking is released
+# the {{{ON_SESSION_READY}}} event is emitted
+
+!!!closing the session
+# top-level facilities accessing the session (GUI, command processing, scripts) are blocked and the LayerSeparationInterface is closed
+# any render processes are ensured to be terminated
+# the {{{ON_SESSION_END}}} event is emitted
+# the command processing log is tagged
+# the command queue(s) are emptied, discarding any commands not yet executed
+# the PlacementIndex is cleared, effectively releasing any object &quot;instances&quot;
+# the [[asset registry|AssetManager]] is cleared, thereby releasing any remaining external resource references
+# destruction of session implementation instances
 </pre>
 </div>
 <div title="SessionLogic" modifier="Ichthyostega" modified="200911071754" created="200904242110" tags="overview" changecount="15">

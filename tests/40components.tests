@@ -561,9 +561,9 @@ out: ctor DoIt<Block< 5> >
 out: ctor DoIt<Block< 3> >
 out: ctor DoIt<Block< 2> >
 out: ctor DoIt<Block< 1> >
-out: Block< 2>::eat\(..\)
-out: Block< 5>::eat\(..\)
-out: Block<13>::eat\(..\)
+out: devouring__Block< 2>__
+out: devouring__Block< 5>__
+out: devouring__Block<13>__
 out: gulp!
 out: dtor DoIt<Block< 1> >
 out: dtor DoIt<Block< 2> >

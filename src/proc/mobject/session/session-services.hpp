@@ -23,8 +23,52 @@
 
 /** @file session-services.hpp
  ** A mechanism for exposing and accessing implementation level
- ** services of the session. 
- ** TODO TODO
+ ** services of the session. While any client code should always
+ ** use the public Session API, some implementation level facilities
+ ** within Proc-Layer need to cooperate with a wider SessionImpl API.
+ ** On the other hand, we don't want to create coupling between the
+ ** mentioned Proc internals and the session implementation. Another
+ ** concern addressed by this mechanism is to assure consistency
+ ** across all those implementation APIs. New APIs can be added
+ ** just by extending a template definition and will automatically
+ ** participate in the session management mechanisms, because any
+ ** access is routed through the top level Session PImpl.
+ ** 
+ ** \par structure of session implementation-level services
+ ** 
+ ** Assumed any part of the Proc implementation needs to cooperate
+ ** with the session implementation; the necessary link has to be
+ ** abstracted into an implementation level API. Typically, this
+ ** API provides an static access function, which is to be implemented
+ ** "somewhere else", so the Proc implementation isn't required to 
+ ** include anything of the session implementation level
+ ** 
+ ** In order to actually provide such a service, an specialisation of
+ ** the ServiceAccessPoint template has to be defined, which may mix in
+ ** the service API and implement it directly on top of SessionImpl.
+ ** Note, mixing in the API isn't required -- alternatively the API might
+ ** be completely bridged through the mentioned static access functions
+ ** (i.e. such would be kind of an generic API, relying on convention
+ ** rather than on a vtable)
+ ** 
+ ** When the SessManagerImpl creates the concrete session object,
+ ** it doesn't use the bare SessionImpl class; rather, an inheritance
+ ** chain is formed, starting with SessionImpl and stacking any of the
+ ** configured ServiceAccessPoint instantiations on top of it. Thus,
+ ** the public session access gets the concrete implementation of the
+ ** Session API (through the vtable), while any service level access
+ ** can use the corresponding service API directly. Service APIs have
+ ** to care to avoid name clashes though.
+ ** 
+ ** The implementation of all the service API access functions is
+ ** bundled within session-service.cpp -- where the full compound
+ ** of SessionImpl and the ServiceAccessPoint specialisations has
+ ** to be visible.
+ ** 
+ ** @see session-service-access-test.cpp simplified inline demo definition of this setup
+ ** @see session.hpp public session API
+ ** @see session-impl.hpp definition of ServiceAccessPoint specialisations
+ ** @see session-impl.cpp session implementation internals
  **
  */
 
@@ -35,24 +79,25 @@
 #include "proc/mobject/session.hpp"
 #include "lib/meta/generator.hpp"
 
-//#include <boost/scoped_ptr.hpp>
-//#include <vector>
-
 
 
 
 namespace mobject {
 namespace session {
   
-//using std::vector;
-//using boost::scoped_ptr;
-//using std::tr1::shared_ptr;
   using lumiera::typelist::InstantiateChained;
   using lumiera::typelist::InheritFrom;
   using lumiera::typelist::NullType;
   
   
-  
+  /**
+   * Access point to a single implementation-level API.
+   * For each concrete service to provide, an specialisation
+   * of this template is assumed to exist which inherits from
+   * IMPL; it will be used in an inheritance-chain on top of
+   * SessionImpl and thus can access the latter (= session
+   * implementation API) just through its parent class IMPL
+   */
   template<class API, class IMPL>
   struct ServiceAccessPoint;
   
@@ -62,16 +107,32 @@ namespace session {
    * to provide by the Session. An instance of this template
    * is created on top of SessionImpl, configured such as
    * to inherit from all the concrete services to be
-   * exposed for use by Proc-Lyer's internals. 
+   * exposed for use by Proc-Lyer's internals.
+   * 
+   * @param APIS  sequence of API types to implement
+   * @param FRONT type of the frontend used for access
+   * @param SESS  the basic session implementation 
    */
-  template< typename IMPS
+  template< typename APIS
           , class FRONT
-          , class BA =NullType
+          , class SESS
           >
-  class SessionServicesX
-    : public InstantiateChained<typename IMPS::List, ServiceAccessPoint, BA>
+  class TSessionServices
+    : public InstantiateChained< typename APIS::List    // for each of the API types...
+                               , ServiceAccessPoint    //  instantiate a service implementation
+                               , SESS                 //   and stack all these on top of SessionImpl
+                               >
     {
-      static FRONT& entrance_;
+    public:
+      static FRONT& current;                      ///< intended to be hard-wired to SessManagerImpl singleton 
+      
+      /** access an service by explicit downcast.
+       *  @warning this function is dangerous; never store the
+       *           returned reference, as the referred object 
+       *           might go away due to session close/reset/load
+       */
+      template<class API>
+      API& get() { return *this; }
     };
   
   

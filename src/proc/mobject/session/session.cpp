@@ -53,7 +53,7 @@ namespace mobject {
    * 
    *  Consequently, if you want to talk to the <i>session manager,</i>
    *  you use dot-notation, while you access the <i>session object</i>
-   *  via arrow notaion (e.g. \code Session::current->getFixture() )
+   *  via arrow notation (e.g. \code Session::current->getFixture() )
    */
   SessManager& Session::current = Singleton<SessManagerImpl>()();
   
@@ -78,6 +78,17 @@ namespace mobject {
    *  or wiring to keep track of the session's content should register here.
    */
   const char* ON_SESSION_INIT ("ON_SESSION_INIT");
+  
+  /** \par
+   *  LifecycleHook, to perform post loading tasks, requiring an already completely usable
+   *  and configured session to be in place. When activated, the session is completely restored
+   *  according to the standard or persisted definition and any access interfaces are already
+   *  opened and enabled. Scripts and the GUI might even be accessing the session in parallel.
+   *  Subsystems intending to perform additional processing should register here, if requiring
+   *  fully functional client side APIs. Examples would be statistics gathering, validation
+   *  or auto-correction of the session's contents.
+   */
+  const char* ON_SESSION_READY ("ON_SESSION_READY");
   
   /** \par
    *  LifecycleHook, to perform any state saving, deregistration or de-activation necessary 

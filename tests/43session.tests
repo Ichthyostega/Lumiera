@@ -99,7 +99,18 @@ PLANNED "SessionManager_test" SessionManager_test <<END
 END
 
 
-PLANNED "Accessing session APIs" SessionServiceAccess_test <<END
+TEST "Accessing session APIs" SessionServiceAccess_test <<END
+out: Session not yet used....
+out: creating new Session 1
+out: Session-Impl\(1\)::externalOperation\(\)
+out: creating new Session 2
+out: Session-Impl\(2\)::externalOperation\(\)
+out: current Session-Impl-ID = 2
+out: Session-Impl\(2\)::implementationService\(\)
+out: now resetting this session.
+out: creating new Session 3
+out: Session-Impl\(3\)::implementationService\(\)
+out: current Session-Impl-ID = 3
 END
 
 
