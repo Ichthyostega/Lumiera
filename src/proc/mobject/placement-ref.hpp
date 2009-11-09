@@ -197,7 +197,11 @@ namespace mobject {
           return false;
         }
       
-      ExplicitPlacement resolve() const { return access(id_).resolve();}
+      ExplicitPlacement
+      resolve() const
+        {
+          return access(id_).resolve();
+        }
       
       
       ////////////////TODO more operations to come....

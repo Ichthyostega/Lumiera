@@ -28,13 +28,26 @@
 namespace mobject {
 namespace session {
   
+  /////////////////////////////////////////TODO temporary hack
+  namespace {
+    DefsManager&
+    getDummyDefaultsManager()
+    {
+      static scoped_ptr<DefsManager> dummyDefaultsManagerInstance(new DefsManager);
+      
+      return *dummyDefaultsManagerInstance;
+    }
+  }
+  /////////////////////////////////////////TODO temporary hack
+  
+  
   /** create a new empty session with default values.
    *  @note any exception arising while creating this
    *        default session will inevitably halt the
    *        system (and this is desirable)
    */
-  SessionImpl::SessionImpl (DefsManager& defs)  throw()
-    : Session(defs),
+  SessionImpl::SessionImpl ()
+    : Session( getDummyDefaultsManager() ),             ///////TODO temporary hack
       focusEDL_(0),
       edls(1),
       fixture(new Fixture),

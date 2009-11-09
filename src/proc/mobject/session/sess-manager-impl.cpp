@@ -59,7 +59,7 @@ namespace session {
    *  @note any exceptions arising while building the basic
    *        session object(s) will halt the system.
    */
-  SessionImpl*
+  SessionImplAPI*
   SessManagerImpl::operator-> ()  throw()
   {
     if (!pImpl_)
@@ -87,8 +87,7 @@ namespace session {
    *  \link #operator-> access \endlink to the session object.
    */
   SessManagerImpl::SessManagerImpl ()  throw()
-    : pDefs_ (0),
-      pImpl_ (0)
+    : pImpl_ (0)
   { }
   
   
@@ -111,14 +110,12 @@ namespace session {
   void
   SessManagerImpl::reset ()
   {
-    scoped_ptr<DefsManager> tmpD (new DefsManager);
-    scoped_ptr<SessionImpl> tmpS (new SessionImpl (*tmpD));
+    scoped_ptr<SessionImplAPI> tmpS (new SessionImplAPI);
     
     TODO ("reset the assets registered with AssetManager");
     /////////////////////////////////////////////////////////////////// TICKET #154
     
     TODO ("thread lock");
-    pDefs_.swap (tmpD);
     pImpl_.swap (tmpS);
   }
   

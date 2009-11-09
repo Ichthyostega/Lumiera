@@ -57,12 +57,9 @@ namespace mobject {
       {
         scoped_ptr<impl::DefsRegistry> defsRegistry;
         
-      protected:
+      public:
         
         DefsManager ()  throw();
-        friend class SessManagerImpl;
-        
-      public:
        ~DefsManager ();
        
         /** common access point: retrieve the default object fulfilling

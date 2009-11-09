@@ -1,5 +1,5 @@
 /*
-  SessionServices  -  accessing Proc-Layer internal session implementation services
+  SESSION-SERVICE-DEFAULTS.hpp  -  session implementation service API: manage default objects
  
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
@@ -18,34 +18,42 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  
-* *****************************************************/
+*/
 
 
-#include "proc/mobject/session/session-service-fetch.hpp"
-#include "proc/mobject/session/session-service-explore-scope.hpp"
-#include "proc/mobject/session/session-service-mock-index.hpp"
-#include "proc/mobject/session/session-service-defaults.hpp"
+/** @file session-service-defaults.hpp
+ ** Implementation level session API: manage default configured objects.
+ ** 
+ ** @todo rework the existing DefsManager to fit into this scheme. TICKET #404
+ ** 
+ ** @see session-impl.hpp implementation of the service
+ ** @see session-services.cpp implementation of access
+ **
+ */
 
-#include "proc/mobject/session/session-services.hpp"
-#include "proc/mobject/session/session-impl.hpp"
+
+#ifndef MOBJECT_SESSION_SESSION_SERVICE_DEFAULTS_H
+#define MOBJECT_SESSION_SESSION_SERVICE_DEFAULTS_H
+
+//#include "proc/mobject/session.hpp"
+//#include "lib/meta/generator.hpp"
+
+
+
 
 namespace mobject {
 namespace session {
   
-  /** TODO */
-  bool
-  SessionServiceFetch::isRegisteredID (PlacementMO::ID const& placementID)
-  {
-    return SessionImplAPI::current->isRegisteredID (placementID);
-  }
+//  using lumiera::typelist::InstantiateChained;
+//  using lumiera::typelist::InheritFrom;
+//  using lumiera::typelist::NullType;
   
   
-  PlacementMO&
-  SessionServiceFetch::resolveID (PlacementMO::ID const& placementID)
-  {
-    return SessionImplAPI::current->resolveID (placementID);
-  }
+  class SessionServiceDefaults
+    {
+    };
   
   
   
 }} // namespace mobject::session
+#endif

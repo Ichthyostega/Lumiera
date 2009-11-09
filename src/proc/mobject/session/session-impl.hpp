@@ -42,6 +42,13 @@
 #include "proc/mobject/session/edl.hpp"
 #include "proc/mobject/session/fixture.hpp"
 #include "proc/mobject/session/placement-index.hpp"
+#include "proc/mobject/session/session-services.hpp"
+
+#include "proc/mobject/session/session-service-fetch.hpp"
+#include "proc/mobject/session/session-service-explore-scope.hpp"
+#include "proc/mobject/session/session-service-mock-index.hpp"
+#include "proc/mobject/session/session-service-defaults.hpp"
+
 
 #include <boost/scoped_ptr.hpp>
 #include <vector>
@@ -65,7 +72,11 @@ namespace session {
       uint focusEDL_;
       vector<EDL> edls;
       PFix fixture;
+      
       shared_ptr<PlacementIndex> pIdx_;
+      
+      scoped_ptr<DefsManager> defaultsManager_;   ///////////TODO: later, this will be the real defaults manager. Currently this is just never initialised (11/09)
+      
       
       /* ==== Session API ==== */
       virtual bool isValid ();
@@ -78,12 +89,82 @@ namespace session {
       virtual void rebuildFixture ();
       
     protected: /* == management API === */
-      SessionImpl (DefsManager&)  throw();
+      SessionImpl ();
       friend class SessManagerImpl;
       
       void clear ();
       
     };
+  
+  
+    /* ===== providing internal services for Proc ===== */
+    
+    template<class IMPL>
+    struct ServiceAccessPoint<SessionServiceFetch, IMPL>
+      : IMPL
+      {
+        bool
+        isRegisteredID (PMO::ID const& placementID)
+          {
+            UNIMPLEMENTED ("check if index contains the given ID");
+          }
+        
+        PMO&
+        resolveID (PMO::ID const& placementID)
+          {
+            UNIMPLEMENTED ("fetch from PlacementIndex, throw on failure");
+//          IMPL::implementationService();
+          }
+      };
+    
+    
+    template<class IMPL>
+    struct ServiceAccessPoint<SessionServiceExploreScope, IMPL>
+      : IMPL
+      {
+        QueryResolver&
+        getResolver()
+          {
+            UNIMPLEMENTED ("how actually to manage the PlacementIndexQueryResolver wrapper instance");
+            
+//          return IMPL::magic_;
+          }
+      };
+    
+    
+    template<class IMPL>
+    struct ServiceAccessPoint<SessionServiceMockIndex, IMPL>
+      : IMPL
+      {
+        ////////////////////////////TODO
+      };
+    
+    
+    template<class IMPL>
+    struct ServiceAccessPoint<SessionServiceDefaults, IMPL>
+      : IMPL
+//    , SessionServiceDefaults
+      {
+
+        ////////////////////////////TODO
+      };
+  
+    
+    
+    
+    
+    class SessManagerImpl;
+    
+    typedef SessionServices< Types< SessionServiceFetch
+                                  , SessionServiceExploreScope
+                                  , SessionServiceMockIndex
+                                  , SessionServiceDefaults
+                                  >              // List of the APIs to provide
+                           , SessManagerImpl    //  frontend for access
+                           , SessionImpl       //   implementation base class
+                           >                  //
+                           SessionImplAPI;
+  
   
   
   /**
@@ -93,8 +174,7 @@ namespace session {
    */
   class SessManagerImpl : public SessManager
     {
-      scoped_ptr<DefsManager> pDefs_;
-      scoped_ptr<SessionImpl> pImpl_;
+      scoped_ptr<SessionImplAPI> pImpl_;
       
       SessManagerImpl()  throw();
       friend class lib::singleton::StaticCreate<SessManagerImpl>;
@@ -106,14 +186,15 @@ namespace session {
       virtual void reset () ;
       virtual void load ()  ;
       virtual void save ()  ;
-      virtual SessionImpl* operator-> ()  throw() ;
       
       
     public:
       /* ==== proc layer internal API ==== */
       
       /** @internal access point for PlacementIndex and PlacementRef */
-      static shared_ptr<PlacementIndex>& getCurrentIndex () ;  
+      static shared_ptr<PlacementIndex>& getCurrentIndex () ;
+      
+      virtual SessionImplAPI* operator-> ()  throw() ;
       
     };
   

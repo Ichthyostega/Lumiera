@@ -97,7 +97,7 @@ namespace mobject {
 
     public:
       static session::SessManager& current;
-      session::DefsManager& defaults;
+      session::DefsManager& defaults;           ///////////////TODO this is a hack... better solve it based on the new SessionServices mechanism
       
       virtual bool isValid ()              = 0;
       virtual void add (PMO& placement)    = 0;

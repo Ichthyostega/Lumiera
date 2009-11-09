@@ -43,6 +43,7 @@ using lib::Symbol;
 using lib::Singleton;
 using mobject::session::SessManager;
 using mobject::session::SessManagerImpl;
+using mobject::session::SessionImplAPI;
 
 namespace mobject {
   
@@ -56,6 +57,15 @@ namespace mobject {
    *  via arrow notation (e.g. \code Session::current->getFixture() )
    */
   SessManager& Session::current = Singleton<SessManagerImpl>()();
+  
+  
+  /** special access point allowing Proc-Layer internals
+   *  to cooperate with session implementation level APIs
+   */
+  template<>
+  SessManagerImpl& SessionImplAPI::current = static_cast<SessManagerImpl&> (Session::current);
+  
+  
   
   
   /** \par

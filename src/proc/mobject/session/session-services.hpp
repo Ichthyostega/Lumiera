@@ -86,8 +86,7 @@ namespace mobject {
 namespace session {
   
   using lumiera::typelist::InstantiateChained;
-  using lumiera::typelist::InheritFrom;
-  using lumiera::typelist::NullType;
+  using lumiera::typelist::Types;
   
   
   /**
@@ -117,7 +116,7 @@ namespace session {
           , class FRONT
           , class SESS
           >
-  class TSessionServices
+  class SessionServices
     : public InstantiateChained< typename APIS::List    // for each of the API types...
                                , ServiceAccessPoint    //  instantiate a service implementation
                                , SESS                 //   and stack all these on top of SessionImpl
