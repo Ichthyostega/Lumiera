@@ -27,9 +27,17 @@
  ** to control the behaviour of the editing part of the application.
  ** All all implementation complexities are hidden behind a "PImpl".
  **
- ** This file contains the implementation classes, it should never
- ** be included by client code.
+ ** This file contains the implementation level API, it should never
+ ** be included by client code. Besides the actual SessionImpl, a set
+ ** of further implementation level services is provided for use by
+ ** Proc-Layer's internals. These additional SessionServices are to be
+ ** accessed through dedicated headers and interface classes (typically
+ ** through static access functions), thereby abstracting from the actual
+ ** session implementation. Within this file, the implementation of these
+ ** SessionServices is wired up with the SessionImpl object.
  ** 
+ ** @see Session public API
+ ** @see session-services.hpp
  ** @see session-service-access-test.cpp for a complete simplified mock session manager 
  **
  */
@@ -94,6 +102,13 @@ namespace session {
       
       void clear ();
       
+      PPIdx const&
+      getPlacementIndex()
+        {
+          ENSURE (pIdx_);
+          return pIdx_;
+        }
+      
     };
   
   
@@ -106,14 +121,13 @@ namespace session {
         bool
         isRegisteredID (PMO::ID const& placementID)
           {
-            UNIMPLEMENTED ("check if index contains the given ID");
+            return IMPL::getPlacementIndex()->contains (placementID); //never throws
           }
         
         PMO&
         resolveID (PMO::ID const& placementID)
           {
-            UNIMPLEMENTED ("fetch from PlacementIndex, throw on failure");
-//          IMPL::implementationService();
+            return IMPL::getPlacementIndex()->find (placementID); //may throw
           }
       };
     
@@ -136,7 +150,23 @@ namespace session {
     struct ServiceAccessPoint<SessionServiceMockIndex, IMPL>
       : IMPL
       {
-        ////////////////////////////TODO
+        PPIdx const&
+        getPlacementIndex()
+          {
+            if (mockIndex_)
+              return mockIndex_;
+            else
+              return IMPL::getPlacementIndex();
+          }
+        
+        void
+        reset_PlacementIndex (PPIdx const& alternativeIndex)
+        {
+          mockIndex_ = alternativeIndex;
+        }
+        
+      private:
+        PPIdx mockIndex_;
       };
     
     

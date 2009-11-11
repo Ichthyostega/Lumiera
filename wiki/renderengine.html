@@ -3522,7 +3522,7 @@ Then, running the goal {{{:-resolve(T, stream(T,mpeg)).}}} would search a Track 
 In the design of the Lumiera Proc Layer done thus far, we provide //no possibility to introduce a new object kind// into the system via plugin interface. The system uses a fixed collection of classes intended to cover all needs (Clip, Effect, Track, Pipe, Label, Automation, ~Macro-Clips). Thus, plugins will only be able to provide new parametrisations of existing classes. This should not be any real limitation, because the whole system is designed to achieve most of its functionality by freely combining rather basic object kinds. As a plus, it plays nicely with any plain-C based plugin interface. For example, we will have C++ adapter classes for the most common sorts of effect plugin (pull system and synchronous frame-by-frame push with buffering) with a thin C adaptation layer for the specific external plugin systems used. Everything beyond this point can be considered &quot;condiguration data&quot; (including the actual plugin implementation to be loaded)
 </pre>
 </div>
-<div title="QueryResolver" modifier="Ichthyostega" modified="200910301615" created="200910210300" tags="Rules spec draft img" changecount="25">
+<div title="QueryResolver" modifier="Ichthyostega" modified="200911090412" created="200910210300" tags="Rules spec draft img" changecount="26">
 <pre>Within the Lumiera Proc-Layer, there is a general preference for issuing [[queries|Query]] over hard wired configuration (or even mere table based configuration). This leads to the demand of exposing a //possibility to issue queries// &amp;mdash; without actually disclosing much details of the facility implementing this service. For example, for shaping the general session interface (in 10/09), we need a means of exposing a hook to discover HighLevelModel contents, without disclosing how the model is actually organised internally (namely by using an PlacementIndex).
 
 !Analysis of the problem
@@ -3541,7 +3541,7 @@ The situation can be decomposed as follows.[&gt;img[QueryResolver|uml/fig137733.
 * and then there is the notorious problem of re-gaining the specifically typed context //behind//&amp;nbsp; the invocation interface. Especially, the facility processing the query needs to know both the expected result type and details about the concrete query and its parametrisation. &lt;br/&gt;&amp;rarr; TypedQueryProblem
 
 !!!Entities and Operations
-The //client// &amp;nbsp;(code using query-resolver.hpp) either wants a ''goal'' or ''query'' to be resolved; the former is just implicitly typed and usually given in predicate logic from, while the latter may be a specialised subclass templated to yield objects of a specific type as results. A ''query resolver'' is an (abstracted) entity capable of //resolving//&amp;nbsp; such a goal. Actually, behind the scenes there is somehow a registration of the concrete resolving facilities, which are asumed to decide about their ability of handling a given goal. Issuing a goal or query yields a ''resolution'' &amp;mdash; practically speaking, a set of indivitual solutions. These individual solution ''results'' can be explored by ''iteration'', thereby moving an embedded ''cursor'' through the ''result set''. Any result can be retrieved at most once &amp;mdash; after that, the resolution is ''exhausted'' and will be released automatically when the expolration iterator goes out of scope.
+The //client// &amp;nbsp;(code using query-resolver.hpp) either wants a ''goal'' or ''query'' to be resolved; the former is just implicitly typed and usually given in predicate logic from ({{red{planned as of 11/09}}}), while the latter may be a specialised subclass templated to yield objects of a specific type as results. A ''query resolver'' is an (abstracted) entity capable of //resolving//&amp;nbsp; such a goal. Actually, behind the scenes there is somehow a registration of the concrete resolving facilities, which are asumed to decide about their ability of handling a given goal. Issuing a goal or query yields a ''resolution'' &amp;mdash; practically speaking, a set of indivitual solutions. These individual solution ''results'' can be explored by ''iteration'', thereby moving an embedded ''cursor'' through the ''result set''. Any result can be retrieved at most once &amp;mdash; after that, the resolution is ''exhausted'' and will be released automatically when the expolration iterator goes out of scope.
 
 !!!Decisions
 * while, in the use case currently at hand, the query instance is created by the client on the stack, the possibility of managing the queries internally is deliberately kept open. Because otherwise, we had to commit to a specific way of obtaining results, for example by assuming always to use an embedded STL iterator.
@@ -3950,7 +3950,7 @@ Currently as of 5/09, this is an ongoing [[implementation and planning effort|Pl
 
 {{red{WIP ... just emerging}}}</pre>
 </div>
-<div title="SessionLifecycle" modifier="Ichthyostega" modified="200911090241" created="200911070329" tags="SessionLogic spec" changecount="20">
+<div title="SessionLifecycle" modifier="Ichthyostega" modified="200911090647" created="200911070329" tags="SessionLogic spec" changecount="21">
 <pre>The current [[Session]] is the root of any state found within Proc-Layer. Thus, events defining the session's lifecycle influence and synchronise the cooperative behaviour of the entities within the model, the ProcDispatcher, [[Fixture]] and any facility below.
 * when ''starting'', on first access an empty session is created, which puts any related facility into a defined initial state.
 * when ''closing'' the session, any dependent facilities are disabled, disconnected, halted or closed
@@ -3991,6 +3991,7 @@ As detailed above, {{{Session::current}}} exposes the management / lifecycle API
 # the PlacementIndex is cleared, effectively releasing any object &quot;instances&quot;
 # the [[asset registry|AssetManager]] is cleared, thereby releasing any remaining external resource references
 # destruction of session implementation instances
+{{red{none of the above is implemented as of 11/09}}}
 </pre>
 </div>
 <div title="SessionLogic" modifier="Ichthyostega" modified="200911071754" created="200904242110" tags="overview" changecount="15">
@@ -4004,8 +4005,8 @@ Currently (as of 5/09), Ichthyo is [[targeting|PlanningSessionInMem]] a first pr
 Objects are attached and manipulated by [[placements|Placement]]; thus the organisation of these placements is part of the session data layout. Effectively, such a placement within the session behaves like an //instances// of a given object, and at the same time it defines the &quot;non-substantial&quot; properties of the object, e.g. its positions and relations. [[References|MObjectRef]] to these placement entries are handed out as parameters, both down to the [[Builder]] and from there to the render processes within the engine, but also to external parts within the GUI and in plugins. The actual implementation of these object references is built on top of the PlacementRef tags, thus relying on the PlacementIndex the session maintains to keep track of all placements and their relations. While &amp;mdash; using these references &amp;mdash; an external client can access the objects and structures within the session, any actual ''mutations'' should be done based on the CommandHandling: a single operation of a sequence of operations is defined as [[Command]], to be [[dispatched as mutation operation|ProcDispatcher]]. Following this policy ensures integration with the&amp;nbsp;SessionStorage and provides (unlimited) [[UNDO|UndoManager]].
 </pre>
 </div>
-<div title="SessionManager" modifier="Ichthyostega" created="200911071838" tags="SessionLogic def" changecount="1">
-<pre>The session manager is responsible for maintaining session state as a whole and for conducting the session lifecycle. The session manager API allows for saving, loading, closing and resetting the session. Accessible through the static interface {{{Session::current}}}, it exposes the actual session as a ~PImpl. Actually, both session and session manager are interfaces.
+<div title="SessionManager" modifier="Ichthyostega" modified="200911090408" created="200911071838" tags="SessionLogic def" changecount="2">
+<pre>The session manager is responsible for maintaining session state as a whole and for conducting the session [[lifecycle|SessionLifecycle]]. The session manager API allows for saving, loading, closing and resetting the session. Accessible through the static interface {{{Session::current}}}, it exposes the actual session as a ~PImpl. Actually, both session and session manager are interfaces.
 </pre>
 </div>
 <div title="SessionOverview" modifier="Ichthyostega" modified="200911071816" created="200709272105" tags="design img" changecount="38">

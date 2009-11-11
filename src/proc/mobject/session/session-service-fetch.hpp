@@ -51,9 +51,16 @@ namespace session {
 //  using lumiera::typelist::InheritFrom;
 //  using lumiera::typelist::NullType;
   
-  
+  /**
+   * Implementation-level service for resolving an Placement-ID.
+   * Usually, this service is backed by the PlacementIndex of the
+   * current session -- however, for the purpose of unit testing,
+   * this index may be overlaid temporarily, by using the
+   * SessionServiceMockIndex API.
+   */
   class SessionServiceFetch
     {
+    public:
       static PlacementMO& resolveID (PlacementMO::ID const&) ;
       static bool    isRegisteredID (PlacementMO::ID const&) ;
     };

@@ -32,7 +32,10 @@
 namespace mobject {
 namespace session {
   
-  /** TODO */
+  /** verify the given placement-ID (hash) is valid,
+   *  by checking if it refers to a Placement instance
+   *  currently registered with the PlacementIndex of the
+   *  active Session. */
   bool
   SessionServiceFetch::isRegisteredID (PlacementMO::ID const& placementID)
   {
@@ -40,11 +43,31 @@ namespace session {
   }
   
   
+  /** actually retrieve a Placement tracked by the index.
+   *  @param placementID hash-ID, typically from a PlacementRef
+   *  @throw error::Invalid if the ID isn't resolvable
+   *  @note the returned ref is guaranteed to be valid and usable
+   *        only \em now, which means, by virtue of the ProcDispatcher
+   *        and command processing, during this operation. It can be
+   *        used to invoke an operation, but should never be stored;
+   *        rather, client code should create an MObjectRef, if 
+   *        bound to store an reference for later.
+   */
   PlacementMO&
   SessionServiceFetch::resolveID (PlacementMO::ID const& placementID)
   {
     return SessionImplAPI::current->resolveID (placementID);
   }
+  
+  
+  /** */
+  void
+  SessionServiceMockIndex::reset_PlacementIndex (PPIdx const& alternativeIndex)
+  {
+    return SessionImplAPI::current->reset_PlacementIndex (alternativeIndex);
+  }
+
+  
   
   
   

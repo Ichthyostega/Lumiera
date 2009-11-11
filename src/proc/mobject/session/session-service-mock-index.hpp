@@ -38,6 +38,7 @@
 #ifndef MOBJECT_SESSION_SESSION_SERVICE_MOCK_INDEX_H
 #define MOBJECT_SESSION_SESSION_SERVICE_MOCK_INDEX_H
 
+#include "proc/mobject/session/placement-index.hpp"
 //#include "proc/mobject/session.hpp"
 //#include "lib/meta/generator.hpp"
 
@@ -51,9 +52,18 @@ namespace session {
 //  using lumiera::typelist::InheritFrom;
 //  using lumiera::typelist::NullType;
   
-  
+
+  /** there is an implicit PlacementIndex available on a global level,
+   *  by default implemented within the current session. This Service
+   *  to re-define this implicit index temporarily, e.g. for unit tests.
+   *  @param alternativeIndex alternative Index instance to install. 
+   *         when \c NIL, then restore access to the PlacementIndex
+   *         instance always available within the SessionImpl
+   */
   class SessionServiceMockIndex
     {
+    public:
+      void reset_PlacementIndex (PPIdx const& alternativeIndex =PPIdx());
     };
   
   
