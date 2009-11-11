@@ -22,11 +22,11 @@
 
 
 /** @file session-impl.hpp
- ** Session and SessionManager Implementation classes.
+ ** Session and SessionServices Implementation classes.
  ** Session and the corresponding Manager are primary Interfaces
  ** to control the behaviour of the editing part of the application.
  ** All all implementation complexities are hidden behind a "PImpl".
- **
+ ** 
  ** This file contains the implementation level API, it should never
  ** be included by client code. Besides the actual SessionImpl, a set
  ** of further implementation level services is provided for use by
@@ -70,7 +70,7 @@ namespace session {
   using std::vector;
   using boost::scoped_ptr;
   using std::tr1::shared_ptr;
-
+  
   
   /**
    * Implementation class for the Session interface
@@ -112,118 +112,96 @@ namespace session {
     };
   
   
-    /* ===== providing internal services for Proc ===== */
-    
-    template<class IMPL>
-    struct ServiceAccessPoint<SessionServiceFetch, IMPL>
-      : IMPL
-      {
-        bool
-        isRegisteredID (PMO::ID const& placementID)
-          {
-            return IMPL::getPlacementIndex()->contains (placementID); //never throws
-          }
-        
-        PMO&
-        resolveID (PMO::ID const& placementID)
-          {
-            return IMPL::getPlacementIndex()->find (placementID); //may throw
-          }
-      };
-    
-    
-    template<class IMPL>
-    struct ServiceAccessPoint<SessionServiceExploreScope, IMPL>
-      : IMPL
-      {
-        QueryResolver&
-        getResolver()
-          {
-            UNIMPLEMENTED ("how actually to manage the PlacementIndexQueryResolver wrapper instance");
-            
-//          return IMPL::magic_;
-          }
-      };
-    
-    
-    template<class IMPL>
-    struct ServiceAccessPoint<SessionServiceMockIndex, IMPL>
-      : IMPL
-      {
-        PPIdx const&
-        getPlacementIndex()
-          {
-            if (mockIndex_)
-              return mockIndex_;
-            else
-              return IMPL::getPlacementIndex();
-          }
-        
-        void
-        reset_PlacementIndex (PPIdx const& alternativeIndex)
-        {
-          mockIndex_ = alternativeIndex;
-        }
-        
-      private:
-        PPIdx mockIndex_;
-      };
-    
-    
-    template<class IMPL>
-    struct ServiceAccessPoint<SessionServiceDefaults, IMPL>
-      : IMPL
-//    , SessionServiceDefaults
-      {
-
-        ////////////////////////////TODO
-      };
   
-    
-    
-    
-    
-    class SessManagerImpl;
-    
-    typedef SessionServices< Types< SessionServiceFetch
-                                  , SessionServiceExploreScope
-                                  , SessionServiceMockIndex
-                                  , SessionServiceDefaults
-                                  >              // List of the APIs to provide
-                           , SessManagerImpl    //  frontend for access
-                           , SessionImpl       //   implementation base class
-                           >                  //
-                           SessionImplAPI;
+  /* ===== providing internal services for Proc ===== */
   
-  
-  
-  /**
-   * Session manager implementation class holding the
-   * actual smart pointer to the current Session impl.
-   * @todo couldn't this be pushed down into session.cpp?
-   */
-  class SessManagerImpl : public SessManager
+  template<class IMPL>
+  struct ServiceAccessPoint<SessionServiceFetch, IMPL>
+    : IMPL
     {
-      scoped_ptr<SessionImplAPI> pImpl_;
+      bool
+      isRegisteredID (PMO::ID const& placementID)
+        {
+          return IMPL::getPlacementIndex()->contains (placementID); //never throws
+        }
       
-      SessManagerImpl()  throw();
-      friend class lib::singleton::StaticCreate<SessManagerImpl>;
-      
-      virtual ~SessManagerImpl() {}
-      
-      /* ==== SessManager API ==== */
-      virtual void clear () ;
-      virtual void reset () ;
-      virtual void load ()  ;
-      virtual void save ()  ;
-      
-      
-    public:
-      /* ==== proc layer internal API ==== */
-      
-      virtual SessionImplAPI* operator-> ()  throw() ;
-      
+      PMO&
+      resolveID (PMO::ID const& placementID)
+        {
+          return IMPL::getPlacementIndex()->find (placementID); //may throw
+        }
     };
+  
+  
+  template<class IMPL>
+  struct ServiceAccessPoint<SessionServiceExploreScope, IMPL>
+    : IMPL
+    {
+      QueryResolver&
+      getResolver()
+        {
+          UNIMPLEMENTED ("how actually to manage the PlacementIndexQueryResolver wrapper instance");
+          
+//          return IMPL::magic_;
+        }
+    };
+  
+  
+  template<class IMPL>
+  struct ServiceAccessPoint<SessionServiceMockIndex, IMPL>
+    : IMPL
+    {
+      PPIdx const&
+      getPlacementIndex()
+        {
+          if (mockIndex_)
+            return mockIndex_;
+          else
+            return IMPL::getPlacementIndex();
+        }
+      
+      void
+      reset_PlacementIndex (PPIdx const& alternativeIndex)
+      {
+        mockIndex_ = alternativeIndex;
+      }
+      
+    private:
+      PPIdx mockIndex_;
+    };
+  
+  
+  template<class IMPL>
+  struct ServiceAccessPoint<SessionServiceDefaults, IMPL>
+    : IMPL
+//    , SessionServiceDefaults
+    {
+      ////////////////////////////TODO
+    };
+  
+  
+  
+  
+  
+  
+  class SessManagerImpl;
+  
+  /** 
+   * actual configuration of the session implementation compound:
+   * forming an inheritance chain of all internal SesssionServices
+   * stacked on top of the SessionImpl class.
+   * @note SessionImplAPI is actually an alias to the global Session PImpl
+   */
+  typedef SessionServices< Types< SessionServiceFetch
+                                , SessionServiceExploreScope
+                                , SessionServiceMockIndex
+                                , SessionServiceDefaults
+                                >              // List of the APIs to provide
+                         , SessManagerImpl    //  frontend for access
+                         , SessionImpl       //   implementation base class
+                         >                  //
+                         SessionImplAPI;
+  
   
   
   

@@ -28,6 +28,7 @@
 
 #include "proc/mobject/session/session-services.hpp"
 #include "proc/mobject/session/session-impl.hpp"
+#include "proc/mobject/session/sess-manager-impl.hpp"
 
 namespace mobject {
 namespace session {

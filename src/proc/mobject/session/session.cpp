@@ -34,6 +34,7 @@
 #include "proc/mobject/session.hpp"
 #include "proc/mobject/session/defsmanager.hpp"
 #include "proc/mobject/session/session-impl.hpp"
+#include "proc/mobject/session/sess-manager-impl.hpp"
 
 #include "lib/symbol.hpp"
 #include "lib/singleton.hpp"
