@@ -26,6 +26,7 @@
 #include "proc/mobject/placement.hpp"
 #include "proc/mobject/placement-ref.hpp"
 #include "proc/mobject/session/placement-index.hpp"
+#include "proc/mobject/session/session-service-mock-index.hpp"
 #include "proc/mobject/explicitplacement.hpp"
 #include "proc/mobject/test-dummy-mobject.hpp"
 #include "lib/util.hpp"
@@ -70,7 +71,7 @@ namespace test    {
           typedef shared_ptr<PlacementIndex> PIdx;
           PIdx index (PlacementIndex::create());
           PMO& root = index->getRoot();
-          reset_PlacementIndex(index);
+          SessionServiceMockIndex::reset_PlacementIndex(index);
           
           index->insert (p1, root);
           index->insert (p2, root);
@@ -179,7 +180,7 @@ namespace test    {
 
           //consistency check; then reset PlacementRef index to default
           ASSERT (0 == index->size());
-          reset_PlacementIndex();
+          SessionServiceMockIndex::reset_PlacementIndex();
         }
     };
   

@@ -155,54 +155,6 @@ namespace session {
   
   
   
-  namespace { // implementation detail: default global placement index access
-    
-    PPIdx globalIndex;
-    
-    PPIdx const&
-    getGlobalIndex()
-    {
-      if (globalIndex)
-        return globalIndex;
-      else
-        return session::SessManagerImpl::getCurrentIndex();
-    }
-    
-  } // (End) implementation detail
-  
-  
-  
-  
-  
-  void
-  reset_PlacementIndex (PPIdx const& alternativeIndex)
-  {
-    globalIndex = alternativeIndex;
-  }
-  
-  /** @internal restore the implicit PlacementIndex to its default implementation (=the session) */
-  void
-  reset_PlacementIndex()
-  {
-    globalIndex.reset();
-  }
-  
-  /** by default, this reaches for the PlacementIndex maintained within
-   *  the current session. But for the purpose of unit tests, an alternative
-   *  PlacementIndex may have been \link #reset_PlacementIndex installed \endlink 
-   */
-  Placement<MObject> &
-  fetch_PlacementIndex (Placement<MObject>::ID const& pID)
-  {
-    return getGlobalIndex()->find (pID);
-  }
-  
-  /** @internal used by PlacementRef to implement a self-check */
-  bool
-  checkContains_PlacementIndex (Placement<MObject>::ID const& pID)
-  {
-    return getGlobalIndex()->contains (pID);
-  }
 
 
 }} // namespace mobject::session

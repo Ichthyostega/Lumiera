@@ -98,9 +98,9 @@ namespace session {
       
     protected: /* == management API === */
       SessionImpl ();
-      friend class SessManagerImpl;
       
       void clear ();
+      friend class SessManagerImpl;
       
       PPIdx const&
       getPlacementIndex()
@@ -220,9 +220,6 @@ namespace session {
       
     public:
       /* ==== proc layer internal API ==== */
-      
-      /** @internal access point for PlacementIndex and PlacementRef */
-      static shared_ptr<PlacementIndex>& getCurrentIndex () ;
       
       virtual SessionImplAPI* operator-> ()  throw() ;
       

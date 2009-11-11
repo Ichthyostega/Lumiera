@@ -138,19 +138,6 @@ namespace session {
 
   
   
-  /** @internal there is an implicit PlacementIndex available on a global scale,
-   *            by default implemented within the current session. This function allows
-   *            to re-define this implicit index temporarily, e.g. for unit tests. */
-  void
-  reset_PlacementIndex(PPIdx const&) ;
-  
-  /** @internal restore the implicit PlacementIndex to its default implementation (=the session) */
-  void
-  reset_PlacementIndex() ;
-  
-  /** @internal access point for PlacementRef to the implicit global PlacementIndex */
-  Placement<MObject> &
-  fetch_PlacementIndex(Placement<MObject>::ID const&) ;
   
   
   

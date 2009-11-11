@@ -22,6 +22,7 @@
 
 
 #include "proc/mobject/session/test-scopes.hpp"
+#include "proc/mobject/session/session-service-mock-index.hpp"
 //#include "lib/util.hpp"
 
 //#include <iostream>
@@ -46,7 +47,7 @@ namespace test    {
       REQUIRE (testIdx);
       testIdx->clear();
       ASSERT (0 == testIdx->size());
-      reset_PlacementIndex();  // restore default Index from Session
+      SessionServiceMockIndex::reset_PlacementIndex();  // restore default Index from Session
       
       delete testIdx;
     }
@@ -72,7 +73,7 @@ namespace test    {
     
     // Prepare an (test)Index backing the PlacementRefs
     PPIdx index (PlacementIndex::create().get(), &remove_testIndex); // taking ownership
-    reset_PlacementIndex(index);
+    SessionServiceMockIndex::reset_PlacementIndex(index);
     PMO& root = index->getRoot();
 
     index->insert (p1, root);

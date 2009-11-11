@@ -63,7 +63,7 @@ namespace session {
   class SessionServiceMockIndex
     {
     public:
-      void reset_PlacementIndex (PPIdx const& alternativeIndex =PPIdx());
+      static void reset_PlacementIndex (PPIdx const& alternativeIndex =PPIdx());
     };
   
   

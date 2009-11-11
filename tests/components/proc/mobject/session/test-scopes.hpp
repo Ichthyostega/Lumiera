@@ -62,7 +62,7 @@ namespace test    {
    * 
    * @see mobject::PlacementIndex
    * @see session::SessManagerImpl::getCurrentIndex()
-   * @see mobject::reset_PlacementIndex
+   * @see mobject::session::SessionServiceMockIndex::reset_PlacementIndex
    */
   PPIdx build_testScopes();
   

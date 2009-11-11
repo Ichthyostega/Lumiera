@@ -29,6 +29,7 @@
 #include "proc/mobject/placement.hpp"
 #include "proc/mobject/placement-ref.hpp"
 #include "proc/mobject/session/placement-index.hpp"
+#include "proc/mobject/session/session-service-mock-index.hpp"
 #include "proc/mobject/session/clip.hpp"
 #include "proc/mobject/explicitplacement.hpp"
 #include "proc/mobject/test-dummy-mobject.hpp"
@@ -47,7 +48,7 @@ namespace test    {
   using lumiera::Time;
   using session::Clip;
   
-  using session::reset_PlacementIndex;
+  using session::SessionServiceMockIndex;  
 
   
   /***************************************************************************
@@ -91,7 +92,7 @@ namespace test    {
           typedef shared_ptr<PlacementIndex> PIdx;
           PIdx index (PlacementIndex::create());
           PMO& root = index->getRoot();
-          reset_PlacementIndex(index);
+          SessionServiceMockIndex::reset_PlacementIndex (index);
           
           // Add the Clips to "session"
           index->insert (pClip1, root);
@@ -130,7 +131,7 @@ namespace test    {
           ASSERT (2 == pClip1.use_count());
           ASSERT (2 == pClip2.use_count());
 #endif ////////////////////////////////////////////////////////////////////////////////////////TODO lots of things unimplemented.....!!!!!
-          reset_PlacementIndex();
+          SessionServiceMockIndex::reset_PlacementIndex();
         }
       
       
