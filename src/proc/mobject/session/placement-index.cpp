@@ -125,10 +125,13 @@ namespace session {
   }
   
   
-  vector<PRef>
+  PlacementIndex::iterator
   PlacementIndex::getReferrers (ID)  const
   {
     UNIMPLEMENTED ("query the Placement relation index and retrieve all other placements bound to this one by a placement-relation");
+    // do a query using equal_range of the hashtable (unordered_multimap)
+    // build a RangeIter from them
+    // use this to build an auto-fetching IterAdapter
   }
   
   

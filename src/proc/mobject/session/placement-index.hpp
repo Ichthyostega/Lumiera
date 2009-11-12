@@ -38,11 +38,13 @@
 //#include "proc/asset/pipe.hpp"
 #include "lib/util.hpp"
 #include "lib/factory.hpp"
+#include "lib/iter-adapter.hpp"
 #include "proc/mobject/placement.hpp"
 #include "proc/mobject/placement-ref.hpp"
-#include "proc/mobject/session/query-resolver.hpp"
+//#include "proc/mobject/session/query-resolver.hpp"
 
 #include <tr1/memory>
+#include <tr1/unordered_map>
 #include <boost/noncopyable.hpp>
 #include <boost/scoped_ptr.hpp>
 #include <vector>
@@ -59,7 +61,7 @@ namespace session {
   using boost::scoped_ptr;
   using std::vector;
   
-  
+//using boost::hash;
   
   /**
    */
@@ -71,12 +73,18 @@ namespace session {
       
       scoped_ptr<Table> pTab_;
       
+      
+      typedef PlacementMO::ID _PlID;
+      typedef std::tr1::unordered_multimap<_PlID,_PlID>::iterator ScopeIter;
+      
+      
     public:
       typedef Placement<MObject> PlacementMO;
       typedef PlacementRef<MObject> PRef;
       typedef PlacementMO::ID const& ID;
       
-      typedef session::Goal::QueryID const& QID;
+//      typedef session::Goal::QueryID const& QID;
+      typedef lib::RangeIter<ScopeIter> iterator;
       
       
       PlacementMO& find (ID)  const;
@@ -89,7 +97,7 @@ namespace session {
       PlacementMO& getScope (PlacementMO const&)  const;
       PlacementMO& getScope (ID)                  const;
       
-      vector<PRef> getReferrers (ID)              const; ///////////////TODO: interface for low level enumeration
+      iterator getReferrers (ID)                  const;
       
       
       /** retrieve the logical root scope */
@@ -99,15 +107,6 @@ namespace session {
       bool contains (PlacementMO const&)          const;
       bool contains (ID)                          const;
       
-////////////////////////////////////////////////////////////////TODO: refactor into explicit query resolving wrapper      
-      template<class MO>
-      typename session::Query<Placement<MO> >::iterator
-      query (PlacementMO& scope)                  const;
-      
-      operator string()  const { return "PlacementIndex"; }
-      
-      bool canHandleQuery(QID)                    const;
-////////////////////////////////////////////////////////////////TODO: refactor into explicit query resolving wrapper      
       
       
       
@@ -162,18 +161,6 @@ namespace session {
     return find (id);
   }
   
-  
-  /** @todo use query-resolver-test as an example.....
-   *        return a result set object derived from Resolution
-   *        For the additional type filtering: build a filter iterator,
-   *        using a type-filtering predicate, based on Placement#isCompatible
-   */
-  template<class MO>
-  inline typename session::Query<Placement<MO> >::iterator
-  PlacementIndex::query (PlacementMO& scope)  const
-  {
-    UNIMPLEMENTED ("actually run the containment query");
-  }
   
   inline Placement<MObject>&
   PlacementIndex::getScope (PlacementMO const& p)  const

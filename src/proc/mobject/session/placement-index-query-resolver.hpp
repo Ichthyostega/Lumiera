@@ -69,8 +69,33 @@ namespace session {
     : public session::QueryResolver
     {
     
+////////////////////////////////////////////////////////////////TODO: moved in from PlacementIndex      
+      template<class MO>
+      typename session::Query<Placement<MO> >::iterator
+      query (PlacementMO& scope)                  const;
+      
+      operator string()  const { return "PlacementIndex"; }
+      
+      bool canHandleQuery(QID)                    const;
+////////////////////////////////////////////////////////////////TODO:      
     };
   
+  
+  
+  /** @todo use query-resolver-test as an example.....
+   *        return a result set object derived from Resolution
+   *        For the additional type filtering: build a filter iterator,
+   *        using a type-filtering predicate, based on Placement#isCompatible
+   */
+  template<class MO>
+  inline typename session::Query<Placement<MO> >::iterator
+  PlacementIndex::query (PlacementMO& scope)  const
+  {
+    UNIMPLEMENTED ("actually run the containment query");
+  }
+////////////////////////////////////////////////////////////////TODO:      
+  
+
   
 }} // namespace mobject::session
 #endif
