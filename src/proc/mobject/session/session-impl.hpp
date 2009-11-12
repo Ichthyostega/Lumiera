@@ -138,11 +138,17 @@ namespace session {
     : IMPL
     {
       QueryResolver&
-      getResolver()
+      getScopeQueryResolver()
         {
           UNIMPLEMENTED ("how actually to manage the PlacementIndexQueryResolver wrapper instance");
           
 //          return IMPL::magic_;
+        }
+      
+      PlacementMO& 
+      getScopeRoot()
+        {
+          return IMPL::getPlacementIndex()->getRoot();
         }
     };
   

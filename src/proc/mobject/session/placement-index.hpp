@@ -89,7 +89,7 @@ namespace session {
       PlacementMO& getScope (PlacementMO const&)  const;
       PlacementMO& getScope (ID)                  const;
       
-      vector<PRef> getReferrers (ID)              const;
+      vector<PRef> getReferrers (ID)              const; ///////////////TODO: interface for low level enumeration
       
       
       /** retrieve the logical root scope */
@@ -105,10 +105,10 @@ namespace session {
       query (PlacementMO& scope)                  const;
       
       operator string()  const { return "PlacementIndex"; }
-////////////////////////////////////////////////////////////////TODO: refactor into explicit query resolving wrapper      
-      
       
       bool canHandleQuery(QID)                    const;
+////////////////////////////////////////////////////////////////TODO: refactor into explicit query resolving wrapper      
+      
       
       
       /* == mutating operations == */

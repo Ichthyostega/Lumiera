@@ -22,7 +22,7 @@
 
 
 #include "lib/test/run.hpp"
-#include "proc/mobject/session/query-resolver.hpp"
+#include "proc/mobject/session/session-service-explore-scope.hpp"
 #include "proc/mobject/session/scope-query.hpp"
 #include "proc/mobject/session/test-scopes.hpp"
 //#include "lib/util.hpp"
@@ -62,9 +62,10 @@ namespace test    {
       run (Arg) 
         {
           // Prepare an (test)Index (dummy "session")
-          PPIdx index = build_testScopes();
-          PlacementMO& scope (index->getRoot());
-          QueryResolver const& resolver (*index);
+          build_testScopes();
+          
+          QueryResolver const& resolver = SessionServiceExploreScope::getResolver();
+          PlacementMO   const& scope    = SessionServiceExploreScope::getScopeRoot();
           
           discover (ScopeQuery<MObject>    (resolver,scope, "contents"));
           discover (ScopeQuery<DummyMO>    (resolver,scope, "contents"));

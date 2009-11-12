@@ -67,8 +67,22 @@ namespace session {
   {
     return SessionImplAPI::current->reset_PlacementIndex (alternativeIndex);
   }
-
   
+  
+  /** */
+  QueryResolver const&
+  SessionServiceExploreScope::getResolver()
+  {
+    return SessionImplAPI::current->getScopeQueryResolver();
+  }
+  
+  
+  /** */
+  PlacementMO& 
+  SessionServiceExploreScope::getScopeRoot()
+  {
+    return SessionImplAPI::current->getScopeRoot();
+  }
   
   
   

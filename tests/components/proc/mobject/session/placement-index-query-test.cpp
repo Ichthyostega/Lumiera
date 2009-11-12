@@ -24,6 +24,7 @@
 #include "lib/test/run.hpp"
 #include "proc/mobject/session/query-resolver.hpp"
 #include "proc/mobject/session/scope-query.hpp"
+#include "proc/mobject/session/session-service-explore-scope.hpp"
 #include "proc/mobject/session/placement-index-query-resolver.hpp"
 #include "proc/mobject/session/test-scopes.hpp"
 #include "lib/util.hpp"
@@ -59,19 +60,26 @@ namespace test    {
       virtual void
       run (Arg) 
         {
-          checkQueryResolverWrapper();
+          checkQueryResolver();
           checkQueryOperations();
         }
       
       void
-      checkQueryResolverWrapper()
+      checkQueryResolver()
         {
           PPIdx index = build_testScopes();
-          QueryResolver const& resolver1 (*index);
-          QueryResolver const& resolver2 (*index);
+          QueryResolver const& resolver1 (SessionServiceExploreScope::getResolver());
+          QueryResolver const& resolver2 (SessionServiceExploreScope::getResolver());
           
           ASSERT (isSameObject (resolver1, resolver2));
-          index = build_testScopes();
+          
+          PlacementMO& root1 = index->getRoot();          
+          PlacementMO& root2 = SessionServiceExploreScope::getScopeRoot();          
+          ASSERT (isSameObject (root1, root2));
+          
+          PlacementMO& elm1 = *ContentsQuery<TestSubMO21>(resolver1,root1);
+//        PlacementMO& elm2 = index->getReferrers(root1);              //////////////TODO: interface for low level enumeration
+          ASSERT (isSameObject (elm1, elm2));
         }
       
       void
@@ -80,11 +88,12 @@ namespace test    {
 #if false  //////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #384  !!!!!!!!!
           // Prepare an (test)Index (dummy "session")
           PPIdx index = build_testScopes();
+          PlacementMO& root = index->getRoot();          
           PlacementIndexQueryResolver resolver(index);
           
-          discover (ContentsQuery<MObject> (resolver));
+          discover (ContentsQuery<MObject> (resolver,root));
           
-          PlacementMO& elm = *ContentsQuery<TestSubMO21>(resolver);
+          PlacementMO& elm = *ContentsQuery<TestSubMO1>(resolver,root);
           
           discover (PathQuery(resolver,elm));
 #endif ////////////////////////////////////////////////////////////////////////////////////////TODO lots of things unimplemented.....!!!!!

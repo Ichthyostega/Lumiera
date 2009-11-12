@@ -259,6 +259,8 @@ namespace session {
        */
       PReso issue (Goal const& query)  const;
       
+      bool canHandle (Goal const&) const;
+      
       
       
     protected:  /* ===== API for concrete query resolvers ===== */
@@ -292,6 +294,13 @@ namespace session {
   Query<RES>::operator() (QueryResolver const& resolver)  const
   {
     return resolveBy (resolver);
+  }
+  
+  
+  inline bool
+  QueryResolver::canHandle(Goal const& query)
+  {
+    return canHandleQuery (query.getQID());
   }
   
   

@@ -46,6 +46,7 @@
 #ifndef MOBJECT_SESSION_SESSION_SERVICE_EXPLORE_SCOPE_H
 #define MOBJECT_SESSION_SESSION_SERVICE_EXPLORE_SCOPE_H
 
+#include "proc/mobject/placement.hpp"
 #include "proc/mobject/session/query-resolver.hpp"
 //#include "lib/meta/generator.hpp"
 
@@ -62,7 +63,9 @@ namespace session {
   
   struct SessionServiceExploreScope
     {
-      static QueryResolver& getResolver();
+      static QueryResolver const& getResolver();
+      
+      static PlacementMO& getScopeRoot();
     };
   
   

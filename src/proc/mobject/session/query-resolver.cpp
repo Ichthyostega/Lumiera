@@ -103,7 +103,7 @@ namespace session {
   {
     TODO ("ensure proper initialisation");  
     
-    if (!canHandleQuery (query.getQID()))
+    if (!canHandle (query))
       throw lumiera::error::Invalid ("unable to resolve this kind of query"); ////TICKET #197
     
     return dispatcher_->handle(query);
