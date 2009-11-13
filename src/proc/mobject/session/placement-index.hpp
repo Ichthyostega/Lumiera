@@ -21,7 +21,20 @@
 */
 
 
-/** @file placement-index.hpp 
+/** @file placement-index.hpp
+ ** Key interface of the session implementation datastructure.
+ ** The PlacementIndex is attached to and controlled by the SessionImpl.
+ ** Client code is not intended to interface directly to this API. Even
+ ** Proc-Layer internal facilities use the session datastructure through
+ ** SessionServices. Embedded within the implementation of PlacementIndex
+ ** is a flat table structure holding all the Placement instances \em contained
+ ** in the session. Any further structuring exists on the logical level only.
+ ** 
+ ** \par PlacementIndex, PlacementRef and MObjectRef
+ ** TODO
+ ** 
+ ** \par Querying and contents discovery
+ ** TODO 
  **
  ** @see PlacementRef
  ** @see PlacementIndex_test
@@ -38,10 +51,9 @@
 //#include "proc/asset/pipe.hpp"
 #include "lib/util.hpp"
 #include "lib/factory.hpp"
-#include "lib/iter-adapter.hpp"
+#include "lib/itertools.hpp"
 #include "proc/mobject/placement.hpp"
 #include "proc/mobject/placement-ref.hpp"
-//#include "proc/mobject/session/query-resolver.hpp"
 
 #include <tr1/memory>
 #include <tr1/unordered_map>
@@ -59,23 +71,33 @@ namespace session {
   using lib::factory::RefcountFac;
   using std::tr1::shared_ptr;
   using boost::scoped_ptr;
-  using std::vector;
   
-//using boost::hash;
+  
+  class PlacementIndex;
+  typedef shared_ptr<PlacementIndex> PPIdx;
   
   /**
+   * Structured compound of Placement instances
+   * with lookup capabilities. Core of the session datastructure.
+   * Adding a Placement creates a separate instance within this network,
+   * owned and managed by the backing implementation. All placements are
+   * related in a tree-like hierarchy of scopes, where each Placement is
+   * within the scope of a parent Placement. There is an additional
+   * reverse index, allowing to find the immediate children of any
+   * given Placement efficiently. All lookup is based on the
+   * Placement's hash-IDs.
    */
   class PlacementIndex
-    : public session::QueryResolver        ////////TODO: really inherit here?
-//  , boost::noncopyable                  ////////TODO : where to put the "noncopyable" base
+    : boost::noncopyable
     {
       class Table;
       
       scoped_ptr<Table> pTab_;
       
       
-      typedef PlacementMO::ID _PlID;
-      typedef std::tr1::unordered_multimap<_PlID,_PlID>::iterator ScopeIter;
+      typedef PlacementMO::ID _PID;
+      typedef std::tr1::unordered_multimap<_PID,_PID>::iterator ScopeIter;
+      
       
       
     public:
@@ -83,8 +105,7 @@ namespace session {
       typedef PlacementRef<MObject> PRef;
       typedef PlacementMO::ID const& ID;
       
-//      typedef session::Goal::QueryID const& QID;
-      typedef lib::RangeIter<ScopeIter> iterator;
+      typedef lib::TransformIter<lib::RangeIter<ScopeIter>, PlacementMO> iterator;
       
       
       PlacementMO& find (ID)  const;
@@ -130,11 +151,8 @@ namespace session {
       
       friend class lib::factory::Factory<PlacementIndex, lib::factory::Wrapper<PlacementIndex, shared_ptr<PlacementIndex> > >;
     };
-  ////////////////TODO currently just fleshing  out the API; probably have to split off an impl.class; but for now a PImpl is sufficient...
   
-    
-  typedef shared_ptr<PlacementIndex> PPIdx;
-
+  
   
   
   

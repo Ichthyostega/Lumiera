@@ -213,7 +213,7 @@ namespace session {
       
       
       friend bool
-      hasNext  (PReso const&, Result const& pos)          ////TICKET #375
+      hasNext  (PReso const&, Result const& pos)          ////TICKET #410
         {
           return bool(pos);
         }
@@ -298,7 +298,7 @@ namespace session {
   
   
   inline bool
-  QueryResolver::canHandle(Goal const& query)
+  QueryResolver::canHandle(Goal const& query)  const
   {
     return canHandleQuery (query.getQID());
   }

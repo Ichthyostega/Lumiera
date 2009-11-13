@@ -64,8 +64,6 @@ namespace session {
   typedef PlacementIndex::PRef PRef;
   typedef PlacementIndex::ID ID;
   
-  typedef PlacementIndex::QID QID; //////////TODO
-  
   
   /** @internal Factory for creating a new placement index.
    *            For use by the Session and for unit tests.  
@@ -79,15 +77,6 @@ namespace session {
   PlacementIndex::~PlacementIndex() { }
  
 
-  bool
-  PlacementIndex::canHandleQuery (QID qID) const
-  {
-    UNIMPLEMENTED ("decide by hard-wired check if the given Query can be resolved by PlacementIndex");
-    return session::Goal::GENERIC == qID.kind;
-        // thats not enough! need to check the typeID (match to Placement<MOX>, with some fixed MOX values)
-  }
-  
-  
   PlacementMO&
   PlacementIndex::getRoot()  const
   {

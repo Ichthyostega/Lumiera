@@ -3064,39 +3064,44 @@ Placements have //value semantics,// i.e. we don't stress the identity of a plac
 
 </pre>
 </div>
-<div title="PlacementIndex" modifier="Ichthyostega" modified="200905241504" created="200905090053" tags="SessionLogic spec impl draft" changecount="15">
+<div title="PlacementIndex" modifier="Ichthyostega" modified="200911130351" created="200905090053" tags="SessionLogic spec impl draft" changecount="17">
 <pre>An implementation facility used to keep track of individual Placements and their relations.
 Especially, the [[Session]] maintains such an index, allowing to use the (opaque) PlacementRef tags for referring to a specific &quot;instance&quot; of an MObject, //placed// in a unique way into the current session. And, moreover, this index allows for one placement referring to another placement, so to implement a //relative// placement mode. Because there is an index behind the scenes, it is possible to actually access such a referral in the reverse direction, which is necessary for implementing the desired placement behaviour (if an object instance used as anchor is moved, all objects placed relatively to it have to move accordingly, which necessitates finding those other objects).
 
-!questions {{red{WIP}}}
-What implementation approach to take for the index. This of course largely depends on the usage pattern, which in turn is not-yet existent. To start with, we need a preliminary implementation!
+Besides searching, [[placement instances|Placement]] can be added to the index, thereby creating a copy managed by the backing data structure. Thus, the session's PlacementIndex is the main interface to the session data structure, and the session's contents are actually contained within it.
 
-Using a ''flat hashtable'' would allow to access a Placement denoted by ID in O(1). This way we could get the Placement, but nothing more. So, additionally we'd have to set up an data record holding additional information:
+!discussion of implementation possibilities
+What implementation approach to take for the index largely depends on the usage pattern. Generally speaking, the Lumiera [[Session]] is a collection of MObjects attached by [[Placement]]; any relations between these objects are established on a logical level, implemented as markers within the respective placements. For [[building the render nodes graph|BuildProcess]], a consolidated view of the session's effective contents is created (&quot;[[Fixture]]&quot;), then to be traversed while emitting the LowLevelModel. The GUI is expected to query the index to discover parts of the structure; the [[object reference tags|MObjectRef]] returned by these queries will be used as arguments to any mutating operation on the objects within the session.
+
+Using a ''flat hashtable'' allows to access a Placement denoted by ID in O(1). This way we get the Placement, but nothing more. So, additionally we'd have to set up an data record holding additional information:
 * the [[scope|PlacementScope]] containing this placement
 * especially the path &quot;up&quot; from this scope, which is used for resolving any queries
 * relations to other placements
 
-Alternatively, we could try to use a ''structure based index''. Following this idea, we could try to avoid the mentioned description record by folding any of the contained informations into the surrounding data structure:
+Alternatively, we could try to use a ''structure based index'', thereby avoiding the mentioned description record by folding any of the contained informations into the surrounding data structure:
 * the scope would be obvious from the index, resp. from the path used to resolve this index
 * any other informations, especially the relations, would be folded into the placement
 * this way, the &quot;index&quot; could be reduced to being the session data structure itself.
 
 
 !supported operations
-The placement index is utilized by editing operations, by executing the build process. Besides these core operations it allows for resolving PlacementRef objects. This latter functionality is used by all kinds of relative placements and for dealing with them while building, but it is also used to resolve [[object reference tags|MObjectRef]], which possibly may have been handed out via an external API or may have crossed layer boundaries. From these use cases we derive the following main operations to support:
+The placement index is utilized by editing operations and by executing the build process. Besides these core operations it allows for resolving PlacementRef objects. This latter functionality is used by all kinds of relative placements and for dealing with them while building, but it is also used to resolve [[object reference tags|MObjectRef]], which possibly may have been handed out via an external API or may have crossed layer boundaries. From these use cases we derive the following main operations to support:
 * find the actual [[Placement]] object for a given ID
 * find the //scope//&amp;nbsp; a given placement resides in. More specifically, find the [[placement defining this scope|PlacementScope]]
-* find (any/all) other placements referring to a given placement
+* find (any/all) other placements referring to a given placement (&quot;within this scope&quot;)
 * add a new placement to a scope given as parameter
 * remove a placement from index
 
 //does a placement need to know it's own ID?// &amp;nbsp; Obviously, there needs to be a way to find out the ID for a given placement, especially in the following situations:
-* for most of the operations above, when querying some additional informations from index for a given placement
+* for most of the operations above, when querying additional informations from index for a given placement
 * to create a PlacementRef (this is a variant of the &quot;shared ptr from this&quot;-problem)
-On second sight, this problem seems to be quite nasty, because either we have to keep a second index table for the reversed lookup (memory address -&gt; ID), or have to tie the placement by a back-link when adding it to the index/session data structure, or (at least) it forces us to store a copy of the ID //within// the placement itself. The last possibility seems to create the least impact; but implementing it this way effectively gears the implementation towards a hashtable based approach.
+On second sight, this problem turns out to be more involved, because either we have to keep a second index table for the reverse lookup (memory address -&gt; ID), or have to tie the placement by a back-link when adding it to the index/session data structure, or (alternatively) it forces us to store a copy of the ID //within// the placement itself. The last possibility seems to create the least impact; but implementing it this way effectively gears the implementation towards a hashtable based approach.
 
 !implementation {{red{WIP}}}
-Consequently, we incorporate a random hash (implemented as {{{LUID}}}) into the individual placement, this way creating an distinguishable //placement identity,// which is retained on copying of the placement. The actual ID tag is complemented by a compile time type (template parameter), thus allowing to pass on additional context information through API calls.
+Consequently, we incorporate a random hash (implemented as {{{LUID}}}) into the individual placement, this way creating an distinguishable //placement identity,// which is //not retained on copying.// The actual ID tag is complemented by a compile time type (template parameter), thus allowing to pass on additional context information through API calls. Placements themselves use a vtable (and thus RTTI), allowing to re-discover the exact type at runtime. Any further relation information is contained within the placement's [[locating pins|LocatingPin]], thus, any further description records can be avoided by storing the placements immediately //within the index.// To summarise, the implementation is comprised of
+* a main table resolving hash-ID to storage location
+* a reverse lookup table to find the enclosing scope
+* an instance holding and managing facility based on pooled allocation
 </pre>
 </div>
 <div title="PlacementRef" modifier="Ichthyostega" modified="200906020130" created="200905090032" tags="def spec draft" changecount="12">

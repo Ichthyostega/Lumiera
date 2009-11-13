@@ -78,7 +78,7 @@ namespace test    {
           ASSERT (isSameObject (root1, root2));
           
           PlacementMO& elm1 = *ContentsQuery<TestSubMO21>(resolver1,root1);
-//        PlacementMO& elm2 = index->getReferrers(root1);              //////////////TODO: interface for low level enumeration
+          PlacementMO& elm2 = *(index->getReferrers(root1));
           ASSERT (isSameObject (elm1, elm2));
         }
       

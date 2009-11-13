@@ -65,6 +65,7 @@
  ** 
  ** @todo WIP WIP WIP
  ** @todo see Ticket #182
+ ** @todo naming of the iteration control function: TICKET #410
  ** 
  ** @see scoped-ptrvect.hpp
  */
@@ -236,7 +237,7 @@ namespace lib {
       bool
       checkPos()  const
       {
-        return source_ && hasNext (source_,pos_);
+        return source_ && hasNext (source_,pos_);                    //////////////TICKET #410
       }
       
       /** ask the controlling container to yield the next position.

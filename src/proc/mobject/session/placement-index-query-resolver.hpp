@@ -70,6 +70,8 @@ namespace session {
     {
     
 ////////////////////////////////////////////////////////////////TODO: moved in from PlacementIndex      
+      typedef session::Goal::QueryID const& QID;
+
       template<class MO>
       typename session::Query<Placement<MO> >::iterator
       query (PlacementMO& scope)                  const;
@@ -89,10 +91,22 @@ namespace session {
    */
   template<class MO>
   inline typename session::Query<Placement<MO> >::iterator
-  PlacementIndex::query (PlacementMO& scope)  const
+  PlacementIndexQueryResolver::query (PlacementMO& scope)  const
   {
     UNIMPLEMENTED ("actually run the containment query");
   }
+  
+  
+  bool
+  PlacementIndexQueryResolver::canHandleQuery (QID qID) const
+  {
+    UNIMPLEMENTED ("decide by hard-wired check if the given Query can be resolved by PlacementIndex");
+    return session::Goal::GENERIC == qID.kind;
+        // thats not enough! need to check the typeID (match to Placement<MOX>, with some fixed MOX values)
+  }
+  
+  
+  
 ////////////////////////////////////////////////////////////////TODO:      
   
 
