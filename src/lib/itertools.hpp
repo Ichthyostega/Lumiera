@@ -38,7 +38,7 @@
  ** (IterTool) exposes the operations necessary to comply to the
  ** Forward Iterator Concept. 
  ** 
- ** \par Filtering Iterator
+ ** \par filtering Iterator
  ** The FilterIter template can be used to build a filter into a pipeline,
  ** as it forwards only those elements from its source iterator, which pass
  ** the predicate evaluation. Anything acceptable as ctor parameter for a
@@ -46,8 +46,15 @@
  ** signature must be sensible. Please note, that -- depending on the
  ** predicate -- already the ctor or even a simple \c bool test might
  ** pull and exhaust the source iterator completely, in an attempt
- ** to find the first element passing the predicate test. 
- **  
+ ** to find the first element passing the predicate test.
+ ** 
+ ** \par processing Iterator
+ ** the TransformIter template can be used as processing (or transforming)
+ ** step within the pipeline. It is created with a functor, which, when 
+ ** pulling elements, is invoked for each element pulled from the 
+ ** source iterator. The signature of the functor must match the
+ ** desired value (output) type. 
+ ** 
  ** @todo WIP WIP WIP
  ** @todo see Ticket #347
  ** 
@@ -63,6 +70,7 @@
 
 #include "lib/bool-checkable.hpp"
 #include "lib/iter-adapter.hpp"
+#include "lib/meta/function.hpp"
 #include "lib/util.hpp"
 
 #include <tr1/functional>
@@ -91,7 +99,7 @@ namespace lib {
   template<class IT>
   struct IdentityCore
     {
-      mutable IT source_;
+      IT source_;
       
       IdentityCore (IT const& orig)
         : source_(orig)
@@ -218,10 +226,6 @@ namespace lib {
           return !isValid();
         }
       
-      
-      /// comparison is allowed to access the feed pipe from core
-      template<class CX>
-      friend bool operator== (IterTool<CX> const& it1, IterTool<CX> const& it2);
     };
   
   
@@ -229,8 +233,8 @@ namespace lib {
   inline bool
   operator== (IterTool<CX> const& it1, IterTool<CX> const& it2)
   {
-    return it1.isValid()    == it2.isValid()
-        && it1.core_.pipe() == it2.core_.pipe()
+    return (!it1 && !it2 )
+        || ( it1 &&  it2 && (*it1) == (*it2) )
         ;
   }
   
@@ -318,6 +322,146 @@ namespace lib {
     return FilterIter<IT>(src,filterPredicate);
   }
   
+  
+  
+  
+  
+  
+  
+  
+  
+  /**
+   * Implementation of custom processing logic.
+   * This core stores a function object instance
+   * to treat each source element pulled.
+   */
+  template<class IT, class VAL>
+  class TransformingCore
+    {
+      typedef typename IT::reference InType;
+      
+      function<VAL(InType)> trafo_;
+      
+      IT source_;
+      VAL treated_;
+      
+      void
+      processItem ()
+        {
+          if (source_)
+            treated_ = trafo_(*source_);
+        }
+      
+      VAL*
+      yieldResult ()  const
+        {
+          if (source_)
+            return &unConst(this)->treated_;  // accessing processed value doesn't count as "mutation" of *this
+          else
+            return 0; // signalling exhausted source
+        }
+      
+      
+    public:
+      TransformingCore () ///< deactivated core
+        : trafo_()
+        , source_()
+        , treated_()
+        { }
+      
+      template<typename FUN>
+      TransformingCore (IT const& orig, FUN processor)
+        : trafo_(processor) // induces a signature check
+        , source_(orig)
+        {
+          processItem();
+        }
+      
+      VAL *
+      pipe ()  const
+        {
+          return yieldResult();
+        }
+      
+      void
+      advance ()
+        {
+          ++source_;
+          processItem();
+        }
+      
+      bool
+      evaluate () const
+        {
+          return bool(source_);
+        }
+      
+      typedef VAL* pointer;
+      typedef VAL& reference;
+      typedef VAL  value_type;
+    };
+  
+  
+  /**
+   * Iterator tool treating pulled data by a custom transformation (function)
+   */
+  template<class IT, class VAL>
+  class TransformIter
+    : public IterTool<TransformingCore<IT,VAL> >
+    {
+      typedef TransformingCore<IT,VAL> _Trafo;
+      typedef IterTool<_Trafo> _IteratorImpl;
+      
+    public:
+      TransformIter ()
+        : _IteratorImpl(_Trafo())
+        { }
+      
+      template<typename FUN>
+      TransformIter (IT const& src, FUN trafoFunc)
+        : _IteratorImpl(_Trafo(src,trafoFunc))
+        { }
+      
+    };
+  
+  
+  
+  namespace { // Helper to pick up the produced value type automatically
+    
+    using lumiera::typelist::FunctionSignature;
+    
+    template<typename SIG>
+    struct _ProducedOutput
+      {
+        typedef typename FunctionSignature<function<SIG> >::Ret Type;
+      };
+    
+    template<typename SIG>
+    struct _ProducedOutput<function<SIG> >
+      {
+        typedef typename FunctionSignature<function<SIG> >::Ret Type;
+      };
+    
+    template<typename FUN>
+    struct _ProducedOutput<FUN*>
+      {
+        typedef typename FunctionSignature<function<FUN> >::Ret Type;
+      };
+  }
+  
+  
+  /** Build a TransformIter: convenience free function shortcut,
+   *  picking up the involved types automatically.
+   *  @param  processingFunc to be invoked for each source element
+   *  @return Iterator processing the source feed
+   */
+  template<class IT, typename FUN>
+  inline TransformIter<IT, typename _ProducedOutput<FUN>::Type>
+  transformIterator (IT const& src, FUN processingFunc)
+  {
+    typedef typename _ProducedOutput<FUN>::Type OutVal;
+    return TransformIter<IT,OutVal>(src,processingFunc);
+  }
   
   
   

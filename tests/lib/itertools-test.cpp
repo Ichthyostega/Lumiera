@@ -78,7 +78,7 @@ namespace test{
   
   /*******************************************************************************
    *  @test build combined and filtering iterators with the help of lib::IterTool.
-   *        Check correct behaviour of the resulting iterator and 
+   *        Check correct behaviour of the resulting iterators and 
    *        verify they fulfil the Lumiera Forward Iterator concept
    *        
    * @todo implement more iterator tools.... see Ticket #347
@@ -104,6 +104,8 @@ namespace test{
           Iter ii (source.begin());
           ++++++ii;
           buildFilterIterator (ii);
+          
+          buildTransformingIterator (source.begin());
         }
       
       
@@ -120,8 +122,8 @@ namespace test{
       
       
       static bool takeAll (int)   { return true; }
-      static bool takeEve (int i) { return 0 == i % 2; }
       static bool takeOdd (int i) { return 0 != i % 2; }
+      static bool takeEve (int i) { return 0 == i % 2; }
       
       void
       buildFilterIterator (Iter const& ii)
@@ -142,6 +144,36 @@ namespace test{
           ASSERT (isnil (odd));
           ASSERT (all == odd);
         }
+      
+      
+      
+      static ulong addTwo (int i) { return i+2; }
+      static int   negate (int i) { return -i; }
+      static int   idFunc (int i) { return i; }
+      
+      void
+      buildTransformingIterator (Iter const& ii)
+        {
+          pullOut (transformIterator(ii, idFunc));
+          pullOut (transformIterator(ii, negate));
+          pullOut (transformIterator(ii, addTwo));  // note: changing output type to unsigned
+          
+          TransformIter<Iter, int> idi (ii, idFunc);
+          TransformIter<Iter, int> neg (ii, negate);
+          verifyComparisons (idi);
+          verifyComparisons (neg);
+          
+          ASSERT (idi);
+          ASSERT (neg);
+          for ( ;idi&&neg;
+              ++idi,++neg)
+            ASSERT (idi != neg);
+          
+          ASSERT (!idi && !neg);
+          ASSERT (idi == neg);
+        }
+      
+      
       
       
       
