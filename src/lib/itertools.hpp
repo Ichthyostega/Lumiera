@@ -98,15 +98,21 @@ namespace lib {
         { }
       
       IT&
-      source ()
+      pipe ()
         {
           return source_;
         }
       
       IT const&
-      source ()  const
+      pipe ()  const
         {
           return source_;
+        }
+      
+      void
+      advance ()
+        {
+          ++source_;
         }
       
       bool
@@ -146,11 +152,11 @@ namespace lib {
       bool
       iterate ()
         {
-          if (!core_.source()) return false;
+          if (!core_.pipe()) return false;
           
-          do ++core_.source();
-          while (core_.source() && !core_.evaluate());
-          return core_.source();
+          do core_.advance();
+          while (core_.pipe() && !core_.evaluate());
+          return core_.pipe();
         }
       
       void
@@ -182,14 +188,14 @@ namespace lib {
       operator*() const
         {
           _maybe_throw();
-          return *core_.source();
+          return *core_.pipe();
         }
       
       pointer
       operator->() const
         {
           _maybe_throw();
-          return core_.source();
+          return core_.pipe();
         }
       
       IterTool&
@@ -213,7 +219,7 @@ namespace lib {
         }
       
       
-      /// comparison is allowed to access the source iterator
+      /// comparison is allowed to access the feed pipe from core
       template<class CX>
       friend bool operator== (IterTool<CX> const& it1, IterTool<CX> const& it2);
     };
@@ -223,8 +229,8 @@ namespace lib {
   inline bool
   operator== (IterTool<CX> const& it1, IterTool<CX> const& it2)
   {
-    return it1.isValid()      == it2.isValid()
-        && it1.core_.source() == it2.core_.source()
+    return it1.isValid()    == it2.isValid()
+        && it1.core_.pipe() == it2.core_.pipe()
         ;
   }
   
@@ -261,8 +267,8 @@ namespace lib {
       bool
       evaluate () const
         {
-          return _Par::source()
-              && predicate_(*_Par::source());
+          return _Par::pipe()
+              && predicate_(*_Par::pipe());
         }
       
       
