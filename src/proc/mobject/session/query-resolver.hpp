@@ -98,7 +98,7 @@ namespace session {
       class Result
         : public lib::BoolCheckable<Result>
         {
-          void *cur_;
+          void* cur_;
           
         protected:
           void point_at(void* p) { cur_ = p; }

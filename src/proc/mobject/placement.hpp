@@ -230,7 +230,7 @@ namespace mobject {
   format_PlacementID (Placement<MObject> const&) ;
   
   
-  /** @todo cleanup uses of ref-to-placement. See Trac #115 */
+  /** @todo cleanup uses of ref-to-placement. See Ticket #115 */
   typedef Placement<MObject> PlacementMO; 
   typedef Placement<MObject> PMO; 
 

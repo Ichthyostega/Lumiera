@@ -42,6 +42,7 @@
 //#include "proc/mobject/placement.hpp"
 #include "proc/mobject/session/placement-index.hpp"
 #include "proc/mobject/session/query-resolver.hpp"
+#include "proc/mobject/session/scope-query.hpp"
 
 //#include <tr1/memory>
 //#include <boost/noncopyable.hpp>
@@ -68,7 +69,9 @@ namespace session {
   class PlacementIndexQueryResolver
     : public session::QueryResolver
     {
-    
+      PPIdx index_;
+      
+      typedef PlacementIndex::ID PID;
 ////////////////////////////////////////////////////////////////TODO: moved in from PlacementIndex      
       typedef session::Goal::QueryID const& QID;
 
@@ -79,7 +82,72 @@ namespace session {
       operator string()  const { return "PlacementIndex"; }
       
       bool canHandleQuery(QID)                    const;
-////////////////////////////////////////////////////////////////TODO:      
+////////////////////////////////////////////////////////////////TODO:
+        
+      /**
+       * on query, an individual result set is prepared
+       * to be explored by the invoking client code.
+       * It is built wrapping the low-level scope iterator
+       * obtained from the index, controlled by an 
+       * exploration strategy.
+       */
+      template<typename TY>
+      struct ResultSet
+        : Resolution
+        {
+          DummySolutions<TY> solutions_;
+          
+          typedef typename Query<TY>::Cursor Cursor;
+          
+          Result
+          prepareResolution()
+            {
+              Cursor cursor;
+              cursor.point_at (solutions_.next());
+              return cursor;
+            }
+          
+          void
+          nextResult(Result& pos)
+            {
+              Cursor& cursor = static_cast<Cursor&> (pos);
+              
+              if (solutions_.exhausted())
+                cursor.point_at (0);
+              else
+                cursor.point_at (solutions_.next());
+            }
+        };
+        
+      template<typename MO>
+      static Resolution*
+      resolutionFunction (Goal const& goal)
+        {
+          QID qID = goal.getQID();
+          REQUIRE (qID.kind == Goal::DISCOVERY
+                && qID.type == getResultTypeID<Placement<MO> >());       /////////////////////////////TODO
+          REQUIRE (INSTANCEOF(ScopeQuery<MO>, &goal));
+          ScopeQuery<MO> const& query = static_cast<ScopeQuery<MO> const&> (goal);
+          
+          Literal direction = query.searchDirection();
+          PID scopeID = query.searchScope().getID();     //////////TICKET #411
+          
+          ///////////////////////////TODO: where to put the exploration strategy? statically, dynamically?
+          //////////////////////////////// note: direction == "parents" works completely different, based on index_->getScope(..)
+          
+          return new ResultSet<MO>(); 
+        }
+      
+    public:
+      PlacementIndexQueryResolver (PPIdx theIndex)
+        : index_(theIndex)
+        {
+          Goal::QueryID case1 = {Goal::DISCOVERY, getResultTypeID<int>()};           /////////////////TODO
+          Goal::QueryID case2 = {Goal::DISCOVERY, getResultTypeID<string>()};
+          
+          installResolutionCase(case1, &resolutionFunction<int> );
+          installResolutionCase(case2, &resolutionFunction<string> );
+        }
     };
   
   
