@@ -68,12 +68,12 @@ namespace mobject {
   /**
    * TODO type comment
    */
-  template<class MO =MObject>
+  template<class MX =MObject>
   class PlacementRef
     {
-      typedef Placement<MO>      PlacementMO;
+      typedef Placement<MX>      PlacementMX;
       typedef Placement<MObject>::ID     _ID;         ////TODO: could we define const& here??
-      typedef Placement<MObject>::Id<MO> _Id;
+      typedef Placement<MObject>::Id<MX> _Id;
       
       _Id id_;
       
@@ -115,7 +115,7 @@ namespace mobject {
         }
       
       template<class X>
-      PlacementRef (PlacementRef<X> const& r) ///< extended copy ctor, when type X is assignable to MO
+      PlacementRef (PlacementRef<X> const& r) ///< extended copy ctor, when type X is assignable to MX
         : id_(recast(r))
         {
           validate(id_); 
@@ -151,9 +151,9 @@ namespace mobject {
       
       /* == forwarding smart-ptr operations == */
       
-      PlacementMO& operator*()  const { return access(id_); } ///< dereferencing fetches referred Placement from Index
+      PlacementMX& operator*()  const { return access(id_); } ///< dereferencing fetches referred Placement from Index
       
-      PlacementMO& operator->() const { return access(id_); } ///< provide access to pointee API by smart-ptr chaining 
+      PlacementMX& operator->() const { return access(id_); } ///< provide access to pointee API by smart-ptr chaining 
       
       operator string()         const { return access(id_).operator string(); }
       size_t use_count()        const { return access(id_).use_count(); }
@@ -210,8 +210,8 @@ namespace mobject {
       static void
       validate (_Id const& rId)
         {
-          PlacementMO& pRef (access (rId));
-          if (!(pRef.template isCompatible<MO>()))
+          PlacementMX& pRef (access (rId));
+          if (!(pRef.template isCompatible<MX>()))
             throw lumiera::error::Invalid("actual type of the resolved placement is incompatible",LUMIERA_ERROR_INVALID_PLACEMENTREF);
           
                   ////////////////////////TODO: 1. better message, including type?
@@ -231,13 +231,13 @@ namespace mobject {
           return reinterpret_cast<_Id const&> (*luid);
         }
       
-      static PlacementMO&
+      static PlacementMX&
       access (_Id const& placementID)
         {
           Placement<MObject> & pla (session::SessionServiceFetch::resolveID (placementID));  // may throw
           REQUIRE (pla.isValid());
-          ASSERT (pla.isCompatible<MO>());
-          return static_cast<PlacementMO&> (pla);
+          ASSERT (pla.isCompatible<MX>());
+          return static_cast<PlacementMX&> (pla);
         }
     };
   
