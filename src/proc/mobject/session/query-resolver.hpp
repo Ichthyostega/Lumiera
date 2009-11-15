@@ -50,6 +50,14 @@ namespace session {
   using std::tr1::function;
   using std::string;
   
+  class no_copy_by_client
+    {
+     protected:
+       ~no_copy_by_client() {}
+        no_copy_by_client() {}
+        no_copy_by_client (no_copy_by_client const&) {}
+        const no_copy_by_client& operator=(no_copy_by_client const&) {}
+    };
   
   class Goal;
   class Resolution;
@@ -58,15 +66,15 @@ namespace session {
   
   /** Allow for taking ownership of a result set */
   typedef std::tr1::shared_ptr<Resolution> PReso;
-  
-  
+
+
   
   /**
    * TODO type comment
    * Query ABC
    */
   class Goal
-    : noncopyable
+    : no_copy_by_client
     {
     public:
       virtual ~Goal() ;
