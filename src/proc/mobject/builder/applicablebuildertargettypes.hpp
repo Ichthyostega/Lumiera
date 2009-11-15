@@ -1,5 +1,5 @@
 /*
-  ApplicableBuilderTargetTypes  -  definitinon header specifying all types treated by builder tools
+  ApplicableBuilderTargetTypes  -  definition header specifying all types treated by builder tools
  
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>

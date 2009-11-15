@@ -46,8 +46,9 @@
 
 //#include <tr1/memory>
 //#include <boost/noncopyable.hpp>
-//#include <boost/scoped_ptr.hpp>
+#include <boost/scoped_ptr.hpp>
 //#include <vector>
+#include <stack>
 
 
 namespace mobject {
@@ -58,7 +59,7 @@ namespace session {
   
 //  using lib::factory::RefcountFac;
 //  using std::tr1::shared_ptr;
-//  using boost::scoped_ptr;
+  using boost::scoped_ptr;
 //  using std::vector;
   
   
@@ -72,8 +73,9 @@ namespace session {
       PPIdx index_;
       
       typedef PlacementIndex::ID PID;
-////////////////////////////////////////////////////////////////TODO: moved in from PlacementIndex      
-      typedef session::Goal::QueryID const& QID;
+////////////////////////////////////////////////////////////////TODO: moved in from PlacementIndex
+      typedef Goal::QueryID QueryID;
+      typedef QueryID const& QID;
 
       template<class MO>
       typename session::Query<Placement<MO> >::iterator
@@ -83,7 +85,124 @@ namespace session {
       
       bool canHandleQuery(QID)                    const;
 ////////////////////////////////////////////////////////////////TODO:
-        
+
+      
+      typedef PlacementIndex::iterator PIter;
+      
+      
+      /** Interface: strategy for exploring the structure */
+      class Explorer
+        {
+        public:
+          virtual ~Explorer() { };
+          virtual bool exhausted ()          =0;
+          virtual PlacementMO& operator() () =0;
+        };
+      
+      /**
+       * Strategy: explore the structure
+       * just by following the given iterator;
+       * usually this yields an element's children
+       */
+      class ChildExplorer
+        {
+          PIter tip_;
+          
+          bool
+          exhausted() 
+            {
+              return !tip_;
+            }
+          
+          PlacementMO&
+          operator() ()
+            {
+              REQUIRE (tip_);
+              PlacementMO& pos = *tip_;
+              ++tip_;
+              return pos;
+            }
+          
+        public:
+          ChildExplorer(PIter start)
+            : tip_(start)
+            { }
+        };
+      
+      /**
+       * Strategy: explore the structure depth first.
+       * After returning an element, delve into the scope
+       * defined by this element and so on recursively.
+       */
+      class DeepExplorer
+        {
+          PPIdx index_;
+          std::stack<PIter> scopes_;
+          
+          bool
+          exhausted() 
+            {
+              while (!scopes_.empty() && !scopes_.top())
+                scopes_.pop();
+              return scopes_.empty();
+            }
+          
+          PlacementMO&
+          operator() ()
+            {
+              REQUIRE (!scopes_.empty() && scopes_.top());
+              PlacementMO& pos = *scopes_.top();
+              ++scopes_.top();
+              scopes_.push(index_->getReferrers(pos.getID()));
+              return pos;
+            }
+          
+        public:
+          DeepExplorer(PIter start, PPIdx idx)
+            : index_(idx)
+            {
+              scopes_.push(start);
+            }
+        };
+      
+      
+      /**
+       * Strategy: explore the structure upwards,
+       * ascending until reaching the root element.
+       */
+      class UpExplorer
+        {
+          PPIdx index_;
+          PlacementMO* tip_;
+          
+          bool
+          exhausted() 
+            {
+              return !tip_;
+            }
+          
+          PlacementMO&
+          operator() ()
+            {
+              REQUIRE (tip_);
+              PlacementMO& pos = *tip_;
+              tip_ = &index_->getScope(*tip_);
+              if (tip_ == &pos)
+                tip_ = 0;
+              return pos;
+            }
+          
+        public:
+          UpExplorer(PlacementMO& start, PPIdx idx)
+            : index_(idx)
+            , tip_(&start)
+            { }
+        };
+      
+      typedef function<bool(Val const&)> ContentFilter;
+      typedef function<Explorer*()> ExplorerBuilder;
+      
+      
       /**
        * on query, an individual result set is prepared
        * to be explored by the invoking client code.
@@ -91,36 +210,89 @@ namespace session {
        * obtained from the index, controlled by an 
        * exploration strategy.
        */
-      template<typename TY>
       struct ResultSet
         : Resolution
         {
-          DummySolutions<TY> solutions_;
+          typedef PlacementMO Val;
           
-          typedef typename Query<TY>::Cursor Cursor;
+          ContentFilter acceptable_;
+          ExplorerBuilder buildExploartion_;
+          scoped_ptr<Explorer> explore_;
+          
+          void
+          exploreNext (Result& res)
+            {
+              typedef typename Query<Val>::Cursor Cursor;
+              Cursor& cursor = static_cast<Cursor&> (res);
+              
+              while (!explore_->exhausted() )
+                {
+                  Val& elm (*explore_());
+                  if (acceptable_(elm))
+                    {
+                      cursor.point_at (elm);
+                      return;
+                    }
+                }
+              
+              ASSERT (explore_->exhausted());
+              cursor.point_at (0);
+            }   
           
           Result
           prepareResolution()
             {
-              Cursor cursor;
-              cursor.point_at (solutions_.next());
+              explore_.reset (buildExploartion_());
+              
+              Result cursor;
+              exploreNext (cursor);
               return cursor;
             }
           
           void
           nextResult(Result& pos)
             {
-              Cursor& cursor = static_cast<Cursor&> (pos);
-              
-              if (solutions_.exhausted())
-                cursor.point_at (0);
-              else
-                cursor.point_at (solutions_.next());
+              exploreNext (pos);
+              return pos;
             }
+          
+        public:
+          ResultSet (ExplorerBuilder b
+                    ,ContentFilter a)
+            : acceptable_(a)
+            , buildExploartion_(b)
+            , explore_()
+            { }
         };
         
+      Explorer*
+      setupExploration (PID startID, Literal direction)
+        {
+          if      (direction == "contents")
+            return new DeepExplorer(index_->getReferrers(startID), index_);
+          
+          else if (direction == "children") 
+            return new ChildExplorer(index_->getReferrers(startID));
+          
+          else if (direction == "parents") 
+            return new UpExplorer(index_->getScope(startID),index_);
+          
+          else if (direction == "path") 
+            return new UpExplorer(index_->find(startID),index_); 
+        }
+      
       template<typename MO>
-      static Resolution*
+      void
+      defineHandling()
+        {
+          installResolutionCase( whenQueryingFor<MO>()
+                               , bind (&PlacementIndexQueryResolver::resolutionFunction<MO>,
+                                       this, _1 )
+                               );
+        }
+        
+      template<typename MO>
+      Resolution*
       resolutionFunction (Goal const& goal)
         {
           QID qID = goal.getQID();
@@ -132,37 +304,44 @@ namespace session {
           Literal direction = query.searchDirection();
           PID scopeID = query.searchScope().getID();     //////////TICKET #411
           
-          ///////////////////////////TODO: where to put the exploration strategy? statically, dynamically?
-          //////////////////////////////// note: direction == "parents" works completely different, based on index_->getScope(..)
-          
-          return new ResultSet<MO>(); 
+          return new ResultSet( bind (&PlacementIndexQueryResolver::setupExploration, 
+                                      this, scopeID, direction)
+                              , getContentFilter(query)
+                              );
+        }
+      
+      template<typename QUERY>
+      ContentFilter
+      getContentFilter (QUERY query)
+        {
+          return query.contentFilter();
+        }
+      
+      ContentFilter
+      getContentFilter (ScopeQuery<MObject>) ///< especially queries for MObjects need not be filtered
+        {
+          ContentFilter acceptAllObjects = bind (val(true), _1);
+          return acceptAllObjects;
+        }
+      
+      template<typename MO>
+      static QueryID
+      whenQueryingFor()
+        {
+          QueryID qID = {Goal::DISCOVERY, getResultTypeID<Placement<MO> >()};
+          return qID;
         }
       
     public:
       PlacementIndexQueryResolver (PPIdx theIndex)
         : index_(theIndex)
         {
-          Goal::QueryID case1 = {Goal::DISCOVERY, getResultTypeID<int>()};           /////////////////TODO
-          Goal::QueryID case2 = {Goal::DISCOVERY, getResultTypeID<string>()};
-          
-          installResolutionCase(case1, &resolutionFunction<int> );
-          installResolutionCase(case2, &resolutionFunction<string> );
+          defineHandling<MObject>();
+          defineHandling<Clip>();
+          defineHandling<Effect>();
         }
     };
   
-  
-  
-  /** @todo use query-resolver-test as an example.....
-   *        return a result set object derived from Resolution
-   *        For the additional type filtering: build a filter iterator,
-   *        using a type-filtering predicate, based on Placement#isCompatible
-   */
-  template<class MO>
-  inline typename session::Query<Placement<MO> >::iterator
-  PlacementIndexQueryResolver::query (PlacementMO& scope)  const
-  {
-    UNIMPLEMENTED ("actually run the containment query");
-  }
   
   
   bool

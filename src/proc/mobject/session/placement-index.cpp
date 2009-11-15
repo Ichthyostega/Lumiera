@@ -111,6 +111,7 @@ namespace session {
   PlacementIndex::getScope (ID)  const
   {
     UNIMPLEMENTED ("Secondary core operation of PlacmentIndex: find the 'parent' Placement by using the Placement relation index");
+    /// decision: root is his own scope
   }
   
   

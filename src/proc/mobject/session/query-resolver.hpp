@@ -179,6 +179,7 @@ namespace session {
           RES* operator->()    { return & access<RES>();  }
           
           void point_at(RES* r){ Goal::Result::point_at(r);}
+          void point_at(RES& r){ Goal::Result::point_at(&r);}
         };
       
       

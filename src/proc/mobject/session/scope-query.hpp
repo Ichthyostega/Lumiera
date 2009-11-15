@@ -80,7 +80,7 @@ namespace session {
       
       
       typedef typename _Query::iterator _QIter;
-      typedef typename _QIter::reference Val;
+      typedef typename PlacementMO const& Val;
       
       
     public:
