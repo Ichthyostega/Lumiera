@@ -51,6 +51,7 @@ namespace lib {
   /** inline string literal
    *  @todo improve interaction with Symbol
    *  @todo make it non-nullable 
+   *  @todo maybe use boost/operators  Ticket #417
    */
   class Literal
     {
@@ -126,6 +127,32 @@ namespace lib {
     return ! (sy1 == sy2); 
   }
   
+  /// comparison with c-strings                     //////TICKET #417
+  inline bool
+  operator== (Literal sy1, const char* const sy2)
+  {
+    return   (sy1 == Literal(sy2)); 
+  }
+  
+  inline bool
+  operator== (const char* const sy1, Literal sy2)
+  {
+    return   (Literal(sy1) == sy2); 
+  }
+  
+  inline bool
+  operator!= (Literal sy1, const char* const sy2)
+  {
+    return ! (sy1 == Literal(sy2)); 
+  }
+  
+  inline bool
+  operator!= (const char* const sy1, Literal sy2)
+  {
+    return ! (Literal(sy1) == sy2); 
+  }
+  
+  /// string concatenation
   inline std::string
   operator+ (std::string str, Literal const& sym)
   {
