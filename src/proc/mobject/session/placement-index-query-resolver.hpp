@@ -339,6 +339,7 @@ namespace session {
           defineHandling<MObject>();
           defineHandling<Clip>();
           defineHandling<Effect>();
+          ///////////////////////////////////////TICKET #414
         }
     };
   
