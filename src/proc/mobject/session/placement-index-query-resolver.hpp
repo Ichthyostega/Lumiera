@@ -44,6 +44,10 @@
 #include "proc/mobject/session/query-resolver.hpp"
 #include "proc/mobject/session/scope-query.hpp"
 
+///////////TODO
+#include "proc/mobject/session/clip.hpp"
+#include "proc/mobject/session/effect.hpp"
+
 //#include <tr1/memory>
 //#include <boost/noncopyable.hpp>
 #include <boost/scoped_ptr.hpp>
@@ -62,6 +66,9 @@ namespace session {
   using boost::scoped_ptr;
 //  using std::vector;
   
+  class Clip;
+  class Effect;
+  
   
   
   /**
@@ -73,21 +80,13 @@ namespace session {
       PPIdx index_;
       
       typedef PlacementIndex::ID PID;
-////////////////////////////////////////////////////////////////TODO: moved in from PlacementIndex
       typedef Goal::QueryID QueryID;
       typedef QueryID const& QID;
-
-      template<class MO>
-      typename session::Query<Placement<MO> >::iterator
-      query (PlacementMO& scope)                  const;
-      
-      operator string()  const { return "PlacementIndex"; }
-      
-      bool canHandleQuery(QID)                    const;
-////////////////////////////////////////////////////////////////TODO:
-
       
       typedef PlacementIndex::iterator PIter;
+      
+      
+      operator string()  const { return "PlacementIndex"; }
       
       
       /** Interface: strategy for exploring the structure */
@@ -95,8 +94,8 @@ namespace session {
         {
         public:
           virtual ~Explorer() { };
-          virtual bool exhausted ()          =0;
-          virtual PlacementMO& operator() () =0;
+          virtual bool exhausted ()    =0;
+          virtual PlacementMO& step () =0;
         };
       
       /**
@@ -105,6 +104,7 @@ namespace session {
        * usually this yields an element's children
        */
       class ChildExplorer
+        : public Explorer
         {
           PIter tip_;
           
@@ -115,7 +115,7 @@ namespace session {
             }
           
           PlacementMO&
-          operator() ()
+          step ()
             {
               REQUIRE (tip_);
               PlacementMO& pos = *tip_;
@@ -135,6 +135,7 @@ namespace session {
        * defined by this element and so on recursively.
        */
       class DeepExplorer
+        : public Explorer
         {
           PPIdx index_;
           std::stack<PIter> scopes_;
@@ -148,7 +149,7 @@ namespace session {
             }
           
           PlacementMO&
-          operator() ()
+          step ()
             {
               REQUIRE (!scopes_.empty() && scopes_.top());
               PlacementMO& pos = *scopes_.top();
@@ -171,6 +172,7 @@ namespace session {
        * ascending until reaching the root element.
        */
       class UpExplorer
+        : public Explorer
         {
           PPIdx index_;
           PlacementMO* tip_;
@@ -182,7 +184,7 @@ namespace session {
             }
           
           PlacementMO&
-          operator() ()
+          step ()
             {
               REQUIRE (tip_);
               PlacementMO& pos = *tip_;
@@ -199,7 +201,8 @@ namespace session {
             { }
         };
       
-      typedef function<bool(Val const&)> ContentFilter;
+      typedef PlacementMO Pla;
+      typedef function<bool(Pla const&)> ContentFilter;
       typedef function<Explorer*()> ExplorerBuilder;
       
       
@@ -213,7 +216,6 @@ namespace session {
       struct ResultSet
         : Resolution
         {
-          typedef PlacementMO Val;
           
           ContentFilter acceptable_;
           ExplorerBuilder buildExploartion_;
@@ -222,12 +224,12 @@ namespace session {
           void
           exploreNext (Result& res)
             {
-              typedef typename Query<Val>::Cursor Cursor;
+              typedef Query<Pla>::Cursor Cursor;
               Cursor& cursor = static_cast<Cursor&> (res);
               
               while (!explore_->exhausted() )
                 {
-                  Val& elm (*explore_());
+                  Pla& elm (explore_->step());
                   if (acceptable_(elm))
                     {
                       cursor.point_at (elm);
@@ -253,7 +255,6 @@ namespace session {
           nextResult(Result& pos)
             {
               exploreNext (pos);
-              return pos;
             }
           
         public:
@@ -279,6 +280,9 @@ namespace session {
           
           else if (direction == "path") 
             return new UpExplorer(index_->find(startID),index_); 
+          
+          else
+            throw lumiera::error::Invalid("unknown query direction");    //////TICKET #197
         }
       
       template<typename MO>
@@ -296,13 +300,12 @@ namespace session {
       resolutionFunction (Goal const& goal)
         {
           QID qID = goal.getQID();
-          REQUIRE (qID.kind == Goal::DISCOVERY
-                && qID.type == getResultTypeID<Placement<MO> >());       /////////////////////////////TODO
+          REQUIRE (qID == whenQueryingFor<MO>());
           REQUIRE (INSTANCEOF(ScopeQuery<MO>, &goal));
           ScopeQuery<MO> const& query = static_cast<ScopeQuery<MO> const&> (goal);
           
           Literal direction = query.searchDirection();
-          PID scopeID = query.searchScope().getID();     //////////TICKET #411
+          PID scopeID = query.searchScope().getID();     ///////////////////////////////TICKET #411
           
           return new ResultSet( bind (&PlacementIndexQueryResolver::setupExploration, 
                                       this, scopeID, direction)
@@ -312,7 +315,7 @@ namespace session {
       
       template<typename QUERY>
       ContentFilter
-      getContentFilter (QUERY query)
+      getContentFilter (QUERY query)         ///< use filter predicate provided by the concrete query
         {
           return query.contentFilter();
         }
@@ -320,9 +323,13 @@ namespace session {
       ContentFilter
       getContentFilter (ScopeQuery<MObject>) ///< especially queries for MObjects need not be filtered
         {
-          ContentFilter acceptAllObjects = bind (val(true), _1);
+          static ContentFilter acceptAllObjects = bind (&acceptAllObjects_, _1);
           return acceptAllObjects;
         }
+      
+      static bool acceptAllObjects_(Pla) { return true; }
+
+      
       
       template<typename MO>
       static QueryID
@@ -332,6 +339,17 @@ namespace session {
           return qID;
         }
       
+      virtual bool 
+      canHandleQuery(QID qID)  const
+        {
+          return qID.kind == Goal::DISCOVERY 
+             &&( qID.type == getResultTypeID<Placement<MObject> >()
+               ||qID.type == getResultTypeID<Placement<Clip> >()
+               ||qID.type == getResultTypeID<Placement<Effect> >()
+                             ///////////////////////////////////////TICKET #414
+               );
+        }
+      
     public:
       PlacementIndexQueryResolver (PPIdx theIndex)
         : index_(theIndex)
@@ -339,23 +357,13 @@ namespace session {
           defineHandling<MObject>();
           defineHandling<Clip>();
           defineHandling<Effect>();
-          ///////////////////////////////////////TICKET #414
+                             ///////////////////////////////////////TICKET #414
         }
     };
   
   
   
-  bool
-  PlacementIndexQueryResolver::canHandleQuery (QID qID) const
-  {
-    UNIMPLEMENTED ("decide by hard-wired check if the given Query can be resolved by PlacementIndex");
-    return session::Goal::GENERIC == qID.kind;
-        // thats not enough! need to check the typeID (match to Placement<MOX>, with some fixed MOX values)
-  }
   
-  
-  
-////////////////////////////////////////////////////////////////TODO:      
   
 
   

@@ -43,6 +43,42 @@ namespace session {
   
   
   /**
+   * Mix-in ABC, combining a Query for placement-attached objects
+   * with an embedded result set iterator. Thus, an concrete (derived)
+   * DiscoveryQuery can be created by the invoking client code, and
+   * then immediately explored until exhaustion of the result iterator. 
+   */
+  template<class MO>
+  class DiscoveryQuery
+    : public Query<Placement<MO> >
+    , public Query<Placement<MO> >::iterator
+    {
+      
+      /// Assignment explicitly disallowed (but copy ctor is ok)
+      DiscoveryQuery const& operator=(DiscoveryQuery const&); 
+      
+    protected:
+      typedef Query<Placement<MO> > _Query;
+      typedef typename _Query::iterator _QIter;
+      
+    protected:
+      DiscoveryQuery ()
+        : _Query (_Query::defineQueryTypeID (Goal::DISCOVERY))
+        , _QIter ()
+        { }
+      
+      
+      typedef PlacementMO const& Pla;
+      typedef function<bool(Pla)> ContentFilter;
+      
+      /** yield an additional filter to be applied
+       *  on the result set. */
+      virtual ContentFilter  buildContentFilter()  const  =0;
+    };
+  
+  
+  
+  /**
    * Query a scope to discover it's contents or location.
    * This is a special kind of query, wired up such as to enumerate
    * the contents or parents of a scope, filtered by a subtype-check.
@@ -69,31 +105,25 @@ namespace session {
    */
   template<class MO>
   class ScopeQuery
-    : public Query<Placement<MO> >
-    , public Query<Placement<MO> >::iterator
+    : public DiscoveryQuery<MO>
     {
-      typedef Query<Placement<MO> > _Query;
+      typedef DiscoveryQuery<MO> _Par;
+      typedef typename _Par::_Query _Query;
+      
       
       QueryResolver const&    index_;
       PlacementMO const& startPoint_;
-      Literal what_to_discover_;
-      
-      
-      typedef typename _Query::iterator _QIter;
-      typedef typename PlacementMO const& Val;
-      
+      Literal      what_to_discover_;
       
     public:
-      typedef _QIter              iterator;
-      typedef function<bool(Val)> ContentFilter;
+      typedef typename _Par::ContentFilter ContentFilter;
+      typedef typename _Query::iterator iterator;
       
       
       ScopeQuery (QueryResolver const& resolver,
                   PlacementMO  const& scope,
                   Literal direction)
-        : _Query (_Query::defineQueryTypeID (Goal::DISCOVERY))
-        , _QIter ()
-        , index_(resolver)
+        : index_(resolver)
         , startPoint_(scope)
         , what_to_discover_(direction)
         {
@@ -127,7 +157,7 @@ namespace session {
         }
       
       
-    protected:
+    private:
       /** the default implementation of the content filtering
        *  builds on the downcast-function available on each 
        *  Placement instance. By parametrising this function
@@ -140,7 +170,6 @@ namespace session {
           return bind (&PlacementMO::isCompatible<MO>, _1 );
         }
       
-    private:
       void
       resetResultIteration (iterator const& newQueryResults)
         {

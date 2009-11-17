@@ -56,7 +56,8 @@ namespace session {
        ~no_copy_by_client() {}
         no_copy_by_client() {}
         no_copy_by_client (no_copy_by_client const&) {}
-        const no_copy_by_client& operator=(no_copy_by_client const&) {}
+        no_copy_by_client const&
+        operator=(no_copy_by_client const&) { return *this; }
     };
   
   class Goal;
@@ -135,6 +136,20 @@ namespace session {
         { }
       
     };
+  
+  
+  inline bool
+  operator== (Goal::QueryID const& id1, Goal::QueryID const& id2)
+  {
+    return id1.kind == id2.kind
+        && id1.type == id2.type;
+  }
+  
+  inline bool
+  operator!= (Goal::QueryID const& id1, Goal::QueryID const& id2)
+  {
+    return ! (id1  == id2);
+  }
   
   
   

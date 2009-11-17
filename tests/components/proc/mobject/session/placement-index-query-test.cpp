@@ -94,7 +94,7 @@ namespace test    {
           
           PlacementMO& elm = *ContentsQuery<TestSubMO1>(resolver,root);
           
-          discover (PathQuery(resolver,elm));
+          discover (PathQuery<MObject> (resolver,elm));
         }
       
       
