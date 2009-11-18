@@ -27,7 +27,6 @@
 
 #include "proc/mobject/placement.hpp"
 #include "proc/mobject/session/query-resolver.hpp"
-#include "lib/symbol.hpp"
 
 #include <tr1/functional>
 
@@ -35,7 +34,6 @@
 namespace mobject {
 namespace session {
   
-  using lib::Literal;
   using std::tr1::bind;
   using std::tr1::function;
   using std::tr1::placeholders::_1;
@@ -61,7 +59,6 @@ namespace session {
       typedef Query<Placement<MO> > _Query;
       typedef typename _Query::iterator _QIter;
       
-    protected:
       DiscoveryQuery ()
         : _Query (_Query::defineQueryTypeID (Goal::DISCOVERY))
         , _QIter ()
@@ -76,6 +73,13 @@ namespace session {
       virtual ContentFilter  buildContentFilter()  const  =0;
     };
   
+  
+  enum ScopeQueryKind
+    { CONTENTS = 0      ///< discover any contained objects depth-first
+    , CHILDREN          ///< discover the immediate children 
+    , PARENTS           ///< discover the enclosing scopes
+    , PATH              ///< discover the path to root
+    };
   
   
   /**
@@ -113,7 +117,7 @@ namespace session {
       
       QueryResolver const&    index_;
       PlacementMO const& startPoint_;
-      Literal      what_to_discover_;
+      ScopeQueryKind    to_discover_;
       
     public:
       typedef typename _Par::ContentFilter ContentFilter;
@@ -122,10 +126,10 @@ namespace session {
       
       ScopeQuery (QueryResolver const& resolver,
                   PlacementMO  const& scope,
-                  Literal direction)
+                  ScopeQueryKind direction)
         : index_(resolver)
         , startPoint_(scope)
-        , what_to_discover_(direction)
+        , to_discover_(direction)
         {
           resetResultIteration (_Query::resolveBy(index_));
         }
@@ -144,10 +148,10 @@ namespace session {
           return startPoint_;
         }
       
-      Literal
+      ScopeQueryKind
       searchDirection ()  const
         {
-          return what_to_discover_;
+          return to_discover_;
         }
       
       ContentFilter
@@ -184,7 +188,7 @@ namespace session {
     {
       ContentsQuery (QueryResolver const& resolver,
                      PlacementMO  const& scope)
-        : ScopeQuery<MO> (resolver,scope, "content")
+        : ScopeQuery<MO> (resolver,scope, CONTENTS)
         { }
       
     };
@@ -196,7 +200,7 @@ namespace session {
     {
       PathQuery (QueryResolver const& resolver,
                  PlacementMO  const& scope)
-        : ScopeQuery<MO> (resolver,scope, "parents")
+        : ScopeQuery<MO> (resolver,scope, PARENTS)
         { }
       
     };

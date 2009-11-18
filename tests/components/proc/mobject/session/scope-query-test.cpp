@@ -67,16 +67,16 @@ namespace test    {
           QueryResolver const& resolver = SessionServiceExploreScope::getResolver();
           PlacementMO   const& scope    = SessionServiceExploreScope::getScopeRoot();
           
-          discover (ScopeQuery<MObject>    (resolver,scope, "contents"));
-          discover (ScopeQuery<DummyMO>    (resolver,scope, "contents"));
-          discover (ScopeQuery<TestSubMO1> (resolver,scope, "contents"));
-          discover (ScopeQuery<TestSubMO2> (resolver,scope, "contents"));
+          discover (ScopeQuery<MObject>    (resolver,scope, CONTENTS));
+          discover (ScopeQuery<DummyMO>    (resolver,scope, CONTENTS));
+          discover (ScopeQuery<TestSubMO1> (resolver,scope, CONTENTS));
+          discover (ScopeQuery<TestSubMO2> (resolver,scope, CONTENTS));
           
-          ScopeQuery<TestSubMO21> specialEl(resolver,scope, "contents");
+          ScopeQuery<TestSubMO21> specialEl(resolver,scope, CONTENTS);
           
-          discover (ScopeQuery<MObject>    (resolver,*specialEl, "parents"));
-          discover (ScopeQuery<MObject>    (resolver,*specialEl, "path"));
-          discover (ScopeQuery<TestSubMO2> (resolver,*specialEl, "path"));
+          discover (ScopeQuery<MObject>    (resolver,*specialEl, PARENTS));
+          discover (ScopeQuery<MObject>    (resolver,*specialEl, PATH));
+          discover (ScopeQuery<TestSubMO2> (resolver,*specialEl, PATH));
           discover (specialEl);
         }
       

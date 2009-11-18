@@ -59,14 +59,13 @@
 //#include "pre.hpp"
 #include "proc/mobject/session/placement-index.hpp"
 #include "proc/mobject/session/query-resolver.hpp"
-#include "lib/symbol.hpp"
+#include "proc/mobject/session/scope-query.hpp"
 
 
 
 namespace mobject {
 namespace session {
   
-  using lib::Literal;
   
   class Explorer;
   
@@ -93,7 +92,7 @@ namespace session {
       virtual operator string()  const { return "PlacementIndex"; }
       
       
-      Explorer* setupExploration (PlacementIndex::ID startID, Literal direction);
+      Explorer* setupExploration (PlacementIndex::ID startID, ScopeQueryKind direction);
       
       template<typename MO>
       void defineHandling();

@@ -326,7 +326,7 @@ namespace session {
     REQUIRE (INSTANCEOF(ScopeQuery<MO>, &goal));
     
     ScopeQuery<MO> const& query = static_cast<ScopeQuery<MO> const&> (goal);
-    Literal direction = query.searchDirection();
+    ScopeQueryKind direction = query.searchDirection();
     PID scopeID = query.searchScope().getID();     ///////////////////////////////TICKET #411
     
     return new ResultSet( bind (&PlacementIndexQueryResolver::setupExploration, 
@@ -336,28 +336,24 @@ namespace session {
   }
   
   
-  /** the builder function used to set up the actual result set object
+  /** the builder function used to set up an concrete result set object
    *  when issuing the query. It is preconfigured by the resolutionFunction.
    *  The object returned from this function is taken over and managed by a
    *  smart-ptr, which is embedded within the iterator given to the client.
    */
   Explorer*
-  PlacementIndexQueryResolver::setupExploration (PID startID, Literal direction)
+  PlacementIndexQueryResolver::setupExploration (PID startID, ScopeQueryKind direction)
   {
-    if      (direction == "contents")
-      return new DeepExplorer(index_->getReferrers(startID), index_);
-    
-    else if (direction == "children") 
-      return new ChildExplorer(index_->getReferrers(startID));
-    
-    else if (direction == "parents") 
-      return new UpExplorer(index_->getScope(startID),index_);
-    
-    else if (direction == "path") 
-      return new UpExplorer(index_->find(startID),index_); 
-    
-    else
-      throw lumiera::error::Invalid("unknown query direction");    //////TICKET #197
+    switch (direction)
+      {
+      case CONTENTS:  return new DeepExplorer(index_->getReferrers(startID), index_);
+      case CHILDREN:  return new ChildExplorer(index_->getReferrers(startID));
+      case PARENTS:   return new UpExplorer(index_->getScope(startID),index_);
+      case PATH:      return new UpExplorer(index_->find(startID),index_);
+      
+      default:
+        throw lumiera::error::Invalid("unknown query direction");    //////TICKET #197
+      }
   }
   
   
