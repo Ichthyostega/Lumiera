@@ -22,7 +22,29 @@
 
 
 /** @file placement-index-query-resolver.hpp
- ** TODO WIP-WIP 
+ ** Implementing resolution of "discover contents"-queries based on PlacementIndex.
+ ** This wrapper adds a service to resolve queries for exploring the contents or
+ ** the parent path of a given scope; the actual implementation is based on the 
+ ** basic operations provided by the PlacementIndex; usually this wrapper is
+ ** instantiated as one of the SessionServices for use by Proc-Layer internals.
+ ** The PlacementIndex to use for the implementation is handed in to the ctor.
+ ** 
+ ** As any of the QueryResolver services, the actual resolution is completely
+ ** decoupled from the querying client code, which retrieves the query results
+ ** through an iterator. Parametrisation is transmitted to the resolver using a
+ ** special subclass of Goal, a ScopeQuery. Especially, besides a filter to apply
+ ** on the results to retrieve, the direction and way* to search can be parametrised: 
+ ** - ascending to the parents of the start scope
+ ** - enumerating the immediate child elements of the scope
+ ** - exhaustive depth-first search to get any content of the scope
+ ** 
+ ** \par how the actual result set is created
+ ** On initialisation, a table with preconfigured resolution functions is built,
+ ** in order to re-gain the fully typed context when receiving a query. From within
+ ** this context, the concrete Query instance can be investigated to define a
+ ** constructor function for the actual result set, to determine the way how further
+ ** results will be searched and extracted. The further exploration is driven by the
+ ** client pulling values from the iterator until exhaustion.  
  **
  ** @see PlacementRef
  ** @see PlacementIndex_test
@@ -35,337 +57,55 @@
 #define MOBJECT_SESSION_PLACEMENT_INDEX_QUERY_RESOLVER_H
 
 //#include "pre.hpp"
-//#include "proc/mobject/session/locatingpin.hpp"
-//#include "proc/asset/pipe.hpp"
-//#include "lib/util.hpp"
-//#include "lib/factory.hpp"
-//#include "proc/mobject/placement.hpp"
 #include "proc/mobject/session/placement-index.hpp"
 #include "proc/mobject/session/query-resolver.hpp"
-#include "proc/mobject/session/scope-query.hpp"
+#include "lib/symbol.hpp"
 
-///////////TODO
-#include "proc/mobject/session/clip.hpp"
-#include "proc/mobject/session/effect.hpp"
-
-//#include <tr1/memory>
-//#include <boost/noncopyable.hpp>
-#include <boost/scoped_ptr.hpp>
-//#include <vector>
-#include <stack>
 
 
 namespace mobject {
-
-//  class MObject;  /////////////////////////////////////????
-  
 namespace session {
   
-//  using lib::factory::RefcountFac;
-//  using std::tr1::shared_ptr;
-  using boost::scoped_ptr;
-//  using std::vector;
+  using lib::Literal;
   
-  class Clip;
-  class Effect;
-  
+  class Explorer;
   
   
   /**
-   * TODO type comment
+   * Wrapper for the PlacementIndex, allowing to resolve scope contents discovery
+   * - handles queries for placements of
+   *   * MObjcect
+   *   * Clip
+   *   * Effect
+   * - is able to process
+   *   * ContentsQuery for retrieving full contents of a scope depth-first
+   *   * PathQuery for retrieving all the parent scopes
+   *   * more generally, any ScopeQuery with these properties, in some variations
    */
   class PlacementIndexQueryResolver
     : public session::QueryResolver
     {
       PPIdx index_;
       
-      typedef PlacementIndex::ID PID;
-      typedef Goal::QueryID QueryID;
-      typedef QueryID const& QID;
       
-      typedef PlacementIndex::iterator PIter;
+      virtual bool canHandleQuery(Goal::QueryID const&)  const;
       
-      
-      operator string()  const { return "PlacementIndex"; }
+      virtual operator string()  const { return "PlacementIndex"; }
       
       
-      /** Interface: strategy for exploring the structure */
-      class Explorer
-        {
-        public:
-          virtual ~Explorer() { };
-          virtual bool exhausted ()    =0;
-          virtual PlacementMO& step () =0;
-        };
-      
-      /**
-       * Strategy: explore the structure
-       * just by following the given iterator;
-       * usually this yields an element's children
-       */
-      class ChildExplorer
-        : public Explorer
-        {
-          PIter tip_;
-          
-          bool
-          exhausted() 
-            {
-              return !tip_;
-            }
-          
-          PlacementMO&
-          step ()
-            {
-              REQUIRE (tip_);
-              PlacementMO& pos = *tip_;
-              ++tip_;
-              return pos;
-            }
-          
-        public:
-          ChildExplorer(PIter start)
-            : tip_(start)
-            { }
-        };
-      
-      /**
-       * Strategy: explore the structure depth first.
-       * After returning an element, delve into the scope
-       * defined by this element and so on recursively.
-       */
-      class DeepExplorer
-        : public Explorer
-        {
-          PPIdx index_;
-          std::stack<PIter> scopes_;
-          
-          bool
-          exhausted() 
-            {
-              while (!scopes_.empty() && !scopes_.top())
-                scopes_.pop();
-              return scopes_.empty();
-            }
-          
-          PlacementMO&
-          step ()
-            {
-              REQUIRE (!scopes_.empty() && scopes_.top());
-              PlacementMO& pos = *scopes_.top();
-              ++scopes_.top();
-              scopes_.push(index_->getReferrers(pos.getID()));
-              return pos;
-            }
-          
-        public:
-          DeepExplorer(PIter start, PPIdx idx)
-            : index_(idx)
-            {
-              scopes_.push(start);
-            }
-        };
-      
-      
-      /**
-       * Strategy: explore the structure upwards,
-       * ascending until reaching the root element.
-       */
-      class UpExplorer
-        : public Explorer
-        {
-          PPIdx index_;
-          PlacementMO* tip_;
-          
-          bool
-          exhausted() 
-            {
-              return !tip_;
-            }
-          
-          PlacementMO&
-          step ()
-            {
-              REQUIRE (tip_);
-              PlacementMO& pos = *tip_;
-              tip_ = &index_->getScope(*tip_);
-              if (tip_ == &pos)
-                tip_ = 0;
-              return pos;
-            }
-          
-        public:
-          UpExplorer(PlacementMO& start, PPIdx idx)
-            : index_(idx)
-            , tip_(&start)
-            { }
-        };
-      
-      typedef PlacementMO Pla;
-      typedef function<bool(Pla const&)> ContentFilter;
-      typedef function<Explorer*()> ExplorerBuilder;
-      
-      
-      /**
-       * on query, an individual result set is prepared
-       * to be explored by the invoking client code.
-       * It is built wrapping the low-level scope iterator
-       * obtained from the index, controlled by an 
-       * exploration strategy.
-       */
-      struct ResultSet
-        : Resolution
-        {
-          
-          ContentFilter acceptable_;
-          ExplorerBuilder buildExploartion_;
-          scoped_ptr<Explorer> explore_;
-          
-          void
-          exploreNext (Result& res)
-            {
-              typedef Query<Pla>::Cursor Cursor;
-              Cursor& cursor = static_cast<Cursor&> (res);
-              
-              while (!explore_->exhausted() )
-                {
-                  Pla& elm (explore_->step());
-                  if (acceptable_(elm))
-                    {
-                      cursor.point_at (elm);
-                      return;
-                    }
-                }
-              
-              ASSERT (explore_->exhausted());
-              cursor.point_at (0);
-            }   
-          
-          Result
-          prepareResolution()
-            {
-              explore_.reset (buildExploartion_());
-              
-              Result cursor;
-              exploreNext (cursor);
-              return cursor;
-            }
-          
-          void
-          nextResult(Result& pos)
-            {
-              exploreNext (pos);
-            }
-          
-        public:
-          ResultSet (ExplorerBuilder b
-                    ,ContentFilter a)
-            : acceptable_(a)
-            , buildExploartion_(b)
-            , explore_()
-            { }
-        };
-        
-      Explorer*
-      setupExploration (PID startID, Literal direction)
-        {
-          if      (direction == "contents")
-            return new DeepExplorer(index_->getReferrers(startID), index_);
-          
-          else if (direction == "children") 
-            return new ChildExplorer(index_->getReferrers(startID));
-          
-          else if (direction == "parents") 
-            return new UpExplorer(index_->getScope(startID),index_);
-          
-          else if (direction == "path") 
-            return new UpExplorer(index_->find(startID),index_); 
-          
-          else
-            throw lumiera::error::Invalid("unknown query direction");    //////TICKET #197
-        }
+      Explorer* setupExploration (PlacementIndex::ID startID, Literal direction);
       
       template<typename MO>
-      void
-      defineHandling()
-        {
-          installResolutionCase( whenQueryingFor<MO>()
-                               , bind (&PlacementIndexQueryResolver::resolutionFunction<MO>,
-                                       this, _1 )
-                               );
-        }
+      void defineHandling();
         
       template<typename MO>
-      Resolution*
-      resolutionFunction (Goal const& goal)
-        {
-          QID qID = goal.getQID();
-          REQUIRE (qID == whenQueryingFor<MO>());
-          REQUIRE (INSTANCEOF(ScopeQuery<MO>, &goal));
-          ScopeQuery<MO> const& query = static_cast<ScopeQuery<MO> const&> (goal);
-          
-          Literal direction = query.searchDirection();
-          PID scopeID = query.searchScope().getID();     ///////////////////////////////TICKET #411
-          
-          return new ResultSet( bind (&PlacementIndexQueryResolver::setupExploration, 
-                                      this, scopeID, direction)
-                              , getContentFilter(query)
-                              );
-        }
+      Resolution* resolutionFunction (Goal const& goal);
       
-      template<typename QUERY>
-      ContentFilter
-      getContentFilter (QUERY query)         ///< use filter predicate provided by the concrete query
-        {
-          return query.contentFilter();
-        }
-      
-      ContentFilter
-      getContentFilter (ScopeQuery<MObject>) ///< especially queries for MObjects need not be filtered
-        {
-          static ContentFilter acceptAllObjects = bind (&acceptAllObjects_, _1);
-          return acceptAllObjects;
-        }
-      
-      static bool acceptAllObjects_(Pla) { return true; }
-
-      
-      
-      template<typename MO>
-      static QueryID
-      whenQueryingFor()
-        {
-          QueryID qID = {Goal::DISCOVERY, getResultTypeID<Placement<MO> >()};
-          return qID;
-        }
-      
-      virtual bool 
-      canHandleQuery(QID qID)  const
-        {
-          return qID.kind == Goal::DISCOVERY 
-             &&( qID.type == getResultTypeID<Placement<MObject> >()
-               ||qID.type == getResultTypeID<Placement<Clip> >()
-               ||qID.type == getResultTypeID<Placement<Effect> >()
-                             ///////////////////////////////////////TICKET #414
-               );
-        }
       
     public:
-      PlacementIndexQueryResolver (PPIdx theIndex)
-        : index_(theIndex)
-        {
-          defineHandling<MObject>();
-          defineHandling<Clip>();
-          defineHandling<Effect>();
-                             ///////////////////////////////////////TICKET #414
-        }
+      PlacementIndexQueryResolver (PPIdx theIndex);
     };
   
-  
-  
-  
-  
-
   
 }} // namespace mobject::session
 #endif
