@@ -32,9 +32,9 @@
  ** 
  ** By virtue of this service, QueryFocus, Scope and Placement can
  ** remain completely agnostic of session's implementation details,
- ** and especially aren't bound to PlacementIndex. This is important,
+ ** especially they aren't bound to PlacementIndex. This is important,
  ** because the public session API is casted in terms of PlacementRef
- ** and QueryFocus An implementation of this service is available
+ ** and QueryFocus. An implementation of this service is available
  ** through the SessionServices access mechanism.
  ** 
  ** @see session-impl.hpp implementation of the service
@@ -48,7 +48,6 @@
 
 #include "proc/mobject/placement.hpp"
 #include "proc/mobject/session/query-resolver.hpp"
-//#include "lib/meta/generator.hpp"
 
 
 
@@ -56,11 +55,8 @@
 namespace mobject {
 namespace session {
   
-//  using lumiera::typelist::InstantiateChained;
-//  using lumiera::typelist::InheritFrom;
-//  using lumiera::typelist::NullType;
   
-  
+
   struct SessionServiceExploreScope
     {
       static QueryResolver const& getResolver();

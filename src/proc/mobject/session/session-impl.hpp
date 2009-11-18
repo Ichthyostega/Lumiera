@@ -57,6 +57,7 @@
 #include "proc/mobject/session/session-service-mock-index.hpp"
 #include "proc/mobject/session/session-service-defaults.hpp"
 
+#include "proc/mobject/session/placement-index-query-resolver.hpp"
 
 #include <boost/scoped_ptr.hpp>
 #include <vector>
@@ -133,6 +134,7 @@ namespace session {
     };
   
   
+  
   template<class IMPL>
   struct ServiceAccessPoint<SessionServiceExploreScope, IMPL>
     : IMPL
@@ -140,9 +142,7 @@ namespace session {
       QueryResolver&
       getScopeQueryResolver()
         {
-          UNIMPLEMENTED ("how actually to manage the PlacementIndexQueryResolver wrapper instance");
-          
-//          return IMPL::magic_;
+          return resolvingWrapper_;
         }
       
       PlacementMO& 
@@ -150,7 +150,16 @@ namespace session {
         {
           return IMPL::getPlacementIndex()->getRoot();
         }
+      
+    protected:
+      ServiceAccessPoint<SessionServiceExploreScope, IMPL>()
+        : resolvingWrapper_(IMPL::getPlacementIndex())
+        { }
+      
+    private:
+      PlacementIndexQueryResolver resolvingWrapper_;
     };
+  
   
   
   template<class IMPL>
@@ -175,6 +184,7 @@ namespace session {
     private:
       PPIdx mockIndex_;
     };
+  
   
   
   template<class IMPL>
