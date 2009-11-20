@@ -3469,7 +3469,7 @@ For decoupling the query invocation from the facility actually processing the qu
 See also the notes on &amp;rarr; QueryImplProlog
 </pre>
 </div>
-<div title="QueryFocus" modifier="Ichthyostega" modified="200911192106" created="200910140244" tags="def spec img" changecount="21">
+<div title="QueryFocus" modifier="Ichthyostega" modified="200911201829" created="200910140244" tags="def spec img" changecount="28">
 <pre>When querying contents of the session or sub-containers within the session, the QueryFocus follows the current point-of-query. As such queries can be issued to explore the content of container-like objects holding other MObjects, the focus is always attached to a container, which also acts as [[scope|PlacementScope]] for the contained objects. QueryFocus is an implicit state (the current point of interrest). This sate especially remembers the path down from the root of the HighLevelModel, which was used to access the current scope. Because this path constitutes a hierarchy of scopes, it can be relevant for querying and resolving placement properties. (&amp;rarr; SessionStructureQuery)
 
 !provided operations
@@ -3481,10 +3481,10 @@ See also the notes on &amp;rarr; QueryImplProlog
 * (typed) content discovery query on the current scope
 [&gt;img[Scope Locating|uml/fig136325.png]]
 !!!relation to Scope
-There is a tight integration with PlacementScope through the ScopeLocator, which establishes the //current scope.// But QueryFocus is more of a //binding// &amp;mdash; it links or focusses the current state into a specific scope with a ScopePath in turn depending on this current state. Thus, while Scope is just a passive container allowing to locate and navigate, QueryFocus by virtue of this binding allows to [[Query]] at this current location.
+There is a tight integration with PlacementScope through the ScopeLocator, which establishes the //current focus.// But while the [[scope|PlacementScope]] just decorates the placement defining a scope (called //&amp;raquo;scope top&amp;laquo;//), QueryFocus is more of a //binding// &amp;mdash; it links or focusses the current state into a specific scope with a ScopePath in turn depending on this current state. Thus, while Scope is just a passive container allowing to locate and navigate, QueryFocus by virtue of this binding allows to [[Query]] at this current location.
 
 !implementation notes
-we provide a static access API, meaning that there is a singleton (the ScopeLocator) behind the scenes, which manages the mentioned scope stack. Moreover, there is an link to the current session. But this link is kept opaque; it works by the current session exposing an [[query service|QueryResolver]], while QueryFocus doesn't rely on knowledge about the session, allowing the focus to be unit tested.
+we provide a static access API, meaning that there is a singleton (the ScopeLocator) behind the scenes, which holds the mentioned scope stack. The current focus stack top, i.e. the current ScopePath is managed through an ref-counting handle embedded into each QueryFocus instance. Thus, effectively QueryFocus is an frontend object for accessing this state. Moreover, embedded into ScopeLocator, there is an link to the current session. But this link is kept opaque; it works by the current session exposing an [[query service|QueryResolver]], while QueryFocus doesn't rely on knowledge about the session, allowing the focus to be unit tested.
 
 The stack of scopes must not be confused with the ScopePath. Each single frame on the stack is a QueryFocus and as such contains a current ScopePath. The purpose of the stack is to make the scope handling mostly transparent; especially this stack allows to write dedicated query functions directed at a given object: they work by pushing and then navigating to the object to use as starting point for the query, i.e. the //current scope.//
 
@@ -3916,15 +3916,15 @@ Later on we expect a distinct __query subsystem__ to emerge, presumably embeddin
 <div title="STypeManager" modifier="Ichthyostega" created="200809220230" changecount="1">
 <pre>A facility allowing the Proc-Layer to work with abstracted [[media stream types|StreamType]], linking (abstract or opaque) [[type tags|StreamTypeDescriptor]] to an [[library|MediaImplLib]], which provides functionality for acutally dealing with data of this media stream type. Thus, the stream type manager is a kind of registry of all the external libraries which can be bridged and accessed by Lumiera (for working with media data, that is). The most basic set of libraries is instelled here automatically at application start, most notably the [[GAVL]] library for working with uncompressed video and audio data. //Later on, when plugins will introduce further external libraries, these need to be registered here too.//</pre>
 </div>
-<div title="ScopeLocator" modifier="Ichthyostega" modified="200911192150" created="200911192145" tags="def SessionLogic" changecount="2">
-<pre>A link to relate a compound of [[nested placement scopes|PlacementScope]] to the //current// session and the //current// [[focus for querying|QueryFocus]] and exploring the structure. ScopeLocator is a singleton service, allowing to ''explore'' a [[Placement]] as a scope, i.e. discover any other placements within this scope, and allowing to locate the position of this scope by navigating the ScopePath up to finally reach the root scope of the HighLevelModel.
+<div title="ScopeLocator" modifier="Ichthyostega" modified="200911202035" created="200911192145" tags="def SessionLogic" changecount="10">
+<pre>A link to relate a compound of [[nested placement scopes|PlacementScope]] to the //current// session and the //current//&amp;nbsp; [[focus for querying|QueryFocus]] and exploring the structure. ScopeLocator is a singleton service, allowing to ''explore'' a [[Placement]] as a scope, i.e. discover any other placements within this scope, and allowing to locate the position of this scope by navigating up the ScopePath finally to reach the root scope of the HighLevelModel.
 
-In the general case, this user visible model of the [[objects|MObject]] within the session allows for more than tree-like associations, as a given [[Sequence|EDL]] might be bound into multiple [[timelines|Timeline]]. Effectively, this makes the ScopePath context dependent. The ScopeLocator is the point where the strictly tree-like hierarchy of placements is connected to this more elaborate scope and path structure.
+In the general case, this user visible high-level-model of the [[objects|MObject]] within the session allows for more than tree-like associations, as a given [[Sequence|EDL]] might be bound into multiple [[timelines|Timeline]]. Effectively, this makes the ScopePath context dependent. The ScopeLocator is the point where the strictly tree-like hierarchy of placements is connected to this more elaborate scope and path structure. To this end, ScopeLocator maintaines a QueryFocusStack, to keep track of the current location in focus, in cooperation with the QueryFocus objects used by client code.
 &amp;rarr; see BindingScopeProblem
 &amp;rarr; see TimelineSequences
 
 !!a note about concurrency
-While there //is// a &quot;current state&quot; involved, the effect of concurrent access deliberately remains unspecified, because it is expected to be serialised on a higher level. If this assumption were to break, then probably the ScopeLocator will involve some thread local state.
+While there //is// a &quot;current state&quot; involved, the effect of concurrent access deliberately remains unspecified, because access is expected to be serialised on a higher level. If this assumption were to break, then probably the ScopeLocator would involve some thread local state.
 </pre>
 </div>
 <div title="Session" modifier="Ichthyostega" modified="200911071800" created="200712100525" tags="def SessionLogic" changecount="8">

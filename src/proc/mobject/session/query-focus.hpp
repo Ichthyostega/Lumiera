@@ -45,7 +45,7 @@ namespace session {
    */
   class QueryFocus
     {
-      ScopePath scopes_;
+      ScopePath scopes_;  /////////////////////////////////////////////////////////////////TODO use intrusive pointer
       /////////////////////////////////////////////////////////////////////////////////////TODO how to integrate the ref-counting handle?
       
     public:
@@ -54,10 +54,10 @@ namespace session {
       QueryFocus& reset ();
       QueryFocus& attach (Scope const&);
       static QueryFocus push (Scope const&);
-      QueryFocus pop();
+      QueryFocus& pop();
       
-      operator Scope()        const { return scopes_.getLeaf(); }      
-      ScopePath currentPath() const { return scopes_; }
+      operator Scope()        const { return currPath().getLeaf(); }      
+      ScopePath currentPath() const { return currPath(); }       ///< @note returns a copy
       
       template<class MO>
       typename ScopeQuery<MO>::iterator
@@ -72,6 +72,10 @@ namespace session {
         {
           ScopeLocator::instance().explore<MO> (*this);
         }
+      
+    private:
+      ScopePath      & currPath();
+      ScopePath const& currPath()  const;
     };
 ///////////////////////////TODO currently just fleshing the API
 

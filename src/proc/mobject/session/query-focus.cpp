@@ -37,6 +37,20 @@ namespace session {
   { }
   
   
+  /** */
+  ScopePath&
+  QueryFocus::currPath()
+  {
+    UNIMPLEMENTED ("dereference and access the current scope path");
+  }
+
+  ScopePath const&
+  QueryFocus::currPath()  const
+  {
+    UNIMPLEMENTED ("dereference and access the current scope path");
+  }
+
+  
   /** discard any state and clear
       the current focus path */
   QueryFocus&
@@ -73,15 +87,16 @@ namespace session {
   
   
   /** cease to use \em this specific reference to the current frame.
-      This operation immediately tries to re-access what is "current"
-      and returns a new handle. But when the previously released reference
-      was the last one, releasing it will cause the QueryFocusStack to pop,
-      in which case we'll re-attach to the now uncovered previous stack top.
+      This operation immediately tries to re-attach to what is "current"
+      and readjusts the internal handle. But when the previously released
+      reference was the last one, releasing it will cause the QueryFocusStack
+      to pop, in which case we'll re-attach to the now uncovered previous stack top.
   */
-  QueryFocus
+  QueryFocus&
   QueryFocus::pop()
   {
-    
+    UNIMPLEMENTED ("pop, give up one reference, maybe drop stack top");
+    return *this;
   }
   
   

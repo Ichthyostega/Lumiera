@@ -24,33 +24,38 @@
 #ifndef MOBJECT_SESSION_SCOPE_LOCATOR_H
 #define MOBJECT_SESSION_SCOPE_LOCATOR_H
 
-//#include "proc/mobject/mobject.hpp"
 #include "proc/mobject/session/scope.hpp"
-#include "proc/mobject/placement.hpp"
 #include "proc/mobject/session/scope-query.hpp"
+#include "proc/mobject/placement.hpp"
 #include "lib/singleton.hpp"
-#include "lib/util.hpp"
 
 #include <boost/scoped_ptr.hpp>
-#include <tr1/memory>
-//#include <vector>
-//#include <string>
 
-//using std::vector;
-//using std::string;
 
 namespace mobject {
 namespace session {
   
-  using std::tr1::shared_ptr;
   using boost::scoped_ptr;
-  using util::cStr;
+  
+  class QueryFocusStack;
+  class ScopePath;
   
   
-  class QueryFocusStack; //////TODO better include?
   
-
-  
+  /**
+   * Singleton service establishing a link to relate
+   * any compound of nested placement scopes to the current session
+   * and the \em current focus for querying and exploring this structure.
+   * While it is OK to use this service directly, clients usually would
+   * prefer to use QueryFocus as a frontend.
+   * 
+   * ScopeLocator is the access point both to the current query scope location
+   * (as maintained with the help of the QueryFocusStack) and allows to explore
+   * the current session data structures (building on a QueryResolver service
+   * exposed by the session).
+   * 
+   * @note in its current form (11/09), ScopeLocator is deliberately <b>not threadsafe</b>
+   */
   class ScopeLocator
     {
       scoped_ptr<QueryFocusStack> focusStack_;
@@ -58,7 +63,7 @@ namespace session {
     public:
       static lib::Singleton<ScopeLocator> instance;
       
-      QueryFocus currFocus();
+      ScopePath& currPath();
       
       template<typename MO>
       typename ScopeQuery<MO>::iterator
@@ -76,12 +81,11 @@ namespace session {
     private:
       QueryResolver const& theResolver();
     };
-///////////////////////////TODO currently just fleshing the API
   
   
   
   
-  /** use the currently installed contents-resolving facility
+  /** use the contents-resolving facility exposed by the session
    *  to enumerate the contents (children) of the given scope
    */
   template<typename MO>
@@ -92,7 +96,7 @@ namespace session {
   }
   
   
-  /** use the currently installed contents-resolving facility
+  /** use the contents-resolving facility exposed by the session
    *  to discover depth-first any object within this scope
    */
   template<typename MO>

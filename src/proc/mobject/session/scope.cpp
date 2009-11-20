@@ -88,9 +88,18 @@ namespace session {
   }
   
   
-  /** TODO */
-  QueryFocus
-  ScopeLocator::currFocus()
+  /** establishes the \em current query focus location.
+   *  Relies on the state of the QueryFocusStack.
+   *  If there is no current focus location, a new
+   *  one is created, referring to the root Scope.
+   *  @return the current path corresponding to the
+   *          most recently used QueryFocus, which is
+   *          actually still referred from somewhere.
+   *  @note may cause the QueryFocusStack to pop 
+   *          path entries no longer in use.
+   */
+  ScopePath&
+  ScopeLocator::currPath()
   {
     UNIMPLEMENTED ("how to access and handle the current focus");
   }

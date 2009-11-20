@@ -119,7 +119,7 @@ namespace test    {
       manipulate_subFocus()
         {
 #ifdef false  ////////////////////////////////////////////////////////////////////////////////TICKET 384
-          QueryFocus original;
+          QueryFocus original; // automatically attaches to current stack top
           uint num_refs = original.ref_count();
           ASSERT (num_refs > 1);
           
@@ -130,7 +130,7 @@ namespace test    {
           ASSERT (       1 == subF.ref_count());
           ASSERT (num_refs == original.ref_count());
           
-          {
+          { // temporarily creating an independent focus attached differently
             QueryFocus subF2 = QueryFocus::push(Scope(subF).getParent());
             ASSERT (subF2 != subF);
             ASSERT (subF == original);
@@ -145,13 +145,13 @@ namespace test    {
               }
             cout << string(subF2) << "<<<--discovery exhausted" << endl;
             
-            subF2.pop();
+            subF2.pop(); // releasing this focus and re-attaching to what's on stack top
             cout << string(subF2) << "<<<--after pop()" << endl;
             ASSERT (subF2 == subF);
-            ASSERT (2 == subF2.ref_count());
+            ASSERT (2 == subF2.ref_count());  // both are now attached to the same path
             ASSERT (2 == subF.ref_count());
           }
-          // subF2 went out of scope, but no auto-pop happens
+          // subF2 went out of scope, but no auto-pop happens (because subF is still there)
           cout << string(subF) << endl;
           
           ASSERT (       1 == subF.ref_count());
