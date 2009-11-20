@@ -36,7 +36,6 @@ namespace mobject {
 namespace session {
 namespace test    {
   
-  using session::ContentsQuery;
   using std::string;
   using std::cout;
   using std::endl;

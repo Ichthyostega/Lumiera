@@ -60,8 +60,15 @@ namespace session {
       ScopePath currentPath() const { return scopes_; }
       
       template<class MO>
-      typename ContentsQuery<MO>::iterator
+      typename ScopeQuery<MO>::iterator
       query()  const
+        {
+          ScopeLocator::instance().query<MO> (*this);
+        }
+      
+      template<class MO>
+      typename ScopeQuery<MO>::iterator
+      explore()  const
         {
           ScopeLocator::instance().explore<MO> (*this);
         }

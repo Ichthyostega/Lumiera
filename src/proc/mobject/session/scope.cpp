@@ -24,6 +24,7 @@
 #include "proc/mobject/session/scope.hpp"
 #include "proc/mobject/session/scope-locator.hpp"
 #include "proc/mobject/session/query-focus-stack.hpp"
+#include "proc/mobject/session/session-service-explore-scope.hpp"
 #include "proc/mobject/mobject.hpp"
 //#include "proc/mobject/session/track.hpp"
 //#include "proc/mobject/placement.hpp"
@@ -73,6 +74,26 @@ namespace session {
   /** Storage holding the single ScopeLocator instance */
   lib::Singleton<ScopeLocator> ScopeLocator::instance;
   
+  
+  /** @internal the one (and only) access point
+   *  actually to link the system of Scope and QueryFocus
+   *  to the current session, by delegating resolution
+   *  of contents discovery queries to the PlacementIndex
+   *  managed within the session 
+   */
+  QueryResolver const&
+  ScopeLocator::theResolver()
+  {
+    return SessionServiceExploreScope::getResolver();
+  }
+  
+  
+  /** TODO */
+  QueryFocus
+  ScopeLocator::currFocus()
+  {
+    UNIMPLEMENTED ("how to access and handle the current focus");
+  }
   
   
   /** discover the enclosing scope of a given Placement */

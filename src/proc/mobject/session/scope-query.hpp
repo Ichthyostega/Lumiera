@@ -94,18 +94,18 @@ namespace session {
    * Currently (11/09), there is a special, hard-wired Query-kind-ID
    * \c Goal::DISCOVERY to distinguish this special kind of a Query.
    * 
-   * Contrary to the usual handling of a generic query, a ContentsQuery
+   * Contrary to the usual handling of a generic query, a ScopeQuery
    * object holds it's own discovery iterator and thus is completely
    * self contained. The query is issued automatically on construction,
    * thus the embedded iterator immediately points at the first result.
    * Moreover, as any Lumiera Forward Iterator is \c bool checkable,
-   * a ContentsQuery not yielding any results will evaluate to \c false
+   * a ScopeQuery not yielding any results will evaluate to \c false
    * immediately after construction, allowing convenient inline checks.
    * The query can be re-issued by the function operator, and the
    * embedded result iterator can of course be copied to a bare
-   * iterator instance, e.g. for passing it on (ContentsQuery
-   * itself is intended to be used polymorphically and thus
-   * defined to be non-copyable)
+   * iterator instance, e.g. for passing it on (ScopeQuery
+   * itself is intended to be used polymorphically and
+   * thus defined to be not assignable)
    */
   template<class MO>
   class ScopeQuery

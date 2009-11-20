@@ -1,6 +1,6 @@
 format 58
 "Placement" // ProcessingLayer::MObject::Placement
-  revision 3
+  revision 4
   modified_by 5 "hiv"
   // class settings
   //class diagram settings
@@ -125,14 +125,13 @@ ${inlines}
       idl_decl ""
       explicit_switch_type ""
       
-      classrelation 177797 // scopes (<unidirectional association>)
-	relation 167813 --->
-	  stereotype "owns"
-	  a role_name "scopes" protected
+      classrelation 193029 // <unidirectional association>
+	relation 182661 --->
+	  a role_name "" protected
 	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
 "
-	    classrelation_ref 177797 // scopes (<unidirectional association>)
-	  b parent class_ref 153477 // ScopePath
+	    classrelation_ref 193029 // <unidirectional association>
+	  b parent class_ref 152965 // Handle
       end
     end
 
@@ -149,14 +148,13 @@ ${inlines}
       idl_decl ""
       explicit_switch_type ""
       
-      classrelation 177925 // <directional composition>
-	relation 167941 *-->
-	  stereotype "vector"
+      classrelation 192901 // <directional composition>
+	relation 182533 *-->
 	  a role_name "" protected
 	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
 "
-	    classrelation_ref 177925 // <directional composition>
-	  b parent class_ref 153605 // QueryFocus
+	    classrelation_ref 192901 // <directional composition>
+	  b parent class_ref 153477 // ScopePath
       end
     end
 

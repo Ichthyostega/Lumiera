@@ -54,52 +54,52 @@ namespace session {
   class ScopeLocator
     {
       scoped_ptr<QueryFocusStack> focusStack_;
-      shared_ptr<QueryResolver> index_;
       
     public:
       static lib::Singleton<ScopeLocator> instance;
       
-      void
-      activate (shared_ptr<QueryResolver> resolvingFacility);
+      QueryFocus currFocus();
       
       template<typename MO>
-      typename ContentsQuery<MO>::iterator
+      typename ScopeQuery<MO>::iterator
       explore (Scope);
+      
+      template<typename MO>
+      typename ScopeQuery<MO>::iterator
+      query (Scope);
       
     protected:
       ScopeLocator();
       
       friend class lib::singleton::StaticCreate<ScopeLocator>;
+      
+    private:
+      QueryResolver const& theResolver();
     };
 ///////////////////////////TODO currently just fleshing the API
   
   
   
-  /** activate or de-activate the QueryFocus system.
-   *  This is done by a link to a contents-query resolving facility,
-   *  typically the PlacementIndex within the current session.  
+  
+  /** use the currently installed contents-resolving facility
+   *  to enumerate the contents (children) of the given scope
    */
-  inline void
-  ScopeLocator::activate (shared_ptr<QueryResolver> resolvingFacility)
+  template<typename MO>
+  inline typename ScopeQuery<MO>::iterator
+  ScopeLocator::explore (Scope scope)
   {
-    index_ = resolvingFacility;
-    
-    if (index_)
-      INFO (config, "Enabling Scope resolution by %s.", cStr(*index_));
-    else
-      INFO (config, "Disabling Scope resolution.");
+    return ScopeQuery<MO> (theResolver(), scope.getTop(), CHILDREN);
   }
   
   
   /** use the currently installed contents-resolving facility
-   *  to enumerate the contents of the given scope
+   *  to discover depth-first any object within this scope
    */
   template<typename MO>
-  inline typename ContentsQuery<MO>::iterator
-  ScopeLocator::explore (Scope scope)
+  inline typename ScopeQuery<MO>::iterator
+  ScopeLocator::query (Scope scope)
   {
-    REQUIRE (index_);
-    return ContentsQuery<MO> (*index_, scope.getTop());
+    return ScopeQuery<MO> (theResolver(), scope.getTop(), CONTENTS);
   }
   
   
