@@ -72,6 +72,7 @@ namespace test    {
           ScopePath testPath = buildPath (startPlacement);
           checkRelations (testPath,startPlacement);
           invalildPath (testPath,startPlacement);
+          emptyPath (testPath);
           check_Identity_and_Copy (startPlacement);
           navigate (testPath, index);
           clear (testPath, index);
@@ -97,12 +98,12 @@ namespace test    {
       
       
       void
-      checkRelations (ScopePath path1, PMO& refPla)
+      checkRelations (ScopePath path1, PMO& refPlacement)
         {
 #if false     ////////////////////////////////////////////////////////////////////////////////TICKET 384
-          ASSERT (path1.contains (refPla));
+          ASSERT (path1.contains (refPlacement));
           
-          Scope refScope (refPla);
+          Scope refScope (refPlacement);
           ASSERT (path1.contains (refScope));
           ASSERT (path1.endsAt (refScope));
           
@@ -130,7 +131,25 @@ namespace test    {
       
       
       void
-      invalidPath (ScopePath refPath, PMO& refPla)
+      emptyPath (ScopePath refPath)
+        {
+#if false     ////////////////////////////////////////////////////////////////////////////////TICKET 384
+          ASSERT (!isnil (refPath));
+          refPath.goRoot();
+          ASSERT ( isnil (refPath));
+          ASSERT (refPath.empty());
+          ASSERT (refPath.isValid());
+          ASSERT (1 == refPath.length());
+          
+          ScopePath defaultPath;
+          ASSERT (isnil (defaultPath));
+          ASSERT (refPath == defaultPath);
+#endif        ////////////////////////////////////////////////////////////////////////////////TICKET 384
+        }
+      
+      
+      void
+      invalidPath (ScopePath refPath, PMO& refPlacement)
         {
 #if false     ////////////////////////////////////////////////////////////////////////////////TICKET 384
           ASSERT (refPath);
@@ -141,10 +160,10 @@ namespace test    {
           ASSERT (invalildP == ScopePath::INVALID);
           ASSERT (!isSameObject (invalidP, ScopePath::INVALID));
           
-          ASSERT (refPath.contains (refPla));
-          ASSERT (!invalidP.contains (refPla));
+          ASSERT (refPath.contains (refPlacement));
+          ASSERT (!invalidP.contains (refPlacement));
           
-          Scope refScope (refPla);
+          Scope refScope (refPlacement);
           ASSERT (!invalidP.contains (refScope));
           ASSERT (!invalidP.endsAt (refScope));
           
@@ -173,10 +192,10 @@ namespace test    {
       
       
       void
-      check_Identity_and_Copy (PMO& refPla)
+      check_Identity_and_Copy (PMO& refPlacement)
         {
 #if false     ////////////////////////////////////////////////////////////////////////////////TICKET 384
-          Scope startScope (startPla);
+          Scope startScope (refPlacement);
           ScopePath path1 (startScope);
           ScopePath path2 (startScope);
           ScopePath path3 (path2);

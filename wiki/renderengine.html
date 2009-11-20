@@ -3118,8 +3118,8 @@ Placement references mimic the behaviour of a real placement, i.e. they proxy th
 {{red{WIP}}}
 </pre>
 </div>
-<div title="PlacementScope" modifier="Ichthyostega" modified="200910181415" created="200905120304" tags="SessionLogic spec img" changecount="18">
-<pre>MObjects are attached into the [[Session]] by adding a [[Placement]]. Because this especially includes the case of //grouping or container objects,// e.g. tracks or [[meta-clips|VirtualClip]], any placement may optionally define and root a scope, and every placement is at least contained in one encompassing scope &amp;mdash; of course with the exception of the absolute top level, which can be thought off as being contained in a scope of handling rules.
+<div title="PlacementScope" modifier="Ichthyostega" modified="200911202127" created="200905120304" tags="SessionLogic spec img" changecount="21">
+<pre>MObjects are attached into the [[Session]] by adding a [[Placement]]. Because this especially includes the possibility of //grouping or container objects,// e.g. [[sequences|EDL]] or [[tracks|Track]] or [[meta-clips|VirtualClip]], any placement may optionally define and root a scope, and every placement is at least contained in one encompassing scope &amp;mdash; of course with the exception of the absolute top level, which can be thought off as being contained in a scope of handling rules.
 
 Thus, while the [[sequences (former called EDL)|EDL]] act as generic container holding a pile of placments, actually there is a more fine grained structure based on the nesting of the tracks, which especially in Lumiera's HighLevelModel belong to the sequence (they aren't a property of the top level timeline as one might expect). Building upon these observations, we actually require each addition of a placement to specify a scope. Consequently, for each Placement at hand it is possible to determine an //containing scope,// which in turn is associated with some Placement of a top-level ~MObject for this scope. The latter is called the ''scope top''. An example would be the {{{Placement&lt;Track&gt;}}} acting as scope of all the clips placed onto this track. The //implementation//&amp;nbsp; of this tie-to-scope is provided by the same mechanism as utilised for relative placements, i.e. an directional placement relation. Actually, this relation is implemented by the PlacementIndex within the current [[Session]].
 
@@ -3925,6 +3925,31 @@ In the general case, this user visible high-level-model of the [[objects|MObject
 
 !!a note about concurrency
 While there //is// a &quot;current state&quot; involved, the effect of concurrent access deliberately remains unspecified, because access is expected to be serialised on a higher level. If this assumption were to break, then probably the ScopeLocator would involve some thread local state.
+</pre>
+</div>
+<div title="ScopePath" modifier="Ichthyostega" modified="200911202205" created="200911202124" tags="def spec" changecount="2">
+<pre>The sequence of nested [[placement scopes|PlacementScope]] leading from the root (global) scope down to a specific [[Placement]] is called ''scope path''. Ascending this path yields all the scopes to search or query in proper order to be used when resolving some attribute of placement. Placements use visibility rules comparable to visibility of scoped definitions in common programming languages or in cascading style sheets, where a local definition can shadow a global one. In a similar way, properties not defined locally may be resolved by querying up the sequence of nested scopes.
+
+A scope path is a sequence of scopes, where each scope is implemented by a PlacementRef pointing to the &amp;raquo;scope top&amp;laquo;, i.e. the placement in the session //constituting this scope.// Each Placement is registered with the session as belonging to a scope, and each placement can contain other placements and thus form a scope. Thus, the ''leaf'' of this path can be considered the current scope. In addition to some search and query functions, a scope path has the ability to ''navigate'' to a given target scope, which must be reachable by ascending and descending into the branches of the overall tree or DAG. Navigating changes the current path. ({{red{WIP 11/09}}} navigation to scopes outside the current path and the immediate children of the current leaf is left out for now. We'll need it later, when actually implementing [[meta-clips|VirtualClip]].)
+
+!Operations
+* the default scope path contains just the root (of the implicit PlacementIndex, i.e. usually the root of the model in the session)
+* a scope path can be created staring from a given scope. This convenience shortcut uses the ScopeLocator to establish the position of the given start scope. This way, effectively the PlacementIndex within the current session is queried for parentship relations until reaching the root of the HighLevelModel.
+* paths are ''copyable value objects'' without identity on their own
+* there is a special //invalid//&amp;nbsp; path token, {{{ScopePath::INVALID}}}
+* length, validity and empty check
+* paths are equality comparable
+* relations
+** if a scope in question is contained in the path
+** if a scope in question is at the leaf position of the path
+** if a path in question is prefix (contained) in the given path
+** if two paths share a common prefix
+** if two paths are disjoint (only connected at root)
+* navigation
+** move up one step
+** move up to the root
+** navigate to a given scope
+** clear a path (reset to default)
 </pre>
 </div>
 <div title="Session" modifier="Ichthyostega" modified="200911071800" created="200712100525" tags="def SessionLogic" changecount="8">
@@ -5596,13 +5621,13 @@ Actually, what the GUI creates and uses is the //view// of a given timeline. Thi
 To complement this possibilities, I'd propose to give the //timeline view// the possibility to be re-linked to a sub-sequence. This way, it would stay connected to the main play control, but at the same time show a sub-sequence //in the way it will be treated as  embedded// within the top-level sequence. This would be the default operation mode when a meta-clip is opened (and showed in a separate tab with such a linked timeline view). The reason for this proposed handling is again to give the user the least surprising behaviour. Because, when &amp;mdash; on the contrary &amp;mdash; the sub-sequence would be opened as //separate timeline,// a different absolute time position and a different signal routing may result; doing such should be reserved for advanced use, e.g. when multiple editors cooperate on a single project and a sequence has to be prepared in isolation prior to being integrated in the global sequence (featuring the whole movie).
 </pre>
 </div>
-<div title="Track" modifier="Ichthyostega" modified="200811011843" created="200801062320" tags="def design decision" changecount="5">
-<pre>Tracks are just a structure used to organize the Media Objects within the EDL. Tracks are associated allways to a specific EDL and the Tracks of an EDL form a //tree.// They can be considered to be an organizing grid, and besides that, they have no special meaning. They are grouping devices, not first-class entities. A track doesn't &quot;have&quot; a port or pipe or &quot;is&quot; a video track and the like; it can be configured to behave in such manner by using placements.
+<div title="Track" modifier="Ichthyostega" modified="200911202133" created="200801062320" tags="def design decision" changecount="6">
+<pre>Tracks are just a structure used to organize the Media Objects within the Sequence. Tracks are associated allways to a specific Sequence and the Tracks of an Sequence form a //tree.// They can be considered to be an organizing grid, and besides that, they have no special meaning. They are grouping devices, not first-class entities. A track doesn't &quot;have&quot; a port or pipe or &quot;is&quot; a video track and the like; it can be configured to behave in such manner by using placements.
 
-The ~Track-IDs are assets on their own, but they can be found within a given EDL. So, several ~EDLs can share a single track or each EDL can have tracks with their own, separate identity. (the latter is the default)
+The ~Track-IDs are assets on their own, but they can be found within a given sequence. So, several sequences can share a single track or each sequence can hold tracks with their own, separate identity. (the latter is the default)
 * Like most ~MObjects, tracks have a asset view: you can find a track asset (a track ID) in the asset manager.
-* and they have an object view: there is an track MObject which can be [[placed|Placement]], thus defining properties of this track within one EDL, e.g. the starting point in time
-Of course, we can place other ~MObjects relative to some track (that's the main reason why we want to have tracks). In this sense, the [[handling of Tracks|TrackHandling]] is somewhat special: the placement of some track can be found directly within the EDL (and not within the general collection of placed objects which form the contents of any EDL). This placement defines properties of the track, which will be inherited if necessary by all ~MObjects placed to this track. For example, if placing (=plugging) a track to some global [[Pipe]], and if placing a clip to this track, without placing the clip directly to another pipe, the associated-to-pipe information of the track will be fetched by the builder when needed to make the output connection of the clip.
+* and they have an object view: there is an track MObject which can be [[placed|Placement]], thus defining properties of this track within one sequence, e.g. the starting point in time
+Of course, we can place other ~MObjects relative to some track (that's the main reason why we want to have tracks). In this sense, the [[handling of Tracks|TrackHandling]] is somewhat special: the placements forming the tree of tracks can be accessed directly through the sequence, and a track acts as container, forming a scope to encompass all the objects &quot;on&quot; this track. Thus, the placement of a track defines properties of the track, which will be inherited (if necessary) by all ~MObjects placed to this track. For example, if placing (=plugging) a track to some global [[Pipe]], and if placing a clip to this track, without placing the clip directly to another pipe, the associated-to-pipe information of the track will be fetched by the builder when needed to make the output connection of the clip.
 &amp;rarr; [[Handling of Tracks|TrackHandling]]
 &amp;rarr; [[Handling of Pipes|PipeHandling]]
 
