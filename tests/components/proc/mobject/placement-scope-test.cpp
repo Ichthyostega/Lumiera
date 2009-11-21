@@ -72,6 +72,7 @@ namespace test    {
           // Prepare an (test)Index backing the PlacementRefs
           PPIdx index = build_testScopes();
           
+          verifyEquality();
           UNIMPLEMENTED ("function test of placement scope interface");
 #if false  //////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET 384  !!!!!!!!!
           verifyLookup (index);
@@ -113,6 +114,35 @@ namespace test    {
               ASSERT (isSameObject (scope1,scope2));
             }
 #endif     //////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET 384  !!!!!!!!!
+        }
+      
+      
+      /** @test equality of scopes is based on the ID of the scope top (Placement) */
+      void
+      verifyEquality ()
+        {
+          PlacementMO& aPlac = retrieve_startElm();
+          Scope scope1(aPlac);
+          Scope scope2(aPlac);
+          Scope nil;
+          
+          ASSERT (scope1 == scope2); ASSERT (scope2 == scope1);
+          ASSERT (scope1 != nil);    ASSERT (nil != scope1);
+          ASSERT (scope2 != nil);    ASSERT (nil != scope2);
+          
+          ASSERT (aPlac == scope1);  ASSERT (scope1 == aPlac);  
+          ASSERT (aPlac == scope2);  ASSERT (scope2 == aPlac);  
+          ASSERT (aPlac != nil);     ASSERT (nil != aPlac);
+          
+          Scope par (scope1.getParent());
+          ASSERT (scope1 != par);    ASSERT (par != scope1);
+          ASSERT (scope2 != par);    ASSERT (par != scope2);
+          
+          PlacementMO& plac2 (scope2.getTop());
+          ASSERT (aPlac.getID() == plac2.getID());
+          
+          PlacementMO& parPlac (par.getTop());
+          ASSERT (aPlac.getID() != parPlac.getID());
         }
       
       
