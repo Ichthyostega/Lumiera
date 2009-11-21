@@ -20,6 +20,65 @@
  
 */
 
+/** @file scope-path.hpp
+ ** An Object representing a sequence of nested scopes within the Session.
+ ** MObjects are being attached to the model by Placements, and each Placement
+ ** is added as belonging \em into another Placement, which defines the Scope
+ ** of the addition. There is one (abstract) root element, containing the timelines;
+ ** from there a nested sequence of scopes leads down to each Placement.
+ ** Ascending this path yields all the scopes to search or query in proper order
+ ** to be used when resolving some attribute of placement. Placements use visibility
+ ** rules comparable to visibility of scoped definitions in common programming languages
+ ** or in cascading style sheets, where a local definition can shadow a global one.
+ ** In a similar way, properties not defined locally may be resolved by querying
+ ** up the sequence of nested scopes.
+ ** 
+ ** A scope path is represented as sequence of scopes, where each Scope is implemented
+ ** by a PlacementRef pointing to the »scope top«, i.e. the placement in the session
+ ** constituting this scope. The leaf of this path can be considered the current scope.
+ ** ScopePath is intended to remember a \em current location within the model, to be
+ ** used for resolving queries and discovering contents.
+ ** 
+ ** \par operations and behaviour
+ ** 
+ ** In addition to some search and query functions, a scope path has the ability to 
+ ** \em navigate to a given target scope, which must be reachable by ascending and
+ ** descending into the branches of the overall tree or DAG (in the general case).
+ ** Navigating changes the current path, which usually happens when the current
+ ** "focus" shifts while operating on the model.
+ ** 
+ ** - ScopePath can be default constructed, yielding an \em invalid path.
+ ** - When created with a given target Scope, a connection to the current Session
+ **   is created behind the scenes to discover the path starting from this target
+ **   Scope up to model root. This is the core "locating" operation. It may fail.
+ ** - There is a pre defined \c ScopePath::INVALID token
+ ** - ScopePaths are intended to be handled <b>by value</b> (as are Scopes and
+ **   PlacementRefs). They are equality comparable and provide several specialised
+ **   relation predicates.
+ ** - all implementations are focused on clarity, not uttermost performance, as
+ **   the assumption is for paths to be relatively short and path operations to
+ **   be executed rather in a GUI action triggered context.
+ ** - the iteration (Lumiera Forward Iterator) yields the path elements in
+ **   \em ascending order, starting with the leaf element
+ ** - a path containing just the root element evaluates to \c bool(false) 
+ **   (rationale is that any valid, usable path is below just root).
+ ** - an empty (nil) path doesn't even contain the root element and 
+ **   may throw on many operations.
+ ** 
+ ** \par relation to ScopeLocator
+ ** 
+ ** ScopeLocator holds the QueryFocusStack, which contains ScopePath objects.
+ ** Each of these stack frames represents the current location for some evaluation
+ ** context; it is organised as stack to allow intermediate evaluations. Management
+ ** of these stack frames is automated, with the assistance of ScopePath by
+ ** incorporating a ref-count.
+ ** 
+ ** @see scope-path-test.cpp
+ ** @see Scope
+ ** @see ScopeLocator
+ ** 
+ */
+
 
 #ifndef MOBJECT_SESSION_SCOPE_PATH_H
 #define MOBJECT_SESSION_SCOPE_PATH_H
@@ -42,7 +101,14 @@ namespace session {
   
   
   /**
-   * TODO type comment
+   * Sequence of nested scopes within the high-level model.
+   * Implemented as vector of Scope elements. Providing
+   * state and relation predicates, and the ability to
+   * \em navigate the current location, as represented
+   * by the current leaf element of the path. 
+   * 
+   * Incorporates a ref count to be utilised by ScopeLocator
+   * and QueryFocus to establish the \em current focus (path).
    */
   class ScopePath
     : public lib::BoolCheckable<ScopePath>
