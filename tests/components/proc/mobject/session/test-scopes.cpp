@@ -96,4 +96,12 @@ namespace test    {
   }
   
   
+  ScopeQuery<MObject>::iterator
+  explore_testScope (PlacementMO const& scopeTop)
+  {
+    return ScopeQuery<MObject>(SessionServiceExploreScope::getResolver(),
+                               scopeTop, CHILDREN);
+  }
+  
+  
 }}} // namespace mobject::session::test

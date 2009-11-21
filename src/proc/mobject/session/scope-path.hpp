@@ -27,6 +27,7 @@
 //#include "proc/mobject/mobject.hpp"
 //#include "proc/mobject/placement-ref.hpp"
 #include "proc/mobject/session/scope.hpp"
+#include "lib/bool-checkable.hpp"
 #include "lib/iter-adapter.hpp"
 
 #include <vector>
@@ -44,6 +45,7 @@ namespace session {
    * TODO type comment
    */
   class ScopePath
+    : public lib::BoolCheckable<ScopePath>
     {
       vector<Scope> path_;
       
@@ -52,19 +54,71 @@ namespace session {
       typedef lib::RangeIter<_VIter>      _IterType;
       
     public:
-      ScopePath();
+      ScopePath ();
+      ScopePath (Scope const& leaf);
+      
+      static const ScopePath INVALID;
+      
+      /* == state diagnostics == */
+      bool isValid()    const;
+      bool empty()      const;
+      size_t size()     const;
+      size_t length()   const;
+                        ////////////////////////////////////////TICKET #429 : diagnostic output to be added later
       
       /// Iteration is always ascending from leaf to root
       typedef _IterType iterator;
       iterator begin()  const;
       iterator end()    const;
       
-      Scope getLeaf()  const;
       
+      /* == relations == */
+      Scope& getLeaf()                 const;
+      bool endsAt (Scope const&)       const;
+      bool contains (Scope const&)     const;
+      bool contains (ScopePath const&) const;
+      
+      friend ScopePath commonPrefix (ScopePath const&, ScopePath const&);
+      friend bool      disjoint     (ScopePath const&, ScopePath const&);
+      
+      friend bool operator== (ScopePath const&, ScopePath const&);
+      
+      
+      /* == mutations == */
       void clear();
+      Scope& moveUp();
+      Scope& goRoot();
+      void navigate (Scope const&);
       
     };
 ///////////////////////////TODO currently just fleshing the API
+  
+  
+  inline bool
+  operator== (ScopePath const& path1, ScopePath const& path2)
+  {
+    return path1.path_ == path2.path_;
+  }
+  
+  inline bool
+  operator!= (ScopePath const& path1, ScopePath const& path2)
+  {
+    return !(path1 == path2);
+  }
+  
+  
+  inline size_t
+  ScopePath::length()  const
+  {
+    return path_.size();
+  }
+  
+  
+  inline size_t
+  ScopePath::size()  const
+  {
+    return path_.size();
+  }
   
   
   inline ScopePath::iterator

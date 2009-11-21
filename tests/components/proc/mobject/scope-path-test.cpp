@@ -40,6 +40,7 @@ namespace mobject {
 namespace session {
 namespace test    {
   
+  using util::isnil;
   using util::isSameObject;
 //using lumiera::Time;
 //using std::string;
@@ -47,6 +48,7 @@ namespace test    {
 //using std::endl;
 //  using namespace mobject::test;
   using lumiera::error::LUMIERA_ERROR_LOGIC;
+  using lumiera::error::LUMIERA_ERROR_INVALID;
   
   
   /***************************************************************************
@@ -66,15 +68,16 @@ namespace test    {
           // Prepare an (test)Index backing the PlacementRefs
           PPIdx index = build_testScopes();
           PMO& startPlacement = retrieve_startElm();
-          ASSERT (startPlacement);
+          ASSERT (startPlacement.isValid());
           
           ScopePath testPath = buildPath (startPlacement);
           checkRelations (testPath,startPlacement);
-          invalildPath (testPath,startPlacement);
-          emptyPath (testPath);
+          invalidPath (testPath,startPlacement);
+          rootPath (testPath);
           check_Identity_and_Copy (startPlacement);
           navigate (testPath, index);
           clear (testPath, index);
+                                  ////////////////////////////////////////TICKET #429 : verify diagnostic output (to be added later)
         }
       
       
@@ -82,16 +85,19 @@ namespace test    {
       buildPath (PMO& startPla)
         {
           Scope startScope (startPla);
-#if false     ////////////////////////////////////////////////////////////////////////////////TICKET 384
-          ScopePath path (startScope);
-          ASSERT (path);
-          ASSERT (path.contains (startScope));
-          return path;
-          ScopePath path (startScope);
-          
+          ScopePath path  (startScope);
           ScopePath path2 (startScope);
           ScopePath path3 (path2);
-#endif
+          
+          ASSERT (path);
+          ASSERT (path.contains (startScope));
+          ASSERT ( path.getLeaf() == path2.getLeaf());
+          ASSERT (path2.getLeaf() == path3.getLeaf());
+          
+          Scope unrelatedScope (TestPlacement<> (*new DummyMO));
+          VERIFY_ERROR (INVALID, ScopePath(unrelatedScope) );
+          
+          return path;
         }
       
       
@@ -112,7 +118,6 @@ namespace test    {
       void
       checkRelations (ScopePath path1, PMO& refPlacement)
         {
-#if false     ////////////////////////////////////////////////////////////////////////////////TICKET 384
           ASSERT (path1.contains (refPlacement));
           
           Scope refScope (refPlacement);
@@ -124,7 +129,7 @@ namespace test    {
           ASSERT (path2.endsAt (refScope));
           
           ASSERT (path1 == path2);
-          ASSERT (!isSameObject (path,path2));
+          ASSERT (!isSameObject (path1,path2));
           
           Scope parent = path2.moveUp();
           ASSERT (path2.endsAt (parent));
@@ -138,38 +143,35 @@ namespace test    {
           ASSERT (path2 == commonPrefix(path2,path1));
           ASSERT (path1 != commonPrefix(path1,path2));
           ASSERT (path1 != commonPrefix(path2,path1));
-#endif        ////////////////////////////////////////////////////////////////////////////////TICKET 384
         }
       
       
       void
-      emptyPath (ScopePath refPath)
+      rootPath (ScopePath refPath)
         {
-#if false     ////////////////////////////////////////////////////////////////////////////////TICKET 384
-          ASSERT (!isnil (refPath));
+          ASSERT ( refPath);
           refPath.goRoot();
-          ASSERT ( isnil (refPath));
-          ASSERT (refPath.empty());
-          ASSERT (refPath.isValid());
+          ASSERT (!refPath);
+          ASSERT (!refPath.empty());
+          ASSERT (!refPath.isValid());
           ASSERT (1 == refPath.length());
           
           ScopePath defaultPath;
-          ASSERT (isnil (defaultPath));
+          ASSERT (!defaultPath);
           ASSERT (refPath == defaultPath);
-#endif        ////////////////////////////////////////////////////////////////////////////////TICKET 384
         }
       
       
       void
       invalidPath (ScopePath refPath, PMO& refPlacement)
         {
-#if false     ////////////////////////////////////////////////////////////////////////////////TICKET 384
           ASSERT (refPath);
           ASSERT (!ScopePath::INVALID);
+          ASSERT (isnil (ScopePath::INVALID));
           
           ScopePath invalidP (ScopePath::INVALID);
-          ASSERT (!invalildP);
-          ASSERT (invalildP == ScopePath::INVALID);
+          ASSERT (isnil (invalidP));
+          ASSERT (invalidP == ScopePath::INVALID);
           ASSERT (!isSameObject (invalidP, ScopePath::INVALID));
           
           ASSERT (refPath.contains (refPlacement));
@@ -189,24 +191,22 @@ namespace test    {
           ASSERT (1 == refPath.length());
           
           Scope nil = refPath.moveUp();
-          ASSERT (!refPath);
+          ASSERT (refPath.empty());
           ASSERT (!nil.isValid());
           ASSERT (refPath == invalidP);
           ASSERT (invalidP.contains (nil));
           
           refPath.navigate(root);
           ASSERT (refPath != invalidP);
-          ASSERT (refPath);
+          ASSERT (!isnil (refPath));
           
         //ScopePath::INVALID.navigate(root);  // doesn't compile
-#endif        ////////////////////////////////////////////////////////////////////////////////TICKET 384
         }
       
       
       void
       check_Identity_and_Copy (PMO& refPlacement)
         {
-#if false     ////////////////////////////////////////////////////////////////////////////////TICKET 384
           Scope startScope (refPlacement);
           ScopePath path1 (startScope);
           ScopePath path2 (startScope);
@@ -237,7 +237,6 @@ namespace test    {
           ASSERT (path1 != path2);
           ASSERT (path2 != path3);
           ASSERT (path1 != path3);
-#endif        ////////////////////////////////////////////////////////////////////////////////TICKET 384
         }
       
       
@@ -253,7 +252,6 @@ namespace test    {
       void
       navigate (const ScopePath refPath, PPIdx index)
         {
-#if false     ////////////////////////////////////////////////////////////////////////////////TICKET 384
           ScopePath path (refPath);
           ASSERT (path == refPath);
           
@@ -278,8 +276,9 @@ namespace test    {
           ASSERT (!path.endsAt (root));
           ASSERT (!path.endsAt (leaf));
           
-          PMO newNode (*new DummyMO);
-          index->insert (newNode, parent); // place as sibling of "leaf"
+          TestPlacement<> newNode (*new DummyMO);
+          PMO& parentRefPoint = parent.getTop();
+          index->insert (newNode, parentRefPoint); // place as sibling of "leaf"
           path.navigate (newNode);
           Scope sibling = path.getLeaf();
           ASSERT (parent == sibling.getParent());
@@ -291,7 +290,7 @@ namespace test    {
           ASSERT (!disjoint (path,refPath));
           ASSERT (!disjoint (refPath,path));
           
-          Path prefix = commonPrefix (path,refPath);
+          ScopePath prefix = commonPrefix (path,refPath);
           ASSERT (prefix == commonPrefix (refPath,path));
           ASSERT (prefix.endsAt (parent));
           ASSERT (!prefix.contains (leaf));
@@ -299,34 +298,40 @@ namespace test    {
           path.navigate (prefix.getLeaf());
           ASSERT (path == prefix);
           
+          // try to navigate to an unconnected location...
+          ScopePath beforeInvalidNavigation = path;
+          Scope unrelatedScope (TestPlacement<> (*new DummyMO));
+          VERIFY_ERROR (INVALID, path.navigate (unrelatedScope) );
+          ASSERT (path == beforeInvalidNavigation); // not messed up by the incident
+          
           // now explore a completely separate branch....
-          PMO& separatePlacement = *index->query<TestSubMO21> (
-                                     *index->query<TestSubMO21> (
-                                       *index->query<TestSubMO21> (root)));
+          PMO& separatePlacement = *explore_testScope (
+                                     *explore_testScope (
+                                       *explore_testScope (
+                                         root.getTop())));
           path.navigate (separatePlacement);
           ASSERT (path);
           ASSERT (disjoint (path,refPath));
           ASSERT (path.contains(separatePlacement));
           Scope other = path.getLeaf();
-          ASSERT (other.getTop() == separatePlacement);
+          ASSERT (isSameObject (other.getTop(), separatePlacement));
           ScopePath rootPrefix = commonPrefix (path,refPath);
           ASSERT (rootPrefix.endsAt (root));
-#endif        ////////////////////////////////////////////////////////////////////////////////TICKET 384
+          
         }
       
       
       void
-      clear (ScopePath& testPath, PPIdx index)
+      clear (ScopePath& path, PPIdx index)
         {
-#if false     ////////////////////////////////////////////////////////////////////////////////TICKET 384
           ASSERT (path);
           PMO rootNode = index->getRoot();
           ASSERT (path.getLeaf() != rootNode);
           
           path.clear();
-          ASSERT (path);
+          ASSERT (!path);
+          ASSERT (!isnil (path));
           ASSERT (path.getLeaf() == rootNode);
-#endif        ////////////////////////////////////////////////////////////////////////////////TICKET 384
         }
           
     };

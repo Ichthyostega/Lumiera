@@ -146,6 +146,16 @@ namespace session {
   }
   
   
+  /** check if this scope can be located.
+   *  An default constructed Scope (i.e without
+   *  defining Placement) can't be located and returns false here */
+  bool
+  Scope::isValid()  const
+  {
+    return anchor_.isValid();
+  }
+  
+  
   /** enumerate the path of nested scopes up to root scope.
    *  @return an iterator which starts with this scope and
    *          successively yields outer scopes, stopping at root.
@@ -155,7 +165,6 @@ namespace session {
   {
     UNIMPLEMENTED ("ascend scope hierarchy up to root");
   }
-
   
   
   

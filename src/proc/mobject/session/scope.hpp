@@ -75,6 +75,7 @@ namespace session {
       
       Scope const& getParent()  const;
       PlacementMO& getTop()  const;
+      bool isValid() const;
       bool isRoot()  const;
       
       typedef IterType_ iterator;

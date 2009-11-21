@@ -27,6 +27,8 @@
 
 #include "proc/mobject/test-dummy-mobject.hpp"
 #include "proc/mobject/session/placement-index.hpp"
+#include "proc/mobject/session/scope-query.hpp"
+#include "proc/mobject/placement.hpp"
 
 #include <tr1/memory>
 
@@ -59,6 +61,14 @@ namespace test    {
    *  which is a Placement<> and way down into the hierarchy
    */
   PlacementMO& retrieve_startElm();
+  
+  
+  /** shortcut to explore the contents of a scope within the current index.
+   *  Usually, clients would use QueryFocus or ScopeLocator to perform this task,
+   *  but for the purpose of testing we're better off to invoke the query directly
+   */
+  ScopeQuery<MObject>::iterator explore_testScope (PlacementMO const& scopeTop);
+  
   
   
 }}} // namespace mobject::session::test
