@@ -96,6 +96,20 @@ namespace test    {
       
       
       void
+      checkIteration (ScopePath path, PMO& refPlacement)
+        {
+          Scope refScope(refPlacement);
+          ScopePath::iterator ii = path.begin();
+          ASSERT (ii);
+          while (++ii)
+            {
+              ASSERT (*ii == refScope.getParent());
+              refScope = *ii;
+            }
+        }
+      
+      
+      void
       checkRelations (ScopePath path1, PMO& refPlacement)
         {
 #if false     ////////////////////////////////////////////////////////////////////////////////TICKET 384

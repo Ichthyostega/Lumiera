@@ -27,6 +27,7 @@
 //#include "proc/mobject/mobject.hpp"
 //#include "proc/mobject/placement-ref.hpp"
 #include "proc/mobject/session/scope.hpp"
+#include "lib/iter-adapter.hpp"
 
 #include <vector>
 //#include <string>
@@ -46,9 +47,17 @@ namespace session {
     {
       vector<Scope> path_;
       
+      typedef vector<Scope>                  _VType;
+      typedef _VType::const_reverse_iterator _VIter;
+      typedef lib::RangeIter<_VIter>      _IterType;
+      
     public:
       ScopePath();
       
+      /// Iteration is always ascending from leaf to root
+      typedef _IterType iterator;
+      iterator begin()  const;
+      iterator end()    const;
       
       Scope getLeaf()  const;
       
@@ -56,6 +65,19 @@ namespace session {
       
     };
 ///////////////////////////TODO currently just fleshing the API
+  
+  
+  inline ScopePath::iterator
+  ScopePath::begin()  const
+  {
+    return iterator (path_.rbegin(), path_.rend());
+  }
+  
+  inline ScopePath::iterator
+  ScopePath::end()    const
+  {
+    return iterator();
+  }
   
   
 }} // namespace mobject::session

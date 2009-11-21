@@ -309,8 +309,8 @@ namespace lib {
         { }
       
       RangeIter ()
-        : p_(0)
-        , e_(0)
+        : p_()
+        , e_()
         { }
       
       
@@ -358,7 +358,7 @@ namespace lib {
       bool
       isValid ()  const
         {
-          return (p_!= IT(0)) && (p_ != e_);
+          return (p_!= IT()) && (p_ != e_);
         }
       
       bool
