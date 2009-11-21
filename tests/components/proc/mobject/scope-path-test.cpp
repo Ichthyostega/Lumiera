@@ -65,8 +65,7 @@ namespace test    {
         {
           // Prepare an (test)Index backing the PlacementRefs
           PPIdx index = build_testScopes();
-#if false     ////////////////////////////////////////////////////////////////////////////////TICKET 384
-          PMO& startPlacement = *(index->query<TestSubMO1>(index->getRoot()));
+          PMO& startPlacement = retrieve_startElm();
           ASSERT (startPlacement);
           
           ScopePath testPath = buildPath (startPlacement);
@@ -76,7 +75,6 @@ namespace test    {
           check_Identity_and_Copy (startPlacement);
           navigate (testPath, index);
           clear (testPath, index);
-#endif
         }
       
       

@@ -25,22 +25,10 @@
 #define MOBJECT_SESSION_TEST_TEST_SCOPES_H
 
 
-//#include "lib/lumitime.hpp"
-//#include "proc/mobject/placement-ref.hpp"
-#include "proc/mobject/session/test-scopes.hpp"
 #include "proc/mobject/test-dummy-mobject.hpp"
 #include "proc/mobject/session/placement-index.hpp"
-//#include "lib/util.hpp"
 
 #include <tr1/memory>
-//#include <iostream>
-//#include <string>
-
-//using util::isSameObject;
-//using lumiera::Time;
-//using std::string;
-//using std::cout;
-//using std::endl;
 
 
 namespace mobject {
@@ -48,7 +36,7 @@ namespace session {
 namespace test    {
   
   using std::tr1::shared_ptr;
-
+  
   using namespace mobject::test;
   typedef TestPlacement<DummyMO> PDum;
   
@@ -65,6 +53,12 @@ namespace test    {
    * @see mobject::session::SessionServiceMockIndex::reset_PlacementIndex
    */
   PPIdx build_testScopes();
+  
+  
+  /** complement to the helper: retrieve one of the dummy placements
+   *  which is a Placement<> and way down into the hierarchy
+   */
+  PlacementMO& retrieve_startElm();
   
   
 }}} // namespace mobject::session::test

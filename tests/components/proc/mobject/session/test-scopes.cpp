@@ -23,16 +23,8 @@
 
 #include "proc/mobject/session/test-scopes.hpp"
 #include "proc/mobject/session/session-service-mock-index.hpp"
-//#include "lib/util.hpp"
-
-//#include <iostream>
-//#include <string>
-
-//using util::isSameObject;
-//using lumiera::Time;
-//using std::string;
-//using std::cout;
-//using std::endl;
+#include "proc/mobject/session/session-service-explore-scope.hpp"
+#include "proc/mobject/session/scope-query.hpp"
 
 
 namespace mobject {
@@ -87,6 +79,20 @@ namespace test    {
     index->insert (ps3, ps2);
     
     return index;
+  }
+  
+  
+  /** @note this test helper only works if build_testScopes is invoked
+   *  beforehand, and the returned smart-ptr to the created test/dummy index
+   *  is retained. Moreover, this function makes assumptions about the actual
+   *  objects created by the former test function.
+   *  @throw lumiera::error::Invalid if the intended start element doesn't exist (anymore)
+   */
+  PlacementMO&
+  retrieve_startElm()
+  {
+    return *ContentsQuery<TestSubMO1>(SessionServiceExploreScope::getResolver()
+                                     ,SessionServiceExploreScope::getScopeRoot());
   }
   
   

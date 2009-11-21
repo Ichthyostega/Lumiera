@@ -61,7 +61,7 @@ namespace test    {
       run (Arg) 
         {
           // Prepare an (test)Index (dummy "session")
-          build_testScopes();
+          PPIdx testSession (build_testScopes());
           
           QueryResolver const& resolver = SessionServiceExploreScope::getResolver();
           PlacementMO   const& scope    = SessionServiceExploreScope::getScopeRoot();
