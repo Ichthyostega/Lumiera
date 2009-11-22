@@ -29,6 +29,7 @@
 #include "proc/mobject/session/scope-path.hpp"
 #include "proc/mobject/session/scope-locator.hpp"
 
+#include <boost/intrusive_ptr.hpp>
 //#include <vector>
 //#include <string>
 
@@ -45,8 +46,7 @@ namespace session {
    */
   class QueryFocus
     {
-      ScopePath scopes_;  /////////////////////////////////////////////////////////////////TODO use intrusive pointer
-      /////////////////////////////////////////////////////////////////////////////////////TODO how to integrate the ref-counting handle?
+      boost::intrusive_ptr<ScopePath> focus_;
       
     public:
       QueryFocus();
@@ -61,26 +61,44 @@ namespace session {
       
       template<class MO>
       typename ScopeQuery<MO>::iterator
-      query()  const
-        {
-          ScopeLocator::instance().query<MO> (*this);
-        }
+      query()  const;
       
       template<class MO>
       typename ScopeQuery<MO>::iterator
-      explore()  const
-        {
-          ScopeLocator::instance().explore<MO> (*this);
-        }
+      explore()  const;
       
     private:
-      ScopePath      & currPath();
-      ScopePath const& currPath()  const;
+      QueryFocus (ScopePath&);
+      
+      static ScopePath& currPath();
     };
 ///////////////////////////TODO currently just fleshing the API
 
   
+
   
+  /** discover depth-first any matching object
+   *  within \em current focus. Resolution is 
+   *  delegate to the \em current session */
+  template<class MO>
+  typename ScopeQuery<MO>::iterator
+  QueryFocus::query()  const
+  {
+    ScopeLocator::instance().query<MO> (*this);
+  }
+      
+  
+  /** discover any matching object contained 
+   *  as immediate Child within \em current focus. 
+   *  Resolution through \em current session */
+  template<class MO>
+  typename ScopeQuery<MO>::iterator
+  QueryFocus::explore()  const
+  {
+    ScopeLocator::instance().explore<MO> (*this);
+  }
+      
+
   
 }} // namespace mobject::session
 #endif

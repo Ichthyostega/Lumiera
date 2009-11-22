@@ -29,6 +29,7 @@
 #include "proc/mobject/placement-ref.hpp"
 //#include "proc/mobject/session/query-resolver.hpp"  ///////////TODO: really?
 #include "lib/iter-adapter.hpp"
+#include "lib/error.hpp"
 //#include "lib/singleton.hpp"
 
 #include <boost/operators.hpp>
@@ -44,6 +45,8 @@ namespace mobject {
 namespace session {
   
   using lib::IterAdapter;
+  
+  LUMIERA_ERROR_DECLARE (INVALID_SCOPE);  ///< Placement scope invalid an not locatable within model
   
   
 

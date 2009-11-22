@@ -35,6 +35,9 @@ namespace mobject {
 namespace session {
   
   
+  LUMIERA_ERROR_DEFINE (INVALID_SCOPE, "Placement scope invalid an not locatable within model");
+
+  
   
   /** TODO??? */
   Scope::Scope (PlacementMO const& constitutingPlacement)
@@ -104,8 +107,20 @@ namespace session {
   ScopePath&
   ScopeLocator::currPath()
   {
-    UNIMPLEMENTED ("how to access and handle the current focus");
+    return focusStack_->top();
   }
+  
+  
+  /** push aside the current focus location
+   *  and open a new ScopePath frame, to serve
+   *  as \em current location until released 
+   */
+  ScopePath&
+  ScopeLocator::pushPath()
+  {
+    return focusStack_->push (SessionServiceExploreScope::getScopeRoot());
+  }
+  
   
   
   /** discover the enclosing scope of a given Placement */

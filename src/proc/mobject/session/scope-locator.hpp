@@ -64,6 +64,7 @@ namespace session {
       static lib::Singleton<ScopeLocator> instance;
       
       ScopePath& currPath();
+      ScopePath& pushPath();
       
       template<typename MO>
       typename ScopeQuery<MO>::iterator

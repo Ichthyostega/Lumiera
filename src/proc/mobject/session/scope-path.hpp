@@ -86,6 +86,7 @@
 #include "proc/mobject/session/scope.hpp"
 #include "lib/bool-checkable.hpp"
 #include "lib/iter-adapter.hpp"
+#include "lib/error.hpp"
 
 #include <vector>
 

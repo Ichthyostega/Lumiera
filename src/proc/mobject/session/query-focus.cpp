@@ -22,80 +22,118 @@
 
 
 #include "proc/mobject/session/query-focus.hpp"
-//#include "proc/mobject/session/track.hpp"
-//#include "proc/mobject/placement.hpp"
-//#include "proc/mobject/session/mobjectfactory.hpp"
-//#include "proc/asset/track.hpp"
+
 
 namespace mobject {
 namespace session {
   
   
   
-  /** TODO??? */
+  /** 
+   * create a new QueryFocus (handle)
+   * linked to the current focus for discovery queries.
+   * The existence of this QueryFocus instance keeps this
+   * current focus alive, but multiple instances share a
+   * common focus location and may change this location.
+   * 
+   */
   QueryFocus::QueryFocus()
-  { }
+    : focus_( & currPath())
+    { }
   
   
-  /** */
+  /**
+   * @internal build a new QueryFocus
+   * as attached to an existing path.
+   */
+  QueryFocus::QueryFocus(ScopePath& path_to_attach)
+    : focus_( &path_to_attach)
+    { }
+  
+  
+  /** @internal access the path designating
+   *  the current focus location */
   ScopePath&
   QueryFocus::currPath()
   {
-    UNIMPLEMENTED ("dereference and access the current scope path");
+    return ScopeLocator::instance().currPath();
   }
-
-  ScopePath const&
-  QueryFocus::currPath()  const
-  {
-    UNIMPLEMENTED ("dereference and access the current scope path");
-  }
-
   
-  /** discard any state and clear
-      the current focus path */
+  
+  /** discard any state and navigate
+   *  current focus path to model root
+   */
   QueryFocus&
   QueryFocus::reset ()
   {
-    scopes_.clear();
+    REQUIRE (focus_);
+    focus_->clear();
     return *this;
   }
   
   
+  
+  
+  
+  namespace {// error check shortcut....
+    
+    using lumiera::error::Invalid;
+    
+    void
+    ___check_validTaget (Scope const& target)
+    {
+      if (!target.isValid())
+        throw Invalid ("Invalid target location for QueryFocus"
+                      , LUMIERA_ERROR_INVALID_SCOPE);
+    }
+  }//(End) shortcut
+  
+  
+  
   /** attach this QueryFocus to a container-like scope,
-      causing it to \em navigate, changing the
-      current ScopePath as a side-effect 
-  */
+   *  causing it to \em navigate, changing the
+   *  current ScopePath as a side-effect
+   *  @throw error::Invalid if the given container is
+   *         invalid or can't be located within the model 
+   */
   QueryFocus&
   QueryFocus::attach (Scope const& container)
   {
-    UNIMPLEMENTED ("navigate this focus to attach to the given container scop");
+    ___check_validTaget (container);
+    
+    REQUIRE (focus_);
+    focus_->navigate (container);
     return *this;
   }
   
   
   /** push the "current QueryFocus" aside and open a new focus frame.
-      This new QueryFocus will act as "current" until going out of scope
+   *  This new QueryFocus will act as "current" until going out of scope
+   *  @throw error::Invalid in case of invalid or unlocatable target scope
    */
   QueryFocus
   QueryFocus::push (Scope const& otherContainer)
   {
-    UNIMPLEMENTED ("push current, open a new QueryFocus frame");
-    QueryFocus newFocus; // = do push and open new frame
+    ___check_validTaget (otherContainer);
+    
+    QueryFocus newFocus (ScopeLocator::instance().pushPath());
     newFocus.attach (otherContainer);
     return newFocus;
   }
   
   
   /** cease to use \em this specific reference to the current frame.
-      This operation immediately tries to re-attach to what is "current"
-      and readjusts the internal handle. But when the previously released
-      reference was the last one, releasing it will cause the QueryFocusStack
-      to pop, in which case we'll re-attach to the now uncovered previous stack top.
-  */
+   *  This operation immediately tries to re-attach to what is "current"
+   *  and readjusts the internal handle. But when the previously released
+   *  reference was the last one, releasing it will cause the QueryFocusStack
+   *  to pop, in which case we'll re-attach to the now uncovered previous stack top.
+   */
   QueryFocus&
   QueryFocus::pop()
   {
-    UNIMPLEMENTED ("pop, give up one reference, maybe drop stack top");
+    focus_ = 0;
+    focus_ = & currPath();
+    
     return *this;
   }
   
