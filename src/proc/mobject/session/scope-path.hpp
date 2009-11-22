@@ -110,6 +110,7 @@ namespace session {
   class ScopePath
     : public lib::BoolCheckable<ScopePath>
     {
+      size_t refcount_;
       std::vector<Scope> path_;
       
       typedef vector<Scope>                  _VType;
@@ -117,6 +118,7 @@ namespace session {
       typedef lib::RangeIter<_VIter>      _IterType;
       
     public:
+     ~ScopePath ();
       ScopePath ();
       ScopePath (Scope const& leaf);
       
@@ -127,6 +129,7 @@ namespace session {
       bool empty()      const;
       size_t size()     const;
       size_t length()   const;
+      size_t ref_count()const;
                         ////////////////////////////////////////TICKET #429 : diagnostic output to be added later
       
       /// Iteration is always ascending from leaf to root
@@ -176,6 +179,13 @@ namespace session {
   operator!= (ScopePath const& path1, ScopePath const& path2)
   {
     return !(path1 == path2);
+  }
+  
+  
+  inline size_t
+  ScopePath::ref_count()  const
+  {
+    return refcount_;
   }
   
   

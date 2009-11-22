@@ -83,7 +83,8 @@ namespace session {
    *       may cause an empty default session to be created.
    */
   ScopePath::ScopePath ()
-    : path_()
+    : refcount_(0)
+    , path_()
   {
     clear();
   }
@@ -100,12 +101,19 @@ namespace session {
    *        can't be connected to the (implicit) root
    */
   ScopePath::ScopePath (Scope const& leaf)
-    : path_()
+    : refcount_(0)
+    , path_()
   {
     if (!leaf.isValid()) return; // invalid leaf defines invalid path....
     
     append_all (discoverScopePath(leaf), path_);
     reverse (path_.begin(), path_.end());
+  }
+  
+  
+  ScopePath::~ScopePath()
+  {
+    WARN_IF (refcount_, "Destroying a scope path frame with ref-count=%u", refcount_);
   }
   
   
