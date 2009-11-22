@@ -123,6 +123,8 @@ NOBUG_CPP_DEFINE_FLAG_PARENT    (    thread,                    backend);       
 NOBUG_CPP_DEFINE_FLAG_PARENT    (   proc,                       progress);
 /** progress log for proc-layer command dispatch */
 NOBUG_CPP_DEFINE_FLAG_PARENT    (    command,                   proc);
+/** progress log for session datastructure */
+NOBUG_CPP_DEFINE_FLAG_PARENT    (    session,                   proc);
 /** progress log for the gui */
 NOBUG_CPP_DEFINE_FLAG_PARENT    (   gui,                        progress);
 /** progress log for the support lib */
