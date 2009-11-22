@@ -149,6 +149,9 @@ namespace session {
       
       friend bool operator== (ScopePath const&, ScopePath const&);
       
+      friend void intrusive_ptr_add_ref (ScopePath*);
+      friend void intrusive_ptr_release (ScopePath*);
+      
       
       /* == mutations == */
       void clear();
@@ -180,6 +183,26 @@ namespace session {
   {
     return !(path1 == path2);
   }
+  
+  
+  /** management function for boost::intrusive_ptr
+   *  to be picked up by ADL
+   */
+  void
+  intrusive_ptr_add_ref (ScopePath* pathFrame)
+  {
+    REQUIRE (pathFrame);
+    ++(pathFrame->refcount_);
+  }
+  
+  void
+  intrusive_ptr_release (ScopePath* pathFrame)
+  {
+    REQUIRE (pathFrame);
+    if (0 < pathFrame->refcount_)
+      --(pathFrame->refcount_);
+  }
+
   
   
   inline size_t

@@ -21,6 +21,7 @@
 * *****************************************************/
 
 
+#include "include/logging.h"
 #include "proc/mobject/session/scope-path.hpp"
 #include "proc/mobject/session/scope-locator.hpp"
 #include "proc/mobject/session/session-service-explore-scope.hpp"
@@ -113,7 +114,7 @@ namespace session {
   
   ScopePath::~ScopePath()
   {
-    WARN_IF (refcount_, "Destroying a scope path frame with ref-count=%u", refcount_);
+    WARN_IF (refcount_, session, "Destroying a scope path frame with ref-count=%lu", refcount_);
   }
   
   
