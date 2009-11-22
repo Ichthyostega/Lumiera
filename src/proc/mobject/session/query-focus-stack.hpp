@@ -24,17 +24,11 @@
 #ifndef MOBJECT_SESSION_QUERY_FOCUS_STACK_H
 #define MOBJECT_SESSION_QUERY_FOCUS_STACK_H
 
-//#include "proc/mobject/mobject.hpp"
-//#include "proc/mobject/placement.hpp"
 #include "proc/mobject/session/scope-path.hpp"
 
-//#include <vector>
-//#include <string>
 #include <boost/noncopyable.hpp>
 #include <list>
 
-//using std::vector;
-//using std::string;
 using std::list;
 
 
@@ -44,7 +38,26 @@ namespace session {
   
   
   /**
-   * TODO type comment
+   * A custom stack holding ScopePath »frames«.
+   * It is utilised by the ScopeLocator to establish the
+   * \em current query focus location. Client code should
+   * access this mechanism through QueryFocus instances 
+   * used as frontend. These QueryFocus objects incorporate
+   * a boost::intrusive_ptr, which stores the ref-count within
+   * the mentioned ScopePath frames located in the stack.
+   * 
+   * \par automatic cleanup of unused frames
+   * 
+   * The stack is aware of this ref-counting mechanism and will --
+   * on each access -- automatically clean up any unused frames starting
+   * from stack top, until encountering the first frame still in use.
+   * This frame, by definition, is the <b>current focus location</b>.
+   * The stack ensures there is always at least one ScopePath frame,
+   * default-creating a new one if necessary.
+   * 
+   * @see query-focus-stack-test.cpp
+   * @see ScopeLocator
+   * @see QueryFocus access point for client code
    */
   class QueryFocusStack
     : boost::noncopyable
@@ -53,38 +66,52 @@ namespace session {
       std::list<ScopePath> paths_;
       
     public:
-      QueryFocusStack()
+      QueryFocusStack ()
         : paths_()
         {
           openDefaultFrame();
         }
       
       
-      bool empty()  const;
-      size_t size() const;
+      bool empty ()  const;
+      size_t size () const;
       
       ScopePath& push (Scope const&);
       ScopePath& top  ();
       void pop_unused ();
+      void clear ();
       
       
     private:
-      void openDefaultFrame();
+      void openDefaultFrame ();
     };
-///////////////////////////TODO currently just fleshing the API
   
+  
+  
+  
+  
+  
+  
+  /* __implementation__ */ 
   
   bool
-  QueryFocusStack::empty()  const
+  QueryFocusStack::empty ()  const
   {
     return paths_.empty();
   }
   
   
   size_t
-  QueryFocusStack::size()  const
+  QueryFocusStack::size ()  const
   {
     return paths_.size();
+  }
+  
+  
+  void
+  QueryFocusStack::clear ()
+  {
+    paths_.clear();
   }
   
   
@@ -120,7 +147,6 @@ namespace session {
       pop_unused();
     
     ENSURE (!empty());
-    ENSURE (!paths_.back().empty());
     return paths_.back();
   }
   
@@ -130,30 +156,36 @@ namespace session {
    *  ScopePath#use_count(). After executing this function
    *  the topmost frame is either in use, or a new default
    *  frame has been created at the bottom of an empty stack.
-   *  @note EXCEPTON_FREE    ///////TODO prove!
+   *  @note EXCEPTION_FREE    ///////TODO prove!
    */
   void
   QueryFocusStack::pop_unused ()
   {
+    if (1 == size() && !paths_.front().isValid())
+      return; // unnecessary to evict a base frame repeatedly
+    
     while (size() && (0 == paths_.back().ref_count()))
       paths_.pop_back();
     
     if (0 == size())
       openDefaultFrame();
     ENSURE (!empty());
-    ENSURE (!paths_.back().empty());
   }
   
   
   /** @internal open a default path frame at the bottom
    *  of an empty stack, locating to current model root
-   *  @note EXCEPTON_FREE    ///////TODO prove!  
+   *  @note EXCEPTION_FREE    ///////TODO prove!
    */
   void
-  QueryFocusStack::openDefaultFrame()
+  QueryFocusStack::openDefaultFrame ()
   {
     REQUIRE (0 == size());
+    
     paths_.resize(1);
+    
+    ENSURE (!paths_.front().empty());
+    ENSURE (!paths_.front().isValid()); // i.e. just root scope
   }
   
   

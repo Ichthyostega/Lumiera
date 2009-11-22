@@ -188,14 +188,14 @@ namespace session {
   /** management function for boost::intrusive_ptr
    *  to be picked up by ADL
    */
-  void
+  inline void
   intrusive_ptr_add_ref (ScopePath* pathFrame)
   {
     REQUIRE (pathFrame);
     ++(pathFrame->refcount_);
   }
   
-  void
+  inline void
   intrusive_ptr_release (ScopePath* pathFrame)
   {
     REQUIRE (pathFrame);
