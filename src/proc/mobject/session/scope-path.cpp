@@ -22,49 +22,90 @@
 
 
 #include "proc/mobject/session/scope-path.hpp"
+#include "proc/mobject/session/scope-locator.hpp"
+#include "proc/mobject/session/session-service-explore-scope.hpp"
+#include "proc/mobject/mobject.hpp"
+#include "lib/itertools.hpp"
+#include "lib/symbol.hpp"
 #include "lib/error.hpp"
 #include "lib/util.hpp"
-//#include "proc/mobject/session/track.hpp"
 
-//#include "proc/mobject/placement.hpp"
-//#include "proc/mobject/session/mobjectfactory.hpp"
-//#include "proc/asset/track.hpp"
 #include <tr1/functional>
+#include <algorithm>
 
 namespace mobject {
 namespace session {
   
+  using std::reverse;
+  
   using std::tr1::bind;
   using std::tr1::function;
   using std::tr1::placeholders::_1;
+  using lib::append_all;
   using util::and_all;
   
   using namespace lumiera;
   
   
-  /** by default, a scope path just contains 
-   *  the root scope of the current session (PlacementIndex).
-   *  @note invoking this function accesses the session and thus
-   *        may cause an empty default session to be created.
+  LUMIERA_ERROR_DEFINE (EMPTY_SCOPE_PATH, "Placement scope not locatable (empty model path)");
+  
+  
+  
+  namespace { // Helpers and shortcuts....
+    
+    /** issue a query to discover the path to root,
+     *  starting with the given scope */
+    inline ScopeQuery<MObject>::iterator
+    discoverScopePath (Scope const& leaf)
+    {
+      return ScopeLocator::instance().locate<MObject> (leaf);
+    }
+    
+    
+    void
+    ___check_notBottom (const ScopePath *path, lib::Literal operation_descr)
+    {
+      REQUIRE (path);
+      if (path->empty())
+        throw error::Invalid (operation_descr+" an empty placement scope path"
+                             , LUMIERA_ERROR_EMPTY_SCOPE_PATH);
+    }
+  }//(End) helpers
+  
+  
+  
+  
+  /**
+   * Create an \em empty path.
+   * By default, a scope path just contains
+   * the root scope of the current session (PlacementIndex).
+   * @note invoking this function accesses the session and thus
+   *       may cause an empty default session to be created.
    */
   ScopePath::ScopePath ()
+    : path_()
   {
-    UNIMPLEMENTED ("default path just containing root");
+    clear();
   }
   
   
-  /** When creating a path to a given (leaf) scope,
-   *  the complete sequence of nested scopes leading to 
-   *  this special scope is discovered, using the query service
-   *  exposed by the session (through ScopeLocator).
-   *  @note when locating the default (invalid) scope,
-   *         a special empty ScopePath is created
-   *  @throw error::Invalid if the given target scope
-   *         can't be connected to the (implicit) root
+  /**
+   * When creating a path to a given (leaf) scope,
+   * the complete sequence of nested scopes leading to
+   * this special scope is discovered, using the query service
+   * exposed by the session (through ScopeLocator).
+   * @note when locating the default (invalid) scope,
+   *        a special empty ScopePath is created
+   * @throw error::Invalid if the given target scope
+   *        can't be connected to the (implicit) root
    */
   ScopePath::ScopePath (Scope const& leaf)
+    : path_()
   {
-    UNIMPLEMENTED ("initialise by discovering complete scope sequence");
+    if (!leaf.isValid()) return; // invalid leaf defines invalid path....
+    
+    append_all (discoverScopePath(leaf), path_);
+    reverse (path_.begin(), path_.end());
   }
   
   
@@ -72,54 +113,66 @@ namespace session {
   const ScopePath ScopePath::INVALID = ScopePath(Scope());
   
   
-  /* == Diagnostics == */
-  
   /** a \em valid path consists of more than just the root element.
    *  @note contrary to this, an \em empty path doesn't even contain a root element
    */
-  bool
+  inline bool
   ScopePath::isValid()  const
   {
-    UNIMPLEMENTED ("validity self check: more than just root");
+    return (0 < length())
+#ifndef NDEBUG
+        && hasValidRoot()
+#endif      
+           ;
   }
   
-  /** an empty path doesn't even contain a root element.
-   *  Many operations throw when invoked on such a path.
-   *  Navigating up from an root path creates an empty path.
-   */
   bool
-  ScopePath::empty()  const
+  ScopePath::hasValidRoot()  const
   {
-    UNIMPLEMENTED ("empty == no elements, even no root!");
+    REQUIRE (0 < length());
+    return path_[0] == currModelRoot();
   }
+  
+  PlacementMO const&
+  ScopePath::currModelRoot()  const
+  {
+    return SessionServiceExploreScope::getScopeRoot();
+  }
+  
+  
   
   
   
   /* == Relations == */
   
-  Scope&
+  Scope const&
   ScopePath::getLeaf()  const
   {
-    UNIMPLEMENTED ("access end node of current path");
+    ___check_notBottom (this, "Inspecting");
+    return path_.back();
   }
   
   
   /** verify the scope in question is equivalent
    *  to our leaf scope. Equivalence of scopes means
    *  they are defined by the same scope top placement,
-   *  i.e. registered with the same Placement-ID. 
+   *  i.e. registered with the same Placement-ID.
    */
   bool
   ScopePath::endsAt(Scope const& aScope)  const
   {
-    UNIMPLEMENTED ("verify the scope in question is identical (same ID) to our leaf scope");
+    return aScope == getLeaf();
   }
   
   
   bool
   ScopePath::contains (Scope const& aScope)  const
   {
-    UNIMPLEMENTED ("containment check");
+    for (iterator ii = this->begin(); ii; ++ii)
+      if (aScope == *ii)
+        return true;
+    
+    return false;
   }
   
   
@@ -144,50 +197,81 @@ namespace session {
   ScopePath
   commonPrefix (ScopePath const& path1, ScopePath const& path2)
   {
-    UNIMPLEMENTED ("determine the common prefix, if any");
+    typedef std::vector<Scope>::iterator VIter;
+    ScopePath prefix (ScopePath::INVALID);
+    uint len = std::min (path1.length(), path2.length());
+    for (uint pos = 0; pos<len; ++pos)
+      if (path1.path_[pos] == path2.path_[pos])
+        prefix.appendScope (path1.path_[pos]);
+    
+    return prefix;
   }
   
   bool
   disjoint (ScopePath const& path1, ScopePath const& path2)
   {
     if (path1.empty() || path2.empty()) return false;
-
+    
     return (path1.isValid() && path2.isValid())
         && (path1.path_[1]  != path2.path_[1]) // no common prefix
          ; 
   }
-
-
   
-
+  
+  
+  
   /* == Mutations == */
   
   void
   ScopePath::clear()
   {
-    UNIMPLEMENTED ("reset the current path to default state (just root)");
+    path_.clear();
+    path_.push_back (currModelRoot());
+    
+    ENSURE (!empty());
+    ENSURE (!isValid());
+    ENSURE ( hasValidRoot());
   }
   
   
   Scope&
   ScopePath::moveUp()
   {
-    UNIMPLEMENTED ("navigate one level up, then return leaf");
+    ___check_notBottom (this, "Navigating");
+    static Scope invalidScope;
+    
+    path_.resize (length()-1);
+    
+    if (empty()) return invalidScope;
+    else         return path_.back();
   }
   
   
   Scope&
   ScopePath::goRoot()
   {
-    UNIMPLEMENTED ("navigate up to the root scope");
+    ___check_notBottom (this, "Navigating");
+    ENSURE (hasValidRoot());
+    
+    path_.resize (1);
+    return path_.back();
   }
   
   
   void
   ScopePath::navigate (Scope const& target)
   {
+    ___check_notBottom (this, "Navigating");
     *this = ScopePath(target);             //////////////////////////////TICKET #424
   }
+  
+  
+  void
+  ScopePath::appendScope (Scope const& child)  ///< @internal backdoor for #commonPrefix
+  {
+    path_.push_back (child);
+  }
+  
   
   
   

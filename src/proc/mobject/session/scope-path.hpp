@@ -83,21 +83,18 @@
 #ifndef MOBJECT_SESSION_SCOPE_PATH_H
 #define MOBJECT_SESSION_SCOPE_PATH_H
 
-//#include "proc/mobject/mobject.hpp"
-//#include "proc/mobject/placement-ref.hpp"
 #include "proc/mobject/session/scope.hpp"
 #include "lib/bool-checkable.hpp"
 #include "lib/iter-adapter.hpp"
 
 #include <vector>
-//#include <string>
 
-using std::vector;
-//using std::string;
 
 namespace mobject {
 namespace session {
   
+  
+  LUMIERA_ERROR_DECLARE (EMPTY_SCOPE_PATH);  ///< Placement scope not locatable (empty model path)
   
   
   /**
@@ -113,7 +110,7 @@ namespace session {
   class ScopePath
     : public lib::BoolCheckable<ScopePath>
     {
-      vector<Scope> path_;
+      std::vector<Scope> path_;
       
       typedef vector<Scope>                  _VType;
       typedef _VType::const_reverse_iterator _VIter;
@@ -139,7 +136,7 @@ namespace session {
       
       
       /* == relations == */
-      Scope& getLeaf()                 const;
+      Scope const& getLeaf()           const;
       bool endsAt (Scope const&)       const;
       bool contains (Scope const&)     const;
       bool contains (ScopePath const&) const;
@@ -156,8 +153,17 @@ namespace session {
       Scope& goRoot();
       void navigate (Scope const&);
       
+      
+    private:
+      bool hasValidRoot()                 const;
+      PlacementMO const& currModelRoot()  const;
+      void appendScope (Scope const&);
     };
-///////////////////////////TODO currently just fleshing the API
+  
+  
+  
+  
+  
   
   
   inline bool
@@ -184,6 +190,16 @@ namespace session {
   ScopePath::size()  const
   {
     return path_.size();
+  }
+  
+  /** an empty path doesn't even contain a root element.
+   *  Many operations throw when invoked on such a path.
+   *  Navigating up from an root path creates an empty path.
+   */
+  inline bool
+  ScopePath::empty()  const
+  {
+    return path_.empty();
   }
   
   

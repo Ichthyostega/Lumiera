@@ -57,6 +57,14 @@ namespace session {
   
   
 
+  /**
+   * Implementation-level service for issuing contents/discovery queries.
+   * Actually, the implementation of this service is backed by the PlacementIndex
+   * within the current session, but this link isn't disclosed to client code.
+   * The exposed QueryResolver is able to handle typed DiscoveryQuery instances.
+   * Usually, on invocation, a search scope needs to be specified. The root Scope
+   * of the current model (session datastructure) can be obtained by #getScopeRoot
+   */
   struct SessionServiceExploreScope
     {
       static QueryResolver const& getResolver();

@@ -61,7 +61,7 @@ namespace session {
   }
   
   
-  /** */
+  /** Re-define the implicit PlacementIndex temporarily, e.g. for unit tests. */
   void
   SessionServiceMockIndex::reset_PlacementIndex (PPIdx const& alternativeIndex)
   {
@@ -69,7 +69,7 @@ namespace session {
   }
   
   
-  /** */
+  /** @return resolver for DiscoveryQuery instances, actually backed by PlacementIndex */
   QueryResolver const&
   SessionServiceExploreScope::getResolver()
   {
@@ -77,7 +77,7 @@ namespace session {
   }
   
   
-  /** */
+  /** @return root scope of the current model (session datastructure) */
   PlacementMO& 
   SessionServiceExploreScope::getScopeRoot()
   {
