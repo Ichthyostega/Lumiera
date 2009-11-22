@@ -24,17 +24,10 @@
 #ifndef MOBJECT_SESSION_QUERY_FOCUS_H
 #define MOBJECT_SESSION_QUERY_FOCUS_H
 
-//#include "proc/mobject/mobject.hpp"
-//#include "proc/mobject/placement.hpp"
 #include "proc/mobject/session/scope-path.hpp"
 #include "proc/mobject/session/scope-locator.hpp"
 
 #include <boost/intrusive_ptr.hpp>
-//#include <vector>
-//#include <string>
-
-//using std::vector;
-//using std::string;
 
 namespace mobject {
 namespace session {
@@ -42,7 +35,45 @@ namespace session {
   
   
   /**
-   * TODO type comment
+   * Current focus location to use as point-of reference
+   * for contents and location discovery queries. This is the
+   * frontend to be used by client code: a smart-handle, internally
+   * linked through the ScopeLocaor singleton to a stack of current
+   * focus path locations. The intention is for this current location
+   * to follow the ongoing query/discovery operations mostly automatically.
+   * 
+   * \par usage
+   * 
+   * A QueryFocus (frontend handle) can be default constructed, in which
+   * case it will automatically connect to what is currently the focus
+   * location for any further queries. Here, the current focus location
+   * is defined as the most recently used location which is still referred
+   * by some QueryFocus handle.
+   * 
+   * Alternatively, through the static factory function #push(), a new
+   * focus location may be opened, thereby pushing the currently used
+   * focus location aside. This new focus location will remain the
+   * current focus, while any handles referring to it is still in use.
+   * 
+   * Using an existing QueryFocus (handle), the current focus may be 
+   * shifted to another scope within the current session.
+   * 
+   * The templated query functions allow to issue specifically typed
+   * queries to retrieve all children (immediately contained in a
+   * given scope), or do discover depth-first any content within
+   * this scope. The result set of these queries will be filtered
+   * to yield only placements compatible to the specified kind of
+   * MObject. E.g, you may query all Clip objects within a given Track.
+   * 
+   * The implementation of these query operations is backed by the
+   * PlacementIndex in the current session. The link to the session
+   * is established the moment these query functions are invoked.
+   * The returned iterator (Lumiera Forward Iterator) contains a
+   * smart-ptr to keep the hidden result set alive. The results
+   * are delivered without any defined order (implementation is
+   * hashtable based)
+   * 
+   * @see query-focus-test.cpp
    */
   class QueryFocus
     {
@@ -51,13 +82,14 @@ namespace session {
     public:
       QueryFocus();
       
-      QueryFocus& reset ();
-      QueryFocus& attach (Scope const&);
-      static QueryFocus push (Scope const&);
-      QueryFocus& pop();
+      ScopePath currentPath()  const;
+      operator Scope()         const;
       
-      operator Scope()        const { return currPath().getLeaf(); }      
-      ScopePath currentPath() const { return currPath(); }       ///< @note returns a copy
+      QueryFocus&     attach (Scope const&);
+      static QueryFocus push (Scope const&);
+      QueryFocus& reset ();
+      QueryFocus& pop ();
+      
       
       template<class MO>
       typename ScopeQuery<MO>::iterator
@@ -67,18 +99,36 @@ namespace session {
       typename ScopeQuery<MO>::iterator
       explore()  const;
       
+      
     private:
       QueryFocus (ScopePath&);
-      
       static ScopePath& currPath();
     };
-///////////////////////////TODO currently just fleshing the API
-
   
-
+  
+  
+  
+  
+  
+  /** allowing direct conversion to Scope.
+   *  Implemented by copying the scope at
+   *  leaf position of the current focus path
+   */
+  QueryFocus::operator Scope() const
+  {
+    return currPath().getLeaf();
+  }
+  
+  /**@note returning a copy */
+  ScopePath
+  QueryFocus::currentPath()  const
+  {
+    return currPath();
+  }
+  
   
   /** discover depth-first any matching object
-   *  within \em current focus. Resolution is 
+   *  within \em current focus. Resolution is
    *  delegate to the \em current session */
   template<class MO>
   typename ScopeQuery<MO>::iterator
@@ -86,10 +136,10 @@ namespace session {
   {
     ScopeLocator::instance().query<MO> (*this);
   }
-      
   
-  /** discover any matching object contained 
-   *  as immediate Child within \em current focus. 
+  
+  /** discover any matching object contained
+   *  as immediate Child within \em current focus.
    *  Resolution through \em current session */
   template<class MO>
   typename ScopeQuery<MO>::iterator
@@ -97,8 +147,8 @@ namespace session {
   {
     ScopeLocator::instance().explore<MO> (*this);
   }
-      
-
+  
+  
   
 }} // namespace mobject::session
 #endif

@@ -66,11 +66,8 @@ namespace test    {
           PPIdx index = build_testScopes();
           PMO& root = index->getRoot();
           
-          UNIMPLEMENTED ("unit test to cover query focus management");
-          
           QueryFocus theFocus;
           theFocus.reset();
-#ifdef false  ////////////////////////////////////////////////////////////////////////////////TICKET 384
           ASSERT (Scope(root) == Scope(theFocus));
           
           checkNavigation (theFocus);
@@ -81,7 +78,6 @@ namespace test    {
           QueryFocus currentFocus;
           ASSERT (scopePosition == Scope(currentFocus));
           ASSERT (currentFocus == theFocus);
-#endif          
         }
       
       
