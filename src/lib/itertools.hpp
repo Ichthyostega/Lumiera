@@ -466,5 +466,18 @@ namespace lib {
   
   
   
+  /* === utility functions === */
+  
+  template<class IT, class CON>
+  inline void
+  append_all (IT iter, CON& container)
+  {
+    for ( ; iter; ++iter )
+      container.push_back (*iter);
+  }
+  
+  
+  
+  
 } // namespace lib
 #endif
