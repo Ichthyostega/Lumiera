@@ -73,6 +73,12 @@ namespace session {
       typename ScopeQuery<MO>::iterator
       query (Scope);
       
+      template<typename MO>
+      typename ScopeQuery<MO>::iterator
+      locate (Scope scope);
+      
+     ~ScopeLocator();
+     
     protected:
       ScopeLocator();
       
@@ -104,6 +110,17 @@ namespace session {
   ScopeLocator::query (Scope scope)
   {
     return ScopeQuery<MO> (theResolver(), scope.getTop(), CONTENTS);
+  }
+  
+  
+  /** use the contents-resolving facility exposed by the session
+   *  to discover the path up from the given scope to model root
+   */
+  template<typename MO>
+  inline typename ScopeQuery<MO>::iterator
+  ScopeLocator::locate (Scope scope)
+  {
+    return ScopeQuery<MO> (theResolver(), scope.getTop(), PATH);
   }
   
   

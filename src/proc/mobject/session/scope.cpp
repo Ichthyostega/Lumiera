@@ -68,8 +68,11 @@ namespace session {
   ScopeLocator::ScopeLocator()
     : focusStack_(new QueryFocusStack)
   {
-    
+    TODO ("anything in initialise here?");
   }
+  
+  ScopeLocator::~ScopeLocator() { }
+  
   
   /** Storage holding the single ScopeLocator instance */
   lib::Singleton<ScopeLocator> ScopeLocator::instance;
