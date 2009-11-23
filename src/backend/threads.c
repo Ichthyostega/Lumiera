@@ -161,7 +161,7 @@ lumiera_thread_new (enum lumiera_thread_class kind,
   llist_init(&self->node);
   // self->id = (pthread_t)NULL; initialized by pthread_create()
   self->finished = finished;
-  self->type = kind;
+  self->kind = kind;
   self->state = LUMIERA_THREADSTATE_IDLE;
 
   printf("creating a thread\n");

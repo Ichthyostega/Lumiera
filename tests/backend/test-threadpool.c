@@ -44,10 +44,10 @@ TEST ("basic-acquire-release")
 				      "test purpose",
 				      NULL);
 
-  printf("thread 1 type=%d\n", t1.type);
-  printf("thread 1 state=%d\n", t1.state);
-  printf("thread 2 type=%d\n", t2.type);
-  printf("thread 2 state=%d\n", t2.state);
+  printf("thread 1 kind=%d\n", t1->kind);
+  printf("thread 1 state=%d\n", t1->state);
+  printf("thread 2 kind=%d\n", t2->kind);
+  printf("thread 2 state=%d\n", t2->state);
 
   printf("releasing thread 1\n");
   lumiera_threadpool_release_thread(t1);

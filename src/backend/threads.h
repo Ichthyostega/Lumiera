@@ -105,7 +105,7 @@ struct lumiera_thread_struct
   // void* arg;
   pthread_t id;
   LumieraReccondition finished;
-  enum lumiera_thread_class type;
+  enum lumiera_thread_class kind;
   lumiera_thread_state state;
 };
 

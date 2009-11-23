@@ -85,6 +85,14 @@ lumiera_threadpool_acquire_thread(enum lumiera_thread_class kind,
    }
 }
 
+void
+lumiera_threadpool_release_thread(LumieraThread thread)
+{
+  // TODO: do we need to check that index 'kind' is within range?
+  llist pool = threadpool.kind[thread->kind].pool;
+  llist_insert_head(&pool, &thread->node);
+}
+
 /*
 // Local Variables:
 // mode: C

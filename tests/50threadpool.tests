@@ -4,9 +4,9 @@ TEST "Acquire/Release test" basic-acquire-release <<END
 out: start by initializing the threadpool
 out: acquiring thread 1
 out: acquiring thread 2
-out: thread 1 type=0
+out: thread 1 kind=0
 out: thread 1 state=0
-out: thread 2 type=4
+out: thread 2 kind=4
 out: thread 2 state=0
 out: releasing thread 1
 out: thread 1 has been released
