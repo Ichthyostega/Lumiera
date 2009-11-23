@@ -194,7 +194,16 @@ lumiera_threadpool_acquire_thread(enum lumiera_thread_class kind,
       return (LumieraThreadpool)0;
     }
 
-  // TODO: either get a thread from the pool or create a new one
+  if (llist_is_empty (tp->threads))
+    {
+      // how does this become an actual pthread?
+      return lumiera_thread_new (kind, NULL, purpose, flag);
+    }
+ else
+   {
+     // use an existing thread, pick the first one
+     return (LumieraThread)(llist_head (&tp->threads));
+   }
 }
 
 LumieraThreadpool
