@@ -29,25 +29,33 @@
 TESTS_BEGIN
 
 
-TEST ("faketest")
+TEST ("basic-acquire-release")
 {
-  printf("this is a fake test\n");
-  /* create a threadpool manager,
-     it will automatically create all the threadpools */
-  lumiera_threadpoolmanager_new();
-#if 0
-  /* create some jobs */
-     LumieraJob myjob = lumiera_job_new(functionpointer, parameters);   // create a non timed (immediate job) */
+  printf("start by initializing the threadpool");
+  lumiera_threadpool_init();
+  printf("acquiring thread 1\n");
+  LumieraThread t1 =
+    lumiera_threadpool_acquire_thread(LUMIERA_THREAD_INTERACTIVE,
+				      "test purpose",
+				      NULL);
+  printf("acquiring thread 2\n");
+  LumieraThread t2 =
+    lumiera_threadpool_acquire_thread(LUMIERA_THREAD_IDLE,
+				      "test purpose",
+				      NULL);
 
-     /* find a suitable threadpool for a given job */
-     LumieraThreadpool somepool = lumiera_threadpool_findpool(myjob); //you want to find a pool which is suitable to run a given job by asking: "hey on which pool can I run this job?" */
+  printf("thread 1 type=%d\n", t1.type);
+  printf("thread 1 state=%d\n", t1.state);
+  printf("thread 2 type=%d\n", t2.type);
+  printf("thread 2 state=%d\n", t2.state);
 
-     /* pass the jobs to the thread pool: */
-     lumiera_threadpool_start_job(somepool, myjob);
-#endif
-     /* wait for the job to finish */
+  printf("releasing thread 1\n");
+  lumiera_threadpool_release_thread(t1);
+  printf("thread 1 has been released\n");
 
-     /* retrive the job result from myjob */
+  printf("releasing thread 2\n");
+  lumiera_threadpool_release_thread(t2);
+  printf("thread 2 has been released\n");
 }
 
 TESTS_END

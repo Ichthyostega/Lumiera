@@ -22,6 +22,9 @@
 //TODO: Support library includes//
 
 #include "include/logging.h"
+#include "lib/mutex.h"
+#include "lib/safeclib.h"
+
 
 //TODO: Lumiera header includes//
 #include "threads.h"
@@ -50,7 +53,6 @@ struct lumiera_thread_mockup
   LumieraReccondition finished;
 };
 
-#if 0
 static void* pthread_runner (void* thread)
 {
   pthread_setcancelstate (PTHREAD_CANCEL_DISABLE, NULL);
@@ -69,7 +71,6 @@ static void* pthread_runner (void* thread)
   return NULL;
 }
 
-
 static pthread_once_t attr_once = PTHREAD_ONCE_INIT;
 static pthread_attr_t attrs;
 
@@ -79,9 +80,9 @@ static void thread_attr_init (void)
   pthread_attr_setdetachstate (&attrs, PTHREAD_CREATE_DETACHED);
   //cancel ...
 }
-#endif
 
 #if 0
+// TODO: rewrite this using lumiera_threadpool_acquire()
 LumieraThread
 lumiera_thread_run (enum lumiera_thread_class kind,
                     void (*start_routine)(void *),
@@ -129,10 +130,10 @@ lumiera_thread_run (enum lumiera_thread_class kind,
   // ask the threadpool for a thread (it might create a new one)
   LumieraThread self = lumiera_threadpool_acquire_thread(kind, purpose, flag);
 
-  // set the function and data to be run
+  // TODO: set the function and data to be run
   //  lumiera_thread_set_func_data (self, start_routine, arg, purpose, flag);
 
-  // and let it really run (signal the condition var, it waits there)
+  // and let it really run (signal the condition var, the thread waits on it)
   LUMIERA_RECCONDITION_SECTION(cond_sync, self->finished)
     LUMIERA_RECCONDITION_SIGNAL;
 
@@ -141,8 +142,39 @@ lumiera_thread_run (enum lumiera_thread_class kind,
   return self;
 }
 
+/**
+ * Create a new thread structure with a matching pthread
+ */
+LumieraThread
+lumiera_thread_new (enum lumiera_thread_class kind,
+                    LumieraReccondition finished,
+                    const char* purpose,
+                    struct nobug_flag* flag)
+{
+  (void) purpose;
+  (void) flag;
 
+  if (attr_once == PTHREAD_ONCE_INIT)
+    pthread_once (&attr_once, thread_attr_init);
 
+  LumieraThread self = lumiera_malloc (sizeof (*self));
+  llist_init(&self->node);
+  // self->id = (pthread_t)NULL; initialized by pthread_create()
+  self->finished = finished;
+  self->type = kind;
+  self->state = LUMIERA_THREADSTATE_IDLE;
+
+  printf("creating a thread\n");
+  int error = pthread_create (&self->id, &attrs, &pthread_runner, self);
+
+  if (error)
+    {
+      free(self);
+      return 0;        /////TODO temporary addition by Ichthyo; probably we'll set lumiera_error?
+    }
+
+  return self;
+}
 
 /*
 // Local Variables:

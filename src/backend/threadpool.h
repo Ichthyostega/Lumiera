@@ -25,6 +25,7 @@
 //TODO: Support library includes//
 #include "lib/reccondition.h"
 #include "lib/llist.h"
+#include "lib/mutex.h"
 
 //TODO: Forward declarations//
 
@@ -43,46 +44,9 @@
 
 //TODO: declarations go here//
 
-typedef struct lumiera_threadpool_struct lumiera_threadpool;
-typedef lumiera_threadpool* LumieraThreadpool;
-
-enum lumiera_threadpool_type
-  {
-    // TODO: the following types need to be more thought out:
-    /** the default kind of threadpool **/
-    LUMIERA_DEFAULT_THREADPOOL,
-    /** a threadpool for special threads **/
-    LUMIERA_SPECIAL_THREADPOOL
-  };
-
-struct lumiera_threadpool_struct
-{
-  /* a list of threadpools for a threadpool manager */
-  llist node;
-
-  enum lumiera_threadpool_type type;
-
-  llist threads;
-};
-
-
-
-/**
- * Create a thread pool.
- */
-LumieraThreadpool
-lumiera_threadpool_new(enum lumiera_threadpool_type type);
-
-/**
- * Delete/remove a threadpool.
- */
-void
-lumiera_threadpool_delete(LumieraThreadpool threadpool);
-
-
 /**
  * Acquire a thread from a threadpool.
- * This may either pick a thread from the list or create a new one when the list is empty.
+ * This may either pick a thread from an appropriate pool or create a new one when the pool is empty.
  * This function doesn't need to be accessible outside of the threadpool implementation.
  */
 LumieraThread
@@ -92,12 +56,29 @@ lumiera_threadpool_acquire_thread(enum lumiera_thread_class kind,
 
 /**
  * Release a thread
- * This ends up putting a (parked/idle) thread back on the list of a threadpool.
+ * This ends up putting a (parked/idle) thread back on the list of an appropriate threadpool.
  * This function doesn't need to be accessible outside of the threadpool implementation.
  */
 void
 lumiera_threadpool_release_thread(LumieraThread thread);
 
+typedef struct lumiera_threadpool_struct lumiera_threadpool;
+typedef lumiera_threadpool* LumieraThreadpool;
+
+struct lumiera_threadpool_struct
+{
+  struct
+  {
+    llist pool;
+    lumiera_mutex lock;
+  } kind[LUMIERA_THREADCLASS_COUNT];
+};
+
+/**
+ * Initialize the thread pool.
+ */
+void
+lumiera_threadpool_init(void);
 
 #endif
 /*

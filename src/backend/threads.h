@@ -60,12 +60,16 @@ enum lumiera_thread_class
     /** busy at average priority **/
     LUMIERA_THREAD_WORKER,
     /** busy, soft realtime, high priority **/
-    LUMIERA_THREAD_URGEND,
+    LUMIERA_THREAD_URGENT,
     /** high latency, background jobs **/
     LUMIERA_THREAD_BATCH,
     /** Something to do when there is really nothing else to do **/
     LUMIERA_THREAD_IDLE,
+    /** this just denotes the number of classes listed above,
+        it is used to create arrays **/
+    LUMIERA_THREADCLASS_COUNT,
 
+    // .. various thread flags follow
     /**
      * flag to let the decision to run the function in a thread open to the backend.
      * depending on load it might decide to run it sequentially.
@@ -82,9 +86,9 @@ enum lumiera_thread_class
  */
 typedef enum 
   {
-    LUMIERA_THREADSTATE_ERROR,
     LUMIERA_THREADSTATE_IDLE,
-    LUMIERA_THREADSTATE_RUNNING
+    LUMIERA_THREADSTATE_RUNNING,
+    LUMIERA_THREADSTATE_ERROR
   }
   lumiera_thread_state;
 
@@ -99,12 +103,20 @@ struct lumiera_thread_struct
   // the function and argument can be passed to the thread at creation time
   // void (*function)(void*);
   // void* arg;
+  pthread_t id;
   LumieraReccondition finished;
   enum lumiera_thread_class type;
   lumiera_thread_state state;
-
 };
 
+/**
+ * Create a thread structure.
+ */
+LumieraThread
+lumiera_thread_new (enum lumiera_thread_class kind,
+                    LumieraReccondition finished,
+                    const char* purpose,
+                    struct nobug_flag* flag);
 
 /**
  * Start a thread.

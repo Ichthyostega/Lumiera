@@ -121,4 +121,10 @@ test_threads_CPPFLAGS = $(AM_CPPFLAGS) -std=gnu99 -Wall -Werror -I$(top_srcdir)/
 test_threads_CFLAGS = $(AM_CFLAGS) $(NOBUGMT_LUMIERA_CFLAGS)
 test_threads_LDADD = $(NOBUGMT_LUMIERA_LIBS) liblumierabackend.la liblumiera.la -ldl -lm     liblumieracommon.la liblumieraproc.la -ldl -lboost_program_options-mt -lboost_regex-mt
 
+check_PROGRAMS += test-threadpool
+test_threadpool_SOURCES = $(tests_srcdir)/backend/test-threadpool.c
+test_threadpool_CPPFLAGS = $(AM_CPPFLAGS) -std=gnu99 -Wall -Werror -I$(top_srcdir)/src/
+test_threadpool_CFLAGS = $(AM_CFLAGS) $(NOBUGMT_LUMIERA_CFLAGS)
+test_threadpool_LDADD = $(NOBUGMT_LUMIERA_LIBS) liblumierabackend.la liblumiera.la -ldl -lm     liblumieracommon.la liblumieraproc.la -ldl -lboost_program_options-mt -lboost_regex-mt
+
 TESTS = $(tests_srcdir)/test.sh
