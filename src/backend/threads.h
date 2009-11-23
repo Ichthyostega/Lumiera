@@ -46,10 +46,12 @@
 typedef struct lumiera_thread_struct lumiera_thread;
 typedef lumiera_thread* LumieraThread;
 
+
 /**
  * Thread classes.
  * We define some 'classes' of threads for different purposes to abstract
  * priorities and other attributes.
+ ** TODO: rename these to LUMIERA_THREADCLASS_*
  */
 enum lumiera_thread_class
   {
@@ -75,6 +77,36 @@ enum lumiera_thread_class
   };
 
 /**
+ * Thread state.
+ * These are the only states our threads can be in.
+ */
+typedef enum 
+  {
+    LUMIERA_THREADSTATE_ERROR,
+    LUMIERA_THREADSTATE_IDLE,
+    LUMIERA_THREADSTATE_RUNNING
+  }
+  lumiera_thread_state;
+
+#include "threadpool.h"
+
+/**
+ * The actual thread data
+ */
+struct lumiera_thread_struct
+{
+  llist node;
+  // the function and argument can be passed to the thread at creation time
+  // void (*function)(void*);
+  // void* arg;
+  LumieraReccondition finished;
+  enum lumiera_thread_class type;
+  lumiera_thread_state state;
+
+};
+
+
+/**
  * Start a thread.
  * Threads are implemented as procedures which take a void* and dont return anything.
  * When a thread wants to pass something back to the application it should use the void* it got for
@@ -85,7 +117,7 @@ enum lumiera_thread_class
  *  * Threads shall not handle signals (all signals will be disabled for them) unless explicitly acknowledged
  *
  * @param kind class of the thread to start
- * @param start_routine pointer to a function to execute in a thread (returning void, not void* as in pthreads)
+ * @param function pointer to a function to execute in a thread (returning void, not void* as in pthreads)
  * @param arg generic pointer passed to the thread
  * @param finished a condition variable to be broadcasted, if not NULL.
  *        The associated mutex should be locked at thread_run time already, else the signal can get lost.
@@ -94,12 +126,11 @@ enum lumiera_thread_class
  */
 LumieraThread
 lumiera_thread_run (enum lumiera_thread_class kind,
-                    void (*start_routine)(void *),
+                    void (*function)(void *),
                     void * arg,
                     LumieraReccondition finished,
                     const char* purpose,
                     struct nobug_flag* flag);
-
 
 
 #endif

@@ -1,0 +1,5 @@
+TESTING "Thread Pool" ./test-threadpool
+
+TEST "Fake test" faketest <<END
+out: this is a fake test
+END

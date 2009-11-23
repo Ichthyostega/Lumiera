@@ -50,7 +50,7 @@ struct lumiera_thread_mockup
   LumieraReccondition finished;
 };
 
-
+#if 0
 static void* pthread_runner (void* thread)
 {
   pthread_setcancelstate (PTHREAD_CANCEL_DISABLE, NULL);
@@ -79,8 +79,9 @@ static void thread_attr_init (void)
   pthread_attr_setdetachstate (&attrs, PTHREAD_CREATE_DETACHED);
   //cancel ...
 }
+#endif
 
- 
+#if 0
 LumieraThread
 lumiera_thread_run (enum lumiera_thread_class kind,
                     void (*start_routine)(void *),
@@ -108,6 +109,39 @@ lumiera_thread_run (enum lumiera_thread_class kind,
   if (error) return 0;        /////TODO temporary addition by Ichthyo; probably we'll set lumiera_error?
   return (LumieraThread) 1;
 }
+#endif
+
+// TODO: new implementation, remove the above one
+// maybe this shouldn't return LumieraThread at all
+// when this is called it should have already been decided that the function
+// shall run in parallel, as a thread
+LumieraThread
+lumiera_thread_run (enum lumiera_thread_class kind,
+                    void (*function)(void *),
+                    void * arg,
+                    LumieraReccondition finished,
+                    const char* purpose,
+                    struct nobug_flag* flag)
+{
+  (void)finished;
+  (void)function;
+  (void)arg;
+  // ask the threadpool for a thread (it might create a new one)
+  LumieraThread self = lumiera_threadpool_acquire_thread(kind, purpose, flag);
+
+  // set the function and data to be run
+  //  lumiera_thread_set_func_data (self, start_routine, arg, purpose, flag);
+
+  // and let it really run (signal the condition var, it waits there)
+  LUMIERA_RECCONDITION_SECTION(cond_sync, self->finished)
+    LUMIERA_RECCONDITION_SIGNAL;
+
+  // NOTE: example only, add solid error handling!
+
+  return self;
+}
+
+
 
 
 /*
