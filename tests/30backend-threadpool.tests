@@ -1,6 +1,17 @@
 
-TESTING "Thread Pools"
+TESTING "Thread Pools" ./test-threadpool
 
 PLANNED "create"
 PLANNED "yield"
 PLANNED "cancel"
+
+TEST "Acquire/Release test" basic-acquire-release <<END
+err: start by initializing the threadpool
+err: acquiring thread 1
+err: acquiring thread 2
+err: releasing thread 1
+err: thread 1 has been released
+err: releasing thread 2
+err: thread 2 has been released
+END
+

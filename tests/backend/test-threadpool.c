@@ -31,31 +31,35 @@ TESTS_BEGIN
 
 TEST ("basic-acquire-release")
 {
-  printf("start by initializing the threadpool");
+  ECHO("start by initializing the threadpool");
   lumiera_threadpool_init();
-  printf("acquiring thread 1\n");
+  ECHO("acquiring thread 1");
   LumieraThread t1 =
     lumiera_threadpool_acquire_thread(LUMIERA_THREAD_INTERACTIVE,
 				      "test purpose",
 				      NULL);
-  printf("acquiring thread 2\n");
+  ECHO("acquiring thread 2");
   LumieraThread t2 =
     lumiera_threadpool_acquire_thread(LUMIERA_THREAD_IDLE,
 				      "test purpose",
 				      NULL);
 
-  printf("thread 1 kind=%d\n", t1->kind);
-  printf("thread 1 state=%d\n", t1->state);
-  printf("thread 2 kind=%d\n", t2->kind);
-  printf("thread 2 state=%d\n", t2->state);
+  //ECHO("thread 1 kind=%d", t1->kind);
+  CHECK(LUMIERA_THREAD_INTERACTIVE == t1->kind);
+  //ECHO("thread 1 state=%d", t1->state);
+  CHECK(LUMIERA_THREADSTATE_IDLE == t1->state);
+  //ECHO("thread 2 kind=%d", t2->kind);
+  // CHECK(LUMIERA_THREAD_IDLE == t2->kind);
+  //ECHO("thread 2 state=%d", t2->state);
+  CHECK(LUMIERA_THREADSTATE_IDLE == t2->state);
 
-  printf("releasing thread 1\n");
+  ECHO("releasing thread 1");
   lumiera_threadpool_release_thread(t1);
-  printf("thread 1 has been released\n");
+  ECHO("thread 1 has been released");
 
-  printf("releasing thread 2\n");
+  ECHO("releasing thread 2");
   lumiera_threadpool_release_thread(t2);
-  printf("thread 2 has been released\n");
+  ECHO("thread 2 has been released");
 }
 
 TESTS_END

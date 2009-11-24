@@ -37,8 +37,7 @@ static lumiera_threadpool threadpool;
  * @file
  *
  */
-
-//NOBUG_DEFINE_FLAG_PARENT (threadpool, lumiera); /*TODO insert a suitable/better parent flag here */
+NOBUG_DEFINE_FLAG_PARENT (threadpool, threads_dbg);
 
 
 //code goes here//
@@ -59,7 +58,7 @@ lumiera_threadpool_init(void)
   for (int i = 0; i < LUMIERA_THREADCLASS_COUNT; ++i)
     {
       llist_init(&threadpool.kind[i].pool);
-      lumiera_mutex_init(&threadpool.kind[i].lock,"pool of threads", NULL);
+      lumiera_mutex_init(&threadpool.kind[i].lock,"pool of threads", &NOBUG_FLAG(threadpool));
     }
 }
 
