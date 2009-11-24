@@ -68,11 +68,9 @@ lumiera_threadpool_acquire_thread(enum lumiera_thread_class kind,
                                   struct nobug_flag* flag)
 {
   // TODO: do we need to check that index 'kind' is within range?
-  llist pool = threadpool.kind[kind].pool;
   // TODO: do we need to check that we get a valid list?
-
   // TODO: do proper locking when manipulating the list
-  if (llist_is_empty (&pool))
+  if (llist_is_empty (&threadpool.kind[kind].pool))
     {
       return lumiera_thread_new (kind, NULL, purpose, flag);
     }
@@ -80,7 +78,7 @@ lumiera_threadpool_acquire_thread(enum lumiera_thread_class kind,
    {
      // use an existing thread, pick the first one
      // remove it from the pool's list
-     return (LumieraThread)(llist_unlink(llist_head (&pool)));
+     return (LumieraThread)(llist_unlink(llist_head (&threadpool.kind[kind].pool)));
    }
 }
 

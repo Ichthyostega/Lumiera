@@ -49,7 +49,7 @@ TEST ("basic-acquire-release")
   //ECHO("thread 1 state=%d", t1->state);
   CHECK(LUMIERA_THREADSTATE_IDLE == t1->state);
   //ECHO("thread 2 kind=%d", t2->kind);
-  // CHECK(LUMIERA_THREAD_IDLE == t2->kind);
+   CHECK(LUMIERA_THREAD_IDLE == t2->kind);
   //ECHO("thread 2 state=%d", t2->state);
   CHECK(LUMIERA_THREADSTATE_IDLE == t2->state);
 

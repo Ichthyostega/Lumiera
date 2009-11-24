@@ -53,6 +53,12 @@ struct lumiera_thread_mockup
   LumieraReccondition finished;
 };
 
+static void* thread_loop (void* arg)
+{
+  return arg;
+}
+
+#if 0
 static void* pthread_runner (void* thread)
 {
   pthread_setcancelstate (PTHREAD_CANCEL_DISABLE, NULL);
@@ -70,6 +76,7 @@ static void* pthread_runner (void* thread)
 
   return NULL;
 }
+#endif
 
 static pthread_once_t attr_once = PTHREAD_ONCE_INIT;
 static pthread_attr_t attrs;
@@ -164,8 +171,7 @@ lumiera_thread_new (enum lumiera_thread_class kind,
   self->kind = kind;
   self->state = LUMIERA_THREADSTATE_IDLE;
 
-  printf("creating a thread\n");
-  int error = pthread_create (&self->id, &attrs, &pthread_runner, self);
+  int error = pthread_create (&self->id, &attrs, &thread_loop, self);
 
   if (error)
     {
