@@ -170,7 +170,6 @@ lumiera_thread_new (enum lumiera_thread_class kind,
   //REQUIRE (finished, "invalid finished flag passed");
 
   LumieraThread self = lumiera_malloc (sizeof (*self));
-  ECHO ("allocated thread struct of size %zd", sizeof (*self));
   llist_init(&self->node);
   self->finished = finished;
   self->kind = kind;
