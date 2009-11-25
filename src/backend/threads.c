@@ -170,6 +170,7 @@ lumiera_thread_new (enum lumiera_thread_class kind,
   //REQUIRE (finished, "invalid finished flag passed");
 
   LumieraThread self = lumiera_malloc (sizeof (*self));
+  ECHO ("allocated thread struct of size %zd", sizeof (*self));
   llist_init(&self->node);
   self->finished = finished;
   self->kind = kind;
@@ -193,7 +194,6 @@ lumiera_thread_new (enum lumiera_thread_class kind,
 LumieraThread
 lumiera_thread_destroy (LumieraThread self)
 {
-  ECHO ("destroying thread");
   REQUIRE (self, "trying to destroy an invalid thread");
 
   // TODO: stop the pthread

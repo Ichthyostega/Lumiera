@@ -8,17 +8,19 @@ PLANNED "cancel"
 TEST "Acquire/Release test" basic-acquire-release <<END
 err: start by initializing the threadpool
 err: acquiring thread 1
+err: allocated thread struct of size
 err: acquiring thread 2
+err: allocated thread struct of size
 err: releasing thread 1
 err: thread 1 has been released
 err: releasing thread 2
 err: thread 2 has been released
+
 err: destroying threadpool
 
 err: destroying individual pool #0
 err: number of threads in the pool=1
 err: deleting thread
-err: destroying thread
 err: destroying the pool mutex
 err: pool mutex destroyed
 
@@ -40,8 +42,41 @@ err: pool mutex destroyed
 err: destroying individual pool #4
 err: number of threads in the pool=1
 err: deleting thread
-err: destroying thread
 err: destroying the pool mutex
 err: pool mutex destroyed
 END
 
+TEST "Many Acquires/Releases test" many-acquire-release <<END
+err: allocated thread struct of size
+err: destroying threadpool
+
+err: destroying individual pool #0
+err: number of threads in the pool=1000
+err: deleting thread
+err: destroying the pool mutex
+err: pool mutex destroyed
+
+err: destroying individual pool #1
+err: number of threads in the pool=1000
+err: deleting thread
+err: destroying the pool mutex
+err: pool mutex destroyed
+
+err: destroying individual pool #2
+err: number of threads in the pool=1000
+err: deleting thread
+err: destroying the pool mutex
+err: pool mutex destroyed
+
+err: destroying individual pool #3
+err: number of threads in the pool=1000
+err: deleting thread
+err: destroying the pool mutex
+err: pool mutex destroyed
+
+err: destroying individual pool #4
+err: number of threads in the pool=1000
+err: deleting thread
+err: destroying the pool mutex
+err: pool mutex destroyed
+END

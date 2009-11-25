@@ -64,4 +64,32 @@ TEST ("basic-acquire-release")
   lumiera_threadpool_destroy();
 }
 
+TEST ("many-acquire-release")
+{
+
+  const int threads_per_pool_count = 1000;
+
+  lumiera_threadpool_init();
+  LumieraThread threads[threads_per_pool_count*LUMIERA_THREADCLASS_COUNT];
+  
+  for (int kind = 0; kind < LUMIERA_THREADCLASS_COUNT; ++kind)
+    {
+      for (int i = 0; i < threads_per_pool_count; ++i)
+	{
+	  threads[i+kind*threads_per_pool_count] =
+	    lumiera_threadpool_acquire_thread(kind,
+					      "test purpose",
+					      NULL);
+	}
+    }
+
+  for (int i = 0; i < threads_per_pool_count*LUMIERA_THREADCLASS_COUNT; ++i)
+    {
+      lumiera_threadpool_release_thread(threads[i]);
+    }
+
+  lumiera_threadpool_destroy();
+
+}
+
 TESTS_END
