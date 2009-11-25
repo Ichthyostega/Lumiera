@@ -92,6 +92,7 @@ lumiera_threadpool_acquire_thread(enum lumiera_thread_class kind,
     {
       // TODO: fill in the reccondition argument, currently NULL
       ret = lumiera_thread_new (kind, NULL, purpose, flag);
+      ENSURE (ret, "did not create a valid thread");
     }
  else
    {
@@ -102,8 +103,8 @@ lumiera_threadpool_acquire_thread(enum lumiera_thread_class kind,
        {
          ret = (LumieraThread)(llist_unlink(llist_head (&threadpool.kind[kind].pool)));
        }
+     ENSURE (ret, "did not find a valid thread");
    }
-  REQUIRE(ret, "did not find a valid thread");
   return ret;
 }
 

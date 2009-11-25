@@ -34,6 +34,7 @@
 
 //TODO: System includes//
 #include <pthread.h>
+#include <errno.h>
 
 /**
  * @file
@@ -180,13 +181,16 @@ lumiera_thread_new (enum lumiera_thread_class kind,
   //REQUIRE (&thread_loop);
   REQUIRE (self);
   int error = pthread_create (&self->id, &attrs, &thread_loop, self);
-
+  ENSURE(error == 0 || EAGAIN == error, "pthread returned %d:%s", error, strerror(error));
+  FIXME("handle EAGAIN");
   if (error)
     {
-      free(self);
+#if 0
       return 0;        /////TODO temporary addition by Ichthyo; probably we'll set lumiera_error?
+#endif
     }
 
+  REQUIRE (self, "returning an invalid thread structure");
   return self;
 }
 
