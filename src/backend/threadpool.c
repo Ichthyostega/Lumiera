@@ -65,16 +65,17 @@ lumiera_threadpool_init(void)
 void
 lumiera_threadpool_destroy(void)
 {
+  ECHO ("destroying threadpool");
   for (int i = 0; i < LUMIERA_THREADCLASS_COUNT; ++i)
     {
+      ECHO ("destroying individual pool #%d", i);
       // no locking is done at this point
-      LLIST_FOREACH(&threadpool.kind[i].pool, thread)
-        {
-          llist_unlink(thread);
-          lumiera_thread_delete((LumieraThread)thread);
-        }
-
+      ECHO ("number of threads in the pool=%d", llist_count(&threadpool.kind[i].pool));
+      LLIST_WHILE_HEAD(&threadpool.kind[i].pool, thread)
+        lumiera_thread_delete((LumieraThread)thread);
+      ECHO ("destroying the pool mutex");
       lumiera_mutex_destroy (&threadpool.kind[i].lock, &NOBUG_FLAG (threadpool));
+      ECHO ("pool mutex destroyed");
     }
 }
 
@@ -109,9 +110,11 @@ lumiera_threadpool_acquire_thread(enum lumiera_thread_class kind,
 void
 lumiera_threadpool_release_thread(LumieraThread thread)
 {
-  // TODO: do we need to check that index 'kind' is within range?
-  llist pool = threadpool.kind[thread->kind].pool;
-  llist_insert_head(&pool, &thread->node);
+  REQUIRE (thread, "invalid thread given");
+  REQUIRE (thread->kind < LUMIERA_THREADCLASS_COUNT, "thread belongs to an unknown pool kind: %d", thread->kind);
+  REQUIRE (llist_is_single(&thread->node), "thread already belongs to some list");
+  llist_insert_head(&threadpool.kind[thread->kind].pool, &thread->node);
+  REQUIRE (!llist_is_empty (&threadpool.kind[thread->kind].pool), "thread pool is still empty after insertion");
 }
 
 /*

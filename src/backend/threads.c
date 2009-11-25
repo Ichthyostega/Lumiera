@@ -55,7 +55,8 @@ struct lumiera_thread_mockup
 
 static void* thread_loop (void* arg)
 {
-  return arg;
+  (void)arg;
+  return 0;
 }
 
 #if 0
@@ -165,10 +166,12 @@ lumiera_thread_new (enum lumiera_thread_class kind,
   if (attr_once == PTHREAD_ONCE_INIT)
     pthread_once (&attr_once, thread_attr_init);
 
+  REQUIRE (kind < LUMIERA_THREADCLASS_COUNT, "invalid thread kind specified: %d", kind);
+  //REQUIRE (finished, "invalid finished flag passed");
+
   LumieraThread self = lumiera_malloc (sizeof (*self));
   llist_init(&self->node);
   self->finished = finished;
-  REQUIRE (kind < LUMIERA_THREADCLASS_COUNT, "invalid thread kind specified: %d", kind);
   self->kind = kind;
   self->state = LUMIERA_THREADSTATE_IDLE;
 
@@ -190,8 +193,11 @@ lumiera_thread_new (enum lumiera_thread_class kind,
 LumieraThread
 lumiera_thread_destroy (LumieraThread self)
 {
+  ECHO ("destroying thread");
+  REQUIRE (self, "trying to destroy an invalid thread");
+
   // TODO: stop the pthread
-  // TODO: empty the list/node?
+  llist_unlink(&self->node);
   //finished = NULL; // or free(finished)?
   lumiera_reccondition_destroy (self->finished, &NOBUG_FLAG(threads));
   //kind = 0;
@@ -202,6 +208,7 @@ lumiera_thread_destroy (LumieraThread self)
 void
 lumiera_thread_delete (LumieraThread self)
 {
+  ECHO ("deleting thread");
   lumiera_free (lumiera_thread_destroy (self));
 }
 
