@@ -60,6 +60,8 @@ TEST ("basic-acquire-release")
   ECHO("releasing thread 2");
   lumiera_threadpool_release_thread(t2);
   ECHO("thread 2 has been released");
+
+  lumiera_threadpool_destroy();
 }
 
 TESTS_END

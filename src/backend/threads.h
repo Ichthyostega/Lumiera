@@ -118,6 +118,12 @@ lumiera_thread_new (enum lumiera_thread_class kind,
                     const char* purpose,
                     struct nobug_flag* flag);
 
+LumieraThread
+lumiera_thread_destroy (LumieraThread self);
+
+void
+lumiera_thread_delete (LumieraThread self);
+
 /**
  * Start a thread.
  * Threads are implemented as procedures which take a void* and dont return anything.

@@ -80,6 +80,9 @@ struct lumiera_threadpool_struct
 void
 lumiera_threadpool_init(void);
 
+void
+lumiera_threadpool_destroy(void);
+
 #endif
 /*
 // Local Variables:

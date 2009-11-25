@@ -40,7 +40,7 @@
  *
  */
 
-//NOBUG_DEFINE_FLAG_PARENT (threads, lumiera); /*TODO insert a suitable/better parent flag here */
+NOBUG_DEFINE_FLAG_PARENT (threads, threads_dbg); /*TODO insert a suitable/better parent flag here */
 
 
 //code goes here//
@@ -158,6 +158,7 @@ lumiera_thread_new (enum lumiera_thread_class kind,
                     const char* purpose,
                     struct nobug_flag* flag)
 {
+  // TODO: do something with these:
   (void) purpose;
   (void) flag;
 
@@ -166,11 +167,15 @@ lumiera_thread_new (enum lumiera_thread_class kind,
 
   LumieraThread self = lumiera_malloc (sizeof (*self));
   llist_init(&self->node);
-  // self->id = (pthread_t)NULL; initialized by pthread_create()
   self->finished = finished;
+  REQUIRE (kind < LUMIERA_THREADCLASS_COUNT, "invalid thread kind specified: %d", kind);
   self->kind = kind;
   self->state = LUMIERA_THREADSTATE_IDLE;
 
+  REQUIRE (&self->id);
+  //REQUIRE (&attrs);
+  //REQUIRE (&thread_loop);
+  REQUIRE (self);
   int error = pthread_create (&self->id, &attrs, &thread_loop, self);
 
   if (error)
@@ -180,6 +185,24 @@ lumiera_thread_new (enum lumiera_thread_class kind,
     }
 
   return self;
+}
+
+LumieraThread
+lumiera_thread_destroy (LumieraThread self)
+{
+  // TODO: stop the pthread
+  // TODO: empty the list/node?
+  //finished = NULL; // or free(finished)?
+  lumiera_reccondition_destroy (self->finished, &NOBUG_FLAG(threads));
+  //kind = 0;
+  //state = 0;
+  return self;
+}
+
+void
+lumiera_thread_delete (LumieraThread self)
+{
+  lumiera_free (lumiera_thread_destroy (self));
 }
 
 /*

@@ -37,7 +37,7 @@ static lumiera_threadpool threadpool;
  * @file
  *
  */
-NOBUG_DEFINE_FLAG_PARENT (threadpool, threads_dbg);
+NOBUG_DEFINE_FLAG_PARENT (threadpool, threads_dbg); /*TODO insert a suitable/better parent flag here */
 
 
 //code goes here//
@@ -62,24 +62,48 @@ lumiera_threadpool_init(void)
     }
 }
 
+void
+lumiera_threadpool_destroy(void)
+{
+  for (int i = 0; i < LUMIERA_THREADCLASS_COUNT; ++i)
+    {
+      // no locking is done at this point
+      LLIST_FOREACH(&threadpool.kind[i].pool, thread)
+        {
+          llist_unlink(thread);
+          lumiera_thread_delete((LumieraThread)thread);
+        }
+
+      lumiera_mutex_destroy (&threadpool.kind[i].lock, &NOBUG_FLAG (threadpool));
+    }
+}
+
 LumieraThread
 lumiera_threadpool_acquire_thread(enum lumiera_thread_class kind,
                                   const char* purpose,
                                   struct nobug_flag* flag)
 {
-  // TODO: do we need to check that index 'kind' is within range?
-  // TODO: do we need to check that we get a valid list?
-  // TODO: do proper locking when manipulating the list
+  LumieraThread ret;
+
+  REQUIRE (kind < LUMIERA_THREADCLASS_COUNT, "unknown pool kind specified: %d", kind);
+  REQUIRE (&threadpool.kind[kind].pool, "threadpool kind %d does not exist", kind);
   if (llist_is_empty (&threadpool.kind[kind].pool))
     {
-      return lumiera_thread_new (kind, NULL, purpose, flag);
+      // TODO: fill in the reccondition argument, currently NULL
+      ret = lumiera_thread_new (kind, NULL, purpose, flag);
     }
  else
    {
+     REQUIRE (&threadpool.kind[kind].lock, "invalid threadpool lock");
      // use an existing thread, pick the first one
      // remove it from the pool's list
-     return (LumieraThread)(llist_unlink(llist_head (&threadpool.kind[kind].pool)));
+     LUMIERA_MUTEX_SECTION (threadpool, &threadpool.kind[kind].lock)
+       {
+         ret = (LumieraThread)(llist_unlink(llist_head (&threadpool.kind[kind].pool)));
+       }
    }
+  REQUIRE(ret, "did not find a valid thread");
+  return ret;
 }
 
 void
