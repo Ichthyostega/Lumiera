@@ -182,12 +182,11 @@ lumiera_thread_new (enum lumiera_thread_class kind,
   REQUIRE (self);
   int error = pthread_create (&self->id, &attrs, &thread_loop, self);
   ENSURE(error == 0 || EAGAIN == error, "pthread returned %d:%s", error, strerror(error));
-  FIXME("handle EAGAIN");
   if (error)
     {
-#if 0
-      return 0;        /////TODO temporary addition by Ichthyo; probably we'll set lumiera_error?
-#endif
+      // error here can only be EAGAIN, given the above ENSURE
+      FIXME ("error is %d:%s, see if this can be improved", error, strerror(error));
+      LUMIERA_DIE (ERRNO);
     }
 
   REQUIRE (self, "returning an invalid thread structure");

@@ -32,7 +32,7 @@ TESTS_BEGIN
 TEST ("basic-acquire-release")
 {
   ECHO("start by initializing the threadpool");
-  lumiera_threadpool_init();
+  lumiera_threadpool_init(100);
   ECHO("acquiring thread 1");
   LumieraThread t1 =
     lumiera_threadpool_acquire_thread(LUMIERA_THREAD_INTERACTIVE,
@@ -69,7 +69,35 @@ TEST ("many-acquire-release")
 
   const int threads_per_pool_count = 50;
 
-  lumiera_threadpool_init();
+  lumiera_threadpool_init(50);
+  LumieraThread threads[threads_per_pool_count*LUMIERA_THREADCLASS_COUNT];
+  
+  for (int kind = 0; kind < LUMIERA_THREADCLASS_COUNT; ++kind)
+    {
+      for (int i = 0; i < threads_per_pool_count; ++i)
+	{
+	  threads[i+kind*threads_per_pool_count] =
+	    lumiera_threadpool_acquire_thread(kind,
+					      "test purpose",
+					      NULL);
+	}
+    }
+
+  for (int i = 0; i < threads_per_pool_count*LUMIERA_THREADCLASS_COUNT; ++i)
+    {
+      lumiera_threadpool_release_thread(threads[i]);
+    }
+
+  lumiera_threadpool_destroy();
+
+}
+
+TEST ("toomany-acquire-release")
+{
+
+  const int threads_per_pool_count = 51;
+
+  lumiera_threadpool_init(50);
   LumieraThread threads[threads_per_pool_count*LUMIERA_THREADCLASS_COUNT];
   
   for (int kind = 0; kind < LUMIERA_THREADCLASS_COUNT; ++kind)

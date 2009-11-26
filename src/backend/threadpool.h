@@ -71,14 +71,18 @@ struct lumiera_threadpool_struct
   {
     llist pool;
     lumiera_mutex lock;
+    unsigned max_threads;
+    unsigned working_thread_count;
+    unsigned idle_thread_count;
   } kind[LUMIERA_THREADCLASS_COUNT];
 };
 
 /**
  * Initialize the thread pool.
+ * @param limit the maximum number of threads (idle+working) allowed per pool
  */
 void
-lumiera_threadpool_init(void);
+lumiera_threadpool_init(unsigned limit);
 
 void
 lumiera_threadpool_destroy(void);

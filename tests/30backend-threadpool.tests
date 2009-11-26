@@ -77,3 +77,9 @@ err: deleting thread
 err: destroying the pool mutex
 err: pool mutex destroyed
 END
+
+TEST "Too Many Acquires/Releases test" toomany-acquire-release <<END
+err: Fatal Error 
+err: .*
+return: !0
+END
