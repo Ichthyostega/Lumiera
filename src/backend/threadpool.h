@@ -69,12 +69,12 @@ struct lumiera_threadpool_struct
 {
   struct
   {
-    llist pool;
+    llist list;
     lumiera_mutex lock;
     unsigned max_threads;
     unsigned working_thread_count;
     unsigned idle_thread_count;
-  } kind[LUMIERA_THREADCLASS_COUNT];
+  } pool[LUMIERA_THREADCLASS_COUNT];
 };
 
 /**
