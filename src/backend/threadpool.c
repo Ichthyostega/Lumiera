@@ -90,7 +90,6 @@ lumiera_threadpool_acquire_thread(enum lumiera_thread_class kind,
   LumieraThread ret;
 
   REQUIRE (kind < LUMIERA_THREADCLASS_COUNT, "unknown pool kind specified: %d", kind);
-  REQUIRE (&threadpool.pool[kind].list, "threadpool kind %d does not exist", kind);
   if (llist_is_empty (&threadpool.pool[kind].list))
     {
       // TODO: fill in the reccondition argument, currently NULL
@@ -133,7 +132,6 @@ lumiera_threadpool_release_thread(LumieraThread thread)
 {
   REQUIRE (thread, "invalid thread given");
   REQUIRE (thread->kind < LUMIERA_THREADCLASS_COUNT, "thread belongs to an unknown pool kind: %d", thread->kind);
-  REQUIRE (&threadpool.pool[thread->kind].lock, "invalid threadpool lock");
 
   // TOOD: currently, locking produces memory leaks
   //  LUMIERA_MUTEX_SECTION (threadpool, &threadpool.pool[thread->kind].lock)

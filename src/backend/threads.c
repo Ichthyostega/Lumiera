@@ -163,11 +163,11 @@ lumiera_thread_new (enum lumiera_thread_class kind,
   // TODO: do something with these:
   (void) purpose;
   (void) flag;
+  REQUIRE (kind < LUMIERA_THREADCLASS_COUNT, "invalid thread kind specified: %d", kind);
 
   if (attr_once == PTHREAD_ONCE_INIT)
     pthread_once (&attr_once, thread_attr_init);
 
-  REQUIRE (kind < LUMIERA_THREADCLASS_COUNT, "invalid thread kind specified: %d", kind);
   //REQUIRE (finished, "invalid finished flag passed");
 
   LumieraThread self = lumiera_malloc (sizeof (*self));
@@ -176,10 +176,8 @@ lumiera_thread_new (enum lumiera_thread_class kind,
   self->kind = kind;
   self->state = LUMIERA_THREADSTATE_IDLE;
 
-  REQUIRE (&self->id);
   //REQUIRE (&attrs);
   //REQUIRE (&thread_loop);
-  REQUIRE (self);
   int error = pthread_create (&self->id, &attrs, &thread_loop, self);
   ENSURE(error == 0 || EAGAIN == error, "pthread returned %d:%s", error, strerror(error));
   if (error)
@@ -188,8 +186,6 @@ lumiera_thread_new (enum lumiera_thread_class kind,
       FIXME ("error is %d:%s, see if this can be improved", error, strerror(error));
       LUMIERA_DIE (ERRNO);
     }
-
-  REQUIRE (self, "returning an invalid thread structure");
   return self;
 }
 
