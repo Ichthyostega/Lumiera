@@ -30,7 +30,6 @@ NOBUG_LOGREGEX='^\(\*\*[0-9]*\*\* \)\?[0-9]\{10,\}: \(TRACE\|INFO\|NOTICE\|WARNI
 
 arg0="$0"
 srcdir="$(dirname "$arg0")"
-vgsuppression_mangle='/^\(\(==\)\|\(\*\*\)[0-9]*\(==\)\|\(\*\*\)\)\|\(\(\*\*[0-9]*\*\* \)\?[0-9]\{10,\}: ECHO:\)/d;'
 
 ulimit -S -t 5 -v 524288
 valgrind=""
@@ -45,10 +44,10 @@ else
 
                 if [[ -x ".libs/vgsuppression" ]]; then
                     ./libtool --mode=execute valgrind --leak-check=yes --show-reachable=yes -q --gen-suppressions=all vgsuppression 2>&1 \
-                        | sed -e "$vgsuppression_mangle" >vgsuppression.supp
+                        | awk '/^{/ {i = 1;} /^}/ {i = 0; print $0;} {if (i == 1) print $0;}' >vgsuppression.supp
                 else
                     valgrind --leak-check=yes --show-reachable=yes -q --gen-suppressions=all ./vgsuppression 2>&1 \
-                        | sed -e "$vgsuppression_mangle" >vgsuppression.supp
+                        | awk '/^{/ {i = 1;} /^}/ {i = 0; print $0;} {if (i == 1) print $0;}' >vgsuppression.supp
                 fi
             fi
             valgrind="$(which valgrind) --leak-check=yes --show-reachable=no --suppressions=vgsuppression.supp -q $VALGRINDFLAGS"
@@ -120,6 +119,11 @@ function TEST()
         rm -f ,expect_stderr
         expect_return=0
 
+        local valgrind="$valgrind"
+        if [ "$VALGRINDFLAGS" = 'DISABLE' ]; then
+            valgrind=
+        fi
+
 	while read -r line; do
             cmd="${line%%:*}"
             arg="${line#*:}"
@@ -185,7 +189,7 @@ function TEST()
         if declare -F | grep $TESTBIN >&/dev/null; then
             CALL=
         elif test -x $TESTBIN; then
-            CALL="env $TESTBIN_PREFIX"
+            CALL="env $TESTBIN_PREFIX $valgrind"
         else
             CALL='-'
             echo -n >,stdout
@@ -302,9 +306,9 @@ function TESTING()
     echo -e "\n#### $1" >>,testlog
 
     if [[ -x ".libs/$2" ]]; then
-        TESTBIN_PREFIX="./libtool --mode=execute $valgrind"
+        TESTBIN_PREFIX="./libtool --mode=execute"
     else
-        TESTBIN_PREFIX="$valgrind"
+        TESTBIN_PREFIX=
     fi
     TESTBIN="$2"
 }
