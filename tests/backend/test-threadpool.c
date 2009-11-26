@@ -67,7 +67,7 @@ TEST ("basic-acquire-release")
 TEST ("many-acquire-release")
 {
 
-  const int threads_per_pool_count = 1000;
+  const int threads_per_pool_count = 50;
 
   lumiera_threadpool_init();
   LumieraThread threads[threads_per_pool_count*LUMIERA_THREADCLASS_COUNT];
