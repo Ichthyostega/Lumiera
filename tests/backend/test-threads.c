@@ -88,7 +88,7 @@ TEST ("simple_thread")
 {
   fprintf (stderr, "main before thread %s\n", NOBUG_THREAD_ID_GET);
 
-  lumiera_thread_run (LUMIERA_THREAD_WORKER,
+  lumiera_thread_run (LUMIERA_THREADCLASS_WORKER,
                       threadfn,
                       NULL,
                       NULL,
@@ -109,7 +109,7 @@ TEST ("thread_synced")
     {
       ECHO ("main before thread %s", NOBUG_THREAD_ID_GET);
 
-      lumiera_thread_run (LUMIERA_THREAD_WORKER,
+      lumiera_thread_run (LUMIERA_THREADCLASS_WORKER,
                           threadsyncfn,
                           &cnd,
                           &cnd,
@@ -140,7 +140,7 @@ TEST ("mutex_thread")
     {
       fprintf (stderr, "main before thread %s\n", NOBUG_THREAD_ID_GET);
 
-      lumiera_thread_run (LUMIERA_THREAD_WORKER,
+      lumiera_thread_run (LUMIERA_THREADCLASS_WORKER,
                           mutexfn,
                           NULL,
                           NULL,

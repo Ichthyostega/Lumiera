@@ -51,20 +51,19 @@ typedef lumiera_thread* LumieraThread;
  * Thread classes.
  * We define some 'classes' of threads for different purposes to abstract
  * priorities and other attributes.
- ** TODO: rename these to LUMIERA_THREADCLASS_*
  */
 enum lumiera_thread_class
   {
     /** mostly idle, low latency **/
-    LUMIERA_THREAD_INTERACTIVE,
+    LUMIERA_THREADCLASS_INTERACTIVE,
     /** busy at average priority **/
-    LUMIERA_THREAD_WORKER,
+    LUMIERA_THREADCLASS_WORKER,
     /** busy, soft realtime, high priority **/
-    LUMIERA_THREAD_URGENT,
+    LUMIERA_THREADCLASS_URGENT,
     /** high latency, background jobs **/
-    LUMIERA_THREAD_BATCH,
+    LUMIERA_THREADCLASS_BATCH,
     /** Something to do when there is really nothing else to do **/
-    LUMIERA_THREAD_IDLE,
+    LUMIERA_THREADCLASS_IDLE,
     /** this just denotes the number of classes listed above,
         it is used to create arrays **/
     LUMIERA_THREADCLASS_COUNT,
@@ -99,7 +98,7 @@ typedef enum
  */
 struct lumiera_thread_struct
 {
-  llist node;
+  llist node; // this should be first for easy casting
   // the function and argument can be passed to the thread at creation time
   // void (*function)(void*);
   // void* arg;

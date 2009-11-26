@@ -35,21 +35,21 @@ TEST ("basic-acquire-release")
   lumiera_threadpool_init(100);
   ECHO("acquiring thread 1");
   LumieraThread t1 =
-    lumiera_threadpool_acquire_thread(LUMIERA_THREAD_INTERACTIVE,
+    lumiera_threadpool_acquire_thread(LUMIERA_THREADCLASS_INTERACTIVE,
 				      "test purpose",
 				      NULL);
   ECHO("acquiring thread 2");
   LumieraThread t2 =
-    lumiera_threadpool_acquire_thread(LUMIERA_THREAD_IDLE,
+    lumiera_threadpool_acquire_thread(LUMIERA_THREADCLASS_IDLE,
 				      "test purpose",
 				      NULL);
 
   //ECHO("thread 1 kind=%d", t1->kind);
-  CHECK(LUMIERA_THREAD_INTERACTIVE == t1->kind);
+  CHECK(LUMIERA_THREADCLASS_INTERACTIVE == t1->kind);
   //ECHO("thread 1 state=%d", t1->state);
   CHECK(LUMIERA_THREADSTATE_IDLE == t1->state);
   //ECHO("thread 2 kind=%d", t2->kind);
-   CHECK(LUMIERA_THREAD_IDLE == t2->kind);
+   CHECK(LUMIERA_THREADCLASS_IDLE == t2->kind);
   //ECHO("thread 2 state=%d", t2->state);
   CHECK(LUMIERA_THREADSTATE_IDLE == t2->state);
 

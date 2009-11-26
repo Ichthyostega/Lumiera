@@ -207,7 +207,7 @@ namespace backend {
         : started_(false),
           operation_(operation)
         {
-          start_thread (LUMIERA_THREAD_INTERACTIVE, purpose, logging_flag);
+          start_thread (LUMIERA_THREADCLASS_INTERACTIVE, purpose, logging_flag);
         }
       
       /** Variant of the standard case, used to register a JoinHandle in addition to starting a thread.
@@ -220,7 +220,7 @@ namespace backend {
         : started_(false),
           operation_(operation)
         {
-          start_thread (LUMIERA_THREAD_INTERACTIVE, purpose, logging_flag, 
+          start_thread (LUMIERA_THREADCLASS_INTERACTIVE, purpose, logging_flag, 
                         join.accessLockedCondition());
         }
     };
