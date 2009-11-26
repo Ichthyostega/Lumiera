@@ -104,6 +104,9 @@ struct lumiera_thread_struct
   // void* arg;
   pthread_t id;
   LumieraReccondition finished;
+  // the following member could have been called "class" except that it would conflict with C++ keyword
+  // as consequence, it's been decided to leave the type name containing the word "class",
+  // while all members/variables called "kind"
   enum lumiera_thread_class kind;
   lumiera_thread_state state;
 };
