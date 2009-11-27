@@ -67,9 +67,9 @@ TEST ("basic-acquire-release")
 TEST ("many-acquire-release")
 {
 
-  const int threads_per_pool_count = 50;
+  const int threads_per_pool_count = 10;
 
-  lumiera_threadpool_init(50);
+  lumiera_threadpool_init(10);
   LumieraThread threads[threads_per_pool_count*LUMIERA_THREADCLASS_COUNT];
   
   for (int kind = 0; kind < LUMIERA_THREADCLASS_COUNT; ++kind)
@@ -95,9 +95,9 @@ TEST ("many-acquire-release")
 TEST ("toomany-acquire-release")
 {
 
-  const int threads_per_pool_count = 51;
+  const int threads_per_pool_count = 11;
 
-  lumiera_threadpool_init(50);
+  lumiera_threadpool_init(10);
   LumieraThread threads[threads_per_pool_count*LUMIERA_THREADCLASS_COUNT];
   
   for (int kind = 0; kind < LUMIERA_THREADCLASS_COUNT; ++kind)
