@@ -69,6 +69,8 @@ namespace session {
   using namespace lumiera;
   
   LUMIERA_ERROR_DEFINE (NOT_IN_SESSION, "referring to a Placement not known to the current session");
+  LUMIERA_ERROR_DEFINE (PLACEMENT_TYPE, "requested Placement (pointee) type not compatible with data or context");
+
   
   
   namespace { // implementation helpers

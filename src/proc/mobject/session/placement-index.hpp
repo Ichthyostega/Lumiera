@@ -50,6 +50,7 @@
 //#include "proc/mobject/session/locatingpin.hpp"
 //#include "proc/asset/pipe.hpp"
 #include "lib/util.hpp"
+#include "lib/error.hpp"
 #include "lib/factory.hpp"
 #include "lib/itertools.hpp"
 #include "proc/mobject/placement.hpp"
@@ -68,7 +69,8 @@ namespace mobject {
   
 namespace session {
   
-  LUMIERA_ERROR_DECLARE (NOT_IN_SESSION);  ///< referring to a Placement not known to the current session
+  LUMIERA_ERROR_DECLARE (NOT_IN_SESSION);   ///< referring to a Placement not known to the current session
+  LUMIERA_ERROR_DECLARE (PLACEMENT_TYPE);   ///< requested Placement (pointee) type not compatible with data or context
   
   
   using lib::factory::RefcountFac;
@@ -164,12 +166,26 @@ namespace session {
   
   /* === forwarding implementations of the templated API === */
   
+  template<class MOX>
+  inline void
+  ___check_compatibleType(PlacementMO& questionable)
+  {
+    if (!questionable.isCompatible<MOX>())
+      throw lumiera::error::Logic ("Attempt to retrieve a Placement of specific type, "
+                                   "while the actual type of the pointee (MObject) "
+                                   "registered within the index isn't compatible with the "
+                                   "requested specific MObject subclass"
+                                  ,LUMIERA_ERROR_PLACEMENT_TYPE);
+  }
+  
+  
   template<class MO>
   inline Placement<MO>&
   PlacementIndex::find (PlacementMO::Id<MO> id)  const
   {
     PlacementMO& result (find (id));
-    REQUIRE (INSTANCEOF (MO, &result) );
+    
+    ___check_compatibleType<MO> (result);
     return static_cast<Placement<MO>&> (result);
   }
   

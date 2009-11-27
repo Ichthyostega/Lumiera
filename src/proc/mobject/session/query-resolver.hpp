@@ -306,7 +306,7 @@ namespace session {
   {
     PReso resultSet = resolver.issue (*this);
     Result first = resultSet->prepareResolution();
-    Cursor& start = static_cast<Cursor&> (first);
+    Cursor& start = static_cast<Cursor&> (first);   // note: type RES must be compatible!
     return iterator (resultSet, start);
   }
   

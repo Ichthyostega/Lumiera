@@ -49,10 +49,11 @@ namespace mobject {
       const Time time;
       const Pipe pipe;
       
-      typedef std::pair<Time,Pipe> SolutionData;  //TODO (ichthyo consideres better passing of solution by subclass)
+      typedef std::pair<Time,Pipe> SolutionData;  //TODO (ichthyo considers better passing of solution by subclass)
       
       /** no need to resolve any further, as this ExplicitPlacement
        *  already \e is the result of a resolve()-call.
+       *                                           //////////////////////TICKET #439
        */
       virtual
       ExplicitPlacement resolve ()  const 

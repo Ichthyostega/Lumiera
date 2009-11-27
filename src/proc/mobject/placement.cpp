@@ -38,6 +38,7 @@ namespace mobject {
    *        because we define the Placements of more specific 
    *        MObject kinds to be subclasses of Placement<MObject>,
    *        so they will inherit this function.
+   *                                           //////////////////////TICKET #439
    */
   ExplicitPlacement
   Placement<MObject>::resolve ()  const 

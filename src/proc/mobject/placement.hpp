@@ -117,7 +117,7 @@ namespace mobject {
   template<>
   class Placement<MObject,MObject>
     : protected shared_ptr<MObject>,
-      public HashIndexed<Placement<MObject>, lib::hash::LuidH>     //////TODO: really need to be inherited publicly?
+      public HashIndexed<Placement<MObject>, lib::hash::LuidH>
     {
     protected:
       typedef HashIndexed<Placement<MObject>, lib::hash::LuidH> HashInd;
@@ -171,7 +171,9 @@ namespace mobject {
        *  provide the resulting (explicit) placement.
        */
       virtual ExplicitPlacement resolve ()  const; 
-                               //////////////////////////TODO could resolve() return a reference?  Otherwise placement-ref.hpp needs to include ExplicitPlacement 
+                               //////////////////////////TODO (1) could resolve() return a reference?  Otherwise placement-ref.hpp needs to include ExplicitPlacement
+                               //////////////////////////TODO (2) does this really need to be virtual. Guess not. It's not abstract and not really polymorphic. But virtual here causes template bloat.
+                                             ////////////TICKET #439
       
       
     protected:
@@ -198,7 +200,7 @@ namespace mobject {
     {
     protected:
       typedef Placement<B> _Parent;
-      typedef typename _Parent::template Id<MO> const& _ID;
+      typedef typename _Parent::template Id<MO> const& _Id;
       typedef typename _Parent::Deleter Deleter;
       typedef typename _Parent::_SmartPtr _SmartPtr;
       
@@ -217,7 +219,7 @@ namespace mobject {
             (_SmartPtr::operator-> ());
         }
       
-      _ID
+      _Id
       getID ()  const  ///< @note overrides HashIndexed::getID to pass specific type information,
         { 
           return _Parent::template recastID<MO>();

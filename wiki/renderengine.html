@@ -3044,10 +3044,10 @@ probably a LocatingPin but... {{red{TODO any details are yet unknown as of 5/08}
 !querying additional dimensions
 basically you resolve the Placement, yielding an ExplicitPlacement... {{red{TODO but any details of how additional dimensions are resolved is still undefined as of 5/08}}}</pre>
 </div>
-<div title="PlacementHandling" modifier="Ichthyostega" modified="200805260212" created="200710100124" tags="design impl" changecount="13">
-<pre>[[Placement]]s are at the very core of all [[editing operations|EditingOperations]], because they act as handles (smart pointers) to access the [[media objects|MObject]] to be manipulated. Moreover, Placements are the actual content of the EDL(s) and Fixture and thus are small objects with //value semantics//. Many editing tasks include finding some Placement in the EDL or directly take a ref to some Placement. By acting on the Placement object, we can in some cases change parameters of the way the media object is placed (e.g. adjust an offset), while by dereferencing the Placement object, we access the &quot;real&quot; media object (e.g. for trimming its length). Placements are ''templated'' on the type of the actual ~MObject they refer to, thus defining the interface/methods usable on this object.
+<div title="PlacementHandling" modifier="Ichthyostega" modified="200911271831" created="200710100124" tags="design impl" changecount="14">
+<pre>[[Placement]]s are at the very core of all [[editing operations|EditingOperations]], because they act as handles (smart pointers) to access the [[media objects|MObject]] to be manipulated. Placements themselves are lightweight and can be handled with //value semantics//. But, when adding a Placement to the [[Session]], it gains an distinguishable identity and should be treated by reference from then on: changing the location properties of this placement has a tangible effect on the way the placed object appears in the context of the session. Besides the direct (language) references, there is a special PlacementRef type which builds on this registration of the placement within the session, can be represented as POD and thus passed over external interfaces. Many editing tasks include finding some Placement in the session and reference as parameter. By acting //on the Placement object,// we can change parameters of the way the media object is placed (e.g. adjust an offset), while by //dereferencing//&amp;nbsp; the Placement object, we access the &quot;real&quot; media object (e.g. for trimming its length). Placements are ''templated'' on the type of the actual ~MObject they refer to, thus defining the interface/methods usable on this object.
 
-Actually, the way each Placement locates its subject is implemented by one or several small LocatingPin objects, where subclasses of LocatingPin implement the various different methods of placing and resolving the final location. Notably, we can give a ~FixedLocation or we can atach to another ~MObject to get a ~RelativeLocation, etc. In the typical use case, these ~LocatingPins are added to the Placement, but never retrieved directly. Rather the Placement acts as a ''query interface'' for determining the location of the related object. Here, &quot;location&quot; can be thought of as encompassing multiple dimenstions at the same time. An object can be
+Actually, the way each Placement ties and locates its subject is implemented by one or several small LocatingPin objects, where subclasses of LocatingPin implement the various different methods of placing and resolving the final location. Notably, we can give a ~FixedLocation or we can atach to another ~MObject to get a ~RelativeLocation, etc. In the typical use case, these ~LocatingPins are added to the Placement, but never retrieved directly. Rather the Placement acts as a ''query interface'' for determining the location of the related object. Here, &quot;location&quot; can be thought of as encompassing multiple dimenstions at the same time. An object can be
 * located at a specific point in time
 * related to and plugged into a specific output or global bus
 * defined to have a position within some [[context-dependant additional dimensions|PlacementDerivedDimension]] like
@@ -3062,16 +3062,17 @@ Placements have //value semantics,// i.e. we don't stress the identity of a plac
 * the actual way of placing is implemented similar to the ''State Pattern'' by small embedded LocatingPin objects.
 * these LocatingPin objects form a ''decorator'' like chain
 * resolving into an ExplicitPlacement traverses this chain
-* //overconstraining// a placement is not an error, we just stop traversing the chain (ignoring the remaining additional Placements) at the moment the position is completely defined. 
-* we provide subclasses to be able to form collections of e.g. {{{Placement&lt;Effect&gt;}}}, but we don't stress polymorphism here. Instead we stick to value semantics and explicitly ''allow slicing'' (all subclasses have the same size and layout and differ only in their vtable contents). This is justified, because for the polymorphical treating of ~MObjects the visitor mechanism used by the builder and the EDL is sufficiant, and I don't want to add another layer of complexity by making Placement something like {{{boost::variant}}}.
-* Why is the question how to access a ~MObject subinterface a Problem?
+* //overconstraining// a placement is not an error, we just stop traversing the chain (ignoring the remaining additional Placements) at the moment the position is completely defined.
+* placements can be treated like values, but incorporate an identity tag for the purpose of registering with the session.
+* we provide subclasses to be able to form collections of e.g. {{{Placement&lt;Effect&gt;}}}, but we don't stress polymorphism here. &amp;rarr; PlacementType
+* Why was the question how to access a ~MObject subinterface a Problem?
 *# we want the EDL/Fixture to be a collection of Placements. This means, either we store pointers, or Placement needs to be //one// unique type!
 *# but if Placement is //a single type//, then we can get only MObjects from a Placement.
 *# then either we had to do everything by a visitor (which gets the concrete subtype dynamically), or we'd end up switching on type.
 
 </pre>
 </div>
-<div title="PlacementIndex" modifier="Ichthyostega" modified="200911130351" created="200905090053" tags="SessionLogic spec impl draft" changecount="17">
+<div title="PlacementIndex" modifier="Ichthyostega" modified="200911271655" created="200905090053" tags="SessionLogic spec impl draft" changecount="18">
 <pre>An implementation facility used to keep track of individual Placements and their relations.
 Especially, the [[Session]] maintains such an index, allowing to use the (opaque) PlacementRef tags for referring to a specific &quot;instance&quot; of an MObject, //placed// in a unique way into the current session. And, moreover, this index allows for one placement referring to another placement, so to implement a //relative// placement mode. Because there is an index behind the scenes, it is possible to actually access such a referral in the reverse direction, which is necessary for implementing the desired placement behaviour (if an object instance used as anchor is moved, all objects placed relatively to it have to move accordingly, which necessitates finding those other objects).
 
@@ -3103,6 +3104,14 @@ The placement index is utilized by editing operations and by executing the build
 * for most of the operations above, when querying additional informations from index for a given placement
 * to create a PlacementRef (this is a variant of the &quot;shared ptr from this&quot;-problem)
 On second sight, this problem turns out to be more involved, because either we have to keep a second index table for the reverse lookup (memory address -&gt; ID), or have to tie the placement by a back-link when adding it to the index/session data structure, or (alternatively) it forces us to store a copy of the ID //within// the placement itself. The last possibility seems to create the least impact; but implementing it this way effectively gears the implementation towards a hashtable based approach.
+
+!!!Handling of Subtypes
+While usually type relations don't carry over to smart-poitner like types, in case of Placement I used a special definition pattern to artificially create such type relations. Now, as we're going to copy and maintain Placements within the storage backing the index, the question is: do we actually store subtypes (all having the same size btw) or do we use a vtable based mechanism to recover the type information on access?
+
+Actually, the handling of placement types quite flexible; the actual hierarchy of Placement types can be determined in the //usage context// &amp;mdash; it is not really stored within the placement, and there is no point in storing it within the index. Only the type of the //pointee//&amp;nbsp; can be checked with the help of Placement's vtable.
+
+Thus, things just fall into place here, without the need of any additional implementation logic. The index stores {{{Placement&lt;MObject&gt;}}} instances. The usage context will provide a suitable meaning for more specifically typed placements, and as long as this is in line with the type relations on the pointee(s), as checked by the {{{Placement::isCompatible&lt;TY&gt;()}}} call, the placement relations will just work out right by the the cast happening automatically on results retrieval.
+&amp;rarr; see PlacementType
 
 !implementation {{red{WIP}}}
 Consequently, we incorporate a random hash (implemented as {{{LUID}}}) into the individual placement, this way creating an distinguishable //placement identity,// which is //not retained on copying.// The actual ID tag is complemented by a compile time type (template parameter), thus allowing to pass on additional context information through API calls. Placements themselves use a vtable (and thus RTTI), allowing to re-discover the exact type at runtime. Any further relation information is contained within the placement's [[locating pins|LocatingPin]], thus, any further description records can be avoided by storing the placements immediately //within the index.// To summarise, the implementation is comprised of
@@ -3144,6 +3153,29 @@ __note__: attaching a Sequence in multiple ways &amp;rarr; [[causes scoping prob
 
 !Purpose of Placement scoping
 Similar to the common mechanisms of object visibility in programming languages, placement scopes guide the search for and resolution of properties of placement. Any such property //not defined locally// within the placement is queried ascending through the sequence of nested scopes. Thus, global definitions can be shadowed by local ones.
+</pre>
+</div>
+<div title="PlacementType" modifier="Ichthyostega" modified="200911271836" created="200911271742" changecount="5">
+<pre>Placement is a smart-ptr. As such, usually smart-pointers are templated on the pointee type, but a type relation between different target types doesn't carry over into a type relation on the corresponding smart-pointers. Now, as a [[Placement]] or a PlacementRef often is used to designate a specific &quot;instance&quot; of an MObject placed into the current session, the type parametrisation plays a crucial role when it comes to processing the objects contained within the session. Because the session deliberately has not much additional structure, besides the structure created by [[scopes and aggregations|PlacementScope]] within the session's contents.
+
+To this end, we're using a special definition pattern for Placements, so
+* a placement can refer to a specific sub-Interface like Track, Clip, Effect
+* a specialised placement can stand-in for the more generic type.
+
+!generic handling
+Thus, ~MObject and Placement&lt;~MObject&gt; relate to the &quot;everything is an object&quot; view of affairs. More specific placements are registered, searched and retrieved within the session through this generic interface. In a similar vein, ~PlacementRef&lt;~MObject&gt; and MObjectRef is used on LayerSeparationInterfaces. This works, because it is possible to re-discover the more fine-grained target type. 
+* ''active type rediscovery'' happens when a [[using visitors|VisitorUse]], which requires support by the pointee types (~MObject subclasses), so the visitor implementation is able to build a trampoline table to dispatch into a specifically typed context.
+* ''passive type rediscovery'' is possible whenever the usage context //is already specifically typed.// Because in this case we can check the type (by RTTI) and filter out any placement not convertible to the type requested within the given context.
+
+!downcasting and slicing
+Deliberately, all Placements have the same runtime size. Handling them value-like under certain circumstances is intended and acceptable. Of course then slicing on the level of the Placement will happen. But because the Placement actually is a smart-pointer, the pointee remains unaffected, and can be used later to re-gain the fully typed context.
+
+On the other hand, care has to be taken when ''downcasting'' a placement. When possible, this should be preceded by a {{{Placement::isCompatible&lt;TY&gt;()}}}-call, which checks based on the pointee's RTTI. Client code is encouraged to avoid explicit casting and rather rely on the provided facilities:
+* invoking one of the templated access functions of the PlacementIndex
+* using the QueryFocus to issue a specifically typed {{{ScopeQuery&lt;TY&gt;}}} (which yields an suitable iterator)
+* create an specifically typed MObjectRef and bind it to some reference source (~Placement-ID, LUID, Placement instance within the session)
+* implementing a visitor (~BuilderTool)
+
 </pre>
 </div>
 <div title="PlanningBuildFixture" modifier="Ichthyostega" modified="200801061937" created="200712100445" tags="impl Builder draft" changecount="11">

@@ -99,7 +99,7 @@ namespace mobject {
         typedef lumiera::Time Time;
         typedef Time* Track; //TODO dummy declaration; we don't use Tracks as first-class entity any longer
         typedef std::tr1::shared_ptr<asset::Pipe> Pipe;
-        typedef std::pair<Time,Pipe> SolutionData;  //TODO (ichthyo considers better passing of solution by subclass)
+        typedef std::pair<Time,Pipe> SolutionData;  //TICKET #100 (ichthyo considers better passing of solution by subclass)
         struct LocatingSolution;
       
         /** next additional Pin, if any */
@@ -124,6 +124,7 @@ namespace mobject {
         LocatingPin (const LocatingPin&);
         LocatingPin& operator= (const LocatingPin&);
         virtual LocatingPin* clone ()  const;
+        
         virtual ~LocatingPin() {};
         
 //      protected:
