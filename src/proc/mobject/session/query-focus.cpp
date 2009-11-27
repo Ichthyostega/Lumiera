@@ -84,7 +84,7 @@ namespace session {
     {
       if (!target.isValid())
         throw Invalid ("Invalid target location for QueryFocus"
-                      , LUMIERA_ERROR_INVALID_SCOPE);
+                      , LUMIERA_ERROR_INVALID_SCOPE);             ////////////////TICKET #197
     }
   }//(End) shortcut
   

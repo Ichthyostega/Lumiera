@@ -81,11 +81,11 @@ namespace test    {
           ASSERT (0 == index->size());
           ASSERT (!index->contains (clip));
           
-//        index->insert (clip, root);
+          index->insert (clip, root);
           ASSERT (1 == index->size());
           ASSERT ( index->contains (clip));
           
-//        index->remove(clip);
+          index->remove(clip);
           ASSERT (0 == index->size());
           ASSERT (!index->contains (clip));
           ASSERT ( index->contains (root));

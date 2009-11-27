@@ -35,28 +35,40 @@
 
 #include "proc/mobject/session/placement-index.hpp"
 #include "proc/mobject/session/session-impl.hpp"
+#include "proc/mobject/session/scope.hpp"
+#include "lib/typed-allocation-manager.hpp"
+#include "proc/mobject/mobject.hpp" ///////////////////////TODO necessary?
+#include "lib/util.hpp"
+
 
 //#include <boost/format.hpp>
 //using boost::str;
+#include <boost/functional/hash.hpp>
+#include <boost/noncopyable.hpp>
+#include <tr1/unordered_map>
+#include <tr1/memory>
+#include <string>
+//#include <map>
+
 
 namespace mobject {
 namespace session {
 
-
-  class PlacementIndex::Table 
-    {
-    public:
-      Table () 
-        { }
-      
-      size_t
-      size()  const
-        {
-          UNIMPLEMENTED ("PlacementIndex datastructure");
-          return 0;
-        }
-        
-    };
+  using boost::hash;
+  using boost::noncopyable;
+  using std::tr1::shared_ptr;
+  using std::tr1::unordered_map;
+  using std::tr1::unordered_multimap;
+  using lib::TypedAllocationManager;
+//using util::getValue_or_default;
+//using util::contains;
+//using std::string;
+//using std::map;
+  using std::make_pair;
+  
+  using namespace lumiera;
+  
+  
   
   
   /* some type shorthands */
@@ -65,13 +77,83 @@ namespace session {
   typedef PlacementIndex::ID ID;
   
   
+  class PlacementIndex::Table 
+    {
+      typedef shared_ptr<PlacementMO> PPlacement;
+      
+      // using a hashtables to implement the index
+      typedef unordered_map<ID, PPlacement, hash<ID> > IDTable;
+      typedef std::tr1::unordered_multimap<ID,ID, hash<ID> > ScopeTable;
+      
+//      typedef PlacementMO::ID _PID;
+      
+      TypedAllocationManager allocator_;
+      IDTable placementTab_;
+      ScopeTable scopeTab_;
+      
+      
+    public:
+      Table () 
+        { }
+      
+     ~Table ()
+        {
+          try { clear(); }
+          catch(lumiera::Error& err)
+            {
+              WARN (session, "Problem while purging PlacementIndex: %s", err.what());
+              lumiera_error();
+        }   }
+      
+      
+      size_t
+      size()  const
+        {
+          return placementTab_.size();
+        }
+      
+      bool
+      contains (ID id)  const
+        {
+          return util::contains(placementTab_, id);
+        }
+      
+      void
+      clear()
+        {
+          INFO (session, "Purging Placement Tables...");
+          scopeTab_.clear();
+          placementTab_.clear();
+        }
+        
+      ID
+      addEntry (PlacementMO const& newObj, PlacementMO const& targetScope)
+        {
+          ID scopeID = targetScope.getID();
+          REQUIRE (contains (scopeID));
+          
+          /////////////////////////////////////////////////////////////////////TICKET #436
+          PPlacement newEntry = allocator_.create<PlacementMO> (newObj);
+          ID newID = newEntry->getID();
+          
+          ASSERT (!contains (newID));
+          placementTab_[newID] = newEntry;
+          scopeTab_.insert (make_pair (scopeID, newID));
+          return newID;
+        }
+      
+    };
+  
+  
+  
+  
   /** @internal Factory for creating a new placement index.
    *            For use by the Session and for unit tests.  
    */
   PlacementIndex::Factory PlacementIndex::create;
   
   PlacementIndex::PlacementIndex()
-    : pTab_()
+    : pTab_(new Table)
     { }
   
   PlacementIndex::~PlacementIndex() { }
@@ -94,8 +176,7 @@ namespace session {
   bool
   PlacementIndex::contains (ID id)  const
   {
-    UNIMPLEMENTED ("containment test: is the given Placement known within this index");
-    return false;
+    return pTab_->contains (id);
   }
   
   
@@ -125,24 +206,41 @@ namespace session {
   }
   
   
+  /** Add a new Placement (Object "instance") into the index.
+   *  Usually this means effectively adding this "Object" to the Session.
+   *  The given Placement is copied into the storage managed within the session.
+   *  This copy within the storage is what will be "the placement of this object".
+   *  It can be discovered as index (Session) content, re-accessed by the ID returned
+   *  from this call and modified in the course of editing the session. 
+   *  @param newObj reference placement pointing to the MObject to be added
+   *  @param targetScope ref to a placement already added to the index, serving as
+   *         container "into" which the new placement will be located
+   *  @return placement ID of the newly added Placement
+   *  @note the newly added Placement has an identity of its own.
+   */
   ID
-  PlacementIndex::insert (PlacementMO& newObj, PlacementMO& targetScope)
+  PlacementIndex::insert (PlacementMO const& newObj, PlacementMO const& targetScope)
   {
-    UNIMPLEMENTED ("store a new information record into PlacmentIndex: ID -> (ref-to-Placement, parent-Placement)");
+    if (!contains (targetScope))
+      throw error::Logic ("Specified a non-registered Placement as scope "
+                          "while adding another Placement to the index"
+                         ,LUMIERA_ERROR_INVALID_SCOPE);              ////////////////TICKET #197
+      
+    return pTab_->addEntry(newObj, targetScope);
   }
   
   
   bool
   PlacementIndex::remove (ID)
   {
-    UNIMPLEMENTED ("remove a information record from PlacementIndex, and also deregister any placement-relations bound to it");
+    UNIMPLEMENTED ("remove a information record from PlacementIndex, and also de-register any placement-relations bound to it");
   }
   
   
   void
   PlacementIndex::clear()
   {
-    UNIMPLEMENTED  ("purge the PlacementIndex, discarding any contained placements");
+    pTab_->clear();
   }
   
   

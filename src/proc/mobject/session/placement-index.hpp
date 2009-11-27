@@ -133,7 +133,7 @@ namespace session {
       
       /* == mutating operations == */
       
-      ID   insert (PlacementMO& newObj, PlacementMO& targetScope);
+      ID   insert (PlacementMO const& newObj, PlacementMO const& targetScope);
       bool remove (PlacementMO&);
       bool remove (ID);
       
