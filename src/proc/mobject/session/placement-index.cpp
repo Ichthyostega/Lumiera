@@ -68,7 +68,23 @@ namespace session {
   
   using namespace lumiera;
   
+  LUMIERA_ERROR_DEFINE (NOT_IN_SESSION, "referring to a Placement not known to the current session");
   
+  
+  namespace { // implementation helpers
+
+    template <typename MAP>
+    inline typename MAP::mapped_type const&
+    getEntry_or_throw (MAP& map, typename MAP::key_type const& key)
+    {
+      typename MAP::const_iterator pos = map.find (key);
+      if (pos == map.end())
+        throw error::Logic("lost a Placement expected to be registered in the index.");
+      
+      return pos->second;
+    }
+      
+  } // (End) impl.helpers
   
   
   /* some type shorthands */
@@ -85,7 +101,6 @@ namespace session {
       typedef unordered_map<ID, PPlacement, hash<ID> > IDTable;
       typedef std::tr1::unordered_multimap<ID,ID, hash<ID> > ScopeTable;
       
-//      typedef PlacementMO::ID _PID;
       
       TypedAllocationManager allocator_;
       IDTable placementTab_;
@@ -117,6 +132,18 @@ namespace session {
         {
           return util::contains(placementTab_, id);
         }
+      
+      PlacementMO&
+      fetch (ID id)  const
+        {
+          REQUIRE (contains (id));
+          PPlacement const& entry = getEntry_or_throw (placementTab_,id);
+          
+          ENSURE (entry);
+          ENSURE (id == entry->getID());
+          return *entry;
+        }
+      
       
       void
       clear()
@@ -181,9 +208,13 @@ namespace session {
   
   
   PlacementMO&
-  PlacementIndex::find (ID)  const
+  PlacementIndex::find (ID id)  const
   {
-    UNIMPLEMENTED ("main operation of PlacmentIndex: lookup a Placement by ID");
+    if (!contains (id))
+      throw error::Invalid ("Accessing Placement not registered within the index"
+                           ,LUMIERA_ERROR_NOT_IN_SESSION);              ///////////////////////TICKET #197
+    
+    return pTab_->fetch (id);
   }
     
   

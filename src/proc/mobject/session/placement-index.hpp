@@ -68,6 +68,9 @@ namespace mobject {
   
 namespace session {
   
+  LUMIERA_ERROR_DECLARE (NOT_IN_SESSION);  ///< referring to a Placement not known to the current session
+  
+  
   using lib::factory::RefcountFac;
   using std::tr1::shared_ptr;
   using boost::scoped_ptr;
