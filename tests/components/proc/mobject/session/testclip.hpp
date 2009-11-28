@@ -46,7 +46,7 @@ namespace test    {
   /**
    * Sample or Test Clip for checking
    * various EDL, session and builder operations.
-   * @todo make this usable as Mock object to record invoked operations.
+   * @todo maybe use this as Mock object to record invoked operations?
    * 
    */
   class TestClip   : public mobject::session::Clip

@@ -61,7 +61,7 @@ namespace session {
   using std::tr1::unordered_map;
   using std::tr1::unordered_multimap;
   using lib::TypedAllocationManager;
-  using util::getValue_or_default;
+//using util::getValue_or_default;
 //using util::contains;
 //using std::string;
 //using std::map;
@@ -74,22 +74,6 @@ namespace session {
   LUMIERA_ERROR_DEFINE (PLACEMENT_TYPE, "requested Placement (pointee) type not compatible with data or context");
   LUMIERA_ERROR_DEFINE (NONEMPTY_SCOPE, "Placement scope (still) contains other elements");
 
-  
-  
-  namespace { // implementation helpers
-
-    template <typename MAP>
-    inline typename MAP::mapped_type const&
-    getEntry_or_throw (MAP& map, typename MAP::key_type const& key)
-    {
-      typename MAP::const_iterator pos = map.find (key);
-      if (pos == map.end())
-        throw error::Logic("lost a Placement expected to be registered in the index.");
-      
-      return pos->second;
-    }
-      
-  } // (End) impl.helpers
   
   
   /* some type shorthands */
@@ -152,7 +136,7 @@ namespace session {
       fetch (ID id)  const
         {
           REQUIRE (contains (id));
-          PPlacement const& entry = getEntry_or_throw (placementTab_,id).element;
+          PPlacement const& entry = base_entry(id).element;
           
           ENSURE (entry);
           ENSURE (id == entry->getID());
@@ -163,7 +147,7 @@ namespace session {
       fetchScope (ID id)  const
         {
           REQUIRE (contains (id));
-          PPlacement const& scope = getEntry_or_throw (placementTab_,id).scope;
+          PPlacement const& scope = base_entry(id).scope;
           
           ENSURE (scope);
           ENSURE (contains (scope->getID()));
@@ -189,9 +173,8 @@ namespace session {
        * @see Placement#isCompatible      
        */ 
       ID
-      addEntry (PlacementMO const& newObj, PlacementMO const& targetScope)
+      addEntry (PlacementMO const& newObj, ID scopeID)
         {
-          ID scopeID = targetScope.getID();
           REQUIRE (contains (scopeID));
           
           PPlacement newEntry = allocator_.create<PlacementMO> (newObj);
@@ -229,10 +212,22 @@ namespace session {
       
       
     private:
+      typedef IDTable::const_iterator Slot;
+      
+      PlacementEntry const&
+      base_entry (ID key)  const
+        {
+          Slot pos = placementTab_.find (key);
+          if (pos == placementTab_.end())
+            throw error::Logic("lost a Placement expected to be registered in the index.");
+          
+          return pos->second;
+        }
+      
       PlacementEntry
       remove_base_entry (ID key)
         {
-          IDTable::iterator pos = placementTab_.find (key);
+          Slot pos = placementTab_.find (key);
           REQUIRE (pos != placementTab_.end());
           PlacementEntry dataToRemove (pos->second);
           placementTab_.erase(pos);
@@ -242,7 +237,7 @@ namespace session {
       void
       remove_from_scope (ID scopeID, ID entryID)
         {
-          typedef ScopeTable::iterator Pos;
+          typedef ScopeTable::const_iterator Pos;
           pair<Pos,Pos> searchRange = scopeTab_.equal_range(scopeID);
           
           Pos pos = searchRange.first;
@@ -340,7 +335,7 @@ namespace session {
    *  @note the newly added Placement has an identity of its own.
    */
   ID
-  PlacementIndex::insert (PlacementMO const& newObj, PlacementMO const& targetScope)
+  PlacementIndex::insert (PlacementMO const& newObj, ID targetScope)
   {
     if (!contains (targetScope))
       throw error::Logic ("Specified a non-registered Placement as scope "

@@ -22,6 +22,7 @@
 
 
 #include "lib/test/run.hpp"
+#include "lib/test/test-helper.hpp"
 //#include "proc/asset/media.hpp"
 //#include "proc/mobject/session.hpp"
 //#include "proc/mobject/session/edl.hpp"
@@ -29,7 +30,7 @@
 #include "proc/mobject/session/testclip.hpp"
 #include "proc/mobject/placement.hpp"
 //#include "proc/mobject/explicitplacement.hpp"
-//#include "lib/util.hpp"
+#include "lib/util.hpp"
 
 //#include <boost/format.hpp>
 //#include <iostream>
@@ -37,6 +38,7 @@
 //using boost::format;
 //using lumiera::Time;
 //using util::contains;
+using util::isSameObject;
 using std::string;
 //using std::cout;
 
@@ -60,20 +62,36 @@ namespace test    {
    */
   class PlacementIndex_test : public Test
     {
-      typedef shared_ptr<PlacementIndex> PIdx;
       
       virtual void
       run (Arg) 
         {
-          PIdx index (PlacementIndex::create());
+          PPIdx index (PlacementIndex::create());
           ASSERT (index);
           
-          /////////////////////////////////TODO
-          checkSimpleInsert (index);
+          checkSimpleInsertRemove (index);
+          has_size (0, index);
+          
+          checkSimpleAccess (index);
+          has_size (1, index);
+          
+          checkScopeHandling (index);
+          has_size (7, index);
+          
+          ////////////////////////////TODO
+          
+          index->clear();
+          has_size (0, index);
         }
       
       void
-      checkSimpleInsert (PIdx index)
+      has_size(uint siz, PPIdx index)
+        {
+          ASSERT (siz == index->size());
+        }
+      
+      void
+      checkSimpleInsertRemove (PPIdx index)
         {
           PMO clip = TestClip::create();
           PMO& root = index->getRoot();
@@ -89,6 +107,73 @@ namespace test    {
           ASSERT (0 == index->size());
           ASSERT (!index->contains (clip));
           ASSERT ( index->contains (root));
+        }
+      
+      
+      void
+      checkSimpleAccess (PPIdx index)
+        {
+          PMO testObj = TestClip::create();
+          PMO& root = index->getRoot();
+          PMO::ID elmID = index->insert (testObj, root);
+          
+          PMO& elm = index->find(elmID);
+          ASSERT (elmID == elm.getID());
+          ASSERT (!isSameObject (elm,testObj));  // note: placements are registered as copy
+          ASSERT (elm == testObj);              //        they are semantically equivalent
+          ASSERT (elmID != testObj.getID());   //         but have a distinct identity
+          
+          PMO::ID elmID2 = index->insert(testObj, root);
+          ASSERT (elmID != elmID);          //            ...and each insert creates a new instance
+          ASSERT (testObj == index->find(elmID2));
+          ASSERT (!isSameObject (elm, index->find(elmID2)));
+          ASSERT ( isSameObject (elm, index->find(elmID )));
+          
+          // can also re-access objects by previous ref
+          ASSERT ( isSameObject (elm, index->find(elm)));
+        }
+      
+      
+      void
+      checkScopeHandling (PPIdx index)
+        {
+          PMO testObj = TestClip::create();
+          PMO& root = index->getRoot();
+          
+          typedef PMO::ID ID;
+          ID e1 = index->insert (testObj, root);
+          ID e11 = index->insert (testObj, e1);
+          ID e12 = index->insert (testObj, e1);
+          ID e13 = index->insert (testObj, e1);
+          ID e131 = index->insert (testObj, e13);
+          ID e132 = index->insert (testObj, e13);
+          ID e133 = index->insert (testObj, e13);
+          ID e1331 = index->insert (testObj, e133);
+          
+          ASSERT (root == index->getScope(e1));
+          ASSERT (e1   == index->getScope(e11).getID());
+          ASSERT (e1   == index->getScope(e12).getID());
+          ASSERT (e1   == index->getScope(e13).getID());
+          ASSERT (e13  == index->getScope(e131).getID());
+          ASSERT (e13  == index->getScope(e132).getID());
+          ASSERT (e13  == index->getScope(e133).getID());
+          ASSERT (e133 == index->getScope(e1331).getID());
+          ASSERT (e1 != e13);
+          ASSERT (e13 != e133);
+          
+          ASSERT (index->getScope(e11) == index->getScope(index->find(e11)));
+          ASSERT (index->getScope(e131) == index->getScope(index->find(e131)));
+          
+          VERIFY_ERROR(NONEMPTY_SCOPE, index->remove(e13) ); // can't remove a scope-constituting element
+          VERIFY_ERROR(NONEMPTY_SCOPE, index->remove(e133) );
+          
+          ASSERT (index->contains(e1331));
+          ASSERT (index->remove(e1331));
+          ASSERT (!index->contains(e1331));
+          ASSERT (!index->remove(e1331));
+          
+          ASSERT (index->remove(e133));     // but can remove an scope, after emptying it 
+          ASSERT (!index->contains(e133));
         }
     };
   
