@@ -71,6 +71,7 @@ namespace session {
   
   LUMIERA_ERROR_DECLARE (NOT_IN_SESSION);   ///< referring to a Placement not known to the current session
   LUMIERA_ERROR_DECLARE (PLACEMENT_TYPE);   ///< requested Placement (pointee) type not compatible with data or context
+  LUMIERA_ERROR_DECLARE (NONEMPTY_SCOPE);   ///< Placement scope (still) contains other elements
   
   
   using lib::factory::RefcountFac;
@@ -166,17 +167,31 @@ namespace session {
   
   /* === forwarding implementations of the templated API === */
   
-  template<class MOX>
-  inline void
-  ___check_compatibleType(PlacementMO& questionable)
-  {
-    if (!questionable.isCompatible<MOX>())
-      throw lumiera::error::Logic ("Attempt to retrieve a Placement of specific type, "
-                                   "while the actual type of the pointee (MObject) "
-                                   "registered within the index isn't compatible with the "
-                                   "requested specific MObject subclass"
-                                  ,LUMIERA_ERROR_PLACEMENT_TYPE);
-  }
+    
+  namespace { // shortcuts...
+    
+    template<class MOX>
+    inline void
+    ___check_compatibleType(PlacementMO& questionable)
+    {
+      if (!questionable.isCompatible<MOX>())
+        throw lumiera::error::Logic ("Attempt to retrieve a Placement of specific type, "
+                                     "while the actual type of the pointee (MObject) "
+                                     "registered within the index isn't compatible with the "
+                                     "requested specific MObject subclass"
+                                    ,LUMIERA_ERROR_PLACEMENT_TYPE);
+    }
+    
+    inline void
+    __check_knownID(PlacementIndex const& idx, PlacementMO::ID id)
+    {
+    if (!idx.contains (id))
+      throw lumiera::error::Invalid ("Accessing Placement not registered within the index"
+                                    ,LUMIERA_ERROR_NOT_IN_SESSION);              ///////////////////////TICKET #197
+    }
+  }//(End) shortcuts
+      
+
   
   
   template<class MO>

@@ -47,6 +47,7 @@
 #include <boost/noncopyable.hpp>
 #include <tr1/unordered_map>
 #include <tr1/memory>
+//#include <algorithm>
 #include <string>
 //#include <map>
 
@@ -60,16 +61,18 @@ namespace session {
   using std::tr1::unordered_map;
   using std::tr1::unordered_multimap;
   using lib::TypedAllocationManager;
-//using util::getValue_or_default;
+  using util::getValue_or_default;
 //using util::contains;
 //using std::string;
 //using std::map;
   using std::make_pair;
+  using std::pair;
   
   using namespace lumiera;
   
   LUMIERA_ERROR_DEFINE (NOT_IN_SESSION, "referring to a Placement not known to the current session");
   LUMIERA_ERROR_DEFINE (PLACEMENT_TYPE, "requested Placement (pointee) type not compatible with data or context");
+  LUMIERA_ERROR_DEFINE (NONEMPTY_SCOPE, "Placement scope (still) contains other elements");
 
   
   
@@ -95,12 +98,22 @@ namespace session {
   typedef PlacementIndex::ID ID;
   
   
+  /**
+   * Storage and implementation
+   * backing the PlacementIndex
+   */
   class PlacementIndex::Table 
     {
       typedef shared_ptr<PlacementMO> PPlacement;
       
+      struct PlacementEntry
+        {
+          PPlacement element;
+          PPlacement scope;
+        };
+      
       // using a hashtables to implement the index
-      typedef unordered_map<ID, PPlacement, hash<ID> > IDTable;
+      typedef unordered_map<ID, PlacementEntry, hash<ID> > IDTable;
       typedef std::tr1::unordered_multimap<ID,ID, hash<ID> > ScopeTable;
       
       
@@ -139,12 +152,24 @@ namespace session {
       fetch (ID id)  const
         {
           REQUIRE (contains (id));
-          PPlacement const& entry = getEntry_or_throw (placementTab_,id);
+          PPlacement const& entry = getEntry_or_throw (placementTab_,id).element;
           
           ENSURE (entry);
           ENSURE (id == entry->getID());
           return *entry;
         }
+      
+      PlacementMO&
+      fetchScope (ID id)  const
+        {
+          REQUIRE (contains (id));
+          PPlacement const& scope = getEntry_or_throw (placementTab_,id).scope;
+          
+          ENSURE (scope);
+          ENSURE (contains (scope->getID()));
+          return *scope;
+        }
+      
       
       
       void
@@ -155,20 +180,81 @@ namespace session {
           placementTab_.clear();
         }
         
+      /** Store a copy of the given Placement as new instance
+       *  within the index, together with the Scope this Placement
+       *  belongs to. 
+       * @note we discard the specific type info.
+       *       It can be rediscovered later with the help
+       *       of the pointee's vtable
+       * @see Placement#isCompatible      
+       */ 
       ID
       addEntry (PlacementMO const& newObj, PlacementMO const& targetScope)
         {
           ID scopeID = targetScope.getID();
           REQUIRE (contains (scopeID));
           
-          /////////////////////////////////////////////////////////////////////TICKET #436
           PPlacement newEntry = allocator_.create<PlacementMO> (newObj);
           ID newID = newEntry->getID();
           
           ASSERT (!contains (newID));
-          placementTab_[newID] = newEntry;
+          placementTab_[newID].element = newEntry;
+          placementTab_[newID].scope   = placementTab_[scopeID].element;
           scopeTab_.insert (make_pair (scopeID, newID));
           return newID;
+        }
+      
+      bool
+      removeEntry (ID id)
+        {
+          if (!contains (id))
+            {
+              ENSURE (!util::contains(scopeTab_, id));
+              return false;
+            }
+          
+          if (util::contains(scopeTab_, id))
+            throw error::State ("Unable to remove the specified Placement, "
+                                "because it defines an non-empty scope. "
+                                "You need to delete any contents first."
+                               ,LUMIERA_ERROR_NONEMPTY_SCOPE);              ////////////////TICKET #197
+          
+          ASSERT (contains (id));
+          PlacementEntry toRemove = remove_base_entry (id);
+          remove_from_scope (toRemove.scope->getID(), id);
+          ENSURE (!util::contains(scopeTab_, id));
+          ENSURE (!contains (id));
+          return true;
+        }
+      
+      
+    private:
+      PlacementEntry
+      remove_base_entry (ID key)
+        {
+          IDTable::iterator pos = placementTab_.find (key);
+          REQUIRE (pos != placementTab_.end());
+          PlacementEntry dataToRemove (pos->second);
+          placementTab_.erase(pos);
+          return dataToRemove;
+        }
+      
+      void
+      remove_from_scope (ID scopeID, ID entryID)
+        {
+          typedef ScopeTable::iterator Pos;
+          pair<Pos,Pos> searchRange = scopeTab_.equal_range(scopeID);
+          
+          Pos pos = searchRange.first;
+          Pos end = searchRange.second;
+          for ( ; pos!=end; ++pos)
+            if (pos->second == entryID)
+              {
+                scopeTab_.erase(pos);
+                return;
+              }
+          
+          NOTREACHED();
         }
       
     };
@@ -212,20 +298,22 @@ namespace session {
   PlacementMO&
   PlacementIndex::find (ID id)  const
   {
-    if (!contains (id))
-      throw error::Invalid ("Accessing Placement not registered within the index"
-                           ,LUMIERA_ERROR_NOT_IN_SESSION);              ///////////////////////TICKET #197
-    
+    __check_knownID(*this,id);
     return pTab_->fetch (id);
   }
     
   
   
+  /** retrieve the Scope information
+   *  registered alongside with the denoted Placement.
+   *  @throw error::Invalid when the given ID isn't registered
+   *  @note root is it's own scope, per definition. 
+   */
   PlacementMO&
-  PlacementIndex::getScope (ID)  const
+  PlacementIndex::getScope (ID id)  const
   {
-    UNIMPLEMENTED ("Secondary core operation of PlacmentIndex: find the 'parent' Placement by using the Placement relation index");
-    /// decision: root is his own scope
+    __check_knownID(*this,id);
+    return pTab_->fetchScope (id);
   }
   
   
@@ -263,10 +351,15 @@ namespace session {
   }
   
   
+  /** Remove and discard a Placement (Object "instance") from the index.
+   *  Usually this means removing this Object from the session.
+   *  @return \c true if actually removed an object.
+   *  @throw error::State if the object to be removed is an non-empty scope
+   */
   bool
-  PlacementIndex::remove (ID)
+  PlacementIndex::remove (ID id)
   {
-    UNIMPLEMENTED ("remove a information record from PlacementIndex, and also de-register any placement-relations bound to it");
+    return pTab_->removeEntry (id);
   }
   
   
