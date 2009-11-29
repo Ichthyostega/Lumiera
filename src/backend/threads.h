@@ -90,17 +90,27 @@ enum lumiera_thread_class
 // defined in threads.c
 extern const char* lumiera_threadclass_names[];
 
+#define LUMIERA_THREAD_STATES                      \
+  LUMIERA_THREAD_STATE(IDLE)                       \
+  LUMIERA_THREAD_STATE(RUNNING)                    \
+  LUMIERA_THREAD_STATE(ERROR)
+
+#define LUMIERA_THREAD_STATE(name) LUMIERA_THREADSTATE_##name,
+
 /**
  * Thread state.
  * These are the only states our threads can be in.
  */
 typedef enum 
   {
-    LUMIERA_THREADSTATE_IDLE,
-    LUMIERA_THREADSTATE_RUNNING,
-    LUMIERA_THREADSTATE_ERROR
+    LUMIERA_THREAD_STATES
   }
   lumiera_thread_state;
+
+#undef LUMIERA_THREAD_STATE
+
+// defined in threads.c
+extern const char* lumiera_threadstate_names[];
 
 #include "threadpool.h"
 

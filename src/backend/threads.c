@@ -54,6 +54,12 @@ const char* lumiera_threadclass_names[] = {
 
 #undef LUMIERA_THREAD_CLASS
 
+#define LUMIERA_THREAD_STATE(name) #name,
+const char* lumiera_threadstate_names[] = {
+  LUMIERA_THREAD_STATES
+};
+#undef LUMIERA_THREAD_STATE
+
 struct lumiera_thread_mockup
 {
   void (*fn)(void*);
