@@ -46,6 +46,21 @@
 typedef struct lumiera_thread_struct lumiera_thread;
 typedef lumiera_thread* LumieraThread;
 
+// this is used for an enum string trick
+#define LUMIERA_THREAD_CLASSES                  \
+  /** mostly idle, low latency **/              \
+  LUMIERA_THREAD_CLASS(INTERACTIVE)             \
+  /** busy at average priority **/              \
+  LUMIERA_THREAD_CLASS(WORKER)                  \
+  /** busy, soft realtime, high priority **/    \
+  LUMIERA_THREAD_CLASS(URGENT)                  \
+  /** high latency, background jobs **/         \
+  LUMIERA_THREAD_CLASS(BATCH)                   \
+  /** Something to do when there is really nothing else to do **/       \
+  LUMIERA_THREAD_CLASS(IDLE)
+
+// enum string trick: expands as an enum of thread classes
+#define LUMIERA_THREAD_CLASS(name) LUMIERA_THREADCLASS_##name,
 
 /**
  * Thread classes.
@@ -54,16 +69,7 @@ typedef lumiera_thread* LumieraThread;
  */
 enum lumiera_thread_class
   {
-    /** mostly idle, low latency **/
-    LUMIERA_THREADCLASS_INTERACTIVE,
-    /** busy at average priority **/
-    LUMIERA_THREADCLASS_WORKER,
-    /** busy, soft realtime, high priority **/
-    LUMIERA_THREADCLASS_URGENT,
-    /** high latency, background jobs **/
-    LUMIERA_THREADCLASS_BATCH,
-    /** Something to do when there is really nothing else to do **/
-    LUMIERA_THREADCLASS_IDLE,
+    LUMIERA_THREAD_CLASSES
     /** this just denotes the number of classes listed above,
         it is used to create arrays **/
     LUMIERA_THREADCLASS_COUNT,
@@ -78,6 +84,11 @@ enum lumiera_thread_class
      **/
     LUMIERA_THREAD_OR_NOT = 1<<16
   };
+
+#undef LUMIERA_THREAD_CLASS
+
+// defined in threads.c
+extern const char* lumiera_threadclass_names[];
 
 /**
  * Thread state.

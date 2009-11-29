@@ -46,6 +46,13 @@ NOBUG_DEFINE_FLAG_PARENT (threads, threads_dbg); /*TODO insert a suitable/better
 
 //code goes here//
 
+#define LUMIERA_THREAD_CLASS(name) #name,
+// enum string trick: expands as an array of thread class name strings
+const char* lumiera_threadclass_names[] = {
+  LUMIERA_THREAD_CLASSES
+};
+
+#undef LUMIERA_THREAD_CLASS
 
 struct lumiera_thread_mockup
 {

@@ -44,12 +44,12 @@ TEST ("basic-acquire-release")
 				      "test purpose",
 				      NULL);
 
-  //ECHO("thread 1 kind=%d", t1->kind);
+  ECHO("thread 1 kind=%s", lumiera_threadclass_names[t1->kind]);
   CHECK(LUMIERA_THREADCLASS_INTERACTIVE == t1->kind);
   //ECHO("thread 1 state=%d", t1->state);
   CHECK(LUMIERA_THREADSTATE_IDLE == t1->state);
-  //ECHO("thread 2 kind=%d", t2->kind);
-   CHECK(LUMIERA_THREADCLASS_IDLE == t2->kind);
+  ECHO("thread 2 kind=%s", lumiera_threadclass_names[t2->kind]);
+  CHECK(LUMIERA_THREADCLASS_IDLE == t2->kind);
   //ECHO("thread 2 state=%d", t2->state);
   CHECK(LUMIERA_THREADSTATE_IDLE == t2->state);
 
