@@ -777,12 +777,20 @@ config.macros.timeline.handler = function(place,macroName,params,wikifier,paramS
 }
 //}}}</pre>
 </div>
-<div title="BindingMO" modifier="Ichthyostega" modified="200907220310" created="200905210144" tags="def design discuss SessionLogic" changecount="5">
+<div title="BindingMO" modifier="Ichthyostega" modified="200911291715" created="200905210144" tags="def design discuss SessionLogic" changecount="6">
 <pre>Sometimes, two entities within the [[Session]] are deliberately associated, and this association has to carry some specific mappings between properties or facilities within the entities to be linked together. When this connection isn't just the [[Placement]] of an object, and isn't just a logical or structural relationship either &amp;mdash; then we create an explicit Binding object to be stored into the session.
 * When connecting a [[Sequence|EDL]] to a certain [[Timeline]], we also establish a mapping between the possible media stream channels produced by the sequence and the real output slots found within the timeline.
 * similarly, using a sequence within a [[meta-clip|VirtualClip]] requires to remember such a mapping.
 * another example is the root [[scope|PlacementScope]], which (conceptually) is a link between the definition part of the Session and the graph of MObjects, which are the session's contents.
 
+!Properties of a Binding
+Binding is a relation entity, maintaining a link between parts of the session. This 1:1 relation may be part of a n:1 (or maybe even n:m?) relation. In addition to representing this link, a binding allows to maintain a set of ''mappings'' attached to this link.
+
+This creates a typing related problem: In order to maintain the link and the mappings, in each case we need a common denominator to subsume the elements to be maintained.
+* in the case of the basic link, this common denominator is given by the basic structure of the HighLevelModel: ~MObjects attached by ~Placements. Consequently, the link maintained through a binding is limited to linking together first-class entities within the model, and the implementation is tied into the existing mechanisms for associating Placements (&amp;rarr; PlacementScope and PlacementIndex)
+* in the case of the attached mappings it seems we're best off limiting ourselves to symbolic mappings (ID mappings). Because, going beyond that would either create sub-groupings (based on varying target types to be mapped), or push the »everything is an object« approach beyond the beneficial level.
+
+!Implementation
 On the implementation side, we use a special kind of MObject, acting as an anchor and providing an unique identity. Like any ~MObject, actually a placement establishes the connection and the scope, and typically constitutes a nested scope (e.g. the scope of all objects //within// the sequence to be bound into a timeline)
 </pre>
 </div>
