@@ -133,9 +133,8 @@ lumiera_threadpool_release_thread(LumieraThread thread)
   REQUIRE (thread, "invalid thread given");
   REQUIRE (thread->kind < LUMIERA_THREADCLASS_COUNT, "thread belongs to an unknown pool kind: %d", thread->kind);
 
-  // TOOD: currently, locking produces memory leaks
-  //  LUMIERA_MUTEX_SECTION (threadpool, &threadpool.pool[thread->kind].lock)
-  //    {
+  LUMIERA_MUTEX_SECTION (threadpool, &threadpool.pool[thread->kind].lock)
+    {
       REQUIRE (llist_is_single(&thread->node), "thread already belongs to some list");
       llist_insert_head(&threadpool.pool[thread->kind].list, &thread->node);
          threadpool.pool[thread->kind].working_thread_count--;
@@ -146,7 +145,7 @@ lumiera_threadpool_release_thread(LumieraThread thread)
                  threadpool.pool[thread->kind].idle_thread_count,
                  llist_count(&threadpool.pool[thread->kind].list));
       //      REQUIRE (!llist_is_empty (&threadpool.pool[thread->kind].list), "thread pool is still empty after insertion");
-      //    }
+    }
 }
 
 /*
