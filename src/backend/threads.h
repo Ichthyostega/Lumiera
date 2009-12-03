@@ -124,6 +124,7 @@ struct lumiera_thread_struct
   // void (*function)(void*);
   // void* arg;
   pthread_t id;
+  // TODO: maybe this condition variable should be renamed when we have a better understanding of how it will be used
   LumieraReccondition finished;
   // the following member could have been called "class" except that it would conflict with C++ keyword
   // as consequence, it's been decided to leave the type name containing the word "class",
