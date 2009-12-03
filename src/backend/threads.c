@@ -93,16 +93,6 @@ static void* pthread_runner (void* thread)
 }
 #endif
 
-static pthread_once_t attr_once = PTHREAD_ONCE_INIT;
-static pthread_attr_t attrs;
-
-static void thread_attr_init (void)
-{
-  pthread_attr_init (&attrs);
-  pthread_attr_setdetachstate (&attrs, PTHREAD_CREATE_DETACHED);
-  //cancel ...
-}
-
 #if 0
 // TODO: rewrite this using lumiera_threadpool_acquire()
 LumieraThread
@@ -171,17 +161,17 @@ LumieraThread
 lumiera_thread_new (enum lumiera_thread_class kind,
                     LumieraReccondition finished,
                     const char* purpose,
-                    struct nobug_flag* flag)
+                    struct nobug_flag* flag,
+                    pthread_attr_t* attrs)
 {
   // TODO: do something with these:
   (void) purpose;
   (void) flag;
   REQUIRE (kind < LUMIERA_THREADCLASS_COUNT, "invalid thread kind specified: %d", kind);
-
-  if (attr_once == PTHREAD_ONCE_INIT)
-    pthread_once (&attr_once, thread_attr_init);
+  REQUIRE (attrs, "invalid pthread attributes structure passed");
 
   //REQUIRE (finished, "invalid finished flag passed");
+
 
   LumieraThread self = lumiera_malloc (sizeof (*self));
   llist_init(&self->node);
@@ -189,9 +179,8 @@ lumiera_thread_new (enum lumiera_thread_class kind,
   self->kind = kind;
   self->state = LUMIERA_THREADSTATE_IDLE;
 
-  //REQUIRE (&attrs);
-  //REQUIRE (&thread_loop);
-  int error = pthread_create (&self->id, &attrs, &thread_loop, self);
+  //REQUIRE (thread_loop);
+  int error = pthread_create (&self->id, attrs, &thread_loop, self);
   ENSURE(error == 0 || EAGAIN == error, "pthread returned %d:%s", error, strerror(error));
   if (error)
     {

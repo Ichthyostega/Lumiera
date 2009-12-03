@@ -139,7 +139,8 @@ LumieraThread
 lumiera_thread_new (enum lumiera_thread_class kind,
                     LumieraReccondition finished,
                     const char* purpose,
-                    struct nobug_flag* flag);
+                    struct nobug_flag* flag,
+                    pthread_attr_t* attrs);
 
 LumieraThread
 lumiera_thread_destroy (LumieraThread self);

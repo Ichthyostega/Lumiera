@@ -61,6 +61,12 @@ lumiera_threadpool_init(unsigned limit)
       threadpool.pool[i].max_threads = limit;
       threadpool.pool[i].working_thread_count = 0;
       threadpool.pool[i].idle_thread_count = 0;
+
+      //TODO: configure each pools' pthread_attrs appropriately
+      pthread_attr_init (&threadpool.pool[i].pthread_attrs);
+      pthread_attr_setdetachstate (&threadpool.pool[i].pthread_attrs, PTHREAD_CREATE_DETACHED);
+      //cancel...
+
       lumiera_mutex_init(&threadpool.pool[i].lock,"pool of threads", &NOBUG_FLAG(threadpool));
     }
 }
@@ -79,6 +85,7 @@ lumiera_threadpool_destroy(void)
       ECHO ("destroying the pool mutex");
       lumiera_mutex_destroy (&threadpool.pool[i].lock, &NOBUG_FLAG (threadpool));
       ECHO ("pool mutex destroyed");
+      pthread_attr_destroy (&threadpool.pool[i].pthread_attrs);
     }
 }
 
@@ -97,7 +104,8 @@ lumiera_threadpool_acquire_thread(enum lumiera_thread_class kind,
       if (threadpool.pool[kind].working_thread_count
           + threadpool.pool[kind].idle_thread_count
           < threadpool.pool[kind].max_threads) {
-        ret = lumiera_thread_new (kind, NULL, purpose, flag);
+        ret = lumiera_thread_new (kind, NULL, purpose, flag,
+                                  &threadpool.pool[kind].pthread_attrs);
         threadpool.pool[kind].working_thread_count++;
         ENSURE (ret, "did not create a valid thread");
       }

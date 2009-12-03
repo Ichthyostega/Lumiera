@@ -74,6 +74,7 @@ struct lumiera_threadpool_struct
     unsigned max_threads;
     unsigned working_thread_count;
     unsigned idle_thread_count;
+    pthread_attr_t pthread_attrs;
   } pool[LUMIERA_THREADCLASS_COUNT];
 };
 
