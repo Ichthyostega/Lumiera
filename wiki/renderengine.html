@@ -777,7 +777,7 @@ config.macros.timeline.handler = function(place,macroName,params,wikifier,paramS
 }
 //}}}</pre>
 </div>
-<div title="BindingMO" modifier="Ichthyostega" modified="200911291715" created="200905210144" tags="def design discuss SessionLogic" changecount="6">
+<div title="BindingMO" modifier="Ichthyostega" modified="200912080304" created="200905210144" tags="def design discuss SessionLogic" changecount="9">
 <pre>Sometimes, two entities within the [[Session]] are deliberately associated, and this association has to carry some specific mappings between properties or facilities within the entities to be linked together. When this connection isn't just the [[Placement]] of an object, and isn't just a logical or structural relationship either &amp;mdash; then we create an explicit Binding object to be stored into the session.
 * When connecting a [[Sequence|EDL]] to a certain [[Timeline]], we also establish a mapping between the possible media stream channels produced by the sequence and the real output slots found within the timeline.
 * similarly, using a sequence within a [[meta-clip|VirtualClip]] requires to remember such a mapping.
@@ -789,6 +789,16 @@ Binding is a relation entity, maintaining a link between parts of the session. T
 This creates a typing related problem: In order to maintain the link and the mappings, in each case we need a common denominator to subsume the elements to be maintained.
 * in the case of the basic link, this common denominator is given by the basic structure of the HighLevelModel: ~MObjects attached by ~Placements. Consequently, the link maintained through a binding is limited to linking together first-class entities within the model, and the implementation is tied into the existing mechanisms for associating Placements (&amp;rarr; PlacementScope and PlacementIndex)
 * in the case of the attached mappings it seems we're best off limiting ourselves to symbolic mappings (ID mappings). Because, going beyond that would either create sub-groupings (based on varying target types to be mapped), or push the »everything is an object« approach beyond the beneficial level.
+
+!Critique {{red{WIP 12/09}}}
+Now I'm in doubt if there is any point in treating the &quot;binding&quot; in a abstract fashion. Is there any common denominator? It seems there is just a common conceptional pattern, but mapping this pattern onto distinct types (classes) seems unnecessary. Rather, we have tree very similar MObjects:
+* ModelRootMO
+* BindingMO
+* [[Track]]
+While each of these actually represents a high-level concept (the session, the timeline(s) the sequence(s)) and moreover links to other parts and provides mappings, it seems there is no re-usable similarity at the code level.
+//According to this reasoning, I should proceed rather with these tree distinct entities and postpone any saearch for similarities to a later refactoring round.//
+
+&amp;rarr; see also SessionInterface
 
 !Implementation
 On the implementation side, we use a special kind of MObject, acting as an anchor and providing an unique identity. Like any ~MObject, actually a placement establishes the connection and the scope, and typically constitutes a nested scope (e.g. the scope of all objects //within// the sequence to be bound into a timeline)
@@ -2317,6 +2327,9 @@ For the case here in question this seems to be the ''resource allocation is cons
 And, last but not least, doing large scale allocations is the job of the backend. Exceptions being long-lived objects, like the Session or the EDL, which are created once and don't bear the danger of causing memory pressure. Besides, the ProcLayer code shouldn't issue &quot;new&quot; and &quot;delete&quot; when it comes in hand, rather it should use some centralized [[Factories]] for all allocation and freeing, so we can redirect these calls down to the backend, which may use pooling or special placement allocators or the like. The rationale is, for modern hardware/architectures, care has to be taken with heap allocations, esp. with many small objects and irregular usage patterns.
 </pre>
 </div>
+<div title="ModelRootMO" modifier="Ichthyostega" created="200912080307" tags="def" changecount="1">
+<pre>A special kind of MObject, serving as a marker or entry point at the root of the HighLevelModel. As any ~MObject, it is attached to the model by a [[Placement]]. And in this special case, this placement froms the ''root scope'' of the model, thus containing any other PlacementScope (e.g. tracks, clips with effects,...)</pre>
+</div>
 <div title="MultichannelMedia" modifier="Ichthyostega" modified="200710212326" created="200709200255" tags="design img" changecount="6">
 <pre>Based on practical experiences, Ichthyo tends to consider Multichannel Media as the base case, while counting media files providing just one single media stream as exotic corner cases. This may seem counter intuitive at first sight; you should think of  it as an attempt to avoid right from start some of the common shortcomings found in many video editors, especially
 * having to deal with keeping a &quot;link&quot; between audio and video clips
@@ -3015,12 +3028,12 @@ The GUI can connect the viewer(s) to some pipe (and moreover can use [[probe poi
 
 </pre>
 </div>
-<div title="PipeHandling" modifier="Ichthyostega" modified="200805250303" created="200801101352" tags="spec" changecount="11">
+<div title="PipeHandling" modifier="Ichthyostega" modified="200912080210" created="200801101352" tags="spec" changecount="12">
 <pre>!Identification
 Pipes are distinct objects and can be identified by their asset ~IDs. Besides, as for all [[structural assets|StructAsset]] there are extended query capabilities, including a symbolic pipe-id and a media (stream) type id. Any pipe can accept and deliver exactly one media stream kind (which may be inherently structured though, e.g. spatial sound systems or stereoscopic video)
 
 !creating pipes
-Pipe assets are created automatically by being used and referred. The [[Session]] holds a collection of global pipes ({{red{todo: implementation missing as of 5/08}}}), and further pipes can be created by using a new pipe reference in some placement. Moreover, every clip has an (implicit) [[source port|ClipSourcePort]], which will appear as pipe asset when first used (referred) while [[building|BuildProcess]]. Note that creating a new pipe implies using a [[processing pattern|ProcPatt]], which will be queried from the [[Defaults Manager|DefaultsManagement]] (resulting in the use of some preconfigured pattern or maybe the creation of a new ProcPatt object if necessary)
+Pipe assets are created automatically by being used and referred. Each [[Timeline]] holds a collection of global pipes, attached to the BindingMO, which is the representation or attachement point of the Timeline within the HighLevelModel ([[Session]]) ({{red{todo: implementation missing as of 11/09}}}), and further pipes can be created by using a new pipe reference in some placement. Moreover, every clip has an (implicit) [[source port|ClipSourcePort]], which will appear as pipe asset when first used (referred) while [[building|BuildProcess]]. Note that creating a new pipe implies using a [[processing pattern|ProcPatt]], which will be queried from the [[Defaults Manager|DefaultsManagement]] (resulting in the use of some preconfigured pattern or maybe the creation of a new ProcPatt object if necessary)
 
 !removal
 Deleting a Pipe is an advanced operation, because it includes finding and &quot;detaching&quot; all references, otherwise the pipe will leap back into existence immediately. Thus, global pipe entries in the Session and pipe references in [[locating pins|LocatingPin]] within any placement have to be removed, while clips using a given source port will be disabled. {{red{todo: implementation deferred}}}
@@ -4025,7 +4038,7 @@ Currently as of 5/09, this is an ongoing [[implementation and planning effort|Pl
 
 {{red{TODO...}}}</pre>
 </div>
-<div title="SessionInterface" modifier="Ichthyostega" modified="200910171721" created="200904242108" tags="SessionLogic GuiIntegration design draft discuss" changecount="9">
+<div title="SessionInterface" modifier="Ichthyostega" modified="200912080304" created="200904242108" tags="SessionLogic GuiIntegration design draft discuss" changecount="11">
 <pre>&quot;Session Interface&quot;, when used in a more general sense, denotes a compound of several interfaces and facilities, together forming the primary access point to the user visible contents and state of the editing project.
 * the API of the session class
 * the accompanying management interface (SessionManager API)
@@ -4040,7 +4053,15 @@ Currently as of 5/09, this is an ongoing [[implementation and planning effort|Pl
 ** Automation
 * the [[command|CommandHandling]] interface, including the [[UNDO|UndoManager]] facility
 
-{{red{WIP ... just emerging}}}</pre>
+{{red{WIP ... just emerging}}}
+
+!generic and explicit API
+The HighLevelModel exposes two kinds of interfaces (which are interconnected btw): A generic, but somewhat low-level API, which is good for processing, and a more explicit API providing access to some meaningful entities within the model. Indeed, the latter (explicit top level entities) can be seen as a ''facade interface'' to the generic structures:
+* the [[Session]] object itself corresponds to the ModelRootMO
+* the one (or multiple) [[Timeline]] objects correspond to the BindingMO instances attached immediately below the model root
+* the [[sequences|EDL]] bound into these timelines (by the ~BindingMOs) correspond to the top level [[Track]]-~MObjects within each of these sequences.
+Thus, there is a convenient and meaningful access path through these facade objects, which of course actually is implemented by forwarding to the actual model elements (root, bindings, tracks)
+</pre>
 </div>
 <div title="SessionLifecycle" modifier="Ichthyostega" modified="200911090647" created="200911070329" tags="SessionLogic spec" changecount="21">
 <pre>The current [[Session]] is the root of any state found within Proc-Layer. Thus, events defining the session's lifecycle influence and synchronise the cooperative behaviour of the entities within the model, the ProcDispatcher, [[Fixture]] and any facility below.
@@ -5685,11 +5706,12 @@ Of course, we can place other ~MObjects relative to some track (that's the main 
 &amp;rarr; [[Anatomy of the high-level model|HighLevelModel]]
 </pre>
 </div>
-<div title="TrackHandling" modifier="Ichthyostega" modified="200804110259" created="200804110013" tags="spec" changecount="23">
+<div title="TrackHandling" modifier="Ichthyostega" modified="200912080302" created="200804110013" tags="spec" changecount="24">
 <pre>What //exactly&amp;nbsp;// is denoted by &amp;raquo;Track&amp;laquo; &amp;mdash; //basically&amp;nbsp;// a working area to group media objects placed at this track at various time positions &amp;mdash; varies depending on context:
 * viewed as [[structural asset|StructAsset]], tracks are nothing but global identifiers (possibly with attached tags and description)
 * regarding the structure //within each [[EDL]],// tracks form a tree-like grid, the individual track being attached to this tree by a [[Placement]], thus setting up properties of placement (time reference origin, output connection, layer, pan) which will be inherited down to any objects located on this track and on child tracks, if not overridden more locally.
 * with respect to //object identity,// a given track-ID can have an incarnation or manifestation as real track-object within several [[EDLs|EDL]] (meaning you could select, disable or choose for rendering all objects in any EDL placed onto this track). Moreover, the track-//object// and the //placement&amp;nbsp;// of this track within the tree of tracks of a given EDL are two distinguishable entities (meaning a given track &amp;mdash; with a couple of objects located on it &amp;mdash; could be placed differently several times within the same EDL, for example with different start offset or with different layering, output mode or pan position)
+{{red{WARNING: as of 11/09, the meaning and relations are rather reverted}}}... EDL == Sequence and holds the track tree.
 
 !Identification
 Tracks thus represent a blend of several concepts, but depending on the context it is allways clear which aspect is meant. Seen as [[assets|Asset]], tracks are known by a unique track-ID, which can be either [[queried|ConfigQuery]], or directly refered to by use of the asset-ID (which is a globally known hash). Usually, all referrals are via track-ID, including when you [[place|Placement]] an object onto a track. 
