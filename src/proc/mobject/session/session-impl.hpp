@@ -82,7 +82,7 @@ namespace session {
       vector<EDL> edls;
       PFix fixture;
       
-      shared_ptr<PlacementIndex> pIdx_;
+      PlacementIndex pIdx_;
       
       scoped_ptr<DefsManager> defaultsManager_;   ///////////TODO: later, this will be the real defaults manager. Currently this is just never initialised (11/09)
       
@@ -103,10 +103,10 @@ namespace session {
       void clear ();
       friend class SessManagerImpl;
       
-      PPIdx const&
+      PlacementIndex&
       getPlacementIndex()
         {
-          ENSURE (pIdx_);
+          ENSURE (pIdx_.isValid());
           return pIdx_;
         }
       
@@ -166,23 +166,23 @@ namespace session {
   struct ServiceAccessPoint<SessionServiceMockIndex, IMPL>
     : IMPL
     {
-      PPIdx const&
+      PlacementIndex&
       getPlacementIndex()
         {
-          if (mockIndex_)
-            return mockIndex_;
+          if (mockIndex_ && mockIndex_->isValid())
+            return *mockIndex_;
           else
             return IMPL::getPlacementIndex();
         }
       
       void
-      reset_PlacementIndex (PPIdx const& alternativeIndex)
+      reset_PlacementIndex (PlacementIndex* alternativeIndex =0)
       {
         mockIndex_ = alternativeIndex;
       }
       
     private:
-      PPIdx mockIndex_;
+      PlacementIndex* mockIndex_;
     };
   
   

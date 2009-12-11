@@ -61,11 +61,30 @@ namespace session {
   }
   
   
+  namespace { // deleter function to clean up test/mock PlacementIndex
+    void
+    remove_testIndex (PlacementIndex* testIdx)
+    {
+      REQUIRE (testIdx);
+      SessionImplAPI::current->reset_PlacementIndex();  // restore default Index from Session
+      
+      testIdx->clear();
+      ASSERT (0 == testIdx->size());
+      delete testIdx;
+    }
+  }
+  
   /** Re-define the implicit PlacementIndex temporarily, e.g. for unit tests. */
-  void
-  SessionServiceMockIndex::reset_PlacementIndex (PPIdx const& alternativeIndex)
+  PPIdx
+  SessionServiceMockIndex:: install ()
   {
-    return SessionImplAPI::current->reset_PlacementIndex (alternativeIndex);
+    PPIdx mockIndex (new PlacementIndex(), &remove_testIndex); // manage instance lifecycle
+    ENSURE (mockIndex);
+    ENSURE (mockIndex->isValid());
+    ENSURE (1 == mockIndex.use_count());
+    
+    SessionImplAPI::current->reset_PlacementIndex (*mockIndex);
+    return mockIndex;
   }
   
   

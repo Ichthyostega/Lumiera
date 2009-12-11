@@ -49,6 +49,7 @@ namespace test    {
   using session::Clip;
   
   using session::SessionServiceMockIndex;  
+  
 
   
   /***************************************************************************
@@ -89,10 +90,8 @@ namespace test    {
           
 #if false  //////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET 384  !!!!!!!!!
           // Prepare an (test)Index
-          typedef shared_ptr<PlacementIndex> PIdx;
-          PIdx index (PlacementIndex::create());
+          PPIdx index = SessionServiceMockIndex::install();
           PMO& root = index->getRoot();
-          SessionServiceMockIndex::reset_PlacementIndex (index);
           
           // Add the Clips to "session"
           index->insert (pClip1, root);
@@ -128,10 +127,12 @@ namespace test    {
           index->remove (pClip1);
           index->remove (pClip2);
           ASSERT (0 == index->size());
+          ASSERT (1 == index.use_count());
           ASSERT (2 == pClip1.use_count());
           ASSERT (2 == pClip2.use_count());
+          index.reset();
 #endif ////////////////////////////////////////////////////////////////////////////////////////TODO lots of things unimplemented.....!!!!!
-          SessionServiceMockIndex::reset_PlacementIndex();
+
         }
       
       

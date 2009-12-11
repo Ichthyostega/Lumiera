@@ -32,23 +32,9 @@ namespace session {
 namespace test    {
   
   
-  namespace { // deleter function to clean up Test fixture
-    void
-    remove_testIndex (PlacementIndex* testIdx)
-    {
-      REQUIRE (testIdx);
-      testIdx->clear();
-      ASSERT (0 == testIdx->size());
-      SessionServiceMockIndex::reset_PlacementIndex();  // restore default Index from Session
-      
-      delete testIdx;
-    }
-  }
-  
-  
-  /** @note when this object goes out of scope, the activation of this
-   *        test PlacementIndex will be cleared automatically, and the
-   *        default Index within the session will be re-activated. 
+  /** @note this dummy index isn't actively connected to the session;
+   *        the unit tests rely on this dummy index containing
+   *        a specific tree structure of test-dummy MObjects. 
    */
   PPIdx
   build_testScopes()
@@ -64,8 +50,8 @@ namespace test    {
     PDum ps3(*new TestSubMO1);
     
     // Prepare an (test)Index backing the PlacementRefs
-    PPIdx index (PlacementIndex::create().get(), &remove_testIndex); // taking ownership
-    SessionServiceMockIndex::reset_PlacementIndex(index);
+    PPIdx index (SessionServiceMockIndex::install());
+    
     PMO& root = index->getRoot();
 
     typedef PMO::ID ID;

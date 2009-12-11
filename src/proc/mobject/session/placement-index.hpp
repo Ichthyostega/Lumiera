@@ -51,12 +51,10 @@
 //#include "proc/asset/pipe.hpp"
 #include "lib/util.hpp"
 #include "lib/error.hpp"
-#include "lib/factory.hpp"
 #include "lib/itertools.hpp"
 #include "proc/mobject/placement.hpp"
 #include "proc/mobject/placement-ref.hpp"
 
-#include <tr1/memory>
 #include <tr1/unordered_map>
 #include <boost/noncopyable.hpp>
 #include <boost/scoped_ptr.hpp>
@@ -74,13 +72,9 @@ namespace session {
   LUMIERA_ERROR_DECLARE (NONEMPTY_SCOPE);   ///< Placement scope (still) contains other elements
   
   
-  using lib::factory::RefcountFac;
-  using std::tr1::shared_ptr;
   using boost::scoped_ptr;
   
   
-  class PlacementIndex;
-  typedef shared_ptr<PlacementIndex> PPIdx;
   
   /**
    * Structured compound of Placement instances
@@ -134,6 +128,8 @@ namespace session {
       bool contains (PlacementMO const&)          const;
       bool contains (ID)                          const;
       
+      bool isValid()                              const;
+      
       
       
       
@@ -144,18 +140,13 @@ namespace session {
       bool remove (ID);
       
       
-      typedef RefcountFac<PlacementIndex> Factory;
       
-      static Factory create;
-      
-      ~PlacementIndex();
+      PlacementIndex() ;
+     ~PlacementIndex() ;
       
       void clear();
       
     protected:
-      PlacementIndex() ;
-      
-      friend class lib::factory::Factory<PlacementIndex, lib::factory::Wrapper<PlacementIndex, shared_ptr<PlacementIndex> > >;
     };
   
   

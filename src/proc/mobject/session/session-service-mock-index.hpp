@@ -24,10 +24,16 @@
 /** @file session-service-mock-index.hpp
  ** Implementation level session API: PlacementIndex mock for tests.
  ** Allows (temporarily) to replace the real Placement index within
- ** the session by a mock instance handed in through this API. Unit
- ** tests may use this \em backdoor to set up a specially prepared 
- ** index to verify the behaviour of Placement and Scope resolution
- ** operations.
+ ** the session by a mock instance installed and provided through
+ ** this API. Unit tests may use this \em backdoor to set up a
+ ** specially prepared index to verify the behaviour of Placement
+ ** and Scope resolution operations.
+ ** 
+ ** The test/mock instance of the placement index obtained by this API
+ ** is \em not wired with the session. Rather it is managed by smart-ptr.
+ ** When the last smart-ptr instance goes out of scope, the test index
+ ** instance will be shut down and removed, thereby uncovering the 
+ ** original PlacementIndex living within the session.
  ** 
  ** @see session-impl.hpp implementation of the service
  ** @see session-services.cpp implementation of access
@@ -39,8 +45,8 @@
 #define MOBJECT_SESSION_SESSION_SERVICE_MOCK_INDEX_H
 
 #include "proc/mobject/session/placement-index.hpp"
-//#include "proc/mobject/session.hpp"
-//#include "lib/meta/generator.hpp"
+
+#include <tr1/memory>
 
 
 
@@ -48,22 +54,22 @@
 namespace mobject {
 namespace session {
   
-//  using lumiera::typelist::InstantiateChained;
-//  using lumiera::typelist::InheritFrom;
-//  using lumiera::typelist::NullType;
+  typedef std::tr1::shared_ptr<PlacementIndex> PPIdx;
   
 
   /** there is an implicit PlacementIndex available on a global level,
    *  by default implemented within the current session. This Service
-   *  to re-define this implicit index temporarily, e.g. for unit tests.
-   *  @param alternativeIndex alternative Index instance to install. 
-   *         when \c NIL, then restore access to the PlacementIndex
-   *         instance always available within the SessionImpl
+   *  temporarily overlays a newly created mock instance, e.g. for tests.
+   *  @return smart-ptr managing a newly created mock index instance.
+   *         Any implicit access to the session's placement index will
+   *         be redirected to that instance. When the smart-ptr reaches
+   *         use-count zero, access to the original PlacementIndex
+   *         will be restored.
    */
   class SessionServiceMockIndex
     {
     public:
-      static void reset_PlacementIndex (PPIdx const& alternativeIndex =PPIdx());
+      static PPIdx install ();
     };
   
   

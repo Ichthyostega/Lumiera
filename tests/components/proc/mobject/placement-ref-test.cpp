@@ -68,10 +68,8 @@ namespace test    {
           p2.chain(Time(2));         // define start time of Placement-2 to be at t=2
           
           // Prepare an (test)Index backing the PlacementRefs
-          typedef shared_ptr<PlacementIndex> PIdx;
-          PIdx index (PlacementIndex::create());
+          PPIdx index = SessionServiceMockIndex::install();
           PMO& root = index->getRoot();
-          SessionServiceMockIndex::reset_PlacementIndex(index);
           
           index->insert (p1, root);
           index->insert (p2, root);
@@ -180,7 +178,8 @@ namespace test    {
 
           //consistency check; then reset PlacementRef index to default
           ASSERT (0 == index->size());
-          SessionServiceMockIndex::reset_PlacementIndex();
+          ASSERT (1 == index.use_count());
+          index.reset();
         }
     };
   
