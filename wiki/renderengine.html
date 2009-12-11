@@ -777,7 +777,7 @@ config.macros.timeline.handler = function(place,macroName,params,wikifier,paramS
 }
 //}}}</pre>
 </div>
-<div title="BindingMO" modifier="Ichthyostega" modified="200912080304" created="200905210144" tags="def design discuss SessionLogic" changecount="9">
+<div title="BindingMO" modifier="Ichthyostega" modified="200912110235" created="200905210144" tags="def design discuss SessionLogic" changecount="10">
 <pre>Sometimes, two entities within the [[Session]] are deliberately associated, and this association has to carry some specific mappings between properties or facilities within the entities to be linked together. When this connection isn't just the [[Placement]] of an object, and isn't just a logical or structural relationship either &amp;mdash; then we create an explicit Binding object to be stored into the session.
 * When connecting a [[Sequence|EDL]] to a certain [[Timeline]], we also establish a mapping between the possible media stream channels produced by the sequence and the real output slots found within the timeline.
 * similarly, using a sequence within a [[meta-clip|VirtualClip]] requires to remember such a mapping.
@@ -791,7 +791,7 @@ This creates a typing related problem: In order to maintain the link and the map
 * in the case of the attached mappings it seems we're best off limiting ourselves to symbolic mappings (ID mappings). Because, going beyond that would either create sub-groupings (based on varying target types to be mapped), or push the »everything is an object« approach beyond the beneficial level.
 
 !Critique {{red{WIP 12/09}}}
-Now I'm in doubt if there is any point in treating the &quot;binding&quot; in a abstract fashion. Is there any common denominator? It seems there is just a common conceptional pattern, but mapping this pattern onto distinct types (classes) seems unnecessary. Rather, we have tree very similar MObjects:
+Now I'm in doubt if there is any point in treating the &quot;binding&quot; in a abstract fashion. Is there any common denominator? It seems there is just a common conceptional pattern, but mapping this pattern onto distinct types (classes) seems unnecessary. Rather, we have three very similar kinds of ~MObjects:
 * ModelRootMO
 * BindingMO
 * [[Track]]
@@ -2327,8 +2327,14 @@ For the case here in question this seems to be the ''resource allocation is cons
 And, last but not least, doing large scale allocations is the job of the backend. Exceptions being long-lived objects, like the Session or the EDL, which are created once and don't bear the danger of causing memory pressure. Besides, the ProcLayer code shouldn't issue &quot;new&quot; and &quot;delete&quot; when it comes in hand, rather it should use some centralized [[Factories]] for all allocation and freeing, so we can redirect these calls down to the backend, which may use pooling or special placement allocators or the like. The rationale is, for modern hardware/architectures, care has to be taken with heap allocations, esp. with many small objects and irregular usage patterns.
 </pre>
 </div>
-<div title="ModelRootMO" modifier="Ichthyostega" created="200912080307" tags="def" changecount="1">
-<pre>A special kind of MObject, serving as a marker or entry point at the root of the HighLevelModel. As any ~MObject, it is attached to the model by a [[Placement]]. And in this special case, this placement froms the ''root scope'' of the model, thus containing any other PlacementScope (e.g. tracks, clips with effects,...)</pre>
+<div title="ModelRootMO" modifier="Ichthyostega" modified="200912110245" created="200912080307" tags="def" changecount="5">
+<pre>A special kind of MObject, serving as a marker or entry point at the root of the HighLevelModel. As any ~MObject, it is attached to the model by a [[Placement]]. And in this special case, this placement froms the ''root scope'' of the model, thus containing any other PlacementScope (e.g. tracks, clips with effects,...)
+
+This special ''session root object'' provides a link between the model part and the &amp;raquo;bookkeeping&amp;laquo; part of the session, i.e. the [[assets|Asset]]. It is created and maintained by the session (implementation level) &amp;mdash; allowing to store and load the asset definitions as contents of the model root element.
+
+__Note__: nothing within the PlacementIndex requires the root object to be of a specific type; the index just assumes a {{{Placement&lt;MObject&gt;}}} (or subclass) to exist as root element. And indeed, for several unit tests we create an Index mock with a tree of dummy ~MObjects and temporarily shaddow the &quot;real&quot; PlacementIndex by this mock (&amp;rarr; see SessionServices for the API allowing to access this //mock index//- functionality)
+
+</pre>
 </div>
 <div title="MultichannelMedia" modifier="Ichthyostega" modified="200710212326" created="200709200255" tags="design img" changecount="6">
 <pre>Based on practical experiences, Ichthyo tends to consider Multichannel Media as the base case, while counting media files providing just one single media stream as exotic corner cases. This may seem counter intuitive at first sight; you should think of  it as an attempt to avoid right from start some of the common shortcomings found in many video editors, especially
@@ -3093,7 +3099,7 @@ Placements have //value semantics,// i.e. we don't stress the identity of a plac
 
 </pre>
 </div>
-<div title="PlacementIndex" modifier="Ichthyostega" modified="200911271655" created="200905090053" tags="SessionLogic spec impl draft" changecount="18">
+<div title="PlacementIndex" modifier="Ichthyostega" modified="200912110239" created="200905090053" tags="SessionLogic spec impl draft" changecount="20">
 <pre>An implementation facility used to keep track of individual Placements and their relations.
 Especially, the [[Session]] maintains such an index, allowing to use the (opaque) PlacementRef tags for referring to a specific &quot;instance&quot; of an MObject, //placed// in a unique way into the current session. And, moreover, this index allows for one placement referring to another placement, so to implement a //relative// placement mode. Because there is an index behind the scenes, it is possible to actually access such a referral in the reverse direction, which is necessary for implementing the desired placement behaviour (if an object instance used as anchor is moved, all objects placed relatively to it have to move accordingly, which necessitates finding those other objects).
 
@@ -3127,7 +3133,7 @@ The placement index is utilized by editing operations and by executing the build
 On second sight, this problem turns out to be more involved, because either we have to keep a second index table for the reverse lookup (memory address -&gt; ID), or have to tie the placement by a back-link when adding it to the index/session data structure, or (alternatively) it forces us to store a copy of the ID //within// the placement itself. The last possibility seems to create the least impact; but implementing it this way effectively gears the implementation towards a hashtable based approach.
 
 !!!Handling of Subtypes
-While usually type relations don't carry over to smart-poitner like types, in case of Placement I used a special definition pattern to artificially create such type relations. Now, as we're going to copy and maintain Placements within the storage backing the index, the question is: do we actually store subtypes (all having the same size btw) or do we use a vtable based mechanism to recover the type information on access?
+While usually type relations don't carry over to smart-poitner like types, in case of Placement I used a special definition pattern to artificially create such type relations ({{{Placement&lt;session::Clip&gt;}}} is subclass of {{{Placement&lt;MObject&gt;}}}). Now, as we're going to copy and maintain Placements within the storage backing the index, the question is: do we actually store subtypes (all having the same size btw) or do we use a vtable based mechanism to recover the type information on access?
 
 Actually, the handling of placement types quite flexible; the actual hierarchy of Placement types can be determined in the //usage context// &amp;mdash; it is not really stored within the placement, and there is no point in storing it within the index. Only the type of the //pointee//&amp;nbsp; can be checked with the help of Placement's vtable.
 
