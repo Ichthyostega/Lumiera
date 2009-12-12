@@ -20,29 +20,54 @@
  
 */
 
+/** @file applicable-builder-target-types.hpp
+ ** Declaration of all kinds of MObjects to be treated by some "Builder tool".
+ ** This is part of Lumiera's visitation mechanism: Individual MObject subclasses
+ ** may declare by the \c DEFINE_PROCESSABLE_BY macro to be specifically processable
+ ** by a builder tool (visitor). On the other hand, any concrete builder tool (visitor)
+ ** is free to define a \c treat(Type) function for each of these specific subclasses.
+ ** If the tool doesn't define such a specific \c treat(..) function, the next suitable
+ ** function for a supertype will be used.
+ ** 
+ ** Now there needs to be \em one location where all the specific kinds of treat-able
+ ** MObjects are declared together (in a typelist). Moreover, we need the full declaration
+ ** of these classes. This is the catch of using the visitor pattern. Thus, any class
+ ** to be treated \em specifically (as opposed to be just treated through a supertype
+ ** or super interface) has two liabilities:
+ ** - DEFINE_PROCESSABLE_BY
+ ** - declare the type here in this file, including the header.
+ ** 
+ ** @note actually the ApplicableBuilderTargetTypes template, when used (as a baseclass
+ **       of any concrete builder tool, causes the generation of the necessary
+ **       dispatcher tables used by our visitor implementation.
+ **       
+ ** @see buildertool.hpp
+ ** @see buildertooltest.hpp
+ ** @see nodecreatertool.hpp
+ */
+
+
 
 #ifndef MOBJECT_BUILDER_APPLICABLEBUILDERTARGETTYPES_H
 #define MOBJECT_BUILDER_APPLICABLEBUILDERTARGETTYPES_H
 
 #include "proc/mobject/builder/buildertool.hpp"
 
+// NOTE:  need to include *all* classes using DEFINE_PROCESSABLE_BY(BuilderTool)
+#include "proc/mobject/session/root.hpp"
+#include "proc/mobject/session/clip.hpp"
+#include "proc/mobject/session/effect.hpp"
+#include "proc/mobject/session/auto.hpp"
+
+                                        /////////////////////////////////TICKET #414
+
 
 
 namespace mobject {
-  namespace session {
-    
-    class Clip;
-    class Effect;
-    class AbstractMO;
-    template<class VAL> class Auto;
-    // Forward declarations sufficient here...
-    // actual definitions necessary only in the
-    // implementation file (*cpp) of the builder tool.
-  }
+namespace builder {
   
-  namespace builder {
-  
-    typedef Types< session::Clip, 
+    typedef Types< session::Root, 
+                   session::Clip, 
                    session::Effect,
                    session::AbstractMO
                  > ::List
@@ -65,7 +90,5 @@ namespace mobject {
     
     
     
-  } // namespace mobject::builder
-
-} // namespace mobject
+}} // namespace mobject::builder
 #endif

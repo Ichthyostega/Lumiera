@@ -25,7 +25,7 @@
 #define MOBJECT_BUILDER_NODECREATORTOOL_H
 
 
-#include "proc/mobject/builder/applicablebuildertargettypes.hpp"
+#include "proc/mobject/builder/applicable-builder-target-types.hpp"
 
 #include "proc/engine/rendergraph.hpp"
 
@@ -66,7 +66,7 @@ namespace builder {
       virtual void treat (mobject::session::Auto<double>& automation) ;  //TODO: the automation-type-problem
       virtual void treat (mobject::Buildable& something) ;
       
-      void onUnknown (Buildable& target) ;             /////////TODO why doesn't the treat(Buildable) function shaddow this??
+      void onUnknown (Buildable& target) ;             /////////TODO why doesn't the treat(Buildable) function shadow this??
     };
   
   

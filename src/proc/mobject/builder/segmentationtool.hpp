@@ -25,7 +25,7 @@
 #define MOBJECT_BUILDER_SEGMENTATIONTOOL_H
 
 
-#include "proc/mobject/builder/applicablebuildertargettypes.hpp"
+#include "proc/mobject/builder/applicable-builder-target-types.hpp"
 
 #include "proc/mobject/session/segmentation.hpp"
 #include "proc/mobject/session/fixture.hpp"   //////TODO really on the header??
@@ -59,7 +59,7 @@ namespace mobject {
 
         void treat (mobject::Buildable& something) ;
         
-        void onUnknown (Buildable& target) ;             /////////TODO why doesn't the treat(Buildable) function shaddow this??
+        void onUnknown (Buildable& target) ;             /////////TODO why doesn't the treat(Buildable) function shadow this??
         
         bool empty()  const;
 
