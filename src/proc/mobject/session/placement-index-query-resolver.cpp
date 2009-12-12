@@ -43,6 +43,7 @@ namespace session {
   typedef Goal::QueryID QueryID;
   typedef QueryID const& QID;
   
+  typedef PlacementIndex& PIdx;
   typedef PlacementIndex::iterator PIter;
   
   /** @note all of this search implementation works on Placement<MObject> refs.
@@ -109,7 +110,7 @@ namespace session {
   class DeepExplorer
     : public Explorer
     {
-      PPIdx index_;
+      PIdx index_;
       std::stack<PIter> scopes_;
       
       bool
@@ -126,12 +127,12 @@ namespace session {
           REQUIRE (!scopes_.empty() && scopes_.top());
           Pla& pos = *scopes_.top();
           ++scopes_.top();
-          scopes_.push(index_->getReferrers(pos.getID()));
+          scopes_.push(index_.getReferrers(pos.getID()));
           return pos;
         }
       
     public:
-      DeepExplorer(PIter start, PPIdx idx)
+      DeepExplorer(PIter start, PIdx idx)
         : index_(idx)
         {
           scopes_.push(start);
@@ -146,7 +147,7 @@ namespace session {
   class UpExplorer
     : public Explorer
     {
-      PPIdx index_;
+      PIdx index_;
       Pla* tip_;
       
       bool
@@ -160,14 +161,14 @@ namespace session {
         {
           REQUIRE (tip_);
           Pla& pos = *tip_;
-          tip_ = &index_->getScope(*tip_);
+          tip_ = &index_.getScope(*tip_);
           if (tip_ == &pos)
             tip_ = 0;
           return pos;
         }
       
     public:
-      UpExplorer(Pla& start, PPIdx idx)
+      UpExplorer(Pla& start, PIdx idx)
         : index_(idx)
         , tip_(&start)
         { }
@@ -277,7 +278,7 @@ namespace session {
   
   
   
-  PlacementIndexQueryResolver::PlacementIndexQueryResolver (PPIdx theIndex)
+  PlacementIndexQueryResolver::PlacementIndexQueryResolver (PIdx theIndex)
     : index_(theIndex)
     {
       defineHandling<MObject>();
@@ -346,10 +347,10 @@ namespace session {
   {
     switch (direction)
       {
-      case CONTENTS:  return new DeepExplorer(index_->getReferrers(startID), index_);
-      case CHILDREN:  return new ChildExplorer(index_->getReferrers(startID));
-      case PARENTS:   return new UpExplorer(index_->getScope(startID),index_);
-      case PATH:      return new UpExplorer(index_->find(startID),index_);
+      case CONTENTS:  return new DeepExplorer(index_.getReferrers(startID), index_);
+      case CHILDREN:  return new ChildExplorer(index_.getReferrers(startID));
+      case PARENTS:   return new UpExplorer(index_.getScope(startID),index_);
+      case PATH:      return new UpExplorer(index_.find(startID),index_);
       
       default:
         throw lumiera::error::Invalid("unknown query direction");    //////TICKET #197

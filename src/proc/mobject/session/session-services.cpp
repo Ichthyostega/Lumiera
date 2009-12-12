@@ -83,7 +83,7 @@ namespace session {
     ENSURE (mockIndex->isValid());
     ENSURE (1 == mockIndex.use_count());
     
-    SessionImplAPI::current->reset_PlacementIndex (*mockIndex);
+    SessionImplAPI::current->reset_PlacementIndex (mockIndex.get());
     return mockIndex;
   }
   

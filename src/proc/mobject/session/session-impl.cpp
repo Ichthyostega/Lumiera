@@ -28,14 +28,15 @@
 namespace mobject {
 namespace session {
   
-  /////////////////////////////////////////TODO temporary hack
+  /////////////////////////////////////////TODO temporary hack: use Meyer's singleton
   namespace {
     DefsManager&
     getDummyDefaultsManager()
     {
-      static scoped_ptr<DefsManager> dummyDefaultsManagerInstance(new DefsManager);
+      static scoped_ptr<DefsManager> dummyInstance(0);
+      if (!dummyInstance) dummyInstance.reset (new DefsManager);
       
-      return *dummyDefaultsManagerInstance;
+      return *dummyInstance;
     }
   }
   /////////////////////////////////////////TODO temporary hack
@@ -51,7 +52,7 @@ namespace session {
       focusEDL_(0),
       edls(1),
       fixture(new Fixture),
-      pIdx_(PlacementIndex::create())
+      pIdx_() /////////////////////////////////////////////TODO
     {
     }
   

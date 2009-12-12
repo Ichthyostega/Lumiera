@@ -37,10 +37,10 @@ namespace mobject {
 namespace session {
 namespace test    {
   
-  using std::tr1::shared_ptr;
-  
   using namespace mobject::test;
   typedef TestPlacement<DummyMO> PDum;
+  
+  typedef std::tr1::shared_ptr<PlacementIndex> PPIdx;
   
   
   

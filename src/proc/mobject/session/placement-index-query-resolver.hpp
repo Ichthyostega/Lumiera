@@ -24,7 +24,7 @@
 /** @file placement-index-query-resolver.hpp
  ** Implementing resolution of "discover contents"-queries based on PlacementIndex.
  ** This wrapper adds a service to resolve queries for exploring the contents or
- ** the parent path of a given scope; the actual implementation is based on the 
+ ** the parent path of a given scope; the actual implementation relies on the 
  ** basic operations provided by the PlacementIndex; usually this wrapper is
  ** instantiated as one of the SessionServices for use by Proc-Layer internals.
  ** The PlacementIndex to use for the implementation is handed in to the ctor.
@@ -33,7 +33,7 @@
  ** decoupled from the querying client code, which retrieves the query results
  ** through an iterator. Parametrisation is transmitted to the resolver using a
  ** special subclass of Goal, a ScopeQuery. Especially, besides a filter to apply
- ** on the results to retrieve, the direction and way* to search can be parametrised: 
+ ** on the results to retrieve, the direction and way to search can be parametrised: 
  ** - ascending to the parents of the start scope
  ** - enumerating the immediate child elements of the scope
  ** - exhaustive depth-first search to get any content of the scope
@@ -42,7 +42,7 @@
  ** On initialisation, a table with preconfigured resolution functions is built,
  ** in order to re-gain the fully typed context when receiving a query. From within
  ** this context, the concrete Query instance can be investigated to define a
- ** constructor function for the actual result set, to determine the way how further
+ ** constructor function for the actual result set, determining the way how further
  ** results will be searched and extracted. The further exploration is driven by the
  ** client pulling values from the iterator until exhaustion.  
  **
@@ -84,7 +84,9 @@ namespace session {
   class PlacementIndexQueryResolver
     : public session::QueryResolver
     {
-      PPIdx index_;
+      typedef PlacementIndex& PIdx;
+      
+      PIdx index_;
       
       
       virtual bool canHandleQuery(Goal::QueryID const&)  const;
@@ -102,7 +104,7 @@ namespace session {
       
       
     public:
-      PlacementIndexQueryResolver (PPIdx theIndex);
+      PlacementIndexQueryResolver (PIdx theIndex);
     };
   
   

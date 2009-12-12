@@ -88,7 +88,7 @@ namespace test    {
           // Prepare an (test)Index (dummy "session")
           PPIdx index = build_testScopes();
           PlacementMO& root = index->getRoot();          
-          PlacementIndexQueryResolver resolver(index);
+          PlacementIndexQueryResolver resolver(*index);
           
           discover (ContentsQuery<MObject> (resolver,root));
           

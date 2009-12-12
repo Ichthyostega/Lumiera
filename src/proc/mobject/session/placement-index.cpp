@@ -257,10 +257,6 @@ namespace session {
   
   
   
-  /** @internal Factory for creating a new placement index.
-   *            For use by the Session and for unit tests.  
-   */
-  PlacementIndex::Factory PlacementIndex::create;
   
   PlacementIndex::PlacementIndex()
     : pTab_(new Table)
@@ -273,6 +269,15 @@ namespace session {
   PlacementIndex::getRoot()  const
   {
     UNIMPLEMENTED ("managing the implicit root context within a scope hierarchy");
+  }
+  
+  
+  /** validity self-check, used for sanity checks
+   *  and the session self-check. */
+  bool
+  PlacementIndex::isValid()  const
+  {
+    UNIMPLEMENTED ("PlacementIndex validity self-check");
   }
   
   

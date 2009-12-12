@@ -68,7 +68,7 @@ namespace test    {
       run (Arg) 
         {
           PlacementIndex index;
-          ASSERT (index);
+          ASSERT (index.isValid());
           
           checkSimpleInsertRemove (index);
           has_size (0, index);
@@ -121,12 +121,14 @@ namespace test    {
           PMO& elm = index.find(elmID);
           ASSERT (elmID == elm.getID());
           ASSERT (!isSameObject (elm,testObj));  // note: placements are registered as copy
-          ASSERT (elm == testObj);              //        they are semantically equivalent
+//        ///////////////////////////////////////////////////////////////////////////////TICKET #119
+//        ASSERT (elm == testObj);              //        they are semantically equivalent
           ASSERT (elmID != testObj.getID());   //         but have a distinct identity
           
           PMO::ID elmID2 = index.insert(testObj, root);
           ASSERT (elmID != elmID);          //            ...and each insert creates a new instance
-          ASSERT (testObj == index.find(elmID2));
+//        ///////////////////////////////////////////////////////////////////////////////TICKET #119
+//        ASSERT (testObj == index.find(elmID2));
           ASSERT (!isSameObject (elm, index.find(elmID2)));
           ASSERT ( isSameObject (elm, index.find(elmID )));
           
@@ -151,7 +153,8 @@ namespace test    {
           ID e133 = index.insert (testObj, e13);
           ID e1331 = index.insert (testObj, e133);
           
-          ASSERT (root == index.getScope(e1));
+//        ///////////////////////////////////////////////////////////////////////////////TICKET #119
+//        ASSERT (root == index.getScope(e1));
           ASSERT (e1   == index.getScope(e11).getID());
           ASSERT (e1   == index.getScope(e12).getID());
           ASSERT (e1   == index.getScope(e13).getID());
@@ -162,8 +165,9 @@ namespace test    {
           ASSERT (e1 != e13);
           ASSERT (e13 != e133);
           
-          ASSERT (index.getScope(e11) == index.getScope(index.find(e11)));
-          ASSERT (index.getScope(e131) == index.getScope(index.find(e131)));
+//        ///////////////////////////////////////////////////////////////////////////////TICKET #119
+//        ASSERT (index.getScope(e11) == index.getScope(index.find(e11)));
+//        ASSERT (index.getScope(e131) == index.getScope(index.find(e131)));
           
           VERIFY_ERROR(NONEMPTY_SCOPE, index.remove(e13) ); // can't remove a scope-constituting element
           VERIFY_ERROR(NONEMPTY_SCOPE, index.remove(e133) );

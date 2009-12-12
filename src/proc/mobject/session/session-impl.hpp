@@ -123,13 +123,13 @@ namespace session {
       bool
       isRegisteredID (PMO::ID const& placementID)
         {
-          return IMPL::getPlacementIndex()->contains (placementID); //never throws
+          return IMPL::getPlacementIndex().contains (placementID); //never throws
         }
       
       PMO&
       resolveID (PMO::ID const& placementID)
         {
-          return IMPL::getPlacementIndex()->find (placementID); //may throw
+          return IMPL::getPlacementIndex().find (placementID); //may throw
         }
     };
   
@@ -148,7 +148,7 @@ namespace session {
       PlacementMO& 
       getScopeRoot()
         {
-          return IMPL::getPlacementIndex()->getRoot();
+          return IMPL::getPlacementIndex().getRoot();
         }
       
     protected:
