@@ -39,13 +39,15 @@ namespace asset {
 
 namespace mobject {
   namespace session {
-  
+    
+    class Root;
     class Clip;
     class Track;
     class Effect;
     
     typedef P<asset::Track> PTrackAsset;
-
+    
+    class DefsManager;
 
     class MObjectFactory
       {
@@ -56,11 +58,13 @@ namespace mobject {
         
       public:
         
+        Placement<Root>   operator() (DefsManager&);
         Placement<Clip>   operator() (asset::Clip const&, asset::Media const&);
         Placement<Clip>   operator() (asset::Clip const&, vector<asset::Media const*>);
         Placement<Track>  operator() (PTrackAsset&);
         Placement<Effect> operator() (asset::Effect const&);
         
+        ////////////////////////////////////////////////////////////////////////////////TICKET #414
       };
 
 

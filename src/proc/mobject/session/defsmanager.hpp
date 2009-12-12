@@ -52,6 +52,10 @@ namespace mobject {
      * code didn't give more specific parameters. Necessary sub-objects 
      * will be created on demand, and any default configuration, once
      * found, will be remembered and stored with the current session.
+     * 
+     * @note while the logic of defaults handling can be considered
+     *       roughly final, as of 12/09 most of the actual object
+     *       handling is placeholder code.
      */
     class DefsManager : private boost::noncopyable
       {
@@ -108,6 +112,13 @@ namespace mobject {
 //            template <class> class SMP  ///<  smart pointer class to wrap the result
 //          >
 //        SMP<TAR> operator() (const lumiera::Query<TAR>&);
+
+// 12/09: according to my current knowledge of template metaprogramming, the answer is "no",
+//        but we could use a traits template to set up a fixed association of smart pointers
+//        and kinds of target object. This would allow to define a templated operator() returning
+//        the result wrapped into the right holder. But currently I don't see how to build a sensible
+//        implementation infrastructure backing such an interface.
+//////////TICKET #452
         
       };
 

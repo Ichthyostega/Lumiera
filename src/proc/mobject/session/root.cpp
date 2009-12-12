@@ -1,5 +1,5 @@
 /*
-  META.hpp  -  abstract base class of all MObjects representing meta data or processing instructions
+  Root  -  root element of the high-level model, global session scope
  
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
@@ -18,34 +18,36 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  
-*/
+* *****************************************************/
 
 
-#ifndef MOBJECT_SESSION_META_H
-#define MOBJECT_SESSION_META_H
-
-#include "proc/mobject/session/abstractmo.hpp"
-
+#include "proc/mobject/session/root.hpp"
+#include "proc/mobject/session/defsmanager.hpp"
 
 
 namespace mobject {
 namespace session {
-
-
-  /**
-   * Meta-MObject doesn't represent real Media Content,
-   * but rather all sorts of Processing Instructions
-   * and other metadata, which can be placed and
-   * attached within the EDL/Session.
-   * @todo do we need this abstract baseclass?
-   */
-  class Meta : public AbstractMO
-    {
-      ///////////
-      //////////////////////////////TICKET #448   what to do with the length here??
-    };
   
+  /** */
+  Root::Root (DefsManager& dM)
+    : defaults_(dM)
+    { }
+  
+  
+  
+  /** @todo validity self-check of the model root
+   *        should do substantial checks; the idea is
+   *        to perform a complete sanity check by delegating
+   *        to the parts.
+   *  @note beware of performance problems here!
+   */
+  bool
+  Root::isValid()  const
+  {
+    return true; //////////////////TICKET #447
+  }
+
+  /////////////////////////////////TODO more to come.....
   
   
 }} // namespace mobject::session
-#endif

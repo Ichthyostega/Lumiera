@@ -22,6 +22,7 @@
 
 
 #include "proc/mobject/session/mobjectfactory.hpp"
+#include "proc/mobject/session/root.hpp"
 #include "proc/mobject/session/clip.hpp"
 #include "proc/mobject/session/track.hpp"
 #include "proc/mobject/session/effect.hpp"
@@ -29,11 +30,23 @@
 #include "proc/asset/track.hpp"
 #include "proc/asset/effect.hpp"
 
-namespace mobject
-  {
-  namespace session
-    {
+namespace mobject {
+namespace session {
+      ////////////////////////////////////////////////////////////////////////////////TICKET #414
 
+
+    
+    /** variant of the Clip-MO factory function, creating
+     *  a multichannel (compound) clip.
+     *  @todo work out the details of multichannel handling
+     */
+    Placement<Root>
+    MObjectFactory::operator() (DefsManager& sessionDefaultsHandler)
+    {
+      return Placement<Root> (*new Root (sessionDefaultsHandler), &deleterFunc);
+    }
+    
+    
     /** creating a Clip-MObject to be placed within
      *  the EDL, based on a clip asset, which typically
      *  is obtained by calling the createClip()-function
@@ -80,6 +93,4 @@ namespace mobject
 
 
 
-  } // namespace mobject::session
-
-} // namespace mobject
+}} // namespace mobject::session
