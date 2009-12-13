@@ -63,6 +63,8 @@ namespace session {
     public:
       static PlacementMO& resolveID (PlacementMO::ID const&) ;
       static bool    isRegisteredID (PlacementMO::ID const&) ;
+      
+      static bool isAccessible() ;
     };
   
   

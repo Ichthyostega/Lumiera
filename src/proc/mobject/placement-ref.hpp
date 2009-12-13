@@ -204,7 +204,8 @@ namespace mobject {
       bool
       checkValidity ()  const
         {
-          return session::SessionServiceFetch::isRegisteredID (this->id_);
+          return session::SessionServiceFetch::isAccessible() // session interface opened?
+              && session::SessionServiceFetch::isRegisteredID (this->id_);
         }
       
       static void

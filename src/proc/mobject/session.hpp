@@ -127,6 +127,9 @@ namespace mobject {
     class SessManager : private boost::noncopyable
       {
       public:
+        /** diagnostics: session interface opened? */
+        virtual bool isUp ()  =0;
+        
         /** clear current session contents 
          *  without resetting overall session config.
          *  Afterwards, the session will contain only one 

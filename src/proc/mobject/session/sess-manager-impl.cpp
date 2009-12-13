@@ -91,6 +91,13 @@ namespace session {
   { }
   
   
+  
+  bool
+  SessManagerImpl::isUp ()
+  {
+    return bool(pImpl_);
+  }
+  
   /** @note no transactional behaviour.
    *        may succeed partial.
    */

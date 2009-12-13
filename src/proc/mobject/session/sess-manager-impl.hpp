@@ -51,6 +51,8 @@ namespace session {
       virtual void load ()  ;
       virtual void save ()  ;
       
+      virtual bool isUp ()  ;
+      
       
     public:
       /* ==== proc layer internal API ==== */

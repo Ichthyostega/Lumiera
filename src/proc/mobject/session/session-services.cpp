@@ -33,6 +33,15 @@
 namespace mobject {
 namespace session {
   
+  /** is the element-fetch service usable?
+   *  Effectively this means: is the session up?
+   */
+  bool
+  SessionServiceFetch::isAccessible ()
+  {
+    return Session::current.isUp();
+  }
+  
   /** verify the given placement-ID (hash) is valid,
    *  by checking if it refers to a Placement instance
    *  currently registered with the PlacementIndex of the
