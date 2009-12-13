@@ -119,7 +119,7 @@ namespace session {
   
   
   /** constant \em invalid path token. Created by locating an invalid scope */
-  const ScopePath ScopePath::INVALID = ScopePath(Scope());                 ///////////////////////TODO can this initialisation be deferred? it causes creation of an default session very early
+  const ScopePath ScopePath::INVALID = ScopePath(Scope());
   
   
   /** a \em valid path consists of more than just the root element.

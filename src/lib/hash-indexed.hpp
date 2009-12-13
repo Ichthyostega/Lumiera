@@ -103,12 +103,12 @@ namespace lib {
         
         typedef lumiera_uid* LUID;
         
-        operator size_t ()                const { return lumiera_uid_hash ((LUID)&luid_); }
-        bool operator== (LuidH const& o)  const { return lumiera_uid_eq ((LUID)&luid_, (LUID)&o.luid_); }
+        operator size_t ()                const { return lumiera_uid_hash (get()); }
+        bool operator== (LuidH const& o)  const { return lumiera_uid_eq (get(), o.get()); }
         bool operator!= (LuidH const& o)  const { return !operator== (o); }
         
         /** for passing to C APIs */
-        LUID get()                        const { return (LUID)&luid_; }
+        LUID get()                        const { return const_cast<LUID> (&luid_);}
       };
     
     

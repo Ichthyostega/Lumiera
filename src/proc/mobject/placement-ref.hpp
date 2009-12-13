@@ -72,7 +72,7 @@ namespace mobject {
   class PlacementRef
     {
       typedef Placement<MX>      PlacementMX;
-      typedef Placement<MObject>::ID     _ID;         ////TODO: could we define const& here??
+      typedef Placement<MObject>::ID     _ID;
       typedef Placement<MObject>::Id<MX> _Id;
       
       _Id id_;
@@ -103,7 +103,7 @@ namespace mobject {
       
       /** Default is an NIL Placement ref. It throws on any access. */
       PlacementRef ()
-        : id_()
+        : id_( bottomID() )
         {
           REQUIRE (!isValid(), "hash-ID clash with existing ID");
         }
@@ -230,6 +230,13 @@ namespace mobject {
         {
           REQUIRE (luid);
           return reinterpret_cast<_Id const&> (*luid);
+        }
+      
+      static _Id const&
+      bottomID ()  ///< @return marker for \em invalid reference
+        {
+          static lumiera_uid invalidLUID;
+          return recast (&invalidLUID);
         }
       
       static PlacementMX&
