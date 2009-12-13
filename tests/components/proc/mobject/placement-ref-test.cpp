@@ -22,13 +22,14 @@
 
 
 #include "lib/test/run.hpp"
-#include "lib/lumitime.hpp"
+#include "lib/test/test-helper.hpp"
 #include "proc/mobject/placement.hpp"
 #include "proc/mobject/placement-ref.hpp"
 #include "proc/mobject/session/placement-index.hpp"
 #include "proc/mobject/session/session-service-mock-index.hpp"
 #include "proc/mobject/explicitplacement.hpp"
 #include "proc/mobject/test-dummy-mobject.hpp"
+#include "lib/lumitime.hpp"
 #include "lib/util.hpp"
 
 #include <iostream>
@@ -150,15 +151,9 @@ namespace test    {
 
           // actually, the assignment has invalidated ref1, because of the changed ID
           ASSERT (p1.getID() == p2.getID());
-          try
-            {
-              *ref1;
-              NOTREACHED();
-            }
-          catch (...)
-            {
-              ASSERT (lumiera_error () == LUMIERA_ERROR_INVALID_PLACEMENTREF);
-            }
+          
+          VERIFY_ERROR(INVALID_PLACEMENTREF, *ref1 );
+          
           ASSERT (!index->contains(p1));           // index indeed detected the invalid ref
           ASSERT (3 == ref2.use_count());          // but ref2 is still valid
           
@@ -166,15 +161,14 @@ namespace test    {
           index->remove (ref2);
           ASSERT (!ref2);                          // checks invalidity without throwing
           ASSERT (!refX);
-          try
-            {
-              *ref2;
-              NOTREACHED();
-            }
-          catch (...)
-            {
-              ASSERT (lumiera_error () == LUMIERA_ERROR_INVALID_PLACEMENTREF);
-            }
+          VERIFY_ERROR(INVALID_PLACEMENTREF, *ref2 );
+          
+          // deliberately create an invalid PlacementRef
+          PlacementRef<TestSubMO21> bottom;
+          ASSERT (!bottom);
+          VERIFY_ERROR(INVALID_PLACEMENTREF, *bottom );
+          VERIFY_ERROR(INVALID_PLACEMENTREF, bottom->specialAPI() );
+          VERIFY_ERROR(INVALID_PLACEMENTREF, bottom.resolve() );
 
           //consistency check; then reset PlacementRef index to default
           ASSERT (0 == index->size());

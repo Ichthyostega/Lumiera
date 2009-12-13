@@ -64,6 +64,8 @@ namespace mobject {
   
   
   LUMIERA_ERROR_DECLARE (INVALID_PLACEMENTREF);  ///< unresolvable placement reference, or of incompatible type
+  LUMIERA_ERROR_DECLARE (BOTTOM_PLACEMENTREF);  ///<  NIL placement-ID marker encountered
+  
   
   /**
    * TODO type comment

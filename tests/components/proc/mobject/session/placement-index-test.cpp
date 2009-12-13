@@ -27,10 +27,10 @@
 //#include "proc/mobject/session.hpp"
 //#include "proc/mobject/session/edl.hpp"
 #include "proc/mobject/session/placement-index.hpp"
-#include "proc/mobject/session/testclip.hpp"
+#include "proc/mobject/session/scope.hpp"
 #include "proc/mobject/placement.hpp"
-//#include "proc/mobject/explicitplacement.hpp"
 #include "lib/util.hpp"
+#include "proc/mobject/session/testclip.hpp"
 
 //#include <boost/format.hpp>
 //#include <iostream>
@@ -134,6 +134,27 @@ namespace test    {
           
           // can also re-access objects by previous ref
           ASSERT ( isSameObject (elm, index.find(elm)));
+        }
+      
+      
+      void
+      checkInvalidRef (Idx index)
+        {
+          RefPlacement invalid;
+          PlacementMO::ID invalidID (invalid);
+          ASSERT (!bool(invalidID));
+          ASSERT (!bool(invalid));
+          
+          VERIFY_ERROR(BOTTOM_PLACEMENTREF, index.find(invalid) );
+          VERIFY_ERROR(BOTTOM_PLACEMENTREF, index.find(invalidID) );
+          VERIFY_ERROR(BOTTOM_PLACEMENTREF, index.getScope(invalidID) );
+          
+          ASSERT (!index.contains(invalidID));
+          
+          PMO testObj = TestClip::create();
+          VERIFY_ERROR(INVALID_SCOPE, index.insert(testObj, invalidID) );
+          
+          ASSERT (false == index.remove(invalidID));
         }
       
       

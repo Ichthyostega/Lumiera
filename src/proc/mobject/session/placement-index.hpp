@@ -176,6 +176,9 @@ namespace session {
     inline void
     __check_knownID(PlacementIndex const& idx, PlacementMO::ID id)
     {
+    if (!id)
+      throw lumiera::error::Logic ("Encountered a NIL Placement-ID marker"
+                                  ,LUMIERA_ERROR_BOTTOM_PLACEMENTREF);
     if (!idx.contains (id))
       throw lumiera::error::Invalid ("Accessing Placement not registered within the index"
                                     ,LUMIERA_ERROR_NOT_IN_SESSION);              ///////////////////////TICKET #197
