@@ -36,10 +36,7 @@ namespace session {
 
 
     
-    /** variant of the Clip-MO factory function, creating
-     *  a multichannel (compound) clip.
-     *  @todo work out the details of multichannel handling
-     */
+    /** build a new session/model root element. */
     Placement<Root>
     MObjectFactory::operator() (DefsManager& sessionDefaultsHandler)
     {

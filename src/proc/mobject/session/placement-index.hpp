@@ -34,7 +34,9 @@
  ** TODO
  ** 
  ** \par Querying and contents discovery
- ** TODO 
+ ** TODO
+ ** 
+ ** @note PlacementIndex is <b>not threadsafe</b>.
  **
  ** @see PlacementRef
  ** @see PlacementIndex_test
@@ -141,6 +143,7 @@ namespace session {
       
       
       
+      PlacementIndex(PlacementMO const&);
       PlacementIndex() ;
      ~PlacementIndex() ;
       

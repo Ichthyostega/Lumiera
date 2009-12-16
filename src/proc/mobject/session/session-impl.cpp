@@ -23,6 +23,7 @@
 
 #include "proc/mobject/session/session-impl.hpp"
 #include "proc/mobject/placement.hpp"
+#include "proc/mobject/mobject.hpp"
 #include "lib/error.hpp"
 
 namespace mobject {
@@ -52,7 +53,7 @@ namespace session {
       focusEDL_(0),
       edls(1),
       fixture(new Fixture),
-      pIdx_() /////////////////////////////////////////////TODO
+      pIdx_( MObject::create (getDummyDefaultsManager()))  ////TODO temporary hack
     {
     }
   

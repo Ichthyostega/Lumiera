@@ -22,11 +22,18 @@
 
 
 /** @file placement-index.cpp 
+ ** Implementation of core session storage structure.
+ ** The PlacementIndex associates IDs to instances, and nested scope structure.
+ ** Moreover, it provides and manages the actual Placement instances (storage),
+ ** considered to be part of the session. 
  ** 
- ** simple hash based implementation. Proof-of-concept
- ** and for fleshing out the API
+ ** Simple hash based implementation. Proof-of-concept and for fleshing out the API.
+ ** The actual storage is provided by an embedded TypedAllocationManager instance, which
+ ** is planned (as of 12/09) to be backed later by a memory pool based custom allocator. 
  ** 
  ** @todo change PlacementIndex into an interface and create a separated implementation class
+ ** @todo really? it seems PlacementIndex has gotten an implementation class without much relevance on the Session API
+ ** 
  ** @see PlacementRef
  ** @see PlacementIndex_test
  **
@@ -83,8 +90,11 @@ namespace session {
   
   
   /**
-   * Storage and implementation
-   * backing the PlacementIndex
+   * Storage and implementation backing the PlacementIndex
+   * - #placementTab_ is an hashtable mapping IDs to Placement + Scope
+   * - #scopeTab_ is an reverse association serving to keep track of 
+   *   any scope's contents
+   * - root scope element is stored and maintained explicitly.
    */
   class PlacementIndex::Table 
     {
@@ -105,6 +115,7 @@ namespace session {
       IDTable placementTab_;
       ScopeTable scopeTab_;
       
+      PPlacement root_;
       
     public:
       Table () 
@@ -112,11 +123,15 @@ namespace session {
       
      ~Table ()
         {
-          try { clear(); }
+          try 
+            {
+              root_.reset();
+              clear(); 
+            }
           catch(lumiera::Error& err)
             {
               WARN (session, "Problem while purging PlacementIndex: %s", err.what());
-              lumiera_error();
+              lumiera_error(); // discard any error state
         }   }
       
       
@@ -162,8 +177,43 @@ namespace session {
           INFO (session, "Purging Placement Tables...");
           scopeTab_.clear();
           placementTab_.clear();
+          
+          if (root_)
+            setupRoot (*root_);
         }
-        
+      
+      
+      /** insert a specially configured root entry into
+       *  the yet empty table. Root is it's own scope 
+       */
+      void
+      setupRoot (PlacementMO const& rootDef)
+        {
+          REQUIRE (0 == placementTab_.size());
+          REQUIRE (0 == scopeTab_.size());
+          REQUIRE (!root_);
+          
+          root_ = allocator_.create<PlacementMO> (rootDef);
+          ID rootID = root_->getID();
+          placementTab_[rootID].element = root_;
+          placementTab_[rootID].scope   = root_;
+          
+          ENSURE (contains (rootID));
+          ENSURE (scopeTab_.empty());
+          ENSURE (1 == size());
+        }
+      
+      PlacementMO&
+      getRootElement()
+        {
+          REQUIRE (root_);
+          REQUIRE (0 < size());
+          REQUIRE (contains (root_->getID()));
+          
+          return *root_;
+        }
+      
+      
       /** Store a copy of the given Placement as new instance
        *  within the index, together with the Scope this Placement
        *  belongs to. 
@@ -258,9 +308,19 @@ namespace session {
   
   
   
+  PlacementIndex::PlacementIndex (PlacementMO const& rootDef)
+    : pTab_(new Table)
+    {
+      pTab_->setupRoot(rootDef);
+      ENSURE (isValid());
+    }
+  
   PlacementIndex::PlacementIndex()
     : pTab_(new Table)
-    { }
+    {
+      pTab_->setupRoot(rootDef); //////////////////////////////////////////TODO what to put in here (it's a test dummy)
+      ENSURE (isValid());
+    }
   
   PlacementIndex::~PlacementIndex() { }
  
@@ -268,7 +328,7 @@ namespace session {
   PlacementMO&
   PlacementIndex::getRoot()  const
   {
-    UNIMPLEMENTED ("managing the implicit root context within a scope hierarchy");
+    return pTab_->getRootElement();
   }
   
   
@@ -284,6 +344,7 @@ namespace session {
   size_t
   PlacementIndex::size()  const
   {
+    ASSERT (0 < pTab_->size());
     return pTab_->size() - 1;
   }
   
@@ -359,6 +420,9 @@ namespace session {
   bool
   PlacementIndex::remove (ID id)
   {
+    if (id == getRoot().getID())
+      throw error::Fatal ("Request to kill the model root.");
+    
     return pTab_->removeEntry (id);
   }
   
