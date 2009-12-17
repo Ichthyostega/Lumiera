@@ -26,6 +26,7 @@
 #include "proc/mobject/session/clip.hpp"
 #include "proc/mobject/session/track.hpp"
 #include "proc/mobject/session/effect.hpp"
+#include "proc/mobject/session/label.hpp"
 #include "proc/asset/clip.hpp"
 #include "proc/asset/track.hpp"
 #include "proc/asset/effect.hpp"
@@ -41,6 +42,14 @@ namespace session {
     MObjectFactory::operator() (DefsManager& sessionDefaultsHandler)
     {
       return Placement<Root> (*new Root (sessionDefaultsHandler), &deleterFunc);
+    }
+    
+    
+    /** build a new session/model root element. */
+    Placement<Label>
+    MObjectFactory::operator() (Symbol labelType)
+    {
+      return Placement<Label> (*new Label (labelType), &deleterFunc);
     }
     
     

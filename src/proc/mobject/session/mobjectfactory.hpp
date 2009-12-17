@@ -25,6 +25,7 @@
 #define MOBJECT_SESSION_MOBJECTFACTORY_H
 
 #include "proc/mobject/mobject.hpp"
+#include "lib/symbol.hpp"
 
 
 
@@ -44,6 +45,7 @@ namespace mobject {
     class Clip;
     class Track;
     class Effect;
+    class Label;
     
     typedef P<asset::Track> PTrackAsset;
     
@@ -63,6 +65,7 @@ namespace mobject {
         Placement<Clip>   operator() (asset::Clip const&, vector<asset::Media const*>);
         Placement<Track>  operator() (PTrackAsset&);
         Placement<Effect> operator() (asset::Effect const&);
+        Placement<Label>  operator() (lib::Symbol);
         
         ////////////////////////////////////////////////////////////////////////////////TICKET #414
       };

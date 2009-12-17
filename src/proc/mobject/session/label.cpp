@@ -22,16 +22,21 @@
 
 
 #include "proc/mobject/session/label.hpp"
+#include "lib/util.hpp"
 
-namespace mobject
+using util::isnil;
+
+namespace mobject {
+namespace session {
+  
+  
+  /** @todo real validity self-check for Label MObject */
+  bool
+  Label::isValid()  const
   {
-  namespace session
-    {
-
-    /** */
-
-
-
-  } // namespace mobject::session
-
-} // namespace mobject
+    return !isnil (typeID_);
+  }
+  
+  
+  
+}} // namespace mobject::session
