@@ -65,10 +65,12 @@ lumiera_sectionlock_ensureunlocked (LumieraSectionlock self)
 #define LUMIERA_SECTION_UNLOCK_(section)                        \
   do if ((section)->lock)                                       \
     {                                                           \
-      if ((section)->unlock((section)->lock))                   \
-        LUMIERA_DIE (LOCK_RELEASE);                             \
-      (section)->lock = NULL;                                   \
-      NOBUG_RESOURCE_LEAVE_RAW((section)->flag, (section)->rh); \
+      NOBUG_RESOURCE_LEAVE_RAW((section)->flag, (section)->rh)  \
+        {                                                       \
+          if ((section)->unlock((section)->lock))               \
+            LUMIERA_DIE (LOCK_RELEASE);                         \
+          (section)->lock = NULL;                               \
+        }                                                       \
     } while (0)
 
 
