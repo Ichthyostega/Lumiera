@@ -22,6 +22,7 @@
 
 
 #include "proc/mobject/session/session-impl.hpp"
+#include "proc/mobject/session/mobjectfactory.hpp"
 #include "proc/mobject/placement.hpp"
 #include "proc/mobject/mobject.hpp"
 #include "lib/error.hpp"

@@ -31,6 +31,7 @@
 #include "proc/mobject/placement.hpp"
 #include "lib/util.hpp"
 #include "proc/mobject/session/testclip.hpp"
+#include "proc/mobject/session/testroot.hpp"
 
 //#include <boost/format.hpp>
 //#include <iostream>
@@ -67,7 +68,7 @@ namespace test    {
       virtual void
       run (Arg) 
         {
-          PlacementIndex index;
+          PlacementIndex index (make_dummyRoot());
           ASSERT (index.isValid());
           
           checkSimpleInsertRemove (index);

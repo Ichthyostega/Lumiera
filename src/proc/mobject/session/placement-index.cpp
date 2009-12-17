@@ -68,7 +68,6 @@ namespace session {
   using std::tr1::unordered_map;
   using std::tr1::unordered_multimap;
   using lib::TypedAllocationManager;
-//using util::getValue_or_default;
 //using util::contains;
 //using std::string;
 //using std::map;
@@ -312,13 +311,6 @@ namespace session {
     : pTab_(new Table)
     {
       pTab_->setupRoot(rootDef);
-      ENSURE (isValid());
-    }
-  
-  PlacementIndex::PlacementIndex()
-    : pTab_(new Table)
-    {
-      pTab_->setupRoot(rootDef); //////////////////////////////////////////TODO what to put in here (it's a test dummy)
       ENSURE (isValid());
     }
   

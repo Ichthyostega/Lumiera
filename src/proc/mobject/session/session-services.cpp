@@ -30,6 +30,11 @@
 #include "proc/mobject/session/session-impl.hpp"
 #include "proc/mobject/session/sess-manager-impl.hpp"
 
+#include "proc/mobject/session/mobjectfactory.hpp"
+#include "lib/symbol.hpp"
+
+using lib::Symbol;
+
 namespace mobject {
 namespace session {
   
@@ -87,7 +92,9 @@ namespace session {
   PPIdx
   SessionServiceMockIndex:: install ()
   {
-    PPIdx mockIndex (new PlacementIndex(), &remove_testIndex); // manage instance lifecycle
+    Symbol typeID ("dummyRoot");
+    PMO dummyRoot (MObject::create (typeID));
+    PPIdx mockIndex (new PlacementIndex(dummyRoot), &remove_testIndex); // manage instance lifecycle
     ENSURE (mockIndex);
     ENSURE (mockIndex->isValid());
     ENSURE (1 == mockIndex.use_count());

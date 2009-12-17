@@ -144,7 +144,6 @@ namespace session {
       
       
       PlacementIndex(PlacementMO const&);
-      PlacementIndex() ;
      ~PlacementIndex() ;
       
       void clear();
