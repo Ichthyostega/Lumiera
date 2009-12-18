@@ -42,7 +42,7 @@ struct lumiera_sectionlock_struct
   void* lock;
   lumiera_sectionlock_unlock_fn unlock;
   NOBUG_IF_ALPHA(struct nobug_flag* flag);
-  RESOURCE_HANDLE (rh);
+  RESOURCE_USER (rh);
 };
 typedef struct lumiera_sectionlock_struct lumiera_sectionlock;
 typedef struct lumiera_sectionlock_struct* LumieraSectionlock;
