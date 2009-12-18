@@ -98,7 +98,8 @@ namespace session {
       
       
       typedef PlacementMO::ID _PID;
-      typedef std::tr1::unordered_multimap<_PID,_PID>::iterator ScopeIter;
+      typedef std::tr1::unordered_multimap<_PID,_PID>::const_iterator ScopeIter;
+      typedef lib::RangeIter<ScopeIter> ScopeRangeIter;
       
       
       
@@ -107,7 +108,7 @@ namespace session {
       typedef PlacementRef<MObject> PRef;
       typedef PlacementMO::ID const& ID;
       
-      typedef lib::TransformIter<lib::RangeIter<ScopeIter>, PlacementMO> iterator;
+      typedef lib::TransformIter<ScopeRangeIter, PlacementMO&> iterator;
       
       
       PlacementMO& find (ID)  const;

@@ -53,6 +53,7 @@
 #include <boost/functional/hash.hpp>
 #include <boost/noncopyable.hpp>
 #include <tr1/unordered_map>
+#include <tr1/functional>
 #include <tr1/memory>
 //#include <algorithm>
 #include <string>
@@ -68,6 +69,9 @@ namespace session {
   using std::tr1::unordered_map;
   using std::tr1::unordered_multimap;
   using lib::TypedAllocationManager;
+//  using std::tr1::placeholders::_1;
+  using std::tr1::function;
+  using std::tr1::bind;
 //using util::contains;
 //using std::string;
 //using std::map;
@@ -106,8 +110,11 @@ namespace session {
         };
       
       // using a hashtables to implement the index
-      typedef unordered_map<ID, PlacementEntry, hash<ID> > IDTable;
-      typedef std::tr1::unordered_multimap<ID,ID, hash<ID> > ScopeTable;
+      typedef PlacementMO::ID PID;
+      typedef unordered_map<PID, PlacementEntry, hash<PID> > IDTable;
+      typedef std::tr1::unordered_multimap<PID,PID, hash<PID> > ScopeTable;
+      
+      typedef pair<ScopeIter, ScopeIter> ScopeContents;
       
       
       TypedAllocationManager allocator_;
@@ -166,6 +173,15 @@ namespace session {
           ENSURE (scope);
           ENSURE (contains (scope->getID()));
           return *scope;
+        }
+      
+      PlacementIndex::iterator
+      queryScopeContents (ID id)  const
+        {
+          REQUIRE (contains (id));
+          ScopeContents contents = scopeTab_.equal_range (id);
+          return iterator (ScopeRangeIter(contents.first, contents.second)
+                          ,rangeIndexElementsResolver() );
         }
       
       
@@ -229,6 +245,7 @@ namespace session {
           PPlacement newEntry = allocator_.create<PlacementMO> (newObj);
           ID newID = newEntry->getID();
           
+          ASSERT (newID, "invalid");
           ASSERT (!contains (newID));
           placementTab_[newID].element = newEntry;
           placementTab_[newID].scope   = placementTab_[scopeID].element;
@@ -301,6 +318,34 @@ namespace session {
           NOTREACHED();
         }
       
+      
+      /** Helper for building a scope exploring iterator
+       *  for PlacementIndex: our "reverse index" (scopeTab_)
+       *  tracks the contents of each scope as pairs (scopeID,elementID).
+       *  After fetching the range of matching entries, whenever the client
+       *  dereferences the iterator, we have to pick up the second ID and
+       *  resolve it through the main index table (placementTab_).
+       */
+      PlacementMO&
+      resolveScopeIndexElement(pair<PID,PID> const& entry)
+        {
+          ID elemID (entry.second);
+          ASSERT (contains (elemID));
+          return fetch (elemID);
+        }
+      
+      
+      typedef function<PlacementMO& (pair<PID,PID> const&)> ElementResolver;
+      mutable ElementResolver elementResolver_;
+      
+      ElementResolver
+      scopeIndexElementsResolver()  const  ///< @return functor for iterator element access 
+        {
+          if (!elementResolver_)
+            elementResolver_ = bind (&Table::resolveScopeIndexElement, this, _1 );
+          return elementResolver_;
+        }
+      
     };
   
   
@@ -370,13 +415,19 @@ namespace session {
   }
   
   
+  /** Retrieve all the elements attached to the given entry (scope)
+   *  Each element (Placement) can act as a scope, containing other
+   *  Placements, which will be discovered by this query one level
+   *  deep (not recursive).
+   *  @return an Lumiera Forward Iterator, yielding the children,
+   *          possibly empty if the denoted element is a leaf.
+   *  @note results are returned in arbitrary order (hashtable)
+   */
   PlacementIndex::iterator
-  PlacementIndex::getReferrers (ID)  const
+  PlacementIndex::getReferrers (ID id)  const
   {
-    UNIMPLEMENTED ("query the Placement relation index and retrieve all other placements bound to this one by a placement-relation");
-    // do a query using equal_range of the hashtable (unordered_multimap)
-    // build a RangeIter from them
-    // use this to build an auto-fetching IterAdapter
+    __check_knownID(*this, id);
+    return pTab_->queryScopeContents(id);
   }
   
   
