@@ -1508,7 +1508,7 @@ Some further details
 
 As the builder and thus render engine //only consults the fixture,// while all editing operations finally propagate to the fixture as well, we get an isolation layer between the high level part of the Proc layer (editing, object manipulation) and the render engine. Creating the Fixture can be seen as a preprocessing step to simplify the build process. For this reason, the process of [[(re)building the fixture|PlanningBuildFixture]] has been designed together with the [[Builder]]</pre>
 </div>
-<div title="ForwardIterator" modifier="Ichthyostega" modified="200910312256" created="200910312114" tags="Concepts def spec" changecount="16">
+<div title="ForwardIterator" modifier="Ichthyostega" modified="200912190027" created="200910312114" tags="Concepts def spec" changecount="17">
 <pre>The situation focussed by this concept is when an API needs to expose a sequence of results, values or objects, instead of just yielding a function result value. As the naive solution of passing an pointer or array creates coupling to internals, it was superseded by the ~GoF [[Iterator pattern|http://en.wikipedia.org/wiki/Iterator]]. Iteration can be implemented by convention, polymorphically or by generic programming; we use the latter approach.
 
 !Lumiera Forward Iterator concept
@@ -1533,7 +1533,7 @@ Another notable difference to the STL iterators is the default ctor and the {{{b
 * __~PtrDerefIter__ works similar, but can be used on an STL container holding //pointers,// to be dereferenced automatically on access
 
 Similar to the STL habits, Lumiera Forward Iterators should expose typedefs for {{{pointer}}}, {{{reference}}} and {{{value_type}}}.
-Additionally, they may be used for resource management purposes by &quot;hiding&quot; a ref-counting facility, e.g. allowing to keep a snapshot or restult set around until it can't be accessed anymore.
+Additionally, they may be used for resource management purposes by embedding a ref-counting facility, e.g. allowing to keep a snapshot or restult set around until it can't be accessed anymore.
 </pre>
 </div>
 <div title="Frame" modifier="Ichthyostega" modified="200909291345" created="200706220332" tags="def" changecount="3">

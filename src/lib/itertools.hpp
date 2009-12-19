@@ -71,6 +71,7 @@
 #include "lib/bool-checkable.hpp"
 #include "lib/iter-adapter.hpp"
 #include "lib/meta/function.hpp"
+#include "lib/meta/trait.hpp"
 #include "lib/util.hpp"
 
 #include <tr1/functional>
@@ -82,6 +83,7 @@ namespace lib {
   using std::tr1::function;
   using util::unConst;
   
+  using lumiera::typelist::RefTraits;
   
   
   
@@ -262,7 +264,7 @@ namespace lib {
   struct FilterCore
     : IdentityCore<IT>
     {
-      typedef IdentityCore<IT> _Par;
+      typedef IdentityCore<IT> Raw;
       typedef typename IT::reference Val;
       
       
@@ -271,14 +273,14 @@ namespace lib {
       bool
       evaluate () const
         {
-          return _Par::pipe()
-              && predicate_(*_Par::pipe());
+          return Raw::pipe()
+              && predicate_(*Raw::pipe());
         }
       
       
       template<typename PRED>
-      FilterCore (IT const& orig, PRED prediDef)
-        : _Par(orig)
+      FilterCore (IT const& source, PRED prediDef)
+        : Raw(source)
         , predicate_(prediDef) // induces a signature check
         { }
     };
@@ -339,11 +341,12 @@ namespace lib {
   class TransformingCore
     {
       typedef typename IT::reference InType;
+      typedef typename RefTraits<VAL>::member_type Item;
       
       function<VAL(InType)> trafo_;
       
       IT source_;
-      VAL treated_;
+      Item treated_;
       
       void
       processItem ()
@@ -352,14 +355,6 @@ namespace lib {
             treated_ = trafo_(*source_);
         }
       
-      VAL*
-      yieldResult ()  const
-        {
-          if (source_)
-            return &unConst(this)->treated_;  // accessing processed value doesn't count as "mutation" of *this
-          else
-            return 0; // signalling exhausted source
-        }
       
       
     public:
@@ -377,10 +372,13 @@ namespace lib {
           processItem();
         }
       
-      VAL *
+      Item *
       pipe ()  const
         {
-          return yieldResult();
+          if (source_)
+            return & unConst(this)->treated_;  // accessing, no "mutation"
+          else
+            return 0; // signalling exhausted source
         }
       
       void
@@ -396,9 +394,9 @@ namespace lib {
           return bool(source_);
         }
       
-      typedef VAL* pointer;
-      typedef VAL& reference;
-      typedef VAL  value_type;
+      typedef typename RefTraits<VAL>::pointer pointer;
+      typedef typename RefTraits<VAL>::reference reference;
+      typedef typename RefTraits<VAL>::value_type value_type;
     };
   
   

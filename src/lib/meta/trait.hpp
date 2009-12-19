@@ -30,6 +30,7 @@
 #include <boost/type_traits/is_convertible.hpp>
 #include <boost/type_traits/is_arithmetic.hpp>
 #include <boost/utility/enable_if.hpp>
+#include <boost/ref.hpp>
 #include <string>
 
 
@@ -66,6 +67,80 @@ namespace typelist {
     {
       enum { value = boost::is_arithmetic<X>::value
            };
+    };
+  
+  
+  /** Extension to boost::reference_wrapper: 
+   *  Allows additionally to re-bind to another reference,
+   *  almost like a pointer. For example this allows to cache
+   *  results returned from an API call by reference.
+   *  @warning potentially dangerous 
+   */
+  template<typename TY>
+  class AssignableRefWrapper
+    : public boost::reference_wrapper<TY>
+    {
+      typedef boost::reference_wrapper<TY> RefWrapper;
+    public:
+      
+      explicit AssignableRefWrapper(TY& ref)
+        : RefWrapper(ref)
+        { }
+      
+      AssignableRefWrapper&
+      operator= (RefWrapper const& o)
+        {
+          RefWrapper::operator= (o);
+          return *this;
+        }
+      
+      AssignableRefWrapper&
+      operator= (TY& newRef)
+        {
+          (*this) = RefWrapper(newRef);
+          return *this;
+        }
+    };
+  
+  
+  /** Type definition helper for pointer and reference types.
+   *  Allows to create a member field and to get the basic type
+   *  irrespective if the given type is plain, pointer or reference
+   */
+  template<typename TY>
+  struct RefTraits
+    {
+      typedef TY* pointer;
+      typedef TY& reference;
+      typedef TY  value_type;
+      typedef value_type member_type;
+    };
+  
+  template<typename TY>
+  struct RefTraits<TY *>
+    {
+      typedef TY* pointer;
+      typedef TY& reference;
+      typedef TY  value_type;
+      typedef pointer member_type;
+    };
+  
+  template<typename TY>
+  struct RefTraits<const TY *>
+    {
+      typedef TY value_type;
+      typedef const TY* pointer;
+      typedef const TY& reference;
+      typedef pointer member_type;
+    };
+  
+  template<typename TY>
+  struct RefTraits<TY &>
+    {
+      typedef TY* pointer;
+      typedef TY& reference;
+      typedef TY  value_type;
+      typedef AssignableRefWrapper<TY> member_type;
     };
   
   
