@@ -26,6 +26,7 @@
 
 
 #include "lib/meta/util.hpp"
+#include "lib/wrapper.hpp"
 
 #include <boost/type_traits/is_convertible.hpp>
 #include <boost/type_traits/is_arithmetic.hpp>
@@ -70,37 +71,6 @@ namespace typelist {
     };
   
   
-  /** Extension to boost::reference_wrapper: 
-   *  Allows additionally to re-bind to another reference,
-   *  almost like a pointer. For example this allows to cache
-   *  results returned from an API call by reference.
-   *  @warning potentially dangerous 
-   */
-  template<typename TY>
-  class AssignableRefWrapper
-    : public boost::reference_wrapper<TY>
-    {
-      typedef boost::reference_wrapper<TY> RefWrapper;
-    public:
-      
-      explicit AssignableRefWrapper(TY& ref)
-        : RefWrapper(ref)
-        { }
-      
-      AssignableRefWrapper&
-      operator= (RefWrapper const& o)
-        {
-          RefWrapper::operator= (o);
-          return *this;
-        }
-      
-      AssignableRefWrapper&
-      operator= (TY& newRef)
-        {
-          (*this) = RefWrapper(newRef);
-          return *this;
-        }
-    };
   
   
   /** Type definition helper for pointer and reference types.
@@ -126,22 +96,14 @@ namespace typelist {
     };
   
   template<typename TY>
-  struct RefTraits<const TY *>
-    {
-      typedef TY value_type;
-      typedef const TY* pointer;
-      typedef const TY& reference;
-      typedef pointer member_type;
-    };
-  
-  template<typename TY>
   struct RefTraits<TY &>
     {
       typedef TY* pointer;
       typedef TY& reference;
       typedef TY  value_type;
-      typedef AssignableRefWrapper<TY> member_type;
+      typedef lib::wrap::AssignableRefWrapper<TY> member_type;
     };
+  //////////////////////////////////////////TODO: not needed 12/09 -- obsolete? useful? keep it?
   
   
 }} // namespace lumiera::typelist
