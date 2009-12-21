@@ -54,6 +54,7 @@
 #define LIB_BOOL_CHECKABLE_H
 
 
+#include <boost/static_assert.hpp>
 
 namespace lib {
   
@@ -117,6 +118,18 @@ namespace lib {
           return !(obj.*isValid)();
         }
       
+      
+      /** safety guard: when this comparison kicks in, the compiler
+       *  is about to use an implicit bool conversion on both sides to
+       *  perform an equality test. This is most likely not what you want.
+       *  Define an explicit equality comparison in the class using BoolCheckable!
+       */
+      friend bool
+      operator== (BoolCheckable const&, BoolCheckable const&)
+      {
+        BOOST_STATIC_ASSERT (false && sizeof(T) );
+        return false;
+      }
     };
   
   
