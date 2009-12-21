@@ -87,16 +87,7 @@ namespace wrapper {
     };
   
   
-  
-  namespace impl {
-    template<typename TY>
-    struct ItemWrapperStorage
-      {
-        char content_[sizeof(TY)];
-        char created_;
-        
-      };
-  }
+    
   
   /**
    * Universal value/ref wrapper behaving like a pointer.
@@ -108,7 +99,7 @@ namespace wrapper {
    * 
    * The purpose of this template is to be able to remember
    * pretty much any kind of value or pointer or reference,
-   * and to subsume this handling in a single template.
+   * and to subsume this handling within a single template.
    * An example would be to remember the value yielded
    * by a function, without any further assumptions
    * regarding this function.
@@ -173,7 +164,7 @@ namespace wrapper {
           if (!ref.isValid())
             discard();
           else
-            (*this) = (*ref);
+            this->operator= (*ref);
           
           return *this;
         }
@@ -182,7 +173,7 @@ namespace wrapper {
       ItemWrapper&
       operator= (X const& something) ///< accept anything assignable to TY
         {
-          if (isSameObject (something, access() ))
+          if (!isSameObject (something, access() ))
             {
               if (created_)
                 access() = something;
@@ -217,6 +208,7 @@ namespace wrapper {
         }
     };
   
+    
   /**
    * Specialisation of the ItemWrapper to deal with references,
    * as if they were pointer values. Allows the reference value
@@ -226,7 +218,7 @@ namespace wrapper {
   class ItemWrapper<TY &>
     : public BoolCheckable<ItemWrapper<TY &> >
     {
-//      mutable 
+      
       TY * content_;
       
       
@@ -275,6 +267,24 @@ namespace wrapper {
           content_ = 0;
         }
     };
+  
+  
+  
+  /** allow equality comparison if the wrapped types are comparable */
+  template<typename TY>
+  inline bool
+  operator== (ItemWrapper<TY> const& w1, ItemWrapper<TY> const& w2)
+  {
+    return (!w1 && !w2)
+        || ( w1 &&  w2 && (*w1)==(*w2));
+  }
+  
+  template<typename TY>
+  inline bool
+  operator!= (ItemWrapper<TY> const& w1, ItemWrapper<TY> const& w2)
+  {
+    return !(w1 == w2);
+  }
   
   
   

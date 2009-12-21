@@ -321,7 +321,8 @@ return: 0
 END
 
 
-PLANNED "inline val/ref wrapper" ItemWrapper_test <<END
+TEST "inline val/ref wrapper" ItemWrapper_test <<END
+out: ItemWrapper: sizeof\( .+ItemWrapper.+ ) =
 END
 
 

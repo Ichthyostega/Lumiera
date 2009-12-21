@@ -29,7 +29,7 @@
 #include "lib/wrapper.hpp"
 
 //#include <boost/lexical_cast.hpp>
-//#include <iostream>
+#include <iostream>
 //#include <vector>
 #include <cstdlib>
 #include <string>
@@ -48,14 +48,27 @@ namespace test{
 //  using std::vector;
   using std::string;
   using lib::test::randStr;
-//  using std::cout;
-//  using std::endl;
+  using lib::test::showSizeof;
+  using std::cout;
+  using std::endl;
   
   
   
-  namespace { // Test data
+  namespace { // Test helper: yet another ctor/dtor counting class
+    
+    long cntTracker = 0;
   
-    ///////////TODO
+    struct Tracker
+      {
+        uint i_;
+        
+        Tracker()                  : i_(rand() % 500) { ++cntTracker; }
+        Tracker(Tracker const& ot) : i_(ot.i_)        { ++cntTracker; }
+       ~Tracker()                                     { --cntTracker; }
+      };
+    
+    bool operator== (Tracker const& t1, Tracker const& t2) { return t1.i_ == t2.i_; }
+    bool operator!= (Tracker const& t1, Tracker const& t2) { return t1.i_ != t2.i_; }
     
   } // (END) Test data
   
@@ -68,12 +81,11 @@ namespace test{
   /*******************************************************************************
    *  @test use the ItemWrapper to define inline-storage holding values,
    *        pointers and references. Verify correct behaviour in each case,
-   *        including assignment, empty check, invalid dereferentiation.
+   *        including (self)assignment, empty check, invalid dereferentiation.
    *        
    */
   class ItemWrapper_test : public Test
     {
-      
       
       
       virtual void
@@ -84,12 +96,9 @@ namespace test{
           string s1 (randStr(50));
           string s2 (randStr(50));
           const char* cp (s1.c_str());
-//        Tracker t1;
-//        Tracker t2;
           
           verifyWrapper<ulong> (l1, l2);
           verifyWrapper<ulong&> (l1, l2);
-#if false  //////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET 475  !!!!!!!!!
           verifyWrapper<ulong*> (&l1, &l2);
           verifyWrapper<ulong*> ((0), &l2);
           verifyWrapper<ulong*> (&l1, (0));
@@ -99,13 +108,10 @@ namespace test{
           verifyWrapper<string&> (s1, s2);
           verifyWrapper<string*> (&s1, &s2);
           
-          verifyWrapper<Tracker> (t1, t2);
-          verifyWrapper<Tracker&> (t1, t2);
-          verifyWrapper<Tracker*> (&t1, &t2);
-          
           verifyWrapper<const char*> (cp, "Lumiera");
-#endif //////////////////////////////////////////////////////////////////////////////////////TODO using yet undefined facilities.....!!!!!
           
+          
+          verifySaneInstanceHandling();
           verifyWrappedRef ();
         }
       
@@ -117,6 +123,8 @@ namespace test{
           const ItemWrapper<X> wrap(val);
           ASSERT (wrap);
           
+          cout << "ItemWrapper: " << showSizeof(wrap) << endl;
+          
           ItemWrapper<X> copy1 (wrap);
           ItemWrapper<X> copy2;
           ItemWrapper<X> empty;
@@ -125,17 +133,13 @@ namespace test{
           ASSERT (!copy2);
           ASSERT (false == bool(empty));
           
-#if false  //////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET 475  !!!!!!!!!
           ASSERT (wrap == copy1);
-#endif //////////////////////////////////////////////////////////////////////////////////////TODO using yet undefined facilities.....!!!!!
           ASSERT (wrap != copy2);
           ASSERT (wrap != empty);
           
           copy2 = copy1;
           ASSERT (copy2);
-#if false  //////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET 475  !!!!!!!!!
           ASSERT (wrap == copy2);
-#endif //////////////////////////////////////////////////////////////////////////////////////TODO using yet undefined facilities.....!!!!!
           ASSERT (wrap != empty);
           
           copy2 = otherVal;
@@ -154,21 +158,53 @@ namespace test{
           ASSERT (otherVal == *copy2);
           ASSERT (wrap != copy1);
           ASSERT (wrap != copy2);
+
+          copy1 = empty;                   // assign empty to discard value
+          copy1 = copy1;                   // self-assign empty
+          ASSERT (!copy1);
           
+          copy1 = copy2;
+          ASSERT (otherVal == *copy1);
+          copy1 = copy1;                   // self-assign (will be suppressed)
+          ASSERT (otherVal == *copy1);
+          copy1 = *copy1;                  // self-assign also detected in this case 
+          ASSERT (otherVal == *copy2);
+          
+          ASSERT (copy1);
           copy1.reset();
           ASSERT (!copy1);
-#if false  //////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET 475  !!!!!!!!!
           ASSERT (empty == copy1);
-#endif //////////////////////////////////////////////////////////////////////////////////////TODO using yet undefined facilities.....!!!!!
           ASSERT (copy2 != copy1);
           VERIFY_ERROR (BOTTOM_VALUE, *copy1 );
         };
       
       
+      /** @test verify that ctor and dtor calls are balanced,
+       *        even when assigning and self-assigning.
+       */
+      void
+      verifySaneInstanceHandling()
+        {
+          cntTracker = 0;
+          {
+            Tracker t1;
+            Tracker t2;
+            
+            verifyWrapper<Tracker> (t1, t2);
+            verifyWrapper<Tracker&> (t1, t2);
+            verifyWrapper<Tracker*> (&t1, &t2);
+              
+          }
+          ASSERT (0 == cntTracker);  
+        }
+      
+      
+      /** @test verify especially that we can wrap and handle
+       *        a reference "value" in a pointer-like manner
+       */
       void
       verifyWrappedRef ()
         {
-#if false  //////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET 475  !!!!!!!!!
           int x = 5;
           ItemWrapper<int&> refWrap;
           ASSERT (!refWrap);
@@ -182,10 +218,10 @@ namespace test{
           ASSERT (x == 10);
           
           ItemWrapper<int*> ptrWrap (& *refWrap);
-          ASSERT (isSameObject (*ptrWrap, x));
+          ASSERT ( isSameObject (**ptrWrap,  x));
+          ASSERT (!isSameObject ( *ptrWrap, &x));
           **ptrWrap += 13;
           ASSERT (x == 23);
-#endif //////////////////////////////////////////////////////////////////////////////////////TODO using yet undefined facilities.....!!!!!
         }
       
       
