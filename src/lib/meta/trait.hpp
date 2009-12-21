@@ -26,12 +26,11 @@
 
 
 #include "lib/meta/util.hpp"
-#include "lib/wrapper.hpp"
+#include "lib/wrapper.hpp"     ////////////////////////TODO only because of AssignableRefWrapper -- can we get rid of this import?
 
 #include <boost/type_traits/is_convertible.hpp>
 #include <boost/type_traits/is_arithmetic.hpp>
 #include <boost/utility/enable_if.hpp>
-#include <boost/ref.hpp>
 #include <string>
 
 
@@ -101,7 +100,7 @@ namespace typelist {
       typedef TY* pointer;
       typedef TY& reference;
       typedef TY  value_type;
-      typedef lib::wrap::AssignableRefWrapper<TY> member_type;
+      typedef lib::wrapper::AssignableRefWrapper<TY> member_type;
     };
   //////////////////////////////////////////TODO: not needed 12/09 -- obsolete? useful? keep it?
   

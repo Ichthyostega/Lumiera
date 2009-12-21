@@ -180,8 +180,9 @@ namespace session {
         {
           REQUIRE (contains (id));
           ScopeContents contents = scopeTab_.equal_range (id);
-          return iterator (ScopeRangeIter(contents.first, contents.second)
-                          ,rangeIndexElementsResolver() );
+          UNIMPLEMENTED ("WIP-WIP-WIP");
+//          return iterator (ScopeRangeIter(contents.first, contents.second)
+//                          ,scopeIndexElementsResolver() );
         }
       
       
@@ -327,7 +328,7 @@ namespace session {
        *  resolve it through the main index table (placementTab_).
        */
       PlacementMO&
-      resolveScopeIndexElement(pair<PID,PID> const& entry)
+      resolveScopeIndexElement(pair<PID,PID> const& entry)  const
         {
           ID elemID (entry.second);
           ASSERT (contains (elemID));

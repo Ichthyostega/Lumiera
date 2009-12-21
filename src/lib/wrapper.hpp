@@ -34,16 +34,22 @@
 #ifndef LIB_WRAPPER_H
 #define LIB_WRAPPER_H
 
-//#include "lib/bool-checkable.hpp"
+#include "lib/error.hpp"
+#include "lib/bool-checkable.hpp"
+#include "lib/util.hpp"
 
 //#include <tr1/memory>
+#include <tr1/functional>     ////////////////////////TODO only because of tr1::ref_wrapper, used by AssignableRefWrapper -- can we get rid of this import?
 
 
 namespace lib {
-namespace wrap {
+namespace wrapper {
   
 //using std::tr1::shared_ptr;
 //using std::tr1::weak_ptr;
+  using util::unConst;
+  using util::isSameObject;
+  using lumiera::error::LUMIERA_ERROR_BOTTOM_VALUE;
   
   
   
@@ -56,9 +62,9 @@ namespace wrap {
    */
   template<typename TY>
   class AssignableRefWrapper
-    : public boost::reference_wrapper<TY>
+    : public std::tr1::reference_wrapper<TY>
     {
-      typedef boost::reference_wrapper<TY> RefWrapper;
+      typedef std::tr1::reference_wrapper<TY> RefWrapper;
     public:
       
       explicit AssignableRefWrapper(TY& ref)
@@ -111,46 +117,103 @@ namespace wrap {
   class ItemWrapper
     : public BoolCheckable<ItemWrapper<TY> >
     {
-      typedef typename impl::ItemWrapperStorage<TY> Item;
+      mutable 
+      char content_[sizeof(TY)];
+      bool created_;
       
-      Item item_;
+      void
+      build (TY const& ref)
+        {
+          new(&content_) TY(ref);
+          created_ = true;
+        }
+      
+      void
+      discard ()
+        {
+          if (created_) access().~TY();
+          created_ = false;
+        }
+      
+      TY&
+      access ()  const
+        {
+          return reinterpret_cast<TY&> (content_);
+        }
+      
       
     public:
       ItemWrapper()
-        : item_()
+        : created_(false)
         { }
       
       explicit
-      ItemWrapper(TY& o)
-        : item_(o)
-        { }
+      ItemWrapper(TY const& o)
+        {
+          build (o);
+        }
       
-      //note: using default copy ctor and assignment operator!
+     ~ItemWrapper()
+        {
+          discard();
+        }
+      
+      
+      /* == copy and assignment == */
+     
+      ItemWrapper (ItemWrapper const& ref)
+        {
+          if (ref.isValid())
+            build (*ref);
+        }
+      
+      ItemWrapper&
+      operator= (ItemWrapper const& ref)
+        {
+          if (!ref.isValid())
+            discard();
+          else
+            (*this) = (*ref);
+          
+          return *this;
+        }
       
       template<typename X>
       ItemWrapper&
       operator= (X const& something) ///< accept anything assignable to TY
         {
-          item_ = something;
+          if (isSameObject (something, access() ))
+            {
+              if (created_)
+                access() = something;
+              else
+                build (something);
+            }
+          
+          return *this;
         }
+      
       
       /* == value access == */
       TY&
-      operator* ()
+      operator* ()  const
         {
-          return item_;
+          if (!created_)
+            throw lumiera::error::State ("accessing uninitialised value/ref wrapper"
+                                        , LUMIERA_ERROR_BOTTOM_VALUE);
+          return access();
         }
       
       bool
       isValid ()  const
         {
-          return item_.isValid();   
+          return created_;   
         }
       
       void
       reset ()
         {
-          item_.clear();
+          discard();
         }
     };
   
