@@ -217,6 +217,65 @@ namespace wrapper {
         }
     };
   
+  /**
+   * Specialisation of the ItemWrapper to deal with references,
+   * as if they were pointer values. Allows the reference value
+   * to be default constructed to \c NULL and to be re-assigned.
+   */
+  template<typename TY>
+  class ItemWrapper<TY &>
+    : public BoolCheckable<ItemWrapper<TY &> >
+    {
+//      mutable 
+      TY * content_;
+      
+      
+    public:
+      ItemWrapper()
+        : content_()
+        { }
+      
+      explicit
+      ItemWrapper(TY& o)
+        : content_( &o )
+        { }
+      
+      
+       /* using default copy and assignment */
+      
+      /** allowing to re-bind the reference */
+      ItemWrapper&
+      operator= (TY& otherRef)
+        {
+          content_ = &otherRef;
+          return *this;
+        }
+      
+      
+      
+      /* == value access == */
+      TY&
+      operator* ()  const
+        {
+          if (!content_)
+            throw lumiera::error::State ("accessing uninitialised reference wrapper"
+                                        , LUMIERA_ERROR_BOTTOM_VALUE);
+          return *content_;
+        }
+      
+      bool
+      isValid ()  const
+        {
+          return bool(content_);   
+        }
+      
+      void
+      reset ()
+        {
+          content_ = 0;
+        }
+    };
+  
   
   
 }} // namespace lib::wrap

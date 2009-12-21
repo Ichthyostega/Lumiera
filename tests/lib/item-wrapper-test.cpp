@@ -79,28 +79,31 @@ namespace test{
       virtual void
       run (Arg)
         {
-          UNIMPLEMENTED ("check ItemWrapper");
+          ulong l1 (rand() % 1000);
+          ulong l2 (rand() % 1000);
+          string s1 (randStr(50));
+          string s2 (randStr(50));
+          const char* cp (s1.c_str());
+//        Tracker t1;
+//        Tracker t2;
           
-          ulong ll (rand() % 1000);
-          string ss (randStr(50));
-          const char* cp (ss.c_str());
-//        Tracker tt;
-          
-          verifyWrapper<ulong> (ItemWrapper<ulong> (ll), ll, -123);
+          verifyWrapper<ulong> (l1, l2);
+          verifyWrapper<ulong&> (l1, l2);
 #if false  //////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET 475  !!!!!!!!!
-          verifyWrapper (ItemWrapper<ulong&> (ll), ll, 45678 );
-          verifyWrapper (ItemWrapper<ulong const&> (ll), ll, 0 );
-          verifyWrapper (ItemWrapper<ulong*> (&ll), &ll, (ulong*) 0 );
+          verifyWrapper<ulong*> (&l1, &l2);
+          verifyWrapper<ulong*> ((0), &l2);
+          verifyWrapper<ulong*> (&l1, (0));
+          verifyWrapper<ulong const&> (l1, l2);
           
-          verifyWrapper (ItemWrapper<string> (ss), ss, "Lumiera");
-          verifyWrapper (ItemWrapper<string&> (ss), ssl, string() );
-          verifyWrapper (ItemWrapper<string*> (&ss), &ss, randStr(12));
+          verifyWrapper<string> (s1, s2);
+          verifyWrapper<string&> (s1, s2);
+          verifyWrapper<string*> (&s1, &s2);
           
-          verifyWrapper (ItemWrapper<Tracker> (tt), tt, Tracker());
-          verifyWrapper (ItemWrapper<Tracker&> (tt), tt, Tracker());
-          verifyWrapper (ItemWrapper<Tracker*> (&tt), &tt, (Tracker*) 0 );
+          verifyWrapper<Tracker> (t1, t2);
+          verifyWrapper<Tracker&> (t1, t2);
+          verifyWrapper<Tracker*> (&t1, &t2);
           
-          verifyWrapper (ItemWrapper<const char*> (cp), cp, "Lumiera");
+          verifyWrapper<const char*> (cp, "Lumiera");
 #endif //////////////////////////////////////////////////////////////////////////////////////TODO using yet undefined facilities.....!!!!!
           
           verifyWrappedRef ();
@@ -109,8 +112,9 @@ namespace test{
       
       template<typename X>
       void
-      verifyWrapper (ItemWrapper<X> const& wrap, X const& val, X const& otherVal)
+      verifyWrapper (X val, X otherVal)
         {
+          const ItemWrapper<X> wrap(val);
           ASSERT (wrap);
           
           ItemWrapper<X> copy1 (wrap);
