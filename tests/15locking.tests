@@ -86,3 +86,7 @@ PLANNED "reccondition broadcasting" <<END
 END
 
 
+TEST "chained reccondition section" chainedrecconditionsection <<END
+out: outer reccondition locked section
+out: inner reccondition locked section
+END
