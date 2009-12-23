@@ -29,10 +29,11 @@
 #include "lib/wrapper.hpp"
 
 //#include <boost/lexical_cast.hpp>
+#include <tr1/functional>
 #include <iostream>
-//#include <vector>
 #include <cstdlib>
 #include <string>
+#include <vector>
 
 
 
@@ -45,7 +46,8 @@ namespace test{
   using util::isSameObject;
 //  using util::for_each;
 //  using util::isnil;
-//  using std::vector;
+  using std::tr1::bind;
+  using std::vector;
   using std::string;
   using lib::test::randStr;
   using lib::test::showSizeof;
@@ -113,6 +115,8 @@ namespace test{
           
           verifySaneInstanceHandling();
           verifyWrappedRef ();
+          
+          verifyFunctionResult ();
         }
       
       
@@ -225,7 +229,39 @@ namespace test{
         }
       
       
-      
+      /** @test verify an extension built on top of the ItemWrapper:
+       *        a function which remembers the last result */
+      void
+      verifyFunctionResult()
+        {
+          vector<int> testVec;
+          for (uint i=0; i<10; ++i)
+            testVec.push_back(i);
+          
+          FunctionResult<int&(size_t)> funRes (bind (&vector<int>::at, _1 ));
+          
+          // function was never invoked, thus the remembered result is NIL
+          ASSERT (!funRes);
+          VERIFY_ERROR (BOTTOM_VALUE, *funRes );
+          
+          int& r5 = funRes (5);
+          ASSERT (5 == r5);
+          ASSERT (isSameObject (r5, testVec[5]));
+          
+          int r5x = *funRes;
+          ASSERT (isSameObject (r5, r5x));
+          
+          ASSERT ( isSameObject (r5, *funRes));
+          int r7 = funRes (7);
+          ASSERT (!isSameObject (r5, *funRes));
+          ASSERT (!isSameObject (r7, *funRes));
+          
+          -- r5x;
+          ++ *funRes;
+          ASSERT (5+1 == testVec[5]);
+          ASSERT (7+1 == testVec[7]);
+          ASSERT (7+1 == r7);
+        }
     };
   
   LAUNCHER (ItemWrapper_test, "unit common");
