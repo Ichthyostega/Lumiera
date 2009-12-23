@@ -177,10 +177,10 @@ namespace backend {
           lumiera_thread_run ( kind
                              , &run         // invoking the run helper and..
                              , this         // passing this start context as parameter
-                             , joinCond     // maybe wait-blocking for the thread to terminate
                              , purpose.c()
                              , logging_flag
                              );
+	  (void)joinCond;
           
           if (!res)
             throw lumiera::error::State("failed to create new thread.");

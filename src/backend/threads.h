@@ -90,10 +90,16 @@ enum lumiera_thread_class
 // defined in threads.c
 extern const char* lumiera_threadclass_names[];
 
-#define LUMIERA_THREAD_STATES                      \
-  LUMIERA_THREAD_STATE(IDLE)                       \
-  LUMIERA_THREAD_STATE(RUNNING)                    \
-  LUMIERA_THREAD_STATE(ERROR)
+// there is some confusion between the meaning of this
+// on one hand it could be used to tell the current state of the thread
+// on the other, it is used to tell the thread which state to enter on next iteration
+#define LUMIERA_THREAD_STATES                        \
+  LUMIERA_THREAD_STATE(IDLE)                         \
+  LUMIERA_THREAD_STATE(ERROR)                        \
+  LUMIERA_THREAD_STATE(RUNNING)                      \
+  LUMIERA_THREAD_STATE(WAKEUP)                       \
+  LUMIERA_THREAD_STATE(SHUTDOWN)                     \
+  LUMIERA_THREAD_STATE(STARTUP)
 
 #define LUMIERA_THREAD_STATE(name) LUMIERA_THREADSTATE_##name,
 
@@ -125,12 +131,15 @@ struct lumiera_thread_struct
   // void* arg;
   pthread_t id;
   // TODO: maybe this condition variable should be renamed when we have a better understanding of how it will be used
-  LumieraReccondition finished;
+  lumiera_reccondition signal; // control signal, state change signal
   // the following member could have been called "class" except that it would conflict with C++ keyword
   // as consequence, it's been decided to leave the type name containing the word "class",
   // while all members/variables called "kind"
   enum lumiera_thread_class kind;
+  // this is used both as a command and as a state tracker
   lumiera_thread_state state;
+  void (*function)(void *);
+  void * arguments;
 };
 
 /**
@@ -138,7 +147,6 @@ struct lumiera_thread_struct
  */
 LumieraThread
 lumiera_thread_new (enum lumiera_thread_class kind,
-                    LumieraReccondition finished,
                     const char* purpose,
                     struct nobug_flag* flag,
                     pthread_attr_t* attrs);
@@ -162,8 +170,6 @@ lumiera_thread_delete (LumieraThread self);
  * @param kind class of the thread to start
  * @param function pointer to a function to execute in a thread (returning void, not void* as in pthreads)
  * @param arg generic pointer passed to the thread
- * @param finished a condition variable to be broadcasted, if not NULL.
- *        The associated mutex should be locked at thread_run time already, else the signal can get lost.
  * @param purpose descriptive name of this thread, used by NoBug
  * @param flag NoBug flag used for logging the thread startup and return
  */
@@ -171,7 +177,6 @@ LumieraThread
 lumiera_thread_run (enum lumiera_thread_class kind,
                     void (*function)(void *),
                     void * arg,
-                    LumieraReccondition finished,
                     const char* purpose,
                     struct nobug_flag* flag);
 

@@ -91,7 +91,6 @@ TEST ("simple_thread")
   lumiera_thread_run (LUMIERA_THREADCLASS_WORKER,
                       threadfn,
                       NULL,
-                      NULL,
                       argv[1],
                       NULL);
 
@@ -111,7 +110,6 @@ TEST ("thread_synced")
 
       lumiera_thread_run (LUMIERA_THREADCLASS_WORKER,
                           threadsyncfn,
-                          &cnd,
                           &cnd,
                           argv[1],
                           NULL);
@@ -142,7 +140,6 @@ TEST ("mutex_thread")
 
       lumiera_thread_run (LUMIERA_THREADCLASS_WORKER,
                           mutexfn,
-                          NULL,
                           NULL,
                           argv[1],
                           NULL);

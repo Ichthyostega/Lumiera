@@ -26,7 +26,7 @@
 #   stop testing on the first failure
 
 export LC_ALL=C
-NOBUG_LOGREGEX='^\(\*\*[0-9]*\*\* \)\?[0-9]\{10,\}: \(TRACE\|INFO\|NOTICE\|WARNING\|ERR\|TODO\|PLANNED\|FIXME\|DEPRECATED\|UNIMPLEMENTED\):'
+NOBUG_LOGREGEX='^\(\*\*[0-9]*\*\* \)\?[0-9]\{10,\}: \(TRACE\|INFO\|NOTICE\|WARNING\|ERR\|TODO\|PLANNED\|FIXME\|DEPRECATED\|UNIMPLEMENTED\|RESOURCE_ENTER\|RESOURCE_LEAVE\|RESOURCE_STATE\):'
 
 arg0="$0"
 srcdir="$(dirname "$arg0")"

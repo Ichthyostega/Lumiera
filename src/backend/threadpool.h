@@ -55,12 +55,12 @@ lumiera_threadpool_acquire_thread(enum lumiera_thread_class kind,
                                   struct nobug_flag* flag);
 
 /**
- * Release a thread
- * This ends up putting a (parked/idle) thread back on the list of an appropriate threadpool.
+ * Park a thread
+ * This ends up putting a finished thread back on the list of an appropriate threadpool.
  * This function doesn't need to be accessible outside of the threadpool implementation.
  */
 void
-lumiera_threadpool_release_thread(LumieraThread thread);
+lumiera_threadpool_park_thread(LumieraThread thread);
 
 typedef struct lumiera_threadpool_struct lumiera_threadpool;
 typedef lumiera_threadpool* LumieraThreadpool;
@@ -71,22 +71,27 @@ struct lumiera_threadpool_struct
   {
     llist list;
     lumiera_mutex lock;
-    unsigned max_threads;
     unsigned working_thread_count;
     unsigned idle_thread_count;
     pthread_attr_t pthread_attrs;
+    lumiera_reccondition signal;
   } pool[LUMIERA_THREADCLASS_COUNT];
 };
 
 /**
  * Initialize the thread pool.
- * @param limit the maximum number of threads (idle+working) allowed per pool
  */
 void
-lumiera_threadpool_init(unsigned limit);
+lumiera_threadpool_init();
 
 void
 lumiera_threadpool_destroy(void);
+
+/**
+ * Just remove the thread structure from an associated pool list.
+ */
+void
+lumiera_threadpool_unlink(LumieraThread thread);
 
 #endif
 /*
