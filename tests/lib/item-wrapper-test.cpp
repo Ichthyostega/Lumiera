@@ -28,7 +28,6 @@
 
 #include "lib/wrapper.hpp"
 
-//#include <boost/lexical_cast.hpp>
 #include <tr1/functional>
 #include <iostream>
 #include <cstdlib>
@@ -42,15 +41,14 @@ namespace wrapper {
 namespace test{
   
   using ::Test;
-//  using boost::lexical_cast;
-  using util::isSameObject;
-//  using util::for_each;
-//  using util::isnil;
-  using std::tr1::bind;
-  using std::vector;
-  using std::string;
   using lib::test::randStr;
   using lib::test::showSizeof;
+  using util::isSameObject;
+  
+  using std::tr1::placeholders::_1;
+  using std::tr1::ref;
+  using std::vector;
+  using std::string;
   using std::cout;
   using std::endl;
   
@@ -59,7 +57,7 @@ namespace test{
   namespace { // Test helper: yet another ctor/dtor counting class
     
     long cntTracker = 0;
-  
+    
     struct Tracker
       {
         uint i_;
@@ -72,7 +70,22 @@ namespace test{
     bool operator== (Tracker const& t1, Tracker const& t2) { return t1.i_ == t2.i_; }
     bool operator!= (Tracker const& t1, Tracker const& t2) { return t1.i_ != t2.i_; }
     
-  } // (END) Test data
+    
+    /// to be bound as test function....
+    int&
+    pickElement (vector<int>& vec, size_t idx)
+    {
+      return vec[idx];
+    }
+    
+    function<int&(size_t)>
+    pickElement_ofVector (vector<int>& vec)
+    {
+      return std::tr1::bind (pickElement, ref(vec), _1 );
+    }
+    
+    
+  } // (END) Test helpers
   
   
   
@@ -81,10 +94,11 @@ namespace test{
   
   
   /*******************************************************************************
-   *  @test use the ItemWrapper to define inline-storage holding values,
-   *        pointers and references. Verify correct behaviour in each case,
-   *        including (self)assignment, empty check, invalid dereferentiation.
-   *        
+   * @test use the ItemWrapper to define inline-storage holding values,
+   *       pointers and references. Verify correct behaviour in each case,
+   *       including (self)assignment, empty check, invalid dereferentiation.
+   *       
+   * @see  wrapper.hpp
    */
   class ItemWrapper_test : public Test
     {
@@ -162,16 +176,16 @@ namespace test{
           ASSERT (otherVal == *copy2);
           ASSERT (wrap != copy1);
           ASSERT (wrap != copy2);
-
+          
           copy1 = empty;                   // assign empty to discard value
-          copy1 = copy1;                   // self-assign empty
+          copy1 = copy1;                   // self-assign empty value
           ASSERT (!copy1);
           
           copy1 = copy2;
           ASSERT (otherVal == *copy1);
           copy1 = copy1;                   // self-assign (will be suppressed)
           ASSERT (otherVal == *copy1);
-          copy1 = *copy1;                  // self-assign also detected in this case 
+          copy1 = *copy1;                  // self-assign also detected in this case
           ASSERT (otherVal == *copy2);
           
           ASSERT (copy1);
@@ -230,7 +244,13 @@ namespace test{
       
       
       /** @test verify an extension built on top of the ItemWrapper:
-       *        a function which remembers the last result */
+       *        a function which remembers the last result. We use a
+       *        test function, which picks a member of an vector and
+       *        returns a \em reference to it. Thus the cached "result"
+       *        can be used to access and change the values within the
+       *        original vector. In a real world usage scenario, such a
+       *        function could be an (expensive) data structure access.
+       */
       void
       verifyFunctionResult()
         {
@@ -238,7 +258,7 @@ namespace test{
           for (uint i=0; i<10; ++i)
             testVec.push_back(i);
           
-          FunctionResult<int&(size_t)> funRes (bind (&vector<int>::at, _1 ));
+          FunctionResult<int&(size_t)> funRes (pickElement_ofVector(testVec));
           
           // function was never invoked, thus the remembered result is NIL
           ASSERT (!funRes);
@@ -248,17 +268,17 @@ namespace test{
           ASSERT (5 == r5);
           ASSERT (isSameObject (r5, testVec[5]));
           
-          int r5x = *funRes;
+          int& r5x = *funRes;
           ASSERT (isSameObject (r5, r5x));
           
           ASSERT ( isSameObject (r5, *funRes));
-          int r7 = funRes (7);
+          int& r7 = funRes (7);
           ASSERT (!isSameObject (r5, *funRes));
-          ASSERT (!isSameObject (r7, *funRes));
+          ASSERT ( isSameObject (r7, *funRes));
           
           -- r5x;
           ++ *funRes;
-          ASSERT (5+1 == testVec[5]);
+          ASSERT (5-1 == testVec[5]);
           ASSERT (7+1 == testVec[7]);
           ASSERT (7+1 == r7);
         }

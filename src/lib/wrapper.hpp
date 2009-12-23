@@ -25,7 +25,15 @@
  ** This is (intended to become) a loose collection of the various small helper templates
  ** for wrapping, containing, placing or handling a somewhat \em problematic other object.
  ** Mostly these are implemented to suit a specific need and then factored out later on.
- **
+ ** - AssignableRefWrapper is not used anymore as of 12/09
+ ** - ItemWrapper is a similar concept, but more like a smart-ptr. Moreover,
+ **   it can be instantiated with a value type, a pointer or a reference type,
+ **   yielding the same behaviour in all cases (useful for building templates)
+ ** - FunctionResult is the combination of ItemWrapper with a functor object
+ **   to cache the function result value. It is used to implement a transforming
+ **   iterator, especially supporting the case when the transformation function
+ **   is to return a reference
+ ** 
  ** @see lib::TransformIter
  ** 
  */
@@ -36,28 +44,28 @@
 
 #include "lib/error.hpp"
 #include "lib/bool-checkable.hpp"
+#include "lib/meta/function.hpp"
+#include "lib/meta/function-closure.hpp"
 #include "lib/util.hpp"
 
-//#include <tr1/memory>
-#include <tr1/functional>     ////////////////////////TODO only because of tr1::ref_wrapper, used by AssignableRefWrapper -- can we get rid of this import?
+#include <tr1/functional>
 
 
 namespace lib {
 namespace wrapper {
   
-//using std::tr1::shared_ptr;
-//using std::tr1::weak_ptr;
   using util::unConst;
   using util::isSameObject;
+  using lumiera::typelist::FunctionSignature;
   using lumiera::error::LUMIERA_ERROR_BOTTOM_VALUE;
   
+  using std::tr1::function;
   
   
   /** 
    * Extension to boost::reference_wrapper: 
    * Allows additionally to re-bind to another reference,
-   * almost like a pointer. For example this allows to cache
-   * results returned from an API call by reference.
+   * almost like a pointer. Helpful for building templates.
    * @warning potentially dangerous 
    */
   template<typename TY>
@@ -87,7 +95,7 @@ namespace wrapper {
     };
   
   
-    
+  
   
   /**
    * Universal value/ref wrapper behaving like a pointer.
@@ -278,7 +286,6 @@ namespace wrapper {
     return (!w1 && !w2)
         || ( w1 &&  w2 && (*w1)==(*w2));
   }
-  
   template<typename TY>
   inline bool
   operator!= (ItemWrapper<TY> const& w1, ItemWrapper<TY> const& w2)
@@ -286,6 +293,62 @@ namespace wrapper {
     return !(w1 == w2);
   }
   
+  
+  
+  /** 
+   * Extension of ItemWrapper: a function remembering
+   * the result of the last invocation. Initially, the "value"
+   * is bottom (undefined, NIL), until the function is invoked 
+   * for the first time. After that, the result of the last 
+   * invocation can be accessed by \c  operator*()
+   * 
+   * @see TransformIter usage example
+   */
+  template<typename SIG>
+  class FunctionResult
+    : public function<SIG>
+    , public lib::BoolCheckable<FunctionResult<SIG> >
+    {
+      typedef typename FunctionSignature<function<SIG> >::Ret Res;
+      typedef ItemWrapper<Res> ResWrapper;
+      
+      ResWrapper lastResult_;
+      
+      
+      Res
+      captureResult (Res res)
+        {
+          lastResult_ = res;
+          return res;
+        }
+      
+    public:
+      /** Explanation:
+       *  - *this is a \em function
+       *  - initially it is defined as invalid
+       *  - then we build the function composition of
+       *    the target function, and a function storing
+       *    the result value into the ResWrapper member
+       *  - define ourselves by assigning the resulting
+       *    composite function
+       */
+      template<typename FUN>
+      FunctionResult (FUN targetFunction)
+        {
+          using std::tr1::bind;
+          using std::tr1::placeholders::_1;
+          using lumiera::typelist::func::chained;
+          
+          function<Res(Res)> doCaptureResult  = bind (&FunctionResult::captureResult, this, _1 );
+          function<SIG> chainedWithResCapture = chained (targetFunction, doCaptureResult); 
+          
+          function<SIG>::operator= (chainedWithResCapture); // define the function (baseclass)
+        }
+      
+      
+      Res operator*()  const { return *lastResult_; }
+      bool isValid ()  const { return lastResult_.isValid(); }
+    };
   
   
 }} // namespace lib::wrap
