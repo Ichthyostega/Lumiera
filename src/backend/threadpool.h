@@ -87,12 +87,6 @@ lumiera_threadpool_init();
 void
 lumiera_threadpool_destroy(void);
 
-/**
- * Just remove the thread structure from an associated pool list.
- */
-void
-lumiera_threadpool_unlink(LumieraThread thread);
-
 #endif
 /*
 // Local Variables:

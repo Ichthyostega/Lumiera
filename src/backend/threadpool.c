@@ -96,14 +96,6 @@ lumiera_threadpool_destroy(void)
     }
 }
 
-void lumiera_threadpool_unlink(LumieraThread thread)
-{
-  REQUIRE (thread, "invalid thread given");
-  REQUIRE (thread->kind < LUMIERA_THREADCLASS_COUNT, "thread belongs to an unknown pool kind: %d", thread->kind);
-  llist_unlink(&thread->node);
-  ENSURE (llist_is_empty(&thread->node), "failed to unlink the thread");
-}
-
 
 LumieraThread
 lumiera_threadpool_acquire_thread(enum lumiera_thread_class kind,

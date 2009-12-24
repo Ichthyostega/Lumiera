@@ -160,7 +160,7 @@ lumiera_thread_destroy (LumieraThread self)
 {
   REQUIRE (self, "trying to destroy an invalid thread");
 
-  lumiera_threadpool_unlink(self);
+  llist_unlink (&self->node);
 
   // get the pthread out of the processing loop
   // need to signal to the thread that it should start quitting
