@@ -45,6 +45,10 @@ NOBUG_DEFINE_FLAG_PARENT (threadpool, threads_dbg); /*TODO insert a suitable/bet
 void
 lumiera_threadpool_init()
 {
+  NOBUG_INIT_FLAG(threadpool);
+  NOBUG_INIT_FLAG(threads);
+  TRACE(threadpool);
+
   for (int i = 0; i < LUMIERA_THREADCLASS_COUNT; ++i)
     {
       llist_init(&threadpool.pool[i].list);
@@ -65,15 +69,16 @@ lumiera_threadpool_init()
 void
 lumiera_threadpool_destroy(void)
 {
-  ECHO ("destroying threadpool");
+  TRACE(threadpool);
+
   for (int i = 0; i < LUMIERA_THREADCLASS_COUNT; ++i)
     {
-      ECHO ("destroying individual pool #%d", i);
+      TRACE (threadpool, "destroying individual pool #%d", i);
       LUMIERA_MUTEX_SECTION (threadpool, &threadpool.pool[i].lock)
         {
           REQUIRE (0 == threadpool.pool[i].working_thread_count, "%d threads are running", threadpool.pool[i].working_thread_count);
           // TODO need to have a stronger assertion that no threads are really running because they will not even be in the list
-          ECHO ("number of threads in the pool=%d", llist_count(&threadpool.pool[i].list));
+          INFO (threadpool, "number of threads in the pool=%d", llist_count(&threadpool.pool[i].list));
           LLIST_WHILE_HEAD(&threadpool.pool[i].list, t)
             {
               lumiera_thread_delete((LumieraThread)t);
@@ -92,8 +97,8 @@ lumiera_threadpool_acquire_thread(enum lumiera_thread_class kind,
                                   const char* purpose,
                                   struct nobug_flag* flag)
 {
-  LumieraThread ret;
-
+  TRACE(threadpool);
+  LumieraThread ret = NULL;
   REQUIRE (kind < LUMIERA_THREADCLASS_COUNT, "unknown pool kind specified: %d", kind);
   LUMIERA_RECCONDITION_SECTION (threadpool, &threadpool.pool[kind].signal)
   {
@@ -126,6 +131,7 @@ lumiera_threadpool_acquire_thread(enum lumiera_thread_class kind,
 void
 lumiera_threadpool_park_thread(LumieraThread thread)
 {
+  TRACE(threadpool);
   REQUIRE (thread, "invalid thread given");
   REQUIRE (thread->kind < LUMIERA_THREADCLASS_COUNT, "thread belongs to an unknown pool kind: %d", thread->kind);
 

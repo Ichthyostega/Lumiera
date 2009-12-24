@@ -69,6 +69,7 @@ struct lumiera_thread_mockup
 
 static void* thread_loop (void* thread)
 {
+  TRACE(threads);
   LumieraThread t = (LumieraThread)thread;
 
   pthread_setcancelstate (PTHREAD_CANCEL_DISABLE, NULL);
@@ -81,14 +82,16 @@ static void* thread_loop (void* thread)
     {
       do {
         // NULL function means: no work to do
+        INFO(threads, "function %p", t->function);
         if (t->function)
           t->function (t->arguments);
+        INFO(threads, "Thread awaken with state %d", t->state);
         lumiera_threadpool_park_thread(t);
         LUMIERA_RECCONDITION_WAIT(t->state != LUMIERA_THREADSTATE_IDLE);
       } while (t->state != LUMIERA_THREADSTATE_SHUTDOWN);
         // SHUTDOWN state
 
-        ECHO ("thread quitting");
+      INFO(threads, "Thread Shutdown");
     }
   return 0;
 }
@@ -102,7 +105,8 @@ lumiera_thread_run (enum lumiera_thread_class kind,
                     const char* purpose,
                     struct nobug_flag* flag)
 {
-  REQUIRE (function, "invalid function");
+  TRACE(threads);
+  //  REQUIRE (function, "invalid function");
 
   // ask the threadpool for a thread (it might create a new one)
   LumieraThread self = lumiera_threadpool_acquire_thread(kind, purpose, flag);
@@ -158,6 +162,7 @@ lumiera_thread_new (enum lumiera_thread_class kind,
 LumieraThread
 lumiera_thread_destroy (LumieraThread self)
 {
+  TRACE(threads);
   REQUIRE (self, "trying to destroy an invalid thread");
 
   llist_unlink (&self->node);
@@ -186,6 +191,7 @@ lumiera_thread_destroy (LumieraThread self)
 void
 lumiera_thread_delete (LumieraThread self)
 {
+  TRACE(threads);
   ECHO ("deleting thread");
   lumiera_free (lumiera_thread_destroy (self));
 }
