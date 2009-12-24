@@ -23,7 +23,7 @@
 #define LUMIERA_THREADS_H
 
 //TODO: Support library includes//
-#include "lib/reccondition.h"
+#include "lib/condition.h"
 
 
 //TODO: Forward declarations//
@@ -132,7 +132,7 @@ struct lumiera_thread_struct
   // void* arg;
   pthread_t id;
   // TODO: maybe this condition variable should be renamed when we have a better understanding of how it will be used
-  lumiera_reccondition signal; // control signal, state change signal
+  lumiera_condition signal; // control signal, state change signal
   // the following member could have been called "class" except that it would conflict with C++ keyword
   // as consequence, it's been decided to leave the type name containing the word "class",
   // while all members/variables called "kind"

@@ -23,9 +23,8 @@
 #define LUMIERA_THREADPOOL_H
 
 //TODO: Support library includes//
-#include "lib/reccondition.h"
+#include "lib/condition.h"
 #include "lib/llist.h"
-#include "lib/mutex.h"
 
 //TODO: Forward declarations//
 
@@ -60,7 +59,7 @@ lumiera_threadpool_acquire_thread(enum lumiera_thread_class kind,
  * This function doesn't need to be accessible outside of the threadpool implementation.
  */
 void
-lumiera_threadpool_park_thread(LumieraThread thread);
+lumiera_threadpool_release_thread(LumieraThread thread);
 
 typedef struct lumiera_threadpool_struct lumiera_threadpool;
 typedef lumiera_threadpool* LumieraThreadpool;
@@ -70,11 +69,10 @@ struct lumiera_threadpool_struct
   struct
   {
     llist list;
-    lumiera_mutex lock;
     unsigned working_thread_count;
     unsigned idle_thread_count;
     pthread_attr_t pthread_attrs;
-    lumiera_reccondition signal;
+    lumiera_condition sync;
   } pool[LUMIERA_THREADCLASS_COUNT];
 };
 
