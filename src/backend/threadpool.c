@@ -42,23 +42,13 @@ NOBUG_DEFINE_FLAG_PARENT (threadpool, threads_dbg); /*TODO insert a suitable/bet
 
 //code goes here//
 
-void* pool_thread_loop(void * arg)
-{
-  (void) arg;
-  while (1)
-    {
-      ;
-    }
-  return arg;
-}
-
 void
 lumiera_threadpool_init()
 {
   for (int i = 0; i < LUMIERA_THREADCLASS_COUNT; ++i)
     {
       llist_init(&threadpool.pool[i].list);
-       threadpool.pool[i].working_thread_count = 0;
+      threadpool.pool[i].working_thread_count = 0;
       threadpool.pool[i].idle_thread_count = 0;
 
       //TODO: configure each pools' pthread_attrs appropriately
