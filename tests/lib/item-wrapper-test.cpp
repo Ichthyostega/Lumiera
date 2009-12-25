@@ -49,6 +49,7 @@ namespace test{
   using std::tr1::ref;
   using std::vector;
   using std::string;
+  using std::rand;
   using std::cout;
   using std::endl;
   
@@ -131,6 +132,7 @@ namespace test{
           verifyWrappedRef ();
           
           verifyFunctionResult ();
+          verifyFunctionRefResult ();
         }
       
       
@@ -244,15 +246,44 @@ namespace test{
       
       
       /** @test verify an extension built on top of the ItemWrapper:
-       *        a function which remembers the last result. We use a
-       *        test function, which picks a member of an vector and
+       *        a function which remembers the last result. As a simple test,
+       *        we bind the \c rand() standard lib function and remember the
+       *        last returned random value.
+       */
+      void
+      verifyFunctionResult()
+        {
+          FunctionResult<int(void)> randomVal (std::rand);
+          
+          // function was never invoked, thus the remembered result is NIL
+          ASSERT (!randomVal);
+          VERIFY_ERROR (BOTTOM_VALUE, *randomVal );
+          
+          int v1 = randomVal();
+          ASSERT (v1 == *randomVal);
+          ASSERT (v1 == *randomVal);
+          ASSERT (v1 == *randomVal);
+          ASSERT (randomVal);
+          
+          int v2;
+          do v2 = randomVal();
+          while (v1 == v2);
+          ASSERT (v2 == *randomVal);
+          ASSERT (v2 == *randomVal);
+          ASSERT (v1 != *randomVal);
+        }
+      
+      
+      /** @test verify an extension built on top of the ItemWrapper:
+       *        a function which remembers the last result. Here we use
+       *        a test function, which picks a member of an vector and
        *        returns a \em reference to it. Thus the cached "result"
        *        can be used to access and change the values within the
        *        original vector. In a real world usage scenario, such a
        *        function could be an (expensive) data structure access.
        */
       void
-      verifyFunctionResult()
+      verifyFunctionRefResult()
         {
           vector<int> testVec;
           for (uint i=0; i<10; ++i)
@@ -265,6 +296,8 @@ namespace test{
           VERIFY_ERROR (BOTTOM_VALUE, *funRes );
           
           int& r5 = funRes (5);
+          ASSERT (funRes); // indicates existence of cached result
+          
           ASSERT (5 == r5);
           ASSERT (isSameObject (r5, testVec[5]));
           
