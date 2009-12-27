@@ -48,6 +48,7 @@
 #include "lib/meta/function-closure.hpp"
 #include "lib/util.hpp"
 
+#include <boost/noncopyable.hpp>
 #include <tr1/functional>
 
 
@@ -302,12 +303,14 @@ namespace wrapper {
    * for the first time. After that, the result of the last 
    * invocation can be accessed by \c  operator*()
    * 
-   * @see TransformIter usage example
+   * @note non-copyable. (removing this limitation would
+   *       require a much more expensive implementation,
+   *       by implementing operator() ourselves)
    */
   template<typename SIG>
   class FunctionResult
     : public function<SIG>
-    , public lib::BoolCheckable<FunctionResult<SIG> >
+    , boost::noncopyable
     {
       typedef typename FunctionSignature<function<SIG> >::Ret Res;
       typedef ItemWrapper<Res> ResWrapper;
@@ -323,7 +326,12 @@ namespace wrapper {
         }
       
     public:
-      /** Explanation:
+      /** default ctor yields an object
+       *  locked to \em invalid state */
+      FunctionResult () { }
+      
+      /** Create result-remembering functor
+       *  by binding the given function. Explanation:
        *  - *this is a \em function
        *  - initially it is defined as invalid
        *  - then we build the function composition of
@@ -338,7 +346,7 @@ namespace wrapper {
           using std::tr1::bind;
           using std::tr1::placeholders::_1;
           using lumiera::typelist::func::chained;
-          
+                                                      // note: binding "this" mandates noncopyable
           function<Res(Res)> doCaptureResult  = bind (&FunctionResult::captureResult, this, _1 );
           function<SIG> chainedWithResCapture = chained (targetFunction, doCaptureResult); 
           
@@ -346,8 +354,11 @@ namespace wrapper {
         }
       
       
-      Res operator*()  const { return *lastResult_; }
+      Res& operator*() const { return *lastResult_; }
       bool isValid ()  const { return lastResult_.isValid(); }
+     
+      operator bool()  const { return isValid(); }
+                      // can't use lib::BoolCheckable, because tr1::function implements safe-bool too
     };
   
   

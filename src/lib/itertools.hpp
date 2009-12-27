@@ -72,6 +72,7 @@
 #include "lib/iter-adapter.hpp"
 #include "lib/meta/function.hpp"
 #include "lib/meta/trait.hpp"
+#include "lib/wrapper.hpp"
 #include "lib/util.hpp"
 
 #include <tr1/functional>
@@ -341,11 +342,11 @@ namespace lib {
   class TransformingCore
     {
       typedef typename IT::reference InType;
-      typedef typename RefTraits<VAL>::member_type Item;
+      typedef wrapper::ItemWrapper<VAL> Item;
       
       function<VAL(InType)> trafo_;
       
-      IT source_;
+      IT   source_;
       Item treated_;
       
       void
@@ -353,6 +354,8 @@ namespace lib {
         {
           if (source_)
             treated_ = trafo_(*source_);
+          else
+            treated_.reset();
         }
       
       
@@ -372,13 +375,10 @@ namespace lib {
           processItem();
         }
       
-      Item *
+      Item const&
       pipe ()  const
         {
-          if (source_)
-            return & unConst(this)->treated_;  // accessing, no "mutation"
-          else
-            return 0; // signalling exhausted source
+          return treated_;
         }
       
       void
