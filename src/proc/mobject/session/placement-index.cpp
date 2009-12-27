@@ -27,12 +27,22 @@
  ** Moreover, it provides and manages the actual Placement instances (storage),
  ** considered to be part of the session. 
  ** 
- ** Simple hash based implementation. Proof-of-concept and for fleshing out the API.
+ ** Simple hash based implementation. Seems adequate for now (12/09).
+ ** A main table associates Placement-ID to an Placement \em instance, which is contained
+ ** and managed within this index. A second hashtable allows to reverse lookup the scope
+ ** associations, especially for enumerating the contents of a scope. The latter is done
+ ** by wrapping up an STL iterator range into a "Lumiera Forward Iterator" (adapter).
+ ** Generally speaking, PlacementIndex is an implementation level facility and provides
+ ** the basic/low-level functionality. For example, the PlacementIndexQueryResolver 
+ ** provides depth-first exploration of all the contents of an scope, including nested scopes,
+ ** building on top of these scope iterators from PlacementIndex.
+ ** 
+ ** PlacementIndex can be seen as the core datastructure of the session. Objects are attached
+ ** to the session by adding (copying) a Placement instance, which is owned and managed by
+ ** the PlacementIndex. Adding this Placement instance creates a new Placement-ID, which
+ ** from then on acts as a shorthand for "the object instance" within the session. 
  ** The actual storage is provided by an embedded TypedAllocationManager instance, which
  ** is planned (as of 12/09) to be backed later by a memory pool based custom allocator. 
- ** 
- ** @todo change PlacementIndex into an interface and create a separated implementation class
- ** @todo really? it seems PlacementIndex has gotten an implementation class without much relevance on the Session API
  ** 
  ** @see PlacementRef
  ** @see PlacementIndex_test
@@ -109,7 +119,7 @@ namespace session {
           PPlacement scope;
         };
       
-      // using a hashtables to implement the index
+      // using hashtables to implement the index
       typedef PlacementMO::ID PID;
       typedef unordered_map<PID, PlacementEntry, hash<PID> > IDTable;
       typedef std::tr1::unordered_multimap<PID,PID, hash<PID> > ScopeTable;
@@ -320,7 +330,7 @@ namespace session {
       
       
       /** Helper for building a scope exploring iterator
-       *  for PlacementIndex: our "reverse index" (scopeTab_)
+       *  for PlacementIndex: our "reverse index" (#scopeTab_)
        *  tracks the contents of each scope as pairs (scopeID,elementID).
        *  After fetching the range of matching entries, whenever the client
        *  dereferences the iterator, we have to pick up the second ID and
@@ -350,6 +360,9 @@ namespace session {
   
   
   
+  
+  
+  /* ============ PlacementIndex implementation functions ============ */
   
   
   PlacementIndex::PlacementIndex (PlacementMO const& rootDef)

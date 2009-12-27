@@ -22,7 +22,7 @@
 
 
 /** @file placement-index.hpp
- ** Key interface of the session implementation datastructure.
+ ** Core of the session implementation datastructure.
  ** The PlacementIndex is attached to and controlled by the SessionImpl.
  ** Client code is not intended to interface directly to this API. Even
  ** Proc-Layer internal facilities use the session datastructure through
@@ -31,10 +31,67 @@
  ** in the session. Any further structuring exists on the logical level only.
  ** 
  ** \par PlacementIndex, PlacementRef and MObjectRef
- ** TODO
+ ** Objects are attached to the session by adding (copying) a Placement instance,
+ ** and doing so creates  a new Placement-ID, which from then on acts as a shorthand for
+ ** "the object instance" within the session. As long as this instance isn't removed from
+ ** the session / PlacementIndex, a direct (language) reference can be used to work with
+ ** "the object instance"; accessing this way is adequate for implementation code living
+ ** within Lumiera's Proc-Layer.
  ** 
- ** \par Querying and contents discovery
- ** TODO
+ ** To avoid the dangerous dependency on a direct reference, external code would rather
+ ** rely on the Placement-ID. Moreover, being a simple value, such an ID can be passed
+ ** through plain C APIs. PlacementRef is a smart-ptr like wrapper, containing just
+ ** such an ID; dereferentiation transparently causes a lookup operation through the
+ ** PlacementIndex of the current session. (accessing an invalid PlacementRef throws)
+ ** 
+ ** When it comes to ownership and lifecycle management, external client code should
+ ** use MObjectRef instances. In addition to containing a PlacementRef, these set up
+ ** a smart-ptr managing the MObject instance and sharing ownership with the Placement
+ ** contained within the PlacementIndex. Usually, the commands expressing any mutating
+ ** operations on the session, bind MObjectRef instances as arguments; similarly, the
+ ** public API functions on the Session interface (and similar facade interfaces) are
+ ** written in terms of MObectRef.   
+ ** 
+ ** \par placement scopes
+ ** When adding a Placement to the index, it is mandatory to specify a Scope: this is
+ ** another Placement already registered within the index; the new Placement can be thought
+ ** off as being located "within" or "below" this scope-defining reference Placement. An
+ ** typical example would be the addition of a \c Placement<session::Clip>, specifying 
+ ** a \c Placement<session::Track> as scope. Thus, all "object instances" within the 
+ ** session are arranged in a tree-like fashion. On creation of the PlacementIndex,
+ ** a root element needs to be provided. While this root element has a meaning for
+ ** the session, within the index it is just a scope-providing element.
+ ** Note that a non-empty scope can't be deleted from the Index.
+ ** 
+ ** \par querying and contents discovery
+ ** As "the object instance within the session" is synonymous to the placement instance
+ ** managed by PlacementIndex, the (hash)-ID of such a placement can be used as an
+ ** object identifier (it is implemented as LUID and stored within the Placement instance).
+ ** Thus, a basic operation of the index is to fetch a (language) reference to a Placement,
+ ** given this hash-ID. Another basic operation is to retrieve the scope an given object
+ ** is living in, represented by the Placement defining this scope (called "scope top").
+ ** The reverse operation is also possible: given a scope-defining Placement, we can
+ ** \em discover all the other Placements directly contained within this scope:
+ ** \c getReferrers(ID) returns an (possibly empty) "Lumiera Forward Iterator",
+ ** allowing to enumerate the nested elements. Client code within Lumiera's Proc-Layer
+ ** typically uses this functionality through a ScopeQuery passed to the SessionServices,
+ ** while external client code would use either QueryFocus and the Scope wrapper objects,
+ ** or the specific query functions available on the facade objects accessible through
+ ** the public session API.
+ ** 
+ ** \par type handling
+ ** MObjects form a hierarchy and contain RTTI. By special definition trickery, the
+ ** various instances of the Placement template mirror this hierarchy to some extent.
+ ** By using the vtable of the referred MObject, a given \c Placement<MObject> can
+ ** be casted into a more specifically typed Placement, thus allowing to re-gain
+ ** the fully typed context. This technique plays an important role when it comes
+ ** to generic processing of the session contents by a visitor, and especially
+ ** within the Builder. This is a fundamental design decision within Proc-Layer:
+ ** code should not operate on MObjects and do type/capability queries -- rather
+ ** any processing is assumed to happen in a suitable typed context. Consequently,
+ ** client code will never need to fetch Placements directly from the index. This
+ ** allows all type information to be discarded on adding (copying) a Placement
+ ** instances into the PlacementIndex.
  ** 
  ** @note PlacementIndex is <b>not threadsafe</b>.
  **
@@ -111,27 +168,29 @@ namespace session {
       typedef lib::TransformIter<ScopeRangeIter, PlacementMO&> iterator;
       
       
-      PlacementMO& find (ID)  const;
+      /* == query operations == */
+      
+      PlacementMO& find (ID)                         const;
       
       template<class MO>
-      Placement<MO>&  find (PlacementMO::Id<MO>)  const;
+      Placement<MO>&  find (PlacementMO::Id<MO>)     const;
       template<class MO>
       Placement<MO>&  find (PlacementRef<MO> const&) const;
       
-      PlacementMO& getScope (PlacementMO const&)  const;
-      PlacementMO& getScope (ID)                  const;
-      
-      iterator getReferrers (ID)                  const;
-      
-      
-      /** retrieve the logical root scope */
-      PlacementMO& getRoot()                      const;
-      
-      size_t size()                               const;
-      bool contains (PlacementMO const&)          const;
-      bool contains (ID)                          const;
-      
-      bool isValid()                              const;
+      PlacementMO& getScope (PlacementMO const&)     const;
+      PlacementMO& getScope (ID)                     const;
+                                                     
+      iterator getReferrers (ID)                     const;
+                                                     
+                                                     
+      /** retrieve the logical root scope */         
+      PlacementMO& getRoot()                         const;
+                                                     
+      size_t size()                                  const;
+      bool contains (PlacementMO const&)             const;
+      bool contains (ID)                             const;
+                                                     
+      bool isValid()                                 const;
       
       
       
@@ -149,7 +208,6 @@ namespace session {
       
       void clear();
       
-    protected:
     };
   
   

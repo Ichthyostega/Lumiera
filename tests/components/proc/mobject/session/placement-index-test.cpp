@@ -33,15 +33,16 @@
 #include "proc/mobject/session/testclip.hpp"
 #include "proc/mobject/session/testroot.hpp"
 
-//#include <boost/format.hpp>
-//#include <iostream>
+#include <boost/format.hpp>
+#include <iostream>
 
-//using boost::format;
+using boost::format;
 //using lumiera::Time;
 //using util::contains;
 using util::isSameObject;
 using std::string;
-//using std::cout;
+using std::cout;
+using std::endl;
 
 
 namespace mobject {
@@ -80,10 +81,14 @@ namespace test    {
           checkScopeHandling (index);
           has_size (7, index);
           
-          ////////////////////////////TODO
+          checkContentsEnumeration (index);
+          
+          has_size (7, index);
+          ASSERT (index.isValid());
           
           index.clear();
           has_size (0, index);
+          ASSERT (index.isValid());
         }
       
       void
@@ -201,6 +206,52 @@ namespace test    {
           
           ASSERT (index.remove(e133));     // but can remove an scope, after emptying it 
           ASSERT (!index.contains(e133));
+        }
+      
+      
+      
+      typedef PlacementIndex::iterator Iter;
+      
+      /** @test drill down into the tree-like structure
+       *        and enumerate the contents of each element, if any 
+       */
+      void
+      checkContentsEnumeration (Idx index)
+        {
+          PMO& root = index.getRoot();
+          
+          Iter rootContents = index.getReferrers (root.getID());
+          ASSERT (rootContents);
+          
+          discover (index, rootContents, 0);
+        }
+      
+      
+      void
+      discover (Idx index, Iter iter, uint level)
+        {
+          uint count (0);
+          for ( ; iter; ++iter )
+            {
+              cout << indent(level) << "::" << string(*iter) << endl;
+              
+              ++count;
+              Iter scopeContents = index.getReferrers (iter->getID());
+              if (scopeContents)
+                discover (index, scopeContents, level+1);
+            }
+          
+          static format summary ("...%i elements at Level %i");
+          cout << indent(level) << summary % count % level << endl;
+          
+          ASSERT (!iter);
+          ASSERT (0 < count);
+        }
+      
+      static string
+      indent (uint level)
+        {
+          return string (level, ' '); 
         }
     };
   
