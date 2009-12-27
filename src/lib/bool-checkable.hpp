@@ -133,6 +133,19 @@ namespace lib {
     };
   
   
+///////////////////////////////////////TICKET #477 : consider alternative safe-bool idiom    
+//      struct _Hidden_type
+//      {
+//        _Hidden_type* _M_bool;
+//      };
+//
+//      /// This typedef is used to implement the safe_bool idiom.
+//      typedef _Hidden_type* _Hidden_type::* _Safe_bool;
+//
+//    public:
+//      operator _Safe_bool() const
+//      {
+//        return isValid()? &_Hidden_type::_M_bool : 0; }
   
   
 } // namespace lib

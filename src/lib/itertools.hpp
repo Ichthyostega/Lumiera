@@ -206,7 +206,7 @@ namespace lib {
       operator->() const
         {
           _maybe_throw();
-          return core_.pipe();
+          return & *core_.pipe();
         }
       
       IterTool&

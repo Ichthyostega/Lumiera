@@ -69,7 +69,7 @@ namespace session {
   using std::tr1::unordered_map;
   using std::tr1::unordered_multimap;
   using lib::TypedAllocationManager;
-//  using std::tr1::placeholders::_1;
+  using std::tr1::placeholders::_1;
   using std::tr1::function;
   using std::tr1::bind;
 //using util::contains;
@@ -180,9 +180,8 @@ namespace session {
         {
           REQUIRE (contains (id));
           ScopeContents contents = scopeTab_.equal_range (id);
-          UNIMPLEMENTED ("WIP-WIP-WIP");
-//          return iterator (ScopeRangeIter(contents.first, contents.second)
-//                          ,scopeIndexElementsResolver() );
+          return iterator (ScopeRangeIter(contents.first, contents.second)
+                          ,scopeIndexElementsResolver() );
         }
       
       
@@ -417,9 +416,8 @@ namespace session {
   
   
   /** Retrieve all the elements attached to the given entry (scope)
-   *  Each element (Placement) can act as a scope, containing other
-   *  Placements, which will be discovered by this query one level
-   *  deep (not recursive).
+   *  Each element (Placement) can act as a scope, containing other Placements,
+   *  which will be discovered by this query one level deep (not recursive).
    *  @return an Lumiera Forward Iterator, yielding the children,
    *          possibly empty if the denoted element is a leaf.
    *  @note results are returned in arbitrary order (hashtable)
