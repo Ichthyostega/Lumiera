@@ -60,6 +60,7 @@
 
 //#include <boost/format.hpp>
 //using boost::str;
+#include <boost/lambda/lambda.hpp>
 #include <boost/functional/hash.hpp>
 #include <boost/noncopyable.hpp>
 #include <tr1/unordered_map>
@@ -87,6 +88,8 @@ namespace session {
 //using std::map;
   using std::make_pair;
   using std::pair;
+  
+  using util::for_each;
   
   using namespace lumiera;
   
@@ -156,7 +159,19 @@ namespace session {
         {
           return placementTab_.size();
         }
-      
+            
+      size_t
+      scope_cnt()  const
+        {
+          return scopeTab_.size();
+        }
+            
+      size_t
+      element_cnt()  const
+        {
+          return allocator_.numSlots<PlacementMO>();
+        }
+
       bool
       contains (ID id)  const
         {
@@ -287,6 +302,38 @@ namespace session {
         }
       
       
+      /* == access for self-test == */
+      PlacementMO*
+      _root_4check ()
+        {
+          return root_.get();
+        }
+      
+      PlacementMO*
+      _element_4check (ID id)
+        {
+          return base_entry(id).element.get();
+        }
+      
+      PlacementMO*
+      _scope_4check (ID id)
+        {
+          return base_entry(id).scope.get();
+        }
+      
+      void
+      _eachEntry_4check ()
+        {
+          UNIMPLEMENTED ("return each id in the base table");
+        }
+      
+      void
+      _eachScope_4check()
+        {
+          UNIMPLEMENTED ("return each scope from the reverse table");
+        }
+      
+      
     private:
       typedef IDTable::const_iterator Slot;
       
@@ -368,6 +415,8 @@ namespace session {
   PlacementIndex::PlacementIndex (PlacementMO const& rootDef)
     : pTab_(new Table)
     {
+      INFO (session, "Initialising PlacementIndex...");
+      
       pTab_->setupRoot(rootDef);
       ENSURE (isValid());
     }
@@ -379,15 +428,6 @@ namespace session {
   PlacementIndex::getRoot()  const
   {
     return pTab_->getRootElement();
-  }
-  
-  
-  /** validity self-check, used for sanity checks
-   *  and the session self-check. */
-  bool
-  PlacementIndex::isValid()  const
-  {
-    UNIMPLEMENTED ("PlacementIndex validity self-check");
   }
   
   
@@ -491,6 +531,135 @@ namespace session {
   
   
   
+  
+  /* ====== PlacementIndex validity self-check ====== */
+  
+  namespace { // Implementation details of self-check
+    
+    LUMIERA_ERROR_DEFINE(INDEX_CORRUPTED, "PlacementIndex corrupted");
+    
+    struct SelfCheckFailure
+      : error::Fatal
+      {
+        SelfCheckFailure (Literal currentTest, string failure)
+          : error::Fatal (string("Failed test: ")+currentTest+ " : "+failure
+                         ,LUMIERA_ERROR_INDEX_CORRUPTED)
+          { }
+      };
+    
+#define VERIFY(_CHECK_, CHECK_ID, DESCRIPTION) \
+      if (!(_CHECK_))                           \
+        throw SelfCheckFailure (CHECK_ID, (DESCRIPTION));
+#define ELM(ID) \
+      (tab._element_4check ((ID)))
+#define SCO(ID) \
+      (tab._scope_4check ((ID)))
+    
+    
+    
+    using namespace boost::lambda;
+    typedef PlacementIndex::Table& Tab;
+      
+    void
+    checkRoot (PMO* root)
+    {
+      VERIFY ( root,                 "(0.1) Basics",   "Root element missing");
+      VERIFY ( root->isValid(),      "(0.2) Basics",   "Root Placement invalid");
+      VERIFY ( (*root)->isValid(),   "(0.3) Basics",   "Root MObject self-check failure");
+    }
+    
+    void
+    checkEntry (Tab tab, ID id)
+    {
+      VERIFY ( tab.contains(id),     "(1.1) Elements", "PlacementIndex main table corrupted");
+      VERIFY ( ELM(id),              "(1.2) Elements", "Entry doesn't hold a Placement");
+      VERIFY ( id==ELM(id)->getID(), "(1.3) Elements", "Element stored with wrong ID");      ////////////////TICKET #197
+      VERIFY ( ELM(id)->isValid(),   "(1.4) Elements", "Index contains invalid Placement")
+      VERIFY ( SCO(id),              "(1.5) Elements", "Entry has undefined scope");
+      VERIFY ( SCO(id)->isValid(),   "(1.6) Elements", "Entry has invalid scope");
+      VERIFY ( tab.contains (SCO(id)->getID()),
+                                     "(1.7) Elements", "Element associated with an unknown scope");
+      
+      PMO* theElement = ELM(id);
+      ID theScope (SCO(id)->getID());
+      bool properlyRegistered =
+          false;  ////////////////////////////////////////////////////////////////////////TODO
+//        has_any (tab.queryScopeContents(theScope), _1 == *theElement );
+      
+      VERIFY ( properlyRegistered,   "(1.8) Elements", "Element isn't registered as member of the enclosing scope");
+    }
+    
+    void
+    checkScope (Tab tab, ID id)
+    {
+      VERIFY ( tab.contains(id),     "(2.1) Scopes",   "Scope not registered in main table");
+      VERIFY ( ELM(id),              "(2.2) Scopes",   "Scope entry doesn't hold a Placement");
+      VERIFY ( SCO(id),              "(2.3) Scopes",   "Scope entry doesn't hold a containing Scope");
+      
+      PMO* root  = tab._root_4check();
+      PMO* scope = SCO(id);
+      while (scope && scope != SCO(scope->getID()))
+        scope = SCO(scope->getID());
+      
+      VERIFY ( root==scope,          "(2.4) Scopes",   "Found a scope not attached below root.");
+    }
+    
+    void
+    checkAllocation (Tab tab)
+    {
+      VERIFY ( 0 < tab.size(),       "(4.1) Storage",  "Implementation table is empty");
+      VERIFY ( 0 < tab.element_cnt(),"(4.2) Storage",  "No Placement instances allocated");
+      VERIFY ( tab.size()==tab.scope_cnt(),
+                                     "(4.3) Storage",  "Number of elements and scope entries disagree");
+      VERIFY ( tab.size()==tab.element_cnt(),
+                                     "(4.4) Storage",  "Number of entries doesn't match number of allocated Placement instances");
+    }
+    
+    
+#undef VERIFY
+#undef ELM
+#undef SCO
+    
+  }//(End) self-check implementation
+  
+  
+  
+  /** validity self-check, used for sanity checks and the session self-check.
+   *  The following checks are performed (causing at least one full table scan)
+   *  - root element exists and is valid.
+   *  - each element
+   *    - has a known scope
+   *    - is registered as child of it's scope
+   *  - can reach root from each scope
+   *  - element count of the allocator matches table size
+   */
+  bool
+  PlacementIndex::isValid()  const
+  {
+    try
+      {
+        if (!pTab_)
+          throw SelfCheckFailure ("(0) Basics"
+                                 ,"Implementation tables not initialised");
+        
+        checkRoot (pTab_->_root_4check());
 
-
+        ////////////////////////////////////////////////////////////////////////TODO
+//      for_each (pTab_->_eachEntry_4check(), bind (checkEntry, *pTab_, _1 ));
+//      for_each (pTab_->_eachScope_4check(), bind (checkScope, *pTab_, _1 ));
+        
+        return true;
+      }
+    
+    catch(SelfCheckFailure& failure)
+      {
+        lumiera_error();
+        ERROR (session, "%s", failure.what());
+      }
+    return false;
+  }
+  
+  
+  
+  
 }} // namespace mobject::session
