@@ -49,6 +49,117 @@ using namespace boost::lambda;
 
 
 namespace util {
+///////////////////////////////////////////////////////////////////////////TODO: Implementation draft
+  
+  using std::tr1::bind;
+  
+  template < typename CON, typename FUN
+           , typename P1
+           >
+  inline void                                                                            //________________________________
+  for_each (CON& elements, FUN function, P1 bind1)                                      ///< Accept binding for 1 Argument 
+  {
+    for_each (elements, std::tr1::bind (function, bind1));
+  }
+  
+  
+  template < typename CON, typename FUN
+           , typename P1
+           , typename P2
+           >
+  inline void                                                                            //________________________________
+  for_each (CON& elements, FUN function, P1 bind1, P2 bind2)                            ///< Accept binding for 2 Arguments
+  {
+    for_each (elements, std::tr1::bind (function, bind1, bind2));
+  }
+  
+  
+  template < typename CON, typename FUN
+           , typename P1
+           , typename P2
+           , typename P3
+           >
+  inline void                                                                            //________________________________
+  for_each (CON& elements, FUN function, P1 bind1, P2 bind2, P3 bind3)                  ///< Accept binding for 3 Arguments
+  {
+    for_each (elements, std::tr1::bind (function, bind1, bind2, bind3));
+  }
+  
+  
+  
+  
+  
+  template < typename CON, typename FUN
+           , typename P1
+           >
+  inline bool                                                                            //________________________________
+  and_all (CON& elements, FUN function, P1 bind1)                                       ///< Accept binding for 1 Argument 
+  {
+    return and_all (elements, std::tr1::bind (function, bind1));
+  }
+  
+  
+  template < typename CON, typename FUN
+           , typename P1
+           , typename P2
+           >
+  inline bool                                                                            //________________________________
+  and_all (CON& elements, FUN function, P1 bind1, P2 bind2)                             ///< Accept binding for 2 Arguments
+  {
+    return and_all (elements, std::tr1::bind (function, bind1, bind2));
+  }
+  
+  
+  template < typename CON, typename FUN
+           , typename P1
+           , typename P2
+           , typename P3
+           >
+  inline bool                                                                            //________________________________
+  and_all (CON& elements, FUN function, P1 bind1, P2 bind2, P3 bind3)                   ///< Accept binding for 3 Arguments
+  {
+    return and_all (elements, std::tr1::bind (function, bind1, bind2, bind3));
+  }
+  
+  
+  
+  
+  
+  template < typename CON, typename FUN
+           , typename P1
+           >
+  inline bool                                                                            //________________________________
+  has_any (CON& elements, FUN function, P1 bind1)                                       ///< Accept binding for 1 Argument 
+  {
+    return has_any (elements, std::tr1::bind (function, bind1));
+  }
+  
+  
+  template < typename CON, typename FUN
+           , typename P1
+           , typename P2
+           >
+  inline bool                                                                            //________________________________
+  has_any (CON& elements, FUN function, P1 bind1, P2 bind2)                             ///< Accept binding for 2 Arguments
+  {
+    return has_any (elements, std::tr1::bind (function, bind1, bind2));
+  }
+  
+  
+  template < typename CON, typename FUN
+           , typename P1
+           , typename P2
+           , typename P3
+           >
+  inline bool                                                                            //________________________________
+  has_any (CON& elements, FUN function, P1 bind1, P2 bind2, P3 bind3)                   ///< Accept binding for 3 Arguments
+  {
+    return has_any (elements, std::tr1::bind (function, bind1, bind2, bind3));
+  }
+  
+  
+  
+///////////////////////////////////////////////////////////////////////////TODO: Implementation draft (END)  
 namespace test {
   
   typedef std::vector<int> VecI;
