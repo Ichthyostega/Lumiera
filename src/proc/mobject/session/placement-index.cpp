@@ -534,6 +534,7 @@ namespace session {
   
   /* ====== PlacementIndex validity self-check ====== */
   
+#if false  //////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET 479  !!!!!!!!!
   namespace { // Implementation details of self-check
     
     LUMIERA_ERROR_DEFINE(INDEX_CORRUPTED, "PlacementIndex corrupted");
@@ -621,6 +622,7 @@ namespace session {
 #undef SCO
     
   }//(End) self-check implementation
+#endif ////////////////////////////////////////////////////////////////////////////////////////TODO lots of things unimplemented.....!!!!!
   
   
   
@@ -636,6 +638,7 @@ namespace session {
   bool
   PlacementIndex::isValid()  const
   {
+#if false  //////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET 479  !!!!!!!!!
     try
       {
         if (!pTab_)
@@ -656,6 +659,7 @@ namespace session {
         lumiera_error();
         ERROR (session, "%s", failure.what());
       }
+#endif ////////////////////////////////////////////////////////////////////////////////////////TODO lots of things unimplemented.....!!!!!
     return false;
   }
   
