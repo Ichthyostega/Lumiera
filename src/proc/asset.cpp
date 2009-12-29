@@ -23,6 +23,7 @@
 
 #include "proc/asset.hpp"
 #include "proc/assetmanager.hpp"
+#include "lib/util-foreach.hpp"
 #include "lib/util.hpp"
 
 #include <boost/format.hpp>

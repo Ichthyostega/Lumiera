@@ -24,7 +24,7 @@
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
 #include "lib/error.hpp"
-#include "lib/util.hpp"
+#include "lib/util-foreach.hpp"
 
 #include <boost/algorithm/string.hpp>
 #include <tr1/functional>

@@ -55,7 +55,7 @@
 #include "proc/mobject/session/scope.hpp"
 #include "lib/typed-allocation-manager.hpp"
 //#include "proc/mobject/mobject.hpp" ///////////////////////TODO necessary?
-#include "lib/util.hpp"
+#include "lib/util-foreach.hpp"
 
 
 //#include <boost/format.hpp>

@@ -25,6 +25,7 @@
 #include "proc/mobject/session.hpp"
 #include "proc/mobject/session/edl.hpp"
 #include "proc/mobject/session/testsession1.hpp"
+#include "lib/util-foreach.hpp"
 #include "lib/util.hpp"
 
 //#include <boost/format.hpp>

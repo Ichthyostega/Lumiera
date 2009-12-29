@@ -26,10 +26,10 @@
 #include "proc/mobject/session/scope-locator.hpp"
 #include "proc/mobject/session/session-service-explore-scope.hpp"
 #include "proc/mobject/mobject.hpp"
+#include "lib/util-foreach.hpp"
 #include "lib/itertools.hpp"
 #include "lib/symbol.hpp"
 #include "lib/error.hpp"
-#include "lib/util.hpp"
 
 #include <tr1/functional>
 #include <algorithm>

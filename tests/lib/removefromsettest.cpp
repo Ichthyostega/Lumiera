@@ -22,7 +22,7 @@
 
 
 #include "lib/test/run.hpp"
-#include "lib/util.hpp"
+#include "lib/util-foreach.hpp"
 
 #include <boost/lexical_cast.hpp>
 #include <boost/lambda/lambda.hpp>
@@ -36,75 +36,72 @@ using std::string;
 
 
 
-namespace util
-  {
-  namespace test
-    {
-    using util::for_each;
-    using boost::lambda::_1;
-    using boost::lambda::bind;
-    using boost::lexical_cast;
-    
-    
+namespace util {
+namespace test {
   
-    template<class COLL>
-    void 
-    show (COLL const& coll)
+  using util::for_each;
+  using boost::lambda::_1;
+  using boost::lambda::bind;
+  using boost::lexical_cast;
+  
+  
+  
+  template<class COLL>
+  void 
+  show (COLL const& coll)
+  {
+    cout << "[ ";
+    for_each (coll, cout << _1 << ", ");
+    cout << "]\n";
+  }
+  
+  bool
+  killerselector (string description, uint candidate)
+  {
+    return string::npos != description.find( lexical_cast<string> (candidate));
+  }
+  
+  
+  
+  class RemoveFromSet_test : public Test
     {
-      cout << "[ ";
-      for_each (coll, cout << _1 << ", ");
-      cout << "]\n";
-    }
-    
-    bool
-    killerselector (string description, uint candidate)
-    {
-      return string::npos != description.find( lexical_cast<string> (candidate));
-    }
-    
-    
-    
-    class RemoveFromSet_test : public Test
-      {
-        virtual void
-        run (Arg)
-          {
-            test_remove (" nothing ");
-            test_remove ("0");
-            test_remove ("9");
-            test_remove ("5");
-            test_remove ("0   2   4   6   8  ");
-            test_remove ("  1   3   5   7   9");
-            test_remove ("0 1 2 3 4 5 6 7 8 9");
-            test_remove ("0 1 2 3 4 5 6 7 8  ");
-            test_remove ("  1 2 3 4 5 6 7 8 9");
-            test_remove ("0 1 2 3 4   6 7 8 9");
-          }
-        
-        
-        /** @test populate a test set,
-         *        remove the denoted elements
-         *        and print the result...  */
-        void
-        test_remove (string elems_to_remove)
-          {
-            std::set<uint> theSet;
-            for (int i=0; i<10; ++i)
-              theSet.insert (i);
-            
-            util::remove_if (theSet, bind( killerselector, elems_to_remove, _1));
-            
-            cout << "removed " << elems_to_remove << " ---> ";
-            show (theSet);
-          }
-        
-      };
-    
+      virtual void
+      run (Arg)
+        {
+          test_remove (" nothing ");
+          test_remove ("0");
+          test_remove ("9");
+          test_remove ("5");
+          test_remove ("0   2   4   6   8  ");
+          test_remove ("  1   3   5   7   9");
+          test_remove ("0 1 2 3 4 5 6 7 8 9");
+          test_remove ("0 1 2 3 4 5 6 7 8  ");
+          test_remove ("  1 2 3 4 5 6 7 8 9");
+          test_remove ("0 1 2 3 4   6 7 8 9");
+        }
       
-      LAUNCHER (RemoveFromSet_test, "unit common");
-
       
-  } // namespace test
-    
-} // namespace util
+      /** @test populate a test set,
+       *        remove the denoted elements
+       *        and print the result...  */
+      void
+      test_remove (string elems_to_remove)
+        {
+          std::set<uint> theSet;
+          for (int i=0; i<10; ++i)
+            theSet.insert (i);
+          
+          util::remove_if (theSet, bind( killerselector, elems_to_remove, _1));
+          
+          cout << "removed " << elems_to_remove << " ---> ";
+          show (theSet);
+        }
+      
+    };
+  
+  
+  LAUNCHER (RemoveFromSet_test, "unit common");
+  
+  
+}} // namespace util::test
 

@@ -46,8 +46,8 @@
 #include "lib/typed-counter.hpp"
 #include "lib/scoped-ptrvect.hpp"
 #include "backend/thread-wrapper.hpp"
+#include "lib/util-foreach.hpp"
 #include "lib/sync.hpp"
-#include "lib/util.hpp"
 
 #include <tr1/functional>
 #include <vector>
