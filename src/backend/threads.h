@@ -137,7 +137,6 @@ struct lumiera_thread_struct
  */
 LumieraThread
 lumiera_thread_new (enum lumiera_thread_class kind,
-                    LumieraReccondition finished,
                     const char* purpose,
                     struct nobug_flag* flag,
                     pthread_attr_t* attrs);
@@ -169,8 +168,6 @@ lumiera_thread_delete (LumieraThread self);
  * @param kind class of the thread to start
  * @param function pointer to a function to execute in a thread (returning void, not void* as in pthreads)
  * @param arg generic pointer passed to the thread
- * @param finished a condition variable to be broadcasted, if not NULL.
- *        The associated mutex should be locked at thread_run time already, else the signal can get lost.
  * @param purpose descriptive name of this thread, used by NoBug
  * @param flag NoBug flag used for logging the thread startup and return
  */
@@ -178,7 +175,6 @@ LumieraThread
 lumiera_thread_run (enum lumiera_thread_class kind,
                     void (*function)(void *),
                     void * arg,
-                    LumieraReccondition finished,
                     const char* purpose,
                     struct nobug_flag* flag);
 

@@ -74,11 +74,9 @@ LumieraThread
 lumiera_thread_run (enum lumiera_thread_class kind,
                     void (*function)(void *),
                     void * arg,
-                    LumieraReccondition finished,
                     const char* purpose,
                     struct nobug_flag* flag)
 {
-  (void)finished;
   (void)function;
   (void)arg;
   // ask the threadpool for a thread (it might create a new one)
@@ -101,7 +99,6 @@ lumiera_thread_run (enum lumiera_thread_class kind,
  */
 LumieraThread
 lumiera_thread_new (enum lumiera_thread_class kind,
-                    LumieraReccondition finished,
                     const char* purpose,
                     struct nobug_flag* flag,
                     pthread_attr_t* attrs)
@@ -112,12 +109,9 @@ lumiera_thread_new (enum lumiera_thread_class kind,
   REQUIRE (kind < LUMIERA_THREADCLASS_COUNT, "invalid thread kind specified: %d", kind);
   REQUIRE (attrs, "invalid pthread attributes structure passed");
 
-  //REQUIRE (finished, "invalid finished flag passed");
-
-
   LumieraThread self = lumiera_malloc (sizeof (*self));
   llist_init (&self->node);
-  self->finished = finished;
+  lumiera_reccondition_init (&self->finished, "thread-control-condition", flag);
   self->kind = kind;
   self->state = LUMIERA_THREADSTATE_IDLE;
 
@@ -140,7 +134,6 @@ lumiera_thread_destroy (LumieraThread self)
 
   // TODO: stop the pthread
   llist_unlink (&self->node);
-  //finished = NULL; // or free(finished)?
   lumiera_reccondition_destroy (self->finished, &NOBUG_FLAG (threads));
   //kind = 0;
   //state = 0;
