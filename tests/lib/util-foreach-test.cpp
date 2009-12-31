@@ -95,7 +95,7 @@ namespace util {
   inline bool                                                                            //________________________________
   and_all (CON& elements, FUN function, P1 bind1)                                       ///< Accept binding for 1 Argument 
   {
-    return and_all (elements, std::tr1::bind (function, bind1));
+    return and_all (elements, std::tr1::bind<bool> (function, bind1));
   }
   
   
@@ -106,7 +106,7 @@ namespace util {
   inline bool                                                                            //________________________________
   and_all (CON& elements, FUN function, P1 bind1, P2 bind2)                             ///< Accept binding for 2 Arguments
   {
-    return and_all (elements, std::tr1::bind (function, bind1, bind2));
+    return and_all (elements, std::tr1::bind<bool> (function, bind1, bind2));
   }
   
   
@@ -118,7 +118,7 @@ namespace util {
   inline bool                                                                            //________________________________
   and_all (CON& elements, FUN function, P1 bind1, P2 bind2, P3 bind3)                   ///< Accept binding for 3 Arguments
   {
-    return and_all (elements, std::tr1::bind (function, bind1, bind2, bind3));
+    return and_all (elements, std::tr1::bind<bool> (function, bind1, bind2, bind3));
   }
   
   
@@ -131,7 +131,7 @@ namespace util {
   inline bool                                                                            //________________________________
   has_any (CON& elements, FUN function, P1 bind1)                                       ///< Accept binding for 1 Argument 
   {
-    return has_any (elements, std::tr1::bind (function, bind1));
+    return has_any (elements, std::tr1::bind<bool> (function, bind1));
   }
   
   
@@ -142,7 +142,7 @@ namespace util {
   inline bool                                                                            //________________________________
   has_any (CON& elements, FUN function, P1 bind1, P2 bind2)                             ///< Accept binding for 2 Arguments
   {
-    return has_any (elements, std::tr1::bind (function, bind1, bind2));
+    return has_any (elements, std::tr1::bind<bool> (function, bind1, bind2));
   }
   
   
@@ -154,7 +154,7 @@ namespace util {
   inline bool                                                                            //________________________________
   has_any (CON& elements, FUN function, P1 bind1, P2 bind2, P3 bind3)                   ///< Accept binding for 3 Arguments
   {
-    return has_any (elements, std::tr1::bind (function, bind1, bind2, bind3));
+    return has_any (elements, std::tr1::bind<bool> (function, bind1, bind2, bind3));
   }
   
   
@@ -213,6 +213,7 @@ namespace test {
     
     
 #define _NL_ cout << endl;
+#define ANNOUNCE(_LABEL_) cout << "---:" << STRINGIFY(_LABEL_) << endl;
     
   } // (End) test data and operations
   
@@ -249,6 +250,8 @@ namespace test {
           check_foreach_bind (container);
 //        check_foreach_bind (iterator);
           
+          check_foreach_bind_const (container);
+          
           check_foreach_memFun (container);
 //        check_foreach_memFun (iterator);
           
@@ -270,6 +273,7 @@ namespace test {
       void
       check_foreach_plain (CO coll)
         {
+          ANNOUNCE (check_foreach_plain);
           function<bool(int)> func(plainFunc);
           
           for_each (coll, plainFunc);      _NL_
@@ -293,10 +297,10 @@ namespace test {
       void
       check_foreach_bind (CO coll)
         {
+          ANNOUNCE (check_foreach_bind);
           function<bool(int,int)>     fun1(function1);
           function<bool(int,int,int)> fun2(function2);
           
-#if false  //////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET 479  !!!!!!!!!
           for_each (coll, function1, 10, _1 );               _NL_
           for_each (coll, &function1,10, _1 );               _NL_
           for_each (coll, fun1,      10, _1 );               _NL_
@@ -321,12 +325,13 @@ namespace test {
           has_any (coll, &function1, _1, _1 );               _NL_
           has_any (coll, fun1,       _1, _1 );               _NL_
           
-          // does not compile:
-          for_each (coll, function1, 10, 20, _1 );
-          for_each (coll, function1, 10, 20 );
-          for_each (coll, function1, 10 );
+        //does not compile.....
+       // for_each (coll, function1, 10, 20, _1 );
+      //  for_each (coll, function1, _1, _2 );
+     //   for_each (coll, function1, 10 );
           
           
+          ANNOUNCE (assign_to_input);
           for_each (coll, function2, 10, 20, _1 );           _NL_
           for_each (coll, &function2,10, 20, _1 );           _NL_
           for_each (coll, fun2,      10, 20, _1 );           _NL_
@@ -340,20 +345,49 @@ namespace test {
           has_any (coll, fun2,       10, 20, _1 );           _NL_
           
           int sum=0;
-          
+          ANNOUNCE (assign_to_var);
           for_each (coll, function2, _1, _1, ref(sum) );     _NL_
           for_each (coll, &function2,_1, _1, ref(sum) );     _NL_
           for_each (coll, fun2,      _1, _1, ref(sum) );     _NL_
+          
+          cout << "sum=" << sum << endl;
           
           and_all (coll, function2,  _1, _1, ref(sum) );     _NL_
           and_all (coll, &function2, _1, _1, ref(sum) );     _NL_
           and_all (coll, fun2,       _1, _1, ref(sum) );     _NL_
           
+          cout << "sum=" << sum << endl;
+          
           has_any (coll, function2,  _1, _1, ref(sum) );     _NL_
           has_any (coll, &function2, _1, _1, ref(sum) );     _NL_
           has_any (coll, fun2,       _1, _1, ref(sum) );     _NL_
           
-#endif ////////////////////////////////////////////////////////////////////////////////////////TODO lots of things unimplemented.....!!!!!
+          cout << "sum=" << sum << endl;
+        }
+      
+      
+      /** @test the input sequence can be also taken
+       *        from a const container (for iterators this
+       *        obviously doesn't make sense  */
+      template<typename CO>
+      void
+      check_foreach_bind_const (CO const& coll)
+        {
+          ANNOUNCE (check_foreach_bind_const);
+          
+          for_each (coll,function1,  10, _1 );               _NL_
+          and_all (coll, function1,  10, _1 );               _NL_
+          has_any (coll, function1,  10, _1 );               _NL_
+          
+          for_each (coll,function1,  _1, _1 );               _NL_
+          and_all (coll, function1,  _1, _1 );               _NL_
+          has_any (coll, function1,  _1, _1 );               _NL_
+          
+          int sum=0;
+          
+          for_each (coll,function2,  _1, _1, ref(sum) );     _NL_
+          and_all (coll, function2,  _1, _1, ref(sum) );     _NL_
+          has_any (coll, function2,  _1, _1, ref(sum) );     _NL_
         }
       
       
@@ -375,18 +409,20 @@ namespace test {
       void
       check_foreach_memFun (CO coll)
         {
+          ANNOUNCE (check_foreach_memFun);
+          
           Dummy dummy;
+          dummy.sum_ = 0;
           
-#if false  //////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET 479  !!!!!!!!!
-          for_each (coll, &Dummy::fun, dummy,  _1 );      _NL_
-          and_all  (coll, &Dummy::fun, dummy,  _1 );      _NL_
-          has_any  (coll, &Dummy::fun, dummy,  _1 );      _NL_
+          for_each (coll, &Dummy::fun, dummy,  _1 );         _NL_
+          and_all  (coll, &Dummy::fun, dummy,  _1 );         _NL_
+          has_any  (coll, &Dummy::fun, dummy,  _1 );         _NL_
           
-          for_each (coll, &Dummy::fun, &dummy, _1 );     _NL_
-          and_all  (coll, &Dummy::fun, &dummy, _1 );     _NL_
-          has_any  (coll, &Dummy::fun, &dummy, _1 );     _NL_
-#endif ////////////////////////////////////////////////////////////////////////////////////////TODO lots of things unimplemented.....!!!!!
+          for_each (coll, &Dummy::fun, &dummy, _1 );         _NL_
+          and_all  (coll, &Dummy::fun, &dummy, _1 );         _NL_
+          has_any  (coll, &Dummy::fun, &dummy, _1 );         _NL_
           
+          cout << "sum=" << dummy.sum_ << endl;
         }
       
       
@@ -395,8 +431,10 @@ namespace test {
       void
       check_foreach_lambda (CO coll)
         {
-          uint sum;
-          for_each (coll, _1_ + var(sum));
+          ANNOUNCE (check_foreach_lambda);
+          uint sum(0);
+          
+          for_each (coll, var(sum) += _1_ );
           
           ASSERT (sum == NUM_ELMS/2 * (NUM_ELMS+1));
           
@@ -411,6 +449,8 @@ namespace test {
       void
       check_existence_quant (CO coll)
         {
+          ANNOUNCE (check_existence_quant);
+          
           ASSERT ( and_all (coll, 0 < _1_ ));
           ASSERT (!and_all (coll, 1 < _1_ ));
           
@@ -425,7 +465,7 @@ namespace test {
           uint n_;
           TestElm(uint i) : n_(i) {}
           
-          void operation() { plainFunc (n_); }
+          bool operation() { return plainFunc (n_); }
         };
       
       
@@ -435,6 +475,8 @@ namespace test {
       void
       check_invoke_on_each ()
         {
+          ANNOUNCE (check_invoke_on_each);
+          
           std::vector<TestElm> elms;
           for (uint i=0; i<6; ++i)
             elms.push_back (TestElm(i));
@@ -444,16 +486,14 @@ namespace test {
             elmPtrs.push_back (& elms[i]);
           
           // fed the element pointer as "this" pointer of the member function
-#if false  //////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET 479  !!!!!!!!!
           for_each (elmPtrs, &TestElm::operation, _1 );      _NL_
           and_all  (elmPtrs, &TestElm::operation, _1 );      _NL_
           has_any  (elmPtrs, &TestElm::operation, _1 );      _NL_
           
-          // but works with references as well
+          // the same works with references as well...
           for_each (elms, &TestElm::operation, _1 );         _NL_
           and_all  (elms, &TestElm::operation, _1 );         _NL_
           has_any  (elms, &TestElm::operation, _1 );         _NL_
-#endif ////////////////////////////////////////////////////////////////////////////////////////TODO lots of things unimplemented.....!!!!!
         }
     };
   

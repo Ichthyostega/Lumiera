@@ -53,6 +53,21 @@ namespace util {
   inline bool
   and_all (SEQ& coll, Oper predicate)
   {
+    typename SEQ::iterator e = coll.end();
+    typename SEQ::iterator i = coll.begin();
+    
+    for ( ; i!=e; ++i )
+      if (!predicate(*i))
+        return false;
+    
+    return true;
+  }
+  
+  
+  template <typename SEQ, typename Oper>
+  inline bool
+  and_all (SEQ const& coll, Oper predicate)
+  {
     typename SEQ::const_iterator e = coll.end();
     typename SEQ::const_iterator i = coll.begin();
     
@@ -71,6 +86,21 @@ namespace util {
   template <typename SEQ, typename Oper>
   inline bool
   has_any (SEQ& coll, Oper predicate)
+  {
+    typename SEQ::iterator e = coll.end();
+    typename SEQ::iterator i = coll.begin();
+    
+    for ( ; i!=e; ++i )
+      if (predicate(*i))
+        return true;
+    
+    return false;
+  }
+  
+  
+  template <typename SEQ, typename Oper>
+  inline bool
+  has_any (SEQ const& coll, Oper predicate)
   {
     typename SEQ::const_iterator e = coll.end();
     typename SEQ::const_iterator i = coll.begin();
