@@ -47,7 +47,7 @@ lumiera_threadpool_init(void)
 {
   for (int i = 0; i < LUMIERA_THREADCLASS_COUNT; ++i)
     {
-      llist_init(&threadpool.pool[i].list);
+      llist_init (&threadpool.pool[i].list);
       threadpool.pool[i].working_thread_count = 0;
       threadpool.pool[i].idle_thread_count = 0;
 
@@ -56,7 +56,7 @@ lumiera_threadpool_init(void)
       pthread_attr_setdetachstate (&threadpool.pool[i].pthread_attrs, PTHREAD_CREATE_DETACHED);
       //cancel...
 
-      lumiera_mutex_init(&threadpool.pool[i].lock,"pool of threads", &NOBUG_FLAG(threadpool));
+      lumiera_mutex_init (&threadpool.pool[i].lock,"pool of threads", &NOBUG_FLAG (threadpool));
     }
 }
 
@@ -68,9 +68,9 @@ lumiera_threadpool_destroy(void)
     {
       ECHO ("destroying individual pool #%d", i);
       // no locking is done at this point
-      ECHO ("number of threads in the pool=%d", llist_count(&threadpool.pool[i].list));
-      LLIST_WHILE_HEAD(&threadpool.pool[i].list, thread)
-        lumiera_thread_delete((LumieraThread)thread);
+      ECHO ("number of threads in the pool=%d", llist_count (&threadpool.pool[i].list));
+      LLIST_WHILE_HEAD (&threadpool.pool[i].list, thread)
+        lumiera_thread_delete ((LumieraThread)thread);
       ECHO ("destroying the pool mutex");
       lumiera_mutex_destroy (&threadpool.pool[i].lock, &NOBUG_FLAG (threadpool));
       ECHO ("pool mutex destroyed");
@@ -100,14 +100,14 @@ lumiera_threadpool_acquire_thread(enum lumiera_thread_class kind,
      // remove it from the pool's list
      LUMIERA_MUTEX_SECTION (threadpool, &threadpool.pool[kind].lock)
        {
-         ret = (LumieraThread)(llist_unlink(llist_head (&threadpool.pool[kind].list)));
+         ret = (LumieraThread)(llist_unlink (llist_head (&threadpool.pool[kind].list)));
          threadpool.pool[kind].working_thread_count++;
          threadpool.pool[kind].idle_thread_count--; // cheaper than using llist_count
          ENSURE (threadpool.pool[kind].idle_thread_count ==
-                 llist_count(&threadpool.pool[kind].list),
+                 llist_count (&threadpool.pool[kind].list),
                  "idle thread count %d is wrong, should be %d",
                  threadpool.pool[kind].idle_thread_count,
-                 llist_count(&threadpool.pool[kind].list));
+                 llist_count (&threadpool.pool[kind].list));
        }
      ENSURE (ret, "did not find a valid thread");
    }
@@ -122,15 +122,15 @@ lumiera_threadpool_release_thread(LumieraThread thread)
 
   LUMIERA_MUTEX_SECTION (threadpool, &threadpool.pool[thread->kind].lock)
     {
-      REQUIRE (llist_is_single(&thread->node), "thread already belongs to some list");
-      llist_insert_head(&threadpool.pool[thread->kind].list, &thread->node);
+      REQUIRE (llist_is_single (&thread->node), "thread already belongs to some list");
+      llist_insert_head (&threadpool.pool[thread->kind].list, &thread->node);
          threadpool.pool[thread->kind].working_thread_count--;
          threadpool.pool[thread->kind].idle_thread_count++; // cheaper than using llist_count
          ENSURE (threadpool.pool[thread->kind].idle_thread_count ==
-                 llist_count(&threadpool.pool[thread->kind].list),
+                 llist_count (&threadpool.pool[thread->kind].list),
                  "idle thread count %d is wrong, should be %d",
                  threadpool.pool[thread->kind].idle_thread_count,
-                 llist_count(&threadpool.pool[thread->kind].list));
+                 llist_count (&threadpool.pool[thread->kind].list));
       //      REQUIRE (!llist_is_empty (&threadpool.pool[thread->kind].list), "thread pool is still empty after insertion");
     }
 }

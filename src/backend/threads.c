@@ -62,7 +62,7 @@ const char* lumiera_threadstate_names[] = {
 
 struct lumiera_thread_mockup
 {
-  void (*fn)(void*);
+  void (*fn) (void*);
   void* arg;
   LumieraReccondition finished;
 };
@@ -86,7 +86,7 @@ static void* pthread_runner (void* thread)
   if (!thread_end_notification)
     return NULL; // no signalling of thread termination desired
 
-  LUMIERA_RECCONDITION_SECTION(cond_sync, thread_end_notification)
+  LUMIERA_RECCONDITION_SECTION (cond_sync, thread_end_notification)
     LUMIERA_RECCONDITION_BROADCAST;
 
   return NULL;
@@ -140,13 +140,13 @@ lumiera_thread_run (enum lumiera_thread_class kind,
   (void)function;
   (void)arg;
   // ask the threadpool for a thread (it might create a new one)
-  LumieraThread self = lumiera_threadpool_acquire_thread(kind, purpose, flag);
+  LumieraThread self = lumiera_threadpool_acquire_thread (kind, purpose, flag);
 
   // TODO: set the function and data to be run
   //  lumiera_thread_set_func_data (self, start_routine, arg, purpose, flag);
 
   // and let it really run (signal the condition var, the thread waits on it)
-  LUMIERA_RECCONDITION_SECTION(cond_sync, self->finished)
+  LUMIERA_RECCONDITION_SECTION (cond_sync, self->finished)
     LUMIERA_RECCONDITION_SIGNAL;
 
   // NOTE: example only, add solid error handling!
@@ -174,14 +174,14 @@ lumiera_thread_new (enum lumiera_thread_class kind,
 
 
   LumieraThread self = lumiera_malloc (sizeof (*self));
-  llist_init(&self->node);
+  llist_init (&self->node);
   self->finished = finished;
   self->kind = kind;
   self->state = LUMIERA_THREADSTATE_IDLE;
 
   //REQUIRE (thread_loop);
   int error = pthread_create (&self->id, attrs, &thread_loop, self);
-  ENSURE(error == 0 || EAGAIN == error, "pthread returned %d:%s", error, strerror(error));
+  ENSURE (error == 0 || EAGAIN == error, "pthread returned %d:%s", error, strerror (error));
   if (error)
     {
       // error here can only be EAGAIN, given the above ENSURE
@@ -197,9 +197,9 @@ lumiera_thread_destroy (LumieraThread self)
   REQUIRE (self, "trying to destroy an invalid thread");
 
   // TODO: stop the pthread
-  llist_unlink(&self->node);
+  llist_unlink (&self->node);
   //finished = NULL; // or free(finished)?
-  lumiera_reccondition_destroy (self->finished, &NOBUG_FLAG(threads));
+  lumiera_reccondition_destroy (self->finished, &NOBUG_FLAG (threads));
   //kind = 0;
   //state = 0;
   return self;
