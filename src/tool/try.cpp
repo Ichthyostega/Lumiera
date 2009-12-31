@@ -92,7 +92,7 @@ main (int, char**)
       numberz.push_back(count--);
     
 //  eat_all (numberz, plainFunc, 10, _1 );
-    eat_all (numberz, std::tr1::bind (plainFunc, 10, _1));
+    eat_all (numberz, std::tr1::bind<bool> (plainFunc, 10, _1));
     
     cout <<  "\n.gulp.\n";
     
