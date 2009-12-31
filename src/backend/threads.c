@@ -60,69 +60,11 @@ const char* lumiera_threadstate_names[] = {
 };
 #undef LUMIERA_THREAD_STATE
 
-struct lumiera_thread_mockup
-{
-  void (*fn) (void*);
-  void* arg;
-  LumieraReccondition finished;
-};
-
 static void* thread_loop (void* arg)
 {
   (void)arg;
   return 0;
 }
-
-#if 0
-static void* pthread_runner (void* thread)
-{
-  pthread_setcancelstate (PTHREAD_CANCEL_DISABLE, NULL);
-
-  struct lumiera_thread_mockup* starter = (struct lumiera_thread_mockup*) thread;
-  LumieraReccondition thread_end_notification = starter->finished;
-
-  starter->fn (starter->arg);
-
-  if (!thread_end_notification)
-    return NULL; // no signalling of thread termination desired
-
-  LUMIERA_RECCONDITION_SECTION (cond_sync, thread_end_notification)
-    LUMIERA_RECCONDITION_BROADCAST;
-
-  return NULL;
-}
-#endif
-
-#if 0
-// TODO: rewrite this using lumiera_threadpool_acquire()
-LumieraThread
-lumiera_thread_run (enum lumiera_thread_class kind,
-                    void (*start_routine)(void *),
-                    void * arg,
-                    LumieraReccondition finished,
-                    const char* purpose,
-                    struct nobug_flag* flag)
-{
-  (void) kind;
-  (void) purpose;
-  (void) flag;
-
-  if (attr_once == PTHREAD_ONCE_INIT)
-    pthread_once (&attr_once, thread_attr_init);
-
-  static struct lumiera_thread_mockup thread;
-
-  thread.fn = start_routine;
-  thread.arg = arg;
-  thread.finished = finished;
-
-  pthread_t dummy;
-  int error = pthread_create (&dummy, &attrs, pthread_runner, &thread);
-
-  if (error) return 0;        /////TODO temporary addition by Ichthyo; probably we'll set lumiera_error?
-  return (LumieraThread) 1;
-}
-#endif
 
 // TODO: new implementation, remove the above one
 // maybe this shouldn't return LumieraThread at all
