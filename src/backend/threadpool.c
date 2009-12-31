@@ -43,12 +43,11 @@ NOBUG_DEFINE_FLAG_PARENT (threadpool, threads_dbg); /*TODO insert a suitable/bet
 //code goes here//
 
 void
-lumiera_threadpool_init(unsigned limit)
+lumiera_threadpool_init(void)
 {
   for (int i = 0; i < LUMIERA_THREADCLASS_COUNT; ++i)
     {
       llist_init(&threadpool.pool[i].list);
-      threadpool.pool[i].max_threads = limit;
       threadpool.pool[i].working_thread_count = 0;
       threadpool.pool[i].idle_thread_count = 0;
 
@@ -90,20 +89,10 @@ lumiera_threadpool_acquire_thread(enum lumiera_thread_class kind,
   if (llist_is_empty (&threadpool.pool[kind].list))
     {
       // TODO: fill in the reccondition argument, currently NULL
-      FIXME ("this max thread logic needs to be deeply thought about and made more efficient as well as rebust");
-      if (threadpool.pool[kind].working_thread_count
-          + threadpool.pool[kind].idle_thread_count
-          < threadpool.pool[kind].max_threads) {
-        ret = lumiera_thread_new (kind, NULL, purpose, flag,
-                                  &threadpool.pool[kind].pthread_attrs);
-        threadpool.pool[kind].working_thread_count++;
-        ENSURE (ret, "did not create a valid thread");
-      }
-      else
-        {
-          //ERROR (threadpool, "did not create a new thread because per-pool limit was reached: %d", threadpool.pool[kind].max_threads);
-          LUMIERA_DIE(ERRNO);
-        }
+      ret = lumiera_thread_new (kind, NULL, purpose, flag,
+                                &threadpool.pool[kind].pthread_attrs);
+      threadpool.pool[kind].working_thread_count++;
+      ENSURE (ret, "did not create a valid thread");
     }
  else
    {
