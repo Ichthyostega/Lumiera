@@ -42,16 +42,6 @@ NOBUG_DEFINE_FLAG_PARENT (threadpool, threads_dbg); /*TODO insert a suitable/bet
 
 //code goes here//
 
-void* pool_thread_loop(void * arg)
-{
-  (void) arg;
-  while (1)
-    {
-      ;
-    }
-  return arg;
-}
-
 void
 lumiera_threadpool_init(unsigned limit)
 {
