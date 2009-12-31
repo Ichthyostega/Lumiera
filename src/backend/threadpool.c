@@ -53,7 +53,6 @@ lumiera_threadpool_init(void)
 
       //TODO: configure each pools' pthread_attrs appropriately
       pthread_attr_init (&threadpool.pool[i].pthread_attrs);
-      pthread_attr_setdetachstate (&threadpool.pool[i].pthread_attrs, PTHREAD_CREATE_DETACHED);
       //cancel...
 
       lumiera_mutex_init (&threadpool.pool[i].lock,"pool of threads", &NOBUG_FLAG (threadpool));
