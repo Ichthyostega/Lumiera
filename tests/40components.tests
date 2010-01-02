@@ -182,7 +182,13 @@ return: 0
 END
 
 
-PLANNED "Duck typing support" DuckDetector_test <<END
+TEST "Duck typing support" DuckDetector_test <<END
+out: HasNested_Core<PropperGander>	 : Yes
+out: HasNested_Core<Propaganda>	 : No
+out: HasMember_honk<PropperGander>	 : Yes
+out: HasMember_honk<Propaganda>	 : Yes
+out: HasFunSig_honk<PropperGander>	 : Yes
+out: HasFunSig_honk<Propaganda>	 : No
 return: 0
 END
 

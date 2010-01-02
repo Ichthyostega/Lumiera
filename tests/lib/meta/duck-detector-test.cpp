@@ -23,7 +23,7 @@
 
 #include "lib/test/run.hpp"
 #include "lib/meta/duck-detector.hpp"
-#include "lib/util.hpp"  /////////////TODO
+#include "lib/util.hpp"
 
 #include <iostream>
 
@@ -31,29 +31,32 @@
 namespace lib {
 namespace meta{
 namespace test{
-
-  //using std::string;
+  
   using std::cout;
   using std::endl;
   
   
   namespace { // some test ducks....
     
+    
     struct PropperGander
       {
         class Core;
         
-        PropperGander& honk();
+        PropperGander& honk (long,long);
       };
+    
     
     struct Propaganda
       {
-        void honk();
+        void honk(float);
       };
-
-#define DO_CHECK(_EXPR_) cout << STRINGIFY(_EXPR_) << "\t = " << _EXPR_::value << endl;    
+    
     
   }//(End) with test ducks
+  
+#define SHOW_CHECK(_EXPR_) cout << STRINGIFY(_EXPR_) << "\t : " << (_EXPR_::value? "Yes":"No") << endl;
+  
   
   
   /***********************************************************************************
@@ -65,19 +68,23 @@ namespace test{
    */
   class DuckDetector_test : public Test
     {
+    
+      META_DETECT_NESTED(Core);
+      META_DETECT_MEMBER(honk);
+      META_DETECT_FUNCTION(PropperGander&, honk, (long,long));
+    
+    
       void
       run (Arg) 
         {
-          DO_CHECK( DetectNested<PropperGander> );
-          DO_CHECK( DetectNested<Propaganda>    );
+          SHOW_CHECK( HasNested_Core<PropperGander> );
+          SHOW_CHECK( HasNested_Core<Propaganda>    );
           
-          DO_CHECK( DetectMember<PropperGander> );
-          DO_CHECK( DetectMember<Propaganda>    );
+          SHOW_CHECK( HasMember_honk<PropperGander> );
+          SHOW_CHECK( HasMember_honk<Propaganda>    );
           
-          DO_CHECK( DetectFunSig<PropperGander> );
-          DO_CHECK( DetectFunSig<Propaganda>    );
-          
-          UNIMPLEMENTED ("detect the propaganda");
+          SHOW_CHECK( HasFunSig_honk<PropperGander> );
+          SHOW_CHECK( HasFunSig_honk<Propaganda>    );
         } 
     };
   

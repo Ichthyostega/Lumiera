@@ -89,57 +89,85 @@ namespace lib {
   
   namespace meta {
     
-    /////////////////////////////TODO: still hard wired for a first test....
-    
-    template<typename TY>
-    class DetectNested
-      {
-        
-        template<class X>
-        static Yes_t check(typename X::Core *);
-        template<class>
-        static No_t  check(...);
-        
-      public: 
-        static const bool value = (sizeof(Yes_t)==sizeof(check<TY>(0)));
-      };
-    
-    
-    template<typename TY>
-    class DetectMember
-      {
-        template<typename X, int i = sizeof(&X::honk)>
-        struct Probe
-          { };
-        
-        template<class X>
-        static Yes_t check(Probe<X>*);
-        template<class>
-        static No_t  check(...);
-        
-      public: 
-        static const bool value = (sizeof(Yes_t)==sizeof(check<TY>(0)));
-      };
-    
-    
-    template<typename TY>
-    class DetectFunSig
-      {
-        template<typename X, X& (X::*)(void)> 
-        struct Probe
-          { };
-        
-        template<class X>
-        static Yes_t check(Probe<X,&X::honk>*);
-        template<class>
-        static No_t  check(...);
-        
-      public: 
-        static const bool value = (sizeof(Yes_t)==sizeof(check<TY>(0)));
-      };
-    
-    
   } // namespace meta
   
 } // namespace lib
+
+
+
+
+
+
+/** Detector for a nested type.
+ *  Defines a metafunction (template), allowing to detect
+ *  if a type TY in question has a nested type or typedef
+ *  with the given name. To answer this question, instantiate
+ *  resulting HasNested_XXX template with the type in question
+ *  and check the static bool value field.
+ */
+#define META_DETECT_NESTED(_TYPE_)                            \
+    template<typename TY>                                      \
+    class HasNested_##_TYPE_                                    \
+      {                                                          \
+                                                                  \
+        template<class X>                                          \
+        static Yes_t check(typename X::_TYPE_ *);                   \
+        template<class>                                              \
+        static No_t  check(...);                                      \
+                                                                       \
+      public:                                                           \
+        static const bool value = (sizeof(Yes_t)==sizeof(check<TY>(0))); \
+      };
+
+
+
+/** Detector for a nested member (field or function).
+ *  Defines a metafunction (template), allowing to detect
+ *  the presence of a member with the given name within
+ *  a type in question.
+ */
+#define META_DETECT_MEMBER(_NAME_)                         \
+    template<typename TY>                                   \
+    class HasMember_##_NAME_                                 \
+      {                                                       \
+        template<typename X, int i = sizeof(&X::_NAME_)>       \
+        struct Probe                                            \
+          { };                                                   \
+                                                                  \
+        template<class X>                                          \
+        static Yes_t check(Probe<X> * );                            \
+        template<class>                                              \
+        static No_t  check(...);                                      \
+                                                                       \
+      public:                                                           \
+        static const bool value = (sizeof(Yes_t)==sizeof(check<TY>(0))); \
+      };
+
+
+
+/** Detector for a specific member function.
+ *  Defines a metafunction (template), allowing to detect
+ *  the presence of a member function with the specific
+ *  signature, as defined by the parameters. Note this
+ *  check will probably fail if there are overloads
+ */
+#define META_DETECT_FUNCTION(_RET_TYPE_,_FUN_NAME_,_ARGS_) \
+    template<typename TY>                                   \
+    class HasFunSig_##_FUN_NAME_                             \
+      {                                                       \
+        template<typename X, _RET_TYPE_ (X::*)_ARGS_>          \
+        struct Probe                                            \
+          { };                                                   \
+                                                                  \
+        template<class X>                                          \
+        static Yes_t check(Probe<X, &X::_FUN_NAME_> * );            \
+        template<class>                                              \
+        static No_t  check(...);                                      \
+                                                                       \
+      public:                                                           \
+        static const bool value = (sizeof(Yes_t)==sizeof(check<TY>(0))); \
+      };
+
+
+
 #endif
