@@ -14,6 +14,7 @@
 // 10/8  - abusing the STL containers to hold noncopyable values
 // 6/09  - investigating how to build a mixin template providing an operator bool()
 // 12/9  - tracking down a strange "warning: type qualifiers ignored on function return type"
+// 1/10  - can we determine at compile time the presence of a certain function (for duck-typing)?
 
 
 //#include <nobug.h>
@@ -21,7 +22,6 @@
 //#include "include/logging.h"
 //#include "include/nobugcfg.h"
 
-#include <tr1/functional>
 
 #include <iostream>
 //#include <typeinfo>
@@ -30,47 +30,59 @@
 #include <cstdio>
 
 
-//using std::tr1::bind;
-using std::tr1::placeholders::_1;
-
 //using std::rand;
 using std::string;
 using std::cout;
+using std::endl;
 
 
-  
-  template <typename SEQ, typename Oper>
-  inline bool
-  eat_all (SEQ& coll, Oper predicate)
+struct A
   {
-    typename SEQ::const_iterator e = coll.end();
-    typename SEQ::const_iterator i = coll.begin();
-    
-    for ( ; i!=e; ++i )
-      if (!predicate(*i))
-        return false;
-    
-    return true;
-  }
-  
-  template < typename CON, typename FUN
-           , typename P1
-           , typename P2
-           >
-  inline bool
-  eat_all (CON& elements, FUN function, P1 bind1, P2 bind2)
+    int& funA ();
+  };
+
+struct B
   {
-    return eat_all (elements, std::tr1::bind<bool> (function, bind1, bind2));
-  }
+    void funA();
+  };
+
+
+  typedef char Yes_t;
+  struct No_t { char padding[8]; };
+
+
+  template<typename TY>
+  class Detector1
+    {
+      template<typename X, int i = sizeof(&X::funA)>
+      struct Probe
+        { };
+      
+      template<class X>
+      static Yes_t check(Probe<X>*);
+      template<class>
+      static No_t  check(...);
+      
+    public: 
+      static const bool value = (sizeof(Yes_t)==sizeof(check<TY>(0)));
+    };
   
   
-    
-  bool
-  plainFunc (int i, int j)
-  {
-    cout <<':'<< i+j;
-    return i+j;
-  }
+  template<typename TY>
+  class Detector2
+    {
+      template<typename X, int& (X::*)(void)> 
+      struct Probe
+        { };
+      
+      template<class X>
+      static Yes_t check(Probe<X,&X::funA>*);
+      template<class>
+      static No_t  check(...);
+      
+    public: 
+      static const bool value = (sizeof(Yes_t)==sizeof(check<TY>(0)));
+    };
   
   
 int 
@@ -79,14 +91,11 @@ main (int, char**)
     
 //  NOBUG_INIT;
     
-    typedef std::vector<int> VecI;
+    cout << "Detector1<A> = " << Detector1<A>::value << endl;
+    cout << "Detector1<B> = " << Detector1<B>::value << endl;
     
-    uint count = 4;
-    VecI numberz;
-    while (count)
-      numberz.push_back(count--);
-    
-    eat_all (numberz, plainFunc, 10, _1 );
+    cout << "Detector2<A> = " << Detector2<A>::value << endl;
+    cout << "Detector2<B> = " << Detector2<B>::value << endl;
     
     cout <<  "\n.gulp.\n";
     
