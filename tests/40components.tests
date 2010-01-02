@@ -182,6 +182,11 @@ return: 0
 END
 
 
+PLANNED "Duck typing support" DuckDetector_test <<END
+return: 0
+END
+
+
 TEST "ExceptionError_test" ExceptionError_test <<END
 out: caught: LUMIERA_ERROR_LIFE_AND_UNIVERSE:and everything\? \(don't panic\)...the answer is: 42
 out: caught lumiera::Error: LUMIERA_ERROR_DERIVED:convoluted exception
