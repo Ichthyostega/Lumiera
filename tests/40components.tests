@@ -356,7 +356,27 @@ out: ::12::11::10::9::8::7::6::5::4::3
 END
 
 
-PLANNED "Iterable type detection" IterableClassification_test <<END
+TEST "Iterable type detection" IterableClassification_test <<END
+out: can_STL_ForEach<LongVector>	 : Yes
+out: can_STL_ForEach<TimeSet>	 : Yes
+out: can_STL_ForEach<CharMap>	 : Yes
+out: can_STL_ForEach<BoolList>	 : Yes
+out: can_STL_ForEach<ShortDeque>	 : Yes
+out: can_STL_ForEach<CustomCont>	 : Yes
+out: can_STL_ForEach<ForwardRangeIter>	 : No
+out: can_STL_ForEach<TransformedForwardIter>	 : No
+out: can_STL_ForEach<FilteredForwardIter>	 : No
+out: can_STL_ForEach<CustomForwardIter>	 : No
+out: can_IterForEach<LongVector>	 : No
+out: can_IterForEach<TimeSet>	 : No
+out: can_IterForEach<CharMap>	 : No
+out: can_IterForEach<BoolList>	 : No
+out: can_IterForEach<ShortDeque>	 : No
+out: can_IterForEach<CustomCont>	 : No
+out: can_IterForEach<ForwardRangeIter>	 : Yes
+out: can_IterForEach<TransformedForwardIter>	 : Yes
+out: can_IterForEach<FilteredForwardIter>	 : Yes
+out: can_IterForEach<CustomForwardIter>	 : Yes
 END
 
 

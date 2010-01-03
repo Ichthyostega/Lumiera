@@ -30,6 +30,9 @@
 #include "lib/itertools.hpp"
 #include "lib/lumitime.hpp"
 
+/////////////////////////////////////////////////////////////TODO draft
+#include <boost/type_traits/is_convertible.hpp>
+/////////////////////////////////////////////////////////////TODO draft
 #include <iostream>
 #include <vector>
 #include <deque>
@@ -41,16 +44,54 @@
 namespace lib {
 /////////////////////////////////////////////////////////////TODO draft
   
-  template<typename TY>
-  struct can_STL_ForEach
+  template<typename T>
+  class can_STL_ForEach
     {
-      enum{ value = false }; ////////////////TODO unimplemented
+      struct is_iterable
+        {
+          META_DETECT_NESTED(iterator);
+          META_DETECT_FUNCTION(typename X::iterator, begin,(void));
+          META_DETECT_FUNCTION(typename X::iterator, end  ,(void));
+          
+          enum { value = HasNested_iterator<T>::value
+                      && HasFunSig_begin<T>::value
+                      && HasFunSig_end<T>::value
+           };
+        };
+      
+      struct is_const_iterable
+        {
+          META_DETECT_NESTED(const_iterator);
+          META_DETECT_FUNCTION(typename X::const_iterator, begin,(void) const);
+          META_DETECT_FUNCTION(typename X::const_iterator, end  ,(void) const);
+          
+          enum { value = HasNested_const_iterator<T>::value
+                      && HasFunSig_begin<T>::value
+                      && HasFunSig_end<T>::value
+           };
+        };
+      
+      
+    public:
+      enum { value = is_iterable::value
+                  || is_const_iterable::value
+           };
     };
   
-  template<typename TY>
-  struct can_IterForEach
+  template<typename T>
+  class can_IterForEach
     {
-      enum{ value = false }; ////////////////TODO unimplemented
+       
+      META_DETECT_NESTED(value_type);
+      META_DETECT_OPERATOR_DEREF();
+      META_DETECT_OPERATOR_INC();
+      
+    public:
+      enum{ value = boost::is_convertible<T, bool>::value
+                 && HasNested_value_type<T>::value
+                 && HasOperator_deref<T>::value
+                 && HasOperator_inc<T>::value
+          };
     };
   
 /////////////////////////////////////////////////////////////TODO draft
@@ -95,34 +136,38 @@ namespace test{
    *       Currently (1/10) we're able to detect the following
    *       - a STL like container with \c begin() and \c end()
    *       - a Lumiera Forward Iterator
+   * This test just retrieves the results of a compile time execution
+   * of the type detection; thus we just define types and then access
+   * the generated meta function value.
    */
   class IterableClassification_test : public Test
     {
-    
-    
-    
+      
       void
       run (Arg) 
         {
+          // define a bunch of STL containers
           typedef std::vector<long>   LongVector;
           typedef std::multiset<Time> TimeSet;
           typedef std::map<int,char>  CharMap;
           typedef std::list<bool>     BoolList;
           typedef std::deque<ushort>  ShortDeque;
-          typedef TestSource          CustomContainer;
+          typedef TestSource          CustomCont;
           
+          // some types in compliance to the "Lumiera Forward Iterator" concept
           typedef TestSource::iterator                  ForwardRangeIter;
           typedef TransformIter<ForwardRangeIter, long> TransformedForwardIter;
           typedef FilterIter<TransformedForwardIter>    FilteredForwardIter;
           typedef ScopeQuery<Effect>::iterator          CustomForwardIter;
           
+          
           // detect STL iteration
           SHOW_CHECK( can_STL_ForEach<LongVector> );
-          SHOW_CHECK( can_STL_ForEach<TimeSet> );
-          SHOW_CHECK( can_STL_ForEach<CharMap> );
-          SHOW_CHECK( can_STL_ForEach<BoolList> );
+          SHOW_CHECK( can_STL_ForEach<TimeSet>    );
+          SHOW_CHECK( can_STL_ForEach<CharMap>    );
+          SHOW_CHECK( can_STL_ForEach<BoolList>   );
           SHOW_CHECK( can_STL_ForEach<ShortDeque> );
-          SHOW_CHECK( can_STL_ForEach<CustomContainer> );
+          SHOW_CHECK( can_STL_ForEach<CustomCont> );
           
           SHOW_CHECK( can_STL_ForEach<ForwardRangeIter> );
           SHOW_CHECK( can_STL_ForEach<TransformedForwardIter> );
@@ -131,18 +176,16 @@ namespace test{
           
           // detect Lumiera Forward Iterator
           SHOW_CHECK( can_IterForEach<LongVector> );
-          SHOW_CHECK( can_IterForEach<TimeSet> );
-          SHOW_CHECK( can_IterForEach<CharMap> );
-          SHOW_CHECK( can_IterForEach<BoolList> );
+          SHOW_CHECK( can_IterForEach<TimeSet>    );
+          SHOW_CHECK( can_IterForEach<CharMap>    );
+          SHOW_CHECK( can_IterForEach<BoolList>   );
           SHOW_CHECK( can_IterForEach<ShortDeque> );
-          SHOW_CHECK( can_IterForEach<CustomContainer> );
+          SHOW_CHECK( can_IterForEach<CustomCont> );
           
           SHOW_CHECK( can_IterForEach<ForwardRangeIter> );
           SHOW_CHECK( can_IterForEach<TransformedForwardIter> );
           SHOW_CHECK( can_IterForEach<FilteredForwardIter> );
           SHOW_CHECK( can_IterForEach<CustomForwardIter> );
-          
-          UNIMPLEMENTED ("the actual type detection code");
         } 
     };
   

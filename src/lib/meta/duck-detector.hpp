@@ -170,4 +170,44 @@ namespace lib {
 
 
 
+/** Detector for a dereferentiation operator. Works like member detection */
+#define META_DETECT_OPERATOR_DEREF()                       \
+    template<typename TY>                                   \
+    class HasOperator_deref                                  \
+      {                                                       \
+        template<typename X, int i = sizeof(&X::operator*)>    \
+        struct Probe                                            \
+          { };                                                   \
+                                                                  \
+        template<class X>                                          \
+        static Yes_t check(Probe<X> * );                            \
+        template<class>                                              \
+        static No_t  check(...);                                      \
+                                                                       \
+      public:                                                           \
+        static const bool value = (sizeof(Yes_t)==sizeof(check<TY>(0))); \
+      };
+
+
+
+/** Detector for a prefix increment operator. Works like function detection */
+#define META_DETECT_OPERATOR_INC()                         \
+    template<typename TY>                                   \
+    class HasOperator_inc                                    \
+      {                                                       \
+        template<typename X, X& (X::*)(void)>                  \
+        struct Probe                                            \
+          { };                                                   \
+                                                                  \
+        template<class X>                                          \
+        static Yes_t check(Probe<X, &X::operator++> * );            \
+        template<class>                                              \
+        static No_t  check(...);                                      \
+                                                                       \
+      public:                                                           \
+        static const bool value = (sizeof(Yes_t)==sizeof(check<TY>(0))); \
+      };
+
+
+
 #endif
