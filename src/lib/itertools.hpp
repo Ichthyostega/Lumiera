@@ -310,6 +310,12 @@ namespace lib {
         : _Impl(_Filter(src,filterPredicate))
         { }
       
+      FilterIter&
+      operator++ ()
+        {
+          _Impl::operator++();
+          return *this;
+        }
     };
   
   
@@ -420,6 +426,12 @@ namespace lib {
         : _IteratorImpl(_Trafo(src,trafoFunc))
         { }
       
+      TransformIter&
+      operator++ ()
+        {
+          _IteratorImpl::operator++();
+          return *this;
+        }
     };
   
   
