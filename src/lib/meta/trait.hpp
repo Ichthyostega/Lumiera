@@ -21,11 +21,12 @@
 */
 
 
-#ifndef LUMIERA_META_TRAIT_H
-#define LUMIERA_META_TRAIT_H
+#ifndef LIB_META_TRAIT_H
+#define LIB_META_TRAIT_H
 
 
 #include "lib/meta/util.hpp"
+#include "lib/meta/duck-detector.hpp"
 #include "lib/wrapper.hpp"     ////////////////////////TODO only because of AssignableRefWrapper -- can we get rid of this import?
 
 #include <boost/type_traits/is_convertible.hpp>
@@ -34,8 +35,8 @@
 #include <string>
 
 
-namespace lumiera {
-namespace typelist {
+namespace lib {
+namespace meta {
   
   
   
@@ -105,5 +106,5 @@ namespace typelist {
   //////////////////////////////////////////TODO: not needed 12/09 -- obsolete? useful? keep it?
   
   
-}} // namespace lumiera::typelist
+}} // namespace lib::meta
 #endif

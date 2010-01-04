@@ -84,7 +84,7 @@ namespace lib {
   using std::tr1::function;
   using util::unConst;
   
-  using lumiera::typelist::RefTraits;
+  using lib::meta::RefTraits;
   
   
   
