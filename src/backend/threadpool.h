@@ -23,9 +23,8 @@
 #define LUMIERA_THREADPOOL_H
 
 //TODO: Support library includes//
-#include "lib/reccondition.h"
+#include "lib/condition.h"
 #include "lib/llist.h"
-#include "lib/mutex.h"
 
 //TODO: Forward declarations//
 
@@ -70,7 +69,7 @@ struct lumiera_threadpool_struct
   struct
   {
     llist list;
-    lumiera_mutex lock;
+    lumiera_condition sync;
     unsigned working_thread_count;
     unsigned idle_thread_count;
     pthread_attr_t pthread_attrs;
