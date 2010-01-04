@@ -51,6 +51,42 @@ using namespace boost::lambda;
 namespace util {
 ///////////////////////////////////////////////////////////////////////////TODO: Implementation draft
   
+  template <typename IT
+           ,typename FUN
+           >
+  inline   typename enable_if< can_IterForEach<IT>,
+  FUN      >::type
+  for_each (IT& ii, FUN doIt)
+  {
+    return std::for_each (ii, IT(), doIt);
+  }
+  
+  
+  
+  template <typename IT
+           ,typename FUN
+           >
+  inline   typename enable_if< can_IterForEach<IT>,
+  bool     >::type                                        
+  and_all (IT& ii, FUN predicate)
+  {
+    return and_all (ii, IT(), predicate);
+  }
+  
+  
+  template <typename IT
+           ,typename FUN
+           >
+  inline   typename enable_if< can_IterForEach<IT>,
+  bool     >::type                                        
+  has_any (IT& ii, FUN predicate)
+  {
+    return has_any (ii, IT(), predicate);
+  }
+  
+  
+  
+  
   using std::tr1::bind;
   
   template < typename CON, typename FUN
@@ -245,21 +281,30 @@ namespace test {
           RangeI iterator(container.begin(), container.end());
           
           check_foreach_plain (container);
-//        check_foreach_plain (iterator);
+          check_foreach_plain (iterator);
           
           check_foreach_bind (container);
-//        check_foreach_bind (iterator);
+          check_foreach_bind (iterator);
           
           check_foreach_bind_const (container);
           
           check_foreach_memFun (container);
-//        check_foreach_memFun (iterator);
+          check_foreach_memFun (iterator);
           
           check_foreach_lambda (container);
-//        check_foreach_lambda (iterator);
+          check_foreach_lambda (iterator);
           
           check_existence_quant (container);
-//        check_existence_quant (iterator);
+          check_existence_quant (iterator);
+          
+          ASSERT (int(NUM_ELMS) ==container[0]);
+          
+          check_ref_argument_bind (container);
+          ASSERT (int(NUM_ELMS) ==container[0]);
+          
+          check_ref_argument_bind (iterator);
+          ASSERT (60+int(NUM_ELMS) ==container[0]);
+          // changes got propagated through the iterator
           
           check_invoke_on_each ();
         }
@@ -299,7 +344,6 @@ namespace test {
         {
           ANNOUNCE (check_foreach_bind);
           function<bool(int,int)>     fun1(function1);
-          function<bool(int,int,int)> fun2(function2);
           
           for_each (coll, function1, 10, _1 );               _NL_
           for_each (coll, &function1,10, _1 );               _NL_
@@ -329,19 +373,39 @@ namespace test {
        // for_each (coll, function1, 10, 20, _1 );
       //  for_each (coll, function1, _1, _2 );
      //   for_each (coll, function1, 10 );
-          
-          
+        }
+      
+      
+      /** @test under some circumstances, it is even possible
+       *        to take a ref to the data in the input sequence,
+       *        or to a summation variable.
+       *  @note in case of invoking this test with a Lumiera Forward Iterator,
+       *        the changes go through to the original container, in spite of
+       *        passing the iterator by value. This behaviour is correct, as
+       *        an iterator is an reference-like object
+       * 
+       * */
+      template<typename CO>
+      void
+      check_ref_argument_bind (CO coll)
+        {
           ANNOUNCE (assign_to_input);
+          function<bool(int,int,int)> fun2(function2);
+          
           for_each (coll, function2, 5, 5, _1 );             _NL_
           for_each (coll, &function2,5, 5, _1 );             _NL_
-          for_each (coll, fun2,      5, 5, _1 );             _NL_
           
           and_all (coll, function2,  5, 5, _1 );             _NL_
           and_all (coll, &function2, 5, 5, _1 );             _NL_
-          and_all (coll, fun2,       5, 5, _1 );             _NL_
           
           has_any (coll, function2,  5, 5, _1 );             _NL_
           has_any (coll, &function2, 5, 5, _1 );             _NL_
+          
+          // note: when using a function object, 
+          // instead of directly using a binder,
+          // the pass-by reference doesn't work
+          for_each (coll,fun2,       5, 5, _1 );             _NL_
+          and_all (coll, fun2,       5, 5, _1 );             _NL_
           has_any (coll, fun2,       5, 5, _1 );             _NL_
           
           int sum=0;
@@ -435,7 +499,7 @@ namespace test {
           
           for_each (coll, var(sum) += _1_ );
           
-          ASSERT (sum == NUM_ELMS/2 * (NUM_ELMS+1));
+          ASSERT (sum == (NUM_ELMS+1) * NUM_ELMS/2);
           
           ASSERT (!and_all  (coll, _1_ - 1 ));
           ASSERT ( has_any  (coll, _1_ + 1 ));
