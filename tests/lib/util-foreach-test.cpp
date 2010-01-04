@@ -207,7 +207,7 @@ namespace test {
     bool
     function2 (int i, int j, int& k)
     {
-      k = i + j;
+      k += i + j;
       return plainFunc(k);
     }
     
@@ -332,36 +332,35 @@ namespace test {
           
           
           ANNOUNCE (assign_to_input);
-          for_each (coll, function2, 10, 20, _1 );           _NL_
-          for_each (coll, &function2,10, 20, _1 );           _NL_
-          for_each (coll, fun2,      10, 20, _1 );           _NL_
+          for_each (coll, function2, 5, 5, _1 );             _NL_
+          for_each (coll, &function2,5, 5, _1 );             _NL_
+          for_each (coll, fun2,      5, 5, _1 );             _NL_
           
-          and_all (coll, function2,  10, 20, _1 );           _NL_
-          and_all (coll, &function2, 10, 20, _1 );           _NL_
-          and_all (coll, fun2,       10, 20, _1 );           _NL_
+          and_all (coll, function2,  5, 5, _1 );             _NL_
+          and_all (coll, &function2, 5, 5, _1 );             _NL_
+          and_all (coll, fun2,       5, 5, _1 );             _NL_
           
-          has_any (coll, function2,  10, 20, _1 );           _NL_
-          has_any (coll, &function2, 10, 20, _1 );           _NL_
-          has_any (coll, fun2,       10, 20, _1 );           _NL_
+          has_any (coll, function2,  5, 5, _1 );             _NL_
+          has_any (coll, &function2, 5, 5, _1 );             _NL_
+          has_any (coll, fun2,       5, 5, _1 );             _NL_
           
           int sum=0;
           ANNOUNCE (assign_to_var);
-          for_each (coll, function2, _1, _1, ref(sum) );     _NL_
-          for_each (coll, &function2,_1, _1, ref(sum) );     _NL_
-          for_each (coll, fun2,      _1, _1, ref(sum) );     _NL_
-          
+          for_each (coll, function2, -10, _1, ref(sum) );    _NL_
+          for_each (coll, &function2,-10, _1, ref(sum) );    _NL_
+          for_each (coll, fun2,      -10, _1, ref(sum) );    _NL_
           cout << "sum=" << sum << endl;
           
-          and_all (coll, function2,  _1, _1, ref(sum) );     _NL_
-          and_all (coll, &function2, _1, _1, ref(sum) );     _NL_
-          and_all (coll, fun2,       _1, _1, ref(sum) );     _NL_
-          
+          sum=0;
+          and_all (coll, function2,  -10, _1, ref(sum) );    _NL_
+          and_all (coll, &function2, -10, _1, ref(sum) );    _NL_
+          and_all (coll, fun2,       -10, _1, ref(sum) );    _NL_
           cout << "sum=" << sum << endl;
           
-          has_any (coll, function2,  _1, _1, ref(sum) );     _NL_
-          has_any (coll, &function2, _1, _1, ref(sum) );     _NL_
-          has_any (coll, fun2,       _1, _1, ref(sum) );     _NL_
-          
+          sum=0;
+          has_any (coll, function2,  -10, _1, ref(sum) );    _NL_
+          has_any (coll, &function2, -10, _1, ref(sum) );    _NL_
+          has_any (coll, fun2,       -10, _1, ref(sum) );    _NL_
           cout << "sum=" << sum << endl;
         }
       
@@ -490,10 +489,12 @@ namespace test {
           and_all  (elmPtrs, &TestElm::operation, _1 );      _NL_
           has_any  (elmPtrs, &TestElm::operation, _1 );      _NL_
           
-          // the same works with references as well...
+          // the same works with copies of the elements as well...
           for_each (elms, &TestElm::operation, _1 );         _NL_
           and_all  (elms, &TestElm::operation, _1 );         _NL_
           has_any  (elms, &TestElm::operation, _1 );         _NL_
+          
+          // note: it seems not to be possible to create a binder, which takes the "*this"-Argument by ref
         }
     };
   
