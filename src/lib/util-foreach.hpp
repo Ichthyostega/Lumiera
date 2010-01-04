@@ -25,53 +25,32 @@
 #define UTIL_FOREACH_H
 
 #include "lib/util.hpp"
+#include "lib/meta/trait.hpp"
 
+#include <boost/utility/enable_if.hpp>
 #include <algorithm>
 
 
 
 namespace util {
   
+  using boost::enable_if;
+  using boost::disable_if;
   
+  using lib::meta::can_STL_ForEach;
+  using lib::meta::can_IterForEach;
   
-  /** shortcut for operating on all elements of a container.
-   *  Isn't this already defined somewhere? It's so obvious..
-   */
-  template <typename Container, typename Oper>
-  inline Oper
-  for_each (Container& c, Oper doIt)
-  {
-    return std::for_each (c.begin(),c.end(), doIt);
-  }
   
   
   /** All quantification: check if all elements of a collection
    *  satisfy the given predicate. Actually a short-circuit
    *  evaluation is performed.
    */
-  template <typename SEQ, typename Oper>
+  template <typename IT, typename FUN>
   inline bool
-  and_all (SEQ& coll, Oper predicate)
+  and_all (IT i, IT end, FUN predicate)
   {
-    typename SEQ::iterator e = coll.end();
-    typename SEQ::iterator i = coll.begin();
-    
-    for ( ; i!=e; ++i )
-      if (!predicate(*i))
-        return false;
-    
-    return true;
-  }
-  
-  
-  template <typename SEQ, typename Oper>
-  inline bool
-  and_all (SEQ const& coll, Oper predicate)
-  {
-    typename SEQ::const_iterator e = coll.end();
-    typename SEQ::const_iterator i = coll.begin();
-    
-    for ( ; i!=e; ++i )
+    for ( ; i!=end; ++i )
       if (!predicate(*i))
         return false;
     
@@ -83,14 +62,11 @@ namespace util {
    *  of a collection satisfies the given predicate.
    *  Actually, a short-circuit evaluation is performed.
    */
-  template <typename SEQ, typename Oper>
+  template <typename IT, typename FUN>
   inline bool
-  has_any (SEQ& coll, Oper predicate)
+  has_any (IT i, IT end, FUN predicate)
   {
-    typename SEQ::iterator e = coll.end();
-    typename SEQ::iterator i = coll.begin();
-    
-    for ( ; i!=e; ++i )
+    for ( ; i!=end; ++i )
       if (predicate(*i))
         return true;
     
@@ -98,18 +74,40 @@ namespace util {
   }
   
   
-  template <typename SEQ, typename Oper>
-  inline bool
-  has_any (SEQ const& coll, Oper predicate)
+  /* === specialisations for STL containers and Lumiera Forward Iterators === */
+  
+  /** shortcut for operating on all elements of a STL container. */
+  template <typename Container
+           ,typename FUN
+           >
+  inline   typename disable_if< can_IterForEach<Container>,
+  FUN      >::type
+  for_each (Container& c, FUN doIt)
   {
-    typename SEQ::const_iterator e = coll.end();
-    typename SEQ::const_iterator i = coll.begin();
-    
-    for ( ; i!=e; ++i )
-      if (predicate(*i))
-        return true;
-    
-    return false;
+    return std::for_each (c.begin(),c.end(), doIt);
+  }
+  
+  
+  
+  template <typename Container
+           ,typename FUN
+           >
+  inline   typename enable_if< can_STL_ForEach<Container>,
+  bool     >::type                                        
+  and_all (Container& coll, FUN predicate)
+  {
+    return and_all (coll.begin(),coll.end(), predicate);
+  }
+  
+  
+  template <typename Container
+           ,typename FUN
+           >
+  inline   typename enable_if< can_STL_ForEach<Container>,
+  bool     >::type                                        
+  has_any (Container& coll, FUN predicate)
+  {
+    return has_any (coll.begin(),coll.end(), predicate);
   }
   
   

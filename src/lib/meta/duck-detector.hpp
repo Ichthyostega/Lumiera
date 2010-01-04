@@ -74,24 +74,16 @@
 #define LIB_META_DUCK_DETECTOR_H
 
 
+#include "lib/meta/util.hpp"
 
 namespace lib {
+namespace meta{
   
-  
-  /* types for figuring out the overload resolution chosen by the compiler */
-  
-  typedef char Yes_t;
-  struct No_t { char padding[8]; };
-  
-  ////////////////////////////////////TODO: after fixing the namespace of typelist/meta programming facilities, these can be dropped.
-  
-  
-  
-  namespace meta {
+                      ///////////////TICKET #175  sort out meta namespace
+  using lumiera::Yes_t;
+  using lumiera::No_t;
     
-  } // namespace meta
-  
-} // namespace lib
+}} // namespace lib::meta
 
 
 

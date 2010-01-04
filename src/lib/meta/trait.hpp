@@ -73,6 +73,68 @@ namespace meta {
   
   
   
+  /** Trait template to detect a type usable with the STL for-each loop.
+   *  Basically we're looking for the functions to get the begin/end iterator
+   */
+  template<typename T>
+  class can_STL_ForEach
+    {
+      struct is_iterable
+        {
+          META_DETECT_NESTED(iterator);
+          META_DETECT_FUNCTION(typename X::iterator, begin,(void));
+          META_DETECT_FUNCTION(typename X::iterator, end  ,(void));
+          
+          enum { value = HasNested_iterator<T>::value
+                      && HasFunSig_begin<T>::value
+                      && HasFunSig_end<T>::value
+           };
+        };
+      
+      struct is_const_iterable
+        {
+          META_DETECT_NESTED(const_iterator);
+          META_DETECT_FUNCTION(typename X::const_iterator, begin,(void) const);
+          META_DETECT_FUNCTION(typename X::const_iterator, end  ,(void) const);
+          
+          enum { value = HasNested_const_iterator<T>::value
+                      && HasFunSig_begin<T>::value
+                      && HasFunSig_end<T>::value
+           };
+        };
+      
+      
+    public:
+      enum { value = is_iterable::value
+                  || is_const_iterable::value
+           };
+    };
+  
+  
+  /** Trait template to detect a type usable immediately as
+   *  "Lumiera Forward Iterator" in a specialised for-each loop
+   *  This is just a heuristic, based on some common properties
+   *  of such iterators; it is enough to distinguish it from an 
+   *  STL container, but can certainly be refined.
+   */
+  template<typename T>
+  class can_IterForEach
+    {
+       
+      META_DETECT_NESTED(value_type);
+      META_DETECT_OPERATOR_DEREF();
+      META_DETECT_OPERATOR_INC();
+      
+    public:
+      enum{ value = boost::is_convertible<T, bool>::value
+                 && HasNested_value_type<T>::value
+                 && HasOperator_deref<T>::value
+                 && HasOperator_inc<T>::value
+          };
+    };
+  
+  
+  
   /** Type definition helper for pointer and reference types.
    *  Allows to create a member field and to get the basic type
    *  irrespective if the given type is plain, pointer or reference
@@ -103,7 +165,7 @@ namespace meta {
       typedef TY  value_type;
       typedef lib::wrapper::AssignableRefWrapper<TY> member_type;
     };
-  //////////////////////////////////////////TODO: not needed 12/09 -- obsolete? useful? keep it?
+  //////////////////////////////////////////TODO: member_type not needed anymore 12/09 -- obsolete? useful? keep it?
   
   
 }} // namespace lib::meta

@@ -42,59 +42,6 @@
 
 
 namespace lib {
-/////////////////////////////////////////////////////////////TODO draft
-  
-  template<typename T>
-  class can_STL_ForEach
-    {
-      struct is_iterable
-        {
-          META_DETECT_NESTED(iterator);
-          META_DETECT_FUNCTION(typename X::iterator, begin,(void));
-          META_DETECT_FUNCTION(typename X::iterator, end  ,(void));
-          
-          enum { value = HasNested_iterator<T>::value
-                      && HasFunSig_begin<T>::value
-                      && HasFunSig_end<T>::value
-           };
-        };
-      
-      struct is_const_iterable
-        {
-          META_DETECT_NESTED(const_iterator);
-          META_DETECT_FUNCTION(typename X::const_iterator, begin,(void) const);
-          META_DETECT_FUNCTION(typename X::const_iterator, end  ,(void) const);
-          
-          enum { value = HasNested_const_iterator<T>::value
-                      && HasFunSig_begin<T>::value
-                      && HasFunSig_end<T>::value
-           };
-        };
-      
-      
-    public:
-      enum { value = is_iterable::value
-                  || is_const_iterable::value
-           };
-    };
-  
-  template<typename T>
-  class can_IterForEach
-    {
-       
-      META_DETECT_NESTED(value_type);
-      META_DETECT_OPERATOR_DEREF();
-      META_DETECT_OPERATOR_INC();
-      
-    public:
-      enum{ value = boost::is_convertible<T, bool>::value
-                 && HasNested_value_type<T>::value
-                 && HasOperator_deref<T>::value
-                 && HasOperator_inc<T>::value
-          };
-    };
-  
-/////////////////////////////////////////////////////////////TODO draft
 namespace meta{
 namespace test{
   
