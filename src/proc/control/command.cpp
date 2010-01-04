@@ -249,7 +249,7 @@ namespace control {
   
   
   
-  /** @return number distinguishable registered command \em instances */
+  /** @return number of distinguishable registered command \em instances */
   size_t
   Command::instance_count()
   {

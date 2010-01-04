@@ -42,7 +42,7 @@ namespace util {
   /**
    * Abstraction of the usual "int argc, int** argv"-Commandline,
    * to be able to treat it as a vector of strings. Inherits from
-   * vector<std::string>, but provides convienient conversions to
+   * vector<std::string>, but provides convenient conversions to
    * string (joining delimited by space)... 
    */
   class Cmdline : public VectS

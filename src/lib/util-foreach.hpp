@@ -21,6 +21,24 @@
 */
 
 
+/** @file util-foreach.hpp
+ ** Perform operations "for each element" of a collection.
+ ** This header defines various flavours of these active iteration functions, which all take
+ ** a functor and invoke it in some way over the collection's elements.
+ ** - basic constructs
+ **   - for_each
+ **   - and_all (all quantisation)
+ **   - has_any (existence quantisation)
+ ** - kinds of collection
+ **   - STL collections and anything which has an iterator, \c begin() and \c end()
+ **   - "Lumiera Forward Iterator" instance to yield all the elements of the collection
+ ** - support for on-the-fly binding up to 4 arguments of the functor
+ ** 
+ ** @see util-foreach-test.cpp
+ ** 
+ */
+
+
 #ifndef UTIL_FOREACH_H
 #define UTIL_FOREACH_H
 
@@ -76,7 +94,11 @@ namespace util {
   
   /* === specialisations for STL containers and Lumiera Forward Iterators === */
   
-  /** shortcut for operating on all elements of a STL container. */
+  /** operating on all elements of a STL container.
+   *  @note this case is the default and kicks in
+   *        \em unless we detect a Lumiera iterator.
+   *        The handling is different for and_all
+   */
   template <typename Container
            ,typename FUN
            >
@@ -88,27 +110,214 @@ namespace util {
   }
   
   
+  /** operating on a Lumiera Forward Iterator until exhaustion. */
+  template <typename IT
+           ,typename FUN
+           >
+  inline   typename enable_if< can_IterForEach<IT>,
+  FUN      >::type
+  for_each (IT& ii, FUN doIt)
+  {
+    return std::for_each (ii, IT(), doIt);
+  }
+  
+  
+  
   
   template <typename Container
            ,typename FUN
            >
   inline   typename enable_if< can_STL_ForEach<Container>,
-  bool     >::type                                        
+  bool     >::type
   and_all (Container& coll, FUN predicate)
   {
     return and_all (coll.begin(),coll.end(), predicate);
   }
   
   
+  template <typename IT
+           ,typename FUN
+           >
+  inline   typename enable_if< can_IterForEach<IT>,
+  bool     >::type
+  and_all (IT& ii, FUN predicate)
+  {
+    return and_all (ii, IT(), predicate);
+  }
+  
+  
+  
   template <typename Container
            ,typename FUN
            >
   inline   typename enable_if< can_STL_ForEach<Container>,
-  bool     >::type                                        
+  bool     >::type
   has_any (Container& coll, FUN predicate)
   {
     return has_any (coll.begin(),coll.end(), predicate);
   }
+  
+  
+  template <typename IT
+           ,typename FUN
+           >
+  inline   typename enable_if< can_IterForEach<IT>,
+  bool     >::type
+  has_any (IT& ii, FUN predicate)
+  {
+    return has_any (ii, IT(), predicate);
+  }
+  
+  
+  
+  
+  /* === allow creating argument binders on-the-fly === */
+  
+  
+  template < typename CON, typename FUN
+           , typename P1
+           >
+  inline void                                                                            //________________________________
+  for_each (CON& elements, FUN function, P1 bind1)                                      ///< Accept binding for 1 Argument 
+  {
+    for_each (elements, std::tr1::bind (function, bind1));
+  }
+  
+  
+  template < typename CON, typename FUN
+           , typename P1
+           , typename P2
+           >
+  inline void                                                                            //________________________________
+  for_each (CON& elements, FUN function, P1 bind1, P2 bind2)                            ///< Accept binding for 2 Arguments
+  {
+    for_each (elements, std::tr1::bind (function, bind1, bind2));
+  }
+  
+  
+  template < typename CON, typename FUN
+           , typename P1
+           , typename P2
+           , typename P3
+           >
+  inline void                                                                            //________________________________
+  for_each (CON& elements, FUN function, P1 bind1, P2 bind2, P3 bind3)                  ///< Accept binding for 3 Arguments
+  {
+    for_each (elements, std::tr1::bind (function, bind1, bind2, bind3));
+  }
+  
+  
+  template < typename CON, typename FUN
+           , typename P1
+           , typename P2
+           , typename P3
+           , typename P4
+           >
+  inline void                                                                            //________________________________
+  for_each (CON& elements, FUN function, P1 bind1, P2 bind2, P3 bind3, P4 bind4)        ///< Accept binding for 4 Arguments
+  {
+    for_each (elements, std::tr1::bind (function, bind1, bind2, bind3, bind4));
+  }
+  
+  
+  
+  
+  
+  template < typename CON, typename FUN
+           , typename P1
+           >
+  inline bool                                                                            //________________________________
+  and_all (CON& elements, FUN function, P1 bind1)                                       ///< Accept binding for 1 Argument 
+  {
+    return and_all (elements, std::tr1::bind<bool> (function, bind1));
+  }
+  
+  
+  template < typename CON, typename FUN
+           , typename P1
+           , typename P2
+           >
+  inline bool                                                                            //________________________________
+  and_all (CON& elements, FUN function, P1 bind1, P2 bind2)                             ///< Accept binding for 2 Arguments
+  {
+    return and_all (elements, std::tr1::bind<bool> (function, bind1, bind2));
+  }
+  
+  
+  template < typename CON, typename FUN
+           , typename P1
+           , typename P2
+           , typename P3
+           >
+  inline bool                                                                            //________________________________
+  and_all (CON& elements, FUN function, P1 bind1, P2 bind2, P3 bind3)                   ///< Accept binding for 3 Arguments
+  {
+    return and_all (elements, std::tr1::bind<bool> (function, bind1, bind2, bind3));
+  }
+  
+  
+  template < typename CON, typename FUN
+           , typename P1
+           , typename P2
+           , typename P3
+           , typename P4
+           >
+  inline bool                                                                            //________________________________
+  and_all (CON& elements, FUN function, P1 bind1, P2 bind2, P3 bind3, P4 bind4)         ///< Accept binding for 4 Arguments
+  {
+    return and_all (elements, std::tr1::bind<bool> (function, bind1, bind2, bind3, bind4));
+  }
+  
+  
+  
+  
+  
+  template < typename CON, typename FUN
+           , typename P1
+           >
+  inline bool                                                                            //________________________________
+  has_any (CON& elements, FUN function, P1 bind1)                                       ///< Accept binding for 1 Argument 
+  {
+    return has_any (elements, std::tr1::bind<bool> (function, bind1));
+  }
+  
+  
+  template < typename CON, typename FUN
+           , typename P1
+           , typename P2
+           >
+  inline bool                                                                            //________________________________
+  has_any (CON& elements, FUN function, P1 bind1, P2 bind2)                             ///< Accept binding for 2 Arguments
+  {
+    return has_any (elements, std::tr1::bind<bool> (function, bind1, bind2));
+  }
+  
+  
+  template < typename CON, typename FUN
+           , typename P1
+           , typename P2
+           , typename P3
+           >
+  inline bool                                                                            //________________________________
+  has_any (CON& elements, FUN function, P1 bind1, P2 bind2, P3 bind3)                   ///< Accept binding for 3 Arguments
+  {
+    return has_any (elements, std::tr1::bind<bool> (function, bind1, bind2, bind3));
+  }
+  
+  
+  template < typename CON, typename FUN
+           , typename P1
+           , typename P2
+           , typename P3
+           , typename P4
+           >
+  inline bool                                                                            //________________________________
+  has_any (CON& elements, FUN function, P1 bind1, P2 bind2, P3 bind3, P4 bind4)         ///< Accept binding for 4 Arguments
+  {
+    return has_any (elements, std::tr1::bind<bool> (function, bind1, bind2, bind3, bind4));
+  }
+  
+  
   
   
 } // namespace util
