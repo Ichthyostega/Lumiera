@@ -43,6 +43,7 @@
 #include "lib/iter-adapter.hpp"
 //#include "lib/bool-checkable.hpp"
 
+#include <boost/noncopyable.hpp>
 #include <tr1/memory>
 
 
@@ -52,8 +53,6 @@ namespace lib {
 
   using std::tr1::shared_ptr;
   
-  namespace {
-  }
   
   
   /**
@@ -61,7 +60,7 @@ namespace lib {
    * which then can be accessed through IterAdapter as a frontend,
    * allowing to pull individual elements until exhaustion.
    * 
-   * This base class is empty and makes now assumptions regarding
+   * This base class is empty and makes no assumptions regarding
    * identity, instantiation and copying.
    * 
    * @see PlacementIndex::Table#_eachEntry_4check usage example
@@ -69,17 +68,7 @@ namespace lib {
    */
   template<typename TY>
   class IterSource
-//    : public lib::BoolCheckable<IterSource<TY> >
     {
-      
-      static void
-      detach_without_destroy (IterSource * source)
-        {
-          WARN_IF (!source, library, "IterSource deleter called with NULL source pointer");
-          if (source)
-            source->disconnect();
-        }
-      
       
     protected: /* == data source API for implementation == */
       
@@ -130,21 +119,113 @@ namespace lib {
       
       typedef IterAdapter<Pos, DataHandle> iterator;
       
+      /** build an iterator frontend for the given source,
+       *  @note the source is allocated separately and
+       *        \em not owned by the iterator frontend
+       */
       static iterator
       build (IterSource& sourceImpl)
         {
           DataHandle sourceHandle (&sourceImpl, &detach_without_destroy);
-          Pos first = sourceImpl.firstResult();
-          return iterator (sourceHandle, first);
+          return startIteration(sourceHandle);
+        }
+      
+      /** build an iterator frontend, thereby managing
+       *  the given heap allocated source object instance.
+       *  @note we take ownership and destroy the source
+       *        when the last copy of the created iterator
+       *        goes out of scope.
+       */
+      static iterator
+      build (IterSource* sourceImplObject)
+        {
+          DataHandle sourceHandle (sourceImplObject, &destroy_managed_source);
+          return startIteration(sourceHandle);
         }
       
       static iterator EMPTY_SOURCE;
+      
+      
+      
+    private:
+      static iterator
+      startIteration (DataHandle sourceHandle)
+        {
+          REQUIRE (sourceHandle);
+          Pos first = sourceHandle->firstResult();
+          return iterator (sourceHandle, first);
+        }
+      
+      
+      static void
+      detach_without_destroy (IterSource * source)
+        {
+          WARN_IF (!source, library, "IterSource deleter called with NULL source pointer");
+          if (source)
+            source->disconnect();
+        }
+      
+      static void
+      destroy_managed_source (IterSource * source)
+        {
+          WARN_IF (!source, library, "IterSource deleter called with NULL source pointer");
+          if (source)
+            {
+              source->disconnect();
+              delete source;
+            }
+        }
     };
   
   
   /** storage for the empty data-source constant */
   template<typename TY>
   typename IterSource<TY>::iterator IterSource<TY>::EMPTY_SOURCE = iterator();
+  
+  
+  
+  
+  /** 
+   * Standard implementation of the IterSource interface:
+   * a wrapped "Lumiera Forward Iterator"
+   */
+  template<class IT>
+  class WrappedLumieraIterator
+    : public IterSource<typename IT::value_type>
+    , boost::noncopyable
+    {
+      typedef IterSource<typename IT::value_type> _Base;
+      typedef typename _Base::Pos Pos;
+      
+      IT src_;
+      
+    Pos
+    firstResult ()
+      {
+        if (!src_)
+          return 0;
+        else
+          return & *src_;
+      }
+    
+    void
+    nextResult (Pos& pos)
+      {
+        if (!pos) return;
+        if (src_) ++src_;
+        if (src_)
+          pos = & *src_;
+        else
+          pos = 0;
+      }
+    
+      
+      
+    public:
+      WrappedLumieraIterator (IT const& orig)
+        : src_(orig)
+        { }
+    };
   
   
   
@@ -188,7 +269,11 @@ namespace lib {
   typename iter_impl::_SeqType<CON>::Iter
   eachEntry (CON& container)
     {
-      UNIMPLEMENTED ("standard iter wrapper yielding all distinct keys of a multimap");
+      typedef typename iter_impl::_SeqType<CON>::Val ValType;
+      typedef RangeIter<typename CON::iterator> Range;
+      
+      Range contents (container.begin(), container.end());
+      return IterSource<ValType>::build (new WrappedLumieraIterator<Range>(contents)); 
     }
   
   

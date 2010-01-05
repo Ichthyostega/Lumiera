@@ -23,6 +23,7 @@
 
 
 #include "lib/test/run.hpp"
+#include "lib/test/test-helper.hpp"
 #include "lib/util.hpp"
 
 #include "lib/iter-source.hpp"
@@ -30,6 +31,7 @@
 #include <boost/lexical_cast.hpp>
 #include <boost/noncopyable.hpp>
 #include <iostream>
+#include <string>
 #include <list>
 
 
@@ -40,7 +42,10 @@ namespace test{
   using ::Test;
   using boost::lexical_cast;
   using boost::noncopyable;
+  using lib::test::randStr;
   using util::isnil;
+  using util::cStr;
+  using std::string;
   using std::list;
   using std::cout;
   using std::endl;
@@ -52,37 +57,52 @@ namespace test{
     
     uint NUM_ELMS = 10;
     
-    /** 
+    typedef const char* CStr;
+    
+    /**
      * Explicit implementation of the IterSource interface (test dummy)
+     * Creates a random string and chops off a character on each iteration
      */
     class TestSource
-      : public IterSource<char*>
+      : public IterSource<CStr>
       , noncopyable
       {
         
-      virtual Pos
-      firstResult ()
-        {
-          UNIMPLEMENTED ("start iteration");
-        }
-      
-      virtual void
-      nextResult (Pos& pos)
-        {
-          UNIMPLEMENTED ("iteration step");
-        }
-      
+        string buffer_;
+        CStr current_;
+        
+        virtual Pos
+        firstResult ()
+          {
+            current_ = buffer_.c_str();
+            ENSURE (current_);
+            return &current_;
+          }
+        
+        virtual void
+        nextResult (Pos& pos)
+          {
+            if (pos && *pos && **pos)
+              ++(*pos);
+            
+            if (!(pos && *pos && **pos))
+              pos = 0;
+          }
+        
         
         
       public:
         TestSource (uint num)
+          : buffer_(randStr (num))
+          , current_(0)
           {
-            UNIMPLEMENTED ("dedicated IterSource implementation");
+            INFO (test, "created TestSource(\"%s\")", cStr(buffer_));
           }
       };
     
-      
-    /** test dummy, simply wrapping an STL container
+    
+    
+    /** test dummy: simply wrapping an STL container
      *  and exposing a range as Lumiera Forward Iterator
      */
     struct WrappedList
@@ -98,13 +118,8 @@ namespace test{
         typedef list<int>::iterator sourceIter;
         typedef RangeIter<sourceIter> iterator;
         
-        typedef list<int>::const_iterator const_sourceIter;
-        typedef RangeIter<const_sourceIter> const_iterator;
-        
-        iterator       begin()       { return       iterator(data_.begin(),data_.end()); }
-        iterator       end()         { return       iterator();                          }
-        const_iterator begin() const { return const_iterator(data_.begin(),data_.end()); }
-        const_iterator end()   const { return const_iterator();                          }
+        iterator begin() { return iterator(data_.begin(),data_.end()); }
+        iterator end()   { return iterator();                          }
         
       };
     
@@ -119,15 +134,17 @@ namespace test{
   /******************************************************************
    *  @test create some (opaque) data sources,
    *        and then pull the data out by iteration.
-   *        Demonstrates simple usage of the IterSource inteface
+   *        Demonstrates simple usage of the IterSource interface
    *        
+   * @see IterSource
+   * @see PlacementIndex::Table#_eachEntry_4check real world usage example
    */
   class IterSource_test : public Test
     {
       
       typedef IterSource<int>::iterator IntIter;
-      typedef IterSource<char*>::iterator StrIter;
-    
+      typedef IterSource<CStr>::iterator StrIter;
+      
       virtual void
       run (Arg arg)
         {
@@ -138,7 +155,7 @@ namespace test{
           TestSource dedicatedSource(NUM_ELMS);
           
           IntIter iii (eachEntry (customList));
-          StrIter cii (IterSource<char*>::build(dedicatedSource));
+          StrIter cii (IterSource<CStr>::build(dedicatedSource));
           
           ASSERT (!isnil (iii));
           ASSERT (!isnil (cii));
@@ -154,9 +171,9 @@ namespace test{
       
       template<class IT>
       void
-      pullOut (IT const& ii)
+      pullOut (IT& iter)
         {
-          for (IT iter(ii) ; iter; ++iter )
+          for ( ; iter; ++iter )
             cout << "::" << *iter;
           cout << endl;
         }
