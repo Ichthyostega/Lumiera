@@ -28,6 +28,7 @@
 #include "lib/iter-source.hpp"
 
 #include <boost/lexical_cast.hpp>
+#include <boost/noncopyable.hpp>
 #include <iostream>
 #include <list>
 
@@ -38,6 +39,7 @@ namespace test{
   
   using ::Test;
   using boost::lexical_cast;
+  using boost::noncopyable;
   using util::isnil;
   using std::list;
   using std::cout;
@@ -55,7 +57,28 @@ namespace test{
      */
     class TestSource
       : public IterSource<char*>
+      , noncopyable
       {
+        
+      virtual Pos
+      firstResult ()
+        {
+          UNIMPLEMENTED ("start iteration");
+        }
+      
+      virtual void
+      nextResult (Pos& pos)
+        {
+          UNIMPLEMENTED ("iteration step");
+        }
+      
+        
+        
+      public:
+        TestSource (uint num)
+          {
+            UNIMPLEMENTED ("dedicated IterSource implementation");
+          }
       };
     
       

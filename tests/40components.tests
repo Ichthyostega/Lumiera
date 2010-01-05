@@ -356,6 +356,10 @@ out: ::12::11::10::9::8::7::6::5::4::3
 END
 
 
+PLANNED "Iterable data source" IterSource_test 20 <<END
+END
+
+
 TEST "Iterable type detection" IterableClassification_test <<END
 out: can_STL_ForEach<LongVector>	 : Yes
 out: can_STL_ForEach<TimeSet>	 : Yes

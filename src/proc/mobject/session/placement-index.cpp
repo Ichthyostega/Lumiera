@@ -56,6 +56,7 @@
 #include "lib/typed-allocation-manager.hpp"
 //#include "proc/mobject/mobject.hpp" ///////////////////////TODO necessary?
 #include "lib/util-foreach.hpp"
+#include "lib/iter-source.hpp"
 
 
 //#include <boost/format.hpp>
@@ -304,6 +305,8 @@ namespace session {
       
       /* == access for self-test == */
       
+      typedef lib::IterSource<PID>::iterator IDIter;
+      
       PlacementMO* _root_4check ()        { return root_.get(); }
       PlacementMO* _element_4check (ID id){ return base_entry(id).element.get();}
       PlacementMO* _scope_4check (ID id)  { return base_entry(id).scope.get();  }
@@ -511,8 +514,6 @@ namespace session {
   
   /* ====== PlacementIndex validity self-check ====== */
   
-#if false  //////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #479  !!!!!!!!!
-#endif ////////////////////////////////////////////////////////////////////////////////////////TODO lots of things unimplemented.....!!!!!
   namespace { // Implementation details of self-check
     
     LUMIERA_ERROR_DEFINE(INDEX_CORRUPTED, "PlacementIndex corrupted");
@@ -611,8 +612,10 @@ namespace session {
         {
           checkRoot (tab._root_4check());
           
+#if false  //////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #479  !!!!!!!!!
           for_each ( tab._eachEntry_4check(), &Validator::checkEntry, this, _1 );
           for_each ( tab._eachScope_4check(), &Validator::checkScope, this, _1 );
+#endif ////////////////////////////////////////////////////////////////////////////////////////TODO lots of things unimplemented.....!!!!!
         }
     
   };//(End) Validator (PlacementIndex self-check implementation)
