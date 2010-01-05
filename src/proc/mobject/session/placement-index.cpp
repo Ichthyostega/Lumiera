@@ -303,35 +303,12 @@ namespace session {
       
       
       /* == access for self-test == */
-      PlacementMO*
-      _root_4check ()
-        {
-          return root_.get();
-        }
       
-      PlacementMO*
-      _element_4check (ID id)
-        {
-          return base_entry(id).element.get();
-        }
-      
-      PlacementMO*
-      _scope_4check (ID id)
-        {
-          return base_entry(id).scope.get();
-        }
-      
-      void
-      _eachEntry_4check ()
-        {
-          UNIMPLEMENTED ("return each id in the base table");
-        }
-      
-      void
-      _eachScope_4check()
-        {
-          UNIMPLEMENTED ("return each scope from the reverse table");
-        }
+      PlacementMO* _root_4check ()        { return root_.get(); }
+      PlacementMO* _element_4check (ID id){ return base_entry(id).element.get();}
+      PlacementMO* _scope_4check (ID id)  { return base_entry(id).scope.get();  }
+      IDIter       _eachEntry_4check ()   { return eachMapKey (placementTab_);  }
+      IDIter       _eachScope_4check()    { return eachDistinctKey (scopeTab_); }
       
       
     private:
@@ -534,7 +511,8 @@ namespace session {
   
   /* ====== PlacementIndex validity self-check ====== */
   
-#if false  //////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET 479  !!!!!!!!!
+#if false  //////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #479  !!!!!!!!!
+#endif ////////////////////////////////////////////////////////////////////////////////////////TODO lots of things unimplemented.....!!!!!
   namespace { // Implementation details of self-check
     
     LUMIERA_ERROR_DEFINE(INDEX_CORRUPTED, "PlacementIndex corrupted");
@@ -548,6 +526,16 @@ namespace session {
           { }
       };
     
+  }
+  
+  class PlacementIndex::Validator
+    {
+    
+      
+      PlacementIndex::Table& tab;
+      
+    
+    
 #define VERIFY(_CHECK_, CHECK_ID, DESCRIPTION) \
       if (!(_CHECK_))                           \
         throw SelfCheckFailure (CHECK_ID, (DESCRIPTION));
@@ -558,8 +546,8 @@ namespace session {
     
     
     
-    using namespace boost::lambda;
-    typedef PlacementIndex::Table& Tab;
+//    using namespace boost::lambda;
+//    typedef PlacementIndex::Table& Tab;
       
     void
     checkRoot (PMO* root)
@@ -570,7 +558,7 @@ namespace session {
     }
     
     void
-    checkEntry (Tab tab, ID id)
+    checkEntry (ID id)
     {
       VERIFY ( tab.contains(id),     "(1.1) Elements", "PlacementIndex main table corrupted");
       VERIFY ( ELM(id),              "(1.2) Elements", "Entry doesn't hold a Placement");
@@ -591,7 +579,7 @@ namespace session {
     }
     
     void
-    checkScope (Tab tab, ID id)
+    checkScope (ID id)
     {
       VERIFY ( tab.contains(id),     "(2.1) Scopes",   "Scope not registered in main table");
       VERIFY ( ELM(id),              "(2.2) Scopes",   "Scope entry doesn't hold a Placement");
@@ -606,7 +594,7 @@ namespace session {
     }
     
     void
-    checkAllocation (Tab tab)
+    checkAllocation ()
     {
       VERIFY ( 0 < tab.size(),       "(4.1) Storage",  "Implementation table is empty");
       VERIFY ( 0 < tab.element_cnt(),"(4.2) Storage",  "No Placement instances allocated");
@@ -616,13 +604,22 @@ namespace session {
                                      "(4.4) Storage",  "Number of entries doesn't match number of allocated Placement instances");
     }
     
+    public:
     
-#undef VERIFY
+      Validator (Table& indexTable)
+        : tab(indexTable)
+        {
+          checkRoot (tab._root_4check());
+          
+          for_each ( tab._eachEntry_4check(), &Validator::checkEntry, this, _1 );
+          for_each ( tab._eachScope_4check(), &Validator::checkScope, this, _1 );
+        }
+    
+  };//(End) Validator (PlacementIndex self-check implementation)
+    
 #undef ELM
 #undef SCO
     
-  }//(End) self-check implementation
-#endif ////////////////////////////////////////////////////////////////////////////////////////TODO lots of things unimplemented.....!!!!!
   
   
   
@@ -639,18 +636,12 @@ namespace session {
   PlacementIndex::isValid()  const
   {
 #if false  //////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET 479  !!!!!!!!!
+#endif ////////////////////////////////////////////////////////////////////////////////////////TODO lots of things unimplemented.....!!!!!
     try
       {
-        if (!pTab_)
-          throw SelfCheckFailure ("(0) Basics"
-                                 ,"Implementation tables not initialised");
+        VERIFY ( pTab_, "(0) Basics" ,"Implementation tables not initialised");
         
-        checkRoot (pTab_->_root_4check());
-
-        ////////////////////////////////////////////////////////////////////////TODO
-//      for_each (pTab_->_eachEntry_4check(), bind (checkEntry, *pTab_, _1 ));
-//      for_each (pTab_->_eachScope_4check(), bind (checkScope, *pTab_, _1 ));
-        
+        Validator (*pTab_);
         return true;
       }
     
@@ -659,10 +650,10 @@ namespace session {
         lumiera_error();
         ERROR (session, "%s", failure.what());
       }
-#endif ////////////////////////////////////////////////////////////////////////////////////////TODO lots of things unimplemented.....!!!!!
     return false;
   }
   
+#undef VERIFY
   
   
   

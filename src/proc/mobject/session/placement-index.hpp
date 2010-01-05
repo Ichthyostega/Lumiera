@@ -150,6 +150,7 @@ namespace session {
     : boost::noncopyable
     {
       class Table;
+      class Validator;
       
       scoped_ptr<Table> pTab_;
       
