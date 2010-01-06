@@ -33,6 +33,7 @@
 #include <boost/noncopyable.hpp>
 #include <tr1/unordered_map>
 #include <iostream>
+#include <cstdlib>
 #include <string>
 #include <list>
 #include <map>
@@ -50,8 +51,10 @@ namespace test{
   using lib::test::randTime;
   using util::isnil;
   using util::cStr;
+  using std::make_pair;
   using std::string;
   using std::list;
+  using std::rand;
   using std::cout;
   using std::endl;
   
@@ -149,11 +152,15 @@ namespace test{
       
       typedef IterSource<int>::iterator IntIter;
       typedef IterSource<CStr>::iterator StrIter;
-      typedef IterSource<const string>::iterator StringIter;
+      typedef IterSource<string>::iterator StringIter;
       typedef IterSource<Time>::iterator TimeIter;
       
       typedef std::map<string,Time>                TreeMap;
       typedef std::tr1::unordered_map<string,Time> HashMap;
+      
+      typedef std::multimap<int,int>               TreeMultimap;
+      typedef std::tr1::unordered_multimap<int,int>HashMultimap;
+      
       
       virtual void
       run (Arg arg)
@@ -164,6 +171,9 @@ namespace test{
           
           verify_MapWrappers<TreeMap>();
           verify_MapWrappers<HashMap>();
+          
+          verify_MultimapKeyIter<TreeMultimap>();
+          verify_MultimapKeyIter<HashMultimap>();
         }
       
       
@@ -217,7 +227,29 @@ namespace test{
           ASSERT (!sIter && !tIter);
         }
       
+      
+      template<class MAP>
+      void
+      verify_MultimapKeyIter()  ///< @see IterTools_test#verify_filterRepetitions
+        {
+          MAP testMap;
+          for (uint i=0; i<NUM_ELMS; ++i)
+            {
+              uint n = 1 + rand() % 100;
+              do testMap.insert (make_pair (i,n));
+              while (--n);
+            }
+          ASSERT (NUM_ELMS < testMap.size(), "no repetition in test data??");
+          
+          IntIter keys = eachDistinctKey (testMap);
+          
+          cout << "distinct_keys";
+          ASSERT (keys);
+          pullOut (keys);
+          ASSERT (!keys);
+        }
     };
+  
   
   LAUNCHER (IterSource_test, "unit common");
   

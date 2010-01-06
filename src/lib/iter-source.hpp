@@ -51,6 +51,7 @@
 #include "lib/iter-adapter.hpp"
 #include "lib/itertools.hpp"
 
+#include <boost/type_traits/remove_const.hpp>
 #include <boost/noncopyable.hpp>
 #include <tr1/memory>
 
@@ -259,8 +260,8 @@ namespace lib {
         {
           typedef typename MAP::key_type Key;
           typedef typename MAP::value_type::second_type Val;
-          typedef typename IterSource<const Key>::iterator KeyIter;
-          typedef typename IterSource<      Val>::iterator ValIter;
+          typedef typename IterSource<Key>::iterator KeyIter;
+          typedef typename IterSource<Val>::iterator ValIter;
         };
       
       
@@ -275,8 +276,12 @@ namespace lib {
       struct _PairIterT
         {
           typedef typename IT::value_type PairType;
-          typedef typename PairType::first_type KeyType;
           typedef typename PairType::second_type ValType;
+          typedef typename PairType::first_type ConstKeyType;
+          
+          // since we're returning the keys always by value,
+          // we can strip the const added by the STL map types
+          typedef typename boost::remove_const<ConstKeyType>::type KeyType;
           
           typedef TransformIter<IT,KeyType> KeyIter;
           typedef TransformIter<IT,ValType> ValIter;
@@ -347,12 +352,17 @@ namespace lib {
     
     /** @return a Lumiera Forward Iterator to yield
      *          all \em distinct keys of a Multimap
+     *  @warning we do a full table scan to find
+     *          the distinct keys
      */
     template<class MAP>
     typename _MapT<MAP>::KeyIter
-    eachDistinctKey (MAP&) // map)
+    eachDistinctKey (MAP& map)
     {
-      UNIMPLEMENTED ("standard iter wrapper yielding all distinct keys of a multimap");
+      typedef RangeIter<typename MAP::iterator> Range;
+      
+      Range contents (map.begin(), map.end());
+      return wrapIter (filterRepetitions (takePairFirst(contents)));
     }
     
     

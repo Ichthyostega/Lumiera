@@ -305,7 +305,7 @@ namespace session {
       
       /* == access for self-test == */
       
-      typedef lib::IterSource<const PID>::iterator IDIter;
+      typedef lib::IterSource<PID>::iterator IDIter;
       
       PlacementMO* _root_4check ()        { return root_.get(); }
       PlacementMO* _element_4check (ID id){ return base_entry(id).element.get();}
