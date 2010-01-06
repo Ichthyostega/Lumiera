@@ -168,11 +168,14 @@ namespace test{
   
   
   /*********************************************************************
-   *  @test set up example implementations based on the iterator-adapter
-   *        templates and verify the behaviour in accordance to the
-   *        concept "lumiera forward iterator"
-   *        
-   * @todo see Ticket #182
+   * @test set up example implementations based on the iterator-adapter
+   *       templates and verify the behaviour in accordance to the
+   *       concept "lumiera forward iterator"
+   *
+   * @note see Ticket #182
+   * @see IterAdapter
+   * @see itertools.hpp
+   * @see IterSource         
    */
   class IterAdapter_test : public Test
     {

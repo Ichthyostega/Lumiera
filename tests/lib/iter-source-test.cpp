@@ -24,15 +24,18 @@
 
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
+#include "lib/lumitime-fmt.hpp"
 #include "lib/util.hpp"
 
 #include "lib/iter-source.hpp"
 
 #include <boost/lexical_cast.hpp>
 #include <boost/noncopyable.hpp>
+#include <tr1/unordered_map>
 #include <iostream>
 #include <string>
 #include <list>
+#include <map>
 
 
 
@@ -40,9 +43,11 @@ namespace lib {
 namespace test{
   
   using ::Test;
+  using lumiera::Time;
   using boost::lexical_cast;
   using boost::noncopyable;
   using lib::test::randStr;
+  using lib::test::randTime;
   using util::isnil;
   using util::cStr;
   using std::string;
@@ -144,12 +149,27 @@ namespace test{
       
       typedef IterSource<int>::iterator IntIter;
       typedef IterSource<CStr>::iterator StrIter;
+      typedef IterSource<const string>::iterator StringIter;
+      typedef IterSource<Time>::iterator TimeIter;
+      
+      typedef std::map<string,Time>                TreeMap;
+      typedef std::tr1::unordered_map<string,Time> HashMap;
       
       virtual void
       run (Arg arg)
         {
           if (0 < arg.size()) NUM_ELMS = lexical_cast<uint> (arg[0]);
           
+          verify_simpleIters();
+          
+          verify_MapWrappers<TreeMap>();
+          verify_MapWrappers<HashMap>();
+        }
+      
+      
+      void
+      verify_simpleIters()
+        {
           // build the test data sources
           WrappedList customList(NUM_ELMS);
           TestSource dedicatedSource(NUM_ELMS);
@@ -176,6 +196,25 @@ namespace test{
           for ( ; iter; ++iter )
             cout << "::" << *iter;
           cout << endl;
+        }
+      
+      
+      template<class MAP>
+      void
+      verify_MapWrappers()
+        {
+          MAP testMap;
+          for (uint i=0; i<NUM_ELMS; ++i)
+            testMap['X'+randStr(11)] = randTime();
+          
+          StringIter sIter = eachMapKey (testMap);
+          TimeIter   tIter = eachMapVal (testMap);
+          
+          ASSERT (sIter && tIter);
+          pullOut (sIter);
+          pullOut (tIter);
+          
+          ASSERT (!sIter && !tIter);
         }
       
     };

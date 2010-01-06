@@ -294,7 +294,7 @@ namespace lib {
       }
       
       template<class IT>
-      typename _PairIterT<IT>::KeyIter
+      typename _PairIterT<IT>::ValIter
       takePairSecond (IT const& source)
       {
         return transformIterator(source, _PairIterT<IT>::takeSecond );
@@ -336,7 +336,7 @@ namespace lib {
      */
     template<class MAP>
     typename _MapT<MAP>::ValIter
-    eachMapValue (MAP& map)
+    eachMapVal (MAP& map)
     {
       typedef RangeIter<typename MAP::iterator> Range;
       
@@ -377,6 +377,7 @@ namespace lib {
   using iter_impl::wrapIter;
   using iter_impl::eachMapKey;
   using iter_impl::eachDistinctKey;
+  using iter_impl::eachMapVal;
   using iter_impl::eachEntry;
   
   
