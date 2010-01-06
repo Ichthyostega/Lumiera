@@ -354,6 +354,37 @@ namespace lib {
   }
   
   
+  /** 
+   * Helper: predicate returning \c true
+   * whenever the argument value changes
+   * during a sequence of invocations. 
+   */ 
+  template<typename VAL>
+  class SkipRepetition
+    {
+      typedef wrapper::ItemWrapper<VAL> Item;
+      
+      Item prev_;
+      
+    public:
+      bool
+      operator() (VAL const& elm)
+        {
+           if (prev_ &&
+              (*prev_ == elm))
+             return false;
+           
+           // element differs from predecessor
+           prev_ = elm;
+           return true;
+        }
+      
+      typedef bool result_type;
+    };
+  
+  
+  
+  
   
   
   
@@ -507,6 +538,18 @@ namespace lib {
     for ( ; iter; ++iter )
       container.push_back (*iter);
   }
+  
+  
+  /** filters away repeated values
+   *  emitted by source iterator */
+  template<class IT>
+  FilterIter<IT>
+  filterRepetitions (IT const& source)
+  {
+    typedef typename IT::value_type Val;
+    return filterIterator(source, SkipRepetition<Val>() );
+  }
+  
   
   
   

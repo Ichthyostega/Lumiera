@@ -173,6 +173,7 @@ namespace wrapper {
       /* == copy and assignment == */
      
       ItemWrapper (ItemWrapper const& ref)
+        : created_(false)
         {
           if (ref.isValid())
             build (*ref);

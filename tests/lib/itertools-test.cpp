@@ -30,6 +30,7 @@
 
 #include <boost/lexical_cast.hpp>
 #include <iostream>
+#include <cstdlib>
 #include <vector>
 
 
@@ -44,6 +45,7 @@ namespace test{
   using std::vector;
   using std::cout;
   using std::endl;
+  using std::rand;
   
   
   
@@ -105,6 +107,7 @@ namespace test{
           Iter ii (source.begin());
           ++++++ii;
           buildFilterIterator (ii);
+          verify_filterRepetitions();
           
           buildTransformingIterator (source.begin());
         }
@@ -144,6 +147,40 @@ namespace test{
           while (++all) { }
           ASSERT (isnil (odd));
           ASSERT (all == odd);
+        }
+      
+      
+      /** @test verify the helper to filter duplicate elements
+       *        emitted by an source iterator. This test creates
+       *        a sequence of numbers with random repetitions.
+       */
+      void
+      verify_filterRepetitions ()
+        {
+          vector<uint> numberz;
+          for (uint i=0; i<NUM_ELMS; ++i)
+            {
+              uint n = 1 + rand() % 100;
+              do numberz.push_back(i);
+              while (--n);
+            }
+          ASSERT (NUM_ELMS < numberz.size(), "no repetition in test data??");
+          
+          typedef vector<uint>::iterator SrcIter;
+          typedef RangeIter<SrcIter> SeqIter;
+          typedef FilterIter<SeqIter> FilteredSeq;
+          
+          SeqIter completeSequence (numberz.begin(), numberz.end());
+          FilteredSeq filtered = filterRepetitions (completeSequence);
+          
+          uint num=0;
+          for (; num<NUM_ELMS && !isnil(filtered);
+               ++num,
+               ++filtered
+              )
+            ASSERT (num == *filtered);
+          
+          ASSERT (num == NUM_ELMS && isnil(filtered));
         }
       
       
