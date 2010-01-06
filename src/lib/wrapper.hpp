@@ -48,6 +48,7 @@
 #include "lib/meta/function-closure.hpp"
 #include "lib/util.hpp"
 
+#include <boost/type_traits/remove_const.hpp>
 #include <boost/noncopyable.hpp>
 #include <tr1/functional>
 
@@ -60,6 +61,7 @@ namespace wrapper {
   using lumiera::typelist::FunctionSignature;
   using lumiera::error::LUMIERA_ERROR_BOTTOM_VALUE;
   
+  using boost::remove_const;
   using std::tr1::function;
   
   
@@ -117,6 +119,10 @@ namespace wrapper {
   class ItemWrapper
     : public BoolCheckable<ItemWrapper<TY> >
     {
+      
+      typedef typename remove_const<TY>::type TY_unconst;
+      
+      
       mutable 
       char content_[sizeof(TY)];
       bool created_;
@@ -141,6 +147,11 @@ namespace wrapper {
           return reinterpret_cast<TY&> (content_);
         }
       
+      TY_unconst&
+      access_unconst()  const  ///< used to assign new buffer contents
+        {
+          return const_cast<TY_unconst&> (access()); 
+        }
       
     public:
       ItemWrapper()
@@ -185,7 +196,7 @@ namespace wrapper {
           if (!isSameObject (something, access() ))
             {
               if (created_)
-                access() = something;
+                access_unconst() = something;
               else
                 build (something);
             }

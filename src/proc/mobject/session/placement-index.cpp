@@ -305,13 +305,13 @@ namespace session {
       
       /* == access for self-test == */
       
-      typedef lib::IterSource<PID>::iterator IDIter;
+      typedef lib::IterSource<const PID>::iterator IDIter;
       
       PlacementMO* _root_4check ()        { return root_.get(); }
       PlacementMO* _element_4check (ID id){ return base_entry(id).element.get();}
       PlacementMO* _scope_4check (ID id)  { return base_entry(id).scope.get();  }
       IDIter       _eachEntry_4check ()   { return eachMapKey (placementTab_);  }
-      IDIter       _eachScope_4check()    { return eachDistinctKey (scopeTab_); }
+      IDIter       _eachScope_4check ()   { return eachDistinctKey (scopeTab_); }
       
       
     private:
