@@ -91,6 +91,7 @@ namespace session {
   using std::pair;
   
   using util::for_each;
+  using util::has_any;
   
   using namespace lumiera;
   
@@ -526,6 +527,8 @@ namespace session {
                          ,LUMIERA_ERROR_INDEX_CORRUPTED)
           { }
       };
+      
+    boost::lambda::placeholder1_type _1_;
     
   }
   
@@ -540,15 +543,13 @@ namespace session {
 #define VERIFY(_CHECK_, CHECK_ID, DESCRIPTION) \
       if (!(_CHECK_))                           \
         throw SelfCheckFailure (CHECK_ID, (DESCRIPTION));
-#define ELM(ID) \
-      (tab._element_4check ((ID)))
-#define SCO(ID) \
-      (tab._scope_4check ((ID)))
+      
+      
+      PlacementMO* elm (ID id) { return tab._element_4check (id); }
+      PlacementMO* sco (ID id) { return tab._scope_4check (id); }
     
     
     
-//    using namespace boost::lambda;
-//    typedef PlacementIndex::Table& Tab;
       
     void
     checkRoot (PMO* root)
@@ -562,19 +563,21 @@ namespace session {
     checkEntry (ID id)
     {
       VERIFY ( tab.contains(id),     "(1.1) Elements", "PlacementIndex main table corrupted");
-      VERIFY ( ELM(id),              "(1.2) Elements", "Entry doesn't hold a Placement");
-      VERIFY ( id==ELM(id)->getID(), "(1.3) Elements", "Element stored with wrong ID");      ////////////////TICKET #197
-      VERIFY ( ELM(id)->isValid(),   "(1.4) Elements", "Index contains invalid Placement")
-      VERIFY ( SCO(id),              "(1.5) Elements", "Entry has undefined scope");
-      VERIFY ( SCO(id)->isValid(),   "(1.6) Elements", "Entry has invalid scope");
-      VERIFY ( tab.contains (SCO(id)->getID()),
+      VERIFY ( elm(id),              "(1.2) Elements", "Entry doesn't hold a Placement");
+      VERIFY ( id==elm(id)->getID(), "(1.3) Elements", "Element stored with wrong ID");      ////////////////TICKET #197
+      VERIFY ( elm(id)->isValid(),   "(1.4) Elements", "Index contains invalid Placement")
+      VERIFY ( sco(id),              "(1.5) Elements", "Entry has undefined scope");
+      VERIFY ( sco(id)->isValid(),   "(1.6) Elements", "Entry has invalid scope");
+      VERIFY ( tab.contains (sco(id)->getID()),
                                      "(1.7) Elements", "Element associated with an unknown scope");
       
-      PMO* theElement = ELM(id);
-      ID theScope (SCO(id)->getID());
-      bool properlyRegistered =
-          false;  ////////////////////////////////////////////////////////////////////////TODO
-//        has_any (tab.queryScopeContents(theScope), _1 == *theElement );
+      PMO* theElement = elm(id);
+      ID theScope (sco(id)->getID());
+      
+      iterator elementsInScope = tab.queryScopeContents(theScope);
+      bool properlyRegistered = 
+          true; ////////////////////////////////////////////////////////////////////////////////////////////TICKET +119   need equality on Placements
+          ///has_any (elementsInScope, _1_ == *theElement );
       
       VERIFY ( properlyRegistered,   "(1.8) Elements", "Element isn't registered as member of the enclosing scope");
     }
@@ -583,13 +586,13 @@ namespace session {
     checkScope (ID id)
     {
       VERIFY ( tab.contains(id),     "(2.1) Scopes",   "Scope not registered in main table");
-      VERIFY ( ELM(id),              "(2.2) Scopes",   "Scope entry doesn't hold a Placement");
-      VERIFY ( SCO(id),              "(2.3) Scopes",   "Scope entry doesn't hold a containing Scope");
+      VERIFY ( elm(id),              "(2.2) Scopes",   "Scope entry doesn't hold a Placement");
+      VERIFY ( sco(id),              "(2.3) Scopes",   "Scope entry doesn't hold a containing Scope");
       
       PMO* root  = tab._root_4check();
-      PMO* scope = SCO(id);
-      while (scope && scope != SCO(scope->getID()))
-        scope = SCO(scope->getID());
+      PMO* scope = sco(id);
+      while (scope && scope != sco(scope->getID()))
+        scope = sco(scope->getID());
       
       VERIFY ( root==scope,          "(2.4) Scopes",   "Found a scope not attached below root.");
     }
@@ -612,16 +615,18 @@ namespace session {
         {
           checkRoot (tab._root_4check());
           
+          Table::IDIter eachEntry = tab._eachEntry_4check();
+          typedef void (Validator::*CheckFun) (ID);
+          CheckFun fun = &Validator::checkEntry; 
+          Validator* obj= this;
+          for_each ( eachEntry, fun, obj, _1 );
 #if false  //////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #479  !!!!!!!!!
-          for_each ( tab._eachEntry_4check(), &Validator::checkEntry, this, _1 );
           for_each ( tab._eachScope_4check(), &Validator::checkScope, this, _1 );
 #endif ////////////////////////////////////////////////////////////////////////////////////////TODO lots of things unimplemented.....!!!!!
         }
     
   };//(End) Validator (PlacementIndex self-check implementation)
     
-#undef ELM
-#undef SCO
     
   
   
@@ -644,7 +649,7 @@ namespace session {
       {
         VERIFY ( pTab_, "(0) Basics" ,"Implementation tables not initialised");
         
-        Validator (*pTab_);
+        Validator verify(*pTab_);
         return true;
       }
     
