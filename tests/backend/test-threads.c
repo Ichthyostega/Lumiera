@@ -47,15 +47,15 @@ void threadfn(void* blah)
 void threadsyncfn(void* blah)
 {
   struct timespec wait = {0,200000000};
-  LumieraReccondition sync = (LumieraReccondition) blah;
+  LumieraCondition sync = (LumieraCondition) blah;
 
   ECHO ("thread starting up %s", NOBUG_THREAD_ID_GET);
-  LUMIERA_RECCONDITION_SECTION(cond_sync, sync)
+  LUMIERA_CONDITION_SECTION(cond_sync, sync)
     {
       ECHO ("send startup signal %s", NOBUG_THREAD_ID_GET);
-      LUMIERA_RECCONDITION_SIGNAL;
+      LUMIERA_CONDITION_SIGNAL;
       ECHO ("wait for trigger %s", NOBUG_THREAD_ID_GET);
-      LUMIERA_RECCONDITION_WAIT(1);
+      LUMIERA_CONDITION_WAIT(1);
     }
 
   ECHO ("thread running %s", NOBUG_THREAD_ID_GET);
@@ -101,10 +101,10 @@ TEST ("simple_thread")
 
 TEST ("thread_synced")
 {
-  lumiera_reccondition cnd;
-  lumiera_reccondition_init (&cnd, "threadsync", &NOBUG_FLAG(NOBUG_ON));
+  lumiera_condition cnd;
+  lumiera_condition_init (&cnd, "threadsync", &NOBUG_FLAG(NOBUG_ON));
 
-  LUMIERA_RECCONDITION_SECTION(cond_sync, &cnd)
+  LUMIERA_CONDITION_SECTION(cond_sync, &cnd)
     {
       ECHO ("main before thread %s", NOBUG_THREAD_ID_GET);
 
@@ -115,17 +115,17 @@ TEST ("thread_synced")
                           NULL);
 
       ECHO ("main wait for thread being ready %s", NOBUG_THREAD_ID_GET);
-      LUMIERA_RECCONDITION_WAIT(1);
+      LUMIERA_CONDITION_WAIT(1);
 
       ECHO ("main trigger thread %s", NOBUG_THREAD_ID_GET);
-      LUMIERA_RECCONDITION_SIGNAL;
+      LUMIERA_CONDITION_SIGNAL;
 
       ECHO ("wait for thread end %s", NOBUG_THREAD_ID_GET);
-      LUMIERA_RECCONDITION_WAIT(1);
+      LUMIERA_CONDITION_WAIT(1);
       ECHO ("thread ended %s", NOBUG_THREAD_ID_GET);
     }
 
-  lumiera_reccondition_destroy (&cnd, &NOBUG_FLAG(NOBUG_ON));
+  lumiera_condition_destroy (&cnd, &NOBUG_FLAG(NOBUG_ON));
 }
 
 

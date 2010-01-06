@@ -26,6 +26,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <math.h>
+#include <unistd.h>
 
 void is_prime(void * arg)
 {
@@ -158,6 +159,25 @@ TEST ("toomany-acquire-release")
 }
 #endif
 
+TEST ("no-function")
+{
+  LumieraThread t;
+
+  lumiera_threadpool_init(10);
+
+  t = lumiera_thread_run (LUMIERA_THREADCLASS_INTERACTIVE,
+			  NULL,
+			  NULL,
+			  "process my test function",
+			  &NOBUG_FLAG(NOBUG_ON));
+
+  // cleanup
+  ECHO("wait 1 sec");
+  usleep(1000000);
+  ECHO("finished waiting");
+  lumiera_threadpool_destroy();
+}
+
 TEST ("process-function")
 {
   // this is what the scheduler would do once it figures out what function a job needs to run
@@ -175,6 +195,9 @@ TEST ("process-function")
 			  &NOBUG_FLAG(NOBUG_ON)); // struct nobug_flag* flag)
 
   // cleanup
+  ECHO("wait 1 sec");
+  usleep(1000000);
+  ECHO("finished waiting");
   lumiera_threadpool_destroy();
 }
 

@@ -22,7 +22,6 @@
 //TODO: Support library includes//
 
 #include "include/logging.h"
-#include "lib/mutex.h"
 #include "lib/safeclib.h"
 
 
@@ -64,31 +63,33 @@ struct lumiera_thread_mockup
 {
   void (*fn)(void*);
   void* arg;
-  LumieraReccondition finished;
+  LumieraCondition finished;
 };
 
 static void* thread_loop (void* thread)
 {
+  TRACE(threads);
   LumieraThread t = (LumieraThread)thread;
 
   pthread_setcancelstate (PTHREAD_CANCEL_DISABLE, NULL);
-  
+
   REQUIRE (t, "thread does not exist");
 
-  ECHO ("entering section 1");
   // this seems to deadlock unexpectedly:
-  LUMIERA_RECCONDITION_SECTION (threads, &t->signal)
+  LUMIERA_CONDITION_SECTION (threads, &t->signal)
     {
       do {
         // NULL function means: no work to do
+        INFO(threads, "function %p", t->function);
         if (t->function)
           t->function (t->arguments);
-        lumiera_threadpool_park_thread(t);
-        LUMIERA_RECCONDITION_WAIT(t->state != LUMIERA_THREADSTATE_IDLE);
+        lumiera_threadpool_release_thread(t);
+        LUMIERA_CONDITION_WAIT(t->state != LUMIERA_THREADSTATE_IDLE);
+        INFO(threads, "Thread awaken with state %d", t->state);
       } while (t->state != LUMIERA_THREADSTATE_SHUTDOWN);
         // SHUTDOWN state
 
-        ECHO ("thread quitting");
+      INFO(threads, "Thread Shutdown");
     }
   return 0;
 }
@@ -102,7 +103,8 @@ lumiera_thread_run (enum lumiera_thread_class kind,
                     const char* purpose,
                     struct nobug_flag* flag)
 {
-  REQUIRE (function, "invalid function");
+  TRACE(threads);
+  //  REQUIRE (function, "invalid function");
 
   // ask the threadpool for a thread (it might create a new one)
   LumieraThread self = lumiera_threadpool_acquire_thread(kind, purpose, flag);
@@ -113,9 +115,9 @@ lumiera_thread_run (enum lumiera_thread_class kind,
 
   // and let it really run (signal the condition var, the thread waits on it)
   self->state = LUMIERA_THREADSTATE_WAKEUP;
-  ECHO ("entering section 2");
-  LUMIERA_RECCONDITION_SECTION(threads, &self->signal)
-    LUMIERA_RECCONDITION_BROADCAST;
+
+  LUMIERA_CONDITION_SECTION(threads, &self->signal)
+    LUMIERA_CONDITION_SIGNAL;
 
   // NOTE: example only, add solid error handling!
 
@@ -138,7 +140,7 @@ lumiera_thread_new (enum lumiera_thread_class kind,
 
   LumieraThread self = lumiera_malloc (sizeof (*self));
   llist_init(&self->node);
-  lumiera_reccondition_init (&self->signal, "thread-control", flag);
+  lumiera_condition_init (&self->signal, "thread-control", flag);
   self->kind = kind;
   self->state = LUMIERA_THREADSTATE_STARTUP;
   self->function = NULL;
@@ -158,27 +160,28 @@ lumiera_thread_new (enum lumiera_thread_class kind,
 LumieraThread
 lumiera_thread_destroy (LumieraThread self)
 {
+  TRACE(threads);
   REQUIRE (self, "trying to destroy an invalid thread");
 
-  lumiera_threadpool_unlink(self);
+  llist_unlink (&self->node);
 
   // get the pthread out of the processing loop
   // need to signal to the thread that it should start quitting
   // should this be within the section?
-  LUMIERA_RECCONDITION_SECTION(threads, &self->signal)
+  LUMIERA_CONDITION_SECTION(threads, &self->signal)
     {
       REQUIRE (self->state == LUMIERA_THREADSTATE_IDLE, "trying to delete a thread in state other than IDLE (%s)", lumiera_threadstate_names[self->state]);
       self->state = LUMIERA_THREADSTATE_SHUTDOWN;
       self->function = NULL;
       self->arguments = NULL;
-      LUMIERA_RECCONDITION_SIGNAL;
+      LUMIERA_CONDITION_SIGNAL;
     }
 
   int error = pthread_join(self->id, NULL);
   ENSURE (0 == error, "pthread_join returned %d:%s", error, strerror(error));
 
   // condition has to be destroyed after joining with the thread
-  lumiera_reccondition_destroy (&self->signal, &NOBUG_FLAG(threads));
+  lumiera_condition_destroy (&self->signal, &NOBUG_FLAG(threads));
 
   return self;
 }
@@ -186,6 +189,7 @@ lumiera_thread_destroy (LumieraThread self)
 void
 lumiera_thread_delete (LumieraThread self)
 {
+  TRACE(threads);
   ECHO ("deleting thread");
   lumiera_free (lumiera_thread_destroy (self));
 }
