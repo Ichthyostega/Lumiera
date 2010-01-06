@@ -260,6 +260,8 @@ namespace lib {
    * This core stores a function object instance,
    * passing each pulled source element to this
    * predicate function for evaluation.
+   * @note predicate is evaluated <i>at most once</i>
+   *       for each value yielded by the source
    */
   template<class IT>
   struct FilterCore
@@ -275,7 +277,26 @@ namespace lib {
       evaluate () const
         {
           return Raw::pipe()
-              && predicate_(*Raw::pipe());
+              && currVal_isOK();
+        }
+      
+      
+      mutable bool isOK_;
+      mutable bool cached_;
+      
+      bool
+      currVal_isOK () const  ///< @return (maybe cached) result of filter predicate
+        {
+          return (cached_ && isOK_)
+              || (cached_ = true
+                 &&(isOK_ = predicate_(*Raw::pipe())));            
+        }
+      
+      void
+      advance ()
+        {
+          cached_ = false;
+          Raw::advance();
         }
       
       
@@ -283,6 +304,7 @@ namespace lib {
       FilterCore (IT const& source, PRED prediDef)
         : Raw(source)
         , predicate_(prediDef) // induces a signature check
+        , cached_(false)
         { }
     };
   
