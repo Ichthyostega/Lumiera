@@ -50,12 +50,13 @@ namespace session {
    *        system (and this is desirable)
    */
   SessionImpl::SessionImpl ()
-    : Session( getDummyDefaultsManager() ),             ///////TODO temporary hack
-      focusEDL_(0),
-      edls(1),
-      fixture(new Fixture),
-      pIdx_( MObject::create (getDummyDefaultsManager()))  ////TODO temporary hack
+    : Session( getDummyDefaultsManager() )             ///////TODO temporary hack
+    , pIdx_( MObject::create (getDummyDefaultsManager())) ////TODO temporary hack
+    , focusEDL_(0)
+    , edls()         /////////// this is dummy code. How to initialise the default session?  ///////TICKET #497
+    , fixture(new Fixture)
     {
+      INFO (session, "new Session created.");
     }
   
   

@@ -78,11 +78,12 @@ namespace session {
    */
   class SessionImpl : public mobject::Session
     {
+      PlacementIndex pIdx_;
+      
       uint focusEDL_;
-      vector<EDL> edls;
+      vector<EDL> edls;                 /////////////////////TICKET #500
       PFix fixture;
       
-      PlacementIndex pIdx_;
       
       scoped_ptr<DefsManager> defaultsManager_;   ///////////TODO: later, this will be the real defaults manager. Currently this is just never initialised (11/09)
       
@@ -180,6 +181,11 @@ namespace session {
       {
         mockIndex_ = alternativeIndex;
       }
+    
+    protected:
+      ServiceAccessPoint<SessionServiceMockIndex, IMPL>()
+        : mockIndex_(0)
+        { }
       
     private:
       PlacementIndex* mockIndex_;

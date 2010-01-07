@@ -40,7 +40,9 @@ namespace mobject {
   namespace session {
 
     
-    class EDL  ///////////////////////////TODO is considered to be renamed as "Sequence". Should be converted to an Inteface
+    class EDL  ///////////////////////////TICKET #152  EDL will be renamed to "Sequence".
+               ///////////////////////////TODO:  Should be converted to an facade interface
+               ///////////////////////////TODO:  what follows is dummy code and will be dropped!
       {
       protected:
         Placement<Track>  track;
@@ -55,7 +57,7 @@ namespace mobject {
         Placement<Track>& getTracks () { return track; } ///< @todo work out the correct use of tracks! make const correct!
         size_t size ()
           {
-            UNIMPLEMENTED ("what ist the 'size' of an EDL?");
+            UNIMPLEMENTED ("what is the 'size' of an EDL?");
             return 0;
           }
         

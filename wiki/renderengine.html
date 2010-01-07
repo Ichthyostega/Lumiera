@@ -4069,11 +4069,11 @@ The HighLevelModel exposes two kinds of interfaces (which are interconnected btw
 Thus, there is a convenient and meaningful access path through these facade objects, which of course actually is implemented by forwarding to the actual model elements (root, bindings, tracks)
 </pre>
 </div>
-<div title="SessionLifecycle" modifier="Ichthyostega" modified="200911090647" created="200911070329" tags="SessionLogic spec" changecount="21">
+<div title="SessionLifecycle" modifier="Ichthyostega" modified="201001070433" created="200911070329" tags="SessionLogic spec" changecount="22">
 <pre>The current [[Session]] is the root of any state found within Proc-Layer. Thus, events defining the session's lifecycle influence and synchronise the cooperative behaviour of the entities within the model, the ProcDispatcher, [[Fixture]] and any facility below.
 * when ''starting'', on first access an empty session is created, which puts any related facility into a defined initial state.
 * when ''closing'' the session, any dependent facilities are disabled, disconnected, halted or closed
-* ''loading'' an existing session &amp;mdash; after closing the previous session &amp;mdash; sets up an empty (default) session an populates it with de-serialised content.
+* ''loading'' an existing session &amp;mdash; after closing the previous session &amp;mdash; sets up an empty (default) session and populates it with de-serialised content.
 * when encountering a ''mutation point'', [[command processing|ProcDispatcher]] is temporarily halted to trigger off an BuildProcess.
 
 !Role of the session manager
