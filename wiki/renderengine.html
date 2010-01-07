@@ -777,7 +777,7 @@ config.macros.timeline.handler = function(place,macroName,params,wikifier,paramS
 }
 //}}}</pre>
 </div>
-<div title="BindingMO" modifier="Ichthyostega" modified="200912110235" created="200905210144" tags="def design discuss SessionLogic" changecount="10">
+<div title="BindingMO" modifier="Ichthyostega" modified="201001070851" created="200905210144" tags="def design discuss SessionLogic" changecount="12">
 <pre>Sometimes, two entities within the [[Session]] are deliberately associated, and this association has to carry some specific mappings between properties or facilities within the entities to be linked together. When this connection isn't just the [[Placement]] of an object, and isn't just a logical or structural relationship either &amp;mdash; then we create an explicit Binding object to be stored into the session.
 * When connecting a [[Sequence|EDL]] to a certain [[Timeline]], we also establish a mapping between the possible media stream channels produced by the sequence and the real output slots found within the timeline.
 * similarly, using a sequence within a [[meta-clip|VirtualClip]] requires to remember such a mapping.
@@ -796,7 +796,7 @@ Now I'm in doubt if there is any point in treating the &quot;binding&quot; in a 
 * BindingMO
 * [[Track]]
 While each of these actually represents a high-level concept (the session, the timeline(s) the sequence(s)) and moreover links to other parts and provides mappings, it seems there is no re-usable similarity at the code level.
-//According to this reasoning, I should proceed rather with these tree distinct entities and postpone any saearch for similarities to a later refactoring round.//
+//According to this reasoning, I should proceed rather with these three distinct entities and postpone any search for similarities to a later refactoring round.//
 
 &amp;rarr; see also SessionInterface
 
@@ -1717,7 +1717,7 @@ Besides routing to a global pipe, wiring plugs can also connect to the source po
 Finally, this example shows an ''automation'' data set controlling some parameter of an effect contained in one of the global pipes. From the effect's POV, the automation is simply a ParamProvider, i.e a function yielding a scalar value over time. The automation data set may be implemented as a bézier curve, or by a mathematical function (e.g. sine or fractal pseudo random) or by some captured and interpolated data values. Interestingly, in this example the automation data set has been placed relatively to the meta clip (albeit on another track), thus it will follow and adjust when the latter is moved.
 </pre>
 </div>
-<div title="ImplementationDetails" modifier="Ichthyostega" modified="200910312030" created="200708080322" tags="overview" changecount="37">
+<div title="ImplementationDetails" modifier="Ichthyostega" modified="201001070900" created="200708080322" tags="overview" changecount="38">
 <pre>This wiki page is the entry point to detail notes covering some technical decisions, details and problems encountered in the course of the implementation of the Lumiera Renderengine, the Builder and the related parts.
 
 * [[Packages, Interfaces and Namespaces|InterfaceNamespaces]]
@@ -1736,6 +1736,7 @@ Finally, this example shows an ''automation'' data set controlling some paramete
 * [[how to handle »attached placement«|AttachedPlacementProblem]]
 * working out the [[basic building situations|BuilderPrimitives]] and [[mechanics of rendering|RenderMechanics]]
 * how to classify and [[describe media stream types|StreamType]] and how to [[use them|StreamTypeUse]]
+* considerations regarding [[identity and equality|ModelObjectIdentity]] of objects in the HighLevelModel
 * the [[identification of frames and nodes|NodeFrameNumbering]]
 * the relation of [[Project, Timelines and Sequences|TimelineSequences]]
 * how to [[start the GUI|GuiStart]] and how to [[communicate|GuiCommunication]]
@@ -2325,6 +2326,26 @@ For the case here in question this seems to be the ''resource allocation is cons
 
 !using Factories
 And, last but not least, doing large scale allocations is the job of the backend. Exceptions being long-lived objects, like the Session or the EDL, which are created once and don't bear the danger of causing memory pressure. Besides, the ProcLayer code shouldn't issue &quot;new&quot; and &quot;delete&quot; when it comes in hand, rather it should use some centralized [[Factories]] for all allocation and freeing, so we can redirect these calls down to the backend, which may use pooling or special placement allocators or the like. The rationale is, for modern hardware/architectures, care has to be taken with heap allocations, esp. with many small objects and irregular usage patterns.
+</pre>
+</div>
+<div title="ModelObjectIdentity" modifier="Ichthyostega" modified="201001070916" created="201001070905" tags="SessionLogic spec draft" changecount="5">
+<pre>
+!Assets
+Each [[Asset]] holds an identification tuple; the hash of this constant tuple is used as ~Asset-ID
+
+!~MObjects
+
+!Placements
+Placements are somewhat special, as they mix value and reference semantics. First off, they are configuration values, copyable and smart-pointers, referring to a primary subject (clip, effect, track, label, binding,....). But, //by adding a placement to the session,// we create an unique instance-identity. This is implemented by copying the placement into the internal session store and thereby creating a new hash-ID, which is then registered within the PlacementIndex. Thus, a ''placement into the model'' has a distict identity.
+* Placements are equality comparable, based on this instance identity (hash-ID)
+* besides, there is an equivalence relation regarding the &quot;placement specification&quot; contained in the [[locating pins|LocatingPin]] of the Placement.
+** they can be compared for ''equivalent definition'': the contained definitions are the same and in the same order
+** alternatively, they can be checked for ''effective equivalence'': both placements to be compared resolve to the same position
+
+!Commands
+
+!References and Handles
+These are used as token for dealing with other objects and have no identity of their own. PlacementRef tokens embody a copy of the referred placement's hash-ID. MObjectRef handles are built on top of the former, additionally holding a smart-ptr to the primary subject.
 </pre>
 </div>
 <div title="ModelRootMO" modifier="Ichthyostega" modified="200912110245" created="200912080307" tags="def" changecount="5">
@@ -3997,14 +4018,14 @@ In the general case, this user visible high-level-model of the [[objects|MObject
 While there //is// a &quot;current state&quot; involved, the effect of concurrent access deliberately remains unspecified, because access is expected to be serialised on a higher level. If this assumption were to break, then probably the ScopeLocator would involve some thread local state.
 </pre>
 </div>
-<div title="ScopePath" modifier="Ichthyostega" modified="200911202205" created="200911202124" tags="def spec" changecount="2">
+<div title="ScopePath" modifier="Ichthyostega" modified="201001070848" created="200911202124" tags="def spec" changecount="3">
 <pre>The sequence of nested [[placement scopes|PlacementScope]] leading from the root (global) scope down to a specific [[Placement]] is called ''scope path''. Ascending this path yields all the scopes to search or query in proper order to be used when resolving some attribute of placement. Placements use visibility rules comparable to visibility of scoped definitions in common programming languages or in cascading style sheets, where a local definition can shadow a global one. In a similar way, properties not defined locally may be resolved by querying up the sequence of nested scopes.
 
 A scope path is a sequence of scopes, where each scope is implemented by a PlacementRef pointing to the &amp;raquo;scope top&amp;laquo;, i.e. the placement in the session //constituting this scope.// Each Placement is registered with the session as belonging to a scope, and each placement can contain other placements and thus form a scope. Thus, the ''leaf'' of this path can be considered the current scope. In addition to some search and query functions, a scope path has the ability to ''navigate'' to a given target scope, which must be reachable by ascending and descending into the branches of the overall tree or DAG. Navigating changes the current path. ({{red{WIP 11/09}}} navigation to scopes outside the current path and the immediate children of the current leaf is left out for now. We'll need it later, when actually implementing [[meta-clips|VirtualClip]].)
 
 !Operations
 * the default scope path contains just the root (of the implicit PlacementIndex, i.e. usually the root of the model in the session)
-* a scope path can be created staring from a given scope. This convenience shortcut uses the ScopeLocator to establish the position of the given start scope. This way, effectively the PlacementIndex within the current session is queried for parentship relations until reaching the root of the HighLevelModel.
+* a scope path can be created starting from a given scope. This convenience shortcut uses the ScopeLocator to establish the position of the given start scope. This way, effectively the PlacementIndex within the current session is queried for parentship relations until reaching the root of the HighLevelModel.
 * paths are ''copyable value objects'' without identity on their own
 * there is a special //invalid//&amp;nbsp; path token, {{{ScopePath::INVALID}}}
 * length, validity and empty check
@@ -4069,7 +4090,7 @@ The HighLevelModel exposes two kinds of interfaces (which are interconnected btw
 Thus, there is a convenient and meaningful access path through these facade objects, which of course actually is implemented by forwarding to the actual model elements (root, bindings, tracks)
 </pre>
 </div>
-<div title="SessionLifecycle" modifier="Ichthyostega" modified="201001070433" created="200911070329" tags="SessionLogic spec" changecount="22">
+<div title="SessionLifecycle" modifier="Ichthyostega" modified="201001070440" created="200911070329" tags="SessionLogic spec" changecount="23">
 <pre>The current [[Session]] is the root of any state found within Proc-Layer. Thus, events defining the session's lifecycle influence and synchronise the cooperative behaviour of the entities within the model, the ProcDispatcher, [[Fixture]] and any facility below.
 * when ''starting'', on first access an empty session is created, which puts any related facility into a defined initial state.
 * when ''closing'' the session, any dependent facilities are disabled, disconnected, halted or closed
@@ -4103,7 +4124,7 @@ As detailed above, {{{Session::current}}} exposes the management / lifecycle API
 
 !!!closing the session
 # top-level facilities accessing the session (GUI, command processing, scripts) are blocked and the LayerSeparationInterface is closed
-# any render processes are ensured to be terminated
+# any render processes are ensured to be terminated (or //disconnected// &amp;mdash; so the can't do any harm)
 # the {{{ON_SESSION_END}}} event is emitted
 # the command processing log is tagged
 # the command queue(s) are emptied, discarding any commands not yet executed
