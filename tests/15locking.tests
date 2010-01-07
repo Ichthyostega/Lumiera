@@ -90,3 +90,8 @@ TEST "chained reccondition section" chainedrecconditionsection <<END
 out: outer reccondition locked section
 out: inner reccondition locked section
 END
+
+TEST "nested reccondition section" nestedrecconditionsection <<END
+out: outer reccondition locked section
+out: inner reccondition locked section
+END
