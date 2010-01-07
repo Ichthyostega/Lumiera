@@ -65,13 +65,13 @@
 
 
 #define LUMIERA_RECCONDITION_SECTION_CHAIN(nobugflag, cnd)                                              \
-  for (lumiera_sectionlock *lumiera_lock_section_old_ = &lumiera_lock_section_,                         \
+  for (lumiera_sectionlock *lumiera_reccond_section_old_ = &lumiera_reccond_section_,                         \
          NOBUG_CLEANUP(lumiera_sectionlock_ensureunlocked) lumiera_reccond_section_ = {                 \
          (void*)1, lumiera_reccondition_unlock_cb NOBUG_ALPHA_COMMA_NULL NOBUG_ALPHA_COMMA_NULL};       \
        lumiera_reccond_section_.lock;)                                                                  \
     for (                                                                                               \
          ({                                                                                             \
-           REQUIRE (lumiera_lock_section_old_->lock, "section prematurely unlocked");                   \
+           REQUIRE (lumiera_reccond_section_old_->lock, "section prematurely unlocked");                   \
            lumiera_reccond_section_.lock = (cnd);                                                       \
            NOBUG_IF_ALPHA(lumiera_reccond_section_.flag = &NOBUG_FLAG(nobugflag);)                      \
            RESOURCE_WAIT (nobugflag, (cnd)->rh, "acquire reccondmutex", lumiera_reccond_section_.rh)    \
@@ -79,7 +79,7 @@
                if (pthread_mutex_lock (&(cnd)->reccndmutex))                                            \
                  LUMIERA_DIE (LOCK_ACQUIRE);                                                            \
                RESOURCE_STATE (nobugflag, NOBUG_RESOURCE_RECURSIVE, lumiera_reccond_section_.rh);       \
-               LUMIERA_SECTION_UNLOCK_(lumiera_lock_section_old_);                                      \
+               LUMIERA_SECTION_UNLOCK_(lumiera_reccond_section_old_);                                      \
              }                                                                                          \
          });                                                                                            \
          lumiera_reccond_section_.lock;                                                                 \
