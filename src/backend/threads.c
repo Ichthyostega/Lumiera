@@ -109,7 +109,7 @@ lumiera_thread_run (enum lumiera_thread_class kind,
   // and let it really run (signal the condition var, the thread waits on it)
   self->state = LUMIERA_THREADSTATE_WAKEUP;
 
-  LUMIERA_CONDITION_SECTION (cond_sync, self->finished)
+  LUMIERA_CONDITION_SECTION (cond_sync, &self->signal)
     LUMIERA_CONDITION_SIGNAL;
 
   // NOTE: example only, add solid error handling!

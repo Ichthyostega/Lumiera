@@ -48,14 +48,14 @@ TESTS_BEGIN
 
 TEST ("threadpool-basic")
 {
-  lumiera_threadpool_init(100);
+  lumiera_threadpool_init();
   lumiera_threadpool_destroy();
 }
 
 TEST ("threadpool1")
 {
   ECHO("start by initializing the threadpool");
-  lumiera_threadpool_init(100);
+  lumiera_threadpool_init();
   LumieraThread t1 =
     lumiera_threadpool_acquire_thread(LUMIERA_THREADCLASS_INTERACTIVE,
 				      "test purpose",
@@ -69,7 +69,7 @@ TEST ("threadpool1")
 TEST ("basic-acquire-release")
 {
   ECHO("start by initializing the threadpool");
-  lumiera_threadpool_init(100);
+  lumiera_threadpool_init();
   ECHO("acquiring thread 1");
   LumieraThread t1 =
     lumiera_threadpool_acquire_thread(LUMIERA_THREADCLASS_INTERACTIVE,
@@ -163,7 +163,7 @@ TEST ("no-function")
 {
   LumieraThread t;
 
-  lumiera_threadpool_init(10);
+  lumiera_threadpool_init();
 
   t = lumiera_thread_run (LUMIERA_THREADCLASS_INTERACTIVE,
 			  NULL,
@@ -184,7 +184,7 @@ TEST ("process-function")
   LumieraThread t;
   int number = 440616;
 
-  lumiera_threadpool_init(10);
+  lumiera_threadpool_init();
 
   ECHO ("the input to the function is %d", number);
 
