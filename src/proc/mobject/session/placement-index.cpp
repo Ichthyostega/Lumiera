@@ -515,7 +515,7 @@ namespace session {
   
   /* ====== PlacementIndex validity self-check ====== */
   
-  namespace { // Implementation details of self-check
+  namespace { // self-check implementation helpers...
     
     LUMIERA_ERROR_DEFINE(INDEX_CORRUPTED, "PlacementIndex corrupted");
     
@@ -527,107 +527,103 @@ namespace session {
                          ,LUMIERA_ERROR_INDEX_CORRUPTED)
           { }
       };
-      
-    boost::lambda::placeholder1_type _1_;
     
+    boost::lambda::placeholder1_type _1_;
   }
   
+  
+  /** 
+   * PlacementIndex self-verification code
+   * Executes all built-in checks automatically
+   * on object creation.
+   * @throw SelfCheckFailure   
+   */
   class PlacementIndex::Validator
     {
-    
       
       PlacementIndex::Table& tab;
       
-    
-    
+      PlacementMO* elm (ID id) { return tab._element_4check (id);}
+      PlacementMO* sco (ID id) { return tab._scope_4check (id);  }
+      
+      
+      
 #define VERIFY(_CHECK_, CHECK_ID, DESCRIPTION) \
       if (!(_CHECK_))                           \
         throw SelfCheckFailure (CHECK_ID, (DESCRIPTION));
       
       
-      PlacementMO* elm (ID id) { return tab._element_4check (id); }
-      PlacementMO* sco (ID id) { return tab._scope_4check (id); }
-    
-    
-    
-      
-    void
-    checkRoot (PMO* root)
-    {
-      VERIFY ( root,                 "(0.1) Basics",   "Root element missing");
-      VERIFY ( root->isValid(),      "(0.2) Basics",   "Root Placement invalid");
-      VERIFY ( (*root)->isValid(),   "(0.3) Basics",   "Root MObject self-check failure");
-    }
-    
-    void
-    checkEntry (ID id)
-    {
-      VERIFY ( tab.contains(id),     "(1.1) Elements", "PlacementIndex main table corrupted");
-      VERIFY ( elm(id),              "(1.2) Elements", "Entry doesn't hold a Placement");
-      VERIFY ( id==elm(id)->getID(), "(1.3) Elements", "Element stored with wrong ID");      ////////////////TICKET #197
-      VERIFY ( elm(id)->isValid(),   "(1.4) Elements", "Index contains invalid Placement")
-      VERIFY ( sco(id),              "(1.5) Elements", "Entry has undefined scope");
-      VERIFY ( sco(id)->isValid(),   "(1.6) Elements", "Entry has invalid scope");
-      VERIFY ( tab.contains (sco(id)->getID()),
-                                     "(1.7) Elements", "Element associated with an unknown scope");
-      
-      PMO* theElement = elm(id);
-      ID theScope (sco(id)->getID());
-      
-      iterator elementsInScope = tab.queryScopeContents(theScope);
-      bool properlyRegistered = 
-          true; ////////////////////////////////////////////////////////////////////////////////////////////TICKET +119   need equality on Placements
-          ///has_any (elementsInScope, _1_ == *theElement );
-      
-      VERIFY ( properlyRegistered,   "(1.8) Elements", "Element isn't registered as member of the enclosing scope");
-    }
-    
-    void
-    checkScope (ID id)
-    {
-      VERIFY ( tab.contains(id),     "(2.1) Scopes",   "Scope not registered in main table");
-      VERIFY ( elm(id),              "(2.2) Scopes",   "Scope entry doesn't hold a Placement");
-      VERIFY ( sco(id),              "(2.3) Scopes",   "Scope entry doesn't hold a containing Scope");
-      
-      PMO* root  = tab._root_4check();
-      PMO* scope = sco(id);
-      while (scope && scope != sco(scope->getID()))
-        scope = sco(scope->getID());
-      
-      VERIFY ( root==scope,          "(2.4) Scopes",   "Found a scope not attached below root.");
-    }
-    
-    void
-    checkAllocation ()
-    {
-      VERIFY ( 0 < tab.size(),       "(4.1) Storage",  "Implementation table is empty");
-      VERIFY ( 0 < tab.element_cnt(),"(4.2) Storage",  "No Placement instances allocated");
-      VERIFY ( tab.size()==tab.scope_cnt(),
-                                     "(4.3) Storage",  "Number of elements and scope entries disagree");
-      VERIFY ( tab.size()==tab.element_cnt(),
-                                     "(4.4) Storage",  "Number of entries doesn't match number of allocated Placement instances");
-    }
-    
-    public:
-    
-      Validator (Table& indexTable)
-        : tab(indexTable)
+      void
+      checkRoot (PMO* root)
         {
-          checkRoot (tab._root_4check());
-          
-          Table::IDIter eachEntry = tab._eachEntry_4check();
-          typedef void (Validator::*CheckFun) (ID);
-          CheckFun fun = &Validator::checkEntry; 
-          Validator* obj= this;
-          for_each ( eachEntry, fun, obj, _1 );
-#if false  //////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #479  !!!!!!!!!
-          for_each ( tab._eachScope_4check(), &Validator::checkScope, this, _1 );
-#endif ////////////////////////////////////////////////////////////////////////////////////////TODO lots of things unimplemented.....!!!!!
+          VERIFY ( root,                 "(0.1) Basics",   "Root element missing");
+          VERIFY ( root->isValid(),      "(0.2) Basics",   "Root Placement invalid");
+          VERIFY ( (*root)->isValid(),   "(0.3) Basics",   "Root MObject self-check failure");
         }
-    
-  };//(End) Validator (PlacementIndex self-check implementation)
-    
-    
+      
+      void
+      checkEntry (ID id)
+        {
+          VERIFY ( tab.contains(id),     "(1.1) Elements", "PlacementIndex main table corrupted");
+          VERIFY ( elm(id),              "(1.2) Elements", "Entry doesn't hold a Placement");
+          VERIFY ( id==elm(id)->getID(), "(1.3) Elements", "Element stored with wrong ID");      ////////////////TICKET #197
+          VERIFY ( elm(id)->isValid(),   "(1.4) Elements", "Index contains invalid Placement")
+          VERIFY ( sco(id),              "(1.5) Elements", "Entry has undefined scope");
+          VERIFY ( sco(id)->isValid(),   "(1.6) Elements", "Entry has invalid scope");
+          VERIFY ( tab.contains (sco(id)->getID()),
+                                         "(1.7) Elements", "Element associated with an unknown scope");
+          
+          PMO* theElement = elm(id);
+          ID theScope (sco(id)->getID());
+          
+          iterator elementsInScope = tab.queryScopeContents(theScope);
+          bool properlyRegistered = 
+              true; ////////////////////////////////////////////////////////////////////////////////////////////TICKET #119   need equality on Placements
+              ///has_any (elementsInScope, _1_ == *theElement );
+          
+          VERIFY ( properlyRegistered,   "(1.8) Elements", "Element isn't registered as member of the enclosing scope");
+        }
+      
+      void
+      checkScope (ID id)
+        {
+          VERIFY ( tab.contains(id),     "(2.1) Scopes",   "Scope not registered in main table");
+          VERIFY ( elm(id),              "(2.2) Scopes",   "Scope entry doesn't hold a Placement");
+          VERIFY ( sco(id),              "(2.3) Scopes",   "Scope entry doesn't hold a containing Scope");
+          
+          PMO* root  = tab._root_4check();
+          PMO* scope = sco(id);
+          while (scope && scope != sco(scope->getID()))
+            scope = sco(scope->getID());
+          
+          VERIFY ( root==scope,          "(2.4) Scopes",   "Found a scope not attached below root.");
+        }
+      
+      void
+      checkAllocation ()
+        {
+          VERIFY ( 0 < tab.size(),       "(4.1) Storage",  "Implementation table is empty");
+          VERIFY ( 0 < tab.element_cnt(),"(4.2) Storage",  "No Placement instances allocated");
+          VERIFY ( tab.size()==tab.scope_cnt(),
+                                         "(4.3) Storage",  "Number of elements and scope entries disagree");
+          VERIFY ( tab.size()==tab.element_cnt(),
+                                         "(4.4) Storage",  "Number of entries doesn't match number of allocated Placement instances");
+        }
+      
+      
+      public:
+        Validator (Table& indexTable)
+          : tab(indexTable)
+          {
+            checkRoot (tab._root_4check());
+            
+            for_each ( tab._eachEntry_4check(), &Validator::checkEntry, this, _1 );
+            for_each ( tab._eachScope_4check(), &Validator::checkScope, this, _1 );
+          }
+      
+    };//(End) Validator (PlacementIndex self-check implementation)
+  
+  
   
   
   
@@ -643,8 +639,6 @@ namespace session {
   bool
   PlacementIndex::isValid()  const
   {
-#if false  //////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET 479  !!!!!!!!!
-#endif ////////////////////////////////////////////////////////////////////////////////////////TODO lots of things unimplemented.....!!!!!
     try
       {
         VERIFY ( pTab_, "(0) Basics" ,"Implementation tables not initialised");

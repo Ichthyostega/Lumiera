@@ -124,7 +124,7 @@ namespace asset {
     
     // can indeed to do the toggle...
     this->enabled = on;
-    for_each (dependants, bind (&propagate_down, _1 ,on));
+    for_each (dependants, &propagate_down, _1 ,on);
     return true;
   }
   

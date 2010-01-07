@@ -1,5 +1,5 @@
 /*
-  CONTENTS-QUERY.hpp  -  query to discover the contents of a container-like part of the model
+  SCOPE-QUERY.hpp  -  query to discover the contents of a container-like part of the model
  
   Copyright (C)         Lumiera.org
     2009,               Hermann Vosseler <Ichthyostega@web.de>
