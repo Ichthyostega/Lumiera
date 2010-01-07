@@ -80,7 +80,7 @@ struct lumiera_threadpool_struct
  * Initialize the thread pool.
  */
 void
-lumiera_threadpool_init();
+lumiera_threadpool_init(void);
 
 void
 lumiera_threadpool_destroy(void);

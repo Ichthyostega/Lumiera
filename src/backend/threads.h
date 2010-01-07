@@ -152,9 +152,17 @@ lumiera_thread_new (enum lumiera_thread_class kind,
                     struct nobug_flag* flag,
                     pthread_attr_t* attrs);
 
+/**
+ * Destroy and de-initialize a thread structure.
+ * Memory is not freed by this function.
+ */
 LumieraThread
 lumiera_thread_destroy (LumieraThread self);
 
+/**
+ * Actually free the memory used by the thread structure.
+ * Make sure to destroy the structure first.
+ */
 void
 lumiera_thread_delete (LumieraThread self);
 

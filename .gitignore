@@ -20,3 +20,4 @@ autom4te.cache
 semantic.cache
 wiki/backups/*
 doc/devel/draw/*.png
+m4/*

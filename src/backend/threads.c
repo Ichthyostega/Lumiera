@@ -59,14 +59,7 @@ const char* lumiera_threadstate_names[] = {
 };
 #undef LUMIERA_THREAD_STATE
 
-struct lumiera_thread_mockup
-{
-  void (*fn)(void*);
-  void* arg;
-  LumieraCondition finished;
-};
-
-static void* thread_loop (void* thread)
+static void* thread_loop (void* arg)
 {
   TRACE(threads);
   LumieraThread t = (LumieraThread)thread;
@@ -107,7 +100,7 @@ lumiera_thread_run (enum lumiera_thread_class kind,
   //  REQUIRE (function, "invalid function");
 
   // ask the threadpool for a thread (it might create a new one)
-  LumieraThread self = lumiera_threadpool_acquire_thread(kind, purpose, flag);
+  LumieraThread self = lumiera_threadpool_acquire_thread (kind, purpose, flag);
 
   // set the function and data to be run
   self->function = function;
@@ -139,7 +132,7 @@ lumiera_thread_new (enum lumiera_thread_class kind,
   REQUIRE (attrs, "invalid pthread attributes structure passed");
 
   LumieraThread self = lumiera_malloc (sizeof (*self));
-  llist_init(&self->node);
+  llist_init (&self->node);
   lumiera_condition_init (&self->signal, "thread-control", flag);
   self->kind = kind;
   self->state = LUMIERA_THREADSTATE_STARTUP;
