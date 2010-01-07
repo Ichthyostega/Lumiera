@@ -47,6 +47,7 @@ lumiera_threadpool_init(void)
 {
   NOBUG_INIT_FLAG (threadpool);
   TRACE (threadpool);
+  NOBUG_INIT_FLAG (threads);
 
   for (int i = 0; i < LUMIERA_THREADCLASS_COUNT; ++i)
     {
@@ -66,6 +67,7 @@ void
 lumiera_threadpool_destroy(void)
 {
   TRACE (threadpool);
+
   for (int i = 0; i < LUMIERA_THREADCLASS_COUNT; ++i)
     {
       TRACE (threadpool, "destroying individual pool #%d", i);
@@ -73,7 +75,7 @@ lumiera_threadpool_destroy(void)
         {
           REQUIRE (0 == threadpool.pool[i].working_thread_count, "%d threads are still running", threadpool.pool[i].working_thread_count);
           // TODO need to have a stronger assertion that no threads are really running because they will not even be in the list
-          INFO (threadpool, "number of threads in the pool=%d", llist_count(&threadpool.pool[i].list));
+          INFO (threadpool, "number of threads in the pool=%d", llist_count (&threadpool.pool[i].list));
           LLIST_WHILE_HEAD (&threadpool.pool[i].list, t)
             {
               lumiera_thread_delete ((LumieraThread)t);
@@ -83,6 +85,7 @@ lumiera_threadpool_destroy(void)
       pthread_attr_destroy (&threadpool.pool[i].pthread_attrs);
     }
 }
+
 
 LumieraThread
 lumiera_threadpool_acquire_thread(enum lumiera_thread_class kind,
@@ -120,6 +123,7 @@ lumiera_threadpool_acquire_thread(enum lumiera_thread_class kind,
   return ret;
 }
 
+// TODO: rename to lumiera_threadpool_park_thread
 void
 lumiera_threadpool_release_thread(LumieraThread thread)
 {

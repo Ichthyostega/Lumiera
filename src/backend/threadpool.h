@@ -54,8 +54,8 @@ lumiera_threadpool_acquire_thread(enum lumiera_thread_class kind,
                                   struct nobug_flag* flag);
 
 /**
- * Release a thread
- * This ends up putting a (parked/idle) thread back on the list of an appropriate threadpool.
+ * Park a thread
+ * This ends up putting a finished thread back on the list of an appropriate threadpool.
  * This function doesn't need to be accessible outside of the threadpool implementation.
  */
 void
@@ -69,10 +69,10 @@ struct lumiera_threadpool_struct
   struct
   {
     llist list;
-    lumiera_condition sync;
     unsigned working_thread_count;
     unsigned idle_thread_count;
     pthread_attr_t pthread_attrs;
+    lumiera_condition sync;
   } pool[LUMIERA_THREADCLASS_COUNT];
 };
 
