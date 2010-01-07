@@ -31,13 +31,148 @@
 
 #include <boost/type_traits/is_convertible.hpp>
 #include <boost/type_traits/is_arithmetic.hpp>
+#include <boost/type_traits/remove_reference.hpp>
+#include <boost/type_traits/remove_pointer.hpp>
+#include <boost/type_traits/remove_cv.hpp>
 #include <boost/utility/enable_if.hpp>
 #include <string>
+
+//Forward declarations for the Unwrap helper....
+namespace boost{
+  template<class X> class reference_wrapper; 
+}
+namespace std {
+namespace tr1 {
+  template<class X> class reference_wrapper; 
+  template<class X> class shared_ptr; 
+}}
+namespace lumiera{
+  template<class X, class B>  class P; 
+}
+namespace mobject{
+  template<class X, class B>  class Placement; 
+}
 
 
 namespace lib {
 namespace meta {
   
+  
+  
+  /** 
+   * Helper for type analysis:
+   * tries to extract a base type from various wrappers.
+   * Additionally allows to extract/deref the wrapped element
+   */
+  template<typename X>
+  struct Unwrap
+    {
+      typedef X Type;
+      
+      static  X&
+      extract (X const& x)
+        {
+          return const_cast<X&> (x);
+        }
+    };
+  
+  template<typename X>
+  struct Unwrap<X*>
+    {
+      typedef X Type;
+      
+      static  X&
+      extract (const X* ptr)
+        {
+          ASSERT (ptr);
+          return const_cast<X&> (*ptr);
+        }
+    };
+  
+  template<typename X>
+  struct Unwrap<boost::reference_wrapper<X> >
+    {
+      typedef X  Type;
+      
+      static X&
+      extract (boost::reference_wrapper<X> wrapped)
+        {
+          return wrapped;
+        }
+    };
+  
+  template<typename X>
+  struct Unwrap<std::tr1::reference_wrapper<X> >
+    {
+      typedef X  Type;
+      
+      static X&
+      extract (std::tr1::reference_wrapper<X> wrapped)
+        {
+          return wrapped;
+        }
+    };
+  
+  template<typename X>
+  struct Unwrap<std::tr1::shared_ptr<X> >
+    {
+      typedef X  Type;
+      
+      static X&
+      extract (std::tr1::shared_ptr<X> ptr)
+        {
+          ASSERT (ptr);
+          return *ptr;
+        }
+    };
+  
+  template<typename X, class B>
+  struct Unwrap<lumiera::P<X, B> >
+    {
+      typedef X  Type;
+      
+      static X&
+      extract (lumiera::P<X,B> ptr)
+        {
+          ASSERT (ptr);
+          return *ptr;
+        }
+    };
+  
+  template<typename X, class B>
+  struct Unwrap<mobject::Placement<X, B> >
+    {
+      typedef X  Type;
+      
+      static X&
+      extract (mobject::Placement<X,B> placement)
+        {
+          ASSERT (placement.isValid());
+          return *placement;
+        }
+    };
+  
+  /** convenience shortcut: unwrapping free function */
+  template<typename X>
+  typename Unwrap<X>::Type&
+  unwrap (X const& wrapped)
+  {
+    return Unwrap<X>::extract(wrapped);
+  }
+  
+  
+  
+  /** Helper for type analysis: tries to strip all kinds of type adornments */
+  template<typename X>
+  struct Strip
+    {
+      typedef typename boost::remove_cv<X>                 ::type TypeUnconst;
+      typedef typename boost::remove_reference<TypeUnconst>::type TypeReferred;
+      typedef typename boost::remove_pointer<TypeReferred> ::type TypePointee;
+      typedef typename boost::remove_cv<TypePointee>       ::type TypePlain;
+      
+      typedef typename Unwrap<TypePlain>                   ::Type Type;
+    };
   
   
   /** Trait template for detecting if a type can be converted to string.
@@ -79,15 +214,17 @@ namespace meta {
   template<typename T>
   class can_STL_ForEach
     {
+      typedef typename Strip<T>::Type Type;
+       
       struct is_iterable
         {
           META_DETECT_NESTED(iterator);
           META_DETECT_FUNCTION(typename X::iterator, begin,(void));
           META_DETECT_FUNCTION(typename X::iterator, end  ,(void));
           
-          enum { value = HasNested_iterator<T>::value
-                      && HasFunSig_begin<T>::value
-                      && HasFunSig_end<T>::value
+          enum { value = HasNested_iterator<Type>::value
+                      && HasFunSig_begin<Type>::value
+                      && HasFunSig_end<Type>::value
            };
         };
       
@@ -97,9 +234,9 @@ namespace meta {
           META_DETECT_FUNCTION(typename X::const_iterator, begin,(void) const);
           META_DETECT_FUNCTION(typename X::const_iterator, end  ,(void) const);
           
-          enum { value = HasNested_const_iterator<T>::value
-                      && HasFunSig_begin<T>::value
-                      && HasFunSig_end<T>::value
+          enum { value = HasNested_const_iterator<Type>::value
+                      && HasFunSig_begin<Type>::value
+                      && HasFunSig_end<Type>::value
            };
         };
       
@@ -120,16 +257,17 @@ namespace meta {
   template<typename T>
   class can_IterForEach
     {
+      typedef typename Strip<T>::Type Type;
        
       META_DETECT_NESTED(value_type);
       META_DETECT_OPERATOR_DEREF();
       META_DETECT_OPERATOR_INC();
       
     public:
-      enum{ value = boost::is_convertible<T, bool>::value
-                 && HasNested_value_type<T>::value
-                 && HasOperator_deref<T>::value
-                 && HasOperator_inc<T>::value
+      enum{ value = boost::is_convertible<Type, bool>::value
+                 && HasNested_value_type<Type>::value
+                 && HasOperator_deref<Type>::value
+                 && HasOperator_inc<Type>::value
           };
     };
   
