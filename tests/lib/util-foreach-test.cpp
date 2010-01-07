@@ -159,6 +159,8 @@ namespace test {
           ASSERT (60+int(NUM_ELMS) ==container[0]);
           // changes got propagated through the iterator
           
+          check_wrapped_container_passing(container);
+          
           check_invoke_on_each ();
         }
       
@@ -237,7 +239,7 @@ namespace test {
        *        passing the iterator by value. This behaviour is correct, as
        *        an iterator is an reference-like object
        * 
-       * */
+       */
       template<typename CO>
       void
       check_ref_argument_bind (CO coll)
@@ -413,6 +415,57 @@ namespace test {
           
           // note: it seems not to be possible to create a binder, which takes the "*this"-Argument by ref
         }
+      
+      
+      /** @test passing the collection to be iterated in various ways
+       *        - anonymous temporary
+       *        - smart pointer
+       *        - pointer
+       *        - const&
+       *  @note We do modifications using a lambda expression with a
+       *        side-effect. The container passed in is always modified,
+       *        disregarding const! (In case of the anonymous temporary
+       *        the modifications get discarded after reaching the end
+       *        of the for_each expression
+       */
+      void
+      check_wrapped_container_passing (VecI coll)
+        {
+          ANNOUNCE (wrapped_container_passing);
+          
+#define SHOW_CONTAINER for_each (coll, plainFunc);           _NL_
+          
+          // use a const reference to pass the container...
+          VecI const& passByConstRef (coll);
+          
+          int counter = NUM_ELMS;
+          for_each (passByConstRef,             _1_ = var(counter)-- );
+          
+          SHOW_CONTAINER
+          // indeed got modifications into the original container!
+          ASSERT (0 == counter);
+          
+          // passing anonymous temporary
+          for_each (buildTestNumberz(NUM_ELMS), _1_ = var(counter)-- );
+          
+          // passing a smart-ptr managed copy
+          std::tr1::shared_ptr<VecI> bySmartPtr (new VecI (coll));
+          
+          for_each (bySmartPtr,                 _1_ = var(counter)-- );
+          
+          // both didn't influence the original container
+          SHOW_CONTAINER
+          ASSERT (-2*int(NUM_ELMS)   == counter);
+          ASSERT (bySmartPtr->back() == counter+1);
+          
+          // passing by pointer is also possible
+          const VecI * const passByConstPointer (&coll);
+          
+          for_each (passByConstPointer,         _1_ = var(counter)-- );
+          SHOW_CONTAINER
+          // ...and influences the original container
+        }
+      
     };
   
   

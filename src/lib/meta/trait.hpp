@@ -62,7 +62,8 @@ namespace meta {
   /** 
    * Helper for type analysis:
    * tries to extract a base type from various wrappers.
-   * Additionally allows to extract/deref the wrapped element
+   * Additionally allows to extract/deref the wrapped element.
+   * @warning strips away any const
    */
   template<typename X>
   struct Unwrap
@@ -79,13 +80,13 @@ namespace meta {
   template<typename X>
   struct Unwrap<X*>
     {
-      typedef X Type;
+      typedef typename boost::remove_cv<X>::type Type;
       
-      static  X&
+      static Type&
       extract (const X* ptr)
         {
           ASSERT (ptr);
-          return const_cast<X&> (*ptr);
+          return const_cast<Type&> (*ptr);
         }
     };
   
@@ -152,13 +153,21 @@ namespace meta {
         }
     };
   
-  /** convenience shortcut: unwrapping free function */
+  
+  /** convenience shortcut: unwrapping free function.
+   *  @return reference to the bare element.
+   *  @warning this function is dangerous: it strips away
+   *           any managing smart-ptr and any const!
+   *           You might even access and return a
+   *           reference to an anonymous temporary.
+   */
   template<typename X>
   typename Unwrap<X>::Type&
   unwrap (X const& wrapped)
   {
     return Unwrap<X>::extract(wrapped);
   }
+  
   
   
   
@@ -173,6 +182,48 @@ namespace meta {
       
       typedef typename Unwrap<TypePlain>                   ::Type Type;
     };
+  
+  
+  
+  
+  /** Type definition helper for pointer and reference types.
+   *  Allows to create a member field and to get the basic type
+   *  irrespective if the given type is plain, pointer or reference
+   */
+  template<typename TY>
+  struct RefTraits
+    {
+      typedef TY* pointer;
+      typedef TY& reference;
+      typedef TY  value_type;
+      typedef value_type member_type;
+    };
+  
+  template<typename TY>
+  struct RefTraits<TY *>
+    {
+      typedef TY* pointer;
+      typedef TY& reference;
+      typedef TY  value_type;
+      typedef pointer member_type;
+    };
+  
+  template<typename TY>
+  struct RefTraits<TY &>
+    {
+      typedef TY* pointer;
+      typedef TY& reference;
+      typedef TY  value_type;
+      typedef lib::wrapper::AssignableRefWrapper<TY> member_type;
+    };
+  //////////////////////////////////////////TODO: member_type not needed anymore 12/09 -- obsolete? useful? keep it?
+  
+  
+  
+  
+  
+  
+  
   
   
   /** Trait template for detecting if a type can be converted to string.
@@ -270,40 +321,6 @@ namespace meta {
                  && HasOperator_inc<Type>::value
           };
     };
-  
-  
-  
-  /** Type definition helper for pointer and reference types.
-   *  Allows to create a member field and to get the basic type
-   *  irrespective if the given type is plain, pointer or reference
-   */
-  template<typename TY>
-  struct RefTraits
-    {
-      typedef TY* pointer;
-      typedef TY& reference;
-      typedef TY  value_type;
-      typedef value_type member_type;
-    };
-  
-  template<typename TY>
-  struct RefTraits<TY *>
-    {
-      typedef TY* pointer;
-      typedef TY& reference;
-      typedef TY  value_type;
-      typedef pointer member_type;
-    };
-  
-  template<typename TY>
-  struct RefTraits<TY &>
-    {
-      typedef TY* pointer;
-      typedef TY& reference;
-      typedef TY  value_type;
-      typedef lib::wrapper::AssignableRefWrapper<TY> member_type;
-    };
-  //////////////////////////////////////////TODO: member_type not needed anymore 12/09 -- obsolete? useful? keep it?
   
   
 }} // namespace lib::meta
