@@ -6,32 +6,6 @@ PLANNED "yield"
 PLANNED "cancel"
 
 TEST "Most basic threadpool test" threadpool-basic <<END
-err: destroying threadpool
-
-err: destroying individual pool #0
-err: number of threads in the pool=0
-err: destroying the pool mutex
-err: pool mutex destroyed
-
-err: destroying individual pool #1
-err: number of threads in the pool=0
-err: destroying the pool mutex
-err: pool mutex destroyed
-
-err: destroying individual pool #2
-err: number of threads in the pool=0
-err: destroying the pool mutex
-err: pool mutex destroyed
-
-err: destroying individual pool #3
-err: number of threads in the pool=0
-err: destroying the pool mutex
-err: pool mutex destroyed
-
-err: destroying individual pool #4
-err: number of threads in the pool=0
-err: destroying the pool mutex
-err: pool mutex destroyed
 END
 
 TEST "process a function" process-function <<END
