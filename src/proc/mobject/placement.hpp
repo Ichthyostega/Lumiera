@@ -71,7 +71,7 @@
 #include "lib/hash-indexed.hpp"
 #include "proc/mobject/session/locatingpin.hpp"
 
-#include "proc/asset/pipe.hpp"   /////TODO: get rid of this (Trac #109)
+#include "proc/asset/pipe.hpp"   //////////////TICKET #109 : get rid of this
 
 #include <tr1/memory>
 
@@ -115,15 +115,15 @@ namespace mobject {
    */
   template<>
   class Placement<MObject,MObject>
-    : protected shared_ptr<MObject>,
-      public HashIndexed<Placement<MObject>, lib::hash::LuidH>
+    : protected shared_ptr<MObject>
+    , public HashIndexed<Placement<MObject>, lib::hash::LuidH >
     {
     protected:
       typedef HashIndexed<Placement<MObject>, lib::hash::LuidH> HashInd;
       typedef shared_ptr<MObject> _SmartPtr;
       typedef void (*Deleter)(MObject*);
       typedef lumiera::Time Time;
-      typedef asset::shared_ptr<asset::Pipe> Pipe;   ////TODO: get rid of this
+      typedef asset::shared_ptr<asset::Pipe> Pipe;   ////TICKET #109 : get rid of this
       
       
       
@@ -175,11 +175,24 @@ namespace mobject {
                                              ////////////TICKET #439
       
       
+      Placement (Placement const& ref)
+        : _SmartPtr (ref)
+        , HashInd()    // creating a new ID!
+        , chain(ref.chain)
+        { }
+      
     protected:
       Placement (MObject & subject, Deleter killer) 
-        : _SmartPtr (&subject, killer) {};
+        : _SmartPtr (&subject, killer) { };
         
       friend class session::MObjectFactory;
+      
+      
+/////////////////////////////////////////////////////////TICKET #513
+//  private:
+//    /** copy assignment prohibited */
+//    Placement& operator= (Placement const&);
+/////////////////////////////////////////////////////////TICKET #513
     };
   
   
