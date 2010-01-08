@@ -47,6 +47,7 @@
 //#include "proc/mobject/session/locatingpin.hpp"
 //#include "proc/asset/pipe.hpp"
 #include "lib/error.hpp"
+#include "lib/bool-checkable.hpp"
 #include "proc/mobject/placement.hpp"
 #include "proc/mobject/explicitplacement.hpp"  /////////////TODO this is ugly! Why can't placement::resolve() return a reference??
 #include "proc/mobject/session/session-service-fetch.hpp"
@@ -72,6 +73,7 @@ namespace mobject {
    */
   template<class MX =MObject>
   class PlacementRef
+    : public lib::BoolCheckable<PlacementRef<MX> >
     {
       typedef Placement<MX>      PlacementMX;
       typedef Placement<MObject>::ID     _ID;
@@ -171,11 +173,6 @@ namespace mobject {
       bool operator!= (PlacementRef<O> const& o)  const { return id_ != o; }
       
       
-      typedef _Id PlacementRef::*__unspecified_bool_type; ////////TICKET #178 :  implement by lib::BoolCheckable?
-      
-      /** implicit conversion to "bool" */ 
-      operator __unspecified_bool_type()  const { return  isValid()? &PlacementRef::id_ : 0; }  // never throws
-      bool operator! ()                   const { return !isValid(); }                         //  ditto
       
       
       
