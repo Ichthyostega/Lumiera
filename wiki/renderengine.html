@@ -2328,24 +2328,52 @@ For the case here in question this seems to be the ''resource allocation is cons
 And, last but not least, doing large scale allocations is the job of the backend. Exceptions being long-lived objects, like the Session or the EDL, which are created once and don't bear the danger of causing memory pressure. Besides, the ProcLayer code shouldn't issue &quot;new&quot; and &quot;delete&quot; when it comes in hand, rather it should use some centralized [[Factories]] for all allocation and freeing, so we can redirect these calls down to the backend, which may use pooling or special placement allocators or the like. The rationale is, for modern hardware/architectures, care has to be taken with heap allocations, esp. with many small objects and irregular usage patterns.
 </pre>
 </div>
-<div title="ModelObjectIdentity" modifier="Ichthyostega" modified="201001070916" created="201001070905" tags="SessionLogic spec draft" changecount="5">
-<pre>
+<div title="ModelObjectIdentity" modifier="Ichthyostega" modified="201001072246" created="201001070905" tags="SessionLogic spec draft" changecount="18">
+<pre>When it comes to addressing and distinguishing object instances, there are two different models of treatment, and usually any class can be related to one of these: An object with ''value semantics'' is completely defined through this &quot;value&quot;, and not distinguishable beyond that. Usually, value objects can be copied, handled and passed freely, without any ownership. To the contrary, an object with ''reference semantics'' has an unique identity, even if otherwise completely opaque. It is rather like a facility, &quot;living&quot; somewhere, often owned and managed by another object (or behaving special in some other way). Usually, client code deals with such objects through a reference token (which has value semantics). Care has to be taken with //mutable objects,// as any change might influence the object's identity. While this usually is acceptable for value objects, it is prohibited for objects with reference semantics. These are typically created by //factories// &amp;mdash; and this fabrication is the only process to define the identity.
+
 !Assets
-Each [[Asset]] holds an identification tuple; the hash of this constant tuple is used as ~Asset-ID
+Each [[Asset]] holds an identification tuple; the hash derived from this constant tuple is used as ~Asset-ID.
+* the {{{Asset::Ident}}} tuple contains the following information
+*# a __name-ID__, which is a human understandable but sanitised word
+*# a tree-like classification of the asset's __category__, comprised of
+*#* asset kind {{{{AUDIO, VIDEO, EFFECT, CODEC, STRUCT, META}}}}
+*#* a path in a virtual classification tree. Some &amp;raquo;folders&amp;laquo; have magic meanings
+*# an __origin-ID__ to denote the origin, authorship or organisation, acting like a namespace
+*# a __version number__.
+Of these, the tuple {{{(org,category,name)}}} defines the unique asset identity, and is hashed into the asset-ID. At most one asset with a given ident-tuple (including version) can exist in the whole system. Any higher version is supposed to be fully backwards compatible to all previous versions. Zero is reserved for internal purposes. {{red{1/10: shouldn't we extend the version to (major,minor), to match the plug-in versioning?}}} Thus, the version can be incremented without changing the identity, but the system won't allow co-existence of multiple versions.
+* Assets are ''equality'' comparable (even ''ordered''), based on their //identity// &amp;mdash; sans version.
+* Categories are ''equality'' comparable value objects
 
 !~MObjects
+As of 1/10, MObjects are mostly placeholders or dummies, because the actual SessionLogic has still to be defined in detail.
+
+The following properties can be considered as settled:
+* reference semantics
+* non-copyable, created by MObjectFactory, managed automatically
+* each ~MObject is associated n:1 to an asset.
+* besides that, it has an opaque instance identity, which is never made explicit.
+* this identity springs from the way the object is created and manipulated. It is //persistent.//
+* because of the ~MObject-identity's nature, there is //no point in comparing ~MObjects.//
+* ~MObjects are always attached to the session by a placement, which creates kind-of an //instance//
+* thus, because placements act as a subdivision of ~MObject identification, in practice always placements will be compared.
 
 !Placements
-Placements are somewhat special, as they mix value and reference semantics. First off, they are configuration values, copyable and smart-pointers, referring to a primary subject (clip, effect, track, label, binding,....). But, //by adding a placement to the session,// we create an unique instance-identity. This is implemented by copying the placement into the internal session store and thereby creating a new hash-ID, which is then registered within the PlacementIndex. Thus, a ''placement into the model'' has a distict identity.
-* Placements are equality comparable, based on this instance identity (hash-ID)
+[[Placements|Placement]] are somewhat special, as they mix value and reference semantics. First off, they are configuration values, copyable and smart-pointers, referring to a primary subject (clip, effect, track, label, binding,....). But, //by adding a placement to the session,// we create an unique instance-identity. This is implemented by copying the placement into the internal session store and thereby creating a new hash-ID, which is then registered within the PlacementIndex. Thus, a ''placement into the model'' has a distict identity.
+* Placements are ''equality'' comparable, based on this instance identity (hash-ID)
 * besides, there is an equivalence relation regarding the &quot;placement specification&quot; contained in the [[locating pins|LocatingPin]] of the Placement.
 ** they can be compared for ''equivalent definition'': the contained definitions are the same and in the same order
 ** alternatively, they can be checked for ''effective equivalence'': both placements to be compared resolve to the same position
+note: the placement equality relation carries over to ~PlacementRef and ~MObjectRef
 
 !Commands
+{{red{WIP}}} For now, commands are denoted by an unique, human-readable ID, which is hard-coded in the source. We might add an LUID and a version numbering scheme later on.
+Commands are used as ''prototype object'' &amp;mdash; thus we face special challenges regarding the identity, which haven't yet been addressed.
 
 !References and Handles
 These are used as token for dealing with other objects and have no identity of their own. PlacementRef tokens embody a copy of the referred placement's hash-ID. MObjectRef handles are built on top of the former, additionally holding a smart-ptr to the primary subject.
+* these reference handles simply reflect the equality relation on placements, by virtue of comparing the hash-ID.
+* besides, we could build upon the placement locating chain equivalence relations to define a semantic equivalence on ~MObjectRefs
+
 </pre>
 </div>
 <div title="ModelRootMO" modifier="Ichthyostega" modified="200912110245" created="200912080307" tags="def" changecount="5">
