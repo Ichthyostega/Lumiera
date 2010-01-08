@@ -37,6 +37,10 @@ PLANNED "basic placement properties" PlacementBasic_test <<END
 END
 
 
+PLANNED "object identity" PlacementObjectIdentity_test <<END
+END
+
+
 TEST "hierarchical placement types" PlacementHierarchy_test <<END
 out: sizeof\( .+ \) =  [0-9]{2}
 out: Placement.+mobject.+test.+TestSubMO1.+. use-cnt=1 .*
