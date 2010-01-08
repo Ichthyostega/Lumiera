@@ -42,6 +42,7 @@
  **   for the generic ID.
  ** - providing a Mixin, which allows any hierarchy to use this facility without 
  **   much code duplication, including an adapter for tr1::unordered_map
+ ** - equality comparison
  **
  ** @see HashIndexed_test
  ** @see Placement usage example
@@ -186,6 +187,11 @@ namespace lib {
         { 
           this->id_ = ref.getID();
         }
+      
+      /** equality comparison delegated to the ID implementation */
+      friend bool operator== (HashIndexed const& hal, HashIndexed const& har) { return hal.id_==har.id_; }
+      friend bool operator!= (HashIndexed const& hal, HashIndexed const& har) { return hal.id_!=har.id_; }
+      
       
     protected:
       HashIndexed ()                : id_()     {}

@@ -32,7 +32,7 @@
 #include "lib/error.hpp"
 //#include "lib/singleton.hpp"
 
-#include <boost/operators.hpp>
+//#include <boost/operators.hpp>
 //#include <boost/scoped_ptr.hpp>
 //#include <tr1/memory>
 //#include <vector>
@@ -58,9 +58,6 @@ namespace session {
    *       maintains the current focus location.
    */
   class Scope
-    : public boost::equality_comparable<Scope
-           , boost::equality_comparable<Scope, PlacementMO> >
-             
     {
       RefPlacement anchor_;
       
@@ -85,7 +82,7 @@ namespace session {
       iterator ascend()  const;
       
       friend bool operator== (Scope const&, Scope const&);
-      friend bool operator== (Scope const&, PlacementMO const&);
+      friend bool operator!= (Scope const&, Scope const&);
     };
   
   
@@ -95,10 +92,6 @@ namespace session {
   /** as scopes are constituted by a "scope top" element (placement)
    *  registered within the PlacementIndex of the current session,
    *  equality is defined in terms of this defining placement.
-   *  Moreover, in this context, \em identity relates to 
-   *  being the same thing, when used in the context
-   *  of the session. Thus, it can be reduced
-   *  to comparing the Placement-IDs 
    */
   inline bool
   operator== (Scope const& scope1, Scope const& scope2)
@@ -107,12 +100,9 @@ namespace session {
   }
   
   inline bool
-  operator== (Scope const& scope, PlacementMO const& aScopeTop)
+  operator!= (Scope const& scope1, Scope const& scope2)
   {
-    typedef PlacementMO::ID const& PlacementID;
-    PlacementID id1 = static_cast<PlacementID> (scope.anchor_);
-    
-    return id1 == aScopeTop.getID();
+    return scope1.anchor_ != scope2.anchor_;  
   }
   
   
