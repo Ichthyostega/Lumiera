@@ -182,8 +182,7 @@ lumiera_thread_destroy (LumieraThread self)
 void
 lumiera_thread_delete (LumieraThread self)
 {
-  TRACE(threads);
-  ECHO ("deleting thread");
+  TRACE(threads, "deleting thread");
   lumiera_free (lumiera_thread_destroy (self));
 }
 
