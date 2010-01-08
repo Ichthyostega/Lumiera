@@ -81,7 +81,7 @@ namespace session {
       PlacementIndex pIdx_;
       
       uint focusEDL_;
-      vector<EDL> edls;                 /////////////////////TICKET #500
+      vector<EDL> edls;                 /////////////////////TICKET #500  #513  #514
       PFix fixture;
       
       

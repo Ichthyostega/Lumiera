@@ -124,6 +124,37 @@ namespace mobject {
           else return *this;
         }
       
+      
+      /* == equality comparisons == */
+      
+      template<class MOX>
+      bool
+      operator== (MORef<MOX> const& oRef)
+        {
+          return pRef_ == oRef.pRef_;
+        }
+      
+      template<class MOX>
+      bool
+      operator== (PlacementRef<MOX> const& pRef)
+        {
+          return pRef_ == pRef;
+        }
+      
+      template<class MOX>
+      bool
+      operator== (typename Placement<MOX>::ID const& pID)
+        {
+          return pRef_ == pID;
+        }
+      
+      template<class XX>
+      bool
+      operator!= (XX const& xx)
+        {
+          return !((*this) == xx);
+        }
+      
     };
   ////////////////TODO currently just fleshing  out the API....
   

@@ -577,9 +577,7 @@ namespace session {
           ID theScope (sco(id)->getID());
           
           iterator elementsInScope = tab.queryScopeContents(theScope);
-          bool properlyRegistered = 
-              true; ////////////////////////////////////////////////////////////////////////////////////////////TICKET #119   need equality on Placements
-              ///has_any (elementsInScope, _1_ == *theElement );
+          bool properlyRegistered = has_any (elementsInScope, _1_ == *theElement );
           
           VERIFY ( properlyRegistered,   "(1.8) Elements", "Element isn't registered as member of the enclosing scope");
         }

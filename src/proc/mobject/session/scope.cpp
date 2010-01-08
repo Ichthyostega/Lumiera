@@ -39,7 +39,9 @@ namespace session {
 
   
   
-  /** TODO??? */
+  /** conversion of a scope top (placement) into a Scope.
+   *  only allowed if the given Placement is actually attached
+   *  to the session, which will be checked by index access */
   Scope::Scope (PlacementMO const& constitutingPlacement)
     : anchor_(constitutingPlacement)
   {

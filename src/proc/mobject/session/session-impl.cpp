@@ -70,7 +70,7 @@ namespace session {
     try
       {
         edls.clear();
-        edls.resize(1);
+        edls.resize(1);   //////////////////////////////////////////////////////////////////////////TICKET #513
         focusEDL_ = 0;
       }
     catch (...)

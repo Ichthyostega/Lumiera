@@ -42,18 +42,17 @@
  ** absolute position (time, track).
  ** 
  ** Together, this yields semantics somewhere in between value semantics and reference semantics.
- ** As any smart-ptr, placements are copyable, any such copies being considered equivalent. \em But,
- ** when added to the Session, a placement acts as if it was an \em instance of the object it
- ** points at, with the purpose to bind this instance into the Session with specific placement
+ ** As any smart-ptr, placements are copyable, but each such copy takes on a <i>distinct identity.</i>
+ ** Moreover, when added to the Session, a placement acts as if it was an \em instance of the object
+ ** it points at, with the purpose to bind this instance into the Session with specific placement
  ** properties. Thus, such a placement-within-session \em is an distinguishable entity, because
  ** the settings on the contained LocatingPin chain \em do constitute the relation properties
  ** of the MObject "placed" by this placement. To support this rather ref-like semantics, any
- ** placement has an embedded ID (identity), and the Session won't allow to add a clone copy
- ** of an placement with the same identity. Moreover, it is possible to create a smart-ptr
- ** like PlacementRef to denote a specific placement found within the current Session.
+ ** placement has an embedded ID (identity). Building on this ID, it is possible to create a
+ ** smart-ptr like PlacementRef to denote a specific placement found within the Session.
  ** 
  ** Placements are templated on the type of the actual MObject they refer to, so, sometimes
- ** we rather use a Placement<Clip> to be able to use the more specific methods of the
+ ** e.g. we rather use a Placement<Clip> to be able to use the more specific methods of the
  ** session::Clip interface. But <i>please note the following detail:</i> this type
  ** labelling and downcasting is the <i>only</i> difference between these subclasses, 
  ** besides that, they can be replaced literally by one another (slicing is accepted).

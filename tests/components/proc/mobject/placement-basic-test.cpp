@@ -79,7 +79,7 @@ namespace mobject {
               ExplicitPlacement expla = pc.resolve();
               ASSERT (expla.time == Time(1));
               ASSERT (!expla.chain.isOverdetermined());
-              //ASSERT (*expla == *pc);  ////////////////////////TODO: define equality on placements (Trac #119)
+//            ASSERT (*expla == *pc);  ////////////////////////////////////////////TICKET #511 define equivalence of locating chains and solutions
               
               // now overconstraining with another Placement
               pc.chain(Time(2));
