@@ -48,6 +48,13 @@ using mobject::session::SessionImplAPI;
 
 namespace mobject {
   
+  
+  /** temporary fix for init problems
+   *  @todo really solve the basic init of session manager TICKET #518
+   */
+  bool Session::initFlag = false;
+  
+  
   /** the sole access point for all client code to the system-wide
    *  "current session". Implemented as smart pointer to singleton
    *  implementation object, where the smart pointer is actually

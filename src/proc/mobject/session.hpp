@@ -97,6 +97,7 @@ namespace mobject {
 
     public:
       static session::SessManager& current;
+      static bool initFlag;                     ///////////////TICKET #518  yet another hack; actually need to care for session manager startup.
       session::DefsManager& defaults;           ///////////////TODO this is a hack... better solve it based on the new SessionServices mechanism
       
       virtual bool isValid ()              = 0;

@@ -44,7 +44,8 @@ namespace session {
   bool
   SessionServiceFetch::isAccessible ()
   {
-    return Session::current.isUp();
+    return Session::initFlag
+        && Session::current.isUp();
   }
   
   /** verify the given placement-ID (hash) is valid,

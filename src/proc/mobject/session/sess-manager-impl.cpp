@@ -88,7 +88,9 @@ namespace session {
    */
   SessManagerImpl::SessManagerImpl ()  throw()
     : pImpl_ (0)
-  { }
+  {
+    Session::initFlag = true;  //////////////////////////////////////// TICKET #518   instead of this hack, implement basic-init of the session manager for real
+  }
   
   
   
