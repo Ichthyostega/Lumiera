@@ -78,7 +78,7 @@ namespace asset
       /** use another wiring template. Triggers complete rebuild of the render engine. */
       void switchProcPatt (PProcPatt& another);
       
-      /** convienience shortcut for retrieving default configured pipes */
+      /** convenience shortcut for retrieving default configured pipes */
       static PPipe query (string properties)  ;
     };
     

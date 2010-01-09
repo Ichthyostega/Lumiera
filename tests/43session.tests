@@ -55,7 +55,16 @@ out: pID\(\w{8,16}\)
 END
 
 
-PLANNED "PlacementIndex_test" PlacementIndex_test <<END
+TEST "PlacementIndex_test" PlacementIndex_test <<END
+out: ^::Placement<.+session.test.TestClip.+ use-cnt=2
+out: ^::Placement<.+session.test.TestClip.+ use-cnt=6
+out: ^ ::Placement<.+session.test.TestClip.+ use-cnt=6
+out: ^  ::Placement<.+session.test.TestClip.+ use-cnt=6
+out: ^  ...2 elements at Level 2
+out: ^ ::Placement<.+session.test.TestClip.+ use-cnt=6
+out: ^ ...3 elements at Level 1
+out: ^::Placement<.+session.test.TestClip.+ use-cnt=2
+out: ^...3 elements at Level 0
 END
 
 

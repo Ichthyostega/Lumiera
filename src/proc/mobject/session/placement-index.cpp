@@ -23,9 +23,9 @@
 
 /** @file placement-index.cpp 
  ** Implementation of core session storage structure.
- ** The PlacementIndex associates IDs to instances, and nested scope structure.
+ ** The PlacementIndex associates IDs to instances, within a nested scope structure.
  ** Moreover, it provides and manages the actual Placement instances (storage),
- ** considered to be part of the session. 
+ ** considered to be part of the session.
  ** 
  ** Simple hash based implementation. Seems adequate for now (12/09).
  ** A main table associates Placement-ID to an Placement \em instance, which is contained
@@ -34,15 +34,15 @@
  ** by wrapping up an STL iterator range into a "Lumiera Forward Iterator" (adapter).
  ** Generally speaking, PlacementIndex is an implementation level facility and provides
  ** the basic/low-level functionality. For example, the PlacementIndexQueryResolver 
- ** provides depth-first exploration of all the contents of an scope, including nested scopes,
- ** building on top of these scope iterators from PlacementIndex.
+ ** provides depth-first exploration of all the contents of an scope, including
+ ** nested scopes, building on top of the scope iterators from PlacementIndex.
  ** 
  ** PlacementIndex can be seen as the core datastructure of the session. Objects are attached
  ** to the session by adding (copying) a Placement instance, which is owned and managed by
  ** the PlacementIndex. Adding this Placement instance creates a new Placement-ID, which
- ** from then on acts as a shorthand for "the object instance" within the session. 
+ ** from then on acts as a shorthand for "the object instance" within the session.
  ** The actual storage is provided by an embedded TypedAllocationManager instance, which
- ** is planned (as of 12/09) to be backed later by a memory pool based custom allocator. 
+ ** is planned (as of 12/09) to be backed later by a memory pool based custom allocator.
  ** 
  ** @see PlacementRef
  ** @see PlacementIndex_test
@@ -54,29 +54,25 @@
 #include "proc/mobject/session/session-impl.hpp"
 #include "proc/mobject/session/scope.hpp"
 #include "lib/typed-allocation-manager.hpp"
-//#include "proc/mobject/mobject.hpp" ///////////////////////TODO necessary?
 #include "lib/util-foreach.hpp"
 #include "lib/iter-source.hpp"
+#include "include/logging.h"
 
-
-//#include <boost/format.hpp>
-//using boost::str;
 #include <boost/lambda/lambda.hpp>
 #include <boost/functional/hash.hpp>
 #include <boost/noncopyable.hpp>
 #include <tr1/unordered_map>
 #include <tr1/functional>
 #include <tr1/memory>
-//#include <algorithm>
 #include <string>
-//#include <map>
 
 
 namespace mobject {
 namespace session {
-
+  
   using boost::hash;
   using boost::noncopyable;
+  using boost::lambda::var;
   using std::tr1::shared_ptr;
   using std::tr1::unordered_map;
   using std::tr1::unordered_multimap;
@@ -84,9 +80,6 @@ namespace session {
   using std::tr1::placeholders::_1;
   using std::tr1::function;
   using std::tr1::bind;
-//using util::contains;
-//using std::string;
-//using std::map;
   using std::make_pair;
   using std::pair;
   
@@ -98,7 +91,7 @@ namespace session {
   LUMIERA_ERROR_DEFINE (NOT_IN_SESSION, "referring to a Placement not known to the current session");
   LUMIERA_ERROR_DEFINE (PLACEMENT_TYPE, "requested Placement (pointee) type not compatible with data or context");
   LUMIERA_ERROR_DEFINE (NONEMPTY_SCOPE, "Placement scope (still) contains other elements");
-
+  
   
   
   /* some type shorthands */
@@ -107,7 +100,7 @@ namespace session {
   typedef PlacementIndex::ID ID;
   
   
-  /**
+  /*********************************************************************
    * Storage and implementation backing the PlacementIndex
    * - #placementTab_ is an hashtable mapping IDs to Placement + Scope
    * - #scopeTab_ is an reverse association serving to keep track of 
@@ -139,7 +132,7 @@ namespace session {
       PPlacement root_;
       
     public:
-      Table () 
+      Table ()
         { }
       
      ~Table ()
@@ -173,12 +166,13 @@ namespace session {
         {
           return allocator_.numSlots<PlacementMO>();
         }
-
+      
       bool
       contains (ID id)  const
         {
           return util::contains(placementTab_, id);
         }
+      
       
       PlacementMO&
       fetch (ID id)  const
@@ -233,7 +227,6 @@ namespace session {
         {
           REQUIRE (0 == placementTab_.size());
           REQUIRE (0 == scopeTab_.size());
-          REQUIRE (!root_);
           
           root_ = allocator_.create<PlacementMO> (rootDef);
           ID rootID = root_->getID();
@@ -257,12 +250,12 @@ namespace session {
       
       
       /** Store a copy of the given Placement as new instance
-       *  within the index, together with the Scope this Placement
-       *  belongs to. 
+       *  within the index, together with the Scope
+       *  this Placement belongs to.
        * @note we discard the specific type info.
        *       It can be rediscovered later with the help
        *       of the pointee's vtable
-       * @see Placement#isCompatible      
+       * @see Placement#isCompatible
        */ 
       ID
       addEntry (PlacementMO const& newObj, ID scopeID)
@@ -308,7 +301,7 @@ namespace session {
       
       typedef lib::IterSource<PID>::iterator IDIter;
       
-      PlacementMO* _root_4check ()        { return root_.get(); }
+      PlacementMO* _root_4check ()        { return root_.get();                 }
       PlacementMO* _element_4check (ID id){ return base_entry(id).element.get();}
       PlacementMO* _scope_4check (ID id)  { return base_entry(id).scope.get();  }
       IDIter       _eachEntry_4check ()   { return eachMapKey (placementTab_);  }
@@ -323,7 +316,7 @@ namespace session {
         {
           Slot pos = placementTab_.find (key);
           if (pos == placementTab_.end())
-            throw error::Logic("lost a Placement expected to be registered in the index.");
+            throw error::Logic("lost a Placement expected to be registered within PlacementIndex.");
           
           return pos->second;
         }
@@ -385,6 +378,9 @@ namespace session {
         }
       
     };
+   //(End) placement index table implementation
+  
+  
   
   
   
@@ -403,8 +399,8 @@ namespace session {
     }
   
   PlacementIndex::~PlacementIndex() { }
- 
-
+  
+  
   PlacementMO&
   PlacementIndex::getRoot()  const
   {
@@ -433,7 +429,7 @@ namespace session {
     __check_knownID(*this,id);
     return pTab_->fetch (id);
   }
-    
+  
   
   
   /** retrieve the Scope information
@@ -573,13 +569,17 @@ namespace session {
           VERIFY ( tab.contains (sco(id)->getID()),
                                          "(1.7) Elements", "Element associated with an unknown scope");
           
-          PMO* theElement = elm(id);
+          PMO& theElement = *elm(id);
           ID theScope (sco(id)->getID());
+          if (theScope == id
+             && elm(id)==tab._root_4check()
+             )        // no need to check root,
+            return;  //  because root is it's own scope
           
           iterator elementsInScope = tab.queryScopeContents(theScope);
-          bool properlyRegistered = has_any (elementsInScope, _1_ == *theElement );
+          bool properlyRegistered = has_any (elementsInScope, _1_ == var(theElement));
           
-          VERIFY ( properlyRegistered,   "(1.8) Elements", "Element isn't registered as member of the enclosing scope");
+          VERIFY ( properlyRegistered,   "(1.8) Elements", "Element not registered as member of the enclosing scope: "+ theElement);
         }
       
       void
@@ -624,7 +624,8 @@ namespace session {
   
   
   
-  
+    
+
   /** validity self-check, used for sanity checks and the session self-check.
    *  The following checks are performed (causing at least one full table scan)
    *  - root element exists and is valid.

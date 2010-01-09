@@ -50,7 +50,7 @@
  ** contained within the PlacementIndex. Usually, the commands expressing any mutating
  ** operations on the session, bind MObjectRef instances as arguments; similarly, the
  ** public API functions on the Session interface (and similar facade interfaces) are
- ** written in terms of MObectRef.   
+ ** written in terms of MObectRef.
  ** 
  ** \par placement scopes
  ** When adding a Placement to the index, it is mandatory to specify a Scope: this is
@@ -91,7 +91,7 @@
  ** any processing is assumed to happen in a suitable typed context. Consequently,
  ** client code will never need to fetch Placements directly from the index. This
  ** allows all type information to be discarded on adding (copying) a Placement
- ** instances into the PlacementIndex.
+ ** instance into the PlacementIndex.
  ** 
  ** @note PlacementIndex is <b>not threadsafe</b>.
  **
@@ -106,8 +106,6 @@
 #define MOBJECT_PLACEMENT_INDEX_H
 
 //#include "pre.hpp"
-//#include "proc/mobject/session/locatingpin.hpp"
-//#include "proc/asset/pipe.hpp"
 #include "lib/util.hpp"
 #include "lib/error.hpp"
 #include "lib/itertools.hpp"
@@ -121,7 +119,7 @@
 
 
 namespace mobject {
-
+  
   class MObject;
   
 namespace session {
@@ -220,7 +218,7 @@ namespace session {
   
   /* === forwarding implementations of the templated API === */
   
-    
+  
   namespace { // shortcuts...
     
     template<class MOX>
@@ -246,8 +244,8 @@ namespace session {
                                     ,LUMIERA_ERROR_NOT_IN_SESSION);              ///////////////////////TICKET #197
     }
   }//(End) shortcuts
-      
-
+  
+  
   
   
   template<class MO>

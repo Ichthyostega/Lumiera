@@ -34,7 +34,7 @@
  ** 
  ** @todo this can be considered a preliminary sketch without being backed
  **       by actual functionality. Just enough to be able to drive the design of
- **       other parts ahead. See esp. Trac #100, which contains an idea for a
+ **       other parts ahead. See esp. TICKET #100, which contains an idea for a
  **       refactoring. 
  **
  */

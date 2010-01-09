@@ -23,13 +23,11 @@
 
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
-//#include "proc/asset/media.hpp"
-//#include "proc/mobject/session.hpp"
-//#include "proc/mobject/session/edl.hpp"
 #include "proc/mobject/session/placement-index.hpp"
 #include "proc/mobject/session/scope.hpp"
 #include "proc/mobject/placement.hpp"
 #include "lib/util.hpp"
+
 #include "proc/mobject/session/testclip.hpp"
 #include "proc/mobject/session/testroot.hpp"
 
@@ -37,8 +35,6 @@
 #include <iostream>
 
 using boost::format;
-//using lumiera::Time;
-//using util::contains;
 using util::isSameObject;
 using std::string;
 using std::cout;
@@ -48,16 +44,15 @@ using std::endl;
 namespace mobject {
 namespace session {
 namespace test    {
-      
-  using asset::VIDEO;
+  
   using session::test::TestClip;
   
   typedef PlacementIndex& Idx;
   
   
   /***************************************************************************
-   * @test basic behaviour of the index mechanism used to keep track of
-   *       individual Placements as added to the current Session..
+   * @test basic behaviour of the index mechanism used to keep track
+   *       of individual Placements as added to the current Session.
    * @see  mobject::Placement
    * @see  mobject::MObject#create
    * @see  mobject::Placement#addPlacement
@@ -76,14 +71,14 @@ namespace test    {
           has_size (0, index);
           
           checkSimpleAccess (index);
-          has_size (1, index);
+          has_size (2, index);
           
           checkScopeHandling (index);
-          has_size (7, index);
+          has_size (8, index);
           
           checkContentsEnumeration (index);
           
-          has_size (7, index);
+          has_size (8, index);
           ASSERT (index.isValid());
           
           index.clear();
@@ -97,6 +92,7 @@ namespace test    {
           ASSERT (siz == index.size());
         }
       
+      
       void
       checkSimpleInsertRemove (Idx index)
         {
@@ -104,15 +100,17 @@ namespace test    {
           PMO& root = index.getRoot();
           
           ASSERT (0 == index.size());
-          ASSERT (!index.contains (clip));
           
-          index.insert (clip, root);
+          PMO::ID elmID = index.insert (clip, root);
           ASSERT (1 == index.size());
-          ASSERT ( index.contains (clip));
+          ASSERT ( index.contains (elmID));
+          ASSERT (!index.contains (clip)); // index stores copies
           
-          index.remove(clip);
+          index.remove(clip); // has no effect
+          ASSERT (1 == index.size());
+          index.remove(elmID);
           ASSERT (0 == index.size());
-          ASSERT (!index.contains (clip));
+          ASSERT (!index.contains (elmID));
           ASSERT ( index.contains (root));
         }
       
@@ -127,13 +125,20 @@ namespace test    {
           PMO& elm = index.find(elmID);
           ASSERT (elmID == elm.getID());
           ASSERT (!isSameObject (elm,testObj));  // note: placements are registered as copy
-          ASSERT (elm == testObj);              //        they are semantically equivalent
+          ASSERT (isSameDef(elm,testObj));      //        they are semantically equivalent    ////////TICKET #511
           ASSERT (elmID != testObj.getID());   //         but have a distinct identity
           
           PMO::ID elmID2 = index.insert(testObj, root);
-          ASSERT (elmID != elmID);          //            ...and each insert creates a new instance
-          ASSERT (testObj == index.find(elmID2));
+          ASSERT (elmID2 != elmID);         //            ...and each insert creates a new instance
+          ASSERT (testObj != index.find (elmID));
+          ASSERT (testObj != index.find (elmID2));
+          ASSERT (isSameDef(testObj, index.find(elmID)));
+          ASSERT (isSameDef(testObj, index.find(elmID2)));
+          ASSERT (!isSameObject (testObj, index.find(elmID2)));
           ASSERT (!isSameObject (elm, index.find(elmID2)));
+          
+          // can repeatedly retrieve a reference to the same object
+          ASSERT ( isSameObject (elm, index.find(elmID )));
           ASSERT ( isSameObject (elm, index.find(elmID )));
           
           // can also re-access objects by previous ref
@@ -200,7 +205,7 @@ namespace test    {
           ASSERT (!index.contains(e1331));
           ASSERT (!index.remove(e1331));
           
-          ASSERT (index.remove(e133));     // but can remove an scope, after emptying it 
+          ASSERT (index.remove(e133));     // but can remove an scope, after emptying it
           ASSERT (!index.contains(e133));
         }
       
@@ -209,7 +214,7 @@ namespace test    {
       typedef PlacementIndex::iterator Iter;
       
       /** @test drill down into the tree-like structure
-       *        and enumerate the contents of each element, if any 
+       *        and enumerate the contents of each element, if any
        */
       void
       checkContentsEnumeration (Idx index)
@@ -254,6 +259,6 @@ namespace test    {
   
   /** Register this test class... */
   LAUNCHER (PlacementIndex_test, "unit session");
-      
-      
+  
+  
 }}} // namespace mobject::session::test
