@@ -125,7 +125,7 @@ namespace session {
   /** a \em valid path consists of more than just the root element.
    *  @note contrary to this, an \em empty path doesn't even contain a root element
    */
-  inline bool
+  bool
   ScopePath::isValid()  const
   {
     return (0 < length())
