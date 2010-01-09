@@ -167,8 +167,20 @@ protected:
             bool still_to_solve (); 
             
           };
+        
+        friend bool operator== (LocatingPin const&, LocatingPin const&);
+        
       };
       
+    
+    /** check for equivalent definition of a complete locating chain */
+    
+    inline bool
+    operator== (LocatingPin const& pin1, LocatingPin const& pin2)
+    {
+//////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #511  really implement equivalence relation!          
+      return pin1.resolve().first == pin2.resolve().first;
+    }
       
       
 

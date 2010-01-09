@@ -240,14 +240,26 @@ namespace mobject {
     };
   
   
-  string
-  format_PlacementID (Placement<MObject> const&) ;
-  
-  
   /** @todo cleanup uses of ref-to-placement. See Ticket #115 */
   typedef Placement<MObject> PlacementMO; 
   typedef Placement<MObject> PMO; 
+  
+  
+  
+  /* == free functions == */
 
-
+  string
+  format_PlacementID (PlacementMO const&) ;
+  
+  
+  /** compare the properties of placement
+   *  @return \c true if all the LocatingPin entries
+   *          in both placements are semantically equivalent.
+   */
+  bool
+  isSameDef (PlacementMO const&, PlacementMO const&);
+  
+  
+  
 } // namespace mobject
 #endif

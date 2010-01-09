@@ -146,8 +146,8 @@ namespace session {
   LocatingPin::Pipe
   LocatingPin::LocatingSolution::getPipe()
   {
-    UNIMPLEMENTED ("get effective Pipe of Solution");
-    return Pipe (); 
+    TODO ("implement Placement LocatingSolution");
+    return asset::Pipe::query ("pipe(master)");  // yet another idiotic dummy
   }
   
   

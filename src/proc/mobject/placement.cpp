@@ -69,6 +69,16 @@ namespace mobject {
   }
   
   
+  bool
+  isSameDef (PlacementMO const& pl1, PlacementMO const& pl2)
+  {
+    return pl1.getID() == pl2.getID()
+        || pl1.chain == pl2.chain
+        ;
+  }
+
+  
+  
 
 
 } // namespace mobject
