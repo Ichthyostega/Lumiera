@@ -68,7 +68,8 @@ struct lumiera_threadpool_struct
 {
   struct
   {
-    llist list;
+    llist working_list;
+    llist working_idle;
     unsigned working_thread_count;
     unsigned idle_thread_count;
     pthread_attr_t pthread_attrs;

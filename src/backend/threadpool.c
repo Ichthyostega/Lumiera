@@ -52,7 +52,8 @@ lumiera_threadpool_init(void)
 
   for (int i = 0; i < LUMIERA_THREADCLASS_COUNT; ++i)
     {
-      llist_init (&threadpool.pool[i].list);
+      llist_init (&threadpool.pool[i].working_list);
+      llist_init (&threadpool.pool[i].idle_list);
       threadpool.pool[i].working_thread_count = 0;
       threadpool.pool[i].idle_thread_count = 0;
 
@@ -74,10 +75,14 @@ lumiera_threadpool_destroy(void)
       TRACE (threadpool, "destroying individual pool #%d", i);
       LUMIERA_CONDITION_SECTION (threadpool, &threadpool.pool[i].sync)
         {
-          REQUIRE (0 == threadpool.pool[i].working_thread_count, "%d threads are still running", threadpool.pool[i].working_thread_count);
+          REQUIRE (0 == threadpool.pool[i].working_thread_count &&
+                   0 = llist_count (&threadpool.pool[i].working_list),
+                   "%d(%d) threads are still running",
+                   threadpool.pool[i].working_thread_count,
+                   llist_count (&threadpool.pool[i].working_list));
           // TODO need to have a stronger assertion that no threads are really running because they will not even be in the list
-          INFO (threadpool, "number of threads in the pool=%d", llist_count (&threadpool.pool[i].list));
-          LLIST_WHILE_HEAD (&threadpool.pool[i].list, t)
+          INFO (threadpool, "working threads count=%d, idle threads count=%d", llist_count (&threadpool.pool[i].working_list), llist_count (&threadpool.pool[i].idle_list));
+          LLIST_WHILE_HEAD (&threadpool.pool[i].idle_list, t)
             {
               lumiera_thread_delete ((LumieraThread)t);
             }
