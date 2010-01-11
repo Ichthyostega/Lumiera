@@ -22,9 +22,10 @@
 
 
 /** @file mobject-ref.hpp
- ** A reference tag for accessing an object within the session externally,
- ** from a separate Layer or from plugin code.
- **
+ ** A reference handle pointing at an MObject, attached (placed) to the session.
+ ** Allows client code to access both the object and the placement, even from a
+ ** separate Layer or from within plugin code.
+ ** 
  ** @see MObject
  ** @see Session
  ** @see PlacementRef
@@ -59,6 +60,10 @@ namespace mobject {
   /**
    * An active (smart-ptr like) external reference
    * to a specifically placed MObject "instance" within the session.
+   * Implemented as a smart-ptr sharing ownership of the pointee MObject
+   * with the corresponding placement within the session. Additionally,
+   * a PlacementRef is incorporated, allowing to re-access this placement
+   * with the help of PlacementIndex within the current session.
    */
   template<class MO =MObject>
   class MORef
