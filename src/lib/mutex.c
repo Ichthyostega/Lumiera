@@ -26,11 +26,6 @@
  * Mutual exclusion locking.
  */
 
-LUMIERA_ERROR_DEFINE (LOCK_ACQUIRE, "locking failed");
-LUMIERA_ERROR_DEFINE (LOCK_RELEASE, "unlocking failed");
-LUMIERA_ERROR_DEFINE (LOCK_DESTROY, "lock destroy failed");
-
-
 LumieraMutex
 lumiera_mutex_init (LumieraMutex self, const char* purpose, struct nobug_flag* flag)
 {
@@ -56,10 +51,7 @@ lumiera_mutex_destroy (LumieraMutex self, struct nobug_flag* flag)
   return self;
 }
 
-int lumiera_mutex_unlock_cb (void* mutex)
-{
-  return pthread_mutex_unlock (&((LumieraMutex)mutex)->mutex);
-}
+
 
 /*
 // Local Variables:
