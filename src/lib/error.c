@@ -34,6 +34,7 @@
 */
 LUMIERA_ERROR_DEFINE (ERRNO, "errno");
 LUMIERA_ERROR_DEFINE (EERROR, "could not initialize error system");
+LUMIERA_ERROR_DEFINE (UNKNOWN, "unknown error");
 
 
 /* Thread local storage */

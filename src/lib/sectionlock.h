@@ -22,14 +22,8 @@
 #ifndef LUMIERA_SECTIONLOCK_H
 #define LUMIERA_SECTIONLOCK_H
 
-#include "lib/error.h"
-
 #include <pthread.h>
 #include <nobug.h>
-
-LUMIERA_ERROR_DECLARE (LOCK_ACQUIRE);
-LUMIERA_ERROR_DECLARE (LOCK_RELEASE);
-LUMIERA_ERROR_DECLARE (LOCK_DESTROY);
 
 
 typedef int (*lumiera_sectionlock_unlock_fn)(void*);

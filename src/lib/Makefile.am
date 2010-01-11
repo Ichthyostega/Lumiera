@@ -19,12 +19,13 @@ liblumiera_la_srcdir = $(top_srcdir)/src/lib
 lib_LTLIBRARIES += liblumiera.la
 
 liblumiera_la_CFLAGS = $(AM_CFLAGS) -std=gnu99 -Wall -Wextra -Werror
-liblumiera_la_CXXFLAGS = $(AM_CXXFLAGS) -Wall -Wextra
+liblumiera_la_CXXFLAGS = $(AM_CXXFLAGS) -Wall -Wextra -Werror
 
 liblumiera_la_SOURCES =						\
 	$(liblumiera_la_srcdir)/error.c				\
 	$(liblumiera_la_srcdir)/mpool.c				\
 	$(liblumiera_la_srcdir)/exception.cpp 			\
+	$(liblumiera_la_srcdir)/lockerror.c			\
 	$(liblumiera_la_srcdir)/mutex.c				\
 	$(liblumiera_la_srcdir)/recmutex.c			\
 	$(liblumiera_la_srcdir)/rwlock.c			\
@@ -54,6 +55,7 @@ noinst_HEADERS +=						\
 	$(liblumiera_la_srcdir)/error.h				\
 	$(liblumiera_la_srcdir)/error.hpp			\
 	$(liblumiera_la_srcdir)/mpool.h				\
+	$(liblumiera_la_srcdir)/lockerror.h			\
 	$(liblumiera_la_srcdir)/mutex.h				\
 	$(liblumiera_la_srcdir)/recmutex.h			\
 	$(liblumiera_la_srcdir)/rwlock.h			\
