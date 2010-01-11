@@ -23,13 +23,6 @@
 #include "lib/rwlock.h"
 
 
-LUMIERA_ERROR_DEFINE(RWLOCK_AGAIN, "maximum number of readlocks exceed");
-LUMIERA_ERROR_DEFINE(RWLOCK_DEADLOCK, "deadlock detected");
-LUMIERA_ERROR_DEFINE(RWLOCK_DESTROY, "destroying rwlock");
-LUMIERA_ERROR_DEFINE(RWLOCK_UNLOCK, "unlock rwlock failed");
-LUMIERA_ERROR_DEFINE(RWLOCK_RDLOCK, "locking rwlock for reading failed");
-LUMIERA_ERROR_DEFINE(RWLOCK_WRLOCK, "locking rwlock for writing failed");
-
 /**
  * @file
  * Read/write locks.
@@ -55,16 +48,11 @@ lumiera_rwlock_destroy (LumieraRWLock self, struct nobug_flag* flag)
     {
       NOBUG_RESOURCE_FORGET_RAW (flag,  self->rh);
       if (pthread_rwlock_destroy (&self->rwlock))
-        LUMIERA_DIE (RWLOCK_DESTROY);
+        LUMIERA_DIE (LOCK_DESTROY);
     }
   return self;
 }
 
-
-int lumiera_rwlock_unlock_cb (void* rwlock)
-{
-  return pthread_rwlock_unlock (&((LumieraRWLock)rwlock)->rwlock);
-}
 
 /*
 // Local Variables:
