@@ -145,7 +145,7 @@ namespace lib {
       char content_[sizeof(TY)];
       char created_;
       
-      typedef ScopedHolder<TY> _ThisType;
+      typedef ScopedHolder<TY> _ThisType;   ////TODO can get rid of this typedef, after using BoolCheckable
       
       
       static char must_be_empty (_ThisType const& ref)
@@ -216,6 +216,7 @@ namespace lib {
       
       typedef char _ThisType::*unspecified_bool_type;
       
+                                                           //////////////////////////////////TICKET #178
       /** implicit conversion to "bool" */
       operator unspecified_bool_type()  const // never throws
         {

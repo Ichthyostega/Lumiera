@@ -38,6 +38,7 @@ namespace mobject {
    *        because we define the Placements of more specific 
    *        MObject kinds to be subclasses of Placement<MObject>,
    *        so they will inherit this function.
+   *                                           //////////////////////TICKET #439
    */
   ExplicitPlacement
   Placement<MObject>::resolve ()  const 
@@ -66,6 +67,16 @@ namespace mobject {
     size_t hashVal = pla.getID();
     return str(fmt % hashVal);
   }
+  
+  
+  bool
+  isSameDef (PlacementMO const& pl1, PlacementMO const& pl2)
+  {
+    return pl1.getID() == pl2.getID()
+        || pl1.chain == pl2.chain
+        ;
+  }
+
   
   
 

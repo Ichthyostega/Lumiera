@@ -514,6 +514,25 @@ ColorPalette
 
 SiteUrl</pre>
 </div>
+<div title="Advice" modifier="Ichthyostega" modified="200911221732" created="200910311755" tags="Concepts def spec" changecount="4">
+<pre>{{red{WIP 11/09}}}...//about to explicate a pattern which I'm aiming at within the design almost since the beginning//
+Expecting Advice and giving Advice &amp;mdash; this collaboration ranges somewhere between messaging and dynamic properties, but cross-cutting the primary, often hierarchical relation of dependencies. Always happening at a certain //point of advice,// which creates a distinct, static nature different of being just a convention, on the other hand, Advice is deliberately kept optional and received synchronously, albeit possibly within an continuation.
+
+!Specification
+''Definition'': Advice is an optional, mediated collaboration between entities taking on the roles of advisor and advised, thereby passing a custom piece of advice data, managed by the advice support system. The possibility of advice is created by the advised entity by exposing a point of advice, while the advising entity can discover this advice possibility.
+!!Collaborators
+* the ''advised'' entity 
+* the ''advisor''
+* ''point of advice''
+* ''advice system''
+* the ''binding''
+* the ''advice''
+The ''advised'' entity opens the collaboration by requsting an advice. The ''advice'' itself is a piece of data of a custom type, which needs to be //copyable.// Obviously, both the advised and the advisor need to share knowledge about the meaning of this advice data. (in a more elaborate version we might allow the advisor to provide a subclass of the advice interface type). The actual advice colaboration happens at a ''point of advice'', which needs to be derived first. To this end, the adviced puts up an request by providing his ''binding'', which is a pattern for matching. An entity willing to give advice //discovers//&amp;nbsp possible ''advice channels'' by putting up an advisor binding, which similarily is a pattern. The ''advice system'' as mediator resolves both sides, by matching (which in the most general case could be an unification). This process creates an ''advice point solution'' &amp;mdash; and in the most general case even multiple solutions. If we allow such, there needs to be a scheme for both sides to handle this (unexpected) multiplicity of advice points. Anyway, now the actual colaboration takes place by the advisor placing the piece of advice into the advice channel, causing it to be placed into the point of advice. After passing a certain (implementation defined) break point, the advice leaves the influence of the advisor and gets exposed to the advised entitie(s). Typically this involves copying the advice data into a location managed by the advice system. In the most simple case, the advised entity accesses the advice synchronously (an non-blocking). Of course, there could be a status flag to find out if there is new advice. Moreover, typically the advice data type is default constructible and thus there is always a basic form of advice available, thereby completely decoupling the advised entity from the timings related to this colaboration.
+
+!!extensions
+In a more elaborate scheme, the advised entiy could provide a signal to be invoked either in the thread context of the advisor (being still blocked in the advice providing call), or in a completely separate thread. A third solution would be to allow the advised entity to block until recieving new advice. Both of these more elaborate schemes would also allow to create an advice queue. 
+</pre>
+</div>
 <div title="AllocationCluster" modifier="Ichthyostega" modified="200810200127" created="200810180031" tags="def img" changecount="9">
 <pre>Memory management facility for the low-level model (render nodes network). The model is organised into temporal segments, which are considered to be structurally constant and uniform. The objects within each segment are strongly interconnected, and thus each segment is being built in a single build process and is replaced or released as a whole. __~AllocationCluster__ implements memory management to support this usage pattern. He owns a number of object families of various types.[&gt;img[draw/AllocationCluster.png]]
 * [[processing nodes|ProcNode]] &amp;mdash; probably with several subclasses (?)
@@ -758,13 +777,47 @@ config.macros.timeline.handler = function(place,macroName,params,wikifier,paramS
 }
 //}}}</pre>
 </div>
-<div title="BindingMO" modifier="Ichthyostega" modified="200907220310" created="200905210144" tags="def design discuss SessionLogic" changecount="5">
+<div title="BindingMO" modifier="Ichthyostega" modified="201001070851" created="200905210144" tags="def design discuss SessionLogic" changecount="12">
 <pre>Sometimes, two entities within the [[Session]] are deliberately associated, and this association has to carry some specific mappings between properties or facilities within the entities to be linked together. When this connection isn't just the [[Placement]] of an object, and isn't just a logical or structural relationship either &amp;mdash; then we create an explicit Binding object to be stored into the session.
 * When connecting a [[Sequence|EDL]] to a certain [[Timeline]], we also establish a mapping between the possible media stream channels produced by the sequence and the real output slots found within the timeline.
 * similarly, using a sequence within a [[meta-clip|VirtualClip]] requires to remember such a mapping.
 * another example is the root [[scope|PlacementScope]], which (conceptually) is a link between the definition part of the Session and the graph of MObjects, which are the session's contents.
 
+!Properties of a Binding
+Binding is a relation entity, maintaining a link between parts of the session. This 1:1 relation may be part of a n:1 (or maybe even n:m?) relation. In addition to representing this link, a binding allows to maintain a set of ''mappings'' attached to this link.
+
+This creates a typing related problem: In order to maintain the link and the mappings, in each case we need a common denominator to subsume the elements to be maintained.
+* in the case of the basic link, this common denominator is given by the basic structure of the HighLevelModel: ~MObjects attached by ~Placements. Consequently, the link maintained through a binding is limited to linking together first-class entities within the model, and the implementation is tied into the existing mechanisms for associating Placements (&amp;rarr; PlacementScope and PlacementIndex)
+* in the case of the attached mappings it seems we're best off limiting ourselves to symbolic mappings (ID mappings). Because, going beyond that would either create sub-groupings (based on varying target types to be mapped), or push the »everything is an object« approach beyond the beneficial level.
+
+!Critique {{red{WIP 12/09}}}
+Now I'm in doubt if there is any point in treating the &quot;binding&quot; in a abstract fashion. Is there any common denominator? It seems there is just a common conceptional pattern, but mapping this pattern onto distinct types (classes) seems unnecessary. Rather, we have three very similar kinds of ~MObjects:
+* ModelRootMO
+* BindingMO
+* [[Track]]
+While each of these actually represents a high-level concept (the session, the timeline(s) the sequence(s)) and moreover links to other parts and provides mappings, it seems there is no re-usable similarity at the code level.
+//According to this reasoning, I should proceed rather with these three distinct entities and postpone any search for similarities to a later refactoring round.//
+
+&amp;rarr; see also SessionInterface
+
+!Implementation
 On the implementation side, we use a special kind of MObject, acting as an anchor and providing an unique identity. Like any ~MObject, actually a placement establishes the connection and the scope, and typically constitutes a nested scope (e.g. the scope of all objects //within// the sequence to be bound into a timeline)
+</pre>
+</div>
+<div title="BindingScopeProblem" modifier="Ichthyostega" modified="200910181440" created="200910181435" tags="SessionLogic spec" changecount="4">
+<pre>There is some flexibility in the HighLevelModel, allowing to attach the same [[Sequence|EDL]] onto multiple [[timelines|Timeline]] or even into a [[meta-clip|VirtualClip]]. Thus, while there is always an containment relation which can be used to define the current PlacementScope, we can't always establish an unique path from any given location up to the model root. In the most general case, we have to deal with a DAG, not a tree.
+
+!solution idea
+Transform the DAG into a tree by //focussing//&amp;nbsp; on the current situation and context. Have a state containing the //current path.//  &amp;rarr; QueryFocus
+
+!!detail decisions
+!!!!how to represent scoping
+We us a 2-layer approach: initially, containment is implemented through a registration in the PlacementIndex. Building on that, scope is layered on top as an abstraction, which uses the registered containment relation, but takes the current access path into account at the  critical points (where a [[binding|BindingMO]] comes into play)
+
+!!!!the basic containment tree
+each Placement (with the exception of the root) gets registered as contained in yet another Placement. This registration is entirely a tree, and thus differs from the real scope nesting at the Sequence level: The scopes constituting Sequences and Timelines are registered as siblings, immediately below the root. This has some consequences
+# Sequences as well as Timelines can be discovered as contents of the model root
+# ScopePath digresses at Sequence level from the basic containment tree
 </pre>
 </div>
 <div title="BuildProcess" modifier="Ichthyostega" modified="200906071813" created="200706190658" tags="dynamic Builder img" changecount="30">
@@ -1106,6 +1159,10 @@ Connecting data streams of differing type involves a StreamConversion. Mostly, t
 * retrieve a //strategy// for implementing a connection
 </pre>
 </div>
+<div title="Concepts" modifier="Ichthyostega" modified="200910312026" created="200910311729" tags="overview" changecount="5">
+<pre>This index refers to the conceptual, more abstract and formally specified aspects of the Proc-Layer and Lumiera in general.
+More often than not, these emerge from immediate solutions, being percieved as especially expressive, when taken on, yielding guidance by themselves. Some others, [[Placements|Placement]] and [[Advice]] to mention here, immediately substantiate the original vision.</pre>
+</div>
 <div title="ConfigQuery" modifier="Ichthyostega" modified="200804110335" created="200801181308" tags="def" changecount="5">
 <pre>Configuration Queries are requests to the system to &quot;create or retrieve an object with //this and that // capabilities&quot;. They are resolved by a rule based system ({{red{planned feature}}}) and the user can extend the used rules for each Session. Syntactically, they are stated in ''prolog'' syntax as a conjunction (=logical and) of ''predicates'', for example {{{stream(mpeg), pipe(myPipe)}}}. Queries are typed to the kind of expected result object: {{{Query&lt;Pipe&gt; (&quot;stream(mpeg)&quot;)}}} requests a pipe excepting/delivering mpeg stream data &amp;mdash; and it depends on the current configuration what &quot;mpeg&quot; means. If there is any stream data producing component in the system, which advertises to deliver {{{stream(mpeg)}}}, and a pipe can be configured or connected with this component, then the [[defaults manager|DefaultsManagement]] will create/deliver a [[Pipe|PipeHandling]] object configured accordingly.
 &amp;rarr; [[Configuration Rules system|ConfigRules]]
@@ -1151,7 +1208,7 @@ For this to work, we need each of the //participating object types// to implemen
 
 @@clear(left):display(block):@@</pre>
 </div>
-<div title="ConfigRules" modifier="Ichthyostega" modified="200804110334" created="200801171352" tags="overview spec" changecount="13">
+<div title="ConfigRules" modifier="Ichthyostega" modified="200910171607" created="200801171352" tags="overview spec Rules" changecount="14">
 <pre>Many features can be implemented by specifically configuring and wiring some unspecific components. Rather than tie the client code in need of some given feature to these configuration internals, in Lumiera the client can //query // for some kind of object providing the //needed capabilities. // Right from start (summer 2007), Ichthyo had the intention to implement such a feature using sort of a ''declarative database'', e.g. by embedding a Prolog system. By adding rules to the basic session configuration, users should be able to customize the semi-automatic part of Lumiera's behaviour to great extent.
 
 [[Configuration Queries|ConfigQuery]] are used at various places, when creating and adding new objects, as well when building or optimizing the render engine node network.
@@ -1230,7 +1287,7 @@ As we don't have a Prolog interpreter on board yet, we utilize a mock store with
 {{{default(Obj)}}} is a predicate expressing that the object {{{Obj}}} can be considered the default setup under the given conditions. Using the //default// can be considered as a shortcut for actually finding a exact and unique solution. The latter would require to specify all sorts of detailed properties up to the point where only one single object can satisfy all conditions. On the other hand, leaving some properties unspecified would yield a set of solutions (and the user code issuing the query had to provide means for selecting one soltution from this set). Just falling back on the //default// means that the user code actually doesn't care for any additional properties (as long as the properties he //does// care for are satisfied). Nothing is said specifically on //how//&amp;nbsp; this default gets configured; actually there can be rules //somewhere,// and, additionally, anything encountered once while asking for a default can be re-used as default under similar circumstances.
 &amp;rarr; [[implementing defaults|DefaultsImplementation]]</pre>
 </div>
-<div title="DesignDecisions" modifier="Ichthyostega" modified="200909291401" created="200801062209" tags="decision design discuss" changecount="24">
+<div title="DesignDecisions" modifier="Ichthyostega" modified="200910312026" created="200801062209" tags="decision design discuss Concepts" changecount="25">
 <pre>Along the way of working out various [[implementation details|ImplementationDetails]], decisions need to be made on how to understand the different facilities and entities and how to tackle some of the problems. This page is mainly a collection of keywords, summaries and links to further the discussion. And the various decisions should allways be read as proposals to solve some problem at hand...
 
 ''Everything is an object'' &amp;mdash; of course, that's a //no-brainer,// todays. Rather, important is what is not &quot;an object&quot;, meaning it can't be arranged arbitrarily
@@ -1451,6 +1508,34 @@ Some further details
 
 As the builder and thus render engine //only consults the fixture,// while all editing operations finally propagate to the fixture as well, we get an isolation layer between the high level part of the Proc layer (editing, object manipulation) and the render engine. Creating the Fixture can be seen as a preprocessing step to simplify the build process. For this reason, the process of [[(re)building the fixture|PlanningBuildFixture]] has been designed together with the [[Builder]]</pre>
 </div>
+<div title="ForwardIterator" modifier="Ichthyostega" modified="200912190027" created="200910312114" tags="Concepts def spec" changecount="17">
+<pre>The situation focussed by this concept is when an API needs to expose a sequence of results, values or objects, instead of just yielding a function result value. As the naive solution of passing an pointer or array creates coupling to internals, it was superseded by the ~GoF [[Iterator pattern|http://en.wikipedia.org/wiki/Iterator]]. Iteration can be implemented by convention, polymorphically or by generic programming; we use the latter approach.
+
+!Lumiera Forward Iterator concept
+''Definition'': An Iterator is a self-contained token value, representing the promise to pull a sequence of data
+* rather then deriving from an specific interface, anything behaving appropriately //is a Lumiera Forward Iterator.// 
+* the client finds a typedef at a suitable, nearby location. Objects of this type can be created, copied and compared.
+* any Lumiera forward iterator can be in //exhausted// &amp;nbsp;(invalid) state, which can be checked by {{{bool}}} conversion.
+* especially, default constructed iterators are fixed to that state. Non-exhausted iterators may only be obtained by API call.
+* the exhausted state is final and can't be reset, meaning that any iterator is a disposable one-way-off object.
+* when an iterator is //not//&amp;nbsp; in the exhausted state, it may be //dereferenced// ({{{*i}}}), yielding the &quot;current&quot; value
+* moreover, iterators may be incremented ({{{++i}}}) until exhaustion.
+
+!!Discussion
+The Lumiera Forward Iterator concept is a blend of the STL iterators and iterator concepts found in Java, C#, Python and Ruby. The chosen syntax should look familiar to C++ programmers and indeed is compatible to STL containers and ranges. To the contrary, while a STL iterator can be thought off as being just a disguised pointer, the semantics of Lumiera Forward Iterators is deliberately reduced to a single, one-way-off forward iteration, they can't be reset, manipulated by any arithmetic, and the result of assigning to an dereferenced iterator is unspecified, as is the meaning of post-increment and stored copies in general. You //should not think of an iterator as denoting a position// &amp;mdash; just a one-way off promise to yield data.
+
+Another notable difference to the STL iterators is the default ctor and the {{{bool}}} conversion. The latter allows using iterators painlessly within {{{for}}} and {{{while}}} loops; a default constructed iterator is equivalent to the STL container's {{{end()}}} value &amp;mdash; indeed any //container-like// object exposing Lumiera Forward Iteration is encouraged to provide such an {{{end()}}}-function, additionally enabling iteration by {{{std::for_each}}} (or Lumiera's even more convenient {{{util::for_each()}}}).
+
+!!Implementation notes
+''iter-adapter.hpp'' provides some helper templates for building Lumiera Forward Iterators.
+* __~IterAdapter__ is the most flexible variant, intended for use by custom facilities. An ~IterAdapter maintains an internal back-link to a facilitiy exposing an iteration control API, which is accessed through free functions as extension point. This iteration control API is similar to C#, allowing to advance to the next result and to check the current iteration state.
+* __~RangeIter__ wraps two existing iterators &amp;mdash; usually obtained from {{{begin()}}} and {{{end()}}} of an STL container embedded within the implementation. This allows for iterator chaining.
+* __~PtrDerefIter__ works similar, but can be used on an STL container holding //pointers,// to be dereferenced automatically on access
+
+Similar to the STL habits, Lumiera Forward Iterators should expose typedefs for {{{pointer}}}, {{{reference}}} and {{{value_type}}}.
+Additionally, they may be used for resource management purposes by embedding a ref-counting facility, e.g. allowing to keep a snapshot or restult set around until it can't be accessed anymore.
+</pre>
+</div>
 <div title="Frame" modifier="Ichthyostega" modified="200909291345" created="200706220332" tags="def" changecount="3">
 <pre>This term has //two meanings, //so care has to be taken for not confusing them.
 # in general use, a Frame means one full image of a video clip, i.e an array of rows of pixels. For interlaced footage, one Frame contains two halfimages, commonly called Fields. (Cinelerra2 confuses this terms)
@@ -1632,7 +1717,7 @@ Besides routing to a global pipe, wiring plugs can also connect to the source po
 Finally, this example shows an ''automation'' data set controlling some parameter of an effect contained in one of the global pipes. From the effect's POV, the automation is simply a ParamProvider, i.e a function yielding a scalar value over time. The automation data set may be implemented as a bézier curve, or by a mathematical function (e.g. sine or fractal pseudo random) or by some captured and interpolated data values. Interestingly, in this example the automation data set has been placed relatively to the meta clip (albeit on another track), thus it will follow and adjust when the latter is moved.
 </pre>
 </div>
-<div title="ImplementationDetails" modifier="Ichthyostega" modified="200909291328" created="200708080322" tags="overview" changecount="35">
+<div title="ImplementationDetails" modifier="Ichthyostega" modified="201001070900" created="200708080322" tags="overview" changecount="38">
 <pre>This wiki page is the entry point to detail notes covering some technical decisions, details and problems encountered in the course of the implementation of the Lumiera Renderengine, the Builder and the related parts.
 
 * [[Packages, Interfaces and Namespaces|InterfaceNamespaces]]
@@ -1651,14 +1736,17 @@ Finally, this example shows an ''automation'' data set controlling some paramete
 * [[how to handle »attached placement«|AttachedPlacementProblem]]
 * working out the [[basic building situations|BuilderPrimitives]] and [[mechanics of rendering|RenderMechanics]]
 * how to classify and [[describe media stream types|StreamType]] and how to [[use them|StreamTypeUse]]
+* considerations regarding [[identity and equality|ModelObjectIdentity]] of objects in the HighLevelModel
 * the [[identification of frames and nodes|NodeFrameNumbering]]
 * the relation of [[Project, Timelines and Sequences|TimelineSequences]]
 * how to [[start the GUI|GuiStart]] and how to [[communicate|GuiCommunication]]
 * build the first LayerSeparationInterfaces
+* create an uniform pattern for [[passing and accessing object collections|ForwardIterator]]
 * decide on SessionInterface and create [[Session datastructure layout|SessionDataMem]]
-* shaping the GUI/~Proc-Interface, based on MObjectRef and the [[Command frontend|CommandHandling]]</pre>
+* shaping the GUI/~Proc-Interface, based on MObjectRef and the [[Command frontend|CommandHandling]]
+* defining PlacementScope in order to allow for [[discovering session contents|Query]]</pre>
 </div>
-<div title="ImplementationGuidelines" modifier="Ichthyostega" modified="200909291414" created="200711210531" tags="discuss draft" changecount="15">
+<div title="ImplementationGuidelines" modifier="Ichthyostega" modified="200910311727" created="200711210531" tags="Concepts design discuss" changecount="16">
 <pre>!Observations, Ideas, Proposals
 ''this page is a scrapbook for collecting ideas'' &amp;mdash; please don't take anything noted here too literal. While writing code, I observe that I (ichthyo) follow certain informal guidelines, some of which I'd like to note down because they could evolve into general style guidelines for the Proc-Layer code.
 * ''Inversion of Control'' is the leading design principle.
@@ -2092,7 +2180,7 @@ The general idea is, that each facade interface actually provides access to a sp
 
 &amp;rarr; [[overview of the MObject hierarchy|MObjects]]</pre>
 </div>
-<div title="MObjectRef" modifier="Ichthyostega" modified="200906020120" created="200904242107" tags="SessionLogic GuiIntegration design draft discuss" changecount="21">
+<div title="MObjectRef" modifier="Ichthyostega" modified="200910152353" created="200904242107" tags="SessionLogic GuiIntegration design img" changecount="24">
 <pre>''The Problem of referring to an [[MObject]]'' stems from the object //as a concept// encompassing a wider scope then just the current implementation instance. If the object was just a runtime entity in memory, we could use a simple (language) reference or pointer. Actually, this isn't sufficient, as the object reference will pass LayerSeparationInterfaces, will be handed over to code not written in the same implementation language, will be included in an ''UNDO'' record for the UndoManager, and thus will need to be serialized and stored permanently within the SessionStorage.
 Moreover [[MObject instances|MObject]] have a 2-level structure: the core object holds just the properties in a strict sense, i.e. the properties which the object //owns.// Any properties due to putting the object into a specific context, i.e. all relation properties are represented as [[Placement]] of the object. Thus, when viewed from the client side, a reference to a specific ~MObject //instance,// actually denotes a //specific//&amp;nbsp; Placement of this object into the Session.
 
@@ -2116,6 +2204,7 @@ Obviously, the second approach has quite some appeal &amp;mdash; but, in order t
 
 !Implementation concept
 Presumably, none of the both models is usable as-is; rather we try to reconstruct the viable properties of both, starting out with the more elegant second model. Thus, basically the ''reference is a smart-ptr'' referring to the core object. Additionally, it incorporates a ''systematic ID denoting the location of the placement''. This ID without the smart-ptr part is used for the C-implementation, making the full handle implementation a shortcut for an access sequence, which first querries the placement from the Session, followed by dereferencing the placement to get at the core object. Thus, the implementation builds upon another abstraction, the &amp;rarr; PlacementRef, which in turn assumes for an index within the implementation of the [[session datastructure|SessionDataMem]] to track and retrieve the actual Placement.
+[img[Structure of MObjectRef and PlacementRef|uml/fig136581.png]]
 
 
 !using ~MObject references
@@ -2237,6 +2326,63 @@ For the case here in question this seems to be the ''resource allocation is cons
 
 !using Factories
 And, last but not least, doing large scale allocations is the job of the backend. Exceptions being long-lived objects, like the Session or the EDL, which are created once and don't bear the danger of causing memory pressure. Besides, the ProcLayer code shouldn't issue &quot;new&quot; and &quot;delete&quot; when it comes in hand, rather it should use some centralized [[Factories]] for all allocation and freeing, so we can redirect these calls down to the backend, which may use pooling or special placement allocators or the like. The rationale is, for modern hardware/architectures, care has to be taken with heap allocations, esp. with many small objects and irregular usage patterns.
+</pre>
+</div>
+<div title="ModelObjectIdentity" modifier="Ichthyostega" modified="201001072246" created="201001070905" tags="SessionLogic spec draft" changecount="18">
+<pre>When it comes to addressing and distinguishing object instances, there are two different models of treatment, and usually any class can be related to one of these: An object with ''value semantics'' is completely defined through this &quot;value&quot;, and not distinguishable beyond that. Usually, value objects can be copied, handled and passed freely, without any ownership. To the contrary, an object with ''reference semantics'' has an unique identity, even if otherwise completely opaque. It is rather like a facility, &quot;living&quot; somewhere, often owned and managed by another object (or behaving special in some other way). Usually, client code deals with such objects through a reference token (which has value semantics). Care has to be taken with //mutable objects,// as any change might influence the object's identity. While this usually is acceptable for value objects, it is prohibited for objects with reference semantics. These are typically created by //factories// &amp;mdash; and this fabrication is the only process to define the identity.
+
+!Assets
+Each [[Asset]] holds an identification tuple; the hash derived from this constant tuple is used as ~Asset-ID.
+* the {{{Asset::Ident}}} tuple contains the following information
+*# a __name-ID__, which is a human understandable but sanitised word
+*# a tree-like classification of the asset's __category__, comprised of
+*#* asset kind {{{{AUDIO, VIDEO, EFFECT, CODEC, STRUCT, META}}}}
+*#* a path in a virtual classification tree. Some &amp;raquo;folders&amp;laquo; have magic meanings
+*# an __origin-ID__ to denote the origin, authorship or organisation, acting like a namespace
+*# a __version number__.
+Of these, the tuple {{{(org,category,name)}}} defines the unique asset identity, and is hashed into the asset-ID. At most one asset with a given ident-tuple (including version) can exist in the whole system. Any higher version is supposed to be fully backwards compatible to all previous versions. Zero is reserved for internal purposes. {{red{1/10: shouldn't we extend the version to (major,minor), to match the plug-in versioning?}}} Thus, the version can be incremented without changing the identity, but the system won't allow co-existence of multiple versions.
+* Assets are ''equality'' comparable (even ''ordered''), based on their //identity// &amp;mdash; sans version.
+* Categories are ''equality'' comparable value objects
+
+!~MObjects
+As of 1/10, MObjects are mostly placeholders or dummies, because the actual SessionLogic has still to be defined in detail.
+
+The following properties can be considered as settled:
+* reference semantics
+* non-copyable, created by MObjectFactory, managed automatically
+* each ~MObject is associated n:1 to an asset.
+* besides that, it has an opaque instance identity, which is never made explicit.
+* this identity springs from the way the object is created and manipulated. It is //persistent.//
+* because of the ~MObject-identity's nature, there is //no point in comparing ~MObjects.//
+* ~MObjects are always attached to the session by a placement, which creates kind-of an //instance//
+* thus, because placements act as a subdivision of ~MObject identification, in practice always placements will be compared.
+
+!Placements
+[[Placements|Placement]] are somewhat special, as they mix value and reference semantics. First off, they are configuration values, copyable and smart-pointers, referring to a primary subject (clip, effect, track, label, binding,....). But, //by adding a placement to the session,// we create an unique instance-identity. This is implemented by copying the placement into the internal session store and thereby creating a new hash-ID, which is then registered within the PlacementIndex. Thus, a ''placement into the model'' has a distict identity.
+* Placements are ''equality'' comparable, based on this instance identity (hash-ID)
+* besides, there is an equivalence relation regarding the &quot;placement specification&quot; contained in the [[locating pins|LocatingPin]] of the Placement.
+** they can be compared for ''equivalent definition'': the contained definitions are the same and in the same order
+** alternatively, they can be checked for ''effective equivalence'': both placements to be compared resolve to the same position
+note: the placement equality relation carries over to ~PlacementRef and ~MObjectRef
+
+!Commands
+{{red{WIP}}} For now, commands are denoted by an unique, human-readable ID, which is hard-coded in the source. We might add an LUID and a version numbering scheme later on.
+Commands are used as ''prototype object'' &amp;mdash; thus we face special challenges regarding the identity, which haven't yet been addressed.
+
+!References and Handles
+These are used as token for dealing with other objects and have no identity of their own. PlacementRef tokens embody a copy of the referred placement's hash-ID. MObjectRef handles are built on top of the former, additionally holding a smart-ptr to the primary subject.
+* these reference handles simply reflect the equality relation on placements, by virtue of comparing the hash-ID.
+* besides, we could build upon the placement locating chain equivalence relations to define a semantic equivalence on ~MObjectRefs
+
+</pre>
+</div>
+<div title="ModelRootMO" modifier="Ichthyostega" modified="200912110245" created="200912080307" tags="def" changecount="5">
+<pre>A special kind of MObject, serving as a marker or entry point at the root of the HighLevelModel. As any ~MObject, it is attached to the model by a [[Placement]]. And in this special case, this placement froms the ''root scope'' of the model, thus containing any other PlacementScope (e.g. tracks, clips with effects,...)
+
+This special ''session root object'' provides a link between the model part and the &amp;raquo;bookkeeping&amp;laquo; part of the session, i.e. the [[assets|Asset]]. It is created and maintained by the session (implementation level) &amp;mdash; allowing to store and load the asset definitions as contents of the model root element.
+
+__Note__: nothing within the PlacementIndex requires the root object to be of a specific type; the index just assumes a {{{Placement&lt;MObject&gt;}}} (or subclass) to exist as root element. And indeed, for several unit tests we create an Index mock with a tree of dummy ~MObjects and temporarily shaddow the &quot;real&quot; PlacementIndex by this mock (&amp;rarr; see SessionServices for the API allowing to access this //mock index//- functionality)
+
 </pre>
 </div>
 <div title="MultichannelMedia" modifier="Ichthyostega" modified="200710212326" created="200709200255" tags="design img" changecount="6">
@@ -2937,12 +3083,12 @@ The GUI can connect the viewer(s) to some pipe (and moreover can use [[probe poi
 
 </pre>
 </div>
-<div title="PipeHandling" modifier="Ichthyostega" modified="200805250303" created="200801101352" tags="spec" changecount="11">
+<div title="PipeHandling" modifier="Ichthyostega" modified="200912080210" created="200801101352" tags="spec" changecount="12">
 <pre>!Identification
 Pipes are distinct objects and can be identified by their asset ~IDs. Besides, as for all [[structural assets|StructAsset]] there are extended query capabilities, including a symbolic pipe-id and a media (stream) type id. Any pipe can accept and deliver exactly one media stream kind (which may be inherently structured though, e.g. spatial sound systems or stereoscopic video)
 
 !creating pipes
-Pipe assets are created automatically by being used and referred. The [[Session]] holds a collection of global pipes ({{red{todo: implementation missing as of 5/08}}}), and further pipes can be created by using a new pipe reference in some placement. Moreover, every clip has an (implicit) [[source port|ClipSourcePort]], which will appear as pipe asset when first used (referred) while [[building|BuildProcess]]. Note that creating a new pipe implies using a [[processing pattern|ProcPatt]], which will be queried from the [[Defaults Manager|DefaultsManagement]] (resulting in the use of some preconfigured pattern or maybe the creation of a new ProcPatt object if necessary)
+Pipe assets are created automatically by being used and referred. Each [[Timeline]] holds a collection of global pipes, attached to the BindingMO, which is the representation or attachement point of the Timeline within the HighLevelModel ([[Session]]) ({{red{todo: implementation missing as of 11/09}}}), and further pipes can be created by using a new pipe reference in some placement. Moreover, every clip has an (implicit) [[source port|ClipSourcePort]], which will appear as pipe asset when first used (referred) while [[building|BuildProcess]]. Note that creating a new pipe implies using a [[processing pattern|ProcPatt]], which will be queried from the [[Defaults Manager|DefaultsManagement]] (resulting in the use of some preconfigured pattern or maybe the creation of a new ProcPatt object if necessary)
 
 !removal
 Deleting a Pipe is an advanced operation, because it includes finding and &quot;detaching&quot; all references, otherwise the pipe will leap back into existence immediately. Thus, global pipe entries in the Session and pipe references in [[locating pins|LocatingPin]] within any placement have to be removed, while clips using a given source port will be disabled. {{red{todo: implementation deferred}}}
@@ -2952,8 +3098,8 @@ there is not much you can do directly with a pipe asset. It is an point of refer
 Pipes are integrated with the [[management of defaults|DefaultsManagement]]. For example, any pipe uses implicitly some [[processing pattern|ProcPatt]] &amp;mdash; it may default to the empty pattern. This feature enables to apply some standard wiring to the pipes (e.g a fader for audio, similar to the classic mixing consoles). This //is // a global property of the pipe, but &amp;mdash; contrary to the stream type &amp;mdash; this pattern may be switched
 </pre>
 </div>
-<div title="Placement" modifier="Ichthyostega" modified="200905090045" created="200706220306" tags="def" changecount="9">
-<pre>A Placement represents a //relation:// it is always linked to a //Subject// (this being a [[Media Object|MObject]]) and has the meaning to //place// this Subject in some manner, either relatively to other Media Objects, or by some Constraint or simply absolute at (time, output). The latter case is especially important for the build process and thus represented by a special [[Sub-Interface ExplicitPlacement|ExplicitPlacement]]. Besides this simple cases, Placements can also express more specific kinds of &quot;locating&quot; an object, like placing a sound source at a pan position or placing a video clip at a given layer (above or below another video clip)
+<div title="Placement" modifier="Ichthyostega" modified="200910311753" created="200706220306" tags="Concepts def" changecount="11">
+<pre>A Placement represents a //relation:// it is always linked to a //Subject// (this being a [[Media Object|MObject]]) and has the meaning to //place// this Subject in some manner, either relatively to other Media Objects, by some Constraint or simply absolute at (time, output). The latter case is especially important for the build process and thus represented by a special [[Sub-Interface ExplicitPlacement|ExplicitPlacement]]. Besides this simple cases, Placements can also express more specific kinds of &quot;locating&quot; an object, like placing a sound source at a pan position or placing a video clip at a given layer (above or below another video clip)
 
 So basically placements represent a query interface: you can allways ask the placement to find out about the position of the related object in terms of (time, output), and &amp;mdash; depending on the specific object and situation &amp;mdash; also about these additional [[placement derived dimensions|PlacementDerivedDimension]] like sound pan or layer order or similar things which also fit into the general concept of &quot;placing&quot; an object.
 
@@ -2974,10 +3120,10 @@ probably a LocatingPin but... {{red{TODO any details are yet unknown as of 5/08}
 !querying additional dimensions
 basically you resolve the Placement, yielding an ExplicitPlacement... {{red{TODO but any details of how additional dimensions are resolved is still undefined as of 5/08}}}</pre>
 </div>
-<div title="PlacementHandling" modifier="Ichthyostega" modified="200805260212" created="200710100124" tags="design impl" changecount="13">
-<pre>[[Placement]]s are at the very core of all [[editing operations|EditingOperations]], because they act as handles (smart pointers) to access the [[media objects|MObject]] to be manipulated. Moreover, Placements are the actual content of the EDL(s) and Fixture and thus are small objects with //value semantics//. Many editing tasks include finding some Placement in the EDL or directly take a ref to some Placement. By acting on the Placement object, we can in some cases change parameters of the way the media object is placed (e.g. adjust an offset), while by dereferencing the Placement object, we access the &quot;real&quot; media object (e.g. for trimming its length). Placements are ''templated'' on the type of the actual ~MObject they refer to, thus defining the interface/methods usable on this object.
+<div title="PlacementHandling" modifier="Ichthyostega" modified="200911271831" created="200710100124" tags="design impl" changecount="14">
+<pre>[[Placement]]s are at the very core of all [[editing operations|EditingOperations]], because they act as handles (smart pointers) to access the [[media objects|MObject]] to be manipulated. Placements themselves are lightweight and can be handled with //value semantics//. But, when adding a Placement to the [[Session]], it gains an distinguishable identity and should be treated by reference from then on: changing the location properties of this placement has a tangible effect on the way the placed object appears in the context of the session. Besides the direct (language) references, there is a special PlacementRef type which builds on this registration of the placement within the session, can be represented as POD and thus passed over external interfaces. Many editing tasks include finding some Placement in the session and reference as parameter. By acting //on the Placement object,// we can change parameters of the way the media object is placed (e.g. adjust an offset), while by //dereferencing//&amp;nbsp; the Placement object, we access the &quot;real&quot; media object (e.g. for trimming its length). Placements are ''templated'' on the type of the actual ~MObject they refer to, thus defining the interface/methods usable on this object.
 
-Actually, the way each Placement locates its subject is implemented by one or several small LocatingPin objects, where subclasses of LocatingPin implement the various different methods of placing and resolving the final location. Notably, we can give a ~FixedLocation or we can atach to another ~MObject to get a ~RelativeLocation, etc. In the typical use case, these ~LocatingPins are added to the Placement, but never retrieved directly. Rather the Placement acts as a ''query interface'' for determining the location of the related object. Here, &quot;location&quot; can be thought of as encompassing multiple dimenstions at the same time. An object can be
+Actually, the way each Placement ties and locates its subject is implemented by one or several small LocatingPin objects, where subclasses of LocatingPin implement the various different methods of placing and resolving the final location. Notably, we can give a ~FixedLocation or we can atach to another ~MObject to get a ~RelativeLocation, etc. In the typical use case, these ~LocatingPins are added to the Placement, but never retrieved directly. Rather the Placement acts as a ''query interface'' for determining the location of the related object. Here, &quot;location&quot; can be thought of as encompassing multiple dimenstions at the same time. An object can be
 * located at a specific point in time
 * related to and plugged into a specific output or global bus
 * defined to have a position within some [[context-dependant additional dimensions|PlacementDerivedDimension]] like
@@ -2992,48 +3138,62 @@ Placements have //value semantics,// i.e. we don't stress the identity of a plac
 * the actual way of placing is implemented similar to the ''State Pattern'' by small embedded LocatingPin objects.
 * these LocatingPin objects form a ''decorator'' like chain
 * resolving into an ExplicitPlacement traverses this chain
-* //overconstraining// a placement is not an error, we just stop traversing the chain (ignoring the remaining additional Placements) at the moment the position is completely defined. 
-* we provide subclasses to be able to form collections of e.g. {{{Placement&lt;Effect&gt;}}}, but we don't stress polymorphism here. Instead we stick to value semantics and explicitly ''allow slicing'' (all subclasses have the same size and layout and differ only in their vtable contents). This is justified, because for the polymorphical treating of ~MObjects the visitor mechanism used by the builder and the EDL is sufficiant, and I don't want to add another layer of complexity by making Placement something like {{{boost::variant}}}.
-* Why is the question how to access a ~MObject subinterface a Problem?
+* //overconstraining// a placement is not an error, we just stop traversing the chain (ignoring the remaining additional Placements) at the moment the position is completely defined.
+* placements can be treated like values, but incorporate an identity tag for the purpose of registering with the session.
+* we provide subclasses to be able to form collections of e.g. {{{Placement&lt;Effect&gt;}}}, but we don't stress polymorphism here. &amp;rarr; PlacementType
+* Why was the question how to access a ~MObject subinterface a Problem?
 *# we want the EDL/Fixture to be a collection of Placements. This means, either we store pointers, or Placement needs to be //one// unique type!
 *# but if Placement is //a single type//, then we can get only MObjects from a Placement.
 *# then either we had to do everything by a visitor (which gets the concrete subtype dynamically), or we'd end up switching on type.
 
 </pre>
 </div>
-<div title="PlacementIndex" modifier="Ichthyostega" modified="200905241504" created="200905090053" tags="SessionLogic spec impl draft" changecount="15">
+<div title="PlacementIndex" modifier="Ichthyostega" modified="200912110239" created="200905090053" tags="SessionLogic spec impl draft" changecount="20">
 <pre>An implementation facility used to keep track of individual Placements and their relations.
 Especially, the [[Session]] maintains such an index, allowing to use the (opaque) PlacementRef tags for referring to a specific &quot;instance&quot; of an MObject, //placed// in a unique way into the current session. And, moreover, this index allows for one placement referring to another placement, so to implement a //relative// placement mode. Because there is an index behind the scenes, it is possible to actually access such a referral in the reverse direction, which is necessary for implementing the desired placement behaviour (if an object instance used as anchor is moved, all objects placed relatively to it have to move accordingly, which necessitates finding those other objects).
 
-!questions {{red{WIP}}}
-What implementation approach to take for the index. This of course largely depends on the usage pattern, which in turn is not-yet existent. To start with, we need a preliminary implementation!
+Besides searching, [[placement instances|Placement]] can be added to the index, thereby creating a copy managed by the backing data structure. Thus, the session's PlacementIndex is the main interface to the session data structure, and the session's contents are actually contained within it.
 
-Using a ''flat hashtable'' would allow to access a Placement denoted by ID in O(1). This way we could get the Placement, but nothing more. So, additionally we'd have to set up an data record holding additional information:
+!discussion of implementation possibilities
+What implementation approach to take for the index largely depends on the usage pattern. Generally speaking, the Lumiera [[Session]] is a collection of MObjects attached by [[Placement]]; any relations between these objects are established on a logical level, implemented as markers within the respective placements. For [[building the render nodes graph|BuildProcess]], a consolidated view of the session's effective contents is created (&quot;[[Fixture]]&quot;), then to be traversed while emitting the LowLevelModel. The GUI is expected to query the index to discover parts of the structure; the [[object reference tags|MObjectRef]] returned by these queries will be used as arguments to any mutating operation on the objects within the session.
+
+Using a ''flat hashtable'' allows to access a Placement denoted by ID in O(1). This way we get the Placement, but nothing more. So, additionally we'd have to set up an data record holding additional information:
 * the [[scope|PlacementScope]] containing this placement
 * especially the path &quot;up&quot; from this scope, which is used for resolving any queries
 * relations to other placements
 
-Alternatively, we could try to use a ''structure based index''. Following this idea, we could try to avoid the mentioned description record by folding any of the contained informations into the surrounding data structure:
+Alternatively, we could try to use a ''structure based index'', thereby avoiding the mentioned description record by folding any of the contained informations into the surrounding data structure:
 * the scope would be obvious from the index, resp. from the path used to resolve this index
 * any other informations, especially the relations, would be folded into the placement
 * this way, the &quot;index&quot; could be reduced to being the session data structure itself.
 
 
 !supported operations
-The placement index is utilized by editing operations, by executing the build process. Besides these core operations it allows for resolving PlacementRef objects. This latter functionality is used by all kinds of relative placements and for dealing with them while building, but it is also used to resolve [[object reference tags|MObjectRef]], which possibly may have been handed out via an external API or may have crossed layer boundaries. From these use cases we derive the following main operations to support:
+The placement index is utilized by editing operations and by executing the build process. Besides these core operations it allows for resolving PlacementRef objects. This latter functionality is used by all kinds of relative placements and for dealing with them while building, but it is also used to resolve [[object reference tags|MObjectRef]], which possibly may have been handed out via an external API or may have crossed layer boundaries. From these use cases we derive the following main operations to support:
 * find the actual [[Placement]] object for a given ID
 * find the //scope//&amp;nbsp; a given placement resides in. More specifically, find the [[placement defining this scope|PlacementScope]]
-* find (any/all) other placements referring to a given placement
+* find (any/all) other placements referring to a given placement (&quot;within this scope&quot;)
 * add a new placement to a scope given as parameter
 * remove a placement from index
 
 //does a placement need to know it's own ID?// &amp;nbsp; Obviously, there needs to be a way to find out the ID for a given placement, especially in the following situations:
-* for most of the operations above, when querying some additional informations from index for a given placement
+* for most of the operations above, when querying additional informations from index for a given placement
 * to create a PlacementRef (this is a variant of the &quot;shared ptr from this&quot;-problem)
-On second sight, this problem seems to be quite nasty, because either we have to keep a second index table for the reversed lookup (memory address -&gt; ID), or have to tie the placement by a back-link when adding it to the index/session data structure, or (at least) it forces us to store a copy of the ID //within// the placement itself. The last possibility seems to create the least impact; but implementing it this way effectively gears the implementation towards a hashtable based approach.
+On second sight, this problem turns out to be more involved, because either we have to keep a second index table for the reverse lookup (memory address -&gt; ID), or have to tie the placement by a back-link when adding it to the index/session data structure, or (alternatively) it forces us to store a copy of the ID //within// the placement itself. The last possibility seems to create the least impact; but implementing it this way effectively gears the implementation towards a hashtable based approach.
+
+!!!Handling of Subtypes
+While usually type relations don't carry over to smart-poitner like types, in case of Placement I used a special definition pattern to artificially create such type relations ({{{Placement&lt;session::Clip&gt;}}} is subclass of {{{Placement&lt;MObject&gt;}}}). Now, as we're going to copy and maintain Placements within the storage backing the index, the question is: do we actually store subtypes (all having the same size btw) or do we use a vtable based mechanism to recover the type information on access?
+
+Actually, the handling of placement types quite flexible; the actual hierarchy of Placement types can be determined in the //usage context// &amp;mdash; it is not really stored within the placement, and there is no point in storing it within the index. Only the type of the //pointee//&amp;nbsp; can be checked with the help of Placement's vtable.
+
+Thus, things just fall into place here, without the need of any additional implementation logic. The index stores {{{Placement&lt;MObject&gt;}}} instances. The usage context will provide a suitable meaning for more specifically typed placements, and as long as this is in line with the type relations on the pointee(s), as checked by the {{{Placement::isCompatible&lt;TY&gt;()}}} call, the placement relations will just work out right by the the cast happening automatically on results retrieval.
+&amp;rarr; see PlacementType
 
 !implementation {{red{WIP}}}
-Consequently, we incorporate a random hash (implemented as {{{LUID}}}) into the individual placement, this way creating an distinguishable //placement identity,// which is retained on copying of the placement. The actual ID tag is complemented by a compile time type (template parameter), thus allowing to pass on additional context information through API calls.
+Consequently, we incorporate a random hash (implemented as {{{LUID}}}) into the individual placement, this way creating an distinguishable //placement identity,// which is //not retained on copying.// The actual ID tag is complemented by a compile time type (template parameter), thus allowing to pass on additional context information through API calls. Placements themselves use a vtable (and thus RTTI), allowing to re-discover the exact type at runtime. Any further relation information is contained within the placement's [[locating pins|LocatingPin]], thus, any further description records can be avoided by storing the placements immediately //within the index.// To summarise, the implementation is comprised of
+* a main table resolving hash-ID to storage location
+* a reverse lookup table to find the enclosing scope
+* an instance holding and managing facility based on pooled allocation
 </pre>
 </div>
 <div title="PlacementRef" modifier="Ichthyostega" modified="200906020130" created="200905090032" tags="def spec draft" changecount="12">
@@ -3050,21 +3210,48 @@ Placement references mimic the behaviour of a real placement, i.e. they proxy th
 {{red{WIP}}}
 </pre>
 </div>
-<div title="PlacementScope" modifier="Ichthyostega" modified="200905210132" created="200905120304" tags="SessionLogic spec draft" changecount="5">
-<pre>MObjects are attached into the [[Session]] by adding a [[Placement]]. Because this especially includes the case of //grouping or container objects,// e.g. tracks or [[meta-clips|VirtualClip]], any placement may optionally define and root a scope, and every placement is at least contained in one encompassing scope &amp;mdash; of course with the exception of the absolute top level, which can be thought off as being contained in a scope of handling rules.
+<div title="PlacementScope" modifier="Ichthyostega" modified="200911202127" created="200905120304" tags="SessionLogic spec img" changecount="21">
+<pre>MObjects are attached into the [[Session]] by adding a [[Placement]]. Because this especially includes the possibility of //grouping or container objects,// e.g. [[sequences|EDL]] or [[tracks|Track]] or [[meta-clips|VirtualClip]], any placement may optionally define and root a scope, and every placement is at least contained in one encompassing scope &amp;mdash; of course with the exception of the absolute top level, which can be thought off as being contained in a scope of handling rules.
 
-Thus, while the [[sequences (former called EDL)|EDL]] act as generic container holding a pile of placments, actually there is a more fine grained structure based on the nesting of the tracks, which especially in Lumiera's HighLevelModel belong to the sequence (they aren't a property of the top level timeline as one might expect). Building upon these observations, we actually require each addition of a placement to specify a scope. The implementation of this tie-to-scope is provided by the same mechanism as utilized for relative placements, i.e. an directional placement relation.
+Thus, while the [[sequences (former called EDL)|EDL]] act as generic container holding a pile of placments, actually there is a more fine grained structure based on the nesting of the tracks, which especially in Lumiera's HighLevelModel belong to the sequence (they aren't a property of the top level timeline as one might expect). Building upon these observations, we actually require each addition of a placement to specify a scope. Consequently, for each Placement at hand it is possible to determine an //containing scope,// which in turn is associated with some Placement of a top-level ~MObject for this scope. The latter is called the ''scope top''. An example would be the {{{Placement&lt;Track&gt;}}} acting as scope of all the clips placed onto this track. The //implementation//&amp;nbsp; of this tie-to-scope is provided by the same mechanism as utilised for relative placements, i.e. an directional placement relation. Actually, this relation is implemented by the PlacementIndex within the current [[Session]].
 
+
+[&gt;img[Structure of Placment Scopes|draw/ScopeStructure1.png]]
 !Kinds of scopes
 There is only a limited number of situations constituting a scope
-* conceptually, the very top level is a scope of general rules. It is implemented as {{{Placement&lt;Binding&gt;}}}, where [[the binding|BindingMO]] is a meta-object representing the relation.
-* similarily, the link binding a [[Sequence|EDL]] into either a (top-level) timeline or as virtual media into a VirtualClip is rather special.
+* conceptually, the very top level is a scope of general rules.
+* the next level is the link of [[binding|BindingMO]] of a [[Sequence|EDL]] into either a (top-level) [[Timeline]] or as virtual media into a VirtualClip. It is implemented through a {{{Placement&lt;Binding&gt;}}}.
 * each sequence has at least one (manadtory) top-level placement holding its root track
 * tracks may contain nested sub tracks.
 * clips and (track-level) effects likewise are associated with an enclosing track.
 * an important special case of relative placement is when an object is [[attached|AttachedPlacementProblem]] to another leading object, like e.g. an effect modifying a clip
+__note__: attaching a Sequence in multiple ways &amp;rarr; [[causes scoping problems|BindingScopeProblem]]
 
-In any case, adding a placement to a scope is to be implemented such as to ensure the presence of a suitable LocatingPin, serving to tie the placement into the scope. This LocatingPin in turn will manage a relation to the scope-defining placement, and by doing so, it will insert the relation information into the [[index|PlacementIndex]]. The remaining problem for the implementation is to find a suitable factory function to set up the mentioned pin.
+!Purpose of Placement scoping
+Similar to the common mechanisms of object visibility in programming languages, placement scopes guide the search for and resolution of properties of placement. Any such property //not defined locally// within the placement is queried ascending through the sequence of nested scopes. Thus, global definitions can be shadowed by local ones.
+</pre>
+</div>
+<div title="PlacementType" modifier="Ichthyostega" modified="200911271836" created="200911271742" changecount="5">
+<pre>Placement is a smart-ptr. As such, usually smart-pointers are templated on the pointee type, but a type relation between different target types doesn't carry over into a type relation on the corresponding smart-pointers. Now, as a [[Placement]] or a PlacementRef often is used to designate a specific &quot;instance&quot; of an MObject placed into the current session, the type parametrisation plays a crucial role when it comes to processing the objects contained within the session. Because the session deliberately has not much additional structure, besides the structure created by [[scopes and aggregations|PlacementScope]] within the session's contents.
+
+To this end, we're using a special definition pattern for Placements, so
+* a placement can refer to a specific sub-Interface like Track, Clip, Effect
+* a specialised placement can stand-in for the more generic type.
+
+!generic handling
+Thus, ~MObject and Placement&lt;~MObject&gt; relate to the &quot;everything is an object&quot; view of affairs. More specific placements are registered, searched and retrieved within the session through this generic interface. In a similar vein, ~PlacementRef&lt;~MObject&gt; and MObjectRef is used on LayerSeparationInterfaces. This works, because it is possible to re-discover the more fine-grained target type. 
+* ''active type rediscovery'' happens when a [[using visitors|VisitorUse]], which requires support by the pointee types (~MObject subclasses), so the visitor implementation is able to build a trampoline table to dispatch into a specifically typed context.
+* ''passive type rediscovery'' is possible whenever the usage context //is already specifically typed.// Because in this case we can check the type (by RTTI) and filter out any placement not convertible to the type requested within the given context.
+
+!downcasting and slicing
+Deliberately, all Placements have the same runtime size. Handling them value-like under certain circumstances is intended and acceptable. Of course then slicing on the level of the Placement will happen. But because the Placement actually is a smart-pointer, the pointee remains unaffected, and can be used later to re-gain the fully typed context.
+
+On the other hand, care has to be taken when ''downcasting'' a placement. When possible, this should be preceded by a {{{Placement::isCompatible&lt;TY&gt;()}}}-call, which checks based on the pointee's RTTI. Client code is encouraged to avoid explicit casting and rather rely on the provided facilities:
+* invoking one of the templated access functions of the PlacementIndex
+* using the QueryFocus to issue a specifically typed {{{ScopeQuery&lt;TY&gt;}}} (which yields an suitable iterator)
+* create an specifically typed MObjectRef and bind it to some reference source (~Placement-ID, LUID, Placement instance within the session)
+* implementing a visitor (~BuilderTool)
+
 </pre>
 </div>
 <div title="PlanningBuildFixture" modifier="Ichthyostega" modified="200801061937" created="200712100445" tags="impl Builder draft" changecount="11">
@@ -3161,7 +3348,7 @@ We need a way of addressing existing [[pipes|Pipe]]. Besides, as the Pipes and T
 &lt;&lt;tasksum end&gt;&gt;
 </pre>
 </div>
-<div title="PlanningSessionInMem" modifier="Ichthyostega" modified="200907212231" created="200904252258" tags="impl SessionLogic draft" changecount="33">
+<div title="PlanningSessionInMem" modifier="Ichthyostega" modified="200910112133" created="200904252258" tags="impl SessionLogic draft" changecount="48">
 <pre>//This page is a scrapbook for working out the implementation of the [[Session Datastructure in Memory|SessionDataMem]]//
 This is a difficult untertaking, because there are several dependencies (most of which aren't fully designed yet as of 5/09)
 * the GUI uses an adapted version of the HighLevelModel; these datastructures are intended to be backed by the Session
@@ -3181,13 +3368,11 @@ This is a difficult untertaking, because there are several dependencies (most of
 
 &lt;&lt;tasksum start&gt;&gt;
 &lt;&lt;taskadder below&gt;&gt;
-&lt;&lt;task 3 3 3&gt;&gt; how to deal with UNDO
-&lt;&lt;task 2 2 2&gt;&gt; how to deal with CommandDefinition
-&lt;&lt;task &gt;&gt; outline the CommandLifecycle
-&lt;&lt;task 5 15 15&gt;&gt; implement a system for defining parameters and targets
-&lt;&lt;task &gt;&gt; implement a system for generating operations
-&lt;&lt;task 2 2 1&gt;&gt; define the general structure of operations
-&lt;&lt;task &gt;&gt; specify the editing operations
+&lt;&lt;task &gt;&gt; standard implementation of a query, including use of lumiera forward iterators
+&lt;&lt;task &gt;&gt; identify and plan the possible queries
+&lt;&lt;task &gt;&gt; BindingMO
+&lt;&lt;task &gt;&gt; scope concept
+&lt;&lt;task &gt;&gt; outline the general style of the [[(query) interface|SessionQueryStructure]]
 
 !Interface
 &lt;&lt;task 1 1 1&gt;&gt; evaluate models for the [[reference problem|MObjectRef]]
@@ -3195,8 +3380,17 @@ This is a difficult untertaking, because there are several dependencies (most of
 &lt;&lt;task 1 2 2&gt;&gt; incorporate this ID into class Placement
 &lt;&lt;task 2 2&gt;&gt; define PlacementRef and MObjectRef behaviour
 &lt;&lt;task 1 0&gt;&gt; wire up [[Session]] interface as a LayerSeparationInterface
-&lt;&lt;task 1 1 0&gt;&gt; implement PlacementRef
+&lt;&lt;task 1 1 1&gt;&gt; implement PlacementRef
 &lt;&lt;task 2 2 0&gt;&gt; implement MObjectRef
+
+!Mutations
+&lt;&lt;task 3 3 3&gt;&gt; how to deal with UNDO
+&lt;&lt;task 2 2 2&gt;&gt; how to deal with CommandDefinition
+&lt;&lt;task 1 1&gt;&gt; outline the CommandLifecycle
+&lt;&lt;task 14 45 45&gt;&gt; design and implement CommandHandling framework
+&lt;&lt;task 2 2 1&gt;&gt; define the general structure of operations
+&lt;&lt;task &gt;&gt; implement a system for generating operations
+&lt;&lt;task &gt;&gt; specify the editing operations
 
 !Datastructure
 &lt;&lt;task&gt;&gt;investigate the best granularity for object collections
@@ -3296,8 +3490,8 @@ Besides, they provide an __inward interface__ for the [[ProcNode]]s, enabling th
 
 </pre>
 </div>
-<div title="ProcLayer and Engine" modifier="Ichthyostega" modified="200909291327" created="200706190056" tags="overview" changecount="20">
-<pre>The Render Engine is the part of the application doing the actual video calculations. Its operations are guided by the Objects and Parameters edited by the user in [[the EDL|EDL]] and it retrieves the raw audio and video data from the [[Data backend|backend.html]]. Because the inner workings of the Render Engine are closely related to the structures used in the EDL, this design covers [[the aspect of objects placed into the EDL|MObjects]] as well.
+<div title="ProcLayer and Engine" modifier="Ichthyostega" modified="200910311726" created="200706190056" tags="overview" changecount="26">
+<pre>The Render Engine is the part of the application doing the actual video calculations. Utilising system level services and retrieving raw audio and video data through [[Lumiera's Backend|backend.html]], its operations are guided by the objects and parameters edited by the user in [[the session|Session]]. Thus, the Lumiera Proc-Layer covers the (abstract) edit operations available to the user, the representation of [[&quot;editable things&quot;|MObjects]] and the translation of those into facilities allowing to [[drive the rendering|Rendering]].
 &lt;&lt;&lt;
 ''Status'': started out as design draft in summer '07, Ichthyo is now in the middle of a implementing the foundations and main structures in C++
 * basic [[AssetManager]] working
@@ -3324,6 +3518,7 @@ The system is ''open'' inasmuch every part mirrors the structure of correspondin
 &amp;rarr; [[Two Examples|Examples]] (Object diagrams) 
 &amp;rarr; how [[Automation]] works
 &amp;rarr; [[Problems|ProblemsTodo]] to be solved and notable [[design decisions|DesignDecisions]]
+&amp;rarr; [[Concepts, Abstractions and Formalities|Concepts]]
 &amp;rarr; [[Implementation Details|ImplementationDetails]] {{red{WIP}}}
 </pre>
 </div>
@@ -3371,7 +3566,65 @@ Viewed as a micro program, the processing patterns are ''weak typed'' &amp;mdash
 <pre>a given Render Engine configuration is a list of Processors. Each Processor in turn contains a Graph of ProcNode.s to do the acutal data processing. In order to cary out any calculations, the Processor needs to be called with a StateProxy containing the state information for this RenderProcess
 </pre>
 </div>
-<div title="QueryImplProlog" modifier="Ichthyostega" modified="200802291526" created="200801202321" tags="draft design" changecount="17">
+<div title="Query" modifier="Ichthyostega" modified="200910210243" created="200910171621" tags="Rules spec draft discuss" changecount="9">
+<pre>{{red{WIP as of 10/09}}}...//brainstorming about the first ideas towards a query subsystem//
+
+!use case: discovering the contents of a container in the HighLevelModel
+In the course of shaping the session API, __joel__ and __ichthyo__ realised that we're moving towards some sort of discovery or introspection. This gives rise to the quest for a //generic// pattern how to issue and run these discovery operations. The idea is to understand such a discovery as running a query &amp;mdash; using this specific problem to shape the foundation of a query subsystem to come.
+* a ''query'' is a polymorphic, noncopyable, non-singleton type; a query instance corresponds to one distinctly issued query
+* issuing a query yields a result set, which is hidden within the concrete query implementation.
+* the transactional behaviour needs still to be defined: how to deal with concurrent modifications? COW?
+* the query instance remains property of the entity exposing the query capability.
+* client code gets a result iterator, which can be explored //only once until exhaustion.//
+* the handed out result iterator is used to manage the allocation for the query result set by sideeffect (smart handle). &amp;rarr; Ticket #353
+
+For decoupling the query invocation from the facility actually processing the query, we need to come up with common pattern. In 10/09, there is an immediate demand for such a solution pattern for implementing the QueryFocus and PlacementScope framework, which is crucial for contents discovery in general on the session interface. &amp;rarr; QueryResolver was shaped to deal with this situation, but has the potential to evolve into a general solution for issuing queries.
+
+----
+See also the notes on &amp;rarr; QueryImplProlog
+</pre>
+</div>
+<div title="QueryFocus" modifier="Ichthyostega" modified="200911201829" created="200910140244" tags="def spec img" changecount="28">
+<pre>When querying contents of the session or sub-containers within the session, the QueryFocus follows the current point-of-query. As such queries can be issued to explore the content of container-like objects holding other MObjects, the focus is always attached to a container, which also acts as [[scope|PlacementScope]] for the contained objects. QueryFocus is an implicit state (the current point of interrest). This sate especially remembers the path down from the root of the HighLevelModel, which was used to access the current scope. Because this path constitutes a hierarchy of scopes, it can be relevant for querying and resolving placement properties. (&amp;rarr; SessionStructureQuery)
+
+!provided operations
+* attach to a given scope-like object. Causes the current focus to //navigate//
+* open a new focus, thereby pushing the existing focus onto a [[focus stack|QueryFocusStack]]
+* return (pop) to the previous focus
+* get the current scope, represented by the &quot;top&quot; Placement of this scope
+* get the current ScopePath from root (session globals) down to the current scope
+* (typed) content discovery query on the current scope
+[&gt;img[Scope Locating|uml/fig136325.png]]
+!!!relation to Scope
+There is a tight integration with PlacementScope through the ScopeLocator, which establishes the //current focus.// But while the [[scope|PlacementScope]] just decorates the placement defining a scope (called //&amp;raquo;scope top&amp;laquo;//), QueryFocus is more of a //binding// &amp;mdash; it links or focusses the current state into a specific scope with a ScopePath in turn depending on this current state. Thus, while Scope is just a passive container allowing to locate and navigate, QueryFocus by virtue of this binding allows to [[Query]] at this current location.
+
+!implementation notes
+we provide a static access API, meaning that there is a singleton (the ScopeLocator) behind the scenes, which holds the mentioned scope stack. The current focus stack top, i.e. the current ScopePath is managed through an ref-counting handle embedded into each QueryFocus instance. Thus, effectively QueryFocus is an frontend object for accessing this state. Moreover, embedded into ScopeLocator, there is an link to the current session. But this link is kept opaque; it works by the current session exposing an [[query service|QueryResolver]], while QueryFocus doesn't rely on knowledge about the session, allowing the focus to be unit tested.
+
+The stack of scopes must not be confused with the ScopePath. Each single frame on the stack is a QueryFocus and as such contains a current ScopePath. The purpose of the stack is to make the scope handling mostly transparent; especially this stack allows to write dedicated query functions directed at a given object: they work by pushing and then navigating to the object to use as starting point for the query, i.e. the //current scope.//
+
+!!!simplifications
+The full implementation of this scope navigation is tricky, especially when it comes to determining the relation of two positions. It should be ''postponed'' and replaced by a ''dummy'' (no-op) implementation for the first integration round.
+</pre>
+</div>
+<div title="QueryFocusStack" modifier="Ichthyostega" modified="200911220509" created="200910200158" tags="SessionLogic spec dynamic" changecount="8">
+<pre>The ScopeLocator uses a special stack of ScopePath &amp;raquo;frames&amp;laquo; to maintain the //current focus.//
+What is the ''current'' QueryFocus and why is it necessary? There is a state-dependent part involved, inasmuch the effective ScopePath depends on how the invoking client has navigated the //current location// down into the HighLevelModel structures. Especially, when a VirtualClip is involved, there can be discrepancies between the paths resulting when descending down through different paths. (See &amp;rarr; BindingScopeProblem).
+
+Thus, doing something with the current location, and especially descending or querying adjacent scopes can modify this current path state. Thus we need a means of invoking a query in a way not interfering with the current path state, otherwise we wouldn't be able to provide side-effect free query operations accessible on individual objects within the model.
+
+!maintaining the current QueryFocus
+As long as client code is just interested to use the current query location, we can provide a handle referring to it. But when a query needs to be run without side effect on the current location, we //push//&amp;nbsp; it aside and start using a new QueryFocus on top, which starts out at a new initial location. Client code again gets a handle (smart-ptr) to this location, and additionally may access the new //current location.// When all references are out of scope and gone, we'll drop back to the focus put aside previously.
+
+!implementation of ref-counting and clean-up
+Actually, client code should use QueryFocus instances as frontend to access this &amp;raquo;current focus&amp;laquo;. Each ~QueryFocus instance incorporates a smart-ptr. But as in this case we're not managing objects allocated somewhere, we use an {{{boost::intrusive_ptr}}} and maintain the ref-count immediately within the target objects to be managed. These target objects are ScopePath instances and are living within the QueryFocusStack, which in turn in managed by the ScopeLocator singleton (see the UML diagram &amp;rarr;[[here|QueryFocus]]). We use an (hand-written) stack implementation to ensure the memory locations of these ScopePath &amp;raquo;frames&amp;laquo; remain valid (and also to help with providing strong exception guarantees). The stack is aware of these ref-count and takes it into account on performing the {{{pop_unused()}}} operation: any unused frame on top will be evicted, stopping at the first frame still in use (which may be even just the old top). This cleanup also happens automatically when accessing the current top, re-initialising an potentially empty stack with a default-constructed new frame if necessary. This way, just accessing the stack top always yields the ''current focus location'', which thereby is //defined as the most recently used focus location still referred.//
+
+!concurrency
+This concept deliberately ignores parallelism. But, as the current path state is already encapsulated (and ref-counting is in place), the only central access point is to reach the current scope. Instead of using a plain-flat singleton here, this access can easily be routed through thread local storage.
+{{red{As of 10/09 it is not clear if there will be any concurrent access to this discovery API}}} &amp;mdash; but it seems not unlikely to happen...
+</pre>
+</div>
+<div title="QueryImplProlog" modifier="Ichthyostega" modified="200910171607" created="200801202321" tags="draft design Rules" changecount="18">
 <pre>//obviously, getting this one to work requires quite a lot of technical details to be planned and implemented.// This said...
 The intention is to get much more readable (&quot;declarative&quot;) and changeable configuration as by programming the decision logic literately within the implementation of some object.
 
@@ -3391,6 +3644,34 @@ Then, running the goal {{{:-resolve(T, stream(T,mpeg)).}}} would search a Track 
 
 !!a note on Plugins
 In the design of the Lumiera Proc Layer done thus far, we provide //no possibility to introduce a new object kind// into the system via plugin interface. The system uses a fixed collection of classes intended to cover all needs (Clip, Effect, Track, Pipe, Label, Automation, ~Macro-Clips). Thus, plugins will only be able to provide new parametrisations of existing classes. This should not be any real limitation, because the whole system is designed to achieve most of its functionality by freely combining rather basic object kinds. As a plus, it plays nicely with any plain-C based plugin interface. For example, we will have C++ adapter classes for the most common sorts of effect plugin (pull system and synchronous frame-by-frame push with buffering) with a thin C adaptation layer for the specific external plugin systems used. Everything beyond this point can be considered &quot;condiguration data&quot; (including the actual plugin implementation to be loaded)
+</pre>
+</div>
+<div title="QueryResolver" modifier="Ichthyostega" modified="200911090412" created="200910210300" tags="Rules spec draft img" changecount="26">
+<pre>Within the Lumiera Proc-Layer, there is a general preference for issuing [[queries|Query]] over hard wired configuration (or even mere table based configuration). This leads to the demand of exposing a //possibility to issue queries// &amp;mdash; without actually disclosing much details of the facility implementing this service. For example, for shaping the general session interface (in 10/09), we need a means of exposing a hook to discover HighLevelModel contents, without disclosing how the model is actually organised internally (namely by using an PlacementIndex).
+
+!Analysis of the problem
+The situation can be decomposed as follows.[&gt;img[QueryResolver|uml/fig137733.png]]
+* first off, we need a way to state //what kind of query we want to run.// This includes stipulations on the type of the expected result set contents
+* as the requirement is to keep the facility actually implementing the query service hidden behind an interface, we're forced to erase specific type information and pass on an encapsulated version of the query
+* providing an iterator for exploring the results poses the additional constraint of having an fairly generic iterator type, while still being able to communicate with the actual query implementation behind the interface.
+
+
+!!!Difficulties
+*the usage pattern is not clear &amp;mdash; mostly it's just //planned//
+*# client might create a specific {{{Query&lt;TY&gt;}}} and demand resolution
+*# client might create just a goal, which is then translated into a specific query mechanism behind the invocation interface
+*# client issues a query and expect it just to be handled by //some//&amp;nbsp; suitable resolver
+* thus it's difficult to determine, //what// part of the issued query needs automatic management. More specifically, is it possible for the client to dispose the query after issuing it, but keeping and exploring the iterator obtained as result of the query?
+* and then there is the notorious problem of re-gaining the specifically typed context //behind//&amp;nbsp; the invocation interface. Especially, the facility processing the query needs to know both the expected result type and details about the concrete query and its parametrisation. &lt;br/&gt;&amp;rarr; TypedQueryProblem
+
+!!!Entities and Operations
+The //client// &amp;nbsp;(code using query-resolver.hpp) either wants a ''goal'' or ''query'' to be resolved; the former is just implicitly typed and usually given in predicate logic from ({{red{planned as of 11/09}}}), while the latter may be a specialised subclass templated to yield objects of a specific type as results. A ''query resolver'' is an (abstracted) entity capable of //resolving//&amp;nbsp; such a goal. Actually, behind the scenes there is somehow a registration of the concrete resolving facilities, which are asumed to decide about their ability of handling a given goal. Issuing a goal or query yields a ''resolution'' &amp;mdash; practically speaking, a set of indivitual solutions. These individual solution ''results'' can be explored by ''iteration'', thereby moving an embedded ''cursor'' through the ''result set''. Any result can be retrieved at most once &amp;mdash; after that, the resolution is ''exhausted'' and will be released automatically when the expolration iterator goes out of scope.
+
+!!!Decisions
+* while, in the use case currently at hand, the query instance is created by the client on the stack, the possibility of managing the queries internally is deliberately kept open. Because otherwise, we had to commit to a specific way of obtaining results, for example by assuming always to use an embedded STL iterator.
+* we endorse that uttermost performance is less important than clean separation an extensibility. Thus we accept accessing the current position pointer through reference and we use a ref-counting mechanism alongside with the iterator to be handed out to the client
+* the result set is not tied to the query &amp;mdash; at least not by design. The query can be discarded while further exploring the result set.
+* for dealing with the TypedQueryProblem, we require the concrete resolving facilities to register with a system startup hook, to build a dispatcher table on the implementation side. This allows us to downcast to the concrete Cursor type on iteration and results retrieval.
 </pre>
 </div>
 <div title="RSSReaderPlugin" modifier="Ichthyostega" created="200708081515" tags="systemConfig" changecount="1">
@@ -3740,18 +4021,71 @@ __see also__
 
 Rendering can be seen as a passive service available to the Backend, which remains in charge what to render and when. Render processes may be running in parallel without any limitations. All of the storage and data management falls into the realm of the Backend. The render nodes themselves are ''completely stateless'' &amp;mdash; if some state is necessary for carrying out the calculations, the backend will provide a //state frame// in addition to the data frames.</pre>
 </div>
+<div title="Rules" modifier="Ichthyostega" modified="200910171620" created="200910171618" tags="overview" changecount="5">
+<pre>A distinct property of the Lumiera application is to rely on a rules based approach rather then on hard wired logic. When it comes to deciding and branching, a [[Query]] is issued, resulting either immediately in a {{{bool}}} result, or creating a //binding// for the variables used within the query. Commonly, there is more than one solution for a given query, allowing the result set to be enumerated.
+
+
+
+
+!current state {{red{WIP as of 10/09}}}
+We are still fighting to get the outline of the application settled down.
+For now, the above remains in the status of a general concept and typical solution pattern: ''create query points instead of hard wiring things''.
+Later on we expect a distinct __query subsystem__ to emerge, presumably embedding a YAP Prolog interpreter.</pre>
+</div>
 <div title="STypeManager" modifier="Ichthyostega" created="200809220230" changecount="1">
 <pre>A facility allowing the Proc-Layer to work with abstracted [[media stream types|StreamType]], linking (abstract or opaque) [[type tags|StreamTypeDescriptor]] to an [[library|MediaImplLib]], which provides functionality for acutally dealing with data of this media stream type. Thus, the stream type manager is a kind of registry of all the external libraries which can be bridged and accessed by Lumiera (for working with media data, that is). The most basic set of libraries is instelled here automatically at application start, most notably the [[GAVL]] library for working with uncompressed video and audio data. //Later on, when plugins will introduce further external libraries, these need to be registered here too.//</pre>
 </div>
-<div title="Session" modifier="Ichthyostega" modified="200904252215" created="200712100525" tags="def SessionLogic" changecount="4">
-<pre>The Session contains all informations, state and objects to be edited by the User. From a users view, the Session is synonymous to the //current Project//. It can be saved and loaded. The individual Objects within the Session, i.e. Clips, Media, Effects, are contained in one (or several) collections within the Session, which we call [[EDL (Edit Decision List)|EDL]]. &amp;rarr; [[Session design overview|SessionOverview]]
+<div title="ScopeLocator" modifier="Ichthyostega" modified="200911202035" created="200911192145" tags="def SessionLogic" changecount="10">
+<pre>A link to relate a compound of [[nested placement scopes|PlacementScope]] to the //current// session and the //current//&amp;nbsp; [[focus for querying|QueryFocus]] and exploring the structure. ScopeLocator is a singleton service, allowing to ''explore'' a [[Placement]] as a scope, i.e. discover any other placements within this scope, and allowing to locate the position of this scope by navigating up the ScopePath finally to reach the root scope of the HighLevelModel.
+
+In the general case, this user visible high-level-model of the [[objects|MObject]] within the session allows for more than tree-like associations, as a given [[Sequence|EDL]] might be bound into multiple [[timelines|Timeline]]. Effectively, this makes the ScopePath context dependent. The ScopeLocator is the point where the strictly tree-like hierarchy of placements is connected to this more elaborate scope and path structure. To this end, ScopeLocator maintaines a QueryFocusStack, to keep track of the current location in focus, in cooperation with the QueryFocus objects used by client code.
+&amp;rarr; see BindingScopeProblem
+&amp;rarr; see TimelineSequences
+
+!!a note about concurrency
+While there //is// a &quot;current state&quot; involved, the effect of concurrent access deliberately remains unspecified, because access is expected to be serialised on a higher level. If this assumption were to break, then probably the ScopeLocator would involve some thread local state.
+</pre>
+</div>
+<div title="ScopePath" modifier="Ichthyostega" modified="201001070848" created="200911202124" tags="def spec" changecount="3">
+<pre>The sequence of nested [[placement scopes|PlacementScope]] leading from the root (global) scope down to a specific [[Placement]] is called ''scope path''. Ascending this path yields all the scopes to search or query in proper order to be used when resolving some attribute of placement. Placements use visibility rules comparable to visibility of scoped definitions in common programming languages or in cascading style sheets, where a local definition can shadow a global one. In a similar way, properties not defined locally may be resolved by querying up the sequence of nested scopes.
+
+A scope path is a sequence of scopes, where each scope is implemented by a PlacementRef pointing to the &amp;raquo;scope top&amp;laquo;, i.e. the placement in the session //constituting this scope.// Each Placement is registered with the session as belonging to a scope, and each placement can contain other placements and thus form a scope. Thus, the ''leaf'' of this path can be considered the current scope. In addition to some search and query functions, a scope path has the ability to ''navigate'' to a given target scope, which must be reachable by ascending and descending into the branches of the overall tree or DAG. Navigating changes the current path. ({{red{WIP 11/09}}} navigation to scopes outside the current path and the immediate children of the current leaf is left out for now. We'll need it later, when actually implementing [[meta-clips|VirtualClip]].)
+
+!Operations
+* the default scope path contains just the root (of the implicit PlacementIndex, i.e. usually the root of the model in the session)
+* a scope path can be created starting from a given scope. This convenience shortcut uses the ScopeLocator to establish the position of the given start scope. This way, effectively the PlacementIndex within the current session is queried for parentship relations until reaching the root of the HighLevelModel.
+* paths are ''copyable value objects'' without identity on their own
+* there is a special //invalid//&amp;nbsp; path token, {{{ScopePath::INVALID}}}
+* length, validity and empty check
+* paths are equality comparable
+* relations
+** if a scope in question is contained in the path
+** if a scope in question is at the leaf position of the path
+** if a path in question is prefix (contained) in the given path
+** if two paths share a common prefix
+** if two paths are disjoint (only connected at root)
+* navigation
+** move up one step
+** move up to the root
+** navigate to a given scope
+** clear a path (reset to default)
+</pre>
+</div>
+<div title="Session" modifier="Ichthyostega" modified="200911071800" created="200712100525" tags="def SessionLogic" changecount="8">
+<pre>The Session contains all informations, state and objects to be edited by the User. From a users view, the Session is synonymous to the //current Project//. It can be [[saved and loaded|SessionLifecycle]]. The individual Objects within the Session, i.e. Clips, Media, Effects, are contained in one (or several) collections within the Session, which we call [[EDL (Edit Decision List)|EDL]].
+&amp;rarr; [[Session design overview|SessionOverview]]
 
 !Session structure
-The Session object is a singleton &amp;mdash; actually it is a »~PImpl«-Facade object (because the actual implementation object can be swapped for (re)loading Sessions).&lt;br/&gt;The Session is comprised of
-* a collection of ''EDL'' objects
-* a ''current EDL'', which can be switched and accessed {{red{TODO not sure if I keep this design...}}}
-* a collection of ''global Pipes''
-* the ''Fixture'' with a possibility to [[(re)build it|PlanningBuildFixture]]</pre>
+The Session object is a singleton &amp;mdash; actually it is a »~PImpl«-Facade object (because the actual implementation object can be swapped for (re)loading Sessions).&lt;br/&gt;The Session is the access point to the HighLevelModel; it is comprised of
+* a number of (independent) top-level [[time-lines|Timeline]]
+* some [[sequences|EDL]] to be used within these timelines
+* a [[scope structure|PlacementScope]] backed by an index, and a current QueryFocus
+* a set of ConfigRules to guide default behaviour {{red{planned as of 10/09}}}
+* the ''Fixture'' with a possibility to [[(re)build it|PlanningBuildFixture]] {{red{just partially designed as of 01/09}}}
+* the [[Asset subsystem|AssetManager]] is tightly integrated; besides, there are some SessionServices for internal use
+
+&amp;rarr; see [[relation of timeline, sequences and objects|TimelineSequences]]
+</pre>
 </div>
 <div title="SessionDataMem" modifier="Ichthyostega" modified="200905082325" created="200904252303" tags="impl design SessionLogic draft" changecount="2">
 <pre>The Layout of the Session datastructure in memory is bound by several dependencies: GUI, HighLevelModel, SessionStorage, [[Builder]].
@@ -3759,25 +4093,79 @@ Currently as of 5/09, this is an ongoing [[implementation and planning effort|Pl
 
 {{red{TODO...}}}</pre>
 </div>
-<div title="SessionInterface" modifier="Ichthyostega" modified="200906071959" created="200904242108" tags="SessionLogic GuiIntegration design draft discuss" changecount="7">
+<div title="SessionInterface" modifier="Ichthyostega" modified="200912080304" created="200904242108" tags="SessionLogic GuiIntegration design draft discuss" changecount="11">
 <pre>&quot;Session Interface&quot;, when used in a more general sense, denotes a compound of several interfaces and facilities, together forming the primary access point to the user visible contents and state of the editing project.
 * the API of the session class
 * the accompanying management interface (SessionManager API)
 * an LayerSeparationInterfaces allowing to access these interfaces from outside the Proc-Layer
-* the primary public ~APIs exposed on the objects to be queried and retrieved via the session class API
+* the primary public ~APIs exposed on the objects to be [[queried and retrieved|SessionStructureQuery]] via the session class API
+** Timeline
 ** Sequence
 ** Placement
 ** Clip
 ** Track
 ** Effect
 ** Automation
-* the [[command|CommandHandling]] interface, including the [[undo|UndoManager]] facility
+* the [[command|CommandHandling]] interface, including the [[UNDO|UndoManager]] facility
 
-{{red{WIP}}}</pre>
+{{red{WIP ... just emerging}}}
+
+!generic and explicit API
+The HighLevelModel exposes two kinds of interfaces (which are interconnected btw): A generic, but somewhat low-level API, which is good for processing, and a more explicit API providing access to some meaningful entities within the model. Indeed, the latter (explicit top level entities) can be seen as a ''facade interface'' to the generic structures:
+* the [[Session]] object itself corresponds to the ModelRootMO
+* the one (or multiple) [[Timeline]] objects correspond to the BindingMO instances attached immediately below the model root
+* the [[sequences|EDL]] bound into these timelines (by the ~BindingMOs) correspond to the top level [[Track]]-~MObjects within each of these sequences.
+Thus, there is a convenient and meaningful access path through these facade objects, which of course actually is implemented by forwarding to the actual model elements (root, bindings, tracks)
+</pre>
 </div>
-<div title="SessionLogic" modifier="Ichthyostega" modified="200906072005" created="200904242110" tags="overview" changecount="13">
+<div title="SessionLifecycle" modifier="Ichthyostega" modified="201001070440" created="200911070329" tags="SessionLogic spec" changecount="23">
+<pre>The current [[Session]] is the root of any state found within Proc-Layer. Thus, events defining the session's lifecycle influence and synchronise the cooperative behaviour of the entities within the model, the ProcDispatcher, [[Fixture]] and any facility below.
+* when ''starting'', on first access an empty session is created, which puts any related facility into a defined initial state.
+* when ''closing'' the session, any dependent facilities are disabled, disconnected, halted or closed
+* ''loading'' an existing session &amp;mdash; after closing the previous session &amp;mdash; sets up an empty (default) session and populates it with de-serialised content.
+* when encountering a ''mutation point'', [[command processing|ProcDispatcher]] is temporarily halted to trigger off an BuildProcess.
+
+!Role of the session manager
+The SessionManager is responsible for conducting the session lifecycle. Accessible through the static interface {{{Session::current}}}, it exposes the actual session as a ~PImpl. Both session manager and session are indeed interfaces, backed by implementation classes belonging to ~Proc-Layer's internals. Loading, saving, resetting and closing are the primary public operations of the session manager, each causing the respective lifecycle event.
+
+!Synchronising access to session's implementation facilities
+Some other parts and subsystems within the ~Proc-Layer need specialised access to implementation facilities within the session. Informations about some conditions and configurations might be retrieved through [[querrying the session|Query]], and especially default configurations for many objects are [[bound to the session|DefaultsImplementation]]. The [[discovery of session contents|SessionStructureQuery]] relies on an [[index facility|PlacementIndex]] embedded within the session implementation. Moreover, some &quot;properties&quot; of the [[media objects|MObject]] are actually due to the respective object being [[placed|Placement]] in some way into the session; consequently, there might be an dependency on the actual [[location as visible to the placement|PlacementScope]], which in turn is constituted by [[querying the index|QueryFocus]].
+
+Each of these facilities relies on a separate access point to session services, corresponding to distinct service interfaces. But &amp;mdash; on the implementation side &amp;mdash; all these services are provided by a (compound) SessionServices implementation object. This approach allows to switch the actual implementation of all these services simply by swapping the ~PImpl maintained by the session manager. A new implementation level service can thus be added to the ~SessionImpl just by hooking it into the ~SessionServices compound object. But note, this mechanism as such is ''not thread safe'', unless the //implementation// of the invoked functions is synchronised in some way to prevent switching to a new session implementation while another thread is still executing session implementation code.
+
+Currently, the understanding is for some global mechanism to hold any command execution, script running and further object access by the GUI //prior//&amp;nbsp; to invoking any of the session management operations (loading, closing, resetting). An alternative would be to change the top-level access to the session ~PImpl to go through an accessor value object, to acquire some lock automatically before any access can happen. C++ ensures the lifespan of any temporaries to surpass evaluation of the enclosing expression, which would be sufficient to prevent another thread to pull away the session during that timespan. Of course, any value returned from such an session API call isn't covered by this protection. Usually, objects are handed out as MObjectRef, which in turn means to resolve them (automatically) on dereferentiation by another session API access. But while it seems we could get locking to work automatically this way, still such a technique seems risky and involved; a plain flat lock at top level seems to be more appropriate.
+
+!Interface and lifecycle hooks
+{{red{draft as of 11/09}}}
+As detailed above, {{{Session::current}}} exposes the management / lifecycle API, and at the same time can be dereferenced into the primary [[session API|SessionInterface]]. An default configured ~SessionImpl instance will be built automatically, in case no session implementation instance exists on executing this dereferentiation.
+
+!!!building (or loading) a session
+# as a preparation step, a new implementation instance is created, alongside with any supporting facilities (especially the PlacementIndex)
+# the basic default configuration is loaded into this new session instance
+# when the new session is (technically) complete and usable, the switch on the ~PImpl happens
+# the {{{ON_SESSION_START}}} LifecycleEvent is emitted
+# content is loaded into the session, including hard wired content and any de-serialised data from persistent storage
+# the {{{ON_SESSION_INIT}}} event is emitted
+# additional initialisation, wiring and registration takes place; basically anything to make the session fully functional
+# the session LayerSeparationInterface is opened and any further top-level blocking is released
+# the {{{ON_SESSION_READY}}} event is emitted
+
+!!!closing the session
+# top-level facilities accessing the session (GUI, command processing, scripts) are blocked and the LayerSeparationInterface is closed
+# any render processes are ensured to be terminated (or //disconnected// &amp;mdash; so the can't do any harm)
+# the {{{ON_SESSION_END}}} event is emitted
+# the command processing log is tagged
+# the command queue(s) are emptied, discarding any commands not yet executed
+# the PlacementIndex is cleared, effectively releasing any object &quot;instances&quot;
+# the [[asset registry|AssetManager]] is cleared, thereby releasing any remaining external resource references
+# destruction of session implementation instances
+{{red{none of the above is implemented as of 11/09}}}
+</pre>
+</div>
+<div title="SessionLogic" modifier="Ichthyostega" modified="200911071754" created="200904242110" tags="overview" changecount="15">
 <pre>The Session contains all informations, state and objects to be edited by the User (&amp;rarr;[[def|Session]]).
-As such, the SessionInterface is the main entrance point to Proc-Layer functionality, both for the primary EditingOperations and for playback/rendering processes.
+As such, the SessionInterface is the main entrance point to Proc-Layer functionality, both for the primary EditingOperations and for playback/rendering processes. Proc-Layer state is rooted within the session and guided by the [[session's lifecycle events|SessionLifecycle]].
+Implementation facilities within the Proc-Layer may access a somewhat richer [[session service API|SessionServices]].
 
 Currently (as of 5/09), Ichthyo is [[targeting|PlanningSessionInMem]] a first preliminary implementation of the [[Session in Memory|SessionDataMem]]
 
@@ -3785,40 +4173,88 @@ Currently (as of 5/09), Ichthyo is [[targeting|PlanningSessionInMem]] a first pr
 Objects are attached and manipulated by [[placements|Placement]]; thus the organisation of these placements is part of the session data layout. Effectively, such a placement within the session behaves like an //instances// of a given object, and at the same time it defines the &quot;non-substantial&quot; properties of the object, e.g. its positions and relations. [[References|MObjectRef]] to these placement entries are handed out as parameters, both down to the [[Builder]] and from there to the render processes within the engine, but also to external parts within the GUI and in plugins. The actual implementation of these object references is built on top of the PlacementRef tags, thus relying on the PlacementIndex the session maintains to keep track of all placements and their relations. While &amp;mdash; using these references &amp;mdash; an external client can access the objects and structures within the session, any actual ''mutations'' should be done based on the CommandHandling: a single operation of a sequence of operations is defined as [[Command]], to be [[dispatched as mutation operation|ProcDispatcher]]. Following this policy ensures integration with the&amp;nbsp;SessionStorage and provides (unlimited) [[UNDO|UndoManager]].
 </pre>
 </div>
-<div title="SessionOverview" modifier="Ichthyostega" modified="200811011805" created="200709272105" tags="design img" changecount="29">
+<div title="SessionManager" modifier="Ichthyostega" modified="200911090408" created="200911071838" tags="SessionLogic def" changecount="2">
+<pre>The session manager is responsible for maintaining session state as a whole and for conducting the session [[lifecycle|SessionLifecycle]]. The session manager API allows for saving, loading, closing and resetting the session. Accessible through the static interface {{{Session::current}}}, it exposes the actual session as a ~PImpl. Actually, both session and session manager are interfaces.
+</pre>
+</div>
+<div title="SessionOverview" modifier="Ichthyostega" modified="200911071816" created="200709272105" tags="design img" changecount="38">
 <pre>&lt;&lt;&lt;
-{{red{WARNING: Naming is currently being discussed (11/08)}}}
-* [[EDL]] probably will be called ''Sequence'' (or maybe ''Arrangement'')
-* [[Session]] maybe renamed to ''Project''
+{{red{WARNING: Naming was discussed (11/08) and decided to be changed....}}}
+* [[EDL]] probably will be called ''Sequence''
+* [[Session]] is largely synonymous to ''Project''
 * there seems to be a new entity called [[Timeline]] which holds the global Pipes
 &lt;&lt;&lt;
-The [[Session]] (sometimes also called //Project// ) contains all informations and objects to be edited by the User. It can be saved and loaded. The individual Objects within the Session, i.e. Clips, Media, Effects, are contained in one (or several) collections within the Session, which we call [[EDL (Edit Decision List)|EDL]]. Moreover, the sesion contains references to all the Media files used, and it contains various default or user defined configuration, all being represented as [[Asset]]. At any given time, there is //only one current session// opened within the application.
-The Session is close to what is visible in the GUI. From a user's perspective, you'll find a [[Timeline]]-like structure, containing an [[EDL (or Sequence)|EDL]], where various Media Objects are arranged and placed. The available building blocks and the rules how they can be combined together form Lumiera's [[high-level data model|HighLevelModel]]. Basically, besides the [[media objects|MObjects]] there are data connections and all processing is organized around processing chains or [[pipes|Pipe]], which can be either global (in the Session) or local (in real or virtual clips)
+The [[Session]] (sometimes also called //Project// ) contains all informations and objects to be edited by the User. Any state within the Proc-Layer is directly or indirectly rooted in the session. It can be saved and loaded. The individual Objects within the Session, i.e. Clips, Media, Effects, are contained in one or multiple collections within the Session, which we call [[Sequence(s)|EDL]]. Moreover, the sesion contains references to all the Media files used, and it contains various default or user defined configuration, all being represented as [[Asset]]. At any given time, there is //only one current session// opened within the application. The [[lifecycle events|SessionLifecycle]] of the session define the lifecycle of ~Proc-Layer as a whole.
+
+The Session is close to what is visible in the GUI. From a user's perspective, you'll find a [[Timeline]]-like structure, containing an [[Sequence|EDL]], where various Media Objects are arranged and placed. The available building blocks and the rules how they can be combined together form Lumiera's [[high-level data model|HighLevelModel]]. Basically, besides the [[media objects|MObjects]] there are data connections and all processing is organized around processing chains or [[pipes|Pipe]], which can be either global (in the Session) or local (in real or virtual clips).
 
 !!!larger projects
 For larger editing projects the simple structure of a session containing &quot;the&quot; timeline is not sufficient. Rather
 * we may have several [[EDLs (=Sequences)|EDL]], e.g. one for each scene. These sequences can be even layered or nested (compositional work).
 * within one project, there may be multiple, //independant Timelines// &amp;mdash; each of which may have an associated Viewer or Monitor
-To support these cases without making the default case more complicated, Lumiera introduces a //focus// for selecting the //current EDL,// which will receive all editing operations. [[Timelines|Timeline]] on the other hand are always top-level objects and can't be combined further. You can render a given timeline to output.
+Usually, when working with this stucture, you'll drill down starting from a timeline, trough a (top-level) sequence, down into a track, a clip, maybe even a embedded Sequence (VirtualClip), and from there even more down into a single attached effect. This constitutes a set of [[nested scopes|PlacementScope]]. Operations are to be [[dispatched|ProcDispatcher]] through a [[command system|CommandHandling]], including the target object [[by reference|MObjectRef]]. [[Timelines|Timeline]] on the other hand are always top-level objects and can't be combined further. You can render a single given timeline to output.
 &amp;rarr; see [[Relation of Project, Timelines and Sequences|TimelineSequences]]
 
 !!!the definitive state
-With all the structural complexities possible within such a session, we need an isolation layer to provide __one__ definitive state where all configuration has been made explicit. Thus the session manages one special object list, the [[Fixture]], which can be seen as all currently active objects placed onto a single timeline.
+With all the structural complexities possible within such a session, we need an isolation layer to provide __one__ definitive state where all configuration has been made explicit. Thus the session manages a special consolidated view (object list), called [[the Fixture|Fixture]], which can be seen as all currently active objects placed onto a single timeline.
 
 !!!organisational devices
-The possibility of having multiple ~EDLs helps organizing larger projects. Each [[EDL]] is just a logical grouping; because all effective properties of any MObject within this EDL are defined by the ~MObject itself and the [[Placement]], by which the object is anchored to some time point, some track, can be connected to some pipe, or linked to another object. In a similar manner, [[Tracks|Track]] are just another organisational aid for grouping objects, disabling them and defining common output pipes.
+The possibility of having multiple Sequences helps organizing larger projects. Each [[Sequence|EDL]] is just a logical grouping; because all effective properties of any MObject within this sequence are defined by the ~MObject itself and the [[Placement]], by which the object is anchored to some time point, some track, can be connected to some pipe, or linked to another object. In a similar manner, [[Tracks|Track]] are just another organisational aid for grouping objects, disabling them and defining common output pipes.
 
 !!!global pipes
-[&gt;img[draw/Proc.builder1.png]] Any session should contain a number of global [[(destination) pipes|Pipe]], typically video out and audio out. The goal is, to get any content producing or transforming object in some way connected to one of these outputs, either //by [[placing|Placement]] it directly// to some pipe, or by //placing it to a track// and having the track refer to some pipe. Besides the global destination pipes, we can use internal pipes to form busses or subgroups, either on a global (session) level, or by using the processing pipe within a [[virtual clip|VirtualClip]], which can be placed freely within the EDL(s). Normally, pipes just gather and mix data, but of course any pipe can have an attached effect chain. (&amp;rarr; see [[more on Tracks and Pipes within the EDL|TrackPipeEDL]])
+[&gt;img[draw/Proc.builder1.png]] Any session should contain a number of global [[(destination) pipes|Pipe]], typically video out and audio out. The goal is, to get any content producing or transforming object in some way connected to one of these outputs, either //by [[placing|Placement]] it directly// to some pipe, or by //placing it to a track// and having the track refer to some pipe. Besides the global destination pipes, we can use internal pipes to form busses or subgroups, either on a global (session) level, or by using the processing pipe within a [[virtual clip|VirtualClip]], which can be placed freely within the sequence(s). Normally, pipes just gather and mix data, but of course any pipe can have an attached effect chain.
+&amp;rarr; [[more on Tracks and Pipes within the Sequence|TrackPipeEDL]]
 
 !!!default configuration
 While all these possibilities may seem daunting, there is a simple default configuration loaded into any pristine new session:
-It will contain a global video and audio out pipe, just one EDL with a single track; this track will have a internal video and audio pipe (bus) configured with one fading device sending to the global output ports. So, by adding some clip with a simple absolute placement to this track and some time position, the clip gets connected and rendered, after [[(re)building|PlanningBuildFixture]] the [[Fixture]] and passing the result to the [[Builder]] &amp;mdash; and using the resulting render nodes network (Render Engine).
+It will contain a global video and audio out pipe, just one timeline holding a single sequence with a single track; this track will be configured with a fading device, to send any video and audio data encountered on enclosed objects to the global (master) pipes. So, by adding a clip with a simple absolute placement to this track and to some time position, the clip gets connected and rendered, after [[(re)building|PlanningBuildFixture]] the [[Fixture]] and passing the result to the [[Builder]] &amp;mdash; and using the resulting render nodes network (Render Engine).
 
 &amp;rarr; [[anatomy of the high-level model|HighLevelModel]]
 &amp;rarr; considerations regarding [[Tracks and Pipes within the EDL|TrackPipeEDL]]
 &amp;rarr; see [[Relation of Project, Timelines and Sequences|TimelineSequences]]
 </pre>
+</div>
+<div title="SessionServices" modifier="Ichthyostega" modified="200911090107" created="200911071825" tags="SessionLogic impl" changecount="7">
+<pre>Within Lumiera's Proc-Layer, there are some implementation facilities and subsystems needing more specialised access to implementation services provided by the session. Thus, besides the public SessionInterface and the [[lifecycle and state management API|SessionManager]], there are some additional service interfaces exposed by the session through a special access mechanism. This mechanism needs to be special in order to assure clean transactional behaviour when the session is opened, closed, cleared or loaded. Of course, there is the additional requirement to avoid direct dependencies of the mentioned Proc internals on session implementation details.
+
+!Accessing session services
+For each of these services, there is an access interface, usually through an class with only static methods. Basically this means access //by name.//
+On the //implementation side//&amp;nbsp; of this access interface class (i.e. within a {{{*.cpp}}} file separate from the client code), there is a (down-casting) access through the top-level session-~PImpl pointer, allowing to invoke functions on the ~SessionServices instance. Actually, this ~SessionServices instance is configured (statically) to stack up implementations for all the exposed service interfaces on top of the basic ~SessionImpl class. Thus, each of the individual service implementations is able to use the basic ~SessinImpl (becaus it inherits it) and the implementaion of the access functions (to the session service we're discussing here) is able to use this forwarding mechanism to get the actual implementation basically by one-liners. The upside of this (admittedly convoluted) technique is that we've gotten at runtime only a single indirection, which moreover is through the top-level session-~PImpl. The downside is that, due to the separation in {{{*.h}}} and {{{*.c}}} files, we can't use any specifically typed generic operations, which forces us to use type erasure in case we need such (an example being the content discovery queries utilised by all high-level model objects).</pre>
+</div>
+<div title="SessionStructureQuery" modifier="Ichthyostega" modified="200910181417" created="200910112322" tags="SessionLogic design draft discuss" changecount="15">
+<pre>The frontside interface of the session allows to query for contained objects; it is used to discover the structure and contents of the currently opened session/project. Access point is the public API of the Session class, which, besides exposing those queries, also provides functionality for adding and removing session contents.
+
+!discovering structure
+The session can be seen as an agglomeration of nested and typed containers.
+Thus, at any point, we can explore the structure by asking for //contained objects of a specific type.// For example, at top level, it may be of interest to enumerate the [[timelines within this session|Timeline]] and to ennumerate the [[sequences|EDL]]. And in turn, on a given Sequence, it would be of interest to explore the tracks, and also maybe to iterate over all clips within this sequence.
+So, clearly, there are two flavours of such an contents exploration query: it could either be issued as an dedicated member function on the public API of the respective container object, e.g. {{{Track::getClips()}}} &amp;mdash; or it could be exposed as generic query function, relying on the implicit knowledge of the //current location//&amp;nbsp; rather.
+
+!problem of context and access path
+The (planned) session structure of Lumiera allows for quite some flexibility, which, of course comes at a price tag. Especially, as there can be multiple independent top level timelines, where a given sequence can be used simultaneously within multiple timelines and even as virtual media within a [[meta-clip|VirtualClip]], and moreover, as properties of any Placement are rather queried and discovered within the PlacementScope of this object &amp;mdash; consequently the discovered values may depend on //how you look at this object.// More specifically, it depends on the ''access path'' used to discover this object, because this path constitutes the actual scope visible to this object.
+
+To give an example, let's assume a clip within a sequence, and this sequence is both linked to the top-level timeline, but also used within a meta-clip. (see the drawing &amp;rarr; [[here|PlacementScope]])
+In this case, the sequence has an 1:n [[binding|BindingMO]]. A binding is (by definition) also a PlacementScope, and, incidentally, in the case of binding the sequence into a timeline, the binding also translates //logical// output designations into global pipes found within the timeline, while otherwise they get mapped onto &quot;channels&quot; of the virtual media used by the virtual clip. Thus, the absolute time position as well as the output connection of a given clip within this sequence //depends on how we look at this clip.// Does this clip apear as part of the global timeline, or did we discover it as contained within the meta-clip? &amp;rarr; see [[discussion of this scope-binding problem|BindingScopeProblem]]
+
+!!solution requirements
+The baseline of any solution to this problem is clear: at the point where the query is issued, a context information is necessary; this context yields an access path from top level down to the object to be queried, and this access path constitutes the effective scope this object can utilise for resolving the query.
+
+!!introducing a QueryFocus
+A secondary goal of the design here is to ease the use of the session query interface. Thus the proposal is to treat this context and access path as part of the current state. To do so, we can introduce a QueryFocus following the queries and remembering the access path; this focus should be maintained mostly automatically. It allows for stack-like organisation, to allow sub-queries without affecting the current focus, where the handling of such a temporary sub-focus is handled automatically by a scoped local (RAII) object. The focus follows the issued queries and re-binds as necessary.
+
+!!using QueryFocus as generic query interface
+Solving the problem this way has the nice side effect, that we get a quite natural location where to put an unspecific query interface: Just let the current QueryFocus expose the basic set of query API functions. Such an generic query interface can be seen as a complement to the query functions exposed on specific objects (&quot;get me the clips within this track&quot;) according to the structure. Because a generic interface especially allows for writing simple diagnostics and discovery code, with only a weak link to the actual session structure.
+
+!Implementation strategy
+The solution is being built starting from the generic part, as the actual session structure isn't hard coded into the session implementation, but rather created by convention.
+The query API on specific objects (i.e. Session, Timeline, Sequence, Track and Clip) is then easily coded up on top, mostly with inlined one-liners of the kind
+{{{
+ITER getClips() { return QueryFocus::push(this).query&lt;Clip&gt;(); } 
+}}}
+To make this work, QueryFocus exposes an static API (and especially the focus stack is a singleton). The //current// QueryFocus object can easily re-bound to another point of interest (and ajusts the contained path info automatically), and the {{{push()}}}-function creates a local scoped object (which pops automatically).
+
+And last but not least: the difficult part of this whole concept is encapsulated and ''can be left out for now''. Because, according to Lumiera's [[roadmap|http://issues.lumiera.org/roadmap]], meta-clips are to be postponed until well into beta! Thus, we can start with a trivial (no-op) implementation, but immediately gain the benefit of making the relevant parts of the session implementation aware of the problem.
+
+{{red{WIP ... draft}}}</pre>
 </div>
 <div title="SideBarOptions" modifier="CehTeh" created="200706200048" changecount="1">
 <pre>&lt;&lt;search&gt;&gt;&lt;&lt;closeAll&gt;&gt;&lt;&lt;permaview&gt;&gt;&lt;&lt;newTiddler&gt;&gt;&lt;&lt;saveChanges&gt;&gt;&lt;&lt;slider chkSliderOptionsPanel OptionsPanel &quot;options »&quot; &quot;Change TiddlyWiki advanced options&quot;&gt;&gt;</pre>
@@ -5312,24 +5748,25 @@ Actually, what the GUI creates and uses is the //view// of a given timeline. Thi
 To complement this possibilities, I'd propose to give the //timeline view// the possibility to be re-linked to a sub-sequence. This way, it would stay connected to the main play control, but at the same time show a sub-sequence //in the way it will be treated as  embedded// within the top-level sequence. This would be the default operation mode when a meta-clip is opened (and showed in a separate tab with such a linked timeline view). The reason for this proposed handling is again to give the user the least surprising behaviour. Because, when &amp;mdash; on the contrary &amp;mdash; the sub-sequence would be opened as //separate timeline,// a different absolute time position and a different signal routing may result; doing such should be reserved for advanced use, e.g. when multiple editors cooperate on a single project and a sequence has to be prepared in isolation prior to being integrated in the global sequence (featuring the whole movie).
 </pre>
 </div>
-<div title="Track" modifier="Ichthyostega" modified="200811011843" created="200801062320" tags="def design decision" changecount="5">
-<pre>Tracks are just a structure used to organize the Media Objects within the EDL. Tracks are associated allways to a specific EDL and the Tracks of an EDL form a //tree.// They can be considered to be an organizing grid, and besides that, they have no special meaning. They are grouping devices, not first-class entities. A track doesn't &quot;have&quot; a port or pipe or &quot;is&quot; a video track and the like; it can be configured to behave in such manner by using placements.
+<div title="Track" modifier="Ichthyostega" modified="200911202133" created="200801062320" tags="def design decision" changecount="6">
+<pre>Tracks are just a structure used to organize the Media Objects within the Sequence. Tracks are associated allways to a specific Sequence and the Tracks of an Sequence form a //tree.// They can be considered to be an organizing grid, and besides that, they have no special meaning. They are grouping devices, not first-class entities. A track doesn't &quot;have&quot; a port or pipe or &quot;is&quot; a video track and the like; it can be configured to behave in such manner by using placements.
 
-The ~Track-IDs are assets on their own, but they can be found within a given EDL. So, several ~EDLs can share a single track or each EDL can have tracks with their own, separate identity. (the latter is the default)
+The ~Track-IDs are assets on their own, but they can be found within a given sequence. So, several sequences can share a single track or each sequence can hold tracks with their own, separate identity. (the latter is the default)
 * Like most ~MObjects, tracks have a asset view: you can find a track asset (a track ID) in the asset manager.
-* and they have an object view: there is an track MObject which can be [[placed|Placement]], thus defining properties of this track within one EDL, e.g. the starting point in time
-Of course, we can place other ~MObjects relative to some track (that's the main reason why we want to have tracks). In this sense, the [[handling of Tracks|TrackHandling]] is somewhat special: the placement of some track can be found directly within the EDL (and not within the general collection of placed objects which form the contents of any EDL). This placement defines properties of the track, which will be inherited if necessary by all ~MObjects placed to this track. For example, if placing (=plugging) a track to some global [[Pipe]], and if placing a clip to this track, without placing the clip directly to another pipe, the associated-to-pipe information of the track will be fetched by the builder when needed to make the output connection of the clip.
+* and they have an object view: there is an track MObject which can be [[placed|Placement]], thus defining properties of this track within one sequence, e.g. the starting point in time
+Of course, we can place other ~MObjects relative to some track (that's the main reason why we want to have tracks). In this sense, the [[handling of Tracks|TrackHandling]] is somewhat special: the placements forming the tree of tracks can be accessed directly through the sequence, and a track acts as container, forming a scope to encompass all the objects &quot;on&quot; this track. Thus, the placement of a track defines properties of the track, which will be inherited (if necessary) by all ~MObjects placed to this track. For example, if placing (=plugging) a track to some global [[Pipe]], and if placing a clip to this track, without placing the clip directly to another pipe, the associated-to-pipe information of the track will be fetched by the builder when needed to make the output connection of the clip.
 &amp;rarr; [[Handling of Tracks|TrackHandling]]
 &amp;rarr; [[Handling of Pipes|PipeHandling]]
 
 &amp;rarr; [[Anatomy of the high-level model|HighLevelModel]]
 </pre>
 </div>
-<div title="TrackHandling" modifier="Ichthyostega" modified="200804110259" created="200804110013" tags="spec" changecount="23">
+<div title="TrackHandling" modifier="Ichthyostega" modified="200912080302" created="200804110013" tags="spec" changecount="24">
 <pre>What //exactly&amp;nbsp;// is denoted by &amp;raquo;Track&amp;laquo; &amp;mdash; //basically&amp;nbsp;// a working area to group media objects placed at this track at various time positions &amp;mdash; varies depending on context:
 * viewed as [[structural asset|StructAsset]], tracks are nothing but global identifiers (possibly with attached tags and description)
 * regarding the structure //within each [[EDL]],// tracks form a tree-like grid, the individual track being attached to this tree by a [[Placement]], thus setting up properties of placement (time reference origin, output connection, layer, pan) which will be inherited down to any objects located on this track and on child tracks, if not overridden more locally.
 * with respect to //object identity,// a given track-ID can have an incarnation or manifestation as real track-object within several [[EDLs|EDL]] (meaning you could select, disable or choose for rendering all objects in any EDL placed onto this track). Moreover, the track-//object// and the //placement&amp;nbsp;// of this track within the tree of tracks of a given EDL are two distinguishable entities (meaning a given track &amp;mdash; with a couple of objects located on it &amp;mdash; could be placed differently several times within the same EDL, for example with different start offset or with different layering, output mode or pan position)
+{{red{WARNING: as of 11/09, the meaning and relations are rather reverted}}}... EDL == Sequence and holds the track tree.
 
 !Identification
 Tracks thus represent a blend of several concepts, but depending on the context it is allways clear which aspect is meant. Seen as [[assets|Asset]], tracks are known by a unique track-ID, which can be either [[queried|ConfigQuery]], or directly refered to by use of the asset-ID (which is a globally known hash). Usually, all referrals are via track-ID, including when you [[place|Placement]] an object onto a track. 
@@ -5398,6 +5835,18 @@ The standard case of a transition is sort of mixing together two input streams, 
 Using transitions is a very basic task and thus needs viable support by the GUI. Handling of transitions need to be very convienient, because it is so important. Because of this, it is compelling to subsume a more complicated situation and treat this more complicated case similar. This is the case, when two (or N) elements have to be combined in the way of a transition, but their further processing in the processing chain //after// the transition needs to be different, maybe they belong to differnent subgroups, have to appear on different layers or with different pan positions. Of courese, the workaround is simple, at least &quot;simple&quot; from the programmers point of view. It is //not// simple from the editor's point of view the moment the editor has to do this simple thing (changing the wiring and add manualy synced fade curves to the individual parts) a dozend or even a hundred times in some larger project.
 
 Because of this experience, ichthyo wants to support a more general case of transitions, which have N output connections, behave similar to their &quot;simple&quot; counterpart, but leave out the mixing step. As a plus, such transitions can be inserted at the source ports of N clips or between any intermediary or final output pipes as well. Any transition processor capable of handling this situation should provide some flag, in order to decide if he can be placed in such a manner. (wichin the builder, encountering a  inconsistently placed transition is just an [[building error|BuildingError]])
+</pre>
+</div>
+<div title="TypedQueryProblem" modifier="Ichthyostega" modified="200910301629" created="200910231618" tags="Rules dynamic" changecount="10">
+<pre>//the problem of processing specifically typed queries without tying query and QueryResolver.//&lt;br/&gt;This problem can be seen as a instance of the problematic situation encountered with most visitation schemes: we want entities and tools (visitors) to work together, without being forced to commit to a pre-defined table of operations. In the situation at hand here, we want //some entities// &amp;mdash; which we don't know &amp;mdash; to issue //some queries// &amp;mdash; which we don't know either. Obviously, such a problem can be solved only by controlling the scope of this incomplete knowledge, and the sequence in time of building it.
+Thus, to re-state the problem more specifically, we want the //definition//&amp;nbsp; of the entities to be completely separate of those definitions concerning the details of the query resolution mechanism, so to be able to design, reason, verify and extend each one without being forced into concern about the details of the respective other side. So, the buildup of the combined structure has to be postponed &amp;mdash; assuring it //has//&amp;nbsp; happened at the point it's operations are required.
+
+!Solution Stages
+* in ''static scope'' (while compiling), just a {{{Query&lt;TY&gt;}}} gets mentioned.&lt;br/&gt;As this is the only chance for driving a specifically typed context, we need to prepare a registration mechanism, to allow for //remembering//&amp;nbsp; this context later.
+* at the same time, but otherwise independently, compilation needs to drive the generation of possible query resolution mechanisms. As C++ only allows very limited influence on the compilation process, which is always based on a common visibility scope, and on the other hand doesn't allow to re-access the static level after the fact (no language-rooted introspection), we're forced to use an external tool, or to rely on manual specification. As we're building a rather specialised facility, not a general purpose library, the latter seems adequate, if done close to where the actual query resolution mechanism is implemented.
+* during ''initialisation'', a complete list of all specifically typed scopes needs to be collected. This might be a flat list, but may well become structured in multiple dimensions later, when using multiple //kinds of query.// It is important to notice that this buildup of a complete list won't happen, unless triggered explicitly, so we need registration into a system lifecycle hook.
+* on ''first use'' (which me must ensure to be //after//&amp;nbsp; initialisation) the list-of-typed queries will be hooked into the query resolving facility to build a dispatcher table there.
+* the ''actual query'' just picks the respective type-ID for accessing the dispatcher table, making for a total of //two//&amp;nbsp; function-pointer indirections.
 </pre>
 </div>
 <div title="VirtualClip" modifier="Ichthyostega" modified="200808160257" created="200804110321" tags="def" changecount="13">

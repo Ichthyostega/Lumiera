@@ -36,6 +36,7 @@
 #include "backend/mediaaccessmock.hpp"
 
 #include "lib/util.hpp"
+#include "lib/util-foreach.hpp"
 
 #include <iostream>
 #include <vector>

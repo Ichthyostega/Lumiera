@@ -30,7 +30,7 @@
 //#include "proc/mobject/test-dummy-mobject.hpp"
 //#include "lib/p.hpp"
 //#include "proc/mobject/placement.hpp"
-//#include "proc/mobject/placement-index.hpp"
+//#include "proc/mobject/session/placement-index.hpp"
 //#include "proc/mobject/explicitplacement.hpp"
 #include "proc/control/command.hpp"
 #include "proc/control/command-impl.hpp"

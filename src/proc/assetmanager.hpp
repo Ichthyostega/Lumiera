@@ -73,11 +73,11 @@ namespace asset {
       /** provide the unique ID for given Asset::Ident tuple */
       static ID<Asset> getID (const Asset::Ident&);
       
-      /** retrieve the registerd smart-ptr for any asset */
+      /** retrieve the registered smart-ptr for any asset */
       template<class KIND>
       static P<KIND> wrap (const KIND& asset);
       
-      /** find and return corresponging object */
+      /** find and return corresponding object */
       template<class KIND>
       P<KIND>  getAsset (const ID<KIND>& id)  throw(lumiera::error::Invalid);
       

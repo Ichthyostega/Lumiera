@@ -85,7 +85,7 @@ namespace mobject {
       /** MObject self-test (usable for asserting) */
       virtual bool isValid()  const =0;
       
-      virtual Time& getLength() =0; ///< @todo how to deal with the time/length field??
+      virtual Time& getLength() =0; ///< @todo how to deal with the time/length field?? ////TICKET #448
       
       virtual bool operator== (const MObject& oo)  const =0;
       

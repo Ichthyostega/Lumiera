@@ -46,8 +46,8 @@
 #include "lib/typed-counter.hpp"
 #include "lib/scoped-ptrvect.hpp"
 #include "backend/thread-wrapper.hpp"
+#include "lib/util-foreach.hpp"
 #include "lib/sync.hpp"
-#include "lib/util.hpp"
 
 #include <tr1/functional>
 #include <vector>
@@ -216,9 +216,12 @@ namespace test{
               targets_[victim].doCount (counter_to_use);
             }
           
+          
+          typedef TargetVect::iterator iterator;
+          
           /** allow Iteration over all targets in the TargetVect */
-          TargetVect::iterator begin() { return targets_.begin(); }
-          TargetVect::iterator end()   { return targets_.end();   }
+          iterator begin() { return targets_.begin(); }
+          iterator end()   { return targets_.end();   }
         };
       
       DummyTarget targetCollection; 

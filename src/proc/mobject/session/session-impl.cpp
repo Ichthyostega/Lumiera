@@ -22,24 +22,41 @@
 
 
 #include "proc/mobject/session/session-impl.hpp"
+#include "proc/mobject/session/mobjectfactory.hpp"
 #include "proc/mobject/placement.hpp"
+#include "proc/mobject/mobject.hpp"
 #include "lib/error.hpp"
 
 namespace mobject {
 namespace session {
+  
+  /////////////////////////////////////////TODO temporary hack: use Meyer's singleton
+  namespace {
+    DefsManager&
+    getDummyDefaultsManager()
+    {
+      static scoped_ptr<DefsManager> dummyInstance(0);
+      if (!dummyInstance) dummyInstance.reset (new DefsManager);
+      
+      return *dummyInstance;
+    }
+  }
+  /////////////////////////////////////////TODO temporary hack
+  
   
   /** create a new empty session with default values.
    *  @note any exception arising while creating this
    *        default session will inevitably halt the
    *        system (and this is desirable)
    */
-  SessionImpl::SessionImpl (DefsManager& defs)  throw()
-    : Session(defs),
-      focusEDL_(0),
-      edls(1),
-      fixture(new Fixture),
-      pIdx_(PlacementIndex::create())
+  SessionImpl::SessionImpl ()
+    : Session( getDummyDefaultsManager() )             ///////TODO temporary hack
+    , pIdx_( MObject::create (getDummyDefaultsManager())) ////TODO temporary hack
+    , focusEDL_(0)
+    , edls()         /////////// this is dummy code. How to initialise the default session?  ///////TICKET #497
+    , fixture(new Fixture)
     {
+      INFO (session, "new Session created.");
     }
   
   
@@ -53,7 +70,7 @@ namespace session {
     try
       {
         edls.clear();
-        edls.resize(1);
+        edls.resize(1);   //////////////////////////////////////////////////////////////////////////TICKET #513
         focusEDL_ = 0;
       }
     catch (...)

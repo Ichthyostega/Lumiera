@@ -46,8 +46,8 @@
 
 namespace util {
   
-  using lumiera::typelist::can_ToString;
-  using lumiera::typelist::can_lexical2string;
+  using lib::meta::can_ToString;
+  using lib::meta::can_lexical2string;
   using lib::Symbol;
   using boost::enable_if;
   using boost::disable_if;

@@ -27,6 +27,7 @@
 #include "lib/scoped-ptrvect.hpp"
 #include "lib/lumitime-fmt.hpp"
 #include "lib/meta/tuple.hpp"
+#include "lib/util-foreach.hpp"
 #include "lib/util.hpp"
 
 #include <boost/format.hpp>

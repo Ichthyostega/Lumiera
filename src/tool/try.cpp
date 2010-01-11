@@ -13,71 +13,89 @@
 // 7/08  - combining partial specialisation and subclasses 
 // 10/8  - abusing the STL containers to hold noncopyable values
 // 6/09  - investigating how to build a mixin template providing an operator bool()
+// 12/9  - tracking down a strange "warning: type qualifiers ignored on function return type"
+// 1/10  - can we determine at compile time the presence of a certain function (for duck-typing)?
 
 
-#include <nobug.h>
-#define LUMIERA_LOGGING_CXX
-#include "include/logging.h"
+//#include <nobug.h>
+//#define LUMIERA_LOGGING_CXX
+//#include "include/logging.h"
 //#include "include/nobugcfg.h"
-#include "lib/bool-checkable.hpp"
+
 
 #include <iostream>
 //#include <typeinfo>
-#include <boost/format.hpp>
+#include <vector>
 #include <cstdlib>
 #include <cstdio>
 
 
-using std::rand;
+//using std::rand;
 using std::string;
 using std::cout;
-using boost::format;
+using std::endl;
 
 
-  namespace {
-      boost::format fmt ("<%2i>");
-      long checksum = 0;
-  }
-  
-  struct TestIt1
-    : lib::BoolCheckable<TestIt1>
+struct A
+  {
+    int& funA ();
+  };
+
+struct B
+  {
+    void funA();
+  };
+
+
+  typedef char Yes_t;
+  struct No_t { char padding[8]; };
+
+
+  template<typename TY>
+  class Detector1
     {
+      template<typename X, int i = sizeof(&X::funA)>
+      struct Probe
+        { };
       
-      int val_;
+      template<class X>
+      static Yes_t check(Probe<X>*);
+      template<class>
+      static No_t  check(...);
       
-      TestIt1 (int v = (rand() % 10))
-        : val_(v)
-        { }
-      
-      bool
-      isValid()  const
-        {
-          return val_ % 2;
-        }
-      
+    public: 
+      static const bool value = (sizeof(Yes_t)==sizeof(check<TY>(0)));
     };
-    
+  
+  
+  template<typename TY>
+  class Detector2
+    {
+      template<typename X, int& (X::*)(void)> 
+      struct Probe
+        { };
+      
+      template<class X>
+      static Yes_t check(Probe<X,&X::funA>*);
+      template<class>
+      static No_t  check(...);
+      
+    public: 
+      static const bool value = (sizeof(Yes_t)==sizeof(check<TY>(0)));
+    };
   
   
 int 
-main (int, char**) //(int argc, char* argv[])
+main (int, char**)
   {
     
-    NOBUG_INIT;
+//  NOBUG_INIT;
     
-    for (int i=0; i<10; ++i)
-      {
-        TestIt1 testrosteron (i);
-        
-        if (testrosteron)
-          cout << "doIt \n";
-        if (!testrosteron)
-          cout << i << "\n";
-      }
-    cout << "size=" << sizeof(TestIt1) <<"\n";
+    cout << "Detector1<A> = " << Detector1<A>::value << endl;
+    cout << "Detector1<B> = " << Detector1<B>::value << endl;
     
-    char* horror = 0;
-    ERROR (all, "note: %s is a horrible thing", horror);
+    cout << "Detector2<A> = " << Detector2<A>::value << endl;
+    cout << "Detector2<B> = " << Detector2<B>::value << endl;
     
     cout <<  "\n.gulp.\n";
     

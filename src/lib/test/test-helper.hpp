@@ -110,6 +110,11 @@ namespace test{
     return Time (500 * (rand() % 2), (rand() % 600));
   }
   
+  /** create garbage string of given length
+   *  @return string containing arbitrary lower case letters and numbers
+   */
+  string randStr (size_t len);
+  
   
 }} // namespace lib::test
 

@@ -23,7 +23,7 @@
 
 #include "lib/test/run.hpp"
 #include "lib/cmdline.hpp"
-#include "lib/util.hpp"
+#include "lib/util-foreach.hpp"
 
 #include <iostream>
 #include <sstream>
@@ -34,68 +34,66 @@ using std::cout;
 
 
 
-namespace util
-  {
-  namespace test
-    {
-    using boost::lambda::_1;
-    using boost::lambda::var;
-
-    
+namespace util {
+namespace test {
+  using boost::lambda::_1;
+  using boost::lambda::var;
   
-    /** @test for util::Cmdline, wrapping various example cmdlines */
-    class CmdlineWrapper_test : public Test
-      {
-        void
-        run (Arg)
-          {
-            testLine("");
-            testLine("\n\t ");
-            testLine("spam");
-            testLine("\nspam");
-            testLine("eat more spam");
-            testLine(" oo _O()O_  ä + €");
-            testLine("Ω\tooΩ\toΩo\tΩoo");
-            
-            testStandardCmdlineformat();
-          }
-        
-        void testLine (const string cmdline)
-          {
-            cout << "wrapping cmdline:" << cmdline << "..." << "\n";
-            
-            int i=0;
-            Cmdline theCmdline (cmdline);
-            for_each(theCmdline, (cout << var(i)++ << "|" <<  _1 << "|\n"));
-            cout << "-->" << theCmdline << "\n";
-            
-            // consistency checks
-            std::ostringstream output;
-            output << theCmdline;
-            ENSURE (output.str() == string(theCmdline));
-            
-            i=0;
-            string token;
-            std::istringstream input(theCmdline);
-            while (input >> token)
-              ENSURE (token == theCmdline[i++]);
-          }
-        
-        /** @test wrapping a (albeit faked) standard commandline 
-         *        given as (argc, argv[])
-         */
-        void testStandardCmdlineformat()
-          {
-            const char* fakeArg[3] = {"CMD", "one ", "two"};
-            Cmdline theCmdline(3, fakeArg);
-            cout << "Standard Cmdlineformat:" << theCmdline << "\n";
-          }
-      };
-    
-      LAUNCHER (CmdlineWrapper_test, "unit common");
-
+  
+  
+  /** @test for util::Cmdline, wrapping various example cmdlines */
+  class CmdlineWrapper_test : public Test
+    {
+      void
+      run (Arg)
+        {
+          testLine("");
+          testLine("\n\t ");
+          testLine("spam");
+          testLine("\nspam");
+          testLine("eat more spam");
+          testLine(" oo _O()O_  ä + €");
+          testLine("Ω\tooΩ\toΩo\tΩoo");
+          
+          testStandardCmdlineformat();
+        }
       
-  } // namespace test
-    
-} // namespace util
+      void
+      testLine (const string cmdline)
+        {
+          cout << "wrapping cmdline:" << cmdline << "..." << "\n";
+          
+          int i=0;
+          Cmdline theCmdline (cmdline);
+          for_each(theCmdline, (cout << var(i)++ << "|" <<  _1 << "|\n"));
+          cout << "-->" << theCmdline << "\n";
+          
+          // consistency checks
+          std::ostringstream output;
+          output << theCmdline;
+          ENSURE (output.str() == string(theCmdline));
+          
+          i=0;
+          string token;
+          std::istringstream input(theCmdline);
+          while (input >> token)
+            ENSURE (token == theCmdline[i++]);
+        }
+      
+      /** @test wrapping a (albeit faked) standard commandline
+       *        given as (argc, argv[])
+       */
+      void
+      testStandardCmdlineformat()
+        {
+          const char* fakeArg[3] = {"CMD", "one ", "two"};
+          Cmdline theCmdline(3, fakeArg);
+          cout << "Standard Cmdlineformat:" << theCmdline << "\n";
+        }
+    };
+  
+  LAUNCHER (CmdlineWrapper_test, "unit common");
+  
+  
+}} // namespace util::test
 

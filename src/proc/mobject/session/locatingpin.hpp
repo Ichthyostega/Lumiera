@@ -34,7 +34,7 @@
  ** 
  ** @todo this can be considered a preliminary sketch without being backed
  **       by actual functionality. Just enough to be able to drive the design of
- **       other parts ahead. See esp. Trac #100, which contains an idea for a
+ **       other parts ahead. See esp. TICKET #100, which contains an idea for a
  **       refactoring. 
  **
  */
@@ -99,7 +99,7 @@ namespace mobject {
         typedef lumiera::Time Time;
         typedef Time* Track; //TODO dummy declaration; we don't use Tracks as first-class entity any longer
         typedef std::tr1::shared_ptr<asset::Pipe> Pipe;
-        typedef std::pair<Time,Pipe> SolutionData;  //TODO (ichthyo considers better passing of solution by subclass)
+        typedef std::pair<Time,Pipe> SolutionData;  //TICKET #100 (ichthyo considers better passing of solution by subclass)
         struct LocatingSolution;
       
         /** next additional Pin, if any */
@@ -124,6 +124,7 @@ namespace mobject {
         LocatingPin (const LocatingPin&);
         LocatingPin& operator= (const LocatingPin&);
         virtual LocatingPin* clone ()  const;
+        
         virtual ~LocatingPin() {};
         
 //      protected:
@@ -166,8 +167,20 @@ protected:
             bool still_to_solve (); 
             
           };
+        
+        friend bool operator== (LocatingPin const&, LocatingPin const&);
+        
       };
       
+    
+    /** check for equivalent definition of a complete locating chain */
+    
+    inline bool
+    operator== (LocatingPin const& pin1, LocatingPin const& pin2)
+    {
+//////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #511  really implement equivalence relation!          
+      return pin1.resolve().first == pin2.resolve().first;
+    }
       
       
 

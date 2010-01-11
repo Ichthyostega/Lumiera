@@ -6,6 +6,10 @@ PLANNED "AddClip_test" AddClip_test <<END
 END
 
 
+PLANNED "discovering scopes" ScopeQuery_test <<END
+END
+
+
 TEST "DefsManager_test" DefsManager_test <<END
 return: 0
 END
@@ -33,6 +37,10 @@ PLANNED "basic placement properties" PlacementBasic_test <<END
 END
 
 
+PLANNED "object identity" PlacementObjectIdentity_test <<END
+END
+
+
 TEST "hierarchical placement types" PlacementHierarchy_test <<END
 out: sizeof\( .+ \) =  [0-9]{2}
 out: Placement.+mobject.+test.+TestSubMO1.+. use-cnt=1 .*
@@ -47,11 +55,56 @@ out: pID\(\w{8,16}\)
 END
 
 
-PLANNED "PlacementIndex_test" PlacementIndex_test <<END
+TEST "PlacementIndex_test" PlacementIndex_test <<END
+out: ^::Placement<.+session.test.TestClip.+ use-cnt=2
+out: ^::Placement<.+session.test.TestClip.+ use-cnt=6
+out: ^ ::Placement<.+session.test.TestClip.+ use-cnt=6
+out: ^  ::Placement<.+session.test.TestClip.+ use-cnt=6
+out: ^  ...2 elements at Level 2
+out: ^ ::Placement<.+session.test.TestClip.+ use-cnt=6
+out: ^ ...3 elements at Level 1
+out: ^::Placement<.+session.test.TestClip.+ use-cnt=2
+out: ^...3 elements at Level 0
 END
 
 
 PLANNED "PlacementRef_test" PlacementRef_test <<END
+END
+
+
+PLANNED "Placement search scope" PlacementScope_test <<END
+END
+
+
+PLANNED "Path of nested scopes" ScopePath_test <<END
+END
+
+
+TEST "issuing typed queries" QueryResolver_test <<END
+out: Query-Results: sizeof\( .+IterAdapter.+Cursor.+shared_ptr.+Resolution
+out: ^6
+out: ^5
+out: ^4
+out: ^3
+out: ^2
+out: ^1
+out: ^0
+out: Query-Results: sizeof\( .+IterAdapter.+Cursor.+shared_ptr.+Resolution
+out: ^a
+out: ^ra
+out: ^era
+out: ^iera
+out: ^miera
+out: ^umiera
+out: ^Lumiera
+END
+
+
+PLANNED "Query focus management" QueryFocus_test <<END
+END
+
+
+PLANNED "Query focus stack" QueryFocusStack_test <<END
 END
 
 
@@ -60,6 +113,21 @@ END
 
 
 PLANNED "SessionManager_test" SessionManager_test <<END
+END
+
+
+TEST "Accessing session APIs" SessionServiceAccess_test <<END
+out: Session not yet used....
+out: creating new Session 1
+out: Session-Impl\(1\)::externalOperation\(\)
+out: creating new Session 2
+out: Session-Impl\(2\)::externalOperation\(\)
+out: current Session-Impl-ID = 2
+out: Session-Impl\(2\)::implementationService\(\)
+out: now resetting this session.
+out: creating new Session 3
+out: Session-Impl\(3\)::implementationService\(\)
+out: current Session-Impl-ID = 3
 END
 
 

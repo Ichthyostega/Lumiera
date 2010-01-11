@@ -28,7 +28,8 @@
 #include "proc/mobject/mobject-ref.hpp"
 #include "proc/mobject/placement.hpp"
 #include "proc/mobject/placement-ref.hpp"
-#include "proc/mobject/placement-index.hpp"
+#include "proc/mobject/session/placement-index.hpp"
+#include "proc/mobject/session/session-service-mock-index.hpp"
 #include "proc/mobject/session/clip.hpp"
 #include "proc/mobject/explicitplacement.hpp"
 #include "proc/mobject/test-dummy-mobject.hpp"
@@ -46,6 +47,9 @@ namespace test    {
   
   using lumiera::Time;
   using session::Clip;
+  
+  using session::SessionServiceMockIndex;  
+  
 
   
   /***************************************************************************
@@ -84,12 +88,10 @@ namespace test    {
           ASSERT (2 == pClip2.use_count());
           
           
-#if 0 /////////////////////////////////////////////////////////////////////////////////////////TODO lots of things unimplemented.....!!!!!
+#if false  //////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET 384  !!!!!!!!!
           // Prepare an (test)Index
-          typedef shared_ptr<PlacementIndex> PIdx;
-          PIdx index (PlacementIndex::create());
+          PPIdx index = SessionServiceMockIndex::install();
           PMO& root = index->getRoot();
-          reset_PlacementIndex(index);
           
           // Add the Clips to "session"
           index->insert (pClip1, root);
@@ -125,10 +127,12 @@ namespace test    {
           index->remove (pClip1);
           index->remove (pClip2);
           ASSERT (0 == index->size());
+          ASSERT (1 == index.use_count());
           ASSERT (2 == pClip1.use_count());
           ASSERT (2 == pClip2.use_count());
+          index.reset();
 #endif ////////////////////////////////////////////////////////////////////////////////////////TODO lots of things unimplemented.....!!!!!
-          reset_PlacementIndex();
+
         }
       
       
@@ -136,7 +140,7 @@ namespace test    {
       void
       checkBuildMObjectRef (REF refObj, void* placementAdr)
         {
-#if 0 /////////////////////////////////////////////////////////////////////////////////////////TODO lots of things unimplemented.....!!!!!
+#if false  //////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET 384  !!!!!!!!!
           MORef<Clip> rMO;
           ASSERT (!rMO);                    // still empty (not bound)
           cout << rMO             << endl;
@@ -177,7 +181,7 @@ namespace test    {
       void
       checkLifecylce (PMObj const& p1, PMObj const& p2)
         {
-#if 0 /////////////////////////////////////////////////////////////////////////////////////////TODO lots of things unimplemented.....!!!!!
+#if false  //////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET 384  !!!!!!!!!
           ASSERT (2 == p1.use_count());
           ASSERT (2 == p2.use_count());
           
@@ -215,7 +219,7 @@ namespace test    {
       void
       checkTypeHandling (LumieraUid luid)
         {
-#if 0 /////////////////////////////////////////////////////////////////////////////////////////TODO lots of things unimplemented.....!!!!!
+#if false  //////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET 384  !!!!!!!!!
           MObjectRef rMObj;
           MORef<Clip> rClip;
           MORef<TestSubMO1> rSub1;

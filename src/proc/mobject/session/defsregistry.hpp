@@ -43,6 +43,7 @@
 #include "lib/sync-classlock.hpp"
 #include "lib/query.hpp"
 #include "lib/util.hpp"
+#include "lib/util-foreach.hpp"
 #include "lib/p.hpp"
 
 #include <set>

@@ -59,6 +59,9 @@ namespace mobject
           run (Arg arg) 
             {
               PSess sess = Session::current;
+              
+              UNIMPLEMENTED("the real standard structure of the session"); //////////////////////////TICKET #499
+              
               ASSERT (0 <= sess->currEDL().size());                // TODO implement
               ASSERT (0 <= sess->getFixture()->size());             // TODO implement
               ASSERT (sess->currEDL().getTracks()->isValid());

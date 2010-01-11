@@ -23,7 +23,15 @@
 /** @file singleton-ref.hpp
  ** Helper for singleton-kind access without managing object creation and lifecycle. 
  ** A typical usage scenario is when implementing C Language Interfaces without any
- ** canonical access to some "this" pointer.  
+ ** canonical access to some "this" pointer. In this case
+ ** - an instance of the \c Access policy class is created "somewhere" (usually as
+ **   global variable). Calls from within the C code would enter through this accessor.
+ ** - when the actual service implementation class comes up, it creates an SingletonRef
+ **   instance and thereby wires the (already existing) accessor up with \c *this
+ ** - when the service goes down, access is closed automatically and reliably.
+ **   Client code (from within C) should check the accessor (by \c bool check)
+ **   prior to any access, because accessing a closed connection will throw
+ **   (that's unfortunate, but at least throwing is better than segfaulting)
  ** 
  ** @see gui::NotificationService usage example
  */
@@ -90,7 +98,11 @@ namespace lib {
   
   /*************************************************************
    * Helper template providing singleton access without managing
-   * object creation and lifecycle.
+   * object creation and lifecycle. Just the access to the
+   * implementation instance is handled: on creation, access is
+   * enabled, and disabled on destruction. Client code is assumed
+   * to invoke through the Access (template template param),
+   * handed in as ctor parameter.
    * @param TY the actual type to be made accessible
    * @param B  a base class to inherit from; defaults to noncopyable
    * @param Accessor how to implement the static instance access

@@ -191,32 +191,6 @@ namespace util {
     }
   
   
-  /** shortcut for operating on all elements of a container.
-   *  Isn't this already defined somewhere? It's so obvious..
-   */
-  template <typename Container, typename Oper>
-  inline Oper
-  for_each (Container& c, Oper doIt)
-  {
-    return std::for_each (c.begin(),c.end(), doIt);
-  }
-  
-  
-  /** shortcut for testing all elements of a collection
-   *  with the given predicate.
-   */
-  template <typename SEQ, typename Oper>
-  inline bool
-  and_all (SEQ& coll, Oper predicate)
-  {
-    typename SEQ::const_iterator e = coll.end();
-    typename SEQ::const_iterator i = coll.begin();
-    
-    while (i!=e && predicate(*i))  ++i;
-    return i==e;
-  }
-  
-  
   /** shortcut to save some typing when having to define
    *  const and non-const variants of member functions
    */

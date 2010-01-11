@@ -26,6 +26,7 @@
 
 #include "lib/error.hpp"
 #include "lib/util.hpp"
+#include "lib/util-foreach.hpp"
 #include "common/subsys.hpp"
 #include "lib/sync.hpp"
 

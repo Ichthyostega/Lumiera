@@ -22,18 +22,37 @@
 
 
 #include "proc/mobject/session/mobjectfactory.hpp"
+#include "proc/mobject/session/root.hpp"
 #include "proc/mobject/session/clip.hpp"
 #include "proc/mobject/session/track.hpp"
 #include "proc/mobject/session/effect.hpp"
+#include "proc/mobject/session/label.hpp"
 #include "proc/asset/clip.hpp"
 #include "proc/asset/track.hpp"
 #include "proc/asset/effect.hpp"
 
-namespace mobject
-  {
-  namespace session
-    {
+namespace mobject {
+namespace session {
+      ////////////////////////////////////////////////////////////////////////////////TICKET #414
 
+
+    
+    /** build a new session/model root element. */
+    Placement<Root>
+    MObjectFactory::operator() (DefsManager& sessionDefaultsHandler)
+    {
+      return Placement<Root> (*new Root (sessionDefaultsHandler), &deleterFunc);
+    }
+    
+    
+    /** build a new session/model root element. */
+    Placement<Label>
+    MObjectFactory::operator() (Symbol labelType)
+    {
+      return Placement<Label> (*new Label (labelType), &deleterFunc);
+    }
+    
+    
     /** creating a Clip-MObject to be placed within
      *  the EDL, based on a clip asset, which typically
      *  is obtained by calling the createClip()-function
@@ -80,6 +99,4 @@ namespace mobject
 
 
 
-  } // namespace mobject::session
-
-} // namespace mobject
+}} // namespace mobject::session

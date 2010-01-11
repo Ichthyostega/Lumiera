@@ -54,6 +54,7 @@
 #define LIB_BOOL_CHECKABLE_H
 
 
+#include <boost/static_assert.hpp>
 
 namespace lib {
   
@@ -117,9 +118,34 @@ namespace lib {
           return !(obj.*isValid)();
         }
       
+      
+      /** safety guard: when this comparison kicks in, the compiler
+       *  is about to use an implicit bool conversion on both sides to
+       *  perform an equality test. This is most likely not what you want.
+       *  Define an explicit equality comparison in the class using BoolCheckable!
+       */
+      friend bool
+      operator== (BoolCheckable const&, BoolCheckable const&)
+      {
+        BOOST_STATIC_ASSERT (false && sizeof(T) );
+        return false;
+      }
     };
   
   
+///////////////////////////////////////TICKET #477 : consider alternative safe-bool idiom    
+//      struct _Hidden_type
+//      {
+//        _Hidden_type* _M_bool;
+//      };
+//
+//      /// This typedef is used to implement the safe_bool idiom.
+//      typedef _Hidden_type* _Hidden_type::* _Safe_bool;
+//
+//    public:
+//      operator _Safe_bool() const
+//      {
+//        return isValid()? &_Hidden_type::_M_bool : 0; }
   
   
 } // namespace lib

@@ -23,9 +23,22 @@
 
 /** @file session.hpp
  ** Primary Interface to the current Session.
+ ** The session interface can be used to discover session's contents.
+ ** Mostly, these objects within the session are MObject subclasses, but they
+ ** are attached into the session by a Placement. Usually, you'd want to use
+ ** the discovered objects to invoke operations on them; in most cases,
+ ** invoking any mutating operation should be wrapped into a Command.
+ ** 
  ** The Interface Session is abstract and only accessible via the
  ** static field Session::current, which actually refers to a SessManager 
- ** singleton instance. The latter acts as smart ptr-to-Impl.
+ ** singleton instance. The latter acts as smart ptr-to-Impl for accessing the
+ ** current session, but at the same time exposes a lifecycle/management API.
+ ** 
+ ** @note if interested in the interplay of Session, SessManager and the
+ **       internal service APIs (SessionServices), you should have a look
+ **       at session-service-access-test.cpp, as this test creates a complete
+ **       but simplified mock setup of the session and session manager, without
+ **       any access and synchronisation and similar concerns, to read top down.
  **
  */
 
@@ -80,11 +93,12 @@ namespace mobject {
     {
     protected:
       Session (session::DefsManager&)  throw();
-      virtual ~Session () = 0;
+      virtual ~Session ();
 
     public:
       static session::SessManager& current;
-      session::DefsManager& defaults;
+      static bool initFlag;                     ///////////////TICKET #518  yet another hack; actually need to care for session manager startup.
+      session::DefsManager& defaults;           ///////////////TODO this is a hack... better solve it based on the new SessionServices mechanism
       
       virtual bool isValid ()              = 0;
       virtual void add (PMO& placement)    = 0;
@@ -101,6 +115,7 @@ namespace mobject {
   
   extern const char* ON_SESSION_START;  ///< triggered before loading any content into a newly created session
   extern const char* ON_SESSION_INIT;   ///< triggered when initialising a new session, after adding content
+  extern const char* ON_SESSION_READY;  ///< triggered after session is completely functional and all APIs are open.
   extern const char* ON_SESSION_END;    ///< triggered before discarding an existing session
   
   
@@ -113,6 +128,9 @@ namespace mobject {
     class SessManager : private boost::noncopyable
       {
       public:
+        /** diagnostics: session interface opened? */
+        virtual bool isUp ()  =0;
+        
         /** clear current session contents 
          *  without resetting overall session config.
          *  Afterwards, the session will contain only one 
@@ -128,13 +146,13 @@ namespace mobject {
         /** replace the current session by a new
          *  session loaded from serialised state.
          */
-        virtual void load () =0;
+        virtual void load ()  =0;
 
         /** create a complete, serialised representation
          *  of the current session config and contents.
          *  @todo how to serialise, parameters, return value?
          */
-        virtual void save () =0;
+        virtual void save ()  =0;
         
         /** access to the current session object instance.
          *  This is the sole access path available for clients.
@@ -142,7 +160,7 @@ namespace mobject {
          */
         virtual Session* operator-> ()  throw() =0;
         
-        virtual ~SessManager() {};
+        virtual ~SessManager();
       };
 
       
