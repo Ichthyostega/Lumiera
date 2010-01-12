@@ -72,9 +72,10 @@ lumiera_reccondition_destroy (LumieraReccondition self, struct nobug_flag* flag)
 }
 
 
-
-int lumiera_reccondition_unlock_cb (void* cond)
-{
-  return pthread_mutex_unlock (&((LumieraReccondition)cond)->reccndmutex);
-}
-
+/*
+// Local Variables:
+// mode: C
+// c-file-style: "gnu"
+// indent-tabs-mode: nil
+// End:
+*/
