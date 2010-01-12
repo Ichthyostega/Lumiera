@@ -115,12 +115,13 @@ lumiera_threadpool_acquire_thread(enum lumiera_thread_class kind,
         }
       // use an existing thread, pick the first one
       // remove it from the pool's list
-      ret = (LumieraThread)(llist_unlink (llist_head (&threadpool.pool[kind].idle_list)));
+      ret = (LumieraThread) (llist_head (&threadpool.pool[kind].idle_list));
 
       ENSURE (ret, "did not find a valid thread");
 
       REQUIRE (ret->state == LUMIERA_THREADSTATE_IDLE, "trying to return a non-idle thread (state=%s)", lumiera_threadstate_names[ret->state]);
 
+      // move thread to the working_list
       llist_insert_head (&threadpool.pool[kind].working_list, ret);
 
       threadpool.pool[kind].working_thread_count++;
@@ -153,7 +154,7 @@ lumiera_threadpool_release_thread(LumieraThread thread)
     {
       thread->state = LUMIERA_THREADSTATE_IDLE;
       REQUIRE (llist_is_empty (&thread->node), "thread already belongs to some list");
-      llist_unlink (&thread); // remove thread from the working_list
+      // move thread to the idle_list
       llist_insert_head (&threadpool.pool[thread->kind].idle_list, &thread->node);
 
       threadpool.pool[thread->kind].working_thread_count--;
