@@ -144,11 +144,8 @@ lumiera_thread_new (enum lumiera_thread_class kind,
   self->arguments = NULL;
 
   int error = pthread_create (&self->id, attrs, &thread_loop, self);
-  ENSURE(error == 0 || EAGAIN == error, "pthread_create returned %d:%s", error, strerror(error));
   if (error)
     {
-      // error here can only be EAGAIN, given the above ENSURE
-      FIXME ("error is %d:%s, see if this can be improved", error, strerror(error));
       LUMIERA_DIE (ERRNO);
     }
   return self;
