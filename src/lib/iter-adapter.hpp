@@ -65,6 +65,7 @@
  ** 
  ** @todo WIP WIP WIP
  ** @todo see Ticket #182
+ ** @todo naming of the iteration control function: TICKET #410
  ** 
  ** @see scoped-ptrvect.hpp
  */
@@ -113,6 +114,14 @@ namespace lib {
         typedef const TY* pointer;
       };
     
+    
+    void
+    _throwIterExhausted()
+    {
+      throw lumiera::error::Invalid ("Can't iterate further",
+            lumiera::error::LUMIERA_ERROR_ITER_EXHAUST);
+    }
+    
   }
   
   
@@ -125,9 +134,24 @@ namespace lib {
    * - it is not just a disguised pointer (meaning, it's more expensive)
    * - it checks validity on every operation and may throw
    * - it has a distinct back-link to the source container
-   * - the source container needs to implement iterStart() and iterInc()
-   * - we need friendship to access the callbacks on the container 
+   * - the source container needs to provide hasNext() and iterNext() free functions.
+   * - we may need friendship to implement those extension points on the container 
    * - the end-of-iteration can be detected by bool check
+   * @note it is possible to "hide" a smart-ptr within the CON template parameter.
+   * 
+   * \par Stipulations
+   * - POS refers to the current position within the data source of this iterator.
+   *       -# it should be default constructible
+   *       -# it should be copy constructible
+   *       -# when IterAdapter is supposed to be assignable, then POS should be
+   *       -# it should provide embedded typedefs for pointer, reference and value_type,
+   *          or alternatively resolve these types through a specialisation if IterTraits.
+   *       -# it should be convertible to the pointer type it declares
+   *       -# dereferencing it should yield type that is convertible to the reference type
+   * - CON points to the data source of this iterator (typically a data container type)
+   *       We store a pointer-like backlink to invoke a special iteration control API:
+   *       -# \c hasNext yields true iff the source has yet more result values to yield
+   *       -# \c iterNext advances the POS to the next element 
    * 
    * @see scoped-ptrvect.hpp usage example
    * @see iter-adaptor-test.cpp
@@ -136,7 +160,7 @@ namespace lib {
   class IterAdapter
     : public lib::BoolCheckable<IterAdapter<POS,CON> >
     {
-      const CON* source_;
+      CON source_;
       mutable POS pos_;
       
     public:
@@ -144,7 +168,7 @@ namespace lib {
       typedef typename IterTraits<POS>::reference reference;
       typedef typename IterTraits<POS>::value_type value_type;
       
-      IterAdapter (const CON* src, const POS& startpos)
+      IterAdapter (CON src, POS const& startpos)
         : source_(src)
         , pos_(startpos)
         { 
@@ -152,8 +176,8 @@ namespace lib {
         }
       
       IterAdapter ()
-        : source_(0)
-        , pos_(0)
+        : source_()
+        , pos_()
         { }
       
       
@@ -213,7 +237,7 @@ namespace lib {
       bool
       checkPos()  const
       {
-        return source_ && CON::hasNext (source_,pos_);
+        return source_ && hasNext (source_,pos_);                    //////////////TICKET #410
       }
       
       /** ask the controlling container to yield the next position.
@@ -226,7 +250,7 @@ namespace lib {
       {
         if (!checkPos()) return false;
         
-        CON::iterNext (source_,pos_);
+        iterNext (source_,pos_);
         return checkPos();
       }
       
@@ -237,8 +261,7 @@ namespace lib {
       _maybe_throw()  const
         {
           if (!isValid())
-            throw lumiera::error::Invalid ("Can't iterate further",
-                  lumiera::error::LUMIERA_ERROR_ITER_EXHAUST);
+            _throwIterExhausted();
         }
       
       /// comparison is allowed to access impl iterator
@@ -286,8 +309,8 @@ namespace lib {
         { }
       
       RangeIter ()
-        : p_(0)
-        , e_(0)
+        : p_()
+        , e_()
         { }
       
       
@@ -335,7 +358,7 @@ namespace lib {
       bool
       isValid ()  const
         {
-          return (p_!= IT(0)) && (p_ != e_);
+          return (p_!= IT()) && (p_ != e_);
         }
       
       bool
@@ -356,8 +379,7 @@ namespace lib {
       _maybe_throw()  const
         {
           if (!isValid())
-            throw lumiera::error::Invalid ("Can't iterate further",
-                  lumiera::error::LUMIERA_ERROR_ITER_EXHAUST);
+            _throwIterExhausted();
         }
     };
   

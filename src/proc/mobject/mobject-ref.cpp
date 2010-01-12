@@ -46,7 +46,8 @@ namespace mobject {
   /** */
   
   
-  LUMIERA_ERROR_DEFINE (INVALID_PLACEMENTREF, "unresolvable placement reference, or of incompatible type");   
+  LUMIERA_ERROR_DEFINE (INVALID_PLACEMENTREF, "unresolvable placement reference, or of incompatible type");
+  LUMIERA_ERROR_DEFINE (BOTTOM_PLACEMENTREF,  "NIL placement-ID marker encountered.");
   
   
   

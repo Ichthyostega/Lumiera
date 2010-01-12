@@ -94,7 +94,6 @@ liblumiprocmobject_la_SOURCES =					\
 	$(liblumiprocmobject_la_srcdir)/mobject-ref.cpp		\
 	$(liblumiprocmobject_la_srcdir)/parameter.cpp		\
 	$(liblumiprocmobject_la_srcdir)/paramprovider.cpp	\
-	$(liblumiprocmobject_la_srcdir)/placement-index.cpp	\
 	$(liblumiprocmobject_la_srcdir)/placement.cpp
 
 
@@ -137,7 +136,6 @@ liblumiprocplay_la_CXXFLAGS = $(AM_CXXFLAGS) -Wall -Wextra
 liblumiprocplay_la_SOURCES =					\
 	$(liblumiprocplay_la_srcdir)/dummy-player-service.cpp	\
 	$(liblumiprocplay_la_srcdir)/dummy-image-generator.cpp
-	
 
 
 liblumiprocmobjectsession_la_srcdir = $(top_srcdir)/src/proc/mobject/session
@@ -146,32 +144,39 @@ noinst_LTLIBRARIES += liblumiprocmobjectsession.la
 liblumiprocmobjectsession_la_CFLAGS = $(AM_CFLAGS) -std=gnu99 -Wall -Wextra -Werror
 liblumiprocmobjectsession_la_CXXFLAGS = $(AM_CXXFLAGS) -Wall -Wextra
 
-liblumiprocmobjectsession_la_SOURCES =					\
-	$(liblumiprocmobjectsession_la_srcdir)/abstractmo.cpp		\
-	$(liblumiprocmobjectsession_la_srcdir)/allocation.cpp		\
-	$(liblumiprocmobjectsession_la_srcdir)/auto.cpp			\
-	$(liblumiprocmobjectsession_la_srcdir)/binding.cpp		\
-	$(liblumiprocmobjectsession_la_srcdir)/clip.cpp			\
-	$(liblumiprocmobjectsession_la_srcdir)/compoundclip.cpp		\
-	$(liblumiprocmobjectsession_la_srcdir)/constraint.cpp		\
-	$(liblumiprocmobjectsession_la_srcdir)/defsmanager.cpp		\
-	$(liblumiprocmobjectsession_la_srcdir)/effect.cpp		\
-	$(liblumiprocmobjectsession_la_srcdir)/fixedlocation.cpp	\
-	$(liblumiprocmobjectsession_la_srcdir)/label.cpp		\
-	$(liblumiprocmobjectsession_la_srcdir)/meta.cpp			\
-	$(liblumiprocmobjectsession_la_srcdir)/relativelocation.cpp	\
-	$(liblumiprocmobjectsession_la_srcdir)/segment.cpp		\
-	$(liblumiprocmobjectsession_la_srcdir)/segmentation.cpp		\
-	$(liblumiprocmobjectsession_la_srcdir)/simpleclip.cpp		\
-	$(liblumiprocmobjectsession_la_srcdir)/plug.cpp			\
-	$(liblumiprocmobjectsession_la_srcdir)/session-impl.cpp		\
-	$(liblumiprocmobjectsession_la_srcdir)/sess-manager-impl.cpp	\
-	$(liblumiprocmobjectsession_la_srcdir)/edl.cpp			\
-	$(liblumiprocmobjectsession_la_srcdir)/session.cpp		\
-	$(liblumiprocmobjectsession_la_srcdir)/track.cpp		\
-	$(liblumiprocmobjectsession_la_srcdir)/fixture.cpp		\
-	$(liblumiprocmobjectsession_la_srcdir)/locatingpin.cpp		\
-	$(liblumiprocmobjectsession_la_srcdir)/mobjectfactory.cpp	\
+liblumiprocmobjectsession_la_SOURCES =							\
+	$(liblumiprocmobjectsession_la_srcdir)/abstractmo.cpp				\
+	$(liblumiprocmobjectsession_la_srcdir)/allocation.cpp				\
+	$(liblumiprocmobjectsession_la_srcdir)/auto.cpp					\
+	$(liblumiprocmobjectsession_la_srcdir)/binding.cpp				\
+	$(liblumiprocmobjectsession_la_srcdir)/clip.cpp					\
+	$(liblumiprocmobjectsession_la_srcdir)/compoundclip.cpp				\
+	$(liblumiprocmobjectsession_la_srcdir)/constraint.cpp				\
+	$(liblumiprocmobjectsession_la_srcdir)/defsmanager.cpp				\
+	$(liblumiprocmobjectsession_la_srcdir)/effect.cpp				\
+	$(liblumiprocmobjectsession_la_srcdir)/fixedlocation.cpp			\
+	$(liblumiprocmobjectsession_la_srcdir)/label.cpp				\
+	$(liblumiprocmobjectsession_la_srcdir)/meta.cpp					\
+	$(liblumiprocmobjectsession_la_srcdir)/relativelocation.cpp			\
+	$(liblumiprocmobjectsession_la_srcdir)/segment.cpp				\
+	$(liblumiprocmobjectsession_la_srcdir)/segmentation.cpp				\
+	$(liblumiprocmobjectsession_la_srcdir)/simpleclip.cpp				\
+	$(liblumiprocmobjectsession_la_srcdir)/plug.cpp					\
+	$(liblumiprocmobjectsession_la_srcdir)/session-impl.cpp				\
+	$(liblumiprocmobjectsession_la_srcdir)/sess-manager-impl.cpp			\
+	$(liblumiprocmobjectsession_la_srcdir)/edl.cpp					\
+	$(liblumiprocmobjectsession_la_srcdir)/session.cpp				\
+	$(liblumiprocmobjectsession_la_srcdir)/track.cpp				\
+	$(liblumiprocmobjectsession_la_srcdir)/fixture.cpp				\
+	$(liblumiprocmobjectsession_la_srcdir)/locatingpin.cpp				\
+	$(liblumiprocmobjectsession_la_srcdir)/mobjectfactory.cpp			\
+	$(liblumiprocmobjectsession_la_srcdir)/placement-index.cpp			\
+	$(liblumiprocmobjectsession_la_srcdir)/query-resolver.cpp 			\
+	$(liblumiprocmobjectsession_la_srcdir)/placement-index-query-resolver.cpp 	\
+	$(liblumiprocmobjectsession_la_srcdir)/session-services.cpp 			\
+	$(liblumiprocmobjectsession_la_srcdir)/root.cpp 				\
+	$(liblumiprocmobjectsession_la_srcdir)/scope.cpp 				\
+	$(liblumiprocmobjectsession_la_srcdir)/scope-path.cpp 				\
 	$(liblumiprocmobjectsession_la_srcdir)/wish.cpp
 
 
@@ -240,6 +245,13 @@ noinst_HEADERS +=							\
 	$(liblumiproc_la_srcdir)/mobject/session/locatingpin.hpp	\
 	$(liblumiproc_la_srcdir)/mobject/session/plug.hpp		\
 	$(liblumiproc_la_srcdir)/mobject/session/defsregistry.hpp	\
+	$(liblumiproc_la_srcdir)/mobject/session/placement-index.hpp	\
+	$(liblumiproc_la_srcdir)/mobject/session/query-resolver.hpp 	\
+	$(liblumiproc_la_srcdir)/mobject/session/placement-index-query-resolver.hpp 	\
+	$(liblumiproc_la_srcdir)/mobject/session/session-service-fetch.hpp 		\
+	$(liblumiproc_la_srcdir)/mobject/session/root.hpp 		\
+	$(liblumiproc_la_srcdir)/mobject/session/scope.hpp 		\
+	$(liblumiproc_la_srcdir)/mobject/session/scope-path.hpp 		\
 	$(liblumiproc_la_srcdir)/mobject/explicitplacement.hpp		\
 	$(liblumiproc_la_srcdir)/mobject/mobject.hpp			\
 	$(liblumiproc_la_srcdir)/mobject/placement.hpp			\

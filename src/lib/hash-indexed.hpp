@@ -42,6 +42,7 @@
  **   for the generic ID.
  ** - providing a Mixin, which allows any hierarchy to use this facility without 
  **   much code duplication, including an adapter for tr1::unordered_map
+ ** - equality comparison
  **
  ** @see HashIndexed_test
  ** @see Placement usage example
@@ -103,12 +104,12 @@ namespace lib {
         
         typedef lumiera_uid* LUID;
         
-        operator size_t ()                const { return lumiera_uid_hash ((LUID)&luid_); }
-        bool operator== (LuidH const& o)  const { return lumiera_uid_eq ((LUID)&luid_, (LUID)&o.luid_); }
+        operator size_t ()                const { return lumiera_uid_hash (get()); }
+        bool operator== (LuidH const& o)  const { return lumiera_uid_eq (get(), o.get()); }
         bool operator!= (LuidH const& o)  const { return !operator== (o); }
         
         /** for passing to C APIs */
-        LUID get()                        const { return (LUID)&luid_; }
+        LUID get()                        const { return const_cast<LUID> (&luid_);}
       };
     
     
@@ -186,6 +187,11 @@ namespace lib {
         { 
           this->id_ = ref.getID();
         }
+      
+      /** equality comparison delegated to the ID implementation */
+      friend bool operator== (HashIndexed const& hal, HashIndexed const& har) { return hal.id_==har.id_; }
+      friend bool operator!= (HashIndexed const& hal, HashIndexed const& har) { return hal.id_!=har.id_; }
+      
       
     protected:
       HashIndexed ()                : id_()     {}

@@ -42,8 +42,14 @@ This code is heavily inspired by
  ** Helpers for working with lumiera::typelist::Types (i.e. lists-of-types). 
  ** The main purpose is to build interfaces and polymorphic implementations
  ** (using virtual functions) based on templated Types or Collections of types,
- ** which is not possible without Template Metaprogrmming.
+ ** which is not possible without Template Metaprogramming.
  ** 
+ ** The facilities in this header work by instantiating another template,
+ ** which is passed in as (template template) parameter, for each of a
+ ** given sequence of types. What varies is the way how this "for each"
+ ** instantiation is mixed or inherited into the resulting product. 
+ ** 
+ ** @see generator-test.cpp
  ** @see lumiera::query::ConfigRules usage example
  ** @see typelist.hpp
  ** 
@@ -97,6 +103,13 @@ namespace typelist{
         typedef _X_<TY> Unit;
         typedef InstantiateForEach<TYPES,_X_> Next;
       };
+    
+    
+    /** Helper to just inherit from the given type(s) */
+    template<typename T>
+    struct InheritFrom : T
+      { };
+    
     
     
     

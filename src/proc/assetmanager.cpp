@@ -25,7 +25,7 @@
 #include "proc/asset/db.hpp"
 
 #include "lib/sync.hpp"
-#include "lib/util.hpp"
+#include "lib/util-foreach.hpp"
 
 #include <tr1/functional>
 #include <boost/format.hpp>

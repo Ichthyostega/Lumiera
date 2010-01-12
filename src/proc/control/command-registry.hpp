@@ -34,10 +34,10 @@
  ** \par Services during command lifecycle
  ** Each command starts out as command definition, accessed by client code through CommandDef.
  ** While collecting the necessary parts of such a definition, there is just an empty (pending)
- ** Command (smart-ptr frontend), which is already registered with the intended command-ID.
- ** A lookup on this ID would still fail at this point, as the \link #queryIndex search function \endlink
- ** treats missing and incomplete command definitions similar. When the definition is complete,
- ** a CommandImpl frame is allocated, configured and used to activate the Command (smart-ptr frontend).
+ ** Command (smart-ptr frontend), which is not yet usable, being held within the CommandDef. 
+ ** When the definition is complete, a CommandImpl frame is allocated, configured and used to
+ ** activate the Command (smart-ptr frontend), at which point it also gets accessible 
+ ** through the CommandRegistry.
  ** 
  ** Later on, client code is assumed to re-access the command by ID. It may bind arguments, which are
  ** stored in the already allocated ArgumentHolder. (-->Ticket #269). As the Command frontend is a

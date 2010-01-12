@@ -37,10 +37,12 @@ namespace session {
    * but rather all sorts of Processing Instructions
    * and other metadata, which can be placed and
    * attached within the EDL/Session.
+   * @todo do we need this abstract baseclass?
    */
   class Meta : public AbstractMO
     {
       ///////////
+      //////////////////////////////TICKET #448   what to do with the length here??
     };
   
   

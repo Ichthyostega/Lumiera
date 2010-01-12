@@ -22,9 +22,7 @@
 
 
 #include "proc/mobject/builder/nodecreatortool.hpp"
-#include "proc/mobject/session/clip.hpp"
-#include "proc/mobject/session/effect.hpp"
-#include "proc/mobject/session/auto.hpp"
+
 
 using mobject::Buildable;
 using mobject::session::Clip;
@@ -34,8 +32,12 @@ using mobject::session::Auto;
 namespace mobject {
   namespace builder {
 
-
-
+                                        /////////////////////////////////TICKET #414
+    
+    
+    ////TODO: do we ever get to treat a model root element??
+    
+    
     void
     NodeCreatorTool::treat (Buildable& something)
     {
@@ -63,7 +65,7 @@ namespace mobject {
     void
     NodeCreatorTool::onUnknown (Buildable& target)
     {
-      UNIMPLEMENTED ("catch-all when partitioning timeline");  ////////TODO: verify why this gets enfoced here...
+      UNIMPLEMENTED ("catch-all when partitioning timeline");  ////////TODO: verify why this gets enforced here...
     }
 
 

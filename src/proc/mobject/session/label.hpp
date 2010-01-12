@@ -25,28 +25,40 @@
 #define MOBJECT_SESSION_LABEL_H
 
 #include "proc/mobject/session/meta.hpp"
+#include "lib/symbol.hpp"
 
 
 
-namespace mobject
-  {
-  namespace session
+namespace mobject {
+namespace session {
+  
+  using lib::Symbol;
+
+
+  /**
+   * Any sort of User visible Marker or Tag, used
+   * to mark time positions and ranges, or specific
+   * locations to attach other MObjects to.
+   * 
+   * @todo Placeholder code for now.
+   * @todo planning to provide some kind of dynamic properties (map)
+   */
+  class Label : public Meta
     {
-
-
-    /**
-     * Any sort of User visible Marker or Tag, used
-     * to mark time positions and ranges, or specific
-     * locations to attach other MObjects to.
-     */
-    class Label : public Meta
-      {
-        ///////////TODO: timespan fields here or already in class Meta??
-      };
-
-
-
-  } // namespace mobject::session
-
-} // namespace mobject
+      ///////////TODO: timespan fields here or already in class Meta??
+    
+      Symbol typeID_;
+    
+      virtual bool isValid()  const;
+      
+    public:
+      Label (Symbol type)
+        : typeID_(type)
+        { }
+      
+    };
+  
+  
+  
+}} // namespace mobject::session
 #endif

@@ -23,7 +23,9 @@
 
 
 #include "lib/test/run.hpp"
+#include "lib/test/test-helper.hpp"
 #include "lib/util.hpp"
+#include "lib/util-foreach.hpp"
 
 #include "lib/allocationcluster.hpp"
 #include "lib/scoped-holder.hpp"
@@ -33,6 +35,7 @@
 #include <boost/lexical_cast.hpp>
 
 using boost::lexical_cast;
+using lib::test::showSizeof;
 using util::for_each;
 using util::isnil;
 using ::Test;
@@ -176,7 +179,7 @@ namespace lib {
             ASSERT (&ref2);
             ASSERT (&ref3);
             ASSERT (&rX);
-            TRACE (test, "sizeof( Dummy<1234> ) = %u", sizeof(rX));
+            TRACE (test, "%s", showSizeof(rX).c_str());
             
             ASSERT (123==ref2.getID());
             ASSERT (3+4+5==rX.getID());

@@ -31,7 +31,7 @@
  **       these cases will just be a subclass or Placement<MObject>
  **       (which in the mentioned example would mean it couldn't be
  **       passed to a API function expecting a Placement<Meta>).
- **       This is uggly, but doesn't seem to bear any danger.
+ **       This is ugly, but doesn't seem to bear any danger.
  **
  ** @see Placement
  ** @see PlacementRef_test
@@ -47,8 +47,10 @@
 //#include "proc/mobject/session/locatingpin.hpp"
 //#include "proc/asset/pipe.hpp"
 #include "lib/error.hpp"
+#include "lib/bool-checkable.hpp"
 #include "proc/mobject/placement.hpp"
 #include "proc/mobject/explicitplacement.hpp"  /////////////TODO this is ugly! Why can't placement::resolve() return a reference??
+#include "proc/mobject/session/session-service-fetch.hpp"
 
 //#include <tr1/memory>
 
@@ -60,24 +62,22 @@ namespace mobject {
   
   class MObject;
   
-  // see placement-index.cpp 
-  Placement<MObject> &
-  fetch_PlacementIndex(Placement<MObject>::ID const&) ;
-  
-  bool
-  checkContains_PlacementIndex (Placement<MObject>::ID const& pID) ;
   
   
   LUMIERA_ERROR_DECLARE (INVALID_PLACEMENTREF);  ///< unresolvable placement reference, or of incompatible type
+  LUMIERA_ERROR_DECLARE (BOTTOM_PLACEMENTREF);  ///<  NIL placement-ID marker encountered
+  
   
   /**
+   * TODO type comment
    */
-  template<class MO =MObject>
+  template<class MX =MObject>
   class PlacementRef
+    : public lib::BoolCheckable<PlacementRef<MX> >
     {
-      typedef Placement<MO>      PlacementMO;
-      typedef Placement<MObject>::ID     _ID;         ////TODO: could we define const& here??
-      typedef Placement<MObject>::Id<MO> _Id;
+      typedef Placement<MX>      PlacementMX;
+      typedef Placement<MObject>::ID     _ID;
+      typedef Placement<MObject>::Id<MX> _Id;
       
       _Id id_;
       
@@ -105,6 +105,13 @@ namespace mobject {
           validate(id_); 
         }
       
+      /** Default is an NIL Placement ref. It throws on any access. */
+      PlacementRef ()
+        : id_( bottomID() )
+        {
+          REQUIRE (!isValid(), "hash-ID clash with existing ID");
+        }
+      
       PlacementRef (PlacementRef const& r)    ///< copy ctor
         : id_(r.id_)
         { 
@@ -112,7 +119,7 @@ namespace mobject {
         }
       
       template<class X>
-      PlacementRef (PlacementRef<X> const& r) ///< extended copy ctor, when type X is assignable to MO
+      PlacementRef (PlacementRef<X> const& r) ///< extended copy ctor, when type X is assignable to MX
         : id_(recast(r))
         {
           validate(id_); 
@@ -148,9 +155,9 @@ namespace mobject {
       
       /* == forwarding smart-ptr operations == */
       
-      PlacementMO& operator*()  const { return access(id_); } ///< dereferencing fetches referred Placement from Index
+      PlacementMX& operator*()  const { return access(id_); } ///< dereferencing fetches referred Placement from Index
       
-      PlacementMO& operator->() const { return access(id_); } ///< provide access to pointee API by smart-ptr chaining 
+      PlacementMX& operator->() const { return access(id_); } ///< provide access to pointee API by smart-ptr chaining 
       
       operator string()         const { return access(id_).operator string(); }
       size_t use_count()        const { return access(id_).use_count(); }
@@ -166,11 +173,6 @@ namespace mobject {
       bool operator!= (PlacementRef<O> const& o)  const { return id_ != o; }
       
       
-      typedef _Id PlacementRef::*__unspecified_bool_type;
-      
-      /** implicit conversion to "bool" */ 
-      operator __unspecified_bool_type()  const { return  isValid()? &PlacementRef::id_ : 0; }  // never throws
-      bool operator! ()                   const { return !isValid(); }                         //  ditto
       
       
       
@@ -188,7 +190,11 @@ namespace mobject {
           return false;
         }
       
-      ExplicitPlacement resolve() const { return access(id_).resolve();}
+      ExplicitPlacement
+      resolve() const
+        {
+          return access(id_).resolve();
+        }
       
       
       ////////////////TODO more operations to come....
@@ -197,14 +203,15 @@ namespace mobject {
       bool
       checkValidity ()  const
         {
-          return checkContains_PlacementIndex(this->id_);
+          return session::SessionServiceFetch::isAccessible() // session interface opened?
+              && session::SessionServiceFetch::isRegisteredID (this->id_);
         }
       
       static void
       validate (_Id const& rId)
         {
-          PlacementMO& pRef (access (rId));
-          if (!(pRef.template isCompatible<MO>()))
+          PlacementMX& pRef (access (rId));
+          if (!(pRef.template isCompatible<MX>()))
             throw lumiera::error::Invalid("actual type of the resolved placement is incompatible",LUMIERA_ERROR_INVALID_PLACEMENTREF);
           
                   ////////////////////////TODO: 1. better message, including type?
@@ -224,16 +231,26 @@ namespace mobject {
           return reinterpret_cast<_Id const&> (*luid);
         }
       
-      static PlacementMO&
+      static _Id const&
+      bottomID ()  ///< @return marker for \em invalid reference
+        {
+          static lumiera_uid invalidLUID;
+          return recast (&invalidLUID);
+        }
+      
+      static PlacementMX&
       access (_Id const& placementID)
         {
-          Placement<MObject> & pla (fetch_PlacementIndex (placementID));  // may throw
+          Placement<MObject> & pla (session::SessionServiceFetch::resolveID (placementID));  // may throw
           REQUIRE (pla.isValid());
-          ASSERT (pla.isCompatible<MO>());
-          return static_cast<PlacementMO&> (pla);
+          ASSERT (pla.isCompatible<MX>());
+          return static_cast<PlacementMX&> (pla);
         }
     };
   
+  
+  /** frequently-used shorthand */
+  typedef PlacementRef<MObject> RefPlacement;
   
   
   

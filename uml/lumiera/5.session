@@ -1,9 +1,7 @@
 window_sizes 1302 1004 270 1022 856 71
 diagrams
-  active  classdiagram_ref 134021 // Command structure
-    575 622 100 4 0 0
-  statediagram_ref 135173 // Command lifecycle
-    349 682 100 4 0 0
+  active  classdiagram_ref 136325 // Focus of Query
+    582 515 100 4 0 0
 end
 show_stereotypes
 selected 
@@ -15,13 +13,23 @@ open
   
   package_ref 128133 // Asset
   classview_ref 128389 // Controller Workings
-  class_ref 148997 // CmdClosure
-  class_ref 150789 // Closure
-  pseudostate_ref 128133 // choice
-  
-  package_ref 128261 // MObject
-  classview_ref 128133 // Engine Workings
+  classview_ref 131973 // Object ref
+  class_ref 152069 // PlacementIndex
+  class_ref 153733 // QueryFocusStack
+  classview_ref 128261 // Builder Workings
+  usecaseview_ref 128261 // config examples
+  class_ref 133253 // Frame
   classview_ref 129541 // InterfaceSystem
   classview_ref 129285 // StreamType
+  classdiagram_ref 137733 // Query Interface
+  operation_ref 140037 // isValid
+  operation_ref 140165 // nextResult
+  class_ref 156933 // Result
+  classrelation_ref 181765 // <dependency>
+  class_ref 155141 // Query
+  class_ref 155525 // ResolvingFacility
+  class_ref 158085 // ResultSet
+  class_ref 152965 // Handle
+  classview_ref 128266 // SmartPointers
 end
 end

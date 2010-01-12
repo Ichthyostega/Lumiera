@@ -162,7 +162,7 @@ namespace asset {
           static const PAsset NULLP;
           IdHashtable::const_iterator i = table.find (hash);
           if (i == table.end())
-            return NULLP;  // empty ptr signaling "not found"
+            return NULLP;  // empty ptr signalling "not found"
           else
             return i->second;
         }

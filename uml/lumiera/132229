@@ -1,0 +1,1668 @@
+format 58
+"Session" // ProcessingLayer::MObject::Session
+  revision 1
+  modified_by 5 "hiv"
+  // class settings
+  //class diagram settings
+  draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default show_stereotype_properties default
+  //use case diagram settings
+  package_name_in_tab default show_context default auto_label_position default draw_all_relations default class_drawing_mode default shadow default show_stereotype_properties default
+  //sequence diagram settings
+  show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default show_stereotype_properties default
+  //collaboration diagram settings
+  show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default show_stereotype_properties default
+  //object diagram settings
+   write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default show_stereotype_properties default
+  //component diagram settings
+  package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default
+  draw_component_as_icon default show_component_req_prov default show_component_rea default show_stereotype_properties default
+  //deployment diagram settings
+  package_name_in_tab default show_context default write_horizontally default auto_label_position default draw_all_relations default shadow default
+  draw_component_as_icon default show_component_req_prov default show_component_rea default show_stereotype_properties default
+  //state diagram settings
+  package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
+  show_activities default region_horizontally default drawing_language default show_stereotype_properties default
+  //activity diagram settings
+  package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
+  show_infonote default drawing_language default show_stereotype_properties default
+  
+  classview 128005 "Session parts"
+    //class diagram settings
+    draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default show_stereotype_properties default
+    //collaboration diagram settings
+    show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default show_stereotype_properties default
+    //object diagram settings
+     write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default show_stereotype_properties default
+    //sequence diagram settings
+    show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default show_stereotype_properties default
+    //state diagram settings
+    package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
+    show_activities default region_horizontally default drawing_language default show_stereotype_properties default
+    //class settings
+    //activity diagram settings
+    package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
+    show_infonote default drawing_language default show_stereotype_properties default
+    classdiagram 128133 "Session structure"
+      draw_all_relations no hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default show_stereotype_properties default
+      size A4
+    end
+
+    class 139653 "Session"
+      abstract visibility public 
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "Primary Interface for all editing tasks.
+The session contains defaults, all the assets being edited, and a set of EDL with the individual MObjects to be manipulated and rendered."
+      operation 133509 "currEDL"
+	public return_type class_ref 128133 // Seq
+	nparams 0
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name} ${(}${)}${const}${volatile} ${throw}${abstract};"
+	cpp_def "${comment}${inline}${type}
+${class}::${name} ${(}${)}${const}${volatile} ${throw}${staticnl}
+{
+  ${body}
+}
+
+"
+	
+	
+	
+	
+	comment "The EDL currently in focus. In most cases, Session and EDL are almost the same, just EDL emphasizes the collection aspect. But generally (for larger editing projects) one Session can contain several EDLs, which may even be nested. At any given time, only one of these EDLs has focus and recieves the editing commands."
+      end
+
+      operation 133637 "getFixture"
+	public explicit_return_type "Fixture&"
+	nparams 0
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name} ${(}${)}${const}${volatile} ${throw}${abstract};"
+	cpp_def "${comment}${inline}${type}
+${class}::${name} ${(}${)}${const}${volatile} ${throw}${staticnl}
+{
+  ${body}
+}
+
+"
+	
+	
+	
+	
+	comment "While the session can be comprised of several EDLs, 
+there is only one Fixture, which represents the actual
+configuration of all Objects to be rendered"
+      end
+
+      classrelation 144773 // current (<unidirectional association>)
+	relation 142853 --->
+	  a role_name "current" multiplicity "1" class_relation public
+	    comment "Standard access path to get at the current session via the Session Manager, which acts as a \"PImpl\" smart pointer"
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}& ${name}${value};
+"
+	    classrelation_ref 144773 // current (<unidirectional association>)
+	  b parent class_ref 139781 // SessManager
+      end
+
+      classrelation 150917 // defaults (<unidirectional association>)
+	relation 148101 --->
+	  a role_name "defaults" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 150917 // defaults (<unidirectional association>)
+	  b parent class_ref 141445 // DefaultsManager
+      end
+    end
+
+    class 128005 "SessionImpl"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "Implementation class for the Session interface"
+      classrelation 128005 // edls (<directional composition>)
+	relation 128005 *-->
+	  a role_name "edls" multiplicity "1..*" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${stereotype}<${type}> ${name}${value};
+"
+	    classrelation_ref 128005 // edls (<directional composition>)
+	  b parent class_ref 128133 // Seq
+      end
+
+      classrelation 128261 // theFixture (<unidirectional association>)
+	relation 128133 --->
+	  a role_name "theFixture" multiplicity "1" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type} * ${name}${value};
+"
+	    classrelation_ref 128261 // theFixture (<unidirectional association>)
+	  b parent class_ref 128261 // Fixture
+      end
+
+      classrelation 144645 // <realization>
+	relation 142725 -_-|>
+	  stereotype "PImpl"
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 144645 // <realization>
+	  b parent class_ref 139653 // Session
+      end
+
+      classrelation 147717 // pipes (<directional aggregation>)
+	relation 145541 o-->
+	  stereotype "vector"
+	  a role_name "pipes" multiplicity "*" protected
+	    comment "the global ports (busses) of the session"
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 147717 // pipes (<directional aggregation>)
+	  b parent class_ref 138117 // Pipe
+      end
+    end
+
+    class 139781 "SessManager"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      operation 133765 "clear"
+	public explicit_return_type "void"
+	nparams 0
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name} ${(}${)}${const}${volatile} ${throw}${abstract};"
+	cpp_def "${comment}${inline}${type}
+${class}::${name} ${(}${)}${const}${volatile} ${throw}${staticnl}
+{
+  ${body}
+}
+
+"
+	
+	
+	
+	
+	comment "clear current session contents 
+without resetting overall session config.
+Afterwards, the session will contain only one 
+empty EDL, while all Assets are retained.
+"
+      end
+
+      operation 133893 "reset"
+	public explicit_return_type "void"
+	nparams 0
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name} ${(}${)}${const}${volatile} ${throw}${abstract};"
+	cpp_def "${comment}${inline}${type}
+${class}::${name} ${(}${)}${const}${volatile} ${throw}${staticnl}
+{
+  ${body}
+}
+
+"
+	
+	
+	
+	
+	comment "reset all session config and 
+start with a pristine default session."
+      end
+
+      operation 134021 "load"
+	public explicit_return_type "void"
+	nparams 0
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name} ${(}${)}${const}${volatile} ${throw}${abstract};"
+	cpp_def "${comment}${inline}${type}
+${class}::${name} ${(}${)}${const}${volatile} ${throw}${staticnl}
+{
+  ${body}
+}
+
+"
+	
+	
+	
+	
+	comment "replace the current session by a new
+session loaded from serialized state."
+      end
+
+      operation 134149 "save"
+	public explicit_return_type "void"
+	nparams 0
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name} ${(}${)}${const}${volatile} ${throw}${abstract};"
+	cpp_def "${comment}${inline}${type}
+${class}::${name} ${(}${)}${const}${volatile} ${throw}${staticnl}
+{
+  ${body}
+}
+
+"
+	
+	
+	
+	
+	comment "create a complete, serialized representation
+of the current session config and contents.
+@todo how to serialize, prameters, return value?"
+      end
+    end
+
+    class 145541 "Timeline"
+      abstract visibility public 
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 159109 // <composition>
+	relation_ref 154885 // <composition>
+      end
+
+      classrelation 159237 // <unidirectional association>
+	relation 155013 --->
+	  stereotype "own"
+	  a role_name "" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 159237 // <unidirectional association>
+	  b parent class_ref 145925 // PlayControl
+      end
+
+      classrelation 159621 // <unidirectional association>
+	relation 155269 --->
+	  a role_name "" multiplicity "1" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 159621 // <unidirectional association>
+	  b parent class_ref 146309 // Sequence
+      end
+
+      classrelation 160005 // globalBusses (<directional composition>)
+	relation 155653 *-->
+	  stereotype "list"
+	  a role_name "globalBusses" multiplicity "*" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	    classrelation_ref 160005 // globalBusses (<directional composition>)
+	  b multiplicity "1" parent class_ref 138117 // Pipe
+      end
+    end
+
+    class 145797 "TimelineView"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 158853 // <realization>
+	relation 154757 -_-|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 158853 // <realization>
+	  b parent class_ref 145541 // Timeline
+      end
+
+      classrelation 159749 // <unidirectional association>
+	relation 155397 --->
+	  a role_name "" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 159749 // <unidirectional association>
+	  b parent class_ref 146309 // Sequence
+      end
+
+      classrelation 160773 // <association>
+	relation 156293 ----
+	  a role_name "" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 160773 // <association>
+	  b role_name "" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 160901 // <association>
+      end
+    end
+
+    class 128133 "Seq"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 128901 // clips (<directional aggregation>)
+	relation 128517 o-->
+	  stereotype "list"
+	  a role_name "clips" multiplicity "*" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${stereotype}<${type} *> ${name}${value};
+"
+	    classrelation_ref 128901 // clips (<directional aggregation>)
+	  b parent class_ref 128517 // MObject
+      end
+
+      classrelation 147333 // track (<unidirectional association>)
+	relation 145157 --->
+	  a role_name "track" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 147333 // track (<unidirectional association>)
+	  b parent class_ref 128389 // Track
+	  association_type class_ref 128645 // Placement
+      end
+    end
+
+    class 128261 "Fixture"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 128517 // <generalisation>
+	relation 128261 ---|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 128517 // <generalisation>
+	  b parent class_ref 128133 // Seq
+      end
+
+      classrelation 131717 // effectiveTimeline (<directional composition>)
+	relation 131077 *-->
+	  stereotype "list"
+	  a role_name "effectiveTimeline" multiplicity "*" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	    classrelation_ref 131717 // effectiveTimeline (<directional composition>)
+	  b parent class_ref 129797 // ExplicitPlacement
+      end
+
+      operation 128645 "getPlaylistForRender"
+	public explicit_return_type "list<ExplicitPlacement   [ProcessingLayer::MObject]>"
+	nparams 0
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name} ${(}${)}${const}${volatile} ${throw}${abstract};"
+	cpp_def "${comment}${inline}${type}
+${class}::${name} ${(}${)}${const}${volatile} ${throw}${staticnl}
+{
+  ${body}
+}
+
+"
+	
+	
+	
+	
+      end
+
+      operation 129157 "getAutomation"
+	public explicit_return_type "Auto   [ProcessingLayer::MObject]*"
+	nparams 0
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name} ${(}${)}${const}${volatile} ${throw}${abstract};"
+	cpp_def "${comment}${inline}${type}
+${class}::${name} ${(}${)}${const}${volatile} ${throw}${staticnl}
+{
+  ${body}
+}
+
+"
+	
+	
+	
+	
+      end
+
+      classrelation 147589 // track (<unidirectional association>)
+	relation 145413 --->
+	  a role_name "track" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 147589 // track (<unidirectional association>)
+	  b parent class_ref 128389 // Track
+	  association_type class_ref 128645 // Placement
+      end
+
+      classrelation 163333 // <association>
+	relation_ref 158213 // <association>
+      end
+    end
+
+    class 147333 "Segmentation"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 163205 // <association>
+	relation 158213 ----
+	  stereotype "partitioning"
+	  a role_name "" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 163205 // <association>
+	  b role_name "" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 163333 // <association>
+      end
+    end
+
+    class 135173 "Segment"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      attribute 129925 "start"
+	protected type class_ref 134917 // Time
+	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+      end
+
+      attribute 130053 "length"
+	protected type class_ref 134917 // Time
+	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	comment "duration (span) of this timeline segment."
+      end
+
+      classrelation 138885 // elements (<directional aggregation>)
+	relation 137093 o-->
+	  stereotype "list"
+	  a role_name "elements" multiplicity "*" protected
+	    comment "relevant MObjects comprising this segment. TODO: actually necessary??"
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${stereotype}<${type} *> ${name}${value};
+"
+	    classrelation_ref 138885 // elements (<directional aggregation>)
+	  b parent class_ref 129797 // ExplicitPlacement
+      end
+
+      classrelation 163589 // <unidirectional association>
+	relation 158469 --->
+	  stereotype "correspondance"
+	  a role_name "" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 163589 // <unidirectional association>
+	  b parent class_ref 131461 // RenderGraph
+      end
+    end
+
+    class 128389 "Track"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      associated_diagram classdiagram_ref 128133 // Session structure
+      classrelation 147077 // <generalisation>
+	relation 144901 ---|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 147077 // <generalisation>
+	  b parent class_ref 129157 // Meta
+      end
+
+      classrelation 147205 // subTracks (<directional composition>)
+	relation 145029 *-->
+	  stereotype "vector"
+	  a role_name "subTracks" multiplicity "*" public
+	    comment "Child tracks in a tree structure"
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	    classrelation_ref 147205 // subTracks (<directional composition>)
+	  b parent class_ref 128389 // Track
+	  association_type class_ref 128645 // Placement
+      end
+
+      classrelation 161413 // <realization>
+	relation 156805 -_-|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 161413 // <realization>
+	  b parent class_ref 128517 // MObject
+      end
+    end
+
+    class 128517 "MObject"
+      abstract visibility public stereotype "interface"
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl "${comment}${@}${visibility}interface ${name}${extends} {
+${members}}
+"
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl "${comment}${abstract}${local}interface ${name}${inherit} {
+${members}};
+"
+      explicit_switch_type ""
+      
+      attribute 128517 "length"
+	protected type class_ref 134917 // Time
+	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	comment "TODO: how to represent time intervals?"
+      end
+
+      classrelation 137093 // <generalisation>
+	relation 135557 ---|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 137093 // <generalisation>
+	  b parent class_ref 134021 // Buildable
+      end
+    end
+
+    class 128645 "Placement"
+      abstract visibility public stereotype "interface"
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl "${comment}${@}${visibility}interface ${name}${extends} {
+${members}}
+"
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl "${comment}${abstract}${local}interface ${name}${inherit} {
+${members}};
+"
+      explicit_switch_type ""
+      
+      comment "used to specify the position of a MObject in the EDL. This can be done in various ways (absolute, relative). 
+Placement at the same time acts as (refcounting) smart pointer for accessing the MObject."
+      operation 128005 "resolve"
+	public explicit_return_type "ExplicitPlacement   [ProcessingLayer::MObject]&"
+	nparams 0
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name} ${(}${)}${const}${volatile} ${throw}${abstract};"
+	cpp_def "${comment}${inline}${type}
+${class}::${name} ${(}${)}${const}${volatile} ${throw}${staticnl}
+{
+  ${body}
+}
+
+"
+	
+	
+	
+	
+	comment "create an actual (explicit) placement while trying to satisfy the network of adjacent objects and placements."
+      end
+
+      classrelation 144901 // subject (<unidirectional association>)
+	relation 142981 --->
+	  a role_name "subject" multiplicity "1" protected
+	    comment "Placement acts as smart pointer"
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 144901 // subject (<unidirectional association>)
+	  b multiplicity "1..*" parent class_ref 128517 // MObject
+      end
+
+      operation 134277 "chain"
+	public explicit_return_type ""
+	nparams 1
+	  param in name "style" explicit_type ""
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name} ${(}const ${t0}& ${p0}${)}${const}${volatile} ${throw}${abstract};"
+	cpp_def "${comment}${inline}${type}
+${class}::${name} ${(}const ${t0}& ${p0}${)}${const}${volatile} ${throw}${staticnl}
+{
+  ${body}
+}
+
+"
+	
+	
+	
+	
+	comment "create and add another Placement for this media object, thus increasingly constraining the (possible) position of this object."
+      end
+
+      classrelation 145413 // chain (<unidirectional association>)
+	relation 143237 --->
+	  a role_name "chain" multiplicity "1" protected
+	    comment "Chain of additional Placements further constraining the position of this MObject"
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 145413 // chain (<unidirectional association>)
+	  b parent class_ref 139909 // LocatingPin
+      end
+
+      classrelation 176773 // <unidirectional association>
+	relation 166789 --->
+	  stereotype "has_a"
+	  a role_name "" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 176773 // <unidirectional association>
+	  b parent class_ref 152581 // Id
+      end
+
+      classrelation 178053 // <dependency>
+	relation 168069 -_->
+	  stereotype "belongs_into"
+	  a package
+	    cpp default "#include in source"
+	    classrelation_ref 178053 // <dependency>
+	  b parent class_ref 153349 // Scope
+      end
+    end
+
+    class 129797 "ExplicitPlacement"
+      abstract visibility public stereotype "interface"
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl "${comment}${@}${visibility}interface ${name}${extends} {
+${members}}
+"
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl "${comment}${abstract}${local}interface ${name}${inherit} {
+${members}};
+"
+      explicit_switch_type ""
+      
+      classrelation 131589 // <generalisation>
+	relation 130949 ---|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 131589 // <generalisation>
+	  b parent class_ref 128645 // Placement
+      end
+
+      attribute 128261 "time"
+	protected type class_ref 134917 // Time
+	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+      end
+
+      attribute 128389 "track"
+	protected explicit_type "Track   [ProcessingLayer::MObject] *"
+	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+      end
+
+      classrelation 131845 // <unidirectional association>
+	relation 131205 --->
+	  a role_name "" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 131845 // <unidirectional association>
+	  b parent class_ref 128389 // Track
+	  association_type class_ref 128389 // Track
+      end
+    end
+
+    class 128773 "AbstractMO"
+      abstract visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 129925 // <generalisation>
+	relation 129285 ---|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 129925 // <generalisation>
+	  b parent class_ref 128517 // MObject
+      end
+    end
+
+    class 128901 "Clip"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 130053 // <generalisation>
+	relation 129413 ---|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 130053 // <generalisation>
+	  b parent class_ref 128773 // AbstractMO
+      end
+
+      classrelation 142469 // source (<unidirectional association>)
+	relation 140677 --->
+	  a role_name "source" multiplicity "1" protected
+	    comment "the media source this clip referes to"
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 142469 // source (<unidirectional association>)
+	  b multiplicity "*" parent class_ref 136709 // Media
+      end
+
+      classrelation 161029 // <realization>
+	relation 156421 -_-|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 161029 // <realization>
+	  b parent class_ref 128517 // MObject
+      end
+    end
+
+    class 138885 "SimpleClip"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "Elementary clip consisting of only one media stream"
+      classrelation 143365 // <generalisation>
+	relation 141445 ---|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 143365 // <generalisation>
+	  b parent class_ref 128901 // Clip
+      end
+    end
+
+    class 138629 "CompoundClip"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      associated_diagram classdiagram_ref 128133 // Session structure
+      comment "Clip MObject which is actually a compound of several elementary clips,
+e.g. the several streams found within multichannels media."
+      classrelation 142597 // <generalisation>
+	relation 140805 ---|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 142597 // <generalisation>
+	  b parent class_ref 128901 // Clip
+      end
+
+      classrelation 143493 // components (<directional aggregation>)
+	relation 141573 o-->
+	  a role_name "components" multiplicity "1..*" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 143493 // components (<directional aggregation>)
+	  b multiplicity "*" parent class_ref 128901 // Clip
+      end
+    end
+
+    class 129029 "Effect"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 130181 // <generalisation>
+	relation 129541 ---|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 130181 // <generalisation>
+	  b parent class_ref 128773 // AbstractMO
+      end
+
+      attribute 128901 "plugin"
+	protected explicit_type "string"
+	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	comment "Identifier of the Plugin to be used"
+      end
+
+      classrelation 161157 // <realization>
+	relation 156549 -_-|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 161157 // <realization>
+	  b parent class_ref 128517 // MObject
+      end
+    end
+
+    class 129157 "Meta"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 130309 // <generalisation>
+	relation 129669 ---|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 130309 // <generalisation>
+	  b parent class_ref 128773 // AbstractMO
+      end
+    end
+
+    class 129285 "FixedLocation"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 145797 // <generalisation>
+	relation 143621 ---|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 145797 // <generalisation>
+	  b parent class_ref 139909 // LocatingPin
+      end
+    end
+
+    class 129413 "RelativeLocation"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 130565 // anchor (<unidirectional association>)
+	relation 129925 --->
+	  a role_name "anchor" multiplicity "1" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 130565 // anchor (<unidirectional association>)
+	  b multiplicity "1" parent class_ref 128517 // MObject
+	  association_type class_ref 128517 // MObject
+      end
+
+      attribute 128133 "relType"
+	protected type class_ref 133893 // RelType
+	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	comment "the kind of relation denoted by this Placement"
+      end
+
+      attribute 129029 "offset"
+	protected type class_ref 134917 // Time
+	init_value "0"
+	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	comment "Offset the actual position by this (time) value relative to the anchor point. TODO: Representation?"
+      end
+
+      class 133893 "RelType"
+	visibility public stereotype "enum"
+	cpp_decl "${comment}enum ${name}
+  {
+${items}
+  };
+"
+	java_decl "${comment}${@}${visibility}${final}${abstract}enum ${name}${implements} {
+${items};
+${members}}
+"
+	php_decl ""
+	python_2_2 python_decl ""
+	idl_decl "${comment}enum ${name} {
+${items}};
+"
+	explicit_switch_type ""
+	
+	comment "the possible kinds of RelativePlacements"
+	attribute 129157 "SAMETIME"
+	  public explicit_type ""
+	  cpp_decl "  ${name}${value},	${comment}"
+	  java_decl ""
+	  php_decl ""
+	  python_decl ""
+	  idl_decl ""
+	  comment "place subject at the sime time as the anchor"
+	end
+
+	attribute 129285 "ATTACH"
+	  public explicit_type ""
+	  cpp_decl "  ${name}${value},	${comment}"
+	  java_decl ""
+	  php_decl ""
+	  python_decl ""
+	  idl_decl ""
+	  comment "attach subject to anchor (e.g. an effect to a clip)"
+	end
+      end
+
+      classrelation 145669 // <generalisation>
+	relation 143493 ---|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 145669 // <generalisation>
+	  b parent class_ref 139909 // LocatingPin
+      end
+    end
+
+    class 129541 "Allocation"
+      abstract visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "a directive to place a MObject in a specific way"
+      attribute 128773 "repr"
+	protected explicit_type "string"
+	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	get_oper operation_ref 131205 // get_repr
+	comment "human readable representation of the condition characterizing this allocaton, e.g. \"t >= 10\""
+      end
+
+      operation 131205 "get_repr"
+	const cpp_inline public explicit_return_type "string"
+	nparams 0
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}const ${type} ${name} ${(}${)}${const}${volatile} ${throw};"
+	cpp_def "${comment}${inline}const ${type} ${class}::${name} ${(}${)}${const}${volatile} ${throw}${staticnl}
+{
+  return repr;
+}
+
+"
+	cpp_name_spec "get${Name}"
+	final 
+	java_name_spec "get${Name}"
+	
+	
+	
+	idl_name_spec "get_${name}"
+	get_of_attribute attribute_ref 128773 // repr
+      end
+
+      classrelation 145925 // <generalisation>
+	relation 143749 ---|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 145925 // <generalisation>
+	  b parent class_ref 139909 // LocatingPin
+      end
+    end
+
+    class 129669 "Label"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 130949 // <generalisation>
+	relation 130309 ---|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 130949 // <generalisation>
+	  b parent class_ref 129157 // Meta
+      end
+
+      classrelation 161285 // <realization>
+	relation 156677 -_-|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 161285 // <realization>
+	  b parent class_ref 128517 // MObject
+      end
+    end
+
+    class 129925 "Auto"
+      visibility package 
+      nformals 1
+      formal name "VAL" type "class" explicit_default_value ""
+        explicit_extends ""
+      nactuals 1
+      actual class class_ref 134661 // ParamProvider
+        rank 0 explicit_value "VAL"
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "Automation data for some parameter (i.e. a time varying function)"
+      classrelation 131973 // <generalisation>
+	relation 131333 ---|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 131973 // <generalisation>
+	  b parent class_ref 129157 // Meta
+      end
+
+      classrelation 138501 // <realization>
+	relation 136837 -_-|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 138501 // <realization>
+	  b parent class_ref 134661 // ParamProvider
+      end
+
+      operation 131077 "getValue"
+	const public explicit_return_type "VAL"
+	nparams 0
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name} ${(}${)}${const}${volatile} ${throw}${abstract};"
+	cpp_def "${comment}${inline}${type}
+${class}::${name} ${(}${)}${const}${volatile} ${throw}${staticnl}
+{
+  ${body}
+}
+
+"
+	
+	
+	
+	
+      end
+    end
+
+    class 130053 "Wish"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 132101 // <generalisation>
+	relation 131461 ---|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 132101 // <generalisation>
+	  b parent class_ref 129541 // Allocation
+      end
+    end
+
+    class 130181 "Constraint"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 132357 // <generalisation>
+	relation 131717 ---|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 132357 // <generalisation>
+	  b parent class_ref 129541 // Allocation
+      end
+    end
+
+    class 140421 "Plug"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 147845 // <generalisation>
+	relation 145669 ---|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 147845 // <generalisation>
+	  b parent class_ref 130053 // Wish
+      end
+
+      classrelation 147973 // outPort (<unidirectional association>)
+	relation 145797 --->
+	  a role_name "outPort" protected
+	    comment "the Port this MObject wants to be conected to"
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 147973 // outPort (<unidirectional association>)
+	  b parent class_ref 138117 // Pipe
+      end
+    end
+
+    class 134533 "Parameter"
+      visibility public 
+      nformals 1
+      formal name "VAL" type "class" explicit_default_value ""
+        explicit_extends ""
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "Descriptor and access object for a plugin parameter. Parameters may be provided with values from the session, and this values may be automated."
+      operation 130821 "getValue"
+	const public explicit_return_type "VAL"
+	nparams 0
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name} ${(}${)}${const}${volatile} ${throw}${abstract};"
+	cpp_def "${comment}${inline}${type}
+${class}::${name} ${(}${)}${const}${volatile} ${throw}${staticnl}
+{
+  ${body}
+}
+
+"
+	
+	
+	
+	
+      end
+
+      classrelation 138245 // <dependency>
+	relation 136581 -_->
+	  stereotype "implemented_by"
+	  a package
+	    cpp default "#include in source"
+	    classrelation_ref 138245 // <dependency>
+	  b parent class_ref 134661 // ParamProvider
+      end
+
+      classrelation 138629 // <association>
+	relation_ref 136325 // <association>
+      end
+    end
+
+    class 134661 "ParamProvider"
+      abstract visibility public stereotype "interface"
+      nformals 1
+      formal name "VAL" type "class" explicit_default_value ""
+        explicit_extends ""
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl "${comment}${@}${visibility}interface ${name}${extends} {
+${members}}
+"
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl "${comment}${abstract}${local}interface ${name}${inherit} {
+${members}};
+"
+      explicit_switch_type ""
+      
+      comment "A facility to get the actual value of a plugin/effect parameter"
+      classrelation 137989 // param (<association>)
+	relation 136325 ----
+	  a role_name "param" multiplicity "1" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 137989 // param (<association>)
+	  b role_name "provider" multiplicity "1" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 138629 // <association>
+      end
+
+      classrelation 138373 // ipo (<unidirectional association>)
+	relation 136709 --->
+	  a role_name "ipo" multiplicity "0..1" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 138373 // ipo (<unidirectional association>)
+	  b parent class_ref 134789 // Interpolator
+      end
+
+      operation 130949 "getValue"
+	const public explicit_return_type "VAL"
+	nparams 0
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name} ${(}${)}${const}${volatile} ${throw}${abstract};"
+	cpp_def "${comment}${inline}${type}
+${class}::${name} ${(}${)}${const}${volatile} ${throw}${staticnl}
+{
+  ${body}
+}
+
+"
+	
+	
+	
+	
+      end
+    end
+
+    class 134789 "Interpolator"
+      visibility package 
+      nformals 1
+      formal name "VAL" type "class" explicit_default_value ""
+        explicit_extends ""
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "Provides the implementation for getting the acutal value of a time varying or automated effect/plugin parameter"
+    end
+
+    class 139909 "LocatingPin"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "An element with value semantics, which actually implements the placement of some MObject by positioning it in some way."
+      classrelation 146053 // next (<unidirectional association>)
+	relation 143877 --->
+	  a role_name "next" protected
+	    comment "next additional LocatingPin, if any"
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 146053 // next (<unidirectional association>)
+	  b parent class_ref 139909 // LocatingPin
+      end
+    end
+  end
+
+  classview 131973 "Object ref"
+    //class diagram settings
+    draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default show_stereotype_properties default
+    //collaboration diagram settings
+    show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default show_stereotype_properties default
+    //object diagram settings
+     write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default show_stereotype_properties default
+    //sequence diagram settings
+    show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default show_stereotype_properties default
+    //state diagram settings
+    package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
+    show_activities default region_horizontally default drawing_language default show_stereotype_properties default
+    //class settings
+    //activity diagram settings
+    package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
+    show_infonote default drawing_language default show_stereotype_properties default
+    classdiagram 136581 "MObjectRef"
+      draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default show_stereotype_properties default
+      size A4
+    end
+
+    class 152453 "PlacementRef"
+      visibility package 
+      nformals 1
+      formal name "MO" type "class" explicit_default_value ""
+        explicit_extends ""
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 176901 // id_ (<unidirectional association>)
+	relation 166917 --->
+	  stereotype "holds"
+	  a role_name "id_" multiplicity "1" private
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 176901 // id_ (<unidirectional association>)
+	  b multiplicity "*" parent class_ref 152581 // Id
+      end
+
+      classrelation 177029 // <dependency>
+	relation 167045 -_->
+	  stereotype "uses"
+	  a package
+	    cpp default "#include in source"
+	    classrelation_ref 177029 // <dependency>
+	  b parent class_ref 152069 // PlacementIndex
+      end
+    end
+
+    class 152581 "Id"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 176645 // <generalisation>
+	relation 166661 ---|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 176645 // <generalisation>
+	  b parent class_ref 152709 // LuidH
+      end
+    end
+
+    class 152709 "LuidH"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+    end
+
+    class 152837 "MObjectRef"
+      visibility package 
+      nformals 1
+      formal name "MO" type "class" explicit_default_value ""
+        explicit_extends ""
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 177157 // <generalisation>
+	relation 167173 ---|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 177157 // <generalisation>
+	  b parent class_ref 152965 // Handle
+      end
+
+      classrelation 177285 // pRef_ (<unidirectional association>)
+	relation 167301 --->
+	  stereotype "holds"
+	  a role_name "pRef_" multiplicity "1" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 177285 // pRef_ (<unidirectional association>)
+	  b multiplicity "*" parent class_ref 152453 // PlacementRef
+      end
+
+      classrelation 177413 // <dependency>
+	relation 167429 -_->
+	  stereotype "denotes"
+	  a package
+	    cpp default "#include in source"
+	    classrelation_ref 177413 // <dependency>
+	  b parent class_ref 128517 // MObject
+      end
+    end
+  end
+
+  classview 132101 "Datastructure"
+    //class diagram settings
+    draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default show_stereotype_properties default
+    //collaboration diagram settings
+    show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default show_stereotype_properties default
+    //object diagram settings
+     write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default show_stereotype_properties default
+    //sequence diagram settings
+    show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default show_stereotype_properties default
+    //state diagram settings
+    package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
+    show_activities default region_horizontally default drawing_language default show_stereotype_properties default
+    //class settings
+    //activity diagram settings
+    package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
+    show_infonote default drawing_language default show_stereotype_properties default
+    classdiagram 136453 "Session backbone"
+      draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default show_stereotype_properties default
+      size A4
+    end
+
+    class 152069 "PlacementIndex"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 178437 // <realization>
+	relation 168453 -_-|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 178437 // <realization>
+	  b parent class_ref 153989 // QueryResolver
+      end
+    end
+
+    class 152197 "Sequence"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+    end
+
+    class 152325 "Binding"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+    end
+  end
+end

@@ -24,6 +24,7 @@
 
 #include "lib/test/run.hpp"
 #include "lib/util.hpp"
+#include "lib/util-foreach.hpp"
 
 #include "lib/iter-adapter.hpp"
 
@@ -48,7 +49,34 @@ namespace test{
   namespace {
   
     uint NUM_ELMS = 10;
-  
+    
+    /** example of simply wrapping an STL container
+     *  and exposing a range as Lumiera Forward Iterator
+     */
+    struct WrappedVector
+      {
+        vector<int> data_;
+        
+        WrappedVector(uint num)
+          {
+            while (num)
+              data_.push_back(num--);
+          }
+        
+        typedef vector<int>::iterator sourceIter;
+        typedef RangeIter<sourceIter> iterator;
+        
+        typedef vector<int>::const_iterator const_sourceIter;
+        typedef RangeIter<const_sourceIter> const_iterator;
+        
+        iterator       begin()       { return       iterator(data_.begin(),data_.end()); }
+        iterator       end()         { return       iterator();                          }
+        const_iterator begin() const { return const_iterator(data_.begin(),data_.end()); }
+        const_iterator end()   const { return const_iterator();                          }
+        
+      };
+    
+    
     /** 
      * Example of a more elaborate custom container exposing an iteration API.
      * While the demo implementation here is based on pointers within a vector,
@@ -82,10 +110,11 @@ namespace test{
         
         /* ==== Exposing Iterator interface(s) for the clients ====== */
         
-        typedef IterAdapter<_Vec::iterator,       TestContainer> iterator;
-        typedef IterAdapter<_Vec::const_iterator, TestContainer> const_iterator;
-        typedef PtrDerefIter<iterator      >                     ref_iterator;
-        typedef PtrDerefIter<const_iterator>                     const_ref_iter;
+        typedef IterAdapter<_Vec::iterator,       const TestContainer*> iterator;
+        typedef IterAdapter<_Vec::const_iterator, const TestContainer*> const_iterator;
+        
+        typedef PtrDerefIter<iterator      > ref_iterator;
+        typedef PtrDerefIter<const_iterator> const_ref_iter;
         
         
         iterator       begin ()           { return iterator       (this, numberz_.begin()); }
@@ -97,15 +126,12 @@ namespace test{
         const_iterator end ()       const { return const_iterator(); }
         
         
+        
       protected: /* ==== API for the IterAdapter ==== */
-        
-        friend class IterAdapter<_Vec::iterator,      TestContainer>;
-        friend class IterAdapter<_Vec::const_iterator,TestContainer>;
-        
         
         /** Implementation of Iteration-logic: pull next element. */
         template<class ITER>
-        static void
+        friend void
         iterNext (const TestContainer*, ITER& pos)
           {
             ++pos;
@@ -120,7 +146,7 @@ namespace test{
          *        immediately transform this into the official "bottom"
          */
         template<class ITER>
-        static bool
+        friend bool
         hasNext (const TestContainer* src, ITER& pos)
           {
             REQUIRE (src);
@@ -142,11 +168,14 @@ namespace test{
   
   
   /*********************************************************************
-   *  @test set up example implementations based on the iterator-adapter
-   *        templates and verify the behaviour in accordance to the
-   *        concept "lumiera forward iterator"
-   *        
-   * @todo see Ticket #182
+   * @test set up example implementations based on the iterator-adapter
+   *       templates and verify the behaviour in accordance to the
+   *       concept "lumiera forward iterator"
+   *
+   * @note see Ticket #182
+   * @see IterAdapter
+   * @see itertools.hpp
+   * @see IterSource         
    */
   class IterAdapter_test : public Test
     {
@@ -156,10 +185,12 @@ namespace test{
         {
           if (0 < arg.size()) NUM_ELMS = lexical_cast<uint> (arg[0]);
           
-          wrapIterRange ();
+          useSimpleWrappedContainer ();
           
+          wrapIterRange ();
           TestContainer testElms (NUM_ELMS);
           simpleUsage (testElms);
+          
           iterTypeVariations (testElms);
           verifyComparisons (testElms);
         }
@@ -194,15 +225,30 @@ namespace test{
       
       
       /** @test use the IterAdapter as if it was a STL iterator */
+      template<class CON>
       void
-      simpleUsage (TestContainer& elms)
+      simpleUsage (CON& elms)
         {
-          for_each (elms, showIt);
+          for_each (elms, showIntP);
           cout << endl;
         }
       
-      static void showIt (int* elm) { cout << "::" << *elm; }
+      static void showIntP (int* elm) { cout << "::" << *elm; }
+      static void showInt  (int  elm) { cout << "::" <<  elm; }
       
+      
+      
+      void
+      useSimpleWrappedContainer ()
+        {
+          WrappedVector testVec (NUM_ELMS);
+          for_each (testVec, showInt);
+          cout << endl;
+          
+          WrappedVector const& ref (testVec);
+          for_each (ref, showInt);  // uses const_iterator
+          cout << endl;
+        }
       
       
       /** @test verify the const and dereferencing variants,

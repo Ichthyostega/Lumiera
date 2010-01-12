@@ -1,6 +1,6 @@
 format 58
 "CommonLib" // CommonLib
-  revision 15
+  revision 16
   modified_by 5 "hiv"
   // class settings
   //class diagram settings
@@ -351,6 +351,8 @@ ${items}};
   end
 
   package_ref 131077 // ConfigQuery
+
+  package_ref 132485 // Containers
 
   classview 128773 "error"
     //class diagram settings
@@ -933,6 +935,21 @@ ${members}}
       idl_decl "${comment}${abstract}${custom}valuetype ${name}${inherit} {
 ${members}};
 "
+      explicit_switch_type ""
+      
+    end
+
+    class 153093 "shared_ptr"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
       explicit_switch_type ""
       
     end

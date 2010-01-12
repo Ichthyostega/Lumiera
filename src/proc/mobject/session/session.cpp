@@ -34,6 +34,7 @@
 #include "proc/mobject/session.hpp"
 #include "proc/mobject/session/defsmanager.hpp"
 #include "proc/mobject/session/session-impl.hpp"
+#include "proc/mobject/session/sess-manager-impl.hpp"
 
 #include "lib/symbol.hpp"
 #include "lib/singleton.hpp"
@@ -43,8 +44,16 @@ using lib::Symbol;
 using lib::Singleton;
 using mobject::session::SessManager;
 using mobject::session::SessManagerImpl;
+using mobject::session::SessionImplAPI;
 
 namespace mobject {
+  
+  
+  /** temporary fix for init problems
+   *  @todo really solve the basic init of session manager TICKET #518
+   */
+  bool Session::initFlag = false;
+  
   
   /** the sole access point for all client code to the system-wide
    *  "current session". Implemented as smart pointer to singleton
@@ -53,9 +62,18 @@ namespace mobject {
    * 
    *  Consequently, if you want to talk to the <i>session manager,</i>
    *  you use dot-notation, while you access the <i>session object</i>
-   *  via arrow notaion (e.g. \code Session::current->getFixture() )
+   *  via arrow notation (e.g. \code Session::current->getFixture() )
    */
   SessManager& Session::current = Singleton<SessManagerImpl>()();
+  
+  
+  /** special access point allowing Proc-Layer internals
+   *  to cooperate with session implementation level APIs
+   */
+  template<>
+  SessManagerImpl& SessionImplAPI::current = static_cast<SessManagerImpl&> (Session::current);
+  
+  
   
   
   /** \par
@@ -80,6 +98,17 @@ namespace mobject {
   const char* ON_SESSION_INIT ("ON_SESSION_INIT");
   
   /** \par
+   *  LifecycleHook, to perform post loading tasks, requiring an already completely usable
+   *  and configured session to be in place. When activated, the session is completely restored
+   *  according to the standard or persisted definition and any access interfaces are already
+   *  opened and enabled. Scripts and the GUI might even be accessing the session in parallel.
+   *  Subsystems intending to perform additional processing should register here, if requiring
+   *  fully functional client side APIs. Examples would be statistics gathering, validation
+   *  or auto-correction of the session's contents.
+   */
+  const char* ON_SESSION_READY ("ON_SESSION_READY");
+  
+  /** \par
    *  LifecycleHook, to perform any state saving, deregistration or de-activation necessary 
    *  before bringing down an existing session. When invoked, the session is still fully valid
    *  and functional, but the GUI/external access has already been closed.
@@ -92,12 +121,13 @@ namespace mobject {
   
   
   
-  Session::~Session () 
-  { }
-  
   Session::Session (session::DefsManager& def)  throw()
     : defaults(def)
   { }
+  
+  // Emit the vtables and other magic stuff here...
+  SessManager::~SessManager() { }
+  Session::~Session () { }
 
 
 

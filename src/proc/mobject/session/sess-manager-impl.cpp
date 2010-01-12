@@ -37,7 +37,7 @@
 
 
 #include "proc/mobject/session.hpp"
-#include "proc/mobject/session/session-impl.hpp"
+#include "proc/mobject/session/sess-manager-impl.hpp"
 #include "proc/mobject/session/defsmanager.hpp"
 //#include "proc/mobject/session/defsregistry.hpp"
 #include "lib/error.hpp"
@@ -59,7 +59,7 @@ namespace session {
    *  @note any exceptions arising while building the basic
    *        session object(s) will halt the system.
    */
-  SessionImpl*
+  SessionImplAPI*
   SessManagerImpl::operator-> ()  throw()
   {
     if (!pImpl_)
@@ -87,10 +87,18 @@ namespace session {
    *  \link #operator-> access \endlink to the session object.
    */
   SessManagerImpl::SessManagerImpl ()  throw()
-    : pDefs_ (0),
-      pImpl_ (0)
-  { }
+    : pImpl_ (0)
+  {
+    Session::initFlag = true;  //////////////////////////////////////// TICKET #518   instead of this hack, implement basic-init of the session manager for real
+  }
   
+  
+  
+  bool
+  SessManagerImpl::isUp ()
+  {
+    return bool(pImpl_);
+  }
   
   /** @note no transactional behaviour.
    *        may succeed partial.
@@ -111,14 +119,12 @@ namespace session {
   void
   SessManagerImpl::reset ()
   {
-    scoped_ptr<DefsManager> tmpD (new DefsManager);
-    scoped_ptr<SessionImpl> tmpS (new SessionImpl (*tmpD));
+    scoped_ptr<SessionImplAPI> tmpS (new SessionImplAPI);
     
     TODO ("reset the assets registered with AssetManager");
-    // Ichthyo-intern: ticket #95
+    /////////////////////////////////////////////////////////////////// TICKET #154
     
     TODO ("thread lock");
-    pDefs_.swap (tmpD);
     pImpl_.swap (tmpS);
   }
   
@@ -142,13 +148,6 @@ namespace session {
   SessManagerImpl::save ()
   {
     UNIMPLEMENTED ("save session (serialised)");
-  }
-  
-  
-  shared_ptr<PlacementIndex>&
-  SessManagerImpl::getCurrentIndex ()
-  {
-    return static_cast<SessManagerImpl&> (Session::current).pImpl_->pIdx_;
   }
   
   

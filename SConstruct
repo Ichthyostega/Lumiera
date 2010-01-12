@@ -60,6 +60,8 @@ def setupBasicEnvironment():
     EnsurePythonVersion(2,3)
     EnsureSConsVersion(0,96,90)
     
+    Decider('MD5-timestamp') # detect changed files by timestamp, then do a MD5
+    
     opts = defineCmdlineOptions() 
     env = LumieraEnvironment(options=opts
                             ,toolpath = [TOOLDIR]

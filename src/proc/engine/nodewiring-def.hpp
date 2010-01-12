@@ -42,6 +42,7 @@
 
 #include "proc/engine/procnode.hpp"
 #include "lib/refarray.hpp"
+#include "lib/util-foreach.hpp"
 
 #include <boost/noncopyable.hpp>
 //#include <boost/scoped_ptr.hpp>

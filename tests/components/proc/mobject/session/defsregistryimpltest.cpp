@@ -182,7 +182,7 @@ namespace mobject {
               
               i = reg_->candidates(q3);
               ASSERT ( *i++ == o3);  // found by direct match
-              ASSERT ( *i++ == o1);  // followed by the ordered ennumeration
+              ASSERT ( *i++ == o1);  // followed by the ordered enumeration
               ASSERT ( *i++ == o2);
               ASSERT ( *i++ == o3);
               ASSERT ( *i++ == o3);

@@ -22,9 +22,7 @@
 
 
 #include "proc/mobject/builder/segmentationtool.hpp"
-#include "proc/mobject/session/clip.hpp"
-#include "proc/mobject/session/effect.hpp"
-#include "proc/mobject/session/segment.hpp"
+
 
 using mobject::Buildable;
 using mobject::session::Clip;
@@ -34,6 +32,7 @@ using mobject::session::Effect;
 namespace mobject {
   namespace builder {
 
+                                        /////////////////////////////////TICKET #414
 
   
     SegmentationTool::SegmentationTool(mobject::session::Fixture&)

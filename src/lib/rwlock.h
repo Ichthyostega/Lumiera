@@ -45,100 +45,88 @@ LUMIERA_ERROR_DECLARE(RWLOCK_WRLOCK);
 /**
  * Read locked section.
  */
-#define LUMIERA_RDLOCK_SECTION(nobugflag, rwlck)                                                \
-  for (lumiera_sectionlock NOBUG_CLEANUP(lumiera_sectionlock_ensureunlocked)                    \
-         lumiera_lock_section_ = {                                                              \
-         (void*)1, lumiera_rwlock_unlock_cb NOBUG_ALPHA_COMMA_NULL NOBUG_ALPHA_COMMA_NULL};     \
-       lumiera_lock_section_.lock;)                                                             \
-    for (                                                                                       \
-         ({                                                                                     \
-           lumiera_lock_section_.lock = (rwlck);                                                \
-           NOBUG_IF_ALPHA(lumiera_lock_section_.flag = &NOBUG_FLAG(nobugflag);)                 \
-             RESOURCE_ENTER (nobugflag, (rwlck)->rh, "acquire readlock",                        \
-                             NOBUG_RESOURCE_WAITING,                                            \
-                             lumiera_lock_section_.rh);                                         \
-           if (pthread_rwlock_rdlock (&(rwlck)->rwlock))                                        \
-             LUMIERA_DIE (LOCK_ACQUIRE);                                                        \
-           TODO ("implement NOBUG_RESOURCE_SHARED");                                            \
-           /*RESOURCE_STATE (nobugflag, NOBUG_RESOURCE_SHARED, lumiera_lock_section_.rh); */ \
-         });                                                                                    \
-         lumiera_lock_section_.lock;                                                            \
-         ({                                                                                     \
-           LUMIERA_RWLOCK_SECTION_UNLOCK;                                                       \
-         }))
+#define LUMIERA_RDLOCK_SECTION(nobugflag, rwlck)                                                                \
+  for (lumiera_sectionlock NOBUG_CLEANUP(lumiera_sectionlock_ensureunlocked)                                    \
+         lumiera_lock_section_ = {                                                                              \
+         rwlck, lumiera_rwlock_unlock_cb NOBUG_ALPHA_COMMA(&NOBUG_FLAG(nobugflag)) NOBUG_ALPHA_COMMA_NULL};     \
+       ({                                                                                                       \
+         if (lumiera_lock_section_.lock)                                                                        \
+           {                                                                                                    \
+             RESOURCE_WAIT (nobugflag, (rwlck)->rh, "acquire readlock", lumiera_lock_section_.rh);              \
+             if (pthread_rwlock_rdlock (&(rwlck)->rwlock))                                                      \
+               LUMIERA_DIE (LOCK_ACQUIRE);                                                                      \
+             RESOURCE_STATE (nobugflag, NOBUG_RESOURCE_SHARED, lumiera_lock_section_.rh);                       \
+           }                                                                                                    \
+         lumiera_lock_section_.lock;                                                                            \
+       });                                                                                                      \
+       ({                                                                                                       \
+         LUMIERA_RWLOCK_SECTION_UNLOCK;                                                                         \
+       }))
 
 
-#define LUMIERA_RDLOCK_SECTION_CHAIN(nobugflag, rwlck)                                          \
-  for (lumiera_sectionlock *lumiera_lock_section_old_ = &lumiera_lock_section_,                 \
-         NOBUG_CLEANUP(lumiera_sectionlock_ensureunlocked) lumiera_lock_section_ = {            \
-         (void*)1, lumiera_rwlock_unlock_cb NOBUG_ALPHA_COMMA_NULL NOBUG_ALPHA_COMMA_NULL};     \
-       lumiera_lock_section_.lock;)                                                             \
-    for (                                                                                       \
-         ({                                                                                     \
-           REQUIRE (lumiera_lock_section_old_->lock, "section prematurely unlocked");           \
-           lumiera_lock_section_.lock = (rwlck);                                                \
-           NOBUG_IF_ALPHA(lumiera_lock_section_.flag = &NOBUG_FLAG(nobugflag);)                 \
-           RESOURCE_ENTER (nobugflag, (rwlck)->rh, "acquire readlock",                          \
-                           NOBUG_RESOURCE_WAITING, lumiera_lock_section_.rh);                   \
-           if (pthread_rwlock_rdlock (&(rwlck)->rwlock))                                        \
-             LUMIERA_DIE (LOCK_ACQUIRE);                                                        \
-           /*RESOURCE_STATE (nobugflag, NOBUG_RESOURCE_SHARED, lumiera_lock_section_.rh); */ \
-           LUMIERA_SECTION_UNLOCK_(lumiera_lock_section_old_);                                  \
-         });                                                                                    \
-         lumiera_lock_section_.lock;                                                            \
-         ({                                                                                     \
-           LUMIERA_MUTEX_SECTION_UNLOCK;                                                        \
-         }))
-
+#define LUMIERA_RDLOCK_SECTION_CHAIN(nobugflag, rwlck)                                                          \
+  for (lumiera_sectionlock *lumiera_lock_section_old_ = &lumiera_lock_section_,                                 \
+         NOBUG_CLEANUP(lumiera_sectionlock_ensureunlocked) lumiera_lock_section_ = {                            \
+         rwlck, lumiera_rwlock_unlock_cb NOBUG_ALPHA_COMMA(&NOBUG_FLAG(nobugflag)) NOBUG_ALPHA_COMMA_NULL};     \
+       ({                                                                                                       \
+         if (lumiera_lock_section_.lock)                                                                        \
+           {                                                                                                    \
+             REQUIRE (lumiera_lock_section_old_->lock, "section prematurely unlocked");                         \
+             RESOURCE_WAIT (nobugflag, (rwlck)->rh, "acquire readlock", lumiera_lock_section_.rh);              \
+             if (pthread_rwlock_rdlock (&(rwlck)->rwlock))                                                      \
+               LUMIERA_DIE (LOCK_ACQUIRE);                                                                      \
+             RESOURCE_STATE (nobugflag, NOBUG_RESOURCE_SHARED, lumiera_lock_section_.rh);                       \
+             LUMIERA_SECTION_UNLOCK_(lumiera_lock_section_old_);                                                \
+           }                                                                                                    \
+         lumiera_lock_section_.lock;                                                                            \
+       });                                                                                                      \
+       ({                                                                                                       \
+         LUMIERA_MUTEX_SECTION_UNLOCK;                                                                          \
+       }))
 
 
 
 /**
  * Write locked section.
  */
-#define LUMIERA_WRLOCK_SECTION(nobugflag, rwlck)                                                \
-  for (lumiera_sectionlock NOBUG_CLEANUP(lumiera_sectionlock_ensureunlocked)                    \
-         lumiera_lock_section_ = {                                                              \
-         (void*)1, lumiera_rwlock_unlock_cb NOBUG_ALPHA_COMMA_NULL NOBUG_ALPHA_COMMA_NULL};     \
-       lumiera_lock_section_.lock;)                                                             \
-    for (                                                                                       \
-         ({                                                                                     \
-           lumiera_lock_section_.lock = (rwlck);                                                \
-           NOBUG_IF_ALPHA(lumiera_lock_section_.flag = &NOBUG_FLAG(nobugflag);)                 \
-             RESOURCE_ENTER (nobugflag, (rwlck)->rh, "acquire writelock",                       \
-                             NOBUG_RESOURCE_WAITING,                                            \
-                             lumiera_lock_section_.rh);                                         \
-           if (pthread_rwlock_wrlock (&(rwlck)->rwlock))                                        \
-             LUMIERA_DIE (LOCK_ACQUIRE);                                                        \
-           RESOURCE_STATE (nobugflag, NOBUG_RESOURCE_EXCLUSIVE, lumiera_lock_section_.rh);      \
-         });                                                                                    \
-         lumiera_lock_section_.lock;                                                            \
-         ({                                                                                     \
-           LUMIERA_RWLOCK_SECTION_UNLOCK;                                                       \
-         }))
+#define LUMIERA_WRLOCK_SECTION(nobugflag, rwlck)                                                                \
+  for (lumiera_sectionlock NOBUG_CLEANUP(lumiera_sectionlock_ensureunlocked)                                    \
+         lumiera_lock_section_ = {                                                                              \
+         rwlck, lumiera_rwlock_unlock_cb NOBUG_ALPHA_COMMA(&NOBUG_FLAG(nobugflag)) NOBUG_ALPHA_COMMA_NULL};     \
+       ({                                                                                                       \
+         if (lumiera_lock_section_.lock)                                                                        \
+           {                                                                                                    \
+             RESOURCE_WAIT (nobugflag, (rwlck)->rh, "acquire writelock", lumiera_lock_section_.rh);             \
+             if (pthread_rwlock_wrlock (&(rwlck)->rwlock))                                                      \
+               LUMIERA_DIE (LOCK_ACQUIRE);                                                                      \
+             RESOURCE_STATE (nobugflag, NOBUG_RESOURCE_EXCLUSIVE, lumiera_lock_section_.rh);                    \
+           }                                                                                                    \
+         lumiera_lock_section_.lock;                                                                            \
+       });                                                                                                      \
+       ({                                                                                                       \
+         LUMIERA_RWLOCK_SECTION_UNLOCK;                                                                         \
+       }))
 
 
-#define LUMIERA_WRLOCK_SECTION_CHAIN(nobugflag, rwlck)                                          \
-  for (lumiera_sectionlock *lumiera_lock_section_old_ = &lumiera_lock_section_,                 \
-         NOBUG_CLEANUP(lumiera_sectionlock_ensureunlocked) lumiera_lock_section_ = {            \
-         (void*)1, lumiera_rwlock_unlock_cb NOBUG_ALPHA_COMMA_NULL NOBUG_ALPHA_COMMA_NULL};     \
-       lumiera_lock_section_.lock;)                                                             \
-    for (                                                                                       \
-         ({                                                                                     \
-           REQUIRE (lumiera_lock_section_old_->lock, "section prematurely unlocked");           \
-           lumiera_lock_section_.lock = (rwlck);                                                \
-           NOBUG_IF_ALPHA(lumiera_lock_section_.flag = &NOBUG_FLAG(nobugflag);)                 \
-           RESOURCE_ENTER (nobugflag, (rwlck)->rh, "acquire writelock",                         \
-                           NOBUG_RESOURCE_WAITING, lumiera_lock_section_.rh);                   \
-           if (pthread_rwlock_wrlock (&(twlck)->rwlock))                                        \
-             LUMIERA_DIE (LOCK_ACQUIRE);                                                        \
-           RESOURCE_STATE (nobugflag, NOBUG_RESOURCE_EXCLUSIVE, lumiera_lock_section_.rh);      \
-           LUMIERA_SECTION_UNLOCK_(lumiera_lock_section_old_);                                  \
-         });                                                                                    \
-         lumiera_lock_section_.lock;                                                            \
-         ({                                                                                     \
-           LUMIERA_MUTEX_SECTION_UNLOCK;                                                        \
-         }))
+#define LUMIERA_WRLOCK_SECTION_CHAIN(nobugflag, rwlck)                                                  \
+  for (lumiera_sectionlock *lumiera_lock_section_old_ = &lumiera_lock_section_,                         \
+         NOBUG_CLEANUP(lumiera_sectionlock_ensureunlocked) lumiera_lock_section_ = {                    \
+         rwlck, lumiera_rwlock_unlock_cb NOBUG_ALPHA_COMMA(&NOBUG_FLAG(nobugflag)) NOBUG_ALPHA_COMMA_NULL};  \
+       ({                                                                                                    \
+         if (lumiera_lock_section_.lock)                                                                    \
+           {                                                                                                \
+             REQUIRE (lumiera_lock_section_old_->lock, "section prematurely unlocked");                     \
+             RESOURCE_WAIT (nobugflag, (rwlck)->rh, "acquire writelock", lumiera_lock_section_.rh);         \
+             if (pthread_rwlock_wrlock (&(twlck)->rwlock))                                                  \
+               LUMIERA_DIE (LOCK_ACQUIRE);                                                                  \
+             RESOURCE_STATE (nobugflag, NOBUG_RESOURCE_EXCLUSIVE, lumiera_lock_section_.rh);                \
+             LUMIERA_SECTION_UNLOCK_(lumiera_lock_section_old_);                                            \
+           }                                                                                                \
+         lumiera_lock_section_.lock;                                                                        \
+       });                                                                                                  \
+       ({                                                                                                   \
+         LUMIERA_MUTEX_SECTION_UNLOCK;                                                                      \
+       }))
 
 
 #define LUMIERA_RWLOCK_SECTION_UNLOCK            \

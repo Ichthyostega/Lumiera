@@ -61,8 +61,9 @@ namespace mobject
               PSess sess = Session::current;
               PMO clip = TestClip::create();
               sess->add (clip);
-              
-              ASSERT (sess->currEDL().contains (clip));
+
+///////////////////////////////////////////////////////////////////TICKET #499              
+//            ASSERT (sess->currEDL().contains (clip));
               // TODO: Clip-Asset and Placement magic??
             } 
         };

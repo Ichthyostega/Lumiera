@@ -188,9 +188,9 @@ AC_CHECK_HEADER([execinfo.h], AC_DEFINE(HAVE_EXECINFO_H))
 PKG_CHECK_MODULES(VALGRIND, [valgrind], AC_DEFINE(HAVE_VALGRIND_H),
                              AC_MSG_NOTICE([valgrind not found                                 (optional)]))
 
-PKG_CHECK_MODULES(NOBUGMT_LUMIERA, [nobugmt >= 200909.1],
+PKG_CHECK_MODULES(NOBUGMT_LUMIERA, [nobugmt >= 201001.1],
 				 AC_DEFINE(HAVE_NOBUGMT_H),
-				 AC_MSG_ERROR([NoBug pkg-config metadata missing                      (http://www.pipapo.org/pipawiki/NoBug)])
+				 AC_MSG_ERROR([Missing required nobug version                    (http://www.lumiera.org/nobug_manual.html)])
 )
 # END Nobug Dependancies
 

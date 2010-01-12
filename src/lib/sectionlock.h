@@ -42,7 +42,7 @@ struct lumiera_sectionlock_struct
   void* lock;
   lumiera_sectionlock_unlock_fn unlock;
   NOBUG_IF_ALPHA(struct nobug_flag* flag);
-  RESOURCE_HANDLE (rh);
+  RESOURCE_USER (rh);
 };
 typedef struct lumiera_sectionlock_struct lumiera_sectionlock;
 typedef struct lumiera_sectionlock_struct* LumieraSectionlock;
@@ -65,10 +65,12 @@ lumiera_sectionlock_ensureunlocked (LumieraSectionlock self)
 #define LUMIERA_SECTION_UNLOCK_(section)                        \
   do if ((section)->lock)                                       \
     {                                                           \
-      if ((section)->unlock((section)->lock))                   \
-        LUMIERA_DIE (LOCK_RELEASE);                             \
-      (section)->lock = NULL;                                   \
-      NOBUG_RESOURCE_LEAVE_RAW((section)->flag, (section)->rh); \
+      NOBUG_RESOURCE_LEAVE_RAW((section)->flag, (section)->rh)  \
+        {                                                       \
+          if ((section)->unlock((section)->lock))               \
+            LUMIERA_DIE (LOCK_RELEASE);                         \
+          (section)->lock = NULL;                               \
+        }                                                       \
     } while (0)
 
 

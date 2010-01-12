@@ -28,22 +28,22 @@
  ** 
  ** As the objects to be treated are normally handled by smart-ptrs, BuilderTool provides
  ** a special facility for dealing with these wrapped objects. There are some liabilities.
- ** <ul><li>each concrete Buildable subtype to be treated specifically needs to
- **         declare \c DEFINE_PROCESSABLE_BY(BuilderTool) </li>
- **     <li>at the same time, the concrete BuilderTool subclass has to declare
- **         being Applicable to this concrete Buildable subtype. The recommended way
- **         of ensuring this, is to add an entry to applicablebuildertargettypes.hpp
- **         and then derive the concrete BuilderTool subclass from 
- **         ApplicableBuilderTargetTypes</li>
- **     <li>when accessing the wrapper from within a \c treat() function, a suitable
- **         concrete wrapper type has to be specified. If the wrapper type used for
- **         invoking the BuilderTool (function \c apply(BuilderTool&l, WrappedObject&) )
- **         can not be converted to this type requested from within the call, an 
- **         assertion failure (or segmentation fault in a release build) will result.</li>
+ ** - each concrete Buildable subtype to be treated specifically needs to
+ **   declare \c DEFINE_PROCESSABLE_BY(BuilderTool)
+ ** - at the same time, the concrete BuilderTool subclass has to declare
+ **   being Applicable to this concrete Buildable subtype. The recommended way
+ **   of ensuring this, is to add an entry to applicable-builder-target-types.hpp
+ **   and then derive the concrete BuilderTool subclass from 
+ **   ApplicableBuilderTargetTypes
+ ** - when accessing the wrapper from within a \c treat() function, a suitable
+ **   concrete wrapper type has to be specified. If the wrapper type used for
+ **   invoking the BuilderTool (function \c apply(BuilderTool&l, WrappedObject&) )
+ **   can not be converted to this type requested from within the call, an 
+ **   assertion failure (or segmentation fault in a release build) will result.
  ** </ul>   
  ** 
  ** @see visitor.hpp
- ** @see applicablebuildertargettypes.hpp
+ ** @see applicable-builder-target-types.hpp
  ** @see buildertooltest.hpp
  ** @see nodecreatertool.hpp
  */

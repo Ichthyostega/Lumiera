@@ -73,8 +73,8 @@ test_components_SOURCES =							\
 	$(testcomponents_srcdir)/proc/mobject/mobject-ref-test.cpp		\
 	$(testcomponents_srcdir)/proc/mobject/placement-basic-test.cpp		\
 	$(testcomponents_srcdir)/proc/mobject/placement-hierarchy-test.cpp	\
-	$(testcomponents_srcdir)/proc/mobject/placement-index-test.cpp		\
 	$(testcomponents_srcdir)/proc/mobject/placement-ref-test.cpp		\
+	$(testcomponents_srcdir)/proc/mobject/session/placement-index-test.cpp		\
 	$(testcomponents_srcdir)/proc/mobject/session/addcliptest.cpp		\
 	$(testcomponents_srcdir)/proc/mobject/session/deletecliptest.cpp	\
 	$(testcomponents_srcdir)/proc/mobject/session/rebuildfixturetest.cpp	\

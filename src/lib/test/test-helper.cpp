@@ -41,5 +41,21 @@ namespace test{
   }
   
   
+  /** @todo probably this can be done in a more clever way. Anyone...?
+   */
+  string
+  randStr (size_t len)
+  {
+    static const string alpha ("aaaabbccddeeeeffgghiiiijjkkllmmnnooooppqqrrssttuuuuvvwwxxyyyyzz0123456789");
+    static const size_t MAXAL (alpha.size());
+    
+    string garbage(len,'\0');
+    size_t p = len;
+    while (p)
+      garbage[--p] = alpha[rand() % MAXAL];
+    return garbage;
+  }
+  
+  
   
 }} // namespace lib::test

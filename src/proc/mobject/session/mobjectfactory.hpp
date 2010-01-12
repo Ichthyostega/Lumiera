@@ -25,6 +25,7 @@
 #define MOBJECT_SESSION_MOBJECTFACTORY_H
 
 #include "proc/mobject/mobject.hpp"
+#include "lib/symbol.hpp"
 
 
 
@@ -39,13 +40,16 @@ namespace asset {
 
 namespace mobject {
   namespace session {
-  
+    
+    class Root;
     class Clip;
     class Track;
     class Effect;
+    class Label;
     
     typedef P<asset::Track> PTrackAsset;
-
+    
+    class DefsManager;
 
     class MObjectFactory
       {
@@ -56,11 +60,14 @@ namespace mobject {
         
       public:
         
+        Placement<Root>   operator() (DefsManager&);
         Placement<Clip>   operator() (asset::Clip const&, asset::Media const&);
         Placement<Clip>   operator() (asset::Clip const&, vector<asset::Media const*>);
         Placement<Track>  operator() (PTrackAsset&);
         Placement<Effect> operator() (asset::Effect const&);
+        Placement<Label>  operator() (lib::Symbol);
         
+        ////////////////////////////////////////////////////////////////////////////////TICKET #414
       };
 
 

@@ -132,7 +132,7 @@ namespace test    {
           
           hijacked->specialAPI();
           ASSERT (3 == hijacked.use_count());
-          ASSERT (hijacked.getID() == pSub3.getID());
+          ASSERT (hijacked.getID() == pClip.getID());
           
           cout << format_PlacementID(pSub1) << endl;
           cout << format_PlacementID(pSub2) << endl;
