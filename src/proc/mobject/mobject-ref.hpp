@@ -130,6 +130,14 @@ namespace mobject {
         }
       
       
+      /* == diagnostics == */
+      size_t
+      use_count()  const
+        {
+          return pRef_.use_count();
+        }
+
+      
       /* == equality comparisons == */
       
       template<class MOX>

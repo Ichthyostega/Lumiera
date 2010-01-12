@@ -96,7 +96,7 @@ namespace test    {
           ASSERT (isSameObject (p1, *ref1));
           ASSERT (isSameObject (p2, *ref2));
           ASSERT (isSameObject (p2, *refX));
-
+          
           cout << string(*ref1) << endl;
           cout << string(*ref2) << endl;
           cout << string(*refX) << endl;
@@ -148,7 +148,7 @@ namespace test    {
           p1 = p2;
           ASSERT (refX.resolve().time == Time(2)); // now we get the time tie we originally set on p2
           ASSERT (3 == ref2.use_count());          // p1, p2 and exPla share ownership
-
+          
           // actually, the assignment has invalidated ref1, because of the changed ID
           ASSERT (p1.getID() == p2.getID());
           
@@ -169,7 +169,7 @@ namespace test    {
           VERIFY_ERROR(INVALID_PLACEMENTREF, *bottom );
           VERIFY_ERROR(INVALID_PLACEMENTREF, bottom->specialAPI() );
           VERIFY_ERROR(INVALID_PLACEMENTREF, bottom.resolve() );
-
+          
           //consistency check; then reset PlacementRef index to default
           ASSERT (0 == index->size());
           ASSERT (1 == index.use_count());
