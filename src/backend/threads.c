@@ -62,6 +62,7 @@ const char* lumiera_threadstate_names[] = {
 static void* thread_loop (void* thread)
 {
   TRACE(threads);
+  NOBUG_THREAD_ID_SET("worker");
   LumieraThread t = (LumieraThread)thread;
 
   pthread_setcancelstate (PTHREAD_CANCEL_DISABLE, NULL);
