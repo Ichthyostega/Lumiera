@@ -104,14 +104,14 @@
  * @param timeout time when the wait expired
  * sets LUMIERA_ERROR_LOCK_TIMEOUT when the timeout passed
  */
-#define LUMIERA_RECCONDITION_TIMEDWAIT(expr, timeout)                                   \
-  do {                                                                                  \
-    REQUIRE (lumiera_lock_section_.lock, "Reccondition mutex not locked");              \
-    if (!lumiera_reccondition_timedwait (lumiera_lock_section_.lock,                    \
-                                         timeout,                                       \
-                                         NOBUG_FLAG_RAW(lumiera_lock_section_.flag),    \
-                                         &lumiera_lock_section_.rh))                    \
-      break;                                                                            \
+#define LUMIERA_RECCONDITION_TIMEDWAIT(expr, timeout)                           \
+  do {                                                                          \
+    REQUIRE (lumiera_lock_section_.lock, "Reccondition mutex not locked");      \
+    if (!lumiera_reccondition_timedwait (lumiera_lock_section_.lock,            \
+                                         timeout,                               \
+                                         lumiera_lock_section_.flag,            \
+                                         &lumiera_lock_section_.rh))            \
+      break;                                                                    \
   } while (!(expr))
 
 
@@ -126,7 +126,7 @@
   do {                                                                          \
     REQUIRE (lumiera_lock_section_.lock, "Reccondition mutex not locked");      \
     lumiera_reccondition_signal (lumiera_lock_section_.lock,                    \
-                                 NOBUG_FLAG_RAW(lumiera_lock_section_.flag));   \
+                                 lumiera_lock_section_.flag);                   \
   } while (0)
 
 
@@ -135,11 +135,11 @@
  * Must be used inside a RECCONDITION_SECTION.
  * Wakes all threads waiting on the condition variable
  */
-#define LUMIERA_RECCONDITION_BROADCAST                                                  \
-  do {                                                                                  \
-    REQUIRE (lumiera_lock_section_.lock, "Reccondition mutex not locked");              \
-    lumiera_reccondition_broadcast (lumiera_lock_section_.lock,                         \
-                                    NOBUG_FLAG_RAW(lumiera_lock_section_.flag));        \
+#define LUMIERA_RECCONDITION_BROADCAST                                          \
+  do {                                                                          \
+    REQUIRE (lumiera_lock_section_.lock, "Reccondition mutex not locked");      \
+    lumiera_reccondition_broadcast (lumiera_lock_section_.lock,                 \
+                                    lumiera_lock_section_.flag);                \
   } while (0)
 
 
