@@ -22,9 +22,30 @@
 
 
 /** @file mobject-ref.hpp
- ** A reference handle pointing at an MObject, attached (placed) to the session.
- ** Allows client code to access both the object and the placement, even from a
- ** separate Layer or from within plugin code.
+ ** External MObject/Placement reference. 
+ ** This smart-handle referres to an MObject, attached (placed) into the session.
+ ** It is a copyable value object, implemented by an LUID (hash) and an shared_ptr.
+ ** Holding an MObject ref keeps the referred MObject alive, but gives no guarantees
+ ** regarding the validity of the referred \em Placement within the session. On each
+ ** access, the placement is re-fetched using the PlacementIndex, which may fail.
+ ** 
+ ** MObjectRef allows to access the pointee (MObject subclass) by using the dereferentiation
+ ** operator, and it allows to access the Placement within the session. Moreover, as an
+ ** convenience shortcut, some of Placement's query operations are directly exposed.
+ ** 
+ ** !Lifecycle
+ ** An MObjectRef is always created inactive. It needs to be activated explicitly,
+ ** providing either a direct (language) ref to an Placement within the session,
+ ** or an PlacementRef tag, or another MObjecRef. It can be closed (detached).
+ ** 
+ ** !Type handling
+ ** Like any smart-ptr MObjectRef is templated on the actual type of the pointee.
+ ** It can be built or re-assigned from a variety of sources, given the runtime type
+ ** of the referred pointee is compatible to this template parameter type. This
+ ** allows flexibly to re-gain a specifically typed context, even based just 
+ ** on a plain LUID. This functionality is implemented by accessing the
+ ** PlacementIndex within the session, and then by using the RTTI of
+ ** the fetched Placement's pointee. 
  ** 
  ** @see MObject
  ** @see Session
@@ -39,23 +60,22 @@
 #define MOBJECT_MOBJECT_REF_H
 
 //#include "pre.hpp"
-//#include "proc/mobject/session/locatingpin.hpp"
-//#include "proc/asset/pipe.hpp"
 #include "lib/handle.hpp"
+#include "lib/lumitime.hpp"
 #include "proc/mobject/placement.hpp"
 #include "proc/mobject/placement-ref.hpp"
 
-//#include <tr1/memory>
 
 ///////////////////////////////////////////TODO: define an C-API representation here, make the header multilingual!
 
 namespace mobject {
   
-//  using std::tr1::shared_ptr;
   
   
   class MObject;
   
+  
+  LUMIERA_ERROR_DECLARE (BOTTOM_MOBJECTREF);  ///<  NIL MObjectRef encountered
   
   /**
    * An active (smart-ptr like) external reference
@@ -69,28 +89,42 @@ namespace mobject {
   class MORef
     : public lib::Handle<MO>
     {
-      typedef lib::Handle<MO> _Par;
+      typedef lib::Handle<MO> _Handle;
       
-      PlacementRef<MO> pRef_; ////////////////////////////////////////////////////////////////////TODO: how to create an "inactive" PlacementRef???
       
-      using _Par::smPtr_;
+      PlacementRef<MO> pRef_;
+      using _Handle::smPtr_;
+      
+      
       
     public:
       
       MO*
       operator-> ()  const
         {
-          REQUIRE (pRef_ && smPtr_, "Lifecycle-Error: not activated");
+          if (!smPtr_)
+            throw lumiera::error::State("Lifecycle error: MObject ref not activated"
+                                       ,LUMIERA_ERROR_BOTTOM_MOBJECTREF);
+          
           ENSURE (INSTANCEOF (MO, smPtr_.get()));
           return smPtr_.operator-> ();
         }
       
       Placement<MO>& getPlacement()  const
         {
-          REQUIRE (pRef_ && smPtr_, "Lifecycle-Error: not activated");
           ENSURE (INSTANCEOF (MO, smPtr_.get()));
           return *pRef_;
         }
+      
+      /** resolves the referred placement to an 
+       *  ExplicitPlacement and returns the found start time
+       */
+      lumiera::Time const&
+      getStartTime()
+        {
+          return pRef_.resolve().time;
+        }
+      
       
       
       /* === Lifecycle === */
@@ -119,7 +153,7 @@ namespace mobject {
        *  - a plain LUID
        * @throws error::Invalid when the (directly or indirectly 
        *         referred placement isn't known to the session PlacementIndex,
-       *         or when the placement actually found has an incompatible dynamic type 
+       *         or when the placement actually found has an incompatible dynamic type
        */
       template<typename REF>
       MORef&
@@ -153,16 +187,46 @@ namespace mobject {
           return activate (oRef.getPlacement().getID());
         }
       
+      /** cross assignment.
+       *  @note besides that, we use the default generated copy operations.
+       *  @note STRONG exception safety guarantee
+       *  @throws error::Invalid when the referred placement isn't registered
+       *       within the current session, or if the runtime type of the pointees
+       *       aren't assignment compatible 
+       */
+      template<typename MOX>
+      MORef&
+      operator= (MORef<MOX> const& oRef)
+        {
+          return activate (oRef);
+        }
+      
       
       
       
       /* == diagnostics == */
+      bool
+      isValid()  const
+        {
+          return pRef_.isValid();
+        }
+      
       size_t
       use_count()  const
         {
           return pRef_.use_count();
         }
-
+      
+      template<class MOX>
+      bool
+      isCompatible()  const
+        {
+          return pRef_
+              && (*pRef_).isCompatible<MOX>();
+        }
+      
+      
+      
       
       /* == equality comparisons == */
       
@@ -221,7 +285,6 @@ namespace mobject {
         }
       
     };
-  ////////////////TODO currently just fleshing  out the API....
   
   
   typedef MORef<MObject> MObjectRef;

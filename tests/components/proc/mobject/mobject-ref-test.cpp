@@ -52,7 +52,7 @@ namespace test    {
   using session::SessionServiceMockIndex;
   using session::PPIdx;
   
-
+  
   
   /***************************************************************************
    * @test properties and behaviour of the external reference-mechanism for
@@ -116,7 +116,6 @@ namespace test    {
           PlacementRef<MObject> ref2 (pClip2);
           
           
-#if false  //////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET 384  !!!!!!!!!
           // -----Tests------------------
           checkBuildMObjectRef (rP1,  &pClip1);
           checkBuildMObjectRef (rP2,  &pClip2);
@@ -131,7 +130,6 @@ namespace test    {
           checkLifecycle (rP1,rP2);
           checkTypeHandling (luid);
           // -----Tests------------------
-#endif ////////////////////////////////////////////////////////////////////////////////////////TODO lots of things unimplemented.....!!!!!
           
           // verify clean state
           index->remove (pClip1);
@@ -168,30 +166,28 @@ namespace test    {
           
           // access the Placement-API
           ASSERT (3 == rMO.use_count());    // now rMO shares ownership with the Placement
-#if false  //////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET 384  !!!!!!!!!
-          ASSERT (0 < rMO.getStartTime());  // (internally, this resolves to an ExplicitPlacement)  /////////TICKET #332
+          ASSERT (Time(0) < rMO.getStartTime());  // (internally, this resolves to an ExplicitPlacement)  /////////TICKET #332
           ASSERT ( rMO.isCompatible<MObject>());
           ASSERT ( rMO.isCompatible<Clip>());
           ASSERT (!rMO.isCompatible<TestSubMO1>());
           Time start = rMO.getStartTime();
-#endif ////////////////////////////////////////////////////////////////////////////////////////TODO lots of things unimplemented.....!!!!!
           
           // re-link to the Placement (note we get the Clip API!)
           Placement<Clip> & refP = rMO.getPlacement();
-          ASSERT (refP);
+          ASSERT (refP.isValid());
           ASSERT (3 == refP.use_count());
           ASSERT (&refP == placementAdr);   // actually denotes the address of the original Placement in the "session"
           cout << string(refP) << endl;
           
           ExplicitPlacement exPla = refP.resolve();
-//        ASSERT (exPla.time == start);     // recovered Placement resolves to the same time as provided by the proxied API
+          ASSERT (exPla.time == start);     // recovered Placement resolves to the same time as provided by the proxied API
           ASSERT (4 == refP.use_count());   // but now we've indeed created an additional owner (exPla)
           ASSERT (4 == rMO.use_count());
         }
       
       
       void
-      checkComparison (PMO& p1, PMO& p2)
+      checkComparison (PMO const& p1, PMO const& p2)
         {
           PlacementRef<Clip>    pRef1 (p1);
           PlacementRef<MObject> pRef2 (p2);
@@ -258,7 +254,7 @@ namespace test    {
       
       
       void
-      checkLifecylce (PMObj const& p1, PMObj const& p2)
+      checkLifecycle (PMObj const& p1, PMObj const& p2)
         {
           ASSERT (2 == p1.use_count());
           ASSERT (2 == p2.use_count());
@@ -290,7 +286,7 @@ namespace test    {
           ASSERT (2 == p2.use_count());
           
           VERIFY_ERROR (INVALID_PLACEMENTREF, rMO.getPlacement() );
-//         VERIFY_ERROR (INVALID_MOBJECTREF,   rMO->getMedia()    );
+          VERIFY_ERROR (BOTTOM_MOBJECTREF,    rMO->getMedia()    );
         }
       
       void
@@ -316,9 +312,7 @@ namespace test    {
           
           // impossible, because Clip isn't a subclass of TestSubMO1:
           VERIFY_ERROR (INVALID_PLACEMENTREF, rSub1.activate(luid) );
-#if false  //////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET 384  !!!!!!!!!
-//        VERIFY_ERROR (INVALID_PLACEMENTREF, rSub1 = rMObj        );
-#endif ////////////////////////////////////////////////////////////////////////////////////////TODO lots of things unimplemented.....!!!!!
+          VERIFY_ERROR (INVALID_PLACEMENTREF, rSub1 = rMObj        );
           
           ASSERT (rMObj->isValid());
           ASSERT (rClip->isValid());
@@ -327,12 +321,12 @@ namespace test    {
           // doesn't compile, because the function isn't on MObject API:
           // rMObj->getMedia();
           
-          // can assign, because the actual type is relevant:
           rClip.close();
           ASSERT (3 == rMObj.use_count());
           ASSERT (0 == rClip.use_count());
           
-//        rClip = rMObj;
+          // can assign, because the actual type checked:
+          rClip = rMObj;
           ASSERT (4 == rMObj.use_count());
           ASSERT (4 == rClip.use_count());
           
