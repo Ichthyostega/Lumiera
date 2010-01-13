@@ -127,6 +127,7 @@ namespace test    {
           checkBuildMObjectRef (ref1, &pClip1);
           checkBuildMObjectRef (ref2, &pClip2);
           
+          checkComparison(rP1,rP2);
           checkLifecycle (rP1,rP2);
           checkTypeHandling (luid);
           // -----Tests------------------
@@ -187,6 +188,78 @@ namespace test    {
           ASSERT (4 == refP.use_count());   // but now we've indeed created an additional owner (exPla)
           ASSERT (4 == rMO.use_count());
         }
+      
+      
+      void
+      checkComparison (PMO& p1, PMO& p2)
+        {
+          PlacementRef<Clip>    pRef1 (p1);
+          PlacementRef<MObject> pRef2 (p2);
+          
+          MORef<MObject> rM;
+          MORef<Clip>    rC;
+          
+#if false  //////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET 384  !!!!!!!!!
+          rM.activate (p1);
+          rC.activate (p2);
+#endif ////////////////////////////////////////////////////////////////////////////////////////TODO lots of things unimplemented.....!!!!!
+          ASSERT (rM && rC);
+          ASSERT (!(rM == rC) && !(rC == rM));
+          ASSERT ( (rM != rC) &&  (rC != rM));
+          
+          // mixed comparisons
+          ASSERT ( (rM == pRef1) &&  (pRef1 == rM));
+          ASSERT ( (rC == pRef2) &&  (pRef2 == rC));
+          ASSERT (!(rM != pRef1) && !(pRef1 != rM));
+          ASSERT (!(rC != pRef2) && !(pRef2 != rC));
+          ASSERT ( (rM != pRef2) &&  (pRef2 != rM));
+          ASSERT ( (rC != pRef1) &&  (pRef1 != rC));
+          ASSERT (!(rM == pRef2) && !(pRef2 == rM));
+          ASSERT (!(rC == pRef1) && !(pRef1 == rC));
+          
+          ASSERT ( (rM == p1.getID()) );
+          ASSERT ( (rC == p2.getID()) );
+          ASSERT (!(rM != p1.getID()) );
+          ASSERT (!(rC != p2.getID()) );
+          ASSERT ( (rM != p2.getID()) );
+          ASSERT ( (rC != p1.getID()) );
+          ASSERT (!(rM == p2.getID()) );
+          ASSERT (!(rC == p1.getID()) );
+          
+          
+#if false  //////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET 384  !!!!!!!!!
+          rC.activate (p1);
+#endif ////////////////////////////////////////////////////////////////////////////////////////TODO lots of things unimplemented.....!!!!!
+          ASSERT ( (rM == rC) &&  (rC == rM));
+          ASSERT (!(rM != rC) && !(rC != rM));
+          
+          ASSERT ( (rC == pRef1) &&  (pRef1 == rC));
+          ASSERT (!(rC != pRef1) && !(pRef1 != rC));
+          ASSERT ( (rC != pRef2) &&  (pRef2 != rC));
+          ASSERT (!(rC == pRef2) && !(pRef2 == rC));
+          
+          ASSERT ( (rC == p1.getID()) );
+          ASSERT (!(rC != p1.getID()) );
+          ASSERT ( (rC != p2.getID()) );
+          ASSERT (!(rC == p2.getID()) );
+          
+          
+          rM.close();
+          ASSERT (!rM);
+          ASSERT (!(rM == rC) && !(rC == rM));
+          ASSERT ( (rM != rC) &&  (rC != rM));
+          
+          ASSERT (!(rM == pRef1) && !(pRef1 == rM));
+          ASSERT ( (rM != pRef1) &&  (pRef1 != rM));
+          ASSERT (!(rM != pRef2) && !(pRef2 != rM));
+          ASSERT ( (rM == pRef2) &&  (pRef2 == rM));
+          
+          ASSERT (!(rM == p1.getID()) );
+          ASSERT ( (rM != p1.getID()) );
+          ASSERT (!(rM != p2.getID()) );
+          ASSERT ( (rM == p2.getID()) );
+        }
+      
       
       void
       checkLifecylce (PMObj const& p1, PMObj const& p2)

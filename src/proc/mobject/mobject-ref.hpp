@@ -142,30 +142,56 @@ namespace mobject {
       
       template<class MOX>
       bool
-      operator== (MORef<MOX> const& oRef)
+      operator== (MORef<MOX> const& oRef)  const
         {
-          return pRef_ == oRef.pRef_;
+          return oRef == this->pRef_;
         }
       
       template<class MOX>
       bool
-      operator== (PlacementRef<MOX> const& pRef)
+      operator!= (MORef<MOX> const& oRef)  const
         {
-          return pRef_ == pRef;
+          return oRef != this->pRef_;
         }
       
       template<class MOX>
-      bool
-      operator== (typename Placement<MOX>::ID const& pID)
+      friend bool
+      operator== (MORef const& oRef, PlacementRef<MOX> const& pRef)
         {
-          return pRef_ == pID;
+          return oRef.pRef_ == pRef;
         }
       
-      template<class XX>
-      bool
-      operator!= (XX const& xx)
+      template<class MOX>
+      friend bool
+      operator!= (MORef const& oRef, PlacementRef<MOX> const& pRef)
         {
-          return !((*this) == xx);
+          return oRef.pRef_ != pRef;
+        }
+      
+      template<class MOX>
+      friend bool
+      operator== (PlacementRef<MOX> const& pRef, MORef const& oRef)
+        {
+          return pRef == oRef.pRef_;
+        }
+      
+      template<class MOX>
+      friend bool
+      operator!= (PlacementRef<MOX> const& pRef, MORef const& oRef)
+        {
+          return pRef != oRef.pRef_;
+        }
+      
+      bool
+      operator== (PlacementMO::ID const& pID)  const
+        {
+          return PlacementMO::ID (pRef_) == pID;
+        }
+      
+      bool
+      operator!= (PlacementMO::ID const& pID)  const
+        {
+          return PlacementMO::ID (pRef_) != pID;
         }
       
     };
