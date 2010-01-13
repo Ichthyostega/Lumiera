@@ -80,12 +80,17 @@ namespace mobject {
       MO*
       operator-> ()  const
         {
-          REQUIRE (smPtr_.get(), "Lifecycle-Error");
+          REQUIRE (pRef_ && smPtr_, "Lifecycle-Error: not activated");
           ENSURE (INSTANCEOF (MO, smPtr_.get()));
           return smPtr_.operator-> ();
         }
       
-      Placement<MO>& getPlacement();
+      Placement<MO>& getPlacement()  const
+        {
+          REQUIRE (pRef_ && smPtr_, "Lifecycle-Error: not activated");
+          ENSURE (INSTANCEOF (MO, smPtr_.get()));
+          return *pRef_;
+        }
       
       
       /* === Lifecycle === */
@@ -100,9 +105,9 @@ namespace mobject {
       MORef&
       activate (Placement<MO> const& placement)
         {
-          ASSERT (placement);
-          pRef_ = placement;           // STRONG exception safe
-          smPtr_.swap (placement);     // never throws
+          ASSERT (placement.isValid());
+          pRef_ = placement;                       // STRONG exception safe
+          placement.extendOwnershipTo(smPtr_);     // never throws
           return *this;
         }
       
@@ -120,14 +125,35 @@ namespace mobject {
       MORef&
       activate (REF const& pRefID)
         {
-          if (pRefID != pRef_)
+          PlacementRef<MO> newRef (pRefID);
+          if (newRef.isValid()
+             && pRef_ != newRef )
             {
-              PlacementRef<MO> newRef (pRefID);
-              ASSERT (newRef);
               return activate (*newRef); // STRONG exception safe
             }
           else return *this;
         }
+      
+      /** build and activate an MObject reference based on
+       *  an existing reference of the same pointee type
+       *  @note STRONG exception safety guarantee
+       *  @throws error::Invalid when the referred placement 
+       *          isn't known to the current session's PlacementIndex
+       */
+      MORef&
+      activate (MORef const& oRef)
+        {
+          return activate (oRef.getPlacement());
+        }
+      
+      template<typename MOX>
+      MORef&
+      activate (MORef<MOX> const& oRef)
+        {
+          return activate (oRef.getPlacement().getID());
+        }
+      
+      
       
       
       /* == diagnostics == */

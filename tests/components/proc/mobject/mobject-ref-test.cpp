@@ -199,10 +199,8 @@ namespace test    {
           MORef<MObject> rM;
           MORef<Clip>    rC;
           
-#if false  //////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET 384  !!!!!!!!!
           rM.activate (p1);
           rC.activate (p2);
-#endif ////////////////////////////////////////////////////////////////////////////////////////TODO lots of things unimplemented.....!!!!!
           ASSERT (rM && rC);
           ASSERT (!(rM == rC) && !(rC == rM));
           ASSERT ( (rM != rC) &&  (rC != rM));
@@ -227,9 +225,7 @@ namespace test    {
           ASSERT (!(rC == p1.getID()) );
           
           
-#if false  //////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET 384  !!!!!!!!!
-          rC.activate (p1);
-#endif ////////////////////////////////////////////////////////////////////////////////////////TODO lots of things unimplemented.....!!!!!
+          rC.activate (pRef1);
           ASSERT ( (rM == rC) &&  (rC == rM));
           ASSERT (!(rM != rC) && !(rC != rM));
           
@@ -271,27 +267,21 @@ namespace test    {
           ASSERT (!rMO);
           ASSERT (0 == rMO.use_count());
           
-#if false  //////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET 384  !!!!!!!!!
           rMO.activate(p1);
-#endif ////////////////////////////////////////////////////////////////////////////////////////TODO lots of things unimplemented.....!!!!!
           ASSERT (rMO);
           ASSERT (rMO->getMedia()->getFilename() == "test-1");
           ASSERT (3 == rMO.use_count());
           ASSERT (3 == p1.use_count());
           ASSERT (2 == p2.use_count());
           
-#if false  //////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET 384  !!!!!!!!!
           rMO.activate(p2);
-#endif ////////////////////////////////////////////////////////////////////////////////////////TODO lots of things unimplemented.....!!!!!
           ASSERT (rMO);
           ASSERT (rMO->getMedia()->getFilename() == "test-2");
           ASSERT (3 == rMO.use_count());
           ASSERT (2 == p1.use_count());
           ASSERT (3 == p2.use_count());
           
-#if false  //////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET 384  !!!!!!!!!
           rMO.activate(p2);
-#endif ////////////////////////////////////////////////////////////////////////////////////////TODO lots of things unimplemented.....!!!!!
           ASSERT (3 == rMO.use_count());
           
           rMO.close();
@@ -314,23 +304,19 @@ namespace test    {
           ASSERT (0 == rClip.use_count());
           ASSERT (0 == rSub1.use_count());
           
-#if false  //////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET 384  !!!!!!!!!
           rMObj.activate(luid);
-#endif ////////////////////////////////////////////////////////////////////////////////////////TODO lots of things unimplemented.....!!!!!
           ASSERT (3 == rMObj.use_count());
           ASSERT (0 == rClip.use_count());
           ASSERT (0 == rSub1.use_count());
           
-#if false  //////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET 384  !!!!!!!!!
           rClip.activate(rMObj);              // attach on existing MObjectRef
-#endif ////////////////////////////////////////////////////////////////////////////////////////TODO lots of things unimplemented.....!!!!!
           ASSERT (4 == rMObj.use_count());
           ASSERT (4 == rClip.use_count());
           ASSERT (0 == rSub1.use_count());
           
           // impossible, because Clip isn't a subclass of TestSubMO1:
-#if false  //////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET 384  !!!!!!!!!
           VERIFY_ERROR (INVALID_PLACEMENTREF, rSub1.activate(luid) );
+#if false  //////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET 384  !!!!!!!!!
 //        VERIFY_ERROR (INVALID_PLACEMENTREF, rSub1 = rMObj        );
 #endif ////////////////////////////////////////////////////////////////////////////////////////TODO lots of things unimplemented.....!!!!!
           

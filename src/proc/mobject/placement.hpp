@@ -84,6 +84,7 @@ namespace mobject {
   class ExplicitPlacement;
   
   using std::tr1::shared_ptr;
+  using std::tr1::static_pointer_cast;
   using lib::HashIndexed;
   
   
@@ -147,6 +148,17 @@ namespace mobject {
       isCompatible ()  const
         {
           return 0 != dynamic_cast<Y*> (get());
+        }
+      
+      /** extend shared ownership to the given smart-ptr
+       *  @note never throws
+       */
+      template<class Y>
+      void
+      extendOwnershipTo (shared_ptr<Y>& target)  const
+        {
+          REQUIRE (isCompatible<Y>());
+          target = static_pointer_cast<Y>(*this);
         }
       
       
