@@ -52,10 +52,8 @@
          cnd, (lumiera_sectionlock_unlock_fn) lumiera_condition_unlock                          \
            NOBUG_ALPHA_COMMA(&NOBUG_FLAG(nobugflag)) NOBUG_ALPHA_COMMA_NULL};                   \
        ({                                                                                       \
-         if (lumiera_lock_section_.lock)                                                        \
-           lumiera_lock_section_.lock =                                                         \
-             lumiera_condition_lock (cnd, &NOBUG_FLAG(nobugflag), &lumiera_lock_section_.rh);   \
-         lumiera_lock_section_.lock;                                                            \
+         lumiera_lock_section_.lock =                                                           \
+           lumiera_condition_lock (cnd, &NOBUG_FLAG(nobugflag), &lumiera_lock_section_.rh);     \
        });                                                                                      \
        ({                                                                                       \
          LUMIERA_CONDITION_SECTION_UNLOCK;                                                      \
@@ -125,7 +123,7 @@
  */
 #define LUMIERA_CONDITION_SIGNAL                                        \
   do {                                                                  \
-    REQUIRE (lumiera_lock_section_.lock, "Condition mutex not locked"); \
+    REQUIRE (lumiera_cond_section_.lock, "Condition mutex not locked"); \
     lumiera_condition_signal (lumiera_lock_section_.lock,               \
                               lumiera_lock_section_.flag);              \
   } while (0)
@@ -138,7 +136,7 @@
  */
 #define LUMIERA_CONDITION_BROADCAST                                     \
   do {                                                                  \
-    REQUIRE (lumiera_lock_section_.lock, "Condition mutex not locked"); \
+    REQUIRE (lumiera_cond_section_.lock, "Condition mutex not locked"); \
     lumiera_condition_broadcast (lumiera_lock_section_.lock,            \
                                  lumiera_lock_section_.flag);           \
   } while (0)
@@ -218,18 +216,9 @@ lumiera_condition_trylock (LumieraCondition self, struct nobug_flag* flag, struc
 }
 
 
-#ifndef LUMIERA_RESTRICT
-# ifdef __cplusplus              /* C++ doesnt support restrict */
-#  define LUMIERA_RESTRICT
-# else
-#  define LUMIERA_RESTRICT restrict
-# endif
-#endif
-
-
 static inline LumieraCondition
 lumiera_condition_timedlock (LumieraCondition self,
-                             const struct timespec* LUMIERA_RESTRICT timeout,
+                             const struct timespec* timeout,
                              struct nobug_flag* flag,
                              struct nobug_resource_user** handle)
 {

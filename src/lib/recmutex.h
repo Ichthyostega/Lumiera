@@ -151,18 +151,9 @@ lumiera_recmutex_trylock (LumieraRecmutex self, struct nobug_flag* flag, struct 
 }
 
 
-#ifndef LUMIERA_RESTRICT
-# ifdef __cplusplus              /* C++ doesnt support restrict */
-#  define LUMIERA_RESTRICT
-# else
-#  define LUMIERA_RESTRICT restrict
-# endif
-#endif
-
-
 static inline LumieraRecmutex
 lumiera_recmutex_timedlock (LumieraRecmutex self,
-                            const struct timespec* LUMIERA_RESTRICT timeout,
+                            const struct timespec* timeout,
                             struct nobug_flag* flag,
                             struct nobug_resource_user** handle)
 {

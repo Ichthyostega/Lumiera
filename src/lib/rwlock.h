@@ -202,17 +202,9 @@ lumiera_rwlock_tryrdlock (LumieraRWLock self, struct nobug_flag* flag, struct no
 }
 
 
-#ifndef LUMIERA_RESTRICT
-# ifdef __cplusplus              /* C++ doesnt support restrict */
-#  define LUMIERA_RESTRICT
-# else
-#  define LUMIERA_RESTRICT restrict
-# endif
-#endif
-
 static inline LumieraRWLock
 lumiera_rwlock_timedrdlock (LumieraRWLock self,
-                            const struct timespec* LUMIERA_RESTRICT timeout,
+                            const struct timespec* timeout,
                             struct nobug_flag* flag,
                             struct nobug_resource_user** handle)
 {
@@ -282,7 +274,7 @@ lumiera_rwlock_trywrlock (LumieraRWLock self, struct nobug_flag* flag, struct no
 
 static inline LumieraRWLock
 lumiera_rwlock_timedwrlock (LumieraRWLock self,
-                            const struct timespec* LUMIERA_RESTRICT timeout,
+                            const struct timespec* timeout,
                             struct nobug_flag* flag,
                             struct nobug_resource_user** handle)
 {

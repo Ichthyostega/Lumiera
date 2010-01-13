@@ -175,16 +175,6 @@ lumiera_mutex_trylock (LumieraMutex self, struct nobug_flag* flag, struct nobug_
   return self;
 }
 
-
-#ifndef LUMIERA_RESTRICT
-# ifdef __cplusplus              /* C++ doesnt support restrict */
-#  define LUMIERA_RESTRICT
-# else
-#  define LUMIERA_RESTRICT restrict
-# endif
-#endif
-
-
 /**
  * Try to lock a mutex variable with a timeout
  * @param self is a pointer to the mutex to be destroyed
@@ -195,7 +185,7 @@ lumiera_mutex_trylock (LumieraMutex self, struct nobug_flag* flag, struct nobug_
  */
 static inline LumieraMutex
 lumiera_mutex_timedlock (LumieraMutex self,
-                         const struct timespec* LUMIERA_RESTRICT timeout,
+                         const struct timespec* timeout,
                          struct nobug_flag* flag,
                          struct nobug_resource_user** handle)
 {
