@@ -33,58 +33,66 @@ test_components_LDADD =								\
 	liblumiera.la								\
 	$(NOBUGMT_LUMIERA_LIBS) -ldl -lboost_program_options-mt -lboost_regex-mt
 
-test_components_SOURCES =							\
-	$(testcomponents_srcdir)/backend/mediaaccessmock.cpp			\
-	$(testcomponents_srcdir)/backend/mediaaccessmocktest.cpp		\
-	$(testcomponents_srcdir)/proc/asset/assetcategorytest.cpp		\
-	$(testcomponents_srcdir)/proc/asset/compoundmediatest.cpp		\
-	$(testcomponents_srcdir)/proc/asset/deleteassettest.cpp			\
-	$(testcomponents_srcdir)/proc/asset/identityofassetstest.cpp		\
-	$(testcomponents_srcdir)/proc/asset/mediastructurequerytest.cpp		\
-	$(testcomponents_srcdir)/proc/asset/basicpipetest.cpp			\
-	$(testcomponents_srcdir)/proc/asset/createassettest.cpp			\
-	$(testcomponents_srcdir)/proc/asset/dependent-assets-test.cpp		\
-	$(testcomponents_srcdir)/proc/asset/makecliptest.cpp			\
-	$(testcomponents_srcdir)/proc/asset/orderingofassetstest.cpp		\
-	$(testcomponents_srcdir)/proc/asset/testasset.cpp			\
-	$(testcomponents_srcdir)/proc/control/command-basic-test.cpp		\
-	$(testcomponents_srcdir)/proc/control/command-argument-test.cpp		\
-	$(testcomponents_srcdir)/proc/control/command-equality-test.cpp		\
-	$(testcomponents_srcdir)/proc/control/command-mutation-test.cpp		\
-	$(testcomponents_srcdir)/proc/control/command-clone-builder-test.cpp	\
-	$(testcomponents_srcdir)/proc/control/command-use1-test.cpp		\
-	$(testcomponents_srcdir)/proc/control/command-use2-test.cpp		\
-	$(testcomponents_srcdir)/proc/control/command-use3-test.cpp		\
-	$(testcomponents_srcdir)/proc/control/command-binding-test.cpp		\
-	$(testcomponents_srcdir)/proc/control/command-registry-test.cpp		\
-	$(testcomponents_srcdir)/proc/control/test-dummy-commands.cpp		\
-	$(testcomponents_srcdir)/proc/control/argument-tuple-accept-test.cpp	\
-	$(testcomponents_srcdir)/proc/control/memento-tie-test.cpp		\
+test_components_SOURCES =								\
+	$(testcomponents_srcdir)/backend/mediaaccessmock.cpp				\
+	$(testcomponents_srcdir)/backend/mediaaccessmocktest.cpp			\
+	$(testcomponents_srcdir)/proc/asset/assetcategorytest.cpp			\
+	$(testcomponents_srcdir)/proc/asset/compoundmediatest.cpp			\
+	$(testcomponents_srcdir)/proc/asset/deleteassettest.cpp				\
+	$(testcomponents_srcdir)/proc/asset/identityofassetstest.cpp			\
+	$(testcomponents_srcdir)/proc/asset/mediastructurequerytest.cpp			\
+	$(testcomponents_srcdir)/proc/asset/basicpipetest.cpp				\
+	$(testcomponents_srcdir)/proc/asset/createassettest.cpp				\
+	$(testcomponents_srcdir)/proc/asset/dependent-assets-test.cpp			\
+	$(testcomponents_srcdir)/proc/asset/makecliptest.cpp				\
+	$(testcomponents_srcdir)/proc/asset/orderingofassetstest.cpp			\
+	$(testcomponents_srcdir)/proc/asset/testasset.cpp				\
+	$(testcomponents_srcdir)/proc/control/command-basic-test.cpp			\
+	$(testcomponents_srcdir)/proc/control/command-argument-test.cpp			\
+	$(testcomponents_srcdir)/proc/control/command-equality-test.cpp			\
+	$(testcomponents_srcdir)/proc/control/command-mutation-test.cpp			\
+	$(testcomponents_srcdir)/proc/control/command-clone-builder-test.cpp		\
+	$(testcomponents_srcdir)/proc/control/command-use1-test.cpp			\
+	$(testcomponents_srcdir)/proc/control/command-use2-test.cpp			\
+	$(testcomponents_srcdir)/proc/control/command-use3-test.cpp			\
+	$(testcomponents_srcdir)/proc/control/command-binding-test.cpp			\
+	$(testcomponents_srcdir)/proc/control/command-registry-test.cpp			\
+	$(testcomponents_srcdir)/proc/control/test-dummy-commands.cpp			\
+	$(testcomponents_srcdir)/proc/control/argument-tuple-accept-test.cpp		\
+	$(testcomponents_srcdir)/proc/control/memento-tie-test.cpp			\
 	$(testcomponents_srcdir)/proc/control/handling-pattern-basics-test.cpp		\
 	$(testcomponents_srcdir)/proc/control/handling-pattern-standard-impl-test.cpp	\
-	$(testcomponents_srcdir)/proc/engine/buff-table-test.cpp		\
-	$(testcomponents_srcdir)/proc/engine/node-basic-test.cpp         	\
-	$(testcomponents_srcdir)/proc/engine/node-fabrication-test.cpp         	\
-	$(testcomponents_srcdir)/proc/engine/node-operation-test.cpp         	\
-	$(testcomponents_srcdir)/proc/engine/node-source-test.cpp         	\
-	$(testcomponents_srcdir)/proc/mobject/builder/buildertooltest.cpp	\
-	$(testcomponents_srcdir)/proc/mobject/builder/buildsegmenttest.cpp	\
-	$(testcomponents_srcdir)/proc/mobject/controller/rendersegmenttest.cpp	\
-	$(testcomponents_srcdir)/proc/mobject/mobject-ref-test.cpp		\
-	$(testcomponents_srcdir)/proc/mobject/placement-basic-test.cpp		\
-	$(testcomponents_srcdir)/proc/mobject/placement-hierarchy-test.cpp	\
-	$(testcomponents_srcdir)/proc/mobject/placement-ref-test.cpp		\
+	$(testcomponents_srcdir)/proc/engine/buff-table-test.cpp			\
+	$(testcomponents_srcdir)/proc/engine/node-basic-test.cpp			\
+	$(testcomponents_srcdir)/proc/engine/node-fabrication-test.cpp			\
+	$(testcomponents_srcdir)/proc/engine/node-operation-test.cpp			\
+	$(testcomponents_srcdir)/proc/engine/node-source-test.cpp			\
+	$(testcomponents_srcdir)/proc/mobject/builder/buildertooltest.cpp		\
+	$(testcomponents_srcdir)/proc/mobject/builder/buildsegmenttest.cpp		\
+	$(testcomponents_srcdir)/proc/mobject/controller/rendersegmenttest.cpp		\
+	$(testcomponents_srcdir)/proc/mobject/mobject-ref-test.cpp			\
+	$(testcomponents_srcdir)/proc/mobject/placement-basic-test.cpp			\
+	$(testcomponents_srcdir)/proc/mobject/placement-hierarchy-test.cpp		\
+	$(testcomponents_srcdir)/proc/mobject/placement-ref-test.cpp			\
+	$(testcomponents_srcdir)/proc/mobject/session/test-scopes.cpp			\
 	$(testcomponents_srcdir)/proc/mobject/session/placement-index-test.cpp		\
-	$(testcomponents_srcdir)/proc/mobject/session/addcliptest.cpp		\
-	$(testcomponents_srcdir)/proc/mobject/session/deletecliptest.cpp	\
-	$(testcomponents_srcdir)/proc/mobject/session/rebuildfixturetest.cpp	\
-	$(testcomponents_srcdir)/proc/mobject/session/sessionmanagertest.cpp	\
-	$(testcomponents_srcdir)/proc/mobject/session/testclip.cpp		\
-	$(testcomponents_srcdir)/proc/mobject/session/defsmanagerimpltest.cpp	\
-	$(testcomponents_srcdir)/proc/mobject/session/defsmanagertest.cpp	\
-	$(testcomponents_srcdir)/proc/mobject/session/defsregistryimpltest.cpp	\
-	$(testcomponents_srcdir)/proc/mobject/session/sessionstructuretest.cpp	\
+	$(testcomponents_srcdir)/proc/mobject/session/addcliptest.cpp			\
+	$(testcomponents_srcdir)/proc/mobject/session/deletecliptest.cpp		\
+	$(testcomponents_srcdir)/proc/mobject/session/rebuildfixturetest.cpp		\
+	$(testcomponents_srcdir)/proc/mobject/session/sessionmanagertest.cpp		\
+	$(testcomponents_srcdir)/proc/mobject/session/testclip.cpp			\
+	$(testcomponents_srcdir)/proc/mobject/session/defsmanagerimpltest.cpp		\
+	$(testcomponents_srcdir)/proc/mobject/session/defsmanagertest.cpp		\
+	$(testcomponents_srcdir)/proc/mobject/session/defsregistryimpltest.cpp		\
+	$(testcomponents_srcdir)/proc/mobject/session/sessionstructuretest.cpp		\
+	$(testcomponents_srcdir)/proc/mobject/session/scope-query-test.cpp		\
+	$(testcomponents_srcdir)/proc/mobject/session/placement-index-query-test.cpp	\
+	$(testcomponents_srcdir)/proc/mobject/session/query-focus-stack-test.cpp	\
+	$(testcomponents_srcdir)/proc/mobject/session/query-resolver-test.cpp		\
+	$(testcomponents_srcdir)/proc/mobject/session/query-focus-test.cpp		\
+	$(testcomponents_srcdir)/proc/mobject/session/session-service-access-test.cpp	\
 	$(testcomponents_srcdir)/mainsuite.cpp
+
 
 noinst_HEADERS +=							\
 	$(testcomponents_srcdir)/backend/mediaaccessmock.hpp		\

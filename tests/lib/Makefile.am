@@ -46,11 +46,16 @@ test_lib_SOURCES =						\
 	$(testlib_srcdir)/factorytest.cpp			\
 	$(testlib_srcdir)/format-helper-test.cpp		\
 	$(testlib_srcdir)/functor-util-test.cpp			\
+	$(testlib_srcdir)/util-foreach-test.cpp			\
 	$(testlib_srcdir)/hash-indexed-test.cpp			\
 	$(testlib_srcdir)/helloworldtest.cpp			\
 	$(testlib_srcdir)/lifecycletest.cpp			\
 	$(testlib_srcdir)/multifact-test.cpp			\
+	$(testlib_srcdir)/multifact-argument-test.cpp		\
 	$(testlib_srcdir)/iter-adapter-test.cpp			\
+	$(testlib_srcdir)/item-wrapper-test.cpp			\
+	$(testlib_srcdir)/itertools-test.cpp			\
+	$(testlib_srcdir)/iter-source-test.cpp			\
 	$(testlib_srcdir)/meta/typelist-test.cpp         	\
 	$(testlib_srcdir)/meta/typelist-manip-test.cpp    	\
 	$(testlib_srcdir)/meta/typeseq-manip-test.cpp    	\
@@ -60,6 +65,8 @@ test_lib_SOURCES =						\
 	$(testlib_srcdir)/meta/function-erasure-test.cpp   	\
 	$(testlib_srcdir)/meta/generator-test.cpp        	\
 	$(testlib_srcdir)/meta/config-flags-test.cpp      	\
+	$(testlib_srcdir)/meta/duck-detector-test.cpp		\
+	$(testlib_srcdir)/meta/iterable-classification-test.cpp	\
 	$(testlib_srcdir)/query/queryutilstest.cpp		\
 	$(testlib_srcdir)/removefromsettest.cpp			\
 	$(testlib_srcdir)/sanitised-identifier-test.cpp		\
