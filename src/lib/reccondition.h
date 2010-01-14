@@ -44,17 +44,19 @@
  * @param nobugflag NoBug flag used to log actions on the condition
  * @param cnd Condition variable to be locked
  */
-#define LUMIERA_RECCONDITION_SECTION(nobugflag, cnd)                                            \
-  for (lumiera_sectionlock NOBUG_CLEANUP(lumiera_sectionlock_ensureunlocked)                    \
-         lumiera_lock_section_ = {                                                              \
-         cnd, (lumiera_sectionlock_unlock_fn) lumiera_reccondition_unlock                       \
-           NOBUG_ALPHA_COMMA(&NOBUG_FLAG(nobugflag)) NOBUG_ALPHA_COMMA_NULL};                   \
-       ({                                                                                       \
-         lumiera_lock_section_.lock =                                                           \
-           lumiera_reccondition_lock (cnd, &NOBUG_FLAG(nobugflag), &lumiera_lock_section_.rh);  \
-       });                                                                                      \
-       ({                                                                                       \
-         LUMIERA_RECCONDITION_SECTION_UNLOCK;                                                   \
+#define LUMIERA_RECCONDITION_SECTION(nobugflag, cnd)                                                    \
+  for (lumiera_sectionlock NOBUG_CLEANUP(lumiera_sectionlock_ensureunlocked)                            \
+         lumiera_lock_section_ = {                                                                      \
+         cnd, (lumiera_sectionlock_unlock_fn) lumiera_reccondition_unlock                               \
+           NOBUG_ALPHA_COMMA(&NOBUG_FLAG(nobugflag)) NOBUG_ALPHA_COMMA_NULL};                           \
+       ({                                                                                               \
+         if (lumiera_lock_section_.lock)                                                                \
+           lumiera_lock_section_.lock =                                                                 \
+             lumiera_reccondition_lock (cnd, &NOBUG_FLAG(nobugflag), &lumiera_lock_section_.rh);        \
+         lumiera_lock_section_.lock;                                                                    \
+       });                                                                                              \
+       ({                                                                                               \
+         LUMIERA_RECCONDITION_SECTION_UNLOCK;                                                           \
        }))
 
 
@@ -92,7 +94,7 @@
   do {                                                                          \
     REQUIRE (lumiera_lock_section_.lock, "Reccondition mutex not locked");      \
     lumiera_reccondition_wait (lumiera_lock_section_.lock,                      \
-                               NOBUG_FLAG_RAW(lumiera_lock_section_.flag),      \
+                               lumiera_lock_section_.flag,                      \
                                &lumiera_lock_section_.rh);                      \
   } while (!(expr))
 

@@ -52,8 +52,10 @@
          cnd, (lumiera_sectionlock_unlock_fn) lumiera_condition_unlock                          \
            NOBUG_ALPHA_COMMA(&NOBUG_FLAG(nobugflag)) NOBUG_ALPHA_COMMA_NULL};                   \
        ({                                                                                       \
-         lumiera_lock_section_.lock =                                                           \
-           lumiera_condition_lock (cnd, &NOBUG_FLAG(nobugflag), &lumiera_lock_section_.rh);     \
+         if (lumiera_lock_section_.lock)                                                        \
+           lumiera_lock_section_.lock =                                                         \
+             lumiera_condition_lock (cnd, &NOBUG_FLAG(nobugflag), &lumiera_lock_section_.rh);   \
+         lumiera_lock_section_.lock;                                                            \
        });                                                                                      \
        ({                                                                                       \
          LUMIERA_CONDITION_SECTION_UNLOCK;                                                      \
@@ -123,7 +125,7 @@
  */
 #define LUMIERA_CONDITION_SIGNAL                                        \
   do {                                                                  \
-    REQUIRE (lumiera_cond_section_.lock, "Condition mutex not locked"); \
+    REQUIRE (lumiera_lock_section_.lock, "Condition mutex not locked"); \
     lumiera_condition_signal (lumiera_lock_section_.lock,               \
                               lumiera_lock_section_.flag);              \
   } while (0)
@@ -136,7 +138,7 @@
  */
 #define LUMIERA_CONDITION_BROADCAST                                     \
   do {                                                                  \
-    REQUIRE (lumiera_cond_section_.lock, "Condition mutex not locked"); \
+    REQUIRE (lumiera_lock_section_.lock, "Condition mutex not locked"); \
     lumiera_condition_broadcast (lumiera_lock_section_.lock,            \
                                  lumiera_lock_section_.flag);           \
   } while (0)
