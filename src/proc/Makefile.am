@@ -172,6 +172,7 @@ liblumiprocmobjectsession_la_SOURCES =							\
 	$(liblumiprocmobjectsession_la_srcdir)/mobjectfactory.cpp			\
 	$(liblumiprocmobjectsession_la_srcdir)/placement-index.cpp			\
 	$(liblumiprocmobjectsession_la_srcdir)/query-resolver.cpp 			\
+	$(liblumiprocmobjectsession_la_srcdir)/query-focus.cpp 				\
 	$(liblumiprocmobjectsession_la_srcdir)/placement-index-query-resolver.cpp 	\
 	$(liblumiprocmobjectsession_la_srcdir)/session-services.cpp 			\
 	$(liblumiprocmobjectsession_la_srcdir)/root.cpp 				\

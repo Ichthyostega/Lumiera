@@ -164,6 +164,7 @@ lumiera_error_peek (void);
   predefined errors
 */
 LUMIERA_ERROR_DECLARE (ERRNO);
+LUMIERA_ERROR_DECLARE (UNKNOWN);
 
 #ifdef __cplusplus
 } /* extern "C" */
