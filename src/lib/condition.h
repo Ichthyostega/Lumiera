@@ -123,7 +123,7 @@
  */
 #define LUMIERA_CONDITION_SIGNAL                                        \
   do {                                                                  \
-    REQUIRE (lumiera_cond_section_.lock, "Condition mutex not locked"); \
+    REQUIRE (lumiera_lock_section_.lock, "Condition mutex not locked"); \
     lumiera_condition_signal (lumiera_lock_section_.lock,               \
                               lumiera_lock_section_.flag);              \
   } while (0)
@@ -136,7 +136,7 @@
  */
 #define LUMIERA_CONDITION_BROADCAST                                     \
   do {                                                                  \
-    REQUIRE (lumiera_cond_section_.lock, "Condition mutex not locked"); \
+    REQUIRE (lumiera_lock_section_.lock, "Condition mutex not locked"); \
     lumiera_condition_broadcast (lumiera_lock_section_.lock,            \
                                  lumiera_lock_section_.flag);           \
   } while (0)
