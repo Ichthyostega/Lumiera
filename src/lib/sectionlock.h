@@ -22,17 +22,11 @@
 #ifndef LUMIERA_SECTIONLOCK_H
 #define LUMIERA_SECTIONLOCK_H
 
-#include "lib/error.h"
-
 #include <pthread.h>
 #include <nobug.h>
 
-LUMIERA_ERROR_DECLARE (LOCK_ACQUIRE);
-LUMIERA_ERROR_DECLARE (LOCK_RELEASE);
-LUMIERA_ERROR_DECLARE (LOCK_DESTROY);
 
-
-typedef int (*lumiera_sectionlock_unlock_fn)(void*);
+typedef int (*lumiera_sectionlock_unlock_fn)(void*, struct nobug_flag* flag, struct nobug_resource_user** handle);
 
 /**
  * sectionlock used to manage the state of mutexes.
@@ -55,22 +49,17 @@ lumiera_sectionlock_ensureunlocked (LumieraSectionlock self)
 }
 
 
-
 /**
  * Unlock the lock hold in a SECTION
  * @internal
  * @param sectionname name used for the sectionlock instance
  * @param ... some extra code to execute
  */
-#define LUMIERA_SECTION_UNLOCK_(section)                        \
-  do if ((section)->lock)                                       \
-    {                                                           \
-      NOBUG_RESOURCE_LEAVE_RAW((section)->flag, (section)->rh)  \
-        {                                                       \
-          if ((section)->unlock((section)->lock))               \
-            LUMIERA_DIE (LOCK_RELEASE);                         \
-          (section)->lock = NULL;                               \
-        }                                                       \
+#define LUMIERA_SECTION_UNLOCK_(section)                                        \
+  do if ((section)->lock)                                                       \
+    {                                                                           \
+      (section)->unlock((section)->lock, (section)->flag, &(section)->rh);      \
+      (section)->lock = NULL;                                                   \
     } while (0)
 
 

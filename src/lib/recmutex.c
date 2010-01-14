@@ -42,15 +42,16 @@ lumiera_recmutex_init (LumieraRecmutex self, const char* purpose, struct nobug_f
 {
   if (self)
     {
-      if (recmutexattr_once == PTHREAD_ONCE_INIT)
-        pthread_once (&recmutexattr_once, recmutexattr_init);
+      pthread_once (&recmutexattr_once, recmutexattr_init);
 
       pthread_mutex_init (&self->recmutex, &recmutexattr);
       NOBUG_RESOURCE_HANDLE_INIT (self->rh);
       NOBUG_RESOURCE_ANNOUNCE_RAW (flag, "recmutex", purpose, self, self->rh);
     }
+
   return self;
 }
+
 
 LumieraRecmutex
 lumiera_recmutex_destroy (LumieraRecmutex self, struct nobug_flag* flag)
@@ -63,7 +64,6 @@ lumiera_recmutex_destroy (LumieraRecmutex self, struct nobug_flag* flag)
     }
   return self;
 }
-
 
 /*
 // Local Variables:

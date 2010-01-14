@@ -2,7 +2,7 @@
   reccondition.h  -  recursive locked condition variables
 
   Copyright (C)         Lumiera.org
-    2008, 2009,         Christian Thaeter <ct@pipapo.org>
+    2008, 2009, 2010,   Christian Thaeter <ct@pipapo.org>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -24,8 +24,11 @@
 
 #include "lib/error.h"
 #include "lib/sectionlock.h"
+#include "lib/lockerror.h"
 
 #include <pthread.h>
+#include <time.h>
+#include <errno.h>
 #include <nobug.h>
 
 /**
@@ -41,49 +44,43 @@
  * @param nobugflag NoBug flag used to log actions on the condition
  * @param cnd Condition variable to be locked
  */
-#define LUMIERA_RECCONDITION_SECTION(nobugflag, cnd)                                                            \
-  for (lumiera_sectionlock NOBUG_CLEANUP(lumiera_sectionlock_ensureunlocked)                                    \
-         lumiera_reccond_section_ = {                                                                           \
-         cnd, lumiera_reccondition_unlock_cb NOBUG_ALPHA_COMMA(&NOBUG_FLAG(nobugflag)) NOBUG_ALPHA_COMMA_NULL}; \
-       ({                                                                                                       \
-         if (lumiera_reccond_section_.lock)                                                                     \
-           {                                                                                                    \
-             RESOURCE_WAIT (nobugflag, (cnd)->rh, "acquire reccondmutex", lumiera_reccond_section_.rh);         \
-             if (pthread_mutex_lock (&(cnd)->reccndmutex))                                                      \
-               LUMIERA_DIE (LOCK_ACQUIRE);                                                                      \
-             RESOURCE_STATE (nobugflag, NOBUG_RESOURCE_RECURSIVE, lumiera_reccond_section_.rh);                 \
-           }                                                                                                    \
-         lumiera_reccond_section_.lock;                                                                         \
-       });                                                                                                      \
-       ({                                                                                                       \
-         LUMIERA_RECCONDITION_SECTION_UNLOCK;                                                                   \
+#define LUMIERA_RECCONDITION_SECTION(nobugflag, cnd)                                            \
+  for (lumiera_sectionlock NOBUG_CLEANUP(lumiera_sectionlock_ensureunlocked)                    \
+         lumiera_lock_section_ = {                                                              \
+         cnd, (lumiera_sectionlock_unlock_fn) lumiera_reccondition_unlock                       \
+           NOBUG_ALPHA_COMMA(&NOBUG_FLAG(nobugflag)) NOBUG_ALPHA_COMMA_NULL};                   \
+       ({                                                                                       \
+         lumiera_lock_section_.lock =                                                           \
+           lumiera_reccondition_lock (cnd, &NOBUG_FLAG(nobugflag), &lumiera_lock_section_.rh);  \
+       });                                                                                      \
+       ({                                                                                       \
+         LUMIERA_RECCONDITION_SECTION_UNLOCK;                                                   \
        }))
 
 
 
-#define LUMIERA_RECCONDITION_SECTION_CHAIN(nobugflag, cnd)                                                      \
-  for (lumiera_sectionlock *lumiera_lock_section_old_ = &lumiera_lock_section_,                                 \
-         NOBUG_CLEANUP(lumiera_sectionlock_ensureunlocked) lumiera_reccond_section_ = {                         \
-         cnd, lumiera_reccondition_unlock_cb NOBUG_ALPHA_COMMA(&NOBUG_FLAG(nobugflag)) NOBUG_ALPHA_COMMA_NULL}; \
-       ({                                                                                                       \
-         if (lumiera_reccond_section_.lock)                                                                     \
-           {                                                                                                    \
-             REQUIRE (lumiera_lock_section_old_->lock, "section prematurely unlocked");                         \
-             RESOURCE_WAIT (nobugflag, (cnd)->rh, "acquire reccondmutex", lumiera_reccond_section_.rh);         \
-             if (pthread_mutex_lock (&(cnd)->reccndmutex))                                                      \
-               LUMIERA_DIE (LOCK_ACQUIRE);                                                                      \
-             RESOURCE_STATE (nobugflag, NOBUG_RESOURCE_RECURSIVE, lumiera_reccond_section_.rh);                 \
-             LUMIERA_SECTION_UNLOCK_(lumiera_lock_section_old_);                                                \
-           }                                                                                                    \
-         lumiera_reccond_section_.lock;                                                                         \
-       });                                                                                                      \
-       ({                                                                                                       \
-         LUMIERA_RECCONDITION_SECTION_UNLOCK;                                                                   \
+#define LUMIERA_RECCONDITION_SECTION_CHAIN(nobugflag, cnd)                                              \
+  for (lumiera_sectionlock *lumiera_lock_section_old_ = &lumiera_lock_section_,                         \
+         NOBUG_CLEANUP(lumiera_sectionlock_ensureunlocked) lumiera_lock_section_ = {                    \
+         cnd, (lumiera_sectionlock_unlock_fn) lumiera_reccondition_unlock                               \
+           NOBUG_ALPHA_COMMA(&NOBUG_FLAG(nobugflag)) NOBUG_ALPHA_COMMA_NULL};                           \
+       ({                                                                                               \
+         if (lumiera_lock_section_.lock)                                                                \
+           {                                                                                            \
+             REQUIRE (lumiera_lock_section_old_->lock, "section prematurely unlocked");                 \
+             lumiera_lock_section_.lock =                                                               \
+               lumiera_reccondition_lock (cnd, &NOBUG_FLAG(nobugflag), &lumiera_lock_section_.rh);      \
+             LUMIERA_SECTION_UNLOCK_(lumiera_lock_section_old_);                                        \
+           }                                                                                            \
+         lumiera_lock_section_.lock;                                                                    \
+       });                                                                                              \
+       ({                                                                                               \
+         LUMIERA_RECCONDITION_SECTION_UNLOCK;                                                           \
        }))
 
 
 #define LUMIERA_RECCONDITION_SECTION_UNLOCK             \
-  LUMIERA_SECTION_UNLOCK_(&lumiera_reccond_section_)
+  LUMIERA_SECTION_UNLOCK_(&lumiera_lock_section_)
 
 
 /**
@@ -91,16 +88,33 @@
  * Must be used inside a RECCONDITION_SECTION.
  * @param expr Condition which must become true, else the condition variable goes back into sleep
  */
-#define LUMIERA_RECCONDITION_WAIT(expr)                                                                                 \
-  do {                                                                                                                  \
-    REQUIRE (lumiera_reccond_section_.lock, "Condition recmutex not locked");                                           \
-    NOBUG_RESOURCE_STATE_RAW (lumiera_reccond_section_.flag, NOBUG_RESOURCE_WAITING, lumiera_reccond_section_.rh)       \
-    {                                                                                                                   \
-      pthread_cond_wait (&((LumieraReccondition)lumiera_reccond_section_.lock)->cond,                                   \
-                         &((LumieraReccondition)lumiera_reccond_section_.lock)->reccndmutex);                           \
-      NOBUG_RESOURCE_STATE_RAW (lumiera_reccond_section_.flag, NOBUG_RESOURCE_RECURSIVE, lumiera_reccond_section_.rh);  \
-    }                                                                                                                   \
+#define LUMIERA_RECCONDITION_WAIT(expr)                                         \
+  do {                                                                          \
+    REQUIRE (lumiera_lock_section_.lock, "Reccondition mutex not locked");      \
+    lumiera_reccondition_wait (lumiera_lock_section_.lock,                      \
+                               NOBUG_FLAG_RAW(lumiera_lock_section_.flag),      \
+                               &lumiera_lock_section_.rh);                      \
   } while (!(expr))
+
+
+/**
+ * Timed wait for a condition.
+ * Must be used inside a RECCONDITION_SECTION.
+ * @param expr Recconditon which must become true, else the condition variable goes back into sleep
+ * @param timeout time when the wait expired
+ * sets LUMIERA_ERROR_LOCK_TIMEOUT when the timeout passed
+ */
+#define LUMIERA_RECCONDITION_TIMEDWAIT(expr, timeout)                           \
+  do {                                                                          \
+    REQUIRE (lumiera_lock_section_.lock, "Reccondition mutex not locked");      \
+    if (!lumiera_reccondition_timedwait (lumiera_lock_section_.lock,            \
+                                         timeout,                               \
+                                         lumiera_lock_section_.flag,            \
+                                         &lumiera_lock_section_.rh))            \
+      break;                                                                    \
+  } while (!(expr))
+
+
 
 
 /**
@@ -108,11 +122,11 @@
  * Must be used inside a RECCONDITION_SECTION.
  * Wakes one thread waiting on the condition variable
  */
-#define LUMIERA_RECCONDITION_SIGNAL                                                                     \
-  do {                                                                                                  \
-    REQUIRE (lumiera_reccond_section_.lock, "Condition recmutex not locked");                           \
-    TRACE(NOBUG_FLAG_RAW(lumiera_reccond_section_.flag), "Signal %p", &lumiera_reccond_section_);       \
-    pthread_cond_signal (&((LumieraReccondition)lumiera_reccond_section_.lock)->cond);                  \
+#define LUMIERA_RECCONDITION_SIGNAL                                             \
+  do {                                                                          \
+    REQUIRE (lumiera_lock_section_.lock, "Reccondition mutex not locked");      \
+    lumiera_reccondition_signal (lumiera_lock_section_.lock,                    \
+                                 lumiera_lock_section_.flag);                   \
   } while (0)
 
 
@@ -121,11 +135,11 @@
  * Must be used inside a RECCONDITION_SECTION.
  * Wakes all threads waiting on the condition variable
  */
-#define LUMIERA_RECCONDITION_BROADCAST                                                                  \
-  do {                                                                                                  \
-    REQUIRE (lumiera_reccond_section_.lock, "Condition recmutex not locked");                           \
-    TRACE(NOBUG_FLAG_RAW(lumiera_reccond_section_.flag), "Broadcast %p", &lumiera_reccond_section_);    \
-    pthread_cond_broadcast (&((LumieraReccondition)lumiera_reccond_section_.lock)->cond);               \
+#define LUMIERA_RECCONDITION_BROADCAST                                          \
+  do {                                                                          \
+    REQUIRE (lumiera_lock_section_.lock, "Reccondition mutex not locked");      \
+    lumiera_reccondition_broadcast (lumiera_lock_section_.lock,                 \
+                                    lumiera_lock_section_.flag);                \
   } while (0)
 
 
@@ -161,8 +175,149 @@ LumieraReccondition
 lumiera_reccondition_destroy (LumieraReccondition self, struct nobug_flag* flag);
 
 
-int
-lumiera_reccondition_unlock_cb (void* cond);
+
+static inline LumieraReccondition
+lumiera_reccondition_lock (LumieraReccondition self, struct nobug_flag* flag, struct nobug_resource_user** handle)
+{
+  if (self)
+    {
+      RESOURCE_WAIT (NOBUG_FLAG_RAW(flag), self->rh, "acquire reccondvar", *handle);
+
+      if (pthread_mutex_lock (&self->reccndmutex))
+        LUMIERA_DIE (LOCK_ACQUIRE);         /* never reached (in a correct program) */
+
+      RESOURCE_STATE (NOBUG_FLAG_RAW(flag), NOBUG_RESOURCE_RECURSIVE, *handle);
+    }
+
+  return self;
+}
+
+
+static inline LumieraReccondition
+lumiera_reccondition_trylock (LumieraReccondition self, struct nobug_flag* flag, struct nobug_resource_user** handle)
+{
+  if (self)
+    {
+      NOBUG_RESOURCE_TRY (NOBUG_FLAG_RAW(flag), self->rh, "try acquire reccondvar", *handle);
+
+      int err = pthread_mutex_trylock (&self->reccndmutex);
+
+      if (!err)
+        {
+          RESOURCE_STATE (NOBUG_FLAG_RAW(flag), NOBUG_RESOURCE_RECURSIVE, *handle);
+        }
+      else
+        {
+          NOBUG_RESOURCE_LEAVE_RAW(flag, *handle) /*{}*/;
+          lumiera_lockerror_set (err, flag, __func__);
+          return NULL;
+        }
+    }
+
+  return self;
+}
+
+
+static inline LumieraReccondition
+lumiera_reccondition_timedlock (LumieraReccondition self,
+                                const struct timespec* timeout,
+                                struct nobug_flag* flag,
+                                struct nobug_resource_user** handle)
+{
+  if (self)
+    {
+      NOBUG_RESOURCE_TRY (NOBUG_FLAG_RAW(flag), self->rh, "timed acquire reccondvar", *handle);
+
+      int err = pthread_mutex_timedlock (&self->reccndmutex, timeout);
+
+      if (!err)
+        {
+          RESOURCE_STATE (NOBUG_FLAG_RAW(flag), NOBUG_RESOURCE_RECURSIVE, *handle);
+        }
+      else
+        {
+          NOBUG_RESOURCE_LEAVE_RAW(flag, *handle) /*{}*/;
+          lumiera_lockerror_set (err, flag, __func__);
+          return NULL;
+        }
+    }
+
+  return self;
+}
+
+
+static inline LumieraReccondition
+lumiera_reccondition_wait (LumieraReccondition self, struct nobug_flag* flag, struct nobug_resource_user** handle)
+{
+  if (self)
+    {
+      NOBUG_RESOURCE_STATE_RAW (flag, NOBUG_RESOURCE_WAITING, *handle);
+
+      pthread_cond_wait (&self->cond, &self->reccndmutex);
+
+      NOBUG_RESOURCE_STATE_RAW (flag, NOBUG_RESOURCE_RECURSIVE, *handle);
+    }
+  return self;
+}
+
+
+static inline LumieraReccondition
+lumiera_reccondition_timedwait (LumieraReccondition self,
+                                const struct timespec* timeout,
+                                struct nobug_flag* flag,
+                                struct nobug_resource_user** handle)
+{
+  if (self)
+    {
+      NOBUG_RESOURCE_STATE_RAW (flag, NOBUG_RESOURCE_WAITING, *handle);
+
+      int err;
+      do {
+        err = pthread_cond_timedwait (&self->cond, &self->reccndmutex, timeout);
+      } while(err == EINTR);
+
+      NOBUG_RESOURCE_STATE_RAW (flag, NOBUG_RESOURCE_RECURSIVE, *handle);
+
+      if (err)
+        {
+          lumiera_lockerror_set (err, flag, __func__);
+          return NULL;
+        }
+    }
+
+  return self;
+}
+
+
+
+static inline void
+lumiera_reccondition_signal (LumieraReccondition self, struct nobug_flag* flag)
+{
+  TRACE(NOBUG_FLAG_RAW(flag), "Signal %p", self);
+  pthread_cond_signal (&self->cond);
+}
+
+
+static inline void
+lumiera_reccondition_broadcast (LumieraReccondition self, struct nobug_flag* flag)
+{
+  TRACE(NOBUG_FLAG_RAW(flag), "Broadcast %p", self);
+  pthread_cond_broadcast (&self->cond);
+}
+
+
+static inline void
+lumiera_reccondition_unlock (LumieraReccondition self, struct nobug_flag* flag, struct nobug_resource_user** handle)
+{
+  REQUIRE(self);
+
+  NOBUG_RESOURCE_LEAVE_RAW(flag, *handle)
+    {
+      if (pthread_mutex_unlock (&self->reccndmutex))
+        LUMIERA_DIE (LOCK_RELEASE);       /* never reached (in a correct program) */
+    }
+}
+
 
 #endif
 /*

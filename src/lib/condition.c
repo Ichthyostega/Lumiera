@@ -2,7 +2,7 @@
   condition.c  -  condition variable
 
   Copyright (C)         Lumiera.org
-    2008, 2009          Christian Thaeter <ct@pipapo.org>
+    2008, 2009, 2010,   Christian Thaeter <ct@pipapo.org>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -58,11 +58,10 @@ lumiera_condition_destroy (LumieraCondition self, struct nobug_flag* flag)
 }
 
 
-
-int lumiera_condition_unlock_cb (void* cond)
-{
-  return pthread_mutex_unlock (&((LumieraCondition)cond)->cndmutex);
-}
-
-
-
+/*
+// Local Variables:
+// mode: C
+// c-file-style: "gnu"
+// indent-tabs-mode: nil
+// End:
+*/
