@@ -69,7 +69,6 @@ static void* thread_loop (void* thread)
 
   REQUIRE (t, "thread does not exist");
 
-  // this seems to deadlock unexpectedly:
   LUMIERA_CONDITION_SECTION (threads, &t->signal)
     {
       do {

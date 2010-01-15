@@ -110,6 +110,7 @@ lumiera_threadpool_acquire_thread(enum lumiera_thread_class kind,
           ret = lumiera_thread_new (kind, purpose, flag,
                                     &threadpool.pool[kind].pthread_attrs);
           ENSURE (ret, "did not create a valid thread");
+          ENSURE (ret->state == LUMIERA_THREADSTATE_IDLE, "a non-idle thread found in the idle pool");
           TODO ("no error handing, let the resourcecollector do it, no need when returning the thread");
           LUMIERA_CONDITION_WAIT (!llist_is_empty (&threadpool.pool[kind].idle_list));
         }
