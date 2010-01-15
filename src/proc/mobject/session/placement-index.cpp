@@ -95,7 +95,6 @@ namespace session {
   
   
   /* some type shorthands */
-  //typedef PlacementIndex::PlacementMO PlacementMO; 
   typedef mobject::PlacementMO PlacementMO; 
   typedef PlacementIndex::PRef PRef;
   typedef PlacementIndex::ID ID;
