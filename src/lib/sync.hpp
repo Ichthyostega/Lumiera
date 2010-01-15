@@ -91,71 +91,169 @@ namespace lib {
     
     /** Helpers and building blocks for Monitor based synchronisation */
     namespace sync {
-      
-      
+
       struct Wrapped_LumieraExcMutex
-        : public lumiera_mutex
         {
+          lumiera_mutex self;
+
         protected:
-          Wrapped_LumieraExcMutex() { lumiera_mutex_init    (this, "Obj.Monitor ExclMutex", &NOBUG_FLAG(sync)); }
-         ~Wrapped_LumieraExcMutex() { lumiera_mutex_destroy (this, &NOBUG_FLAG(sync)); }
+          Wrapped_LumieraExcMutex() { lumiera_mutex_init    (&self, "Obj.Monitor ExclMutex", &NOBUG_FLAG(sync)); }
+         ~Wrapped_LumieraExcMutex() { lumiera_mutex_destroy (&self, &NOBUG_FLAG(sync)); }
           
-          pthread_mutex_t* mutex()  { return &(lumiera_mutex::mutex); }
+          bool lock (struct nobug_resource_user** handle)
+          {
+            return !!lumiera_mutex_lock (&self, &NOBUG_FLAG(sync), handle);
+          }
           
-         //------------------Resource-Tracking------
-         void __may_block() { TODO ("Record we may block on mutex"); }
-         void __enter()     { TODO ("Record we successfully acquired the mutex"); }
-         void __left()      { TODO ("Record we released the mutex"); }
+          bool trylock (struct nobug_resource_user** handle)
+          {
+            return !!lumiera_mutex_trylock (&self, &NOBUG_FLAG(sync), handle);
+          }
+          
+          bool timedlock (const struct timespec* timeout, struct nobug_resource_user** handle)
+          {
+            return !!lumiera_mutex_timedlock (&self, timeout, &NOBUG_FLAG(sync), handle);
+          }
+          
+          void unlock (struct nobug_resource_user** handle)
+          {
+            lumiera_mutex_unlock (&self, &NOBUG_FLAG(sync), handle);
+          }
+          
+          LumieraReccondition myreccond () {throw "bullshit"; return NULL;} // placeholder, brainstorm
         };
       
       
       struct Wrapped_LumieraRecMutex
-        : public lumiera_recmutex
         {
+          lumiera_recmutex self;
         protected:
-          Wrapped_LumieraRecMutex() { lumiera_recmutex_init (this, "Obj.Monitor RecMutex", &NOBUG_FLAG(sync)); }
-         ~Wrapped_LumieraRecMutex() { lumiera_recmutex_destroy (this, &NOBUG_FLAG(sync)); }
+          Wrapped_LumieraRecMutex() { lumiera_recmutex_init    (&self, "Obj.Monitor RecMutex", &NOBUG_FLAG(sync)); }
+         ~Wrapped_LumieraRecMutex() { lumiera_recmutex_destroy (&self, &NOBUG_FLAG(sync)); }
           
-          pthread_mutex_t* mutex()  { return &recmutex; }
+          bool lock (struct nobug_resource_user** handle)
+          {
+            return !!lumiera_recmutex_lock (&self, &NOBUG_FLAG(sync), handle);
+          }
           
-         //------------------Resource-Tracking------
-         void __may_block() { TODO ("Record we may block on mutex"); }
-         void __enter()     { TODO ("Record we successfully acquired the mutex"); }
-         void __left()      { TODO ("Record we are released the mutex"); }
+          bool trylock (struct nobug_resource_user** handle)
+          {
+            return !!lumiera_recmutex_trylock (&self, &NOBUG_FLAG(sync), handle);
+          }
+          
+          bool timedlock (const struct timespec* timeout, struct nobug_resource_user** handle)
+          {
+            return !!lumiera_recmutex_timedlock (&self, timeout, &NOBUG_FLAG(sync), handle);
+          }
+          
+          void unlock (struct nobug_resource_user** handle)
+          {
+            lumiera_recmutex_unlock (&self, &NOBUG_FLAG(sync), handle);
+          }
+          
+          LumieraReccondition myreccond () {throw "bullshit"; return NULL;} // placeholder, brainstorm
         };
       
       
       struct Wrapped_LumieraExcCond
-        : public lumiera_condition
         {
+          lumiera_condition self;
         protected:
-          Wrapped_LumieraExcCond() { lumiera_condition_init    (this, "Obj.Monitor ExclCondition", &NOBUG_FLAG(sync) ); }
-         ~Wrapped_LumieraExcCond() { lumiera_condition_destroy (this, &NOBUG_FLAG(sync) ); }
+          Wrapped_LumieraExcCond() { lumiera_condition_init    (&self, "Obj.Monitor ExclCondition", &NOBUG_FLAG(sync) ); }
+         ~Wrapped_LumieraExcCond() { lumiera_condition_destroy (&self, &NOBUG_FLAG(sync) ); }
           
-          pthread_mutex_t* mutex() { return &cndmutex; }
-          pthread_cond_t*  condv() { return &cond;     }
+          bool lock (struct nobug_resource_user** handle)
+          {
+            return !!lumiera_condition_lock (&self, &NOBUG_FLAG(sync), handle);
+          }
           
-         //------------------Resource-Tracking------
-         void __may_block() { TODO ("Record we may block on mutex"); }
-         void __enter()     { TODO ("Record we successfully acquired the mutex"); }
-         void __left()      { TODO ("Record we released the mutex"); }
+          bool trylock (struct nobug_resource_user** handle)
+          {
+            return !!lumiera_condition_trylock (&self, &NOBUG_FLAG(sync), handle);
+          }
+          
+          bool timedlock (const struct timespec* timeout, struct nobug_resource_user** handle)
+          {
+            return !!lumiera_condition_timedlock (&self, timeout, &NOBUG_FLAG(sync), handle);
+          }
+          
+          bool wait (struct nobug_resource_user** handle)
+          {
+            return !!lumiera_condition_wait (&self, &NOBUG_FLAG(sync), handle);
+          }
+          
+          bool timedwait (const struct timespec* timeout, struct nobug_resource_user** handle)
+          {
+            return !!lumiera_condition_timedwait (&self, timeout, &NOBUG_FLAG(sync), handle);
+          }
+          
+          void signal()
+          {
+            lumiera_condition_signal (&self, &NOBUG_FLAG(sync));
+          }
+          
+          void broadcast()
+          {
+            lumiera_condition_broadcast (&self, &NOBUG_FLAG(sync));
+          }
+          
+          void unlock (struct nobug_resource_user** handle)
+          {
+            lumiera_condition_unlock (&self, &NOBUG_FLAG(sync), handle);
+          }
+          
+          LumieraReccondition myreccond () {throw "bullshit"; return NULL;} // placeholder, brainstorm
         };
       
       
       struct Wrapped_LumieraRecCond
-        : public lumiera_reccondition
         {
+          lumiera_reccondition self;
         protected:
-          Wrapped_LumieraRecCond() { lumiera_reccondition_init    (this, "Obj.Monitor RecCondition", &NOBUG_FLAG(sync) ); } ////////TODO
-         ~Wrapped_LumieraRecCond() { lumiera_reccondition_destroy (this, &NOBUG_FLAG(sync) ); }
+          Wrapped_LumieraRecCond() { lumiera_reccondition_init    (&self, "Obj.Monitor RecCondition", &NOBUG_FLAG(sync) ); }
+         ~Wrapped_LumieraRecCond() { lumiera_reccondition_destroy (&self, &NOBUG_FLAG(sync) ); }
           
-          pthread_mutex_t* mutex() { return &reccndmutex; }
-          pthread_cond_t*  condv() { return &cond;        }
+          bool lock (struct nobug_resource_user** handle)
+          {
+            return !!lumiera_reccondition_lock (&self, &NOBUG_FLAG(sync), handle);
+          }
           
-         //------------------Resource-Tracking------
-         void __may_block() { TODO ("Record we may block on mutex"); }
-         void __enter()     { TODO ("Record we successfully acquired the mutex"); }
-         void __left()     { TODO ("Record we released the mutex"); }
+          bool trylock (struct nobug_resource_user** handle)
+          {
+            return !!lumiera_reccondition_trylock (&self, &NOBUG_FLAG(sync), handle);
+          }
+          
+          bool timedlock (const struct timespec* timeout, struct nobug_resource_user** handle)
+          {
+            return !!lumiera_reccondition_timedlock (&self, timeout, &NOBUG_FLAG(sync), handle);
+          }
+          
+          bool wait (struct nobug_resource_user** handle)
+          {
+            return !!lumiera_reccondition_wait (&self, &NOBUG_FLAG(sync), handle);
+          }
+
+          bool timedwait (const struct timespec* timeout, struct nobug_resource_user** handle)
+          {
+            return !!lumiera_reccondition_timedwait (&self, timeout, &NOBUG_FLAG(sync), handle);
+          }
+          
+          void signal()
+          {
+            lumiera_reccondition_signal (&self, &NOBUG_FLAG(sync));
+          }
+          
+          void broadcast()
+          {
+            lumiera_reccondition_broadcast (&self, &NOBUG_FLAG(sync));
+          }
+          
+          void unlock (struct nobug_resource_user** handle)
+          {
+            lumiera_reccondition_unlock (&self, &NOBUG_FLAG(sync), handle);
+          }
+          
+          LumieraReccondition myreccond () { return &self;} // placeholder, brainstorm
         };
       
       
@@ -167,10 +265,6 @@ namespace lib {
         : protected MTX
         {
         protected:
-          using MTX::mutex;
-          using MTX::__may_block;
-          using MTX::__enter;
-          using MTX::__left;
           
          ~Mutex () { }
           Mutex () { }
@@ -179,22 +273,15 @@ namespace lib {
           
         public:
             void
-            acquire()
+            acquire(struct nobug_resource_user** handle)
               {
-                __may_block();
-                
-                if (pthread_mutex_lock (mutex()))
-                  throw lumiera::error::State("Mutex acquire failed.");  ///////TODO capture the error-code
-                
-                __enter();
+                MTX::lock(handle);
               }
             
             void
-            release()
-              { 
-                pthread_mutex_unlock (mutex());
-                
-                __left();
+            release(struct nobug_resource_user** handle)
+              {
+                MTX::unlock(handle);
               }
             
         };
@@ -207,41 +294,38 @@ namespace lib {
       class Condition
         : public Mutex<CDX>
         {
-        protected:
-          using CDX::condv;
-          using CDX::mutex;
-          
+
         public:
           void
           signal (bool wakeAll=false)
             {
               if (wakeAll)
-                  pthread_cond_broadcast (condv());
+                CDX::broadcast ();
               else
-                  pthread_cond_signal (condv());
+                CDX::signal ();
             }
           
           
           template<class BF>
           bool
-          wait (BF& predicate, Timeout& waitEndTime)
+          wait (struct nobug_resource_user** handle, BF& predicate, Timeout& waitEndTime)
             {
-              int err=0;
-              while (!predicate() && !err)
+              bool ok = true;
+              while (ok && !predicate())
                 if (waitEndTime)
-                  err = pthread_cond_timedwait (condv(), mutex(), &waitEndTime);
+                  ok = CDX::timedwait (&waitEndTime, handle);
                 else
-                  err = pthread_cond_wait (condv(), mutex());
+                  ok = CDX::wait (handle);
               
-              if (!err)           return true;
-              if (ETIMEDOUT==err) return false;
+              if (!ok && lumiera_error_expect(LUMIERA_ERROR_LOCK_TIMEOUT)) return false;
+              lumiera::throwOnError();   // any other error thows
               
-              throw lumiera::error::State ("Condition wait failed."); ///////////TODO extract error-code
+              return true;
             }
         };
       
       
-      /** 
+      /**
        * helper for specifying an optional timeout for an timed wait.
        * Wrapping a timespec-struct, it allows for easy initialisation
        * by a given relative offset.
@@ -320,30 +404,30 @@ namespace lib {
           const Monitor& operator= (Monitor const& ref) { timeout_ = ref.timeout_; }
           
           
-          void acquireLock() { IMPL::acquire(); }
-          void releaseLock() { IMPL::release(); }
+          void acquireLock(struct nobug_resource_user** handle) { IMPL::acquire(handle); }
+          void releaseLock(struct nobug_resource_user** handle) { IMPL::release(handle); }
           
           void signal(bool a){ IMPL::signal(a); }
           
           bool
-          wait (Flag flag, ulong timedwait=0)
+          wait (struct nobug_resource_user** handle, Flag flag, ulong timedwait=0)
             {
               BoolFlagPredicate checkFlag(flag);
-              return IMPL::wait(checkFlag, timeout_.setOffset(timedwait));                                   
+              return IMPL::wait(handle, checkFlag, timeout_.setOffset(timedwait));
             }
           
           template<class X>
           bool
-          wait (X& instance, bool (X::*method)(void), ulong timedwait=0)
+          wait (struct nobug_resource_user** handle, X& instance, bool (X::*method)(void), ulong timedwait=0)
             {
               BoolMethodPredicate<X> invokeMethod(instance, method);
-              return IMPL::wait(invokeMethod, timeout_.setOffset(timedwait));                                   
+              return IMPL::wait(handle, invokeMethod, timeout_.setOffset(timedwait));
             }
           
           void setTimeout(ulong relative) {timeout_.setOffset(relative);}
           bool isTimedWait()              {return (timeout_);}
           
-          LumieraReccondition accessCond(){return static_cast<LumieraReccondition> (this);}
+          LumieraReccondition accessCond(){return IMPL::myreccond();}
         };
      
       typedef Mutex<Wrapped_LumieraExcMutex> NonrecursiveLock_NoWait;
@@ -353,9 +437,6 @@ namespace lib {
       
       
     } // namespace sync (helpers and building blocks)
-    
-    
-    
     
     
     
@@ -374,14 +455,14 @@ namespace lib {
     
     
     /*************************************************************************
-     * Facility for monitor object based locking. 
+     * Facility for monitor object based locking.
      * To be attached either on a per class base or per object base.
      * Typically, the client class will inherit from this template (but it
      * is possible to use it stand-alone, if inheriting isn't an option).
      * The interface for clients to access the functionality is the embedded
      * Lock template, which should be instantiated as an automatic variable
      * within the scope to be protected.
-     *  
+     *
      */
     template<class CONF = NonrecursiveLock_NoWait>
     class Sync
@@ -404,9 +485,11 @@ namespace lib {
             Monitor& mon_;
             
           public:
+            RESOURCE_USER (handle);     // temporary public until thread impl settles the locking
+
             template<class X>
-            Lock(X* it) : mon_(getMonitor(it)){ mon_.acquireLock(); }
-            ~Lock()                           { mon_.releaseLock(); }
+            Lock(X* it) : mon_(getMonitor(it)){ RESOURCE_USER_INIT (handle); mon_.acquireLock(&handle); }
+            ~Lock()                           { mon_.releaseLock(&handle); }
             
             void notify()                     { mon_.signal(false);}
             void notifyAll()                  { mon_.signal(true); }
@@ -417,31 +500,32 @@ namespace lib {
             bool
             wait (C& cond, ulong timeout=0)
               {
-                return mon_.wait(cond,timeout);
+                return mon_.wait(&handle, cond, timeout);
               }
             
             template<typename X>
             bool
             wait  (X& instance, bool (X::*predicate)(void), ulong timeout=0)
               {
-                return mon_.wait(instance,predicate,timeout);
+                return mon_.wait(&handle, instance, predicate, timeout);
               }
             
-            /** convenience shortcut: 
+            /** convenience shortcut:
              *  Locks and immediately enters wait state,
              *  observing a condition defined as member function. */
             template<class X>
             Lock(X* it, bool (X::*method)(void))
               : mon_(getMonitor(it)) 
               { 
-                mon_.acquireLock();
-                mon_.wait(*it,method);
+                RESOURCE_USER_INIT (handle);
+                mon_.acquireLock(&handle);
+                mon_.wait(&handle, *it, method);
               }
             
           protected:
             /** for creating a ClassLock */
             Lock(Monitor& m) : mon_(m)
-              { mon_.acquireLock(); }
+              { RESOURCE_USER_INIT (handle); mon_.acquireLock(&handle); }
             
             /** for controlled access to the
              * underlying sync primitives */

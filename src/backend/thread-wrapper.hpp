@@ -118,7 +118,7 @@ namespace backend {
       void
       join()
         {
-          accessMonitor().wait (*this, &JoinHandle::wakeupCheck);
+          accessMonitor().wait (&handle, *this, &JoinHandle::wakeupCheck);
         }
     };
   

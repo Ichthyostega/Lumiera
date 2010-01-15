@@ -134,3 +134,19 @@ lumiera_error_peek (void)
 {
   return lumiera_error_get ()->err;
 }
+
+int
+lumiera_error_expect (lumiera_err expected)
+{
+  LumieraErrorcontext self = lumiera_error_get ();
+  lumiera_err err = self->err;
+
+  if (err == expected)
+    {
+      if (err)
+        self->err = NULL;
+      return 1;
+    }
+  else
+    return 0;
+}
