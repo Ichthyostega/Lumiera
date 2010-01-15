@@ -160,6 +160,17 @@ lumiera_err
 lumiera_error_peek (void);
 
 
+/**
+ * Expect some error
+ * Check that the current error state matches some expectation, if true then the error state
+ * is cleared and 1 is returned, otherwise 0 is returned and the error state remains set.
+ * @param expected error which is expected
+ * @return 1 if the current error state equals the expected state, else 0, the error state is cleared when the expectation is met
+ */
+int
+lumiera_error_expect (lumiera_err expected);
+
+
 /*
   predefined errors
 */

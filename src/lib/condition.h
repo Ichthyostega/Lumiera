@@ -52,8 +52,10 @@
          cnd, (lumiera_sectionlock_unlock_fn) lumiera_condition_unlock                          \
            NOBUG_ALPHA_COMMA(&NOBUG_FLAG(nobugflag)) NOBUG_ALPHA_COMMA_NULL};                   \
        ({                                                                                       \
-         lumiera_lock_section_.lock =                                                           \
-           lumiera_condition_lock (cnd, &NOBUG_FLAG(nobugflag), &lumiera_lock_section_.rh);     \
+         if (lumiera_lock_section_.lock)                                                        \
+           lumiera_lock_section_.lock =                                                         \
+             lumiera_condition_lock (cnd, &NOBUG_FLAG(nobugflag), &lumiera_lock_section_.rh);   \
+         lumiera_lock_section_.lock;                                                            \
        });                                                                                      \
        ({                                                                                       \
          LUMIERA_CONDITION_SECTION_UNLOCK;                                                      \

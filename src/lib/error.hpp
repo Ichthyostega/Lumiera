@@ -125,6 +125,7 @@ namespace lumiera {
     LUMIERA_ERROR_DECLARE (WRONG_TYPE);   ///< runtime type mismatch 
     LUMIERA_ERROR_DECLARE (ITER_EXHAUST); ///< end of sequence reached 
     LUMIERA_ERROR_DECLARE (BOTTOM_VALUE); ///< invalid or NIL value 
+    LUMIERA_ERROR_DECLARE (RUNTIME);      ///< generic runtime error, will be overridden by id
 
     
 /** Macro for creating derived exception classes properly 
@@ -155,6 +156,7 @@ namespace lumiera {
     LUMIERA_EXCEPTION_DECLARE (State,    Error,  LUMIERA_ERROR_STATE);
     LUMIERA_EXCEPTION_DECLARE (Invalid,  Error,  LUMIERA_ERROR_INVALID);
     LUMIERA_EXCEPTION_DECLARE (External, Error,  LUMIERA_ERROR_EXTERNAL);
+    LUMIERA_EXCEPTION_DECLARE (Runtime,  Error,  LUMIERA_ERROR_RUNTIME);
     
     
     /** install our own handler for undeclared exceptions. Will be
@@ -162,6 +164,22 @@ namespace lumiera {
     void install_unexpectedException_handler ();
     
   } // namespace error
+
+
+  /**
+   * Throw a 'Runtime' error which wraps an existing lumiera error
+   * no-op when no error is pending. Does not clear the error state.
+   */
+  static inline void throwOnError()
+  {
+    lumiera_err err = lumiera_error_peek();
+    if (err)
+      {
+        const char* extra = lumiera_error_extra();
+        throw error::Runtime(extra?extra:"", err);
+      }
+  }
+
 
 } // namespace lumiera
 
