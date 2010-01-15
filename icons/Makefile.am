@@ -18,7 +18,7 @@
 svgdir = $(top_srcdir)/icons/svg
 prerendereddir = $(top_srcdir)/icons/prerendered
 icondir = $(top_builddir)
-iconcommand = python $(top_srcdir)/admin/render-icon.py
+iconcommand = python $(top_srcdir)/admin/render_icon.py
 
 16x16 = $(icondir)/16x16
 22x22 = $(icondir)/22x22
