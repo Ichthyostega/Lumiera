@@ -196,12 +196,13 @@ def checkCommandOption(env, optID, val=None, cmdName=None):
 
 
 
-def RegisterIcon_Builder(env, renderer):
+def RegisterIcon_Builder(env):
     """ Registers Custom Builders for generating and installing Icons.
         Additionally you need to build the tool (rsvg-convert.c)
         used to generate png from the svg source using librsvg. 
     """
-    renderer = __import__(renderer) # load python script for invoking the render
+    
+    import render_icon as renderer  # load Joel's python script for invoking the rsvg-convert (SVG render)
     renderer.rsvgPath = env.subst("$BINDIR/rsvg-convert")
     
     def invokeRenderer(target, source, env):
