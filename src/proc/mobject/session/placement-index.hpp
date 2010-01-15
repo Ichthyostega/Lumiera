@@ -160,7 +160,6 @@ namespace session {
       
       
     public:
-      typedef Placement<MObject> PlacementMO;
       typedef PlacementRef<MObject> PRef;
       typedef PlacementMO::ID const& ID;
       
