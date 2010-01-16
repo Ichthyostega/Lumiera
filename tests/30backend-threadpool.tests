@@ -10,7 +10,6 @@ END
 
 TEST "process a function" process-function <<END
 err: the input to the function is 440616
-err: executing the user function
-err: thread quitting
-err: the result is 1
+err: wait 1 sec
+err: finished waiting
 END

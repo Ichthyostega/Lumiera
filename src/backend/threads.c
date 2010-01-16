@@ -76,9 +76,6 @@ static void* thread_loop (void* thread)
         INFO(threads, "function %p", t->function);
         if (t->function)
           t->function (t->arguments);
-        // TODO: problem:
-        // calling release on a not-yet properly setup thread
-        // threadpool.pool[thread->kind].working_thread_count == 0
         lumiera_threadpool_release_thread(t);
         LUMIERA_CONDITION_WAIT(t->state != LUMIERA_THREADSTATE_IDLE);
         INFO(threads, "Thread awaken with state %d", t->state);

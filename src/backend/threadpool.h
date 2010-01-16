@@ -70,8 +70,8 @@ struct lumiera_threadpool_struct
   {
     llist working_list;
     llist idle_list;
-    unsigned working_thread_count;
-    unsigned idle_thread_count;
+    int thread_count;
+    int idle_thread_count;
     pthread_attr_t pthread_attrs;
     lumiera_condition sync;
   } pool[LUMIERA_THREADCLASS_COUNT];
