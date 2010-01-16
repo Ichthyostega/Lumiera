@@ -46,7 +46,7 @@ void
 lumiera_threadpool_init(void)
 {
   NOBUG_INIT_FLAG (threadpool);
-  NOBUG_INIT_FLAG(threads);
+  NOBUG_INIT_FLAG (threads);
   TRACE (threadpool);
   NOBUG_INIT_FLAG (threads);
 

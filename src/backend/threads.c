@@ -62,7 +62,7 @@ const char* lumiera_threadstate_names[] = {
 static void* thread_loop (void* thread)
 {
   TRACE (threads);
-  NOBUG_THREAD_ID_SET("worker");
+  NOBUG_THREAD_ID_SET ("worker");
   LumieraThread t = (LumieraThread)thread;
 
   pthread_setcancelstate (PTHREAD_CANCEL_DISABLE, NULL);
@@ -73,16 +73,16 @@ static void* thread_loop (void* thread)
     {
       do {
         // NULL function means: no work to do
-        INFO(threads, "function %p", t->function);
+        INFO (threads, "function %p", t->function);
         if (t->function)
           t->function (t->arguments);
         lumiera_threadpool_release_thread(t);
-        LUMIERA_CONDITION_WAIT(t->state != LUMIERA_THREADSTATE_IDLE);
-        INFO(threads, "Thread awaken with state %d", t->state);
+        LUMIERA_CONDITION_WAIT (t->state != LUMIERA_THREADSTATE_IDLE);
+        INFO (threads, "Thread awaken with state %d", t->state);
       } while (t->state != LUMIERA_THREADSTATE_SHUTDOWN);
         // SHUTDOWN state
 
-      INFO(threads, "Thread Shutdown");
+      INFO (threads, "Thread Shutdown");
     }
   return 0;
 }
@@ -158,7 +158,7 @@ lumiera_thread_destroy (LumieraThread self)
   // get the pthread out of the processing loop
   // need to signal to the thread that it should start quitting
   // should this be within the section?
-  LUMIERA_CONDITION_SECTION(threads, &self->signal)
+  LUMIERA_CONDITION_SECTION (threads, &self->signal)
     {
       REQUIRE (self->state == LUMIERA_THREADSTATE_IDLE, "trying to delete a thread in state other than IDLE (%s)", lumiera_threadstate_names[self->state]);
       self->state = LUMIERA_THREADSTATE_SHUTDOWN;
@@ -167,11 +167,11 @@ lumiera_thread_destroy (LumieraThread self)
       LUMIERA_CONDITION_SIGNAL;
     }
 
-  int error = pthread_join(self->id, NULL);
-  ENSURE (0 == error, "pthread_join returned %d:%s", error, strerror(error));
+  int error = pthread_join (self->id, NULL);
+  ENSURE (0 == error, "pthread_join returned %d:%s", error, strerror (error));
 
   // condition has to be destroyed after joining with the thread
-  lumiera_condition_destroy (&self->signal, &NOBUG_FLAG(threads));
+  lumiera_condition_destroy (&self->signal, &NOBUG_FLAG (threads));
 
   return self;
 }
