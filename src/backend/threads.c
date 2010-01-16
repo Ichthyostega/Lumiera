@@ -61,7 +61,7 @@ const char* lumiera_threadstate_names[] = {
 
 static void* thread_loop (void* thread)
 {
-  TRACE(threads);
+  TRACE (threads);
   NOBUG_THREAD_ID_SET("worker");
   LumieraThread t = (LumieraThread)thread;
 
@@ -99,7 +99,7 @@ lumiera_thread_run (enum lumiera_thread_class kind,
                     const char* purpose,
                     struct nobug_flag* flag)
 {
-  TRACE(threads);
+  TRACE (threads);
   //  REQUIRE (function, "invalid function");
 
   // ask the threadpool for a thread (it might create a new one)
@@ -153,7 +153,7 @@ lumiera_thread_new (enum lumiera_thread_class kind,
 LumieraThread
 lumiera_thread_destroy (LumieraThread self)
 {
-  TRACE(threads);
+  TRACE (threads);
   REQUIRE (self, "trying to destroy an invalid thread");
 
   llist_unlink (&self->node);
@@ -182,7 +182,7 @@ lumiera_thread_destroy (LumieraThread self)
 void
 lumiera_thread_delete (LumieraThread self)
 {
-  TRACE(threads, "deleting thread");
+  TRACE (threads);
   lumiera_free (lumiera_thread_destroy (self));
 }
 
