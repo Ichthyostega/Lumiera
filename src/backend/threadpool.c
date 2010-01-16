@@ -156,9 +156,12 @@ lumiera_threadpool_release_thread(LumieraThread thread)
   REQUIRE (thread->state != LUMIERA_THREADSTATE_IDLE, "trying to park an already idle thread");
   LUMIERA_CONDITION_SECTION (threadpool, &threadpool.pool[thread->kind].sync)
     {
-      thread->state = LUMIERA_THREADSTATE_IDLE;
       REQUIRE (!llist_is_member (&threadpool.pool[thread->kind].idle_list, &thread->node), "thread is already in the idle list");
-      //      REQUIRE (llist_is_member (&threadpool.pool[thread->kind].working_list, &thread->node), "thread is not in the working list"); // does not make sense for when the thread was just created, check for state==STARTUP
+      REQUIRE (llist_is_member (&threadpool.pool[thread->kind].working_list, &thread->node)
+               || thread->state == LUMIERA_THREADSTATE_STARTUP,
+               "thread is not in the working list (state=%s)",
+               lumiera_threadstate_names[thread->state]);
+      thread->state = LUMIERA_THREADSTATE_IDLE;
       // move thread to the idle_list
       llist_insert_head (&threadpool.pool[thread->kind].idle_list, &thread->node);
 
