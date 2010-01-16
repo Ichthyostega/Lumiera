@@ -48,11 +48,16 @@ namespace test    {
   using namespace mobject::test;
   typedef TestPlacement<TestSubMO21> PSub;
   
+  typedef PlacementMO::ID P_ID;
+  
   
   /***************************************************************************
    * @test properties and behaviour of the reference-mechanism for Placements.
    *       We create an mock placement index and install it to be used
    *       by all PlacementRef instances while conducting this test.
+   *       Then we add two dummy placements and create some
+   *       references to conduct placement operations
+   *       through these references.
    * @see  mobject::Placement
    * @see  mobject::MObject#create
    * @see  mobject::Placement#addPlacement
@@ -64,17 +69,21 @@ namespace test    {
       virtual void
       run (Arg) 
         {
-          PSub p1(*new TestSubMO21);
-          PSub p2(*new TestSubMO21);
-          p2.chain(Time(2));         // define start time of Placement-2 to be at t=2
+          PSub testPlacement1(*new TestSubMO21);
+          PSub testPlacement2(*new TestSubMO21);
+          testPlacement2.chain(Time(2));     // define start time of Placement-2 to be at t=2
           
           // Prepare an (test)Index backing the PlacementRefs
           PPIdx index = SessionServiceMockIndex::install();
           PMO& root = index->getRoot();
           
-          index->insert (p1, root);
-          index->insert (p2, root);
+          P_ID id1   = index->insert (testPlacement1, root);
+          P_ID tmpID = index->insert (testPlacement2, root);
           ASSERT (2 == index->size());
+          
+          // References to the "live" placements within our test index
+          PMO&  p1 = index->find(id1);
+          PMO&  p2 = index->find(tmpID);
           
           PlacementMO::Id<TestSubMO21> id2 = p2.recastID<TestSubMO21>();
           ASSERT (id2);
@@ -103,11 +112,11 @@ namespace test    {
           
           // PlacementRef mimics placement behaviour
           ref1->specialAPI();
-          ASSERT (1 == ref1.use_count());
-          ASSERT (1 == ref2.use_count());
+          ASSERT (2 == ref1.use_count());
+          ASSERT (2 == ref2.use_count());
           ExplicitPlacement exPla = refX.resolve();
           ASSERT (exPla.time == Time(2));          // indeed get back the time we set on p2 above
-          ASSERT (2 == ref2.use_count());          // exPla shares ownership with p2
+          ASSERT (3 == ref2.use_count());          // exPla shares ownership with p2
           
           ASSERT (index->contains(ref1));          // ref can stand-in for a placement-ID 
           ASSERT (sizeof(id2) == sizeof(ref2));    // (and is actually implemented based on an ID)
@@ -129,8 +138,8 @@ namespace test    {
           
           LumieraUid luid2 (p2.getID().get());
           refX = luid2;                            // assignment works even based on a plain LUID
-          ref2 = ref1;                             
-          ref1 = refX;                             // dynamic type check when downcasting  
+          ref2 = ref1;
+          ref1 = refX;                             // dynamic type check when downcasting
           ASSERT (isSameObject (p1, *ref2));
           ASSERT (isSameObject (p2, *ref1));
           refX = ref2;
@@ -144,35 +153,31 @@ namespace test    {
           ASSERT (ref2 != refX);
           
           // resolution is indeed "live", we see changes to the referred placement
-          ASSERT (refX.resolve().time == Time(0));
-          p1 = p2;
+          ASSERT (refX.resolve().time == Time::MIN);
+          p1.chain = p2.chain;                     // do a change on the placement within index....
           ASSERT (refX.resolve().time == Time(2)); // now we get the time tie we originally set on p2
-          ASSERT (3 == ref2.use_count());          // p1, p2 and exPla share ownership
           
-          // actually, the assignment has invalidated ref1, because of the changed ID
-          ASSERT (p1.getID() == p2.getID());
+          ASSERT (p1.getID() != p2.getID());       // but the instance identities are still unaltered
+          ASSERT (2 == ref1.use_count());
+          ASSERT (3 == ref2.use_count());          // one more because of shared ownership with exPla
           
-          VERIFY_ERROR(INVALID_PLACEMENTREF, *ref1 );
-          
-          ASSERT (!index->contains(p1));           // index indeed detected the invalid ref
-          ASSERT (3 == ref2.use_count());          // but ref2 is still valid
           
           // actively removing p2 invalidates the other refs to
-          index->remove (ref2);
-          ASSERT (!ref2);                          // checks invalidity without throwing
+          index->remove (ref1);
+          ASSERT (!ref1);                          // checks invalidity without throwing
           ASSERT (!refX);
-          VERIFY_ERROR(INVALID_PLACEMENTREF, *ref2 );
+          VERIFY_ERROR(NOT_IN_SESSION, *ref1 );
           
           // deliberately create an invalid PlacementRef
           PlacementRef<TestSubMO21> bottom;
           ASSERT (!bottom);
-          VERIFY_ERROR(INVALID_PLACEMENTREF, *bottom );
-          VERIFY_ERROR(INVALID_PLACEMENTREF, bottom->specialAPI() );
-          VERIFY_ERROR(INVALID_PLACEMENTREF, bottom.resolve() );
+          VERIFY_ERROR(BOTTOM_PLACEMENTREF, *bottom );
+          VERIFY_ERROR(BOTTOM_PLACEMENTREF, bottom->specialAPI() );
+          VERIFY_ERROR(BOTTOM_PLACEMENTREF, bottom.resolve() );
           
           //consistency check; then reset PlacementRef index to default
-          ASSERT (0 == index->size());
-          ASSERT (1 == index.use_count());
+          ASSERT (1 == index->size());
+          ASSERT (index->isValid());
           index.reset();
         }
     };

@@ -70,7 +70,9 @@ out: ^...3 elements at Level 0
 END
 
 
-PLANNED "PlacementRef_test" PlacementRef_test <<END
+TEST "PlacementRef_test" PlacementRef_test <<END
+out: Placement<.+TestSubMO21.> .......... use-cnt=2
+out: specialAPI()
 END
 
 

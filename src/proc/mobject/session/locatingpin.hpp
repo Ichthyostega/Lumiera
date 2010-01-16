@@ -152,8 +152,8 @@ protected:
             bool impo;
             
             LocatingSolution () 
-              : minTime(Time::MAX),  // TODO: better implementation of "unspecified..."
-                maxTime(Time::MIN),
+              : minTime(Time::MIN),  // TODO: better implementation of "unspecified..."
+                maxTime(Time::MAX),
                 minTrack(0),     // TODO
                 maxTrack(0),
                 impo(false)

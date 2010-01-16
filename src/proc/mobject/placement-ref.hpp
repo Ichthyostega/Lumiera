@@ -263,6 +263,10 @@ namespace mobject {
       static PlacementMX&
       access (_Id const& placementID)
         {
+          if (!placementID)
+            throw lumiera::error::Logic ("Attempt to access a NIL PlacementRef"
+                                        ,LUMIERA_ERROR_BOTTOM_PLACEMENTREF);
+          
           Placement<MObject> & pla (session::SessionServiceFetch::resolveID (placementID));  // may throw
           REQUIRE (pla.isValid());
           ASSERT (pla.isCompatible<MX>());
