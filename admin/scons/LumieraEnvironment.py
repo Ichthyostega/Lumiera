@@ -74,6 +74,7 @@ class LumieraEnvironment(Environment):
             return False
         
         self.libInfo[libID] = libInfo = LumieraEnvironment()
+        libInfo["ENV"]["PKG_CONFIG_PATH"] = os.environ.get("PKG_CONFIG_PATH")
         libInfo.ParseConfig ('pkg-config --cflags --libs '+ libID )
         if alias:
             self.libInfo[alias] = libInfo
