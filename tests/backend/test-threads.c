@@ -153,7 +153,7 @@ TEST ("mutex_thread")
 }
 
 
-PLANNED ("error_cleared_on_join")
+TEST ("error_cleared_on_join")
 {
   //when a thread/job is finished, there must be no pending errors
 }
