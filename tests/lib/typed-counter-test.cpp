@@ -71,8 +71,8 @@ namespace test{
   
   namespace { // test data and helpers...
       
-      const uint MAX_FAMILIES   =  5;  ///< maximum separate "families", each sharing a TypedCounter
-      const uint MAX_MEMBERS    = 20;  ///< maximum members per family (member == test thread)
+      const uint MAX_FAMILIES   =  4;  ///< maximum separate "families", each sharing a TypedCounter
+      const uint MAX_MEMBERS    = 10;  ///< maximum members per family (member == test thread)
       const uint MAX_ITERATIONS = 50;  ///< maximum iterations within a single test thread
       const uint MAX_DELAY_ms   =  3;  ///< maximum delay between check iterations
       

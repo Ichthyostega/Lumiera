@@ -22,7 +22,7 @@
 
 
 /** @file mobject-ref.hpp
- ** External MObject/Placement reference. 
+ ** External MObject/Placement reference.
  ** This smart-handle referres to an MObject, attached (placed) into the session.
  ** It is a copyable value object, implemented by an LUID (hash) and an shared_ptr.
  ** Holding an MObject ref keeps the referred MObject alive, but gives no guarantees
@@ -42,10 +42,10 @@
  ** Like any smart-ptr MObjectRef is templated on the actual type of the pointee.
  ** It can be built or re-assigned from a variety of sources, given the runtime type
  ** of the referred pointee is compatible to this template parameter type. This
- ** allows flexibly to re-gain a specifically typed context, even based just 
+ ** allows flexibly to re-gain a specifically typed context, even based just
  ** on a plain LUID. This functionality is implemented by accessing the
  ** PlacementIndex within the session, and then by using the RTTI of
- ** the fetched Placement's pointee. 
+ ** the fetched Placement's pointee.
  ** 
  ** @see MObject
  ** @see Session
@@ -64,6 +64,8 @@
 #include "lib/lumitime.hpp"
 #include "proc/mobject/placement.hpp"
 #include "proc/mobject/placement-ref.hpp"
+
+#include <string>
 
 
 ///////////////////////////////////////////TODO: define an C-API representation here, make the header multilingual!
@@ -110,11 +112,17 @@ namespace mobject {
           return smPtr_.operator-> ();
         }
       
+      
       Placement<MO>& getPlacement()  const
         {
+          if (!isValid())
+            throw lumiera::error::State("Accessing inactive MObject ref"
+                                       ,LUMIERA_ERROR_BOTTOM_MOBJECTREF);
+          
           ENSURE (INSTANCEOF (MO, smPtr_.get()));
           return *pRef_;
         }
+      
       
       /** resolves the referred placement to an 
        *  ExplicitPlacement and returns the found start time
@@ -160,12 +168,11 @@ namespace mobject {
       activate (REF const& pRefID)
         {
           PlacementRef<MO> newRef (pRefID);
-          if (newRef.isValid()
-             && pRef_ != newRef )
-            {
-              return activate (*newRef); // STRONG exception safe
-            }
-          else return *this;
+          
+          if (isValid() && pRef_ == newRef )
+            return *this;                // self assignment detected
+          else
+            return activate (*newRef); // STRONG exception safe
         }
       
       /** build and activate an MObject reference based on
@@ -208,13 +215,14 @@ namespace mobject {
       bool
       isValid()  const
         {
-          return pRef_.isValid();
+          return _Handle::isValid() 
+              && pRef_.isValid();
         }
       
       size_t
       use_count()  const
         {
-          return pRef_.use_count();
+          return isValid()? pRef_.use_count() : 0;
         }
       
       template<class MOX>
@@ -223,6 +231,12 @@ namespace mobject {
         {
           return pRef_
               && (*pRef_).isCompatible<MOX>();
+        }
+      
+      operator string()   const                      ///////////////////////TICKET #527   should be better integrated with the other object types
+        {
+          return isValid()? string(getPlacement())
+                          : "MRef-NIL";
         }
       
       
@@ -234,54 +248,62 @@ namespace mobject {
       bool
       operator== (MORef<MOX> const& oRef)  const
         {
-          return oRef == this->pRef_;
+          return isValid()
+              && oRef == this->pRef_;
         }
       
       template<class MOX>
       bool
       operator!= (MORef<MOX> const& oRef)  const
         {
-          return oRef != this->pRef_;
+          return !isValid()
+              || oRef != this->pRef_;
         }
       
       template<class MOX>
       friend bool
       operator== (MORef const& oRef, PlacementRef<MOX> const& pRef)
         {
-          return oRef.pRef_ == pRef;
+          return oRef.isValid()
+              && oRef.pRef_ == pRef;
         }
       
       template<class MOX>
       friend bool
       operator!= (MORef const& oRef, PlacementRef<MOX> const& pRef)
         {
-          return oRef.pRef_ != pRef;
+          return !oRef.isValid()
+              ||  oRef.pRef_ != pRef;
         }
       
       template<class MOX>
       friend bool
       operator== (PlacementRef<MOX> const& pRef, MORef const& oRef)
         {
-          return pRef == oRef.pRef_;
+          return oRef.isValid()
+              && pRef == oRef.pRef_;
         }
       
       template<class MOX>
       friend bool
       operator!= (PlacementRef<MOX> const& pRef, MORef const& oRef)
         {
-          return pRef != oRef.pRef_;
+          return !oRef.isValid()
+              ||  pRef != oRef.pRef_;
         }
       
       bool
       operator== (PlacementMO::ID const& pID)  const
         {
-          return PlacementMO::ID (pRef_) == pID;
+          return isValid()
+              && PlacementMO::ID (pRef_) == pID;
         }
       
       bool
       operator!= (PlacementMO::ID const& pID)  const
         {
-          return PlacementMO::ID (pRef_) != pID;
+          return !isValid()
+              || PlacementMO::ID (pRef_) != pID;
         }
       
     };

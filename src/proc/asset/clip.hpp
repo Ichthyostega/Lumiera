@@ -28,6 +28,8 @@
 
 
 
+/////////////////////////TODO: 1/2010 very likely the handling of the clip-asset needs to be rewritten
+
 namespace asset
   {
   /**
@@ -38,7 +40,7 @@ namespace asset
       /** media source of this clip  */
       const Media& source_;
       
-      /** the corresponding (dependant) clip-MO */
+      /** the corresponding (dependent) clip-MO */
       PClipMO clipMO_;
       
     public:

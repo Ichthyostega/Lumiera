@@ -232,12 +232,8 @@ namespace mobject {
       static void
       validate (_Id const& rId)
         {
-          PlacementMX& pRef (access (rId));
-          if (!(pRef.template isCompatible<MX>()))
-            throw lumiera::error::Invalid("actual type of the resolved placement is incompatible",LUMIERA_ERROR_INVALID_PLACEMENTREF);
-          
-                  ////////////////////////TODO: 1. better message, including type?
-                  ////////////////////////TODO: 2. define a separate error-ID for the type mismatch!
+          access (rId); // may throw
+          /////////////////////////////TODO more to check on each PlacementRef creation?
         }
       
       static _Id const&
@@ -267,10 +263,16 @@ namespace mobject {
             throw lumiera::error::Logic ("Attempt to access a NIL PlacementRef"
                                         ,LUMIERA_ERROR_BOTTOM_PLACEMENTREF);
           
-          Placement<MObject> & pla (session::SessionServiceFetch::resolveID (placementID));  // may throw
-          REQUIRE (pla.isValid());
-          ASSERT (pla.isCompatible<MX>());
-          return static_cast<PlacementMX&> (pla);
+          Placement<MObject> & genericPlacement (session::SessionServiceFetch::resolveID (placementID));  // may throw
+          REQUIRE (genericPlacement.isValid());
+          
+          if (!(genericPlacement.template isCompatible<MX>()))
+            throw lumiera::error::Invalid("actual type of the resolved placement is incompatible"
+                                         , LUMIERA_ERROR_INVALID_PLACEMENTREF);
+                  ////////////////////////TODO: 1. better message, including type?
+                  ////////////////////////TODO: 2. define a separate error-ID for the type mismatch!
+          
+          return static_cast<PlacementMX&> (genericPlacement);
         }
     };
   

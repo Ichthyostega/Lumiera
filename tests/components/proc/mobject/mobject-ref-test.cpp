@@ -46,8 +46,30 @@ using std::endl;
 namespace mobject {
 namespace test    {
   
+  namespace { // shortcut for checking use-counts
+    
+    bool
+    checkUseCount (size_t cnt, uint additional=0)
+    {
+      static uint base_count=0;
+      if (!additional) // called for init
+        base_count = cnt;
+      
+      return cnt == base_count + additional;
+    }
+    
+    template<class REF>
+    bool
+    checkUseCount (REF const& ref, uint additional)
+    {
+      return checkUseCount(ref.use_count(), additional);
+    }
+  }
+  
+  
   using lumiera::Time;
   using session::Clip;
+  using session::PMedia;
   
   using session::SessionServiceMockIndex;
   using session::PPIdx;
@@ -105,6 +127,10 @@ namespace test    {
           PMObj& pClip1 = index->find(clip1ID);
           PMObj& pClip2 = index->find(clip2ID);
           
+          ASSERT (3 == pClip1.use_count());   // clip-Asset, original placement, new placement in index
+          ASSERT (3 == pClip2.use_count());
+          checkUseCount(pClip1.use_count());  // set ref point for later checks
+          
           // extract various kinds of IDs and refs
           PMObj &         rP1 (pClip1);
           PMObj const&    rP2 (pClip2);
@@ -147,25 +173,29 @@ namespace test    {
       
       template<typename REF>
       void
-      checkBuildMObjectRef (REF refObj, void* placementAdr)
+      checkBuildMObjectRef (REF& refObj, void* placementAdr)
         {
           MORef<Clip> rMO;
           ASSERT (!rMO);                    // still empty (not bound)
-          cout << rMO             << endl;
+          ASSERT (0==rMO.use_count());
+          cout << string(rMO)     << endl;                 /////////////////////TICKET #527
           cout << showSizeof(rMO) << endl;
           
           // activate by binding to provided ref
           rMO.activate(refObj);
           ASSERT (rMO);                     // now bound
-          cout << rMO             << endl;
+          cout << string(rMO)     << endl;                 /////////////////////TICKET #527
           
           // access MObject (Clip API)
 //        cout << rMO->operator string() << endl;          /////////////////////TICKET #428
-          cout << string(rMO->getMedia()->ident) << endl;  /////////////////////TICKET #520
+          PMedia media = rMO->getMedia();
+          cout << str(media) << endl;                      /////////////////////TICKET #520
+          Time mediaLength = media->getLength();
+          ASSERT (Time(0) < mediaLength);
           ASSERT (rMO->isValid());
           
           // access the Placement-API
-          ASSERT (3 == rMO.use_count());    // now rMO shares ownership with the Placement
+          ASSERT (checkUseCount(rMO, 1));          // now rMO shares ownership with the Placement --> use-count += 1
           ASSERT (Time(0) < rMO.getStartTime());  // (internally, this resolves to an ExplicitPlacement)  /////////TICKET #332
           ASSERT ( rMO.isCompatible<MObject>());
           ASSERT ( rMO.isCompatible<Clip>());
@@ -175,14 +205,15 @@ namespace test    {
           // re-link to the Placement (note we get the Clip API!)
           Placement<Clip> & refP = rMO.getPlacement();
           ASSERT (refP.isValid());
-          ASSERT (3 == refP.use_count());
+          ASSERT (refP.use_count() == rMO.use_count());
+          ASSERT (checkUseCount(refP, 1));  // use count not changed
           ASSERT (&refP == placementAdr);   // actually denotes the address of the original Placement in the "session"
           cout << string(refP) << endl;
           
           ExplicitPlacement exPla = refP.resolve();
           ASSERT (exPla.time == start);     // recovered Placement resolves to the same time as provided by the proxied API
-          ASSERT (4 == refP.use_count());   // but now we've indeed created an additional owner (exPla)
-          ASSERT (4 == rMO.use_count());
+          ASSERT (checkUseCount(refP, 2));  // but now we've indeed created an additional owner (exPla)
+          ASSERT (checkUseCount(rMO, 2));
         }
       
       
@@ -243,21 +274,21 @@ namespace test    {
           
           ASSERT (!(rM == pRef1) && !(pRef1 == rM));
           ASSERT ( (rM != pRef1) &&  (pRef1 != rM));
-          ASSERT (!(rM != pRef2) && !(pRef2 != rM));
-          ASSERT ( (rM == pRef2) &&  (pRef2 == rM));
+          ASSERT ( (rM != pRef2) &&  (pRef2 != rM));
+          ASSERT (!(rM == pRef2) && !(pRef2 == rM));
           
           ASSERT (!(rM == p1.getID()) );
           ASSERT ( (rM != p1.getID()) );
-          ASSERT (!(rM != p2.getID()) );
-          ASSERT ( (rM == p2.getID()) );
+          ASSERT ( (rM != p2.getID()) );
+          ASSERT (!(rM == p2.getID()) );
         }
       
       
       void
       checkLifecycle (PMObj const& p1, PMObj const& p2)
         {
-          ASSERT (2 == p1.use_count());
-          ASSERT (2 == p2.use_count());
+          ASSERT (checkUseCount(p1, 0));
+          ASSERT (checkUseCount(p2, 0));
           
           MORef<Clip> rMO;
           ASSERT (!rMO);
@@ -266,27 +297,27 @@ namespace test    {
           rMO.activate(p1);
           ASSERT (rMO);
           ASSERT (rMO->getMedia()->getFilename() == "test-1");
-          ASSERT (3 == rMO.use_count());
-          ASSERT (3 == p1.use_count());
-          ASSERT (2 == p2.use_count());
+          ASSERT (checkUseCount(rMO, 1));
+          ASSERT (checkUseCount(p1,  1)); // sharing ownership
+          ASSERT (checkUseCount(p2,  0));
           
           rMO.activate(p2);
           ASSERT (rMO);
           ASSERT (rMO->getMedia()->getFilename() == "test-2");
-          ASSERT (3 == rMO.use_count());
-          ASSERT (2 == p1.use_count());
-          ASSERT (3 == p2.use_count());
+          ASSERT (checkUseCount(rMO, 1));
+          ASSERT (checkUseCount(p1,  0)); // detached, use count dropped to previous value
+          ASSERT (checkUseCount(p2,  1)); // sharing ownership
           
           rMO.activate(p2);
-          ASSERT (3 == rMO.use_count());
+          ASSERT (checkUseCount(rMO, 1)); // no change
           
           rMO.close();
           ASSERT (!rMO);
-          ASSERT (2 == p1.use_count());
-          ASSERT (2 == p2.use_count());
+          ASSERT (checkUseCount(p1,  0));
+          ASSERT (checkUseCount(p2,  0));
           
-          VERIFY_ERROR (INVALID_PLACEMENTREF, rMO.getPlacement() );
-          VERIFY_ERROR (BOTTOM_MOBJECTREF,    rMO->getMedia()    );
+          VERIFY_ERROR (BOTTOM_MOBJECTREF, rMO.getPlacement() );
+          VERIFY_ERROR (BOTTOM_MOBJECTREF, rMO->getMedia()    );
         }
       
       void
@@ -296,19 +327,19 @@ namespace test    {
           MORef<Clip> rClip;
           MORef<TestSubMO1> rSub1;
           
-          ASSERT (0 == rMObj.use_count());
-          ASSERT (0 == rClip.use_count());
-          ASSERT (0 == rSub1.use_count());
+          ASSERT ( ! rMObj.use_count());
+          ASSERT ( ! rClip.use_count());
+          ASSERT ( ! rSub1.use_count());
           
           rMObj.activate(luid);
-          ASSERT (3 == rMObj.use_count());
-          ASSERT (0 == rClip.use_count());
-          ASSERT (0 == rSub1.use_count());
+          ASSERT (checkUseCount(rMObj, 1));
+          ASSERT ( ! rClip.use_count());
+          ASSERT ( ! rSub1.use_count());
           
           rClip.activate(rMObj);              // attach on existing MObjectRef
-          ASSERT (4 == rMObj.use_count());
-          ASSERT (4 == rClip.use_count());
-          ASSERT (0 == rSub1.use_count());
+          ASSERT (checkUseCount(rMObj, 2));
+          ASSERT (checkUseCount(rClip, 2));
+          ASSERT ( ! rSub1.use_count());
           
           // impossible, because Clip isn't a subclass of TestSubMO1:
           VERIFY_ERROR (INVALID_PLACEMENTREF, rSub1.activate(luid) );
@@ -322,15 +353,15 @@ namespace test    {
           // rMObj->getMedia();
           
           rClip.close();
-          ASSERT (3 == rMObj.use_count());
-          ASSERT (0 == rClip.use_count());
+          ASSERT (checkUseCount(rMObj, 1));
+          ASSERT ( ! rClip.use_count());
           
-          // can assign, because the actual type checked:
+          // can assign, because the actual type is checked:
           rClip = rMObj;
-          ASSERT (4 == rMObj.use_count());
-          ASSERT (4 == rClip.use_count());
+          ASSERT (checkUseCount(rMObj, 2));
+          ASSERT (checkUseCount(rClip, 2));
           
-          cout << rClip << endl;
+          cout << string(rClip) << endl;                         //////////TICKET #527
           cout << string(rClip->getMedia()->ident) << endl;      //////////TICKET #520
         }
     };
