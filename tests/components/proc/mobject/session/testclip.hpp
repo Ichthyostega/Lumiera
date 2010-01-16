@@ -26,13 +26,11 @@
 
 
 #include "proc/mobject/session/clip.hpp"
-//#include "lib/util.hpp"
+#include "lib/lumitime.hpp"
 
 
-//#include <boost/format.hpp>
 
 using std::tr1::shared_ptr;
-//using boost::format;
 using std::string;
 
 
@@ -78,6 +76,9 @@ namespace test    {
     return TestPlacement (*new TestClip);
   }
   
+  
+  /* == some test data to check == */
+  extern const lumiera::Time LENGTH_TestClip;
   
   
 }}} // namespace mobject::session::test

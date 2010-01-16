@@ -59,7 +59,7 @@ namespace backend_interface
   typedef MediaAccessFacade::ChanHandle ChanHandle;
 
 
-    namespace // implementation deatils
+    namespace // implementation details
       {
       typedef vector<ChanDesc> Response;
       const ChanDesc NULLResponse;

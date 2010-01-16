@@ -132,6 +132,22 @@ namespace session {
   using boost::scoped_ptr;
   
   
+  /**
+   * Helper for building Placement-ID types
+   * @todo this is a rather half-baked solution //////////TICKET #523
+   */
+  template<typename PLA>
+  struct BuildID;
+  
+  /// @note just ignoring the second (parent) type encoded into Placement
+  template<typename MO, typename BMO>
+  struct BuildID<Placement<MO,BMO> >
+    {
+      typedef PlacementMO::Id<MO> Type;
+      typedef MO                  Target;
+    };
+  
+  
   
   /**
    * Structured compound of Placement instances
@@ -199,6 +215,9 @@ namespace session {
       bool remove (PlacementMO&);
       bool remove (ID);
       
+      template<class PLA>
+      typename BuildID<PLA>::Type insert (PLA const&, ID);
+      
       
       
       PlacementIndex(PlacementMO const&);
@@ -251,7 +270,7 @@ namespace session {
   inline Placement<MO>&
   PlacementIndex::find (PlacementMO::Id<MO> id)  const
   {
-    PlacementMO& result (find (id));
+    PlacementMO& result (find ((ID)id));
     
     ___check_compatibleType<MO> (result);
     return static_cast<Placement<MO>&> (result);
@@ -273,11 +292,30 @@ namespace session {
     return getScope(p.getID()); 
   }
   
+  
   inline bool
   PlacementIndex::contains (PlacementMO const& p)  const
   {
     return contains (p.getID());
   }
+  
+  
+  /** convenience shortcut to insert a placement
+   *  immediately followed by creating a typed-ID,
+   *  allowing to retain the original typed context
+   *  @todo this solution is half-baked   ///////////////////////////////////TICKET #523
+   */
+  template<class PLA>
+  typename BuildID<PLA>::Type
+  PlacementIndex::insert (PLA const& newObj, ID targetScope)
+  {
+    typedef typename BuildID<PLA>::Target TargetMO;
+    PlacementMO const& genericPlacement(newObj);
+    
+    return find (insert (genericPlacement, targetScope))
+           .template recastID<TargetMO>();
+  }
+  
   
   inline bool
   PlacementIndex::remove (PlacementMO& p)

@@ -32,6 +32,7 @@ namespace mobject {
 namespace session {
 namespace test    {
   
+  using lumiera::Time;
   typedef shared_ptr<asset::Media> PM;
   typedef backend_interface::MediaAccessFacade MAF;
   using backend_interface::test::MediaAccessMock;
@@ -81,6 +82,10 @@ namespace test    {
     ASSERT (isValid());
   }
   
+  
+  /* == define some data for verification in unit tests == */
+  
+  const Time LENGTH_TestClip = Time(25);   //////TODO hard wired as of (1/10). See MediaFactory::operator()  in media.cpp
   
   
 }}} // namespace mobject::session::test

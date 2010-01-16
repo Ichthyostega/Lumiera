@@ -57,6 +57,8 @@ END
 
 TEST "PlacementIndex_test" PlacementIndex_test <<END
 out: ^::Placement<.+session.test.TestClip.+ use-cnt=2
+out: ^ ::Placement<.+session.test.TestClip.+ use-cnt=1
+out: ^ ...1 elements at Level 1
 out: ^::Placement<.+session.test.TestClip.+ use-cnt=6
 out: ^ ::Placement<.+session.test.TestClip.+ use-cnt=6
 out: ^  ::Placement<.+session.test.TestClip.+ use-cnt=6

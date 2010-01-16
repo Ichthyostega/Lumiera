@@ -137,7 +137,7 @@ namespace lib {
       struct ID : IMP
         {
           ID ()              : IMP ()            {}
-          ID (BA const& ref) : IMP (ref.getID()) {}
+          ID (BA const& ref) : IMP (ref.getID()) {}   // note: automatic conversion (e.g. from PlacementMO&)
           ID (IMP const& ir) : IMP (ir)          {}
         };
       

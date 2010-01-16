@@ -26,6 +26,7 @@
 #include "proc/mobject/session/placement-index.hpp"
 #include "proc/mobject/session/scope.hpp"
 #include "proc/mobject/placement.hpp"
+#include "proc/asset/media.hpp"
 #include "lib/util.hpp"
 
 #include "proc/mobject/session/testclip.hpp"
@@ -70,15 +71,19 @@ namespace test    {
           checkSimpleInsertRemove (index);
           has_size (0, index);
           
-          checkSimpleAccess (index);
+          PMO::ID elmID = checkSimpleAccess (index);
+          ASSERT (index.isValid());
           has_size (2, index);
           
+          checkTypedAccess (index, elmID);
+          has_size (3, index);
+          
           checkScopeHandling (index);
-          has_size (8, index);
+          has_size (9, index);
           
           checkContentsEnumeration (index);
           
-          has_size (8, index);
+          has_size (9, index);
           ASSERT (index.isValid());
           
           index.clear();
@@ -115,7 +120,7 @@ namespace test    {
         }
       
       
-      void
+      PMO::ID
       checkSimpleAccess (Idx index)
         {
           PMO testObj = TestClip::create();
@@ -143,6 +148,34 @@ namespace test    {
           
           // can also re-access objects by previous ref
           ASSERT ( isSameObject (elm, index.find(elm)));
+          return elmID;
+        }
+      
+      
+           
+      void
+      checkTypedAccess (Idx index, PMO::ID elmID)
+        {
+          PMO& elm = index.find(elmID);
+          ASSERT (elmID == elm.getID());
+          
+          typedef Placement<Clip> PClip;
+          PClip anotherTestClip = TestClip::create();
+          
+          typedef PlacementMO::Id<Clip> IDClip;
+          IDClip clipID = index.insert(anotherTestClip, elmID);
+          // retaining the more specific type info
+          
+          // access as MObject...
+          PMO::ID mID = clipID;
+          PMO& asMO = index.find(mID);
+          
+          // access as Clip
+          PClip& asClip = index.find(clipID);
+          ASSERT (LENGTH_TestClip == asClip->getMedia()->getLength());  // using the Clip API
+          
+          ASSERT ( isSameObject(asMO,asClip));
+          ASSERT (!isSameObject(asClip, anotherTestClip)); // always inserting a copy into the PlacementIndex
         }
       
       

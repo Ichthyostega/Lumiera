@@ -53,6 +53,7 @@
  **       (which in the mentioned example would mean it couldn't be
  **       passed to a API function expecting a Placement<Meta>).
  **       This is ugly, but doesn't seem to bear any danger.
+ ** @todo better solution for the ID to type connection ///////////////////////TICKET #523
  **
  ** @see Placement
  ** @see PlacementRef_test
