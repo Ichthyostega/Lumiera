@@ -19,6 +19,6 @@ lumitesttool_srcdir = $(top_srcdir)/tests/tool
 
 noinst_PROGRAMS += vgsuppression
 vgsuppression_CPPFLAGS = $(AM_CPPFLAGS) -std=gnu99 -Wall -Werror
-vgsuppression_LDADD = $(NOBUGMT_LUMIERA_LIBS)  liblumieraproc.la liblumierabackend.la liblumieracommon.la liblumiera.la -lboost_regex-mt -lboost_program_options-mt -ldl
+vgsuppression_LDADD = $(LUMIERA_LIBS) liblumieraproc.la liblumierabackend.la liblumieracommon.la liblumiera.la -lboost_regex-mt -lboost_program_options-mt -ldl
 vgsuppression_SOURCES = $(lumitesttool_srcdir)/vgsuppression.c
 
