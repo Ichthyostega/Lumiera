@@ -80,10 +80,15 @@ enum lumiera_thread_class
      * flag to let the decision to run the function in a thread open to the backend.
      * depending on load it might decide to run it sequentially.
      * This has some constraints:
-     *  The condition variable to signal the finish of the thread must not be used.
      *  The Thread must be very careful with locking, better don't.
+     *  TODO explain syncronization issues
      **/
-    LUMIERA_THREAD_OR_NOT = 1<<16
+    LUMIERA_THREAD_OR_NOT = 1<<16,
+
+    /**
+     * Thread must be joined finally
+     **/
+    LUMIERA_THREAD_JOINABLE = 1<<17
   };
 
 #undef LUMIERA_THREAD_CLASS
@@ -95,11 +100,13 @@ extern const char* lumiera_threadclass_names[];
 // on one hand it could be used to tell the current state of the thread
 // on the other, it is used to tell the thread which state to enter on next iteration
 #define LUMIERA_THREAD_STATES                        \
-  LUMIERA_THREAD_STATE(IDLE)                         \
   LUMIERA_THREAD_STATE(ERROR)                        \
+  LUMIERA_THREAD_STATE(IDLE)                         \
   LUMIERA_THREAD_STATE(RUNNING)                      \
   LUMIERA_THREAD_STATE(WAKEUP)                       \
   LUMIERA_THREAD_STATE(SHUTDOWN)                     \
+  LUMIERA_THREAD_STATE(ZOMBIE)                       \
+  LUMIERA_THREAD_STATE(JOINED)                       \
   LUMIERA_THREAD_STATE(STARTUP)
 
 #define LUMIERA_THREAD_STATE(name) LUMIERA_THREADSTATE_##name,
@@ -108,9 +115,12 @@ extern const char* lumiera_threadclass_names[];
  * Thread state.
  * These are the only states our threads can be in.
  */
-typedef enum 
+typedef enum
   {
     LUMIERA_THREAD_STATES
+
+    LUMIERA_THREADSTATE_CUSTOM_START = 1024,
+    LUMIERA_THREADSTATE_CUSTOM_END = 32768,
   }
   lumiera_thread_state;
 
@@ -127,18 +137,20 @@ extern const char* lumiera_threadstate_names[];
 struct lumiera_thread_struct
 {
   llist node; // this should be first for easy casting
-  // the function and argument can be passed to the thread at creation time
-  // void (*function)(void*);
-  // void* arg;
+
   pthread_t id;
   // TODO: maybe this condition variable should be renamed when we have a better understanding of how it will be used
   lumiera_condition signal; // control signal, state change signal
+
+  struct nobug_resource_user** rh;
+
   // the following member could have been called "class" except that it would conflict with C++ keyword
   // as consequence, it's been decided to leave the type name containing the word "class",
   // while all members/variables called "kind"
-  enum lumiera_thread_class kind;
+  int kind;
+
   // this is used both as a command and as a state tracker
-  lumiera_thread_state state;
+  int state;
   void (*function)(void *);
   void * arguments;
 };
@@ -189,6 +201,52 @@ lumiera_thread_run (enum lumiera_thread_class kind,
                     const char* purpose,
                     struct nobug_flag* flag);
 
+/**
+ * Query the LumieraThread handle of the current thread
+ *
+ *
+ * @return pointer to the (opaque) handle of the current lumiera thread or NULL when this is not a lumiera thread
+ */
+LumieraThread
+lumiera_thread_self (void);
+
+
+/**
+ * Thread syncronization
+ * Lumiera threads can be syncronized with custom states.
+ * The syncronization primitives act as barrier over 2 threads, any thread reaching a syncronization
+ * point first is blocked until the other one reaches it with the same state.
+ * Providing different states is errorneous!
+ */
+
+
+/**
+ * Syncronize with another threads state
+ *
+ * this blocks until/unless the other thread reaches 'state'
+ */
+LumieraThread
+lumiera_thread_sync_other (LumieraThread other, int state);
+
+/**
+ * Syncronize current thread
+ *
+ * signifies that this thread reached 'state' and blocks until/unless
+ * some other thread synced with this state
+ * @return on success pointer to self (opaque), or NULL on error
+ */
+LumieraThread
+lumiera_thread_sync (int state);
+
+/**
+ * Joining threads
+ * a thread can be set up with the LUMEIRA_THREAD_JOINABLE flag, if so
+ * then it must be joined finally. Joining clears the error state of the joined thread
+ * and returns it to the joiner.
+ *
+ */
+lumiera_err
+lumiera_thread_join (LumieraThread thread);
 
 #endif
 /*
