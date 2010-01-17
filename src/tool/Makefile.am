@@ -18,13 +18,13 @@
 lumitool_srcdir = $(top_srcdir)/src/tool
 
 noinst_PROGRAMS += luidgen
-luidgen_CFLAGS = $(CFLAGS) -std=gnu99 -Wall -Werror
+luidgen_CFLAGS = $(CFLAGS) $(LUMIERA_TOOL_CFLAGS) -std=gnu99 -Wall -Werror
 luidgen_CPPFLAGS = -I$(top_srcdir)/src/
-luidgen_LDADD = liblumiera.la  $(NOBUGMT_LUMIERA_LIBS)    -lboost_regex-mt -lboost_program_options-mt
+luidgen_LDADD = liblumiera.la $(LUMIERA_TOOL_LIBS)
 luidgen_SOURCES = $(lumitool_srcdir)/luidgen.c
 
 
 noinst_PROGRAMS += rsvg-convert
-rsvg_convert_CPPFLAGS = $(AM_CPPFLAGS) $(LUMIERA_GUI_CFLAGS) -std=gnu99 -Wall -Werror
-rsvg_convert_LDADD = -lcairo -lglib-2.0 -lgthread-2.0 -lrsvg-2
+rsvg_convert_CPPFLAGS = $(AM_CPPFLAGS) $(LUMIERA_TOOL_CFLAGS) -std=gnu99 -Wall -Werror
+rsvg_convert_LDADD = $(LUMIERA_TOOL_LIBS)
 rsvg_convert_SOURCES = $(lumitool_srcdir)/rsvg-convert.c
