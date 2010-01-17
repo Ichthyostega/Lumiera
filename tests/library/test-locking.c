@@ -318,5 +318,41 @@ TEST ("recconditionforgotunlock")
   lumiera_reccondition_destroy (&reccond, &NOBUG_FLAG(NOBUG_ON));
 }
 
+TEST ("chainedrecconditionsection")
+{
+  lumiera_reccondition outer, inner;
+  lumiera_reccondition_init (&outer, "outer_recconditionsection", &NOBUG_FLAG(NOBUG_ON));
+  lumiera_reccondition_init (&inner, "inner_recconditionsection", &NOBUG_FLAG(NOBUG_ON));
+
+  LUMIERA_RECCONDITION_SECTION (NOBUG_ON, &outer)
+    {
+      printf ("outer reccondition locked section\n");
+      LUMIERA_RECCONDITION_SECTION_CHAIN (NOBUG_ON, &inner)
+	{
+	  printf ("inner reccondition locked section\n");
+	}
+    }
+  lumiera_reccondition_destroy (&outer, &NOBUG_FLAG(NOBUG_ON));
+  lumiera_reccondition_destroy (&inner, &NOBUG_FLAG(NOBUG_ON));
+}
+
+TEST ("nestedrecconditionsection")
+{
+  lumiera_reccondition outer, inner;
+  lumiera_reccondition_init (&outer, "outer_recconditionsection", &NOBUG_FLAG(NOBUG_ON));
+  lumiera_reccondition_init (&inner, "inner_recconditionsection", &NOBUG_FLAG(NOBUG_ON));
+
+  LUMIERA_RECCONDITION_SECTION (NOBUG_ON, &outer)
+    {
+      printf ("outer reccondition locked section\n");
+      LUMIERA_RECCONDITION_SECTION (NOBUG_ON, &inner)
+	{
+	  printf ("inner reccondition locked section\n");
+	}
+    }
+  lumiera_reccondition_destroy (&outer, &NOBUG_FLAG(NOBUG_ON));
+  lumiera_reccondition_destroy (&inner, &NOBUG_FLAG(NOBUG_ON));
+}
+
 
 TESTS_END

@@ -26,6 +26,7 @@ liblumierabackend_la_SOURCES =					\
 	$(liblumierabackend_la_srcdir)/mediaaccessfacade.cpp	\
 	$(liblumierabackend_la_srcdir)/backend.c		\
 	$(liblumierabackend_la_srcdir)/threads.c		\
+	$(liblumierabackend_la_srcdir)/threadpool.c		\
 	$(liblumierabackend_la_srcdir)/file.c			\
 	$(liblumierabackend_la_srcdir)/filehandle.c		\
 	$(liblumierabackend_la_srcdir)/filedescriptor.c		\
@@ -41,6 +42,7 @@ liblumierabackend_la_SOURCES =					\
 noinst_HEADERS +=						\
 	$(liblumierabackend_la_srcdir)/backend.h		\
 	$(liblumierabackend_la_srcdir)/threads.h		\
+	$(liblumierabackend_la_srcdir)/threadpool.h		\
 	$(liblumierabackend_la_srcdir)/file.h			\
 	$(liblumierabackend_la_srcdir)/filehandle.h		\
 	$(liblumierabackend_la_srcdir)/filedescriptor.h		\

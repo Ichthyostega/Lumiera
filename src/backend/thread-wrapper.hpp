@@ -177,10 +177,11 @@ namespace backend {
           lumiera_thread_run ( kind
                              , &run         // invoking the run helper and..
                              , this         // passing this start context as parameter
-                             , joinCond     // maybe wait-blocking for the thread to terminate
                              , purpose.c()
                              , logging_flag
                              );
+	  (void)joinCond; // TODO: this is a temporary fix to match the C API
+	  // we might have to re-write more of this file or even remove it later
           
           if (!res)
             throw lumiera::error::State("failed to create new thread.");
@@ -207,7 +208,7 @@ namespace backend {
         : started_(false),
           operation_(operation)
         {
-          start_thread (LUMIERA_THREAD_INTERACTIVE, purpose, logging_flag);
+          start_thread (LUMIERA_THREADCLASS_INTERACTIVE, purpose, logging_flag);
         }
       
       /** Variant of the standard case, used to register a JoinHandle in addition to starting a thread.
@@ -220,7 +221,7 @@ namespace backend {
         : started_(false),
           operation_(operation)
         {
-          start_thread (LUMIERA_THREAD_INTERACTIVE, purpose, logging_flag, 
+          start_thread (LUMIERA_THREADCLASS_INTERACTIVE, purpose, logging_flag, 
                         join.accessLockedCondition());
         }
     };

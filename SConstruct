@@ -33,7 +33,7 @@ TESTDIR          = 'tests'
 ICONDIR          = 'icons'
 VERSION          = '0.1+pre.01'
 TOOLDIR          = './admin/scons'
-SVGRENDERER      = 'admin/render-icon'
+SCRIPTDIR        = './admin'
 #-----------------------------------Configuration
 
 # NOTE: scons -h for help.
@@ -47,6 +47,7 @@ import os
 import sys
 
 sys.path.append(TOOLDIR)
+sys.path.append(SCRIPTDIR)
 
 from Buildhelper import *
 from LumieraEnvironment import *
@@ -84,7 +85,7 @@ def setupBasicEnvironment():
                , CCFLAGS='-Wall -Wextra '
                , CFLAGS='-std=gnu99' 
                )
-    RegisterIcon_Builder(env,SVGRENDERER)
+    RegisterIcon_Builder(env)
     handleNoBugSwitches(env)
     
     env.Append(CPPDEFINES = '_GNU_SOURCE')

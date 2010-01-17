@@ -105,4 +105,10 @@ test_threads_CPPFLAGS = $(AM_CPPFLAGS) -std=gnu99 -Wall -Werror -I$(top_srcdir)/
 test_threads_CFLAGS = $(AM_CFLAGS) $(PTHREAD_CFLAGS)
 test_threads_LDADD = liblumierabackend.la liblumieracommon.la liblumieraproc.la
 
+check_PROGRAMS += test-threadpool
+test_threadpool_SOURCES = $(tests_srcdir)/backend/test-threadpool.c
+test_threadpool_CPPFLAGS = $(AM_CPPFLAGS) -std=gnu99 -Wall -Werror -I$(top_srcdir)/src/
+test_threadpool_CFLAGS = $(AM_CFLAGS) $(LUMIERA_BACKEND_CFLAGS)
+test_threadpool_LDADD = $(LUMIERA_LIBS) liblumierabackend.la liblumieracommon.la liblumieraproc.la
+
 TESTS = $(tests_srcdir)/test.sh

@@ -18,6 +18,7 @@
 lumitool_srcdir = $(top_srcdir)/src/tool
 
 noinst_PROGRAMS += luidgen
+
 luidgen_CFLAGS = $(CFLAGS) $(LUMIERA_TOOL_CFLAGS) -std=gnu99 -Wall -Werror
 luidgen_CPPFLAGS = -I$(top_srcdir)/src/
 luidgen_LDADD = liblumiera.la $(LUMIERA_TOOL_LIBS)

@@ -1,6 +1,6 @@
 #!/usr/bin/python
 #
-# render-icons.py  -  Icon rendering utility script
+# render_icons.py  -  Icon rendering utility script
 #
 #  Copyright (C)         Lumiera.org
 #    2008,               Joel Holdsworth <joel@airwebreathe.org.uk>
