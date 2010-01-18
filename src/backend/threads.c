@@ -257,7 +257,7 @@ lumiera_thread_deadline_extend (unsigned ms)
       clock_gettime (CLOCK_REALTIME, &deadline);
       deadline.tv_sec += ms / 1000;
       deadline.tv_nsec += 1000000 * (ms % 1000);
-      if (deadline.tv_nsec > 1000000000)
+      if (deadline.tv_nsec >= 1000000000)
         {
           deadline.tv_sec += (deadline.tv_nsec / 1000000000);
           deadline.tv_nsec %= 1000000000;
