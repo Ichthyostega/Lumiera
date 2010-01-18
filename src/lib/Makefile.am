@@ -18,8 +18,19 @@
 liblumiera_la_srcdir = $(top_srcdir)/src/lib
 lib_LTLIBRARIES += liblumiera.la
 
-liblumiera_la_CFLAGS = $(AM_CFLAGS) -std=gnu99 -Wall -Wextra -Werror
-liblumiera_la_CXXFLAGS = $(AM_CXXFLAGS) -Wall -Wextra
+liblumiera_la_CFLAGS = 						\
+	$(AM_CFLAGS)						\
+	$(LUMIERA_LIBRARY_CFLAGS)				\
+	-std=gnu99 -Wall -Wextra -Werror
+
+liblumiera_la_CXXFLAGS =					\
+	$(AM_CXXFLAGS)						\
+	$(LUMIERA_LIBRARY_CFLAGS)				\
+	-Wall -Wextra
+
+liblumiera_la_LIBADD =	 					\
+	$(LUMIERA_LIBRARY_LIBS)
+
 
 liblumiera_la_SOURCES =						\
 	$(liblumiera_la_srcdir)/error.c				\

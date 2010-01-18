@@ -13,3 +13,5 @@ err: the input to the function is 440616
 err: wait 1 sec
 err: finished waiting
 END
+
+PLANNED "error cleared on join"

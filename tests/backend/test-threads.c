@@ -153,9 +153,4 @@ TEST ("mutex_thread")
 }
 
 
-TEST ("error_cleared_on_join")
-{
-  //when a thread/job is finished, there must be no pending errors
-}
-
 TESTS_END
