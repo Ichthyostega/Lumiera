@@ -116,7 +116,7 @@ namespace session {
       
       
       QueryResolver const&    index_;
-      PlacementMO const& startPoint_;
+      PlacementMO::ID    startPoint_;
       ScopeQueryKind    to_discover_;
       
     public:
@@ -142,7 +142,7 @@ namespace session {
           return _Query::resolveBy (index_);
         }
       
-      PlacementMO const&
+      PlacementMO::ID const&
       searchScope ()  const
         {
           return startPoint_;

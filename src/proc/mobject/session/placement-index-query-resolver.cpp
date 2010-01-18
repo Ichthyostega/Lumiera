@@ -253,14 +253,14 @@ namespace session {
     /** use filter predicate provided by the concrete query */
     template<typename QUERY>
     ContentFilter
-    getContentFilter (QUERY query)
+    getContentFilter (QUERY const& query)
     {
       return query.contentFilter();
     }
     
     /** especially queries for MObjects need not be filtered */
     ContentFilter
-    getContentFilter (ScopeQuery<MObject>)
+    getContentFilter (ScopeQuery<MObject> const&)
     {
       static ContentFilter acceptAllObjects = bind (&acceptAllObjects_, _1);
       return acceptAllObjects;
@@ -342,7 +342,7 @@ namespace session {
     
     ScopeQuery<MO> const& query = static_cast<ScopeQuery<MO> const&> (goal);
     ScopeQueryKind direction = query.searchDirection();
-    PID scopeID = query.searchScope().getID();     ///////////////////////////////TICKET #411
+    PID scopeID = query.searchScope();
     
     return new ResultSet( bind (&PlacementIndexQueryResolver::setupExploration, 
                                 this, scopeID, direction)
