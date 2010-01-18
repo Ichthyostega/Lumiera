@@ -91,12 +91,12 @@
  * @param expr Condition which must become true, else the condition variable goes back into sleep
  */
 #define LUMIERA_RECCONDITION_WAIT(expr)                                         \
-  do {                                                                          \
+  while (!(expr)) {                                                             \
     REQUIRE (lumiera_lock_section_.lock, "Reccondition mutex not locked");      \
     lumiera_reccondition_wait (lumiera_lock_section_.lock,                      \
                                lumiera_lock_section_.flag,                      \
                                &lumiera_lock_section_.rh);                      \
-  } while (!(expr))
+  }
 
 
 /**
@@ -107,15 +107,14 @@
  * sets LUMIERA_ERROR_LOCK_TIMEOUT when the timeout passed
  */
 #define LUMIERA_RECCONDITION_TIMEDWAIT(expr, timeout)                           \
-  do {                                                                          \
+  while (!(expr)) {                                                             \
     REQUIRE (lumiera_lock_section_.lock, "Reccondition mutex not locked");      \
     if (!lumiera_reccondition_timedwait (lumiera_lock_section_.lock,            \
                                          timeout,                               \
                                          lumiera_lock_section_.flag,            \
                                          &lumiera_lock_section_.rh))            \
       break;                                                                    \
-  } while (!(expr))
-
+  }
 
 
 
