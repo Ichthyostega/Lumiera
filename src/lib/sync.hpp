@@ -344,7 +344,7 @@ namespace lib {
                   clock_gettime(CLOCK_REALTIME, this);
                   tv_sec   += offs / 1000;
                   tv_nsec  += 1000000 * (offs % 1000);
-                  if (tv_nsec > 1000000000)
+                  if (tv_nsec >= 1000000000)
                     {
                       tv_sec += tv_nsec / 1000000000;
                       tv_nsec %= 1000000000;
