@@ -9,7 +9,7 @@ TEST "Most basic threadpool test" threadpool-basic <<END
 END
 
 TEST "process a function" process-function <<END
-err: the input to the function is 440616
+err: the input to the function is
 err: finished waiting
 END
 
