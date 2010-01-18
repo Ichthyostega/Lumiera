@@ -33,6 +33,7 @@
 
 //TODO: System includes//
 #include <pthread.h>
+#include <time.h>
 #include <errno.h>
 
 /**
@@ -136,6 +137,8 @@ lumiera_thread_run (enum lumiera_thread_class kind,
   self->function = function;
   self->arguments = arg;
 
+  self->deadline.tv_sec = 0;
+
   // and let it really run (signal the condition var, the thread waits on it)
   self->state = LUMIERA_THREADSTATE_WAKEUP;
 
@@ -169,6 +172,8 @@ lumiera_thread_new (enum lumiera_thread_class kind,
   self->state = LUMIERA_THREADSTATE_STARTUP;
   self->function = NULL;
   self->arguments = NULL;
+  self->deadline.tv_sec = 0;
+  self->deadline.tv_nsec = 0;
 
   int error = pthread_create (&self->id, attrs, &thread_loop, self);
   if (error)
@@ -221,6 +226,65 @@ lumiera_thread_self (void)
   pthread_once (&lumiera_thread_initialized, lumiera_thread_tls_init);
   return pthread_getspecific (lumiera_thread_tls);
 }
+
+
+/**
+ * Set a threads deadline
+ * A thread must finish before its deadline is hit. Otherwise it counts as stalled
+ * which is a fatal error which might pull the application down.
+ */
+LumieraThread
+lumiera_thread_deadline_set (struct timespec deadline)
+{
+  LumieraThread self = lumiera_thread_self ();
+  if (self)
+    self->deadline = deadline;
+  return self;
+}
+
+
+/**
+ * Extend a threads deadline
+ * sets the deadline to now+ms in future. This can be used to implement a heartbeat.
+ */
+LumieraThread
+lumiera_thread_deadline_extend (unsigned ms)
+{
+  LumieraThread self = lumiera_thread_self ();
+  if (self)
+    {
+      struct timespec deadline;
+      clock_gettime (CLOCK_REALTIME, &deadline);
+      deadline.tv_sec += ms / 1000;
+      deadline.tv_nsec += 1000000 * (ms % 1000);
+      if (deadline.tv_nsec > 1000000000)
+        {
+          deadline.tv_sec += (deadline.tv_nsec / 1000000000);
+          deadline.tv_nsec %= 1000000000;
+        }
+      self->deadline = deadline;
+    }
+
+  return self;
+}
+
+
+/**
+ * Clear a threads deadline
+ * Threads without deadline will not be checked against deadlocks (this is the default)
+ */
+LumieraThread
+lumiera_thread_deadline_clear (void)
+{
+  LumieraThread self = lumiera_thread_self ();
+  if (self)
+    {
+      self->deadline.tv_sec = 0;
+      self->deadline.tv_nsec = 0;
+    }
+  return self;
+}
+
 
 
 LumieraThread

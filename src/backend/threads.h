@@ -142,6 +142,8 @@ struct lumiera_thread_struct
   // TODO: maybe this condition variable should be renamed when we have a better understanding of how it will be used
   lumiera_condition signal; // control signal, state change signal
 
+  struct timespec deadline;
+
   struct nobug_resource_user** rh;
 
   // the following member could have been called "class" except that it would conflict with C++ keyword
@@ -209,6 +211,40 @@ lumiera_thread_run (enum lumiera_thread_class kind,
  */
 LumieraThread
 lumiera_thread_self (void);
+
+/**
+ * Heartbeat and Deadlines
+ *
+ * Any thread can have an optional 'deadline' which must never be hit.
+ * This deadlines are lazily checked and if hit this is a fatal error which triggers
+ * an emergency shutdown. Thus threads are obliged to set and extend their deadlines
+ * accordingly.
+ *
+ */
+
+/**
+ * Set a threads deadline
+ * A thread must finish before its deadline is hit. Otherwise it counts as stalled
+ * which is a fatal error which might pull the application down.
+ */
+LumieraThread
+lumiera_thread_deadline_set (struct timespec deadline);
+
+
+/**
+ * Extend a threads deadline
+ * sets the deadline to now+ms in future. This can be used to implement a heartbeat.
+ */
+LumieraThread
+lumiera_thread_deadline_extend (unsigned ms);
+
+
+/**
+ * Clear a threads deadline
+ * Threads without deadline will not be checked against deadlocks (this is the default)
+ */
+LumieraThread
+lumiera_thread_deadline_clear (void);
 
 
 /**
