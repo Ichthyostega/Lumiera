@@ -250,9 +250,9 @@ lumiera_thread_sync (int state)
 
   TODO("error handing, maybe timed mutex (using the threads heartbeat timeout, shortly before timeout)");
 
-  do {
+  while (self->state != state) {
     lumiera_condition_wait (&self->signal, &NOBUG_FLAG(threads), self->rh);
-  } while (self->state != state);
+  }
 
   return self;
 }
