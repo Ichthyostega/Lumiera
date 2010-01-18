@@ -23,9 +23,8 @@
 #define LUMIERA_THREADPOOL_H
 
 //TODO: Support library includes//
-#include "lib/reccondition.h"
+#include "lib/condition.h"
 #include "lib/llist.h"
-#include "lib/mutex.h"
 
 //TODO: Forward declarations//
 
@@ -55,8 +54,8 @@ lumiera_threadpool_acquire_thread(enum lumiera_thread_class kind,
                                   struct nobug_flag* flag);
 
 /**
- * Release a thread
- * This ends up putting a (parked/idle) thread back on the list of an appropriate threadpool.
+ * Park a thread
+ * This ends up putting a finished thread back on the list of an appropriate threadpool.
  * This function doesn't need to be accessible outside of the threadpool implementation.
  */
 void
@@ -65,25 +64,30 @@ lumiera_threadpool_release_thread(LumieraThread thread);
 typedef struct lumiera_threadpool_struct lumiera_threadpool;
 typedef lumiera_threadpool* LumieraThreadpool;
 
+enum lumiera_threadpool_state {
+  LUMIERA_THREADPOOL_OFFLINE,
+  LUMIERA_THREADPOOL_ONLINE
+};
+
 struct lumiera_threadpool_struct
 {
   struct
   {
-    llist list;
-    lumiera_mutex lock;
-    unsigned max_threads;
-    unsigned working_thread_count;
-    unsigned idle_thread_count;
+    llist working_list;
+    llist idle_list;
+    int thread_count;
+    int idle_thread_count;
     pthread_attr_t pthread_attrs;
+    lumiera_condition sync;
+    enum lumiera_threadpool_state status;
   } pool[LUMIERA_THREADCLASS_COUNT];
 };
 
 /**
  * Initialize the thread pool.
- * @param limit the maximum number of threads (idle+working) allowed per pool
  */
 void
-lumiera_threadpool_init(unsigned limit);
+lumiera_threadpool_init(void);
 
 void
 lumiera_threadpool_destroy(void);

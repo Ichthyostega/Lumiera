@@ -22,7 +22,6 @@
 //TODO: Support library includes//
 
 #include "include/logging.h"
-#include "lib/mutex.h"
 #include "lib/safeclib.h"
 
 
@@ -34,6 +33,7 @@
 
 //TODO: System includes//
 #include <pthread.h>
+#include <time.h>
 #include <errno.h>
 
 /**
@@ -60,94 +60,90 @@ const char* lumiera_threadstate_names[] = {
 };
 #undef LUMIERA_THREAD_STATE
 
-struct lumiera_thread_mockup
-{
-  void (*fn)(void*);
-  void* arg;
-  LumieraReccondition finished;
-};
+LUMIERA_ERROR_DEFINE(THREAD, "fatal threads initialization error");
 
-static void* thread_loop (void* arg)
+/* thread local storage pointing back to the thread structure of each thread */
+static pthread_key_t lumiera_thread_tls;
+static pthread_once_t lumiera_thread_initialized = PTHREAD_ONCE_INIT;
+
+static void
+lumiera_thread_tls_init (void)
 {
-  (void)arg;
+  if (!!pthread_key_create (&lumiera_thread_tls, NULL))
+    LUMIERA_DIE (THREAD);      /* should never happen */
+}
+
+
+static void*
+thread_loop (void* thread)
+{
+  TRACE (threads);
+  NOBUG_THREAD_ID_SET ("worker");
+  LumieraThread t = (LumieraThread)thread;
+
+  pthread_setspecific (lumiera_thread_tls, t);
+
+  pthread_setcancelstate (PTHREAD_CANCEL_DISABLE, NULL);
+
+  REQUIRE (t, "thread does not exist");
+
+  LUMIERA_CONDITION_SECTION (threads, &t->signal)
+    {
+      t->rh = &lumiera_lock_section_.rh;
+
+      do {
+        // NULL function means: no work to do
+        INFO (threads, "function %p", t->function);
+        if (t->function)
+          t->function (t->arguments);
+        lumiera_threadpool_release_thread(t);
+        LUMIERA_CONDITION_WAIT (t->state != LUMIERA_THREADSTATE_IDLE);
+        INFO (threads, "Thread awaken with state %d", t->state);
+      } while (t->state != LUMIERA_THREADSTATE_SHUTDOWN);
+      // SHUTDOWN state
+
+      if (t->kind & LUMIERA_THREAD_JOINABLE)
+        {
+          INFO (threads, "Thread zombified");
+          /* move error state to data the other thread will it pick up from there */
+          t->arguments = (void*)lumiera_error ();
+          t->state = LUMIERA_THREADSTATE_ZOMBIE;
+          LUMIERA_CONDITION_WAIT (t->state == LUMIERA_THREADSTATE_JOINED);
+          INFO (threads, "Thread joined");
+        }
+
+      INFO (threads, "Thread Shutdown");
+    }
+  TODO ("no error must be pending here, else do app shutdown");
   return 0;
 }
 
-#if 0
-static void* pthread_runner (void* thread)
-{
-  pthread_setcancelstate (PTHREAD_CANCEL_DISABLE, NULL);
-
-  struct lumiera_thread_mockup* starter = (struct lumiera_thread_mockup*) thread;
-  LumieraReccondition thread_end_notification = starter->finished;
-
-  starter->fn (starter->arg);
-
-  if (!thread_end_notification)
-    return NULL; // no signalling of thread termination desired
-
-  LUMIERA_RECCONDITION_SECTION(cond_sync, thread_end_notification)
-    LUMIERA_RECCONDITION_BROADCAST;
-
-  return NULL;
-}
-#endif
-
-#if 0
-// TODO: rewrite this using lumiera_threadpool_acquire()
-LumieraThread
-lumiera_thread_run (enum lumiera_thread_class kind,
-                    void (*start_routine)(void *),
-                    void * arg,
-                    LumieraReccondition finished,
-                    const char* purpose,
-                    struct nobug_flag* flag)
-{
-  (void) kind;
-  (void) purpose;
-  (void) flag;
-
-  if (attr_once == PTHREAD_ONCE_INIT)
-    pthread_once (&attr_once, thread_attr_init);
-
-  static struct lumiera_thread_mockup thread;
-
-  thread.fn = start_routine;
-  thread.arg = arg;
-  thread.finished = finished;
-
-  pthread_t dummy;
-  int error = pthread_create (&dummy, &attrs, pthread_runner, &thread);
-
-  if (error) return 0;        /////TODO temporary addition by Ichthyo; probably we'll set lumiera_error?
-  return (LumieraThread) 1;
-}
-#endif
-
-// TODO: new implementation, remove the above one
-// maybe this shouldn't return LumieraThread at all
 // when this is called it should have already been decided that the function
 // shall run in parallel, as a thread
 LumieraThread
 lumiera_thread_run (enum lumiera_thread_class kind,
                     void (*function)(void *),
                     void * arg,
-                    LumieraReccondition finished,
                     const char* purpose,
                     struct nobug_flag* flag)
 {
-  (void)finished;
-  (void)function;
-  (void)arg;
-  // ask the threadpool for a thread (it might create a new one)
-  LumieraThread self = lumiera_threadpool_acquire_thread(kind, purpose, flag);
+  TRACE (threads);
+  //  REQUIRE (function, "invalid function");
 
-  // TODO: set the function and data to be run
-  //  lumiera_thread_set_func_data (self, start_routine, arg, purpose, flag);
+  // ask the threadpool for a thread (it might create a new one)
+  LumieraThread self = lumiera_threadpool_acquire_thread (kind, purpose, flag);
+
+  // set the function and data to be run
+  self->function = function;
+  self->arguments = arg;
+
+  self->deadline.tv_sec = 0;
 
   // and let it really run (signal the condition var, the thread waits on it)
-  LUMIERA_RECCONDITION_SECTION(cond_sync, self->finished)
-    LUMIERA_RECCONDITION_SIGNAL;
+  self->state = LUMIERA_THREADSTATE_WAKEUP;
+
+  LUMIERA_CONDITION_SECTION (cond_sync, &self->signal)
+    LUMIERA_CONDITION_SIGNAL;
 
   // NOTE: example only, add solid error handling!
 
@@ -159,33 +155,29 @@ lumiera_thread_run (enum lumiera_thread_class kind,
  */
 LumieraThread
 lumiera_thread_new (enum lumiera_thread_class kind,
-                    LumieraReccondition finished,
                     const char* purpose,
                     struct nobug_flag* flag,
                     pthread_attr_t* attrs)
 {
+  pthread_once (&lumiera_thread_initialized, lumiera_thread_tls_init);
+
   // TODO: do something with these:
   (void) purpose;
-  (void) flag;
-  REQUIRE (kind < LUMIERA_THREADCLASS_COUNT, "invalid thread kind specified: %d", kind);
   REQUIRE (attrs, "invalid pthread attributes structure passed");
 
-  //REQUIRE (finished, "invalid finished flag passed");
-
-
   LumieraThread self = lumiera_malloc (sizeof (*self));
-  llist_init(&self->node);
-  self->finished = finished;
+  llist_init (&self->node);
+  lumiera_condition_init (&self->signal, "thread-control", flag);
   self->kind = kind;
-  self->state = LUMIERA_THREADSTATE_IDLE;
+  self->state = LUMIERA_THREADSTATE_STARTUP;
+  self->function = NULL;
+  self->arguments = NULL;
+  self->deadline.tv_sec = 0;
+  self->deadline.tv_nsec = 0;
 
-  //REQUIRE (thread_loop);
   int error = pthread_create (&self->id, attrs, &thread_loop, self);
-  ENSURE(error == 0 || EAGAIN == error, "pthread returned %d:%s", error, strerror(error));
   if (error)
     {
-      // error here can only be EAGAIN, given the above ENSURE
-      FIXME ("error is %d:%s, see if this can be improved", error, strerror(error));
       LUMIERA_DIE (ERRNO);
     }
   return self;
@@ -194,23 +186,160 @@ lumiera_thread_new (enum lumiera_thread_class kind,
 LumieraThread
 lumiera_thread_destroy (LumieraThread self)
 {
+  TRACE (threads);
   REQUIRE (self, "trying to destroy an invalid thread");
 
-  // TODO: stop the pthread
-  llist_unlink(&self->node);
-  //finished = NULL; // or free(finished)?
-  lumiera_reccondition_destroy (self->finished, &NOBUG_FLAG(threads));
-  //kind = 0;
-  //state = 0;
+  llist_unlink (&self->node);
+
+  // get the pthread out of the processing loop
+  // need to signal to the thread that it should start quitting
+  // should this be within the section?
+  LUMIERA_CONDITION_SECTION (threads, &self->signal)
+    {
+      REQUIRE (self->state == LUMIERA_THREADSTATE_IDLE, "trying to delete a thread in state other than IDLE (%s)", lumiera_threadstate_names[self->state]);
+      self->state = LUMIERA_THREADSTATE_SHUTDOWN;
+      self->function = NULL;
+      self->arguments = NULL;
+      LUMIERA_CONDITION_SIGNAL;
+    }
+
+  int error = pthread_join (self->id, NULL);
+  ENSURE (0 == error, "pthread_join returned %d:%s", error, strerror (error));
+
+  // condition has to be destroyed after joining with the thread
+  lumiera_condition_destroy (&self->signal, &NOBUG_FLAG (threads));
+
   return self;
 }
 
 void
 lumiera_thread_delete (LumieraThread self)
 {
-  ECHO ("deleting thread");
+  TRACE (threads);
   lumiera_free (lumiera_thread_destroy (self));
 }
+
+
+LumieraThread
+lumiera_thread_self (void)
+{
+  pthread_once (&lumiera_thread_initialized, lumiera_thread_tls_init);
+  return pthread_getspecific (lumiera_thread_tls);
+}
+
+
+/**
+ * Set a threads deadline
+ * A thread must finish before its deadline is hit. Otherwise it counts as stalled
+ * which is a fatal error which might pull the application down.
+ */
+LumieraThread
+lumiera_thread_deadline_set (struct timespec deadline)
+{
+  LumieraThread self = lumiera_thread_self ();
+  if (self)
+    self->deadline = deadline;
+  return self;
+}
+
+
+/**
+ * Extend a threads deadline
+ * sets the deadline to now+ms in future. This can be used to implement a heartbeat.
+ */
+LumieraThread
+lumiera_thread_deadline_extend (unsigned ms)
+{
+  LumieraThread self = lumiera_thread_self ();
+  if (self)
+    {
+      struct timespec deadline;
+      clock_gettime (CLOCK_REALTIME, &deadline);
+      deadline.tv_sec += ms / 1000;
+      deadline.tv_nsec += 1000000 * (ms % 1000);
+      if (deadline.tv_nsec > 1000000000)
+        {
+          deadline.tv_sec += (deadline.tv_nsec / 1000000000);
+          deadline.tv_nsec %= 1000000000;
+        }
+      self->deadline = deadline;
+    }
+
+  return self;
+}
+
+
+/**
+ * Clear a threads deadline
+ * Threads without deadline will not be checked against deadlocks (this is the default)
+ */
+LumieraThread
+lumiera_thread_deadline_clear (void)
+{
+  LumieraThread self = lumiera_thread_self ();
+  if (self)
+    {
+      self->deadline.tv_sec = 0;
+      self->deadline.tv_nsec = 0;
+    }
+  return self;
+}
+
+
+
+LumieraThread
+lumiera_thread_sync_other (LumieraThread other, int state)
+{
+  TRACE(threads);
+
+  LUMIERA_CONDITION_SECTION (threads, &other->signal)
+    {
+      REQUIRE (other->state == ~state);        TODO("Runtime error when state expectation isnt met");
+      other->state = state;
+      LUMIERA_CONDITION_SIGNAL;
+    }
+  return other;
+}
+
+
+LumieraThread
+lumiera_thread_sync (int state)
+{
+  TRACE(threads);
+
+  LumieraThread self = lumiera_thread_self ();
+  REQUIRE(self, "not a lumiera thread");
+
+  self->state = ~state;
+
+  TODO("error handing, maybe timed mutex (using the threads heartbeat timeout, shortly before timeout)");
+
+  while (self->state != state) {
+    lumiera_condition_wait (&self->signal, &NOBUG_FLAG(threads), self->rh);
+  }
+
+  return self;
+}
+
+
+
+lumiera_err
+lumiera_thread_join (LumieraThread thread)
+{
+  TRACE(threads);
+  lumiera_err ret = NULL;
+
+  LUMIERA_CONDITION_SECTION (threads, &thread->signal)
+    {
+      LUMIERA_CONDITION_WAIT (thread->state == LUMIERA_THREADSTATE_ZOMBIE);
+      ret = (lumiera_err)thread->arguments;
+      thread->state = LUMIERA_THREADSTATE_JOINED;
+      LUMIERA_CONDITION_SIGNAL;         /* kiss it a last goodbye */
+    }
+  return ret;
+}
+
+
 
 /*
 // Local Variables:

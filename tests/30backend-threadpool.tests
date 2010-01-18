@@ -5,85 +5,13 @@ PLANNED "create"
 PLANNED "yield"
 PLANNED "cancel"
 
-TEST "Acquire/Release test" basic-acquire-release <<END
-err: start by initializing the threadpool
-err: acquiring thread 1
-err: acquiring thread 2
-err: thread 1 kind=INTERACTIVE
-err: thread 1 state=IDLE
-err: thread 2 kind=IDLE
-err: thread 2 state=IDLE
-err: releasing thread 1
-err: thread 1 has been released
-err: releasing thread 2
-err: thread 2 has been released
-
-err: destroying threadpool
-
-err: destroying individual pool #0
-err: number of threads in the pool=1
-err: deleting thread
-err: destroying the pool mutex
-err: pool mutex destroyed
-
-err: destroying individual pool #1
-err: number of threads in the pool=0
-err: destroying the pool mutex
-err: pool mutex destroyed
-
-err: destroying individual pool #2
-err: number of threads in the pool=0
-err: destroying the pool mutex
-err: pool mutex destroyed
-
-err: destroying individual pool #3
-err: number of threads in the pool=0
-err: destroying the pool mutex
-err: pool mutex destroyed
-
-err: destroying individual pool #4
-err: number of threads in the pool=1
-err: deleting thread
-err: destroying the pool mutex
-err: pool mutex destroyed
+TEST "Most basic threadpool test" threadpool-basic <<END
 END
 
-TEST "Many Acquires/Releases test" many-acquire-release <<END
-err: destroying threadpool
-
-err: destroying individual pool #0
-err: number of threads in the pool=10
-err: deleting thread
-err: destroying the pool mutex
-err: pool mutex destroyed
-
-err: destroying individual pool #1
-err: number of threads in the pool=10
-err: deleting thread
-err: destroying the pool mutex
-err: pool mutex destroyed
-
-err: destroying individual pool #2
-err: number of threads in the pool=10
-err: deleting thread
-err: destroying the pool mutex
-err: pool mutex destroyed
-
-err: destroying individual pool #3
-err: number of threads in the pool=10
-err: deleting thread
-err: destroying the pool mutex
-err: pool mutex destroyed
-
-err: destroying individual pool #4
-err: number of threads in the pool=10
-err: deleting thread
-err: destroying the pool mutex
-err: pool mutex destroyed
+TEST "process a function" process-function <<END
+err: the input to the function is 440616
+err: wait 1 sec
+err: finished waiting
 END
 
-TEST "Too Many Acquires/Releases test" toomany-acquire-release <<END
-err: Fatal Error 
-err: .*
-return: !0
-END
+PLANNED "error cleared on join"

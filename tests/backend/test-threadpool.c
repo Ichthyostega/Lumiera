@@ -25,24 +25,61 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <math.h>
+#include <unistd.h>
+
+void is_prime(void * arg)
+{
+  int number = *(int *)arg;
+  int prime = 1;
+
+  for (int x = number; x >= sqrt(number); --x)
+    {
+      if (number % x == 0)
+	{
+	  prime = 0;
+	  break;
+	}
+    }
+  *(int *)arg = prime;
+}
 
 TESTS_BEGIN
+
+TEST ("threadpool-basic")
+{
+  lumiera_threadpool_init();
+  lumiera_threadpool_destroy();
+}
+
+TEST ("threadpool1")
+{
+  ECHO("start by initializing the threadpool");
+  lumiera_threadpool_init();
+  LumieraThread t1 =
+    lumiera_threadpool_acquire_thread(LUMIERA_THREADCLASS_INTERACTIVE,
+				      "test purpose",
+				      &NOBUG_FLAG(NOBUG_ON));
+  //  lumiera_threadpool_release_thread(t1);
+  ECHO("acquired thread 1 %p",t1);
+  lumiera_threadpool_destroy();
+}
 
 
 TEST ("basic-acquire-release")
 {
   ECHO("start by initializing the threadpool");
-  lumiera_threadpool_init(100);
+  lumiera_threadpool_init();
   ECHO("acquiring thread 1");
   LumieraThread t1 =
     lumiera_threadpool_acquire_thread(LUMIERA_THREADCLASS_INTERACTIVE,
 				      "test purpose",
-				      NULL);
+				      &NOBUG_FLAG(NOBUG_ON));
   ECHO("acquiring thread 2");
   LumieraThread t2 =
     lumiera_threadpool_acquire_thread(LUMIERA_THREADCLASS_IDLE,
 				      "test purpose",
-				      NULL);
+				      &NOBUG_FLAG(NOBUG_ON));
 
   ECHO("thread 1 kind=%s", lumiera_threadclass_names[t1->kind]);
   CHECK(LUMIERA_THREADCLASS_INTERACTIVE == t1->kind);
@@ -54,16 +91,17 @@ TEST ("basic-acquire-release")
   CHECK(LUMIERA_THREADSTATE_IDLE == t2->state);
 
   ECHO("releasing thread 1");
-  lumiera_threadpool_release_thread(t1);
+  //lumiera_threadpool_release_thread(t1);
   ECHO("thread 1 has been released");
 
   ECHO("releasing thread 2");
-  lumiera_threadpool_release_thread(t2);
+  //lumiera_threadpool_release_thread(t2);
   ECHO("thread 2 has been released");
 
   lumiera_threadpool_destroy();
 }
 
+#if 0
 TEST ("many-acquire-release")
 {
 
@@ -79,7 +117,7 @@ TEST ("many-acquire-release")
 	  threads[i+kind*threads_per_pool_count] =
 	    lumiera_threadpool_acquire_thread(kind,
 					      "test purpose",
-					      NULL);
+					      &NOBUG_FLAG(NOBUG_ON));
 	}
     }
 
@@ -107,7 +145,7 @@ TEST ("toomany-acquire-release")
 	  threads[i+kind*threads_per_pool_count] =
 	    lumiera_threadpool_acquire_thread(kind,
 					      "test purpose",
-					      NULL);
+					      &NOBUG_FLAG(NOBUG_ON));
 	}
     }
 
@@ -118,6 +156,45 @@ TEST ("toomany-acquire-release")
 
   lumiera_threadpool_destroy();
 
+}
+#endif
+
+TEST ("no-function")
+{
+  LumieraThread t;
+
+  lumiera_threadpool_init();
+
+  t = lumiera_thread_run (LUMIERA_THREADCLASS_INTERACTIVE,
+			  NULL,
+			  NULL,
+			  "process my test function",
+			  &NOBUG_FLAG(NOBUG_ON));
+
+  // cleanup
+  ECHO("finished waiting");
+  lumiera_threadpool_destroy();
+}
+
+TEST ("process-function")
+{
+  // this is what the scheduler would do once it figures out what function a job needs to run
+  LumieraThread t;
+  int number = 440616;
+
+  lumiera_threadpool_init();
+
+  ECHO ("the input to the function is %d", number);
+
+  t = lumiera_thread_run (LUMIERA_THREADCLASS_INTERACTIVE,
+			  &is_prime,
+			  (void *)&number, //void * arg,
+			  "process my test function",
+			  &NOBUG_FLAG(NOBUG_ON)); // struct nobug_flag* flag)
+
+  // cleanup
+  ECHO("finished waiting");
+  lumiera_threadpool_destroy();
 }
 
 TESTS_END

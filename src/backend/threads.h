@@ -23,7 +23,7 @@
 #define LUMIERA_THREADS_H
 
 //TODO: Support library includes//
-#include "lib/reccondition.h"
+#include "lib/condition.h"
 
 
 //TODO: Forward declarations//
@@ -34,6 +34,7 @@
 
 //TODO: System includes//
 #include <nobug.h>
+NOBUG_DECLARE_FLAG (threads);
 
 
 /**
@@ -79,10 +80,15 @@ enum lumiera_thread_class
      * flag to let the decision to run the function in a thread open to the backend.
      * depending on load it might decide to run it sequentially.
      * This has some constraints:
-     *  The condition variable to signal the finish of the thread must not be used.
      *  The Thread must be very careful with locking, better don't.
+     *  TODO explain syncronization issues
      **/
-    LUMIERA_THREAD_OR_NOT = 1<<16
+    LUMIERA_THREAD_OR_NOT = 1<<16,
+
+    /**
+     * Thread must be joined finally
+     **/
+    LUMIERA_THREAD_JOINABLE = 1<<17
   };
 
 #undef LUMIERA_THREAD_CLASS
@@ -90,10 +96,18 @@ enum lumiera_thread_class
 // defined in threads.c
 extern const char* lumiera_threadclass_names[];
 
-#define LUMIERA_THREAD_STATES                      \
-  LUMIERA_THREAD_STATE(IDLE)                       \
-  LUMIERA_THREAD_STATE(RUNNING)                    \
-  LUMIERA_THREAD_STATE(ERROR)
+// there is some confusion between the meaning of this
+// on one hand it could be used to tell the current state of the thread
+// on the other, it is used to tell the thread which state to enter on next iteration
+#define LUMIERA_THREAD_STATES                        \
+  LUMIERA_THREAD_STATE(ERROR)                        \
+  LUMIERA_THREAD_STATE(IDLE)                         \
+  LUMIERA_THREAD_STATE(RUNNING)                      \
+  LUMIERA_THREAD_STATE(WAKEUP)                       \
+  LUMIERA_THREAD_STATE(SHUTDOWN)                     \
+  LUMIERA_THREAD_STATE(ZOMBIE)                       \
+  LUMIERA_THREAD_STATE(JOINED)                       \
+  LUMIERA_THREAD_STATE(STARTUP)
 
 #define LUMIERA_THREAD_STATE(name) LUMIERA_THREADSTATE_##name,
 
@@ -101,9 +115,12 @@ extern const char* lumiera_threadclass_names[];
  * Thread state.
  * These are the only states our threads can be in.
  */
-typedef enum 
+typedef enum
   {
     LUMIERA_THREAD_STATES
+
+    LUMIERA_THREADSTATE_CUSTOM_START = 1024,
+    LUMIERA_THREADSTATE_CUSTOM_END = 32768,
   }
   lumiera_thread_state;
 
@@ -120,16 +137,24 @@ extern const char* lumiera_threadstate_names[];
 struct lumiera_thread_struct
 {
   llist node; // this should be first for easy casting
-  // the function and argument can be passed to the thread at creation time
-  // void (*function)(void*);
-  // void* arg;
+
   pthread_t id;
-  LumieraReccondition finished;
+  // TODO: maybe this condition variable should be renamed when we have a better understanding of how it will be used
+  lumiera_condition signal; // control signal, state change signal
+
+  struct timespec deadline;
+
+  struct nobug_resource_user** rh;
+
   // the following member could have been called "class" except that it would conflict with C++ keyword
   // as consequence, it's been decided to leave the type name containing the word "class",
   // while all members/variables called "kind"
-  enum lumiera_thread_class kind;
-  lumiera_thread_state state;
+  int kind;
+
+  // this is used both as a command and as a state tracker
+  int state;
+  void (*function)(void *);
+  void * arguments;
 };
 
 /**
@@ -137,14 +162,21 @@ struct lumiera_thread_struct
  */
 LumieraThread
 lumiera_thread_new (enum lumiera_thread_class kind,
-                    LumieraReccondition finished,
                     const char* purpose,
                     struct nobug_flag* flag,
                     pthread_attr_t* attrs);
 
+/**
+ * Destroy and de-initialize a thread structure.
+ * Memory is not freed by this function.
+ */
 LumieraThread
 lumiera_thread_destroy (LumieraThread self);
 
+/**
+ * Actually free the memory used by the thread structure.
+ * Make sure to destroy the structure first.
+ */
 void
 lumiera_thread_delete (LumieraThread self);
 
@@ -161,8 +193,6 @@ lumiera_thread_delete (LumieraThread self);
  * @param kind class of the thread to start
  * @param function pointer to a function to execute in a thread (returning void, not void* as in pthreads)
  * @param arg generic pointer passed to the thread
- * @param finished a condition variable to be broadcasted, if not NULL.
- *        The associated mutex should be locked at thread_run time already, else the signal can get lost.
  * @param purpose descriptive name of this thread, used by NoBug
  * @param flag NoBug flag used for logging the thread startup and return
  */
@@ -170,10 +200,89 @@ LumieraThread
 lumiera_thread_run (enum lumiera_thread_class kind,
                     void (*function)(void *),
                     void * arg,
-                    LumieraReccondition finished,
                     const char* purpose,
                     struct nobug_flag* flag);
 
+/**
+ * Query the LumieraThread handle of the current thread
+ *
+ *
+ * @return pointer to the (opaque) handle of the current lumiera thread or NULL when this is not a lumiera thread
+ */
+LumieraThread
+lumiera_thread_self (void);
+
+/**
+ * Heartbeat and Deadlines
+ *
+ * Any thread can have an optional 'deadline' which must never be hit.
+ * This deadlines are lazily checked and if hit this is a fatal error which triggers
+ * an emergency shutdown. Thus threads are obliged to set and extend their deadlines
+ * accordingly.
+ *
+ */
+
+/**
+ * Set a threads deadline
+ * A thread must finish before its deadline is hit. Otherwise it counts as stalled
+ * which is a fatal error which might pull the application down.
+ */
+LumieraThread
+lumiera_thread_deadline_set (struct timespec deadline);
+
+
+/**
+ * Extend a threads deadline
+ * sets the deadline to now+ms in future. This can be used to implement a heartbeat.
+ */
+LumieraThread
+lumiera_thread_deadline_extend (unsigned ms);
+
+
+/**
+ * Clear a threads deadline
+ * Threads without deadline will not be checked against deadlocks (this is the default)
+ */
+LumieraThread
+lumiera_thread_deadline_clear (void);
+
+
+/**
+ * Thread syncronization
+ * Lumiera threads can be syncronized with custom states.
+ * The syncronization primitives act as barrier over 2 threads, any thread reaching a syncronization
+ * point first is blocked until the other one reaches it with the same state.
+ * Providing different states is errorneous!
+ */
+
+
+/**
+ * Syncronize with another threads state
+ *
+ * this blocks until/unless the other thread reaches 'state'
+ */
+LumieraThread
+lumiera_thread_sync_other (LumieraThread other, int state);
+
+/**
+ * Syncronize current thread
+ *
+ * signifies that this thread reached 'state' and blocks until/unless
+ * some other thread synced with this state
+ * @return on success pointer to self (opaque), or NULL on error
+ */
+LumieraThread
+lumiera_thread_sync (int state);
+
+/**
+ * Joining threads
+ * a thread can be set up with the LUMEIRA_THREAD_JOINABLE flag, if so
+ * then it must be joined finally. Joining clears the error state of the joined thread
+ * and returns it to the joiner.
+ *
+ */
+lumiera_err
+lumiera_thread_join (LumieraThread thread);
 
 #endif
 /*
