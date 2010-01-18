@@ -30,10 +30,10 @@
 
 void is_prime(void * arg)
 {
-  int number = *(int *)arg;
-  int prime = 1;
+  unsigned long long number = *(unsigned long long *)arg;
+  unsigned long long prime = 1;
 
-  for (int x = number; x >= sqrt(number); --x)
+  for (unsigned long long x = number; x >= sqrt(number); --x)
     {
       if (number % x == 0)
 	{
@@ -41,7 +41,7 @@ void is_prime(void * arg)
 	  break;
 	}
     }
-  *(int *)arg = prime;
+  *(unsigned long long *)arg = prime;
 }
 
 TESTS_BEGIN
@@ -180,11 +180,11 @@ TEST ("process-function")
 {
   // this is what the scheduler would do once it figures out what function a job needs to run
   LumieraThread t;
-  int number = 1073676287;
+  unsigned long long number = 18014398241046527;
 
   lumiera_threadpool_init();
 
-  ECHO ("the input to the function is %d", number);
+  ECHO ("the input to the function is %llu", number);
 
   t = lumiera_thread_run (LUMIERA_THREADCLASS_INTERACTIVE,
 			  &is_prime,
