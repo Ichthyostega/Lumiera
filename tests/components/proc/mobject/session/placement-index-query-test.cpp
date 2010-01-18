@@ -50,6 +50,8 @@ namespace test    {
    * @test accessing the PlacementIndex through the generic query interface,
    *       for discovering scope contents and containing scope.
    *       
+   * @todo change that to use a more realistic test session, based on the actual model types   //////////////// TICKET #532
+   * 
    * @see  mobject::session::PlacementIndex
    * @see  mobject::session::QueryResolver
    * @see  mobject::session::ContentsQuery
@@ -92,7 +94,7 @@ namespace test    {
           
           discover (ContentsQuery<MObject> (resolver,root));
           
-          PlacementMO& elm = *ContentsQuery<TestSubMO1>(resolver,root);
+          PlacementMO& elm = *ContentsQuery<TestSubMO1>(resolver,root);                  ////////////////////// TICKET #532
           
           discover (PathQuery<MObject> (resolver,elm));
         }

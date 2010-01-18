@@ -28,6 +28,8 @@
 #include "proc/mobject/session/clip.hpp"
 #include "proc/mobject/session/effect.hpp"
 
+#include "proc/mobject/test-dummy-mobject.hpp"  /////////////////////////////////////TICKET #532
+
 #include <boost/scoped_ptr.hpp>
 #include <stack>
 
@@ -285,6 +287,12 @@ namespace session {
       defineHandling<Clip>();
       defineHandling<Effect>();
                        /////////////////////////////////////////////////////////////////TICKET #414
+      
+      defineHandling<mobject::test::DummyMO    >();
+      defineHandling<mobject::test::TestSubMO1 >();
+      defineHandling<mobject::test::TestSubMO2 >();
+      defineHandling<mobject::test::TestSubMO21>();
+                       /////////////////////////////////////////////////////////////////TICKET #532
     }
   
   bool
@@ -295,6 +303,12 @@ namespace session {
          ||qID.type == getResultTypeID<Placement<Clip> >()
          ||qID.type == getResultTypeID<Placement<Effect> >()
                        /////////////////////////////////////////////////////////////////TICKET #414
+         
+         ||qID.type == getResultTypeID<Placement<mobject::test::DummyMO    > >()
+         ||qID.type == getResultTypeID<Placement<mobject::test::TestSubMO1 > >()
+         ||qID.type == getResultTypeID<Placement<mobject::test::TestSubMO2 > >()
+         ||qID.type == getResultTypeID<Placement<mobject::test::TestSubMO21> >()
+                       /////////////////////////////////////////////////////////////////TICKET #532
          );
   }
   

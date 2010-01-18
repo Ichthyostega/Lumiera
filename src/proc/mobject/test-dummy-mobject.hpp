@@ -28,6 +28,8 @@
  ** check the basic MObject properties and behaviour, this can be an obstacle. 
  ** Thus we create a separate branch in the MObject hierarchy with relaxed
  ** requirements and some dummy/test API functions.
+ ** 
+ ** @todo needed to move this temporarily into the core session tree. ////////////TICKET #532
  **
  ** @see mobject::session::BuilderTool_test
  ** @see mobject::session::PlacementHierarchy_test

@@ -48,7 +48,7 @@ namespace test    {
    *       a given scope or finding the enclosing scopes. The discovered
    *       elements will be filtered by a runtime type check.
    *       
-   * @todo cover using an additional dynamic filter on the results
+   * @todo change that to use a more realistic test session, based on the actual model types   //////////////// TICKET #532
    *       
    * @see  mobject::session::PlacementIndex
    * @see  mobject::session::QueryResolver
@@ -67,7 +67,7 @@ namespace test    {
           PlacementMO   const& scope    = SessionServiceExploreScope::getScopeRoot();
           
           discover (ScopeQuery<MObject>    (resolver,scope, CONTENTS));
-          discover (ScopeQuery<DummyMO>    (resolver,scope, CONTENTS));
+          discover (ScopeQuery<DummyMO>    (resolver,scope, CONTENTS));                  ////////////////////// TICKET #532
           discover (ScopeQuery<TestSubMO1> (resolver,scope, CONTENTS));
           discover (ScopeQuery<TestSubMO2> (resolver,scope, CONTENTS));
           
