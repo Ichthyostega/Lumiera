@@ -64,6 +64,11 @@ lumiera_threadpool_release_thread(LumieraThread thread);
 typedef struct lumiera_threadpool_struct lumiera_threadpool;
 typedef lumiera_threadpool* LumieraThreadpool;
 
+enum lumiera_threadpool_state {
+  LUMIERA_THREADPOOL_OFFLINE,
+  LUMIERA_THREADPOOL_ONLINE
+};
+
 struct lumiera_threadpool_struct
 {
   struct
@@ -74,6 +79,7 @@ struct lumiera_threadpool_struct
     int idle_thread_count;
     pthread_attr_t pthread_attrs;
     lumiera_condition sync;
+    enum lumiera_threadpool_state status;
   } pool[LUMIERA_THREADCLASS_COUNT];
 };
 

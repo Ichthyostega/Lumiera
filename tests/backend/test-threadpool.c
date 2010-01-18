@@ -172,8 +172,6 @@ TEST ("no-function")
 			  &NOBUG_FLAG(NOBUG_ON));
 
   // cleanup
-  ECHO("wait 1 sec");
-  usleep(1000000);
   ECHO("finished waiting");
   lumiera_threadpool_destroy();
 }
@@ -195,8 +193,6 @@ TEST ("process-function")
 			  &NOBUG_FLAG(NOBUG_ON)); // struct nobug_flag* flag)
 
   // cleanup
-  ECHO("wait 1 sec");
-  usleep(1000000);
   ECHO("finished waiting");
   lumiera_threadpool_destroy();
 }
