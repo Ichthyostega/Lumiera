@@ -103,6 +103,7 @@ extern const char* lumiera_threadclass_names[];
   LUMIERA_THREAD_STATE(ERROR)                        \
   LUMIERA_THREAD_STATE(IDLE)                         \
   LUMIERA_THREAD_STATE(RUNNING)                      \
+  LUMIERA_THREAD_STATE(SYNCING)                      \
   LUMIERA_THREAD_STATE(WAKEUP)                       \
   LUMIERA_THREAD_STATE(SHUTDOWN)                     \
   LUMIERA_THREAD_STATE(ZOMBIE)                       \
@@ -118,9 +119,6 @@ extern const char* lumiera_threadclass_names[];
 typedef enum
   {
     LUMIERA_THREAD_STATES
-
-    LUMIERA_THREADSTATE_CUSTOM_START = 1024,
-    LUMIERA_THREADSTATE_CUSTOM_END = 32768,
   }
   lumiera_thread_state;
 
@@ -152,7 +150,7 @@ struct lumiera_thread_struct
   int kind;
 
   // this is used both as a command and as a state tracker
-  int state;
+  lumiera_thread_state state;
   void (*function)(void *);
   void * arguments;
 };
@@ -249,30 +247,33 @@ lumiera_thread_deadline_clear (void);
 
 /**
  * Thread syncronization
- * Lumiera threads can be syncronized with custom states.
  * The syncronization primitives act as barrier over 2 threads, any thread reaching a syncronization
- * point first is blocked until the other one reaches it with the same state.
- * Providing different states is errorneous!
+ * point first is blocked until the other one reaches it too.
  */
 
 
 /**
  * Syncronize with another threads state
  *
- * this blocks until/unless the other thread reaches 'state'
+ * this blocks until/unless the other thread reaches a syncronization point
  */
 LumieraThread
-lumiera_thread_sync_other (LumieraThread other, int state);
+lumiera_thread_sync_other (LumieraThread other);
 
 /**
  * Syncronize current thread
  *
- * signifies that this thread reached 'state' and blocks until/unless
- * some other thread synced with this state
+ * this blocks until/unless the other thread reaches a syncronization point
  * @return on success pointer to self (opaque), or NULL on error
  */
 LumieraThread
-lumiera_thread_sync (int state);
+lumiera_thread_sync (void);
+
+// TODO implement timedsync, this is bit tricky because after a timeout, syncronization points are desynced
+// we possibly need some way to reset/resync this
+//LumieraThread
+//lumiera_thread_timedsync (struct timespec timeout);
+
 
 /**
  * Joining threads
