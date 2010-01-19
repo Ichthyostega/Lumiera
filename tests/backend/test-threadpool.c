@@ -180,7 +180,7 @@ TEST ("process-function")
 {
   // this is what the scheduler would do once it figures out what function a job needs to run
   LumieraThread t;
-  int number = 440616;
+  int number = 1073676287;
 
   lumiera_threadpool_init();
 
