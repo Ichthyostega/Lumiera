@@ -126,7 +126,7 @@ thread_loop (void* thread)
 // when this is called it should have already been decided that the function
 // shall run in parallel, as a thread
 LumieraThread
-lumiera_thread_run (enum lumiera_thread_class kind,
+lumiera_thread_run (int kind,
                     void (*function)(void *),
                     void * arg,
                     const char* purpose,
@@ -136,12 +136,12 @@ lumiera_thread_run (enum lumiera_thread_class kind,
   //  REQUIRE (function, "invalid function");
 
   // ask the threadpool for a thread (it might create a new one)
-  LumieraThread self = lumiera_threadpool_acquire_thread (kind, purpose, flag);
+  LumieraThread self = lumiera_threadpool_acquire_thread (kind&0xff, purpose, flag);
 
   // set the function and data to be run
   self->function = function;
   self->arguments = arg;
-
+  self->kind = kind;
   self->deadline.tv_sec = 0;
 
   // and let it really run (signal the condition var, the thread waits on it)

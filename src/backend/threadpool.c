@@ -179,6 +179,7 @@ lumiera_threadpool_release_thread(LumieraThread thread)
 {
   TRACE (threadpool);
   REQUIRE (thread, "invalid thread given");
+  thread->kind = thread->kind&0xff;
   REQUIRE (thread->kind < LUMIERA_THREADCLASS_COUNT, "thread belongs to an unknown pool kind: %d", thread->kind);
 
   REQUIRE (thread->state != LUMIERA_THREADSTATE_IDLE, "trying to park an already idle thread");

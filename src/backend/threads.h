@@ -73,7 +73,7 @@ enum lumiera_thread_class
     LUMIERA_THREAD_CLASSES
     /** this just denotes the number of classes listed above,
         it is used to create arrays **/
-    LUMIERA_THREADCLASS_COUNT,
+    LUMIERA_THREADCLASS_COUNT,  /* must be <= 256, thats easy or? */
 
     // .. various thread flags follow
     /**
@@ -83,12 +83,12 @@ enum lumiera_thread_class
      *  The Thread must be very careful with locking, better don't.
      *  TODO explain syncronization issues
      **/
-    LUMIERA_THREAD_OR_NOT = 1<<16,
+    LUMIERA_THREAD_OR_NOT = 1<<8,
 
     /**
      * Thread must be joined finally
      **/
-    LUMIERA_THREAD_JOINABLE = 1<<17
+    LUMIERA_THREAD_JOINABLE = 1<<9
   };
 
 #undef LUMIERA_THREAD_CLASS
@@ -195,7 +195,7 @@ lumiera_thread_delete (LumieraThread self);
  * @param flag NoBug flag used for logging the thread startup and return
  */
 LumieraThread
-lumiera_thread_run (enum lumiera_thread_class kind,
+lumiera_thread_run (int kind,
                     void (*function)(void *),
                     void * arg,
                     const char* purpose,
