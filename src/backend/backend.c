@@ -27,6 +27,7 @@
 #include "backend/filehandlecache.h"
 #include "backend/filedescriptor.h"
 #include "backend/mmapcache.h"
+#include "backend/threadpool.h"
 
 #include <unistd.h>
 #include <sys/resource.h>
@@ -63,6 +64,9 @@ lumiera_backend_init (void)
   //NOBUG_INIT_FLAG (mmapcache);
 
   TRACE (backend_dbg);
+
+  lumiera_threadpool_init ();
+
   lumiera_filedescriptor_registry_init ();
 
   lumiera_backend_pagesize = sysconf(_SC_PAGESIZE);
@@ -112,4 +116,5 @@ lumiera_backend_destroy (void)
   lumiera_mmapcache_delete ();
   lumiera_filehandlecache_delete ();
   lumiera_filedescriptor_registry_destroy ();
+  lumiera_threadpool_destroy ();
 }
