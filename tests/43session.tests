@@ -121,7 +121,35 @@ out: Placement<.+session.Label.> .............. use-cnt=1
 END
 
 
-PLANNED "discovering scopes" ScopeQuery_test <<END
+TEST "discovering scopes" ScopeQuery_test <<END
+out: --------------------------------Test-1: contents depth-first
+out: Placement<.+TestSubMO21.>
+out: Placement<.+TestSubMO2.>
+out: Placement<.+TestSubMO1.>
+out: Placement<.+DummyMO.>
+out: --------------------------------Test-2: contents depth-first, filtered to Clip
+out: --------------------------------Test-3: contents depth-first, filtered to DummyMO
+out: Placement<.+TestSubMO21.>
+out: Placement<.+TestSubMO2.>
+out: Placement<.+TestSubMO1.>
+out: Placement<.+DummyMO.>
+out: --------------------------------Test-4: contents depth-first, filtered to TestSubMO1
+out: Placement<.+TestSubMO1.>
+out: --------------------------------Test-5: contents depth-first, filtered to TestSubMO2
+out: Placement<.+TestSubMO21.>
+out: Placement<.+TestSubMO2.>
+out: --------------------------------Test-6: parents of the second TestSubMO2 element found
+out: Placement<.+TestSubMO21.>
+out: Placement<.+mobject.session.Label.>
+out: --------------------------------Test-7: children of the this TestSubMO2 element
+out: Placement<.+TestSubMO21.>
+out: --------------------------------Test-8: path from there to root
+out: Placement<.+TestSubMO21.>
+out: Placement<.+mobject.session.Label.>
+out: --------------------------------Test-9: same path, but filtered to TestSubMO2
+out: Placement<.+TestSubMO21.>
+out: --------------------------------Test-10: continue exploring partially used TestSubMO2 iterator
+out: Placement<.+TestSubMO21.>
 END
 
 
