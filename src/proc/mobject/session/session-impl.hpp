@@ -136,6 +136,7 @@ namespace session {
   
   
   
+  
   template<class IMPL>
   struct ServiceAccessPoint<SessionServiceExploreScope, IMPL>
     : IMPL
@@ -152,14 +153,27 @@ namespace session {
           return IMPL::getPlacementIndex().getRoot();
         }
       
-    protected:
-      ServiceAccessPoint<SessionServiceExploreScope, IMPL>()
-        : resolvingWrapper_(IMPL::getPlacementIndex())
-        { }
-      
     private:
       PlacementIndexQueryResolver resolvingWrapper_;
+      
+      /** indirection to use the \em currently defined
+       *  index access point (might be a test mock) */
+      struct
+      AccessCurrentIndex
+        {
+          IMPL& accessPoint_;  
+          PlacementIndex& operator() (void) { return accessPoint_.getPlacementIndex(); }
+          
+          AccessCurrentIndex (IMPL& impl) : accessPoint_(impl) { }
+        };
+      
+    protected:
+      ServiceAccessPoint<SessionServiceExploreScope, IMPL>()
+        : resolvingWrapper_(AccessCurrentIndex (*this))
+        { }
     };
+  
+  
   
   
   

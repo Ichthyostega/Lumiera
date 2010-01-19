@@ -92,10 +92,12 @@ namespace test    {
           PlacementMO& root = index->getRoot();          
           PlacementIndexQueryResolver resolver(*index);
           
+          cout << "explore contents depth-first..." << endl;
           discover (ContentsQuery<MObject> (resolver,root));
           
           PlacementMO& elm = *ContentsQuery<TestSubMO1>(resolver,root);                  ////////////////////// TICKET #532
           
+          cout << "path to root starting at " << string(elm) << endl;
           discover (PathQuery<MObject> (resolver,elm));
         }
       

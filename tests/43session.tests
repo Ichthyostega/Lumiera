@@ -6,10 +6,6 @@ PLANNED "AddClip_test" AddClip_test <<END
 END
 
 
-PLANNED "discovering scopes" ScopeQuery_test <<END
-END
-
-
 TEST "DefsManager_test" DefsManager_test <<END
 return: 0
 END
@@ -92,7 +88,13 @@ out: pID\(\w{8,16}\)
 END
 
 
-TEST "PlacementIndex_test" PlacementIndex_test <<END
+TEST "PlacementRef_test" PlacementRef_test <<END
+out: Placement<.+TestSubMO21.> .......... use-cnt=2
+out: specialAPI()
+END
+
+
+TEST "Placement Index" PlacementIndex_test <<END
 out: ^::Placement<.+session.test.TestClip.+ use-cnt=2
 out: ^ ::Placement<.+session.test.TestClip.+ use-cnt=1
 out: ^ ...1 elements at Level 1
@@ -107,9 +109,19 @@ out: ^...3 elements at Level 0
 END
 
 
-TEST "PlacementRef_test" PlacementRef_test <<END
-out: Placement<.+TestSubMO21.> .......... use-cnt=2
-out: specialAPI()
+TEST "Querying the index" PlacementIndexQuery_test <<END
+out: explore contents depth-first...
+out: Placement<.+TestSubMO21.> .......... use-cnt=1
+out: Placement<.+TestSubMO2.> ........... use-cnt=1
+out: Placement<.+TestSubMO1.> ........... use-cnt=1
+out: Placement<.+DummyMO.> ............... use-cnt=1
+out: path to root starting at Placement<.+TestSubMO1
+out: Placement<.+TestSubMO2.> ........... use-cnt=1
+out: Placement<.+session.Label.> .............. use-cnt=1
+END
+
+
+PLANNED "discovering scopes" ScopeQuery_test <<END
 END
 
 

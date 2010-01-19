@@ -275,26 +275,49 @@ namespace session {
         return qID;
       }
     
+    struct
+    UseThisIndex
+      {
+        UseThisIndex (PlacementIndex& idx) : refIndex_(idx) {}
+        
+        PlacementIndex& refIndex_;  
+        PlacementIndex& operator() (void) { return refIndex_; }
+      };
   } //(END) Helpers
   
   
   
   
-  PlacementIndexQueryResolver::PlacementIndexQueryResolver (PIdx theIndex)
-    : index_(theIndex)
+  PlacementIndexQueryResolver::PlacementIndexQueryResolver (PlacementIndex& theIndex)
+    : _getIndex(UseThisIndex (theIndex))
     {
-      defineHandling<MObject>();
-      defineHandling<Clip>();
-      defineHandling<Effect>();
-                       /////////////////////////////////////////////////////////////////TICKET #414
-      
-      defineHandling<mobject::test::DummyMO    >();
-      defineHandling<mobject::test::TestSubMO1 >();
-      defineHandling<mobject::test::TestSubMO2 >();
-      defineHandling<mobject::test::TestSubMO21>();
-                       /////////////////////////////////////////////////////////////////TICKET #532
+      preGenerateInvocationContext();
     }
   
+  
+  PlacementIndexQueryResolver::PlacementIndexQueryResolver (function<IndexLink> const& accessIndex)
+    : _getIndex(accessIndex)
+    {
+      preGenerateInvocationContext();
+    }
+  
+  
+  void
+  PlacementIndexQueryResolver::preGenerateInvocationContext()
+  {
+    defineHandling<MObject>();
+    defineHandling<Clip>();
+    defineHandling<Effect>();
+                       /////////////////////////////////////////////////////////////////TICKET #414
+      
+    defineHandling<mobject::test::DummyMO    >();
+    defineHandling<mobject::test::TestSubMO1 >();
+    defineHandling<mobject::test::TestSubMO2 >();
+    defineHandling<mobject::test::TestSubMO21>();
+                       /////////////////////////////////////////////////////////////////TICKET #532
+  }
+      
+
   bool
   PlacementIndexQueryResolver::canHandleQuery(QID qID)  const
   {
@@ -359,12 +382,13 @@ namespace session {
   Explorer*
   PlacementIndexQueryResolver::setupExploration (PID startID, ScopeQueryKind direction)
   {
+    PIdx index = _getIndex(); // access the currently configured PlacementIndex (Session)
     switch (direction)
       {
-      case CONTENTS:  return new DeepExplorer(index_.getReferrers(startID), index_);
-      case CHILDREN:  return new ChildExplorer(index_.getReferrers(startID));
-      case PARENTS:   return new UpExplorer(index_.getScope(startID),index_);
-      case PATH:      return new UpExplorer(index_.find(startID),index_);
+      case CONTENTS:  return new DeepExplorer(index.getReferrers(startID), index);
+      case CHILDREN:  return new ChildExplorer(index.getReferrers(startID));
+      case PARENTS:   return new UpExplorer(index.getScope(startID),index);
+      case PATH:      return new UpExplorer(index.find(startID),index);
       
       default:
         throw lumiera::error::Invalid("unknown query direction");    //////TICKET #197

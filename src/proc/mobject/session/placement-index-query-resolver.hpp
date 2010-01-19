@@ -61,11 +61,15 @@
 #include "proc/mobject/session/query-resolver.hpp"
 #include "proc/mobject/session/scope-query.hpp"
 
+#include <tr1/functional>
 
 
 namespace mobject {
 namespace session {
+ 
+  using std::tr1::function;
   
+  typedef PlacementIndex& IndexLink(void);
   
   class Explorer;
   
@@ -84,9 +88,8 @@ namespace session {
   class PlacementIndexQueryResolver
     : public session::QueryResolver
     {
-      typedef PlacementIndex& PIdx;
       
-      PIdx index_;
+      function<IndexLink> _getIndex;
       
       
       virtual bool canHandleQuery(Goal::QueryID const&)  const;
@@ -96,6 +99,8 @@ namespace session {
       
       Explorer* setupExploration (PlacementIndex::ID startID, ScopeQueryKind direction);
       
+      void preGenerateInvocationContext();
+      
       template<typename MO>
       void defineHandling();
         
@@ -104,7 +109,8 @@ namespace session {
       
       
     public:
-      PlacementIndexQueryResolver (PIdx theIndex);
+      PlacementIndexQueryResolver (PlacementIndex& theIndex);
+      PlacementIndexQueryResolver (function<IndexLink> const& accessIndex);
     };
   
   
