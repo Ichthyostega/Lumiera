@@ -31,8 +31,8 @@
 
 using std::tr1::bind;
 using test::Test;
-
-
+using lib::Sync;
+using lib::NonrecursiveLock_NoWait;
 
 namespace backend {
   namespace test  {
@@ -54,18 +54,21 @@ namespace backend {
       }
       
       
-      struct TestThread : Thread
+      struct TestThread
+        : Thread
+        , Sync<NonrecursiveLock_NoWait> // note: Thread isnt derived from sync anymore, if we want to lock values this needs to be done at per client base
+                                       //        an alternative would be to use the threads .sync() and lumiera_thread_sync() where approbiate
         {
           TestThread()
             : Thread("test Thread creation",
                      bind (&TestThread::theOperation, this, createVal(), createVal()))
             { }                         // note the binding (functor object) is passed as anonymous temporary
           
-           
-          void 
+          
+          void
           theOperation (uint a, uint b) ///< the actual operation running in a separate thread
             {
-              Lock sync(this);          // *not* a recursive lock, because parent unlocks prior to invoking the operation 
+              Lock(this);
               sum += (a+b);
             }
         };
@@ -98,7 +101,7 @@ namespace backend {
             sum = checksum = 0;
             TestThread instances[NUM_THREADS]    SIDEEFFECT;
             
-            usleep (200000);  // pause 200ms for the threads to terminate..... 
+            usleep (200000);  // pause 200ms for the threads to terminate.....
             
             ASSERT (0 < sum);
             ASSERT (sum==checksum);
