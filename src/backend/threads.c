@@ -161,7 +161,7 @@ lumiera_thread_new (enum lumiera_thread_class kind,
 {
   pthread_once (&lumiera_thread_initialized, lumiera_thread_tls_init);
 
-  // TODO: do something with these:
+  // TODO: do something with this string:
   (void) purpose;
   REQUIRE (attrs, "invalid pthread attributes structure passed");
 
