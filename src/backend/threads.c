@@ -241,6 +241,7 @@ lumiera_thread_self (void)
 LumieraThread
 lumiera_thread_deadline_set (struct timespec deadline)
 {
+  TRACE (threads);
   LumieraThread self = lumiera_thread_self ();
   if (self)
     self->deadline = deadline;
@@ -255,6 +256,7 @@ lumiera_thread_deadline_set (struct timespec deadline)
 LumieraThread
 lumiera_thread_deadline_extend (unsigned ms)
 {
+  TRACE (threads);
   LumieraThread self = lumiera_thread_self ();
   if (self)
     {
@@ -281,6 +283,7 @@ lumiera_thread_deadline_extend (unsigned ms)
 LumieraThread
 lumiera_thread_deadline_clear (void)
 {
+  TRACE (threads);
   LumieraThread self = lumiera_thread_self ();
   if (self)
     {
