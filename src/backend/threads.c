@@ -294,7 +294,7 @@ lumiera_thread_sync_other (LumieraThread other)
 
   LUMIERA_CONDITION_SECTION (threads, &other->signal)
     {
-      REQUIRE (other->state == LUMIERA_THREADSTATE_SYNCING);        TODO("Runtime error when state expectation isnt met");
+      REQUIRE (other->state == LUMIERA_THREADSTATE_SYNCING, "the other thread is in the wrong state: %s", lumiera_threadstate_names[other->state]);        TODO("Runtime error when state expectation isn't met");
       other->state = LUMIERA_THREADSTATE_RUNNING;
       LUMIERA_CONDITION_SIGNAL;
     }
