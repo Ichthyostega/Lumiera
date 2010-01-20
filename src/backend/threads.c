@@ -299,7 +299,7 @@ lumiera_thread_sync_other (LumieraThread other)
 
   LUMIERA_CONDITION_SECTION (threads, &other->signal)
     {
-      REQUIRE (other->state == LUMIERA_THREADSTATE_SYNCING);        TODO("Runtime error when state expectation isnt met");
+      LUMIERA_CONDITION_WAIT (other->state == LUMIERA_THREADSTATE_SYNCING);
       other->state = LUMIERA_THREADSTATE_RUNNING;
       LUMIERA_CONDITION_SIGNAL;
     }
@@ -316,6 +316,7 @@ lumiera_thread_sync (void)
   REQUIRE(self, "not a lumiera thread");
 
   self->state = LUMIERA_THREADSTATE_SYNCING;
+  lumiera_condition_signal (&self->signal, &NOBUG_FLAG(threads));
 
   TODO("error handing, maybe timed mutex (using the threads heartbeat timeout, shortly before timeout)");
 
