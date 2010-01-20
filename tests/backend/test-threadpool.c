@@ -33,9 +33,9 @@ void is_prime(void * arg)
   unsigned long long number = *(unsigned long long *)arg;
   unsigned long long prime = 1;
 
-  for (unsigned long long x = number; x >= sqrt(number); --x)
+  for (unsigned long long x = number-1; x >= sqrt(number); --x)
     {
-      if (number % x == 0)
+      if ((number % x) == 0)
 	{
 	  prime = 0;
 	  break;
@@ -180,7 +180,7 @@ TEST ("process-function")
 {
   // this is what the scheduler would do once it figures out what function a job needs to run
   LumieraThread t;
-  unsigned long long number = 18014398241046527;
+  unsigned long long number = 10000019;
 
   lumiera_threadpool_init();
 
@@ -193,8 +193,9 @@ TEST ("process-function")
 			  &NOBUG_FLAG(NOBUG_ON)); // struct nobug_flag* flag)
 
   // cleanup
-  ECHO("finished waiting");
   lumiera_threadpool_destroy();
+  ECHO("the result is %llu", number);
+
 }
 
 TESTS_END

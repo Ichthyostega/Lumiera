@@ -10,7 +10,7 @@ END
 
 TEST "process a function" process-function <<END
 err: the input to the function is
-err: finished waiting
+err: the result is 1
 END
 
 PLANNED "error cleared on join"
