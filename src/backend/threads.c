@@ -92,25 +92,30 @@ thread_loop (void* thread)
       t->rh = &lumiera_lock_section_.rh;
 
       do {
+        lumiera_threadpool_release_thread(t);
+        LUMIERA_CONDITION_WAIT (t->state != LUMIERA_THREADSTATE_IDLE);
+        INFO (threads, "Thread awaken with state %d", t->state);
+
         // NULL function means: no work to do
         INFO (threads, "function %p", t->function);
         if (t->function)
           t->function (t->arguments);
-        lumiera_threadpool_release_thread(t);
-        LUMIERA_CONDITION_WAIT (t->state != LUMIERA_THREADSTATE_IDLE);
-        INFO (threads, "Thread awaken with state %d", t->state);
+        TRACE (threads, "function done");
+
+        if (t->kind & LUMIERA_THREAD_JOINABLE)
+          {
+            INFO (threads, "Thread zombified");
+            /* move error state to data the other thread will it pick up from there */
+            t->arguments = (void*)lumiera_error ();
+            t->state = LUMIERA_THREADSTATE_ZOMBIE;
+            LUMIERA_CONDITION_SIGNAL;
+            LUMIERA_CONDITION_WAIT (t->state == LUMIERA_THREADSTATE_JOINED);
+            INFO (threads, "Thread joined");
+        }
+
       } while (t->state != LUMIERA_THREADSTATE_SHUTDOWN);
       // SHUTDOWN state
 
-      if (t->kind & LUMIERA_THREAD_JOINABLE)
-        {
-          INFO (threads, "Thread zombified");
-          /* move error state to data the other thread will it pick up from there */
-          t->arguments = (void*)lumiera_error ();
-          t->state = LUMIERA_THREADSTATE_ZOMBIE;
-          LUMIERA_CONDITION_WAIT (t->state == LUMIERA_THREADSTATE_JOINED);
-          INFO (threads, "Thread joined");
-        }
 
       INFO (threads, "Thread Shutdown");
     }
@@ -121,7 +126,7 @@ thread_loop (void* thread)
 // when this is called it should have already been decided that the function
 // shall run in parallel, as a thread
 LumieraThread
-lumiera_thread_run (enum lumiera_thread_class kind,
+lumiera_thread_run (int kind,
                     void (*function)(void *),
                     void * arg,
                     const char* purpose,
@@ -131,12 +136,12 @@ lumiera_thread_run (enum lumiera_thread_class kind,
   //  REQUIRE (function, "invalid function");
 
   // ask the threadpool for a thread (it might create a new one)
-  LumieraThread self = lumiera_threadpool_acquire_thread (kind, purpose, flag);
+  LumieraThread self = lumiera_threadpool_acquire_thread (kind&0xff, purpose, flag);
 
   // set the function and data to be run
   self->function = function;
   self->arguments = arg;
-
+  self->kind = kind;
   self->deadline.tv_sec = 0;
 
   // and let it really run (signal the condition var, the thread waits on it)
@@ -294,7 +299,7 @@ lumiera_thread_sync_other (LumieraThread other)
 
   LUMIERA_CONDITION_SECTION (threads, &other->signal)
     {
-      REQUIRE (other->state == LUMIERA_THREADSTATE_SYNCING, "the other thread is in the wrong state: %s", lumiera_threadstate_names[other->state]);        TODO("Runtime error when state expectation isn't met");
+      LUMIERA_CONDITION_WAIT (other->state == LUMIERA_THREADSTATE_SYNCING);
       other->state = LUMIERA_THREADSTATE_RUNNING;
       LUMIERA_CONDITION_SIGNAL;
     }
@@ -311,6 +316,7 @@ lumiera_thread_sync (void)
   REQUIRE(self, "not a lumiera thread");
 
   self->state = LUMIERA_THREADSTATE_SYNCING;
+  lumiera_condition_signal (&self->signal, &NOBUG_FLAG(threads));
 
   TODO("error handing, maybe timed mutex (using the threads heartbeat timeout, shortly before timeout)");
 

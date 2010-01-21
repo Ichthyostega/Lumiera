@@ -129,6 +129,13 @@ namespace backend {
             // while the third thread wasn't created at all.
           }
         
+      public:
+        ThreadWrapperJoin_test()
+        { lumiera_threadpool_init(); }
+        
+        ~ThreadWrapperJoin_test()
+        { lumiera_threadpool_destroy(); }
+        
       };
     
     

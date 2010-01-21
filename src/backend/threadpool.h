@@ -75,8 +75,6 @@ struct lumiera_threadpool_struct
   {
     llist working_list;
     llist idle_list;
-    int thread_count;
-    int idle_thread_count;
     pthread_attr_t pthread_attrs;
     lumiera_condition sync;
     enum lumiera_threadpool_state status;

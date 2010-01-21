@@ -104,6 +104,12 @@ namespace backend {
             ASSERT (sum==checksum);
           }
         
+      public:
+        ThreadWrapper_test()
+        { lumiera_threadpool_init(); }
+        
+        ~ThreadWrapper_test()
+        { lumiera_threadpool_destroy(); }
         
       };
     
