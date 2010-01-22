@@ -477,9 +477,7 @@ mpool_reserve (MPool self, unsigned nelements)
 void
 nobug_mpool_dump (const_MPool self,
                   const int depth,
-                  const char* file,
-                  const int line,
-                  const char* func)
+                  const struct nobug_context dump_context)
 {
   if (self && depth)
     {
