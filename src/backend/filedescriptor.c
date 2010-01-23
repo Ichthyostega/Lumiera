@@ -98,7 +98,7 @@ lumiera_filedescriptor_registry_init (void)
   if (!registry)
     LUMIERA_DIE (NO_MEMORY);
 
-  lumiera_mutex_init (&registry_mutex, "filedescriptor_registry", &NOBUG_FLAG (mutex_dbg));
+  lumiera_mutex_init (&registry_mutex, "filedescriptor_registry", &NOBUG_FLAG (mutex_dbg), NOBUG_CONTEXT);
 }
 
 void
@@ -107,7 +107,7 @@ lumiera_filedescriptor_registry_destroy (void)
   TRACE (filedescriptor_dbg);
   REQUIRE (!psplay_nelements (registry));
 
-  lumiera_mutex_destroy (&registry_mutex, &NOBUG_FLAG (mutex_dbg));
+  lumiera_mutex_destroy (&registry_mutex, &NOBUG_FLAG (mutex_dbg), NOBUG_CONTEXT);
 
   if (registry)
     psplay_destroy (registry);
@@ -277,7 +277,7 @@ lumiera_filedescriptor_new (LumieraFiledescriptor template)
   self->mmapings = NULL;
   llist_init (&self->files);
 
-  lumiera_mutex_init (&self->lock, "filedescriptor", &NOBUG_FLAG (mutex_dbg));
+  lumiera_mutex_init (&self->lock, "filedescriptor", &NOBUG_FLAG (mutex_dbg), NOBUG_CONTEXT);
 
   return self;
 }
@@ -310,7 +310,7 @@ lumiera_filedescriptor_delete (LumieraFiledescriptor self, const char* name)
 
       TODO ("release filehandle");
 
-      lumiera_mutex_destroy (&self->lock, &NOBUG_FLAG (mutex_dbg));
+      lumiera_mutex_destroy (&self->lock, &NOBUG_FLAG (mutex_dbg), NOBUG_CONTEXT);
       lumiera_free (self);
     }
 }

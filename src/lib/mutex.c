@@ -27,24 +27,29 @@
  */
 
 LumieraMutex
-lumiera_mutex_init (LumieraMutex self, const char* purpose, struct nobug_flag* flag)
+lumiera_mutex_init (LumieraMutex self,
+                    const char* purpose,
+                    struct nobug_flag* flag,
+                    const struct nobug_context ctx)
 {
   if (self)
     {
       pthread_mutex_init (&self->mutex, NULL);
       NOBUG_RESOURCE_HANDLE_INIT (self->rh);
-      NOBUG_RESOURCE_ANNOUNCE_RAW (flag, "mutex", purpose, self, self->rh);
+      NOBUG_RESOURCE_ANNOUNCE_RAW_CTX (flag, "mutex", purpose, self, self->rh, ctx);
     }
   return self;
 }
 
 
 LumieraMutex
-lumiera_mutex_destroy (LumieraMutex self, struct nobug_flag* flag)
+lumiera_mutex_destroy (LumieraMutex self,
+                       struct nobug_flag* flag,
+                       const struct nobug_context ctx)
 {
   if (self)
     {
-      NOBUG_RESOURCE_FORGET_RAW (flag,  self->rh);
+      NOBUG_RESOURCE_FORGET_RAW_CTX (flag, self->rh, ctx);
       if (pthread_mutex_destroy (&self->mutex))
         LUMIERA_DIE (LOCK_DESTROY);
     }

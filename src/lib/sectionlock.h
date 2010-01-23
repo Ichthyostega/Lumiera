@@ -26,7 +26,10 @@
 #include <nobug.h>
 
 
-typedef int (*lumiera_sectionlock_unlock_fn)(void*, struct nobug_flag* flag, struct nobug_resource_user** handle);
+typedef int
+(*lumiera_sectionlock_unlock_fn)(void*, struct nobug_flag* flag,
+                                 struct nobug_resource_user** handle,
+                                 const struct nobug_context ctx);
 
 /**
  * sectionlock used to manage the state of mutexes.
@@ -55,11 +58,12 @@ lumiera_sectionlock_ensureunlocked (LumieraSectionlock self)
  * @param sectionname name used for the sectionlock instance
  * @param ... some extra code to execute
  */
-#define LUMIERA_SECTION_UNLOCK_(section)                                        \
-  do if ((section)->lock)                                                       \
-    {                                                                           \
-      (section)->unlock((section)->lock, (section)->flag, &(section)->rh);      \
-      (section)->lock = NULL;                                                   \
+#define LUMIERA_SECTION_UNLOCK_(section)                        \
+  do if ((section)->lock)                                       \
+    {                                                           \
+      (section)->unlock((section)->lock, (section)->flag,       \
+                        &(section)->rh, NOBUG_CONTEXT);         \
+      (section)->lock = NULL;                                   \
     } while (0)
 
 

@@ -172,7 +172,7 @@ lumiera_thread_new (enum lumiera_thread_class kind,
 
   LumieraThread self = lumiera_malloc (sizeof (*self));
   llist_init (&self->node);
-  lumiera_condition_init (&self->signal, "thread-control", flag);
+  lumiera_condition_init (&self->signal, "thread-control", flag, NOBUG_CONTEXT);
   self->kind = kind;
   self->state = LUMIERA_THREADSTATE_STARTUP;
   self->function = NULL;
@@ -212,7 +212,7 @@ lumiera_thread_destroy (LumieraThread self)
   ENSURE (0 == error, "pthread_join returned %d:%s", error, strerror (error));
 
   // condition has to be destroyed after joining with the thread
-  lumiera_condition_destroy (&self->signal, &NOBUG_FLAG (threads));
+  lumiera_condition_destroy (&self->signal, &NOBUG_FLAG (threads), NOBUG_CONTEXT);
 
   return self;
 }
@@ -319,12 +319,12 @@ lumiera_thread_sync (void)
   REQUIRE(self, "not a lumiera thread");
 
   self->state = LUMIERA_THREADSTATE_SYNCING;
-  lumiera_condition_signal (&self->signal, &NOBUG_FLAG(threads));
+  lumiera_condition_signal (&self->signal, &NOBUG_FLAG(threads), NOBUG_CONTEXT);
 
   TODO("error handing, maybe timed mutex (using the threads heartbeat timeout, shortly before timeout)");
 
   while (self->state == LUMIERA_THREADSTATE_SYNCING) {
-    lumiera_condition_wait (&self->signal, &NOBUG_FLAG(threads), self->rh);
+    lumiera_condition_wait (&self->signal, &NOBUG_FLAG(threads), self->rh, NOBUG_CONTEXT);
   }
 
   return self;

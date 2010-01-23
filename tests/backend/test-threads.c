@@ -102,7 +102,7 @@ TEST ("simple_thread")
 TEST ("thread_synced")
 {
   lumiera_condition cnd;
-  lumiera_condition_init (&cnd, "threadsync", &NOBUG_FLAG(NOBUG_ON));
+  lumiera_condition_init (&cnd, "threadsync", &NOBUG_FLAG(NOBUG_ON), NOBUG_CONTEXT);
 
   LUMIERA_CONDITION_SECTION(cond_sync, &cnd)
     {
@@ -125,14 +125,14 @@ TEST ("thread_synced")
       ECHO ("thread ended %s", NOBUG_THREAD_ID_GET);
     }
 
-  lumiera_condition_destroy (&cnd, &NOBUG_FLAG(NOBUG_ON));
+  lumiera_condition_destroy (&cnd, &NOBUG_FLAG(NOBUG_ON), NOBUG_CONTEXT);
 }
 
 
 
 TEST ("mutex_thread")
 {
-  lumiera_mutex_init (&testmutex, "test", &NOBUG_FLAG(NOBUG_ON));
+  lumiera_mutex_init (&testmutex, "test", &NOBUG_FLAG(NOBUG_ON), NOBUG_CONTEXT);
 
   LUMIERA_MUTEX_SECTION (NOBUG_ON, &testmutex)
     {
@@ -149,7 +149,7 @@ TEST ("mutex_thread")
       fprintf (stderr, "main after thread %s\n", NOBUG_THREAD_ID_GET);
     }
 
-  lumiera_mutex_destroy (&testmutex, &NOBUG_FLAG(NOBUG_ON));
+  lumiera_mutex_destroy (&testmutex, &NOBUG_FLAG(NOBUG_ON), NOBUG_CONTEXT);
 }
 
 

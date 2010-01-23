@@ -44,7 +44,7 @@ lumiera_mmapings_init (LumieraMMapings self, LumieraFile file, size_t chunksize)
   self->descriptor = file->descriptor;
   self->chunksize = chunksize;
 
-  lumiera_mutex_init (&self->lock, "mmapings", &NOBUG_FLAG(mutex_dbg));
+  lumiera_mutex_init (&self->lock, "mmapings", &NOBUG_FLAG(mutex_dbg), NOBUG_CONTEXT);
 
   return self;
 }
@@ -63,7 +63,7 @@ lumiera_mmapings_destroy (LumieraMMapings self)
       lumiera_mmap_delete (mmap);
     }
 
-  lumiera_mutex_destroy (&self->lock, &NOBUG_FLAG(mutex_dbg));
+  lumiera_mutex_destroy (&self->lock, &NOBUG_FLAG(mutex_dbg), NOBUG_CONTEXT);
 
   return self;
 }

@@ -51,7 +51,7 @@ lumiera_resourcecollector_init_ (void)
   for (int i = 0; i < LUMIERA_RESOURCE_END; ++i)
     llist_init (&lumiera_resourcecollector_registry[i]);
 
-  lumiera_mutex_init (&lumiera_resourcecollector_lock, "resourcecollector", &NOBUG_FLAG(mutex_dbg));
+  lumiera_mutex_init (&lumiera_resourcecollector_lock, "resourcecollector", &NOBUG_FLAG(mutex_dbg), NOBUG_CONTEXT);
 }
 
 
@@ -65,7 +65,7 @@ lumiera_resourcecollector_destroy (void)
     LLIST_WHILE_HEAD (&lumiera_resourcecollector_registry[i], head)
       lumiera_resourcehandler_unregister ((LumieraResourcehandler)head);
 
-  lumiera_mutex_destroy (&lumiera_resourcecollector_lock, &NOBUG_FLAG(mutex_dbg));
+  lumiera_mutex_destroy (&lumiera_resourcecollector_lock, &NOBUG_FLAG(mutex_dbg), NOBUG_CONTEXT);
 }
 
 

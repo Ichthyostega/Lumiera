@@ -29,24 +29,29 @@
  */
 
 LumieraRWLock
-lumiera_rwlock_init (LumieraRWLock self, const char* purpose, struct nobug_flag* flag)
+lumiera_rwlock_init (LumieraRWLock self,
+                     const char* purpose,
+                     struct nobug_flag* flag,
+                     const struct nobug_context ctx)
 {
   if (self)
     {
       pthread_rwlock_init (&self->rwlock, NULL);
       NOBUG_RESOURCE_HANDLE_INIT (self->rh);
-      NOBUG_RESOURCE_ANNOUNCE_RAW (flag, "rwlock", purpose, self, self->rh);
+      NOBUG_RESOURCE_ANNOUNCE_RAW_CTX (flag, "rwlock", purpose, self, self->rh, ctx);
     }
   return self;
 }
 
 
 LumieraRWLock
-lumiera_rwlock_destroy (LumieraRWLock self, struct nobug_flag* flag)
+lumiera_rwlock_destroy (LumieraRWLock self,
+                        struct nobug_flag* flag,
+                        const struct nobug_context ctx)
 {
   if (self)
     {
-      NOBUG_RESOURCE_FORGET_RAW (flag,  self->rh);
+      NOBUG_RESOURCE_FORGET_RAW_CTX (flag,  self->rh, ctx);
       if (pthread_rwlock_destroy (&self->rwlock))
         LUMIERA_DIE (LOCK_DESTROY);
     }

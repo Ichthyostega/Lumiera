@@ -234,9 +234,8 @@ mpool_free (MPool self, void* element);
 void
 nobug_mpool_dump (const_MPool self,
                   const int depth,
-                  const char* file,
-                  const int line,
-                  const char* func);
+                  const struct nobug_context dump_context);
+
 
 /*
 //      Local Variables:

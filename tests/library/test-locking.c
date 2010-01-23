@@ -35,7 +35,7 @@ TESTS_BEGIN
 TEST ("mutexsection")
 {
   lumiera_mutex m;
-  lumiera_mutex_init (&m, "mutexsection", &NOBUG_FLAG(NOBUG_ON));
+  lumiera_mutex_init (&m, "mutexsection", &NOBUG_FLAG(NOBUG_ON), NOBUG_CONTEXT);
 
   LUMIERA_MUTEX_SECTION (NOBUG_ON, &m)
     {
@@ -47,28 +47,28 @@ TEST ("mutexsection")
       printf ("mutex locked section 2\n");
     }
 
-  lumiera_mutex_destroy (&m, &NOBUG_FLAG(NOBUG_ON));
+  lumiera_mutex_destroy (&m, &NOBUG_FLAG(NOBUG_ON), NOBUG_CONTEXT);
 }
 
 
 TEST ("mutexforgotunlock")
 {
   lumiera_mutex m;
-  lumiera_mutex_init (&m, "mutexforgotunlock", &NOBUG_FLAG(NOBUG_ON));
+  lumiera_mutex_init (&m, "mutexforgotunlock", &NOBUG_FLAG(NOBUG_ON), NOBUG_CONTEXT);
 
   LUMIERA_MUTEX_SECTION (NOBUG_ON, &m)
     {
       break;    // MUTEX_SECTIONS must not be left by a jump
     }
 
-  lumiera_mutex_destroy (&m, &NOBUG_FLAG(NOBUG_ON));
+  lumiera_mutex_destroy (&m, &NOBUG_FLAG(NOBUG_ON), NOBUG_CONTEXT);
 }
 
 
 TEST ("mutexexplicitunlock")
 {
   lumiera_mutex m;
-  lumiera_mutex_init (&m, "mutexforgotunlock", &NOBUG_FLAG(NOBUG_ON));
+  lumiera_mutex_init (&m, "mutexforgotunlock", &NOBUG_FLAG(NOBUG_ON), NOBUG_CONTEXT);
 
   LUMIERA_MUTEX_SECTION (NOBUG_ON, &m)
     {
@@ -77,17 +77,17 @@ TEST ("mutexexplicitunlock")
       break;
     }
 
-  lumiera_mutex_destroy (&m, &NOBUG_FLAG(NOBUG_ON));
+  lumiera_mutex_destroy (&m, &NOBUG_FLAG(NOBUG_ON), NOBUG_CONTEXT);
 }
 
 
 TEST ("nestedmutexsection")
 {
   lumiera_mutex m;
-  lumiera_mutex_init (&m, "m_mutexsection", &NOBUG_FLAG(NOBUG_ON));
+  lumiera_mutex_init (&m, "m_mutexsection", &NOBUG_FLAG(NOBUG_ON), NOBUG_CONTEXT);
 
   lumiera_mutex n;
-  lumiera_mutex_init (&n, "n_mutexsection", &NOBUG_FLAG(NOBUG_ON));
+  lumiera_mutex_init (&n, "n_mutexsection", &NOBUG_FLAG(NOBUG_ON), NOBUG_CONTEXT);
 
   LUMIERA_MUTEX_SECTION (NOBUG_ON, &m)
     {
@@ -99,17 +99,17 @@ TEST ("nestedmutexsection")
         }
     }
 
-  lumiera_mutex_destroy (&n, &NOBUG_FLAG(NOBUG_ON));
-  lumiera_mutex_destroy (&m, &NOBUG_FLAG(NOBUG_ON));
+  lumiera_mutex_destroy (&n, &NOBUG_FLAG(NOBUG_ON), NOBUG_CONTEXT);
+  lumiera_mutex_destroy (&m, &NOBUG_FLAG(NOBUG_ON), NOBUG_CONTEXT);
 }
 
 TEST ("chainedmutexsection")
 {
   lumiera_mutex m;
-  lumiera_mutex_init (&m, "m_mutexsection", &NOBUG_FLAG(NOBUG_ON));
+  lumiera_mutex_init (&m, "m_mutexsection", &NOBUG_FLAG(NOBUG_ON), NOBUG_CONTEXT);
 
   lumiera_mutex n;
-  lumiera_mutex_init (&n, "n_mutexsection", &NOBUG_FLAG(NOBUG_ON));
+  lumiera_mutex_init (&n, "n_mutexsection", &NOBUG_FLAG(NOBUG_ON), NOBUG_CONTEXT);
 
   LUMIERA_MUTEX_SECTION (NOBUG_ON, &m)
     {
@@ -121,8 +121,8 @@ TEST ("chainedmutexsection")
         }
     }
 
-  lumiera_mutex_destroy (&n, &NOBUG_FLAG(NOBUG_ON));
-  lumiera_mutex_destroy (&m, &NOBUG_FLAG(NOBUG_ON));
+  lumiera_mutex_destroy (&n, &NOBUG_FLAG(NOBUG_ON), NOBUG_CONTEXT);
+  lumiera_mutex_destroy (&m, &NOBUG_FLAG(NOBUG_ON), NOBUG_CONTEXT);
 }
 
 
@@ -130,7 +130,7 @@ TEST ("chainedmutexsection")
 TEST ("recursivemutexsection")
 {
   lumiera_recmutex m;
-  lumiera_recmutex_init (&m, "m_recmutexsection", &NOBUG_FLAG(NOBUG_ON));
+  lumiera_recmutex_init (&m, "m_recmutexsection", &NOBUG_FLAG(NOBUG_ON), NOBUG_CONTEXT);
 
 
   LUMIERA_RECMUTEX_SECTION (NOBUG_ON, &m)
@@ -143,7 +143,7 @@ TEST ("recursivemutexsection")
         }
     }
 
- lumiera_recmutex_destroy (&m, &NOBUG_FLAG(NOBUG_ON));
+ lumiera_recmutex_destroy (&m, &NOBUG_FLAG(NOBUG_ON), NOBUG_CONTEXT);
 }
 
 
@@ -151,7 +151,7 @@ TEST ("recursivemutexsection")
 TEST ("rwlocksection")
 {
   lumiera_rwlock rwlock;
-  lumiera_rwlock_init (&rwlock, "rwsection", &NOBUG_FLAG(NOBUG_ON));
+  lumiera_rwlock_init (&rwlock, "rwsection", &NOBUG_FLAG(NOBUG_ON), NOBUG_CONTEXT);
 
   LUMIERA_WRLOCK_SECTION (NOBUG_ON, &rwlock)
     {
@@ -163,21 +163,21 @@ TEST ("rwlocksection")
       printf ("read locked section 2\n");
     }
 
-  lumiera_rwlock_destroy (&rwlock, &NOBUG_FLAG(NOBUG_ON));
+  lumiera_rwlock_destroy (&rwlock, &NOBUG_FLAG(NOBUG_ON), NOBUG_CONTEXT);
 }
 
 
 TEST ("rwlockforgotunlock")
 {
   lumiera_rwlock rwlock;
-  lumiera_rwlock_init (&rwlock, "rwlockforgotunlock", &NOBUG_FLAG(NOBUG_ON));
+  lumiera_rwlock_init (&rwlock, "rwlockforgotunlock", &NOBUG_FLAG(NOBUG_ON), NOBUG_CONTEXT);
 
   LUMIERA_RDLOCK_SECTION (NOBUG_ON, &rwlock)
     {
       break;    // LOCK_SECTIONS must not be left by a jump
     }
 
-  lumiera_rwlock_destroy (&rwlock, &NOBUG_FLAG(NOBUG_ON));
+  lumiera_rwlock_destroy (&rwlock, &NOBUG_FLAG(NOBUG_ON), NOBUG_CONTEXT);
 }
 
 
@@ -185,7 +185,7 @@ TEST ("rwlockforgotunlock")
 TEST ("rwdeadlockwr")
 {
   lumiera_rwlock rwlock;
-  lumiera_rwlock_init (&rwlock, "rwsection", &NOBUG_FLAG(NOBUG_ON));
+  lumiera_rwlock_init (&rwlock, "rwsection", &NOBUG_FLAG(NOBUG_ON), NOBUG_CONTEXT);
 
   LUMIERA_WRLOCK_SECTION (NOBUG_ON, &rwlock)
     {
@@ -196,7 +196,7 @@ TEST ("rwdeadlockwr")
         }
     }
 
-  lumiera_rwlock_destroy (&rwlock, &NOBUG_FLAG(NOBUG_ON));
+  lumiera_rwlock_destroy (&rwlock, &NOBUG_FLAG(NOBUG_ON), NOBUG_CONTEXT);
 }
 
 
@@ -204,7 +204,7 @@ TEST ("rwdeadlockwr")
 TEST ("rwdeadlockrw")
 {
   lumiera_rwlock rwlock;
-  lumiera_rwlock_init (&rwlock, "rwsection", &NOBUG_FLAG(NOBUG_ON));
+  lumiera_rwlock_init (&rwlock, "rwsection", &NOBUG_FLAG(NOBUG_ON), NOBUG_CONTEXT);
 
   LUMIERA_RDLOCK_SECTION (NOBUG_ON, &rwlock)
     {
@@ -215,14 +215,14 @@ TEST ("rwdeadlockrw")
         }
     }
 
-  lumiera_rwlock_destroy (&rwlock, &NOBUG_FLAG(NOBUG_ON));
+  lumiera_rwlock_destroy (&rwlock, &NOBUG_FLAG(NOBUG_ON), NOBUG_CONTEXT);
 }
 
 
 TEST ("conditionops (compiletest only)")
 {
   lumiera_condition cond;
-  lumiera_condition_init (&cond, "conditionsection", &NOBUG_FLAG(NOBUG_ON));
+  lumiera_condition_init (&cond, "conditionsection", &NOBUG_FLAG(NOBUG_ON), NOBUG_CONTEXT);
 
   LUMIERA_CONDITION_SECTION (NOBUG_ON, &cond)
     {
@@ -231,14 +231,14 @@ TEST ("conditionops (compiletest only)")
       LUMIERA_CONDITION_BROADCAST;
     }
 
-  lumiera_condition_destroy (&cond, &NOBUG_FLAG(NOBUG_ON));
+  lumiera_condition_destroy (&cond, &NOBUG_FLAG(NOBUG_ON), NOBUG_CONTEXT);
 }
 
 
 TEST ("conditionsection")
 {
   lumiera_condition cond;
-  lumiera_condition_init (&cond, "conditionsection", &NOBUG_FLAG(NOBUG_ON));
+  lumiera_condition_init (&cond, "conditionsection", &NOBUG_FLAG(NOBUG_ON), NOBUG_CONTEXT);
 
   LUMIERA_CONDITION_SECTION (NOBUG_ON, &cond)
     {
@@ -250,7 +250,7 @@ TEST ("conditionsection")
       printf ("condition locked section 2\n");
     }
 
-  lumiera_condition_destroy (&cond, &NOBUG_FLAG(NOBUG_ON));
+  lumiera_condition_destroy (&cond, &NOBUG_FLAG(NOBUG_ON), NOBUG_CONTEXT);
 }
 
 
@@ -258,14 +258,14 @@ TEST ("conditionsection")
 TEST ("conditionforgotunlock")
 {
   lumiera_condition cond;
-  lumiera_condition_init (&cond, "conditionforgotunlock", &NOBUG_FLAG(NOBUG_ON));
+  lumiera_condition_init (&cond, "conditionforgotunlock", &NOBUG_FLAG(NOBUG_ON), NOBUG_CONTEXT);
 
   LUMIERA_CONDITION_SECTION (NOBUG_ON, &cond)
     {
       break;    // CONDITION_SECTIONS must not be left by a jump
     }
 
-  lumiera_condition_destroy (&cond, &NOBUG_FLAG(NOBUG_ON));
+  lumiera_condition_destroy (&cond, &NOBUG_FLAG(NOBUG_ON), NOBUG_CONTEXT);
 }
 
 
@@ -273,7 +273,7 @@ TEST ("conditionforgotunlock")
 TEST ("recconditionops (compiletest only)")
 {
   lumiera_reccondition reccond;
-  lumiera_reccondition_init (&reccond, "recconditionsection", &NOBUG_FLAG(NOBUG_ON));
+  lumiera_reccondition_init (&reccond, "recconditionsection", &NOBUG_FLAG(NOBUG_ON), NOBUG_CONTEXT);
 
   LUMIERA_RECCONDITION_SECTION (NOBUG_ON, &reccond)
     {
@@ -282,14 +282,14 @@ TEST ("recconditionops (compiletest only)")
       LUMIERA_RECCONDITION_BROADCAST;
     }
 
-  lumiera_reccondition_destroy (&reccond, &NOBUG_FLAG(NOBUG_ON));
+  lumiera_reccondition_destroy (&reccond, &NOBUG_FLAG(NOBUG_ON), NOBUG_CONTEXT);
 }
 
 
 TEST ("recconditionsection")
 {
   lumiera_reccondition reccond;
-  lumiera_reccondition_init (&reccond, "recconditionsection", &NOBUG_FLAG(NOBUG_ON));
+  lumiera_reccondition_init (&reccond, "recconditionsection", &NOBUG_FLAG(NOBUG_ON), NOBUG_CONTEXT);
 
   LUMIERA_RECCONDITION_SECTION (NOBUG_ON, &reccond)
     {
@@ -301,28 +301,28 @@ TEST ("recconditionsection")
       printf ("reccondition locked section 2\n");
     }
 
-  lumiera_reccondition_destroy (&reccond, &NOBUG_FLAG(NOBUG_ON));
+  lumiera_reccondition_destroy (&reccond, &NOBUG_FLAG(NOBUG_ON), NOBUG_CONTEXT);
 }
 
 
 TEST ("recconditionforgotunlock")
 {
   lumiera_reccondition reccond;
-  lumiera_reccondition_init (&reccond, "recconditionforgotunlock", &NOBUG_FLAG(NOBUG_ON));
+  lumiera_reccondition_init (&reccond, "recconditionforgotunlock", &NOBUG_FLAG(NOBUG_ON), NOBUG_CONTEXT);
 
   LUMIERA_RECCONDITION_SECTION (NOBUG_ON, &reccond)
     {
       break;    // RECCONDITION_SECTIONS must not be left by a jump
     }
 
-  lumiera_reccondition_destroy (&reccond, &NOBUG_FLAG(NOBUG_ON));
+  lumiera_reccondition_destroy (&reccond, &NOBUG_FLAG(NOBUG_ON), NOBUG_CONTEXT);
 }
 
 TEST ("chainedrecconditionsection")
 {
   lumiera_reccondition outer, inner;
-  lumiera_reccondition_init (&outer, "outer_recconditionsection", &NOBUG_FLAG(NOBUG_ON));
-  lumiera_reccondition_init (&inner, "inner_recconditionsection", &NOBUG_FLAG(NOBUG_ON));
+  lumiera_reccondition_init (&outer, "outer_recconditionsection", &NOBUG_FLAG(NOBUG_ON), NOBUG_CONTEXT);
+  lumiera_reccondition_init (&inner, "inner_recconditionsection", &NOBUG_FLAG(NOBUG_ON), NOBUG_CONTEXT);
 
   LUMIERA_RECCONDITION_SECTION (NOBUG_ON, &outer)
     {
@@ -332,15 +332,15 @@ TEST ("chainedrecconditionsection")
 	  printf ("inner reccondition locked section\n");
 	}
     }
-  lumiera_reccondition_destroy (&outer, &NOBUG_FLAG(NOBUG_ON));
-  lumiera_reccondition_destroy (&inner, &NOBUG_FLAG(NOBUG_ON));
+  lumiera_reccondition_destroy (&outer, &NOBUG_FLAG(NOBUG_ON), NOBUG_CONTEXT);
+  lumiera_reccondition_destroy (&inner, &NOBUG_FLAG(NOBUG_ON), NOBUG_CONTEXT);
 }
 
 TEST ("nestedrecconditionsection")
 {
   lumiera_reccondition outer, inner;
-  lumiera_reccondition_init (&outer, "outer_recconditionsection", &NOBUG_FLAG(NOBUG_ON));
-  lumiera_reccondition_init (&inner, "inner_recconditionsection", &NOBUG_FLAG(NOBUG_ON));
+  lumiera_reccondition_init (&outer, "outer_recconditionsection", &NOBUG_FLAG(NOBUG_ON), NOBUG_CONTEXT);
+  lumiera_reccondition_init (&inner, "inner_recconditionsection", &NOBUG_FLAG(NOBUG_ON), NOBUG_CONTEXT);
 
   LUMIERA_RECCONDITION_SECTION (NOBUG_ON, &outer)
     {
@@ -350,8 +350,8 @@ TEST ("nestedrecconditionsection")
 	  printf ("inner reccondition locked section\n");
 	}
     }
-  lumiera_reccondition_destroy (&outer, &NOBUG_FLAG(NOBUG_ON));
-  lumiera_reccondition_destroy (&inner, &NOBUG_FLAG(NOBUG_ON));
+  lumiera_reccondition_destroy (&outer, &NOBUG_FLAG(NOBUG_ON), NOBUG_CONTEXT);
+  lumiera_reccondition_destroy (&inner, &NOBUG_FLAG(NOBUG_ON), NOBUG_CONTEXT);
 }
 
 

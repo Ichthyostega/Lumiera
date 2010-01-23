@@ -39,32 +39,32 @@ LUMIERA_ERROR_DEFINE (LOCK_AGAIN, "too much recursive locks");
 
 
 void
-lumiera_lockerror_set (int err, struct nobug_flag* flag, const char* extra)
+lumiera_lockerror_set (int err, struct nobug_flag* flag, const struct nobug_context ctx)
 {
   switch (err)
     {
     case 0:
       break;
     case EINVAL:
-      LUMIERA_ERROR_SET_ALERT(NOBUG_FLAG_RAW(flag), LOCK_INVAL, extra);
+      LUMIERA_ERROR_SET_ALERT(NOBUG_FLAG_RAW(flag), LOCK_INVAL, ctx.func);
       break;
     case EBUSY:
-      LUMIERA_ERROR_SET(NOBUG_FLAG_RAW(flag), LOCK_BUSY, extra);
+      LUMIERA_ERROR_SET(NOBUG_FLAG_RAW(flag), LOCK_BUSY, ctx.func);
       break;
     case EDEADLK:
-      LUMIERA_ERROR_SET(NOBUG_FLAG_RAW(flag), LOCK_DEADLK, extra);
+      LUMIERA_ERROR_SET(NOBUG_FLAG_RAW(flag), LOCK_DEADLK, ctx.func);
       break;
     case EPERM:
-      LUMIERA_ERROR_SET_ALERT(NOBUG_FLAG_RAW(flag), LOCK_PERM, extra);
+      LUMIERA_ERROR_SET_ALERT(NOBUG_FLAG_RAW(flag), LOCK_PERM, ctx.func);
       break;
     case ETIMEDOUT:
-      LUMIERA_ERROR_SET(NOBUG_FLAG_RAW(flag), LOCK_TIMEOUT, extra);
+      LUMIERA_ERROR_SET(NOBUG_FLAG_RAW(flag), LOCK_TIMEOUT, ctx.func);
       break;
     case EAGAIN:
-      LUMIERA_ERROR_SET_WARNING(NOBUG_FLAG_RAW(flag), LOCK_AGAIN, extra);
+      LUMIERA_ERROR_SET_WARNING(NOBUG_FLAG_RAW(flag), LOCK_AGAIN, ctx.func);
       break;
     default:
-      LUMIERA_ERROR_SET_CRITICAL(NOBUG_FLAG_RAW(flag), UNKNOWN, extra);
+      LUMIERA_ERROR_SET_CRITICAL(NOBUG_FLAG_RAW(flag), UNKNOWN, ctx.func);
       break;
     }
 }

@@ -46,7 +46,7 @@ lumiera_mmapcache_new (size_t limit)
   lumiera_mcache->total = 0;
   lumiera_mcache->cached = 0;
 
-  lumiera_mutex_init (&lumiera_mcache->lock, "mmapcache", &NOBUG_FLAG (mutex_dbg));
+  lumiera_mutex_init (&lumiera_mcache->lock, "mmapcache", &NOBUG_FLAG (mutex_dbg), NOBUG_CONTEXT);
 }
 
 
@@ -58,7 +58,7 @@ lumiera_mmapcache_delete (void)
     {
       REQUIRE (lumiera_mcache->total == lumiera_mcache->cached, "MMaps still checked out at shutdown");
       lumiera_mrucache_destroy (&lumiera_mcache->cache);
-      lumiera_mutex_destroy (&lumiera_mcache->lock, &NOBUG_FLAG (mutex_dbg));
+      lumiera_mutex_destroy (&lumiera_mcache->lock, &NOBUG_FLAG (mutex_dbg), NOBUG_CONTEXT);
       free (lumiera_mcache);
       lumiera_mcache = NULL;
     }

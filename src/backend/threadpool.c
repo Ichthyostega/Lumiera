@@ -61,7 +61,7 @@ lumiera_threadpool_init(void)
       pthread_attr_init (&threadpool.pool[i].pthread_attrs);
       //cancel...
 
-      lumiera_condition_init (&threadpool.pool[i].sync,"pool of threads", &NOBUG_FLAG (threadpool));
+      lumiera_condition_init (&threadpool.pool[i].sync,"pool of threads", &NOBUG_FLAG (threadpool), NOBUG_CONTEXT);
     }
 }
 
@@ -101,7 +101,7 @@ lumiera_threadpool_destroy(void)
               lumiera_thread_delete ((LumieraThread)t);
             }
         }
-      lumiera_condition_destroy (&threadpool.pool[i].sync, &NOBUG_FLAG (threadpool));
+      lumiera_condition_destroy (&threadpool.pool[i].sync, &NOBUG_FLAG (threadpool), NOBUG_CONTEXT);
       pthread_attr_destroy (&threadpool.pool[i].pthread_attrs);
     }
 }
