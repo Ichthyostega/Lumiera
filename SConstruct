@@ -218,11 +218,6 @@ def configurePlatform(env):
     if not conf.CheckLibWithHeader('dl', 'dlfcn.h', 'C'):
         problems.append('Functions for runtime dynamic loading not available.')
     
-    if not conf.CheckPkgConfig('nobugmt', 200909.1):
-        problems.append('Did not find NoBug [http://www.pipapo.org/pipawiki/NoBug].')
-    else:
-        conf.env.mergeConf('nobugmt')
-    
     if not conf.CheckLibWithHeader('pthread', 'pthread.h', 'C'):
         problems.append('Did not find the pthread lib or pthread.h.')
     else:
@@ -236,6 +231,11 @@ def configurePlatform(env):
         conf.env.Append(CPPFLAGS = ' -DHAVE_VALGRIND_H')
     else:
         print 'Valgrind not found. The use of Valgrind is optional; building without.'
+    
+    if not conf.CheckPkgConfig('nobugmt', 201001.1):
+        problems.append('Did not find NoBug [http://www.lumiera.org/nobug_manual.html].')
+    else:
+        conf.env.mergeConf('nobugmt')
     
     if not conf.CheckCXXHeader('tr1/memory'):
         problems.append('We rely on the std::tr1 proposed standard extension for shared_ptr.')
