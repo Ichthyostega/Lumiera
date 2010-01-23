@@ -97,27 +97,31 @@ namespace lib {
           lumiera_mutex self;
 
         protected:
-          Wrapped_LumieraExcMutex() { lumiera_mutex_init    (&self, "Obj.Monitor ExclMutex", &NOBUG_FLAG(sync)); }
-         ~Wrapped_LumieraExcMutex() { lumiera_mutex_destroy (&self, &NOBUG_FLAG(sync)); }
+          Wrapped_LumieraExcMutex(const struct nobug_context ctx = NOBUG_CONTEXT_NOFUNC)
+          { lumiera_mutex_init    (&self, "Obj.Monitor ExclMutex", &NOBUG_FLAG(sync), ctx); }
+         ~Wrapped_LumieraExcMutex()
+          { lumiera_mutex_destroy (&self, &NOBUG_FLAG(sync), NOBUG_CONTEXT); }
           
-          bool lock (struct nobug_resource_user** handle)
+          bool lock (struct nobug_resource_user** handle, const struct nobug_context ctx = NOBUG_CONTEXT_NOFUNC)
           {
-            return !!lumiera_mutex_lock (&self, &NOBUG_FLAG(sync), handle);
+            return !!lumiera_mutex_lock (&self, &NOBUG_FLAG(sync), handle, ctx);
           }
           
-          bool trylock (struct nobug_resource_user** handle)
+          bool trylock (struct nobug_resource_user** handle, const struct nobug_context ctx = NOBUG_CONTEXT_NOFUNC)
           {
-            return !!lumiera_mutex_trylock (&self, &NOBUG_FLAG(sync), handle);
+            return !!lumiera_mutex_trylock (&self, &NOBUG_FLAG(sync), handle, ctx);
           }
           
-          bool timedlock (const struct timespec* timeout, struct nobug_resource_user** handle)
+          bool timedlock (const struct timespec* timeout,
+                          struct nobug_resource_user** handle,
+                          const struct nobug_context ctx = NOBUG_CONTEXT_NOFUNC)
           {
-            return !!lumiera_mutex_timedlock (&self, timeout, &NOBUG_FLAG(sync), handle);
+            return !!lumiera_mutex_timedlock (&self, timeout, &NOBUG_FLAG(sync), handle, ctx);
           }
           
-          void unlock (struct nobug_resource_user** handle)
+          void unlock (struct nobug_resource_user** handle, const struct nobug_context ctx = NOBUG_CONTEXT_NOFUNC)
           {
-            lumiera_mutex_unlock (&self, &NOBUG_FLAG(sync), handle);
+            lumiera_mutex_unlock (&self, &NOBUG_FLAG(sync), handle, ctx);
           }
           
           LumieraReccondition myreccond () {throw "bullshit"; return NULL;} // placeholder, brainstorm
@@ -128,27 +132,32 @@ namespace lib {
         {
           lumiera_recmutex self;
         protected:
-          Wrapped_LumieraRecMutex() { lumiera_recmutex_init    (&self, "Obj.Monitor RecMutex", &NOBUG_FLAG(sync)); }
-         ~Wrapped_LumieraRecMutex() { lumiera_recmutex_destroy (&self, &NOBUG_FLAG(sync)); }
+          Wrapped_LumieraRecMutex(const struct nobug_context ctx = NOBUG_CONTEXT_NOFUNC)
+          { lumiera_recmutex_init    (&self, "Obj.Monitor RecMutex", &NOBUG_FLAG(sync), ctx); }
+         ~Wrapped_LumieraRecMutex()
+          { lumiera_recmutex_destroy (&self, &NOBUG_FLAG(sync), NOBUG_CONTEXT); }
           
-          bool lock (struct nobug_resource_user** handle)
+          bool lock (struct nobug_resource_user** handle, const struct nobug_context ctx = NOBUG_CONTEXT_NOFUNC)
           {
-            return !!lumiera_recmutex_lock (&self, &NOBUG_FLAG(sync), handle);
+            return !!lumiera_recmutex_lock (&self, &NOBUG_FLAG(sync), handle, ctx);
           }
           
-          bool trylock (struct nobug_resource_user** handle)
+          bool trylock (struct nobug_resource_user** handle, const struct nobug_context ctx = NOBUG_CONTEXT_NOFUNC)
           {
-            return !!lumiera_recmutex_trylock (&self, &NOBUG_FLAG(sync), handle);
+            return !!lumiera_recmutex_trylock (&self, &NOBUG_FLAG(sync), handle, ctx);
           }
           
-          bool timedlock (const struct timespec* timeout, struct nobug_resource_user** handle)
+          bool timedlock (const struct timespec* timeout,
+                          struct nobug_resource_user** handle,
+                          const struct nobug_context ctx = NOBUG_CONTEXT_NOFUNC)
           {
-            return !!lumiera_recmutex_timedlock (&self, timeout, &NOBUG_FLAG(sync), handle);
+            return !!lumiera_recmutex_timedlock (&self, timeout, &NOBUG_FLAG(sync), handle, ctx);
           }
           
-          void unlock (struct nobug_resource_user** handle)
+          void unlock (struct nobug_resource_user** handle,
+                       const struct nobug_context ctx = NOBUG_CONTEXT_NOFUNC)
           {
-            lumiera_recmutex_unlock (&self, &NOBUG_FLAG(sync), handle);
+            lumiera_recmutex_unlock (&self, &NOBUG_FLAG(sync), handle, ctx);
           }
           
           LumieraReccondition myreccond () {throw "bullshit"; return NULL;} // placeholder, brainstorm
@@ -159,47 +168,53 @@ namespace lib {
         {
           lumiera_condition self;
         protected:
-          Wrapped_LumieraExcCond() { lumiera_condition_init    (&self, "Obj.Monitor ExclCondition", &NOBUG_FLAG(sync) ); }
-         ~Wrapped_LumieraExcCond() { lumiera_condition_destroy (&self, &NOBUG_FLAG(sync) ); }
+          Wrapped_LumieraExcCond(const struct nobug_context ctx = NOBUG_CONTEXT_NOFUNC)
+          { lumiera_condition_init    (&self, "Obj.Monitor ExclCondition", &NOBUG_FLAG(sync), ctx); }
+         ~Wrapped_LumieraExcCond()
+          { lumiera_condition_destroy (&self, &NOBUG_FLAG(sync), NOBUG_CONTEXT); }
           
-          bool lock (struct nobug_resource_user** handle)
+          bool lock (struct nobug_resource_user** handle, const struct nobug_context ctx = NOBUG_CONTEXT_NOFUNC)
           {
-            return !!lumiera_condition_lock (&self, &NOBUG_FLAG(sync), handle);
+            return !!lumiera_condition_lock (&self, &NOBUG_FLAG(sync), handle, ctx);
           }
           
-          bool trylock (struct nobug_resource_user** handle)
+          bool trylock (struct nobug_resource_user** handle, const struct nobug_context ctx = NOBUG_CONTEXT_NOFUNC)
           {
-            return !!lumiera_condition_trylock (&self, &NOBUG_FLAG(sync), handle);
+            return !!lumiera_condition_trylock (&self, &NOBUG_FLAG(sync), handle, ctx);
           }
           
-          bool timedlock (const struct timespec* timeout, struct nobug_resource_user** handle)
+          bool timedlock (const struct timespec* timeout,
+                          struct nobug_resource_user** handle,
+                          const struct nobug_context ctx = NOBUG_CONTEXT_NOFUNC)
           {
-            return !!lumiera_condition_timedlock (&self, timeout, &NOBUG_FLAG(sync), handle);
+            return !!lumiera_condition_timedlock (&self, timeout, &NOBUG_FLAG(sync), handle, ctx);
           }
           
-          bool wait (struct nobug_resource_user** handle)
+          bool wait (struct nobug_resource_user** handle, const struct nobug_context ctx = NOBUG_CONTEXT_NOFUNC)
           {
-            return !!lumiera_condition_wait (&self, &NOBUG_FLAG(sync), handle);
+            return !!lumiera_condition_wait (&self, &NOBUG_FLAG(sync), handle, ctx);
           }
           
-          bool timedwait (const struct timespec* timeout, struct nobug_resource_user** handle)
+          bool timedwait (const struct timespec* timeout,
+                          struct nobug_resource_user** handle,
+                          const struct nobug_context ctx = NOBUG_CONTEXT_NOFUNC)
           {
-            return !!lumiera_condition_timedwait (&self, timeout, &NOBUG_FLAG(sync), handle);
+            return !!lumiera_condition_timedwait (&self, timeout, &NOBUG_FLAG(sync), handle, ctx);
           }
           
-          void signal()
+          void signal(const struct nobug_context ctx = NOBUG_CONTEXT_NOFUNC)
           {
-            lumiera_condition_signal (&self, &NOBUG_FLAG(sync));
+            lumiera_condition_signal (&self, &NOBUG_FLAG(sync), ctx);
           }
           
-          void broadcast()
+          void broadcast(const struct nobug_context ctx = NOBUG_CONTEXT_NOFUNC)
           {
-            lumiera_condition_broadcast (&self, &NOBUG_FLAG(sync));
+            lumiera_condition_broadcast (&self, &NOBUG_FLAG(sync), ctx);
           }
           
-          void unlock (struct nobug_resource_user** handle)
+          void unlock (struct nobug_resource_user** handle, const struct nobug_context ctx = NOBUG_CONTEXT_NOFUNC)
           {
-            lumiera_condition_unlock (&self, &NOBUG_FLAG(sync), handle);
+            lumiera_condition_unlock (&self, &NOBUG_FLAG(sync), handle, ctx);
           }
           
           LumieraReccondition myreccond () {throw "bullshit"; return NULL;} // placeholder, brainstorm
@@ -210,47 +225,53 @@ namespace lib {
         {
           lumiera_reccondition self;
         protected:
-          Wrapped_LumieraRecCond() { lumiera_reccondition_init    (&self, "Obj.Monitor RecCondition", &NOBUG_FLAG(sync) ); }
-         ~Wrapped_LumieraRecCond() { lumiera_reccondition_destroy (&self, &NOBUG_FLAG(sync) ); }
+          Wrapped_LumieraRecCond(const struct nobug_context ctx = NOBUG_CONTEXT_NOFUNC)
+          { lumiera_reccondition_init    (&self, "Obj.Monitor RecCondition", &NOBUG_FLAG(sync), ctx); }
+         ~Wrapped_LumieraRecCond()
+          { lumiera_reccondition_destroy (&self, &NOBUG_FLAG(sync), NOBUG_CONTEXT); }
           
-          bool lock (struct nobug_resource_user** handle)
+          bool lock (struct nobug_resource_user** handle, const struct nobug_context ctx = NOBUG_CONTEXT_NOFUNC)
           {
-            return !!lumiera_reccondition_lock (&self, &NOBUG_FLAG(sync), handle);
+            return !!lumiera_reccondition_lock (&self, &NOBUG_FLAG(sync), handle, ctx);
           }
           
-          bool trylock (struct nobug_resource_user** handle)
+          bool trylock (struct nobug_resource_user** handle, const struct nobug_context ctx = NOBUG_CONTEXT_NOFUNC)
           {
-            return !!lumiera_reccondition_trylock (&self, &NOBUG_FLAG(sync), handle);
+            return !!lumiera_reccondition_trylock (&self, &NOBUG_FLAG(sync), handle, ctx);
           }
           
-          bool timedlock (const struct timespec* timeout, struct nobug_resource_user** handle)
+          bool timedlock (const struct timespec* timeout,
+                          struct nobug_resource_user** handle,
+                          const struct nobug_context ctx = NOBUG_CONTEXT_NOFUNC)
           {
-            return !!lumiera_reccondition_timedlock (&self, timeout, &NOBUG_FLAG(sync), handle);
+            return !!lumiera_reccondition_timedlock (&self, timeout, &NOBUG_FLAG(sync), handle, ctx);
           }
           
-          bool wait (struct nobug_resource_user** handle)
+          bool wait (struct nobug_resource_user** handle, const struct nobug_context ctx = NOBUG_CONTEXT_NOFUNC)
           {
-            return !!lumiera_reccondition_wait (&self, &NOBUG_FLAG(sync), handle);
+            return !!lumiera_reccondition_wait (&self, &NOBUG_FLAG(sync), handle, ctx);
           }
 
-          bool timedwait (const struct timespec* timeout, struct nobug_resource_user** handle)
+          bool timedwait (const struct timespec* timeout,
+                          struct nobug_resource_user** handle,
+                          const struct nobug_context ctx = NOBUG_CONTEXT_NOFUNC)
           {
-            return !!lumiera_reccondition_timedwait (&self, timeout, &NOBUG_FLAG(sync), handle);
+            return !!lumiera_reccondition_timedwait (&self, timeout, &NOBUG_FLAG(sync), handle, ctx);
           }
           
-          void signal()
+          void signal(const struct nobug_context ctx = NOBUG_CONTEXT_NOFUNC)
           {
-            lumiera_reccondition_signal (&self, &NOBUG_FLAG(sync));
+            lumiera_reccondition_signal (&self, &NOBUG_FLAG(sync), ctx);
           }
           
-          void broadcast()
+          void broadcast(const struct nobug_context ctx = NOBUG_CONTEXT_NOFUNC)
           {
-            lumiera_reccondition_broadcast (&self, &NOBUG_FLAG(sync));
+            lumiera_reccondition_broadcast (&self, &NOBUG_FLAG(sync), ctx);
           }
           
-          void unlock (struct nobug_resource_user** handle)
+          void unlock (struct nobug_resource_user** handle, const struct nobug_context ctx = NOBUG_CONTEXT_NOFUNC)
           {
-            lumiera_reccondition_unlock (&self, &NOBUG_FLAG(sync), handle);
+            lumiera_reccondition_unlock (&self, &NOBUG_FLAG(sync), handle, ctx);
           }
           
           LumieraReccondition myreccond () { return &self;} // placeholder, brainstorm

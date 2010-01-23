@@ -39,7 +39,10 @@ static void recursive_mutexattr_init()
 
 
 LumieraReccondition
-lumiera_reccondition_init (LumieraReccondition self, const char* purpose, struct nobug_flag* flag)
+lumiera_reccondition_init (LumieraReccondition self,
+                           const char* purpose,
+                           struct nobug_flag* flag,
+                           const struct nobug_context ctx)
 {
   if (self)
     {
@@ -49,18 +52,20 @@ lumiera_reccondition_init (LumieraReccondition self, const char* purpose, struct
       pthread_cond_init (&self->cond, NULL);
       pthread_mutex_init (&self->reccndmutex, &recursive_mutexattr);
       NOBUG_RESOURCE_HANDLE_INIT (self->rh);
-      NOBUG_RESOURCE_ANNOUNCE_RAW (flag, "reccond_var", purpose, self, self->rh);
+      NOBUG_RESOURCE_ANNOUNCE_RAW_CTX (flag, "reccond_var", purpose, self, self->rh, ctx);
     }
   return self;
 }
 
 
 LumieraReccondition
-lumiera_reccondition_destroy (LumieraReccondition self, struct nobug_flag* flag)
+lumiera_reccondition_destroy (LumieraReccondition self,
+                              struct nobug_flag* flag,
+                              const struct nobug_context ctx)
 {
   if (self)
     {
-      NOBUG_RESOURCE_FORGET_RAW (flag,  self->rh);
+      NOBUG_RESOURCE_FORGET_RAW_CTX (flag,  self->rh, ctx);
 
       if (pthread_mutex_destroy (&self->reccndmutex))
         LUMIERA_DIE (LOCK_DESTROY);

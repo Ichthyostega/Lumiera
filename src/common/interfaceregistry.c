@@ -108,7 +108,7 @@ lumiera_interfaceregistry_init (void)
   if (!lumiera_pluginregistry)
     LUMIERA_DIE (ERRNO);
 
-  lumiera_recmutex_init (&lumiera_interface_mutex, "interfaceregistry", &NOBUG_FLAG(interfaceregistry));
+  lumiera_recmutex_init (&lumiera_interface_mutex, "interfaceregistry", &NOBUG_FLAG(interfaceregistry), NOBUG_CONTEXT);
 
   lumiera_interface_init ();
 }
@@ -125,7 +125,7 @@ lumiera_interfaceregistry_destroy (void)
     psplay_delete (lumiera_pluginregistry);
   lumiera_pluginregistry = NULL;
 
-  lumiera_recmutex_destroy (&lumiera_interface_mutex, &NOBUG_FLAG(mutex_dbg));
+  lumiera_recmutex_destroy (&lumiera_interface_mutex, &NOBUG_FLAG(mutex_dbg), NOBUG_CONTEXT);
 
   REQUIRE (!psplay_nelements (lumiera_interfaceregistry), "some interfaces still registered at shutdown");
 

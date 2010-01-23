@@ -41,7 +41,7 @@ LUMIERA_ERROR_DECLARE (LOCK_AGAIN);
  * Translate pthread error code into lumiera error
  */
 void
-lumiera_lockerror_set (int err, struct nobug_flag* flag, const char* extra);
+lumiera_lockerror_set (int err, struct nobug_flag* flag, const struct nobug_context ctx);
 
 #endif
 /*
