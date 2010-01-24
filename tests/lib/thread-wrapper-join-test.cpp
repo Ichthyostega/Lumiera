@@ -22,6 +22,7 @@
 
 
 #include "lib/test/run.hpp"
+#include "lib/test/test-helper.hpp"
 
 #include "lib/symbol.hpp"
 #include "backend/thread-wrapper.hpp"
@@ -36,117 +37,96 @@ using test::Test;
 
 
 namespace backend {
-  namespace test  {
+namespace test {
   
-    /**************************************************************************
-     * @test use the Lumiera backend to create some new threads, additionally
-     *       passing an condition variable for waiting on thread termination.
-     *       Actually this is implemented as creating and passing a JoinHandle.
-     *
-     * @see backend::Thread
-     * @see threads.h
-     */
-    class ThreadWrapperJoin_test : public Test
-      {
-        
-        virtual void
-        run (Arg)
-          {
-            simpleUse ();
-            wrongUse ();
-          }
-        
-        
-        volatile int aValue_;         ///< state to be modified by the other thread
-        
-        void
-        theAction (int secretValue)   ///< to be run in a new thread...
-          {
-            usleep (100000);          // pause 100ms prior to modifying
+  using lumiera::error::LUMIERA_ERROR_LOGIC;
+  namespace {
+    
+    const uint DESTRUCTION_CODE = 23;
+    
+    LUMIERA_ERROR_DEFINE(SPECIAL, "grandiose exception");
+  }
+  
+  
+  /***************************************************************************
+   * @test use the Lumiera backend to create some new threads, additionally
+   *       synchronising with these child threads and waiting for termination.
+   * 
+   * @see backend::Thread
+   * @see threads.h
+   */
+  class ThreadWrapperJoin_test : public Test
+    {
+      
+      virtual void
+      run (Arg)
+        {
+          simpleUse ();
+          wrongUse ();
+          getError ();
+        }
+      
+      
+      volatile int aValue_;         ///< state to be modified by the other thread
+      
+      void
+      theAction (int secretValue)   ///< to be run in a new thread...
+        {
+          usleep (100000);          // pause 100ms prior to modifying
+          
+          if (DESTRUCTION_CODE == secretValue)
+            lumiera_error_set(LUMIERA_ERROR_SPECIAL, 0);
+          else
             aValue_ =  secretValue+42;
-          }
-        
-        
-        void
-        simpleUse ()
-          {
-            aValue_=0;
-            int mySecret = (rand() % 1000) - 500;
-            
-            JoinHandle waitingHandle;
-            
-            Thread("test Thread joining",
-                   bind (&ThreadWrapperJoin_test::theAction, this, mySecret),
-                   waitingHandle);
-                                      // note binding and thread wrapper already destroyed
-            waitingHandle.join();     // blocks until theAction() is done
-            
-            CHECK (aValue_ == mySecret+42);
-          }
-        
-        
-        void
-        wrongUse ()
-          {
-            JoinHandle waitingHandle;
-            
-            Thread("test Thread joining-1",
-                   bind (&ThreadWrapperJoin_test::theAction, this, 111));
-                                      // note we "forget" to pass the JoinHandle
-            try
-              {
-                waitingHandle.join(); // protocol error: handle wasn't passed for starting a Thread;
-                NOTREACHED();
-              }
-            catch (lumiera::error::Logic& logo)
-              { lumiera_error(); }
-            
-            
-            Thread("test Thread joining-2",
-                   bind (&ThreadWrapperJoin_test::theAction, this, 222),
-                   waitingHandle);    // this time we pass it....
-            
-#ifdef DEBUG
-            /////////////////////////////////////////////////////////////////////////////////////////////TODO: better way of detecting debug builds
-#if false   /////////////////////////////////////////////////////////////////////////////////////////////TODO: re-enable assertions to throw, and make this configurable
-            try
-              {
-                Thread("test Thread joining-3",
-                       bind (&ThreadWrapperJoin_test::theAction, this, 333),
-                       waitingHandle);    // but then pass it again for another thread....
-                NOTREACHED();
-              }
-            catch (...)
-              {
-                CHECK (lumiera_error() == lumiera::error::LUMIERA_ERROR_ASSERTION);
-              }
-#endif
-#endif            
-            
-            // note: the waitingHandle goes out of scope here,
-            // which unblocks the second thread. The first thread wasn't blocked,
-            // while the third thread wasn't created at all.
-
-            waitingHandle.join();       // just making the above thing pass, JoinHandle thows when not joined and going out of scope
-                                       // the semantics herer need to be defined (auto joining? see thread-wrapper.hpp)
-          }
-        
-      public:
-        ThreadWrapperJoin_test()
-        { lumiera_threadpool_init(); }
-        
-        ~ThreadWrapperJoin_test()
-        { lumiera_threadpool_destroy(); }
-        
-      };
-    
-    
-    
-    /** Register this test class... */
-    LAUNCHER (ThreadWrapperJoin_test, "function common");
-    
-    
-    
-  } // namespace test
-
-} // namespace backend
+          
+          
+        }
+      
+      
+      void
+      simpleUse ()
+        {
+          aValue_=0;
+          int mySecret = (rand() % 1000) - 500;
+          
+          ThreadJoinable newThread("test Thread joining-1"
+                                  , bind (&ThreadWrapperJoin_test::theAction, this, mySecret)
+                                  );
+          newThread.join();      // blocks until theAction() is done
+          
+          CHECK (aValue_ == mySecret+42);
+        }
+      
+      
+      void
+      wrongUse ()
+        {
+          ThreadJoinable newThread("test Thread joining-2"
+                                  , bind (&ThreadWrapperJoin_test::theAction, this, 1234)
+                                  );
+          newThread.join();      // blocks until theAction() is done
+          
+          VERIFY_ERROR(LOGIC, newThread.join() );
+          VERIFY_ERROR(LOGIC, newThread.join() );
+        }
+      
+      
+      void
+      getError()
+        {
+          ThreadJoinable newThread("test Thread joining-2"
+                                  , bind (&ThreadWrapperJoin_test::theAction, this, DESTRUCTION_CODE)
+                                  );
+          
+          VERIFY_ERROR(SPECIAL, newThread.join() );
+        }
+    };
+  
+  
+  
+  /** Register this test class... */
+  LAUNCHER (ThreadWrapperJoin_test, "function common");
+  
+  
+  
+}} // namespace backend::test

@@ -57,8 +57,7 @@ namespace proc {
      * with adjustable frequency. Quick'n dirty implementation!
      */
     class TickService
-      : backend::JoinHandle,
-        backend::Thread
+      : backend::ThreadJoinable
       {
         typedef function<void(void)> Tick;
         volatile uint timespan_;
@@ -68,10 +67,9 @@ namespace proc {
         
       public:
         TickService (Tick callback)
-          : Thread("Tick generator (dummy)",
-                   bind (&TickService::timerLoop, this, callback),
-                   (backend::JoinHandle&)*this 
-                  )
+          : ThreadJoinable("Tick generator (dummy)"
+                          , bind (&TickService::timerLoop, this, callback)
+                          )
           { 
             INFO (proc, "TickService started.");
           }

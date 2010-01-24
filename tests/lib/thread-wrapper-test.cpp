@@ -56,8 +56,7 @@ namespace backend {
       
       struct TestThread
         : Thread
-        , Sync<NonrecursiveLock_NoWait> // note: Thread isnt derived from sync anymore, if we want to lock values this needs to be done at per client base
-                                       //        an alternative would be to use the threads .sync() and lumiera_thread_sync() where approbiate
+        , Sync<NonrecursiveLock_NoWait>  // using dedicated locking for this test
         {
           TestThread()
             : Thread("test Thread creation",
@@ -106,14 +105,6 @@ namespace backend {
             ASSERT (0 < sum);
             ASSERT (sum==checksum);
           }
-        
-      public:
-        ThreadWrapper_test()
-        { lumiera_threadpool_init(); }
-        
-        ~ThreadWrapper_test()
-        { lumiera_threadpool_destroy(); }
-        
       };
     
     

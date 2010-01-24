@@ -34,6 +34,7 @@ liblumierabackend_la_SOURCES =					\
 	$(liblumierabackend_la_srcdir)/mmap.c			\
 	$(liblumierabackend_la_srcdir)/mmapings.c		\
 	$(liblumierabackend_la_srcdir)/mmapcache.c		\
+	$(liblumierabackend_la_srcdir)/threadpool-init.cpp	\
 	$(liblumierabackend_la_srcdir)/enginefacade.cpp		\
 	$(liblumierabackend_la_srcdir)/scriptrunnerfacade.cpp	\
 	$(liblumierabackend_la_srcdir)/netnodefacade.cpp
