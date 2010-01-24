@@ -120,16 +120,6 @@ namespace test {
           
           VERIFY_ERROR(SPECIAL, newThread.join() );
         }
-      
-      
-      
-    public:
-      ThreadWrapperJoin_test()
-      { lumiera_threadpool_init(); }
-      
-      ~ThreadWrapperJoin_test()
-      { lumiera_threadpool_destroy(); }
-      
     };
   
   

@@ -33,6 +33,7 @@
 extern "C" {
 #include "backend/threads.h"
 }
+#include "backend/threadpool-init.hpp"
 
 #include <tr1/functional>
 #include <boost/noncopyable.hpp>
