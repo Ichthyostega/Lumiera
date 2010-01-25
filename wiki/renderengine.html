@@ -44,7 +44,7 @@ DAMAGE.
 
 <style type="text/css">#contentWrapper {display:none;}</style><div id="SplashScreen" style="border: 3px solid #ccc; display: block; text-align: center; width: 320px; margin: 100px auto; padding: 50px; color:#000; font-size: 28px; font-family:Tahoma; background-color:#eee;">loading <b>Proc-Layer</b> devel doku<blink> ...</blink><br><br><span style="font-size: 14px; color:red;">Requires Javascript.</span></div>
 <!--PRE-HEAD-END-->
-<title> Engine - Building a Render Nodes Network from Objects in the EDL </title>
+<title> Engine - Building a Render Nodes Network from Objects in the Session </title>
 <style type="text/css">
 #saveTest {display:none;}
 #messageArea {display:none;}
@@ -548,9 +548,9 @@ Even if the low-level memory manager(s) may use raw storage, we require that the
 </pre>
 </div>
 <div title="Asset" modifier="Ichthyostega" modified="200906071813" created="200708100337" tags="def classes img" changecount="17">
-<pre>Asset management is a subsystem on its own. Assets are &quot;things&quot; that can be loaded into a session, like Media, Clips, Effects, Transitions. It is the &quot;bookkeeping view&quot;, while the EDL is the &quot;manipulation and process view&quot;. Some Assets can be //loaded// and a collection of Assets is saved with each Session. Besides, there is a collection of basic Assets always available by default.
+<pre>Asset management is a subsystem on its own. Assets are &quot;things&quot; that can be loaded into a session, like Media, Clips, Effects, Transitions. It is the &quot;bookkeeping view&quot;, while the Objects in the Session relate to the &quot;manipulation and process view&quot;. Some Assets can be //loaded// and a collection of Assets is saved with each Session. Besides, there is a collection of basic Assets always available by default.
 
-The Assets are important reference points holding the information needed to access external resources. For example, an Clip asset can reference a Media asset, which in turn holds the external filename from which to get the media stream. For Effects, the situation is similar. Assets thus serve two quite distinct purposes. One is to load, list, group search and browse them, and to provide an entry point to create new or get at existing MObjects in the EDL, while the other purpose is to provide attribute and property informations to the inner parts of the engine, while at the same time isolating and decoupling them from environmental details. 
+The Assets are important reference points holding the information needed to access external resources. For example, an Clip asset can reference a Media asset, which in turn holds the external filename from which to get the media stream. For Effects, the situation is similar. Assets thus serve two quite distinct purposes. One is to load, list, group search and browse them, and to provide an entry point to create new or get at existing MObject in the Session, while the other purpose is to provide attribute and property informations to the inner parts of the engine, while at the same time isolating and decoupling them from environmental details. 
 
 We can distinguish several different Kinds of Assets, each one with specific properties. While all these Kinds of Assets implement the basic Asset interface, they in turn are the __key abstractions__ of the asset management view. Mostly, their interfaces will be used directly, because they are quite different in behaviour. Thus it is common to see asset related operations being templated on the Asset Kind. 
 &amp;rarr; see also [[Creating and registering Assets|AssetCreation]]
@@ -575,7 +575,7 @@ Some of the building blocks providing the framework for the objects placed into 
 &amp;rarr; StructAsset {{red{to be defined}}}
 
 !Meta Asset
-Some additional, virtual facilities created in the course of the editing process. Examples are Automation data sets, Labels and reference points, Meta Clips (nested sub-~EDLs)
+Some additional, virtual facilities created in the course of the editing process. Examples are Automation data sets, Labels and reference points, Meta Clips (nested sub-sequences)
 * __outward interface operations__ include...
 * __inward interface operations__ include...
 &amp;rarr; MetaAsset {{red{to be defined}}}
@@ -624,10 +624,10 @@ Attachment on itself does //not// keep an object alive. Rather, it's implemented
 </pre>
 </div>
 <div title="AutomationData" modifier="Ichthyostega" created="200805300105" tags="def automation" changecount="2">
-<pre>While generally automation is treated as a function over time, defining and providing such a function requires some //Automation Data.// The actual layout and meaning of this data is deemed an implementation detail of the [[parameter provider|ParamProvider]] used, but nevertheless an automation data set has object characteristics within the [[EDL (high-level-model)|EDL]], allowing it to be attached, moved and [[placed|Placement]] by the user.</pre>
+<pre>While generally automation is treated as a function over time, defining and providing such a function requires some //Automation Data.// The actual layout and meaning of this data is deemed an implementation detail of the [[parameter provider|ParamProvider]] used, but nevertheless an automation data set has object characteristics within the session (high-level-model), allowing it to be attached, moved and [[placed|Placement]] by the user.</pre>
 </div>
 <div title="BasicBuildingOperations" modifier="Ichthyostega" modified="200805210230" created="200712040334" tags="design dynamic Builder img" changecount="24">
-<pre>Starting out from the concepts of Objects, Placement to Tracks, render Pipes and connection properties (&amp;rarr; see [[here|TrackPipeEDL]]) within the EDL, we can identify the elementary operations occuring within the Builder. Overall, the Builder is organized as application of //visiting tools// to a collection of objects, so finally we have to consider some object kind appearing in the working function of the given builder tool, which holds at this moment some //context//. The job now is to organize this context such as to create a predictable build process from this //event driven// approach.
+<pre>Starting out from the concepts of Objects, Placement to Tracks, render Pipes and connection properties (&amp;rarr; see [[here|TrackPipeSequence]]) within the session, we can identify the elementary operations occuring within the Builder. Overall, the Builder is organized as application of //visiting tools// to a collection of objects, so finally we have to consider some object kind appearing in the working function of the given builder tool, which holds at this moment some //context//. The job now is to organize this context such as to create a predictable build process from this //event driven// approach.
 &amp;rarr;see also: BuilderPrimitives for the elementary situations used to cary out the building operations
 
 !Builder working Situations
@@ -657,7 +657,7 @@ Attachment on itself does //not// keep an object alive. Rather, it's implemented
 After consuming all input objects and satisfying all wiring requests, the result is a set of [[exit nodes|ExitNode]] ready for pulling data. We call the network reachable from such an exit node a [[Processor]], together all processors of all segments and output data types comprise the render engine.
 
 !!!dependencies
-Pipes need to be there first, as everything else will be plugged (placed) to a pipe at some point. The same holds true for tracks. But, on the other hand, both are optional. We can have ~EDLs with ~MObjects without configuring pipes (but won't be able to build any render processor of course). And we could have an EDL without any track, if we place every ~MObject within this EDL directly to some pipe.
+Pipes need to be there first, as everything else will be plugged (placed) to a pipe at some point. But, on the other hand, for the model as such, pipes are optional: We could create sequences with ~MObjects without configuring pipes (but won't be able then to build any render processor of course). Similarily, there is no direct relation between tracks and pipes. Each sequence is comprised of at least one root track, but this has no implications regarding any output pipe.
 
 Effects can be attached only to already existing pipelines, starting out at some pipes entry port or the source port of some clip. Besides that, all further parts can be built in any order and independent of each other. This is made possible by using [[wiring requests|WiringRequest]], which can be resolved later on. So, as long as we start out with the tracks (to resolve any pipe they are placed to), and further, if we manage to get any effect placed to some clip-MO //after// setting up and treating the clip, we are fine and can do the building quasi event driven.
 
@@ -779,7 +779,7 @@ config.macros.timeline.handler = function(place,macroName,params,wikifier,paramS
 </div>
 <div title="BindingMO" modifier="Ichthyostega" modified="201001070851" created="200905210144" tags="def design discuss SessionLogic" changecount="12">
 <pre>Sometimes, two entities within the [[Session]] are deliberately associated, and this association has to carry some specific mappings between properties or facilities within the entities to be linked together. When this connection isn't just the [[Placement]] of an object, and isn't just a logical or structural relationship either &amp;mdash; then we create an explicit Binding object to be stored into the session.
-* When connecting a [[Sequence|EDL]] to a certain [[Timeline]], we also establish a mapping between the possible media stream channels produced by the sequence and the real output slots found within the timeline.
+* When connecting a [[Sequence]] to a certain [[Timeline]], we also establish a mapping between the possible media stream channels produced by the sequence and the real output slots found within the timeline.
 * similarly, using a sequence within a [[meta-clip|VirtualClip]] requires to remember such a mapping.
 * another example is the root [[scope|PlacementScope]], which (conceptually) is a link between the definition part of the Session and the graph of MObjects, which are the session's contents.
 
@@ -805,7 +805,7 @@ On the implementation side, we use a special kind of MObject, acting as an ancho
 </pre>
 </div>
 <div title="BindingScopeProblem" modifier="Ichthyostega" modified="200910181440" created="200910181435" tags="SessionLogic spec" changecount="4">
-<pre>There is some flexibility in the HighLevelModel, allowing to attach the same [[Sequence|EDL]] onto multiple [[timelines|Timeline]] or even into a [[meta-clip|VirtualClip]]. Thus, while there is always an containment relation which can be used to define the current PlacementScope, we can't always establish an unique path from any given location up to the model root. In the most general case, we have to deal with a DAG, not a tree.
+<pre>There is some flexibility in the HighLevelModel, allowing to attach the same [[Sequence]] onto multiple [[timelines|Timeline]] or even into a [[meta-clip|VirtualClip]]. Thus, while there is always an containment relation which can be used to define the current PlacementScope, we can't always establish an unique path from any given location up to the model root. In the most general case, we have to deal with a DAG, not a tree.
 
 !solution idea
 Transform the DAG into a tree by //focussing//&amp;nbsp; on the current situation and context. Have a state containing the //current path.//  &amp;rarr; QueryFocus
@@ -960,7 +960,7 @@ Any wiring (outside the chain of effects within a pipe) is always done from exit
 ** so this design makes it easy to add new Tool subclasses, and within each Tool subclass, all operations on the different MObject classes are grouped together, so it is easy to see what is going on.
 ** a given Tool instance can carry state while being iterated, so we don't need any global (or object-global) variables to hold the result of the build process
 
-This programming technique is often referred to as [[&quot;double dispatch&quot; or &quot;visitor&quot;|VisitorUse]]. We use a specialized library implementation of this pattern &amp;mdash; heavily inspired by the [[Loki library|http://loki-lib.sourceforge.net/]]. We use this approach not only for the builder, but also for carrying out operations on the objects in the EDL in a typesafe manner. 
+This programming technique is often referred to as [[&quot;double dispatch&quot; or &quot;visitor&quot;|VisitorUse]]. We use a specialized library implementation of this pattern &amp;mdash; heavily inspired by the [[Loki library|http://loki-lib.sourceforge.net/]]. We use this approach not only for the builder, but also for carrying out operations on the objects in the session in a typesafe manner. 
 It is the low level foundation of the actual [[building operations|BasicBuildingOperations]] necessary to create render nodes starting from the given high level model. 
 [img[Entities cooperating in the Builder|uml/fig129285.png]]
 
@@ -1291,14 +1291,14 @@ As we don't have a Prolog interpreter on board yet, we utilize a mock store with
 <pre>Along the way of working out various [[implementation details|ImplementationDetails]], decisions need to be made on how to understand the different facilities and entities and how to tackle some of the problems. This page is mainly a collection of keywords, summaries and links to further the discussion. And the various decisions should allways be read as proposals to solve some problem at hand...
 
 ''Everything is an object'' &amp;mdash; of course, that's a //no-brainer,// todays. Rather, important is what is not &quot;an object&quot;, meaning it can't be arranged arbitrarily
-* we have one and only one global [[Session]] which directly contains a collection of multiple [[Sequences|EDL]] and is associated with a globally managed collection of [[assets|Asset]]. We don't utilise scoped variables here (no &quot;mandantisation&quot;); if e.g. a media has been //opened,// it is just plain //globally known//&amp;nbsp; as asset.
+* we have one and only one global [[Session]] which directly contains a collection of multiple [[Sequences|Sequence]] and is associated with a globally managed collection of [[assets|Asset]]. We don't utilise scoped variables here (no &quot;mandantisation&quot;); if e.g. a media has been //opened,// it is just plain //globally known//&amp;nbsp; as asset.
 * the [[knowledge base|ConfigRules]] is just available globally. Obviously, the session gets a chance to install rules into this knowledge base, but we don't stress ownership here.
 * we have a [[Fixture]] which acts as isolation layer towards the render engine and is (re)built automatically.
 
 We ''separate'' processing (rendering) and configuration (building). We have a [[Builder]] which creates a network of [[render nodes|ProcNode]], to be processed by //pulling data // from some [[Pipe]]
 
 ''Objects are [[placed|Placement]] rather'' than assembled, connected, wired, attached. This is more of a rule-based approach and gives us one central metaphor and abstraction, allowing us to treat everything in an uniform manner. You can place it as you like, and the builder tries to make sense out of it, silently disabling what doesn't make sense.
-An [[EDL]] is just a collection of configured and placed objects (and has no additional, fixed structure). [[Tracks|Track]] form a mere organisational grid, they are grouping devices not first-class entities (a track doesn't &quot;have&quot; a pipe or &quot;is&quot; a video track and the like; it can be configured to behave in such manner by using placements though). [[Pipes|Pipe]] are hooks for making connections and are the only facility to build processing chains. We have global pipes, and each clip is built around a lokal [[source port|ClipSourcePort]] &amp;mdash; and that's all. No special &quot;media viewer&quot; and &quot;arranger&quot;, no special role for media sources, no commitment to some fixed media stream types (video and audio). All of this is sort of pushed down to be configuration, represented as asset of some kind. For example, we have [[processing pattern|ProcPatt]] assets to represent the way of building the source network for reading from some media file (including codecs treated like effect plugin nodes)
+An [[Sequence]] is just a collection of configured and placed objects (and has no additional, fixed structure). [[Tracks|Track]] form a mere organisational grid, they are grouping devices not first-class entities (a track doesn't &quot;have&quot; a pipe or &quot;is&quot; a video track and the like; it can be configured to behave in such manner by using placements though). [[Pipes|Pipe]] are hooks for making connections and are the only facility to build processing chains. We have global pipes, and each clip is built around a lokal [[source port|ClipSourcePort]] &amp;mdash; and that's all. No special &quot;media viewer&quot; and &quot;arranger&quot;, no special role for media sources, no commitment to some fixed media stream types (video and audio). All of this is sort of pushed down to be configuration, represented as asset of some kind. For example, we have [[processing pattern|ProcPatt]] assets to represent the way of building the source network for reading from some media file (including codecs treated like effect plugin nodes)
 
 Actual ''media data and handling'' is abstracted rigorously. Media is conceived as being stream-like data of distinct StreamType. When it comes to more low-level media handling, we build on the DataFrame abstraction. Media processing isn't the focus of Lumiera; we organise the processing but otherwise ''rely on media handling libraries.'' In a similar vein, multiplicity is understood as type variation. Consequently, we don't build an audio and video &quot;section&quot; and we don't even have audio tracks and video tracks. Lumiera uses tracks and clips, and clips build on media, but we're able to deal with multichannel mixed-typed media.
 
@@ -1315,12 +1315,12 @@ Deliberately there is an limitaion on the flexibility of what can be added to th
 !Why doesn't the current Cinelerra-2 Design succeed?
 The design of Cinelerra-2 basically follows a similar design, but __fails because of two reasons__
 # too much differentiation is put into the class hierarchy instead of configuring Instances differently.&lt;br&gt;This causes overly heavy use of virtual functions and -- in order to ameliorate this -- falling back to hard wired branching
-# far too much coupling and back-coupling to the internals of the EDL, forcing a overly rigid structure on the latter
+# far too much coupling and back-coupling to the internals of the »EDL«, forcing a overly rigid structure on the latter
 
 !Try to learn from the Problems of the current Cinelerra-2 codebase
 * build up an [[Node Abstraction|ProcNode]] powerful enough to express //all necessary Operations// without the need to recure on the actual object type
-* need to redesign the internals of the EDL in a far more open manner. Everything is an [[M-Object|MObjects]] which is [[placed|Placement]] in some manner
-* strive at a StrongSeparation between EDL and Render Engine, encapsulate and allways implement against interfaces
+* need to redesign the internals of the Session in a far more open manner. Everything is an [[M-Object|MObjects]] which is [[placed|Placement]] in some manner
+* strive at a StrongSeparation between Session and Render Engine, encapsulate and allways implement against interfaces
 
 
 !Design Goals
@@ -1330,7 +1330,7 @@ To achieve this, here we try to separate ''Configuration'' from ''Processing''. 
 
 The main tool used to implement this separation is the [[Builder Pattern|http://en.wikipedia.org/wiki/Builder_pattern]]. Here especially we move all decisions and parametrization into the BuildProcess. The Nodes in the render pipeline should process Video/Audio and do nothing else. All decisions, tests and conditional operations are factored out of the render process and handled as configuration of the pipeline, which is done by the Builder. The actual color model and number of ports is configured in by a pre-built wiring descriptor. All Nodes are of equal footing with each other, able to be connected freely within the limitations of the necessary input and output. OpenGL and renderfarm support can be configured in as an alternate implementation of some operations together with an alternate signal flow (usable only if the whole Pipeline can be built up to support this changed signal flow), thus factoring out all the complexities of managing the data flow between core and hardware accelerated rendering. We introduce separate control data connections for the [[automation data|Automation]], separating the case of true multi-channel-effects from the case where one node just gets remote controlled by another node (or the case of two nodes using the same automation data).
 
-Another pertinent theme is to make the basic building blocks simpler, while on the other hand gaining much more flexibility for combining these building blocks. For example we try to unfold any &quot;internal-multi&quot; effects into separate instances (e.g. the possibility of having an arbitrary number of single masks at any point of the pipeline instead of having one special masking facility encompassing multiple sub-masks. Similarly, we treat the Objects in the EDL in a more uniform manner and gain the possibility to [[place|Placement]] them in various ways.
+Another pertinent theme is to make the basic building blocks simpler, while on the other hand gaining much more flexibility for combining these building blocks. For example we try to unfold any &quot;internal-multi&quot; effects into separate instances (e.g. the possibility of having an arbitrary number of single masks at any point of the pipeline instead of having one special masking facility encompassing multiple sub-masks. Similarly, we treat the Objects in the Session in a more uniform manner and gain the possibility to [[place|Placement]] them in various ways.
 </pre>
 </div>
 <div title="DisplayFacade" modifier="Ichthyostega" modified="200904302316" created="200902080703" tags="spec" changecount="2">
@@ -1348,28 +1348,16 @@ Access point especially for the playback. A render- or playback process uses the
 <pre>An output port wired up to some display facility or viewer widget within the UI. For the client code, each slot is represented by a handle, which can be used to lock into this slot for an continuous output process. Managed by the DisplayService
 </pre>
 </div>
-<div title="EDL" modifier="Ichthyostega" modified="200811011755" created="200706210610" tags="def" changecount="9">
-<pre>&lt;&lt;&lt;
-{{red{WARNING: Naming is currently being discussed (11/08)}}}
-* [[EDL]] probably will be called ''Sequence'' (or maybe ''Arrangement'')
-* [[Session]] maybe renamed to ''Project''
-* there seems to be a new entity called [[Timeline]] which holds the global Pipes
-&lt;&lt;&lt;
+<div title="EDL" modifier="Ichthyostega" modified="201001252333" created="200706210610" tags="def" changecount="12">
+<pre>''EDL'' is a short-hand for __E__dit __D__ecision __L__ist. The use of this term can be confusing; for the usual meaning see the definition in [[Wikipedia|http://en.wikipedia.org/wiki/Edit_decision_list]]
 
+Cinelerra uses this term in a related manner but with a somewhat shifted focus: In Cinelerra the EDL is comprised of the whole set of clips and other media objects arranged onto the tracks by the user. It is the result of the user's //editing efforts.//
 
-''EDL'' is a short-hand for __E__dit __D__ecision __L__ist. The use of this term can be confusing; for the usual meaning see the definition in [[Wikipedia|http://en.wikipedia.org/wiki/Edit_decision_list]]
-
-Cinelerra uses this term in a related manner but with a somewhat shifted focus (and we just stick to this usage here): In Lumiera the EDL is comprised of the whole set of clips and other media objects parametrized and placed onto the tracks by the user. It is the result of the user's //editing efforts.//
-
-In this usage, the EDL in most cases will be almost synonymous to the [[Session|SessionOverview]], just the latter emphasizes more the state aspect, as it can be thought as the current EDL contents contained in a file or data structure together with additional Option values and settings for the GUI. The Session is what you save and load, while the EDL rather denotes a structured collection of Objects placed in time.
-
-The EDL within the Session is just a //logical grouping//, allowing for lots of flexibility. Actually, we can have several ~EDLs within one Session, and these ~EDLs can be linked together or not, they may be in sequence or may constitue a logical grouping of clips used simultanously in compositional work etc. Multiple ~EDLs can use the same or different tracks, and tracks as well are only an organisational (grouping) device. But at any time, we have exactly one [[Fixture]], derived automatically from all ~EDLs and containing the content actually to be rendered.
-
-&amp;rarr; see considerations about [[the role of Tracks and Pipes in conjunction with the EDL|TrackPipeEDL]]
+In this usage, the EDL in most cases will be almost synonymous to &amp;raquo;the session&amp;laquo;, just the latter emphasizes more the state aspect. While the Lumiera project started out using the same terminology, later on, when support for multiple &quot;containers&quot; within the session and for [[meta-clips|VirtualClip]] was determined to be of much importance, the new term &amp;raquo;[[Sequence]]&amp;laquo; was preferred.
 </pre>
 </div>
 <div title="EditingOperations" modifier="Ichthyostega" modified="200710111508" created="200709251610" tags="design decision" changecount="5">
-<pre>These are the tools provided to any client of the Proc layer for handling and manipulating the entities in the EDL. When defining such operations, //the goal should be to arrive at some uniformity in the way things are done.// Ideally, when writing client code, one should be able to guess how to achieve some desired result.
+<pre>These are the tools provided to any client of the Proc layer for handling and manipulating the entities in the Session. When defining such operations, //the goal should be to arrive at some uniformity in the way things are done.// Ideally, when writing client code, one should be able to guess how to achieve some desired result.
 
 !guiding principle
 The approach taken to define any operation is based primarily on the ''~OO-way of doing things'': entities operate themselfs. You don't advise some manager, session or other &amp;raquo;god class&amp;laquo; to manipulate them. And, secondly, the scope of each operation will be as large as possible, but not larger. This often means performing quite some elementary operations &amp;mdash; sometimes a convenience shortcut provided by the higher levels of the application may come in handy &amp;mdash; and basically this gives rise to several different paths of doing the same thing, all of which need to be equivalent.
@@ -1378,8 +1366,8 @@ The approach taken to define any operation is based primarily on the ''~OO-way o
 * you ''create a clip'' either from a source media or from another clip (copy, maybe clone?). The new clip always reflects the full size (and other properties) of the source used for creating.
 * you can request a clip to ''resize'', which always relates to its current dimensions.
 * you can ''place or attach'' the clip to some point or other entity by creating a [[Placement]] from the clip. (&amp;rarr; [[handling of Placements|PlacementHandling]])
-* you can ''adjust'' a placement relative to some other placement, meta object (i.e. selection), label or media, and this may cause the placement to resize or even delete the clip as necessary
-* you can perform ''adjustments'' on the whole EDL.
+* you can ''adjust'' a placement relative to some other placement, meta object (i.e. selection), label or media, and this may cause the placement to resize or even effectively remove the clip.
+* you can perform ''adjustments'' on a Sequence as a whole.
 All these operations propagate to directly dependant objects and may schedule global reconfigurations.
 
 !state, locking, policies
@@ -1388,7 +1376,7 @@ While performing any manipulative task, the state of the object is considered in
 !!parallelism
 At the level of fine grained operations on individual entities, there is ''no support for parallelism''. Individual entities don't lock themselves. Tasks perform locking and are to be scheduled. Thus, we need an isolation layer towards all inherently multithreaded parts of the system, like the GUI or the renderengine.
 
-This has some obvious and some subtle consequences. Of course, manipulating //tasks// will be queued and scheduled somewhere. But as we rely on object identity and reference semantics for the entities in the EDL, some value changes are visible to  operations going on in parallel threads (e.g. rendering) and each operation on the EDL entities //has to be aware of this.//
+This has some obvious and some subtle consequences. Of course, manipulating //tasks// will be queued and scheduled somewhere. But as we rely on object identity and reference semantics for the entities in the session, some value changes are visible to  operations going on in parallel threads (e.g. rendering) and each operation on the session entities //has to be aware of this.//
 Consequently, sometimes there needs to be done sort of a ''read-copy-update'', i.e. self-replacement by copy followed by manipulation of the new copy, while ongoing processes use the unaltered original object until they receive some sort of reset.
 
 !!undo
@@ -1408,7 +1396,7 @@ Initially, only the parameter (descriptors) are present on the effect ~MObject, 
 </div>
 <div title="Example1" modifier="Ichthyostega" modified="200906071812" created="200706220239" tags="example img" changecount="5">
 <pre>The &amp;raquo;Timeline&amp;laquo; is a sequence of ~MObjects -- here clips -- together with an ExplicitPlacement, locating each clip at a given time and track. (Note: I simplified the time format and wrote frame numbers to make it more clear)
-[img[Example1: Objects in the EDL/Fixture|uml/fig128773.png]]
+[img[Example1: Objects in the Session/Fixture|uml/fig128773.png]]
 
 ----
 After beeing processed by the Builder, we get the following Render Engine configuration
@@ -1418,10 +1406,10 @@ After beeing processed by the Builder, we get the following Render Engine config
 </div>
 <div title="Example2" modifier="Ichthyostega" modified="200906071812" created="200706220251" tags="example img" changecount="4">
 <pre>{{red{TODO: seemingly this example is slightly outdated, as the implementation of placements is now indirect via LocatingPin objects}}}
-This Example showes the //high level// EDL as well. This needs to be transformed into a Fixture by some facility still to be designed. Basically, each [[Placement]] needs to be queried for this to get the corresponding ExplicitPlacement. The difficult part is to handle possible Placement constraints, e.g. one clip can't be placed at a timespan covered by another clip on the same track. In the current Cinelerra2, all of this is done directly by the GUI actions.
+This Example showes the //high level// Sequence as well. This needs to be transformed into a Fixture by some facility still to be designed. Basically, each [[Placement]] needs to be queried for this to get the corresponding ExplicitPlacement. The difficult part is to handle possible Placement constraints, e.g. one clip can't be placed at a timespan covered by another clip on the same track. In the current Cinelerra2, all of this is done directly by the GUI actions.
 
 The &amp;raquo;Timeline&amp;laquo; is a sequence of ~MObjects -- note: using the same Object instances -- but now with the calculated ExplicitPlacement, locating the clip at a given time and track. The effect is located absolutely in time as well, but because it is the same Instance, it has the pointer to the ~RelativePlacement, wich basically attaches the effect to the clip. This structure may look complicated, but is easy to process if we go &quot;backward&quot; and just rely on the information contained in the ExplicitPlacement.
-[img[Example2: Clip with Effect and generated Fixture for this EDL|uml/fig128901.png]]
+[img[Example2: Clip with Effect and generated Fixture for this Sequence|uml/fig128901.png]]
 
 ----
 After beeing processed by the Builder, we get a Render Engine configuration.&lt;br&gt;
@@ -1500,7 +1488,7 @@ Some further details
 </pre>
 </div>
 <div title="Fixture" modifier="Ichthyostega" modified="200712100439" created="200706220324" tags="def" changecount="4">
-<pre>a specially configured EDL
+<pre>a specially configured sequence list
  * all MObjects have their position, length and configuration set up ready for rendering.
  * compound objects (e.g. multichannel clips) have been resolved to single non-compound basic objects.
  * every MObject is associated with an ExplicitPlacement, which declares a fixed position (Time, Track)
@@ -1707,12 +1695,12 @@ Actually a ''clip'' is handled as if it was comprised of local pipe(s). In the e
 @@clear(right):display(block):@@
 !!Example of an complete Session
 [img[draw/high-level3.png]]
-The Session contains several independent [[EDL]]s plus an output bus section (''global Pipes''). Each EDL holds a collection of ~MObjects placed within a ''tree of tracks''. 
-Within Lumiera, tracks are a rather passive means for organizing media objects, but aren't involved into the data processing themselves. The possibility of nesting tracks allows for easy grouping. Like the other objects, tracks are connected together by placements: A track holds the list of placements of its child tracks. Each EDL holds a single placement pointing to the root track. 
+The Session contains several independent [[sequences|Sequence]] plus an output bus section (''global Pipes'') attached to the [[Timeline]]. Each sequence holds a collection of ~MObjects placed within a ''tree of tracks''. 
+Within Lumiera, tracks are a rather passive means for organizing media objects, but aren't involved into the data processing themselves. The possibility of nesting tracks allows for easy grouping. Like the other objects, tracks are connected together by placements: A track holds the list of placements of its child tracks. Each sequence holds a single placement pointing to the root track. 
 
-As placements have the ability to cooperate and derive any missing placement specifications, this creates a hierarchical structure throughout the session, where parts on any level behave similar if applicable. For example, when a track is anchored to some external entity (label, sync point in sound, etc), all objects placed relatively to this track will adjust and follow automatically. This relation between the track tree and the individual objects is especially important for the wiring, which, if not defined locally within an ~MObject's placement, is derived by searching up this track tree and utilizing the wiring plug locating pins found there, if applicable. In the default configuration, the placement of an EDL's root track contains a wiring plug for video and another wiring plug for audio. This setup is sufficient for getting every object within this EDL wired up automatically to the correct global output pipe. Moreover, when adding another wiring plug to some sub track, we can intercept and reroute the connections of all objects creating output of this specific stream type within this track and on all child tracks.
+As placements have the ability to cooperate and derive any missing placement specifications, this creates a hierarchical structure throughout the session, where parts on any level behave similar if applicable. For example, when a track is anchored to some external entity (label, sync point in sound, etc), all objects placed relatively to this track will adjust and follow automatically. This relation between the track tree and the individual objects is especially important for the wiring, which, if not defined locally within an ~MObject's placement, is derived by searching up this track tree and utilizing the wiring plug locating pins found there, if applicable. In the default configuration, the placement of an sequence's root track contains a wiring plug for video and another wiring plug for audio. This setup is sufficient for getting every object within this sequence wired up automatically to the correct global output pipe. Moreover, when adding another wiring plug to some sub track, we can intercept and reroute the connections of all objects creating output of this specific stream type within this track and on all child tracks.
 
-Besides routing to a global pipe, wiring plugs can also connect to the source port of an ''meta-clip''. In this example session, the outputs of ~EDL-2 as defined by locating pins in it's root track's placement, are directed to the source ports of a [[meta-cllip|VirtualClip]] placed within ~EDL-1. Thus, within ~EDL-1, the contents of ~EDL-2 appear like a pseudo-media, from which the (meta) clip has been taken. They can be adorned with effects and processed further completely similar to a real clip.
+Besides routing to a global pipe, wiring plugs can also connect to the source port of an ''meta-clip''. In this example session, the outputs of ~Seq-2 as defined by locating pins in it's root track's placement, are directed to the source ports of a [[meta-cllip|VirtualClip]] placed within ~Seq-1. Thus, within ~Seq-1, the contents of ~Seq-2 appear like a pseudo-media, from which the (meta) clip has been taken. They can be adorned with effects and processed further completely similar to a real clip.
 
 Finally, this example shows an ''automation'' data set controlling some parameter of an effect contained in one of the global pipes. From the effect's POV, the automation is simply a ParamProvider, i.e a function yielding a scalar value over time. The automation data set may be implemented as a bézier curve, or by a mathematical function (e.g. sine or fractal pseudo random) or by some captured and interpolated data values. Interestingly, in this example the automation data set has been placed relatively to the meta clip (albeit on another track), thus it will follow and adjust when the latter is moved.
 </pre>
@@ -1729,7 +1717,7 @@ Finally, this example shows an ''automation'' data set controlling some paramete
 * [[Handling of the current Session|CurrentSession]]
 * [[collecting Ideas for Implementation Guidelines|ImplementationGuidelines]]
 * [[using the Visitor pattern?|VisitorUse]] &amp;mdash; resulting in [[»Visiting-Tool« library implementation|VisitingToolImpl]]
-* [[Handling of Tracks and render Pipes in the EDL|TrackPipeEDL]]. [[Handling of Tracks|TrackHandling]] and [[Pipes|PipeHandling]]
+* [[Handling of Tracks and render Pipes in the session|TrackPipeSequence]]. [[Handling of Tracks|TrackHandling]] and [[Pipes|PipeHandling]]
 * [[getting default configured|DefaultsManagement]] Objects relying on [[rule-based Configuration Queries|ConfigRules]]
 * [[integrating the Config Query system|ConfigQueryIntegration]]
 * [[identifying the basic Builder operations|BasicBuildingOperations]] and [[planning the Implementation|PlanningNodeCreatorTool]]
@@ -2152,7 +2140,7 @@ The general idea is, that each facade interface actually provides access to a sp
 </pre>
 </div>
 <div title="LoadingMedia" modifier="Ichthyostega" modified="200806030203" created="200709220005" tags="design spec" changecount="4">
-<pre>Opening and accessing media files on disk poses several problems, most of which belong to the domain of Lumiera's data backend. Here, we focus on the questions related to making media data available to the EDL and the render engine. Each media will be represented by an MediaAsset object, which indeed could be a compound object (in case of MultichannelMedia). Building this asset object thus includes getting informations from the real file on disk. For delegating this to the backend, we use the following query interface:
+<pre>Opening and accessing media files on disk poses several problems, most of which belong to the domain of Lumiera's data backend. Here, we focus on the questions related to making media data available to the session and the render engine. Each media will be represented by an MediaAsset object, which indeed could be a compound object (in case of MultichannelMedia). Building this asset object thus includes getting informations from the real file on disk. For delegating this to the backend, we use the following query interface:
 * {{{queryFile(char* name)}}} requests accessing the file and yields some (opaque) handle when successful.
 * {{{queryChannel(fHandle, int)}}} will then be issued in sequence with ascending index numbers, until it returns {{{NULL}}}.
 * the returned struct (pointer) will provide the following information:
@@ -2173,7 +2161,7 @@ The general idea is, that each facade interface actually provides access to a sp
 * //additional constraints, placement objectives, range restrictions, pattern rules will follow...//</pre>
 </div>
 <div title="MObject" modifier="Ichthyostega" modified="200905130114" created="200706220312" tags="def classes" changecount="3">
-<pre>All sorts of &quot;things&quot; to be placed and manipulated by the user in the EDL. This interface abstracts the details and just supposes
+<pre>All sorts of &quot;things&quot; to be placed and manipulated by the user in the session. This interface abstracts the details and just supposes
 * the media object has a duration
 * it is allways //placed// in some manner, i.e. it is allways accessed via a [[Placement]]
 * {{red{and what else?}}}
@@ -2214,20 +2202,20 @@ Presumably, none of the both models is usable as-is; rather we try to reconstruc
 </pre>
 </div>
 <div title="MObjects" modifier="Ichthyostega" modified="200906071811" created="200706190636" tags="overview img" changecount="17">
-<pre>The ~MObjects Subsystem contains everything related to the [[EDL]] and the various Media Objects placed within. It is complemented by the Asset Management (see &amp;rarr; [[Asset]]). Examples for [[MObjects |MObject]](&amp;rarr; def) being:
+<pre>The ~MObjects Subsystem contains everything related to the [[Session]] and the various Media Objects placed within. It is complemented by the Asset Management (see &amp;rarr; [[Asset]]). Examples for [[MObjects |MObject]](&amp;rarr; def) being:
 * audio/video clips
 * [[effects and plugins|EffectHandling]]
 * special facilities like mask and projector
 * [[Automation]] sets
 * labels and other (maybe functional) markup
 
-This Design strives to achieve a StrongSeparation between the low-level Structures used to carry out the actual rendering and the high level Entities living in the EDL and being manipulated by the user. In this high level view, the Objects are grouped and located by [[Placements|Placement]], providing a flexible and open way to express different groupings, locations and ordering constraints between the Media Objects.
+This Design strives to achieve a StrongSeparation between the low-level Structures used to carry out the actual rendering and the high level Entities living in the session and being manipulated by the user. In this high level view, the Objects are grouped and located by [[Placements|Placement]], providing a flexible and open way to express different groupings, locations and ordering constraints between the Media Objects.
 &amp;rarr; EditingOperations
 &amp;rarr; PlacementHandling
 &amp;rarr; SessionOverview
 
 
-[img[Classess related to the EDL|uml/fig128133.png]]
+[img[Classess related to the session|uml/fig128133.png]]
 </pre>
 </div>
 <div title="MainMenu" modifier="Ichthyostega" modified="200802031758" created="200706172305" changecount="10">
@@ -2239,13 +2227,13 @@ This Design strives to achieve a StrongSeparation between the low-level Structur
 &lt;&lt;fullscreen&gt;&gt;</pre>
 </div>
 <div title="ManagementAssetRelation" modifier="Ichthyostega" modified="200711220525" created="200708100337" tags="impl decision" changecount="12">
-<pre>Problem is: when removing an Asset, all corresponding MObjects need to disappear. This means, besides the obvious ~Ref-Link (MObject referring to an asset) we need backlinks or a sort of registry. And still worse: we need to remove the affected MObject from the object network in the EDL and rebuild the Fixture...
+<pre>Problem is: when removing an Asset, all corresponding MObjects need to disappear. This means, besides the obvious ~Ref-Link (MObject referring to an asset) we need backlinks or a sort of registry. And still worse: we need to remove the affected MObject from the object network in the session and rebuild the Fixture...
 
 &amp;rarr; for a general design discussion see [[Relation of Clip and Asset|RelationClipAsset]]
 
 //Currently// Ichthyo considers the following approach:
 * all references between MObjects and Assets are implemented as __refcounting__ boost::shared_ptr
-* the opposite direction is also a __strong reference__, effectively keeping the clip-MO alive even if it is no longer in use in the session (note this is a cyclic dependency that needs to be actively broken on deletion). This design decision is based on  logical considerations (&amp;rarr; see &quot;deletions, Model-2&quot; [[here|RelationClipAsset]]). This back-link is implemented by a Placement which is stored internally within the asset::Clip, it is needed for clean deletion of Assets, for GUI search functions and for adding the Clip to the EDL (again after been removed, or multiple times as if cloned).
+* the opposite direction is also a __strong reference__, effectively keeping the clip-MO alive even if it is no longer in use in the session (note this is a cyclic dependency that needs to be actively broken on deletion). This design decision is based on  logical considerations (&amp;rarr; see &quot;deletions, Model-2&quot; [[here|RelationClipAsset]]). This back-link is implemented by a Placement which is stored internally within the asset::Clip, it is needed for clean deletion of Assets, for GUI search functions and for adding the Clip to the session (again after been removed, or multiple times as if cloned).
 * MObjects and Assets implement an {{{unlink()}}} function releasing any internal links causing circular dependencies. It is always implemented such as to drop //optional// associations while retaining those associations mandatory for fulfilling the objects contract.
 * Instead of a delete, we call this unlink() function and let the shared_ptr handle the actual deletion. Thus, even if the object is already unlinked, it is still valid and usable as long as some other entity holds a smart-ptr. An ongoing render process for example can still use a clip asset and the corresponding media asset linked as parent, but this media asset's link to the dependant clip has already been cleared (and the media is no longer registered with the AssetManager of course).
 * so the back-link from dependant asset up to the parent asset is mandatory for the child asset to be functional, but preferably it should be {{{const}}} (only used for information retrieval)
@@ -2258,7 +2246,7 @@ This Design strives to achieve a StrongSeparation between the low-level Structur
 </pre>
 </div>
 <div title="ManagementRenderNodes" modifier="Ichthyostega" modified="200810160131" created="200805280200" tags="impl decision" changecount="5">
-<pre>Contrary to the &amp;rarr;[[Assets and MObjects|ManagementAssetRelation]], the usage pattern for [[render nodes|ProcNode]] is quite simple: All nodes are created together every time a new segment of the network is being build and will be used together until this segment is re-built, at which point they can be thrown away altogether. While it would be easy to handle the nodes automatically by smart-ptr (the creation is accessible only by use of the {{{NodeFactory}}} anyways), it //seems advisable to care for a bulk allocation/deallocation here.// The reason being not so much the amount of memory (which is expected to be moderate), but the fact the build process can be triggered repeatedly several times a second when tweaking the EDL, which could lead to fragmentation and memory pressure.
+<pre>Contrary to the &amp;rarr;[[Assets and MObjects|ManagementAssetRelation]], the usage pattern for [[render nodes|ProcNode]] is quite simple: All nodes are created together every time a new segment of the network is being build and will be used together until this segment is re-built, at which point they can be thrown away altogether. While it would be easy to handle the nodes automatically by smart-ptr (the creation is accessible only by use of the {{{NodeFactory}}} anyways), it //seems advisable to care for a bulk allocation/deallocation here.// The reason being not so much the amount of memory (which is expected to be moderate), but the fact the build process can be triggered repeatedly several times a second when tweaking the session, which could lead to fragmentation and memory pressure.
 
 __10/2008__: the allocation mechanism can surely be improved later, but for now I am going for a simple implementation based on heap allocated objects owned by a vector or smart-ptrs. For each segment of the render nodes network, we have several families of objects, each of with will be maintained by a separate low-level memory manager (as said, for now implemented as vector of smart-ptrs). Together, they form an AllocationCluster; all objects contained in such a cluster will be destroyed together.
 </pre>
@@ -2271,7 +2259,7 @@ __10/2008__: the allocation mechanism can surely be improved later, but for now 
 &lt;style type=&quot;text/css&quot;&gt;#contentWrapper {display:none;}&lt;/style&gt;&lt;div id=&quot;SplashScreen&quot; style=&quot;border: 3px solid #ccc; display: block; text-align: center; width: 320px; margin: 100px auto; padding: 50px; color:#000; font-size: 28px; font-family:Tahoma; background-color:#eee;&quot;&gt;loading &lt;b&gt;Proc-Layer&lt;/b&gt; devel doku&lt;blink&gt; ...&lt;/blink&gt;&lt;br&gt;&lt;br&gt;&lt;span style=&quot;font-size: 14px; color:red;&quot;&gt;Requires Javascript.&lt;/span&gt;&lt;/div&gt;</pre>
 </div>
 <div title="MediaAsset" modifier="Ichthyostega" modified="200906071810" created="200709021530" tags="def classes img" changecount="8">
-<pre>The Interface asset::Media is a //key abstraction// It ties together several concepts and enables to deal with them on the interfaces in a uniform manner. Besides, as every Asset kind it belongs rather to the bookkeeping view: an asset::Media holds the specific properties and parametrisation of the media source it stands for. Regarding the __inward interface__ &amp;mdash; as used from within the [[EDL]] or the [[Render Nodes|ProcNode]], it is irrelevant if any given asset::Media object stands for a complete media source, just a clip taken from this source or if a placeholder version of the real media source is used instead.
+<pre>The Interface asset::Media is a //key abstraction// It ties together several concepts and enables to deal with them on the interfaces in a uniform manner. Besides, like every Asset kind, it belongs rather to the bookkeeping view: an asset::Media holds the specific properties and parametrisation of the media source it stands for. Regarding the __inward interface__ &amp;mdash; as used from within the [[model|HighLevelModel]] or the [[render nodes|ProcNode]], it is irrelevant if any given asset::Media object stands for a complete media source, just a clip taken from this source or if a placeholder version of the real media source is used instead.
 [img[Asset Classess|uml/fig130437.png]]
 
 &amp;rarr; see also LoadingMedia
@@ -2313,17 +2301,17 @@ For the case here in question this seems to be the ''resource allocation is cons
 
 !!!dangerous uses
 * the render nodes &amp;rarr; [[detail analysis|ManagementRenderNodes]] {{red{TODO}}}
-* the MObjects in the EDL &amp;rarr; [[detail analysis|ManagementMObjects]] {{red{TODO}}}
+* the MObjects in the session &amp;rarr; [[detail analysis|ManagementMObjects]] {{red{TODO}}}
 * Asset - MObject relationship. &amp;rarr; [[detail analysis|ManagementAssetRelation]] {{red{TODO}}}
 
 !!!rather harmless
 * Frames (buffers), because they belong to a given [[RenderProcess (=StateProxy)|StateProxy]] and are just passed in into the individual [[ProcNode]]s. This can be handled consistently with conventional methods.
 * each StateProxy belongs to one top-level call to the [[Controller-Facade|Controller]]
 * similar for the builder tools, which belong to a build process. Moreover, they are pooled and reused.
-* the EDL and the defined [[Asset]]s belong together to one Session. If the Session is closed, this means a internal shutdown of the whole ProcLayer, i.e. closing of all GUI representations and terminating all render processes. If these calles are implemented as blocking operations, we can assert that as long as any GUI representation or any render process is running, there is a valid Session and EDL.
+* the [[sequences|Sequence]] and the defined [[assets|Asset]] belong together to one [[Session]]. If the Session is closed, this means a internal shutdown of the whole ProcLayer, i.e. closing of all GUI representations and terminating all render processes. If these calles are implemented as blocking operations, we can assert that as long as any GUI representation or any render process is running, there is a valid session and model.
 
 !using Factories
-And, last but not least, doing large scale allocations is the job of the backend. Exceptions being long-lived objects, like the Session or the EDL, which are created once and don't bear the danger of causing memory pressure. Besides, the ProcLayer code shouldn't issue &quot;new&quot; and &quot;delete&quot; when it comes in hand, rather it should use some centralized [[Factories]] for all allocation and freeing, so we can redirect these calls down to the backend, which may use pooling or special placement allocators or the like. The rationale is, for modern hardware/architectures, care has to be taken with heap allocations, esp. with many small objects and irregular usage patterns.
+And, last but not least, doing large scale allocations is the job of the backend. Exceptions being long-lived objects, like the session or the sequences, which are created once and don't bear the danger of causing memory pressure. Besides, the ProcLayer code shouldn't issue &quot;new&quot; and &quot;delete&quot; when it comes in hand, rather it should use some centralized [[Factories]] for all allocation and freeing, so we can redirect these calls down to the backend, which may use pooling or special placement allocators or the like. The rationale is, for modern hardware/architectures, care has to be taken with heap allocations, esp. with many small objects and irregular usage patterns.
 </pre>
 </div>
 <div title="ModelObjectIdentity" modifier="Ichthyostega" modified="201001072246" created="201001070905" tags="SessionLogic spec draft" changecount="18">
@@ -2394,14 +2382,14 @@ __Note__: nothing within the PlacementIndex requires the root object to be of a 
 [&gt;img[Outline of the Build Process|uml/fig131333.png]]
 Basically, each [[media asset|MediaAsset]] is considered to be a compound of several elementary media (tracks), possibly of various different media kinds. Adding support for placeholders (''proxy clips'') at some point in future will add still more complexity (because then there will be even dependencies between some of these elementary media). To handle, edit and render compound media, we need to impose some structural limitations. But anyhow, we try to configure as much as possible already at the &quot;asset level&quot; and make the rest of the proc layer behave just according to the configuration given with each asset.
 
-So, when creating a clip out of such a compound media asset, the clip has to be a compound of elementary clips mirroring the given media asset's structure. Besides, it should be possible to //detach// and //attach// elementary clips from a compound clip. On the other hand, the [[Fixture]] created from the current state of the [[EDL]] is explicit to a great extent. So, in the Fixture we deal only with elementary clips placed to absolute positions, and thus the builder will see only simple non-compound clips and translate them into the corresponding source reading nodes.
+So, when creating a clip out of such a compound media asset, the clip has to be a compound of elementary clips mirroring the given media asset's structure. Besides, it should be possible to //detach// and //attach// elementary clips from a compound clip. On the other hand, the [[Fixture]] created from the current state of the session is explicit to a great extent. So, in the Fixture we deal only with elementary clips placed to absolute positions, and thus the builder will see only simple non-compound clips and translate them into the corresponding source reading nodes.
 
 !Handling
 * from a Media asset, we can get a [[Processing Pattern (ProcPatt)|ProcPatt]] describing how to build a render pipeline for this media
 * we can create a Clip (MObject) from each Media, which will be linked back to the media asset internally.
 * moreover, creating a Clip will create and register a Clip asset as well, and this Clip asset will be tied to the original Clip and will show up in some special Category
 * media can be compound and the created Clips will mirror this compound structure
-* we distinguish elementay (non-compound) Clips from compound clips by concrete subtype. The builder can only handle elementary clips, because he needs to build a separate pipeline for every output channel. So the work of splitting common effect stacks for clips with several channels needs to be done when calculating the Fixture for the current EDL. The Builder expects to be able to build the render nodes corresponding to each entity found in the Fixture one by one.
+* we distinguish elementay (non-compound) Clips from compound clips by concrete subtype. {{red{really?? doesn't seem so much like a good idea to me anymore 1/10}}} The builder can only handle elementary clips, because he needs to build a separate pipeline for every output channel. So the work of splitting common effect stacks for clips with several channels needs to be done when calculating the [[Fixture]] for the current session. The Builder expects to be able to build the render nodes corresponding to each entity found in the Fixture one by one.
 * the Builder gets at the ProcPatt (descriptor) of the underlying media for each clip and uses this description as a template to build the render pipeline. That is, the ProcPatt specifies the codec asset and maybe some additional effect assets (deinterlace, scale) necessary for feeding media data corresponding to this clip/media into the render nodes network.</pre>
 </div>
 <div title="NodeConfiguration" modifier="Ichthyostega" modified="200909041807" created="200909041806" tags="spec Builder Rendering" changecount="2">
@@ -2452,15 +2440,15 @@ some points to note:
 |!Action|&gt;|!creates |
 |loading a media file|asset::Media, asset::Codec| |
 |viewing media|asset::Clip, session::Clip and Placement (on hold)| for the whole Media, if not already existent|
-|mark selection as clip|asset::Clip, session::Clip, Placement with unspec. LocatingPin| doesn't add to EDL|
+|mark selection as clip|asset::Clip, session::Clip, Placement with unspec. LocatingPin| doesn't add to session|
 |loading Plugin|asset::Effect| usually at program startup|
 |create Session|asset::Track, asset::Pipe| |
 &amp;rarr; [[creating and registering Assets|AssetCreation]]
 &amp;rarr; [[loading media|LoadingMedia]]
 
 !![[MObjects|MObject]]
-|add media to EDL|asset::Clip, session::Clip, Placement with unspecified LocatingPin| creating whole-media clip on-the-fly |
-|add Clip to EDL|copy of Placement| creates intependent Placement of existing ~Clip-MO|
+|add media to sequence|asset::Clip, session::Clip, Placement with unspecified LocatingPin| creating whole-media clip on-the-fly |
+|add Clip to sequence|copy of Placement| creates intependent Placement of existing ~Clip-MO|
 |attach Effect|session::Effect, Placement with RelativeLocation| |
 |start using Automation|session::Auto, asset::Dataset, RelativeLocation Placement| |
 
@@ -2494,7 +2482,7 @@ This is possible because the operation point has been provided (by the mould) wi
 </pre>
 </div>
 <div title="Overview" modifier="Ichthyostega" modified="200906071810" created="200706190300" tags="overview img" changecount="13">
-<pre>The Lumiera Processing Layer is comprised of various subsystems and can be separated into a low-level and a high-level part. At the low-level end is the [[Render Engine|OverviewRenderEngine]] which basically is a network of render nodes cooperating closely with the Backend Layer in order to carry out the actual playback and media transforming calculations. Whereas on the high-level side we find several different [[Media Objects|MObjects]] that can be placed into the [[EDL]], edited and manipulated. This is complemented by the [[Asset Management|Asset]], which is the &quot;bookkeeping view&quot; of all the different &quot;things&quot; within each [[Session|SessionOverview]].
+<pre>The Lumiera Processing Layer is comprised of various subsystems and can be separated into a low-level and a high-level part. At the low-level end is the [[Render Engine|OverviewRenderEngine]] which basically is a network of render nodes cooperating closely with the Backend Layer in order to carry out the actual playback and media transforming calculations. Whereas on the high-level side we find several different [[Media Objects|MObjects]] that can be placed into the session, edited and manipulated. This is complemented by the [[Asset Management|Asset]], which is the &quot;bookkeeping view&quot; of all the different &quot;things&quot; within each [[Session|SessionOverview]].
 
 There is rather strong separation between these two levels, and &amp;mdash; &lt;br/&gt;correspondingly you'll encounter the data held within the Processing Layer organized in two different views, the ''high-level-model'' and the ''low-level-model''
 * from users (and GUI) perspective, you'll see a [[Session|SessionOverview]] with a timeline-like structure, where various [[Media Objects|MObjects]] are arranged and [[placed|Placement]]. By looking closer, you'll find that there are data connections and all processing is organized around processing chains or [[pipes|Pipe]], which can be either global (in the Session) or local (in real or [[virtual|VirtualClip]] clips)
@@ -2548,7 +2536,7 @@ To give a concrete example:
 * a Fade Plugin needs the actual fade value for Frame t=xxx
 * the Plugin has a Parameter Object (from which we could query the information of this parameter being a continuous float function)
 * this Parameter Object provides a getValue() function, which is internally linked (i.e. by configuration) to a //Parameter Provider//
-* the actual object implementing the ParamProvider Interface could be a Automation MObject located somewhere in the EDL and would do bezier interpolation on a given keyframe set.
+* the actual object implementing the ParamProvider Interface could be a Automation MObject located somewhere in the session and would do bezier interpolation on a given keyframe set.
 * Param providers are created on demand; while building the Render Engine configuration actually at work, the Builder would have to setup a link between the Plugin Parameter Object and the ParamProvider; he can do so, because he sees the link between the Automation MObject and the corresponding Effect MObject
 
 !!ParamProvider ownership and lifecycle
@@ -3070,7 +3058,7 @@ DAMAGE.
 <pre>Facility guiding decisions regarding the strategy to employ for rendering or wiring up connections. The PathManager is querried through the OperationPoint, when executing the connection steps within the Build process.</pre>
 </div>
 <div title="Pipe" modifier="Ichthyostega" modified="200804110301" created="200801062110" tags="def decision" changecount="6">
-<pre>Pipes play an central role within the Proc Layer, because for everything placed and handled within the EDL, the final goal is to get it transformed into data which can be retrieved at some pipe's exit port. Pipes are special facilities, rather like inventory, separate and not treated like all the other objects.
+<pre>Pipes play an central role within the Proc Layer, because for everything placed and handled within the session, the final goal is to get it transformed into data which can be retrieved at some pipe's exit port. Pipes are special facilities, rather like inventory, separate and not treated like all the other objects.
 We don't distinguish between &quot;input&quot; and &quot;output&quot; ports &amp;mdash; rather, pipes are thought to be ''hooks for making connections to''. By following this line of thought, each pipe has an input side and an output side and is in itself something like a ''Bus'' or ''processing chain''. Other processing entities like effects and transitions can be placed (attached) at the pipe, resulting them to be appended to form this chain. Likewise, we can place [[wiring requests|WiringRequest]] to the pipe, meaning we want it connected so to send it's output to another destination pipe. The [[Builder]] may generate further wiring requests to fulfil the placement of other entities.
 Thus //Pipes are the basic building blocks// of the whole render network. We distinguish ''global available'' Pipes, which are like the sum groups of a mixing console, and the ''lokal pipe'' or [[source ports|ClipSourcePort]] of the individual clips, which exist only within the duration of the corresponding clip. The design //limits the possible kinds of pipes // to these two types &amp;mdash; thus we can build local processing chains at clips and global processing chains at the global pipes of the session and that's all we can do. (because of the flexibility which comes with the concept of [[placements|Placement]], this is no real limitation)
 
@@ -3101,7 +3089,7 @@ Pipes are integrated with the [[management of defaults|DefaultsManagement]]. For
 
 So basically placements represent a query interface: you can allways ask the placement to find out about the position of the related object in terms of (time, output), and &amp;mdash; depending on the specific object and situation &amp;mdash; also about these additional [[placement derived dimensions|PlacementDerivedDimension]] like sound pan or layer order or similar things which also fit into the general concept of &quot;placing&quot; an object.
 
-The fact of being placed in the [[Session|SessionOverview]]/[[EDL]]is constitutive for all sorts of [[MObject]]s, without Placement they make no sense. Thus &amp;mdash; technically &amp;mdash; Placements act as ''smart pointers''. Of course, there are several kinds of Placements and they are templated on the type of MObject they are refering to. Placements can be //aggregated// to increasingly constrain the resulting &quot;location&quot; of the refered ~MObject. See &amp;rarr; [[handling of Placements|PlacementHandling]] for more details
+The fact of being placed in the [[Session|SessionOverview]] is constitutive for all sorts of [[MObject]]s, without Placement they make no sense. Thus &amp;mdash; technically &amp;mdash; Placements act as ''smart pointers''. Of course, there are several kinds of Placements and they are templated on the type of MObject they are refering to. Placements can be //aggregated// to increasingly constrain the resulting &quot;location&quot; of the refered ~MObject. See &amp;rarr; [[handling of Placements|PlacementHandling]] for more details
 
 !Placements as instance
 Effectively, the placement of a given MObject into the Session acts as setting up an concrete instance of this object. This way, placements exhibit a dual nature. When viewed on themselves, like any reference or smart-pointer they behave like values. But, by adding a placement to the session, we again create a unique distinguishable entity with reference semantics: there could be multiple placements of the same object but with varying placement properties. Such a placement-bound-into-the-session is denoted by an generic placement-ID or (as we call it) &amp;rarr; PlacementRef; behind the scenes there is a PlacementIndex keeping track of those &quot;instances&quot; &amp;mdash; allowing us to hand out the PlacementRef (which is just an opaque id) to client code outside the Proc-Layer and generally use it as an shorthand, behaving as if it was an MObject instance
@@ -3140,7 +3128,7 @@ Placements have //value semantics,// i.e. we don't stress the identity of a plac
 * placements can be treated like values, but incorporate an identity tag for the purpose of registering with the session.
 * we provide subclasses to be able to form collections of e.g. {{{Placement&lt;Effect&gt;}}}, but we don't stress polymorphism here. &amp;rarr; PlacementType
 * Why was the question how to access a ~MObject subinterface a Problem?
-*# we want the EDL/Fixture to be a collection of Placements. This means, either we store pointers, or Placement needs to be //one// unique type!
+*# we want the Session/Fixture to be a collection of Placements. This means, either we store pointers, or Placement needs to be //one// unique type!
 *# but if Placement is //a single type//, then we can get only MObjects from a Placement.
 *# then either we had to do everything by a visitor (which gets the concrete subtype dynamically), or we'd end up switching on type.
 
@@ -3211,16 +3199,16 @@ Placement references mimic the behaviour of a real placement, i.e. they proxy th
 </pre>
 </div>
 <div title="PlacementScope" modifier="Ichthyostega" modified="200911202127" created="200905120304" tags="SessionLogic spec img" changecount="21">
-<pre>MObjects are attached into the [[Session]] by adding a [[Placement]]. Because this especially includes the possibility of //grouping or container objects,// e.g. [[sequences|EDL]] or [[tracks|Track]] or [[meta-clips|VirtualClip]], any placement may optionally define and root a scope, and every placement is at least contained in one encompassing scope &amp;mdash; of course with the exception of the absolute top level, which can be thought off as being contained in a scope of handling rules.
+<pre>MObjects are attached into the [[Session]] by adding a [[Placement]]. Because this especially includes the possibility of //grouping or container objects,// e.g. [[sequences|Sequence]] or [[tracks|Track]] or [[meta-clips|VirtualClip]], any placement may optionally define and root a scope, and every placement is at least contained in one encompassing scope &amp;mdash; of course with the exception of the absolute top level, which can be thought off as being contained in a scope of handling rules.
 
-Thus, while the [[sequences (former called EDL)|EDL]] act as generic container holding a pile of placments, actually there is a more fine grained structure based on the nesting of the tracks, which especially in Lumiera's HighLevelModel belong to the sequence (they aren't a property of the top level timeline as one might expect). Building upon these observations, we actually require each addition of a placement to specify a scope. Consequently, for each Placement at hand it is possible to determine an //containing scope,// which in turn is associated with some Placement of a top-level ~MObject for this scope. The latter is called the ''scope top''. An example would be the {{{Placement&lt;Track&gt;}}} acting as scope of all the clips placed onto this track. The //implementation//&amp;nbsp; of this tie-to-scope is provided by the same mechanism as utilised for relative placements, i.e. an directional placement relation. Actually, this relation is implemented by the PlacementIndex within the current [[Session]].
+Thus, while the [[sequences|Sequence]] act as generic container holding a pile of placments, actually there is a more fine grained structure based on the nesting of the tracks, which especially in Lumiera's HighLevelModel belong to the sequence (they aren't a property of the top level timeline as one might expect). Building upon these observations, we actually require each addition of a placement to specify a scope. Consequently, for each Placement at hand it is possible to determine an //containing scope,// which in turn is associated with some Placement of a top-level ~MObject for this scope. The latter is called the ''scope top''. An example would be the {{{Placement&lt;Track&gt;}}} acting as scope of all the clips placed onto this track. The //implementation//&amp;nbsp; of this tie-to-scope is provided by the same mechanism as utilised for relative placements, i.e. an directional placement relation. Actually, this relation is implemented by the PlacementIndex within the current [[Session]].
 
 
 [&gt;img[Structure of Placment Scopes|draw/ScopeStructure1.png]]
 !Kinds of scopes
 There is only a limited number of situations constituting a scope
 * conceptually, the very top level is a scope of general rules.
-* the next level is the link of [[binding|BindingMO]] of a [[Sequence|EDL]] into either a (top-level) [[Timeline]] or as virtual media into a VirtualClip. It is implemented through a {{{Placement&lt;Binding&gt;}}}.
+* the next level is the link of [[binding|BindingMO]] of a [[Sequence]] into either a (top-level) [[Timeline]] or as virtual media into a VirtualClip. It is implemented through a {{{Placement&lt;Binding&gt;}}}.
 * each sequence has at least one (manadtory) top-level placement holding its root track
 * tracks may contain nested sub tracks.
 * clips and (track-level) effects likewise are associated with an enclosing track.
@@ -3256,15 +3244,14 @@ On the other hand, care has to be taken when ''downcasting'' a placement. When p
 </div>
 <div title="PlanningBuildFixture" modifier="Ichthyostega" modified="200801061937" created="200712100445" tags="impl Builder draft" changecount="11">
 <pre>//This page is a scrapbook for working out the implementation of how to (re)build the [[Fixture]]//
-Structurally, (re)building the Fixture rather belongs to [[Session]]/[[EDLs|EDL]], but it is implemented very similar to the render engine build process: by treating all ~MObjects found in the various ~EDLs with a common [[visiting tool|VisitorUse]], this tool collects a simplified view with everyting made explicit, which can be pulled of as Fixture, i.e. (special kind of) EDL
-afterwards.
+Structurally, (re)building the Fixture rather belongs to [[Session]], but it is implemented very similar to the render engine build process: by treating all ~MObjects found in the various [[sequences|Sequence]] with a common [[visiting tool|VisitorUse]], this tool collects a simplified view with everyting made explicit, which can be pulled of as Fixture, i.e. (special kind of sequence list) afterwards.
 * there is a //gathering phase// and a //solving phase//, the gathering is done by visiting.
 * during the gathering phase, there ''need to be a lock'' preventing any other edit operation.
 * the solving is delegated to the individual ~Placements. It is effectively a {{{const}}} operation creating a ExplicitPlacement (copy)
-* thus the Fixture contains these newly created ~ExplicitPlacements, refering to ~MObjects shared with the original Placements within the ~EDLs
+* thus the Fixture contains these newly created ~ExplicitPlacements, refering to ~MObjects shared with the original Placements within the sequences
 
 !!!prerequisites
-* Session and ~EDLs exist.
+* Session and sequences exist.
 * Pipes exist and are configured
 
 !!!postconditions
@@ -3309,7 +3296,7 @@ afterwards.
 * NodeCreatorTool is a [[visiting tool|VisitorUse]]
 * the render engine to be built is contained as state within this tool object while it is passed around
 !!!prerequisites
-* Session and ~EDLs exist.
+* Session and sequences exist.
 * Pipes exist and are configured
 * Fixture contains ExplicitPlacement for every MObject to be rendered, and nothing else
 
@@ -3448,7 +3435,7 @@ From experience, mainly with other applications, we can draw the following concl
 * Cinelerra currently uses the approach of simply counting natural values for each media type separately. In an environment mixing several different media types freely, this seems a bit too simplistic (because it actually brings in the danger of rounding errors, just think at drop frame TC)
 
 !!Organizing of Output Channels
-How to handle the simultaneous rendering of several output streams (video, audio channels). Shall we treat the EDL as one entity containing different output channels, or should it rather be seen as a composite of several sub-~EDLs, each for only one output channel? This decision will be reflected in the overall structure of the network of render nodes: We could have a list of channel-output generating pipelines in each processor (for every segment), or we could have independently segmented lists of Processors for every output channel/type. The problem is, //it is not clear what approach to prefer at the moment//  because we are just guessing.
+How to handle the simultaneous rendering of several output streams (video, audio channels). Shall we treat the session as one entity containing different output channels, or should it rather be seen as a composite of several sub-sessions, each for only one output channel? This decision will be reflected in the overall structure of the network of render nodes: We could have a list of channel-output generating pipelines in each processor (for every segment), or we could have independently segmented lists of Processors for every output channel/type. The problem is, //it is not clear what approach to prefer at the moment//  because we are just guessing.
 
 !!Tracks, Channels, Layers
 Closely related to this is the not-so-obvious problem how to understand the common global structures found in most audio and video editing applications. Mostly, they stem from imitating hardware recording and editing solutions, thus easing the transition for professionals grown up with analogue hardware based media. But as digital media are the de-facto standard nowadays, we could rethink some of this accidental complexity introduced by sticking to the hardware tool metaphor.
@@ -3464,7 +3451,7 @@ One example of this problem is the [[handling of multichannel media|Multichannel
 !!Parallelism
 We need to work out guidelines for dealing with operations going on simultaneously. Certainly, this will divide the application in several different regions. As always, the primary goal is to avoid multithread problems altogether. Typically, this can be achieved by making matters explicit: externalizing state, make the processing subsystems stateless, queue and schedule tasks, use isolation layers.
 * the StateProxy is a key for the individual render processes state, which is managed in separate [[StateFrame]]s in the backend. The [[processing network|ProcNode]] is stateless.
-* the [[Fixture]] provides an isolation layer between the renderengine and the Session/EDL
+* the [[Fixture]] provides an isolation layer between the renderengine and the Session / high-level model
 * all EditingOperations are not threadsafe intentionally, because they are [[scheduled|ProcLayerScheduler]]
 </pre>
 </div>
@@ -3503,9 +3490,9 @@ Besides, they provide an __inward interface__ for the [[ProcNode]]s, enabling th
 &lt;&lt;&lt;
 
 !Summary
-We have several kinds of &quot;things&quot; organized as [[assets|Asset]] in the AssetManager, like media, clips, effects, codecs, configuration templates. Within the context of the [[EDL]], we can use these as [[&quot;Media Objects&quot;|MObjects]] &amp;mdash; especially, we can [[place|Placement]] them in various kinds within the EDL and relative to one another. Basically, this is the [[editing work|EditingOperations]] done by the user.
+We have several kinds of &quot;things&quot; organized as [[assets|Asset]] in the AssetManager, like media, clips, effects, codecs, configuration templates. Within the context of the [[Session]], we can use these as [[&quot;Media Objects&quot;|MObjects]] &amp;mdash; especially, we can [[place|Placement]] them in various kinds within the session and relative to one another. Basically, this is the [[editing work|EditingOperations]] done by the user.
 
-Now, from any given configuration within the EDL, we create sort or a frozen- and tied-down snapshot, here called [[&quot;Fixture&quot;|Fixture]], containing all currently active ~MObjects, broken down to elementary parts and made explicit if necessary. This Fixture acts as a isolation layer towards the Render Engine. We will hand it over to the  [[Builder]], which in turn will transform it into a network of connected [[render nodes|ProcNode]]. This network //implements//&amp;nbsp; the [[Render Engine|OverviewRenderEngine]].
+Now, from any given configuration within the session, we create sort or a frozen- and tied-down snapshot, here called [[&quot;Fixture&quot;|Fixture]], containing all currently active ~MObjects, broken down to elementary parts and made explicit if necessary. This Fixture acts as a isolation layer towards the Render Engine. We will hand it over to the  [[Builder]], which in turn will transform it into a network of connected [[render nodes|ProcNode]]. This network //implements//&amp;nbsp; the [[Render Engine|OverviewRenderEngine]].
 
 The system is ''open'' inasmuch every part mirrors the structure of corresponding parts in adjacent subsystems, and the transformation of any given structure from one subsystem (e.g. Asset) to another (e.g. Render Engine) is done with minimal &quot;magic&quot;. So the whole system should be able to handle completely new structures mostly by adding new configurations and components, without much need of rewriting basic workings.
 
@@ -3899,9 +3886,9 @@ When the Asset or the corresponding asset::Media is deleted, the dependant clip-
 In either case, we have to solve the ''problem of clip asset proliferation''
 
 !!multiplicity and const-ness
-The link between ~MObject and Asset should be {{{const}}}, so the clip can't change the media parameters. Because of separation of concerns, it would be desirable that the Asset can't //edit// the clip either (meaning {{{const}}} in the opposite direction as well). But unfortunately the asset::Clip is in power to delete the clip-MO and, moreover, handles out a smart ptr ([[Placement]]) referring to the clip-MO, which can (and should) be used to place the clip-MO within the EDL and to manipulate it consequently...
+The link between ~MObject and Asset should be {{{const}}}, so the clip can't change the media parameters. Because of separation of concerns, it would be desirable that the Asset can't //edit// the clip either (meaning {{{const}}} in the opposite direction as well). But unfortunately the asset::Clip is in power to delete the clip-MO and, moreover, handles out a smart ptr ([[Placement]]) referring to the clip-MO, which can (and should) be used to place the clip-MO within the session and to manipulate it consequently...
 [&gt;img[Outline of the Build Process|uml/fig131333.png]]
-At first sight the link between asset and clip-MO is a simple logical relation between entities, but it is not strictly 1:1 because typical media are [[multichannel|MultichannelMedia]]. Even if the media is compound, there is //only one asset::Clip//, because in the logical view we have only one &quot;clip-thing&quot;. On the other hand, in the Session/EDL, we have a compound clip ~MObject comprised of several elementary clip objects, each of which will refer to its own sub-media (channel) within the compound media (and don't forget, this structure can be tree-like)
+At first sight the link between asset and clip-MO is a simple logical relation between entities, but it is not strictly 1:1 because typical media are [[multichannel|MultichannelMedia]]. Even if the media is compound, there is //only one asset::Clip//, because in the logical view we have only one &quot;clip-thing&quot;. On the other hand, in the session, we have a compound clip ~MObject comprised of several elementary clip objects, each of which will refer to its own sub-media (channel) within the compound media (and don't forget, this structure can be tree-like)
 {{red{open question:}}} do the clip-MO's of the individual channels refer directly to asset::Media? does this mean the relation is different from the top level, where we have a relation to a asset::Clip??</pre>
 </div>
 <div title="RenderEngine" modifier="Ichthyostega" modified="200802031835" created="200802031820" tags="def" changecount="2">
@@ -4017,7 +4004,7 @@ __see also__
 </pre>
 </div>
 <div title="Rendering" modifier="Ichthyostega" modified="200806010307" created="200806010248" tags="def overview" changecount="3">
-<pre>The rendering of input sources to the desired output ports happens within the &amp;raquo;''Render Engine''&amp;laquo;, which can be seen as a collaboration of Proc-Layer, Backend together with external/library code for the actual data manipulation. In preparation of the RenderProcess, the [[Builder]] as wired up a network of [[processing nodes|ProcNode]] called the ''low-level model'' (in contrast to the high-level model of objects placed within the EDL/Session). Generally, this network is a &quot;Directed Acyclic Graph&quot; starting at the //exit nodes// (output ports) and pointing down to the //source readers.// In Lumiera, rendering is organized according to the ''pull principle'': when a specific frame of rendered data is requested from an exit node, a recursive calldown happens, as each node asks his predecessor(s) for the necessary input frame(s). This may include pulling frames from various input sources and for several time points, thus pull rendering is more powerful (but also more difficult to understand) than push rendering, where the process would start out with a given source frame.
+<pre>The rendering of input sources to the desired output ports happens within the &amp;raquo;''Render Engine''&amp;laquo;, which can be seen as a collaboration of Proc-Layer, Backend together with external/library code for the actual data manipulation. In preparation of the RenderProcess, the [[Builder]] as wired up a network of [[processing nodes|ProcNode]] called the ''low-level model'' (in contrast to the high-level model of objects placed within the session). Generally, this network is a &quot;Directed Acyclic Graph&quot; starting at the //exit nodes// (output ports) and pointing down to the //source readers.// In Lumiera, rendering is organized according to the ''pull principle'': when a specific frame of rendered data is requested from an exit node, a recursive calldown happens, as each node asks his predecessor(s) for the necessary input frame(s). This may include pulling frames from various input sources and for several time points, thus pull rendering is more powerful (but also more difficult to understand) than push rendering, where the process would start out with a given source frame.
 
 Rendering can be seen as a passive service available to the Backend, which remains in charge what to render and when. Render processes may be running in parallel without any limitations. All of the storage and data management falls into the realm of the Backend. The render nodes themselves are ''completely stateless'' &amp;mdash; if some state is necessary for carrying out the calculations, the backend will provide a //state frame// in addition to the data frames.</pre>
 </div>
@@ -4038,7 +4025,7 @@ Later on we expect a distinct __query subsystem__ to emerge, presumably embeddin
 <div title="ScopeLocator" modifier="Ichthyostega" modified="200911202035" created="200911192145" tags="def SessionLogic" changecount="10">
 <pre>A link to relate a compound of [[nested placement scopes|PlacementScope]] to the //current// session and the //current//&amp;nbsp; [[focus for querying|QueryFocus]] and exploring the structure. ScopeLocator is a singleton service, allowing to ''explore'' a [[Placement]] as a scope, i.e. discover any other placements within this scope, and allowing to locate the position of this scope by navigating up the ScopePath finally to reach the root scope of the HighLevelModel.
 
-In the general case, this user visible high-level-model of the [[objects|MObject]] within the session allows for more than tree-like associations, as a given [[Sequence|EDL]] might be bound into multiple [[timelines|Timeline]]. Effectively, this makes the ScopePath context dependent. The ScopeLocator is the point where the strictly tree-like hierarchy of placements is connected to this more elaborate scope and path structure. To this end, ScopeLocator maintaines a QueryFocusStack, to keep track of the current location in focus, in cooperation with the QueryFocus objects used by client code.
+In the general case, this user visible high-level-model of the [[objects|MObject]] within the session allows for more than tree-like associations, as a given [[Sequence]] might be bound into multiple [[timelines|Timeline]]. Effectively, this makes the ScopePath context dependent. The ScopeLocator is the point where the strictly tree-like hierarchy of placements is connected to this more elaborate scope and path structure. To this end, ScopeLocator maintaines a QueryFocusStack, to keep track of the current location in focus, in cooperation with the QueryFocus objects used by client code.
 &amp;rarr; see BindingScopeProblem
 &amp;rarr; see TimelineSequences
 
@@ -4071,14 +4058,22 @@ A scope path is a sequence of scopes, where each scope is implemented by a Place
 ** clear a path (reset to default)
 </pre>
 </div>
+<div title="Sequence" modifier="Ichthyostega" created="201001252327" tags="def" changecount="1">
+<pre>A sequence is a collection of media objects, arranged onto a track tree. Sequences are the building blocks within the session. To be visible and editable, a session is to be bound into a top-level [[Timeline]]. Alternatively, it may be used as a VirtualClip nested within another sequence.
+
+The sequences within the session establish a //logical grouping//, allowing for lots of flexibility. Actually, we can have several sequences within one session, and these sequences can be linked together or not, they may be arranged in temporal order or may constitue a logical grouping of clips used simultanously in compositional work etc. Multiple sequences can use the same or different tracks, and tracks as well are only an organisational (grouping) device. But at any time, we have exactly one [[Fixture]], derived automatically from all sequences and containing the content actually to be rendered.
+
+&amp;rarr; see considerations about [[the role of Tracks and Pipes in conjunction with the sequences|TrackPipeSequence]]
+</pre>
+</div>
 <div title="Session" modifier="Ichthyostega" modified="200911071800" created="200712100525" tags="def SessionLogic" changecount="8">
-<pre>The Session contains all informations, state and objects to be edited by the User. From a users view, the Session is synonymous to the //current Project//. It can be [[saved and loaded|SessionLifecycle]]. The individual Objects within the Session, i.e. Clips, Media, Effects, are contained in one (or several) collections within the Session, which we call [[EDL (Edit Decision List)|EDL]].
+<pre>The Session contains all informations, state and objects to be edited by the User. From a users view, the Session is synonymous to the //current Project//. It can be [[saved and loaded|SessionLifecycle]]. The individual Objects within the Session, i.e. Clips, Media, Effects, are contained in one (or several) collections within the Session, which we call [[Sequence]].
 &amp;rarr; [[Session design overview|SessionOverview]]
 
 !Session structure
 The Session object is a singleton &amp;mdash; actually it is a »~PImpl«-Facade object (because the actual implementation object can be swapped for (re)loading Sessions).&lt;br/&gt;The Session is the access point to the HighLevelModel; it is comprised of
 * a number of (independent) top-level [[time-lines|Timeline]]
-* some [[sequences|EDL]] to be used within these timelines
+* some [[sequences|Sequence]] to be used within these timelines
 * a [[scope structure|PlacementScope]] backed by an index, and a current QueryFocus
 * a set of ConfigRules to guide default behaviour {{red{planned as of 10/09}}}
 * the ''Fixture'' with a possibility to [[(re)build it|PlanningBuildFixture]] {{red{just partially designed as of 01/09}}}
@@ -4125,7 +4120,7 @@ MObject lifetime is managed by reference counting; all placements and client sid
 The HighLevelModel exposes two kinds of interfaces (which are interconnected btw): A generic, but somewhat low-level API, which is good for processing, and a more explicit API providing access to some meaningful entities within the model. Indeed, the latter (explicit top level entities) can be seen as a ''facade interface'' to the generic structures:
 * the [[Session]] object itself corresponds to the ModelRootMO
 * the one (or multiple) [[Timeline]] objects correspond to the BindingMO instances attached immediately below the model root
-* the [[sequences|EDL]] bound into these timelines (by the ~BindingMOs) correspond to the top level [[Track]]-~MObjects within each of these sequences.
+* the [[sequences|Sequence]] bound into these timelines (by the ~BindingMOs) correspond to the top level [[Track]]-~MObjects within each of these sequences.
 Thus, there is a convenient and meaningful access path through these facade objects, which of course actually is implemented by forwarding to the actual model elements (root, bindings, tracks)
 </pre>
 </div>
@@ -4191,17 +4186,17 @@ Objects are attached and manipulated by [[placements|Placement]]; thus the organ
 <div title="SessionOverview" modifier="Ichthyostega" modified="200911071816" created="200709272105" tags="design img" changecount="38">
 <pre>&lt;&lt;&lt;
 {{red{WARNING: Naming was discussed (11/08) and decided to be changed....}}}
-* [[EDL]] probably will be called ''Sequence''
+* the term [[EDL]] was phased out in favour of ''Sequence''
 * [[Session]] is largely synonymous to ''Project''
 * there seems to be a new entity called [[Timeline]] which holds the global Pipes
 &lt;&lt;&lt;
-The [[Session]] (sometimes also called //Project// ) contains all informations and objects to be edited by the User. Any state within the Proc-Layer is directly or indirectly rooted in the session. It can be saved and loaded. The individual Objects within the Session, i.e. Clips, Media, Effects, are contained in one or multiple collections within the Session, which we call [[Sequence(s)|EDL]]. Moreover, the sesion contains references to all the Media files used, and it contains various default or user defined configuration, all being represented as [[Asset]]. At any given time, there is //only one current session// opened within the application. The [[lifecycle events|SessionLifecycle]] of the session define the lifecycle of ~Proc-Layer as a whole.
+The [[Session]] (sometimes also called //Project// ) contains all informations and objects to be edited by the User. Any state within the Proc-Layer is directly or indirectly rooted in the session. It can be saved and loaded. The individual Objects within the Session, i.e. Clips, Media, Effects, are contained in one or multiple collections within the Session, which we call [[sequence(s)|Sequence]]. Moreover, the sesion contains references to all the Media files used, and it contains various default or user defined configuration, all being represented as [[Asset]]. At any given time, there is //only one current session// opened within the application. The [[lifecycle events|SessionLifecycle]] of the session define the lifecycle of ~Proc-Layer as a whole.
 
-The Session is close to what is visible in the GUI. From a user's perspective, you'll find a [[Timeline]]-like structure, containing an [[Sequence|EDL]], where various Media Objects are arranged and placed. The available building blocks and the rules how they can be combined together form Lumiera's [[high-level data model|HighLevelModel]]. Basically, besides the [[media objects|MObjects]] there are data connections and all processing is organized around processing chains or [[pipes|Pipe]], which can be either global (in the Session) or local (in real or virtual clips).
+The Session is close to what is visible in the GUI. From a user's perspective, you'll find a [[Timeline]]-like structure, containing an [[Sequence]], where various Media Objects are arranged and placed. The available building blocks and the rules how they can be combined together form Lumiera's [[high-level data model|HighLevelModel]]. Basically, besides the [[media objects|MObjects]] there are data connections and all processing is organized around processing chains or [[pipes|Pipe]], which can be either global (in the Session) or local (in real or virtual clips).
 
 !!!larger projects
 For larger editing projects the simple structure of a session containing &quot;the&quot; timeline is not sufficient. Rather
-* we may have several [[EDLs (=Sequences)|EDL]], e.g. one for each scene. These sequences can be even layered or nested (compositional work).
+* we may have several [[sequences|Sequence]], e.g. one for each scene. These sequences can be even layered or nested (compositional work).
 * within one project, there may be multiple, //independant Timelines// &amp;mdash; each of which may have an associated Viewer or Monitor
 Usually, when working with this stucture, you'll drill down starting from a timeline, trough a (top-level) sequence, down into a track, a clip, maybe even a embedded Sequence (VirtualClip), and from there even more down into a single attached effect. This constitutes a set of [[nested scopes|PlacementScope]]. Operations are to be [[dispatched|ProcDispatcher]] through a [[command system|CommandHandling]], including the target object [[by reference|MObjectRef]]. [[Timelines|Timeline]] on the other hand are always top-level objects and can't be combined further. You can render a single given timeline to output.
 &amp;rarr; see [[Relation of Project, Timelines and Sequences|TimelineSequences]]
@@ -4210,18 +4205,18 @@ Usually, when working with this stucture, you'll drill down starting from a time
 With all the structural complexities possible within such a session, we need an isolation layer to provide __one__ definitive state where all configuration has been made explicit. Thus the session manages a special consolidated view (object list), called [[the Fixture|Fixture]], which can be seen as all currently active objects placed onto a single timeline.
 
 !!!organisational devices
-The possibility of having multiple Sequences helps organizing larger projects. Each [[Sequence|EDL]] is just a logical grouping; because all effective properties of any MObject within this sequence are defined by the ~MObject itself and the [[Placement]], by which the object is anchored to some time point, some track, can be connected to some pipe, or linked to another object. In a similar manner, [[Tracks|Track]] are just another organisational aid for grouping objects, disabling them and defining common output pipes.
+The possibility of having multiple Sequences helps organizing larger projects. Each [[Sequence]] is just a logical grouping; because all effective properties of any MObject within this sequence are defined by the ~MObject itself and the [[Placement]], by which the object is anchored to some time point, some track, can be connected to some pipe, or linked to another object. In a similar manner, [[Tracks|Track]] are just another organisational aid for grouping objects, disabling them and defining common output pipes.
 
 !!!global pipes
 [&gt;img[draw/Proc.builder1.png]] Any session should contain a number of global [[(destination) pipes|Pipe]], typically video out and audio out. The goal is, to get any content producing or transforming object in some way connected to one of these outputs, either //by [[placing|Placement]] it directly// to some pipe, or by //placing it to a track// and having the track refer to some pipe. Besides the global destination pipes, we can use internal pipes to form busses or subgroups, either on a global (session) level, or by using the processing pipe within a [[virtual clip|VirtualClip]], which can be placed freely within the sequence(s). Normally, pipes just gather and mix data, but of course any pipe can have an attached effect chain.
-&amp;rarr; [[more on Tracks and Pipes within the Sequence|TrackPipeEDL]]
+&amp;rarr; [[more on Tracks and Pipes within the Sequence|TrackPipeSequence]]
 
 !!!default configuration
 While all these possibilities may seem daunting, there is a simple default configuration loaded into any pristine new session:
 It will contain a global video and audio out pipe, just one timeline holding a single sequence with a single track; this track will be configured with a fading device, to send any video and audio data encountered on enclosed objects to the global (master) pipes. So, by adding a clip with a simple absolute placement to this track and to some time position, the clip gets connected and rendered, after [[(re)building|PlanningBuildFixture]] the [[Fixture]] and passing the result to the [[Builder]] &amp;mdash; and using the resulting render nodes network (Render Engine).
 
 &amp;rarr; [[anatomy of the high-level model|HighLevelModel]]
-&amp;rarr; considerations regarding [[Tracks and Pipes within the EDL|TrackPipeEDL]]
+&amp;rarr; considerations regarding [[Tracks and Pipes within the session|TrackPipeSequence]]
 &amp;rarr; see [[Relation of Project, Timelines and Sequences|TimelineSequences]]
 </pre>
 </div>
@@ -4237,7 +4232,7 @@ On the //implementation side//&amp;nbsp; of this access interface class (i.e. wi
 
 !discovering structure
 The session can be seen as an agglomeration of nested and typed containers.
-Thus, at any point, we can explore the structure by asking for //contained objects of a specific type.// For example, at top level, it may be of interest to enumerate the [[timelines within this session|Timeline]] and to ennumerate the [[sequences|EDL]]. And in turn, on a given Sequence, it would be of interest to explore the tracks, and also maybe to iterate over all clips within this sequence.
+Thus, at any point, we can explore the structure by asking for //contained objects of a specific type.// For example, at top level, it may be of interest to enumerate the [[timelines within this session|Timeline]] and to ennumerate the [[sequences|Sequence]]. And in turn, on a given Sequence, it would be of interest to explore the tracks, and also maybe to iterate over all clips within this sequence.
 So, clearly, there are two flavours of such an contents exploration query: it could either be issued as an dedicated member function on the public API of the respective container object, e.g. {{{Track::getClips()}}} &amp;mdash; or it could be exposed as generic query function, relying on the implicit knowledge of the //current location//&amp;nbsp; rather.
 
 !problem of context and access path
@@ -4271,7 +4266,7 @@ And last but not least: the difficult part of this whole concept is encapsulated
 <pre>&lt;&lt;search&gt;&gt;&lt;&lt;closeAll&gt;&gt;&lt;&lt;permaview&gt;&gt;&lt;&lt;newTiddler&gt;&gt;&lt;&lt;saveChanges&gt;&gt;&lt;&lt;slider chkSliderOptionsPanel OptionsPanel &quot;options »&quot; &quot;Change TiddlyWiki advanced options&quot;&gt;&gt;</pre>
 </div>
 <div title="SiteSubtitle" modifier="Ichthyostega" modified="200802030406" created="200706190044" changecount="2">
-<pre>Building a Render Nodes Network from Objects in the EDL</pre>
+<pre>Building a Render Nodes Network from Objects in the Session</pre>
 </div>
 <div title="SiteTitle" modifier="Ichthyostega" modified="200708080212" created="200706190042" changecount="2">
 <pre>Engine</pre>
@@ -4540,17 +4535,17 @@ My Idea was to use [[type implementation constraints|StreamTypeImplConstraint]] 
 Instead, we should try to just connect the various subsystems via Interfaces and &amp;mdash; instead of just using some information, rather use some service to be located on an Interface to query other components for this information. The best approach of course is always to avoid the dependency altogether.
 
 !Examples
-* There is a separation between the __high level [[EDL]] view__ and the [[Fixture]]: the latter only accesses the MObjects and the Placement Interfaces.
-* same holds true for the Builder: it just uses the same Interfaces. The actual coupling is done rather //by type//, i.e. the Builder relies on several types of MObjects to exist and treats them via overloaded methods. He doesn't rely on a actual object structure layout in the EDL besides the requirement of having a [[Playlist]]
-* the Builder itself is a separation layer. Neither do the Objects in the EDL access directly [[Render Nodes|ProcNode]], nor do the latter call back into the EDL. Both connections seem to be necessary at first sight, but both can be avoided by using the Builder Pattern
+* There is a separation between the __high level [[Session]] view__ and the [[Fixture]]: the latter only accesses the MObjects and the Placement Interfaces.
+* same holds true for the Builder: it just uses the same Interfaces. The actual coupling is done rather //by type//, i.e. the Builder relies on several types of MObjects to exist and treats them via overloaded methods. He doesn't rely on a actual object structure layout in the session besides the requirement of having a [[Playlist]]
+* the Builder itself is a separation layer. Neither do the Objects in the sessionL access directly [[Render Nodes|ProcNode]], nor do the latter call back into the session. Both connections seem to be necessary at first sight, but both can be avoided by using the Builder Pattern
 * another separation exists between the Render Engine and the individual Nodes: The Render Engine doesn't need to know the details of the data types processed by the Nodes. It relies on the Builder having done the correct connections and just pulls out the calculated results. If there needs to be additional control information to be passed, then I would prefer to do a direct wiring of separate control connections to specialized components, which in turn could instruct the controller to change the rendering process.
 * to shield the rendering code of all complexities of thread communication and synchronization, we use the StateProxy
 </pre>
 </div>
 <div title="StructAsset" modifier="Ichthyostega" modified="200906071813" created="200709221353" tags="def classes img" changecount="9">
-<pre>Structural Assets are intended mainly for internal use, but the user should be able to see and query them. They are not &quot;loaded&quot; or &quot;created&quot; direcly, rather they //leap into existance // by creating or extending some other structures in the EDL/Session, hence the name. Some of the structural Asset parametrisation can be modified to control of some aspects of the Proc Layer's (default) behaviour.
+<pre>Structural Assets are intended mainly for internal use, but the user should be able to see and query them. They are not &quot;loaded&quot; or &quot;created&quot; direcly, rather they //leap into existance // by creating or extending some other structures in the session, hence the name. Some of the structural Asset parametrisation can be modified to control of some aspects of the Proc Layer's (default) behaviour.
 * [[Processing Patterns|ProcPatt]] encode information how to set up some parts of the render network to be created automatically: for example, when building a clip, we use the processing pattern how to decode and preprocess the actual media data.
-* [[Tracks|Track]] are one of the dimensions used for organizing the EDL. They serve as an Anchor to attach parametrisation of output pipe, overlay mode etc. By [[placing|Placement]] to a track, some media object inherits placement properties from this track.
+* [[Tracks|Track]] are one of the dimensions used for organizing the session data. They serve as an Anchor to attach parametrisation of output pipe, overlay mode etc. By [[placing|Placement]] to a track, some media object inherits placement properties from this track.
 * [[Pipes|Pipe]] form &amp;mdash; at least as visible to the user &amp;mdash; the basic building block of the render network, because the latter appears to be a collection of interconnected processing pipelines. (this is the //outward view; // in fact the render network consists of [[nodes|ProcNode]] and is [[built|Builder]] from the Pipes, clips, effects...)
 [&gt;img[Asset Classess|uml/fig131205.png]]
 !naming scheme
@@ -5735,8 +5730,8 @@ function addKeyDownHandlers(e)
 * a time axis in abolute time (WIP: not clear if this is an entity or just a conceptual definition) 
 * a PlayControler
 * a list of global Pipes representing the possible outputs (master busses)
-* //exactly one// top-level [[EDL (Sequence)|EDL]], which in turn may contain further nested ~EDLs (Sequences).
-Please note especially that following this design //a timeline doesn't define tracks.// [[Tracks form a Tree|Track]] and are part of the individual ~EDLs (Sequences), together with the media objects placed to these tracks.
+* //exactly one// top-level [[Sequence]], which in turn may contain further nested Sequences.
+Please note especially that following this design //a timeline doesn't define tracks.// [[Tracks form a Tree|Track]] and are part of the individual sequences, together with the media objects placed to these tracks.
 
 Within the Project, there may be ''multiple timelines'', to be viewed and rendered independently. But, being the top-level entities, multiple timelines may not be combined further. You can always just render (or view) one specific timeline. A given sequence may be referred directly or indirectly from multiple timelines though.
 
@@ -5744,10 +5739,10 @@ Within the Project, there may be ''multiple timelines'', to be viewed and render
 </pre>
 </div>
 <div title="TimelineSequences" modifier="Ichthyostega" modified="200811022211" created="200811011836" tags="design draft discuss img" changecount="14">
-<pre>There is a three-level hierarchy: [[Project|Session]], [[Timeline]], [[Sequence|EDL]]. Each project can contain ''multiple timelines'', to be viewed and rendered independently. But, being the top-level entities, these timelines may not be combined further. You can always just render (or view) one specific timeline. Each of those timelines refers to a Sequence, which is a bunch of [[media objects|MObject]] placed to a tree of [[tracks|Track]]. Of course it is possible to use ~Sub-EDLs (Sub-sequences) within the top-level sequence within a timeline to organize a movie into several scenes or chapters. 
+<pre>There is a three-level hierarchy: [[Project|Session]], [[Timeline]], [[Sequence]]. Each project can contain ''multiple timelines'', to be viewed and rendered independently. But, being the top-level entities, these timelines may not be combined further. You can always just render (or view) one specific timeline. Each of those timelines refers to a Sequence, which is a bunch of [[media objects|MObject]] placed to a tree of [[tracks|Track]]. Of course it is possible to use ~sub-sequences within the top-level sequence within a timeline to organize a movie into several scenes or chapters. 
 
 [&gt;img[Relation of Timelines, Sequences and MObjects within the Project|uml/fig132741.png]]
-As stated in the [[definition|Timeline]], a timeline refers to exactly one EDL (Sequence), and the latter defines a tree of [[tracks|Track]] and a bunch of media objects placed to these tracks. A Sequence may optionally also contain nested sequences as [[meta-clips|VirtualClip]]. Moreover, obviously several timelines (top-level entities) may refer to the same Sequence without problems.
+As stated in the [[definition|Timeline]], a timeline refers to exactly one sequence, and the latter defines a tree of [[tracks|Track]] and a bunch of media objects placed to these tracks. A Sequence may optionally also contain nested sequences as [[meta-clips|VirtualClip]]. Moreover, obviously several timelines (top-level entities) may refer to the same Sequence without problems.
 This is because the top-level entities (Timelines) are not permitted to be combined further. You may play or render a given timeline, you may even play several timelines simultaneously in different monitor windows, and these different timelines may incorporate the same sequence in a different way. The Sequence just defines the relations between some objects and may be placed relatively to another object (clip, label,...) or similar reference point, or even anchored at an absolute time if desired. In a similar open fashion, within the track-tree of a sequence, we may define a specific signal routing, or we may just fall back to automatic output wiring.
 
 !Attaching output
@@ -5775,37 +5770,36 @@ Of course, we can place other ~MObjects relative to some track (that's the main 
 <div title="TrackHandling" modifier="Ichthyostega" modified="200912080302" created="200804110013" tags="spec" changecount="24">
 <pre>What //exactly&amp;nbsp;// is denoted by &amp;raquo;Track&amp;laquo; &amp;mdash; //basically&amp;nbsp;// a working area to group media objects placed at this track at various time positions &amp;mdash; varies depending on context:
 * viewed as [[structural asset|StructAsset]], tracks are nothing but global identifiers (possibly with attached tags and description)
-* regarding the structure //within each [[EDL]],// tracks form a tree-like grid, the individual track being attached to this tree by a [[Placement]], thus setting up properties of placement (time reference origin, output connection, layer, pan) which will be inherited down to any objects located on this track and on child tracks, if not overridden more locally.
-* with respect to //object identity,// a given track-ID can have an incarnation or manifestation as real track-object within several [[EDLs|EDL]] (meaning you could select, disable or choose for rendering all objects in any EDL placed onto this track). Moreover, the track-//object// and the //placement&amp;nbsp;// of this track within the tree of tracks of a given EDL are two distinguishable entities (meaning a given track &amp;mdash; with a couple of objects located on it &amp;mdash; could be placed differently several times within the same EDL, for example with different start offset or with different layering, output mode or pan position)
-{{red{WARNING: as of 11/09, the meaning and relations are rather reverted}}}... EDL == Sequence and holds the track tree.
+* regarding the structure //within each [[Sequence]],// tracks form a tree-like grid, the individual track being attached to this tree by a [[Placement]], thus setting up properties of placement (time reference origin, output connection, layer, pan) which will be inherited down to any objects located on this track and on child tracks, if not overridden more locally.
+* with respect to //object identity,// a given track-ID can have an incarnation or manifestation as real track-object within several [[sequences|Sequence]] (meaning you could select, disable or choose for rendering all objects in any sequence placed onto this track). Moreover, the track-//object// and the //placement&amp;nbsp;// of this track within the tree of tracks of a given sequence are two distinguishable entities (meaning a given track &amp;mdash; with a couple of objects located on it &amp;mdash; could be placed differently several times within the same sequence {{red{really??}}}, for example with different start offset or with different layering, output mode or pan position)
 
 !Identification
 Tracks thus represent a blend of several concepts, but depending on the context it is allways clear which aspect is meant. Seen as [[assets|Asset]], tracks are known by a unique track-ID, which can be either [[queried|ConfigQuery]], or directly refered to by use of the asset-ID (which is a globally known hash). Usually, all referrals are via track-ID, including when you [[place|Placement]] an object onto a track. 
-Under some cincumstances though, especially from within the [[Builder]], we refer to a {{{Placement&lt;Track&gt;}}} rather, denoting a specific instantiation located at a distinct node within the tree of tracks of a given EDL. These latter referrals are always done by direct object reference, e.g. while traversing the track tree (generally there is no way to refer to a placement by name).
+Under some cincumstances though, especially from within the [[Builder]], we refer to a {{{Placement&lt;Track&gt;}}} rather, denoting a specific instantiation located at a distinct node within the tree of tracks of a given sequence. These latter referrals are always done by direct object reference, e.g. while traversing the track tree (generally there is no way to refer to a placement by name).
 
 !creating tracks
-Similar to [[pipes|Pipe]] and [[processing patterns|ProcPatt]], track-assets need not be created, but rather leap into existence on first referral. On the contrary, you need to explicitly create the {{{Placement&lt;Track&gt;}}} for attaching it to some node within the tree of tracks of an EDL. The public access point for creating such a placement is {{{asset::Struct::create(trackID}}} (i.e. the {{{asset::StructFactory}}}), which, as a convenience shortcut, can also be accessed from the interface of the track-objects within the EDL for adding new child tracks to a given track.
+Similar to [[pipes|Pipe]] and [[processing patterns|ProcPatt]], track-assets need not be created, but rather leap into existence on first referral. On the contrary, you need to explicitly create the {{{Placement&lt;Track&gt;}}} for attaching it to some node within the tree of tracks of an sequence. The public access point for creating such a placement is {{{asset::Struct::create(trackID}}} (i.e. the {{{asset::StructFactory}}}), which, as a convenience shortcut, can also be accessed from the interface of the track-objects within the sequence for adding new child tracks to a given track.
 
 !removal
-Deleting a Track is an operation with drastic consequences, as it will cause the removal of all child tracks and the deletion of //all object placements to this track,// which could cause the resepctive objects to go out of scope (being deleted automatically by the placements or other smart pointer classes in charge of them). On the contrary, removing a {{{Placement&lt;Track&gt;}}} from the tree of tracks of an EDL will just cause all objects placed onto this track to disappear (because they are no longer reachable for the build process). On re-adding it, they will show up again. (This is how things behave based on how we defined the relations of the entities to be. Another question is if we want to make this functionality available to the user. Judging from the use of Ardour's &amp;laquo;Playlists&amp;raquo;, such a feature may be quite helpful).
+Deleting a Track is an operation with drastic consequences, as it will cause the removal of all child tracks and the deletion of //all object placements to this track,// which could cause the resepctive objects to go out of scope (being deleted automatically by the placements or other smart pointer classes in charge of them). On the contrary, removing a {{{Placement&lt;Track&gt;}}} from the tree of tracks of an sequence will just cause all objects placed onto this track to disappear (because they are no longer reachable for the build process). On re-adding it, they will show up again. (This is how things behave based on how we defined the relations of the entities to be. Another question is if we want to make this functionality available to the user. Judging from the use of Ardour's &amp;laquo;Playlists&amp;raquo;, such a feature may be quite helpful).
 
 !using Tracks
-The '''Track Asset''' is a rather static object with limited capabilities. It's main purpose is to be a point of referral. Track assets have a description field and you may assign a list of [[tags|Tag]] to them (which could be used for binding ConfigRules).  Note that track assets are globally known within the session, they can't be limited to just one EDL (but you are allways free not to refer to some track from a given EDL). By virtue of this global nature, you can utilize the track assets to enable/disable a bunch of objects irrespective of what EDL they are located in, and probably it's a good idea to allow the selection of specific tracks for rendering.
-Matters are quite different for the placement of a Track within the tree of tracks of a given EDL, and for placing some media object onto a given track. The track placement defines properties which will be inherited to all objects on this track and on all child tracks and thus plays a key role for wiring the objects up to some output pipe. Typically, the top level track of each EDL has a placement-to &quot;the&quot; video and &quot;the&quot; audio master pipe.
+The '''Track Asset''' is a rather static object with limited capabilities. It's main purpose is to be a point of referral. Track assets have a description field and you may assign a list of [[tags|Tag]] to them (which could be used for binding ConfigRules).  Note that track assets are globally known within the session, they can't be limited to just one [[Sequence]] (but you are allways free not to refer to some track from a given sequence). By virtue of this global nature, you can utilize the track assets to enable/disable a bunch of objects irrespective of what sequence they are located in, and probably it's a good idea to allow the selection of specific tracks for rendering.
+Matters are quite different for the placement of a Track within the tree of tracks of a given sequence, and for placing some media object onto a given track. The track placement defines properties which will be inherited to all objects on this track and on all child tracks and thus plays a key role for wiring the objects up to some output pipe. Typically, the top level track of each sequence has a placement-to &quot;the&quot; video and &quot;the&quot; audio master pipe.
 
 !!!!details to note
-* Tracks are global, but the placement of a track is local within one EDL
-* when objects are placed onto a track, this is done by referal to the global track asset ID. But because this placement of some media object is allways inherently contained within one EDL, the //meaning&amp;nbsp;// of such a placement is to connect to the properties of any track-placement of this given track //within this EDL.//
+* Tracks are global, but the placement of a track is local within one sequence
+* when objects are placed onto a track, this is done by referal to the global track asset ID. But because this placement of some media object is allways inherently contained within one sequence, the //meaning&amp;nbsp;// of such a placement is to connect to the properties of any track-placement of this given track //within this sequence.//
 * thus tracks-as-ID appear as something global, but tracks-as-propperty-carrier appear to the user as something local and object-like.
-* in an extreme case, you'll add two different placements of a track at different points within the track tree of an EDL. And because the objects placed onto a track refer to the global track-ID, every object &quot;on&quot; this track //within this EDL&amp;nbsp;// will show up two times independently and possibly with different inherited properties (output pipe, layering mode, pan, temporal position)
-* an interesting configuration results from the fact that you can use an EDL as a [[&quot;meta clip&quot; or &quot;virtual clip&quot;|VirtualClip]] within another EDL. In this case, you'll probably configure the tracks of the &quot;inner&quot; EDL such as to send their output not to a global pipe but rather to the [[source ports|ClipSourcePort]] of the virtual clip (which are effectively local pipes). Thus, within the &quot;outer&quot; EDL, you could attach effects to the virutal clip, combine it with transitions and place it onto another track, and any missing properties of this latter placement are to be resolved within the &quot;outer&quot; EDL &lt;br/&gt;(it would be perfectly legal to construct a contrieved example when using the same track-ID within &quot;inner&quot; and the &quot;outer&quot; EDL. Because the Placement of this track will probably be different in the both ~EDLs, the behaviour of this placement could be quite different in the &quot;inner&quot; and the &quot;outer&quot; EDL. All of this may seem weird when discussed here in a textual and logical manner, but when viewed within the context and meaning of the various entities of the application, it's rather the way you'd expect it to be: you work locally and things behave as defined locally)
-* note further, the root of the tree of tracks within each EDL //is itself again a //{{{Placement&lt;Track&gt;}}}. There is no necessitiy for doing it this way, but it seemed more stright forward and logical to Ichthyo, as it allowes for an easy way of configuring some things (like ouput connections) as a default within one EDL. As every track can have a list of child tracks, you'll get the &quot;list of tracks&quot; you'd expect.
-* a nice consequence of the latter is: if you create a new EDL, it automatically gets one top-level track to start with, and this track will get a default configured placement (according to what is defined as [[default|DefaultsManagement]] within the current ConfigRules) &amp;mdash; typically starting at t=0 and being plugged into the master video and master audio pipe
+* in an extreme case, you'll add two different placements of a track at different points within the track tree of an sequence. And because the objects placed onto a track refer to the global track-ID, every object &quot;on&quot; this track //within this sequence&amp;nbsp;// will show up two times independently and possibly with different inherited properties (output pipe, layering mode, pan, temporal position)
+* an interesting configuration results from the fact that you can use an sequence as a [[&quot;meta clip&quot; or &quot;virtual clip&quot;|VirtualClip]] nested within another sequence. In this case, you'll probably configure the tracks of the &quot;inner&quot; sequence such as to send their output not to a global pipe but rather to the [[source ports|ClipSourcePort]] of the virtual clip (which are effectively local pipes). Thus, within the &quot;outer&quot; sequence, you could attach effects to the virutal clip, combine it with transitions and place it onto another track, and any missing properties of this latter placement are to be resolved within the &quot;outer&quot; sequence &lt;br/&gt;(it would be perfectly legal to construct a contrieved example when using the same track-ID within &quot;inner&quot; and the &quot;outer&quot; sequence. Because the Placement of this track will probably be different in the both sequences, the behaviour of this placement could be quite different in the &quot;inner&quot; and the &quot;outer&quot; sequence. All of this may seem weird when discussed here in a textual and logical manner, but when viewed within the context and meaning of the various entities of the application, it's rather the way you'd expect it to be: you work locally and things behave as defined locally)
+* note further, the root of the tree of tracks within each sequence //is itself again a //{{{Placement&lt;Track&gt;}}}. There is no necessitiy for doing it this way, but it seemed more stright forward and logical to Ichthyo, as it allowes for an easy way of configuring some things (like ouput connections) as a default within one sequence. As every track can have a list of child tracks, you'll get the &quot;list of tracks&quot; you'd expect.
+* a nice consequence of the latter is: if you create a new sequence, it automatically gets one top-level track to start with, and this track will get a default configured placement (according to what is defined as [[default|DefaultsManagement]] within the current ConfigRules) &amp;mdash; typically starting at t=0 and being plugged into the master video and master audio pipe
 * nothing prevents us from putting several objects at the same temporal location within one track. If the builder can't derive any additional layering information (which could be provided by some other configuration rules), then //there is no layering precedence// &amp;mdash; simply the object encountered first (or last) wins.
 * obviously, one wants the __edit function__ used to create such an overlapping placement&amp;nbsp; also to create an [[transition|TransitionsHandling]] between the overlapping objects. Meaning this edit function will automatically create an transition processor object and provide it with a placement such as to attach it to the region of overlap.
 </pre>
 </div>
-<div title="TrackPipeEDL" modifier="Ichthyostega" modified="200904242058" created="200711300405" tags="design discuss def decision Builder" changecount="27">
+<div title="TrackPipeSequence" modifier="Ichthyostega" modified="200904242058" created="200711300405" tags="design discuss def decision Builder" changecount="27">
 <pre>''towards a definition of »Track«''. We don't want to tie ourself to some naive and overly simplistic definition, just because it is convenient. For classical (analogue) media, tracks are physical entities dictated by the nature of the process by which the media works. Especially, Tape machines have read/writing heads, which creates fixed tracks to which to route the signals. This is a practical geometric necessity. For digital media, there is no such necessity. We are bound primarily by the editor's habits of working.
 
 !!!Assessment of Properties
@@ -5819,11 +5813,11 @@ This is to say we have //several degrees of freedom// within this organisational
 Starting with the assumption &quot;everything is just connected processing nodes&quot;, Tracks may seem superfluous. The problem with this approach is: it doesn't scale well. While it is fine to be able to connect clips and effects as we see fit (indeed, we want to build such a system), it is clearly not feasible to wire every clip manually to the output ports or add a panner effect to each and every audio sample. Because while editing, most of the time things are done in a fairly regular and systematic manner. Preferably we use the tracks as //preconfigured group setup// and just //place media onto them;// any such [[Placement]] can do the necessary wiring semi-automatic (rule-based).
 
 !!!the constant part
-there seems to be some non time-varying part in each EDL, that doesn't fit well with the simple model &quot;objects on a timeline&quot;. Tracks seen as an organisational grid fall into this category: they are a global property of the given EDL. They could be associated to the Session as a whole, but effectively this would subvert the concept of having [[several EDLs|SessionOverview]]. On the other hand, 
+there seems to be some non time-varying part in each sequence, that doesn't fit well with the simple model &quot;objects on a timeline&quot;. Tracks seen as an organisational grid fall into this category: they are a global property of the given sequence. They could be associated to the Session as a whole, but effectively this would subvert the concept of having [[several sequences|SessionOverview]]. On the other hand, 
 [[pipes|Pipe]] for Video and Sound output are obviously a global property of the Session. There can be several global pipes forming a matrix of subgroup busses. We could add ports or pipes to tracks by default as well, but we don't do this, because, again, this would run counter to our attempt of treating tracks as merely organisational entities. We have special [[source ports|ClipSourcePort]] on individual clips though, and we will have ports on [[virtual clips|VirtualClip]] too.
 
 !Design
-[[Tracks|Track]] are just a structure used to organize the Media Objects within the EDL. They form a grid, and besides that, they have no special meaning. It seems convenient to make the tracks not just a list, but allow grouping (tree structure) right from start. __~MObjects__ are ''placed'' rather than wired. The wiring is derived from the __Placement__. Placing can happen in several dimensions:
+[[Tracks|Track]] are just a structure used to organize the Media Objects within the session. They form a grid, and besides that, they have no special meaning. It seems convenient to make the tracks not just a list, but allow grouping (tree structure) right from start. __~MObjects__ are ''placed'' rather than wired. The wiring is derived from the __Placement__. Placing can happen in several dimensions:
 * placing in time will define when to activate and show the object.
 * placing onto a track associates the ~MObject with this track; the GUI will show it on this track and the track may be used to resolve other properties of the object.
 * placing to a __Pipe__ brings the object in conjunction with this pipe for the build process. It will be considered when building the render network for this pipe. Source-like objects (clips and exit nodes of effect chains) will be connected to the pipe, while transforming objects (effects) are inserted at the pipe. (you may read &quot;placed to pipe X&quot; as &quot;plug into pipe X&quot;)
@@ -5863,9 +5857,9 @@ Thus, to re-state the problem more specifically, we want the //definition//&amp;
 <div title="VirtualClip" modifier="Ichthyostega" modified="200808160257" created="200804110321" tags="def" changecount="13">
 <pre>A ''~Meta-Clip'' or ''Virtual Clip'' (both are synonymous) denotes a clip which doesn't just pull media streams out of a source media asset, but rather provides the results of rendering a complete sub-network. In all other respects it behaves exactly like a &quot;real&quot; clip, i.e. it has [[source ports|ClipSourcePort]], can have attached effects (thus forming a local render pipe) and can be placed and combined with other clips. Depending on what is wired to the source ports, we get two flavours:
 * a __placeholder clip__ has no &quot;embedded&quot; content. Rather, by virtue of placements and wiring requests, the output of some other pipe somewhere in the session will be wired to the clip's source ports. Thus, pulling data from this clip will effectively pull from these source pipes wired to it.
-* a __nested EDL __ is like the other ~EDLs in the Session, just that any missing placement properties will be derived from the Virtual Clip, which is thought as to &quot;contain&quot; the objects of the nested EDL. Typically, this also [[configures the tracks|TrackHandling]] of the &quot;inner&quot; EDL such as to connect any output to the source ports of the Virtual Clip.
+* a __nested sequence __ is like the other sequences in the Session, just that any missing placement properties will be derived from the Virtual Clip, which is thought as to &quot;contain&quot; the objects of the nested sequence. Typically, this also [[configures the tracks|TrackHandling]] of the &quot;inner&quot; sequence such as to connect any output to the source ports of the Virtual Clip.
 
-Like any &quot;real&quot; clip, Virtual Clips have a start offset and a length, which will simply translate into an offset of the frame number pulled from the Virtual Clip's source connection or embedded EDL, making it possible to cut, splice, trim and roll them as usual. This of course implies we can have several instances of the same virtual clip with different start offset and length placed differently. The only limitation is that we can't handle cyclic dependencies for pulling data (which has to be detected and flagged as an error by the builder)
+Like any &quot;real&quot; clip, Virtual Clips have a start offset and a length, which will simply translate into an offset of the frame number pulled from the Virtual Clip's source connection or embedded sequence, making it possible to cut, splice, trim and roll them as usual. This of course implies we can have several instances of the same virtual clip with different start offset and length placed differently. The only limitation is that we can't handle cyclic dependencies for pulling data (which has to be detected and flagged as an error by the builder)
 </pre>
 </div>
 <div title="VisitingToolImpl" modifier="Ichthyostega" modified="200802031822" created="200801032003" tags="impl excludeMissing" changecount="21">
@@ -5909,7 +5903,7 @@ Visitor helps us to circumvent this trap: the basic operations can be written ag
 !!well suited for using visitors
 generally speaking, visitors are preferable when the underlying element type hierarchy is rather stable, but new operations are to be added frequently.
 * Implementation of the builder. All sorts of special treatments of some MObject kinds can be added later
-* Operating on the Object collection within the EDL. Effectively, this decouples the invoking interface on the EDL completely from the special operations to be carried out on individual objects.
+* Operating on the Object collection within the session. Effectively, this decouples the invoking interface on the session completely from the special operations to be carried out on individual objects.
 
 To see an simple example of our &quot;visiting tool&quot;, have a look at {{{tests/components/common/visitingtooltest.cpp}}}
 </pre>
@@ -5918,21 +5912,21 @@ To see an simple example of our &quot;visiting tool&quot;, have a look at {{{tes
 <pre>The Intention of this text is to help you understanding the design and to show some notable details.
 
 !!!!Starting Point
-Design is an experiment to find out how things are related. We can't //plan// a Design top down, rather we have to start at some point with some hypothesis and look how it works out. The point of origin for Ichthyo's design is the observation that the Render Engine needs some Separation of Concerns to get the complexity down. And especially, this design ''uses three different Levels'' or Layers within the Render Engine and EDL.
-* the __high level__ within the EDL uses uniformly treated MObjects which are assembled/glued together by a network of [[Placements|Placement]].&lt;br&gt; It is supposed that the GUI will present this and //only this view //to the user, giving him the ability to work with the objects
+Design is an experiment to find out how things are related. We can't //plan// a Design top down, rather we have to start at some point with some hypothesis and look how it works out. The point of origin for Ichthyo's design is the observation that the Render Engine needs some Separation of Concerns to get the complexity down. And especially, this design ''uses three different Levels'' or Layers within the Render Engine and Session.
+* the __high level__ within the session uses uniformly treated MObjects which are assembled/glued together by a network of [[Placements|Placement]].&lt;br&gt; It is supposed that the GUI will present this and //only this view //to the user, giving him the ability to work with the objects
 * the __builder level__ works on a stripped-down subset of this ~MObject network: it uses the //same Object instances// but only assembled by [[Explicit Placements|ExplicitPlacement]] which locate the objects //on a simple (track, time) grid.// It's the job of the builder to create out of this simplified Network the Configuration of [[Render Nodes|ProcNode]] needed to do the actual rendering
 * the __engine level__ uses solely [[Render Pipeline Nodes (ProcNode)|ProcNode]], i.e. a Graph of interconnected processing nodes. The important constraint here is that //any decisions are ruled out//. The core Render Engine with all its nodes is lacking the ability to do any tests and checks and has no possibility to branch or reconfigure anything. (this is an especially important lesson I draw from studying the current Cinelerra source code)
 
 !!!!Performance Considerations
 * within the Engine the Render Nodes are containing the ''inner loop'', whose contents are to be executed hundred thousands to million times per frame. Every dispensable concern, which is not strictly necessary to get the job done, is worth the effort of factoring out here.
 * performance pressure at the builder level is far lower, albeit still existent. Compared to the effort of calculating a single processing step, looping even over some hundred nodes and executing quite some logic is negligible. Danger bears on creating memory pressure or causing awkward execution patterns (in the backend) rather. So the main concern should be the ability of reconfiguring different aspects separately without much effort. If for example a given render strategy works out to create lots of deadlocks and waitstates in the backend, the design should account for the possibility to exchange it with another strategy without having to modify the inner workings of the build process.&lt;br&gt;On the other hand, I wouldn't be overly concerned to trigger the build process yet another time to get some specific problem solved. However, the possibility to share one Render configuration for, say, 20 sec of video, instead of triggering the build process 500 times for every frame in this timespan, would sure be worth considering if it's not overly complicated to achieve.
-* contrary to this, the EDL level is harmless with respect to performance. Getting acceptable responsiveness on user interactions is sufficient. We could consider using high level languages here, for it is much more important being able to express and handle complicated object relationships with relative ease. The only (indirect) concern is to avoid generating memory pressure inadvertently. Edit actions generating memory peaks could interfere with an ongoing background render process. If we decide to use lots of relation objects or transient objects, we should use an object pool or still better an garbage collector.
+* contrary to this, the session level is harmless with respect to performance. Getting acceptable responsiveness on user interactions is sufficient. We could consider using high level languages here, for it is much more important being able to express and handle complicated object relationships with relative ease. The only (indirect) concern is to avoid generating memory pressure inadvertently. Edit actions generating memory peaks could interfere with an ongoing background render process. If we decide to use lots of relation objects or transient objects, we should use an object pool or still better an garbage collector.
 
 !!!!Concepts and Interfaces
 This design strives to build each level and subsystem around some central concepts, which are directly expressed as Interfaces. Commonly used Interfaces clamp the different layers.
-* MObject gives an uniform view on all the various entities to be arranged in the EDL.
+* MObject gives an uniform view on all the various entities to be arranged in the session.
 * all the arranging and relating of ~MObjects is abstracted as [[Placement]]. The contract of a Placement is that it always has a related Subject, that we can change the //way of placement&amp;nbsp;// by adding and removing [[&quot;locating pins&quot;|LocatingPin]], call some test methods on it (still to be defined), and, finally, that we can get an ExplicitPlacement from it.
-* albeit being a special form of a Placement, the ExplicitPlacement is treated as a separate concept. With respect to edit operations within the EDL, it can stand for any sort of Placement. On the other hand the Builder takes a list of ~ExplicitPlacements as input for building up the Render Engine(s). This corresponds to the fact that the render process needs to organize the things to be done on a simple two dimensional grid of (output channel / time). The (extended) contract of an ~ExplicitPlacement provides us with this (output,time).
+* albeit being a special form of a Placement, the ExplicitPlacement is treated as a separate concept. With respect to edit operations within the session, it can stand for any sort of Placement. On the other hand the Builder takes a list of ~ExplicitPlacements as input for building up the Render Engine(s). This corresponds to the fact that the render process needs to organize the things to be done on a simple two dimensional grid of (output channel / time). The (extended) contract of an ~ExplicitPlacement provides us with this (output,time).
 * on the lower end of the builder, everything is organized around the Concept of a ProcNode, which enables us to //pull// one (freely addressable) Frame of calculated data. Further, the ProcNode has the ability to be wired with other nodes and [[Parameter Providers|ParamProvider]]
 * the various types of data to be processed are abstracted away under the notion of a [[Frame]]. Basically, a Frame is an Buffer containing an Array of raw data and it can be located by some generic scheme, including (at least) the absolute starting time (and probably some type or channel id).
 * All sorts of (target domain) [[parameters|Parameter]] are treated uniformly. There is a distinction between Parameters (which //could// be variable) and Configuration (which is considered to be fixed). In this context, [[Automation]] just appears as a special kind of ParamProvider.
@@ -5942,10 +5936,10 @@ This design strives to build each level and subsystem around some central concep
 An important goal of this approach is to be able to push down the treatment of variations and special cases. We don't need to know what kind of Placement links one MObject to another, because it is sufficient for us to get an ExplicitPlacement. The Render Engine doesn't need to know if it is pulling audio Frames or video Frames or GOPs or OpenGL textures. It simply relies on the Builder wiring together the correct node types. And the Builder in turn does so by using some overloaded function of an iterator or visitor. At many instances, instead of doing decisions in-code or using hard wired defaults, a system of [[configuration rules|ConfigRules]] is invoked to get a suitable default as a solution (and, as a plus, this provides points of customisation for advanced users). At engine level, there is no need for the video processing node to test for the colormodel on every screen line, because the Builder has already wired up the fitting implementation routine. All of this helps reducing complexity and quite some misconceptions can be detected already by the compiler.
 
 !!!!Explicit structural differences
-In case it's not already clear: we don't have &quot;the&quot; Render Engine, rather we construct a Render Engine for each structurally differing part of the timeline. (please relate this to the current Cinelerra code base, which constructs and builds up the render pipeline for each frame separately). No need to call back from within the pipeline to find out if a given plugin is enabled or to see if there are any automation keyframes. We don't need to pose any constraints on the structuring of the objects in the EDL, besides the requirement to get an ExplicitPlacement for each. We could even loosen the use of the common metaphor of placing media sequences on fixed tracks, if we want to get at a more advanced GUI at some point in the future.
+In case it's not already clear: we don't have &quot;the&quot; Render Engine, rather we construct a Render Engine for each structurally differing part of the timeline. (please relate this to the current Cinelerra code base, which constructs and builds up the render pipeline for each frame separately). No need to call back from within the pipeline to find out if a given plugin is enabled or to see if there are any automation keyframes. We don't need to pose any constraints on the structuring of the objects in the session, besides the requirement to get an ExplicitPlacement for each. We could even loosen the use of the common metaphor of placing media sequences on fixed tracks, if we want to get at a more advanced GUI at some point in the future.
 
 !!!!Stateless Subsystems
-The &amp;raquo;current setup&amp;laquo; of the objects in the EDL is sort of a global state. Same holds true for the Controller, as the Engine can be at playback, it can run a background render or scrub single frames. But the whole complicated subsystem of the Builder and one given Render Engine configuration can be made ''stateless''. As a benefit of this we can run this subsystems multi-threaded without the need of any precautions (locking, synchronizing). Because all state information is just passed in as function parameters and lives in local variables on the stack, or is contained in the StateProxy which represents the given render //process// and is passed down as function parameter as well. (note: I use the term &quot;stateless&quot; in the usual, slightly relaxed manner; of course there are some configuration values contained in instance variables of the objects carrying out the calculations, but this values are considered to be constant over the course of the object usage).
+The &amp;raquo;current setup&amp;laquo; of the objects in the session is sort of a global state. Same holds true for the Controller, as the Engine can be at playback, it can run a background render or scrub single frames. But the whole complicated subsystem of the Builder and one given Render Engine configuration can be made ''stateless''. As a benefit of this we can run this subsystems multi-threaded without the need of any precautions (locking, synchronizing). Because all state information is just passed in as function parameters and lives in local variables on the stack, or is contained in the StateProxy which represents the given render //process// and is passed down as function parameter as well. (note: I use the term &quot;stateless&quot; in the usual, slightly relaxed manner; of course there are some configuration values contained in instance variables of the objects carrying out the calculations, but this values are considered to be constant over the course of the object usage).
 </pre>
 </div>
 <div title="WiringDescriptor" modifier="Ichthyostega" modified="200807132352" created="200807132338" tags="Rendering impl spec dynamic" changecount="3">
