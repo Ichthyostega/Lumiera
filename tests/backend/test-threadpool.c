@@ -66,7 +66,7 @@ TEST ("threadpool1")
 }
 
 
-TEST ("basic-acquire-release")
+TEST ("two-thread-acquire")
 {
   ECHO("start by initializing the threadpool");
   lumiera_threadpool_init();
@@ -90,13 +90,7 @@ TEST ("basic-acquire-release")
   ECHO("thread 2 state=%s", lumiera_threadstate_names[t2->state]);
   CHECK(LUMIERA_THREADSTATE_IDLE == t2->state);
 
-  ECHO("releasing thread 1");
-  //lumiera_threadpool_release_thread(t1);
-  ECHO("thread 1 has been released");
-
-  ECHO("releasing thread 2");
-  //lumiera_threadpool_release_thread(t2);
-  ECHO("thread 2 has been released");
+  ECHO("cleaning up");
 
   lumiera_threadpool_destroy();
 }
