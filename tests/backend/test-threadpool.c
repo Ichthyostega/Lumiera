@@ -30,18 +30,18 @@
 
 void is_prime(void * arg)
 {
-  int number = *(int *)arg;
-  int prime = 1;
+  unsigned long long number = *(unsigned long long *)arg;
+  unsigned long long prime = 1;
 
-  for (int x = number; x >= sqrt(number); --x)
+  for (unsigned long long x = number-1; x >= sqrt(number); --x)
     {
-      if (number % x == 0)
+      if ((number % x) == 0)
 	{
 	  prime = 0;
 	  break;
 	}
     }
-  *(int *)arg = prime;
+  *(unsigned long long *)arg = prime;
 }
 
 TESTS_BEGIN
@@ -66,7 +66,7 @@ TEST ("threadpool1")
 }
 
 
-TEST ("basic-acquire-release")
+TEST ("two-thread-acquire")
 {
   ECHO("start by initializing the threadpool");
   lumiera_threadpool_init();
@@ -90,13 +90,7 @@ TEST ("basic-acquire-release")
   ECHO("thread 2 state=%s", lumiera_threadstate_names[t2->state]);
   CHECK(LUMIERA_THREADSTATE_IDLE == t2->state);
 
-  ECHO("releasing thread 1");
-  //lumiera_threadpool_release_thread(t1);
-  ECHO("thread 1 has been released");
-
-  ECHO("releasing thread 2");
-  //lumiera_threadpool_release_thread(t2);
-  ECHO("thread 2 has been released");
+  ECHO("cleaning up");
 
   lumiera_threadpool_destroy();
 }
@@ -180,11 +174,11 @@ TEST ("process-function")
 {
   // this is what the scheduler would do once it figures out what function a job needs to run
   LumieraThread t;
-  int number = 1073676287;
+  unsigned long long number = 10000019;
 
   lumiera_threadpool_init();
 
-  ECHO ("the input to the function is %d", number);
+  ECHO ("the input to the function is %llu", number);
 
   t = lumiera_thread_run (LUMIERA_THREADCLASS_INTERACTIVE,
 			  &is_prime,
@@ -193,8 +187,9 @@ TEST ("process-function")
 			  &NOBUG_FLAG(NOBUG_ON)); // struct nobug_flag* flag)
 
   // cleanup
-  ECHO("finished waiting");
   lumiera_threadpool_destroy();
+  ECHO("the result is %llu", number);
+
 }
 
 TESTS_END

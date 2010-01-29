@@ -147,7 +147,6 @@ lumiera_threadpool_acquire_thread (enum lumiera_thread_class kind,
   return ret;
 }
 
-// TODO: rename to lumiera_threadpool_park_thread
 void
 lumiera_threadpool_release_thread(LumieraThread thread)
 {
