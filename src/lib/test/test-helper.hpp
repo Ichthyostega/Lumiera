@@ -129,15 +129,15 @@ namespace test{
  * an assertion failure. In case of an exception, the #lumiera_error
  * state is checked, cleared and verified.
  */
-#define VERIFY_ERROR(ERROR_ID, ERRONEOUS_STATEMENT) \
-          try                             \
-            {                             \
-              ERRONEOUS_STATEMENT ;       \
-              NOTREACHED();               \
-            }                             \
-          catch (...)                     \
-            {                             \
-              ASSERT (lumiera_error () == LUMIERA_ERROR_##ERROR_ID ); \
+#define VERIFY_ERROR(ERROR_ID, ERRONEOUS_STATEMENT)                             \
+          try                                                                   \
+            {                                                                   \
+              ERRONEOUS_STATEMENT ;                                             \
+              NOTREACHED("'%s' resisted to fail", #ERRONEOUS_STATEMENT);        \
+            }                                                                   \
+          catch (...)                                                           \
+            {                                                                   \
+              CHECK (lumiera_error_expect (LUMIERA_ERROR_##ERROR_ID));          \
             }
 
 #endif
