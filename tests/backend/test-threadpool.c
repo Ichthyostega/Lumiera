@@ -191,7 +191,7 @@ TEST ("process-function")
 {
   // this is what the scheduler would do once it figures out what function a job needs to run
   LumieraThread t;
-  unsigned long long number = 10000019;
+  unsigned long long number = 1307;
 
   lumiera_threadpool_init();
 
