@@ -14,6 +14,7 @@ err: the result is 1
 END
 
 TEST "acquire two threads" two-thread-acquire <<END
+err: start by initializing the threadpool
 err: acquiring thread 1
 err: acquiring thread 2
 err: thread 1 state=IDLE
