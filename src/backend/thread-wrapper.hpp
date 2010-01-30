@@ -96,6 +96,7 @@ namespace backend {
           : operation_(operation_to_execute)
           {
             REQUIRE (!lumiera_error(), "Error pending at thread start") ;
+            TODO("the threadclass needs to become a parameter");
             handle =
               lumiera_thread_run ( LUMIERA_THREADCLASS_INTERACTIVE | additionalFlags
                                  , &run         // invoking the run helper and..
@@ -200,9 +201,10 @@ namespace backend {
         lumiera_err errorInOtherThread =
             lumiera_thread_join (thread_);
         thread_ = 0;
-        
+
+        TODO("check this, is error::State approbiate or do we want Runtime as thrown by throwOnError()");
         if (errorInOtherThread)
-          throw lumiera::error::State ("Thread terminated with error:");
+          throw lumiera::error::State ("Thread terminated with error:", errorInOtherThread);
       }
   };
   
