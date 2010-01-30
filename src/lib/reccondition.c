@@ -46,8 +46,7 @@ lumiera_reccondition_init (LumieraReccondition self,
 {
   if (self)
     {
-      if (recursive_mutexattr_once == PTHREAD_ONCE_INIT)
-        pthread_once (&recursive_mutexattr_once, recursive_mutexattr_init);
+      pthread_once (&recursive_mutexattr_once, recursive_mutexattr_init);
 
       pthread_cond_init (&self->cond, NULL);
       pthread_mutex_init (&self->reccndmutex, &recursive_mutexattr);
