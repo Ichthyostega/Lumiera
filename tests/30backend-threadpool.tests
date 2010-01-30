@@ -22,4 +22,7 @@ err: thread 2 state=IDLE
 err: cleaning up
 END
 
+TEST "many sleepy threads" many-sleepy-threads <<END
+END
+
 PLANNED "error cleared on join"

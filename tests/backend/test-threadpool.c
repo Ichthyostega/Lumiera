@@ -44,6 +44,14 @@ void is_prime(void * arg)
   *(unsigned long long *)arg = prime;
 }
 
+void sleep_fn(void * arg)
+{
+  unsigned int usec = *(int *)arg;
+
+  unsigned int result = usleep (usec);
+  *(int *)arg = result;
+}
+
 TESTS_BEGIN
 
 TEST ("threadpool-basic")
@@ -105,13 +113,13 @@ TEST ("two-thread-acquire")
   lumiera_threadpool_destroy();
 }
 
-#if 0
-TEST ("many-acquire-release")
+TEST ("many-sleepy-threads")
 {
 
   const int threads_per_pool_count = 10;
+  unsigned int delay = 13;
 
-  lumiera_threadpool_init(10);
+  lumiera_threadpool_init();
   LumieraThread threads[threads_per_pool_count*LUMIERA_THREADCLASS_COUNT];
   
   for (int kind = 0; kind < LUMIERA_THREADCLASS_COUNT; ++kind)
@@ -119,20 +127,19 @@ TEST ("many-acquire-release")
       for (int i = 0; i < threads_per_pool_count; ++i)
 	{
 	  threads[i+kind*threads_per_pool_count] =
-	    lumiera_threadpool_acquire_thread(kind,
-					      "test purpose",
-					      &NOBUG_FLAG(NOBUG_ON));
+	    lumiera_thread_run(kind,
+			       &sleep_fn,
+			       (void *) &delay,
+			       "just sleep a bit",
+			       &NOBUG_FLAG(NOBUG_ON));
 	}
-    }
-
-  for (int i = 0; i < threads_per_pool_count*LUMIERA_THREADCLASS_COUNT; ++i)
-    {
-      lumiera_threadpool_release_thread(threads[i]);
     }
 
   lumiera_threadpool_destroy();
 
 }
+
+#if 0
 
 TEST ("toomany-acquire-release")
 {
