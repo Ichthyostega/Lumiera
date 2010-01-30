@@ -401,10 +401,10 @@ namespace test  {
 
       public:
         SubsystemRunner_test()
-        { lumiera_threadpool_init(); }
+        { }
         
         ~SubsystemRunner_test()
-        { lumiera_threadpool_destroy(); }
+        { }
 
       };
     
