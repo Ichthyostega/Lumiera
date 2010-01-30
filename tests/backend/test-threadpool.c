@@ -83,17 +83,11 @@ TEST ("two-thread-acquire")
 				      "test purpose",
 				      &NOBUG_FLAG(NOBUG_ON));
 
-  LUMIERA_CONDITION_SECTION(NOBUG_ON, &t1->signal)
-    {
-      ECHO("thread 1 state=%s", lumiera_threadstate_names[t1->state]);
-      CHECK(LUMIERA_THREADSTATE_IDLE == t1->state);
-    }
+  ECHO("thread 1 state=%s", lumiera_threadstate_names[t1->state]);
+  CHECK(LUMIERA_THREADSTATE_IDLE == t1->state);
 
-  LUMIERA_CONDITION_SECTION(NOBUG_ON, &t2->signal)
-    {
-      ECHO("thread 2 state=%s", lumiera_threadstate_names[t2->state]);
-      CHECK(LUMIERA_THREADSTATE_IDLE == t2->state);
-    }
+  ECHO("thread 2 state=%s", lumiera_threadstate_names[t2->state]);
+  CHECK(LUMIERA_THREADSTATE_IDLE == t2->state);
 
   LUMIERA_CONDITION_SECTION(NOBUG_ON, &t1->signal)
     {
