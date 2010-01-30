@@ -130,6 +130,15 @@ lumiera_threadpool_acquire_thread (enum lumiera_thread_class kind,
             {
               ret = lumiera_thread_new (kind, purpose, flag,
                                         &threadpool.pool[kind].pthread_attrs);
+              TRACE (threadpool, "created thread %p", ret);
+
+              /*
+                a newly created thread flows somewhere in the airm it isnt released yet into the idle list,
+                nor in the working list, While we are holding this CONDITION_SECION we can safely put it on the working list,
+                this removes a small race.
+              */
+              llist_insert_head (&threadpool.pool[kind].working_list, &ret->node);
+
               ENSURE (ret, "did not create a valid thread");
               TODO ("no error handing, let the resourcecollector do it, no need when returning the thread");
               LUMIERA_CONDITION_WAIT (!llist_is_empty (&threadpool.pool[kind].idle_list));
@@ -137,6 +146,7 @@ lumiera_threadpool_acquire_thread (enum lumiera_thread_class kind,
           // use an existing thread, pick the first one
           // remove it from the pool's list
           ret = (LumieraThread) (llist_head (&threadpool.pool[kind].idle_list));
+          TRACE (threadpool, "got thread %p", ret);
 
           REQUIRE (ret->state == LUMIERA_THREADSTATE_IDLE, "trying to return a non-idle thread (state=%s)", lumiera_threadstate_names[ret->state]);
 
