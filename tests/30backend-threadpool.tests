@@ -16,9 +16,7 @@ END
 TEST "acquire two threads" two-thread-acquire <<END
 err: acquiring thread 1
 err: acquiring thread 2
-err: thread 1 kind=INTERACTIVE
 err: thread 1 state=IDLE
-err: thread 2 kind=INTERACTIVE
 err: thread 2 state=IDLE
 err: cleaning up
 END
