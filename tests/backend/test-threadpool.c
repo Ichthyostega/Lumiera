@@ -71,27 +71,43 @@ TEST ("two-thread-acquire")
   ECHO("start by initializing the threadpool");
   lumiera_threadpool_init();
   ECHO("acquiring thread 1");
+
   LumieraThread t1 =
     lumiera_threadpool_acquire_thread(LUMIERA_THREADCLASS_INTERACTIVE,
 				      "test purpose",
 				      &NOBUG_FLAG(NOBUG_ON));
+
   ECHO("acquiring thread 2");
   LumieraThread t2 =
     lumiera_threadpool_acquire_thread(LUMIERA_THREADCLASS_IDLE,
 				      "test purpose",
 				      &NOBUG_FLAG(NOBUG_ON));
 
-  ECHO("thread 1 kind=%s", lumiera_threadclass_names[t1->kind]);
-  CHECK(LUMIERA_THREADCLASS_INTERACTIVE == t1->kind);
-  ECHO("thread 1 state=%s", lumiera_threadstate_names[t1->state]);
-  CHECK(LUMIERA_THREADSTATE_IDLE == t1->state);
-  ECHO("thread 2 kind=%s", lumiera_threadclass_names[t2->kind]);
-  CHECK(LUMIERA_THREADCLASS_IDLE == t2->kind);
-  ECHO("thread 2 state=%s", lumiera_threadstate_names[t2->state]);
-  CHECK(LUMIERA_THREADSTATE_IDLE == t2->state);
+  LUMIERA_CONDITION_SECTION(NOBUG_ON, &t1->signal)
+    {
+      ECHO("thread 1 state=%s", lumiera_threadstate_names[t1->state]);
+      CHECK(LUMIERA_THREADSTATE_IDLE == t1->state);
+    }
+
+  LUMIERA_CONDITION_SECTION(NOBUG_ON, &t2->signal)
+    {
+      ECHO("thread 2 state=%s", lumiera_threadstate_names[t2->state]);
+      CHECK(LUMIERA_THREADSTATE_IDLE == t2->state);
+    }
+
+  LUMIERA_CONDITION_SECTION(NOBUG_ON, &t1->signal)
+    {
+      t1->state = LUMIERA_THREADSTATE_WAKEUP;
+      LUMIERA_CONDITION_SIGNAL;
+    }
+
+  LUMIERA_CONDITION_SECTION(NOBUG_ON, &t2->signal)
+    {
+      t2->state = LUMIERA_THREADSTATE_WAKEUP;
+      LUMIERA_CONDITION_SIGNAL;
+    }
 
   ECHO("cleaning up");
-
   lumiera_threadpool_destroy();
 }
 
