@@ -209,4 +209,27 @@ TEST ("process-function")
 
 }
 
+TEST ("many-random-sleepy-threads (compiletest only)")
+{
+  const int threads_per_pool_count = 10;
+  unsigned int delay[threads_per_pool_count*LUMIERA_THREADCLASS_COUNT];
+  lumiera_threadpool_init();
+  LumieraThread threads[threads_per_pool_count*LUMIERA_THREADCLASS_COUNT];
+
+  for (int kind = 0; kind < LUMIERA_THREADCLASS_COUNT; ++kind)
+    {
+      for (int i = 0; i < threads_per_pool_count; ++i)
+	{
+	  delay[i] = rand() % 1000000;
+	  threads[i+kind*threads_per_pool_count] =
+	    lumiera_thread_run(kind,
+			       &sleep_fn,
+			       (void *) &delay[i],
+			       "just sleep a bit",
+			       &NOBUG_FLAG(NOBUG_ON));
+	}
+    }
+  lumiera_threadpool_destroy();
+}
+
 TESTS_END
