@@ -32,7 +32,7 @@ void is_prime(void * arg)
 {
   unsigned long long number = *(unsigned long long *)arg;
   unsigned long long prime = 1;
-
+  usleep(1);
   for (unsigned long long x = number-1; x >= sqrt(number); --x)
     {
       if ((number % x) == 0)
@@ -42,6 +42,7 @@ void is_prime(void * arg)
 	}
     }
   *(unsigned long long *)arg = prime;
+  usleep(1);
 }
 
 void sleep_fn(void * arg)
