@@ -41,7 +41,6 @@
  *
  */
 
-NOBUG_DEFINE_FLAG_PARENT (threads, threads_dbg); /*TODO insert a suitable/better parent flag here */
 
 
 //code goes here//

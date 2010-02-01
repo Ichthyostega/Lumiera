@@ -37,7 +37,6 @@ static lumiera_threadpool threadpool;
  * @file
  *
  */
-NOBUG_DEFINE_FLAG_PARENT (threadpool, threads_dbg); /*TODO insert a suitable/better parent flag here */
 
 LUMIERA_ERROR_DEFINE(THREADPOOL_OFFLINE, "tried to acquire thread while threadpool is not available");
 
@@ -46,10 +45,7 @@ LUMIERA_ERROR_DEFINE(THREADPOOL_OFFLINE, "tried to acquire thread while threadpo
 void
 lumiera_threadpool_init(void)
 {
-  NOBUG_INIT_FLAG (threadpool);
-  NOBUG_INIT_FLAG (threads);
   TRACE (threadpool);
-  NOBUG_INIT_FLAG (threads);
 
   for (int i = 0; i < LUMIERA_THREADCLASS_COUNT; ++i)
     {

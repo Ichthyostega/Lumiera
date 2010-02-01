@@ -22,6 +22,7 @@
 #include "tests/test.h"
 
 #include "backend/threadpool.h"
+#include "include/logging.h"
 
 #include <stdio.h>
 #include <string.h>
@@ -68,7 +69,7 @@ TEST ("threadpool1")
   LumieraThread t1 =
     lumiera_threadpool_acquire_thread(LUMIERA_THREADCLASS_INTERACTIVE,
 				      "test purpose",
-				      &NOBUG_FLAG(NOBUG_ON));
+				      &NOBUG_FLAG(test));
   //  lumiera_threadpool_release_thread(t1);
   ECHO("acquired thread 1 %p",t1);
   lumiera_threadpool_destroy();
@@ -84,13 +85,13 @@ TEST ("two-thread-acquire")
   LumieraThread t1 =
     lumiera_threadpool_acquire_thread(LUMIERA_THREADCLASS_INTERACTIVE,
 				      "test purpose",
-				      &NOBUG_FLAG(NOBUG_ON));
+				      &NOBUG_FLAG(test));
 
   ECHO("acquiring thread 2");
   LumieraThread t2 =
     lumiera_threadpool_acquire_thread(LUMIERA_THREADCLASS_IDLE,
 				      "test purpose",
-				      &NOBUG_FLAG(NOBUG_ON));
+				      &NOBUG_FLAG(test));
 
   ECHO("thread 1 state=%s", lumiera_threadstate_names[t1->state]);
   CHECK(LUMIERA_THREADSTATE_IDLE == t1->state);
@@ -132,7 +133,7 @@ TEST ("many-sleepy-threads")
 			       &sleep_fn,
 			       (void *) &delay,
 			       "just sleep a bit",
-			       &NOBUG_FLAG(NOBUG_ON));
+			       &NOBUG_FLAG(test));
 	}
     }
 
@@ -157,7 +158,7 @@ TEST ("toomany-random-sleepy-threads (compiletest only)")
 			       &sleep_fn,
 			       (void *) &delay[i],
 			       "just sleep a bit",
-			       &NOBUG_FLAG(NOBUG_ON));
+			       &NOBUG_FLAG(test));
 	}
     }
   lumiera_threadpool_destroy();
@@ -173,7 +174,7 @@ TEST ("no-function")
 			  NULL,
 			  NULL,
 			  "process my test function",
-			  &NOBUG_FLAG(NOBUG_ON));
+			  &NOBUG_FLAG(test));
 
   // cleanup
   ECHO("finished waiting");
@@ -194,7 +195,7 @@ TEST ("process-function")
 			  &is_prime,
 			  (void *)&number, //void * arg,
 			  "process my test function",
-			  &NOBUG_FLAG(NOBUG_ON)); // struct nobug_flag* flag)
+			  &NOBUG_FLAG(test)); // struct nobug_flag* flag)
 
   // cleanup
   lumiera_threadpool_destroy();
@@ -219,7 +220,7 @@ TEST ("many-random-sleepy-threads (compiletest only)")
 			       &sleep_fn,
 			       (void *) &delay[i],
 			       "just sleep a bit",
-			       &NOBUG_FLAG(NOBUG_ON));
+			       &NOBUG_FLAG(test));
 	}
     }
   lumiera_threadpool_destroy();
