@@ -118,7 +118,7 @@ TEST ("many-sleepy-threads")
 {
 
   const int threads_per_pool_count = 10;
-  unsigned int delay = 13;
+  unsigned int delay = 10000;
 
   lumiera_threadpool_init();
   LumieraThread threads[threads_per_pool_count*LUMIERA_THREADCLASS_COUNT];
