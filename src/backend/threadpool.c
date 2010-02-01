@@ -68,13 +68,13 @@ lumiera_threadpool_destroy(void)
 
   /* set all threadpools offline must be done first, since running threads may attempt to start new ones */
   for (int i = 0; i < LUMIERA_THREADCLASS_COUNT; ++i)
-    LUMIERA_CONDITION_SECTION (threadpool, &threadpool.pool[i].sync)
+    LUMIERA_CONDITION_SECTION (cond_sync, &threadpool.pool[i].sync)
       threadpool.pool[i].status = LUMIERA_THREADPOOL_OFFLINE;
 
   /* wait that all theads have finished */
   for (int i = 0; i < LUMIERA_THREADCLASS_COUNT; ++i)
     {
-      LUMIERA_CONDITION_SECTION (threadpool, &threadpool.pool[i].sync)
+      LUMIERA_CONDITION_SECTION (cond_sync, &threadpool.pool[i].sync)
         {
           TODO ("check threads deadlines, kill them when they are stalled");
           TODO ("for threads without deadline use a timeout from config system, 500ms or so by default");
@@ -87,7 +87,7 @@ lumiera_threadpool_destroy(void)
     {
       TRACE (threadpool, "destroying individual pool #%d", i);
 
-      LUMIERA_CONDITION_SECTION (threadpool, &threadpool.pool[i].sync)
+      LUMIERA_CONDITION_SECTION (cond_sync, &threadpool.pool[i].sync)
         {
           ENSURE (llist_is_empty (&threadpool.pool[i].working_list),
                   "threads are still running");
@@ -116,7 +116,7 @@ lumiera_threadpool_acquire_thread (enum lumiera_thread_class kind,
 
   REQUIRE (kind < LUMIERA_THREADCLASS_COUNT, "unknown pool kind specified: %d", kind);
 
-  LUMIERA_CONDITION_SECTION (threadpool, &threadpool.pool[kind].sync)
+  LUMIERA_CONDITION_SECTION (cond_sync, &threadpool.pool[kind].sync)
     {
       if (threadpool.pool[kind].status != LUMIERA_THREADPOOL_ONLINE)
         LUMIERA_ERROR_SET_WARNING (threadpool, THREADPOOL_OFFLINE, purpose);
@@ -162,7 +162,7 @@ lumiera_threadpool_release_thread(LumieraThread thread)
   REQUIRE (thread->kind < LUMIERA_THREADCLASS_COUNT, "thread belongs to an unknown pool kind: %d", thread->kind);
 
   REQUIRE (thread->state != LUMIERA_THREADSTATE_IDLE, "trying to park an already idle thread");
-  LUMIERA_CONDITION_SECTION (threadpool, &threadpool.pool[thread->kind].sync)
+  LUMIERA_CONDITION_SECTION (cond_sync, &threadpool.pool[thread->kind].sync)
     {
       REQUIRE (!llist_is_member (&threadpool.pool[thread->kind].idle_list, &thread->node), "thread is already in the idle list");
       REQUIRE (llist_is_member (&threadpool.pool[thread->kind].working_list, &thread->node)

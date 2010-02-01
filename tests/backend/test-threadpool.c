@@ -99,13 +99,13 @@ TEST ("two-thread-acquire")
   ECHO("thread 2 state=%s", lumiera_threadstate_names[t2->state]);
   CHECK(LUMIERA_THREADSTATE_IDLE == t2->state);
 
-  LUMIERA_CONDITION_SECTION(NOBUG_ON, &t1->signal)
+  LUMIERA_CONDITION_SECTION(cond_sync, &t1->signal)
     {
       t1->state = LUMIERA_THREADSTATE_WAKEUP;
       LUMIERA_CONDITION_SIGNAL;
     }
 
-  LUMIERA_CONDITION_SECTION(NOBUG_ON, &t2->signal)
+  LUMIERA_CONDITION_SECTION(cond_sync, &t2->signal)
     {
       t2->state = LUMIERA_THREADSTATE_WAKEUP;
       LUMIERA_CONDITION_SIGNAL;
