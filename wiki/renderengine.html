@@ -777,7 +777,7 @@ config.macros.timeline.handler = function(place,macroName,params,wikifier,paramS
 }
 //}}}</pre>
 </div>
-<div title="BindingMO" modifier="Ichthyostega" modified="201001070851" created="200905210144" tags="def design discuss SessionLogic" changecount="12">
+<div title="BindingMO" modifier="Ichthyostega" modified="201002010125" created="200905210144" tags="def design discuss SessionLogic" changecount="13">
 <pre>Sometimes, two entities within the [[Session]] are deliberately associated, and this association has to carry some specific mappings between properties or facilities within the entities to be linked together. When this connection isn't just the [[Placement]] of an object, and isn't just a logical or structural relationship either &amp;mdash; then we create an explicit Binding object to be stored into the session.
 * When connecting a [[Sequence]] to a certain [[Timeline]], we also establish a mapping between the possible media stream channels produced by the sequence and the real output slots found within the timeline.
 * similarly, using a sequence within a [[meta-clip|VirtualClip]] requires to remember such a mapping.
@@ -787,7 +787,7 @@ config.macros.timeline.handler = function(place,macroName,params,wikifier,paramS
 Binding is a relation entity, maintaining a link between parts of the session. This 1:1 relation may be part of a n:1 (or maybe even n:m?) relation. In addition to representing this link, a binding allows to maintain a set of ''mappings'' attached to this link.
 
 This creates a typing related problem: In order to maintain the link and the mappings, in each case we need a common denominator to subsume the elements to be maintained.
-* in the case of the basic link, this common denominator is given by the basic structure of the HighLevelModel: ~MObjects attached by ~Placements. Consequently, the link maintained through a binding is limited to linking together first-class entities within the model, and the implementation is tied into the existing mechanisms for associating Placements (&amp;rarr; PlacementScope and PlacementIndex)
+* in the case of the basic link, this common denominator is given by the basic structure of the HighLevelModel: ~MObjects attached by Placements. Consequently, the link maintained through a binding is limited to linking together first-class entities within the model, and the implementation is tied into the existing mechanisms for associating Placements (&amp;rarr; PlacementScope and PlacementIndex)
 * in the case of the attached mappings it seems we're best off limiting ourselves to symbolic mappings (ID mappings). Because, going beyond that would either create sub-groupings (based on varying target types to be mapped), or push the »everything is an object« approach beyond the beneficial level.
 
 !Critique {{red{WIP 12/09}}}
@@ -4058,8 +4058,8 @@ A scope path is a sequence of scopes, where each scope is implemented by a Place
 ** clear a path (reset to default)
 </pre>
 </div>
-<div title="Sequence" modifier="Ichthyostega" created="201001252327" tags="def" changecount="1">
-<pre>A sequence is a collection of media objects, arranged onto a track tree. Sequences are the building blocks within the session. To be visible and editable, a session is to be bound into a top-level [[Timeline]]. Alternatively, it may be used as a VirtualClip nested within another sequence.
+<div title="Sequence" modifier="Ichthyostega" modified="201002010123" created="201001252327" tags="def" changecount="2">
+<pre>A sequence is a collection of media objects, arranged onto a track tree. Sequences are the building blocks within the session. To be visible and editable, a session needs to be bound into a top-level [[Timeline]]. Alternatively, it may be used as a VirtualClip nested within another sequence.
 
 The sequences within the session establish a //logical grouping//, allowing for lots of flexibility. Actually, we can have several sequences within one session, and these sequences can be linked together or not, they may be arranged in temporal order or may constitue a logical grouping of clips used simultanously in compositional work etc. Multiple sequences can use the same or different tracks, and tracks as well are only an organisational (grouping) device. But at any time, we have exactly one [[Fixture]], derived automatically from all sequences and containing the content actually to be rendered.
 
@@ -4099,11 +4099,11 @@ For implementation, the HighLevelModel can be reduced to a compound of interconn
 MObject lifetime is managed by reference counting; all placements and client side references to an MObject share ownership. The placement instances attached to the session are maintained by the index; thus, as long as an placement exists, the corresponding object automatically stays alive. A bare PlacementRef on the other hand doesn't guarantee anything about the referred placement; when dereferencting this reference token, the index is accessed to re-establish a connection to the object, if possible. The full-fledged MObjectRef is built on top of such a reference token and additionally incorporates a smart-ptr. For the client code this means, that holding a ref ensures existence of the object, while the //placement// of this object still can get removed from the session.
 </pre>
 </div>
-<div title="SessionInterface" modifier="Ichthyostega" modified="200912080304" created="200904242108" tags="SessionLogic GuiIntegration design draft discuss" changecount="11">
+<div title="SessionInterface" modifier="Ichthyostega" modified="201002010106" created="200904242108" tags="SessionLogic GuiIntegration design draft discuss" changecount="12">
 <pre>&quot;Session Interface&quot;, when used in a more general sense, denotes a compound of several interfaces and facilities, together forming the primary access point to the user visible contents and state of the editing project.
 * the API of the session class
 * the accompanying management interface (SessionManager API)
-* an LayerSeparationInterfaces allowing to access these interfaces from outside the Proc-Layer
+* LayerSeparationInterfaces allowing to access these interfaces from outside the Proc-Layer
 * the primary public ~APIs exposed on the objects to be [[queried and retrieved|SessionStructureQuery]] via the session class API
 ** Timeline
 ** Sequence
@@ -4227,7 +4227,7 @@ It will contain a global video and audio out pipe, just one timeline holding a s
 For each of these services, there is an access interface, usually through an class with only static methods. Basically this means access //by name.//
 On the //implementation side//&amp;nbsp; of this access interface class (i.e. within a {{{*.cpp}}} file separate from the client code), there is a (down-casting) access through the top-level session-~PImpl pointer, allowing to invoke functions on the ~SessionServices instance. Actually, this ~SessionServices instance is configured (statically) to stack up implementations for all the exposed service interfaces on top of the basic ~SessionImpl class. Thus, each of the individual service implementations is able to use the basic ~SessinImpl (becaus it inherits it) and the implementaion of the access functions (to the session service we're discussing here) is able to use this forwarding mechanism to get the actual implementation basically by one-liners. The upside of this (admittedly convoluted) technique is that we've gotten at runtime only a single indirection, which moreover is through the top-level session-~PImpl. The downside is that, due to the separation in {{{*.h}}} and {{{*.c}}} files, we can't use any specifically typed generic operations, which forces us to use type erasure in case we need such (an example being the content discovery queries utilised by all high-level model objects).</pre>
 </div>
-<div title="SessionStructureQuery" modifier="Ichthyostega" modified="200910181417" created="200910112322" tags="SessionLogic design draft discuss" changecount="15">
+<div title="SessionStructureQuery" modifier="Ichthyostega" modified="201002010105" created="200910112322" tags="SessionLogic design draft discuss" changecount="16">
 <pre>The frontside interface of the session allows to query for contained objects; it is used to discover the structure and contents of the currently opened session/project. Access point is the public API of the Session class, which, besides exposing those queries, also provides functionality for adding and removing session contents.
 
 !discovering structure
@@ -4256,7 +4256,7 @@ The query API on specific objects (i.e. Session, Timeline, Sequence, Track and C
 {{{
 ITER getClips() { return QueryFocus::push(this).query&lt;Clip&gt;(); } 
 }}}
-To make this work, QueryFocus exposes an static API (and especially the focus stack is a singleton). The //current// QueryFocus object can easily re-bound to another point of interest (and ajusts the contained path info automatically), and the {{{push()}}}-function creates a local scoped object (which pops automatically).
+To make this work, QueryFocus exposes an static API (and especially the focus stack is a singleton). The //current// QueryFocus object can easily be re-bound to another point of interest (and ajusts the contained path info automatically), and the {{{push()}}}-function creates a local scoped object (which pops automatically).
 
 And last but not least: the difficult part of this whole concept is encapsulated and ''can be left out for now''. Because, according to Lumiera's [[roadmap|http://issues.lumiera.org/roadmap]], meta-clips are to be postponed until well into beta! Thus, we can start with a trivial (no-op) implementation, but immediately gain the benefit of making the relevant parts of the session implementation aware of the problem.
 
@@ -4366,7 +4366,7 @@ Consequently, as we can't get away with an fixed Enum of all stream prototypes, 
 NTSC and PAL video, video versus digitized film, HD video versus SD video, 3D versus flat video, cinemascope versus 4:3, stereophonic versus monaural, periphonic versus panoramic sound, Ambisonics versus 5.1, dolby versus linear PCM...
 </pre>
 </div>
-<div title="StreamType" modifier="Ichthyostega" modified="200908302143" created="200808060244" tags="spec discuss draft" changecount="11">
+<div title="StreamType" modifier="Ichthyostega" modified="201002010135" created="200808060244" tags="spec discuss draft" changecount="15">
 <pre>//how to classify and describe media streams//
 Media data is supposed to appear structured as stream(s) over time. While there may be an inherent internal structuring, at a given perspective ''any stream is a unit and homogeneous''. In the context of digital media data processing, streams are always ''quantized'', which means they appear as a temporal sequence of data chunks called ''frames''.
 
@@ -4379,14 +4379,14 @@ Media data is supposed to appear structured as stream(s) over time. While there 
 * the __~Stream-Type__ describes the kind of media data contained in the stream
 
 ! Problem of Stream Type Description
-Media types vary largely and exhibit a large number of different properties, which can't be subsumed under a single classification scheme. But on the other hand, we want to deal with media objects in a uniform and generic manner, because generally all kinds of media behave somewhat similar. But the problem is, these similarities disappear when describing media with logical precision. Thus we are forced into specialized handling and operations for each kind of media, while we want to implement a generic handling concept.
+Media types vary largely and exhibit a large number of different properties, which can't be subsumed under a single classification scheme. On the other hand we want to deal with media objects in a uniform and generic manner, because generally all kinds of media behave somewhat similar. But the twist is, these similarities disappear when describing media with logical precision. Thus we are forced into specialized handling and operations for each kind of media, while we want to implement a generic handling concept.
 
 ! Stream Type handling in the Proc-Layer
 !! Identification
 A stream type is denoted by a StreamTypeID, which is an identifier, acting as an unique key for accessing information related to the stream type. It corresponds to an StreamTypeDescriptor record, containing an &amp;mdash; //not necessarily complete// &amp;mdash; specification of the stream type, according to the classification detailed below.
 
 !! Classification
-Within the Proc-Layer, media streams are treated largely in a similar manner. But, looking closer, note everything can be connected together, while on the other hand there may be some classes of media streams which can be considered //equivalent// in most respects. Thus, it seems reasonable to separate the distinction between various media streams into several levels
+Within the Proc-Layer, media streams are treated largely in a similar manner. But, looking closer, not everything can be connected together, while on the other hand there may be some classes of media streams which can be considered //equivalent// in most respects. Thus separating the distinction between various media streams into several levels seems reasonable...
 * Each media belongs to a fundamental ''kind'' of media, examples being __Video__, __Image__, __Audio__, __MIDI__,... Media streams of different kind can be considered somewhat &quot;completely separate&quot; &amp;mdash; just the handling of each of those media kinds follows a common //generic pattern// augmented with specialisations. Basically, it is //impossible to connect// media streams of different kind. Under some circumstances there may be the possibility of a //transformation// though. For example, a still image can be incorporated into video, sound may be visualized, MIDI may control a sound synthesizer.
 * Below the level of distinct kinds of media streams, within every kind we have an open ended collection of ''prototypes'', which, when compared directly, may each be quite distinct and different, but which may be //rendered//&amp;nbsp; into each other. For example, we have stereoscopic (3D) video and we have the common flat video lacking depth information, we have several spatial audio systems (Ambisonics, Wave Field Synthesis), we have panorama simulating sound systems (5.1, 7.1,...), we have common stereophonic and monaural audio. It is considered important to retain some openness and configurability within this level of distinction, which means this classification should better be done by rules then by setting up a fixed property table. For example, it may be desirable for some production to distinguish between digitized film and video NTSC and PAL, while in another production everything is just &quot;video&quot; and can be converted automatically. The most noticeable consequence of such a distinction is that any Bus or [[Pipe]] is always limited to a media stream of a single prototype. (&amp;rarr; [[more|StreamPrototype]])
 * Besides the distinction by prototypes, there are the various media ''implementation types''. This classification is not necessarily hierarchically related to the prototype classification, while in practice commonly there will be some sort of dependency. For example, both stereophonic and monaural audio may be implemented as 96kHz 24bit PCM with just a different number of channel streams, but we may as well get a dedicated stereo audio stream with two channels multiplexed into a single stream. For dealing with media streams of various implementation type, we need //library// routines, which also yield a //type classification system.// Most notably, for raw sound and video data we use the [[GAVL]] library, which defines a classification system for buffers and streams.
@@ -4431,7 +4431,7 @@ An implementation constraint can //stand-in// for a completely specified impleme
 //Note:// there is a sort-of &quot;degraded&quot; variant just requiring some &amp;rarr; [[implementation constraint|StreamTypeImplConstraint]] to hold
 </pre>
 </div>
-<div title="StreamTypeQuery" modifier="Ichthyostega" modified="200810060525" created="200809280129" tags="spec draft" changecount="23">
+<div title="StreamTypeQuery" modifier="Ichthyostega" modified="201002010142" created="200809280129" tags="spec draft" changecount="24">
 <pre>Querying for media stream type information comes in various flavours
 * you may want to find a structural object (pipe, output, processing patten) associated with / able to deal with a certain stream type
 * you may need a StreamTypeDescriptor for an existing stream given as implementation data
@@ -4446,7 +4446,7 @@ the information of the fundamental media kind (video, audio, text, MIDI,...) is 
 !query for a prototype
 __Situation__: given an implementation type, find a prototype to subsume it.
 Required only for building a complete ~StreamType which isn't known at this point.
-The general case of this query is //quite hairy,// because the solution is not necessary clear and unique. And, worse still, it is related to the semantics, requiring semantic information and tagging to be maintained somewhere. For example, while the computer can't &quot;know&quot; what stereopohinc audio is (only a human can by listening to a stereophoic playback and deciding if it actually does convey a spatical sound image), in most cases we can overcome this problem by using the //heuristical rule// of assuming the prototype &quot;stereophonic&quot; when given two identically typed audio channels. This example also shows the necessity of ordering heuristic rules to be able to pick a best fit.
+The general case of this query is //quite hairy,// because the solution is not necessary clear and unique. And, worse still, it is related to the semantics, requiring semantic information and tagging to be maintained somewhere. For example, while the computer can't &quot;know&quot; what stereopohinc audio is (only a human can, by listening to a stereophoic playback and deciding if it actually does convey a spatical sound image), in most cases we can overcome this problem by using the //heuristical rule// of assuming the prototype &quot;stereophonic&quot; when given two identically typed audio channels. This example also shows the necessity of ordering heuristic rules to be able to pick a best fit.
 
 We can inject two different kinds of fallback solutions for this kind of query:
 * we can always build a &quot;catch-all&quot; prototype just based on the kind of media (e.g. {{{prototype(video).}}}). This should match with lowest priority
@@ -4477,7 +4477,7 @@ Independent from these is __another Situation__ where we query for a type ''by I
 {{red{not sure if we want to support queries by symboic ID}}}...problem is the impl type, because probably the library needs to support describing any implementation type by a string. Seemingly GAVL does, but requiring it for every lib?
 </pre>
 </div>
-<div title="StreamTypeUse" modifier="Ichthyostega" modified="200809280320" created="200809130312" tags="draft discuss dynamic" changecount="21">
+<div title="StreamTypeUse" modifier="Ichthyostega" modified="201002010151" created="200809130312" tags="draft discuss dynamic" changecount="22">
 <pre>Questions regarding the use of StreamType within the Proc-Layer.
 * what is the relation between Buffer and Frame?
 * how to get the required size of a Buffer?
@@ -4498,7 +4498,7 @@ And how to do the classification of an existing implementation type.
 Besides, there is the problem of //hijacking a prototype:// when a specific implementation type gets tied to a rather generic protoype, like {{{protoype(video)}}}, how to comply to the rule of prototypes subsuming a class of equivalent implementations?
 
 !Defaults and partial specification
-A StreamType need not be completely defined. It is sufficient to specify the media kind and the Prototype. The implementation type may be just given as a constraint, thus defining some properties and leaving out others. When creating a frame buffer based upon such an //incomplete type,// [[defaults|DefaultsManagement]] are queried to fill in the missing parts.
+A StreamType need not be defined completely. It is sufficient to specify the media kind and the Prototype. The implementation type may be just given as a constraint, thus defining some properties and leaving out others. When creating a frame buffer based upon such an //incomplete type,// [[defaults|DefaultsManagement]] are queried to fill in the missing parts.
 Constraints are objects provided by the Lumiera core, but specialized to the internals of the actual implementation library.
 For example there might be a constraint implementation to force a specific {{{gavl_pixelformat_t}}}.
 
@@ -5725,9 +5725,9 @@ function addKeyDownHandlers(e)
 <div title="TiddlyWiki" modifier="Ichthyostega" created="200706220430" changecount="1">
 <pre>http://tiddlywiki.com/</pre>
 </div>
-<div title="Timeline" modifier="Ichthyostega" modified="200811022215" created="200706250721" tags="def" changecount="6">
+<div title="Timeline" modifier="Ichthyostega" modified="201002010118" created="200706250721" tags="def" changecount="7">
 <pre>Timeline is the top level element within the [[Session (Project)|Session]]. It is visible within a //timeline view// in the GUI and represents the effective (resulting) arrangement of media objects, to be rendered for output or viewed in a Monitor (viewer window). A timeline is comprised of:
-* a time axis in abolute time (WIP: not clear if this is an entity or just a conceptual definition) 
+* a time axis in abolute time ({{red{WIP 1/10}}}: not clear if this is an entity or just a conceptual definition) 
 * a PlayControler
 * a list of global Pipes representing the possible outputs (master busses)
 * //exactly one// top-level [[Sequence]], which in turn may contain further nested Sequences.
