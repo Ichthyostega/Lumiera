@@ -54,6 +54,25 @@ void sleep_fn(void * arg)
   *(int *)arg = result;
 }
 
+
+void other_fn(void * arg)
+{
+  int input = *(int *)arg;
+  lumiera_thread_sync (); // the main thread can discard the argument storage
+  input -= 42;
+  ECHO ("result is %d", input);
+}
+
+void sleeping_worker_fn(void * arg)
+{
+  int input = *(int *)arg;
+  int delay = rand () % 100000;
+  usleep (delay);
+  lumiera_thread_sync (); // the main thread can discard the argument storage
+  input -= 42;
+  ECHO ("result is %d", input);
+}
+
 TESTS_BEGIN
 
 TEST ("threadpool-basic")
@@ -224,6 +243,48 @@ TEST ("many-random-sleepy-threads (compiletest only)")
 	}
     }
   lumiera_threadpool_destroy();
+}
+
+TEST ("simple-sync")
+{
+  lumiera_threadpool_init ();
+
+  int value = 42;
+
+  LumieraThread other = lumiera_thread_run (LUMIERA_THREADCLASS_IDLE,
+					     &other_fn,
+					     (void *)&value,
+					     "other thread",
+					     &NOBUG_FLAG (test));
+
+  ECHO ("syncing with the other thread");
+  lumiera_thread_sync_other (other);
+  ECHO ("the other thread received its arguments");
+  value += 42;
+
+  lumiera_threadpool_destroy ();
+}
+
+TEST ("sync-many")
+{
+  lumiera_threadpool_init ();
+
+  int value = 42;
+  int workers = 100;
+  LumieraThread threads[workers];
+
+  for (int i = 0; i < workers; i++)
+    {
+      threads[i] = lumiera_thread_run (LUMIERA_THREADCLASS_IDLE,
+				       &sleeping_worker_fn,
+				       (void *)&value,
+				       "worker thread",
+				       &NOBUG_FLAG (test));
+      lumiera_thread_sync_other (threads[i]);
+    }
+  value += 42;
+  ECHO ("value is %d", value);
+  lumiera_threadpool_destroy ();
 }
 
 TESTS_END

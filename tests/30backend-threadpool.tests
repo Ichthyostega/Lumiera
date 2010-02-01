@@ -25,4 +25,15 @@ END
 TEST "many sleepy threads" many-sleepy-threads <<END
 END
 
+TEST "simple sync" simple-sync <<END
+err: syncing with the other thread
+err: the other thread received its arguments
+err: result is 0
+END
+
+TEST "sync many" sync-many <<END
+err: result is 0
+err: value is 84
+END
+
 PLANNED "error cleared on join"
