@@ -93,7 +93,7 @@ thread_loop (void* thread)
       do {
         lumiera_threadpool_release_thread(t);
         LUMIERA_CONDITION_WAIT (t->state != LUMIERA_THREADSTATE_IDLE);
-        INFO (threads, "Thread awaken with state %d", t->state);
+        INFO (threads, "Thread awaken with state %s", lumiera_threadstate_names[t->state]);
 
         // NULL function means: no work to do
         INFO (threads, "function %p", t->function);
