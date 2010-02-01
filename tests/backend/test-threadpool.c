@@ -140,36 +140,28 @@ TEST ("many-sleepy-threads")
 
 }
 
-#if 0
-
-TEST ("toomany-acquire-release")
+TEST ("toomany-random-sleepy-threads (compiletest only)")
 {
-
-  const int threads_per_pool_count = 11;
-
-  lumiera_threadpool_init(10);
+  const int threads_per_pool_count = 500;
+  unsigned int delay[threads_per_pool_count*LUMIERA_THREADCLASS_COUNT];
+  lumiera_threadpool_init();
   LumieraThread threads[threads_per_pool_count*LUMIERA_THREADCLASS_COUNT];
-  
+
   for (int kind = 0; kind < LUMIERA_THREADCLASS_COUNT; ++kind)
     {
       for (int i = 0; i < threads_per_pool_count; ++i)
 	{
+	  delay[i] = rand() % 1000000;
 	  threads[i+kind*threads_per_pool_count] =
-	    lumiera_threadpool_acquire_thread(kind,
-					      "test purpose",
-					      &NOBUG_FLAG(NOBUG_ON));
+	    lumiera_thread_run(kind,
+			       &sleep_fn,
+			       (void *) &delay[i],
+			       "just sleep a bit",
+			       &NOBUG_FLAG(NOBUG_ON));
 	}
     }
-
-  for (int i = 0; i < threads_per_pool_count*LUMIERA_THREADCLASS_COUNT; ++i)
-    {
-      lumiera_threadpool_release_thread(threads[i]);
-    }
-
   lumiera_threadpool_destroy();
-
 }
-#endif
 
 TEST ("no-function")
 {
