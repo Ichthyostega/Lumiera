@@ -39,8 +39,10 @@ namespace backend {
   
     namespace { // private test classes and data...
       
-      ulong sum;
+      volatile ulong sum;
       ulong checksum;
+      
+      Sync<NonrecursiveLock_NoWait> lockme;
       
       const uint NUM_THREADS      = 20;
       const uint MAX_RAND_SUMMAND = 100;
@@ -55,8 +57,8 @@ namespace backend {
       
       
       struct TestThread
-        : Thread
-        , Sync<NonrecursiveLock_NoWait>  // using dedicated locking for this test
+        : Sync<NonrecursiveLock_NoWait>  // using dedicated locking for this test TODO: needs classlock
+        , Thread
         {
           TestThread()
             : Thread("test Thread creation",
@@ -67,8 +69,13 @@ namespace backend {
           void
           theOperation (uint a, uint b) ///< the actual operation running in a separate thread
             {
-              Lock(this);
-              sum += (a+b);
+              //Lock(this);     << broken we need a classlock, using sync-classlock is left as excercise for the reader
+              Sync<NonrecursiveLock_NoWait>::Lock gotit(&lockme);
+              sum *= 2;
+              usleep (200);             // force preemption
+              sum += (2*(a+b));
+              usleep (200);
+              sum /= 2;
             }
         };
       
