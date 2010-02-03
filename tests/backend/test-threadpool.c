@@ -309,6 +309,20 @@ TEST ("sync-many")
   lumiera_threadpool_destroy ();
 }
 
+TEST ("joinable-thread")
+{
+  int delay = 10000;
+  lumiera_threadpool_init ();
+  LumieraThread t = lumiera_thread_run (LUMIERA_THREADCLASS_IDLE
+					     | LUMIERA_THREAD_JOINABLE,
+					     &sleep_fn,
+					     (void *)&delay,
+					     "joinable idle thread",
+					     &NOBUG_FLAG (test));
+  lumiera_thread_join(t);
+  lumiera_threadpool_destroy ();
+}
+
 TEST ("sync-joinable")
 {
   lumiera_threadpool_init ();
