@@ -36,9 +36,11 @@ lumiera_rwlock_init (LumieraRWLock self,
 {
   if (self)
     {
-      pthread_rwlock_init (&self->rwlock, NULL);
       NOBUG_RESOURCE_HANDLE_INIT (self->rh);
-      NOBUG_RESOURCE_ANNOUNCE_RAW_CTX (flag, "rwlock", purpose, self, self->rh, ctx);
+      NOBUG_RESOURCE_ANNOUNCE_RAW_CTX (flag, "rwlock", purpose, self, self->rh, ctx)
+        {
+          pthread_rwlock_init (&self->rwlock, NULL);
+        }
     }
   return self;
 }
@@ -51,9 +53,11 @@ lumiera_rwlock_destroy (LumieraRWLock self,
 {
   if (self)
     {
-      NOBUG_RESOURCE_FORGET_RAW_CTX (flag,  self->rh, ctx);
-      if (pthread_rwlock_destroy (&self->rwlock))
-        LUMIERA_DIE (LOCK_DESTROY);
+      NOBUG_RESOURCE_FORGET_RAW_CTX (flag,  self->rh, ctx)
+        {
+          if (pthread_rwlock_destroy (&self->rwlock))
+            LUMIERA_DIE (LOCK_DESTROY);
+        }
     }
   return self;
 }

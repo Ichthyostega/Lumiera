@@ -142,12 +142,13 @@ lumiera_mutex_lock (LumieraMutex self,
 {
   if (self)
     {
-      NOBUG_RESOURCE_WAIT_CTX (NOBUG_FLAG_RAW(flag), self->rh, "acquire mutex", *handle, ctx);
+      NOBUG_RESOURCE_WAIT_CTX (NOBUG_FLAG_RAW(flag), self->rh, "acquire mutex", *handle, ctx)
+        {
+          if (pthread_mutex_lock (&self->mutex))
+            LUMIERA_DIE (LOCK_ACQUIRE);         /* never reached (in a correct program) */
 
-      if (pthread_mutex_lock (&self->mutex))
-        LUMIERA_DIE (LOCK_ACQUIRE);         /* never reached (in a correct program) */
-
-      NOBUG_RESOURCE_STATE_CTX (NOBUG_FLAG_RAW(flag), NOBUG_RESOURCE_EXCLUSIVE, *handle, ctx);
+          NOBUG_RESOURCE_STATE_CTX (NOBUG_FLAG_RAW(flag), NOBUG_RESOURCE_EXCLUSIVE, *handle, ctx) /*{}*/;
+        }
     }
 
   return self;
@@ -169,19 +170,20 @@ lumiera_mutex_trylock (LumieraMutex self,
 {
   if (self)
     {
-      NOBUG_RESOURCE_TRY_CTX (NOBUG_FLAG_RAW(flag), self->rh, "try acquire mutex", *handle, ctx);
-
-      int err = pthread_mutex_trylock (&self->mutex);
-
-      if (!err)
+      NOBUG_RESOURCE_TRY_CTX (NOBUG_FLAG_RAW(flag), self->rh, "try acquire mutex", *handle, ctx)
         {
-          NOBUG_RESOURCE_STATE_CTX (NOBUG_FLAG_RAW(flag), NOBUG_RESOURCE_EXCLUSIVE, *handle, ctx);
-        }
-      else
-        {
-          NOBUG_RESOURCE_LEAVE_RAW_CTX (flag, *handle, ctx) /*{}*/;
-          lumiera_lockerror_set (err, flag, ctx);
-          return NULL;
+          int err = pthread_mutex_trylock (&self->mutex);
+
+          if (!err)
+            {
+              NOBUG_RESOURCE_STATE_CTX (NOBUG_FLAG_RAW(flag), NOBUG_RESOURCE_EXCLUSIVE, *handle, ctx) /*{}*/;
+            }
+          else
+            {
+              NOBUG_RESOURCE_LEAVE_RAW_CTX (flag, *handle, ctx) /*{}*/;
+              lumiera_lockerror_set (err, flag, ctx);
+              self = NULL;
+            }
         }
     }
 
@@ -205,19 +207,20 @@ lumiera_mutex_timedlock (LumieraMutex self,
 {
   if (self)
     {
-      NOBUG_RESOURCE_TRY_CTX (NOBUG_FLAG_RAW(flag), self->rh, "timed acquire mutex", *handle, ctx);
-
-      int err = pthread_mutex_timedlock (&self->mutex, timeout);
-
-      if (!err)
+      NOBUG_RESOURCE_TRY_CTX (NOBUG_FLAG_RAW(flag), self->rh, "timed acquire mutex", *handle, ctx)
         {
-          NOBUG_RESOURCE_STATE_CTX (NOBUG_FLAG_RAW(flag), NOBUG_RESOURCE_EXCLUSIVE, *handle, ctx);
-        }
-      else
-        {
-          NOBUG_RESOURCE_LEAVE_RAW_CTX (flag, *handle, ctx) /*{}*/;
-          lumiera_lockerror_set (err, flag, ctx);
-          return NULL;
+          int err = pthread_mutex_timedlock (&self->mutex, timeout);
+
+          if (!err)
+            {
+              NOBUG_RESOURCE_STATE_CTX (NOBUG_FLAG_RAW(flag), NOBUG_RESOURCE_EXCLUSIVE, *handle, ctx) /*{}*/;
+            }
+          else
+            {
+              NOBUG_RESOURCE_LEAVE_RAW_CTX (flag, *handle, ctx) /*{}*/;
+              lumiera_lockerror_set (err, flag, ctx);
+              self = NULL;
+            }
         }
     }
 

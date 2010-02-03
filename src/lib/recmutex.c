@@ -47,9 +47,11 @@ lumiera_recmutex_init (LumieraRecmutex self,
     {
       pthread_once (&recmutexattr_once, recmutexattr_init);
 
-      pthread_mutex_init (&self->recmutex, &recmutexattr);
       NOBUG_RESOURCE_HANDLE_INIT (self->rh);
-      NOBUG_RESOURCE_ANNOUNCE_RAW_CTX (flag, "recmutex", purpose, self, self->rh, ctx);
+      NOBUG_RESOURCE_ANNOUNCE_RAW_CTX (flag, "recmutex", purpose, self, self->rh, ctx)
+        {
+          pthread_mutex_init (&self->recmutex, &recmutexattr);
+        }
     }
 
   return self;
@@ -63,9 +65,11 @@ lumiera_recmutex_destroy (LumieraRecmutex self,
 {
   if (self)
     {
-      NOBUG_RESOURCE_FORGET_RAW_CTX (flag,  self->rh, ctx);
-      if (pthread_mutex_destroy (&self->recmutex))
-        LUMIERA_DIE (LOCK_DESTROY);
+      NOBUG_RESOURCE_FORGET_RAW_CTX (flag,  self->rh, ctx)
+        {
+          if (pthread_mutex_destroy (&self->recmutex))
+            LUMIERA_DIE (LOCK_DESTROY);
+        }
     }
   return self;
 }

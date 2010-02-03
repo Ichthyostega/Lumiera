@@ -196,12 +196,12 @@ lumiera_reccondition_lock (LumieraReccondition self,
 {
   if (self)
     {
-      NOBUG_RESOURCE_WAIT_CTX (NOBUG_FLAG_RAW(flag), self->rh, "acquire reccondvar", *handle, ctx);
-
-      if (pthread_mutex_lock (&self->reccndmutex))
-        LUMIERA_DIE (LOCK_ACQUIRE);         /* never reached (in a correct program) */
-
-      NOBUG_RESOURCE_STATE_CTX (NOBUG_FLAG_RAW(flag), NOBUG_RESOURCE_RECURSIVE, *handle, ctx);
+      NOBUG_RESOURCE_WAIT_CTX (NOBUG_FLAG_RAW(flag), self->rh, "acquire reccondvar", *handle, ctx)
+        {
+          if (pthread_mutex_lock (&self->reccndmutex))
+            LUMIERA_DIE (LOCK_ACQUIRE);         /* never reached (in a correct program) */
+          NOBUG_RESOURCE_STATE_CTX (NOBUG_FLAG_RAW(flag), NOBUG_RESOURCE_RECURSIVE, *handle, ctx) /*{}*/;
+        }
     }
 
   return self;
@@ -216,19 +216,20 @@ lumiera_reccondition_trylock (LumieraReccondition self,
 {
   if (self)
     {
-      NOBUG_RESOURCE_TRY_CTX (NOBUG_FLAG_RAW(flag), self->rh, "try acquire reccondvar", *handle, ctx);
-
-      int err = pthread_mutex_trylock (&self->reccndmutex);
-
-      if (!err)
+      NOBUG_RESOURCE_TRY_CTX (NOBUG_FLAG_RAW(flag), self->rh, "try acquire reccondvar", *handle, ctx)
         {
-          NOBUG_RESOURCE_STATE_CTX (NOBUG_FLAG_RAW(flag), NOBUG_RESOURCE_RECURSIVE, *handle, ctx);
-        }
-      else
-        {
-          NOBUG_RESOURCE_LEAVE_RAW_CTX (flag, *handle, ctx) /*{}*/;
-          lumiera_lockerror_set (err, flag, ctx);
-          return NULL;
+          int err = pthread_mutex_trylock (&self->reccndmutex);
+
+          if (!err)
+            {
+              NOBUG_RESOURCE_STATE_CTX (NOBUG_FLAG_RAW(flag), NOBUG_RESOURCE_RECURSIVE, *handle, ctx) /*{}*/;
+            }
+          else
+            {
+              NOBUG_RESOURCE_LEAVE_RAW_CTX (flag, *handle, ctx) /*{}*/;
+              lumiera_lockerror_set (err, flag, ctx);
+              self = NULL;
+            }
         }
     }
 
@@ -245,19 +246,20 @@ lumiera_reccondition_timedlock (LumieraReccondition self,
 {
   if (self)
     {
-      NOBUG_RESOURCE_TRY_CTX (NOBUG_FLAG_RAW(flag), self->rh, "timed acquire reccondvar", *handle, ctx);
-
-      int err = pthread_mutex_timedlock (&self->reccndmutex, timeout);
-
-      if (!err)
+      NOBUG_RESOURCE_TRY_CTX (NOBUG_FLAG_RAW(flag), self->rh, "timed acquire reccondvar", *handle, ctx)
         {
-          NOBUG_RESOURCE_STATE_CTX (NOBUG_FLAG_RAW(flag), NOBUG_RESOURCE_RECURSIVE, *handle, ctx);
-        }
-      else
-        {
-          NOBUG_RESOURCE_LEAVE_RAW_CTX (flag, *handle, ctx) /*{}*/;
-          lumiera_lockerror_set (err, flag, ctx);
-          return NULL;
+          int err = pthread_mutex_timedlock (&self->reccndmutex, timeout);
+
+          if (!err)
+            {
+              NOBUG_RESOURCE_STATE_CTX (NOBUG_FLAG_RAW(flag), NOBUG_RESOURCE_RECURSIVE, *handle, ctx) /*{}*/;
+            }
+          else
+            {
+              NOBUG_RESOURCE_LEAVE_RAW_CTX (flag, *handle, ctx) /*{}*/;
+              lumiera_lockerror_set (err, flag, ctx);
+              self = NULL;
+            }
         }
     }
 
@@ -273,11 +275,11 @@ lumiera_reccondition_wait (LumieraReccondition self,
 {
   if (self)
     {
-      NOBUG_RESOURCE_STATE_RAW_CTX (flag, NOBUG_RESOURCE_WAITING, *handle, ctx);
-
-      pthread_cond_wait (&self->cond, &self->reccndmutex);
-
-      NOBUG_RESOURCE_STATE_RAW_CTX (flag, NOBUG_RESOURCE_RECURSIVE, *handle, ctx);
+      NOBUG_RESOURCE_STATE_RAW_CTX (flag, NOBUG_RESOURCE_WAITING, *handle, ctx)
+        {
+          pthread_cond_wait (&self->cond, &self->reccndmutex);
+          NOBUG_RESOURCE_STATE_RAW_CTX (flag, NOBUG_RESOURCE_RECURSIVE, *handle, ctx) /*{}*/;
+        }
     }
   return self;
 }
@@ -292,19 +294,20 @@ lumiera_reccondition_timedwait (LumieraReccondition self,
 {
   if (self)
     {
-      NOBUG_RESOURCE_STATE_RAW_CTX (flag, NOBUG_RESOURCE_WAITING, *handle, ctx);
-
-      int err;
-      do {
-        err = pthread_cond_timedwait (&self->cond, &self->reccndmutex, timeout);
-      } while(err == EINTR);
-
-      NOBUG_RESOURCE_STATE_RAW_CTX (flag, NOBUG_RESOURCE_RECURSIVE, *handle, ctx);
-
-      if (err)
+      NOBUG_RESOURCE_STATE_RAW_CTX (flag, NOBUG_RESOURCE_WAITING, *handle, ctx)
         {
-          lumiera_lockerror_set (err, flag, ctx);
-          return NULL;
+          int err;
+          do {
+            err = pthread_cond_timedwait (&self->cond, &self->reccndmutex, timeout);
+          } while(err == EINTR);
+
+          if (!err)
+            NOBUG_RESOURCE_STATE_RAW_CTX (flag, NOBUG_RESOURCE_RECURSIVE, *handle, ctx) /*{}*/;
+          else
+            {
+              lumiera_lockerror_set (err, flag, ctx);
+              self = NULL;
+            }
         }
     }
 

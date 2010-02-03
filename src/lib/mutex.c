@@ -34,9 +34,11 @@ lumiera_mutex_init (LumieraMutex self,
 {
   if (self)
     {
-      pthread_mutex_init (&self->mutex, NULL);
       NOBUG_RESOURCE_HANDLE_INIT (self->rh);
-      NOBUG_RESOURCE_ANNOUNCE_RAW_CTX (flag, "mutex", purpose, self, self->rh, ctx);
+      NOBUG_RESOURCE_ANNOUNCE_RAW_CTX (flag, "mutex", purpose, self, self->rh, ctx)
+        {
+          pthread_mutex_init (&self->mutex, NULL);
+        }
     }
   return self;
 }
@@ -49,9 +51,11 @@ lumiera_mutex_destroy (LumieraMutex self,
 {
   if (self)
     {
-      NOBUG_RESOURCE_FORGET_RAW_CTX (flag, self->rh, ctx);
-      if (pthread_mutex_destroy (&self->mutex))
-        LUMIERA_DIE (LOCK_DESTROY);
+      NOBUG_RESOURCE_FORGET_RAW_CTX (flag, self->rh, ctx)
+        {
+          if (pthread_mutex_destroy (&self->mutex))
+            LUMIERA_DIE (LOCK_DESTROY);
+        }
     }
   return self;
 }
