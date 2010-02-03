@@ -34,7 +34,6 @@
 
 //TODO: System includes//
 #include <nobug.h>
-NOBUG_DECLARE_FLAG (threads);
 
 
 /**

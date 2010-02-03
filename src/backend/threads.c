@@ -41,7 +41,6 @@
  *
  */
 
-NOBUG_DEFINE_FLAG_PARENT (threads, threads_dbg); /*TODO insert a suitable/better parent flag here */
 
 
 //code goes here//
@@ -87,14 +86,14 @@ thread_loop (void* thread)
 
   REQUIRE (t, "thread does not exist");
 
-  LUMIERA_CONDITION_SECTION (threads, &t->signal)
+  LUMIERA_CONDITION_SECTION (cond_sync, &t->signal)
     {
       t->rh = &lumiera_lock_section_.rh;
 
       do {
         lumiera_threadpool_release_thread(t);
         LUMIERA_CONDITION_WAIT (t->state != LUMIERA_THREADSTATE_IDLE);
-        INFO (threads, "Thread awaken with state %d", t->state);
+        INFO (threads, "Thread awaken with state %s", lumiera_threadstate_names[t->state]);
 
         // NULL function means: no work to do
         INFO (threads, "function %p", t->function);
@@ -201,7 +200,7 @@ lumiera_thread_destroy (LumieraThread self)
   // get the pthread out of the processing loop
   // need to signal to the thread that it should start quitting
   // should this be within the section?
-  LUMIERA_CONDITION_SECTION (threads, &self->signal)
+  LUMIERA_CONDITION_SECTION (cond_sync, &self->signal)
     {
       REQUIRE (self->state == LUMIERA_THREADSTATE_IDLE, "trying to delete a thread in state other than IDLE (%s)", lumiera_threadstate_names[self->state]);
       self->state = LUMIERA_THREADSTATE_SHUTDOWN;
@@ -302,7 +301,7 @@ lumiera_thread_sync_other (LumieraThread other)
 {
   TRACE(threads);
 
-  LUMIERA_CONDITION_SECTION (threads, &other->signal)
+  LUMIERA_CONDITION_SECTION (cond_sync, &other->signal)
     {
       LUMIERA_CONDITION_WAIT (other->state == LUMIERA_THREADSTATE_SYNCING);
       other->state = LUMIERA_THREADSTATE_RUNNING;
@@ -340,7 +339,7 @@ lumiera_thread_join (LumieraThread thread)
   TRACE(threads);
   lumiera_err ret = NULL;
 
-  LUMIERA_CONDITION_SECTION (threads, &thread->signal)
+  LUMIERA_CONDITION_SECTION (cond_sync, &thread->signal)
     {
       LUMIERA_CONDITION_WAIT (thread->state == LUMIERA_THREADSTATE_ZOMBIE);
       ret = (lumiera_err)thread->arguments;
