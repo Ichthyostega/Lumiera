@@ -36,4 +36,10 @@ err: result is 0
 err: value is 84
 END
 
+TEST "sync joinable" sync-joinable <<END
+err: syncing with the master thread
+err: the master thread received its arguments
+err: the master thread terminated
+END
+
 PLANNED "error cleared on join"
