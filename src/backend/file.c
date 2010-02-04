@@ -136,6 +136,12 @@ lumiera_file_chunksize_set (LumieraFile self, size_t chunksize)
 size_t
 lumiera_file_chunksize_get (LumieraFile self)
 {
+  if (!self->descriptor->mmapings)
+    {
+      LUMIERA_ERROR_SET (file, FILE_NOCHUNKSIZE, lumiera_filedescriptor_name (self->descriptor));
+      return 0;
+    }
+
   return self->descriptor->mmapings->chunksize;
 }
 
