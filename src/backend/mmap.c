@@ -202,7 +202,6 @@ lumiera_mmap_init (LumieraMMap self, LumieraFile file, off_t start, size_t size)
  etruncate:
  efile:
   lumiera_file_handle_release (file);
-  lumiera_free (self);
   return NULL;
 }
 
