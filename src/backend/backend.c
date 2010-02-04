@@ -26,6 +26,7 @@
 #include "common/config.h"
 #include "backend/filehandlecache.h"
 #include "backend/filedescriptor.h"
+#include "backend/filedescriptorregistry.h"
 #include "backend/mmapcache.h"
 #include "backend/threadpool.h"
 
@@ -65,9 +66,11 @@ lumiera_backend_init (void)
 
   TRACE (backend_dbg);
 
+  lumiera_mutex_init (&lumiera_filecreate_mutex, "fileaccess", &NOBUG_FLAG (mutex_dbg), NOBUG_CONTEXT);
+
   lumiera_threadpool_init ();
 
-  lumiera_filedescriptor_registry_init ();
+  lumiera_filedescriptorregistry_init ();
 
   lumiera_backend_pagesize = sysconf(_SC_PAGESIZE);
 
@@ -115,6 +118,9 @@ lumiera_backend_destroy (void)
   TRACE (backend_dbg);
   lumiera_mmapcache_delete ();
   lumiera_filehandlecache_delete ();
-  lumiera_filedescriptor_registry_destroy ();
+  lumiera_filedescriptorregistry_destroy ();
   lumiera_threadpool_destroy ();
+
+  lumiera_mutex_destroy (&lumiera_filecreate_mutex, &NOBUG_FLAG (mutex_dbg), NOBUG_CONTEXT);
 }
+
