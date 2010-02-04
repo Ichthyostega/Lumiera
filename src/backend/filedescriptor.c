@@ -214,9 +214,9 @@ lumiera_filedescriptor_handle_acquire (LumieraFiledescriptor self)
     {
       if (!self->handle)
         /* no handle yet, get a new one */
-        lumiera_filehandlecache_handle_acquire (lumiera_fhcache, self);
+        lumiera_filehandlecache_handle_acquire (self);
       else
-        lumiera_filehandlecache_checkout (lumiera_fhcache, self->handle);
+        lumiera_filehandlecache_checkout (self->handle);
 
       fd = lumiera_filehandle_handle (self->handle);
     }
@@ -232,7 +232,7 @@ lumiera_filedescriptor_handle_release (LumieraFiledescriptor self)
   REQUIRE (self->handle);
 
   LUMIERA_MUTEX_SECTION (mutex_sync, &self->lock)
-    lumiera_filehandlecache_checkin (lumiera_fhcache, self->handle);
+    lumiera_filehandlecache_checkin (self->handle);
 }
 
 
@@ -299,11 +299,11 @@ lumiera_filedescriptor_delete (LumieraFiledescriptor self, const char* name)
       if (self->handle && name && ((self->flags & O_RDWR) == O_RDWR))
         {
           TRACE (filedescriptor_dbg, "truncate %s to %lld", name, (long long)self->realsize);
-          lumiera_filehandlecache_checkout (lumiera_fhcache, self->handle);
+          lumiera_filehandlecache_checkout (self->handle);
           int dummy = ftruncate (lumiera_filehandle_handle (self->handle), self->realsize);
           (void) dummy; /* this is present to silence a warning */
           TODO ("handle error case better");
-          lumiera_filehandlecache_checkin (lumiera_fhcache, self->handle);
+          lumiera_filehandlecache_checkin (self->handle);
         }
 
       lumiera_mmapings_delete (self->mmapings);
