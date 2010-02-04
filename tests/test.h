@@ -28,7 +28,7 @@
 
 #include <stdio.h>
 
-NOBUG_DEFINE_FLAG (tests);
+NOBUG_DEFINE_FLAG (TESTS);
 LUMIERA_ERROR_DEFINE (TEST, "test error");
 
 #define TESTS_BEGIN                             \
@@ -36,7 +36,7 @@ int                                             \
 main (int argc, const char** argv)              \
 {                                               \
   NOBUG_INIT;                                   \
-  NOBUG_INIT_FLAG (tests);                      \
+  NOBUG_INIT_FLAG (TESTS);                      \
                                                 \
   if (argc == 1)                                \
     {                                           \
