@@ -43,7 +43,7 @@ using util::isnil;
 using util::cStr;
 using test::Test;
 using lib::Sync;
-using lib::NonrecursiveLock_Waitable;
+using lib::RecursiveLock_Waitable;
 using backend::Thread;
 
 
@@ -86,7 +86,7 @@ namespace test  {
        */
       class MockSys
         : public lumiera::Subsys
-        , public Sync<NonrecursiveLock_Waitable>
+        , public Sync<RecursiveLock_Waitable>      ////////////TODO: Sync could be eliminated entirely here
         {
           Literal id_;
           const string spec_;
@@ -96,6 +96,7 @@ namespace test  {
           volatile bool started_;
           volatile bool termRequest_;
           int running_duration_;
+          
           
           bool
           shouldStart (lumiera::Option&)
@@ -117,7 +118,12 @@ namespace test  {
               
               if ("true"==startSpec) //----simulate successful subsystem start
                 {
-                  Thread (id_, bind (&MockSys::run, this, termination)).sync();            /////TODO: the thread description should be rather "Test: "+string(*this), but this requires to implement the class Literal as planned
+                  REQUIRE (!started_);
+                   
+                  Thread (id_, bind (&MockSys::run, this, termination))
+                        .sync();     // run-status hanshake
+                  
+                  ASSERT (started_);
                 }
               else
               if ("fail"==startSpec) //----not starting, incorrectly reporting success
@@ -160,6 +166,7 @@ namespace test  {
               string runSpec (extractID ("run",spec_));
               ASSERT (!isnil (runSpec));
               
+              // run-status handshake
               started_ = true;
               isUp_    = ("true"==runSpec || "throw"==runSpec);
               didRun_  = ("false"!=runSpec); // includes "fail" and "throw"
@@ -219,7 +226,7 @@ namespace test  {
           operator string ()  const { return "MockSys(\""+id_+"\")"; }
           
           friend inline ostream&
-          operator<< (ostream& os, MockSys const& mosi) { return os << string(mosi); }
+          operator<< (ostream& os, MockSys const& subsys) { return os << string(subsys); }
           
           bool didRun ()  const { return didRun_; }
         };
@@ -398,14 +405,6 @@ namespace test  {
             ASSERT (!unit3.didRun());
             // can't say for sure if unit4 actually did run
           }
-
-      public:
-        SubsystemRunner_test()
-        { }
-        
-        ~SubsystemRunner_test()
-        { }
-
       };
     
     

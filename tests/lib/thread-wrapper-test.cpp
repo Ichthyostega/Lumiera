@@ -23,59 +23,81 @@
 
 #include "lib/test/run.hpp"
 
-#include "lib/symbol.hpp"
 #include "backend/thread-wrapper.hpp"
 #include "lib/sync.hpp"
+#include "lib/symbol.hpp"
 
 #include <tr1/functional>
 
 using std::tr1::bind;
 using test::Test;
-using lib::Sync;
-using lib::NonrecursiveLock_NoWait;
+
 
 namespace backend {
   namespace test  {
   
     namespace { // private test classes and data...
       
-      volatile ulong sum;
-      ulong checksum;
-      
-      Sync<NonrecursiveLock_NoWait> lockme;
-      
       const uint NUM_THREADS      = 20;
       const uint MAX_RAND_SUMMAND = 100;
       
-      uint
-      createVal()  ///< generating test values, remembering the sum
-      {
-        uint val(rand() % MAX_RAND_SUMMAND);
-        checksum += val;
-        return val;
-      }
+      
+      class Checker
+        : public lib::Sync<>
+        {
+          volatile ulong hot_sum_;
+          ulong control_sum_;
+          
+        public:
+          Checker() : hot_sum_(0), control_sum_(0) { }
+          
+          bool
+          verify()    ///< verify test values got handled and accounted
+            {
+              return 0 < hot_sum_
+                  && control_sum_ == hot_sum_;
+            }
+          
+          uint
+          createVal() ///< generating test values, remembering the control sum
+            {
+              uint val(rand() % MAX_RAND_SUMMAND);
+              control_sum_ += val;
+              return val;
+            }
+          
+          void
+          addValues (uint a, uint b)   ///< to be called concurrently
+            {
+              Lock guard(this);
+              
+              hot_sum_ *= 2;
+              usleep (200);             // force preemption
+              hot_sum_ += 2 * (a+b);
+              usleep (200);
+              hot_sum_ /= 2;
+            }
+        };
+      
+      
+      Checker checksum; ///< global variable used by multiple threads
+      
+      
       
       
       struct TestThread
-        : Sync<NonrecursiveLock_NoWait>  // using dedicated locking for this test TODO: needs classlock
-        , Thread
+        : Thread
         {
           TestThread()
             : Thread("test Thread creation",
-                     bind (&TestThread::theOperation, this, createVal(), createVal()))
+                     bind (&TestThread::theOperation, this, checksum.createVal(), checksum.createVal()))
             { }                         // note the binding (functor object) is passed as anonymous temporary
           
           
           void
           theOperation (uint a, uint b) ///< the actual operation running in a separate thread
             {
-              //Lock(this);     << broken we need a classlock, using sync-classlock is left as excercise for the reader
-              Sync<NonrecursiveLock_NoWait>::Lock gotit(&lockme);
-              sum *= 2;
-              usleep (200);             // force preemption
-              sum += (2*(a+b));
-              usleep (200);
-              sum /= 2;
+              checksum.addValues (a,b);
             }
         };
       
@@ -104,13 +126,11 @@ namespace backend {
         virtual void
         run (Arg)
           {
-            sum = checksum = 0;
             TestThread instances[NUM_THREADS]    SIDEEFFECT;
             
             usleep (200000);  // pause 200ms for the threads to terminate.....
             
-            ASSERT (0 < sum);
-            ASSERT (sum==checksum);
+            ASSERT (checksum.verify());
           }
       };
     
@@ -121,6 +141,4 @@ namespace backend {
     
     
     
-  } // namespace test
-
-} // namespace backend
+}} // namespace backend::test
