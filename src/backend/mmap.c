@@ -59,21 +59,16 @@ lumiera_mmap_init (LumieraMMap self, LumieraFile file, off_t start, size_t size)
   REQUIRE (start >= 0);
   REQUIRE (size);
 
-  static int once = 0;
-  if (!once)
-    {
-      once = 1;
-      /**
-       * default size for the mmapping window
-       * 128MB on 32 bit arch
-       * 2GB on 64 bit arch
-       */
+  /**
+   * default size for the mmapping window
+   * 128MB on 32 bit arch
+   * 2GB on 64 bit arch
+   */
 #if SIZE_MAX <= 4294967295U
-      lumiera_config_setdefault ("backend.mmap.window_size = 134217728");
+  lumiera_config_setdefault ("backend.mmap.window_size = 134217728");
 #else
-      lumiera_config_setdefault ("backend.mmap.window_size = 2147483648");
+  lumiera_config_setdefault ("backend.mmap.window_size = 2147483648");
 #endif
-    }
 
   long long mmap_window_size = 0;
   lumiera_config_number_get ("backend.mmap.window_size", &mmap_window_size);
