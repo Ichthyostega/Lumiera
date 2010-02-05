@@ -29,6 +29,7 @@
 #include "backend/filedescriptorregistry.h"
 #include "backend/mmapcache.h"
 #include "backend/threadpool.h"
+#include "backend/resourcecollector.h"
 
 #include <unistd.h>
 #include <sys/resource.h>
@@ -67,6 +68,8 @@ lumiera_backend_init (void)
   TRACE (backend_dbg);
 
   lumiera_mutex_init (&lumiera_filecreate_mutex, "fileaccess", &NOBUG_FLAG (mutex_dbg), NOBUG_CONTEXT);
+
+  lumiera_resourcecollector_init ();
 
   lumiera_threadpool_init ();
 
@@ -116,10 +119,13 @@ void
 lumiera_backend_destroy (void)
 {
   TRACE (backend_dbg);
+
   lumiera_mmapcache_delete ();
   lumiera_filehandlecache_delete ();
   lumiera_filedescriptorregistry_destroy ();
   lumiera_threadpool_destroy ();
+
+  lumiera_resourcecollector_destroy ();
 
   lumiera_mutex_destroy (&lumiera_filecreate_mutex, &NOBUG_FLAG (mutex_dbg), NOBUG_CONTEXT);
 }

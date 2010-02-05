@@ -99,9 +99,16 @@ typedef lumiera_resourcehandler* LumieraResourcehandler;
 
 
 /**
+ * Initialize the Resourcecollector.
+ * The resourcecollector is singleton and can be used after initialized once.
+ */
+void
+lumiera_resourcecollector_init (void);
+
+
+/**
  * Destroy the resource collector registry.
  * Unregisters and deletes all handlers.
- * Note that there is no resourcecollector_init() function, initialization is automatic on first use.
  */
 void
 lumiera_resourcecollector_destroy (void);
