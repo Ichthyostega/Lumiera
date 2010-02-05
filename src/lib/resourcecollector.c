@@ -74,8 +74,7 @@ lumiera_resourcecollector_run (enum lumiera_resource which, enum lumiera_resourc
 {
   TRACE (resourcecollector_dbg);
 
-  if (lumiera_resourcecollector_once == PTHREAD_ONCE_INIT)
-    pthread_once (&lumiera_resourcecollector_once, lumiera_resourcecollector_init_);
+  pthread_once (&lumiera_resourcecollector_once, lumiera_resourcecollector_init_);
 
   LUMIERA_MUTEX_SECTION (mutex_sync, &lumiera_resourcecollector_lock)
     {
@@ -120,8 +119,7 @@ lumiera_resourcecollector_run (enum lumiera_resource which, enum lumiera_resourc
 LumieraResourcehandler
 lumiera_resourcecollector_register_handler (enum lumiera_resource resource, lumiera_resource_handler_fn handler, void* data)
 {
-  if (lumiera_resourcecollector_once == PTHREAD_ONCE_INIT)
-    pthread_once (&lumiera_resourcecollector_once, lumiera_resourcecollector_init_);
+  pthread_once (&lumiera_resourcecollector_once, lumiera_resourcecollector_init_);
 
   TRACE (resourcecollector_dbg);
 

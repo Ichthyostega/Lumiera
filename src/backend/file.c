@@ -95,7 +95,6 @@ lumiera_file_handle_acquire (LumieraFile self)
   TRACE (file_dbg);
   REQUIRE (self);
   REQUIRE (self->descriptor);
-  REQUIRE (lumiera_fhcache);
 
   return lumiera_filedescriptor_handle_acquire (self->descriptor);
 }
@@ -107,7 +106,6 @@ lumiera_file_handle_release (LumieraFile self)
   TRACE (file_dbg);
   REQUIRE (self);
   REQUIRE (self->descriptor);
-  REQUIRE (lumiera_fhcache);
 
   return lumiera_filedescriptor_handle_release (self->descriptor);
 }

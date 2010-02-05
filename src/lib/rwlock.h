@@ -170,19 +170,20 @@ lumiera_rwlock_rdlock (LumieraRWLock self,
 {
   if (self)
     {
-      NOBUG_RESOURCE_WAIT_CTX (NOBUG_FLAG_RAW(flag), self->rh, "acquire rwlock for reading", *handle, ctx);
-
-      int err = pthread_rwlock_rdlock (&self->rwlock);
-
-      if (!err)
+      NOBUG_RESOURCE_WAIT_CTX (NOBUG_FLAG_RAW(flag), self->rh, "acquire rwlock for reading", *handle, ctx)
         {
-          NOBUG_RESOURCE_STATE_CTX (NOBUG_FLAG_RAW(flag), NOBUG_RESOURCE_SHARED, *handle, ctx);
-        }
-      else
-        {
-          NOBUG_RESOURCE_LEAVE_RAW_CTX (flag, *handle, ctx) /*{}*/;
-          lumiera_lockerror_set (err, flag, ctx);
-          return NULL;
+          int err = pthread_rwlock_rdlock (&self->rwlock);
+
+          if (!err)
+            {
+              NOBUG_RESOURCE_STATE_CTX (NOBUG_FLAG_RAW(flag), NOBUG_RESOURCE_SHARED, *handle, ctx) /*{}*/;
+            }
+          else
+            {
+              NOBUG_RESOURCE_LEAVE_RAW_CTX (flag, *handle, ctx) /*{}*/;
+              lumiera_lockerror_set (err, flag, ctx);
+              self = NULL;
+            }
         }
     }
 
@@ -198,19 +199,20 @@ lumiera_rwlock_tryrdlock (LumieraRWLock self,
 {
   if (self)
     {
-      NOBUG_RESOURCE_TRY_CTX (NOBUG_FLAG_RAW(flag), self->rh, "try acquire rwlock for reading", *handle, ctx);
-
-      int err = pthread_rwlock_tryrdlock (&self->rwlock);
-
-      if (!err)
+      NOBUG_RESOURCE_TRY_CTX (NOBUG_FLAG_RAW(flag), self->rh, "try acquire rwlock for reading", *handle, ctx)
         {
-          NOBUG_RESOURCE_STATE_CTX (NOBUG_FLAG_RAW(flag), NOBUG_RESOURCE_SHARED, *handle, ctx);
-        }
-      else
-        {
-          NOBUG_RESOURCE_LEAVE_RAW_CTX (flag, *handle, ctx) /*{}*/;
-          lumiera_lockerror_set (err, flag, ctx);
-          return NULL;
+          int err = pthread_rwlock_tryrdlock (&self->rwlock);
+
+          if (!err)
+            {
+              NOBUG_RESOURCE_STATE_CTX (NOBUG_FLAG_RAW(flag), NOBUG_RESOURCE_SHARED, *handle, ctx) /*{}*/;
+            }
+          else
+            {
+              NOBUG_RESOURCE_LEAVE_RAW_CTX (flag, *handle, ctx) /*{}*/;
+              lumiera_lockerror_set (err, flag, ctx);
+              self = NULL;
+            }
         }
     }
 
@@ -227,19 +229,20 @@ lumiera_rwlock_timedrdlock (LumieraRWLock self,
 {
   if (self)
     {
-      NOBUG_RESOURCE_TRY_CTX (NOBUG_FLAG_RAW(flag), self->rh, "timed acquire rwlock for reading", *handle, ctx);
-
-      int err = pthread_rwlock_timedrdlock (&self->rwlock, timeout);
-
-      if (!err)
+      NOBUG_RESOURCE_TRY_CTX (NOBUG_FLAG_RAW(flag), self->rh, "timed acquire rwlock for reading", *handle, ctx)
         {
-          NOBUG_RESOURCE_STATE_CTX (NOBUG_FLAG_RAW(flag), NOBUG_RESOURCE_SHARED, *handle, ctx);
-        }
-      else
-        {
-          NOBUG_RESOURCE_LEAVE_RAW_CTX (flag, *handle, ctx) /*{}*/;
-          lumiera_lockerror_set (err, flag, ctx);
-          return NULL;
+          int err = pthread_rwlock_timedrdlock (&self->rwlock, timeout);
+
+          if (!err)
+            {
+              NOBUG_RESOURCE_STATE_CTX (NOBUG_FLAG_RAW(flag), NOBUG_RESOURCE_SHARED, *handle, ctx) /*{}*/;
+            }
+          else
+            {
+              NOBUG_RESOURCE_LEAVE_RAW_CTX (flag, *handle, ctx) /*{}*/;
+              lumiera_lockerror_set (err, flag, ctx);
+              self = NULL;
+            }
         }
     }
 
@@ -255,12 +258,13 @@ lumiera_rwlock_wrlock (LumieraRWLock self,
 {
   if (self)
     {
-      NOBUG_RESOURCE_WAIT_CTX (NOBUG_FLAG_RAW(flag), self->rh, "acquire rwlock for writing", *handle, ctx);
+      NOBUG_RESOURCE_WAIT_CTX (NOBUG_FLAG_RAW(flag), self->rh, "acquire rwlock for writing", *handle, ctx)
+        {
+          if (pthread_rwlock_wrlock (&self->rwlock))
+            LUMIERA_DIE (LOCK_ACQUIRE);                 /* never reached (in a correct program) */
 
-      if (pthread_rwlock_wrlock (&self->rwlock))
-        LUMIERA_DIE (LOCK_ACQUIRE);                 /* never reached (in a correct program) */
-
-      NOBUG_RESOURCE_STATE_CTX (NOBUG_FLAG_RAW(flag), NOBUG_RESOURCE_EXCLUSIVE, *handle, ctx);
+          NOBUG_RESOURCE_STATE_CTX (NOBUG_FLAG_RAW(flag), NOBUG_RESOURCE_EXCLUSIVE, *handle, ctx) /*{}*/;
+        }
     }
 
   return self;
@@ -275,19 +279,20 @@ lumiera_rwlock_trywrlock (LumieraRWLock self,
 {
   if (self)
     {
-      NOBUG_RESOURCE_TRY_CTX (NOBUG_FLAG_RAW(flag), self->rh, "try acquire rwlock for writing", *handle, ctx);
-
-      int err = pthread_rwlock_trywrlock (&self->rwlock);
-
-      if (!err)
+      NOBUG_RESOURCE_TRY_CTX (NOBUG_FLAG_RAW(flag), self->rh, "try acquire rwlock for writing", *handle, ctx)
         {
-          NOBUG_RESOURCE_STATE_CTX (NOBUG_FLAG_RAW(flag), NOBUG_RESOURCE_EXCLUSIVE, *handle, ctx);
-        }
-      else
-        {
-          NOBUG_RESOURCE_LEAVE_RAW_CTX (flag, *handle, ctx) /*{}*/;
-          lumiera_lockerror_set (err, flag, ctx);
-          return NULL;
+          int err = pthread_rwlock_trywrlock (&self->rwlock);
+
+          if (!err)
+            {
+              NOBUG_RESOURCE_STATE_CTX (NOBUG_FLAG_RAW(flag), NOBUG_RESOURCE_EXCLUSIVE, *handle, ctx) /*{}*/;
+            }
+          else
+            {
+              NOBUG_RESOURCE_LEAVE_RAW_CTX (flag, *handle, ctx) /*{}*/;
+              lumiera_lockerror_set (err, flag, ctx);
+              self = NULL;
+            }
         }
     }
 
@@ -304,19 +309,20 @@ lumiera_rwlock_timedwrlock (LumieraRWLock self,
 {
   if (self)
     {
-      NOBUG_RESOURCE_TRY_CTX (NOBUG_FLAG_RAW(flag), self->rh, "timed acquire rwlock for writing", *handle, ctx);
-
-      int err = pthread_rwlock_timedwrlock (&self->rwlock, timeout);
-
-      if (!err)
+      NOBUG_RESOURCE_TRY_CTX (NOBUG_FLAG_RAW(flag), self->rh, "timed acquire rwlock for writing", *handle, ctx)
         {
-          NOBUG_RESOURCE_STATE_CTX (NOBUG_FLAG_RAW(flag), NOBUG_RESOURCE_EXCLUSIVE, *handle, ctx);
-        }
-      else
-        {
-          NOBUG_RESOURCE_LEAVE_RAW_CTX (flag, *handle, ctx) /*{}*/;
-          lumiera_lockerror_set (err, flag, ctx);
-          return NULL;
+          int err = pthread_rwlock_timedwrlock (&self->rwlock, timeout);
+
+          if (!err)
+            {
+              NOBUG_RESOURCE_STATE_CTX (NOBUG_FLAG_RAW(flag), NOBUG_RESOURCE_EXCLUSIVE, *handle, ctx) /*{}*/;
+            }
+          else
+            {
+              NOBUG_RESOURCE_LEAVE_RAW_CTX (flag, *handle, ctx) /*{}*/;
+              lumiera_lockerror_set (err, flag, ctx);
+              self = NULL;
+            }
         }
     }
 

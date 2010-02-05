@@ -110,7 +110,7 @@ TEST ("threadpool1")
   LumieraThread t1 =
     lumiera_threadpool_acquire_thread(LUMIERA_THREADCLASS_INTERACTIVE,
 				      "test purpose",
-				      &NOBUG_FLAG(test));
+				      &NOBUG_FLAG(TESTS));
   //  lumiera_threadpool_release_thread(t1);
   ECHO("acquired thread 1 %p",t1);
   lumiera_threadpool_destroy();
@@ -126,13 +126,13 @@ TEST ("two-thread-acquire")
   LumieraThread t1 =
     lumiera_threadpool_acquire_thread(LUMIERA_THREADCLASS_INTERACTIVE,
 				      "test purpose",
-				      &NOBUG_FLAG(test));
+				      &NOBUG_FLAG(TESTS));
 
   ECHO("acquiring thread 2");
   LumieraThread t2 =
     lumiera_threadpool_acquire_thread(LUMIERA_THREADCLASS_IDLE,
 				      "test purpose",
-				      &NOBUG_FLAG(test));
+				      &NOBUG_FLAG(TESTS));
 
   ECHO("thread 1 state=%s", lumiera_threadstate_names[t1->state]);
   CHECK(LUMIERA_THREADSTATE_IDLE == t1->state);
@@ -140,13 +140,13 @@ TEST ("two-thread-acquire")
   ECHO("thread 2 state=%s", lumiera_threadstate_names[t2->state]);
   CHECK(LUMIERA_THREADSTATE_IDLE == t2->state);
 
-  LUMIERA_CONDITION_SECTION(cond_sync, &t1->signal)
+  LUMIERA_CONDITION_SECTION(TESTS, &t1->signal)
     {
       t1->state = LUMIERA_THREADSTATE_WAKEUP;
       LUMIERA_CONDITION_SIGNAL;
     }
 
-  LUMIERA_CONDITION_SECTION(cond_sync, &t2->signal)
+  LUMIERA_CONDITION_SECTION(TESTS, &t2->signal)
     {
       t2->state = LUMIERA_THREADSTATE_WAKEUP;
       LUMIERA_CONDITION_SIGNAL;
@@ -174,7 +174,7 @@ TEST ("many-sleepy-threads")
 			       &sleep_fn,
 			       (void *) &delay,
 			       "just sleep a bit",
-			       &NOBUG_FLAG(test));
+			       &NOBUG_FLAG(TESTS));
 	}
     }
 
@@ -199,7 +199,7 @@ TEST ("toomany-random-sleepy-threads (compiletest only)")
 			       &sleep_fn,
 			       (void *) &delay[i],
 			       "just sleep a bit",
-			       &NOBUG_FLAG(test));
+			       &NOBUG_FLAG(TESTS));
 	}
     }
   lumiera_threadpool_destroy();
@@ -215,7 +215,7 @@ TEST ("no-function")
 			  NULL,
 			  NULL,
 			  "process my test function",
-			  &NOBUG_FLAG(test));
+			  &NOBUG_FLAG(TESTS));
 
   // cleanup
   ECHO("finished waiting");
@@ -236,7 +236,7 @@ TEST ("process-function")
 			  &is_prime,
 			  (void *)&number, //void * arg,
 			  "process my test function",
-			  &NOBUG_FLAG(test)); // struct nobug_flag* flag)
+			  &NOBUG_FLAG(TESTS)); // struct nobug_flag* flag)
 
   // cleanup
   lumiera_threadpool_destroy();
@@ -261,7 +261,7 @@ TEST ("many-random-sleepy-threads (compiletest only)")
 			       &sleep_fn,
 			       (void *) &delay[i],
 			       "just sleep a bit",
-			       &NOBUG_FLAG(test));
+			       &NOBUG_FLAG(TESTS));
 	}
     }
   lumiera_threadpool_destroy();
@@ -277,7 +277,7 @@ TEST ("simple-sync")
 					     &other_fn,
 					     (void *)&value,
 					     "other thread",
-					     &NOBUG_FLAG (test));
+					     &NOBUG_FLAG (TESTS));
 
   ECHO ("syncing with the other thread");
   lumiera_thread_sync_other (other);
@@ -301,7 +301,7 @@ TEST ("sync-many")
 				       &sleeping_worker_fn,
 				       (void *)&value,
 				       "worker thread",
-				       &NOBUG_FLAG (test));
+				       &NOBUG_FLAG (TESTS));
       lumiera_thread_sync_other (threads[i]);
     }
   value += 42;

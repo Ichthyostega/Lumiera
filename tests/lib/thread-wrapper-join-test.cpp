@@ -75,7 +75,7 @@ namespace test {
           usleep (100000);          // pause 100ms prior to modifying
           
           if (DESTRUCTION_CODE == secretValue)
-            lumiera_error_set(LUMIERA_ERROR_SPECIAL, 0);
+            LUMIERA_ERROR_SET(test, SPECIAL, 0);
           else
             aValue_ =  secretValue+42;
           

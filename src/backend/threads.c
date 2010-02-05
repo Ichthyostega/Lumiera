@@ -107,6 +107,8 @@ thread_loop (void* thread)
             /* move error state to data the other thread will it pick up from there */
             t->arguments = (void*)lumiera_error ();
             t->state = LUMIERA_THREADSTATE_ZOMBIE;
+            ERROR_IF (t->arguments, threads, "joinable thread ended with error %s", (char*)t->arguments);
+
             LUMIERA_CONDITION_SIGNAL;
             LUMIERA_CONDITION_WAIT (t->state == LUMIERA_THREADSTATE_JOINED);
             INFO (threads, "Thread joined");
@@ -341,6 +343,8 @@ lumiera_thread_join (LumieraThread thread)
     {
       LUMIERA_CONDITION_WAIT (thread->state == LUMIERA_THREADSTATE_ZOMBIE);
       ret = (lumiera_err)thread->arguments;
+      ERROR_IF (ret, threads, "thread joined with error %s", ret);
+
       thread->state = LUMIERA_THREADSTATE_JOINED;
       LUMIERA_CONDITION_SIGNAL;         /* kiss it a last goodbye */
     }

@@ -195,7 +195,7 @@ TEST ("basic_insert_dump")
   for (int i = 1; i <= end; ++i)
     {
       sprintf (key, "%d", i);
-      TRACE (tests, "insert %s", key);
+      TRACE (TESTS, "insert %s", key);
       psplay_insert (&splay_tree, (PSplaynode)testitem_new (key), 100);
     }
 
@@ -205,14 +205,14 @@ TEST ("basic_insert_dump")
   for (int i = 1; i <= end; ++i)
     {
       sprintf (key, "%d", i);
-      TRACE (tests, "insert %s", key);
+      TRACE (TESTS, "insert %s", key);
       psplay_remove_key (&splay_tree, key);
       psplay_dump (&splay_tree, stderr);
     }
   for (int i = end; i; --i)
     {
       sprintf (key, "%d", i);
-      TRACE (tests, "insert %s", key);
+      TRACE (TESTS, "insert %s", key);
       psplay_remove_key (&splay_tree, key);
       psplay_dump (&splay_tree, stderr);
     }
@@ -299,7 +299,7 @@ TEST ("basic_insert_splay")
   for (int i = 1; i <= end; ++i)
     {
       sprintf (key, "%d", i);
-      TRACE (tests, "insert %s", key);
+      TRACE (TESTS, "insert %s", key);
       psplay_insert (&splay_tree, (PSplaynode)testitem_new (key), 100);
     }
 

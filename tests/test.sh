@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-#  Copyright (C)         Lumiera.org
-#    2007 - 2010,        Christian Thaeter <ct@pipapo.org>
+#  Copyright (C)              Lumiera.org
+#    2007, 2008, 2009, 2010,  Christian Thaeter <ct@pipapo.org>
 #
 #  This program is free software; you can redistribute it and/or
 #  modify it under the terms of the GNU General Public License as
@@ -59,7 +59,7 @@ LC_ALL=C
 #config validating the output the `LOGSUPRESS` variable can be set to a regex to filter this things out.
 #config The default as shown above filters some NoBug annotations and non fatal logging out.
 #config
-LOGSUPPRESS='^\(\*\*[0-9]*\*\* \)\?[0-9]\{10,\}: \(TRACE\|INFO\|NOTICE\|WARNING\|ERR\):'
+LOGSUPPRESS='^\(\*\*[0-9]*\*\* \)\?[0-9]\{10,\}[:!] \(TRACE\|INFO\|NOTICE\|WARNING\|ERR\):'
 
 #config PARA Resource Limits; ulimit; constrain resource limits
 #config It is possible to set some limits for tests to protect the system against really broken cases.
