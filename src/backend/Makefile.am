@@ -35,6 +35,7 @@ liblumierabackend_la_SOURCES =					\
 	$(liblumierabackend_la_srcdir)/mmap.c			\
 	$(liblumierabackend_la_srcdir)/mmapings.c		\
 	$(liblumierabackend_la_srcdir)/mmapcache.c		\
+	$(liblumierabackend_la_srcdir)/resourcecollector.c	\
 	$(liblumierabackend_la_srcdir)/threadpool-init.cpp	\
 	$(liblumierabackend_la_srcdir)/enginefacade.cpp		\
 	$(liblumierabackend_la_srcdir)/scriptrunnerfacade.cpp	\
@@ -52,5 +53,6 @@ noinst_HEADERS +=						\
 	$(liblumierabackend_la_srcdir)/filehandlecache.h	\
 	$(liblumierabackend_la_srcdir)/mmap.h			\
 	$(liblumierabackend_la_srcdir)/mmapings.h		\
-	$(liblumierabackend_la_srcdir)/mmapcache.h
+	$(liblumierabackend_la_srcdir)/mmapcache.h		\
+	$(liblumierabackend_la_srcdir)/resourcecollector.h
 

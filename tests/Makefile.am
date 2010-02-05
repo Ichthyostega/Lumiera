@@ -73,9 +73,10 @@ test_filemmap_LDADD = $(LUMIERA_LIBS) liblumierabackend.la liblumieracommon.la l
 # FIXME stray dependencies on proc
 
 check_PROGRAMS += test-resourcecollector
-test_resourcecollector_SOURCES = $(tests_srcdir)/library/test-resourcecollector.c
+test_resourcecollector_SOURCES = $(tests_srcdir)/backend/test-resourcecollector.c
 test_resourcecollector_CPPFLAGS = $(AM_CPPFLAGS) -std=gnu99 -Wall -Werror -I$(top_srcdir)/src/
-test_resourcecollector_LDADD = $(LUMIERA_LIBS) liblumiera.la
+test_resourcecollector_LDADD = $(LUMIERA_LIBS) liblumiera.la liblumierabackend.la liblumieraproc.la liblumieracommon.la
+# FIXME stray dependencies on proc
 
 check_PROGRAMS += test-slist
 test_slist_SOURCES = $(tests_srcdir)/library/test-slist.c
