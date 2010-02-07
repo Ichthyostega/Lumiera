@@ -59,6 +59,7 @@ lumiera_error_tls_delete (void* err)
 {
   if (err)
     free (((LumieraErrorcontext)err)->extra);
+  free(err);
 }
 
 static void
