@@ -61,6 +61,13 @@ namespace test  {
        *  shutdown request every XX milliseconds */
       const uint TICK_DURATION_ms = 5;
       
+      /** due to a shortcoming of this test fixture,
+       *  a floundering subsystem continues to run for
+       *  a short time after the sync barrier.
+       *  Relevant for singleSubsys_start_failure().
+       */
+      const uint DELAY_FOR_FLOUNDERING_THRAD_ms = 20;
+      
       /** dummy options just to be ignored */
       util::Cmdline dummyArgs ("");
       lumiera::Option dummyOpt (dummyArgs);
@@ -75,12 +82,9 @@ namespace test  {
       
       /** 
        * A simulated "Lumiera Subsystem".
-       * It is capable of starting a separate thread,
-       * which may terminate regularly after a random
-       * time, or may fail in various ways. 
-       * The behaviour is controlled by a number of
-       * definitions, given at construction in
-       * logic predicate notation.
+       * It is capable of starting a separate thread, which may terminate regularly
+       * after a random time, or may fail in various ways. The behaviour is controlled
+       * by a number of definitions, given at construction in logic predicate notation.
        */
       class MockSys
         : public lumiera::Subsys
@@ -262,7 +266,7 @@ namespace test  {
         run (Arg)
           {
             singleSubsys_complete_cycle();
-            singleSubsys_start_failure();      ////////////////////////////TODO: Valgrind logs an invalid read from here here, at line 172
+            singleSubsys_start_failure();
             singleSubsys_emegency_exit();
             
             dependentSubsys_complete_cycle();
@@ -289,6 +293,15 @@ namespace test  {
           }
         
         
+        /** @note as this test focuses on the SubsystemRunner, the mock subsystem
+         *  is implemented rather simplistic. Especially, there is a race when a
+         *  subsystem is configured to "fail" -- because in this case the starting
+         *  context may go away before the remainder of the subsystem thread has
+         *  executed after the sync() barrier. Especially in this case, no MockSys
+         *  actually starts without failure, and thus the SubsystemRunner::wait()
+         *  has no guarding effect. This can be considered a shortcoming of the
+         *  test fixture; a well behaved subsystem won't just go away...
+         */
         void
         singleSubsys_start_failure()
           {
@@ -306,6 +319,7 @@ namespace test  {
             VERIFY_ERROR (LOGIC, runner.maybeRun (unit3) );     // incorrect behaviour trapped
             VERIFY_ERROR (LOGIC, runner.maybeRun (unit4) );     // detected that the subsystem didn't come up
             
+            usleep (DELAY_FOR_FLOUNDERING_THRAD_ms * 1000);     // preempt to allow unit4 to go away
             runner.wait();
             
             ASSERT (!unit1.isRunning());
