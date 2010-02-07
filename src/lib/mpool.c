@@ -38,9 +38,14 @@
 #endif
 
 /*
+  defaults for the hooks, used when creating mpools
+ */
+void *(*mpool_malloc_hook)(size_t size) = malloc;
+void (*mpool_free_hook)(void *ptr) = free;
+
+/*
   Cluster and node structures are private
 */
-
 typedef struct mpoolcluster_struct mpoolcluster;
 typedef mpoolcluster* MPoolcluster;
 typedef const mpoolcluster* const_MPoolcluster;
@@ -94,6 +99,9 @@ mpool_init (MPool self, size_t elem_size, unsigned elements_per_cluster, mpool_d
       self->elements_free = 0;
       self->destroy = dtor;
       self->locality = NULL;
+
+      self->malloc_hook = mpool_malloc_hook;
+      self->free_hook = mpool_free_hook;
     }
 
   return self;
@@ -144,7 +152,7 @@ mpool_destroy (MPool self)
 
           llist_unlink_fast_ (cluster);
           TRACE (mpool_dbg, "freeing cluster %p" , cluster);
-          free (cluster);
+          self->free_hook (cluster);
         }
 
       llist_init (&self->freelist);
@@ -156,11 +164,19 @@ mpool_destroy (MPool self)
 }
 
 
+MPool
+mpool_purge (MPool self)
+{
+  // not UNIMPLEMENTED because valid no-op
+  PLANNED("To be implemented");
+  return self;
+}
+
 
 MPool
 mpool_cluster_alloc_ (MPool self)
 {
-  MPoolcluster cluster = malloc (self->cluster_size);
+  MPoolcluster cluster = self->malloc_hook (self->cluster_size);
   TRACE (mpool_dbg, "%p", cluster);
 
   if (!cluster)

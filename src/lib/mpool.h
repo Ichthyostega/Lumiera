@@ -77,6 +77,8 @@ struct mpool_struct
   unsigned elements_free;               /* a counter of free elements is the price we pay to support a reserve() operation */
   void* locality;
   mpool_destroy_fn destroy;
+  void *(*malloc_hook)(size_t);
+  void (*free_hook)(void *);
 };
 
 
@@ -127,6 +129,18 @@ mpool_init (MPool self, size_t elem_size, unsigned elements_per_cluster, mpool_d
 */
 MPool
 mpool_destroy (MPool self);
+
+/*
+//index.mpool_purge xref:mpool_purge[mpool_purge()]:: free unused clusters
+//mpool [[mpool_purge]]
+//mpool .mpool_purge
+//mpool
+//mpool TODO
+//mpool
+//mpool
+*/
+MPool
+mpool_purge (MPool self);
 
 
 /*
