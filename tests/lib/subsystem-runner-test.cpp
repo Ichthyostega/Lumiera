@@ -42,8 +42,6 @@ using std::tr1::bind;
 using util::isnil;
 using util::cStr;
 using test::Test;
-using lib::Sync;
-using lib::RecursiveLock_Waitable;
 using backend::Thread;
 
 
@@ -86,7 +84,6 @@ namespace test  {
        */
       class MockSys
         : public lumiera::Subsys
-        , public Sync<RecursiveLock_Waitable>      ////////////TODO: Sync could be eliminated entirely here
         {
           Literal id_;
           const string spec_;
@@ -121,7 +118,7 @@ namespace test  {
                   REQUIRE (!started_);
                    
                   Thread (id_, bind (&MockSys::run, this, termination))
-                        .sync();     // run-status hanshake
+                        .sync();     // run-status handshake
                   
                   ASSERT (started_);
                 }
@@ -179,9 +176,11 @@ namespace test  {
                   
                   INFO (test, "thread %s now running....", cStr(*this));
                   
-                  Lock sync_condition(this);
-                  while (!sync_condition.wait (*this, &MockSys::tick, TICK_DURATION_ms))
-                    running_duration_ -= TICK_DURATION_ms;
+                  while (!shouldTerminate())
+                    {
+                      usleep (1000*TICK_DURATION_ms);
+                      running_duration_ -= TICK_DURATION_ms;
+                    }
                   
                   INFO (test, "thread %s about to terminate...", cStr(*this));
                   isUp_ = false;
@@ -203,7 +202,7 @@ namespace test  {
           
           
           bool
-          tick ()   ///< simulates async termination, either on request or by timing
+          shouldTerminate ()  ///< simulates async termination, either on request or by timing
             {
               return termRequest_ || running_duration_ <= 0;
             }
@@ -263,11 +262,11 @@ namespace test  {
         run (Arg)
           {
             singleSubsys_complete_cycle();
-            singleSubsys_start_failure();
-            //singleSubsys_emegency_exit();
+            singleSubsys_start_failure();      ////////////////////////////TODO: Valgrind logs an invalid read from here here, at line 172
+            singleSubsys_emegency_exit();
             
-            //dependentSubsys_complete_cycle();
-            //dependentSubsys_start_failure();
+            dependentSubsys_complete_cycle();
+            dependentSubsys_start_failure();
           }
         
         
