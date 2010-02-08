@@ -79,8 +79,17 @@ struct mpool_struct
   mpool_destroy_fn destroy;
   void *(*malloc_hook)(size_t);
   void (*free_hook)(void *);
+  void* udata;                          /* free to use by the user, resourcecollector stuff in lumiera*/
 };
 
+
+extern void *(*mpool_malloc_hook)(size_t size);
+extern void (*mpool_free_hook)(void *ptr);
+
+/** called after a mpool got initialized */
+extern void (*mpool_init_hook) (MPool self);
+/** called before a mpool gets destroyed */
+extern void (*mpool_destroy_hook) (MPool self);
 
 /*
 //index.mpool_init xref:mpool_init[mpool_init()]:: initialize a new memory pool

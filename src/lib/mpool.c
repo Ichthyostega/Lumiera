@@ -43,6 +43,11 @@
 void *(*mpool_malloc_hook)(size_t size) = malloc;
 void (*mpool_free_hook)(void *ptr) = free;
 
+/** called after a mpool got initialized */
+void (*mpool_init_hook) (MPool self) = NULL;
+/** called before a mpool gets destroyed */
+void (*mpool_destroy_hook) (MPool self) = NULL;
+
 /*
   Cluster and node structures are private
 */
@@ -102,6 +107,9 @@ mpool_init (MPool self, size_t elem_size, unsigned elements_per_cluster, mpool_d
 
       self->malloc_hook = mpool_malloc_hook;
       self->free_hook = mpool_free_hook;
+
+      if (mpool_init_hook)
+        mpool_init_hook (self);
     }
 
   return self;
@@ -137,6 +145,9 @@ mpool_destroy (MPool self)
   TRACE (mpool_dbg, "%p", self);
   if (self)
     {
+      if (mpool_destroy_hook)
+        mpool_destroy_hook (self);
+
       LLIST_WHILE_TAIL(&self->clusters, cluster)
         {
           if (self->destroy)
