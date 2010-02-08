@@ -73,6 +73,28 @@ void sleeping_worker_fn(void * arg)
   ECHO ("result is %d", input);
 }
 
+void joinable_worker_fn(void * arg)
+{
+  int input = *(int *)arg;
+  lumiera_thread_sync ();
+  input += 42;
+}
+
+void joinable_master_fn(void * arg)
+{
+  int input = *(int *)arg;
+  lumiera_thread_sync ();
+  input -= 42;
+  LumieraThread worker = lumiera_thread_run (LUMIERA_THREADCLASS_IDLE
+					     | LUMIERA_THREAD_JOINABLE,
+					     &joinable_worker_fn,
+					     (void *)&input,
+					     "joinable worker thread",
+					     &NOBUG_FLAG (test));
+  lumiera_thread_sync_other (worker);
+  lumiera_thread_join (worker);
+}
+
 TESTS_BEGIN
 
 TEST ("threadpool-basic")
@@ -284,6 +306,42 @@ TEST ("sync-many")
     }
   value += 42;
   ECHO ("value is %d", value);
+  lumiera_threadpool_destroy ();
+}
+
+TEST ("joinable-thread")
+{
+  int delay = 10000;
+  lumiera_threadpool_init ();
+  LumieraThread t = lumiera_thread_run (LUMIERA_THREADCLASS_IDLE
+					     | LUMIERA_THREAD_JOINABLE,
+					     &sleep_fn,
+					     (void *)&delay,
+					     "joinable idle thread",
+					     &NOBUG_FLAG (test));
+  lumiera_thread_join(t);
+  lumiera_threadpool_destroy ();
+}
+
+TEST ("sync-joinable")
+{
+  lumiera_threadpool_init ();
+
+  int value = 0;
+
+  LumieraThread master = lumiera_thread_run (LUMIERA_THREADCLASS_IDLE
+					     | LUMIERA_THREAD_JOINABLE,
+					     &joinable_master_fn,
+					     (void *)&value,
+					     "joinable master thread",
+					     &NOBUG_FLAG (test));
+
+  ECHO ("syncing with the master thread");
+  lumiera_thread_sync_other (master);
+  ECHO ("the master thread received its arguments");
+  lumiera_thread_join (master);
+  ECHO ("the master thread terminated");
+
   lumiera_threadpool_destroy ();
 }
 
