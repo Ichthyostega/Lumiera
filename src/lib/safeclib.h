@@ -30,6 +30,18 @@
 LUMIERA_ERROR_DECLARE(NO_MEMORY);
 
 /**
+ * Install the resourcecollector run hook.
+ * The resourcecollectr must be hooked into the safeclib at bootup after it got
+ * initialized and removed from it before shut down. Without resourcecollector
+ * failed allocations will abort().
+ * @param hook pointer to the resourcecollector_run function, must be of type
+ *        lumiera_resourcecollector_run_fn but we dont want a dependency on backend in this header
+ */
+void
+lumiera_safeclib_set_resourcecollector (void* hook);
+
+
+/**
  * Allocate memory.
  * always succeeds or dies
  * @param size memory to be allocated

@@ -93,6 +93,7 @@ enum lumiera_resource_try
  * @return indication what the the handler really did (LUMIERA_RESOURCE_NONE when it didn't obey the request)
  */
 typedef enum lumiera_resource_try (*lumiera_resource_handler_fn)(enum lumiera_resource_try itr, void* data, void* context);
+typedef int (*lumiera_resourcecollector_run_fn) (enum lumiera_resource which, enum lumiera_resource_try* iteration, void* context);
 
 typedef struct lumiera_resourcehandler_struct lumiera_resourcehandler;
 typedef lumiera_resourcehandler* LumieraResourcehandler;

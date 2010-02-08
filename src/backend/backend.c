@@ -89,6 +89,10 @@ lumiera_backend_init (void)
   mpool_init_hook = lumiera_backend_resourcecollector_register_mpool;
   mpool_destroy_hook = lumiera_backend_resourcecollector_unregister_mpool;
 
+  /* hook the resourcecollector into the safeclib allocation functions */
+  lumiera_safeclib_set_resourcecollector (lumiera_resourcecollector_run);
+
+  PLANNED("The resourcecollector aborts by default when there is no final strategy for recovery, TODO: initiate sane shutdown");
 
   lumiera_threadpool_init ();
   PLANNED ("hook threadpool into the resourcecollector (maybe in threadpool_init() instead here");
@@ -143,6 +147,13 @@ lumiera_backend_destroy (void)
   lumiera_filehandlecache_delete ();
   lumiera_filedescriptorregistry_destroy ();
   lumiera_threadpool_destroy ();
+
+  lumiera_safeclib_set_resourcecollector (NULL);
+
+  mpool_init_hook = NULL;
+  mpool_destroy_hook = NULL;
+  mpool_malloc_hook = malloc;
+  mpool_free_hook = free;
 
   lumiera_resourcecollector_destroy ();
 
