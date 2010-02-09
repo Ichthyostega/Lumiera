@@ -75,22 +75,6 @@ struct lumiera_filedescriptor_struct
   llist files;
 };
 
-/**
- * Initialize the global filedescriptor registry.
- * All filedescriptors are looked up by dev/ino/open-flags in a hashtable. Opening hardlinked
- * files will be targeted to the same filedescriptor.
- * This function never fails but dies on error.
- */
-void
-lumiera_filedescriptor_registry_init (void);
-
-/**
- * Destroy and free the global filedescriptor registry.
- * Never fails.
- */
-void
-lumiera_filedescriptor_registry_destroy (void);
-
 
 /**
  * Find existing filedescriptor or create one

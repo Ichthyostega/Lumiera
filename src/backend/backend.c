@@ -21,13 +21,16 @@
 
 #include "include/logging.h"
 #include "lib/safeclib.h"
+#include "lib/mpool.h"
 
 #include "backend/backend.h"
 #include "common/config.h"
 #include "backend/filehandlecache.h"
 #include "backend/filedescriptor.h"
+#include "backend/filedescriptorregistry.h"
 #include "backend/mmapcache.h"
 #include "backend/threadpool.h"
+#include "backend/resourcecollector.h"
 
 #include <unistd.h>
 #include <sys/resource.h>
@@ -49,7 +52,19 @@
 //NOBUG_DECLARE_FLAG (mmapcache);
 
 
+
+static enum lumiera_resource_try
+lumiera_backend_mpool_purge (enum lumiera_resource_try itr, void* data, void* context);
+
+static void
+lumiera_backend_resourcecollector_register_mpool (MPool self);
+
+static void
+lumiera_backend_resourcecollector_unregister_mpool (MPool self);
+
+
 size_t lumiera_backend_pagesize;
+
 
 int
 lumiera_backend_init (void)
@@ -64,15 +79,29 @@ lumiera_backend_init (void)
   //NOBUG_INIT_FLAG (mmapcache);
 
   TRACE (backend_dbg);
+  lumiera_mutex_init (&lumiera_filecreate_mutex, "fileaccess", &NOBUG_FLAG (mutex_dbg), NOBUG_CONTEXT);
+
+  lumiera_resourcecollector_init ();
+
+  /* hook the resourcecollector into the mpool*/
+  mpool_malloc_hook = lumiera_malloc;
+  mpool_free_hook = lumiera_free;
+  mpool_init_hook = lumiera_backend_resourcecollector_register_mpool;
+  mpool_destroy_hook = lumiera_backend_resourcecollector_unregister_mpool;
+
+  /* hook the resourcecollector into the safeclib allocation functions */
+  lumiera_safeclib_set_resourcecollector (lumiera_resourcecollector_run);
+
+  PLANNED("The resourcecollector aborts by default when there is no final strategy for recovery, TODO: initiate sane shutdown");
 
   lumiera_threadpool_init ();
+  PLANNED ("hook threadpool into the resourcecollector (maybe in threadpool_init() instead here");
 
-  lumiera_filedescriptor_registry_init ();
+  lumiera_filedescriptorregistry_init ();
 
   lumiera_backend_pagesize = sysconf(_SC_PAGESIZE);
 
   TODO ("add config options to override following defaults");
-
 
   const char* filehandles = lumiera_tmpbuf_snprintf (SIZE_MAX,
                                                      "backend.file.max_handles = %d",
@@ -113,8 +142,54 @@ void
 lumiera_backend_destroy (void)
 {
   TRACE (backend_dbg);
+
   lumiera_mmapcache_delete ();
   lumiera_filehandlecache_delete ();
-  lumiera_filedescriptor_registry_destroy ();
+  lumiera_filedescriptorregistry_destroy ();
   lumiera_threadpool_destroy ();
+
+  lumiera_safeclib_set_resourcecollector (NULL);
+
+  mpool_init_hook = NULL;
+  mpool_destroy_hook = NULL;
+  mpool_malloc_hook = malloc;
+  mpool_free_hook = free;
+
+  lumiera_resourcecollector_destroy ();
+
+  lumiera_mutex_destroy (&lumiera_filecreate_mutex, &NOBUG_FLAG (mutex_dbg), NOBUG_CONTEXT);
 }
+
+
+static enum lumiera_resource_try
+lumiera_backend_mpool_purge (enum lumiera_resource_try itr, void* data, void* context)
+{
+  (void) context;
+  (void) data;
+  (void) itr;
+  TODO("mpool_purge ((MPool) data)");
+  return LUMIERA_RESOURCE_NONE;
+}
+
+static void
+lumiera_backend_resourcecollector_register_mpool (MPool self)
+{
+  self->udata =
+     lumiera_resourcecollector_register_handler (LUMIERA_RESOURCE_MEMORY, lumiera_backend_mpool_purge, self);
+}
+
+static void
+lumiera_backend_resourcecollector_unregister_mpool (MPool self)
+{
+  lumiera_resourcehandler_unregister ((LumieraResourcehandler) self->udata);
+}
+
+
+
+/*
+//      Local Variables:
+//      mode: C
+//      c-file-style: "gnu"
+//      indent-tabs-mode: nil
+//      End:
+*/

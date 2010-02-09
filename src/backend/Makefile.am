@@ -30,10 +30,12 @@ liblumierabackend_la_SOURCES =					\
 	$(liblumierabackend_la_srcdir)/file.c			\
 	$(liblumierabackend_la_srcdir)/filehandle.c		\
 	$(liblumierabackend_la_srcdir)/filedescriptor.c		\
+	$(liblumierabackend_la_srcdir)/filedescriptorregistry.c	\
 	$(liblumierabackend_la_srcdir)/filehandlecache.c	\
 	$(liblumierabackend_la_srcdir)/mmap.c			\
 	$(liblumierabackend_la_srcdir)/mmapings.c		\
 	$(liblumierabackend_la_srcdir)/mmapcache.c		\
+	$(liblumierabackend_la_srcdir)/resourcecollector.c	\
 	$(liblumierabackend_la_srcdir)/threadpool-init.cpp	\
 	$(liblumierabackend_la_srcdir)/enginefacade.cpp		\
 	$(liblumierabackend_la_srcdir)/scriptrunnerfacade.cpp	\
@@ -47,8 +49,10 @@ noinst_HEADERS +=						\
 	$(liblumierabackend_la_srcdir)/file.h			\
 	$(liblumierabackend_la_srcdir)/filehandle.h		\
 	$(liblumierabackend_la_srcdir)/filedescriptor.h		\
+	$(liblumierabackend_la_srcdir)/filedescriptorregistry.h	\
 	$(liblumierabackend_la_srcdir)/filehandlecache.h	\
 	$(liblumierabackend_la_srcdir)/mmap.h			\
 	$(liblumierabackend_la_srcdir)/mmapings.h		\
-	$(liblumierabackend_la_srcdir)/mmapcache.h
+	$(liblumierabackend_la_srcdir)/mmapcache.h		\
+	$(liblumierabackend_la_srcdir)/resourcecollector.h
 

@@ -54,11 +54,14 @@ lumiera_file_init (LumieraFile self, const char* name, int flags)
 }
 
 LumieraFile
-lumiera_file_destroy (LumieraFile self)
+lumiera_file_destroy (LumieraFile self, int do_unlink)
 {
   TRACE (file_dbg);
 
   lumiera_filedescriptor_release (self->descriptor, self->name, &self->node);
+  if (do_unlink)
+    unlink (self->name);
+
   lumiera_free (self->name);
   return self;
 }
@@ -85,7 +88,16 @@ lumiera_file_delete (LumieraFile self)
 {
   TRACE (file_dbg);
   TRACE (file, "close file '%s'", self->name);
-  lumiera_free (lumiera_file_destroy (self));
+  lumiera_free (lumiera_file_destroy (self, 0));
+}
+
+
+void
+lumiera_file_delete_unlink (LumieraFile self)
+{
+  TRACE (file_dbg);
+  TRACE (file, "close and unlink file '%s'", self->name);
+  lumiera_free (lumiera_file_destroy (self, 1));
 }
 
 
@@ -124,6 +136,12 @@ lumiera_file_chunksize_set (LumieraFile self, size_t chunksize)
 size_t
 lumiera_file_chunksize_get (LumieraFile self)
 {
+  if (!self->descriptor->mmapings)
+    {
+      LUMIERA_ERROR_SET (file, FILE_NOCHUNKSIZE, lumiera_filedescriptor_name (self->descriptor));
+      return 0;
+    }
+
   return self->descriptor->mmapings->chunksize;
 }
 
