@@ -38,9 +38,6 @@ TEST "joinable thread" joinable-thread <<END
 END
 
 TEST "sync joinable" sync-joinable <<END
-err: syncing with the master thread
-err: the master thread received its arguments
-err: the master thread terminated
 END
 
 PLANNED "error cleared on join"

@@ -73,26 +73,33 @@ void sleeping_worker_fn(void * arg)
   CHECK (input == 42, "result is not 42, but %d", input);
 }
 
+// subtracts 13 from the value
 void joinable_worker_fn(void * arg)
 {
   int input = *(int *)arg;
-  lumiera_thread_sync ();
-  input += 42;
+  lumiera_thread_sync (); // signal that arguments have been received
+  *(int *)arg = input - 13;
+  lumiera_thread_sync (); // signal that results have been calculated
 }
 
+// adds 42 to the value
 void joinable_master_fn(void * arg)
 {
   int input = *(int *)arg;
   lumiera_thread_sync ();
-  input -= 42;
+  CHECK (input == 42, "input is not 42, but %d", input);
   LumieraThread worker = lumiera_thread_run (LUMIERA_THREADCLASS_IDLE
 					     | LUMIERA_THREAD_JOINABLE,
 					     &joinable_worker_fn,
 					     (void *)&input,
 					     "joinable worker thread",
 					     &NOBUG_FLAG (test));
-  lumiera_thread_sync_other (worker);
+  lumiera_thread_sync_other (worker); // wait until the arguments are sent
+  lumiera_thread_sync_other (worker); // wait until the result has been calculated
+  CHECK (input == 42-13, "result is not 42-13=29, but %d", input);
+  input += 42;
   lumiera_thread_join (worker);
+  *(int *)arg = input;
 }
 
 TESTS_BEGIN
@@ -326,9 +333,10 @@ TEST ("joinable-thread")
 
 TEST ("sync-joinable")
 {
+  // NOTE: this test essentially avoids concurrency with _sync() calls
   lumiera_threadpool_init ();
 
-  int value = 0;
+  int value = 42;
 
   LumieraThread master = lumiera_thread_run (LUMIERA_THREADCLASS_IDLE
 					     | LUMIERA_THREAD_JOINABLE,
@@ -337,11 +345,11 @@ TEST ("sync-joinable")
 					     "joinable master thread",
 					     &NOBUG_FLAG (test));
 
-  ECHO ("syncing with the master thread");
   lumiera_thread_sync_other (master);
-  ECHO ("the master thread received its arguments");
+  value = 7732;
+
   lumiera_thread_join (master);
-  ECHO ("the master thread terminated");
+  CHECK (value == 42*2-13, "result is not 42*2-12=71, but %d", value);
 
   lumiera_threadpool_destroy ();
 }
