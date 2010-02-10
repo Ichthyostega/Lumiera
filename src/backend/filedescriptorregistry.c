@@ -102,7 +102,7 @@ lumiera_filedescriptorregistry_destroy (void)
   lumiera_mutex_destroy (&filedescriptorregistry_mutex, &NOBUG_FLAG (mutex_dbg), NOBUG_CONTEXT);
 
   if (filedescriptorregistry)
-    psplay_destroy (filedescriptorregistry);
+    psplay_delete (filedescriptorregistry);
 
   filedescriptorregistry = NULL;
 }
