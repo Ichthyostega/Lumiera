@@ -69,8 +69,8 @@ void sleeping_worker_fn(void * arg)
   int delay = rand () % 100000;
   usleep (delay);
   lumiera_thread_sync (); // the main thread can discard the argument storage
-  input -= 42;
-  ECHO ("result is %d", input);
+  input -= 81;
+  CHECK (input == 42, "result is not 42, but %d", input);
 }
 
 void joinable_worker_fn(void * arg)
@@ -291,21 +291,22 @@ TEST ("sync-many")
 {
   lumiera_threadpool_init ();
 
-  int value = 42;
+  int value = 1337;
   int workers = 100;
   LumieraThread threads[workers];
 
   for (int i = 0; i < workers; i++)
     {
+      value = 123;
       threads[i] = lumiera_thread_run (LUMIERA_THREADCLASS_IDLE,
 				       &sleeping_worker_fn,
 				       (void *)&value,
 				       "worker thread",
 				       &NOBUG_FLAG (TESTS));
       lumiera_thread_sync_other (threads[i]);
+      value -= 123;
     }
-  value += 42;
-  ECHO ("value is %d", value);
+  CHECK (value == 0, "final value is not 0, but %d", value);
   lumiera_threadpool_destroy ();
 }
 

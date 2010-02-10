@@ -32,8 +32,6 @@ err: result is 0
 END
 
 TEST "sync many" sync-many <<END
-err: result is 0
-err: value is 84
 END
 
 TEST "joinable thread" joinable-thread <<END
