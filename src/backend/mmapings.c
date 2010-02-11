@@ -93,65 +93,65 @@ lumiera_mmapings_mmap_acquire (LumieraMMapings self, LumieraFile file, LList acq
 
   LumieraMMap ret = NULL;
 
-  LUMIERA_MUTEX_SECTION (mutex_sync, &self->lock)
-    {
-      REQUIRE (llist_is_empty (acquirer));
+  if (self)
+    LUMIERA_MUTEX_SECTION (mutex_sync, &self->lock)
+      {
+        REQUIRE (llist_is_empty (acquirer));
 
-      /* find first matching mmap, crude way */
-      LLIST_FOREACH (&self->mmaps, node)
-        {
-          TODO ("improve this selection algorithm, choose mmaps by size, move mfu to head etc");
+        /* find first matching mmap, crude way */
+        LLIST_FOREACH (&self->mmaps, node)
+          {
+            TODO ("improve this selection algorithm, choose mmaps by size, move mfu to head etc");
 
-          LumieraMMap mmap = LLIST_TO_STRUCTP (node, lumiera_mmap, searchnode);
+            LumieraMMap mmap = LLIST_TO_STRUCTP (node, lumiera_mmap, searchnode);
 
-          if (mmap->size >= size && mmap->start <= start && mmap->start+mmap->size >= start+size)
-            {
-              ret = mmap;
-              break;
-            }
-        }
+            if (mmap->size >= size && mmap->start <= start && mmap->start+mmap->size >= start+size)
+              {
+                ret = mmap;
+                break;
+              }
+          }
 
-      /* found? */
-      if (ret)
-        {
-          if (!ret->refcnt)
-            /* in cache, needs to me checked out */
-            lumiera_mmapcache_checkout (lumiera_mcache, ret);
-        }
-      else
-        {
-          /* create new mmap */
-          TRACE (mmapings_dbg, "mmap not found, creating");
-          ret = lumiera_mmap_new (file, start, size);
+        /* found? */
+        if (ret)
+          {
+            if (!ret->refcnt)
+              /* in cache, needs to me checked out */
+              lumiera_mmapcache_checkout (lumiera_mcache, ret);
+          }
+        else
+          {
+            /* create new mmap */
+            TRACE (mmapings_dbg, "mmap not found, creating");
+            ret = lumiera_mmap_new (file, start, size);
 
-          llist_insert_head (&self->mmaps, &ret->searchnode);
+            llist_insert_head (&self->mmaps, &ret->searchnode);
 
-          TODO ("sort search list?");
-        }
+            TODO ("sort search list?");
+          }
 
-      llist_insert_head (&ret->cachenode, acquirer);
-    }
+        llist_insert_head (&ret->cachenode, acquirer);
+      }
 
   return ret;
 }
-
 
 void
 lumiera_mmapings_release_mmap (LumieraMMapings self, LList acquirer, LumieraMMap map)
 {
   TRACE (mmapings_dbg);
 
-  LUMIERA_MUTEX_SECTION (mutex_sync, &self->lock)
-    {
-      llist_unlink (acquirer);
-      if (llist_is_empty (&map->cachenode))
-        {
-          TRACE (mmapcache_dbg, "checkin");
-          lumiera_mmapcache_checkin (lumiera_mcache, map);
-        }
-    }
+  if (self)
+    LUMIERA_MUTEX_SECTION (mutex_sync, &self->lock)
+      {
+        llist_unlink (acquirer);
+        if (llist_is_empty (&map->cachenode))
+          {
+            TRACE (mmapcache_dbg, "checkin");
+            lumiera_mmapcache_checkin (lumiera_mcache, map);
+          }
+      }
 }
-
 
 /*
 // Local Variables:

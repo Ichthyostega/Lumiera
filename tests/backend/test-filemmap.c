@@ -34,6 +34,7 @@
 #include "tests/test.h"
 
 #include <unistd.h>
+#include <string.h>
 #include <errno.h>
 #include <sys/mman.h>
 
@@ -133,9 +134,9 @@ TEST ("mmap_forget_releasing")
   llist user;
   llist_init (&user);
 
-  LumieraMMap mmap = lumiera_mmapings_mmap_acquire (mmaps, file, &user, 0, 100);
+  LumieraMMap map = lumiera_mmapings_mmap_acquire (mmaps, file, &user, 0, 100);
  
-  (void) mmap;  //lumiera_mmapings_release_mmap (mmaps, &user, mmap);
+  (void) map;  //lumiera_mmapings_release_mmap (mmaps, &user, mmap);
 
   lumiera_file_delete (file);
 
@@ -154,9 +155,9 @@ TEST ("mmap_simple")
 
   llist user;
   llist_init (&user);
-  LumieraMMap mmap = lumiera_mmapings_mmap_acquire (mmaps, file, &user, 0, 100);
+  LumieraMMap map = lumiera_mmapings_mmap_acquire (mmaps, file, &user, 0, 100);
 
-  lumiera_mmapings_release_mmap (mmaps, &user, mmap);
+  lumiera_mmapings_release_mmap (mmaps, &user, map);
 
   lumiera_file_delete (file);
 
@@ -181,17 +182,17 @@ TEST ("mmap_checkout_twice")
 
   llist user;
   llist_init (&user);
-  LumieraMMap mmap = lumiera_mmapings_mmap_acquire (mmaps, file, &user, 0, 100);
+  LumieraMMap map = lumiera_mmapings_mmap_acquire (mmaps, file, &user, 0, 100);
 
   llist user2;
   llist_init (&user2);
-  LumieraMMap mmap2 = lumiera_mmapings_mmap_acquire (mmaps, file, &user2, 0, 100);
+  LumieraMMap map2 = lumiera_mmapings_mmap_acquire (mmaps, file, &user2, 0, 100);
 
-  ENSURE (lumiera_mmap_address (mmap) == lumiera_mmap_address (mmap2));
+  ENSURE (map->address == map2->address);
 
-  lumiera_mmapings_release_mmap (mmaps, &user, mmap);
+  lumiera_mmapings_release_mmap (mmaps, &user, map);
 
-  lumiera_mmapings_release_mmap (mmaps, &user2, mmap2);
+  lumiera_mmapings_release_mmap (mmaps, &user2, map2);
 
   lumiera_file_delete (file);
 
@@ -216,13 +217,13 @@ TEST ("mmap_checkout_again")
 
   llist user;
   llist_init (&user);
-  LumieraMMap mmap = lumiera_mmapings_mmap_acquire (mmaps, file, &user, 0, 100);
-  lumiera_mmapings_release_mmap (mmaps, &user, mmap);
+  LumieraMMap map = lumiera_mmapings_mmap_acquire (mmaps, file, &user, 0, 100);
+  lumiera_mmapings_release_mmap (mmaps, &user, map);
 
   llist user2;
   llist_init (&user2);
-  LumieraMMap mmap2 = lumiera_mmapings_mmap_acquire (mmaps, file, &user2, 0, 100);
-  lumiera_mmapings_release_mmap (mmaps, &user2, mmap2);
+  LumieraMMap map2 = lumiera_mmapings_mmap_acquire (mmaps, file, &user2, 0, 100);
+  lumiera_mmapings_release_mmap (mmaps, &user2, map2);
 
   lumiera_file_delete (file);
 
@@ -249,8 +250,8 @@ TEST ("mmap_grow_existing_file")
   llist user;
   llist_init (&user);
 
-  LumieraMMap mmap = lumiera_mmapings_mmap_acquire (mmaps, file, &user, 0, 100);
-  lumiera_mmapings_release_mmap (mmaps, &user, mmap);
+  LumieraMMap map = lumiera_mmapings_mmap_acquire (mmaps, file, &user, 0, 100);
+  lumiera_mmapings_release_mmap (mmaps, &user, map);
 
   lumiera_file_delete (file);
 
@@ -276,8 +277,8 @@ TEST ("mmap_readonly_file")
   llist user;
   llist_init (&user);
 
-  LumieraMMap mmap = lumiera_mmapings_mmap_acquire (mmaps, file, &user, 0, 100);
-  lumiera_mmapings_release_mmap (mmaps, &user, mmap);
+  LumieraMMap map = lumiera_mmapings_mmap_acquire (mmaps, file, &user, 0, 100);
+  lumiera_mmapings_release_mmap (mmaps, &user, map);
 
   lumiera_file_delete (file);
 
@@ -292,6 +293,63 @@ TEST ("mmap_readonly_file")
 
 
 
+TEST ("file_access")
+{
+  lumiera_backend_init ();
+  LumieraFile file = lumiera_file_new (",tmp-filemmap", LUMIERA_FILE_RECREATE);
+  lumiera_file_chunksize_set (file, 4096);
+
+  llist user;
+  llist_init (&user);
+
+  LumieraMMap map = lumiera_file_mmap_acquire (file, &user, 10, 100);
+
+  char* addr = lumiera_mmap_address (map, 20);
+
+  strcpy (addr, "test");
+
+  lumiera_file_release_mmap (file, &user, map);
+
+  lumiera_file_delete (file);
+  lumiera_backend_destroy ();
+}
+
+
+
+TEST ("mmap_section")
+{
+  lumiera_backend_init ();
+  LumieraFile file = lumiera_file_new (",tmp-filemmap", LUMIERA_FILE_RECREATE);
+  lumiera_file_chunksize_set (file, 4096);
+
+  LUMIERA_FILE_MMAP_SECTION(file, 20, 20, addr)
+    {
+      strcpy (addr, "mmap section");
+    }
+
+  CHECK(lumiera_error_peek() == NULL);
+
+  lumiera_file_delete (file);
+  lumiera_backend_destroy ();
+}
+
+
+TEST ("mmap_section_err")
+{
+  lumiera_backend_init ();
+  LumieraFile file = lumiera_file_new (",tmp-filemmap", LUMIERA_FILE_RECREATE);
+  /* forgot to set lumiera_file_chunksize_set (file, 4096); */
+
+  LUMIERA_FILE_MMAP_SECTION(file, 20, 20, addr)
+    {
+      strcpy (addr, "mmap section");
+    }
+
+  CHECK(lumiera_error_peek() == NULL);
+
+  lumiera_file_delete (file);
+  lumiera_backend_destroy ();
+}
 
 
 #if 0

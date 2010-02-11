@@ -154,3 +154,27 @@ lumiera_file_mmapings (LumieraFile self)
 
   return self->descriptor->mmapings;
 }
+
+
+LumieraMMap
+lumiera_file_mmap_acquire (LumieraFile self, LList acquirer, off_t start, size_t size)
+{
+  TRACE (file_dbg);
+  return lumiera_mmapings_mmap_acquire (lumiera_file_mmapings (self), self, acquirer, start, size);
+}
+
+
+void
+lumiera_file_release_mmap (LumieraFile self, LList acquirer, LumieraMMap map)
+{
+  TRACE (file_dbg);
+  lumiera_mmapings_release_mmap (lumiera_file_mmapings (self), acquirer, map);
+}
+
+/*
+// Local Variables:
+// mode: C
+// c-file-style: "gnu"
+// indent-tabs-mode: nil
+// End:
+*/

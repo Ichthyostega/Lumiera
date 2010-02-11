@@ -78,12 +78,19 @@ LumieraMMap
 lumiera_mmap_new (LumieraFile file, off_t start, size_t size);
 
 
+/**
+ * Translate a 'external' offset to a address in memory
+ * @param self MMap object to query
+ * @param offset position on the mmaped file to get
+ * @return address in memory which relates to offset
+ */
 static inline void*
-lumiera_mmap_address (LumieraMMap self)
+lumiera_mmap_address (LumieraMMap self, off_t offset)
 {
-  return self->address;
+  REQUIRE (offset >= self->start, "offset before mmaped region");
+  REQUIRE (offset < self->start + (off_t)self->size, "offset after mmaped region");
+  return self?(self->address + (offset - self->start)):NULL;
 }
-
 
 void
 lumiera_mmap_delete (LumieraMMap self);
