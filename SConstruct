@@ -326,9 +326,8 @@ def defineBuildTargets(env, artifacts):
         setup sub-environments with special build options if necessary.
         We use a custom function to declare a whole tree of srcfiles. 
     """
-    env.mergeConf(['glibmm-2.4','gthread-2.0'])
     
-    # use PCH to speed up building
+    # use PCH to speed up building // disabled for now due to strange failures
 #   env['GCH'] = ( env.PrecompiledHeader('$SRCDIR/pre.hpp')
 #                + env.PrecompiledHeader('$SRCDIR/pre_a.hpp')
 #                )
@@ -360,7 +359,7 @@ def defineBuildTargets(env, artifacts):
     
     # the Lumiera GTK GUI
     envGtk = env.Clone()
-    envGtk.mergeConf(['gtkmm-2.4','cairomm-1.0','gdl','xv','xext','sm'])
+    envGtk.mergeConf(['gtkmm-2.4','gthread-2.0','cairomm-1.0','gdl','xv','xext','sm'])
     envGtk.Append(CPPDEFINES='LUMIERA_PLUGIN', LIBS=core)
     
     objgui  = srcSubtree(envGtk,'$SRCDIR/gui')
