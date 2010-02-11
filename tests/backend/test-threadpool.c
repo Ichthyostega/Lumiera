@@ -59,6 +59,7 @@ void other_fn(void * arg)
 {
   int input = *(int *)arg;
   lumiera_thread_sync (); // the main thread can discard the argument storage
+  CHECK (input == 42, "input is not 42, but %d", input);
   input -= 42;
   ECHO ("result is %d", input);
 }
@@ -288,8 +289,8 @@ TEST ("simple-sync")
 
   ECHO ("syncing with the other thread");
   lumiera_thread_sync_other (other);
-  ECHO ("the other thread received its arguments");
   value += 42;
+  CHECK (value == 42*2, "value is not equal to 42*2=84, but %d", value);
 
   lumiera_threadpool_destroy ();
 }

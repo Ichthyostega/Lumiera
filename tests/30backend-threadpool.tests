@@ -27,7 +27,6 @@ END
 
 TEST "simple sync" simple-sync <<END
 err: syncing with the other thread
-err: the other thread received its arguments
 err: result is 0
 END
 
