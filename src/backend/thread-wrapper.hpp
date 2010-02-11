@@ -60,8 +60,7 @@ namespace backend {
    *
    */
   class Thread
-    : lib::BoolCheckable< Thread
-    , boost::noncopyable>                //////TODO: do we want Thread instances to be copyable?
+    : boost::noncopyable              //////TODO: do we want Thread instances to be copyable?
   {
     
   protected:
@@ -136,15 +135,6 @@ namespace backend {
         ThreadStartContext (thread_, operation, purpose, logging_flag);
       }
     
-    /** automatic conversion: Thread instance can stand-in for a handle
-     *  @throws lumiera::error::State when thread isn't running */
-    operator LumieraThread()  const
-      {
-        if (!isValid())
-          throw lumiera::error::State("thread not executing (anymore)");
-        
-        return thread_;
-      }
     
     bool
     isValid()  const
@@ -178,12 +168,12 @@ namespace backend {
    * to join on the termination of this thread.
    */
   class ThreadJoinable
-    : public Thread
+    : public lib::BoolCheckable<ThreadJoinable
+                               ,Thread>     // baseclass
   {
   public:
     ThreadJoinable (Literal purpose, Operation const& operation,
                     NoBugFlag logging_flag = &NOBUG_FLAG(thread))
-      : Thread()
       {
         ThreadStartContext (thread_, operation, purpose, logging_flag,
                             LUMIERA_THREAD_JOINABLE);

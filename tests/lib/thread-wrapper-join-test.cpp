@@ -42,7 +42,7 @@ namespace test {
   using lumiera::error::LUMIERA_ERROR_LOGIC;
   namespace {
     
-    const uint DESTRUCTION_CODE = 23;
+    const int DESTRUCTION_CODE = 23;
     
     LUMIERA_ERROR_DEFINE(SPECIAL, "grandiose exception");
   }
