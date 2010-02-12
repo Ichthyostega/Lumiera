@@ -80,7 +80,6 @@ void joinable_worker_fn(void * arg)
   int input = *(int *)arg;
   lumiera_thread_sync (); // signal that arguments have been received
   *(int *)arg = input - 13;
-  lumiera_thread_sync (); // signal that results have been calculated
 }
 
 // adds 42 to the value
@@ -96,10 +95,9 @@ void joinable_master_fn(void * arg)
 					     "joinable worker thread",
 					     &NOBUG_FLAG (test));
   lumiera_thread_sync_other (worker); // wait until the arguments are sent
-  lumiera_thread_sync_other (worker); // wait until the result has been calculated
+  lumiera_thread_join (worker); // wait until the result has been calculated
   CHECK (input == 42-13, "result is not 42-13=29, but %d", input);
   input += 42;
-  lumiera_thread_join (worker);
   *(int *)arg = input;
 }
 
