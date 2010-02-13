@@ -66,9 +66,9 @@
 #ifndef LIB_SYNC_H
 #define LIB_SYNC_H
 
-#include "include/logging.h"
 #include "lib/error.hpp"
 #include "lib/util.hpp"
+#include "lib/sync-nobug-resource-handle.hpp"
 
 extern "C" {
 #include "lib/mutex.h"
@@ -229,26 +229,6 @@ namespace lib {
         };
       
       
-      /** 
-       * housing the resource tracker handle in ALPHA builds,
-       * an empty struct in BETA or RELEASE builds. /////////TODO don't we need the handle in BETA builds for resource logging?
-       */
-      struct NobugResourceHandle
-        {
-          RESOURCE_USER (handle_);
-          
-          NobugResourceHandle()
-            {
-              RESOURCE_USER_INIT (handle_);
-            }
-
-          operator nobug_resource_user** ()
-            {
-              return NOBUG_IF_ALPHA (&handle_) NOBUG_IF_NOT_ALPHA(0);  //////TODO is there a better way of achieving this?
-            }
-        };
-      
-      
       
       
       /* ========== abstractions defining the usable synchronisation primitives ============== */
@@ -258,7 +238,11 @@ namespace lib {
         : protected MTX
         {
         protected:
-          NobugResourceHandle usage_;
+          NobugResourceHandle& 
+          _usage()
+            {
+              return NobugResourceHandle::access();
+            }
           
          ~Mutex () { }
           Mutex () { }
@@ -269,13 +253,13 @@ namespace lib {
             void
             acquire()
               {
-                MTX::lock (usage_);
+                MTX::lock (_usage());
               }
             
             void
             release()
               {
-                MTX::unlock (usage_);
+                MTX::unlock (_usage());
               }
         };
       
@@ -307,9 +291,9 @@ namespace lib {
               bool ok = true;
               while (ok && !predicate())
                 if (waitEndTime)
-                  ok = CDX::timedwait (&waitEndTime, this->usage_);
+                  ok = CDX::timedwait (&waitEndTime, this->_usage());
                 else
-                  ok = CDX::wait (this->usage_);
+                  ok = CDX::wait (this->_usage());
               
               if (!ok && lumiera_error_expect(LUMIERA_ERROR_LOCK_TIMEOUT)) return false;
               lumiera::throwOnError();   // any other error thows
@@ -475,7 +459,7 @@ namespace lib {
         
       public:
         class Lock
-          : private noncopyable
+          : sync::NobugResourceHandle
           {
             Monitor& mon_;
             
