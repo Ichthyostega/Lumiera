@@ -68,7 +68,7 @@
 
 #include "lib/error.hpp"
 #include "lib/util.hpp"
-#include "lib/sync-nobug-resource-handle.hpp"
+#include "lib/diagnostic-context.hpp"
 
 extern "C" {
 #include "lib/mutex.h"
@@ -238,10 +238,10 @@ namespace lib {
         : protected MTX
         {
         protected:
-          NobugResourceHandle& 
+          DiagnosticContext& 
           _usage()
             {
-              return NobugResourceHandle::access();
+              return DiagnosticContext::access();
             }
           
          ~Mutex () { }
@@ -459,7 +459,7 @@ namespace lib {
         
       public:
         class Lock
-          : sync::NobugResourceHandle
+          : DiagnosticContext
           {
             Monitor& mon_;
             

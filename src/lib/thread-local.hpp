@@ -1,5 +1,5 @@
 /*
-  SYNC-NOBUG-RESOURCE-HANDLE.hpp  -  supplement: manage storage for NoBug resource handles
+  THREAD-LOCAL.hpp  -  support using thread local data
  
   Copyright (C)         Lumiera.org
     2010,               Hermann Vosseler <Ichthyostega@web.de>
@@ -20,19 +20,19 @@
 
 */
 
-/** @file sync-nobug-resource-handle.hpp
- ** Supplement to sync.hpp: manage the storage for NoBug resource handles.
- ** For resource tracking we need storage for each \em usage of a resource, in order
- ** to provide a user handle for this usage situation. I consider this an internal
- ** detail and want to keep it away from the code concerned with the resource itself
- ** (here the object monitor).
+/** @file thread-local.hpp
+ ** Helpers for working with thread local data.
+ ** As we don't want to depend on boost.threads, we'll provide some simple
+ ** support facilities for dealing with thread local data in RAII fashion.
+ ** Draft as of 2/10, to be extended on demand.
  ** 
- ** @todo experimental solution
+ ** @todo care for unit test coverage
+ ** @todo WIP-WIP. Maybe add facilities similar to boost::specific_ptr
  **/
 
 
-#ifndef LIB_SYNC_NOBUG_RESOURCE_HANDLE_H
-#define LIB_SYNC_NOBUG_RESOURCE_HANDLE_H
+#ifndef LIB_THREAD_LOCAL_H
+#define LIB_THREAD_LOCAL_H
 
 
 #include "lib/error.hpp"
@@ -44,7 +44,6 @@
 
 
 namespace lib {
-namespace sync{
   
   
   /**
@@ -104,75 +103,10 @@ namespace sync{
                                         ,lumiera::error::LUMIERA_ERROR_BOTTOM_VALUE);
           return p;
         }
-
+      
     };
   
   
-    
-    
-//#ifdef NOBUG_MODE_ALPHA     /////////TODO don't we need the handle in BETA builds for resource logging?
   
-  /** 
-   * Diagnostic context, housing the NoBug resource tracker handle.
-   * Instances of this class should be created on the stack at appropriate scopes.
-   * When used in nested scopes, a chain (stack) of contexts is maintained automatically.
-   * Client code can access the innermost handle via static API.
-   * @warning never store this into global data structures.
-   */
-  class NobugResourceHandle
-    : boost::noncopyable
-    {
-      typedef nobug_resource_user* Handle;
-      typedef ThreadLocalPtr<NobugResourceHandle> ThreadLocalAccess;
-      
-      Handle handle_;
-      NobugResourceHandle * const prev_;
-      
-      /** embedded thread local pointer
-       *  to the innermost context encountered */
-      static ThreadLocalAccess&
-      current()
-        {
-          static ThreadLocalAccess accessPoint;
-          return accessPoint;
-        }
-      
-      
-    public:
-      NobugResourceHandle()
-        : handle_(0)
-        , prev_(current().get())
-        {
-          current().set (this);
-        }
-      
-     ~NobugResourceHandle()
-        {
-          ASSERT (this == current().get());
-          current().set (prev_);
-        }
-      
-      
-      operator Handle* () ///< payload: NoBug resource tracker user handle
-        {
-          return &handle_;
-        }
-      
-      /** accessing the innermost diagnostic context created */
-      static NobugResourceHandle&
-      access ()
-        {
-          NobugResourceHandle* innermost = current().get();
-          if (!innermost)
-            throw lumiera::error::Logic ("Accessing Diagnostic context out of order; "
-                                         "an instance should have been created in "
-                                         "an enclosing scope");
-          return *innermost;
-        }
-    };
-//#endif
-  
-  
-  
-}} // namespace lib::sync
+} // namespace lib
 #endif
