@@ -150,24 +150,22 @@ lumiera_file_handle_release (LumieraFile self);
 /**
  * acquire a mmap which covers the given range
  * @param self file from where the mmap shall be acquired
- * @param acquirer list node of the new owner which will registered in the mmap
  * @param start begin of the required range
  * @param size requested size
  * @return MMap object covering the requested range or NULL on error
  * note: the chunksize for the file must be set prior accessing mmaps
  */
 LumieraMMap
-lumiera_file_mmap_acquire (LumieraFile self, LList acquirer, off_t start, size_t size);
+lumiera_file_mmap_acquire (LumieraFile self, off_t start, size_t size);
 
 
 /**
  * release a previously acquired MMap object
  * @param self file to which the map belongs
- * @param acquirer holding node, used on require
  * @param map object to be released
  */
 void
-lumiera_file_release_mmap (LumieraFile self, LList acquirer, LumieraMMap map);
+lumiera_file_release_mmap (LumieraFile self, LumieraMMap map);
 
 
 /**
@@ -177,18 +175,17 @@ lumiera_file_release_mmap (LumieraFile self, LList acquirer, LumieraMMap map);
  * @param size the length of the requested block
  * @param addr name of a void* variable pointing to the requested memory
  */
-#define LUMIERA_FILE_MMAP_SECTION(file, start, size, addr)                              \
-  for (LLIST_AUTO(user_##__LINE__); user_##__LINE__.next; user_##__LINE__.next = NULL)  \
-    for (LumieraMMap map_##__LINE__ =                                                   \
-           lumiera_file_mmap_acquire (file, &user_##__LINE__, start, size);             \
-         map_##__LINE__;                                                                \
-         ({                                                                             \
-           lumiera_file_release_mmap (file, &user_##__LINE__, map_##__LINE__);          \
-           map_##__LINE__ = NULL;                                                       \
-         }))                                                                            \
-      for (void* addr = lumiera_mmap_address (map_##__LINE__, start);                   \
-           addr;                                                                        \
-           addr = NULL)
+#define LUMIERA_FILE_MMAP_SECTION(file, start, size, addr)              \
+  for (LumieraMMap map_##__LINE__ =                                     \
+         lumiera_file_mmap_acquire (file, start, size);                 \
+       map_##__LINE__;                                                  \
+       ({                                                               \
+         lumiera_file_release_mmap (file, map_##__LINE__);              \
+         map_##__LINE__ = NULL;                                         \
+       }))                                                              \
+    for (void* addr = lumiera_mmap_address (map_##__LINE__, start);     \
+         addr;                                                          \
+         addr = NULL)
 
 
 /**

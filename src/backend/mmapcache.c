@@ -137,12 +137,12 @@ LumieraMMap
 lumiera_mmapcache_checkout (LumieraMMapcache self, LumieraMMap handle)
 {
   TRACE (mmapcache_dbg);
+  REQUIRE (handle->refcnt == 0);
 
   LUMIERA_MUTEX_SECTION (mutex_sync, &self->lock)
     {
       TODO ("cached stats");
       lumiera_mrucache_checkout (&self->cache, &handle->cachenode);
-      ++handle->refcnt;
     }
 
   return handle;
@@ -153,11 +153,11 @@ void
 lumiera_mmapcache_checkin (LumieraMMapcache self, LumieraMMap handle)
 {
   TRACE (mmapcache_dbg);
+  REQUIRE (handle->refcnt == 0);
 
   LUMIERA_MUTEX_SECTION (mutex_sync, &self->lock)
     {
       TODO ("cached stats");
-      --handle->refcnt;
       lumiera_mrucache_checkin (&self->cache, &handle->cachenode);
     }
 }

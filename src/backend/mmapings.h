@@ -86,16 +86,17 @@ lumiera_mmapings_new (LumieraFile file, size_t chunksize);
 void
 lumiera_mmapings_delete (LumieraMMapings self);
 
+
 /**
  * acquire a mmap which covers the given range
  * @param self mmapings where to search
- * @param acquirer list node of the new owner which will registered in the mmap
  * @param start begin of the required range
  * @param size requested size
  * @return MMap object covering the requested range or NULL on error
  */
 LumieraMMap
-lumiera_mmapings_mmap_acquire (LumieraMMapings self, LumieraFile file, LList acquirer, off_t start, size_t size);
+lumiera_mmapings_mmap_acquire (LumieraMMapings self, LumieraFile file, off_t start, size_t size);
+
 
 /**
  * release a previously acquired MMap object
@@ -104,7 +105,10 @@ lumiera_mmapings_mmap_acquire (LumieraMMapings self, LumieraFile file, LList acq
  * @param map object to be released
  */
 void
-lumiera_mmapings_release_mmap (LumieraMMapings self, LList acquirer, LumieraMMap map);
+lumiera_mmapings_release_mmap (LumieraMMapings self, LumieraMMap map);
+
+
+
 
 #endif
 /*

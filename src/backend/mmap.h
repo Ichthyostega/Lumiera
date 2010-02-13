@@ -52,7 +52,7 @@ typedef lumiera_mmap* LumieraMMap;
  */
 struct lumiera_mmap_struct
 {
-  /** used for the mrucache when checked in the cache OR for attaching owners when checked out **/
+  /** used for the mrucache when checked in the cache **/
   llist cachenode;
 
   /** all mmaps of a filedescriptor are chained in this list, used to find ranges **/
@@ -63,10 +63,10 @@ struct lumiera_mmap_struct
   void* address;
 
   /** accumulated references, this is 0 when checked into the cache **/
-  unsigned long refcnt;
+  long refcnt;
 
   /** array with refcounters per chunk **/
-  unsigned short* refmap;       // TODO flexible array?
+  short* refmap;       // TODO flexible array?
 };
 
 

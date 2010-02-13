@@ -87,7 +87,7 @@ lumiera_mmapings_delete (LumieraMMapings self)
 
 
 LumieraMMap
-lumiera_mmapings_mmap_acquire (LumieraMMapings self, LumieraFile file, LList acquirer, off_t start, size_t size)
+lumiera_mmapings_mmap_acquire (LumieraMMapings self, LumieraFile file, off_t start, size_t size)
 {
   TRACE (mmapings_dbg);
 
@@ -96,8 +96,6 @@ lumiera_mmapings_mmap_acquire (LumieraMMapings self, LumieraFile file, LList acq
   if (self)
     LUMIERA_MUTEX_SECTION (mutex_sync, &self->lock)
       {
-        REQUIRE (llist_is_empty (acquirer));
-
         /* find first matching mmap, crude way */
         LLIST_FOREACH (&self->mmaps, node)
           {
@@ -130,22 +128,25 @@ lumiera_mmapings_mmap_acquire (LumieraMMapings self, LumieraFile file, LList acq
             TODO ("sort search list?");
           }
 
-        llist_insert_head (&ret->cachenode, acquirer);
-      }
+        ++ret->refcnt;
+
+        PLANNED ("use refmap for finer grained refcounting");
+
+        ENSURE (llist_is_empty(&ret->cachenode));
+     }
 
   return ret;
 }
 
 void
-lumiera_mmapings_release_mmap (LumieraMMapings self, LList acquirer, LumieraMMap map)
+lumiera_mmapings_release_mmap (LumieraMMapings self, LumieraMMap map)
 {
   TRACE (mmapings_dbg);
 
   if (self)
     LUMIERA_MUTEX_SECTION (mutex_sync, &self->lock)
       {
-        llist_unlink (acquirer);
-        if (llist_is_empty (&map->cachenode))
+        if (!--map->refcnt)
           {
             TRACE (mmapcache_dbg, "checkin");
             lumiera_mmapcache_checkin (lumiera_mcache, map);

@@ -131,11 +131,8 @@ TEST ("mmap_forget_releasing")
 
   LumieraMMapings mmaps = lumiera_file_mmapings (file);
 
-  llist user;
-  llist_init (&user);
+  LumieraMMap map = lumiera_mmapings_mmap_acquire (mmaps, file, 0, 100);
 
-  LumieraMMap map = lumiera_mmapings_mmap_acquire (mmaps, file, &user, 0, 100);
- 
   (void) map;  //lumiera_mmapings_release_mmap (mmaps, &user, mmap);
 
   lumiera_file_delete (file);
@@ -153,11 +150,9 @@ TEST ("mmap_simple")
 
   LumieraMMapings mmaps = lumiera_file_mmapings (file);
 
-  llist user;
-  llist_init (&user);
-  LumieraMMap map = lumiera_mmapings_mmap_acquire (mmaps, file, &user, 0, 100);
+  LumieraMMap map = lumiera_mmapings_mmap_acquire (mmaps, file, 0, 100);
 
-  lumiera_mmapings_release_mmap (mmaps, &user, map);
+  lumiera_mmapings_release_mmap (mmaps, map);
 
   lumiera_file_delete (file);
 
@@ -180,19 +175,15 @@ TEST ("mmap_checkout_twice")
 
   LumieraMMapings mmaps = lumiera_file_mmapings (file);
 
-  llist user;
-  llist_init (&user);
-  LumieraMMap map = lumiera_mmapings_mmap_acquire (mmaps, file, &user, 0, 100);
+  LumieraMMap map = lumiera_mmapings_mmap_acquire (mmaps, file, 0, 100);
 
-  llist user2;
-  llist_init (&user2);
-  LumieraMMap map2 = lumiera_mmapings_mmap_acquire (mmaps, file, &user2, 0, 100);
+  LumieraMMap map2 = lumiera_mmapings_mmap_acquire (mmaps, file, 0, 100);
 
   ENSURE (map->address == map2->address);
 
-  lumiera_mmapings_release_mmap (mmaps, &user, map);
+  lumiera_mmapings_release_mmap (mmaps, map);
 
-  lumiera_mmapings_release_mmap (mmaps, &user2, map2);
+  lumiera_mmapings_release_mmap (mmaps, map2);
 
   lumiera_file_delete (file);
 
@@ -215,15 +206,11 @@ TEST ("mmap_checkout_again")
 
   LumieraMMapings mmaps = lumiera_file_mmapings (file);
 
-  llist user;
-  llist_init (&user);
-  LumieraMMap map = lumiera_mmapings_mmap_acquire (mmaps, file, &user, 0, 100);
-  lumiera_mmapings_release_mmap (mmaps, &user, map);
+  LumieraMMap map = lumiera_mmapings_mmap_acquire (mmaps, file, 0, 100);
+  lumiera_mmapings_release_mmap (mmaps, map);
 
-  llist user2;
-  llist_init (&user2);
-  LumieraMMap map2 = lumiera_mmapings_mmap_acquire (mmaps, file, &user2, 0, 100);
-  lumiera_mmapings_release_mmap (mmaps, &user2, map2);
+  LumieraMMap map2 = lumiera_mmapings_mmap_acquire (mmaps, file, 0, 100);
+  lumiera_mmapings_release_mmap (mmaps, map2);
 
   lumiera_file_delete (file);
 
@@ -247,11 +234,8 @@ TEST ("mmap_grow_existing_file")
 
   LumieraMMapings mmaps = lumiera_file_mmapings (file);
 
-  llist user;
-  llist_init (&user);
-
-  LumieraMMap map = lumiera_mmapings_mmap_acquire (mmaps, file, &user, 0, 100);
-  lumiera_mmapings_release_mmap (mmaps, &user, map);
+  LumieraMMap map = lumiera_mmapings_mmap_acquire (mmaps, file, 0, 100);
+  lumiera_mmapings_release_mmap (mmaps, map);
 
   lumiera_file_delete (file);
 
@@ -274,11 +258,8 @@ TEST ("mmap_readonly_file")
 
   LumieraMMapings mmaps = lumiera_file_mmapings (file);
 
-  llist user;
-  llist_init (&user);
-
-  LumieraMMap map = lumiera_mmapings_mmap_acquire (mmaps, file, &user, 0, 100);
-  lumiera_mmapings_release_mmap (mmaps, &user, map);
+  LumieraMMap map = lumiera_mmapings_mmap_acquire (mmaps, file, 0, 100);
+  lumiera_mmapings_release_mmap (mmaps, map);
 
   lumiera_file_delete (file);
 
@@ -299,16 +280,13 @@ TEST ("file_access")
   LumieraFile file = lumiera_file_new (",tmp-filemmap", LUMIERA_FILE_RECREATE);
   lumiera_file_chunksize_set (file, 4096);
 
-  llist user;
-  llist_init (&user);
-
-  LumieraMMap map = lumiera_file_mmap_acquire (file, &user, 10, 100);
+  LumieraMMap map = lumiera_file_mmap_acquire (file, 10, 100);
 
   char* addr = lumiera_mmap_address (map, 20);
 
   strcpy (addr, "test");
 
-  lumiera_file_release_mmap (file, &user, map);
+  lumiera_file_release_mmap (file, map);
 
   lumiera_file_delete (file);
   lumiera_backend_destroy ();
