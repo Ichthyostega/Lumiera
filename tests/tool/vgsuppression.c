@@ -24,6 +24,12 @@
 */
 
 #include "lib/safeclib.h"
+#include <stdint.h>
+
+struct lumiera_errorcontext_struct;
+
+struct lumiera_errorcontext_struct*
+lumiera_error_get (void);
 
 
 int
@@ -32,6 +38,12 @@ main ()
   /* debian etch glibc is lazy about cleaning up TLS */
   lumiera_tmpbuf_provide (100);
   lumiera_tmpbuf_freeall ();
+
+  /* tempbufs aren't freed by design */
+  lumiera_tmpbuf_snprintf (SIZE_MAX, "everyone loves c-strings");
+
+  /* lumiera_error_get() mallocs a LumieraErrorcontext for each thread */
+  lumiera_error_get();
 
   return 0;
 }

@@ -31,13 +31,12 @@ namespace lumiera {
   initialise_NoBug () 
   {
     NOBUG_INIT;
-
-////////////////////////////////////////////////////////////////////////TODO: a better way to detect Alpha/beta builds
-#ifdef DEBUG
+    
+#ifdef NOBUG_MODE_ALPHA
     static uint callCount = 0;
     ASSERT ( 0 == callCount++ );
 #endif
   }
-
+  
+  
 }
-
