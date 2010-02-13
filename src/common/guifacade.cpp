@@ -48,6 +48,7 @@ namespace gui {
   
   
   
+  /** load and start the GUI as a plugin */
   struct GuiRunner
     : public GuiFacade
     {
@@ -78,7 +79,7 @@ namespace gui {
   
   
   
-  namespace { // implementation details : start GUI through GuiStarterPlugin
+  namespace { // implementation of GUI-"Subsystem" : start GUI through GuiStarterPlugin
     
     scoped_ptr<GuiRunner> facade (0);
     
