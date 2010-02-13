@@ -83,6 +83,7 @@ namespace lumiera {
             catcher (&test::doubleNestedTh,"test-8");
             
             checkErrorIntegration();
+            checkErrorFlagPropagation();
             checkRootCauseChaining();
           }
         
@@ -152,6 +153,27 @@ namespace lumiera {
           
           ASSERT (!lumiera_error ());
         }
+        
+        
+        void detectErrorflag        (string)     { throwOnError(); }
+        void detectErrorflagChained (string msg) { maybeThrow<error::Logic>(msg); }
+        
+        
+        /** @test verify throwing of Exceptions
+         *  based on a non-cleared C error flag
+         */
+        void checkErrorFlagPropagation()
+        {
+          lumiera_error_set(LUMIERA_ERROR_LIFE_AND_UNIVERSE, "what is the answer?");
+          ASSERT (lumiera_error_peek());
+          
+          catcher (&test::detectErrorflag, "");
+          ASSERT (LUMIERA_ERROR_LIFE_AND_UNIVERSE == lumiera_error_peek());
+          
+          catcher (&test::detectErrorflagChained, "the big bang");
+          ASSERT (LUMIERA_ERROR_LIFE_AND_UNIVERSE == lumiera_error());
+        }
+        
         
         /** @test the chaining of lumiera::Exception objects
          *  and the retrieval of the original root cause.

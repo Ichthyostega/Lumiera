@@ -192,7 +192,6 @@ namespace backend {
             lumiera_thread_join (thread_);
         thread_ = 0;
 
-        TODO("check this, is error::State approbiate or do we want Runtime as thrown by throwOnError()");
         if (errorInOtherThread)
           throw lumiera::error::State ("Thread terminated with error:", errorInOtherThread);
       }
