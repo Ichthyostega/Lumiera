@@ -29,6 +29,7 @@
 #include "lib/error.hpp"
 #include "include/logging.h"
 #include "lib/bool-checkable.hpp"
+#include "lib/result.hpp"
 
 extern "C" {
 #include "backend/threads.h"
@@ -44,6 +45,9 @@ namespace backend {
   using std::tr1::bind;
   using std::tr1::function;
   using lib::Literal;
+  namespace error = lumiera::error;
+  using error::LUMIERA_ERROR_STATE;
+  using error::LUMIERA_ERROR_EXTERNAL;
   
   typedef struct nobug_flag* NoBugFlag;
   
@@ -57,10 +61,41 @@ namespace backend {
    * - allows to bind to various kinds of functions including member functions
    * The new thread starts immediately within the ctor; after returning, the new
    * thread has already copied the arguments and indeed actively started to run.
-   *
+   * 
+   * \par Joining, cancellation and memory management
+   * In the basic version (class Thread), the created thread is completely detached
+   * and not further controllable. There is no way to find out its execution state,
+   * wait on termination or even cancel it. Client code needs to implement such
+   * facilities explicitly, if needed. Care has to be taken with memory management,
+   * as there are no guarantees beyond the existence of the arguments bound into
+   * the operation functor. If the operation in the started thread needs additional
+   * storage, it has to manage it actively.
+   * 
+   * There is an extended version (class ThreadJoinable) to allow at least to wait
+   * on the started thread's termination (joining). Building on this it is possible
+   * to create a self-contained "thread in an object"; the dtor of such an class
+   * must join to prevent pulling away member variables the thread function will
+   * continue to use.
+   * 
+   * \par failures in the thread function
+   * The operation started in the new thread is protected by a top-level catch block.
+   * Error states or caught exceptions can be propagated through the lumiera_error
+   * state flag, when using the \c join() facility. By invoking \join().maybeThrow()
+   * on a join-able thread, exceptions can be propagated.
+   * @note any errorstate or caught exception detected on termination of a standard
+   * async Thread is considered a violation of policy and will result in emergency
+   * shutdown of the whole application.
+   * 
+   * \par synchronisation barriers
+   * Lumiera threads provide a low-level synchronisation mechanism, which is used
+   * to secure the hand-over of additional arguments to the thread function. It
+   * can be used by client code, but care has to be taken to avoid getting out
+   * of sync. When invoking the #sync and #syncPoint functions, the caller will
+   * block until the counterpart has also invoked the corresponding function.
+   * If this doesn't happen, you'll block forever.
    */
   class Thread
-    : boost::noncopyable              //////TODO: do we want Thread instances to be copyable?
+    : boost::noncopyable
   {
     
   protected:
@@ -82,8 +117,24 @@ namespace backend {
             
             lumiera_thread_sync (); // sync point: arguments handed over
             
-            _doIt_(); // execute the actual operation in the new thread
+            try
+              { 
+                _doIt_(); // execute the actual operation in the new thread
+              }
+            
+            catch (std::exception& failure)
+              {
+                if (!lumiera_error_peek())
+                  LUMIERA_ERROR_SET (sync, STATE
+                                    ,failure.what());
+              }
+            catch (...)
+              {
+                LUMIERA_ERROR_SET_ALERT (sync, EXTERNAL
+                                        , "Thread terminated abnormally");
+              }
           }
+        
         
       public:
         ThreadStartContext (LumieraThread& handle
@@ -95,7 +146,6 @@ namespace backend {
           : operation_(operation_to_execute)
           {
             REQUIRE (!lumiera_error(), "Error pending at thread start") ;
-            TODO("the threadclass needs to become a parameter");
             handle =
               lumiera_thread_run ( LUMIERA_THREADCLASS_INTERACTIVE | additionalFlags
                                  , &run         // invoking the run helper and..
@@ -104,7 +154,8 @@ namespace backend {
                                  , logging_flag
                                  );
             if (!handle)
-              lumiera::throwOnError();
+              throw error::State ("Failed to start a new Thread for \"+purpose+\""
+                                 , lumiera_error());
             
             // make sure the new thread had the opportunity to take the Operation
             // prior to leaving and thereby possibly destroying this local context
@@ -136,18 +187,21 @@ namespace backend {
       }
     
     
+    /** @note by design there is no possibility to find out
+     *  just based on the thread handle, if the thread is alive.
+     *  We define our own accounting here based on the internals
+     *  of the thread wrapper. This will break down, if you mix
+     *  uses of the C++ wrapper with the raw C functions. */
     bool
     isValid()  const
       {
-        return thread_
-            && true    ////////////TODO: how to determine that the thread is still running?
-            ;
+        return thread_;
       }
     
     
     /** Synchronisation barrier. In the function executing in this thread
-     *  needs to be a corresponding lumiera_thread_sync() call. Blocking
-     *  until both the caller and the thread have reached the barrier.
+     *  needs to be a corresponding Thread::sync() call. Blocking until
+     *  both the caller and the thread have reached the barrier.
      */
     void
     sync ()
@@ -155,6 +209,16 @@ namespace backend {
         REQUIRE (isValid(), "Thread terminated");
         if (!lumiera_thread_sync_other (thread_))
           lumiera::throwOnError();
+      }
+    
+    /** counterpart of the synchronisation barrier, to be called from
+     *  within the thread to be synchronised. Will block until both
+     *  this thread and the outward partner reached the barrier. 
+     */
+    static void
+    syncPoint ()
+      {
+        lumiera_thread_sync ();
       }
   };
   
@@ -181,19 +245,24 @@ namespace backend {
     
     
     /** put the caller into a blocking wait until this thread has terminated.
-     *  @throws error::Logic if this thread has already terminated
+     *  @return token signalling either success or failure.
+     *          The caller can find out by invoking \c isValid()
+     *          or \c maybeThrow() on this result token
      */
-    void join()
+    lib::Result<void>
+    join ()
       {
         if (!isValid())
-          throw lumiera::error::Logic ("joining on an already terminated thread");
+          throw error::Logic ("joining on an already terminated thread");
         
         lumiera_err errorInOtherThread =
             lumiera_thread_join (thread_);
         thread_ = 0;
-
+        
         if (errorInOtherThread)
-          throw lumiera::error::State ("Thread terminated with error:", errorInOtherThread);
+          return error::State ("Thread terminated with error", errorInOtherThread);
+        else
+          return true;
       }
   };
   

@@ -114,11 +114,19 @@ namespace test {
       void
       getError()
         {
-          ThreadJoinable newThread("test Thread joining-2"
-                                  , bind (&ThreadWrapperJoin_test::theAction, this, DESTRUCTION_CODE)
-                                  );
+          ThreadJoinable thread1("test Thread joining-3"
+                                , bind (&ThreadWrapperJoin_test::theAction, this, DESTRUCTION_CODE)
+                                );
           
-          VERIFY_ERROR(SPECIAL, newThread.join() );
+          VERIFY_ERROR(SPECIAL, thread1.join().maybeThrow() );
+          
+          
+          
+          ThreadJoinable thread2("test Thread joining-4"
+                                , bind (&ThreadWrapperJoin_test::theAction, this, DESTRUCTION_CODE)
+                                );
+          
+          ASSERT (!thread2.join().isValid() ); // can check success without throwing
         }
     };
   
