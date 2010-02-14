@@ -38,15 +38,20 @@ static void recmutexattr_init()
 
 
 LumieraRecmutex
-lumiera_recmutex_init (LumieraRecmutex self, const char* purpose, struct nobug_flag* flag)
+lumiera_recmutex_init (LumieraRecmutex self,
+                       const char* purpose,
+                       struct nobug_flag* flag,
+                       const struct nobug_context ctx)
 {
   if (self)
     {
       pthread_once (&recmutexattr_once, recmutexattr_init);
 
-      pthread_mutex_init (&self->recmutex, &recmutexattr);
       NOBUG_RESOURCE_HANDLE_INIT (self->rh);
-      NOBUG_RESOURCE_ANNOUNCE_RAW (flag, "recmutex", purpose, self, self->rh);
+      NOBUG_RESOURCE_ANNOUNCE_RAW_CTX (flag, "recmutex", purpose, self, self->rh, ctx)
+        {
+          pthread_mutex_init (&self->recmutex, &recmutexattr);
+        }
     }
 
   return self;
@@ -54,13 +59,17 @@ lumiera_recmutex_init (LumieraRecmutex self, const char* purpose, struct nobug_f
 
 
 LumieraRecmutex
-lumiera_recmutex_destroy (LumieraRecmutex self, struct nobug_flag* flag)
+lumiera_recmutex_destroy (LumieraRecmutex self,
+                          struct nobug_flag* flag,
+                          const struct nobug_context ctx)
 {
   if (self)
     {
-      NOBUG_RESOURCE_FORGET_RAW (flag,  self->rh);
-      if (pthread_mutex_destroy (&self->recmutex))
-        LUMIERA_DIE (LOCK_DESTROY);
+      NOBUG_RESOURCE_FORGET_RAW_CTX (flag,  self->rh, ctx)
+        {
+          if (pthread_mutex_destroy (&self->recmutex))
+            LUMIERA_DIE (LOCK_DESTROY);
+        }
     }
   return self;
 }

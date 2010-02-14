@@ -38,9 +38,19 @@
 #endif
 
 /*
+  defaults for the hooks, used when creating mpools
+ */
+void *(*mpool_malloc_hook)(size_t size) = malloc;
+void (*mpool_free_hook)(void *ptr) = free;
+
+/** called after a mpool got initialized */
+void (*mpool_init_hook) (MPool self) = NULL;
+/** called before a mpool gets destroyed */
+void (*mpool_destroy_hook) (MPool self) = NULL;
+
+/*
   Cluster and node structures are private
 */
-
 typedef struct mpoolcluster_struct mpoolcluster;
 typedef mpoolcluster* MPoolcluster;
 typedef const mpoolcluster* const_MPoolcluster;
@@ -94,6 +104,12 @@ mpool_init (MPool self, size_t elem_size, unsigned elements_per_cluster, mpool_d
       self->elements_free = 0;
       self->destroy = dtor;
       self->locality = NULL;
+
+      self->malloc_hook = mpool_malloc_hook;
+      self->free_hook = mpool_free_hook;
+
+      if (mpool_init_hook)
+        mpool_init_hook (self);
     }
 
   return self;
@@ -129,6 +145,9 @@ mpool_destroy (MPool self)
   TRACE (mpool_dbg, "%p", self);
   if (self)
     {
+      if (mpool_destroy_hook)
+        mpool_destroy_hook (self);
+
       LLIST_WHILE_TAIL(&self->clusters, cluster)
         {
           if (self->destroy)
@@ -144,7 +163,7 @@ mpool_destroy (MPool self)
 
           llist_unlink_fast_ (cluster);
           TRACE (mpool_dbg, "freeing cluster %p" , cluster);
-          free (cluster);
+          self->free_hook (cluster);
         }
 
       llist_init (&self->freelist);
@@ -156,11 +175,19 @@ mpool_destroy (MPool self)
 }
 
 
+MPool
+mpool_purge (MPool self)
+{
+  // not UNIMPLEMENTED because valid no-op
+  PLANNED("To be implemented");
+  return self;
+}
+
 
 MPool
 mpool_cluster_alloc_ (MPool self)
 {
-  MPoolcluster cluster = malloc (self->cluster_size);
+  MPoolcluster cluster = self->malloc_hook (self->cluster_size);
   TRACE (mpool_dbg, "%p", cluster);
 
   if (!cluster)
@@ -477,9 +504,7 @@ mpool_reserve (MPool self, unsigned nelements)
 void
 nobug_mpool_dump (const_MPool self,
                   const int depth,
-                  const char* file,
-                  const int line,
-                  const char* func)
+                  const struct nobug_context dump_context)
 {
   if (self && depth)
     {

@@ -93,15 +93,23 @@ enum lumiera_resource_try
  * @return indication what the the handler really did (LUMIERA_RESOURCE_NONE when it didn't obey the request)
  */
 typedef enum lumiera_resource_try (*lumiera_resource_handler_fn)(enum lumiera_resource_try itr, void* data, void* context);
+typedef int (*lumiera_resourcecollector_run_fn) (enum lumiera_resource which, enum lumiera_resource_try* iteration, void* context);
 
 typedef struct lumiera_resourcehandler_struct lumiera_resourcehandler;
 typedef lumiera_resourcehandler* LumieraResourcehandler;
 
 
 /**
+ * Initialize the Resourcecollector.
+ * The resourcecollector is singleton and can be used after initialized once.
+ */
+void
+lumiera_resourcecollector_init (void);
+
+
+/**
  * Destroy the resource collector registry.
  * Unregisters and deletes all handlers.
- * Note that there is no resourcecollector_init() function, initialization is automatic on first use.
  */
 void
 lumiera_resourcecollector_destroy (void);

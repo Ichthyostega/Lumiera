@@ -1,8 +1,8 @@
 /*
-  NoBugInit  -  pull up NoBug automagically in static initialisation 
+  ThreadpoolInit  -  pull up the Thread management automagically at application initialisation 
  
   Copyright (C)         Lumiera.org
-    2009,               Hermann Vosseler <Ichthyostega@web.de>
+    2010,               Hermann Vosseler <Ichthyostega@web.de>
  
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -21,22 +21,29 @@
 * *****************************************************/
 
 
-#include "lib/nobug-init.hpp"
+#include "backend/threadpool-init.hpp"
 
 
 
 namespace lumiera {
   
-  void 
-  initialise_NoBug () 
+  void
+  initialise_Threadpool ()
   {
-    NOBUG_INIT;
+    lumiera_threadpool_init();
     
-#if NOBUG_MODE_ALPHA
+////////////////////////////////////////////////////////////////////////TODO: a better way to detect Alpha/beta builds
+#ifdef DEBUG
     static uint callCount = 0;
     ASSERT ( 0 == callCount++ );
 #endif
   }
   
   
+  void
+  shutdown_Threadpool ()
+  {
+    lumiera_threadpool_destroy();
+  }
 }
+

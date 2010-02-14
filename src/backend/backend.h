@@ -21,11 +21,20 @@
 #ifndef LUMIERA_BACKEND_H
 #define LUMIERA_BACKEND_H
 
+#include "lib/mutex.h"
+
 #include <nobug.h>
 
 //NOBUG_DECLARE_FLAG (backend);
 
 extern size_t lumiera_backend_pagesize;
+
+/**
+ * Protect lookup and creation of files.
+ * Trying to access a nonexistent file with O_CREAT would be racy.
+ * Defined in filedescriptor.c
+ */
+extern lumiera_mutex lumiera_filecreate_mutex;
 
 
 int

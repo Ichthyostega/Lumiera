@@ -36,8 +36,7 @@ CLEANFILES =
 # global pre-processor flags. Per-target variables should include
 # these at the front (if possible) for consistency
 AM_CPPFLAGS = -I$(top_srcdir)/src/ 	\
-	$(NOBUGMT_LUMIERA_CFLAGS)	\
-	$(VALGRIND_CFLAGS)
+		$(LUMIERA_CFLAGS)
 
 # Only use subdirs if really needed, prefer the include scheme below
 #SUBDIRS +=

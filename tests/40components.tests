@@ -205,7 +205,9 @@ out: intermediate handler caught: LUMIERA_ERROR_EXTERNAL:failure in external ser
 out: caught lumiera::Error: LUMIERA_ERROR_STATE:unforeseen state -- caused by: LUMIERA_ERROR_EXTERNAL:failure in external service \(test-7\).
 out: intermediate handler caught: LUMIERA_ERROR_EXTERNAL:failure in external service \(test-8\).....will rethrow as error::State
 out: 2nd intermediate handler caught: LUMIERA_ERROR_STATE:unforeseen state -- caused by: LUMIERA_ERROR_EXTERNAL:failure in external service \(test-8\).....will rethrow as error::Config
-out: caught lumiera::Error: LUMIERA_ERROR_CONFIG:misconfiguration -- caused by: LUMIERA_ERROR_EXTERNAL:failure in external service \(test-8\).
+out: caught lumiera::Error: LUMIERA_ERROR_CONFIG:misconfiguration -- caused by: LUMIERA_ERROR_EXTERNAL:failure in external service \(test-8\)\.
+out: caught lumiera::Error: LUMIERA_ERROR_LIFE_AND_UNIVERSE:and everything\? \(what is the answer\?\)\.
+out: caught error::Logic: LUMIERA_ERROR_LOGIC:internal logic broken \(the big bang\). -- caused by: LUMIERA_ERROR_LIFE_AND_UNIVERSE:and everything\? \(what is the answer\?\)\.
 END
 
 
@@ -931,8 +933,8 @@ TEST "TypedAllocationManager" TypedAllocationManager_test <<END
 return: 0
 END
 
-# disabled by cehteh, investigate this later
-PLANNED "Type-based contexts" TypedCounter_test <<END
+
+TEST "Type-based contexts" TypedCounter_test <<END
 return: 0
 END
 

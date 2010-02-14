@@ -116,7 +116,7 @@ namespace lib {
         }
       
     public:
-      ClassLock(...) : Lock (getPerClassMonitor()) {}
+      ClassLock() : Lock (getPerClassMonitor()) { }
       
       uint use_count() { return nifty::Holder<PerClassMonitor>::accessed_; }
     };

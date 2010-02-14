@@ -58,8 +58,7 @@ namespace lib {
 namespace test{
   
   
-  using backend::Thread;
-  using backend::JoinHandle;
+  using backend::ThreadJoinable;
   using util::for_each;
   using util::isnil;
   using std::tr1::placeholders::_1;
@@ -234,15 +233,13 @@ namespace test{
        * and decrements on random targets. 
        */
       class SingleCheck
-        : JoinHandle,
-          Thread
+        : ThreadJoinable
         {
         public:
           SingleCheck (TypedCounter& counter_to_use)
-            : Thread("TypedCounter_test worker Thread"
-                    , bind (&SingleCheck::runCheckSequence, this, ref(counter_to_use), (rand() % MAX_ITERATIONS))
-                    , (backend::JoinHandle&)*this 
-                    )
+            : ThreadJoinable("TypedCounter_test worker Thread"
+                            , bind (&SingleCheck::runCheckSequence, this, ref(counter_to_use), (rand() % MAX_ITERATIONS))
+                            )
             { }
           
          ~SingleCheck () { this->join(); }

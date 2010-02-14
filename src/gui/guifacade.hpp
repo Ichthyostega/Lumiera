@@ -60,11 +60,16 @@ namespace gui {
    * When running Lumiera with a GUI is required (the default case),
    * it is loaded as dynamic module, thus defining the interface(s) 
    * for any further access. After successfully loading and starting
-   * the GUI, this gui::Facade is wired internally with this interface
-   * such as to allow transparent access from within the core. This
-   * startup sequence includes providing the GUI with similar facade
-   * access via interface handles for communication with Backend and
-   * Proc-Layer.
+   * the GUI, the actual "business" interfaces of the GUI are opened
+   * and wired internally such as to allow transparent access from
+   * within the core.
+   * 
+   * \par implementation notes
+   * This is an facade interface to the GUI subsystem, but it is setup
+   * somewhat special, as its sole purpose is to expose the subsystem
+   * descriptor, which, when started, loads the GUI as a plugin and
+   * invokes \c kickOff(term) there. For the implementation see
+   * gui::GuiRunner (guifacade.cpp) and guistart.cpp (the plugin).
    * 
    * @note this facade is intended to be used by Lumiera main solely.
    *       client code should always use the "business" interface(s).

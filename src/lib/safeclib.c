@@ -21,6 +21,8 @@
 #include "lib/error.h"
 #include "lib/safeclib.h"
 
+#include "backend/resourcecollector.h"
+
 #include <string.h>
 #include <stdlib.h>
 #include <pthread.h>
@@ -31,12 +33,40 @@
 
 LUMIERA_ERROR_DEFINE (NO_MEMORY, "Out of Memory!");
 
+
+
+/* placeholder function until the resourcecollector gets hooked in */
+static int
+die_no_mem (enum lumiera_resource which, enum lumiera_resource_try* iteration, void* context)
+{
+  (void) which; (void) iteration; (void) context;
+  LUMIERA_DIE (NO_MEMORY);
+  return 0; /* not reached */
+}
+
+static lumiera_resourcecollector_run_fn lumiera_safeclib_resourcecollector_run_hook = die_no_mem;
+
+void
+lumiera_safeclib_set_resourcecollector (void* hook)
+{
+  if (hook)
+    lumiera_safeclib_resourcecollector_run_hook = (lumiera_resourcecollector_run_fn)hook;
+  else
+    lumiera_safeclib_resourcecollector_run_hook = die_no_mem;
+}
+
+
 void*
 lumiera_malloc (size_t size)
 {
-  void* o = size ? malloc (size) : NULL;
-  if (!o)
-    LUMIERA_DIE (NO_MEMORY);
+  enum lumiera_resource_try iteration = LUMIERA_RESOURCE_ONE;
+  void* o = NULL;
+
+  if (size)
+    do
+      o = malloc (size);
+    while (!o && lumiera_safeclib_resourcecollector_run_hook (LUMIERA_RESOURCE_MEMORY, &iteration, &size));
+
   return o;
 }
 
@@ -44,9 +74,16 @@ lumiera_malloc (size_t size)
 void*
 lumiera_calloc (size_t n, size_t size)
 {
-  void* o = (n&&size)? calloc (n, size) : NULL;
-  if (!o)
-    LUMIERA_DIE (NO_MEMORY);
+  enum lumiera_resource_try iteration = LUMIERA_RESOURCE_ONE;
+  void* o = NULL;
+
+  size_t gross = n*size;
+
+  if (n&&size)
+    do
+      o = calloc (n, size);
+    while (!o && lumiera_safeclib_resourcecollector_run_hook (LUMIERA_RESOURCE_MEMORY, &iteration, &gross));
+
   return o;
 }
 
@@ -54,9 +91,13 @@ lumiera_calloc (size_t n, size_t size)
 void*
 lumiera_realloc (void* ptr, size_t size)
 {
-  void* o = size ? realloc (ptr, size) : NULL;
-  if (!o)
-    LUMIERA_DIE (NO_MEMORY);
+  enum lumiera_resource_try iteration = LUMIERA_RESOURCE_ONE;
+  void* o = NULL;
+
+  if (size)
+    do
+      o = realloc (ptr, size);
+    while (!o && lumiera_safeclib_resourcecollector_run_hook (LUMIERA_RESOURCE_MEMORY, &iteration, &size));
 
   return o;
 }
@@ -65,14 +106,16 @@ lumiera_realloc (void* ptr, size_t size)
 char*
 lumiera_strndup (const char* str, size_t len)
 {
-  char* o;
-  if (str)
-    o = strndup (str, len);
-  else
-    o = strdup ("");
+  enum lumiera_resource_try iteration = LUMIERA_RESOURCE_ONE;
+  void* o = NULL;
 
-  if (!o)
-    LUMIERA_DIE (NO_MEMORY);
+  do
+    if (str && len)
+      o = strndup (str, len);
+    else
+      o = strdup ("");
+  while (!o && lumiera_safeclib_resourcecollector_run_hook (LUMIERA_RESOURCE_MEMORY, &iteration, &len));
+
   return o;
 }
 
@@ -122,8 +165,7 @@ lumiera_tmpbuf_init (void)
 void
 lumiera_tmpbuf_freeall (void)
 {
-  if (lumiera_tmpbuf_tls_once == PTHREAD_ONCE_INIT)
-    pthread_once (&lumiera_tmpbuf_tls_once, lumiera_tmpbuf_init);
+  pthread_once (&lumiera_tmpbuf_tls_once, lumiera_tmpbuf_init);
 
   struct lumiera_tmpbuf_struct* buf = pthread_getspecific (lumiera_tmpbuf_tls_key);
   if (buf)
@@ -139,8 +181,7 @@ lumiera_tmpbuf_freeall (void)
 void*
 lumiera_tmpbuf_provide (size_t size)
 {
-  if (lumiera_tmpbuf_tls_once == PTHREAD_ONCE_INIT)
-    pthread_once (&lumiera_tmpbuf_tls_once, lumiera_tmpbuf_init);
+  pthread_once (&lumiera_tmpbuf_tls_once, lumiera_tmpbuf_init);
 
   struct lumiera_tmpbuf_struct* buf = pthread_getspecific (lumiera_tmpbuf_tls_key);
   if (!buf)
@@ -236,3 +277,12 @@ lumiera_tmpbuf_tr (const char* in, const char* from, const char* to, const char*
 
   return ret;
 }
+
+
+/*
+// Local Variables:
+// mode: C
+// c-file-style: "gnu"
+// indent-tabs-mode: nil
+// End:
+*/

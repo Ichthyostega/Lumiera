@@ -19,20 +19,24 @@ liblumierabackend_la_srcdir = $(top_srcdir)/src/backend
 lib_LTLIBRARIES += liblumierabackend.la
 
 liblumierabackend_la_CPPFLAGS = $(AM_CPPFLAGS)
-liblumierabackend_la_CFLAGS = $(AM_CFLAGS) -std=gnu99 -Wextra -Wall -Werror
-liblumierabackend_la_LIBADD = liblumiera.la
+liblumierabackend_la_CFLAGS = $(AM_CFLAGS) $(LUMIERA_BACKEND_CFLAGS) -std=gnu99 -Wextra -Wall -Werror
+liblumierabackend_la_LIBADD = $(LUMIERA_BACKEND_LIBS) liblumiera.la
 
 liblumierabackend_la_SOURCES =					\
 	$(liblumierabackend_la_srcdir)/mediaaccessfacade.cpp	\
 	$(liblumierabackend_la_srcdir)/backend.c		\
 	$(liblumierabackend_la_srcdir)/threads.c		\
+	$(liblumierabackend_la_srcdir)/threadpool.c		\
 	$(liblumierabackend_la_srcdir)/file.c			\
 	$(liblumierabackend_la_srcdir)/filehandle.c		\
 	$(liblumierabackend_la_srcdir)/filedescriptor.c		\
+	$(liblumierabackend_la_srcdir)/filedescriptorregistry.c	\
 	$(liblumierabackend_la_srcdir)/filehandlecache.c	\
 	$(liblumierabackend_la_srcdir)/mmap.c			\
 	$(liblumierabackend_la_srcdir)/mmapings.c		\
 	$(liblumierabackend_la_srcdir)/mmapcache.c		\
+	$(liblumierabackend_la_srcdir)/resourcecollector.c	\
+	$(liblumierabackend_la_srcdir)/threadpool-init.cpp	\
 	$(liblumierabackend_la_srcdir)/enginefacade.cpp		\
 	$(liblumierabackend_la_srcdir)/scriptrunnerfacade.cpp	\
 	$(liblumierabackend_la_srcdir)/netnodefacade.cpp
@@ -41,11 +45,14 @@ liblumierabackend_la_SOURCES =					\
 noinst_HEADERS +=						\
 	$(liblumierabackend_la_srcdir)/backend.h		\
 	$(liblumierabackend_la_srcdir)/threads.h		\
+	$(liblumierabackend_la_srcdir)/threadpool.h		\
 	$(liblumierabackend_la_srcdir)/file.h			\
 	$(liblumierabackend_la_srcdir)/filehandle.h		\
 	$(liblumierabackend_la_srcdir)/filedescriptor.h		\
+	$(liblumierabackend_la_srcdir)/filedescriptorregistry.h	\
 	$(liblumierabackend_la_srcdir)/filehandlecache.h	\
 	$(liblumierabackend_la_srcdir)/mmap.h			\
 	$(liblumierabackend_la_srcdir)/mmapings.h		\
-	$(liblumierabackend_la_srcdir)/mmapcache.h
+	$(liblumierabackend_la_srcdir)/mmapcache.h		\
+	$(liblumierabackend_la_srcdir)/resourcecollector.h
 

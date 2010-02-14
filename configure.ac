@@ -7,8 +7,9 @@ AC_PREREQ(2.59)
 
 AC_COPYRIGHT([
   Copyright (C)         Lumiera.org
-    2008,               Christian Thaeter <ct@pipapo.org>
+    2008, 2009, 2010    Christian Thaeter <ct@pipapo.org>
                         Joel Holdsworth <joel@airwebreathe.org.uk>
+                        et. al.
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -25,12 +26,14 @@ AC_COPYRIGHT([
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 ])
 
+#################################################################################
 #
 # Global configuration
 #
 AC_GNU_SOURCE
 AC_DISABLE_STATIC
 
+#################################################################################
 #
 # Required programs
 #
@@ -42,26 +45,12 @@ AC_LIBTOOL_DLOPEN
 AC_PROG_LIBTOOL
 PKG_PROG_PKG_CONFIG([0.22])
 
-#
-# test for headers
-#
-AC_STDC_HEADERS
-
-ACX_PTHREAD
-LIBS="$PTHREAD_LIBS $LIBS"
-CFLAGS="$CFLAGS $PTHREAD_CFLAGS"
-CC="$PTHREAD_CC"
-
-##AM_CONDITIONAL([HAVE_THREADING], [test x"$acx_pthread_ok" = xyes])
-
-
-
+#################################################################################
 #
 # user options
 #
 
-
-############## NoBug build levels
+# NoBug build levels
 AH_TEMPLATE(EBUG_ALPHA, [Define to 1 for selecting NoBug ALPHA build level])
 AH_TEMPLATE(EBUG_BETA, [Define to 1 for selecting NoBug BETA build level])
 AH_TEMPLATE(NDEBUG, [Define to 1 for selecting NoBug RELEASE build level])
@@ -83,18 +72,44 @@ AC_ARG_ENABLE(release, AC_HELP_STRING([--enable-release], [select NoBug RELEASE 
 )])])
 # END NoBug
 
-# C headers and libraries
-AC_LANG_PUSH([C])
 
-AC_CHECK_LIB(dl, dlopen, [LUMIERA_PLUGIN_LIBS="$LUMIERA_PLUGIN_LIBS -ldl"],
-                   [AC_MSG_ERROR([Dynamic linking not supported, report a bug])]
+
+
+#################################################################################
+#
+# global test for headers and functions
+#
+AC_STDC_HEADERS
+
+
+ACX_PTHREAD
+LIBS="$PTHREAD_LIBS $LIBS"
+CFLAGS="$CFLAGS $PTHREAD_CFLAGS"
+CC="$PTHREAD_CC"
+
+# Nobug Dependencies
+AC_CHECK_HEADER([execinfo.h], AC_DEFINE(HAVE_EXECINFO_H))
+PKG_CHECK_MODULES(VALGRIND, [valgrind], AC_DEFINE(HAVE_VALGRIND_H),
+                             AC_MSG_NOTICE([valgrind not found                                 (optional)]))
+
+PKG_CHECK_MODULES(NOBUGMT, [nobugmt >= 201002.1],
+			   AC_DEFINE(HAVE_NOBUGMT_H),
+			   AC_MSG_ERROR([Missing required nobug version                    (http://www.lumiera.org/nobug_manual.html)])
 )
 
-AC_LANG_POP([C])
+LUMIERA_CFLAGS="$NOBUGMT_CFLAGS $VALGRIND_CFLAGS"
+LUMIERA_LIBS="$NOBUGMT_LIBS"
+
+AC_SUBST(LUMIERA_CFLAGS)
+AC_SUBST(LUMIERA_LIBS)
 
 
+#boost
 # C++ headers and libraries
 AC_LANG_PUSH([C++])
+# check for the minimum Boost version
+# (http://www.randspringer.de/boost/upt.html)
+AX_BOOST_BASE([1.34.1])
 
 AC_CHECK_HEADER([tr1/memory],
         ,
@@ -107,22 +122,87 @@ AC_CHECK_HEADER([boost/shared_ptr.hpp],
         )
 
 AC_CHECK_HEADER([boost/program_options.hpp],
-        ,
+        [LUMIERA_BOOST_LIBS="$LUMIERA_BOOST_LIBS -lboost_program_options-mt"],
         AC_MSG_ERROR([boost::program_options missing            (http://www.boost.org/)])
         )
 
-# check for the minimum Boost version
-# (http://www.randspringer.de/boost/upt.html)
-AX_BOOST_BASE([1.34.1])
-
 AC_CHECK_HEADER([boost/regex.hpp],
-        ,
+        [LUMIERA_BOOST_LIBS="$LUMIERA_BOOST_LIBS -lboost_regex-mt"],
         AC_MSG_ERROR([boost::regex missing                      (http://www.boost.org/)])
         )
 
 AC_LANG_POP([C++])
+AC_SUBST(LUMIERA_BOOST_CFLAGS)
+AC_SUBST(LUMIERA_BOOST_LIBS)
 
-PKG_CHECK_MODULES(LUMIERA_COMMON_LIBS, [sigc++-2.0 >= 2.0.17])
+
+
+#################################################################################
+#
+# Configs for subsystems
+# ----------------------
+#
+
+#################################################################################
+#
+# library
+#
+
+PKG_CHECK_MODULES(LUMIERA_LIBRARY, [
+    gavl >= 1.0.1
+    ])
+
+LUMIERA_LIBRARY_CFLAGS="$LUMIERA_LIBRARY_CFLAGS $LUMIERA_CFLAGS"
+LUMIERA_LIBRARY_LIBS="$LUMIERA_LIBRARY_CFLAGS $LUMIERA_LIBS $LUMIERA_BOOST_LIBS"
+
+AC_SUBST(LUMIERA_LIBRARY_CFLAGS)
+AC_SUBST(LUMIERA_LIBRARY_LIBS)
+
+#################################################################################
+#
+# common
+#
+PKG_CHECK_MODULES(LUMIERA_COMMON, [sigc++-2.0 >= 2.0.17])
+
+AC_LANG_PUSH([C])
+AC_CHECK_LIB(dl, dlopen, [LUMIERA_COMMON_LIBS="$LUMIERA_COMMON_LIBS -ldl"],
+                   [AC_MSG_ERROR([Dynamic linking not supported, report a bug])]
+)
+AC_LANG_POP([C])
+
+LUMIERA_COMMON_CFLAGS="$LUMIERA_COMMON_CFLAGS $LUMIERA_CFLAGS"
+LUMIERA_COMMON_LIBS="$LUMIERA_COMMON_LIBS $LUMIERA_LIBS"
+
+AC_SUBST(LUMIERA_COMMON_CFLAGS)
+AC_SUBST(LUMIERA_COMMON_LIBS)
+
+#################################################################################
+#
+# backend
+#
+
+LUMIERA_BACKEND_CFLAGS="$LUMIERA_CFLAGS"
+LUMIERA_BACKEND_LIBS="$LUMIERA_LIBS"
+
+AC_SUBST(LUMIERA_BACKEND_CFLAGS)
+AC_SUBST(LUMIERA_BACKEND_LIBS)
+
+#################################################################################
+#
+# proc
+#
+
+
+LUMIERA_PROC_CFLAGS="$LUMIERA_PROC_CFLAGS $LUMIERA_CFLAGS"
+LUMIERA_PROC_LIBS="$LUMIERA_PROC_CFLAGS $LUMIERA_LIBS"
+
+AC_SUBST(LUMIERA_PROC_CFLAGS)
+AC_SUBST(LUMIERA_PROC_LIBS)
+
+#################################################################################
+#
+# gui
+#
 
 ############## Internatinalization
 #GETTEXT_PACKAGE=gtk-lumiera
@@ -143,14 +223,12 @@ PKG_CHECK_MODULES(LUMIERA_GUI, [
     gtkmm-2.4 >= 2.12
     cairomm-1.0 >= 0.6.0
     librsvg-2.0 >= 2.18.1
-    gavl >= 0.2.5
+    gavl >= 1.0.1
     gthread-2.0 >= 2.12.4])
 
 # Check for gdl-1.0 with a gdl-lum fallback
 PKG_CHECK_MODULES(GDL, gdl-1.0 >= 2.27.1, ,
     [PKG_CHECK_MODULES(GDL, gdl-lum >= 2.27.1) ])
-LUMIERA_GUI_CFLAGS="$LUMIERA_GUI_CFLAGS $GDL_CFLAGS"
-LUMIERA_GUI_LIBS="$LUMIERA_GUI_LIBS $GDL_LIBS"
 
 # END Gtk Dependancies
 
@@ -178,21 +256,28 @@ AC_CHECK_LIB(Xv, XvQueryAdaptors, [LUMIERA_GUI_LIBS="$LUMIERA_GUI_LIBS -lXv"],
 
 # END X11 Dependancies
 
-AC_SUBST(LUMIERA_COMMON_LIBS)
-AC_SUBST(LUMIERA_PLUGIN_LIBS)
-AC_SUBST(LUMIERA_GUI_LIBS)
+LUMIERA_GUI_CFLAGS="$LUMIERA_GUI_CFLAGS $LUMIERA_CFLAGS $GDL_CFLAGS"
+LUMIERA_GUI_LIBS="$LUMIERA_GUI_LIBS $LUMIERA_LIBS $GDL_LIBS"
+
 AC_SUBST(LUMIERA_GUI_CFLAGS)
+AC_SUBST(LUMIERA_GUI_LIBS)
 
-############## Nobug Dependancies
-AC_CHECK_HEADER([execinfo.h], AC_DEFINE(HAVE_EXECINFO_H))
-PKG_CHECK_MODULES(VALGRIND, [valgrind], AC_DEFINE(HAVE_VALGRIND_H),
-                             AC_MSG_NOTICE([valgrind not found                                 (optional)]))
 
-PKG_CHECK_MODULES(NOBUGMT_LUMIERA, [nobugmt >= 201001.1],
-				 AC_DEFINE(HAVE_NOBUGMT_H),
-				 AC_MSG_ERROR([Missing required nobug version                    (http://www.lumiera.org/nobug_manual.html)])
-)
-# END Nobug Dependancies
+#################################################################################
+#
+# tools
+#
+
+LUMIERA_TOOL_CFLAGS="$LUMIERA_TOOL_CFLAGS $LUMIERA_CFLAGS $LUMIERA_GUI_CFLAGS"
+LUMIERA_TOOL_LIBS="$LUMIERA_TOOL_CFLAGS $LUMIERA_LIBS $LUMIERA_BOOST_LIBS $LUMIERA_GUI_LIBS"
+
+AC_SUBST(LUMIERA_TOOL_CFLAGS)
+AC_SUBST(LUMIERA_TOOL_LIBS)
+
+#################################################################################
+#
+# Generate output
+#
 
 # Print a summary
 AC_MSG_RESULT([

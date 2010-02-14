@@ -19,9 +19,12 @@
 testlib_srcdir = $(top_srcdir)/tests/lib
 
 check_PROGRAMS += test-lib
-test_lib_CPPFLAGS = $(AM_CPPFLAGS) -Wall -I$(testlib_srcdir)                                   	$(LUMIERA_GUI_CFLAGS)
+test_lib_CPPFLAGS = $(AM_CPPFLAGS) -Wall -I$(testlib_srcdir) $(LUMIERA_GUI_CFLAGS)
+#why gui cflags/libs?
 
 test_lib_LDADD =			\
+	$(LUMIERA_LIBRARY_LIBS)		\
+	$(LUMIERA_GUI_LIBS)		\
 	liblumiprocmobjectbuilder.la	\
 	liblumiprocmobjectsession.la	\
 	liblumiprocmobject.la		\
@@ -31,9 +34,7 @@ test_lib_LDADD =			\
 	liblumiprocasset.la		\
 	liblumierabackend.la		\
 	liblumieracommon.la		\
-	liblumiera.la			\
-	$(LUMIERA_GUI_LIBS)			\
-	$(NOBUGMT_LUMIERA_LIBS) -ldl -lboost_program_options-mt -lboost_regex-mt
+	liblumiera.la
 
 test_lib_SOURCES =						\
 	$(testlib_srcdir)/mainsuite.cpp				\

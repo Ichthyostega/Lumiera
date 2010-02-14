@@ -51,8 +51,6 @@ struct lumiera_filehandlecache_struct
   lumiera_mutex lock;
 };
 
-extern LumieraFilehandlecache lumiera_fhcache;
-
 /**
  * Initializes the filehandle cache.
  * @param max_entries number how much filehandles shall be managed
@@ -76,7 +74,7 @@ lumiera_filehandlecache_delete (void);
  * @return the new filehandle
  */
 LumieraFilehandle
-lumiera_filehandlecache_handle_acquire (LumieraFilehandlecache self, LumieraFiledescriptor desc);
+lumiera_filehandlecache_handle_acquire (LumieraFiledescriptor desc);
 
 /**
  * Remove a filehandle from cache aging
@@ -85,7 +83,7 @@ lumiera_filehandlecache_handle_acquire (LumieraFilehandlecache self, LumieraFile
  * @param handle the filehandle to be checked out
  */
 LumieraFilehandle
-lumiera_filehandlecache_checkout (LumieraFilehandlecache self, LumieraFilehandle handle);
+lumiera_filehandlecache_checkout (LumieraFilehandle handle);
 
 /**
  * Put a filehandle into the cache
@@ -94,6 +92,6 @@ lumiera_filehandlecache_checkout (LumieraFilehandlecache self, LumieraFilehandle
  * @param handle the filehandle to be checked in
  */
 void
-lumiera_filehandlecache_checkin (LumieraFilehandlecache self, LumieraFilehandle handle);
+lumiera_filehandlecache_checkin (LumieraFilehandle handle);
 
 #endif

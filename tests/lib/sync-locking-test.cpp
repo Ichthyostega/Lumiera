@@ -25,186 +25,178 @@
 #include "lib/error.hpp"
 
 #include "lib/sync.hpp"
-
-#include <glibmm.h>
+#include "backend/thread-wrapper.hpp"
 
 #include <iostream>
+#include <tr1/functional>
+
+using std::tr1::bind;
 
 using std::cout;
 using test::Test;
 
 
 namespace lib {
-  namespace test {
+namespace test{
   
-    namespace { // private test classes and data...
-    
-      const uint NUM_COUNTERS = 20;       ///< number of independent counters to increment in parallel
-      const uint NUM_THREADS  = 10;       ///< number of threads trying to increment these counters
-      const uint MAX_PAUSE    = 10000;    ///< maximum delay implemented as empty counting loop
-      const uint MAX_SUM      = 1000;     ///< trigger when to finish incrementing
-      const uint MAX_INC      = 10;       ///< maximum increment on each step
-      
-      
-      
-      class Victim
-        : public Sync<RecursiveLock_NoWait>
-        {
-          volatile long cnt_[NUM_COUNTERS];
-          volatile uint step_;         ///< @note stored as instance variable
-
-          void
-          pause ()
-            {
-              Lock guard (this); // note recursive lock
-              
-              for ( uint i=0, lim=(rand() % MAX_PAUSE); i<lim; ++i)
-                ;
-            }
-          
-          void 
-          incrementAll ()
-            {
-              for (uint i=0; i<NUM_COUNTERS; ++i)
-                {
-                  pause();
-                  cnt_[i] += step_;
-                }
-            }
-      
-        
-        public:
-          Victim ()
-            {
-              for (uint i=0; i<NUM_COUNTERS; ++i)
-                cnt_[i] = 0;
-            }
-          
-          void 
-          inc (uint newStep)
-            {
-              Lock guard (this);
-              step_ = newStep;
-              incrementAll();
-            }
-          
-          bool
-          belowLimit ()
-            {
-              Lock guard (this);
-              return cnt_[0] < MAX_SUM;
-            }
-          
-          bool
-          checkAllEqual ()
-            {
-              for (uint i=1; i<NUM_COUNTERS; ++i)
-                if (cnt_[i-1] != cnt_[i])
-                  return false;
-              return true;
-            }
-          
-          void 
-          report ()
-            {
-              for (uint i=0; i<NUM_COUNTERS; ++i)
-                cout << "Counter-#" << i << " = " << cnt_[i] << "\n";
-            }
-        }
-      ourVictim;
-      
-      
-      
-      /**
-       * A Thread trying to increment all victim counters in sync...
-       */
-      class HavocThread
-        {
-          Glib::Thread * thread_;
-          
-          void
-          doIt ()
-            {
-              while (ourVictim.belowLimit())
-                ourVictim.inc (rand() % MAX_INC);
-            }
-          
-        public:
-          
-          HavocThread ()
-            : thread_(0)
-            { }
-          
-          ~HavocThread ()
-            {
-              if (thread_)
-                thread_->join();
-            }
-          
-          void
-          start () 
-            {
-              thread_ = Glib::Thread::create(sigc::mem_fun(*this, &HavocThread::doIt), true);
-              ASSERT (thread_);
-            }
-        };
-      
-    } // (End) test classes and data....
+  namespace { // private test classes and data...
+  
+    const uint NUM_COUNTERS = 20;       ///< number of independent counters to increment in parallel
+    const uint NUM_THREADS  = 10;       ///< number of threads trying to increment these counters
+    const uint MAX_PAUSE    = 10000;    ///< maximum delay implemented as empty counting loop
+    const uint MAX_SUM      = 1000;     ///< trigger when to finish incrementing
+    const uint MAX_INC      = 10;       ///< maximum increment on each step
     
     
     
-    
-    
-    
-    
-    
-    
-    
-    /**********************************************************************
-     * @test create multiple threads, all concurrently trying to increment
-     * a number of counters with random steps and random pauses. Without
-     * locking, the likely result will be differing counters.
-     * But because the class Victim uses an object level monitor to
-     * guard the mutations, the state should remain consistent.
-     * 
-     * @see SyncWaiting_test condition based wait/notify
-     * @see SyncClasslock_test locking a type, not an instance 
-     * @see sync.hpp
-     */
-    class SyncLocking_test : public Test
+    class Victim
+      : public Sync<RecursiveLock_NoWait>
       {
+        volatile long cnt_[NUM_COUNTERS];
+        volatile uint step_;         ///< @note stored as instance variable
         
-        virtual void
-        run (Arg)
+        void
+        pause ()
           {
-            if (!Glib::thread_supported()) 
-              Glib::thread_init();
+            Lock guard (this); // note recursive lock
             
-            REQUIRE (ourVictim.checkAllEqual());
-            {
-              HavocThread threads[NUM_THREADS];
-              for (uint i=0; i<NUM_THREADS; ++i)
-                threads[i].start();
-            } 
-            // all finished and joined here...
-            
-            if (!ourVictim.checkAllEqual())
+            for ( uint i=0, lim=(rand() % MAX_PAUSE); i<lim; ++i)
+              ;
+          }
+        
+        void 
+        incrementAll ()
+          {
+            for (uint i=0; i<NUM_COUNTERS; ++i)
               {
-                cout << "Thread locking is broken; internal state got messed up\n"
-                        "NOTE: all counters should be equal and >=" << MAX_SUM << "\n";
-                ourVictim.report();
+                pause();
+                cnt_[i] += step_;
               }
           }
         
+        
+      public:
+        Victim ()
+          {
+            for (uint i=0; i<NUM_COUNTERS; ++i)
+              cnt_[i] = 0;
+          }
+        
+        void 
+        inc (uint newStep)
+          {
+            Lock guard (this);
+            step_ = newStep;
+            incrementAll();
+          }
+        
+        bool
+        belowLimit ()
+          {
+            Lock guard (this);
+            return cnt_[0] < MAX_SUM;
+          }
+        
+        bool
+        checkAllEqual ()
+          {
+            for (uint i=1; i<NUM_COUNTERS; ++i)
+              if (cnt_[i-1] != cnt_[i])
+                return false;
+            return true;
+          }
+        
+        void 
+        report ()
+          {
+            for (uint i=0; i<NUM_COUNTERS; ++i)
+              cout << "Counter-#" << i << " = " << cnt_[i] << "\n";
+          }
+      }
+    ourVictim;
+    
+    
+    
+    /**
+     * A Thread trying to increment all victim counters in sync...
+     */
+    class HavocThread
+      {
+        backend::ThreadJoinable thread_;
+        
+        void
+        doIt ()
+          {
+            while (ourVictim.belowLimit())
+              ourVictim.inc (rand() % MAX_INC);
+          }
+        
+      public:
+        
+        HavocThread ()
+          : thread_("HavocThread"
+                   , bind (&HavocThread::doIt, this)
+                   )
+          {
+            ASSERT (thread_);
+          }
+        
+        ~HavocThread ()
+          {
+            if (thread_)
+              thread_.join();
+          }
       };
     
+  } // (End) test classes and data....
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  /**********************************************************************
+   * @test create multiple threads, all concurrently trying to increment
+   * a number of counters with random steps and random pauses. Without
+   * locking, the likely result will be differing counters.
+   * But because the class Victim uses an object level monitor to
+   * guard the mutations, the state should remain consistent.
+   * 
+   * @see SyncWaiting_test condition based wait/notify
+   * @see SyncClasslock_test locking a type, not an instance 
+   * @see sync.hpp
+   */
+  class SyncLocking_test : public Test
+    {
       
-    
-    /** Register this test class... */
-    LAUNCHER (SyncLocking_test, "unit common");
-    
-    
-    
-  } // namespace test
-
-} // namespace lib
+      virtual void
+      run (Arg)
+        {
+          REQUIRE (ourVictim.checkAllEqual());
+          {
+            HavocThread threads[NUM_THREADS]   SIDEEFFECT;
+          } 
+          // all finished and joined here...
+          
+          if (!ourVictim.checkAllEqual())
+            {
+              cout << "Thread locking is broken; internal state got messed up\n"
+                      "NOTE: all counters should be equal and >=" << MAX_SUM << "\n";
+              ourVictim.report();
+            }
+        }
+      
+    };
+  
+  
+  
+  /** Register this test class... */
+  LAUNCHER (SyncLocking_test, "unit common");
+  
+  
+  
+}} // namespace lib::test

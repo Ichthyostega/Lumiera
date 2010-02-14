@@ -112,7 +112,7 @@ lumiera_config_init (const char* path)
   lumiera_configitem_init (&lumiera_global_config->files);
   lumiera_configitem_init (&lumiera_global_config->TODO_unknown);
 
-  lumiera_mutex_init (&lumiera_global_config->lock, "config mutex", &NOBUG_FLAG (mutex_dbg));
+  lumiera_mutex_init (&lumiera_global_config->lock, "config mutex", &NOBUG_FLAG (mutex_dbg), NOBUG_CONTEXT);
 
   lumiera_config_setdefault (lumiera_tmpbuf_snprintf (SIZE_MAX, "config.path = %s", path));
 
@@ -131,7 +131,7 @@ lumiera_config_destroy ()
   TRACE (config_dbg);
   if (lumiera_global_config)
     {
-      lumiera_mutex_destroy (&lumiera_global_config->lock, &NOBUG_FLAG (mutex_dbg));
+      lumiera_mutex_destroy (&lumiera_global_config->lock, &NOBUG_FLAG (mutex_dbg), NOBUG_CONTEXT);
       lumiera_configitem_destroy (&lumiera_global_config->defaults, &lumiera_global_config->keys);
       lumiera_configitem_destroy (&lumiera_global_config->files, &lumiera_global_config->keys);
       lumiera_configitem_destroy (&lumiera_global_config->TODO_unknown, &lumiera_global_config->keys);

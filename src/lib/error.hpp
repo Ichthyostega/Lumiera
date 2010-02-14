@@ -2,7 +2,7 @@
   ERROR.hpp  -  Lumiera Exception Interface
  
   Copyright (C)         Lumiera.org
-    2008,               Hermann Vosseler <Ichthyostega@web.de>
+    2008-2010           Hermann Vosseler <Ichthyostega@web.de>
  
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -33,32 +33,32 @@
 namespace lumiera {
   
   using std::string;
-
-
+  
+  
   
   /** error-ID for unspecified exceptions */
   LUMIERA_ERROR_DECLARE(EXCEPTION);  
   
   /**
-   * Interface and Base class of all Exceptions thrown 
+   * Interface and Base class of all Exceptions thrown
    * from within Lumiera (C++) code. Common operations
    * for getting an diagnostic message and for obtaining
    * the root cause, i.e. the first exception encountered
-   * in a chain of exceptions. 
+   * in a chain of exceptions.
    */
   class Error : public std::exception
     {
     public:
-      Error (string description="", const char* id=LUMIERA_ERROR_EXCEPTION) throw();
+      Error (string description="", const char* const id=LUMIERA_ERROR_EXCEPTION) throw();
       Error (std::exception const& cause,
-             string description="", const char* id=LUMIERA_ERROR_EXCEPTION) throw();
+             string description="", const char* const id=LUMIERA_ERROR_EXCEPTION) throw();
       
       Error (const Error&) throw();
       virtual ~Error () throw() {};
       
       /** yield a diagnostic message characterising the problem */
       virtual const char* what () const throw();
-
+      
       /** the internal Lumiera-error-ID (was set as C-errorstate in ctor) */
       const char* getID () const throw() { return this->id_; }
       
@@ -72,10 +72,10 @@ namespace lumiera {
        *  @return the description string, maybe empty (if there is no known root cause)
        */
       const string& rootCause () const throw()  { return this->cause_; }
-
+      
       /** replace the previous or default friendly message for the user. To be localised. */
       Error& setUsermsg (const string& newMsg) throw() { this->msg_ = newMsg; return *this; }
-
+      
       /** give additional developer info. Typically used at intermediate handlers to add context. */
       Error& prependInfo (const string& text) throw() { this->desc_.insert (0,text); return *this; }
       
@@ -86,19 +86,18 @@ namespace lumiera {
       string desc_;          ///< detailed description of the error situation for the developers
       mutable string what_;  ///< buffer for generating the detailed description on demand
       const string cause_;   ///< description of first exception encountered in the chain
-
+      
       static const string extractCauseMsg (std::exception const&)  throw();
     };
   
-    
-    
-    
-    
-    
+  
+  
+  
+  
+  
   /* === Exception Sub-categories === */
-    
-  namespace error
-    {
+  
+  namespace error {
     
     /** global function for handling unknown exceptions
      *  encountered at functions declaring not to throw 
@@ -107,28 +106,28 @@ namespace lumiera {
      *  add some diagnostics prior to halting.
      */
     void lumiera_unexpectedException ()  throw();
-
+    
     /** throw an error::Fatal indicating "assertion failure" */
     void assertion_terminate (const string& location);
     
-
+    
     /* constants to be used as error IDs */
-    LUMIERA_ERROR_DECLARE (LOGIC    );    ///< contradiction to internal logic assumptions detected  
-    LUMIERA_ERROR_DECLARE (FATAL    );    ///< unable to cope with, internal logic floundered     
+    LUMIERA_ERROR_DECLARE (LOGIC    );    ///< contradiction to internal logic assumptions detected
+    LUMIERA_ERROR_DECLARE (FATAL    );    ///< unable to cope with, internal logic floundered
     LUMIERA_ERROR_DECLARE (CONFIG   );    ///< execution aborted due to misconfiguration
     LUMIERA_ERROR_DECLARE (STATE    );    ///< unforeseen internal state
+    LUMIERA_ERROR_DECLARE (FLAG     );    ///< non-cleared lumiera errorstate from C code
     LUMIERA_ERROR_DECLARE (INVALID  );    ///< invalid input or parameters encountered
     LUMIERA_ERROR_DECLARE (EXTERNAL );    ///< failure in external service the application relies on
     LUMIERA_ERROR_DECLARE (ASSERTION);    ///< assertion failure
     
     /* generic error situations */
-    LUMIERA_ERROR_DECLARE (WRONG_TYPE);   ///< runtime type mismatch 
-    LUMIERA_ERROR_DECLARE (ITER_EXHAUST); ///< end of sequence reached 
-    LUMIERA_ERROR_DECLARE (BOTTOM_VALUE); ///< invalid or NIL value 
-    LUMIERA_ERROR_DECLARE (RUNTIME);      ///< generic runtime error, will be overridden by id
-
+    LUMIERA_ERROR_DECLARE (WRONG_TYPE);   ///< runtime type mismatch
+    LUMIERA_ERROR_DECLARE (ITER_EXHAUST); ///< end of sequence reached
+    LUMIERA_ERROR_DECLARE (BOTTOM_VALUE); ///< invalid or NIL value
     
-/** Macro for creating derived exception classes properly 
+    
+/** Macro for creating derived exception classes properly
  *  integrated into Lumiera's exception hierarchy. Using
  *  this macro assures that the new class will get the full
  *  set of constructors and behaviour common to all exception
@@ -143,44 +142,73 @@ namespace lumiera {
                const char* id=_ID_) throw()             \
         : PARENT (description, id)  {}                  \
                                                         \
-        CLASS (std::exception& cause,                   \
+        CLASS (std::exception const& cause,             \
                std::string description="",              \
                const char* id=_ID_) throw()             \
         : PARENT (cause, description, id)   {}          \
       };
-
+    
     //-------------------------CLASS-----PARENT--ID----------------------
     LUMIERA_EXCEPTION_DECLARE (Logic,    Error,  LUMIERA_ERROR_LOGIC);
     LUMIERA_EXCEPTION_DECLARE (Fatal,    Logic,  LUMIERA_ERROR_FATAL);
     LUMIERA_EXCEPTION_DECLARE (Config,   Error,  LUMIERA_ERROR_CONFIG);
     LUMIERA_EXCEPTION_DECLARE (State,    Error,  LUMIERA_ERROR_STATE);
+    LUMIERA_EXCEPTION_DECLARE (Flag,     State,  LUMIERA_ERROR_FLAG);
     LUMIERA_EXCEPTION_DECLARE (Invalid,  Error,  LUMIERA_ERROR_INVALID);
     LUMIERA_EXCEPTION_DECLARE (External, Error,  LUMIERA_ERROR_EXTERNAL);
-    LUMIERA_EXCEPTION_DECLARE (Runtime,  Error,  LUMIERA_ERROR_RUNTIME);
     
     
     /** install our own handler for undeclared exceptions. Will be
      *  called automatically ON_BASIC_INIT when linking exception.cpp */
     void install_unexpectedException_handler ();
     
+    /** @return error detail-info if currently set, a default message else */
+    const char* detailInfo ();
+    
   } // namespace error
-
-
+  
+  
+  
   /**
-   * Throw a 'Runtime' error which wraps an existing lumiera error
-   * no-op when no error is pending. Does not clear the error state.
+   * Check the lumiera error state, which maybe was set by C-code.
+   * @throw Errorflag exception to signal an detected lumiera error
+   * @note specific error code and information is enclosed in
+   *       the raised exception; the error state is \em not cleared.
    */
-  static inline void throwOnError()
+  inline void
+  throwOnError()
   {
-    lumiera_err err = lumiera_error_peek();
-    if (err)
+    if (lumiera_err errorFlag =lumiera_error())
       {
-        const char* extra = lumiera_error_extra();
-        throw error::Runtime(extra?extra:"", err);
-      }
+        throw error::Flag( error::detailInfo()
+                         , errorFlag);
+  }   }                  //causes the error state to be set
+  
+  /** Check the lumiera error state and throw a specific exception
+   *  in case a non-cleared errorflag is detected. No-op else.
+   *  @throw instance of the lumiera::Error subclass provided as
+   *         template parameter, containing an lumiera::error::Flag
+   *         as root cause to denote the detected error-flag state.
+   */
+  template<class EX>
+  inline void
+  maybeThrow(string description)
+  {
+    if (lumiera_err errorFlag =lumiera_error())
+      {
+        throw EX (error::Flag( error::detailInfo()
+                             , errorFlag)
+                 ,description);
+  }   }
+  
+  template<class EX>
+  inline void
+  maybeThrow()
+  {
+    maybeThrow<EX>("");
   }
-
-
+  
+  
 } // namespace lumiera
 
 

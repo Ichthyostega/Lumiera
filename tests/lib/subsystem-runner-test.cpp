@@ -42,8 +42,6 @@ using std::tr1::bind;
 using util::isnil;
 using util::cStr;
 using test::Test;
-using lib::Sync;
-using lib::RecursiveLock_Waitable;
 using backend::Thread;
 
 
@@ -63,6 +61,13 @@ namespace test  {
        *  shutdown request every XX milliseconds */
       const uint TICK_DURATION_ms = 5;
       
+      /** due to a shortcoming of this test fixture,
+       *  a floundering subsystem continues to run for
+       *  a short time after the sync barrier.
+       *  Relevant for singleSubsys_start_failure().
+       */
+      const uint DELAY_FOR_FLOUNDERING_THRAD_ms = 20;
+      
       /** dummy options just to be ignored */
       util::Cmdline dummyArgs ("");
       lumiera::Option dummyOpt (dummyArgs);
@@ -77,16 +82,12 @@ namespace test  {
       
       /** 
        * A simulated "Lumiera Subsystem".
-       * It is capable of starting a separate thread,
-       * which may terminate regularly after a random
-       * time, or may fail in various ways. 
-       * The behaviour is controlled by a number of
-       * definitions, given at construction in
-       * logic predicate notation.
+       * It is capable of starting a separate thread, which may terminate regularly
+       * after a random time, or may fail in various ways. The behaviour is controlled
+       * by a number of definitions, given at construction in logic predicate notation.
        */
       class MockSys
-        : public lumiera::Subsys,
-          public Sync<RecursiveLock_Waitable>
+        : public lumiera::Subsys
         {
           Literal id_;
           const string spec_;
@@ -113,14 +114,17 @@ namespace test  {
             {
               REQUIRE (!(isUp_|started_|didRun_), "attempt to start %s twice!", cStr(*this));
               
-              Lock sync(this);
               string startSpec (extractID ("start",spec_));
               ASSERT (!isnil (startSpec));
               
               if ("true"==startSpec) //----simulate successful subsystem start
-                { 
-                  Thread (id_, bind (&MockSys::run, this, termination));            /////TODO: the thread description should be rather "Test: "+string(*this), but this requires to implement the class Literal as planned
-                  sync.wait(started_); // run-status handshake
+                {
+                  REQUIRE (!started_);
+                   
+                  Thread (id_, bind (&MockSys::run, this, termination))
+                        .sync();     // run-status handshake
+                  
+                  ASSERT (started_);
                 }
               else
               if ("fail"==startSpec) //----not starting, incorrectly reporting success
@@ -163,13 +167,11 @@ namespace test  {
               string runSpec (extractID ("run",spec_));
               ASSERT (!isnil (runSpec));
               
-              { // run-status handshake
-                Lock sync(this);
-                started_ = true;
-                isUp_    = ("true"==runSpec || "throw"==runSpec);
-                didRun_  = ("false"!=runSpec); // includes "fail" and "throw"
-                sync.notify();
-              }
+              // run-status handshake
+              started_ = true;
+              isUp_    = ("true"==runSpec || "throw"==runSpec);
+              didRun_  = ("false"!=runSpec); // includes "fail" and "throw"
+              lumiera_thread_sync ();
               
               if (isUp_) //-------------actually enter running state for some time
                 {
@@ -178,9 +180,11 @@ namespace test  {
                   
                   INFO (test, "thread %s now running....", cStr(*this));
                   
-                  Lock sync_condition(this);
-                  while (!sync_condition.wait (*this, &MockSys::tick, TICK_DURATION_ms))
-                    running_duration_ -= TICK_DURATION_ms;
+                  while (!shouldTerminate())
+                    {
+                      usleep (1000*TICK_DURATION_ms);
+                      running_duration_ -= TICK_DURATION_ms;
+                    }
                   
                   INFO (test, "thread %s about to terminate...", cStr(*this));
                   isUp_ = false;
@@ -202,7 +206,7 @@ namespace test  {
           
           
           bool
-          tick ()   ///< simulates async termination, either on request or by timing
+          shouldTerminate ()  ///< simulates async termination, either on request or by timing
             {
               return termRequest_ || running_duration_ <= 0;
             }
@@ -225,7 +229,7 @@ namespace test  {
           operator string ()  const { return "MockSys(\""+id_+"\")"; }
           
           friend inline ostream&
-          operator<< (ostream& os, MockSys const& mosi) { return os << string(mosi); }
+          operator<< (ostream& os, MockSys const& subsys) { return os << string(subsys); }
           
           bool didRun ()  const { return didRun_; }
         };
@@ -289,6 +293,15 @@ namespace test  {
           }
         
         
+        /** @note as this test focuses on the SubsystemRunner, the mock subsystem
+         *  is implemented rather simplistic. Especially, there is a race when a
+         *  subsystem is configured to "fail" -- because in this case the starting
+         *  context may go away before the remainder of the subsystem thread has
+         *  executed after the sync() barrier. Especially in this case, no MockSys
+         *  actually starts without failure, and thus the SubsystemRunner::wait()
+         *  has no guarding effect. This can be considered a shortcoming of the
+         *  test fixture; a well behaved subsystem won't just go away...
+         */
         void
         singleSubsys_start_failure()
           {
@@ -306,6 +319,7 @@ namespace test  {
             VERIFY_ERROR (LOGIC, runner.maybeRun (unit3) );     // incorrect behaviour trapped
             VERIFY_ERROR (LOGIC, runner.maybeRun (unit4) );     // detected that the subsystem didn't come up
             
+            usleep (DELAY_FOR_FLOUNDERING_THRAD_ms * 1000);     // preempt to allow unit4 to go away
             runner.wait();
             
             ASSERT (!unit1.isRunning());

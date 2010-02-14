@@ -77,8 +77,19 @@ struct mpool_struct
   unsigned elements_free;               /* a counter of free elements is the price we pay to support a reserve() operation */
   void* locality;
   mpool_destroy_fn destroy;
+  void *(*malloc_hook)(size_t);
+  void (*free_hook)(void *);
+  void* udata;                          /* free to use by the user, resourcecollector stuff in lumiera*/
 };
 
+
+extern void *(*mpool_malloc_hook)(size_t size);
+extern void (*mpool_free_hook)(void *ptr);
+
+/** called after a mpool got initialized */
+extern void (*mpool_init_hook) (MPool self);
+/** called before a mpool gets destroyed */
+extern void (*mpool_destroy_hook) (MPool self);
 
 /*
 //index.mpool_init xref:mpool_init[mpool_init()]:: initialize a new memory pool
@@ -127,6 +138,18 @@ mpool_init (MPool self, size_t elem_size, unsigned elements_per_cluster, mpool_d
 */
 MPool
 mpool_destroy (MPool self);
+
+/*
+//index.mpool_purge xref:mpool_purge[mpool_purge()]:: free unused clusters
+//mpool [[mpool_purge]]
+//mpool .mpool_purge
+//mpool
+//mpool TODO
+//mpool
+//mpool
+*/
+MPool
+mpool_purge (MPool self);
 
 
 /*
@@ -234,9 +257,8 @@ mpool_free (MPool self, void* element);
 void
 nobug_mpool_dump (const_MPool self,
                   const int depth,
-                  const char* file,
-                  const int line,
-                  const char* func);
+                  const struct nobug_context dump_context);
+
 
 /*
 //      Local Variables:

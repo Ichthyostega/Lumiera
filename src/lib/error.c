@@ -59,6 +59,7 @@ lumiera_error_tls_delete (void* err)
 {
   if (err)
     free (((LumieraErrorcontext)err)->extra);
+  free(err);
 }
 
 static void
@@ -72,8 +73,7 @@ lumiera_error_tls_init (void)
 LumieraErrorcontext
 lumiera_error_get (void)
 {
-  if (lumiera_error_initialized == PTHREAD_ONCE_INIT)
-    pthread_once (&lumiera_error_initialized, lumiera_error_tls_init);
+  pthread_once (&lumiera_error_initialized, lumiera_error_tls_init);
 
   LumieraErrorcontext self = pthread_getspecific (lumiera_error_tls);
   if (!self)

@@ -26,6 +26,7 @@
  ** usable by scripts or the two lower layers. The main purpose of these services
  ** is to push informations and status updates into the GUI.
  **
+ ** @see notification-service.hpp implementation
  ** @see gui::GuiFacade
  ** @see main.cpp
  */

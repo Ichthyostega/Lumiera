@@ -28,31 +28,39 @@
 
 
 LumieraCondition
-lumiera_condition_init (LumieraCondition self, const char* purpose, struct nobug_flag* flag)
+lumiera_condition_init (LumieraCondition self,
+                        const char* purpose,
+                        struct nobug_flag* flag,
+                        const struct nobug_context ctx)
 {
   if (self)
     {
-      pthread_cond_init (&self->cond, NULL);
-      pthread_mutex_init (&self->cndmutex, NULL);
       NOBUG_RESOURCE_HANDLE_INIT (self->rh);
-      NOBUG_RESOURCE_ANNOUNCE_RAW (flag, "cond_var", purpose, self, self->rh);
+      NOBUG_RESOURCE_ANNOUNCE_RAW_CTX (flag, "cond_var", purpose, self, self->rh, ctx)
+        {
+          pthread_mutex_init (&self->cndmutex, NULL);
+          pthread_cond_init (&self->cond, NULL);
+        }
     }
   return self;
 }
 
 
 LumieraCondition
-lumiera_condition_destroy (LumieraCondition self, struct nobug_flag* flag)
+lumiera_condition_destroy (LumieraCondition self,
+                           struct nobug_flag* flag,
+                           const struct nobug_context ctx)
 {
   if (self)
     {
-      NOBUG_RESOURCE_FORGET_RAW (flag,  self->rh);
+      NOBUG_RESOURCE_FORGET_RAW_CTX (flag,  self->rh, ctx)
+        {
+          if (pthread_mutex_destroy (&self->cndmutex))
+            LUMIERA_DIE (LOCK_DESTROY);
 
-      if (pthread_mutex_destroy (&self->cndmutex))
-        LUMIERA_DIE (LOCK_DESTROY);
-
-      if (pthread_cond_destroy (&self->cond))
-        LUMIERA_DIE (LOCK_DESTROY);
+          if (pthread_cond_destroy (&self->cond))
+            LUMIERA_DIE (LOCK_DESTROY);
+        }
     }
   return self;
 }

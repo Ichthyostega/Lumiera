@@ -32,7 +32,6 @@
 
 llist lumiera_resourcecollector_registry[LUMIERA_RESOURCE_END];
 lumiera_mutex lumiera_resourcecollector_lock;
-static pthread_once_t lumiera_resourcecollector_once = PTHREAD_ONCE_INIT;
 
 struct lumiera_resourcehandler_struct
 {
@@ -42,8 +41,8 @@ struct lumiera_resourcehandler_struct
 };
 
 
-static void
-lumiera_resourcecollector_init_ (void)
+void
+lumiera_resourcecollector_init (void)
 {
   //NOBUG_INIT_FLAG (resourcecollector);
   TRACE (resourcecollector_dbg);
@@ -51,7 +50,7 @@ lumiera_resourcecollector_init_ (void)
   for (int i = 0; i < LUMIERA_RESOURCE_END; ++i)
     llist_init (&lumiera_resourcecollector_registry[i]);
 
-  lumiera_mutex_init (&lumiera_resourcecollector_lock, "resourcecollector", &NOBUG_FLAG(mutex_dbg));
+  lumiera_mutex_init (&lumiera_resourcecollector_lock, "resourcecollector", &NOBUG_FLAG(mutex_dbg), NOBUG_CONTEXT);
 }
 
 
@@ -65,7 +64,7 @@ lumiera_resourcecollector_destroy (void)
     LLIST_WHILE_HEAD (&lumiera_resourcecollector_registry[i], head)
       lumiera_resourcehandler_unregister ((LumieraResourcehandler)head);
 
-  lumiera_mutex_destroy (&lumiera_resourcecollector_lock, &NOBUG_FLAG(mutex_dbg));
+  lumiera_mutex_destroy (&lumiera_resourcecollector_lock, &NOBUG_FLAG(mutex_dbg), NOBUG_CONTEXT);
 }
 
 
@@ -73,9 +72,6 @@ int
 lumiera_resourcecollector_run (enum lumiera_resource which, enum lumiera_resource_try* iteration, void* context)
 {
   TRACE (resourcecollector_dbg);
-
-  if (lumiera_resourcecollector_once == PTHREAD_ONCE_INIT)
-    pthread_once (&lumiera_resourcecollector_once, lumiera_resourcecollector_init_);
 
   LUMIERA_MUTEX_SECTION (mutex_sync, &lumiera_resourcecollector_lock)
     {
@@ -120,9 +116,6 @@ lumiera_resourcecollector_run (enum lumiera_resource which, enum lumiera_resourc
 LumieraResourcehandler
 lumiera_resourcecollector_register_handler (enum lumiera_resource resource, lumiera_resource_handler_fn handler, void* data)
 {
-  if (lumiera_resourcecollector_once == PTHREAD_ONCE_INIT)
-    pthread_once (&lumiera_resourcecollector_once, lumiera_resourcecollector_init_);
-
   TRACE (resourcecollector_dbg);
 
   LumieraResourcehandler self = lumiera_malloc (sizeof (*self));

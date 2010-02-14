@@ -33,108 +33,106 @@ using test::Test;
 
 
 namespace lib {
-  namespace test {
+namespace test{
   
-    namespace { // private test classes and data...
+  namespace { // private test classes and data...
     
-      const uint WAIT_mSec = 200;   ///< milliseconds to wait before timeout
+    const uint WAIT_mSec = 200;   ///< milliseconds to wait before timeout
+    
+  } // (End) test classes and data....
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  /********************************************************************************
+   * @test timeout feature on condition wait as provided by pthread and accessible
+   *       via the object monitor based locking/waiting mechanism. Without creating
+   *       multiple threads, we engage into a blocking wait, which aborts due to
+   *       setting a timeout. (Note it is discouraged to use the timed wait feature;
+   *       when possible, you should prefer relying on the Lumiera scheduler)
+   * 
+   * @see SyncWaiting_test
+   * @see sync::Timeout
+   * @see sync.hpp
+   */
+  class SyncTimedwait_test 
+    : public Test,
+      Sync<RecursiveLock_Waitable>
+    {
       
-    } // (End) test classes and data....
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    /********************************************************************************
-     * @test timeout feature on condition wait as provided by pthread and accessible
-     *       via the object monitor based locking/waiting mechanism. Without creating
-     *       multiple threads, we engage into a blocking wait, which aborts due to
-     *       setting a timeout. (Note it is discouraged to use the timed wait feature;
-     *       when possible, you should prefer relying on the Lumiera scheduler)
-     * 
-     * @see SyncWaiting_test
-     * @see sync::Timeout
-     * @see sync.hpp
-     */
-    class SyncTimedwait_test 
-      : public Test,
-        Sync<RecursiveLock_Waitable>
-      {
-        
-        friend class Lock; // allows inheriting privately from Sync
-        
-        
-        virtual void
-        run (Arg)
-          {
-            checkTimeoutStruct();
-            
-            Lock block(this, &SyncTimedwait_test::neverHappens);
-            
-            cout << "back from LaLaLand, alive and thriving!\n";
-            ASSERT (block.isTimedWait());
-          }
-        
-        
-        bool
-        neverHappens()                              ///< the "condition test" used for waiting....
-          {
-            Lock currentLock(this);                 // get the Lock recursively
-            if (!currentLock.isTimedWait())         // right from within the condition test:
-              currentLock.setTimeout(WAIT_mSec);    // switch waiting mode to timed wait and set timeout
-            
-            return false; 
-          }
-        
-        
-        
-        void
-        checkTimeoutStruct()
-          {
-            sync::Timeout tout;
-            
-            ASSERT (!tout);
-            ASSERT (0 == tout.tv_sec);
-            ASSERT (0 == tout.tv_nsec);
-            
-            tout.setOffset (0);
-            ASSERT (!tout);
-            ASSERT (0 == tout.tv_sec);
-            ASSERT (0 == tout.tv_nsec);
-            
-            timespec ref;
-            clock_gettime(CLOCK_REALTIME, &ref);
-            tout.setOffset (1);
-            ASSERT (tout);
-            ASSERT (0 < tout.tv_sec);
-            ASSERT (ref.tv_sec <= tout.tv_sec);
-            ASSERT (ref.tv_nsec <= 1000000 + tout.tv_nsec || ref.tv_nsec > 1000000000-100000);
-            
-            clock_gettime(CLOCK_REALTIME, &ref);
-            tout.setOffset (1000);
-            ASSERT (tout);
-            if (ref.tv_nsec!=0) // should have gotten an overflow to the seconds part
-              {
-                ASSERT (ref.tv_sec <= 2 + tout.tv_sec );
-                ASSERT ((ref.tv_nsec +  1000000 * 999) % 1000000000 
-                                   <= tout.tv_nsec);
-              }
-          }
-        
-      };
-    
+      friend class Lock; // allows inheriting privately from Sync
       
-    
-    /** Register this test class... */
-    LAUNCHER (SyncTimedwait_test, "unit common");
-    
-    
-    
-  } // namespace test
-
-} // namespace lib
+      
+      virtual void
+      run (Arg)
+        {
+          checkTimeoutStruct();
+          
+          Lock block(this, &SyncTimedwait_test::neverHappens);
+          
+          cout << "back from LaLaLand, alive and thriving!\n";
+          ASSERT (block.isTimedWait());
+        }
+      
+      
+      bool
+      neverHappens()                              ///< the "condition test" used for waiting....
+        {
+          Lock currentLock(this);                 // get the Lock recursively
+          if (!currentLock.isTimedWait())         // right from within the condition test:
+            currentLock.setTimeout(WAIT_mSec);    // switch waiting mode to timed wait and set timeout
+          
+          return false; 
+        }
+      
+      
+      
+      void
+      checkTimeoutStruct()
+        {
+          sync::Timeout tout;
+          
+          ASSERT (!tout);
+          ASSERT (0 == tout.tv_sec);
+          ASSERT (0 == tout.tv_nsec);
+          
+          tout.setOffset (0);
+          ASSERT (!tout);
+          ASSERT (0 == tout.tv_sec);
+          ASSERT (0 == tout.tv_nsec);
+          
+          timespec ref;
+          clock_gettime(CLOCK_REALTIME, &ref);
+          tout.setOffset (1);
+          ASSERT (tout);
+          ASSERT (0 < tout.tv_sec);
+          ASSERT (ref.tv_sec <= tout.tv_sec);
+          ASSERT (ref.tv_nsec <= 1000000 + tout.tv_nsec || ref.tv_nsec > 1000000000-100000);
+          
+          clock_gettime(CLOCK_REALTIME, &ref);
+          tout.setOffset (1000);
+          ASSERT (tout);
+          if (ref.tv_nsec!=0) // should have gotten an overflow to the seconds part
+            {
+              ASSERT (ref.tv_sec <= 2 + tout.tv_sec );
+              ASSERT ((ref.tv_nsec +  1000000 * 999) % 1000000000 
+                                 <= tout.tv_nsec);
+            }
+        }
+      
+    };
+  
+  
+  
+  /** Register this test class... */
+  LAUNCHER (SyncTimedwait_test, "unit common");
+  
+  
+  
+}} // namespace lib::test

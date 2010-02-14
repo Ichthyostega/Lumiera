@@ -23,9 +23,9 @@
 
 #include "lib/test/run.hpp"
 
-#include "lib/symbol.hpp"
 #include "backend/thread-wrapper.hpp"
 #include "lib/sync.hpp"
+#include "lib/symbol.hpp"
 
 #include <tr1/functional>
 
@@ -33,40 +33,71 @@ using std::tr1::bind;
 using test::Test;
 
 
-
 namespace backend {
   namespace test  {
   
     namespace { // private test classes and data...
       
-      ulong sum;
-      ulong checksum;
-      
       const uint NUM_THREADS      = 20;
       const uint MAX_RAND_SUMMAND = 100;
       
-      uint
-      createVal()  ///< generating test values, remembering the sum
-      {
-        uint val(rand() % MAX_RAND_SUMMAND);
-        checksum += val;
-        return val;
-      }
+      
+      class Checker
+        : public lib::Sync<>
+        {
+          volatile ulong hot_sum_;
+          ulong control_sum_;
+          
+        public:
+          Checker() : hot_sum_(0), control_sum_(0) { }
+          
+          bool
+          verify()    ///< verify test values got handled and accounted
+            {
+              return 0 < hot_sum_
+                  && control_sum_ == hot_sum_;
+            }
+          
+          uint
+          createVal() ///< generating test values, remembering the control sum
+            {
+              uint val(rand() % MAX_RAND_SUMMAND);
+              control_sum_ += val;
+              return val;
+            }
+          
+          void
+          addValues (uint a, uint b)   ///< to be called concurrently
+            {
+              Lock guard(this);
+              
+              hot_sum_ *= 2;
+              usleep (200);             // force preemption
+              hot_sum_ += 2 * (a+b);
+              usleep (200);
+              hot_sum_ /= 2;
+            }
+        };
       
       
-      struct TestThread : Thread
+      Checker checksum; ///< global variable used by multiple threads
+      
+      
+      
+      
+      struct TestThread
+        : Thread
         {
           TestThread()
             : Thread("test Thread creation",
-                     bind (&TestThread::theOperation, this, createVal(), createVal()))
+                     bind (&TestThread::theOperation, this, checksum.createVal(), checksum.createVal()))
             { }                         // note the binding (functor object) is passed as anonymous temporary
           
-           
-          void 
+          
+          void
           theOperation (uint a, uint b) ///< the actual operation running in a separate thread
             {
-              Lock sync(this);          // *not* a recursive lock, because parent unlocks prior to invoking the operation 
-              sum += (a+b);
+              checksum.addValues (a,b);
             }
         };
       
@@ -95,16 +126,12 @@ namespace backend {
         virtual void
         run (Arg)
           {
-            sum = checksum = 0;
             TestThread instances[NUM_THREADS]    SIDEEFFECT;
             
-            usleep (200000);  // pause 200ms for the threads to terminate..... 
+            usleep (200000);  // pause 200ms for the threads to terminate.....
             
-            ASSERT (0 < sum);
-            ASSERT (sum==checksum);
+            ASSERT (checksum.verify());
           }
-        
-        
       };
     
     
@@ -114,6 +141,4 @@ namespace backend {
     
     
     
-  } // namespace test
-
-} // namespace backend
+}} // namespace backend::test

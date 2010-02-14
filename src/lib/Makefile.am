@@ -18,8 +18,19 @@
 liblumiera_la_srcdir = $(top_srcdir)/src/lib
 lib_LTLIBRARIES += liblumiera.la
 
-liblumiera_la_CFLAGS = $(AM_CFLAGS) -std=gnu99 -Wall -Wextra -Werror
-liblumiera_la_CXXFLAGS = $(AM_CXXFLAGS) -Wall -Wextra
+liblumiera_la_CFLAGS = 						\
+	$(AM_CFLAGS)						\
+	$(LUMIERA_LIBRARY_CFLAGS)				\
+	-std=gnu99 -Wall -Wextra -Werror
+
+liblumiera_la_CXXFLAGS =					\
+	$(AM_CXXFLAGS)						\
+	$(LUMIERA_LIBRARY_CFLAGS)				\
+	-Wall -Wextra
+
+liblumiera_la_LIBADD =	 					\
+	$(LUMIERA_LIBRARY_LIBS)
+
 
 liblumiera_la_SOURCES =						\
 	$(liblumiera_la_srcdir)/error.c				\
@@ -36,7 +47,6 @@ liblumiera_la_SOURCES =						\
 	$(liblumiera_la_srcdir)/psplay.c			\
 	$(liblumiera_la_srcdir)/mrucache.c			\
 	$(liblumiera_la_srcdir)/time.c				\
-	$(liblumiera_la_srcdir)/resourcecollector.c		\
 	$(liblumiera_la_srcdir)/allocationcluster.cpp		\
 	$(liblumiera_la_srcdir)/lumitime.cpp			\
 	$(liblumiera_la_srcdir)/lifecycle.cpp			\
@@ -66,7 +76,6 @@ noinst_HEADERS +=						\
 	$(liblumiera_la_srcdir)/psplay.h			\
 	$(liblumiera_la_srcdir)/mrucache.h			\
 	$(liblumiera_la_srcdir)/time.h				\
-	$(liblumiera_la_srcdir)/resourcecollector.h		\
 	$(liblumiera_la_srcdir)/ppmpl.h				\
 	$(liblumiera_la_srcdir)/allocationcluster.hpp		\
 	$(liblumiera_la_srcdir)/scoped-holder.hpp		\

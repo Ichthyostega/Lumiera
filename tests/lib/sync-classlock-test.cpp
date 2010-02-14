@@ -26,80 +26,75 @@
 
 #include "lib/sync-classlock.hpp"
 
-//#include <iostream>
-
-//using std::cout;
 using test::Test;
 
 
 namespace lib {
-  namespace test {
+namespace test {
+  
+  namespace { // private test classes and data...
     
-    namespace { // private test classes and data...
-      
-      const uint NUM_INSTANCES = 20;   ///< number of probe instances to create
-      
-      
-      /**
-       * Several instances of this probe class will be created.
-       * Each of them acquires the shared lock; but anyway, just
-       * by defining this class, the embedded Monitor got created.
-       */
-      struct Probe
-        {
-          ClassLock<Probe> shared_lock_;
-          
-          Probe() {}
-         ~Probe() {}
-        };
-      
-      
-    } // (End) test classes and data....
+    const uint NUM_INSTANCES = 20;   ///< number of probe instances to create
     
     
-    
-    
-    
-    
-    
-    
-    
-    
-    /**************************************************************************
-     * @test check proper handling of class (not instance)-based Monitor locks.
-     * Because no instance is available in this case, a hidden storage for the
-     * Monitor object needs to be provided in a way safe for use even in the
-     * static startup/shutdown phase. This test validates the associated
-     * refcounting and object creation works as expected. It does \em not
-     * validate the locking functionality as such.
-     * 
-     * @see sync.hpp
+    /**
+     * Several instances of this probe class will be created.
+     * Each of them acquires the shared lock; but anyway, just
+     * by defining this class, the embedded Monitor got created.
      */
-    class SyncClasslock_test : public Test
+    struct Probe
       {
+        ClassLock<Probe> shared_lock_;
         
-        virtual void
-        run (Arg)
-          {
-            {
-              Probe objs[NUM_INSTANCES];
-              
-              ASSERT (1 == objs[0].shared_lock_.use_count());
-            }
-            
-            ClassLock<Probe> get_class_lock;
-            ASSERT ( 1 ==  get_class_lock.use_count()); // embedded PerClassMonitor<Probe> got created exactly once
-          }                                            //  and stays alive until static dtors are called....
-        
+        Probe() {}
+       ~Probe() {}
       };
     
     
-    
-    /** Register this test class... */
-    LAUNCHER (SyncClasslock_test, "unit common");
-    
-    
-    
-  } // namespace test
-
-} // namespace lib
+  } // (End) test classes and data....
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  /**************************************************************************
+   * @test check proper handling of class (not instance)-based Monitor locks.
+   * Because no instance is available in this case, a hidden storage for the
+   * Monitor object needs to be provided in a way safe for use even in the
+   * static startup/shutdown phase. This test validates the associated
+   * refcounting and object creation works as expected. It does \em not
+   * validate the locking functionality as such.
+   * 
+   * @see sync.hpp
+   */
+  class SyncClasslock_test : public Test
+    {
+      
+      virtual void
+      run (Arg)
+        {
+          {
+            Probe objs[NUM_INSTANCES];
+            
+            ASSERT (1 == objs[0].shared_lock_.use_count());
+          }
+          
+          ClassLock<Probe> get_class_lock;
+          ASSERT ( 1 ==  get_class_lock.use_count()); // embedded PerClassMonitor<Probe> got created exactly once
+        }                                            //  and stays alive until static dtors are called....
+      
+    };
+  
+  
+  
+  /** Register this test class... */
+  LAUNCHER (SyncClasslock_test, "unit common");
+  
+  
+  
+}} // namespace lib::test

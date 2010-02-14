@@ -91,12 +91,11 @@ lumiera_file_init (LumieraFile self, const char* name, int flags);
  * Destroy a file structure.
  * frees all associated resources, releases the filedescriptor etc.
  * @param self file structure to be destroyed
- * @param chunksize allocation/mmaping granularity, must be 2's exponent of pagesize
- *        only used at the first access to a file and ignored for subsequnet accesses
+ * @param do_unlink if 1 then delete the file physically from disk (only the associated name)
  * @return self
  */
 LumieraFile
-lumiera_file_destroy (LumieraFile self);
+lumiera_file_destroy (LumieraFile self, int do_unlink);
 
 
 /**
@@ -115,6 +114,14 @@ lumiera_file_new (const char* name, int flags);
  */
 void
 lumiera_file_delete (LumieraFile self);
+
+
+/**
+ * Frees a file structure and deletes the associated file name from disk.
+ * @param self file structure to be freed
+ */
+void
+lumiera_file_delete_unlink (LumieraFile self);
 
 
 /**

@@ -34,6 +34,11 @@ using std::exception;
 
 
 namespace lumiera {
+  
+  typedef const char*       CStr;
+  typedef const char* const CCStr;
+  
+  
   namespace error {
     
     /** the message shown to the user per default
@@ -48,37 +53,46 @@ namespace lumiera {
            + typeid(*exception_obj).name() + ")";
     }
     
-    inline const char*
-    default_or_given (const char* id)
+    inline CStr
+    default_or_given (CCStr id)
     {
       return id? id : LUMIERA_ERROR_STATE;
     }
     
+    CStr
+    detailInfo ()
+    {
+      CCStr detailinfo = lumiera_error_extra();
+      return isnil (detailinfo)? "Lumiera errorstate detected"
+                               : detailinfo;
+    }
+    
     
     /* constants to be used as error IDs */
-    LUMIERA_ERROR_DEFINE (LOGIC    , "internal logic broken");   
-    LUMIERA_ERROR_DEFINE (FATAL    , "floundered");      
-    LUMIERA_ERROR_DEFINE (CONFIG   , "misconfiguration"); 
-    LUMIERA_ERROR_DEFINE (STATE    , "unforeseen state"); 
-    LUMIERA_ERROR_DEFINE (INVALID  , "invalid input or parameters"); 
-    LUMIERA_ERROR_DEFINE (EXTERNAL , "failure in external service"); 
+    LUMIERA_ERROR_DEFINE (LOGIC    , "internal logic broken");
+    LUMIERA_ERROR_DEFINE (FATAL    , "floundered");
+    LUMIERA_ERROR_DEFINE (CONFIG   , "misconfiguration");
+    LUMIERA_ERROR_DEFINE (STATE    , "unforeseen state");
+    LUMIERA_ERROR_DEFINE (FLAG     , "non-cleared lumiera errorstate");
+    LUMIERA_ERROR_DEFINE (INVALID  , "invalid input or parameters");
+    LUMIERA_ERROR_DEFINE (EXTERNAL , "failure in external service");
     LUMIERA_ERROR_DEFINE (ASSERTION, "assertion failure");
-
+    
     /* some further generic error situations */
-    LUMIERA_ERROR_DEFINE (WRONG_TYPE, "runtime type mismatch"); 
+    LUMIERA_ERROR_DEFINE (WRONG_TYPE, "runtime type mismatch");
     LUMIERA_ERROR_DEFINE (ITER_EXHAUST, "end of sequence reached");
-    LUMIERA_ERROR_DEFINE (BOTTOM_VALUE, "invalid or NIL value"); 
+    LUMIERA_ERROR_DEFINE (BOTTOM_VALUE, "invalid or NIL value");
     
     
   } // namespace error
   
-  LUMIERA_ERROR_DEFINE (EXCEPTION, "generic Lumiera exception"); 
+  LUMIERA_ERROR_DEFINE (EXCEPTION, "generic Lumiera exception");
   
   
   
   
   /** @note we set the C-style errorstate as a side effect */
-  Error::Error (string description, const char* id) throw()
+  Error::Error (string description, CCStr id) throw()
     : std::exception (),
       id_ (error::default_or_given (id)),
       msg_ (error::default_usermsg (this)),
@@ -90,7 +104,7 @@ namespace lumiera {
   
   
   Error::Error (std::exception const& cause, 
-                string description, const char* id) throw()
+                string description, CCStr id) throw()
     : std::exception (),
       id_ (error::default_or_given (id)),
       msg_ (error::default_usermsg (this)),
@@ -117,7 +131,7 @@ namespace lumiera {
    *  If a root cause can be obtained, this will be included in the
    *  generated output as well. 
    */
-  const char*
+  CStr
   Error::what() const  throw()
   {
     if (isnil (this->what_))
@@ -160,13 +174,13 @@ namespace lumiera {
     
     void lumiera_unexpectedException ()  throw()
     {
-      const char* is_halted 
+      CCStr is_halted 
         = "### Lumiera halted due to an unexpected Error ###";
       
       std::cerr << "\n" << is_halted << "\n\n";
       ERROR (NOBUG_ON, "%s", is_halted);
       
-      if (const char * errorstate = lumiera_error ())
+      if (CCStr errorstate = lumiera_error ())
         ERROR (NOBUG_ON, "last registered error was....\n%s", errorstate);
       
       std::terminate();
@@ -176,20 +190,20 @@ namespace lumiera {
     {
       throw Fatal (location, LUMIERA_ERROR_ASSERTION)
                  .setUsermsg("Program terminated because of violating "
-                             "an internal consistency check.");    
+                             "an internal consistency check.");
     }
     
     
     void install_unexpectedException_handler ()
     {
-      std::set_unexpected (lumiera_unexpectedException);      
+      std::set_unexpected (lumiera_unexpectedException);
     }
     
     namespace {
-      LifecycleHook schedule_ (ON_BASIC_INIT, &install_unexpectedException_handler);         
+      LifecycleHook schedule_ (ON_BASIC_INIT, &install_unexpectedException_handler);
     }
-    
-    
-  } // namespace error
   
+  
+  } // namespace error
+
 } // namespace lumiera

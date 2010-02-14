@@ -254,6 +254,7 @@ namespace mobject {
   
   /** @todo cleanup uses of ref-to-placement. See Ticket #115 */
   typedef Placement<MObject> PlacementMO; 
+  //‘typedef class mobject::Placement<mobject::MObject, mobject::MObject> mobject::PlacementMO’
   typedef Placement<MObject> PMO; 
   
   
