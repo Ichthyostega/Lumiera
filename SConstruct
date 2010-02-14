@@ -232,7 +232,7 @@ def configurePlatform(env):
     else:
         print 'Valgrind not found. The use of Valgrind is optional; building without.'
     
-    if not conf.CheckPkgConfig('nobugmt', 201001.1):
+    if not conf.CheckPkgConfig('nobugmt', 201002.1):
         problems.append('Did not find NoBug [http://www.lumiera.org/nobug_manual.html].')
     else:
         conf.env.mergeConf('nobugmt')
