@@ -94,6 +94,10 @@ if testsuites:
 pluginpath = os.environ.get('LUMIERA_PLUGIN_PATH')
 if testsuites:
     testEnv['ENV']['LUMIERA_PLUGIN_PATH'] = pluginpath 
+
+# specify path to test.conf
+testEnv['ENV']['TEST_CONF'] = env.File("test.conf").abspath 
+
  
 testDir = env.Dir('#$BINDIR')
 runTest = env.File("test.sh").abspath
