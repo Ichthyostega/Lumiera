@@ -1,0 +1,704 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="800"
+   height="600"
+   id="svg2"
+   sodipodi:version="0.32"
+   inkscape:version="0.46"
+   sodipodi:docbase="/home/hiv/devel/lumi/doc/devel/draw"
+   sodipodi:docname="Session.Facade-1.svg"
+   inkscape:output_extension="org.inkscape.output.svg.inkscape"
+   version="1.0"
+   inkscape:export-filename="/home/hiv/devel/lumi/wiki/draw/ScopeStructure1.png"
+   inkscape:export-xdpi="72.970001"
+   inkscape:export-ydpi="72.970001">
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="1.4142136"
+     inkscape:cx="221.88942"
+     inkscape:cy="440.99547"
+     inkscape:document-units="px"
+     inkscape:current-layer="svg2"
+     inkscape:window-width="1668"
+     inkscape:window-height="1016"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     width="800px"
+     height="600px"
+     showgrid="false"
+     gridanglex="30px"
+     gridanglez="30px"
+     grid_units="px"
+     inkscape:grid-points="true"
+     inkscape:grid-bbox="false"
+     showguides="true"
+     inkscape:object-paths="false"
+     inkscape:object-nodes="true"
+     gridtolerance="10000"
+     inkscape:guide-points="true"
+     guidetolerance="5">
+    <inkscape:grid
+       empspacing="5"
+       empopacity="0.4"
+       opacity="0.09019608"
+       empcolor="#0000ff"
+       color="#4b4bf4"
+       spacingy="2px"
+       spacingx="2px"
+       originy="0px"
+       originx="0px"
+       type="xygrid"
+       id="GridFromPre046Settings"
+       visible="true"
+       enabled="true" />
+  </sodipodi:namedview>
+  <defs
+     id="globals">
+    <marker
+       style="overflow:visible;"
+       id="Arrow1Mend"
+       refX="0.0"
+       refY="0.0"
+       orient="auto"
+       inkscape:stockid="Arrow1Mend">
+      <path
+         transform="scale(0.4) rotate(180) translate(10,0)"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt;marker-start:none;"
+         d="M 0.0,0.0 L 5.0,-5.0 L -12.5,0.0 L 5.0,5.0 L 0.0,0.0 z "
+         id="path3482" />
+    </marker>
+    <inkscape:perspective
+       id="perspective2619"
+       inkscape:persp3d-origin="400 : 200 : 1"
+       inkscape:vp_z="800 : 300 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 300 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <filter
+       inkscape:collect="always"
+       height="1.1096916"
+       x="-0.19868796"
+       y="-0.054845817"
+       width="1.3973759"
+       id="filter4688">
+      <feGaussianBlur
+         inkscape:collect="always"
+         id="feGaussianBlur4690"
+         stdDeviation="3.3181169" />
+    </filter>
+    <linearGradient
+       id="linearGrad_In1">
+      <stop
+         id="stop8557"
+         style="stop-color:#3e3e3e;stop-opacity:0.72941178;"
+         offset="0" />
+      <stop
+         id="stop9540"
+         style="stop-color:#7e7e7e;stop-opacity:0.58854169;"
+         offset="0.18208332" />
+      <stop
+         id="stop8563"
+         style="stop-color:#ffffff;stop-opacity:0;"
+         offset="0.44109029" />
+      <stop
+         id="stop8553"
+         style="stop-color:#ffffff;stop-opacity:0;"
+         offset="1" />
+    </linearGradient>
+    <marker
+       refX="0"
+       inkscape:stockid="Arrow2Send"
+       refY="0"
+       orient="auto"
+       id="Arrow2Send"
+       style="overflow:visible">
+      <path
+         transform="matrix(-0.3,0,0,-0.3,0.69,0)"
+         d="M 8.7185878,4.0337352 L -2.2072895,0.016013256 L 8.7185884,-4.0017078 C 6.97309,-1.6296469 6.9831476,1.6157441 8.7185878,4.0337352 z "
+         id="path5285"
+         style="font-size:12px;fill-rule:evenodd;stroke-width:0.625;stroke-linejoin:round" />
+    </marker>
+    <linearGradient
+       id="linearGradient3548">
+      <stop
+         id="stop3550"
+         style="stop-color:#ececec;stop-opacity:0.86666667;"
+         offset="0" />
+      <stop
+         id="stop3556"
+         style="stop-color:#f2f2f2;stop-opacity:0.87058824;"
+         offset="0.64166665" />
+      <stop
+         id="stop3552"
+         style="stop-color:#ffffff;stop-opacity:0.96078432;"
+         offset="1" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient4901">
+      <stop
+         id="stop4903"
+         offset="0"
+         style="stop-color:#ffffff;stop-opacity:0;" />
+      <stop
+         style="stop-color:#ffffff;stop-opacity:1;"
+         offset="0.44999999"
+         id="stop4913" />
+      <stop
+         id="stop4905"
+         offset="1"
+         style="stop-color:#ffffff;stop-opacity:1;" />
+    </linearGradient>
+    <linearGradient
+       y2="871.85999"
+       x2="500.39999"
+       y1="871.85999"
+       x1="324.60001"
+       gradientTransform="matrix(1.3221205,0,0,0.9882635,29.856748,-400.71027)"
+       gradientUnits="userSpaceOnUse"
+       id="linearGradient5166"
+       xlink:href="#linearGradient4901"
+       inkscape:collect="always" />
+    <linearGradient
+       id="linearGrad_RoundHigh1">
+      <stop
+         id="stop5572"
+         style="stop-color:#d9eadb;stop-opacity:1;"
+         offset="0" />
+      <stop
+         id="stop5578"
+         style="stop-color:#bad8cd;stop-opacity:1;"
+         offset="0.75833333" />
+      <stop
+         id="stop5574"
+         style="stop-color:#8cc0ac;stop-opacity:0.78431374;"
+         offset="1" />
+    </linearGradient>
+    <filter
+       inkscape:collect="always"
+       height="1.250896"
+       x="-0.094086036"
+       y="-0.125448"
+       width="1.1881721"
+       id="filter4817">
+      <feGaussianBlur
+         inkscape:collect="always"
+         id="feGaussianBlur4819"
+         stdDeviation="0.78404989" />
+    </filter>
+    <marker
+       refX="0"
+       inkscape:stockid="ArrowHIV1end"
+       refY="0"
+       id="ArrowHIV1end"
+       orient="auto"
+       style="overflow:visible">
+      <path
+         id="pathPfeil1"
+         sodipodi:nodetypes="ccccccc"
+         d="M -8,0 L -10,1.2 L -2,1.2 L 5,0 L -2,-1.2 L -10,-1.2 L -8,0 z "
+         style="fill:#40c0ab;stroke:#01ffff;stroke-width:0.1;stroke-linecap:butt;stroke-miterlimit:6.5" />
+    </marker>
+    <radialGradient
+       r="10.15"
+       fy="227.36218"
+       fx="200"
+       cy="227.36218"
+       cx="200"
+       gradientUnits="userSpaceOnUse"
+       id="radialGradient5444"
+       xlink:href="#linearGrad_RoundHigh1"
+       inkscape:collect="always" />
+    <radialGradient
+       r="10.15"
+       fy="227.36218"
+       fx="200"
+       cy="227.36218"
+       cx="200"
+       gradientUnits="userSpaceOnUse"
+       id="radialGradient5492"
+       xlink:href="#linearGrad_RoundHigh1"
+       inkscape:collect="always" />
+    <radialGradient
+       r="10.15"
+       fy="227.36218"
+       fx="200"
+       cy="227.36218"
+       cx="200"
+       gradientUnits="userSpaceOnUse"
+       id="radialGradient5516"
+       xlink:href="#linearGrad_RoundHigh1"
+       inkscape:collect="always" />
+    <radialGradient
+       r="10.15"
+       fy="227.36218"
+       fx="200"
+       cy="227.36218"
+       cx="200"
+       gradientUnits="userSpaceOnUse"
+       id="radialGradient5564"
+       xlink:href="#linearGrad_RoundHigh1"
+       inkscape:collect="always" />
+    <radialGradient
+       r="10.15"
+       fy="227.36218"
+       fx="200"
+       cy="227.36218"
+       cx="200"
+       gradientUnits="userSpaceOnUse"
+       id="radialGradient5636"
+       xlink:href="#linearGrad_RoundHigh1"
+       inkscape:collect="always" />
+    <radialGradient
+       r="10.15"
+       fy="227.36218"
+       fx="200"
+       cy="227.36218"
+       cx="200"
+       gradientUnits="userSpaceOnUse"
+       id="radialGradient5660"
+       xlink:href="#linearGrad_RoundHigh1"
+       inkscape:collect="always" />
+    <linearGradient
+       y2="94.861481"
+       x2="605.48975"
+       y1="94.861481"
+       x1="574.5"
+       gradientTransform="matrix(1,0,0,0.7952199,-681.9777,684.57714)"
+       gradientUnits="userSpaceOnUse"
+       id="linearGradient6148"
+       xlink:href="#linearGradient3548"
+       inkscape:collect="always" />
+    <linearGradient
+       y2="94.861481"
+       x2="605.48975"
+       y1="94.861481"
+       x1="574.5"
+       gradientTransform="matrix(1,0,0,0.7952199,-681.9777,684.57714)"
+       gradientUnits="userSpaceOnUse"
+       id="linearGradient6150"
+       xlink:href="#linearGrad_In1"
+       inkscape:collect="always" />
+    <linearGradient
+       y2="94.861481"
+       x2="605.48975"
+       y1="94.861481"
+       x1="574.5"
+       gradientTransform="matrix(1,0,0,0.7952199,-681.9777,684.57714)"
+       gradientUnits="userSpaceOnUse"
+       id="linearGradient6208"
+       xlink:href="#linearGradient3548"
+       inkscape:collect="always" />
+    <linearGradient
+       y2="94.861481"
+       x2="605.48975"
+       y1="94.861481"
+       x1="574.5"
+       gradientTransform="matrix(1,0,0,0.7952199,-681.9777,684.57714)"
+       gradientUnits="userSpaceOnUse"
+       id="linearGradient6210"
+       xlink:href="#linearGrad_In1"
+       inkscape:collect="always" />
+    <linearGradient
+       y2="94.861481"
+       x2="605.48975"
+       y1="94.861481"
+       x1="574.5"
+       gradientTransform="matrix(1,0,0,0.7952199,-681.9777,684.57714)"
+       gradientUnits="userSpaceOnUse"
+       id="linearGradient6264"
+       xlink:href="#linearGradient3548"
+       inkscape:collect="always" />
+    <linearGradient
+       y2="94.861481"
+       x2="605.48975"
+       y1="94.861481"
+       x1="574.5"
+       gradientTransform="matrix(1,0,0,0.7952199,-681.9777,684.57714)"
+       gradientUnits="userSpaceOnUse"
+       id="linearGradient6266"
+       xlink:href="#linearGrad_In1"
+       inkscape:collect="always" />
+    <linearGradient
+       y2="94.861481"
+       x2="605.48975"
+       y1="94.861481"
+       x1="574.5"
+       gradientTransform="matrix(1,0,0,0.7952199,-681.9777,684.57714)"
+       gradientUnits="userSpaceOnUse"
+       id="linearGradient6268"
+       xlink:href="#linearGradient3548"
+       inkscape:collect="always" />
+    <linearGradient
+       y2="94.861481"
+       x2="605.48975"
+       y1="94.861481"
+       x1="574.5"
+       gradientTransform="matrix(1,0,0,0.7952199,-681.9777,684.57714)"
+       gradientUnits="userSpaceOnUse"
+       id="linearGradient6270"
+       xlink:href="#linearGrad_In1"
+       inkscape:collect="always" />
+    <linearGradient
+       y2="94.861481"
+       x2="605.48975"
+       y1="94.861481"
+       x1="574.5"
+       gradientTransform="matrix(1,0,0,0.7952199,-681.9777,684.57714)"
+       gradientUnits="userSpaceOnUse"
+       id="linearGradient6298"
+       xlink:href="#linearGradient3548"
+       inkscape:collect="always" />
+    <linearGradient
+       y2="94.861481"
+       x2="605.48975"
+       y1="94.861481"
+       x1="574.5"
+       gradientTransform="matrix(1,0,0,0.7952199,-681.9777,684.57714)"
+       gradientUnits="userSpaceOnUse"
+       id="linearGradient6300"
+       xlink:href="#linearGrad_In1"
+       inkscape:collect="always" />
+    <marker
+       style="overflow:visible;"
+       id="Arrow1MendY"
+       refX="0.0"
+       refY="0.0"
+       orient="auto"
+       inkscape:stockid="Arrow1MendY">
+      <path
+         transform="scale(0.4) rotate(180) translate(10,0)"
+         style="marker-start:none;stroke:#26155c;stroke-width:1.0pt;fill:#26155c;fill-rule:evenodd"
+         d="M 0.0,0.0 L 5.0,-5.0 L -12.5,0.0 L 5.0,5.0 L 0.0,0.0 z "
+         id="path4310" />
+    </marker>
+  </defs>
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by-nc-sa/3.0/" />
+        <dc:title>Structure of Placement Scopes</dc:title>
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>Ichthyostega</dc:title>
+          </cc:Agent>
+        </dc:creator>
+        <dc:description>design sketch: Relation of the nested Placement Scopes within the Lumiera session</dc:description>
+        <dc:date>2009</dc:date>
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by-nc-sa/3.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:prohibits
+           rdf:resource="http://creativecommons.org/ns#CommercialUse" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:groupmode="layer"
+     id="lay1"
+     inkscape:label="Drawing" />
+  <rect
+     inkscape:export-ydpi="90"
+     inkscape:export-xdpi="90"
+     inkscape:export-filename="/home/hiv/devel/lumi/wiki/draw/PlayerArch1.png"
+     y="70"
+     x="40"
+     height="460"
+     width="740"
+     id="rect_Canvas"
+     style="opacity:1;color:#000000;fill:none;fill-opacity:0.75;fill-rule:evenodd;stroke:none;stroke-width:1.5;stroke-linecap:butt;stroke-linejoin:miter;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
+  <text
+     inkscape:export-ydpi="89.75"
+     inkscape:export-xdpi="89.75"
+     inkscape:export-filename="/home/hiv/devel/lumi/wiki/draw/SessionFacade1.png"
+     xml:space="preserve"
+     style="font-size:14px;font-style:oblique;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:100%;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;opacity:1;fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Bitstream Vera Sans"
+     x="29.917969"
+     y="41.449715"
+     id="text3868"
+     sodipodi:linespacing="100%"><tspan
+       id="tspan2641"
+       y="41.449715"
+       x="29.917969"
+       sodipodi:role="line">Session</tspan></text>
+  <path
+     sodipodi:nodetypes="ccc"
+     id="rect3872"
+     d="M 20,128.68986 L 20,20.27864 L 248.88373,20"
+     style="fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#6c6c6c;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+     inkscape:export-filename="/home/hiv/devel/lumi/wiki/draw/SessionFacade1.png"
+     inkscape:export-xdpi="89.75"
+     inkscape:export-ydpi="89.75" />
+  <text
+     inkscape:export-ydpi="89.75"
+     inkscape:export-xdpi="89.75"
+     inkscape:export-filename="/home/hiv/devel/lumi/wiki/draw/SessionFacade1.png"
+     sodipodi:linespacing="100%"
+     id="text5680"
+     y="63.136086"
+     x="65.713936"
+     style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Bitstream Vera Sans;-inkscape-font-specification:Bitstream Vera Sans"
+     xml:space="preserve"><tspan
+       sodipodi:role="line"
+       x="65.713936"
+       y="63.136086"
+       style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;font-family:Bitstream Vera Sans;-inkscape-font-specification:Bitstream Vera Sans"
+       id="tspan5682">Timeline(s)</tspan></text>
+  <use
+     transform="translate(-407.1889,-251.23988)"
+     height="1052.36"
+     x="0"
+     xlink:href="#path4523Sha"
+     y="0"
+     width="744.09448"
+     id="use5871" />
+  <use
+     transform="translate(-407.1889,-251.23988)"
+     height="1052.36"
+     x="0"
+     xlink:href="#rect4525Bod"
+     y="0"
+     width="744.09448"
+     id="use5873" />
+  <use
+     transform="translate(-407.1889,-251.23988)"
+     height="1052.36"
+     x="0"
+     xlink:href="#rect4589Top"
+     y="0"
+     width="744.09448"
+     id="use5893" />
+  <use
+     transform="translate(-22.188904,83.760119)"
+     height="1052.36"
+     width="744.09448"
+     id="use5895"
+     xlink:href="#g_port"
+     y="0"
+     x="0" />
+  <text
+     xml:space="preserve"
+     style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Bitstream Vera Sans;-inkscape-font-specification:Bitstream Vera Sans"
+     x="65.025459"
+     y="86.084885"
+     id="text2664"
+     sodipodi:linespacing="100%"
+     inkscape:export-filename="/home/hiv/devel/lumi/wiki/draw/SessionFacade1.png"
+     inkscape:export-xdpi="89.75"
+     inkscape:export-ydpi="89.75"><tspan
+       id="tspan2666"
+       style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;font-family:Bitstream Vera Sans;-inkscape-font-specification:Bitstream Vera Sans"
+       y="86.084885"
+       x="65.025459"
+       sodipodi:role="line">Sequence(s)</tspan></text>
+  <text
+     inkscape:export-ydpi="89.75"
+     inkscape:export-xdpi="89.75"
+     inkscape:export-filename="/home/hiv/devel/lumi/wiki/draw/SessionFacade1.png"
+     sodipodi:linespacing="100%"
+     id="text2668"
+     y="109.80515"
+     x="65.084053"
+     style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Bitstream Vera Sans;-inkscape-font-specification:Bitstream Vera Sans"
+     xml:space="preserve"><tspan
+       sodipodi:role="line"
+       x="65.084053"
+       y="109.80515"
+       style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;font-family:Bitstream Vera Sans;-inkscape-font-specification:Bitstream Vera Sans"
+       id="tspan2670">all()</tspan></text>
+  <text
+     xml:space="preserve"
+     style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Bitstream Vera Sans;-inkscape-font-specification:Bitstream Vera Sans"
+     x="65.132881"
+     y="133.13965"
+     id="text2676"
+     sodipodi:linespacing="100%"
+     inkscape:export-filename="/home/hiv/devel/lumi/wiki/draw/SessionFacade1.png"
+     inkscape:export-xdpi="89.75"
+     inkscape:export-ydpi="89.75"><tspan
+       id="tspan2678"
+       style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;font-family:Bitstream Vera Sans;-inkscape-font-specification:Bitstream Vera Sans"
+       y="133.13965"
+       x="65.132881"
+       sodipodi:role="line">default()</tspan></text>
+  <text
+     inkscape:export-ydpi="89.75"
+     inkscape:export-xdpi="89.75"
+     inkscape:export-filename="/home/hiv/devel/lumi/wiki/draw/SessionFacade1.png"
+     sodipodi:linespacing="100%"
+     id="text2680"
+     y="121.4724"
+     x="114.50432"
+     style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Bitstream Vera Sans;-inkscape-font-specification:Bitstream Vera Sans"
+     xml:space="preserve"><tspan
+       sodipodi:role="line"
+       x="114.50432"
+       y="121.4724"
+       style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;font-family:Bitstream Vera Sans;-inkscape-font-specification:Bitstream Vera Sans"
+       id="tspan2682">focus()</tspan></text>
+  <path
+     sodipodi:nodetypes="cc"
+     style="fill:#6c6c6c;fill-opacity:1;fill-rule:evenodd;stroke:#26155c;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;marker-end:url(#Arrow1MendY);stroke-opacity:1"
+     d="M 30,106.6655 L 58.284271,106.6655"
+     id="path4757"
+     inkscape:export-filename="/home/hiv/devel/lumi/wiki/draw/SessionFacade1.png"
+     inkscape:export-xdpi="89.75"
+     inkscape:export-ydpi="89.75" />
+  <path
+     id="path4759"
+     d="M 30,130 L 58.284271,130"
+     style="fill:#6c6c6c;fill-opacity:1;fill-rule:evenodd;stroke:#26155c;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;marker-end:url(#Arrow1MendY);stroke-opacity:1"
+     sodipodi:nodetypes="cc"
+     inkscape:export-filename="/home/hiv/devel/lumi/wiki/draw/SessionFacade1.png"
+     inkscape:export-xdpi="89.75"
+     inkscape:export-ydpi="89.75" />
+  <path
+     sodipodi:nodetypes="cc"
+     style="fill:#6c6c6c;fill-opacity:1;fill-rule:evenodd;stroke:#26155c;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;marker-end:url(#Arrow1MendY);stroke-opacity:1"
+     d="M 30,59.996439 L 58.284271,59.996439"
+     id="path4761"
+     inkscape:export-filename="/home/hiv/devel/lumi/wiki/draw/SessionFacade1.png"
+     inkscape:export-xdpi="89.75"
+     inkscape:export-ydpi="89.75" />
+  <path
+     id="path4763"
+     d="M 30,83.33098 L 58.284271,83.33098"
+     style="fill:#6c6c6c;fill-opacity:1;fill-rule:evenodd;stroke:#26155c;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;marker-end:url(#Arrow1MendY);stroke-opacity:1"
+     sodipodi:nodetypes="cc"
+     inkscape:export-filename="/home/hiv/devel/lumi/wiki/draw/SessionFacade1.png"
+     inkscape:export-xdpi="89.75"
+     inkscape:export-ydpi="89.75" />
+  <path
+     sodipodi:nodetypes="cc"
+     style="fill:#6c6c6c;fill-opacity:1;fill-rule:evenodd;stroke:#26155c;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;marker-end:url(#Arrow1MendY);stroke-opacity:1"
+     d="M 30,118.33275 L 108.48885,118.33275"
+     id="path4765"
+     inkscape:export-filename="/home/hiv/devel/lumi/wiki/draw/SessionFacade1.png"
+     inkscape:export-xdpi="89.75"
+     inkscape:export-ydpi="89.75" />
+  <g
+     id="g4779"
+     transform="translate(-4.7266918,-5.8288174)"
+     inkscape:export-filename="/home/hiv/devel/lumi/wiki/draw/SessionFacade1.png"
+     inkscape:export-xdpi="89.75"
+     inkscape:export-ydpi="89.75">
+    <text
+       xml:space="preserve"
+       style="font-size:14px;font-style:oblique;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Bitstream Vera Sans"
+       x="151.60211"
+       y="57.90715"
+       id="text4767"
+       sodipodi:linespacing="100%"
+       inkscape:export-filename="/home/hiv/devel/lumi/wiki/draw/PlayerArch1.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90"><tspan
+         id="tspan4769"
+         style="font-size:8px;font-style:oblique;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;font-family:Bitstream Vera Sans"
+         y="57.90715"
+         x="151.60211"
+         sodipodi:role="line">Axis</tspan></text>
+    <text
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/hiv/devel/lumi/wiki/draw/PlayerArch1.png"
+       sodipodi:linespacing="100%"
+       id="text4771"
+       y="67.796928"
+       x="150.96149"
+       style="font-size:14px;font-style:oblique;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Bitstream Vera Sans"
+       xml:space="preserve"><tspan
+         sodipodi:role="line"
+         x="150.96149"
+         y="67.796928"
+         style="font-size:8px;font-style:oblique;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;font-family:Bitstream Vera Sans"
+         id="tspan4773">Pipes</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:14px;font-style:oblique;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Bitstream Vera Sans"
+       x="150.69586"
+       y="78.7668"
+       id="text4775"
+       sodipodi:linespacing="100%"
+       inkscape:export-filename="/home/hiv/devel/lumi/wiki/draw/PlayerArch1.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90"><tspan
+         id="tspan4777"
+         style="font-size:8px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;font-family:Bitstream Vera Sans;-inkscape-font-specification:Bitstream Vera Sans"
+         y="78.7668"
+         x="150.69586"
+         sodipodi:role="line">all()</tspan></text>
+  </g>
+  <path
+     sodipodi:nodetypes="cc"
+     style="fill:#6c6c6c;fill-opacity:1;fill-rule:evenodd;stroke:#26155c;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;marker-end:url(#Arrow1MendY);stroke-opacity:1"
+     d="M 123.69165,59.996439 L 143.49064,59.996439"
+     id="path4787"
+     inkscape:export-filename="/home/hiv/devel/lumi/wiki/draw/SessionFacade1.png"
+     inkscape:export-xdpi="89.75"
+     inkscape:export-ydpi="89.75" />
+  <path
+     id="path4789"
+     d="M 123.69165,59.348959 L 143.49064,49.095911"
+     style="fill:#6c6c6c;fill-opacity:1;fill-rule:evenodd;stroke:#26155c;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;marker-end:url(#Arrow1MendY);stroke-opacity:1"
+     sodipodi:nodetypes="cc"
+     inkscape:export-filename="/home/hiv/devel/lumi/wiki/draw/SessionFacade1.png"
+     inkscape:export-xdpi="89.75"
+     inkscape:export-ydpi="89.75" />
+  <path
+     sodipodi:nodetypes="cc"
+     style="fill:#6c6c6c;fill-opacity:1;fill-rule:evenodd;stroke:#26155c;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;marker-end:url(#Arrow1MendY);stroke-opacity:1"
+     d="M 123.69165,60.173216 L 143.49064,70.426264"
+     id="path4792"
+     inkscape:export-filename="/home/hiv/devel/lumi/wiki/draw/SessionFacade1.png"
+     inkscape:export-xdpi="89.75"
+     inkscape:export-ydpi="89.75" />
+  <path
+     id="path4794"
+     d="M 70.658639,66.3604 L 80.558134,76.259895"
+     style="fill:#6c6c6c;fill-opacity:1;fill-rule:evenodd;stroke:#26155c;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;marker-end:url(#Arrow1MendY);stroke-opacity:1"
+     sodipodi:nodetypes="cc"
+     inkscape:export-filename="/home/hiv/devel/lumi/wiki/draw/SessionFacade1.png"
+     inkscape:export-xdpi="89.75"
+     inkscape:export-ydpi="89.75" />
+  <rect
+     style="opacity:1;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.99999994000000003;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+     id="rect4796"
+     width="287.79245"
+     height="160.51323"
+     x="0"
+     y="0.37344939"
+     inkscape:export-filename="/home/hiv/devel/lumi/wiki/draw/SessionFacade1.png"
+     inkscape:export-xdpi="89.75"
+     inkscape:export-ydpi="89.75" />
+</svg>

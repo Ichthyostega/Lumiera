@@ -3571,7 +3571,7 @@ For decoupling the query invocation from the facility actually processing the qu
 See also the notes on &amp;rarr; QueryImplProlog
 </pre>
 </div>
-<div title="QueryFocus" modifier="Ichthyostega" modified="200911201829" created="200910140244" tags="def spec img" changecount="28">
+<div title="QueryFocus" modifier="Ichthyostega" modified="201002160259" created="200910140244" tags="def spec img" changecount="30">
 <pre>When querying contents of the session or sub-containers within the session, the QueryFocus follows the current point-of-query. As such queries can be issued to explore the content of container-like objects holding other MObjects, the focus is always attached to a container, which also acts as [[scope|PlacementScope]] for the contained objects. QueryFocus is an implicit state (the current point of interrest). This sate especially remembers the path down from the root of the HighLevelModel, which was used to access the current scope. Because this path constitutes a hierarchy of scopes, it can be relevant for querying and resolving placement properties. (&amp;rarr; SessionStructureQuery)
 
 !provided operations
@@ -3588,7 +3588,7 @@ There is a tight integration with PlacementScope through the ScopeLocator, which
 !implementation notes
 we provide a static access API, meaning that there is a singleton (the ScopeLocator) behind the scenes, which holds the mentioned scope stack. The current focus stack top, i.e. the current ScopePath is managed through an ref-counting handle embedded into each QueryFocus instance. Thus, effectively QueryFocus is an frontend object for accessing this state. Moreover, embedded into ScopeLocator, there is an link to the current session. But this link is kept opaque; it works by the current session exposing an [[query service|QueryResolver]], while QueryFocus doesn't rely on knowledge about the session, allowing the focus to be unit tested.
 
-The stack of scopes must not be confused with the ScopePath. Each single frame on the stack is a QueryFocus and as such contains a current ScopePath. The purpose of the stack is to make the scope handling mostly transparent; especially this stack allows to write dedicated query functions directed at a given object: they work by pushing and then navigating to the object to use as starting point for the query, i.e. the //current scope.//
+The stack of scopes must not be confused with the ScopePath. Each single frame on the stack can be seen and accessed as a QueryFocus and as such relates to a current ScopePath. The purpose of the stack is to make the scope handling mostly transparent; especially this stack allows to write dedicated query functions directed at a given object: they work by pushing and then navigating to the object to use as starting point for the query, i.e. the //current scope.//
 
 !!!simplifications
 The full implementation of this scope navigation is tricky, especially when it comes to determining the relation of two positions. It should be ''postponed'' and replaced by a ''dummy'' (no-op) implementation for the first integration round.
@@ -4099,7 +4099,7 @@ For implementation, the HighLevelModel can be reduced to a compound of interconn
 MObject lifetime is managed by reference counting; all placements and client side references to an MObject share ownership. The placement instances attached to the session are maintained by the index; thus, as long as an placement exists, the corresponding object automatically stays alive. A bare PlacementRef on the other hand doesn't guarantee anything about the referred placement; when dereferencting this reference token, the index is accessed to re-establish a connection to the object, if possible. The full-fledged MObjectRef is built on top of such a reference token and additionally incorporates a smart-ptr. For the client code this means, that holding a ref ensures existence of the object, while the //placement// of this object still can get removed from the session.
 </pre>
 </div>
-<div title="SessionInterface" modifier="Ichthyostega" modified="201002010106" created="200904242108" tags="SessionLogic GuiIntegration design draft discuss" changecount="12">
+<div title="SessionInterface" modifier="Ichthyostega" modified="201002160343" created="200904242108" tags="SessionLogic GuiIntegration design draft discuss" changecount="23">
 <pre>&quot;Session Interface&quot;, when used in a more general sense, denotes a compound of several interfaces and facilities, together forming the primary access point to the user visible contents and state of the editing project.
 * the API of the session class
 * the accompanying management interface (SessionManager API)
@@ -4114,14 +4114,38 @@ MObject lifetime is managed by reference counting; all placements and client sid
 ** Automation
 * the [[command|CommandHandling]] interface, including the [[UNDO|UndoManager]] facility
 
-{{red{WIP ... just emerging}}}
-
 !generic and explicit API
-The HighLevelModel exposes two kinds of interfaces (which are interconnected btw): A generic, but somewhat low-level API, which is good for processing, and a more explicit API providing access to some meaningful entities within the model. Indeed, the latter (explicit top level entities) can be seen as a ''facade interface'' to the generic structures:
+The HighLevelModel exposes two kinds of interfaces (which are interconnected and rely on each other): A generic, but somewhat low-level API, which is good for processing &amp;mdash; like e.g. for the builder or de-serialiser &amp;mdash; and a more explicit API providing access to some meaningful entities within the model. Indeed, the latter (explicit top level entities) can be seen as a ''façade interface'' to the generic structures:
 * the [[Session]] object itself corresponds to the ModelRootMO
 * the one (or multiple) [[Timeline]] objects correspond to the BindingMO instances attached immediately below the model root
 * the [[sequences|Sequence]] bound into these timelines (by the ~BindingMOs) correspond to the top level [[Track]]-~MObjects within each of these sequences.
-Thus, there is a convenient and meaningful access path through these facade objects, which of course actually is implemented by forwarding to the actual model elements (root, bindings, tracks)
+[&lt;img[Object relations on the session facade|draw/SessionFacade1.png]]
+
+Thus, there is a convenient and meaningful access path through these façade objects, which of course actually is implemented by forwarding to the actual model elements (root, bindings, tracks)
+
+Following this access path down from the session means using the ''dedicated'' API on the objects retrieved.
+To the contrary, the ''generic'' API is related to a //current location (state),// the QueryFocus.
+
+
+
+!purpose of these APIs
+* to discover
+** by ID
+** by filter
+** all contained
+* to add
+* to destroy
+
+
+{{red{WIP ... just emerging}}}
+
+
+!!!Questions
+* what is the exact relation of discovery and mutations?
+* What is the point of locating them on the same conceptual level?
+* how to observe the requirement of ''dispatching'' mutations ([[Command]])?
+* how to integrate the two possible search depths (children and all)?
+* how is all of this related to the LayerSeparationInterfaces, here SessionFacade und EditFacade?
 </pre>
 </div>
 <div title="SessionLifecycle" modifier="Ichthyostega" modified="201001070440" created="200911070329" tags="SessionLogic spec" changecount="23">
