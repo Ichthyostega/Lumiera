@@ -22,11 +22,11 @@
 
 
 /** @file struct.hpp
- ** Structural facilities of the EDL (e.g. Tracks) can be treated in the
- ** "bookkeeping view" as a specific Kind of Asset.
- ** For the different <i>Kinds</i> of Assets, we use sub-intefaces inheriting
+ ** Structural parts of the Session (e.g. Tracks) can be reflected
+ ** into the "bookkeeping view" as a specific Kind of Asset.
+ ** For the different <i>Kinds</i> of Assets, we use sub-interfaces inheriting
  ** from the general Asset interface. To be able to get asset::Struct instances
- ** directly from the AssetManager, we define a specialization of the Asset ID.
+ ** directly from the AssetManager, we define a specialisation of the Asset ID.
  **
  ** @see asset.hpp for explanation
  ** @see StructFactory creating concrete asset::Struct instances

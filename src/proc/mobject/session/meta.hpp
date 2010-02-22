@@ -36,7 +36,7 @@ namespace session {
    * Meta-MObject doesn't represent real Media Content,
    * but rather all sorts of Processing Instructions
    * and other metadata, which can be placed and
-   * attached within the EDL/Session.
+   * attached within the Model/Session.
    * @todo do we need this abstract baseclass?
    */
   class Meta : public AbstractMO

@@ -23,16 +23,13 @@
 
 #include "lib/test/run.hpp"
 #include "proc/mobject/session.hpp"
-#include "proc/mobject/session/edl.hpp"
 #include "proc/mobject/session/testsession1.hpp"
 #include "lib/util-foreach.hpp"
 #include "lib/util.hpp"
 
-//#include <boost/format.hpp>
 #include <tr1/functional>
 #include <iostream>
 
-//using boost::format;
 using std::tr1::bind;
 using util::contains; 
 using util::for_each; 
@@ -49,7 +46,7 @@ namespace test    {
   
   /*******************************************************************
    * @test (re)building the ExplicitPlacement objects from the objects
-   *       placed into the Session/EDL.
+   *       placed into the Session/Model.
    * @see  mobject::session::Fixture
    * @see  mobject::ExplicitPlacement
    */
@@ -63,6 +60,7 @@ namespace test    {
           buildTestsession1();
           ASSERT (sess->isValid());
           sess->rebuildFixture();
+#if false ////////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #548
           TODO ("check the fixture has been touched. e.g. by hash.");
           TODO ("query all Placements of all Clips (via AssetManager). Verify explicit plac contained in Fixture.");
           
@@ -82,6 +80,7 @@ namespace test    {
           
 //        PMO originalPlacement = explicitPlacement->subject->getPlacement();
 //        ASSERT (edl.contains(originalPlacement));
+#endif ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #548
         }
     };
   

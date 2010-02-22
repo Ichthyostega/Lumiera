@@ -1,5 +1,5 @@
 /*
-  Track  -  A grouping device within the EDL.
+  Track  -  A grouping device within the Session.
  
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>

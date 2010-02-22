@@ -1,5 +1,5 @@
 /*
-  Track  -  structural asset holding the configuration of a track in the EDL
+  Track  -  structural asset holding the configuration of a track in the Session
  
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>

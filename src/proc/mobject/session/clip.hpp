@@ -44,7 +44,7 @@ namespace session {
    * A user visible/editable Clip is a reference to a contiguous
    * sequence of media data loaded as Asset into the current Session.
    * As such, it is a virtual (non destructive) cut or edit of the 
-   * source material and can be placed into the EDL to be rendered
+   * source material and can be placed into the Session to be rendered
    * into the output. The actual media type of a clip will be derived
    * at runtime by resolving this reference to the underlying Asset.
    * 

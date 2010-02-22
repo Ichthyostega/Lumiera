@@ -1,5 +1,5 @@
 /*
-  BuildSegment(Test)  -  building the render-tree for a segment of the EDL
+  BuildSegment(Test)  -  building the render-tree for a segment of the Timeline
  
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
@@ -44,7 +44,7 @@ namespace mobject
       
       /*******************************************************************
        * @test the builder core functionality: create a render pipeline
-       *       for a given segment of the EDL.
+       *       for a given segment of the Session/Timeline.
        */
       class BuildSegment_test : public Test
         {

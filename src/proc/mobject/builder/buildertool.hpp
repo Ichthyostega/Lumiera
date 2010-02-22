@@ -23,7 +23,7 @@
 /** @file buildertool.hpp
  ** Visiting-tool mechanism configured specifically for the Builder.
  ** The Builder creates the render nodes network by applying several Builder Tools
- ** to the objects found in the Session, EDL and Fixture. These BuilderTool instances
+ ** to the objects found in the Session and Fixture. These BuilderTool instances
  ** contain the details of the builder implementation.
  ** 
  ** As the objects to be treated are normally handled by smart-ptrs, BuilderTool provides

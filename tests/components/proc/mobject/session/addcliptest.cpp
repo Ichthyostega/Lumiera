@@ -1,5 +1,5 @@
 /*
-  AddClip(Test)  -  adding an Clip-MObject to the EDL/Session
+  AddClip(Test)  -  adding an Clip-MObject to the Model/Session
  
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
@@ -23,7 +23,6 @@
 
 #include "lib/test/run.hpp"
 #include "proc/mobject/session.hpp"
-#include "proc/mobject/session/edl.hpp"
 #include "proc/mobject/session/testclip.hpp"
 #include "proc/mobject/placement.hpp"
 #include "lib/util.hpp"
@@ -49,9 +48,9 @@ namespace mobject
       
       
       /*******************************************************************
-       * @test adding an test clip to the EDL/Session.
+       * @test adding an test clip to the Model/Session.
        * @see  mobject::session::Clip
-       * @see  mobject::session::EDL
+       * @see  mobject::Session
        */
       class AddClip_test : public Test
         {

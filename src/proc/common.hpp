@@ -105,7 +105,7 @@ namespace mobject {
 
 
   /**
-   * Namespace of Session, EDL and user visible high-level objects.
+   * Namespace of Session and user visible high-level objects.
    */
   namespace session { }
 

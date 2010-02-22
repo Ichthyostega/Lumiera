@@ -60,7 +60,6 @@ namespace mobject {
   
   namespace session { 
     class SessManager;
-    class EDL; 
     class Fixture;
     typedef std::tr1::shared_ptr<Fixture> PFix;
   }
@@ -104,9 +103,6 @@ namespace mobject {
       virtual void add (PMO& placement)    = 0;
       virtual bool remove (PMO& placement) = 0;
       
-      /// @deprecated Ichthyo doubts it is good design to hand out the EDL??
-      virtual session::EDL& currEDL ()     = 0;
-      
       virtual session::PFix& getFixture () = 0;
       virtual void rebuildFixture ()       = 0;
       
@@ -134,7 +130,7 @@ namespace mobject {
         /** clear current session contents 
          *  without resetting overall session config.
          *  Afterwards, the session will contain only one 
-         *  empty EDL, while all Assets are retained.
+         *  empty Sequence, while all Assets are retained.
          */
         virtual void clear () =0;
         

@@ -1,5 +1,5 @@
 /*
-  TESTROOT.hpp  -  test dummy model root for checking EDL/Session functionality
+  TESTROOT.hpp  -  test dummy model root for checking Model/Session functionality
  
   Copyright (C)         Lumiera.org
     2009,               Hermann Vosseler <Ichthyostega@web.de>

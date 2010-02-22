@@ -1,5 +1,5 @@
 /*
-  TESTCLIP.hpp  -  test clip (stub) for checking EDL/Session functionality
+  TESTCLIP.hpp  -  test clip (stub) for checking Model/Session functionality
  
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
@@ -43,7 +43,7 @@ namespace test    {
   
   /**
    * Sample or Test Clip for checking
-   * various EDL, session and builder operations.
+   * various model, session and builder operations.
    * @todo maybe use this as Mock object to record invoked operations?
    * 
    */

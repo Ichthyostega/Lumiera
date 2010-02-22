@@ -53,18 +53,17 @@ namespace session {
     }
     
     
-    /** creating a Clip-MObject to be placed within
-     *  the EDL, based on a clip asset, which typically
-     *  is obtained by calling the createClip()-function
-     *  on some asset::Media. The newly created Clip-MO is
-     *  internally linked with this media Asset and wrapped
-     *  into a Placement, which takes ownership. So, when the
-     *  render engine gets across this Clip-MO, it is able to
-     *  obtain the media information contained in the corresponding
+    /** creating a Clip-MObject to be placed within the Session,
+     *  based on a clip asset, which typically is obtained by calling
+     *  the createClip()-function on some asset::Media.
+     *  The newly created Clip-MO is (back)linked with this media Asset
+     *  internally and wrapped into a Placement, which takes ownership.
+     *  So, when the render engine gets across this Clip-MO, it is able
+     *  to obtain the media information contained in the corresponding
      *  media asset. Note this will create a single track clip. 
      *  @param mediaDef the actual asset::Media to be used 
      *  created Clip could be a compound (multichannel) clip 
-     *  comprised of several SimpleClip subobjects.
+     *  comprised of several SimpleClip sub-objects.
      */
     Placement<Clip>   
     MObjectFactory::operator() (const asset::Clip& clipRef, const asset::Media& mediaDef)

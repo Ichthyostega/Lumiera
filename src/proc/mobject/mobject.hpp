@@ -59,8 +59,8 @@ namespace mobject {
   /**
    * MObject is the interface class for all "Media Objects".
    * All the contents and elements that can be placed and 
-   * manipulated and finally rendered within Lumiera's EDL 
-   * are MObjects.
+   * manipulated and finally rendered within Lumiera's
+   * high-level model and Session are MObjects.
    */
   class MObject 
     : public Buildable,

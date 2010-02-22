@@ -24,7 +24,6 @@
 #include "lib/test/run.hpp"
 #include "proc/asset/media.hpp"
 #include "proc/mobject/session.hpp"
-#include "proc/mobject/session/edl.hpp"
 #include "proc/mobject/session/testclip.hpp"
 #include "proc/mobject/placement.hpp"
 #include "proc/mobject/explicitplacement.hpp"

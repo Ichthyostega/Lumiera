@@ -1,5 +1,5 @@
 /*
-  TRACK.hpp  -  A grouping device within the EDL.
+  TRACK.hpp  -  A grouping device within the Session.
  
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
@@ -43,7 +43,7 @@ namespace session {
     
     
     /**
-     * A Track is grouping device within the EDL.
+     * A Track is grouping device within the Session.
      * The corresponding Placement by which this Track object is referred
      * defines fallback placing properties to be used by all objects placed on this track
      * in case they don't specify more concrete placements.
@@ -52,11 +52,11 @@ namespace session {
      * of clips. Note tracks are grouped in a tree like fashion.
      * \par
      * This Media Object (often referred to as "track-MO") is always dealt with
-     * locally within one EDL. Client code normally doesn't have to care for creating
+     * locally within one Sequence. Client code normally doesn't have to care for creating
      * or retrieving track-MO. Rather, it refers to the global track-asset-ID. The same
      * holds true when placing some other Media Object onto a track: the corresponding
-     * placement just refers the global trackID, while the builder automatically retrieves
-     * the matching track-MO for the EDL in question. If some EDL contains several instances
+     * placement just refers the global trackID, while the builder automatically retrieves the
+     * matching track-MO for the Sequence in question. If the Session contains several instances
      * (track-MO) referring to the same trackID (asset), then this causes all objects placed
      * onto this track to be included several times in the resulting render nodes network
      * (possibly with varying placement properties) 

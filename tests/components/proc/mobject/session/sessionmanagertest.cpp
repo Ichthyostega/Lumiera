@@ -1,5 +1,5 @@
 /*
-  SessionManager(Test)  -  accessing, loading and saving the Session/EDL
+  SessionManager(Test)  -  accessing, loading and saving the Session/Model
  
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>

@@ -24,7 +24,6 @@
 #include "lib/test/run.hpp"
 #include "proc/assetmanager.hpp"
 #include "proc/mobject/session.hpp"
-#include "proc/mobject/session/edl.hpp"               // TODO: really neded?
 #include "proc/mobject/session/testsession1.hpp"
 #include "proc/mobject/session/clip.hpp"              // TODO: really neded?
 //#include "lib/util.hpp"
@@ -51,9 +50,11 @@ namespace test    {
   
   
   /*******************************************************************
-   * @test removing a test clip from the EDL.
+   * @test removing a test clip from the Session/Model.
    * @see  mobject::session::Clip
-   * @see  mobject::session::EDL
+   * @see  mobject::Session
+   * 
+   * @todo ////////////////////////////////////////////////TICKET #499
    */
   class DeleteClip_test : public Test
     {
@@ -64,13 +65,13 @@ namespace test    {
           PSess sess = Session::current;
           AssetManager& aMang = AssetManager::instance();
           
-          UNIMPLEMENTED("typesafe searching for MObjects in the EDL");
+          UNIMPLEMENTED("typesafe searching for MObjects in the Session");
           
           
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////TODO: work out how to search within EDL!!
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////TODO: work out how to search within the Model!!
                 
           PClipMO clipPlacement = sess->currEDL().find(SESSION1_CLIP); 
-                                                              // global Var asigned in buildTestsession1()
+                                                              // global Var assigned in buildTestsession1()
           PMedia media = clipPlacement->getMedia();
           IDA clipAID = media->getID();
           ASSERT (clipPlacement);
@@ -80,7 +81,7 @@ namespace test    {
           ASSERT (!sess->currEDL().find(SESSION1_CLIP));            // EDL forgot the Clip/Placement
           ASSERT (!aMang.known (clipAID));                          // corresponding Clip Asset has disappeared
           ASSERT (!clipPlacement->getMedia());                      // internal cross-links removed
-#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////TODO: work out how to search within EDL!!
+#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////TODO: work out how to search within the Model!!
         }
     };
   

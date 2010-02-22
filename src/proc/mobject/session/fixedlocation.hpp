@@ -37,7 +37,7 @@ namespace mobject
 
     /** 
      * The most common case of positioning a MObject
-     * in the EDL: directly specifying a constant position.
+     * in the Session: directly specifying a constant position.
      * @todo use a subclass to represent the LocatingSolution?
      *       would solve the construction of a ExplicitPlacement
      *       much more natural. (ichthyo: siehe trac #100) 

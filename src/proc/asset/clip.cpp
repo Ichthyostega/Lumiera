@@ -75,7 +75,7 @@ namespace asset
    *  asset::Clip internally holds a Clip-MO, which has 
    *  been created alongside. This Clip-MO may have several
    *  Placements or no placement at all (meaning it need not
-   *  be placed within the EDL) 
+   *  be placed within the session) 
    */
   Media::PClipMO 
   Clip::createClip ()  const

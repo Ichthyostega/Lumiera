@@ -1,5 +1,5 @@
 /*
-  TestClip  -  test clip (stub) for checking EDL/Session functionality
+  TestClip  -  test clip (stub) for checking Model/Session functionality
  
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>

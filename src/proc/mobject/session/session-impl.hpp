@@ -47,7 +47,6 @@
 #define MOBJECT_SESSION_SESSIONIMPL_H
 
 #include "proc/mobject/session.hpp"
-#include "proc/mobject/session/edl.hpp"
 #include "proc/mobject/session/fixture.hpp"
 #include "proc/mobject/session/placement-index.hpp"
 #include "proc/mobject/session/session-services.hpp"
@@ -80,8 +79,6 @@ namespace session {
     {
       PlacementIndex pIdx_;
       
-      uint focusEDL_;
-      vector<EDL> edls;                 /////////////////////TICKET #500  #513  #514
       PFix fixture;
       
       
@@ -92,8 +89,6 @@ namespace session {
       virtual bool isValid ();
       virtual void add (PMO& placement);
       virtual bool remove (PMO& placement);
-      
-      virtual EDL&  currEDL ();
       
       virtual PFix& getFixture ();
       virtual void rebuildFixture ();

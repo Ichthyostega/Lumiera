@@ -22,7 +22,7 @@
 
 
 /** @file visitingtoolconept.cpp
- ** While laying the foundations for EDL and Builder, Ichthyo came accross 
+ ** While laying the foundations for Session and Builder, Ichthyo came across 
  ** the necessity to create a custom implementation of the Visitor Pattern
  ** optimally suited for Lumiera's needs. This implementation file was 
  ** used for the draft and is self-contained. The final solution was then
@@ -35,7 +35,7 @@
  **     <li>Visitor is about <i>double dispatch</i>, thus we can't avoid
  **         using some table lookup implementation, and we can't avoid using
  **         some of the cooperating classes vtables. Besides that, the 
- **         implementation should not be too wastefull...</li>
+ **         implementation should not be too wasteful...</li>
  **     <li>individual Visiting Tool implementation classes should be able
  **         to opt in or opt out on implementing functions treating some of
  **         the visitable subclasses.</li>
@@ -48,7 +48,7 @@
  **
  ** @see visitor.hpp the final lib implementation
  ** @see visitingtooltest.cpp test cases using our lib implementation
- ** @see BuilderTool one especially important instantiiation
+ ** @see BuilderTool one especially important instantiation
  **
  */
 

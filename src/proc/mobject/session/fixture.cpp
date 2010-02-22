@@ -1,5 +1,5 @@
 /*
-  Fixture  -  the (low level) representation of the EDL with explicit placement data
+  Fixture  -  the (low level) representation of the Session with explicit placement data
  
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
@@ -25,37 +25,37 @@
 #include "include/logging.h"
 
 namespace mobject {
-  namespace session {
+namespace session {
+  
+  
+  
+  list<ExplicitPlacement> &
+  Fixture::getPlaylistForRender ()
+  {
+    UNIMPLEMENTED ("get Playlist For Render");
+  }
+  
+  
+  /** TODO: a placeholder for the Operation needed for
+   *  wiring the Automation providers in the Build process
+   */
+  Auto<double>*
+  Fixture::getAutomation ()
+  {
+    UNIMPLEMENTED ("getAutomation from Fixture");
+    return 0;
+  }
+  
+  
+  /** @todo self-verification of the fixture? necessary? */
+  bool
+  Fixture::isValid()  const
+  {
+    TODO ("actually do a self-verification of the Fixture");
+    return true;
+  }
 
 
 
-    list<ExplicitPlacement> &
-    Fixture::getPlaylistForRender ()
-    {
-      UNIMPLEMENTED ("get Playlist For Render");
-    }
 
-
-    /** TODO: a placeholder for the Operation needed for
-     *  wiring the Automation providers in the Build process
-     */
-    Auto<double>*
-    Fixture::getAutomation ()
-    {
-      UNIMPLEMENTED ("getAutomation from Fixture");
-      return 0;
-    }
-
-
-
-  } // namespace mobject::session
-
-} // namespace mobject
-
-/*
-// Local Variables:
-// mode: C++
-// c-file-style: "gnu"
-// indent-tabs-mode: nil
-// End:
-*/
+}} // namespace mobject::session

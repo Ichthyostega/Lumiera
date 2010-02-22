@@ -42,10 +42,10 @@ namespace mobject
       
       
       
-      /*******************************************************************
-       * @test create a render process from a given segment of the EDL.
+      /********************************************************************
+       * @test create a render process from a given segment of the Session.
        *       Basically this includes cooperation of all parts of the
-       *       Lumiera Proc Layer. For a prepared test-EDL we invoke the
+       *       Lumiera Proc Layer. For a prepared test-Session we invoke the
        *       controller to create a render process. This includes building
        *       the render pipeline. Finally, we analyze all the created 
        *       Structures. 
@@ -56,7 +56,7 @@ namespace mobject
         {
           virtual void run(Arg arg) 
             {
-              UNIMPLEMENTED ("complete render process for a given test segment of the EDL");
+              UNIMPLEMENTED ("complete render process for a given test segment of the Session");
             } 
         };
       

@@ -24,7 +24,7 @@
 /** @file placement.hpp 
  ** Placements are at the very core of all editing operations,
  ** because they act as handles to access the media objects to be manipulated. 
- ** Moreover, Placements are the actual content of the EDL(s) and Fixture and thus
+ ** Moreover, Placements are the actual "content" of the Session and Fixture and thus
  ** are small handle like objects. Many editing tasks include locating some Placement
  ** within the Session or directly take a ref to a Placement.
  ** 
@@ -35,7 +35,7 @@
  ** which takes ownership of the MObject.
  **
  ** Besides being a handle, Placements define the logical position where some MObject is
- ** supposed to be located within the EDL or Fixture. The way in which this placing happens
+ ** supposed to be located within the Session or Fixture. The way in which this placing happens
  ** is controlled and parametrised by a collection (chain) of LocatingPin objects. By adding
  ** to this chain, the position of the MObject is increasingly constrained. The simplest
  ** case of such constraining is to add a FixedLocation, thus placing the MObject at one
@@ -92,7 +92,7 @@ namespace mobject {
   /**
    * A refcounting Handle to an MObject of type MO,
    * used to constrain or explicitly specify the  location
-   * where the MObject is supposed to be within the Session/EDL.
+   * where the MObject is supposed to be within the Session/Model.
    * Placements are copyable (like values), but may be distinguished
    * by their identity (reference semantics), which is based on an
    * \link lib::HashIndexed hash-ID \endlink.

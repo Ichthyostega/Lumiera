@@ -96,7 +96,7 @@ namespace asset {
       PProcPatt howtoProc ()  const;
       
       /** Service Access Point for creating a Clip entity usable within 
-       *  the EDL/Session from a given Media or Clip Asset. As a sideeffect,
+       *  the Session from a given Media or Clip Asset. As a sideeffect,
        *  a corresponding asset::Clip is created as well if necessary. 
        *  It is OK to use and throw away the returned Clip-MO, because
        *  it can be regenerated from the corresponding asset::Clip

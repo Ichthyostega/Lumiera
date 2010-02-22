@@ -52,8 +52,6 @@ namespace session {
   SessionImpl::SessionImpl ()
     : Session( getDummyDefaultsManager() )             ///////TODO temporary hack
     , pIdx_( MObject::create (getDummyDefaultsManager())) ////TODO temporary hack
-    , focusEDL_(0)
-    , edls()         /////////// this is dummy code. How to initialise the default session?  ///////TICKET #497
     , fixture(new Fixture)
     {
       INFO (session, "new Session created.");
@@ -61,22 +59,19 @@ namespace session {
   
   
   /** @internal used by SessionManager#clear
-   *            discard all EDL content, without
-   *            touching global configuration.
+   *            discard all Session content,
+   *            without touching global configuration.
    */
   void 
   SessionImpl::clear ()
   {
     try
       {
-        edls.clear();
-        edls.resize(1);   //////////////////////////////////////////////////////////////////////////TICKET #513
-        focusEDL_ = 0;
+                          //////////////////////////////////////////////////////////////////////////TICKET #496
       }
     catch (...)
       {
-        focusEDL_ = 0;
-        throw lumiera::error::Fatal ("unexpected exception while clearing EDLs");
+        throw lumiera::error::Fatal ("unexpected exception while clearing the session"); ///////////TODO still required??
       }
   }
   
@@ -92,23 +87,15 @@ namespace session {
   void 
   SessionImpl::add (PMO& placement)
   {
-    UNIMPLEMENTED ("add Placement to the current EDL");
+    UNIMPLEMENTED ("add Placement to the current Session");
   }
   
   
   bool 
   SessionImpl::remove (PMO& placement)
   {
-    UNIMPLEMENTED ("search and remove a given Placement from current EDL");
+    UNIMPLEMENTED ("search and remove a given Placement from current Session");
     return false; // TODO
-  }
-  
-  /// @deprecated should not grant direct access to EDL objects
-  EDL&
-  SessionImpl::currEDL ()
-  {
-    ASSERT (focusEDL_ < edls.size());
-    return  edls[focusEDL_];
   }
   
   

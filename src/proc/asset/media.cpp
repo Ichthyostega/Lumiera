@@ -213,8 +213,8 @@ namespace asset
   
   /** Factory method for creating a Clip asset based
    *  on the given Media asset. This asset::Clip can be used
-   *  to create clip in the EDL covering the whole length of
-   *  this media.
+   *  to create a clip in the session covering the whole length
+   *  of this media.
    *  @note  creates a dependency between media and new clip 
    *  @throw Invalid if the given media asset is not top-level,
    *         but rather part or a multichannel (compound) media

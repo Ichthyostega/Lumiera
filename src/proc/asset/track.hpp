@@ -35,10 +35,10 @@ namespace asset
   /**
    * Structural Asset using as a global identifier for placing
    * some object onto a given track. Not to be confused with the "track-MO":
-   * To actually use a track  within an EDL, we need to attach a 
-   * Placement<mobject::session::Track> to the tree-of-tracks of this EDL.
+   * To actually use a track within an Sequence, we need to attach a 
+   * Placement<mobject::session::Track> to the tree-of-tracks of this Sequence.
    * Thus, we have one global track-identifier (this class here), but
-   * maybe several instances (track-MO) within various EDLs
+   * maybe several instances (track-MO) within various Sequences
    */
   class Track : public Struct
     {

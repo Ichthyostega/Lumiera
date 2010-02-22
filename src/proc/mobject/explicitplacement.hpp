@@ -35,8 +35,8 @@ namespace mobject {
   /**
    * Special kind of Placement, where the location of the
    * MObject has been nailed down to a fixed position.
-   * The Session allways contains one special EDL, which
-   * actually is a snapshot of all EDLs contents fixed
+   * The Session maintains a special list of Placements,
+   * which actually is a snapshot of all Session contents fixed
    * and reduced to simple positions. This so called Fixture
    * contains only ExplicitPlacement objects and is processed
    * by the Builder to create the render engine  node network.

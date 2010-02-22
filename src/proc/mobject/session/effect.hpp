@@ -1,5 +1,5 @@
 /*
-  EFFECT.hpp  -  EDL representation of a pluggable and automatable effect.
+  EFFECT.hpp  -  Model representation of a pluggable and automatable effect.
  
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>

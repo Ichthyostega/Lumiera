@@ -23,7 +23,7 @@
 
 /** @file locatingpin.hpp 
  ** Implementing the Placement mechanics. The various specifications how
- ** some MObject is to be placed (logically) within the EDL are given by small
+ ** to place some MObject (logically) within the Session are given by small
  ** LocatingPin objects forming a chain. For resolving the actual position, at the 
  ** moment (10/07) we use a preliminary implementation to support the most common
  ** Placement types (fixed and relative). It is comprised of the nested LocatingSolution
