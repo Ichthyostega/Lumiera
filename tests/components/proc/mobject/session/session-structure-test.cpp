@@ -25,10 +25,12 @@
 #include "proc/mobject/session.hpp"
 #include "proc/mobject/session/fixture.hpp"             // TODO only temporarily needed
 #include "proc/assetmanager.hpp"
-//#include "lib/util.hpp"
+#include "lib/lumitime.hpp"
+#include "lib/util.hpp"
 
 #include <iostream>
 
+using util::isSameObject;
 using std::string;
 using std::cout;
 
@@ -39,6 +41,8 @@ namespace test    {
   
   using proc_interface::AssetManager;
   using proc_interface::PAsset;
+  
+  using lumiera::Time;
   
   
   /*******************************************************************************
@@ -52,9 +56,21 @@ namespace test    {
   class SessionStructure_test : public Test
     {
       virtual void
-      run (Arg arg) 
+      run (Arg) 
         {
+          Session::current.reset();
+          ASSERT (Session::current.isUp());
+          
+          verify_defaultStructure();
+        }
+      
+      
+      void
+      verify_defaultStructure()
+        {
+          
           PSess sess = Session::current;
+          ASSERT (sess->isValid())
           
           UNIMPLEMENTED("the real standard structure of the session"); //////////////////////////TICKET #499
           
@@ -70,7 +86,43 @@ namespace test    {
           
 #endif //////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #546              
           UNIMPLEMENTED ("how to refer to tracks...");
-        } 
+          
+          ASSERT (0 < sess->timelines.size());
+          Timeline& til = sess->timelines[0];
+          
+          ASSERT (0 < sess->sequences.size());
+          Sequence& seq = sess->sequences[0];
+          
+          ASSERT (isSameObject (seq, til.getSequence()));
+          
+          //verify default timeline
+          Axis& axis = til.getAxis();
+          ASSERT (Time(0) == axis.origin());
+          ASSERT (Time(0) == til.length());                   ////////////////////////TICKET #177
+          
+          //verify global pipes
+          //TODO
+          
+          //verify default sequence
+          Track rootTrack = seq.rootTrack();
+          ASSERT (rootTrack->isValid());
+          ASSERT (Time(0) == rootTrack->length());
+          ASSERT (0 == rootTrack->subTracks.size());
+          ASSERT (0 == rootTrack->clips.size());
+          //TODO verify the output slots of the sequence
+          
+          //TODO now use the generic query API to discover the same structure.
+          ASSERT (til == *(sess->all<Timeline>()));
+          ASSERT (seq == *(sess->all<Sequence>()));
+          ASSERT (rootTrack == *(sess->all<Track>()));
+          ASSERT (! sess->all<Clip>());
+          
+          QueryFocus& focus = sess->focus();
+          ASSERT (rootTrack == focus.getObject());
+          focus.navigate (til);
+          ASSERT (til.getBinding() == focus.getObject());
+          ASSERT (rootTrack == *(focus.children()));
+        }
     };
   
   

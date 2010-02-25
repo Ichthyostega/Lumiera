@@ -4099,7 +4099,7 @@ For implementation, the HighLevelModel can be reduced to a compound of interconn
 MObject lifetime is managed by reference counting; all placements and client side references to an MObject share ownership. The placement instances attached to the session are maintained by the index; thus, as long as an placement exists, the corresponding object automatically stays alive. A bare PlacementRef on the other hand doesn't guarantee anything about the referred placement; when dereferencting this reference token, the index is accessed to re-establish a connection to the object, if possible. The full-fledged MObjectRef is built on top of such a reference token and additionally incorporates a smart-ptr. For the client code this means, that holding a ref ensures existence of the object, while the //placement// of this object still can get removed from the session.
 </pre>
 </div>
-<div title="SessionInterface" modifier="Ichthyostega" modified="201002202339" created="200904242108" tags="SessionLogic GuiIntegration design draft discuss" changecount="27">
+<div title="SessionInterface" modifier="Ichthyostega" modified="201002210435" created="200904242108" tags="SessionLogic GuiIntegration design draft discuss" changecount="35">
 <pre>&quot;Session Interface&quot;, when used in a more general sense, denotes a compound of several interfaces and facilities, together forming the primary access point to the user visible contents and state of the editing project.
 * the API of the session class
 * the accompanying management interface (SessionManager API)
@@ -4119,7 +4119,7 @@ The HighLevelModel exposes two kinds of interfaces (which are interconnected and
 * the [[Session]] object itself corresponds to the ModelRootMO
 * the one (or multiple) [[Timeline]] objects correspond to the BindingMO instances attached immediately below the model root
 * the [[sequences|Sequence]] bound into these timelines (by the ~BindingMOs) correspond to the top level [[Track]]-~MObjects within each of these sequences.
-[&lt;img[Object relations on the session facade|draw/SessionFacade1.png]]
+[&lt;img[Object relations on the session façade|draw/SessionFacade1.png]]
 
 Thus, there is a convenient and meaningful access path through these façade objects, which of course actually is implemented by forwarding to the actual model elements (root, bindings, tracks)
 
@@ -4128,19 +4128,33 @@ To the contrary, the ''generic'' API is related to a //current location (state),
 
 
 
-!purpose of these APIs
+!purpose of these ~APIs
 * to discover
 ** by ID
-** by filter
+** by type (filter)
 ** all contained
 * to add
 * to destroy
 
 
 {{red{WIP ... just emerging}}}
+!!!discovery and mutations
+The discovery functions available on these ~APIs are wired such as to return suitably typed MObjectRef instances always. These are small value objects and can be used to invoke operations (both query and mutating) on the underlying object within the session. Raw placement references aren't exposed on these outward interfaces.
+
+While this protects against accessing dangling references, it can't prevent clients from invoking any mutating operation directly on these references. It would be conceivable, by using proxies, to create and invoke commands automatically. But we rather don't want to go this route, because
+* Lumiera is an application focussed on very specific usage, not a general purpose library or framework
+* regarding CommandHandling, the //design decision was to require a dedicated (and hand written) undo functor.//
+
+!!!!protection against accidental mutation
+{{red{WIP}}}As of 2/10, I am considering to add a protection against invoking an mutation accidentally, thus bypassing the command frontend and the ProcDispatcher. This would not only be annoying (no UNDO), but potentially dangerous, because all of the session internals are not threadsafe by design.
+The considered solution would be to treat this situation as if an authorisation is required; this authorisation for mutation could be checked by a &amp;raquo;wormhole&amp;laqou;-like context access. Of course, in our case we're not dealing with real access restrictions, just a safeguard: While command execution creates such an authorisation token automatically, a client actually wanting to invoke an mutation operations bypassing the command frontend, would need to set up such a token explicitly and manually.
+
+!!!adding and destroying
+Objects can be added and destroyed directly on the top level session API. The actual memory management of the object instances works automatically, based on reference counts. (Even after destroying an object, it may still be indirectly in use by an ongoing render process).
+When adding an object, a [[scope|PlacementScope]] needs to be specified. Thus it makes sense to provide the {{{add()}}}-operation on the dedicated API of individual session parts, while the generic {{{add()}}}-call on the top-level session API relies on the current QueryFocus to determine the location where to add an object. Besides, as we're always adding the [[Placement]] of an object into the session, this placement may specify an additional constraint or tie to a specific scope; resolving the placement thus may cause the object to move to another location
 
 
-!!!Questions
+!!!{{red{Questions}}}
 * what exactly is the relation of discovery and [[mutations|SessionMutation]]?
 * what's the point of locating them on the same conceptual level?
 * how to observe the requirement of ''dispatching'' mutations ([[Command]])?
@@ -4207,9 +4221,9 @@ Objects are attached and manipulated by [[placements|Placement]]; thus the organ
 <pre>The session manager is responsible for maintaining session state as a whole and for conducting the session [[lifecycle|SessionLifecycle]]. The session manager API allows for saving, loading, closing and resetting the session. Accessible through the static interface {{{Session::current}}}, it exposes the actual session as a ~PImpl. Actually, both session and session manager are interfaces.
 </pre>
 </div>
-<div title="SessionMutation" modifier="Ichthyostega" modified="201002170351" created="201002170332" tags="SessionLogic spec decision draft" changecount="1">
+<div title="SessionMutation" modifier="Ichthyostega" modified="201002220008" created="201002170332" tags="SessionLogic spec decision draft" changecount="2">
 <pre>//Any modification of the session will pass through the [[command system|CommandHandling]].//
-Thus any possible mutation comes in two flavours: a raw operation invoked directly on an object instance attached to the model, and a command taking an MObjectRef as parameter. {{red{Currently (2/10) it looks like...}}} we're not enforcing the use of commands and object-refs at the session API, but only the use of this second flavour is exposed on the corresponding LayerSeparationInterfaces.
+Thus any possible mutation comes in two flavours: a raw operation invoked directly on an object instance attached to the model, and a command taking an MObjectRef as parameter. The latter approach &amp;mdash; invoking any mutation through a command &amp;mdash; will pass the mutations trough the ProcDispatcher to ensure the're logged for [[UNDO|UndoManager]] and executed sequentially, which is important, because the session's internals are //not threadsafe by design.// Thus we're kind of enforcing the use of Commands: mutating operations include a check for a &amp;raquo;permission to mutate&amp;laquo;, which is automatically available within a command execution {{red{TODO as of 2/10}}}. Moreover, the session API and the corresponding LayerSeparationInterfaces expose MObjectRef instances, not raw (language) refs.
 
 !!Questions to solve
 * how to get from the raw mutation to the command?
