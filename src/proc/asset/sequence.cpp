@@ -1,5 +1,5 @@
 /*
-  SEQUENCE.hpp  -  Compound of MObjects placed on a track tree. Building block of the Session
+  Sequence  -  Compound of MObjects placed on a track tree. Building block of the Session
  
   Copyright (C)         Lumiera.org
     2009,               Hermann Vosseler <Ichthyostega@web.de>
@@ -18,38 +18,30 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  
-*/
+* *****************************************************/
 
 
-#ifndef MOBJECT_SESSION_SEQUENCE_H
-#define MOBJECT_SESSION_SEQUENCE_H
-
-//#include "proc/mobject/mobject.hpp"
+#include "asset/sequence.hpp"
+//#include "proc/mobject/session/track.hpp"
 //#include "proc/mobject/placement.hpp"
+//#include "proc/mobject/session/mobjectfactory.hpp"
+//#include "proc/asset/track.hpp"
 
-//#include <vector>
-//#include <string>
-
-//using std::vector;
-//using std::string;
-
-namespace mobject {
-namespace session {
+namespace asset {
   
   
   
-  /**
-   * TODO type comment
-   */
-  class Sequence
-    {
-      
-    public:
-      Sequence();
-      
-    };
-///////////////////////////TODO currently just fleshing the API
+  /** create an empty default configured Sequence */
+  Sequence::Sequence (const Asset::Ident& idi)
+//  : track (makeDefaultTrack ())
+//  , clips (0)
+  {
+    
+  }
   
   
-}} // namespace mobject::session
-#endif
+  
+  
+  
+  
+} // namespace asset

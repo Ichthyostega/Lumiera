@@ -547,7 +547,7 @@ Even if the low-level memory manager(s) may use raw storage, we require that the
 &amp;rarr; see MemoryManagement
 </pre>
 </div>
-<div title="Asset" modifier="Ichthyostega" modified="200906071813" created="200708100337" tags="def classes img" changecount="17">
+<div title="Asset" modifier="Ichthyostega" modified="201002272329" created="200708100337" tags="def classes img" changecount="18">
 <pre>Asset management is a subsystem on its own. Assets are &quot;things&quot; that can be loaded into a session, like Media, Clips, Effects, Transitions. It is the &quot;bookkeeping view&quot;, while the Objects in the Session relate to the &quot;manipulation and process view&quot;. Some Assets can be //loaded// and a collection of Assets is saved with each Session. Besides, there is a collection of basic Assets always available by default.
 
 The Assets are important reference points holding the information needed to access external resources. For example, an Clip asset can reference a Media asset, which in turn holds the external filename from which to get the media stream. For Effects, the situation is similar. Assets thus serve two quite distinct purposes. One is to load, list, group search and browse them, and to provide an entry point to create new or get at existing MObject in the Session, while the other purpose is to provide attribute and property informations to the inner parts of the engine, while at the same time isolating and decoupling them from environmental details. 
@@ -569,7 +569,7 @@ Some software component able to work on media data in the Lumiera Render engine 
 &amp;rarr; ProcAsset
 
 !Structural Asset
-Some of the building blocks providing the framework for the objects placed into the current Session. Notable examples are [[processing pipes|Pipe]] within the high-level-model, Viewer attachment points, Tracks, etc.
+Some of the building blocks providing the framework for the objects placed into the current Session. Notable examples are [[processing pipes|Pipe]] within the high-level-model, Viewer attachment points, Tracks, Sequences, Timelines etc.
 * __outward interface operations__ include...
 * __inward interface operations__ include...
 &amp;rarr; StructAsset {{red{to be defined}}}
@@ -589,14 +589,20 @@ is how to implement the relationship between [[MObject]]s and Assets. Do we use 
 
 </pre>
 </div>
-<div title="AssetCreation" modifier="Ichthyostega" modified="200806030153" created="200709040307" tags="dynamic impl" changecount="3">
+<div title="AssetCreation" modifier="Ichthyostega" modified="201002272321" created="200709040307" tags="dynamic impl" changecount="5">
 <pre>Assets are created by a Factories returning smart pointers; the Asset creation is bound to specific use cases and //only available// for these specific situations. There is no generic Asset Factory.
 
 For every Asset we generate a __Ident tuple__ and a long ID (hash) derived from this Ident tuple. The constructor of the abstract base class {{{Asset}}} takes care of this step and automatically registeres the new Asset object with the AssetManager. Typically, the factory methods for concrete Asset classes provide some shortcuts providing sensible default values for some of the Ident tuple data fields. They may take additional parameters &amp;mdash; for example the factory method for creating {{{asset::Media}}} takes a filename (and may at some point in the future aply &quot;magic&quot; based on examination of the file &amp;rarr; LoadingMedia)
+
+Generally speaking, assets can be seen as the statical part or view of the session and model. They form a global scope and are tied to the [[model root|ModelRootMO]] &amp;mdash; which means, they're going to be serialised and de-serialised alongside with this model root scope. Especially the de-serialisation triggers (re)-creation of all assets associated with the session to be loaded.
+{{red{TODO:}}} //there will be a special factory mechanism for this case, details pending definition as of 2/2010 //
 </pre>
 </div>
-<div title="AssetManager" modifier="Ichthyostega" created="200709200300" changecount="1">
-<pre>The Asset Manager provides an Interface to some internal Database holding all Assets in the current Session and System state. It may be a real Database at some point (and for the moment it's a Hashtable). Each [[Asset]] is registered automatically with the Asset Manager; it can be queried either by it's //identification tuple// or by it's unique ID.</pre>
+<div title="AssetManager" modifier="Ichthyostega" modified="201002272324" created="200709200300" tags="def" changecount="2">
+<pre>The Asset Manager provides an Interface to an internal Database holding all Assets in the current Session and System state. It may be a real Database at some point (and for the moment it's a Hashtable). Each [[Asset]] is registered automatically with the Asset Manager; it can be queried either by it's //identification tuple// or by it's unique ID.
+
+Conceptually, assets belong to the [[global or root scope|ModelRootMO]] of the session data model. A mechanism for serialising and de-serialising all assets alongside with the session is planned as of 2/2010
+</pre>
 </div>
 <div title="AttachedPlacementProblem" modifier="Ichthyostega" modified="200905310342" created="200801111305" tags="SessionLogic impl draft dynamic" changecount="17">
 <pre>Placing an MObject relatively to another object such that it should be handled as //attached//&amp;nbsp; to the latter results in several design and implementation challenges. Actually, such an attachment creates a cluster of objects. The typical use case is that of an effect attached to a clip or processing pipe.
@@ -4058,12 +4064,14 @@ A scope path is a sequence of scopes, where each scope is implemented by a Place
 ** clear a path (reset to default)
 </pre>
 </div>
-<div title="Sequence" modifier="Ichthyostega" modified="201002010123" created="201001252327" tags="def" changecount="2">
+<div title="Sequence" modifier="Ichthyostega" modified="201002270500" created="201001252327" tags="def" changecount="9">
 <pre>A sequence is a collection of media objects, arranged onto a track tree. Sequences are the building blocks within the session. To be visible and editable, a session needs to be bound into a top-level [[Timeline]]. Alternatively, it may be used as a VirtualClip nested within another sequence.
 
 The sequences within the session establish a //logical grouping//, allowing for lots of flexibility. Actually, we can have several sequences within one session, and these sequences can be linked together or not, they may be arranged in temporal order or may constitue a logical grouping of clips used simultanously in compositional work etc. Multiple sequences can use the same or different tracks, and tracks as well are only an organisational (grouping) device. But at any time, we have exactly one [[Fixture]], derived automatically from all sequences and containing the content actually to be rendered.
-
 &amp;rarr; see considerations about [[the role of Tracks and Pipes in conjunction with the sequences|TrackPipeSequence]]
+
+!!Implementation and lifecycle
+Actually, sequences are façade objects to quite some extent, delegating the implementation of the exposed functionality to the relevant placements and ~MObjects within the model. But they're not completely shallow; each sequence has an distinguishable identity and may hold additional metadata. Thus, stressing this static aspect, sequences are implemented as MetaAsset {{red{TODO: ~StructAsset or ~MetaAsset??}}}, attached to the [[model root|ModelRootMO]] through the AssetManager, accessed and owned by refcounting smart-ptr.
 </pre>
 </div>
 <div title="Session" modifier="Ichthyostega" modified="200911071800" created="200712100525" tags="def SessionLogic" changecount="8">
@@ -4082,21 +4090,21 @@ The Session object is a singleton &amp;mdash; actually it is a »~PImpl«-Facade
 &amp;rarr; see [[relation of timeline, sequences and objects|TimelineSequences]]
 </pre>
 </div>
-<div title="SessionDataMem" modifier="Ichthyostega" modified="201001112310" created="200904252303" tags="impl design SessionLogic draft" changecount="4">
+<div title="SessionDataMem" modifier="Ichthyostega" modified="201002270444" created="200904252303" tags="impl design SessionLogic draft" changecount="5">
 <pre>The [[Session]] is interconnected with the GUI, the SessionStorage, [[Builder]] and the CommandHandling. The HighLevelModel is an conceptual view of the session. All these dependencies are isolated from the actual data layout in memory, but the latter is shaped by the intended interactions.
 
 {{red{WIP...}}}Currently as of 5/09, this is an ongoing [[implementation and planning effort|PlanningSessionInMem]]
 
 !Objects, Placements, References
 Media objects are attached to the session by [[placements|Placement]]. A Placement within the session gets an distinguishable identity (&amp;rarr; ModelObjectIdentity) and behaves like being an instance of the attached object. Client code usually interacts with the compound of placement + ~MObject. In order to decouple this interaction from the actual implementation within the session, client code rather deals with //references.// These are implemented like a smart-ptr, but based on an opaque hash value, which is equivalent to the //object instance identity.//
-&amp;rarr MObjectRef
-&amp;rarr PlacementRef
+&amp;rarr; MObjectRef
+&amp;rarr; PlacementRef
 
 !Index of placements attached to the session
-For implementation, the HighLevelModel can be reduced to a compound of interconnected placements. These placement instances are owned and managed by the session; attaching a placement means copying it into the session, thereby creating a new placement-ID. A lookup mechanism for placements and placement relations (PlacementIndex) thus is the actual core of the session datastructure; the actual object instances are maintained by a pooling custom allocator ({{red{planned as of 1/10}}}).
+For implementation, the HighLevelModel can be reduced to a compound of interconnected placements. These placement instances are owned and managed by the session; attaching a placement means copying it into the session, thereby creating a new placement-ID. A lookup mechanism for placements and placement relations (PlacementIndex) thus is the actual core of the session data structure; the actual object instances are maintained by a pooling custom allocator ({{red{planned as of 1/10}}}).
 
 !Lifecycle
-MObject lifetime is managed by reference counting; all placements and client side references to an MObject share ownership. The placement instances attached to the session are maintained by the index; thus, as long as an placement exists, the corresponding object automatically stays alive. A bare PlacementRef on the other hand doesn't guarantee anything about the referred placement; when dereferencting this reference token, the index is accessed to re-establish a connection to the object, if possible. The full-fledged MObjectRef is built on top of such a reference token and additionally incorporates a smart-ptr. For the client code this means, that holding a ref ensures existence of the object, while the //placement// of this object still can get removed from the session.
+MObject lifetime is managed by reference counting; all placements and client side references to an MObject share ownership. The placement instances attached to the session are maintained by the index; thus, as long as an placement exists, the corresponding object automatically stays alive. Similarly, assets, as managed by shared-ptrs, stay alive when directly referenced, even after being dropped from the AssetManager. A bare PlacementRef on the other hand doesn't guarantee anything about the referred placement; when dereferencing this reference token, the index is accessed to re-establish a connection to the object, if possible. The full-fledged MObjectRef is built on top of such a reference token and additionally incorporates a smart-ptr. For the client code this means, that holding a ref ensures existence of the object, while the //placement// of this object still can get removed from the session.
 </pre>
 </div>
 <div title="SessionInterface" modifier="Ichthyostega" modified="201002210435" created="200904242108" tags="SessionLogic GuiIntegration design draft discuss" changecount="35">
@@ -4595,17 +4603,25 @@ Instead, we should try to just connect the various subsystems via Interfaces and
 * to shield the rendering code of all complexities of thread communication and synchronization, we use the StateProxy
 </pre>
 </div>
-<div title="StructAsset" modifier="Ichthyostega" modified="200906071813" created="200709221353" tags="def classes img" changecount="9">
-<pre>Structural Assets are intended mainly for internal use, but the user should be able to see and query them. They are not &quot;loaded&quot; or &quot;created&quot; direcly, rather they //leap into existance // by creating or extending some other structures in the session, hence the name. Some of the structural Asset parametrisation can be modified to control of some aspects of the Proc Layer's (default) behaviour.
-* [[Processing Patterns|ProcPatt]] encode information how to set up some parts of the render network to be created automatically: for example, when building a clip, we use the processing pattern how to decode and preprocess the actual media data.
-* [[Tracks|Track]] are one of the dimensions used for organizing the session data. They serve as an Anchor to attach parametrisation of output pipe, overlay mode etc. By [[placing|Placement]] to a track, some media object inherits placement properties from this track.
-* [[Pipes|Pipe]] form &amp;mdash; at least as visible to the user &amp;mdash; the basic building block of the render network, because the latter appears to be a collection of interconnected processing pipelines. (this is the //outward view; // in fact the render network consists of [[nodes|ProcNode]] and is [[built|Builder]] from the Pipes, clips, effects...)
-[&gt;img[Asset Classess|uml/fig131205.png]]
+<div title="StructAsset" modifier="Ichthyostega" modified="201002280044" created="200709221353" tags="def classes img" changecount="18">
+<pre>Structural Assets are intended mainly for internal use, but the user should be able to see and query them. They are not &quot;loaded&quot; or &quot;created&quot; directly, rather they //leap into existence // by creating or extending some other structures in the session, hence the name. Some of the structural Asset parametrisation can be modified to exert control on some aspects of the Proc Layer's (default) behaviour.
+* [[Processing Patterns|ProcPatt]] encode information how to set up some parts of the render network to be created automatically: for example, when building a clip, we use the processing pattern how to decode and pre-process the actual media data.
+* [[Tracks|Track]] are one of the dimensions used for organizing the session data. They serve as an Anchor to attach parametrisation of output pipe, overlay mode etc. By [[placing|Placement]] to a track, a media object inherits placement properties from this track.
+* [[Pipes|Pipe]] form &amp;mdash; at least as visible to the user &amp;mdash; the basic building block of the render network, because the latter appears to be a collection of interconnected processing pipelines. (this is the //outward view; // in fact the render network consists of [[nodes|ProcNode]] and is [[built|Builder]] from the Pipes, clips, effects...)[&gt;img[Asset Classess|uml/fig131205.png]]
+* [[Sequence]] assets act as a façade to the fundamental compound building blocks within the model, a sequence being a collection of clips placed onto a tree of tracks. Sequences, as well as the top-level tracks enclosed will be created automatically on demand. Of course you may create them deliberately. Without binding it to a timeline or meta-clip, a sequence remains invisible.
+* [[Timeline]] assets are the top level structures to access the model; similar to the sequences, they act as façade to relevant parts of the model (BindingMO) and will be created on demand, alongside with a new session if necessary, bound to the new timeline. Likewise, they can be referred by their name-ID 
+
+
 !naming scheme
 The Asset name field of structural Assets utilizes a special naming scheme, which allows to derive the name based on the capabilities of the structural asset. For example, by default all media clips with a given media stream type (e.g. H264) will use the same [[processing Pattern|ProcPatt]] for rendering. {{red{todo: work out the details of this naming scheme??}}}
 
 !querying
-Structural assets can be queried by specifying the specific type (Pipe, Track, ProcPatt) and a query goal, which means in the current implementation just querying for some predicate defined with the structural asset. For example, you can {{{Query&lt;Pipe&gt; (&quot;stream(mpeg)&quot;)}}}, yieliding the first pipe found which declares to have stream type &quot;mpeg&quot;</pre>
+Structural assets can be queried by specifying the specific type (Pipe, Track, ProcPatt) and a query goal. For example, you can {{{Query&lt;Pipe&gt; (&quot;stream(mpeg)&quot;)}}}, yielding the first pipe found which declares to have stream type &quot;mpeg&quot;. The access point for this querying facility is on the ~StructFactory, which (as usual within Lumiera) can be invoked as {{{Struct::create(Query&lt;...&gt; ...}}}. Given such a query, first an attempt is made to satisfy it by retrieving an existing object (which might bind variables as a side effect). On failure, a new structural asset of the requested type will be created to satisfy the given goal.
+
+{{red{Note:}}} in the current implementation no real resolution engine is used (as of 2/2010); rather, we're just able to retrieve a hard-wired answer or create a new asset, simply pattern matching on parts of the query.
+
+&amp;rarr; [[Assets in general|Asset]]
+</pre>
 </div>
 <div title="StyleSheet" modifier="Ichthyostega" modified="200709040043" created="200701131624" tags="MPTWTheme excludeMissing" server.type="file" server.host="file:///home/ct/.homepage/home.html" server.page.revision="200706090017" changecount="14">
 <pre>/*{{{*/
@@ -5778,7 +5794,7 @@ function addKeyDownHandlers(e)
 <div title="TiddlyWiki" modifier="Ichthyostega" created="200706220430" changecount="1">
 <pre>http://tiddlywiki.com/</pre>
 </div>
-<div title="Timeline" modifier="Ichthyostega" modified="201002170358" created="200706250721" tags="def" changecount="9">
+<div title="Timeline" modifier="Ichthyostega" modified="201002270504" created="200706250721" tags="def" changecount="11">
 <pre>Timeline is the top level element within the [[Session (Project)|Session]]. It is visible within a //timeline view// in the GUI and represents the effective (resulting) arrangement of media objects, to be rendered for output or viewed in a Monitor (viewer window). A timeline is comprised of:
 * a time axis in abolute time ({{red{WIP 1/10}}}: not clear if this is an entity or just a conceptual definition) 
 * a PlayControler
@@ -5791,7 +5807,7 @@ Within the Project, there may be ''multiple timelines'', to be viewed and render
 ''Note'': in early drafts of the design (2007) there was an entity called &quot;Timeline&quot; within the [[Fixture]]. This entity seems superfluous and has been dropped. It never got any relevance in existing code and at most was used in some code comments.
 
 !Façade and implementation
-Actually, Timeline is both an interface and acts as façade. Its an interface, because we'll need &quot;timeline views&quot; ({{red{really? is that a reason to create a hierarchy right here, or shouldn't that be rather conceptual?}}}. It is a façade to the raw structures in the model, in this case a {{{Placement&lt;BindingMO&gt;}}} attached immediately below the [[root scope|ModelRootMO]].
+Actually, Timeline is both an interface and acts as façade. Its an interface, because we'll need &quot;timeline views&quot; ({{red{really? is that a reason to create a hierarchy right here, or shouldn't that be rather conceptual?}}}. It is a façade to the raw structures in the model, in this case a {{{Placement&lt;BindingMO&gt;}}} attached immediately below the [[root scope|ModelRootMO]]. The implementation of the timeline(s) is maintained as StructAsset {{red{Really? or should this be a ~MetaAsset??}}} within the AssetManager, managed by shared-ptr.
 </pre>
 </div>
 <div title="TimelineSequences" modifier="Ichthyostega" modified="200811022211" created="200811011836" tags="design draft discuss img" changecount="14">

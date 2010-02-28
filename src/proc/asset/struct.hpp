@@ -75,13 +75,15 @@ namespace asset {
   /**
    * key abstraction: structural asset
    * @todo just a stub, have to figure out what a asset::Struct is
+   * @todo WIP as of 1/2010. Need to integrate Sequences and Timelines
    */
   class Struct : public Asset
     {
     public:
       static StructFactory create;
       
-      virtual const ID<Struct>& getID()  const    ///< @return ID of kind asset::Struct 
+      virtual const ID<Struct>&
+      getID()  const             ///< @return ID of kind asset::Struct 
         { 
           return static_cast<const ID<Struct>& > (Asset::getID()); 
         }
@@ -97,7 +99,7 @@ namespace asset {
     
     
     // definition of ID<Struct> ctors is possible now,
-   //  after providing full definition of class Proc
+   //  after providing full definition of class Struct
 
   inline ID<Struct>::ID(size_t id)          : ID<Asset> (id)           {};
   inline ID<Struct>::ID(const Struct& stru) : ID<Asset> (stru.getID()) {};
@@ -123,7 +125,7 @@ namespace asset {
       typedef P<asset::Struct> PType;
       
       template<class STRU>
-      P<STRU> operator() (const Query<STRU>& query);      ////////////TODO actually do something sensible here 
+      P<STRU> operator() (const Query<STRU>& query);      ////////////TODO for now we're just using a fake config query with preconfigured hardwired answers 
       
       P<Pipe> operator() (string pipeID, string streamID);
       

@@ -39,6 +39,7 @@
  ** @see lumiera::Query
  ** @see mobject::session::DefsManager
  ** @see asset::StructFactory 
+ ** @see fake-configrules.hpp currently used dummy-implementation
  **
  */
 

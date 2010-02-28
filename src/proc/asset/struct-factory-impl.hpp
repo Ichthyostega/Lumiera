@@ -1,8 +1,8 @@
 /*
-  STRUCTFACTORYIMPL.hpp  -  crating structural assets (impl details)
+  STRUCT-FACTORY-IMPL.hpp  -  crating structural assets (impl details)
  
   Copyright (C)         Lumiera.org
-    2008,               Hermann Vosseler <Ichthyostega@web.de>
+    2008-2010,          Hermann Vosseler <Ichthyostega@web.de>
  
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -21,8 +21,10 @@
 */
 
 
-/** @file structfactoryimpl.hpp
+/** @file struct-factory-impl.hpp
  ** Private implementation details of creating various structural assets.
+ ** Details how to fabricate specific kinds of structural assets, based
+ ** on capability informations encoded into a query (goal).
  ** @internal to be used by struct.cpp
  **
  ** @see ConfigQuery
@@ -30,8 +32,8 @@
  */
 
 
-#ifndef ASSET_STRUCTFACTORYIMPL_H
-#define ASSET_STRUCTFACTORYIMPL_H
+#ifndef ASSET_STRUCT_FACTORY_IMPL_H
+#define ASSET_STRUCT_FACTORY_IMPL_H
 
 
 #include "proc/mobject/session.hpp"
@@ -51,8 +53,7 @@ using asset::Query;
 using lumiera::query::LUMIERA_ERROR_CAPABILITY_QUERY;
 using lumiera::query::extractID;
 
-namespace asset
-  {
+namespace asset {
   
   
   template<class STRU>
@@ -85,7 +86,7 @@ namespace asset
    */ 
   class StructFactoryImpl
     {
-
+      
       /** @internal derive a sensible asset ident tuple when creating 
        *  structural asset instances  based on a capability query
        */
@@ -114,8 +115,8 @@ namespace asset
           return Asset::Ident (name, cat );
         }
       
-  
-    
+      
+      
       
       
       
@@ -130,7 +131,8 @@ namespace asset
       
       
       /** make a new structural asset instance.
-       *  default/fallback impl. throws.
+       *  @warning default/fallback implementation just throws.
+       *  @todo a real implementation using a resolution engine.
        */
       template<class STRU>
       STRU* fabricate (const Query<STRU>& caps)
@@ -143,13 +145,13 @@ namespace asset
     
     
     /* ============= specialisations =========================== */
-
+    
     template<>
     Track* 
     StructFactoryImpl::fabricate (const Query<Track>& caps)
       {
         TODO ("actually extract properties/capabilities from the query...");
-        TODO ("make sure AssetManager detects duplicates (currently 4/08 it doesn't)");
+        TODO ("make sure AssetManager detects duplicates (currently 4/08 it doesn't)");       /////////////TICKET #102
         return new Track (createIdent (caps));
       }
     

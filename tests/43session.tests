@@ -214,3 +214,7 @@ END
 
 PLANNED "SessionStructure_test" SessionStructure_test <<END
 END
+
+
+PLANNED "Handling of Timelines and Sequences" TimelineSequenceHandling_test <<END
+END
