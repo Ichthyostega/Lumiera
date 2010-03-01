@@ -101,6 +101,8 @@ namespace lumiera {
       
       answer_->insert (entry_Struct<Pipe> ("pipe(master), stream(video)"));
       item<Pipe> (answer_, "") = item<Pipe>(answer_,"pipe(master), stream(video)");//   use as default
+      
+      answer_->insert (entry_Struct<Pipe> ("pipe(ambiance)"));
     }
     
     
@@ -108,7 +110,7 @@ namespace lumiera {
     
     /* under some circumstances we need to emulate the behaviour *
      * of a real resolution engine in a more detailed manner.    *
-     * These case are hard wired in code below                   */
+     * The code below implements these cases hard wired.         */
     
     /** special case: create a new pipe with matching pipe and stream IDs on the fly when referred... */
     bool 
@@ -130,14 +132,14 @@ namespace lumiera {
       answer_->insert (entry<Pipe> (q, newPipe));
       return true;
     }
-    /** special case: create/retrieve new rocessing pattern for given stream ID... */
+    /** special case: create/retrieve new processing pattern for given stream ID... */
     bool 
-    MockTable::fabricate_ProcPatt_on_demand (Query<const ProcPatt>& q, string const& streamID)
+    MockTable::fabricate_ProcPatt_on_demand (Query<const ProcPatt>& q)
     {
       typedef const ProcPatt cPP;
       typedef WrapReturn<cPP>::Wrapper Ptr;
       
-      Ptr newPP (Struct::create (Query<cPP> ("make(PP), "+q)));
+      Ptr newPP (Struct::create (Query<cPP> ("make(PP), "+q)));   // magic token: bail out and invoke factory for new object
       answer_->insert (entry<cPP> (q, newPP));
       return true;
     }

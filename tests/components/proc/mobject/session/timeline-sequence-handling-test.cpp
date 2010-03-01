@@ -24,8 +24,12 @@
 #include "lib/test/run.hpp"
 #include "proc/mobject/session.hpp"
 //#include "proc/mobject/session/fixture.hpp"             // TODO only temporarily needed
-#include "proc/assetmanager.hpp"
+#include "proc/assetmanager.hpp" ///??
+#include "proc/asset/timeline.hpp"
+#include "proc/asset/sequence.hpp"
+#include "proc/asset/pipe.hpp"
 #include "lib/lumitime.hpp"
+#include "lib/query.hpp"
 #include "lib/util.hpp"
 
 #include <iostream>
@@ -42,13 +46,25 @@ namespace test    {
   using proc_interface::AssetManager;
   using proc_interface::PAsset;
   
+  using asset::PTimeline;
+  using asset::PSequence;
+  using asset::Pipe;
+  
+  using lumiera::Query;
   using lumiera::Time;
   
   
   /********************************************************************************
    * @test verify retrieval and instance management of the top level facade objects
-   *       as integrated with the session and high-level model.
-   * 
+   *       as integrated with the session and high-level model. Both sequences and
+   *       timelines are at the same time structural assets and act as facades
+   *       on the session API. Thus we can query specific instances from the
+   *       struct factory or alternatively access them through the session.
+   *       Moreover we can create new top level elements in the session
+   *       just by querying the respective asset.
+   *       
+   * @todo specify how deletion is handled      
+   *       
    * @see  session-structure-test.cpp
    * @see  Timeline
    * @see  Sequence
@@ -63,52 +79,57 @@ namespace test    {
           ASSERT (Session::current.isUp());
           
           verify_retrieval();
+          verify_creation();
         }
       
       
       void
       verify_retrieval()
         {
+          PSess sess = Session::current;
+          ASSERT (sess->isValid());
+          ASSERT (0 < sess->timelines.size());
           
+          PTimeline defaultTimeline = sess->defaults (Query<Timeline> ());           //////////////////////TICKET #549
+          Query<Timeline> query1 = "id("+defaultTimeline->getNameID()+").";
+          
+          PTimeline queriedTimeline = asset::Struct::create (query1);
+          ASSERT (queriedTimeline);
+          ASSERT (queriedTimeline == defaultTimeline);  // retrieved the existing timeline asset again
+          ASSERT (queriedTimeline == sess->timelines[0]);
+          
+          Query<Sequence> query2 = "id("+defaultTimeline->getSequence()->getNameID()+").";
+          PSequence queriedSequence = asset::Struct::create (query2);
+          ASSERT (queriedSequence);
+          ASSERT (queriedSequence == sess->sequences[0]);
+          ASSERT (queriedSequence == sess->timelines[0]->getSequence());
+          ASSERT (queriedSequence == defaultTimeline->getSequence());
+        }
+      
+      
+      void
+      verify_creation()
+        {
           PSess sess = Session::current;
           ASSERT (sess->isValid());
           
+          uint num_timelines = sess->timelines.size();
+          ASSERT (0 < num_timelines);
           
-          ASSERT (0 < sess->timelines.size());
-          Timeline& til = sess->timelines[0];
+          Query<Timeline> special = "id(aSillyName), sequence("
+                                  + sess->sequences[0]->getNameID()
+                                  + "), pipe(ambiance).";
           
-          ASSERT (0 < sess->sequences.size());
-          Sequence& seq = sess->sequences[0];
+          PTimeline specialTimeline (asset::Struct::create (special));
+          ASSERT (specialTimeline);
+          ASSERT (num_timelines + 1 == sess->timelines.size());
+          ASSERT (specialTimeline == session->timelines[num_timelines]);  // new one got appended at the end
           
-          ASSERT (isSameObject (seq, til.getSequence()));
+          // verify the properties
+          ASSERT (specialTimeline->getSequence() == sess->sequences[0]);  // the already existing sequence got bound into that timeline too
+          ASSERT (contains (specialTimeline->pipes, Pipe::query("pipe(ambiance)")));
           
-          //verify default timeline
-          Axis& axis = til.getAxis();
-          ASSERT (Time(0) == axis.origin());
-          ASSERT (Time(0) == til.length());                   ////////////////////////TICKET #177
-          
-          //verify global pipes
-          //TODO
-          
-          //verify default sequence
-          Track rootTrack = seq.rootTrack();
-          ASSERT (rootTrack->isValid());
-          ASSERT (Time(0) == rootTrack->length());
-          ASSERT (0 == rootTrack->subTracks.size());
-          ASSERT (0 == rootTrack->clips.size());
-          //TODO verify the output slots of the sequence
-          
-          //TODO now use the generic query API to discover the same structure.
-          ASSERT (til == *(sess->all<Timeline>()));
-          ASSERT (seq == *(sess->all<Sequence>()));
-          ASSERT (rootTrack == *(sess->all<Track>()));
-          ASSERT (! sess->all<Clip>());
-          
-          QueryFocus& focus = sess->focus();
-          ASSERT (rootTrack == focus.getObject());
-          focus.navigate (til);
-          ASSERT (til.getBinding() == focus.getObject());
-          ASSERT (rootTrack == *(focus.children()));
+          ASSERT (specialTimeline.use_count() == 3); // we, the AssetManager and the session
         }
     };
   

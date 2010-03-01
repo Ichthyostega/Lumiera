@@ -33,6 +33,7 @@ namespace asset {
   
   /** create an empty default configured Sequence */
   Sequence::Sequence (const Asset::Ident& idi)
+    : Struct (idi)
 //  : track (makeDefaultTrack ())
 //  , clips (0)
   {

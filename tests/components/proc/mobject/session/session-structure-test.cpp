@@ -24,7 +24,9 @@
 #include "lib/test/run.hpp"
 #include "proc/mobject/session.hpp"
 #include "proc/mobject/session/fixture.hpp"             // TODO only temporarily needed
-#include "proc/assetmanager.hpp"
+#include "proc/assetmanager.hpp"          //////??
+#include "proc/asset/timeline.hpp"
+#include "proc/asset/sequence.hpp"
 #include "lib/lumitime.hpp"
 #include "lib/util.hpp"
 
@@ -41,6 +43,9 @@ namespace test    {
   
   using proc_interface::AssetManager;
   using proc_interface::PAsset;
+  
+  using asset::PTimeline;
+  using asset::PSequence;
   
   using lumiera::Time;
   
@@ -88,23 +93,23 @@ namespace test    {
           UNIMPLEMENTED ("how to refer to tracks...");
           
           ASSERT (0 < sess->timelines.size());
-          Timeline& til = sess->timelines[0];
+          PTimeline til = sess->timelines[0];
           
           ASSERT (0 < sess->sequences.size());
-          Sequence& seq = sess->sequences[0];
+          PSequence seq = sess->sequences[0];
           
-          ASSERT (isSameObject (seq, til.getSequence()));
+          ASSERT (isSameObject (seq, til->getSequence()));
           
           //verify default timeline
-          Axis& axis = til.getAxis();
+          Axis& axis = til->getAxis();
           ASSERT (Time(0) == axis.origin());
-          ASSERT (Time(0) == til.length());                   ////////////////////////TICKET #177
+          ASSERT (Time(0) == til->length());                   ////////////////////////TICKET #177
           
           //verify global pipes
           //TODO
           
           //verify default sequence
-          Track rootTrack = seq.rootTrack();
+          Track rootTrack = seq->rootTrack();
           ASSERT (rootTrack->isValid());
           ASSERT (Time(0) == rootTrack->length());
           ASSERT (0 == rootTrack->subTracks.size());

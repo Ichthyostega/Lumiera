@@ -33,6 +33,7 @@ namespace asset {
   
   /** TODO??? */
   Timeline::Timeline (const Asset::Ident& idi)
+    : Struct (idi)
 //  : track (makeDefaultTrack ())
 //  , clips (0)
   {

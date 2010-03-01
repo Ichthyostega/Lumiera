@@ -5794,7 +5794,7 @@ function addKeyDownHandlers(e)
 <div title="TiddlyWiki" modifier="Ichthyostega" created="200706220430" changecount="1">
 <pre>http://tiddlywiki.com/</pre>
 </div>
-<div title="Timeline" modifier="Ichthyostega" modified="201002270504" created="200706250721" tags="def" changecount="11">
+<div title="Timeline" modifier="Ichthyostega" modified="201003010218" created="200706250721" tags="def" changecount="14">
 <pre>Timeline is the top level element within the [[Session (Project)|Session]]. It is visible within a //timeline view// in the GUI and represents the effective (resulting) arrangement of media objects, to be rendered for output or viewed in a Monitor (viewer window). A timeline is comprised of:
 * a time axis in abolute time ({{red{WIP 1/10}}}: not clear if this is an entity or just a conceptual definition) 
 * a PlayControler
@@ -5808,6 +5808,8 @@ Within the Project, there may be ''multiple timelines'', to be viewed and render
 
 !Façade and implementation
 Actually, Timeline is both an interface and acts as façade. Its an interface, because we'll need &quot;timeline views&quot; ({{red{really? is that a reason to create a hierarchy right here, or shouldn't that be rather conceptual?}}}. It is a façade to the raw structures in the model, in this case a {{{Placement&lt;BindingMO&gt;}}} attached immediately below the [[root scope|ModelRootMO]]. The implementation of the timeline(s) is maintained as StructAsset {{red{Really? or should this be a ~MetaAsset??}}} within the AssetManager, managed by shared-ptr.
+
+Besides building on the asset management, implementing Timeline (and Sequence) as StructAsset yields another benefit: ~StructAssets can be retrieved by query, allowing to specify more details of the configuration immediately on creation. //But on the short term, this approach causes problems:// there is no real inference engine integrated into Lumiera yet (as of 2/2010 the plan is to get an early alpha working end to end first). For now we're bound to use the {{{fake-configrules}}} and to rely on a hard wired simulation of the intended behaviour of a real query resolution. Just some special magic queries will work for now, but that's enough to get ahead.
 </pre>
 </div>
 <div title="TimelineSequences" modifier="Ichthyostega" modified="200811022211" created="200811011836" tags="design draft discuss img" changecount="14">

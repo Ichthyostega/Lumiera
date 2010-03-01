@@ -29,8 +29,8 @@
 
 
 
-namespace asset
-  {
+namespace asset {
+  
   using lumiera::P;
   
   class Pipe;
@@ -44,9 +44,9 @@ namespace asset
       ID (size_t id);
       ID (const Pipe&);
     };
-
-    
-    
+  
+  
+  
   /**
    * structural asset corresponding to some 
    * processing pipe for generating media output
@@ -64,13 +64,13 @@ namespace asset
         { 
           return static_cast<const ID<Pipe>& > (Asset::getID()); 
         }
-
+      
       
     protected:
       Pipe (const Asset::Ident&, PProcPatt& wiring, const string& pipeID, wstring shortName =wstring(), wstring longName =wstring()) ;
       friend class StructFactory;
       friend class StructFactoryImpl;
-
+      
     public:
       const string& getPipeID()       const { return pipeID_; }
       const PProcPatt& getProcPatt()  const { return wiringTemplate; }
@@ -87,10 +87,10 @@ namespace asset
   //
   inline ID<Pipe>::ID(size_t id)        : ID<Struct> (id)           {};
   inline ID<Pipe>::ID(const Pipe& pipe) : ID<Struct> (pipe.getID()) {};
-
-      
-
-    
-    
+  
+  
+  
+  
+  
 } // namespace asset
 #endif

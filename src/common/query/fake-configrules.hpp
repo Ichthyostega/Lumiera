@@ -49,12 +49,9 @@
 
 
 
-namespace lumiera
-  {
-  
-  
-  namespace query
-    {
+namespace lumiera {
+  namespace query {
+    
     using asset::Pipe;
     using asset::ProcPatt;
     using asset::PProcPatt;
@@ -69,8 +66,7 @@ namespace lumiera
     
     
     
-    namespace // internal details
-      {
+    namespace { // internal details
       
       /** a traits-class to define the smart-ptr to wrap the result */
       template<class TY>
@@ -81,14 +77,16 @@ namespace lumiera
       
       
       /** helper detecting if a query actually intended to retrieve a "default" object.
-       *  This implementation is quite crude, of cours it would be necessary to actually
+       *  This implementation is quite crude, of course it would be necessary actually to
        *  parse and evaluate the query. @note query is modified if "default" ... */
       inline bool
       is_defaults_query (string& query)
       {
         return !isnil (removeTerm ("default", query));
       }
+      
     } // details (end)
+    
     
     
     /** 
@@ -112,7 +110,7 @@ namespace lumiera
         bool detect_case (typename WrapReturn<TY>::Wrapper&, Query<TY>& q);
         bool fabricate_matching_new_Pipe (Query<Pipe>& q, string const& pipeID, string const& streamID);
         bool fabricate_just_new_Pipe (Query<Pipe>& q);
-        bool fabricate_ProcPatt_on_demand (Query<const ProcPatt>& q, string const& streamID);
+        bool fabricate_ProcPatt_on_demand (Query<const ProcPatt>& q);
         
         template<class TY>
         bool set_new_mock_solution (Query<TY>& q, typename WrapReturn<TY>::Wrapper& candidate);
@@ -184,7 +182,7 @@ namespace lumiera
       if (!isnil (extractID("make", q)))
         return false; // let the query fail here,
                      //  so the invoking factory will go ahead
-                    //   and create a new object.
+                    //   and create a new object. (prevents infinite recursion)
       
       const string pipeID   = extractID("pipe", q);
       const string streamID = extractID("stream", q);
@@ -210,7 +208,7 @@ namespace lumiera
       
       const string streamID = extractID("stream", q);
       if (!candidate && !isnil(streamID))
-          return fabricate_ProcPatt_on_demand (q, streamID);
+          return fabricate_ProcPatt_on_demand (q);
       
       q.clear();
       return false;
@@ -240,13 +238,11 @@ namespace lumiera
         
       public:
         
-        // TODO: implementation of any additional functions on the ConfigRules inteface goes here
+        // TODO: implementation of any additional functions on the ConfigRules interface goes here
       };
       
     
     
   
-  } // namespace query
-    
-} // namespace lumiera
+}} // namespace lumiera::query
 #endif
