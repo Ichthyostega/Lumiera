@@ -2320,6 +2320,43 @@ For the case here in question this seems to be the ''resource allocation is cons
 And, last but not least, doing large scale allocations is the job of the backend. Exceptions being long-lived objects, like the session or the sequences, which are created once and don't bear the danger of causing memory pressure. Besides, the ProcLayer code shouldn't issue &quot;new&quot; and &quot;delete&quot; when it comes in hand, rather it should use some centralized [[Factories]] for all allocation and freeing, so we can redirect these calls down to the backend, which may use pooling or special placement allocators or the like. The rationale is, for modern hardware/architectures, care has to be taken with heap allocations, esp. with many small objects and irregular usage patterns.
 </pre>
 </div>
+<div title="ModelDependencies" modifier="Ichthyostega" modified="201003020510" created="201003020150" tags="SessionLogic spec dynamic draft" changecount="22">
+<pre>Our design of the models (both [[high-level|HighLevelModel]] and [[low-level|LowLevelModel]]) relies partially on dependent objects being kept consitently in sync. Currently (2/2010), __ichthyo__'s assessment is to consider this topic not important and pervasive enough to justify building a dedicated solution, mainly due to the fact of keeping the session implementation mostly single-threaded. Thus, care has to be taken to capture and treat all the relevant dependencies properly at the implementation level.
+
+!known interdependencies
+* the session API relies on two kinds of facade like assets: [[Timeline]] and [[Sequence]], linked to the BindingMO and Track objects within the model respectively.
+* conceptually, the DefaultsManagement and the AssetManager count as being part of the [[global model scope|ModelRootMO]], but, due to their importance, these facilities are accessible through an singleton interface.
+* currently as of 2/2010 the exact dependency of the automation calculation during the render process onto the automation definitions within the HighLevelModel remains to be specified.
+
+!!Timelines and Sequences
+While implemented as StructAsset, additionally we need to assure every instance gets linked to the relevant parts of the model and registered with the session. Contrast this with other kinds of assets, which may just remain enlisted, but never actually used.
+
+;the Session
+:...is linked 1:1 with timelines and sequences. Registration and deregistration is directly tied to creation and destruction.
+: __created__ &amp;rArr; default timeline
+: __destroy__ &amp;rArr; discard all timelines, discard all sequences
+
+;Timeline
+:acts as facade and is implemented by an BindingMO, which can't exist in isolation.
+: __created__ &amp;rArr; create new binding, use either newly created (maybe default) sequence, or use existing sequence
+: __destroy__ &amp;rArr; remove binding, while the bound sequence remains in model.
+;Binding
+:is completely dependent and can't even be created without prerequisites
+: __created__ &amp;rArr; mandates specification of a timeline, while the sequence is optional and will be created if missing
+: __destroy__ &amp;rArr; is implemented by forwarding to timeline destruction
+
+;Sequence
+:is completely dependent on a root-scoped track, can optionally be bound, into one/multiple timelines/VirtualClip, or unbound
+: __created__ &amp;rArr; mandates specification of an track-MO, placed into root scope
+: __destroy__ &amp;rArr; purge the corresponding track from model, including all contents
+: __querying__ &amp;rArr; forwards to creating a root-placed track, unless the queried sequence exists already
+;root-placed Track
+:attachment of a track to root scope is detected magically and causes creation of a Sequence
+: __attached__ to root &amp;rArr; invoke sequence creation
+: __detached__ from root &amp;rArr; find and discard corresponding sequence
+: irrespective if the track exists, is empty, or gets purged entirely, only the connection to root scope counts; thus relocating a track by [[Placement]] might cause its scope with all nested contents to become a sequence of its own or become part of another sequence. As sequences aren't required to be bound into a timeline, they may be present in the model as invisible, passive container
+</pre>
+</div>
 <div title="ModelObjectIdentity" modifier="Ichthyostega" modified="201001072246" created="201001070905" tags="SessionLogic spec draft" changecount="18">
 <pre>When it comes to addressing and distinguishing object instances, there are two different models of treatment, and usually any class can be related to one of these: An object with ''value semantics'' is completely defined through this &quot;value&quot;, and not distinguishable beyond that. Usually, value objects can be copied, handled and passed freely, without any ownership. To the contrary, an object with ''reference semantics'' has an unique identity, even if otherwise completely opaque. It is rather like a facility, &quot;living&quot; somewhere, often owned and managed by another object (or behaving special in some other way). Usually, client code deals with such objects through a reference token (which has value semantics). Care has to be taken with //mutable objects,// as any change might influence the object's identity. While this usually is acceptable for value objects, it is prohibited for objects with reference semantics. These are typically created by //factories// &amp;mdash; and this fabrication is the only process to define the identity.
 
@@ -4064,14 +4101,17 @@ A scope path is a sequence of scopes, where each scope is implemented by a Place
 ** clear a path (reset to default)
 </pre>
 </div>
-<div title="Sequence" modifier="Ichthyostega" modified="201002270500" created="201001252327" tags="def" changecount="9">
+<div title="Sequence" modifier="Ichthyostega" modified="201003020521" created="201001252327" tags="def" changecount="13">
 <pre>A sequence is a collection of media objects, arranged onto a track tree. Sequences are the building blocks within the session. To be visible and editable, a session needs to be bound into a top-level [[Timeline]]. Alternatively, it may be used as a VirtualClip nested within another sequence.
 
-The sequences within the session establish a //logical grouping//, allowing for lots of flexibility. Actually, we can have several sequences within one session, and these sequences can be linked together or not, they may be arranged in temporal order or may constitue a logical grouping of clips used simultanously in compositional work etc. Multiple sequences can use the same or different tracks, and tracks as well are only an organisational (grouping) device. But at any time, we have exactly one [[Fixture]], derived automatically from all sequences and containing the content actually to be rendered.
+The sequences within the session establish a //logical grouping//, allowing for lots of flexibility. Actually, we can have several sequences within one session, and these sequences can be linked together or not, they may be arranged in temporal order or may constitute a logical grouping of clips used simultaneously in compositional work etc. Multiple sequences can use the same or different tracks, and tracks as well are only an organisational (grouping) device. But at any time, we have exactly one [[Fixture]], derived automatically from all sequences and containing the content actually to be rendered.
 &amp;rarr; see considerations about [[the role of Tracks and Pipes in conjunction with the sequences|TrackPipeSequence]]
 
 !!Implementation and lifecycle
-Actually, sequences are façade objects to quite some extent, delegating the implementation of the exposed functionality to the relevant placements and ~MObjects within the model. But they're not completely shallow; each sequence has an distinguishable identity and may hold additional metadata. Thus, stressing this static aspect, sequences are implemented as MetaAsset {{red{TODO: ~StructAsset or ~MetaAsset??}}}, attached to the [[model root|ModelRootMO]] through the AssetManager, accessed and owned by refcounting smart-ptr.
+Actually, sequences are façade objects to quite some extent, delegating the implementation of the exposed functionality to the relevant placements and ~MObjects within the model. But they're not completely shallow; each sequence has an distinguishable identity and may hold additional meta-data. Thus, stressing this static aspect, sequences are implemented as StructAsset, attached to the [[model root|ModelRootMO]] through the AssetManager, simultaneously registered with the session, then accessed and owned by ref-counting smart-ptr.
+
+A sequence is always tied to a root-placed track, it can't exist without such. When moving this track by changing it's [[Placement]], thus disconnecting it from the root scope, the corresponding sequence will be automatically removed from the session and discarded. On the other hand, sequences aren't required to be //bound// &amp;mdash; a sequence might just exist in the model (attached by its track placed into root scope) and thereby remain passive and invisible. Such an unbound sequence can't be edited, displayed in the GUI or rendered, it is only accessible as asset. Of course it can be re-activated by linking it to a new or existing timeline or VirtualClip.
+&amp;rarr; see detailed [[discussion of dependent objects' behaviour|ModelDependencies]]
 </pre>
 </div>
 <div title="Session" modifier="Ichthyostega" modified="200911071800" created="200712100525" tags="def SessionLogic" changecount="8">
@@ -4090,7 +4130,7 @@ The Session object is a singleton &amp;mdash; actually it is a »~PImpl«-Facade
 &amp;rarr; see [[relation of timeline, sequences and objects|TimelineSequences]]
 </pre>
 </div>
-<div title="SessionDataMem" modifier="Ichthyostega" modified="201002270444" created="200904252303" tags="impl design SessionLogic draft" changecount="5">
+<div title="SessionDataMem" modifier="Ichthyostega" modified="201003020149" created="200904252303" tags="impl design SessionLogic draft" changecount="7">
 <pre>The [[Session]] is interconnected with the GUI, the SessionStorage, [[Builder]] and the CommandHandling. The HighLevelModel is an conceptual view of the session. All these dependencies are isolated from the actual data layout in memory, but the latter is shaped by the intended interactions.
 
 {{red{WIP...}}}Currently as of 5/09, this is an ongoing [[implementation and planning effort|PlanningSessionInMem]]
@@ -4105,6 +4145,10 @@ For implementation, the HighLevelModel can be reduced to a compound of interconn
 
 !Lifecycle
 MObject lifetime is managed by reference counting; all placements and client side references to an MObject share ownership. The placement instances attached to the session are maintained by the index; thus, as long as an placement exists, the corresponding object automatically stays alive. Similarly, assets, as managed by shared-ptrs, stay alive when directly referenced, even after being dropped from the AssetManager. A bare PlacementRef on the other hand doesn't guarantee anything about the referred placement; when dereferencing this reference token, the index is accessed to re-establish a connection to the object, if possible. The full-fledged MObjectRef is built on top of such a reference token and additionally incorporates a smart-ptr. For the client code this means, that holding a ref ensures existence of the object, while the //placement// of this object still can get removed from the session.
+
+!Updates and dependent objects
+The session and the models rely on dependent objects beeing kept updated and consistent. This problem can't be solved in a generic fashion &amp;mdash; at least not without using a far more elaborate scheme (e.g. a transaction manager), which is beyond the scope here. Thus, care has to be taken on the implementation level, especially in conjunction with error handling and threading considerations
+&amp;rarr; see [[details here...|ModelDependencies]]
 </pre>
 </div>
 <div title="SessionInterface" modifier="Ichthyostega" modified="201002210435" created="200904242108" tags="SessionLogic GuiIntegration design draft discuss" changecount="35">
@@ -4214,7 +4258,7 @@ As detailed above, {{{Session::current}}} exposes the management / lifecycle API
 {{red{none of the above is implemented as of 11/09}}}
 </pre>
 </div>
-<div title="SessionLogic" modifier="Ichthyostega" modified="201002170351" created="200904242110" tags="overview" changecount="17">
+<div title="SessionLogic" modifier="Ichthyostega" modified="201003020156" created="200904242110" tags="overview" changecount="18">
 <pre>The Session contains all informations, state and objects to be edited by the User (&amp;rarr;[[def|Session]]).
 As such, the SessionInterface is the main entrance point to Proc-Layer functionality, both for the primary EditingOperations and for playback/rendering processes. Proc-Layer state is rooted within the session and guided by the [[session's lifecycle events|SessionLifecycle]].
 Implementation facilities within the Proc-Layer may access a somewhat richer [[session service API|SessionServices]].
@@ -4223,13 +4267,15 @@ Currently (as of 5/09), Ichthyo is [[targeting|PlanningSessionInMem]] a first pr
 
 !Design and handling of Objects within the Session
 Objects are attached and manipulated by [[placements|Placement]]; thus the organisation of these placements is part of the session data layout. Effectively, such a placement within the session behaves like an //instances// of a given object, and at the same time it defines the &quot;non-substantial&quot; properties of the object, e.g. its positions and relations. [[References|MObjectRef]] to these placement entries are handed out as parameters, both down to the [[Builder]] and from there to the render processes within the engine, but also to external parts within the GUI and in plugins. The actual implementation of these object references is built on top of the PlacementRef tags, thus relying on the PlacementIndex the session maintains to keep track of all placements and their relations. While &amp;mdash; using these references &amp;mdash; an external client can access the objects and structures within the session, any actual ''mutations'' should be done based on the CommandHandling: a single operation of a sequence of operations is defined as [[Command]], to be [[dispatched|ProcDispatcher]] as [[mutation operation|SessionMutation]]. Following this policy ensures integration with the&amp;nbsp;SessionStorage and provides (unlimited) [[UNDO|UndoManager]].
+
+On the implementation level, there are some interdependencies to consider between the [[data layout|SessionDataMem]], keeping ModelDependencies updated and integrating with the BuildProcess. While the internals of the session are deliberately kept single-threaded, we can't make much assumptions regarding the ongoing render processes.
 </pre>
 </div>
 <div title="SessionManager" modifier="Ichthyostega" modified="200911090408" created="200911071838" tags="SessionLogic def" changecount="2">
 <pre>The session manager is responsible for maintaining session state as a whole and for conducting the session [[lifecycle|SessionLifecycle]]. The session manager API allows for saving, loading, closing and resetting the session. Accessible through the static interface {{{Session::current}}}, it exposes the actual session as a ~PImpl. Actually, both session and session manager are interfaces.
 </pre>
 </div>
-<div title="SessionMutation" modifier="Ichthyostega" modified="201002220008" created="201002170332" tags="SessionLogic spec decision draft" changecount="2">
+<div title="SessionMutation" modifier="Ichthyostega" modified="201003020143" created="201002170332" tags="SessionLogic spec decision draft" changecount="3">
 <pre>//Any modification of the session will pass through the [[command system|CommandHandling]].//
 Thus any possible mutation comes in two flavours: a raw operation invoked directly on an object instance attached to the model, and a command taking an MObjectRef as parameter. The latter approach &amp;mdash; invoking any mutation through a command &amp;mdash; will pass the mutations trough the ProcDispatcher to ensure the're logged for [[UNDO|UndoManager]] and executed sequentially, which is important, because the session's internals are //not threadsafe by design.// Thus we're kind of enforcing the use of Commands: mutating operations include a check for a &amp;raquo;permission to mutate&amp;laquo;, which is automatically available within a command execution {{red{TODO as of 2/10}}}. Moreover, the session API and the corresponding LayerSeparationInterfaces expose MObjectRef instances, not raw (language) refs.
 
@@ -4237,6 +4283,7 @@ Thus any possible mutation comes in two flavours: a raw operation invoked direct
 * how to get from the raw mutation to the command?
 * how to organise the naming and parametrisation of commands?
 * should we provide the additional flexibility of a binding here?
+* how to keep [[dependencies within the model|ModelDependencies]] up-to date?
 
 !!who defines commands?
 The answer is simple: the one who needs to know about their existence. Because basically commands are invoked //by-name// &amp;mdash; someone needs to be aware of that name and what it denotes. Thus, for any given mutation, there is a place where it's meaningful to specify the details //and// to subsume them under a meaningful term. An entity responsible for this place could then act as the provider of the command in question.
@@ -5794,7 +5841,7 @@ function addKeyDownHandlers(e)
 <div title="TiddlyWiki" modifier="Ichthyostega" created="200706220430" changecount="1">
 <pre>http://tiddlywiki.com/</pre>
 </div>
-<div title="Timeline" modifier="Ichthyostega" modified="201003010218" created="200706250721" tags="def" changecount="14">
+<div title="Timeline" modifier="Ichthyostega" modified="201003020524" created="200706250721" tags="def" changecount="16">
 <pre>Timeline is the top level element within the [[Session (Project)|Session]]. It is visible within a //timeline view// in the GUI and represents the effective (resulting) arrangement of media objects, to be rendered for output or viewed in a Monitor (viewer window). A timeline is comprised of:
 * a time axis in abolute time ({{red{WIP 1/10}}}: not clear if this is an entity or just a conceptual definition) 
 * a PlayControler
@@ -5807,7 +5854,7 @@ Within the Project, there may be ''multiple timelines'', to be viewed and render
 ''Note'': in early drafts of the design (2007) there was an entity called &quot;Timeline&quot; within the [[Fixture]]. This entity seems superfluous and has been dropped. It never got any relevance in existing code and at most was used in some code comments.
 
 !Façade and implementation
-Actually, Timeline is both an interface and acts as façade. Its an interface, because we'll need &quot;timeline views&quot; ({{red{really? is that a reason to create a hierarchy right here, or shouldn't that be rather conceptual?}}}. It is a façade to the raw structures in the model, in this case a {{{Placement&lt;BindingMO&gt;}}} attached immediately below the [[root scope|ModelRootMO]]. The implementation of the timeline(s) is maintained as StructAsset {{red{Really? or should this be a ~MetaAsset??}}} within the AssetManager, managed by shared-ptr.
+Actually, Timeline is both an interface and acts as façade. Its an interface, because we'll need &quot;timeline views&quot; ({{red{really? is that a reason to create a hierarchy right here, or shouldn't that be rather conceptual?}}}. It is a façade to the raw structures in the model, in this case a {{{Placement&lt;BindingMO&gt;}}} attached immediately below the [[root scope|ModelRootMO]]. The implementation of the timeline(s) is maintained as StructAsset within the AssetManager, managed by shared-ptr. It always depends on a [[Sequence]], which might be created automatically as empty container when referring to a timeline.
 
 Besides building on the asset management, implementing Timeline (and Sequence) as StructAsset yields another benefit: ~StructAssets can be retrieved by query, allowing to specify more details of the configuration immediately on creation. //But on the short term, this approach causes problems:// there is no real inference engine integrated into Lumiera yet (as of 2/2010 the plan is to get an early alpha working end to end first). For now we're bound to use the {{{fake-configrules}}} and to rely on a hard wired simulation of the intended behaviour of a real query resolution. Just some special magic queries will work for now, but that's enough to get ahead.
 </pre>
