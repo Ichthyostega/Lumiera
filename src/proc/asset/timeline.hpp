@@ -55,6 +55,9 @@
 #include "proc/asset/struct.hpp"
 //#include "proc/mobject/mobject.hpp"
 //#include "proc/mobject/placement.hpp"
+#include "proc/mobject/mobject-ref.hpp"
+//#include "proc/mobject/session/binding.hpp"         ////TODO avoidable??
+
 
 //#include <vector>
 //#include <string>
@@ -62,8 +65,16 @@
 //using std::vector;
 //using std::string;
 
+namespace mobject {
+namespace session {
+  
+  class Binding;
+}}
+
+
 namespace asset {
   
+  typedef mobject::MORef<mobject::session::Binding> RBinding;
   
   
   /**
@@ -80,6 +91,7 @@ namespace asset {
     
   
   typedef P<Timeline> PTimeline;
+  
   
 ///////////////////////////TODO currently just fleshing the API
   

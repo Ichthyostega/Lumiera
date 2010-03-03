@@ -52,6 +52,7 @@
 #include "proc/asset/struct.hpp"
 //#include "proc/mobject/mobject.hpp"
 //#include "proc/mobject/placement.hpp"
+#include "proc/mobject/mobject-ref.hpp"
 
 //#include <vector>
 //#include <string>
@@ -59,9 +60,17 @@
 //using std::vector;
 //using std::string;
 
+namespace mobject {
+namespace session {
+  
+  class Track;
+}}
+
+
 namespace asset {
   
   
+  typedef mobject::MORef<mobject::session::Track> RTrack;
   
   /**
    * TODO type comment

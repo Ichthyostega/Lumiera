@@ -2,7 +2,7 @@
   MOBJECTFACTORY.hpp  -  creating concrete MObject subclass instances
  
   Copyright (C)         Lumiera.org
-    2008,               Hermann Vosseler <Ichthyostega@web.de>
+    2008-2010,          Hermann Vosseler <Ichthyostega@web.de>
  
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -30,7 +30,7 @@
 
 
 namespace asset {
-
+  
   class Clip;
   class Media;
   class Track;
@@ -39,40 +39,39 @@ namespace asset {
   }
 
 namespace mobject {
-  namespace session {
-    
-    class Root;
-    class Clip;
-    class Track;
-    class Effect;
-    class Label;
-    
-    typedef P<asset::Track> PTrackAsset;
-    
-    class DefsManager;
-
-    class MObjectFactory
-      {
-        /** custom deleter func allowing class Placement    
-          *  to take ownership of MObjct instances
-          */
-        static void deleterFunc (MObject* o) { delete o; }
-        
-      public:
-        
-        Placement<Root>   operator() (DefsManager&);
-        Placement<Clip>   operator() (asset::Clip const&, asset::Media const&);
-        Placement<Clip>   operator() (asset::Clip const&, vector<asset::Media const*>);
-        Placement<Track>  operator() (PTrackAsset&);
-        Placement<Effect> operator() (asset::Effect const&);
-        Placement<Label>  operator() (lib::Symbol);
-        
-        ////////////////////////////////////////////////////////////////////////////////TICKET #414
-      };
-
-
-
-  } // namespace mobject::session
-
-} // namespace mobject
+namespace session {
+  
+  class Root;
+  class Clip;
+  class Track;
+  class Effect;
+  class Label;
+  
+  typedef P<asset::Track> PTrackAsset;
+  
+  class DefsManager;
+  
+  
+  class MObjectFactory
+    {
+      /** custom deleter function allowing
+       *  Placement to take ownership of MObjct instances
+       */
+      static void deleterFunc (MObject* o) { delete o; }
+      
+    public:
+      
+      Placement<Root>   operator() (DefsManager&);
+      Placement<Clip>   operator() (asset::Clip const&, asset::Media const&);
+      Placement<Clip>   operator() (asset::Clip const&, vector<asset::Media const*>);
+      Placement<Track>  operator() (PTrackAsset&);
+      Placement<Effect> operator() (asset::Effect const&);
+      Placement<Label>  operator() (lib::Symbol);
+      
+      ////////////////////////////////////////////////////////////////////////////////TICKET #414
+    };
+  
+  
+  
+}} // namespace mobject::session
 #endif
