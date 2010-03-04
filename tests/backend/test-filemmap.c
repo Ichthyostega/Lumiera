@@ -44,7 +44,7 @@ TESTS_BEGIN
   The first two are not really tests, but some code to check for
   filesystem and kernel semantics which might be moved elsewhere someday
 */
-TEST ("mmap_semantic")
+TEST (mmap_semantic)
 {
   int fd = open (",mmaptest", O_RDWR|O_CREAT, 0666);
   printf ("got fd %d\n", fd);
@@ -78,7 +78,7 @@ TEST ("mmap_semantic")
     }
 }
 
-TEST ("fd_semantic")
+TEST (fd_semantic)
 {
   mkdir (",testdir", 0777); errno = 0;
 
@@ -106,7 +106,7 @@ TEST ("fd_semantic")
 }
 
 
-TEST ("mmap_missing_chunksize")
+TEST (mmap_missing_chunksize)
 {
   lumiera_backend_init ();
   LumieraFile file = lumiera_file_new (",tmp-filemmap", LUMIERA_FILE_CREATE);
@@ -123,7 +123,7 @@ TEST ("mmap_missing_chunksize")
 }
 
 
-TEST ("mmap_forget_releasing")
+TEST (mmap_forget_releasing)
 {
   lumiera_backend_init ();
   LumieraFile file = lumiera_file_new (",tmp-filemmap", LUMIERA_FILE_CREATE);
@@ -142,7 +142,7 @@ TEST ("mmap_forget_releasing")
 }
 
 
-TEST ("mmap_simple")
+TEST (mmap_simple)
 {
   lumiera_backend_init ();
   LumieraFile file = lumiera_file_new (",tmp-filemmap", LUMIERA_FILE_CREATE);
@@ -167,7 +167,7 @@ TEST ("mmap_simple")
 
 
 
-TEST ("mmap_checkout_twice")
+TEST (mmap_checkout_twice)
 {
   lumiera_backend_init ();
   LumieraFile file = lumiera_file_new (",tmp-filemmap", LUMIERA_FILE_CREATE);
@@ -198,7 +198,7 @@ TEST ("mmap_checkout_twice")
 
 
 
-TEST ("mmap_checkout_again")
+TEST (mmap_checkout_again)
 {
   lumiera_backend_init ();
   LumieraFile file = lumiera_file_new (",tmp-filemmap", LUMIERA_FILE_CREATE);
@@ -225,7 +225,7 @@ TEST ("mmap_checkout_again")
 
 
 
-TEST ("mmap_grow_existing_file")
+TEST (mmap_grow_existing_file)
 {
   lumiera_backend_init ();
   LumieraFile file = lumiera_file_new (",tmp-filemmap", LUMIERA_FILE_READWRITE);
@@ -249,7 +249,7 @@ TEST ("mmap_grow_existing_file")
 }
 
 
-TEST ("mmap_readonly_file")
+TEST (mmap_readonly_file)
 {
   lumiera_backend_init ();
   LumieraFile file = lumiera_file_new (",tmp-filemmap", LUMIERA_FILE_READONLY);
@@ -274,7 +274,7 @@ TEST ("mmap_readonly_file")
 
 
 
-TEST ("file_access")
+TEST (file_access)
 {
   lumiera_backend_init ();
   LumieraFile file = lumiera_file_new (",tmp-filemmap", LUMIERA_FILE_RECREATE);
@@ -294,7 +294,7 @@ TEST ("file_access")
 
 
 
-TEST ("mmap_section")
+TEST (mmap_section)
 {
   lumiera_backend_init ();
   LumieraFile file = lumiera_file_new (",tmp-filemmap", LUMIERA_FILE_RECREATE);
@@ -312,7 +312,7 @@ TEST ("mmap_section")
 }
 
 
-TEST ("mmap_section_err")
+TEST (mmap_section_err)
 {
   lumiera_backend_init ();
   LumieraFile file = lumiera_file_new (",tmp-filemmap", LUMIERA_FILE_RECREATE);
@@ -331,7 +331,7 @@ TEST ("mmap_section_err")
 
 
 #if 0
-TEST ("refactored_usage")
+TEST (refactored_usage)
 {
   LumieraFile file = lumiera_file_new ("filename", mode);
 

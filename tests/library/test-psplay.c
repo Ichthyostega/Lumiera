@@ -21,6 +21,7 @@
 
 #include <time.h>
 #include <stdlib.h>
+#include <nobug.h>
 
 #include "lib/psplay.h"
 #include "tests/test.h"
@@ -183,7 +184,7 @@ TEST ("basic")
 
 TEST ("basic_insert_dump")
 {
-  REQUIRE (argv[2]);
+  CHECK (argv[2]);
 
   psplay splay_tree;
   psplay_init (&splay_tree, cmp_fn, key_fn, delete_fn);
@@ -195,7 +196,7 @@ TEST ("basic_insert_dump")
   for (int i = 1; i <= end; ++i)
     {
       sprintf (key, "%d", i);
-      TRACE (TESTS, "insert %s", key);
+      ECHO ("insert %s", key);
       psplay_insert (&splay_tree, (PSplaynode)testitem_new (key), 100);
     }
 
@@ -205,14 +206,14 @@ TEST ("basic_insert_dump")
   for (int i = 1; i <= end; ++i)
     {
       sprintf (key, "%d", i);
-      TRACE (TESTS, "insert %s", key);
+      ECHO ("insert %s", key);
       psplay_remove_key (&splay_tree, key);
       psplay_dump (&splay_tree, stderr);
     }
   for (int i = end; i; --i)
     {
       sprintf (key, "%d", i);
-      TRACE (TESTS, "insert %s", key);
+      ECHO ("insert %s", key);
       psplay_remove_key (&splay_tree, key);
       psplay_dump (&splay_tree, stderr);
     }
@@ -287,7 +288,7 @@ TEST ("insert_find")
 
 TEST ("basic_insert_splay")
 {
-  REQUIRE (argv[2]);
+  CHECK (argv[2]);
 
   psplay splay_tree;
   psplay_init (&splay_tree, cmp_fn, key_fn, delete_fn);
@@ -299,7 +300,7 @@ TEST ("basic_insert_splay")
   for (int i = 1; i <= end; ++i)
     {
       sprintf (key, "%d", i);
-      TRACE (TESTS, "insert %s", key);
+      ECHO ("insert %s", key);
       psplay_insert (&splay_tree, (PSplaynode)testitem_new (key), 100);
     }
 
@@ -316,7 +317,7 @@ TEST ("basic_insert_splay")
 
 TEST ("basic_rand_insert_dump")
 {
-  REQUIRE (argv[2]);
+  CHECK (argv[2]);
 
   psplay splay_tree;
   psplay_init (&splay_tree, cmp_fn, key_fn, delete_fn);
@@ -341,7 +342,7 @@ TEST ("basic_rand_insert_dump")
 
 TEST ("fast_insert")
 {
-  REQUIRE (argv[2]);
+  CHECK (argv[2]);
 
   psplay splay_tree;
   psplay_init (&splay_tree, fcmp_fn, fkey_fn, fdelete_fn);
@@ -365,14 +366,14 @@ TEST ("fast_insert")
 
 TEST ("nonexistant")
 {
-  REQUIRE (argv[2]);
+  CHECK (argv[2]);
 
 }
 
 
 TEST ("insert")
 {
-  REQUIRE (argv[2]);
+  CHECK (argv[2]);
 
 }
 
@@ -380,7 +381,7 @@ TEST ("insert")
 
 TEST ("insert_rand")
 {
-  REQUIRE (argv[2]);
+  CHECK (argv[2]);
 
 }
 
@@ -388,7 +389,7 @@ TEST ("insert_rand")
 
 TEST ("insert_fastcheck")
 {
-  REQUIRE (argv[2]);
+  CHECK (argv[2]);
 
 }
 
@@ -406,16 +407,16 @@ TESTS_END
 static int
 cmp_fn (const void* a, const void* b)
 {
-  REQUIRE (a);
-  REQUIRE (b);
+  CHECK (a);
+  CHECK (b);
   return strcmp (a, b);
 }
 
 static const void*
 key_fn (const PSplaynode node)
 {
-  REQUIRE (node);
-  REQUIRE (((TestItem)node)->key);
+  CHECK (node);
+  CHECK (((TestItem)node)->key);
 
   return ((TestItem)node)->key;
 }
@@ -423,7 +424,7 @@ key_fn (const PSplaynode node)
 static void
 delete_fn (PSplaynode node)
 {
-  REQUIRE (node);
+  CHECK (node);
   testitem_delete ((TestItem) node);
 }
 

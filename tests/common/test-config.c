@@ -28,7 +28,7 @@
 
 TESTS_BEGIN
 
-TEST ("init")
+TEST (init)
 {
 /*  lumiera_config_init ("./"); */
   printf ("initialized\n");
@@ -37,7 +37,7 @@ TEST ("init")
 }
 
 
-TEST ("configitem_simple")
+TEST (configitem_simple)
 {
   REQUIRE (argv[2]);
 
@@ -61,7 +61,7 @@ TEST ("configitem_simple")
 }
 
 
-TEST ("lookup")
+TEST (lookup)
 {
 
   lumiera_config_lookup lookup;
@@ -81,7 +81,7 @@ TEST ("lookup")
 }
 
 
-TEST ("change_value")
+TEST (change_value)
 {
   REQUIRE (argv[2]);
   REQUIRE (argv[3]);
@@ -110,7 +110,7 @@ TEST ("change_value")
 
 
 
-TEST ("basic_set_get")
+TEST (basic_set_get)
 {
   REQUIRE (argv[2]);
   REQUIRE (argv[3]);
@@ -133,7 +133,7 @@ TEST ("basic_set_get")
 
 
 
-TEST ("number_get")
+TEST (number_get)
 {
   REQUIRE (argv[2]);
   REQUIRE (argv[3]);
@@ -151,7 +151,7 @@ TEST ("number_get")
 }
 
 
-TEST ("number_get_nodefault")
+TEST (number_get_nodefault)
 {
   REQUIRE (argv[2]);
 
@@ -166,7 +166,7 @@ TEST ("number_get_nodefault")
 }
 
 
-TEST ("number_set")
+TEST (number_set)
 {
   REQUIRE (argv[2]);
   REQUIRE (argv[3]);
@@ -185,7 +185,7 @@ TEST ("number_set")
 }
 
 
-TEST ("string_get")
+TEST (string_get)
 {
   REQUIRE (argv[2]);
   REQUIRE (argv[3]);
@@ -203,7 +203,7 @@ TEST ("string_get")
 }
 
 
-TEST ("string_set")
+TEST (string_set)
 {
   REQUIRE (argv[2]);
   REQUIRE (argv[3]);
@@ -221,7 +221,7 @@ TEST ("string_set")
 }
 
 
-TEST ("word_get")
+TEST (word_get)
 {
   REQUIRE (argv[2]);
   REQUIRE (argv[3]);
@@ -239,7 +239,7 @@ TEST ("word_get")
 }
 
 
-TEST ("word_set")
+TEST (word_set)
 {
   REQUIRE (argv[2]);
   REQUIRE (argv[3]);
@@ -257,7 +257,7 @@ TEST ("word_set")
 }
 
 
-TEST ("configitem_simple_ctor_dtor")
+TEST (configitem_simple_ctor_dtor)
 {
   REQUIRE (argv[2]);
 
@@ -269,7 +269,7 @@ TEST ("configitem_simple_ctor_dtor")
 }
 
 
-TEST ("configitem_simple_content_check")
+TEST (configitem_simple_content_check)
 {
   REQUIRE (argv[2]);
 
@@ -298,7 +298,7 @@ TEST ("configitem_simple_content_check")
 }
 
 
-TEST ("wordlist_get_nth")
+TEST (wordlist_get_nth)
 {
   REQUIRE (argv[2]);
   REQUIRE (argv[3]);
@@ -315,7 +315,7 @@ TEST ("wordlist_get_nth")
 }
 
 
-TEST ("wordlist_find")
+TEST (wordlist_find)
 {
   REQUIRE (argv[2]);
   REQUIRE (argv[3]);
@@ -332,7 +332,7 @@ TEST ("wordlist_find")
 }
 
 
-TEST ("wordlist_replace")
+TEST (wordlist_replace)
 {
   REQUIRE (argv[2]);
   REQUIRE (argv[3]);
@@ -354,7 +354,7 @@ TEST ("wordlist_replace")
 }
 
 
-TEST ("wordlist_add")
+TEST (wordlist_add)
 {
   REQUIRE (argv[2]);
   REQUIRE (argv[3]);

@@ -48,14 +48,14 @@ test_memory_handler (enum lumiera_resource_try itr, void* data, void* context)
 
 TESTS_BEGIN
 
-TEST ("basic")
+TEST (basic)
 {
   lumiera_resourcecollector_init ();
   lumiera_resourcecollector_register_handler (LUMIERA_RESOURCE_MEMORY, test_memory_handler, NULL);
   lumiera_resourcecollector_destroy ();
 }
 
-TEST ("memory_collection_mockup")
+TEST (memory_collection_mockup)
 {
   REQUIRE (argv[2]);
   lumiera_resourcecollector_init ();

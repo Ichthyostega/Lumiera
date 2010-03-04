@@ -19,15 +19,14 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
-//#include <stdio.h>
-//#include <string.h>
+#include <nobug.h>
 
 #include "lib/llist.h"
 #include "tests/test.h"
 
 TESTS_BEGIN
 
-TEST ("basic")
+TEST (basic)
 {
   LLIST_AUTO (node1);
 
@@ -38,7 +37,7 @@ TEST ("basic")
   printf ("%d\n", llist_is_empty (&node2));
 }
 
-TEST ("nodeinsert")
+TEST (nodeinsert)
 {
   LLIST_AUTO (list);
   LLIST_AUTO (node1);
@@ -59,7 +58,7 @@ TEST ("nodeinsert")
   printf ("%d\n", llist_count (&list));
 }
 
-TEST ("predicates")
+TEST (predicates)
 {
   LLIST_AUTO (list);
   LLIST_AUTO (node1);
@@ -86,7 +85,7 @@ TEST ("predicates")
   printf ("%d\n", llist_is_before_after (&list, &node1, &nil));
 }
 
-TEST ("unlink")
+TEST (unlink)
 {
   LLIST_AUTO (list);
   LLIST_AUTO (node1);
@@ -128,7 +127,7 @@ TEST ("unlink")
   printf ("%d\n", llist_is_empty (&nil));
 }
 
-TEST ("whiles")
+TEST (whiles)
 {
   LLIST_AUTO (list);
   LLIST_AUTO (node1);
@@ -185,7 +184,7 @@ TEST ("whiles")
 }
 
 
-TEST ("relocate")
+TEST (relocate)
 {
   llist source;
   llist_init (&source);

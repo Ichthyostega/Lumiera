@@ -23,6 +23,7 @@
 #include "tests/test.h"
 
 #include <sys/time.h>
+#include <nobug.h>
 
 typedef struct item {
     int key;
@@ -60,36 +61,36 @@ TESTS_BEGIN
  *      int slist_is_before_after( const_SList list, const_SList before, const_SList after )
  */
 
-TEST( "basic" ) {
+TEST (basic) {
 
     SLIST_AUTO( listX );
     slist listY;
     SLIST_AUTO( nodeA );
     SLIST_AUTO( nodeB );
 
-    printf( "%d\n", slist_is_end( &listX, &listX ) );
+    ECHO ("%d", slist_is_end( &listX, &listX ) );
     
     slist_init( &listY );
 
-    printf( "%d\n", slist_is_empty( &listY ) );
+    ECHO ("%d", slist_is_empty( &listY ) );
     
     slist_insert( &listX, &nodeA );
-    printf( "%d\n", slist_is_empty( &listX ) );
-    printf( "%d\n", slist_is_single( &listX ) );
-    printf( "%d\n", slist_is_head( &listX, &nodeA ) );
-    printf( "%d\n", slist_is_end( &listX, &nodeA ) );
-    printf( "%d\n", slist_is_member( &listX, &nodeA ) );
-    printf( "%d\n", slist_is_member( &listX, &nodeB ) );
+    ECHO ("%d", slist_is_empty( &listX ) );
+    ECHO ("%d", slist_is_single( &listX ) );
+    ECHO ("%d", slist_is_head( &listX, &nodeA ) );
+    ECHO ("%d", slist_is_end( &listX, &nodeA ) );
+    ECHO ("%d", slist_is_member( &listX, &nodeA ) );
+    ECHO ("%d", slist_is_member( &listX, &nodeB ) );
 
     slist_insert( &nodeA, &nodeB );
-    printf( "%d\n", slist_is_empty( &listX ) );
-    printf( "%d\n", slist_is_single( &listX ) );
-    printf( "%d\n", slist_is_head( &listX, &nodeB ) );
-    printf( "%d\n", slist_is_end( &listX, &nodeB ) );
-    printf( "%d\n", slist_is_member( &listX, &nodeB ) );
+    ECHO ("%d", slist_is_empty( &listX ) );
+    ECHO ("%d", slist_is_single( &listX ) );
+    ECHO ("%d", slist_is_head( &listX, &nodeB ) );
+    ECHO ("%d", slist_is_end( &listX, &nodeB ) );
+    ECHO ("%d", slist_is_member( &listX, &nodeB ) );
 
-    printf( "%d\n", slist_is_before_after( &listX, &nodeA, &nodeB ) );
-    printf( "%d\n", slist_is_before_after( &listX, &nodeB, &nodeA ) );
+    ECHO ("%d", slist_is_before_after( &listX, &nodeA, &nodeB ) );
+    ECHO ("%d", slist_is_before_after( &listX, &nodeB, &nodeA ) );
 
 }
 
@@ -102,7 +103,7 @@ TEST( "basic" ) {
  *      SList slist_unlink( SList list, SList node )
  */
 
-TEST( "insert_delete" ) {
+TEST (insert_delete) {
 
     SLIST_AUTO( listX );
     SLIST_AUTO( nodeA );
@@ -112,34 +113,34 @@ TEST( "insert_delete" ) {
     slist_insert_head( &listX, &nodeA );
     slist_insert( &nodeA, &nodeB );
     slist_insert( &nodeB, &nodeC );
-    printf( "%d\n", slist_next( &listX ) == &nodeA );
-    printf( "%d\n", slist_next( &nodeA ) == &nodeB );
-    printf( "%d\n", slist_next( &nodeB ) == &nodeC );
-    printf( "%d\n", slist_next( &nodeC ) == &listX );
+    ECHO ("%d", slist_next( &listX ) == &nodeA );
+    ECHO ("%d", slist_next( &nodeA ) == &nodeB );
+    ECHO ("%d", slist_next( &nodeB ) == &nodeC );
+    ECHO ("%d", slist_next( &nodeC ) == &listX );
 
     slist_unlink( &listX, &nodeA );
-    printf( "%d\n", slist_next( &listX ) == &nodeB );
+    ECHO ("%d", slist_next( &listX ) == &nodeB );
 
     slist_insert( &listX, &nodeA );
-    printf( "%d\n", slist_next( &listX ) == &nodeA );
+    ECHO ("%d", slist_next( &listX ) == &nodeA );
 
     SLIST_AUTO( listY );
 
     slist_insert_list( &listY, &listX );
-    printf( "%d\n", slist_is_empty( &listX ) );
-    printf( "%d\n", slist_next( &listY ) == &nodeA );
-    printf( "%d\n", slist_next( &nodeA ) == &nodeB );
-    printf( "%d\n", slist_next( &nodeB ) == &nodeC );
-    printf( "%d\n", slist_next( &nodeC ) == &listY );
+    ECHO ("%d", slist_is_empty( &listX ) );
+    ECHO ("%d", slist_next( &listY ) == &nodeA );
+    ECHO ("%d", slist_next( &nodeA ) == &nodeB );
+    ECHO ("%d", slist_next( &nodeB ) == &nodeC );
+    ECHO ("%d", slist_next( &nodeC ) == &listY );
 
     slist_insert_range( &listX, &nodeA, &nodeB );
-    printf( "%d\n", slist_next( &listX ) == &nodeA );
-    printf( "%d\n", slist_next( &nodeA ) == &nodeB );
-    printf( "%d\n", slist_next( &nodeB ) == &listX );
+    ECHO ("%d", slist_next( &listX ) == &nodeA );
+    ECHO ("%d", slist_next( &nodeA ) == &nodeB );
+    ECHO ("%d", slist_next( &nodeB ) == &listX );
 
-    printf( "%d\n", slist_is_single( &listY ) );
-    printf( "%d\n", slist_next( &listY ) == &nodeC );
-    printf( "%d\n", slist_next( &nodeC ) == &listY );
+    ECHO ("%d", slist_is_single( &listY ) );
+    ECHO ("%d", slist_next( &listY ) == &nodeC );
+    ECHO ("%d", slist_next( &nodeC ) == &listY );
     
 }
 
@@ -152,7 +153,7 @@ TEST( "insert_delete" ) {
  *      void slist_forward( SList_ref node )
  */
 
-TEST( "movement" ) {
+TEST (movement) {
 
     SLIST_AUTO( listX );
     SLIST_AUTO( nodeA );
@@ -163,25 +164,25 @@ TEST( "movement" ) {
     slist_insert( &nodeA, &nodeB );
     slist_insert( &nodeB, &nodeC );
 
-    printf( "%d\n", slist_next( &listX ) == &nodeA );
-    printf( "%d\n", slist_next( &nodeA ) == &nodeB );
-    printf( "%d\n", slist_next( &nodeB ) == &nodeC );
-    printf( "%d\n", slist_next( &nodeC ) == &listX );
+    ECHO ("%d", slist_next( &listX ) == &nodeA );
+    ECHO ("%d", slist_next( &nodeA ) == &nodeB );
+    ECHO ("%d", slist_next( &nodeB ) == &nodeC );
+    ECHO ("%d", slist_next( &nodeC ) == &listX );
 
-    printf( "%d\n", slist_prev( &listX, &listX ) == &nodeC );
-    printf( "%d\n", slist_prev( &listX, &nodeC ) == &nodeB );
-    printf( "%d\n", slist_prev( &listX, &nodeB ) == &nodeA );
-    printf( "%d\n", slist_prev( &listX, &nodeA ) == &listX );
+    ECHO ("%d", slist_prev( &listX, &listX ) == &nodeC );
+    ECHO ("%d", slist_prev( &listX, &nodeC ) == &nodeB );
+    ECHO ("%d", slist_prev( &listX, &nodeB ) == &nodeA );
+    ECHO ("%d", slist_prev( &listX, &nodeA ) == &listX );
     
     slist_advance( &listX, &nodeA );
-    printf( "%d\n", slist_next( &listX ) == &nodeB );
-    printf( "%d\n", slist_next( &nodeB ) == &nodeA );
-    printf( "%d\n", slist_next( &nodeA ) == &nodeC );
-    printf( "%d\n", slist_next( &nodeC ) == &listX );
+    ECHO ("%d", slist_next( &listX ) == &nodeB );
+    ECHO ("%d", slist_next( &nodeB ) == &nodeA );
+    ECHO ("%d", slist_next( &nodeA ) == &nodeC );
+    ECHO ("%d", slist_next( &nodeC ) == &listX );
 
     SList node = &listX;
     slist_forward( &node );
-    printf( "%d\n", node == &nodeB );
+    ECHO ("%d", node == &nodeB );
     
 }
 
@@ -193,7 +194,7 @@ TEST( "movement" ) {
  *      SLIST_WHILE_HEAD( list, head )
  */
 
-TEST( "enumerations" ) {
+TEST (enumerations) {
 
     SLIST_AUTO( list );
     
@@ -214,28 +215,28 @@ TEST( "enumerations" ) {
 
     SLIST_FOREACH ( &list, node ) {
         item_t* item = ( item_t* ) SLIST_TO_STRUCTP( node, item_t, list );
-        printf( "%c ", item -> key );
+        ECHO ("%c", item -> key );
     }
-    printf( ".\n" );
+    ECHO ("," );
 
-    printf( "---\n" );
+    ECHO ("---" );
 
     SLIST_FORRANGE ( &nodeB.list, &nodeD.list, node ) {
         item_t* item = ( item_t* ) SLIST_TO_STRUCTP( node, item_t, list );
-        printf( "%c ", item -> key );
+        ECHO ("%c", item -> key );
     }
-    printf( ".\n" );
+    ECHO ("," );
 
-    printf( "---\n" );
+    ECHO ("---" );
 
     SLIST_WHILE_HEAD ( &list, head ) {
         item_t* item = ( item_t* ) SLIST_TO_STRUCTP( head, item_t, list );
-        printf( "%c ", item -> key );
+        ECHO ("%c ", item -> key );
         slist_unlink( &list, head );
     }
-    printf( ".\n" );
+    ECHO ("," );
 
-    printf( "%d\n", slist_is_empty( &list ) );
+    ECHO ("%d", slist_is_empty( &list ) );
     
 }
 
@@ -246,7 +247,7 @@ TEST( "enumerations" ) {
  *      SList slist_get_nth_stop( SList list, int n, const_SList stop )
  */
 
-TEST( "count" ) {
+TEST (count) {
 
     SLIST_AUTO( list );
     SLIST_AUTO( nodeA );
@@ -257,9 +258,9 @@ TEST( "count" ) {
     slist_insert( &nodeA, &nodeB );
     slist_insert( &nodeB, &nodeC );
 
-    printf( "%u\n", slist_count( &list ) );
-    printf( "%d\n", slist_get_nth( &list, 3 ) == &nodeC );
-    printf( "%d\n", slist_get_nth_stop( &list, 3, &nodeC ) == NULL );
+    ECHO ("%u", slist_count( &list ) );
+    ECHO ("%d", slist_get_nth( &list, 3 ) == &nodeC );
+    ECHO ("%d", slist_get_nth_stop( &list, 3, &nodeC ) == NULL );
     
 }
 
@@ -268,7 +269,7 @@ TEST( "count" ) {
  *      SList slist_sort( SList list, slist_cmpfn cmp )
  */
 
-TEST( "sort" ) {
+TEST (sort) {
 
     srand( time( NULL ) );
     
@@ -315,7 +316,7 @@ TEST( "sort" ) {
  *      SList slist_sfind( const_SList list, const_SList pattern, slist_cmpfn cmp )
  */
 
-TEST( "search" ) {
+TEST (search) {
 
     SLIST_AUTO( list );
     
@@ -337,12 +338,12 @@ TEST( "search" ) {
 
     nodeX.key = 'C';
 
-    printf( "%d\n", slist_find( &list, &nodeX.list, cmp ) == &nodeC.list );
-    printf( "%d\n", slist_ufind( &list, &nodeX.list, cmp ) == &nodeC.list );
-    printf( "%d\n", slist_next( &nodeC.list ) == &nodeA.list );
+    ECHO ("%d", slist_find( &list, &nodeX.list, cmp ) == &nodeC.list );
+    ECHO ("%d", slist_ufind( &list, &nodeX.list, cmp ) == &nodeC.list );
+    ECHO ("%d", slist_next( &nodeC.list ) == &nodeA.list );
 
     nodeX.key = 'A';
-    printf( "%d\n", slist_sfind( &list, &nodeX.list, cmp ) == NULL );
+    ECHO ("%d", slist_sfind( &list, &nodeX.list, cmp ) == NULL );
     
 }
 

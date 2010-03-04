@@ -24,13 +24,13 @@
 
 TESTS_BEGIN
 
-TEST ("allocation0")
+TEST (allocation0)
 {
   lumiera_malloc (0);
   NOTREACHED();
 }
 
-TEST ("allocation1024")
+TEST (allocation1024)
 {
   void* data[1024];
   for (int i = 0; i < 1024; ++i)
@@ -44,7 +44,7 @@ TEST ("allocation1024")
     }
 }
 
-TEST ("allocationtoobig")
+TEST (allocationtoobig)
 {
   struct rlimit rl;
   rl.rlim_cur = 100*1024*1024;
@@ -54,21 +54,16 @@ TEST ("allocationtoobig")
   NOTREACHED();
 }
 
-TEST ("streq")
+TEST (streq)
 {
-  if (!lumiera_streq ("foo", "foo"))
-    LUMIERA_DIE (TEST);
-  if (!lumiera_streq (NULL, NULL))
-    LUMIERA_DIE (TEST);
-  if (!!lumiera_streq (NULL, "foo"))
-    LUMIERA_DIE (TEST);
-  if (!!lumiera_streq ("foo", NULL))
-    LUMIERA_DIE (TEST);
-  if (!!lumiera_streq ("foo", "bar"))
-    LUMIERA_DIE (TEST);
+  CHECK (lumiera_streq ("foo", "foo"));
+  CHECK (lumiera_streq (NULL, NULL));
+  CHECK (!lumiera_streq (NULL, "foo"));
+  CHECK (!lumiera_streq ("foo", NULL));
+  CHECK (!lumiera_streq ("foo", "bar"));
 }
 
-TEST ("tmpbuf")
+TEST (tmpbuf)
 {
   for (int i = 0; i < 256; ++i)
     {
@@ -82,21 +77,21 @@ TEST ("tmpbuf")
 }
 
 
-TEST ("tr0")
+TEST (tr0)
 {
   char* r = lumiera_tmpbuf_tr (argv[2], "abcdeABCDE0123456789", "ABCDEABCDE0123456789", NULL);
   printf("%s\n", r?r:"failed");
 }
 
 
-TEST ("tr")
+TEST (tr)
 {
   char* r = lumiera_tmpbuf_tr (argv[2], "abcdeABCDE0123456789", "ABCDEABCDE0123456789", "");
   printf("%s\n", r?r:"failed");
 }
 
 
-TEST ("tr_")
+TEST (tr_)
 {
   printf("%s\n", lumiera_tmpbuf_tr (argv[2], "abcdeABCDE0123456789", "ABCDEABCDE0123456789", "_"));
 }

@@ -45,7 +45,7 @@ dtor (void* o)
 
 TESTS_BEGIN
 
-TEST ("basic")
+TEST (basic)
 {
   mpool mypool;
   mpool_init (&mypool, sizeof(void*), 10, dtor);
@@ -68,7 +68,7 @@ TEST ("basic")
 }
 
 
-TEST ("destroy")
+TEST (destroy)
 {
   mpool mypool;
   mpool_init (&mypool, sizeof(void*), 10, dtor);
@@ -86,7 +86,7 @@ TEST ("destroy")
 }
 
 
-TEST ("clusters")
+TEST (clusters)
 {
   mpool mypool;
   mpool_init (&mypool, sizeof(void*), 2, dtor);
@@ -107,7 +107,7 @@ TEST ("clusters")
 }
 
 
-TEST ("clusters_big")
+TEST (clusters_big)
 {
   mpool mypool;
   mpool_init (&mypool, sizeof(void*), 200, dtor);
@@ -128,7 +128,7 @@ TEST ("clusters_big")
 }
 
 
-TEST ("alloc_free")
+TEST (alloc_free)
 {
   mpool mypool;
   mpool_init (&mypool, 24, 4, dtor);
@@ -155,7 +155,7 @@ TEST ("alloc_free")
 }
 
 
-TEST ("alloc_free_big")
+TEST (alloc_free_big)
 {
   mpool mypool;
   mpool_init (&mypool, 24, 4, dtor);
@@ -185,7 +185,7 @@ TEST ("alloc_free_big")
 
 
 
-TEST ("reserve")
+TEST (reserve)
 {
 }
 
@@ -193,7 +193,7 @@ TEST ("reserve")
 /*
   benchmark mpool vs malloc, first only the allocation/free itself with some necessary llist ops
 */
-TEST ("bench_mpool")
+TEST (bench_mpool)
 {
   mpool mypool;
   mpool_init (&mypool, sizeof(struct teststruct), 2000, NULL);
@@ -222,7 +222,7 @@ TEST ("bench_mpool")
 }
 
 
-TEST ("bench_malloc")
+TEST (bench_malloc)
 {
   mpool mypool;
   mpool_init (&mypool, sizeof(llist), 2000, NULL);
@@ -256,7 +256,7 @@ TEST ("bench_malloc")
   - allocate list nodes which have 2 data members as payload
   - there is a 25% chance at each alloc that the head of the list gets deleted
 */
-TEST ("bench_mpool_sim")
+TEST (bench_mpool_sim)
 {
   mpool mypool;
   mpool_init (&mypool, sizeof(struct teststruct), 2000, NULL);
@@ -298,7 +298,7 @@ TEST ("bench_mpool_sim")
 }
 
 
-TEST ("bench_malloc_sim")
+TEST (bench_malloc_sim)
 {
   mpool mypool;
   mpool_init (&mypool, sizeof(llist), 2000, NULL);

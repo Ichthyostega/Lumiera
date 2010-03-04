@@ -53,7 +53,7 @@ LUMIERA_INTERFACE_DECLARE (lumieraorg_testexample_void, 0
 void
 testfunc (const char* message)
 {
-  printf ("Called as '%s'\n", message);
+  ECHO ("Called as '%s'", message);
 }
 
 
@@ -62,7 +62,7 @@ LumieraInterface
 testacquire (LumieraInterface self, LumieraInterface interface)
 {
   (void) interface;
-  printf ("Acquire %s_%d_%s\n", self->interface, self->version, self->name);
+  ECHO ("Acquire %s_%d_%s", self->interface, self->version, self->name);
   return self;
 }
 
@@ -70,7 +70,7 @@ testacquire (LumieraInterface self, LumieraInterface interface)
 void
 testrelease (LumieraInterface self)
 {
-  printf ("Release %s_%d_%s\n", self->interface, self->version, self->name);
+  ECHO ("Release %s_%d_%s", self->interface, self->version, self->name);
 }
 
 /*
@@ -170,7 +170,7 @@ LumieraInterface
 testacquire_one (LumieraInterface self, LumieraInterface interface)
 {
   (void) interface;
-  TRACE (TESTS, "Acquire one %s_%d_%s", self->interface, self->version, self->name);
+  ECHO ("Acquire one %s_%d_%s", self->interface, self->version, self->name);
   one_keeps_two = LUMIERA_INTERFACE_OPEN (lumieraorg_testexample_void, 0, 0, lumieraorg_dependencytest_two);
   one_keeps_three = LUMIERA_INTERFACE_OPEN (lumieraorg_testexample_void, 0, 0, lumieraorg_dependencytest_three);
   return self;
@@ -179,7 +179,7 @@ testacquire_one (LumieraInterface self, LumieraInterface interface)
 void
 testrelease_one (LumieraInterface self)
 {
-  TRACE (TESTS, "Release one %s_%d_%s", self->interface, self->version, self->name);
+  ECHO ("Release one %s_%d_%s", self->interface, self->version, self->name);
   lumiera_interface_close ((LumieraInterface)one_keeps_two);
   lumiera_interface_close ((LumieraInterface)one_keeps_three);
 }
@@ -191,7 +191,7 @@ LumieraInterface
 testacquire_two (LumieraInterface self, LumieraInterface interface)
 {
   (void) interface;
-  TRACE (TESTS, "Acquire two %s_%d_%s", self->interface, self->version, self->name);
+  ECHO ("Acquire two %s_%d_%s", self->interface, self->version, self->name);
   two_keeps_one = LUMIERA_INTERFACE_OPEN (lumieraorg_testexample_void, 0, 0, lumieraorg_dependencytest_one);
   two_keeps_four = LUMIERA_INTERFACE_OPEN (lumieraorg_testexample_void, 0, 0, lumieraorg_dependencytest_four);
   return self;
@@ -200,7 +200,7 @@ testacquire_two (LumieraInterface self, LumieraInterface interface)
 void
 testrelease_two (LumieraInterface self)
 {
-  TRACE (TESTS, "Release two %s_%d_%s", self->interface, self->version, self->name);
+  ECHO ("Release two %s_%d_%s", self->interface, self->version, self->name);
   lumiera_interface_close ((LumieraInterface)two_keeps_one);
   lumiera_interface_close ((LumieraInterface)two_keeps_four);
 }
@@ -212,7 +212,7 @@ LumieraInterface
 testacquire_three (LumieraInterface self, LumieraInterface interface)
 {
   (void) interface;
-  TRACE (TESTS, "Acquire three %s_%d_%s", self->interface, self->version, self->name);
+  ECHO ("Acquire three %s_%d_%s", self->interface, self->version, self->name);
   three_keeps_two = LUMIERA_INTERFACE_OPEN (lumieraorg_testexample_void, 0, 0, lumieraorg_dependencytest_two);
   three_keeps_four = LUMIERA_INTERFACE_OPEN (lumieraorg_testexample_void, 0, 0, lumieraorg_dependencytest_four);
   return self;
@@ -221,7 +221,7 @@ testacquire_three (LumieraInterface self, LumieraInterface interface)
 void
 testrelease_three (LumieraInterface self)
 {
-  TRACE (TESTS, "Release three %s_%d_%s", self->interface, self->version, self->name);
+  ECHO ("Release three %s_%d_%s", self->interface, self->version, self->name);
   lumiera_interface_close ((LumieraInterface)three_keeps_two);
   lumiera_interface_close ((LumieraInterface)three_keeps_four);
 }
@@ -234,7 +234,7 @@ LumieraInterface
 testacquire_four (LumieraInterface self, LumieraInterface interface)
 {
   (void) interface;
-  TRACE (TESTS, "Acquire four %s_%d_%s", self->interface, self->version, self->name);
+  ECHO ("Acquire four %s_%d_%s", self->interface, self->version, self->name);
   four_keeps_one = LUMIERA_INTERFACE_OPEN (lumieraorg_testexample_void, 0, 0, lumieraorg_dependencytest_one);
   four_keeps_two = LUMIERA_INTERFACE_OPEN (lumieraorg_testexample_void, 0, 0, lumieraorg_dependencytest_two);
   four_keeps_three = LUMIERA_INTERFACE_OPEN (lumieraorg_testexample_void, 0, 0, lumieraorg_dependencytest_three);
@@ -244,7 +244,7 @@ testacquire_four (LumieraInterface self, LumieraInterface interface)
 void
 testrelease_four (LumieraInterface self)
 {
-  TRACE (TESTS, "Release four %s_%d_%s", self->interface, self->version, self->name);
+  ECHO ("Release four %s_%d_%s", self->interface, self->version, self->name);
   lumiera_interface_close ((LumieraInterface)four_keeps_one);
   lumiera_interface_close ((LumieraInterface)four_keeps_two);
   lumiera_interface_close ((LumieraInterface)four_keeps_three);
@@ -301,7 +301,7 @@ LUMIERA_EXPORT (
 
 TESTS_BEGIN
 
-TEST ("basic")
+TEST (basic)
 {
   lumiera_interfaceregistry_init ();
 
@@ -325,14 +325,14 @@ TEST ("basic")
   lumiera_interfaceregistry_destroy ();
 }
 
-TEST ("open_close")
+TEST (open_close)
 {
   lumiera_interfaceregistry_init ();
   lumiera_interfaceregistry_bulkregister_interfaces (lumiera_plugin_interfaces(), NULL);
 
   LUMIERA_INTERFACE_HANDLE(lumieraorg_testexample_one, 0) handle =
     LUMIERA_INTERFACE_OPEN (lumieraorg_testexample_one, 0, 0, lumieraorg_first_test);
-  ENSURE (handle);
+  CHECK (handle);
 
   handle->bar1 ("this is bar1");
 
@@ -342,16 +342,16 @@ TEST ("open_close")
   lumiera_interfaceregistry_destroy ();
 }
 
-TEST ("dependencies_one")
+TEST (dependencies_one)
 {
   lumiera_interfaceregistry_init ();
   LUMIERA_INTERFACE_REGISTEREXPORTED;
 
   LUMIERA_INTERFACE_HANDLE(lumieraorg_testexample_void, 0) handle =
     LUMIERA_INTERFACE_OPEN (lumieraorg_testexample_void, 0, 0, lumieraorg_dependencytest_one);
-  ENSURE (handle);
+  CHECK (handle);
 
-  TRACE (TESTS, "Sucessfully opened");
+  ECHO ("Sucessfully opened");
 
   lumiera_interface_close ((LumieraInterface)handle);
 
@@ -360,16 +360,16 @@ TEST ("dependencies_one")
 }
 
 
-TEST ("dependencies_two")
+TEST (dependencies_two)
 {
   lumiera_interfaceregistry_init ();
   LUMIERA_INTERFACE_REGISTEREXPORTED;
 
   LUMIERA_INTERFACE_HANDLE(lumieraorg_testexample_void, 0) handle =
     LUMIERA_INTERFACE_OPEN (lumieraorg_testexample_void, 0, 0, lumieraorg_dependencytest_two);
-  ENSURE (handle);
+  CHECK (handle);
 
-  TRACE (TESTS, "Sucessfully opened");
+  ECHO ("Sucessfully opened");
 
   lumiera_interface_close ((LumieraInterface)handle);
 
@@ -377,16 +377,16 @@ TEST ("dependencies_two")
   lumiera_interfaceregistry_destroy ();
 }
 
-TEST ("dependencies_three")
+TEST (dependencies_three)
 {
   lumiera_interfaceregistry_init ();
   LUMIERA_INTERFACE_REGISTEREXPORTED;
 
   LUMIERA_INTERFACE_HANDLE(lumieraorg_testexample_void, 0) handle =
     LUMIERA_INTERFACE_OPEN (lumieraorg_testexample_void, 0, 0, lumieraorg_dependencytest_three);
-  ENSURE (handle);
+  CHECK (handle);
 
-  TRACE (TESTS, "Sucessfully opened");
+  ECHO ("Sucessfully opened");
 
   lumiera_interface_close ((LumieraInterface)handle);
 
@@ -395,16 +395,16 @@ TEST ("dependencies_three")
 }
 
 
-TEST ("dependencies_four")
+TEST (dependencies_four)
 {
   lumiera_interfaceregistry_init ();
   LUMIERA_INTERFACE_REGISTEREXPORTED;
 
   LUMIERA_INTERFACE_HANDLE(lumieraorg_testexample_void, 0) handle =
     LUMIERA_INTERFACE_OPEN (lumieraorg_testexample_void, 0, 0, lumieraorg_dependencytest_four);
-  ENSURE (handle);
+  CHECK (handle);
 
-  TRACE (TESTS, "Sucessfully opened");
+  ECHO ("Sucessfully opened");
 
   lumiera_interface_close ((LumieraInterface)handle);
 
@@ -414,43 +414,43 @@ TEST ("dependencies_four")
 
 
 
-TEST ("dependencies_all")
+TEST (dependencies_all)
 {
   lumiera_interfaceregistry_init ();
   LUMIERA_INTERFACE_REGISTEREXPORTED;
 
-  TRACE (TESTS, "OPEN one");
+  ECHO ("OPEN one");
   LUMIERA_INTERFACE_HANDLE(lumieraorg_testexample_void, 0) handle_one =
     LUMIERA_INTERFACE_OPEN (lumieraorg_testexample_void, 0, 0, lumieraorg_dependencytest_one);
-  ENSURE (handle_one);
+  CHECK (handle_one);
 
-  TRACE (TESTS, "OPEN three");
+  ECHO ("OPEN three");
   LUMIERA_INTERFACE_HANDLE(lumieraorg_testexample_void, 0) handle_three =
     LUMIERA_INTERFACE_OPEN (lumieraorg_testexample_void, 0, 0, lumieraorg_dependencytest_three);
-  ENSURE (handle_three);
+  CHECK (handle_three);
 
-  TRACE (TESTS, "OPEN two");
+  ECHO ("OPEN two");
   LUMIERA_INTERFACE_HANDLE(lumieraorg_testexample_void, 0) handle_two =
     LUMIERA_INTERFACE_OPEN (lumieraorg_testexample_void, 0, 0, lumieraorg_dependencytest_two);
-  ENSURE (handle_two);
+  CHECK (handle_two);
 
-  TRACE (TESTS, "OPEN four");
+  ECHO ("OPEN four");
   LUMIERA_INTERFACE_HANDLE(lumieraorg_testexample_void, 0) handle_four =
     LUMIERA_INTERFACE_OPEN (lumieraorg_testexample_void, 0, 0, lumieraorg_dependencytest_four);
-  ENSURE (handle_four);
+  CHECK (handle_four);
 
-  TRACE (TESTS, "Sucessfully OPENED");
+  ECHO ("Sucessfully OPENED");
 
-  TRACE (TESTS, "CLOSE four");
+  ECHO ("CLOSE four");
   lumiera_interface_close ((LumieraInterface)handle_four);
 
-  TRACE (TESTS, "CLOSE two");
+  ECHO ("CLOSE two");
   lumiera_interface_close ((LumieraInterface)handle_two);
 
-  TRACE (TESTS, "CLOSE three");
+  ECHO ("CLOSE three");
   lumiera_interface_close ((LumieraInterface)handle_three);
 
-  TRACE (TESTS, "CLOSE one");
+  ECHO ("CLOSE one");
   lumiera_interface_close ((LumieraInterface)handle_one);
 
 
@@ -459,7 +459,7 @@ TEST ("dependencies_all")
 }
 
 
-TEST ("plugin_discover")
+TEST (plugin_discover)
 {
   lumiera_interfaceregistry_init ();
 
@@ -477,7 +477,7 @@ TEST ("plugin_discover")
 }
 
 
-TEST ("plugin_unload")
+TEST (plugin_unload)
 {
   lumiera_interfaceregistry_init ();
 
@@ -491,7 +491,7 @@ TEST ("plugin_unload")
 }
 
 
-TEST ("plugin_examplepluginc")
+TEST (plugin_examplepluginc)
 {
   lumiera_interfaceregistry_init ();
   lumiera_plugin_discover (lumiera_plugin_load, lumiera_plugin_register);
@@ -517,7 +517,7 @@ TEST ("plugin_examplepluginc")
   lumiera_config_destroy ();
 }
 
-TEST ("plugin_examplepluginc_nested")
+TEST (plugin_examplepluginc_nested)
 {
   lumiera_interfaceregistry_init ();
   lumiera_plugin_discover (lumiera_plugin_load, lumiera_plugin_register);

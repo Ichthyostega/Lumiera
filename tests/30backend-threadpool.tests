@@ -30,7 +30,10 @@ err: syncing with the other thread
 err: result is 0
 END
 
-TEST "sync many" sync-many <<END
+# Broken, needs better test drive (planned features for dispatching output)
+PLANNED "sync many" sync-many <<END
+err(worker_): result is 0
+err(thread_1): value is 84
 END
 
 TEST "joinable thread" joinable-thread <<END

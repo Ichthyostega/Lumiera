@@ -32,7 +32,7 @@
 TESTS_BEGIN
 
 
-TEST ("mutexsection")
+TEST (mutexsection)
 {
   lumiera_mutex m;
   lumiera_mutex_init (&m, "mutexsection", &NOBUG_FLAG(NOBUG_ON), NOBUG_CONTEXT);
@@ -51,7 +51,7 @@ TEST ("mutexsection")
 }
 
 
-TEST ("mutexforgotunlock")
+TEST (mutexforgotunlock)
 {
   lumiera_mutex m;
   lumiera_mutex_init (&m, "mutexforgotunlock", &NOBUG_FLAG(NOBUG_ON), NOBUG_CONTEXT);
@@ -65,7 +65,7 @@ TEST ("mutexforgotunlock")
 }
 
 
-TEST ("mutexexplicitunlock")
+TEST (mutexexplicitunlock)
 {
   lumiera_mutex m;
   lumiera_mutex_init (&m, "mutexforgotunlock", &NOBUG_FLAG(NOBUG_ON), NOBUG_CONTEXT);
@@ -81,7 +81,7 @@ TEST ("mutexexplicitunlock")
 }
 
 
-TEST ("nestedmutexsection")
+TEST (nestedmutexsection)
 {
   lumiera_mutex m;
   lumiera_mutex_init (&m, "m_mutexsection", &NOBUG_FLAG(NOBUG_ON), NOBUG_CONTEXT);
@@ -103,7 +103,7 @@ TEST ("nestedmutexsection")
   lumiera_mutex_destroy (&m, &NOBUG_FLAG(NOBUG_ON), NOBUG_CONTEXT);
 }
 
-TEST ("chainedmutexsection")
+TEST (chainedmutexsection)
 {
   lumiera_mutex m;
   lumiera_mutex_init (&m, "m_mutexsection", &NOBUG_FLAG(NOBUG_ON), NOBUG_CONTEXT);
@@ -127,7 +127,7 @@ TEST ("chainedmutexsection")
 
 
 
-TEST ("recursivemutexsection")
+TEST (recursivemutexsection)
 {
   lumiera_recmutex m;
   lumiera_recmutex_init (&m, "m_recmutexsection", &NOBUG_FLAG(NOBUG_ON), NOBUG_CONTEXT);
@@ -148,7 +148,7 @@ TEST ("recursivemutexsection")
 
 
 
-TEST ("rwlocksection")
+TEST (rwlocksection)
 {
   lumiera_rwlock rwlock;
   lumiera_rwlock_init (&rwlock, "rwsection", &NOBUG_FLAG(NOBUG_ON), NOBUG_CONTEXT);
@@ -167,7 +167,7 @@ TEST ("rwlocksection")
 }
 
 
-TEST ("rwlockforgotunlock")
+TEST (rwlockforgotunlock)
 {
   lumiera_rwlock rwlock;
   lumiera_rwlock_init (&rwlock, "rwlockforgotunlock", &NOBUG_FLAG(NOBUG_ON), NOBUG_CONTEXT);
@@ -182,7 +182,7 @@ TEST ("rwlockforgotunlock")
 
 
 
-TEST ("rwdeadlockwr")
+TEST (rwdeadlockwr)
 {
   lumiera_rwlock rwlock;
   lumiera_rwlock_init (&rwlock, "rwsection", &NOBUG_FLAG(NOBUG_ON), NOBUG_CONTEXT);
@@ -201,7 +201,7 @@ TEST ("rwdeadlockwr")
 
 
 
-TEST ("rwdeadlockrw")
+TEST (rwdeadlockrw)
 {
   lumiera_rwlock rwlock;
   lumiera_rwlock_init (&rwlock, "rwsection", &NOBUG_FLAG(NOBUG_ON), NOBUG_CONTEXT);
@@ -219,7 +219,7 @@ TEST ("rwdeadlockrw")
 }
 
 
-TEST ("conditionops (compiletest only)")
+TEST (conditionops (compiletest only))
 {
   lumiera_condition cond;
   lumiera_condition_init (&cond, "conditionsection", &NOBUG_FLAG(NOBUG_ON), NOBUG_CONTEXT);
@@ -235,7 +235,7 @@ TEST ("conditionops (compiletest only)")
 }
 
 
-TEST ("conditionsection")
+TEST (conditionsection)
 {
   lumiera_condition cond;
   lumiera_condition_init (&cond, "conditionsection", &NOBUG_FLAG(NOBUG_ON), NOBUG_CONTEXT);
@@ -255,7 +255,7 @@ TEST ("conditionsection")
 
 
 
-TEST ("conditionforgotunlock")
+TEST (conditionforgotunlock)
 {
   lumiera_condition cond;
   lumiera_condition_init (&cond, "conditionforgotunlock", &NOBUG_FLAG(NOBUG_ON), NOBUG_CONTEXT);
@@ -270,7 +270,7 @@ TEST ("conditionforgotunlock")
 
 
 
-TEST ("recconditionops (compiletest only)")
+TEST (recconditionops (compiletest only))
 {
   lumiera_reccondition reccond;
   lumiera_reccondition_init (&reccond, "recconditionsection", &NOBUG_FLAG(NOBUG_ON), NOBUG_CONTEXT);
@@ -286,7 +286,7 @@ TEST ("recconditionops (compiletest only)")
 }
 
 
-TEST ("recconditionsection")
+TEST (recconditionsection)
 {
   lumiera_reccondition reccond;
   lumiera_reccondition_init (&reccond, "recconditionsection", &NOBUG_FLAG(NOBUG_ON), NOBUG_CONTEXT);
@@ -305,7 +305,7 @@ TEST ("recconditionsection")
 }
 
 
-TEST ("recconditionforgotunlock")
+TEST (recconditionforgotunlock)
 {
   lumiera_reccondition reccond;
   lumiera_reccondition_init (&reccond, "recconditionforgotunlock", &NOBUG_FLAG(NOBUG_ON), NOBUG_CONTEXT);
@@ -318,7 +318,7 @@ TEST ("recconditionforgotunlock")
   lumiera_reccondition_destroy (&reccond, &NOBUG_FLAG(NOBUG_ON), NOBUG_CONTEXT);
 }
 
-TEST ("chainedrecconditionsection")
+TEST (chainedrecconditionsection)
 {
   lumiera_reccondition outer, inner;
   lumiera_reccondition_init (&outer, "outer_recconditionsection", &NOBUG_FLAG(NOBUG_ON), NOBUG_CONTEXT);
@@ -336,7 +336,7 @@ TEST ("chainedrecconditionsection")
   lumiera_reccondition_destroy (&inner, &NOBUG_FLAG(NOBUG_ON), NOBUG_CONTEXT);
 }
 
-TEST ("nestedrecconditionsection")
+TEST (nestedrecconditionsection)
 {
   lumiera_reccondition outer, inner;
   lumiera_reccondition_init (&outer, "outer_recconditionsection", &NOBUG_FLAG(NOBUG_ON), NOBUG_CONTEXT);
