@@ -193,7 +193,7 @@ lumiera_mmap_init (LumieraMMap self, LumieraFile file, off_t start, size_t size)
   self->address = addr;
   self->refmap = lumiera_calloc ((length-1)/chunksize+1, sizeof (unsigned short));
   self->refcnt = 0;
-  lumiera_mmapcache_announce (lumiera_mcache, self);
+  lumiera_mmapcache_announce (self);
 
   lumiera_file_handle_release (file);
   return self;
@@ -210,7 +210,7 @@ lumiera_mmap_new (LumieraFile file, off_t start, size_t size)
 {
   TRACE (mmap_dbg);
 
-  LumieraMMap self = lumiera_mmapcache_mmap_acquire (lumiera_mcache);
+  LumieraMMap self = lumiera_mmapcache_mmap_acquire ();
 
   if (lumiera_mmap_init (self, file, start, size))
     return self;
@@ -229,7 +229,7 @@ lumiera_mmap_delete (LumieraMMap self)
   if (self)
     {
       REQUIRE (!self->refcnt);
-      lumiera_mmapcache_forget (lumiera_mcache, self);
+      lumiera_mmapcache_forget (self);
 
       /* The matching mappings->lock must be hold or being irrelevant (mappings destructor) here, we can't asset this from here, good luck */
       llist_unlink (&self->searchnode);
@@ -249,9 +249,9 @@ lumiera_mmap_destroy_node (LList node)
   REQUIRE (llist_is_empty (node));
   LumieraMMap self = (LumieraMMap)node;
 
-  lumiera_mmapcache_forget (lumiera_mcache, self);
+  lumiera_mmapcache_forget (self);
 
-  llist_unlink (&self->searchnode); TODO ("must lock mmappings -> deadlock");
+  llist_unlink (&self->searchnode); FIXME ("must lock mmappings -> deadlock");
 
   munmap (self->address, self->size);
   lumiera_free (self->refmap);

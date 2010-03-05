@@ -115,7 +115,7 @@ lumiera_mmapings_mmap_acquire (LumieraMMapings self, LumieraFile file, off_t sta
           {
             if (!ret->refcnt)
               /* in cache, needs to me checked out */
-              lumiera_mmapcache_checkout (lumiera_mcache, ret);
+              lumiera_mmapcache_checkout (ret);
           }
         else
           {
@@ -149,7 +149,7 @@ lumiera_mmapings_release_mmap (LumieraMMapings self, LumieraMMap map)
         if (!--map->refcnt)
           {
             TRACE (mmapcache_dbg, "checkin");
-            lumiera_mmapcache_checkin (lumiera_mcache, map);
+            lumiera_mmapcache_checkin (map);
           }
       }
 }

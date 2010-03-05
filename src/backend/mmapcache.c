@@ -66,19 +66,19 @@ lumiera_mmapcache_delete (void)
 
 
 void*
-lumiera_mmapcache_mmap_acquire (LumieraMMapcache self)
+lumiera_mmapcache_mmap_acquire (void)
 {
   TRACE (mmapcache_dbg);
   void* map = NULL;
 
-  LUMIERA_MUTEX_SECTION (mutex_sync, &self->lock)
+  LUMIERA_MUTEX_SECTION (mutex_sync, &lumiera_mcache->lock)
     {
-      map = lumiera_mrucache_pop (&self->cache);
+      map = lumiera_mrucache_pop (&lumiera_mcache->cache);
     }
 
   if (!map)
     {
-      map = lumiera_malloc (sizeof (*self));
+      map = lumiera_malloc (sizeof (lumiera_mmap));
       TRACE (mmapcache_dbg, "allocated new mmap");
     }
   else
@@ -91,42 +91,42 @@ lumiera_mmapcache_mmap_acquire (LumieraMMapcache self)
 
 
 void
-lumiera_mmapcache_announce (LumieraMMapcache self, LumieraMMap map)
+lumiera_mmapcache_announce (LumieraMMap map)
 {
   TRACE (mmapcache_dbg);
-  LUMIERA_MUTEX_SECTION (mutex_sync, &self->lock)
+  LUMIERA_MUTEX_SECTION (mutex_sync, &lumiera_mcache->lock)
     {
-      self->total += map->size;
+      lumiera_mcache->total += map->size;
     }
 }
 
 
 void
-lumiera_mmapcache_forget (LumieraMMapcache self, LumieraMMap map)
+lumiera_mmapcache_forget (LumieraMMap map)
 {
   TRACE (mmapcache_dbg);
-  LUMIERA_MUTEX_SECTION (mutex_sync, &self->lock)
+  LUMIERA_MUTEX_SECTION (mutex_sync, &lumiera_mcache->lock)
     {
       if (!llist_is_empty (&map->cachenode))
         {
           TODO ("cached stats");
-          REQUIRE (llist_is_member (&self->cache.cache_list, &map->cachenode), "Map object not in cache");
+          REQUIRE (llist_is_member (&lumiera_mcache->cache.cache_list, &map->cachenode), "Map object not in cache");
           llist_unlink (&map->cachenode);
         }
-      self->total -= map->size;
+      lumiera_mcache->total -= map->size;
     }
 }
 
 #if 0
 int
-lumiera_mmapcache_age (LumieraMMapcache self)
+lumiera_mmapcache_age (void)
 {
   TRACE (mmapcache_dbg);
   int ret = 0;
 
-  LUMIERA_MUTEX_SECTION (mmapcache, &self->lock)
+  LUMIERA_MUTEX_SECTION (mmapcache, &lumiera_mcache->lock)
     {
-      ret = lumiera_mrucache_age (&self->cache, 10);      TODO ("age nelem == 20%(configureable) of the cache");
+      ret = lumiera_mrucache_age (&lumiera_mcache->cache, 10);      TODO ("age nelem == 20%(configureable) of the cache");
     }
 
   return ret;
@@ -134,15 +134,15 @@ lumiera_mmapcache_age (LumieraMMapcache self)
 #endif
 
 LumieraMMap
-lumiera_mmapcache_checkout (LumieraMMapcache self, LumieraMMap handle)
+lumiera_mmapcache_checkout (LumieraMMap handle)
 {
   TRACE (mmapcache_dbg);
   REQUIRE (handle->refcnt == 0);
 
-  LUMIERA_MUTEX_SECTION (mutex_sync, &self->lock)
+  LUMIERA_MUTEX_SECTION (mutex_sync, &lumiera_mcache->lock)
     {
       TODO ("cached stats");
-      lumiera_mrucache_checkout (&self->cache, &handle->cachenode);
+      lumiera_mrucache_checkout (&lumiera_mcache->cache, &handle->cachenode);
     }
 
   return handle;
@@ -150,15 +150,15 @@ lumiera_mmapcache_checkout (LumieraMMapcache self, LumieraMMap handle)
 
 
 void
-lumiera_mmapcache_checkin (LumieraMMapcache self, LumieraMMap handle)
+lumiera_mmapcache_checkin (LumieraMMap handle)
 {
   TRACE (mmapcache_dbg);
   REQUIRE (handle->refcnt == 0);
 
-  LUMIERA_MUTEX_SECTION (mutex_sync, &self->lock)
+  LUMIERA_MUTEX_SECTION (mutex_sync, &lumiera_mcache->lock)
     {
       TODO ("cached stats");
-      lumiera_mrucache_checkin (&self->cache, &handle->cachenode);
+      lumiera_mrucache_checkin (&lumiera_mcache->cache, &handle->cachenode);
     }
 }
 

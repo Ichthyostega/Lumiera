@@ -49,8 +49,6 @@ struct lumiera_mmapcache_struct
   lumiera_mutex lock;
 };
 
-extern LumieraMMapcache lumiera_mcache;
-
 
 /**
  * Initializes the mmapcache.
@@ -71,58 +69,52 @@ lumiera_mmapcache_delete (void);
  * Get a fresh mmap object.
  * when mmaped_limit is reached, the oldest mmap object gets dropped else a new allocated object
  * is returned
- * @param self pointer to the cache
- * @return the new uninitialized mmap
+ * @return the new uninitialized mmap (void* because this is uninitialized)
  */
 void*
-lumiera_mmapcache_mmap_acquire (LumieraMMapcache self);
+lumiera_mmapcache_mmap_acquire (void);
 
 
 /**
  * Announce a new mmap object to the cache quotas.
  * Update the statistics kept in the cache,
  * the map object is still considered to be checked out
- * @param self pointer to the cache
  * @param map object to be announced
  */
 void
-lumiera_mmapcache_announce (LumieraMMapcache self, LumieraMMap map);
+lumiera_mmapcache_announce (LumieraMMap map);
 
 /**
  * Remove a mmap object from the cache quotas.
  * Update the statistics kept in the cache, remove it from the cache.
- * @param self pointer to the cache
  * @param map object to be removed
  */
 void
-lumiera_mmapcache_forget (LumieraMMapcache self, LumieraMMap map);
+lumiera_mmapcache_forget (LumieraMMap map);
 
 /**
  * Destroy and free the nelem oldest elements.
  * Used to free up resources and memory.
- * @param self cache where to free elements.
  * @return nelem-(numer of elements which got freed), that is 0 if all requested elements got freed
  */
 int
-lumiera_mmapcache_age (LumieraMMapcache self);
+lumiera_mmapcache_age (void);
 
 /**
  * Remove a mmap from cache aging
  * Mmaps which are subject of cache aging must be checked out before they can be used.
- * @param self the mmapcache
  * @param handle the mmap to be checked out
  */
 LumieraMMap
-lumiera_mmapcache_checkout (LumieraMMapcache self, LumieraMMap handle);
+lumiera_mmapcache_checkout (LumieraMMap handle);
 
 /**
  * Put a mmap into the cache
  * Mmaps which are checked in are subject of cache aging and might get destroyed and reused.
- * @param self the mmapcache
  * @param handle the mmap to be checked in
  */
 void
-lumiera_mmapcache_checkin (LumieraMMapcache self, LumieraMMap handle);
+lumiera_mmapcache_checkin (LumieraMMap handle);
 
 #endif
 /*
