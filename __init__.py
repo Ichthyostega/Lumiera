@@ -60,10 +60,10 @@ def DoxyfileParse(file_contents):
          key_token = False
       else:
          if token == "+=":
-            if not data.has_key(key):
-               data[key] = list()
+            if key not in data:
+               data[key] = []
          elif token == "=":
-            data[key] = list()
+            data[key] = []
          else:
             append_data( data, key, new_data, token )
             new_data = True
@@ -76,7 +76,7 @@ def DoxyfileParse(file_contents):
          append_data( data, key, new_data, '\\' )
 
    # compress lists of len 1 into single strings
-   for (k, v) in data.items():
+   for k, v in data.items():
       if len(v) == 0:
          data.pop(k)
 
@@ -109,10 +109,7 @@ def DoxySourceScan(node, env, path):
 
    data = DoxyfileParse(node.get_contents())
 
-   if data.get("RECURSIVE", "NO") == "YES":
-      recursive = True
-   else:
-      recursive = False
+   recursive = data.get("RECURSIVE") == "YES"
 
    file_patterns = data.get("FILE_PATTERNS", default_file_patterns)
    exclude_patterns = data.get("EXCLUDE_PATTERNS", default_exclude_patterns)
@@ -126,8 +123,8 @@ def DoxySourceScan(node, env, path):
                for f in files:
                   filename = os.path.join(root, f)
 
-                  pattern_check = reduce(lambda x, y: x or bool(fnmatch(filename, y)), file_patterns, False)
-                  exclude_check = reduce(lambda x, y: x and fnmatch(filename, y), exclude_patterns, True)
+                  pattern_check = any(fnmatch(filename, y) for y in file_patterns)
+                  exclude_check = any(fnmatch(filename, y) for y in exclude_patterns)
 
                   if pattern_check and not exclude_check:
                      sources.append(filename)
@@ -135,7 +132,7 @@ def DoxySourceScan(node, env, path):
             for pattern in file_patterns:
                sources.extend(glob.glob("/".join([node, pattern])))
 
-   sources = map( lambda path: env.File(path), sources )
+   sources = [env.File(path) for path in sources]
    return sources
 
 
@@ -150,7 +147,7 @@ def DoxyEmitter(source, target, env):
       "HTML": ("YES", "html"),
       "LATEX": ("YES", "latex"),
       "RTF": ("NO", "rtf"),
-      "MAN": ("YES", "man"),
+      "MAN": ("NO", "man"),
       "XML": ("NO", "xml"),
    }
 
@@ -160,7 +157,7 @@ def DoxyEmitter(source, target, env):
    out_dir = data.get("OUTPUT_DIRECTORY", ".")
 
    # add our output locations
-   for (k, v) in output_formats.items():
+   for k, v in output_formats.items():
       if data.get("GENERATE_" + k, v[0]) == "YES":
          targets.append(env.Dir( os.path.join(out_dir, data.get(k + "_OUTPUT", v[1]))) )
 
@@ -185,13 +182,12 @@ def generate(env):
       scan_check = DoxySourceScanCheck,
    )
 
-   doxyfile_builder = env.Builder(
-      action = env.Action("cd ${SOURCE.dir}  &&  ${DOXYGEN} ${SOURCE.file}"),
+   import SCons.Builder
+   doxyfile_builder = SCons.Builder.Builder(
+      action = "cd ${SOURCE.dir}  &&  ${DOXYGEN} ${SOURCE.file}",
       emitter = DoxyEmitter,
       target_factory = env.fs.Entry,
       single_source = True,
-
-
       source_scanner =  doxyfile_scanner,
    )
 
