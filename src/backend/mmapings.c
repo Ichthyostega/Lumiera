@@ -59,8 +59,9 @@ lumiera_mmapings_destroy (LumieraMMapings self)
 
   LLIST_WHILE_TAIL (&self->mmaps, node)
     {
-      LumieraMMap mmap = LLIST_TO_STRUCTP (node, lumiera_mmap, searchnode);
-      lumiera_mmap_delete (mmap);
+      LumieraMMap map = LLIST_TO_STRUCTP (node, lumiera_mmap, searchnode);
+      REQUIRE (map->refcnt == 0, "map still in use: %p", map);
+      lumiera_mmap_delete (map);
     }
 
   lumiera_mutex_destroy (&self->lock, &NOBUG_FLAG(mutex_dbg), NOBUG_CONTEXT);
@@ -114,8 +115,9 @@ lumiera_mmapings_mmap_acquire (LumieraMMapings self, LumieraFile file, off_t sta
         if (ret)
           {
             if (!ret->refcnt)
-              /* in cache, needs to me checked out */
+              /* in cache, needs to be checked out */
               lumiera_mmapcache_checkout (ret);
+            ++ret->refcnt;
           }
         else
           {
@@ -127,8 +129,6 @@ lumiera_mmapings_mmap_acquire (LumieraMMapings self, LumieraFile file, off_t sta
 
             TODO ("sort search list?");
           }
-
-        ++ret->refcnt;
 
         PLANNED ("use refmap for finer grained refcounting");
 

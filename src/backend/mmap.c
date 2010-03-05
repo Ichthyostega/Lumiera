@@ -192,7 +192,7 @@ lumiera_mmap_init (LumieraMMap self, LumieraFile file, off_t start, size_t size)
   self->size = length;
   self->address = addr;
   self->refmap = lumiera_calloc ((length-1)/chunksize+1, sizeof (unsigned short));
-  self->refcnt = 0;
+  self->refcnt = 1;
   lumiera_mmapcache_announce (self);
 
   lumiera_file_handle_release (file);
@@ -228,7 +228,7 @@ lumiera_mmap_delete (LumieraMMap self)
   TRACE (mmap_dbg);
   if (self)
     {
-      REQUIRE (!self->refcnt);
+      REQUIRE (self->refcnt <= 1);
       lumiera_mmapcache_forget (self);
 
       /* The matching mappings->lock must be hold or being irrelevant (mappings destructor) here, we can't asset this from here, good luck */
