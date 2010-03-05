@@ -54,6 +54,11 @@ struct lumiera_mmapings_struct
    **/
   size_t chunksize;
 
+  /**
+   * bias shifts the chunk begin to suppress headers for example
+   **/
+  size_t bias;
+
   LumieraFiledescriptor descriptor;
   lumiera_mutex lock;
 };
@@ -63,7 +68,7 @@ struct lumiera_mmapings_struct
  *
  */
 LumieraMMapings
-lumiera_mmapings_init (LumieraMMapings self, LumieraFile file, size_t chunksize);
+lumiera_mmapings_init (LumieraMMapings self, LumieraFile file, size_t chunksize, size_t bias);
 
 /**
  * destroy mmapings container and free all resources.
@@ -77,7 +82,7 @@ lumiera_mmapings_destroy (LumieraMMapings self);
  *
  */
 LumieraMMapings
-lumiera_mmapings_new (LumieraFile file, size_t chunksize);
+lumiera_mmapings_new (LumieraFile file, size_t chunksize, size_t bias);
 
 /**
  * destroy and free mmapings container and all its resources

@@ -228,9 +228,9 @@
      objecttolerance="10"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1.0079515"
-     inkscape:cx="545.17906"
-     inkscape:cy="415.83375"
+     inkscape:zoom="0.83301777"
+     inkscape:cx="348.4926"
+     inkscape:cy="452.67427"
      inkscape:document-units="px"
      inkscape:current-layer="layer2"
      showgrid="true"
@@ -1432,21 +1432,21 @@
     <rect
        style="fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:0.82869649;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        id="rect3603"
-       width="640.0755"
-       height="30.088608"
-       x="91.254616"
-       y="202.75461" />
+       width="731.33014"
+       height="28.748718"
+       x="0"
+       y="204.09448" />
     <text
        xml:space="preserve"
        style="font-size:8.64456749px;font-style:normal;font-weight:normal;fill:#666666;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
-       x="87.530151"
-       y="251.90054"
+       x="10.799681"
+       y="251.90056"
        id="text2542"
        transform="scale(1.1570198,0.8642895)"><tspan
          sodipodi:role="line"
          id="tspan2544"
-         x="87.530151"
-         y="251.90054">011011000010001100011100111011100001100111000110010.........</tspan></text>
+         x="10.799681"
+         y="251.90056">011011000010001100011100111011100001100111000110010.........</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:16px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
@@ -2205,7 +2205,7 @@
        xml:space="preserve"
        id="flowRoot5966"
        style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Sans;-inkscape-font-specification:Sans"
-       transform="translate(22.606445,9.6094127)"><flowRegion
+       transform="translate(22.606445,-3.842736)"><flowRegion
          id="flowRegion5968"><rect
            id="rect5970"
            width="262.86139"
@@ -2223,5 +2223,34 @@
            height="217.11667"
            x="739.41113"
            y="506.97781" /></flowRegion><flowPara
-         id="flowPara5980">Higher level access goes over the indices. frames are acquired from then when needed and released to it when done.</flowPara></flowRoot>  </g>
+         id="flowPara5980">Higher level access goes over the indices. frames are acquired from then when needed and released to it when done.</flowPara></flowRoot>    <rect
+       y="364.45364"
+       x="-0.41226619"
+       height="29.527279"
+       width="90.053123"
+       id="rect2724"
+       style="opacity:1;fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1.71750402;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+    <text
+       sodipodi:linespacing="125%"
+       id="text2726"
+       y="384.09448"
+       x="45.068359"
+       style="font-size:22px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;writing-mode:lr-tb;text-anchor:middle;fill:#b3b3b3;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Sans;-inkscape-font-specification:Sans"
+       xml:space="preserve"><tspan
+         y="384.09448"
+         x="45.068359"
+         id="tspan2728"
+         sodipodi:role="line">Header</tspan></text>
+    <flowRoot
+       xml:space="preserve"
+       id="flowRoot2730"
+       style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Sans;-inkscape-font-specification:Sans"
+       transform="translate(22.606445,66.157264)"><flowRegion
+         id="flowRegion2732"><rect
+           id="rect2734"
+           width="262.86139"
+           height="65.490013"
+           x="737.13861"
+           y="322.4472" /></flowRegion><flowPara
+         id="flowPara2736">There is a special facility to map File-Header data exactly and offset the start of chunks after the header.</flowPara></flowRoot>  </g>
 </svg>

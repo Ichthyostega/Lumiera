@@ -127,7 +127,7 @@ TEST (mmap_forget_releasing)
 {
   lumiera_backend_init ();
   LumieraFile file = lumiera_file_new (",tmp-filemmap", LUMIERA_FILE_CREATE);
-  lumiera_file_chunksize_set (file, 4096);
+  lumiera_file_set_chunksize_bias (file, 4096, 0);
 
   LumieraMMapings mmaps = lumiera_file_mmapings (file);
 
@@ -146,7 +146,7 @@ TEST (mmap_simple)
 {
   lumiera_backend_init ();
   LumieraFile file = lumiera_file_new (",tmp-filemmap", LUMIERA_FILE_CREATE);
-  lumiera_file_chunksize_set (file, 4096);
+  lumiera_file_set_chunksize_bias (file, 4096, 0);
 
   LumieraMMapings mmaps = lumiera_file_mmapings (file);
 
@@ -171,7 +171,7 @@ TEST (mmap_checkout_twice)
 {
   lumiera_backend_init ();
   LumieraFile file = lumiera_file_new (",tmp-filemmap", LUMIERA_FILE_CREATE);
-  lumiera_file_chunksize_set (file, 4096);
+  lumiera_file_set_chunksize_bias (file, 4096, 0);
 
   LumieraMMapings mmaps = lumiera_file_mmapings (file);
 
@@ -202,7 +202,7 @@ TEST (mmap_checkout_again)
 {
   lumiera_backend_init ();
   LumieraFile file = lumiera_file_new (",tmp-filemmap", LUMIERA_FILE_CREATE);
-  lumiera_file_chunksize_set (file, 4096);
+  lumiera_file_set_chunksize_bias (file, 4096, 0);
 
   LumieraMMapings mmaps = lumiera_file_mmapings (file);
 
@@ -230,7 +230,7 @@ TEST (mmap_grow_existing_file)
   lumiera_backend_init ();
   LumieraFile file = lumiera_file_new (",tmp-filemmap", LUMIERA_FILE_READWRITE);
 
-  lumiera_file_chunksize_set (file, 4096);
+  lumiera_file_set_chunksize_bias (file, 4096, 0);
 
   LumieraMMapings mmaps = lumiera_file_mmapings (file);
 
@@ -254,7 +254,7 @@ TEST (mmap_readonly_file)
   lumiera_backend_init ();
   LumieraFile file = lumiera_file_new (",tmp-filemmap", LUMIERA_FILE_READONLY);
 
-  lumiera_file_chunksize_set (file, 4096);
+  lumiera_file_set_chunksize_bias (file, 4096, 0);
 
   LumieraMMapings mmaps = lumiera_file_mmapings (file);
 
@@ -278,7 +278,7 @@ TEST (file_access)
 {
   lumiera_backend_init ();
   LumieraFile file = lumiera_file_new (",tmp-filemmap", LUMIERA_FILE_RECREATE);
-  lumiera_file_chunksize_set (file, 4096);
+  lumiera_file_set_chunksize_bias (file, 4096, 0);
 
   LumieraMMap map = lumiera_file_mmap_acquire (file, 10, 100);
 
@@ -298,7 +298,7 @@ TEST (mmap_section)
 {
   lumiera_backend_init ();
   LumieraFile file = lumiera_file_new (",tmp-filemmap", LUMIERA_FILE_RECREATE);
-  lumiera_file_chunksize_set (file, 4096);
+  lumiera_file_set_chunksize_bias (file, 4096, 0);
 
   LUMIERA_FILE_MMAP_SECTION(file, 20, 20, addr)
     {

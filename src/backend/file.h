@@ -30,7 +30,7 @@
 //NOBUG_DECLARE_FLAG (file);
 
 LUMIERA_ERROR_DECLARE(FILE_CHANGED);
-LUMIERA_ERROR_DECLARE(FILE_NOCHUNKSIZE);
+LUMIERA_ERROR_DECLARE(FILE_NOMMAPINGS);
 
 /**
  * @file
@@ -199,13 +199,23 @@ lumiera_file_mmapings (LumieraFile self);
 
 
 /**
+ * Query the flags effective for a file
+ * @param self the file to query
+ * @return flags
+ */
+int
+lumiera_file_checkflags (LumieraFile self, int flags);
+
+
+/**
  * Set the chunksize for mapping operations
+ * can only set once for a filedescriptor, subsequent calls are no-ops
  * @param chunksize allocation/mmaping granularity, must be 2's exponent of pagesize
- *        only used at the first access to a file and ignored for subsequent accesses
+ * @param bias offset to shift chunks, used for stepping over a header for example.
  * @return the effective chunksize used for the file
  */
 size_t
-lumiera_file_chunksize_set (LumieraFile self, size_t chunksize);
+lumiera_file_set_chunksize_bias (LumieraFile self, size_t chunksize, size_t bias);
 
 
 /**
@@ -214,6 +224,14 @@ lumiera_file_chunksize_set (LumieraFile self, size_t chunksize);
  */
 size_t
 lumiera_file_chunksize_get (LumieraFile self);
+
+/**
+ * Get the bias for mapping operations
+ * @return the effective bias used for the file
+ */
+size_t
+lumiera_file_bias_get (LumieraFile self);
+
 
 #endif
 

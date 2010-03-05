@@ -35,14 +35,16 @@
 
 
 LumieraMMapings
-lumiera_mmapings_init (LumieraMMapings self, LumieraFile file, size_t chunksize)
+lumiera_mmapings_init (LumieraMMapings self, LumieraFile file, size_t chunksize, size_t bias)
 {
   TRACE (mmapings_dbg);
   REQUIRE (!file->descriptor->mmapings);
 
   llist_init (&self->mmaps);
   self->descriptor = file->descriptor;
+  TODO("align chunksize on 2's exponent or error out?");
   self->chunksize = chunksize;
+  self->bias = bias;
 
   lumiera_mutex_init (&self->lock, "mmapings", &NOBUG_FLAG(mutex_dbg), NOBUG_CONTEXT);
 
@@ -71,11 +73,11 @@ lumiera_mmapings_destroy (LumieraMMapings self)
 
 
 LumieraMMapings
-lumiera_mmapings_new (LumieraFile file, size_t chunksize)
+lumiera_mmapings_new (LumieraFile file, size_t chunksize, size_t bias)
 {
   TRACE (mmapings_dbg);
   LumieraMMapings self = lumiera_malloc (sizeof (*self));
-  return lumiera_mmapings_init (self, file, chunksize);
+  return lumiera_mmapings_init (self, file, chunksize, bias);
 }
 
 

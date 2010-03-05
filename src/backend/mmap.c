@@ -54,6 +54,8 @@ lumiera_mmap_init (LumieraMMap self, LumieraFile file, off_t start, size_t size)
 {
   TRACE (mmap_dbg);
 
+  TODO ("enforce size instead using chunksize (rounded to pagessize) for parsing headers");
+
   REQUIRE (self);
   REQUIRE (file);
   REQUIRE (start >= 0);
@@ -64,6 +66,7 @@ lumiera_mmap_init (LumieraMMap self, LumieraFile file, off_t start, size_t size)
    * 128MB on 32 bit arch
    * 2GB on 64 bit arch
    */
+  TODO("move the setdefaults somewhere else, backend_defaults.c or so");
 #if SIZE_MAX <= 4294967295U
   lumiera_config_setdefault ("backend.mmap.window_size = 134217728");
 #else
@@ -84,6 +87,12 @@ lumiera_mmap_init (LumieraMMap self, LumieraFile file, off_t start, size_t size)
   off_t begin = 0;
   size_t length = 0;
   size_t chunksize = lumiera_file_chunksize_get (file);
+  size_t bias = lumiera_file_bias_get (file);
+
+  REQUIRE(start >= (off_t)bias, "begin before first chunk");
+
+  TODO ("error here? or just map as asked for?");
+  ENSURE(chunksize);
 
   /**
    * Maintaining the right[tm] mmapping size is a bit tricky:
@@ -126,7 +135,7 @@ lumiera_mmap_init (LumieraMMap self, LumieraFile file, off_t start, size_t size)
         case FIRST_TRY:
           TRACE (mmap_dbg, "FIRST_TRY");
           /* align begin and end to chunk boundaries */
-          begin = start & ~(chunksize-1);
+          begin = ((start-bias) & ~(chunksize-1)) + bias;
           length = ((start+size+chunksize-1) & ~(chunksize-1)) - begin;
 
           if (begin+(off_t)length > descriptor->stat.st_size)

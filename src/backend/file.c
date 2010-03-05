@@ -32,7 +32,7 @@
 //NOBUG_DEFINE_FLAG_PARENT (file, file_all);
 
 LUMIERA_ERROR_DEFINE (FILE_CHANGED, "File changed unexpected");
-LUMIERA_ERROR_DEFINE (FILE_NOCHUNKSIZE, "Chunksize not set");
+LUMIERA_ERROR_DEFINE (FILE_NOMMAPINGS, "MMapings (chunksize/bias) not initialized");
 
 
 LumieraFile
@@ -124,10 +124,10 @@ lumiera_file_handle_release (LumieraFile self)
 
 
 size_t
-lumiera_file_chunksize_set (LumieraFile self, size_t chunksize)
+lumiera_file_set_chunksize_bias (LumieraFile self, size_t chunksize, size_t bias)
 {
   if (chunksize && !self->descriptor->mmapings)
-    self->descriptor->mmapings = lumiera_mmapings_new (self, chunksize);
+    self->descriptor->mmapings = lumiera_mmapings_new (self, chunksize, bias);
 
   return self->descriptor->mmapings->chunksize;
 }
@@ -138,7 +138,7 @@ lumiera_file_chunksize_get (LumieraFile self)
 {
   if (!self->descriptor->mmapings)
     {
-      LUMIERA_ERROR_SET (file, FILE_NOCHUNKSIZE, lumiera_filedescriptor_name (self->descriptor));
+      LUMIERA_ERROR_SET (file, FILE_NOMMAPINGS, lumiera_filedescriptor_name (self->descriptor));
       return 0;
     }
 
@@ -146,13 +146,33 @@ lumiera_file_chunksize_get (LumieraFile self)
 }
 
 
+size_t
+lumiera_file_bias_get (LumieraFile self)
+{
+  if (!self->descriptor->mmapings)
+    {
+      LUMIERA_ERROR_SET (file, FILE_NOMMAPINGS, lumiera_filedescriptor_name (self->descriptor));
+      return 0;
+    }
+
+  return self->descriptor->mmapings->bias;
+}
+
+
 LumieraMMapings
 lumiera_file_mmapings (LumieraFile self)
 {
   if (!self->descriptor->mmapings)
-    LUMIERA_ERROR_SET (file, FILE_NOCHUNKSIZE, lumiera_filedescriptor_name (self->descriptor));
+    LUMIERA_ERROR_SET (file, FILE_NOMMAPINGS, lumiera_filedescriptor_name (self->descriptor));
 
   return self->descriptor->mmapings;
+}
+
+
+int
+lumiera_file_checkflags (LumieraFile self, int flags)
+{
+  return self->descriptor->flags & flags;
 }
 
 
