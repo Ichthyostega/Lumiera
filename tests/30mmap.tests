@@ -40,6 +40,10 @@ TEST "accessing file" file_access <<END
 return: 0
 END
 
+TEST "exact mmap" exact_mmap <<END
+return: 0
+END
+
 TEST "mmaped secion" mmap_section <<END
 return: 0
 END

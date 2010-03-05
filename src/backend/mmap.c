@@ -214,6 +214,70 @@ lumiera_mmap_init (LumieraMMap self, LumieraFile file, off_t start, size_t size)
   return NULL;
 }
 
+
+LumieraMMap
+lumiera_mmap_init_exact (LumieraMMap self, LumieraFile file, off_t start, size_t size)
+{
+  TRACE (mmap_dbg);
+
+  REQUIRE (self);
+  REQUIRE (file);
+  REQUIRE (start >= 0);
+  REQUIRE (size);
+
+  LumieraFiledescriptor descriptor = file->descriptor;
+
+  int fd = lumiera_file_handle_acquire (file);
+  TRACE (mmap_dbg, "got fd %d", fd);
+  if (fd == -1)
+    goto efile;
+
+  if ((off_t)(start + size) > descriptor->stat.st_size)
+    {
+      /* request past the end */
+      if ((descriptor->flags & O_ACCMODE) == O_RDWR)
+        {
+          /* extend file (writable) */
+          if (ftruncate (fd, start+size) == -1)
+            {
+              LUMIERA_ERROR_SET (mmap, ERRNO, lumiera_filedescriptor_name (file->descriptor));
+              goto etruncate;
+            };
+          descriptor->stat.st_size = descriptor->realsize = start+size;
+        }
+    }
+
+  TODO ("use resourcecllector here");
+  void* addr = mmap (NULL,
+                     size,
+                     (descriptor->flags & O_ACCMODE) == O_RDONLY ? PROT_READ : PROT_READ|PROT_WRITE,
+                     MAP_SHARED,
+                     fd,
+                     start);
+
+  INFO_IF (addr==(void*)-1, mmap_dbg, "mmap failed %s", strerror (errno));
+  ENSURE (errno == 0 || errno == ENOMEM, "unexpected mmap error %s", strerror (errno));
+
+  llist_init (&self->cachenode);
+  llist_init (&self->searchnode);
+
+  self->start = start;
+  self->size = size;
+  self->address = addr;
+  self->refmap = NULL;
+  self->refcnt = 1;
+  lumiera_mmapcache_announce (self);
+
+  lumiera_file_handle_release (file);
+  return self;
+
+ etruncate:
+ efile:
+  lumiera_file_handle_release (file);
+  return NULL;
+}
+
+
 LumieraMMap
 lumiera_mmap_new (LumieraFile file, off_t start, size_t size)
 {
@@ -222,6 +286,23 @@ lumiera_mmap_new (LumieraFile file, off_t start, size_t size)
   LumieraMMap self = lumiera_mmapcache_mmap_acquire ();
 
   if (lumiera_mmap_init (self, file, start, size))
+    return self;
+  else
+    {
+      lumiera_free (self);
+      return NULL;
+    }
+}
+
+
+LumieraMMap
+lumiera_mmap_new_exact (LumieraFile file, off_t start, size_t size)
+{
+  TRACE (mmap_dbg);
+
+  LumieraMMap self = lumiera_mmapcache_mmap_acquire ();
+
+  if (lumiera_mmap_init_exact (self, file, start, size))
     return self;
   else
     {

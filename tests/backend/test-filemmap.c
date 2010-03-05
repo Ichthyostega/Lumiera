@@ -294,6 +294,25 @@ TEST (file_access)
 
 
 
+TEST (exact_mmap)
+{
+  lumiera_backend_init ();
+  LumieraFile file = lumiera_file_new (",tmp-filemmap", LUMIERA_FILE_RECREATE);
+
+  LumieraMMap map = lumiera_mmap_new_exact (file, 0, 6);
+
+  char* addr = lumiera_mmap_address (map, 1);
+
+  strcpy (addr, "test");
+
+  lumiera_mmap_delete (map);
+
+  lumiera_file_delete (file);
+  lumiera_backend_destroy ();
+}
+
+
+
 TEST (mmap_section)
 {
   lumiera_backend_init ();

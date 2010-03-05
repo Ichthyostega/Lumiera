@@ -69,13 +69,36 @@ struct lumiera_mmap_struct
   short* refmap;       // TODO flexible array?
 };
 
-
+/**
+ * Initialize a MMap object.
+ * The mmap objects are aligned and shifted by the chunksize and bias defined for the file
+ * @param self the mmap object to be initialized
+ * @param file file from which to map
+ * @param start offset in file which must be part of the mmaped region
+ * @param size minimum size after start to map
+ * @return self on success or NULL on error
+ */
 LumieraMMap
 lumiera_mmap_init (LumieraMMap self, LumieraFile file, off_t start, size_t size);
+
+/**
+ * Initialize a MMap object.
+ * Maps exactly the given range
+ * @param self the mmap object to be initialized
+ * @param file file from which to map
+ * @param start offset in file which must be part of the mmaped region
+ * @param size minimum size after start to map
+ * @return self on success or NULL on error
+ */
+LumieraMMap
+lumiera_mmap_init_exact (LumieraMMap self, LumieraFile file, off_t start, size_t size);
 
 
 LumieraMMap
 lumiera_mmap_new (LumieraFile file, off_t start, size_t size);
+
+LumieraMMap
+lumiera_mmap_new_exact (LumieraFile file, off_t start, size_t size);
 
 
 /**
