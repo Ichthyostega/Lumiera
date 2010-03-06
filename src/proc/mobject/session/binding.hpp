@@ -43,7 +43,7 @@ namespace session {
   class Binding : public Meta
     {
     public:
-      
+        //////////////////////////////TICKET #566
     };
 
 

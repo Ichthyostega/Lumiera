@@ -35,14 +35,15 @@ namespace session {
   Track::Track (PTrackAsset& trackDef)
     : start_(0),
       trackDef_(trackDef)
-  { }
+  {
+    throwIfInvalid();
+  }
   
   
   bool 
   Track::isValid()  const
   {
-    TODO ("sensible Track-MO self-check");
-    return true;
+    return bool(trackDef_);
   }
   
   

@@ -43,6 +43,8 @@ namespace mobject
     class Auto : public Meta, public ParamProvider<VAL>
       {
       public:
+        //////////////////////////////TICKET #566
+      
         virtual VAL getValue () ;
       };
 

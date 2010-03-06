@@ -38,6 +38,7 @@ namespace session {
       clipDef_(clipDef)
   {
     setupLength();
+    throwIfInvalid();
   }
   
   

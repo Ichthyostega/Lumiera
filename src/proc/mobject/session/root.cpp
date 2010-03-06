@@ -31,7 +31,9 @@ namespace session {
   /** */
   Root::Root (DefsManager& dM)
     : defaults_(dM)
-    { }
+    {
+      throwIfInvalid();
+    }
   
   
   

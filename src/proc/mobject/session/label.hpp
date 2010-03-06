@@ -54,7 +54,9 @@ namespace session {
     public:
       Label (Symbol type)
         : typeID_(type)
-        { }
+        {
+          throwIfInvalid();
+        }
       
     };
   

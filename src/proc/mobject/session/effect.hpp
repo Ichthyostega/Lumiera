@@ -47,6 +47,9 @@ namespace session {
       string pluginID;
       
     public:
+              //////////////////////////////TICKET #566
+      
+      
       /** access the underlying processing asset */
       asset::Proc const& getProcAsset ()  const;
                                                 //////////////////////TODO: clarify asset->mobject relation and asset dependencies; Ticket #255

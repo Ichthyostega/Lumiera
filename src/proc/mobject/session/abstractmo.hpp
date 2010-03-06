@@ -49,6 +49,15 @@ namespace session {
       
       virtual bool operator== (const MObject& oo)  const;
       
+    protected:
+      void
+      throwIfInvalid()  const
+        {
+          if (!isValid())
+            throw lumiera::error::Fatal ("Invalid MObject in model. Indicates a race "
+                                         "or similarly broken internal assumptions.");
+        }
+      
     };
   
   
