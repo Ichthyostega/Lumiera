@@ -24,11 +24,31 @@
 /** @file struct.hpp
  ** Structural parts of the Session (e.g. Tracks) can be reflected
  ** into the "bookkeeping view" as a specific Kind of Asset.
- ** For the different <i>Kinds</i> of Assets, we use sub-interfaces inheriting
- ** from the general Asset interface. To be able to get asset::Struct instances
- ** directly from the AssetManager, we define a specialisation of the Asset ID.
- **
- ** @see asset.hpp for explanation
+ ** For the different \em kinds of Assets, we use sub-interfaces inheriting
+ ** from the general Asset interface, each of which expose a distinguishing feature.
+ ** In the case of structural assets, the key point is a naming scheme allowing for
+ ** retrieval of instances with specific capabilities; structural assets are created
+ ** on demand, just by referral. Thus, the collection of these assets provides a map
+ ** for exploring the current session's structure and allow for tweaking of the
+ ** default behaviour.
+ ** - Track acts as unique track ID
+ ** - Timeline and Sequence are facades, part of the session API
+ ** - Pipe is an attachment point for wiring connections and defines a StreamType
+ ** - ProcPatt is used as a blueprint in the build process, a standard connection pattern
+ ** 
+ ** \par access and creation
+ ** asset::Struct instances are created on demand; the interface is to invoke the
+ ** StructFactory with a (typed) Query describing properties or capabilities.
+ ** In case this query succeeds, an existing asset will be returned, otherwise
+ ** a suitable new instance is created automatically. Typically, structural assets
+ ** aren't deleted. Doing so would require a dedicated function which not only drops
+ ** an asset instance from AssetManager, but also ensures removal of all properties
+ ** within the model which could cause automatic re-creation of this asset. E.g.
+ ** purging a track asset (=unique trackID) requires removing or disconnecting
+ ** all placements referring to this track, which could be sub tracks, clips,
+ ** effects, automation or labels. 
+ ** 
+ ** @see asset.hpp for explanation regarding asset IDs
  ** @see StructFactory creating concrete asset::Struct instances
  **
  */
@@ -74,7 +94,12 @@ namespace asset {
     
   /**
    * key abstraction: structural asset
-   * @todo just a stub, have to figure out what a asset::Struct is
+   * Created automatically as a sideeffect of building the structure
+   * of the high-level-model (session contents), thus providing IDs
+   * for later referral, search and attachment of metadata.
+   * 
+   * Examples being tracks, sequences, timelines, pipes, processing patterns
+   * 
    * @todo WIP as of 1/2010. Need to integrate Sequences and Timelines
    */
   class Struct : public Asset

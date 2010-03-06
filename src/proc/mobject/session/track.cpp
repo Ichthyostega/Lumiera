@@ -24,28 +24,27 @@
 #include "proc/mobject/session/track.hpp"
 #include "proc/asset/track.hpp"
 
-namespace mobject
+
+namespace mobject {
+namespace session {
+  
+  /** new track-MO linked with the given asset::Track.
+   *  Initially, the reference (zero-point) time of this track
+   *  will be set to 0 
+   */
+  Track::Track (PTrackAsset& trackDef)
+    : start_(0),
+      trackDef_(trackDef)
+  { }
+  
+  
+  bool 
+  Track::isValid()  const
   {
-  namespace session
-    {
-
-    /** new track-MO linked with the given asset::Track.
-     *  Initially, the reference (zero-point) time of this track
-     *  will be set to 0 
-     */
-    Track::Track (PTrackAsset& trackDef)
-      : start_(0),
-        trackDef_(trackDef)
-    { }
-
-
-    bool 
-    Track::isValid()  const
-    {
-      TODO ("sensible Track-MO self-check");
-      return true;
-    }
-
-  } // namespace mobject::session
-
-} // namespace mobject
+    TODO ("sensible Track-MO self-check");
+    return true;
+  }
+  
+  
+  
+}} // namespace mobject::session

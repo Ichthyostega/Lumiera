@@ -31,6 +31,7 @@
 #include "proc/asset/struct-factory-impl.hpp"
 
 #include "lib/util.hpp"
+#include "lib/symbol.hpp"
 #include "include/logging.h"
 
 #include <boost/format.hpp>
@@ -83,7 +84,7 @@ namespace asset {
   /** Factory method for Structural Asset instances.
    *  First tries to resolve the asset by issuing an capability query.
    *  If unsuccessful, use some internally specialised ctor call.
-   *  @todo work out the struct asset naming scheme!
+   *  @todo work out the struct asset naming scheme! /////////////////////////////////TICKET #565
    *  @todo for now we're using a faked config query, just pulling preconfigured
    *        hardwired answers from a table. Should be replaced by a real resolution engine.
    *  @return an Struct smart ptr linked to the internally registered smart ptr

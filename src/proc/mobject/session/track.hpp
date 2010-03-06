@@ -59,7 +59,7 @@ namespace session {
      * matching track-MO for the Sequence in question. If the Session contains several instances
      * (track-MO) referring to the same trackID (asset), then this causes all objects placed
      * onto this track to be included several times in the resulting render nodes network
-     * (possibly with varying placement properties) 
+     * (possibly with varying placement properties) //////////////TODO 3/2010 likely *not* implementing this feature, because we have sequences 
      */
     class Track : public Meta
       {

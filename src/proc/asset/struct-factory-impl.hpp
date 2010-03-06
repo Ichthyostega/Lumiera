@@ -38,6 +38,7 @@
 
 #include "proc/mobject/session.hpp"
 #include "common/configrules.hpp"
+#include "lib/symbol.hpp"
 #include "lib/error.hpp"
 #include "lib/util.hpp"
 
@@ -47,6 +48,7 @@ using boost::format;
 
 using mobject::Session;
 
+using lib::Symbol;
 using util::isnil;
 using util::contains;
 using asset::Query;
@@ -56,26 +58,31 @@ using lumiera::query::extractID;
 namespace asset {
   
   
-  template<class STRU>
-  struct Traits
-    {
-      static Symbol namePrefix;
-      static Symbol catFolder;
-      static Symbol idSymbol;
-    };
-  
-  template<> Symbol Traits<Track>::namePrefix = "track";
-  template<> Symbol Traits<Track>::catFolder  = "tracks";
-  template<> Symbol Traits<Track>::idSymbol   = "track";
-  
-  template<> Symbol Traits<Pipe>::namePrefix = "pipe";
-  template<> Symbol Traits<Pipe>::catFolder  = "pipes";
-  template<> Symbol Traits<Pipe>::idSymbol   = "pipe";
-  
-  template<> Symbol Traits<const ProcPatt>::namePrefix = "patt";
-  template<> Symbol Traits<const ProcPatt>::catFolder  = "build-templates";
-  template<> Symbol Traits<const ProcPatt>::idSymbol   = "procPatt";
-  
+  namespace { // structural asset ID scheme   ///////////////////////////////////////////////////////////TICKET #565
+    
+    template<class STRU>
+    struct Traits
+      {
+        static Symbol namePrefix;
+        static Symbol catFolder;
+        static Symbol idSymbol;
+      };
+    
+    template<> Symbol Traits<Track>::namePrefix = "track";
+    template<> Symbol Traits<Track>::catFolder  = "tracks";
+    template<> Symbol Traits<Track>::idSymbol   = "track";
+    
+    template<> Symbol Traits<Pipe>::namePrefix = "pipe";
+    template<> Symbol Traits<Pipe>::catFolder  = "pipes";
+    template<> Symbol Traits<Pipe>::idSymbol   = "pipe";
+    
+    template<> Symbol Traits<const ProcPatt>::namePrefix = "patt";
+    template<> Symbol Traits<const ProcPatt>::catFolder  = "build-templates";
+    template<> Symbol Traits<const ProcPatt>::idSymbol   = "procPatt";
+    
+    Symbol genericIdSymbol ("id");
+    
+  }
   
   
   
@@ -94,8 +101,12 @@ namespace asset {
       const Asset::Ident
       createIdent (const Query<STRU>& query)
         {
-          string name (query); 
-          string nameID = extractID (Traits<STRU>::idSymbol, query);
+          string name (query);
+          
+          // does the query somehow specify the desired name-ID?
+          string nameID = extractID (genericIdSymbol, query);
+          if (isnil (nameID))
+            nameID = extractID (Traits<STRU>::idSymbol, query);
           if (isnil (nameID))
             {
                // no name-ID contained in the query...

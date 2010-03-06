@@ -2320,7 +2320,7 @@ For the case here in question this seems to be the ''resource allocation is cons
 And, last but not least, doing large scale allocations is the job of the backend. Exceptions being long-lived objects, like the session or the sequences, which are created once and don't bear the danger of causing memory pressure. Besides, the ProcLayer code shouldn't issue &quot;new&quot; and &quot;delete&quot; when it comes in hand, rather it should use some centralized [[Factories]] for all allocation and freeing, so we can redirect these calls down to the backend, which may use pooling or special placement allocators or the like. The rationale is, for modern hardware/architectures, care has to be taken with heap allocations, esp. with many small objects and irregular usage patterns.
 </pre>
 </div>
-<div title="ModelDependencies" modifier="Ichthyostega" modified="201003020510" created="201003020150" tags="SessionLogic spec dynamic draft" changecount="22">
+<div title="ModelDependencies" modifier="Ichthyostega" modified="201003060012" created="201003020150" tags="SessionLogic spec dynamic draft" changecount="23">
 <pre>Our design of the models (both [[high-level|HighLevelModel]] and [[low-level|LowLevelModel]]) relies partially on dependent objects being kept consitently in sync. Currently (2/2010), __ichthyo__'s assessment is to consider this topic not important and pervasive enough to justify building a dedicated solution, mainly due to the fact of keeping the session implementation mostly single-threaded. Thus, care has to be taken to capture and treat all the relevant dependencies properly at the implementation level.
 
 !known interdependencies
@@ -2339,7 +2339,7 @@ While implemented as StructAsset, additionally we need to assure every instance 
 ;Timeline
 :acts as facade and is implemented by an BindingMO, which can't exist in isolation.
 : __created__ &amp;rArr; create new binding, use either newly created (maybe default) sequence, or use existing sequence
-: __destroy__ &amp;rArr; remove binding, while the bound sequence remains in model.
+: __destroy__ &amp;rArr; remove binding, while the previously bound sequence remains in model.
 ;Binding
 :is completely dependent and can't even be created without prerequisites
 : __created__ &amp;rArr; mandates specification of a timeline, while the sequence is optional and will be created if missing
@@ -3520,13 +3520,11 @@ Besides, they provide an __inward interface__ for the [[ProcNode]]s, enabling th
 
 </pre>
 </div>
-<div title="ProcLayer and Engine" modifier="Ichthyostega" modified="200910311726" created="200706190056" tags="overview" changecount="26">
+<div title="ProcLayer and Engine" modifier="Ichthyostega" modified="201003042333" created="200706190056" tags="overview" changecount="27">
 <pre>The Render Engine is the part of the application doing the actual video calculations. Utilising system level services and retrieving raw audio and video data through [[Lumiera's Backend|backend.html]], its operations are guided by the objects and parameters edited by the user in [[the session|Session]]. Thus, the Lumiera Proc-Layer covers the (abstract) edit operations available to the user, the representation of [[&quot;editable things&quot;|MObjects]] and the translation of those into facilities allowing to [[drive the rendering|Rendering]].
 &lt;&lt;&lt;
 ''Status'': started out as design draft in summer '07, Ichthyo is now in the middle of a implementing the foundations and main structures in C++
 * basic [[AssetManager]] working
-* [[Builder]] implementation is on the way (&amp;rarr;[[more|BuilderPrimitives]])
-* made a first draft of how to wire and operate processing nodes (&amp;rarr;[[more|RenderMechanics]])
 * first attempts to [[integrate with the GUI|GuiIntegration]]
 * first outline of the [[session implementation|PlanningSessionInMem]]
 * as a prerequisite, defined and implemented [[Proc-Layer Command frontend|CommandHandling]]
@@ -4151,7 +4149,7 @@ The session and the models rely on dependent objects beeing kept updated and con
 &amp;rarr; see [[details here...|ModelDependencies]]
 </pre>
 </div>
-<div title="SessionInterface" modifier="Ichthyostega" modified="201002210435" created="200904242108" tags="SessionLogic GuiIntegration design draft discuss" changecount="35">
+<div title="SessionInterface" modifier="Ichthyostega" modified="201003042334" created="200904242108" tags="SessionLogic GuiIntegration design draft discuss" changecount="36">
 <pre>&quot;Session Interface&quot;, when used in a more general sense, denotes a compound of several interfaces and facilities, together forming the primary access point to the user visible contents and state of the editing project.
 * the API of the session class
 * the accompanying management interface (SessionManager API)
@@ -4202,7 +4200,7 @@ While this protects against accessing dangling references, it can't prevent clie
 The considered solution would be to treat this situation as if an authorisation is required; this authorisation for mutation could be checked by a &amp;raquo;wormhole&amp;laqou;-like context access. Of course, in our case we're not dealing with real access restrictions, just a safeguard: While command execution creates such an authorisation token automatically, a client actually wanting to invoke an mutation operations bypassing the command frontend, would need to set up such a token explicitly and manually.
 
 !!!adding and destroying
-Objects can be added and destroyed directly on the top level session API. The actual memory management of the object instances works automatically, based on reference counts. (Even after destroying an object, it may still be indirectly in use by an ongoing render process).
+Objects can be added and destroyed directly on the top level session API. The actual memory management of the object instances works automatically, based on reference counts. (Even after purging an object from the session, it may still be indirectly in use by an ongoing render process).
 When adding an object, a [[scope|PlacementScope]] needs to be specified. Thus it makes sense to provide the {{{add()}}}-operation on the dedicated API of individual session parts, while the generic {{{add()}}}-call on the top-level session API relies on the current QueryFocus to determine the location where to add an object. Besides, as we're always adding the [[Placement]] of an object into the session, this placement may specify an additional constraint or tie to a specific scope; resolving the placement thus may cause the object to move to another location
 
 
@@ -5888,18 +5886,19 @@ Of course, we can place other ~MObjects relative to some track (that's the main 
 &amp;rarr; [[Anatomy of the high-level model|HighLevelModel]]
 </pre>
 </div>
-<div title="TrackHandling" modifier="Ichthyostega" modified="200912080302" created="200804110013" tags="spec" changecount="24">
+<div title="TrackHandling" modifier="Ichthyostega" modified="201003050315" created="200804110013" tags="spec" changecount="32">
 <pre>What //exactly&amp;nbsp;// is denoted by &amp;raquo;Track&amp;laquo; &amp;mdash; //basically&amp;nbsp;// a working area to group media objects placed at this track at various time positions &amp;mdash; varies depending on context:
 * viewed as [[structural asset|StructAsset]], tracks are nothing but global identifiers (possibly with attached tags and description)
 * regarding the structure //within each [[Sequence]],// tracks form a tree-like grid, the individual track being attached to this tree by a [[Placement]], thus setting up properties of placement (time reference origin, output connection, layer, pan) which will be inherited down to any objects located on this track and on child tracks, if not overridden more locally.
 * with respect to //object identity,// a given track-ID can have an incarnation or manifestation as real track-object within several [[sequences|Sequence]] (meaning you could select, disable or choose for rendering all objects in any sequence placed onto this track). Moreover, the track-//object// and the //placement&amp;nbsp;// of this track within the tree of tracks of a given sequence are two distinguishable entities (meaning a given track &amp;mdash; with a couple of objects located on it &amp;mdash; could be placed differently several times within the same sequence {{red{really??}}}, for example with different start offset or with different layering, output mode or pan position)
+{{red{3/2010: no!}}} &amp;mdash; it doesn't work this way. Relative placements attach to other placements, not ~MObjects. Thuse the clips in this example are within the scope of //one// placement. We could create //another// placement of the same track and attach it to to a differenc sequence, but this other placement wouldn't &quot;inherit&quot; the clips attached to the first one!
 
 !Identification
 Tracks thus represent a blend of several concepts, but depending on the context it is allways clear which aspect is meant. Seen as [[assets|Asset]], tracks are known by a unique track-ID, which can be either [[queried|ConfigQuery]], or directly refered to by use of the asset-ID (which is a globally known hash). Usually, all referrals are via track-ID, including when you [[place|Placement]] an object onto a track. 
-Under some cincumstances though, especially from within the [[Builder]], we refer to a {{{Placement&lt;Track&gt;}}} rather, denoting a specific instantiation located at a distinct node within the tree of tracks of a given sequence. These latter referrals are always done by direct object reference, e.g. while traversing the track tree (generally there is no way to refer to a placement by name).
+Under some cincumstances though, especially from within the [[Builder]], we refer to a {{{Placement&lt;Track&gt;}}} rather, denoting a specific instantiation located at a distinct node within the tree of tracks of a given sequence. These latter referrals are always done by direct object reference, e.g. while traversing the track tree (generally there is no way to refer to a placement by name {{red{Note 3/2010 meanwhile we have placementIDs and we have ~MObjectRef. TODO better wording}}}).
 
 !creating tracks
-Similar to [[pipes|Pipe]] and [[processing patterns|ProcPatt]], track-assets need not be created, but rather leap into existence on first referral. On the contrary, you need to explicitly create the {{{Placement&lt;Track&gt;}}} for attaching it to some node within the tree of tracks of an sequence. The public access point for creating such a placement is {{{asset::Struct::create(trackID}}} (i.e. the {{{asset::StructFactory}}}), which, as a convenience shortcut, can also be accessed from the interface of the track-objects within the sequence for adding new child tracks to a given track.
+Similar to [[pipes|Pipe]] and [[processing patterns|ProcPatt]], track-assets need not be created, but rather leap into existence on first referral. On the contrary, you need to explicitly create the {{{Placement&lt;Track&gt;}}} for attaching it to some node within the tree of tracks of an sequence. The public access point for creating such a placement is {{{asset::Struct::create(trackID}}} (i.e. the {{{asset::StructFactory}}}), which, as a convenience shortcut, can also be accessed from the interface of the track-objects within the sequence for adding new child tracks to a given track.{{red{TODO 3/2010: not quite, the latter is an abstraction built on top. It //delegates// to the ~StructFactory internally, but also wraps into Command}}}
 
 !removal
 Deleting a Track is an operation with drastic consequences, as it will cause the removal of all child tracks and the deletion of //all object placements to this track,// which could cause the resepctive objects to go out of scope (being deleted automatically by the placements or other smart pointer classes in charge of them). On the contrary, removing a {{{Placement&lt;Track&gt;}}} from the tree of tracks of an sequence will just cause all objects placed onto this track to disappear (because they are no longer reachable for the build process). On re-adding it, they will show up again. (This is how things behave based on how we defined the relations of the entities to be. Another question is if we want to make this functionality available to the user. Judging from the use of Ardour's &amp;laquo;Playlists&amp;raquo;, such a feature may be quite helpful).
