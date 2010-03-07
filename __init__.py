@@ -60,10 +60,14 @@ def DoxyfileParse(file_contents):
          key_token = False
       else:
          if token == "+=":
-            if key not in data:
-               data[key] = []
+            if not data.has_key(key):
+               data[key] = list()
          elif token == "=":
-            data[key] = []
+            if key == "TAGFILES" and data.has_key(key):
+               append_data( data, key, False, "=" )
+               new_data=False
+            else:
+               data[key] = list()
          else:
             append_data( data, key, new_data, token )
             new_data = True
@@ -76,12 +80,12 @@ def DoxyfileParse(file_contents):
          append_data( data, key, new_data, '\\' )
 
    # compress lists of len 1 into single strings
-   for k, v in data.items():
+   for (k, v) in data.items():
       if len(v) == 0:
          data.pop(k)
 
       # items in the following list will be kept as lists and not converted to strings
-      if k in ["INPUT", "FILE_PATTERNS", "EXCLUDE_PATTERNS"]:
+      if k in ["INPUT", "FILE_PATTERNS", "EXCLUDE_PATTERNS", "TAGFILES"]:
          continue
 
       if len(v) == 1:
@@ -109,12 +113,23 @@ def DoxySourceScan(node, env, path):
 
    data = DoxyfileParse(node.get_contents())
 
-   recursive = data.get("RECURSIVE") == "YES"
+   if data.get("RECURSIVE", "NO") == "YES":
+      recursive = True
+   else:
+      recursive = False
 
    file_patterns = data.get("FILE_PATTERNS", default_file_patterns)
    exclude_patterns = data.get("EXCLUDE_PATTERNS", default_exclude_patterns)
 
+   # We're running in the top-level directory, but the doxygen
+   # configuration file is in the same directory as node; this means
+   # that relative pathnames in node must be adjusted before they can
+   # go onto the sources list
+   conf_dir = os.path.dirname(str(node))
+   
    for node in data.get("INPUT", []):
+      if not os.path.isabs(node):
+         node = os.path.join(conf_dir, node)
       if os.path.isfile(node):
          sources.append(node)
       elif os.path.isdir(node):
@@ -123,8 +138,8 @@ def DoxySourceScan(node, env, path):
                for f in files:
                   filename = os.path.join(root, f)
 
-                  pattern_check = any(fnmatch(filename, y) for y in file_patterns)
-                  exclude_check = any(fnmatch(filename, y) for y in exclude_patterns)
+                  pattern_check = reduce(lambda x, y: x or bool(fnmatch(filename, y)), file_patterns, False)
+                  exclude_check = reduce(lambda x, y: x and fnmatch(filename, y), exclude_patterns, True)
 
                   if pattern_check and not exclude_check:
                      sources.append(filename)
@@ -132,7 +147,27 @@ def DoxySourceScan(node, env, path):
             for pattern in file_patterns:
                sources.extend(glob.glob("/".join([node, pattern])))
 
-   sources = [env.File(path) for path in sources]
+   # Add tagfiles to the list of source files:
+   for node in data.get("TAGFILES", []):
+      file = node.split("=")[0]
+      if not os.path.isabs(file):
+         file = os.path.join(conf_dir, file)
+      sources.append(file)
+   
+   # Add additional files to the list of source files:
+   def append_additional_source(option):
+      file = data.get(option, "")
+      if file != "":
+         if not os.path.isabs(file):
+            file = os.path.join(conf_dir, file)
+         if os.path.isfile(file):
+            sources.append(file)
+
+   append_additional_source("HTML_STYLESHEET")
+   append_additional_source("HTML_HEADER")
+   append_additional_source("HTML_FOOTER")
+
+   sources = map( lambda path: env.File(path), sources )
    return sources
 
 
@@ -147,7 +182,7 @@ def DoxyEmitter(source, target, env):
       "HTML": ("YES", "html"),
       "LATEX": ("YES", "latex"),
       "RTF": ("NO", "rtf"),
-      "MAN": ("NO", "man"),
+      "MAN": ("YES", "man"),
       "XML": ("NO", "xml"),
    }
 
@@ -155,11 +190,22 @@ def DoxyEmitter(source, target, env):
 
    targets = []
    out_dir = data.get("OUTPUT_DIRECTORY", ".")
+   if not os.path.isabs(out_dir):
+      conf_dir = os.path.dirname(str(source[0]))
+      out_dir = os.path.join(conf_dir, out_dir)
 
    # add our output locations
-   for k, v in output_formats.items():
+   for (k, v) in output_formats.items():
       if data.get("GENERATE_" + k, v[0]) == "YES":
          targets.append(env.Dir( os.path.join(out_dir, data.get(k + "_OUTPUT", v[1]))) )
+
+   # add the tag file if neccessary:
+   tagfile = data.get("GENERATE_TAGFILE", "")
+   if tagfile != "":
+      if not os.path.isabs(tagfile):
+         conf_dir = os.path.dirname(str(source[0]))
+         tagfile = os.path.join(conf_dir, tagfile)
+      targets.append(env.File(tagfile))
 
    # don't clobber targets
    for node in targets:
