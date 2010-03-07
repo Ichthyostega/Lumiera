@@ -312,5 +312,29 @@ namespace mobject {
   typedef MORef<MObject> MObjectRef;
   
   
+  /* === convenience shortcuts === */
+  
+  /** check if the two references actually share ownership
+   *  on the same underlying \em MObject (as opposed to referring
+   *  to the same \em Placement, which is tested by \c operator== )
+   */
+  template<class MOX, class MOY>
+  inline bool
+  isSharedPointee (MORef<MOX> const& ref1, MORef<MOY> const& ref2)
+  {
+    return ref1.isValid() && ref2.isValid()
+        && isSharedPointee (ref1.getPlacement(), ref2.getPlacement());
+  }
+  
+  /** check if the two references actually denote an equivalent placement */
+  template<class MOX, class MOY>
+  inline bool
+  isEquivalentPlacement (MORef<MOX> const& ref1, MORef<MOY> const& ref2)
+  {
+    return ref1.isValid() && ref2.isValid()
+        && isSameDef (ref1.getPlacement(), ref2.getPlacement());
+  }
+  
+  
 } // namespace mobject
 #endif

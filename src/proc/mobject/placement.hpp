@@ -161,6 +161,14 @@ namespace mobject {
           target = static_pointer_cast<Y>(*this);
         }
       
+      /** free function to detect two placements sharing a pointee */
+      friend bool
+      isSharedPointee (Placement const& p1, Placement const& p2)
+      {
+        return static_cast<const void*> (p1.get())
+            == static_cast<const void*> (p2.get());
+      }
+      
       
       operator string()   const ;
       size_t use_count()  const { return _SmartPtr::use_count(); }
