@@ -1,4 +1,5 @@
 # vim: set et sw=3 tw=0 fo=awqorc ft=python:
+# -*- mode:python; coding:utf-8; -*-
 #
 # Astxx, the Asterisk C++ API and Utility Library.
 # Copyright (C) 2005, 2006  Matthew A. Nicholson
