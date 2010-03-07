@@ -46,6 +46,7 @@ namespace test    {
   
   using asset::PTimeline;
   using asset::PSequence;
+  using asset::RTrack;
   
   using lumiera::Time;
   
@@ -109,7 +110,7 @@ namespace test    {
           //TODO
           
           //verify default sequence
-          Track rootTrack = seq->rootTrack();
+          RTrack rootTrack = seq->rootTrack();
           ASSERT (rootTrack->isValid());
           ASSERT (Time(0) == rootTrack->length());
           ASSERT (0 == rootTrack->subTracks.size());

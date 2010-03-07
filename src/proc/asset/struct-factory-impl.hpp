@@ -123,7 +123,7 @@ namespace asset {
           ENSURE (contains (name, nameID));
           
           Category cat (STRUCT, Traits<STRU>::catFolder);
-          return Asset::Ident (name, cat );
+          return Asset::Ident (name, cat );                       ///////////////////////TICKET #565  the ID field should be just the ID, the query should go into a dedicated "capabilities" field.
         }
       
       

@@ -4149,7 +4149,7 @@ The session and the models rely on dependent objects beeing kept updated and con
 &amp;rarr; see [[details here...|ModelDependencies]]
 </pre>
 </div>
-<div title="SessionInterface" modifier="Ichthyostega" modified="201003042334" created="200904242108" tags="SessionLogic GuiIntegration design draft discuss" changecount="36">
+<div title="SessionInterface" modifier="Ichthyostega" modified="201003070527" created="200904242108" tags="SessionLogic GuiIntegration design draft discuss" changecount="41">
 <pre>&quot;Session Interface&quot;, when used in a more general sense, denotes a compound of several interfaces and facilities, together forming the primary access point to the user visible contents and state of the editing project.
 * the API of the session class
 * the accompanying management interface (SessionManager API)
@@ -4210,6 +4210,12 @@ When adding an object, a [[scope|PlacementScope]] needs to be specified. Thus it
 * how to observe the requirement of ''dispatching'' mutations ([[Command]])?
 * how to integrate the two possible search depths (children and all)?
 * how is all of this related to the LayerSeparationInterfaces, here SessionFacade und EditFacade?
+
+&lt;&lt;&lt;
+__preliminary notes__: {{red{3/2010}}} Discovery functions accessible from the session API are always written such as to return ~MObjectRefs. These expose generic functions for modifying the structure: {{{attach(MObjectRef)}}} and {{{purge()}}}. The session API exposes variations of these functions. Actually, all these functions do dispatch the respective commands automatically. To the contrary, the raw functions for adding and removing placements are located on the PlacementIndex; the're accessible as SessionServices &amp;mdash; which are intended for Proc-Layer's internal use solely. This separation isn't meant to be airtight, just an reminder for proper use.
+
+Currently, I'm planning to modify MObjectRef to return only a const ref to the underlying facilities by default. Then, there would be a subclass which is //mutation enabled.// But this subclass will check for the presence of a mutation-permission token &amp;mdash; which is exposed via thread local storage, but //only within a command dispatch.// Again, no attempt is made to make this barrier airtight. Indeed, for tests, the mutation-permission token can just be created in the local scope. After all, this is not conceived as an authorisation scheme, rather as a automatic sanity check. It's the liability of the client code to ensure any mutation is dispatched.
+&lt;&lt;&lt;
 </pre>
 </div>
 <div title="SessionLifecycle" modifier="Ichthyostega" modified="201001070440" created="200911070329" tags="SessionLogic spec" changecount="23">
@@ -5886,7 +5892,7 @@ Of course, we can place other ~MObjects relative to some track (that's the main 
 &amp;rarr; [[Anatomy of the high-level model|HighLevelModel]]
 </pre>
 </div>
-<div title="TrackHandling" modifier="Ichthyostega" modified="201003050315" created="200804110013" tags="spec" changecount="32">
+<div title="TrackHandling" modifier="Ichthyostega" modified="201003070510" created="200804110013" tags="spec" changecount="35">
 <pre>What //exactly&amp;nbsp;// is denoted by &amp;raquo;Track&amp;laquo; &amp;mdash; //basically&amp;nbsp;// a working area to group media objects placed at this track at various time positions &amp;mdash; varies depending on context:
 * viewed as [[structural asset|StructAsset]], tracks are nothing but global identifiers (possibly with attached tags and description)
 * regarding the structure //within each [[Sequence]],// tracks form a tree-like grid, the individual track being attached to this tree by a [[Placement]], thus setting up properties of placement (time reference origin, output connection, layer, pan) which will be inherited down to any objects located on this track and on child tracks, if not overridden more locally.
@@ -5898,10 +5904,13 @@ Tracks thus represent a blend of several concepts, but depending on the context 
 Under some cincumstances though, especially from within the [[Builder]], we refer to a {{{Placement&lt;Track&gt;}}} rather, denoting a specific instantiation located at a distinct node within the tree of tracks of a given sequence. These latter referrals are always done by direct object reference, e.g. while traversing the track tree (generally there is no way to refer to a placement by name {{red{Note 3/2010 meanwhile we have placementIDs and we have ~MObjectRef. TODO better wording}}}).
 
 !creating tracks
-Similar to [[pipes|Pipe]] and [[processing patterns|ProcPatt]], track-assets need not be created, but rather leap into existence on first referral. On the contrary, you need to explicitly create the {{{Placement&lt;Track&gt;}}} for attaching it to some node within the tree of tracks of an sequence. The public access point for creating such a placement is {{{asset::Struct::create(trackID}}} (i.e. the {{{asset::StructFactory}}}), which, as a convenience shortcut, can also be accessed from the interface of the track-objects within the sequence for adding new child tracks to a given track.{{red{TODO 3/2010: not quite, the latter is an abstraction built on top. It //delegates// to the ~StructFactory internally, but also wraps into Command}}}
+Similar to [[pipes|Pipe]] and [[processing patterns|ProcPatt]], track-assets need not be created, but rather leap into existence on first referral. On the contrary, you need to explicitly create the {{{Placement&lt;Track&gt;}}} for attaching it to some node within the tree of tracks of an sequence. The public access point for creating such a placement is {{{MObject::create(trackID}}} (i.e. the ~MObjectFactory. Here, the {{{trackID}}} denotes the track-asset. This placement, as returned from the ~MObjectFactory isn't attached to the session yet; {{{Session::current-&gt;attach(trackPlacement)}}} performs this step by creating a copy managed by the PlacementIndex and attaching it at the current QueryFocus, which was assumed to point to a track previously. Usually, client code would use one of the provided convenience shortcuts for this rather involved call sequence:
+* the interface of the track-~MObjects exposes a function for adding new child tracks.
+* the session API contains a function to attach child tracks. In both cases, existing tracks can be referred by plain textual ID.
+* any MObjectRef to an object within the session allows to attach another placement or ~MObjectRef
 
 !removal
-Deleting a Track is an operation with drastic consequences, as it will cause the removal of all child tracks and the deletion of //all object placements to this track,// which could cause the resepctive objects to go out of scope (being deleted automatically by the placements or other smart pointer classes in charge of them). On the contrary, removing a {{{Placement&lt;Track&gt;}}} from the tree of tracks of an sequence will just cause all objects placed onto this track to disappear (because they are no longer reachable for the build process). On re-adding it, they will show up again. (This is how things behave based on how we defined the relations of the entities to be. Another question is if we want to make this functionality available to the user. Judging from the use of Ardour's &amp;laquo;Playlists&amp;raquo;, such a feature may be quite helpful).
+Deleting a Track is an operation with drastic consequences, as it will cause the removal of all child tracks and the deletion of //all object placements to this track,// which could cause the resepctive objects to go out of scope (being deleted automatically by the placements or other smart pointer classes in charge of them). If the removed track was the root track of a sequence, this sequence and any timeline or VirtualClip binding to it will be killed as well. Deleting of objects can be achieved by {{{MObjectRef::purge()}}} or {{{Session::purge(MObjectRef)}}}
 
 !using Tracks
 The '''Track Asset''' is a rather static object with limited capabilities. It's main purpose is to be a point of referral. Track assets have a description field and you may assign a list of [[tags|Tag]] to them (which could be used for binding ConfigRules).  Note that track assets are globally known within the session, they can't be limited to just one [[Sequence]] (but you are allways free not to refer to some track from a given sequence). By virtue of this global nature, you can utilize the track assets to enable/disable a bunch of objects irrespective of what sequence they are located in, and probably it's a good idea to allow the selection of specific tracks for rendering.

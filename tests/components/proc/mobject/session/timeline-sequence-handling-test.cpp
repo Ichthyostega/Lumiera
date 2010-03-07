@@ -271,10 +271,10 @@ namespace test    {
           RTrack someTrack = sess->sequences[0]->getTracks();
           
           // indirectly cause a new sequence to come to life...
-          RTrack newTrack = sess->getRoot().attach (someTrack);               /////////////////TICKET #412  does attaching new objects really work this way??
+          RTrack newTrack = sess->getRoot().attach (someTrack);        // attach new Placement<Track> to root scope
           CHECK (newTrack != someTrack); // it's a new placement
 
-          CHECK (num_sequences + 1 == sess->sequences.size());
+          CHECK (num_sequences + 1 == sess->sequences.size());         // this root-attachment created a new sequence by sideeffect
           PSequence aSequence = sess->sequences[num_sequences];
           CHECK (newTrack == aSequence->getTracks());
           CHECK (newTrack);
