@@ -28,7 +28,7 @@
 
 TESTS_BEGIN
 
-TEST ("acquire_existing")
+TEST (acquire_existing)
 {
   lumiera_backend_init ();
   llist node;
@@ -46,7 +46,7 @@ TEST ("acquire_existing")
 }
 
 
-TEST ("acquire_existing_again")
+TEST (acquire_existing_again)
 {
   lumiera_backend_init ();
   llist node;
@@ -67,7 +67,7 @@ TEST ("acquire_existing_again")
     return 1;
 }
 
-TEST ("acquire_existing_3files")
+TEST (acquire_existing_3files)
 {
   lumiera_backend_init ();
   llist node1;
@@ -100,7 +100,7 @@ TEST ("acquire_existing_3files")
     return 1;
 }
 
-TEST ("acquire_create")
+TEST (acquire_create)
 {
   lumiera_backend_init ();
   llist node;
@@ -117,7 +117,7 @@ TEST ("acquire_create")
     return 1;
 }
 
-TEST ("acquire_create_dir")
+TEST (acquire_create_dir)
 {
   lumiera_backend_init ();
   llist node;
