@@ -319,7 +319,7 @@ TEST (mmap_section)
   LumieraFile file = lumiera_file_new (",tmp-filemmap", LUMIERA_FILE_RECREATE);
   lumiera_file_set_chunksize_bias (file, 4096, 0);
 
-  LUMIERA_FILE_MMAP_SECTION(file, 20, 20, addr)
+  LUMIERA_FILE_MMAP_SECTION (NOBUG_ON, file, 20, 20, addr)
     {
       strcpy (addr, "mmap section");
     }
@@ -337,7 +337,7 @@ TEST (mmap_section_err)
   LumieraFile file = lumiera_file_new (",tmp-filemmap", LUMIERA_FILE_RECREATE);
   /* forgot to set lumiera_file_chunksize_set (file, 4096); */
 
-  LUMIERA_FILE_MMAP_SECTION(file, 20, 20, addr)
+  LUMIERA_FILE_MMAP_SECTION (NOBUG_ON, file, 20, 20, addr)
     {
       strcpy (addr, "mmap section");
     }

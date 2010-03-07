@@ -170,12 +170,13 @@ lumiera_file_release_mmap (LumieraFile self, LumieraMMap map);
 
 /**
  * helper macro for acquireing and releasing maped regions
+ * @param nobugflag yet unused
  * @param file the file from from where to acquire the mapped region
  * @param start the start offset for the mmaped region
  * @param size the length of the requested block
  * @param addr name of a void* variable pointing to the requested memory
  */
-#define LUMIERA_FILE_MMAP_SECTION(file, start, size, addr)              \
+#define LUMIERA_FILE_MMAP_SECTION(nobugflag, file, start, size, addr)   \
   for (LumieraMMap map_##__LINE__ =                                     \
          lumiera_file_mmap_acquire (file, start, size);                 \
        map_##__LINE__;                                                  \
