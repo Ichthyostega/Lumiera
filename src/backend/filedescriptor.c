@@ -200,7 +200,12 @@ lumiera_filedescriptor_new (LumieraFiledescriptor template)
   self->mmapings = NULL;
   llist_init (&self->files);
 
+  RESOURCE_USER_INIT(self->filelock_rh);
+
   lumiera_mutex_init (&self->lock, "filedescriptor", &NOBUG_FLAG (mutex_dbg), NOBUG_CONTEXT);
+
+  lumiera_rwlock_init (&self->filelock, "filelock", &NOBUG_FLAG (filedescriptor_dbg), NOBUG_CONTEXT);
+  self->lock_cnt = 0;
 
   return self;
 }
@@ -211,6 +216,7 @@ lumiera_filedescriptor_delete (LumieraFiledescriptor self, const char* name)
 {
   TRACE (filedescriptor_dbg, "%p %s", self, name);
 
+  REQUIRE (!self->lock_cnt, "File still locked");
   REQUIRE (llist_is_empty (&self->files));
 
   lumiera_filedescriptorregistry_remove (self);
@@ -230,6 +236,153 @@ lumiera_filedescriptor_delete (LumieraFiledescriptor self, const char* name)
       TODO ("really release filehandle");
     }
 
+  lumiera_rwlock_destroy (&self->filelock, &NOBUG_FLAG (mutex_dbg), NOBUG_CONTEXT);
   lumiera_mutex_destroy (&self->lock, &NOBUG_FLAG (mutex_dbg), NOBUG_CONTEXT);
+
   lumiera_free (self);
 }
+
+
+LumieraFiledescriptor
+lumiera_filedescriptor_rdlock (LumieraFiledescriptor self)
+{
+  TRACE (filedescriptor_dbg);
+
+  if (self)
+    {
+      lumiera_rwlock_rdlock (&self->filelock, &NOBUG_FLAG (filedescriptor_dbg), &self->filelock_rh, NOBUG_CONTEXT);
+
+      int fd = lumiera_filedescriptor_handle_acquire (self);
+      int err = 0;
+
+      LUMIERA_MUTEX_SECTION (mutex_dbg, &self->lock)
+        {
+          if (!self->lock_cnt)
+            {
+
+              struct flock lock;
+              lock.l_type = F_RDLCK;
+              lock.l_whence = SEEK_SET;
+              lock.l_start = 0;
+              lock.l_len = 0;
+
+              while ((err = fcntl (fd, F_SETLKW, &lock)) == -1 && errno == EINTR)
+                ;
+
+            }
+          if (!err)
+            ++self->lock_cnt;
+        }
+
+      if (err)
+        {
+          lumiera_filedescriptor_handle_release (self);
+          lumiera_rwlock_unlock (&self->filelock, &NOBUG_FLAG (filedescriptor_dbg), &self->filelock_rh, NOBUG_CONTEXT);
+
+          LUMIERA_ERROR_SET_WARNING (filedescriptor_dbg, ERRNO, lumiera_filedescriptor_name (self));
+          self = NULL;
+        }
+    }
+
+  return self;
+}
+
+
+
+LumieraFiledescriptor
+lumiera_filedescriptor_wrlock (LumieraFiledescriptor self)
+{
+  TRACE (filedescriptor_dbg);
+
+  if (self)
+    {
+      lumiera_rwlock_wrlock (&self->filelock, &NOBUG_FLAG (filedescriptor_dbg), &self->filelock_rh, NOBUG_CONTEXT);
+
+      int fd = lumiera_filedescriptor_handle_acquire (self);
+      int err = 0;
+
+      LUMIERA_MUTEX_SECTION(mutex_dbg, &self->lock)
+        {
+
+          struct flock lock;
+          lock.l_type = F_WRLCK;
+          lock.l_whence = SEEK_SET;
+          lock.l_start = 0;
+          lock.l_len = 0;
+
+          while ((err = fcntl (fd, F_SETLKW, &lock)) == -1 && errno == EINTR)
+            ;
+
+          if (!err)
+            self->lock_cnt = -1;
+
+        }
+
+      if (err)
+        {
+          lumiera_filedescriptor_handle_release (self);
+          lumiera_rwlock_unlock (&self->filelock, &NOBUG_FLAG (filedescriptor_dbg), &self->filelock_rh, NOBUG_CONTEXT);
+          LUMIERA_ERROR_SET_WARNING (filedescriptor_dbg, ERRNO, lumiera_filedescriptor_name (self));
+          self = NULL;
+        }
+    }
+
+  return self;
+}
+
+
+LumieraFiledescriptor
+lumiera_filedescriptor_unlock (LumieraFiledescriptor self)
+{
+  TRACE (filedescriptor_dbg);
+
+  if (self)
+    {
+      int fd = lumiera_filehandle_get (self->handle);
+      REQUIRE (fd >= 0, "was not locked?");
+      int err = 0;
+
+      LUMIERA_MUTEX_SECTION(mutex_dbg, &self->lock)
+        {
+          if (self->lock_cnt == -1)
+            self->lock_cnt = 0;
+          else
+            --self->lock_cnt;
+
+          if (!self->lock_cnt)
+            {
+
+              struct flock lock;
+              lock.l_type = F_UNLCK;
+              lock.l_whence = SEEK_SET;
+              lock.l_start = 0;
+              lock.l_len = 0;
+
+              while ((err = fcntl (fd, F_SETLK, &lock)) == -1 && errno == EINTR)
+                ;
+            }
+        }
+
+      if (err)
+        {
+          LUMIERA_ERROR_SET_WARNING (filedescriptor_dbg, ERRNO, lumiera_filedescriptor_name (self));
+          self = NULL;
+        }
+      else
+        {
+          lumiera_filedescriptor_handle_release (self);
+          lumiera_rwlock_unlock (&self->filelock, &NOBUG_FLAG (filedescriptor_dbg), &self->filelock_rh, NOBUG_CONTEXT);
+        }
+    }
+
+  return self;
+}
+
+
+/*
+// Local Variables:
+// mode: C
+// c-file-style: "gnu"
+// indent-tabs-mode: nil
+// End:
+*/

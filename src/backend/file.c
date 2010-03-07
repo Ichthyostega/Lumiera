@@ -191,6 +191,40 @@ lumiera_file_release_mmap (LumieraFile self, LumieraMMap map)
   lumiera_mmapings_release_mmap (lumiera_file_mmapings (self), map);
 }
 
+
+
+LumieraFile
+lumiera_file_rdlock (LumieraFile self)
+{
+  if (self && !lumiera_filedescriptor_rdlock (self->descriptor))
+    return NULL;
+
+  return self;
+}
+
+
+LumieraFile
+lumiera_file_wrlock (LumieraFile self)
+{
+  if (self && !lumiera_filedescriptor_wrlock (self->descriptor))
+    return NULL;
+
+  return self;
+}
+
+
+LumieraFile
+lumiera_file_unlock (LumieraFile self)
+{
+  if (self && !lumiera_filedescriptor_unlock (self->descriptor))
+    return NULL;
+
+  return self;
+}
+
+
+
+
 /*
 // Local Variables:
 // mode: C

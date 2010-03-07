@@ -87,4 +87,32 @@ TEST ("more")
   lumiera_config_destroy ();
 }
 
+
+
+TEST (file_locking)
+{
+
+  lumiera_backend_init ();
+  LumieraFile file = lumiera_file_new (",tmp_testfile", LUMIERA_FILE_RECREATE);
+
+
+  LumieraFile locked = lumiera_file_wrlock (file);
+  CHECK (locked);
+  CHECK (lumiera_file_unlock (locked));
+
+  lumiera_file_delete (file);
+  lumiera_backend_destroy ();
+  lumiera_config_destroy ();
+}
+
+
+PLANNED_TEST (file_locking_blocked)
+{
+}
+
+
+
+
+
+
 TESTS_END

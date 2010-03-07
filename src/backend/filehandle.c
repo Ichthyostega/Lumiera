@@ -66,13 +66,6 @@ lumiera_filehandle_destroy_node (LList node)
 }
 
 
-int
-lumiera_filehandle_get (LumieraFilehandle self)
-{
-  REQUIRE (self->descriptor);
-  return -1;
-}
-
 
 int
 lumiera_filehandle_handle (LumieraFilehandle self)

@@ -83,4 +83,15 @@ lumiera_filehandle_destroy_node (LList node);
 int
 lumiera_filehandle_handle (LumieraFilehandle self);
 
+
+/**
+ * just accessor, no saftey net
+ */
+static inline int
+lumiera_filehandle_get (LumieraFilehandle self)
+{
+  REQUIRE (self->descriptor);
+  return self->fd;
+}
+
 #endif

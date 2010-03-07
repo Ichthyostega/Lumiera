@@ -234,6 +234,49 @@ size_t
 lumiera_file_bias_get (LumieraFile self);
 
 
+
+
+/**
+ * Place and remove locks on a file
+ * This locks are per thread and lock the file across multiple lumiera processes
+ * (or any other programm which repects advisory file locking).
+ * Only exclusive locks over the whole file are supported for initially accessing
+ * a file, other locking is done somewhere else.
+ */
+
+LumieraFile
+lumiera_file_rdlock (LumieraFile self);
+
+LumieraFile
+lumiera_file_wrlock (LumieraFile self);
+
+
+LumieraFile
+lumiera_file_unlock (LumieraFile self);
+
+
+#define LUMIERA_FILE_RDLOCK_SECTION(nobugflag, file)    \
+  for (LumieraFile filelock_##__LINE__ =                \
+         lumiera_file_rdlock (file);                    \
+       filelock_##__LINE__;                             \
+       ({                                               \
+         lumiera_file_unlock (filelock_##__LINE__);     \
+         filelock_##__LINE__ = NULL;                    \
+       }))
+
+#define LUMIERA_FILE_WRLOCK_SECTION(nobugflag, file)    \
+  for (LumieraFile filelock_##__LINE__ =                \
+         lumiera_file_wrlock (file);                    \
+       filelock_##__LINE__;                             \
+       ({                                               \
+         lumiera_file_unlock (filelock_##__LINE__);     \
+         filelock_##__LINE__ = NULL;                    \
+       }))
+
+
+
+
+
 #endif
 
 /*

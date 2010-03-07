@@ -23,6 +23,7 @@
 #define LUMIERA_FILEDESCRIPTOR_H
 
 #include "lib/mutex.h"
+#include "lib/rwlock.h"
 #include "lib/psplay.h"
 #include "lib/llist.h"
 
@@ -73,6 +74,12 @@ struct lumiera_filedescriptor_struct
 
   /** list of all attached 'file' structures, that are the names of the files */
   llist files;
+
+  /** file locking, a rwlock for thread locking */
+  lumiera_rwlock filelock;
+  /** readlock counter for releasing the file lock, -1 for write lock, 0 = unlocked */
+  int lock_cnt;
+  RESOURCE_USER (filelock_rh);
 };
 
 
@@ -125,4 +132,27 @@ lumiera_filedescriptor_new (LumieraFiledescriptor template);
 void
 lumiera_filedescriptor_delete (LumieraFiledescriptor self, const char* name);
 
+
+
+LumieraFiledescriptor
+lumiera_filedescriptor_rdlock (LumieraFiledescriptor self);
+
+
+LumieraFiledescriptor
+lumiera_filedescriptor_wrlock (LumieraFiledescriptor self);
+
+
+LumieraFiledescriptor
+lumiera_filedescriptor_unlock (LumieraFiledescriptor self);
+
+
+
+
 #endif
+/*
+// Local Variables:
+// mode: C
+// c-file-style: "gnu"
+// indent-tabs-mode: nil
+// End:
+*/
