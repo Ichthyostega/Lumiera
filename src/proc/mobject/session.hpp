@@ -40,6 +40,9 @@
  **       but simplified mock setup of the session and session manager, without
  **       any access and synchronisation and similar concerns, to read top down.
  **
+ ** @see session-structure-test.cpp
+ ** @see timeline-sequence-handling-test.cpp
+ ** @see session-modify-parts-test.cpp
  */
 
 
@@ -48,13 +51,20 @@
 
 #include "proc/mobject/placement.hpp"
 #include "proc/mobject/session/defsmanager.hpp"
+#include "lib/ref-array.hpp"
 #include "lib/singleton.hpp"
 #include "lib/symbol.hpp"
+#include "lib/p.hpp"
 
 #include <boost/noncopyable.hpp>
 #include <tr1/memory>
 
 
+
+namespace asset {
+  class Timeline;    typedef lumiera::P<Timeline> PTimeline;
+  class Sequence;    typedef lumiera::P<Sequence> PSequence;
+}
 
 namespace mobject {
   
@@ -77,31 +87,46 @@ namespace mobject {
    * 
    * Opening a Session has effectively global consequences, 
    * because the Session defines the available Assets, and some 
-   * kinds of Assets define default behaviour. Thus, access to 
-   * the Session is similar to a Singleton instance.
+   * kinds of Assets define default behaviour. Thus, access to the
+   * Session is similar to a Singleton, through \c Session::current
+   * Besides the SessionManager, several sub-interfaces are exposed
+   * as embedded components: DefaultsManger, timelines and sequences.
    * 
    * @note Any client should be aware that the Session can be closed, 
    *       replaced and loaded. The only way to access the Session is
    *       via a "PImpl" smart pointer session::PSess (which indeed is
    *       a reference to the SessManager and is accessible as the static
-   *       field Session::current). You will never be able to get a direct
+   *       field Session::current). Clients shouldn't try to get a direct
    *       pointer or reference to the Session object.
    *  
    */
-  class Session : private boost::noncopyable
+  class Session 
+    : boost::noncopyable
     {
     protected:
-      Session (session::DefsManager&)  throw();
+      typedef session::DefsManager&            DefaultsAccess;
+      typedef lib::RefArray<asset::PTimeline>& TimelineAccess;
+      typedef lib::RefArray<asset::PSequence>& SequenceAccess;
+      
+      
+      Session (DefaultsAccess
+              ,TimelineAccess
+              ,SequenceAccess)  throw();
       virtual ~Session ();
-
+      
+      
     public:
-      static session::SessManager& current;
       static bool initFlag;                     ///////////////TICKET #518  yet another hack; actually need to care for session manager startup.
-      session::DefsManager& defaults;           ///////////////TODO this is a hack... better solve it based on the new SessionServices mechanism
+      
+      static session::SessManager& current;
+      
+      DefaultsAccess defaults;
+      TimelineAccess timelines;
+      SequenceAccess sequences;
       
       virtual bool isValid ()              = 0;
-      virtual void add (PMO& placement)    = 0;
-      virtual bool remove (PMO& placement) = 0;
+      virtual void attach (PMO& placement) = 0;
+      virtual bool detach (PMO& placement) = 0;
       
       virtual session::PFix& getFixture () = 0;
       virtual void rebuildFixture ()       = 0;

@@ -87,8 +87,8 @@ namespace session {
       
       /* ==== Session API ==== */
       virtual bool isValid ();
-      virtual void add (PMO& placement);
-      virtual bool remove (PMO& placement);
+      virtual void attach (PMO& placement);
+      virtual bool detach (PMO& placement);
       
       virtual PFix& getFixture ();
       virtual void rebuildFixture ();
@@ -221,7 +221,9 @@ namespace session {
    * actual configuration of the session implementation compound:
    * forming an inheritance chain of all internal SesssionServices
    * stacked on top of the SessionImpl class.
-   * @note SessionImplAPI is actually an alias to the global Session PImpl
+   * @note SessionImplAPI is actually used within the SessManagerImpl
+   *       to create "the session" instance and expose it through the
+   *       global Session PImpl
    */
   typedef SessionServices< Types< SessionServiceFetch
                                 , SessionServiceExploreScope

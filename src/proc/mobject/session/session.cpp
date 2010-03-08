@@ -121,9 +121,14 @@ namespace mobject {
   
   
   
-  Session::Session (session::DefsManager& def)  throw()
-    : defaults(def)
+  Session::Session (DefaultsAccess defs
+                   ,TimelineAccess tils
+                   ,SequenceAccess seqs)  throw()
+    : defaults(defs)
+    , timelines(tils)
+    , sequences(seqs)
   { }
+  
   
   // Emit the vtables and other magic stuff here...
   SessManager::~SessManager() { }

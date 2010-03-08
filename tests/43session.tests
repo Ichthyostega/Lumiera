@@ -212,7 +212,11 @@ out: current Session-Impl-ID = 3
 END
 
 
-PLANNED "SessionStructure_test" SessionStructure_test <<END
+PLANNED "Session structure basics" SessionStructure_test <<END
+END
+
+
+PLANNED "modifying session contents" SessionModifyParts_testt <<END
 END
 
 
