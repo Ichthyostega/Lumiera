@@ -33,7 +33,7 @@
  ** - contained objects accessed by reference, never NULL.
  ** - the exposed iterator automatically dereferences
  ** - TODO: detaching of objects...
- ** - TODO: retro-fit with refarray interface (--> builder branch)
+ ** - TODO: retro-fit with RefArray interface
  ** 
  ** @see scoped-ptrvect-test.cpp
  ** @see scoped-holder.hpp

@@ -1,5 +1,5 @@
 /*
-  REFARRAYIMPL.hpp  -  some implementations of the ref-array interface
+  REF-ARRAY-IMPL.hpp  -  some implementations of the ref-array interface
  
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
@@ -20,30 +20,30 @@
  
 */
 
-/** @file refarrayimpl.hpp
+/** @file ref-array-impl.hpp
  ** Some (library-) implementations of the RefArray interface.
- **
+ ** 
  ** Being an array-like object exposing just a const ref, it is typically used
  ** on interfaces, and the type of the array "elements" usually is a ABC or interface.
- ** The actual implementation usually holds a subclass, and is either based on a vector,
+ ** The actual implementation typically holds a subclass, and is either based on a vector,
  ** or a fixed storage contained within the implementation. The only price to pay is
- ** that of an virtual call on element access.
+ ** a virtual call on element access.
  ** 
- ** For advanced use it would be possible to have a pointer-array or even an embedded
+ ** For advanced uses it would be possible to have a pointer-array or even an embedded
  ** storage of variant-records, able to hold a mixture of subclasses. (the latter cases
  ** will be implemented when needed).
- **
- ** @see refarraytest.cpp
+ ** 
+ ** @see ref-array-test.cpp
  ** 
  */
 
 
-#ifndef LIB_REFARRAYIMPL_H
-#define LIB_REFARRAYIMPL_H
+#ifndef LIB_REF_ARRAY_IMPL_H
+#define LIB_REF_ARRAY_IMPL_H
 
 
-#include "lib/refarray.hpp"
-#include "proc/nobugcfg.hpp"
+#include "lib/ref-array.hpp"
+#include "include/logging.h"
 
 #include <vector>
 using std::vector;
@@ -74,7 +74,7 @@ namespace lib {
           return table_.size();
         }
       
-      virtual B const& operator[] (size_t i)  const 
+      virtual B const& operator[] (size_t i)  const
         {
           REQUIRE (i < size());
           return table_[i];
@@ -108,7 +108,7 @@ namespace lib {
   
   
   /**
-   * RefArray implementation based on a fix sized array,
+   * RefArray implementation based on a fixed size array,
    * i.e. the storage is embedded. Embedded subclass obj
    * either need to be default constructible or be
    * placed directly by a factory
@@ -167,8 +167,9 @@ namespace lib {
           REQUIRE (i < size());
           return array_[i];
         }
-
+      
     };
+  
   
 } // namespace lib
 #endif

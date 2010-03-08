@@ -26,7 +26,7 @@
 
 #include "proc/engine/procnode.hpp"
 #include "proc/engine/bufftable.hpp"
-#include "lib/refarray.hpp"
+#include "lib/ref-array.hpp"
 
 #include <boost/scoped_ptr.hpp>
 #include <iostream>

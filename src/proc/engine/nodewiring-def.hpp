@@ -41,7 +41,7 @@
 
 
 #include "proc/engine/procnode.hpp"
-#include "lib/refarray.hpp"
+#include "lib/ref-array.hpp"
 #include "lib/util-foreach.hpp"
 
 #include <boost/noncopyable.hpp>

@@ -1,5 +1,5 @@
 /*
-  REFARRAY.hpp  -  abstraction providing array-like access to a list of references
+  REF-ARRAY.hpp  -  abstraction providing array-like access to a list of references
  
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
@@ -21,8 +21,8 @@
 */
 
 
-#ifndef LIB_REFARRAY_H
-#define LIB_REFARRAY_H
+#ifndef LIB_REF_ARRAY_H
+#define LIB_REF_ARRAY_H
 
 
 #include <boost/noncopyable.hpp>

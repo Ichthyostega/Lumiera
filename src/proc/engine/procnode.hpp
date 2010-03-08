@@ -47,7 +47,7 @@
 #include "proc/asset/proc.hpp"
 #include "proc/mobject/parameter.hpp"
 #include "lib/frameid.hpp"
-#include "lib/refarray.hpp"
+#include "lib/ref-array.hpp"
 
 #include <vector>
 
