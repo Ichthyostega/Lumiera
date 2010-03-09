@@ -25,6 +25,10 @@ PLANNED "DeleteClip_test" DeleteClip_test <<END
 END
 
 
+PLANNED "SessionElementTracker_test" SessionElementTracker_test <<END
+END
+
+
 TEST "external MObject references" MObjectRef_test <<END
 out: MRef-NIL
 out: sizeof\( .+MORef.+session.Clip.+ \) =  (32)|(24)

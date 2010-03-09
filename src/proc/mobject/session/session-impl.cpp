@@ -30,18 +30,6 @@
 namespace mobject {
 namespace session {
   
-  /////////////////////////////////////////TODO temporary hack: use Meyer's singleton
-  namespace {
-    DefsManager&
-    getDummyDefaultsManager()
-    {
-      static scoped_ptr<DefsManager> dummyInstance(0);
-      if (!dummyInstance) dummyInstance.reset (new DefsManager);
-      
-      return *dummyInstance;
-    }
-  }
-  /////////////////////////////////////////TODO temporary hack
   
   
   /** create a new empty session with default values.
@@ -50,9 +38,12 @@ namespace session {
    *        system (and this is desirable)
    */
   SessionImpl::SessionImpl ()
-    : Session( getDummyDefaultsManager() )             ///////TODO temporary hack
-    , pIdx_( MObject::create (getDummyDefaultsManager())) ////TODO temporary hack
-    , fixture(new Fixture)
+    : SessionInterfaceModules()
+    , Session( defaultsManager_
+             , timelineRegistry_
+             , sequenceRegistry_ )
+    , contents_( MObject::create (defaultsManager_))
+    , fixture_(new Fixture)
     {
       INFO (session, "new Session created.");
     }
@@ -85,14 +76,14 @@ namespace session {
   
   
   void 
-  SessionImpl::add (PMO& placement)
+  SessionImpl::attach (PMO& placement)
   {
     UNIMPLEMENTED ("add Placement to the current Session");
   }
   
   
   bool 
-  SessionImpl::remove (PMO& placement)
+  SessionImpl::detach (PMO& placement)
   {
     UNIMPLEMENTED ("search and remove a given Placement from current Session");
     return false; // TODO

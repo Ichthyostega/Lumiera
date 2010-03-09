@@ -120,9 +120,9 @@ namespace mobject {
       
       static session::SessManager& current;
       
-      DefaultsAccess defaults;
-      TimelineAccess timelines;
-      SequenceAccess sequences;
+      DefaultsAccess defaults;            ///< manages default configured objects
+      TimelineAccess timelines;           ///< collection of timelines (top level)
+      SequenceAccess sequences;           ///< collection of sequences
       
       virtual bool isValid ()              = 0;
       virtual void attach (PMO& placement) = 0;

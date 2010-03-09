@@ -50,6 +50,7 @@
 #include "proc/mobject/session/fixture.hpp"
 #include "proc/mobject/session/placement-index.hpp"
 #include "proc/mobject/session/session-services.hpp"
+#include "proc/mobject/session/session-interface-modules.hpp"
 
 #include "proc/mobject/session/session-service-fetch.hpp"
 #include "proc/mobject/session/session-service-explore-scope.hpp"
@@ -58,8 +59,6 @@
 
 #include "proc/mobject/session/placement-index-query-resolver.hpp"
 
-#include <boost/scoped_ptr.hpp>
-#include <vector>
 
 
 
@@ -67,22 +66,20 @@
 namespace mobject {
 namespace session {
   
-  using std::vector;
-  using boost::scoped_ptr;
-  using std::tr1::shared_ptr;
   
   
   /**
    * Implementation class for the Session interface
    */
-  class SessionImpl : public mobject::Session
+  class SessionImpl
+    : protected SessionInterfaceModules
+    , public mobject::Session
     {
-      PlacementIndex pIdx_;
+      PlacementIndex contents_;
       
-      PFix fixture;
+      PFix fixture_;
       
       
-      scoped_ptr<DefsManager> defaultsManager_;   ///////////TODO: later, this will be the real defaults manager. Currently this is just never initialised (11/09)
       
       
       /* ==== Session API ==== */
@@ -102,8 +99,8 @@ namespace session {
       PlacementIndex&
       getPlacementIndex()
         {
-          ENSURE (pIdx_.isValid());
-          return pIdx_;
+          ENSURE (contents_.isValid());
+          return contents_;
         }
       
     };
