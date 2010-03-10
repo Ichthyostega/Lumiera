@@ -3,6 +3,7 @@ TESTING "fileheader access" ./test-fileheader
 TEST "fileheader, basic creation" create_basic <<END
 err: ECHO: .*: fileheader: TEST  0
 err: ECHO: .*: .*          $
+err: ECHO: .*: main: e
 err: ECHO: .*: :
 END
 
@@ -20,6 +21,15 @@ END
 TEST "fileheader, reopen" acquire_basic <<END
 err: ECHO: .*: fileheader: TEST  0
 err: ECHO: .*: .*          $
+err: ECHO: .*: main: e
+err: ECHO: .*: :
+END
+
+
+TEST "fileheader, reopen" acquire_basic_readonly <<END
+err: ECHO: .*: fileheader: TEST  0
+err: ECHO: .*: .*          $
+err: ECHO: .*: main: e
 err: ECHO: .*: :
 END
 

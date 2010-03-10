@@ -37,13 +37,13 @@ TEST (create_basic)
 
   LUMIERA_FILE_WRLOCK_SECTION (NOBUG_ON, file)
     {
-      lumiera_fileheader header = lumiera_fileheader_create (file, "TEST", 0, sizeof (lumiera_fileheader_raw));
+      lumiera_fileheader header = lumiera_fileheader_create (file, "TEST", 0, sizeof (lumiera_fileheader_raw), LUMIERA_FILEHEADER_FLAG_ENDIANESS);
 
       CHECK (lumiera_error_peek() == NULL);
 
       ECHO ("fileheader: %s:", (char*)header.header);
 
-      lumiera_fileheader_close (&header);
+      lumiera_fileheader_close (&header, LUMIERA_FILEHEADER_FLAG_CLEAN);
     }
 
   lumiera_file_delete (file);
@@ -60,11 +60,11 @@ TEST (create_nowrite)
 
   LUMIERA_FILE_RDLOCK_SECTION (NOBUG_ON, file)
     {
-      lumiera_fileheader header = lumiera_fileheader_create (file, "TEST", 0, sizeof (lumiera_fileheader));
+      lumiera_fileheader header = lumiera_fileheader_create (file, "TEST", 0, sizeof (lumiera_fileheader), NULL);
 
       CHECK(lumiera_error() == LUMIERA_ERROR_FILEHEADER_NOWRITE);
 
-      lumiera_fileheader_close (&header);
+      lumiera_fileheader_close (&header, LUMIERA_FILEHEADER_FLAG_CLEAN);
     }
 
   lumiera_file_delete (file);
@@ -80,12 +80,14 @@ TEST (acquire_wrongheader)
 
   LUMIERA_FILE_RDLOCK_SECTION (NOBUG_ON, file)
     {
-      lumiera_fileheader header = lumiera_fileheader_open (file, "BADH", sizeof (lumiera_fileheader));
+      lumiera_fileheader header = lumiera_fileheader_open (file, "BADH",
+                                                           sizeof (lumiera_fileheader),
+                                                           LUMIERA_FILEHEADER_FLAG_CLEAN, LUMIERA_FILEHEADER_FLAG_CLEAN);
 
       CHECK(!header.header);
       CHECK(lumiera_error() == LUMIERA_ERROR_FILEHEADER_HEADER);
 
-      lumiera_fileheader_close (&header);
+      lumiera_fileheader_close (&header, LUMIERA_FILEHEADER_FLAG_CLEAN);
     }
 
   lumiera_file_delete (file);
@@ -97,11 +99,13 @@ TEST (acquire_wrongheader)
 TEST (acquire_basic)
 {
   lumiera_backend_init ();
-  LumieraFile file = lumiera_file_new (",tmp-fileheader", LUMIERA_FILE_READONLY);
+  LumieraFile file = lumiera_file_new (",tmp-fileheader", LUMIERA_FILE_READWRITE);
 
   LUMIERA_FILE_RDLOCK_SECTION (NOBUG_ON, file)
     {
-      lumiera_fileheader header = lumiera_fileheader_open (file, "TEST", sizeof (lumiera_fileheader));
+      lumiera_fileheader header = lumiera_fileheader_open (file, "TEST",
+                                                           sizeof (lumiera_fileheader),
+                                                           LUMIERA_FILEHEADER_FLAG_CLEAN, LUMIERA_FILEHEADER_FLAG_CLEAN);
 
       CHECK(header.header);
       CHECK(!lumiera_error());
@@ -110,7 +114,34 @@ TEST (acquire_basic)
 
       ECHO ("fileheader: %s:", (char*)header.header);
 
-      lumiera_fileheader_close (&header);
+      lumiera_fileheader_close (&header, LUMIERA_FILEHEADER_FLAG_CLEAN);
+    }
+
+  lumiera_file_delete (file);
+  lumiera_backend_destroy ();
+
+}
+
+
+TEST (acquire_basic_readonly)
+{
+  lumiera_backend_init ();
+  LumieraFile file = lumiera_file_new (",tmp-fileheader", LUMIERA_FILE_READONLY);
+
+  LUMIERA_FILE_RDLOCK_SECTION (NOBUG_ON, file)
+    {
+      lumiera_fileheader header = lumiera_fileheader_open (file, "TEST",
+                                                           sizeof (lumiera_fileheader),
+                                                           LUMIERA_FILEHEADER_FLAG_CLEAN, NULL);
+
+      CHECK(header.header);
+      CHECK(!lumiera_error());
+
+      CHECK (lumiera_fileheader_version (&header) == 0);
+
+      ECHO ("fileheader: %s:", (char*)header.header);
+
+      lumiera_fileheader_close (&header, LUMIERA_FILEHEADER_FLAG_CLEAN);
     }
 
   lumiera_file_delete (file);

@@ -26,19 +26,17 @@
 
 LUMIERA_ERROR_DECLARE (FILEHEADER_NOWRITE);
 LUMIERA_ERROR_DECLARE (FILEHEADER_HEADER);
+LUMIERA_ERROR_DECLARE (FILEHEADER_FLAGS);
+LUMIERA_ERROR_DECLARE (FILEHEADER_FLAGSPACE);
+LUMIERA_ERROR_DECLARE (FILEHEADER_ENDIANESS);
 
+#define LUMIERA_FILEHEADER_ENDIANMAGIC 0x0123456789ABCDEFULL
 
 typedef struct lumiera_fileheader_struct lumiera_fileheader;
 typedef lumiera_fileheader* LumieraFileheader;
 
 typedef struct lumiera_fileheader_raw_struct lumiera_fileheader_raw;
 typedef lumiera_fileheader_raw* LumieraFileheaderRaw;
-
-typedef struct lumiera_fileheaderext_struct lumiera_fileheaderext;
-typedef lumiera_fileheaderext* LumieraFileheaderext;
-
-typedef struct lumiera_fileheaderext_raw_struct lumiera_fileheaderext_raw;
-typedef lumiera_fileheaderext_raw* LumieraFileheaderextRaw;
 
 
 #include "backend/file.h"
@@ -79,12 +77,34 @@ struct LUMIERA_PACKED lumiera_fileheader_raw_struct
   /** always '\n' */
   char newline1;
   /** freeform string, comment or so on, initialized to spaces */
-  char meta[22];
+  char meta[15];
   /** always '\n' */
   char newline2;
+
+  /** initialized to spaces, flags are single chars, unsorted */
+  char flags[6];
+  /** always '\n' */
+  char newline3;
   /** always '\0' */
   char null;
+
+  /* natively written 0x0123456789ABCDEFULL by the host created this */
+  uint64_t endianess_mark;
 };
+
+/**
+ * Fileheader flags are chars to make this easily inspectable, these add another human readable line to the header
+ */
+
+/** file is clean */
+#define LUMIERA_FILEHEADER_FLAG_CLEAN "c"
+
+/** check for host order endianess */
+#define LUMIERA_FILEHEADER_FLAG_ENDIANESS "e"
+
+
+
+
 
 /**
  * A fileheader object encapsulates the underlying mmap object which keeps the
@@ -106,10 +126,11 @@ struct lumiera_fileheader_struct
  * @param version version number for the header (should be incremented after changes)
  *                the value '0' is reserved for experimental versions.
  * @param size The actual size of all header data, including following format specific data.
+ * @param flags initial flags which should be set (dont include CLEAN here, should be set on close)
  * @return A lumiera_fileheader object by value, .header and .map are set to NULL on error.
  */
 lumiera_fileheader
-lumiera_fileheader_create (LumieraFile file, char* fourcc, int version, size_t size);
+lumiera_fileheader_create (LumieraFile file, char* fourcc, int version, size_t size, const char* flags);
 
 
 /**
@@ -118,20 +139,23 @@ lumiera_fileheader_create (LumieraFile file, char* fourcc, int version, size_t s
  * and must be closed after use. The File should be locked for operations on the fileheader.
  * @param file The file on which to open the header.
  * @param fourcc pointer to a string of length 4 with the expected identifier for the file
- * @param size The actual size of all header data, including following format specific data.
+ * @param size The actual size of all header data, including following format specific data
+ * @param flags_expected expect this flags being set
+ * @param flags_remov remove this flags when opening
  * @return A lumiera_fileheader object by value, .header and .map are set to NULL on error.
  */
 lumiera_fileheader
-lumiera_fileheader_open (LumieraFile file, char* fourcc, size_t size);
+lumiera_fileheader_open (LumieraFile file, char* fourcc, size_t size, const char* flags_expected, const char* flags_remove);
 
 
 /**
  * Closes a previously created or opened fileheader.
  * @param self the fileheader to close.
- * no errors, no nothing returned
+ * @param flags_add set this flags if not already set
+ * no errors, no nothing returned (yet)
  */
 void
-lumiera_fileheader_close (LumieraFileheader self);
+lumiera_fileheader_close (LumieraFileheader self, const char* flags_add);
 
 
 /**
@@ -143,7 +167,24 @@ int
 lumiera_fileheader_version (LumieraFileheader self);
 
 
+/**
+ * check if all flags given from some sets are either set or not.
+ */
+int
+lumiera_fileheader_flags_validate (LumieraFileheader self, const char* expected, const char* unexpected);
 
+
+/**
+ * Sets flags if not already set
+ */
+LumieraFileheader
+lumiera_fileheader_flags_set (LumieraFileheader self, const char* flags);
+
+/**
+ * Clear flags if present
+ */
+LumieraFileheader
+lumiera_fileheader_flags_clear (LumieraFileheader self, const char* flags);
 
 
 #endif
