@@ -85,6 +85,7 @@ NOBUG_CPP_DEFINE_FLAG_PARENT    (   mmapings_dbg,               backend_dbg);
 NOBUG_CPP_DEFINE_FLAG_PARENT    (   thread_dbg,                 backend_dbg);
 NOBUG_CPP_DEFINE_FLAG_PARENT    (    threads_dbg,               thread_dbg);
 NOBUG_CPP_DEFINE_FLAG_PARENT    (    threadpool_dbg,            thread_dbg);
+NOBUG_CPP_DEFINE_FLAG_PARENT    (   fileheader_dbg,             backend_dbg);
 
 /** base of debug logging for the proc layer */
 NOBUG_CPP_DEFINE_FLAG_PARENT    (  proc_dbg,                    debugging);
@@ -124,6 +125,7 @@ NOBUG_CPP_DEFINE_FLAG_PARENT    (    mmap,                      backend);       
 NOBUG_CPP_DEFINE_FLAG_PARENT    (    thread,                    backend);       //starting/stopping threads
 NOBUG_CPP_DEFINE_FLAG_PARENT    (     threads,                  thread);
 NOBUG_CPP_DEFINE_FLAG_PARENT    (     threadpool,               thread);
+NOBUG_CPP_DEFINE_FLAG_PARENT    (    fileheader,                backend);
 /** progress log for the proc layer */
 NOBUG_CPP_DEFINE_FLAG_PARENT    (   proc,                       progress);
 /** progress log for proc-layer command dispatch */

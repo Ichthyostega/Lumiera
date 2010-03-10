@@ -166,7 +166,6 @@ lumiera_fileheader_version (LumieraFileheader self)
 
 
 
-
 /**
  * check if all flags given from some sets are either set or not.
  */
