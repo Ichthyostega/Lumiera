@@ -101,6 +101,7 @@ lumiera_filehandlecache_handle_acquire (LumieraFiledescriptor desc)
 LumieraFilehandle
 lumiera_filehandlecache_checkout (LumieraFilehandle handle)
 {
+  TRACE (filehandlecache_dbg);
   REQUIRE (handle);
   /* This function is called with the associated descriptor locked, nothing can modify 'handle' */
   if (!handle->use_cnt)
@@ -109,10 +110,10 @@ lumiera_filehandlecache_checkout (LumieraFilehandle handle)
       LUMIERA_MUTEX_SECTION (mutex_sync, &lumiera_fhcache->lock)
         {
           lumiera_mrucache_checkout (&lumiera_fhcache->cache, &handle->cachenode);
+          ++lumiera_fhcache->checked_out;
         }
     }
   ++handle->use_cnt;
-  ++lumiera_fhcache->checked_out;
 
   return handle;
 }
@@ -121,6 +122,7 @@ lumiera_filehandlecache_checkout (LumieraFilehandle handle)
 void
 lumiera_filehandlecache_checkin (LumieraFilehandle handle)
 {
+  TRACE (filehandlecache_dbg);
   REQUIRE (handle);
   REQUIRE (handle->use_cnt);
 
