@@ -142,7 +142,7 @@ namespace asset {
    *  assets to do so with the link to this asset. 
    *  @note we don't release upward links to parent assets,
    *        thus effectively keeping the parents alive, because
-   *        frequently these accessible parent assets are part
+   *        frequently the accessibility of parent assets is part
    *        of our own contract. (e.g. media for clip assets) 
    */
   void 

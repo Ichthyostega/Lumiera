@@ -25,10 +25,12 @@
 //#include "proc/mobject/session.hpp"
 //#include "proc/mobject/mobject-ref.hpp"
 //#include "proc/mobject/session/binding.hpp"
-//#include "proc/mobject/session/fixture.hpp"             // TODO only temporarily needed
+//#include "proc/mobject/session/fixture.hpp"
 //#include "proc/assetmanager.hpp"
+#include "proc/mobject/session/session-interface-modules.hpp"
 #include "proc/asset/timeline.hpp"
 #include "proc/asset/sequence.hpp"
+#include "lib/p.hpp"
 //#include "proc/asset/pipe.hpp"
 //#include "lib/lumitime.hpp"
 //#include "lib/query.hpp"
@@ -38,6 +40,7 @@
 
 //using util::isSameObject;
 //using util::contains;
+//using util::isnil;
 //using std::string;
 //using std::cout;
 
@@ -46,6 +49,42 @@ namespace mobject {
 namespace session {
 namespace test    {
   
+  namespace { // yet another accounting dummy
+    
+    int checksum = 0;
+    
+    class AutoRegisteringDummy;
+    
+    typedef lumiera::P<AutoRegisteringDummy> PDummy;
+    
+    class AutoRegisteringDummy
+      {
+        const uint id_;
+        
+      public:
+        AutoRegisteringDummy()
+          : id_(++checksum)
+          {
+            TODO ("cause the registration");
+          }
+        
+        void
+        unlink()
+          {
+            TODO ("cause the deregistration");
+            checksum -= id_;
+          }
+        
+        static PDummy create();
+      };
+    
+    inline PDummy
+    AutoRegisteringDummy::create()
+    {
+      return PDummy (new AutoRegisteringDummy);
+    }
+    
+  }
 //  using proc_interface::AssetManager;
 //  using proc_interface::PAsset;
   
@@ -82,7 +121,47 @@ namespace test    {
       void
       verify_trackingMechanism()
         {
-          UNIMPLEMENTED ("use a test dummy class and do a dry run of the ElementTracker");
+          checksum = 0;
+          {
+            impl::ElementTracker<AutoRegisteringDummy> trackedDummies;
+            
+            CHECK (0 == checksum);
+            CHECK (0 == trackedDummies.size());
+            
+            PDummy dummy1 = AutoRegisteringDummy::create();
+            PDummy dummy2 = AutoRegisteringDummy::create();
+            
+            CHECK (2 == trackedDummies.size());
+            CHECK (dummy1 == trackedDummies[0]);
+            CHECK (dummy2 == trackedDummies[1]);
+            
+            PDummy dummy3 = AutoRegisteringDummy::create();
+            CHECK (3 == trackedDummies.size());
+            CHECK (dummy3 == trackedDummies[2]);
+            
+            CHECK (1+2+3 == checksum);
+            
+            dummy2.unlink();
+            CHECK (1 + 3 == checksum);
+            CHECK (2 == trackedDummies.size());
+            CHECK (dummy1 == trackedDummies[0]);
+            CHECK (dummy3 == trackedDummies[1]);
+            
+            CHECK (1 == dummy2.use_count());
+            CHECK (2 == dummy1.use_count());
+            CHECK (2 == dummy3.use_count());
+            
+            // deliberately discard our reference, 
+            // so the only remaining ref is in the tracker
+            dummy1.reset();
+            dummy2.reset();
+            CHECK (1 == trackedDummies[0].use_count());
+            CHECK (1 == trackedDummies[1].use_count());
+            CHECK (1 + 3 == checksum);
+            
+            // now the tracker goes out of scope...
+          }
+          CHECK (0 == checksum); // ...remaining elements have been unlinked 
         }
       
       

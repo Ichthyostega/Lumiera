@@ -4149,7 +4149,7 @@ The session and the models rely on dependent objects beeing kept updated and con
 &amp;rarr; see [[details here...|ModelDependencies]]
 </pre>
 </div>
-<div title="SessionInterface" modifier="Ichthyostega" modified="201003070527" created="200904242108" tags="SessionLogic GuiIntegration design draft discuss" changecount="41">
+<div title="SessionInterface" modifier="Ichthyostega" modified="201003100340" created="200904242108" tags="SessionLogic GuiIntegration design draft discuss" changecount="44">
 <pre>&quot;Session Interface&quot;, when used in a more general sense, denotes a compound of several interfaces and facilities, together forming the primary access point to the user visible contents and state of the editing project.
 * the API of the session class
 * the accompanying management interface (SessionManager API)
@@ -4186,9 +4186,15 @@ To the contrary, the ''generic'' API is related to a //current location (state),
 * to add
 * to destroy
 
+!!exploring session contents
+Typically, the list of timelines serves as starting point for exploring the model. Basically, any kind of object could be attached everywhere, but both the GUI and the Builder rely on assumptions regarding the [[overall model structure|HighLevelModel]] &amp;mdash; silently ignoring content not in line. This corresponds to the //dedicated API functions// on specific kinds of objects, which allow to retrieve content according to this assumed structure conveniently and with strong typing. From the timeline and the sequence linked to it you'll get the root track, and from there the sub-tracks and the clips located on them, which in turn may have attachments (effects, transitions, labels).
+On the other hand, arbitrary structures can be retrieved using the //generic API:// Contents can be discovered on the QueryFocus, which automatically follows the //point of mutation,// but can be moved to any point using the {{{QueryFocus::attach(obj)}}} function.
+
+!!queries and defaults
+Queries can retrieve the immediate children, or the complete contents of a scope (depth-first). The results can be filtered by type. The intention is to extend this later to arbitrary logical queries, using some kind of resolution engine. Besides these queries, [[default configured objects|DefaultsManagement]] can be retrieved or defined through the defaults manager, which is accessible as a self-contained component on the public session API. Defaults can be used to establish a standard way of doing things on a per-project base.
 
 {{red{WIP ... just emerging}}}
-!!!discovery and mutations
+!!discovery and mutations
 The discovery functions available on these ~APIs are wired such as to return suitably typed MObjectRef instances always. These are small value objects and can be used to invoke operations (both query and mutating) on the underlying object within the session. Raw placement references aren't exposed on these outward interfaces.
 
 While this protects against accessing dangling references, it can't prevent clients from invoking any mutating operation directly on these references. It would be conceivable, by using proxies, to create and invoke commands automatically. But we rather don't want to go this route, because
@@ -4199,9 +4205,9 @@ While this protects against accessing dangling references, it can't prevent clie
 {{red{WIP}}}As of 2/10, I am considering to add a protection against invoking an mutation accidentally, thus bypassing the command frontend and the ProcDispatcher. This would not only be annoying (no UNDO), but potentially dangerous, because all of the session internals are not threadsafe by design.
 The considered solution would be to treat this situation as if an authorisation is required; this authorisation for mutation could be checked by a &amp;raquo;wormhole&amp;laqou;-like context access. Of course, in our case we're not dealing with real access restrictions, just a safeguard: While command execution creates such an authorisation token automatically, a client actually wanting to invoke an mutation operations bypassing the command frontend, would need to set up such a token explicitly and manually.
 
-!!!adding and destroying
+!!adding and destroying
 Objects can be added and destroyed directly on the top level session API. The actual memory management of the object instances works automatically, based on reference counts. (Even after purging an object from the session, it may still be indirectly in use by an ongoing render process).
-When adding an object, a [[scope|PlacementScope]] needs to be specified. Thus it makes sense to provide the {{{add()}}}-operation on the dedicated API of individual session parts, while the generic {{{add()}}}-call on the top-level session API relies on the current QueryFocus to determine the location where to add an object. Besides, as we're always adding the [[Placement]] of an object into the session, this placement may specify an additional constraint or tie to a specific scope; resolving the placement thus may cause the object to move to another location
+When adding an object, a [[scope|PlacementScope]] needs to be specified. Thus it makes sense to provide {{{add()}}}-operations on the dedicated API of individual session parts, while the generic {{{attach()}}}-call on the top-level session API relies on the current QueryFocus to determine the location where to add an object. Besides, as we're always adding the [[Placement]] of an object into the session, this placement may specify an additional constraint or tie to a specific scope; resolving the placement thus may cause the object to move to another location
 
 
 !!!{{red{Questions}}}

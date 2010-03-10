@@ -27,35 +27,33 @@
 using std::tr1::static_pointer_cast;
 
 
-namespace asset
-  {
+namespace asset {
   
-  namespace
+  namespace {
+    
+    /** @internal derive a sensible asset ident tuple
+     *  when creating a asset::Clip based on some asset::Media
+     *  @todo getting this one correct is important for handling creation
+     *        of multiple clip instances from one media. Means we
+     *        have still to figure out a sensible concept...
+     */
+    const Asset::Ident
+    createClipIdent (const Media& mediaref)
     {
-      /** @internal derive a sensible asset ident tuple
-       *  when creating a asset::Clip based on some asset::Media
-       *  @todo getting this one correct is important for handling creation
-       *        of multiple clip instances from one media. Means we
-       *        have still to figure out a sensible concept...
-       */
-      const Asset::Ident
-      createClipIdent (const Media& mediaref)
-        {
-          string name (mediaref.ident.name + "-clip");  // TODO something sensible here; append number, sanitise etc.
-          Category category (mediaref.ident.category);
-          category.setPath(CLIP_SUBFOLDER);
-          return Asset::Ident (name, category, 
-                               mediaref.ident.org, 
-                               mediaref.ident.version );
-          
-        }
-      
-      Media::PClipMO
-      createClipMO (const Clip& thisClipAsset, const Media& mediaChannel)
-        {
-          return mobject::MObject::create (thisClipAsset,mediaChannel);
-        }
+      string name (mediaref.ident.name + "-clip");  // TODO something sensible here; append number, sanitise etc.
+      Category category (mediaref.ident.category);
+      category.setPath(CLIP_SUBFOLDER);
+      return Asset::Ident (name, category, 
+                           mediaref.ident.org, 
+                           mediaref.ident.version );
     }
+    
+    Media::PClipMO
+    createClipMO (const Clip& thisClipAsset, const Media& mediaChannel)
+    {
+      return mobject::MObject::create (thisClipAsset,mediaChannel);
+    }
+  }
   
   
   
