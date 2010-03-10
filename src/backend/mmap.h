@@ -110,8 +110,8 @@ lumiera_mmap_new_exact (LumieraFile file, off_t start, size_t size);
 static inline void*
 lumiera_mmap_address (LumieraMMap self, off_t offset)
 {
-  REQUIRE (offset >= self->start, "offset before mmaped region");
-  REQUIRE (offset < self->start + (off_t)self->size, "offset after mmaped region");
+  REQUIRE_IF (self, offset >= self->start, "offset before mmaped region");
+  REQUIRE_IF (self, offset < self->start + (off_t)self->size, "offset after mmaped region");
   return self?(self->address + (offset - self->start)):NULL;
 }
 
