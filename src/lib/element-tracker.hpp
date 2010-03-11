@@ -1,5 +1,5 @@
 /*
-  SESSION-INTERFACE-MODULES.hpp  -  holds the complete session data to be edited by the user
+  ELEMENT-TRACKER.hpp  -  registry for tracking instances automatically
  
   Copyright (C)         Lumiera.org
     2010,               Hermann Vosseler <Ichthyostega@web.de>
@@ -21,8 +21,8 @@
 */
 
 
-/** @file session-interface-modules.hpp
- ** Self-contained sub-elements on the Session API.
+/** @file element-tracker.hpp
+ ** Tracking instances automatically on creation and disposal.
  ** Part of the Session interface is exposed as self-contained 
  ** interface modules -- both for notational convenience at the
  ** usage site, and for keeping session implementation code manageable.
@@ -64,37 +64,52 @@
  */
 
 
-#ifndef MOBJECT_SESSION_INTERFACE_MODULES_H
-#define MOBJECT_SESSION_INTERFACE_MODULES_H
+#ifndef LIB_ELEMENT_TRACKER_H
+#define LIB_ELEMENT_TRACKER_H
 
-#include "lib/element-tracker.hpp"
+#include "lib/p.hpp"
+#include "lib/ref-array-impl.hpp"
 
 
 
 
-namespace mobject {
-namespace session {
+namespace lib {
+
+    using lumiera::P;
+    
+    /**
+     * Custom implementation of the RefArray interface,
+     * used by the Session to keep track of all timelines
+     * and sequences. The registration/deregistration functions
+     * are accessible as SessionServices
+     */
+    template<typename ELM>
+    class ElementTracker
+      : public lib::RefArrayVectorWrapper<P<ELM> >
+      {
+      public:
+        void
+        append (P<ELM> const& asset)
+          {
+            UNIMPLEMENTED ("attach entry to session");
+          }
+        
+        void
+        remove (ELM const& asset)
+          {
+            UNIMPLEMENTED ("detach entry from session");
+          }
+        
+        bool
+        isRegistered (ELM const& asset)
+          {
+            UNIMPLEMENTED ("detect if the given element is indeed registered within this");
+          }
+      };
+    
   
   
   
-  typedef lib::ElementTracker<asset::Timeline> TimelineTracker;
-  typedef lib::ElementTracker<asset::Sequence> SequenceTracker;
   
-  
-  /**
-   * Collection of implementation components,
-   * providing self-contained sub-elements
-   * exposed on the public Session API.
-   */
-  struct SessionInterfaceModules
-    : boost::noncopyable
-    {
-      DefsManager defaultsManager_;
-      TimelineTracker timelineRegistry_;
-      SequenceTracker sequenceRegistry_;
-    };
-  
-  
-  
-}} // namespace mobject::session
+} // namespace lib
 #endif

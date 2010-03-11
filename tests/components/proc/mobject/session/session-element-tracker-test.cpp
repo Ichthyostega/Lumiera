@@ -37,6 +37,7 @@
 //#include "lib/util.hpp"
 
 //#include <iostream>
+#include <tr1/functional>
 
 //using util::isSameObject;
 //using util::contains;
@@ -53,36 +54,96 @@ namespace test    {
     
     int checksum = 0;
     
-    class AutoRegisteringDummy;
     
-    typedef lumiera::P<AutoRegisteringDummy> PDummy;
+    using std::tr1::function;
+    using std::tr1::bind;
+    using std::tr1::ref;
     
-    class AutoRegisteringDummy
+    
+    template<typename TAR>
+    class AutoRegistered
+      {
+        typedef lib::ElementTracker<TAR> Registry;
+        typedef function<Registry&(void)> RegistryLink;
+        
+        static RegistryLink getRegistry;
+        
+      public:
+        
+        template<typename FUN>
+        static void
+        establishRegistryLink (FUN link)
+          {
+            AutoRegistered::getRegistry = link;
+          }
+        
+        static void
+        setRegistryInstance (Registry& registry_to_use)
+          {
+            establishRegistryLink (bind (ref(registry_to_use)));
+          }
+        
+        
+        typedef lumiera::P<TAR> PTarget;
+        
+        static PTarget
+        create()
+          {
+            REQUIRE (getRegistry);
+            
+            PTarget newElement (new TAR());
+            getRegistry().append (newElement);
+            
+            ENSURE (newElement);
+            ENSURE (getRegistry().isRegistered(*newElement));
+            return newElement;
+          }
+        
+        
+        void
+        detach()
+          {
+            getRegistry().remove(*this);
+            
+            ENSURE (!getRegistry().isRegistered(*this));
+          }
+      };
+    
+    /** storage for the functor to link an AutoRegistered entity
+     *  to the corresponding registration service */
+    template<typename TAR>
+    AutoRegistered<TAR>::RegistryLink AutoRegistered<TAR>::getRegistry; 
+    
+    
+    /**
+     * Test Dummy: to be created through the inherited static #create(),
+     * managed by smart-ptr. Any Dummy instance gets automatically registered
+     * for tracking, and will be deregistered by invoking #unlink().
+     * The link to the actual registration service has to be established at
+     * runtime once, by calling #establishRegistryLink or #setRegistryInstance
+     */
+    struct Dummy
+      : AutoRegistered<Dummy>
       {
         const uint id_;
         
       public:
-        AutoRegisteringDummy()
+        Dummy()
           : id_(++checksum)
           {
-            TODO ("cause the registration");
+            CHECK (getRegistry().isRegistered (*this));
           }
         
         void
         unlink()
           {
-            TODO ("cause the deregistration");
+            getRegistry().remove(*this);
             checksum -= id_;
           }
         
-        static PDummy create();
       };
     
-    inline PDummy
-    AutoRegisteringDummy::create()
-    {
-      return PDummy (new AutoRegisteringDummy);
-    }
+    
     
   }
 //  using proc_interface::AssetManager;
@@ -123,11 +184,16 @@ namespace test    {
         {
           checksum = 0;
           {
-            impl::ElementTracker<AutoRegisteringDummy> trackedDummies;
+            typedef Dummy AutoRegisteringDummy;
+            typedef lumiera::P<AutoRegisteringDummy> PDummy;
+            typedef lib::ElementTracker<Dummy> DummyRegistry;
+            
+            DummyRegistry trackedDummies;
             
             CHECK (0 == checksum);
             CHECK (0 == trackedDummies.size());
             
+            AutoRegisteringDummy::setRegistryInstance (trackedDummies);
             PDummy dummy1 = AutoRegisteringDummy::create();
             PDummy dummy2 = AutoRegisteringDummy::create();
             
@@ -152,7 +218,7 @@ namespace test    {
             CHECK (2 == dummy3.use_count());
             
             // deliberately discard our reference, 
-            // so the only remaining ref is in the tracker
+            // so the only remaining ref is within the registry
             dummy1.reset();
             dummy2.reset();
             CHECK (1 == trackedDummies[0].use_count());
