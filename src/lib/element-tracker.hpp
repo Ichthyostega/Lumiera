@@ -37,7 +37,13 @@
  ** automatically to reflect some internal structures within the model; 
  ** with the help of lib::ElementTracker we can expose a list of
  ** all instances as part of the public Session interface.
- **  
+ ** 
+ ** @warning AutoRegistered does not check accessibility of the configured
+ ** registry, when detaching an element. Especially, when detaching in turn
+ ** gets automatically invoked from some kind of cleanup, care has to be taken
+ ** to ensure the registry is still available. Ignoring this might lead to
+ ** segfault on application shutdown. ///TICKET #574
+ ** 
  ** @see session-element-tracker-test.cpp
  ** @see session-interface-modules
  ** @see Timeline

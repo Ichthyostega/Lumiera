@@ -76,6 +76,17 @@ namespace test    {
       };
     
     
+    /** 
+     * Helper mixin template for implementing a type
+     * to participate in automatic element tracking.
+     * - the element-tracking registry is accessed through
+     *   the static functor #getRegistry
+     * - a factory and a #detach operation is provided,
+     *   automatically handling registration.
+     * It is not mandatory to use this template, but
+     * types participating in automatic element tracking
+     * should provide equivalent functionality. 
+     */
     template<typename TAR>
     class AutoRegistered
       {
@@ -83,22 +94,26 @@ namespace test    {
         typedef lib::ElementTracker<TAR> Registry;
         typedef function<Registry&(void)> RegistryLink;
         
-//      virtual ~AutoRegistered() {}             ////////////////////////////////////TODO template code bloat?
-//      
-//      virtual void                             ////////////////////////////////////TODO clarify de-registration
+        /** detach this element
+         *  from the element-tracking registry.
+         *  @note called when destroying an non-empty registry.
+         */
         void
         detach()
           {
-#if false ///////////////////////////////////////////////////////////////////////////TODO clarify de-registration            
-            getRegistry().remove(*this);
+            TAR& element = static_cast<TAR&> (*this);
             
-            ENSURE (!getRegistry().isRegistered(*this));
-#endif    ///////////////////////////////////////////////////////////////////////////TODO clarify de-registration            
+            getRegistry().remove(element);
+            ENSURE (!getRegistry().isRegistered(element));
           }
         
         
         typedef lumiera::P<TAR> PTarget;
         
+        /** factory for creating smart-ptr managed
+         *  TAR instances, automatically registered
+         *  with the element-tracking registry.
+         */
         static PTarget
         create()
           {
@@ -158,15 +173,10 @@ namespace test    {
         friend class AutoRegistered<Dummy>;
         
       public:
-//      virtual void              /////////////////////////////TODO
         void
-        detach()
+        detach() // demonstrates how to hook into the cleanup-operation
           {
-            getRegistry().remove(*this);
-            
-            ENSURE (!getRegistry().isRegistered(*this));
-///////////////////////////////////////////////////////////////TODO: should call the baseclass!            
-//          AutoRegistered<Dummy>::detach();
+            AutoRegistered<Dummy>::detach();
             checksum -= id_;
           }
       };
