@@ -78,7 +78,10 @@ namespace asset {
   class Sequence 
     : public Struct
     {
-      
+
+    public:
+       void detach() { TODO("Session-Sequence registration"); }
+     
     protected:
       Sequence (const Asset::Ident& idi);
       friend class StructFactoryImpl;

@@ -50,6 +50,7 @@
 #define LIB_ELEMENT_TRACKER_H
 
 #include "lib/p.hpp"
+#include "lib/util-foreach.hpp"
 #include "lib/ref-array-impl.hpp"
 
 
@@ -60,32 +61,87 @@ namespace lib {
   using lumiera::P;
   
   /**
+   * Registry for tracking object instances.
    * Custom implementation of the RefArray interface,
-   * used by the Session to keep track of all timelines
-   * and sequences. The registration/deregistration functions
-   * are accessible as SessionServices
+   * based on a vector. Especially used  by the Session
+   * to keep track of all timelines and sequences.
+   * Typically, ELM will inherit from AutoRegistered<ELM>,
+   * which in turn will invoke the registration/deregistration.
+   * Because of the smart-ptr-from-this problem, removal takes
+   * a direct reference, as opposed to a smart-ptr.
+   * @note ELM is required to provide an equality test.
+   *       Depending on the semantics of this equality,
+   *       registration might behave surprisingly, as
+   *       previously registered \em equivalent instances
+   *       will be deregistered prior to appending the 
+   *       new instance. 
    */
   template<typename ELM>
   class ElementTracker
     : public lib::RefArrayVector<P<ELM> >
     {
+      typedef std::vector<P<ELM> > _Vec;
+      typedef typename _Vec::iterator Iter;
+      typedef typename _Vec::const_iterator CIter;
+      
     public:
+     ~ElementTracker()
+        {
+          try { clear(); }
+          catch(...) {/*ignored*/}
+        }
+      
+      void
+      clear ()
+        {
+          _Vec toKill;
+          toKill.reserve(_Vec::size());
+          toKill.swap(*this);
+          ASSERT (0 == _Vec::size());
+          util::for_each (toKill, unlink_it);
+        }
+      
       void
       append (P<ELM> const& asset)
         {
-          UNIMPLEMENTED ("attach entry to session");
+          REQUIRE (asset, "Attempt to track a NIL element");
+          remove (*asset);
+          push_back (asset);
         }
       
       void
       remove (ELM const& asset)
         {
-          UNIMPLEMENTED ("detach entry from session");
+          for (Iter i = _Vec::begin();
+               i != _Vec::end() ; ++i )
+            if (asset == **i)       // _Vec contains smart-ptrs
+              {                    //   ELM is required to define '=='
+                erase (i);
+                return;
+              }
         }
       
       bool
-      isRegistered (ELM const& asset)
+      isRegistered (ELM const& asset)  const
         {
-          UNIMPLEMENTED ("detect if the given element is indeed registered within this");
+          for (CIter i = _Vec::begin();
+               i != _Vec::end() ; ++i )
+            if (asset == **i)
+              return true;
+          
+          return false;
+        }
+      
+    private:
+      static void
+      unlink_it (P<ELM>& elm)
+        {
+          REQUIRE (elm);
+          try { elm->detach(); }
+          catch(...)
+            {
+              WARN (common,"ignoring problems while clearing ElementTracker");
+            }
         }
     };
   

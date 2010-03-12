@@ -53,7 +53,8 @@ namespace test    {
   
   namespace { // yet another accounting dummy
     
-    int checksum = 0;
+    uint instance = 0;
+    int  checksum = 0;
     
     
     using std::tr1::function;
@@ -82,19 +83,17 @@ namespace test    {
         typedef lib::ElementTracker<TAR> Registry;
         typedef function<Registry&(void)> RegistryLink;
         
-        
-        template<typename FUN>
-        static void
-        establishRegistryLink (FUN link)
+//      virtual ~AutoRegistered() {}             ////////////////////////////////////TODO template code bloat?
+//      
+//      virtual void                             ////////////////////////////////////TODO clarify de-registration
+        void
+        detach()
           {
-            AutoRegistered::getRegistry = link;
-          }
-        
-        static void
-        setRegistryInstance (Registry& registry_to_use)
-          {
-            RegistryLink accessInstance = ReturnRef<Registry>(registry_to_use); 
-            establishRegistryLink (accessInstance);
+#if false ///////////////////////////////////////////////////////////////////////////TODO clarify de-registration            
+            getRegistry().remove(*this);
+            
+            ENSURE (!getRegistry().isRegistered(*this));
+#endif    ///////////////////////////////////////////////////////////////////////////TODO clarify de-registration            
           }
         
         
@@ -114,12 +113,18 @@ namespace test    {
           }
         
         
-        void
-        detach()
+        template<typename FUN>
+        static void
+        establishRegistryLink (FUN link)
           {
-            getRegistry().remove(*this);
-            
-            ENSURE (!getRegistry().isRegistered(*this));
+            AutoRegistered::getRegistry = link;
+          }
+        
+        static void
+        setRegistryInstance (Registry& registry_to_use)
+          {
+            RegistryLink accessInstance = ReturnRef<Registry>(registry_to_use); 
+            establishRegistryLink (accessInstance);
           }
         
       protected:
@@ -144,22 +149,29 @@ namespace test    {
       {
         const uint id_;
         
-      public:
         Dummy()
-          : id_(++checksum)
+          : id_(++instance)
           {
-            CHECK (getRegistry().isRegistered (*this));
+            checksum += id_;
           }
+         // to be created by factory...
+        friend class AutoRegistered<Dummy>;
         
+      public:
+//      virtual void              /////////////////////////////TODO
         void
-        unlink()
+        detach()
           {
             getRegistry().remove(*this);
+            
+            ENSURE (!getRegistry().isRegistered(*this));
+///////////////////////////////////////////////////////////////TODO: should call the baseclass!            
+//          AutoRegistered<Dummy>::detach();
             checksum -= id_;
           }
-        
       };
     
+      
     bool
     operator== (Dummy const& d1, Dummy const& d2)
     {
@@ -198,13 +210,14 @@ namespace test    {
       run (Arg) 
         {
           verify_trackingMechanism();
-          verify_integration();
+//        verify_integration();
         }
       
       
       void
       verify_trackingMechanism()
         {
+          instance = 0;
           checksum = 0;
           {
             typedef Dummy AutoRegisteringDummy;
@@ -230,7 +243,7 @@ namespace test    {
             
             CHECK (1+2+3 == checksum);
             
-            dummy2->unlink();
+            dummy2->detach();
             CHECK (1 + 3 == checksum);
             CHECK (2 == trackedDummies.size());
             CHECK (dummy1 == trackedDummies[0]);
@@ -243,7 +256,10 @@ namespace test    {
             // deliberately discard our reference, 
             // so the only remaining ref is within the registry
             dummy1.reset();
-            dummy2.reset();
+            dummy3.reset();
+            CHECK (!dummy1);
+            CHECK ( dummy2);
+            CHECK (!dummy3);
             CHECK (1 == trackedDummies[0].use_count());
             CHECK (1 == trackedDummies[1].use_count());
             CHECK (1 + 3 == checksum);

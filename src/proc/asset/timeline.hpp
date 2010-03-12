@@ -83,6 +83,9 @@ namespace asset {
   class Timeline
     : public Struct
     {
+        
+    public:
+      void detach() { TODO("Timeline-Session registration"); }
       
     protected:
       Timeline (const Asset::Ident& idi);
