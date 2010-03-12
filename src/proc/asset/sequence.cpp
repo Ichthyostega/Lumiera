@@ -21,7 +21,7 @@
 * *****************************************************/
 
 
-#include "asset/sequence.hpp"
+#include "proc/asset/sequence.hpp"
 //#include "proc/mobject/session/track.hpp"
 //#include "proc/mobject/placement.hpp"
 //#include "proc/mobject/session/mobjectfactory.hpp"

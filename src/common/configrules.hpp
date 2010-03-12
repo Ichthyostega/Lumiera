@@ -58,21 +58,23 @@
 #include "proc/asset/procpatt.hpp"
 #include "proc/asset/pipe.hpp"
 #include "proc/asset/track.hpp"
+#include "proc/asset/timeline.hpp"
+#include "proc/asset/sequence.hpp"
 
 #include <string>
 
 
 
-namespace lumiera
-  {
+namespace lumiera {
+  
   using std::string;
   using lumiera::P;
 
   
   
     
-  namespace query
-    {
+  namespace query {
+    
     // The intention is to support the following style of Prolog code
     //
     //  resolve(O, Cap) :- find(O), capabilities(Cap).
@@ -216,6 +218,8 @@ namespace lumiera
                                    , asset::Track
                                    , asset::Pipe
                                    , const asset::ProcPatt
+                                   , asset::Timeline
+                                   , asset::Sequence
                                    > ::List
                                      InterfaceTypes;
   

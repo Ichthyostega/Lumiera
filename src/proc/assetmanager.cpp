@@ -238,10 +238,11 @@ namespace asset {
 #include "proc/asset/pipe.hpp"  
 #include "proc/asset/meta.hpp"  
 #include "proc/asset/procpatt.hpp"  
+#include "proc/asset/timeline.hpp"  
+#include "proc/asset/sequence.hpp"  
 
 
-namespace asset
-  {
+namespace asset {
   
   template ID<Asset> AssetManager::reg (Asset* obj, const Asset::Ident& idi);
   
@@ -258,6 +259,8 @@ namespace asset
   template P<Track>    AssetManager::wrap (const Track& asset);
   template P<Pipe>     AssetManager::wrap (const Pipe&  asset);
   template P<ProcPatt> AssetManager::wrap (const ProcPatt& asset);
-
+  template P<Timeline> AssetManager::wrap (const Timeline& asset);
+  template P<Sequence> AssetManager::wrap (const Sequence& asset);
+  
   
 } // namespace asset

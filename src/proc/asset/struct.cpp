@@ -144,6 +144,8 @@ namespace asset {
 #include "proc/asset/procpatt.hpp"
 #include "proc/asset/track.hpp"
 #include "proc/asset/pipe.hpp"
+#include "proc/asset/timeline.hpp"
+#include "proc/asset/sequence.hpp"
 
 
 namespace asset {
@@ -151,6 +153,8 @@ namespace asset {
   template P<Pipe>     StructFactory::operator() (const Query<Pipe>& query);
   template P<Track>    StructFactory::operator() (const Query<Track>& query);
   template PProcPatt   StructFactory::operator() (const Query<const ProcPatt>& query);
+  template PTimeline   StructFactory::operator() (const Query<Timeline>& query);
+  template PSequence   StructFactory::operator() (const Query<Sequence>& query);
   
   
 } // namespace asset

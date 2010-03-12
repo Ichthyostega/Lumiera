@@ -36,100 +36,101 @@ using lumiera::query::LUMIERA_ERROR_CAPABILITY_QUERY;
 
 
 namespace mobject {
-  namespace session {
+namespace session {
   
-    using lumiera::P;
-    
-    
-    
-    /** initialise the most basic internal defaults. */
-    DefsManager::DefsManager ()  throw()
-      : defsRegistry(new DefsRegistry)
-    {
-      TODO ("setup basic defaults of the session");
-    }
-    
-    
-    
-    /** @internal causes boost::checked_delete from \c scoped_ptr<DefsRegistry>
-     *  to be placed here, where the declaration of DefsRegistry is available.*/
-    DefsManager::~DefsManager() {}
-    
-    
-    
-    template<class TAR>
-    P<TAR>
-    DefsManager::search  (const Query<TAR>& capabilities)
-    {
-      P<TAR> res;
-      QueryHandler<TAR>& typeHandler = ConfigRules::instance();  
-      for (DefsRegistry::Iter<TAR> i = defsRegistry->candidates(capabilities); 
-           res = *i ; ++i )
-        {
-          typeHandler.resolve (res, capabilities);
-          if (res)
-            return res;
-        }
-      return res; // "no solution found"
-    }
-    
-    
-    template<class TAR>
-    P<TAR> 
-    DefsManager::create  (const Query<TAR>& capabilities)
-    {
-      P<TAR> res;
-      QueryHandler<TAR>& typeHandler = ConfigRules::instance();  
-      typeHandler.resolve (res, capabilities);
-      if (res)
-        defsRegistry->put (res, capabilities);
+  using lumiera::P;
+  
+  
+  
+  /** initialise the most basic internal defaults. */
+  DefsManager::DefsManager ()  throw()
+    : defsRegistry(new DefsRegistry)
+  {
+    TODO ("setup basic defaults of the session");
+  }
+  
+  
+  
+  /** @internal causes boost::checked_delete from \c scoped_ptr<DefsRegistry>
+   *  to be placed here, where the declaration of DefsRegistry is available.*/
+  DefsManager::~DefsManager() {}
+  
+  
+  
+  template<class TAR>
+  P<TAR>
+  DefsManager::search  (const Query<TAR>& capabilities)
+  {
+    P<TAR> res;
+    QueryHandler<TAR>& typeHandler = ConfigRules::instance();
+    for (DefsRegistry::Iter<TAR> i = defsRegistry->candidates(capabilities);
+         res = *i ; ++i )
+      {
+        typeHandler.resolve (res, capabilities);
+        if (res)
+          return res;
+      }
+    return res; // "no solution found"
+  }
+  
+  
+  template<class TAR>
+  P<TAR> 
+  DefsManager::create  (const Query<TAR>& capabilities)
+  {
+    P<TAR> res;
+    QueryHandler<TAR>& typeHandler = ConfigRules::instance();
+    typeHandler.resolve (res, capabilities);
+    if (res)
+      defsRegistry->put (res, capabilities);
+    return res;
+  }
+  
+  
+  template<class TAR>
+  bool 
+  DefsManager::define  (const P<TAR>& defaultObj, const Query<TAR>& capabilities)
+  {
+    P<TAR> candidate (defaultObj);
+    QueryHandler<TAR>& typeHandler = ConfigRules::instance();  
+    typeHandler.resolve (candidate, capabilities);
+    if (!candidate)
+      return false;
+    else
+      return defsRegistry->put (candidate, capabilities);
+  }
+  
+  
+  template<class TAR>
+  bool 
+  DefsManager::forget  (const P<TAR>& defaultObj)
+  {
+    return defsRegistry->forget (defaultObj);
+  }
+  
+  
+  template<class TAR>
+  P<TAR>
+  DefsManager::operator() (const Query<TAR>& capabilities)
+  {
+    P<TAR> res (search (capabilities));
+    if (res) 
       return res;
-    }
+    else
+      res = create (capabilities); // not yet known as default, create new
     
-    
-    template<class TAR>
-    bool 
-    DefsManager::define  (const P<TAR>& defaultObj, const Query<TAR>& capabilities)
-    {
-      P<TAR> candidate (defaultObj);
-      QueryHandler<TAR>& typeHandler = ConfigRules::instance();  
-      typeHandler.resolve (candidate, capabilities);
-      if (!candidate)
-        return false;
-      else
-        return defsRegistry->put (candidate, capabilities);
-    }
-    
-    
-    template<class TAR>
-    bool 
-    DefsManager::forget  (const P<TAR>& defaultObj)
-    {
-      return defsRegistry->forget (defaultObj);
-    }
+    if (!res)
+      throw lumiera::error::Config ( str(format("The following Query could not be resolved: %s.")
+                                               % capabilities.asKey())
+                                   , LUMIERA_ERROR_CAPABILITY_QUERY );
+    else
+      return res;
+  }
+  
+}} // namespace mobject::session
 
-    
-    template<class TAR>
-    P<TAR> 
-    DefsManager::operator() (const Query<TAR>& capabilities)
-    {
-      P<TAR> res (search (capabilities));
-      if (res) 
-        return res;
-      else
-        res = create (capabilities); // not yet known as default, create new
-      
-      if (!res)
-        throw lumiera::error::Config ( str(format("The following Query could not be resolved: %s.") 
-                                                 % capabilities.asKey())
-                                     , LUMIERA_ERROR_CAPABILITY_QUERY );
-      else
-        return res;
-    }
 
-  } // namespace mobject::session
 
-} // namespace mobject
 
 
 
@@ -140,32 +141,37 @@ namespace mobject {
 #include "proc/asset/procpatt.hpp"
 #include "proc/asset/pipe.hpp"
 #include "proc/asset/track.hpp"
+#include "proc/asset/timeline.hpp"
+#include "proc/asset/sequence.hpp"
 #include "proc/mobject/session/track.hpp"
 
 namespace mobject {
-  namespace session {
-    
-    
-    using asset::Pipe;
-    using asset::PPipe;
-    using asset::ProcPatt;
-    using asset::PProcPatt;
-    
-    using mobject::session::Track;
-    using mobject::session::TrackAsset;
-    using mobject::session::PTrack;
-    using mobject::session::PTrackAsset;
-    
-    template PPipe       DefsManager::operator() (const Query<Pipe>&); 
-    template PProcPatt   DefsManager::operator() (const Query<const ProcPatt>&); 
-    template PTrack      DefsManager::operator() (const Query<Track>&); 
-    template PTrackAsset DefsManager::operator() (const Query<TrackAsset>&); 
-    
-    template bool DefsManager::define (const PPipe&, const Query<Pipe>&);
-    template bool DefsManager::forget (const PPipe&);
-    
-    
-  } // namespace mobject::session
-
-} // namespace mobject
-
+namespace session {
+  
+  
+  using asset::Pipe;
+  using asset::PPipe;
+  using asset::ProcPatt;
+  using asset::PProcPatt;
+  using asset::Timeline;
+  using asset::PTimeline;
+  using asset::Sequence;
+  using asset::PSequence;
+  
+  using mobject::session::Track;
+  using mobject::session::TrackAsset;
+  using mobject::session::PTrack;
+  using mobject::session::PTrackAsset;
+  
+  template PPipe       DefsManager::operator() (const Query<Pipe>&);
+  template PProcPatt   DefsManager::operator() (const Query<const ProcPatt>&);
+  template PTrack      DefsManager::operator() (const Query<Track>&);
+  template PTrackAsset DefsManager::operator() (const Query<TrackAsset>&);
+  template PTimeline   DefsManager::operator() (const Query<Timeline>&);
+  template PSequence   DefsManager::operator() (const Query<Sequence>&);
+  
+  template bool DefsManager::define (const PPipe&, const Query<Pipe>&);
+  template bool DefsManager::forget (const PPipe&);
+  
+  
+}} // namespace mobject::session
