@@ -22,29 +22,16 @@
 
 
 #include "lib/test/run.hpp"
-//#include "proc/mobject/session.hpp"
-//#include "proc/mobject/mobject-ref.hpp"
-//#include "proc/mobject/session/binding.hpp"
-//#include "proc/mobject/session/fixture.hpp"
-#include "proc/assetmanager.hpp"
+
+#include "lib/element-tracker.hpp"
 #include "proc/mobject/session/session-interface-modules.hpp"
+
+#include "proc/assetmanager.hpp"
 #include "proc/mobject/session.hpp"
 #include "proc/asset/timeline.hpp"
 #include "proc/asset/sequence.hpp"
-#include "lib/p.hpp"
-//#include "proc/asset/pipe.hpp"
-//#include "lib/lumitime.hpp"
 #include "lib/query.hpp"
-#include "lib/util.hpp"
 
-//#include <iostream>
-#include <tr1/functional>
-
-//using util::isSameObject;
-//using util::contains;
-//using util::isnil;
-//using std::string;
-//using std::cout;
 
 
 namespace mobject {
@@ -56,101 +43,7 @@ namespace test    {
     uint instance = 0;
     int  checksum = 0;
     
-    
-    using std::tr1::function;
-//    using std::tr1::bind;
-//    using std::tr1::ref;
-    
-    /** 
-     * Reference wrapper implemented as constant function,
-     * returning the (fixed) reference on invocation
-     */
-    template<typename T>
-    class ReturnRef
-      {
-        T& ref_;
-        
-      public:
-        ReturnRef(T& target) : ref_(target) { }
-        T& operator() ()  const { return ref_;}
-      };
-    
-    
-    /** 
-     * Helper mixin template for implementing a type
-     * to participate in automatic element tracking.
-     * - the element-tracking registry is accessed through
-     *   the static functor #getRegistry
-     * - a factory and a #detach operation is provided,
-     *   automatically handling registration.
-     * It is not mandatory to use this template, but
-     * types participating in automatic element tracking
-     * should provide equivalent functionality. 
-     */
-    template<typename TAR>
-    class AutoRegistered
-      {
-      public:
-        typedef lib::ElementTracker<TAR> Registry;
-        typedef function<Registry&(void)> RegistryLink;
-        
-        /** detach this element
-         *  from the element-tracking registry.
-         *  @note called when destroying an non-empty registry.
-         */
-        void
-        detach()
-          {
-            TAR& element = static_cast<TAR&> (*this);
-            
-            getRegistry().remove(element);
-            ENSURE (!getRegistry().isRegistered(element));
-          }
-        
-        
-        typedef lumiera::P<TAR> PTarget;
-        
-        /** factory for creating smart-ptr managed
-         *  TAR instances, automatically registered
-         *  with the element-tracking registry.
-         */
-        static PTarget
-        create()
-          {
-            REQUIRE (getRegistry);
-            
-            PTarget newElement (new TAR());
-            getRegistry().append (newElement);
-            
-            ENSURE (newElement);
-            ENSURE (getRegistry().isRegistered(*newElement));
-            return newElement;
-          }
-        
-        
-        template<typename FUN>
-        static void
-        establishRegistryLink (FUN link)
-          {
-            AutoRegistered::getRegistry = link;
-          }
-        
-        static void
-        setRegistryInstance (Registry& registry_to_use)
-          {
-            RegistryLink accessInstance = ReturnRef<Registry>(registry_to_use); 
-            establishRegistryLink (accessInstance);
-          }
-        
-      protected:
-        static RegistryLink getRegistry;
-      };
-    
-    /** storage for the functor to link an AutoRegistered entity
-     *  to the corresponding registration service */
-    template<typename TAR>
-    typename AutoRegistered<TAR>::RegistryLink  AutoRegistered<TAR>::getRegistry; 
-    
+    using lib::AutoRegistered;
     
     /**
      * Test Dummy: to be created through the inherited static #create(),
@@ -180,7 +73,6 @@ namespace test    {
             checksum -= id_;
           }
       };
-    
       
     bool
     operator== (Dummy const& d1, Dummy const& d2)
@@ -188,27 +80,25 @@ namespace test    {
       return util::isSameObject (d1, d2);
     }
     
-    
-  }
+  } // (End) test dummy and helper
+  
+  
   
   using lumiera::Query;
   using asset::Timeline;
   using asset::PTimeline;
   using asset::AssetManager;
-//  using asset::PSequence;
-//  using asset::RBinding;
-//  using asset::RTrack;
-//  using asset::Pipe;
-  
-//  using lumiera::Query;
-//  using lumiera::Time;
   
   
   /********************************************************************************
    * @test verify the tracking of special session/model elements, to be exposed
    *       through an self-contained interface module on the session API.
-   *       
-   * @todo WIP-WIP-WIP
+   *       The basic element-tracking mechanism uses a simple (vector based)
+   *       registry, which stores a smart-ptr. Thus the elements need to be
+   *       created by a factory. In case of Timeline / Sequence, the
+   *       asset::StructFactory will take on this role. The integration test
+   *       creates a Timeline (facade asset) and verifies proper registration
+   *       and deregistration.
    *       
    * @see  timeline-sequence-handling-test.cpp
    * @see  session-interface-modules.hpp
@@ -220,7 +110,7 @@ namespace test    {
       run (Arg) 
         {
           verify_trackingMechanism();
-//        verify_integration();
+//        verify_integration();        ///////////////////////////////////////////TICKET #499
         }
       
       
@@ -296,7 +186,7 @@ namespace test    {
           CHECK (specialTimeline);
           CHECK (num_timelines + 1 == sess->timelines.size());
           CHECK (specialTimeline == sess->timelines[num_timelines]);
-          CHECK (specialTimeline.use_count() == 3);                        // we, the AssetManager and the session
+          CHECK (specialTimeline.use_count() == 3);                     // we, the AssetManager and the session
           
           PTimeline anotherTimeline (asset::Struct::create (Query<Timeline> ()));
           CHECK (num_timelines + 2 == sess->timelines.size());
@@ -310,7 +200,7 @@ namespace test    {
           
           CHECK (num_timelines + 1 == sess->timelines.size());
           CHECK (anotherTimeline == sess->timelines[num_timelines]);    // moved to the previous slot
-          CHECK (specialTimeline.use_count() == 1);                        // we're holding the last reference
+          CHECK (specialTimeline.use_count() == 1);                     // we're holding the last reference
         }
     };
   

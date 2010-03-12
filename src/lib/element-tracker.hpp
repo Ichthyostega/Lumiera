@@ -56,15 +56,18 @@
 #define LIB_ELEMENT_TRACKER_H
 
 #include "lib/p.hpp"
+#include "lib/wrapper.hpp"
 #include "lib/util-foreach.hpp"
 #include "lib/ref-array-impl.hpp"
 
+#include <tr1/functional>
 
 
 
 namespace lib {
   
   using lumiera::P;
+  using std::tr1::function;
   
   /**
    * Registry for tracking object instances.
@@ -151,9 +154,84 @@ namespace lib {
         }
     };
   
-
-
-
-
+  
+  
+  /**
+   * Helper mixin template for implementing a type
+   * intended to participate in automatic element tracking.
+   * - the element-tracking registry is accessed through
+   *   the static functor #getRegistry
+   * - a factory and a #detach operation is provided,
+   *   automatically handling registration.
+   * It is not mandatory to use this template, but
+   * types participating in automatic element tracking
+   * should provide equivalent functionality.
+   */
+  template<typename TAR>
+  class AutoRegistered
+    {
+    public:
+      typedef lib::ElementTracker<TAR> Registry;
+      typedef function<Registry&(void)> RegistryLink;
+      
+      /** detach this element
+       *  from the element-tracking registry.
+       *  @note called when destroying an non-empty registry.
+       */
+      void
+      detach()
+        {
+          TAR& element = static_cast<TAR&> (*this);
+          
+          getRegistry().remove(element);
+          ENSURE (!getRegistry().isRegistered(element));
+        }
+      
+      
+      typedef lumiera::P<TAR> PTarget;
+      
+      /** factory for creating smart-ptr managed
+       *  TAR instances, automatically registered
+       *  with the element-tracking registry.
+       */
+      static PTarget
+      create()
+        {
+          REQUIRE (getRegistry);
+          
+          PTarget newElement (new TAR());
+          getRegistry().append (newElement);
+          
+          ENSURE (newElement);
+          ENSURE (getRegistry().isRegistered(*newElement));
+          return newElement;
+        }
+      
+      
+      template<typename FUN>
+      static void
+      establishRegistryLink (FUN link)
+        {
+          AutoRegistered::getRegistry = link;
+        }
+      
+      static void
+      setRegistryInstance (Registry& registry_to_use)
+        {
+          RegistryLink accessInstance = wrapper::refFunction(registry_to_use);
+          establishRegistryLink (accessInstance);
+        }
+      
+    protected:
+      static RegistryLink getRegistry;
+    };
+  
+  /** storage for the functor to link an AutoRegistered entity
+   *  to the corresponding registration service */
+  template<typename TAR>
+  typename AutoRegistered<TAR>::RegistryLink  AutoRegistered<TAR>::getRegistry;
+  
+  
+  
 } // namespace lib
 #endif

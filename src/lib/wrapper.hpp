@@ -97,6 +97,31 @@ namespace wrapper {
   
   
   
+  /** 
+   * Reference wrapper implemented as constant function,
+   * returning the (fixed) reference on invocation
+   */
+  template<typename T>
+  class ReturnRef
+    {
+      T& ref_;
+      
+    public:
+      ReturnRef(T& target) : ref_(target) { }
+      T& operator() ()  const { return ref_;}
+    };
+  
+  template<typename T>
+  ReturnRef<T>
+  refFunction (T& target)
+  {
+    return ReturnRef<T> (target);
+  }
+  
+  
+  
+  
+  
   
   /**
    * Universal value/ref wrapper behaving like a pointer.
