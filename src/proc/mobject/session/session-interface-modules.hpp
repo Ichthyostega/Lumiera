@@ -68,13 +68,15 @@
 #define MOBJECT_SESSION_INTERFACE_MODULES_H
 
 #include "lib/element-tracker.hpp"
+#include "proc/asset/timeline.hpp"
+#include "proc/asset/sequence.hpp"
+#include "proc/mobject/session/defsmanager.hpp"
 
 
 
 
 namespace mobject {
 namespace session {
-  
   
   
   typedef lib::ElementTracker<asset::Timeline> TimelineTracker;

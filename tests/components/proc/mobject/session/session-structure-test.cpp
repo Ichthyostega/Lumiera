@@ -76,7 +76,7 @@ namespace test    {
         {
           
           PSess sess = Session::current;
-          ASSERT (sess->isValid())
+          ASSERT (sess->isValid());
           
           UNIMPLEMENTED("the real standard structure of the session"); //////////////////////////TICKET #499
           
@@ -99,6 +99,7 @@ namespace test    {
           ASSERT (0 < sess->sequences.size());
           PSequence seq = sess->sequences[0];
           
+#if false //////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #546              
           ASSERT (isSameObject (seq, til->getSequence()));
           
           //verify default timeline
@@ -128,6 +129,7 @@ namespace test    {
           focus.navigate (til);
           ASSERT (til.getBinding() == focus.getObject());
           ASSERT (rootTrack == *(focus.children()));
+#endif //////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #546              
         }
     };
   

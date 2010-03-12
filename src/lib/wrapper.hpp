@@ -30,9 +30,7 @@
  **   it can be instantiated with a value type, a pointer or a reference type,
  **   yielding the same behaviour in all cases (useful for building templates)
  ** - FunctionResult is the combination of ItemWrapper with a functor object
- **   to cache the function result value. It is used to implement a transforming
- **   iterator, especially supporting the case when the transformation function
- **   is to return a reference
+ **   to cache the function result value.
  ** 
  ** @see lib::TransformIter
  ** 

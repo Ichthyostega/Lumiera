@@ -26,15 +26,16 @@
 //#include "proc/mobject/mobject-ref.hpp"
 //#include "proc/mobject/session/binding.hpp"
 //#include "proc/mobject/session/fixture.hpp"
-//#include "proc/assetmanager.hpp"
+#include "proc/assetmanager.hpp"
 #include "proc/mobject/session/session-interface-modules.hpp"
+#include "proc/mobject/session.hpp"
 #include "proc/asset/timeline.hpp"
 #include "proc/asset/sequence.hpp"
 #include "lib/p.hpp"
 //#include "proc/asset/pipe.hpp"
 //#include "lib/lumitime.hpp"
-//#include "lib/query.hpp"
-//#include "lib/util.hpp"
+#include "lib/query.hpp"
+#include "lib/util.hpp"
 
 //#include <iostream>
 #include <tr1/functional>
@@ -56,19 +57,31 @@ namespace test    {
     
     
     using std::tr1::function;
-    using std::tr1::bind;
-    using std::tr1::ref;
+//    using std::tr1::bind;
+//    using std::tr1::ref;
+    
+    /** 
+     * Reference wrapper implemented as constant function,
+     * returning the (fixed) reference on invocation
+     */
+    template<typename T>
+    class ReturnRef
+      {
+        T& ref_;
+        
+      public:
+        ReturnRef(T& target) : ref_(target) { }
+        T& operator() ()  const { return ref_;}
+      };
     
     
     template<typename TAR>
     class AutoRegistered
       {
+      public:
         typedef lib::ElementTracker<TAR> Registry;
         typedef function<Registry&(void)> RegistryLink;
         
-        static RegistryLink getRegistry;
-        
-      public:
         
         template<typename FUN>
         static void
@@ -80,7 +93,8 @@ namespace test    {
         static void
         setRegistryInstance (Registry& registry_to_use)
           {
-            establishRegistryLink (bind (ref(registry_to_use)));
+            RegistryLink accessInstance = ReturnRef<Registry>(registry_to_use); 
+            establishRegistryLink (accessInstance);
           }
         
         
@@ -107,12 +121,15 @@ namespace test    {
             
             ENSURE (!getRegistry().isRegistered(*this));
           }
+        
+      protected:
+        static RegistryLink getRegistry;
       };
     
     /** storage for the functor to link an AutoRegistered entity
      *  to the corresponding registration service */
     template<typename TAR>
-    AutoRegistered<TAR>::RegistryLink AutoRegistered<TAR>::getRegistry; 
+    typename AutoRegistered<TAR>::RegistryLink  AutoRegistered<TAR>::getRegistry; 
     
     
     /**
@@ -143,14 +160,20 @@ namespace test    {
         
       };
     
+    bool
+    operator== (Dummy const& d1, Dummy const& d2)
+    {
+      return util::isSameObject (d1, d2);
+    }
     
     
   }
-//  using proc_interface::AssetManager;
-//  using proc_interface::PAsset;
   
+  using lumiera::Query;
+  using asset::Timeline;
   using asset::PTimeline;
-  using asset::PSequence;
+  using asset::AssetManager;
+//  using asset::PSequence;
 //  using asset::RBinding;
 //  using asset::RTrack;
 //  using asset::Pipe;
@@ -207,7 +230,7 @@ namespace test    {
             
             CHECK (1+2+3 == checksum);
             
-            dummy2.unlink();
+            dummy2->unlink();
             CHECK (1 + 3 == checksum);
             CHECK (2 == trackedDummies.size());
             CHECK (dummy1 == trackedDummies[0]);
@@ -246,13 +269,13 @@ namespace test    {
           PTimeline specialTimeline (asset::Struct::create (Query<Timeline> ("id(testical)")));
           CHECK (specialTimeline);
           CHECK (num_timelines + 1 == sess->timelines.size());
-          CHECK (specialTimeline == session->timelines[num_timelines]);
+          CHECK (specialTimeline == sess->timelines[num_timelines]);
           CHECK (specialTimeline.use_count() == 3);                        // we, the AssetManager and the session
           
           PTimeline anotherTimeline (asset::Struct::create (Query<Timeline> ()));
           CHECK (num_timelines + 2 == sess->timelines.size());
-          CHECK (specialTimeline == session->timelines[num_timelines]);
-          CHECK (anotherTimeline == session->timelines[num_timelines+1]);  // new one got appended at the end
+          CHECK (specialTimeline == sess->timelines[num_timelines]);
+          CHECK (anotherTimeline == sess->timelines[num_timelines+1]);  // new one got appended at the end
           
           AssetManager& assetM (AssetManager::instance());
           CHECK (assetM.known (specialTimeline->getID()));
@@ -260,7 +283,7 @@ namespace test    {
           CHECK (!assetM.known (specialTimeline->getID()));
           
           CHECK (num_timelines + 1 == sess->timelines.size());
-          CHECK (anotherTimeline == session->timelines[num_timelines]);    // moved to the previous slot
+          CHECK (anotherTimeline == sess->timelines[num_timelines]);    // moved to the previous slot
           CHECK (specialTimeline.use_count() == 1);                        // we're holding the last reference
         }
     };

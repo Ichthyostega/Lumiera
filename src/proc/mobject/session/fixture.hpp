@@ -51,7 +51,7 @@ namespace session {
       list<ExplicitPlacement> content_;
       boost::scoped_ptr<Segmentation> partitioning_;
       
-      /////////////TODO: who creates this?
+      /////////////////////////////////////////////////TICKET #573  who creates the fixture?
       
     public:
       list<ExplicitPlacement> & getPlaylistForRender () ;

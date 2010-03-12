@@ -32,6 +32,7 @@
 #include "proc/mobject/session/testclip.hpp"
 #include "proc/mobject/mobject-ref.hpp"
 #include "proc/mobject/placement.hpp"
+#include "lib/query.hpp"
 
 #include <tr1/functional>
 #include <boost/ref.hpp>
@@ -56,9 +57,11 @@ namespace test    {
   
 //  using asset::PTimeline;
   using asset::PSequence;
+  using asset::Sequence;
   using asset::RTrack;
   
 //  using lumiera::Time;
+  using lumiera::Query;
   
   typedef MORef<session::Clip> RClip;
   
@@ -100,6 +103,7 @@ namespace test    {
           PSequence seq = sess->defaults (Query<Sequence> ());           //////////////////////TICKET #549
           CHECK (seq);
           
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #499
           RTrack track1 = seq->attachTrack();
           RTrack track2 = seq->attachTrack("track-2");
           RTrack track21 = seq->attachTrack("track-2.1", track2);
@@ -138,6 +142,7 @@ namespace test    {
           
           // verify we indeed covered all tracks known to the session....
           CHECK (and_all (sess->all<Track>(), contains, ref(allTracks), _1 ));
+#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #499
         }
       
       
@@ -147,6 +152,7 @@ namespace test    {
           PSess sess = Session::current;
           CHECK (sess->isValid());
           
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #499
           QueryFocus& focus = sess->focus();
           CHECK (focus.getObject().isCompatible<session::Track>());
           RClip clip1 = sess->attach (TestClip::create());
@@ -209,12 +215,14 @@ namespace test    {
           CHECK ( focus.hasChild (clip2));
           CHECK ( focus.hasChild (clip3));
           CHECK (!focus.hasChild (clip4));            // ...because this one is on track2, not track31
+#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #499
         }
       
       
       void
       removeParts()
         {
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #499
           PSess sess = Session::current;
           CHECK (sess->isValid());
           
@@ -301,6 +309,7 @@ namespace test    {
           CHECK (1 == sess->sequences.size());
           CHECK (aSequence != sess->sequences[0]);
           CHECK (aSequence.use_count() == 1);                 // we're holding the last remaining reference
+#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #499
         }
       
       

@@ -49,7 +49,9 @@ namespace test    {
   using proc_interface::AssetManager;
   using proc_interface::PAsset;
   
+  using asset::Timeline;
   using asset::PTimeline;
+  using asset::Sequence;
   using asset::PSequence;
   using asset::RBinding;
   using asset::RTrack;
@@ -102,6 +104,7 @@ namespace test    {
           CHECK (0 < sess->timelines.size());
           
           PTimeline defaultTimeline = sess->defaults (Query<Timeline> ());           //////////////////////TICKET #549
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #499
           Query<Timeline> query1 = "id("+defaultTimeline->getNameID()+").";
           
           PTimeline queriedTimeline = asset::Struct::create (query1);
@@ -115,6 +118,7 @@ namespace test    {
           CHECK (queriedSequence == sess->sequences[0]);
           CHECK (queriedSequence == sess->timelines[0]->getSequence());
           CHECK (queriedSequence == defaultTimeline->getSequence());
+#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #499
         }
       
       
@@ -127,6 +131,7 @@ namespace test    {
           uint num_timelines = sess->timelines.size();
           CHECK (0 < num_timelines);
           
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #499
           Query<Timeline> special = "id(aSillyName), sequence("
                                   + sess->sequences[0]->getNameID()
                                   + "), pipe(ambiance).";
@@ -141,6 +146,7 @@ namespace test    {
           CHECK (contains (specialTimeline->pipes, Pipe::query("pipe(ambiance)")));
           
           CHECK (specialTimeline.use_count() == 3); // we, the AssetManager and the session
+#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #499
         }
       
       
@@ -155,6 +161,7 @@ namespace test    {
           CHECK (2 <= num_timelines);
           
           PTimeline specialTimeline = sess->timelines[num_timelines-1];
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #499
           CHECK ("aSillyName" == specialTimeline->getNameID());
           
           RBinding binding = specialTimeline->getBinding();
@@ -175,6 +182,7 @@ namespace test    {
           
           CHECK (num_timelines - 1 == sess->timelines.size());
           CHECK (!binding);                         //  got purged from the model
+#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #499
         }
       
       
@@ -189,6 +197,7 @@ namespace test    {
           CHECK (0 < num_timelines);
           
           // create a new Timeline to play with, using the default sequence...
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #499
           PTimeline aTimeline (asset::Struct::create (Query<Timeline> ("sequence("+
                                                                       + sess->sequences[0]->getNameID()
                                                                       +        ").")));
@@ -213,6 +222,7 @@ namespace test    {
           CHECK (num_timelines == sess->timelines.size());
           CHECK (!contains (sess->timelines, aTimeline));
           CHECK ( contains (sess->sequences, theSeq));   // unaffected
+#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #499
         }
       
       
@@ -228,6 +238,7 @@ namespace test    {
           
           // create a new timeline, bound to a new sequence...
           PTimeline aTimeline (asset::Struct::create (Query<Timeline> ()));
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #499
           PSequence aSequence (aTimeline->getSequence());
           CHECK (num_timelines + 1 == sess->timelines.size());
           CHECK (num_sequences + 1 == sess->sequences.size());
@@ -256,6 +267,7 @@ namespace test    {
 
           CHECK (1 == aTimeline.use_count());   
           CHECK (1 == aSequence.use_count());   
+#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #499
         }
       
       
@@ -268,6 +280,7 @@ namespace test    {
           CHECK (sess->isValid());
           uint num_sequences = sess->sequences.size();
           
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #499
           RTrack someTrack = sess->sequences[0]->getTracks();
           
           // indirectly cause a new sequence to come to life...
@@ -295,6 +308,7 @@ namespace test    {
 
           CHECK (someTrack);
           CHECK (newTrack);
+#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #499
         }
     };
   

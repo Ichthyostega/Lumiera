@@ -93,7 +93,7 @@ namespace session {
   PFix&
   SessionImpl::getFixture ()
   {
-    return fixture;
+    return fixture_;
   }
   
   
