@@ -783,7 +783,7 @@ config.macros.timeline.handler = function(place,macroName,params,wikifier,paramS
 }
 //}}}</pre>
 </div>
-<div title="BindingMO" modifier="Ichthyostega" modified="201002010125" created="200905210144" tags="def design discuss SessionLogic" changecount="13">
+<div title="BindingMO" modifier="Ichthyostega" modified="201003130209" created="200905210144" tags="def design discuss SessionLogic" changecount="15">
 <pre>Sometimes, two entities within the [[Session]] are deliberately associated, and this association has to carry some specific mappings between properties or facilities within the entities to be linked together. When this connection isn't just the [[Placement]] of an object, and isn't just a logical or structural relationship either &amp;mdash; then we create an explicit Binding object to be stored into the session.
 * When connecting a [[Sequence]] to a certain [[Timeline]], we also establish a mapping between the possible media stream channels produced by the sequence and the real output slots found within the timeline.
 * similarly, using a sequence within a [[meta-clip|VirtualClip]] requires to remember such a mapping.
@@ -805,6 +805,22 @@ While each of these actually represents a high-level concept (the session, the t
 //According to this reasoning, I should proceed rather with these three distinct entities and postpone any search for similarities to a later refactoring round.//
 
 &amp;rarr; see also SessionInterface
+
+!Problems and Questions {{red{WIP 3/10}}}
+Meanwhile I've settled down on implementing the [[top-level entities|Timeline]] as façade assets, backed by a {{{Placement&lt;Binding&gt;}}}. But the addressing and mapping of media channels still remains unsettled. Moreover, what happens when binding the sequence into a VirtualClip?
+* because a Binding was assumed to link two entities, I concluded that the binding is dependent on those entities
+* but then the two cases don't match:
+** Timeline is an asset, not an MObject. Having a Timeline MObject would clearly be redundant. But then, consequently, //binding has to provide the global pipes,// because we need the possibility to attach effects to them (by placing the effects into the binding's scope)
+** to the contrary, a VirtualClip requires somehow a ClipMO, which then in turn would need a channel configuration
+*** so either, we could rework the clip asset into such a channel configuration (it looks pretty much redundant otherwise)
+*** or the binding could take on the role of the channel configuration (which would be more in-line with the first case)
+** unfortunately, both solutions bring the binding rather on the level of an asset (a media or channel configuration).
+* //multiplicity// is yet another open question:
+** can multiple placements refer to the same binding?
+** what would be the semantics or such an arrangement?
+** if we decide against it, what happens if we nevertheless encounter this situation?
+
+&amp;harr; related to the handling of MultichannelMedia, which likewhise needs to be re-adjusted meanwhile!
 
 !Implementation
 On the implementation side, we use a special kind of MObject, acting as an anchor and providing an unique identity. Like any ~MObject, actually a placement establishes the connection and the scope, and typically constitutes a nested scope (e.g. the scope of all objects //within// the sequence to be bound into a timeline)
@@ -2320,7 +2336,7 @@ For the case here in question this seems to be the ''resource allocation is cons
 And, last but not least, doing large scale allocations is the job of the backend. Exceptions being long-lived objects, like the session or the sequences, which are created once and don't bear the danger of causing memory pressure. Besides, the ProcLayer code shouldn't issue &quot;new&quot; and &quot;delete&quot; when it comes in hand, rather it should use some centralized [[Factories]] for all allocation and freeing, so we can redirect these calls down to the backend, which may use pooling or special placement allocators or the like. The rationale is, for modern hardware/architectures, care has to be taken with heap allocations, esp. with many small objects and irregular usage patterns.
 </pre>
 </div>
-<div title="ModelDependencies" modifier="Ichthyostega" modified="201003060012" created="201003020150" tags="SessionLogic spec dynamic draft" changecount="23">
+<div title="ModelDependencies" modifier="Ichthyostega" modified="201003122249" created="201003020150" tags="SessionLogic spec dynamic draft" changecount="24">
 <pre>Our design of the models (both [[high-level|HighLevelModel]] and [[low-level|LowLevelModel]]) relies partially on dependent objects being kept consitently in sync. Currently (2/2010), __ichthyo__'s assessment is to consider this topic not important and pervasive enough to justify building a dedicated solution, mainly due to the fact of keeping the session implementation mostly single-threaded. Thus, care has to be taken to capture and treat all the relevant dependencies properly at the implementation level.
 
 !known interdependencies
@@ -2338,7 +2354,7 @@ While implemented as StructAsset, additionally we need to assure every instance 
 
 ;Timeline
 :acts as facade and is implemented by an BindingMO, which can't exist in isolation.
-: __created__ &amp;rArr; create new binding, use either newly created (maybe default) sequence, or use existing sequence
+: __created__ &amp;rArr; create new binding, using either newly created (maybe default) sequence, or an existing sequence
 : __destroy__ &amp;rArr; remove binding, while the previously bound sequence remains in model.
 ;Binding
 :is completely dependent and can't even be created without prerequisites
@@ -2414,7 +2430,7 @@ __Note__: nothing within the PlacementIndex requires the root object to be of a 
 
 </pre>
 </div>
-<div title="MultichannelMedia" modifier="Ichthyostega" modified="200710212326" created="200709200255" tags="design img" changecount="6">
+<div title="MultichannelMedia" modifier="Ichthyostega" modified="201003130220" created="200709200255" tags="design img" changecount="9">
 <pre>Based on practical experiences, Ichthyo tends to consider Multichannel Media as the base case, while counting media files providing just one single media stream as exotic corner cases. This may seem counter intuitive at first sight; you should think of  it as an attempt to avoid right from start some of the common shortcomings found in many video editors, especially
 * having to deal with keeping a &quot;link&quot; between audio and video clips
 * silly limitations on the supported audio setups (e.g. &quot;sound is mono, stereo or Dolby-5.1&quot;)
@@ -2433,7 +2449,21 @@ So, when creating a clip out of such a compound media asset, the clip has to be 
 * moreover, creating a Clip will create and register a Clip asset as well, and this Clip asset will be tied to the original Clip and will show up in some special Category
 * media can be compound and the created Clips will mirror this compound structure
 * we distinguish elementay (non-compound) Clips from compound clips by concrete subtype. {{red{really?? doesn't seem so much like a good idea to me anymore 1/10}}} The builder can only handle elementary clips, because he needs to build a separate pipeline for every output channel. So the work of splitting common effect stacks for clips with several channels needs to be done when calculating the [[Fixture]] for the current session. The Builder expects to be able to build the render nodes corresponding to each entity found in the Fixture one by one.
-* the Builder gets at the ProcPatt (descriptor) of the underlying media for each clip and uses this description as a template to build the render pipeline. That is, the ProcPatt specifies the codec asset and maybe some additional effect assets (deinterlace, scale) necessary for feeding media data corresponding to this clip/media into the render nodes network.</pre>
+* the Builder gets at the ProcPatt (descriptor) of the underlying media for each clip and uses this description as a template to build the render pipeline. That is, the ProcPatt specifies the codec asset and maybe some additional effect assets (deinterlace, scale) necessary for feeding media data corresponding to this clip/media into the render nodes network.
+
+!{{red{Reviewed 3/2010}}}
+While the general approach and reasoning remains valid, a lot of the details looks dated meanwhile.
+* it is //not// true that the builder can be limited to handling single processing chains. Some effects ineed need to be fed with mutliple channels &amp;mdash; most notably panners and compressors.
+* consequently there is the need for an internal representation of the media StreamType.
+* thus we can assume the presence of some kind of //type system//
+* which transforms the individual &quot;stream&quot; into a entirely conceptual entity within the HighLevelModel
+* moreover it is clear that the channel configuration needs to be flexible, and not automatically bound to the existence of a single media with that configuration.
+* and last but not least, we handle nested sequences as virtual clips with virtual media.
+&amp;rArr; conclusions
+* while the asset related parts remain as specified, we get a distinct ChannelConfig asset instead of the clip asset (which seems to be redundant)
+* either the ClipMO referres this ChannelConfig asset &amp;mdash; or in case of the VirtualClip a BindingMO takes this role.
+* as the BindingMO is also used to implement the top-level timelines, the treatment of global and local pipes is united
+</pre>
 </div>
 <div title="NodeConfiguration" modifier="Ichthyostega" modified="200909041807" created="200909041806" tags="spec Builder Rendering" changecount="2">
 <pre>Various aspects of the individual [[render node|ProcNode]] are subject to configuration and may influence the output quality or the behaviour of the render process.
@@ -5989,10 +6019,10 @@ Thus, to re-state the problem more specifically, we want the //definition//&amp;
 * the ''actual query'' just picks the respective type-ID for accessing the dispatcher table, making for a total of //two//&amp;nbsp; function-pointer indirections.
 </pre>
 </div>
-<div title="VirtualClip" modifier="Ichthyostega" modified="200808160257" created="200804110321" tags="def" changecount="13">
+<div title="VirtualClip" modifier="Ichthyostega" modified="201003130000" created="200804110321" tags="def" changecount="15">
 <pre>A ''~Meta-Clip'' or ''Virtual Clip'' (both are synonymous) denotes a clip which doesn't just pull media streams out of a source media asset, but rather provides the results of rendering a complete sub-network. In all other respects it behaves exactly like a &quot;real&quot; clip, i.e. it has [[source ports|ClipSourcePort]], can have attached effects (thus forming a local render pipe) and can be placed and combined with other clips. Depending on what is wired to the source ports, we get two flavours:
 * a __placeholder clip__ has no &quot;embedded&quot; content. Rather, by virtue of placements and wiring requests, the output of some other pipe somewhere in the session will be wired to the clip's source ports. Thus, pulling data from this clip will effectively pull from these source pipes wired to it.
-* a __nested sequence __ is like the other sequences in the Session, just that any missing placement properties will be derived from the Virtual Clip, which is thought as to &quot;contain&quot; the objects of the nested sequence. Typically, this also [[configures the tracks|TrackHandling]] of the &quot;inner&quot; sequence such as to connect any output to the source ports of the Virtual Clip.
+* a __nested sequence__ is like the other sequences in the Session, just in this case any missing placement properties will be derived from the Virtual Clip, which is thought as to &quot;contain&quot; the objects of the nested sequence. Typically, this also [[configures the tracks|TrackHandling]] of the &quot;inner&quot; sequence such as to connect any output to the source ports of the Virtual Clip.
 
 Like any &quot;real&quot; clip, Virtual Clips have a start offset and a length, which will simply translate into an offset of the frame number pulled from the Virtual Clip's source connection or embedded sequence, making it possible to cut, splice, trim and roll them as usual. This of course implies we can have several instances of the same virtual clip with different start offset and length placed differently. The only limitation is that we can't handle cyclic dependencies for pulling data (which has to be detected and flagged as an error by the builder)
 </pre>

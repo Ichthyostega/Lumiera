@@ -80,6 +80,14 @@ namespace asset {
     template<> Symbol Traits<const ProcPatt>::catFolder  = "build-templates";
     template<> Symbol Traits<const ProcPatt>::idSymbol   = "procPatt";
     
+    template<> Symbol Traits<Timeline>::namePrefix = "tL";
+    template<> Symbol Traits<Timeline>::catFolder  = "timelines";
+    template<> Symbol Traits<Timeline>::idSymbol   = "timeline";
+    
+    template<> Symbol Traits<Sequence>::namePrefix = "seq";
+    template<> Symbol Traits<Sequence>::catFolder  = "sequences";
+    template<> Symbol Traits<Sequence>::idSymbol   = "sequence";
+    
     Symbol genericIdSymbol ("id");
     
   }
@@ -187,6 +195,22 @@ namespace asset {
                        , processingPattern
                        , pipeID
                        );
+      }
+    
+    template<>
+    Timeline* 
+    StructFactoryImpl::fabricate (const Query<Timeline>& caps)
+      {
+        TODO ("actually extract properties/capabilities from the query...");
+        return new Timeline (createIdent (caps));
+      }
+    
+    template<>
+    Sequence* 
+    StructFactoryImpl::fabricate (const Query<Sequence>& caps)
+      {
+        TODO ("actually extract properties/capabilities from the query...");
+        return new Sequence (createIdent (caps));
       }
     
     

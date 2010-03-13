@@ -74,7 +74,7 @@ namespace session {
 
 namespace asset {
   
-  typedef mobject::MORef<mobject::session::Binding> RBinding;
+  typedef mobject::MORef<mobject::session::Binding> RBinding;   ////TODO why defining this into namespace asset? shouldn't it go into mobject::session ??
   
   
   /**
