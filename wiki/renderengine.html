@@ -2280,9 +2280,11 @@ __10/2008__: the allocation mechanism can surely be improved later, but for now 
 
 &lt;style type=&quot;text/css&quot;&gt;#contentWrapper {display:none;}&lt;/style&gt;&lt;div id=&quot;SplashScreen&quot; style=&quot;border: 3px solid #ccc; display: block; text-align: center; width: 320px; margin: 100px auto; padding: 50px; color:#000; font-size: 28px; font-family:Tahoma; background-color:#eee;&quot;&gt;loading &lt;b&gt;Proc-Layer&lt;/b&gt; devel doku&lt;blink&gt; ...&lt;/blink&gt;&lt;br&gt;&lt;br&gt;&lt;span style=&quot;font-size: 14px; color:red;&quot;&gt;Requires Javascript.&lt;/span&gt;&lt;/div&gt;</pre>
 </div>
-<div title="MediaAsset" modifier="Ichthyostega" modified="200906071810" created="200709021530" tags="def classes img" changecount="8">
+<div title="MediaAsset" modifier="Ichthyostega" modified="201003140236" created="200709021530" tags="def classes img" changecount="10">
 <pre>The Interface asset::Media is a //key abstraction// It ties together several concepts and enables to deal with them on the interfaces in a uniform manner. Besides, like every Asset kind, it belongs rather to the bookkeeping view: an asset::Media holds the specific properties and parametrisation of the media source it stands for. Regarding the __inward interface__ &amp;mdash; as used from within the [[model|HighLevelModel]] or the [[render nodes|ProcNode]], it is irrelevant if any given asset::Media object stands for a complete media source, just a clip taken from this source or if a placeholder version of the real media source is used instead.
 [img[Asset Classess|uml/fig130437.png]]
+{{red{NOTE 3/2010:}}} Considering to change that significantly. Especially considering to collapse clip-asset and clip-MO into a single entity with multiple inheritance
+&amp;rarr; regarding MultichannelMedia (see the notes at bottom)
 
 &amp;rarr; see also LoadingMedia
 </pre>
@@ -2336,7 +2338,7 @@ For the case here in question this seems to be the ''resource allocation is cons
 And, last but not least, doing large scale allocations is the job of the backend. Exceptions being long-lived objects, like the session or the sequences, which are created once and don't bear the danger of causing memory pressure. Besides, the ProcLayer code shouldn't issue &quot;new&quot; and &quot;delete&quot; when it comes in hand, rather it should use some centralized [[Factories]] for all allocation and freeing, so we can redirect these calls down to the backend, which may use pooling or special placement allocators or the like. The rationale is, for modern hardware/architectures, care has to be taken with heap allocations, esp. with many small objects and irregular usage patterns.
 </pre>
 </div>
-<div title="ModelDependencies" modifier="Ichthyostega" modified="201003122249" created="201003020150" tags="SessionLogic spec dynamic draft" changecount="24">
+<div title="ModelDependencies" modifier="Ichthyostega" modified="201003140258" created="201003020150" tags="SessionLogic spec dynamic draft" changecount="25">
 <pre>Our design of the models (both [[high-level|HighLevelModel]] and [[low-level|LowLevelModel]]) relies partially on dependent objects being kept consitently in sync. Currently (2/2010), __ichthyo__'s assessment is to consider this topic not important and pervasive enough to justify building a dedicated solution, mainly due to the fact of keeping the session implementation mostly single-threaded. Thus, care has to be taken to capture and treat all the relevant dependencies properly at the implementation level.
 
 !known interdependencies
@@ -2353,13 +2355,15 @@ While implemented as StructAsset, additionally we need to assure every instance 
 : __destroy__ &amp;rArr; discard all timelines, discard all sequences
 
 ;Timeline
-:acts as facade and is implemented by an BindingMO, which can't exist in isolation.
-: __created__ &amp;rArr; create new binding, using either newly created (maybe default) sequence, or an existing sequence
+:acts as facade and is implemented by an root-attached BindingMO. Can't exist in isolation.
+: __created__ &amp;rArr; either use an existing binding and sequence, or create new binding and sequence (maybe using default)
 : __destroy__ &amp;rArr; remove binding, while the previously bound sequence remains in model.
-;Binding
-:is completely dependent and can't even be created without prerequisites
-: __created__ &amp;rArr; mandates specification of a timeline, while the sequence is optional and will be created if missing
-: __destroy__ &amp;rArr; is implemented by forwarding to timeline destruction
+;root-placed Binding
+:while generally a Binding can exist in the model, when attached to root, a Timeline will be created
+: __created__ &amp;rArr; an existing sequence might be given on creation, otherwhise a default configured sequence is created
+: __destroy__ &amp;rArr; implemented by detaching from root (see below) prior to purging from the model.
+: __attached__ to root &amp;rArr; invoke Timeline creation
+: __detached__ from root &amp;rArr will care to destroy the corresponding timeline
 
 ;Sequence
 :is completely dependent on a root-scoped track, can optionally be bound, into one/multiple timelines/VirtualClip, or unbound
@@ -2430,7 +2434,7 @@ __Note__: nothing within the PlacementIndex requires the root object to be of a 
 
 </pre>
 </div>
-<div title="MultichannelMedia" modifier="Ichthyostega" modified="201003130220" created="200709200255" tags="design img" changecount="9">
+<div title="MultichannelMedia" modifier="Ichthyostega" modified="201003140238" created="200709200255" tags="design img" changecount="12">
 <pre>Based on practical experiences, Ichthyo tends to consider Multichannel Media as the base case, while counting media files providing just one single media stream as exotic corner cases. This may seem counter intuitive at first sight; you should think of  it as an attempt to avoid right from start some of the common shortcomings found in many video editors, especially
 * having to deal with keeping a &quot;link&quot; between audio and video clips
 * silly limitations on the supported audio setups (e.g. &quot;sound is mono, stereo or Dolby-5.1&quot;)
@@ -2453,7 +2457,7 @@ So, when creating a clip out of such a compound media asset, the clip has to be 
 
 !{{red{Reviewed 3/2010}}}
 While the general approach and reasoning remains valid, a lot of the details looks dated meanwhile.
-* it is //not// true that the builder can be limited to handling single processing chains. Some effects ineed need to be fed with mutliple channels &amp;mdash; most notably panners and compressors.
+* it is //not//&amp;nbsp; true that the builder can be limited to the handling single processing chains. Some effects ineed need to be fed with mutliple channels &amp;mdash; most notably panners and compressors.
 * consequently there is the need for an internal representation of the media StreamType.
 * thus we can assume the presence of some kind of //type system//
 * which transforms the individual &quot;stream&quot; into a entirely conceptual entity within the HighLevelModel
@@ -2461,7 +2465,7 @@ While the general approach and reasoning remains valid, a lot of the details loo
 * and last but not least, we handle nested sequences as virtual clips with virtual media.
 &amp;rArr; conclusions
 * while the asset related parts remain as specified, we get a distinct ChannelConfig asset instead of the clip asset (which seems to be redundant)
-* either the ClipMO referres this ChannelConfig asset &amp;mdash; or in case of the VirtualClip a BindingMO takes this role.
+* either the ~ClipMO referres this ChannelConfig asset &amp;mdash; or in case of the VirtualClip a BindingMO takes this role. Clip Asset and MO could be joined into a single entity
 * as the BindingMO is also used to implement the top-level timelines, the treatment of global and local pipes is united
 </pre>
 </div>
@@ -3533,7 +3537,7 @@ We need to work out guidelines for dealing with operations going on simultaneous
 
 While the Backend is responsible for Data access and management and for carrying out the computation intensive media opteratons, the middle Layer or ~Proc-Layer contains [[assets|Asset]] and [[Session]], i.e. the user-visible data model and provides configuration and behaviour for these entities. Besides, he is responsible for [[building and configuring|Builder]] the [[render engine|RenderEngine]] based on the current Session state.</pre>
 </div>
-<div title="ProcAsset" modifier="Ichthyostega" modified="200906071810" created="200709221343" tags="def classes img" changecount="2">
+<div title="ProcAsset" modifier="Ichthyostega" modified="201003140233" created="200709221343" tags="def classes img" changecount="3">
 <pre>All Assets of kind asset::Proc represent //processing algorithms// in the bookkeeping view. They enable loading, browsing and maybe even parametrizing all the Effects, Plugins and Codecs available for use within the Lumiera Session.
 
 Besides, they provide an __inward interface__ for the [[ProcNode]]s, enabling them to dispatch the actual processing call while rendering. Actually, this interface is always accessed via an ~Effect-MObject; mostly it is investigated and queried in the build process when creating the corresponding processor nodes. &amp;rarr; see EffectHandling for details
@@ -3541,7 +3545,7 @@ Besides, they provide an __inward interface__ for the [[ProcNode]]s, enabling th
 {{red{todo: the naming scheme??}}}
 
 [img[Asset Classess|uml/fig131077.png]]
-</pre>
+{{red{Note 3/2010}}} it is very unlikely we'll organise the processing nodes as a class hierarchy. Rather it looks like we'll get several submodules/special capabilities configured in within the Builder</pre>
 </div>
 <div title="ProcLayer" modifier="Ichthyostega" modified="200708100338" created="200708100333" tags="def" changecount="2">
 <pre>The middle Layer of our current Architecture plan, i.e. the layer managing all processing and manipulation, while the actual data handling is done in the backend and the user interaction belongs to the GUI Layer.
@@ -4179,7 +4183,7 @@ The session and the models rely on dependent objects beeing kept updated and con
 &amp;rarr; see [[details here...|ModelDependencies]]
 </pre>
 </div>
-<div title="SessionInterface" modifier="Ichthyostega" modified="201003100340" created="200904242108" tags="SessionLogic GuiIntegration design draft discuss" changecount="44">
+<div title="SessionInterface" modifier="Ichthyostega" modified="201003140244" created="200904242108" tags="SessionLogic GuiIntegration design draft discuss" changecount="47">
 <pre>&quot;Session Interface&quot;, when used in a more general sense, denotes a compound of several interfaces and facilities, together forming the primary access point to the user visible contents and state of the editing project.
 * the API of the session class
 * the accompanying management interface (SessionManager API)
@@ -4232,8 +4236,8 @@ While this protects against accessing dangling references, it can't prevent clie
 * regarding CommandHandling, the //design decision was to require a dedicated (and hand written) undo functor.//
 
 !!!!protection against accidental mutation
-{{red{WIP}}}As of 2/10, I am considering to add a protection against invoking an mutation accidentally, thus bypassing the command frontend and the ProcDispatcher. This would not only be annoying (no UNDO), but potentially dangerous, because all of the session internals are not threadsafe by design.
-The considered solution would be to treat this situation as if an authorisation is required; this authorisation for mutation could be checked by a &amp;raquo;wormhole&amp;laqou;-like context access. Of course, in our case we're not dealing with real access restrictions, just a safeguard: While command execution creates such an authorisation token automatically, a client actually wanting to invoke an mutation operations bypassing the command frontend, would need to set up such a token explicitly and manually.
+{{red{WIP}}}As of 2/10, I am considering to add a protection against invoking an raw mutation operation accidentally, and especially bypassing the command frontend and the ProcDispatcher. This would not only be annoying (no UNDO), but potentially dangerous, because all of the session internals are not threadsafe by design.
+The considered solution would be to treat this situation as if an authorisation is required; this authorisation for mutation could be checked by a &amp;raquo;wormhole&amp;laquo;-like context access (&amp;rarr; aspect oriented programming). Of course, in our case we're not dealing with real access restrictions, just a safeguard: While command execution creates such an authorisation token automatically, a client actually wanting to invoke an mutation operations bypassing the command frontend, would need to set up such a token explicitly and manually.
 
 !!adding and destroying
 Objects can be added and destroyed directly on the top level session API. The actual memory management of the object instances works automatically, based on reference counts. (Even after purging an object from the session, it may still be indirectly in use by an ongoing render process).
