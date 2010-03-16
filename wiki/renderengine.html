@@ -604,6 +604,20 @@ Generally speaking, assets can be seen as the statical part or view of the sessi
 Conceptually, assets belong to the [[global or root scope|ModelRootMO]] of the session data model. A mechanism for serialising and de-serialising all assets alongside with the session is planned as of 2/2010
 </pre>
 </div>
+<div title="AssetModelConnection" modifier="Ichthyostega" created="201003160243" tags="SessionLogic Model spec draft discuss" changecount="1">
+<pre>Conceptually, Assets and ~MObjects represent different views onto the same entities. Assets focuss on bookkeeping of the contents, while the media objects allow manipulation and EditingOperations. Usually, on the implementation side, such closely linked dual views require some considerations.
+
+!redundancy
+Obviously there is the danger of getting each entity twice, as Asset and as ~MObject. While such dual entities could be OK in conjunction with much specialised functionality, in the case of Lumiera's Proc-Layer most of the functionality is shifted to naming schemes, configuration and generic processing, thus leaving the actual objects almost empty and deprived of distinguishing properties. Thus, starting out from the required concepts, an attempt was made to join, reduce and straighten the design.
+* type and channel configuration is concentrated to MediaAsset
+* the accounting of structural elements in the model is done through StructAsset
+* the object instance handling is done in a generic fashion by using placements and object references
+* clips and labels appear as objects solely; there is just an generic id registrattion on the asset side
+* tracks are completely deprived of processing functionality and become unspecific containers, also used as clip bins.
+* timelines and sequences are implemented as facade to equivalent stuctures within the model
+* this leaves us only with effects requiring both an object and asset implementation
+</pre>
+</div>
 <div title="AttachedPlacementProblem" modifier="Ichthyostega" modified="200905310342" created="200801111305" tags="SessionLogic impl draft dynamic" changecount="17">
 <pre>Placing an MObject relatively to another object such that it should be handled as //attached//&amp;nbsp; to the latter results in several design and implementation challenges. Actually, such an attachment creates a cluster of objects. The typical use case is that of an effect attached to a clip or processing pipe.
 * attachment is not a globally fixed relation between objects, rather, it typically exists only for some limited time span (e.g. the duration of the basic clip the effect is attached to)
@@ -1455,7 +1469,7 @@ To make the intended use of the classes more clear, consider the following two e
 <pre>A special kind (subclass) of [[Placement]]. As such it is always linked to a //Subject//, i.e. a MObject. In addition to the properties of a (unspecific) Placement, the ExplicitPlacement specifies a absolute time and track position for locating the Subject
 </pre>
 </div>
-<div title="Factories" modifier="Ichthyostega" modified="200906060436" created="200708100401" tags="impl discuss excludeMissing" changecount="23">
+<div title="Factories" modifier="Ichthyostega" modified="201003160211" created="200708100401" tags="impl discuss excludeMissing rewrite" changecount="24">
 <pre>We use Factories
 * for centralizing [[memory management|MemoryManagement]]
 * to support polymorphism (of course...)
@@ -2092,7 +2106,7 @@ The InstanceHandle is created by the service implementation and will automatical
 &amp;rarr; see [[detailed description here|LayerSeparationInterfaces]]
 </pre>
 </div>
-<div title="InterfaceNamespaces" modifier="Ichthyostega" modified="200708120302" created="200708080338" tags="impl decision discuss" changecount="15">
+<div title="InterfaceNamespaces" modifier="Ichthyostega" modified="201003160209" created="200708080338" tags="impl decision draft" changecount="16">
 <pre>Because we rely on strong decoupling and separation into self contained components, there is not much need for a common quasi-global namespace. Operations needing the cooperation of another subsystem will be delegated or even dispatched, consequently implementation code needs only the service acces points from &quot;direct cooperation partner&quot; subsystems. Hierarchical scopes besides classes are needed only when multiple subsystems share a set of common abstractions. Interface and Implementation use separate namespaces.
 
 !common definitions
@@ -2305,7 +2319,7 @@ Because we deliberately won't make any asumptions about the implementation libra
 It would be possible to circumvent this problem by requiring all supported implementation libraries to be known at compile time, because then the actual media implementation type could be linked to a facade type by generic programming. Indeed, Lumiera follows this route with regards to the possible kinds of MObject or [[Asset]] &amp;mdash; but to the contraty, for the problem in question here, being able to include support for a new media data type just by adding a plugin by far outweights the benefits of compile-time checked implementation type selection. So, as a consequence of this design decision we //note the possibility of the media file type discovery code to be misconfigured// and select the //wrong implementation library at runtime.// And thus the render engine needs to be prepared for the source reading node of any pipe to flounder completely, and protect the rest of the system accordingly
 </pre>
 </div>
-<div title="MemoryManagement" modifier="Ichthyostega" modified="200808110208" created="200708100225" tags="impl decision discuss" changecount="14">
+<div title="MemoryManagement" modifier="Ichthyostega" modified="201003160208" created="200708100225" tags="impl decision rewrite" changecount="15">
 <pre>Of course: Cinelerra currently leaks memory and crashes regularilly. For the newly written code, besides retaining the same level of performance, a main goal is to use methods and techniques known to support the writing of quality code. So, besides the MultithreadConsiderations, a solid strategy for managing the ownership of allocated memory blocks is necessary right from start.
 
 !Problems
@@ -2535,7 +2549,7 @@ when creating Objects, certain invariants have to be maintained. Because creatin
 * MObjects are always created to be placed in some way or the other
 * [[Assets|Asset]] manage a dependency graph. Creating a derived Object (e.g. a Clip from a Media) implies a new dependency. (&amp;rarr; [[memory management|ManagementAssetRelation]] relies on this)</pre>
 </div>
-<div title="OpenGL" modifier="Ichthyostega" modified="200706220359" created="200706220345" tags="def discuss" changecount="3">
+<div title="OpenGL" modifier="Ichthyostega" modified="201003160208" created="200706220345" tags="decision discuss" changecount="4">
 <pre>Cinelerra2 introduced OpenGL support for rendering previews. I must admit, I am very unhappy with this, because
 * it just supports some hardware
 * it makes building difficult
@@ -2545,9 +2559,9 @@ when creating Objects, certain invariants have to be maintained. Because creatin
 
 So my judgement would be: in contrary to a realtime/gaming application, for quality video editing it is not worth the effort implementing OpenGL support in all details and with all its complexity. I would accept ~OpenGL as an option, if it could be pushed down into a Library, so it can be handled and maintained transparently and doesnt bind our limited developer manpower.
 
-But because I know the opinions on this topc are varying (users tend to be delighted if they hear &quot;~OpenGL&quot;, because it carries notion of &quot;fast&quot; and &quot;power&quot; todays) &amp;mdash; I try to integrate ~OpenGL as apossibility into this design of the Render Engine. Obviousely, I have the hard requirement that it //must not jeopardize the code structure.//
+But because I know the opinions on this topc are varying (users tend to be delighted if they hear &quot;~OpenGL&quot;, because it seems to be likted to the notion of &quot;speed&quot; and &quot;power&quot; todays) &amp;mdash; I try to integrate ~OpenGL as a possibility into this design of the Render Engine. But I insist on putting up the requirement that it //must not jeopardize the code structure.//
 
-My proposed aproach is to treat OpenGL as a separate video raw data type, requiring separete and specialized [[Processing Nodes|ProcNode]] for all calculations. Thus the Builder could connect OpenGL nodes if it is possible to cover the whole render path for preview and fall back to the normal ~ProcNodes for all relevant renders
+My proposed aproach is to treat OpenGL as a separate video raw data type, requiring separete and specialized [[Processing Nodes|ProcNode]] for all calculations. Thus the Builder could connect OpenGL nodes if it is possible to cover the render path in whole or partially or maybe even just for preview.
 </pre>
 </div>
 <div title="OperationPoint" modifier="Ichthyostega" modified="200909041742" created="200805270334" tags="def impl Builder" changecount="8">
@@ -3412,59 +3426,6 @@ We need a way of addressing existing [[pipes|Pipe]]. Besides, as the Pipes and T
 &lt;&lt;tasksum end&gt;&gt;
 </pre>
 </div>
-<div title="PlanningSessionInMem" modifier="Ichthyostega" modified="200910112133" created="200904252258" tags="impl SessionLogic draft" changecount="48">
-<pre>//This page is a scrapbook for working out the implementation of the [[Session Datastructure in Memory|SessionDataMem]]//
-This is a difficult untertaking, because there are several dependencies (most of which aren't fully designed yet as of 5/09)
-* the GUI uses an adapted version of the HighLevelModel; these datastructures are intended to be backed by the Session
-* of course, the structure of the HighLevelModel itself creates constraints on the session's data handling
-* the persistent SessionStorage depends on the requirements of the session in memory
-* the (currently as of 1/09 just half-way designed) [[Builder]] relies heavily on the data within the session.
-
-!!!requirements
-* can discover and ennumerate the structure
-* can ennumerate the contents (objects) of a specific scope
-* provide [[references|MObjectRef]] as result of these query/discovery operations
-
-!!!invariants
-* memory management consistency
-* support ongoing render processes
-* {{red{TODO: hrmpf}}}
-
-&lt;&lt;tasksum start&gt;&gt;
-&lt;&lt;taskadder below&gt;&gt;
-&lt;&lt;task &gt;&gt; standard implementation of a query, including use of lumiera forward iterators
-&lt;&lt;task &gt;&gt; identify and plan the possible queries
-&lt;&lt;task &gt;&gt; BindingMO
-&lt;&lt;task &gt;&gt; scope concept
-&lt;&lt;task &gt;&gt; outline the general style of the [[(query) interface|SessionQueryStructure]]
-
-!Interface
-&lt;&lt;task 1 1 1&gt;&gt; evaluate models for the [[reference problem|MObjectRef]]
-&lt;&lt;task 2 3 3&gt;&gt; implement an hash-ID
-&lt;&lt;task 1 2 2&gt;&gt; incorporate this ID into class Placement
-&lt;&lt;task 2 2&gt;&gt; define PlacementRef and MObjectRef behaviour
-&lt;&lt;task 1 0&gt;&gt; wire up [[Session]] interface as a LayerSeparationInterface
-&lt;&lt;task 1 1 1&gt;&gt; implement PlacementRef
-&lt;&lt;task 2 2 0&gt;&gt; implement MObjectRef
-
-!Mutations
-&lt;&lt;task 3 3 3&gt;&gt; how to deal with UNDO
-&lt;&lt;task 2 2 2&gt;&gt; how to deal with CommandDefinition
-&lt;&lt;task 1 1&gt;&gt; outline the CommandLifecycle
-&lt;&lt;task 14 45 45&gt;&gt; design and implement CommandHandling framework
-&lt;&lt;task 2 2 1&gt;&gt; define the general structure of operations
-&lt;&lt;task &gt;&gt; implement a system for generating operations
-&lt;&lt;task &gt;&gt; specify the editing operations
-
-!Datastructure
-&lt;&lt;task&gt;&gt;investigate the best granularity for object collections
-&lt;&lt;task &gt;&gt; define a record to be used within the index
-&lt;&lt;task &gt;&gt; implement basic index operations
-&lt;&lt;task 1&gt;&gt; implement adding a placement relation
-
-&lt;&lt;tasksum end&gt;&gt;
-</pre>
-</div>
 <div title="PlayerDummy" modifier="Ichthyostega" modified="200906071810" created="200901300209" tags="GuiIntegration dynamic img" changecount="17">
 <pre>__Joelholdsworth__ and __Ichthyo__ created this player mockup in 1/2009 to find out about the implementation details regarding integration and colaboration between the layers. There is no working render engine yet, thus we use a ~DummyImageGenerator for creating faked yuv frames to display. Within the GUI, there is a ~PlaybackController hooked up with the transport controls on the timeline pane.
 # first everything was contained within ~PlaybackController, which spawns a thread for periodically creating those dummy frames
@@ -3554,14 +3515,15 @@ Besides, they provide an __inward interface__ for the [[ProcNode]]s, enabling th
 
 </pre>
 </div>
-<div title="ProcLayer and Engine" modifier="Ichthyostega" modified="201003042333" created="200706190056" tags="overview" changecount="27">
+<div title="ProcLayer and Engine" modifier="Ichthyostega" modified="201003160219" created="200706190056" tags="overview" changecount="28">
 <pre>The Render Engine is the part of the application doing the actual video calculations. Utilising system level services and retrieving raw audio and video data through [[Lumiera's Backend|backend.html]], its operations are guided by the objects and parameters edited by the user in [[the session|Session]]. Thus, the Lumiera Proc-Layer covers the (abstract) edit operations available to the user, the representation of [[&quot;editable things&quot;|MObjects]] and the translation of those into facilities allowing to [[drive the rendering|Rendering]].
 &lt;&lt;&lt;
 ''Status'': started out as design draft in summer '07, Ichthyo is now in the middle of a implementing the foundations and main structures in C++
 * basic [[AssetManager]] working
 * first attempts to [[integrate with the GUI|GuiIntegration]]
-* first outline of the [[session implementation|PlanningSessionInMem]]
+* bringing toghether the vital parts of the [[session implementation|SessionDataMem]]
 * as a prerequisite, defined and implemented [[Proc-Layer Command frontend|CommandHandling]]
+* near term goal is to get the foundation of the HighLevelModel roughly settled.
 &lt;&lt;&lt;
 
 !Summary
@@ -4162,10 +4124,10 @@ The Session object is a singleton &amp;mdash; actually it is a »~PImpl«-Facade
 &amp;rarr; see [[relation of timeline, sequences and objects|TimelineSequences]]
 </pre>
 </div>
-<div title="SessionDataMem" modifier="Ichthyostega" modified="201003020149" created="200904252303" tags="impl design SessionLogic draft" changecount="7">
+<div title="SessionDataMem" modifier="Ichthyostega" modified="201003160216" created="200904252303" tags="impl design SessionLogic draft" changecount="8">
 <pre>The [[Session]] is interconnected with the GUI, the SessionStorage, [[Builder]] and the CommandHandling. The HighLevelModel is an conceptual view of the session. All these dependencies are isolated from the actual data layout in memory, but the latter is shaped by the intended interactions.
 
-{{red{WIP...}}}Currently as of 5/09, this is an ongoing [[implementation and planning effort|PlanningSessionInMem]]
+{{red{WIP...}}}Currently as of 3/10, this is an ongoing implementation and planning effort
 
 !Objects, Placements, References
 Media objects are attached to the session by [[placements|Placement]]. A Placement within the session gets an distinguishable identity (&amp;rarr; ModelObjectIdentity) and behaves like being an instance of the attached object. Client code usually interacts with the compound of placement + ~MObject. In order to decouple this interaction from the actual implementation within the session, client code rather deals with //references.// These are implemented like a smart-ptr, but based on an opaque hash value, which is equivalent to the //object instance identity.//
@@ -4302,12 +4264,15 @@ As detailed above, {{{Session::current}}} exposes the management / lifecycle API
 {{red{none of the above is implemented as of 11/09}}}
 </pre>
 </div>
-<div title="SessionLogic" modifier="Ichthyostega" modified="201003020156" created="200904242110" tags="overview" changecount="18">
+<div title="SessionLogic" modifier="Ichthyostega" modified="201003160227" created="200904242110" tags="overview" changecount="20">
 <pre>The Session contains all informations, state and objects to be edited by the User (&amp;rarr;[[def|Session]]).
 As such, the SessionInterface is the main entrance point to Proc-Layer functionality, both for the primary EditingOperations and for playback/rendering processes. Proc-Layer state is rooted within the session and guided by the [[session's lifecycle events|SessionLifecycle]].
 Implementation facilities within the Proc-Layer may access a somewhat richer [[session service API|SessionServices]].
 
-Currently (as of 5/09), Ichthyo is [[targeting|PlanningSessionInMem]] a first preliminary implementation of the [[Session in Memory|SessionDataMem]]
+Currently (as of 3/10), Ichthyo is working on getting a preliminary implementation of the [[Session in Memory|SessionDataMem]] settled.
+
+!Session, Model and Engine
+The session is a SubSystem and acts as a frontend to most of the Proc-Layer. But it doesn't contain much operational logic; its primary contents are the [[model|HighLevelModel]], which is closely [[interconnected to the assets|AssetModelConnection]].
 
 !Design and handling of Objects within the Session
 Objects are attached and manipulated by [[placements|Placement]]; thus the organisation of these placements is part of the session data layout. Effectively, such a placement within the session behaves like an //instances// of a given object, and at the same time it defines the &quot;non-substantial&quot; properties of the object, e.g. its positions and relations. [[References|MObjectRef]] to these placement entries are handed out as parameters, both down to the [[Builder]] and from there to the render processes within the engine, but also to external parts within the GUI and in plugins. The actual implementation of these object references is built on top of the PlacementRef tags, thus relying on the PlacementIndex the session maintains to keep track of all placements and their relations. While &amp;mdash; using these references &amp;mdash; an external client can access the objects and structures within the session, any actual ''mutations'' should be done based on the CommandHandling: a single operation of a sequence of operations is defined as [[Command]], to be [[dispatched|ProcDispatcher]] as [[mutation operation|SessionMutation]]. Following this policy ensures integration with the&amp;nbsp;SessionStorage and provides (unlimited) [[UNDO|UndoManager]].
@@ -4379,7 +4344,7 @@ It will contain a global video and audio out pipe, just one timeline holding a s
 For each of these services, there is an access interface, usually through an class with only static methods. Basically this means access //by name.//
 On the //implementation side//&amp;nbsp; of this access interface class (i.e. within a {{{*.cpp}}} file separate from the client code), there is a (down-casting) access through the top-level session-~PImpl pointer, allowing to invoke functions on the ~SessionServices instance. Actually, this ~SessionServices instance is configured (statically) to stack up implementations for all the exposed service interfaces on top of the basic ~SessionImpl class. Thus, each of the individual service implementations is able to use the basic ~SessinImpl (becaus it inherits it) and the implementaion of the access functions (to the session service we're discussing here) is able to use this forwarding mechanism to get the actual implementation basically by one-liners. The upside of this (admittedly convoluted) technique is that we've gotten at runtime only a single indirection, which moreover is through the top-level session-~PImpl. The downside is that, due to the separation in {{{*.h}}} and {{{*.c}}} files, we can't use any specifically typed generic operations, which forces us to use type erasure in case we need such (an example being the content discovery queries utilised by all high-level model objects).</pre>
 </div>
-<div title="SessionStructureQuery" modifier="Ichthyostega" modified="201002010105" created="200910112322" tags="SessionLogic design draft discuss" changecount="16">
+<div title="SessionStructureQuery" modifier="Ichthyostega" modified="201003160203" created="200910112322" tags="SessionLogic design draft" changecount="17">
 <pre>The frontside interface of the session allows to query for contained objects; it is used to discover the structure and contents of the currently opened session/project. Access point is the public API of the Session class, which, besides exposing those queries, also provides functionality for adding and removing session contents.
 
 !discovering structure
@@ -4518,7 +4483,7 @@ Consequently, as we can't get away with an fixed Enum of all stream prototypes, 
 NTSC and PAL video, video versus digitized film, HD video versus SD video, 3D versus flat video, cinemascope versus 4:3, stereophonic versus monaural, periphonic versus panoramic sound, Ambisonics versus 5.1, dolby versus linear PCM...
 </pre>
 </div>
-<div title="StreamType" modifier="Ichthyostega" modified="201002010135" created="200808060244" tags="spec discuss draft" changecount="15">
+<div title="StreamType" modifier="Ichthyostega" modified="201003160202" created="200808060244" tags="spec draft" changecount="16">
 <pre>//how to classify and describe media streams//
 Media data is supposed to appear structured as stream(s) over time. While there may be an inherent internal structuring, at a given perspective ''any stream is a unit and homogeneous''. In the context of digital media data processing, streams are always ''quantized'', which means they appear as a temporal sequence of data chunks called ''frames''.
 
@@ -5903,7 +5868,7 @@ Actually, Timeline is both an interface and acts as façade. Its an interface, b
 Besides building on the asset management, implementing Timeline (and Sequence) as StructAsset yields another benefit: ~StructAssets can be retrieved by query, allowing to specify more details of the configuration immediately on creation. //But on the short term, this approach causes problems:// there is no real inference engine integrated into Lumiera yet (as of 2/2010 the plan is to get an early alpha working end to end first). For now we're bound to use the {{{fake-configrules}}} and to rely on a hard wired simulation of the intended behaviour of a real query resolution. Just some special magic queries will work for now, but that's enough to get ahead.
 </pre>
 </div>
-<div title="TimelineSequences" modifier="Ichthyostega" modified="200811022211" created="200811011836" tags="design draft discuss img" changecount="14">
+<div title="TimelineSequences" modifier="Ichthyostega" modified="201003160202" created="200811011836" tags="design decision img" changecount="15">
 <pre>There is a three-level hierarchy: [[Project|Session]], [[Timeline]], [[Sequence]]. Each project can contain ''multiple timelines'', to be viewed and rendered independently. But, being the top-level entities, these timelines may not be combined further. You can always just render (or view) one specific timeline. Each of those timelines refers to a Sequence, which is a bunch of [[media objects|MObject]] placed to a tree of [[tracks|Track]]. Of course it is possible to use ~sub-sequences within the top-level sequence within a timeline to organize a movie into several scenes or chapters. 
 
 [&gt;img[Relation of Timelines, Sequences and MObjects within the Project|uml/fig132741.png]]
@@ -5968,7 +5933,7 @@ Matters are quite different for the placement of a Track within the tree of trac
 * obviously, one wants the __edit function__ used to create such an overlapping placement&amp;nbsp; also to create an [[transition|TransitionsHandling]] between the overlapping objects. Meaning this edit function will automatically create an transition processor object and provide it with a placement such as to attach it to the region of overlap.
 </pre>
 </div>
-<div title="TrackPipeSequence" modifier="Ichthyostega" modified="200904242058" created="200711300405" tags="design discuss def decision Builder" changecount="27">
+<div title="TrackPipeSequence" modifier="Ichthyostega" modified="201003160201" created="200711300405" tags="design def decision Builder rewrite" changecount="28">
 <pre>''towards a definition of »Track«''. We don't want to tie ourself to some naive and overly simplistic definition, just because it is convenient. For classical (analogue) media, tracks are physical entities dictated by the nature of the process by which the media works. Especially, Tape machines have read/writing heads, which creates fixed tracks to which to route the signals. This is a practical geometric necessity. For digital media, there is no such necessity. We are bound primarily by the editor's habits of working.
 
 !!!Assessment of Properties
@@ -6061,7 +6026,7 @@ A good starting point for understanding our library implementation of the visito
 ** when creating a new &quot;~Visitable-and-Tool&quot; hierarchy, the user should derive (or typedef) and parametrize the {{{Visitable}}}, {{{Tool}}} and {{{Applicable}}} templates, typically into a new namespace. An example can be seen in {{{proc/mobject/builder/buildertool.hpp}}}
 </pre>
 </div>
-<div title="VisitorUse" modifier="Ichthyostega" modified="200906072024" created="200711280302" tags="impl discuss" changecount="17">
+<div title="VisitorUse" modifier="Ichthyostega" modified="201003160159" created="200711280302" tags="impl decision" changecount="18">
 <pre>Using the ''Visitor Design Pattern'' is somewhat controversial, mainly because this pattern is rather complicated, requires certain circumstances to be usefull, and &amp;mdash; especially when used in the original form described by Gamma et al &amp;mdash; puts quite some burden on the implementor. Contrary to some patterns commonly used today (like e.g. singleton or factory), visitor is by no way a popular pattern. Ichthyo thinks that until now it's potential stregths remain still to be discovered, due to obvious and well known weaknesses. This problems can be ameliorated a good deal by using template based library implementation techniques along the lines of the [[Loki library|http://loki-lib.sourceforge.net/]].
 &amp;rarr; [[implementation deatails|VisitingToolImpl]]
 
