@@ -96,6 +96,14 @@ namespace session {
     UNIMPLEMENTED ("fabricate effect-MO");
   }
   
+  /** */ 
+  Placement<Binding>
+  MObjectFactory::operator() (PSequence& sequence_to_bind)
+  {
+    TODO ("any additional liabilities when creating a binding?");
+    return Placement<Binding> (*new Binding(sequence_to_bind));
+  }
+  
   
   
 }} // namespace mobject::session

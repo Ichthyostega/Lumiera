@@ -1,5 +1,5 @@
 /*
-  BINDING.hpp  -  an association between session entities, constituting a scope
+  BINDING.hpp  -  link to use a sequence within the session
  
   Copyright (C)         Lumiera.org
     2009,               Hermann Vosseler <Ichthyostega@web.de>
@@ -27,23 +27,25 @@
 #include "proc/mobject/session/meta.hpp"
 
 
+namespace asset { class Sequence; }
 
 namespace mobject {
 namespace session {
   
+  typedef lumiera::P<asset::Sequence> PSequence;
   
   /**
-   * Association of two entities within the Session
-   * deliberately linked together, thereby carrying additional mappings
-   * between properties or facilities within the entities to be linked together.
-   * An example would be the situation when a Sequence is linked either into
-   * a Timeline or MetaClip. Usually, the Placement holding such a Binding
-   * also constitutes a scope containing other nested objects.
+   * Explicit link to bind a Sequence (container) to be used within the Session,
+   * either as contents of a top level Timeline, or as embedded MetaClip.
+   * Usually, the Placement holding such a Binding also constitutes a scope
+   * on its own, containing other nested objects.
    */
   class Binding : public Meta
     {
     public:
         //////////////////////////////TICKET #566
+    
+        Binding (PSequence& sequence_to_bind);
     };
 
 

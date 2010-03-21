@@ -1,5 +1,5 @@
 /*
-  Binding  -  an association between session entities, constituting a scope
+  Binding  -  link to use a sequence within the session
  
   Copyright (C)         Lumiera.org
     2009,               Hermann Vosseler <Ichthyostega@web.de>
@@ -22,11 +22,17 @@
 
 
 #include "proc/mobject/session/binding.hpp"
+#include "proc/asset/sequence.hpp"
 
 namespace mobject {
 namespace session {
   
   /** */
+  Binding::Binding (PSequence& sequence_to_bind)
+    : boundSequence_(sequence_to_bind)
+    {
+      UNIMPLEMENTED ("what additionally to do when binding a sequence??");
+    }
   
 
 

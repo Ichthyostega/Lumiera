@@ -32,12 +32,13 @@ namespace asset {
   
   
   /** TODO??? */
-  Timeline::Timeline (const Asset::Ident& idi)
+  Timeline::Timeline (const Asset::Ident& idi, RBinding const& sequenceBinding)
     : Struct (idi)
+    , boundSeqence_(sequenceBinding)
 //  : track (makeDefaultTrack ())
 //  , clips (0)
   {
-    
+    REQUIRE (boundSeqence_);
   }
   
   

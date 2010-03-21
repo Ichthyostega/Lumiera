@@ -35,6 +35,7 @@ namespace asset {
   class Media;
   class Track;
   class Effect;
+  class Sequence;
   
   }
 
@@ -48,6 +49,7 @@ namespace session {
   class Label;
   
   typedef P<asset::Track> PTrackAsset;
+  typedef P<asset::Sequence> PSequence;
   
   class DefsManager;
   
@@ -67,6 +69,7 @@ namespace session {
       Placement<Track>  operator() (PTrackAsset&);
       Placement<Effect> operator() (asset::Effect const&);
       Placement<Label>  operator() (lib::Symbol);
+      Placement<Binding>operator() (PSequence&);
       
       ////////////////////////////////////////////////////////////////////////////////TICKET #414
     };

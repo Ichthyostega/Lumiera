@@ -300,6 +300,7 @@ namespace test    {
           // causes the sequence to disappear
           newTrack.getPlacement().chain (someTrack, Time(20));                /////////////////TICKET #555   does moving by placement really work this way??
           
+          //TODO 3/2010 not finally decided *if* we want this behaviour
           //TODO how to verify the changed placement??
           
           CHECK (!assetM.known (aSequence->getID()));

@@ -37,7 +37,14 @@
 
 
 #include "proc/mobject/session.hpp"
+#include "proc/mobject/mobject.hpp"
 #include "common/configrules.hpp"
+#include "proc/asset/timeline.hpp"
+#include "proc/asset/sequence.hpp"
+#include "proc/asset/procpatt.hpp"
+#include "proc/asset/track.hpp"
+#include "proc/asset/pipe.hpp"
+
 #include "lib/symbol.hpp"
 #include "lib/error.hpp"
 #include "lib/util.hpp"
@@ -47,6 +54,7 @@
 using boost::format;
 
 using mobject::Session;
+using mobject::MObject;
 
 using lib::Symbol;
 using util::isnil;
@@ -201,8 +209,15 @@ namespace asset {
     Timeline* 
     StructFactoryImpl::fabricate (const Query<Timeline>& caps)
       {
-        TODO ("actually extract properties/capabilities from the query...");
-        return new Timeline (createIdent (caps));
+        TODO ("extract additional properties/capabilities from the query...");
+        const Asset::Ident idi (createIdent (caps));
+        string sequenceID = extractID ("sequence", caps);
+        Query<Sequence> seq_to_use (isnil (sequenceID)? "" : "id("+sequenceID+")");
+        P<Sequence> seq = recursive_create_(sequence_to_use);
+        ASSERT (seq);
+        RBinding newBinding = Session::current->getRoot().attach (MObject::create (seq));
+        ASSERT (newBinding);
+        return new Timeline (idi, newBinding);
       }
     
     template<>

@@ -21,11 +21,8 @@
 * *****************************************************/
 
 
-#include "proc/assetmanager.hpp"
 #include "proc/asset/struct.hpp"
-#include "proc/asset/procpatt.hpp"
-#include "proc/asset/track.hpp"
-#include "proc/asset/pipe.hpp"
+#include "proc/assetmanager.hpp"
 #include "common/configrules.hpp"
 
 #include "proc/asset/struct-factory-impl.hpp"

@@ -38,7 +38,7 @@
  ** Like every structural asset, the creation of timelines happens automatically
  ** on referral; Timelines can be queried from the StructFactory, providing additional
  ** requested capabilities. Commonly clients will retrieve a given timeline by query
- ** on the name-ID of the timeline: \c Struct::create(Query<Timeline> ("id(theName)."))
+ ** on the name-ID of the timeline: \c Struct::create(Query<Timeline>("id(theName)."))
  ** Additionally, the binding to a specific sequence may be established alongside:
  ** \c "timeline(theTimelineName),bindSequence(theTimelineName,sequenceID)." 
  ** 
@@ -57,6 +57,7 @@
 //#include "proc/mobject/placement.hpp"
 #include "proc/mobject/mobject-ref.hpp"
 //#include "proc/mobject/session/binding.hpp"         ////TODO avoidable??
+//#include "lib/p.hpp"
 
 
 //#include <vector>
@@ -76,6 +77,7 @@ namespace asset {
   
   typedef mobject::MORef<mobject::session::Binding> RBinding;   ////TODO why defining this into namespace asset? shouldn't it go into mobject::session ??
   
+//  using lumiera::P;
   
   /**
    * TODO type comment
@@ -83,12 +85,13 @@ namespace asset {
   class Timeline
     : public Struct
     {
-        
+      RBinding boundSeqence_;
+      
     public:
       void detach() { TODO("Timeline-Session registration"); }
       
     protected:
-      Timeline (const Asset::Ident& idi);
+      Timeline (const Asset::Ident& idi, RBinding const& sequenceBinding);
       friend class StructFactoryImpl;
     };
     

@@ -153,6 +153,7 @@ namespace asset {
       P<STRU> operator() (const Query<STRU>& query);      ////////////TODO for now we're just using a fake config query with preconfigured hardwired answers 
       
       P<Pipe> operator() (string pipeID, string streamID);
+      P<Timeline> operator() (MORef<Binding>);  ///////////TODO doesn't this create circular includes?? Any better idea how to refer to an existing binding?
       
     };
     

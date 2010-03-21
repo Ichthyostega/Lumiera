@@ -604,17 +604,17 @@ Generally speaking, assets can be seen as the statical part or view of the sessi
 Conceptually, assets belong to the [[global or root scope|ModelRootMO]] of the session data model. A mechanism for serialising and de-serialising all assets alongside with the session is planned as of 2/2010
 </pre>
 </div>
-<div title="AssetModelConnection" modifier="Ichthyostega" created="201003160243" tags="SessionLogic Model spec draft discuss" changecount="1">
-<pre>Conceptually, Assets and ~MObjects represent different views onto the same entities. Assets focuss on bookkeeping of the contents, while the media objects allow manipulation and EditingOperations. Usually, on the implementation side, such closely linked dual views require some considerations.
+<div title="AssetModelConnection" modifier="Ichthyostega" modified="201003200149" created="201003160243" tags="SessionLogic Model spec draft discuss" changecount="3">
+<pre>Conceptually, Assets and ~MObjects represent different views onto the same entities. Assets focus on bookkeeping of the contents, while the media objects allow manipulation and EditingOperations. Usually, on the implementation side, such closely linked dual views require careful consideration.
 
 !redundancy
-Obviously there is the danger of getting each entity twice, as Asset and as ~MObject. While such dual entities could be OK in conjunction with much specialised functionality, in the case of Lumiera's Proc-Layer most of the functionality is shifted to naming schemes, configuration and generic processing, thus leaving the actual objects almost empty and deprived of distinguishing properties. Thus, starting out from the required concepts, an attempt was made to join, reduce and straighten the design.
+Obviously there is the danger of getting each entity twice, as Asset and as ~MObject. While such dual entities could be OK in conjunction with much specialised processing, in the case of Lumiera's Proc-Layer most of the functionality is shifted to naming schemes, configuration and generic processing, leaving the actual objects almost empty and deprived of distinguishing properties. Thus, starting out from the required concepts, an attempt was made to join, reduce and straighten the design.
 * type and channel configuration is concentrated to MediaAsset
 * the accounting of structural elements in the model is done through StructAsset
 * the object instance handling is done in a generic fashion by using placements and object references
-* clips and labels appear as objects solely; there is just an generic id registrattion on the asset side
-* tracks are completely deprived of processing functionality and become unspecific containers, also used as clip bins.
-* timelines and sequences are implemented as facade to equivalent stuctures within the model
+* clips and labels appear as ~MObjects solely; on the asset side there is just an generic [[id tracking mechanism|TypedID]].
+* tracks are completely deprived of processing functionality and become lightweight containers, also used as clip bins.
+* timelines and sequences are implemented as façade to equivalent structures within the model
 * this leaves us only with effects requiring both an object and asset implementation
 </pre>
 </div>
@@ -1205,7 +1205,7 @@ More often than not, these emerge from immediate solutions, being percieved as e
 &amp;rarr; [[accessing and integrating configuration queries|ConfigQueryIntegration]]
 </pre>
 </div>
-<div title="ConfigQueryIntegration" modifier="Ichthyostega" modified="200804110350" created="200804070247" tags="overview draft impl img" changecount="17">
+<div title="ConfigQueryIntegration" modifier="Ichthyostega" modified="201003210010" created="200804070247" tags="overview draft impl img" changecount="21">
 <pre>* planning to embed a YAP Prolog engine
 * currently just integrated by a table driven mock
 * the baseline is a bit more clear by now (4/08)
@@ -1216,9 +1216,9 @@ More often than not, these emerge from immediate solutions, being percieved as e
 !Use cases
 [&lt;img[when to run config queries|uml/fig131717.png]]
 
-The key idea is that there is a Rule Base &amp;mdash; partly contained in the session (building on a stock of standard rules supplied with the application). Now, whenever there is the need to get a new object, for adding it to the session or for using associated with another object &amp;mdash; then instead of creating it by a direct hard wired ctor call, we issue a ConfigQuery requesting an object of the given type with some //capabilities// defined by predicates. The same holds true when loading an existing session: some objects won't be loaded back blindly, rather they will be re-created by issuing the config queries again. Especially important is the case of (re)creating a [[processing pattern|ProcPatt]] guiding how to wire up the processing pipeline for some given media.
+The key idea is that there is a Rule Base &amp;mdash; partly contained in the session (building on a stock of standard rules supplied with the application). Now, whenever there is the need to get a new object, for adding it to the session or for use associated with another object &amp;mdash; then instead of creating it by a direct hard wired ctor call, we issue a ConfigQuery requesting an object of the given type with some //capabilities// defined by predicates. The same holds true when loading an existing session: some objects won't be loaded back blindly, rather they will be re-created by issuing the config queries again. Especially an important use case is  (re)creating a [[processing pattern|ProcPatt]] to guide the wiring of a given media's processing pipeline.
 
-At various places, instead of requiring a fixed set of capabilities, it is possible to request a &quot;default configured&quot; object instead, specifying just those capabilities we really need to be configured in a specific way. This is done by using the [[Defaults Manager|DefaultsManagement]] accessible on the [[Session]] interface. Such a default object query may either retrieve an already existing object instance, run further config queries, and finally result in the invocation of a factory for creating new objects &amp;mdash; just as necessary and guarded by the rules.
+At various places, instead of requiring a fixed set of capabilities, it is possible to request a &quot;default configured&quot; object instead, specifying just those capabilities we really need to be configured in a specific way. This is done by using the [[Defaults Manager|DefaultsManagement]] accessible on the [[Session]] interface. Such a default object query may either retrieve an already existing object instance, run further config queries, and finally result in the invocation of a factory for creating new objects &amp;mdash; guarded by rules to suit current necessities.
 
 @@clear(left):display(block):@@
 
@@ -1704,7 +1704,7 @@ Now, when invoking an operation on some public interface, the code in the lower 
 <pre>A specially configured LumieraPlugin, which actually contains or loads the complete code of the (GTK)GUI, and additionally is linked dynamically against the application core lib. During the [[UI startup process|GuiStart]], loading of this Plugin is triggered from {{{main()}}}. Actually this causes spawning of the GTK event thread and execution of the GTK main loop.
 </pre>
 </div>
-<div title="HighLevelModel" modifier="Ichthyostega" modified="200906071811" created="200808152311" tags="spec design discuss img" changecount="33">
+<div title="HighLevelModel" modifier="Ichthyostega" modified="201003210021" created="200808152311" tags="Model spec design discuss img" changecount="34">
 <pre>While the low-level model holds the data used for carrying out the actual media data processing (=rendering), the high-level model is what the user works upon when performing edit operations through the GUI (or script driven in &amp;raquo;headless mode&amp;laquo;). Its building blocks and combination rules determine largely what structures can be created within the [[Session]].
 On the whole, it is a collection of [[media objects|MObjects]] stuck together and arranged by [[placements|Placement]].
 
@@ -2352,7 +2352,10 @@ For the case here in question this seems to be the ''resource allocation is cons
 And, last but not least, doing large scale allocations is the job of the backend. Exceptions being long-lived objects, like the session or the sequences, which are created once and don't bear the danger of causing memory pressure. Besides, the ProcLayer code shouldn't issue &quot;new&quot; and &quot;delete&quot; when it comes in hand, rather it should use some centralized [[Factories]] for all allocation and freeing, so we can redirect these calls down to the backend, which may use pooling or special placement allocators or the like. The rationale is, for modern hardware/architectures, care has to be taken with heap allocations, esp. with many small objects and irregular usage patterns.
 </pre>
 </div>
-<div title="ModelDependencies" modifier="Ichthyostega" modified="201003140258" created="201003020150" tags="SessionLogic spec dynamic draft" changecount="25">
+<div title="Model" modifier="Ichthyostega" modified="201003210021" created="201003210020" tags="overview" changecount="2">
+<pre>Lumiera's Proc-Layer is built around //two interconnected models,// mediated by the [[Builder]]. Basically, the &amp;rarr;[[Session]] is an external interface to the HighLevelModel, while the &amp;rarr;RenderEngine operates the structures of the LowLevelModel.</pre>
+</div>
+<div title="ModelDependencies" modifier="Ichthyostega" modified="201003210423" created="201003020150" tags="SessionLogic spec dynamic draft" changecount="29">
 <pre>Our design of the models (both [[high-level|HighLevelModel]] and [[low-level|LowLevelModel]]) relies partially on dependent objects being kept consitently in sync. Currently (2/2010), __ichthyo__'s assessment is to consider this topic not important and pervasive enough to justify building a dedicated solution, mainly due to the fact of keeping the session implementation mostly single-threaded. Thus, care has to be taken to capture and treat all the relevant dependencies properly at the implementation level.
 
 !known interdependencies
@@ -2370,24 +2373,24 @@ While implemented as StructAsset, additionally we need to assure every instance 
 
 ;Timeline
 :acts as facade and is implemented by an root-attached BindingMO. Can't exist in isolation.
-: __created__ &amp;rArr; either use an existing binding and sequence, or create new binding and sequence (maybe using default)
+: __created__ &amp;rArr; create a dedicated new binding, either useing an existing sequence, or a newly created empty sequence
 : __destroy__ &amp;rArr; remove binding, while the previously bound sequence remains in model.
 ;root-placed Binding
 :while generally a Binding can exist in the model, when attached to root, a Timeline will be created
 : __created__ &amp;rArr; an existing sequence might be given on creation, otherwhise a default configured sequence is created
 : __destroy__ &amp;rArr; implemented by detaching from root (see below) prior to purging from the model.
 : __attached__ to root &amp;rArr; invoke Timeline creation
-: __detached__ from root &amp;rArr will care to destroy the corresponding timeline
+: __detached__ from root &amp;rArr; will care to destroy the corresponding timeline
 
 ;Sequence
 :is completely dependent on a root-scoped track, can optionally be bound, into one/multiple timelines/VirtualClip, or unbound
-: __created__ &amp;rArr; mandates specification of an track-MO, placed into root scope
+: __created__ &amp;rArr; mandates specification of an track-MO, ({{red{TODO}}}maybe/necessarily??) placed into root scope
 : __destroy__ &amp;rArr; purge the corresponding track from model, including all contents
 : __querying__ &amp;rArr; forwards to creating a root-placed track, unless the queried sequence exists already
 ;root-placed Track
 :attachment of a track to root scope is detected magically and causes creation of a Sequence
 : __attached__ to root &amp;rArr; invoke sequence creation
-: __detached__ from root &amp;rArr; find and discard corresponding sequence
+: __detached__ from root &amp;rArr; find and discard corresponding sequence {{red{TODO 3/2010: decide if we want this behaviour}}}
 : irrespective if the track exists, is empty, or gets purged entirely, only the connection to root scope counts; thus relocating a track by [[Placement]] might cause its scope with all nested contents to become a sequence of its own or become part of another sequence. As sequences aren't required to be bound into a timeline, they may be present in the model as invisible, passive container
 </pre>
 </div>
@@ -3515,10 +3518,10 @@ Besides, they provide an __inward interface__ for the [[ProcNode]]s, enabling th
 
 </pre>
 </div>
-<div title="ProcLayer and Engine" modifier="Ichthyostega" modified="201003160219" created="200706190056" tags="overview" changecount="28">
+<div title="ProcLayer and Engine" modifier="Ichthyostega" modified="201003210253" created="200706190056" tags="overview" changecount="29">
 <pre>The Render Engine is the part of the application doing the actual video calculations. Utilising system level services and retrieving raw audio and video data through [[Lumiera's Backend|backend.html]], its operations are guided by the objects and parameters edited by the user in [[the session|Session]]. Thus, the Lumiera Proc-Layer covers the (abstract) edit operations available to the user, the representation of [[&quot;editable things&quot;|MObjects]] and the translation of those into facilities allowing to [[drive the rendering|Rendering]].
 &lt;&lt;&lt;
-''Status'': started out as design draft in summer '07, Ichthyo is now in the middle of a implementing the foundations and main structures in C++
+''Status'': started out as design draft in summer '07, Ichthyo is now in the middle of a implementing the fundamental parts in C++
 * basic [[AssetManager]] working
 * first attempts to [[integrate with the GUI|GuiIntegration]]
 * bringing toghether the vital parts of the [[session implementation|SessionDataMem]]
@@ -4264,7 +4267,7 @@ As detailed above, {{{Session::current}}} exposes the management / lifecycle API
 {{red{none of the above is implemented as of 11/09}}}
 </pre>
 </div>
-<div title="SessionLogic" modifier="Ichthyostega" modified="201003160227" created="200904242110" tags="overview" changecount="20">
+<div title="SessionLogic" modifier="Ichthyostega" modified="201003210012" created="200904242110" tags="overview" changecount="21">
 <pre>The Session contains all informations, state and objects to be edited by the User (&amp;rarr;[[def|Session]]).
 As such, the SessionInterface is the main entrance point to Proc-Layer functionality, both for the primary EditingOperations and for playback/rendering processes. Proc-Layer state is rooted within the session and guided by the [[session's lifecycle events|SessionLifecycle]].
 Implementation facilities within the Proc-Layer may access a somewhat richer [[session service API|SessionServices]].
@@ -4272,7 +4275,7 @@ Implementation facilities within the Proc-Layer may access a somewhat richer [[s
 Currently (as of 3/10), Ichthyo is working on getting a preliminary implementation of the [[Session in Memory|SessionDataMem]] settled.
 
 !Session, Model and Engine
-The session is a SubSystem and acts as a frontend to most of the Proc-Layer. But it doesn't contain much operational logic; its primary contents are the [[model|HighLevelModel]], which is closely [[interconnected to the assets|AssetModelConnection]].
+The session is a SubSystem and acts as a frontend to most of the Proc-Layer. But it doesn't contain much operational logic; its primary contents are the [[model|Model]], which is closely [[interconnected to the assets|AssetModelConnection]].
 
 !Design and handling of Objects within the Session
 Objects are attached and manipulated by [[placements|Placement]]; thus the organisation of these placements is part of the session data layout. Effectively, such a placement within the session behaves like an //instances// of a given object, and at the same time it defines the &quot;non-substantial&quot; properties of the object, e.g. its positions and relations. [[References|MObjectRef]] to these placement entries are handed out as parameters, both down to the [[Builder]] and from there to the render processes within the engine, but also to external parts within the GUI and in plugins. The actual implementation of these object references is built on top of the PlacementRef tags, thus relying on the PlacementIndex the session maintains to keep track of all placements and their relations. While &amp;mdash; using these references &amp;mdash; an external client can access the objects and structures within the session, any actual ''mutations'' should be done based on the CommandHandling: a single operation of a sequence of operations is defined as [[Command]], to be [[dispatched|ProcDispatcher]] as [[mutation operation|SessionMutation]]. Following this policy ensures integration with the&amp;nbsp;SessionStorage and provides (unlimited) [[UNDO|UndoManager]].
@@ -5974,6 +5977,42 @@ The standard case of a transition is sort of mixing together two input streams, 
 Using transitions is a very basic task and thus needs viable support by the GUI. Handling of transitions need to be very convienient, because it is so important. Because of this, it is compelling to subsume a more complicated situation and treat this more complicated case similar. This is the case, when two (or N) elements have to be combined in the way of a transition, but their further processing in the processing chain //after// the transition needs to be different, maybe they belong to differnent subgroups, have to appear on different layers or with different pan positions. Of courese, the workaround is simple, at least &quot;simple&quot; from the programmers point of view. It is //not// simple from the editor's point of view the moment the editor has to do this simple thing (changing the wiring and add manualy synced fade curves to the individual parts) a dozend or even a hundred times in some larger project.
 
 Because of this experience, ichthyo wants to support a more general case of transitions, which have N output connections, behave similar to their &quot;simple&quot; counterpart, but leave out the mixing step. As a plus, such transitions can be inserted at the source ports of N clips or between any intermediary or final output pipes as well. Any transition processor capable of handling this situation should provide some flag, in order to decide if he can be placed in such a manner. (wichin the builder, encountering a  inconsistently placed transition is just an [[building error|BuildingError]])
+</pre>
+</div>
+<div title="TypedID" modifier="Ichthyostega" modified="201003210004" created="201003200157" tags="Model Rules design draft" changecount="16">
+<pre>//3/10 currently investigating necessity//
+An registration service to associate object identities, symbolic identifiers and types.
+
+!Motivation
+For maintaining persistent objects, generally an unique object ID is desirable. Within Lumiera, we employ 128 hash-~IDs (&amp;raquo;{{{LUID}}}&amp;laquo;). But hash-~IDs are difficult to handle for testing and configuration, as they aren't self explanatory for human readers. They're best used in a way avoiding textual representation.
+
+Formal symmetry might be another motivation: we separate into objects and assets, where the latter represent the //bookkeeping view.// But there remain some cases where the asset side, the bookkeeping is void of any substantial functionality. Just for the sake of orthogonality it //would be preferable//&amp;nbsp; to maintain a registration (for scripted use, for overview and organisational activities by the user, for diagnostics and repair work in the saved session state). A mere data record suffices to fulfil these requirements &amp;mdash; while there are other kinds of asset exposing a substantial amount of functionality.
+
+Both these motivations highlight a tension between having a single global namespace of unique ~IDs, and having type-bound sub namespaces of limited scope, as the latter allows for using human readable symbolic ~IDs. Usually, when it comes to writing rules and configuration or creating instances explicitly from code, the specific context of the situation allows or even requires to focus down upon a single and distinct type of objects immediately &amp;mdash; global uniqueness is not much of a concern here.
+
+!desired functionality
+A registration service backed by an index table can be used to //translate//&amp;nbsp; between these two seemingly contradictory usage view angles. 
+* re-accessing the specific type to deal with data known just by unique object ID.
+* retrieving the unique implementation instance, given just a symbolic ID and the type to use.
+* ensuring uniqueness of symbolic ~IDs //within one kind of entities.//
+* enumerating all instances of a specific kind
+* ability to handle instance registration and de-registration automatically
+
+!!!usage scenarios
+* automatically maintained lists of all clips, labels, tracks and sequences in the &amp;raquo;Asset&amp;laquo; section of the application
+* addressing objects in script driven operations, just based on symbolic names, allowing for additional conventions
+* implementing a predicate {{{isTypeXXX(Element)}}}, which is crucial for [[rules based configuration|ConfigQuery]].
+
+!!!{{red{WIP}}}Analysis and discussion
+Still some contradictions &amp;mdash; and rather seems helpful, not so much necessary.
+We //already have an registration service,// both for Assets (AssetManager) and for Placements (PlacementIndex). These facilities maintain not only a raw ID &amp;harr; object association, but also structuring informations, albeit bound to more specific circumstances (the system of placement scopes, and the asset category). Thus, still lacking is a ''system of sub index tables''.
+
+As mentioned above, an ID &amp;harr; type association plays a crucial role when it comes to implementing any kind of rules based configuration. It would allow to bridge from our session objects to rules and resolution working entirely symbolic. (&amp;rarr; [[more|ConfigQueryIntegration]]). But, as of 3/2010 this is a //planned feature and not required to get the initial pipeline working.// Thus, according to the YAGNI principle, we shouldn't engage into any implementation details right now and just create the extension points.
+&lt;&lt;&lt;
+So the plan is to use ''per type'' mapping tables for an association: ''symbolic-ID &amp;rarr; unique-ID''
+There should be a configurable slot to ''attach an object reference'' &amp;mdash; to be defined later
+Just an ''registration scheme'' should be implemented right now, working completely automatic
+&lt;&lt;&lt;
 </pre>
 </div>
 <div title="TypedQueryProblem" modifier="Ichthyostega" modified="200910301629" created="200910231618" tags="Rules dynamic" changecount="10">
