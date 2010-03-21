@@ -212,10 +212,10 @@ namespace asset {
         TODO ("extract additional properties/capabilities from the query...");
         const Asset::Ident idi (createIdent (caps));
         string sequenceID = extractID ("sequence", caps);
-        Query<Sequence> seq_to_use (isnil (sequenceID)? "" : "id("+sequenceID+")");
-        P<Sequence> seq = recursive_create_(sequence_to_use);
-        ASSERT (seq);
-        RBinding newBinding = Session::current->getRoot().attach (MObject::create (seq));
+        Query<Sequence> desiredSequence (isnil (sequenceID)? "" : "id("+sequenceID+")");
+        PSequence sequence = recursive_create_(desiredSequence);
+        ASSERT (sequence);
+        RBinding newBinding = Session::current->getRoot().attach (MObject::create (sequence));
         ASSERT (newBinding);
         return new Timeline (idi, newBinding);
       }
@@ -224,6 +224,7 @@ namespace asset {
     Sequence* 
     StructFactoryImpl::fabricate (const Query<Sequence>& caps)
       {
+        // when we reach this point it is clear a suitable sequence doesn't yet exist in the model
         TODO ("actually extract properties/capabilities from the query...");
         return new Sequence (createIdent (caps));
       }

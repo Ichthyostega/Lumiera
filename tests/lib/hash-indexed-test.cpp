@@ -24,6 +24,7 @@
 #include "lib/test/run.hpp"
 
 #include "lib/hash-indexed.hpp"
+#include "lib/util.hpp"
 
 #include <tr1/unordered_map>
 
@@ -138,9 +139,9 @@ namespace test{
           tab[key2] = o2;
           tab[key3] = o3;
           
-          ASSERT (&o1 != &tab[key1]);                 // indeed a copy...
-          ASSERT (&o2 != &tab[key2]);
-          ASSERT (&o3 != &tab[key3]);
+          ASSERT (!isSameObject (o1, tab[key1]));     // indeed a copy...
+          ASSERT (!isSameObject (o2, tab[key2]));
+          ASSERT (!isSameObject (o3, tab[key3]));
           
           ASSERT (o1.getID() == tab[key1].getID());   // but "equal" by ID
           ASSERT (o2.getID() == tab[key2].getID());

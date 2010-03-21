@@ -589,7 +589,7 @@ is how to implement the relationship between [[MObject]]s and Assets. Do we use 
 
 </pre>
 </div>
-<div title="AssetCreation" modifier="Ichthyostega" modified="201002272321" created="200709040307" tags="dynamic impl" changecount="5">
+<div title="AssetCreation" modifier="Ichthyostega" modified="201002272321" created="200709040307" tags="operational impl" changecount="5">
 <pre>Assets are created by a Factories returning smart pointers; the Asset creation is bound to specific use cases and //only available// for these specific situations. There is no generic Asset Factory.
 
 For every Asset we generate a __Ident tuple__ and a long ID (hash) derived from this Ident tuple. The constructor of the abstract base class {{{Asset}}} takes care of this step and automatically registeres the new Asset object with the AssetManager. Typically, the factory methods for concrete Asset classes provide some shortcuts providing sensible default values for some of the Ident tuple data fields. They may take additional parameters &amp;mdash; for example the factory method for creating {{{asset::Media}}} takes a filename (and may at some point in the future aply &quot;magic&quot; based on examination of the file &amp;rarr; LoadingMedia)
@@ -618,7 +618,7 @@ Obviously there is the danger of getting each entity twice, as Asset and as ~MOb
 * this leaves us only with effects requiring both an object and asset implementation
 </pre>
 </div>
-<div title="AttachedPlacementProblem" modifier="Ichthyostega" modified="200905310342" created="200801111305" tags="SessionLogic impl draft dynamic" changecount="17">
+<div title="AttachedPlacementProblem" modifier="Ichthyostega" modified="200905310342" created="200801111305" tags="SessionLogic impl draft operational" changecount="17">
 <pre>Placing an MObject relatively to another object such that it should be handled as //attached//&amp;nbsp; to the latter results in several design and implementation challenges. Actually, such an attachment creates a cluster of objects. The typical use case is that of an effect attached to a clip or processing pipe.
 * attachment is not a globally fixed relation between objects, rather, it typically exists only for some limited time span (e.g. the duration of the basic clip the effect is attached to)
 * the order of attachment is important and the attached placement may create a fork in the signal flow, so we need a way for specifying reproducibly how the resulting wiring should be
@@ -646,7 +646,7 @@ Attachment on itself does //not// keep an object alive. Rather, it's implemented
 <div title="AutomationData" modifier="Ichthyostega" created="200805300105" tags="def automation" changecount="2">
 <pre>While generally automation is treated as a function over time, defining and providing such a function requires some //Automation Data.// The actual layout and meaning of this data is deemed an implementation detail of the [[parameter provider|ParamProvider]] used, but nevertheless an automation data set has object characteristics within the session (high-level-model), allowing it to be attached, moved and [[placed|Placement]] by the user.</pre>
 </div>
-<div title="BasicBuildingOperations" modifier="Ichthyostega" modified="200805210230" created="200712040334" tags="design dynamic Builder img" changecount="24">
+<div title="BasicBuildingOperations" modifier="Ichthyostega" modified="200805210230" created="200712040334" tags="design operational Builder img" changecount="24">
 <pre>Starting out from the concepts of Objects, Placement to Tracks, render Pipes and connection properties (&amp;rarr; see [[here|TrackPipeSequence]]) within the session, we can identify the elementary operations occuring within the Builder. Overall, the Builder is organized as application of //visiting tools// to a collection of objects, so finally we have to consider some object kind appearing in the working function of the given builder tool, which holds at this moment some //context//. The job now is to organize this context such as to create a predictable build process from this //event driven// approach.
 &amp;rarr;see also: BuilderPrimitives for the elementary situations used to cary out the building operations
 
@@ -856,7 +856,7 @@ each Placement (with the exception of the root) gets registered as contained in 
 # ScopePath digresses at Sequence level from the basic containment tree
 </pre>
 </div>
-<div title="BuildProcess" modifier="Ichthyostega" modified="200906071813" created="200706190658" tags="dynamic Builder img" changecount="30">
+<div title="BuildProcess" modifier="Ichthyostega" modified="200906071813" created="200706190658" tags="Builder operational img" changecount="30">
 <pre>All decisions on //how // the RenderProcess has to be carried out are concentrated in this rather complicated Builder Subsystem. The benefit of this approach is, besides decoupling of subsystems, to keep the actual performance-intensive video processing code as simple and transparent as possible. The price, in terms of increased complexity &amp;mdash; to pay in the Builder &amp;mdash; can be handled by making the Build Process generic to a large degree. Using a Design By Contract approach we can decompose the various decisions into small decision modules without having to trace the actual workings of the Build Process as a whole.
 
 [&gt;img[Outline of the Build Process|uml/fig129413.png]]
@@ -915,7 +915,7 @@ As the builder has to create a render node network implementing most of the feat
 * any non-trivial wiring of render nodes, tracks, pipes and [[automation|Automation]] is done by the services of the [[connection manager|ConManager]]
 </pre>
 </div>
-<div title="BuilderMechanics" modifier="Ichthyostega" modified="200810170220" created="200805210256" tags="design dynamic Builder" changecount="3">
+<div title="BuilderMechanics" modifier="Ichthyostega" modified="200810170220" created="200805210256" tags="Builder design operational" changecount="3">
 <pre>The cooperation of several components creates a context of operation for the primary builder working tool, the [[node creator|PlanningNodeCreatorTool]]:
 * the BuilderToolFactory acts as the &quot;builder for the builder tools&quot;, i.e. we can assume to be able to retrive all needed primary tools and elementary tools from this factory, completely configured and ready to use.
 * the [[Assembler|BuilderAssembler]] has the ability to consume objects from the high level model and feed them to the node creator (which translates into a dispatch of individual operations suited to the objects to be treated). This involves some sort of scheduling or ordering of the operaions, which is the only means to direct the overall process such as to create a sensible and usable result. //This is an fundamental design decision:// the actual working tools have no hard wired knowledge of the &quot;right process&quot;, which makes the whole Builder highly configurable (&quot;open&quot;).
@@ -1144,7 +1144,7 @@ When a command has been executed (and maybe undone), it's best to leave it alone
 State predicates are accessible through the Command (frontend); additionally there are static query functions in class {{{Command}}}
 </pre>
 </div>
-<div title="CommandUsage" modifier="Ichthyostega" modified="200908091509" created="200907212338" tags="SessionLogic draft dynamic" changecount="8">
+<div title="CommandUsage" modifier="Ichthyostega" modified="200908091509" created="200907212338" tags="SessionLogic draft operational" changecount="8">
 <pre>//for now (7/09) I'll use this page to collect ideas how commands might be used...//
 
 * use a command for getting a log entry and an undo possibility automatically
@@ -1420,7 +1420,7 @@ Basically, each elementary operation has to record the informations necessary to
 {{red{to be defined in more detail later...}}}
 </pre>
 </div>
-<div title="EffectHandling" modifier="Ichthyostega" modified="200810170025" created="200810162300" tags="design dynamic" changecount="3">
+<div title="EffectHandling" modifier="Ichthyostega" modified="200810170025" created="200810162300" tags="design operational" changecount="3">
 <pre>We have to deal with effects on various different levels. One thing is to decide if an effect is applicable, another question is to find out about variable and automatable parameters, find a module which can be used as an effect GUI and finally to access a processing function which can be executed on a buffer filled with suitable data.
 
 The effect asset (which is a [[processing asset|ProcAsset]]) provides an unified interface for loading external processing modules and querying their properties. As usual with assets, this is the &quot;bookkeeping view&quot; to start with, but we can create a //processor// from such an asset, i.e. an instance of the processing facility which can be used and wired into the model. Such a processor is an MObject and can be placed into the session (high level model); moreover it holds a concrete wiring for the various control parameters and it has an active link to the effect GUI module. As every ~MObject, it could be placed multiple times to affect several pipes, but all those different Placements would behave as being linked together (with respect to the control parameter sources and the GUI)
@@ -2355,8 +2355,8 @@ And, last but not least, doing large scale allocations is the job of the backend
 <div title="Model" modifier="Ichthyostega" modified="201003210021" created="201003210020" tags="overview" changecount="2">
 <pre>Lumiera's Proc-Layer is built around //two interconnected models,// mediated by the [[Builder]]. Basically, the &amp;rarr;[[Session]] is an external interface to the HighLevelModel, while the &amp;rarr;RenderEngine operates the structures of the LowLevelModel.</pre>
 </div>
-<div title="ModelDependencies" modifier="Ichthyostega" modified="201003210423" created="201003020150" tags="SessionLogic spec dynamic draft" changecount="29">
-<pre>Our design of the models (both [[high-level|HighLevelModel]] and [[low-level|LowLevelModel]]) relies partially on dependent objects being kept consitently in sync. Currently (2/2010), __ichthyo__'s assessment is to consider this topic not important and pervasive enough to justify building a dedicated solution, mainly due to the fact of keeping the session implementation mostly single-threaded. Thus, care has to be taken to capture and treat all the relevant dependencies properly at the implementation level.
+<div title="ModelDependencies" modifier="Ichthyostega" modified="201003220007" created="201003020150" tags="SessionLogic operational spec draft" changecount="31">
+<pre>Our design of the models (both [[high-level|HighLevelModel]] and [[low-level|LowLevelModel]]) relies partially on dependent objects being kept consitently in sync. Currently (2/2010), __ichthyo__'s assessment is to consider this topic not important and pervasive enough to justify building a dedicated solution, like e.g. a central tracking and registration service. An important point to consider with this assesment is the fact that the session implementation is beeing kept mostly single-threaded. Thus, lacking one central place to handle this issue, care has to be taken to capture and treat all the relevant individual dependencies properly at the implementation level.
 
 !known interdependencies
 * the session API relies on two kinds of facade like assets: [[Timeline]] and [[Sequence]], linked to the BindingMO and Track objects within the model respectively.
@@ -2506,7 +2506,7 @@ While the general approach and reasoning remains valid, a lot of the details loo
 In the most general case the render network may be just a DAG (not just a tree). Especially, multiple exit points may lead down to the same node, and following each of this possible paths the node may be at a different depth on each. This rules out a simple counter starting from the exit level, leaving us with the possibility of either employing a rather convoluted addressing scheme or using arbitrary ID numbers.{{red{...which is what we do for now}}}
 </pre>
 </div>
-<div title="NodeOperationProtocol" modifier="Ichthyostega" modified="200909031217" created="200806010251" tags="Rendering dynamic" changecount="16">
+<div title="NodeOperationProtocol" modifier="Ichthyostega" modified="200909031217" created="200806010251" tags="Rendering operational" changecount="16">
 <pre>The [[nodes|ProcNode]] are wired to form a &quot;Directed Acyclic Graph&quot;; each node knows its predecessor(s), but not its successor(s).  The RenderProcess is organized according to the ''pull principle'', thus we find an operation {{{pull()}}} at the core of this process. There is no such thing as an &quot;engine object&quot; calling nodes iteratively or table driven, rather, the nodes themselves issue recursive calls to their predecessor(s). For this to work, we need the nodes to adhere to a specific protocol:
 # Node is pulled, with a StateProxy object as parameter (encapsulating the access to the frames or buffers)
 # Node may now access current parameter values, using the state accessible via the StateProxy
@@ -3429,7 +3429,7 @@ We need a way of addressing existing [[pipes|Pipe]]. Besides, as the Pipes and T
 &lt;&lt;tasksum end&gt;&gt;
 </pre>
 </div>
-<div title="PlayerDummy" modifier="Ichthyostega" modified="200906071810" created="200901300209" tags="GuiIntegration dynamic img" changecount="17">
+<div title="PlayerDummy" modifier="Ichthyostega" modified="200906071810" created="200901300209" tags="GuiIntegration operational img" changecount="17">
 <pre>__Joelholdsworth__ and __Ichthyo__ created this player mockup in 1/2009 to find out about the implementation details regarding integration and colaboration between the layers. There is no working render engine yet, thus we use a ~DummyImageGenerator for creating faked yuv frames to display. Within the GUI, there is a ~PlaybackController hooked up with the transport controls on the timeline pane.
 # first everything was contained within ~PlaybackController, which spawns a thread for periodically creating those dummy frames
 # then, a ~PlayerService was factored out, now implemented within Proc-Layer (probably to be relocated into the backend for the final version). A new LayerSeparationInterface called ''~DummyPlayer'' was created and set up as a [[Subsystem]] within main().
@@ -3634,7 +3634,7 @@ The stack of scopes must not be confused with the ScopePath. Each single frame o
 The full implementation of this scope navigation is tricky, especially when it comes to determining the relation of two positions. It should be ''postponed'' and replaced by a ''dummy'' (no-op) implementation for the first integration round.
 </pre>
 </div>
-<div title="QueryFocusStack" modifier="Ichthyostega" modified="200911220509" created="200910200158" tags="SessionLogic spec dynamic" changecount="8">
+<div title="QueryFocusStack" modifier="Ichthyostega" modified="200911220509" created="200910200158" tags="SessionLogic spec operational" changecount="8">
 <pre>The ScopeLocator uses a special stack of ScopePath &amp;raquo;frames&amp;laquo; to maintain the //current focus.//
 What is the ''current'' QueryFocus and why is it necessary? There is a state-dependent part involved, inasmuch the effective ScopePath depends on how the invoking client has navigated the //current location// down into the HighLevelModel structures. Especially, when a VirtualClip is involved, there can be discrepancies between the paths resulting when descending down through different paths. (See &amp;rarr; BindingScopeProblem).
 
@@ -3980,7 +3980,7 @@ We //do employ//&amp;nbsp; some virtual calls for the buffer management in order
 @@clear(right):display(block):@@
 </pre>
 </div>
-<div title="RenderMechanics" modifier="Ichthyostega" modified="200906071809" created="200806030230" tags="Rendering impl dynamic img" changecount="28">
+<div title="RenderMechanics" modifier="Ichthyostega" modified="200906071809" created="200806030230" tags="Rendering operational impl img" changecount="28">
 <pre>While the render process, with respect to the dependencies, the builder and the processing function is sufficiently characterized by referring to the ''pull principle'' and by defining a [[protocol|NodeOperationProtocol]] each node has to adhere to &amp;mdash; for actually get it coded we have to care for some important details, especially //how to manage the buffers.// It may well be that the length of the code path necessary to invoke the individual processing functions is finally not so important, compared with the time spent at the inner pixel loop within these functions. But my guess is (as of 5/08), that the overall number of data moving and copying operations //will be//&amp;nbsp; of importance.
 
 !requirements
@@ -4032,7 +4032,7 @@ __see also__
 &amp;rarr; the protocol [[how to operate the nodes|NodeOperationProtocol]]
 </pre>
 </div>
-<div title="RenderProcess" modifier="Ichthyostega" modified="200806130009" created="200706190705" tags="Rendering dynamic" changecount="27">
+<div title="RenderProcess" modifier="Ichthyostega" modified="200806130009" created="200706190705" tags="Rendering operational" changecount="27">
 <pre>For each segment (of the effective timeline), there is a Processor holding the exit node(s) of a processing network, which is a &quot;Directed Acyclic Graph&quot; of small, preconfigured, stateless [[processing nodes|ProcNode]]. This network is operated according to the ''pull principle'', meaning that the rendering is just initiated by &quot;pulling&quot; output from the exit node, causing a cascade of recursive downcalls. Each node knows its predecessor(s) an can pull the necessary input from there. Consequently, there is no centralized &quot;engine object&quot; which may invoke nodes iteratively or table driven &amp;mdash; rather, the rendering can be seen as a passive service provided for the backend, which may pull from the exit nodes at any time, in any order (?), and possibly multithreaded.
 All State necessary for a given calculation process is encapsulated and accessible by a StateProxy object, which can be seen as the representation of &quot;the process&quot;. At the same time, this proxy provides the buffers holding data to be processed and acts as a gateway to the backend to handle the communication with the Cache. In addition to this //top-level State,// each calculation step includes a small [[state adapter object|StateAdapter]] (stack allocated), which is pre-configured by the builder and serves the purpose to isolate the processing function from the detals of buffer management.
 
@@ -4597,7 +4597,7 @@ Independent from these is __another Situation__ where we query for a type ''by I
 {{red{not sure if we want to support queries by symboic ID}}}...problem is the impl type, because probably the library needs to support describing any implementation type by a string. Seemingly GAVL does, but requiring it for every lib?
 </pre>
 </div>
-<div title="StreamTypeUse" modifier="Ichthyostega" modified="201002010151" created="200809130312" tags="draft discuss dynamic" changecount="22">
+<div title="StreamTypeUse" modifier="Ichthyostega" modified="201002010151" created="200809130312" tags="draft operational discuss" changecount="22">
 <pre>Questions regarding the use of StreamType within the Proc-Layer.
 * what is the relation between Buffer and Frame?
 * how to get the required size of a Buffer?
@@ -6015,7 +6015,7 @@ Just an ''registration scheme'' should be implemented right now, working complet
 &lt;&lt;&lt;
 </pre>
 </div>
-<div title="TypedQueryProblem" modifier="Ichthyostega" modified="200910301629" created="200910231618" tags="Rules dynamic" changecount="10">
+<div title="TypedQueryProblem" modifier="Ichthyostega" modified="200910301629" created="200910231618" tags="Rules operational" changecount="10">
 <pre>//the problem of processing specifically typed queries without tying query and QueryResolver.//&lt;br/&gt;This problem can be seen as a instance of the problematic situation encountered with most visitation schemes: we want entities and tools (visitors) to work together, without being forced to commit to a pre-defined table of operations. In the situation at hand here, we want //some entities// &amp;mdash; which we don't know &amp;mdash; to issue //some queries// &amp;mdash; which we don't know either. Obviously, such a problem can be solved only by controlling the scope of this incomplete knowledge, and the sequence in time of building it.
 Thus, to re-state the problem more specifically, we want the //definition//&amp;nbsp; of the entities to be completely separate of those definitions concerning the details of the query resolution mechanism, so to be able to design, reason, verify and extend each one without being forced into concern about the details of the respective other side. So, the buildup of the combined structure has to be postponed &amp;mdash; assuring it //has//&amp;nbsp; happened at the point it's operations are required.
 
@@ -6115,7 +6115,7 @@ In case it's not already clear: we don't have &quot;the&quot; Render Engine, rat
 The &amp;raquo;current setup&amp;laquo; of the objects in the session is sort of a global state. Same holds true for the Controller, as the Engine can be at playback, it can run a background render or scrub single frames. But the whole complicated subsystem of the Builder and one given Render Engine configuration can be made ''stateless''. As a benefit of this we can run this subsystems multi-threaded without the need of any precautions (locking, synchronizing). Because all state information is just passed in as function parameters and lives in local variables on the stack, or is contained in the StateProxy which represents the given render //process// and is passed down as function parameter as well. (note: I use the term &quot;stateless&quot; in the usual, slightly relaxed manner; of course there are some configuration values contained in instance variables of the objects carrying out the calculations, but this values are considered to be constant over the course of the object usage).
 </pre>
 </div>
-<div title="WiringDescriptor" modifier="Ichthyostega" modified="200807132352" created="200807132338" tags="Rendering impl spec dynamic" changecount="3">
+<div title="WiringDescriptor" modifier="Ichthyostega" modified="200807132352" created="200807132338" tags="Rendering operational impl spec" changecount="3">
 <pre>Each [[processing node|ProcNode]] contains a stateless ({{{const}}}) descriptor detailing the inputs, outputs and predecessors. Moreover, this descriptor contains the configuration of the call sequence yielding the &amp;raquo;data pulled from predecessor(s)&amp;laquo;. The actual type of this object is composed out of several building blocks (policy classes) and placed by the builder as a template parameter on the WiringDescriptor of the individual ProcNode. This happens in the WiringFactory in file {{{nodewiring.cpp}}}, which consequently contains all the possible combinations (pre)generated at compile time.
 
 !building blocks

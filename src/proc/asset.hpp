@@ -124,11 +124,11 @@ namespace asset {
    * Superinterface describing especially bookkeeping properties.
    * As of 09/2007, there are four  <b>Kinds</b> of Assets, each
    * comprising a sub-Interface of the Asset Interface:
-   * <ul><li>asset::Media representing mediafiles</li>
-   *     <li>asset::Proc representing media data processing components (e.g. Effects)</li>
-   *     <li>asset::Struct representing structural components used in the session (e.g. Tracks)</li>
-   *     <li>asset::Meta representing meta objects created while editing (e.g. Automation)</li>
-   * </ul> 
+   * - asset::Media representing mediafiles
+   * - asset::Proc representing media data processing components (e.g. Effects)
+   * - asset::Struct representing structural components used in the session (e.g. Tracks)
+   * - asset::Meta representing meta objects created while editing (e.g. Automation)
+   *  
    * And of course there are various concrete Asset subclasses, like asset::Clip,
    * asset::Effect, asset::Codec, asset::Track, asset::Dataset.
    * @note Assets objects have a strict unique identity and because of this are non-copyable.
@@ -350,8 +350,8 @@ namespace asset {
 
 
 
-namespace proc_interface
-  {
+namespace proc_interface {
+  
   using asset::Asset;
   using asset::Category;
   using asset::ID;
@@ -360,10 +360,3 @@ namespace proc_interface
 }
 
 #endif
-/*
-// Local Variables:
-// mode: C++
-// c-file-style: "gnu"
-// indent-tabs-mode: nil
-// End:
-*/
