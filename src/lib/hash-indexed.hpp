@@ -69,6 +69,7 @@ namespace lib {
     /** 
      * simple Hash implementation
      * directly incorporating the hash value.
+     * @note currently (3/2010) not used
      */
     class Plain
       {

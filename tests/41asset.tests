@@ -11,11 +11,7 @@ return: 0
 END
 
 
-PLANNED "BasicPipe_test" BasicPort_test <<END
-END
-
-
-PLANNED "BasicTrack_test" BasicTrack_test <<END
+PLANNED "BasicPipe_test" BasicPipe_test <<END
 END
 
 
@@ -33,6 +29,11 @@ END
 
 
 TEST "DependentAssets_test" DependentAssets_test <<END
+return: 0
+END
+
+
+PLANNED "plain entry-ID" EntryID_test <<END
 return: 0
 END
 
