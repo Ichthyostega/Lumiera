@@ -46,7 +46,7 @@ using lumiera::error::LUMIERA_ERROR_WRONG_TYPE;
 namespace asset{
 namespace test {
   
-  namespace { // Test data...
+  namespace { // Test definitions...
     
     struct Dummy { };
     
@@ -90,9 +90,9 @@ namespace test {
           DummyID dID1;
           DummyID dID2("strange");
           DummyID dID3;
-          CHECK (dID1);
-          CHECK (dID2);
-          CHECK (dID3);
+          CHECK (dID1.isValid());
+          CHECK (dID2.isValid());
+          CHECK (dID3.isValid());
           CHECK (dID1 != dID2); CHECK (dID2 != dID1);
           CHECK (dID2 != dID3); CHECK (dID3 != dID2);
           CHECK (dID1 != dID3); CHECK (dID3 != dID1);
@@ -100,9 +100,9 @@ namespace test {
           TrackID tID1;
           TrackID tID2;
           TrackID tID3("special");
-          CHECK (tID1);
-          CHECK (tID2);
-          CHECK (tID3);
+          CHECK (tID1.isValid());
+          CHECK (tID2.isValid());
+          CHECK (tID3.isValid());
           CHECK (tID1 != tID2); CHECK (tID2 != tID1);
           CHECK (tID2 != tID3); CHECK (tID3 != tID2);
           CHECK (tID1 != tID3); CHECK (tID3 != tID1);

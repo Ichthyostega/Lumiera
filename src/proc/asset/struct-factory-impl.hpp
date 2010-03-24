@@ -45,6 +45,8 @@
 #include "proc/asset/track.hpp"
 #include "proc/asset/pipe.hpp"
 
+#include "proc/asset/struct-scheme.hpp"
+
 #include "lib/symbol.hpp"
 #include "lib/error.hpp"
 #include "lib/util.hpp"
@@ -65,40 +67,14 @@ using lumiera::query::extractID;
 
 namespace asset {
   
+  using idi::StructTraits;
   
-  namespace { // structural asset ID scheme   ///////////////////////////////////////////////////////////TICKET #565
-    
-    template<class STRU>
-    struct Traits
-      {
-        static Symbol namePrefix;
-        static Symbol catFolder;
-        static Symbol idSymbol;
-      };
-    
-    template<> Symbol Traits<Track>::namePrefix = "track";
-    template<> Symbol Traits<Track>::catFolder  = "tracks";
-    template<> Symbol Traits<Track>::idSymbol   = "track";
-    
-    template<> Symbol Traits<Pipe>::namePrefix = "pipe";
-    template<> Symbol Traits<Pipe>::catFolder  = "pipes";
-    template<> Symbol Traits<Pipe>::idSymbol   = "pipe";
-    
-    template<> Symbol Traits<const ProcPatt>::namePrefix = "patt";
-    template<> Symbol Traits<const ProcPatt>::catFolder  = "build-templates";
-    template<> Symbol Traits<const ProcPatt>::idSymbol   = "procPatt";
-    
-    template<> Symbol Traits<Timeline>::namePrefix = "tL";
-    template<> Symbol Traits<Timeline>::catFolder  = "timelines";
-    template<> Symbol Traits<Timeline>::idSymbol   = "timeline";
-    
-    template<> Symbol Traits<Sequence>::namePrefix = "seq";
-    template<> Symbol Traits<Sequence>::catFolder  = "sequences";
-    template<> Symbol Traits<Sequence>::idSymbol   = "sequence";
+  namespace {
     
     Symbol genericIdSymbol ("id");
     
   }
+  
   
   
   
@@ -122,7 +98,7 @@ namespace asset {
           // does the query somehow specify the desired name-ID?
           string nameID = extractID (genericIdSymbol, query);
           if (isnil (nameID))
-            nameID = extractID (Traits<STRU>::idSymbol, query);
+            nameID = extractID (StructTraits<STRU>::idSymbol, query);
           if (isnil (nameID))
             {
                // no name-ID contained in the query...
@@ -130,15 +106,15 @@ namespace asset {
               static int i=0;
               static format namePattern ("%s.%d");
               static format predPattern ("%s(%s), ");
-              nameID = str(namePattern % Traits<STRU>::namePrefix % (++i) );
+              nameID = str(namePattern % StructTraits<STRU>::namePrefix % (++i) );
               name.insert(0, 
-                       str(predPattern % Traits<STRU>::idSymbol % nameID ));
+                       str(predPattern % StructTraits<STRU>::idSymbol % nameID ));
             }
           ENSURE (!isnil (name));
           ENSURE (!isnil (nameID));
           ENSURE (contains (name, nameID));
           
-          Category cat (STRUCT, Traits<STRU>::catFolder);
+          Category cat (STRUCT, StructTraits<STRU>::catFolder);
           return Asset::Ident (name, cat );                       ///////////////////////TICKET #565  the ID field should be just the ID, the query should go into a dedicated "capabilities" field.
         }
       
