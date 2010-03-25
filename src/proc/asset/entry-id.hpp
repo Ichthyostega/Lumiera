@@ -48,12 +48,18 @@
 #include "lib/hash-indexed.hpp"
 #include "lib/util.hpp"
 
+#include <boost/operators.hpp>
+#include <iostream>
 #include <string>
 
 
 namespace asset {
 
   using std::string;
+  using std::ostream;
+  
+  using lumiera::error::LUMIERA_ERROR_WRONG_TYPE;
+
   
   namespace idi {
     
@@ -86,6 +92,11 @@ namespace asset {
   }
   
   
+  
+  template<class TY>
+  class EntryID;
+  
+  
   /**
    * type erased baseclass
    * for building a combined hash and symbolic ID.
@@ -103,6 +114,8 @@ namespace asset {
         : symbol_(util::sanitise(symbolID))
         , hash_(buildHash (symbol_, seed))
         { }
+      
+      /* default copy- and assignable */
       
       
       bool
@@ -122,16 +135,41 @@ namespace asset {
         {
           return hash_;   
         }
+      
+      /** using BareEntryID derived objects as keys within tr1::unordered_map */
+      struct UseEmbeddedHash
+        : public std::unary_function<BA, size_t>
+        {
+          size_t operator() (BareEntryID const& obj)  const { return obj.getHash(); }
+        };
+      
+      
+      template<typename TAR>
+      EntryID<TAR> recast()  const;
+      
     };
   
+  
   /** 
-   * thin ID with blah
+   * typed symbolic and hash ID for asset-like position accounting.
+   * Allows for creating an entry with symbolic id and distinct type,
+   * combined with an derived hash value, without the overhead in storage
+   * and instance management imposed by using a full-fledged Asset.
+   * 
+   * Similar to an Asset, an identification tuple is available (generated on the fly),
+   * as is an unique LUID and total ordering. The type information is attached as
+   * template parameter, but included into the hash calculation. All instantiations of the
+   * EntryID template share a common baseclass, usable for type erased common registration.
+   * @todo currently storing the symbolic-ID as string. It should be a lib::Symbol,
+   *       but this isn't possible unless we use a symbol table. //////TICKET #158
    * 
    * @see mobject::session::Track
    */
   template<class TY>
   class EntryID
-    : public BareEntryID
+    : boost::totally_ordered1< EntryID<TY>
+                             , BareEntryID     // common baseclass
+                             >
     {
     public:
       EntryID()
@@ -140,7 +178,7 @@ namespace asset {
       
       explicit
       EntryID (string const& symbolID)
-        : BareEntryID (symbolID, getTypeHash<TY>())
+        : BareEntryID (symbolID, getTypeHash())
         { }
       
       
@@ -161,9 +199,61 @@ namespace asset {
           Category cat (STRUCT, idi::StructTraits<TY>::catFolder);
           return hash_value (cat);
         }
+      
+      
+      /** @return true if the upcast would yield exactly the same
+       *  tuple (symbol,type) as was used on original definition
+       *  of an ID, based on the given BareEntryID. Implemented
+       *  by re-calculating the hash.
+       */
+      static bool
+      canRecast (BareEntryID const& bID)
+        {
+          return bID.getHash() == buildHash (bID.getSym(), getTypeHash());
+        }
+      
+      static EntryID
+      recast (BareEntryID const& bID)
+        {
+          if (!canRecast(bID))
+            throw lumiera::error::Logic ("unable to recast EntryID: desired type "
+                                         "doesn't match original definition"
+                                        , LUMIERA_ERROR_WRONG_TYPE);
+          return EntryID (bID.getSym());
+        }
+      
+      
+      operator string ()  const
+        {
+          return "ID<"+idi::StructTraits<TY>::idSymbol+">-"+getSym();
+        }
+  
+      friend ostream& operator<<   (ostream& os, EntryID const& id) { return os << string(id); }
+
+      friend bool operator== (EntryID const& i1, EntryID const& i2) { return i1.getSym() == i2.getSym(); }
+      friend bool operator<  (EntryID const& i1, EntryID const& i2) { return i1.getSym() <  i2.getSym(); }
     };
     
+  
     
+  
+  /** try to upcast this BareEntryID to a fully typed EntryID.
+   *  Effectively, this is the attempt to reverse a type erasure;
+   *  thus the caller needs to know the type information (as provided
+   *  by the template parameter), because this information can't be
+   *  recovered from the stored data.
+   *  @throws error::Logic if the given type parameter isn't exactly
+   *          the same as was used on creation of the original EntryID,
+   *          prior to type erasing it into a BareEntryID. Implemented
+   *          by re-calculating the hash from typeinfo + symbolicID;
+   *          Exception if it doesn't match the stored hash.
+   */
+  template<typename TAR>
+  EntryID<TAR> BareEntryID::recast()  const
+  {
+    return EntryID<TAR>::recast(*this);
+  }
+
     
 
 } // namespace asset

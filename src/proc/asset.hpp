@@ -186,8 +186,8 @@ namespace asset {
           int compare (const Ident& other)   const;
 
           /** @note equality ignores version differences */
-          bool operator== (const Ident& oi)  const { return compare (oi) ==0; }
-          bool operator<  (const Ident& oi)  const { return compare (oi) < 0; }
+          bool operator== (Ident const& oi)  const { return compare (oi) ==0; }
+          bool operator<  (Ident const& oi)  const { return compare (oi) < 0; }
     
           operator string ()  const;
         };
@@ -201,8 +201,8 @@ namespace asset {
       virtual const ID<Asset>& getID()   const { return id; }
       
       
-      bool operator== (const Asset& oa)  const { return ident == oa.ident; }
-      bool operator<  (const Asset& oa)  const { return ident <  oa.ident; }
+      bool operator== (Asset const& oa)  const { return ident == oa.ident; }
+      bool operator<  (Asset const& oa)  const { return ident <  oa.ident; }
           
       virtual operator string ()  const;
       

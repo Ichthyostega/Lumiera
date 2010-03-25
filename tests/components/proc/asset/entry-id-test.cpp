@@ -40,7 +40,6 @@ using std::string;
 using std::cout;
 using std::endl;
 
-using lumiera::error::LUMIERA_ERROR_WRONG_TYPE;
 
 
 namespace asset{
