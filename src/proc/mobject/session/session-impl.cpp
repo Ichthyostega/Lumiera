@@ -90,6 +90,14 @@ namespace session {
   }
   
   
+  MObjectRef
+  SessionImpl::getRoot()
+  {
+    UNIMPLEMENTED ("access and return the model root, packaged as MObject-ref");
+  }
+
+  
+  
   PFix&
   SessionImpl::getFixture ()
   {

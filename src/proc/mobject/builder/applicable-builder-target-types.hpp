@@ -58,6 +58,7 @@
 #include "proc/mobject/session/clip.hpp"
 #include "proc/mobject/session/effect.hpp"
 #include "proc/mobject/session/auto.hpp"
+#include "proc/mobject/session/binding.hpp"
 
                                         /////////////////////////////////TICKET #414
 
@@ -69,6 +70,7 @@ namespace builder {
     typedef Types< session::Root, 
                    session::Clip, 
                    session::Effect,
+                   session::Binding,
                    session::AbstractMO
                  > ::List
                    BuilderTargetTypes;

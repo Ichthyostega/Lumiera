@@ -25,6 +25,7 @@
 #define MOBJECT_SESSION_BINDING_H
 
 #include "proc/mobject/session/meta.hpp"
+#include "proc/mobject/builder/buildertool.hpp"
 
 
 namespace asset { class Sequence; }
@@ -32,23 +33,32 @@ namespace asset { class Sequence; }
 namespace mobject {
 namespace session {
   
-  typedef lumiera::P<asset::Sequence> PSequence;
-  
-  /**
-   * Explicit link to bind a Sequence (container) to be used within the Session,
-   * either as contents of a top level Timeline, or as embedded MetaClip.
-   * Usually, the Placement holding such a Binding also constitutes a scope
-   * on its own, containing other nested objects.
-   */
-  class Binding : public Meta
-    {
-    public:
-        //////////////////////////////TICKET #566
+    typedef lumiera::P<asset::Sequence> PSequence;
     
+    /**
+     * Explicit link to bind a Sequence (container) to be used within the Session,
+     * either as contents of a top level Timeline, or as embedded MetaClip.
+     * Usually, the Placement holding such a Binding also constitutes a scope
+     * on its own, containing other nested objects.
+     */
+    class Binding : public Meta
+      {
+        PSequence boundSequence_;
+        
+        bool isValid()  const;
+        
+      public:
         Binding (PSequence& sequence_to_bind);
-    };
+          
+        DEFINE_PROCESSABLE_BY (builder::BuilderTool);
 
-
-
-}} // namespace mobject::session
+      };
+    
+  } // namespace mobject::session
+  
+  /** Placement<Binding> defined to be subclass of Placement<Meta> */
+  template class Placement<session::Binding, session::Meta>;
+  typedef Placement<session::Binding, session::Meta> PBinding;
+  
+} // namespace mobject
 #endif

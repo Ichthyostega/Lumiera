@@ -50,6 +50,7 @@
 #define MOBJECT_SESSION_H
 
 #include "proc/mobject/placement.hpp"
+#include "proc/mobject/mobject-ref.hpp"
 #include "proc/mobject/session/defsmanager.hpp"
 #include "lib/ref-array.hpp"
 #include "lib/singleton.hpp"
@@ -127,6 +128,8 @@ namespace mobject {
       virtual bool isValid ()              = 0;
       virtual void attach (PMO& placement) = 0;
       virtual bool detach (PMO& placement) = 0;
+      
+      virtual MObjectRef getRoot()         = 0;
       
       virtual session::PFix& getFixture () = 0;
       virtual void rebuildFixture ()       = 0;

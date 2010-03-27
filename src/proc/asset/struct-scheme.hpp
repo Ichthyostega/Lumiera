@@ -81,33 +81,33 @@ namespace asset{
         static Symbol idSymbol;
       };
     
-    template<> Symbol Traits<Track>::namePrefix = "track";
-    template<> Symbol Traits<Track>::catFolder  = "tracks";
-    template<> Symbol Traits<Track>::idSymbol   = "track";
+    template<> Symbol StructTraits<Track>::namePrefix = "track";
+    template<> Symbol StructTraits<Track>::catFolder  = "tracks";
+    template<> Symbol StructTraits<Track>::idSymbol   = "track";
     
-    template<> Symbol Traits<Pipe>::namePrefix = "pipe";
-    template<> Symbol Traits<Pipe>::catFolder  = "pipes";
-    template<> Symbol Traits<Pipe>::idSymbol   = "pipe";
+    template<> Symbol StructTraits<Pipe>::namePrefix = "pipe";
+    template<> Symbol StructTraits<Pipe>::catFolder  = "pipes";
+    template<> Symbol StructTraits<Pipe>::idSymbol   = "pipe";
     
-    template<> Symbol Traits<const ProcPatt>::namePrefix = "patt";
-    template<> Symbol Traits<const ProcPatt>::catFolder  = "build-templates";
-    template<> Symbol Traits<const ProcPatt>::idSymbol   = "procPatt";
+    template<> Symbol StructTraits<const ProcPatt>::namePrefix = "patt";
+    template<> Symbol StructTraits<const ProcPatt>::catFolder  = "build-templates";
+    template<> Symbol StructTraits<const ProcPatt>::idSymbol   = "procPatt";
     
-    template<> Symbol Traits<Timeline>::namePrefix = "tL";
-    template<> Symbol Traits<Timeline>::catFolder  = "timelines";
-    template<> Symbol Traits<Timeline>::idSymbol   = "timeline";
+    template<> Symbol StructTraits<Timeline>::namePrefix = "tL";
+    template<> Symbol StructTraits<Timeline>::catFolder  = "timelines";
+    template<> Symbol StructTraits<Timeline>::idSymbol   = "timeline";
     
-    template<> Symbol Traits<Sequence>::namePrefix = "seq";
-    template<> Symbol Traits<Sequence>::catFolder  = "sequences";
-    template<> Symbol Traits<Sequence>::idSymbol   = "sequence";
+    template<> Symbol StructTraits<Sequence>::namePrefix = "seq";
+    template<> Symbol StructTraits<Sequence>::catFolder  = "sequences";
+    template<> Symbol StructTraits<Sequence>::idSymbol   = "sequence";
     
     /* catch-all defaults */
     template<class X>
-    Symbol Traits<X>::idSymbol = typeid(X).name(); ////////////////////TICKET #583   this default works but is ugly
+    Symbol StructTraits<X>::idSymbol = typeid(X).name(); ////////////////////TICKET #583   this default works but is ugly
     template<class X>
-    Symbol Traits<X>::catFolder = Traits<X>::idSymbol;
+    Symbol StructTraits<X>::catFolder = StructTraits<X>::idSymbol;
     template<class X>
-    Symbol Traits<X>::namePrefix = Traits<X>::idSymbol;
+    Symbol StructTraits<X>::namePrefix = StructTraits<X>::idSymbol;
     
     
     

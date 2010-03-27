@@ -37,6 +37,8 @@ namespace asset {
   class Effect;
   class Sequence;
   
+  typedef P<Sequence> PSequence;
+  
   }
 
 namespace mobject {
@@ -47,9 +49,11 @@ namespace session {
   class Track;
   class Effect;
   class Label;
+  class Binding;
   
   typedef P<asset::Track> PTrackAsset;
-  typedef P<asset::Sequence> PSequence;
+  
+  using asset::PSequence;
   
   class DefsManager;
   

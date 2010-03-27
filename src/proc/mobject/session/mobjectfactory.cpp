@@ -27,6 +27,7 @@
 #include "proc/mobject/session/track.hpp"
 #include "proc/mobject/session/effect.hpp"
 #include "proc/mobject/session/label.hpp"
+#include "proc/mobject/session/binding.hpp"
 #include "proc/asset/clip.hpp"
 #include "proc/asset/track.hpp"
 #include "proc/asset/effect.hpp"
@@ -101,7 +102,7 @@ namespace session {
   MObjectFactory::operator() (PSequence& sequence_to_bind)
   {
     TODO ("any additional liabilities when creating a binding?");
-    return Placement<Binding> (*new Binding(sequence_to_bind));
+    return Placement<Binding> (*new Binding(sequence_to_bind), &deleterFunc);
   }
   
   

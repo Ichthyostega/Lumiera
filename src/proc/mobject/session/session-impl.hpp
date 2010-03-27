@@ -87,6 +87,8 @@ namespace session {
       virtual void attach (PMO& placement);
       virtual bool detach (PMO& placement);
       
+      virtual MObjectRef getRoot();
+
       virtual PFix& getFixture ();
       virtual void rebuildFixture ();
       

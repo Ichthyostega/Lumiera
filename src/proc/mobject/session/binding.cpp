@@ -31,8 +31,21 @@ namespace session {
   Binding::Binding (PSequence& sequence_to_bind)
     : boundSequence_(sequence_to_bind)
     {
+      throwIfInvalid();
       UNIMPLEMENTED ("what additionally to do when binding a sequence??");
     }
+  
+  
+  bool
+  Binding::isValid()  const
+  {
+    TODO ("self-check of a binding within the model"); ///////////////////////////////TICKET #584
+    return true;
+    // Ideas: - compare the bound sequence's channels with this binding's channel configuration
+    //        - verify the virtual media, unless this biding is creating a top-level timeline
+    //        - verify the bound sequence is based on a track within the model
+  }
+
   
 
 
