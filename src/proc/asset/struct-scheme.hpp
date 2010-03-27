@@ -49,6 +49,8 @@
 using boost::format;
 /////////////////////////////////////////////////////////TODO needs to be pushed down into a *.cpp
 
+#include <cstdlib>
+
 //using mobject::Session;
 //using mobject::MObject;
 
@@ -98,6 +100,14 @@ namespace asset{
     template<> Symbol Traits<Sequence>::namePrefix = "seq";
     template<> Symbol Traits<Sequence>::catFolder  = "sequences";
     template<> Symbol Traits<Sequence>::idSymbol   = "sequence";
+    
+    /* catch-all defaults */
+    template<class X>
+    Symbol Traits<X>::idSymbol = typeid(X).name(); ////////////////////TICKET #583   this default works but is ugly
+    template<class X>
+    Symbol Traits<X>::catFolder = Traits<X>::idSymbol;
+    template<class X>
+    Symbol Traits<X>::namePrefix = Traits<X>::idSymbol;
     
     
     
