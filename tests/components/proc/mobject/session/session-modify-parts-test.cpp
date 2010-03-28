@@ -64,6 +64,7 @@ namespace test    {
   using lumiera::Query;
   
   typedef MORef<session::Clip> RClip;
+  typedef PlacementMO::ID PID;
   
   
   
@@ -303,7 +304,10 @@ namespace test    {
           
           CHECK (focus.getObject() == sess->getRoot());
           
+          PID currRoot = sess->getRoot.getPlacement().getID();
           sess->getRoot().purge();                            // purging the root scope effectively resets the session to defaults
+          CHECK (currRoot == sess->getRoot.getPlacement.getID);
+                                                              // but the root element itself is retained
           CHECK (sess->isValid());
           CHECK (1 == sess->timelines.size());
           CHECK (1 == sess->sequences.size());

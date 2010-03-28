@@ -223,7 +223,8 @@ namespace session {
       PlacementIndex(PlacementMO const&);
      ~PlacementIndex() ;
       
-      void clear();
+      void clear (ID targetScope);
+      void clear ();
       
     };
   
@@ -304,6 +305,7 @@ namespace session {
    *  immediately followed by creating a typed-ID,
    *  allowing to retain the original typed context
    *  @todo this solution is half-baked   ///////////////////////////////////TICKET #523
+   *  @todo is this API used in application code? or just used in tests?
    */
   template<class PLA>
   typename BuildID<PLA>::Type

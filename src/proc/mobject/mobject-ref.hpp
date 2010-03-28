@@ -64,6 +64,7 @@
 #include "lib/lumitime.hpp"
 #include "proc/mobject/placement.hpp"
 #include "proc/mobject/placement-ref.hpp"
+#include "proc/mobject/session/session-service-mutate.hpp"
 
 #include <string>
 
@@ -131,6 +132,38 @@ namespace mobject {
       getStartTime()
         {
           return pRef_.resolve().time;
+        }
+      
+      
+      /** attach a child element to the model
+       *  @param newPlacement to be copied into the model, placed 
+       *         into the scope of the object denoted by this MORef
+       *  @return MORef designing the newly created and attached object instance
+       */
+      template<class MOX>
+      MORef<MOX>
+      attach (Placement<MOX> const& newPlacement)
+        {
+          if (!isValid())
+            throw lumiera::error::State("Attempt to attach a child to an inactive MObject ref"
+                                       , LUMIERA_ERROR_BOTTOM_MOBJECTREF);
+          MORef<MOX> newInstance;
+          PlacementMO::ID thisScope = pRef_;
+          return newInstance.activate (
+                    session::SessionServiceMutate::attach_toModel (newPlacement, thisScope));
+        }
+      
+      
+      /** detach this object instance from model,
+       *  including all child elements 
+       */
+      void
+      purge ()
+        { 
+          if (isValid())
+            session::SessionServiceMutate::detach_and_clear (pRef_);
+          
+          ENSURE (!isValid());
         }
       
       

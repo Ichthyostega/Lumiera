@@ -296,6 +296,16 @@ namespace session {
           return true;
         }
       
+      void
+      removeAll (ID scopeID)
+        {
+          remove_all_from_scope (scopeID); // recursive
+          remove_base_entry (scopeID);    //  discard storage
+          
+          ENSURE (!util::contains(scopeTab_, scopeID));
+          ENSURE (!contains (scopeID));
+        }
+      
       
       /* == access for self-test == */
       
@@ -348,6 +358,21 @@ namespace session {
           
           NOTREACHED();
         }
+      
+      void
+      remove_all_from_scope (ID scopeID)
+        {
+          typedef ScopeTable::const_iterator Pos;
+          pair<Pos,Pos> searchRange = scopeTab_.equal_range(scopeID);
+          
+          Pos pos = searchRange.first;
+          Pos end = searchRange.second;
+          for ( ; pos!=end; ++pos)
+            removeAll (pos->second); // depth-first recursion
+          
+          scopeTab_.erase (pos,end); // assumed to be NOP for pos==end
+        }
+      
       
       
       /** Helper for building a scope exploring iterator
@@ -496,6 +521,23 @@ namespace session {
       throw error::Fatal ("Request to kill the model root.");
     
     return pTab_->removeEntry (id);
+  }
+  
+  
+  /** recursively kill a complete scope,
+   *  including the given element and all children.
+   *  @note as an exception, when specifying model root,
+   *        any sub-elements are cleared but root is retained
+   */
+  void
+  PlacementIndex::clear (ID targetScope)
+  {
+    if (targetScope == getRoot().getID())
+      pTab_->clear();
+    else
+      pTab_->removeAll (targetScope);
+    
+    ENSURE (isValid());
   }
   
   

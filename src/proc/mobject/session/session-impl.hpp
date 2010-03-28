@@ -84,8 +84,8 @@ namespace session {
       
       /* ==== Session API ==== */
       virtual bool isValid ();
-      virtual void attach (PMO& placement);
-      virtual bool detach (PMO& placement);
+      virtual MObjectRef attach (PMO& placement);
+      virtual bool       detach (PMO& placement);
       
       virtual MObjectRef getRoot();
 
@@ -125,6 +125,45 @@ namespace session {
       resolveID (PMO::ID const& placementID)
         {
           return IMPL::getPlacementIndex().find (placementID); //may throw
+        }
+    };
+  
+  
+  
+  
+  template<class IMPL>
+  struct ServiceAccessPoint<SessionServiceMutate, IMPL>
+    : IMPL
+    {
+      PMO::ID const&
+      insertCopy (PMO const& newPlacement, PMO::ID const& scope)
+        {
+          return index().insert (newPlacement,scope);
+        }
+      
+      bool
+      purgeScopeRecursively (PMO::ID const& scope)
+        {
+          size_t siz = index().size();
+          if (index().contains (scope))
+              index().clear (scope);
+          
+          ENSURE (!index().contains (scope) || (scope == index().getRoot().getID()));
+          ENSURE (siz >= index().size());
+          return siz != index().size();
+        }
+      
+      bool
+      detachElement (PMO::ID const& placementID)
+        {
+          return index().remove (placementID);
+        }
+      
+    private:
+      PlacementIndex&
+      index()
+        {
+          return IMPL::getPlacementIndex();
         }
     };
   
@@ -225,6 +264,7 @@ namespace session {
    *       global Session PImpl
    */
   typedef SessionServices< Types< SessionServiceFetch
+                                , SessionServiceMutate
                                 , SessionServiceExploreScope
                                 , SessionServiceMockIndex
                                 , SessionServiceDefaults

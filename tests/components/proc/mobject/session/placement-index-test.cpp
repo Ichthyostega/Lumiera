@@ -240,6 +240,31 @@ namespace test    {
           
           ASSERT (index.remove(e133));     // but can remove an scope, after emptying it
           ASSERT (!index.contains(e133));
+          
+          // build a complete new subtree
+          uint siz   = index.size();
+          ID e1321   = index.insert (testObj, e132);
+          ID e13211  = index.insert (testObj, e1321);
+          ID e13212  = index.insert (testObj, e1321);
+          ID e13213  = index.insert (testObj, e1321);
+          ID e13214  = index.insert (testObj, e1321);
+          ID e132131 = index.insert (testObj, e13213);
+          ID e132132 = index.insert (testObj, e13213);
+          ID e132133 = index.insert (testObj, e13213);
+          ID e132134 = index.insert (testObj, e13213);
+          ID e132141 = index.insert (testObj, e13214);
+          ID e132142 = index.insert (testObj, e13214);
+          ID e132143 = index.insert (testObj, e13214);
+          ID e132144 = index.insert (testObj, e13214);
+          
+          // ...and kill it recursively in one sway
+          index.clear (e1321);
+          ASSERT (!index.contains (e1321));
+          ASSERT (!index.contains (e13211));
+          ASSERT (!index.contains (e13213));
+          ASSERT (!index.contains (e132131));
+          ASSERT (!index.contains (e132144));
+          ASSERT (siz == index.size());
         }
       
       

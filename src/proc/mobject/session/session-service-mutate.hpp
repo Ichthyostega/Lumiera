@@ -1,8 +1,8 @@
 /*
-  SESSION-SERVICE-FETCH.hpp  -  session implementation service API: fetch PlacementRef
+  SESSION-SERVICE-MUTATE.hpp  -  session implementation service API: add/remove session contents
  
   Copyright (C)         Lumiera.org
-    2008,               Hermann Vosseler <Ichthyostega@web.de>
+    2010,               Hermann Vosseler <Ichthyostega@web.de>
  
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -21,12 +21,14 @@
 */
 
 
-/** @file session-service-fetch.hpp
- ** Implementation level session API: resolve a Placement by hash-ID.
- ** This specialised service is intended to be used by PlacementRef,
- ** in order to (re)-access the Placement instance within the session,
- ** given the hash-ID of this placement. An implementation of this
- ** service is available through the SessionServices access mechanism.
+/** @file session-service-mutate.hpp
+ ** Implementation level session API: add or remove Session contents.
+ ** This specialised service is intended to be used by MObjectRef,
+ ** in order to attach a new Placement to the session or to detach
+ ** and purge an existing Placement. An implementation of this service
+ ** service is available through the SessionServices access mechanism,
+ ** and delegates the actual implementation to the PlacementIndex,
+ ** which is the core session datastructure.
  ** 
  ** @see session-impl.hpp implementation of the service
  ** @see session-services.cpp implementation of access
@@ -34,8 +36,8 @@
  */
 
 
-#ifndef MOBJECT_SESSION_SESSION_SERVICE_FETCH_H
-#define MOBJECT_SESSION_SESSION_SERVICE_FETCH_H
+#ifndef MOBJECT_SESSION_SESSION_SERVICE_MUTATE_H
+#define MOBJECT_SESSION_SESSION_SERVICE_MUTATE_H
 
 //#include "proc/mobject/session.hpp"
 //#include "lib/meta/generator.hpp"
@@ -47,9 +49,6 @@
 namespace mobject {
 namespace session {
   
-//  using lumiera::typelist::InstantiateChained;
-//  using lumiera::typelist::InheritFrom;
-//  using lumiera::typelist::NullType;
   
   /**
    * Implementation-level service for resolving an Placement-ID.
@@ -58,13 +57,15 @@ namespace session {
    * this index may be overlaid temporarily, by using the
    * SessionServiceMockIndex API.
    */
-  class SessionServiceFetch
+  class SessionServiceMutate
     {
     public:
-      static PlacementMO& resolveID (PlacementMO::ID const&) ;
-      static bool    isRegisteredID (PlacementMO::ID const&) ;
+      typedef PlacementMO     const& PMO;
+      typedef PlacementMO::ID const& PID;
       
-      static bool isAccessible() ;
+      static PID  attach_toModel (PMO, PID) ;
+      static bool detach_and_clear (PID) ;
+      static bool detach (PID) ;
     };
   
   

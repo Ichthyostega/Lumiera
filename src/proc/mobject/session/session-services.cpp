@@ -22,6 +22,7 @@
 
 
 #include "proc/mobject/session/session-service-fetch.hpp"
+#include "proc/mobject/session/session-service-mutate.hpp"
 #include "proc/mobject/session/session-service-explore-scope.hpp"
 #include "proc/mobject/session/session-service-mock-index.hpp"
 #include "proc/mobject/session/session-service-defaults.hpp"
@@ -74,6 +75,46 @@ namespace session {
   {
     return SessionImplAPI::current->resolveID (placementID);
   }
+  
+  
+  /** attach an object by placement onto the session.
+   *  Implemented by registering a copy of the Placement into the
+   *  PlacementIndex in the session. This copy establishes a new kind of
+   *  "object instance", represented by a new placement-ID, which is returned
+   *  and can be used to refer to this "instance" within the session from now on.
+   *  @param scope the (existing) parent scope where to attach the new element
+   */
+  PlacementMO::ID const&
+  SessionServiceMutate::attach_toModel(PMO newPlacement, PID scope)
+  {
+    return SessionImplAPI::current->insertCopy (newPlacement,scope);
+  }
+  
+  
+  /** detach the denoted element from the model <i>including all children.</i>
+   *  @return true if actually erased something
+   *  @note when specifying model root, all sub-elements will be cleared,
+   *        but model root itself will be retained. 
+   */
+  bool
+  SessionServiceMutate::detach_and_clear (PID scope)
+  {
+    return SessionImplAPI::current->purgeScopeRecursively (scope);
+  }
+  
+  
+  /** detach the denoted leaf element from the model.
+   *  @return true if actually erased something
+   *  @throw error::Fatal when attempting to remove the model root
+   *  @throw error::State when the given element contains sub elements
+   */
+  bool
+  SessionServiceMutate::detach (PID leafElement)
+  {
+    return SessionImplAPI::current->detachElement (leafElement);
+  }
+
+  
   
   
   namespace { // deleter function to clean up test/mock PlacementIndex

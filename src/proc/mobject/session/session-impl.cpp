@@ -75,7 +75,7 @@ namespace session {
   }
   
   
-  void 
+  MObjectRef 
   SessionImpl::attach (PMO& placement)
   {
     UNIMPLEMENTED ("add Placement to the current Session");
