@@ -99,7 +99,7 @@ namespace session {
   
   /** */ 
   Placement<Binding>
-  MObjectFactory::operator() (PSequence& sequence_to_bind)
+  MObjectFactory::operator() (PSequence const& sequence_to_bind)
   {
     TODO ("any additional liabilities when creating a binding?");
     return Placement<Binding> (*new Binding(sequence_to_bind), &deleterFunc);

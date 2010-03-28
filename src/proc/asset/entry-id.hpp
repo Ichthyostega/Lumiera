@@ -87,7 +87,7 @@ namespace asset {
       boost::hash_combine(seed, sym);
       lumiera_uid tmpLUID;
       lumiera_uid_set_ptr (&tmpLUID, reinterpret_cast<void*> (&seed));
-      return reinterpret_cast<LuidH> (tmpLUID);
+      return reinterpret_cast<LuidH&> (tmpLUID);
     }
   }
   
@@ -110,9 +110,9 @@ namespace asset {
       
     public:
       explicit
-      BareEntryID (string const& symbolID, HashVal seed =0)        /////////////TODO couldn't this be protected?
+      BareEntryID (string const& symbolID, idi::HashVal seed =0)        /////////////TODO couldn't this be protected?
         : symbol_(util::sanitise(symbolID))
-        , hash_(buildHash (symbol_, seed))
+        , hash_(idi::buildHash (symbol_, seed))
         { }
       
       /* default copy- and assignable */
@@ -138,7 +138,7 @@ namespace asset {
       
       /** using BareEntryID derived objects as keys within tr1::unordered_map */
       struct UseEmbeddedHash
-        : public std::unary_function<BA, size_t>
+        : public std::unary_function<BareEntryID, size_t>
         {
           size_t operator() (BareEntryID const& obj)  const { return obj.getHash(); }
         };
@@ -190,7 +190,7 @@ namespace asset {
       getIdent()  const
         {
           Category cat (STRUCT, idi::StructTraits<TY>::catFolder);
-          return Asset::Ident (name, cat);           
+          return Asset::Ident (this->getSym(), cat);           
         }
       
       static idi::HashVal
@@ -225,7 +225,7 @@ namespace asset {
       
       operator string ()  const
         {
-          return "ID<"+idi::StructTraits<TY>::idSymbol+">-"+getSym();
+          return "ID<"+idi::StructTraits<TY>::idSymbol+">-"+EntryID::getSym();
         }
   
       friend ostream& operator<<   (ostream& os, EntryID const& id) { return os << string(id); }

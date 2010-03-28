@@ -28,6 +28,8 @@
 
 #include <tr1/unordered_map>
 
+using util::isSameObject;
+
 
 namespace lib {
 namespace test{

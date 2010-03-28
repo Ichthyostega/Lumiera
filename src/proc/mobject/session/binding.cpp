@@ -28,7 +28,7 @@ namespace mobject {
 namespace session {
   
   /** */
-  Binding::Binding (PSequence& sequence_to_bind)
+  Binding::Binding (PSequence const& sequence_to_bind)
     : boundSequence_(sequence_to_bind)
     {
       throwIfInvalid();

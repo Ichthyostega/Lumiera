@@ -25,6 +25,8 @@
 #include "lib/test/test-helper.hpp"
 
 #include "proc/asset/entry-id.hpp"
+#include "proc/mobject/session/clip.hpp"
+#include "proc/mobject/session/track.hpp"
 #include "lib/util-foreach.hpp"
 #include "lib/symbol.hpp"
 
@@ -85,7 +87,6 @@ namespace test {
       checkCreation ()
         {
 #if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #582
-#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #582
           DummyID dID1;
           DummyID dID2("strange");
           DummyID dID3;
@@ -112,12 +113,14 @@ namespace test {
           DummyID x (dID2);  // copy ctor
           CHECK (x == dID2);
           CHECK (!isSameObject (x, dID2));
+#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #582
         }
       
       
       void
       checkBasicProperties ()
         {
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #582
           TrackID tID(" test  ⚡ ☠ ☭ ⚡  track  ");
           CHECK (tID.getIdent() == Asset::Ident("test_track", Category(STRUCT,"tracks"), "lumi", 0));
           
@@ -142,12 +145,14 @@ namespace test {
             }
           
           CHECK (sizeof (tID) == sizeof(hash::LuidH) + sizeof(Literal));
+#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #582
         }
       
       
       void
       checkComparisions ()
         {
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #582
           TrackID tID1("a1");
           TrackID tID2("a1");
           TrackID tID3("a2");
@@ -165,12 +170,14 @@ namespace test {
           CHECK (tID4 > tID3);
           
           CHECK (TrackID() < TrackID());
+#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #582
         }
       
       
       void
       checkErasure ()
         {
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #582
           TrackID tID("suspicious");
           ClipID  cID("suspicious");
           
@@ -201,12 +208,14 @@ namespace test {
           lumiera_uid_copy (&plainLUID, tID.getHash().get());
           
           CHECK (cID == ClipID::recast ("suspicious", plainLUID)); // upcast from type erased data (note: changed type)
+#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #582
         }
       
       
       void
       buildHashtable ()
         {                              //---key--+-value-+-hash-function--- 
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #582
           typedef std::tr1::unordered_map<DummyID, string, DummyID::UseEmbeddedHash()> Hashtable;
               
           Hashtable tab;
@@ -220,6 +229,7 @@ namespace test {
           CHECK (1000 == tab.size());
           
           for_each (tab.getKeys(), tab[_1] == string(_1));      /////TODO use boost::lambda to make this happen....
+#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #582
         }
     };
   

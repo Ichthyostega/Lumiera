@@ -53,8 +53,6 @@ namespace session {
   
   typedef P<asset::Track> PTrackAsset;
   
-  using asset::PSequence;
-  
   class DefsManager;
   
   
@@ -73,7 +71,7 @@ namespace session {
       Placement<Track>  operator() (PTrackAsset&);
       Placement<Effect> operator() (asset::Effect const&);
       Placement<Label>  operator() (lib::Symbol);
-      Placement<Binding>operator() (PSequence&);
+      Placement<Binding>operator() (asset::PSequence const&);
       
       ////////////////////////////////////////////////////////////////////////////////TICKET #414
     };

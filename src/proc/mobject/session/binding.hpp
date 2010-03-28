@@ -28,12 +28,17 @@
 #include "proc/mobject/builder/buildertool.hpp"
 
 
-namespace asset { class Sequence; }
+namespace asset { 
+  class Sequence;
+  
+  typedef lumiera::P<Sequence> PSequence;
+
+}
 
 namespace mobject {
 namespace session {
   
-    typedef lumiera::P<asset::Sequence> PSequence;
+    using asset::PSequence;
     
     /**
      * Explicit link to bind a Sequence (container) to be used within the Session,
@@ -48,7 +53,7 @@ namespace session {
         bool isValid()  const;
         
       public:
-        Binding (PSequence& sequence_to_bind);
+        Binding (PSequence const& sequence_to_bind);
           
         DEFINE_PROCESSABLE_BY (builder::BuilderTool);
 

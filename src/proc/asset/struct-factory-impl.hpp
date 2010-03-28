@@ -37,7 +37,8 @@
 
 
 #include "proc/mobject/session.hpp"
-#include "proc/mobject/mobject.hpp"
+#include "proc/mobject/session/binding.hpp"
+#include "proc/mobject/session/mobjectfactory.hpp"
 #include "common/configrules.hpp"
 #include "proc/asset/timeline.hpp"
 #include "proc/asset/sequence.hpp"
