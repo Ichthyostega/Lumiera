@@ -33,13 +33,13 @@
 
 
 namespace asset {
-
+  
   using lib::Literal;
   
   using std::string;
   using std::ostream;
   
-  /** 
+  /**
    * top-level distinction of different Kinds of Assets.
    * For convenience, this classification is slightly denormalised,
    * as AUDIO, and VIDEO are both asset::Media objects, EFFECT and CODEC
@@ -67,9 +67,7 @@ namespace asset {
    */
   class Category
     {
-    public:
       
-    private:
       Kind kind_;
       string path_;
       
@@ -87,15 +85,8 @@ namespace asset {
       
       operator string ()  const;
       
+      friend size_t hash_value (Category const&);
       
-      friend size_t
-      hash_value (Category const& cat)
-        {
-          size_t hash = 0;
-          boost::hash_combine(hash, cat.kind_);
-          boost::hash_combine(hash, cat.path_);
-          return hash;
-        }
       
       int
       compare (Category const& co)  const
@@ -109,7 +100,21 @@ namespace asset {
       
     };
   
-  inline ostream& operator<< (ostream& os, const Category& cago) { return os << string(cago); }
+  
+  inline ostream&
+  operator<< (ostream& os, const Category& cat)
+    {
+      return os << string(cat); 
+    }
+  
+  inline size_t
+  hash_value (Category const& cat)
+  {
+    size_t hash = 0;
+    boost::hash_combine(hash, cat.kind_);
+    boost::hash_combine(hash, cat.path_);
+    return hash;
+  }
   
   
   

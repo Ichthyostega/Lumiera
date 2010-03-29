@@ -34,6 +34,7 @@
 #include <iostream>
 #include <string>
 
+using lib::test::showSizeof;
 using lib::test::randStr;
 using util::isSameObject;
 using util::for_each;
@@ -86,7 +87,6 @@ namespace test {
       void
       checkCreation ()
         {
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #582
           DummyID dID1;
           DummyID dID2("strange");
           DummyID dID3;
@@ -107,13 +107,22 @@ namespace test {
           CHECK (tID2 != tID3); CHECK (tID3 != tID2);
           CHECK (tID1 != tID3); CHECK (tID3 != tID1);
           
-          cout << dID1 << dID2 << dID3 << endl;
-          cout << tID1 << tID2 << tID3 << endl;
+          cout << dID1 << endl;
+          cout << dID2 << endl;
+          cout << dID3 << endl;
+          
+          cout << tID1 << endl;
+          cout << tID2 << endl;
+          cout << tID3 << endl;
+          
+          cout << showSizeof<TrackID>() << endl;
+          cout << showSizeof<BareEntryID>() << endl;
+          CHECK (sizeof(TrackID) == sizeof(BareEntryID));
+          CHECK (sizeof(TrackID) == sizeof(lumiera_uid) + sizeof(void*));
           
           DummyID x (dID2);  // copy ctor
           CHECK (x == dID2);
           CHECK (!isSameObject (x, dID2));
-#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #582
         }
       
       
@@ -236,7 +245,7 @@ namespace test {
   
   
   /** Register this test class... */
-  LAUNCHER (EntryID_test, "unit common");
+  LAUNCHER (EntryID_test, "unit asset");
   
   
 }} // namespace asset::test

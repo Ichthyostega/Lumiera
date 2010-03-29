@@ -61,6 +61,14 @@ using lib::Symbol;
 //using lumiera::query::LUMIERA_ERROR_CAPABILITY_QUERY;
 //using lumiera::query::extractID;
 
+namespace mobject {
+namespace session {
+  
+  class Track;
+  class Clip;
+  
+}}
+
 namespace asset{
   
   class Track;
@@ -70,7 +78,7 @@ namespace asset{
   class Sequence;
   
   namespace idi  {
-  
+    
     // structural asset ID scheme   ///////////////////////////////////////////////////////////TICKET #565
     
     template<class STRU>
@@ -81,9 +89,18 @@ namespace asset{
         static Symbol idSymbol;
       };
     
-    template<> Symbol StructTraits<Track>::namePrefix = "track";
-    template<> Symbol StructTraits<Track>::catFolder  = "tracks";
-    template<> Symbol StructTraits<Track>::idSymbol   = "track";
+    ///////////////////////////////////////////////////////////////////////////////////////////TICKET #581 intending to abandon asset::Track in favour of a plain EntryID 
+    template<> Symbol StructTraits<asset::Track>::namePrefix = "track";
+    template<> Symbol StructTraits<asset::Track>::catFolder  = "tracks";
+    template<> Symbol StructTraits<asset::Track>::idSymbol   = "track";
+    
+    template<> Symbol StructTraits<mobject::session::Track>::namePrefix = "track";
+    template<> Symbol StructTraits<mobject::session::Track>::catFolder  = "tracks";
+    template<> Symbol StructTraits<mobject::session::Track>::idSymbol   = "track";
+    
+    template<> Symbol StructTraits<mobject::session::Clip>::namePrefix = "clip";
+    template<> Symbol StructTraits<mobject::session::Clip>::catFolder  = "clips";
+    template<> Symbol StructTraits<mobject::session::Clip>::idSymbol   = "clip";
     
     template<> Symbol StructTraits<Pipe>::namePrefix = "pipe";
     template<> Symbol StructTraits<Pipe>::catFolder  = "pipes";
@@ -117,7 +134,7 @@ namespace asset{
     generateSymbolID()
     {
         static uint i=0;
-        static format namePattern ("%s.%02d");
+        static format namePattern ("%s.%03d");
         /////////////////////////////////////////////////////////TODO needs to be pushed down into a *.cpp
         
         return str(namePattern % StructTraits<STRU>::namePrefix % (++i) );

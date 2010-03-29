@@ -80,13 +80,14 @@ namespace asset {
      *  @todo several unsolved design problems. How to deal with std hash values in
      *        conjunction with LUID. How to create a LuidH instance, if not generating
      *        a new random value
+     *  @warning this code isn't portable and breaks if sizeof(size_t) < sizeof(void*)
      */
     inline LuidH
     buildHash (string const& sym, HashVal seed =0)
     {
       boost::hash_combine(seed, sym);
       lumiera_uid tmpLUID;
-      lumiera_uid_set_ptr (&tmpLUID, reinterpret_cast<void*> (&seed));
+      lumiera_uid_set_ptr (&tmpLUID, reinterpret_cast<void*> (seed));
       return reinterpret_cast<LuidH&> (tmpLUID);
     }
   }
@@ -102,6 +103,7 @@ namespace asset {
    * for building a combined hash and symbolic ID.
    */
   class BareEntryID
+    : public boost::equality_comparable<BareEntryID>
     {
       typedef lib::hash::LuidH LuidH;
       
@@ -166,16 +168,20 @@ namespace asset {
    * @see mobject::session::Track
    */
   template<class TY>
-  class EntryID
-    : boost::totally_ordered1< EntryID<TY>
-                             , BareEntryID     // common baseclass
-                             >
+  struct EntryID
+    : BareEntryID
+    , boost::totally_ordered< EntryID<TY> >
     {
-    public:
+      
+      /** case-1: auto generated symbolic ID */
       EntryID()
         : BareEntryID (idi::generateSymbolID<TY>(), getTypeHash())
         { }
       
+      /** case-2: explicitly specify a symbolic ID to use.
+       *  The type information TY will be included automatically
+       *  into the generated hash-ID. This hash is reproducible.
+       */
       explicit
       EntryID (string const& symbolID)
         : BareEntryID (symbolID, getTypeHash())
@@ -197,7 +203,9 @@ namespace asset {
       getTypeHash()
         {
           Category cat (STRUCT, idi::StructTraits<TY>::catFolder);
-          return hash_value (cat);
+          asset::Category const& catz(cat);
+          size_t haha = hash_value (catz);
+          return haha;
         }
       
       
@@ -229,11 +237,16 @@ namespace asset {
         }
   
       friend ostream& operator<<   (ostream& os, EntryID const& id) { return os << string(id); }
-
-      friend bool operator== (EntryID const& i1, EntryID const& i2) { return i1.getSym() == i2.getSym(); }
-      friend bool operator<  (EntryID const& i1, EntryID const& i2) { return i1.getSym() <  i2.getSym(); }
+      friend bool operator<  (EntryID const& i1, EntryID const& i2) { return i1.getSym()  <  i2.getSym();  }
     };
     
+  
+  inline bool
+  operator== (BareEntryID const& i1, BareEntryID const& i2)
+  {
+    return i1.getHash() == i2.getHash();
+  }
+
   
     
   

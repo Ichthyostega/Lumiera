@@ -4148,7 +4148,7 @@ The session and the models rely on dependent objects beeing kept updated and con
 &amp;rarr; see [[details here...|ModelDependencies]]
 </pre>
 </div>
-<div title="SessionInterface" modifier="Ichthyostega" modified="201003140244" created="200904242108" tags="SessionLogic GuiIntegration design draft discuss" changecount="47">
+<div title="SessionInterface" modifier="Ichthyostega" modified="201003272138" created="200904242108" tags="SessionLogic GuiIntegration design draft discuss" changecount="48">
 <pre>&quot;Session Interface&quot;, when used in a more general sense, denotes a compound of several interfaces and facilities, together forming the primary access point to the user visible contents and state of the editing project.
 * the API of the session class
 * the accompanying management interface (SessionManager API)
@@ -4217,7 +4217,7 @@ When adding an object, a [[scope|PlacementScope]] needs to be specified. Thus it
 * how is all of this related to the LayerSeparationInterfaces, here SessionFacade und EditFacade?
 
 &lt;&lt;&lt;
-__preliminary notes__: {{red{3/2010}}} Discovery functions accessible from the session API are always written such as to return ~MObjectRefs. These expose generic functions for modifying the structure: {{{attach(MObjectRef)}}} and {{{purge()}}}. The session API exposes variations of these functions. Actually, all these functions do dispatch the respective commands automatically. To the contrary, the raw functions for adding and removing placements are located on the PlacementIndex; the're accessible as SessionServices &amp;mdash; which are intended for Proc-Layer's internal use solely. This separation isn't meant to be airtight, just an reminder for proper use.
+__preliminary notes__: {{red{3/2010}}} Discovery functions accessible from the session API are always written such as to return ~MObjectRefs. These expose generic functions for modifying the structure: {{{attach(MObjectRef)}}} and {{{purge()}}}. The session API exposes variations of these functions. Actually, all these functions do dispatch the respective commands automatically. To the contrary, the raw functions for adding and removing placements are located on the PlacementIndex; they are accessible as SessionServices &amp;mdash; which are intended for Proc-Layer's internal use solely. This separation isn't meant to be airtight, just an reminder for proper use.
 
 Currently, I'm planning to modify MObjectRef to return only a const ref to the underlying facilities by default. Then, there would be a subclass which is //mutation enabled.// But this subclass will check for the presence of a mutation-permission token &amp;mdash; which is exposed via thread local storage, but //only within a command dispatch.// Again, no attempt is made to make this barrier airtight. Indeed, for tests, the mutation-permission token can just be created in the local scope. After all, this is not conceived as an authorisation scheme, rather as a automatic sanity check. It's the liability of the client code to ensure any mutation is dispatched.
 &lt;&lt;&lt;
