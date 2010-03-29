@@ -33,7 +33,15 @@ return: 0
 END
 
 
-PLANNED "plain entry-ID" EntryID_test <<END
+TEST "plain entry-ID" EntryID_test <<END
+out: ID<..asset.+Dummy.>-..asset.+Dummy.\.001
+out: ID<..asset.+Dummy.>-strange
+out: ID<..asset.+Dummy.>-..asset.+Dummy.\.002
+out: ID<track>-track\.001
+out: ID<track>-track\.002
+out: ID<track>-special
+out: sizeof\( ..asset.+EntryID.+mobject.+session.+Track.+ \) =
+out: sizeof\( ..asset.+BareEntryID. \) =
 return: 0
 END
 

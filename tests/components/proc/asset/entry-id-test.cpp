@@ -27,6 +27,7 @@
 #include "proc/asset/entry-id.hpp"
 #include "proc/mobject/session/clip.hpp"
 #include "proc/mobject/session/track.hpp"
+#include "lib/meta/trait-special.hpp"
 #include "lib/util-foreach.hpp"
 #include "lib/symbol.hpp"
 
@@ -37,7 +38,7 @@
 using lib::test::showSizeof;
 using lib::test::randStr;
 using util::isSameObject;
-using util::for_each;
+using util::and_all;
 using lib::Literal;
 using std::string;
 using std::cout;
@@ -58,6 +59,9 @@ namespace test {
   }
   
   
+  
+  
+  
   /***************************************************************************
    * @test proof-of-concept test for a combined symbolic and hash based ID.
    *       - create some symbolic IDs 
@@ -65,7 +69,7 @@ namespace test {
    *       - check comparisons
    *       - check hashing
    *       - use the embedded hash ID (LUID) as hashtable key
-   *       
+   * 
    * @see lib::HashIndexed::Id
    * @see mobject::Placement real world usage example 
    */
@@ -115,11 +119,6 @@ namespace test {
           cout << tID2 << endl;
           cout << tID3 << endl;
           
-          cout << showSizeof<TrackID>() << endl;
-          cout << showSizeof<BareEntryID>() << endl;
-          CHECK (sizeof(TrackID) == sizeof(BareEntryID));
-          CHECK (sizeof(TrackID) == sizeof(lumiera_uid) + sizeof(void*));
-          
           DummyID x (dID2);  // copy ctor
           CHECK (x == dID2);
           CHECK (!isSameObject (x, dID2));
@@ -129,22 +128,22 @@ namespace test {
       void
       checkBasicProperties ()
         {
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #582
           TrackID tID(" test  ⚡ ☠ ☭ ⚡  track  ");
           CHECK (tID.getIdent() == Asset::Ident("test_track", Category(STRUCT,"tracks"), "lumi", 0));
           
           CHECK (tID.getHash() == TrackID("☢ test ☢ track ☢").getHash());
           
-          CHECK (isSameObject (tID.getSym(), tID.getIdent().name));
-          CHECK ("tracks" == TrackID().getIdent().category.path);
-          CHECK ("clips"  == ClipID().getIdent().category.path);
+          CHECK (tID.getSym() == tID.getIdent().name);
+          CHECK (TrackID().getIdent().category == Category (STRUCT,"tracks"));
+          CHECK (ClipID().getIdent().category  == Category (STRUCT,"clips"));
           
-          CHECK (ClipID().getSym() < ClipID().getSym());
+          ClipID cID2,cID3;
+          CHECK (cID2.getSym() < cID3.getSym());
           CHECK (ClipID("x").getSym() == ClipID(" x ").getSym());
           
-          for (uint i=0; i<1000; ++i)
+          for (uint i=0; i<10000; ++i)
             {
-              TrackID arbitrary(randStr(20));
+              TrackID arbitrary(randStr(30));
               CHECK (0 < arbitrary.getHash());
               CHECK (tID.getHash() != arbitrary.getHash());
               tID = arbitrary;
@@ -153,15 +152,16 @@ namespace test {
               CHECK (tID.getIdent()== arbitrary.getIdent());
             }
           
-          CHECK (sizeof (tID) == sizeof(hash::LuidH) + sizeof(Literal));
-#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #582
+          cout << showSizeof<TrackID>() << endl;
+          cout << showSizeof<BareEntryID>() << endl;
+          CHECK (sizeof(TrackID) == sizeof(BareEntryID));
+          CHECK (sizeof(TrackID) == sizeof(lumiera_uid) + sizeof(void*));
         }
       
       
       void
       checkComparisions ()
         {
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #582
           TrackID tID1("a1");
           TrackID tID2("a1");
           TrackID tID3("a2");
@@ -178,15 +178,23 @@ namespace test {
           CHECK (tID4 >= tID3);
           CHECK (tID4 > tID3);
           
-          CHECK (TrackID() < TrackID());
-#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #582
+          TrackID trackID1, trackID2;
+          CHECK (trackID1 < trackID2); // auto generated IDs are prefix + running counter
         }
       
       
+      
+      /** @test handling of EntryIDs through their common base class,
+       *        which means erasing the specific type information.
+       *        While this type information can't be recovered 
+       *        after erasure, we can try to upcast back 
+       *        to a known type; this upcast is safe,
+       *        because the embedded hash-ID
+       *        is based on the type info. 
+       */
       void
       checkErasure ()
         {
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #582
           TrackID tID("suspicious");
           ClipID  cID("suspicious");
           
@@ -201,35 +209,52 @@ namespace test {
           CHECK (bIDt.getSym()  == bIDc.getSym());
           CHECK ("suspicious"  == bIDc.getSym());
           
-          TrackID tIDnew = bIDt.recast<TrackID>();
-          ClipID  cIDnew = bIDc.recast<ClipID>();
+          using mobject::session::Track;
+          using mobject::session::Clip;
+          TrackID tIDnew = bIDt.recast<Track>();
+          ClipID  cIDnew = bIDc.recast<Clip>();
           CHECK (tIDnew == tID);
           CHECK (cIDnew == cID);
           
-          VERIFY_ERROR (WRONG_TYPE, bIDt.recast<ClipID>());
-          VERIFY_ERROR (WRONG_TYPE, bIDc.recast<TrackID>());
+          VERIFY_ERROR (WRONG_TYPE, bIDt.recast<Clip>());
+          VERIFY_ERROR (WRONG_TYPE, bIDc.recast<Track>());
           VERIFY_ERROR (WRONG_TYPE, bIDc.recast<Dummy>());
+          VERIFY_ERROR (WRONG_TYPE, bIDt.recast<Dummy>());
           
-          CHECK (tID == bIDt.recast<mobject::session::Track>());   // alternatively can specify type directly
-          CHECK (tID == TrackID::recast (bIDt));                   // equivalent static API on typed subclass
+          CHECK (tID == TrackID::recast (bIDt));         // equivalent static API on typed subclass
+          VERIFY_ERROR (WRONG_TYPE, TrackID::recast(bIDc));
+          VERIFY_ERROR (WRONG_TYPE,  ClipID::recast(bIDt));
+          VERIFY_ERROR (WRONG_TYPE, DummyID::recast(bIDc));
+          VERIFY_ERROR (WRONG_TYPE, DummyID::recast(bIDt));
           
-          lumiera_uid plainLUID;
-          lumiera_uid_copy (&plainLUID, tID.getHash().get());
+          // mixed equality comparisons (based on the hash)
+          BareEntryID bIDt_copy (bIDt);
+          CHECK (bIDt == bIDt_copy);
+          CHECK (!isSameObject (bIDt, bIDt_copy));
           
-          CHECK (cID == ClipID::recast ("suspicious", plainLUID)); // upcast from type erased data (note: changed type)
-#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #582
+          CHECK (tID != bIDc);
+          CHECK (cID != bIDt_copy);
+          CHECK (tID == bIDt_copy);
+          
+          CHECK (bIDt == TrackID ("suspicious"));
+          CHECK (bIDt != ClipID ("suspicious"));
+          CHECK (bIDc == ClipID ("suspicious"));
+          CHECK (TrackID ("suspicious") != ClipID ("suspicious"));
         }
       
       
+      
+                                   //---key--+-value-+-hash-function--- 
+      typedef std::tr1::unordered_map<DummyID, string, DummyID::UseEmbeddedHash> Hashtable;
+      
+      /** @test build a hashtable, using EntryID as key,
+       *        thereby using the embedded hash-ID */
       void
       buildHashtable ()
-        {                              //---key--+-value-+-hash-function--- 
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #582
-          typedef std::tr1::unordered_map<DummyID, string, DummyID::UseEmbeddedHash()> Hashtable;
-              
+        {
           Hashtable tab;
           
-          for (uint i=0; i<1000; ++i)
+          for (uint i=0; i<1000; ++i)     /////////////////////////////////////TICKET #587  we get strange collisions for 10000 entries
             {
               DummyID dummy;
               tab[dummy] = string(dummy);
@@ -237,9 +262,16 @@ namespace test {
           
           CHECK (1000 == tab.size());
           
-          for_each (tab.getKeys(), tab[_1] == string(_1));      /////TODO use boost::lambda to make this happen....
-#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #582
+          CHECK (and_all (tab, verifyEntry));
         }
+      
+      
+      static bool
+      verifyEntry (Hashtable::value_type entry)
+        {
+          return entry.second == string(entry.first);
+        }
+      
     };
   
   

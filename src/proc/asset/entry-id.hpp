@@ -27,12 +27,12 @@
  ** overhead of creating individual assets for each entry. The datafields in the symbolic part
  ** of the ID are similar to the asset identity tuple; the idea is to promote individual entries
  ** to full fledged assets on demand. Alongside with the symbolic identity, which can be reduced
- ** to just a Symbol and a type identifier, we store the derived hash value as LUID. 
+ ** to just a Symbol and (compile time) type information, we store the derived hash value as LUID.
  ** 
  ** @note as of 3/2010 this is an experimental setup and exists somewhat in parallel
  **       to the assets. We're still in the process of finding out what's really required
  **       to keep track of all the various kinds of objects.
- **
+ ** 
  ** @see asset::Asset::Ident
  ** @see entry-id-test.cpp
  ** 
@@ -54,18 +54,18 @@
 
 
 namespace asset {
-
+  
   using std::string;
   using std::ostream;
   
   using lumiera::error::LUMIERA_ERROR_WRONG_TYPE;
-
+  
   
   namespace idi {
     
     using lib::hash::LuidH;
-    
     typedef size_t HashVal;
+    
     
     /** build up a hash value, packaged as LUID.
      *  @param sym symbolic ID-string to be hashed
@@ -110,20 +110,26 @@ namespace asset {
       string symbol_;
       LuidH hash_;
       
-    public:
-      explicit
-      BareEntryID (string const& symbolID, idi::HashVal seed =0)        /////////////TODO couldn't this be protected?
+    protected:
+      /** 
+       * Not to be created stand-alone.
+       * derived classes feed down the specific type information
+       * encoded into a hash seed. Thus even the same symbolicID
+       * generates differing hash-IDs for different type parameters
+       */
+      BareEntryID (string const& symbolID, idi::HashVal seed =0)
         : symbol_(util::sanitise(symbolID))
         , hash_(idi::buildHash (symbol_, seed))
         { }
       
-      /* default copy- and assignable */
+    public:
+      /* default copyable and assignable */
       
       
       bool
       isValid()  const
         {
-          return bool(hash_); 
+          return bool(hash_);
         }
       
       string const&
@@ -135,8 +141,9 @@ namespace asset {
       LuidH const&
       getHash()  const
         {
-          return hash_;   
+          return hash_;
         }
+      
       
       /** using BareEntryID derived objects as keys within tr1::unordered_map */
       struct UseEmbeddedHash
@@ -196,16 +203,13 @@ namespace asset {
       getIdent()  const
         {
           Category cat (STRUCT, idi::StructTraits<TY>::catFolder);
-          return Asset::Ident (this->getSym(), cat);           
+          return Asset::Ident (this->getSym(), cat);
         }
       
       static idi::HashVal
       getTypeHash()
         {
-          Category cat (STRUCT, idi::StructTraits<TY>::catFolder);
-          asset::Category const& catz(cat);
-          size_t haha = hash_value (catz);
-          return haha;
+          return hash_value (Category (STRUCT, idi::StructTraits<TY>::catFolder));
         }
       
       
@@ -217,7 +221,7 @@ namespace asset {
       static bool
       canRecast (BareEntryID const& bID)
         {
-          return bID.getHash() == buildHash (bID.getSym(), getTypeHash());
+          return bID.getHash() == idi::buildHash (bID.getSym(), getTypeHash());
         }
       
       static EntryID
@@ -235,9 +239,9 @@ namespace asset {
         {
           return "ID<"+idi::StructTraits<TY>::idSymbol+">-"+EntryID::getSym();
         }
-  
+      
       friend ostream& operator<<   (ostream& os, EntryID const& id) { return os << string(id); }
-      friend bool operator<  (EntryID const& i1, EntryID const& i2) { return i1.getSym()  <  i2.getSym();  }
+      friend bool operator<  (EntryID const& i1, EntryID const& i2) { return i1.getSym()  <  i2.getSym(); }
     };
     
   
@@ -246,9 +250,9 @@ namespace asset {
   {
     return i1.getHash() == i2.getHash();
   }
-
   
-    
+  
+  
   
   /** try to upcast this BareEntryID to a fully typed EntryID.
    *  Effectively, this is the attempt to reverse a type erasure;
@@ -266,8 +270,8 @@ namespace asset {
   {
     return EntryID<TAR>::recast(*this);
   }
-
-    
-
+  
+  
+  
 } // namespace asset
 #endif
