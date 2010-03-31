@@ -337,7 +337,7 @@ namespace lib {
     
     
     /** @return a Lumiera Forward Iterator to yield
-     *          all the keys of the given Map or Hashtable
+     *          all the values of the given Map or Hashtable
      */
     template<class MAP>
     typename _MapT<MAP>::ValIter
@@ -366,6 +366,23 @@ namespace lib {
     }
     
     
+    /** @return a Lumiera Forward Iterator to yield all values
+     *          associated to the given key within this Map or Multimap
+     *  @note obviously in case of a Map we'll get at most one result.
+     */
+    template<class MAP>
+    typename _MapT<MAP>::ValIter
+    eachValForKey (MAP& map, typename _MapT<MAP>::Key key)
+    {
+      typedef typename MAP::iterator Pos;
+      typedef RangeIter<Pos> Range;
+      
+      std::pair<Pos,Pos> valuesForKey = map.equal_range(key);
+      Range contents (valuesForKey.first, valuesForKey.second);
+      return wrapIter (takePairSecond(contents));
+    }
+    
+    
     /** @param container a STL-like container, providing
      *         - a typedef \c iterator
      *         - functions \c begin() and \c end()
@@ -387,6 +404,7 @@ namespace lib {
   using iter_impl::wrapIter;
   using iter_impl::eachMapKey;
   using iter_impl::eachDistinctKey;
+  using iter_impl::eachValForKey;
   using iter_impl::eachMapVal;
   using iter_impl::eachEntry;
   

@@ -172,8 +172,8 @@ namespace test{
           verify_MapWrappers<TreeMap>();
           verify_MapWrappers<HashMap>();
           
-          verify_MultimapKeyIter<TreeMultimap>();
-          verify_MultimapKeyIter<HashMultimap>();
+          verify_MultimapIters<TreeMultimap>();
+          verify_MultimapIters<HashMultimap>();
         }
       
       
@@ -225,12 +225,31 @@ namespace test{
           pullOut (tIter);
           
           ASSERT (!sIter && !tIter);
+          
+          
+          // The each-value-for-given-key-Iterator can be used for a map or multimap.
+          // In case of a map, it should yield exactly one result for existing values
+          // and zero results for non-existing mappings
+          StringIter justSomeKey = eachMapKey (testMap);
+          TimeIter correspondingVal = eachMapVal (testMap);
+          ++justSomeKey;
+          ++correspondingVal;
+          ASSERT (justSomeKey);
+          
+          TimeIter value4key = eachValForKey (testMap, "nonexistent key");
+          ASSERT (!value4key);
+          
+          value4key = eachValForKey (testMap, *justSomeKey);
+          ASSERT (value4key);
+          ASSERT (*value4key == *correspondingVal);
+          ++value4key;
+          ASSERT (!value4key);
         }
       
       
       template<class MAP>
       void
-      verify_MultimapKeyIter()  ///< @see IterTools_test#verify_filterRepetitions
+      verify_MultimapIters()  ///< @see IterTools_test#verify_filterRepetitions
         {
           MAP testMap;
           for (uint i=0; i<NUM_ELMS; ++i)
@@ -247,6 +266,16 @@ namespace test{
           ASSERT (keys);
           pullOut (keys);
           ASSERT (!keys);
+          
+          cout << "values_4_key";
+          IntIter vals = eachValForKey (testMap, NUM_ELMS); // non-existent key
+          ASSERT (!vals);
+          
+          vals = eachValForKey (testMap, 0);
+          ASSERT (vals);
+          pullOut (vals); // should produce anything between 1 and 100 entries
+          ASSERT (!vals);
+          
         }
     };
   
