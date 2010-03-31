@@ -216,6 +216,7 @@ namespace test    {
           ID e133 = index.insert (testObj, e13);
           ID e1331 = index.insert (testObj, e133);
           
+          ASSERT (index.isValid());
           ASSERT (root == index.getScope(e1));
           ASSERT (e1   == index.getScope(e11).getID());
           ASSERT (e1   == index.getScope(e12).getID());
@@ -240,6 +241,7 @@ namespace test    {
           
           ASSERT (index.remove(e133));     // but can remove an scope, after emptying it
           ASSERT (!index.contains(e133));
+          ASSERT (index.isValid());
           
           // build a complete new subtree
           uint siz   = index.size();
@@ -265,6 +267,7 @@ namespace test    {
           ASSERT (!index.contains (e132131));
           ASSERT (!index.contains (e132144));
           ASSERT (siz == index.size());
+          ASSERT (index.isValid());
         }
       
       

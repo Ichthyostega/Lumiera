@@ -150,13 +150,13 @@ namespace session {
       
       
       size_t
-      size()  const
+      size()  const            ///<@note always at least 1 because of root
         {
           return placementTab_.size();
         }
             
       size_t
-      scope_cnt()  const
+      scope_cnt()  const       ///<@note root doesn't produce an scope entry
         {
           return scopeTab_.size();
         }
@@ -316,6 +316,7 @@ namespace session {
       PlacementMO* _scope_4check (ID id)  { return base_entry(id).scope.get();  }
       IDIter       _eachEntry_4check ()   { return eachMapKey (placementTab_);  }
       IDIter       _eachScope_4check ()   { return eachDistinctKey (scopeTab_); }
+      IDIter       _contents_4check(ID id){ return eachValForKey (scopeTab_,id);}
       
       
     private:
@@ -437,7 +438,7 @@ namespace session {
   PlacementIndex::size()  const
   {
     ASSERT (0 < pTab_->size());
-    return pTab_->size() - 1;
+    return pTab_->size() - 1;  // root not counted
   }
   
   
@@ -637,6 +638,18 @@ namespace session {
             scope = sco(scope->getID());
           
           VERIFY ( root==scope,          "(2.4) Scopes",   "Found a scope not attached below root.");
+          
+          for_each ( tab._contents_4check(id), &Validator::checkScopeEntry, this, id, _1 );
+        }
+      
+      void
+      checkScopeEntry (ID scope, ID entry)
+        {
+          VERIFY ( tab.contains(entry),  "(2.5) Scopes",   "Scope member not registered in main table");
+          VERIFY ( elm(entry),           "(2.6) Scopes",   "Scope member entry doesn't refer to a valid Placement");
+          VERIFY ( sco(entry),           "(2.7) Scopes",   "Scope member entry is lacking valid scope information");
+          VERIFY ( sco(entry)->getID() == scope,
+                                         "(2.8) Scopes",   "Scope member registered as belonging to a different scope in main table");
         }
       
       void
@@ -644,7 +657,7 @@ namespace session {
         {
           VERIFY ( 0 < tab.size(),       "(4.1) Storage",  "Implementation table is empty");
           VERIFY ( 0 < tab.element_cnt(),"(4.2) Storage",  "No Placement instances allocated");
-          VERIFY ( tab.size()==tab.scope_cnt(),
+          VERIFY ( tab.size()==tab.scope_cnt()+1,
                                          "(4.3) Storage",  "Number of elements and scope entries disagree");
           VERIFY ( tab.size()==tab.element_cnt(),
                                          "(4.4) Storage",  "Number of entries doesn't match number of allocated Placement instances");
@@ -659,6 +672,8 @@ namespace session {
             
             for_each ( tab._eachEntry_4check(), &Validator::checkEntry, this, _1 );
             for_each ( tab._eachScope_4check(), &Validator::checkScope, this, _1 );
+            
+            checkAllocation();
           }
       
     };//(End) Validator (PlacementIndex self-check implementation)
