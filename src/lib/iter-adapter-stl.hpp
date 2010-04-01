@@ -53,38 +53,123 @@ namespace lib {
 namespace iter_stl {
   
   
+  /** 
+   * helper baseclass to simplify
+   * defining customised wrapped STL iterators
+   */
+  template<typename IT>
+  class WrappedStlIter
+    {
+      IT i_;
+      
+    public:
+      typedef typename IT::value_type value_type;
+      typedef typename IT::reference reference;
+      typedef typename IT::pointer  pointer;
+      
+      
+      WrappedStlIter()            : i_()  { }
+      WrappedStlIter(IT const& i) : i_(i) { }
+      
+      IT const& get()        const  { return i_;  }
+      pointer   operator->() const  { return i_;  }
+      reference operator*()  const  { return *i_; }
+      
+      WrappedStlIter& operator++()  { ++i_; return *this; }
+      
+      friend bool operator== (WrappedStlIter const& i1, WrappedStlIter const& i2) { return i1.i_ == i2.i_; }
+      friend bool operator!= (WrappedStlIter const& i1, WrappedStlIter const& i2) { return i1.i_ != i2.i_; }
+    };
+  
+  
   namespace { // traits and helpers...
-        
+    
+    template<class MAP>
+    struct _MapTypeSelector
+      {
+        typedef typename MAP::value_type::first_type  Key;
+        typedef typename MAP::value_type::second_type Val;
+        typedef typename MAP::iterator                Itr;
+      };
+    
+    template<class MAP>
+    struct _MapTypeSelector<const MAP>
+      {
+        typedef typename MAP::value_type::first_type        Key;
+        typedef typename MAP::value_type::second_type const Val;
+        typedef typename MAP::const_iterator                Itr;
+      };
+    
+    
+    
     template<class MAP>
     struct _MapT
       {
-        typedef typename MAP::key_type Key;
-        typedef typename MAP::value_type::second_type Val;
-          typedef typename MAP::iterator    MIter;         ///////////////////////////TODO
-          typedef RangeIter<MIter>         SrcRange;
-          typedef TransformIter<SrcRange,Key> KeyIter;        ///////////////////////////TODO
-          typedef TransformIter<SrcRange,Val> ValIter;        ///////////////////////////TODO
+        typedef typename _MapTypeSelector<MAP>::Key KeyType;
+        typedef typename _MapTypeSelector<MAP>::Val ValType;
+        typedef typename _MapTypeSelector<MAP>::Itr EntryIter;
+        
+        typedef WrappedStlIter<EntryIter> WrapI;
+        
+        struct PickKeyIter : WrapI
+          {
+            typedef KeyType  value_type;
+            typedef KeyType& reference;
+            typedef KeyType* pointer;
+            
+            PickKeyIter ()               : WrapI()     {}
+            PickKeyIter (EntryIter iter) : WrapI(iter) {}
+            
+            pointer   operator->() const { return &(WrapI::get()->first); }
+            reference operator* () const { return  (WrapI::get()->first); }
+          };
+        
+        struct PickValIter : WrapI
+          {
+            typedef ValType  value_type;
+            typedef ValType& reference;
+            typedef ValType* pointer;
+            
+            PickValIter ()               : WrapI()     {}
+            PickValIter (EntryIter iter) : WrapI(iter) {}
+            
+            pointer   operator->() const { return &(WrapI::get()->second); }
+            reference operator* () const { return  (WrapI::get()->second); }
+          };
+          
+          typedef RangeIter<PickKeyIter> KeyIter;
+          typedef RangeIter<PickValIter> ValIter;
       };
   }
   
   
-  /**
+  
+  
+  /** @return Lumiera Forward Iterator to yield
+   *          each key of a map/multimap
    */
   template<class MAP>
   inline typename _MapT<MAP>::KeyIter
-  eachKey (MAP)
+  eachKey (MAP& map)
   {
-    UNIMPLEMENTED ("each key of a map as Lumiera Forward Iterator");
+    typedef typename _MapT<MAP>::KeyIter Range;
+    typedef typename _MapT<MAP>::PickKeyIter PickKey;
+    
+    return Range (PickKey (map.begin()), PickKey (map.end()));
   }
   
   
-  /**
+  /** @return Lumiera Forward Iterator to yield
+   *          each value within a map/multimap
    */
   template<class MAP>
   inline typename _MapT<MAP>::ValIter
-  eachVal (MAP)
+  eachVal (MAP& map)
   {
-    UNIMPLEMENTED ("each value of a map as Lumiera Forward Iterator");
+    typedef typename _MapT<MAP>::ValIter Range;
+    typedef typename _MapT<MAP>::PickValIter PickVal;
+    
+    return Range (PickVal (map.begin()), PickVal (map.end()));
   }
   
   
