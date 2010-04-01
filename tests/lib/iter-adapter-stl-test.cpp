@@ -93,6 +93,7 @@ namespace test{
         {
           if (0 < arg.size()) NUM_ELMS = lexical_cast<uint> (arg[0]);
           
+          checkDistinctValIter();
           iterateMapKeyVal (getTestMap_int<MapII> (NUM_ELMS));
         }
       
@@ -107,8 +108,34 @@ namespace test{
           TEST_ITER (iter::eachVal, (map));
           TEST_ITER (iter::eachDistinctKey, (map));
         }
-          
       
+      
+      void
+      checkDistinctValIter()
+        {
+          PRINT_FUNC (filter-distinct-values, VecI);
+          
+          VecI vec;
+          TEST_ITER(iter::eachDistinct, (vec));
+          
+          vec.push_back (1);
+          vec.push_back (1);
+          vec.push_back (1);
+          TEST_ITER(iter::eachDistinct, (vec));
+          
+          vec.push_back (2);
+          vec.push_back (3);
+          vec.push_back (3);
+          vec.push_back (1);
+          TEST_ITER(iter::eachDistinct, (vec));
+          
+          vec.push_back (1);
+          vec.push_back (1);
+          vec.push_back (1);
+          vec.push_back (1);
+          vec.push_back (1);
+          TEST_ITER(iter::eachDistinct, (vec));
+        }
     };
   
   LAUNCHER (IterAdapterSTL_test, "unit common");

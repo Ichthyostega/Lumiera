@@ -82,6 +82,44 @@ namespace iter_stl {
     };
   
   
+  template<typename IT>
+  class DistinctIter
+    : public lib::BoolCheckable<DistinctIter<IT> >
+    {
+    public:
+      typedef typename IT::value_type value_type;
+      typedef typename IT::reference reference;
+      typedef typename IT::pointer  pointer;
+      
+    private:
+      IT      i_;
+      pointer prev_;
+      
+      void memorise() { if (i_) prev_ = &(*i_); }
+      
+    public:
+      DistinctIter()            : i_(), prev_() { }
+      DistinctIter(IT const& i) : i_(i),prev_() { memorise(); }
+      
+      pointer   operator->() const  { return i_;  }
+      reference operator*()  const  { return *i_; }
+      bool      isValid()    const  { return i_;  }
+      
+      
+      DistinctIter&
+      operator++()
+        {
+          do ++i_;
+          while (i_ && prev_ && *prev_ == *i_ );
+          memorise();
+          return *this; 
+        }
+      
+      friend bool operator== (DistinctIter const& i1, DistinctIter const& i2) { return i1.i_ == i2.i_; }
+      friend bool operator!= (DistinctIter const& i1, DistinctIter const& i2) { return i1.i_ != i2.i_; }
+    };
+  
+  
   namespace { // traits and helpers...
     
     template<class MAP>
@@ -117,8 +155,8 @@ namespace iter_stl {
             typedef KeyType& reference;
             typedef KeyType* pointer;
             
-            PickKeyIter ()               : WrapI()     {}
-            PickKeyIter (EntryIter iter) : WrapI(iter) {}
+            PickKeyIter ()                      : WrapI()     {}
+            PickKeyIter (EntryIter const& iter) : WrapI(iter) {}
             
             pointer   operator->() const { return &(WrapI::get()->first); }
             reference operator* () const { return  (WrapI::get()->first); }
@@ -130,8 +168,8 @@ namespace iter_stl {
             typedef ValType& reference;
             typedef ValType* pointer;
             
-            PickValIter ()               : WrapI()     {}
-            PickValIter (EntryIter iter) : WrapI(iter) {}
+            PickValIter ()                      : WrapI()     {}
+            PickValIter (EntryIter const& iter) : WrapI(iter) {}
             
             pointer   operator->() const { return &(WrapI::get()->second); }
             reference operator* () const { return  (WrapI::get()->second); }
@@ -139,6 +177,24 @@ namespace iter_stl {
           
           typedef RangeIter<PickKeyIter> KeyIter;
           typedef RangeIter<PickValIter> ValIter;
+      };
+    
+    
+    
+    template<class SEQ>
+    struct _SeqT
+      {
+        typedef typename SEQ::iterator Iter;
+        typedef RangeIter<Iter> Range;
+        typedef DistinctIter<Range> DistinctVals;
+      };
+    
+    template<class SEQ>
+    struct _SeqT<const SEQ>
+      {
+        typedef typename SEQ::const_iterator Iter;
+        typedef RangeIter<Iter> Range;
+        typedef DistinctIter<Range> DistinctVals;
       };
   }
   
@@ -170,6 +226,20 @@ namespace iter_stl {
     typedef typename _MapT<MAP>::PickValIter PickVal;
     
     return Range (PickVal (map.begin()), PickVal (map.end()));
+  }
+  
+  
+  /** build a Lumiera Forward Iterator to suppress
+   *  any repetitions in the given sequence.
+   */         
+  template<class SEQ>
+  inline typename _SeqT<SEQ>::DistinctVals
+  eachDistinct (SEQ& seq)
+  {
+    typedef typename _SeqT<SEQ>::Range Range;
+    typedef typename _SeqT<SEQ>::DistinctVals DistinctValues; 
+    
+    return DistinctValues (Range (seq.begin(), seq.end()));
   }
   
   
