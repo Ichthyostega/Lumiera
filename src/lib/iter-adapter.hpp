@@ -1,5 +1,5 @@
 /*
-  ITER-ADAPTOR.hpp  -  helpers for building simple forward iterators 
+  ITER-ADAPTER.hpp  -  helpers for building simple forward iterators 
  
   Copyright (C)         Lumiera.org
     2009,               Hermann Vosseler <Ichthyostega@web.de>
@@ -71,8 +71,8 @@
  */
 
 
-#ifndef LIB_ITER_ADAPTOR_H
-#define LIB_ITER_ADAPTOR_H
+#ifndef LIB_ITER_ADAPTER_H
+#define LIB_ITER_ADAPTER_H
 
 
 #include "lib/error.hpp"

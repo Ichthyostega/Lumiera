@@ -245,7 +245,7 @@ namespace lib {
   
   /* === pre-defined Adapters for frequently used Containers === */
   
-  namespace iter_impl {
+  namespace iter_source {
     namespace {  // traits and helpers...
     
       template<class CON>
@@ -401,12 +401,12 @@ namespace lib {
     }
     
   }
-  using iter_impl::wrapIter;
-  using iter_impl::eachMapKey;
-  using iter_impl::eachDistinctKey;
-  using iter_impl::eachValForKey;
-  using iter_impl::eachMapVal;
-  using iter_impl::eachEntry;
+  using iter_source::wrapIter;
+  using iter_source::eachMapKey;
+  using iter_source::eachDistinctKey;
+  using iter_source::eachValForKey;
+  using iter_source::eachMapVal;
+  using iter_source::eachEntry;
   
   
 } // namespace lib

@@ -21,8 +21,8 @@
 */
 
 
-#ifndef LIB_TEST_TESTHELPER_H
-#define LIB_TEST_TESTHELPER_H
+#ifndef LIB_TEST_TEST_HELPER_H
+#define LIB_TEST_TEST_HELPER_H
 
 
 #include "lib/symbol.hpp"
