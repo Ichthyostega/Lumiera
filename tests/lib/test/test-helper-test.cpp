@@ -137,10 +137,10 @@ namespace test{
           // verify the exception is indeed raised
           VERIFY_ERROR (EXCEPTION, doThrow() );
           
-#if false ////////////////////////////////////////////////////////TODO: restore throwing ASSERT
+#if false ///////////////////////////////////////////////////////////////////////////////////////////////TICKET #537 : restore throwing ASSERT
           // and when actually no exception is raised, this is an ASSERTION failure
           VERIFY_ERROR (ASSERTION, VERIFY_ERROR (EXCEPTION, dontThrow() ));
-#endif    ////////////////////////////////////////////////////////
+#endif    ///////////////////////////////////////////////////////////////////////////////////////////////TICKET #537 : restore throwing ASSERT
         }
       
     };

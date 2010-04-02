@@ -40,7 +40,7 @@ test_lib_SOURCES =						\
 	$(testlib_srcdir)/mainsuite.cpp				\
 	$(testlib_srcdir)/allocationclustertest.cpp		\
 	$(testlib_srcdir)/appconfigtest.cpp			\
-	$(testlib_srcdir)/customsharedptrtest.cpp		\
+	$(testlib_srcdir)/custom-shared-ptr-test.cpp	\
 	$(testlib_srcdir)/bool-checkable-test.cpp		\
 	$(testlib_srcdir)/exceptionerrortest.cpp		\
 	$(testlib_srcdir)/factory-special-test.cpp		\

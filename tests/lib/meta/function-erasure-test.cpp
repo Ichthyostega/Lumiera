@@ -145,7 +145,7 @@ namespace test {
           ASSERT (INSTANCEOF (function<Sig4>, &f5.getFun<Sig4>()));
           
           
-#if false ////////////////////////////////////////////////////////TODO: restore throwing ASSERT
+#if false ///////////////////////////////////////////////////////////////////////////////////////////////TICKET #537 : restore throwing ASSERT
           VERIFY_ERROR (ASSERTION, f1.getFun<Sig2>() );
           VERIFY_ERROR (ASSERTION, f1.getFun<Sig3>() );
           VERIFY_ERROR (ASSERTION, f1.getFun<Sig4>() );
@@ -165,7 +165,7 @@ namespace test {
           VERIFY_ERROR (ASSERTION, f5.getFun<Sig1>() );
           VERIFY_ERROR (ASSERTION, f5.getFun<Sig2>() );
           VERIFY_ERROR (ASSERTION, f5.getFun<Sig3>() );
-#endif    ////////////////////////////////////////////////////////
+#endif    ///////////////////////////////////////////////////////////////////////////////////////////////TICKET #537 : restore throwing ASSERT
         }
       
       

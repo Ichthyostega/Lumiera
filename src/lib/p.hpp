@@ -41,7 +41,7 @@
  ** as template parameter.
  **
  ** @see asset.hpp
- ** @see customsharedptrtest.cpp
+ ** @see custom-shared-ptr-test.cpp
  ** @see orderingofassetstest.cpp
  */
 
