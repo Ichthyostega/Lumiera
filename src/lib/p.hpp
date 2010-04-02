@@ -50,6 +50,7 @@
 #define LUMIERA_P_H
 
 
+#include "lib/error.hpp"
 #include <tr1/memory>
 
 
@@ -107,19 +108,19 @@ namespace lumiera {
   
       template<typename _O_>
       friend inline bool
-      operator<  (P const& p, P<_O_> const& q) { return (p && q) && (*p < *q); }   ////TICKET #307  : problem with equality test in associative containers, where equal(a,b) := !(a < b) && !(b < a)
+      operator<  (P const& p, P<_O_> const& q) { REQUIRE (p && q); return *p < *q; }   ///< @note deliberately not allowing comparison on NIL ////TICKET #307  : problem with equality test in associative containers, where equal(a,b) := !(a < b) && !(b < a)
   
       template<typename _O_>
       friend inline bool
-      operator>  (P const& p, P<_O_> const& q) { return (p && q) && (*q < *p); }
+      operator>  (P const& p, P<_O_> const& q) { REQUIRE (p && q); return *q < *p; }
 
       template<typename _O_>
       friend inline bool
-      operator<= (P const& p, P<_O_> const& q) { return (p && q)? (*p <= *q) : (!p && !q); }
+      operator<= (P const& p, P<_O_> const& q) { REQUIRE (p && q); return *p <= *q;}
 
       template<typename _O_>
       friend inline bool
-      operator>= (P const& p, P<_O_> const& q) { return (p && q)? (*p >= *q) : (!p && !q); }
+      operator>= (P const& p, P<_O_> const& q) { REQUIRE (p && q); return *p >= *q;}
       
     };
    

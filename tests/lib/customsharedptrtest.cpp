@@ -22,6 +22,7 @@
 
 
 #include "lib/test/run.hpp"
+#include "lib/test/test-helper.hpp"
 #include "lib/util.hpp"
 
 #include "lib/p.hpp"
@@ -37,6 +38,8 @@ namespace asset {
     using lumiera::P;
     using std::tr1::shared_ptr;
     using std::tr1::weak_ptr;
+            
+    using lumiera::error::LUMIERA_ERROR_ASSERTION;
     
     
     struct X 
@@ -288,17 +291,28 @@ namespace asset {
             
             ASSERT (!(pXX == pX5));    // compare subtype ptr to empty ptr: "unequal but not orderable"
             ASSERT ( (pXX != pX5));
-            ASSERT (!(pXX <  pX5));
-            ASSERT (!(pXX >  pX5));
-            ASSERT (!(pXX <= pX5));
-            ASSERT (!(pXX >= pX5));
             
             ASSERT ( (pX5 == pX6));    // compare two empty ptrs: "equal, equivalent but not orderable"
             ASSERT (!(pX5 != pX6));
-            ASSERT (!(pX5 <  pX6));
-            ASSERT (!(pX5 >  pX6));
-            ASSERT ( (pX5 <= pX6));
-            ASSERT ( (pX5 >= pX6));
+            
+            // order relations on NIL pointers disallowed
+            
+#if false ///////////////////////////////////////////////////////////////////////////////////////////////TICKET #537 : restore throwing ASSERT
+            VERIFY_ERROR (ASSERTION, pXX <  pX5 );
+            VERIFY_ERROR (ASSERTION, pXX >  pX5 );
+            VERIFY_ERROR (ASSERTION, pXX <= pX5 );
+            VERIFY_ERROR (ASSERTION, pXX >= pX5 );
+            
+            VERIFY_ERROR (ASSERTION, pX5 <  pXX );
+            VERIFY_ERROR (ASSERTION, pX5 >  pXX );
+            VERIFY_ERROR (ASSERTION, pX5 <= pXX );
+            VERIFY_ERROR (ASSERTION, pX5 >= pXX );
+            
+            VERIFY_ERROR (ASSERTION, pX5 <  pX6 );
+            VERIFY_ERROR (ASSERTION, pX5 >  pX6 );
+            VERIFY_ERROR (ASSERTION, pX5 <= pX6 );
+            VERIFY_ERROR (ASSERTION, pX5 >= pX6 );
+#endif    ///////////////////////////////////////////////////////////////////////////////////////////////TICKET #537 : restore throwing ASSERT
           }
       };
     
