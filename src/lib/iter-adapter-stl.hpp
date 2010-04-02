@@ -26,7 +26,7 @@
  ** repackaged as <b>lumiera forward iterators</b>. Mostly the purpose
  ** is ease of use, we don't create an abstraction barrier or try to
  ** hide implementation details. (see iter-source.hpp for such an
- ** abstraction facility). As a benefit, these adapters can be 
+ ** abstraction facility). As a benefit, these adapters can be
  ** considered low overhead.
  ** 
  ** @see iter-adapter-stl-test.cpp
@@ -50,7 +50,7 @@ namespace lib {
 namespace iter_stl {
   
   
-  /** 
+  /**
    * helper baseclass to simplify
    * defining customised wrapped STL iterators
    */
@@ -115,6 +115,9 @@ namespace iter_stl {
       friend bool operator== (DistinctIter const& i1, DistinctIter const& i2) { return i1.i_ == i2.i_; }
       friend bool operator!= (DistinctIter const& i1, DistinctIter const& i2) { return i1.i_ != i2.i_; }
     };
+  
+  
+  
   
   
   namespace { // traits and helpers...
@@ -195,7 +198,8 @@ namespace iter_stl {
         typedef RangeIter<Iter> Range;
         typedef DistinctIter<Range> DistinctVals;
       };
-  }
+    
+  }//(End) traits/helpers
   
   
   
@@ -230,13 +234,13 @@ namespace iter_stl {
   
   /** build a Lumiera Forward Iterator to suppress
    *  any repetitions in the given sequence.
-   */         
+   */
   template<class SEQ>
   inline typename _SeqT<SEQ>::DistinctVals
   eachDistinct (SEQ& seq)
   {
     typedef typename _SeqT<SEQ>::Range Range;
-    typedef typename _SeqT<SEQ>::DistinctVals DistinctValues; 
+    typedef typename _SeqT<SEQ>::DistinctVals DistinctValues;
     
     return DistinctValues (Range (seq.begin(), seq.end()));
   }
@@ -270,6 +274,127 @@ namespace iter_stl {
     
     return Range (PickVal (valRange.first), PickVal (valRange.second));
   }
+  
+  
+  
+  
+  /**
+   * materialised iterator contents.
+   * At construction, the given source iterator
+   * is immediately discharged into an internal buffer (vector).
+   * This captured value sequence can be retrieved once as
+   * Lumiera Forward Iterator
+   */
+  template<typename VAL>
+  class IterSnapshot
+    : public lib::BoolCheckable<IterSnapshot<VAL> >
+    {
+      typedef std::vector<VAL> Sequence;
+      
+      mutable
+      Sequence buffer_;
+      size_t   pos_;
+      
+      
+    public:
+      /** create empty snapshot */
+      IterSnapshot()
+        : buffer_()
+        , pos_(0)
+        { }
+      
+      /** take snapshot by discharging a copy
+       *  of the given Lumiera Forward iterator
+       *  @warning depending on the implementation
+       *           backing the source iterator, this
+       *           might or might not yield side-effects.
+       */
+      template<class IT>
+      IterSnapshot (IT const& src)
+        : buffer_()
+        , pos_(0)
+        {
+          for (IT copy(src); copy; ++copy)
+            buffer_.push_back(*copy);
+        }
+      
+      /** take snapshot from STL iterator */
+      template<class IT>
+      IterSnapshot (IT const& begin, IT const& end)
+        : buffer_()
+        , pos_(0)
+        {
+          for (IT p(begin); p!=end; ++p)
+            buffer_.push_back(*p);
+        }
+      
+      
+      
+      /* === lumiera forward iterator concept === */
+      
+      typedef VAL* pointer;
+      typedef VAL& reference;
+      typedef VAL  value_type;
+      
+      reference
+      operator*() const
+        {
+          _maybe_throw();
+          return buffer_[pos_];
+        }
+      
+      pointer
+      operator->() const
+        {
+          _maybe_throw();
+          return &buffer_[pos_];
+        }
+      
+      IterSnapshot&
+      operator++()
+        {
+          _maybe_throw();
+          ++pos_;
+          return *this;
+        }
+      
+      bool
+      isValid ()  const
+        {
+          return pos_ < buffer_.size();
+        }
+      
+      bool
+      empty ()  const
+        {
+          return !isValid();
+        }
+      
+      
+      /** equality is based both on the actual contents of the snapshots
+       *  and the current iterator position */
+      friend bool
+      operator== (IterSnapshot const& snap1, IterSnapshot const& snap2)
+      {
+        return snap1.buffer_ == snap2.buffer_
+               && snap1.pos_ == snap2.pos_ ;
+      }
+      
+      friend bool
+      operator!= (IterSnapshot const& snap1, IterSnapshot const& snap2)
+      {
+        return ! (snap1 == snap2);
+      }
+      
+      
+    private:
+      void
+      _maybe_throw()  const
+        {
+          if (!isValid())
+            _throwIterExhausted();
+        }
+    };
   
   
 }} // namespace lib::iter_stl
