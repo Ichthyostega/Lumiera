@@ -54,6 +54,7 @@
 #include "proc/mobject/session/session-impl.hpp"
 #include "proc/mobject/session/scope.hpp"
 #include "lib/typed-allocation-manager.hpp"
+#include "lib/iter-adapter-stl.hpp"
 #include "lib/util-foreach.hpp"
 #include "lib/iter-source.hpp"
 #include "include/logging.h"
@@ -77,6 +78,8 @@ namespace session {
   using std::tr1::unordered_map;
   using std::tr1::unordered_multimap;
   using lib::TypedAllocationManager;
+  using lib::iter_stl::IterSnapshot;
+  using lib::iter_stl::eachVal;
   using std::tr1::placeholders::_1;
   using std::tr1::function;
   using std::tr1::bind;
@@ -300,7 +303,7 @@ namespace session {
       removeAll (ID scopeID)
         {
           remove_all_from_scope (scopeID); // recursive
-          remove_base_entry (scopeID);    //  discard storage
+          removeEntry (scopeID);          //  discard top-level
           
           ENSURE (!util::contains(scopeTab_, scopeID));
           ENSURE (!contains (scopeID));
@@ -364,14 +367,24 @@ namespace session {
       remove_all_from_scope (ID scopeID)
         {
           typedef ScopeTable::const_iterator Pos;
-          pair<Pos,Pos> searchRange = scopeTab_.equal_range(scopeID);
+          pair<Pos,Pos> scopeEntries = scopeTab_.equal_range(scopeID);
+          Pos first = scopeEntries.first;
+          Pos end   = scopeEntries.second;
           
-          Pos pos = searchRange.first;
-          Pos end = searchRange.second;
-          for ( ; pos!=end; ++pos)
-            removeAll (pos->second); // depth-first recursion
+          // take a snapshot of all children to be processed recursively
+          typedef IterSnapshot<PID> ChildIDs;
+          ChildIDs child (eachVal(first,end));
           
-          scopeTab_.erase (pos,end); // assumed to be NOP for pos==end
+          scopeTab_.erase (first,end); // assumed to be NOP for first==end
+          
+          for ( ; child; ++child )
+            {
+              remove_all_from_scope (*child); // recursive
+              remove_base_entry (*child);    //  discard storage
+              
+              ENSURE (!util::contains(scopeTab_, *child));
+              ENSURE (!contains (*child));
+            }
         }
       
       
