@@ -49,36 +49,10 @@
 namespace lib {
 namespace iter_stl {
   
-  
   /**
-   * helper baseclass to simplify
-   * defining customised wrapped STL iterators
+   * Helper to filter repeated values
+   * from a wrapped iterator (both STL or Lumiera)
    */
-  template<typename IT>
-  class WrappedStlIter
-    {
-      IT i_;
-      
-    public:
-      typedef typename IT::value_type value_type;
-      typedef typename IT::reference reference;
-      typedef typename IT::pointer  pointer;
-      
-      
-      WrappedStlIter()            : i_()  { }
-      WrappedStlIter(IT const& i) : i_(i) { }
-      
-      IT const& get()        const  { return i_;  }
-      pointer   operator->() const  { return i_;  }
-      reference operator*()  const  { return *i_; }
-      
-      WrappedStlIter& operator++()  { ++i_; return *this; }
-      
-      friend bool operator== (WrappedStlIter const& i1, WrappedStlIter const& i2) { return i1.i_ == i2.i_; }
-      friend bool operator!= (WrappedStlIter const& i1, WrappedStlIter const& i2) { return i1.i_ != i2.i_; }
-    };
-  
-  
   template<typename IT>
   class DistinctIter
     : public lib::BoolCheckable<DistinctIter<IT> >
@@ -118,6 +92,95 @@ namespace iter_stl {
   
   
   
+  /**
+   * helper baseclass to simplify
+   * defining customised wrapped STL iterators
+   */
+  template<typename DEF>
+  struct WrappedStlIter : DEF
+    {
+      typedef typename DEF::Iter Iter;
+      typedef typename DEF::reference reference;
+      typedef typename DEF::pointer  pointer;
+      
+      
+      WrappedStlIter()              : i_()  { }
+      WrappedStlIter(Iter const& i) : i_(i) { }
+      
+      pointer   operator->() const  { return DEF::get(i_);  }
+      reference operator*()  const  { return *(DEF::get(i_)); }
+      
+      WrappedStlIter& operator++()  { ++i_; return *this; }
+      
+      friend bool operator== (WrappedStlIter const& i1, WrappedStlIter const& i2) { return i1.i_ == i2.i_; }
+      friend bool operator!= (WrappedStlIter const& i1, WrappedStlIter const& i2) { return i1.i_ != i2.i_; }
+      
+    private:
+      mutable Iter i_;
+    };
+  
+  
+  /* -- customisations for building concrete wrappers -- */
+  
+  /**
+   * Wrapped-Iter-Policy: forwarding directly
+   * with typing retained unaltered.
+   */
+  template<typename IT>
+  struct Wrapped_Identity
+    {
+      typedef IT Iter;
+      typedef typename IT::value_type value_type;
+      typedef typename IT::reference reference;
+      typedef typename IT::pointer  pointer;
+      
+      static Iter get (Iter& it) { return & (*it); }
+    };
+  
+  /**
+   * Wrapped-Iter-Policy: picking the key part
+   * of a pair iterator (map or multimap).
+   */
+  template<typename IT>
+  struct Wrapped_PickKey
+    {
+      typedef IT Iter;
+      typedef typename IT::value_type::first_type value_type;
+      typedef value_type & reference;
+      typedef value_type * pointer;
+      
+      static pointer get (Iter& it) { return & (it->first); }
+    };
+  
+  /**
+   * Wrapped-Iter-Policy: picking the key part
+   * of a pair iterator (map or multimap).
+   */
+  template<typename IT>
+  struct Wrapped_PickVal
+    {
+      typedef IT Iter;
+      typedef typename IT::value_type::second_type value_type;
+      typedef value_type & reference;
+      typedef value_type * pointer;
+      
+      static pointer get (Iter& it) { return & (it->second); }
+    };
+  
+  template<typename IT>
+  struct Wrapped_PickConstVal
+    {
+      typedef IT Iter;
+      typedef typename IT::value_type::second_type value_type;
+      typedef value_type const& reference;
+      typedef value_type const* pointer;
+      
+      static pointer get (Iter& it) { return & (it->second); }
+    };
+  
+  
+  
+  
   
   
   namespace { // traits and helpers...
@@ -138,6 +201,22 @@ namespace iter_stl {
         typedef typename MAP::const_iterator                Itr;
       };
     
+    /** helper to access the parts of the pair values correctly...*/
+    template<class IT, typename SEL>
+    struct _MapSubSelector
+      {
+        typedef WrappedStlIter< Wrapped_PickKey<IT> > PickKey;
+        typedef WrappedStlIter< Wrapped_PickVal<IT> > PickVal;
+      };
+    
+    /** especially for const iterators we need to use \c const& and \c const* */
+    template<class IT, typename SEL>
+    struct _MapSubSelector<IT, SEL const&>
+      {
+        typedef WrappedStlIter< Wrapped_PickKey<IT> >      PickKey; // Key is always const for maps
+        typedef WrappedStlIter< Wrapped_PickConstVal<IT> > PickVal;
+      };
+    
     
     
     template<class MAP>
@@ -147,38 +226,33 @@ namespace iter_stl {
         typedef typename _MapTypeSelector<MAP>::Val ValType;
         typedef typename _MapTypeSelector<MAP>::Itr EntryIter;
         
-        typedef WrappedStlIter<EntryIter> WrapI;
+        typedef typename EntryIter::reference DetectConst;
+        typedef typename _MapSubSelector<EntryIter,DetectConst>::PickKey PickKeyIter;
+        typedef typename _MapSubSelector<EntryIter,DetectConst>::PickVal PickValIter;
         
-        struct PickKeyIter : WrapI
-          {
-            typedef KeyType  value_type;
-            typedef KeyType& reference;
-            typedef KeyType* pointer;
-            
-            PickKeyIter ()                      : WrapI()     {}
-            PickKeyIter (EntryIter const& iter) : WrapI(iter) {}
-            
-            pointer   operator->() const { return &(WrapI::get()->first); }
-            reference operator* () const { return  (WrapI::get()->first); }
-          };
+        typedef RangeIter<PickKeyIter> KeyIter;
+        typedef RangeIter<PickValIter> ValIter;
         
-        struct PickValIter : WrapI
-          {
-            typedef ValType  value_type;
-            typedef ValType& reference;
-            typedef ValType* pointer;
-            
-            PickValIter ()                      : WrapI()     {}
-            PickValIter (EntryIter const& iter) : WrapI(iter) {}
-            
-            pointer   operator->() const { return &(WrapI::get()->second); }
-            reference operator* () const { return  (WrapI::get()->second); }
-          };
+        typedef DistinctIter<KeyIter> DistinctKeys;
+      };
+    
+    
+    template<class IT>
+    struct _MapIterT
+      {
+        typedef IT EntryIter;
+        
+        typedef typename EntryIter::value_type::first_type KeyType;
+        typedef typename EntryIter::value_type::second_type ValType;
+        
+        typedef typename EntryIter::reference DetectConst;
+        typedef typename _MapSubSelector<EntryIter,DetectConst>::PickKey PickKeyIter;
+        typedef typename _MapSubSelector<EntryIter,DetectConst>::PickVal PickValIter;
           
-          typedef RangeIter<PickKeyIter> KeyIter;
-          typedef RangeIter<PickValIter> ValIter;
-          
-          typedef DistinctIter<KeyIter> DistinctKeys;
+        typedef RangeIter<PickKeyIter> KeyIter;
+        typedef RangeIter<PickValIter> ValIter;
+        
+        typedef DistinctIter<KeyIter> DistinctKeys;
       };
     
     
@@ -218,6 +292,20 @@ namespace iter_stl {
   }
   
   
+  /** @return Lumiera Forward Iterator extracting the keys
+   *          from a given range of (key,value) pairs
+   */
+  template<class IT>
+  inline typename _MapIterT<IT>::KeyIter
+  eachKey (IT const& begin, IT const& end)
+  {
+    typedef typename _MapIterT<IT>::KeyIter Range;
+    typedef typename _MapIterT<IT>::PickKeyIter PickKey;
+    
+    return Range (PickKey (begin), PickKey (end));
+  }
+  
+  
   /** @return Lumiera Forward Iterator to yield
    *          each value within a map/multimap
    */
@@ -229,6 +317,20 @@ namespace iter_stl {
     typedef typename _MapT<MAP>::PickValIter PickVal;
     
     return Range (PickVal (map.begin()), PickVal (map.end()));
+  }
+  
+  
+  /** @return Lumiera Forward Iterator extracting the values
+   *          from a given range of (key,value) pairs
+   */
+  template<class IT>
+  inline typename _MapIterT<IT>::ValIter
+  eachVal (IT const& begin, IT const& end)
+  {
+    typedef typename _MapIterT<IT>::ValIter Range;
+    typedef typename _MapIterT<IT>::PickValIter PickVal;
+    
+    return Range (PickVal (begin), PickVal (end));
   }
   
   

@@ -113,7 +113,9 @@ namespace test{
           PRINT_FUNC (iterateMapKeyVal, MAP);
           
           TEST_ITER (iter::eachKey, (map));
+          TEST_ITER (iter::eachKey, (map.begin(), map.end()));
           TEST_ITER (iter::eachVal, (map));
+          TEST_ITER (iter::eachVal, (map.begin(), map.end()));
           TEST_ITER (iter::eachDistinctKey, (map));
         }
       
