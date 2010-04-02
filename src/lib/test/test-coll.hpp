@@ -62,8 +62,8 @@ namespace test{
   typedef std::map<int,int> MapII;
   typedef std::multimap<int,int> MMapII;
   
-  typedef std::tr1::unordered_map<int,int> HMap;
-  typedef std::tr1::unordered_multimap<int,int> HMMap;
+  typedef std::tr1::unordered_map<int,int> HMapII;
+  typedef std::tr1::unordered_multimap<int,int> HMMapII;
   
   
   template<class MAP>
@@ -83,7 +83,7 @@ namespace test{
   {
     MUMAP map;
     for (uint i=0; i<NUM_ELMS; ++i)
-      for (uint j=NUM_ELMS; j; --j)
+      for (uint j=NUM_ELMS-i; j; --j)
         map.insert (std::make_pair (i, j));
     
     return map;

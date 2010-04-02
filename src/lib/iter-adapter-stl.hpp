@@ -43,9 +43,6 @@
 
 #include "lib/iter-adapter.hpp"
 
-/////////////////////////TODO remove
-#include "lib/itertools.hpp"
-/////////////////////////TODO remove
 
 
 
@@ -177,6 +174,8 @@ namespace iter_stl {
           
           typedef RangeIter<PickKeyIter> KeyIter;
           typedef RangeIter<PickValIter> ValIter;
+          
+          typedef DistinctIter<KeyIter> DistinctKeys;
       };
     
     
@@ -243,13 +242,33 @@ namespace iter_stl {
   }
   
   
-  /**
+  /** @return Lumiera Forward Iterator to yield
+   *          the distinct keys from a multimap
+   *  @warning full scan of all keys, dropping repetitions
    */
   template<class MAP>
-  inline typename _MapT<MAP>::KeyIter
-  eachDistinctKey (MAP)
+  inline typename _MapT<MAP>::DistinctKeys
+  eachDistinctKey (MAP& map)
   {
-    UNIMPLEMENTED ("each distinct key a multimap as Lumiera Forward Iterator");
+    return typename _MapT<MAP>::DistinctKeys (eachKey (map));
+  }
+  
+  
+  /** @return Lumiera Forward Iterator to yield
+   *          the distinct keys from a multimap
+   *  @warning full scan of all keys, dropping repetitions
+   */
+  template<class MMAP, typename KEY>
+  inline typename _MapT<MMAP>::ValIter
+  eachValForKey (MMAP& multimap, KEY key)
+  {
+    typedef typename _MapT<MMAP>::EntryIter Pos;
+    typedef typename _MapT<MMAP>::ValIter Range;
+    typedef typename _MapT<MMAP>::PickValIter PickVal;
+    
+    std::pair<Pos,Pos> valRange = multimap.equal_range (key);
+    
+    return Range (PickVal (valRange.first), PickVal (valRange.second));
   }
   
   

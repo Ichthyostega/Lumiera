@@ -94,19 +94,40 @@ namespace test{
           if (0 < arg.size()) NUM_ELMS = lexical_cast<uint> (arg[0]);
           
           checkDistinctValIter();
+          
           iterateMapKeyVal (getTestMap_int<MapII> (NUM_ELMS));
+          iterateMapKeyVal (getTestMap_int<HMapII> (NUM_ELMS));
+          
+          iterateMapKeyVal (getTestMultiMap_int<MMapII> (NUM_ELMS));
+          iterateMapKeyVal (getTestMultiMap_int<HMMapII> (NUM_ELMS));
+          
+          iterateValues4Key (getTestMultiMap_int<MMapII> (NUM_ELMS));
+          iterateValues4Key (getTestMultiMap_int<HMMapII> (NUM_ELMS));
         }
       
       
       template<class MAP>
       void
-      iterateMapKeyVal(MAP const& map)
+      iterateMapKeyVal (MAP const& map)
         { 
           PRINT_FUNC (iterateMapKeyVal, MAP);
           
           TEST_ITER (iter::eachKey, (map));
           TEST_ITER (iter::eachVal, (map));
           TEST_ITER (iter::eachDistinctKey, (map));
+        }
+      
+      
+      template<class MMAP>
+      void
+      iterateValues4Key (MMAP const& mumap)
+        {
+          PRINT_FUNC (iterateValues4Key, MMAP);
+          
+          TEST_ITER (iter::eachValForKey, (mumap, 0));
+          
+          // non-existing key should yield empty iterator
+          CHECK (! iter::eachValForKey (mumap, NUM_ELMS));  
         }
       
       
