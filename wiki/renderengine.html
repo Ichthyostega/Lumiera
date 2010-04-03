@@ -1205,7 +1205,7 @@ More often than not, these emerge from immediate solutions, being percieved as e
 &amp;rarr; [[accessing and integrating configuration queries|ConfigQueryIntegration]]
 </pre>
 </div>
-<div title="ConfigQueryIntegration" modifier="Ichthyostega" modified="201003210010" created="200804070247" tags="overview draft impl img" changecount="21">
+<div title="ConfigQueryIntegration" modifier="Ichthyostega" modified="201004030043" created="200804070247" tags="overview draft impl img" changecount="23">
 <pre>* planning to embed a YAP Prolog engine
 * currently just integrated by a table driven mock
 * the baseline is a bit more clear by now (4/08)
@@ -1233,10 +1233,10 @@ At various places, instead of requiring a fixed set of capabilities, it is possi
 &lt;br/&gt;
 &lt;br/&gt;
 
-Access point is the interface {{{ConfigRules}}}, which allowes to resolve a ConfigQuery resulting in an object with properties condigured such as to fulfill the query. This whole subsystem employes quite some generic programming, because actually we don't deal with &quot;objects&quot;, but rather with similar instantiations of the same functionality for a collection of different object types. For the purpose of resolving these queries, the actual kind of object is not so much of importance, but on the caller sinde, of course we want to deal with the result of the queries in a typesafe manner.
+Access point is the interface {{{ConfigRules}}}, which allowes to resolve a ConfigQuery resulting in an object with properties configured such as to fulfill the query. This whole subsystem employes quite some generic programming, because actually we don't deal with &quot;objects&quot;, but rather with similar instantiations of the same functionality for a collection of different object types. For the purpose of resolving these queries, the actual kind of object is not so much of importance, but on the caller sinde, of course we want to deal with the result of the queries in a typesafe manner.
 Examples for //participating object kinds// are [[pipes|Pipe]], [[processing patterns|ProcPatt]], effect instances, [[tags|Tag]], [[labels|Label]], [[automation data sets|AutomationData]],...
 @@clear(right):display(block):@@
-For this to work, we need each of the //participating object types// to implement a generic interface {{{TypeHandler}}}, which will provide actual C/C++ implementations for the predicates usable on objects of this type within the Prolog rules. The implementation has to make sure that alongside with each config query, there are additional //type constraints// to be regarded. For example, if the client code runs a {{{Query&lt;Pipe&gt;}}}, an additional //type guard// (implemented by a predicate {{{type(pipe)}}} has to be inserted, so only rules and facts in accordance with this type will be used for resolution.
+For this to work, we need each of the //participating object types// to provide the implementation of a generic interface {{{TypeHandler}}}, which allows to access actual C/C++ implementations for the predicates usable on objects of this type within the Prolog rules. The implementation has to make sure that, alongside with each config query, there are additional //type constraints// to be regarded. For example, if the client code runs a {{{Query&lt;Pipe&gt;}}}, an additional //type guard// (implemented by a predicate {{{type(pipe)}}} has to be inserted, so only rules and facts in accordance with this type will be used for resolution.
 
 
 !when querying for a [[&quot;default&quot;|DefaultsManagement]] object
@@ -2526,22 +2526,22 @@ some points to note:
 &amp;rarr; more fine grained [[implementation details|RenderImplDetails]]
 </pre>
 </div>
-<div title="ObjectCreation" modifier="Ichthyostega" modified="200806030153" created="200709030139" tags="impl design" changecount="18">
+<div title="ObjectCreation" modifier="Ichthyostega" modified="201004031621" created="200709030139" tags="impl design" changecount="20">
 <pre>We have to consider carefully how to handle the Creation of new class instances. Because, when done naively, it can defeat all efforts of separating subsystems, or &amp;mdash; the other extreme &amp;mdash; lead to a //switch-on-typeID//  programming style. We strive at a solution somewhere in the middle by utilizing __Abstract Factories__ on Interface or key abstraction classes, but providing specialized overloads for the different use cases. So in each use case we have to decide if we want to create a instance of some general concept (Interface), or if we have a direct collaboration and thus need the Factory to provide a more specific sub-Interface or even a concrete type.
 
 !Object creation use cases
 !![[Assets|Asset]]
 |!Action|&gt;|!creates |
 |loading a media file|asset::Media, asset::Codec| |
-|viewing media|asset::Clip, session::Clip and Placement (on hold)| for the whole Media, if not already existent|
-|mark selection as clip|asset::Clip, session::Clip, Placement with unspec. LocatingPin| doesn't add to session|
+|viewing media|asset::Sequence, session::Clip and Placement (on hold)| for the whole Media, if not already existent|
+|mark selection as clip|session::Clip, Placement with unspec. LocatingPin| doesn't add to session|
 |loading Plugin|asset::Effect| usually at program startup|
-|create Session|asset::Track, asset::Pipe| |
+|create Session|asset::Sequence, asset::Timeline, asset::Pipe| |
 &amp;rarr; [[creating and registering Assets|AssetCreation]]
 &amp;rarr; [[loading media|LoadingMedia]]
 
 !![[MObjects|MObject]]
-|add media to sequence|asset::Clip, session::Clip, Placement with unspecified LocatingPin| creating whole-media clip on-the-fly |
+|add media to sequence|session::Clip, Placement with unspecified LocatingPin| creating whole-media clip on-the-fly |
 |add Clip to sequence|copy of Placement| creates intependent Placement of existing ~Clip-MO|
 |attach Effect|session::Effect, Placement with RelativeLocation| |
 |start using Automation|session::Auto, asset::Dataset, RelativeLocation Placement| |
