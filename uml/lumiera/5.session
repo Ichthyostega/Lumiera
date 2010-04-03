@@ -1,34 +1,39 @@
-window_sizes 1302 1004 270 1022 856 71
+window_sizes 1324 1020 270 1044 872 71
 diagrams
-  active  classdiagram_ref 136325 // Focus of Query
-    582 515 100 4 0 0
+  classdiagram_ref 136453 // Session backbone
+    631 352 100 4 0 0
+  active  objectdiagram_ref 138885 // ModelAssetRelations
+    730 488 100 4 0 0
+  classdiagram_ref 139141 // Meta-Asset Relations
+    469 451 100 4 0 0
 end
 show_stereotypes
 selected 
-  package_ref 129 // lumiera
+package_ref 129 // lumiera
 open
-  classview_ref 129413 // Project Entities
   
-  package_ref 128645 // codegen
-  
-  package_ref 128133 // Asset
+package_ref 128005 // design
+  class_ref 160389 // VirtualMedia
+  class_ref 136837 // Proc
+  class_ref 160901 // Timeline
+  class_ref 139269 // DoRecurse
+  class_ref 160645 // EntryID
   classview_ref 128389 // Controller Workings
-  classview_ref 131973 // Object ref
-  class_ref 152069 // PlacementIndex
+  class_ref 139653 // Session
+  class_ref 128133 // Seq
+  class_ref 160517 // Root
+  class_ref 128389 // Track
+  class_ref 152325 // Binding
+  class_ref 129797 // ExplicitPlacement
+  class_ref 152453 // PlacementRef
+  classrelation_ref 178437 // <realization>
   class_ref 153733 // QueryFocusStack
   classview_ref 128261 // Builder Workings
   usecaseview_ref 128261 // config examples
   class_ref 133253 // Frame
-  classview_ref 129541 // InterfaceSystem
   classview_ref 129285 // StreamType
-  classdiagram_ref 137733 // Query Interface
-  operation_ref 140037 // isValid
-  operation_ref 140165 // nextResult
-  class_ref 156933 // Result
-  classrelation_ref 181765 // <dependency>
-  class_ref 155141 // Query
-  class_ref 155525 // ResolvingFacility
-  class_ref 158085 // ResultSet
+  
+package_ref 131077 // ConfigQuery
   class_ref 152965 // Handle
   classview_ref 128266 // SmartPointers
 end

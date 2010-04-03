@@ -1,6 +1,6 @@
 format 58
 "Session" // ProcessingLayer::MObject::Session
-  revision 1
+  revision 2
   modified_by 5 "hiv"
   // class settings
   //class diagram settings
@@ -62,24 +62,6 @@ ${inlines}
       
       comment "Primary Interface for all editing tasks.
 The session contains defaults, all the assets being edited, and a set of EDL with the individual MObjects to be manipulated and rendered."
-      operation 133509 "currEDL"
-	public return_type class_ref 128133 // Seq
-	nparams 0
-	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name} ${(}${)}${const}${volatile} ${throw}${abstract};"
-	cpp_def "${comment}${inline}${type}
-${class}::${name} ${(}${)}${const}${volatile} ${throw}${staticnl}
-{
-  ${body}
-}
-
-"
-	
-	
-	
-	
-	comment "The EDL currently in focus. In most cases, Session and EDL are almost the same, just EDL emphasizes the collection aspect. But generally (for larger editing projects) one Session can contain several EDLs, which may even be nested. At any given time, only one of these EDLs has focus and recieves the editing commands."
-      end
-
       operation 133637 "getFixture"
 	public explicit_return_type "Fixture&"
 	nparams 0
@@ -118,6 +100,7 @@ configuration of all Objects to be rendered"
 	    classrelation_ref 150917 // defaults (<unidirectional association>)
 	  b parent class_ref 141445 // DefaultsManager
       end
+
     end
 
     class 128005 "SessionImpl"
@@ -134,12 +117,12 @@ ${inlines}
       explicit_switch_type ""
       
       comment "Implementation class for the Session interface"
-      classrelation 128005 // edls (<directional composition>)
+      classrelation 128005 // sequences (<directional composition>)
 	relation 128005 *-->
-	  a role_name "edls" multiplicity "1..*" protected
+	  a role_name "sequences" multiplicity "1..*" protected
 	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${stereotype}<${type}> ${name}${value};
 "
-	    classrelation_ref 128005 // edls (<directional composition>)
+	    classrelation_ref 128005 // sequences (<directional composition>)
 	  b parent class_ref 128133 // Seq
       end
 
@@ -170,6 +153,15 @@ ${inlines}
 "
 	    classrelation_ref 147717 // pipes (<directional aggregation>)
 	  b parent class_ref 138117 // Pipe
+      end
+
+      classrelation 195205 // timelines (<directional composition>)
+	relation 184709 *-->
+	  a role_name "timelines" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	    classrelation_ref 195205 // timelines (<directional composition>)
+	  b parent class_ref 145541 // Timeline
       end
     end
 
@@ -265,6 +257,15 @@ ${class}::${name} ${(}${)}${const}${volatile} ${throw}${staticnl}
 of the current session config and contents.
 @todo how to serialize, prameters, return value?"
       end
+
+      classrelation 195333 // current (<unidirectional association>)
+	relation 184837 --->
+	  a role_name "current" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 195333 // current (<unidirectional association>)
+	  b parent class_ref 139653 // Session
+      end
     end
 
     class 145541 "Timeline"
@@ -311,6 +312,15 @@ ${inlines}
 "
 	    classrelation_ref 160005 // globalBusses (<directional composition>)
 	  b multiplicity "1" parent class_ref 138117 // Pipe
+      end
+
+      classrelation 195077 // <unidirectional association>
+	relation 184581 --->
+	  a role_name "" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 195077 // <unidirectional association>
+	  b parent class_ref 128133 // Seq
       end
     end
 
@@ -554,6 +564,29 @@ ${inlines}
       end
     end
 
+    class 160517 "Root"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 194309 // <generalisation>
+	relation 183941 ---|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 194309 // <generalisation>
+	  b parent class_ref 129157 // Meta
+      end
+
+    end
+
     class 128389 "Track"
       visibility package 
       cpp_decl "${comment}${template}class ${name}${inherit}
@@ -595,6 +628,21 @@ ${inlines}
 	    classrelation_ref 161413 // <realization>
 	  b parent class_ref 128517 // MObject
       end
+    end
+
+    class 152325 "Binding"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
     end
 
     class 128517 "MObject"
@@ -848,63 +896,6 @@ ${inlines}
       end
     end
 
-    class 138885 "SimpleClip"
-      visibility package 
-      cpp_decl "${comment}${template}class ${name}${inherit}
-  {
-${members}  };
-${inlines}
-"
-      java_decl ""
-      php_decl ""
-      python_2_2 python_decl ""
-      idl_decl ""
-      explicit_switch_type ""
-      
-      comment "Elementary clip consisting of only one media stream"
-      classrelation 143365 // <generalisation>
-	relation 141445 ---|>
-	  a public
-	    cpp default "${type}"
-	    classrelation_ref 143365 // <generalisation>
-	  b parent class_ref 128901 // Clip
-      end
-    end
-
-    class 138629 "CompoundClip"
-      visibility package 
-      cpp_decl "${comment}${template}class ${name}${inherit}
-  {
-${members}  };
-${inlines}
-"
-      java_decl ""
-      php_decl ""
-      python_2_2 python_decl ""
-      idl_decl ""
-      explicit_switch_type ""
-      
-      associated_diagram classdiagram_ref 128133 // Session structure
-      comment "Clip MObject which is actually a compound of several elementary clips,
-e.g. the several streams found within multichannels media."
-      classrelation 142597 // <generalisation>
-	relation 140805 ---|>
-	  a public
-	    cpp default "${type}"
-	    classrelation_ref 142597 // <generalisation>
-	  b parent class_ref 128901 // Clip
-      end
-
-      classrelation 143493 // components (<directional aggregation>)
-	relation 141573 o-->
-	  a role_name "components" multiplicity "1..*" protected
-	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
-"
-	    classrelation_ref 143493 // components (<directional aggregation>)
-	  b multiplicity "*" parent class_ref 128901 // Clip
-      end
-    end
-
     class 129029 "Effect"
       visibility package 
       cpp_decl "${comment}${template}class ${name}${inherit}
@@ -1082,6 +1073,23 @@ ${items}};
 	    cpp default "${type}"
 	    classrelation_ref 145669 // <generalisation>
 	  b parent class_ref 139909 // LocatingPin
+      end
+
+      classrelation 194693 // <dependency>
+	relation 184197 -_->
+	  a default
+	    cpp default "#include in source"
+	    classrelation_ref 194693 // <dependency>
+	  b parent class_ref 152453 // PlacementRef
+      end
+
+      classrelation 194821 // <unidirectional association>
+	relation 184325 --->
+	  a role_name "" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 194821 // <unidirectional association>
+	  b parent class_ref 152453 // PlacementRef
       end
     end
 
@@ -1508,6 +1516,14 @@ ${inlines}
 	    classrelation_ref 177029 // <dependency>
 	  b parent class_ref 152069 // PlacementIndex
       end
+
+      classrelation 194949 // <dependency>
+	relation 184453 -_->
+	  a default
+	    cpp default "#include in source"
+	    classrelation_ref 194949 // <dependency>
+	  b parent class_ref 128645 // Placement
+      end
     end
 
     class 152581 "Id"
@@ -1635,34 +1651,225 @@ ${inlines}
       end
     end
 
-    class 152197 "Sequence"
-      visibility package 
-      cpp_decl "${comment}${template}class ${name}${inherit}
-  {
-${members}  };
-${inlines}
-"
-      java_decl ""
-      php_decl ""
-      python_2_2 python_decl ""
-      idl_decl ""
-      explicit_switch_type ""
-      
+    objectdiagram 138885 "ModelAssetRelations"
+       write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default show_stereotype_properties default
+      size A4
     end
 
-    class 152325 "Binding"
-      visibility package 
-      cpp_decl "${comment}${template}class ${name}${inherit}
-  {
-${members}  };
-${inlines}
-"
-      java_decl ""
-      php_decl ""
-      python_2_2 python_decl ""
-      idl_decl ""
-      explicit_switch_type ""
-      
+    classinstance 138373 ""
+      type class_ref 160517 // Root
+      attributes
+        end
+      relations
+        end
+    end
+
+    classinstance 138501 ""
+      type class_ref 128389 // Track
+      attributes
+        end
+      relations
+        end
+    end
+
+    classinstance 138629 ""
+      type class_ref 128389 // Track
+      attributes
+        end
+      relations
+        end
+    end
+
+    classinstance 138757 ""
+      type class_ref 128389 // Track
+      attributes
+        end
+      relations
+        end
+    end
+
+    classinstance 138885 ""
+      type class_ref 128389 // Track
+      attributes
+        end
+      relations
+        end
+    end
+
+    classinstance 139013 ""
+      type class_ref 128389 // Track
+      attributes
+        end
+      relations
+        end
+    end
+
+    classinstance 139141 ""
+      type class_ref 152325 // Binding
+      attributes
+        end
+      relations
+        end
+    end
+
+    classinstance 139269 ""
+      type class_ref 152197 // Sequence
+      attributes
+        end
+      relations
+        end
+    end
+
+    classinstance 139397 ""
+      type class_ref 152325 // Binding
+      attributes
+        end
+      relations
+        end
+    end
+
+    classinstance 139525 ""
+      type class_ref 152197 // Sequence
+      attributes
+        end
+      relations
+        end
+    end
+
+    classinstance 139653 ""
+      type class_ref 128901 // Clip
+      attributes
+        end
+      relations
+        end
+    end
+
+    classinstance 139781 ""
+      type class_ref 129029 // Effect
+      attributes
+        end
+      relations
+        end
+    end
+
+    classinstance 139909 ""
+      type class_ref 129029 // Effect
+      attributes
+        end
+      relations
+        end
+    end
+
+    classinstance 140037 ""
+      type class_ref 129029 // Effect
+      attributes
+        end
+      relations
+        end
+    end
+
+    classinstance 140165 ""
+      type class_ref 128901 // Clip
+      attributes
+        end
+      relations
+        end
+    end
+
+    classinstance 140293 ""
+      type class_ref 128389 // Track
+      attributes
+        end
+      relations
+        end
+    end
+
+    classinstance 140421 ""
+      type class_ref 136709 // Media
+      attributes
+        end
+      relations
+        end
+    end
+
+    classinstance 140549 ""
+      type class_ref 136709 // Media
+      attributes
+        end
+      relations
+        end
+    end
+
+    classinstance 140677 ""
+      type class_ref 160389 // VirtualMedia
+      attributes
+        end
+      relations
+        end
+    end
+
+    classinstance 140805 ""
+      type class_ref 160645 // EntryID
+      attributes
+        end
+      relations
+        end
+    end
+
+    classinstance 141061 ""
+      type class_ref 128389 // Track
+      attributes
+        end
+      relations
+        end
+    end
+
+    classinstance 141189 ""
+      type class_ref 129669 // Label
+      attributes
+        end
+      relations
+        end
+    end
+
+    classinstance 141317 ""
+      type class_ref 160645 // EntryID
+      attributes
+        end
+      relations
+        end
+    end
+
+    classinstance 141445 ""
+      type class_ref 160645 // EntryID
+      attributes
+        end
+      relations
+        end
+    end
+
+    classinstance 141573 "plugin1"
+      type class_ref 137733 // Effect
+      attributes
+        end
+      relations
+        end
+    end
+
+    classinstance 141701 "plugin2"
+      type class_ref 137733 // Effect
+      attributes
+        end
+      relations
+        end
+    end
+
+    classinstance 141829 ""
+      type class_ref 145541 // Timeline
+      attributes
+        end
+      relations
+        end
     end
   end
 end

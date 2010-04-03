@@ -1,6 +1,6 @@
 format 58
 "Asset" // ProcessingLayer::Asset
-  revision 19
+  revision 20
   modified_by 5 "hiv"
   // class settings
   //class diagram settings
@@ -59,6 +59,11 @@ format 58
 
     classdiagram 131205 "Struct-Asset Relations"
       draw_all_relations no hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default show_stereotype_properties default
+      size A4
+    end
+
+    classdiagram 139141 "Meta-Asset Relations"
+      draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default show_stereotype_properties default
       size A4
     end
 
@@ -505,15 +510,37 @@ e.g. the individual media streams found in one media file"
 	  b parent class_ref 136709 // Media
       end
 
-      classrelation 142341 // tracks (<directional aggregation>)
+      classrelation 142341 // channels (<directional aggregation>)
 	relation 140549 o-->
 	  stereotype "vector"
-	  a role_name "tracks" multiplicity "1..*" protected
+	  a role_name "channels" multiplicity "1..*" protected
 	    comment "elementary media assets comprising this compound"
 	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${stereotype}<${type} *> ${name}${value};
 "
-	    classrelation_ref 142341 // tracks (<directional aggregation>)
+	    classrelation_ref 142341 // channels (<directional aggregation>)
 	  b multiplicity "*" parent class_ref 136709 // Media
+      end
+    end
+
+    class 160389 "VirtualMedia"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 194181 // <generalisation>
+	relation 183813 ---|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 194181 // <generalisation>
+	  b parent class_ref 138501 // CompoundMedia
       end
     end
 
@@ -600,40 +627,6 @@ ${inlines}
       explicit_switch_type ""
       
       comment "tree like classification of Assets"
-    end
-
-    class 137349 "Clip"
-      visibility package 
-      cpp_decl "${comment}${template}class ${name}${inherit}
-  {
-${members}  };
-${inlines}
-"
-      java_decl ""
-      php_decl ""
-      python_2_2 python_decl ""
-      idl_decl ""
-      explicit_switch_type ""
-      
-      comment "bookkeeping (asset) view of a media clip."
-      classrelation 140549 // <generalisation>
-	relation 138757 ---|>
-	  a public
-	    cpp default "${type}"
-	    classrelation_ref 140549 // <generalisation>
-	  b parent class_ref 136709 // Media
-      end
-
-      classrelation 141957 // source (<unidirectional association>)
-	relation 140165 --->
-	  a role_name "source" multiplicity "1" const_relation protected
-	    comment "media source of this clip"
-	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
-"
-	    classrelation_ref 141957 // source (<unidirectional association>)
-	  b multiplicity "*" parent class_ref 136709 // Media
-	  association_type class_ref 136709 // Media
-      end
     end
 
     class 137477 "Unknown"
@@ -728,7 +721,7 @@ ${inlines}
       end
     end
 
-    class 137989 "Track"
+    class 152197 "Sequence"
       visibility package 
       cpp_decl "${comment}${template}class ${name}${inherit}
   {
@@ -741,12 +734,33 @@ ${inlines}
       idl_decl ""
       explicit_switch_type ""
       
-      comment "structural asset holding the configuration of a track in the EDL"
-      classrelation 141317 // <generalisation>
-	relation 139525 ---|>
+      classrelation 195717 // <generalisation>
+	relation 185221 ---|>
 	  a public
 	    cpp default "${type}"
-	    classrelation_ref 141317 // <generalisation>
+	    classrelation_ref 195717 // <generalisation>
+	  b parent class_ref 136965 // Struct
+      end
+    end
+
+    class 160901 "Timeline"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 195845 // <generalisation>
+	relation 185349 ---|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 195845 // <generalisation>
 	  b parent class_ref 136965 // Struct
       end
     end
@@ -951,6 +965,60 @@ ${inlines}
 	    classrelation_ref 144005 // subPattern (<unidirectional association>)
 	  b multiplicity "*" parent class_ref 138757 // ProcPatt
       end
+    end
+
+    class 160773 "Inventory"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 195589 // <generalisation>
+	relation 185093 ---|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 195589 // <generalisation>
+	  b parent class_ref 137093 // Meta
+      end
+    end
+  end
+
+  classview 133381 "Types"
+    //class diagram settings
+    draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default show_stereotype_properties default
+    //collaboration diagram settings
+    show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default show_stereotype_properties default
+    //object diagram settings
+     write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default show_stereotype_properties default
+    //sequence diagram settings
+    show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default show_stereotype_properties default
+    //state diagram settings
+    package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
+    show_activities default region_horizontally default drawing_language default show_stereotype_properties default
+    //class settings
+    //activity diagram settings
+    package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
+    show_infonote default drawing_language default show_stereotype_properties default
+    class 160645 "EntryID"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
     end
   end
 end

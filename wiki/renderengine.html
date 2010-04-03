@@ -900,12 +900,12 @@ With regard to the build process, the wiring of data connections translates into
 In many cases, the parameter values provided by these connections aren't frame based data, rather, the processing function needs a call interface to get the current value (value for a given time), which is provided by the parameter object. Here, the wiring needs to link to the suitable parameter instance, which is located within the high-level model (!). As an additional complication, calculating the actual parameter value may require a context data frame (typically for caching purposes to speed up the interpolation). While these parameter context data frames are completely opaque for the render node, they have to be passed in and out similar to the state needed by the node itself, and the wiring has to prepare for accessing these frames too.
 </pre>
 </div>
-<div title="Builder" modifier="Ichthyostega" modified="200810170221" created="200706220317" tags="def overview" changecount="28">
+<div title="Builder" modifier="Ichthyostega" modified="201004032310" created="200706220317" tags="def overview" changecount="29">
 <pre>The Builder takes some MObject/[[Placement]] information (called Timeline) and generates out of this a Render Engine configuration able to render this Objects. It does all decisions and retrieves the current configuration of all objects and plugins, so the Render Engine can just process them stright forward.
 
 The Builder is the central part of the [[Builder Pattern|http://en.wikipedia.org/wiki/Builder_pattern]]
 &lt;br/&gt;
-As the builder has to create a render node network implementing most of the features and wiring possible with the various MObject kinds and placement types, it is a rather complicated piece of software. In order to keep it manageable, it is broken down into several specialized sub components:
+As the builder [[has to create a render node network|BuilderModelRelation]] implementing most of the features and wiring possible with the various MObject kinds and placement types, it is a rather complicated piece of software. In order to keep it manageable, it is broken down into several specialized sub components:
 * clients access builder functionality via the BuilderFacade
 * the [[Proc-Layer-Controller|Controller]] initiates the BuildProcess and does the overall coordination of scheduling edit operations, rebuilding the fixture and triggering the Builder
 * to carry out the building, we use several primary tools (SegmentationTool, NodeCreatorTool,...),  together with a BuilderToolKit to be supplied by the [[tool factory|BuilderToolFactory]]
@@ -927,6 +927,9 @@ The working pattern of this builder mechanics can be described as triggering, en
 !!call chain
 After preparing the tools with the context state of this build process, the assembler drives the visitation process in the right order. The functions embedded within the visitor (NodeCreatorTool) for treating specific kinds of objects in turn use the toolkit (=the fully configured tool factory) to get the mould(s) for the individual steps they need to carry out. This involves preparing the mould (with the high-level object currently in-the-works, a suitable processing pattern and additional references), followed by operating the mould. The latter &quot;plays&quot; the processing pattern in the context of the mould, which, especially with the help of the operation point, carries out the actual building and/or connecting step. While doing so, the node factory will be invoked, which in turn invokes the wiring factory and thus pre-determines the node's prospective mode of operation when later called for rendering.
 </pre>
+</div>
+<div title="BuilderModelRelation" modifier="Ichthyostega" created="201004032311" tags="Builder design draft" changecount="1">
+<pre>[&gt;img[Builder creating the Model|uml/fig132868.png]]</pre>
 </div>
 <div title="BuilderMould" modifier="Ichthyostega" modified="200805270325" created="200805260248" tags="def" changecount="2">
 <pre>The [[Builder]] uses different kinds of tools for creating a network of render nodes from a given high-level model. When breaking down this (necessarily complex) process into small manageable chunks, we arrive at [[elementary building situations|BuilderPrimitives]]. For each of these there is a specialized tool. We denote these tools as &quot;moulds&quot; because they are a rather passive holder for the objects to be attached and wired up. They are shaped according to the basic form the connections have to follow for each of these basic situations:

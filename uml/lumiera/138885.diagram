@@ -1,0 +1,182 @@
+format 58
+
+classinstancecanvas 128005 classinstance_ref 138373 // 
+  xyz 32 157 2000
+end
+classinstancecanvas 128133 classinstance_ref 138501 // 
+  xyz 200 157 2000
+end
+classinstancecanvas 128261 classinstance_ref 138629 // 
+  xyz 200 211 2000
+end
+classinstancecanvas 128389 classinstance_ref 138757 // 
+  xyz 236 252 2000
+end
+classinstancecanvas 128517 classinstance_ref 138885 // 
+  xyz 236 279 2000
+end
+classinstancecanvas 128645 classinstance_ref 139013 // 
+  xyz 236 307 2000
+end
+classinstancecanvas 128773 classinstance_ref 139141 // 
+  xyz 33 211 2000
+end
+classinstancecanvas 128901 classinstance_ref 139269 // 
+  xyz 96 211 2000
+end
+classinstancecanvas 130693 classinstance_ref 139397 // 
+  xyz 319 251 2000
+end
+classinstancecanvas 130949 classinstance_ref 139525 // 
+  xyz 313 211 2000
+end
+classinstancecanvas 131333 classinstance_ref 139653 // 
+  xyz 319 308 2000
+end
+classinstancecanvas 131461 classinstance_ref 139781 // 
+  xyz 276 346 2000
+end
+classinstancecanvas 131589 classinstance_ref 139909 // 
+  xyz 393 343 2000
+end
+classinstancecanvas 131717 classinstance_ref 140037 // 
+  xyz 393 274 2005
+end
+classinstancecanvas 132741 classinstance_ref 140165 // 
+  xyz 319 91 2004
+end
+classinstancecanvas 133125 classinstance_ref 140293 // 
+  xyz 236 129 2009
+end
+classinstancecanvas 133637 classinstance_ref 140421 // 
+  xyz 503 308 2000
+end
+classinstancecanvas 133893 classinstance_ref 140677 // 
+  xyz 492 211 2000
+end
+classinstancecanvas 134021 classinstance_ref 140805 // 
+  xyz 562 129 2000
+end
+classinstancecanvas 134789 classinstance_ref 141189 // 
+  xyz 319 53 2000
+end
+classinstancecanvas 135173 classinstance_ref 141317 // 
+  xyz 562 91 2000
+end
+classinstancecanvas 135301 classinstance_ref 141445 // 
+  xyz 562 53 2005
+end
+fragment 135813 "TypedLookup"
+  xyzwh 532 22 1994 151 138
+end
+classinstancecanvas 136197 classinstance_ref 141573 // plugin1
+  xyz 490 342 2000
+end
+classinstancecanvas 136325 classinstance_ref 141701 // plugin2
+  xyz 490 396 2000
+end
+classinstancecanvas 137221 classinstance_ref 141829 // 
+  xyz 32 263 2000
+end
+packagecanvas 137477 
+  package_ref 128133 // Asset
+    xyzwh 470 183 1989 213 250
+end
+packagecanvas 137605 
+  package_ref 132229 // Session
+    xyzwh 15 25 1994 456 408
+end
+note 137733 "top-level Timeline"
+  xyzwh 91 263 2000 64 45
+note 137861 "virtual clip"
+  xyzwh 379 233 2010 69 35
+objectlinkcanvas 129029 norel
+  from ref 128773 z 1999 to ref 128901
+  no_role_a no_role_b
+objectlinkcanvas 129157 norel
+  from ref 128005 z 1999 to ref 128773
+  no_role_a no_role_b
+objectlinkcanvas 129285 norel
+  from ref 128005 z 1999 to ref 128133
+  no_role_a no_role_b
+objectlinkcanvas 129413 norel
+  from ref 128005 z 1999 to ref 128261
+  no_role_a no_role_b
+objectlinkcanvas 129541 norel
+  geometry VH
+  from ref 128261 z 1999 to point 223 260
+  line 130181 z 1999 to ref 128389
+  no_role_a no_role_b
+objectlinkcanvas 129669 norel
+  geometry VH
+  from ref 128261 z 1999 to point 223 287
+  line 130053 z 1999 to ref 128517
+  no_role_a no_role_b
+objectlinkcanvas 129797 norel
+  geometry VH
+  from ref 128261 z 1999 to point 223 315
+  line 130437 z 1999 to ref 128645
+  no_role_a no_role_b
+objectlinkcanvas 130821 norel
+  from ref 128389 z 1999 to ref 130693
+  no_role_a no_role_b
+objectlinkcanvas 131077 norel
+  from ref 130693 z 1999 to ref 130949
+  no_role_a no_role_b
+objectlinkcanvas 131845 norel
+  from ref 128645 z 1999 to ref 131333
+  no_role_a no_role_b
+objectlinkcanvas 131973 norel
+  geometry VH
+  from ref 128645 z 1999 to point 259 354
+  line 132101 z 1999 to ref 131461
+  no_role_a no_role_b
+objectlinkcanvas 132229 norel
+  geometry VH
+  from ref 131333 z 1999 to point 342 351
+  line 132357 z 1999 to ref 131589
+  no_role_a no_role_b
+objectlinkcanvas 132485 norel
+  geometry VH
+  from ref 130693 z 1999 to point 342 282
+  line 132613 z 1999 to ref 131717
+  no_role_a no_role_b
+objectlinkcanvas 133253 norel
+  geometry VH
+  from ref 128133 z 1999 to point 223 137
+  line 133381 z 1999 to ref 133125
+  no_role_a no_role_b
+objectlinkcanvas 133509 norel
+  geometry VH
+  from ref 133125 z 2003 to point 259 99
+  line 134661 z 2003 to ref 132741
+  no_role_a no_role_b
+objectlinkcanvas 134917 norel
+  geometry VH
+  from ref 133125 z 1999 to point 259 61
+  line 135045 z 1999 to ref 134789
+  no_role_a no_role_b
+line 130565 -_-_
+  from ref 128901 z 1999 to ref 128261
+line 131205 -_-_
+  from ref 130949 z 1999 to ref 128133
+line 135429 -_-_
+  from ref 134789 z 1999 to ref 135301
+line 135557 -_-_
+  from ref 132741 z 1999 to ref 135173
+line 135685 -_-_
+  from ref 133125 z 1999 to ref 134021
+line 135941 -_-_
+  from ref 131333 z 1999 to ref 133637
+line 136069 -_-_
+  from ref 130949 z 1999 to ref 133893
+line 136581 -_-_
+  from ref 131589 z 1999 to ref 136197
+line 136965 -_-_ decenter_end 181
+  from ref 131717 z 1999 to ref 136197
+line 137093 -_-_
+  from ref 131461 z 1999 to ref 136325
+line 137349 -_-_
+  from ref 137221 z 1999 to ref 128773
+preferred_whz 730 488 1
+end
