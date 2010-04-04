@@ -149,7 +149,7 @@ namespace lib {
           try { elm->detach(); }
           catch(...)
             {
-              WARN (common,"ignoring problems while clearing ElementTracker");
+              WARN (common,"problems while clearing ElementTracker, ignored.");
             }
         }
     };

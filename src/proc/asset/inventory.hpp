@@ -1,8 +1,8 @@
 /*
-  Dataset  -  meta asset describing a collection of control data
+  INVENTORY.hpp  -  viewing an Typed-ID registration group as meta asset
  
   Copyright (C)         Lumiera.org
-    2008,               Hermann Vosseler <Ichthyostega@web.de>
+    2010,               Hermann Vosseler <Ichthyostega@web.de>
  
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -18,14 +18,30 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  
-* *****************************************************/
+*/
 
 
-#include "proc/asset/dataset.hpp"
+#ifndef ASSET_INVENTORY_H
+#define ASSET_INVENTORY_H
 
-namespace asset
-  {
+#include "proc/asset/meta.hpp"
 
 
 
+namespace asset {
+
+
+  /**
+   * TypedID registration group exposed as meta asset
+   * 
+   * @todo WIP-WIP unimplemented
+   */
+  class Inventory : public Meta
+    {};
+  
+  
+  typedef lumiera::P<Inventory> PInv;
+  
+  
 } // namespace asset
+#endif

@@ -1,6 +1,6 @@
 format 58
 "Session" // ProcessingLayer::MObject::Session
-  revision 2
+  revision 3
   modified_by 5 "hiv"
   // class settings
   //class diagram settings
@@ -100,7 +100,6 @@ configuration of all Objects to be rendered"
 	    classrelation_ref 150917 // defaults (<unidirectional association>)
 	  b parent class_ref 141445 // DefaultsManager
       end
-
     end
 
     class 128005 "SessionImpl"
@@ -584,7 +583,6 @@ ${inlines}
 	    classrelation_ref 194309 // <generalisation>
 	  b parent class_ref 129157 // Meta
       end
-
     end
 
     class 128389 "Track"

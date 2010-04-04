@@ -67,7 +67,7 @@ classinstancecanvas 135301 classinstance_ref 141445 //
   xyz 562 53 2005
 end
 fragment 135813 "TypedLookup"
-  xyzwh 532 22 1994 151 138
+  xyzwh 532 23 1994 148 137
 end
 classinstancecanvas 136197 classinstance_ref 141573 // plugin1
   xyz 490 342 2000
@@ -80,11 +80,11 @@ classinstancecanvas 137221 classinstance_ref 141829 //
 end
 packagecanvas 137477 
   package_ref 128133 // Asset
-    xyzwh 470 183 1989 213 250
+  name_in_tab yes color verylightorange  xyzwh 470 183 1989 213 254
 end
 packagecanvas 137605 
   package_ref 132229 // Session
-    xyzwh 15 25 1994 456 408
+  name_in_tab yes  xyzwh 15 25 1994 456 408
 end
 note 137733 "top-level Timeline"
   xyzwh 91 263 2000 64 45

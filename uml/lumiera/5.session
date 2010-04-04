@@ -2,22 +2,24 @@ window_sizes 1324 1020 270 1044 872 71
 diagrams
   classdiagram_ref 136453 // Session backbone
     631 352 100 4 0 0
-  active  objectdiagram_ref 138885 // ModelAssetRelations
+  objectdiagram_ref 138885 // ModelAssetRelations
     730 488 100 4 0 0
   classdiagram_ref 139141 // Meta-Asset Relations
     469 451 100 4 0 0
+  active  classdiagram_ref 140293 // TypedLookup
+    721 697 100 4 0 0
 end
 show_stereotypes
 selected 
-package_ref 129 // lumiera
+  package_ref 129 // lumiera
 open
   
-package_ref 128005 // design
+  package_ref 128005 // design
   class_ref 160389 // VirtualMedia
   class_ref 136837 // Proc
   class_ref 160901 // Timeline
   class_ref 139269 // DoRecurse
-  class_ref 160645 // EntryID
+  class_ref 162821 // TypedID::Link
   classview_ref 128389 // Controller Workings
   class_ref 139653 // Session
   class_ref 128133 // Seq
@@ -33,7 +35,7 @@ package_ref 128005 // design
   class_ref 133253 // Frame
   classview_ref 129285 // StreamType
   
-package_ref 131077 // ConfigQuery
+  package_ref 131077 // ConfigQuery
   class_ref 152965 // Handle
   classview_ref 128266 // SmartPointers
 end

@@ -5982,9 +5982,9 @@ Using transitions is a very basic task and thus needs viable support by the GUI.
 Because of this experience, ichthyo wants to support a more general case of transitions, which have N output connections, behave similar to their &quot;simple&quot; counterpart, but leave out the mixing step. As a plus, such transitions can be inserted at the source ports of N clips or between any intermediary or final output pipes as well. Any transition processor capable of handling this situation should provide some flag, in order to decide if he can be placed in such a manner. (wichin the builder, encountering a  inconsistently placed transition is just an [[building error|BuildingError]])
 </pre>
 </div>
-<div title="TypedID" modifier="Ichthyostega" modified="201004031509" created="201003200157" tags="Model Rules design draft" changecount="29">
+<div title="TypedID" modifier="Ichthyostega" modified="201004040114" created="201003200157" tags="Model Rules design draft" changecount="31">
 <pre>//drafted service as of 4/10 &amp;mdash; &amp;rarr;[[implementation plans|TypedLookup]]//
-An registration service to associate object identities, symbolic identifiers and types.
+A registration service to associate object identities, symbolic identifiers and types.
 
 !Motivation
 For maintaining persistent objects, generally an unique object ID is desirable. Within Lumiera, we employ 128 hash-~IDs (&amp;raquo;{{{LUID}}}&amp;laquo;). But hash-~IDs are difficult to handle for testing and configuration, as they aren't self explanatory for human readers. They're best used in a way avoiding textual representation.

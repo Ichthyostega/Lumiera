@@ -46,6 +46,11 @@ return: 0
 END
 
 
+PLANNED "ID to type association" TypedID_test <<END
+return: 0
+END
+
+
 TEST "IdentityOfAssets_test" IdentityOfAssets_test <<END
 return: 0
 END

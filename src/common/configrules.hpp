@@ -65,14 +65,14 @@
 
 
 
-namespace lumiera {
+namespace lumiera {  ///////TODO: shouldn't that be namespace lib? or proc?
   
   using std::string;
   using lumiera::P;
-
   
   
-    
+  
+  
   namespace query {
     
     // The intention is to support the following style of Prolog code
@@ -110,9 +110,7 @@ namespace lumiera {
         typename SIG = bool(string) //  Signature
       >
     class Pred
-      {
-        
-      };
+      { };
       
     /**
      * the "back side" interface towards the classes participating
@@ -163,7 +161,7 @@ namespace lumiera {
          */
         virtual bool resolve (P<TY>& solution, const Query<TY>& q) = 0;
       };
-
+    
     // TODO: the Idea is to provide specialisations for the concrete types
     //       we want to participate in the ConfigRules system....
     //       Thus we get the possibility to create a specific return type,
@@ -197,7 +195,7 @@ namespace lumiera {
         // TODO: find out what operations we need to support here for the »real solution« (using Prolog)
       };
       
-
+      
     
     
     LUMIERA_ERROR_DECLARE (CAPABILITY_QUERY);  ///< unresolvable capability query.
@@ -238,12 +236,11 @@ namespace lumiera {
   
   
   
-    
-  namespace query
-    {
+  
+  namespace query {
     
     /** backdoor for tests: the next config query with this query string
-     *  will magically suceed with every candidate object provided. This
+     *  will magically succeed with every candidate object provided. This
      *  is currently necessary to get objects into the defaults manager,
      *  as the query system is not able to do real query resolution */
     void setFakeBypass(string const& q);

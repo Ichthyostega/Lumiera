@@ -22,13 +22,15 @@
 
 
 /** @file meta.hpp
- ** Some Metatdata elements (e.g. Automation Datasets) can be treated as 
- ** specific Kind of Asset.
- ** For the different <i>Kinds</i> of Assets, we use sub-intefaces inheriting
+ ** Internal and organisational metadata. Some internally created data elements,
+ ** like automation data sets, inventory of session contents, can be exposed and 
+ ** treated as specific Kind of Asset.
+ ** 
+ ** For the different <i>Kinds</i> of Assets, we use sub-interfaces inheriting
  ** from the general Asset interface. To be able to get asset::Meta instances
- ** directly from the AssetManager, we define a specialization of the Asset ID.
- **
- ** @see asset.hpp for explanation
+ ** directly from the AssetManager, we define a specialisation of the Asset ID.
+ ** 
+ ** @see asset.hpp explanation of assets in general
  ** @see MetaFactory creating concrete asset::Meta instances
  **
  */
@@ -43,8 +45,7 @@
 
 
 
-namespace asset
-  {
+namespace asset {
   
   class Meta;
   class MetaFactory;
@@ -57,12 +58,12 @@ namespace asset
       ID (size_t id);
       ID (const Meta&);
     };
-
-    
-    
+  
+  
+  
   /**
    * key abstraction: metadata and organisational asset
-   * @todo just a stub, have to figure out what a asset::Proc is
+   * @todo just a stub, still have to figure out the distinctive properties of asset::Meta
    */
   class Meta : public Asset
     {
@@ -82,10 +83,11 @@ namespace asset
     
     // definition of ID<Meta> ctors is possible now,
    //  after providing full definition of class Proc
-
+  
   inline ID<Meta>::ID(size_t id)        : ID<Asset> (id)           {};
   inline ID<Meta>::ID(const Meta& meta) : ID<Asset> (meta.getID()) {};
   
+  typedef P<Meta> PMeta;
   
   
   
@@ -98,11 +100,11 @@ namespace asset
       typedef P<asset::Meta> PType;
        
       PType operator() (Asset::Ident& key);      ////////////TODO define actual operation 
-
+      
     };
-
-    
-    
-    
+  
+  
+  
+  
 } // namespace asset
 #endif

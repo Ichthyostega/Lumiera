@@ -1,6 +1,6 @@
 format 58
 "Asset" // ProcessingLayer::Asset
-  revision 20
+  revision 21
   modified_by 5 "hiv"
   // class settings
   //class diagram settings
@@ -987,6 +987,15 @@ ${inlines}
 	    classrelation_ref 195589 // <generalisation>
 	  b parent class_ref 137093 // Meta
       end
+
+      classrelation 197381 // <unidirectional association>
+	relation 186885 --->
+	  a role_name "" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 197381 // <unidirectional association>
+	  b parent class_ref 162309 // Group
+      end
     end
   end
 
@@ -1006,7 +1015,7 @@ ${inlines}
     //activity diagram settings
     package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
     show_infonote default drawing_language default show_stereotype_properties default
-    class 160645 "EntryID"
+    class 162437 "BareEntryID"
       visibility package 
       cpp_decl "${comment}${template}class ${name}${inherit}
   {
@@ -1019,6 +1028,165 @@ ${inlines}
       idl_decl ""
       explicit_switch_type ""
       
+    end
+
+    class 160645 "EntryID"
+      visibility package 
+      nformals 1
+      formal name "TY" type "class" explicit_default_value ""
+        explicit_extends ""
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 196997 // <generalisation>
+	relation 186501 ---|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 196997 // <generalisation>
+	  b parent class_ref 162437 // BareEntryID
+      end
+    end
+
+    classdiagram 140293 "TypedLookup"
+      draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default show_stereotype_properties default
+      size A4
+    end
+
+    class 162053 "TypedID"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+    end
+
+    class 162181 "TypedID::Table"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 197253 // <directional composition>
+	relation 186757 *-->
+	  a role_name "" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	    classrelation_ref 197253 // <directional composition>
+	  b parent class_ref 162309 // Group
+      end
+    end
+
+    class 162309 "Group"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 197509 // <directional composition>
+	relation 187013 *-->
+	  a role_name "" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	    classrelation_ref 197509 // <directional composition>
+	  b parent class_ref 162437 // BareEntryID
+      end
+    end
+
+    class 162565 "RegEntry"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 197125 // <generalisation>
+	relation 186629 ---|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 197125 // <generalisation>
+	  b parent class_ref 162437 // BareEntryID
+      end
+    end
+
+    class 162693 "TypedID::Index"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+    end
+
+    class 162821 "TypedID::Link"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      operation 142469 "registerInstance"
+	public explicit_return_type ""
+	nparams 0
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name} ${(}${)}${const}${volatile} ${throw}${abstract};"
+	cpp_def "${comment}${inline}${type}
+${class}::${name} ${(}${)}${const}${volatile} ${throw}${staticnl}
+{
+  ${body}
+}
+
+"
+	
+	
+	
+	
+      end
     end
   end
 end

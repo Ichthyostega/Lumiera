@@ -39,12 +39,12 @@ namespace lumiera {
   using lib::Literal;
   using std::string;
   using boost::format;
-
+  
   /* ==== common definitions for rule based queries ==== */
   
-      
-
-  /** 
+  
+  
+  /**
    * Generic query interface for retrieving objects matching
    * some capability query
    */
@@ -62,8 +62,8 @@ namespace lumiera {
       
       operator string& () { return *this; }      // TODO: needed temporarily by fake-configrules
     };                                          //        for calling removeTerm on the string-ref....
-
-    
+  
+  
   namespace query {
     
     /** ensure standard format for a given id string.
@@ -72,7 +72,7 @@ namespace lumiera {
      */
     void normaliseID (string& id);
     
-
+    
     /** count the top-level predicates in the query string.
      *  usable for ordering queries, as more predicates usually
      *  mean more conditions, i.e. more constriction
@@ -83,7 +83,7 @@ namespace lumiera {
     const string extractID (Symbol, const string& termString);
     
     const string removeTerm (Symbol, string& termString);
-
+    
     
 }} // namespace lumiera::query
 #endif

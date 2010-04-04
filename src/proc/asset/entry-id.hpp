@@ -95,7 +95,7 @@ namespace asset {
   
   
   template<class TY>
-  class EntryID;
+  struct EntryID;
   
   
   /**

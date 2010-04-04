@@ -1,3 +1,4 @@
+
 /*
   ConfigRules  -  interface for rule based configuration
  
@@ -21,51 +22,44 @@
 * *****************************************************/
 
 
+#include "lib/error.hpp"
 #include "common/configrules.hpp"
 #include "common/query/fake-configrules.hpp"
-//#include "lib/util.hpp"
-#include "include/logging.h"
 
 
 
-namespace lumiera
-  {
-  
-  namespace query
-    {
+namespace lumiera {
+  namespace query {
     
     LUMIERA_ERROR_DEFINE (CAPABILITY_QUERY, "unresolvable capability query");
-
     
-      
+    
   } // namespace query
-
-  namespace {
   
+  namespace {
+    
     /** type of the actual ConfigRules implementation to use */
     lib::singleton::UseSubclass<query::MockConfigRules> typeinfo;
   }
   
-      
+  
   /** Singleton factory instance, parametrised to actual impl. type. */
-  lib::SingletonSub<ConfigRules> ConfigRules::instance (typeinfo); 
-
-
+  lib::SingletonSub<ConfigRules> ConfigRules::instance (typeinfo);
   
   
-    
-  namespace query
-    {
-    namespace // local definitions: implementing a backdoor for tests
-      {
-        string fakeBypass; 
-      } 
+  
+  
+  
+  namespace query {
+    namespace { // local definitions: implementing a backdoor for tests
+        string fakeBypass;
+    } 
     
     void setFakeBypass(string const& q)  { fakeBypass = q; }
     bool isFakeBypass (string const& q)  { return q == fakeBypass; }
     
   } // namespace query
-
-    
+  
+  
   
 } // namespace lumiera
