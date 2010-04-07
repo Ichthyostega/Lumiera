@@ -514,7 +514,7 @@ ColorPalette
 
 SiteUrl</pre>
 </div>
-<div title="Advice" modifier="Ichthyostega" modified="201004060212" created="200910311755" tags="Concepts def spec" changecount="7">
+<div title="Advice" modifier="Ichthyostega" modified="201004070114" created="200910311755" tags="Concepts def spec" changecount="9">
 <pre>{{red{WIP 11/09}}}...//about to explicate a pattern which I'm aiming at within the design almost since the beginning//
 Expecting Advice and giving Advice &amp;mdash; this collaboration ranges somewhere between messaging and dynamic properties, but cross-cutting the primary, often hierarchical relation of dependencies. Always happening at a certain //point of advice,// which creates a distinct, static nature different of being just a convention, on the other hand, Advice is deliberately kept optional and received synchronously, albeit possibly within an continuation.
 
@@ -527,17 +527,17 @@ Expecting Advice and giving Advice &amp;mdash; this collaboration ranges somewhe
 * ''advice system''
 * the ''binding''
 * the ''advice''
-The ''advised'' entity opens the collaboration by requsting an advice. The ''advice'' itself is a piece of data of a custom type, which needs to be //copyable.// Obviously, both the advised and the advisor need to share knowledge about the meaning of this advice data. (in a more elaborate version we might allow the advisor to provide a subclass of the advice interface type). The actual advice colaboration happens at a ''point of advice'', which needs to be derived first. To this end, the adviced puts up an request by providing his ''binding'', which is a pattern for matching. An entity willing to give advice //discovers//&amp;nbsp; possible ''advice channels'' by putting up an advisor binding, which similarily is a pattern. The ''advice system'' as mediator resolves both sides, by matching (which in the most general case could be an unification). This process creates an ''advice point solution'' &amp;mdash; and in the most general case even multiple solutions. If we allow such, there needs to be a scheme for both sides to handle this (unexpected) multiplicity of advice points. Anyway, now the actual colaboration takes place by the advisor placing the piece of advice into the advice channel, causing it to be placed into the point of advice. After passing a certain (implementation defined) break point, the advice leaves the influence of the advisor and gets exposed to the advised entitie(s). Typically this involves copying the advice data into a location managed by the advice system. In the most simple case, the advised entity accesses the advice synchronously (an non-blocking). Of course, there could be a status flag to find out if there is new advice. Moreover, typically the advice data type is default constructible and thus there is always a basic form of advice available, thereby completely decoupling the advised entity from the timings related to this colaboration.
+The ''advised'' entity opens the collaboration by requsting an advice. The ''advice'' itself is a piece of data of a custom type, which needs to be //copyable.// Obviously, both the advised and the advisor need to share knowledge about the meaning of this advice data. (in a more elaborate version we might allow the advisor to provide a subclass of the advice interface type). The actual advice colaboration happens at a ''point of advice'', which needs to be derived first. To this end, the advised puts up an request by providing his ''binding'', which is a pattern for matching. An entity willing to give advice //discovers//&amp;nbsp; possible ''advice channels'' by putting up an advisor binding, which similarily is a pattern. The ''advice system'' as mediator resolves both sides, by matching (which in the most general case could be an unification). This process creates an ''advice point solution'' &amp;mdash; and in the most general case even multiple solutions. If we allow such, there needs to be a scheme for both sides to handle this (unexpected) multiplicity of advice points. Anyway, now the actual colaboration takes place by the advisor placing the piece of advice into the advice channel, causing it to be placed into the point of advice. After passing a certain (implementation defined) break point, the advice leaves the influence of the advisor and gets exposed to the advised entitie(s). Typically this involves copying the advice data into a location managed by the advice system. In the most simple case, the advised entity accesses the advice synchronously (an non-blocking). Of course, there could be a status flag to find out if there is new advice. Moreover, typically the advice data type is default constructible and thus there is always a basic form of advice available, thereby completely decoupling the advised entity from the timings related to this colaboration.
 
 !!extensions
-In a more elaborate scheme, the advised entiy could provide a signal to be invoked either in the thread context of the advisor (being still blocked in the advice providing call), or in a completely separate thread. A third solution would be to allow the advised entity to block until recieving new advice. Both of these more elaborate schemes would also allow to create an advice queue. 
+In a more elaborate scheme, the advised entiy could provide a signal to be invoked either in the thread context of the advisor (being still blocked in the advice providing call), or in a completely separate thread. A third solution would be to allow the advised entity to block until recieving new advice. Both of these more elaborate schemes would also allow to create an advice queue &amp;mdash; thereby developing the advice colaboration into a kind of messaging system. Following this route seems questionable though.
 
 &amp;rarr; AdviceSituations
 &amp;rarr; AdviceRequirements
 &amp;rarr; AdviceImplementation
 </pre>
 </div>
-<div title="AdviceRequirements" modifier="Ichthyostega" modified="201004060326" created="201004060213" tags="design impl" changecount="4">
+<div title="AdviceRequirements" modifier="Ichthyostega" modified="201004080252" created="201004060213" tags="design impl" changecount="10">
 <pre>From analysing a number of intended AdviceSituations, some requirements for an Advice collaboration and implementation can be extracted.
 
 * the piece of advice is //not shared// between advisor and the advised entities; rather, it is copied into storage managed by the advice system
@@ -551,27 +551,63 @@ In a more elaborate scheme, the advised entiy could provide a signal to be invok
 * even possible and partial solutions should be cached, similar to the rete algorithm. Dispatching a solution should work lock-free
 * advice can be overwritten by new advice, but is rarely retracted (indeed, we can rule out this possibility, by relying on a proxy)
 * when locking is left out, we can't give any guarantee as to when a given advice gets visible to the advised entity
+* throughput doesn't seem to be an issue, but picking up exsiting advice should be fast.
+
+!!questions
+;when does the advice colaboration actually happen?
+:when there is both a client (advised) and a server (advisor) and their advice bindings match
+;can there be multiple matches?
+:within the system as a whole there can be multiple solutions
+:but the individual partners never see more than one connection
+:each point of advice has exactly one binding and can establish one advice channel
+;but when an attempt is made to transfer more information?
+:both sides don't behave symmetrically, and thus the consequences are different
+:on the client side, advice is just //available.// When there is newer one, the previous advice is overwritten
+:the server side doesn't //contain// advice &amp;mdash; rather, it is placed into the system. After that, the advisor can go away
+:thus, if an advisor places new advice into an existing advice provision, this effectively initiates a new colaboration
+:if the new advice reaches the same destination, it overwrites; but it may as well reach a different destination this time
+;can just one advice provision create multiplicity?
+:yes, because of the matching process there could be multiple solutions. But neither the client nor the server is aware of that.
+;can advice be changed?
+:No. When inserted into the system, the advisor looses any direct connection to the piece of advice (it is copied)
+:But an advisor can put up another piece of advice into the same advice provision, thereby effectively overwriting at the destination
+;can the binding be modified dynamically?
+:this is treated as if retracting the existing point of advice and opening a new one.
+;what drives the matching?
+:whenever a new point of adivice is opened, search for a matching solution happens.
+:thus, the actual colaboration can be initiated from both sides
+:when a match happens, the corresponding advice point solution gets added into the sytem
+;what about the lifetime of such a solution?
+:it is tied to the //referral// &amp;mdash; but there is an asymetry between server and client
+:referral is bound to the server sided / client sided point of advice being still in existence
+:but the server sided point of advice is copied into the system, while the client sided is owned by the client
+:thus, when an advisor goes away, any actual solution remains valid, until no client refers to it anymore
+:on the client side there is an asymetry: actually, a new advice request can be opened, with an exactly identical binding
+:in this case, existing connections will be re-used. But any differences in the binding will require searching a new solution
+;is the search for an adivce point solution exhaustive?
+:from the server side, when a new advice provision / binding is put up, //any// possible advice channel will be searched
+:contrary to this, at the client side, the first match found wins and will establish an advice channel.
 </pre>
 </div>
-<div title="AdviceSituations" modifier="Ichthyostega" modified="201004060218" created="201004052316" tags="Concepts spec design" changecount="6">
+<div title="AdviceSituations" modifier="Ichthyostega" modified="201004080208" created="201004052316" tags="Concepts spec design" changecount="13">
 <pre>[[Advice]] is a pattern extracted from several otherwise unrelated constellations
 
 !Proxy media in the engine
-Without rebuilding the engine network, we need the ability to reconfigure some parts to adapt to low resolution place-holder media temporarily. The collaboration required to make this happen seems to ''cross-cut'' the normal processing logic. Indeed, the nature of the adjustments is highly context dependent &amp;mdash; not every processing node needs to be adjusted. There is a dangerous interference with the ongoing render processes, prompting for the possibility of picking up this information synchronously.
+Without rebuilding the engine network, we need the ability to reconfigure some parts to adapt to low resolution place-holder media temporarily. The collaboration required to make this happen seems to ''cross-cut'' the normal processing logic. Indeed, the nature of the adjustments is highly context dependent &amp;mdash; not every processing node needs to be adjusted. There is a dangerous interference with the ongoing render processes, prompting for the possibility to pick up this information synchronously.
 * the addressing and delivery of the advice is based on a mix of static (type) and dynamic information
-* it is concievable that the actual matching may even include a token present in the direct invocation context (of a render)
+* it is concievable that the actual matching may even include a token present in the direct invocation context (the ongoing render task)
 * the attempt to recieve and pick up advice needs to be failsafe
 * locking should be avoided by design
 
 !Dependency injection for testing
-While inversion of control is a guiding principle on all levels, the design of the Lumiera application deliberately stays just below the level of employing a dependency injection container. Instead, common services are accessible //by type// and the builder pattern is used more explicitly at places. Interestingly, the impact on writing unit tests was by far not so serious as one might expect, based on the usual reasoning of DI proponents. But there remain some situations, where sharing a common test fixture would come in handy
+While inversion of control is a guiding principle on all levels, the design of the Lumiera application deliberately stays just below the level of employing a dependency injection container. Instead, common services are accessible //by type// and the builder pattern is used more explicitly at places. Interestingly, the impact on writing unit tests was by far not so serious as one might expect, based on the usual reasoning of D.I. proponents. But there remain some situations, where sharing a common test fixture would come in handy
 * here the test depending on a fixture puts up a hard requirement for the actual advice to be there.
 * thus, the advice support system can be used to communicate a need for advice
 * but it seems unreasonable to extend it actually to transmitt a control flow
 
 !properties of placement
-The placement concept plays a fundamental role within Lumiera's HighLevelModel. Besides just being a way of sticking objects together and defining the common properties of //temporal position and output destination,// we try to push this approach to enable a more general, open and generic use. &quot;Placement&quot; is understood as locating within a grid coprised of various degrees of freedom &amp;mdash; where locating in a specific way might create additional dimensions to be included into the placement. The standard example is an output connection creating additional adjustable parameters of how to including the connected object into a given presentation space (consider e.g. a sound object, which &amp;mdash; just by connection, gains the ability of being //panned// by azimuth, elevation and distance)
-* in this case, obviously the colaboration is n:m, while each partner preferrably should only see a single link.
+The placement concept plays a fundamental role within Lumiera's HighLevelModel. Besides just being a way of sticking objects together and defining the common properties of //temporal position and output destination,// we try to push this approach to enable a more general, open and generic use. &quot;Placement&quot; is understood as locating within a grid comprised of various degrees of freedom &amp;mdash; where locating in a specific way might create additional dimensions to be included into the placement. The standard example is an output connection creating additional adjustable parameters controlling the way the connected object is embedded into a given presentation space (consider e.g. a sound object, which &amp;mdash; just by connection, gains the ability of being //panned// by azimuth, elevation and distance)
+* in this case, obviously the colaboration is n:m, while each partner preferrably should only see a single advice link.
 * advice is used here to negotiate a direct colaboration, which is then handed off to another facility (wiring a control connection)
 * the possibility of an advice colaboration in this case is initiated rather from the side of the advisor
 * deriving an advice point solution includes some kind of negotioation or active re-evaluation
