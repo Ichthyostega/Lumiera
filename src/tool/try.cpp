@@ -15,6 +15,7 @@
 // 6/09  - investigating how to build a mixin template providing an operator bool()
 // 12/9  - tracking down a strange "warning: type qualifiers ignored on function return type"
 // 1/10  - can we determine at compile time the presence of a certain function (for duck-typing)?
+// 4/10  - pretty printing STL containers with python enabled GDB?
 
 
 //#include <nobug.h>
@@ -25,6 +26,7 @@
 
 #include <iostream>
 //#include <typeinfo>
+#include <string>
 #include <vector>
 #include <cstdlib>
 #include <cstdio>
@@ -36,68 +38,27 @@ using std::cout;
 using std::endl;
 
 
-struct A
-  {
-    int& funA ();
-  };
-
-struct B
-  {
-    void funA();
-  };
-
-
-  typedef char Yes_t;
-  struct No_t { char padding[8]; };
-
-
-  template<typename TY>
-  class Detector1
-    {
-      template<typename X, int i = sizeof(&X::funA)>
-      struct Probe
-        { };
-      
-      template<class X>
-      static Yes_t check(Probe<X>*);
-      template<class>
-      static No_t  check(...);
-      
-    public: 
-      static const bool value = (sizeof(Yes_t)==sizeof(check<TY>(0)));
-    };
-  
-  
-  template<typename TY>
-  class Detector2
-    {
-      template<typename X, int& (X::*)(void)> 
-      struct Probe
-        { };
-      
-      template<class X>
-      static Yes_t check(Probe<X,&X::funA>*);
-      template<class>
-      static No_t  check(...);
-      
-    public: 
-      static const bool value = (sizeof(Yes_t)==sizeof(check<TY>(0)));
-    };
-  
-  
 int 
 main (int, char**)
   {
     
 //  NOBUG_INIT;
     
-    cout << "Detector1<A> = " << Detector1<A>::value << endl;
-    cout << "Detector1<B> = " << Detector1<B>::value << endl;
+    std::string str = "hullo wöld";
+    std::vector<int> vec (1000);
     
-    cout << "Detector2<A> = " << Detector2<A>::value << endl;
-    cout << "Detector2<B> = " << Detector2<B>::value << endl;
+    for (uint i = 0; i < vec.size(); ++i)
+        vec[i] = i;
     
-    cout <<  "\n.gulp.\n";
+    cout << str <<  "\n.gulp.\n";
+    
+    // Note: when selecting the string or the vector in the Eclipse variables view
+    //       (or when issuing "print str" at the GDB prompt), the GDB python pretty-printer
+    //       should be activated. Requires an python enabled GDB (>6.8.50). Debian/Lenny isn't enough,
+    //       but compiling the GDB package from Debian/Squeeze (GDB-7.1) is straightforward.
+    //       Moreover, you need to check out and install the python pretty-printers and 
+    //       you need to activate them through your ~/.gdbinit
+    //       see http://sourceware.org/gdb/wiki/STLSupport
     
     return 0;
   }
