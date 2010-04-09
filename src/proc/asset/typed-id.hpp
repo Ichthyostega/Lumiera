@@ -124,7 +124,7 @@ namespace asset {
       
     public:
       void
-      registerInstance (std::tr1::weak_ptr smart_ptr_instance)
+      registerInstance (std::tr1::weak_ptr<TY> smart_ptr_instance)
         {
           TODO ("actually attach the smart-ptr to the existing TypedID registration");
         }

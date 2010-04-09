@@ -128,6 +128,7 @@ namespace test {
       void
       verifyRegistration()
         {
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #599
           uint type_cnt = TypedID::type_count();
           uint elm_cnt = TypedID::element_count();
           
@@ -145,12 +146,14 @@ namespace test {
           DummyID idu = TypedID::getID<DummyEntity> ("up");
           CHECK (idu);
           CHECK ("up" == idu.getSym());
+#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #599
         }
       
       
       void
       verifyAssetFrontend()
         {
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #599
           PInv inventory = asset::Meta::create (Category (META,"typed-id-test-dummy"));
           CHECK (inventory);
           CHECK (0 == inventory->size());
@@ -165,6 +168,7 @@ namespace test {
           CHECK (2 == inventory->size());
           
           for_each (inventory->all(), show<BareEntryID> );
+#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #599
         }
       
       template<typename X>
@@ -178,6 +182,7 @@ namespace test {
       void
       verifyInstanceAccess()
         {
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #599
           PDum top (new DummyEntity ("top"));
           PDum bot (new DummyEntity ("bottom"));
           
@@ -205,12 +210,14 @@ namespace test {
           CHECK (2 == bot.use_count());
           
           for_each (TypedID::allInstances<DummyEntity>(), show<DummyEntity> );
+#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #599
         }
       
       
       void
       verifyAutomaticCleanup()
         {
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #599
           
           PDum cha (new DummyEntity ("charm"));
           PDum bea (new DummyEntity ("beauty"));
@@ -225,6 +232,7 @@ namespace test {
           CHECK (0 == TypedID::entry_count<DummyEntity>());
           CHECK (! (TypedID::get<DummyEntity>("beauty")));
           CHECK (isnil (TypedID::allInstances<DummyEntity>()));
+#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #599
         }
     };
   
