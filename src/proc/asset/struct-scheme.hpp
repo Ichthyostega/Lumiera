@@ -89,34 +89,8 @@ namespace asset{
         static Symbol idSymbol;
       };
     
-    ///////////////////////////////////////////////////////////////////////////////////////////TICKET #581 intending to abandon asset::Track in favour of a plain EntryID 
-    template<> Symbol StructTraits<asset::Track>::namePrefix = "track";
-    template<> Symbol StructTraits<asset::Track>::catFolder  = "tracks";
-    template<> Symbol StructTraits<asset::Track>::idSymbol   = "track";
+    // Note: individual defaults are defined in stuct.cpp
     
-    template<> Symbol StructTraits<mobject::session::Track>::namePrefix = "track";
-    template<> Symbol StructTraits<mobject::session::Track>::catFolder  = "tracks";
-    template<> Symbol StructTraits<mobject::session::Track>::idSymbol   = "track";
-    
-    template<> Symbol StructTraits<mobject::session::Clip>::namePrefix = "clip";
-    template<> Symbol StructTraits<mobject::session::Clip>::catFolder  = "clips";
-    template<> Symbol StructTraits<mobject::session::Clip>::idSymbol   = "clip";
-    
-    template<> Symbol StructTraits<Pipe>::namePrefix = "pipe";
-    template<> Symbol StructTraits<Pipe>::catFolder  = "pipes";
-    template<> Symbol StructTraits<Pipe>::idSymbol   = "pipe";
-    
-    template<> Symbol StructTraits<const ProcPatt>::namePrefix = "patt";
-    template<> Symbol StructTraits<const ProcPatt>::catFolder  = "build-templates";
-    template<> Symbol StructTraits<const ProcPatt>::idSymbol   = "procPatt";
-    
-    template<> Symbol StructTraits<Timeline>::namePrefix = "tL";
-    template<> Symbol StructTraits<Timeline>::catFolder  = "timelines";
-    template<> Symbol StructTraits<Timeline>::idSymbol   = "timeline";
-    
-    template<> Symbol StructTraits<Sequence>::namePrefix = "seq";
-    template<> Symbol StructTraits<Sequence>::catFolder  = "sequences";
-    template<> Symbol StructTraits<Sequence>::idSymbol   = "sequence";
     
     /* catch-all defaults */
     template<class X>
