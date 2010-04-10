@@ -1,0 +1,74 @@
+format 58
+
+classcanvas 128005 class_ref 163973 // Advice
+  draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default show_stereotype_properties default
+  color lightmagenta
+  xyz 348 20 2000
+end
+classcanvas 128133 class_ref 164101 // PointOfAdvice
+  draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default show_stereotype_properties default
+  xyz 265 102 2000
+end
+classcanvas 128389 class_ref 164229 // Advisor
+  draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default show_stereotype_properties default
+  xyz 20 188 2000
+end
+classcanvas 128517 class_ref 164357 // Advised
+  draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default show_stereotype_properties default
+  xyz 551 189 2000
+end
+classcanvas 128645 class_ref 164485 // AdviceRequest
+  draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default show_stereotype_properties default
+  xyz 364 207 2000
+end
+classcanvas 129157 class_ref 164613 // AdviceProvision
+  draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default show_stereotype_properties default
+  xyz 157 207 2000
+end
+classcanvas 129285 class_ref 164741 // Binding
+  draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default show_stereotype_properties default
+  xyz 283 207 2000
+end
+relationcanvas 128261 relation_ref 188165 // <unidirectional association>
+  from ref 128133 z 1999 stereotype "<<holds>>" xyz 340 79 3000 to ref 128005
+  no_role_a no_role_b
+  no_multiplicity_a no_multiplicity_b
+end
+relationcanvas 128773 relation_ref 188293 // <generalisation>
+  geometry VHV
+  from ref 128645 z 1999 to point 405 171
+  line 128901 z 1999 to point 304 171
+  line 129029 z 1999 to ref 128133
+  no_role_a no_role_b
+  no_multiplicity_a no_multiplicity_b
+end
+relationcanvas 129413 relation_ref 188421 // <unidirectional association>
+  from ref 128517 z 1999 stereotype "<<owns>>" xyz 475 225 3000 to ref 128645
+  no_role_a no_role_b
+  no_multiplicity_a no_multiplicity_b
+end
+relationcanvas 129541 relation_ref 188549 // <unidirectional association>
+  from ref 128389 z 1999 stereotype "<<add>>" xyz 89 225 3000 to ref 129157
+  no_role_a no_role_b
+  no_multiplicity_a no_multiplicity_b
+end
+relationcanvas 129669 relation_ref 188677 // <association>
+  from ref 129157 z 1999 to ref 129285
+  no_role_a no_role_b
+  multiplicity_a_pos 266 232 3000 multiplicity_b_pos 259 232 3000
+end
+relationcanvas 129925 relation_ref 188933 // <association>
+  from ref 128645 z 1999 to ref 129285
+  no_role_a no_role_b
+  multiplicity_a_pos 341 232 3000 multiplicity_b_pos 347 232 3000
+end
+relationcanvas 130053 relation_ref 189061 // <generalisation>
+  geometry VHV
+  from ref 129157 z 1999 to point 201 171
+  line 130181 z 1999 to point 304 171
+  line 130309 z 1999 to ref 128133
+  no_role_a no_role_b
+  no_multiplicity_a no_multiplicity_b
+end
+preferred_whz 635 331 1
+end
