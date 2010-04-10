@@ -514,12 +514,16 @@ ColorPalette
 
 SiteUrl</pre>
 </div>
-<div title="Advice" modifier="Ichthyostega" modified="201004070114" created="200910311755" tags="Concepts def spec" changecount="9">
+<div title="Advice" modifier="Ichthyostega" modified="201004100320" created="200910311755" tags="Concepts def spec img" changecount="20">
 <pre>{{red{WIP 11/09}}}...//about to explicate a pattern which I'm aiming at within the design almost since the beginning//
 Expecting Advice and giving Advice &amp;mdash; this collaboration ranges somewhere between messaging and dynamic properties, but cross-cutting the primary, often hierarchical relation of dependencies. Always happening at a certain //point of advice,// which creates a distinct, static nature different of being just a convention, on the other hand, Advice is deliberately kept optional and received synchronously, albeit possibly within an continuation.
 
 !Specification
 ''Definition'': Advice is an optional, mediated collaboration between entities taking on the roles of advisor and advised, thereby passing a custom piece of advice data, managed by the advice support system. The possibility of advice is created by the advised entity by exposing a point of advice, while the advising entity can discover this advice possibility.
+[&gt;img[Entities for Advice collaboration|uml/fig141445.png]]
+
+
+
 !!Collaborators
 * the ''advised'' entity 
 * the ''advisor''
@@ -537,21 +541,42 @@ In a more elaborate scheme, the advised entiy could provide a signal to be invok
 &amp;rarr; AdviceImplementation
 </pre>
 </div>
-<div title="AdviceRequirements" modifier="Ichthyostega" modified="201004080252" created="201004060213" tags="design impl" changecount="10">
+<div title="AdviceImplementation" modifier="Ichthyostega" modified="201004100403" created="201004100056" tags="impl draft img" changecount="13">
+<pre>[&lt;img[Advice solution|uml/fig141573.png]]
+
+
+
+
+
+The advice system is //templated on the advice type// &amp;mdash; so basically there is an independent lookup table for each different kind of advice.The advice system is a sytem wide singleton service, but it is never addressed directly by the participants. Rather, instances of ~AdviceProvision and ~AdviceRequest act as point of access. But these aren't completely symmetric; while the ~AdviceRequest is owned by the advised entity, the ~AdviceProvision is a value object, a uniform holder used to introduce new advice into the system. ~AdviceProvision is copied into an internal buffer and managed by the advice system, as is the actual advice item, which is copied alongside.
+
+In order to find matches and provide advice solutions, the advice system maintains an index data structure called ''~BindingIndex''. The actual binding predicates are represented by value objects stored within this index table. The matching process is triggered whenever a new possibility for an advice solution enters the system, which could be a new request, a new provision or a change in the specified bindings. A successful match causes a pointer to be set within the ~AdviceRequest, pointing to the ~AdviceProvision acting as solution. Thus, when a solution exists, the advised entity can access the advice value object by dereferencing this pointer. A new advice solution just results in setting a different pointer, which is atomic and doesn't need to be protected by locking. But note, when omitting locking there is no memory barrier; thus the advised might not see a changed advice solution, until the corresponding thread(s) refresh their cpu cache. This might or might not be acceptable, depending on the context, and thus is configurable as policy. Similarily, the handling of default advice is configurable. Usually, advice is a default constructible value object. In this case, when there isn't any advice solution (yet), a pseudo solution holding the default constructed advice value is used to satisfy any advice access by the client (advised entity). The same can be used when the actual ~AdviceProvision gets //retracted.// As an alternative, when this default solution approach doesn't work, we can provide a policy either to throw or to wait blocking &amp;mdash; but this alternative policy is similarily implemented with an //null object// (a placeholder ~AdviceProvision). Anyway, this implementation techinque causes the advice system to collect some advice provisions, bindings and advice objects over time. It should use a pooling custom allocator in the final version. As the number of advisors is expected to be rather small, the storage occupied by these elements, which is effectively blocked until application exit, isn't considered a problem.
+
+!organising the advice solution
+This is the tricky part of the whole advice system implementation. A naive implementation will quickly degenerate in performance, as costs are of order ~AdviceProvisions * ~AdviceRequests * (average number of binding terms). But contrary to the standard solutions for rules based systems (either forward or backward chaining), in this case here always complete binding sets are to be matched, which allows to reduce the effort.
+
+!!!solution idea
+The binding patterns are organised by //predicate symbol and the lists are normalised.// A simple normalisation could be lexicographic ordering of the predicates. Then the resulting representation can be //hashed.// When all predicates are constant, match can be found by hashtable lookup, otherwise, in case some predicates contain variable arguments ({{red{planned extension}}}), the lookup is followed by an unification.
+
+Yet still we need to store a successful match, together with backlinks, in order to handle changing and retracting of advice.
+</pre>
+</div>
+<div title="AdviceRequirements" modifier="Ichthyostega" modified="201004100149" created="201004060213" tags="design impl" changecount="17">
 <pre>From analysing a number of intended AdviceSituations, some requirements for an Advice collaboration and implementation can be extracted.
 
 * the piece of advice is //not shared// between advisor and the advised entities; rather, it is copied into storage managed by the advice system
 * the piece of advice can only be exposed {{{const}}}, as any created advice point solution might be shared
 * the actual mode of advice needs to be configurable by policy &amp;mdash; signals (callback functors) might be used on both sides transparently
 * the client side (the advised entity) specifies initially, if a default answer is acceptable. If not, retrieving advice might block or fail
-* on both sides, the collaboration is initiated specifying an advice binding, which is an conjunction of predicates, optionally dynamic
+* on both sides, the collaboration is initiated specifying an advice binding, which is an conjunction of predicates, --optionally dynamic--^^no!^^
 * there is a tension between matching performance and flexibility. The top level should be entirely static (advice type)
 * the analysed usage situations provide no common denominator on the preferences regarding the match implementation.
 * some cases require just a match out of a small number of tokens, while generally we might get even a double dispatch
-* even possible and partial solutions should be cached, similar to the rete algorithm. Dispatching a solution should work lock-free
-* advice can be overwritten by new advice, but is rarely retracted (indeed, we can rule out this possibility, by relying on a proxy)
+* later, possible and partial solutions could be cached, similar to the rete algorithm. Dispatching a solution should work lock-free
+* advice can be replaced by new advice, which causes all matching advice solutions to behave as being overwritten.
 * when locking is left out, we can't give any guarantee as to when a given advice gets visible to the advised entity
-* throughput doesn't seem to be an issue, but picking up exsiting advice should be fast.
+* throughput doesn't seem to be an issue, but picking up exsiting advice should be as fast as possible
+* we expect a small number of advisors collaborating with and a larger number of advised entities.
 
 !!questions
 ;when does the advice colaboration actually happen?
@@ -587,15 +612,28 @@ In a more elaborate scheme, the advised entiy could provide a signal to be invok
 ;is the search for an adivce point solution exhaustive?
 :from the server side, when a new advice provision / binding is put up, //any// possible advice channel will be searched
 :contrary to this, at the client side, the first match found wins and will establish an advice channel.
+
+!decisions
+After considering the implementation possibilities, some not completely determined requirements can be narrowed down.
+* we //do// support the //retracting of advice.//
+* there is always an implicit //default advice solution.//
+* advice //is not an messaging system// &amp;mdash; no advice queue
+* signals (continuations) are acceptable as a extension to be provided later
+* we don't support any kind of dynamic re-evaluation of the binding match (this means not supporting the placement use case)
+* the binding pattern is //interpreted strictly as a conjuction of logic predicates// &amp;mdash; no partial match, but arguments are allowed
+* we prepare for a later extension to //full unification of arguments,// and provide a way of accessing the created bindings as //advice parameters.//
+
+Combining all these requirements and properties provides the foundation for the &amp;rarr; AdviceImplementation
+
 </pre>
 </div>
-<div title="AdviceSituations" modifier="Ichthyostega" modified="201004080208" created="201004052316" tags="Concepts spec design" changecount="13">
+<div title="AdviceSituations" modifier="Ichthyostega" modified="201004100124" created="201004052316" tags="Concepts spec design" changecount="16">
 <pre>[[Advice]] is a pattern extracted from several otherwise unrelated constellations
 
 !Proxy media in the engine
 Without rebuilding the engine network, we need the ability to reconfigure some parts to adapt to low resolution place-holder media temporarily. The collaboration required to make this happen seems to ''cross-cut'' the normal processing logic. Indeed, the nature of the adjustments is highly context dependent &amp;mdash; not every processing node needs to be adjusted. There is a dangerous interference with the ongoing render processes, prompting for the possibility to pick up this information synchronously.
 * the addressing and delivery of the advice is based on a mix of static (type) and dynamic information
-* it is concievable that the actual matching may even include a token present in the direct invocation context (the ongoing render task)
+* it is concievable that the actual matching may even include a token present in the direct invocation context (but this possibility was ruled out by later decision)
 * the attempt to recieve and pick up advice needs to be failsafe
 * locking should be avoided by design
 
@@ -613,6 +651,8 @@ The placement concept plays a fundamental role within Lumiera's HighLevelModel. 
 * deriving an advice point solution includes some kind of negotioation or active re-evaluation
 * the possible adivsors have to be queried according to their placement scope relations
 * this queriying might even trigger a resolution process within the advising placement.
+__Note__: after detailed analysis, this use case was deemed beyond the scope of the [[Advice]] core concept and idea.
+//As a use case, it was dropped.// But we retain some of the properties discovered by considering this scenario, especially the n:m relation, the symmetry in terms of opening the collaboration, and the possibility to have a specially implemented predicate in the binding pattern.
 
 &amp;rarr; AdviceRequirements
 </pre>
