@@ -64,17 +64,52 @@ namespace test {
       : private advice::Request<int>
       {
       public:
-        bool got(int val) { return val == getAdvice(); }
+        TheAdvised (Literal topic =0)
+          {
+            rebind (topic);
+          }
+        
+        void
+        rebind (Literal topic)
+          {
+            defineBinding (topic);
+          }
+        
+        bool
+        got(int val)
+          {
+            return val == getAdvice();
+          }
       };
     
     
     class TheAdvisor
       {
-        advice::Provision link_;
+        advice::Provision<int> link_;
           
       public:
-        void publish (int val) { link_.setAdvice (val); }
-        void clear()           { link_.retractAdvice(); }
+        TheAdvisor (Literal topic =0)
+          {
+            rebind (topic);
+          }
+        
+        void
+        rebind (Literal topic)
+          {
+            link_.defineBinding (topic);
+          }
+        
+        void
+        publish (int val)
+          {
+            link_.setAdvice (val);
+          }
+        
+        void
+        clear()
+          {
+            link_.retractAdvice(); 
+          }
       };
   }
   
