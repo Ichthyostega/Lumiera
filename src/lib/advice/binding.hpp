@@ -71,10 +71,13 @@
 //#include <boost/operators.hpp>
 //#include <tr1/memory>
 //#include <iostream>
-//#include <string>
+#include <string>
 
 namespace lib    {
 namespace advice {
+  
+  using std::string;
+  
   
   /**
    * Conjunction of predicates to be matched
@@ -98,6 +101,12 @@ namespace advice {
          *  by adding a predicate according to the
          *  given textual definition */
         void addPredicate (Literal spec);
+        
+        template<typename TY>
+        void addTypeGuard();
+        
+        
+        operator string()  const;
     };
   
   

@@ -112,21 +112,12 @@ namespace advice {
       void defineBinding (Binding const& binding);
       
       /** access the \em current piece of advice */
-      AD const& getAdvice();
-    };
-  
-  
-  /**
-   * Access point for the advised entity (client).
-   * TODO type comment
-   */
-  template<class AD>
-  class Request
-    : public PointOfAdvice<AD>
-    {
+      AD const& getAdvice()  const;
       
-    public:
       
+      /* == policy definitions == */    ////TODO: extract into policy classes
+      
+      AD const& handleMissingSolution()  const;
     };
   
   
@@ -140,8 +131,37 @@ namespace advice {
     {
       
     public:
+      AD const&
+      getAdvice()  const
+        {
+          UNIMPLEMENTED ("how to embody the piece of advice...");
+        }
+      
       void setAdvice (AD const& pieceOfAdvice);
       void retractAdvice();
+    };
+  
+  
+  /**
+   * Access point for the advised entity (client).
+   * TODO type comment
+   */
+  template<class AD>
+  class Request
+    : public PointOfAdvice<AD>
+    {
+      Provision<AD>* solution_;
+      
+    public:
+      AD const&
+      getAdvice()  const
+        {
+          if (!solution_)
+            return this->handleMissingSolution();
+          else
+            return solution_->getAdvice();
+        }
+      
     };
   
 

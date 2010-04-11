@@ -32,9 +32,10 @@
 //#include "proc/mobject/session/track.hpp"
 //#include "lib/meta/trait-special.hpp"
 //#include "lib/util-foreach.hpp"
+#include "lib/time.h"
 //#include "lib/symbol.hpp"
 
-//#include <iostream>
+#include <iostream>
 //#include <string>
 
 //using lib::test::showSizeof;
@@ -47,8 +48,8 @@
 //using lib::Symbol;
 //using lumiera::P;
 //using std::string;
-//using std::cout;
-//using std::endl;
+using std::cout;
+using std::endl;
 
 
 
@@ -94,6 +95,31 @@ namespace test {
       verifyPatternNormalisation()
         {
 #if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #605
+          Binding b0, b00;
+          Binding b1 ("cat1(), cat2().");
+          Binding b2 ("  cat2 (  ),cat1(   ) . ");
+          
+          CHECK (b0 == b00); CHECK (b00 == b0);
+          CHECK (b1 == b2);  CHECK (b2 == b1);
+          
+          CHECK (b0 != b1);  CHECK (b1 != b0);
+          CHECK (b0 != b2);  CHECK (b2 != b0);
+          
+          b2.addPredicate("cat1()");
+          CHECK (b1 == b2);
+          b2.addPredicate("cat3(zzz)");
+          CHECK (b1 != b2);
+          
+          b1.addTypeGuard<lumiera::Time>();
+          CHECK (b1 != b2);
+          b1.addPredicate(" cat3 (  zzz   )  ");
+          CHECK (b1 != b2);
+          b2.addTypeGuard<lumiera::Time>();
+          CHECK (b1 == b2);
+          
+          cout << "b0==" << b0 << endl;
+          cout << "b1==" << b1 << endl;
+          cout << "b2==" << b2 << endl;
 #endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #605
         }
       
@@ -102,6 +128,15 @@ namespace test {
       verifyStaticMatch()
         {
 #if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #605
+          CHECK ( matches (Binding(), Binding()));
+          CHECK ( matches (Binding("pred()"),  Binding("pred(  ) ")));
+          
+          CHECK ( matches (Binding("pred(x)"), Binding("pred(x)")));
+          CHECK (!matches (Binding("pred()"),  Binding("pred(x)")));
+          CHECK (!matches (Binding("pred(x)"), Binding("pred(y)")));
+          
+          CHECK ( matches (Binding("pred(x), pred(y)"), Binding("pred(y), pred(x)")));
+          CHECK (!matches (Binding("pred(x), pred(y)"), Binding("pred(y), pred(y)")));
 #endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #605
         }
       
