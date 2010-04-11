@@ -36,6 +36,7 @@
 
 //#include <iostream>
 //#include <string>
+#include <cstdlib>
 
 //using lib::test::showSizeof;
 //using lib::test::randStr;
@@ -47,6 +48,7 @@
 //using lib::Symbol;
 //using lumiera::P;
 //using std::string;
+using std::rand;
 //using std::cout;
 //using std::endl;
 
@@ -57,6 +59,23 @@ namespace advice {
 namespace test {
   
   namespace {
+    
+    class TheAdvised
+      : private advice::Request<int>
+      {
+      public:
+        bool got(int val) { return val == getAdvice(); }
+      };
+    
+    
+    class TheAdvisor
+      {
+        advice::Provision link_;
+          
+      public:
+        void publish (int val) { link_.setAdvice (val); }
+        void clear()           { link_.retractAdvice(); }
+      };
   }
   
   
@@ -95,6 +114,16 @@ namespace test {
       simpleExchange()
         {
 #if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #605
+          TheAdvised client;         // implicitly opens an request-for-advice
+          CHECK (client.got (0));    // no advice yet --> getting the default int()
+          
+          TheAdvisor server;         // implicitly prepares an advice provision
+          CHECK (client.got (0));    // but as no advice was provided yet, nothing happens
+          
+          int rr (1 + (rand() % 1000));
+          
+          server.publish (rr);       // now an match is detected, creating an advice channel
+          CHECK (client.got (rr));   // ..so the client can pick up the provided advice value
 #endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #605
         }
       
@@ -104,16 +133,123 @@ namespace test {
       createCollaboration()
         {
 #if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #605
+          TheAdvised client1 ("topic1()");
+          TheAdvisor server2 ("topic2()");
+          
+          int r1 (1 + (rand() % 1000));
+          int r2 (1 + (rand() % 1000));
+          
+          server2.publish (r2);
+          CHECK (client1.got(0));
+          
+          TheAdvised client2 ("topic2()");
+          CHECK (client2.got(r2));
+          
+          TheAdvisor server1;
+          CHECK (client1.got(0));
+          
+          server1.publish (r1);
+          CHECK (client1.got(0));
+          CHECK (client2.got(r2));
+          
+          server1.rebind ("topic1()");
+          CHECK (client1.got(r1));
+          CHECK (client2.got(r2));
 #endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #605
         }
       
       
       /** @test changing the provided advice, finally retracting it,
-       *        causing fallback on the default value */
+       *        causing fallback on the default value. Any given advisor
+       *        can connect to the advice system with multiple bindings
+       *        consecutively. The connection has no identity beside this
+       *        binding, so another server (advisor) can step into an
+       *        existing connection and overwrite or retract the advice.
+       *        Unless retracted, advice remains in the system,
+       *        even after the advisor is gone.
+       */
       void
       overwriting_and_retracting()
         {
 #if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #605
+          TheAdvised client1 ("topic1()");
+          TheAdvised client2 ("topic2()");
+          CHECK (client1.got(0));
+          CHECK (client2.got(0));
+          
+          int r1 (1 + (rand() % 1000));
+          int r2 (1 + (rand() % 1000));
+          
+          {
+            TheAdvisor server("topic1()");
+            CHECK (client1.got(0));
+            CHECK (client2.got(0));
+            
+            server.publish (r1);
+            CHECK (client1.got(r1));
+            CHECK (client2.got(0));
+            
+            server.publish (r2);
+            CHECK (client1.got(r2));
+            CHECK (client2.got(0));
+            
+            server.rebind("topic2()");
+            CHECK (client1.got(0));
+            CHECK (client2.got(r2));
+          }
+          
+          CHECK (client1.got(0));
+          CHECK (client2.got(r2));
+          
+          {
+            TheAdvisor anotherServer("topic1()");
+            CHECK (client1.got(0));
+            CHECK (client2.got(r2));
+            
+            anotherServer.publish (r1);
+            CHECK (client1.got(r1));
+            CHECK (client2.got(r2));
+          }
+          
+          CHECK (client1.got(r1));
+          CHECK (client2.got(r2));
+          
+          {
+            TheAdvisor yetAnotherServer("topic2()");
+            CHECK (client1.got(r1));
+            CHECK (client2.got(r2));
+            
+            yetAnotherServer.publish (r1);
+            CHECK (client1.got(r1));
+            CHECK (client2.got(r1));
+            
+            yetAnotherserver.rebind("topic1()");
+            CHECK (client1.got(r1));
+            CHECK (client2.got(0));
+            
+            yetAnotherserver.clear();
+            CHECK (client1.got(0));
+            CHECK (client2.got(0));
+            
+            yetAnotherserver.rebind("topic2()");
+            CHECK (client1.got(0));
+            CHECK (client2.got(0));
+            
+            yetAnotherServer.publish (r1);
+            CHECK (client1.got(0));
+            CHECK (client2.got(r1));
+          }
+          
+          CHECK (client1.got(0));
+          CHECK (client2.got(r1));
+          
+          client1.rebind("topic2()");
+          CHECK (client1.got(r1));
+          CHECK (client2.got(r1));
+          
+          client2.rebind("nonExistingTopic()");
+          CHECK (client1.got(r1));
+          CHECK (client2.got(0));
 #endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #605
         }
     };
