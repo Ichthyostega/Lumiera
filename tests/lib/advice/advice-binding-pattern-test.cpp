@@ -35,6 +35,8 @@
 #include "lib/time.h"
 //#include "lib/symbol.hpp"
 
+//#include <tr1/functional_hash.h>
+//#include <boost/functional/hash.hpp>
 #include <iostream>
 //#include <string>
 
@@ -48,6 +50,7 @@
 //using lib::Symbol;
 //using lumiera::P;
 //using std::string;
+//using boost::hash;
 using std::cout;
 using std::endl;
 
@@ -87,6 +90,7 @@ namespace test {
         {
           verifyPatternNormalisation();
           verifyStaticMatch();
+          verifyPreparedMatch();
           verifyDynamicMatch();
         }
       
@@ -94,10 +98,9 @@ namespace test {
       void
       verifyPatternNormalisation()
         {
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #605
           Binding b0, b00;
           Binding b1 ("cat1(), cat2().");
-          Binding b2 ("  cat2 (  ),cat1(   ) . ");
+          Binding b2 ("  cat2 (  ),cat1 . ");
           
           CHECK (b0 == b00); CHECK (b00 == b0);
           CHECK (b1 == b2);  CHECK (b2 == b1);
@@ -120,14 +123,12 @@ namespace test {
           cout << "b0==" << b0 << endl;
           cout << "b1==" << b1 << endl;
           cout << "b2==" << b2 << endl;
-#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #605
         }
       
       
       void
       verifyStaticMatch()
         {
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #605
           CHECK ( matches (Binding(), Binding()));
           CHECK ( matches (Binding("pred()"),  Binding("pred(  ) ")));
           
@@ -137,7 +138,35 @@ namespace test {
           
           CHECK ( matches (Binding("pred(x), pred(y)"), Binding("pred(y), pred(x)")));
           CHECK (!matches (Binding("pred(x), pred(y)"), Binding("pred(y), pred(y)")));
-#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #605
+        }
+      
+      
+      void
+      verifyPreparedMatch()
+        {
+          Binding b1 ("pred()");
+          Binding b2 ("pred");
+          Binding b3 ("pred, pred(x)");
+          Binding b4 ("pred ( x ) , pred().");
+          CHECK ( matches (b1,b2));
+          CHECK ( matches (b3,b4));
+          
+          Binding::Matcher bm1 (b1.buildMatcher());
+          Binding::Matcher bm2 (b2.buildMatcher());
+          Binding::Matcher bm3 (b3.buildMatcher());
+          Binding::Matcher bm4 (b4.buildMatcher());
+          
+          CHECK (hash_value(b1) == hash_value(bm1));
+          CHECK (hash_value(b2) == hash_value(bm2));
+          CHECK (hash_value(b3) == hash_value(bm3));
+          CHECK (hash_value(b4) == hash_value(bm4));
+          
+          CHECK (hash_value(b1) != hash_value(b3));
+          
+          CHECK ( matches (bm1,bm2));
+          CHECK ( matches (bm3,bm4));
+          CHECK (!matches (bm1,bm3));
+          CHECK (!matches (bm2,bm4));
         }
       
       

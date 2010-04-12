@@ -70,13 +70,16 @@
 
 //#include <boost/operators.hpp>
 //#include <tr1/memory>
-//#include <iostream>
+#include <iostream>
 #include <string>
 
 namespace lib    {
 namespace advice {
   
   using std::string;
+  
+  typedef size_t HashVal;
+  
   
   
   /**
@@ -87,30 +90,150 @@ namespace advice {
    */
   class Binding
     {
-      public:
-        /** create the empty binding, equivalent to \c true */
-        Binding();
       
-        /** create the binding as defined by the given textual definition.
-         *  @note implicit type conversion deliberately intended */
-        Binding (Literal spec);
-        
-        /*-- Binding is default copyable --*/
-        
-        /** extend the definition of this binding
-         *  by adding a predicate according to the
-         *  given textual definition */
-        void addPredicate (Literal spec);
-        
-        template<typename TY>
-        void addTypeGuard();
-        
-        
-        operator string()  const;
+    public:
+      /** 
+       * Functor object for matching against another Binding.
+       * Contains precompiled information necessary for
+       * determining a match.
+       */
+      class Matcher
+        {
+          HashVal bindingHash_;
+          
+          
+          Matcher (HashVal ha)
+            : bindingHash_(ha)
+            { }
+          
+          friend class Binding;
+          
+          
+        public:
+          bool matches (Binding const& obi)  const;
+          bool matches (Binding::Matcher const& oma)  const;
+          
+          friend HashVal hash_value (Matcher const&);
+        };
+      
+      
+      
+      
+      /** create the empty binding, equivalent to \c true */
+      Binding();
+    
+      /** create the binding as defined by the given textual definition.
+       *  @note implicit type conversion deliberately intended */
+      Binding (Literal spec);
+      
+      /*-- Binding is default copyable --*/
+      
+      /** extend the definition of this binding
+       *  by adding a predicate according to the
+       *  given textual definition */
+      void addPredicate (Literal spec);
+      
+      template<typename TY>
+      void addTypeGuard();
+      
+      
+      Matcher buildMatcher()  const;
+      HashVal calculateHash() const;
+      
+      operator string()  const;
+      
+      
+    private:
+      void normalise(); ////TODO necessary??
     };
   
   
-  ////TODO define the hash function here, to be picked up by ADL
+  inline std::ostream&
+  operator<< (std::ostream& os, Binding const& bi)
+  {
+    return os << string(bi); 
+  }
+      
+  template<typename TY>
+  inline void
+  Binding::addTypeGuard()
+  {
+    UNIMPLEMENTED ("create a new predicate spec to denote that this binding is related to the given advice type");
+  }
+
+  
+  
+  
+  /* === equality comparison and matching === */
+  
+  /** bindings are considered equivalent if, after normalisation,
+   *  their respective definitions are identical.
+   *  @note for bindings without variable arguments, equivalence and matching
+   *        always yield the same results. Contrary to this, two bindings with
+   *        some variable arguments could match, without being defined identically.
+   *        For example \c pred(X) matches \c pred(u) or any other binding of the
+   *        form \c pred(<constant_value>)
+   */
+  inline bool
+  operator== (Binding const& b1, Binding const& b2)
+  {
+    UNIMPLEMENTED ("equality of bindings, based on term by term comparison");
+  }
+  
+  inline bool
+  operator!= (Binding const& b1, Binding const& b2)
+  {
+    return ! (b1 == b2);
+  }
+  
+  
+  inline bool
+  matches (Binding const& b1, Binding const& b2)
+  {
+    return b1.buildMatcher().matches (b2);
+  }
+  
+  inline bool
+  matches (Binding::Matcher const& m1, Binding::Matcher const& m2)
+  {
+    return m1.matches (m2);
+  }
+  
+  
+  inline Binding::Matcher
+  Binding::buildMatcher()  const
+  {
+    return Matcher (this->calculateHash());
+  }
+  
+  
+  
+  /* == access hash values used for matching == */
+  
+  inline bool
+  Binding::Matcher::matches (Binding const& obi)  const
+  {
+    return bindingHash_ == obi.calculateHash();
+  }
+          
+  inline bool
+  Binding::Matcher::matches (Binding::Matcher const& oma)  const
+  {
+    return bindingHash_ == hash_value(oma);
+  }
+          
+  inline HashVal
+  hash_value (Binding::Matcher const& bm)
+  {
+    return bm.bindingHash_;
+  }
+  
+  inline HashVal
+  hash_value (Binding const& bi)
+  {
+    return bi.calculateHash();
+  }
+  
   
   
   

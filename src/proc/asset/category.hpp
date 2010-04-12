@@ -102,7 +102,7 @@ namespace asset {
   
   
   inline ostream&
-  operator<< (ostream& os, const Category& cat)
+  operator<< (ostream& os, Category const& cat)
     {
       return os << string(cat); 
     }
