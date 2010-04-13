@@ -47,8 +47,8 @@ using boost::regex_search;
 
 #include <iostream>
 
-namespace util
-  {
+namespace util {
+  
   
   /** create as a tokenised <i>copy</i> of the current commandline.
    *  Note that argv[0] is always ignored. */

@@ -96,7 +96,7 @@ namespace mobject {
           weak_ptr<TAR> objRef;
           
           Record (const Query<TAR>& q, const P<TAR>& obj)
-            : degree (lumiera::query::countPraed (q)),
+            : degree (lumiera::query::countPred (q)),
               query (q),
               objRef (obj)
             { }

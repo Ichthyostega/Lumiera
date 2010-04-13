@@ -72,6 +72,7 @@
 //#include <tr1/memory>
 #include <iostream>
 #include <string>
+#include <set>
 
 namespace lib    {
 namespace advice {
@@ -90,6 +91,51 @@ namespace advice {
    */
   class Binding
     {
+      
+      /** 
+       *  single predicate
+       *  as part of an advice binding pattern
+       */
+      class Atom
+        {
+          uint   ari_;
+          string sym_;
+          string arg_;
+          
+        public:
+          Atom (uint arity, string const& symbol, string const& arg ="")
+            : ari_(arity)
+            , sym_(symbol)
+            , arg_(arg)
+            { }
+          
+          string const& sym()  const { return sym_; }
+          string const& arg()  const { return arg_; }
+          uint        arity()  const { return ari_; }
+          
+          operator string()  const;
+          
+          int 
+          compare (Atom const& oa)  const
+            { 
+              int res;
+              if (0 != (res=sym().compare (oi.sym())))  return res;
+              if (0 != (res=arity() - (oi.arity())))    return res;
+              return arg().compare (oi.arg());                        /////TODO: in the final version, when we'll allow for variable arguments
+            }                                                         /////////  and unification, then variable arguments must not be part of
+                                                                      /////////  the comparison, otherwise the matching by hash will break!
+          friend bool
+          operator< (Atom const& a1, Atom const& a2)
+          {
+            return a1.compare(a2) < 0; 
+          }
+        };
+      
+      
+      typedef std::set<Atom> NormalisedAtoms;
+      
+      NormalisedAtoms atoms_;
+      
       
     public:
       /** 
@@ -144,7 +190,8 @@ namespace advice {
       
       
     private:
-      void normalise(); ////TODO necessary??
+      /** internal: parse into atoms, and insert them */
+      void parse_and_append (string def);
     };
   
   

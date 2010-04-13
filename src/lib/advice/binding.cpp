@@ -24,6 +24,14 @@
 #include "lib/advice/binding.hpp"
 
 //#include <tr1/functional_hash.h>
+#include <boost/functional/hash.hpp>
+#include <boost/algorithm/string/join.hpp>
+#include <boost/lexical_cast.hpp>
+
+using boost::algorithm::join;
+using boost::lexical_cast;
+
+using boost::hash_combine;
 
 
 namespace lib {
@@ -31,39 +39,62 @@ namespace advice {
 
 //  using std::tr1::hash;
 
-//  LUMIERA_ERROR_DEFINE (MISSING_INSTANCE, "Existing ID registration without associated instance");
+  
+  
+  Binding::Atom::operator string()  const
+  {
+    return sym_+"/"+lexical_cast<string> (ari_)
+               +"("+arg_+")";
+  }
+  
+  
+  void
+  Binding::parse_and_append (string def)
+  {
+    UNIMPLEMENTED ("do the actual parsing by regexp, create an Atom for each match");
+  }
 
   
-  /* ohlolololohaha */
   Binding::Binding ()
-  {
-    UNIMPLEMENTED ("create a new empty binding");
-  }
+    : atoms_()
+  { }
   
   Binding::Binding (Literal spec)
   {
-    UNIMPLEMENTED ("parse the spec and create a new binding");
+    parse_and_append (spec);
   }
   
   
   void
   Binding::addPredicate (Literal spec)
   {
-    UNIMPLEMENTED ("parse the given spec and create an additional predicte, then re-normalise"); 
+    parse_and_append (spec);
   }
 
 
   
   Binding::operator string()  const
   {
-    UNIMPLEMENTED ("diagnostic string representation of an advice binding");
+    return "Binding[" + join(atoms_, ", ") + "]";
   }
   
   
   HashVal
   Binding::calculateHash() const
   {
-    UNIMPLEMENTED ("calculate the hash for a normalised advice binding");
+    HashVal hash=0;
+    
+    typedef NormalisedAtoms::const_iterator AIter;
+    AIter pos = atoms_.begin();
+    AIter end = atoms_.end();
+    for ( ; pos!=end ; ++pos)
+      {
+        hash_combine (hash, pos->sym());
+        hash_combine (hash, pos->arity());
+        hash_combine (hash, pos->arg());              //////////////TODO: not in final version with variable arguments
+      }
+    
+    return hash;
   }
   
   

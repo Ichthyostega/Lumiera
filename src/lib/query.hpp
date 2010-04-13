@@ -77,7 +77,7 @@ namespace lumiera {
      *  usable for ordering queries, as more predicates usually
      *  mean more conditions, i.e. more constriction
      */
-    uint countPraed (const string&);
+    uint countPred (const string&);
     
     
     const string extractID (Symbol, const string& termString);
