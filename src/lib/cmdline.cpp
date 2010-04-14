@@ -35,9 +35,6 @@ using boost::algorithm::split;
 using boost::algorithm::join;
 using boost::algorithm::is_any_of;
 using boost::algorithm::token_compress_on;
-using boost::regex;
-using boost::smatch;
-using boost::regex_search;
 
 using boost::regex;
 using boost::smatch;

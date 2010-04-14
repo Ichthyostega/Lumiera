@@ -22,14 +22,26 @@
 
 
 #include "lib/advice/binding.hpp"
+#include "lib/symbol.hpp"
 
 //#include <tr1/functional_hash.h>
 #include <boost/functional/hash.hpp>
 #include <boost/algorithm/string/join.hpp>
 #include <boost/lexical_cast.hpp>
+#include <boost/regex.hpp>
+
+
+using lib::Literal;
 
 using boost::algorithm::join;
 using boost::lexical_cast;
+
+using boost::regex;
+using boost::smatch;
+//using boost::regex_search;
+using boost::sregex_iterator;
+using boost::match_continuous;
+
 
 using boost::hash_combine;
 
@@ -41,19 +53,44 @@ namespace advice {
 
   
   
-  Binding::Atom::operator string()  const
-  {
-    return sym_+"/"+lexical_cast<string> (ari_)
-               +"("+arg_+")";
+                                                                      /////////////////////TICKET #613 : centralise generally useful RegExps
+  namespace{  // Implementation details
+    
+    const string matchSym = "(\\w[\\w_\\.\\-]*)";
+    const string matchArg = "\\(\\s*"+matchSym+"?\\s*\\)"; 
+    regex findPredicate ("\\s*"+matchSym+"("+matchArg+")?\\s*,?");    ///< \c sym(arg), groups: [symbol, parenthesis, argument symbol]
+    
+    /** detect the \em arity of an predicate, as matched by #findPredicate.
+     *  Currently, we don't really parse predicate logic notation and thus we
+     *  just distinguish nullary predicates (no argument) and predicates with
+     *  one single constant argument. */
+    inline uint
+    detectArity (smatch const& match)
+    {
+      if (!match[2].matched) return 0;  // no parenthesis at all
+      if (!match[3].matched) return 0;  // empty parenthesis
+      
+      // later we could analyse the argument in detail here...
+      return 1;  // but now we just accept a single constant symbol
+    }
   }
   
   
   void
-  Binding::parse_and_append (string def)
-  {
-    UNIMPLEMENTED ("do the actual parsing by regexp, create an Atom for each match");
+  Binding::parse_and_append (Literal lit)
+  {      
+    string def(lit);
+    sregex_iterator end;
+    sregex_iterator pos (def.begin(),def.end(), findPredicate, 
+                                                match_continuous);    // continuous: don't allow garbage *not* matched by the RegExp
+    while (pos != end)
+      {
+        smatch match = *pos;
+        atoms_.insert (Atom (match[1], detectArity(match), match[3]));
+        ++pos;
+      }
   }
-
+  
   
   Binding::Binding ()
     : atoms_()
@@ -61,6 +98,7 @@ namespace advice {
   
   Binding::Binding (Literal spec)
   {
+    REQUIRE (spec);
     parse_and_append (spec);
   }
   
@@ -68,6 +106,7 @@ namespace advice {
   void
   Binding::addPredicate (Literal spec)
   {
+    REQUIRE (spec);
     parse_and_append (spec);
   }
 
@@ -75,7 +114,25 @@ namespace advice {
   
   Binding::operator string()  const
   {
-    return "Binding[" + join(atoms_, ", ") + "]";
+    string repr("Binding[");
+    typedef NormalisedAtoms::const_iterator AIter;
+    AIter end = atoms_.end();
+    AIter pos = atoms_.begin();
+    for ( ; pos!=end ; ++pos)
+      repr += string(*pos)+", ";
+    
+    if (0 < atoms_.size())
+      repr.resize(repr.size()-2);
+    
+    repr += "]";
+    return repr;
+  }
+  
+  
+  Binding::Atom::operator string()  const
+  {
+    return sym_+"/"+lexical_cast<string> (ari_)
+               +"("+arg_+")";
   }
   
   
@@ -95,6 +152,35 @@ namespace advice {
       }
     
     return hash;
+  }
+  
+  
+  /** bindings are considered equivalent if, after normalisation,
+   *  their respective definitions are identical.
+   *  @note for bindings without variable arguments, equivalence and matching
+   *        always yield the same results. Contrary to this, two bindings with
+   *        some variable arguments could match, without being defined identically.
+   *        For example \c pred(X) matches \c pred(u) or any other binding of the
+   *        form \c pred(<constant_value>)
+   */
+  bool
+  operator== (Binding const& b1, Binding const& b2)
+  {
+    if (b1.atoms_.size() != b2.atoms_.size())
+      return false;
+    
+    ASSERT (b1.atoms_.size() == b2.atoms_.size());
+    
+    typedef Binding::NormalisedAtoms::const_iterator Iter;
+    Iter end = b1.atoms_.end();
+    Iter p1 = b1.atoms_.begin();
+    Iter p2 = b2.atoms_.begin();
+    
+    for ( ; p1!=end;  ++p1, ++p2 )
+      if (! p1->identical(*p2))
+        return false;
+    
+    return true;
   }
   
   

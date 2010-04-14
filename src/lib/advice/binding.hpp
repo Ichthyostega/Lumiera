@@ -67,6 +67,7 @@
 //#include "lib/hash-indexed.hpp"
 //#include "lib/util.hpp"
 #include "lib/symbol.hpp"
+#include "lib/query.hpp"
 
 //#include <boost/operators.hpp>
 //#include <tr1/memory>
@@ -103,10 +104,9 @@ namespace advice {
           string arg_;
           
         public:
-          Atom (uint arity, string const& symbol, string const& arg ="")
-            : ari_(arity)
-            , sym_(symbol)
-            , arg_(arg)
+          explicit
+          Atom (string const& symbol ="nil", uint arity =0, string const& arg ="")
+            : ari_(arity), sym_(symbol), arg_(arg)
             { }
           
           string const& sym()  const { return sym_; }
@@ -115,15 +115,23 @@ namespace advice {
           
           operator string()  const;
           
+          bool
+          identical (Atom const& oa)  const
+            {
+              return ari_ == oa.ari_
+                  && sym_ == oa.sym_
+                  && arg_ == oa.arg_;
+            }
+          
           int 
-          compare (Atom const& oa)  const
+          compare (Atom const& oa)  const               ///< @note when #compare returns 0, the corresponding Atom counts as duplicate
             { 
               int res;
-              if (0 != (res=sym().compare (oi.sym())))  return res;
-              if (0 != (res=arity() - (oi.arity())))    return res;
-              return arg().compare (oi.arg());                        /////TODO: in the final version, when we'll allow for variable arguments
-            }                                                         /////////  and unification, then variable arguments must not be part of
-                                                                      /////////  the comparison, otherwise the matching by hash will break!
+              if (0 != (res=sym().compare (oa.sym())))  return res;
+              if (0 != (res=arity() - (oa.arity())))    return res;
+              return arg().compare (oa.arg());                        /////TODO: in the final version, when we'll allow for variable arguments
+            }                                                         /////////: and unification, then variable arguments must not be part of
+                                                                      /////////: the comparison, otherwise the matching by hash will break!
           friend bool
           operator< (Atom const& a1, Atom const& a2)
           {
@@ -188,10 +196,12 @@ namespace advice {
       
       operator string()  const;
       
-      
+      friend bool operator== (Binding const&, Binding const&);
+    
+    
     private:
       /** internal: parse into atoms, and insert them */
-      void parse_and_append (string def);
+      void parse_and_append (Literal def);
     };
   
   
@@ -205,7 +215,7 @@ namespace advice {
   inline void
   Binding::addTypeGuard()
   {
-    UNIMPLEMENTED ("create a new predicate spec to denote that this binding is related to the given advice type");
+    atoms_.insert (Atom ("advice.type."+lumiera::query::buildTypeID<TY>()));
   }
 
   
@@ -213,19 +223,6 @@ namespace advice {
   
   /* === equality comparison and matching === */
   
-  /** bindings are considered equivalent if, after normalisation,
-   *  their respective definitions are identical.
-   *  @note for bindings without variable arguments, equivalence and matching
-   *        always yield the same results. Contrary to this, two bindings with
-   *        some variable arguments could match, without being defined identically.
-   *        For example \c pred(X) matches \c pred(u) or any other binding of the
-   *        form \c pred(<constant_value>)
-   */
-  inline bool
-  operator== (Binding const& b1, Binding const& b2)
-  {
-    UNIMPLEMENTED ("equality of bindings, based on term by term comparison");
-  }
   
   inline bool
   operator!= (Binding const& b1, Binding const& b2)

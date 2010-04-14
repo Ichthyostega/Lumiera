@@ -85,5 +85,16 @@ namespace lumiera {
     const string removeTerm (Symbol, string& termString);
     
     
+    template<typename TY>
+    const string
+    buildTypeID()
+    {
+      string typeID (typeid(TY).name());
+      normaliseID (typeID);
+      return typeID;
+    }
+    
+    
+    
 }} // namespace lumiera::query
 #endif

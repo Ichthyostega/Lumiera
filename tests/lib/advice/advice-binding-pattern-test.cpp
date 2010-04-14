@@ -88,6 +88,7 @@ namespace test {
       virtual void
       run (Arg)
         {
+          verifyPatternSyntax();
           verifyPatternNormalisation();
           verifyStaticMatch();
           verifyPreparedMatch();
@@ -96,11 +97,41 @@ namespace test {
       
       
       void
+      verifyPatternSyntax()
+        {
+#define _PARSE_AND_SHOW(_STR_) \
+          cout << _STR_ << "\t--->" << Binding(_STR_) << endl;
+          
+          _PARSE_AND_SHOW ("");
+          _PARSE_AND_SHOW ("aSymbol");
+          _PARSE_AND_SHOW ("aSymbol followed by Garbage : §&Ω%€GΩ%€ar☠☠☠baäääääge");
+          _PARSE_AND_SHOW ("§&Ω%€GΩ%€ar☠☠☠baäääääge");
+          _PARSE_AND_SHOW ("a, list , of ,symbols.");
+          _PARSE_AND_SHOW ("nullary().");
+          _PARSE_AND_SHOW ("nullary( )");
+          _PARSE_AND_SHOW ("nothing ()");
+          _PARSE_AND_SHOW ("predicate( with-argument )");
+          _PARSE_AND_SHOW ("no( valid definition here)");
+          
+          Binding testBinding;
+          testBinding.addTypeGuard<AdviceBindingPattern_test>();
+          testBinding.addPredicate("one two(), three( four ).");
+          
+          cout << testBinding << endl;
+        }
+      
+      
+      void
       verifyPatternNormalisation()
         {
           Binding b0, b00;
           Binding b1 ("cat1(), cat2().");
-          Binding b2 ("  cat2 (  ),cat1 . ");
+          Binding b2 ("  cat2(  ) cat1  ****");
+          
+          cout << "b0==" << b0 << endl;
+          cout << "b1==" << b1 << endl;
+          cout << "b2==" << b2 << endl;
+          
           
           CHECK (b0 == b00); CHECK (b00 == b0);
           CHECK (b1 == b2);  CHECK (b2 == b1);
@@ -115,13 +146,11 @@ namespace test {
           
           b1.addTypeGuard<lumiera::Time>();
           CHECK (b1 != b2);
-          b1.addPredicate(" cat3 (  zzz   )  ");
+          b1.addPredicate(" cat3(  zzz   )  ");
           CHECK (b1 != b2);
           b2.addTypeGuard<lumiera::Time>();
           CHECK (b1 == b2);
           
-          cout << "b0==" << b0 << endl;
-          cout << "b1==" << b1 << endl;
           cout << "b2==" << b2 << endl;
         }
       

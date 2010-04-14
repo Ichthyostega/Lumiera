@@ -69,7 +69,7 @@ namespace lumiera {
     
     
     
-    
+                                                                          //////////////////////TICKET #613 : centralise generally useful RegExps
     namespace{  // Implementation details
       
       map<Symbol, regex> regexTable;
