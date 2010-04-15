@@ -24,33 +24,25 @@
 #include "lib/advice/binding.hpp"
 #include "lib/symbol.hpp"
 
-//#include <tr1/functional_hash.h>
 #include <boost/functional/hash.hpp>
-#include <boost/algorithm/string/join.hpp>
 #include <boost/lexical_cast.hpp>
 #include <boost/regex.hpp>
 
 
 using lib::Literal;
 
-using boost::algorithm::join;
-using boost::lexical_cast;
-
 using boost::regex;
 using boost::smatch;
-//using boost::regex_search;
 using boost::sregex_iterator;
 using boost::match_continuous;
-
-
 using boost::hash_combine;
+using boost::lexical_cast;
 
 
 namespace lib {
 namespace advice {
-
-//  using std::tr1::hash;
-
+  
+  
   
   
                                                                       /////////////////////TICKET #613 : centralise generally useful RegExps
@@ -109,8 +101,8 @@ namespace advice {
     REQUIRE (spec);
     parse_and_append (spec);
   }
-
-
+  
+  
   
   Binding::operator string()  const
   {
@@ -148,7 +140,7 @@ namespace advice {
       {
         hash_combine (hash, pos->sym());
         hash_combine (hash, pos->arity());
-        hash_combine (hash, pos->arg());              //////////////TODO: not in final version with variable arguments
+        hash_combine (hash, pos->arg());              //////////////TICKET #615 : not in final version with variable arguments
       }
     
     return hash;

@@ -62,15 +62,9 @@
 
 
 #include "lib/error.hpp"
-//#include "proc/asset.hpp"
-//#include "proc/asset/struct-scheme.hpp"
-//#include "lib/hash-indexed.hpp"
-//#include "lib/util.hpp"
 #include "lib/symbol.hpp"
 #include "lib/query.hpp"
 
-//#include <boost/operators.hpp>
-//#include <tr1/memory>
 #include <iostream>
 #include <string>
 #include <set>
@@ -87,13 +81,17 @@ namespace advice {
   /**
    * Conjunction of predicates to be matched
    * against a collaboration partner for establishing
-   * an Advice connection.
+   * an Advice connection. The binding is defined by a
+   * textual spec in prolog-like syntax. The internal
+   * representation is immediately \em normalised.
+   * Typically the goal is just to create a #Matcher
+   * (Functor) to be stored for later match checks
    * TODO type comment
    */
   class Binding
     {
       
-      /** 
+      /**
        *  single predicate
        *  as part of an advice binding pattern
        */
@@ -123,9 +121,9 @@ namespace advice {
                   && arg_ == oa.arg_;
             }
           
-          int 
+          int
           compare (Atom const& oa)  const               ///< @note when #compare returns 0, the corresponding Atom counts as duplicate
-            { 
+            {
               int res;
               if (0 != (res=sym().compare (oa.sym())))  return res;
               if (0 != (res=arity() - (oa.arity())))    return res;
@@ -146,7 +144,7 @@ namespace advice {
       
       
     public:
-      /** 
+      /**
        * Functor object for matching against another Binding.
        * Contains precompiled information necessary for
        * determining a match.
@@ -175,7 +173,7 @@ namespace advice {
       
       /** create the empty binding, equivalent to \c true */
       Binding();
-    
+      
       /** create the binding as defined by the given textual definition.
        *  @note implicit type conversion deliberately intended */
       Binding (Literal spec);
@@ -197,8 +195,8 @@ namespace advice {
       operator string()  const;
       
       friend bool operator== (Binding const&, Binding const&);
-    
-    
+      
+      
     private:
       /** internal: parse into atoms, and insert them */
       void parse_and_append (Literal def);
@@ -208,16 +206,16 @@ namespace advice {
   inline std::ostream&
   operator<< (std::ostream& os, Binding const& bi)
   {
-    return os << string(bi); 
+    return os << string(bi);
   }
-      
+  
   template<typename TY>
   inline void
   Binding::addTypeGuard()
   {
     atoms_.insert (Atom ("advice.type."+lumiera::query::buildTypeID<TY>()));
   }
-
+  
   
   
   

@@ -22,45 +22,23 @@
 
 
 #include "lib/test/run.hpp"
-//#include "lib/test/test-helper.hpp"
 
 #include "lib/advice.hpp"
-//#include "lib/p.hpp"
-//#include "proc/assetmanager.hpp"
-//#include "proc/asset/inventory.hpp"
-//#include "proc/mobject/session/clip.hpp"
-//#include "proc/mobject/session/track.hpp"
-//#include "lib/meta/trait-special.hpp"
-//#include "lib/util-foreach.hpp"
 #include "lib/time.h"
-//#include "lib/symbol.hpp"
 
-//#include <tr1/functional_hash.h>
-//#include <boost/functional/hash.hpp>
 #include <iostream>
-//#include <string>
 
-//using lib::test::showSizeof;
-//using lib::test::randStr;
-//using util::isSameObject;
-//using util::and_all;
-//using util::for_each;
-//using util::isnil;
-//using lib::Literal;
-//using lib::Symbol;
-//using lumiera::P;
-//using std::string;
-//using boost::hash;
 using std::cout;
 using std::endl;
 
 
 
-namespace lib {
-namespace advice {
-namespace test {
+namespace lib   {
+namespace advice{
+namespace test  {
   
   namespace {
+    class DummyAdvice { };
   }
   
   
@@ -104,17 +82,17 @@ namespace test {
           
           _PARSE_AND_SHOW ("");
           _PARSE_AND_SHOW ("aSymbol");
-          _PARSE_AND_SHOW ("aSymbol followed by Garbage : §&Ω%€GΩ%€ar☠☠☠baäääääge");
+          _PARSE_AND_SHOW ("aSymbol followed by Garbage §&Ω%€GΩ%€ar☠☠☠bäaäääge");
           _PARSE_AND_SHOW ("§&Ω%€GΩ%€ar☠☠☠baäääääge");
           _PARSE_AND_SHOW ("a, list , of ,symbols.");
           _PARSE_AND_SHOW ("nullary().");
           _PARSE_AND_SHOW ("nullary( )");
           _PARSE_AND_SHOW ("nothing ()");
           _PARSE_AND_SHOW ("predicate( with-argument )");
-          _PARSE_AND_SHOW ("no( valid definition here)");
+          _PARSE_AND_SHOW ("no (valid definition here)");
           
           Binding testBinding;
-          testBinding.addTypeGuard<AdviceBindingPattern_test>();
+          testBinding.addTypeGuard<DummyAdvice>();
           testBinding.addPredicate("one two(), three( four ).");
           
           cout << testBinding << endl;
@@ -126,7 +104,7 @@ namespace test {
         {
           Binding b0, b00;
           Binding b1 ("cat1(), cat2().");
-          Binding b2 ("  cat2(  ) cat1  ****");
+          Binding b2 (" cat2 cat1  ***");
           
           cout << "b0==" << b0 << endl;
           cout << "b1==" << b1 << endl;
@@ -176,7 +154,7 @@ namespace test {
           Binding b1 ("pred()");
           Binding b2 ("pred");
           Binding b3 ("pred, pred(x)");
-          Binding b4 ("pred ( x ) , pred().");
+          Binding b4 ("pred( x ) , pred().");
           CHECK ( matches (b1,b2));
           CHECK ( matches (b3,b4));
           
@@ -201,13 +179,27 @@ namespace test {
       
       /** @test match against patterns containing variables,
        *        verify the created solution arguments
-       *  @todo this is a future extension
+       *  @todo this is a future extension and its not clear
+       *        if we need it and what the exact semantics
+       *        could be  ///////////////////////////////TICKET #615
        */
       void
       verifyDynamicMatch()
         {
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #605
-#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #605
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #615
+          CHECK ( matches (Binding("pred(u)"), Binding("pred(X)")));
+          CHECK ( matches (Binding("pred(f(u))"), Binding("pred(f(X))")));
+          CHECK ( matches (Binding("pred(f(u,Y))"), Binding("pred(f(X,v))")));
+          CHECK ( matches (Binding("pred(f(u,X))"), Binding("pred(f(X,v))")));   // the so called "standardisation apart"
+          
+          CHECK (!matches (Binding("pred(u,v)"), Binding("pred(X)")));
+          CHECK (!matches (Binding("pred(f(u))"), Binding("pred(f(v))")));
+          CHECK (!matches (Binding("pred(f(u))"), Binding("pred(g(X))")));
+          CHECK (!matches (Binding("pred(f(u,v))"), Binding("pred(f(X,X))")));
+          
+          //////TODO should also cover the difference between equality and match, which gets tangible only in conjunction with variables
+          
+#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #615
         }
     };
   
