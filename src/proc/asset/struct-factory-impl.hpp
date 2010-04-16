@@ -99,7 +99,7 @@ namespace asset {
           // does the query somehow specify the desired name-ID?
           string nameID = extractID (genericIdSymbol, query);
           if (isnil (nameID))
-            nameID = extractID (StructTraits<STRU>::idSymbol, query);
+            nameID = extractID (StructTraits<STRU>::idSymbol(), query);
           if (isnil (nameID))
             {
                // no name-ID contained in the query...
@@ -107,15 +107,15 @@ namespace asset {
               static int i=0;
               static format namePattern ("%s.%d");
               static format predPattern ("%s(%s), ");
-              nameID = str(namePattern % StructTraits<STRU>::namePrefix % (++i) );
+              nameID = str(namePattern % StructTraits<STRU>::namePrefix() % (++i) );
               name.insert(0, 
-                       str(predPattern % StructTraits<STRU>::idSymbol % nameID ));
+                       str(predPattern % StructTraits<STRU>::idSymbol() % nameID ));
             }
           ENSURE (!isnil (name));
           ENSURE (!isnil (nameID));
           ENSURE (contains (name, nameID));
           
-          Category cat (STRUCT, StructTraits<STRU>::catFolder);
+          Category cat (STRUCT, StructTraits<STRU>::catFolder());
           return Asset::Ident (name, cat );                       ///////////////////////TICKET #565  the ID field should be just the ID, the query should go into a dedicated "capabilities" field.
         }
       

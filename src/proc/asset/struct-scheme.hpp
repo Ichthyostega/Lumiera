@@ -36,30 +36,14 @@
 #define ASSET_STRUCT_SCHEME_H
 
 
-//#include "proc/mobject/session.hpp"
-//#include "proc/mobject/mobject.hpp"
-
 #include "lib/symbol.hpp"
-//#include "lib/error.hpp"
-//#include "lib/util.hpp"
-
-//#include <boost/format.hpp>
-
-#include <boost/format.hpp>
-using boost::format;
-/////////////////////////////////////////////////////////TODO needs to be pushed down into a *.cpp
 
 #include <cstdlib>
 
-//using mobject::Session;
-//using mobject::MObject;
+/////////////////////////////////////////////////////////TICKET #166 : needs to be pushed down into a *.cpp
+#include <boost/format.hpp>
+using boost::format;
 
-using lib::Symbol;
-//using util::isnil;
-//using util::contains;
-//using asset::Query;
-//using lumiera::query::LUMIERA_ERROR_CAPABILITY_QUERY;
-//using lumiera::query::extractID;
 
 namespace mobject {
 namespace session {
@@ -77,28 +61,76 @@ namespace asset{
   class Timeline;
   class Sequence;
   
+  
   namespace idi  {
     
-    // structural asset ID scheme   ///////////////////////////////////////////////////////////TICKET #565
+    using lib::Symbol;
+    
+    
+    
+    /* ==== structural asset ID scheme ==== */  /////////////////////////////////////////////TICKET #565 : better organisation of this naming scheme
     
     template<class STRU>
     struct StructTraits
       {
-        static Symbol namePrefix;
-        static Symbol catFolder;
-        static Symbol idSymbol;
+        static Symbol namePrefix();
+        static Symbol catFolder();
+        static Symbol idSymbol();
       };
     
-    // Note: individual defaults are defined in stuct.cpp
+    
+  ///////////////////////////////////////////////////////////////////////////////////////////TICKET #581 intending to abandon asset::Track in favour of a plain EntryID 
+    template<> struct StructTraits<asset::Track>
+      {
+        static Symbol namePrefix() { return "track"; }
+        static Symbol catFolder()  { return "tracks";}
+        static Symbol idSymbol()   { return "track"; }
+      };
+    template<> struct StructTraits<mobject::session::Track>
+      {
+        static Symbol namePrefix() { return "track"; }
+        static Symbol catFolder()  { return "tracks";}
+        static Symbol idSymbol()   { return "track"; }
+      };
+    template<> struct StructTraits<mobject::session::Clip>
+      {
+        static Symbol namePrefix() { return "clip"; }
+        static Symbol catFolder()  { return "clips";}
+        static Symbol idSymbol()   { return "clip"; }
+      };
+    template<> struct StructTraits<Pipe>
+      {
+        static Symbol namePrefix() { return "pipe"; }
+        static Symbol catFolder()  { return "pipes";}
+        static Symbol idSymbol()   { return "pipe"; }
+      };
+    template<> struct StructTraits<const ProcPatt>
+      {
+        static Symbol namePrefix() { return "patt";           }
+        static Symbol catFolder()  { return "build-templates";}
+        static Symbol idSymbol()   { return "procPatt";       }
+      };
+    template<> struct StructTraits<Timeline>
+      {
+        static Symbol namePrefix() { return "tL";       }
+        static Symbol catFolder()  { return "timelines";}
+        static Symbol idSymbol()   { return "timeline"; }
+      };
+    template<> struct StructTraits<Sequence>
+      {
+        static Symbol namePrefix() { return "seq";      }
+        static Symbol catFolder()  { return "sequences";}
+        static Symbol idSymbol()   { return "sequence"; }
+      };
     
     
     /* catch-all defaults */
     template<class X>
-    Symbol StructTraits<X>::idSymbol = typeid(X).name(); ////////////////////TICKET #583   this default works but is ugly
+    Symbol StructTraits<X>::idSymbol() { return typeid(X).name(); } ////////////////////TICKET #583   this default works but is ugly
     template<class X>
-    Symbol StructTraits<X>::catFolder = StructTraits<X>::idSymbol;
+    Symbol StructTraits<X>::catFolder(){ return idSymbol(); }
     template<class X>
-    Symbol StructTraits<X>::namePrefix = StructTraits<X>::idSymbol;
+    Symbol StructTraits<X>::namePrefix(){return idSymbol(); }
     
     
     
@@ -109,9 +141,9 @@ namespace asset{
     {
         static uint i=0;
         static format namePattern ("%s.%03d");
-        /////////////////////////////////////////////////////////TODO needs to be pushed down into a *.cpp
+        ////////////////////////////////////////////////////////////////////////////////TICKET #166 : needs to be pushed down into a *.cpp
         
-        return str(namePattern % StructTraits<STRU>::namePrefix % (++i) );
+        return str(namePattern % StructTraits<STRU>::namePrefix() % (++i) );
     }
     
     
