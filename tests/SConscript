@@ -5,6 +5,8 @@
 
 import os
 from os import path
+from glob import glob
+
 from Buildhelper import srcSubtree
 from Buildhelper import scanSubtree
 from Buildhelper import globRootdirs
@@ -55,11 +57,12 @@ moduledirs = globRootdirs('*')
 
 
 
-artifacts['testsuite'] = ts = ( [ testExecutable(env, dir) for dir in ['lib','components'] ] 
+artifacts['testsuite'] = ts = ( [ testExecutable(env, dir) for dir in ['lib','components'] ]
                               + [ testCollection(env, dir) for dir in moduledirs if not dir in specials]
                               + createPlugins(envPlu, 'plugin')
-                              ) 
-                              
+                              + env.File(glob('*.tests'))     # depending on the test definition files for test.sh
+                              )
+
 
 
 
@@ -74,8 +77,9 @@ Depends(ts,vgsuppr)
 #
 #  - the product of running the Testsuite is the ",testlog"
 #  - it depends on all artifacts defined as "ts" above
-#  - if not set via options switch, the environment variable TESTSUITES
-#    is explicitly propagated to test.sh
+#  - including the tests/*.tests (suite definition files)
+#  - if not set via options switch, the environment variables
+#    TESTSUITES and VALGRINDFLAGS are explicitly propagated to test.sh
 #
 testEnv = env.Clone()
 
@@ -84,25 +88,25 @@ if not valgrind and not env['VALGRIND']:
     valgrind = 'DISABLE'
 
 testEnv.Append(ENV = { 'VALGRINDFLAGS' : valgrind
-                     , 'LUMIERA_CONFIG_PATH' : './' 
+                     , 'LUMIERA_CONFIG_PATH' : './'
                      })
-    
+
 testsuites = env['TESTSUITES'] or os.environ.get('TESTSUITES')
 if testsuites:
-    testEnv['ENV']['TESTSUITES'] = testsuites 
+    testEnv['ENV']['TESTSUITES'] = testsuites
     
 pluginpath = os.environ.get('LUMIERA_PLUGIN_PATH')
 if testsuites:
-    testEnv['ENV']['LUMIERA_PLUGIN_PATH'] = pluginpath 
+    testEnv['ENV']['LUMIERA_PLUGIN_PATH'] = pluginpath
 
 # specify path to test.conf
-testEnv['ENV']['TEST_CONF'] = env.File("test.conf").abspath 
+testEnv['ENV']['TEST_CONF'] = env.File("test.conf").abspath
 
- 
+
 testDir = env.Dir('#$BINDIR')
 runTest = env.File("test.sh").abspath
 
-runTs = testEnv.Command(',testlog', ts, runTest,  chdir=testDir)
+runTs = testEnv.Command('#$BINDIR/,testlog', ts, runTest,  chdir=testDir)
 
 
 
@@ -115,4 +119,4 @@ env.Alias('testcode', ts )
 env.Alias('check', runTs )
 
 # allow tempfiles of test.sh to be cleaned  
-env.Clean ('check', [',testlog.pre',',expect_stdout',',stdout',',stderr',',testtmp','.libs']) 
+env.Clean ('check', [',testlog',',testlog.pre',',expect_stdout',',stdout',',stderr',',testtmp','.libs'])
