@@ -42,13 +42,16 @@ using boost::lexical_cast;
 namespace lib {
 namespace advice {
   
+  LUMIERA_ERROR_DEFINE (BINDING_PATTERN_SYNTAX, "Unable to parse the given binding pattern definition");
+  
+  
   
   
   
                                                                       /////////////////////TICKET #613 : centralise generally useful RegExps
   namespace{  // Implementation details
     
-    const string matchSym = "(\\w[\\w_\\.\\-]*)";
+    const string matchSym = "(\\w+(?:[\\.\\-]\\w+)*)";
     const string matchArg = "\\(\\s*"+matchSym+"?\\s*\\)"; 
     regex findPredicate ("\\s*"+matchSym+"("+matchArg+")?\\s*,?");    ///< \c sym(arg), groups: [symbol, parenthesis, argument symbol]
     
@@ -72,6 +75,8 @@ namespace advice {
   Binding::parse_and_append (Literal lit)
   {      
     string def(lit);
+    string::const_iterator end_of_last_match = def.begin();
+    
     sregex_iterator end;
     sregex_iterator pos (def.begin(),def.end(), findPredicate, 
                                                 match_continuous);    // continuous: don't allow garbage *not* matched by the RegExp
@@ -79,8 +84,15 @@ namespace advice {
       {
         smatch match = *pos;
         atoms_.insert (Atom (match[1], detectArity(match), match[3]));
+        end_of_last_match = match[0].second;
         ++pos;
       }
+    
+    if (  end_of_last_match !=def.end()
+       && *end_of_last_match !='.'
+       ) // if the match did *not stop at the end of the pattern definition list 
+      throw lumiera::error::Invalid ("Trailing garbage in binding pattern definition"                 ///////////////TICKET #197  should include the garbage, i.e. where the parsing stops
+                                    , LUMIERA_ERROR_BINDING_PATTERN_SYNTAX);
   }
   
   
@@ -147,13 +159,13 @@ namespace advice {
   }
   
   
-  /** bindings are considered equivalent if, after normalisation,
-   *  their respective definitions are identical.
+  /** bindings are considered equivalent if,
+   *  after normalisation, their respective definitions are identical.
    *  @note for bindings without variable arguments, equivalence and matching
    *        always yield the same results. Contrary to this, two bindings with
    *        some variable arguments could match, without being defined identically.
    *        For example \c pred(X) matches \c pred(u) or any other binding of the
-   *        form \c pred(<constant_value>)
+   *        form \c pred(<constant_value>)  ////TICKET #615 not yet implemented
    */
   bool
   operator== (Binding const& b1, Binding const& b2)

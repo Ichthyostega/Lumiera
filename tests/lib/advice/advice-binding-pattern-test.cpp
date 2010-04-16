@@ -22,6 +22,7 @@
 
 
 #include "lib/test/run.hpp"
+#include "lib/test/test-helper.hpp"
 
 #include "lib/advice.hpp"
 #include "lib/time.h"
@@ -82,14 +83,17 @@ namespace test  {
           
           _PARSE_AND_SHOW ("");
           _PARSE_AND_SHOW ("aSymbol");
-          _PARSE_AND_SHOW ("aSymbol followed by Garbage §&Ω%€GΩ%€ar☠☠☠bäaäääge");
-          _PARSE_AND_SHOW ("§&Ω%€GΩ%€ar☠☠☠baäääääge");
+          _PARSE_AND_SHOW ("a.compound_Symbol-with-various.parts");
+          _PARSE_AND_SHOW ("trailing Garbage allowed. ☢☢ eat ☠☠☠ atomic ☠☠☠ waste ☢☢");
           _PARSE_AND_SHOW ("a, list , of ,symbols.");
           _PARSE_AND_SHOW ("nullary().");
           _PARSE_AND_SHOW ("nullary( )");
-          _PARSE_AND_SHOW ("nothing ()");
+          _PARSE_AND_SHOW ("nullary  .");
           _PARSE_AND_SHOW ("predicate( with-argument )");
-          _PARSE_AND_SHOW ("no (valid definition here)");
+          
+          VERIFY_ERROR (BINDING_PATTERN_SYNTAX, Binding("no (valid definition here)"));
+          VERIFY_ERROR (BINDING_PATTERN_SYNTAX, Binding("predicate(with ☠☠☠ Garbage ☠☠☠"));
+          VERIFY_ERROR (BINDING_PATTERN_SYNTAX, Binding("§&Ω%€GΩ%€ar☠☠☠baäääääge"));
           
           Binding testBinding;
           testBinding.addTypeGuard<DummyAdvice>();
@@ -104,7 +108,7 @@ namespace test  {
         {
           Binding b0, b00;
           Binding b1 ("cat1(), cat2().");
-          Binding b2 (" cat2 cat1  ***");
+          Binding b2 (" cat2 cat1 ....");
           
           cout << "b0==" << b0 << endl;
           cout << "b1==" << b1 << endl;

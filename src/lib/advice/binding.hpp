@@ -27,10 +27,10 @@
  ** against a similar pattern associated with the attachment of a possible collaboration partner.
  ** Semantically, this list of atoms forms an conjunction of predicates to be resolved against 
  ** similar predicates of the partner. Informally, when two entities attach to the Advice system,
- ** each specifying a binding, they can be paired up if, when combining, the expressions in their
- ** bindings all evaluate to true.
+ ** each specifying a binding, they can be paired up if any condition included into the binding
+ ** holds true for both sides.
  ** 
- ** Typically, a binding includes a \em type-guard predicate \c adviceType(xx) where \c xx is an 
+ ** Typically, a binding includes a \em type-guard predicate \c advice.type.xx where \c xx is an 
  ** identifier denoting a type used within an instantiation of the Advice collaboration, i.e. a type
  ** used as advice value in a instantiation of the PointOfAdvice<AD> template. Besides the type guard,
  ** a binding may narrow down the topic of the advice by providing further predicates. This allows for
@@ -41,14 +41,27 @@
  ** the advice type, and another client entity (the advised entity) could pick up this value
  ** without the need to now anything about the advisor.
  ** 
- ** Any binding can be normalised into a hash value, which plays a crucial role within the
- ** implementation of the advice system.
+ ** \par implementation notes
+ ** Any binding will be normalised prior to further processing. This normalisation is based
+ ** on ordering by predicate symbol and arity. Patterns just comprised of constant symbols
+ ** (nullary atoms) can even be condensed into a single hash value, which allows for fast
+ ** match checking. For each pattern, we provide a matcher functor, allowing to check
+ ** a match against this pattern. In case of the mentioned symbol-only patterns,
+ ** this matcher will just hold the hash value of the normalised pattern.
  ** 
- ** TODO WIP-WIP
+ ** The advice system uses a binding index datastructure to keep track of any participating
+ ** patterns and especially of the matching pairs. Actually, this datastructure needs to store
+ ** only these matcher functors; thus, for a new binding to be used within the advice system,
+ ** the symbolic definition is parsed, then normalised and finally, after creating the matcher
+ ** functor, the full pattern definition can be discarded.
  ** 
  ** @note as of 4/2010 this is an experimental setup and implemented just enough to work out
  **       the interfaces. Ichthyo expects this collaboration service to play a central role
  **       at various places within proc-layer.
+ ** @todo for now, \em only the case of a completely constant (ground) pattern is implemented.
+ **       Later we may consider to extend the binding patterns to allow variables, which, on match
+ **       could be fed as parameters to the bound advice. But this extension requires to extend
+ **       the simple hash-based match check to an actual unification of the patterns. ///TICKET #615
  ** 
  ** @see configrules.hpp
  ** @see typed-lookup.cpp corresponding implementation
@@ -75,6 +88,8 @@ namespace advice {
   using std::string;
   
   typedef size_t HashVal;
+  
+  LUMIERA_ERROR_DECLARE (BINDING_PATTERN_SYNTAX); ///< Unable to parse the given binding pattern definition
   
   
   

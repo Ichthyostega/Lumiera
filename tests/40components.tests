@@ -3,7 +3,7 @@ TESTING "Component Test Suite: common and basic components" ./test-lib --group=c
 
 
 TEST "Hello test world" HelloWorld_test 3 <<END
-out: ^This is how the world ends\.\.\.$
+out-lit: This is how the world ends...
 return: 0
 END
 
@@ -38,22 +38,21 @@ return: 0
 END
 
 
-PLANNED "Advice binding patterns" AdviceBindingPattern_test <<END
-out: 	--->Binding[]
-out: aSymbol	--->Binding[aSymbol/0()]
-out: aSymbol followed by Garbage §&Ω%€GΩ%€ar☠☠☠bäaäääge	--->Binding[Garbage/0(), aSymbol/0(), by/0(), followed/0()]
-out: §&Ω%€GΩ%€ar☠☠☠baäääääge	--->Binding[]
-out: a, list , of ,symbols.	--->Binding[a/0(), list/0(), of/0(), symbols./0()]
-out: nullary().	--->Binding[nullary/0()]
-out: nullary( )	--->Binding[nullary/0()]
-out: nothing ()	--->Binding[nothing/0()]
-out: predicate( with-argument )	--->Binding[predicate/1(with-argument)]
-out: no (valid definition here)	--->Binding[no/0()]
-out: Binding[advice.type.n3lib6advice4test12_GLOBAL__N_111DummyAdviceE/0(), one/0(), three/1(four), two/0()]
-out: b0==Binding[]
-out: b1==Binding[cat1/0(), cat2/0()]
-out: b2==Binding[cat1/0(), cat2/0()]
-out: b2==Binding[advice.type.n7lumiera4TimeE/0(), cat1/0(), cat2/0(), cat3/1(zzz)]
+TEST "Advice binding patterns" AdviceBindingPattern_test <<END
+out-lit: 	--->Binding[]
+out-lit: aSymbol	--->Binding[aSymbol/0()]
+out-lit: a.compound_Symbol-with-various.parts	--->Binding[a.compound_Symbol-with-various.parts/0()]
+out-lit: trailing Garbage allowed. ☢☢ eat ☠☠☠ atomic ☠☠☠ waste ☢☢	--->Binding[Garbage/0(), allowed/0(), trailing/0()]
+out-lit: a, list , of ,symbols.	--->Binding[a/0(), list/0(), of/0(), symbols/0()]
+out-lit: nullary().	--->Binding[nullary/0()]
+out-lit: nullary( )	--->Binding[nullary/0()]
+out-lit: nullary  .	--->Binding[nullary/0()]
+out-lit: predicate( with-argument )	--->Binding[predicate/1(with-argument)]
+out-lit: Binding[advice.type.n3lib6advice4test12_GLOBAL__N_111DummyAdviceE/0(), one/0(), three/1(four), two/0()]
+out-lit: b0==Binding[]
+out-lit: b1==Binding[cat1/0(), cat2/0()]
+out-lit: b2==Binding[cat1/0(), cat2/0()]
+out-lit: b2==Binding[advice.type.n7lumiera4TimeE/0(), cat1/0(), cat2/0(), cat3/1(zzz)]
 return: 0
 END
 
