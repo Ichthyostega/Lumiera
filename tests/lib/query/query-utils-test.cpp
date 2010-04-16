@@ -94,7 +94,7 @@ namespace test{
         {
           Cmdline tokens ("a A AA dufte 1a _1 A_A BÄH");
           tokens.push_back ("");
-          tokens.push_back ("  White  space ");
+          tokens.push_back ("  White \t space ");
           tokens.push_back ("§&Ω%€GΩ%€ar  ☠☠☠  baäääääge!!!!! ");
           
           cout << "..original : " << tokens << " :"<<endl;

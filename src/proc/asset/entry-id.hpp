@@ -202,14 +202,14 @@ namespace asset {
       Asset::Ident
       getIdent()  const
         {
-          Category cat (STRUCT, idi::StructTraits<TY>::catFolder);
+          Category cat (STRUCT, idi::StructTraits<TY>::catFolder());
           return Asset::Ident (this->getSym(), cat);
         }
       
       static idi::HashVal
       getTypeHash()
         {
-          return hash_value (Category (STRUCT, idi::StructTraits<TY>::catFolder));
+          return hash_value (Category (STRUCT, idi::StructTraits<TY>::catFolder()));
         }
       
       
@@ -237,7 +237,7 @@ namespace asset {
       
       operator string ()  const
         {
-          return "ID<"+idi::StructTraits<TY>::idSymbol+">-"+EntryID::getSym();
+          return "ID<"+idi::StructTraits<TY>::idSymbol()+">-"+EntryID::getSym();
         }
       
       friend ostream& operator<<   (ostream& os, EntryID const& id) { return os << string(id); }
