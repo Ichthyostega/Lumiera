@@ -214,7 +214,7 @@ function compare_template() # template plainfile
             'literal:')
                 if [[ "$line" = "$arg" ]]; then
                     IFS='' read -u 3 -r template && IFS='' read -u 4 -r line || {
-                        return 1
+                        return 0
                     }
                 else
                     echo -e "'$line':$lineno\ndoes not match\n$template:$templateno"
