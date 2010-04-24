@@ -207,8 +207,8 @@ namespace test {
       overwriting_and_retracting()
         {
 #if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #605
-          TheAdvised client1 ("topic1()");
-          TheAdvised client2 ("topic2()");
+          TheAdvised client1 ("topic1");
+          TheAdvised client2 ("topic2");
           CHECK (client1.got(0));
           CHECK (client2.got(0));
           
@@ -237,7 +237,7 @@ namespace test {
           CHECK (client2.got(r2));
           
           {
-            TheAdvisor anotherServer("topic1()");
+            TheAdvisor anotherServer("topic1");
             CHECK (client1.got(0));
             CHECK (client2.got(r2));
             
@@ -250,7 +250,7 @@ namespace test {
           CHECK (client2.got(r2));
           
           {
-            TheAdvisor yetAnotherServer("topic2()");
+            TheAdvisor yetAnotherServer("topic2");
             CHECK (client1.got(r1));
             CHECK (client2.got(r2));
             
@@ -258,7 +258,7 @@ namespace test {
             CHECK (client1.got(r1));
             CHECK (client2.got(r1));
             
-            yetAnotherserver.rebind("topic1()");
+            yetAnotherserver.rebind("topic1");
             CHECK (client1.got(r1));
             CHECK (client2.got(0));
             
@@ -266,7 +266,7 @@ namespace test {
             CHECK (client1.got(0));
             CHECK (client2.got(0));
             
-            yetAnotherserver.rebind("topic2()");
+            yetAnotherserver.rebind("topic2");
             CHECK (client1.got(0));
             CHECK (client2.got(0));
             
@@ -278,11 +278,11 @@ namespace test {
           CHECK (client1.got(0));
           CHECK (client2.got(r1));
           
-          client1.rebind("topic2()");
+          client1.rebind("topic2");
           CHECK (client1.got(r1));
           CHECK (client2.got(r1));
           
-          client2.rebind("nonExistingTopic()");
+          client2.rebind("nonExistingTopic");
           CHECK (client1.got(r1));
           CHECK (client2.got(0));
 #endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #605

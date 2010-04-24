@@ -22,6 +22,7 @@
 
 
 #include "lib/advice.hpp"
+#include "lib/advice/index.hpp"
 
 
 namespace lib {

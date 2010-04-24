@@ -1,0 +1,1000 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="800"
+   height="600"
+   id="svg2"
+   sodipodi:version="0.32"
+   inkscape:version="0.46"
+   sodipodi:docbase="/home/hiv/devel/lumi/doc/devel/draw"
+   sodipodi:docname="AdviceBindingIndex-1.svg"
+   inkscape:output_extension="org.inkscape.output.svg.inkscape"
+   version="1.0"
+   inkscape:export-filename="/home/hiv/devel/lumi/wiki/draw/ScopeStructure1.png"
+   inkscape:export-xdpi="72.970001"
+   inkscape:export-ydpi="72.970001">
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="1.4142136"
+     inkscape:cx="233.503"
+     inkscape:cy="441.94135"
+     inkscape:document-units="px"
+     inkscape:current-layer="svg2"
+     inkscape:window-width="1668"
+     inkscape:window-height="1016"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     width="800px"
+     height="600px"
+     showgrid="false"
+     gridanglex="30px"
+     gridanglez="30px"
+     grid_units="px"
+     inkscape:grid-points="true"
+     inkscape:grid-bbox="false"
+     showguides="true"
+     inkscape:object-paths="false"
+     inkscape:object-nodes="true"
+     gridtolerance="10000"
+     inkscape:guide-points="true"
+     guidetolerance="5">
+    <inkscape:grid
+       empspacing="5"
+       empopacity="0.4"
+       opacity="0.09019608"
+       empcolor="#0000ff"
+       color="#4b4bf4"
+       spacingy="2px"
+       spacingx="2px"
+       originy="0px"
+       originx="0px"
+       type="xygrid"
+       id="GridFromPre046Settings"
+       visible="true"
+       enabled="true" />
+  </sodipodi:namedview>
+  <defs
+     id="globals">
+    <marker
+       style="overflow:visible;"
+       id="Arrow1Mend"
+       refX="0.0"
+       refY="0.0"
+       orient="auto"
+       inkscape:stockid="Arrow1Mend">
+      <path
+         transform="scale(0.4) rotate(180) translate(10,0)"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt;marker-start:none;"
+         d="M 0.0,0.0 L 5.0,-5.0 L -12.5,0.0 L 5.0,5.0 L 0.0,0.0 z "
+         id="path3482" />
+    </marker>
+    <inkscape:perspective
+       id="perspective2619"
+       inkscape:persp3d-origin="400 : 200 : 1"
+       inkscape:vp_z="800 : 300 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 300 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <linearGradient
+       id="linearGrad_In1">
+      <stop
+         id="stop8557"
+         style="stop-color:#3e3e3e;stop-opacity:0.72941178;"
+         offset="0" />
+      <stop
+         id="stop9540"
+         style="stop-color:#7e7e7e;stop-opacity:0.58854169;"
+         offset="0.18208332" />
+      <stop
+         id="stop8563"
+         style="stop-color:#ffffff;stop-opacity:0;"
+         offset="0.44109029" />
+      <stop
+         id="stop8553"
+         style="stop-color:#ffffff;stop-opacity:0;"
+         offset="1" />
+    </linearGradient>
+    <marker
+       refX="0"
+       inkscape:stockid="Arrow2Send"
+       refY="0"
+       orient="auto"
+       id="Arrow2Send"
+       style="overflow:visible">
+      <path
+         transform="matrix(-0.3,0,0,-0.3,0.69,0)"
+         d="M 8.7185878,4.0337352 L -2.2072895,0.016013256 L 8.7185884,-4.0017078 C 6.97309,-1.6296469 6.9831476,1.6157441 8.7185878,4.0337352 z "
+         id="path5285"
+         style="font-size:12px;fill-rule:evenodd;stroke-width:0.625;stroke-linejoin:round" />
+    </marker>
+    <linearGradient
+       id="linearGradient3548">
+      <stop
+         id="stop3550"
+         style="stop-color:#ececec;stop-opacity:0.86666667;"
+         offset="0" />
+      <stop
+         id="stop3556"
+         style="stop-color:#f2f2f2;stop-opacity:0.87058824;"
+         offset="0.64166665" />
+      <stop
+         id="stop3552"
+         style="stop-color:#ffffff;stop-opacity:0.96078432;"
+         offset="1" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient4901">
+      <stop
+         id="stop4903"
+         offset="0"
+         style="stop-color:#ffffff;stop-opacity:0;" />
+      <stop
+         style="stop-color:#ffffff;stop-opacity:1;"
+         offset="0.44999999"
+         id="stop4913" />
+      <stop
+         id="stop4905"
+         offset="1"
+         style="stop-color:#ffffff;stop-opacity:1;" />
+    </linearGradient>
+    <linearGradient
+       y2="871.85999"
+       x2="500.39999"
+       y1="871.85999"
+       x1="324.60001"
+       gradientTransform="matrix(1.3221205,0,0,0.9882635,29.856748,-400.71027)"
+       gradientUnits="userSpaceOnUse"
+       id="linearGradient5166"
+       xlink:href="#linearGradient4901"
+       inkscape:collect="always" />
+    <linearGradient
+       id="linearGrad_RoundHigh1">
+      <stop
+         id="stop5572"
+         style="stop-color:#d9eadb;stop-opacity:1;"
+         offset="0" />
+      <stop
+         id="stop5578"
+         style="stop-color:#bad8cd;stop-opacity:1;"
+         offset="0.75833333" />
+      <stop
+         id="stop5574"
+         style="stop-color:#8cc0ac;stop-opacity:0.78431374;"
+         offset="1" />
+    </linearGradient>
+    <marker
+       refX="0"
+       inkscape:stockid="ArrowHIV1end"
+       refY="0"
+       id="ArrowHIV1end"
+       orient="auto"
+       style="overflow:visible">
+      <path
+         id="pathPfeil1"
+         sodipodi:nodetypes="ccccccc"
+         d="M -8,0 L -10,1.2 L -2,1.2 L 5,0 L -2,-1.2 L -10,-1.2 L -8,0 z "
+         style="fill:#40c0ab;stroke:#01ffff;stroke-width:0.1;stroke-linecap:butt;stroke-miterlimit:6.5" />
+    </marker>
+    <radialGradient
+       r="10.15"
+       fy="227.36218"
+       fx="200"
+       cy="227.36218"
+       cx="200"
+       gradientUnits="userSpaceOnUse"
+       id="radialGradient5444"
+       xlink:href="#linearGrad_RoundHigh1"
+       inkscape:collect="always" />
+    <radialGradient
+       r="10.15"
+       fy="227.36218"
+       fx="200"
+       cy="227.36218"
+       cx="200"
+       gradientUnits="userSpaceOnUse"
+       id="radialGradient5492"
+       xlink:href="#linearGrad_RoundHigh1"
+       inkscape:collect="always" />
+    <radialGradient
+       r="10.15"
+       fy="227.36218"
+       fx="200"
+       cy="227.36218"
+       cx="200"
+       gradientUnits="userSpaceOnUse"
+       id="radialGradient5516"
+       xlink:href="#linearGrad_RoundHigh1"
+       inkscape:collect="always" />
+    <radialGradient
+       r="10.15"
+       fy="227.36218"
+       fx="200"
+       cy="227.36218"
+       cx="200"
+       gradientUnits="userSpaceOnUse"
+       id="radialGradient5564"
+       xlink:href="#linearGrad_RoundHigh1"
+       inkscape:collect="always" />
+    <radialGradient
+       r="10.15"
+       fy="227.36218"
+       fx="200"
+       cy="227.36218"
+       cx="200"
+       gradientUnits="userSpaceOnUse"
+       id="radialGradient5636"
+       xlink:href="#linearGrad_RoundHigh1"
+       inkscape:collect="always" />
+    <radialGradient
+       r="10.15"
+       fy="227.36218"
+       fx="200"
+       cy="227.36218"
+       cx="200"
+       gradientUnits="userSpaceOnUse"
+       id="radialGradient5660"
+       xlink:href="#linearGrad_RoundHigh1"
+       inkscape:collect="always" />
+    <linearGradient
+       y2="94.861481"
+       x2="605.48975"
+       y1="94.861481"
+       x1="574.5"
+       gradientTransform="matrix(1,0,0,0.7952199,-681.9777,684.57714)"
+       gradientUnits="userSpaceOnUse"
+       id="linearGradient6148"
+       xlink:href="#linearGradient3548"
+       inkscape:collect="always" />
+    <linearGradient
+       y2="94.861481"
+       x2="605.48975"
+       y1="94.861481"
+       x1="574.5"
+       gradientTransform="matrix(1,0,0,0.7952199,-681.9777,684.57714)"
+       gradientUnits="userSpaceOnUse"
+       id="linearGradient6150"
+       xlink:href="#linearGrad_In1"
+       inkscape:collect="always" />
+    <linearGradient
+       y2="94.861481"
+       x2="605.48975"
+       y1="94.861481"
+       x1="574.5"
+       gradientTransform="matrix(1,0,0,0.7952199,-681.9777,684.57714)"
+       gradientUnits="userSpaceOnUse"
+       id="linearGradient6208"
+       xlink:href="#linearGradient3548"
+       inkscape:collect="always" />
+    <linearGradient
+       y2="94.861481"
+       x2="605.48975"
+       y1="94.861481"
+       x1="574.5"
+       gradientTransform="matrix(1,0,0,0.7952199,-681.9777,684.57714)"
+       gradientUnits="userSpaceOnUse"
+       id="linearGradient6210"
+       xlink:href="#linearGrad_In1"
+       inkscape:collect="always" />
+    <linearGradient
+       y2="94.861481"
+       x2="605.48975"
+       y1="94.861481"
+       x1="574.5"
+       gradientTransform="matrix(1,0,0,0.7952199,-681.9777,684.57714)"
+       gradientUnits="userSpaceOnUse"
+       id="linearGradient6264"
+       xlink:href="#linearGradient3548"
+       inkscape:collect="always" />
+    <linearGradient
+       y2="94.861481"
+       x2="605.48975"
+       y1="94.861481"
+       x1="574.5"
+       gradientTransform="matrix(1,0,0,0.7952199,-681.9777,684.57714)"
+       gradientUnits="userSpaceOnUse"
+       id="linearGradient6266"
+       xlink:href="#linearGrad_In1"
+       inkscape:collect="always" />
+    <linearGradient
+       y2="94.861481"
+       x2="605.48975"
+       y1="94.861481"
+       x1="574.5"
+       gradientTransform="matrix(1,0,0,0.7952199,-681.9777,684.57714)"
+       gradientUnits="userSpaceOnUse"
+       id="linearGradient6268"
+       xlink:href="#linearGradient3548"
+       inkscape:collect="always" />
+    <linearGradient
+       y2="94.861481"
+       x2="605.48975"
+       y1="94.861481"
+       x1="574.5"
+       gradientTransform="matrix(1,0,0,0.7952199,-681.9777,684.57714)"
+       gradientUnits="userSpaceOnUse"
+       id="linearGradient6270"
+       xlink:href="#linearGrad_In1"
+       inkscape:collect="always" />
+    <linearGradient
+       y2="94.861481"
+       x2="605.48975"
+       y1="94.861481"
+       x1="574.5"
+       gradientTransform="matrix(1,0,0,0.7952199,-681.9777,684.57714)"
+       gradientUnits="userSpaceOnUse"
+       id="linearGradient6298"
+       xlink:href="#linearGradient3548"
+       inkscape:collect="always" />
+    <linearGradient
+       y2="94.861481"
+       x2="605.48975"
+       y1="94.861481"
+       x1="574.5"
+       gradientTransform="matrix(1,0,0,0.7952199,-681.9777,684.57714)"
+       gradientUnits="userSpaceOnUse"
+       id="linearGradient6300"
+       xlink:href="#linearGrad_In1"
+       inkscape:collect="always" />
+    <marker
+       style="overflow:visible;"
+       id="Arrow1MendY"
+       refX="0.0"
+       refY="0.0"
+       orient="auto"
+       inkscape:stockid="Arrow1MendY">
+      <path
+         transform="scale(0.4) rotate(180) translate(10,0)"
+         style="marker-start:none;stroke:#26155c;stroke-width:1.0pt;fill:#26155c;fill-rule:evenodd"
+         d="M 0.0,0.0 L 5.0,-5.0 L -12.5,0.0 L 5.0,5.0 L 0.0,0.0 z "
+         id="path4310" />
+    </marker>
+    <marker
+       style="overflow:visible;"
+       id="Arrow1MendM"
+       refX="0.0"
+       refY="0.0"
+       orient="auto"
+       inkscape:stockid="Arrow1MendM">
+      <path
+         transform="scale(0.4) rotate(180) translate(10,0)"
+         style="marker-start:none;stroke:#2ccd92;stroke-width:1.0pt;fill:#2ccd92;fill-rule:evenodd"
+         d="M 0.0,0.0 L 5.0,-5.0 L -12.5,0.0 L 5.0,5.0 L 0.0,0.0 z "
+         id="path4264" />
+    </marker>
+    <marker
+       style="overflow:visible;"
+       id="Arrow1MendMP"
+       refX="0.0"
+       refY="0.0"
+       orient="auto"
+       inkscape:stockid="Arrow1MendMP">
+      <path
+         transform="scale(0.4) rotate(180) translate(10,0)"
+         style="fill-rule:evenodd;marker-start:none;stroke:#46f86e;stroke-width:1.0pt;fill:#46f86e"
+         d="M 0.0,0.0 L 5.0,-5.0 L -12.5,0.0 L 5.0,5.0 L 0.0,0.0 z "
+         id="path5098" />
+    </marker>
+    <marker
+       style="overflow:visible;"
+       id="Arrow1MendMv"
+       refX="0.0"
+       refY="0.0"
+       orient="auto"
+       inkscape:stockid="Arrow1MendMv">
+      <path
+         transform="scale(0.4) rotate(180) translate(10,0)"
+         style="fill-rule:evenodd;marker-start:none;stroke:#46f86e;stroke-width:1.0pt;fill:#46f86e"
+         d="M 0.0,0.0 L 5.0,-5.0 L -12.5,0.0 L 5.0,5.0 L 0.0,0.0 z "
+         id="path5101" />
+    </marker>
+    <marker
+       style="overflow:visible;"
+       id="Arrow1MendM7"
+       refX="0.0"
+       refY="0.0"
+       orient="auto"
+       inkscape:stockid="Arrow1MendM7">
+      <path
+         transform="scale(0.4) rotate(180) translate(10,0)"
+         style="fill-rule:evenodd;marker-start:none;stroke:#46f86e;stroke-width:1.0pt;fill:#46f86e"
+         d="M 0.0,0.0 L 5.0,-5.0 L -12.5,0.0 L 5.0,5.0 L 0.0,0.0 z "
+         id="path5104" />
+    </marker>
+  </defs>
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by-nc-sa/3.0/" />
+        <dc:title>Advice Binding Index Structures</dc:title>
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>Ichthyostega</dc:title>
+          </cc:Agent>
+        </dc:creator>
+        <dc:description>design sketch: Advice binding match implementation</dc:description>
+        <dc:date>2010</dc:date>
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by-nc-sa/3.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:prohibits
+           rdf:resource="http://creativecommons.org/ns#CommercialUse" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:groupmode="layer"
+     id="lay1"
+     inkscape:label="Drawing" />
+  <rect
+     inkscape:export-ydpi="90"
+     inkscape:export-xdpi="90"
+     inkscape:export-filename="/home/hiv/devel/lumi/wiki/draw/AdviceBindingIndex1.png"
+     y="0"
+     x="0"
+     height="200"
+     width="400"
+     id="rect_Canvas"
+     style="opacity:1;fill:none;fill-opacity:0.75000000000000000;fill-rule:evenodd;stroke:none;stroke-width:1.50000000000000000;stroke-linecap:butt;stroke-linejoin:miter;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
+  <text
+     inkscape:export-ydpi="90"
+     inkscape:export-xdpi="90"
+     inkscape:export-filename="/home/hiv/devel/lumi/wiki/draw/AdviceBindingIndex1.png"
+     xml:space="preserve"
+     style="font-size:14px;font-style:oblique;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:100%;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;opacity:1;fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Bitstream Vera Sans"
+     x="40"
+     y="100"
+     id="text3868"
+     sodipodi:linespacing="100%"><tspan
+       id="tspan2641"
+       y="100"
+       x="40"
+       sodipodi:role="line">Provisions</tspan></text>
+  <path
+     sodipodi:nodetypes="ccc"
+     id="rect3872"
+     d="M 30,190.02198 L 30,80.285889 L 258.88374,80.003843"
+     style="fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#6c6c6c;stroke-width:1.49999988;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+     inkscape:export-filename="/home/hiv/devel/lumi/wiki/draw/AdviceBindingIndex1.png"
+     inkscape:export-xdpi="90"
+     inkscape:export-ydpi="90" />
+  <use
+     transform="translate(-407.1889,-251.23988)"
+     height="1052.36"
+     x="0"
+     xlink:href="#path4523Sha"
+     y="0"
+     width="744.09448"
+     id="use5871" />
+  <use
+     transform="translate(-407.1889,-251.23988)"
+     height="1052.36"
+     x="0"
+     xlink:href="#rect4525Bod"
+     y="0"
+     width="744.09448"
+     id="use5873" />
+  <use
+     transform="translate(-407.1889,-251.23988)"
+     height="1052.36"
+     x="0"
+     xlink:href="#rect4589Top"
+     y="0"
+     width="744.09448"
+     id="use5893" />
+  <use
+     transform="translate(-22.188904,83.760119)"
+     height="1052.36"
+     width="744.09448"
+     id="use5895"
+     xlink:href="#g_port"
+     y="0"
+     x="0" />
+  <text
+     sodipodi:linespacing="100%"
+     id="text2729"
+     y="100"
+     x="190"
+     style="font-size:14px;font-style:oblique;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:100%;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;opacity:1;fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Bitstream Vera Sans"
+     xml:space="preserve"
+     inkscape:export-filename="/home/hiv/devel/lumi/wiki/draw/AdviceBindingIndex1.png"
+     inkscape:export-xdpi="90"
+     inkscape:export-ydpi="90"><tspan
+       sodipodi:role="line"
+       x="190"
+       y="100"
+       id="tspan2731">Requests</tspan></text>
+  <text
+     xml:space="preserve"
+     style="font-size:14px;font-style:oblique;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Bitstream Vera Sans"
+     x="157.46268"
+     y="174.80763"
+     id="text2737"
+     sodipodi:linespacing="100%"
+     inkscape:export-filename="/home/hiv/devel/lumi/wiki/draw/AdviceBindingIndex1.png"
+     inkscape:export-xdpi="90"
+     inkscape:export-ydpi="90"><tspan
+       id="tspan2739"
+       style="font-size:8px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;font-family:Bitstream Vera Sans;-inkscape-font-specification:Bitstream Vera Sans"
+       y="174.80763"
+       x="157.46268"
+       sodipodi:role="line">Match</tspan></text>
+  <g
+     id="g3637"
+     inkscape:export-filename="/home/hiv/devel/lumi/wiki/draw/AdviceBindingIndex1.png"
+     inkscape:export-xdpi="90"
+     inkscape:export-ydpi="90">
+    <text
+       xml:space="preserve"
+       style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Bitstream Vera Sans;-inkscape-font-specification:Bitstream Vera Sans"
+       x="33.973213"
+       y="31.797388"
+       id="text2741"
+       sodipodi:linespacing="100%"
+       inkscape:export-filename="/home/hiv/devel/lumi/wiki/draw/SessionFacade1.png"
+       inkscape:export-xdpi="89.75"
+       inkscape:export-ydpi="89.75"><tspan
+         id="tspan2743"
+         style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;font-family:Bitstream Vera Sans;-inkscape-font-specification:Bitstream Vera Sans"
+         y="31.797388"
+         x="33.973213"
+         sodipodi:role="line">AdviceProvision</tspan></text>
+    <rect
+       y="20"
+       x="29.49033"
+       height="15.845213"
+       width="90.509666"
+       id="rect2757"
+       style="fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#6c6c6c;stroke-width:0.99999994;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
+  </g>
+  <g
+     id="g3569"
+     inkscape:export-filename="/home/hiv/devel/lumi/wiki/draw/AdviceBindingIndex1.png"
+     inkscape:export-xdpi="90"
+     inkscape:export-ydpi="90">
+    <text
+       xml:space="preserve"
+       style="font-size:14px;font-style:oblique;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Bitstream Vera Sans"
+       x="42"
+       y="128"
+       id="text2749"
+       sodipodi:linespacing="100%"
+       inkscape:export-filename="/home/hiv/devel/lumi/wiki/draw/PlayerArch1.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90"><tspan
+         id="tspan2751"
+         style="font-size:8px;font-style:oblique;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;font-family:Bitstream Vera Sans"
+         y="128"
+         x="42"
+         sodipodi:role="line">hash</tspan></text>
+    <rect
+       style="opacity:1;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#331eaf;stroke-width:0.99999988;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       id="rect3555"
+       width="40.018665"
+       height="9.9428082"
+       x="39.976952"
+       y="120" />
+  </g>
+  <path
+     style="fill:none;fill-opacity:0.75;fill-rule:evenodd;stroke:#331eaf;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+     d="M 80,120 L 80,187.25"
+     id="path3557"
+     sodipodi:nodetypes="cc"
+     inkscape:export-filename="/home/hiv/devel/lumi/wiki/draw/AdviceBindingIndex1.png"
+     inkscape:export-xdpi="90"
+     inkscape:export-ydpi="90" />
+  <path
+     sodipodi:type="arc"
+     style="opacity:1;fill:#331eaf;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.85099202;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+     id="path3559"
+     sodipodi:cx="88.125"
+     sodipodi:cy="145.12502"
+     sodipodi:rx="2.625"
+     sodipodi:ry="2.625"
+     d="M 90.75,145.12502 A 2.625,2.625 0 1 1 85.5,145.12502 A 2.625,2.625 0 1 1 90.75,145.12502 z"
+     transform="matrix(1.5238095,0,0,1.5238095,-54.285714,-81.14288)"
+     inkscape:export-filename="/home/hiv/devel/lumi/wiki/draw/AdviceBindingIndex1.png"
+     inkscape:export-xdpi="90"
+     inkscape:export-ydpi="90" />
+  <path
+     transform="matrix(1.5238095,0,0,1.5238095,-54.285714,-71.142877)"
+     d="M 90.75,145.12502 A 2.625,2.625 0 1 1 85.5,145.12502 A 2.625,2.625 0 1 1 90.75,145.12502 z"
+     sodipodi:ry="2.625"
+     sodipodi:rx="2.625"
+     sodipodi:cy="145.12502"
+     sodipodi:cx="88.125"
+     id="path3561"
+     style="opacity:1;fill:#331eaf;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.85099202;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+     sodipodi:type="arc"
+     inkscape:export-filename="/home/hiv/devel/lumi/wiki/draw/AdviceBindingIndex1.png"
+     inkscape:export-xdpi="90"
+     inkscape:export-ydpi="90" />
+  <g
+     id="g3574"
+     transform="translate(150.02305,0)"
+     inkscape:export-filename="/home/hiv/devel/lumi/wiki/draw/AdviceBindingIndex1.png"
+     inkscape:export-xdpi="90"
+     inkscape:export-ydpi="90">
+    <text
+       inkscape:export-ydpi="90"
+       inkscape:export-xdpi="90"
+       inkscape:export-filename="/home/hiv/devel/lumi/wiki/draw/PlayerArch1.png"
+       sodipodi:linespacing="100%"
+       id="text3576"
+       y="128"
+       x="58.789452"
+       style="font-size:14px;font-style:oblique;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Bitstream Vera Sans"
+       xml:space="preserve"><tspan
+         sodipodi:role="line"
+         x="58.789452"
+         y="128"
+         style="font-size:8px;font-style:oblique;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;font-family:Bitstream Vera Sans"
+         id="tspan3578">hash</tspan></text>
+    <rect
+       y="120"
+       x="39.976952"
+       height="9.9428082"
+       width="40.018665"
+       id="rect3580"
+       style="opacity:1;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#331eaf;stroke-width:0.99999988;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
+  </g>
+  <path
+     sodipodi:nodetypes="cc"
+     id="path3582"
+     d="M 190,120 L 190,187.25"
+     style="fill:none;fill-opacity:0.75;fill-rule:evenodd;stroke:#331eaf;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+     inkscape:export-filename="/home/hiv/devel/lumi/wiki/draw/AdviceBindingIndex1.png"
+     inkscape:export-xdpi="90"
+     inkscape:export-ydpi="90" />
+  <path
+     transform="matrix(1.5238095,0,0,1.5238095,55.714288,-81.14288)"
+     d="M 90.75,145.12502 A 2.625,2.625 0 1 1 85.5,145.12502 A 2.625,2.625 0 1 1 90.75,145.12502 z"
+     sodipodi:ry="2.625"
+     sodipodi:rx="2.625"
+     sodipodi:cy="145.12502"
+     sodipodi:cx="88.125"
+     id="path3584"
+     style="opacity:1;fill:#331eaf;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.85099202;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+     sodipodi:type="arc"
+     inkscape:export-filename="/home/hiv/devel/lumi/wiki/draw/AdviceBindingIndex1.png"
+     inkscape:export-xdpi="90"
+     inkscape:export-ydpi="90" />
+  <path
+     sodipodi:type="arc"
+     style="opacity:1;fill:#331eaf;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.85099202;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+     id="path3586"
+     sodipodi:cx="88.125"
+     sodipodi:cy="145.12502"
+     sodipodi:rx="2.625"
+     sodipodi:ry="2.625"
+     d="M 90.75,145.12502 A 2.625,2.625 0 1 1 85.5,145.12502 A 2.625,2.625 0 1 1 90.75,145.12502 z"
+     transform="matrix(1.5238095,0,0,1.5238095,55.714288,-71.142877)"
+     inkscape:export-filename="/home/hiv/devel/lumi/wiki/draw/AdviceBindingIndex1.png"
+     inkscape:export-xdpi="90"
+     inkscape:export-ydpi="90" />
+  <path
+     transform="matrix(1.5238095,0,0,1.5238095,55.714288,-61.142877)"
+     d="M 90.75,145.12502 A 2.625,2.625 0 1 1 85.5,145.12502 A 2.625,2.625 0 1 1 90.75,145.12502 z"
+     sodipodi:ry="2.625"
+     sodipodi:rx="2.625"
+     sodipodi:cy="145.12502"
+     sodipodi:cx="88.125"
+     id="path3588"
+     style="opacity:1;fill:#331eaf;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.85099202;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+     sodipodi:type="arc"
+     inkscape:export-filename="/home/hiv/devel/lumi/wiki/draw/AdviceBindingIndex1.png"
+     inkscape:export-xdpi="90"
+     inkscape:export-ydpi="90" />
+  <path
+     sodipodi:type="arc"
+     style="opacity:1;fill:#331eaf;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.85099202;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+     id="path3590"
+     sodipodi:cx="88.125"
+     sodipodi:cy="145.12502"
+     sodipodi:rx="2.625"
+     sodipodi:ry="2.625"
+     d="M 90.75,145.12502 A 2.625,2.625 0 1 1 85.5,145.12502 A 2.625,2.625 0 1 1 90.75,145.12502 z"
+     transform="matrix(1.5238095,0,0,1.5238095,55.714288,-51.142877)"
+     inkscape:export-filename="/home/hiv/devel/lumi/wiki/draw/AdviceBindingIndex1.png"
+     inkscape:export-xdpi="90"
+     inkscape:export-ydpi="90" />
+  <path
+     transform="matrix(1.5238095,0,0,1.5238095,55.714288,-41.142877)"
+     d="M 90.75,145.12502 A 2.625,2.625 0 1 1 85.5,145.12502 A 2.625,2.625 0 1 1 90.75,145.12502 z"
+     sodipodi:ry="2.625"
+     sodipodi:rx="2.625"
+     sodipodi:cy="145.12502"
+     sodipodi:cx="88.125"
+     id="path3592"
+     style="opacity:1;fill:#331eaf;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:0.85099202;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+     sodipodi:type="arc"
+     inkscape:export-filename="/home/hiv/devel/lumi/wiki/draw/AdviceBindingIndex1.png"
+     inkscape:export-xdpi="90"
+     inkscape:export-ydpi="90" />
+  <g
+     id="g3615"
+     transform="translate(0,20)"
+     inkscape:export-filename="/home/hiv/devel/lumi/wiki/draw/AdviceBindingIndex1.png"
+     inkscape:export-xdpi="90"
+     inkscape:export-ydpi="90">
+    <text
+       inkscape:export-ydpi="89.75"
+       inkscape:export-xdpi="89.75"
+       inkscape:export-filename="/home/hiv/devel/lumi/wiki/draw/SessionFacade1.png"
+       sodipodi:linespacing="100%"
+       id="text3617"
+       y="31.797388"
+       x="33.973213"
+       style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Bitstream Vera Sans;-inkscape-font-specification:Bitstream Vera Sans"
+       xml:space="preserve"><tspan
+         sodipodi:role="line"
+         x="33.973213"
+         y="31.797388"
+         style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;font-family:Bitstream Vera Sans;-inkscape-font-specification:Bitstream Vera Sans"
+         id="tspan3619">AdviceProvision</tspan></text>
+    <rect
+       style="fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#6c6c6c;stroke-width:0.99999994;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       id="rect3621"
+       width="90.509666"
+       height="15.845213"
+       x="29.49033"
+       y="20" />
+  </g>
+  <g
+     id="g3642"
+     transform="translate(60,0)"
+     inkscape:export-filename="/home/hiv/devel/lumi/wiki/draw/AdviceBindingIndex1.png"
+     inkscape:export-xdpi="90"
+     inkscape:export-ydpi="90">
+    <text
+       inkscape:export-ydpi="89.75"
+       inkscape:export-xdpi="89.75"
+       inkscape:export-filename="/home/hiv/devel/lumi/wiki/draw/SessionFacade1.png"
+       sodipodi:linespacing="100%"
+       id="text2745"
+       y="31.797388"
+       x="242.92325"
+       style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Bitstream Vera Sans;-inkscape-font-specification:Bitstream Vera Sans"
+       xml:space="preserve"><tspan
+         sodipodi:role="line"
+         x="242.92325"
+         y="31.797388"
+         style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;font-family:Bitstream Vera Sans;-inkscape-font-specification:Bitstream Vera Sans"
+         id="tspan2747">AdviceRequest</tspan></text>
+    <rect
+       style="fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#6c6c6c;stroke-width:0.99999994;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       id="rect3629"
+       width="90.509666"
+       height="15.845213"
+       x="230"
+       y="20" />
+  </g>
+  <g
+     transform="translate(60,20)"
+     id="g3647"
+     inkscape:export-filename="/home/hiv/devel/lumi/wiki/draw/AdviceBindingIndex1.png"
+     inkscape:export-xdpi="90"
+     inkscape:export-ydpi="90">
+    <text
+       xml:space="preserve"
+       style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Bitstream Vera Sans;-inkscape-font-specification:Bitstream Vera Sans"
+       x="242.92325"
+       y="31.797388"
+       id="text3649"
+       sodipodi:linespacing="100%"
+       inkscape:export-filename="/home/hiv/devel/lumi/wiki/draw/SessionFacade1.png"
+       inkscape:export-xdpi="89.75"
+       inkscape:export-ydpi="89.75"><tspan
+         id="tspan3651"
+         style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;font-family:Bitstream Vera Sans;-inkscape-font-specification:Bitstream Vera Sans"
+         y="31.797388"
+         x="242.92325"
+         sodipodi:role="line">AdviceRequest</tspan></text>
+    <rect
+       y="20"
+       x="230"
+       height="15.845213"
+       width="90.509666"
+       id="rect3653"
+       style="fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#6c6c6c;stroke-width:0.99999994;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
+  </g>
+  <g
+     id="g3655"
+     transform="translate(60,40)"
+     inkscape:export-filename="/home/hiv/devel/lumi/wiki/draw/AdviceBindingIndex1.png"
+     inkscape:export-xdpi="90"
+     inkscape:export-ydpi="90">
+    <text
+       inkscape:export-ydpi="89.75"
+       inkscape:export-xdpi="89.75"
+       inkscape:export-filename="/home/hiv/devel/lumi/wiki/draw/SessionFacade1.png"
+       sodipodi:linespacing="100%"
+       id="text3657"
+       y="31.797388"
+       x="242.92325"
+       style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Bitstream Vera Sans;-inkscape-font-specification:Bitstream Vera Sans"
+       xml:space="preserve"><tspan
+         sodipodi:role="line"
+         x="242.92325"
+         y="31.797388"
+         style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;font-family:Bitstream Vera Sans;-inkscape-font-specification:Bitstream Vera Sans"
+         id="tspan3659">AdviceRequest</tspan></text>
+    <rect
+       style="fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#6c6c6c;stroke-width:0.99999994;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       id="rect3661"
+       width="90.509666"
+       height="15.845213"
+       x="230"
+       y="20" />
+  </g>
+  <g
+     transform="translate(60,60)"
+     id="g3663"
+     inkscape:export-filename="/home/hiv/devel/lumi/wiki/draw/AdviceBindingIndex1.png"
+     inkscape:export-xdpi="90"
+     inkscape:export-ydpi="90">
+    <text
+       xml:space="preserve"
+       style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Bitstream Vera Sans;-inkscape-font-specification:Bitstream Vera Sans"
+       x="242.92325"
+       y="31.797388"
+       id="text3665"
+       sodipodi:linespacing="100%"
+       inkscape:export-filename="/home/hiv/devel/lumi/wiki/draw/SessionFacade1.png"
+       inkscape:export-xdpi="89.75"
+       inkscape:export-ydpi="89.75"><tspan
+         id="tspan3667"
+         style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;font-family:Bitstream Vera Sans;-inkscape-font-specification:Bitstream Vera Sans"
+         y="31.797388"
+         x="242.92325"
+         sodipodi:role="line">AdviceRequest</tspan></text>
+    <rect
+       y="20"
+       x="230"
+       height="15.845213"
+       width="90.509666"
+       id="rect3669"
+       style="fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#6c6c6c;stroke-width:0.99999994;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate" />
+  </g>
+  <path
+     sodipodi:nodetypes="cc"
+     style="fill:none;fill-opacity:0.75000000000000000;fill-rule:evenodd;stroke:#16e9e9;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;opacity:1;color:#000000;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:2, 1;stroke-dashoffset:0;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+     d="M 80,140 L 190,170"
+     id="path3671"
+     inkscape:export-filename="/home/hiv/devel/lumi/wiki/draw/AdviceBindingIndex1.png"
+     inkscape:export-xdpi="90"
+     inkscape:export-ydpi="90" />
+  <path
+     id="path3673"
+     d="M 80,140 L 190,150"
+     style="fill:none;fill-opacity:0.75000000000000000;fill-rule:evenodd;stroke:#16e9e9;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:2,1;stroke-dashoffset:0;marker-start:none"
+     sodipodi:nodetypes="cc"
+     inkscape:export-filename="/home/hiv/devel/lumi/wiki/draw/AdviceBindingIndex1.png"
+     inkscape:export-xdpi="90"
+     inkscape:export-ydpi="90" />
+  <path
+     id="path3677"
+     d="M 80,150 L 190,140"
+     style="fill:none;fill-opacity:0.75000000000000000;fill-rule:evenodd;stroke:#16e9e9;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;opacity:1;color:#000000;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:2, 1;stroke-dashoffset:0;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+     sodipodi:nodetypes="cc"
+     inkscape:export-filename="/home/hiv/devel/lumi/wiki/draw/AdviceBindingIndex1.png"
+     inkscape:export-xdpi="90"
+     inkscape:export-ydpi="90" />
+  <path
+     style="stroke-linejoin:miter;marker-end:url(#Arrow1MendM);stroke-opacity:1;fill-rule:evenodd;fill-opacity:0.75000000000000000;stroke:#2ccd92;stroke-linecap:butt;stroke-width:1px;fill:none"
+     d="M 200,140 C 314.70432,140 214.77319,30 280,30"
+     id="path3679"
+     sodipodi:nodetypes="cc"
+     inkscape:export-filename="/home/hiv/devel/lumi/wiki/draw/AdviceBindingIndex1.png"
+     inkscape:export-xdpi="90"
+     inkscape:export-ydpi="90" />
+  <path
+     sodipodi:nodetypes="cc"
+     id="path4493"
+     d="M 200,150 C 314.70432,150 222.20165,50.089485 280,50.089485"
+     style="fill:none;fill-opacity:0.75;fill-rule:evenodd;stroke:#2ccd92;stroke-width:0.99999994px;stroke-linecap:butt;stroke-linejoin:miter;marker-end:url(#Arrow1MendM);stroke-opacity:1"
+     inkscape:export-filename="/home/hiv/devel/lumi/wiki/draw/AdviceBindingIndex1.png"
+     inkscape:export-xdpi="90"
+     inkscape:export-ydpi="90" />
+  <path
+     style="fill:none;fill-opacity:0.75;fill-rule:evenodd;stroke:#2ccd92;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;marker-end:url(#Arrow1MendM);stroke-opacity:1"
+     d="M 200,160 C 314.70432,160 229.27271,70.17897 280,70.17897"
+     id="path4495"
+     sodipodi:nodetypes="cc"
+     inkscape:export-filename="/home/hiv/devel/lumi/wiki/draw/AdviceBindingIndex1.png"
+     inkscape:export-xdpi="90"
+     inkscape:export-ydpi="90" />
+  <path
+     sodipodi:nodetypes="cc"
+     id="path4497"
+     d="M 200,170 C 314.70432,170 235.60147,90.268455 280,90.268455"
+     style="fill:none;fill-opacity:0.75;fill-rule:evenodd;stroke:#2ccd92;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;marker-end:url(#Arrow1MendM);stroke-opacity:1"
+     inkscape:export-filename="/home/hiv/devel/lumi/wiki/draw/AdviceBindingIndex1.png"
+     inkscape:export-xdpi="90"
+     inkscape:export-ydpi="90" />
+  <path
+     sodipodi:nodetypes="cc"
+     id="path4499"
+     d="M 294.75231,23.680938 C 250,10 170,50 130,50"
+     style="stroke-linejoin:miter;marker-end:url(#Arrow1MendMP);stroke-opacity:1;fill-opacity:0.75000000000000000;fill-rule:evenodd;stroke:#46f86e;stroke-linecap:butt;stroke-miterlimit:4;stroke-dasharray:none;stroke-width:1.30000000000000004;fill:none"
+     inkscape:export-filename="/home/hiv/devel/lumi/wiki/draw/AdviceBindingIndex1.png"
+     inkscape:export-xdpi="90"
+     inkscape:export-ydpi="90" />
+  <path
+     style="stroke-linejoin:miter;marker-end:url(#Arrow1MendMv);stroke-opacity:1;fill-opacity:0.75000000000000000;fill-rule:evenodd;stroke:#46f86e;stroke-linecap:butt;stroke-miterlimit:4;stroke-dasharray:none;stroke-width:1.30000000000000004;fill:none"
+     d="M 294.75231,43.479927 C 250,29.798989 170,30 130,30"
+     id="path4501"
+     sodipodi:nodetypes="cc"
+     inkscape:export-filename="/home/hiv/devel/lumi/wiki/draw/AdviceBindingIndex1.png"
+     inkscape:export-xdpi="90"
+     inkscape:export-ydpi="90" />
+  <path
+     sodipodi:nodetypes="cc"
+     id="path4503"
+     d="M 294.75231,84.138566 C 250,70.457628 170,30 130,30"
+     style="stroke-linejoin:miter;marker-end:url(#Arrow1MendM7);stroke-opacity:1;fill-opacity:0.75000000000000000;fill-rule:evenodd;stroke:#46f86e;stroke-linecap:butt;stroke-miterlimit:4;stroke-dasharray:none;stroke-width:1.30000000000000004;fill:none"
+     inkscape:export-filename="/home/hiv/devel/lumi/wiki/draw/AdviceBindingIndex1.png"
+     inkscape:export-xdpi="90"
+     inkscape:export-ydpi="90" />
+  <path
+     sodipodi:nodetypes="csc"
+     id="path4505"
+     d="M 73.921273,140 C 27.349471,140 5.9699239,77.765842 5.9699239,49.291108 C 5.9699239,38.408051 5.2280782,30 21.498435,30"
+     style="fill:none;fill-opacity:0.75;fill-rule:evenodd;stroke:#2ccd92;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;marker-end:url(#Arrow1MendM);stroke-opacity:1"
+     inkscape:export-filename="/home/hiv/devel/lumi/wiki/draw/AdviceBindingIndex1.png"
+     inkscape:export-xdpi="90"
+     inkscape:export-ydpi="90" />
+  <path
+     style="fill:none;fill-opacity:0.75;fill-rule:evenodd;stroke:#2ccd92;stroke-width:0.99999994px;stroke-linecap:butt;stroke-linejoin:miter;marker-end:url(#Arrow1MendM);stroke-opacity:1"
+     d="M 73.921273,150 C 27.349471,150 5.9699239,93.47412 5.9699239,67.611162 C 5.9699239,57.726328 3.7296432,50.089485 20,50.089485"
+     id="path4507"
+     sodipodi:nodetypes="csc"
+     inkscape:export-filename="/home/hiv/devel/lumi/wiki/draw/AdviceBindingIndex1.png"
+     inkscape:export-xdpi="90"
+     inkscape:export-ydpi="90" />
+  <text
+     inkscape:export-ydpi="90"
+     inkscape:export-xdpi="90"
+     inkscape:export-filename="/home/hiv/devel/lumi/wiki/draw/AdviceBindingIndex1.png"
+     sodipodi:linespacing="100%"
+     id="text5353"
+     y="61.670551"
+     x="157.46268"
+     style="font-size:14px;font-style:oblique;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;fill:none;fill-opacity:0.75000000000000000;fill-rule:evenodd;stroke:#46f86e;stroke-width:1.29999994999999990;stroke-linecap:butt;stroke-linejoin:miter;marker:none;marker-start:none;marker-mid:none;marker-end:url(#Arrow1MendM7);stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate;font-family:Bitstream Vera Sans;opacity:1;color:#000000"
+     xml:space="preserve"><tspan
+       sodipodi:role="line"
+       x="157.46268"
+       y="61.670551"
+       style="font-size:8px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:100%;writing-mode:lr-tb;text-anchor:start;font-family:Bitstream Vera Sans;-inkscape-font-specification:Bitstream Vera Sans;color:#000000;fill:none;fill-opacity:0.75000000000000000;fill-rule:evenodd;stroke:#46f86e;stroke-width:1.29999994999999990;stroke-linecap:butt;stroke-linejoin:miter;marker:none;marker-start:none;marker-mid:none;marker-end:url(#Arrow1MendM7);stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+       id="tspan5355">Advice Solution</tspan></text>
+</svg>

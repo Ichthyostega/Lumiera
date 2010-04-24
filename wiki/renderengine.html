@@ -541,7 +541,7 @@ In a more elaborate scheme, the advised entity could provide a signal to be invo
 &amp;rarr; AdviceImplementation
 </pre>
 </div>
-<div title="AdviceImplementation" modifier="Ichthyostega" modified="201004160249" created="201004100056" tags="impl draft img" changecount="19">
+<div title="AdviceImplementation" modifier="Ichthyostega" modified="201004240054" created="201004100056" tags="impl draft img" changecount="38">
 <pre>[&lt;img[Advice solution|uml/fig141573.png]]
 
 
@@ -559,6 +559,45 @@ This is the tricky part of the whole advice system implementation. A naive imple
 The binding patterns are organised by //predicate symbol and the lists are normalised.// A simple normalisation could be lexicographic ordering of the predicate symbols. Then the resulting representation can be //hashed.// When all predicates are constant, a match can be detected by hashtable lookup, otherwise, in case some of the predicates contain variable arguments ({{red{planned extension}}}), the lookup is followed by an unification. For this to work, we'll have to include the arity into the predicate symbols used in the first matching stage. Moreover, we'll create a //matching closure// (functor object), internally holding the arguments for unification. This approach allows for //actual interpretation of the arguments.// It is conceivable that in special cases we'll get multiple instances of the same predicate, just with different arguments. The unification of these terms needs to consider each possible pairwise combination (cartesian product) &amp;mdash; but working out the details of the implementation can safely be deferred until we'll actually hit such a special situation, thanks to the implementation by a functor.
 
 Fortunately, the calculation of this normalised patterns can be separated completely from the actual matching. Indeed, we don't even need to store the binding patterns at all within the binding index &amp;mdash; storing the hash value is sufficient (and in case of patterns with arguments we'll attach the matching closure functor). Yet still we need to store a marker for each successful match, together with back-links, in order to handle changing and retracting of advice.
+
+!!!storage and registrations
+We have to provide dedicated storage for the actual advice provisions and for the index entries. Mostly, these objects to be managed are attached through a single link &amp;mdash; and moreover the advice system is considered performance critical, so it doesn't make sense to implement the management of these entries by smart-ptr. This rules out ~TypedAllocationManager and prompts to write a dedicated storage frontend, later to be backed by Lumiera's mpool facility.
+* both the advice provision and the advice requests attach to the advice system after fulfilling some prerequisites; they need to detach automatically on destruction.
+* in case of the provision, there is a cascaded relation: the externally maintained provision creates an internal provision record, which in turn attaches an index entry.
+* both in case of the provision and the request, the relation of the index bears some multiplicity:
+** a multitude of advice provisions can attach with the same binding (which could be the same binding pattern terms, but different variable arguments). Each of them could create a separate advice solution (at least when variable arguments are involved); it would be desirable to establish a defined LIFO order for any search for possibly matching advice.
+** a multitude of advice requests can attach with the same binding, and each of them needs to be visited in case a match is detected.
+* in both cases, any of these entries could be removed any time on de-registration of the corresponding external entity
+* we need to track existing advice solutions, because we need to be able to overwrite with new advice and to remove all solutions bound to a given pattern about to leave the system. One provision could create a large number of solutions, while each registration always holds onto exactly one solution (which could be a default/placeholder solution though)
+
+!!!index datastructure
+It is clear by now that the implementation datastrucutre has to serve as a kind of //reference count.// Within this datastructure, any constructed advice solution needs to be reflected somehow, to prevent us from discarding an advice provision still accessible. Allowing lock-free access to the advice solution (planned feature) adds an special twist, because in this case we can't even tell for sure if an overwritten old solution is actually gone (or if its still referred from some thread's cached memeory). This could be addressed with an transactional approach (which might be good anyway) &amp;mdash; but I tend to leave this special concern asside for now.
+
+To start with, any advice matching and solution will //always happen within matching buckets of a hash based pattern organisation.// The binding index thus should build on two hashtables (one for the requests and one for the provisions), but using specifically crafted datastructures as buckets. The individual entries within these bucket structures in both cases will be comprised of a binding matcher (to determine if an match actually happens) and a back-link to the registered entitiy (provision or request). Given the special pattern of the advice solutions, existing solutions could be tracked within the entries at the request side.
+* Advice provisions are expected to happen only in small numbers; they will be searched stack-like, starting from the newes provisions, until a match is found.
+* Each advised entity basically creates an advice request, so there could be a larger number of request entries. In the typical search triggered from the provision side, each request entry will be visited and checked for match, which, if successful, causes a pointer to be set within the ~AdviceRequest object (located outside the realm of the advice system). While &amp;mdash; obviously &amp;mdash; multiple requests with similar binding match could be folded into a sub-list, we need actual timing measurements to determine the weight of these two calculation steps of matching and storing, which together comprise the handling of an advice solution.
+
+The above considerations don't fully solve the question how to represent an computed solution within the index datastructure, candidates being to use the index within the provision list, or a direct pointer to the provision or even just to re-use the pointer stored into the ~AdviceRequest. Besides solutions found by matching, we need //fallback solutions// holding a default constructed piece of advice of the requested type. As these defaults aren't correlated at all to the involved bindings, but only to the advice type as such, it seems reasonable to keep them completely apart, like e.g. placing them into static memory managed by the ~AdviceProvision template instantiations.
+
+!!!interactions to be served by the index
+[&gt;img[Advice solution|draw/AdviceBindingIndex1.png]]
+
+;add request
+:check existing provisions starting from top until match; use default solution in case no match is found; publish solution into the new request; finally attach the new request entry
+;remove request
+:just remove the request entry
+;modify request
+:handle as if newly added
+;add provision
+:push new provision entry on top; traverse all request entries and check for match with this new provision entry, publish new solution for each match
+;retract provision
+:remove the provision entry; traverse all request entries to find those using this provision as advice solution, treat these as if they where newly added requests
+;modify provision
+:add a new (copy of the) provision, followed by retracting the old one; actually these two traversals of all requests can be combined, thus treating a request which used the old provision but doesn't match the new one is treated like a new request
+&lt;&lt;&lt;
+__Invariant__: each request has a valid soultion pointer set (maybe pointing to a default solution). Whenever such a solution points to a registered provision, there is a match between the index entries and this is the top-most possible match to any provision entry for this request entry
+&lt;&lt;&lt;
+Clearly, retracting advice (and consequently also the modification) is expensive. After finishing these operations, the old/retracted provision can be discarded (or put asside in case of non-locking advice access). Other operations don't cause de-allocation, as provisions remain within the system, even if the original advising entity is gone.
 </pre>
 </div>
 <div title="AdviceRequirements" modifier="Ichthyostega" modified="201004100149" created="201004060213" tags="design impl" changecount="17">

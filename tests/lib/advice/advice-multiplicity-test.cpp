@@ -85,7 +85,7 @@ namespace test {
       
       /** @test run simple pairs of collaborators in multiple threads.
        *        Intentionally, there should be just a single match per pair,
-       *        but the timings of provision and pickup are choosen randomly
+       *        but the timings of provision and pickup are chosen randomly
        */
       void
       check_highLoadSimpleMatch()

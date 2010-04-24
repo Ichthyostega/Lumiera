@@ -122,7 +122,7 @@ namespace advice {
   
   
   /**
-   * Access point for the advised entity (client).
+   * Access point for the advising entity (server).
    * TODO type comment
    */
   template<class AD>
