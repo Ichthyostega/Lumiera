@@ -35,6 +35,7 @@
 //#include "lib/symbol.hpp"
 
 //#include <iostream>
+#include <vector>
 //#include <string>
 
 //using lib::test::showSizeof;
@@ -62,29 +63,72 @@ namespace test {
     
     struct TestPOA
       {
+        TestPOA* solution_;
+        Binding::Matcher pattern_;
         
+        explicit
+        TestPOA(Literal spec="missing")
+          : solution_(0)
+          , pattern_(Binding(spec).buildMatcher())
+          { }
+        
+        bool
+        matches (Literal refSpec)  const
+          {
+            return pattern_.matches (Binding(refSpec));
+          }
+        
+        
+        friend TestPOA*
+        getSolution (TestPOA& entry)
+        {
+          return entry.solution_;
+        }
+        
+        friend void
+        setSolution (TestPOA& entry, TestPOA& solution)
+        {
+          entry.solution_ = &solution;
+        }
       };
     
     
+    
+    
+    const uint MAX_TEST_ENTRIES = 10;
+    
+    std::vector<TestPOA> testEntries(MAX_TEST_ENTRIES);
+    
+    
+    
     /** convenience shortcut for writing testcases inline */
-    inline Binding::Matcher
+    inline TestPOA&
     _entry (uint id, Literal spec)
     {
-      return Binding(spec).buildMatcher();
+      REQUIRE (id < testEntries.size());
+      
+      if (!testEntries[id].matches(spec))
+        testEntries[id] = TestPOA(spec);
+      
+      return testEntries[id];
     }
     
     /** check if the given request got the denoted solution */
     inline bool
     _hasSolution (uint req, uint prov)
     {
-      UNIMPLEMENTED ("check test solution");
+      REQUIRE (req < testEntries.size());
+      REQUIRE (prov < testEntries.size());
+      
+      return testEntries[req].solution_ == & testEntries[prov]; 
     }
     
     /** check if the given request holds a default solution */
     inline bool
     _hasDefault (uint req)
     {
-      UNIMPLEMENTED ("check pseudo default solution, which is NULL for this test");
+      REQUIRE (req < testEntries.size());
+      return NULL == testEntries[req].solution_;
     }
   }
   
@@ -100,8 +144,6 @@ namespace test {
    *       We employ special test entries, different from what is used in the advice system,
    *       and we create a specific instantiation of the advice::Index template solely
    *       for this test
-   * 
-   * @todo partially unimplemented and thus commented out ////////////////////TICKET #608
    * 
    * @see advice.hpp
    * @see AdviceBasics_test
@@ -133,7 +175,6 @@ namespace test {
           CHECK (idx.isValid());
           CHECK (0 == idx.size());
           
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #608
           idx.addRequest (_entry (1,"cat"));
           idx.addRequest (_entry (2,"cat"));
           idx.addRequest (_entry (3,"dog"));
@@ -150,14 +191,12 @@ namespace test {
           CHECK (_hasDefault (2));
           CHECK (_hasSolution (3,4));
           CHECK (idx.isValid());
-#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #608
         }
       
       
       void
       addRequest (Index& idx)
         {
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #608
           CHECK (idx.isValid());
           uint req_cnt = idx.request_count();
           
@@ -171,14 +210,12 @@ namespace test {
           CHECK (_hasSolution (5,4));
           CHECK (idx.isValid());
           CHECK (2 + req_cnt == idx.request_count());
-#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #608
         }
       
       
       void
       addProvision (Index& idx)
         {
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #608
           CHECK (idx.isValid());
           uint r_cnt = idx.request_count();
           uint p_cnt = idx.provision_count();
@@ -211,14 +248,12 @@ namespace test {
           CHECK (idx.isValid());
           CHECK (2 + p_cnt == idx.provision_count());
           CHECK (0 + r_cnt == idx.request_count());
-#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #608
         }
       
       
       void
       removeRequest (Index& idx)
         {
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #608
           CHECK (idx.isValid());
           uint r_cnt = idx.request_count();
           uint p_cnt = idx.provision_count();
@@ -246,14 +281,12 @@ namespace test {
           CHECK (p_cnt   == idx.provision_count());
           CHECK (r_cnt-1 == idx.request_count());
           CHECK (idx.isValid());
-#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #608
         }
       
       
       void
       retractProvision (Index& idx)
         {
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #608
           CHECK (idx.isValid());
           uint r_cnt = idx.request_count();
           uint p_cnt = idx.provision_count();
@@ -295,14 +328,12 @@ namespace test {
           CHECK (p_cnt-2 == idx.provision_count());
           CHECK (r_cnt   == idx.request_count());
           CHECK (idx.isValid());
-#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #608
         }
       
       
       void
       modifyRequest (Index& idx)
         {
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #608
           CHECK (idx.isValid());
           uint r_cnt = idx.request_count();
           uint p_cnt = idx.provision_count();
@@ -324,7 +355,6 @@ namespace test {
           CHECK (_hasSolution (6,7));
           CHECK (_hasDefault  (3));
           CHECK (_hasSolution (2,7));                  // automatically got the current cat solution
-#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #608
         }
       
       
@@ -332,7 +362,6 @@ namespace test {
       modifyProvision (Index& idx)
         {
           CHECK (idx.isValid());
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #608
           uint r_cnt = idx.request_count();
           uint p_cnt = idx.provision_count();
           CHECK (_hasSolution (1,7));
@@ -379,7 +408,6 @@ namespace test {
           CHECK (p_cnt == idx.provision_count());
           CHECK (r_cnt == idx.request_count());
           CHECK (idx.isValid());
-#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #608
         }
       
       
@@ -389,8 +417,6 @@ namespace test {
           idx.clear();
           CHECK (idx.isValid());
           CHECK (0 == idx.size());
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #608
-#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #608
         }
     };
   

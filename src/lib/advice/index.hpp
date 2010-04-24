@@ -105,10 +105,50 @@ namespace advice {
     public:
       
       void
+      addRequest (POA& entry)
+        {
+          UNIMPLEMENTED ("add advice request entry");
+        }
+      
+      void
+      modifyRequest (POA const& oldRef, POA& newEntry)
+        {
+          UNIMPLEMENTED ("replace denoted entry with new advice request");
+        }
+      
+      void
+      removeRequest (POA const& refEntry)
+        {
+          UNIMPLEMENTED ("drop advice request");
+        }
+      
+      
+      void
+      addProvision (POA& entry)
+        {
+          UNIMPLEMENTED ("add advice provision entry");
+        }
+      
+      void
+      modifyProvision (POA const& oldRef, POA& newEntry)
+        {
+          UNIMPLEMENTED ("replace denoted entry with new advice provision");
+        }
+      
+      void
+      removeProvision (POA const& refEntry)
+        {
+          UNIMPLEMENTED ("retract advice provision entry");
+        }
+      
+      
+      void
       clear ()
         {
           UNIMPLEMENTED ("clear all index tables");
         }
+      
+      
       
       /* == diagnostics == */
       
@@ -119,6 +159,30 @@ namespace advice {
       size()  const
         {
           UNIMPLEMENTED ("sum up size of both tables");
+        }
+      
+      size_t
+      request_count()  const
+        {
+          UNIMPLEMENTED ("number of request entries");
+        }
+      
+      size_t
+      provision_count()  const
+        {
+          UNIMPLEMENTED ("number of provision entries");
+        }
+      
+      bool
+      hasRequest (POA const& refEntry)  const
+        {
+          UNIMPLEMENTED ("do we hold this entry?");
+        }
+      
+      bool
+      hasProvision (POA const& refEntry)  const
+        {
+          UNIMPLEMENTED ("do we hold this entry?");
         }
       
       
