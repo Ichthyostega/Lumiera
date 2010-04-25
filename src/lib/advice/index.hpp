@@ -113,6 +113,7 @@ namespace advice {
       struct Entry
         : pair<Binding::Matcher, POA*> 
         {
+          explicit
           Entry (POA& elm)
             : pair<Binding::Matcher, POA*> (getMatcher(elm), &elm)
             { }
@@ -131,6 +132,7 @@ namespace advice {
         };
       
       typedef vector<Entry> EntryList;
+      typedef typename EntryList::iterator EIter;
       
       
       class Cluster
@@ -142,8 +144,30 @@ namespace advice {
            append (POA& elm)
              {
                Entry entry (elm);
-               REQUIRE (!contains (elms_, entry));
+               REQUIRE (!contains (elms_, entry), "Duplicate entry");
                elms_.push_back(entry);
+             }
+           
+           void
+           overwrite (POA const& oldRef, POA& newEntry)
+             {
+               EIter pos = std::find (elms_.begin(),elms_.end(), oldRef);
+               REQUIRE (pos!=elms_.end(), "Attempt to overwrite an entry which isn't there.");
+////TODO       REQUIRE (!contains (elms_, newEntry), "Duplicate entry");
+               
+               *pos = Entry(newEntry);
+               
+////TODO       ENSURE (!contains (elms_, oldRef), "Duplicate entry");
+             }
+           
+           void
+           remove (POA const& refEntry)
+             {
+               EIter pos = std::find (elms_.begin(),elms_.end(), refEntry);  /////////////////////////////TODO can't compare to refEntry, need a Entry. Maybe define other operator==
+               if (pos!=elms_.end())
+                 elms_.erase(pos);
+               
+////TODO       ENSURE (!contains (elms_, refEntry), "Duplicate entry");
              }
         };
       
@@ -155,6 +179,18 @@ namespace advice {
           publish_all_solutions (POA& provisionElm)
             {
               UNIMPLEMENTED ("traverse all, check match, publish solution");
+            }
+          
+          void
+          rewrite_all_solutions (POA const& oldProv, POA& newProv)
+            {
+              UNIMPLEMENTED ("traverse all, check match, publish solution, treat solutions with old Provision as if newly added request");
+            }
+          
+          void
+          retract_all_solutions (POA const& oldProv)
+            {
+              UNIMPLEMENTED ("traverse all, check match, treat matching as if newly added request");
             }
         };
       
@@ -189,13 +225,23 @@ namespace advice {
       void
       modifyRequest (POA const& oldRef, POA& newEntry)
         {
-          UNIMPLEMENTED ("replace denoted entry with new advice request");
+          HashVal oKey (hash_value(oldRef));
+          HashVal nKey (hash_value(newEntry));
+          if (oKey != nKey)
+            {
+              requestEntries_[oKey].remove (oldRef);
+              requestEntries_[nKey].append (newEntry);
+            }
+          else
+            requestEntries_[nKey].overwrite (oldRef, newEntry);
+          provisionEntries_[nKey].publish_latest_solution (newEntry);
         }
       
       void
       removeRequest (POA const& refEntry)
         {
-          UNIMPLEMENTED ("drop advice request");
+          HashVal oKey (hash_value(refEntry));
+          requestEntries_[oKey].remove (refEntry);
         }
       
       
@@ -210,13 +256,28 @@ namespace advice {
       void
       modifyProvision (POA const& oldRef, POA& newEntry)
         {
-          UNIMPLEMENTED ("replace denoted entry with new advice provision");
+          HashVal oKey (hash_value(oldRef));
+          HashVal nKey (hash_value(newEntry));
+          if (oKey != nKey)
+            {
+              provisionEntries_[oKey].remove (oldRef);
+              provisionEntries_[nKey].append (newEntry);
+              requestEntries_[nKey].publish_all_solutions (newEntry);
+              requestEntries_[oKey].retract_all_solutions (oldRef);
+            }
+          else
+            {
+              provisionEntries_[nKey].overwrite (oldRef, newEntry);
+              requestEntries_[nKey].rewrite_all_solutions (oldRef,newEntry);
+            }
         }
       
       void
       removeProvision (POA const& refEntry)
         {
-          UNIMPLEMENTED ("retract advice provision entry");
+          HashVal oKey (hash_value(refEntry));
+          provisionEntries_[oKey].remove (refEntry);
+          requestEntries_[oKey].retract_all_solutions (refEntry);
         }
       
       
