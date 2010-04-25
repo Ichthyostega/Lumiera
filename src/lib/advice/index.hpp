@@ -108,21 +108,45 @@ namespace advice {
   template<class POA>
   class Index
     {
-      typedef pair<Binding::Matcher, POA*> Entry;
+      
+      
+      struct Entry
+        : pair<Binding::Matcher, POA*> 
+        {
+          Entry (POA& elm)
+            : pair<Binding::Matcher, POA*> (getMatcher(elm), &elm)
+            { }
+          
+          friend bool
+          operator== (Entry const& a, Entry const& b)
+          {
+            return a.second == b.second;
+          }
+          
+          friend bool
+          operator!= (Entry const& a, Entry const& b)
+          {
+            return a.second != b.second;
+          }
+        };
+      
       typedef vector<Entry> EntryList;
+      
       
       class Cluster
         {
            EntryList elms_;
+           
         public:
            void
            append (POA& elm)
              {
-               Entry entry (getMatcher(elm), &elm);
+               Entry entry (elm);
                REQUIRE (!contains (elms_, entry));
                elms_.push_back(entry);
              }
         };
+      
       
       struct RequestCluster
         : Cluster
@@ -158,7 +182,7 @@ namespace advice {
       addRequest (POA& entry)
         {
           HashVal key (hash_value(entry));
-          requestEntries_[key].add (entry);
+          requestEntries_[key].append (entry);
           provisionEntries_[key].publish_latest_solution (entry);
         }
       
