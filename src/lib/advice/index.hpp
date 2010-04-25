@@ -72,7 +72,10 @@
 #include "lib/advice/binding.hpp"
 //#include "lib/symbol.hpp"
 //#include "lib/query.hpp"
+#include "include/logging.h"
+#include "lib/util.hpp"
 
+#include <tr1/unordered_map>
 //#include <iostream>
 //#include <string>
 //#include <set>
@@ -80,7 +83,11 @@
 namespace lib    {
 namespace advice {
   
+  using util::contains;
 //  using std::string;
+  using std::pair;
+  using std::vector;
+  using std::tr1::unordered_map;
   
 //  LUMIERA_ERROR_DECLARE (BINDING_PATTERN_SYNTAX); ///< Unable to parse the given binding pattern definition
   
@@ -101,13 +108,58 @@ namespace advice {
   template<class POA>
   class Index
     {
-    
+      typedef pair<Binding::Matcher, POA*> Entry;
+      typedef vector<Entry> EntryList;
+      
+      class Cluster
+        {
+           EntryList elms_;
+        public:
+           void
+           append (POA& elm)
+             {
+               Entry entry (getMatcher(elm), &elm);
+               REQUIRE (!contains (elms_, entry));
+               elms_.push_back(entry);
+             }
+        };
+      
+      struct RequestCluster
+        : Cluster
+        {
+          void
+          publish_all_solutions (POA& provisionElm)
+            {
+              UNIMPLEMENTED ("traverse all, check match, publish solution");
+            }
+        };
+      
+      struct ProvisionCluster
+        : Cluster
+        {
+          void
+          publish_latest_solution (POA& requestElm)
+            {
+              UNIMPLEMENTED ("visit from back, find first match, publish solution");
+            }
+        };
+      
+        
+      typedef unordered_map<HashVal, RequestCluster> RTable; 
+      typedef unordered_map<HashVal, ProvisionCluster> PTable;
+      
+      RTable requestEntries_;
+      PTable provisionEntries_;
+      
+      
     public:
       
       void
       addRequest (POA& entry)
         {
-          UNIMPLEMENTED ("add advice request entry");
+          HashVal key (hash_value(entry));
+          requestEntries_[key].add (entry);
+          provisionEntries_[key].publish_latest_solution (entry);
         }
       
       void
@@ -126,7 +178,9 @@ namespace advice {
       void
       addProvision (POA& entry)
         {
-          UNIMPLEMENTED ("add advice provision entry");
+          HashVal key (hash_value(entry));
+          provisionEntries_[key].append (entry);
+          requestEntries_[key].publish_all_solutions (entry);
         }
       
       void
@@ -142,10 +196,16 @@ namespace advice {
         }
       
       
+      /** @warning calling this effectively detaches any existing advice information,
+       *           but doesn't clean up storage of advice provisions incorporated
+       *           within the advice system in general.
+       */
       void
       clear ()
         {
-          UNIMPLEMENTED ("clear all index tables");
+          WARN (library, "Purging Advice Binding Index...");
+          requestEntries_.clear();
+          provisionEntries_.clear();
         }
       
       
@@ -158,7 +218,7 @@ namespace advice {
       size_t
       size()  const
         {
-          UNIMPLEMENTED ("sum up size of both tables");
+          return request_count() + provision_count();
         }
       
       size_t
