@@ -100,9 +100,10 @@ namespace test {
         }
         
         friend void
-        setSolution (TestPOA& entry, TestPOA& solution)
+        setSolution (TestPOA* entry, TestPOA* solution =0)
         {
-          entry.solution_ = &solution;
+          REQUIRE (entry);
+          entry->solution_ = solution;
         }
       };
     

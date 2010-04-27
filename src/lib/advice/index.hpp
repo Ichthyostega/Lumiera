@@ -142,11 +142,10 @@ namespace advice {
       typedef typename EntryList::iterator EIter;
       
       
-      class Cluster
+      struct Cluster
         {
            EntryList elms_;
            
-        public:
            size_t
            size()  const
              {
@@ -190,31 +189,8 @@ namespace advice {
                    return true;
                return false;
              }
-        private:
         };
       
-      
-      struct RequestCluster
-        : Cluster
-        {
-          void
-          publish_all_solutions (POA& provisionElm)
-            {
-              UNIMPLEMENTED ("traverse all, check match, publish solution");
-            }
-          
-          void
-          rewrite_all_solutions (POA const& oldProv, POA& newProv)
-            {
-              UNIMPLEMENTED ("traverse all, check match, publish solution, treat solutions with old Provision as if newly added request");
-            }
-          
-          void
-          retract_all_solutions (POA const& oldProv)
-            {
-              UNIMPLEMENTED ("traverse all, check match, treat matching as if newly added request");
-            }
-        };
       
       struct ProvisionCluster
         : Cluster
@@ -222,7 +198,65 @@ namespace advice {
           void
           publish_latest_solution (POA& requestElm)
             {
-              UNIMPLEMENTED ("visit from back, find first match, publish solution");
+              typedef typename EntryList::reverse_iterator RIter;
+              Binding::Matcher pattern (getMatcher (requestElm));
+              for (RIter ii=this->elms_.rbegin();
+                   ii!=this->elms_.rend();
+                   ++ii )
+                if (ii->first.matches (pattern))
+                  {  // found the most recent advice provision satisfying the (new) request
+                    //  thus publish this new advice solution into the request object
+                    setSolution (&requestElm, ii->second);
+                    return;
+                  }
+               // if we reach this point, non of the existing provisions is suitable.
+              //  thus we report "no solution" which causes a default solution to be used
+              setSolution (&requestElm, NULL );
+            }
+        };
+      
+      struct RequestCluster
+        : Cluster
+        {
+          void
+          publish_all_solutions (POA& provisionElm)
+            {
+              Binding::Matcher pattern (getMatcher (provisionElm));
+              for (EIter ii=this->elms_.begin();
+                   ii!=this->elms_.end();
+                   ++ii )
+                if (pattern.matches (ii->first))
+                   // the given (new) advice provision satisfies this request
+                  //  thus publish this new advice solution into the request object
+                  setSolution (ii->second, &provisionElm);
+            }
+          
+          void
+          retract_all_solutions (POA const& oldProv, ProvisionCluster& possibleReplacementSolutions)
+            {
+              Binding::Matcher pattern (getMatcher (oldProv));
+              for (EIter ii=this->elms_.begin();
+                   ii!=this->elms_.end();
+                   ++ii )
+                if (pattern.matches (ii->first))
+                   // the old advice provision (to be dropped) satisfied this request
+                  //  which thus needs to be treated anew (could cause quadratic complexity)
+                  possibleReplacementSolutions.publish_latest_solution (*(ii->second));
+            }
+          
+          void
+          rewrite_all_solutions (POA const& oldProv, POA& newProv, ProvisionCluster& possibleReplacementSolutions)
+            {
+              Binding::Matcher oldPattern (getMatcher (oldProv));
+              Binding::Matcher newPattern (getMatcher (newProv));
+              for (EIter ii=this->elms_.begin();
+                   ii!=this->elms_.end();
+                   ++ii )
+                if (newPattern.matches (ii->first))
+                  setSolution (ii->second, &newProv);
+                else
+                if (oldPattern.matches (ii->first))
+                  possibleReplacementSolutions.publish_latest_solution (*(ii->second));
             }
         };
       
@@ -288,12 +322,12 @@ namespace advice {
               provisionEntries_[oKey].remove (oldRef);
               provisionEntries_[nKey].append (newEntry);
               requestEntries_[nKey].publish_all_solutions (newEntry);
-              requestEntries_[oKey].retract_all_solutions (oldRef);
+              requestEntries_[oKey].retract_all_solutions (oldRef, provisionEntries_[oKey]);
             }
           else
             {
               provisionEntries_[nKey].overwrite (oldRef, newEntry);
-              requestEntries_[nKey].rewrite_all_solutions (oldRef,newEntry);
+              requestEntries_[nKey].rewrite_all_solutions (oldRef,newEntry, provisionEntries_[nKey]);
             }
         }
       
@@ -302,7 +336,7 @@ namespace advice {
         {
           HashVal oKey (hash_value(refEntry));
           provisionEntries_[oKey].remove (refEntry);
-          requestEntries_[oKey].retract_all_solutions (refEntry);
+          requestEntries_[oKey].retract_all_solutions (refEntry, provisionEntries_[oKey]);
         }
       
       
@@ -353,7 +387,8 @@ namespace advice {
       hasProvision (POA const& refEntry)  const
         {
           return provisionEntries_[hash_value(refEntry)].contains (refEntry);
-        }
+        }                       // note: even just lookup might create a new (empty) cluster;
+                               //        thus the tables are defined as mutable 
       
       
     private:
