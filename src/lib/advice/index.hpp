@@ -75,6 +75,7 @@
 #include "include/logging.h"
 #include "lib/util.hpp"
 
+#include <boost/operators.hpp>
 #include <tr1/unordered_map>
 //#include <iostream>
 //#include <string>
@@ -111,7 +112,9 @@ namespace advice {
       
       
       struct Entry
-        : pair<Binding::Matcher, POA*> 
+        : pair<Binding::Matcher, POA*>
+        , boost::equality_comparable<Entry, POA,
+          boost::equality_comparable<Entry> >
         {
           explicit
           Entry (POA& elm)
@@ -125,9 +128,9 @@ namespace advice {
           }
           
           friend bool
-          operator!= (Entry const& a, Entry const& b)
+          operator== (Entry const& a, POA const& p)
           {
-            return a.second != b.second;
+            return a.second != &p;
           }
         };
       
@@ -143,9 +146,8 @@ namespace advice {
            void
            append (POA& elm)
              {
-               Entry entry (elm);
-               REQUIRE (!contains (elms_, entry), "Duplicate entry");
-               elms_.push_back(entry);
+               REQUIRE (!contains (elm), "Duplicate entry");
+               elms_.push_back (Entry(elm));
              }
            
            void
@@ -153,21 +155,31 @@ namespace advice {
              {
                EIter pos = std::find (elms_.begin(),elms_.end(), oldRef);
                REQUIRE (pos!=elms_.end(), "Attempt to overwrite an entry which isn't there.");
-////TODO       REQUIRE (!contains (elms_, newEntry), "Duplicate entry");
+               REQUIRE (!contains (newEntry), "Duplicate entry");
                
                *pos = Entry(newEntry);
                
-////TODO       ENSURE (!contains (elms_, oldRef), "Duplicate entry");
+               ENSURE (!contains (oldRef), "Duplicate entry");
              }
            
            void
            remove (POA const& refEntry)
              {
-               EIter pos = std::find (elms_.begin(),elms_.end(), refEntry);  /////////////////////////////TODO can't compare to refEntry, need a Entry. Maybe define other operator==
+               EIter pos = std::find (elms_.begin(),elms_.end(), refEntry);
                if (pos!=elms_.end())
                  elms_.erase(pos);
                
-////TODO       ENSURE (!contains (elms_, refEntry), "Duplicate entry");
+               ENSURE (!contains (refEntry), "Duplicate entry");
+             }
+           
+        private:
+           bool
+           contains (POA const& refElm)
+             {
+               for (EIter i=elms_.begin(); i!=elms_.end(); ++i)
+                 if (i->second == &refElm)
+                   return true;
+               return false;
              }
         };
       
