@@ -73,6 +73,8 @@
 //#include "lib/symbol.hpp"
 //#include "lib/query.hpp"
 #include "include/logging.h"
+#include "lib/iter-adapter-stl.hpp"
+//#include "lib/util-foreach.hpp"
 #include "lib/util.hpp"
 
 #include <boost/operators.hpp>
@@ -84,6 +86,8 @@
 namespace lib    {
 namespace advice {
   
+  using lib::iter_stl::eachVal;
+//  using util::for_each;
   using util::contains;
 //  using std::string;
   using std::pair;
@@ -143,6 +147,12 @@ namespace advice {
            EntryList elms_;
            
         public:
+           size_t
+           size()  const
+             {
+               return elms_.size();
+             }
+           
            void
            append (POA& elm)
              {
@@ -172,7 +182,6 @@ namespace advice {
                ENSURE (!contains (refEntry), "Duplicate entry");
              }
            
-        private:
            bool
            contains (POA const& refElm)
              {
@@ -181,6 +190,7 @@ namespace advice {
                    return true;
                return false;
              }
+        private:
         };
       
       
@@ -216,12 +226,15 @@ namespace advice {
             }
         };
       
+      
+        
+      /* ==== Index Tables ===== */  
         
       typedef unordered_map<HashVal, RequestCluster> RTable; 
       typedef unordered_map<HashVal, ProvisionCluster> PTable;
       
-      RTable requestEntries_;
-      PTable provisionEntries_;
+      mutable RTable requestEntries_;
+      mutable PTable provisionEntries_;
       
       
     public:
@@ -321,30 +334,40 @@ namespace advice {
       size_t
       request_count()  const
         {
-          UNIMPLEMENTED ("number of request entries");
+          return sumClusters (eachVal (requestEntries_));
         }
       
       size_t
       provision_count()  const
         {
-          UNIMPLEMENTED ("number of provision entries");
+          return sumClusters (eachVal (provisionEntries_));
         }
       
       bool
       hasRequest (POA const& refEntry)  const
         {
-          UNIMPLEMENTED ("do we hold this entry?");
+          return requestEntries_[hash_value(refEntry)].contains (refEntry);
         }
       
       bool
       hasProvision (POA const& refEntry)  const
         {
-          UNIMPLEMENTED ("do we hold this entry?");
+          return provisionEntries_[hash_value(refEntry)].contains (refEntry);
         }
       
       
     private:
-      /** internal: parse into atoms, and insert them */
+      /** internal: sum element count over all 
+       *  clusters in the given hashtable */
+      template<class IT>
+      static size_t
+      sumClusters (IT ii)
+        {
+          size_t sum=0;
+          for ( ; ii; ++ii )
+              sum += ii->size();
+          return sum;
+        }
     };
   
   
