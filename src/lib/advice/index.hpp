@@ -42,11 +42,11 @@
  ** Actually the advice system will have to deal with concrete advice::Request and advice::Provision
  ** objects, which are templated to a specific advice type; but this specifically typed context
  ** is kept on the interface level (advice.hpp) and the type information is stripped before
- ** calling into the actual implementation, so the index can be realised in a generic fashion.
+ ** calling into the actual implementation, so the index can be implemented generic.
  ** 
  ** @note as of 4/2010 this is an experimental setup and implemented just enough to work out
  **       the interfaces. Ichthyo expects this collaboration service to play a central role
- **       at various places within proc-layer.
+ **       later at various places within proc-layer.
  ** @note for now, \em only the case of a completely constant (ground) pattern is implemented.
  **       Later we may consider to extend the binding patterns to allow variables. The mechanics
  **       of the index are designed right from start to support this case (and indeed the index
@@ -70,31 +70,36 @@
 
 #include "lib/error.hpp"
 #include "lib/advice/binding.hpp"
-//#include "lib/symbol.hpp"
+#include "lib/symbol.hpp"
 //#include "lib/query.hpp"
 #include "include/logging.h"
 #include "lib/iter-adapter-stl.hpp"
-//#include "lib/util-foreach.hpp"
+#include "lib/util-foreach.hpp"
 #include "lib/util.hpp"
 
 #include <boost/operators.hpp>
 #include <tr1/unordered_map>
 //#include <iostream>
-//#include <string>
+#include <string>
 //#include <set>
 
 namespace lib    {
 namespace advice {
   
-  using lib::iter_stl::eachVal;
-//  using util::for_each;
-  using util::contains;
-//  using std::string;
-  using std::pair;
-  using std::vector;
+  using std::tr1::placeholders::_1;
   using std::tr1::unordered_map;
+  using lib::iter_stl::eachVal;
+  using lib::iter_stl::eachElm;
+  using util::for_each;
+  using util::contains;
+  using util::unConst;
+  using lib::Literal;
+  using std::string;
+  using std::vector;
+  using std::pair;
   
-//  LUMIERA_ERROR_DECLARE (BINDING_PATTERN_SYNTAX); ///< Unable to parse the given binding pattern definition
+  using namespace lumiera;
+  
   
   
   
@@ -138,6 +143,7 @@ namespace advice {
           }
         };
       
+        
       typedef vector<Entry> EntryList;
       typedef typename EntryList::iterator EIter;
       
@@ -189,14 +195,20 @@ namespace advice {
                    return true;
                return false;
              }
+           
+           RangeIter<EIter>
+           allElms ()
+             {
+               return eachElm (elms_);
+             }
         };
       
       
       struct ProvisionCluster
         : Cluster
         {
-          void
-          publish_latest_solution (POA& requestElm)
+          POA*
+          find_latest_solution (POA& requestElm)
             {
               typedef typename EntryList::reverse_iterator RIter;
               Binding::Matcher pattern (getMatcher (requestElm));
@@ -204,14 +216,22 @@ namespace advice {
                    ii!=this->elms_.rend();
                    ++ii )
                 if (ii->first.matches (pattern))
-                  {  // found the most recent advice provision satisfying the (new) request
-                    //  thus publish this new advice solution into the request object
-                    setSolution (&requestElm, ii->second);
-                    return;
-                  }
-               // if we reach this point, non of the existing provisions is suitable.
-              //  thus we report "no solution" which causes a default solution to be used
-              setSolution (&requestElm, NULL );
+                  return ii->second;
+              
+              return NULL;
+            }
+          
+          void
+          publish_latest_solution (POA& requestElm)
+            {
+              POA* solution = find_latest_solution (requestElm);
+              if (solution)
+                 // found the most recent advice provision satisfying the (new) request
+                //  thus publish this new advice solution into the request object
+                setSolution (&requestElm, solution);
+              else
+                setSolution (&requestElm, NULL );
+                //  report "no solution" which causes a default solution to be used
             }
         };
       
@@ -403,6 +423,9 @@ namespace advice {
               sum += ii->size();
           return sum;
         }
+      
+      void verify_Entry   (Entry const&, HashVal)  const;
+      void verify_Request (Entry const&, HashVal)  const;
     };
   
   
@@ -410,23 +433,101 @@ namespace advice {
   
   
   
-  /* === equality comparison and matching === */
   
   
   
   
   
-  /* == diagnostics == */
+  /* == Self-Verification == */
+      
+  namespace { // self-check implementation helpers...
+    
+    LUMIERA_ERROR_DEFINE(INDEX_CORRUPTED, "Advice-Index corrupted");
+    
+    struct SelfCheckFailure
+      : error::Fatal
+      {
+        SelfCheckFailure (Literal failure)
+          : error::Fatal (string("Failed test: ")+failure
+                         ,LUMIERA_ERROR_INDEX_CORRUPTED)
+          { }
+      };
+    
+  }
+      
+  
+  
+  /** Advice index self-verification: traverses the tables to check
+   *  each entry is valid. Moreover, when a advice request has a stored solution
+   *  which points back into the current advice provisions, this solution will be
+   *  re-computed with the current data to prove it's still valid.
+   *  @note expensive operation
+   */
   template<class POA>
   bool
   Index<POA>::isValid()  const
   {
-    UNIMPLEMENTED ("verify the index invariant");
+    typedef typename RTable::const_iterator RTIter;
+    typedef typename PTable::const_iterator PTIter;
+      
+    try {
+        for (PTIter ii=provisionEntries_.begin(); 
+             ii != provisionEntries_.end(); ++ii)
+          {
+            HashVal hash (ii->first);
+            Cluster& clu = unConst(ii->second);
+            for_each (clu.allElms(), &Index::verify_Entry, this, _1, hash);
+          }
+        for (RTIter ii=requestEntries_.begin(); 
+             ii != requestEntries_.end(); ++ii)
+          {
+            HashVal hash (ii->first);
+            Cluster& clu = unConst(ii->second);
+            for_each (clu.allElms(), &Index::verify_Request, this, _1, hash);
+          }
+        return true;
+      }
+    
+    catch(SelfCheckFailure& failure)
+      {
+        lumiera_error();
+        ERROR (library, "%s", failure.what());
+      }
+    return false;
+  }
+
+  
+      
+#define VERIFY(_CHECK_, DESCRIPTION) \
+      if (!(_CHECK_))                           \
+        throw SelfCheckFailure ((DESCRIPTION));
+  
+  
+  template<class POA>
+  void
+  Index<POA>::verify_Entry (Entry const& e, HashVal hash)  const
+  {
+    VERIFY (hash == hash_value(e.first), "Wrong bucket, hash doesn't match bucket");
+    VERIFY (e.second,                    "Invalid Entry: back-link is NULL");
   }
   
+  template<class POA>
+  void
+  Index<POA>::verify_Request (Entry const& e, HashVal hash)  const
+  {
+    verify_Entry (e,hash);
+    POA& request = *(e.second);
+    POA* solution (getSolution (request));
+    if (solution && hasProvision(*solution))
+      {
+        POA* currentSolution = provisionEntries_[hash].find_latest_solution (request); 
+        VERIFY (e.first.matches (getMatcher(*solution)), "stored advice solution not supported by binding match");
+        VERIFY (bool(currentSolution),                   "unable to reproduce stored solution with the current provisions")
+        VERIFY (solution == currentSolution,             "stored advice solution isn't the topmost solution for this request")
+      }
+  }
   
-  
-  
+#undef VERIFY  
   
   
 }} // namespace lib::advice

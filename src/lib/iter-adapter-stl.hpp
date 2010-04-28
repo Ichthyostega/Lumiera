@@ -278,6 +278,18 @@ namespace iter_stl {
   
   
   
+  /** @return Lumiera Forward Iterator
+   *           to yield each Element from a STL container
+   */
+  template<class CON>
+  inline typename _SeqT<CON>::Range
+  eachElm (CON& coll)
+  {
+    typedef typename _SeqT<CON>::Range Range;
+    return Range (coll.begin(), coll.end());
+  }
+  
+  
   /** @return Lumiera Forward Iterator to yield
    *          each key of a map/multimap
    */
