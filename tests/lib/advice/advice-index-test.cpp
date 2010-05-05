@@ -394,11 +394,12 @@ namespace test {
           CHECK (r_cnt == idx.request_count());
           CHECK (_hasDefault  (1));
           CHECK (_hasDefault  (2));
-          CHECK (_hasDefault  (3));
+          CHECK (_hasDefault  (6));
           CHECK (_hasSolution (3,8));
           
           idx.addProvision (_entry (7,"cat"));
           idx.addProvision (_entry (9,"cat"));
+          CHECK (p_cnt+2 == idx.provision_count());
           CHECK (idx.hasProvision (_entry (7,"cat")));
           CHECK (idx.hasProvision (_entry (9,"cat")));
           CHECK (_hasSolution (1,9));                  // all cats got the second cat solution
@@ -413,14 +414,12 @@ namespace test {
           
           CHECK (!idx.hasProvision (_entry (7,"cat")));
           CHECK ( idx.hasProvision (_entry (4,"dog")));
-          CHECK (p_cnt == idx.provision_count());
-          CHECK (r_cnt == idx.request_count());
           CHECK (_hasSolution (1,9));                  // cats unaffected, because we're changing a shadowed cat solution
           CHECK (_hasSolution (2,9));
           CHECK (_hasSolution (6,9));
           CHECK (_hasSolution (3,4));                  // but the dog got switched to the transmogrified-into-dog solution,
                                                        // because it was added later than the existing solution 8
-          CHECK (p_cnt == idx.provision_count());
+          CHECK (p_cnt+2 == idx.provision_count());
           CHECK (r_cnt == idx.request_count());
           CHECK (idx.isValid());
         }

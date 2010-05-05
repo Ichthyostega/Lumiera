@@ -139,7 +139,7 @@ namespace advice {
           friend bool
           operator== (Entry const& a, POA const& p)
           {
-            return a.second != &p;
+            return a.second == &p;
           }
         };
       
