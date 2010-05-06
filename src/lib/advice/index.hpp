@@ -32,8 +32,11 @@
  ** It is \em not usable as an external interface. But it is written in a rather self-contained manner,
  ** in order to be testable in isolation. To this end, the actual PointOfAdvice entities being organised
  ** by this index datastructure remain abstract (defined as template parameter). As link for dealing 
- ** with those entities, we employ the free functions \c getSolution(POA) and \c setSolution(POA)
- ** -- expected to be picked up by ADL.
+ ** with those entities, we employ free functions to be picked up by ADL
+ ** - \c hash_value(POA)
+ ** - \c getMatcher(POA)
+ ** - \c getSolution(POA)
+ ** - \c setSolution(POA,solution)
  ** 
  ** \par implementation notes
  ** The advice binding index is implemented by two hashtables holding Binding::Matcher entries.
@@ -44,13 +47,29 @@
  ** is kept on the interface level (advice.hpp) and the type information is stripped before
  ** calling into the actual implementation, so the index can be implemented generic.
  ** 
+ ** While both hashtables are organised by the binding pattern hash, the individual buckets are
+ ** coded explicitly as ProvisionCluster and RequestCluster -- both based on a vector of entries.
+ ** In case of the provisions, there is a stack-like order, inasmuch additions happen at the back
+ ** and solutions are always searched starting from the end. Because of the basic structure of
+ ** a binding match, solutions are possible \only between provision/request - clusters with the
+ ** same hash value (which is based on the predicate symbols within the patterns to match). Thus,
+ ** in case of changing an existing request or solution, the internal handling is different,
+ ** depending on the new value to belong or don't belong to the same cluster (hash code).
+ ** It's possible (for patterns including variables) that an entry leading to a solution with
+ ** the old provision doesn't match a new provision (and vice versa); thus we'll have to traverse
+ ** the contents of the whole cluster, find all old solutions, match against the new counterpart
+ ** and treating those entries \em not matching with the new value as if they where completely
+ ** newly added entries. In case we don't find any solution, the entries are supposed to be
+ ** implemented such as to fall back to an default solution automatically (when receiving
+ ** a \c NULL solution)
+ ** 
  ** @note as of 4/2010 this is an experimental setup and implemented just enough to work out
  **       the interfaces. Ichthyo expects this collaboration service to play a central role
  **       later at various places within proc-layer.
  ** @note for now, \em only the case of a completely constant (ground) pattern is implemented.
  **       Later we may consider to extend the binding patterns to allow variables. The mechanics
  **       of the index are designed right from start to support this case (and indeed the index
- **       could be much simpler if it wasn't to deal with this foreseeable additional complexity.
+ **       could be much simpler if it wasn't to deal with this foreseeable additional complexity:
  **       When a pattern contains variables, then even within one bucket of the hashtable there
  **       might be non-matching entries. Each individual pair of (provision, request) has to be
  **       checked explicitly to determine a match.     /////////////////////////TICKET #615
@@ -71,7 +90,6 @@
 #include "lib/error.hpp"
 #include "lib/advice/binding.hpp"
 #include "lib/symbol.hpp"
-//#include "lib/query.hpp"
 #include "include/logging.h"
 #include "lib/iter-adapter-stl.hpp"
 #include "lib/util-foreach.hpp"
@@ -79,9 +97,8 @@
 
 #include <boost/operators.hpp>
 #include <tr1/unordered_map>
-//#include <iostream>
+#include <iostream>
 #include <string>
-//#include <set>
 
 namespace lib    {
 namespace advice {
@@ -97,6 +114,9 @@ namespace advice {
   using std::string;
   using std::vector;
   using std::pair;
+  using std::ostream;
+  using std::cout;
+  using std::endl;
   
   using namespace lumiera;
   
@@ -141,9 +161,15 @@ namespace advice {
           {
             return a.second == &p;
           }
+          
+          friend ostream&
+          operator<< (ostream& os, Entry const& ent)
+          {
+            return os << "E-"<<hash_value(ent.first) << "--> " << ent.second ;
+          }
         };
       
-        
+      
       typedef vector<Entry> EntryList;
       typedef typename EntryList::iterator EIter;
       
@@ -166,34 +192,41 @@ namespace advice {
              }
            
            void
-           overwrite (POA const& oldRef, POA& newEntry)
+           overwrite (POA const& oldRef, POA& newElm)
              {
                EIter pos = std::find (elms_.begin(),elms_.end(), oldRef);
                REQUIRE (pos!=elms_.end(), "Attempt to overwrite an entry which isn't there.");
-               REQUIRE (!contains (newEntry), "Duplicate entry");
+               REQUIRE (!contains (newElm), "Duplicate entry");
                
-               *pos = Entry(newEntry);
+               *pos = Entry(newElm);
                
                ENSURE (!contains (oldRef), "Duplicate entry");
              }
            
            void
-           remove (POA const& refEntry)
+           remove (POA const& refElm)
              {
-               EIter pos = std::find (elms_.begin(),elms_.end(), refEntry);
+               EIter pos = std::find (elms_.begin(),elms_.end(), refElm);
                if (pos!=elms_.end())
                  elms_.erase(pos);
                
-               ENSURE (!contains (refEntry), "Duplicate entry");
+               ENSURE (!contains (refElm), "Duplicate entry");
              }
            
            bool
            contains (POA const& refElm)
              {
                for (EIter i=elms_.begin(); i!=elms_.end(); ++i)
-                 if (i->second == &refElm)
-                   return true;
+                 if (*i == refElm) return true;
                return false;
+             }
+           
+           void
+           dump() ///< debugging helper: Cluster contents --> STDOUT
+             {
+               cout << "elmList("<< elms_.size()<<")" << endl;
+               for (EIter i=elms_.begin(); i!=elms_.end(); ++i)
+                 cout << "E...:"<< (*i) << endl;
              }
            
            RangeIter<EIter>
@@ -281,14 +314,15 @@ namespace advice {
         };
       
       
-        
+      
       /* ==== Index Tables ===== */  
-        
-      typedef unordered_map<HashVal, RequestCluster> RTable; 
+      
+      typedef unordered_map<HashVal, RequestCluster> RTable;
       typedef unordered_map<HashVal, ProvisionCluster> PTable;
       
       mutable RTable requestEntries_;
       mutable PTable provisionEntries_;
+      
       
       
     public:
@@ -439,7 +473,7 @@ namespace advice {
   
   
   /* == Self-Verification == */
-      
+  
   namespace { // self-check implementation helpers...
     
     LUMIERA_ERROR_DEFINE(INDEX_CORRUPTED, "Advice-Index corrupted");
@@ -452,9 +486,9 @@ namespace advice {
                          ,LUMIERA_ERROR_INDEX_CORRUPTED)
           { }
       };
-    
   }
-      
+  
+  
   
   
   /** Advice index self-verification: traverses the tables to check
@@ -469,16 +503,16 @@ namespace advice {
   {
     typedef typename RTable::const_iterator RTIter;
     typedef typename PTable::const_iterator PTIter;
-      
+    
     try {
-        for (PTIter ii=provisionEntries_.begin(); 
+        for (PTIter ii =provisionEntries_.begin();
              ii != provisionEntries_.end(); ++ii)
           {
             HashVal hash (ii->first);
             Cluster& clu = unConst(ii->second);
             for_each (clu.allElms(), &Index::verify_Entry, this, _1, hash);
           }
-        for (RTIter ii=requestEntries_.begin(); 
+        for (RTIter ii=requestEntries_.begin();
              ii != requestEntries_.end(); ++ii)
           {
             HashVal hash (ii->first);
@@ -495,11 +529,11 @@ namespace advice {
       }
     return false;
   }
-
   
-      
+  
+  
 #define VERIFY(_CHECK_, DESCRIPTION) \
-      if (!(_CHECK_))                           \
+      if (!(_CHECK_))                 \
         throw SelfCheckFailure ((DESCRIPTION));
   
   
@@ -527,7 +561,7 @@ namespace advice {
       }
   }
   
-#undef VERIFY  
+#undef VERIFY
   
   
 }} // namespace lib::advice

@@ -541,7 +541,7 @@ In a more elaborate scheme, the advised entity could provide a signal to be invo
 &amp;rarr; AdviceImplementation
 </pre>
 </div>
-<div title="AdviceImplementation" modifier="Ichthyostega" modified="201004240054" created="201004100056" tags="impl draft img" changecount="38">
+<div title="AdviceImplementation" modifier="Ichthyostega" modified="201005060151" created="201004100056" tags="impl draft img" changecount="39">
 <pre>[&lt;img[Advice solution|uml/fig141573.png]]
 
 
@@ -577,7 +577,7 @@ To start with, any advice matching and solution will //always happen within matc
 * Advice provisions are expected to happen only in small numbers; they will be searched stack-like, starting from the newes provisions, until a match is found.
 * Each advised entity basically creates an advice request, so there could be a larger number of request entries. In the typical search triggered from the provision side, each request entry will be visited and checked for match, which, if successful, causes a pointer to be set within the ~AdviceRequest object (located outside the realm of the advice system). While &amp;mdash; obviously &amp;mdash; multiple requests with similar binding match could be folded into a sub-list, we need actual timing measurements to determine the weight of these two calculation steps of matching and storing, which together comprise the handling of an advice solution.
 
-The above considerations don't fully solve the question how to represent an computed solution within the index datastructure, candidates being to use the index within the provision list, or a direct pointer to the provision or even just to re-use the pointer stored into the ~AdviceRequest. Besides solutions found by matching, we need //fallback solutions// holding a default constructed piece of advice of the requested type. As these defaults aren't correlated at all to the involved bindings, but only to the advice type as such, it seems reasonable to keep them completely apart, like e.g. placing them into static memory managed by the ~AdviceProvision template instantiations.
+The above considerations don't fully solve the question how to represent an computed solution within the index datastructure, candidates being to use the index within the provision list, or a direct pointer to the provision or even just to re-use the pointer stored into the ~AdviceRequest. My decision is to do the latter. Besides solutions found by matching, we need //fallback solutions// holding a default constructed piece of advice of the requested type. As these defaults aren't correlated at all to the involved bindings, but only to the advice type as such, it seems reasonable to keep them completely apart, like e.g. placing them into static memory managed by the ~AdviceProvision template instantiations.
 
 !!!interactions to be served by the index
 [&gt;img[Advice solution|draw/AdviceBindingIndex1.png]]

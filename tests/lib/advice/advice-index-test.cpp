@@ -22,34 +22,11 @@
 
 
 #include "lib/test/run.hpp"
-//#include "lib/test/test-helper.hpp"
-
 #include "lib/advice/index.hpp"
-//#include "lib/p.hpp"
-//#include "proc/assetmanager.hpp"
-//#include "proc/asset/inventory.hpp"
-//#include "proc/mobject/session/clip.hpp"
-//#include "proc/mobject/session/track.hpp"
-//#include "lib/meta/trait-special.hpp"
-//#include "lib/util-foreach.hpp"
-//#include "lib/symbol.hpp"
 
-//#include <iostream>
 #include <vector>
-//#include <string>
 
-//using lib::test::showSizeof;
-//using lib::test::randStr;
-//using util::isSameObject;
-//using util::and_all;
-//using util::for_each;
-//using util::isnil;
 using lib::Literal;
-//using lib::Symbol;
-//using lumiera::P;
-//using std::string;
-//using std::cout;
-//using std::endl;
 
 
 
@@ -57,10 +34,16 @@ namespace lib {
 namespace advice {
 namespace test {
   
-  using lib::Literal;
-  
   namespace { // test support definitions
     
+    /**
+     * Test dummy record, representing
+     * either a provision or an request.
+     * The advice binding is simulated by
+     * storing a pattern matcher, and for
+     * the case of the advice request, the
+     * solution is simulated by a \c TestPOA*
+     */
     struct TestPOA
       {
         TestPOA* solution_;
@@ -156,9 +139,11 @@ namespace test {
    *       to get pairs of participants to connect by an individual advice channel.
    *       
    *       This test covers the properties of this implementation datastructure in isolation.
-   *       We employ special test entries, different from what is used in the advice system,
-   *       and we create a specific instantiation of the advice::Index template solely
-   *       for this test
+   *       We employ special \link TestPOA test entries \endlink, different from what is used
+   *       in the advice system (contrary to the real thing we're not differentiating between
+   *       advice request and advice provision, as for the test all we need is the possibility
+   *       to set an "advice solution"). To use these test records, we create a specific
+   *       instantiation of the advice::Index template solely for this test.
    * 
    * @see advice.hpp
    * @see AdviceBasics_test
@@ -406,7 +391,7 @@ namespace test {
           CHECK (_hasSolution (2,9));
           CHECK (_hasSolution (6,9));
           CHECK (_hasSolution (3,8));                  // the dog is unaffected
-
+          
           CHECK ( idx.hasProvision (_entry (7,"cat")));
           CHECK (!idx.hasProvision (_entry (4,"dog")));
           
@@ -419,6 +404,17 @@ namespace test {
           CHECK (_hasSolution (6,9));
           CHECK (_hasSolution (3,4));                  // but the dog got switched to the transmogrified-into-dog solution,
                                                        // because it was added later than the existing solution 8
+          
+          // a switch within the same cluster ("cat")
+          idx.modifyProvision (_entry (9,"cat"), _entry (7,"cat"));
+          CHECK (!idx.hasProvision (_entry (9,"cat")));
+          CHECK ( idx.hasProvision (_entry (7,"cat")));
+          CHECK ( idx.hasProvision (_entry (4,"dog")));
+          CHECK (_hasSolution (1,7));                  // because cat-7 is newly added, it shaddows the older cat-9
+          CHECK (_hasSolution (2,7));
+          CHECK (_hasSolution (6,7));
+          CHECK (_hasSolution (3,4));                  // but dog remains dog
+          
           CHECK (p_cnt+2 == idx.provision_count());
           CHECK (r_cnt == idx.request_count());
           CHECK (idx.isValid());
