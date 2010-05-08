@@ -100,25 +100,62 @@ namespace advice {
   /**
    * TODO type comment
    */
-  template<class AD>
   class PointOfAdvice
     {
-    public:
-      /** define or re-define the binding
-       *  specifically designating this attachment to the advice system.
+      Binding::Matcher pattern_;
+      PointOfAdvice* resolution_;
+
+    protected:
+      /** define or re-define the binding, which
+       *  specifically labels this attachment to the advice system.
        *  @note issuing this on an existing connection is equivalent
        *        to re-connecting with the new binding.  
        */
-      void defineBinding (Binding const& binding);
+      void setBindingPattern (Binding const& binding)
+        {
+          pattern_ = binding.buildMatcher();
+        }
       
-      /** access the \em current piece of advice */
-      AD const& getAdvice()  const;
+    public:
+      explicit
+      PointOfAdvice (Binding const& binding)
+        : pattern_(binding.buildMatcher())
+        , resolution_(0)
+        { }
+      
+      // using default copy/assignment
       
       
-      /* == policy definitions == */    ////TODO: extract into policy classes
       
-      AD const& handleMissingSolution()  const;
+      /* == Adapter interface for use within the Index == */
+        
+      friend HashVal
+      hash_value (PointOfAdvice const& entry)
+      {
+        return hash_value (entry.pattern_);
+      }
+      
+      friend const Binding::Matcher
+      getMatcher (PointOfAdvice const& entry)
+      {
+        return entry.pattern_;
+      }
+      
+      friend PointOfAdvice*
+      getSolution (PointOfAdvice& entry)
+      {
+        return entry.resolution_;
+      }
+      
+      friend void
+      setSolution (PointOfAdvice* entry, PointOfAdvice* solution =0)
+      {
+        REQUIRE (entry);
+        entry->resolution_ = solution;
+      }
     };
+  
+  
   
   
   /**
@@ -127,41 +164,107 @@ namespace advice {
    */
   template<class AD>
   class Provision
-    : public PointOfAdvice<AD>
+    : public PointOfAdvice
     {
+      AD theAdvice_;
+      
+      
+      /* == policy definitions == */    ////TODO: extract into policy classes
+      
+      AD const& handleMissingSolution()  const { return AD(); }
+      void deregistrate()                      { /* NOP */ }
+      
       
     public:
+      explicit
+      Provision (Literal bindingSpec =0)
+        : PointOfAdvice (Binding(bindingSpec).addTypeGuard<AD>())
+        , theAdvice_()
+        { }
+      
+     ~Provision()
+        {
+          this->deregistrate();
+        }
+      
+      
       AD const&
       getAdvice()  const
         {
-          UNIMPLEMENTED ("how to embody the piece of advice...");
+          return theAdvice_;
         }
       
-      void setAdvice (AD const& pieceOfAdvice);
-      void retractAdvice();
+      void setAdvice (AD const& pieceOfAdvice)
+        {
+          theAdvice_ = pieceOfAdvice;
+          UNIMPLEMENTED ("change advice provision registration");
+        }
+      
+      void retractAdvice()
+        {
+          theAdvice_ = this->handleMissingSolution();
+          UNIMPLEMENTED ("notify index of retracted advice");
+        }
+      
+      void
+      defineBinding (Literal topic)
+        {
+          setBindingPattern (Binding(topic).addTypeGuard<AD>());
+          UNIMPLEMENTED ("propagate binding change to index");
+        }
     };
   
+    
+    
   
+    
   /**
    * Access point for the advised entity (client).
    * TODO type comment
    */
   template<class AD>
   class Request
-    : public PointOfAdvice<AD>
+    : public PointOfAdvice
     {
-      Provision<AD>* solution_;
+      typedef Provision<AD> AdviceProvision;
+      
+      
+      /* == policy definitions == */    ////TODO: extract into policy classes
+      
+      AD const& handleMissingSolution()  const { return AD(); }
+      
       
     public:
+      explicit
+      Request (Literal bindingSpec =0)
+        : PointOfAdvice (Binding(bindingSpec).addTypeGuard<AD>())
+        {
+          UNIMPLEMENTED ("registration with the index");
+        }
+      
+     ~Request()
+        {
+          UNIMPLEMENTED ("detach from index");
+        }
+      
+      
       AD const&
       getAdvice()  const
         {
-          if (!solution_)
+          AdviceProvision* solution = static_cast<AdviceProvision*> (getSolution (*this));
+          if (!solution)
             return this->handleMissingSolution();
           else
-            return solution_->getAdvice();
+            return solution->getAdvice();
         }
       
+      
+      void
+      defineBinding (Literal topic)
+        {
+          setBindingPattern (Binding(topic).addTypeGuard<AD>());
+          UNIMPLEMENTED ("propagate binding change to index");
+        }
     };
   
 

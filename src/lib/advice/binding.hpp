@@ -201,7 +201,7 @@ namespace advice {
       void addPredicate (Literal spec);
       
       template<typename TY>
-      void addTypeGuard();
+      Binding const& addTypeGuard();
       
       
       Matcher buildMatcher()  const;
@@ -225,10 +225,11 @@ namespace advice {
   }
   
   template<typename TY>
-  inline void
+  inline Binding const&
   Binding::addTypeGuard()
   {
     atoms_.insert (Atom ("advice.type."+lumiera::query::buildTypeID<TY>()));
+    return *this;
   }
   
   

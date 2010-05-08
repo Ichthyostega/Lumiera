@@ -121,7 +121,8 @@ namespace test  {
           CHECK (b0 != b1);  CHECK (b1 != b0);
           CHECK (b0 != b2);  CHECK (b2 != b0);
           
-          b2.addPredicate("cat1()");
+          b2.addPredicate("cat1()");          // adding the same predicate multiple times has no effect 
+          b2.addPredicate(" cat1 "); 
           CHECK (b1 == b2);
           b2.addPredicate("cat3(zzz)");
           CHECK (b1 != b2);
