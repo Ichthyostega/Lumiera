@@ -56,12 +56,12 @@ TEST ("basic")
   ECHO ("allocated %p", element);
   *(int*)element = 0xdeadbabe;
 
-  DUMP(NOBUG_ON, mpool, &mypool, 4);
+  DUMP(NOBUG_ON, mpool, &mypool, 4, NULL);
 
   mpool_free (&mypool, element);
   ECHO ("freed");
 
-  DUMP(NOBUG_ON, mpool, &mypool, 4);
+  DUMP(NOBUG_ON, mpool, &mypool, 4, NULL);
 
   mpool_destroy (&mypool);
   ECHO ("destroyed");
@@ -79,7 +79,7 @@ TEST ("destroy")
   ECHO ("allocated %p", element);
   *(int*)element = 0xbabeface;
 
-  DUMP(NOBUG_ON, mpool, &mypool, 4);
+  DUMP(NOBUG_ON, mpool, &mypool, 4, NULL);
 
   mpool_destroy (&mypool);
   ECHO ("destroyed");
@@ -100,7 +100,7 @@ TEST ("clusters")
       *(int*)element = i;
     }
 
-  DUMP(NOBUG_ON, mpool, &mypool, 4);
+  DUMP(NOBUG_ON, mpool, &mypool, 4, NULL);
 
   mpool_destroy (&mypool);
   ECHO ("destroyed");
@@ -121,7 +121,7 @@ TEST ("clusters_big")
       *(int*)element = i;
     }
 
-  DUMP(NOBUG_ON, mpool, &mypool, 4);
+  DUMP(NOBUG_ON, mpool, &mypool, 4, NULL);
 
   mpool_destroy (&mypool);
   ECHO ("destroyed");
@@ -148,7 +148,7 @@ TEST ("alloc_free")
       mpool_free (&mypool, elem[i]);
     }
   ECHO ("freed some");
-  DUMP(NOBUG_ON, mpool, &mypool, 4);
+  DUMP(NOBUG_ON, mpool, &mypool, 4, NULL);
 
   mpool_destroy (&mypool);
   ECHO ("destroyed");
@@ -175,9 +175,9 @@ TEST ("alloc_free_big")
       mpool_free (&mypool, elem[i]);
     }
   ECHO ("freed some");
-  DUMP(NOBUG_ON, mpool, &mypool, 4);
+  DUMP(NOBUG_ON, mpool, &mypool, 4, NULL);
 
-  DUMP(NOBUG_ON, mpool, &mypool, 4);
+  DUMP(NOBUG_ON, mpool, &mypool, 4, NULL);
 
   mpool_destroy (&mypool);
   ECHO ("destroyed");

@@ -504,8 +504,11 @@ mpool_reserve (MPool self, unsigned nelements)
 void
 nobug_mpool_dump (const_MPool self,
                   const int depth,
-                  const struct nobug_context dump_context)
+                  const struct nobug_context dump_context,
+                  void* extra)
 {
+  (void) extra;
+
   if (self && depth)
     {
       DUMP_LOG ("mpool %p: ", self);

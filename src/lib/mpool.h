@@ -257,7 +257,8 @@ mpool_free (MPool self, void* element);
 void
 nobug_mpool_dump (const_MPool self,
                   const int depth,
-                  const struct nobug_context dump_context);
+                  const struct nobug_context dump_context,
+                  void* extra);
 
 
 /*
