@@ -103,6 +103,18 @@ LUMIERA_LIBS="$NOBUGMT_LIBS"
 AC_SUBST(LUMIERA_CFLAGS)
 AC_SUBST(LUMIERA_LIBS)
 
+#functions from realtime library
+AC_LANG_PUSH([C])
+
+AC_CHECK_FUNCS(clock_gettime,
+	AC_MSG_NOTICE([clock_gettime is in the clib]),
+	AC_CHECK_LIB(rt, clock_gettime,
+		[LUMIERA_LIBS="$LUMIERA_LIBS -lrt"],
+		AC_MSG_ERROR([No library providing clock_gettime found])	
+	)
+)
+
+AC_LANG_POP([C])
 
 #boost
 # C++ headers and libraries
