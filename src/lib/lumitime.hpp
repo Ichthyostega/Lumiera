@@ -28,6 +28,7 @@
 #include <string>
 
 extern "C" {
+#include <stdint.h>
 #include <gavl/gavltime.h>
 }
 
