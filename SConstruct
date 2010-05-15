@@ -232,7 +232,7 @@ def configurePlatform(env):
     else:
         print 'Valgrind not found. The use of Valgrind is optional; building without.'
     
-    if not conf.CheckPkgConfig('nobugmt', 201002.1):
+    if not conf.CheckPkgConfig('nobugmt', 201005.1):
         problems.append('Did not find NoBug [http://www.lumiera.org/nobug_manual.html].')
     else:
         conf.env.mergeConf('nobugmt')
@@ -250,6 +250,12 @@ def configurePlatform(env):
         if not conf.CheckLibWithHeader('boost_regex-mt','boost/regex.hpp','C++'):
             problems.append('We need the boost regular expression lib (incl. binary lib for linking).')
     
+    
+    if conf.CheckLib(symbol='clock_gettime'):
+        print 'Using function clock_gettime() as defined in the C-lib...'
+    else:
+        if not conf.CheckLib(symbol='clock_gettime', library='rt'):
+            problems.append('No library known to provide the clock_gettime() function.')
     
     if not conf.CheckPkgConfig('gavl', 1.0):
         problems.append('Did not find Gmerlin Audio Video Lib [http://gmerlin.sourceforge.net/gavl.html].')
@@ -283,9 +289,6 @@ def configurePlatform(env):
     
     if not conf.CheckPkgConfig('xv')  : problems.append('Need libXv...')
     if not conf.CheckPkgConfig('xext'): problems.append('Need libXext.')
-#   if not conf.CheckPkgConfig('sm'): Exit(1)
-#    
-# obviously not needed?
     
     
     # report missing dependencies
