@@ -59,7 +59,7 @@ def setupBasicEnvironment():
     """ define cmdline options, build type decisions
     """
     EnsurePythonVersion(2,3)
-    EnsureSConsVersion(0,96,90)
+    EnsureSConsVersion(1,0)
     
     Decider('MD5-timestamp') # detect changed files by timestamp, then do a MD5
     

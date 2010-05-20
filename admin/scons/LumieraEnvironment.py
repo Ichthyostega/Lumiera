@@ -79,28 +79,14 @@ class LumieraEnvironment(Environment):
         if alias:
             self.libInfo[alias] = libInfo
         return libInfo
-    
-    def Glob (self, pattern):
-        """ temporary workaround; newer versions of SCons provide this as a global function """
-        pattern = self.subst(pattern)
-        return glob.glob(pattern)
-    
-    def AddMethod (self, function):
-        """ temporary workaround; newer versions of SCons provide this as a global function """
-        self.__dict__[function.__name__] = function.__get__(self)
-        
-        
-#### temporary pre 1.0 SCons compatibility hack ####
-_ver = map(int, SCons.__version__.split('.')[:2])
-_old = (_ver[0]<1 and _ver[1]<97)
-if _old:
-    ConfigBase = SCons.SConf.SConf
-else:
-    ConfigBase = SCons.SConf.SConfBase
-    del LumieraEnvironment.Glob
-    del LumieraEnvironment.AddMethod
-    # use the official impl present since SCons 0.98
-    # use the new name of the config context base class
+
+
+
+
+
+# extending the 'Configure' functionality of SCons,
+# especially for library dependency checking
+ConfigBase = SCons.SConf.SConfBase
 
 
 
