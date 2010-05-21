@@ -37,11 +37,11 @@ namespace lumiera {
   {
     NOBUG_INIT;
     
-#ifdef DEBUG
+#if NOBUG_MODE_ALPHA
     static uint callCount = 0;
     ASSERT ( 0 == callCount++ );
 #endif
   }
-
+  
+  
 }
-

@@ -13,6 +13,8 @@
 // 7/08  - combining partial specialisation and subclasses 
 // 10/8  - abusing the STL containers to hold noncopyable values
 // 6/09  - investigating how to build a mixin template providing an operator bool()
+// 12/9  - tracking down a strange "warning: type qualifiers ignored on function return type"
+// 1/10  - can we determine at compile time the presence of a certain function (for duck-typing)?
 
 
 #include "include/nobugcfg.h"

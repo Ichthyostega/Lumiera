@@ -33,7 +33,7 @@ TESTDIR          = 'tests'
 ICONDIR          = 'icons'
 VERSION          = '0.1+pre.01'
 TOOLDIR          = './admin/scons'
-SVGRENDERER      = 'admin/render-icon'
+SCRIPTDIR        = './admin'
 #-----------------------------------Configuration
 
 # NOTE: scons -h for help.
@@ -47,6 +47,7 @@ import os
 import sys
 
 sys.path.append(TOOLDIR)
+sys.path.append(SCRIPTDIR)
 
 from Buildhelper import *
 from LumieraEnvironment import *
@@ -58,10 +59,12 @@ def setupBasicEnvironment():
     """ define cmdline options, build type decisions
     """
     EnsurePythonVersion(2,3)
-    EnsureSConsVersion(0,96,90)
+    EnsureSConsVersion(1,0)
     
-    opts = defineCmdlineOptions() 
-    env = LumieraEnvironment(options=opts
+    Decider('MD5-timestamp') # detect changed files by timestamp, then do a MD5
+    
+    vars = defineCmdlineVariables() 
+    env = LumieraEnvironment(variables=vars
                             ,toolpath = [TOOLDIR]
                             ,tools = ["default", "BuilderGCH", "BuilderDoxygen"]  
                             ) 
@@ -82,7 +85,7 @@ def setupBasicEnvironment():
                , CCFLAGS='-Wall -Wextra '
                , CFLAGS='-std=gnu99' 
                )
-    RegisterIcon_Builder(env,SVGRENDERER)
+    RegisterIcon_Builder(env)
     handleNoBugSwitches(env)
     
     env.Append(CPPDEFINES = '_GNU_SOURCE')
@@ -98,8 +101,8 @@ def setupBasicEnvironment():
     appendCppDefine(env,'PKGDATADIR','LUMIERA_CONFIG_PATH=\\"$PKGLIBDIR/:.\\"'
                                     ,'LUMIERA_CONFIG_PATH=\\"$DESTDIR/share/lumiera/:.\\"') 
     
-    prepareOptionsHelp(opts,env)
-    opts.Save(OPTIONSCACHEFILE, env)
+    prepareOptionsHelp(vars,env)
+    vars.Save(OPTIONSCACHEFILE, env)
     return env
 
 def appendCppDefine(env,var,cppVar, elseVal=''):
@@ -139,40 +142,40 @@ def handleVerboseMessages(env):
 
 
 
-def defineCmdlineOptions():
-    """ current options will be persisted in a options cache file.
-        you may define custom options in a separate file. 
+def defineCmdlineVariables():
+    """ several toggles and configuration variables can be set on the commandline,
+        current settings will be persisted in a options cache file.
+        you may define custom variable settings in a separate file. 
         Commandline will override both.
     """
-    opts = Options([OPTIONSCACHEFILE, CUSTOPTIONSFILE])
-    opts.AddOptions(
+    vars = Variables([OPTIONSCACHEFILE, CUSTOPTIONSFILE])
+    vars.AddVariables(
          ('ARCHFLAGS', 'Set architecture-specific compilation flags (passed literally to gcc)','')
         ,('CC', 'Set the C compiler to use.', 'gcc')
         ,('CXX', 'Set the C++ compiler to use.', 'g++')
-        ,PathOption('CCACHE', 'Integrate with CCache', '', PathOption.PathAccept)
-        ,PathOption('DISTCC', 'Invoke C/C++ compiler commands through DistCC', '', PathOption.PathAccept)
-        ,EnumOption('BUILDLEVEL', 'NoBug build level for debugging', 'ALPHA',
-                    allowed_values=('ALPHA', 'BETA', 'RELEASE'))
-        ,BoolOption('DEBUG', 'Build with debugging information and no optimisations', False)
-        ,BoolOption('OPTIMIZE', 'Build with strong optimisation (-O3)', False)
-        ,BoolOption('VALGRIND', 'Run Testsuite under valgrind control', True)
-        ,BoolOption('VERBOSE',  'Print full build commands', False)
+        ,PathVariable('CCACHE', 'Integrate with CCache', '', PathVariable.PathAccept)
+        ,PathVariable('DISTCC', 'Invoke C/C++ compiler commands through DistCC', '', PathVariable.PathAccept)
+        ,EnumVariable('BUILDLEVEL', 'NoBug build level for debugging', 'ALPHA', allowed_values=('ALPHA', 'BETA', 'RELEASE'))
+        ,BoolVariable('DEBUG', 'Build with debugging information and no optimisations', False)
+        ,BoolVariable('OPTIMIZE', 'Build with strong optimisation (-O3)', False)
+        ,BoolVariable('VALGRIND', 'Run Testsuite under valgrind control', True)
+        ,BoolVariable('VERBOSE',  'Print full build commands', False)
         ,('TESTSUITES', 'Run only Testsuites matching the given pattern', '')
-#       ,BoolOption('OPENGL', 'Include support for OpenGL preview rendering', False)
-#       ,EnumOption('DIST_TARGET', 'Build target architecture', 'auto', 
+#       ,BoolVariable('OPENGL', 'Include support for OpenGL preview rendering', False)
+#       ,EnumVariable('DIST_TARGET', 'Build target architecture', 'auto', 
 #                   allowed_values=('auto', 'i386', 'i686', 'x86_64' ), ignorecase=2)
-        ,PathOption('DESTDIR', 'Installation dir prefix', '/usr/local')
-        ,PathOption('PKGLIBDIR', 'Installation dir for plugins, defaults to DESTDIR/lib/lumiera', '',PathOption.PathAccept)
-        ,PathOption('PKGDATADIR', 'Installation dir for default config, usually DESTDIR/share/lumiera', '',PathOption.PathAccept)
-        ,PathOption('SRCTAR', 'Create source tarball prior to compiling', '..', PathOption.PathAccept)
-        ,PathOption('DOCTAR', 'Create tarball with developer documentation', '..', PathOption.PathAccept)
+        ,PathVariable('DESTDIR', 'Installation dir prefix', '/usr/local')
+        ,PathVariable('PKGLIBDIR', 'Installation dir for plugins, defaults to DESTDIR/lib/lumiera', '',PathVariable.PathAccept)
+        ,PathVariable('PKGDATADIR', 'Installation dir for default config, usually DESTDIR/share/lumiera', '',PathVariable.PathAccept)
+        ,PathVariable('SRCTAR', 'Create source tarball prior to compiling', '..', PathVariable.PathAccept)
+        ,PathVariable('DOCTAR', 'Create tarball with developer documentation', '..', PathVariable.PathAccept)
      )
     
-    return opts
+    return vars
 
 
 
-def prepareOptionsHelp(opts,env):
+def prepareOptionsHelp(vars,env):
     prelude = """
 USAGE:   scons [-c] [OPTS] [key=val [key=val...]] [TARGETS]
      Build and optionally install Lumiera.
@@ -191,7 +194,7 @@ Special Targets:
 
 Configuration Options:
 """
-    Help(prelude + opts.GenerateHelpText(env))
+    Help(prelude + vars.GenerateHelpText(env))
 
 
 
@@ -215,11 +218,6 @@ def configurePlatform(env):
     if not conf.CheckLibWithHeader('dl', 'dlfcn.h', 'C'):
         problems.append('Functions for runtime dynamic loading not available.')
     
-    if not conf.CheckPkgConfig('nobugmt', 200909.1):
-        problems.append('Did not find NoBug [http://www.pipapo.org/pipawiki/NoBug].')
-    else:
-        conf.env.mergeConf('nobugmt')
-    
     if not conf.CheckLibWithHeader('pthread', 'pthread.h', 'C'):
         problems.append('Did not find the pthread lib or pthread.h.')
     else:
@@ -234,6 +232,11 @@ def configurePlatform(env):
     else:
         print 'Valgrind not found. The use of Valgrind is optional; building without.'
     
+    if not conf.CheckPkgConfig('nobugmt', 201005.1):
+        problems.append('Did not find NoBug [http://www.lumiera.org/nobug_manual.html].')
+    else:
+        conf.env.mergeConf('nobugmt')
+    
     if not conf.CheckCXXHeader('tr1/memory'):
         problems.append('We rely on the std::tr1 proposed standard extension for shared_ptr.')
     
@@ -247,6 +250,12 @@ def configurePlatform(env):
         if not conf.CheckLibWithHeader('boost_regex-mt','boost/regex.hpp','C++'):
             problems.append('We need the boost regular expression lib (incl. binary lib for linking).')
     
+    
+    if conf.CheckLib(symbol='clock_gettime'):
+        print 'Using function clock_gettime() as defined in the C-lib...'
+    else:
+        if not conf.CheckLib(symbol='clock_gettime', library='rt'):
+            problems.append('No library known to provide the clock_gettime() function.')
     
     if not conf.CheckPkgConfig('gavl', 1.0):
         problems.append('Did not find Gmerlin Audio Video Lib [http://gmerlin.sourceforge.net/gavl.html].')
@@ -280,9 +289,6 @@ def configurePlatform(env):
     
     if not conf.CheckPkgConfig('xv')  : problems.append('Need libXv...')
     if not conf.CheckPkgConfig('xext'): problems.append('Need libXext.')
-#   if not conf.CheckPkgConfig('sm'): Exit(1)
-#    
-# obviously not needed?
     
     
     # report missing dependencies
@@ -323,7 +329,8 @@ def defineBuildTargets(env, artifacts):
         setup sub-environments with special build options if necessary.
         We use a custom function to declare a whole tree of srcfiles. 
     """
-    # use PCH to speed up building
+    
+    # use PCH to speed up building // disabled for now due to strange failures
 #   env['GCH'] = ( env.PrecompiledHeader('$SRCDIR/pre.hpp')
 #                + env.PrecompiledHeader('$SRCDIR/pre_a.hpp')
 #                )
@@ -355,7 +362,7 @@ def defineBuildTargets(env, artifacts):
     
     # the Lumiera GTK GUI
     envGtk = env.Clone()
-    envGtk.mergeConf(['gtkmm-2.4','cairomm-1.0','gdl','gthread-2.0','xv','xext','sm'])
+    envGtk.mergeConf(['gtkmm-2.4','gthread-2.0','cairomm-1.0','gdl','xv','xext','sm'])
     envGtk.Append(CPPDEFINES='LUMIERA_PLUGIN', LIBS=core)
     
     objgui  = srcSubtree(envGtk,'$SRCDIR/gui')

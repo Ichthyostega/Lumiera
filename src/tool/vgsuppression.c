@@ -23,6 +23,7 @@
   just place any problematic calls where valgrind whines about in main (with comments please)
 */
 
+#include <stdint.h>
 
 
 int
