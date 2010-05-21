@@ -15,8 +15,8 @@ END
 TESTING "Run the Dummy Test Executable" ./test-bugs
 
 TEST "I am a dummy test" <<END
-out: *** Lumiera NLE for Linux ***
-out:     This is a dummy test
+out-lit: *** Lumiera NLE for Linux ***
+out-lit:     This is a dummy test
 return: 2
 END
 
