@@ -551,7 +551,7 @@ namespace advice {
   {
     verify_Entry (e,hash);
     POA& request = *(e.second);
-    POA* solution (getSolution (request));
+    const POA* solution (getSolution (request));
     if (solution && hasProvision(*solution))
       {
         POA* currentSolution = provisionEntries_[hash].find_latest_solution (request); 

@@ -148,7 +148,6 @@ namespace test {
       void
       simpleExchange()
         {
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #605
           TheAdvised client;         // implicitly opens an request-for-advice
           CHECK (client.got (0));    // no advice yet --> getting the default int()
           
@@ -159,7 +158,6 @@ namespace test {
           
           server.publish (rr);       // now an match is detected, creating an advice channel
           CHECK (client.got (rr));   // ..so the client can pick up the provided advice value
-#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #605
         }
       
       
@@ -167,7 +165,6 @@ namespace test {
       void
       createCollaboration()
         {
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #605
           TheAdvised client1 ("topic1()");
           TheAdvisor server2 ("topic2()");
           
@@ -190,7 +187,6 @@ namespace test {
           server1.rebind ("topic1()");
           CHECK (client1.got(r1));
           CHECK (client2.got(r2));
-#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #605
         }
       
       
@@ -206,7 +202,6 @@ namespace test {
       void
       overwriting_and_retracting()
         {
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #605
           TheAdvised client1 ("topic1");
           TheAdvised client2 ("topic2");
           CHECK (client1.got(0));
@@ -258,15 +253,15 @@ namespace test {
             CHECK (client1.got(r1));
             CHECK (client2.got(r1));
             
-            yetAnotherserver.rebind("topic1");
+            yetAnotherServer.rebind("topic1");
             CHECK (client1.got(r1));
             CHECK (client2.got(0));
             
-            yetAnotherserver.clear();
+            yetAnotherServer.clear();
             CHECK (client1.got(0));
             CHECK (client2.got(0));
             
-            yetAnotherserver.rebind("topic2");
+            yetAnotherServer.rebind("topic2");
             CHECK (client1.got(0));
             CHECK (client2.got(0));
             
@@ -285,7 +280,6 @@ namespace test {
           client2.rebind("nonExistingTopic");
           CHECK (client1.got(r1));
           CHECK (client2.got(0));
-#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #605
         }
     };
   

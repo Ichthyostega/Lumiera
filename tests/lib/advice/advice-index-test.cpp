@@ -76,8 +76,8 @@ namespace test {
           return entry.pattern_;
         }
         
-        friend TestPOA*
-        getSolution (TestPOA& entry)
+        friend const TestPOA*
+        getSolution (TestPOA const& entry)
         {
           return entry.solution_;
         }

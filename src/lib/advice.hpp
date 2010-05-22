@@ -141,8 +141,8 @@ namespace advice {
         return entry.pattern_;
       }
       
-      friend PointOfAdvice*
-      getSolution (PointOfAdvice& entry)
+      friend const PointOfAdvice*
+      getSolution (PointOfAdvice const& entry)
       {
         return entry.resolution_;
       }
@@ -171,7 +171,7 @@ namespace advice {
       
       /* == policy definitions == */    ////TODO: extract into policy classes
       
-      AD const& handleMissingSolution()  const { return AD(); }
+      AD const& handleMissingSolution()  const { return AD(); }              /////////////////////TODO either return value or build a registry of defaults
       void deregistrate()                      { /* NOP */ }
       
       
@@ -226,12 +226,12 @@ namespace advice {
   class Request
     : public PointOfAdvice
     {
-      typedef Provision<AD> AdviceProvision;
+      typedef const Provision<AD> AdviceProvision;
       
       
       /* == policy definitions == */    ////TODO: extract into policy classes
       
-      AD const& handleMissingSolution()  const { return AD(); }
+      AD const& handleMissingSolution()  const { return AD(); }              /////////////////////TODO either return value or build a registry of defaults
       
       
     public:
