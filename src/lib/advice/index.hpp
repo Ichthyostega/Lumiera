@@ -132,6 +132,10 @@ namespace advice {
    * by invoking the free function \c setSolution(POA) for the
    * corresponding PointOfAdvice entity.
    * 
+   * @note element \em identity is defined in terms of pointing 
+   *       to the same memory location of a POA (point of advice).
+   *       Thus e.g. #hasProvision means this index holds an entry
+   *       pointing to exactly this given data entity.
    * @note the diagnostic API is mainly intended for unit testing
    *       and \em not implemented with focus on performance. 
    */

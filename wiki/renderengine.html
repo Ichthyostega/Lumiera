@@ -541,7 +541,7 @@ In a more elaborate scheme, the advised entity could provide a signal to be invo
 &amp;rarr; AdviceImplementation
 </pre>
 </div>
-<div title="AdviceImplementation" modifier="Ichthyostega" modified="201005081902" created="201004100056" tags="impl draft img" changecount="42">
+<div title="AdviceImplementation" modifier="Ichthyostega" modified="201005250415" created="201004100056" tags="impl draft img" changecount="45">
 <pre>[&lt;img[Advice solution|uml/fig141573.png]]
 
 
@@ -550,7 +550,7 @@ In a more elaborate scheme, the advised entity could provide a signal to be invo
 
 The advice system is //templated on the advice type// &amp;mdash; so basically any collaboration is limited to a distinct advice type. But currently (as of 5/2010), this typed context is kept on the interface level, while the implementation is built on top of a single lookup table (which might create contention problems in the future and thus may be changed without further notice). The advice system is a system wide singleton service, but it is never addressed directly by the participants. Rather, instances of ~AdviceProvision and ~AdviceRequest act as point of access. But these aren't completely symmetric; while the ~AdviceRequest is owned by the advised entity, the ~AdviceProvision is a value object, a uniform holder used to introduce new advice into the system. ~AdviceProvision is copied into an internal buffer and managed by the advice system, as is the actual advice item, which is copied alongside.
 
-In order to find matches and provide advice solutions, the advice system maintains an index data structure called ''~BindingIndex''. The actual binding predicates are represented by value objects stored within this index table. The matching process is triggered whenever a new possibility for an advice solution enters the system, which could be a new request, a new provision or a change in the specified bindings. A successful match causes a pointer to be set within the ~AdviceRequest, pointing to the ~AdviceProvision acting as solution. Thus, when a solution exists, the advised entity can access the advice value object by dereferencing this pointer. A new advice solution just results in setting a different pointer, which is atomic and doesn't need to be protected by locking. But note, omitting the locking means there is no memory barrier; thus the advised entity might not see any changed advice solution, until the corresponding thread(s) refresh their CPU cache. This might or might not be acceptable, depending on the context, and thus is configurable as policy. Similarly, the handling of default advice is configurable. Usually, advice is a default constructible value object. In this case, when there isn't any advice solution (yet), a pseudo solution holding the default constructed advice value is used to satisfy any advice access by the client (advised entity). The same can be used when the actual ~AdviceProvision gets //retracted.// As an alternative, when this default solution approach doesn't work, we can provide a policy either to throw or to wait blocking &amp;mdash; but this alternative policy is similarly implemented with an //null object// (a placeholder ~AdviceProvision). Anyway, this implementation technique causes the advice system to collect some advice provisions, bindings and advice objects over time. It should use a pooling custom allocator in the final version. As the number of advisors is expected to be rather small, the storage occupied by these elements, which is effectively blocked until application exit, isn't considered a problem.
+In order to find matches and provide advice solutions, the advice system maintains an index data structure called ''~Binding-Index''. The actual binding predicates are represented by value objects stored within this index table. The matching process is triggered whenever a new possibility for an advice solution enters the system, which could be a new request, a new provision or a change in the specified bindings. A successful match causes a pointer to be set within the ~AdviceRequest, pointing to the ~AdviceProvision acting as solution. Thus, when a solution exists, the advised entity can access the advice value object by dereferencing this pointer. A new advice solution just results in setting a different pointer, which is atomic and doesn't need to be protected by locking. But note, omitting the locking means there is no memory barrier; thus the advised entity might not see any changed advice solution, until the corresponding thread(s) refresh their CPU cache. This might or might not be acceptable, depending on the context, and thus is configurable as policy. Similarly, the handling of default advice is configurable. Usually, advice is a default constructible value object. In this case, when there isn't any advice solution (yet), a pseudo solution holding the default constructed advice value is used to satisfy any advice access by the client (advised entity). The same can be used when the actual ~AdviceProvision gets //retracted.// As an alternative, when this default solution approach doesn't work, we can provide a policy either to throw or to wait blocking &amp;mdash; but this alternative policy is similarly implemented with an //null object// (a placeholder ~AdviceProvision). Anyway, this implementation technique causes the advice system to collect some advice provisions, bindings and advice objects over time. It should use a pooling custom allocator in the final version. As the number of advisors is expected to be rather small, the storage occupied by these elements, which is effectively blocked until application exit, isn't considered a problem.
 
 !organising the advice solution
 This is the tricky part of the whole advice system implementation. A naive implementation will quickly degenerate in performance, as costs are of order ~AdviceProvisions * ~AdviceRequests * (average number of binding terms). But contrary to the standard solutions for rules based systems (either forward or backward chaining), in this case here always complete binding sets are to be matched, which allows to reduce the effort.
@@ -569,6 +569,18 @@ We have to provide dedicated storage for the actual advice provisions and for th
 ** a multitude of advice requests can attach with the same binding, and each of them needs to be visited in case a match is detected.
 * in both cases, any of these entries could be removed any time on de-registration of the corresponding external entity
 * we need to track existing advice solutions, because we need to be able to overwrite with new advice and to remove all solutions bound to a given pattern about to leave the system. One provision could create a large number of solutions, while each registration always holds onto exactly one solution (which could be a default/placeholder solution though)
+
+!!!!subtle variations in semantics
+While generally advice has value semantics and there is no ownership or distinguishable identity, the actual implementation technique creates the possibility for some subtle semantic variations. At the time of this writing (5/2010) no external point of reference was available to decide upon the correct implementation variant. These variations get visible when advice is //retracted.// Ideally, a new advisor would re-attach to an existing provision and supersede the contained advice information with new data. Thus, after a chain of such new provisions all attaching with the identical binding, when finally the advice gets retracted, any advice provisions would be gone and we'd fall back onto the default solution. Thus, &quot;retracting&quot; would mean to void any advice given with this binding.
+But there is another conceivable variation of semantics, which yields some benefits implementation-wise: Advice can be provided as &quot;I don't care what was said, but here is new information&quot;. In this case, the mechanism of resolving and finding a match would be responsible to pick the latest addition, while the provisions would just be dumped into the system. In this case, &quot;retracting&quot; would mean just to cancel //one specific//&amp;nbsp; piece of information and might cause in an older advice solution to be uncovered and revived. The default (empty) solution would be used in this case only after retracting all advice provisions.
+
+!!!!implementation variants with respect to attachment and memory management
+Aside from the index, handling of the advice provisions turns out to be tricky.
+* management by ref-count was ruled out due to contention and locality considerations
+* the most straight forward implementation would be for the ~AdviceProvision within the advisor to keep kind of an &quot;inofficial&quot; link to &quot;its&quot; provision, allowing to modify and retract it during the lifetime of the advisor. When going away without retracting (the default behaviour), the provision, as added into the system would remain there as a dangling entry. It is still reachable via the index, but not maintained in any further way. If memory usage turns out to be a problem, we'd need to enqueue these entries for clean-up.
+* but as this simple solution contradicts the general advice semantics in a subtle way (see previous paragraph), we could insist on really re-capturing and retracting previous advice automatically on each new advice provision or modification. In this case, due to the requirement of thread safety, each addition, binding modification, placing of new advice or retraction would require to do an index search to find an existing provision with equivalent binding (same binding definition, not just a matching binding pattern). As a later provision could stomp upon an existing provision without the original advisor noticing this, we can't use the internal references anymore; we really need to search each time and also need a global lock during the modification transaction.
+* an attempt to reduce this considerable overhead would be to use an back-link from the provision as added to the system to the original source (the ~AdviceProvision owned by the advisor). On modification, this original source would be notified and thus detached. Of course this is tricky to implement correctly, and also requires locking.
+The decision for the initial implementation is to use the first variant and just accept the slightly imprecise semantics.
 
 !!!index datastructure
 It is clear by now that the implementation datastrucutre has to serve as a kind of //reference count.// Within this datastructure, any constructed advice solution needs to be reflected somehow, to prevent us from discarding an advice provision still accessible. Allowing lock-free access to the advice solution (planned feature) adds an special twist, because in this case we can't even tell for sure if an overwritten old solution is actually gone (or if its still referred from some thread's cached memeory). This could be addressed with an transactional approach (which might be good anyway) &amp;mdash; but I tend to leave this special concern asside for now.
@@ -600,7 +612,7 @@ __Invariant__: each request has a valid soultion pointer set (maybe pointing to 
 Clearly, retracting advice (and consequently also the modification) is expensive. After finishing these operations, the old/retracted provision can be discarded (or put asside in case of non-locking advice access). Other operations don't cause de-allocation, as provisions remain within the system, even if the original advising entity is gone.
 </pre>
 </div>
-<div title="AdviceRequirements" modifier="Ichthyostega" modified="201004100149" created="201004060213" tags="design impl" changecount="17">
+<div title="AdviceRequirements" modifier="Ichthyostega" modified="201005250339" created="201004060213" tags="design impl" changecount="21">
 <pre>From analysing a number of intended AdviceSituations, some requirements for an Advice collaboration and implementation can be extracted.
 
 * the piece of advice is //not shared// between advisor and the advised entities; rather, it is copied into storage managed by the advice system
@@ -614,11 +626,11 @@ Clearly, retracting advice (and consequently also the modification) is expensive
 * later, possible and partial solutions could be cached, similar to the rete algorithm. Dispatching a solution should work lock-free
 * advice can be replaced by new advice, which causes all matching advice solutions to behave as being overwritten.
 * when locking is left out, we can't give any guarantee as to when a given advice gets visible to the advised entity
-* throughput doesn't seem to be an issue, but picking up exsiting advice should be as fast as possible
+* throughput doesn't seem to be an issue, but picking up existing advice should be as fast as possible
 * we expect a small number of advisors collaborating with and a larger number of advised entities.
 
 !!questions
-;when does the advice colaboration actually happen?
+;when does the advice collaboration actually happen?
 :when there is both a client (advised) and a server (advisor) and their advice bindings match
 ;can there be multiple matches?
 :within the system as a whole there can be multiple solutions
@@ -628,27 +640,30 @@ Clearly, retracting advice (and consequently also the modification) is expensive
 :both sides don't behave symmetrically, and thus the consequences are different
 :on the client side, advice is just //available.// When there is newer one, the previous advice is overwritten
 :the server side doesn't //contain// advice &amp;mdash; rather, it is placed into the system. After that, the advisor can go away
-:thus, if an advisor places new advice into an existing advice provision, this effectively initiates a new colaboration
+:thus, if an advisor places new advice into an existing advice provision, this effectively initiates a new collaboration
 :if the new advice reaches the same destination, it overwrites; but it may as well reach a different destination this time
 ;can just one advice provision create multiplicity?
 :yes, because of the matching process there could be multiple solutions. But neither the client nor the server is aware of that.
 ;can advice be changed?
 :No. When inserted into the system, the advisor looses any direct connection to the piece of advice (it is copied)
 :But an advisor can put up another piece of advice into the same advice provision, thereby effectively overwriting at the destination
+;if advice is copied, what about ownership and identity?
+:advice has //value semantics.// Thus it has no distinguishable identity beyond the binding used to attach it
+:a provision does not &quot;own&quot; advice. It is a piece of information, and the latest information is what counts
 ;can the binding be modified dynamically?
 :this is treated as if retracting the existing point of advice and opening a new one.
 ;what drives the matching?
-:whenever a new point of adivice is opened, search for a matching solution happens.
-:thus, the actual colaboration can be initiated from both sides
-:when a match happens, the corresponding advice point solution gets added into the sytem
+:whenever a new point of advice is opened, search for a matching solution happens.
+:thus, the actual collaboration can be initiated from both sides
+:when a match happens, the corresponding advice point solution gets added into the system
 ;what about the lifetime of such a solution?
-:it is tied to the //referral// &amp;mdash; but there is an asymetry between server and client
+:it is tied to the //referral// &amp;mdash; but there is an asymmetry between server and client
 :referral is bound to the server sided / client sided point of advice being still in existence
 :but the server sided point of advice is copied into the system, while the client sided is owned by the client
-:thus, when an advisor goes away, any actual solution remains valid, until no client refers to it anymore
-:on the client side there is an asymetry: actually, a new advice request can be opened, with an exactly identical binding
+:thus, when an advisor goes away without explicitly //retracting//&amp;nbsp; the advice, any actual solution remains valid
+:on the client side there is an asymmetry: actually, a new advice request can be opened, with an exactly identical binding
 :in this case, existing connections will be re-used. But any differences in the binding will require searching a new solution
-;is the search for an adivce point solution exhaustive?
+;is the search for an advice point solution exhaustive?
 :from the server side, when a new advice provision / binding is put up, //any// possible advice channel will be searched
 :contrary to this, at the client side, the first match found wins and will establish an advice channel.
 
@@ -658,8 +673,9 @@ After considering the implementation possibilities, some not completely determin
 * there is always an implicit //default advice solution.//
 * advice //is not an messaging system// &amp;mdash; no advice queue
 * signals (continuations) are acceptable as a extension to be provided later
+* retracting advice means to retreat a specific solution. This might or might not uncover earlier solutions (undefined behaviour)
 * we don't support any kind of dynamic re-evaluation of the binding match (this means not supporting the placement use case)
-* the binding pattern is //interpreted strictly as a conjuction of logic predicates// &amp;mdash; no partial match, but arguments are allowed
+* the binding pattern is //interpreted strictly as a conjunction of logic predicates// &amp;mdash; no partial match, but arguments are allowed
 * we prepare for a later extension to //full unification of arguments,// and provide a way of accessing the created bindings as //advice parameters.//
 
 Combining all these requirements and properties provides the foundation for the &amp;rarr; AdviceImplementation

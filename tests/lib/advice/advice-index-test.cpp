@@ -410,7 +410,7 @@ namespace test {
           CHECK (!idx.hasProvision (_entry (9,"cat")));
           CHECK ( idx.hasProvision (_entry (7,"cat")));
           CHECK ( idx.hasProvision (_entry (4,"dog")));
-          CHECK (_hasSolution (1,7));                  // because cat-7 is newly added, it shaddows the older cat-9
+          CHECK (_hasSolution (1,7));                  // because cat-7 is newly added, it shadows the older cat-9
           CHECK (_hasSolution (2,7));
           CHECK (_hasSolution (6,7));
           CHECK (_hasSolution (3,4));                  // but dog remains dog

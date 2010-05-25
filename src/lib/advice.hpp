@@ -161,6 +161,13 @@ namespace advice {
   /**
    * Access point for the advising entity (server).
    * TODO type comment
+   * 
+   * TODO planned implementation of memory handling: see notes in TiddlyWiki
+   *      Basically I'll use this->resolution_ to point to the copy incorporated into the advice system.
+   *      This is some kind of "unofficial" ownership and slightly incorrect, but seems the most straight forward implementation.
+   *      Thus each Provision cares for "his" advice and just detaches when going away. Consequently, by default, advice provisions
+   *      aren't freed during the lifetime of the application. We'll see if this causes problems. 
+   *      
    */
   template<class AD>
   class Provision
