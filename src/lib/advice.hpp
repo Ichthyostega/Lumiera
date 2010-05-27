@@ -116,6 +116,14 @@ namespace advice {
           pattern_ = binding.buildMatcher();
         }
       
+      void publishProvision();
+      void discardSolutions ();
+      void publishBindingChange();
+      void publishRequestBindingChange();
+      
+      void registrateRequest();
+      void deregistrateRequest();
+      
     public:
       explicit
       PointOfAdvice (Binding const& binding)
@@ -204,20 +212,20 @@ namespace advice {
       void setAdvice (AD const& pieceOfAdvice)
         {
           theAdvice_ = pieceOfAdvice;
-          UNIMPLEMENTED ("change advice provision registration");
+          publishProvision (); ///////////////////////////TODO how to propagate without specific typing?
         }
       
       void retractAdvice()
         {
           theAdvice_ = this->handleMissingSolution();
-          UNIMPLEMENTED ("notify index of retracted advice");
+          discardSolutions ();
         }
       
       void
       defineBinding (Literal topic)
         {
           setBindingPattern (Binding(topic).addTypeGuard<AD>());
-          UNIMPLEMENTED ("propagate binding change to index");
+          publishBindingChange();
         }
     };
   
@@ -246,12 +254,12 @@ namespace advice {
       Request (Literal bindingSpec =0)
         : PointOfAdvice (Binding(bindingSpec).addTypeGuard<AD>())
         {
-          UNIMPLEMENTED ("registration with the index");
+          registrateRequest();
         }
       
      ~Request()
         {
-          UNIMPLEMENTED ("detach from index");
+          deregistrateRequest();
         }
       
       
@@ -270,7 +278,7 @@ namespace advice {
       defineBinding (Literal topic)
         {
           setBindingPattern (Binding(topic).addTypeGuard<AD>());
-          UNIMPLEMENTED ("propagate binding change to index");
+          publishRequestBindingChange();
         }
     };
   

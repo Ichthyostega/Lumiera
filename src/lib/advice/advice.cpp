@@ -32,6 +32,48 @@ namespace advice {
 
   
   /* ohlolololohaha */
+  void
+  PointOfAdvice::publishProvision()
+  {
+    UNIMPLEMENTED ("change advice provision registration");
+  }
+  
+  
+  void
+  PointOfAdvice::discardSolutions ()
+  {
+    UNIMPLEMENTED ("notify index of retracted advice");
+  }
+  
+  
+  void
+  PointOfAdvice::publishBindingChange ()
+  {
+    UNIMPLEMENTED ("propagate binding change to index");
+  }
+      
+      
+  void
+  PointOfAdvice::publishRequestBindingChange()
+  {
+    UNIMPLEMENTED ("propagate binding change to index");
+  }
+  
+  
+  void
+  PointOfAdvice::registrateRequest()
+  {
+    UNIMPLEMENTED ("registrate request with the index");
+  }
+  
+  
+  void
+  PointOfAdvice::deregistrateRequest()
+  {
+    UNIMPLEMENTED ("detach request from index");
+  }
+
+
   
   
   
