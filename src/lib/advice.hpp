@@ -116,13 +116,15 @@ namespace advice {
           pattern_ = binding.buildMatcher();
         }
       
-      void publishProvision();
+      void publishProvision (PointOfAdvice*);
       void discardSolutions ();
       void publishBindingChange();
       void publishRequestBindingChange();
       
-      void registrateRequest();
-      void deregistrateRequest();
+      void registerRequest();
+      void deregisterRequest();
+      
+      void* getBuffer(size_t);
       
     public:
       explicit
@@ -181,7 +183,6 @@ namespace advice {
   class Provision
     : public PointOfAdvice
     {
-      AD theAdvice_;
       
       
       /* == policy definitions == */    ////TODO: extract into policy classes
@@ -194,7 +195,6 @@ namespace advice {
       explicit
       Provision (Literal bindingSpec =0)
         : PointOfAdvice (Binding(bindingSpec).addTypeGuard<AD>())
-        , theAdvice_()
         { }
       
      ~Provision()
@@ -203,21 +203,13 @@ namespace advice {
         }
       
       
-      AD const&
-      getAdvice()  const
-        {
-          return theAdvice_;
-        }
-      
       void setAdvice (AD const& pieceOfAdvice)
         {
-          theAdvice_ = pieceOfAdvice;
-          publishProvision (); ///////////////////////////TODO how to propagate without specific typing?
+          publishProvision (storeCopy (pieceOfAdvice));
         }
       
       void retractAdvice()
         {
-          theAdvice_ = this->handleMissingSolution();
           discardSolutions ();
         }
       
@@ -227,7 +219,56 @@ namespace advice {
           setBindingPattern (Binding(topic).addTypeGuard<AD>());
           publishBindingChange();
         }
+      
+    private:
+      PointOfAdvice* storeCopy (AD const& advice_given);
     };
+  
+  
+  /**
+   * Piece of Advice as incorporated into the AdviceSystem.
+   * This holder-object contains a copy of the advice data
+   * and is placed into the internal storage buffer; the
+   * advice index keeps a (type erased) pointer to serve
+   * any requests which happen to match the binding.
+   */
+  template<class AD>
+  class ActiveProvision
+    : public PointOfAdvice
+    {
+      AD theAdvice_;
+      
+    public:
+      AD const&
+      getAdvice()  const
+        {
+          return theAdvice_;
+        }
+      
+    protected:
+      ActiveProvision (PointOfAdvice const& refPoint, AD const& advice_given)
+        : PointOfAdvice(refPoint)
+        , theAdvice_(advice_given)
+        {
+          setSolution (this, this);
+        }
+      
+      friend class Provision<AD>;
+    };
+  
+    
+  /** function to copy advice into an internal buffer,
+      @return type erased pointer to the data holder created
+      @throw  error::External on allocation problems, plus anything
+              the advice data may throw during copy construction. */
+  template<class AD>
+  PointOfAdvice*
+  Provision<AD>::storeCopy (AD const& advice_given)
+    {
+      typedef ActiveProvision<AD> Holder;
+      return new(getBuffer(sizeof(Holder))) Holder (*this, advice_given);
+    }
+
   
     
     
@@ -241,7 +282,7 @@ namespace advice {
   class Request
     : public PointOfAdvice
     {
-      typedef const Provision<AD> AdviceProvision;
+      typedef const ActiveProvision<AD> AdviceProvision;
       
       
       /* == policy definitions == */    ////TODO: extract into policy classes
@@ -254,12 +295,12 @@ namespace advice {
       Request (Literal bindingSpec =0)
         : PointOfAdvice (Binding(bindingSpec).addTypeGuard<AD>())
         {
-          registrateRequest();
+          registerRequest();
         }
       
      ~Request()
         {
-          deregistrateRequest();
+          deregisterRequest();
         }
       
       

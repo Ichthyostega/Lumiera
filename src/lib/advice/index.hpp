@@ -392,9 +392,9 @@ namespace advice {
       void
       removeProvision (POA const& refEntry)
         {
-          HashVal oKey (hash_value(refEntry));
-          provisionEntries_[oKey].remove (refEntry);
-          requestEntries_[oKey].retract_all_solutions (refEntry, provisionEntries_[oKey]);
+          HashVal key (hash_value(refEntry));
+          provisionEntries_[key].remove (refEntry);
+          requestEntries_[key].retract_all_solutions (refEntry, provisionEntries_[key]);
         }
       
       

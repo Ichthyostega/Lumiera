@@ -31,9 +31,22 @@ namespace advice {
 //  LUMIERA_ERROR_DEFINE (MISSING_INSTANCE, "Existing ID registration without associated instance");
 
   
-  /* ohlolololohaha */
+  /** allocate raw storage for a buffer holding the actual piece of advice.
+      We need to manage this internally, as the original advice::Provision
+      may go out of scope, while the advice information as such remains valid.
+      @note the special twist is the size of the buffer depending on the actual
+            advice type, which we need to erase for tracking all advice provisions
+            and advice requests through an generic index datastructure.
+      @todo rewrite to use Lumiera's block allocator / memory pool */
+  void*
+  PointOfAdvice::getBuffer(size_t)
+  {
+    UNIMPLEMENTED ("raw allocation and de-allocation of advice holding buffer");
+  }
+  
+  
   void
-  PointOfAdvice::publishProvision()
+  PointOfAdvice::publishProvision (PointOfAdvice*)
   {
     UNIMPLEMENTED ("change advice provision registration");
   }
@@ -61,14 +74,14 @@ namespace advice {
   
   
   void
-  PointOfAdvice::registrateRequest()
+  PointOfAdvice::registerRequest()
   {
     UNIMPLEMENTED ("registrate request with the index");
   }
   
   
   void
-  PointOfAdvice::deregistrateRequest()
+  PointOfAdvice::deregisterRequest()
   {
     UNIMPLEMENTED ("detach request from index");
   }
