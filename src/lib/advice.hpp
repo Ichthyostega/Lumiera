@@ -116,16 +116,6 @@ namespace advice {
           pattern_ = binding.buildMatcher();
         }
       
-      void publishProvision (PointOfAdvice*);
-      void discardSolutions ();
-      void publishBindingChange();
-      void publishRequestBindingChange();
-      
-      void registerRequest();
-      void deregisterRequest();
-      
-      void* getBuffer(size_t);
-      
     public:
       explicit
       PointOfAdvice (Binding const& binding)
@@ -169,6 +159,39 @@ namespace advice {
   
   
   /**
+   * Advice Collaboration partner, internally connected to the AdviceSystem.
+   * Both advice::Request and advice::Provision are linked in this way
+   * to an internal index datastructure, which allows to carry out
+   * the actual advice exchange and collaboration.
+   */
+  class AdviceLink
+    : public PointOfAdvice
+    {
+    protected:
+      void publishProvision (PointOfAdvice*);
+      void discardSolutions ();
+      void publishBindingChange();
+      void publishRequestBindingChange();
+      
+      void registerRequest();
+      void deregisterRequest();
+      
+      void* getBuffer(size_t);
+      
+    public:
+      explicit
+      AdviceLink (Binding const& binding)
+        : PointOfAdvice(binding)
+        { }
+      
+      // using default copy/assignment
+    };
+
+  
+  
+  
+  
+  /**
    * Access point for the advising entity (server).
    * TODO type comment
    * 
@@ -181,7 +204,7 @@ namespace advice {
    */
   template<class AD>
   class Provision
-    : public PointOfAdvice
+    : public AdviceLink
     {
       
       
@@ -194,7 +217,7 @@ namespace advice {
     public:
       explicit
       Provision (Literal bindingSpec =0)
-        : PointOfAdvice (Binding(bindingSpec).addTypeGuard<AD>())
+        : AdviceLink (Binding(bindingSpec).addTypeGuard<AD>())
         { }
       
      ~Provision()
@@ -280,7 +303,7 @@ namespace advice {
    */
   template<class AD>
   class Request
-    : public PointOfAdvice
+    : public AdviceLink
     {
       typedef const ActiveProvision<AD> AdviceProvision;
       
@@ -293,7 +316,7 @@ namespace advice {
     public:
       explicit
       Request (Literal bindingSpec =0)
-        : PointOfAdvice (Binding(bindingSpec).addTypeGuard<AD>())
+        : AdviceLink (Binding(bindingSpec).addTypeGuard<AD>())
         {
           registerRequest();
         }

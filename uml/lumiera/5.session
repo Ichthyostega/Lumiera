@@ -8,9 +8,9 @@ diagrams
     469 451 100 4 0 0
   classdiagram_ref 140293 // TypedLookup
     721 697 100 4 0 0
-  classdiagram_ref 141445 // Advice entities
+  active  classdiagram_ref 141445 // Advice entities
     635 331 100 4 0 0
-  active  objectdiagram_ref 141573 // Advice solving
+  objectdiagram_ref 141573 // Advice solving
     556 483 100 4 0 0
 end
 show_stereotypes
@@ -37,9 +37,12 @@ open
   classview_ref 128261 // Builder Workings
   usecaseview_ref 128261 // config examples
   class_ref 133253 // Frame
-  class_ref 164485 // AdviceRequest
-  class_ref 164613 // AdviceProvision
+  class_ref 164485 // Request
+  class_ref 164613 // Provision
+  class_ref 166021 // ActiveProvision
   class_ref 164741 // Binding
+  class_ref 166277 // Index
+  classinstance_ref 144517 // 
   class_ref 145285 // MediaKind
   
   package_ref 131077 // ConfigQuery

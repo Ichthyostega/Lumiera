@@ -39,49 +39,49 @@ namespace advice {
             and advice requests through an generic index datastructure.
       @todo rewrite to use Lumiera's block allocator / memory pool */
   void*
-  PointOfAdvice::getBuffer(size_t)
+  AdviceLink::getBuffer(size_t)
   {
     UNIMPLEMENTED ("raw allocation and de-allocation of advice holding buffer");
   }
   
   
   void
-  PointOfAdvice::publishProvision (PointOfAdvice*)
+  AdviceLink::publishProvision (PointOfAdvice*)
   {
     UNIMPLEMENTED ("change advice provision registration");
   }
   
   
   void
-  PointOfAdvice::discardSolutions ()
+  AdviceLink::discardSolutions ()
   {
     UNIMPLEMENTED ("notify index of retracted advice");
   }
   
   
   void
-  PointOfAdvice::publishBindingChange ()
+  AdviceLink::publishBindingChange ()
   {
     UNIMPLEMENTED ("propagate binding change to index");
   }
       
       
   void
-  PointOfAdvice::publishRequestBindingChange()
+  AdviceLink::publishRequestBindingChange()
   {
     UNIMPLEMENTED ("propagate binding change to index");
   }
   
   
   void
-  PointOfAdvice::registerRequest()
+  AdviceLink::registerRequest()
   {
     UNIMPLEMENTED ("registrate request with the index");
   }
   
   
   void
-  PointOfAdvice::deregisterRequest()
+  AdviceLink::deregisterRequest()
   {
     UNIMPLEMENTED ("detach request from index");
   }
