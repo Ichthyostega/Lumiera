@@ -540,7 +540,7 @@ In a more elaborate scheme, the advised entity could provide a signal to be invo
 &amp;rarr; AdviceImplementation
 </pre>
 </div>
-<div title="AdviceImplementation" modifier="Ichthyostega" modified="201005290218" created="201004100056" tags="impl draft img" changecount="46">
+<div title="AdviceImplementation" modifier="Ichthyostega" modified="201006010358" created="201004100056" tags="impl draft img" changecount="55">
 <pre>[&lt;img[Advice solution|uml/fig141573.png]]
 
 
@@ -580,6 +580,18 @@ Aside from the index, handling of the advice provisions turns out to be tricky.
 * but as this simple solution contradicts the general advice semantics in a subtle way (see previous paragraph), we could insist on really re-capturing and retracting previous advice automatically on each new advice provision or modification. In this case, due to the requirement of thread safety, each addition, binding modification, placing of new advice or retraction would require to do an index search to find an existing provision with equivalent binding (same binding definition, not just a matching binding pattern). As a later provision could stomp upon an existing provision without the original advisor noticing this, we can't use the internal references anymore; we really need to search each time and also need a global lock during the modification transaction.
 * an attempt to reduce this considerable overhead would be to use an back-link from the provision as added to the system to the original source (the ~AdviceProvision owned by the advisor). On modification, this original source would be notified and thus detached. Of course this is tricky to implement correctly, and also requires locking.
 The decision for the initial implementation is to use the first variant and just accept the slightly imprecise semantics.
+
+!!!lifecycle considerations
+Behind the scenes, hidden within the {{{advice.cpp}}} implementation file, the ~AdviceSystem is maintained as singleton. According to a general lifecycle policy within Lumiera, no significant logic is allowed to execute in the shutdown phase of the application, once the {{{main()}}} has exited. Thus, any advice related operations might throw {{{error::Logic}}} after that point. The {{{~AdviceSystem()}}} also is a good place to free any buffers holding incorporated advice data, after having freed the index datastructure referring to these buffer storage, of course.
+
+!!!!handling of default advice
+Basically, the behaviour when requesting non-existing advice may be configured by policy. But the default policy is to return ref to a default constructed instance of the advice type in that case. Just the (implementation related) problem is that we return advice by {{{const&amp;}}}, not by value, so we're bound to create and manage this piece of default advice during the lifetime of the ~AdviceSystem. The way the ~AdviceSystem is accessed (only through the frontend of {{{advice::Request}}} and {{{advice::Provision}}} objects, in conjunction with the desire to control this behaviour by policy, creates a tricky implementation situation. Here we might also consider to use some separate kind of singleton bundle just for these default advice data (e.g. a templated version of //Meyer's Singleton...//), but this would create yet another difficult to define relation between the lifecycle of the ~AdviceSystem and such a singleton bundle.
+&lt;&lt;&lt;
+{{red{WIP ... solution idea}}}: //let the handling-function for missing advice create an {{{advice::Provision&lt;AD&gt;}}}, with the same binding as the current request,//
+i.e. fabricate the missing solution on-the-fly, setting a default constructed piece of advice data.
+__pro__: simple to implement, avoids to re-create for this special case some of the functionality the index already provides
+__con__: difficult to check and verify, loads additional data into the index table, the first request failure gets as expensive as an advice provision, how to fabricate a reliably matching solution is not obvious in case we allow variables in the binding pattern.
+&lt;&lt;&lt;
 
 !!!index datastructure
 It is clear by now that the implementation datastrucutre has to serve as a kind of //reference count.// Within this datastructure, any constructed advice solution needs to be reflected somehow, to prevent us from discarding an advice provision still accessible. Allowing lock-free access to the advice solution (planned feature) adds an special twist, because in this case we can't even tell for sure if an overwritten old solution is actually gone (or if its still referred from some thread's cached memeory). This could be addressed with an transactional approach (which might be good anyway) &amp;mdash; but I tend to leave this special concern asside for now.

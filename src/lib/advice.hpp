@@ -254,6 +254,10 @@ namespace advice {
    * and is placed into the internal storage buffer; the
    * advice index keeps a (type erased) pointer to serve
    * any requests which happen to match the binding.
+   * 
+   * @note the ptr-to-solution in the inherited PointOfAdvice
+   *       is currently (5/10) not used, because this \em is
+   *       already the solution. 
    */
   template<class AD>
   class ActiveProvision
@@ -273,7 +277,7 @@ namespace advice {
         : PointOfAdvice(refPoint)
         , theAdvice_(advice_given)
         {
-          setSolution (this, this);
+          setSolution (this, this); // not used currently (5/10)
         }
       
       friend class Provision<AD>;
@@ -310,7 +314,7 @@ namespace advice {
       
       /* == policy definitions == */    ////TODO: extract into policy classes
       
-      AD const& handleMissingSolution()  const { return AD(); }              /////////////////////TODO either return value or build a registry of defaults
+      AD const& handleMissingSolution()  const { return AD(); }              /////////////////////TODO singleton or registry for default advice. See TiddlyWiki for discussion
       
       
     public:
