@@ -86,6 +86,7 @@
 //#include "proc/asset/struct-scheme.hpp"
 //#include "lib/hash-indexed.hpp"
 //#include "lib/util.hpp"
+#include "lib/null-value.hpp"
 #include "lib/symbol.hpp"
 #include "lib/advice/binding.hpp"
 
@@ -210,8 +211,7 @@ namespace advice {
       
       /* == policy definitions == */    ////TODO: extract into policy classes
       
-      AD const& handleMissingSolution()  const { return AD(); }              /////////////////////TODO either return value or build a registry of defaults
-      void deregistrate()                      { /* NOP */ }
+      void deregistrate() { /* NOP */ }
       
       
     public:
@@ -314,7 +314,7 @@ namespace advice {
       
       /* == policy definitions == */    ////TODO: extract into policy classes
       
-      AD const& handleMissingSolution()  const { return AD(); }              /////////////////////TODO singleton or registry for default advice. See TiddlyWiki for discussion
+      AD const& handleMissingSolution()  const { return NullValue<AD>::get(); }  ///< @warning might segfault when used during shutdown
       
       
     public:
