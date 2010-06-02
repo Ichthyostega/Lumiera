@@ -5,7 +5,7 @@ Christian Thäter <ct@pipapo.org>
 
 [abstract]
 ******************************************************************************
-The Lumiera Community creates, a non linear video editing and compositing FOSS
+The Lumiera Community creates a non linear video editing and compositing FOSS
 application for Linux/Unix/Posix Operating Systems, suitable for professional
 and quality oriented work, building on common open source video, sound and GUI
 toolkits and libraries, providing flexibility and a high degree of
@@ -27,7 +27,7 @@ About this Document
 This document is meant to be read electronically, it contains a lot
 hyper-links between explanations denoted by an arrow ->. Lumiera is still in
 development, we describe here planned feature without explicitly tagging them,
-as well some things are not yet worked out. Although this document is heavily
+as well some things are not worked out, yet. Although this document is heavily
 cross-linked we try to start with a broad overview and work out more detailed
 things towards the end.
 
@@ -44,10 +44,10 @@ some explanation what it means to us:
         Whatever happens, your work must be safe, protected against software
         glitches and recoverable. Ideally Lumiera should be very stable and
         never crash, in practice even crashes or power outages should not
-        yield in lost work.
+        result in lost work.
 
  Productivity::
-        One wants to get thing done, in time, with control over every aspect.
+        One wants to get things done, in time, with control over every aspect.
         Getting this together is a important goal for workflow design and
         usability.
 
@@ -132,11 +132,11 @@ Now its time to take a look at the prelimary Lumiera GUI:
 
 image:lumiera_screenshot.png[Screenshot of Lumiera]
 
-Just for the record, the GUI itself is a plugin by itself and only one way to
-work Lumiera, it will become possible to create special-purpose GUIs or
-control Lumiera in different ways, like a headless rendernode
-xref:rendernode[->] or frameserver xref:frameserver[->]. Completely script
-driven interfaces for automated processing are also planned.
+The GUI is a plugin by itself and only one way to work Lumiera, it will become
+possible to create special-purpose GUIs or control Lumiera in different ways,
+like a headless rendernode xref:rendernode[->] or frameserver
+xref:frameserver[->]. Completely script driven interfaces for automated
+processing are also planned.
 
 The GUI screenshot you see above is faily default as when you start Lumiera up
 for the first time (only a 2nd Viewer added). While we support a much more
