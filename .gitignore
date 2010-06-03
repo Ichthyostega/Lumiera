@@ -21,4 +21,5 @@ semantic.cache
 tests/,*
 wiki/backups/*
 doc/devel/draw/*.png
+doc/user/lumiera_from_outer_space/*.html
 m4/*
