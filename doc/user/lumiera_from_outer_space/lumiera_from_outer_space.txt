@@ -14,7 +14,7 @@ smooth workflow which scales well to larger and more complicated editing
 projects. This Document outlines the Design from some distance,
 helping people to understand the Ideas behind Lumiera and understand the tools
 they get to work with. It is aimed for workflow designers any anyone who wants
-to know how the programm works.
+to know how the program works in general.
 ******************************************************************************
 
 
@@ -26,8 +26,8 @@ About this Document
 
 This document is meant to be read electronically, it contains a lot
 hyper-links between explanations denoted by an arrow ->. Lumiera is still in
-development, we describe here planned feature without explicitly tagging them,
-as well some things are not worked out, yet. Although this document is heavily
+development, we describe here planned features without explicitly tagging them;
+some things are not worked out in detail yet. Although this document is heavily
 cross-linked we try to start with a broad overview and work out more detailed
 things towards the end.
 
@@ -42,20 +42,20 @@ some explanation what it means to us:
 
  Reliability::
         Whatever happens, your work must be safe, protected against software
-        glitches and recoverable. Ideally Lumiera should be very stable and
+        glitches and incompatibilities. Ideally Lumiera should be very stable and
         never crash, in practice even crashes or power outages should not
         result in lost work.
 
  Productivity::
-        One wants to get things done, in time, with control over every aspect.
-        Getting this together is a important goal for workflow design and
-        usability.
+        Professionals want to get things done, in time, but optionally with control
+        over every aspect. Balancing these goals should be the central concern for 
+        workflow design and usability.
 
  Quality::
         If you work with high quality, cinema grade digital video material you
         want to be sure that you can deliver this crisp quality without
         compromise throughout you workflow to your final product. All rendering
-        must be reproduceable to the bit.
+        must be reproducible to the bit.
 
  Scalability::
         Projects and budgets differ, hardware advances, Lumiera must scale
@@ -66,8 +66,8 @@ some explanation what it means to us:
         Soft and Hardware advances at a fast pace. We must not lock into the
         current state of technology but being flexible to extend the System
         without breaking compatibility. Projects you create nowadays with
-        Lumiera should be useabele in foreseeable future, at least there needs
-        to be a guranteed upgrade path.
+        Lumiera should be usable in foreseeable future, at least there needs
+        to be a guaranteed upgrade path.
 
 
 Fundamental Forces
@@ -75,50 +75,75 @@ Fundamental Forces
 
 // the basic ideas which drive the lumiera design
 
-The Lumiera design is founded on only a few basic principles. Keeping these in
-mind will help one understand how that actual more interesting things are
-build up on that.
+The Lumiera design is guided by a small number of basic principles. Keeping these in
+mind will help to understand how actually more interesting things can be built up
+on that foundation.
+
+
+Open ended combining of Building Blocks
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Lumiera is not so much defined in terms of _features_ -- rather it allows to combine
+basic _building blocks._ These basic modules, entities or objects each have a distinct
+_type_ explicitly limiting the connections. Within these limits, any conceivable
+combination shall be supported without further hidden limitations.
+
+Lumiera is neither a set of Lego bricks, nor is it the business application
+driven by finite usage stories.
+
+
+Medium level Abstraction and Project specific Conventions
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+These building blocks within Lumiera create a moderate level of abstraction; a user
+may, if desired, directly manipulate through the GUI clips, individual effects, masks,
+and even the placements xref:placement[->] used to stitch the objects together, which is
+comparatively low-level. On the other hand, these abstractions shield the user from the
+actual technical details like format conversions and the accessing of individual channels.
+
+To complement this approach, Lumiera does _not_ rely on hard wired, global conventions --
+rather we allow to build up project specific conventions and rules xref:rules[->]
+to fit the given requirements and preferred working style. To help getting started,
+Lumiera will ship with a fairly conventional project template and default configuration.
 
 
 [[graphs]]
 Rendering is Graph Processing
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Processing of Video (and audio) data can be generalized as normal graph
-processing (more precisely ``directed acyclic graphs''). Data flows on the
-edges of this graphs and is processed in the nodes.
+Processing of Video (and audio) data can be generalized as graph processing
+(more precisely ``directed acyclic graphs''). Data flows on the
+edges of these graphs and is processed in the nodes.
 
 image:graph.svg[Example for a graph]
 
 When we look at this model we discover that we only need to build
-xref:builder[->] such graphs, the nodes themself can be seen as black boxes
+xref:builder[->] such graphs, the nodes themselves can be seen as black boxes
 and will be implemented by plugins xref:plugins[->]. Moreover one can
 preconfigure subgraphs and handle them as single entity xref:pluginstack[->].
 
-In Lumiera everything is a graph, the footage you put in will be demultiplexed
-xref:demultiplexer[->] at a first node, down to the encoding xref:encoder[->]
+In Lumiera everything will be translated into such a graph. Your footage will
+be demultiplexed xref:demultiplexer[->] at a first node, down to the encoding xref:encoder[->]
 and multiplexer xref:multiplexer[->] which assembles the final video.
 
 
 Pulling not Pushing
 ~~~~~~~~~~~~~~~~~~~
 
-On a first glance, it looks natural that one sets up the graphs
-xref:graphs[->] as described above and then pushes data into the input nodes
-whereas the final result can then be seen soon on the output node. Serveral
+On a first glance, it looks fairly natural to set up the graphs xref:graphs[->]
+as described above and then push data into the system through the input nodes
+whereas the final result can then be seen soon on the output node. Several
 multimedia frameworks use this approach. But it has a lot of shortcomings
-which make it inapprobiate for non-linear video editing.
+which make it inappropriate for non-linear video editing.
 
 Lumiera instead pulls data though the pipe, that is a request starts at the
 output node and makes it way up to the inputs. This has certain advantages
 xref:pull[->], explained later.
 
 
-Don't waste Work
+Don't waste work
 ~~~~~~~~~~~~~~~~
 
 Rendering A/V Data can be quite CPU intensive, to ensure that we do not waste
-cpu power by rendering things twice, or the worse, have to throw results away
+CPU power by rendering things twice, or the worse, have to throw results away
 because they couldn't be rendered in time, we use sophisticated caching
 xref:caching[->] and profiling xref:profiling[->].
 
@@ -139,9 +164,9 @@ xref:frameserver[->]. Completely script driven interfaces for automated
 processing are also planned.
 
 The GUI screenshot you see above is faily default as when you start Lumiera up
-for the first time (only a 2nd Viewer added). While we support a much more
-sophisticated screen concept xref:screenconcept[->] to adapt to different
-workplaces and workflows.
+for the first time (the plan is to add a 2nd Viewer to the default configuration).
+While we support a much more sophisticated screen concept xref:screenconcept[->]
+to adapt to different workplaces and workflows.
 
 
 Viewer
@@ -167,19 +192,22 @@ Transport Controls
 // possibly as its own gui element
 
 // This are devices either controlled by widgets or by some input device (midi
-// etc) so their gui may loog differently.
+// etc) so their gui may look differently.
 // Either way they connect to a Play Controler xref.. in the core which
 // manages playing and cursor positioning.
 
 // thus there will be some gui facility to attach Transport controls to Play
-// Controllers. Transport controlls are ganged when they attach to the same
+// Controllers. Transport controls are ganged when they attach to the same
 // Play Controler.
 
-// just playing some footage for preview creates a simple internal timelline,
+// just playing some footage for preview creates a simple internal timeline,
 // no magic here.
 
 // TODO: bit unrelated, think about how ganging controls in general should
 // work, also for faders, masks and so on
+// Note by Ichthyo: the connection to a fader is handled through the placements,
+// which allows to inherit such a control connection. IMHO together with the
+// tree-like tracks this removes 80% of the need to gang faders.
 
 
 Timeline View
@@ -194,8 +222,16 @@ Timeline View
 // Q: how to handle interaction, for example when some conversion can only be
 //    done in a lossy way and some conversion node may or may not be inserted
 //    (i mean gui wise)?
+// A: this usually is detected at build time, which means the incriminating
+//    object and exit node is just in scope when the problem is detected.
+//    My intention was to have a problem flag with accompanying information
+//    attached to this object, so the GUI can highlight the problem location
+//    and give a general alert.
 
 // TBD: Cursors .. discussion, handling, gui representation
+// Note by Ichthyo: we shouldn't focus on cursors, but rather on selections.
+//                  IMHO a playhead or edit marker or similar cursor is just
+//                  a special case of a selection.
 
 
 // Busses
@@ -211,17 +247,25 @@ Asset View
 // Manages all assets available in one project.
 //  * source media/footage/soundfiles
 //  * prepared clips, known subprojects
-//  * All available effects
+//  * all available effects and transitions
+//  * internal artefacts like sequences and automation data sets
 
 // First this will be simply implemented showing data loaded into the session
 // and all available plugins/effects
+// The user may build custom effect collections ("effect palette")
 
 // (much) Later it is planed to make this a database driven interface, where
 // the tabs showing things are basically just database queries. Then it
 // becomes possible to create/extend this by customized queries and augment
 // assets with all kinds of metadata which can be queried
 
-// this is a sequence, ichthyo may explain this better
+// Actually, the same underlying data structure is used to implement the
+// asset view with folders, clip bins and effect palettes, and the timeline
+// view with tracks, clips and attached effects. Technically, there is no
+// difference between a track or a clip bin -- just the presentation varies.
+// Timeline contents can be viewed like assets for bookkeeping purposes, and
+// the contents of a clip bin can be played like a storyboard
+
 
 
 Dark Matter
@@ -243,6 +287,20 @@ Session storage
 // benefits, unlimited undo, selective undo
 // export/import plugins
 // everything is stored in the session
+
+
+Placements
+~~~~~~~~~~
+[[placement]]
+Generic mechanism to stitch together media objects. Any placement may contain a list of conditions
+how to locate the placed object, examples being time-absolute/relative, relative to another object,
+or relative to some specific source media frame.
+
+All of the session model contents are attached by placement, forming a large tree. Placements are
+to be _resolved_ to find out the actual position, output and further locational properties of an object.
+Missing placement information is _inherited_ from parent placements in the session tree. This causes
+a lot of relational and locational properties to be inherited from more global settings, unless defined
+locally at a given object: time reference point, output destination, layering, fade control, audio pan,...
 
 
 Rendering Engine
@@ -293,8 +351,8 @@ Pulling a Frame
 // constrain viewer
 
 // proxy
-// viewer circruit
-// render circruit
+// viewer circuit
+// render circuit
 
 
 
@@ -312,7 +370,7 @@ Pulling a Frame
 
 
 
-// TODO Following things need to be integrated nto the document above
+// TODO Following things need to be integrated into the document above
 
 
 * [[plugins]]
@@ -351,13 +409,9 @@ for intermediate data, to be reused later.
 Glossary
 --------
 
-// NOTE Draft, plese help rephrase/review and sort this terms, shorten
+// NOTE Draft, please help rephrase/review and sort this terms, shorten
 // explanations, the long explanation is the topic of the document above
 
-
- Viewer::
-        the display showing video frame and maybe
-        some effect overlays (as masking etc.).
 
  Project::
         the top-level context in which all edit work is done over an extended
@@ -380,92 +434,119 @@ Glossary
 
  Track-head/patchbay::
         TODO: better term for this
-        the box in front of a track allowing to control things on the track,
-        unfold nested tracks and so on.
-
+//Note by Ichthyo: while I like the term "patchbay", my concern with this is that
+// it has already a very specific meaning in audio applications; and while our track heads
+// certainly can serve as a patchbay, that is not the main purpose and they can do things
+// beyond that..        
+        the box in front of a track allowing to control properties of the elements
+        contained within this track, unfold nested tracks and so on. To a large extent,
+        it corresponds to the placement of this track and allows to manipulate this placement
 
 
  Timeline::
-        the top level element within the Project. It is visible within a
+        the top level element(s) within the Project. It is visible within a
         'timeline view' in the GUI and represents the effective (resulting)
         arrangement of media objects, resolved to a finite time axis, to be
         rendered for output or viewed in a Monitor (viewer window).
         Timeline(s) are top-level and may not be further combined. A timeline
         is comprised of:
-         * Time axis (doesnt this belong to the Timeline view only?)
+         * Time axis, defining the time base
          * Play Controller (WIP: discussion if thats belongs to the timeline
-           and if we want a 1:N relation here)
-         * Busses
+           and if we want a 1:N relation here). Note by Ichthyo: yes, our current discussion showed us
+           that a play controller rather gets allocated to a timeline, but isn't contained therein.
+         * global pipes, i.e. global busses like in a mixing desk
          * exactly one top level Sequence
 
  Time Axis::
-        A bar showing the absolute time (in configureable units) within the project
-        (WIP: not clear if this is an entity or just a conceptual definition)
+        An entity defining the temporal properties of a timeline. A time axis defines
+        the time base, kind of timecode and absolute anchor point. Besides, it manages
+        a set of frame quantisation grids, corresponding to the outputs configured for
+        this timeline (through the global busses).
+        The GUI representation is a time ruler with configurable time ticks showed
+        on top of the timeline view
 
 
  Busses::
-        A list of global 'Pipes' representing the possible outputs (master
+        A list of 'global Pipes' representing the possible outputs (master
         busses) similar to audio mixing desk. A bus defines the properties of
         the rendered output (Framerate, Resolution, Colorformat and so on).
         Busses are part of a Timeline.
 
  Sequence::
-        A collection of MObjects (TODO: need user-compatible term here) placed
-        onto a tree of tracks. (this entity was former named 'EDL' an
-        alternative name would be 'Arrangement' ). By means of this placement,
-        the objects could be anchored relative to each other, relative to
-        external objects, absolute in time. Placement and routing information
-        can be inherited down the track tree, and missing information is
-        filled in by configuration rules. This way, a sequence can connect to
-        the global pipes when used as top-level sequence within a timeline, or
-        alternatively it can act as a virtual-media when used within a
+        A collection of *Media Objects* (clips, effects, transitions, labels, automation)
+        placed onto a tree of tracks. By means of this placement, the objects could be
+        anchored relative to each other, relative to external objects, absolute in time.
+        A sequence can connect to the global pipes when used as top-level sequence within
+        a timeline, or alternatively it can act as a virtual-media when used within a
         meta-clip (nested sequence). In the default configuration, a Sequence
         contains just a single root track and sends directly to the master
-        busses of the timeline. Pipe the conceptual building block of the
-        high-level model. It can be thought of as simple linear processing
-        chain. A stream can be 'sent to' a pipe, in which case it will be
-        mixed in at the input, and you can 'plug' the output of a pipe to
-        another destination. Further, effects or processors can be attached to
-        the pipe. Besides the global pipes (busses) in each Timeline, each
-        clip automatically creates N pipes (one for each distinct content
-        stream, i.e. normally N=2, namely video and audio) PlayController
-        coordinating playback, cueing and rewinding of a '!PlayheadCursor' (or
-        multiple in case there are multiple views and or monitors), and at the
-        same time directing a render process to deliver the media data needed
-        for playback. Actually, the implementation of the !PlayController(s)
-        is assumed to live in the backend. RenderTask basically a
-        !PlayController, but collecting output directly, without moving a
-        !PlayheadCursor (maybe a progress indicator) and not operating in a
-        timed fashion, but freewheeling or in background mode Monitor a viewer
-        window to be attached to a timeline. When attached, a monitor reflects
-        the state of the timeline's !PlayController, and it attaches to the
-        timeline's global pipes by stream-type match, showing video as monitor
-        image and sending audio to the system audio port (Alsa or Jack).
-        Possible extensions are for a monitor to be able to attach to probe
-        points within the render network, to show a second stream as (partial)
-        overlay for comparison, or to be collapsed to a mere control for
-        sending video to a dedicated monitor (separate X display or firewire)
+        bus of the timeline.
+        
+ Placement::
+        A Placement represents a relation: it is always linked to a Subject (this being a Media Object)
+        and has the meaning to place this Subject in some manner, either relatively to other Media Objects,
+        by some Constraint or simply absolute at (time, output). Placements are used to stitch together
+        the objects in the high-level-model. Placements thus are organised hierarchically and need
+        to be _resolved_ to obtain a specific value (time point, output routing, layering, fade,...)
+        
+ Pipe::
+        Conceptual building block of the  high-level model. It can be thought off as
+        simple linear processing chain. A stream can be 'sent to' a pipe, in which case
+        it will be mixed in at the input, and you can 'plug' the output of a pipe to
+        another destination. Further, effects or processors can be attached to the pipe.
+        Besides the global pipes (busses) in each Timeline, each clip automatically creates N pipes
+        (one for each distinct content stream. Typically N=2, for video and audio)
+        
+ PlayController::
+        coordinating playback, cueing and rewinding of a playback position, visible
+        as 'Playhead' cursor in the GUI. When in play state, a PlayController requests
+        and directs a render process to deliver the media data needed for playback.
+
+//TODO not sure about the term and if it's appropriate to include it here        
+       
+ RenderTask::
+        basically a PlayController, but collecting output directly, without moving a
+        PlayheadCursor (maybe a progress indicator) and not operating in a
+        timed fashion, but freewheeling or in background mode
+        
+
+ Controller Gui::
+        This can be either a full Software implementation for a Transport
+        control (Widgets for Start/Stop/Rev/Ffw etc) or some Gui managing an
+        Input Device. They share some feature to attach them to controllable
+        gui-entities (Viewers, Timeline Views)
+
+ Viewer::
+        the display destination showing video frame and possibly some effect overlays (masking etc.).
+        When attached to a timeline, a viewer reflects the state of the timeline's associated 
+        PlayController, and it attaches to the timeline's global pipes (stream-type match or explicitly),
+        showing video as monitor image and sending audio to the system audio port. Possible extensions are
+        for a viewer to be able to attach to probe points within the render network, to show a second stream
+        as (partial) overlay for comparison, or to be collapsed to a mere control for sending video to a
+        dedicated monitor (separate X display or firewire)
 
  High Level Model::
-        will be translated by the Builder to the Low Level Model.
-
- Builder::
-        A kind of compiler which creates Low Level/Processing Graphs, by
-        taking Extents from the Timeline/High Level Model/Sequence and using
-        the Rules System.
-
- Extent::
-        (TODO: not sure about this term)
-        A range in the timeline which yields in one Processing graph, commonly
-        the range between cut points (which require a reconfiguration of the graph).
+        All the session content to be edited and manipulated by the user through the GUI.
+        The high-level-model will be translated by the Builder into the Low Level Model for rendering.
 
  Low Level Model::
-        The generated Processing Graph.
+        The generated Processing Graph, to be ``performed'' within the engine to yield rendered output
+
+ Builder::
+        A kind of compiler which creates Low Level/Processing Graphs, by traversing and evaluating
+        the relevant parts of the high-level-model and using the Rules System.
+
+ Timeline Segment::
+        A range in the timeline which yields in one Processing graph, commonly
+        the range between cut points (which require a reconfiguration of the graph).
+        
+// Note by Ichthyo: "Extent" sounds somewhat cool, just it didn't occur to me as a term.
+// We may well agree on it, if "extent" communicates the meaning better. Up to now, I called it "segment"
 
  Assets View::
         The windows showing and managing the available things to work with.
         This are the ingested footage, already composed Clips, available
-        Sub-Projects, Effects and so on.
+        Sub-Projects, Effects, Transitions and internal artefacts.
 
  Rules System::
         Translating the Timeline to the underlying Processing Graphs involves
@@ -490,16 +571,6 @@ Glossary
  Input Device::
         some hardware controler, like a extra Keyboard, Midi Mixer, Jog, ..
         TODO: decide if the main keyboard as special (global) state.
-
- Controler Gui::
-        This can be either a full Software implementation for a Transport
-        control (Widgets for Start/Stop/Rev/Ffw etc) or some Gui managing an
-        Input Device. They share some feature to attach them to controllable
-        gui-entities (Viewers, Timeline Views)
-
- Play Controller::
-        An internal component which manages playing and positioning a Cursor.
-        This is controlled by a Controller Gui.
 
  Cursor::
         TBD
