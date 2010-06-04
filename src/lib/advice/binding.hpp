@@ -163,6 +163,7 @@ namespace advice {
        * Functor object for matching against another Binding.
        * Contains precompiled information necessary for
        * determining a match.
+       * @note Matcher is POD, copyable, no-throw
        */
       class Matcher
         {

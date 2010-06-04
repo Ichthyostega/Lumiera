@@ -140,6 +140,12 @@ namespace advice {
    *       explicitly relies on that definition of equality.
    * @note the diagnostic API is mainly intended for unit testing
    *       and \em not implemented with focus on performance. 
+   * 
+   * \par Exception safety
+   * Adding new registrations might throw error::Fatal or bad_alloc.
+   * The addition in this case has no effect and the index remains valid.
+   * The other mutating operations are NO_THROW, given that Binding::Matcher
+   * is a POD and std::vector fulfils the guarantee for POD content elements.
    */
   template<class POA>
   class Index
@@ -155,6 +161,8 @@ namespace advice {
           Entry (POA& elm)
             : pair<Binding::Matcher, POA*> (getMatcher(elm), &elm)
             { }
+          
+          // using default-copy, thus assuming copy is NO_THROW
           
           friend bool
           operator== (Entry const& a, Entry const& b)
@@ -194,7 +202,12 @@ namespace advice {
            append (POA& elm)
              {
                REQUIRE (!contains (elm), "Duplicate entry");
-               elms_.push_back (Entry(elm));
+               try { elms_.push_back (Entry(elm)); }
+               
+               catch(std::bad_alloc&)
+                 {
+                   throw error::Fatal("AdviceSystem failure due to exhausted memory");
+                 }
              }
            
            void
@@ -337,7 +350,7 @@ namespace advice {
       addRequest (POA& entry)
         {
           HashVal key (hash_value(entry));
-          requestEntries_[key].append (entry);
+          requestEntries_[key].append (entry);  // might throw
           provisionEntries_[key].publish_latest_solution (entry);
         }
       
@@ -353,8 +366,8 @@ namespace advice {
           HashVal nKey (hash_value(entry));
           if (oKey != nKey)
             {
+              requestEntries_[nKey].append (entry);   // might throw
               requestEntries_[oKey].remove (entry);
-              requestEntries_[nKey].append (entry);
             }
           else
             { // rewrite Entry to include the new binding
@@ -375,7 +388,7 @@ namespace advice {
       addProvision (POA& entry)
         {
           HashVal key (hash_value(entry));
-          provisionEntries_[key].append (entry);
+          provisionEntries_[key].append (entry);  // might throw
           requestEntries_[key].publish_all_solutions (entry);
         }
       
@@ -386,8 +399,8 @@ namespace advice {
           HashVal nKey (hash_value(newEntry));
           if (oKey != nKey)
             {
+              provisionEntries_[nKey].append (newEntry);  // might throw, in which case it has no effect
               provisionEntries_[oKey].remove (oldRef);
-              provisionEntries_[nKey].append (newEntry);
               requestEntries_[nKey].publish_all_solutions (newEntry);
               requestEntries_[oKey].retract_all_solutions (oldRef, provisionEntries_[oKey]);
             }
@@ -402,7 +415,7 @@ namespace advice {
       removeProvision (POA const& refEntry)
         {
           HashVal key (hash_value(refEntry));
-          provisionEntries_[key].remove (refEntry);
+          provisionEntries_[key].remove (refEntry);  // NO_THROW
           requestEntries_[key].retract_all_solutions (refEntry, provisionEntries_[key]);
         }
       
