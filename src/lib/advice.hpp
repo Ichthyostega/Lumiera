@@ -171,7 +171,6 @@ namespace advice {
     protected:
       void publishProvision (PointOfAdvice*);
       void discardSolutions ();
-      void publishBindingChange();
       void publishRequestBindingChange();
       
       void registerRequest();
@@ -240,11 +239,12 @@ namespace advice {
       defineBinding (Literal topic)
         {
           setBindingPattern (Binding(topic).addTypeGuard<AD>());
-          publishBindingChange();
+          maybe_rePublish();
         }
       
     private:
       PointOfAdvice* storeCopy (AD const& advice_given);
+      void maybe_rePublish ();
     };
   
   
@@ -289,12 +289,29 @@ namespace advice {
       @throw  error::External on allocation problems, plus anything
               the advice data may throw during copy construction. */
   template<class AD>
-  PointOfAdvice*
+  inline PointOfAdvice*
   Provision<AD>::storeCopy (AD const& advice_given)
-    {
-      typedef ActiveProvision<AD> Holder;
-      return new(getBuffer(sizeof(Holder))) Holder (*this, advice_given);
-    }
+  {
+    typedef ActiveProvision<AD> Holder;
+    return new(getBuffer(sizeof(Holder))) Holder (*this, advice_given);
+  }
+  
+  
+  /** @internal in case we've already published this provision,
+   *            we temporarily need a new provision entry, to allow the
+   *            AdviceSystem implementation to rewrite the internal index
+   */
+  template<class AD>
+  inline void
+  Provision<AD>::maybe_rePublish ()
+  {
+    typedef const ActiveProvision<AD> AdviceProvision;
+    AdviceProvision* solution = static_cast<AdviceProvision*> (getSolution (*this));
+    
+    if (solution)    // create copy of the data holder, using the new binding 
+      publishProvision (storeCopy (solution->getAdvice()));
+  }
+  
 
   
     
@@ -346,6 +363,7 @@ namespace advice {
       defineBinding (Literal topic)
         {
           setBindingPattern (Binding(topic).addTypeGuard<AD>());
+    ////////////////////////////////////////////////////////////////////////////TODO: conceptual mismatch here! we don't have an "old entry", because we ourselves are the entry ;-)
           publishRequestBindingChange();
         }
     };

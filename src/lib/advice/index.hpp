@@ -350,7 +350,9 @@ namespace advice {
               requestEntries_[nKey].append (newEntry);
             }
           else
-            requestEntries_[nKey].overwrite (oldRef, newEntry);
+            {
+              requestEntries_[nKey].overwrite (oldRef, newEntry);
+            }
           provisionEntries_[nKey].publish_latest_solution (newEntry);
         }
       

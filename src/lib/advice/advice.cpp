@@ -23,13 +23,50 @@
 
 #include "lib/advice.hpp"
 #include "lib/advice/index.hpp"
+#include "lib/singleton.hpp"
+#include "include/logging.h"
 
+#include <boost/noncopyable.hpp>
+
+using lib::Singleton;
 
 namespace lib {
 namespace advice {
   
 //  LUMIERA_ERROR_DEFINE (MISSING_INSTANCE, "Existing ID registration without associated instance");
+  
+  namespace { // ======= implementation of the AdviceSystem ============
+    
+    class AdviceSystem
+      : public Index<PointOfAdvice>
+      , boost::noncopyable
+      {
+        
+      public:
+        AdviceSystem()
+          {
+            INFO (library, "Initialising Advice Index tables.");
+          }
+        
+       ~AdviceSystem()
+          {
+            INFO (library, "Shutting down Advice system.");
+          }
+      };
+    
+    
+    /** hidden implementation-level access to the AdviceSystem */
+    Singleton<AdviceSystem> aSys;
+    
+    
+  } //(End) AdviceSystem implementation
 
+  
+  
+  
+  
+  /*  ====== AdviceLink : access point for Provisions and Requests ====== */  
+  
   
   /** allocate raw storage for a buffer holding the actual piece of advice.
       We need to manage this internally, as the original advice::Provision
@@ -45,30 +82,49 @@ namespace advice {
   }
   
   
+  /** when the Provision actually sets advice data, this is copied
+   *  into an internal buffer within the AdviceSystem. We then use the
+   *  Index to remember the presence of this advice data and to detect
+   *  possible matches with existing advice::Request entries.
+   *  @param adviceData pointer to the copied data,
+   *         actually pointing to an ActiveProvision<AD>
+   */
   void
-  AdviceLink::publishProvision (PointOfAdvice*)
+  AdviceLink::publishProvision (PointOfAdvice* newProvision)
   {
-    UNIMPLEMENTED ("change advice provision registration");
+    const PointOfAdvice* previousProvision (getSolution (*this));
+    setSolution (this, newProvision);
+    
+    if (!previousProvision && newProvision)
+      aSys().addProvision (*newProvision);
+    else
+    if (previousProvision && newProvision)
+      aSys().modifyProvision (*previousProvision, *newProvision);
+    else
+    if (previousProvision && !newProvision)
+      aSys().removeProvision (*previousProvision);  ////////////////////////////TODO: don't we need to release buffer storage here?
   }
   
   
+  /** when advice is retracted explicitly,
+   *  after removing the provision index entry
+   *  we also need to re-process any requests
+   *  which happen to match our binding... 
+   */
   void
   AdviceLink::discardSolutions ()
   {
-    UNIMPLEMENTED ("notify index of retracted advice");
+    const PointOfAdvice* existingProvision (getSolution (*this));
+    setSolution (this, NULL );
+    if (existingProvision)
+      aSys().removeProvision (*existingProvision);  ////////////////////////////TODO: don't we need to release buffer storage here?
   }
   
   
-  void
-  AdviceLink::publishBindingChange ()
-  {
-    UNIMPLEMENTED ("propagate binding change to index");
-  }
-      
-      
   void
   AdviceLink::publishRequestBindingChange()
   {
+    ////////////////////////////////////////////////////////////////////////////TODO: conceptual mismatch here! we don't have an "old entry", because we ourselves are the entry ;-)
     UNIMPLEMENTED ("propagate binding change to index");
   }
   
@@ -76,14 +132,14 @@ namespace advice {
   void
   AdviceLink::registerRequest()
   {
-    UNIMPLEMENTED ("registrate request with the index");
+    aSys().addRequest (*this);
   }
   
   
   void
   AdviceLink::deregisterRequest()
   {
-    UNIMPLEMENTED ("detach request from index");
+    aSys().removeRequest (*this);
   }
 
 
