@@ -63,9 +63,8 @@
  **       could be fed as parameters to the bound advice. But this extension requires to extend
  **       the simple hash-based match check to an actual unification of the patterns. ///TICKET #615
  ** 
- ** @see configrules.hpp
- ** @see typed-lookup.cpp corresponding implementation
- ** @see typed-id-test.cpp
+ ** @see advice.hpp
+ ** @see advice-binding-pattern-test.cpp
  ** 
  */
 

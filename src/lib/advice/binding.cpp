@@ -23,6 +23,7 @@
 
 #include "lib/advice/binding.hpp"
 #include "lib/symbol.hpp"
+#include "lib/util.hpp"
 
 #include <boost/functional/hash.hpp>
 #include <boost/lexical_cast.hpp>
@@ -30,6 +31,7 @@
 
 
 using lib::Literal;
+using util::isnil;
 
 using boost::regex;
 using boost::smatch;
@@ -102,8 +104,8 @@ namespace advice {
   
   Binding::Binding (Literal spec)
   {
-    REQUIRE (spec);
-    parse_and_append (spec);
+    if (!isnil(spec))
+      parse_and_append (spec);
   }
   
   

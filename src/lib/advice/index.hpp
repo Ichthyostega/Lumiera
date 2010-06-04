@@ -214,12 +214,12 @@ namespace advice {
            overwrite (POA const& oldRef, POA& newElm)
              {
                EIter pos = std::find (elms_.begin(),elms_.end(), oldRef);
-               REQUIRE (pos!=elms_.end(), "Attempt to overwrite an entry which isn't there.");
-               REQUIRE (!contains (newElm), "Duplicate entry");
+               REQUIRE    (pos!=elms_.end(), "Attempt to overwrite an entry which isn't there.");
+               REQUIRE_IF (&oldRef != &newElm, !contains (newElm), "Duplicate entry");
                
                *pos = Entry(newElm);
                
-               ENSURE (!contains (oldRef), "Duplicate entry");
+               REQUIRE_IF (&oldRef != &newElm, !contains (oldRef), "Duplicate entry");
              }
            
            void
