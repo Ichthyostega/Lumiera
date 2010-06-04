@@ -169,14 +169,15 @@ namespace advice {
     : public PointOfAdvice
     {
     protected:
-      void publishProvision (PointOfAdvice*);
-      void discardSolutions ();
+      const PointOfAdvice* publishProvision (PointOfAdvice*);
+      const PointOfAdvice* discardSolutions ();
       void publishRequestBindingChange(HashVal);
       
       void registerRequest();
       void deregisterRequest();
       
       void* getBuffer(size_t);
+      void  releaseBuffer (const void*, size_t);
       
     public:
       explicit
@@ -201,6 +202,7 @@ namespace advice {
    *      Thus each Provision cares for "his" advice and just detaches when going away. Consequently, by default, advice provisions
    *      aren't freed during the lifetime of the application. We'll see if this causes problems. 
    *      
+   * @todo currently leaking buffer storage for all the advice data which isn't explicitly retracted.
    */
   template<class AD>
   class Provision
@@ -210,7 +212,11 @@ namespace advice {
       
       /* == policy definitions == */    ////TODO: extract into policy classes
       
-      void deregistrate() { /* NOP */ }
+      void
+      deregistrate()
+        {
+          TODO ("hand-over deallocation information to the AdviceSystem");
+        }
       
       
     public:
@@ -227,12 +233,15 @@ namespace advice {
       
       void setAdvice (AD const& pieceOfAdvice)
         {
-          publishProvision (storeCopy (pieceOfAdvice));
+          maybe_deallocateOld (
+              publishProvision(
+                  storeCopy (pieceOfAdvice)));
         }
       
       void retractAdvice()
         {
-          discardSolutions ();
+          maybe_deallocateOld(
+              discardSolutions());
         }
       
       void
@@ -244,6 +253,7 @@ namespace advice {
       
     private:
       PointOfAdvice* storeCopy (AD const& advice_given);
+      void maybe_deallocateOld(const PointOfAdvice*);
       void maybe_rePublish ();
     };
   
@@ -283,10 +293,12 @@ namespace advice {
       friend class Provision<AD>;
     };
   
-    
-  /** function to copy advice into an internal buffer,
+  
+  /*  ==== memory management for Provision data ===== */
+  
+  /** function to copy advice into an internal buffer.
       @return type erased pointer to the data holder created
-      @throw  error::External on allocation problems, plus anything
+      @throw  error::Fatal on allocation problems, plus anything
               the advice data may throw during copy construction. */
   template<class AD>
   inline PointOfAdvice*
@@ -297,9 +309,26 @@ namespace advice {
   }
   
   
+  /** @internal assist the AdviceSystem with deallocating buffer storage.
+   *  Problem is we need to know the exact size of the advice value holder,
+   *  which information is available only here, in the fully typed context.
+   *  @note the assumption is that \em any binding created will automatically
+   *        contain a type guard, which ensures the existingEntry passed in here
+   *        originally was allocated by #storeCopy within the same typed context.
+   */
+  template<class AD>
+  inline void
+  Provision<AD>::maybe_deallocateOld (const PointOfAdvice* existingEntry)
+  {
+    typedef ActiveProvision<AD> Holder;
+    if (existingEntry)
+      releaseBuffer (existingEntry, sizeof(Holder));
+  }
+  
+  
   /** @internal in case we've already published this provision,
-   *            we temporarily need a new provision entry, to allow the
-   *            AdviceSystem implementation to rewrite the internal index
+   *  we temporarily need a new provision entry, to allow the
+   *  AdviceSystem implementation to rewrite the internal index
    */
   template<class AD>
   inline void
@@ -309,7 +338,9 @@ namespace advice {
     AdviceProvision* solution = static_cast<AdviceProvision*> (getSolution (*this));
     
     if (solution)    // create copy of the data holder, using the new binding 
-      publishProvision (storeCopy (solution->getAdvice()));
+      maybe_deallocateOld (
+          publishProvision(
+              storeCopy (solution->getAdvice())));
   }
   
 

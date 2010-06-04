@@ -72,14 +72,27 @@ namespace advice {
       We need to manage this internally, as the original advice::Provision
       may go out of scope, while the advice information as such remains valid.
       @note the special twist is the size of the buffer depending on the actual
-            advice type, which we need to erase for tracking all advice provisions
-            and advice requests through an generic index datastructure.
+            advice type, which type information we need to erase for tracking all
+            advice provisions and requests through an generic index datastructure.
       @todo rewrite to use Lumiera's block allocator / memory pool */
   void*
-  AdviceLink::getBuffer(size_t)
+  AdviceLink::getBuffer(size_t siz)
   {
-    UNIMPLEMENTED ("raw allocation and de-allocation of advice holding buffer");
+    try { return new char[siz]; }
+    
+    catch(std::bad_alloc&)
+      {
+        throw error::Fatal("Unable to store Advice due to memory exhaustion");
+      }
   }
+  
+  
+  void
+  AdviceLink::releaseBuffer (const void* buff, size_t)
+  { 
+    delete[] (char*)buff; 
+  }
+
   
   
   /** when the Provision actually sets advice data, this is copied
@@ -88,8 +101,13 @@ namespace advice {
    *  possible matches with existing advice::Request entries.
    *  @param adviceData pointer to the copied data,
    *         actually pointing to an ActiveProvision<AD>
+   *  @return pointer to an superseded old provision entry,
+   *          which the caller then needs to de-allocate.
+   *          The caller is assumed to know the actual type
+   *          and thus the size of the entry to deallocate.
+   *          Returning \c NULL in case no old entry exists. 
    */
-  void
+  const PointOfAdvice*
   AdviceLink::publishProvision (PointOfAdvice* newProvision)
   {
     const PointOfAdvice* previousProvision (getSolution (*this));
@@ -102,7 +120,9 @@ namespace advice {
       aSys().modifyProvision (*previousProvision, *newProvision);
     else
     if (previousProvision && !newProvision)
-      aSys().removeProvision (*previousProvision);  ////////////////////////////TODO: don't we need to release buffer storage here?
+      aSys().removeProvision (*previousProvision);
+    
+    return previousProvision;  // to be deallocated by caller if non-NULL
   }
   
   
@@ -110,14 +130,18 @@ namespace advice {
    *  after removing the provision index entry
    *  we also need to re-process any requests
    *  which happen to match our binding... 
+   *  @return pointer to the existing provision entry,
+   *          to be deallocated by the caller, which
+   *          is assumed to know it's exact type.
    */
-  void
+  const PointOfAdvice*
   AdviceLink::discardSolutions ()
   {
     const PointOfAdvice* existingProvision (getSolution (*this));
     setSolution (this, NULL );
     if (existingProvision)
-      aSys().removeProvision (*existingProvision);  ////////////////////////////TODO: don't we need to release buffer storage here?
+      aSys().removeProvision (*existingProvision);
+    return existingProvision;
   }
   
   
