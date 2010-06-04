@@ -42,7 +42,6 @@ open
   class_ref 166021 // ActiveProvision
   class_ref 164741 // Binding
   class_ref 166277 // Index
-  classinstance_ref 144517 // 
   class_ref 145285 // MediaKind
   
   package_ref 131077 // ConfigQuery

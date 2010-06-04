@@ -171,7 +171,7 @@ namespace advice {
     protected:
       void publishProvision (PointOfAdvice*);
       void discardSolutions ();
-      void publishRequestBindingChange();
+      void publishRequestBindingChange(HashVal);
       
       void registerRequest();
       void deregisterRequest();
@@ -362,9 +362,9 @@ namespace advice {
       void
       defineBinding (Literal topic)
         {
+          HashVal previous_bindingKey (hash_value(*this));
           setBindingPattern (Binding(topic).addTypeGuard<AD>());
-    ////////////////////////////////////////////////////////////////////////////TODO: conceptual mismatch here! we don't have an "old entry", because we ourselves are the entry ;-)
-          publishRequestBindingChange();
+          publishRequestBindingChange (previous_bindingKey);
         }
     };
   

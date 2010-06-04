@@ -58,7 +58,7 @@ end
 relationcanvas 129669 relation_ref 188677 // <association>
   from ref 129157 z 1999 to ref 129285
   no_role_a no_role_b
-  multiplicity_a_pos 275 240 3000 multiplicity_b_pos 237 240 3000
+  multiplicity_a_pos 266 244 3000 multiplicity_b_pos 246 244 3000
 end
 relationcanvas 129925 relation_ref 188933 // <association>
   from ref 128645 z 1999 to ref 129285
@@ -114,6 +114,13 @@ relationcanvas 133125 relation_ref 191109 // <unidirectional association>
   geometry HVr
   from ref 132101 z 1999 to point 444 145
   line 133253 z 1999 to ref 132229
+  no_role_a no_role_b
+  no_multiplicity_a no_multiplicity_b
+end
+relationcanvas 133381 relation_ref 192261 // <dependency>
+  decenter_end 98
+  from ref 129157 z 1999 stereotype "<<create>>" xyz 109 149 3000 to point 163 194
+  line 133765 z 1999 to ref 131461
   no_role_a no_role_b
   no_multiplicity_a no_multiplicity_b
 end

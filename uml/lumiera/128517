@@ -1,6 +1,6 @@
 format 58
 "CommonLib" // CommonLib
-  revision 18
+  revision 19
   modified_by 5 "hiv"
   // class settings
   //class diagram settings
@@ -451,6 +451,15 @@ ${class}::${name} ${(}${)}${const}${volatile} ${throw}${staticnl}
 	
 	
 	
+      end
+
+      classrelation 203141 // <dependency>
+	relation 192261 -_->
+	  stereotype "create"
+	  a package
+	    cpp default "#include in source"
+	    classrelation_ref 203141 // <dependency>
+	  b parent class_ref 166021 // ActiveProvision
       end
     end
 

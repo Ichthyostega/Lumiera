@@ -136,6 +136,8 @@ namespace advice {
    *       to the same memory location of a POA (point of advice).
    *       Thus e.g. #hasProvision means this index holds an entry
    *       pointing to exactly this given data entity.
+   * @note the implementation of modifying a Request entry
+   *       explicitly relies on that definition of equality.
    * @note the diagnostic API is mainly intended for unit testing
    *       and \em not implemented with focus on performance. 
    */
@@ -339,21 +341,26 @@ namespace advice {
           provisionEntries_[key].publish_latest_solution (entry);
         }
       
+      /** @note explicitly relying on the implementation of \c ==
+       *        which checks only the memory location of the Request.
+       *        Thus we can use the already modified Request to find
+       *        the old entry within the index pointing to this Request.
+       *  @param oKey the binding hash value prior to modification
+       */      
       void
-      modifyRequest (POA const& oldRef, POA& newEntry)
+      modifyRequest (HashVal oKey, POA& entry)
         {
-          HashVal oKey (hash_value(oldRef));
-          HashVal nKey (hash_value(newEntry));
+          HashVal nKey (hash_value(entry));
           if (oKey != nKey)
             {
-              requestEntries_[oKey].remove (oldRef);
-              requestEntries_[nKey].append (newEntry);
+              requestEntries_[oKey].remove (entry);
+              requestEntries_[nKey].append (entry);
             }
           else
-            {
-              requestEntries_[nKey].overwrite (oldRef, newEntry);
+            { // rewrite Entry to include the new binding
+              requestEntries_[nKey].overwrite (entry, entry);
             }
-          provisionEntries_[nKey].publish_latest_solution (newEntry);
+          provisionEntries_[nKey].publish_latest_solution (entry);
         }
       
       void

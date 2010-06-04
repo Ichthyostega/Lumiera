@@ -122,10 +122,9 @@ namespace advice {
   
   
   void
-  AdviceLink::publishRequestBindingChange()
+  AdviceLink::publishRequestBindingChange(HashVal previous_bindingKey)
   {
-    ////////////////////////////////////////////////////////////////////////////TODO: conceptual mismatch here! we don't have an "old entry", because we ourselves are the entry ;-)
-    UNIMPLEMENTED ("propagate binding change to index");
+    aSys().modifyRequest(previous_bindingKey, *this);
   }
   
   

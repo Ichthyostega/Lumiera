@@ -61,6 +61,12 @@ namespace test {
             return pattern_.matches (Binding(refSpec));
           }
         
+        void
+        changeBinding (Literal newSpec)
+          {
+            pattern_ = Binding(newSpec).buildMatcher();
+          }
+        
         
         /* == Adapter interface for use within the Index == */
         
@@ -342,19 +348,22 @@ namespace test {
           CHECK (_hasDefault  (3));
           CHECK (_hasDefault  (5));
           
-          CHECK (!idx.hasRequest (_entry (2,"cat")));
+          HashVal dogHash (hash_value (_entry (5,"dog")));
+          
           CHECK ( idx.hasRequest (_entry (5,"dog")));
+          _entry (5,"dog").changeBinding("cat");       // transmogrify existing request into cat-request
+          CHECK (_hasDefault  (5));                    // of course this didn't change the solution
+          CHECK (!idx.hasRequest (_entry (5,"cat")));  // can't find it anymore because of changed binding           
           
-          idx.modifyRequest (_entry (5,"dog"), _entry (2,"cat"));
+          idx.modifyRequest (dogHash, _entry (5,"cat"));
           
-          CHECK ( idx.hasRequest (_entry (2,"cat")));
-          CHECK (!idx.hasRequest (_entry (5,"dog")));
+          CHECK ( idx.hasRequest (_entry (5,"cat")));
           CHECK (p_cnt == idx.provision_count());
           CHECK (r_cnt == idx.request_count());
           CHECK (_hasSolution (1,7));
           CHECK (_hasSolution (6,7));
           CHECK (_hasDefault  (3));
-          CHECK (_hasSolution (2,7));                  // automatically got the current cat solution
+          CHECK (_hasSolution (5,7));                  // automatically got the current cat solution
         }
       
       
@@ -365,7 +374,7 @@ namespace test {
           uint r_cnt = idx.request_count();
           uint p_cnt = idx.provision_count();
           CHECK (_hasSolution (1,7));
-          CHECK (_hasSolution (2,7));
+          CHECK (_hasSolution (5,7));
           CHECK (_hasSolution (6,7));
           CHECK (_hasDefault  (3));
           
@@ -378,7 +387,7 @@ namespace test {
           CHECK (p_cnt == idx.provision_count());
           CHECK (r_cnt == idx.request_count());
           CHECK (_hasDefault  (1));
-          CHECK (_hasDefault  (2));
+          CHECK (_hasDefault  (5));
           CHECK (_hasDefault  (6));
           CHECK (_hasSolution (3,8));
           
@@ -388,7 +397,7 @@ namespace test {
           CHECK (idx.hasProvision (_entry (7,"cat")));
           CHECK (idx.hasProvision (_entry (9,"cat")));
           CHECK (_hasSolution (1,9));                  // all cats got the second cat solution
-          CHECK (_hasSolution (2,9));
+          CHECK (_hasSolution (5,9));
           CHECK (_hasSolution (6,9));
           CHECK (_hasSolution (3,8));                  // the dog is unaffected
           
@@ -399,10 +408,10 @@ namespace test {
           
           CHECK (!idx.hasProvision (_entry (7,"cat")));
           CHECK ( idx.hasProvision (_entry (4,"dog")));
-          CHECK (_hasSolution (1,9));                  // cats unaffected, because we're changing a shadowed cat solution
-          CHECK (_hasSolution (2,9));
+          CHECK (_hasSolution (1,9));                  // cats unaffected, because we're changing a shadowed cat provision
+          CHECK (_hasSolution (5,9));
           CHECK (_hasSolution (6,9));
-          CHECK (_hasSolution (3,4));                  // but the dog got switched to the transmogrified-into-dog solution,
+          CHECK (_hasSolution (3,4));                  // but the dog got switched to the replaced-by-dog solution,
                                                        // because it was added later than the existing solution 8
           
           // a switch within the same cluster ("cat")
@@ -411,7 +420,7 @@ namespace test {
           CHECK ( idx.hasProvision (_entry (7,"cat")));
           CHECK ( idx.hasProvision (_entry (4,"dog")));
           CHECK (_hasSolution (1,7));                  // because cat-7 is newly added, it shadows the older cat-9
-          CHECK (_hasSolution (2,7));
+          CHECK (_hasSolution (5,7));
           CHECK (_hasSolution (6,7));
           CHECK (_hasSolution (3,4));                  // but dog remains dog
           
