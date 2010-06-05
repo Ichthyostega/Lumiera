@@ -18,7 +18,7 @@ return: 0
 END
 
 
-PLANNED "Advice collaboration (basics)" AdviceBasics_test <<END
+TEST "Advice collaboration (basics)" AdviceBasics_test <<END
 return: 0
 END
 
@@ -57,7 +57,7 @@ return: 0
 END
 
 
-PLANNED "Advice index implementation" AdviceIndex_test <<END
+TEST "Advice index implementation" AdviceIndex_test <<END
 return: 0
 END
 

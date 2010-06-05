@@ -540,7 +540,7 @@ In a more elaborate scheme, the advised entity could provide a signal to be invo
 &amp;rarr; AdviceImplementation
 </pre>
 </div>
-<div title="AdviceImplementation" modifier="Ichthyostega" modified="201006041639" created="201004100056" tags="impl draft img" changecount="57">
+<div title="AdviceImplementation" modifier="Ichthyostega" modified="201006050152" created="201004100056" tags="impl draft img" changecount="58">
 <pre>[&lt;img[Advice solution|uml/fig141573.png]]
 
 
@@ -580,6 +580,13 @@ Aside from the index, handling of the advice provisions turns out to be tricky.
 * but as this simple solution contradicts the general advice semantics in a subtle way (see previous paragraph), we could insist on really re-capturing and retracting previous advice automatically on each new advice provision or modification. In this case, due to the requirement of thread safety, each addition, binding modification, placing of new advice or retraction would require to do an index search to find an existing provision with equivalent binding (same binding definition, not just a matching binding pattern). As a later provision could stomp upon an existing provision without the original advisor noticing this, we can't use the internal references anymore; we really need to search each time and also need a global lock during the modification transaction.
 * an attempt to reduce this considerable overhead would be to use an back-link from the provision as added to the system to the original source (the ~AdviceProvision owned by the advisor). On modification, this original source would be notified and thus detached. Of course this is tricky to implement correctly, and also requires locking.
 The decision for the initial implementation is to use the first variant and just accept the slightly imprecise semantics.
+When copying a Provision, the hidden link to existing advice data is //not shared.//
+
+!!!!de-allocation of advice data
+It is desirable that the dtors of each piece of advice data be called eventually. But ensuring this reliably is tricky, because advice 
+data may be of various types and is added to the system to remain available, even after the original {{{advice::Provision}}} went out of scope. Moreover, the implementation decision was //not//&amp;nbsp; to employ a vtable for the advice collaborators and data holders, so we're bound to invoke the dtor with the correct specific type.
+There are some special cases when de-allocation happens while the original provision is still alive (new advice, changed binding, retracting). But in any other case, responsibility for de-allocation has to be taken by the ~AdviceSystem, which unfortunately can't handle the specific type information. Thus the original provision needs to provide a deleter function, and there is no way to avoid storing a function pointer to this deleter within the ~AdviceSystem, together with the advice data holder.
+It seems reasonable to create this deleter right away and not to share the link to advice data, when copying a provision, to keep responsibilities straight. {{red{Question: does this even work?? }}} to be verified: does the address of the advice data buffer really determine alone what is found as &quot;existing&quot; provision?
 
 !!!lifecycle considerations
 Behind the scenes, hidden within the {{{advice.cpp}}} implementation file, the ~AdviceSystem is maintained as singleton. According to a general lifecycle policy within Lumiera, no significant logic is allowed to execute in the shutdown phase of the application, once the {{{main()}}} has exited. Thus, any advice related operations might throw {{{error::Logic}}} after that point. The {{{~AdviceSystem()}}} also is a good place to free any buffers holding incorporated advice data, after having freed the index datastructure referring to these buffer storage, of course.

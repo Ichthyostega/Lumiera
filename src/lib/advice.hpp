@@ -32,7 +32,7 @@
  ** Lumiera. Creating this abstraction was partially inspired by aspect oriented programming, especially
  ** the idea of cross-cutting the primary dependency hierarchy. Another source of inspiration where the
  ** various incarnations of properties with dynamic binding. For defining the actual binding, we rely
- ** on predicate notation and matching (later unification) as known from rule based systems.
+ ** on predicate notation and matching (planned: unification) as known from rule based systems.
  ** 
  ** <b>Definition</b>: Advice is an optional, mediated collaboration between entities taking on
  ** the roles of advisor and advised, thereby passing a custom piece of advice data, managed by
@@ -53,7 +53,7 @@
  ** advisor need to share knowledge about the meaning of this advice data. The actual advice collaboration
  ** happens at a \em point-of-advice, which needs to be derived first. To this end, the advised puts up an
  ** \em request by providing his \em binding, which is a pattern for matching. An entity about to give advice
- ** opens possible \advice \em channels by putting up an advisor binding, which similarly is a pattern. The
+ ** opens possible advice \em channels by putting up an advisor binding, which similarly is a pattern. The
  ** advice \em system as mediator resolves both sides, by matching (which in the most general case could be
  ** an unification). This process creates an advice point \em solution -- allowing the advisor to fed the
  ** piece of advice into the advice channel, causing it to be placed into the point of advice. After passing
@@ -64,11 +64,13 @@
  ** form of advice available, thereby completely decoupling the advised entity from the timings related
  ** to this collaboration.
  ** 
- ** TODO WIP-WIP
- ** 
- ** @note as of 4/2010 this is an experimental setup and implemented just enough to work out
- **       the interfaces. Ichthyo expects this collaboration service to play a central role
- **       at various places within proc-layer.
+ ** @note as of 6/2010 this is an experimental setup and implemented just enough to work out
+ **       the interfaces and gain practical usage experiences. Ichthyo expects this collaboration
+ **       service to play a central role at various places within proc-layer.
+ ** @todo allow variables in binding patterns
+ ** @todo use the lumiera MPool instead of heap allocations
+ ** @todo consider to provide variations of the basic behaviour by policy classes
+ ** @todo the implementation is generic/defensive, and could be improved and optimised
  ** 
  ** @see configrules.hpp
  ** @see typed-lookup.cpp corresponding implementation
@@ -82,20 +84,17 @@
 
 
 #include "lib/error.hpp"
-//#include "proc/asset.hpp"
-//#include "proc/asset/struct-scheme.hpp"
-//#include "lib/hash-indexed.hpp"
-//#include "lib/util.hpp"
 #include "lib/null-value.hpp"
-#include "lib/symbol.hpp"
 #include "lib/advice/binding.hpp"
+#include "lib/symbol.hpp"
+#include "lib/util.hpp"
 
-//#include <boost/operators.hpp>
-//#include <tr1/memory>
-//#include <iostream>
-//#include <string>
+#include <boost/noncopyable.hpp>
 
-namespace lib    {  ///////TODO: how to arrange the namespaces best?
+using util::isSameObject;
+
+
+namespace lib    {
 namespace advice {
   
   /**
@@ -105,12 +104,12 @@ namespace advice {
     {
       Binding::Matcher pattern_;
       PointOfAdvice* resolution_;
-
+      
     protected:
       /** define or re-define the binding, which
        *  specifically labels this attachment to the advice system.
        *  @note issuing this on an existing connection is equivalent
-       *        to re-connecting with the new binding.  
+       *        to re-connecting with the new binding.
        */
       void setBindingPattern (Binding const& binding)
         {
@@ -187,7 +186,7 @@ namespace advice {
       
       // using default copy/assignment
     };
-
+  
   
   
   
@@ -196,12 +195,6 @@ namespace advice {
    * Access point for the advising entity (server).
    * TODO type comment
    * 
-   * TODO planned implementation of memory handling: see notes in TiddlyWiki
-   *      Basically I'll use this->resolution_ to point to the copy incorporated into the advice system.
-   *      This is some kind of "unofficial" ownership and slightly incorrect, but seems the most straight forward implementation.
-   *      Thus each Provision cares for "his" advice and just detaches when going away. Consequently, by default, advice provisions
-   *      aren't freed during the lifetime of the application. We'll see if this causes problems. 
-   *      
    * @todo currently leaking buffer storage for all the advice data which isn't explicitly retracted.
    */
   template<class AD>
@@ -228,6 +221,22 @@ namespace advice {
      ~Provision()
         {
           this->deregistrate();
+        }
+      
+      Provision (Provision const& o)
+        : AdviceLink(o)
+        {
+          setSolution (this, NULL );
+        }
+      
+      Provision&
+      operator= (Provision const& o)
+        {
+          if (!isSameObject(*this, o))
+            {
+              AdviceLink::operator= (o);
+              setSolution (this, NULL );
+            }
         }
       
       
@@ -267,11 +276,12 @@ namespace advice {
    * 
    * @note the ptr-to-solution in the inherited PointOfAdvice
    *       is currently (5/10) not used, because this \em is
-   *       already the solution. 
+   *       already the solution.
    */
   template<class AD>
   class ActiveProvision
     : public PointOfAdvice
+    , boost::noncopyable
     {
       AD theAdvice_;
       
@@ -343,12 +353,12 @@ namespace advice {
               storeCopy (solution->getAdvice())));
   }
   
-
   
-    
-    
   
-    
+  
+  
+  
+  
   /**
    * Access point for the advised entity (client).
    * TODO type comment
@@ -362,7 +372,11 @@ namespace advice {
       
       /* == policy definitions == */    ////TODO: extract into policy classes
       
-      AD const& handleMissingSolution()  const { return NullValue<AD>::get(); }  ///< @warning might segfault when used during shutdown
+      AD const&
+      handleMissingSolution()  const  ///< @warning might segfault when used during shutdown
+        {
+          return NullValue<AD>::get();
+        }
       
       
     public:
@@ -377,6 +391,8 @@ namespace advice {
         {
           deregisterRequest();
         }
+      
+      // copying Requests is allowed, using default
       
       
       AD const&
@@ -399,7 +415,7 @@ namespace advice {
         }
     };
   
-
+  
   
   
   

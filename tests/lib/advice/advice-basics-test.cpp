@@ -22,35 +22,11 @@
 
 
 #include "lib/test/run.hpp"
-//#include "lib/test/test-helper.hpp"
-
 #include "lib/advice.hpp"
-//#include "lib/p.hpp"
-//#include "proc/assetmanager.hpp"
-//#include "proc/asset/inventory.hpp"
-//#include "proc/mobject/session/clip.hpp"
-//#include "proc/mobject/session/track.hpp"
-//#include "lib/meta/trait-special.hpp"
-//#include "lib/util-foreach.hpp"
-//#include "lib/symbol.hpp"
 
-//#include <iostream>
-//#include <string>
 #include <cstdlib>
 
-//using lib::test::showSizeof;
-//using lib::test::randStr;
-//using util::isSameObject;
-//using util::and_all;
-//using util::for_each;
-//using util::isnil;
-//using lib::Literal;
-//using lib::Symbol;
-//using lumiera::P;
-//using std::string;
 using std::rand;
-//using std::cout;
-//using std::endl;
 
 
 
@@ -58,7 +34,8 @@ namespace lib {
 namespace advice {
 namespace test {
   
-  namespace {
+  namespace { // Some test classes using the advice system...
+    
     
     class TheAdvised
       : private advice::Request<int>
@@ -108,7 +85,7 @@ namespace test {
         void
         clear()
           {
-            link_.retractAdvice(); 
+            link_.retractAdvice();
           }
       };
   }
@@ -121,8 +98,6 @@ namespace test {
    *       This test demonstrates the basic expected behaviour in a simple but
    *       typical situation: two unrelated entities exchange a piece of data
    *       just by referring to a symbolic topic ID.
-   * 
-   * @todo partially unimplemented and thus commented out ////////////////////TICKET #605
    * 
    * @see advice.hpp
    * @see AdviceSituations_test
@@ -202,8 +177,8 @@ namespace test {
       void
       overwriting_and_retracting()
         {
-          TheAdvised client1 ("topic1");
-          TheAdvised client2 ("topic2");
+          TheAdvised client1 ("slot1");
+          TheAdvised client2 ("slot2");
           CHECK (client1.got(0));
           CHECK (client2.got(0));
           
@@ -211,7 +186,7 @@ namespace test {
           int r2 (1 + (rand() % 1000));
           
           {
-            TheAdvisor server("topic1()");
+            TheAdvisor server("slot1()");
             CHECK (client1.got(0));
             CHECK (client2.got(0));
             
@@ -223,7 +198,7 @@ namespace test {
             CHECK (client1.got(r2));
             CHECK (client2.got(0));
             
-            server.rebind("topic2()");
+            server.rebind("slot2()");
             CHECK (client1.got(0));
             CHECK (client2.got(r2));
           }
@@ -232,7 +207,7 @@ namespace test {
           CHECK (client2.got(r2));
           
           {
-            TheAdvisor anotherServer("topic1");
+            TheAdvisor anotherServer("slot1");
             CHECK (client1.got(0));
             CHECK (client2.got(r2));
             
@@ -245,7 +220,7 @@ namespace test {
           CHECK (client2.got(r2));
           
           {
-            TheAdvisor yetAnotherServer("topic2");
+            TheAdvisor yetAnotherServer("slot2");
             CHECK (client1.got(r1));
             CHECK (client2.got(r2));
             
@@ -253,32 +228,32 @@ namespace test {
             CHECK (client1.got(r1));
             CHECK (client2.got(r1));
             
-            yetAnotherServer.rebind("topic1");
+            yetAnotherServer.rebind("slot1");
             CHECK (client1.got(r1));
-            CHECK (client2.got(0));
-            
+            CHECK (client2.got(r2));          // ideally it should be 0, but actually we uncover the old provision
+                                              // the decision was to err for a simple implementation         /////////TICKET #623
             yetAnotherServer.clear();
-            CHECK (client1.got(0));
-            CHECK (client2.got(0));
+            CHECK (client1.got(r1));          // should be 0, but again the existing provision is uncovered
+            CHECK (client2.got(r2));          // should be 0
             
-            yetAnotherServer.rebind("topic2");
-            CHECK (client1.got(0));
-            CHECK (client2.got(0));
+            yetAnotherServer.rebind("slot2"); // no effect, because it doesn't provide advice anymore
+            CHECK (client1.got(r1));
+            CHECK (client2.got(r2));
             
-            yetAnotherServer.publish (r1);
-            CHECK (client1.got(0));
-            CHECK (client2.got(r1));
+            yetAnotherServer.publish (5);
+            CHECK (client1.got(r1));
+            CHECK (client2.got(5));
           }
           
-          CHECK (client1.got(0));
-          CHECK (client2.got(r1));
-          
-          client1.rebind("topic2");
           CHECK (client1.got(r1));
-          CHECK (client2.got(r1));
+          CHECK (client2.got(5));
           
-          client2.rebind("nonExistingTopic");
-          CHECK (client1.got(r1));
+          client1.rebind("slot2");
+          CHECK (client1.got(5));
+          CHECK (client2.got(5));
+          
+          client2.rebind("nonExistingSlot");
+          CHECK (client1.got(5));
           CHECK (client2.got(0));
         }
     };
