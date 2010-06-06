@@ -171,8 +171,8 @@ namespace advice {
   const PointOfAdvice*
   AdviceLink::publishProvision (PointOfAdvice* newProvision)
   {
-    const PointOfAdvice* previousProvision (getSolution (*this));
-    setSolution (this, newProvision);
+    const PointOfAdvice* previousProvision (getSolution());
+    this->setSolution (newProvision);
     
     if (!previousProvision && newProvision)
       aSys().addProvision (*newProvision);
@@ -198,8 +198,8 @@ namespace advice {
   const PointOfAdvice*
   AdviceLink::discardSolutions ()
   {
-    const PointOfAdvice* existingProvision (getSolution (*this));
-    setSolution (this, NULL );
+    const PointOfAdvice* existingProvision (getSolution());
+    this->setSolution ( NULL );
     if (existingProvision)
       aSys().removeProvision (*existingProvision);
     return existingProvision;

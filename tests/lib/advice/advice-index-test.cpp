@@ -70,29 +70,14 @@ namespace test {
         
         /* == Adapter interface for use within the Index == */
         
+        void setSolution (TestPOA* p)        { solution_ = p;   }
+        const TestPOA*  getSolution () const { return solution_;}
+        Binding::Matcher getMatcher () const { return pattern_; }
+        
         friend HashVal
         hash_value (TestPOA const& entry)
         {
           return hash_value (entry.pattern_);
-        }
-        
-        friend const Binding::Matcher
-        getMatcher (TestPOA const& entry)
-        {
-          return entry.pattern_;
-        }
-        
-        friend const TestPOA*
-        getSolution (TestPOA const& entry)
-        {
-          return entry.solution_;
-        }
-        
-        friend void
-        setSolution (TestPOA* entry, TestPOA* solution =0)
-        {
-          REQUIRE (entry);
-          entry->solution_ = solution;
         }
       };
     

@@ -128,30 +128,29 @@ namespace advice {
       
       
       /* == Adapter interface for use within the Index == */
+      
+      void
+      setSolution (PointOfAdvice* solution =0)
+        {
+          resolution_ = solution;
+        }
         
+      const PointOfAdvice*
+      getSolution ()  const
+        {
+          return resolution_;
+        }
+      
+      Binding::Matcher
+      getMatcher ()  const
+        {
+          return pattern_;
+        }
+      
       friend HashVal
       hash_value (PointOfAdvice const& entry)
       {
         return hash_value (entry.pattern_);
-      }
-      
-      friend const Binding::Matcher
-      getMatcher (PointOfAdvice const& entry)
-      {
-        return entry.pattern_;
-      }
-      
-      friend const PointOfAdvice*
-      getSolution (PointOfAdvice const& entry)
-      {
-        return entry.resolution_;
-      }
-      
-      friend void
-      setSolution (PointOfAdvice* entry, PointOfAdvice* solution =0)
-      {
-        REQUIRE (entry);
-        entry->resolution_ = solution;
       }
     };
   
@@ -226,7 +225,7 @@ namespace advice {
       Provision (Provision const& o)
         : AdviceLink(o)
         {
-          setSolution (this, NULL );
+          setSolution ( NULL );
         }
       
       Provision&
@@ -235,7 +234,7 @@ namespace advice {
           if (!isSameObject(*this, o))
             {
               AdviceLink::operator= (o);
-              setSolution (this, NULL );
+              setSolution ( NULL );
             }
         }
       
@@ -297,7 +296,7 @@ namespace advice {
         : PointOfAdvice(refPoint)
         , theAdvice_(advice_given)
         {
-          setSolution (this, this); // not used currently (5/10)
+          this->setSolution (this); // not used currently (5/10)
         }
       
       friend class Provision<AD>;
@@ -345,7 +344,7 @@ namespace advice {
   Provision<AD>::maybe_rePublish ()
   {
     typedef const ActiveProvision<AD> AdviceProvision;
-    AdviceProvision* solution = static_cast<AdviceProvision*> (getSolution (*this));
+    AdviceProvision* solution = static_cast<AdviceProvision*> (getSolution());
     
     if (solution)    // create copy of the data holder, using the new binding 
       maybe_deallocateOld (
@@ -398,7 +397,7 @@ namespace advice {
       AD const&
       getAdvice()  const
         {
-          AdviceProvision* solution = static_cast<AdviceProvision*> (getSolution (*this));
+          AdviceProvision* solution = static_cast<AdviceProvision*> (this->getSolution());
           if (!solution)
             return this->handleMissingSolution();
           else

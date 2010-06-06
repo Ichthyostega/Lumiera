@@ -31,12 +31,12 @@
  ** This header is intended to be incorporated as part of the advice system implementation (advice.cpp).
  ** It is \em not usable as an external interface. But it is written in a rather self-contained manner,
  ** in order to be testable in isolation. To this end, the actual PointOfAdvice entities being organised
- ** by this index datastructure remain abstract (defined as template parameter). As link for dealing 
- ** with those entities, we employ free functions to be picked up by ADL
+ ** by this index datastructure remain abstract (defined as template parameter), and are only manipulated
+ ** through the following functions:
  ** - \c hash_value(POA)
- ** - \c getMatcher(POA)
- ** - \c getSolution(POA)
- ** - \c setSolution(POA,solution)
+ ** - \c POA::getMatcher()
+ ** - \c POA::getSolution()
+ ** - \c POA::setSolution(solution*)
  ** 
  ** \par implementation notes
  ** The advice binding index is implemented by two hashtables holding Binding::Matcher entries.
@@ -129,7 +129,7 @@ namespace advice {
    * the index allows to add, modify and remove entities of these
    * two kinds. Each of these mutating operations immediately
    * re-computes the advice solutions and publishes the results
-   * by invoking the free function \c setSolution(POA) for the
+   * by invoking the \c setSolution() function on the
    * corresponding PointOfAdvice entity.
    * 
    * @note element \em identity is defined in terms of pointing 
@@ -159,7 +159,7 @@ namespace advice {
         {
           explicit
           Entry (POA& elm)
-            : pair<Binding::Matcher, POA*> (getMatcher(elm), &elm)
+            : pair<Binding::Matcher, POA*> (elm.getMatcher(), &elm)
             { }
           
           // using default-copy, thus assuming copy is NO_THROW
@@ -263,7 +263,7 @@ namespace advice {
           find_latest_solution (POA& requestElm)
             {
               typedef typename EntryList::reverse_iterator RIter;
-              Binding::Matcher pattern (getMatcher (requestElm));
+              Binding::Matcher pattern (requestElm.getMatcher());
               for (RIter ii=this->elms_.rbegin();
                    ii!=this->elms_.rend();
                    ++ii )
@@ -280,9 +280,9 @@ namespace advice {
               if (solution)
                  // found the most recent advice provision satisfying the (new) request
                 //  thus publish this new advice solution into the request object
-                setSolution (&requestElm, solution);
+                requestElm.setSolution (solution);
               else
-                setSolution (&requestElm, NULL );
+                requestElm.setSolution ( NULL );
                 //  report "no solution" which causes a default solution to be used
             }
         };
@@ -293,20 +293,20 @@ namespace advice {
           void
           publish_all_solutions (POA& provisionElm)
             {
-              Binding::Matcher pattern (getMatcher (provisionElm));
+              Binding::Matcher pattern (provisionElm.getMatcher());
               for (EIter ii=this->elms_.begin();
                    ii!=this->elms_.end();
                    ++ii )
                 if (pattern.matches (ii->first))
                    // the given (new) advice provision satisfies this request
                   //  thus publish this new advice solution into the request object
-                  setSolution (ii->second, &provisionElm);
+                  ii->second->setSolution (&provisionElm);
             }
           
           void
           retract_all_solutions (POA const& oldProv, ProvisionCluster& possibleReplacementSolutions)
             {
-              Binding::Matcher pattern (getMatcher (oldProv));
+              Binding::Matcher pattern (oldProv.getMatcher());
               for (EIter ii=this->elms_.begin();
                    ii!=this->elms_.end();
                    ++ii )
@@ -319,13 +319,13 @@ namespace advice {
           void
           rewrite_all_solutions (POA const& oldProv, POA& newProv, ProvisionCluster& possibleReplacementSolutions)
             {
-              Binding::Matcher oldPattern (getMatcher (oldProv));
-              Binding::Matcher newPattern (getMatcher (newProv));
+              Binding::Matcher oldPattern (oldProv.getMatcher());
+              Binding::Matcher newPattern (newProv.getMatcher ());
               for (EIter ii=this->elms_.begin();
                    ii!=this->elms_.end();
                    ++ii )
                 if (newPattern.matches (ii->first))
-                  setSolution (ii->second, &newProv);
+                  ii->second->setSolution (&newProv);
                 else
                 if (oldPattern.matches (ii->first))
                   possibleReplacementSolutions.publish_latest_solution (*(ii->second));
@@ -577,11 +577,11 @@ namespace advice {
   {
     verify_Entry (e,hash);
     POA& request = *(e.second);
-    const POA* solution (getSolution (request));
+    const POA* solution (request.getSolution());
     if (solution && hasProvision(*solution))
       {
         POA* currentSolution = provisionEntries_[hash].find_latest_solution (request); 
-        VERIFY (e.first.matches (getMatcher(*solution)), "stored advice solution not supported by binding match");
+        VERIFY (e.first.matches (solution->getMatcher()),"stored advice solution not supported by binding match");
         VERIFY (bool(currentSolution),                   "unable to reproduce stored solution with the current provisions")
         VERIFY (solution == currentSolution,             "stored advice solution isn't the topmost solution for this request")
       }
