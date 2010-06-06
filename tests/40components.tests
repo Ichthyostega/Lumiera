@@ -226,6 +226,11 @@ return: 0
 END
 
 
+PLANNED "Deleter function collection" DelStash_test <<END
+return: 0
+END
+
+
 TEST "Duck typing support" DuckDetector_test <<END
 out: HasNested_Core<PropperGander>	 : Yes
 out: HasNested_Core<Propaganda>	 : No
