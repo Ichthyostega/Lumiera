@@ -55,6 +55,8 @@
 
 namespace lib {
   
+  using boost::disable_if_c;
+  using boost::is_same;
   
   /**
    * Manage a collection of deleter functions.
@@ -94,6 +96,12 @@ namespace lib {
           
           bool operator== (const void* target)  const { return target_ == target; }
           bool operator!= (const void* target)  const { return target_ != target; }
+          
+          bool
+          isActive()  const
+            {
+              return bool(target_);
+            }
         };
       
       
@@ -125,24 +133,32 @@ namespace lib {
       size_t
       size ()  const
         {
-          return killers_.size();
+          size_t activeEntries = 0;
+          size_t i = killers_.size();
+          while (i)
+            if (killers_[--i].isActive())
+              ++activeEntries;
+          return activeEntries;
         }
       
       
-#define __DONT_USE_THIS_OVERLOAD_FOR_VOID_POINTER_ typename boost::disable_if<boost::is_same<TY,void> >::type* =0
+#define __DONT_USE_THIS_OVERLOAD_FOR_VOID_POINTER_      \
+          typename disable_if_c< is_same<TY,void>::value \
+                               ||is_same<TY,void*>::value>::type* =0
       
       
       template<typename TY>
       void
       manage (TY* obj,  __DONT_USE_THIS_OVERLOAD_FOR_VOID_POINTER_)
         {
+          if (!obj) return;
           REQUIRE (!isRegistered (obj));
           killers_.push_back (Killer (how_to_kill<TY>, obj));
         }
       
       template<typename TY>
       void
-      manage (TY& obj)
+      manage (TY& obj,  __DONT_USE_THIS_OVERLOAD_FOR_VOID_POINTER_)
         {
           REQUIRE (!isRegistered (&obj));
           killers_.push_back (Killer (how_to_kill<TY>, &obj));
@@ -152,6 +168,7 @@ namespace lib {
       void
       manage (void *obj)
         {
+          if (!obj) return;
           REQUIRE (!isRegistered (obj));
           killers_.push_back (Killer (how_to_kill<TY>, obj));
         }
@@ -175,11 +192,9 @@ namespace lib {
       void
       killAll ()
         {
-          size_t i = size();
+          size_t i = killers_.size();
           while (i)
-            {
-              killers_[i].trigger();
-            }
+            killers_[--i].trigger();
         }
       
       

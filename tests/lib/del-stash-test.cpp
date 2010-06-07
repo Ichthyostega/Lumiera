@@ -22,10 +22,8 @@
 
 
 #include "lib/test/run.hpp"
-
 #include "lib/del-stash.hpp"
 
-#include <tr1/functional>
 #include <cstdlib>
 
 
@@ -33,14 +31,13 @@
 namespace lib {
 namespace test{
   
-  using std::tr1::function;
   using std::rand;
   
   
   
   namespace { // probe victims
     
-    ulong MAX_MASS = 200;  // number of victims for mass kill
+    ulong MAX_MASS = 200;  // number of victims to kill at once
     
     ulong checksum = 0;
     
@@ -73,12 +70,20 @@ namespace test{
       };
     
     
-    template<uint i>
-    Probe<i>*
+    template<uint x>
+    inline Probe<x>*
     makeViktim ()
     {
-      return new Probe<i>();
+      return new Probe<x>();
     }
+    
+    template<uint x>
+    inline void
+    feedViktim (DelStash& killer)
+      {
+        killer.manage (new Probe<x>());
+      }
+    
     
   }//(End) test data
   
@@ -88,7 +93,11 @@ namespace test{
   /****************************************************************************
    * @test create a bunch of objects with varying type and size, memorising
    *       how to kill them properly. Verify everyone is dead after mass-kill.
-   *       
+   *       Use a checksum not only to verify the number of objects created and
+   *       destroyed, but also the individual (random) contents of the data
+   *       within the objects, to ensure that the correct destructor
+   *       actually is invoked for each type.
+   * 
    * @see lib::DelStash
    */
   class DelStash_test : public Test
@@ -130,8 +139,8 @@ namespace test{
           killer.kill (p);
           CHECK (1 == killer.size());
           
-          killer.kill (p);            // ignores spurious kill requests
-          CHECK (1 == killer.size());
+          killer.kill (p);
+          CHECK (1 == killer.size()); // spurious kill requests ignored
           
           killer.kill (v);
           CHECK (0 == killer.size());
@@ -142,15 +151,14 @@ namespace test{
       void
       feedViktims (DelStash& killer)
         {
-          function<void*(void)> builder[5];
-          builder[0] = makeViktim<12>;
-          builder[1] = makeViktim<23>;
-          builder[2] = makeViktim<34>;
-          builder[3] = makeViktim<45>;
-          builder[4] = makeViktim<56>;
-          
           for (uint i=1; i <= MAX_MASS; ++i)
-            killer.manage (builder[i % 5]());
+            switch (i% 5) {
+              case 0: feedViktim<12> (killer); break;
+              case 1: feedViktim<23> (killer); break;
+              case 2: feedViktim<34> (killer); break;
+              case 3: feedViktim<45> (killer); break;
+              case 4: feedViktim<56> (killer); break;
+            }
         }
       
       
@@ -181,7 +189,7 @@ namespace test{
             CHECK (0 == checksum);
             
             feedViktims (killer);
-            void * individuum = makeViktim<444>();
+            Probe<444> * individuum = makeViktim<444>();
             killer.manage (individuum);
             feedViktims (killer);
             killer.manage (makeViktim<5555>());

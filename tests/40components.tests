@@ -226,7 +226,7 @@ return: 0
 END
 
 
-PLANNED "Deleter function collection" DelStash_test <<END
+TEST "Deleter function collection" DelStash_test <<END
 return: 0
 END
 
