@@ -46,35 +46,68 @@
 
 #include "lib/error.hpp"
 
-//#include <functional>
-//#include <boost/functional/hash.hpp>      /////TODO better push the hash implementation into a cpp file (and btw, do it more seriously!)
-
-//#include <iostream>
-//#include <string>
+#include <vector>
+#include <algorithm>
 #include <boost/noncopyable.hpp>
+#include <boost/utility/enable_if.hpp>
+#include <boost/type_traits/is_same.hpp>
 
 
 namespace lib {
-
-//  using boost::hash_value;
   
   
-  /** 
+  /**
    * Manage a collection of deleter functions.
    * This component can memorise addresses and deleter functions
    * and trigger deletion of single objects, or delete all objects
    * on demand or automatically on shutdown.
+   * @warning clients must not add a given object more than once
    */
   class DelStash
     : boost::noncopyable
     {
+      /**
+       * @internal entry to store target object
+       * and the actual deleter function to use
+       */
+      class Killer
+        {
+          typedef void KillFun(void*);
+          void* target_;
+          KillFun* killIt_;
+          
+        public:
+          Killer(KillFun* f, void* t)
+            : target_(t)
+            , killIt_(f)
+            {
+              REQUIRE(f);
+            }
+          
+          void
+          trigger ()
+            {
+              if (target_)
+                killIt_(target_);
+              target_ = NULL; // remember kill
+            }
+          
+          bool operator== (const void* target)  const { return target_ == target; }
+          bool operator!= (const void* target)  const { return target_ != target; }
+        };
+      
+      
+      typedef std::vector<Killer> Killers;
+      Killers killers_;
+      
       
     public:
       DelStash (size_t elms_to_reserve =0)
+        : killers_()
         { 
           if (elms_to_reserve)
             {
-              //
+              killers_.reserve (elms_to_reserve);
             }
         }
       
@@ -92,29 +125,35 @@ namespace lib {
       size_t
       size ()  const
         {
-          UNIMPLEMENTED ("killer size");
+          return killers_.size();
         }
+      
+      
+#define __DONT_USE_THIS_OVERLOAD_FOR_VOID_POINTER_ typename boost::disable_if<boost::is_same<TY,void> >::type* =0
       
       
       template<typename TY>
       void
-      manage (TY* obj)
+      manage (TY* obj,  __DONT_USE_THIS_OVERLOAD_FOR_VOID_POINTER_)
         {
-          UNIMPLEMENTED ("accept typed ptr for later killing");      
+          REQUIRE (!isRegistered (obj));
+          killers_.push_back (Killer (how_to_kill<TY>, obj));
         }
       
       template<typename TY>
       void
       manage (TY& obj)
         {
-          UNIMPLEMENTED ("accept typed obj ref for later killing");      
+          REQUIRE (!isRegistered (&obj));
+          killers_.push_back (Killer (how_to_kill<TY>, &obj));
         }
       
       template<typename TY>
       void
       manage (void *obj)
         {
-          UNIMPLEMENTED ("accept object by void* and type information");      
+          REQUIRE (!isRegistered (obj));
+          killers_.push_back (Killer (how_to_kill<TY>, obj));
         }
       
       
@@ -122,20 +161,59 @@ namespace lib {
       void
       kill (TY* obj)
         {
-          UNIMPLEMENTED ("pick and kill object denoted by address");      
-        }
+          triggerKill (obj);
+        } // note: entry remains in the killer vector,
+         //  but is now disabled and can't be found anymore
       
       template<typename TY>
       void
       kill (TY& obj)
         {
-          UNIMPLEMENTED ("pick and kill object denoted by reference");      
+          triggerKill (&obj);
         }
       
       void
       killAll ()
         {
-          UNIMPLEMENTED ("mass kill");
+          size_t i = size();
+          while (i)
+            {
+              killers_[i].trigger();
+            }
+        }
+      
+      
+    private:
+      /** trampoline function to invoke destructor
+       *  of the specific target type */
+      template<typename TY>
+      static void
+      how_to_kill (void* subject)
+        {
+          TY* victim = static_cast<TY*> (subject);
+          ENSURE (victim);
+          delete victim;
+        };
+      
+      bool
+      isRegistered (const void* objAddress)
+        {
+          return killers_.end() != findEntry (objAddress);
+        }
+      
+      Killers::iterator
+      findEntry (const void* obj)
+        {
+          return std::find(killers_.begin(),killers_.end(), obj);
+        }
+      
+      void
+      triggerKill (void* objAddress)
+        {
+          Killers::iterator pos = findEntry (objAddress);
+          if (killers_.end() != pos)
+            pos->trigger();
+          ENSURE (!isRegistered (objAddress), "duplicate deleter registration");
         }
     };
   
