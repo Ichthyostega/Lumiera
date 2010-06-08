@@ -331,7 +331,11 @@ namespace advice {
   {
     typedef ActiveProvision<AD> Holder;
     if (existingEntry)
-      releaseBuffer (existingEntry, sizeof(Holder));
+      {
+        Holder* obj = (Holder*)existingEntry;
+        obj->~Holder();
+        releaseBuffer (existingEntry, sizeof(Holder));
+      }
   }
   
   
