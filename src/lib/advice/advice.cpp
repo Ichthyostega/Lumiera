@@ -61,10 +61,18 @@
  ** re-discover the specifically typed context; the type guards can only be checked for a match.
  ** Thus we need the help of the frontend objects, which need to provide a deleter function
  ** when providing concrete advice data; this deleter function will be saved as function pointer
- ** so to be able to deallocate all advice data when the AdviceSystem is shut down
- **
+ ** so to be able to deallocate all advice data when the AdviceSystem is shut down.
+ ** 
+ ** @todo This approach is closely related to the decision to use a single global index table
+ ** for managing all advice collaborations. An alternative would be to use either a separate
+ ** table for each type, or to store an additional type descriptor with this memory management
+ ** information into each "bucket", which can be assumed to manage entries dealing with the
+ ** same kind of advice data, because each binding automatically includes a type guard.
+ ** If we ever happen to get a significant amount of advice data, but only a small
+ ** number of different advice types, we should reconsider this optimisation.
+ ** 
  ** @todo currently this is unimplemented and we happily leak memory....
- ** @todo rewrite the allocation to use Lumiera's mpool instead of heap allocations
+ ** @todo rewrite the allocation to use Lumiera's MPool instead of heap allocations
  ** 
  ** \par synchronisation
  ** While the frontend objects are deliberately \em not threadsafe, the lookup implementation
@@ -112,6 +120,15 @@ namespace advice {
           {
             INFO (library, "Shutting down Advice system.");
           }
+       
+       
+       void discardEntry (const PointOfAdvice* storedProvision)
+         {
+           if (storedProvision)
+             {
+               UNIMPLEMENTED ("use stored management information to trigger deletion");
+             }
+         }
       };
     
     
@@ -155,6 +172,21 @@ namespace advice {
   }
   
   
+  /** Store a descriptor record to take ownership of the given allocation.
+   *  Problem is we need to know the exact size of the advice value holder,
+   *  which information is available initially, when the advice data is
+   *  copied into the system. The knowledge about the size of the allocation
+   *  is embodied into the deleter function. This allows later to discard
+   *  entries without needing to know their exact type. 
+   */
+  void
+  AdviceLink::manageAdviceData (PointOfAdvice* entry, DeleterFunc* how_to_delete)
+  {
+    UNIMPLEMENTED ("store memory management information");
+  }
+
+  
+  
   
   /** when the Provision actually sets advice data, this is copied
    *  into an internal buffer within the AdviceSystem. We then use the
@@ -168,7 +200,7 @@ namespace advice {
    *          and thus the size of the entry to deallocate.
    *          Returning \c NULL in case no old entry exists.
    */
-  const PointOfAdvice*
+  void
   AdviceLink::publishProvision (PointOfAdvice* newProvision)
   {
     const PointOfAdvice* previousProvision (getSolution());
@@ -183,7 +215,7 @@ namespace advice {
     if (previousProvision && !newProvision)
       aSys().removeProvision (*previousProvision);
     
-    return previousProvision;  // to be deallocated by caller if non-NULL
+    aSys().discardEntry (previousProvision);
   }
   
   
@@ -195,14 +227,15 @@ namespace advice {
    *          to be deallocated by the caller, which
    *          is assumed to know it's exact type.
    */
-  const PointOfAdvice*
+  void
   AdviceLink::discardSolutions ()
   {
     const PointOfAdvice* existingProvision (getSolution());
     this->setSolution ( NULL );
     if (existingProvision)
       aSys().removeProvision (*existingProvision);
-    return existingProvision;
+    
+    aSys().discardEntry (existingProvision);
   }
   
   

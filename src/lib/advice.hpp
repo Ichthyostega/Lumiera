@@ -91,11 +91,13 @@
 
 #include <boost/noncopyable.hpp>
 
-using util::isSameObject;
-
 
 namespace lib    {
 namespace advice {
+  
+  using lib::Symbol;
+  using util::isSameObject;
+  
   
   /**
    * TODO type comment
@@ -167,15 +169,18 @@ namespace advice {
     : public PointOfAdvice
     {
     protected:
-      const PointOfAdvice* publishProvision (PointOfAdvice*);
-      const PointOfAdvice* discardSolutions ();
+      void publishProvision (PointOfAdvice*);
+      void discardSolutions ();
       void publishRequestBindingChange(HashVal);
       
       void registerRequest();
       void deregisterRequest();
       
-      void* getBuffer(size_t);
-      void  releaseBuffer (const void*, size_t);
+      static void* getBuffer(size_t);
+      static void  releaseBuffer (const void*, size_t);
+      
+      typedef void (DeleterFunc)(void*);
+      static void manageAdviceData (PointOfAdvice*, DeleterFunc*);
       
     public:
       explicit
@@ -241,15 +246,13 @@ namespace advice {
       
       void setAdvice (AD const& pieceOfAdvice)
         {
-          maybe_deallocateOld (
-              publishProvision(
-                  storeCopy (pieceOfAdvice)));
+          publishProvision(
+            storeCopy (pieceOfAdvice));
         }
       
       void retractAdvice()
         {
-          maybe_deallocateOld(
-              discardSolutions());
+          discardSolutions();
         }
       
       void
@@ -261,7 +264,7 @@ namespace advice {
       
     private:
       PointOfAdvice* storeCopy (AD const& advice_given);
-      void maybe_deallocateOld(const PointOfAdvice*);
+      static void releaseAdviceData (void*);
       void maybe_rePublish ();
     };
   
@@ -314,27 +317,36 @@ namespace advice {
   Provision<AD>::storeCopy (AD const& advice_given)
   {
     typedef ActiveProvision<AD> Holder;
-    return new(getBuffer(sizeof(Holder))) Holder (*this, advice_given);
+    void* storage = getBuffer(sizeof(Holder));
+    try
+      {
+        Holder* storedProvision = new(storage) Holder (*this, advice_given);
+        manageAdviceData (storedProvision, &releaseAdviceData);
+        return storedProvision;
+      }
+    catch(...)
+      {
+        Symbol errID = lumiera_error();
+        releaseBuffer (storage, sizeof(Holder));
+        throw lumiera::error::Fatal ("Failure to store advice data", errID);
+      }
   }
   
   
   /** @internal assist the AdviceSystem with deallocating buffer storage.
    *  Problem is we need to know the exact size of the advice value holder,
    *  which information is available only here, in the fully typed context.
-   *  @note the assumption is that \em any binding created will automatically
-   *        contain a type guard, which ensures the existingEntry passed in here
-   *        originally was allocated by #storeCopy within the same typed context.
    */
   template<class AD>
   inline void
-  Provision<AD>::maybe_deallocateOld (const PointOfAdvice* existingEntry)
+  Provision<AD>::releaseAdviceData (void* entry)
   {
     typedef ActiveProvision<AD> Holder;
-    if (existingEntry)
+    if (entry)
       {
-        Holder* obj = (Holder*)existingEntry;
+        Holder* obj = static_cast<Holder*> (entry);
         obj->~Holder();
-        releaseBuffer (existingEntry, sizeof(Holder));
+        releaseBuffer (entry, sizeof(Holder));
       }
   }
   
@@ -351,9 +363,8 @@ namespace advice {
     AdviceProvision* solution = static_cast<AdviceProvision*> (getSolution());
     
     if (solution)    // create copy of the data holder, using the new binding 
-      maybe_deallocateOld (
-          publishProvision(
-              storeCopy (solution->getAdvice())));
+      publishProvision(
+        storeCopy (solution->getAdvice()));
   }
   
   
