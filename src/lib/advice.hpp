@@ -64,6 +64,16 @@
  ** form of advice available, thereby completely decoupling the advised entity from the timings related
  ** to this collaboration.
  ** 
+ ** \par interfaces and implementation
+ ** Client code is assumed to interface solely through the advice::Request and advice::Provision classes,
+ ** which both can be instantiated and copied freely, may be used as member or mixed in as baseclass.
+ ** The AdviceSystem on the other hand is an implementation facility (actually a singleton) and lives
+ ** in the advice.cpp translation unit. The interface entities inherit protected from AdviceLink,
+ ** which is implemented in the same scope as the AdviceSystem and thus allowed to talk to it
+ ** directly. The AdviceSystem in turn uses advice::Index to keep track of the collaboration
+ ** partners, which, for this purpose, are handled as type-erased PointOfAdvice elements.
+ ** The latter class contains 4 API functions used by the index to manage solutions. 
+ ** 
  ** @note as of 6/2010 this is an experimental setup and implemented just enough to work out
  **       the interfaces and gain practical usage experiences. Ichthyo expects this collaboration
  **       service to play a central role at various places within proc-layer.
@@ -203,7 +213,7 @@ namespace advice {
    */
   template<class AD>
   class Provision
-    : public AdviceLink
+    : protected AdviceLink
     {
       
       
@@ -379,7 +389,7 @@ namespace advice {
    */
   template<class AD>
   class Request
-    : public AdviceLink
+    : protected AdviceLink
     {
       typedef const ActiveProvision<AD> AdviceProvision;
       
