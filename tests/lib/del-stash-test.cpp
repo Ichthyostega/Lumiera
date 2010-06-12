@@ -108,6 +108,7 @@ namespace test{
         {
           checksum = 0;
           checkSingleKill();
+          checkCustomKill();
           checkMassKill();
           checkAutoKill();
         }
@@ -203,6 +204,55 @@ namespace test{
             CHECK (0 < checksum);
           }// killer going out of scope...
           
+          CHECK (0 == checksum);
+        }
+      
+      
+      /** @test use a custom-provided
+       *        deleter function 
+       */
+      void
+      checkCustomKill ()
+        {
+          DelStash killer;
+          CHECK (0 == killer.size());
+          
+          /** a very specific setup,
+           *  bound to mess up the checksum,
+           *  unless the random bias is removed
+           *  by the custom deleter function
+           */ 
+          class Special
+            : Probe<555>
+            {
+              char secret_;
+              
+            public:
+              Special()
+                : Probe<555>()
+                , secret_('a' + (rand() % (1+'z'-'a')))
+                {
+                  checksum += secret_;
+                }
+              
+              static void
+              selfKill (void *it)
+                {
+                  Special *self = static_cast<Special*> (it);
+                  checksum -= self->secret_;
+                  delete self;
+                }
+            };
+          
+          
+          void * type_erased = new Special();
+          CHECK (0 < checksum);
+          
+          killer.manage (type_erased, &Special::selfKill);
+          CHECK (1 == killer.size());
+          
+          killer.kill(type_erased);
+          CHECK (0 == killer.size());
           CHECK (0 == checksum);
         }
     };

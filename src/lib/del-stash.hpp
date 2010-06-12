@@ -68,13 +68,15 @@ namespace lib {
   class DelStash
     : boost::noncopyable
     {
+      
+      typedef void KillFun(void*);
+      
       /**
-       * @internal entry to store target object
+       * @internal entry to store target pointer
        * and the actual deleter function to use
        */
       class Killer
         {
-          typedef void KillFun(void*);
           void* target_;
           KillFun* killIt_;
           
@@ -106,6 +108,7 @@ namespace lib {
       
       
       typedef std::vector<Killer> Killers;
+      
       Killers killers_;
       
       
@@ -166,11 +169,19 @@ namespace lib {
       
       template<typename TY>
       void
-      manage (void *obj)
+      manage (void* obj)
         {
           if (!obj) return;
           REQUIRE (!isRegistered (obj));
           killers_.push_back (Killer (how_to_kill<TY>, obj));
+        }
+      
+      void
+      manage (void* obj, KillFun* customDeleter)
+        {
+          if (!obj) return;
+          REQUIRE (!isRegistered (obj));
+          killers_.push_back (Killer (customDeleter, obj));
         }
       
       
@@ -180,7 +191,7 @@ namespace lib {
         {
           triggerKill (obj);
         } // note: entry remains in the killer vector,
-         //  but is now disabled and can't be found anymore
+         //  but is disabled and can't be found anymore
       
       template<typename TY>
       void
@@ -201,11 +212,11 @@ namespace lib {
     private:
       /** trampoline function to invoke destructor
        *  of the specific target type */
-      template<typename TY>
+      template<typename X>
       static void
       how_to_kill (void* subject)
         {
-          TY* victim = static_cast<TY*> (subject);
+          X* victim = static_cast<X*> (subject);
           ENSURE (victim);
           delete victim;
         };
