@@ -92,16 +92,20 @@
 
 #include "lib/advice.hpp"
 #include "lib/advice/index.hpp"
+#include "lib/del-stash.hpp"
 #include "lib/singleton.hpp"
+#include "lib/util.hpp"
 #include "include/logging.h"
 
 #include <boost/noncopyable.hpp>
 
 using lib::Singleton;
+using util::unConst;
+
+typedef void (DeleterFunc)(void*);
 
 namespace lib {
 namespace advice {
-  
   
   namespace { // ======= implementation of the AdviceSystem ============
     
@@ -109,6 +113,8 @@ namespace advice {
       : public Index<PointOfAdvice>
       , boost::noncopyable
       {
+        
+        DelStash adviceDataRegistry_;
         
       public:
         AdviceSystem()
@@ -121,12 +127,18 @@ namespace advice {
             INFO (library, "Shutting down Advice system.");
           }
        
+       void
+       manageAdviceData (PointOfAdvice* entry, DeleterFunc* how_to_delete)
+         {
+           adviceDataRegistry_.manage (entry, how_to_delete);
+         }
        
-       void discardEntry (const PointOfAdvice* storedProvision)
+       void
+       discardEntry (PointOfAdvice* storedProvision)
          {
            if (storedProvision)
              {
-               UNIMPLEMENTED ("use stored management information to trigger deletion");
+               adviceDataRegistry_.kill (storedProvision);
              }
          }
       };
@@ -182,7 +194,7 @@ namespace advice {
   void
   AdviceLink::manageAdviceData (PointOfAdvice* entry, DeleterFunc* how_to_delete)
   {
-    UNIMPLEMENTED ("store memory management information");
+    aSys().manageAdviceData (entry,how_to_delete);
   }
 
   
@@ -215,7 +227,7 @@ namespace advice {
     if (previousProvision && !newProvision)
       aSys().removeProvision (*previousProvision);
     
-    aSys().discardEntry (previousProvision);
+    aSys().discardEntry (unConst(previousProvision));
   }
   
   
@@ -235,7 +247,7 @@ namespace advice {
     if (existingProvision)
       aSys().removeProvision (*existingProvision);
     
-    aSys().discardEntry (existingProvision);
+    aSys().discardEntry (unConst(existingProvision));
   }
   
   

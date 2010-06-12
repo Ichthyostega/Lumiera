@@ -224,12 +224,14 @@ namespace lib {
       bool
       isRegistered (const void* objAddress)
         {
+          REQUIRE (objAddress);
           return killers_.end() != findEntry (objAddress);
         }
       
       Killers::iterator
       findEntry (const void* obj)
         {
+          REQUIRE (obj);
           return std::find(killers_.begin(),killers_.end(), obj);
         }
       
