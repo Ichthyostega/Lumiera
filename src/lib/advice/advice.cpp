@@ -89,15 +89,19 @@
  */
 
 
+#include "lib/error.hpp"
 #include "lib/advice.hpp"
 #include "lib/advice/index.hpp"
 #include "lib/del-stash.hpp"
 #include "lib/singleton.hpp"
+#include "lib/symbol.hpp"
+#include "lib/sync.hpp"
 #include "lib/util.hpp"
 #include "include/logging.h"
 
 #include <boost/noncopyable.hpp>
 
+using lib::Symbol;
 using lib::Singleton;
 using util::unConst;
 
@@ -116,7 +120,8 @@ namespace advice {
      * to determine the advice solutions on request. 
      */
     class AdviceSystem
-      : boost::noncopyable
+      : public lib::Sync<>
+      , boost::noncopyable
       {
         
         DelStash adviceDataRegistry_;
@@ -140,6 +145,10 @@ namespace advice {
         
         /** low-level allocation of storage to hold advice data
          *  @todo rewrite to use Lumiera's block allocator / memory pool      /////////////////////////////////TICKET #609
+         *  @warning the raw allocation and deallocation is \em not protected
+         *           by the  AdviceSystem monitor. Currently we don't need
+         *           locking (heap allocation), but any custom allocator
+         *           will have to care for its own locking!
          */ 
         void*
         allocateBuffer(size_t siz)
@@ -161,11 +170,13 @@ namespace advice {
         void
         manageAdviceData (PointOfAdvice* entry, DeleterFunc* how_to_delete)
           {
+            Lock sync (this);
             adviceDataRegistry_.manage (entry, how_to_delete);
           }
         
+      private:
         void
-        discardEntry (PointOfAdvice* storedProvision)
+        discardEntry (PointOfAdvice* storedProvision)  ///< @note to be invoked from a locked scope
           {
             if (storedProvision)
               {
@@ -174,31 +185,46 @@ namespace advice {
         
         
         
+      public:
         /* == forward additions and retractions to the index == */
         
         void
         publishRequestBindingChange(PointOfAdvice & req,
                                     HashVal previous_bindingKey)
           {
+            Lock sync (this);
             index_.modifyRequest(previous_bindingKey, req);
           }
         
         void
         registerRequest(PointOfAdvice & req)
           {
+            Lock sync (this);
             index_.addRequest (req);
           }
         
         void
         deregisterRequest(PointOfAdvice const& req)
           {
-            index_.removeRequest (req);
+            try
+              {
+                Lock sync (this);
+                index_.removeRequest (req);
+              }
+            
+            catch(...)
+              {
+                Symbol errID = lumiera_error();
+                WARN (library, "Problems on deregistration of advice request: %s", errID.c());
+              }
           }
         
         
         void
         publishProvision (PointOfAdvice* newProvision, const PointOfAdvice* previousProvision)
           {
+            Lock sync (this);
+            
             if (!previousProvision && newProvision)
               index_.addProvision (*newProvision);
             else
@@ -214,6 +240,8 @@ namespace advice {
         void
         discardSolutions (const PointOfAdvice* existingProvision)
           {
+            Lock sync (this);
+            
             if (existingProvision)
               index_.removeProvision (*existingProvision);
             
