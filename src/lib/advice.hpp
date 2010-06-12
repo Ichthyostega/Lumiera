@@ -82,9 +82,10 @@
  ** @todo consider to provide variations of the basic behaviour by policy classes
  ** @todo the implementation is generic/defensive, and could be improved and optimised
  ** 
- ** @see configrules.hpp
- ** @see typed-lookup.cpp corresponding implementation
- ** @see typed-id-test.cpp
+ ** @see AdviceBasics_test usage example
+ ** @see advice.cpp implementation
+ ** @see advice::Index index datastructure
+ ** @see binding.hpp
  ** 
  */
 
@@ -110,7 +111,17 @@ namespace advice {
   
   
   /**
-   * TODO type comment
+   * Basic (abstracted) view of an advice collaboration partner,
+   * as used internally by the AdviceSystem to manage the participants.
+   * Each PointOfAdvice is characterised by a binding pattern, used to
+   * pair up advice::Request and advice::Provision entries. Moreover,
+   * each PointOfAdvice can refer to an existing advice solution 
+   * provided elsewhere in the system. The specific type of advice
+   * (and thus the storage requirements) are abstracted away,
+   * as is the distinction between Request and Provision.
+   * 
+   * @see AdviceSystem
+   * @see AdviceIndex_test
    */
   class PointOfAdvice
     {
@@ -187,7 +198,7 @@ namespace advice {
       void deregisterRequest();
       
       static void* getBuffer(size_t);
-      static void  releaseBuffer (const void*, size_t);
+      static void  releaseBuffer (void*, size_t);
       
       typedef void (DeleterFunc)(void*);
       static void manageAdviceData (PointOfAdvice*, DeleterFunc*);
@@ -207,9 +218,22 @@ namespace advice {
   
   /**
    * Access point for the advising entity (server).
-   * TODO type comment
+   * This is the interface intended for client code to set and provide
+   * concrete advice information of a specific type AD. Instantiating 
+   * automatically creates a \em type-guard binding pattern, but client code
+   * can (and typically should) provide additional predicates to define the
+   * "topic" this advice belongs to. This allows advice::Request entries
+   * to attach to the suitable advice "channels" and get the specific
+   * piece of advice they're looking for.
    * 
-   * @todo currently leaking buffer storage for all the advice data which isn't explicitly retracted.
+   * Any advice::Provision remains inactive and thus invisible, until
+   * \link #setAdvice setting the concrete advice data \endlink. After that,
+   * the provided data is \em copied into the AdviceSystem and remains available
+   * even after the original Provision goes out of scope. Consequently, it isn't
+   * possible to \em modify advice data once set. But client code may retract
+   * the provision or change the binding pattern.
+   * 
+   * @see AdviceBasics_test usage example
    */
   template<class AD>
   class Provision
@@ -219,11 +243,7 @@ namespace advice {
       
       /* == policy definitions == */    ////TODO: extract into policy classes
       
-      void
-      deregistrate()
-        {
-          TODO ("hand-over deallocation information to the AdviceSystem");
-        }
+      void deregistrate() { /* NOP */ }
       
       
     public:
@@ -318,7 +338,7 @@ namespace advice {
   
   /*  ==== memory management for Provision data ===== */
   
-  /** function to copy advice into an internal buffer.
+  /** @internal function to copy advice into an internal buffer.
       @return type erased pointer to the data holder created
       @throw  error::Fatal on allocation problems, plus anything
               the advice data may throw during copy construction. */
@@ -385,7 +405,21 @@ namespace advice {
   
   /**
    * Access point for the advised entity (client).
-   * TODO type comment
+   * This is the interface intended for client code to request advice
+   * of a specific type and optionally limited to a special topic (binding).
+   * Instantiating an \c Request<AD> object automatically entails a registration
+   * with the AdviceSystem behind the scenes, and deleting it causes deregistration.
+   * Request objects may be instantiated and copied freely, and the binding pattern
+   * may be changed. The actual advice is accessed through the member function
+   * #getAdvice, which might return a default-constructed piece of advice data
+   * in case no specific advice has been provided yet. Accessing advice can be
+   * considered a lightweight operation, while creating/destroying advice
+   * causes an index operation and thus requires a lock.
+   * 
+   * Creating an Request and changing the binding might fail, while the dtor
+   * is protected against failure (as you'd expect). Accessing advice can also
+   * be considered safe, given the concrete advice type can be default constructed
+   * without failure in case there isn't any advice data provided yet.
    */
   template<class AD>
   class Request

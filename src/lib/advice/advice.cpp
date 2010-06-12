@@ -71,8 +71,7 @@
  ** If we ever happen to get a significant amount of advice data, but only a small
  ** number of different advice types, we should reconsider this optimisation.
  ** 
- ** @todo currently this is unimplemented and we happily leak memory....
- ** @todo rewrite the allocation to use Lumiera's MPool instead of heap allocations
+ ** @todo rewrite the allocation to use Lumiera's MPool instead of heap allocations    //////TICKET #609
  ** 
  ** \par synchronisation
  ** While the frontend objects are deliberately \em not threadsafe, the lookup implementation
@@ -104,20 +103,28 @@ using util::unConst;
 
 typedef void (DeleterFunc)(void*);
 
+
 namespace lib {
 namespace advice {
   
   namespace { // ======= implementation of the AdviceSystem ============
     
+    /** 
+     * the system-wide service to support the implementation
+     * of \em advice collaborations. Manages storage for 
+     * provided advice data and maintains an index table
+     * to determine the advice solutions on request. 
+     */
     class AdviceSystem
-      : public Index<PointOfAdvice>
-      , boost::noncopyable
+      : boost::noncopyable
       {
         
         DelStash adviceDataRegistry_;
+        Index<PointOfAdvice> index_;
         
       public:
         AdviceSystem()
+          : index_()
           {
             INFO (library, "Initialising Advice Index tables.");
           }
@@ -126,21 +133,92 @@ namespace advice {
           {
             INFO (library, "Shutting down Advice system.");
           }
-       
-       void
-       manageAdviceData (PointOfAdvice* entry, DeleterFunc* how_to_delete)
-         {
-           adviceDataRegistry_.manage (entry, how_to_delete);
-         }
-       
-       void
-       discardEntry (PointOfAdvice* storedProvision)
-         {
-           if (storedProvision)
-             {
-               adviceDataRegistry_.kill (storedProvision);
-             }
-         }
+        
+        
+        
+        /* == Advice data storage management == */
+        
+        /** low-level allocation of storage to hold advice data
+         *  @todo rewrite to use Lumiera's block allocator / memory pool      /////////////////////////////////TICKET #609
+         */ 
+        void*
+        allocateBuffer(size_t siz)
+          {
+            try { return new char[siz]; }
+            
+            catch(std::bad_alloc&)
+              {
+                throw error::Fatal("Unable to store Advice due to memory exhaustion");
+              }
+          }
+        
+        void
+        releaseBuffer (void* buff, size_t)                                   /////////////////////////////////TICKET #609
+          { 
+            delete[] (char*)buff; 
+          }
+        
+        void
+        manageAdviceData (PointOfAdvice* entry, DeleterFunc* how_to_delete)
+          {
+            adviceDataRegistry_.manage (entry, how_to_delete);
+          }
+        
+        void
+        discardEntry (PointOfAdvice* storedProvision)
+          {
+            if (storedProvision)
+              {
+                adviceDataRegistry_.kill (storedProvision);
+          }   }
+        
+        
+        
+        /* == forward additions and retractions to the index == */
+        
+        void
+        publishRequestBindingChange(PointOfAdvice & req,
+                                    HashVal previous_bindingKey)
+          {
+            index_.modifyRequest(previous_bindingKey, req);
+          }
+        
+        void
+        registerRequest(PointOfAdvice & req)
+          {
+            index_.addRequest (req);
+          }
+        
+        void
+        deregisterRequest(PointOfAdvice const& req)
+          {
+            index_.removeRequest (req);
+          }
+        
+        
+        void
+        publishProvision (PointOfAdvice* newProvision, const PointOfAdvice* previousProvision)
+          {
+            if (!previousProvision && newProvision)
+              index_.addProvision (*newProvision);
+            else
+            if (previousProvision && newProvision)
+              index_.modifyProvision (*previousProvision, *newProvision);
+            else
+            if (previousProvision && !newProvision)
+              index_.removeProvision (*previousProvision);
+            
+            discardEntry (unConst(previousProvision));
+          }
+        
+        void
+        discardSolutions (const PointOfAdvice* existingProvision)
+          {
+            if (existingProvision)
+              index_.removeProvision (*existingProvision);
+            
+            discardEntry (unConst(existingProvision));
+          }
       };
     
     
@@ -159,28 +237,24 @@ namespace advice {
   
   
   /** allocate raw storage for a buffer holding the actual piece of advice.
-      We need to manage this internally, as the original advice::Provision
-      may go out of scope, while the advice information as such remains valid.
-      @note the special twist is the size of the buffer depending on the actual
-            advice type, which type information we need to erase for tracking all
-            advice provisions and requests through an generic index datastructure.
-      @todo rewrite to use Lumiera's block allocator / memory pool */
+   *  We need to manage this internally, as the original advice::Provision
+   *  may go out of scope, while the advice information as such remains valid.
+   *  @note the special twist is the size of the buffer depending on the actual
+   *        advice type, which type information we need to erase for tracking all
+   *        advice provisions and requests through an generic index datastructure.
+   *  @throws error::Fatal on allocation failure
+   */
   void*
   AdviceLink::getBuffer(size_t siz)
   {
-    try { return new char[siz]; }
-    
-    catch(std::bad_alloc&)
-      {
-        throw error::Fatal("Unable to store Advice due to memory exhaustion");
-      }
+    return aSys().allocateBuffer(siz);
   }
   
   
   void
-  AdviceLink::releaseBuffer (const void* buff, size_t)
+  AdviceLink::releaseBuffer (void* buff, size_t siz)
   { 
-    delete[] (char*)buff; 
+    aSys().releaseBuffer(buff, siz);
   }
   
   
@@ -196,7 +270,7 @@ namespace advice {
   {
     aSys().manageAdviceData (entry,how_to_delete);
   }
-
+  
   
   
   
@@ -218,16 +292,7 @@ namespace advice {
     const PointOfAdvice* previousProvision (getSolution());
     this->setSolution (newProvision);
     
-    if (!previousProvision && newProvision)
-      aSys().addProvision (*newProvision);
-    else
-    if (previousProvision && newProvision)
-      aSys().modifyProvision (*previousProvision, *newProvision);
-    else
-    if (previousProvision && !newProvision)
-      aSys().removeProvision (*previousProvision);
-    
-    aSys().discardEntry (unConst(previousProvision));
+    aSys().publishProvision (newProvision, previousProvision);
   }
   
   
@@ -244,31 +309,28 @@ namespace advice {
   {
     const PointOfAdvice* existingProvision (getSolution());
     this->setSolution ( NULL );
-    if (existingProvision)
-      aSys().removeProvision (*existingProvision);
-    
-    aSys().discardEntry (unConst(existingProvision));
+    aSys().discardSolutions (existingProvision);
   }
   
   
   void
   AdviceLink::publishRequestBindingChange(HashVal previous_bindingKey)
   {
-    aSys().modifyRequest(previous_bindingKey, *this);
+    aSys().publishRequestBindingChange (*this, previous_bindingKey);
   }
   
   
   void
   AdviceLink::registerRequest()
   {
-    aSys().addRequest (*this);
+    aSys().registerRequest (*this);
   }
   
   
   void
   AdviceLink::deregisterRequest()
   {
-    aSys().removeRequest (*this);
+    aSys().deregisterRequest (*this);
   }
   
   
