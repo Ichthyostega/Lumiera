@@ -58,7 +58,7 @@ namespace mobject {
 namespace session {
 namespace test {
   
-  struct DummyEntity { };
+  struct DummyEntity { };    ////////////////////////TODO of course the key idea is to mix in TypedID::link, to get an automatic registration and deregistartion
   
   typedef lumiera::P<DummyEntity> PDum;
   
