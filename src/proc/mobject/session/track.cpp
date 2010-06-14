@@ -34,7 +34,20 @@ namespace session {
    */
   Track::Track (PTrackAsset& trackDef)
     : start_(0),
-      trackDef_(trackDef)
+      trackDef_(trackDef)    /////////////////////TICKET #581 kill kill kill the track-asset
+  {
+    throwIfInvalid();
+  }
+  
+  
+  /** create a new track-MObject based on the given unique ID.
+   *  Initially, the reference (zero-point) time of this track
+   *  will be set to 0 
+   */
+  Track::Track (TrackID const& trackID)
+    : start_(0),
+      trackDef_()            /////////////////////TICKET #581 kill kill kill the track-asset 
+    , id_(trackID)
   {
     throwIfInvalid();
   }

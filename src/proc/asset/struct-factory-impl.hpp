@@ -203,7 +203,14 @@ namespace asset {
       {
         // when we reach this point it is clear a suitable sequence doesn't yet exist in the model
         TODO ("actually extract properties/capabilities from the query...");
-        return new Sequence (createIdent (caps));
+        string trackID = extractID ("track", caps);
+        Query<Track> desiredTrack (isnil (trackID)? "" : "id("+trackID+")");
+//      PTrack track = Session::current->query (desiredTrack);        ///////////////////////////////////TICKET #639
+        // TODO: handle the following cases
+        // - track doesn't exist --> create and root attach it
+        // - track exists and is root attached, but belongs already to a sequence --> throw
+        // - track exists, but isn't root attached ---> what do do here? steal it??
+        return new Sequence (createIdent (caps));  ///////////TODO fed track in here
       }
     
     

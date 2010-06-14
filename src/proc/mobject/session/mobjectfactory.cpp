@@ -84,10 +84,19 @@ namespace session {
   
   /** */ 
   Placement<Track>
-  MObjectFactory::operator() (PTrackAsset& trackDef)
+  MObjectFactory::operator() (PTrackAsset& trackDef)           /////////////////////TICKET #581 kill kill kill the track-asset
   {
     TODO ("what needs to be registered when creating an Track-MO?");
     return Placement<Track> (*new Track (trackDef), &deleterFunc);
+  }
+  
+  /** fabricate a new track-MObject, using the given unique ID */ 
+  Placement<Track>
+  MObjectFactory::operator() (TrackID const& id)
+  {
+    TODO ("what needs to be registered when creating an Track-MO?");
+    TODO ("assure the ID is indeed unique and not already used for another track");  //////////TICKET #638
+    return Placement<Track> (*new Track (id), &deleterFunc);
   }
   
   /** */ 

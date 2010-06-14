@@ -25,6 +25,7 @@
 #define MOBJECT_SESSION_MOBJECTFACTORY_H
 
 #include "proc/mobject/mobject.hpp"
+#include "proc/asset/entry-id.hpp"
 #include "lib/symbol.hpp"
 
 
@@ -68,7 +69,8 @@ namespace session {
       Placement<Root>   operator() (DefsManager&);
       Placement<Clip>   operator() (asset::Clip const&, asset::Media const&);
       Placement<Clip>   operator() (asset::Clip const&, vector<asset::Media const*>);
-      Placement<Track>  operator() (PTrackAsset&);
+      Placement<Track>  operator() (PTrackAsset&); ////////////////////////////////////////////////////TICKET #581 kill kill kill the track-asset
+      Placement<Track>  operator() (asset::EntryID<Track> const&);                         ////////////TICKET #581 use this one instead
       Placement<Effect> operator() (asset::Effect const&);
       Placement<Label>  operator() (lib::Symbol);
       Placement<Binding>operator() (asset::PSequence const&);

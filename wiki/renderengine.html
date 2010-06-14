@@ -2260,6 +2260,15 @@ This Design strives to achieve a StrongSeparation between the low-level Structur
 [img[Classess related to the session|uml/fig128133.png]]
 </pre>
 </div>
+<div title="MagicAttachment" modifier="Ichthyostega" created="201006132135" tags="Model spec draft" changecount="1">
+<pre>The HighLevelModel consists of MObjects, which are attached to one another through their [[Placement]]. While this is a generic scheme to arrange objects in a tree of [[scopes|PlacementScope]], some attachments are handled specifically and may trigger side-effects
+
+{{red{drafted feature as of 6/2010}}}
+
+* a [[binding|BindingMO]] attached to root is linked to a [[Timeline]]
+* a [[Track]] attached to rood corresponds to a [[Sequence]]
+</pre>
+</div>
 <div title="MainMenu" modifier="Ichthyostega" modified="200802031758" created="200706172305" changecount="10">
 <pre>''[[Lumiera|index.html]]''
 [[Proc-Layer|ProcLayer and Engine]]
@@ -2361,7 +2370,7 @@ And, last but not least, doing large scale allocations is the job of the backend
 <div title="Model" modifier="Ichthyostega" modified="201003210021" created="201003210020" tags="overview" changecount="2">
 <pre>Lumiera's Proc-Layer is built around //two interconnected models,// mediated by the [[Builder]]. Basically, the &amp;rarr;[[Session]] is an external interface to the HighLevelModel, while the &amp;rarr;RenderEngine operates the structures of the LowLevelModel.</pre>
 </div>
-<div title="ModelDependencies" modifier="Ichthyostega" modified="201006130130" created="201003020150" tags="SessionLogic operational spec draft img" changecount="32">
+<div title="ModelDependencies" modifier="Ichthyostega" modified="201006140007" created="201003020150" tags="SessionLogic Model operational spec draft img" changecount="35">
 <pre>Our design of the models (both [[high-level|HighLevelModel]] and [[low-level|LowLevelModel]]) relies partially on dependent objects being kept consitently in sync. Currently (2/2010), __ichthyo__'s assessment is to consider this topic not important and pervasive enough to justify building a dedicated solution, like e.g. a central tracking and registration service. An important point to consider with this assesment is the fact that the session implementation is beeing kept mostly single-threaded. Thus, lacking one central place to handle this issue, care has to be taken to capture and treat all the relevant individual dependencies properly at the implementation level.
 
 !known interdependencies
@@ -2390,14 +2399,17 @@ While implemented as StructAsset, additionally we need to assure every instance 
 
 ;Sequence
 :is completely dependent on a root-scoped track, can optionally be bound, into one/multiple timelines/VirtualClip, or unbound
-: __created__ &amp;rArr; mandates specification of an track-MO, ({{red{TODO}}}maybe/necessarily??) placed into root scope
-: __destroy__ &amp;rArr; purge the corresponding track from model, including all contents
+: __created__ &amp;rArr; mandates specification of an track-MO, (necessarily) placed into root scope &amp;mdash; {{red{TODO: what to do with non-root tracks?}}}
+: __destroy__ &amp;rArr; destroy any binding using this sequence, purge the corresponding track from model, if applicable, including all contents
 : __querying__ &amp;rArr; forwards to creating a root-placed track, unless the queried sequence exists already
 ;root-placed Track
 :attachment of a track to root scope is detected magically and causes creation of a Sequence
 : __attached__ to root &amp;rArr; invoke sequence creation
-: __detached__ from root &amp;rArr; find and discard corresponding sequence {{red{TODO 3/2010: decide if we want this behaviour}}}
+: __detached__ from root &amp;rArr; find and detach from corresponding sequence, which is then destroyed. //Note:// contents remain unaffected
 : irrespective if the track exists, is empty, or gets purged entirely, only the connection to root scope counts; thus relocating a track by [[Placement]] might cause its scope with all nested contents to become a sequence of its own or become part of another sequence. As sequences aren't required to be bound into a timeline, they may be present in the model as invisible, passive container
+
+!!Magic attachments
+While generally the HighLevelModel allows all kinds of arrangements and attachments, certain connections are [[detected automatically|ScopeTrigger]] and may trigger special actions, like the creation of Timeline or Sequence façade objects as described above. The implementation of such [[magic attachments|MagicAttachment]] relies on the PlacementIndex.
 </pre>
 </div>
 <div title="ModelObjectIdentity" modifier="Ichthyostega" modified="201001072246" created="201001070905" tags="SessionLogic spec draft" changecount="18">
@@ -4104,10 +4116,23 @@ A scope path is a sequence of scopes, where each scope is implemented by a Place
 ** clear a path (reset to default)
 </pre>
 </div>
-<div title="Sequence" modifier="Ichthyostega" modified="201003020521" created="201001252327" tags="def" changecount="13">
+<div title="ScopeTrigger" modifier="Ichthyostega" modified="201006132140" created="201006132139" tags="SessionLogic impl draft" changecount="2">
+<pre>An implementation mechanism used within the PlacementIndex to detect some specific kinds of object connections(&amp;raquoMagicAttachment&amp;laquo;), which then need to trigger a special handling.
+
+{{red{planned feature as of 6/2010)}}}
+
+//It is not clear yet, if that's just an implementation facility, or something which is exposed through the ConfigRules.//
+
+!preliminary requirements
+We need to detect attaching and detaching of
+* root &amp;harr; BindingMO
+* root &amp;harr; [[Track]]
+</pre>
+</div>
+<div title="Sequence" modifier="Ichthyostega" modified="201006132117" created="201001252327" tags="def" changecount="15">
 <pre>A sequence is a collection of media objects, arranged onto a track tree. Sequences are the building blocks within the session. To be visible and editable, a session needs to be bound into a top-level [[Timeline]]. Alternatively, it may be used as a VirtualClip nested within another sequence.
 
-The sequences within the session establish a //logical grouping//, allowing for lots of flexibility. Actually, we can have several sequences within one session, and these sequences can be linked together or not, they may be arranged in temporal order or may constitute a logical grouping of clips used simultaneously in compositional work etc. Multiple sequences can use the same or different tracks, and tracks as well are only an organisational (grouping) device. But at any time, we have exactly one [[Fixture]], derived automatically from all sequences and containing the content actually to be rendered.
+The sequences within the session establish a //logical grouping//, allowing for lots of flexibility. Actually, we can have several sequences within one session, and these sequences can be linked together or not, they may be arranged in temporal order or may constitute a logical grouping of clips used simultaneously in compositional work etc. The data structure comprising a sequence is always a sub-tree of tracks, attached allways directly below root (Sequences at sub-nodes are deliberately disallowed). Through the sequence as frontend, this track tree might be used at various places in the model simultaneously. Tracks in turn are only an organisational (grouping) devices, like folders, so this structure of sequences and track trees referred through them allows to use the contents of such a track or folder at various places within the model. But at any time, we have exactly one [[Fixture]], derived automatically from all sequences and containing the content actually to be rendered.
 &amp;rarr; see considerations about [[the role of Tracks and Pipes in conjunction with the sequences|TrackPipeSequence]]
 
 !!Implementation and lifecycle

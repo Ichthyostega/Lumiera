@@ -25,13 +25,17 @@
 #define MOBJECT_SESSION_TRACK_H
 
 #include "proc/mobject/session/meta.hpp"
+#include "proc/asset/entry-id.hpp"
 
 
 
-namespace asset { class Track; }
+namespace asset { 
+  class Track;           /////////////////////TICKET #581 kill kill kill the track-asset
+  
+}
 
 namespace mobject {
-namespace session {
+namespace session {     //////////////////////////////////////////////////////TICKET #637
     
     using lumiera::P;
     
@@ -40,8 +44,21 @@ namespace session {
     
     typedef P<Track> PTrack;
     typedef P<TrackAsset> PTrackAsset;
+
+}}
     
+namespace asset {       //////////////////////////////////////////////////////TICKET #637
+  
+  typedef EntryID<mobject::session::Track> TrackID;
+}
+
+
+namespace mobject {
+namespace session {
+  
+    using asset::TrackID;
     
+  
     /**
      * A Track is grouping device within the Session.
      * The corresponding Placement by which this Track object is referred
@@ -65,9 +82,11 @@ namespace session {
       {
         Time start_;
         PTrackAsset trackDef_;
+        TrackID id_;
         
       protected:
-        Track (PTrackAsset&);
+        Track (PTrackAsset&);           /////////////////////TICKET #581 kill kill kill the track-asset
+        Track (TrackID const&);
         friend class MObjectFactory;
         
       public:

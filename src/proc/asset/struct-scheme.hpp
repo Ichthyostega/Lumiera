@@ -22,7 +22,7 @@
 
 
 /** @file struct-scheme.hpp
- ** Naming and labelling scheme for structural assets.
+ ** Naming and labeling scheme for structural assets.
  ** Preconfigured traits data for the relevant types encountered in
  ** Lumiera's session data model.
  **
@@ -68,7 +68,7 @@ namespace asset{
     
     
     
-    /* ==== structural asset ID scheme ==== */  /////////////////////////////////////////////TICKET #565 : better organisation of this naming scheme
+    /* ==== structural asset ID scheme ==== */  /////////////////////////////////////////////TICKET #565 : better organization of this naming scheme
     
     template<class STRU>
     struct StructTraits
