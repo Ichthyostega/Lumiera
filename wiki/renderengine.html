@@ -3611,7 +3611,7 @@ Viewed as a micro program, the processing patterns are ''weak typed'' &amp;mdash
 <pre>a given Render Engine configuration is a list of Processors. Each Processor in turn contains a Graph of ProcNode.s to do the acutal data processing. In order to cary out any calculations, the Processor needs to be called with a StateProxy containing the state information for this RenderProcess
 </pre>
 </div>
-<div title="Query" modifier="Ichthyostega" modified="200910210243" created="200910171621" tags="Rules spec draft discuss" changecount="9">
+<div title="Query" modifier="Ichthyostega" modified="201006150322" created="200910171621" tags="Rules spec draft discuss" changecount="13">
 <pre>{{red{WIP as of 10/09}}}...//brainstorming about the first ideas towards a query subsystem//
 
 !use case: discovering the contents of a container in the HighLevelModel
@@ -3624,6 +3624,12 @@ In the course of shaping the session API, __joel__ and __ichthyo__ realised that
 * the handed out result iterator is used to manage the allocation for the query result set by sideeffect (smart handle). &amp;rarr; Ticket #353
 
 For decoupling the query invocation from the facility actually processing the query, we need to come up with common pattern. In 10/09, there is an immediate demand for such a solution pattern for implementing the QueryFocus and PlacementScope framework, which is crucial for contents discovery in general on the session interface. &amp;rarr; QueryResolver was shaped to deal with this situation, but has the potential to evolve into a general solution for issuing queries.
+
+!use case: retrieving object to fulfil a condition
+The requirement is to retrieve one (or multiple) objects of a specific kind, located within a scope, and fulfilling some additional condition. For example: find a sub-track with {{{id(blubb)}}}.
+This is a special case of the general discovery (described in the previous use case), but it is also a common situation in a general ConfigQuery (&amp;rArr; an object of a specific type and with additional capabilities...). The tricky question seems to be how to specify and resolve these additional conditions or capabilities.
+* in a generic query handled by a resolution engine, we might represent these capabilities as a nested //goal.//
+* if we approach the problem as a filter pipeline, then the condition becomes a functor (or closure).
 
 ----
 See also the notes on &amp;rarr; QueryImplProlog
@@ -3669,7 +3675,7 @@ This concept deliberately ignores parallelism. But, as the current path state is
 {{red{As of 10/09 it is not clear if there will be any concurrent access to this discovery API}}} &amp;mdash; but it seems not unlikely to happen...
 </pre>
 </div>
-<div title="QueryImplProlog" modifier="Ichthyostega" modified="200910171607" created="200801202321" tags="draft design Rules" changecount="18">
+<div title="QueryImplProlog" modifier="Ichthyostega" modified="201006150322" created="200801202321" tags="draft design Rules" changecount="19">
 <pre>//obviously, getting this one to work requires quite a lot of technical details to be planned and implemented.// This said...
 The intention is to get much more readable (&quot;declarative&quot;) and changeable configuration as by programming the decision logic literately within the implementation of some object.
 
@@ -3688,7 +3694,7 @@ Then, running the goal {{{:-resolve(T, stream(T,mpeg)).}}} would search a Track 
 * Any __participating object kind__ needs a way to declare domain specific predicates, thus triggering the registration of the necessary hooks within the supporting system. Moreover, it should be able to inject further prolog code (as shown in the example above with the {{{strem(T, mpeg)}}} predicate. For each of these new domain specific predicates, there needs to be a functor which can be invoked when the C implementation of the predicate is called from Prolog (in some cases even later, when the final solution is &quot;executed&quot;, e.g. a new instance has been created and now some properties need to be set).
 
 !!a note on Plugins
-In the design of the Lumiera Proc Layer done thus far, we provide //no possibility to introduce a new object kind// into the system via plugin interface. The system uses a fixed collection of classes intended to cover all needs (Clip, Effect, Track, Pipe, Label, Automation, ~Macro-Clips). Thus, plugins will only be able to provide new parametrisations of existing classes. This should not be any real limitation, because the whole system is designed to achieve most of its functionality by freely combining rather basic object kinds. As a plus, it plays nicely with any plain-C based plugin interface. For example, we will have C++ adapter classes for the most common sorts of effect plugin (pull system and synchronous frame-by-frame push with buffering) with a thin C adaptation layer for the specific external plugin systems used. Everything beyond this point can be considered &quot;condiguration data&quot; (including the actual plugin implementation to be loaded)
+In the design of the Lumiera Proc Layer done thus far, we provide //no possibility to introduce a new object kind// into the system via plugin interface. The system uses a fixed collection of classes intended to cover all needs (Clip, Effect, Track, Pipe, Label, Automation, ~Macro-Clips). Thus, plugins will only be able to provide new parametrisations of existing classes. This should not be any real limitation, because the whole system is designed to achieve most of its functionality by freely combining rather basic object kinds. As a plus, it plays nicely with any plain-C based plugin interface. For example, we will have C++ adapter classes for the most common sorts of effect plugin (pull system and synchronous frame-by-frame push with buffering) with a thin C adaptation layer for the specific external plugin systems used. Everything beyond this point can be considered &quot;configuration data&quot; (including the actual plugin implementation to be loaded)
 </pre>
 </div>
 <div title="QueryResolver" modifier="Ichthyostega" modified="200911090412" created="200910210300" tags="Rules spec draft img" changecount="26">

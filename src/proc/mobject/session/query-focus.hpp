@@ -129,7 +129,7 @@ namespace session {
   
   /** discover depth-first any matching object
    *  within \em current focus. Resolution is
-   *  delegate to the \em current session */
+   *  delegated to the \em current session */
   template<class MO>
   typename ScopeQuery<MO>::iterator
   QueryFocus::query()  const

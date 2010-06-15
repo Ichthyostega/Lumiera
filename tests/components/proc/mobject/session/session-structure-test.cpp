@@ -82,6 +82,8 @@ namespace test    {
           
 #if false //////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #546              
           
+/////TODO the following is code from the old session mockup... try to rephrase it into the new (real) session API
+//        
           ASSERT (0 <= sess->currEDL().size());                // TODO implement
           ASSERT (0 <= sess->getFixture()->size());             // TODO implement
           ASSERT (sess->currEDL().getTracks()->isValid());
