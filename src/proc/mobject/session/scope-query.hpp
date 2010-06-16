@@ -21,6 +21,23 @@
 */
 
 
+/** @file scope-query.hpp
+ ** Specific queries to explore contents of a scope within the high-level model.
+ ** This is an application of the QueryResolver facility, and used heavily to
+ ** provide the various search and exploration functions on the session API.
+ ** It is implemented by accessing a SessionService, which resolves the
+ ** queries by iteration on the PlacementIndex behind the scenes.
+ ** 
+ ** @see query-focus.hpp
+ ** @see query-resolver.hpp
+ ** @see scope-query-test.cpp
+ ** @see placement-index-query-test.cpp
+ ** @see PlacementIndexQueryResolver
+ **
+ */
+
+
+
 #ifndef MOBJECT_SESSION_SCOPE_QUERY_H
 #define MOBJECT_SESSION_SCOPE_QUERY_H
 
@@ -29,6 +46,7 @@
 #include "proc/mobject/session/query-resolver.hpp"
 
 #include <tr1/functional>
+#include "lib/meta/function-closure.hpp"  //////////////////////TODO
 
 
 namespace mobject {
@@ -203,6 +221,54 @@ namespace session {
         : ScopeQuery<MO> (resolver,scope, PARENTS)
         { }
       
+    };
+  
+  
+  template<class MO>
+  class SpecificContentsQuery
+    : public ContentsQuery<MO>
+    {
+      typedef ContentsQuery<MO> _Parent;
+      typedef typename _Parent::ContentFilter ContentFilter;
+      
+      typedef Placement<MO> const& TypedPlacement; 
+      
+      typedef function<bool(TypedPlacement)> SpecialPredicate;
+      
+      class SpecialTest
+        {
+          SpecialPredicate predicate_;
+        public:
+          SpecialTest (SpecialPredicate const& pred)
+            : predicate_(pred)
+            { }
+          
+          bool
+          operator() (PlacementMO const& anyMO)
+            {
+              if (!anyMO.isCompatible<MO>())
+                return false;
+              
+              TypedPlacement interestingObject = static_cast<TypedPlacement> (anyMO);
+              return predicate_(interestingObject);
+            }
+        };
+      
+      SpecialTest specialTest_;
+      
+      virtual ContentFilter
+      buildContentFilter()  const
+        {
+          return specialTest_;
+        }
+      
+    public:
+      SpecificContentsQuery (QueryResolver const& resolver
+                            ,PlacementMO  const& scope
+                            ,SpecialPredicate const& specialPred)
+        : ContentsQuery<MO> (resolver,scope)
+        , specialTest_(specialPred)
+        { }
     };
   
   

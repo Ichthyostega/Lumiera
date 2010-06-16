@@ -3611,7 +3611,7 @@ Viewed as a micro program, the processing patterns are ''weak typed'' &amp;mdash
 <pre>a given Render Engine configuration is a list of Processors. Each Processor in turn contains a Graph of ProcNode.s to do the acutal data processing. In order to cary out any calculations, the Processor needs to be called with a StateProxy containing the state information for this RenderProcess
 </pre>
 </div>
-<div title="Query" modifier="Ichthyostega" modified="201006150322" created="200910171621" tags="Rules spec draft discuss" changecount="13">
+<div title="Query" modifier="Ichthyostega" modified="201006160220" created="200910171621" tags="Rules spec draft discuss" changecount="15">
 <pre>{{red{WIP as of 10/09}}}...//brainstorming about the first ideas towards a query subsystem//
 
 !use case: discovering the contents of a container in the HighLevelModel
@@ -3630,6 +3630,9 @@ The requirement is to retrieve one (or multiple) objects of a specific kind, loc
 This is a special case of the general discovery (described in the previous use case), but it is also a common situation in a general ConfigQuery (&amp;rArr; an object of a specific type and with additional capabilities...). The tricky question seems to be how to specify and resolve these additional conditions or capabilities.
 * in a generic query handled by a resolution engine, we might represent these capabilities as a nested //goal.//
 * if we approach the problem as a filter pipeline, then the condition becomes a functor (or closure).
+On second consideration, these two approaches don't contradict each other, because they live in different contexts and levels of abstraction. Performance-wise, both are bad and degenerate on large models, because both effectively cause a full table scan. Only specialised search functions for hardcoded individual properties could improve that situation, by backing them with an additional sub-index.
+__Conclusion__: no objection against providing the functor/filter solution right now, even on the QueryFocus API &amp;mdash;
+notwithstanding the fact we need a better solution later.
 
 ----
 See also the notes on &amp;rarr; QueryImplProlog
