@@ -87,7 +87,7 @@ namespace session {
       typedef function<bool(Pla)> ContentFilter;
       
       /** yield an additional filter to be applied
-       *  on the result set. */
+       *  to the result set. */
       virtual ContentFilter  buildContentFilter()  const  =0;
     };
   
@@ -175,7 +175,7 @@ namespace session {
       ContentFilter
       contentFilter () const
         {
-          return buildContentFilter();
+          return buildContentFilter(); ////////////////////////FIXME why isn't this dispatched via VTABLE?????
         }
       
       

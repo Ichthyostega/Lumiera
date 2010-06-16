@@ -41,6 +41,15 @@ namespace test    {
   using std::string;
   using std::cout;
   using std::endl;
+  namespace {
+    bool
+    filterfunk (Placement<DummyMO> const& candidate)
+    {
+      string desc = candidate->operator string();
+      cout << "prüfe..." << desc << endl;
+      return desc == "TestSubMO2";
+    }
+  }
   
   
   /**********************************************************************************************
@@ -73,6 +82,8 @@ namespace test    {
           discover (ScopeQuery<DummyMO>    (resolver,scope, CONTENTS) , "contents depth-first, filtered to DummyMO");  ////////////////////// TICKET #532
           discover (ScopeQuery<TestSubMO1> (resolver,scope, CONTENTS) , "contents depth-first, filtered to TestSubMO1");
           discover (ScopeQuery<TestSubMO2> (resolver,scope, CONTENTS) , "contents depth-first, filtered to TestSubMO2");
+
+          discover (SpecificContentsQuery<DummyMO> (resolver,scope, &filterfunk) , "contents depth-first, custom filtered DummyMO");
           
           ScopeQuery<TestSubMO21> specialEl(resolver,scope, CONTENTS);
           ++specialEl; // step in to second solution found...
