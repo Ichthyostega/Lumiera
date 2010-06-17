@@ -69,26 +69,36 @@ namespace session {
     : public Query<Placement<MO> >
     , public Query<Placement<MO> >::iterator
     {
-      
-      /// Assignment explicitly disallowed (but copy ctor is ok)
-      DiscoveryQuery const& operator=(DiscoveryQuery const&); 
-      
-    protected:
       typedef Query<Placement<MO> > _Query;
-      typedef typename _Query::iterator _QIter;
+      
+      
+    public:      
+      typedef typename _Query::iterator iterator;
+      
+      typedef function<bool(PlacementMO const&)> ContentFilter;
+      
+      
+      ContentFilter
+      contentFilter () const
+        {
+          return buildContentFilter();
+        }
+
+    protected:
+      /** yield additional filter to be applied to the result set. */
+      virtual ContentFilter  buildContentFilter()  const  =0;
+      
+      
+      
       
       DiscoveryQuery ()
         : _Query (_Query::defineQueryTypeID (Goal::DISCOVERY))
         , _QIter ()
         { }
       
-      
-      typedef PlacementMO const& Pla;
-      typedef function<bool(Pla)> ContentFilter;
-      
-      /** yield an additional filter to be applied
-       *  to the result set. */
-      virtual ContentFilter  buildContentFilter()  const  =0;
+    private:
+      /// Assignment explicitly disallowed (but copy ctor is ok)
+      DiscoveryQuery const& operator=(DiscoveryQuery const&);
     };
   
   
@@ -129,8 +139,8 @@ namespace session {
   class ScopeQuery
     : public DiscoveryQuery<MO>
     {
-      typedef DiscoveryQuery<MO> _Par;
-      typedef typename _Par::_Query _Query;
+      typedef DiscoveryQuery<MO>   _Parent;
+      typedef Query<Placement<MO> > _Query;
       
       
       QueryResolver const&    index_;
@@ -138,8 +148,8 @@ namespace session {
       ScopeQueryKind    to_discover_;
       
     public:
-      typedef typename _Par::ContentFilter ContentFilter;
-      typedef typename _Query::iterator iterator;
+      typedef typename _Parent::iterator      iterator;
+      typedef typename _Parent::ContentFilter ContentFilter;
       
       
       ScopeQuery (QueryResolver const& resolver,
@@ -149,7 +159,7 @@ namespace session {
         , startPoint_(scope)
         , to_discover_(direction)
         {
-          resetResultIteration (_Query::resolveBy(index_));
+          resetResultIteration (_Query::resolveBy(index_)); ///////////////////////////////TICKET #642  this call causes the problem!!!
         }
       
       
@@ -172,11 +182,6 @@ namespace session {
           return to_discover_;
         }
       
-      ContentFilter
-      contentFilter () const
-        {
-          return buildContentFilter(); ////////////////////////FIXME why isn't this dispatched via VTABLE?????
-        }
       
       
     private:
@@ -186,7 +191,7 @@ namespace session {
        *  with our template parameter MO, we pick out only
        *  those elements of the scope being subclasses of MO
        */
-      virtual ContentFilter
+      ContentFilter
       buildContentFilter()  const
         {
           return bind (&PlacementMO::isCompatible<MO>, _1 );
@@ -256,7 +261,7 @@ namespace session {
       
       SpecialTest specialTest_;
       
-      virtual ContentFilter
+      ContentFilter
       buildContentFilter()  const
         {
           return specialTest_;
