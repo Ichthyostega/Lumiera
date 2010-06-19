@@ -107,8 +107,8 @@ namespace test    {
           discover (ScopeQuery<TestSubMO1> (scope, CONTENTS) , "contents depth-first, filtered to TestSubMO1");
           discover (ScopeQuery<TestSubMO2> (scope, CONTENTS) , "contents depth-first, filtered to TestSubMO2");
           
-          discover (SpecificContentsQuery<DummyMO> (scope, filter) , "contents depth-first, custom filtered DummyMO");
-                                                          // note the filter is typed to accept DummyMO
+          discover (pickAllSuitable(scope, filter)           , "contents depth-first, custom filtered DummyMO");
+                                          // note filter is typed to accept DummyMO
           ScopeQuery<TestSubMO21> allM021(scope, CONTENTS);
           ScopeQuery<TestSubMO21>::iterator specialEl (issue(allM021));
           ++specialEl; // step in to second solution found...

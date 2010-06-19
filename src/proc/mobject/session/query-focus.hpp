@@ -114,13 +114,13 @@ namespace session {
    *  Implemented by copying the scope at
    *  leaf position of the current focus path
    */
-  QueryFocus::operator Scope() const
+  inline QueryFocus::operator Scope() const
   {
     return currPath().getLeaf();
   }
   
   /**@note returning a copy */
-  ScopePath
+  inline ScopePath
   QueryFocus::currentPath()  const
   {
     return currPath();
@@ -131,7 +131,7 @@ namespace session {
    *  within \em current focus. Resolution is
    *  delegated to the \em current session */
   template<class MO>
-  typename ScopeQuery<MO>::iterator
+  inline typename ScopeQuery<MO>::iterator
   QueryFocus::query()  const
   {
     ScopeLocator::instance().query<MO> (*this);
@@ -142,7 +142,7 @@ namespace session {
    *  as immediate Child within \em current focus.
    *  Resolution through \em current session */
   template<class MO>
-  typename ScopeQuery<MO>::iterator
+  inline typename ScopeQuery<MO>::iterator
   QueryFocus::explore()  const
   {
     ScopeLocator::instance().explore<MO> (*this);

@@ -107,5 +107,68 @@ namespace session {
     };
   
   
+  
+  namespace { // type matching helper
+    
+    template<class PRED>
+    struct _PickResult;
+    
+    template<class MO>
+    struct _PickResult<function<bool(Placement<MO> const&)> >
+      {
+        typedef MO Type;
+        typedef SpecificContentsQuery<MO> FilterQuery;
+        typedef typename ScopeQuery<MO>::Iterator Iterator;
+      };
+    
+    template<class MO>
+    struct _PickResult<bool(&)(Placement<MO> const&)>
+      {
+        typedef MO Type;
+        typedef SpecificContentsQuery<MO> FilterQuery;
+        typedef typename ScopeQuery<MO>::Iterator Iterator;
+      };
+    
+    template<class MO>
+    struct _PickResult<bool(*)(Placement<MO> const&)>
+      {
+        typedef MO Type;
+        typedef SpecificContentsQuery<MO> FilterQuery;
+        typedef typename ScopeQuery<MO>::iterator Iterator;
+      };
+  }
+  
+  
+  
+  
+  /** convenience shortcut to issue a SpecialContentsQuery,
+   *  figuring out the actual return/filter type automatically,
+   *  based on the predicate given as parameter
+   */
+  template<typename FUNC>
+  inline typename _PickResult<FUNC>::FilterQuery
+  pickAllSuitable(PlacementMO const& scope, FUNC predicate)
+  {
+    typedef typename _PickResult<FUNC>::FilterQuery Query;
+    
+    return Query(scope, predicate);
+  }
+  
+  /** convenience shortcut (variant), automatically to build
+   *  and execute a suitable SpecialContentsQuery
+   *  @return iterator yielding placements of the type as
+   *          defined through the parameter of the predicate
+   */
+  template<typename FUNC>
+  inline typename _PickResult<FUNC>::Iterator
+  pickAllSuitable(PlacementMO const& scope, FUNC predicate, QueryResolver const& resolver)
+  {
+    typedef typename _PickResult<FUNC>::FilterQuery Query;
+    
+    return Query(scope, predicate ).resolveBy(resolver);
+  }
+  
+  
+  
 }} // namespace mobject::session
 #endif
