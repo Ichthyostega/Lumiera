@@ -3640,7 +3640,7 @@ See also the notes on
 &amp;nbsp; &amp;rarr; QueryRegistration
 </pre>
 </div>
-<div title="QueryFocus" modifier="Ichthyostega" modified="201002160259" created="200910140244" tags="def spec img" changecount="30">
+<div title="QueryFocus" modifier="Ichthyostega" modified="201006190505" created="200910140244" tags="def spec img" changecount="34">
 <pre>When querying contents of the session or sub-containers within the session, the QueryFocus follows the current point-of-query. As such queries can be issued to explore the content of container-like objects holding other MObjects, the focus is always attached to a container, which also acts as [[scope|PlacementScope]] for the contained objects. QueryFocus is an implicit state (the current point of interrest). This sate especially remembers the path down from the root of the HighLevelModel, which was used to access the current scope. Because this path constitutes a hierarchy of scopes, it can be relevant for querying and resolving placement properties. (&amp;rarr; SessionStructureQuery)
 
 !provided operations
@@ -3651,6 +3651,7 @@ See also the notes on
 * get the current ScopePath from root (session globals) down to the current scope
 * (typed) content discovery query on the current scope
 [&gt;img[Scope Locating|uml/fig136325.png]]
+&amp;rarr; [[more|SessionContentsQuery]] regarding generic scope queries
 !!!relation to Scope
 There is a tight integration with PlacementScope through the ScopeLocator, which establishes the //current focus.// But while the [[scope|PlacementScope]] just decorates the placement defining a scope (called //&amp;raquo;scope top&amp;laquo;//), QueryFocus is more of a //binding// &amp;mdash; it links or focusses the current state into a specific scope with a ScopePath in turn depending on this current state. Thus, while Scope is just a passive container allowing to locate and navigate, QueryFocus by virtue of this binding allows to [[Query]] at this current location.
 
@@ -4185,6 +4186,23 @@ The Session object is a singleton &amp;mdash; actually it is a »~PImpl«-Facade
 &amp;rarr; see [[relation of timeline, sequences and objects|TimelineSequences]]
 </pre>
 </div>
+<div title="SessionContentsQuery" modifier="Ichthyostega" modified="201006190547" created="201006190526" tags="SessionLogic spec draft" changecount="6">
+<pre>Querying and retrieving objects within the session model is always bound to a [[scope|PlacementScope]]. When using the //dedicated API,// this scope is immediately defined by the object used to issue the query, like e.g. when searching the contents of a track. But when using the //generic API,// this scope is rather implicit, because in this case a (stateful) QueryFocus object is used to invoke the queries. Somewhat in-between, the top-level session API itself exposes dedicated query functions working on the whole-session scope (model root).
+Based on the PlacementIndex, the treelike scope structure can be explored efficiently; each Placement attached to the session knows its parent scope. But any additional filtering currently is implemented on top of this basic scope exploration, which obviously may degenerate when searching large scopes and models. Filtering may happen implicitly; all scope queries are parametrised to a specific kind of MObject, while the PlacementIndex deals with all kinds of {{{Placement&lt;MObject&gt;}}} uniformly. Thus, more specifically typed queries automatically have to apply a type filter based on the RTTI of the discovered placements. The plan is later to add specialised sub-indices and corresponding specific query functions to speed up the most frequently used kinds of queries.
+
+!Ways to query
+;contents query
+:running a ~ContentsQuery&lt;TY&gt; means to traverse the given start scope depth-first, the order of the retrieved elements is implementation defined (hashtable).
+;exploration
+:this special parametrisation of the ~ContentsQuery is confined to retrieving the immediate children of the start scope, and intended for exploring and processing the model contents in specific ways. The implementation is based on the bucket iterators of the reverse index (aka scope table).
+;parent path
+:this query proceeds in the other direction, ascending from the given start scope up to the model root
+;special contents
+:a ~ContentsQuery&lt;TY&gt; may be combined with a predicate supplied by the client code; this predicate is applied after the general type filter, allowing to use the special interface of the subtype. In a large model this may degenerate considerably.
+;picking
+:to pick by query means to retrieve the first object returned by the underlying query. As the oder of retrieval is implementation defined, the results may be unpredictable. Typically, this is used under the assumption that the given query can only yield a single result. Beware, the {{{pick(predicate)}}}-functions exposed on the QueryFocus and top-level session API moreover assume there will be a result, and throw when this assumption is broken. The type filter in this case is derived automatically (at compile time) from the provided predicate.
+</pre>
+</div>
 <div title="SessionDataMem" modifier="Ichthyostega" modified="201003160216" created="200904252303" tags="impl design SessionLogic draft" changecount="8">
 <pre>The [[Session]] is interconnected with the GUI, the SessionStorage, [[Builder]] and the CommandHandling. The HighLevelModel is an conceptual view of the session. All these dependencies are isolated from the actual data layout in memory, but the latter is shaped by the intended interactions.
 
@@ -4206,7 +4224,7 @@ The session and the models rely on dependent objects beeing kept updated and con
 &amp;rarr; see [[details here...|ModelDependencies]]
 </pre>
 </div>
-<div title="SessionInterface" modifier="Ichthyostega" modified="201003272138" created="200904242108" tags="SessionLogic GuiIntegration design draft discuss" changecount="48">
+<div title="SessionInterface" modifier="Ichthyostega" modified="201006190502" created="200904242108" tags="SessionLogic GuiIntegration design draft discuss" changecount="49">
 <pre>&quot;Session Interface&quot;, when used in a more general sense, denotes a compound of several interfaces and facilities, together forming the primary access point to the user visible contents and state of the editing project.
 * the API of the session class
 * the accompanying management interface (SessionManager API)
@@ -4248,7 +4266,8 @@ Typically, the list of timelines serves as starting point for exploring the mode
 On the other hand, arbitrary structures can be retrieved using the //generic API:// Contents can be discovered on the QueryFocus, which automatically follows the //point of mutation,// but can be moved to any point using the {{{QueryFocus::attach(obj)}}} function.
 
 !!queries and defaults
-Queries can retrieve the immediate children, or the complete contents of a scope (depth-first). The results can be filtered by type. The intention is to extend this later to arbitrary logical queries, using some kind of resolution engine. Besides these queries, [[default configured objects|DefaultsManagement]] can be retrieved or defined through the defaults manager, which is accessible as a self-contained component on the public session API. Defaults can be used to establish a standard way of doing things on a per-project base.
+Queries can retrieve the immediate children, or the complete contents of a scope (depth-first). The results can be filtered by type. Additionally, the results of such a scoped query can be filtered by a client-provided predicate, which allows to pick objects with specific properties. The intention is to extend this later to arbitrary logical [[queries|Query]], using some kind of resolution engine. Besides these queries, [[default configured objects|DefaultsManagement]] can be retrieved or defined through the defaults manager, which is accessible as a self-contained component on the public session API. Defaults can be used to establish a standard way of doing things on a per-project base.
+&amp;rarr; SessionContentsQuery
 
 {{red{WIP ... just emerging}}}
 !!discovery and mutations
