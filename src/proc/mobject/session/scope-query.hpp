@@ -59,15 +59,16 @@ namespace session {
   
   
   /**
-   * Mix-in ABC, combining a Query for placement-attached objects
-   * with an embedded result set iterator. Thus, an concrete (derived)
-   * DiscoveryQuery can be created by the invoking client code, and
-   * then immediately explored until exhaustion of the result iterator. 
+   * ABC to build Queries for placement-attached objects.
+   * The Placements obtained from such a query are typed to the
+   * specific MObject type given as template parameter. To ensure
+   * this, an additional ContentFilter is applied on the yielded
+   * results; this filter function is constructed by a virtual
+   * call when actually issuing the query. 
    */
   template<class MO>
   class DiscoveryQuery
     : public Query<Placement<MO> >
-    , public Query<Placement<MO> >::iterator
     {
       typedef Query<Placement<MO> > _Query;
       
@@ -93,7 +94,6 @@ namespace session {
       
       DiscoveryQuery ()
         : _Query (_Query::defineQueryTypeID (Goal::DISCOVERY))
-        , _QIter ()
         { }
       
     private:
@@ -143,7 +143,6 @@ namespace session {
       typedef Query<Placement<MO> > _Query;
       
       
-      QueryResolver const&    index_;
       PlacementMO::ID    startPoint_;
       ScopeQueryKind    to_discover_;
       
@@ -152,23 +151,13 @@ namespace session {
       typedef typename _Parent::ContentFilter ContentFilter;
       
       
-      ScopeQuery (QueryResolver const& resolver,
-                  PlacementMO  const& scope,
+      ScopeQuery (PlacementMO  const& scope,
                   ScopeQueryKind direction)
-        : index_(resolver)
-        , startPoint_(scope)
+        : startPoint_(scope)
         , to_discover_(direction)
-        {
-          resetResultIteration (_Query::resolveBy(index_)); ///////////////////////////////TICKET #642  this call causes the problem!!!
-        }
+        { }
       
       
-      
-      iterator
-      operator() ()  const
-        {
-          return _Query::resolveBy (index_);
-        }
       
       PlacementMO::ID const&
       searchScope ()  const
@@ -209,9 +198,8 @@ namespace session {
   struct ContentsQuery
     : ScopeQuery<MO>
     {
-      ContentsQuery (QueryResolver const& resolver,
-                     PlacementMO  const& scope)
-        : ScopeQuery<MO> (resolver,scope, CONTENTS)
+      ContentsQuery (PlacementMO  const& scope)
+        : ScopeQuery<MO> (scope, CONTENTS)
         { }
       
     };
@@ -221,9 +209,8 @@ namespace session {
   struct PathQuery
     : ScopeQuery<MO>
     {
-      PathQuery (QueryResolver const& resolver,
-                 PlacementMO  const& scope)
-        : ScopeQuery<MO> (resolver,scope, PARENTS)
+      PathQuery (PlacementMO  const& scope)
+        : ScopeQuery<MO> (scope, PARENTS)
         { }
       
     };
@@ -233,18 +220,25 @@ namespace session {
   class SpecificContentsQuery
     : public ContentsQuery<MO>
     {
-      typedef ContentsQuery<MO> _Parent;
-      typedef typename _Parent::ContentFilter ContentFilter;
+      typedef typename ContentsQuery<MO>::ContentFilter ContentFilter;
       
       typedef Placement<MO> const& TypedPlacement; 
       
       typedef function<bool(TypedPlacement)> SpecialPredicate;
       
-      class SpecialTest
+      /**
+       * Filter functor, built on top of a predicate,
+       * which is provided by the client on creation of this
+       * SpecivicContentsQuery instance. This allows for filtering
+       * based on operations of the specific type MO, as opposed to
+       * just using the bare MObject interface.
+       */
+      class Filter
         {
           SpecialPredicate predicate_;
+          
         public:
-          SpecialTest (SpecialPredicate const& pred)
+          Filter (SpecialPredicate const& pred)
             : predicate_(pred)
             { }
           
@@ -259,8 +253,14 @@ namespace session {
             }
         };
       
-      SpecialTest specialTest_;
+      Filter specialTest_;
       
+      /** using a specialised version of the filtering,
+       *  which doesn't only check the concrete type,
+       *  but also applies a custom filter predicate
+       *  @return function object, embedding a copy
+       *          of the Filter functor.
+       */
       ContentFilter
       buildContentFilter()  const
         {
@@ -268,10 +268,9 @@ namespace session {
         }
       
     public:
-      SpecificContentsQuery (QueryResolver const& resolver
-                            ,PlacementMO  const& scope
+      SpecificContentsQuery (PlacementMO  const& scope
                             ,SpecialPredicate const& specialPred)
-        : ContentsQuery<MO> (resolver,scope)
+        : ContentsQuery<MO> (scope)
         , specialTest_(specialPred)
         { }
     };

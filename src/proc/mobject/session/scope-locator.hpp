@@ -99,7 +99,7 @@ namespace session {
   inline typename ScopeQuery<MO>::iterator
   ScopeLocator::explore (Scope scope)
   {
-    return ScopeQuery<MO> (theResolver(), scope.getTop(), CHILDREN);
+    return ScopeQuery<MO> (scope.getTop(), CHILDREN).resolveBy (theResolver());
   }
   
   
@@ -110,7 +110,7 @@ namespace session {
   inline typename ScopeQuery<MO>::iterator
   ScopeLocator::query (Scope scope)
   {
-    return ScopeQuery<MO> (theResolver(), scope.getTop(), CONTENTS);
+    return ScopeQuery<MO> (scope.getTop(), CONTENTS).resolveBy (theResolver());
   }
   
   
@@ -121,7 +121,7 @@ namespace session {
   inline typename ScopeQuery<MO>::iterator
   ScopeLocator::locate (Scope scope)
   {
-    return ScopeQuery<MO> (theResolver(), scope.getTop(), PATH);
+    return ScopeQuery<MO> (scope.getTop(), PATH).resolveBy (theResolver());
   }
   
   

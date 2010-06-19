@@ -27,6 +27,7 @@
 #include "proc/mobject/session/test-scopes.hpp"
 #include "proc/mobject/session/clip.hpp"
 #include "lib/symbol.hpp"
+#include "lib/util.hpp"
 
 #include <iostream>
 #include <string>
@@ -41,14 +42,37 @@ namespace test    {
   using std::string;
   using std::cout;
   using std::endl;
-  namespace {
+  
+  using util::contains;
+  
+  
+  namespace { // helpers and shortcuts....
+    
+    /** a filter predicate to pick some objects from a resultset.
+     *  @note using the specific API of DummyMO, without cast! */
     bool
-    filterfunk (Placement<DummyMO> const& candidate)
+    filter (Placement<DummyMO> const& candidate)
     {
       string desc = candidate->operator string();
-      cout << "prüfe..." << desc << endl;
-      return desc == "TestSubMO2";
+      return contains(desc, "MO2");
     }
+    
+    template<class IT>
+    void
+    pullOut (IT const& iter)
+    {
+      for (IT elm(iter);
+           elm; ++elm)
+        cout << string(*elm) << endl;
+    }
+    
+    void
+    announce (Literal description)
+    {
+      static uint nr(0);
+      cout << "--------------------------------Test-"<< ++nr << ": " << description << endl;
+    }
+    
   }
   
   
@@ -74,46 +98,43 @@ namespace test    {
           // Prepare an (test)Index (dummy "session")
           PPIdx testSession (build_testScopes());
           
-          QueryResolver const& resolver = SessionServiceExploreScope::getResolver();
-          PlacementMO   const& scope    = SessionServiceExploreScope::getScopeRoot();
+          PlacementMO   const& scope = SessionServiceExploreScope::getScopeRoot();
           
-          discover (ScopeQuery<MObject>    (resolver,scope, CONTENTS) , "contents depth-first");
-          discover (ScopeQuery<Clip>       (resolver,scope, CONTENTS) , "contents depth-first, filtered to Clip");
-          discover (ScopeQuery<DummyMO>    (resolver,scope, CONTENTS) , "contents depth-first, filtered to DummyMO");  ////////////////////// TICKET #532
-          discover (ScopeQuery<TestSubMO1> (resolver,scope, CONTENTS) , "contents depth-first, filtered to TestSubMO1");
-          discover (ScopeQuery<TestSubMO2> (resolver,scope, CONTENTS) , "contents depth-first, filtered to TestSubMO2");
-
-          discover (SpecificContentsQuery<DummyMO> (resolver,scope, &filterfunk) , "contents depth-first, custom filtered DummyMO");
+          discover (ScopeQuery<MObject>    (scope, CONTENTS) , "contents depth-first");
+          discover (ScopeQuery<Clip>       (scope, CONTENTS) , "contents depth-first, filtered to Clip");
+          discover (ScopeQuery<DummyMO>    (scope, CONTENTS) , "contents depth-first, filtered to DummyMO");  ////////////////////// TICKET #532
+          discover (ScopeQuery<TestSubMO1> (scope, CONTENTS) , "contents depth-first, filtered to TestSubMO1");
+          discover (ScopeQuery<TestSubMO2> (scope, CONTENTS) , "contents depth-first, filtered to TestSubMO2");
           
-          ScopeQuery<TestSubMO21> specialEl(resolver,scope, CONTENTS);
+          discover (SpecificContentsQuery<DummyMO> (scope, filter) , "contents depth-first, custom filtered DummyMO");
+          
+          ScopeQuery<TestSubMO21> allM021(scope, CONTENTS);
+          ScopeQuery<TestSubMO21>::iterator specialEl (issue(allM021));
           ++specialEl; // step in to second solution found...
           ASSERT (specialEl);
           
-          discover (ScopeQuery<MObject>    (resolver,*specialEl, PARENTS) , "parents of the second TestSubMO2 element found");
-          discover (ScopeQuery<MObject>    (resolver,*specialEl, CHILDREN), "children of the this TestSubMO2 element");
-          discover (ScopeQuery<MObject>    (resolver,*specialEl, PATH)    , "path from there to root");
-          discover (ScopeQuery<TestSubMO2> (resolver,*specialEl, PATH)    , "same path, but filtered to TestSubMO2");
-          discover (specialEl                                             , "continue exploring partially used TestSubMO2 iterator");
+          discover (ScopeQuery<MObject>    (*specialEl, PARENTS) , "parents of the second TestSubMO2 element found");
+          discover (ScopeQuery<MObject>    (*specialEl, CHILDREN), "children of the this TestSubMO2 element");
+          discover (ScopeQuery<MObject>    (*specialEl, PATH)    , "path from there to root");
+          discover (ScopeQuery<TestSubMO2> (*specialEl, PATH)    , "same path, but filtered to TestSubMO2");
+          announce (                                               "continue exploring partially used TestSubMO2 iterator");
+          pullOut  (specialEl);
         }
       
       
       template<class MO>
-      void
+      static void
       discover (ScopeQuery<MO> const& query, Literal description)
         {
-          typedef typename ScopeQuery<MO>::iterator I;
-          
           announce (description);
-          for (I elm(query);
-               elm; ++elm)
-            cout << string(*elm) << endl;
+          pullOut (issue(query));
         }
       
-      void
-      announce (Literal description)
+      template<class MO>
+      static typename ScopeQuery<MO>::iterator
+      issue (ScopeQuery<MO> const& query)
         {
-          static uint nr(0);
-          cout << "--------------------------------Test-"<< ++nr << ": " << description << endl;
+          return query.resolveBy(SessionServiceExploreScope::getResolver());
         }
       
     };

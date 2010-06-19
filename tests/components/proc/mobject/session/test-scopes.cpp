@@ -78,16 +78,16 @@ namespace test    {
   PlacementMO&
   retrieve_startElm()
   {
-    return *ContentsQuery<TestSubMO1>(SessionServiceExploreScope::getResolver()
-                                     ,SessionServiceExploreScope::getScopeRoot());
+    return *ContentsQuery<TestSubMO1>(SessionServiceExploreScope::getScopeRoot())
+                           .resolveBy(SessionServiceExploreScope::getResolver());
   }
   
   
   ScopeQuery<MObject>::iterator
   explore_testScope (PlacementMO const& scopeTop)
   {
-    return ScopeQuery<MObject>(SessionServiceExploreScope::getResolver(),
-                               scopeTop, CHILDREN);
+    return ScopeQuery<MObject>(scopeTop, CHILDREN)
+                           .resolveBy(SessionServiceExploreScope::getResolver());
   }
   
   

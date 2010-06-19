@@ -142,17 +142,20 @@ out: Placement<.+TestSubMO1.>
 out: --------------------------------Test-5: contents depth-first, filtered to TestSubMO2
 out: Placement<.+TestSubMO21.>
 out: Placement<.+TestSubMO2.>
-out: --------------------------------Test-6: parents of the second TestSubMO2 element found
+out: --------------------------------Test-6: contents depth-first, custom filtered DummyMO
+out: Placement<.+TestSubMO21.>
+out: Placement<.+TestSubMO2.>
+out: --------------------------------Test-7: parents of the second TestSubMO2 element found
 out: Placement<.+TestSubMO21.>
 out: Placement<.+mobject.session.Label.>
-out: --------------------------------Test-7: children of the this TestSubMO2 element
+out: --------------------------------Test-8: children of the this TestSubMO2 element
 out: Placement<.+TestSubMO21.>
-out: --------------------------------Test-8: path from there to root
+out: --------------------------------Test-9: path from there to root
 out: Placement<.+TestSubMO21.>
 out: Placement<.+mobject.session.Label.>
-out: --------------------------------Test-9: same path, but filtered to TestSubMO2
+out: --------------------------------Test-10: same path, but filtered to TestSubMO2
 out: Placement<.+TestSubMO21.>
-out: --------------------------------Test-10: continue exploring partially used TestSubMO2 iterator
+out: --------------------------------Test-11: continue exploring partially used TestSubMO2 iterator
 out: Placement<.+TestSubMO21.>
 END
 

@@ -79,7 +79,7 @@ namespace test    {
           PlacementMO& root2 = SessionServiceExploreScope::getScopeRoot();          
           ASSERT (isSameObject (root1, root2));
           
-          PlacementMO& elm1 = *ContentsQuery<TestSubMO21>(resolver1,root1);
+          PlacementMO& elm1 = *ContentsQuery<TestSubMO21>(root1).resolveBy(resolver1);
           PlacementMO& elm2 = *(index->getReferrers(root1));
           ASSERT (isSameObject (elm1, elm2));
         }
@@ -93,12 +93,12 @@ namespace test    {
           PlacementIndexQueryResolver resolver(*index);
           
           cout << "explore contents depth-first..." << endl;
-          discover (ContentsQuery<MObject> (resolver,root));
+          discover (ContentsQuery<MObject>(root).resolveBy(resolver));
           
-          PlacementMO& elm = *ContentsQuery<TestSubMO1>(resolver,root);                  ////////////////////// TICKET #532
+          PlacementMO& elm = *ContentsQuery<TestSubMO1>(root).resolveBy(resolver);                  ////////////////////// TICKET #532
           
           cout << "path to root starting at " << string(elm) << endl;
-          discover (PathQuery<MObject> (resolver,elm));
+          discover (PathQuery<MObject> (elm).resolveBy(resolver));
         }
       
       
