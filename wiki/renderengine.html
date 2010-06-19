@@ -3611,7 +3611,7 @@ Viewed as a micro program, the processing patterns are ''weak typed'' &amp;mdash
 <pre>a given Render Engine configuration is a list of Processors. Each Processor in turn contains a Graph of ProcNode.s to do the acutal data processing. In order to cary out any calculations, the Processor needs to be called with a StateProxy containing the state information for this RenderProcess
 </pre>
 </div>
-<div title="Query" modifier="Ichthyostega" modified="201006160220" created="200910171621" tags="Rules spec draft discuss" changecount="15">
+<div title="Query" modifier="Ichthyostega" modified="201006190049" created="200910171621" tags="Rules spec draft discuss" changecount="17">
 <pre>{{red{WIP as of 10/09}}}...//brainstorming about the first ideas towards a query subsystem//
 
 !use case: discovering the contents of a container in the HighLevelModel
@@ -3629,13 +3629,15 @@ For decoupling the query invocation from the facility actually processing the qu
 The requirement is to retrieve one (or multiple) objects of a specific kind, located within a scope, and fulfilling some additional condition. For example: find a sub-track with {{{id(blubb)}}}.
 This is a special case of the general discovery (described in the previous use case), but it is also a common situation in a general ConfigQuery (&amp;rArr; an object of a specific type and with additional capabilities...). The tricky question seems to be how to specify and resolve these additional conditions or capabilities.
 * in a generic query handled by a resolution engine, we might represent these capabilities as a nested //goal.//
-* if we approach the problem as a filter pipeline, then the condition becomes a functor (or closure).
+* if we approach the problem as a filter pipeline, then the condition becomes a functor (or closure). &amp;rarr; QueryResolver
 On second consideration, these two approaches don't contradict each other, because they live in different contexts and levels of abstraction. Performance-wise, both are bad and degenerate on large models, because both effectively cause a full table scan. Only specialised search functions for hardcoded individual properties could improve that situation, by backing them with an additional sub-index.
 __Conclusion__: no objection against providing the functor/filter solution right now, even on the QueryFocus API &amp;mdash;
 notwithstanding the fact we need a better solution later.
 
 ----
-See also the notes on &amp;rarr; QueryImplProlog
+See also the notes on
+&amp;nbsp; &amp;rarr; QueryImplProlog
+&amp;nbsp; &amp;rarr; QueryRegistration
 </pre>
 </div>
 <div title="QueryFocus" modifier="Ichthyostega" modified="201002160259" created="200910140244" tags="def spec img" changecount="30">
@@ -3698,6 +3700,22 @@ Then, running the goal {{{:-resolve(T, stream(T,mpeg)).}}} would search a Track 
 
 !!a note on Plugins
 In the design of the Lumiera Proc Layer done thus far, we provide //no possibility to introduce a new object kind// into the system via plugin interface. The system uses a fixed collection of classes intended to cover all needs (Clip, Effect, Track, Pipe, Label, Automation, ~Macro-Clips). Thus, plugins will only be able to provide new parametrisations of existing classes. This should not be any real limitation, because the whole system is designed to achieve most of its functionality by freely combining rather basic object kinds. As a plus, it plays nicely with any plain-C based plugin interface. For example, we will have C++ adapter classes for the most common sorts of effect plugin (pull system and synchronous frame-by-frame push with buffering) with a thin C adaptation layer for the specific external plugin systems used. Everything beyond this point can be considered &quot;configuration data&quot; (including the actual plugin implementation to be loaded)
+</pre>
+</div>
+<div title="QueryRegistration" modifier="Ichthyostega" created="201006190112" tags="Rules draft impl discuss" changecount="1">
+<pre>//Querying for some suitable element,// instead of relying on hard wired dependencies, is considered a core pattern within Lumiera.
+But we certainly can't expect to subsume every query situation to one single umbrella interface, so we need some kind of '''query dispatch''' and a registration mechanism to support this indirection. Closely related is the &amp;rarr; TypedQueryProblem
+
+!Plans and preliminary implementation
+As of 6/10, the intention is to be able just to //pose queries eventually.// Behind the scenes, a suitable QueryResolver should then be picked to process the query and yield a resultset. Thus the {{{Goal}}} and {{{Query&lt;TY&gt;}}} interfaces are to become the access point to a generic dispatching service and a bundle of specialised resolution mechanisms.
+
+But implementing this gets a bit involved, for several reasons
+* we don't know the kinds of queries, their frequency and performance requirements
+* we don't know the exact usage pattern with respect to memory management of the resultsets.
+* we can't asses the relevance of //lock contention,// created by using a central dispatcher facility.
+We might end up with a full blown subsystem, and possibly with a hierarchy of dispatchers.
+
+But for now the decision is to proceed with isolated and specialised QueryResolver subclasses, and to pass a basically suitable resolver to the query explicitly when it comes to retrieving results. This resolver should be obtained by some system service suitable for the concrete usage situation, like e.g. the ~SessionServiceExploreScope, which exposes a resolver to query session contents through the PlacementIndex. Nonetheless, the actual dispatch mechanism is already implemented (by using an ~MultiFact instance), and each concrete resolution mechanism is required to do an registration within the ctor, by calling the inherited {{{QueryResolver::installResolutionCase(..)}}}.
 </pre>
 </div>
 <div title="QueryResolver" modifier="Ichthyostega" modified="200911090412" created="200910210300" tags="Rules spec draft img" changecount="26">
@@ -6101,7 +6119,7 @@ Obviously, the ~TypedLookup system is open for addition of completely separate a
 |~| Transition| Asset(?)|
 </pre>
 </div>
-<div title="TypedQueryProblem" modifier="Ichthyostega" modified="200910301629" created="200910231618" tags="Rules operational" changecount="10">
+<div title="TypedQueryProblem" modifier="Ichthyostega" modified="201006190118" created="200910231618" tags="Rules operational" changecount="16">
 <pre>//the problem of processing specifically typed queries without tying query and QueryResolver.//&lt;br/&gt;This problem can be seen as a instance of the problematic situation encountered with most visitation schemes: we want entities and tools (visitors) to work together, without being forced to commit to a pre-defined table of operations. In the situation at hand here, we want //some entities// &amp;mdash; which we don't know &amp;mdash; to issue //some queries// &amp;mdash; which we don't know either. Obviously, such a problem can be solved only by controlling the scope of this incomplete knowledge, and the sequence in time of building it.
 Thus, to re-state the problem more specifically, we want the //definition//&amp;nbsp; of the entities to be completely separate of those definitions concerning the details of the query resolution mechanism, so to be able to design, reason, verify and extend each one without being forced into concern about the details of the respective other side. So, the buildup of the combined structure has to be postponed &amp;mdash; assuring it //has//&amp;nbsp; happened at the point it's operations are required.
 
@@ -6111,6 +6129,11 @@ Thus, to re-state the problem more specifically, we want the //definition//&amp;
 * during ''initialisation'', a complete list of all specifically typed scopes needs to be collected. This might be a flat list, but may well become structured in multiple dimensions later, when using multiple //kinds of query.// It is important to notice that this buildup of a complete list won't happen, unless triggered explicitly, so we need registration into a system lifecycle hook.
 * on ''first use'' (which me must ensure to be //after//&amp;nbsp; initialisation) the list-of-typed queries will be hooked into the query resolving facility to build a dispatcher table there.
 * the ''actual query'' just picks the respective type-ID for accessing the dispatcher table, making for a total of //two//&amp;nbsp; function-pointer indirections.
+
+!{{red{Preliminary solution}}}
+The above outlines the planned full version of this service.
+For now, as of 6/10, we use specialised QueryResolver instances explicitly and don't need the lifecycle hook registration yet. But a dispatcher table is in place already
+&amp;rarr; QueryRegistration
 </pre>
 </div>
 <div title="VirtualClip" modifier="Ichthyostega" modified="201003130000" created="200804110321" tags="def" changecount="15">

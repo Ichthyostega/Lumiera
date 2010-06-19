@@ -258,8 +258,15 @@ namespace session {
 
 
   /**
-   * Interface: a facility for resolving (some) queries
-   * TODO type comment
+   * Interface: a facility for resolving (some kind of) queries
+   * A concrete subclass has the ability to create Resolution instances
+   * in response to specific queries of some kind, \link #canHandle if applicable \endlink.
+   * Every resolution mechanism is expected to enrol by calling #installResolutionCase.
+   * Such a registration is considered permanent; a factory function gets stored,
+   * assuming that the entity implementing this function remains available
+   * up to the end of Lumiera main(). The kind of query and a suitable
+   * resolver is determined by the QueryID, which includes a type-ID.
+   * Thus the implementation might downcast query and resultset.
    */
   class QueryResolver
     : noncopyable
