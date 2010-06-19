@@ -29,6 +29,12 @@
 
 
 
+/**
+ * Lumiera Proc-Layer implementation root.
+ * The middle layer of the application holds a session with the
+ * high-level model, to be translated by the Builder into a node network,
+ * which can be \em performed by the Engine to render output.
+ */
 namespace proc {
   
   

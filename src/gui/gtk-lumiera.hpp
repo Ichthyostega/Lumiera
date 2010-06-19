@@ -62,7 +62,7 @@ extern "C" {
 #endif
 
 /**
- * The namespace of all GUI code.
+ * Lumiera GTK GUI implementation root.
  */
 namespace gui {
   
