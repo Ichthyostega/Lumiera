@@ -46,7 +46,6 @@
 #include "proc/mobject/session/query-resolver.hpp"
 
 #include <tr1/functional>
-#include "lib/meta/function-closure.hpp"  //////////////////////TODO
 
 
 namespace mobject {
@@ -213,66 +212,6 @@ namespace session {
         : ScopeQuery<MO> (scope, PARENTS)
         { }
       
-    };
-  
-  
-  template<class MO>
-  class SpecificContentsQuery
-    : public ContentsQuery<MO>
-    {
-      typedef typename ContentsQuery<MO>::ContentFilter ContentFilter;
-      
-      typedef Placement<MO> const& TypedPlacement; 
-      
-      typedef function<bool(TypedPlacement)> SpecialPredicate;
-      
-      /**
-       * Filter functor, built on top of a predicate,
-       * which is provided by the client on creation of this
-       * SpecivicContentsQuery instance. This allows for filtering
-       * based on operations of the specific type MO, as opposed to
-       * just using the bare MObject interface.
-       */
-      class Filter
-        {
-          SpecialPredicate predicate_;
-          
-        public:
-          Filter (SpecialPredicate const& pred)
-            : predicate_(pred)
-            { }
-          
-          bool
-          operator() (PlacementMO const& anyMO)
-            {
-              if (!anyMO.isCompatible<MO>())
-                return false;
-              
-              TypedPlacement interestingObject = static_cast<TypedPlacement> (anyMO);
-              return predicate_(interestingObject);
-            }
-        };
-      
-      Filter specialTest_;
-      
-      /** using a specialised version of the filtering,
-       *  which doesn't only check the concrete type,
-       *  but also applies a custom filter predicate
-       *  @return function object, embedding a copy
-       *          of the Filter functor.
-       */
-      ContentFilter
-      buildContentFilter()  const
-        {
-          return specialTest_;
-        }
-      
-    public:
-      SpecificContentsQuery (PlacementMO  const& scope
-                            ,SpecialPredicate const& specialPred)
-        : ContentsQuery<MO> (scope)
-        , specialTest_(specialPred)
-        { }
     };
   
   

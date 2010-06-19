@@ -22,8 +22,9 @@
 
 
 #include "lib/test/run.hpp"
-#include "proc/mobject/session/session-service-explore-scope.hpp"
 #include "proc/mobject/session/scope-query.hpp"
+#include "proc/mobject/session/specific-contents-query.hpp"
+#include "proc/mobject/session/session-service-explore-scope.hpp"
 #include "proc/mobject/session/test-scopes.hpp"
 #include "proc/mobject/session/clip.hpp"
 #include "lib/symbol.hpp"
@@ -76,6 +77,7 @@ namespace test    {
   }
   
   
+  
   /**********************************************************************************************
    * @test how to discover contents or location of a container-like part of the high-level model.
    *       As this container-like object is just a concept and actually implemented by the
@@ -91,7 +93,6 @@ namespace test    {
    */
   class ScopeQuery_test : public Test
     {
-      
       virtual void
       run (Arg) 
         {
@@ -107,7 +108,7 @@ namespace test    {
           discover (ScopeQuery<TestSubMO2> (scope, CONTENTS) , "contents depth-first, filtered to TestSubMO2");
           
           discover (SpecificContentsQuery<DummyMO> (scope, filter) , "contents depth-first, custom filtered DummyMO");
-          
+                                                          // note the filter is typed to accept DummyMO
           ScopeQuery<TestSubMO21> allM021(scope, CONTENTS);
           ScopeQuery<TestSubMO21>::iterator specialEl (issue(allM021));
           ++specialEl; // step in to second solution found...
@@ -120,6 +121,7 @@ namespace test    {
           announce (                                               "continue exploring partially used TestSubMO2 iterator");
           pullOut  (specialEl);
         }
+      
       
       
       template<class MO>
