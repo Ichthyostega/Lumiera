@@ -143,7 +143,7 @@ namespace asset {
         }
       
       
-  
+      
       
       
       
@@ -171,75 +171,75 @@ namespace asset {
         }
       
     };
-    
-    
-    /* ============= specialisations =========================== */
-    
-    template<>
-    inline Track* 
-    StructFactoryImpl::fabricate (const Query<Track>& caps)
-      {
-        TODO ("actually extract properties/capabilities from the query...");
-        TODO ("make sure AssetManager detects duplicates (currently 4/08 it doesn't)");       /////////////TICKET #102
-        return new Track (createIdent (caps));
-      }
-    
-    template<>
-    inline const ProcPatt* 
-    StructFactoryImpl::fabricate (const Query<const ProcPatt>& caps)
-      {
-        TODO ("actually extract properties/capabilities from the query...");
-        return new ProcPatt (createIdent (caps));
-      }
-    
-    template<>
-    inline Pipe* 
-    StructFactoryImpl::fabricate (const Query<Pipe>& caps)
-      {
-        const Asset::Ident idi (createIdent (caps));
-        string pipeID = extractID ("pipe", idi.name);
-        string streamID = extractID ("stream", caps);
-        if (isnil (streamID)) streamID = "default"; 
-        PProcPatt processingPattern = Session::current->defaults (Query<const ProcPatt>("stream("+streamID+")"));
-        return new Pipe( idi
-                       , processingPattern
-                       , pipeID
-                       );
-      }
-    
-    template<>
-    inline Timeline* 
-    StructFactoryImpl::fabricate (const Query<Timeline>& caps)
-      {
-        TODO ("extract additional properties/capabilities from the query...");
-        const Asset::Ident idi (createIdent (caps));
-        string sequenceID = extractID ("sequence", caps);
-        Query<Sequence> desiredSequence (isnil (sequenceID)? "" : "id("+sequenceID+")");
-        PSequence sequence = recursive_create_(desiredSequence);
-        ASSERT (sequence);
-        RBinding newBinding = Session::current->getRoot().attach (MObject::create (sequence));
-        ASSERT (newBinding);
-        return new Timeline (idi, newBinding);
-      }
-    
-    template<>
-    inline Sequence* 
-    StructFactoryImpl::fabricate (const Query<Sequence>& caps)
-      {
-        // when we reach this point it is clear a suitable sequence doesn't yet exist in the model
-        TODO ("actually extract properties/capabilities from the query...");
-        string trackID = extractID ("track", caps);
-        Query<Track> desiredTrack (isnil (trackID)? "" : "id("+trackID+")");
-//      PTrack track = Session::current->query (desiredTrack);        ///////////////////////////////////TICKET #639
-        // TODO: handle the following cases
-        // - track doesn't exist --> create and root attach it
-        // - track exists and is root attached, but belongs already to a sequence --> throw
-        // - track exists, but isn't root attached ---> what do do here? steal it??
-        return new Sequence (createIdent (caps));  ///////////TODO fed track in here
-      }
-    
-    
-    
-    
+  
+  
+  /* ============= specialisations =========================== */
+  
+  template<>
+  inline Track* 
+  StructFactoryImpl::fabricate (const Query<Track>& caps)
+  {
+    TODO ("actually extract properties/capabilities from the query...");
+    TODO ("make sure AssetManager detects duplicates (currently 4/08 it doesn't)");       /////////////TICKET #102
+    return new Track (createIdent (caps));
+  }
+  
+  template<>
+  inline const ProcPatt* 
+  StructFactoryImpl::fabricate (const Query<const ProcPatt>& caps)
+  {
+    TODO ("actually extract properties/capabilities from the query...");
+    return new ProcPatt (createIdent (caps));
+  }
+  
+  template<>
+  inline Pipe* 
+  StructFactoryImpl::fabricate (const Query<Pipe>& caps)
+  {
+    const Asset::Ident idi (createIdent (caps));
+    string pipeID = extractID ("pipe", idi.name);
+    string streamID = extractID ("stream", caps);
+    if (isnil (streamID)) streamID = "default"; 
+    PProcPatt processingPattern = Session::current->defaults (Query<const ProcPatt>("stream("+streamID+")"));
+    return new Pipe( idi
+                   , processingPattern
+                   , pipeID
+                   );
+  }
+  
+  template<>
+  inline Timeline* 
+  StructFactoryImpl::fabricate (const Query<Timeline>& caps)
+  {
+    TODO ("extract additional properties/capabilities from the query...");
+    const Asset::Ident idi (createIdent (caps));
+    string sequenceID = extractID ("sequence", caps);
+    Query<Sequence> desiredSequence (isnil (sequenceID)? "" : "id("+sequenceID+")");
+    PSequence sequence = recursive_create_(desiredSequence);
+    ASSERT (sequence);
+    RBinding newBinding = Session::current->getRoot().attach (MObject::create (sequence));
+    ASSERT (newBinding);
+    return new Timeline (idi, newBinding);
+  }
+  
+  template<>
+  inline Sequence* 
+  StructFactoryImpl::fabricate (const Query<Sequence>& caps)
+  {
+    // when we reach this point it is clear a suitable sequence doesn't yet exist in the model
+    TODO ("actually extract properties/capabilities from the query...");
+    string trackID = extractID ("track", caps);
+    Query<Track> desiredTrack (isnil (trackID)? "" : "id("+trackID+")");
+//  PTrack track = Session::current->query (desiredTrack);        ///////////////////////////////////TICKET #639
+    // TODO: handle the following cases
+    // - track doesn't exist --> create and root attach it
+    // - track exists and is root attached, but belongs already to a sequence --> throw
+    // - track exists, but isn't root attached ---> what do do here? steal it??
+    return new Sequence (createIdent (caps));  ///////////TODO fed track in here
+  }
+  
+  
+  
+  
 } // namespace asset
 #endif

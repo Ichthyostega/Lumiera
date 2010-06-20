@@ -76,8 +76,10 @@ namespace session {
         typedef typename ScopeQuery<MO>::iterator Iterator;
       };
   }
-
-
+  
+  
+  
+  
   /**
    * Access point to session global search and query functions.
    * This sub-component of the public session interface allows to
@@ -114,8 +116,8 @@ namespace session {
         }
       
     };
-
-    
-
+  
+  
+  
 }} // namespace mobject::session
 #endif
