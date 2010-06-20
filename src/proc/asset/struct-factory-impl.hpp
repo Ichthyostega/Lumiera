@@ -39,6 +39,9 @@
 #include "proc/mobject/session.hpp"
 #include "proc/mobject/session/binding.hpp"
 #include "proc/mobject/session/mobjectfactory.hpp"
+#include "proc/mobject/session/element-query.hpp"
+#include "proc/mobject/session/session-query.hpp"
+#include "proc/mobject/session/scope.hpp"
 #include "common/configrules.hpp"
 #include "proc/asset/timeline.hpp"
 #include "proc/asset/sequence.hpp"
@@ -58,6 +61,8 @@ using boost::format;
 
 using mobject::Session;
 using mobject::MObject;
+using mobject::session::Scope;
+using mobject::session::match_specificTrack;
 
 using lib::Symbol;
 using util::isnil;
@@ -120,6 +125,26 @@ namespace asset {
         }
       
       
+      /** either fetch or build a suitable root track for a new sequence */
+      RTrack
+      getTrack_forSequence (string const& desiredID)
+        {
+          RTrack track;
+          if (!isnil (desiredID))
+            track = Session::current->elements.pick (match_specificTrack (desiredID));
+          
+          if (track && !Scope::containing (track.getRef()).isRoot())
+            {
+              UNIMPLEMENTED ("how to deal with 'stealing' a sub-track tree to a new sequence??");
+            }
+          if (!track)
+            track = Session::current->getRoot().attach (MObject::create (TrackID (desiredID)));
+          
+        }
+      
+      
+  
+      
       
       
       
@@ -151,7 +176,7 @@ namespace asset {
     /* ============= specialisations =========================== */
     
     template<>
-    Track* 
+    inline Track* 
     StructFactoryImpl::fabricate (const Query<Track>& caps)
       {
         TODO ("actually extract properties/capabilities from the query...");
@@ -160,7 +185,7 @@ namespace asset {
       }
     
     template<>
-    const ProcPatt* 
+    inline const ProcPatt* 
     StructFactoryImpl::fabricate (const Query<const ProcPatt>& caps)
       {
         TODO ("actually extract properties/capabilities from the query...");
@@ -168,7 +193,7 @@ namespace asset {
       }
     
     template<>
-    Pipe* 
+    inline Pipe* 
     StructFactoryImpl::fabricate (const Query<Pipe>& caps)
       {
         const Asset::Ident idi (createIdent (caps));
@@ -183,7 +208,7 @@ namespace asset {
       }
     
     template<>
-    Timeline* 
+    inline Timeline* 
     StructFactoryImpl::fabricate (const Query<Timeline>& caps)
       {
         TODO ("extract additional properties/capabilities from the query...");
@@ -198,7 +223,7 @@ namespace asset {
       }
     
     template<>
-    Sequence* 
+    inline Sequence* 
     StructFactoryImpl::fabricate (const Query<Sequence>& caps)
       {
         // when we reach this point it is clear a suitable sequence doesn't yet exist in the model

@@ -174,6 +174,9 @@ namespace mobject {
           return *this;
         }
       
+      void clear () { id_ = bottomID(); }
+      
+      
       
       /* == forwarding smart-ptr operations == */
       

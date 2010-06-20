@@ -91,13 +91,20 @@ namespace session {
         
       public:
         /** Child tracks in a tree structure */
-        vector<Placement<Track> > subTracks;  ///////////TODO: it should really work with PlacementRefs! this here is just a decoy!!!!!!!
+//      vector<Placement<Track> > subTracks;  ///////////TODO: it should really work with PlacementRefs! this here is just a decoy!!!!!!!
 /////////////////////////////////////////////////////////TICKET #513
         
+        bool isSameID (string const&);
         
         virtual bool isValid()  const;
       };
       
+    
+    inline bool
+    Track::isSameID(string const& refID)
+    {
+      return refID == id_.getSym();
+    }
       
       
   } // namespace mobject::session

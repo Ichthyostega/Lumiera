@@ -125,7 +125,7 @@ namespace mobject {
         }
       
       
-      /** allow to use a MObjectRef like a (bar) PlacementRef
+      /** allow to use a MObjectRef like a (bare) PlacementRef
        *  @note not test if this MObjectRef is NIL  */
       PlacementRef<MO> const&
       getRef() const
