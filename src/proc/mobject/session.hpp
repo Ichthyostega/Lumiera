@@ -51,7 +51,7 @@
 
 #include "proc/mobject/placement.hpp"
 #include "proc/mobject/mobject-ref.hpp"
-#include "proc/mobject/session/defsmanager.hpp"
+#include "proc/mobject/session/defsmanager.hpp"               ////////////////////////////TICKET #643  forward declare this?
 #include "lib/ref-array.hpp"
 #include "lib/singleton.hpp"
 #include "lib/symbol.hpp"
@@ -71,6 +71,7 @@ namespace mobject {
   
   namespace session { 
     class SessManager;
+    class ElementQuery;
     class Fixture;
     typedef std::tr1::shared_ptr<Fixture> PFix;
   }
@@ -106,11 +107,13 @@ namespace mobject {
     {
     protected:
       typedef session::DefsManager&            DefaultsAccess;
+      typedef session::ElementQuery&           ElementsAccess;
       typedef lib::RefArray<asset::PTimeline>& TimelineAccess;
       typedef lib::RefArray<asset::PSequence>& SequenceAccess;
       
       
       Session (DefaultsAccess
+              ,ElementsAccess
               ,TimelineAccess
               ,SequenceAccess)  throw();
       virtual ~Session ();
@@ -119,9 +122,10 @@ namespace mobject {
     public:
       static bool initFlag;                     ///////////////TICKET #518  yet another hack; actually need to care for session manager startup.
       
-      static session::SessManager& current;
+      static session::SessManager& current;     ///< access point to the current Session
       
       DefaultsAccess defaults;                  ///< manages default configured objects
+      ElementsAccess elements;
       TimelineAccess timelines;                 ///< collection of timelines (top level)
       SequenceAccess sequences;                 ///< collection of sequences
       

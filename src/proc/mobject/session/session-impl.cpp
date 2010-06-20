@@ -40,6 +40,7 @@ namespace session {
   SessionImpl::SessionImpl ()
     : SessionInterfaceModules()
     , Session( defaultsManager_
+             , elementQueryAPI_
              , timelineRegistry_
              , sequenceRegistry_ )
     , contents_( MObject::create (defaultsManager_))

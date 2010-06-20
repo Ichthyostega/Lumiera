@@ -109,7 +109,7 @@ namespace session {
   
   
   namespace { // type matching helper
-    
+                                                              ///////////////////////////////TICKET #644  combine/clean up! see also element-query.hpp
     template<class PRED>
     struct _PickResult;
     
@@ -118,7 +118,7 @@ namespace session {
       {
         typedef MO Type;
         typedef SpecificContentsQuery<MO> FilterQuery;
-        typedef typename ScopeQuery<MO>::Iterator Iterator;
+        typedef typename ScopeQuery<MO>::iterator Iterator;
       };
     
     template<class MO>
@@ -126,7 +126,7 @@ namespace session {
       {
         typedef MO Type;
         typedef SpecificContentsQuery<MO> FilterQuery;
-        typedef typename ScopeQuery<MO>::Iterator Iterator;
+        typedef typename ScopeQuery<MO>::iterator Iterator;
       };
     
     template<class MO>

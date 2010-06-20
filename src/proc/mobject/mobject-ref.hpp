@@ -33,12 +33,12 @@
  ** operator, and it allows to access the Placement within the session. Moreover, as an
  ** convenience shortcut, some of Placement's query operations are directly exposed.
  ** 
- ** !Lifecycle
+ ** \par Lifecycle
  ** An MObjectRef is always created inactive. It needs to be activated explicitly,
  ** providing either a direct (language) ref to an Placement within the session,
  ** or an PlacementRef tag, or another MObjecRef. It can be closed (detached).
  ** 
- ** !Type handling
+ ** \par Type handling
  ** Like any smart-ptr MObjectRef is templated on the actual type of the pointee.
  ** It can be built or re-assigned from a variety of sources, given the runtime type
  ** of the referred pointee is compatible to this template parameter type. This
@@ -123,6 +123,16 @@ namespace mobject {
           ENSURE (INSTANCEOF (MO, smPtr_.get()));
           return *pRef_;
         }
+      
+      
+      /** allow to use a MObjectRef like a (bar) PlacementRef
+       *  @note not test if this MObjectRef is NIL  */
+      PlacementRef<MO> const&
+      getRef() const
+        {
+          return pRef_;
+        }
+      
       
       
       /** resolves the referred placement to an 

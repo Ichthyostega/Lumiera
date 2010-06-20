@@ -1,5 +1,5 @@
 /*
-  SESSION-INTERFACE-MODULES.hpp  -  holds the complete session data to be edited by the user
+  SESSION-INTERFACE-MODULES.hpp  -  composing the public session API from several interface modules
  
   Copyright (C)         Lumiera.org
     2010,               Hermann Vosseler <Ichthyostega@web.de>
@@ -41,6 +41,7 @@
  **   correspond to the roots of track trees, attached below model root.
  ** 
  ** \par maintaining the link between session, timelines and sequences
+ ** 
  ** Timeline and Sequence are implemented as asset::Struct, causing them to be
  ** maintained by the AssetManager, which in turn is attached to the session::Root
  ** (WIP 3/2010: yet to be implemented). Creation and destruction of timelines and
@@ -71,6 +72,7 @@
 #include "proc/asset/timeline.hpp"
 #include "proc/asset/sequence.hpp"
 #include "proc/mobject/session/defsmanager.hpp"
+#include "proc/mobject/session/element-query.hpp"
 
 
 
@@ -92,6 +94,7 @@ namespace session {
     : boost::noncopyable
     {
       DefsManager defaultsManager_;
+      ElementQuery elementQueryAPI_;
       TimelineTracker timelineRegistry_;
       SequenceTracker sequenceRegistry_;
     };
