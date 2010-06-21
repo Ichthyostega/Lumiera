@@ -37,7 +37,7 @@ END
 
 TEST "build argument accepting function" ArgumentTupleAccept_test <<END
 out: sizeof\( .+control.+TestClass.+ \) =   1
-out: sizeof\( .+control.+TestClass.+lumiera.Time.+ \) =  (12)|(16)
+out: sizeof\( .+control.+TestClass.+lumiera.Time.+ \) =  (12|16)
 out: 00:..:..\.000
 return: 0
 END

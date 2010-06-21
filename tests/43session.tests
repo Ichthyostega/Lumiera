@@ -31,37 +31,37 @@ END
 
 TEST "external MObject references" MObjectRef_test <<END
 out: MRef-NIL
-out: sizeof\( .+MORef.+session.Clip.+ \) =  (32)|(24)
+out: sizeof\( .+MORef.+session.Clip.+ \) =  (32|24)
 out: Placement<.+Clip.> ............... use-cnt=4
 out: Asset\(VIDEO:lumi.test-1 v1\)
 out: Placement<.+Clip.> ............... use-cnt=4
 out: MRef-NIL
-out: sizeof\( .+MORef.+session.Clip.+ \) =  (32)|(24)
+out: sizeof\( .+MORef.+session.Clip.+ \) =  (32|24)
 out: Placement<.+Clip.> ............... use-cnt=4
 out: Asset\(VIDEO:lumi.test-2 v1\)
 out: Placement<.+Clip.> ............... use-cnt=4
 out: MRef-NIL
-out: sizeof\( .+MORef.+session.Clip.+ \) =  (32)|(24)
+out: sizeof\( .+MORef.+session.Clip.+ \) =  (32|24)
 out: Placement<.+Clip.> ............... use-cnt=4
 out: Asset\(VIDEO:lumi.test-1 v1\)
 out: Placement<.+Clip.> ............... use-cnt=4
 out: MRef-NIL
-out: sizeof\( .+MORef.+session.Clip.+ \) =  (32)|(24)
+out: sizeof\( .+MORef.+session.Clip.+ \) =  (32|24)
 out: Placement<.+Clip.> ............... use-cnt=4
 out: Asset\(VIDEO:lumi.test-2 v1\)
 out: Placement<.+Clip.> ............... use-cnt=4
 out: MRef-NIL
-out: sizeof\( .+MORef.+session.Clip.+ \) =  (32)|(24)
+out: sizeof\( .+MORef.+session.Clip.+ \) =  (32|24)
 out: Placement<.+Clip.>.+ use-cnt=4
 out: Asset\(VIDEO:lumi.test-1 v1\)
 out: Placement<.+Clip.> ............... use-cnt=4
 out: MRef-NIL
-out: sizeof\( .+MORef.+session.Clip.+ \) =  (32)|(24)
+out: sizeof\( .+MORef.+session.Clip.+ \) =  (32|24)
 out: Placement<.+Clip.> ............... use-cnt=4
 out: Asset\(VIDEO:lumi.test-1 v1\)
 out: Placement<.+Clip.> ............... use-cnt=4
 out: MRef-NIL
-out: sizeof\( .+MORef.+session.Clip.+ \) =  (32)|(24)
+out: sizeof\( .+MORef.+session.Clip.+ \) =  (32|24)
 out: Placement<.+Clip.> ............... use-cnt=4
 out: Asset\(VIDEO:lumi.test-2 v1\)
 out: Placement<.+Clip.> ............... use-cnt=4
