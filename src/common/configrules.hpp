@@ -57,7 +57,6 @@
 #include "proc/mobject/session/track.hpp"
 #include "proc/asset/procpatt.hpp"
 #include "proc/asset/pipe.hpp"
-#include "proc/asset/track.hpp"
 #include "proc/asset/timeline.hpp"
 #include "proc/asset/sequence.hpp"
 
@@ -213,7 +212,6 @@ namespace lumiera {  ///////TODO: shouldn't that be namespace lib? or proc?
    *  rule based config query system
    */
   typedef lumiera::typelist::Types < mobject::session::Track
-                                   , asset::Track
                                    , asset::Pipe
                                    , const asset::ProcPatt
                                    , asset::Timeline

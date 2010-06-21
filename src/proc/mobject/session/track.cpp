@@ -22,31 +22,17 @@
 
 
 #include "proc/mobject/session/track.hpp"
-#include "proc/asset/track.hpp"
 
 
 namespace mobject {
 namespace session {
-  
-  /** new track-MO linked with the given asset::Track.
-   *  Initially, the reference (zero-point) time of this track
-   *  will be set to 0 
-   */
-  Track::Track (PTrackAsset& trackDef)
-    : start_(0),
-      trackDef_(trackDef)    /////////////////////TICKET #581 kill kill kill the track-asset
-  {
-    throwIfInvalid();
-  }
-  
   
   /** create a new track-MObject based on the given unique ID.
    *  Initially, the reference (zero-point) time of this track
    *  will be set to 0 
    */
   Track::Track (TrackID const& trackID)
-    : start_(0),
-      trackDef_()            /////////////////////TICKET #581 kill kill kill the track-asset 
+    : start_(0)
     , id_(trackID)
   {
     throwIfInvalid();
@@ -56,7 +42,7 @@ namespace session {
   bool 
   Track::isValid()  const
   {
-    return bool(trackDef_);
+    return bool(id_.isValid());  ////////TODO anything more 'real' to check?
   }
   
   

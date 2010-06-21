@@ -234,7 +234,6 @@ namespace asset {
 #include "proc/asset/clip.hpp"  
 #include "proc/asset/proc.hpp"  
 #include "proc/asset/struct.hpp"  
-#include "proc/asset/track.hpp"  
 #include "proc/asset/pipe.hpp"  
 #include "proc/asset/meta.hpp"  
 #include "proc/asset/procpatt.hpp"  
@@ -256,7 +255,6 @@ namespace asset {
   template P<Asset>    AssetManager::wrap (const Asset& asset);
   template P<Media>    AssetManager::wrap (const Media& asset);
   template P<Clip>     AssetManager::wrap (const Clip&  asset);
-  template P<Track>    AssetManager::wrap (const Track& asset);
   template P<Pipe>     AssetManager::wrap (const Pipe&  asset);
   template P<ProcPatt> AssetManager::wrap (const ProcPatt& asset);
   template P<Timeline> AssetManager::wrap (const Timeline& asset);

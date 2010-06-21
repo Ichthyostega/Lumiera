@@ -26,7 +26,6 @@
 //#include "proc/mobject/placement.hpp"
 //#include "proc/mobject/session/mobjectfactory.hpp"
 #include "proc/mobject/session/binding.hpp"
-//#include "proc/asset/track.hpp"
 
 namespace asset {
   

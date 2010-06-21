@@ -34,7 +34,6 @@ namespace asset {
   
   class Clip;
   class Media;
-  class Track;
   class Effect;
   class Sequence;
   
@@ -52,8 +51,6 @@ namespace session {
   class Label;
   class Binding;
   
-  typedef P<asset::Track> PTrackAsset;
-  
   class DefsManager;
   
   
@@ -69,8 +66,7 @@ namespace session {
       Placement<Root>   operator() (DefsManager&);
       Placement<Clip>   operator() (asset::Clip const&, asset::Media const&);
       Placement<Clip>   operator() (asset::Clip const&, vector<asset::Media const*>);
-      Placement<Track>  operator() (PTrackAsset&); ////////////////////////////////////////////////////TICKET #581 kill kill kill the track-asset
-      Placement<Track>  operator() (asset::EntryID<Track> const&);                         ////////////TICKET #581 use this one instead
+      Placement<Track>  operator() (asset::EntryID<Track> const&);
       Placement<Effect> operator() (asset::Effect const&);
       Placement<Label>  operator() (lib::Symbol);
       Placement<Binding>operator() (asset::PSequence const&);

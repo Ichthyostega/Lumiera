@@ -29,7 +29,6 @@
 #include "proc/mobject/session/label.hpp"
 #include "proc/mobject/session/binding.hpp"
 #include "proc/asset/clip.hpp"
-#include "proc/asset/track.hpp"
 #include "proc/asset/effect.hpp"
 
 namespace mobject {
@@ -80,14 +79,6 @@ namespace session {
   MObjectFactory::operator() (const asset::Clip& clipRef, vector<const Media*> mediaTracks)
   {
     UNIMPLEMENTED ("build multichannel compound clip-MO");
-  }
-  
-  /** */ 
-  Placement<Track>
-  MObjectFactory::operator() (PTrackAsset& trackDef)           /////////////////////TICKET #581 kill kill kill the track-asset
-  {
-    TODO ("what needs to be registered when creating an Track-MO?");
-    return Placement<Track> (*new Track (trackDef), &deleterFunc);
   }
   
   /** fabricate a new track-MObject, using the given unique ID */ 

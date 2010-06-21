@@ -140,7 +140,6 @@ namespace session {
 
 #include "proc/asset/procpatt.hpp"
 #include "proc/asset/pipe.hpp"
-#include "proc/asset/track.hpp"
 #include "proc/asset/timeline.hpp"
 #include "proc/asset/sequence.hpp"
 #include "proc/mobject/session/track.hpp"
@@ -159,14 +158,11 @@ namespace session {
   using asset::PSequence;
   
   using mobject::session::Track;
-  using mobject::session::TrackAsset;
   using mobject::session::PTrack;
-  using mobject::session::PTrackAsset;
   
   template PPipe       DefsManager::operator() (const Query<Pipe>&);
   template PProcPatt   DefsManager::operator() (const Query<const ProcPatt>&);
   template PTrack      DefsManager::operator() (const Query<Track>&);
-  template PTrackAsset DefsManager::operator() (const Query<TrackAsset>&);
   template PTimeline   DefsManager::operator() (const Query<Timeline>&);
   template PSequence   DefsManager::operator() (const Query<Sequence>&);
   

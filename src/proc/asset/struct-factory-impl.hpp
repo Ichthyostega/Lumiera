@@ -46,7 +46,6 @@
 #include "proc/asset/timeline.hpp"
 #include "proc/asset/sequence.hpp"
 #include "proc/asset/procpatt.hpp"
-#include "proc/asset/track.hpp"
 #include "proc/asset/pipe.hpp"
 
 #include "proc/asset/struct-scheme.hpp"
@@ -174,15 +173,6 @@ namespace asset {
   
   
   /* ============= specialisations =========================== */
-  
-  template<>
-  inline Track* 
-  StructFactoryImpl::fabricate (const Query<Track>& caps)
-  {
-    TODO ("actually extract properties/capabilities from the query...");
-    TODO ("make sure AssetManager detects duplicates (currently 4/08 it doesn't)");       /////////////TICKET #102
-    return new Track (createIdent (caps));
-  }
   
   template<>
   inline const ProcPatt* 

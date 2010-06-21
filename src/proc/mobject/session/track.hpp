@@ -29,21 +29,14 @@
 
 
 
-namespace asset { 
-  class Track;           /////////////////////TICKET #581 kill kill kill the track-asset
-  
-}
-
 namespace mobject {
 namespace session {     //////////////////////////////////////////////////////TICKET #637
     
     using lumiera::P;
     
     class Track;
-    typedef asset::Track TrackAsset;
     
     typedef P<Track> PTrack;
-    typedef P<TrackAsset> PTrackAsset;
 
 }}
     
@@ -81,11 +74,9 @@ namespace session {
     class Track : public Meta
       {
         Time start_;
-        PTrackAsset trackDef_;
         TrackID id_;
         
       protected:
-        Track (PTrackAsset&);           /////////////////////TICKET #581 kill kill kill the track-asset
         Track (TrackID const&);
         friend class MObjectFactory;
         
