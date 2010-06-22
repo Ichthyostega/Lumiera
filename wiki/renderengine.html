@@ -2593,6 +2593,26 @@ The operation point is provided by the current BuilderMould and used by the [[pr
 This is possible because the operation point has been provided (by the mould) with informations about the media stream type to be wired, which, together with information accessible at the the [[render node interface|ProcNode]] and from the [[referred processing assets|ProcAsset]], with the help of the [[connection manager|ConManager]] allows to figure out what's possible and how to do the desired connections. Additionally, in the course of deciding about possible connections, the PathManager is consulted to guide strategic decisions regarding the [[render node configuration|NodeConfiguration]], possible type conversions and the rendering technology to employ.
 </pre>
 </div>
+<div title="OutputDesignation" modifier="Ichthyostega" modified="201006220153" created="201006220126" tags="Model draft design discuss" changecount="2">
+<pre>__6/2010__: an ever recurring (and yet unsolved) problem in the design of Luimiera's ~Proc-Layer is how to refer to output destinations, and how to organise them.
+To get ahead with this problem, I'll start collecting observations, relations and drafts on this tiddler.
+
+!Observations
+* effectively each [[Timeline]] is known to expose a set of global Pipes
+* ehen connecting a Sequence to a Timeline or a VirtualClip, we also establish a mapping between the possible media stream channels produced by the sequence and the real output slots located in the enclosing entity
+* uncertainity on who has to provide the global pipes
+** as Timeline is just a facade, BindingMO has to expose something which can be referred for attaching effects (to global pipes)
+** when used as VirtualClip, there is somehow a channel configuration, either as asset, or exposed by the BindingMO
+* Placements always resolve at least two dimensions: time and output. The latter means that a [[Placement]] can figure out to where to connect
+* the resolution ability of Placements could help to overcome the problems in conjunction with a VirtualClip: missing output destination informations could be inherited down from the virtual clip's placement....
+* expanding on the basic concept of a Placement in N-dimensional configuration space, this //figuring out// would denote the ability to resolve the final output destination
+* this resolution to a final destination is explicitly context dependent. We engage into quite some complexities to make this happen (&amp;rarr; BindingScopeProblem)
+* [[processing patterns|ProcPatt]] are used for creating nodes on the source network of a clip, and similarily for fader, overlay and mixing into a summation pipe
+* in case the track tree of a sequence doesn't contain specific routing advice, connections will be done directly to the global pipes in order and by matching StreamType (i.e. typically video to video master, audio to stereo audio master). When a monitor (viewer window) is attached to a timeline, similar output connections are made from the timeline's global pipes, i.e. the video display will take the contents of the first video (master) bus, and the first stereo audio pipe will be pulled and sent to system audio out.
+
+
+</pre>
+</div>
 <div title="Overview" modifier="Ichthyostega" modified="200906071810" created="200706190300" tags="overview img" changecount="13">
 <pre>The Lumiera Processing Layer is comprised of various subsystems and can be separated into a low-level and a high-level part. At the low-level end is the [[Render Engine|OverviewRenderEngine]] which basically is a network of render nodes cooperating closely with the Backend Layer in order to carry out the actual playback and media transforming calculations. Whereas on the high-level side we find several different [[Media Objects|MObjects]] that can be placed into the session, edited and manipulated. This is complemented by the [[Asset Management|Asset]], which is the &quot;bookkeeping view&quot; of all the different &quot;things&quot; within each [[Session|SessionOverview]].
 
