@@ -68,7 +68,7 @@ namespace test    {
           UNIMPLEMENTED("typesafe searching for MObjects in the Session");
           
           
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////TODO: work out how to search within the Model!!
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #639 : work out how to search within the Model!!
                 
           PClipMO clipPlacement = sess->currEDL().find(SESSION1_CLIP); 
                                                               // global Var assigned in buildTestsession1()
@@ -78,10 +78,10 @@ namespace test    {
           
           sess->remove (clipPlacement);
           
-          ASSERT (!sess->currEDL().find(SESSION1_CLIP));            // EDL forgot the Clip/Placement
+          ASSERT (!sess->currEDL().find(SESSION1_CLIP));            // Session forgot the Clip/Placement
           ASSERT (!aMang.known (clipAID));                          // corresponding Clip Asset has disappeared
           ASSERT (!clipPlacement->getMedia());                      // internal cross-links removed
-#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////TODO: work out how to search within the Model!!
+#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #639 : work out how to search within the Model!!
         }
     };
   

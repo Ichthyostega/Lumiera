@@ -88,7 +88,7 @@ namespace test    {
           ASSERT (0 <= sess->getFixture()->size());             // TODO implement
           ASSERT (sess->currEDL().getTracks()->isValid());
           
-//              PAsset track = sess->currEDL().getTracks()[0];
+//              PAsset track = sess->currEDL().getTracks()[0];    // TODO obsolete
 //              AssetManager& aMang = AssetManager::instance();
 //              ASSERT (track == aMang.getAsset (track->getID()));
           
