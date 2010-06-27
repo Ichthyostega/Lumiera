@@ -1,5 +1,5 @@
 /*
-  Pipe  -  structural asset denoting a processing pipe generating media output
+  Pipe  -  structural asset denoting a processing pipe to generate media output
  
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
@@ -26,16 +26,21 @@
 
 using util::isnil;
 
-namespace asset
-  {
+namespace asset {
   
   
-  /** */
+  /** Create and register a new Pipe asset.
+   *  Usually, this is triggered automatically
+   *  by referring to the pipeID. When building
+   *  the render network, the given processing pattern
+   *  will be executed, allowing for all sorts of
+   *  default wiring.
+   */
   Pipe::Pipe ( const Asset::Ident& idi
              , PProcPatt& wiring
              , const string& pipeID
-             , wstring shortName
-             , wstring longName
+             , string shortName
+             , string longName
              ) 
     : Struct (idi),
       pipeID_ (pipeID),
@@ -45,7 +50,7 @@ namespace asset
   {
     REQUIRE (!isnil (pipeID));
     if (isnil (shortDesc))
-      shortDesc = wstring (pipeID.begin(), pipeID.end());
+      shortDesc = pipeID;
   }
 
   

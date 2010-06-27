@@ -72,7 +72,6 @@
 namespace asset {
   
   using std::string;
-  using std::wstring;
   using boost::scoped_ptr;
   using lumiera::Query;
   

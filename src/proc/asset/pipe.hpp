@@ -27,11 +27,14 @@
 #include "proc/asset/struct.hpp"
 #include "proc/asset/procpatt.hpp"
 
+#include <string>
+
 
 
 namespace asset {
   
   using lumiera::P;
+  using std::string;
   
   class Pipe;
   typedef P<Pipe> PPipe;
@@ -48,8 +51,9 @@ namespace asset {
   
   
   /**
-   * structural asset corresponding to some 
-   * processing pipe for generating media output
+   * structural asset corresponding to the part
+   * of the model forming a processing pipe
+   * for generating media output
    */
   class Pipe : public Struct
     {
@@ -57,17 +61,17 @@ namespace asset {
       PProcPatt wiringTemplate;
       
     public:
-      wstring shortDesc;
-      wstring longDesc;
+      string shortDesc;
+      string longDesc;
       
-      virtual const ID<Pipe>& getID()  const    ///< @return ID typed to asset::Pipe 
+      virtual const ID<Pipe>& getID()  const    ///< @return ID typed to asset::Pipe
         { 
           return static_cast<const ID<Pipe>& > (Asset::getID()); 
         }
       
       
     protected:
-      Pipe (const Asset::Ident&, PProcPatt& wiring, const string& pipeID, wstring shortName =wstring(), wstring longName =wstring()) ;
+      Pipe (const Asset::Ident&, PProcPatt& wiring, const string& pipeID, string shortName ="", string longName ="") ;
       friend class StructFactory;
       friend class StructFactoryImpl;
       

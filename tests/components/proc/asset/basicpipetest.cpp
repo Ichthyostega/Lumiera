@@ -39,7 +39,6 @@ using boost::format;
 using util::contains;
 using util::isnil;
 using std::string;
-using std::wstring;
 using std::cout;
 
 
@@ -90,7 +89,7 @@ namespace asset
             ASSERT (thePipe->getProcPatt());
             ASSERT (thePipe->getPipeID() == pID_sane);
             ASSERT (thePipe->getProcPatt()->queryStreamID() == sID);
-            ASSERT (thePipe->shortDesc == wstring (pID_sane.begin(), pID_sane.end()));
+            ASSERT (thePipe->shortDesc == pID_sane);
             
             Asset::Ident idi = thePipe->ident;
             ASSERT (idi.org == "lumi");
