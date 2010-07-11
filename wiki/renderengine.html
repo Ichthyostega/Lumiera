@@ -800,7 +800,7 @@ config.macros.timeline.handler = function(place,macroName,params,wikifier,paramS
 }
 //}}}</pre>
 </div>
-<div title="BindingMO" modifier="Ichthyostega" modified="201003130209" created="200905210144" tags="def design discuss SessionLogic" changecount="15">
+<div title="BindingMO" modifier="Ichthyostega" modified="201007110149" created="200905210144" tags="def design discuss SessionLogic" changecount="17">
 <pre>Sometimes, two entities within the [[Session]] are deliberately associated, and this association has to carry some specific mappings between properties or facilities within the entities to be linked together. When this connection isn't just the [[Placement]] of an object, and isn't just a logical or structural relationship either &amp;mdash; then we create an explicit Binding object to be stored into the session.
 * When connecting a [[Sequence]] to a certain [[Timeline]], we also establish a mapping between the possible media stream channels produced by the sequence and the real output slots found within the timeline.
 * similarly, using a sequence within a [[meta-clip|VirtualClip]] requires to remember such a mapping.
@@ -838,6 +838,8 @@ Meanwhile I've settled down on implementing the [[top-level entities|Timeline]] 
 ** if we decide against it, what happens if we nevertheless encounter this situation?
 
 &amp;harr; related to the handling of MultichannelMedia, which likewhise needs to be re-adjusted meanwhile!
+
+&amp;rArr; {{red{rework of the model 6/10}}} taking these problems into account. Mostly cleanup and straightening. See AssetModelConnection
 
 !Implementation
 On the implementation side, we use a special kind of MObject, acting as an anchor and providing an unique identity. Like any ~MObject, actually a placement establishes the connection and the scope, and typically constitutes a nested scope (e.g. the scope of all objects //within// the sequence to be bound into a timeline)
@@ -1529,12 +1531,13 @@ Some further details
 * a special case of this factory use is the [[Singleton]] factory, which is used a lot within the Proy-Layer code
 </pre>
 </div>
-<div title="Fixture" modifier="Ichthyostega" modified="200712100439" created="200706220324" tags="def" changecount="4">
+<div title="Fixture" modifier="Ichthyostega" modified="201007110035" created="200706220324" tags="def" changecount="9">
 <pre>a specially configured sequence list
- * all MObjects have their position, length and configuration set up ready for rendering.
- * compound objects (e.g. multichannel clips) have been resolved to single non-compound basic objects.
- * every MObject is associated with an ExplicitPlacement, which declares a fixed position (Time, Track)
- * this ~ExplicitPlacements are contained in a ordered List called the Timeline
+* all MObjects have their position, length and configuration set up ready for rendering.
+* any nested sequences (or other kinds of indirections) have been resolved.
+* every MObject is associated with an ExplicitPlacement, which declares a fixed position (Time, [[Pipe-ID|OutputDesignation]])
+* these ~ExplicitPlacements are contained in a ordered List, sometimes denoted as the //effective timeline.//
+* besides, there is a collection of all effective, possibly externally visible [[model ports|ModelPorts]]
 
 As the builder and thus render engine //only consults the fixture,// while all editing operations finally propagate to the fixture as well, we get an isolation layer between the high level part of the Proc layer (editing, object manipulation) and the render engine. Creating the Fixture can be seen as a preprocessing step to simplify the build process. For this reason, the process of [[(re)building the fixture|PlanningBuildFixture]] has been designed together with the [[Builder]]</pre>
 </div>
@@ -1658,6 +1661,11 @@ Used within Lumiera as a foundation for working with raw video and audio media d
 For this Lumiera design, we could consider making GOP just another raw media data frame type and integrate this decoding into the render pipeline, similar to an effect based on several source frames for every calculated output frame.
 
 &amp;rarr;see in [[Wikipedia|http://en.wikipedia.org/wiki/Group_of_pictures]]
+</pre>
+</div>
+<div title="GlobalPipe" modifier="Ichthyostega" created="201007110200" tags="Model design spec draft" changecount="1">
+<pre>Each [[Timeline]] has an associated set of global [[pipes|Pipe]] (global busses), similar to the subgroups of a sound mixing desk.
+In the typical standard configuration, there is (at least) a video master and a sound master pipe. Like any pipe, ingoing connections attach to the input side, attached effects form a chain, where the last node acts as exit node. The ~Pipe-ID of such a global bus can be used to route media streams, allowing the global pipe to act as a summation bus bar.
 </pre>
 </div>
 <div title="GuiCommunication" modifier="Ichthyostega" modified="200812050555" created="200812050543" tags="GuiIntegration draft" changecount="2">
@@ -2593,7 +2601,7 @@ The operation point is provided by the current BuilderMould and used by the [[pr
 This is possible because the operation point has been provided (by the mould) with informations about the media stream type to be wired, which, together with information accessible at the the [[render node interface|ProcNode]] and from the [[referred processing assets|ProcAsset]], with the help of the [[connection manager|ConManager]] allows to figure out what's possible and how to do the desired connections. Additionally, in the course of deciding about possible connections, the PathManager is consulted to guide strategic decisions regarding the [[render node configuration|NodeConfiguration]], possible type conversions and the rendering technology to employ.
 </pre>
 </div>
-<div title="OutputDesignation" modifier="Ichthyostega" modified="201007090132" created="201006220126" tags="Model draft design discuss" changecount="22">
+<div title="OutputDesignation" modifier="Ichthyostega" modified="201007110046" created="201006220126" tags="Model draft design discuss" changecount="24">
 <pre>__6/2010__: an ever recurring (and yet unsolved) problem in the design of Luimiera's ~Proc-Layer is how to refer to output destinations, and how to organise them.
 To get ahead with this problem, I'll start collecting observations, relations and drafts on this tiddler.
 
@@ -2624,14 +2632,14 @@ To get ahead with this problem, I'll start collecting observations, relations an
 !!!relation to Pipes
 in almost every case mentioned above, the output designation is identical with the starting point of a [[Pipe]]. This might be a global pipe or a ClipSourcePort. Thus it sounds reasonable to use pipe-~IDs directly as output designation. Pipes, as an accountable entity (=asset) just //leap into existence by being referred.// On the other hand, the //actual// pipe is a semantic concept, a specific structural arrangement of objects. Basically it means that some object acts as attachment point and thereby //claims//&amp;nbsp; to be the entrance side of a pipe, while other processor objects chain up in sequence.
 !!!system outputs
-System level output connections are the exception to the above rule. There is no pipe at an external port, and these externally visible connection points can appear and disappear, driven by external conditions. So the question is if system outputs shall be directly addressable at all as output designation? Rather, there should be a separate OutputManagement.
+System level output connections are the exception to the above rule. There is no pipe at an external port, and these externally visible connection points can appear and disappear, driven by external conditions. So the question is if system outputs shall be directly addressable at all as output designation? Rather, there should be a separate OutputManagement to handle external outputs and displays, both in windows or full screen.
 !!!consequences of mentioning an output designation
-The immediate consequence is that an connection to this designation is wired, using an appropriate [[processing pattern|ProcPatt]]. A further consequence is for the mentioned output designation to appear as exit node of the built render nodes network.
+The immediate consequence is that an connection to this designation is wired, using an appropriate [[processing pattern|ProcPatt]]. A further consequence is for the mentioned output designation to appear as exit node of the built render nodes network. (not sure if thats always the case, or only when the correponding pipe is an end point without further outgoing connections)
 
 </pre>
 </div>
-<div title="OutputManagement" modifier="Ichthyostega" modified="201007090157" created="201007090155" tags="Model Rendering Player spec draft" changecount="3">
-<pre>''writing down some thoughts''
+<div title="OutputManagement" modifier="Ichthyostega" modified="201007110112" created="201007090155" tags="Model Rendering Player spec draft" changecount="8">
+<pre>//writing down some thoughts//
 
 * ruled out the system outputs as OutputDesignation.
 * thus, any designation is a [[Pipe]]-ID.
@@ -2644,6 +2652,12 @@ Do we get a single [[Fixture]] &amp;mdash; guess yes
 From the implementation side, the only interesting exit nodes are the ones to be //actually pulled,// i.e. those immeditately corresponding to the final output.
 * __rendering__ happens immediately at the output of a GlobalPipe (i.e. at a [[Timeline]], which is top-level)
 * __playback__ always happens at a viewer element
+
+!Connection to external outputs
+External output destinations are never addressed directly from within the model. This is an design decision. Rather, model parts connect to an OutputDesignation, and these in turn may be  [[connected to a viewer element|ViewerPlayConnection]]. At this point, related to the viewer element, there is a mapping to external destination(s): for images, a viewer typically has an implicit, natural destination (read, there is a corresponding viewer window or widget), while for sound we use an mapping rule, which could be overridden locally in the viewer.
+
+Any external output sink is managed as a [[slot|DisplayerSlot]] in the ~OutputManager. Such a slot can be opened and allocated for a playback process, which allows the latter to push calculated data frames to the output. Depending on the kind of output, there might be various, often tight requirements on the timed delivery of output data, but any details are abstracted away &amp;mdash; any slot implementation provides a way to handle timeouts gracefully, e.g. by just showing the last video frame delivered, or by looping and fading sound
+&amp;rarr; see also the PlayerDummy
 </pre>
 </div>
 <div title="Overview" modifier="Ichthyostega" modified="200906071810" created="200706190300" tags="overview img" changecount="13">
@@ -6206,6 +6220,13 @@ Thus, to re-state the problem more specifically, we want the //definition//&amp;
 The above outlines the planned full version of this service.
 For now, as of 6/10, we use specialised QueryResolver instances explicitly and don't need the lifecycle hook registration yet. But a dispatcher table is in place already
 &amp;rarr; QueryRegistration
+</pre>
+</div>
+<div title="ViewerPlayConnection" modifier="Ichthyostega" created="201007110305" tags="Model Player spec draft" changecount="1">
+<pre>for showing output, three entities are involved
+* the [[Timeline]] holds the relevant part of the model, which gets rendered for playback
+* by connecting to a viewer component, an actual output target is established
+* the playback process itself is coordinated by a PlayController, which in turn creates a PlayProcess
 </pre>
 </div>
 <div title="VirtualClip" modifier="Ichthyostega" modified="201003130000" created="200804110321" tags="def" changecount="15">
