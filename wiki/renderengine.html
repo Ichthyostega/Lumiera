@@ -1663,9 +1663,17 @@ For this Lumiera design, we could consider making GOP just another raw media dat
 &amp;rarr;see in [[Wikipedia|http://en.wikipedia.org/wiki/Group_of_pictures]]
 </pre>
 </div>
-<div title="GlobalPipe" modifier="Ichthyostega" created="201007110200" tags="Model design spec draft" changecount="1">
+<div title="GlobalPipe" modifier="Ichthyostega" modified="201007120219" created="201007110200" tags="Model design spec draft" changecount="5">
 <pre>Each [[Timeline]] has an associated set of global [[pipes|Pipe]] (global busses), similar to the subgroups of a sound mixing desk.
 In the typical standard configuration, there is (at least) a video master and a sound master pipe. Like any pipe, ingoing connections attach to the input side, attached effects form a chain, where the last node acts as exit node. The ~Pipe-ID of such a global bus can be used to route media streams, allowing the global pipe to act as a summation bus bar.
+
+!{{red{WIP}}} Design problem with global Pipes
+actually building up the implementation of global pipes seems to pose a rather subtle design problem: it is difficult to determine how to do it //right.//
+To start with, we need the ability to attach effects to global pipes. There is already an obvious way how to attach effects to clips (=local pipes), and thus it's desirable to do handle it the same way for global pipes. At least there should be a really good reason //not//&amp;nbsp; to do it the same way. Thus, we're going to attach these effects by placement into the scope of another placed MObject. And, moreover, this other object should be part of the HighLevelModel's tree, to allow using the PlacementIndex as implementation. So this reasoning brings us to inventing or postulating some kind of object, without having any existing concept to justify the existence of the corresponding class or shaping its properties on itself. Which means &amp;mdash; from a design view angle &amp;mdash; we're entering slippery ground.
+!!~Model-A: dedicated object per pipe
+Just for the sake of symmetry, for each global pipe we'd attach some ~MObject as child of the BindingMO representing the timeline. If no further specific properties or functionality is required, we could use Track objects, which are generally used as containers within the model. Individual effects would then be attached as children, while output routing would be done within the attaching placement, the same way as it's done with clips or tracks in general. As the pipe asset itself already stores a StreamType reference, all we'd need is some kind of link to the pipe asset or pipe-ID, and maybe some façade functions within the binding to support the handling.
+!!~Model-B: attaching to the container
+Acknowledging the missing justification, we could instead use //something to attach// &amp;mdash; and actually handle the real association elsewhere. The obvious &quot;something&quot; in this case would be the BindingMO, which already acts as implementation of the timeline (which is a façade asset). Thus, for this approach, the bus-level effects would be attached as direct children of the {{{Placement&lt;BindingMO&gt;}}}, just for the sake of beeing attached and stored within the session, with an additional convention for the actual ordering and association to a specific pipe. The Builder then would rather query the ~BindingMO to discover and build up the implementation of the global pipes in terms of the render nodes.
 </pre>
 </div>
 <div title="GuiCommunication" modifier="Ichthyostega" modified="200812050555" created="200812050543" tags="GuiIntegration draft" changecount="2">
