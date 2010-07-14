@@ -77,12 +77,23 @@ namespace lumiera {
      *  usable for ordering queries, as more predicates usually
      *  mean more conditions, i.e. more constriction
      */
-    uint countPraed (const string&);
+    uint countPred (const string&);
     
     
     const string extractID (Symbol, const string& termString);
     
     const string removeTerm (Symbol, string& termString);
+    
+    
+    template<typename TY>
+    const string
+    buildTypeID()
+    {
+      string typeID (typeid(TY).name());
+      normaliseID (typeID);
+      return typeID;
+    }
+    
     
     
 }} // namespace lumiera::query

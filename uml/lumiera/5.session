@@ -6,8 +6,12 @@ diagrams
     730 488 100 4 0 0
   classdiagram_ref 139141 // Meta-Asset Relations
     469 451 100 4 0 0
-  active  classdiagram_ref 140293 // TypedLookup
+  classdiagram_ref 140293 // TypedLookup
     721 697 100 4 0 0
+  active  classdiagram_ref 141445 // Advice entities
+    635 331 100 4 0 0
+  objectdiagram_ref 141573 // Advice solving
+    556 483 100 4 0 0
 end
 show_stereotypes
 selected 
@@ -33,7 +37,12 @@ open
   classview_ref 128261 // Builder Workings
   usecaseview_ref 128261 // config examples
   class_ref 133253 // Frame
-  classview_ref 129285 // StreamType
+  class_ref 164485 // Request
+  class_ref 164613 // Provision
+  class_ref 166021 // ActiveProvision
+  class_ref 164741 // Binding
+  class_ref 166277 // Index
+  class_ref 145285 // MediaKind
   
   package_ref 131077 // ConfigQuery
   class_ref 152965 // Handle

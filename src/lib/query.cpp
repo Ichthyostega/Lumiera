@@ -66,12 +66,12 @@ namespace lumiera {
       if (is_upper (first))
         id[0] = std::tolower (first);
     }
-
     
     
     
-    namespace // Implementation details
-      {
+                                                                          //////////////////////TICKET #613 : centralise generally useful RegExps
+    namespace{  // Implementation details
+      
       map<Symbol, regex> regexTable;
       
       Symbol matchArgument = "\\(\\s*([\\w_\\.\\-]+)\\s*\\),?\\s*"; 
@@ -128,7 +128,7 @@ namespace lumiera {
      *  probably get for free when we embed a prolog system)...
      */
     uint 
-    countPraed (const string& q)
+    countPred (const string& q)
     {
       uint cnt (0);
       sregex_iterator end;

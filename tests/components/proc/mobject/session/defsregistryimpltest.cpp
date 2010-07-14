@@ -208,7 +208,7 @@ namespace mobject {
                   ASSERT ( *j );
                   Q23 qx ((*j)->instanceID);
                   ASSERT ( ps[qx] == (*j));
-                  d = lumiera::query::countPraed (qx);
+                  d = lumiera::query::countPred (qx);
                   ASSERT ( d_prev <= d );
                   d_prev = d;
                 }

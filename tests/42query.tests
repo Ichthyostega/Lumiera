@@ -12,7 +12,7 @@ END
 
 
 TEST "normalise ID" QueryUtils_test  normaliseID  <<END
-out-lit: ..original : a A AA dufte 1a _1 A_A BÄH    White 	 space  §&Ω%€GΩ%€ar  Ω  baäääääge!!!!!  :
+out-lit: ..original : a A AA dufte 1a _1 A_A BÄH    White 	 space  §&Ω%€GΩ%€ar  ☠☠☠  baäääääge!!!!!  :
 out-lit: normalised : a a aA dufte o1a o_1 a_A bH o white_space gar_bage :
 END
 
@@ -27,6 +27,6 @@ return: 0
 END
 
 
-TEST "count predicates in query" QueryUtils_test  countPraed  <<END
+TEST "count predicates in query" QueryUtils_test  countPred  <<END
 return: 0
 END

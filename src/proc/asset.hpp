@@ -183,7 +183,7 @@ namespace asset {
                  const uint ver=1);
           
           
-          int compare (const Ident& other)   const;
+          int compare (Ident const& other)   const;
 
           /** @note equality ignores version differences */
           bool operator== (Ident const& oi)  const { return compare (oi) ==0; }
@@ -308,7 +308,7 @@ namespace asset {
      *  forwarded to the Asset comparison operators.
      *  @note version info is irrelevant */
     inline int 
-    Asset::Ident::compare (const Asset::Ident& oi)  const
+    Asset::Ident::compare (Asset::Ident const& oi)  const
     { 
       int res;
       if (0 != (res=category.compare (oi.category)))  return res;
@@ -320,7 +320,7 @@ namespace asset {
     /** promote subtype-ptr to PAsset, e.g. for comparing */
     template<class A>
     inline const PcAsset
-    pAsset (const shared_ptr<A>& subPtr)
+    pAsset (shared_ptr<A> const& subPtr)
     {
       return static_pointer_cast<const Asset,A> (subPtr);
     }
@@ -336,7 +336,7 @@ namespace asset {
     
     
     /** convenient for debugging */
-    inline string str (const PcAsset& a) 
+    inline string str (PcAsset const& a) 
     {
       if (a)
         return string (*a.get());

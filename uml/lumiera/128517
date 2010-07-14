@@ -1,6 +1,6 @@
 format 58
 "CommonLib" // CommonLib
-  revision 16
+  revision 19
   modified_by 5 "hiv"
   // class settings
   //class diagram settings
@@ -212,6 +212,467 @@ ${inlines}
 	    classrelation_ref 170757 // <dependency>
 	  b parent class_ref 146693 // Proxy
       end
+    end
+  end
+
+  classview 134533 "Advice"
+    //class diagram settings
+    draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default show_stereotype_properties default
+    //collaboration diagram settings
+    show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default show_stereotype_properties default
+    //object diagram settings
+     write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default show_stereotype_properties default
+    //sequence diagram settings
+    show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default show_stereotype_properties default
+    //state diagram settings
+    package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
+    show_activities default region_horizontally default drawing_language default show_stereotype_properties default
+    //class settings
+    //activity diagram settings
+    package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
+    show_infonote default drawing_language default show_stereotype_properties default
+    classdiagram 141445 "Advice entities"
+      draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default show_stereotype_properties default
+      size A4
+    end
+
+    class 163973 "Advice"
+      visibility package stereotype "entity"
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl "${comment}${@}${visibility}${final}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      php_decl "${comment}${final}${visibility}${abstract}class ${name}${extends}${implements} {
+${members}}
+"
+      python_2_2 python_decl "class ${name}${inherit}:
+${docstring}${members}
+"
+      idl_decl "${comment}${abstract}${custom}valuetype ${name}${inherit} {
+${members}};
+"
+      explicit_switch_type ""
+      
+    end
+
+    class 164101 "PointOfAdvice"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+    end
+
+    class 164229 "Advisor"
+      visibility package stereotype "actor"
+      cpp_decl ""
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 199045 // <unidirectional association>
+	relation 188549 --->
+	  stereotype "add"
+	  a role_name "" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 199045 // <unidirectional association>
+	  b parent class_ref 164613 // Provision
+      end
+    end
+
+    class 164357 "Advised"
+      visibility package stereotype "actor"
+      cpp_decl ""
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 198917 // <unidirectional association>
+	relation 188421 --->
+	  stereotype "owns"
+	  a role_name "" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 198917 // <unidirectional association>
+	  b parent class_ref 164485 // Request
+      end
+    end
+
+    class 165893 "AdviceLink"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 201093 // <generalisation>
+	relation 190213 ---|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 201093 // <generalisation>
+	  b parent class_ref 164101 // PointOfAdvice
+      end
+
+      classrelation 201733 // <unidirectional association>
+	relation 190853 --->
+	  stereotype "attach"
+	  a role_name "" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 201733 // <unidirectional association>
+	  b parent class_ref 166149 // AdviceSystem
+      end
+    end
+
+    class 164485 "Request"
+      visibility package 
+      nformals 1
+      formal name "AD" type "class" explicit_default_value ""
+        explicit_extends ""
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 199685 // <association>
+	relation 188933 ----
+	  a role_name "" multiplicity "1" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 199685 // <association>
+	  b role_name "" multiplicity "1" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 199813 // <association>
+      end
+
+      classrelation 201349 // <generalisation>
+	relation 190469 ---|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 201349 // <generalisation>
+	  b parent class_ref 165893 // AdviceLink
+      end
+
+      operation 143749 "getAdvice"
+	public explicit_return_type ""
+	nparams 0
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name} ${(}${)}${const}${volatile} ${throw}${abstract};"
+	cpp_def "${comment}${inline}${type}
+${class}::${name} ${(}${)}${const}${volatile} ${throw}${staticnl}
+{
+  ${body}
+}
+
+"
+	
+	
+	
+	
+      end
+    end
+
+    class 164613 "Provision"
+      visibility package 
+      nformals 1
+      formal name "AD" type "class" explicit_default_value ""
+        explicit_extends ""
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 199173 // <association>
+	relation 188677 ----
+	  a role_name "" multiplicity "1" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 199173 // <association>
+	  b role_name "" multiplicity "1" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 199301 // <association>
+      end
+
+      classrelation 201221 // <generalisation>
+	relation 190341 ---|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 201221 // <generalisation>
+	  b parent class_ref 165893 // AdviceLink
+      end
+
+      operation 143621 "setAdvice"
+	public explicit_return_type ""
+	nparams 0
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${type} ${name} ${(}${)}${const}${volatile} ${throw}${abstract};"
+	cpp_def "${comment}${inline}${type}
+${class}::${name} ${(}${)}${const}${volatile} ${throw}${staticnl}
+{
+  ${body}
+}
+
+"
+	
+	
+	
+	
+      end
+
+      classrelation 203141 // <dependency>
+	relation 192261 -_->
+	  stereotype "create"
+	  a package
+	    cpp default "#include in source"
+	    classrelation_ref 203141 // <dependency>
+	  b parent class_ref 166021 // ActiveProvision
+      end
+    end
+
+    class 166021 "ActiveProvision"
+      visibility package 
+      nformals 1
+      formal name "AD" type "class" explicit_default_value ""
+        explicit_extends ""
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 201477 // <unidirectional association>
+	relation 190597 --->
+	  stereotype "holds"
+	  a role_name "" multiplicity "1" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 201477 // <unidirectional association>
+	  b multiplicity "1" parent class_ref 163973 // Advice
+      end
+
+      classrelation 201605 // <generalisation>
+	relation 190725 ---|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 201605 // <generalisation>
+	  b parent class_ref 164101 // PointOfAdvice
+      end
+    end
+
+    class 164741 "Binding"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 199301 // <association>
+	relation_ref 188677 // <association>
+      end
+
+      classrelation 199813 // <association>
+	relation_ref 188933 // <association>
+      end
+    end
+
+    class 166149 "AdviceSystem"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 201989 // <unidirectional association>
+	relation 191109 --->
+	  a role_name "" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 201989 // <unidirectional association>
+	  b parent class_ref 166277 // Index
+      end
+    end
+
+    class 166277 "Index"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 201861 // <directional composition>
+	relation 190981 *-->
+	  a role_name "" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	    classrelation_ref 201861 // <directional composition>
+	  b parent class_ref 164741 // Binding
+      end
+    end
+
+    objectdiagram 141573 "Advice solving"
+       write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default show_stereotype_properties default
+      size A4
+    end
+
+    classinstance 142981 ""
+      type class_ref 164613 // Provision
+      attributes
+        end
+      relations
+        end
+    end
+
+    classinstance 143109 ""
+      type class_ref 164613 // Provision
+      attributes
+        end
+      relations
+        end
+    end
+
+    classinstance 143237 ""
+      type class_ref 164613 // Provision
+      attributes
+        end
+      relations
+        end
+    end
+
+    classinstance 143365 ""
+      type class_ref 164229 // Advisor
+      attributes
+        end
+      relations
+        end
+    end
+
+    classinstance 143493 ""
+      type class_ref 164357 // Advised
+      attributes
+        end
+      relations
+        end
+    end
+
+    classinstance 143621 ""
+      type class_ref 164485 // Request
+      attributes
+        end
+      relations
+        end
+    end
+
+    classinstance 143749 ""
+      type class_ref 164357 // Advised
+      attributes
+        end
+      relations
+        end
+    end
+
+    classinstance 143877 ""
+      type class_ref 164485 // Request
+      attributes
+        end
+      relations
+        end
+    end
+
+    classinstance 144005 ""
+      type class_ref 164741 // Binding
+      attributes
+        end
+      relations
+        end
+    end
+
+    classinstance 144133 ""
+      type class_ref 164741 // Binding
+      attributes
+        end
+      relations
+        end
+    end
+
+    classinstance 144261 ""
+      type class_ref 164741 // Binding
+      attributes
+        end
+      relations
+        end
+    end
+
+    classinstance 144389 ""
+      type class_ref 164741 // Binding
+      attributes
+        end
+      relations
+        end
+    end
+
+    classinstance 144517 ""
+      type class_ref 164741 // Binding
+      attributes
+        end
+      relations
+        end
     end
   end
 

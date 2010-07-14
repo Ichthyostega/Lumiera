@@ -68,7 +68,7 @@ namespace asset{
     
     
     
-    /* ==== structural asset ID scheme ==== */  /////////////////////////////////////////////TICKET #565 : better organization of this naming scheme
+    /* ==== structural asset ID scheme ==== */  /////////////////////////////////////////////TICKET #565 : better organisation of this naming scheme
     
     template<class STRU>
     struct StructTraits
