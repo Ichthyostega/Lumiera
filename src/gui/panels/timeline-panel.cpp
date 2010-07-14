@@ -111,7 +111,24 @@ TimelinePanel::TimelinePanel(workspace::PanelManager &panel_manager,
    
   toolbar.show_all();
   panelBar.pack_start(toolbar, PACK_SHRINK);
-   
+
+  // Setup tooltips
+  sequenceChooser     .set_tooltip_text(_("Change sequence"));
+  timeIndicatorButton .set_tooltip_text(_("Go to time code"));
+
+  previousButton  .set_tooltip_text(_("To beginning"));
+  rewindButton    .set_tooltip_text(_("Rewind"));
+  playPauseButton .set_tooltip_text(_("Start playback"));
+  stopButton      .set_tooltip_text(_("Stop playback"));
+  forwardButton   .set_tooltip_text(_("Forward"));
+  nextButton      .set_tooltip_text(_("To end"));
+
+  arrowTool       .set_tooltip_text(_("Selection tool"));
+  iBeamTool       .set_tooltip_text(_("Marker tool"));
+
+  zoomIn          .set_tooltip_text(_("Zoom in"));
+  zoomOut         .set_tooltip_text(_("Zoom out"));
+
   // Setup the timeline widget
   shared_ptr<Sequence> sequence
     = *get_project().get_sequences().begin();  
@@ -281,8 +298,17 @@ TimelinePanel::update_sequence_chooser()
 void
 TimelinePanel::update_playback_buttons()
 {
-  playPauseButton.set_stock_id(is_playing() ?
-    Stock::MEDIA_PAUSE : Stock::MEDIA_PLAY);  
+  if (is_playing())
+    {
+      playPauseButton.set_stock_id(Stock::MEDIA_PAUSE);
+      playPauseButton.set_tooltip_text("Pause playback");
+    }
+  else
+    {
+      playPauseButton.set_stock_id(Stock::MEDIA_PLAY);
+      playPauseButton.set_tooltip_text("Start playback");
+    }
+
 }
 
 void

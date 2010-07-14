@@ -1,6 +1,5 @@
 /*
-  timeline-layout-helper.cpp  -  Implements utility functions for
-  GDK rects
+  rectangle.cpp  -  Implements utility functions for GDK rects
  
   Copyright (C)         Lumiera.org
     2008,               Joel Holdsworth <joel@airwebreathe.org.uk>

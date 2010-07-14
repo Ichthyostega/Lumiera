@@ -1,5 +1,5 @@
 /*
-  name-chooser.cpp  -  Definition of the name chooser dialog object
+  name-chooser.hpp  -  Definition of the name chooser dialog object
  
   Copyright (C)         Lumiera.org
     2008,               Joel Holdsworth <joel@airwebreathe.org.uk>
@@ -19,7 +19,7 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  
 */
-/** @file sequence-name.hpp
+/** @file name-chooser.hpp
  ** This file contains the definition of the name chooser dialog
  **
  */

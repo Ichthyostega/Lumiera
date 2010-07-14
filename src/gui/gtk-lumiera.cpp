@@ -106,7 +106,7 @@ const Glib::ustring GtkLumiera::get_app_copyright()
 
 const Glib::ustring GtkLumiera::get_app_website()
 {
-  return "www.lumiera.org";
+  return "http://www.lumiera.org";
 }
 
 const std::vector<Glib::ustring>

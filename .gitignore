@@ -18,6 +18,7 @@ config.log
 aclocal.m4
 autom4te.cache
 semantic.cache
+tests/,*
 wiki/backups/*
 doc/devel/draw/*.png
 m4/*

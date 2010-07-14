@@ -1,6 +1,5 @@
 /*
-  timeline-layout-helper.hpp  -  Declares utility functions for
-  GDK rects
+  rectangle.hpp  -  Declares utility functions for GDK rects
  
   Copyright (C)         Lumiera.org
     2008,               Joel Holdsworth <joel@airwebreathe.org.uk>
@@ -20,7 +19,7 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  
 * *****************************************************/
-/** @file timeline-layout-helper.hpp
+/** @file rectangle.hpp
  ** This file contains the declaration of the utility functions for
  ** GDK rects
  */
