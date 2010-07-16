@@ -1731,15 +1731,20 @@ Some further details
 * a special case of this factory use is the [[Singleton]] factory, which is used a lot within the Proy-Layer code
 </pre>
 </div>
-<div title="Fixture" modifier="Ichthyostega" modified="201007110035" created="200706220324" tags="def" changecount="9">
+<div title="Fixture" modifier="Ichthyostega" modified="201007160052" created="200706220324" tags="def" changecount="10">
 <pre>a specially configured sequence list
 * all MObjects have their position, length and configuration set up ready for rendering.
 * any nested sequences (or other kinds of indirections) have been resolved.
 * every MObject is associated with an ExplicitPlacement, which declares a fixed position (Time, [[Pipe-ID|OutputDesignation]])
 * these ~ExplicitPlacements are contained in a ordered List, sometimes denoted as the //effective timeline.//
-* besides, there is a collection of all effective, possibly externally visible [[model ports|ModelPorts]]
+* besides, there is a collection of all effective, possibly externally visible [[model ports|ModelPort]]
 
-As the builder and thus render engine //only consults the fixture,// while all editing operations finally propagate to the fixture as well, we get an isolation layer between the high level part of the Proc layer (editing, object manipulation) and the render engine. Creating the Fixture can be seen as a preprocessing step to simplify the build process. For this reason, the process of [[(re)building the fixture|PlanningBuildFixture]] has been designed together with the [[Builder]]</pre>
+As the builder and thus render engine //only consults the fixture,// while all editing operations finally propagate to the fixture as well, we get an isolation layer between the high level part of the Proc layer (editing, object manipulation) and the render engine. Creating the Fixture can be seen as a preprocessing step to simplify the build process. For this reason, the process of [[(re)building the fixture|PlanningBuildFixture]] has been designed together with the [[Builder]]
+
+!{{red{WIP}}} Structure of the fixture
+The fixture is like a grid, where one dimension is given by the [[model ports|ModelPort]], and the other dimension extends in time. The time axis is grouped in segments of constant structure.
+A problem yet to be solved is how the fixture relates to the mulitude of top-level timelines, without generating a too fine grained segmentation.
+</pre>
 </div>
 <div title="ForwardIterator" modifier="Ichthyostega" modified="200912190027" created="200910312114" tags="Concepts def spec" changecount="17">
 <pre>The situation focussed by this concept is when an API needs to expose a sequence of results, values or objects, instead of just yielding a function result value. As the naive solution of passing an pointer or array creates coupling to internals, it was superseded by the ~GoF [[Iterator pattern|http://en.wikipedia.org/wiki/Iterator]]. Iteration can be implemented by convention, polymorphically or by generic programming; we use the latter approach.
@@ -1863,13 +1868,13 @@ For this Lumiera design, we could consider making GOP just another raw media dat
 &amp;rarr;see in [[Wikipedia|http://en.wikipedia.org/wiki/Group_of_pictures]]
 </pre>
 </div>
-<div title="GlobalPipe" modifier="Ichthyostega" modified="201007120219" created="201007110200" tags="Model design spec draft" changecount="5">
+<div title="GlobalPipe" modifier="Ichthyostega" modified="201007152253" created="201007110200" tags="Model design spec draft" changecount="6">
 <pre>Each [[Timeline]] has an associated set of global [[pipes|Pipe]] (global busses), similar to the subgroups of a sound mixing desk.
 In the typical standard configuration, there is (at least) a video master and a sound master pipe. Like any pipe, ingoing connections attach to the input side, attached effects form a chain, where the last node acts as exit node. The ~Pipe-ID of such a global bus can be used to route media streams, allowing the global pipe to act as a summation bus bar.
 
 !{{red{WIP}}} Design problem with global Pipes
 actually building up the implementation of global pipes seems to pose a rather subtle design problem: it is difficult to determine how to do it //right.//
-To start with, we need the ability to attach effects to global pipes. There is already an obvious way how to attach effects to clips (=local pipes), and thus it's desirable to do handle it the same way for global pipes. At least there should be a really good reason //not//&amp;nbsp; to do it the same way. Thus, we're going to attach these effects by placement into the scope of another placed MObject. And, moreover, this other object should be part of the HighLevelModel's tree, to allow using the PlacementIndex as implementation. So this reasoning brings us to inventing or postulating some kind of object, without having any existing concept to justify the existence of the corresponding class or shaping its properties on itself. Which means &amp;mdash; from a design view angle &amp;mdash; we're entering slippery ground.
+To start with, we need the ability to attach effects to global pipes. There is already an obvious way how to attach effects to clips (=local pipes), and thus it's desirable to handle it the same way for global pipes. At least there should be a really good reason //not//&amp;nbsp; to do it the same way. Thus, we're going to attach these effects by placement into the scope of another placed MObject. And, moreover, this other object should be part of the HighLevelModel's tree, to allow using the PlacementIndex as implementation. So this reasoning brings us to inventing or postulating some kind of object, without having any existing concept to justify the existence of the corresponding class or shaping its properties on itself. Which means &amp;mdash; from a design view angle &amp;mdash; we're entering slippery ground.
 !!~Model-A: dedicated object per pipe
 Just for the sake of symmetry, for each global pipe we'd attach some ~MObject as child of the BindingMO representing the timeline. If no further specific properties or functionality is required, we could use Track objects, which are generally used as containers within the model. Individual effects would then be attached as children, while output routing would be done within the attaching placement, the same way as it's done with clips or tracks in general. As the pipe asset itself already stores a StreamType reference, all we'd need is some kind of link to the pipe asset or pipe-ID, and maybe some façade functions within the binding to support the handling.
 !!~Model-B: attaching to the container
@@ -2809,7 +2814,7 @@ The operation point is provided by the current BuilderMould and used by the [[pr
 This is possible because the operation point has been provided (by the mould) with informations about the media stream type to be wired, which, together with information accessible at the the [[render node interface|ProcNode]] and from the [[referred processing assets|ProcAsset]], with the help of the [[connection manager|ConManager]] allows to figure out what's possible and how to do the desired connections. Additionally, in the course of deciding about possible connections, the PathManager is consulted to guide strategic decisions regarding the [[render node configuration|NodeConfiguration]], possible type conversions and the rendering technology to employ.
 </pre>
 </div>
-<div title="OutputDesignation" modifier="Ichthyostega" modified="201007110046" created="201006220126" tags="Model draft design discuss" changecount="24">
+<div title="OutputDesignation" modifier="Ichthyostega" modified="201007160047" created="201006220126" tags="Model draft design discuss" changecount="31">
 <pre>__6/2010__: an ever recurring (and yet unsolved) problem in the design of Luimiera's ~Proc-Layer is how to refer to output destinations, and how to organise them.
 To get ahead with this problem, I'll start collecting observations, relations and drafts on this tiddler.
 
@@ -2830,6 +2835,7 @@ To get ahead with this problem, I'll start collecting observations, relations an
 
 !Conclusions
 * there are //direct, indirect//&amp;nbsp; and //relative//&amp;nbsp; referrals to an output designation
+* //indirect// means to derive the destination transitively (looking at the destination's output designation and so on)
 * //relative// in this context means that we refer to &quot;the N^^th^^ of this kind&quot; (e.g. the second video out)
 * we need to attach some metadata with an output; especially we need an associated StreamType
 * output designation is structured into several //levels://
@@ -2842,11 +2848,11 @@ in almost every case mentioned above, the output designation is identical with t
 !!!system outputs
 System level output connections are the exception to the above rule. There is no pipe at an external port, and these externally visible connection points can appear and disappear, driven by external conditions. So the question is if system outputs shall be directly addressable at all as output designation? Rather, there should be a separate OutputManagement to handle external outputs and displays, both in windows or full screen.
 !!!consequences of mentioning an output designation
-The immediate consequence is that an connection to this designation is wired, using an appropriate [[processing pattern|ProcPatt]]. A further consequence is for the mentioned output designation to appear as exit node of the built render nodes network. (not sure if thats always the case, or only when the correponding pipe is an end point without further outgoing connections)
-
+The immediate consequence is that a [[Pipe]] with the given ID exists as an accountable entity. Only if &amp;mdash; additionally &amp;mdash; a suitable object within the model //claims to root this pipe,//  a connection to this designation is wired, using an appropriate [[processing pattern|ProcPatt]]. A further consequence then is for the mentioned output designation to become a possible candidate for a ModelPort, an exit node of the built render nodes network. By default, only those designations without further outgoing connections actually become active model ports (but an existing and wired pipe exit node can be promoted to a model port explicitly).
+&amp;rarr; OutputManagement
 </pre>
 </div>
-<div title="OutputManagement" modifier="Ichthyostega" modified="201007110112" created="201007090155" tags="Model Rendering Player spec draft" changecount="8">
+<div title="OutputManagement" modifier="Ichthyostega" modified="201007160105" created="201007090155" tags="Model Rendering Player spec draft" changecount="9">
 <pre>//writing down some thoughts//
 
 * ruled out the system outputs as OutputDesignation.
@@ -2860,6 +2866,9 @@ Do we get a single [[Fixture]] &amp;mdash; guess yes
 From the implementation side, the only interesting exit nodes are the ones to be //actually pulled,// i.e. those immeditately corresponding to the final output.
 * __rendering__ happens immediately at the output of a GlobalPipe (i.e. at a [[Timeline]], which is top-level)
 * __playback__ always happens at a viewer element
+
+!Attaching and mapping of exit nodes
+[[Output designations|OutputDesignation]] are created by using a [[Pipe]]-ID and by some object //claiming to root this pipe.// All of this is figured out dynamically, resulting in a collection of model ports as part of the current [[Fixture]]. A RenderProcess can be started to pull from these active exit points of a given timeline. Besides, when such a timeline is connected to a viewer, an output network is built to hook up exit points to the viewer component. Both cases encompass a mapping of exit nodes to actual output channels. Usually, this mapping relies on relative addressing of the output sinks, starting connections at the &quot;first of each kind&quot;.
 
 !Connection to external outputs
 External output destinations are never addressed directly from within the model. This is an design decision. Rather, model parts connect to an OutputDesignation, and these in turn may be  [[connected to a viewer element|ViewerPlayConnection]]. At this point, related to the viewer element, there is a mapping to external destination(s): for images, a viewer typically has an implicit, natural destination (read, there is a corresponding viewer window or widget), while for sound we use an mapping rule, which could be overridden locally in the viewer.
