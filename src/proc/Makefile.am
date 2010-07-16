@@ -24,12 +24,12 @@ noinst_LTLIBRARIES += liblumiproc.la
 liblumiproc_la_CFLAGS = $(AM_CFLAGS) $(LUMIERA_PROC_CFLAGS) -std=gnu99 -Wall -Wextra -Werror
 liblumiproc_la_CXXFLAGS = $(AM_CXXFLAGS) $(LUMIERA_PROC_CFLAGS) -Wall -Wextra
 
-liblumiproc_la_SOURCES =						\
-	$(liblumiproc_la_srcdir)/controllerfacade.cpp			\
-	$(liblumiproc_la_srcdir)/facade.cpp				\
-	$(liblumiproc_la_srcdir)/state.cpp				\
-	$(liblumiproc_la_srcdir)/asset.cpp				\
-	$(liblumiproc_la_srcdir)/assetmanager.cpp
+liblumiproc_la_SOURCES =				\
+	$(liblumiproc_la_srcdir)/asset.cpp		\
+	$(liblumiproc_la_srcdir)/assetmanager.cpp	\
+	$(liblumiproc_la_srcdir)/controllerfacade.cpp	\
+	$(liblumiproc_la_srcdir)/facade.cpp		\
+	$(liblumiproc_la_srcdir)/state.cpp
 
 
 
@@ -40,22 +40,21 @@ liblumiprocasset_la_CFLAGS = $(AM_CFLAGS) $(LUMIERA_PROC_CFLAGS) -std=gnu99 -Wal
 liblumiprocasset_la_CXXFLAGS = $(AM_CXXFLAGS) $(LUMIERA_PROC_CFLAGS) -Wall -Wextra
 
 liblumiprocasset_la_SOURCES =				\
+	$(liblumiprocasset_la_srcdir)/category.cpp	\
+	$(liblumiprocasset_la_srcdir)/clip.cpp		\
 	$(liblumiprocasset_la_srcdir)/codec.cpp		\
 	$(liblumiprocasset_la_srcdir)/compoundmedia.cpp	\
 	$(liblumiprocasset_la_srcdir)/effect.cpp	\
-	$(liblumiprocasset_la_srcdir)/preview.cpp	\
-	$(liblumiprocasset_la_srcdir)/unknown.cpp	\
-	$(liblumiprocasset_la_srcdir)/clip.cpp		\
-	$(liblumiprocasset_la_srcdir)/meta.cpp		\
-	$(liblumiprocasset_la_srcdir)/category.cpp	\
 	$(liblumiprocasset_la_srcdir)/media.cpp		\
+	$(liblumiprocasset_la_srcdir)/meta.cpp		\
 	$(liblumiprocasset_la_srcdir)/pipe.cpp		\
+	$(liblumiprocasset_la_srcdir)/preview.cpp	\
 	$(liblumiprocasset_la_srcdir)/proc.cpp		\
 	$(liblumiprocasset_la_srcdir)/procpatt.cpp	\
-	$(liblumiprocasset_la_srcdir)/struct.cpp	\
 	$(liblumiprocasset_la_srcdir)/sequence.cpp	\
-	$(liblumiprocasset_la_srcdir)/timeline.cpp
-
+	$(liblumiprocasset_la_srcdir)/struct.cpp	\
+	$(liblumiprocasset_la_srcdir)/timeline.cpp	\
+	$(liblumiprocasset_la_srcdir)/unknown.cpp
 
 
 liblumiprocengine_la_srcdir = $(top_srcdir)/src/proc/engine
@@ -72,11 +71,11 @@ liblumiprocengine_la_SOURCES =					\
 	$(liblumiprocengine_la_srcdir)/nodewiring.cpp		\
 	$(liblumiprocengine_la_srcdir)/pluginadapter.cpp	\
 	$(liblumiprocengine_la_srcdir)/projector.cpp		\
-	$(liblumiprocengine_la_srcdir)/rendergraph.cpp		\
+	$(liblumiprocengine_la_srcdir)/render-invocation.cpp	\
 	$(liblumiprocengine_la_srcdir)/renderengine.cpp		\
+	$(liblumiprocengine_la_srcdir)/rendergraph.cpp		\
 	$(liblumiprocengine_la_srcdir)/source.cpp		\
 	$(liblumiprocengine_la_srcdir)/stateproxy.cpp		\
-	$(liblumiprocengine_la_srcdir)/render-invocation.cpp	\
 	$(liblumiprocengine_la_srcdir)/trafo.cpp
 
 
@@ -90,8 +89,8 @@ liblumiprocmobject_la_CXXFLAGS = $(AM_CXXFLAGS) $(LUMIERA_PROC_CFLAGS) -Wall -We
 liblumiprocmobject_la_SOURCES =					\
 	$(liblumiprocmobject_la_srcdir)/builderfacade.cpp	\
 	$(liblumiprocmobject_la_srcdir)/interpolator.cpp	\
-	$(liblumiprocmobject_la_srcdir)/mobject.cpp		\
 	$(liblumiprocmobject_la_srcdir)/mobject-ref.cpp		\
+	$(liblumiprocmobject_la_srcdir)/mobject.cpp		\
 	$(liblumiprocmobject_la_srcdir)/parameter.cpp		\
 	$(liblumiprocmobject_la_srcdir)/paramprovider.cpp	\
 	$(liblumiprocmobject_la_srcdir)/placement.cpp
@@ -119,11 +118,11 @@ liblumiproccontrol_la_CFLAGS = $(AM_CFLAGS) $(LUMIERA_PROC_CFLAGS) -std=gnu99 -W
 liblumiproccontrol_la_CXXFLAGS = $(AM_CXXFLAGS) $(LUMIERA_PROC_CFLAGS) -Wall -Wextra
 
 liblumiproccontrol_la_SOURCES =					\
-	$(liblumiproccontrol_la_srcdir)/command.cpp		\
 	$(liblumiproccontrol_la_srcdir)/command-impl.cpp	\
+	$(liblumiproccontrol_la_srcdir)/command.cpp		\
 	$(liblumiproccontrol_la_srcdir)/handling-pattern.cpp	\
-	$(liblumiproccontrol_la_srcdir)/proc-dispatcher.cpp	\
 	$(liblumiproccontrol_la_srcdir)/pathmanager.cpp		\
+	$(liblumiproccontrol_la_srcdir)/proc-dispatcher.cpp	\
 	$(liblumiproccontrol_la_srcdir)/stypemanager.cpp
 
 
@@ -134,8 +133,8 @@ liblumiprocplay_la_CFLAGS = $(AM_CFLAGS) $(LUMIERA_PROC_CFLAGS) -std=gnu99 -Wall
 liblumiprocplay_la_CXXFLAGS = $(AM_CXXFLAGS) $(LUMIERA_PROC_CFLAGS) -Wall -Wextra
 
 liblumiprocplay_la_SOURCES =					\
-	$(liblumiprocplay_la_srcdir)/dummy-player-service.cpp	\
-	$(liblumiprocplay_la_srcdir)/dummy-image-generator.cpp
+	$(liblumiprocplay_la_srcdir)/dummy-image-generator.cpp	\
+	$(liblumiprocplay_la_srcdir)/dummy-player-service.cpp
 
 
 liblumiprocmobjectsession_la_srcdir = $(top_srcdir)/src/proc/mobject/session
@@ -155,109 +154,109 @@ liblumiprocmobjectsession_la_SOURCES =							\
 	$(liblumiprocmobjectsession_la_srcdir)/defsmanager.cpp				\
 	$(liblumiprocmobjectsession_la_srcdir)/effect.cpp				\
 	$(liblumiprocmobjectsession_la_srcdir)/fixedlocation.cpp			\
+	$(liblumiprocmobjectsession_la_srcdir)/fixture.cpp				\
 	$(liblumiprocmobjectsession_la_srcdir)/label.cpp				\
+	$(liblumiprocmobjectsession_la_srcdir)/locatingpin.cpp				\
 	$(liblumiprocmobjectsession_la_srcdir)/meta.cpp					\
+	$(liblumiprocmobjectsession_la_srcdir)/mobjectfactory.cpp			\
+	$(liblumiprocmobjectsession_la_srcdir)/placement-index-query-resolver.cpp 	\
+	$(liblumiprocmobjectsession_la_srcdir)/placement-index.cpp			\
+	$(liblumiprocmobjectsession_la_srcdir)/plug.cpp					\
+	$(liblumiprocmobjectsession_la_srcdir)/query-focus.cpp 				\
+	$(liblumiprocmobjectsession_la_srcdir)/query-resolver.cpp 			\
 	$(liblumiprocmobjectsession_la_srcdir)/relativelocation.cpp			\
+	$(liblumiprocmobjectsession_la_srcdir)/root.cpp 				\
+	$(liblumiprocmobjectsession_la_srcdir)/scope-path.cpp 				\
+	$(liblumiprocmobjectsession_la_srcdir)/scope.cpp 				\
 	$(liblumiprocmobjectsession_la_srcdir)/segment.cpp				\
 	$(liblumiprocmobjectsession_la_srcdir)/segmentation.cpp				\
-	$(liblumiprocmobjectsession_la_srcdir)/simpleclip.cpp				\
-	$(liblumiprocmobjectsession_la_srcdir)/plug.cpp					\
-	$(liblumiprocmobjectsession_la_srcdir)/session-impl.cpp				\
 	$(liblumiprocmobjectsession_la_srcdir)/sess-manager-impl.cpp			\
-	$(liblumiprocmobjectsession_la_srcdir)/session.cpp				\
-	$(liblumiprocmobjectsession_la_srcdir)/track.cpp				\
-	$(liblumiprocmobjectsession_la_srcdir)/fixture.cpp				\
-	$(liblumiprocmobjectsession_la_srcdir)/locatingpin.cpp				\
-	$(liblumiprocmobjectsession_la_srcdir)/mobjectfactory.cpp			\
-	$(liblumiprocmobjectsession_la_srcdir)/placement-index.cpp			\
-	$(liblumiprocmobjectsession_la_srcdir)/query-resolver.cpp 			\
-	$(liblumiprocmobjectsession_la_srcdir)/query-focus.cpp 				\
-	$(liblumiprocmobjectsession_la_srcdir)/placement-index-query-resolver.cpp 	\
+	$(liblumiprocmobjectsession_la_srcdir)/session-impl.cpp				\
 	$(liblumiprocmobjectsession_la_srcdir)/session-services.cpp 			\
-	$(liblumiprocmobjectsession_la_srcdir)/root.cpp 				\
-	$(liblumiprocmobjectsession_la_srcdir)/scope.cpp 				\
-	$(liblumiprocmobjectsession_la_srcdir)/scope-path.cpp 				\
+	$(liblumiprocmobjectsession_la_srcdir)/session.cpp				\
+	$(liblumiprocmobjectsession_la_srcdir)/simpleclip.cpp				\
+	$(liblumiprocmobjectsession_la_srcdir)/track.cpp				\
 	$(liblumiprocmobjectsession_la_srcdir)/wish.cpp
 
 
 
 
 noinst_HEADERS +=									\
+	$(liblumiproc_la_srcdir)/asset.hpp						\
+	$(liblumiproc_la_srcdir)/asset/buildinstruct.hpp				\
 	$(liblumiproc_la_srcdir)/asset/category.hpp					\
 	$(liblumiproc_la_srcdir)/asset/clip.hpp						\
 	$(liblumiproc_la_srcdir)/asset/codec.hpp					\
 	$(liblumiproc_la_srcdir)/asset/compoundmedia.hpp				\
 	$(liblumiproc_la_srcdir)/asset/dataset.hpp					\
-	$(liblumiproc_la_srcdir)/asset/effect.hpp					\
-	$(liblumiproc_la_srcdir)/asset/preview.hpp					\
 	$(liblumiproc_la_srcdir)/asset/db.hpp						\
-	$(liblumiproc_la_srcdir)/asset/buildinstruct.hpp				\
+	$(liblumiproc_la_srcdir)/asset/effect.hpp					\
 	$(liblumiproc_la_srcdir)/asset/media.hpp					\
 	$(liblumiproc_la_srcdir)/asset/meta.hpp						\
 	$(liblumiproc_la_srcdir)/asset/pipe.hpp						\
+	$(liblumiproc_la_srcdir)/asset/preview.hpp					\
 	$(liblumiproc_la_srcdir)/asset/proc.hpp						\
 	$(liblumiproc_la_srcdir)/asset/procpatt.hpp					\
-	$(liblumiproc_la_srcdir)/asset/struct.hpp					\
 	$(liblumiproc_la_srcdir)/asset/sequence.hpp					\
+	$(liblumiproc_la_srcdir)/asset/struct.hpp					\
 	$(liblumiproc_la_srcdir)/asset/timeline.hpp					\
 	$(liblumiproc_la_srcdir)/asset/unknown.hpp					\
+	$(liblumiproc_la_srcdir)/assetmanager.hpp					\
+	$(liblumiproc_la_srcdir)/control/pathmanager.hpp				\
 	$(liblumiproc_la_srcdir)/controllerfacade.hpp					\
 	$(liblumiproc_la_srcdir)/engine/mask.hpp					\
 	$(liblumiproc_la_srcdir)/engine/pluginadapter.hpp				\
 	$(liblumiproc_la_srcdir)/engine/procnode.hpp					\
 	$(liblumiproc_la_srcdir)/engine/projector.hpp					\
 	$(liblumiproc_la_srcdir)/engine/renderengine.hpp				\
+	$(liblumiproc_la_srcdir)/engine/rendergraph.hpp					\
 	$(liblumiproc_la_srcdir)/engine/source.hpp					\
 	$(liblumiproc_la_srcdir)/engine/trafo.hpp					\
-	$(liblumiproc_la_srcdir)/engine/rendergraph.hpp					\
+	$(liblumiproc_la_srcdir)/facade.cpp						\
 	$(liblumiproc_la_srcdir)/mobject/builder/assembler.hpp				\
 	$(liblumiproc_la_srcdir)/mobject/builder/buildertool.hpp			\
 	$(liblumiproc_la_srcdir)/mobject/builder/conmanager.hpp				\
 	$(liblumiproc_la_srcdir)/mobject/builder/segmentationtool.hpp			\
 	$(liblumiproc_la_srcdir)/mobject/builder/toolfactory.hpp			\
 	$(liblumiproc_la_srcdir)/mobject/builderfacade.hpp				\
-	$(liblumiproc_la_srcdir)/control/pathmanager.hpp				\
-	$(liblumiproc_la_srcdir)/play/tick-service.hpp					\
-	$(liblumiproc_la_srcdir)/play/dummy-image-generator.hpp				\
+	$(liblumiproc_la_srcdir)/mobject/explicitplacement.hpp				\
 	$(liblumiproc_la_srcdir)/mobject/interpolator.hpp				\
+	$(liblumiproc_la_srcdir)/mobject/mobject.hpp					\
 	$(liblumiproc_la_srcdir)/mobject/parameter.hpp					\
 	$(liblumiproc_la_srcdir)/mobject/paramprovider.hpp				\
+	$(liblumiproc_la_srcdir)/mobject/placement.hpp					\
+	$(liblumiproc_la_srcdir)/mobject/session.hpp					\
 	$(liblumiproc_la_srcdir)/mobject/session/abstractmo.hpp				\
 	$(liblumiproc_la_srcdir)/mobject/session/allocation.hpp				\
 	$(liblumiproc_la_srcdir)/mobject/session/auto.hpp				\
-	$(liblumiproc_la_srcdir)/mobject/session/compoundclip.hpp			\
-	$(liblumiproc_la_srcdir)/mobject/session/effect.hpp				\
-	$(liblumiproc_la_srcdir)/mobject/session/fixedlocation.hpp			\
-	$(liblumiproc_la_srcdir)/mobject/session/label.hpp				\
-	$(liblumiproc_la_srcdir)/mobject/session/meta.hpp				\
-	$(liblumiproc_la_srcdir)/mobject/session/relativelocation.hpp			\
-	$(liblumiproc_la_srcdir)/mobject/session/simpleclip.hpp				\
-	$(liblumiproc_la_srcdir)/mobject/session/mobjectfactory.hpp			\
-	$(liblumiproc_la_srcdir)/mobject/session/segment.hpp				\
-	$(liblumiproc_la_srcdir)/mobject/session/segmentation.hpp			\
-	$(liblumiproc_la_srcdir)/mobject/session/track.hpp				\
-	$(liblumiproc_la_srcdir)/mobject/session/wish.hpp				\
 	$(liblumiproc_la_srcdir)/mobject/session/clip.hpp				\
+	$(liblumiproc_la_srcdir)/mobject/session/compoundclip.hpp			\
 	$(liblumiproc_la_srcdir)/mobject/session/constraint.hpp				\
 	$(liblumiproc_la_srcdir)/mobject/session/defsmanager.hpp			\
-	$(liblumiproc_la_srcdir)/mobject/session/fixture.hpp				\
-	$(liblumiproc_la_srcdir)/mobject/session/locatingpin.hpp			\
-	$(liblumiproc_la_srcdir)/mobject/session/plug.hpp				\
 	$(liblumiproc_la_srcdir)/mobject/session/defsregistry.hpp			\
-	$(liblumiproc_la_srcdir)/mobject/session/placement-index.hpp			\
-	$(liblumiproc_la_srcdir)/mobject/session/query-resolver.hpp			\
+	$(liblumiproc_la_srcdir)/mobject/session/effect.hpp				\
+	$(liblumiproc_la_srcdir)/mobject/session/fixedlocation.hpp			\
+	$(liblumiproc_la_srcdir)/mobject/session/fixture.hpp				\
+	$(liblumiproc_la_srcdir)/mobject/session/label.hpp				\
+	$(liblumiproc_la_srcdir)/mobject/session/locatingpin.hpp			\
+	$(liblumiproc_la_srcdir)/mobject/session/meta.hpp				\
+	$(liblumiproc_la_srcdir)/mobject/session/mobjectfactory.hpp			\
 	$(liblumiproc_la_srcdir)/mobject/session/placement-index-query-resolver.hpp	\
-	$(liblumiproc_la_srcdir)/mobject/session/session-service-fetch.hpp		\
+	$(liblumiproc_la_srcdir)/mobject/session/placement-index.hpp			\
+	$(liblumiproc_la_srcdir)/mobject/session/plug.hpp				\
+	$(liblumiproc_la_srcdir)/mobject/session/query-resolver.hpp			\
+	$(liblumiproc_la_srcdir)/mobject/session/relativelocation.hpp			\
 	$(liblumiproc_la_srcdir)/mobject/session/root.hpp				\
-	$(liblumiproc_la_srcdir)/mobject/session/scope.hpp				\
 	$(liblumiproc_la_srcdir)/mobject/session/scope-path.hpp				\
-	$(liblumiproc_la_srcdir)/mobject/explicitplacement.hpp				\
-	$(liblumiproc_la_srcdir)/mobject/mobject.hpp					\
-	$(liblumiproc_la_srcdir)/mobject/placement.hpp					\
-	$(liblumiproc_la_srcdir)/mobject/session.hpp					\
-	$(liblumiproc_la_srcdir)/asset.hpp						\
-	$(liblumiproc_la_srcdir)/assetmanager.hpp					\
-	$(liblumiproc_la_srcdir)/facade.cpp
+	$(liblumiproc_la_srcdir)/mobject/session/scope.hpp				\
+	$(liblumiproc_la_srcdir)/mobject/session/segment.hpp				\
+	$(liblumiproc_la_srcdir)/mobject/session/segmentation.hpp			\
+	$(liblumiproc_la_srcdir)/mobject/session/session-service-fetch.hpp		\
+	$(liblumiproc_la_srcdir)/mobject/session/simpleclip.hpp				\
+	$(liblumiproc_la_srcdir)/mobject/session/track.hpp				\
+	$(liblumiproc_la_srcdir)/mobject/session/wish.hpp				\
+	$(liblumiproc_la_srcdir)/play/dummy-image-generator.hpp				\
+	$(liblumiproc_la_srcdir)/play/tick-service.hpp
 
 
 liblumieraproc_la_srcdir = $(top_srcdir)/src/proc
@@ -272,9 +271,9 @@ liblumieraproc_la_LIBADD =			\
 	$(LUMIERA_PROC_LIBS)			\
 	liblumiproc.la				\
 	liblumiprocasset.la			\
+	liblumiproccontrol.la			\
 	liblumiprocengine.la			\
 	liblumiprocmobject.la			\
 	liblumiprocmobjectbuilder.la		\
-	liblumiproccontrol.la			\
-	liblumiprocplay.la			\
-	liblumiprocmobjectsession.la
+	liblumiprocmobjectsession.la		\
+	liblumiprocplay.la

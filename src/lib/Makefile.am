@@ -32,81 +32,87 @@ liblumiera_la_LIBADD =	 					\
 	$(LUMIERA_LIBRARY_LIBS)
 
 
-liblumiera_la_SOURCES =						\
-	$(liblumiera_la_srcdir)/error.c				\
-	$(liblumiera_la_srcdir)/mpool.c				\
-	$(liblumiera_la_srcdir)/exception.cpp 			\
-	$(liblumiera_la_srcdir)/lockerror.c			\
-	$(liblumiera_la_srcdir)/mutex.c				\
-	$(liblumiera_la_srcdir)/recmutex.c			\
-	$(liblumiera_la_srcdir)/rwlock.c			\
-	$(liblumiera_la_srcdir)/condition.c			\
-	$(liblumiera_la_srcdir)/reccondition.c			\
-	$(liblumiera_la_srcdir)/luid.c				\
-	$(liblumiera_la_srcdir)/safeclib.c			\
-	$(liblumiera_la_srcdir)/psplay.c			\
-	$(liblumiera_la_srcdir)/mrucache.c			\
-	$(liblumiera_la_srcdir)/time.c				\
-	$(liblumiera_la_srcdir)/allocationcluster.cpp		\
-	$(liblumiera_la_srcdir)/lumitime.cpp			\
-	$(liblumiera_la_srcdir)/lifecycle.cpp			\
-	$(liblumiera_la_srcdir)/nobug-init.cpp			\
-	$(liblumiera_la_srcdir)/util.cpp			\
-	$(liblumiera_la_srcdir)/query.cpp			\
-	$(liblumiera_la_srcdir)/streamtype.cpp			\
-	$(liblumiera_la_srcdir)/test/testoption.cpp 		\
-	$(liblumiera_la_srcdir)/test/test-helper.cpp 		\
-	$(liblumiera_la_srcdir)/test/suite.cpp 			\
-	$(liblumiera_la_srcdir)/symbol-impl.cpp			\
-	$(liblumiera_la_srcdir)/cmdline.cpp			\
-	$(liblumiera_la_srcdir)/logging.cpp
+liblumiera_la_SOURCES =					\
+	$(liblumiera_la_srcdir)/advice/advice.cpp	\
+	$(liblumiera_la_srcdir)/advice/binding.cpp	\
+	$(liblumiera_la_srcdir)/allocationcluster.cpp	\
+	$(liblumiera_la_srcdir)/cmdline.cpp		\
+	$(liblumiera_la_srcdir)/condition.c		\
+	$(liblumiera_la_srcdir)/error.c			\
+	$(liblumiera_la_srcdir)/exception.cpp		\
+	$(liblumiera_la_srcdir)/lifecycle.cpp		\
+	$(liblumiera_la_srcdir)/lockerror.c		\
+	$(liblumiera_la_srcdir)/logging.cpp		\
+	$(liblumiera_la_srcdir)/luid.c			\
+	$(liblumiera_la_srcdir)/lumitime.cpp		\
+	$(liblumiera_la_srcdir)/mpool.c			\
+	$(liblumiera_la_srcdir)/mrucache.c		\
+	$(liblumiera_la_srcdir)/mutex.c			\
+	$(liblumiera_la_srcdir)/nobug-init.cpp		\
+	$(liblumiera_la_srcdir)/psplay.c		\
+	$(liblumiera_la_srcdir)/query.cpp		\
+	$(liblumiera_la_srcdir)/reccondition.c		\
+	$(liblumiera_la_srcdir)/recmutex.c		\
+	$(liblumiera_la_srcdir)/rwlock.c		\
+	$(liblumiera_la_srcdir)/safeclib.c		\
+	$(liblumiera_la_srcdir)/streamtype.cpp		\
+	$(liblumiera_la_srcdir)/symbol-impl.cpp		\
+	$(liblumiera_la_srcdir)/test/suite.cpp		\
+	$(liblumiera_la_srcdir)/test/test-helper.cpp	\
+	$(liblumiera_la_srcdir)/test/testoption.cpp	\
+	$(liblumiera_la_srcdir)/time.c			\
+	$(liblumiera_la_srcdir)/util.cpp
+
 
 noinst_HEADERS +=						\
+	$(liblumiera_la_srcdir)/advice.hpp			\
+	$(liblumiera_la_srcdir)/advice/binding.hpp		\
+	$(liblumiera_la_srcdir)/advice/index.hpp		\
+	$(liblumiera_la_srcdir)/allocationcluster.hpp		\
+	$(liblumiera_la_srcdir)/condition.h			\
 	$(liblumiera_la_srcdir)/error.h				\
 	$(liblumiera_la_srcdir)/error.hpp			\
-	$(liblumiera_la_srcdir)/mpool.h				\
-	$(liblumiera_la_srcdir)/lockerror.h			\
-	$(liblumiera_la_srcdir)/mutex.h				\
-	$(liblumiera_la_srcdir)/recmutex.h			\
-	$(liblumiera_la_srcdir)/rwlock.h			\
-	$(liblumiera_la_srcdir)/condition.h			\
-	$(liblumiera_la_srcdir)/reccondition.h			\
-	$(liblumiera_la_srcdir)/luid.h				\
-	$(liblumiera_la_srcdir)/safeclib.h			\
-	$(liblumiera_la_srcdir)/psplay.h			\
-	$(liblumiera_la_srcdir)/mrucache.h			\
-	$(liblumiera_la_srcdir)/time.h				\
-	$(liblumiera_la_srcdir)/ppmpl.h				\
-	$(liblumiera_la_srcdir)/allocationcluster.hpp		\
-	$(liblumiera_la_srcdir)/scoped-holder.hpp		\
-	$(liblumiera_la_srcdir)/lifecycleregistry.hpp		\
-	$(liblumiera_la_srcdir)/nobug-init.hpp			\
 	$(liblumiera_la_srcdir)/factory.hpp			\
 	$(liblumiera_la_srcdir)/frameid.hpp			\
-	$(liblumiera_la_srcdir)/singleton.hpp			\
-	$(liblumiera_la_srcdir)/singletonpolicies.hpp		\
-	$(liblumiera_la_srcdir)/singletonpreconfigure.hpp	\
+	$(liblumiera_la_srcdir)/lifecycleregistry.hpp		\
+	$(liblumiera_la_srcdir)/lockerror.h			\
+	$(liblumiera_la_srcdir)/luid.h				\
 	$(liblumiera_la_srcdir)/lumitime.hpp			\
-	$(liblumiera_la_srcdir)/visitor.hpp			\
-	$(liblumiera_la_srcdir)/visitor-dispatcher.hpp		\
-	$(liblumiera_la_srcdir)/visitor-policies.hpp		\
-	$(liblumiera_la_srcdir)/sync.hpp			\
-	$(liblumiera_la_srcdir)/p.hpp				\
-	$(liblumiera_la_srcdir)/query.hpp			\
-	$(liblumiera_la_srcdir)/singletonfactory.hpp		\
-	$(liblumiera_la_srcdir)/singleton-subclass.hpp		\
-	$(liblumiera_la_srcdir)/meta/typelist.hpp		\
 	$(liblumiera_la_srcdir)/meta/configflags.hpp		\
 	$(liblumiera_la_srcdir)/meta/generator.hpp		\
 	$(liblumiera_la_srcdir)/meta/typelist-util.hpp		\
-	$(liblumiera_la_srcdir)/util.hpp			\
+	$(liblumiera_la_srcdir)/meta/typelist.hpp		\
+	$(liblumiera_la_srcdir)/mpool.h				\
+	$(liblumiera_la_srcdir)/mrucache.h			\
+	$(liblumiera_la_srcdir)/mutex.h				\
+	$(liblumiera_la_srcdir)/nobug-init.hpp			\
 	$(liblumiera_la_srcdir)/observable-list.hpp		\
-	$(liblumiera_la_srcdir)/sync.hpp			\
+	$(liblumiera_la_srcdir)/p.hpp				\
+	$(liblumiera_la_srcdir)/ppmpl.h				\
+	$(liblumiera_la_srcdir)/psplay.h			\
+	$(liblumiera_la_srcdir)/query.hpp			\
+	$(liblumiera_la_srcdir)/reccondition.h			\
+	$(liblumiera_la_srcdir)/recmutex.h			\
+	$(liblumiera_la_srcdir)/rwlock.h			\
+	$(liblumiera_la_srcdir)/safeclib.h			\
+	$(liblumiera_la_srcdir)/scoped-holder.hpp		\
+	$(liblumiera_la_srcdir)/singleton-subclass.hpp		\
+	$(liblumiera_la_srcdir)/singleton.hpp			\
+	$(liblumiera_la_srcdir)/singletonfactory.hpp		\
+	$(liblumiera_la_srcdir)/singletonpolicies.hpp		\
+	$(liblumiera_la_srcdir)/singletonpreconfigure.hpp	\
 	$(liblumiera_la_srcdir)/sync-classlock.hpp		\
-	$(liblumiera_la_srcdir)/tree.hpp			\
+	$(liblumiera_la_srcdir)/sync.hpp			\
+	$(liblumiera_la_srcdir)/sync.hpp			\
 	$(liblumiera_la_srcdir)/test/mockinjector.hpp		\
+	$(liblumiera_la_srcdir)/test/run.hpp			\
 	$(liblumiera_la_srcdir)/test/suite.hpp			\
-	$(liblumiera_la_srcdir)/test/testoption.hpp		\
 	$(liblumiera_la_srcdir)/test/test-helper.hpp		\
-	$(liblumiera_la_srcdir)/test/run.hpp
+	$(liblumiera_la_srcdir)/test/testoption.hpp		\
+	$(liblumiera_la_srcdir)/time.h				\
+	$(liblumiera_la_srcdir)/tree.hpp			\
+	$(liblumiera_la_srcdir)/util.hpp			\
+	$(liblumiera_la_srcdir)/visitor-dispatcher.hpp		\
+	$(liblumiera_la_srcdir)/visitor-policies.hpp		\
+	$(liblumiera_la_srcdir)/visitor.hpp
 

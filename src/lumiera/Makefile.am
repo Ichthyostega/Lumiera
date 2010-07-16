@@ -24,10 +24,10 @@ lumiera_CXXFLAGS = $(AM_CXXFLAGS) $(LUMIERA_CFLAGS) -Wall -Wextra
 
 lumiera_LDADD =					\
 	$(LUMIERA_LIBS)				\
-	liblumieracommon.la			\
+	liblumiera.la				\
 	liblumierabackend.la			\
-	liblumieraproc.la			\
-	liblumiera.la
+	liblumieracommon.la			\
+	liblumieraproc.la
 
 lumiera_SOURCES =				\
 	$(lumiera_srcdir)/main.cpp
