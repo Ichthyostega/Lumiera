@@ -209,7 +209,10 @@ namespace test {
             VALID (test,testID);
             exitCode_ |= invokeTestCase (*(*test)(), cmdline);  // TODO confusing statement, improve definition of test collection datatype Ticket #289
             return;
-      }   }
+          }
+        else
+          throw lumiera::error::Invalid ("unknown test : "+testID);
+      }
     
     // no test-ID was specified.
     // Instantiate all tests cases and execute them.
