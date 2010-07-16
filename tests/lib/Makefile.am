@@ -68,7 +68,6 @@ test_lib_SOURCES =						\
 	$(testlib_srcdir)/meta/config-flags-test.cpp      	\
 	$(testlib_srcdir)/meta/duck-detector-test.cpp		\
 	$(testlib_srcdir)/meta/iterable-classification-test.cpp	\
-	$(testlib_srcdir)/query/queryutilstest.cpp		\
 	$(testlib_srcdir)/removefromsettest.cpp			\
 	$(testlib_srcdir)/sanitised-identifier-test.cpp		\
 	$(testlib_srcdir)/opaque-unchecked-buffer-test.cpp	\

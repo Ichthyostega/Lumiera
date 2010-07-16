@@ -36,13 +36,11 @@ test_components_LDADD =								\
 test_components_SOURCES =								\
 	$(testcomponents_srcdir)/backend/mediaaccessmock.cpp				\
 	$(testcomponents_srcdir)/backend/mediaaccessmocktest.cpp			\
-	$(testcomponents_srcdir)/proc/asset/assetcategorytest.cpp			\
 	$(testcomponents_srcdir)/proc/asset/compoundmediatest.cpp			\
 	$(testcomponents_srcdir)/proc/asset/deleteassettest.cpp				\
 	$(testcomponents_srcdir)/proc/asset/identityofassetstest.cpp			\
 	$(testcomponents_srcdir)/proc/asset/mediastructurequerytest.cpp			\
 	$(testcomponents_srcdir)/proc/asset/basicpipetest.cpp				\
-	$(testcomponents_srcdir)/proc/asset/createassettest.cpp				\
 	$(testcomponents_srcdir)/proc/asset/dependent-assets-test.cpp			\
 	$(testcomponents_srcdir)/proc/asset/makecliptest.cpp				\
 	$(testcomponents_srcdir)/proc/asset/orderingofassetstest.cpp			\
@@ -84,7 +82,6 @@ test_components_SOURCES =								\
 	$(testcomponents_srcdir)/proc/mobject/session/defsmanagerimpltest.cpp		\
 	$(testcomponents_srcdir)/proc/mobject/session/defsmanagertest.cpp		\
 	$(testcomponents_srcdir)/proc/mobject/session/defsregistryimpltest.cpp		\
-	$(testcomponents_srcdir)/proc/mobject/session/sessionstructuretest.cpp		\
 	$(testcomponents_srcdir)/proc/mobject/session/scope-query-test.cpp		\
 	$(testcomponents_srcdir)/proc/mobject/session/placement-index-query-test.cpp	\
 	$(testcomponents_srcdir)/proc/mobject/session/query-focus-stack-test.cpp	\
