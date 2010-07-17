@@ -1,15 +1,17 @@
 ﻿Lumiera Workflows
 
-Requirements & Considerations
- -Technical
- -User
+:Author:    Brian J.M. Rytel
+:Email:     <tesla.drummer@gmail.com>
+:Date:      
+:Revision:  2.1
 
-Current Industry Workflows**
-
-Potential Lumiera Workflows**
-
-**Not done
-
+Lumiera Workflows
+-----------------
+----
+Considerations:
+-Technical
+-User
+----
 
  1.Requirements & Considerations
 (a)Ingest
