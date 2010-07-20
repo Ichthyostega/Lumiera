@@ -1,0 +1,275 @@
+Lumiera: The Inner Core
+=======================
+
+[abstract]
+******************************************************************************
+The Lumiera Developers have a vision about a modern core for a NLE. Here are
+some of the design decisions and rationales in a rather sketchy way explained.
+New Developers may find this Document useful to get an idea about how the
+different components work together.
+******************************************************************************
+
+
+Overview
+--------
+
+Lumiera constitutes of a broad range of subsystems. These are roughly grouped
+into three layers plus some extra components. This structure is mostly kept in
+the source directory structures.
+
+This three Layers are:
+ The User Interface::
+     User interfaces are implemented as plugins, most commonly one will see
+     the default GUI. But also scripting interfaces or specialized GUI's are
+     possible.
+
+ The Processing layer::
+     Keeps the Session, generates the rendering graphs for sequences.
+
+ The IO and System interface Backend::
+     Manages thread-queues, schedules jobs, does the memory management for the
+     heavy multimedia data.
+
+The extra components are:
+ Lumiera::
+     The main program itself, basically acts only as loader to pull the rest up.
+
+ Common::
+     Vital components which must be available for pulling the system up, part
+     of the main program.
+
+ Library::
+     A lot of (mostly) stateless helper functinality which is used by all the
+     rest.
+
+
+Lumiera Main
+------------
+
+
+
+
+Common
+------
+
+Config System
+^^^^^^^^^^^^^
+
+Plugin loader and interfaces
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Lua Scripting
+^^^^^^^^^^^^^
+
+Library
+-------
+
+Meant to be extended as we go
+
+Locking
+~~~~~~~
+
+mutex, condition vars, rwlocks. intentionally no semaphores.
+
+//sync-classlock.hpp
+//sync.hpp
+
+Time
+~~~~
+time handling and conversion at one central point
+
+
+Errors
+~~~~~~
+
+Error codes
+
+Memory Pools
+~~~~~~~~~~~~
+
+
+Polymorphic Programming in C
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+//vcall.h
+
+
+Unique Identifiers
+~~~~~~~~~~~~~~~~~~
+
+C++ Exceptions
+~~~~~~~~~~~~~~
+
+
+CLib wrappers
+~~~~~~~~~~~~~
+
+safeclib.c memory str*()
+
+tmpbuf
+
+
+Preprocessor Metaprogramming
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+ppmpl.h
+
+
+Algorithms & Datastructures
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Probabilistic Splay Tree
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+
+BTree
+^^^^^
+
+
+Cuckoo Hashing
+^^^^^^^^^^^^^^
+
+Currently defunct
+
+
+
+Hash functions
+^^^^^^^^^^^^^^
+
+planned
+
+
+Linked Lists
+^^^^^^^^^^^^
+
+.llist
+
+.slist
+
+Cache Lists
+^^^^^^^^^^^
+
+mrucache.c
+
+//Undocumented
+//access-casted.hpp
+//advice.hpp symbol-impl.cpp
+//allocationcluster.cpp symbol.hpp
+//bool-checkable.hpp
+//cmdline.cpp
+//cmdline.hpp
+//del-stash.hpp
+//diagnostic-context.hpp
+//element-tracker.hpp
+//external
+//factory.hpp
+//format.hpp
+//frameid.hpp
+//functor-util.hpp
+//handle.hpp
+//hash-indexed.hpp
+//iter-adapter-stl.hpp
+//iter-adapter.hpp
+//iter-source.hpp
+//itertools.hpp
+//lifecycle.cpp
+//lifecycleregistry.hpp
+//lumitime-fmt.hpp
+//lumitime.cpp
+//multifact-arg.hpp
+//multifact.hpp
+//nobug-init.cpp <<why here and not in common?
+//nobug-init.hpp
+//null-value.hpp
+//observable-list.hpp
+//opaque-holder.hpp
+//p.hpp
+//query.cpp
+//query.hpp
+//ref-array-impl.hpp
+//ref-array.hpp
+//result.hpp
+//scoped-holder.hpp
+//scoped-ptrvect.hpp
+//scopedholdertransfer.hpp
+//singleton-ref.hpp
+//singleton-subclass.hpp
+//singleton.hpp
+//singletonfactory.hpp
+//singletonpolicies.hpp
+//singletonpreconfigure.hpp
+//streamtype.cpp
+//test
+//thread-local.hpp
+//tree.hpp
+//typed-allocation-manager.hpp
+//typed-counter.hpp
+//util-foreach.hpp
+//util.cpp
+//util.hpp
+//variant.hpp
+//visitor-dispatcher.hpp
+//visitor-policies.hpp
+//visitor.hpp
+//wrapper.hpp
+//wrapperptr.hpp
+
+
+
+User Interfaces
+---------------
+
+User interfaces are stateless and act only as manipulators on the Session
+which is kept in the processing layer below. User interfaces are implemented
+as plugins and are pulled up on demand.
+
+
+Processing Layer
+----------------
+
+High Level Model
+^^^^^^^^^^^^^^^^
+
+Rules System
+^^^^^^^^^^^^
+
+Low Level Model
+^^^^^^^^^^^^^^^
+
+
+
+Backend
+-------
+
+I/O Subsystem
+^^^^^^^^^^^^^
+
+.OS Filehandles
+
+ * as mru cache, round robin reused
+
+.Files
+
+.Memory Mapping
+
+.Indexing
+
+.Frameprovider
+
+
+Threadpools
+^^^^^^^^^^^
+
+
+Schedulers
+^^^^^^^^^^
+
+.Realtime
+
+.Deadline
+
+.Background
+
+
+Profiler
+^^^^^^^^
+
