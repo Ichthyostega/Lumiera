@@ -39,7 +39,7 @@ The extra components are:
      of the main program.
 
  Library::
-     A lot of (mostly) stateless helper functinality which is used by all the
+     A lot of (mostly) stateless helper functionality which is used by all the
      rest.
 
 
@@ -53,13 +53,14 @@ Common
 ------
 
 Config System
-^^^^^^^^^^^^^
+~~~~~~~~~~~~~
 
 Plugin loader and interfaces
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 
 Lua Scripting
-^^^^^^^^^^^^^
+~~~~~~~~~~~~~
 
 Library
 -------
@@ -70,6 +71,8 @@ Locking
 ~~~~~~~
 
 mutex, condition vars, rwlocks. intentionally no semaphores.
+
+macros to put scoped around critical sections
 
 //sync-classlock.hpp
 //sync.hpp
@@ -82,31 +85,60 @@ time handling and conversion at one central point
 Errors
 ~~~~~~
 
-Error codes
+ * Errors are identified by pointers to static strings.
+ * Errors are sticky (you cant set a new error unless the pending one got
+   cleared).
+ * macros for declaring and defining errors
+
+.C++ exceptions
 
 Memory Pools
 ~~~~~~~~~~~~
+
+Fast memory pools for moderately small static sized allocations in highly
+dynamic situations.
+
+ * optimized for cache locality
+ * supporting a destructor callback to free all objects
+
 
 
 Polymorphic Programming in C
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 //vcall.h
 
+Just a simple macro to call vtable functions with some safety measures
+
 
 Unique Identifiers
 ~~~~~~~~~~~~~~~~~~
 
-C++ Exceptions
-~~~~~~~~~~~~~~
+Generating 128 bit non cryptographic strong unique identifiers.
+
+ * having an alternative representation to store a pointer
+
+ * may be extended for a strong (slow) and a fast (weak) variant in future
 
 
 CLib wrappers
 ~~~~~~~~~~~~~
 
-safeclib.c memory str*()
+Some wrapers for the C memory management functions malloc, calloc, realloc and
+free which never fail. In case of an error the resourcecollector in the
+backend is invoked to free resources or doing an emergency shutdown.
 
-tmpbuf
+Safe wrapers for some string functions from the C-library which also never
+fail. NULL strings are propagated to "" empty strings.
 
+
+Temporary Buffers
+^^^^^^^^^^^^^^^^^
+
+Provides a small number of round robin buffers which need not to be freed.
+Must only be used locally when no deep recursion may use tmpbufs. Using these
+wrong (recursively) will crash.
+
+Very fast and efficient from smallest too hugest allocations.
 
 Preprocessor Metaprogramming
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -120,16 +152,32 @@ Algorithms & Datastructures
 Probabilistic Splay Tree
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
+Self optimizing splay tree
+
+Advantage:
+ * can be iterated
+ * very fast in situations where few common elements are queried most often
+
+Disadvantages
+ * provides no own locking, needs to be locked from outside
+ * (almost) every access is a mutation and needs an exclusive lock, bad for concurrency
+
 
 BTree
 ^^^^^
+
+Generic B+/B* Tree implementation. Details are provided by a vtable at an
+actual implementation.
+
+ * Fine grained (block level) locking with different modes
+ * supports cursors to iterate over the data, in both directions
+ * exact and inexact searched (whats close before/after something)
 
 
 Cuckoo Hashing
 ^^^^^^^^^^^^^^
 
-Currently defunct
-
+Currently defunct, to be revieved someday.
 
 
 Hash functions
@@ -143,12 +191,21 @@ Linked Lists
 
 .llist
 
+Cyclic double linked intrusive list.
+
 .slist
 
-Cache Lists
-^^^^^^^^^^^
+Single linked variant.
 
-mrucache.c
+
+Most Recent used Cachelists
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+A list where old entries are recycled from the tail, used things are removed
+from the list (ownership acquired) and released back to the head.
+
+Items not used propagate towards the tail where they will be reused.
+
 
 //Undocumented
 //access-casted.hpp
@@ -227,13 +284,13 @@ Processing Layer
 ----------------
 
 High Level Model
-^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~
 
 Rules System
-^^^^^^^^^^^^
+~~~~~~~~~~~~
 
 Low Level Model
-^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~
 
 
 
@@ -241,7 +298,7 @@ Backend
 -------
 
 I/O Subsystem
-^^^^^^^^^^^^^
+~~~~~~~~~~~~~
 
 .OS Filehandles
 
@@ -249,7 +306,19 @@ I/O Subsystem
 
 .Files
 
+Lumiera has its own abstract file handles which store the state and name of a
+file. The associated filehandle doesn't need to be kept open and will be
+reopened on demand. Hardlinked files are recognized and opened only once.
+
 .Memory Mapping
+
+All file access is done by memory mapping to reduce data copies between
+userland and kernel. Moreover the kernel becomes responsible to schedule
+paging (which will be augmented by lumiera) to make the best use of available
+resources. Memory is mapped in biggier possibly overlapping windows of
+resonable sized chunks. Requests asking for a contingous set of data from the
+file in  memory.
+
 
 .Indexing
 
@@ -257,19 +326,64 @@ I/O Subsystem
 
 
 Threadpools
-^^^^^^^^^^^
+~~~~~~~~~~~
+
+Manages serveral classes of threads in pools. The threadpool is reasonable
+dumb. Higher level management will be done by the Schedulers and Jobs.
 
 
 Schedulers
-^^^^^^^^^^
+~~~~~~~~~~
 
-.Realtime
+Scheduling Queues for different purposes:
 
 .Deadline
+Higher priority jobs ordered by a deadline time plus some (negative) hystersis. Jobs are
+started when they approach their deadline. Jobs who miss their deadline are
+never scheduled here.
 
 .Background
+Background jobs scheduled by priority and timeout.
+
+
+.Realtime
+Timer driven queue which starts jobs at defined absolute times. Timer might be
+also an external synchronization entity.
+
+
+Job
+^^^
+
+a job can be part of multiple queues, the queue which picks them first runs
+them. When other queues hit a running job they either just drop it or promote
+its priority (to be decided).
 
 
 Profiler
-^^^^^^^^
+~~~~~~~~
+
+Collects statistic about system load, helps to decide if job constraints can
+be fulfilled.
+
+Things to watch:
+ * cpu utilization
+ * memory usage (swapping, paging)
+ * I/O load, latency
+
+
+
+Resourcecollector
+~~~~~~~~~~~~~~~~~
+
+Handles system errors related to resource shortage. There are serveral classes
+of resources defined. Other subsystems can hook in functions to free
+resources. Has multiple policies about how aggressive resources should be freed.
+
+If no one cares it does a final abort(). So all systems should hook better
+recovery here in!
+
+
+
+
+
 
