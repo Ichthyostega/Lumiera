@@ -21,7 +21,7 @@
 
 #include "include/logging.h"
 #include "lib/error.h"
-#include "lib/safeclib.h"
+#include "lib/tmpbuf.h"
 
 
 #include "common/config.h"

@@ -23,6 +23,7 @@
 #include "include/logging.h"
 #include "lib/llist.h"
 #include "lib/safeclib.h"
+#include "lib/tmpbuf.h"
 
 
 //TODO: Lumiera header includes//

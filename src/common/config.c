@@ -22,6 +22,7 @@
 //TODO: Support library includes//
 #include "include/logging.h"
 #include "lib/safeclib.h"
+#include "lib/tmpbuf.h"
 #include "common/config.h"
 
 

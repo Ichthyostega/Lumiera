@@ -21,7 +21,7 @@
 
 //TODO: Support library includes//
 #include "include/logging.h"
-#include "lib/safeclib.h"
+#include "lib/tmpbuf.h"
 
 
 //TODO: Lumiera header includes//
