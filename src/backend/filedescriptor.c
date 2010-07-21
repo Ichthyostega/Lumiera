@@ -22,6 +22,7 @@
 #include "include/logging.h"
 #include "lib/mutex.h"
 #include "lib/safeclib.h"
+#include "lib/tmpbuf.h"
 
 #include "backend/file.h"
 #include "backend/filedescriptor.h"

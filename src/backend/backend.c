@@ -21,6 +21,7 @@
 
 #include "include/logging.h"
 #include "lib/safeclib.h"
+#include "lib/tmpbuf.h"
 #include "lib/mpool.h"
 
 #include "backend/backend.h"
