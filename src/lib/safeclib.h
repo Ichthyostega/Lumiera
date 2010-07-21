@@ -116,74 +116,10 @@ lumiera_strncmp (const char* a, const char* b, size_t len);
 int
 lumiera_streq (const char* a, const char* b);
 
-
-/**
- * Round robin temporary buffers.
- * This provides 64 buffers per thread which are recycled with each use.
- * The idea here is to have fast buffers for temporal data without need for explicit heap management.
- */
-
-/**
- * free all buffers associated with this thread.
- * This function is called automatically, usually one doesnt need to call it.
- */
-void
-lumiera_tmpbuf_freeall (void);
-
-/**
- * Query a thread local tmpbuf.
- * @param size minimal needed size for the tmpbuf
- * @return the tmpbuf
- */
-void*
-lumiera_tmpbuf_provide (size_t size);
-
-/**
- * Duplicate string to a tmpbuf.
- * @param src string to be duplicated
- * @param size maximal length to be copied
- * @return temporary buffer containing a copy of the string
- */
-char*
-lumiera_tmpbuf_strndup (const char* src, size_t size);
-
-/**
- * Construct a string in a tmpbuf.
- * @param size maximal length for the string
- * @param fmt printf like formatstring
- * @param ... parameters
- * @return temporary buffer containing the constructed of the string
- */
-char*
-lumiera_tmpbuf_snprintf (size_t size, const char* fmt, ...);
-
-
-/**
- * Concat up to 3 strings in a tmpbuf.
- * @param str1 first string to concat or NULL
- * @param str1_len how much of the first string shall be used
- * @param str2 second string to concat or NULL
- * @param str2_len how much of the second string shall be used
- * @param str3 third string to concat or NULL
- * @param str3_len how much of the third string shall be used
- * @return temporary buffer containing the constructed of the string
- */
-char*
-lumiera_tmpbuf_strcat3 (const char* str1, size_t str1_len,
-                        const char* str2, size_t str2_len,
-                        const char* str3, size_t str3_len);
-
-/**
- * Translates characters in a string, similar to the shell 'tr' utility
- * @param in input string to  be translated
- * @param from source character set
- * @param to destination character set
- * @param def default destination character when a character is not in the source set,
- *        when NULL then translation will abort on unknown characters and return NULL,
- *        when "" then unknown characters will be removed
- *        when set to a single character string, unknown characters will be replaced with this string
- * @return temporary buffer containing the constructed of the string
- */
-char*
-lumiera_tmpbuf_tr (const char* in, const char* from, const char* to, const char* def);
-
+/*
+// Local Variables:
+// mode: C
+// c-file-style: "gnu"
+// indent-tabs-mode: nil
+// End:
+*/

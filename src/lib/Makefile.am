@@ -61,6 +61,7 @@ liblumiera_la_SOURCES =					\
 	$(liblumiera_la_srcdir)/test/test-helper.cpp	\
 	$(liblumiera_la_srcdir)/test/testoption.cpp	\
 	$(liblumiera_la_srcdir)/time.c			\
+	$(liblumiera_la_srcdir)/tmpbuf.c		\
 	$(liblumiera_la_srcdir)/util.cpp
 
 
@@ -68,6 +69,7 @@ noinst_HEADERS +=						\
 	$(liblumiera_la_srcdir)/advice.hpp			\
 	$(liblumiera_la_srcdir)/advice/binding.hpp		\
 	$(liblumiera_la_srcdir)/advice/index.hpp		\
+	$(liblumiera_la_srcdir)/allocationcluster.hpp		\
 	$(liblumiera_la_srcdir)/allocationcluster.hpp		\
 	$(liblumiera_la_srcdir)/condition.h			\
 	$(liblumiera_la_srcdir)/error.h				\
@@ -84,11 +86,14 @@ noinst_HEADERS +=						\
 	$(liblumiera_la_srcdir)/meta/typelist.hpp		\
 	$(liblumiera_la_srcdir)/mpool.h				\
 	$(liblumiera_la_srcdir)/mrucache.h			\
+	$(liblumiera_la_srcdir)/mrucache.h			\
 	$(liblumiera_la_srcdir)/mutex.h				\
 	$(liblumiera_la_srcdir)/nobug-init.hpp			\
 	$(liblumiera_la_srcdir)/observable-list.hpp		\
 	$(liblumiera_la_srcdir)/p.hpp				\
 	$(liblumiera_la_srcdir)/ppmpl.h				\
+	$(liblumiera_la_srcdir)/ppmpl.h				\
+	$(liblumiera_la_srcdir)/psplay.h			\
 	$(liblumiera_la_srcdir)/psplay.h			\
 	$(liblumiera_la_srcdir)/query.hpp			\
 	$(liblumiera_la_srcdir)/reccondition.h			\
@@ -110,6 +115,8 @@ noinst_HEADERS +=						\
 	$(liblumiera_la_srcdir)/test/test-helper.hpp		\
 	$(liblumiera_la_srcdir)/test/testoption.hpp		\
 	$(liblumiera_la_srcdir)/time.h				\
+	$(liblumiera_la_srcdir)/time.h				\
+	$(liblumiera_la_srcdir)/tmpbuf.h			\
 	$(liblumiera_la_srcdir)/tree.hpp			\
 	$(liblumiera_la_srcdir)/util.hpp			\
 	$(liblumiera_la_srcdir)/visitor-dispatcher.hpp		\

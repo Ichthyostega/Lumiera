@@ -17,6 +17,7 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 #include "lib/safeclib.h"
+#include "lib/tmpbuf.h" /* not factored out yet */
 #include "tests/test.h"
 
 #include <sys/time.h>
