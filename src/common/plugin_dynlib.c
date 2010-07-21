@@ -20,7 +20,7 @@
 */
 
 #include "include/logging.h"
-#include "lib/safeclib.h"
+#include "lib/tmpbuf.h"
 #include "common/plugin.h"
 
 #include <dlfcn.h>

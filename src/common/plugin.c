@@ -21,6 +21,7 @@
 
 #include "include/logging.h"
 #include "lib/safeclib.h"
+#include "lib/tmpbuf.h"
 #include "lib/psplay.h"
 #include "lib/recmutex.h"
 #include "lib/error.h"
