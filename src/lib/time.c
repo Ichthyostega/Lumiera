@@ -21,7 +21,7 @@
 
 #include <nobug.h>
 #include "lib/time.h"
-#include "lib/safeclib.h"
+#include "lib/tmpbuf.h"
 
 char*
 lumiera_tmpbuf_print_time (gavl_time_t time)
