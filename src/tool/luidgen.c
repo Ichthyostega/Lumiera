@@ -19,7 +19,7 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
-#include "lib/safeclib.h"
+#include "lib/tmpbuf.h"
 #include "lib/luid.h"
 
 #include <unistd.h>

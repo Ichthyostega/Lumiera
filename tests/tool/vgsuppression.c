@@ -23,7 +23,7 @@
   just place any problematic calls where valgrind whines about in main (with comments please)
 */
 
-#include "lib/safeclib.h"
+#include "lib/tmpbuf.h"
 #include <stdint.h>
 
 struct lumiera_errorcontext_struct;
