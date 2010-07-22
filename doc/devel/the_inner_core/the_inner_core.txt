@@ -359,10 +359,23 @@ them. When other queues hit a running job they either just drop it or promote
 its priority (to be decided).
 
 
-Profiler
-~~~~~~~~
+Resource Management
+~~~~~~~~~~~~~~~~~~~
 
-Collects statistic about system load, helps to decide if job constraints can
+Running Lumiera requires a lot different resources, such as CPU-Time, Threads,
+IO Bandwidth, Memory, Address space and so on. Many of this resources are rather
+hard limited and the system will return errors when this limits are hit, but
+often one does not even reach this hard limits because performance will
+degrade way before coming into the realm of this limits. The goal for Lumiera
+is to find a sweet spot for operating with optimal performance. Thus we have
+some facilities to monitor and adjust resource usage depending and adapting to
+the system and current circumstances.
+
+
+Profiler
+^^^^^^^^
+
+Collects statistic about resource load, helps to decide if job constraints can
 be fulfilled.
 
 Things to watch:
@@ -371,9 +384,16 @@ Things to watch:
  * I/O load, latency
 
 
+Budget Manager
+^^^^^^^^^^^^^^
+
+resources need to be distributed among a lot subsystems and jobs. Each of this
+component can become part of a budgeting system which accounts resource usage
+and helps to distribute it. Resource usage is only voluntary managed.
+
 
 Resourcecollector
-~~~~~~~~~~~~~~~~~
+^^^^^^^^^^^^^^^^^
 
 Handles system errors related to resource shortage. There are serveral classes
 of resources defined. Other subsystems can hook in functions to free
