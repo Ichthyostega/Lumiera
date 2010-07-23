@@ -1,0 +1,112 @@
+Resource Management: Budgeting
+==============================
+
+// please don't remove the //word: comments
+
+[grid="all"]
+`------------`-----------------------
+*State*         _Idea_
+*Date*          _Fri Jul 23 20:33:32 2010_
+*Proposed by*   Christian Thaeter <ct@pipapo.org>
+-------------------------------------
+
+[abstract]
+******************************************************************************
+The Profiler will give some Idea about how much Resources can me used to
+optimally utilize the system. Knowing this number leads to the next challenge,
+distributing the resources to different subsystems, jobs and objects.
+I here introduce a budgeting system which takes care for this.
+******************************************************************************
+
+
+Description
+-----------
+//description: add a detailed description:
+
+The idea is quite simple, for each kind of resource we have a global budget
+manager which accounts for the available and used amounts of this resource.
+
+Each user of a resource has its own account managing his share on the resource.
+
+The system is completely voluntary giving only hints how much of a resource is
+available for anyone.
+
+
+
+[source,C]
+------------------------------------------------------------------------------
+typedef ssize_t budget_count;
+
+struct budgetmanager
+{
+  rwlock lock;
+  
+  void (*callback)();                   // called on resource shortage (resource collector)
+    
+  int sum_priorities;                   // sum of all client budgets .. each client is granted available/(sum_priorities/own_priority) of the resource
+        
+  budget_count available_prefs;         // configuration from preferences
+  budget_count available_profile;       // tuned by profiler
+  int available_factor;                 // how much % from prefs vs profile
+              
+  budget_count available;               // caclulated from above
+  budget_count allocated;               // actively in use
+};
+                    
+struct budget
+{
+  BudgetManager manager;
+  int priority;
+                        
+  budget_count allocated;
+};
+------------------------------------------------------------------------------
+
+
+
+
+Tasks
+~~~~~
+// List what would need to be done to implement this Proposal in a few words:
+// * item ...
+
+
+Pros
+^^^^
+// add just a fact list/enumeration which make this suitable:
+//  * foo
+//  * bar ...
+
+
+
+Cons
+^^^^
+// fact list of the known/considered bad implications:
+
+
+
+Alternatives
+------------
+//alternatives: if possible explain/link alternatives and tell why they are not viable:
+
+
+
+Rationale
+---------
+//rationale: Describe why it should be done *this* way:
+
+
+
+//Conclusion
+//----------
+//conclusion: When approbate (this proposal becomes a Final) write some conclusions about its process:
+
+
+
+
+Comments
+--------
+//comments: append below
+
+
+//endof_comments:
