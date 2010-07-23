@@ -1,0 +1,69 @@
+Design Process : Data Backend
+=============================
+
+[grid="all"]
+`------------`-----------------------
+*State*         _Final_
+*Date*          _2007-06-04_
+*Proposed by*   link:ct[]
+-------------------------------------
+
+DataBackend
+-----------
+Describe the DataBackend functionality.
+
+
+Description
+~~~~~~~~~~~
+This just starts as braindump, I will refine it soon:
+
+. handle all files lumiera uses at runtime (media, edl, temp data)
+. manage filehandles, lumiera might use more more files than available filehandles
+. manage temporary data
+. do caching
+. io will be blocked where the backend tells the core where it can expect the data (not read()/write() like)
+. kindof garbage collector
+. do prefetching
+. no/low latency for the core the prefetcher and other things ensure that data is available in time
+. translate any input into a format which the lumiera core understands (demux, decode)
+. same for encoding to output formats
+. offer a plugin API for encoders/decoders
+. maybe network backend for serving data to distributed rendernodes
+. can do some load control or management (trigger adaptive rendering if system is idle etc)
+. pull based arch
+
+.Notes:
+* ichthyo wrote also some ideas on http://www.pipapo.org/pipawiki/Cinelerra/Developers/ichthyo/Cinelerra3/Architecture[Architecture] and a sketch/draft about http://www.pipapo.org/pipawiki/Cinelerra/Developers/ichthyo/Possibilities_at_hand[things possible in the middle layer]
+
+
+Tasks
+^^^^^
+
+
+Pros
+^^^^
+
+
+Cons
+^^^^
+
+
+Alternatives
+^^^^^^^^^^^^
+
+
+Rationale
+~~~~~~~~~
+
+
+Comments
+--------
+
+Sounds fairly complete to me
+ -- link:Ichthyostega[] [[DateTime(2007-06-16T23:19:44Z)]]
+
+Developement takes place in the repo now
+ -- link:ct[] [[DateTime(2007-06-27T16:14:56Z)]]
+
+''''
+Back to link:Lumiera/DesignProcess[]

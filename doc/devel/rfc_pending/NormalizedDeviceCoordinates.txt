@@ -1,0 +1,83 @@
+[grid="all"]
+`------------`-----------------------
+*State*         _Idea_
+*Date*          _2009-01-14_
+*Proposed by*   link:ct[]
+-------------------------------------
+
+
+Normalized Device Coordinates
+-----------------------------
+
+AkhIL pointed me out to some blender problem and how renderman fixes that. We should use this too.
+
+
+
+
+Description
+~~~~~~~~~~~
+
+Just snippet from IRC log:
+
+------------------------------------------------------------
+[15:09] <AkhIL> and I hope lumiera will use some resolution independend measuring for all parameters
+[15:09] <cehteh> one can rotate where the node actually sits
+[15:09] <AkhIL> like NDC
+[15:09] <cehteh> or pass transistions through the renderpipe, make all effects transisition aware and apply them at the end
+[15:10] <cehteh> the later is better but needs more efforts and some rethinking
+[15:10] <cehteh> we will prolly support both in lumiera :)
+[15:11] <AkhIL> in renderman's NDC for horizontal image with 4:3 aspect ration (-1.33,-1) is lower-left corner and (1.33,1) upper-right
+[15:11] <cehteh> ah
+[15:11] <AkhIL> so moving to different resolutions and different aspect ratios in renderman makes no problems
+[15:11] <cehteh> well good point, we will measure in pixel but need to convert between them . using a float would be good to address pixels
+[15:12] <cehteh> yes
+[15:12] <cehteh> what stands NDC for?
+[15:13] <AkhIL> Normalized Device Coordinates
+[15:14] <cehteh> ok
+[15:14] <AkhIL> so from -1 to 1 is a range by smallest image size
+[15:15] <cehteh> yes sounds reasonable
+[15:15] * cehteh adds a note to the lumiera design docs
+[15:15] <cehteh> so far we dont do anything where it matters .. but that will come
+[15:16] <AkhIL> when you move some logo to (0.8,-0.8) it will stay on screen even when you chenge resolution and image aspect ratio
+[15:17] <AkhIL> all input images should be scaled to this range (-1,1) by smalles side
+
+------------------------------------------------------------
+
+
+
+Tasks
+^^^^^
+
+
+Pros
+^^^^
+
+
+
+Cons
+^^^^
+
+
+
+Alternatives
+^^^^^^^^^^^^
+
+
+
+Rationale
+~~~~~~~~~
+
+
+
+
+
+
+Comments
+--------
+
+One issue where I always assumed we'd need to define something of this sort is for proxy editing. Especially this is a problem in conjunction with masks. Basically, this means a bit more of "vector graphics". With film/video editing, this was rather unusual, but with the advent of more and new digital video/film formats it gets more and more important. Also, our considerations regarding time handling and quantisation to single frames somewhat fit into this line of thought. Up to now, rather the standard way of thinkin was to use a "project framerate" and a fixed resolution in pixels. But we certainly can do better.
+
+  -- Ichthyostega 18:09:50
+
+
+Back to link:Lumiera/DesignProcess[]

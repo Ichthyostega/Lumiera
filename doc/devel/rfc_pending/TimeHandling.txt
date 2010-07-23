@@ -1,0 +1,94 @@
+Design Process : Time Handling
+==============================
+
+[grid="all"]
+`------------`-----------------------
+*State*         _Final_
+*Date*          _2007-06-21_
+*Proposed by*   link:Ichthyostega[]
+-------------------------------------
+
+Time handling
+-------------
+How to handle time values in the code and which policy to aply to the "current" position
+
+
+Description
+~~~~~~~~~~~
+. *Representation of time values*
+  * We use an uniform time type. Time is time, not frames, samples etc.
+  * All timings in Lumiera are based on integral datatypes
+  * We use a fixed, very fine grid, something of the sort of microseconds
+  * The internal representation is based on a `typedef int64_t gavl_time_t`
+  * We use a set of library routines and  convenience-methods to
+    - Get time in different formats (fractional seconds, frame counts)
+    - Calculate with time values (overloaded operators)
+  * Time measurement is zero based (of course :-? )
+. *Quantizing to a frame index or similar*
+  * Quantizing/rounding shall happen only once at a defined point in the calculation chain and, if in doubt, be done always as late as possible. 
+  * Values needing to be quantized to time (grid) positions are calculated by half-way rounding, but the result should not depend on the actual zero-point of the scale (i.e. `floor(0.5+val)`, thus quant(0.5) yields 1, quant(0.49) yields 0, quant(-0.5) yields 0 )
+. *Position of frames*
+  * Frame numbers are zero based and Frame 0 starts at time=0 (or whatever the nominal start time is)
+  * Each frame starts when the locator hits its lower border (inclusively) and ends when the locator is on its upper border (exclusively) 
+  image:images/Lumi.FramePositions1.png[]
+  * When the locator snaps to frames this means it can be placed on the start positions of the frames solely
+  * When the locator is placed on such a start position, this means 'always' displaying the frame starting at this position, irrespective of playback direction.
+. *Current position for keyframe nodes and automation*
+  * When parameter values for plugins/automation need to be retrieved on a per frame base (which normally is the case), for each frame there is a well defined 'point of evaluation' time position, irrespective of the playback direction
+  * There is no single best choice where to put this "POE", thus we provide a switch
+image:images/Lumi.FramePositions2.png[]
+    - 'Point of evaluation' of the automation is in the middle of the timespan covered by a frame
+    - 'Point of evaluation' is on the lower bound of each frame
+  * Maybe additional position or fraction (?)
+  * Moreover, we provide an option to snap the keyframe nodes to the 'point of evaluation' within each frame or to be able to move them arbitrarily
+  * When keyframes are set by tweaking of parameters, they are located at the 'point of evaluation' position.
+
+
+Tasks
+~~~~~
+* Figure out what has to be done when switching the "current position" policy on a existing project.
+
+
+Alternatives
+~~~~~~~~~~~~
+Leave everything as in Cinelerra2, i.e. show frames after the locator has passed over them,
+behave different when playing backwards and set the keyframes on the position of the locator but use them on the
+frame actually to be shown (which differs according to the playback direction but is always "one off").
+
+Why not? because it makes frame-precise working with keyframes a real pain and even creates contradictory situations when you
+switch back and forward while tweaking.
+
+Similar for the issues with quantized values. At first sight, e.g. directly using the frame numbers as coordinates (as Cinelerra does) seems to be clever, but on the long run we get lots of case distinctions scattered all over the code. Thus better use one uniform scheme and work with precise time values as long as possible and only quantize for rendering a given frame.
+
+Rationale
+~~~~~~~~~
+The intention is to make time handling and calculations as uniform and "rational" as possible. We try to stick to the precise mathematical values and let the calculations just yield an result in an uniform manner, instead of sticking to "simple" values like frame counts or even a session-wide frame rate
+
+. Time and interval calculations are tricky. Solve this question once and be done.
+. Rounding is always dangerous, rounded values are not the more "clean" values. The floor-rounding rule is chosen, because the length of an interval after quantisation should not depend on the position in relation to the zero point. The usual mathematical rounding behaves "symmetrical" to the zero point, which could yield a different length after quantisation if an interval contains the zero point
+. This is based on the analogy with real film running through a film projector (or the usual fencepost problem)
+. While using the actual position of the locator as the "current" position for keyframes seems more natural at first, it crates problems when mixing footage with different framerate or when using a low-framerate proxy footage.
+
+
+Comments
+~~~~~~~~
+* This is the summary of a discussion cehteh, Plouj and ichthyo just had on irc.
+ -- link:Ichthyostega[] [[DateTime(2007-06-21T05:12:03Z)]]
+
+* We use GAVL now (needs to be included in the build system)
+ -- link:ct[] [[DateTime(2008-03-05T16:19:22Z)]]
+
+* I've tidied up this old design proposal, we could make it final now. I've changed the rounding rule, please check if it's OK. In the original proposal, we  wanted to use the common mathematical rounding rule, i.e. round(-x) = - round(x) . I changed this, because of the danger of interval lengths or alignment to "jump" dependant on the position in relation to the time zero point.
+ -- link:Ichthyostega[] [[DateTime(2008-10-04T22:47:54Z)]]
+
+* Looks ok to me, maybe we should wrap up the gavl time handling in a very thin layer to unify our time functions and then cast this again into a authoritative testsuite/specification. Anyways I think this can be finalized.
+ -- link:ct[] [[DateTime(2008-10-06T06:44:21Z)]]
+
+
+Conclusion
+~~~~~~~~~~
+* The adapted form of this proposal was *accepted* by October.2008 developer meeting. 
+
+* The proposed thin library layer to centralize time calculations shall be added on demand. When doing so, we need to add thorough test coverage for time calculations too.
+
+Back to link:Lumiera/DesignProcess[]

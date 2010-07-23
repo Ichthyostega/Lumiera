@@ -1,0 +1,50 @@
+Design Process : How to proceed
+===============================
+
+[grid="all"]
+`------------`-----------------------
+*State*         _Final_
+*Date*          _2007-06-16_
+*Proposed by*   link:ct[]
+-------------------------------------
+
+How To Proceed
+--------------
+
+How we start...
+
+Description
+~~~~~~~~~~~
+. Rewiew this wiki, link:DesignProcess[] .. do we want this formalism?.
+. Setup git repos.
+. Each developer makes a design sketch (bouml/wiki) about the subsystem he wants to care that is:
+  .. ichthyo: render engine
+  .. cehteh: data backend
+
+Please add yourself above, contact people already working on something when you want to join.
+
+Tasks
+~~~~~
+
+Pros
+~~~~
+
+Cons
+~~~~
+
+Alternatives
+~~~~~~~~~~~~
+
+Rationale
+~~~~~~~~~
+
+Comments
+--------
+
+* "Do we want this formalism": this level for formalism seems right at the moment. It will work only if we agree on it and do it always in this way. Every important (large scale) Issue, Question and Decision should be noted here and we need to be sure that nothing gets lost.
+* For the time being this formalism is enough. Later on, I fear, we will need a bit more (and some Tool support)
+ -- link:Ichthyostega[] [[DateTime(2007-06-17T00:24:14Z)]] 
+* Accepted, deployed, done ... Final
+ -- link:ct[] [[DateTime(2007-06-27T16:13:25Z)]]
+
+Back to link:Lumiera/DesignProcess[]

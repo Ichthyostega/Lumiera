@@ -1,0 +1,65 @@
+Design Process : Unit Tests Python
+==================================
+
+
+[grid="all"]
+`------------`-----------------------
+*State*         _Dropped_
+*Date*          _2007-06-17_
+*Proposed by*   link:Ichthyostega[]
+-------------------------------------
+
+
+UnitTests in Python
+-------------------
+
+Use the Python scripting language for the actual Unit Tests and access the Cinelerra Code via SWIG
+
+
+Description
+~~~~~~~~~~~
+
+Define Test classes in Python, using e.g. the link:PyUnit[] framework of the Python Standard lib. The SWIG compiler can generate wrapper code automatically, so we can access the C++ Classes and Facilities of Cinelerra as Python Modules and Classes. The Classes to be tested in Cinelerra need to provide some Interface for carrying out these tests (and this is one of the main benefits of the whole Test driven aproach).
+
+
+Tasks
+~~~~~
+
+ * Find out how the SWIG generated wrappers play together with Python's List and Map types. Without the ability to use the latter in the tests, this whole proposal is rather pointless.
+ * Think on how we can test video data processing (at least in its basics, e.g. does additive overlay work)
+
+
+Pros
+~~~~
+
+Programming Unit and Self tests in a Scripting language facillates this task. 
+The X-Language bindings are quite usable today. As a side effect, it helps to get a clean program structure, because the tests need some Interface and/or some object factories to create the test
+candidates. Python is proposed, because it is fairly mainstream, has a flat learning curve and but is moderately modern and functional-style at the same time.
+
+Cons
+~~~~
+
+ * Adds to the complexity
+ * Some old-style hackers have a quite distinct aversion against Python
+
+
+Alternatives
+~~~~~~~~~~~~
+
+Rationale
+~~~~~~~~~
+
+Why am I proposing this? Out of lazyness. Python is there, many devs (on linux) have some Python skills, SWIG is not overly complicated to use.
+
+And last but not least: just to get the discussion going... ;-)
+
+
+Comments
+--------
+
+* I'd rather consider to use some embedded language in cinelerra which we can use to drive tests, should be something smaller and more sane than python. Needs certainly more discussion. For simple unit tests some C/C++ harness and bit shell scripting would suffice, I really want to integrate this with link:NoBug[].
+ -- link:ct[] [[DateTime(2007-06-17T17:32:27Z)]]
+
+
+''''
+Back to link:../DesignProcess[]

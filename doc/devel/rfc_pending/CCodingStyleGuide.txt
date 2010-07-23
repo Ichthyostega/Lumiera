@@ -1,0 +1,158 @@
+Design Process : C Coding Style Guide
+=====================================
+
+[grid="all"]
+`------------`-----------------------
+*State*         _Final_
+*Date*          _2007-07-03_
+*Proposed by*   link:ct[]
+-------------------------------------
+
+
+
+
+C Coding Style Guide
+--------------------
+I introduce here my favorite C coding style.
+
+
+
+
+Description
+~~~~~~~~~~~
+In the following I'll explain a C coding style I used frequently for other projects. Take this as suggestion for parts written in C (it definitely makes no sense for C++). We probably don't need to enforce this style for normal C code, but for the related link:Lumiera/DesignProcess/AllPluginInterfacesAreC[] it really makes sense to have some well defined style.
+
+
+Function names follow the rule:
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.`namespace[\_object][\_verb[\_subjects]][\_version]`
+* namespace is \'lumiera_\' appended with some subsystem tag (`lumiera_plugin_audio_`)
+* object is the type of the \'this\' object we are addressing, maybe followed by the object we are returning
+* verb is the action to take, (new, copy, free, set, clear,.. etc.) if omitted the action is `get`
+* subjects is a descriptive list of the arguments which the action takes, this should be a  human readable word describing the parameter concept, and NOT encoding a concrete type (name, age, weight; not string, int, float)
+* for interfaces we may use versioning, then a number is appended to the name but we alias the actual function with a inline function or a macro without this number.
+
+
+Prototypes follow the rule:
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.`rettype function (Object self, ...)`
+* function is the functionname as above
+* rettype is sensible to what object and verb define, setters return a pointer to the set'ed element if an allocation could be involved (or NULL on failure), a int if the setter does some checks over the supplied argument (0 indicates failure, !0 success), void for procedures and actions which can never fail.
+* Object is a pointer to refered object (\'this\' like C++) in rare cases (_new()) functions may be used without this self pointer, see below
+* `...` are the types and names of the arguments described in `subjects` of the name.
+
+
+Object variants:
+^^^^^^^^^^^^^^^^
+For each `struct namespace_foo_struct` we have following typedefs:
+
+[source,C]
+----
+typedef struct namespace_foo_struct namespace_foo;          // canonical typename
+typedef const namespace_foo * const_NamespaceFoo;           // pointer to const object
+typedef namespace_foo* link:NamespaceFoo[];                 // canonical pointer/handle
+typedef namespace_foo ** link:NamespaceFoo[]_ref;           // when intend to mutate the handle itself
+typedef const namespace_foo ** const_NamespaceFoo_ref;      // for const object handle
+----
+
+Examples:
++++++++++
+.`lumiera_plugin_audio_sample_normalize_limit_1 (AudioSample self, int limit)`
+* namespace is \'lumiera_plugin_audio\'
+* operates on a \'sample\' object (and likely returns a pointer)
+* operation is \'normalize\'
+* takes one additional parameter describing the limit for normalization
+* this is a version 1 interface we later define:
+
+[source,C]
+----
+#define lumiera_plugin_audio_sample_normalize_limit\
+        lumiera_plugin_audio_sample_normalize_limit_1
+----
+
+.`lumiera_plugin_audio_sample_rate_1 (AudioSample self)`
+* this would be just a getter function returning the sample rate
+
+.`lumiera_plugin_audio_sample_set_rate_1 (AudioSample self, unsigned rate)`
+* a setter, note that the 'rate' is defined after the verb
+
+
+
+
+Tasks
+^^^^^
+
+
+Pros
+^^^^
+* supplements documentation, makes it even unneeded sometimes
+* well defined namespace
+* C language bindings without tricks
+
+
+Cons
+^^^^
+* very long identifier names
+* not completely unique
+
+
+Alternatives
+^^^^^^^^^^^^
+* Hungarian notation isn't readable, fails semantic consistency, has renaming issues and encodes types rather than concepts. There are simpler schemes which are even more unambiguous.
+
+
+
+
+Rationale
+~~~~~~~~~
+I am trying/using this scheme since some time now, at first it looks like overhead to encode arguments to functionnames. But the intention here is to make code easy readable and memorizeable, when one follows this scheme one does seldom need to lookup the docs about the API. In fact it sometimes even turns out that one wants to use a functionname which isn't defined in the API, which is a good indicator to add such to to the API.
+
+This scheme is not fully unambiguous but suffices for all practical task. It encodes parameters like C++ does for overloading without strange mangling. All names are global in a well defined namespace which is very natural for C (other OO like C styles involve structs and hand written vtables, with this scheme we trampoline from this global names to vtables *only* if needed)
+
+
+
+
+Conclusion
+----------
+Finalized on link:MonthlyMeetings[]/Protocol-2008-03-06
+
+
+
+
+Comments
+--------
+
+I strongly object promoting such a thing as a general "Style Guide". It can be a help or last resort if you are forced to work with improper
+tools (a situation that's rather frequent in practice though). __As such it is well chosen and practical__.
+
+But basically, it shows several things:
+* you are using a global namespace
+* you deal with way to fat interfaces
+* you mix deployment metadata (a version/compatibility check) with functional code
+All of this indicates some design style breakage, so it would be preferable to fix the design if possible.
+
+The only part I'd like to support as a Style Guide is the rule of using the "verb+object" pattern for
+creating function names
+ -- link:Ichthyostega[] [[DateTime(2007-07-08T11:42:39Z)]]
+
+Probably needs little explanation:
+* you are using a global namespace
+This is only about C for names which get exported, C only has a global namespace and we need some way to get unique names. The link:Lumiera/DesignProcess/AllPluginInterfacesAreC[] already uses better/smaller namespaces by defining interfaces as C structs. The full blown long names explained here are technically not needed when we use the plugin system as proposed, I just shown them here for completeness. Next, when we decide for alternative linking methods like static builds we would need to declare all "verb+object" functions static, else there is a high probability of clashes.
+
+* you deal with way to fat interfaces
+How can you tell that? This is only a nameing style. No interfaces mentioned here. I am all after small well defined specialized interfaces.
+
+* you mix deployment metadata (a version/compatibility check) with functional code
+Yes, I cant figure out how to do it better but still lightweight in C. the _version thing is something I added here after the interfaces proposal. I work on a example how this will be used in a more friendly way.
+
+Note again that this is a "nameing system", it is intended to be very verbose and give unique declarative names. It is not about design! Design is done as usual and only when things have to be exported as C symbols (both, exported and C!!)  this applies. This has zero implication for C++ code, zero implication for C functions which are not exported (while I personally still prefer this style) and finally when we do the interfaces thing like I proposed, then the naming can be much simpler, see examples there or in my repository.
+ -- link:ct[] [[DateTime(2007-07-10T08:03:06Z)]]
+
+
+Thanks, your explanation together with the example in git made the usage pattern much more clear. I think the _version postfix is esp. helpful on the names
+of the plugin interfaces (structs in C), and probably it will be a good practice, to have one such common plugin interface on every "plugin extension point",
+i.e. every point in the sytem, that can be extended by plugins.
+  -- 217.110.94.1 [[DateTime(2007-07-10T17:23:33Z)]]
+
+''''
+Back to link:Lumiera/DesignProcess[]

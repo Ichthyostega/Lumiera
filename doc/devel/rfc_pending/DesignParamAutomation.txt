@@ -1,0 +1,68 @@
+[grid="all"]
+`------------`-----------------------
+*State*         _Idea_
+*Date*          _2008-03-06_
+*Proposed by*   link:Ichthyostega[]
+-------------------------------------
+
+
+Design the handling of Parameters and Automation
+------------------------------------------------
+Parameters of Plugin Components and/or Render Nodes play a role at various levels of the application.
+ +
+Thus it seems reasonable to do a formal requirements analysis and design prior to coding.
+
+
+Description
+~~~~~~~~~~~
+Regarding components directly participating in the render (which may be implemented by plugins), we distinguish between *configuration* (static) and *parameters* (dynamic). The point of reference for this distinction is the render process: a plugin configuration may well be variable in some manner, e.g. the plugin may provide different flavours of the same algorithm. But this choice has to be fixed prior to feeding the corresponding plugin asset to the builder. Contrary to such fixed configuration setup, the _parameters_ are considered to be _variable_ during the rendering process. They can be changed on-the-fly from GUI, and they may be automated. Probably, each Render Node will have at least one such _parameter_ -- namely a bypass switch.
+
+
+Tasks
+^^^^^
+
+ * we need to work out an introspection mechanism for parameters
+   - asses what different types of parameters we need
+   - find out how much structured parameters will be (do simple values suffice?)
+   - define how parameters can be discovered/enumerated
+   - define a naming scheme for parameters, so they can be addressed unambiguously
+ * value parameters have a value range. Work out how to handle this
+ * parameters may need a specific presentation in the GUI
+   - linear/logarithmic scale, scale reference
+   - selecting the right widget
+
+So...
+
+. find out to which extend we need these properties
+. find out what parts of the App will have what requirements?
+. chose a best fitting implementation based on this information
+
+A closely related issue is the handling of *Automation*. The current draft calls for an abstract interface "ParamProvider",
+which just allows the link:Plugin/RenderComponent[] to pull a current value, without knowing if the ParamProvider is a GUI widget or
+an automation data set with interpolation. The component using the param value should not need to do any interpolation.
+We should re-asses and refine this draft as needed. Note: Render Nodes are stateless; this creates some tricky situations.
+
+
+
+
+
+
+
+Alternatives
+^^^^^^^^^^^^
+?? (any ideas?)
+
+
+Rationale
+~~~~~~~~~
+
+
+
+
+
+
+Comments
+--------
+
+
+Back to link:Lumiera/DesignProcess[]

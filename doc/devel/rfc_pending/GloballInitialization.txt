@@ -1,0 +1,107 @@
+Design Process : Global Initialization
+======================================
+
+[grid="all"]
+`------------`-----------------------
+*State*         _Final_
+*Date*          _2008-04-05_
+*Proposed by*   link:ct[]
+-------------------------------------
+
+Global initialization call
+--------------------------
+
+Propose a central initialization facility.
+
+
+Description
+~~~~~~~~~~~
+Setup a `src/common/lumiera_init.c` file which contains following functions:
+
+ * `int lumiera_init(s.b.)` initializes the subsystems, global registries, link:NoBug[] and other things. Must be called once at startup.
+ * `void lumiera_destroy(void)` shuts down, frees resources, cleans up.
+
+Calling 'lumiera_init()' twice or more should be a fatal abort, calling lumiera_destroy() twice or more should be a non-op.
+
+`lumiera_init()` returns 'int' to indicate errors, it may take argc/argv for parsing options, this is to be decided.
+
+`lumiera_destroy()` is suitable for being called in an 'atexit()' handler.
+
+
+Tasks
+~~~~~
+
+Implement this.
+
+Pros
+~~~~
+
+Cons
+~~~~
+
+Alternatives
+~~~~~~~~~~~~
+
+Some things could be initialized with a `if (!initialized) {initialize(); initialized = 1;}` idiom. Parts of the C++ code could use different kinds of singleton implementations. Where needed this can still be done, but having a global initialization handler gives much better control over the initialization order and makes debugging easier since it is a serial, well defined sequence.
+
+
+Rationale
+~~~~~~~~~
+
+We have some global things to initialize and prepare. It is just convinient and easy to do it from a cental facility.
+
+
+Comments
+--------
+
+* You may have noted that I implemented an Appconfig class (for some very elementary static configuration constants. 
+See `common/appconfig.hpp` I choose to implement it as Meyers Singleton, so it isn't dependent on global static initialisation, and I put the NOBUG_INIT call there too, so it gets issued automatically.
+* Generally speaking, I can't stress enough to be reluctant with static init, so count me to be much in support for this design draft. While some resources can be pulled up on demand (and thus be a candidate for some of the many singleton flavours), some things simply need to be set up once, and its always better to do it explicitly and in a defined manner. 
+* For the proc layer, I plan to concentrate much of the setup and (re)configuration within the loading of a session, and I intend to make the session manager create an empty default session at a well defined point, probably after parsing the commandline in main (and either this or the loading of a existing session will bring the proc layer up into fully operational state  -- link:Ichthyostega[] [[DateTime(2008-04-09T02:13:02Z)]]
+* About link:NoBug[] initialization: I've seen that you made a nobugcfg where you centralized all nobug setup. Problem here is that a change in that file forces a whole application rebuild. I'd like to factor that out that each subsystem and subsubsystem does its own NOBUG_FLAG_INIT() initializations, the global NOBUG_INIT should be done in main() (of testsuites, tools, app) and not even in the global initialization handler. Note that I use this global initialization in a nested way
+
+------------------------------------------------------------
+lumiera_init ()
+{
+  lumiera_backend_init();
+  ...
+}
+
+lumiera_backend_init()
+{
+  ...backend-global nobug flags ..
+  ...backend subsystems _init() ..
+  ...
+}
+------------------------------------------------------------
+
+Backend tests then only call `lumiera_backend_init()` and dont need to do the whole initialization, same could be done
+for `lumiera_proc_init()` and `lumiera_gui_init()`. Note about the library: i think the lib shall not depend on such an init, but i would add one if really needed.
+ -- link:ct[] [[DateTime(2008-04-09T19:19:17Z)]]
+
+* After reconsidering I think we have several different problems intermixed here.
+ - Regarding organisation of includes: I agree that my initial approach ties things too much together. This is also true for the global "lumiera.h" which proved to be of rather limited use. Probably we'll be better off if every layer has a separate set of basic or global definition headers. I think the usage pattern of the flags (btw. the idea of making a flag hierarchy is very good!) will be much different in the backend, the proc layer and the gui.
+ - Initialisation of the very basic services is tricky, as always. Seemingly this includes link:NoBug[]. Of course one wants to use assertions and some diagnostigs logging already in constructor code, and, sadly enough it can't be avoided completely to run such already in the static intialisation phase before entering main(). My current solution (putting NOBUG_INIT it in the Appconfig ctor) is not airtight, I think we can't avoid going for something like a schwartz counter here. 
+ - Then there is the initialisation of common serives. For these, it's just fine to do a dedicated call from main (e.g. to init the backend services and for creating the basic empty session for proc and firing off the event loop for the GUI). I think it's no problem to ''disallow'' any IO, any accessing of services in the other layers prior to this point.
+ - What is with shutdown? personally, I'd like to call a explicit shutdown hook at the end of main and to disallow any IO and usage of services outside each subsystem after this point. Currently, I have the policy for the proc layer to require every destructor to be called and everything to be deallocated, meaning that quite a lot of code is running after the end of main() -- most of which is libarary generated. 
+ -- link:Ichthyostega[] [[DateTime(2008-04-12T04:56:49Z)]]
+
+* Regarding organisation of includes:... agreed
+* Initialisation of the very...
+  - I won't hesitate to add some C++ functionality to give link:NoBug[] an singleton initialization in C++
+* Then there is the initialisation of common serives... agreed
+* What is with shutdown?...
+  - Mostly agreed, I suggest to make all initialization code once-only, a second call shall bail out (under link:NoBug[]), all shutdown code shall be callable multiple times where subsequent calls are no-ops, this allows us to register at least some things in atexit() handlers, while we should add an explicit clean shutdown too, whenever that (or the atexit) handlers get really called is another thing, shutting down costs time and in emergency cases we first and foremost only want to shutdown things which fix some state for the next easier startup, clearing memory and process resources is only useful and has to be done when things run under a leak checker or as library.  -- link:ct[] [[DateTime(2008-04-12T08:49:55Z)]]
+* (./) now done the following:
+  - Moved lumiera.h and nobugcfg.h to proc/lumiera.hpp and nobugcfg.hpp (i.e. consider them now as Proc-Layer only)
+  - Changed Appconfig to support simple lifecycle hooks, especially a ON_BASIC_INIT. Rationale is that I don't have a lot of "magic" code in the Appconfig ctor, rather each subsystem in need of a basic initialisation can install a small callback. It can do so for other lifecycle events too.
+  - Added the usual magic static ctor to install those callbacks in case they really need an early init. Thus now nobugcfg.hpp can install a callback to issue NOBUG_INIT, error.hpp does the same for the unknown-exception handler. I'll expect the config query system to need somthing similar soon.
+  - For all remaining initialisation (in case it can't be done on demand, which of course is allways preferable) now main() issues and explicit call `Appconfig::lifecycle (ON_GLOBAL_INIT)` and similar fire off ON_GLOBAL_SHUTDOWN at end. Similar for the tests. We could add an init-call for the backend there too, either directly or by registering an callback, just as it fits in better.
+  - This system is extensible: for example I plan to let the link:SessionManager[] issue ON_SESSION_INIT and ON_SESSION_CLOSE events. E.g. AssetManager could now just install his callbacks to clean up the internal Asset registry   
+    -- link:Ichthyostega[] [[DateTime(2008-04-14T03:40:54Z)]]
+
+* Regarding shutdown my understanding is that ON_GLOBAL_SHUTDOWN does what is absolutely necessary (like flushing the sesion file, closing display and network connections, writing a backup or commiting to a database). I see no problem with bypassing the standard dtor calls in a release build (they add no value besides diagnostics and even may cause a lot of pages to be swapped in). We could even make this a policy ("don't rely on destructors or automatic shutdown code to do any cleanup of permanent importance")
+* I made this final now, details are still in progress to be worked out, but we basically agreed on it iirc.
+  -- link:ct[] [[DateTime(2008-07-26T09:08:11Z)]]
+
+Back to link:Lumiera/DesignProcess[]

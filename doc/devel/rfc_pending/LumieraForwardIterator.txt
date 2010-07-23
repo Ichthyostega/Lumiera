@@ -1,0 +1,101 @@
+Design Process: Lumiera Forward Iterator
+========================================
+
+[grid="all"]
+`------------`-----------------------
+*State*         _Idea_
+*Date*          _2009-11-01_
+*Proposed by*   link:Ichthyostega[]
+-------------------------------------
+
+The situation focussed by this concept is when an API needs to expose a sequence of results, values or objects,
+instead of just yielding a function result value. As the naive solution of passing an pointer or array creates
+coupling to internals, it was superseded by the GoF http://en.wikipedia.org/wiki/Iterator[Iterator pattern].
+Iteration can be implemented by convention, polymorphically or by generic programming; we use the latter approach.
+
+
+Lumiera Forward Iterator concept
+--------------------------------
+.Definition
+An Iterator is a self-contained token value, representing the promise to pull a sequence of data
+
+ - rather then deriving from an specific interface, anything behaving appropriately _is a Lumiera Forward Iterator._ 
+ - the client finds a typedef at a suitable, nearby location. Objects of this type can be created, copied and compared.
+ - any Lumiera forward iterator can be in _exhausted_ (invalid) state, which can be checked by +bool+ conversion.
+ - especially, default constructed iterators are fixed to that state. Non-exhausted iterators may only be obtained by API call.
+ - the exhausted state is final and can't be reset, meaning that any iterator is a disposable one-way-off object.
+ - when an iterator is _not_ in the exhausted state, it may be _dereferenced_ (+*i+), yielding the ``current'' value
+ - moreover, iterators may be incremented (+++i+) until exhaustion.
+
+
+Discussion
+~~~~~~~~~~
+The Lumiera Forward Iterator concept is a blend of the STL iterators and iterator concepts found in Java, C#, Python and Ruby.
+The chosen syntax should look familiar to C++ programmers and indeed is compatible to STL containers and ranges.
+To the contrary, while a STL iterator can be thought off as being just a disguised pointer, the semantics of Lumiera Forward Iterators is deliberately reduced to a single, one-way-off forward iteration, they can't be reset, manipulated by any arithmetic, and the result of assigning to an dereferenced iterator is unspecified, as is the meaning of post-increment and stored copies in general. You _should not think of an iterator as denoting a position_ -- just a one-way off promise to yield data.
+
+Another notable difference to the STL iterators is the default ctor and the +bool+ conversion.
+The latter allows using iterators painlessly within +for+ and +while+ loops; a default constructed iterator is equivalent
+to the STL container's +end()+ value -- indeed any _container-like_ object exposing Lumiera Forward Iteration is encouraged
+to provide such an +end()+-function, additionally enabling iteration by +std::for_each+ (or Lumiera's even more convenient
+ +util::for_each()+).
+ 
+Implementation notes
+^^^^^^^^^^^^^^^^^^^^
+*iter-adapter.hpp* provides some helper templates for building Lumiera Forward Iterators.
+
+ - _IterAdapter_ is the most flexible variant, intended for use by custom facilities.
+   An IterAdapter maintains an internal back-link to a facilitiy exposing an iteration control API,
+   which is accessed through free functions as extension point. This iteration control API is similar to C#,
+   allowing to advance to the next result and to check the current iteration state.
+ - _RangeIter_ wraps two existing iterators -- usually obtained from +begin()+ and +end()+ of an STL container
+   embedded within the implementation. This allows for iterator chaining.
+ - _PtrDerefIter_ works similar, but can be used on an STL container holding _pointers,_
+   to be dereferenced automatically on access
+
+Similar to the STL habits, Lumiera Forward Iterators should expose typedefs for +pointer+, +reference+ and +value_type+. 
+Additionally, they may be used for resource management purposes by ``hiding'' a ref-counting facility, e.g. allowing to keep a snapshot or restult set around until it can't be accessed anymore.
+
+
+Tasks
+^^^^^
+The concept was implemented both for unit test and to be used on the _QueryResolver_ facility; thus it can be expected
+to show up on the session interface, as the _PlacementIndex_ implements _QueryResolver_. QueryFocus also relies on that
+interface for discovering session contents. Besides that, we need more implementation experience.
+
+Some existing iterators or collection-style interfaces should be retro-fitted. See http://issues.lumiera.org/ticket/349[Ticket #349]. +
+Moreover, we need to gain experience about mapping this concept down into a flat C-style API.
+
+
+
+Alternatives
+^^^^^^^^^^^^
+. expose pointers or arrays
+. inherit from an _Iterator_ ABC
+. unfold the iteration control functions into the custom types
+. define a selection of common container types to be allowed on APIs
+. use _active iteration,_ i.e. pass a closure or callback
+
+
+Rationale
+~~~~~~~~~
+APIs should be written such as not tie them to the current implementation. Exposing iterators is known to create
+a strong incentive in this direction and thus furthers the creation of clean APIs.
+
+Especially in Proc-Layer we utilise already several iterator implementations, but without an uniform concept, these remain
+just slightly disguised implementation types of a specific container. Moreover, the STL defines various and very elaborate
+iterator concepts. Ichthyo considers most of these an overkill and an outdated aproach. Many modern programming languages build
+with success on a very simple iterator concept, which allows once to pull a sequence of values -- and nothing more.
+
+Thus the idea is to formulate a concept in compliance with STL's forward iterator -- but augmented by an stop-iteration test.
+This would give us basic STL integration and look familiar to C++ and Java programmers without compromising the clean APIs.
+
+
+
+
+
+Comments
+--------
+
+
+Back to link:Lumiera/DesignProcess[]

@@ -1,0 +1,231 @@
+[grid="all"]
+`------------`-----------------------
+*State*         _Idea_
+*Date*          _2008-09-21_
+*Proposed by*   link:nasa[]
+-------------------------------------
+
+
+Delectus Shot Evaluator
+-----------------------
+This is a brain dump about the shot evaluator subproject.
+
+
+Description
+~~~~~~~~~~~
+
+
+Brainstorm on Delectus
+~~~~~~~~~~~~~~~~~~~~~~
+Some (many) of the ideas presented herein come from the various parties involved in the Lumiera discussion list and IRC channel #lumiera.
+http://lists.lumiera.org/pipermail/lumiera/2008-September/000053.html[] -- the main discussion thread
+
+Additionally, a lot of great concepts for how to streamline the interface are derived in part from link:KPhotoAlbum[].
+
+I use tags, keywords, and metadata almost interchangeably, with the exception that metadata includes computer generated metadata as well.
+These are not tags in the conventional sense -- they don't have to be text. In fact the planned support (please add more!) is:
+
+ * Text -- both simple strings (tags) and blocks
+ * Audio -- on the fly (recorded from the application) or pregenerated
+ * Video -- same as audio
+ * Link -- back to a Celtx or other document resource, forward to a final cut, URL, etc
+ * Still image -- inspiration image, on set details, etc
+ * ID -- such as the serial number of a camera used, the ISBN of a book to be cited, etc
+
+As such, the tags themselves can have metadata. You can see where this is going...
+
+Also, the tags are applied to "clips" -- which I use interchangeably between source material imported into the application and slice of that material that tags are applied to. Any section of a video or audio source can have tags applied to it.
+
+
+Two key functions: assign metadata and filter by metadata.
+
+clips are one thing; but in reality most clips are much longer than their interesting parts.
+Especially for raw footage, the interesting sections of a clip can be very slim compared to
+the total footage. Here is a typical workflow for selecting footage:
+
+. Import footage.
+. Remove all footage that is technically too flawed to be useful.
+. Mark interesting sections of existing clips, possibly grouped into different sections.
+. Mark all other footage as uninteresting.
+. Repeat 3-4 as many times as desired.
+
+Some key points:
+
+ * Import and export should be as painless and fast as possible.
+ * Technically flawed footage can be both manual and computer classified.
+ * In some cases (e.g. documentaries, dialog) audio and video clips/footage can follow different section processes.
+    It is possible to use video from footage with useless audio or use audio from footage with useless video.
+ * "Interesting" is designed to be broad and is explained below.
+ * steps 2-5 can be performed in parallel by numerous people and can span many different individual clips.
+
+In simple editors like Kino or iMovie, the fundamental unit used to edit video is the clip. This is great for a large number of uses, such as home videos or quick Youtube postings, but it quickly limits the expressive power of more experienced engineers in large scale productions (which are defined for the purposes of this document to include more than 2 post-production crew members). The clip in those editors is trimmed down to include only the desired footage, and these segments are coalesced together into some sort of coherent mess.
+
+The key to adequate expressive power is as follows:
+
+ * Well designed, fast metadata entry. Any data that can be included should by default, and ideally the metadata entry process should run no less than about 75% as fast as simple raw footage viewing. Powerful group commands that act on sections of clips and also grouping commands that recognize the differences between takes and angles (or individual mics) enhance and speed up the process.
+ * Good tools to classify the metadata into categories that are actually useful. Much of the metadata associated with a clip is not actively used in any part of the footage generation.
+ * Merging and splicing capabilities. The application should be smart enough to fill in audio if the existing source is missing. For example, in a recent project I was working on a camera op accidently set the shotgun mike to test mode, ruining about 10% of the audio for the gig. I was running sound, and luckily I had a backup copy of the main audio being recorded. This application should, when told that these two are of the same event at the same time, seamlessly overlay the backup audio over the section of the old audio that has been marked bad and not even play the bad audio. This is just background noise, and streamlining the immense task of sorting through footage needs to be simplified as much as possible.
+ * Connection to on site documentation and pre-production documentation. When making decisions about what material to use and how to classify it, it is essential to use any tools and resources available. The two most useful are onsite documentation (what worked/didn't work, how the weather was, pictures of the setup, etc all at the shoot) and pre-production (what the ideal scene would be, what is intended, etc). Anything else that would be useful should be supported as well.
+ * Be easily accessible when making the final cut. Lumiera is, if the application gets up to speed, going to serve primarily to render effects, finalize the cut, and fine tune what material best fits together. Any metadata, and certainly any clipping decisions, should be very visible in Lumiera.
+ * Notes, notes, notes! The application should support full multimedia notes. These differ from (4) in that they are generated during the CLASSIFICATION process, not before. This fits in with (5) as well -- Lumiera should display these notes prominently on clip previews. The main way for multiple parties to communicate and even for a single person to stay organized is to add in notes about tough decisions made and rationale, questionable sections, etc. These notes can be video, audio, text, etc from one of the clips, from the machine used to edit (such as using a webcam or microphone), or over the network (other people's input).
+
+
+Too technically flawed
+^^^^^^^^^^^^^^^^^^^^^^
+A clip is said to be too technically flawed if it has no chance of making it to the final product whatsoever. This does not, however, preclude its use throughout the post-production process; for example, part of a clip in which the director describes his vision of the talent's facial expression in a particular scene is never going to make it into the final product, but is invaluable in classifying the scene. In this case, the most reasonable place to put the clip would be as a multimedia note referenced by all takes/angles of the scene it refers to.
+
+As mentioned above, flawed video doesn't necessarily mean flawed audio or vice-versa.
+
+
+Interesting
+^^^^^^^^^^^
+An "interesting" clip is one that has potential -- either as a metadata piece (multimedia note, talent briefing, etc) or footage (for the final product OR intermediary step). The main goal of the application is to find and classify interesting clips of various types as quickly as possible.
+
+
+Parallel Processing
+^^^^^^^^^^^^^^^^^^^
+Many people, accustomed to different interfaces and work styles, should be able to work on the same project and add interactive metadata at the same time.
+
+
+Classification interface
+++++++++++++++++++++++++
+The classification interface is divided into two categories: technical and effective. Technical classification is simply facts about a clip or part of a clip: what weather there is, who is on set, how many frames are present, the average audio level, etc. Effective classification allows the artist to express their feelings of the subjective merits (or failures) of a clip.
+
+
+DCMS
+^^^^
+The project is organized around a distributed content management system which allows access to all existing materials at all times. Content narrowing allows for a more digestible amount of information to process, but everything is non-destructive; every change to the clip structure and layout is recorded, preferably with a reason as to why it was necessary or desired.
+
+
+Content narrowing
+^^^^^^^^^^^^^^^^^
+With all of the information of an entire production available from a single application, information overload is easy. Content narrowing is designed to fix that by having parts of individual clips, metadata, or other files be specific to one aspect of the overall design. This allows for much more successful use of the related information and a cleaner, streamlined layout. As an example, metadata involving file size has no effect whatsoever on the vast majority of most major decisions -- the answer is almost always "whatever it takes." Thus, it would not appear most of the time. Content narrowing means that it is easy to add back footage -- "widen the view" one step, add it back, and "narrow the view" again.
+
+
+Multiple cuts
+^^^^^^^^^^^^^
+There is no need to export a final cut from this application; it merely is the first step in the post-production chain. It is the missing link between receiving raw footage from the camera and adding the well executed scenes to the timeline. What should come out of the application is a classification of 
+
+
+Situational, take, and instance tagging
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+This is VERY powerful. The first step to using the application is to mark which scenes are the same in all source clips -- where same means that they contain sections which would both not run. This can include multiple takes, different microphones or camera angles, etc. The key to fast editing is that the application can edit metadata for the situation (what is actually going on IN THE SCENE), take (what is actually going on IN THIS SPECIFIC RUN), and instance (what is actually going on IN THIS CLIP). If editing a situation, the other referenced clips AUTOMATICALLY add metadata and relevant sections. This can be as precise and nested as desired, though rough cuts for level one editing (first watchthrough after technically well executed clips have been selected) and more accurate ones for higher levels is the recommended method.
+
+
+Subtitling
+^^^^^^^^^^
+This came up on the discussion list for Lumiera, and it will be supported, probably as a special tag.
+
+
+nasa's Laws of Tagging
+^^^^^^^^^^^^^^^^^^^^^^
+. There is always more variety in data than tags. There are always more situations present in the data than can be adequately expressed with any (reasonable) number of tags. This is OK. All that is needed is the minimum set of unique tags to progress to the next cycle without losing editing intent or the ability to rapidly evaluate many situations.
+. Many tags are used many times. "Outdoors" will be a very, very common tag; so will "redub." If conventional names are decided upon and stuck to, it is significantly easier to map the complex interactions between different content situations.
+. Avoid compound tags. Do not have "conversation_jill_joe" as a tag; use "conversation," "jill," and "joe" instead. It is very easy to search for multiple tags and very hard to link data that doesn't use overlapping tags.
+
+
+
+
+
+
+
+
+
+
+The interface -- random idea
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+This is not meant to be a final interface design, just something I wrote up to get ideas out there.
+
+key commands
+    mutt/vim-style -- much faster than using a mouse, though GUI supported. Easy to map to joystick, midi control surface, etc.
+Space stop/start and tag enter
+Tab (auto pause) adds metadata special
+Tracks have letters within scenes -- Audio[a-z], Video[a-z], Other[a-z] (these are not limits) -- or names.
+Caps lock adds notes. This is really, really fast. It works anywhere.
+This means that up to 26 different overlapping metadata sections are allowed.
+
+Prompting
+Prompting for metadata is a laborious, time-consuming process. There is no truly efficient way to do it. This application uses a method similar to link:KPhotoAlbum[]. When the space key is held and a letter is pressed, the tag that corresponds to that letter is assigned to the track for the duration of the press. (If the space is pressed and no other key is pressed at the same time, it stops the track.) For example, suppose that the following mapping is present:
+o = outside
+x = extra
+p = protagonist
+c = closeup
+
+Then holding SPACE over a section and pressing one of these keys would assign the tag to the audio AND video of the section over which the space was held. If instead just the key is pressed (without space being held), that tag is assigned to the section over which it is held. This is very fast and maps well to e.g. PS3 controller or MIDI control.
+
+If LALT is held down instead of SPACE, the audio is effected instead. If RALT is held, just the video is effected.
+
+In order to support scenario/take/clip tagging:
+    The default is situation. If the keybinding to x is:
+    x = t:extra ; effect only take
+    x = ts:extra ; effect take and scenario
+    x = c:extra ; extra only visible in this clip!
+    x = tc:extra ; this take and clip show the extra
+    etc
+    
+Other keyargs (the part in front of the colon) can be added to account for other uses (e.g. l = all taken on the same location).
+
+Tab is pressed to add metadata mappings. Tab is pressed to enter metadata edit mode; this pauses video. Then press any key to map; and type the tag to associate (with space, multiple tags can be added.). The following specials are defined:
+    [:keyarg:]:TAG is special tagging for scenario/take/clip.
+    !TAG removes TAG if it is present. This is useful because it allows huge sections of the clip to be defined as a certain tag, then have parts  removed later.
+    a:TAG applies TAG only to the audio.
+    v:TAG applies TAG only to the video.
+    p:PATH adds a link to PATH as a special tag.
+
+(This will have a nice GUI as well, I just will always use the keyboard method so I am describing it first. Mapping configurations can be stored in a separate file, as a user config, or in the specific project.)
+
+If ESC is pressed, all currently ranged tags are ended.
+
+Finally, if single_quote is pressed without SPACE or {L,R}ALT down, it marks an "interesting location." Pressing SHIFT+single_quote goes to the next "interesting location" and pressing CNTRL+' goes to the previous "interesting location." This allows for very quick review of footage.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Comments
+--------
+
+
+Rating - Quantitative Rating as well as Qualitative Tagging
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The importance/value of the video for various factors uses, can vary through the video. It would be helpful to have the ability to create continuous ratings over the entire track. Ratings would be numerical. Automatic clip selection/suggestion could be generated by using algorithms to compute the usefulness of video based on these ratings (aswell as "boolean operations"/"binary decisions" done with tags).
+The ratings could be viewed just like levels are - color coded and ovelayed on track thumbnails.
+
+- Tree 2008-10-25
+
+
+link:MultiView[] - useful for concurrent ratings input
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+It would be convenient to have an ability to view the different tracks (of the same scene/time sequence) at once, so the viewer can input their ratings of the video "on the fly", including a priority parameter that helps decide which video is better than what other video.See the GUI brainstorming for a viewer widget, and key combinations that allow both right and left hand input, that could be used for raising/lowing ratings for up to six tracks at once.
+
+- Tree 2008-10-25
+
+
+I like the idea of rating clips (or rather, takes) a lot. It would be cool to include both "hard," "relative," and "fuzzy" rating. Hard is an exactly defined value (scaled 0-1) that puts the clip in an exact location in the queue. Relative means that one is higher or lower rated than another. Fuzzy is a slider which is approximate value, and there is some randomness. The best part is that these can be assigned to hardware sliders/faders. Pressure sensitive buttons + fuzzy ratings = really easy entry interface. Just hit as hard as needed! Multiple tracks at once also an astounding idea. I could image some sort of heap (think binary heap, at least for the data structure) which determines the priorities and decides which clips are played. Then the highest rated clips are played first, down to the worst.
+
+- link:NicholasSA[] 2009-01-04
+
+
+Possible Collaboration with the people from Ardour?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+I guess if the thing can do all the things we talked about here, it would be perfectly suitable for sound classification too, and maybe could fill another gap in FOSS: Audio Archival Software, like this: http://www.soundminer.com/SM_Site/Home.html[] (which is very expensive)... maybe the Ardour people would be interested in a collaboration on this?
+
+I like the suggestion of sound classification with a similar (or, even better, identical) evaluator. link:SoundMiner[] looks interesting, but like you say very expensive. I'm a sound guy, so I feel your pain...
+
+- link:NicholasSA[] 2009-01-04
+
+Back to link:Lumiera/DesignProcess[]

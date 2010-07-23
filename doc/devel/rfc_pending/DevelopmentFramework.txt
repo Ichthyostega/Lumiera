@@ -1,0 +1,102 @@
+Design Process : Development Framework
+======================================
+
+[grid="all"]
+`------------`-----------------------
+*State*         _Final_
+*Date*          _2007-06-08_
+*Proposed by*   link:ct[]
+-------------------------------------
+
+
+
+
+Development Framework
+---------------------
+Here we collect how the tree/repository will be set up and which tools are needed/required for working on lumiera.
+
+
+
+
+Description
+~~~~~~~~~~~
+.Tools required:
+* unix like shell environment with standard tools
+* we don't require a specific linux distribution
+* git 1.5.3 (not out yet, but really soon, we want submodules support)
+* GNU toolchain, autoconf/automake (maybe scons or something else?)
+* bouml (version case unresolved)
+
+.Tools suggested:
+* doxygen
+
+
+
+
+Tasks
+^^^^^
+* cehteh will setup a initial repository (see link:RepositorySetup[proposed structure])
+* ichthyo has setup a debian-APT-depot at http://deb/ichthyostega.de[] and will add backport packages there if necessary so the debian-people can stay near Etch/stable in the next time
+* ichthyo volunteers to get the new source into a debian package structure from start (same as the current cinelerra is)
+
+.And for later:
+* decide on a Unit Test framework (see link:UnitTests_Python[this Proposal])
+* can we get some continuous integration running somewhere (nightly builds, testsuite)?
+* find a viable toolchain for writing more formal documentation. link:ReStructured[] Text, Docbook etc?
+
+
+Pros
+^^^^
+
+
+Cons
+^^^^
+* the GIT submodules are just not there atm. we need to come along with one monolitic large project until they are available.
+
+
+Alternatives
+^^^^^^^^^^^^
+* use visual studio and .NET :P
+
+
+
+
+Rationale
+~~~~~~~~~
+The project will be tied to a distributed infrastructure/git. With recent git submodules support it should be easy to let contributors only checkpout/work on parts of the tree (plugins, documentation, i18n, ...). We want to build up a set of maintenance scripts in a ./admin dir.
+
+At the moment we go for rather bleeding edge tools, because we want to stay at a given version to avoid incompatibility problems.
+Later on a version switch needs agreement/notification by all devs.
+
+
+
+
+Comments
+--------
+
+I am always in favor of getting the basic project organization and all scripting up and running very early in a project.
+I would like if the project would take a rather conservative approach on the required Libs and Tools, so that finally,
+when we get into a beta state, we can run/compile on the major distros without too much pain. I wouldn't completely
+abandon the idea to target \*bsd and osx as well later on.
+
+I would propose to move Doxygen to "required". The Idea to use scons sounds quite appealing to me at the moment.
+Besides that, I think it could be moved to "Draft".
+ -- link:Ichthyostega[] [[DateTime(2007-06-17T00:18:40Z)]]
+
+Moved to Draft. For Developer documentation I would prefer doxygen. For user documentation we can make a similar/same think like nicolasm did for cinelerra2, means wiki for edits, git to maintain it, based on gnu texinfo. Texinfo is quite limiting in its capabilities but it suffices, seeing the current cin2 docs, i say its rather well done.
+
+We need to factor out some of the proposals from this page to subpages (scons, documentation, testing,...)
+ -- link:ct[] [[DateTime(2007-06-17T17:27:59Z)]]
+
+It would really suck if we have to go through the experiences described http://freshmeat.net/articles/view/889/[here]. I have experienced parts of that in the past. I have only some beginner experience with writing autotoolized projects (mostly based on trial-and-error) and no experience in any other build system (such as scons). As such, I still believe that autotools can be manageable (for me personally) once the initial hurdle of learning is overcome.
+
+I all for Doxygen documentation. Related to documentation are http://www.splint.org/[splint] http://www.splint.org/manual/html/appC.html[annotations] (comments). I suggest that we consider using such a tool for QA. Like link:ct[] said, this should be discussed in a subpage.
+
+I agree with using currently bleeding-edge tools.
+
+
+We have now a \'compatibility wiki\', finalized this proposal
+ -- link:ct[] [[DateTime(2008-03-26T13:43:26Z)]]
+
+''''
+Back to link:Lumiera/DesignProcess[]

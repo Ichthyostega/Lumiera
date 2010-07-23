@@ -1,0 +1,88 @@
+Design Process : Official Assembly Language
+===========================================
+
+[grid="all"]
+`------------`-----------------------
+*State*         _Dropped_
+*Date*          _2008-08-01_
+*Proposed by*   link:PercivalTiglao[]
+-------------------------------------
+
+
+Official Assembly Language
+--------------------------
+
+I describe here an optimization that might have to be be taken into account at the design level. At very least, we should design our code with auto-vectorization in mind. At the most, we can choose to manually write parts of our code in assembly language and manually vectorize it using x86 SSE Instructions or !PowerPC !AltiVec instructions. By keeping these instructions in mind, we can easily achieve a large increase in speed.
+
+
+Description
+~~~~~~~~~~~
+
+While the C / C++ core should be designed efficiently and as portable as possible, nominating an official assembly language or an official platform can create new routes for optimization. For example, the x86 SSE instruction set can add / subtract 16 bytes in parallel (interpreted as 8-bit, 16-bit, 32-bit, or 64-bit integers, or 32-bit/64-bit floats), with some instructions supporting masks, blending, dot products, and other various instructions specifically designed for media processing. While the specific assembly level optimizations should be ignored for now, structuring our code in such a way to encourage a style of programming suitable for SSE Optimization would make Lumiera significantly faster in the long run. At very least, we should structure our innermost loop in such a way that it is suitable for gcc's auto-vectorization.
+
+The problem is that we will be splitting up our code. Bugs may appear on some platforms where assembly-specific commands are, or perhaps the C/C++ code would have bugs that the assembly code does not. We will be maintaining one more codebase for the same set of code. Remember though, we don't have to do assembly language now, we just leave enough room in the design to add assembly-level libraries somewhere in our code.
+
+
+Tasks
+~~~~~
+
+* Choose an "Official" assembly language / platform.
+* Review the SIMD instructions avaliable for that assembly language.
+* For example, the Pentium 2 supports MMX instructions. Pentium 3 supports MMX and SSE Instructions. Early Pentium4s support MMX, SSE, and SSE2 instructions. Core Duo supports upto SSE4 instructions. AMD announced SSE5 instructions to come in 2009.
+* Consider SIMD instructions while designing the Render Nodes and Effects architecture. 
+* Write the whole application in C/C++ / Lua while leaving sections to optimize in assembly later. (Probably simple tasks or a library written in C)
+* Rewrite these sections in Assembly using only instructions we agreed upon.
+
+
+Pros
+~~~~
+
+Assuming we go all the way with an official assembly language / platform...
+
+* Significantly faster render and previews. (Even when using a high-level library like http://www.pixelglow.com/macstl/valarray/[macstl valarray], we can get 3.6x -- 16.2x the speed in our inner loop. We can probably expect greater if we hand-optimize the assembly) 
+
+
+Cons
+~~~~
+
+* Earlier architectures of that family will be significantly slower or unsupported
+* Other architectures will rely on C / C++ port instead of optimized assembly
+* Redundant Code
+
+
+Alternatives
+^^^^^^^^^^^^
+
+* We only consider auto-vectorization -- GCC is attempting to convert trivial loops into common SSE patterns. Newer or Higher level instructions may not be supported by GCC. This is turned on http://gcc.gnu.org/projects/tree-ssa/vectorization.html[in GCC4.3 with specific compiler flags]
+* We can consider assembly but we don't officially support it -- We leave the holes there for people to patch up later. Unofficial ports may come up, and maybe a few years down the line we can reconsider assembly and start to reimplement it down the road.
+* Find a SIMD library for C/C++ -- Intel's ICC and http://gcc.gnu.org/onlinedocs/gcc-3.4.6/gcc/Vector-Extensions.html[GCC] both have non-standard extensions to C that roughly translate to these instructions. There is also the http://www.pixelglow.com/macstl/valarray/[macstl valarray library] mentioned earlier. Depending on the library, the extensions can be platform specific.
+* Write in a language suitable for auto-vectorization -- Maybe there exists some vector-based languages? Fortran might be one, but I don't really know.
+
+
+Rationale
+~~~~~~~~~
+
+I think this is one of those few cases where the design can evolve in a way that makes this kind of optimization impossible. As long as we try to keep this optimization avaliable in the future, then we should be good.
+
+
+Comments
+--------
+
+* I have to admit that I don't know too much about SSE instructions aside from the fact that they can operate on 128-bits at once in parallel and there are some cache tricks involved when using them. (you can move data in from memory without bringing in the whole cache line). Nonetheless, keeping these assembly level instructions in mind will ease optimization of this Video Editor. Some of the instructions are high-level enough that they may effect design decisions. Considering them now while we are still in early stages of development might prove to be advantagous. Optimize early? Definitely not. However, if we don't consider this means of optimization, we may design ourselves into a situation where this kind of optimization becomes impossible.
+
+* I don't think we should change any major design decisions to allow for vectorization. At most, we design a utility library that can be easily optimized using SIMD instructions. Render Nodes and Effects can use this library. When this library is optimized, then all Render Nodes and Effects can be optimized as well. -- link:PercivalTiglao[] [[DateTime(2008-08-01T16:12:11Z)]]
+
+* Uhm, the Lumiera core (backend, proc, gui) doesn't do any numbercrunching. This is all delegated to plugins (libgavl, effects, encoders). I think we don't need any highly assembler/vector optimized code in the core (well, lets see). This plugins and libraries are somewhat out of our scope and thats good so, the people working on it know better than we how to optimize this stuff. It might be even worthwile to try if when we leave all vectorization out, if then the plugins can use the vector registers better and we gain overall performance!
+  -- link:ct[] [[DateTime(2008-08-03T02:27:14Z)]]
+
+* Another idea about a probably worthwhile optimization: gcc can instumentate code for profileing and then do arc profileing and build it a second time with feedback what it learnd from the profile runs, this mostly affects branch prediction and can give a reasonable performance boost. If somone likes challenges, prepare the build system to do this:
+. build it with -fprofile-arcs
+. profile it by running ''carefully'' selected benchmarks and tests.
+. rebuild it again this time with -fbranch-probabilities
+. PROFIT
+ -- link:ct[] [[DateTime(2008-08-03T02:27:14Z)]]
+
+* I've discussed general ideas around, and I agree now that "core Lumiera" is not the place to think of these kinds of optimizations. So I'll just move this over to dropped. -- link:PercivalTiglao[] [[DateTime(2008-08-04T18:33:58Z)]]
+
+''''
+Back to link:Lumiera/DesignProcess[]

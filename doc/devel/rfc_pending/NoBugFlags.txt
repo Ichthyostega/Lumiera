@@ -1,0 +1,47 @@
+NoBug logging flag hierachy
+===========================
+
+[grid="all"]
+`------------`-----------------------
+*State*         _Final_
+*Date*          _2008-04-05_
+*Proposed by*   link:ct[]
+-------------------------------------
+
+
+link:NoBug[] logging flag hierachy
+----------------------------------
+
+link:NoBug[] allows hierachical organization of logging flags. Propose a documentation/planning about the setup.
+
+Description
+~~~~~~~~~~~
+Take a look at my draft at:
+link:http://www.lumiera.org/gitweb?p=lumiera/ct;a=blob;f=doc/devel/nobug_flags.txt;h=74471e255e6ebfedb642e450bdfd3f79e346c600;hb=backend[NoBug_flags]
+
+I've added the things I planning for the backend, others might add their own plans there too. So far this is an early draft, comments welcome.
+
+
+Tasks
+~~~~~
+ * Needs a file.c defining the common root see link:Lumiera/DesignProcess/GlobalInitialization[]
+ * Everyone needs to setup this hierachy by NOBUG_DEFINE_FLAG_PARENT (flag, parent_flag);
+
+
+Pros
+~~~~
+When done right, logging control is much easier, just 'NOBUG_LOG=lumiera:DEBUG' would suffice.
+
+Rationale
+~~~~~~~~~
+We need some easy way to control logging, later on when lumiera runs in beta tests it must be easy to tell a tester how to create useable debugging logs.
+
+Comments
+--------
+
+cehteh will care for further integration
+ -- link:ct[] [[DateTime(2008-07-26T09:11:29Z)]]
+
+
+
+Back to link:Lumiera/DesignProcess[]

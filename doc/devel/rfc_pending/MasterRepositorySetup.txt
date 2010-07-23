@@ -1,0 +1,45 @@
+Design Process : Shared Master Repository
+=========================================
+
+[grid="all"]
+`------------`-----------------------
+*State*         _Final_
+*Date*          _2008-04-08_
+*Proposed by*   link:ct[]
+-------------------------------------
+
+Shared Master Repository setup
+------------------------------
+This describes how the shared MASTER is set up and syncronized.
+
+
+Description
+~~~~~~~~~~~
+We have now a shared master repository in /git/LUMIERA. The public/anonymous git url is 'git://git.lumiera.org/LUMIERA', for people with ssh access it is pushable at 'git.lumiera.org:/git/LUMIERA'.
+
+The repository is maintained by cehteh. It updates daily by a script.
+
+There are the following branches updated from their respective maintainer repositories:
+
+[grid="all"]
+`-------------`----------------------------------------------------`----------------------------
+*BRANCHNAME*      *DESCRIPTION*                                        *Automatic updated from*
+'master'        Stable branch, use this as generic entry point.        cehteh, ichthyo
+'library'       Support library development                            cehteh, ichthyo
+'proc'          Render core development                                ichthyo
+'backend'       Data backend development,                              cehteh
+'gui'           GUI development                                        joel
+------------------------------------------------------------------------------------------------
+
+Automatic syncronization is only done for 'fast-forward' updates, conflicting changes are rejected. It is still possible to manually push to this repository to override automatic syncronization.
+
+Please suggest changes for this setup when required (new branches, difefrent maintainers, ...)
+
+
+Comments
+--------
+
+Instead this polling @daily update maintainers might use git hooks on their repos to push relevant things, be careful not to push cruft or tags (which tags shall be present here is not yet resolved -> no tags for now)
+ -- link:ct[] [[DateTime(2008-04-08T21:48:51Z)]]
+
+Back to link:Lumiera/DesignProcess[]

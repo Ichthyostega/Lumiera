@@ -1,0 +1,60 @@
+Design Process : Lumiera Design Process
+=======================================
+ 
+[grid="all"]
+`------------`-----------------------
+*State*         _Final_
+*Date*          _2007-06-03_
+*Proposed by*   link:ct[]
+-------------------------------------
+
+Define a Lumiera design process
+-------------------------------
+Set up a lightweight formalized process how people can add proposals for the Lumiera development.
+
+Description
+~~~~~~~~~~~
+Just use this Wiki to make it easy to add proposals in a well defined manner.
+
+I'd like to introduce a slightly formalized process for the ongoing Lumiera planning:
+ * Every proposal is instantiated as 'Idea', the author gives other people the opportunity to review and comment on it with extreme prejudice, while still working out details.
+ * When the the 'Idea' in a proper form and worked out in most details it becomes a 'Draft'. This 'Draft' need to be carefully reviewed, commented, perhaps corrected and rated by the other Developers.
+ * At some point we may decide that a 'Draft' becomes a 'Final' (I leave it open how this decision shall be done for now). 'Final' Documents will be imported into repository.
+ * Sometimes proposals will become dropped for some reason, this is indicated by changing their state to 'Dropped', they still stay in the system for further reference.
+
+
+Tasks
+~~~~~
+ * We need to refine link:Lumiera/DesignProcessTemplate[].
+
+Pros
+~~~~
+
+ * Simple
+ * Flexible
+ * No much rules
+ * Persistent and at Final stage well documented process
+
+
+Cons
+~~~~
+ * Could be abused/vandalized (but wiki can use ACL's)
+ * Depends on my server, this might be unfavorable or unreliable, ymmv.
+ * Will only work if all or almost all involved people agree on this process
+
+
+Alternatives
+~~~~~~~~~~~~
+
+ * We could use some forum, Trac, Mailinglist or whatever instead.
+ * Just for Design documentation 0I would give http://bouml.free.fr/[Bouml] a try. For myself, I am not very fond of UML Design tools, while Bouml looks quite promising and we could maintain the UML model in git repositories which would be more favorable than this centralized wiki. The backside is that this needs even more agreement between the developers, everyone has to install and use bouml (and learn its usage) and design is constrained by a external tool.
+
+
+Rationale
+~~~~~~~~~
+Wiki works it is simple to use and just flexible enough to handle the task. I don't go to install any other software for such tasks on my server. While the design progresses I'd propose to move our work into git repositories and eventually phase this wiki pages out anyways. I'd rather like to start out distributed/git right away .. but git gives us only a fine storage layer, for a design process we need some good presentation layer (later when using git and starting the implementation everyones favorite editor serves for that) I have no better ideas yet to solve the presentation problem other than using this wiki (or maybe bouml).
+
+Comments
+--------
+
+Back to link:Lumiera/DesignProcess[]

@@ -1,0 +1,74 @@
+Design Process : IRC Developer Meeting
+======================================
+
+[grid="all"]
+`------------`-----------------------
+*State*         _Final_
+*Date*          _2007-06-15_
+*Proposed by*   link:ct[]
+-------------------------------------
+
+
+IRC Developer Meeting
+---------------------
+Meet regularly on IRC to discuss about short time issues.
+
+
+Description
+~~~~~~~~~~~
+Set up some schedule for a regular developer meeting on IRC. The idea is that we have some time where we can resolve some issues which requires group communication quickly.
+
+Things like:
+
+ * Who works on what, whats going on
+ * Who needs help for something
+ * Make Decisions about pending proposals
+
+We should make small 'to be talked about' list beforehand (on the wiki) and write an also small protocol afterwards about the decisions made.
+
+I'd suggest to do this first Friday of each month at 21:00GMT, thats late evening in Europe and afternoon in USA. Details need to be acknowledged.
+
+
+Tasks
+~~~~~
+
+
+Pros
+~~~~
+
+
+
+Cons
+~~~~
+
+ * Inflexible - People's lives and schedules can easily change within a few months thus making them unavailable for further meetings
+
+
+Alternatives
+~~~~~~~~~~~~
+
+ * We should decide to meet every 4th week. The exact day and time shall be decided 1 week prior to the meeting week to give members time to prepare and resolve scheduling conflicts.
+
+
+Rationale
+~~~~~~~~~
+
+
+Comments
+--------
+
+* A short meeting every week is a must. "meeting" means a fair amount of the developers involved show up and there is a possibility to point at current problems. We could make a Full Meeting in the way proposed by link:MichaelPloujnikov[] additionally. But even one week can be dangerousely long in software developement, esp. when the dev process is so open and distributed.
+
+* Personally, I am OK with Friday 21GMT
+ -- link:Ichthyostega[] [[DateTime(2007-06-17T00:29:54Z)]]
+
+* Friday 21GMT is only good for me starting in two weeks until September. After that it's booked for the Winter. Thursday 21GMT would be better.
+ -- link:MichaelPloujnikov[] [[DateTime(2007-06-17T03:09:36Z)]]
+
+* Also Ok for me
+   -- link:ct[] [[DateTime(2007-06-17T17:20:37Z)]]
+
+* I think this (monthly) meeting should not be too frequent and address more global project directions, having a more frequent meeting rather makes it more unattractive and time consuming for slightly involved people. This does not means that we cant meet more often, but this should be acknowledged between people who work together on some features/subsystems. That would also have the benefit that such small groups are very flexible to meet, even daily on hot phases and able to acknowledge times when all members can attend. And later if timing is not that good only one person of such a subproject/group may attend to the monthly meeting and report/collect information there. Its likely hard enough to get many developers to meet at one time in month (when we have more devs than now :P)
+ -- link:ct[] [[DateTime(2007-06-17T17:20:37Z)]]
+
+Back to link:Lumiera/DesignProcess[]

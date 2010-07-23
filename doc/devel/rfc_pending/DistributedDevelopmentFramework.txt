@@ -1,0 +1,64 @@
+Design Process : Distributed Development Framework
+==================================================
+
+[grid="all"]
+`------------`-----------------------
+*State*         _Final_
+*Date*          _2007-06-07_
+*Proposed by*   link:ct[]
+-------------------------------------
+
+
+Distributed Development Framework
+---------------------------------
+
+Create our own toolset to track issues, tasks, bugs in a distributed manner.
+
+
+Description
+~~~~~~~~~~~
+
+* Use git as backend
+* Things get automatically updated/merged/pushed on a mob branch here
+* Should be self-contained, checkout, ready to use
+
+
+Tasks
+~~~~~
+
+* Serveral (shell?) scripts which ease the use
+
+
+Pros
+~~~~
+
+
+
+Cons
+~~~~
+
+
+
+Alternatives
+~~~~~~~~~~~~
+
+
+
+Rationale
+~~~~~~~~~
+ 
+* To cut the administrative overhead down
+
+
+
+
+
+
+Comments
+--------
+
+Made this 'final', this proposal got accepted and is already in use without much discussion
+ -- link:ct[] [[DateTime(2007-06-27T16:07:13Z)]]
+
+
+Back to link:Lumiera/DesignProcess[]

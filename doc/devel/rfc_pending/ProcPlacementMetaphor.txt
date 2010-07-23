@@ -1,0 +1,139 @@
+[grid="all"]
+`------------`-----------------------
+*State*         _Idea_
+*Date*          _2008-03-06_
+*Proposed by*   link:Ichthyostega[]
+-------------------------------------
+
+
+Placement Metaphor used within the high-level view of Proc-Layer
+----------------------------------------------------------------
+besides the [wiki:self:../ProcBuilder Builder], one of the core ideas of the Proc-Layer (as being currently implemented by Ichthyo) is to utilize ''Placement'' as a single central metaphor for object association, location and configuration within the high-level model. The intention is to prefer ''rules'' over fixed ''values.'' Instead of "having" a property for this and that, we query for information when it is needed.
+
+The proposed use of '''Placement''' within the proc layer spans several, closely related ideas:
+
+ * use the placement as a universal means to stick the "media objects" together and put them on some location in the timeline, with the consequence of a unified and simplified processing.
+ * recognize that various ''location-like'' degrees of freedom actually form a single ''"configuration space"'' with multiple (more than 3) dimensions.
+ * distinguish between ''properties'' of an object and qualities, which are caused by "placing" or "locating" the object in ''configuration space''
+   - ''propetries'' belong to the object, like the blur value, the media source file, the sampling/frame rate of a source
+   - ''location qualities'' exist only because the object is "at" a given location in the graph or space, most notably the start time, the output connection, the layering order, the stereoscopic window depth, the sound pan position, the MIDI instrument
+ * introduce a ''way of placement'' independent of properties and location qualities, describing if the placement ''itself'' is ''absolute, relative or even derived''
+ * open especially the possibility to ''derive'' parts of the placement from the context by searching over connected objects and then up the track tree; this includes the possibility of having rules for resolving unspecified qualities.
+
+
+
+Description
+~~~~~~~~~~~
+The basic idea is to locate ''Media Objects'' of various kinds within a ''configuration space''. Any object can have a lot of different qualities, which may partially depend on one another, and partially may be chosen freely. All these various choices are considered as ''degrees of freedom'' -- and defining a property can be seen as ''placing'' the object to a specific parameter value on one of these dimensions. While this view may be bewildering at first sight, the important observation is that in many cases we don't want to lock down any of those parameters completely to one fixed value. Rather, we just want to ''limit'' some parameters.
+
+To give an example, most editing applications let the user place a video clip at a fixed time and track. They do so by just assigning fixed values, where the track number determines the output and the layering order. While this may seem simple, sound and pragmatic, indeed this puts down way to much information in a much to rigid manner for many common use cases of editing media. More often than not it's not necessary to "nail down" a video clip -- rather, the user wants it to start immediately after the end of another clip, it should be sent to some generic output and it should stay in the layering order above some other clip. But, as the editing system fails to provide the means for expressing such relationships, we are forced to
+work with hard values, resort to a bunch of macro features or even compensate for this lack by investing additional resources in production organisation (the latter is especially true for building up a movie sound track).
+
+On the contrary, using the '''Placement''' metaphor has the implication of switching to a query-driven approach.
+
+ * it gives us one single instrument to express the various kinds of relations
+ * the ''kind of placement'' becomes an internal value of the ''placement'' (as opposed to the object)
+ * some kinds of placement can express rule-like relations in a natural fashion
+ * while there remains only one single mechanism for treating a bunch of features in a unified manner
+ * plugins could provide exotic and advanced kinds of placement, without the need of massively reworking the core.
+
+When interpreting the high-level model and creating the low-level model, Placements need to be ''resolved'',
+resulting in a simplified and completely nailed-down copy of the session contents, which this design calls »the '''Fixture'''«
+
+Media Objects can be placed
+
+ * fixed at a given time
+ * relative to some reference point given by another object (clip, label, timeline origin)
+ * as plugged into a specific output pipe (destination port)
+ * as attached directly to another media object
+ * to a fixed layer number
+ * layered above or below another reference object
+ * fixed to a given pan position in virtual sound space
+ * panned relative to the pan position of another object
+
+
+
+
+Tasks
+^^^^^
+ * currently just the simple standard case is drafted in code.
+ * the mechanism for treating placements within the builder is drafted in code, but needs to be worked out to see the implications more clearly
+ * while this design opens endless possibilities, it is not clear how much of it should be visible through the GUI
+
+
+
+Pros
+^^^^
+ * with just one concept, we get a lot of issues right, which many conventional approaches fail to solve satisfactory
+ * one grippy metaphor instead of several special treatments
+ * includes the simple standard case
+ * unified treatment
+ * modular and extensible
+ * allows much more elaborate handling of media objects then the conventional approach, while both the simple standard case and the elaborate special case are "first class citizens" and completely integrated in all object treatment.
+
+
+
+Cons
+^^^^
+ * difficult to grasp, breaks with some habits
+ * requires a separate resolution step
+ * requires to ''query'' for object properties instead of just looking up a fixed value
+ * forces the GUI to invent means for handling object placement which may go beyond the conventional
+ * can create quite some surprises for the user, especially if he doesn't care to understand the concept up front
+
+
+
+Alternatives
+^^^^^^^^^^^^
+Use the conventional approach
+
+ * media objects are assigned with fixed time positions
+ * they are stored directly within a grid (or tree) of tracks
+ * layering and pan are hard wired additional properties
+ * implement an additional auto-link macro facility to attach sound to video
+ * implement a magnetic snap-to for attaching clips seamless after each other
+ * implement a splicing/sliding/shuffling mode in the gui
+ * provide a output wiring tool in the GUI
+ * provide macro features for this and that....
+ . (hopefully I made clear by now ''why'' I don't want to take the conventional approach)
+
+
+
+Rationale
+~~~~~~~~~
+There is a conventional way of dealing with those properties, which stems of the use of analogue hardware, especially multitrack tape machines. This conventional approach constantly creates practical problems, which could be avoided by using the placement concept. This is due to the fact, that the placement concept follows the natural relations of the involved concepts, while the conventional approach was dictated by technological limitations.
+
+ * the ususal layering based on tracks constantly forces the user to place clips in a unnatural and unrelated fashion and tear apart clips which belong closely together
+ * the conventional approach of having a fixed "pan control" in specialized "audio tracks" constantly hinders the development of more natural and convincing sound mixing. It favors a single sound system (intensity based stereophony) for no good reason.
+ * handling of stereoscopic (3D) video/film is notoriously difficult within the conventional, hard wired approach
+ * building more elaborate sound scapes and sound design is notoriously difficult to maintain, because the user is forced to use hidden "side chains", magic rules and re-build details in external applications, because of the lack of flexible integration of control data alongside with the main data.
+
+The high-level model is close to the problem domain, it should provide means to express the (naturally complex) relationships between media objects. Using an abstract and unified concept is always better then having a bunch of seemingly unrelated features, even if they may be more easy to grasp for beginners. Moreover, the Placement concept deliberately brings in an rule based approach, which well fits into the problem domain. Finally, there is sort-of a visionary aspect involved here: Ichthyo thinks that nowadays, after image and sound are no longer bound to physical media, there is potential for new workflows to be discovered, and the Placement concept could be an extension point for such undertakings.
+
+
+
+
+
+
+Comments
+--------
+
+
+Placement Metaphor
+~~~~~~~~~~~~~~~~~~
+Re:
+"Finally, there is sort-of a visionary aspect involved here: 
+Ichthyo thinks that nowadays, after image and sound are no longer bound to physical media, there is potential for '''new workflows''' to be '''discovered''', 
+and the '''Placement concept''' '''''could be''''' an '''extension point''' for such undertakings."
+
+New workflows will not just be '''discovered''', but they will be able to be '''recorded, analysed, templated, automated, and integrated''' into the full workflow process.
+This will free up a greater proportion of time for the "finishing" processes of projects.
+
+"The Placement concept 'could be' an extension for such undertakings" is very likely to be an understatement as it is this which '''''will be''''' what makes these undertakings possible, because it enables the gathering, use, and decision rules based on these parameters. 
+
+This feature/capability is likely to stamp the Lumiera project as a flagship benchmark in more ways than one, for some time.
+
+ . --link:Tree[][[DateTime(2008-08-23T12:54:00NZ)]].
+
+
+Back to link:Lumiera/DesignProcess[]

@@ -1,0 +1,68 @@
+Design Process : Manifest
+=========================
+
+[grid="all"]
+`------------`-----------------------
+*State*         _Final_
+*Date*          _2007-06-09_
+*Proposed by*   link:ct[]
+-------------------------------------
+
+Manifest
+--------
+
+This Proposal describe the general ideas how the community will work together to create Lumiera.
+
+
+Description
+~~~~~~~~~~~
+Note: I start with my personal opinions, this needs to be refined and worked out.
+
+Please feel free to add new points or comment on things.
+
+
+Background
+~~~~~~~~~~
+
+Cinelerra is quite an old project, there is an original version from heroinewarrior.com and a community fork at cinelerra.org. The original author claims that there was no-one producing useable input despite their proposes while cinelerra was in development, and indeed the cinelerra.org community only feeds back the source released by the original author into their SVN repository and maintains few fixes. There is not much development going on. Some people have created new functionality/features from time to time which have rarely been merged into the main repository and maintained by themselves.
+
+The Cinelerra community is a quite loose group of individuals, there is some fluctation on the developer base and almost all developers have day jobs which restricts their involvement time on the cinelerra project.
+
+Some of these things work quite well, there is an overall friendly relation between the involved people. People who know C++ and have the time to edit the source have satisfactory added their own features. The Mailing-list and the IRC channel is also quite helpful and even new users who ask stupid questions are welcome.
+
+But there are some bad things too. Notably there is not much progress on the community development. Users don't benefit from new improvements which other people have made. There is a endlessly growing list of bugs and feature requests, when someone sends a patch to the ML he has to invest quite some time to maintain it until it might be merged. Finally we don't know what heroine virtual is working on, until we see his next tarball.
+
+
+Solution for Lumiera
+~~~~~~~~~~~~~~~~~~~~
+
+We are in need of a new development model which is acceptable by all involved people and benefits from the way Cinelerra development worked the years before, without maintaining the bad sides again: 
+
+. *Make it easy to contribute*
+Even if it is favorable when we have people which are continously working on Lumiera, it's a fact that people show up, send a few patches and then disappear. The development model should be prepared for this by:
+.. Good documentation
+.. Well defined design and interfaces  
+.. Establish some coding guidelines to make it easy for others maintain code written by others
+.. Prefer known and simple aproaches/coding over bleeding edge and highly complex techniques 
+
+. *Simple access*
+ We will use a fully distributed development model using git. I'll open a anonymous pushable repository which anyone can use to publish his changes.
+
+. *Freedom to do, or not to do*
+The model allows everyone to do as much as he wants. In a free project there is no way to put demands on people. This is good since it's easy to join and is open for anyone. The community might expect some responsibility for people maintaining their patches, but at worst, things which don't match our expected quality and when there is noone who keeps them up, will be removed. Since we are working in a distributed way with each developer maintaining his own repository and merging from other people, there is no easy way that bad code will leap into the project.
+ 
+. *No Rule is better than a Rule which is not engaged*
+We have to agree on some rules to make teamwork possible. These rules should be kept to a minimum required and accepted by all involved people. It is vital that we can trust each other on simple things, like properly formatted code or that patches one proposes to merge don't break the system etc..
+
+. *Legal status must be clear*
+Lumiera is developed under the GPL, every contributor must acknowledge this. Even when we provide anonymous commits, every non trivial patch should be traceable to the person who made it, GPG signatures would be proper here - details need to be worked out.
+
+. *All for Lumiera*
+The goal is to make the best Linux video editor to date, nothing less. Everyone puts in their best abilities. This project is not the place to blame people for things where they are not profound, help each other, make things right instead of blaming someone. Everyone should rate himself at what he can do best on the project.
+
+Comments
+--------
+
+
+
+Back to link:Lumiera/DesignProcess[]

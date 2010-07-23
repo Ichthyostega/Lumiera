@@ -1,0 +1,151 @@
+Design Process : All Plugin Interfaces Are C
+============================================
+
+[grid="all"]
+`------------`-----------------------
+*State*         _Final_
+*Date*          _2007-06-29_
+*Proposed by*   link:ct[]
+-------------------------------------
+
+
+
+
+C interfaces
+------------
+When we offer interfaces for plugging in external code, we export them as C interfaces.
+
+
+
+
+Description
+~~~~~~~~~~~
+Lumiera will be based on a plugin architecture, the core is just a skeleton with very few components. Everything else is loaded at runtime as _plugin_. C++ interfaces are hard to use by other programming languages. Thus I propose to export every interface between these plugins as C interface which can much more easily integrated in other languages.
+
+.Further notes:
+  * dynamic loading of plugins, maybe unloading
+  * proper interface versioning
+
+
+Implementation Proposal
+^^^^^^^^^^^^^^^^^^^^^^^
+  * keep the interface in a C struct (POD).
+  * the interface is versioned
+  * first member is a _size_ which will be initialized by the actual implementation
+  * followed by function pointers defining the interface, see: link:Lumiera/DesignProcess/CCodingStyleGuide[]
+
+  * everything added is considered immutable for this interface version
+  * new functions are added to the end (thus changing size)
+  * function pointers must be implemented, never be NULL
+
+  * a given interface version can be extended (but nothing removed)
+  * code using an interface just needs to check once if the size he get from a supplier is >= what it expects, then the interface suffices its requirements
+  * functions are versioned too, old version might be superseded by newer ones, but the interface still needs to provide backward compatibility functions
+  * when old function are really deprecated, the interface version is bumped and the old functions are removed from the struct
+
+
+Example define the interface structure:
+
+[source,C]
+----
+struct lumiera_plugin_audio_interface_1
+{
+  size_t size;
+
+  // Now the prototypes for the interface
+  AudioSample (*sample_normalize_limit_1)(AudioSample self, int limit);
+  unsigned (*sample_rate_1) (AudioSample self);
+  AudioSample (*sample_set_rate_1) (AudioSample self, unsigned rate);
+
+  // a later version might take a double as limit
+  AudioSample (*sample_normalize_limit_2)(AudioSample self, double limit);
+}
+----
+
+
+Example how a plugin 'thiseffect' initializes the struct:
+
+[source,C]
+----
+struct lumiera_plugin_audio_interface_1 lumiera_plugin_audio_thiseffect_interface =
+{
+  // maybe we want to initialize size somewhat smarter
+  sizeof(struct lumiera_plugin_audio_interface_1),
+
+  // this are the actual functions implemented in 'thiseffect'
+  lumiera_plugin_audio_thiseffect_sample_normalize_limit_1,
+  lumiera_plugin_audio_thiseffect_sample_rate_1,
+  lumiera_plugin_audio_thiseffect_sample_set_rate_1,
+  lumiera_plugin_audio_thiseffect_sample_normalize_limit_2
+}
+----
+
+
+Example how it will be used (schematic code):
+
+[source,C]
+----
+int main()
+{
+  // get the function vector
+  void* thiseffecthandle = dlopen("thiseffect.so");
+  struct lumiera_plugin_audio_interface_1* thiseffect =
+          dlsym(thiseffecthandle, "lumiera_plugin_audio_thiseffect_interface");
+
+  // call a function
+  thiseffect.sample_normalize_limit_1 (somesample, 1);
+}
+----
+
+
+Further notes:
+
+That above gives only a idea, the datastructure needs to be extended with some more information (reference counter?). The first few functions should be common for all interfaces (init, destroy, ...). Opening and initialization will be handled more high level than in the example above. Some macros which make versioning simpler and so on.
+
+
+
+
+Tasks
+^^^^^
+* Write some support macros when we know how to do it
+
+
+Pros
+^^^^
+* Easier usage/extension from other languages.
+
+
+Cons
+^^^^
+* Adds some constraints on possible interfaces, the glue code has to be maintained.
+
+
+Alternatives
+^^^^^^^^^^^^
+* Just only use C++
+* Maybe SWIG?
+* Implement lumiera in C instead C++
+
+
+
+
+Rationale
+~~~~~~~~~
+Not sure yet, maybe someone has a better idea.
+
+
+
+
+Comments
+--------
+After a talk on IRC ichthyo and me agreed on making lumiera a multi language project where each part can be written in the language which will fit it best. Language purists might disagree on such a mix, but I believe the benefits outweigh the drawbacks.
+ -- link:ct[] [[DateTime(2007-07-03T05:51:06Z)]]
+
+C is the only viable choice here. Perhaps some sort of "test bench" could be designed to rigorously test plugins for any problems which may cause Lumiera to become unstable (memory leaks etc).
+ -- link:Deltafire[] [[DateTime(2007-07-03T12:17:09Z)]]
+
+after a talk on irc, we decided to do it this way, further work will be documented in the repository (tiddlywiki/source)
+ -- link:ct[] [[DateTime(2007-07-11T13:10:07Z)]]
+
+''''
+Back to link:Lumiera/DesignProcess[]

@@ -1,0 +1,54 @@
+Design Process: Builder within the Proc-Layer
+=============================================
+
+[grid="all"]
+`------------`-----------------------
+*State*         _Final_
+*Date*          _2008-03-06_
+*Proposed by*   link:Ichthyostega[]
+-------------------------------------
+
+Builder within the Proc-Layer
+-----------------------------
+One of the core ideas of the Proc-Layer (as being implemented since summer '07 by Ichthyo) is the use of the Builder-pattern to achieve a separation between high-level view and low-level view.
+
+Description
+~~~~~~~~~~~
+The Proc-Layer differentiates into a high-level view, which models the properties of the problem domain (manipulating media objects), and a low-level model, which is a network of render nodes and will be optimized for processing efficiency. 
+
+In between sits the Builder, which is triggered on all important/relevant changes to the high-level model. 
+
+The Builder inspects the current state of this high-level model and, driven by the actual objects and their configuration, creates a corresponding representation within the low-level model, which is then hot-swapped into the renderer. 
+
+In the course of this building process, all necessary decisions are taken, disabled features and impossible connections are detected and left out, and all more elaborate or macro-like structures (e.g. meta clips) are broken down into simple building blocks, which can be implemented 1:1 by render nodes in the low-level model.
+
+The configuration of the high-level model is deliberately very open; the builder doesn't impose much limitations, rather he reflects the found configuration down into the low-level model using generic rules. 
+
+Pros
+^^^^
+ * Separation, decoupling
+ * Architectural approach instead of just hacking away...
+
+Cons
+^^^^
+ * Increases the overall complexity
+ * More work to be done to get a minimal system implemented
+
+Rationale
+~~~~~~~~~
+This design was chosen as a direct consequence of the problems encountered in the Cinelerra-2 codebase.
+
+ * Separating this way allows us to take on different viewpoints on what is "good" and "efficient".
+ * In the low-level view simplicity and efficiency of computation is the main criterion.
+ * Whereas in the high-level view a good modeling of the problem domain and maximum flexibility is preferable.
+ * The high-level view is taken out of the critical code path, allowing for advanced and even experimental technologies without endangering the whole application's usability. In the low-level realm, 'speed' is measured in ms, whereas in the high-level domain, speed is rather measured in 100ms.
+ * The separation creates distinct interfaces and allows people with very different skill sets to work in parallel at the various levels of the App.
+
+
+Conclusion
+----------
+This proposal reflects a distinct approach taken right from start. 
+
+Marked 'final' at October.2008 developer meeting
+
+Back to link:Lumiera/DesignProcess[]

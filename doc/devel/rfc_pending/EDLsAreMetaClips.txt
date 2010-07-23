@@ -1,0 +1,89 @@
+EDL's Are Meta-Clips
+====================
+
+[grid="all"]
+`------------`-----------------------
+*State*         _Final_
+*Date*          _2008-07-15_
+*Proposed by*   link:PercivalTiglao[]
+-------------------------------------
+
+EDLs Are Meta-Clips
+-------------------
+One very useful property of EDLs is the ability to contain other EDLs and treat these "inner" EDLs as a unit. The most logical implementation of this is to have EDLs themselves be able to be treated as an Clip-MObject. Recursion is known to be a powerful feature that is relatively simple to understand. By making EDLs recursive, some higher level features can be more easily implemented by taking advantage of this fact.
+
+
+Description
+~~~~~~~~~~~
+
+There is a class of problems that this sort of behavior would help with. 
+
+First, you can organize a movie recursively. For example, you can create a large movie file and organize it into Introduction, Chapter1, Chapter2, Climax, and Conclusion. From there, you can edit Introduction EDL, then the Chapter1 EDL, and so forth. 
+
+From a bottom-up perspective, you can build a collection of Stock Footage (for example, transformation scenes, lip sync frames, or maybe running joke). You can then use the Stock Footage even if it isn't finished, and you can re-edit your stock footage later once you have a better idea of what you want. From there, the edits in these other files will still be in sync in the final render of the big project. Further, each instance of Stock Footage can be personalized by added effects on the timeline. Finally, one can create Stock Footage without being forced to render the file to disk first. 
+
+The usability benefits are obvious.
+
+In all examples, rendering the main EDL implies that all of the "inner EDLs" have to be re-rendered if the inner EDL was modified. That is one of the only requirements.
+
+
+Tasks
+~~~~~
+
+ * Consider usability issues from the current Cinelerra userbase.
+ * Have the EDL Object (or create a proxy class) that extends MObject, Clip, AbstractMO, or some other class that would create this kind of behaviour.
+ * Consider and Detect infinite recursive cases. ie: File1 contains File2. File2 contains File1. This might produce infinite recursion while attempting to render the EDL.
+ * Implement higher level features in the GUI.
+ * Create "Compound Tracks" which contain multiple tracks within them.
+ * Create a GUI that can handle multiple open EDLs at the same time.
+
+
+Pros
+~~~~
+
+ * A low level feature that would greatly ease the creation of high level features.
+ * Multiple applications.
+ * Eases the use and maintenance of Stock Footage.
+
+
+Cons
+~~~~
+ * Possibly would have to rewrite a lot of code at the Engine level??
+ * Caching / Efficiency issues arise.
+   - Handling multiple instances of Lumiera running might be difficult. E.g. File1 contains File2. Both File1 and File2 are open by two different processes.
+   - Or maybe even multiple instances of Lumiera across computers that are connected to the same Drive. File1 is opened in Computer1 and File2 is opened in Computer2.
+ * A corrupted "inner EDL" or Stock Footage would "poison" the whole project.
+
+
+Alternatives
+~~~~~~~~~~~~
+
+ * Pre-Rendering Clips 
+   - Unlike the current proposal, you would be unable to reedit sock footage on the mass scale and reapply it to the whole project.
+   - Moreover, rendering either introduces a generation loss or requires huge storage for raw (uncompressed) video.
+ * Loading the resources of the EDL -- This is an alternative way to load EDLs. This should also be supported. It would be an expected feature from the old Cinelerra2 userbase.
+
+
+
+Comments
+--------
+
+* I got the inspiration of this idea from an email discussion between Rick777 discussing the Saya Video Editor. -- link:PercivalTiglao[] [[DateTime(2008-07-17T13:34:08Z)]]
+* Hi Percival, thanks for writing this proposal. This is indeed a feature which was much discussed in the last months and I consider it to be included almost for sure. We always used the term '''meta-clip''' for this feature, thus I edited the headline (I hope you don't mind).
+* Regarding the implementation, I choose a slightly different approach for the proc layer (actually, it's not yet there, but planned right from start, as I consider this meta-clip feature to be of uttermost importance): I'd prefer to add it at the level of the media source which is used by a clip. The rationale is, that at the level of the clip, there is no (or almost no) different behaviour if a clip pulls from a media file, from an life input or from another EDL. Thus, the implementation would be for a meta-clip to use a special media asset, which represents the output of the other EDL.
+* Basically, the implementation is quite simple and doesn't necessiate much additional code (the power of recursion at work!). Further, I don't see any caching or efficiency problems. As you already pointed out, there are two fundamental problems
+  - We need a cycle detector when building the low-level model. ''But'' we don't need it solely because of meta-clips, we also need such a facility the moment we allow relatively free wiring of input-output connections (which we do plan anyway). My proposal is to flag the respective MObjects as erroneous, which should be visualized accordingly in the GUI
+  - We need a thouroughly complete handling for multichannel video and audio throughout the whole application. We need to get rid of the distinction into "video" and "audio" tracks. ''But'' again, this is not due to meta-clips solely, we should do so anyway because of multichannel spatial audio, 3D video and other advanced media to come. Thus, when every media is multichannel by default, and the builder can sort and handle connections with multiple stream types (which he does, or more correctly, was planned to do right from start), putting a meta-clip which pulls output from N channels with various mixed stream types from another EDL is not really a problem.
+* The other "cons" listed above actually aren't directly connected or due to the existence of meta-clips, thus I wouldn't list them here.
+ - yes, it ''is'' true, concurrent changes to the session files may screw up things. But is this really an issue the Lumiera App should handle at all??
+ - yes, ''any corrupted part'' of the serialized session can mess up things. This is a real threat (see Cinelerra), but not limited to meta-clips. It is especially important, as you can expect users to work for months or years with a single session. Thus the integrity of the session is a value to be protected. That's the rationale why I put up the constraint in the proc layer that all important objects can only be created or re-created by some specialized factory, which in turn has the responsibility of never creating a corrupted object.
+  -- link:Ichthyostega[] [[DateTime(2008-07-27T22:15:01Z)]]
+* I'll think about closures around seralized artefacts, the serialized stream can then be validated, unsupported or corrupted parts can be tagged as erroneous (means they become virtually readonly but they must be preserved) and circumvented. A lot of details have to be worked out here, iirc ichthyo already planned support for 'erroneous' nodes in the datamodell. I also think about some debugable plaintext dump format (maybe XML) then real corrupt things can be fixed manually with some efforts. Otherwise we handle gigabytes of video data and our most valuable resource is the few MB sized session file. I really aim to make that as robust as possible. Adding backups and redundancy there wont hurt.
+       -- link:ct[] [[DateTime(2008-07-30T16:03:04Z)]]
+
+
+Conclusion
+----------
+This Design Entry concerns whether to include such a feature and discusses the general questions when doing so. As we for sure include meta-clip, and so so exactly in the way described here, this proposal is 'final' now.
+
+Back to link:Lumiera/DesignProcess[]

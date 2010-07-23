@@ -1,0 +1,80 @@
+Design Process : Clip Cataloging System 
+=======================================
+
+[grid="all"]
+`------------`-----------------------
+*State*         _Idea_
+*Date*          _2008-07-26_
+*Proposed by*   link:JordanN[]
+-------------------------------------
+
+Clip Cataloging System 
+-----------------------
+
+A system for storing, organizing, and retrieving assets, such as images and videos.
+
+
+Description
+~~~~~~~~~~~
+
+Organizations that work with video, and even home users, tend to have massive collections of stock videos and images that they will need to find and use in their projects. A Linux-based system is needed to help them to organize, tag, and retrieve assets from those collections. Being able to find the clips the user needs and bring them into his timeline, will mean that the user will be able to more rapidly complete his project.
+
+This could be implemented as a separate application, but integrated for use in a Linux-based video workflow suite, including apps like Lumiera and Blender.
+
+
+Tasks
+~~~~~
+
+* Identify ways in which existing groups organize their collections.
+* Determine pros / cons of each method
+* Implement a solution that will be modular enough for other content creation projects to also use
+
+
+Pros
+~~~~
+
+* Faster, more efficient workflow
+
+
+Cons
+~~~~
+Not directly a part of Lumiera. If not implemented separately, could cause undue bloat.
+
+
+Alternatives
+~~~~~~~~~~~~
+Storage-based organization. User must remember where files are, and must store them correctly. Not clip-based, so the entire video must be imported and the desired portion selected.
+
+
+Rationale
+~~~~~~~~~
+
+
+Comments
+--------
+
+* Such is planned, but as you pointed out, this would be a rather standalone application which needs a lot of efforts to be implemented. We don't have the development power to do that now. If someone wants to work on that, please contact me. General idea is to put all kinds of resources (Footage, Clips, Effects, Subprojects, Sounds ....) into a database with then gets tagged/attributed in different ways (implicit things like 'filename', 'type', 'length'; automatic deduceable things like 'Exposure', 'Timecode', ...; And manual tags like: who was on set, location, ....). Then present this all in a *good* GUI (by default just showing filesysten like) but one can define queries on this database and the generated views will then be storeable.
+Back to Lumiera, for now we will likely just use 'normal' file open dialogs until the above system becomes available.
+ -- link:ct[] [[DateTime(2008-07-26T08:31:42Z)]]
+* Yes, it's indeed an important feature we should care for. But cehteh is right, we have more important things to do first. But feel free to target it.
+* Also, we'd need integration with production support systems, for example http://celtx.com/[CELTX].
+* The interface to the Lumiera App would be to populate the asset manager with the required assets
+   -- link:Ichthyostega[] [[DateTime(2008-07-27T22:19:38Z)]]
+
+
+Videos, Audio, Clips and Resources Manager by using plugins for FOSS GPL "Library & Collections Management" programs.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+The video and audio raw material, clips, etc could be managed using code that is already available in project that carry out the same tasks. For example as library managers, or media  (video, audio or CD) collections, Integrated Library Systems (ILS).
+
+Examples of a library management program ;
+
+. Kete - http://kete.net.nz/[]
+. Koha - http://www.koha.org/[]
+. link:GreenStone[] - http://www.greenstone.org/[]
+. Evergreen - http://open-ils.org/faq.php[]
+
+An additional benefit to using "library" managers, is that it can handle interloans, referencing of "other" (people's/organization's) libraries, numbering systems, descriptions, and classifications, thousands to millions of items, search systems, review and comment systems, plus the benefits of open source that allow the expansion of features easily.
+The use of task oriented programs in this way, makes use of established code, that has been developed by experts in their field. Any database system would be useful for managing all these media. But one that has been developed by the people that have been working with cataloging systems for a long time is likely to do well. Plus it can be readily improved, by people who do not have to know the first thing about how to design video editing programs. The program also gets improved because of it own community, which adds features or performance to Lumiera, without even having to "drive" the development.. --link:Tree[][[DateTime(2008-08-27T20:38:00NZ)]].
+
+''''
+Back to link:Lumiera/DesignProcess[]

@@ -1,0 +1,72 @@
+Design Process : Tag Clouds for Resources
+=========================================
+
+[grid="all"]
+`------------`-----------------------
+*State*         _Dropped_
+*Date*          _2008-07-15_
+*Proposed by*   link:PercivalTiglao[]
+-------------------------------------
+
+
+Tag Clouds for Resources
+------------------------
+
+Perhaps a Cloud of tags is unnecessary, but tagging resources similar to Youtube or like Tag Clouds allows for efficient searching and filtering. Anyone who uses the web would know how to use them. If a "Cloud of Tags" approach is used, then organizing the tags by some sort of frequency would be useful. IE: the more a specific tag is used, the larger it gets, or perhaps the more often that tag is searched on.
+
+
+Description
+~~~~~~~~~~~
+
+
+
+Tasks
+~~~~~
+
+
+Pros
+~~~~
+
+* Simple GUI Concept
+* Eases management of resources with Search
+* Orthogonal to other resource management schemes like Folders
+
+
+Cons
+~~~~
+
+
+Alternatives
+~~~~~~~~~~~~
+
+
+
+Rationale
+~~~~~~~~~
+
+
+
+
+
+Comments
+--------
+
+* Note: I was inspired with this idea during an email conversation with Rick777. -- link:PercivalTiglao[] [[DateTime(2008-07-17T14:29:57Z)]]
+
+* Agreed, this is usefull. Also, more advanced config rules can make use of such tags and wiring can depend on them, for example to route your dialogue audio to another global bus than the music or ambiance.
+  -- link:Ichthyostega[] [[DateTime(2008-07-27T22:23:38Z)]]
+
+
+
+Conclusion
+----------
+
+This Design Proposal is 'superseded' by a much more advanced proposal: link:DelectusShotEvaluator[Delectus]
+
+(Dropping it doesn't mean disapproval)
+
+
+''''
+
+
+Back to link:Lumiera/DesignProcess[]

@@ -1,0 +1,76 @@
+[grid="all"]
+`------------`-----------------------
+*State*         _Idea_
+*Date*          _2008-10-10_
+*Proposed by*   link:Ichthyostega[]
+-------------------------------------
+
+
+
+the Marble Mode
+---------------
+''dual working styles -- build up from small pieces of clay or cut away the unneeded parts from a block of marble''
+
+While the usual UI of video editors quite well supports a working style assembling the result from small building blocks by relying on clips (media objects)
+
+
+
+Description
+~~~~~~~~~~~
+This proposal stems from an discussion on the Mailinglist starting with the quote from Walter Murch "Marble and Clay".
+ +
+It is thought to be in support and to complement nasa's [wiki:self:../DelectusShotEvaluator Delectus Shot Evaluator]
+
+The central Idea is to remove the difference between "viewing", i.e. the media viewer and the timeline/Sequence on the other hand. Lumiera is designed to handle multiple Sequences, which can even arbitrarily be embedded in one another (the so called _meta-clips_ ). Basically, Sequences are a comparatively cheap resource, so the idea is to create a new Sequence on-the-fly to do the viewing already based on a complete timeline. It is up to the user finally to promote one of these workbench-like timelines to become "the" master timeline.
+
+To make this usable, in the GUI there should be a slightly different representation which aims at reducing vertical screen usage. Also the track heads could be reduced, e.g. we don't need controls for mixing and panning, the effect stacks could be reduced to a simple mark indicating that there is any effect in a given time range, anything concerned with the fine points of wiring, tweaking effects and controling automation could be left out deliberately. This would allow us to have several independant timelines above/below each other. There could be at least two, maybe even three or four "slots" which could be allocated by a timeline to display. Every time you open a new media, a new Sequence will be created on the fly and a new timeline display of this Sequence will be available, replacing the least recently used timeline display slot. Of course, re-visiting an already opened media will bring back the corresponding timeline in the state you left it, with markers, notes, maybe even trimmings and added clips. Contrast this GUI mode with the usual working mode (the "clay mode"), where  there is _one_ central timeline, probably with tabs to switch between multiple independant Sequences (including the ones which actually are embedded in another timeline as meta-clips)
+
+Basically, each of these timelines has a separate, independant transport, but transports can be locked together, and in locked state you can displace/offset the locked partners relative to one another. Moreover, there would be at least two viewer windows which would be automatically connected to recieve the ouput of the timelines as new timelines are placed in the visible slots to work with. To round things up, we need good keybindings for navigtation, and of course you can liberally mark parts and spill them over to another timeline, either overwriting or shifting existing footage there.
+
+Technically, to support this working mode, _opening a media_ would:
+
+ * create a clip containing the whole media
+ * on-the-fly create new Sequence containing this clip
+ * allocate the next usable display slot and create a timeline display featuring this Sequence there
+
+Initially this new Sequence would be anonymous. But the moment you do the first non-trivial modification there (like adding a label, trimming off parts, adding /deleting tracks), the new Sequence would be promoted to be a named and persisted entity, which from then on could itself serve as a new "pseudo-media". It would appear as an asset on its own (probably in a special sub category), and it could be used as a source to create clips from. This way, you could work with your media, prepare it, augment it even by adding effects like colour correction. And because it's a real Sequence, you could do non-trivial things there right in-place, like adding new sub-tracks, placing other media on them -- and then later on use this prepared media like a real media captured from camera source.
+
+Finally, there should be the possibility to "play" a clip bin, thereby on-the-fly creating a new Sequence filled with all the clips in the order they were arranged in the bin. This would yield a bridge to the more clip-oriented working style and also provide a cheap implementation of the "sparse timeline" or "storyboard mode"
+
+
+
+Tasks
+^^^^^
+ * have several switchable _perspectives_ or working modes in the GUI
+ * associate a _workflow state_ whith each Sequence, to track when an Sequence is just anonymous, gets a named entity, is a clip-bin-tied Sequence, or finally is the master Sequence connected to the global output pipes section.
+ * work out the details of the "display slot allocation"
+ * provide an "opening media" compound function, comprised of
+   * creating the clip covering the whole media (./) (already implemented)
+   * creating a new Sequence and populating it with this clip
+ * make locked-together transports work
+   * in the GUI (transport controls)
+   * for coordinating the corresponding playback/render schedules (playback controller, which is located in the backend according to our current planning)
+
+
+
+
+
+
+
+
+
+Rationale
+^^^^^^^^^
+Lumiera is not pioneering the video editing by computers. We are sort of second-generation (or even third generation) of computer based editing systms. The tradition of conventional, film based editing clearly shows us these two quite different working approaches, which obviously can have quite some impact on the resulting style and rythm of the final movie. The distinguishing property of the working style to be supported by the "marble mode" is that it bypasses the state of creating and organizing clips, but rather directly evolves the footage into the final cut.
+This working style is dual to the common clip based approach, none of them is superior or inferior, thus we should actively support both working styles.
+
+
+
+
+
+
+Comments
+--------
+
+
+Back to link:Lumiera/DesignProcess[]

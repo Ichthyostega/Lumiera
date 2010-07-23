@@ -1,0 +1,72 @@
+[grid="all"]
+`------------`-----------------------
+*State*         _Idea_
+*Date*          _2007-06-07_
+*Proposed by*   link:ct[]
+-------------------------------------
+
+Render Optimizer
+----------------
+Render only parts of a frame which are necessary for the Output;
+Optimize render pipeline for efficiency
+
+
+Description
+~~~~~~~~~~~
+This Idea is just stored here for later reference/implementation.
+
+Effects give some information on which data their output depends (like transitions, temporal dependencies, color/alpha etc) and what the operation costs. Based on this information we optimize the render pipeline, for example if the output is a zoom, then we only need to calculate the parts of a frame which will be viewable in the output (plus some more dependencies, like blur has radius and so on). Further in some cases it might be favorable to reorder some effects for the actual render process, as long it would produce the same output as the original sequence of effects.
+
+
+
+
+
+Tasks
+^^^^^
+
+
+Pros
+^^^^
+
+
+
+Cons
+^^^^
+
+
+
+Alternatives
+^^^^^^^^^^^^
+
+
+
+Rationale
+~~~~~~~~~
+
+
+
+
+
+
+Comments
+--------
+
+Possible classification for video filters:
+ 1. The filter only changes the color of each pixel in the same way
+ 2. The filter deforms the image but leaves the color
+ 3. The filter makes complex things. The only additional hint it can export is the
+ number of referenced past frames, if such a limit exists (sometimes it doesn't).
+
+Filters of type 1 and type 2 never use any previous frames, and are strictly
+one frame in - one frame out. Filters of type 1 can always be swapped with filters of type 2, the output
+is the same. All other filters cannot be swapped in general. 
+
+The good news is, that:
+
+ 1. All commonly used filters are either type 1 or type 2 
+ (type 3 are more the fun effects)
+ 2. Filters of type 2 are colormodel agnostic
+ 3. If a filter of type 1 makes only linear transformations of the color vectors (new_color = matrix * old_color), 
+ the matrix can be transformed from e.g. RGB to YUV, so these filters can always work in both colorspaces directly
+
+Back to link:Lumiera/DesignProcess[]

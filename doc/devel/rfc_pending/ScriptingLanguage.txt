@@ -1,0 +1,86 @@
+[grid="all"]
+`------------`-----------------------
+*State*         _Final_
+*Date*          _2008-07-26_
+*Proposed by*   link:ct[]
+-------------------------------------
+
+
+Scripting Language
+------------------
+Add support for the 'Lua' scripting language in Lumiera.
+
+
+Description
+~~~~~~~~~~~
+We talked since the beginning about that we want to have scripting support within Lumiera. Some weeks ago we did a non formal decision on IRC to bless Lua as 'official' scripting language.
+
+
+Tasks
+^^^^^
+ * Investigate Lua's C bindings and integrate it
+ * It will attach to the link:Plugin/Interface[] System cehteh is working on
+
+
+Pros
+^^^^
+ * Small, Lightweight
+ * Simple Syntax
+ * reasonable fast
+ * incremental GC (predictable performance)
+
+
+Cons
+^^^^
+ * Lua has only a moderate library compared to Python for example, though I don't think this is a problem for our purpose
+
+
+
+Alternatives
+^^^^^^^^^^^^
+There are quite a lot other scripting language which would be suitable. When it makes sense these could be bound later too.
+
+
+Rationale
+~~~~~~~~~
+Wee need scripting yet alone for driving the testsuite soon. Later on scripting might be used to customize workflows and other application internals. Further one might implement a high level / batch interface to lumiera to give it a scripting interface similar to link:AviSynth[].
+
+
+
+
+
+Comments
+--------
+
+To make it more clear: the intention is to have the scripts call into well defined Intefaces / API functions, which are accessed via the plugin system. It is ''not'' intended to have just arbitrary scripts anywhere and everywhere, but -- on the other hand -- all important functionality which can be activated via the GUI should be similarly accessible via the scripting APIs without restrictions. So, as Python and Ruby and Perl are popular scripting language, we'll have the neccessary bindings sooner or later.
+
+Beyond that, it is possible to have some ''extension points'' where configuration is added to the application in a well defined manner by scripts. These scripts provide for some basic customisation and can even add some of the important higher-level features. With respect to these, the idea of this proposal is to have one ''required scripting language'', so scripts in this language are guaranteed to work and may be used to add essential features. I consider Lua to be an almost perfect fit for this purpose.
+  -- link:Ichthyostega[] [[DateTime(2008-07-27T22:36:52Z)]]
+
+Well my intention is to make Lua a real first class binding where any internal interface gets exported and would be useable from scripting, that contradicts your limitation to make is only an extension language; but hold on:
+
+ * this internal bindings should be announced as volatile and do-not-use for anyone external and being 'unsupported'
+ * we can build a 'exported' scripting api on top of that which then will be the official way to control Lumiera from a high level script.
+ * the reason why I want to make it this way is that it will become possible to implement tests, mock-ups and prototypes of some functionality in Lua. I predict that this will help us greatly on development when we progress further. Things which usefulness is doubtful can be prototyped and tried out in a afternoon rather than a week. That makes it possible to 'see' things which otherwise would be rejected because they are not worth a try.
+ * some very custom specializations (studio workflows) would be easier integrateable
+ * of course if this is used wrong it can really damage the health of the system, but I think this is oblivious and very explicit, there are easier ways to damage it, just whack your computer with a sledgehammer for example.
+ * there might some lazyness to keep prototypes in Lua instead reimplement them properly in C/C++, well IMHO that's OK, at some point need will arise to make it proper, if the Lua implementation is insufficient, but that's arguable.
+  -- link:ct[] [[DateTime(2008-07-30T16:22:32Z)]]
+
+I have no problems using Lua. It is proven in the industry, well supported, fast, efficient, high level and designed for this purpose. My only "complaint" is that Lua isn't my pet language (Scheme). And that really isn't a complaint at all.
+  -- link:PercivalTiglao[] [[DateTime(2008-07-28T19:56:25Z)]]
+
+
+I think Python should be reconsidered: it's given that all languages in this class are powerful at what they do, however python has particularly well developed libraries and is used as the scripting language in the main raster (GIMP), vector (Inkscape) and 3D (Blender, link:PythonOgre[], PyCrystal) Apps. Combinations of these Apps are all going to be working in a stack in professional production, so the fact that all the others use python makes a more persuasive case for adoption than any micro-benefit in performance or features that can be found between Python/Ruby/Perl/Lua etc. Python is also used extensively in RedHat and Ubuntu admin scripting where most professional deployments will be. If the goal is to truly get a professional setup, i.e. to get this into professional production houses, then I think having a single language from OS admin the whole way through the stack is a massive gain for the types of users who will be using it. I personally prefer Ruby. Naturally it's your decision to make, all the best, we are looking forward to alphas and betas in the future 
+  -- mytwocents
+ 
+  This proposal is about the ''required'' scripting language, i.e. when accepted, Lua will be a necessary prerequisite for running Lumiera. This doesn't rule out the ''use'' of other scripting languages. We strive at having clean interfaces, thus it shouldn't be much of a problem to create Python bindings. And given the popularity of Python, I guess it won't be long until we have some Python bindings. But ''requiring'' Python would mean having a Python runtime in memory most of the time -- for such Lua obviously is a better choice, because it's much more lightweight and minimalistic.
+    -- link:Ichthyostega[] [[DateTime(2008-09-30T02:17:08Z)]]
+
+
+
+Conclusion
+----------
+Lua is '''accepted''' as the required scripting language by October.2008 dev meeting.
+
+Back to link:Lumiera/DesignProcess[]

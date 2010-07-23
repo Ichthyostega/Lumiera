@@ -1,0 +1,102 @@
+[grid="all"]
+`------------`-----------------------
+*State*         _Draft_
+*Date*          _2008-08-16_
+*Proposed by*   link:Ichthyostega[]
+-------------------------------------
+
+
+High-level model in the Proc-Layer
+----------------------------------
+
+The purpose of this link:DesignProcess[] entry is to collect together informations regarding the design and structure of the high-level model of Lumiera's Proc-Layer. Most of the information presented here is already written down somewhere, in the http://www.lumiera.org/wiki/renderengine.html#SessionOverview[Proc-Layer TiddlyWiki] and in source code comments. This summer, we had quite some discussions regarding meta-clips, a *container* concept and the arrangement of tracks, which further helped to shape the model as presented here.
+
+While the low-level model holds the data used for carrying out the actual media data processing (=rendering), the high-level model is what the user works upon when performing edit operations through the GUI (or script driven in "headless"). Its building blocks and combination rules determine largely what structures can be created within the http://www.lumiera.org/wiki/renderengine.html#Session[Session].
+On the whole, it is a collection of http://www.lumiera.org/wiki/renderengine.html#MObjects[media objects] stuck together and arranged by http://www.lumiera.org/wiki/renderengine.html#Placement[placements].
+
+Basically, the structure of the high-level model is is a very open and flexible one &mdash; every valid connection of the underlying object types is allowed &mdash; but the transformation into a low-level node network for rendering follows certain patterns and only takes into account any objects reachable while processing the session data in accordance to these patterns. Taking into account the parameters and the structure of these objects visited when building, the low-level render node network is configured in detail.
+
+The fundamental metaphor or structural pattern is to create processing *pipes*, which are a linear chain of data processing modules, starting from an source port and providing an exit point. http://www.lumiera.org/wiki/renderengine.html#Pipe[Pipes] are a _concept or pattern,_ they don't exist as objects. Each pipe has an input side and an output side and is in itself something like a Bus treating a single http://www.lumiera.org/wiki/renderengine.html#StreamType[media stream] (but this stream may still have an internal structure, e.g. several channels related to a spatial audio system). Other processing entities like effects and transitions can be placed (attached) at the pipe, resulting them to be appended to form this chain. Optionally, there may be a *wiring plug*, requesting the exit point to be connected to another pipe. When omitted, the wiring will be figured out automatically.
+Thus, when making an connection _to_ a pipe, output data will be sent to the *source port* (input side) of the pipe, wheras when making a connection _from_ a pipe, data from it's exit point will be routed to the destination. Incidentally, the low-level model and the render engine employ _pull-based processing,_ but this is rather of no relevance for the high-level model.
+
+
+image:images/high-level1.png[]
+
+Normally, pipes are limited to a _strictly linear chain_ of data processors ("*effects*") working on a single data stream type, and consequently there is a single *exit point* which may be wired to an destination. As an exception to this rule, you may insert wire tap nodes (probe points), which explicitly may send data to an arbitrary input port; they are never wired automatically. It is possible to create cyclic connections by such arbitrary wiring, which will be detected by the builder and flagged as an error.
+
+While pipes have a rather rigid and limited structure, it is allowed to make several connections to and from any pipe &mdash; even connections requiring an stream type conversion. It is not even necessary to specify ''any'' output destination, because then the wiring will be figured out automatically by searching the context and finally using some general rule. Connecting multiple outputs to the input of another pipe automatically creates a *mixing step* (which optionally can be controlled by a fader). Several pipes may be joined together by a *transition*, which in the general case simultaneously treats N media streams. Of course, the most common case is to combine two streams into one output, thereby also mixing them. Most available transition plugins belong to this category, but, as said, the model isn't limited to this simple case, and moreover it is possible to attach several overlapping transitions covering the same time interval.
+
+Individual Media Objects are attached, located or joined together by *Placements* . A http://www.lumiera.org/wiki/renderengine.html#Placement[Placement] is a handle for a single MObject (implemented as a refcounting smart-ptr) and contains a list of placement specifications, called http://www.lumiera.org/wiki/renderengine.html[LocatingPin]. Adding an placement to the session acts as if creating an _instance_ . (it behaves like a clone in case of multiple placements of the same object). Besides absolute and relative placement, there is also the possibility of a placement to stick directly to another MObject's placement, e.g. for attaching an effect to a clip or to connect an automation data set to an effect. This _stick-to placement_ creates sort of a loose clustering of objects: it will derive the position from the placement it is attached to. Note that while the length and the in/out points are a _property of the MObject_ , it's actual location depends on how it is _placed_ and thus can be maintained quite dynamically. Note further that effects can have an length on their own, thus by using these attachement mechaics, the wiring and configuration within the high-level model can be quite time dependant.
+
+
+image:images/high-level2.png[]
+
+Actually a *clip* is handled as if it was comprised of local pipe(s). In the example shown here, a two-channel clip has three effects attached, plus a wiring plug. Each of those attachments is used only if applicable to the media stream type the respective pipe will process. As the clip has two channels (e.g. video and audio), it will have two *source ports* pulling from the underlying media. Thus, as showed in the drawing to the right, by chaining up any attached effect applicable to the respective stream type defined by the source port, effectively each channel (sub)clip gets its own specifically adapted processing pipe.
+
+
+
+
+Example of an complete Session
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+image:images/high-level3.png[]
+
+The Session contains several independent http://www.lumiera.org/wiki/renderengine.html#EDL[EDL]s plus an output bus section ( *global Pipes* ). Each EDL holds a collection of MObjects placed within a *tree of tracks* . 
+Within Lumiera, tracks are a rather passive means for organizing media objects, but aren't involved into the data processing themselves. The possibility of nesting tracks allows for easy grouping. Like the other objects, tracks are connected together by placements: A track holds the list of placements of its child tracks. Each EDL holds a single placement pointing to the root track. 
+
+As placements have the ability to cooperate and derive any missing placement specifications, this creates a hierarchical structure throughout the session, where parts on any level behave similar if applicable. For example, when a track is anchored to some external entity (label, sync point in sound, etc), all objects placed relatively to this track will adjust and follow automatically. This relation between the track tree and the individual objects is especially important for the wiring, which, if not defined locally within an MObject's placement, is derived by searching up this track tree and utilizing the wiring plug locating pins found there, if applicable. In the default configuration, the placement of an EDL's root track contains a wiring plug for video and another wiring plug for audio. This setup is sufficient for getting every object within this EDL wired up automatically to the correct global output pipe. Moreover, when adding another wiring plug to some sub track, we can intercept and reroute the connections of all objects creating output of this specific stream type within this track and on all child tracks.
+
+Besides routing to a global pipe, wiring plugs can also connect to the source port of an *meta-clip*. In this example session, the outputs of EDL-2 as defined by locating pins in it's root track's placement, are directed to the source ports of a http://www.lumiera.org/wiki/renderengine.html#VirtualClip[meta-clip] placed within EDL-1. Thus, within EDL-1, the contents of EDL-2 appear like a pseudo-media, from which the (meta) clip has been taken. They can be adorned with effects and processed further completely similar to a real clip.
+
+Finally, this example shows an *automation* data set controlling some parameter of an effect contained in one of the global pipes. From the effect's POV, the automation is simply a http://www.lumiera.org/wiki/renderengine.html[ParamProvider], i.e a function yielding a scalar value over time. The automation data set may be implemented as a bézier curve, or by a mathematical function (e.g. sine or fractal pseudo random) or by some captured and interpolated data values. Interestingly, in this example the automation data set has been placed relatively to the meta clip (albeit on another track), thus it will follow and adjust when the latter is moved.
+
+
+
+Tasks
+^^^^^
+Lagely, the objects exist in code, but lots of details are missing
+
+ * Effect-MObojects are currently just a stub
+ * the actual data storage holding the placements within the EDL has to be implemented
+ * has to work out how to implement the ref to a param provider
+ * similar, there is a memory management issue regarding relative placement
+ * the locating pins are just stubs and query logic within placement needs to be implemented
+
+
+Pros
+^^^^
+
+ * very open and modular, allows for creating quite dynamic object behaviour in the sessison
+ * implementation is rather simple, because it relies on a small number of generic building blocks
+
+
+
+Cons
+^^^^
+
+ * very tightly coupled to the general design of the Proc-Layer. Doesn't make much sense without a Builder and a Rules-based configuration
+ * not all semantic constraints are enforced structurally. Rather, it is assumed that the builder will follow certain patterns and ignore non conforming parts
+ * allows to create patterns which go beyond the abilities of current GUI technology. Thus the interface to the GUI layer needs extra care an won't be a simple as it could be with a more conventional approach. Also, the GUI needs to be prepared that objects can move in response to some edit operation.
+
+
+
+Alternatives
+^^^^^^^^^^^^
+_Use the conventional approach:_ hard-wire a _reasonable simple_ structure and code the behaviour of tracks, clips, effects and automation explicitly, providing separate code to deal with each of them. Use the hard-wired assumption that a clip consists of "video and audio". Hack in any advanced features (e.g. support multi-camera takes) as GUI macros. Just don't try to support things like 3D video and spatial audio (anything beyond stereo and 5.1). Instead, add a global "node editor" to make the geeks happy, allowing to wire everything to everything, just static and global of course.
+
+
+
+Rationale
+~~~~~~~~~
+Ichthyo developed this design because the goal was to start out with the level of flexibility we know from Cinelerra, but try to do it considering all consequences right from start. Besides, the observation is that the development of non-mainstream media types like steroscopic (3D) film and really convincing spatial audio (beyond the ubiquitous "panned mono" sound) is hindered not by technological limitations, but by pragmatism preferring the "simple" hard wired approach. 
+
+
+
+
+
+
+Comments
+--------
+
+
+Back to link:Lumiera/DesignProcess[]

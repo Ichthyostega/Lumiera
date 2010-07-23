@@ -1,0 +1,187 @@
+[grid="all"]
+`------------`-----------------------
+*State*         _Idea_
+*Date*          _2010-04-16_
+*Proposed by*   link:Ichthyostega[]
+-------------------------------------
+
+
+Overview Engine Interface(s)
+----------------------------
+At the Engine Interfaces, Lumiera's Backend and Session get connected and work together to produce rendered output.
+This design proposal intends to give an overview of the connection points and facilities involved,
+to define some terms and concepts and to provide a foundation for discussion and working out the APIs in detail.
+
+
+
+Participants
+~~~~~~~~~~~~
+ *Render Process*:: represents an ongoing calculation as a whole
+ *Engine Model*:: encloses the details of the current engine configuration and wiring
+ *Dispatcher*:: translates a render process into the (planned) invocation of individual nodes
+ *Scheduler*:: cares for calculations actually to happen, in the right order and just in time, if at all
+ *Node*:: abstraction of an processing unit, supports planning by the dispatcher, +
+          allows to pull data, thereby driving the actual calculation.
+
+Render Process
+~~~~~~~~~~~~~~
+The render process brackets an ongoing calculation as a whole. It is not to be confused with a operating system
+process or thread; rather it is a point of reference for the relevant entities in the GUI and Proc-Layer in need
+to connect to such a "rendering", and it holds the specific definitions for this calculation series. A render process
+_corresponds to a single data stream_ to be rendered. Thus, when the play controller of some timeline in the model is
+in _playing_ or _paused_ state, typically multiple corresponding render processes exist.
+
+* there is an displayer- or output slot, which got allocated on creation of the process
+* the process disposes calculated data frames "into" this slot
+* the process can be paused/started and stopped (aborted, halted).
+* some processes allow for changing parameters dynamically (e.g. speed, direction)
+* each process has to ensure that the output/display slot gets closed or released finally
+
+.Process parameters
+A process is linked to a single stream data format (a ->  link:StreamTypeSystem.html[stream implementation type]). +
+It is configured with _frame quantisation_ and _timings_, and a _model port_ identifier and _channel selector_.
+
+ quantisation:: translates time values into frame numbers. (In the most general case this is a function, connected to the session)
+ timings:: a definition to translate global model time units in real clock time, including _alignment_ to an external time grid.
+ model port:: a point in the (high level) model where output can be produced. +
+              This might be a global pipe in one of the model's timelines, or it might be a _probe point_.
+ channel:: within the session and high level model, details of the stream implementation are abstracted. Typically,
+           a global pipe (master bus or subgroup) corresponds to a multichannel stream, and each of these channels
+           might be hooked up to an individual render process (we have to work out if that's _always the case_ or just
+           under _some circumstances_)
+
+[NOTE]
+===================
+While certainly the port and channel definition is fixed, unfortunately the quantisation and the timings are'nt.
+The timings may be changed in the middle of an ongoing render process, due to changed playback speed, shuffling
+or requirements forwarded from chase-and-lock synchronisation to an external source. We still need to discuss if
+Lumiera is going to support variable framerates (several media professionals I've talked to were rather positive
+we need to support that -- personally I'm still in doubt we do). Variable framerates force us to determine the frame numbers
+by an integration over time from a start position up to the time position in question. The relevant data to be integrated
+is located in the session / high-level model; probably we'll then create an excerpt of this data, but still the less
+quantisation will be a function of time. Anyway, it is the render processes job to translate all kinds of parameter
+changes into relevant internal API calls to reconfigure the calculation process to fit.
+===================
+
+
+
+Engine Model (low-level Model)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+The low level model is a network of interconnected render nodes. It is created by the build process to embody any
+configuration, setup and further parametrisation derived from the high-level description within the session.
+But the data structure of this node network is _opaque_ and considered an implementation detail. It is not
+intended to be inspected and processed by outward entities (contrast this to the high-level model within the
+session, which provides an extensive discovery API and can be manipulated by model mutating commands). We
+just provide a set of _query and information retrieval functions_ to suit the needs of the calculation process.
+The engine model is _not persisted._
+
+* the engine model is partitioned by a _segmentation_ of the time axis. Individual segments can be hot-swapped.
+* the engine has _exit nodes,_ corresponding to the model ports mentioned above
+* each exit node provides a stream type definition plus quantisation and alignment constraints.
+
+Thus, for any pair (port, time) it is possible to figure out a segment and an exit node to serve this position.
+The segmentation(s) for multiple ports might differ. To allow for effective dispatching, the model should provide
+convenience functions to translate these informations into frame number ranges. The mentioned quantisation and alignment
+constraints stem from the fact that the underlying media source(s) are typically themselves quantised and the timings
+might be manipulated within the processing chain. We might or might not be able to shift the underlying media source
+(it might be a live input or it might be tied to a fixed timecode)
+
+
+
+Processing Node
+~~~~~~~~~~~~~~~
+In this context, a node is a conceptual entity: it is an elementary unit of processing. It might indeed be a single
+invocation of a _processor_ (plugin or similar processing function), or it might be a chain of nodes, a complete
+subtree, it might _represent_ a data source (file, external input or peer in case of distributed rendering), or
+it might stand for a pipeline implemented in hardware. The actual decision about these possibilities happened
+during the build process and can be configured by rules. Information about these decisions is retained only
+insofar it is required for the processing, most of the detailed type information is discarded after the
+wiring and configuration step. As mentioned above, each node serves two distinct purposes, namely to
+assist with the planning and dispatching, and to pull data by performing the calculations.
+
+Nodes can be considered _stateless_ -- pulling a node has no effect outside the invocation context.
+While a node _might_ actually be configured to drive a whole chain or subtree and propagate the pull request
+_within_ this tree or chain internally, the node _never propagates a pull request beyond its realm._ The pull()
+call expects to be provided with all prerequisite data, intermediary and output buffers.
+
+
+Dispatching Step
+~~~~~~~~~~~~~~~~
+The dispatcher translates a render process into sequences of node invocations, which then can be analysed
+further (including planning the invocation of prerequisites) and scheduled. This mapping is assisted by
+the engine model API (to find the right exit node in the right segment), the render process (for quantisation)
+and the involved node's invocation API (to find the prerequisites)
+
+
+Node Invocation API
+~~~~~~~~~~~~~~~~~~~
+As nodes are stateless, they need to be embedded into an invocation context in order to be of any use. +
+The node invocation has two distinct stages and thus the invocation API can be partitioned in two groups
+
+Planning
+^^^^^^^^
+During the planning phase, the dispatcher retrieves various informations necessary to _schedule_ the following
+pull call. These informations include
+
+ * reproducible invocation identifier, usable to label frames for caching
+ * opaque source identifier (owned by the backed) when this node represents a source
+ * prerequisite nodes
+ * index (channel) of the prerequisite's output to be fed as input buffer(s)
+ * number and size of the output buffers required
+ * additional memory required
+ * control data frame(s)
+
+
+Node pull
+^^^^^^^^^
+ * the pull call expects to be provided with all the resources announced during the planning step
+ * moreover, the pull call needs to know (or some way to figure out) the time coordinates
+ * after retrieving automation, the control flow forwards to the actual processing function
+ * there is an result/error code (assuming the scheduler prefers error codes over exceptions)
+
+
+''''
+
+Tasks
+~~~~~
+ * find out if we need to support variable framerate
+ * find out about the exact handling of multichannel data streams
+ * design a buffer descriptor
+ * design a buffer designation scheme
+ * expand on the node identification scheme
+ * clarify how control data frames can be addressed
+
+
+Discussion
+~~~~~~~~~~
+
+Pros/Cons/Alternatives
+^^^^^^^^^^^^^^^^^^^^^^
+Possible variants to consider....
+
+
+Rationale
+^^^^^^^^^
+* allow for optimal resource use and avoid blocking of threads
+* shift away complexity from the engine into the builder, which is by far not so performance critical
+* allow to adjust the actual behaviour of the engine in a wide range, based on actual measurements
+* create a code structure able to support the foreseeable extensions (hardware and distributed rendering)
+  without killing maintainability
+
+
+
+
+
+Comments
+--------
+
+////////////////////
+
+Conclusion
+~~~~~~~~~~
+* *accepted* / *dropped* by MMMMMM.YYYY developer meeting. 
+
+////////////////////
+
+
+Back to link:Lumiera/DesignProcess[]

@@ -1,0 +1,262 @@
+Design Process : Mistakes to avoid
+==================================
+
+[grid="all"]
+`------------`-----------------------
+*State*         _Dropped_
+*Date*          _2008-04-21_
+*Proposed by*   link:rick_777[]
+-------------------------------------
+
+
+Mistakes to avoid in the Lumiera design
+---------------------------------------
+
+
+As a multimedia user and experienced programmer, I've found various flaws present in open source Non Linear Video editors. Here I will list the problems and their proposed (or mandatory) solutions. Please forgive me if some of the ideas here have already been approved, I wrote this text before reaching this wiki.
+
+
+Description
+~~~~~~~~~~~
+
+
+As a multimedia user and experienced programmer, I've found the following flaws present in open source Non Linear Video editors (your mileage may vary) :
+
+. Frequent crashes (which most of the time make you lose your work)
+. Reinventing the wheel for every new project
+. Lack of a user-friendly (and extensible) UI
+. Lack of support for certain video formats or codecs
+. Lack of documentation
+. Lack of cross-platform support
+. Dependency on scripted languages like Python, which make installation a mess 
+
+I will expand on the problems and their proposed (or mandatory) solutions.
+
+
+1. Frequent crashes
+~~~~~~~~~~~~~~~~~~~
+
+[grid="all"]
+`------------`------------------------------------------------------
+*Problem*       Frequent Crashes and unsaved work.
+*Severity*      CRITICAL.
+*Solution*      Isolating the UI from the rendering and data handling (also improves the extensibility)
+*Required*      Yes
+*Workarounds*   Auto-save (however it's not a real solution for the problem) 
+--------------------------------------------------------------------
+
+Working with multimedia (video / audio) editing is a magnet for segfaults (crashes) due to the handling of pointers and compression algorithms. A bug in a plugin (like in Audacity's low-pass filter) will crash and you suddenly realize you lost your work - unless you have an auto-save feature, but that doesn't go to the root of the problem.
+
+My proposal is to move the low-level handling of video to a separate process, which then will do the processing - if it crashes, the UI will only report an error with a dialog (i.e. "the process crashed. Try again?"), but you work will stay safe. I'm not sure of the implementation difficulties that arise from having a shared memory buffer for rendering / processing, but one thing is certain: Whenever you move the cursor or rewind a part of a clip in your resources, the application isn't supposed to crash. Just moving the cursor isn't a time-critical task, so perhaps we can use temporary files for this. It's safer if you're not doing the final rendering.
+
+
+Comments
+^^^^^^^^
+
+I am not sure yet about separating things into processes, generally it is clear that this would be more robust but there are some performance impacts and programming problems (massisve amounts of data in shared memory). But most importantly, when a subprocess gets a job and crashes on it, it won't complete the job, we don't have a choice except gracefully abort it. From a user perspective "It doesn't work!" there is no much difference to a complete crash. Well and yes we aim to make it crash proof rather, crashes a bugs and have to be fixed, point.
+
+Lumiera will never ever loose work, we don't plan to make a project file, autosafe way. Lumiera will keep projects in an internal database like format which consists of a Dumpfile and a contingous written logfile. After a crash/powerdown whatever, this log just gets replayed. The advantages are countless, imagine persistent, selective undo and so on. Any other format (cinelerra2 XML, MXF, ...) will be realized by importer/exporter plugins.
+  -- link:ct[] [[DateTime(2008-04-21T11:27:23Z)]]
+
+ 
+ 
+2. Reinventing the wheel for every new project
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+[grid="all"]
+`------------`------------------------------------------------------
+*Problem*      Various projects compete and reinvent the wheel
+*Severity*     Serious (Slows down development time. A lot)
+*Solution*     Multi-tier design, turn the data handling into a backend and use whatever UI you prefer
+*Required*     Yes. Better now that the project hasn't started
+---------------------------------------------------------------------
+
+Imagine the Linux kernel was tied to the window manager. You would have to stick with KDE or GNOME and you couldn't improve it! Fortunately it's not like that for Linux, but it is for some projects. If you want to change the user interface from QT to wxWidgets or GTK you'll need to rewrite every module.
+
+If you separate the UI from the project handling engine, you can simply fork the project and change the UI to one that supports skinning, without having to do the complicated video-processing stuff.
+
+Separating the processes has an equivalent for web programming, it's called "separation of concerns", or multi-tier design. When you suddenly change the database engine, you don't need to change the whole program, just the database module. Same goes for changing the UI from HTML to XML or Flash. If they're separate modules that only communicate through a clearly defined API.
+
+Example case 1: The Code::Blocks IDE. The compiling engine supports various compilers, and the engine itself is only a plugin for the main editor. If the compiler crashes, you only get an error, but the IDE doesn't crash (unless it's the UI part that's doing something wrong).
+
+Example case 2: Chessmaster. The user interface and speech synthesis stuff only call the chess engine, called "theking.exe". Linux chess games also depend on an engine to do the thinking.
+
+So I suggest to split the project into four separate tiers (not necessarily processes):
+
+. User interface - communicates with the "project" tier, handles the user events and does the calls.
+. The project tier - the main part of the video editor. This one invokes the renderer and decides which effects to apply, saving them as mere parameters for later processing. It also tells you where the current pointer for the track view is. Also calls the rendering engine for the current frame, or for previews of a certain special effect. Note that if this process keeps running even if the GUI crashes, later we can restart the GUI and keep working.
+. The rendering engine - This one must be a separate process for the reasons stated in problem #1. This also gives us the advantage that it can work on the background while we keep working on the project (after all the project is just a set of data stating which effects to apply to which tracks, and which files are used for the tracks) - instead of just having a window saying "Rendering, please wait". Even Adobe Premiere Pro suffered from this problem. This means that if we put enough effort, we can surpass commercial software in certain areas. Note that the rendering engine uses the same API than the project tier, as it works on a copy of the project when doing the final rendering.
+. The video processing wrapper, which has interfaces for different video processing toolkits (DirectX, GStreamer, etc). This also makes the project cross-platform. Tiers 1 and 2 can go in one process, and the 3 and 4 in another (this would make tier 2 a library which defines a C++ Class, and tier 4 would also be a library which is used by the rendering engine). 
+
+By separating the tiers, these can later become their own projects and overall the community would receive great benefits.
+
+
+Comments
+^^^^^^^^
+
+Please look at our design drafts, things will be separated (little different than you describe here). We reuse things which are benefitful (gavl, ffmpeg, ..) but we are also aware that we reinvent the wheel for some things by intention. Lumieras goal is not just to glue some existing libraries together under a new gui, there are already a lot projects trying this way. We rather aim for a ''Professional'' high performance Video editing solution which does some things in a different (maybe more complex) way. We do not use existing frameworks like MLT or gstreamer because we believe that these do not fit our goals (gstreamer will be supported through plugins). We do not produce yet another multimedia framework library (this only happen by coincidence) to be used by others.
+  -- link:ct[] [[DateTime(2008-04-21T11:27:23Z)]]
+
+
+3. Lack of a user-friendly and extensible UI.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+[grid="all"]
+`------------`------------------------------------------------------
+*Problem*       Often, editors provide a very poor and buggy interface. Examples: Jahshaka doesn't even provide tooltips for the various tools, and the documentation is poor; In Cinelerra I've noticed some bugs when using the open dialog, I'd rather have the KDE one, thanks.
+*Severity*      From Annoying to Serious.
+*Solution 1*    Use a library that allows you to use different widget libraries, like wxWidgets.
+*Required*      Recommended, but not obligatory.
+*Solution 2*    Write different user interfaces, but they'd be hard to maintain.
+*Required*,     No.
+---------------------------------------------------------------------
+
+This problem is complicated, we need a good framework for handling the tracks. Perhaps this could become a separate project. Ideas are welcome.
+
+
+Comments
+^^^^^^^^
+
+Joel started working on a GUI recently and making good progress. The UI should finally be quite flexible as it mostly provides a skeletion where plugins render to. We have quite a lot ideas about the UI and user input is welcome. The UI is currently the most separate tier in the design, i'd like to make it a plugin itself which is loaded when lumiera is started in a gui mode, but it is to early to say how exactlly it will be integrated, except that we all agree that GUI is optional and Lumiera can also run headless, script driven.
+  -- link:ct[] [[DateTime(2008-04-21T11:27:23Z)]]
+
+
+4. Lack of support for certain video formats or codecs
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+[grid="all"]
+`------------`------------------------------------------------------
+*Problem*      Lack of support for certain video formats or codecs.
+*Severity*     Critical.
+*Workarounds*  1. Give a help page for the user to do his own conversion, but this is very inelegant, annoying, and a waste of time. 2. Provide conversion on the fly, and keep a separate "preprocessed" copy of the imported clip in a separate directory. This is a nice middle ground, IMHO.
+*Solution*     Use a wrapper library as stated in problem # 2, having a plugin-based design is recommended.
+*Required*     Yes.
+---------------------------------------------------------------------
+
+Some editors like Cinelerra are hardwired into using one format, or have a phobia to certain formats / codecs (i.e. DivX AVI's). If we separate the project editing engine from the video handling libraries, we can use unknown formats by simply providing an input/output plugin. This would allows us to use files encoded with lossless codecs like http://lags.leetcode.net/codec.html[Lagarith]. This also provides forward compatibility for future formats.
+
+
+Comments
+^^^^^^^^
+
+Lumiera is a video editor we don't care (*cough*, not really true) about video formats. Everything which comes In and goes Out is defined in plugins which handle video formats. We currently decided to use 'gavl' because it is a nice small library which does exactly what we want. Later on gstreamer and other such kinds of decoder/encoder/processing-pipe libs will be realized.
+  -- link:ct[] [[DateTime(2008-04-21T11:27:23Z)]]
+
+
+5. Lack of documentation
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+[grid="all"]
+`------------`------------------------------------------------------
+*Problem*      Some video editors have very poor documentation (and that's an understatement *cough* Jahshaka *cough* )
+*Severity*     Critical.
+*Solution*     Have a team for the documentation.
+*Required*     Yes.
+---------------------------------------------------------------------
+
+Nuff said.
+
+
+Comments
+^^^^^^^^
+
+Quote from Ohloh.net: (http://www.ohloh.net/projects/lumiera)[]
+
+------------------------------------------------------------
+Extremely well-commented source code
+
+Lumiera is written mostly in C++.
+Across all C++ projects on Ohloh, 23% of all source code lines are comments. For Lumiera, this figure is 46%.
+This very impressive number of comments puts Lumiera among the best 10% of all C++ projects on Ohloh. 
+------------------------------------------------------------
+
+
+Nuff saied... Oh well, about user docs we like to get that impressive ratings there too, any helpers?
+  -- link:ct[] [[DateTime(2008-04-21T11:27:23Z)]]
+
+
+6. Lack of cross-platform support
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+[grid="all"]
+`------------`------------------------------------------------------
+*Problem*      Where's my Windows version?
+*Severity*     Blocker
+*Solution*     Use a cross-platform toolkit for the UI.
+*Required*     Depends, do you plan to make it Cross-Platform?
+--------------------------------------------------------------------
+
+A good example for this is the Code::Blocks IDE, which was thought of being cross-platform from the beginning. Curiously, at first the project was Windows-only, and its only F/OSS alternative was Dev-C++ from Bloodshed (eew). Otherwise you'd have to stick with proprietary applications like Visual C++.
+
+In Linux there were various IDE's, but they were Linux-only. Since Code::Blocks uses a cross-platform toolkit (wxWidgets), it can be compiled either in Windows and Linux. There are RPM's for various distros now that the first public version (8.02) got out. I've heard that QT is also cross-platform, but I haven't tried it yet.
+
+Of course - if you separate the UI from the project engine, someone could make his own Windows UI for the project. Now what needs to be taken care of, is that the rendering libraries are cross-platform too.
+
+
+Comments
+^^^^^^^^
+
+We refuse to make it cross platform intentionally. Most things are written portable, POSIX compatible, some might need platform specific fixes. But our target is primary Linux (because thats what we use) secondary any other Free OS (hopefully we find some testers/maintainers for that). Lumiera ''might'' run on OSX and patches will be accepted, but it is not a free platform so we don't care by ourself. Windows due its diffrent system interfaces will be hard to port, if someone wants to do that, have fun, we will accept patches to, but we do not support it in *any* way by ourself.
+  -- link:ct[] [[DateTime(2008-04-21T11:27:23Z)]]
+
+
+7. Dependency on scripted languages like Python, which make installation a mess
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+[grid="all"]
+`------------`------------------------------------------------------
+*Problem*      Installation can be a mess if we depend on scripted languages.
+*Severity*     Annoying, the end user might just conform with another project that "just works".
+*Solution*     Make it in C++ or other easily-compilable language.
+*Required*     VERY recommended.
+---------------------------------------------------------------------
+
+I've had to install several packages for my distro (whose repository is not as large as others like Ubuntu's) from source. Some of them depend on very esoteric scripted languages which I also need to install. And then the libraries, etc. My suggestion is to free the end user from this burden, and work on a common language, like C++.
+
+
+Comments
+^^^^^^^^
+
+At some point a scripting language ''will'' be required, yet to drive the testsuite, make headless rendering work and so on. We need to provide installation instructions and/or even bundle this language with Lumiera. This will likely become a small embedded language like Lua or some kind of forth (or maybe some scheme?) it should not depend on strange modules which are not part of the core scripting language distribution (or we shall provide them too), needs to be worked out.
+  -- link:ct[] [[DateTime(2008-04-21T11:27:23Z)]]
+
+
+
+Author's comments
+^^^^^^^^^^^^^^^^^
+
+Some of the measures stated in this document are optional, but separating the processes for the rendering engine, editor and User Interface are the optimal solution and required to avoid common problems.
+
+
+Discussion
+----------
+
+Mostly we agree with the general statements in this Design Entry. But there are some points which don't stand the test of a detailed technical discussion. For example, you simply can't state it's a 'mistake' not to write code which similarly runs on windows and *nix. Well. You could try to write it in Java. See my point? While today it's quite feasible to write office stuff or banking applications in a cross-platform manner, a video editor still is a different kind of a beast.
+ 
+A similar argumentation holds true for the question, wether or not to use separate processes and IPC. While it certainly is a good idea to have the X server or a database running in a separate process, the situation is really quite different for editing video. Hopefully it's clear why. 
+
+Could you please rework this Design Entry in a way that we can finalize (accept) it?
+
+* Please remove the section about windows
+* Please separate out things needing technical discussion and are not just "mistakes", thus retaining only the big picture statements (on which we all agree)
+* How to secure the application against crashes
+* If it is viable/desirable to run the gui in a separate process really needs in-depth technical discussion (create a new Design Entry for this)
+* How to deal with the dependencies problem in combination with plugins/extensions and script languages
+  -- link:Ichthyostega[] [[DateTime(2008-10-05T01:51:50Z)]]
+
+
+Conclusion
+----------
+The October.2008 dev meeting decided to 'drop' this design proposal as is.
+
+Basically, this text just tells us "to make Lumiera good", and especially it contains a mixture of topics
+
+* We fully agree to 80% of the statements made there, but we think those statements are so very basic and self-evident as to be considered off-topic here. We are aware of the recurring problems with open source video editing. That's why we are here.
+* The proposal draws conclusions on two technically substantial points, at which we don't agree. And it fails to provide sufficient (technically sound) arguments to prove these statements.
+
+While it is certainly 'desirable' to be cross-platform as much as possible and especially '''target Microsoft Windows''', we don't see much possibilities with today's mainstream technology to build an application which is as technologically demanding as a video editor is. We would end up developing two or even three sister applications, or we are forced to sacrifice performance for portability. When put up to face such options, we have a clear preference to concentrate on a really free and open platform.
+
+While it is certainly 'desirable' to make the application as robust as possible, we don't see how '''using multiple separate processes''' could help us with this goal ''without creating major scalability or performance problems'' due to the use of shared memory. And, yet more important: we don't share the basic assumption made in the proposal, namely that video processing is inherently dangerous. We think the basic algorithms involved are sufficiently well-known and understandable to implement them in a sound manner.
+
+''''
+Back to link:Lumiera/DesignProcess[]

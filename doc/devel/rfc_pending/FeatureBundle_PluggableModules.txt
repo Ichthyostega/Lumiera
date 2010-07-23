@@ -1,0 +1,169 @@
+[grid="all"]
+`------------`-----------------------
+*State*         _Idea_
+*Date*          _2008-09-03_
+*Proposed by*   link:Ichthyostega[]
+-------------------------------------
+
+
+
+Describe pluggable modules by a "Feature Bundle"
+------------------------------------------------
+This proposal builds upon Cehteh's Plugin Loader, which is the fundamental mechanism for integrating variable parts into the application. 
+
+It targets the special situation when several layers have to cooperate in order to provide some pluggable functionality. The most prominent example are the "effects plugins" visible for the user. Because, in order to provide such an effect
+
+ * the engine needs a processing function
+ * the builder needs description data
+ * the gui may need a custom control plugin
+ * and all together need a deployment descriptor detailing how they are related.
+ 
+
+
+
+Description
+~~~~~~~~~~~
+The Application has a fixed number of *Extension Points*. Lumiera deliberately
+by design does _not build upon a component architecture_ -- which means that plugins
+can not themselves create new extension points and mechanisms. New extension points
+are created by the developers solely, by changing the code base. Each extension
+point can be addressed by a fixed textual ID, e.g. "Effect", "Transition", ....
+
+Now, to provide a pluggable extension for such an Extension Point, we use a *Feature Bundle*
+Such a Feature Bundle is comprised of
+
+ * a Deployment Descriptor (provided as "structured data" -- TODO: define the actual data format)
+ * the corresponding resources mentioned by this Deployment Descriptor
+ 
+The Deployment Descriptor contains
+
+ * Metadata describing the Feature Bundle
+   - ID of the Extension point
+   - ID of the Bundle (textual ID)
+   - ID of origin / provider (could be a domain name)
+   - Category (textual, tree-like)
+   - Version number (major, minor)
+   - required Extension point version number (or Lumiera version no.?)
+   - Author name (utf8)
+   - Support email (utf8)
+   - textual description in a single line (utf8)
+ * A List of Resources, each with:
+   - ResourceID
+   - SubID
+   - Type of Resource, which may be
+     . Plugin
+     . Properties
+     . Script
+     . ...?
+
+   - one of:
+     . the Resource provided inline in suitable quoted form (for textual resources only)
+     . an URL or path or similar locator for accessing the Resource (TODO: define)
+   - Additional Metadata depending on Type of Resource (e.g. the language of a script)
+
+   
+   
+We do _not_ provide a meta-language for defining requirements of an Extension Point,
+rather, each extension point has hard wired requirements for a Feature Bundle targeted
+at this extension point. There is an API which allows code within lumiera to access
+the data found in the Feature Bundle's Deployment Descriptor. Using this API, the code
+operating and utilizing the Extension Point has to check if a given feature bundle is
+usable.
+
+It is assumed that these Feature Bundles are created / maintained by a third party,
+which we call a *Packager*. This packager may use other resources from different
+sources and assemble them as a Feature Bundle loadable by Lumiera. Of course, Lumiera
+will come with some basic Feature Bundles (e.g. for colour correction, sound panning,....)
+which are maintained by the core dev team. (please don't confuse the "packager" mentioned here
+with the packager creating RPMs or DEBs or tarballs for installation in a specific distro).
+Additionally, we may allow for the auto-generation of Feature Bundles for some simple cases,
+if feasible (e.g. for LADSPA plugins).
+
+
+The individual resources
+^^^^^^^^^^^^^^^^^^^^^^^^
+In most cases, the resources referred by a Feature Bundle will be Lumiera Plugins. Which means,
+there is an Interface (with version number), which can be used by the code within lumiera for
+accessing the functionality. Besides, we allow for a number of further plugin architectures
+which can be loaded by specialized loader code found in the core application. E.g. Lumiera
+will probably provide a LADSPA host and a GStreamer host. If such an adapter is applicable
+depends on the specific Extension point.
+
+The ResourceID is the identifyer by which an Extension point tries to find required resources.
+For example, the Extension Point "Effect" will try to find an ResourceID called "ProcFunction".
+There may be several Entries for the same ResourceID, but with distinct SubID. This can be used
+to provide several implementations for different platforms. It is up to the individual Extension
+Pont to impose additional semantic requirements to this SubID datafield. (Which means: define
+it as we go). Similarly, it is up to the code driving the individual Extension point to define
+when a Feature Bundle is fully usable, partially usable or to be rejected. For example, an
+"Effect" Feature Bundle may be partially usable, even if we can't load any "ProcFunction" for
+the current platform, but it will be unusable (rejected) if the proc layer can't access the
+properties describing the media stream type this effect is supposed to handle.
+
+Besides binary plugins, other types of resources include:
+ * a set of properties (key/value pairs)
+ * a script, which is executed by the core code using the Extension Point and which in turn
+   may access certain interfaces provided by the core for "doing things"
+
+Probably there will be some discovery mechanism for finding (new) Feature Bundles similar
+to what we are planning for the bare plugins. It would be a good idea to store the metadata
+of Feature Bundles in the same manner as we plan to store the metadata of bare plugins in
+a plugin registry. 
+
+
+
+
+Tasks
+^^^^^
+
+
+Pros
+^^^^
+
+
+
+Cons
+^^^^
+
+
+
+Alternatives
+^^^^^^^^^^^^
+Use or adapt one of the existing component systems or invent a new one.
+
+
+
+Rationale
+~~~~~~~~~
+The purpose of this framework is to decouple the core application code from the details of 
+accessing external functionality, while providing a clean implementation with a basic set of
+sanity checks. Moreover, it allows us to create an unique internal description for each
+loaded module, and this description data e.g. is what is stored as an "Asset" into the
+user session.
+
+Today it is well understood what is necessary to make a real component architecture work.
+This design proposal deliberately avoids to create a component architecture and confines
+itself to the bare minimum needed to avoid the common maintenance problems. As a guideline,
+for each flexibility available to the user or packager, we should provide clearly specified
+bounds which can be checked and enforced automatically. Because our main goal isn't to
+create a new platform, framework or programming language, it is sufficient to allow the
+user to _customize_ things, while structural and systematic changes can be done by the
+lumiera developers only.
+
+
+
+
+
+
+Comments
+--------
+
+From a fast reading, I like this, some things might get refined. For example I'd strongly suggest to
+make the Deployment Descriptor itself an Interface which is offered by a plugin, all data will then
+be queried by functions on this interface, not by some 'dataformat'. Also Resource ID's and a lot
+other metadata can be boiled down to interfaces: names, versions, uuid of these instead reiventing
+another system for storing metadata. My Idea is to make the link:Plugin/Interface[] system self-describing
+this will also be used to bootstrap a session on itself (by the serializer which is tightly integrated)
+  -- link:ct[] [[DateTime(2008-09-04T09:28:37Z)]] 2008-09-04 09:28:37 
+
+Back to link:Lumiera/DesignProcess[]

@@ -1,0 +1,136 @@
+Design Process : Application Structure
+======================================
+
+[grid="all"]]
+`------------`----------------------
+*State* 	_Dropped_
+*Date*		_2008-11-05_
+*Proposed by*	link:ct[]
+------------------------------------
+
+Application Structure
+---------------------
+Here I am going to propose some more refined structure of the application and its components.
+
+
+Description
+~~~~~~~~~~~
+So far we came up with a simplified BACKEND/PROC/GUI structure where each of this entities defines its own sub subcomponents. We agreed to glue that all together with some portable versioned interfaces system, but details where not laid out yet. At the time of this writing the interface system and plugin loader are reasonable finished to be usable (some small refinements to do). We recently discussed some details on IRC on how to engage this without a definitive decision. The topic of this proposal is to make a detailed description towards how the application components being glued together.
+
+In the discussion mentioned above we concluded that we want a 'lumiera' binary which in turn loads the optional parts as plugins. There was no consent what this parts are actually be, except that the GUI should be optional for headless operation. I suggested to make as much as possible pluginable to make it easier to validate our interfaces and try different things out.
+
+Now I introduce 'lumiera' here, this will become a new component in ./src/lumiera being the driver application for bootstraping all the rest:
+
+Then our application structure looks somewhat like (please refine):
+
+ * the 'lumiera' loader
+   - commandline handling
+   - interface & plugin system
+   - session manager core
+   - configuration system
+   - lua scripting
+ * backend
+  - file and io handling
+  - caches
+  - streams
+  - threads
+  - scheduler
+ * proc
+  - asset management
+  - config rules system
+  - builder
+  - render graph management
+ * gui
+  - timelines
+  - viewers
+  - resources
+  - preferences
+  - ...
+
+Furthermore the interface&plugin system is flexible enough to provide things independently of their origin (if it is build in or a plugin/dynamic library). So deployment (where to link these things) is secondary.
+
+'lumiera' will then be the executable the user starts up, what exactly gets initialized and booted up is then matter
+of configuration and commmandline options (and maybe lua scripting?).
+
+
+
+Tasks
+^^^^^
+
+ * create the 'lumiera' directory
+  - setup the build system
+  - move config, plugin and interfaces therein
+  - lua support can be done later
+ * write the main() part of the application
+  - start config system
+  - parse commandline opts
+ * librificate all other components (backend, proc gui)
+  - define their lumiera interfaces
+  - decide if they shall be statically linked, becoming shared libs or plugins
+
+This are rather distributed tasks, after the 'lumiera' being set up, all other components have to be adapted to be loadable from it.
+
+
+Pros
+^^^^
+
+ * flexible plugin based architecture
+  - later: loads only things which are necessary for a given task
+ * very fast startup
+ * things which cant be used on a given environment can be left out (no gui on a headless system, no $DISPLAY set)
+ * inter dependencies between interfaces and plugins are automatically tracked.
+
+
+Cons
+^^^^
+
+Ichthyo raised concerns that this kind of flexibility might attract other people to write things which are not in our intention and break future design and compatibility. We need to carefully document and define interfaces that people don't abuse those!
+
+
+
+Alternatives
+^^^^^^^^^^^^
+
+We discussed the startup/main() through the GUI as it is currently done, it would be also possible to produce some more
+executables (lumigui, luminode, lumiserver, ....). But I think we agreed that a common loader is the best way to go.
+
+
+Rationale
+~~~~~~~~~
+
+I just think this is the best way to ensure a enduring design even for future changes we can not forsee yet.
+
+
+
+
+
+Comments
+--------
+We discussed this issue lately on IRC and I got the feeling we pretty much agreed on it. 
+
+ * we don't want to build a bunch of specialized executables, rather we build one core app which pulls up optional parts after parsing the config
+ * we change the GUI to be loaded via the module/interfaces system
+
+From reading the above text, this proposal seems to capture that. But I am somewhat unsure if the purpose of this proposal isn't rather to load just a micro kernel and the pull up components according to configuration. Because I wouldn't accept such an architecture, and I clearly stated so right at the beginning of our project. I accepted a very flexible and language neutral plugin system on the condition the core remains in control, stays ''reasonable'' monolithic and componentization doesn't handicap us in creating an architecture based on abstractions and exploiting the proven design patterns.
+
+It has that flexibility, yes. But that means not that we have to abuse it in any way. The main() there and thus the bootstrap of the application is
+under our tight control, if we want to reject scriptable/highly configurable bootstrapping there then we can just do so. Thats more a social than a
+technical decision. I personally don't like if a design is 'nannying' and puts too much constraints into unforeseen areas. If the computer can do some
+task better than we, it shall do it. This still means that I want to stay very much in control, it should only do some tedious, error-prone managing
+tasks for me. For example the interfaces system already tracks inter-dependencies between plugins and interfaces automatically, without the programmer
+needs to care or define anything. The interface system gets it right and we wont need to care for the order initialization. I added that because I
+consider such as absolutely important for plugins which might be supplied by third parties where we have no control over. But I now realized that we can
+nicely use that for our own internal things too. Imo thats some very valuable service.
+  -- link:ct[] [[DateTime(2008-11-08T06:26:18Z)]]
+
+Some further minor details: We didn't finish the discussion about namespaces on the last meeting. (I know I still have to write up a proposal showing the two  or three alternatives I see regarding namespace organisation). But probably, "lumiera::" will be our top level interface namespace and then probably the lumiera directory will be taken by that. I see no problem also putting some startup facilities in there, but generally, it shouldn't contain implementation code, only headers and abstract classes. If that's going to become a problem, we should consider to use a separate package for the startup, e.g. "src/boot".
+
+Another point is, you need not write a main, because there is already one. Please have a look at it, especially with regards to the [wiki:self:../GlobalInitialization global initialisation]. Further, last year I've investigated boost::program_options and think it's fine. I use it for my test class runner since then. I don't think there is any reason why we should bother with parsing options (most config is pulled up from the session). I don't think we get much program options, maybe something to set a GUI skin. Moreover, I've written last year a thin wrapper around the commandline and integrated it with the boost options parser such that user code can receive the remaining options as a vector of std::strings. Please have a look at http://git.lumiera.org/gitweb?p=LUMIERA;a=blob;f=tests/common/mainsuite.cpp;h=455bfd98effd0b7dbe6597f712a1bdfa35232308;hb=HEAD[the test class runner main] for an usage example. I really want our Lumiera main to be clean and expressive in the way showed there.
+Probably the most important part of the startup is pulling up the session core; because of that I think most of the startup process falls into the realm of the Proc-Layer. Within Proc, I don't want any significant string manipulations done with C-strings and I don't want raw arrays when we can use std::vector.
+ -- link:Ichthyostega[] [[DateTime(2008-11-06T19:28:13Z)]]
+
+I 'dropped' this now because we do it somewhat differently now and I dont want to document this here :P
+ -- link:ct[] [[DateTime(2009-02-03T17:28:28Z)]]
+
+''''
+Back to link:Lumiera/DesignProcess[]

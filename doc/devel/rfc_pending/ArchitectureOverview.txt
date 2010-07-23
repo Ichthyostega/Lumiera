@@ -1,0 +1,51 @@
+Architecure Overview
+====================
+
+[grid="all"]
+`------------`-----------------------
+*State*         _Final_
+*Date*          _2008-03-06_
+*Proposed by*   link:Ichthyostega[]
+-------------------------------------
+
+Architecure Overview
+--------------------
+This proposal intends to capture envisioned Architecture of the Application.
+
+See the SVG drawing http://www.lumiera.org/gitweb?p=LUMIERA;a=blob_plain;f=doc/devel/draw/Lumi.Architecture-1.svg;hb=HEAD[Overview of Lumiera Architecture)] maintained in GIT
+
+
+Description
+~~~~~~~~~~~
+ * the Application has three Layers: Backend, Proc and GUI
+ * the Application shall be completely functional without GUI (script-driven)
+ * all IO, media data fetching, processing and bookkeeping falls within the realm of the Backend
+ * all media object manipulation, deciding and configuration is the Proc Layer's job
+ * extensible by plugins on all levels, highly configurable, but not totally componentized (micro kernel) architecture
+ * strong separation between high-level and low-level areas of the Application
+ * the user/GUI manipulates a high-level model whereas rendering is based on a corresponding low-level model
+ * stored Session (state) is comprised of high-level model, a collection of Assets and accompaning configuration
+ * (possibly) several storage backends, abstracted out by a common interface
+
+
+Comments
+--------
+
+ * Alcarinque made http://telniratha.atspace.com/ui_architecture.jpg[some drafts]  for the ui. Here is the http://telniratha.atspace.com/ui_architecture.odg[oodraw document]. This is not a technical draft at all, it is just an idea.
+
+ * Wouldn't the Config Rules (embedded Prolog) also interact with the High Level Model? Or would that be expanding its scope too much? I imagine default/user configurable settings such as explicit !LocatingPin placement vs Relative !LocatingPin placement. For example, in an AMV, or any music video actually, the positioning of clips should be always relative against the audio/music. However, if you are editing a scene in a movie, you want the next scene to appear relative to the last scene played. In the first, you want to keep the scenes always synced up against the audio, while in the latter, you just want the scenes to appear one after another.
+ --- link:PercivalTiglao[] [[DateTime(2008-07-16T05:32:45Z)]]
+
+ * Yes, indeed, that is what I am planning. The drawing above just doesn't show every connection. The interaction between high-level model and rules system mostly goes via the "session defaults", which are facts ''and'' rules. Thus, in your example, the user would just use the "default placement". My Intention was to use '''tags''' to quite some extent. The user would be able to tag the source footage, and then rules can kick in when a certain tag applies.
+   Incidentally, integrating prolog is immediately on the agenda, because first we want to flesh out the very basic system and get to work basic rendering. Until then, I use a "mock" implementation of the query/rules system, which just returns some hard wired defaults.
+ -- link:Ichthyostega[] [[DateTime(2008-09-04T15:38:21Z)]]
+
+
+
+Conclusion
+----------
+Accepted. The drawing was moved into the GIT tree, hopefully it will be maintained in future.
+
+
+
+Back to link:Lumiera/DesignProcess[]

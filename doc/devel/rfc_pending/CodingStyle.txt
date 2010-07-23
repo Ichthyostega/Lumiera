@@ -1,0 +1,93 @@
+Design Process : Coding Style
+=============================
+
+[grid="all"]
+`------------`-----------------------
+*State*         _Final_
+*Date*          _2007-06-27_
+*Proposed by*   link:ct[]
+-------------------------------------
+
+
+
+
+CodingStyle
+-----------
+Define coding style standard which we will use.
+
+
+
+
+Description
+~~~~~~~~~~~
+We need to agree on some coding style, imo constistency is the most important part with this, no matter which style we use.
+
+See http://en.wikipedia.org/wiki/Indent_style[]
+
+.Notes:
+* no tabs, use spaces!
+
+.Proposed:
+* K&R by ichthyo
+* compact and well known
+* GNU by cehteh
+* imo the best readability (albeit little strange)
+* cinelerra might apply as official GNU project someday
+
+
+Another question: __how to write identifiers?__
+
+.Proposed:
+* ichthyo: use link:CamelCase[], start ClassNames upper case and variableNames in lower case. Make all namespaces and package (dir) names completely lowercase
+
+
+
+
+Tasks
+^^^^^
+* Bouml config to generate this style
+* footers (or headers) to configure common editors to use this style by default
+
+
+Pros
+^^^^
+
+
+Cons
+^^^^
+
+
+Alternatives
+^^^^^^^^^^^^
+
+
+
+
+Rationale
+~~~~~~~~~
+
+
+
+
+Conclusion
+----------
+we agreed on GNU style
+ -- link:ct[] [[DateTime(2007-07-03T04:04:22Z)]]
+
+
+
+
+Comments
+--------
+Since link:ct[] called spaces instead of tabs first, we should stick to that. I think all other reasons will lead us to nowhere!
+
+Although I'm used to a BSD/KNF-like coding style I will try the GNU one. After all, the wikipedia page mentions no disadvantages of that style :)
+
+
+I just proposed K&R because it is widely accepted. Personally, I was never very fond of K&R style, I always prefered putting opening braces
+to the left. I never used GNU style until now, but it looks somewhat apealing to me. (btw, ECLIPSE comes with presets for all this styles :-P ).
+Anyhow, I can adapt to most any style. The only thing I really dislike is using tabs (with the exeption of database DDLs and CSound files, where
+tab are actually helpful) :)
+
+''''
+Back to link:Lumiera/DesignProcess[]

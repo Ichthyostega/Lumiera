@@ -1,0 +1,74 @@
+[grid="all"]
+`------------`-----------------------
+*State*         _Parked_
+*Date*          _2008-04-09_
+*Proposed by*   link:ct[]
+-------------------------------------
+
+
+Use Git Submodules to organize the project
+------------------------------------------
+We planned this long time ago when the project started, this proposal is for to work out the details and define a turnover point in time.
+
+
+Description
+~~~~~~~~~~~
+There is a git-filter-branch command which helps in doing the dirty work isolating commits which touch certain dirs. This can moderately easily be used to create a new repository with a rewritten history containing only sub parts of the original history.
+
+The basic idea is that one developer who wants to works on a certain subsystem clones the 'official' master and then updates and tracks only the development state of a certain subsystem.
+
+
+Tasks
+^^^^^
+ * what shall be in the master repository?
+  * boilerplate files, license, build infrastructure
+  * the _admin_ dir with supplemental scripts
+ * define which submodules shall be defined?
+  * _doc/devel_
+  * _doc/user_
+  * _wiki_
+  * _uml_
+  * _src/backend_
+  * _src/proc_
+  * _src/gui_
+  * _src/lib_
+
+Not yet decided:
+ * _tests_ move them into the _src/$subsystem_ as symlink?
+ * _src/tool_ 
+
+
+Pros
+^^^^
+ * better isolation of single subprojects
+ * one who is interested on one subproject can track a master and only following certain subproject updates
+ * smaller/faster updates/downloads
+
+
+Cons
+^^^^
+ * needs some more git-fu to be used by the developers
+ * we will host considerably more git repositories (bigger list in gitweb), this is not a problem but might look more confusing
+
+
+
+Alternatives
+^^^^^^^^^^^^
+Go as we do currently with one big repository per developer. The decision to use submodules is not urgend and it can be transfered at any time. The turnaround should just be planned and be scheduled to one day to minimize the confusion and merging issues.
+
+
+Rationale
+~~~~~~~~~
+When all people get used to it it allows a cleaner more sane work flow and well isolated, less conflicting commits.
+
+
+
+
+
+Comments
+--------
+
+We concluded that that submodules are not yet needed with exception for the ./doc folder. Parked for now.
+ -- ct 2008-07-26 09:09:57
+
+Back to link:Lumiera/DesignProcess[]

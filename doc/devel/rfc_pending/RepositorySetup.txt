@@ -1,0 +1,84 @@
+Design Process: Repository Setup
+================================
+
+[grid="all"]
+`------------`-----------------------
+*State*         _Final_
+*Date*          _2007-06-09_
+*Proposed by*   link:ct[]
+-------------------------------------
+
+Repository Setup
+----------------
+Here we describe the Directory hierachy and how the git repository are set up.
+
+
+Description
+~~~~~~~~~~~
+
+------------------------------------------------------------
+far incomplete
+
+./admin/            # administrative scripts, tools etc
+./doc/user/         # user docs
+./doc/devel/        # development docs
+./uml/              # uml model
+./tests/
+./tests/bugs/
+./wiki/             # tiddlywiki for semi-persistent documentation
+./oldsrc/           # cinelerra2 sources
+./src/$COMPONENT/   # new source, per component (lets see how bouml generation works for this)
+------------------------------------------------------------
+
+The cinelerra2 sources are put into oldsrc on a per-case base.
+
+We want to use the new GIT feature of "Superprojects and Submodules" when it is ready for general use.
+Then we will transform several subtrees into separate GIT repos which will be linked to from the main
+Project (then called the "Superproject") as submodules.
+
+
+
+Tasks
+~~~~~
+
+Pros
+^^^^
+ * Because its a text-like structure, it is partially self-documenting
+ * GIT is flexible and with the planned submodules it can be separated in chunks of manageable size if necessary
+
+Cons
+^^^^
+ * Can get large and confusing
+ * has no real "portal" or entrance point for people wanting to join
+
+Alternatives
+^^^^^^^^^^^^
+
+
+
+Rationale
+~~~~~~~~~
+Every important document, draft, text and code (including) prototypes should be checked into one SCM (or a set of related SCMs). This repo should be "almost everything" you need for the project. Because we try to use a distributed developement model, every dev can/should have his own copy and fed his changes back.
+
+This 'Repository aproach' avoids the problems of a central infrastructure and helps cut down project management time. Basically, every dev is responsible himself for getting every important piece of information added into "the general view of matters" in a consitent way.
+
+
+Comments
+--------
+
+- Basically the structure is just fine.
+- Maybe add a "pastebin" somewhere in the dev-documentation area?
+- I would add the source tree roots at level 2, so we can have several submodules here:
+  * oldsrc
+  * cin3
+  * prototype  
+ link:Ichthyostega[]
+- Draft now.
+- Yes I left source dirs out but this sounds fine, note that with git, there is no problem to reorganize the repo (in contrast to CVS) later. We can fix things afterward when we find better ways. -- link:ct[] [[DateTime(2007-06-17T17:36:46Z)]]
+- Whats prototype for? won't that be better a branch?  -- link:ct[] [[DateTime(2007-06-17T22:04:39Z)]]
+- I just wanted to show there could be additional things beside the main tree (later to be separete submodules). The example was meant as a classical throwaway prototype. But I agree, in our case we just start hacking at the new tree and make feature/tryout/prototype branches...
+- The point I wanted to make is: every directory 2 levels deep in the source tree, e.g. /src/cinelerra3 or /src/oldsrource should be a completely self-contained tree which can be built without needing anything of the rest of the repo. Thats an prerequisite for moving to Submodules IMHO. But you seem rather to put the sourcetree-roots 1 level deep. As we have just two trees at the moment (and can easily reorganize), I have no objections against this. The only point I really care is to try to keep the source tree self-contained without any dependencies to the rest of the "design GIT" (because of this Superprojects-Submodules thing...) -- link:Ichthyostega[] [[DateTime(2007-06-17T23:45:06Z)]]
+- We could make the trees deeper than one level, I didn't intended 1-level depth. but also be careful with that not to make it too complex. While I am not sure if we want a complete oldsrc, that just adds weight and confusion for now (lets see). Neither I am fully decided about the hierachy in /src (want /libs /plugins or /src/libs /src/plugins or /src/render/plugins? name it rather 'effects' than 'plugins'?). While I am quite sure that I want to separate /oldssrc and /src quite much (in /src should only be new stuff or stuff which is carefully reviewed, with known license and author).  -- link:ct[] [[DateTime(2007-06-18T08:38:43Z)]]
+- I made this proposal 'final' now further details are likely better worked out in the git repository (and we already started to define things there) see ./admin/treeinfo.sh  -- link:ct[] [[DateTime(2007-06-27T16:01:52Z)]]
+
+Back to link:Lumiera/DesignProcess[]
