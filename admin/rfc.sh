@@ -1,4 +1,5 @@
 #!/bin/bash
+shopt -s extglob
 
 
 function usage()
@@ -76,6 +77,71 @@ function camel_case()
     echo "$(tr -c -d "A-Za-z" <<<"$t")"
 }
 
+function word_wrap()
+{
+    local linelength="${1:-80}"
+    local indent=""
+    local newline
+    local tmpline
+    local wrapped
+    local text
+    local tab=$'\t'
+
+    while IFS='' read -r line; do
+        # untabify all, spaces leading tabs are not considered (TODO proper tab handling)
+        line="${line//$tab/        }"
+
+        if [[ ${#line} -gt $linelength ]]; then
+
+            text="${line##*([![:alnum:]])}"
+            if [[ "$text" ]]; then
+                indent="${line:0:${#line}-${#text}}"
+                indent="${indent//?/ }"
+
+                while [[ "${#line}" -gt "${#indent}" ]]; do
+
+                    tmpline="${line:0:$linelength}"
+
+                    if [[ ${#tmpline} -ge $linelength ]]; then
+                        wrapped="${tmpline% *}"
+                        if [[ ${#wrapped} -lt ${#indent} ]]; then
+                            # one long word TODO better keep overlong lines (long urls?)
+                            wrapped="$tmpline"
+                        fi
+                    else
+                        wrapped="$tmpline"
+                    fi
+
+                    echo "$wrapped"
+
+                    line="$indent${line:${#wrapped}+1}"
+
+                    # TODO if indent level doesnt change and indent has only space we can meld lines together
+                done
+            else
+                # a line without any text will not be wrapped
+                echo "$line"
+            fi
+        else
+            # short lines are not wrapped
+            echo "$line"
+        fi
+    done
+}
+
+
+function smart_wrap()
+{
+    # calling on a file
+    word_wrap $2 <"$1" >"$1.$$.tmp"
+    if ! cmp "$1" "$1.$$.tmp" &>/dev/null ; then
+        cat "$1.$$.tmp" >"$1"
+        git add "$1"
+    fi
+    rm "$1.$$.tmp"
+}
+
+
 
 function find_rfc()
 {
@@ -120,6 +186,8 @@ function process()
     local file="$1"
     local path="${1%/*}"
     local state=$(grep '^\*State\* *' "$file")
+
+    smart_wrap "$1" 80
 
     case "$state" in
     *Final*)
