@@ -57,7 +57,8 @@ Rationale
 Comments
 --------
 
-Made this 'final', this proposal got accepted and is already in use without much discussion
+Made this 'final', this proposal got accepted and is already in use without
+much discussion
  -- link:ct[] [[DateTime(2007-06-27T16:07:13Z)]]
 
 

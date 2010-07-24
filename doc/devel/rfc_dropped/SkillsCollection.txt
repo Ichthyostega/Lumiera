@@ -8,14 +8,21 @@
 
 Skills Collection
 -----------------
-Make a page where people can tell in which areas they are willing to support others.
+Make a page where people can tell in which areas they are willing to support
+others.
 
 
 Description
 ~~~~~~~~~~~
-Some Page should list different things needed for working on the project and users should attach themself when they offer support for it. This is meant that people who run into problems know who to ask. In contrast this is not meant like these Skill pages on Sourceforge or such. I don't like this rating and posing system. We let people assing themself to skill and not skills to people and there is no rating.
+Some Page should list different things needed for working on the project and
+users should attach themself when they offer support for it. This is meant that
+people who run into problems know who to ask. In contrast this is not meant
+like these Skill pages on Sourceforge or such. I don't like this rating and
+posing system. We let people assing themself to skill and not skills to people
+and there is no rating.
 
-Skills shall be anything which is needed like the tools we use, the code we create etc.
+Skills shall be anything which is needed like the tools we use, the code we
+create etc.
 
 
 
@@ -37,7 +44,8 @@ Example
 
 Tasks
 ^^^^^
- * just set this page up .. either on this wiki or in a tiddlywiki which becomes checked into the repo
+ * just set this page up .. either on this wiki or in a tiddlywiki which
+   becomes checked into the repo
 
 
 Pros
@@ -47,7 +55,8 @@ Pros
 
 Cons
 ^^^^
- * privacy concerns, people might not publish what they know or better what they ''not'' know
+ * privacy concerns, people might not publish what they know or better what
+   they ''not'' know
 
 
 Alternatives
@@ -57,7 +66,8 @@ Alternatives
 
 Rationale
 ~~~~~~~~~
-This only announces where people offer support within the lumiera developer community and is absolutely voluntary.
+This only announces where people offer support within the lumiera developer
+community and is absolutely voluntary.
 
 
 

@@ -29,36 +29,39 @@ refinement.
 
 .Requirements/Evaluation
  generic::
-	Profiling should be sufficiently abstracted to have a single set of
-	datastructures and algorithms to work on a broad range of subjects being
-	profiled. Moreover the profiling core just offers unitless counters,
-	semantic will be added on top of that on a higher level.
+        Profiling should be sufficiently abstracted to have a single set of
+        datastructures and algorithms to work on a broad range of subjects being
+        profiled. Moreover the profiling core just offers unitless counters,
+        semantic will be added on top of that on a higher level.
 
  least possible overhead::
-	Profiling itself must not cost much, it must not block and should avoid
-	expensive operations. Simple integer arithmetic without divisions
-	is suggested.
-	
+        Profiling itself must not cost much, it must not block and should avoid
+        expensive operations. Simple integer arithmetic without divisions
+        is suggested.
+        
  accurate::
-	We may sample data on in stochastic way to reduce the overhead,
-	nevertheless data which gets sampled must be accurately stored and
-	processed without rounding losses and drifts.
+        We may sample data on in stochastic way to reduce the overhead,
+        nevertheless data which gets sampled must be accurately stored and
+        processed without rounding losses and drifts.
 
  transient values::
-	It's quite common that some values can be far off either in maximum or in
-	minimum direction, the system should adapt to this and recover from such
-	false alarms. Workload also changes over time we need to find some way to
-	measure the current/recent workload an grand total over the whole
-	application runtime is rather uninteresting. While it is also important
-	that we adapt slow enough not to get into some osccilating cycle.
+        It's quite common that some values can be far off either in maximum or
+        in
+        minimum direction, the system should adapt to this and recover from such
+        false alarms. Workload also changes over time we need to find some way
+        to
+        measure the current/recent workload an grand total over the whole
+        application runtime is rather uninteresting. While it is also important
+        that we adapt slow enough not to get into some osccilating cycle.
 
  active or passive system::
-	Profiling can be only passive collecting data and let it be analyzed
- 	by some other component or active triggering some action when some limits
-	are reached. I am yet a bit undecided and keep it open for both.
+        Profiling can be only passive collecting data and let it be analyzed
+         by some other component or active triggering some action when some
+         limits
+        are reached. I am yet a bit undecided and keep it open for both.
 
 
-	
+        
 
 
 
@@ -83,28 +86,36 @@ struct profile
   /* statistics / running averages */
 
   /* n being a small number 2-5 or so */
-  profile_value max[n];                 /* n maximum values seen so far, decreased by recovery */
-  profile_value min[n];                 /* n minimum values seen so far, increased by recovery */
+  profile_value max[n];                 /* n maximum values seen so far,
+  decreased by recovery */
+  profile_value min[n];                 /* n minimum values seen so far,
+  increased by recovery */
 
-  /* store sum & count, but average calculation implies a division and will be only done on demand */
+  /* store sum & count, but average calculation implies a division and will be
+     only done on demand */
   profile_value count;                  /* count profile calls */
-  profile_value sum;                    /* sum up all calls, average = sum/count */
+  profile_value sum;                    /* sum up all calls, average =
+  sum/count */
 
   /* current is the sampled value to be integrated */
 
   /* trend is caclulated before theb new run_average */
-  profile_value trend;                  /* trend = (trend + (run_average-current))>>1 */
+  profile_value trend;                  /* trend = (trend +
+  (run_average-current))>>1 */
 
   /* we may need some slower diverging formula for running average */
-  profile_value run_average;            /* run_average = (run_average + current)>>1) */
+  profile_value run_average;            /* run_average = (run_average +
+  current)>>1) */
 
 
-  /* active limits, define whats good and whats bad, calls back to vtable when limit is hit */
+  /* active limits, define whats good and whats bad, calls back to vtable when
+     limit is hit */
   profile_value max_limit;
   profile_value min_limit;
   /* do we want limits for trends too? */
 
-  /* we count how often we hit limits, a hit/miss ratio will give a good value for optimization */
+  /* we count how often we hit limits, a hit/miss ratio will give a good value
+     for optimization */
   profile_value hit_cnt;
   profile_value high_miss_cnt;
   profile_value low_miss_cnt;
@@ -142,7 +153,8 @@ Cons
 
 Alternatives
 ------------
-//alternatives: if possible explain/link alternatives and tell why they are not viable:
+//alternatives: if possible explain/link alternatives and tell why they are not
+  viable:
 
 
 
@@ -154,7 +166,8 @@ Rationale
 
 //Conclusion
 //----------
-//conclusion: When approbate (this proposal becomes a Final) write some conclusions about its process:
+//conclusion: When approbate (this proposal becomes a Final) write some
+  conclusions about its process:
 
 
 
