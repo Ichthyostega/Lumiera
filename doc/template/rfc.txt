@@ -13,10 +13,9 @@ ${TITLE//?/=}
 -------------------------------------
 
 [abstract]
-******************************************************************************
+********************************************************************************
 
-******************************************************************************
-
+********************************************************************************
 
 Description
 -----------
@@ -46,7 +45,7 @@ Cons
 
 Alternatives
 ------------
-//alternatives: if possible explain/link alternatives and tell why they are not viable:
+//alternatives: explain alternatives and tell why they are not viable:
 
 
 
@@ -58,7 +57,8 @@ Rationale
 
 //Conclusion
 //----------
-//conclusion: When approbate (this proposal becomes a Final) write some conclusions about its process:
+//conclusion: When approbate (this proposal becomes a Final)
+//            write some conclusions about its process:
 
 
 
