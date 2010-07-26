@@ -1,6 +1,6 @@
 # -*- python -*-
 ##
-## ToolDistCC.py  -  SCons tool for distributed compilation using DistCC
+## ToolCCache.py  -  SCons tool for integrating with CCache compiler cache
 ##
 
 #  Copyright (C)         Lumiera.org and FreeOrion.org
@@ -33,33 +33,44 @@ from Buildhelper import *
 
 def generate(env):
     """ Modify the environment such as to redirect any
-        C/C++ compiler invocations through DistCC. Additionally
-        pull in the environment config variables used by DistCC
+        C/C++ compiler invocations through CCache, while using
+        CCache config variables found in the os.environment.
     """
     if not exists(env): return
     
-    assert env['DISTCC']
-    if not env['DISTCC'] in env['CC']:
-        env['CC'] = env.subst('$DISTCC $CC')
-    if not env['DISTCC'] in env['CXX']:
-        env['CXX'] = env.subst('$DISTCC $CXX')
-    print env.subst("* Build using $DISTCC")
+    assert env['CCACHE']
+    if not env['CCACHE'] in env['CC']:
+        env['CC'] = env.subst('$CCACHE $CC')
+    if not env['CCACHE'] in env['CXX']:
+        env['CXX'] = env.subst('$CCACHE $CXX')
+    print env.subst("* Build using $CCACHE")
+    
     for i in ['HOME'
-             ,'DISTCC_HOSTS'
-             ,'DISTCC_VERBOSE'
-             ,'DISTCC_FALLBACK'
-             ,'DISTCC_LOG'
-             ,'DISTCC_MMAP'
-             ,'DISTCC_SAVE_TEMPS'
-             ,'DISTCC_TCP_CORK'
-             ,'DISTCC_SSH'
+             ,'CCACHE_DIR'
+             ,'CCACHE_TEMPDIR'
+             ,'CCACHE_LOGFILE'
+             ,'CCACHE_PATH'
+             ,'CCACHE_CC'
+             ,'CCACHE_CPP2'
+             ,'CCACHE_PREFIX'
+             ,'CCACHE_DISABLE'
+             ,'CCACHE_READONLY'
+             ,'CCACHE_NOSTATS'
+             ,'CCACHE_NLEVELS'
+             ,'CCACHE_HARDLINK'
+             ,'CCACHE_RECACHE'
+             ,'CCACHE_UMASK'
+             ,'CCACHE_HASHDIR'
+             ,'CCACHE_UNIFY'
+             ,'CCACHE_EXTENSION'
              ]:
         if os.environ.has_key(i) and not env.has_key(i):
             env['ENV'][i] = os.environ[i]
 
 
+
 def exists(env):
-    """ Ensure DistCC exists.
+    """ Ensure CCache is available.
     """
-    return checkCommandOption(env, 'DISTCC', cmdName='distcc')
+    return checkCommandOption(env, 'CCACHE', cmdName='ccache')
 

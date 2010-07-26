@@ -141,7 +141,7 @@ if [ "$VALGRINDFLAGS" = 'DISABLE' ]; then
     echo "valgrind explicit disabled"
 else
     if [ "$(which valgrind)" ]; then
-	ulimit -S -t ${ULIMIT_VG_CPU:-20} -v ${ULIMIT_VG_VSZ:-524288}
+	ulimit -S -t ${LIMIT_VG_CPU:-20} -v ${LIMIT_VG_VSZ:-524288}
         LIMIT_TIME_REAL="$LIMIT_VG_TIME"
         if [[ -x 'vgsuppression' ]]; then
             if [[ 'vgsuppression' -nt 'vgsuppression.supp' ]]; then

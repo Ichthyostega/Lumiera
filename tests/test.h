@@ -22,40 +22,39 @@
 #ifndef TEST_H
 #define TEST_H
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include <nobug.h>
 
-#include "lib/error.h"
-
-#include <stdio.h>
-
-NOBUG_DEFINE_FLAG (TESTS);
-LUMIERA_ERROR_DEFINE (TEST, "test error");
+NOBUG_DEFINE_FLAG_LIMIT(TEST, LOG_DEBUG);
 
 #define TESTS_BEGIN                             \
 int                                             \
 main (int argc, const char** argv)              \
 {                                               \
   NOBUG_INIT;                                   \
-  NOBUG_INIT_FLAG (TESTS);                      \
+  NOBUG_INIT_FLAG (TEST);                       \
+  unsigned testcnt=0;                           \
+  int ret = 0;                                  \
                                                 \
   if (argc == 1)                                \
-    {                                           \
-      fprintf (stderr, "missing argument\n");   \
-      return 1;                                 \
-    }
+    fprintf (stderr, "supported tests:\n");
 
 #define TEST(name)                              \
- else if (!strcmp(argv[1], name))
+  if (argc == 1)                                \
+    fprintf (stderr, "  "#name"\n");            \
+  else if (!strcmp(argv[1], #name) && ++testcnt)
 
+#define PLANNED_TEST(name)                      \
+  if (argc == 1)                                \
+    fprintf (stderr, "  "#name" (planned)\n");  \
+  else if (!++testcnt)
 
-#define TESTS_END                               \
-  else                                          \
-    {                                           \
-      fprintf (stderr, "unknown test\n");       \
-      return 1;                                 \
-    }                                           \
-                                                \
-  return 0;                                     \
+#define TESTS_END                                       \
+  if (!testcnt && argc !=1)                             \
+    fprintf (stderr,"no such test: %s\n", argv[1]);     \
+  return ret;                                           \
 }
 
 

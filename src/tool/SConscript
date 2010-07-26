@@ -8,11 +8,10 @@ Import('env','artifacts','core')
 support_lib = artifacts['support']
 
 envSvg = env.Clone()
-envSvg.mergeConf(['librsvg-2.0','gthread-2.0'])
+envSvg.mergeConf(['librsvg-2.0'])
 envSvg.Append(LIBS=support_lib)
 
 
-vgsuppr = env.Program('#$BINDIR/vgsuppression','vgsuppression.c', LIBS=core)## for suppressing false valgrind alarms
 luidgen =    env.Program('#$BINDIR/luidgen', 'luidgen.c', LIBS=support_lib) ## for generating Lumiera-UIDs
 rsvg    = envSvg.Program('#$BINDIR/rsvg-convert','rsvg-convert.c')          ## for rendering SVG icons (uses librsvg) 
 
@@ -20,7 +19,6 @@ rsvg    = envSvg.Program('#$BINDIR/rsvg-convert','rsvg-convert.c')          ## f
 artifacts['tools'] = [ env.Program('#$BINDIR/hello-world','hello.c')      #### hello world (checks C build)      
                      + env.Program('#$BINDIR/try', 'try.cpp')             #### to try out some feature...
 #                    + luidgen
-                     + vgsuppr
                      + rsvg
                      ]
 
