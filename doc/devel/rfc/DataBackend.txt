@@ -39,10 +39,7 @@ This just starts as braindump, I will refine it soon:
 
 .Notes:
 * ichthyo wrote also some ideas on
-  http://www.pipapo.org/pipawiki/Cinelerra/Developers/ichthyo/Cinelerra3/Archite
-  ture[Architecture] and a sketch/draft about
-  http://www.pipapo.org/pipawiki/Cinelerra/Developers/ichthyo/Possibilities_at_h
-  nd[things possible in the middle layer]
+  http://www.pipapo.org/pipawiki/Cinelerra/Developers/ichthyo/Cinelerra3/Architecture[Architecture] and a sketch/draft about http://www.pipapo.org/pipawiki/Cinelerra/Developers/ichthyo/Possibilities_at_hand[things possible in the middle layer]
 
 
 Tasks

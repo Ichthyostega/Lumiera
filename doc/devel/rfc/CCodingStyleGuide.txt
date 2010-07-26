@@ -156,9 +156,9 @@ Comments
 --------
 
 I strongly object promoting such a thing as a general "Style Guide". It can be
-a help or last resort if you are forced to work with improper
-tools (a situation that's rather frequent in practice though). __As such it is
-well chosen and practical__.
+a help or last resort if you are forced to work with improper tools (a
+situation that's rather frequent in practice though). __As such it is well
+chosen and practical__.
 
 But basically, it shows several things:
 * you are using a global namespace
@@ -169,8 +169,7 @@ All of this indicates some design style breakage, so it would be preferable to
 fix the design if possible.
 
 The only part I'd like to support as a Style Guide is the rule of using the
-"verb+object" pattern for
-creating function names
+"verb+object" pattern for creating function names
  -- link:Ichthyostega[] [[DateTime(2007-07-08T11:42:39Z)]]
 
 Probably needs little explanation:
@@ -207,11 +206,9 @@ naming can be much simpler, see examples there or in my repository.
 
 Thanks, your explanation together with the example in git made the usage
 pattern much more clear. I think the _version postfix is esp. helpful on the
-names
-of the plugin interfaces (structs in C), and probably it will be a good
+names of the plugin interfaces (structs in C), and probably it will be a good
 practice, to have one such common plugin interface on every "plugin extension
-point",
-i.e. every point in the sytem, that can be extended by plugins.
+point", i.e. every point in the sytem, that can be extended by plugins.
   -- 217.110.94.1 [[DateTime(2007-07-10T17:23:33Z)]]
 
 ''''

@@ -19,15 +19,15 @@ Description
 The Proc-Layer differentiates into a high-level view, which models the
 properties of the problem domain (manipulating media objects), and a low-level
 model, which is a network of render nodes and will be optimized for processing
-efficiency. 
+efficiency.
 
 In between sits the Builder, which is triggered on all important/relevant
-changes to the high-level model. 
+changes to the high-level model.
 
 The Builder inspects the current state of this high-level model and, driven by
 the actual objects and their configuration, creates a corresponding
 representation within the low-level model, which is then hot-swapped into the
-renderer. 
+renderer.
 
 In the course of this building process, all necessary decisions are taken,
 disabled features and impossible connections are detected and left out, and all
@@ -37,7 +37,7 @@ low-level model.
 
 The configuration of the high-level model is deliberately very open; the
 builder doesn't impose much limitations, rather he reflects the found
-configuration down into the low-level model using generic rules. 
+configuration down into the low-level model using generic rules.
 
 Pros
 ^^^^
@@ -70,7 +70,7 @@ the Cinelerra-2 codebase.
 
 Conclusion
 ----------
-This proposal reflects a distinct approach taken right from start. 
+This proposal reflects a distinct approach taken right from start.
 
 Marked 'final' at October.2008 developer meeting
 

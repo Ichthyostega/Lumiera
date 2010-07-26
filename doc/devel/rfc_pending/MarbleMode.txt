@@ -121,9 +121,9 @@ quite different working approaches, which obviously can have quite some impact
 on the resulting style and rythm of the final movie. The distinguishing
 property of the working style to be supported by the "marble mode" is that it
 bypasses the state of creating and organizing clips, but rather directly
-evolves the footage into the final cut.
-This working style is dual to the common clip based approach, none of them is
-superior or inferior, thus we should actively support both working styles.
+evolves the footage into the final cut. This working style is dual to the
+common clip based approach, none of them is superior or inferior, thus we
+should actively support both working styles.
 
 
 

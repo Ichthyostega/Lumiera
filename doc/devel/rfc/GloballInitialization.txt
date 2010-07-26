@@ -63,7 +63,7 @@ Comments
 --------
 
 * You may have noted that I implemented an Appconfig class (for some very
-  elementary static configuration constants. 
+  elementary static configuration constants.
 See `common/appconfig.hpp` I choose to implement it as Meyers Singleton, so it
 isn't dependent on global static initialisation, and I put the NOBUG_INIT call
 there too, so it gets issued automatically.
@@ -71,7 +71,7 @@ there too, so it gets issued automatically.
   so count me to be much in support for this design draft. While some resources
   can be pulled up on demand (and thus be a candidate for some of the many
   singleton flavours), some things simply need to be set up once, and its
-  always better to do it explicitly and in a defined manner. 
+  always better to do it explicitly and in a defined manner.
 * For the proc layer, I plan to concentrate much of the setup and
   (re)configuration within the loading of a session, and I intend to make the
   session manager create an empty default session at a well defined point,
@@ -102,10 +102,9 @@ lumiera_backend_init()
 ------------------------------------------------------------
 
 Backend tests then only call `lumiera_backend_init()` and dont need to do the
-whole initialization, same could be done
-for `lumiera_proc_init()` and `lumiera_gui_init()`. Note about the library: i
-think the lib shall not depend on such an init, but i would add one if really
-needed.
+whole initialization, same could be done for `lumiera_proc_init()` and
+`lumiera_gui_init()`. Note about the library: i think the lib shall not depend
+on such an init, but i would add one if really needed.
  -- link:ct[] [[DateTime(2008-04-09T19:19:17Z)]]
 
 * After reconsidering I think we have several different problems intermixed
@@ -122,7 +121,7 @@ needed.
    be avoided completely to run such already in the static intialisation phase
    before entering main(). My current solution (putting NOBUG_INIT it in the
    Appconfig ctor) is not airtight, I think we can't avoid going for something
-   like a schwartz counter here. 
+   like a schwartz counter here.
  - Then there is the initialisation of common serives. For these, it's just
    fine to do a dedicated call from main (e.g. to init the backend services and
    for creating the basic empty session for proc and firing off the event loop
@@ -133,7 +132,7 @@ needed.
    subsystem after this point. Currently, I have the policy for the proc layer
    to require every destructor to be called and everything to be deallocated,
    meaning that quite a lot of code is running after the end of main() -- most
-   of which is libarary generated. 
+   of which is libarary generated.
  -- link:Ichthyostega[] [[DateTime(2008-04-12T04:56:49Z)]]
 
 * Regarding organisation of includes:... agreed
@@ -172,7 +171,7 @@ needed.
   - This system is extensible: for example I plan to let the
     link:SessionManager[] issue ON_SESSION_INIT and ON_SESSION_CLOSE events.
     E.g. AssetManager could now just install his callbacks to clean up the
-    internal Asset registry   
+    internal Asset registry
     -- link:Ichthyostega[] [[DateTime(2008-04-14T03:40:54Z)]]
 
 * Regarding shutdown my understanding is that ON_GLOBAL_SHUTDOWN does what is

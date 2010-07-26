@@ -27,7 +27,7 @@ Description
   * Time measurement is zero based (of course :-? )
 . *Quantizing to a frame index or similar*
   * Quantizing/rounding shall happen only once at a defined point in the
-    calculation chain and, if in doubt, be done always as late as possible. 
+    calculation chain and, if in doubt, be done always as late as possible.
   * Values needing to be quantized to time (grid) positions are calculated by
     half-way rounding, but the result should not depend on the actual
     zero-point of the scale (i.e. `floor(0.5+val)`, thus quant(0.5) yields 1,
@@ -36,7 +36,7 @@ Description
   * Frame numbers are zero based and Frame 0 starts at time=0 (or whatever the
     nominal start time is)
   * Each frame starts when the locator hits its lower border (inclusively) and
-    ends when the locator is on its upper border (exclusively) 
+    ends when the locator is on its upper border (exclusively)
   image:images/Lumi.FramePositions1.png[]
   * When the locator snaps to frames this means it can be placed on the start
     positions of the frames solely
@@ -70,15 +70,13 @@ Tasks
 Alternatives
 ~~~~~~~~~~~~
 Leave everything as in Cinelerra2, i.e. show frames after the locator has
-passed over them,
-behave different when playing backwards and set the keyframes on the position
-of the locator but use them on the
-frame actually to be shown (which differs according to the playback direction
-but is always "one off").
+passed over them, behave different when playing backwards and set the keyframes
+on the position of the locator but use them on the frame actually to be shown
+(which differs according to the playback direction but is always "one off").
 
 Why not? because it makes frame-precise working with keyframes a real pain and
-even creates contradictory situations when you
-switch back and forward while tweaking.
+even creates contradictory situations when you switch back and forward while
+tweaking.
 
 Similar for the issues with quantized values. At first sight, e.g. directly
 using the frame numbers as coordinates (as Cinelerra does) seems to be clever,
@@ -110,7 +108,8 @@ sticking to "simple" values like frame counts or even a session-wide frame rate
 
 Comments
 ~~~~~~~~
-* This is the summary of a discussion cehteh, Plouj and ichthyo just had on irc.
+* This is the summary of a discussion cehteh, Plouj and ichthyo just had on
+  irc.
  -- link:Ichthyostega[] [[DateTime(2007-06-21T05:12:03Z)]]
 
 * We use GAVL now (needs to be included in the build system)
@@ -133,7 +132,7 @@ Comments
 Conclusion
 ~~~~~~~~~~
 * The adapted form of this proposal was *accepted* by October.2008 developer
-  meeting. 
+  meeting.
 
 * The proposed thin library layer to centralize time calculations shall be
   added on demand. When doing so, we need to add thorough test coverage for

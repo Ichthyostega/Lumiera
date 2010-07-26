@@ -60,11 +60,10 @@ Comments
    in your example, the user would just use the "default placement". My
    Intention was to use '''tags''' to quite some extent. The user would be able
    to tag the source footage, and then rules can kick in when a certain tag
-   applies.
-   Incidentally, integrating prolog is immediately on the agenda, because first
-   we want to flesh out the very basic system and get to work basic rendering.
-   Until then, I use a "mock" implementation of the query/rules system, which
-   just returns some hard wired defaults.
+   applies. Incidentally, integrating prolog is immediately on the agenda,
+   because first we want to flesh out the very basic system and get to work
+   basic rendering. Until then, I use a "mock" implementation of the
+   query/rules system, which just returns some hard wired defaults.
  -- link:Ichthyostega[] [[DateTime(2008-09-04T15:38:21Z)]]
 
 

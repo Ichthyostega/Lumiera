@@ -122,9 +122,9 @@ get this into professional production houses, then I think having a single
 language from OS admin the whole way through the stack is a massive gain for
 the types of users who will be using it. I personally prefer Ruby. Naturally
 it's your decision to make, all the best, we are looking forward to alphas and
-betas in the future 
+betas in the future
   -- mytwocents
- 
+
   This proposal is about the ''required'' scripting language, i.e. when
   accepted, Lua will be a necessary prerequisite for running Lumiera. This
   doesn't rule out the ''use'' of other scripting languages. We strive at

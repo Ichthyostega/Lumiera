@@ -34,10 +34,9 @@ far incomplete
 The cinelerra2 sources are put into oldsrc on a per-case base.
 
 We want to use the new GIT feature of "Superprojects and Submodules" when it is
-ready for general use.
-Then we will transform several subtrees into separate GIT repos which will be
-linked to from the main
-Project (then called the "Superproject") as submodules.
+ready for general use. Then we will transform several subtrees into separate
+GIT repos which will be linked to from the main Project (then called the
+"Superproject") as submodules.
 
 
 
@@ -83,7 +82,7 @@ Comments
   submodules here:
   * oldsrc
   * cin3
-  * prototype  
+  * prototype
  link:Ichthyostega[]
 - Draft now.
 - Yes I left source dirs out but this sounds fine, note that with git, there is

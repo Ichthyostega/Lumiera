@@ -41,7 +41,7 @@ Tasks
 
 Not yet decided:
  * _tests_ move them into the _src/$subsystem_ as symlink?
- * _src/tool_ 
+ * _src/tool_
 
 
 Pros

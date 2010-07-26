@@ -57,7 +57,7 @@ Levels of classification
 ^^^^^^^^^^^^^^^^^^^^^^^^
 The description/classification of streams is structured into several levels. A
 complete stream type (implemented by a stream type descriptor) containts a tag
-or selection regarding each of these levels. 
+or selection regarding each of these levels.
 
  * Each media belongs to a fundamental *kind of media*, examples being _Video,
    Image, Audio, MIDI, Text,..._ This is a simple Enum.

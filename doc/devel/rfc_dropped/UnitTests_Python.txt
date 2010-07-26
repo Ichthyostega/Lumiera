@@ -41,13 +41,12 @@ Tasks
 Pros
 ~~~~
 
-Programming Unit and Self tests in a Scripting language facillates this task. 
+Programming Unit and Self tests in a Scripting language facillates this task.
 The X-Language bindings are quite usable today. As a side effect, it helps to
 get a clean program structure, because the tests need some Interface and/or
-some object factories to create the test
-candidates. Python is proposed, because it is fairly mainstream, has a flat
-learning curve and but is moderately modern and functional-style at the same
-time.
+some object factories to create the test candidates. Python is proposed,
+because it is fairly mainstream, has a flat learning curve and but is
+moderately modern and functional-style at the same time.
 
 Cons
 ~~~~

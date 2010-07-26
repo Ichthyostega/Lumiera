@@ -53,7 +53,7 @@ Tasks
   instructions. Core Duo supports upto SSE4 instructions. AMD announced SSE5
   instructions to come in 2009.
 * Consider SIMD instructions while designing the Render Nodes and Effects
-  architecture. 
+  architecture.
 * Write the whole application in C/C++ / Lua while leaving sections to optimize
   in assembly later. (Probably simple tasks or a library written in C)
 * Rewrite these sections in Assembly using only instructions we agreed upon.
@@ -67,7 +67,7 @@ Assuming we go all the way with an official assembly language / platform...
 * Significantly faster render and previews. (Even when using a high-level
   library like http://www.pixelglow.com/macstl/valarray/[macstl valarray], we
   can get 3.6x -- 16.2x the speed in our inner loop. We can probably expect
-  greater if we hand-optimize the assembly) 
+  greater if we hand-optimize the assembly)
 
 
 Cons

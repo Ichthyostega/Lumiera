@@ -21,12 +21,12 @@ implemented by taking advantage of this fact.
 Description
 ~~~~~~~~~~~
 
-There is a class of problems that this sort of behavior would help with. 
+There is a class of problems that this sort of behavior would help with.
 
 First, you can organize a movie recursively. For example, you can create a
 large movie file and organize it into Introduction, Chapter1, Chapter2, Climax,
 and Conclusion. From there, you can edit Introduction EDL, then the Chapter1
-EDL, and so forth. 
+EDL, and so forth.
 
 From a bottom-up perspective, you can build a collection of Stock Footage (for
 example, transformation scenes, lip sync frames, or maybe running joke). You
@@ -35,7 +35,7 @@ your stock footage later once you have a better idea of what you want. From
 there, the edits in these other files will still be in sync in the final render
 of the big project. Further, each instance of Stock Footage can be personalized
 by added effects on the timeline. Finally, one can create Stock Footage without
-being forced to render the file to disk first. 
+being forced to render the file to disk first.
 
 The usability benefits are obvious.
 
@@ -83,7 +83,7 @@ Cons
 Alternatives
 ~~~~~~~~~~~~
 
- * Pre-Rendering Clips 
+ * Pre-Rendering Clips
    - Unlike the current proposal, you would be unable to reedit sock footage on
      the mass scale and reapply it to the whole project.
    - Moreover, rendering either introduces a generation loss or requires huge

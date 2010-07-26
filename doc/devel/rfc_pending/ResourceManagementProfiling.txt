@@ -13,9 +13,9 @@ Resource Management: Profiling
 [abstract]
 ******************************************************************************
 From the beginning on we planned some kind of 'profiling' to adapt dynamically
-to workload and machine capabilities. I describe here how statistic data
-can be gathered in a generic way. This will later work together with other
-components tuning the system automatically.
+to workload and machine capabilities. I describe here how statistic data can be
+gathered in a generic way. This will later work together with other components
+tuning the system automatically.
 ******************************************************************************
 
 
@@ -27,18 +27,17 @@ I just introduce some ideas about the planned profiling framework here, nothing
 is defined/matured yet this is certainly subject for futher discussion and
 refinement.
 
-.Requirements/Evaluation
- generic::
+.Requirements/Evaluation generic::
         Profiling should be sufficiently abstracted to have a single set of
-        datastructures and algorithms to work on a broad range of subjects being
-        profiled. Moreover the profiling core just offers unitless counters,
-        semantic will be added on top of that on a higher level.
+        datastructures and algorithms to work on a broad range of subjects
+        being profiled. Moreover the profiling core just offers unitless
+        counters, semantic will be added on top of that on a higher level.
 
  least possible overhead::
         Profiling itself must not cost much, it must not block and should avoid
-        expensive operations. Simple integer arithmetic without divisions
-        is suggested.
-        
+        expensive operations. Simple integer arithmetic without divisions is
+        suggested.
+
  accurate::
         We may sample data on in stochastic way to reduce the overhead,
         nevertheless data which gets sampled must be accurately stored and
@@ -46,22 +45,20 @@ refinement.
 
  transient values::
         It's quite common that some values can be far off either in maximum or
-        in
-        minimum direction, the system should adapt to this and recover from such
-        false alarms. Workload also changes over time we need to find some way
-        to
-        measure the current/recent workload an grand total over the whole
-        application runtime is rather uninteresting. While it is also important
-        that we adapt slow enough not to get into some osccilating cycle.
+        in minimum direction, the system should adapt to this and recover from
+        such false alarms. Workload also changes over time we need to find some
+        way to measure the current/recent workload an grand total over the
+        whole application runtime is rather uninteresting. While it is also
+        important that we adapt slow enough not to get into some osccilating
+        cycle.
 
  active or passive system::
-        Profiling can be only passive collecting data and let it be analyzed
-         by some other component or active triggering some action when some
-         limits
+        Profiling can be only passive collecting data and let it be analyzed by
+        some other component or active triggering some action when some limits
         are reached. I am yet a bit undecided and keep it open for both.
 
 
-        
+
 
 
 
@@ -77,8 +74,8 @@ struct profile
   ProfileVTable vtable;
 
   /*
-   Using trylock for sampling makes it never contend on the lock
-   but some samples are lost. Should be ok.
+   Using trylock for sampling makes it never contend on the lock but some
+   samples are lost. Should be ok.
   */
   mutex_t lock;                         /* with trylock? */
 

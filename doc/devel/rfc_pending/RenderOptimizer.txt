@@ -7,8 +7,8 @@
 
 Render Optimizer
 ----------------
-Render only parts of a frame which are necessary for the Output;
-Optimize render pipeline for efficiency
+Render only parts of a frame which are necessary for the Output; Optimize
+render pipeline for efficiency
 
 
 Description
@@ -68,8 +68,8 @@ Possible classification for video filters:
 
 Filters of type 1 and type 2 never use any previous frames, and are strictly
 one frame in - one frame out. Filters of type 1 can always be swapped with
-filters of type 2, the output
-is the same. All other filters cannot be swapped in general. 
+filters of type 2, the output is the same. All other filters cannot be swapped
+in general.
 
 The good news is, that:
 

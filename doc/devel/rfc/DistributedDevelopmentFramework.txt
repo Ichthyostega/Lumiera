@@ -46,7 +46,7 @@ Alternatives
 
 Rationale
 ~~~~~~~~~
- 
+
 * To cut the administrative overhead down
 
 

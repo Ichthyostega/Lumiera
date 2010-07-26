@@ -77,8 +77,8 @@ parts of the tree (plugins, documentation, i18n, ...). We want to build up a
 set of maintenance scripts in a ./admin dir.
 
 At the moment we go for rather bleeding edge tools, because we want to stay at
-a given version to avoid incompatibility problems.
-Later on a version switch needs agreement/notification by all devs.
+a given version to avoid incompatibility problems. Later on a version switch
+needs agreement/notification by all devs.
 
 
 
@@ -87,16 +87,15 @@ Comments
 --------
 
 I am always in favor of getting the basic project organization and all
-scripting up and running very early in a project.
-I would like if the project would take a rather conservative approach on the
-required Libs and Tools, so that finally,
-when we get into a beta state, we can run/compile on the major distros without
-too much pain. I wouldn't completely
-abandon the idea to target \*bsd and osx as well later on.
+scripting up and running very early in a project. I would like if the project
+would take a rather conservative approach on the required Libs and Tools, so
+that finally, when we get into a beta state, we can run/compile on the major
+distros without too much pain. I wouldn't completely abandon the idea to target
+\*bsd and osx as well later on.
 
 I would propose to move Doxygen to "required". The Idea to use scons sounds
-quite appealing to me at the moment.
-Besides that, I think it could be moved to "Draft".
+quite appealing to me at the moment. Besides that, I think it could be moved to
+"Draft".
  -- link:Ichthyostega[] [[DateTime(2007-06-17T00:18:40Z)]]
 
 Moved to Draft. For Developer documentation I would prefer doxygen. For user

@@ -58,18 +58,18 @@ Solution for Lumiera
 
 We are in need of a new development model which is acceptable by all involved
 people and benefits from the way Cinelerra development worked the years before,
-without maintaining the bad sides again: 
+without maintaining the bad sides again:
 
 . *Make it easy to contribute*
 Even if it is favorable when we have people which are continously working on
 Lumiera, it's a fact that people show up, send a few patches and then
 disappear. The development model should be prepared for this by:
 .. Good documentation
-.. Well defined design and interfaces  
+.. Well defined design and interfaces
 .. Establish some coding guidelines to make it easy for others maintain code
    written by others
 .. Prefer known and simple aproaches/coding over bleeding edge and highly
-   complex techniques 
+   complex techniques
 
 . *Simple access*
  We will use a fully distributed development model using git. I'll open a
@@ -84,7 +84,7 @@ quality and when there is noone who keeps them up, will be removed. Since we
 are working in a distributed way with each developer maintaining his own
 repository and merging from other people, there is no easy way that bad code
 will leap into the project.
- 
+
 . *No Rule is better than a Rule which is not engaged*
 We have to agree on some rules to make teamwork possible. These rules should be
 kept to a minimum required and accepted by all involved people. It is vital

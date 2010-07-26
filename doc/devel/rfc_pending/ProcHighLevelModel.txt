@@ -23,8 +23,8 @@ data processing (=rendering), the high-level model is what the user works upon
 when performing edit operations through the GUI (or script driven in
 "headless"). Its building blocks and combination rules determine largely what
 structures can be created within the
-http://www.lumiera.org/wiki/renderengine.html#Session[Session].
-On the whole, it is a collection of
+http://www.lumiera.org/wiki/renderengine.html#Session[Session]. On the whole,
+it is a collection of
 http://www.lumiera.org/wiki/renderengine.html#MObjects[media objects] stuck
 together and arranged by
 http://www.lumiera.org/wiki/renderengine.html#Placement[placements].
@@ -49,12 +49,12 @@ to a spatial audio system). Other processing entities like effects and
 transitions can be placed (attached) at the pipe, resulting them to be appended
 to form this chain. Optionally, there may be a *wiring plug*, requesting the
 exit point to be connected to another pipe. When omitted, the wiring will be
-figured out automatically.
-Thus, when making an connection _to_ a pipe, output data will be sent to the
-*source port* (input side) of the pipe, wheras when making a connection _from_
-a pipe, data from it's exit point will be routed to the destination.
-Incidentally, the low-level model and the render engine employ _pull-based
-processing,_ but this is rather of no relevance for the high-level model.
+figured out automatically. Thus, when making an connection _to_ a pipe, output
+data will be sent to the *source port* (input side) of the pipe, wheras when
+making a connection _from_ a pipe, data from it's exit point will be routed to
+the destination. Incidentally, the low-level model and the render engine employ
+_pull-based processing,_ but this is rather of no relevance for the high-level
+model.
 
 
 image:images/high-level1.png[]
@@ -124,12 +124,12 @@ image:images/high-level3.png[]
 The Session contains several independent
 http://www.lumiera.org/wiki/renderengine.html#EDL[EDL]s plus an output bus
 section ( *global Pipes* ). Each EDL holds a collection of MObjects placed
-within a *tree of tracks* . 
-Within Lumiera, tracks are a rather passive means for organizing media objects,
-but aren't involved into the data processing themselves. The possibility of
-nesting tracks allows for easy grouping. Like the other objects, tracks are
-connected together by placements: A track holds the list of placements of its
-child tracks. Each EDL holds a single placement pointing to the root track. 
+within a *tree of tracks* . Within Lumiera, tracks are a rather passive means
+for organizing media objects, but aren't involved into the data processing
+themselves. The possibility of nesting tracks allows for easy grouping. Like
+the other objects, tracks are connected together by placements: A track holds
+the list of placements of its child tracks. Each EDL holds a single placement
+pointing to the root track.
 
 As placements have the ability to cooperate and derive any missing placement
 specifications, this creates a hierarchical structure throughout the session,
@@ -229,7 +229,7 @@ consequences right from start. Besides, the observation is that the development
 of non-mainstream media types like steroscopic (3D) film and really convincing
 spatial audio (beyond the ubiquitous "panned mono" sound) is hindered not by
 technological limitations, but by pragmatism preferring the "simple" hard wired
-approach. 
+approach.
 
 
 

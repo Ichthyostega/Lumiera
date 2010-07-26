@@ -34,7 +34,8 @@ Tasks
 
  * we need to work out an introspection mechanism for parameters
    - asses what different types of parameters we need
-   - find out how much structured parameters will be (do simple values suffice?)
+   - find out how much structured parameters will be (do simple values
+     suffice?)
    - define how parameters can be discovered/enumerated
    - define a naming scheme for parameters, so they can be addressed
      unambiguously
@@ -50,12 +51,11 @@ So...
 . chose a best fitting implementation based on this information
 
 A closely related issue is the handling of *Automation*. The current draft
-calls for an abstract interface "ParamProvider",
-which just allows the link:Plugin/RenderComponent[] to pull a current value,
-without knowing if the ParamProvider is a GUI widget or
-an automation data set with interpolation. The component using the param value
-should not need to do any interpolation.
-We should re-asses and refine this draft as needed. Note: Render Nodes are
+calls for an abstract interface "ParamProvider", which just allows the
+link:Plugin/RenderComponent[] to pull a current value, without knowing if the
+ParamProvider is a GUI widget or an automation data set with interpolation. The
+component using the param value should not need to do any interpolation. We
+should re-asses and refine this draft as needed. Note: Render Nodes are
 stateless; this creates some tricky situations.
 
 

@@ -57,7 +57,8 @@ You build up a simple linear cut sequence. Either by
    of) unwanted parts
  - playing source media and spilling over (insert, overwrite) some parts into
    the final assembly
- - dragging over pre-organised clips from clip folders to build up the assembly.
+ - dragging over pre-organised clips from clip folders to build up the
+   assembly.
 
 Sound is either used immediately as-is (the soundtrack attached to the media),
 or there is a similarly simple, linear music bed. Some people prefer to switch
@@ -72,9 +73,9 @@ Without the intention to rework it from scratch, an already existing simple
 assembly is augmented, beautified and polished, maybe to conform with
 professional standards. This includes the "rescue" of a somewhat questionable
 assembly by repairing localized technical problems, but also shortening and
-re-arranging, and in extreme cases even changing the narrative structure.
-A distinctive property of this usage scenario is that work happens rather in
-the context of ''tasks'' (passes) -- not so much isolated operations:
+re-arranging, and in extreme cases even changing the narrative structure. A
+distinctive property of this usage scenario is that work happens rather in the
+context of ''tasks'' (passes) -- not so much isolated operations:
 
  - the task may be to get the rhythm or overall tempo right, and thus you go
    over the sequence and do trim, roll, shuffle or slide edits.
@@ -201,11 +202,11 @@ Scenario (8) : Script driven
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The application is started ''headless'' (without GUI) and controlled via an
-API. Either an existing session is loaded, or a new session is
-created and populated. Then, some operations have to be done in a systematic
-manner, requiring a way to address parts of the session both unambiguously and
-in a way easy to access and control from a programming environment (you can't
-just ''see'' the right clip, it needs to be tagged). Finally, there might be an
+API. Either an existing session is loaded, or a new session is created and
+populated. Then, some operations have to be done in a systematic manner,
+requiring a way to address parts of the session both unambiguously and in a way
+easy to access and control from a programming environment (you can't just
+''see'' the right clip, it needs to be tagged). Finally, there might be an
 export or render step. A variation of this scenario is the automatic extraction
 of some informations from an existing project.
 
@@ -285,11 +286,9 @@ Template e.g. for regular TV series
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Constraints to fit all contents within fixed timeline, cover topic, select
-collage of iconic scenes from archived and collected footage.
-Update intro and credit roll for each episode.
-Add in stopmotion, and 3D model animations with vocal commentaries.
-Gather together separate items from "outworkers".
-Tree
+collage of iconic scenes from archived and collected footage. Update intro and
+credit roll for each episode. Add in stopmotion, and 3D model animations with
+vocal commentaries. Gather together separate items from "outworkers". Tree
 (@)SIG(@)
 
 Back to link:Lumiera/DesignProcess[]

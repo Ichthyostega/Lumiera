@@ -49,7 +49,7 @@ Comments
    here and we need to be sure that nothing gets lost.
 * For the time being this formalism is enough. Later on, I fear, we will need a
   bit more (and some Tool support)
- -- link:Ichthyostega[] [[DateTime(2007-06-17T00:24:14Z)]] 
+ -- link:Ichthyostega[] [[DateTime(2007-06-17T00:24:14Z)]]
 * Accepted, deployed, done ... Final
  -- link:ct[] [[DateTime(2007-06-27T16:13:25Z)]]
 

@@ -47,20 +47,19 @@ aphphanumeric character (if it is numeric, just write it out):
 These are used when the provider is a project and not an individual person.
 
 If the provider of a interface is a individual person then he encodes his email
-address in a similar way
-The @ sign is encoded as uppercase "AT":
+address in a similar way The @ sign is encoded as uppercase "AT":
 
 
 ------------------------------------------------------------
  7of9@star-trek.net -> sevenofnineATstartreknet
------------------------------------------------------------- 
+------------------------------------------------------------
 
 Abstract identifiers
 ^^^^^^^^^^^^^^^^^^^^
 
-As alternative method one can use his gpg (or pgp) key ids or full fingerprints.
-These are encoded as uppercase 'PGP' or 'GPG' followed with a sequence of hex
-digits (both upper and lower case allowed):
+As alternative method one can use his gpg (or pgp) key ids or full
+fingerprints. These are encoded as uppercase 'PGP' or 'GPG' followed with a
+sequence of hex digits (both upper and lower case allowed):
 
 
 ------------------------------------------------------------
@@ -86,8 +85,8 @@ entropy of 128 bits:
 Following Parts: hierachic namespace
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 Lumiera itself will use some hierachic naming scheme for it interface
-declarations and implementations. 
-The details will be layed out next, genereally thinks look like:
+declarations and implementations. The details will be layed out next,
+genereally thinks look like:
 
 ------------------------------------------------------------
  lumieraorg_backend_frameprovider
@@ -117,13 +116,11 @@ The above described scheme will be implemented and used by me (cehteh).
 Rationale
 ~~~~~~~~~
 I believe that writing plugins for Lumiera shall be simple. We do not want some
-central registry or management. Anyone
-shall be able to just start to write plugins. But that puts some reponsibility
-on the namespace so that all plugins can
-coexist and their names don't clash. The above describes a very simple and
-flexible nameing system which anyone can
-follow. It produces names which should be sufficiently unique for practical
-purposes. It leaves alternatives for
+central registry or management. Anyone shall be able to just start to write
+plugins. But that puts some reponsibility on the namespace so that all plugins
+can coexist and their names don't clash. The above describes a very simple and
+flexible nameing system which anyone can follow. It produces names which should
+be sufficiently unique for practical purposes. It leaves alternatives for
 providing plugins as institutuion, individual or even anonymously.
 
 

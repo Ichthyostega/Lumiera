@@ -33,7 +33,7 @@ present in open source Non Linear Video editors (your mileage may vary) :
 . Lack of support for certain video formats or codecs
 . Lack of documentation
 . Lack of cross-platform support
-. Dependency on scripted languages like Python, which make installation a mess 
+. Dependency on scripted languages like Python, which make installation a mess
 
 I will expand on the problems and their proposed (or mandatory) solutions.
 
@@ -48,7 +48,7 @@ I will expand on the problems and their proposed (or mandatory) solutions.
 *Solution*      Isolating the UI from the rendering and data handling (also
  improves the extensibility)
 *Required*      Yes
-*Workarounds*   Auto-save (however it's not a real solution for the problem) 
+*Workarounds*   Auto-save (however it's not a real solution for the problem)
 --------------------------------------------------------------------
 
 Working with multimedia (video / audio) editing is a magnet for segfaults
@@ -88,8 +88,8 @@ countless, imagine persistent, selective undo and so on. Any other format
 (cinelerra2 XML, MXF, ...) will be realized by importer/exporter plugins.
   -- link:ct[] [[DateTime(2008-04-21T11:27:23Z)]]
 
- 
- 
+
+
 2. Reinventing the wheel for every new project
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -151,7 +151,7 @@ processes):
   processing toolkits (DirectX, GStreamer, etc). This also makes the project
   cross-platform. Tiers 1 and 2 can go in one process, and the 3 and 4 in
   another (this would make tier 2 a library which defines a C++ Class, and tier
-  4 would also be a library which is used by the rendering engine). 
+  4 would also be a library which is used by the rendering engine).
 
 By separating the tiers, these can later become their own projects and overall
 the community would receive great benefits.
@@ -267,11 +267,10 @@ Quote from Ohloh.net: (http://www.ohloh.net/projects/lumiera)[]
 ------------------------------------------------------------
 Extremely well-commented source code
 
-Lumiera is written mostly in C++.
-Across all C++ projects on Ohloh, 23% of all source code lines are comments.
-For Lumiera, this figure is 46%.
-This very impressive number of comments puts Lumiera among the best 10% of all
-C++ projects on Ohloh. 
+Lumiera is written mostly in C++. Across all C++ projects on Ohloh, 23% of all
+source code lines are comments. For Lumiera, this figure is 46%. This very
+impressive number of comments puts Lumiera among the best 10% of all C++
+projects on Ohloh.
 ------------------------------------------------------------
 
 
@@ -372,11 +371,11 @@ similarly runs on windows and *nix. Well. You could try to write it in Java.
 See my point? While today it's quite feasible to write office stuff or banking
 applications in a cross-platform manner, a video editor still is a different
 kind of a beast.
- 
+
 A similar argumentation holds true for the question, wether or not to use
 separate processes and IPC. While it certainly is a good idea to have the X
 server or a database running in a separate process, the situation is really
-quite different for editing video. Hopefully it's clear why. 
+quite different for editing video. Hopefully it's clear why.
 
 Could you please rework this Design Entry in a way that we can finalize
 (accept) it?

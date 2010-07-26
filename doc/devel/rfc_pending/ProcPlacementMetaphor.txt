@@ -62,10 +62,10 @@ than not it's not necessary to "nail down" a video clip -- rather, the user
 wants it to start immediately after the end of another clip, it should be sent
 to some generic output and it should stay in the layering order above some
 other clip. But, as the editing system fails to provide the means for
-expressing such relationships, we are forced to
-work with hard values, resort to a bunch of macro features or even compensate
-for this lack by investing additional resources in production organisation (the
-latter is especially true for building up a movie sound track).
+expressing such relationships, we are forced to work with hard values, resort
+to a bunch of macro features or even compensate for this lack by investing
+additional resources in production organisation (the latter is especially true
+for building up a movie sound track).
 
 On the contrary, using the '''Placement''' metaphor has the implication of
 switching to a query-driven approach.
@@ -80,9 +80,9 @@ switching to a query-driven approach.
    need of massively reworking the core.
 
 When interpreting the high-level model and creating the low-level model,
-Placements need to be ''resolved'',
-resulting in a simplified and completely nailed-down copy of the session
-contents, which this design calls »the '''Fixture'''«
+Placements need to be ''resolved'', resulting in a simplified and completely
+nailed-down copy of the session contents, which this design calls »the
+'''Fixture'''«
 
 Media Objects can be placed
 
@@ -204,15 +204,13 @@ Re:
 "Finally, there is sort-of a visionary aspect involved here: 
 Ichthyo thinks that nowadays, after image and sound are no longer bound to
 physical media, there is potential for '''new workflows''' to be
-'''discovered''', 
-and the '''Placement concept''' '''''could be''''' an '''extension point''' for
-such undertakings."
+'''discovered''',  and the '''Placement concept''' '''''could be''''' an
+'''extension point''' for such undertakings."
 
 New workflows will not just be '''discovered''', but they will be able to be
 '''recorded, analysed, templated, automated, and integrated''' into the full
-workflow process.
-This will free up a greater proportion of time for the "finishing" processes of
-projects.
+workflow process. This will free up a greater proportion of time for the
+"finishing" processes of projects.
 
 "The Placement concept 'could be' an extension for such undertakings" is very
  likely to be an understatement as it is this which '''''will be''''' what
@@ -222,7 +220,7 @@ projects.
 This feature/capability is likely to stamp the Lumiera project as a flagship
 benchmark in more ways than one, for some time.
 
- . --link:Tree[][[DateTime(2008-08-23T12:54:00NZ)]].
+ . --link:Tree[][[DateTime(2008-08-23T12:54:00NZ)]].
 
 
 Back to link:Lumiera/DesignProcess[]

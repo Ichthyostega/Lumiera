@@ -14,8 +14,8 @@ Resource Management: Budgeting
 ******************************************************************************
 The Profiler will give some Idea about how much Resources can me used to
 optimally utilize the system. Knowing this number leads to the next challenge,
-distributing the resources to different subsystems, jobs and objects.
-I here introduce a budgeting system which takes care for this.
+distributing the resources to different subsystems, jobs and objects. I here
+introduce a budgeting system which takes care for this.
 ******************************************************************************
 
 

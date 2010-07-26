@@ -22,7 +22,7 @@ Definitions
  Project:: the top-level context in which all edit work is done over an
  extended period of time. The Project can be saved and re-opened. It is
  comprised of  the collection of all things the user is working on, it contains
- all informations, assets, state and objects to be edited. 
+ all informations, assets, state and objects to be edited.
 
  Session:: the current in-memory representation of the Project when opened
  within an instance of Lumiera. This is an implementation-internal term. For

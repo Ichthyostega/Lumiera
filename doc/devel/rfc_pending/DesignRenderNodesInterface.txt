@@ -9,7 +9,7 @@
 Design the Render Nodes interface
 ---------------------------------
 In the current design, the low-level model is comprised of "Render Nodes";
-Proc-Layer and Backend carry out some colaboration based on this node network. 
+Proc-Layer and Backend carry out some colaboration based on this node network.
  +
 Three different interfaces can be identified
  * the node wiring interface
@@ -43,7 +43,7 @@ preselected to use a combination of specific working modes:
 
  * participate in caching
  * calculate in-place
- * source reading 
+ * source reading
  * (planned) use hardware acceleration
  * (planned) remote dispatched calculation
 

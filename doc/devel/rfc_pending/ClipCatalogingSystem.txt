@@ -1,4 +1,4 @@
-Design Process : Clip Cataloging System 
+Design Process : Clip Cataloging System
 =======================================
 
 [grid="all"]
@@ -8,7 +8,7 @@ Design Process : Clip Cataloging System
 *Proposed by*   link:JordanN[]
 -------------------------------------
 
-Clip Cataloging System 
+Clip Cataloging System
 -----------------------
 
 A system for storing, organizing, and retrieving assets, such as images and
@@ -105,15 +105,15 @@ An additional benefit to using "library" managers, is that it can handle
 interloans, referencing of "other" (people's/organization's) libraries,
 numbering systems, descriptions, and classifications, thousands to millions of
 items, search systems, review and comment systems, plus the benefits of open
-source that allow the expansion of features easily.
-The use of task oriented programs in this way, makes use of established code,
-that has been developed by experts in their field. Any database system would be
-useful for managing all these media. But one that has been developed by the
-people that have been working with cataloging systems for a long time is likely
-to do well. Plus it can be readily improved, by people who do not have to know
-the first thing about how to design video editing programs. The program also
-gets improved because of it own community, which adds features or performance
-to Lumiera, without even having to "drive" the development..
+source that allow the expansion of features easily. The use of task oriented
+programs in this way, makes use of established code, that has been developed by
+experts in their field. Any database system would be useful for managing all
+these media. But one that has been developed by the people that have been
+working with cataloging systems for a long time is likely to do well. Plus it
+can be readily improved, by people who do not have to know the first thing
+about how to design video editing programs. The program also gets improved
+because of it own community, which adds features or performance to Lumiera,
+without even having to "drive" the development..
 --link:Tree[][[DateTime(2008-08-27T20:38:00NZ)]].
 
 ''''
