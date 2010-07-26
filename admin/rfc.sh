@@ -12,23 +12,25 @@ usage:
 
 options:
  title                  - Quoted string used as RFC title
- rfc                    - Name of the RFC, smart matched
+ rfc                    - Name of the RFC, smart matched, unique
+ rfcs                   - Name of the RFC, smart matched, multiple
  regex                  - Regex matched against the content of a RFC
  chapter                - Heading of a section
 
 commands (with <mandatory> and [optional] parameters):
- help                   - Show this help
- find <rfc> [regex]     - List all matching RFC's (matching 'regex')
- show <rfc> [regex]     - Read RFC's (matching 'regex')
- edit <rfc> [chapter]   - Edit RFC at chapter
- process                - Do automatic maintenance work
+ find <rfcs> [regex]    - List all matching RFC's (matching 'regex')
+ show <rfcs> [regex]    - Read RFC's (matching 'regex')
  create <title>         - Create a new RFC
- draft <rfc>            - Change RFC to Draft state
- park <rfc>             - Change RFC to Parked state
- final <rfc>            - Change RFC to Final state
- drop <rfc>             - Change RFC to Dropped state
+ edit <rfc> [chapter]   - Edit RFC at chapter
  comment <rfc>          - Add a new comment to a RFC
+ draft <rfc>            - Change RFC to Draft state
+ final <rfc>            - Change RFC to Final state
+ park <rfc>             - Change RFC to Parked state
+ drop <rfc>             - Change RFC to Dropped state
  discard <rfc>          - Delete an RFC
+ help                   - Show this help
+ process                - Do automatic maintenance work
+ wrap <rfcs>            - canonical reformatting
 
 Smart matching:
  RFC names don't need to be given exactly, they use a globbing pattern.
@@ -218,8 +220,6 @@ function process()
     local file="$1"
     local path="${1%/*}"
     local state=$(grep '^\*State\* *' "$file")
-
-    smart_wrap "$1" 80
 
     case "$state" in
     *Final*)
@@ -414,7 +414,9 @@ discard)
     fi
     ;;
 wrap)
-    word_wrap "$1"
+    find_rfc "$1" | while read file; do
+        smart_wrap "$file" 80
+    done
     ;;
 help|*)
     usage
