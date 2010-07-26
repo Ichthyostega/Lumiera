@@ -77,56 +77,88 @@ function camel_case()
     echo "$(tr -c -d "A-Za-z" <<<"$t")"
 }
 
+
+
+function untabify()
+{
+    local in="$1"
+    local tmp
+    local out
+
+    while [[ "$in" ]]; do
+        tmp="${in%%$'\t'*}"
+        in="${in:${#tmp}+1}"
+        out="$out$tmp        "
+        out="${out:0:${#out}/8*8}"
+    done
+    out="${out%%*( )}"
+
+    echo "$out"
+}
+
+
+
 function word_wrap()
 {
     local linelength="${1:-80}"
     local indent=""
-    local newline
-    local tmpline
-    local wrapped
     local text
     local tab=$'\t'
+    local rest
+    local oldindent
+    local coderx='//|/\*|#'
+    local meld=yes
 
     while IFS='' read -r line; do
-        # untabify all, spaces leading tabs are not considered (TODO proper tab handling)
-        line="${line//$tab/        }"
+        line="$(untabify "$line")"
+        # remove DOS linebreaks
+        line="${line//$'\r'/}"
 
-        if [[ ${#line} -gt $linelength ]]; then
+        text="${line##*([![:alnum:]])}"
+        oldindent="$indent"
+        indent="${line:0:${#line}-${#text}}"
+        if [[ "$text" ]]; then
 
-            text="${line##*([![:alnum:]])}"
-            if [[ "$text" ]]; then
-                indent="${line:0:${#line}-${#text}}"
-                indent="${indent//?/ }"
-
-                while [[ "${#line}" -gt "${#indent}" ]]; do
-
-                    tmpline="${line:0:$linelength}"
-
-                    if [[ ${#tmpline} -ge $linelength ]]; then
-                        wrapped="${tmpline% *}"
-                        if [[ ${#wrapped} -lt ${#indent} ]]; then
-                            # one long word TODO better keep overlong lines (long urls?)
-                            wrapped="$tmpline"
-                        fi
-                    else
-                        wrapped="$tmpline"
-                    fi
-
-                    echo "$wrapped"
-
-                    line="$indent${line:${#wrapped}+1}"
-
-                    # TODO if indent level doesnt change and indent has only space we can meld lines together
-                done
-            else
-                # a line without any text will not be wrapped
-                echo "$line"
+            # avoid melding text after // /* and # comments
+            if [[ "$indent" =~ $coderx ]]; then
+                meld=no
             fi
+
+            if [[ $meld = yes && ! "${indent// /}" && ${#oldindent} -eq ${#indent} ]]; then
+                line="${rest:+$rest }$text"
+            else
+                if [[ "$rest" ]]; then
+                    echo "$rest"
+                fi
+            fi
+            indent="${indent//?/ }"
+
+            while [[ "${#line}" -ge "${linelength}" ]]; do
+                local wrapped
+                local tmpline="${line:0:$linelength}"
+                wrapped="${tmpline% *}"
+                if [[ "${#wrapped}" -gt "${#indent}" ]]; then
+                    line="${indent}${line:${#wrapped}+1}"
+                else
+                    wrapped="$line"
+                    line=''
+                fi
+                echo "$wrapped"
+            done
+
+            rest="${line}"
         else
-            # short lines are not wrapped
+            meld=yes
+            if [[ "$rest" ]]; then
+                echo "$rest"
+                rest=""
+            fi
             echo "$line"
         fi
     done
+    if [[ "$rest" ]]; then
+        echo "$rest"
+    fi
 }
 
 
@@ -306,6 +338,7 @@ process)
     # for all rfc's
     for file in $(find ./doc/devel/rfc* -name '*.txt');
     do
+        echo "process $file"
         process "$file"
     done
     :
@@ -379,6 +412,9 @@ discard)
     if [[ "$name" ]]; then
         git rm "${name}"
     fi
+    ;;
+wrap)
+    word_wrap "$1"
     ;;
 help|*)
     usage
