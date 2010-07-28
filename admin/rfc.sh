@@ -4,7 +4,7 @@ shopt -s extglob
 
 function usage()
 {
-    less -e <<"EOF"
+    less -F <<"EOF"
 Script to maintain Lumiera RFC's
 
 usage:
@@ -67,16 +67,7 @@ EOF
 
 function camel_case()
 {
-    local c
-    local u
-    local t=" $1"
-
-    for c in {a..z}; do
-        u=$(tr "a-z" "A-Z" <<<"$c")
-        t="${t// $c/$u}"
-    done
-
-    echo "$(tr -c -d "A-Za-z" <<<"$t")"
+    sed -e 's/[^[:alnum:]]/ /g;s/ \+\(.\)/\U\1/g' <<<" $1"
 }
 
 
@@ -417,6 +408,10 @@ wrap)
     find_rfc "$1" | while read file; do
         smart_wrap "$file" 80
     done
+    ;;
+smart_wrap)
+    # multipurpose smart wrap
+    smart_wrap "$1" ${2:-80}
     ;;
 help|*)
     usage
