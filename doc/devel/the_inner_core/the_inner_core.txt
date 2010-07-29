@@ -88,9 +88,51 @@ Errors
  * Errors are identified by pointers to static strings.
  * Errors are sticky (you cant set a new error unless the pending one got
    cleared).
- * macros for declaring and defining errors
+
+.General definition and declarations of errors
+Errors get declared in headers with the `LUMIERA_ERROR_DECLARE(err)` macro.
+
+Then the implementaton file uses the macros `LUMIERA_ERROR_DEFINE(err, msg)`
+to instance the error. There is no central registry, Any component can
+introduce its own errorcodes but must ensure that the error identifier is
+unique.
+
+.Error handling in C
+There are two helper macro forms for setting up error coditions, one is
+`LUMIERA_ERROR_SET..(flag, err, extra)` and the other one is
+`LUMIERA_ERROR_GOTO..(flag, err, extra)`. Each for differnt logging levels.
+The `SET` form just logs an error and sets it, the `GOTO` form also jumps to
+an error handler. Both take a NoBug flag used for logging and a optional
+`extra` c-string.
+
+
+[source,C]
+--------------------------------------------------------------------------------
+const char*
+mayfail()
+{
+  const char* ret = foo();
+  if (!ret)
+    LUMIERA_ERROR_GOTO (flag, FOO_FAILED);
+
+  if (!bar(ret))
+    LUMIERA_ERROR_GOTO (flag, BAR_FAILED,
+                        lumiera_tmpbuf_snprintf (256, "foo was %s", ret));
+
+  return "everything ok";
+
+  /* cleanup in reverse setup order */
+ BAR_FAILED:
+  lumiera_free (ret);
+ FOO_FAILED:
+  return NULL;
+}
+--------------------------------------------------------------------------------
+
 
 .C++ exceptions
+
+
 
 Memory Pools
 ~~~~~~~~~~~~
