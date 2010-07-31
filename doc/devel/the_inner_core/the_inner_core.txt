@@ -43,10 +43,36 @@ The extra components are:
      rest.
 
 
+Coding Style
+~~~~~~~~~~~~
+
+The Lumiera team agreed on using GNU coding style with some exceptions (no
+tabs, line wrap must not always be enforced). Otherwise we are a bit pedantic
+to be consistent to make the codebase uniform. Function nameing conventions
+and other details are described in sereral RFCs.
+
+Documentation
+~~~~~~~~~~~~~
+
+Every public function should be documented with doxygen comments. The design
+is documented in this text, in various RFC's. Bootstrapping the Lumiera design
+used serveral other places, some tiddlywikis, an uml model and cehteh's
+private wiki, most of this information is asciidoced meanwhile and in progress
+to be integrated in a now documentation hierarchy.
+
+
+Test Driven Development
+~~~~~~~~~~~~~~~~~~~~~~~
+
+We strive to use _Test-Driven-Development_ this means tests are written first,
+defining the specification of the entity being tested. Then things get
+implemented until they pass their tests. Practice shows that this approach
+isn't always suiteable, nevertheless we try to follow it closely and maintain
+rigid testsuites.
+
+
 Lumiera Main
 ------------
-
-
 
 
 Common
