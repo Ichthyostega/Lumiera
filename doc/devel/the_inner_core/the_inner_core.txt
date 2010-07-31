@@ -124,7 +124,7 @@ introduce its own errorcodes but must ensure that the error identifier is
 unique.
 
 .Error handling in C
-There are two helper macro forms for setting up error coditions, one is
+There are two helper macro forms for setting up error conditions, one is
 `LUMIERA_ERROR_SET..(flag, err, extra)` and the other one is
 `LUMIERA_ERROR_GOTO..(flag, err, extra)`. Each for differnt logging levels.
 The `SET` form just logs an error and sets it, the `GOTO` form also jumps to
@@ -139,18 +139,18 @@ mayfail()
 {
   const char* ret = foo();
   if (!ret)
-    LUMIERA_ERROR_GOTO (flag, FOO_FAILED);
+    LUMIERA_ERROR_GOTO (flag, FOO_FAILED, 0);
 
   if (!bar(ret))
-    LUMIERA_ERROR_GOTO (flag, BAR_FAILED,
+    LUMIERA_ERROR_GOTO (flag, BAR_FAILED, 1,
                         lumiera_tmpbuf_snprintf (256, "foo was %s", ret));
 
   return "everything ok";
 
   /* cleanup in reverse setup order */
- BAR_FAILED:
+ BAR_FAILED1:
   lumiera_free (ret);
- FOO_FAILED:
+ FOO_FAILED0:
   return NULL;
 }
 --------------------------------------------------------------------------------
@@ -173,9 +173,14 @@ dynamic situations.
 
 Polymorphic Programming in C
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-//vcall.h
 
-Just a simple macro to call vtable functions with some safety measures
+Just a macro for simplyfying vtable function calls
+ VCALL(Handle, function, arguments...)
+translates to
+ Handle->vtable->function (Handle, arguments...)
+
+The user is responsible for setting up a `vtable` member in his datastructures
+this macro does some NoBug checks that self and function are initialized.
 
 
 Unique Identifiers
@@ -200,13 +205,16 @@ fail. NULL strings are propagated to "" empty strings.
 
 
 Temporary Buffers
-^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~
 
 Provides a small number of round robin buffers which need not to be freed.
 Must only be used locally when no deep recursion may use tmpbufs. Using these
-wrong (recursively) will crash.
+wrong (recursively) will result in corrupted data.
 
-Very fast and efficient from smallest too hugest allocations.
+Very fast and efficient from smallest too hugest allocations. No need to care
+for 'free()'
+
+
 
 Preprocessor Metaprogramming
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
