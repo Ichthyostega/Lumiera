@@ -27,6 +27,7 @@ commands (with <mandatory> and [optional] parameters):
  final <rfc>            - Change RFC to Final state
  park <rfc>             - Change RFC to Parked state
  drop <rfc>             - Change RFC to Dropped state
+ supersede <rfc> <new>  - Supersede RFC with a new RFC
  discard <rfc>          - Delete an RFC
  help                   - Show this help
  process                - Do automatic maintenance work
@@ -366,36 +367,52 @@ edit)
     name=$(unique_name "$1")
     if [[ "$name" ]]; then
         edit "${name}" 2 "$2"
+        git add "$name"
     fi
     ;;
 draft)
     name=$(unique_name "$1")
     if [[ "$name" ]]; then
         change_state "$name" Draft
+        git add "$name"
     fi
     ;;
 park)
     name=$(unique_name "$1")
     if [[ "$name" ]]; then
         change_state "$name" Parked
+        git add "$name"
     fi
     ;;
 final)
     name=$(unique_name "$1")
     if [[ "$name" ]]; then
         change_state "$name" Final
+        git add "$name"
+    fi
+    ;;
+supersede)
+    name=$(unique_name "$1")
+    newname=$(unique_name "$2")
+    newname="${newname##*/}"
+    newname="${newname%.txt}"
+    if [[ "$name" && "$newname" ]]; then
+        change_state "$name" "Superseded by $newname"
+        git add "$name"
     fi
     ;;
 drop)
     name=$(unique_name "$1")
     if [[ "$name" ]]; then
         change_state "$name" Dropped
+        git add "$name"
     fi
     ;;
 comment)
     name=$(unique_name "$1")
     if [[ "$name" ]]; then
         add_comment "${name}"
+        git add "$name"
     fi
     ;;
 discard)
