@@ -34,7 +34,7 @@ namespace mobject {
 namespace session {
   
   
-  LUMIERA_ERROR_DEFINE (INVALID_SCOPE, "Placement scope invalid an not locatable within model");
+  LUMIERA_ERROR_DEFINE (INVALID_SCOPE, "Placement scope invalid and not locatable within model");
 
   
   

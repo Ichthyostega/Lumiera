@@ -24,7 +24,7 @@
  ** An Object representing a sequence of nested scopes within the Session.
  ** MObjects are being attached to the model by Placements, and each Placement
  ** is added as belonging \em into another Placement, which defines the Scope
- ** of the addition. There is one (abstract) root element, containing the timelines;
+ ** of the addition. There is one (formal) root element, containing the timelines;
  ** from there a nested sequence of scopes leads down to each Placement.
  ** Ascending this path yields all the scopes to search or query in proper order
  ** to be used when resolving some attribute of placement. Placements use visibility

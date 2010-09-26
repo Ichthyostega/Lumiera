@@ -128,7 +128,7 @@ namespace session {
   bool
   ScopePath::isValid()  const
   {
-    return (0 < length())
+    return (1 < length())
 #ifndef NDEBUG
         && hasValidRoot()
 #endif      

@@ -138,8 +138,8 @@ namespace test    {
           ASSERT (scope1 != par);    ASSERT (par != scope1);
           ASSERT (scope2 != par);    ASSERT (par != scope2);
           
-          PlacementMO& plac2 (scope2.getTop());
-          ASSERT (aPlac.getID() == plac2.getID());
+          PlacementMO& placm2 (scope2.getTop());
+          ASSERT (aPlac.getID() == placm2.getID());
           
           PlacementMO& parPlac (par.getTop());
           ASSERT (aPlac.getID() != parPlac.getID());
