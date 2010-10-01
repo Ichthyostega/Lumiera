@@ -72,7 +72,7 @@ namespace session {
   ScopeLocator::ScopeLocator()
     : focusStack_(new QueryFocusStack)
   {
-    TODO ("anything in initialise here?");
+    TODO ("anything to initialise here?");
   }
   
   ScopeLocator::~ScopeLocator() { }

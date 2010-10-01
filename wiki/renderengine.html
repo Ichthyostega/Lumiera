@@ -1045,11 +1045,16 @@ Meanwhile I've settled down on implementing the [[top-level entities|Timeline]] 
 On the implementation side, we use a special kind of MObject, acting as an anchor and providing an unique identity. Like any ~MObject, actually a placement establishes the connection and the scope, and typically constitutes a nested scope (e.g. the scope of all objects //within// the sequence to be bound into a timeline)
 </pre>
 </div>
-<div title="BindingScopeProblem" modifier="Ichthyostega" modified="201009260345" created="200910181435" tags="SessionLogic spec" changecount="7">
+<div title="BindingScopeProblem" modifier="Ichthyostega" modified="201010011556" created="200910181435" tags="SessionLogic spec" changecount="19">
 <pre>There is some flexibility in the HighLevelModel, allowing to attach the same [[Sequence]] onto multiple [[timelines|Timeline]] or even into a [[meta-clip|VirtualClip]]. Thus, while there is always an containment relation which can be used to define the current PlacementScope, we can't always establish an unique path from any given location up to the model root. In the most general case, we have to deal with a DAG, not a tree.
 
 !solution idea
 Transform the DAG into a tree by //focussing//&amp;nbsp; on the current situation and context. Have a state containing the //current path.//  &amp;rarr; QueryFocus
+
+Incidentally, this problem is quite similar to file system navigation involving ''symlinks''.
+* under which circumstances shall discovery follow symlinks?
+* where do you get by {{{cd ..}}} &amp;mdash; especially when you went down following a symlink?
+This leads us to building our solution here to match a similar behaviour pattern, according to the principle of least surprise. That is, disovery shall follow the special [[bindings|BindingMO]] only when requested explicitly, but the current &quot;shell&quot; (QueryFocus) should maintain a virtual/effective path to root scope.
 
 !!detail decisions
 !!!!how to represent scoping
@@ -1061,7 +1066,7 @@ each Placement (with the exception of the root) gets registered as contained in 
 # ScopePath digresses at Sequence level from the basic containment tree
 
 !!!!locating a placement
-constituting the effective logical position of a placement poses sort-of a chicken or egg problem: We need alread a logical position to start with. In practice, this is done by recurring on the QueryFocus, which is a stack-like state and automatically follows the access or query operations on the session. //Locating a placement//&amp;nbsp; is done by //navigating the current query focus.//
+constituting the effective logical position of a placement poses sort-of a chicken or egg problem: We need already a logical position to start with. In practice, this is done by recurring on the QueryFocus, which is a stack-like state and automatically follows the access or query operations on the session. //Locating a placement//&amp;nbsp; is done by //navigating the current query focus.//
 
 !!!!navigating a scope path location
 As the current query focus stack top always holds a ScopePath, the ''navigating operation'' on ScopePath is the key for managing this logical view onto the &quot;current&quot; location.
@@ -1069,6 +1074,14 @@ As the current query focus stack top always holds a ScopePath, the ''navigating 
 * in case the new scope belongs to a different sequence, this sequence might be connected to the current one as a meta-clip, again resulting in a common prefix
 * otherwise use the first possible binding according to the ordering of timelines as a prefix
 * use the basic containment path as a fallback if no binding exists
+
+!!{{red{WIP 9/10}}}Deficiencies
+To buy us some time, analysing and implementing the gory details of scope path navigation and meta-clips was skipped for now.
+Please note the shortcomings and logical contradictions in the solution currently in code:
+* it is assumed that the translation basic tree &amp;rarr; logical position happens &quot;somehow&quot; in the discovery query; but this query is implemented by the standard query resolver, which is the PlacementIndex. Thus, the facility providing the basic view should also be in charge for providing the logical view &amp;mdash; not a very clever move
+* QueryFocus, with the help of ScopeLocator exposes the query services of the PlacementIndex. This yields the basic containment tree, while actually the logical view should be exposed. Thus we need an augmenting and translating layer on top
+* the {{{ScopePath::navigate()}}}-function actually creates a new path on-the-fly, just to get this translation. Rather, //exactly this function//&amp;nbsp; should be the sole location to //provide//&amp;nbsp; this service.
+* so we need a way to share the implementation logic, so the query/discovery functions can participate
 </pre>
 </div>
 <div title="BuildProcess" modifier="Ichthyostega" modified="200906071813" created="200706190658" tags="Builder operational img" changecount="30">
@@ -3963,7 +3976,7 @@ The stack of scopes must not be confused with the ScopePath. Each single frame o
 The full implementation of this scope navigation is tricky, especially when it comes to determining the relation of two positions. It should be ''postponed'' and replaced by a ''dummy'' (no-op) implementation for the first integration round.
 </pre>
 </div>
-<div title="QueryFocusStack" modifier="Ichthyostega" modified="200911220509" created="200910200158" tags="SessionLogic spec operational" changecount="8">
+<div title="QueryFocusStack" modifier="Ichthyostega" modified="201009300225" created="200910200158" tags="SessionLogic spec operational" changecount="9">
 <pre>The ScopeLocator uses a special stack of ScopePath &amp;raquo;frames&amp;laquo; to maintain the //current focus.//
 What is the ''current'' QueryFocus and why is it necessary? There is a state-dependent part involved, inasmuch the effective ScopePath depends on how the invoking client has navigated the //current location// down into the HighLevelModel structures. Especially, when a VirtualClip is involved, there can be discrepancies between the paths resulting when descending down through different paths. (See &amp;rarr; BindingScopeProblem).
 
@@ -3973,7 +3986,7 @@ Thus, doing something with the current location, and especially descending or qu
 As long as client code is just interested to use the current query location, we can provide a handle referring to it. But when a query needs to be run without side effect on the current location, we //push//&amp;nbsp; it aside and start using a new QueryFocus on top, which starts out at a new initial location. Client code again gets a handle (smart-ptr) to this location, and additionally may access the new //current location.// When all references are out of scope and gone, we'll drop back to the focus put aside previously.
 
 !implementation of ref-counting and clean-up
-Actually, client code should use QueryFocus instances as frontend to access this &amp;raquo;current focus&amp;laquo;. Each ~QueryFocus instance incorporates a smart-ptr. But as in this case we're not managing objects allocated somewhere, we use an {{{boost::intrusive_ptr}}} and maintain the ref-count immediately within the target objects to be managed. These target objects are ScopePath instances and are living within the QueryFocusStack, which in turn in managed by the ScopeLocator singleton (see the UML diagram &amp;rarr;[[here|QueryFocus]]). We use an (hand-written) stack implementation to ensure the memory locations of these ScopePath &amp;raquo;frames&amp;laquo; remain valid (and also to help with providing strong exception guarantees). The stack is aware of these ref-count and takes it into account on performing the {{{pop_unused()}}} operation: any unused frame on top will be evicted, stopping at the first frame still in use (which may be even just the old top). This cleanup also happens automatically when accessing the current top, re-initialising an potentially empty stack with a default-constructed new frame if necessary. This way, just accessing the stack top always yields the ''current focus location'', which thereby is //defined as the most recently used focus location still referred.//
+Actually, client code should use QueryFocus instances as frontend to access this &amp;raquo;current focus&amp;laquo;. Each ~QueryFocus instance incorporates a smart-ptr. But as in this case we're not managing objects allocated somewhere, we use an {{{boost::intrusive_ptr}}} and maintain the ref-count immediately within the target objects to be managed. These target objects are ScopePath instances and are living within the QueryFocusStack, which in turn is managed by the ScopeLocator singleton (see the UML diagram &amp;rarr;[[here|QueryFocus]]). We use an (hand-written) stack implementation to ensure the memory locations of these ScopePath &amp;raquo;frames&amp;laquo; remain valid (and also to help with providing strong exception guarantees). The stack is aware of these ref-count and takes it into account on performing the {{{pop_unused()}}} operation: any unused frame on top will be evicted, stopping at the first frame still in use (which may be even just the old top). This cleanup also happens automatically when accessing the current top, re-initialising an potentially empty stack with a default-constructed new frame if necessary. This way, just accessing the stack top always yields the ''current focus location'', which thereby is //defined as the most recently used focus location still referred.//
 
 !concurrency
 This concept deliberately ignores parallelism. But, as the current path state is already encapsulated (and ref-counting is in place), the only central access point is to reach the current scope. Instead of using a plain-flat singleton here, this access can easily be routed through thread local storage.
@@ -4418,10 +4431,10 @@ In the general case, this user visible high-level-model of the [[objects|MObject
 While there //is// a &quot;current state&quot; involved, the effect of concurrent access deliberately remains unspecified, because access is expected to be serialised on a higher level. If this assumption were to break, then probably the ScopeLocator would involve some thread local state.
 </pre>
 </div>
-<div title="ScopePath" modifier="Ichthyostega" modified="201009260154" created="200911202124" tags="def spec" changecount="7">
+<div title="ScopePath" modifier="Ichthyostega" modified="201010011555" created="200911202124" tags="def spec" changecount="8">
 <pre>The sequence of nested [[placement scopes|PlacementScope]] leading from the root (global) scope down to a specific [[Placement]] is called ''scope path''. Ascending this path yields all the scopes to search or query in proper order to be used when resolving some attribute of placement. Placements use visibility rules comparable to visibility of scoped definitions in common programming languages or in cascading style sheets, where a local definition can shadow a global one. In a similar way, properties not defined locally may be resolved by querying up the sequence of nested scopes.
 
-A scope path is a sequence of scopes, where each scope is implemented by a PlacementRef pointing to the &amp;raquo;scope top&amp;laquo;, i.e. the placement in the session //constituting this scope.// Each Placement is registered with the session as belonging to a scope, and each placement can contain other placements and thus form a scope. Thus, the ''leaf'' of this path can be considered the current scope. In addition to some search and query functions, a scope path has the ability to ''navigate'' to a given target scope, which must be reachable by ascending and descending into the branches of the overall tree or DAG. Navigating changes the current path. ({{red{WIP 11/09}}} navigation to scopes outside the current path and the immediate children of the current leaf is left out for now. We'll need it later, when actually implementing [[meta-clips|VirtualClip]].)
+A scope path is a sequence of scopes, where each scope is implemented by a PlacementRef pointing to the &amp;raquo;scope top&amp;laquo;, i.e. the placement in the session //constituting this scope.// Each Placement is registered with the session as belonging to a scope, and each placement can contain other placements and thus form a scope. Thus, the ''leaf'' of this path can be considered the current scope. In addition to some search and query functions, a scope path has the ability to ''navigate'' to a given target scope, which must be reachable by ascending and descending into the branches of the overall tree or DAG. Navigating changes the current path. ({{red{WIP 11/09}}} navigation to scopes outside the current path and the immediate children of the current leaf is left out for now. We'll need it later, when actually implementing meta-clips. &amp;rarr; see BindingScopeProblem)
 
 !access path and session structure
 ScopePath represents an ''effective scoping location'' within the model &amp;mdash; it is not necessarily identical to the storage structure (&amp;rarr; PlacementIndex) used to organise the session. While similar in most cases, binding a sequence into multiple timelines or meta-clips will cause the internal and the logical (effective) structure to digress (&amp;rarr; BindingScopeProblem). An internal singleton service, the ScopeLocator is used to constitute the logical (effective) position for a given placement (which in itself defines a position in the session datastructure). This translation involves a [[current focus|QueryFocus]] remembering the access path used to reach the placement in question. Actually, this translation is built on top of the //navigation//-Operation of ScopePath, which thus forms the foundation to provide such a logical view on the &quot;current&quot; location.

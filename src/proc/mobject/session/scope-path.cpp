@@ -59,7 +59,7 @@ namespace session {
     inline ScopeQuery<MObject>::iterator
     discoverScopePath (Scope const& leaf)
     {
-      return ScopeLocator::instance().locate<MObject> (leaf);
+      return ScopeLocator::instance().locate<MObject> (leaf);   /////////////////////////////TICKET #663   create a single extension point to add meta-clip support later
     }
     
     
@@ -107,7 +107,7 @@ namespace session {
   {
     if (!leaf.isValid()) return; // invalid leaf defines invalid path....
     
-    append_all (discoverScopePath(leaf), path_);
+    append_all (discoverScopePath(leaf), path_);   /////////////////////////////TICKET #663   extension point for meta-clip support
     reverse (path_.begin(), path_.end());
   }
   
@@ -272,6 +272,7 @@ namespace session {
   {
     ___check_notBottom (this, "Navigating");
     *this = ScopePath(target);             //////////////////////////////TICKET #424
+                                          ///////////////////////////////TICKET #663   extension point for meta-clip support
   }
   
   

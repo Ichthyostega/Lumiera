@@ -53,10 +53,15 @@ namespace session {
    * Alternatively, through the static factory function #push(), a new
    * focus location may be opened, thereby pushing the currently used
    * focus location aside. This new focus location will remain the
-   * current focus, while any handles referring to it is still in use.
+   * current focus, until all handles referring to it go out of scope.
    * 
    * Using an existing QueryFocus (handle), the current focus may be 
-   * shifted to another scope within the current session.
+   * shifted to another scope within the current session. This
+   * »navigating« operation will use the current focus position as
+   * point of departure, thus retaining a similar access path to any
+   * nested sequences. (These might be attached multiple times within
+   * the same session, each attachement constituing a different
+   * context scope. Navigating tries to retain the current context)
    * 
    * The templated query functions allow to issue specifically typed
    * queries to retrieve all children (immediately contained in a
@@ -73,7 +78,8 @@ namespace session {
    * are delivered without any defined order (implementation is
    * hashtable based)
    * 
-   * @see query-focus-test.cpp
+   * @see QueryFocus_test
+   * @see scope-path.hpp (concept: path of scopes)
    */
   class QueryFocus
     {

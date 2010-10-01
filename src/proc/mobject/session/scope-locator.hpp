@@ -116,6 +116,9 @@ namespace session {
   
   /** use the contents-resolving facility exposed by the session
    *  to discover the path up from the given scope to model root
+   *  @todo this seems to be the prime candidate to add the support for virtual paths,
+   *        as required to implement meta-clips ///////////////////////////////////////////TICKET #663
+   *        only used by the ScopePath implementation thus far
    */
   template<typename MO>
   inline typename ScopeQuery<MO>::iterator
