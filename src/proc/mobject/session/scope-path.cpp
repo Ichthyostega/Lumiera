@@ -54,12 +54,12 @@ namespace session {
   
   namespace { // Helpers and shortcuts....
     
-    /** issue a query to discover the path to root,
+    /** issue a query to discover the (raw) path to root,
      *  starting with the given scope */
     inline ScopeQuery<MObject>::iterator
     discoverScopePath (Scope const& leaf)
     {
-      return ScopeLocator::instance().locate<MObject> (leaf);   /////////////////////////////TICKET #663   create a single extension point to add meta-clip support later
+      return ScopeLocator::instance().getRawPath (leaf);
     }
     
     
@@ -279,7 +279,7 @@ namespace session {
     this->path_ = otherPath;          //  TODO really relate the two paths, including a treatment for meta-clips
                                      //   - if both are in the same sequence (same head element): just attach the tail of the other
                                     //    - if the other path points into a sequence which is attached as meta-clip to the current sequence,
-                                   //          then attach the other path below that meta-clip
+                                   //          then attach the other path below that meta-clip (problem: resolve multiple attachments)
                                   //      - otherwise use the first timeline, to which the other path's sequence is attached
                                  //       - otherwise, if all else fails, use the raw otherPath
   }

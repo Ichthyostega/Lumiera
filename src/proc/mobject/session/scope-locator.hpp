@@ -78,6 +78,10 @@ namespace session {
       typename ScopeQuery<MO>::iterator
       locate (Scope scope);
       
+      ScopeQuery<MObject>::iterator
+      getRawPath (Scope);
+
+
      ~ScopeLocator();
      
     protected:
@@ -113,20 +117,42 @@ namespace session {
     return ScopeQuery<MO> (scope.getTop(), CONTENTS).resolveBy (theResolver());
   }
   
-  
-  /** use the contents-resolving facility exposed by the session
-   *  to discover the path up from the given scope to model root
-   *  @todo this seems to be the prime candidate to add the support for virtual paths,
-   *        as required to implement meta-clips ///////////////////////////////////////////TICKET #663
-   *        only used by the ScopePath implementation thus far
+
+  /** navigate the \em current QueryFocus scope location. The resulting
+   *  access path to the new location is chosen such as to be most closely related
+   *  to the original location; this includes picking a timeline or meta-clip
+   *  attachment most similar to the one used in the original path. So effectively
+   *  you'll see things through the same "scoping perspective" as given by the
+   *  original path, if possible to the new location
+   *  given as parameter. use the contents-resolving facility exposed by the session
+   * @note changes the \em current QueryFocus as a sideeffect
+   * @param scope the new target location to navigate
+   * @return an iterator yielding the nested scopes from the new location
+   *         up to root, in a way likely to be similar to the original location
    */
   template<typename MO>
   inline typename ScopeQuery<MO>::iterator
   ScopeLocator::locate (Scope scope)
   {
-    return ScopeQuery<MO> (scope.getTop(), PATH).resolveBy (theResolver());
+    UNIMPLEMENTED ("virtual navigation");
   }
   
   
+  /** use the contents-resolving facility exposed by the session
+   *  to discover the path up from the given scope to model root.
+   *  @note this yields the \em raw path (basic containment hierarchy),
+   *        as opposed to an effective or virtual path, which should reflect
+   *        the attachment of Sequences to Timelines or meta-clips. That is,
+   *        you'll always get the top-level track of any sequence as direct
+   *        child of the root node and timelines (BindingMO) just appear
+   *        to be "dead ends"
+   */
+  inline ScopeQuery<MObject>::iterator
+  ScopeLocator::getRawPath (Scope scope)
+  {
+    return ScopeQuery<MObject> (scope.getTop(), PATH).resolveBy (theResolver());
+  }
+
+
 }} // namespace mobject::session
 #endif

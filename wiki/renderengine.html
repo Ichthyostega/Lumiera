@@ -1045,7 +1045,7 @@ Meanwhile I've settled down on implementing the [[top-level entities|Timeline]] 
 On the implementation side, we use a special kind of MObject, acting as an anchor and providing an unique identity. Like any ~MObject, actually a placement establishes the connection and the scope, and typically constitutes a nested scope (e.g. the scope of all objects //within// the sequence to be bound into a timeline)
 </pre>
 </div>
-<div title="BindingScopeProblem" modifier="Ichthyostega" modified="201010011556" created="200910181435" tags="SessionLogic spec" changecount="19">
+<div title="BindingScopeProblem" modifier="Ichthyostega" modified="201010021417" created="200910181435" tags="SessionLogic spec" changecount="20">
 <pre>There is some flexibility in the HighLevelModel, allowing to attach the same [[Sequence]] onto multiple [[timelines|Timeline]] or even into a [[meta-clip|VirtualClip]]. Thus, while there is always an containment relation which can be used to define the current PlacementScope, we can't always establish an unique path from any given location up to the model root. In the most general case, we have to deal with a DAG, not a tree.
 
 !solution idea
@@ -1078,10 +1078,11 @@ As the current query focus stack top always holds a ScopePath, the ''navigating 
 !!{{red{WIP 9/10}}}Deficiencies
 To buy us some time, analysing and implementing the gory details of scope path navigation and meta-clips was skipped for now.
 Please note the shortcomings and logical contradictions in the solution currently in code:
-* it is assumed that the translation basic tree &amp;rarr; logical position happens &quot;somehow&quot; in the discovery query; but this query is implemented by the standard query resolver, which is the PlacementIndex. Thus, the facility providing the basic view should also be in charge for providing the logical view &amp;mdash; not a very clever move
-* QueryFocus, with the help of ScopeLocator exposes the query services of the PlacementIndex. This yields the basic containment tree, while actually the logical view should be exposed. Thus we need an augmenting and translating layer on top
-* the {{{ScopePath::navigate()}}}-function actually creates a new path on-the-fly, just to get this translation. Rather, //exactly this function//&amp;nbsp; should be the sole location to //provide//&amp;nbsp; this service.
-* so we need a way to share the implementation logic, so the query/discovery functions can participate
+* the {{{ScopePath::navigate()}}}-function was chosen as the location to implement the translation logic. //But actually this translation logic is missing.//
+* so basically we're just using the raw paths of the basic containment tree; more specifically, the BindingMO (=Timeline) isn't part of the derived ScopePath
+* this will result in problems even way before we implement meta-clips (because the Timeline is assumed to provide output routing information) to the Placements
+* QueryFocus, with the help of ScopeLocator exposes the query services of the PlacementIndex. So actually it's up to the client code to pick the right functions. This might get confusing
+* The current design rather places the implementation according to the roles of the involved entities, which causes some ping-pong on the implementation level. Especially the ScopeLocator singleton can be accessed multiple times. This is the usual clarity vs. performance tradeoff. Scope resolution is assumed rather to be //not performance critical.//
 </pre>
 </div>
 <div title="BuildProcess" modifier="Ichthyostega" modified="200906071813" created="200706190658" tags="Builder operational img" changecount="30">

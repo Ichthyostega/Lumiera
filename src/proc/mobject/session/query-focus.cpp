@@ -22,6 +22,7 @@
 
 
 #include "proc/mobject/session/query-focus.hpp"
+#include "proc/mobject/mobject.hpp"
 
 
 namespace mobject {
