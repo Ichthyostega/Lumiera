@@ -135,6 +135,9 @@ namespace session {
   ScopeLocator::locate (Scope scope)
   {
     UNIMPLEMENTED ("virtual navigation");
+    ///////////////////////////////////////////TODO: see scope-query.hpp
+    ///////////////////////////////////////////TODO: its hard to come up with a generic implementation which yields a compatible iterator
+    ///////////////////////////////////////////TODO: *alternatively* just expose an Iterator of Scopes?
   }
   
   

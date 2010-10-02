@@ -145,11 +145,11 @@ namespace lib {
    *       -# it should be copy constructible
    *       -# when IterAdapter is supposed to be assignable, then POS should be
    *       -# it should provide embedded typedefs for pointer, reference and value_type,
-   *          or alternatively resolve these types through a specialisation if IterTraits.
+   *          or alternatively resolve these types through a specialisation of IterTraits.
    *       -# it should be convertible to the pointer type it declares
-   *       -# dereferencing it should yield type that is convertible to the reference type
+   *       -# dereferencing should yield a type that is convertible to the reference type
    * - CON points to the data source of this iterator (typically a data container type)
-   *       We store a pointer-like backlink to invoke a special iteration control API:
+   *       We store a pointer-like backlink to invoke a special iteration control API:     //////////////TICKET #410
    *       -# \c hasNext yields true iff the source has yet more result values to yield
    *       -# \c iterNext advances the POS to the next element 
    * 

@@ -209,5 +209,32 @@ namespace session {
     };
   
   
+  /**
+   * Exposes an opaque MObject result set
+   * similar to a DiscoveryQuery, including the
+   * ability to filter/downcast to a specific
+   * kind of MObject
+   */
+  template<class MO>
+  class WrappedResults
+    {
+
+      class Wrapper
+        {
+//////////////TODO: it would be *nice* if we could build something similar to the scope-query Resolution
+//////////////TODO: *requirement* is that it must not pull in anything beyond <function> and iter-adapters.hpp
+//////////////TODO: but if that's too expensive to implement, just ditch the ability of subclassing and just yield MObjects, or even just Scopes
+        };
+
+
+      template<typename IT>
+      WrappedResults (IT const& results)
+        {
+          UNIMPLEMENTED ("build a suitable wrapper");
+        }
+
+    };
+
+
 }} // namespace mobject::session
 #endif

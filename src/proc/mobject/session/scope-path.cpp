@@ -282,7 +282,7 @@ namespace session {
                                    //          then attach the other path below that meta-clip (problem: resolve multiple attachments)
                                   //      - otherwise use the first timeline, to which the other path's sequence is attached
                                  //       - otherwise, if all else fails, use the raw otherPath
-  }
+  }                             ////////////////////////////////////TICKET #672
   
   
   void
