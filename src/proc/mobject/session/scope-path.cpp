@@ -107,8 +107,8 @@ namespace session {
   {
     if (!leaf.isValid()) return; // invalid leaf defines invalid path....
     
-    append_all (discoverScopePath(leaf), path_);   /////////////////////////////TICKET #663   extension point for meta-clip support
-    reverse (path_.begin(), path_.end());
+    clear();
+    navigate (leaf);
   }
   
   
@@ -271,8 +271,17 @@ namespace session {
   ScopePath::navigate (Scope const& target)
   {
     ___check_notBottom (this, "Navigating");
-    *this = ScopePath(target);             //////////////////////////////TICKET #424
-                                          ///////////////////////////////TICKET #663   extension point for meta-clip support
+    std::vector<Scope> otherPath;
+    append_all (discoverScopePath(target), otherPath);
+    reverse (otherPath.begin(), otherPath.end());
+                                        ////////////////////////////TICKET #663   extension point for meta-clip support
+    ASSERT (path_[0] == otherPath[0]); // sharing the root element
+    this->path_ = otherPath;          //  TODO really relate the two paths, including a treatment for meta-clips
+                                     //   - if both are in the same sequence (same head element): just attach the tail of the other
+                                    //    - if the other path points into a sequence which is attached as meta-clip to the current sequence,
+                                   //          then attach the other path below that meta-clip
+                                  //      - otherwise use the first timeline, to which the other path's sequence is attached
+                                 //       - otherwise, if all else fails, use the raw otherPath
   }
   
   

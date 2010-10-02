@@ -122,14 +122,14 @@ namespace session {
    */
   inline QueryFocus::operator Scope() const
   {
-    return currPath().getLeaf();
+    return focus_->getLeaf();
   }
   
   /**@note returning a copy */
   inline ScopePath
   QueryFocus::currentPath()  const
   {
-    return currPath();
+    return *focus_;
   }
   
   
