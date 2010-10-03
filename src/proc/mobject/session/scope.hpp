@@ -28,7 +28,7 @@
 #include "proc/mobject/placement.hpp"
 #include "proc/mobject/placement-ref.hpp"
 //#include "proc/mobject/session/query-resolver.hpp"  ///////////TODO: really?
-#include "lib/iter-adapter.hpp"
+//#include "lib/iter-adapter.hpp"
 #include "lib/error.hpp"
 //#include "lib/singleton.hpp"
 
@@ -43,8 +43,6 @@
 
 namespace mobject {
 namespace session {
-  
-  using lib::IterAdapter;
   
   LUMIERA_ERROR_DECLARE (INVALID_SCOPE);  ///< Placement scope invalid and not locatable within model
   
@@ -61,8 +59,6 @@ namespace session {
     {
       RefPlacement anchor_;
       
-      typedef IterAdapter<PlacementMO*, Scope> IterType_;
-      
     public:
       Scope (PlacementMO const& constitutingPlacement);
       Scope (); ///< unlocated NIL scope
@@ -77,9 +73,6 @@ namespace session {
       PlacementMO& getTop()  const;
       bool isValid() const;
       bool isRoot()  const;
-      
-      typedef IterType_ iterator;
-      iterator ascend()  const;
       
       friend bool operator== (Scope const&, Scope const&);
       friend bool operator!= (Scope const&, Scope const&);

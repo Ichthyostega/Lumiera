@@ -25,6 +25,7 @@
 #define MOBJECT_SESSION_QUERY_FOCUS_H
 
 #include "proc/mobject/session/scope-path.hpp"
+#include "proc/mobject/session/scope-query.hpp"
 #include "proc/mobject/session/scope-locator.hpp"
 
 #include <boost/intrusive_ptr.hpp>

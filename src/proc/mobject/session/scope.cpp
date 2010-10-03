@@ -122,6 +122,28 @@ namespace session {
     return focusStack_->push (SessionServiceExploreScope::getScopeRoot());
   }
   
+
+  /** navigate the \em current QueryFocus scope location. The resulting
+   *  access path to the new location is chosen such as to be most closely related
+   *  to the original location; this includes picking a timeline or meta-clip
+   *  attachment most similar to the one used in the original path. So effectively
+   *  you'll see things through the same "scoping perspective" as given by the
+   *  original path, if possible to the new location
+   *  given as parameter. use the contents-resolving facility exposed by the session
+   * @note changes the \em current QueryFocus as a sideeffect
+   * @param scope the new target location to navigate
+   * @return an iterator yielding the nested scopes from the new location
+   *         up to root, in a way likely to be similar to the original location
+   */
+  ScopeQuery<MObject>::iterator
+  ScopeLocator::locate (Scope scope)
+  {
+    UNIMPLEMENTED ("virtual navigation");
+    ///////////////////////////////////////////TODO: see scope-query.hpp
+    ///////////////////////////////////////////TODO: its hard to come up with a generic implementation which yields a compatible iterator
+    ///////////////////////////////////////////TODO: *alternatively* just expose an Iterator of Scopes?
+  }
+
   
   
   /** discover the enclosing scope of a given Placement */
@@ -172,17 +194,6 @@ namespace session {
   Scope::isValid()  const
   {
     return anchor_.isValid();
-  }
-  
-  
-  /** enumerate the path of nested scopes up to root scope.
-   *  @return an iterator which starts with this scope and
-   *          successively yields outer scopes, stopping at root.
-   */
-  Scope::IterType_
-  Scope::ascend()  const
-  {
-    UNIMPLEMENTED ("ascend scope hierarchy up to root");
   }
   
   
