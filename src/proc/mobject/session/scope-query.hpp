@@ -216,21 +216,62 @@ namespace session {
    * kind of MObject
    */
   template<class MO>
-  class WrappedResults
+  class CachedQuery
+    : Query<Placement<MO> >
     {
+      typedef Placement<MO> PMO;
+      typedef Query<PMO> _Query;
+      typedef typename _Query::Result Result;
+      typedef typename _Query::Cursor Cursor;
 
-      class Wrapper
+
+    public:
+      typedef typename _Query::iterator iterator;
+
+      class Snapshot
+        : public Resolution
         {
 //////////////TODO: it would be *nice* if we could build something similar to the scope-query Resolution
 //////////////TODO: *requirement* is that it must not pull in anything beyond <function> and iter-adapters.hpp
 //////////////TODO: but if that's too expensive to implement, just ditch the ability of subclassing and just yield MObjects, or even just Scopes
+
+          vector<PMO*> results_;
+
+          Result
+          prepareResolution()
+            {
+              UNIMPLEMENTED ("hook up first result");
+            }
+
+          void
+          nextResult(Result& pos)
+            {
+              UNIMPLEMENTED ("how to advance embedded pointer");
+            }
+
+        public:
+          template<typename IT>
+          Snapshot(IT const& iter)
+            {
+              for(IT ii(iter); ii; ++ii)
+                results_.push_back(*ii);
+            }
         };
 
+      Snapshot resultset_;
 
       template<typename IT>
-      WrappedResults (IT const& results)
+      CachedQuery (IT const& results)
+        : resultset_(results)
+        { }
+
+      iterator
+      resolve ()  const
         {
-          UNIMPLEMENTED ("build a suitable wrapper");
+          PReso resultSet(new Snapshot(resultset_));
+          Result first = resultSet->prepareResolution();
+          Cursor& start = static_cast<Cursor&> (first);   // note: type RES must be compatible!
+          return iterator (resultSet, start);
         }
 
     };
