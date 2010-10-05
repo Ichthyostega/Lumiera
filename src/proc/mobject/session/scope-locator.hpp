@@ -27,6 +27,7 @@
 #include "proc/mobject/session/scope.hpp"
 #include "proc/mobject/session/scope-query.hpp"
 #include "proc/mobject/placement.hpp"
+#include "lib/iter-source.hpp"                 ////////////////////TICKET #493 : the bare interface would be sufficient here
 #include "lib/singleton.hpp"
 
 #include <boost/scoped_ptr.hpp>
@@ -74,11 +75,15 @@ namespace session {
       typename ScopeQuery<MO>::iterator
       query (Scope);
       
-      ScopeQuery<MObject>::iterator
-      locate (Scope scope);
-      
+      template<typename MO>
+      typename ScopeQuery<MO>::iterator
+      getRawPath (Scope);
+
       ScopeQuery<MObject>::iterator
       getRawPath (Scope);
+
+      lib::IterSource<const Scope>::iterator
+      locate (Scope scope);
 
 
      ~ScopeLocator();
@@ -126,6 +131,13 @@ namespace session {
    *        child of the root node and timelines (BindingMO) just appear
    *        to be "dead ends"
    */
+  template<typename MO>
+  inline typename ScopeQuery<MO>::iterator
+  ScopeLocator::getRawPath (Scope scope)
+  {
+    return ScopeQuery<MO> (scope.getTop(), PATH).resolveBy (theResolver());
+  }
+
   inline ScopeQuery<MObject>::iterator
   ScopeLocator::getRawPath (Scope scope)
   {

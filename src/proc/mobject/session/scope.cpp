@@ -26,9 +26,31 @@
 #include "proc/mobject/session/query-focus-stack.hpp"
 #include "proc/mobject/session/session-service-explore-scope.hpp"
 #include "proc/mobject/mobject.hpp"
+#include "lib/iter-source.hpp"                 ////////////////////TICKET #493 : using the IterSource adapters here
 //#include "proc/mobject/session/track.hpp"
+
 //#include "proc/mobject/placement.hpp"
 //#include "proc/mobject/session/mobjectfactory.hpp"
+#include <vector>
+
+using std::vector;
+using lib::IterSource;
+using lib::WrappedLumieraIterator;
+using lib::iter_source::wrapIter;
+
+namespace lib {
+namespace iter{
+
+//  using mobject::session::Scope;
+//
+//  template<>
+//  struct IterTraits<vector<Scope>::const_reverse_iterator>
+//    {
+//      typedef const Scope   value_type;
+//      typedef Scope const&  reference;
+//      typedef const Scope*  pointer;
+//    };
+}}
 
 namespace mobject {
 namespace session {
@@ -135,13 +157,12 @@ namespace session {
    * @return an iterator yielding the nested scopes from the new location
    *         up to root, in a way likely to be similar to the original location
    */
-  ScopeQuery<MObject>::iterator
+  IterSource<const Scope>::iterator
   ScopeLocator::locate (Scope scope)
   {
-    UNIMPLEMENTED ("virtual navigation");
-    ///////////////////////////////////////////TODO: see scope-query.hpp
-    ///////////////////////////////////////////TODO: its hard to come up with a generic implementation which yields a compatible iterator
-    ///////////////////////////////////////////TODO: *alternatively* just expose an Iterator of Scopes?
+    ScopePath& currentPath = focusStack_->top();
+    currentPath.navigate (scope);
+    return wrapIter (currentPath.begin());
   }
 
   

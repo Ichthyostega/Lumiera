@@ -81,14 +81,21 @@
 #include <boost/type_traits/remove_const.hpp>
 
 
-
+namespace mobject {
+namespace session {
+  class Scope;
+}}
+#include <vector>
+using std::vector;
 namespace lib {
   
   
-  namespace {
+  namespace iter {
     /** 
      * Helper for creating nested typedefs
      * within the iterator adaptor, similar to what the STL does.
+     * @note client code might define specialisations
+     *       to handle tricky situations (like const_reverse_iter)
      */
     template<typename TY>
     struct IterTraits
@@ -113,8 +120,20 @@ namespace lib {
         typedef const TY& reference;
         typedef const TY* pointer;
       };
-    
-    
+
+  using mobject::session::Scope;
+
+  template<>
+  struct IterTraits<vector<Scope>::const_reverse_iterator>
+    {
+      typedef const Scope   value_type;
+      typedef Scope const&  reference;
+      typedef const Scope*  pointer;
+    };
+
+  }
+
+  namespace { // internal helpers
     void
     _throwIterExhausted()
     {
@@ -164,9 +183,9 @@ namespace lib {
       mutable POS pos_;
       
     public:
-      typedef typename IterTraits<POS>::pointer pointer;
-      typedef typename IterTraits<POS>::reference reference;
-      typedef typename IterTraits<POS>::value_type value_type;
+      typedef typename iter::IterTraits<POS>::pointer pointer;
+      typedef typename iter::IterTraits<POS>::reference reference;
+      typedef typename iter::IterTraits<POS>::value_type value_type;
       
       IterAdapter (CON src, POS const& startpos)
         : source_(src)
@@ -299,9 +318,9 @@ namespace lib {
       IT e_;
       
     public:
-      typedef typename IterTraits<IT>::pointer pointer;
-      typedef typename IterTraits<IT>::reference reference;
-      typedef typename IterTraits<IT>::value_type value_type;
+      typedef typename iter::IterTraits<IT>::pointer pointer;
+      typedef typename iter::IterTraits<IT>::reference reference;
+      typedef typename iter::IterTraits<IT>::value_type value_type;
       
       RangeIter (IT const& start, IT const& end)
         : p_(start)
