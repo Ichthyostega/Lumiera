@@ -44,7 +44,7 @@ namespace iter{
 //  using mobject::session::Scope;
 //
 //  template<>
-//  struct IterTraits<vector<Scope>::const_reverse_iterator>
+//  struct TypeBinding<vector<Scope>::const_reverse_iterator>
 //    {
 //      typedef const Scope   value_type;
 //      typedef Scope const&  reference;

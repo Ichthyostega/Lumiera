@@ -98,7 +98,7 @@ namespace lib {
      *       to handle tricky situations (like const_reverse_iter)
      */
     template<typename TY>
-    struct IterTraits
+    struct TypeBinding
       {
         typedef typename TY::pointer pointer;
         typedef typename TY::reference reference;
@@ -106,7 +106,7 @@ namespace lib {
       };
     
     template<typename TY>
-    struct IterTraits<TY *>
+    struct TypeBinding<TY *>
       {
         typedef TY value_type;
         typedef TY& reference;
@@ -114,7 +114,7 @@ namespace lib {
       };
     
     template<typename TY>
-    struct IterTraits<const TY *>
+    struct TypeBinding<const TY *>
       {
         typedef TY value_type;
         typedef const TY& reference;
@@ -124,7 +124,7 @@ namespace lib {
   using mobject::session::Scope;
 
   template<>
-  struct IterTraits<vector<Scope>::const_reverse_iterator>
+  struct TypeBinding<vector<Scope>::const_reverse_iterator>
     {
       typedef const Scope   value_type;
       typedef Scope const&  reference;
@@ -164,7 +164,7 @@ namespace lib {
    *       -# it should be copy constructible
    *       -# when IterAdapter is supposed to be assignable, then POS should be
    *       -# it should provide embedded typedefs for pointer, reference and value_type,
-   *          or alternatively resolve these types through a specialisation of IterTraits.
+   *          or alternatively resolve these types through specialisation of iter::TypeBinding.
    *       -# it should be convertible to the pointer type it declares
    *       -# dereferencing should yield a type that is convertible to the reference type
    * - CON points to the data source of this iterator (typically a data container type)
@@ -183,9 +183,9 @@ namespace lib {
       mutable POS pos_;
       
     public:
-      typedef typename iter::IterTraits<POS>::pointer pointer;
-      typedef typename iter::IterTraits<POS>::reference reference;
-      typedef typename iter::IterTraits<POS>::value_type value_type;
+      typedef typename iter::TypeBinding<POS>::pointer pointer;
+      typedef typename iter::TypeBinding<POS>::reference reference;
+      typedef typename iter::TypeBinding<POS>::value_type value_type;
       
       IterAdapter (CON src, POS const& startpos)
         : source_(src)
@@ -318,9 +318,9 @@ namespace lib {
       IT e_;
       
     public:
-      typedef typename iter::IterTraits<IT>::pointer pointer;
-      typedef typename iter::IterTraits<IT>::reference reference;
-      typedef typename iter::IterTraits<IT>::value_type value_type;
+      typedef typename iter::TypeBinding<IT>::pointer pointer;
+      typedef typename iter::TypeBinding<IT>::reference reference;
+      typedef typename iter::TypeBinding<IT>::value_type value_type;
       
       RangeIter (IT const& start, IT const& end)
         : p_(start)
