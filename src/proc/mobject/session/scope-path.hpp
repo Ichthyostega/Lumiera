@@ -259,7 +259,10 @@ namespace session {
   }
   
   
-  inline ScopePath::iterator
+  /** @note actually this is an Lumiera Forward Iterator,
+   *  yielding the path up to root as a sequence of
+   *  const Scope elements */
+   inline ScopePath::iterator
   ScopePath::begin()  const
   {
     return iterator (path_.rbegin(), path_.rend());

@@ -24,30 +24,19 @@
 #ifndef MOBJECT_SESSION_SCOPE_H
 #define MOBJECT_SESSION_SCOPE_H
 
-//#include "proc/mobject/mobject.hpp"
 #include "proc/mobject/placement.hpp"
 #include "proc/mobject/placement-ref.hpp"
-//#include "proc/mobject/session/query-resolver.hpp"  ///////////TODO: really?
-//#include "lib/iter-adapter.hpp"
 #include "lib/error.hpp"
-//#include "lib/singleton.hpp"
 
-//#include <boost/operators.hpp>
-//#include <boost/scoped_ptr.hpp>
-//#include <tr1/memory>
-//#include <vector>
-//#include <string>
-
-//using std::vector;
-//using std::string;
 
 namespace mobject {
 namespace session {
   
-  LUMIERA_ERROR_DECLARE (INVALID_SCOPE);  ///< Placement scope invalid and not locatable within model
+  LUMIERA_ERROR_DECLARE (NO_PARENT_SCOPE); ///< Parent scope of root not accessible
+  LUMIERA_ERROR_DECLARE (INVALID_SCOPE);  ///<  Placement scope invalid and not locatable within model
   
   
-
+  
   /**
    * TODO type comment
    * @note Scope is a passive entity,
@@ -66,10 +55,10 @@ namespace session {
       Scope (Scope const&);
       Scope& operator= (Scope const&);
       
-      static Scope const& containing (PlacementMO const& aPlacement);              //////////////TODO really returning a const& here??
-      static Scope const& containing (RefPlacement const& refPlacement);
+      static Scope containing (PlacementMO const& aPlacement);
+      static Scope containing (RefPlacement const& refPlacement);
       
-      Scope const& getParent()  const;
+      Scope getParent()      const;
       PlacementMO& getTop()  const;
       bool isValid() const;
       bool isRoot()  const;
@@ -79,9 +68,9 @@ namespace session {
     };
   
   
-///////////////////////////TODO currently just fleshing the API
   
-    
+  
+  
   /** as scopes are constituted by a "scope top" element (placement)
    *  registered within the PlacementIndex of the current session,
    *  equality is defined in terms of this defining placement.
@@ -89,13 +78,13 @@ namespace session {
   inline bool
   operator== (Scope const& scope1, Scope const& scope2)
   {
-    return scope1.anchor_ == scope2.anchor_;  
+    return scope1.anchor_ == scope2.anchor_;
   }
   
   inline bool
   operator!= (Scope const& scope1, Scope const& scope2)
   {
-    return scope1.anchor_ != scope2.anchor_;  
+    return scope1.anchor_ != scope2.anchor_;
   }
   
   

@@ -27,10 +27,7 @@
 #include "proc/mobject/session/session-service-explore-scope.hpp"
 #include "proc/mobject/mobject.hpp"
 #include "lib/iter-source.hpp"                 ////////////////////TICKET #493 : using the IterSource adapters here
-//#include "proc/mobject/session/track.hpp"
 
-//#include "proc/mobject/placement.hpp"
-//#include "proc/mobject/session/mobjectfactory.hpp"
 #include <vector>
 
 using std::vector;
@@ -42,17 +39,16 @@ namespace session {
   
   
   LUMIERA_ERROR_DEFINE (INVALID_SCOPE, "Placement scope invalid and not locatable within model");
+  LUMIERA_ERROR_DEFINE (NO_PARENT_SCOPE, "Parent scope of root not accessible");
   
   
-
+  
   /** conversion of a scope top (placement) into a Scope.
    *  only allowed if the given Placement is actually attached
    *  to the session, which will be checked by index access */
   Scope::Scope (PlacementMO const& constitutingPlacement)
     : anchor_(constitutingPlacement)
-  {
-    
-  }
+  { }
   
   
   Scope::Scope ()
@@ -64,7 +60,9 @@ namespace session {
   
   Scope::Scope (Scope const& o)
     : anchor_(o.anchor_)
-  { }
+  {
+    ENSURE (anchor_.isValid());
+  }
   
   
   Scope&
@@ -78,9 +76,7 @@ namespace session {
   
   ScopeLocator::ScopeLocator()
     : focusStack_(new QueryFocusStack)
-  {
-    TODO ("anything to initialise here?");
-  }
+  { }
   
   ScopeLocator::~ScopeLocator() { }
   
@@ -129,7 +125,7 @@ namespace session {
     return focusStack_->push (SessionServiceExploreScope::getScopeRoot());
   }
   
-
+  
   /** navigate the \em current QueryFocus scope location. The resulting
    *  access path to the new location is chosen such as to be most closely related
    *  to the original location; this includes picking a timeline or meta-clip
@@ -149,18 +145,18 @@ namespace session {
     currentPath.navigate (scope);
     return wrapIter (currentPath.begin());
   }
-
+  
   
   
   /** discover the enclosing scope of a given Placement */
-  Scope const&
+  Scope
   Scope::containing (PlacementMO const& aPlacement)
   {
-    UNIMPLEMENTED ("scope discovery");
+    return SessionServiceExploreScope::getScope (aPlacement);
   }
   
   
-  Scope const&
+  Scope
   Scope::containing (RefPlacement const& refPlacement)
   {
     return containing (*refPlacement);
@@ -178,10 +174,14 @@ namespace session {
   /** retrieve the parent scope which encloses this scope.
    *  @throw error::Invalid if this is the root scope
    */
-  Scope const&
+  Scope
   Scope::getParent()  const
   {
-    UNIMPLEMENTED ("retrieve the enclosing parent scope");
+    if (isRoot())
+        throw lumiera::error::Invalid ("can't get parent of root scope"
+                                      , LUMIERA_ERROR_NO_PARENT_SCOPE);
+    
+    return SessionServiceExploreScope::getScope (*anchor_);
   }
   
   
@@ -189,7 +189,7 @@ namespace session {
   bool
   Scope::isRoot()  const
   {
-    UNIMPLEMENTED ("detection of root scope");
+    return *anchor_ == SessionServiceExploreScope::getScopeRoot();
   }
   
   
