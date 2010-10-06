@@ -156,6 +156,14 @@ namespace session {
   
   /** @return root scope of the current model (session datastructure) */
   PlacementMO& 
+  SessionServiceExploreScope::getScope (PlacementMO const& placementToLocate)
+  {
+    return SessionImplAPI::current->getScope(placementToLocate);
+  }
+
+
+  /** @return root scope of the current model (session datastructure) */
+  PlacementMO&
   SessionServiceExploreScope::getScopeRoot()
   {
     return SessionImplAPI::current->getScopeRoot();
