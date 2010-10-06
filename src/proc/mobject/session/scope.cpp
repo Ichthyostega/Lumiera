@@ -35,31 +35,16 @@
 
 using std::vector;
 using lib::IterSource;
-using lib::WrappedLumieraIterator;
 using lib::iter_source::wrapIter;
-
-namespace lib {
-namespace iter{
-
-//  using mobject::session::Scope;
-//
-//  template<>
-//  struct TypeBinding<vector<Scope>::const_reverse_iterator>
-//    {
-//      typedef const Scope   value_type;
-//      typedef Scope const&  reference;
-//      typedef const Scope*  pointer;
-//    };
-}}
 
 namespace mobject {
 namespace session {
   
   
   LUMIERA_ERROR_DEFINE (INVALID_SCOPE, "Placement scope invalid and not locatable within model");
+  
+  
 
-  
-  
   /** conversion of a scope top (placement) into a Scope.
    *  only allowed if the given Placement is actually attached
    *  to the session, which will be checked by index access */

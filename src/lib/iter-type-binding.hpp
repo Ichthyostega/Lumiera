@@ -30,6 +30,8 @@
  ** might be injected prior to instantiating the Iterator adapter
  ** template.
  ** 
+ ** @see iter-adapter.hpp
+ ** @see scope-path.hpp usage example (explicit specialisation)
  */
 
 
@@ -39,13 +41,6 @@
 
 #include "lib/error.hpp"
 
-
-namespace mobject {
-namespace session {
-  class Scope;
-}}
-#include <vector>
-using std::vector;
 
 
 namespace lib {
@@ -83,15 +78,6 @@ namespace iter {
       typedef const TY* pointer;
     };
   
-  using mobject::session::Scope;
-  
-  template<>
-  struct TypeBinding<vector<Scope>::const_reverse_iterator>
-    {
-      typedef const Scope   value_type;
-      typedef Scope const&  reference;
-      typedef const Scope*  pointer;
-    };
   
   
 }} // namespace lib

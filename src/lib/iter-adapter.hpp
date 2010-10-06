@@ -63,11 +63,13 @@
  **   \em dereferenced to yield the "current" value.
  ** - moreover, iterators may be incremented until exhaustion.
  ** 
- ** @todo WIP WIP WIP
- ** @todo see Ticket #182
  ** @todo naming of the iteration control function: TICKET #410
  ** 
- ** @see scoped-ptrvect.hpp
+ ** @see iter-adapter-test.cpp
+ ** @see itertools.hpp
+ ** @see IterSource (completely opaque iterator)
+ ** @see iter-type-binding.hpp
+ **
  */
 
 

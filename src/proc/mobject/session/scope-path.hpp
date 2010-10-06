@@ -91,6 +91,28 @@
 #include <vector>
 
 
+namespace lib {
+namespace iter{
+
+  using mobject::session::Scope;
+
+  /**
+   * this explicit specialisation allows to build a RangeIter
+   * to yield const Scope elements, based on the const_reverse_iterator
+   * used internally within ScopePath. This specialisation needs to be
+   * injected prior to actually building the iterator type of ScopePath
+   * @see iter-type-binding.hpp
+   * @see iter-adapter.hpp
+   */
+  template<>
+  struct TypeBinding<vector<Scope>::const_reverse_iterator>
+    {
+      typedef const Scope   value_type;
+      typedef Scope const&  reference;
+      typedef const Scope*  pointer;
+    };
+}}
+
 namespace mobject {
 namespace session {
   
