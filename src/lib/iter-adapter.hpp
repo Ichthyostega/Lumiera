@@ -77,62 +77,14 @@
 
 #include "lib/error.hpp"
 #include "lib/bool-checkable.hpp"
+#include "lib/iter-type-binding.hpp"
 
 #include <boost/type_traits/remove_const.hpp>
 
 
-namespace mobject {
-namespace session {
-  class Scope;
-}}
-#include <vector>
-using std::vector;
 namespace lib {
   
   
-  namespace iter {
-    /** 
-     * Helper for creating nested typedefs
-     * within the iterator adaptor, similar to what the STL does.
-     * @note client code might define specialisations
-     *       to handle tricky situations (like const_reverse_iter)
-     */
-    template<typename TY>
-    struct TypeBinding
-      {
-        typedef typename TY::pointer pointer;
-        typedef typename TY::reference reference;
-        typedef typename TY::value_type value_type;
-      };
-    
-    template<typename TY>
-    struct TypeBinding<TY *>
-      {
-        typedef TY value_type;
-        typedef TY& reference;
-        typedef TY* pointer;
-      };
-    
-    template<typename TY>
-    struct TypeBinding<const TY *>
-      {
-        typedef TY value_type;
-        typedef const TY& reference;
-        typedef const TY* pointer;
-      };
-
-  using mobject::session::Scope;
-
-  template<>
-  struct TypeBinding<vector<Scope>::const_reverse_iterator>
-    {
-      typedef const Scope   value_type;
-      typedef Scope const&  reference;
-      typedef const Scope*  pointer;
-    };
-
-  }
-
   namespace { // internal helpers
     void
     _throwIterExhausted()
@@ -140,10 +92,10 @@ namespace lib {
       throw lumiera::error::Invalid ("Can't iterate further",
             lumiera::error::LUMIERA_ERROR_ITER_EXHAUST);
     }
-    
   }
   
   
+
   /**
    * Adapter for building an implementation of the lumiera forward iterator concept.
    * The "current position" is represented as an opaque element (usually an nested iterator),
@@ -173,6 +125,7 @@ namespace lib {
    *       -# \c iterNext advances the POS to the next element 
    * 
    * @see scoped-ptrvect.hpp usage example
+   * @see iter-type-binding.hpp
    * @see iter-adaptor-test.cpp
    */
   template<class POS, class CON>
