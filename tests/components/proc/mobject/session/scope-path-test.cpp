@@ -75,6 +75,7 @@ namespace test    {
           invalidPath (testPath,startPlacement);
           rootPath (testPath);
           check_Identity_and_Copy (startPlacement);
+          check_RefcountProtection (startPlacement);
           navigate (testPath, index);
           clear (testPath, index);
                                   ////////////////////////////////////////TICKET #429 : verify diagnostic output (to be added later)
@@ -181,7 +182,7 @@ namespace test    {
           ASSERT (!invalidP.contains (refScope));
           ASSERT (!invalidP.endsAt (refScope));
           
-          ASSERT (refPath.contains (invalidP));      // If the moon consists of green cheese, I'll eat my hat!
+          ASSERT (refPath.contains (invalidP));      // If the moon is made of green cheese, I'll eat my hat!
           ASSERT (!invalidP.contains (refPath));
           ASSERT (invalidP == commonPrefix(refPath,invalidP));
           ASSERT (invalidP == commonPrefix(invalidP,refPath));
@@ -238,6 +239,43 @@ namespace test    {
           ASSERT (path2 != path3);
           ASSERT (path1 != path3);
         }
+      
+      
+      /** @test the embedded refcount is handled sensibly
+       *        when it comes to copying. (This refcount
+       *        is used by QueryFocusStack) */
+      void
+      check_RefcountProtection (PMO& refPlacement)
+        {
+          Scope startScope (refPlacement);
+          ScopePath path1 (startScope);
+          ScopePath path2 (path1);
+          
+          path1 = path2;
+          CHECK (!isSameObject (path1,path2));
+          CHECK (0 == path1.ref_count());
+          CHECK (0 == path2.ref_count());
+          
+          intrusive_ptr_add_ref (&path2);
+          CHECK (0 == path1.ref_count());
+          CHECK (0 <  path2.ref_count());
+          
+          ScopePath path3 (path2);
+          CHECK (0 == path3.ref_count());  // refcount not copied
+          
+          path3.moveUp();
+          
+          VERIFY_ERROR (LOGIC, path2 = path3 ); // overwriting of path with refcount is prohibited
+          CHECK (path1 != path3);
+          path1 = path2;                        // but path without refcount may be overwritten
+          path1 = path3;
+          CHECK (path1 == path3);
+                    
+          intrusive_ptr_release (&path2);       // refcount drops to zero...
+          CHECK (0 == path1.ref_count());
+          CHECK (0 == path2.ref_count());
+        }
+      
       
       
       /** @test modify a path by \em navigating it.
@@ -333,7 +371,7 @@ namespace test    {
           ASSERT (!isnil (path));
           ASSERT (path.getLeaf() == rootNode);
         }
-          
+      
     };
   
   
