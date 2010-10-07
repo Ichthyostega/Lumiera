@@ -21,6 +21,23 @@
 * *****************************************************/
 
 
+/** @file scope.cpp
+ ** Implementation of placement scopes and scope locator.
+ ** This translation unit embeds the (hidden) link to the session implementation
+ ** used to establish the position of a given placement within the hierarchy
+ ** of nested scopes. The rest of the model implementation code mostly builds
+ ** on top of this access point, when it comes to discovering contents or
+ ** navigating within the model. Especially the ScopeLocator singleton
+ ** defined here plays the role of linking together the system of nested scopes,
+ ** the current QueryFocus and the actual session implementation and storage
+ ** (PlacementIndex)
+ ** 
+ ** @see command.hpp
+ ** @see command-registry.hpp
+ **
+ */
+
+
 #include "proc/mobject/session/scope.hpp"
 #include "proc/mobject/session/scope-locator.hpp"
 #include "proc/mobject/session/query-focus-stack.hpp"
@@ -68,7 +85,8 @@ namespace session {
   Scope&
   Scope::operator= (Scope const& o)
   {
-    anchor_ = o.anchor_;  ////////////////////////////TODO verify correctness
+    anchor_ = o.anchor_;  // note: actually we're just assigning an hash value
+    ENSURE (o.isValid());
     return *this;
   }
   
@@ -139,7 +157,7 @@ namespace session {
    *         up to root, in a way likely to be similar to the original location
    */
   IterSource<const Scope>::iterator
-  ScopeLocator::locate (Scope scope)
+  ScopeLocator::locate (Scope const& scope)
   {
     ScopePath& currentPath = focusStack_->top();
     currentPath.navigate (scope);

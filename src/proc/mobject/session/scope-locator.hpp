@@ -69,25 +69,25 @@ namespace session {
       
       template<typename MO>
       typename ScopeQuery<MO>::iterator
-      explore (Scope);
+      explore (Scope const&);
       
       template<typename MO>
       typename ScopeQuery<MO>::iterator
-      query (Scope);
+      query (Scope const&);
       
       template<typename MO>
       typename ScopeQuery<MO>::iterator
-      getRawPath (Scope);
-
+      getRawPath (Scope const&);
+      
       ScopeQuery<MObject>::iterator
-      getRawPath (Scope);
-
+      getRawPath (Scope const&);
+      
       lib::IterSource<const Scope>::iterator
-      locate (Scope scope);
-
-
+      locate (Scope const& target);
+      
+      
      ~ScopeLocator();
-     
+      
     protected:
       ScopeLocator();
       
@@ -105,7 +105,7 @@ namespace session {
    */
   template<typename MO>
   inline typename ScopeQuery<MO>::iterator
-  ScopeLocator::explore (Scope scope)
+  ScopeLocator::explore (Scope const& scope)
   {
     return ScopeQuery<MO> (scope.getTop(), CHILDREN).resolveBy (theResolver());
   }
@@ -116,7 +116,7 @@ namespace session {
    */
   template<typename MO>
   inline typename ScopeQuery<MO>::iterator
-  ScopeLocator::query (Scope scope)
+  ScopeLocator::query (Scope const& scope)
   {
     return ScopeQuery<MO> (scope.getTop(), CONTENTS).resolveBy (theResolver());
   }
@@ -133,13 +133,13 @@ namespace session {
    */
   template<typename MO>
   inline typename ScopeQuery<MO>::iterator
-  ScopeLocator::getRawPath (Scope scope)
+  ScopeLocator::getRawPath (Scope const& scope)
   {
     return ScopeQuery<MO> (scope.getTop(), PATH).resolveBy (theResolver());
   }
 
   inline ScopeQuery<MObject>::iterator
-  ScopeLocator::getRawPath (Scope scope)
+  ScopeLocator::getRawPath (Scope const& scope)
   {
     return ScopeQuery<MObject> (scope.getTop(), PATH).resolveBy (theResolver());
   }

@@ -61,7 +61,7 @@ namespace session {
    * »navigating« operation will use the current focus position as
    * point of departure, thus retaining a similar access path to any
    * nested sequences. (These might be attached multiple times within
-   * the same session, each attachement constituing a different
+   * the same session, each attachment constituting a different
    * context scope. Navigating tries to retain the current context)
    * 
    * The templated query functions allow to issue specifically typed
@@ -106,6 +106,9 @@ namespace session {
       typename ScopeQuery<MO>::iterator
       explore()  const;
       
+      lib::IterSource<const Scope>::iterator
+      locate (Scope const& toTarget);
+      
       
     private:
       QueryFocus (ScopePath&);
@@ -141,7 +144,7 @@ namespace session {
   inline typename ScopeQuery<MO>::iterator
   QueryFocus::query()  const
   {
-    ScopeLocator::instance().query<MO> (*this);
+    return ScopeLocator::instance().query<MO> (*this);
   }
   
   
@@ -152,7 +155,22 @@ namespace session {
   inline typename ScopeQuery<MO>::iterator
   QueryFocus::explore()  const
   {
-    ScopeLocator::instance().explore<MO> (*this);
+    return ScopeLocator::instance().explore<MO> (*this);
+  }
+  
+  
+  /** shift or navigate the current focus to point at
+   *  the given target scope. In case of multiple possible
+   *  access paths, the \em current location is taken into
+   *  account, trying to reach the new location in a
+   *  \em similar fashion as much as possible.
+   *  @note moves the current focus as side-effect
+   *  @return the effective / virtual new access path
+   *          leading to the new target focus scope */
+  inline lib::IterSource<const Scope>::iterator
+  QueryFocus::locate (Scope const& toTarget)
+  {
+    return ScopeLocator::instance().locate (toTarget);
   }
   
   

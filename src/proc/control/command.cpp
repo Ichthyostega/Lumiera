@@ -21,8 +21,8 @@
 * *****************************************************/
 
 
-/** @file command.cpp 
- ** Implementation of the command frontend. 
+/** @file command.cpp
+ ** Implementation of the command frontend.
  ** Within this file, the implementation level of the command frontend
  ** is linked to the implementation of the command registry. Client code
  ** is shielded from those implementation classes and need only include
