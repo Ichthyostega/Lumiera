@@ -36,15 +36,15 @@
  ** A scope path is represented as sequence of scopes, where each Scope is implemented
  ** by a PlacementRef pointing to the »scope top«, i.e. the placement in the session
  ** constituting this scope. The leaf of this path can be considered the current scope.
- ** ScopePath is intended to remember a \em current location within the model, to be
- ** used for resolving queries and discovering contents.
+ ** ScopePath is intended to be used for remembering a \em current location within the
+ ** model, usable for resolving queries and discovering contents.
  ** 
  ** \par operations and behaviour
  ** 
  ** In addition to some search and query functions, a scope path has the ability to 
  ** \em navigate to a given target scope, which must be reachable by ascending and
  ** descending into the branches of the overall tree or DAG (in the general case).
- ** Navigating changes the current path, which usually happens when the current
+ ** Navigating is a mutating operation which usually happens when the current
  ** "focus" shifts while operating on the model.
  ** 
  ** - ScopePath can be default constructed, yielding an \em invalid path.
@@ -55,6 +55,8 @@
  ** - ScopePaths are intended to be handled <b>by value</b> (as are Scopes and
  **   PlacementRefs). They are equality comparable and provide several specialised
  **   relation predicates.
+ ** - while generally copying is permitted, you may not overwrite an ScopePath
+ **   which is attached (referred by a QueryFocus, see below)
  ** - all implementations are focused on clarity, not uttermost performance, as
  **   the assumption is for paths to be relatively short and path operations to
  **   be executed rather in a GUI action triggered context.
@@ -71,7 +73,9 @@
  ** Each of these stack frames represents the current location for some evaluation
  ** context; it is organised as stack to allow intermediate evaluations. Management
  ** of these stack frames is automated, with the assistance of ScopePath by
- ** incorporating a ref-count.
+ ** incorporating a ref-count. Client code usually accesses this mechanism
+ ** through QueryFocus objects as frontend, which is reflected in the
+ ** mentioned embedded refcount
  ** 
  ** @see scope-path-test.cpp
  ** @see Scope
@@ -145,7 +149,12 @@ namespace session {
       ScopePath ();
       ScopePath (Scope const& leaf);
       
+      ScopePath (ScopePath const&);
+      ScopePath&
+      operator= (ScopePath const&);
+      
       static const ScopePath INVALID;
+      
       
       /* == state diagnostics == */
       bool isValid()    const;

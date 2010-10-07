@@ -26,24 +26,19 @@
 #include "proc/mobject/session/scope-locator.hpp"
 #include "proc/mobject/session/session-service-explore-scope.hpp"
 #include "proc/mobject/mobject.hpp"
-#include "lib/util-foreach.hpp"
 #include "lib/itertools.hpp"
 #include "lib/symbol.hpp"
 #include "lib/error.hpp"
+#include "lib/util.hpp"
 
-#include <tr1/functional>
 #include <algorithm>
 
 namespace mobject {
 namespace session {
   
   using std::reverse;
-  
-  using std::tr1::bind;
-  using std::tr1::function;
-  using std::tr1::placeholders::_1;
   using lib::append_all;
-  using util::and_all;
+  using util::isSameObject;
   
   using namespace lumiera;
   
@@ -112,6 +107,30 @@ namespace session {
   }
   
   
+  ScopePath::ScopePath (ScopePath const& o)
+    : refcount_(0)
+    , path_(o.path_)
+  { }
+  
+  /**
+   * Copy from existing path
+   * @throw error::Logic when current path has nonzero refcount
+   */
+  ScopePath&
+  ScopePath::operator= (ScopePath const& ref)
+  {
+    if (0 < refcount_)
+      throw error::Logic ("Attempt to overwrite a ScopePath with nonzero refcount");
+    
+    if (!isSameObject (*this, ref))
+      {
+        path_ = ref.path_;
+        ENSURE (0 == refcount_);
+      }
+    return *this;
+  }
+  
+  
   ScopePath::~ScopePath()
   {
     WARN_IF (refcount_, session, "Destroying a scope path frame with ref-count=%lu", refcount_);
@@ -129,7 +148,7 @@ namespace session {
   ScopePath::isValid()  const
   {
     return (1 < length())
-#ifndef NDEBUG
+#if NOBUG_MODE_ALPHA
         && hasValidRoot()
 #endif      
            ;
