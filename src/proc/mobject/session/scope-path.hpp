@@ -187,8 +187,8 @@ namespace session {
       
       /* == mutations == */
       void clear();
-      Scope& moveUp();
-      Scope& goRoot();
+      Scope const& moveUp();
+      Scope const& goRoot();
       void navigate (Scope const&);
       
       

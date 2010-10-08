@@ -164,7 +164,8 @@ PLANNED "Placement search scope" PlacementScope_test <<END
 END
 
 
-PLANNED "Path of nested scopes" ScopePath_test <<END
+TEST "Path of nested scopes" ScopePath_test <<END
+return: 0
 END
 
 

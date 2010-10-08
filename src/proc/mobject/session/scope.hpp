@@ -72,7 +72,9 @@ namespace session {
       
       Scope (Scope const&);
       Scope& operator= (Scope const&);
-      
+            
+      static const Scope INVALID;
+
       static Scope containing (PlacementMO const& aPlacement);
       static Scope containing (RefPlacement const& refPlacement);
       

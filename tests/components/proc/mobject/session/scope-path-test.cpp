@@ -24,15 +24,9 @@
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
 #include "proc/mobject/session/test-scopes.hpp"
+#include "proc/mobject/session/placement-index.hpp"
 #include "proc/mobject/session/scope-path.hpp"
-//#include "lib/lumitime.hpp"
-//#include "proc/mobject/placement-ref.hpp"
-//#include "proc/mobject/session/placement-index.hpp"
-//#include "proc/mobject/test-dummy-mobject.hpp"
 #include "lib/util.hpp"
-
-//#include <iostream>
-//#include <string>
 
 
 
@@ -42,19 +36,44 @@ namespace test    {
   
   using util::isnil;
   using util::isSameObject;
-//using lumiera::Time;
-//using std::string;
-//using std::cout;
-//using std::endl;
-//  using namespace mobject::test;
+  
   using lumiera::error::LUMIERA_ERROR_LOGIC;
   using lumiera::error::LUMIERA_ERROR_INVALID;
   
   
+  namespace { // subversive test helper...
+    
+    Scope const&
+    fabricate_invalidScope()
+    {        /** 
+              * assumed to have identical memory layout
+              * to a Scope object, as the latter is implemented
+              * by a PlacementRef, which in turn is just an
+              * encapsulated Placement-ID
+              */
+             struct Ambush
+               {
+                 /** random ID assumed to be
+                  *  nowhere in the model */
+                 PlacementMO::ID derailed_;
+               };
+      
+      static Ambush _kinky_;
+      return *reinterpret_cast<Scope*> (&_kinky_);
+    }
+  }
+  
+  
+  
+  
+  
   /***************************************************************************
    * @test properties and behaviour of the path of nested scopes.
-   *       Using a pseudo-session (actually just a PlacementIndex), this test
-   *       creates some nested scopes and executes navigation moves on them.
+   *       Using a pseudo-session (actually just a PlacementIndex),
+   *       this test  creates some nested scopes, builds scope paths
+   *       and executes various comparisons navigation moves on them.
+   *       Especially detection of invalid scopes and paths and the
+   *       special handling of empty and root paths is covered.
    * @see  mobject::Placement
    * @see  mobject::session::ScopePath
    * @see  mobject::session::QueryFocus
@@ -70,6 +89,7 @@ namespace test    {
           PMO& startPlacement = retrieve_startElm();
           ASSERT (startPlacement.isValid());
           
+          checkInvalidScopeDetection();
           ScopePath testPath = buildPath (startPlacement);
           checkRelations (testPath,startPlacement);
           invalidPath (testPath,startPlacement);
@@ -95,11 +115,28 @@ namespace test    {
           ASSERT ( path.getLeaf() == path2.getLeaf());
           ASSERT (path2.getLeaf() == path3.getLeaf());
           
-          Scope unrelatedScope (TestPlacement<> (*new DummyMO));
-          VERIFY_ERROR (INVALID, ScopePath(unrelatedScope) );
-          
           return path;
         }
+      
+      
+      void
+      checkInvalidScopeDetection()
+        {
+          // verify detection of illegal scopes and paths...
+          TestPlacement<> notRelated2anything (*new DummyMO);
+          VERIFY_ERROR (NOT_IN_SESSION, Scope invalid (notRelated2anything) );
+          
+          Scope const& scopeOfEvil = fabricate_invalidScope();
+          REQUIRE (!scopeOfEvil.isValid());
+          
+          VERIFY_ERROR (INVALID_SCOPE, ScopePath outsideCurrentModel (scopeOfEvil) );
+          
+          // but there is one exception to this rule...
+          ScopePath theInvalidToken (Scope::INVALID);
+          CHECK (!theInvalidToken.isValid());
+          CHECK (theInvalidToken.empty());
+        }
+      
       
       
       void
@@ -180,28 +217,28 @@ namespace test    {
           
           Scope refScope (refPlacement);
           ASSERT (!invalidP.contains (refScope));
-          ASSERT (!invalidP.endsAt (refScope));
+          VERIFY_ERROR (EMPTY_SCOPE_PATH, invalidP.endsAt (refScope) ); // Logic: can't inspect the end of nothing
           
-          ASSERT (refPath.contains (invalidP));      // If the moon is made of green cheese, I'll eat my hat!
+          ASSERT (refPath.contains (invalidP));            // If the moon is made of green cheese, I'll eat my hat!
           ASSERT (!invalidP.contains (refPath));
           ASSERT (invalidP == commonPrefix(refPath,invalidP));
           ASSERT (invalidP == commonPrefix(invalidP,refPath));
           
-          VERIFY_ERROR (LOGIC, invalidP.moveUp());
+          VERIFY_ERROR (EMPTY_SCOPE_PATH, invalidP.moveUp() );
           Scope root = refPath.goRoot();
           ASSERT (1 == refPath.length());
           
-          Scope nil = refPath.moveUp();
+          Scope const& nil = refPath.moveUp();
           ASSERT (refPath.empty());
           ASSERT (!nil.isValid());
           ASSERT (refPath == invalidP);
           ASSERT (invalidP.contains (nil));
+          ASSERT (invalidP.contains (refPath));
+          ASSERT (!invalidP.contains (refScope));
           
-          refPath.navigate(root);
-          ASSERT (refPath != invalidP);
-          ASSERT (!isnil (refPath));
+          VERIFY_ERROR (EMPTY_SCOPE_PATH, refPath.navigate(root) );
           
-        //ScopePath::INVALID.navigate(root);  // doesn't compile
+        //ScopePath::INVALID.navigate(root);  // doesn't compile: INVALID is immutable
         }
       
       
@@ -234,7 +271,7 @@ namespace test    {
           ASSERT (path2 == path3);
           ASSERT (path1 != path3);
           
-          path1 = ScopePath::INVALID;
+          path2 = ScopePath::INVALID;
           ASSERT (path1 != path2);
           ASSERT (path2 != path3);
           ASSERT (path1 != path3);
@@ -285,7 +322,7 @@ namespace test    {
        *  - attach a new sibling node and move the path down to there
        *  - extract the common prefix, which should again point to the parent
        *  - find a placement in a completely separate branch (only sharing the
-       *    root node). Navigate to there and verify root is the common prefix. 
+       *    root node). Navigate to there and verify root is the common prefix.
        */
       void
       navigate (const ScopePath refPath, PPIdx index)
@@ -316,9 +353,12 @@ namespace test    {
           
           TestPlacement<> newNode (*new DummyMO);
           PMO& parentRefPoint = parent.getTop();
-          index->insert (newNode, parentRefPoint); // place as sibling of "leaf"
-          path.navigate (newNode);
+          Scope newLocation = 
+              index->find(      // place newNode as sibling of "leaf"
+                  index->insert (newNode, parentRefPoint));
+          path.navigate (newLocation);
           Scope sibling = path.getLeaf();
+          ASSERT (sibling == newLocation);
           ASSERT (parent == sibling.getParent());
           ASSERT (path.endsAt (sibling));
           ASSERT (path.contains (parent));
@@ -338,8 +378,8 @@ namespace test    {
           
           // try to navigate to an unconnected location...
           ScopePath beforeInvalidNavigation = path;
-          Scope unrelatedScope (TestPlacement<> (*new DummyMO));
-          VERIFY_ERROR (INVALID, path.navigate (unrelatedScope) );
+          Scope const& unrelatedScope (fabricate_invalidScope());
+          VERIFY_ERROR (INVALID_SCOPE, path.navigate (unrelatedScope) );
           ASSERT (path == beforeInvalidNavigation); // not messed up by the incident
           
           // now explore a completely separate branch....
@@ -359,11 +399,12 @@ namespace test    {
         }
       
       
+      
       void
       clear (ScopePath& path, PPIdx index)
         {
           ASSERT (path);
-          PMO rootNode = index->getRoot();
+          PMO& rootNode = index->getRoot();
           ASSERT (path.getLeaf() != rootNode);
           
           path.clear();
@@ -371,8 +412,8 @@ namespace test    {
           ASSERT (!isnil (path));
           ASSERT (path.getLeaf() == rootNode);
         }
-      
     };
+  
   
   
   /** Register this test class... */

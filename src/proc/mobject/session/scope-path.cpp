@@ -63,8 +63,8 @@ namespace session {
     {
       REQUIRE (path);
       if (path->empty())
-        throw error::Invalid (operation_descr+" an empty placement scope path"
-                             , LUMIERA_ERROR_EMPTY_SCOPE_PATH);
+        throw error::Logic (operation_descr+" an empty placement scope path"
+                           , LUMIERA_ERROR_EMPTY_SCOPE_PATH);
     }
   }//(End) helpers
   
@@ -100,7 +100,7 @@ namespace session {
     : refcount_(0)
     , path_()
   {
-    if (!leaf.isValid()) return; // invalid leaf defines invalid path....
+    if (leaf == Scope::INVALID) return; // invalid leaf defines invalid path....
     
     clear();
     navigate (leaf);
@@ -196,6 +196,8 @@ namespace session {
   bool
   ScopePath::contains (Scope const& aScope)  const
   {
+    if (aScope == Scope::INVALID) return true; // bottom is contained everywhere
+    
     for (iterator ii = this->begin(); ii; ++ii)
       if (aScope == *ii)
         return true;
@@ -207,8 +209,8 @@ namespace session {
   bool
   ScopePath::contains (ScopePath const& otherPath)  const
   {
-    if ( empty())             return false;
     if (!otherPath.isValid()) return true;
+    if ( empty())             return false;
     if (!isValid())           return false;
     
     ASSERT (1 < length());
@@ -262,20 +264,19 @@ namespace session {
   }
   
   
-  Scope&
+  Scope const&
   ScopePath::moveUp()
   {
     ___check_notBottom (this, "Navigating");
-    static Scope invalidScope;
     
     path_.resize (length()-1);
     
-    if (empty()) return invalidScope;
+    if (empty()) return Scope::INVALID;
     else         return path_.back();
   }
   
   
-  Scope&
+  Scope const&
   ScopePath::goRoot()
   {
     ___check_notBottom (this, "Navigating");
@@ -290,6 +291,10 @@ namespace session {
   ScopePath::navigate (Scope const& target)
   {
     ___check_notBottom (this, "Navigating");
+    if (!target.isValid())
+      throw error::Invalid ("can't navigate to a target scope outside the model"
+                           , LUMIERA_ERROR_INVALID_SCOPE);
+    
     std::vector<Scope> otherPath;
     append_all (discoverScopePath(target), otherPath);
     reverse (otherPath.begin(), otherPath.end());

@@ -91,6 +91,10 @@ namespace session {
   }
   
   
+  /** constant \em invalid scope token. */
+  const Scope Scope::INVALID = Scope();
+  
+  
   
   ScopeLocator::ScopeLocator()
     : focusStack_(new QueryFocusStack)
