@@ -193,7 +193,8 @@ PLANNED "Query focus management" QueryFocus_test <<END
 END
 
 
-PLANNED "Query focus stack" QueryFocusStack_test <<END
+TEST "Query focus stack" QueryFocusStack_test <<END
+return: 0
 END
 
 

@@ -159,6 +159,7 @@ namespace session {
       /* == state diagnostics == */
       bool isValid()    const;
       bool empty()      const;
+      bool isRoot()     const;
       size_t size()     const;
       size_t length()   const;
       size_t ref_count()const;
@@ -266,6 +267,17 @@ namespace session {
   {
     return path_.empty();
   }
+  
+  inline bool
+  ScopePath::isRoot() const
+  {
+    return (1 == size())
+#if NOBUG_MODE_ALPHA
+        && path_[0].isRoot()
+#endif
+        ;
+  }
+  
   
   
   /** @note actually this is an Lumiera Forward Iterator,

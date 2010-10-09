@@ -25,6 +25,7 @@
 #include "lib/test/test-helper.hpp"
 #include "proc/mobject/session/test-scopes.hpp"
 #include "proc/mobject/session/query-focus-stack.hpp"
+#include "proc/mobject/session/test-scope-invalid.hpp"
 #include "lib/util.hpp"
 
 
@@ -46,6 +47,9 @@ namespace test    {
    *       the stack frames (ScopePath instances) and cleans up unused frames.
    *       Similar to the ScopePath_test, we use a pseudo-session to create
    *       some path frames to play with.
+   * @note this test executes a lot of functionality in a manual by-hand way,
+   *       which in the actual application is accessed and utilised through
+   *       QueryFocus objects as frontend. 
    *       
    * @see  mobject::session::QueryFocusStack
    * @see  mobject::session::ScopePath
@@ -56,7 +60,8 @@ namespace test    {
       virtual void
       run (Arg) 
         {
-          // Prepare an (test)Index backing the PlacementRefs
+          // Prepare an (test)Index and
+          // set up dummy session contents
           PPIdx index = build_testScopes();
           
           createStack();
@@ -74,7 +79,7 @@ namespace test    {
           
           ASSERT (!isnil (stack));
           ASSERT (!isnil (stack.top()));
-          ASSERT (stack.top().getLeaf().isRoot());
+          ASSERT (stack.top().isRoot());
         }
       
       
@@ -106,7 +111,7 @@ namespace test    {
           
           // can use/navigate the stack top frame
           stack.top().goRoot();
-          ASSERT (isnil (stack.top())); // now indeed at root == empty path
+          ASSERT (!stack.top()); // now indeed at root == no path
           ASSERT (secondFrame.getLeaf().isRoot());
           ASSERT (secondFrame == stack.top());
           
@@ -155,7 +160,7 @@ namespace test    {
           ScopePath& anotherFrame = stack.push(startPoint);
           ASSERT (0 == anotherFrame.ref_count());
           ASSERT (1 == firstFrame.ref_count());
-          intrusive_ptr_release (&anotherFrame);
+          intrusive_ptr_release (&firstFrame);
           ASSERT (0 == firstFrame.ref_count());
           ASSERT (firstFrame.getLeaf() == startPoint);
           
@@ -188,16 +193,16 @@ namespace test    {
           intrusive_ptr_add_ref (&firstFrame);
           
           ScopePath beforeInvalidNavigation = firstFrame;
-          Scope unrelatedScope (TestPlacement<> (*new DummyMO));
+          Scope const& unrelatedScope = fabricate_invalidScope();
           
           // try to navigate to an invalid place
-          VERIFY_ERROR (INVALID, stack.top().navigate (unrelatedScope) );
+          VERIFY_ERROR (INVALID_SCOPE, stack.top().navigate (unrelatedScope) );
           ASSERT (1 == stack.size());
           ASSERT (1 == firstFrame.ref_count());
           ASSERT (stack.top().getLeaf() == startPoint);
           
           // try to push an invalid place
-          VERIFY_ERROR (INVALID, stack.push (unrelatedScope) );
+          VERIFY_ERROR (INVALID_SCOPE, stack.push (unrelatedScope) );
           ASSERT (1 == stack.size());
           ASSERT (1 == firstFrame.ref_count());
           ASSERT (stack.top().getLeaf() == startPoint);

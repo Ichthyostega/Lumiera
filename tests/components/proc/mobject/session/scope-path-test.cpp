@@ -26,6 +26,7 @@
 #include "proc/mobject/session/test-scopes.hpp"
 #include "proc/mobject/session/placement-index.hpp"
 #include "proc/mobject/session/scope-path.hpp"
+#include "proc/mobject/session/test-scope-invalid.hpp"
 #include "lib/util.hpp"
 
 
@@ -39,30 +40,6 @@ namespace test    {
   
   using lumiera::error::LUMIERA_ERROR_LOGIC;
   using lumiera::error::LUMIERA_ERROR_INVALID;
-  
-  
-  namespace { // subversive test helper...
-    
-    Scope const&
-    fabricate_invalidScope()
-    {        /** 
-              * assumed to have identical memory layout
-              * to a Scope object, as the latter is implemented
-              * by a PlacementRef, which in turn is just an
-              * encapsulated Placement-ID
-              */
-             struct Ambush
-               {
-                 /** random ID assumed to be
-                  *  nowhere in the model */
-                 PlacementMO::ID derailed_;
-               };
-      
-      static Ambush _kinky_;
-      return *reinterpret_cast<Scope*> (&_kinky_);
-    }
-  }
-  
   
   
   
