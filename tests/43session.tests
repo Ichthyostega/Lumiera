@@ -157,10 +157,16 @@ out: --------------------------------Test-10: same path, but filtered to TestSub
 out: Placement<.+TestSubMO21.>
 out: --------------------------------Test-11: continue exploring partially used TestSubMO2 iterator
 out: Placement<.+TestSubMO21.>
+return: 0
 END
 
 
-PLANNED "Placement search scope" PlacementScope_test <<END
+TEST "Placement search scope" PlacementScope_test <<END
+out: Placement<.+TestSubMO21.>
+out: Placement<.+TestSubMO2.>
+out: Placement<.+TestSubMO1.>
+out: Placement<.+DummyMO.>
+return: 0
 END
 
 
