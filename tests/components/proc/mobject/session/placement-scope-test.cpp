@@ -23,8 +23,10 @@
 
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
+#include "proc/mobject/mobject.hpp"
 #include "proc/mobject/session/scope.hpp"
 #include "proc/mobject/session/test-scopes.hpp"
+#include "proc/mobject/session/scope-locator.hpp"
 //#include "lib/lumitime.hpp"
 //#include "proc/mobject/placement-ref.hpp"
 //#include "proc/mobject/session/placement-index.hpp"
@@ -39,6 +41,26 @@
 namespace mobject {
 namespace session {
 namespace test    {
+  
+  namespace { // Helper to enumerate all Contents
+             //  of the test-dummy session
+    typedef _ScopeIterMO _Iter;
+    
+    _Iter
+    contents_of_testSession()
+    {
+      Scope root_of_testSession (retrieve_startElm());
+      return ScopeLocator::instance().query<MObject> (root_of_testSession);
+    }
+    
+    _Iter
+    pathToRoot(PlacementMO& elm)
+    {
+      Scope startScope(elm);
+      return ScopeLocator::instance().getRawPath (startScope);
+    }
+  }
+  
   
 //  using namespace mobject::test;
   using lumiera::error::LUMIERA_ERROR_INVALID;
@@ -73,21 +95,12 @@ namespace test    {
           PPIdx index = build_testScopes();
           
           verifyEquality();
-          UNIMPLEMENTED ("function test of placement scope interface");
-#if false  //////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET 384  !!!!!!!!!
           verifyLookup (index);
           verifyNavigation (index);
         }
       
       
-      typedef Query<Placement<DummyMO> >::iterator _Iter;
       
-      _Iter
-      getContents(PPIdx index)
-        {
-          return index->query<DummyMO>(index->getRoot());
-#endif     //////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET 384  !!!!!!!!!
-        }
       
       /** @test for each Placement in our test "session",
        *        find the scope and verify it's in line with the index
@@ -95,24 +108,25 @@ namespace test    {
       void
       verifyLookup (PPIdx ref_index)
         {
-#if false  //////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET 384  !!!!!!!!!
-          for (_Iter elm = getContents(ref_index); elm; ++elm)
+          for (_Iter ii = contents_of_testSession(); ii; ++ii)
             {
-              ASSERT (elm->isValid());
-              cout << string(*elm) << endl;
-              Scope const& scope1 = Scope::containing(*elm);
+              PlacementMO& elm = *ii;
+              ASSERT (elm.isValid());
+              cout << string(elm) << endl;
+              Scope const& scope1 = Scope::containing(elm);
               
-              RefPlacement ref (*elm);
+              RefPlacement ref (elm);
               Scope const& scope2 = Scope::containing(ref);
               
               // verify this with the scope registered within the index...
-              PlacementMO& scopeTop = ref_index->getScope(*elm);
+              PlacementMO& scopeTop = ref_index->getScope(elm);
               ASSERT (scope1 == scopeTop);
               ASSERT (scope2 == scopeTop);
               ASSERT (scope1 == scope2);
               
               ASSERT (isSameObject (scope1,scope2));
             }
+#if false  //////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET 384  !!!!!!!!!
 #endif     //////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET 384  !!!!!!!!!
         }
       
@@ -150,29 +164,34 @@ namespace test    {
       void
       verifyNavigation (PPIdx ref_index)
         {
-#if false  //////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET 384  !!!!!!!!!
-          for (_Iter elm = getContents(ref_index); elm; ++elm)
+          for (_Iter elm = contents_of_testSession(); elm; ++elm)
             {
-              Scope const& scope = Scope::containing(*elm);
-              ASSERT (scope == *scope.ascend());
-              for (Scope::iterator sco = scope.ascend(); sco; ++sco)
-                if (sco->isRoot())
-                  {
-                    VERIFY_ERROR (INVALID, sco->getParent() );
-                    RefPlacement top = sco->getTop();
-                    RefPlacement root = ref_index->getRoot();
-                    
-                    ASSERT (isSameObject (top,root));
-                  }
-                else
-                  {
-                    Scope& parent = sco->getParent();
-                    RefPlacement top = sco->getTop();
-                    Scope& parentsScope = Scope::containing(top);
-                    RefPlacement topsTop = ref_index->getScope(top); ///////////////////TODO impact of Binding a Sequence? see Ticket #311
-                    ASSERT (topsTop == parentsScope);
-                    ASSERT (isSameObject (topsTop, parentsScope.getTop()));
-            }     }
+              _Iter pathIter = pathToRoot(*elm);
+              Scope const& enclosing = Scope::containing(*elm);
+              ASSERT (enclosing == Scope(*elm).getParent());
+              ASSERT (*pathIter == enclosing);
+              
+              for ( ; pathIter; ++pathIter)
+                {
+                  Scope sco(*pathIter);
+                  if (sco.isRoot())
+                    {
+                      VERIFY_ERROR (INVALID, sco.getParent() );
+                      PlacementMO& top = sco.getTop();
+                      PlacementMO& root = ref_index->getRoot();
+                      
+                      ASSERT (isSameObject (top,root));
+                    }
+                  else
+                    {
+                      Scope parent = sco.getParent();
+                      PlacementMO& top = sco.getTop();
+                      Scope parentsScope = Scope::containing(top);
+                      PlacementMO& topsTop = ref_index->getScope(top); ///////////////////TODO impact of Binding a Sequence? see Ticket #311
+                      ASSERT (topsTop == parentsScope);
+                      ASSERT (isSameObject (topsTop, parentsScope.getTop()));
+            }   }   }
+#if false  //////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET 384  !!!!!!!!!
 #endif     //////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET 384  !!!!!!!!!
         }
       
