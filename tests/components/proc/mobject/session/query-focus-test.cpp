@@ -39,6 +39,18 @@ namespace mobject {
 namespace session {
 namespace test    {
   
+  namespace {
+    /** Helper: extract the refcount
+     *  of the current path referred by the given focus
+     */
+    inline size_t
+    refs (QueryFocus const& focus)
+    {
+      return focus.currentPath().ref_count();      
+    }
+  }
+  
+  
   //using util::isSameObject;
   //using lumiera::Time;
   using std::string;
@@ -49,7 +61,9 @@ namespace test    {
   /**********************************************************************************
    * @test handling of current query focus when navigating a system of nested scopes.
    *       Using a pseudo-session (actually just a PlacementIndex), this test
-   *       creates some nested scopes and then checks moving the "current scope".
+   *       accesses some nested scopes and then checks moving the "current scope".
+   *       Moreover a (stack-like) sub-focus is created, temporarily moving aside
+   *       the current focus and returning later on 
    *       
    * @see  mobject::PlacementIndex
    * @see  mobject::session::ScopePath
@@ -89,8 +103,7 @@ namespace test    {
           focus.reset();
           ASSERT (Scope(focus).isRoot());
           
-#ifdef false  ////////////////////////////////////////////////////////////////////////////////TICKET 384
-          PMO& someObj = focus.query<TestSubMO1>();
+          PMO& someObj = *focus.query<TestSubMO1>();
                          // by construction of the test fixture,
                          // we know this object is root -> ps2 -> ps3
           
@@ -99,60 +112,66 @@ namespace test    {
           ASSERT (!Scope(focus).isRoot());
           ScopePath path = focus.currentPath();
           ASSERT (someObj == path.getLeaf());
-          ASSERT (path.getParent().getParent().isRoot());
+          ASSERT (Scope(focus).getParent().getParent().isRoot());
           
-          focus.attach (path.getParent());
-          ASSERT (Scope(focus) == path.getParent());
+          focus.attach (path.getLeaf().getParent());
+          ASSERT (Scope(focus) == path.getLeaf().getParent());
           ASSERT (someObj != Scope(focus));
           ASSERT (path.contains (focus.currentPath()));
-          ASSERT (focus.currentPath().getParent().isRoot());
+          ASSERT (focus.currentPath().getLeaf().getParent().isRoot());
+          
+            // as the focus now has been moved up one level,
+           //  we'll re-discover the original starting point as immediate child
+          CHECK (someObj == *focus.explore<TestSubMO1>());
+#ifdef false  ////////////////////////////////////////////////////////////////////////////////TICKET 384
 #endif
         }
       
       
-      /** @test side-effect free manipulation of a sub-focus */
+      /** @test side-effect free manipulation of a sub-focus,
+       *        while the original focus is pushed on a stack */
       void
       manipulate_subFocus()
         {
-#ifdef false  ////////////////////////////////////////////////////////////////////////////////TICKET 384
-          QueryFocus original; // automatically attaches to current stack top
-          uint num_refs = original.ref_count();
-          ASSERT (num_refs > 1);
+          QueryFocus original;    // automatically attaches to current stack top
+          uint num_refs = refs (original);
+          ASSERT (num_refs > 1);  // because the run() function also holds a ref
           
           QueryFocus subF = QueryFocus::push();
-          cout << string(subF) << endl;
+//        cout << string(subF) << endl;
           ASSERT (subF == original);
           
-          ASSERT (       1 == subF.ref_count());
-          ASSERT (num_refs == original.ref_count());
+          ASSERT (       1 == refs(subF) );
+          ASSERT (num_refs == refs(original));
           
           { // temporarily creating an independent focus attached differently
             QueryFocus subF2 = QueryFocus::push(Scope(subF).getParent());
             ASSERT (subF2 != subF);
             ASSERT (subF == original);
-            cout << string(subF2) << endl;
+//          cout << string(subF2) << endl;
             
-            Iterator ii = subF2.query<TestSubMO21>();
+            ScopeQuery<TestSubMO21>::iterator ii = subF2.query<TestSubMO21>();
             while (ii)
               {
                 subF2.attach(*ii);
-                cout << string(subF2) << endl;
+//              cout << string(subF2) << endl;
                 ii = subF2.query<TestSubMO21>();
               }
-            cout << string(subF2) << "<<<--discovery exhausted" << endl;
+//          cout << string(subF2) << "<<<--discovery exhausted" << endl;
             
             subF2.pop(); // releasing this focus and re-attaching to what's on stack top
-            cout << string(subF2) << "<<<--after pop()" << endl;
+//          cout << string(subF2) << "<<<--after pop()" << endl;
             ASSERT (subF2 == subF);
-            ASSERT (2 == subF2.ref_count());  // both are now attached to the same path
-            ASSERT (2 == subF.ref_count());
+            ASSERT (2 == refs(subF2));  // both are now attached to the same path
+            ASSERT (2 == refs(subF));
           }
           // subF2 went out of scope, but no auto-pop happens (because subF is still there)
-          cout << string(subF) << endl;
+//        cout << string(subF) << endl;
           
-          ASSERT (       1 == subF.ref_count());
-          ASSERT (num_refs == original.ref_count());
+          ASSERT (       1 == refs(subF));
+          ASSERT (num_refs == refs(original));
          // when subF goes out of scope now, auto-pop will happen...
+#ifdef false  ////////////////////////////////////////////////////////////////////////////////TICKET 384
 #endif
         }
           

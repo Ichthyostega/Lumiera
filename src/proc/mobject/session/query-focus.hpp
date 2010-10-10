@@ -94,6 +94,7 @@ namespace session {
       
       QueryFocus&     attach (Scope const&);
       static QueryFocus push (Scope const&);
+      static QueryFocus push ();
       QueryFocus& reset ();
       QueryFocus& pop ();
       

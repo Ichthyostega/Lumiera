@@ -123,6 +123,21 @@ namespace session {
   }
   
   
+  /** push the "current QueryFocus" aside and open a new focus frame,
+   *  which starts out at the same location as the original */
+  QueryFocus
+  QueryFocus::push ()
+  {
+    Scope currentLocation (ScopeLocator::instance().currPath().getLeaf());
+    ENSURE (currentLocation.isValid());
+    
+    QueryFocus newFocus (ScopeLocator::instance().pushPath());
+    newFocus.attach (currentLocation);
+    return newFocus;
+  }
+  
+  
+  
   /** cease to use \em this specific reference to the current frame.
    *  This operation immediately tries to re-attach to what is "current"
    *  and readjusts the internal handle. But when the previously released
