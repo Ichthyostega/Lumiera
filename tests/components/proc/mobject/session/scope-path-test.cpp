@@ -152,7 +152,7 @@ namespace test    {
           ASSERT (parent == refScope.getParent());
           ASSERT (path1 != path2);
           ASSERT (path2 != path1);
-          ASSERT (path1.contains (path2)); ////////////////////TODO: not clear if we really need to implement those relations
+          ASSERT (path1.contains (path2));
           ASSERT (!disjoint(path1,path2));
           ASSERT (path2 == commonPrefix(path1,path2));
           ASSERT (path2 == commonPrefix(path2,path1));
