@@ -22,13 +22,10 @@
 
 
 #include "lib/test/run.hpp"
-//#include "lib/lumitime.hpp"
-//#include "proc/mobject/placement-ref.hpp"
 #include "proc/mobject/session/test-scopes.hpp"
 #include "proc/mobject/session/placement-index.hpp"
 #include "proc/mobject/session/query-focus.hpp"
 #include "proc/mobject/session/scope.hpp"
-//#include "lib/util.hpp"
 
 #include <iostream>
 #include <string>
@@ -46,37 +43,37 @@ namespace test    {
     inline size_t
     refs (QueryFocus const& focus)
     {
-      return focus.currentPath().ref_count();      
+      return focus.currentPath().ref_count();
     }
   }
   
   
-  //using util::isSameObject;
-  //using lumiera::Time;
+  
   using std::string;
   using std::cout;
   using std::endl;
   
   
-  /**********************************************************************************
+  /***********************************************************************************
    * @test handling of current query focus when navigating a system of nested scopes.
    *       Using a pseudo-session (actually just a PlacementIndex), this test
    *       accesses some nested scopes and then checks moving the "current scope".
    *       Moreover a (stack-like) sub-focus is created, temporarily moving aside
-   *       the current focus and returning later on 
+   *       the current focus and returning later on.
    *       
    * @see  mobject::PlacementIndex
    * @see  mobject::session::ScopePath
    * @see  mobject::session::QueryFocus
    */
-  class QueryFocus_test : public Test
+  class QueryFocus_test
+    : public Test
     {
       
       virtual void
       run (Arg) 
         {
-          
-          // Prepare an (test)Index backing the PlacementRefs
+          // Prepare a (test)Session with 
+          // some nested dummy placements
           PPIdx index = build_testScopes();
           PMO& root = index->getRoot();
           
@@ -92,10 +89,13 @@ namespace test    {
           QueryFocus currentFocus;
           ASSERT (scopePosition == Scope(currentFocus));
           ASSERT (currentFocus == theFocus);
+          ASSERT (2 == refs(currentFocus));
+          ASSERT (2 == refs(theFocus));
         }
       
       
-      /** @test move the current focus to various locations
+      
+      /** @test move the current focus to different locations
        *        and discover contents there. */
       void
       checkNavigation (QueryFocus& focus)
@@ -123,13 +123,12 @@ namespace test    {
             // as the focus now has been moved up one level,
            //  we'll re-discover the original starting point as immediate child
           CHECK (someObj == *focus.explore<TestSubMO1>());
-#ifdef false  ////////////////////////////////////////////////////////////////////////////////TICKET 384
-#endif
         }
       
       
+      
       /** @test side-effect free manipulation of a sub-focus,
-       *        while the original focus is pushed on a stack */
+       *        while the original focus is pushed aside (stack) */
       void
       manipulate_subFocus()
         {
@@ -138,7 +137,7 @@ namespace test    {
           ASSERT (num_refs > 1);  // because the run() function also holds a ref
           
           QueryFocus subF = QueryFocus::push();
-//        cout << string(subF) << endl;
+//        cout << string(subF) << endl;                                          /////////////////////////////////////TICKET #679  display diagnostic output
           ASSERT (subF == original);
           
           ASSERT (       1 == refs(subF) );
@@ -148,34 +147,33 @@ namespace test    {
             QueryFocus subF2 = QueryFocus::push(Scope(subF).getParent());
             ASSERT (subF2 != subF);
             ASSERT (subF == original);
-//          cout << string(subF2) << endl;
+//          cout << string(subF2) << endl;                                       /////////////////////////////////////TICKET #679  display diagnostic output
             
-            ScopeQuery<TestSubMO21>::iterator ii = subF2.query<TestSubMO21>();
-            while (ii)
+            ScopeQuery<TestSubMO21>::iterator ii = subF2.explore<TestSubMO21>();
+            while (ii) // drill down depth first
               {
                 subF2.attach(*ii);
-//              cout << string(subF2) << endl;
-                ii = subF2.query<TestSubMO21>();
+//              cout << string(subF2) << endl;                                   /////////////////////////////////////TICKET #679  display diagnostic output
+                ii = subF2.explore<TestSubMO21>();
               }
-//          cout << string(subF2) << "<<<--discovery exhausted" << endl;
+//          cout << string(subF2) << "<<<--discovery exhausted" << endl;         /////////////////////////////////////TICKET #679  display diagnostic output
             
             subF2.pop(); // releasing this focus and re-attaching to what's on stack top
-//          cout << string(subF2) << "<<<--after pop()" << endl;
+//          cout << string(subF2) << "<<<--after pop()" << endl;                 /////////////////////////////////////TICKET #679  display diagnostic output
             ASSERT (subF2 == subF);
             ASSERT (2 == refs(subF2));  // both are now attached to the same path
             ASSERT (2 == refs(subF));
           }
           // subF2 went out of scope, but no auto-pop happens (because subF is still there)
-//        cout << string(subF) << endl;
+//        cout << string(subF) << endl;                                          /////////////////////////////////////TICKET #679  display diagnostic output
           
           ASSERT (       1 == refs(subF));
           ASSERT (num_refs == refs(original));
          // when subF goes out of scope now, auto-pop will happen...
-#ifdef false  ////////////////////////////////////////////////////////////////////////////////TICKET 384
-#endif
         }
-          
+      
     };
+  
   
   
   /** Register this test class... */

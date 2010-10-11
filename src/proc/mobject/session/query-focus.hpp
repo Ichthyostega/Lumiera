@@ -89,8 +89,8 @@ namespace session {
     public:
       QueryFocus();
       
-      ScopePath currentPath()  const;
-      operator Scope()         const;
+      ScopePath const& currentPath()  const;
+      operator Scope()                const;
       
       QueryFocus&     attach (Scope const&);
       static QueryFocus push (Scope const&);
@@ -130,8 +130,13 @@ namespace session {
     return focus_->getLeaf();
   }
   
-  /**@note returning a copy */
-  inline ScopePath
+  /** @return ref to internal datastructure
+   *  @warning don't store it directly. Rather
+   *        copy it or store a QueryFocus instance. 
+   *  @note use #attach if the intention is
+   *        to \em manipulate the current
+   *        focus location */
+  inline ScopePath const&
   QueryFocus::currentPath()  const
   {
     return *focus_;

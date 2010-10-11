@@ -195,7 +195,8 @@ out: ^Lumiera
 END
 
 
-PLANNED "Query focus management" QueryFocus_test <<END
+TEST "Query focus management" QueryFocus_test <<END
+return: 0
 END
 
 
