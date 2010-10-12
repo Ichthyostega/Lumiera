@@ -76,6 +76,15 @@ namespace session {
         Time start_;
         TrackID id_;
         
+      
+        string
+        initShortID()  const
+          {
+            return buildShortID("Fork");
+          }
+        
+        bool isValid()  const;
+        
       protected:
         Track (TrackID const&);
         friend class MObjectFactory;
@@ -87,7 +96,6 @@ namespace session {
         
         bool isSameID (string const&);
         
-        virtual bool isValid()  const;
       };
       
     

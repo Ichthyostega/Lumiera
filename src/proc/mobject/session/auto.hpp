@@ -42,6 +42,12 @@ namespace mobject
     template<class VAL>
     class Auto : public Meta, public ParamProvider<VAL>
       {
+        string
+        initShortID()  const
+          {
+            return buildShortID("Auto");
+          }
+      
       public:
         //////////////////////////////TICKET #566
       

@@ -54,6 +54,12 @@ namespace session {
         ///////////TODO: timespan fields here or already in class Meta??
         ///////////TODO: any idea about the purpose of root's "timespan"??  ///////TICKET #448
       
+        string
+        initShortID()  const
+          {
+            return buildShortID("Root","(✼)");
+          }
+        
         virtual bool isValid()  const;
         
       public:

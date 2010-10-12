@@ -22,22 +22,39 @@
 
 
 #include "proc/mobject/session/abstractmo.hpp"
+#include "lib/util.hpp"
 
-namespace mobject
+#include <boost/format.hpp>
+
+using boost::format;
+using util::isnil;
+
+namespace mobject {
+namespace session {
+  
+  /** default/fallback implementation of equality
+   *  using literal object identity (same address)
+   */
+  bool
+  AbstractMO::operator== (const MObject& oo)  const
   {
-  namespace session
-    {
-
-    /** default/fallback implementation of equality
-     *  using literal object identity (same address)
-     */
-    bool
-    AbstractMO::operator== (const MObject& oo)  const
-    {
-      return (this == &oo);
-    }
-
-
-  } // namespace mobject::session
-
-} // namespace mobject
+    return (this == &oo);
+  }
+  
+  
+  
+  string
+  AbstractMO::buildShortID (lib::Literal typeID, string suffix)  const
+  {
+    static uint i=0;
+    static format namePattern ("%s.%03d");
+    
+    REQUIRE (!isnil (typeID));
+    if (!isnil (suffix))
+      return typeID+"."+suffix;
+    else
+      return str(namePattern % typeID % (++i) );
+  }
+  
+  
+}} // namespace mobject::session

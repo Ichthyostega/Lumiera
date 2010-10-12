@@ -46,10 +46,16 @@ namespace session {
   class Label : public Meta
     {
       ///////////TODO: timespan fields here or already in class Meta??
-    
+      
       Symbol typeID_;
-    
-      virtual bool isValid()  const;
+      
+      string
+      initShortID()  const
+        {
+          return buildShortID("Label");
+        }
+      
+      bool isValid()  const;
       
     public:
       Label (Symbol type)

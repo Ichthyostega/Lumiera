@@ -43,6 +43,12 @@ namespace session {
     {
       ///////////
       //////////////////////////////TICKET #448   what to do with the length here??
+      
+      string
+      initShortID()  const
+        {
+          return buildShortID("MetaMO");
+        }
     };
   
   
