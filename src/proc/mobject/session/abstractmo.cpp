@@ -33,7 +33,8 @@ namespace mobject {
 namespace session {
   
   /** default/fallback implementation of equality
-   *  using literal object identity (same address)
+   *  using literal object identity (same address).
+   *  Required to enable handling by lumiera::P
    */
   bool
   AbstractMO::operator== (const MObject& oo)  const

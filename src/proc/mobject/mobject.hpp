@@ -95,12 +95,12 @@ namespace mobject {
       
       virtual Time& getLength() =0; ///< @todo how to deal with the time/length field?? ////TICKET #448
             
-      virtual bool operator== (const MObject& oo)  const =0;
+      virtual bool operator== (const MObject& oo)  const =0;  ///< needed for handling by lumiera::P
       
     protected:
       
       virtual string initShortID()  const =0;
-
+      
     };
   
   

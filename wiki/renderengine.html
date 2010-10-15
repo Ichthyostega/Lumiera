@@ -1437,7 +1437,7 @@ More often than not, these emerge from immediate solutions, being percieved as e
 &amp;rarr; [[accessing and integrating configuration queries|ConfigQueryIntegration]]
 </pre>
 </div>
-<div title="ConfigQueryIntegration" modifier="Ichthyostega" modified="201004030043" created="200804070247" tags="overview draft impl img" changecount="23">
+<div title="ConfigQueryIntegration" modifier="Ichthyostega" modified="201010140133" created="200804070247" tags="overview draft impl img" changecount="24">
 <pre>* planning to embed a YAP Prolog engine
 * currently just integrated by a table driven mock
 * the baseline is a bit more clear by now (4/08)
@@ -1465,7 +1465,7 @@ At various places, instead of requiring a fixed set of capabilities, it is possi
 &lt;br/&gt;
 &lt;br/&gt;
 
-Access point is the interface {{{ConfigRules}}}, which allowes to resolve a ConfigQuery resulting in an object with properties configured such as to fulfill the query. This whole subsystem employes quite some generic programming, because actually we don't deal with &quot;objects&quot;, but rather with similar instantiations of the same functionality for a collection of different object types. For the purpose of resolving these queries, the actual kind of object is not so much of importance, but on the caller sinde, of course we want to deal with the result of the queries in a typesafe manner.
+Access point is the interface {{{ConfigRules}}}, which allowes to resolve a ConfigQuery resulting in an object with properties configured such as to fulfill the query. This whole subsystem employes quite some generic programming, because actually we don't deal with &quot;objects&quot;, but rather with similar instantiations of the same functionality for a collection of different object types. For the purpose of resolving these queries, the actual kind of object is not so much of importance, but on the caller side, of course we want to deal with the result of the queries in a typesafe manner.
 Examples for //participating object kinds// are [[pipes|Pipe]], [[processing patterns|ProcPatt]], effect instances, [[tags|Tag]], [[labels|Label]], [[automation data sets|AutomationData]],...
 @@clear(right):display(block):@@
 For this to work, we need each of the //participating object types// to provide the implementation of a generic interface {{{TypeHandler}}}, which allows to access actual C/C++ implementations for the predicates usable on objects of this type within the Prolog rules. The implementation has to make sure that, alongside with each config query, there are additional //type constraints// to be regarded. For example, if the client code runs a {{{Query&lt;Pipe&gt;}}}, an additional //type guard// (implemented by a predicate {{{type(pipe)}}} has to be inserted, so only rules and facts in accordance with this type will be used for resolution.
@@ -6419,7 +6419,7 @@ Just an ''registration scheme'' should be implemented right now, working complet
 see [[implementation planning|TypedLookup]]
 </pre>
 </div>
-<div title="TypedLookup" modifier="Ichthyostega" modified="201006250025" created="201004031607" tags="Rules spec impl draft" changecount="18">
+<div title="TypedLookup" modifier="Ichthyostega" modified="201010140129" created="201004031607" tags="Rules spec impl draft" changecount="19">
 <pre>TypedID is a registration service to associate object identities, symbolic identifiers and types. It acts as frontend to the TypedLookup service within Proc-Layer, at the implementation level. While TypedID works within a strictly typed context, this type information is translated into an internal index on passing over to the implementation, which manages a set of tables containing base entries with an combined symbolic+hash ID, plus an opaque buffer. Thus, the strictly typed context is required to re-access the stored data. But the type information wasn't erased entirely, so this typed context can be re-gained with the help of an internal type index. All of this is considered implementation detail and may be subject to change without further notice; any access is assumed to happen through the TypedID frontend. Besides, there are two more specialised frontends.
 
 !Front-ends
@@ -6440,7 +6440,7 @@ In most cases, the //actually usable instance// of an entity isn't identical to 
 !basic usage patterns
 * ''Assets'' are maintained by the AssetManager, which always holds a smart-ptr to the managed asset. Assets include explicit links to dependent assets. Thus, there is no point in interfering with lifecylce management, so we store just a ''weak reference'' here, which the access functor turns back into a smart-ptr, sharing ownership.
 * Plain ''~MObjects'' are somewhat similar, but there is no active lifecycle management &amp;mdash; they are always tied either to a placement of linked from within the assets or render processes. When done, they just go out of scope. Thus we too use a ''weak reference'' here, thereby expecting the respective entity to mix in {{{TypedID::Link}}}
-* Active ''Placements'' of an MObject behave like //object instances// within the model/session. They live within the PlacementIndex and cary an unique {{{LUID}}}-ID. Thus, it's sufficient to store this ''Placement-ID'', which can be used by the access functor to fetch the corresponding Placement from the session.
+* Active ''Placements'' of an MObject behave like //object instances// within the model/session. They live within the PlacementIndex and cary an unique {{{LUID}}}-ID. Thus, it's sufficient to store this ''~Placement-ID'', which can be used by the access functor to fetch the corresponding Placement from the session.
 Obviously, the ~TypedLookup system is open for addition of completely separate and different types.
 [&gt;img[TypedLookup implementation sketch|uml/fig140293.png]]
 |&gt;| !Entity |!pattern |
