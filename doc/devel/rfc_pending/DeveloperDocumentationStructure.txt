@@ -26,7 +26,7 @@ I propose to reorganize the developer documentation in the following way:
  * make a 3 (or more, see below) level documentation structure:
   1. The entry level becomes the 'Lumiera: The inner Core' document which shall
      not go into details but give a hint what everything is made for. This
-     will be the first introductional doc for new developers.
+     will be the first introductory doc for new developers.
   2. second level are the RFC's which descibe the design as planned on a
      general level, not going (except for some example snippets) into
      implementation details.
@@ -58,8 +58,6 @@ Tasks
 Pros
 ^^^^
 // add just a fact list/enumeration which make this suitable:
-//  * foo
-//  * bar ...
 
 Much easier entry to the whole developer documentation. Reading the "Inner Core" 
 document should be sufficient to get a good idea about the Lumiera design and 
@@ -70,7 +68,7 @@ Cons
 ^^^^
 // fact list of the known/considered bad implications:
 
-There are some open ends yet, doxygen for example doesnt integrate nicely, we 
+There are some open ends yet, doxygen for example doesn't integrate nicely, we 
 possibly can't link to single doxygen entities since these have no permanent 
 link (to my understanding, to be investigated). Other parts like the UML model 
 are not yet decided and moving the other existing content over needs some (not 
@@ -80,7 +78,8 @@ Alternatives
 ------------
 //alternatives: explain alternatives and tell why they are not viable:
 
-Wait for a miracle that our docs become well organized on its own.
+Spring 2010 we discussed and decided an overall website and documentation structure.
+We could just stick to that.
 
 
 Rationale
@@ -90,11 +89,11 @@ Rationale
 This approach fits nicely into our overall infrastructure and the way we wanted 
 to do things. Using git and asciidoc mostly, making the developer documentation 
 part of the source tree and reasonable easy available/maintainable to 
-deveoplers.
+developers.
 
 //Conclusion
 //----------
-//conclusion: When approbate (this proposal becomes a Final)
+//conclusion: When approbated (this proposal becomes a Final)
 //            write some conclusions about its process:
 
 
@@ -104,5 +103,34 @@ Comments
 --------
 //comments: append below
 
+* The general idea of having three levels, with 'The Inner Core' as entry point,
+  looks OK for me.
+* beyond that -- we had a detailed discussion about the overall website structure,
+  which includes the documentation. Why should we overthrow these results now and
+  re-start the discussion? Lets just stick to this agreed on structure!
+* especially I don't like the way this proposal tries to squeeze everything into
+  an completely uniform structure. It is simply not true that the RFCs are just the
+  second level, and doxygen would cover the 3^rd^ level. Look at the existing
+  documentation to see why.
+  - RFCs are a 'kind' of document, not a 'hierarchy level.' Indeed, our existing
+    RFCs span all three hierarchy levels, and this is OK so and should remain this
+    way. (And yes, I like the RFCs much and want to retain them)
+  - RFCs are well suited to topics requiring discussion and agreement by the whole
+    core developer team. I see no point in 'pseudo-RFC-ing' the individual design
+    decisions only relevant for an isolated part of the application and without
+    any potential for discussion.
+  - similarily, in the TiddlyWiki, besides just working notes (``extended brain'')
+    you'll find finished text pages belonging to all different levels, from very
+    high-level conceptual down to explanation of technical details, with
+    cross references and tags for categorisation (and this will be retained
+    when asciidocing the content).
+* so my conclusion is rather having one overview text, and then the split into
+  *conceptual* and *technical* documentation, each of which has a separate sub
+  structure not necessarily congruent to the structure on the other half. RFCs,
+  UML model and doxygen are just separate and consistent bodies of documentation
+  and can be referred to from the main documentation. (I agree with the observation
+  regarding permanent links into doxygen. But I can't imagine there isn't some
+  existing solution to this problem)
+  -- link:Ichthyostega[] 2010-10-15
 
 //endof_comments:
