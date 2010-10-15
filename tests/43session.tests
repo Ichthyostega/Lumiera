@@ -221,6 +221,16 @@ END
 
 
 TEST "Query focus management" QueryFocus_test <<END
+out: Focus\(2\)--->/\[DummyMO....\]
+out: Focus\(3\)--->/$
+out: Focus\(3\)--->/\[DummyMO....\]$
+out: Focus\(3\)--->/\[DummyMO....\]/\[DummyMO....\]$
+out: Focus\(3\)--->/\[DummyMO....\]/\[DummyMO....\]/\[DummyMO....\]$
+out: Focus\(3\)--->/\[DummyMO....\]/\[DummyMO....\]/\[DummyMO....\]/\[DummyMO....\]$
+out: Focus\(3\)--->/\[DummyMO....\]/\[DummyMO....\]/\[DummyMO....\]/\[DummyMO....\]/\[DummyMO....\]$
+out: Focus\(3\)--->/\[DummyMO....\]/\[DummyMO....\]/\[DummyMO....\]/\[DummyMO....\]/\[DummyMO....\]<<<--discovery exhausted
+out: Focus\(2\)--->/\[DummyMO....\]<<<--after pop
+out: Focus\(2\)--->/\[DummyMO....\]
 return: 0
 END
 

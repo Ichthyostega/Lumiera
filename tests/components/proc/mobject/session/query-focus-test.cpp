@@ -137,7 +137,7 @@ namespace test    {
           ASSERT (num_refs > 1);  // because the run() function also holds a ref
           
           QueryFocus subF = QueryFocus::push();
-//        cout << string(subF) << endl;                                          /////////////////////////////////////TICKET #429  display diagnostic output
+          cout << string(subF) << endl;
           ASSERT (subF == original);
           
           ASSERT (       1 == refs(subF) );
@@ -147,25 +147,25 @@ namespace test    {
             QueryFocus subF2 = QueryFocus::push(Scope(subF).getParent());
             ASSERT (subF2 != subF);
             ASSERT (subF == original);
-//          cout << string(subF2) << endl;                                       /////////////////////////////////////TICKET #429  display diagnostic output
+            cout << string(subF2) << endl;
             
             ScopeQuery<TestSubMO21>::iterator ii = subF2.explore<TestSubMO21>();
             while (ii) // drill down depth first
               {
                 subF2.attach(*ii);
-//              cout << string(subF2) << endl;                                   /////////////////////////////////////TICKET #429  display diagnostic output
+                cout << string(subF2) << endl;
                 ii = subF2.explore<TestSubMO21>();
               }
-//          cout << string(subF2) << "<<<--discovery exhausted" << endl;         /////////////////////////////////////TICKET #429  display diagnostic output
+            cout << string(subF2) << "<<<--discovery exhausted" << endl;
             
             subF2.pop(); // releasing this focus and re-attaching to what's on stack top
-//          cout << string(subF2) << "<<<--after pop()" << endl;                 /////////////////////////////////////TICKET #429  display diagnostic output
+            cout << string(subF2) << "<<<--after pop()" << endl;
             ASSERT (subF2 == subF);
             ASSERT (2 == refs(subF2));  // both are now attached to the same path
             ASSERT (2 == refs(subF));
           }
           // subF2 went out of scope, but no auto-pop happens (because subF is still there)
-//        cout << string(subF) << endl;                                          /////////////////////////////////////TICKET #429  display diagnostic output
+          cout << string(subF) << endl;
           
           ASSERT (       1 == refs(subF));
           ASSERT (num_refs == refs(original));

@@ -85,6 +85,8 @@ namespace session {
       lib::IterSource<const Scope>::iterator
       locate (Scope const& target);
       
+      size_t stackSize()  const;
+      
       
      ~ScopeLocator();
       
@@ -143,7 +145,7 @@ namespace session {
   {
     return ScopeQuery<MObject> (scope.getTop(), PATH).resolveBy (theResolver());
   }
-
-
+  
+  
 }} // namespace mobject::session
 #endif

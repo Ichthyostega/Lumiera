@@ -29,6 +29,7 @@
 #include "proc/mobject/session/scope-locator.hpp"
 
 #include <boost/intrusive_ptr.hpp>
+#include <string>
 
 namespace mobject {
 namespace session {
@@ -91,6 +92,7 @@ namespace session {
       
       ScopePath const& currentPath()  const;
       operator Scope()                const;
+      operator string()               const;
       
       QueryFocus&     attach (Scope const&);
       static QueryFocus push (Scope const&);

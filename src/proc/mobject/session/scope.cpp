@@ -121,6 +121,13 @@ namespace session {
   }
   
   
+  size_t
+  ScopeLocator::stackSize()  const
+  {
+    return focusStack_->size();
+  }
+  
+  
   /** establishes the \em current query focus location.
    *  Relies on the state of the QueryFocusStack.
    *  If there is no current focus location, a new
