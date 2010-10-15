@@ -28,6 +28,8 @@
 #include "proc/mobject/placement-ref.hpp"
 #include "lib/error.hpp"
 
+#include <string>
+
 
 namespace mobject {
 namespace session {
@@ -72,16 +74,17 @@ namespace session {
       
       Scope (Scope const&);
       Scope& operator= (Scope const&);
-            
+      
       static const Scope INVALID;
-
+      
       static Scope containing (PlacementMO const& aPlacement);
       static Scope containing (RefPlacement const& refPlacement);
       
+      operator std::string() const;
       Scope getParent()      const;
       PlacementMO& getTop()  const;
-      bool isValid() const;
-      bool isRoot()  const;
+      bool isValid()         const;
+      bool isRoot()          const;
       
       friend bool operator== (Scope const&, Scope const&);
       friend bool operator!= (Scope const&, Scope const&);

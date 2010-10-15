@@ -100,8 +100,9 @@ namespace test    {
             {
               PlacementMO& elm = *ii;
               ASSERT (elm.isValid());
-              std::cout << string(elm) << std::endl;
               Scope const& scope1 = Scope::containing(elm);
+              std::cout << "Scope: " << string(scope1) << std::endl;
+              std::cout << string(elm) << std::endl;
               
               RefPlacement ref (elm);
               Scope const& scope2 = Scope::containing(ref);

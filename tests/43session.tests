@@ -169,9 +169,21 @@ END
 
 
 TEST "Placement search scope" PlacementScope_test <<END
+out: Scope: \[Label\.[0-9]{3}\]
 out: Placement<.+TestSubMO21.>
+out: Scope: \[DummyMO\.[0-9]{3}\]
+out: Placement<.+TestSubMO21.>
+out: Scope: \[DummyMO\.[0-9]{3}\]
+out: Placement<.+TestSubMO21.>
+out: Scope: \[DummyMO\.[0-9]{3}\]
+out: Placement<.+TestSubMO21.>
+out: Scope: \[DummyMO\.[0-9]{3}\]
+out: Placement<.+TestSubMO21.>
+out: Scope: \[Label\.[0-9]{3}\]
 out: Placement<.+TestSubMO2.>
+out: Scope: \[DummyMO\.[0-9]{3}\]
 out: Placement<.+TestSubMO1.>
+out: Scope: \[Label\.[0-9]{3}\]
 out: Placement<.+DummyMO.>
 return: 0
 END

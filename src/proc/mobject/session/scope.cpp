@@ -47,6 +47,7 @@
 
 #include <vector>
 
+using std::string;
 using std::vector;
 using lib::IterSource;
 using lib::iter_source::wrapIter;
@@ -222,6 +223,19 @@ namespace session {
   Scope::isValid()  const
   {
     return anchor_.isValid();
+  }
+  
+  
+  /** Scope diagnostic self display.
+   *  Implemented based on the self-display of the MObject
+   *  attached through the scope top placement. Usually this
+   *  should yield a reasonably unique, descriptive string. */
+  Scope::operator string()  const
+  {
+    string res("[");
+    res += anchor_->shortID();
+    res += "]";
+    return res;
   }
   
   
