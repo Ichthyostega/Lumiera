@@ -39,6 +39,7 @@ namespace session {
   using std::reverse;
   using lib::append_all;
   using util::isSameObject;
+  using util::isnil;
   
   using namespace lumiera;
   
@@ -139,6 +140,26 @@ namespace session {
   
   /** constant \em invalid path token. Created by locating an invalid scope */
   const ScopePath ScopePath::INVALID = ScopePath(Scope());
+  
+  
+  /** ScopePath diagnostic self display.
+   *  Implemented similar to a filesystem path, where the
+   *  path elements are based on the self-display of the MObject
+   *  attached through the respective scope top placement. */
+  ScopePath::operator string()  const
+  {
+    if (isnil (path_)) return "!";
+    if (1 == length()) return "/";
+    
+    string res;
+    vector<Scope>::const_iterator node (path_.begin());
+    while (++node != path_.end())
+      {
+        res += "/";
+        res += string (*node);
+      }
+    return res;
+  }
   
   
   /** a \em valid path consists of more than just the root element.

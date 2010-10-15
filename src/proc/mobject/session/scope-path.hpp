@@ -93,6 +93,7 @@
 #include "lib/error.hpp"
 
 #include <vector>
+#include <string>
 
 
 namespace lib {
@@ -163,7 +164,7 @@ namespace session {
       size_t size()     const;
       size_t length()   const;
       size_t ref_count()const;
-                        ////////////////////////////////////////TICKET #429 : diagnostic output to be added later
+      operator string() const;
       
       /// Iteration is always ascending from leaf to root
       typedef _IterType iterator;

@@ -190,6 +190,12 @@ END
 
 
 TEST "Path of nested scopes" ScopePath_test <<END
+out: Step\(1\): /\[DummyMO\.[0-9]{3}\]/\[DummyMO\.[0-9]{3}\]
+out: Step\(2\): /\[DummyMO\.[0-9]{3}\]
+out: Step\(3\): /
+out: Step\(4\): /\[DummyMO\.[0-9]{3}\]
+out: Step\(5\): /\[DummyMO\.[0-9]{3}\]/\[DummyMO\.[0-9]{3}\]
+out: Step\(6\): /\[DummyMO\.[0-9]{3}\]
 return: 0
 END
 

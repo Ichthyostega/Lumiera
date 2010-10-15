@@ -29,12 +29,17 @@
 #include "proc/mobject/session/test-scope-invalid.hpp"
 #include "lib/util.hpp"
 
+#include <iostream>
+#include <string>
 
 
 namespace mobject {
 namespace session {
 namespace test    {
   
+  using std::cout;
+  using std::endl;
+  using std::string;
   using util::isnil;
   using util::isSameObject;
   
@@ -75,7 +80,6 @@ namespace test    {
           check_RefcountProtection (startPlacement);
           navigate (testPath, index);
           clear (testPath, index);
-                                  ////////////////////////////////////////TICKET #429 : verify diagnostic output (to be added later)
         }
       
       
@@ -183,6 +187,7 @@ namespace test    {
           ASSERT (refPath);
           ASSERT (!ScopePath::INVALID);
           ASSERT (isnil (ScopePath::INVALID));
+          ASSERT ("!" == string(ScopePath::INVALID));
           
           ScopePath invalidP (ScopePath::INVALID);
           ASSERT (isnil (invalidP));
@@ -304,11 +309,13 @@ namespace test    {
       void
       navigate (const ScopePath refPath, PPIdx index)
         {
-          ScopePath path (refPath);
+          #define __SHOWPATH(N) cout << "Step("<<N<<"): "<< string(path) << endl;
+          
+          ScopePath path (refPath);               __SHOWPATH(1)
           ASSERT (path == refPath);
           
           Scope leaf = path.getLeaf();
-          Scope parent = path.moveUp();
+          Scope parent = path.moveUp();           __SHOWPATH(2)
           ASSERT (path != refPath);
           ASSERT (refPath.contains (path));
           ASSERT (refPath.endsAt (leaf));
@@ -316,14 +323,14 @@ namespace test    {
           ASSERT (parent == leaf.getParent());
           ASSERT (parent == path.getLeaf());
           
-          Scope root = path.goRoot();
+          Scope root = path.goRoot();             __SHOWPATH(3)
           ASSERT (path != refPath);
           ASSERT (path.endsAt (root));
           ASSERT (refPath.contains (path));
           ASSERT (!path.endsAt (parent));
           ASSERT (!path.endsAt (leaf));
           
-          path.navigate (parent);
+          path.navigate (parent);                 __SHOWPATH(4)
           ASSERT (path.endsAt (parent));
           ASSERT (!path.endsAt (root));
           ASSERT (!path.endsAt (leaf));
@@ -333,7 +340,7 @@ namespace test    {
           Scope newLocation = 
               index->find(      // place newNode as sibling of "leaf"
                   index->insert (newNode, parentRefPoint));
-          path.navigate (newLocation);
+          path.navigate (newLocation);            __SHOWPATH(5)
           Scope sibling = path.getLeaf();
           ASSERT (sibling == newLocation);
           ASSERT (parent == sibling.getParent());
@@ -350,7 +357,7 @@ namespace test    {
           ASSERT (prefix.endsAt (parent));
           ASSERT (!prefix.contains (leaf));
           ASSERT (!prefix.contains (sibling));
-          path.navigate (prefix.getLeaf());
+          path.navigate (prefix.getLeaf());       __SHOWPATH(6)
           ASSERT (path == prefix);
           
           // try to navigate to an unconnected location...
