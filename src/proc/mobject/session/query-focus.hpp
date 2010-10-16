@@ -25,9 +25,11 @@
 #define MOBJECT_SESSION_QUERY_FOCUS_H
 
 #include "proc/mobject/session/scope-path.hpp"
+#include "proc/mobject/session/scope-query.hpp"
 #include "proc/mobject/session/scope-locator.hpp"
 
 #include <boost/intrusive_ptr.hpp>
+#include <string>
 
 namespace mobject {
 namespace session {
@@ -53,10 +55,15 @@ namespace session {
    * Alternatively, through the static factory function #push(), a new
    * focus location may be opened, thereby pushing the currently used
    * focus location aside. This new focus location will remain the
-   * current focus, while any handles referring to it is still in use.
+   * current focus, until all handles referring to it go out of scope.
    * 
    * Using an existing QueryFocus (handle), the current focus may be 
-   * shifted to another scope within the current session.
+   * shifted to another scope within the current session. This
+   * »navigating« operation will use the current focus position as
+   * point of departure, thus retaining a similar access path to any
+   * nested sequences. (These might be attached multiple times within
+   * the same session, each attachment constituting a different
+   * context scope. Navigating tries to retain the current context)
    * 
    * The templated query functions allow to issue specifically typed
    * queries to retrieve all children (immediately contained in a
@@ -73,7 +80,8 @@ namespace session {
    * are delivered without any defined order (implementation is
    * hashtable based)
    * 
-   * @see query-focus-test.cpp
+   * @see QueryFocus_test
+   * @see scope-path.hpp (concept: path of scopes)
    */
   class QueryFocus
     {
@@ -82,11 +90,13 @@ namespace session {
     public:
       QueryFocus();
       
-      ScopePath currentPath()  const;
-      operator Scope()         const;
+      ScopePath const& currentPath()  const;
+      operator Scope()                const;
+      operator string()               const;
       
       QueryFocus&     attach (Scope const&);
       static QueryFocus push (Scope const&);
+      static QueryFocus push ();
       QueryFocus& reset ();
       QueryFocus& pop ();
       
@@ -98,6 +108,9 @@ namespace session {
       template<class MO>
       typename ScopeQuery<MO>::iterator
       explore()  const;
+      
+      lib::IterSource<const Scope>::iterator
+      locate (Scope const& toTarget);
       
       
     private:
@@ -116,14 +129,19 @@ namespace session {
    */
   inline QueryFocus::operator Scope() const
   {
-    return currPath().getLeaf();
+    return focus_->getLeaf();
   }
   
-  /**@note returning a copy */
-  inline ScopePath
+  /** @return ref to internal datastructure
+   *  @warning don't store it directly. Rather
+   *        copy it or store a QueryFocus instance. 
+   *  @note use #attach if the intention is
+   *        to \em manipulate the current
+   *        focus location */
+  inline ScopePath const&
   QueryFocus::currentPath()  const
   {
-    return currPath();
+    return *focus_;
   }
   
   
@@ -134,7 +152,7 @@ namespace session {
   inline typename ScopeQuery<MO>::iterator
   QueryFocus::query()  const
   {
-    ScopeLocator::instance().query<MO> (*this);
+    return ScopeLocator::instance().query<MO> (*this);
   }
   
   
@@ -145,7 +163,22 @@ namespace session {
   inline typename ScopeQuery<MO>::iterator
   QueryFocus::explore()  const
   {
-    ScopeLocator::instance().explore<MO> (*this);
+    return ScopeLocator::instance().explore<MO> (*this);
+  }
+  
+  
+  /** shift or navigate the current focus to point at
+   *  the given target scope. In case of multiple possible
+   *  access paths, the \em current location is taken into
+   *  account, trying to reach the new location in a
+   *  \em similar fashion as much as possible.
+   *  @note moves the current focus as side-effect
+   *  @return the effective / virtual new access path
+   *          leading to the new target focus scope */
+  inline lib::IterSource<const Scope>::iterator
+  QueryFocus::locate (Scope const& toTarget)
+  {
+    return ScopeLocator::instance().locate (toTarget);
   }
   
   

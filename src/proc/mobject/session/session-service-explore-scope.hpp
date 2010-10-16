@@ -69,6 +69,7 @@ namespace session {
     {
       static QueryResolver const& getResolver();
       
+      static PlacementMO& getScope (PlacementMO const&);
       static PlacementMO& getScopeRoot();
     };
   

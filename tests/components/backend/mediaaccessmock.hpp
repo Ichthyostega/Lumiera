@@ -30,23 +30,20 @@
 
 
 
-namespace backend_interface
-  {
-  namespace test
+namespace backend_interface {
+namespace test {
+  
+  /**
+   * Mock implementation of the MediaAccessFacade. 
+   * Provides preconfigured responses for some Test-Filenames.
+   */
+  class MediaAccessMock : public MediaAccessFacade
     {
-    /**
-     * Mock implementation of the MediaAccessFacade. 
-     * Provides preconfigured responses for some Test-Filenames.
-     */
-    class MediaAccessMock : public MediaAccessFacade
-      {
-      public:
-        FileHandle queryFile (const char* name)  throw(lumiera::error::Invalid);
-        ChanDesc queryChannel (FileHandle, uint chanNo)  throw();
-      };
-
-
-  } // namespace test
-
-} // namespace backend_interface
+    public:
+      FileHandle queryFile (const char* name)  throw(lumiera::error::Invalid);
+      ChanDesc queryChannel (FileHandle, uint chanNo)  throw();
+    };
+  
+  
+}} // namespace backend_interface::test
 #endif

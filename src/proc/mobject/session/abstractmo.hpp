@@ -25,6 +25,7 @@
 #define MOBJECT_SESSION_ABSTRACTMO_H
 
 #include "proc/mobject/mobject.hpp"
+#include "lib/symbol.hpp"
 
 
 
@@ -36,18 +37,30 @@ namespace session {
    *  abstract base class of all MObjects for providing common services.
    *  @todo seems that we don't need this intermediate class...
    */
-  class AbstractMO : public MObject
+  class AbstractMO
+    : public MObject
     {
       
-    public:
-      
-      /* some dummy implementations used to make the code compile... */
-      
-      virtual Time& getLength() { return length; }
+     
+      /* === some default implementations ===  */
       
       DEFINE_PROCESSABLE_BY (builder::BuilderTool);
       
-      virtual bool operator== (const MObject& oo)  const;
+      string
+      initShortID()  const
+        {
+          return buildShortID("MObject");
+        }
+      
+    public:
+      
+      Time&
+      getLength()
+        {
+          return length_; 
+        }
+      
+      bool operator== (const MObject& oo)  const;
       
     protected:
       void
@@ -58,6 +71,7 @@ namespace session {
                                          "or similarly broken internal assumptions.");
         }
       
+      string buildShortID (lib::Literal typeID, string suffix ="")  const;
     };
   
   

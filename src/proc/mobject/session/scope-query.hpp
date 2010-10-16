@@ -184,12 +184,6 @@ namespace session {
         {
           return bind (&PlacementMO::isCompatible<MO>, _1 );
         }
-      
-      void
-      resetResultIteration (iterator const& newQueryResults)
-        {
-          static_cast<iterator&> (*this) = newQueryResults;
-        }
     };
   
   
@@ -215,5 +209,7 @@ namespace session {
     };
   
   
+
+
 }} // namespace mobject::session
 #endif

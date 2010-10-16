@@ -63,11 +63,13 @@
  **   \em dereferenced to yield the "current" value.
  ** - moreover, iterators may be incremented until exhaustion.
  ** 
- ** @todo WIP WIP WIP
- ** @todo see Ticket #182
  ** @todo naming of the iteration control function: TICKET #410
  ** 
- ** @see scoped-ptrvect.hpp
+ ** @see iter-adapter-test.cpp
+ ** @see itertools.hpp
+ ** @see IterSource (completely opaque iterator)
+ ** @see iter-type-binding.hpp
+ **
  */
 
 
@@ -77,54 +79,25 @@
 
 #include "lib/error.hpp"
 #include "lib/bool-checkable.hpp"
+#include "lib/iter-type-binding.hpp"
 
 #include <boost/type_traits/remove_const.hpp>
-
 
 
 namespace lib {
   
   
-  namespace {
-    /** 
-     * Helper for creating nested typedefs
-     * within the iterator adaptor, similar to what the STL does.
-     */
-    template<typename TY>
-    struct IterTraits
-      {
-        typedef typename TY::pointer pointer;
-        typedef typename TY::reference reference;
-        typedef typename TY::value_type value_type;
-      };
-    
-    template<typename TY>
-    struct IterTraits<TY *>
-      {
-        typedef TY value_type;
-        typedef TY& reference;
-        typedef TY* pointer;
-      };
-    
-    template<typename TY>
-    struct IterTraits<const TY *>
-      {
-        typedef TY value_type;
-        typedef const TY& reference;
-        typedef const TY* pointer;
-      };
-    
-    
+  namespace { // internal helpers
     void
     _throwIterExhausted()
     {
       throw lumiera::error::Invalid ("Can't iterate further",
             lumiera::error::LUMIERA_ERROR_ITER_EXHAUST);
     }
-    
   }
   
   
+
   /**
    * Adapter for building an implementation of the lumiera forward iterator concept.
    * The "current position" is represented as an opaque element (usually an nested iterator),
@@ -145,15 +118,16 @@ namespace lib {
    *       -# it should be copy constructible
    *       -# when IterAdapter is supposed to be assignable, then POS should be
    *       -# it should provide embedded typedefs for pointer, reference and value_type,
-   *          or alternatively resolve these types through a specialisation if IterTraits.
+   *          or alternatively resolve these types through specialisation of iter::TypeBinding.
    *       -# it should be convertible to the pointer type it declares
-   *       -# dereferencing it should yield type that is convertible to the reference type
+   *       -# dereferencing should yield a type that is convertible to the reference type
    * - CON points to the data source of this iterator (typically a data container type)
-   *       We store a pointer-like backlink to invoke a special iteration control API:
+   *       We store a pointer-like backlink to invoke a special iteration control API:     //////////////TICKET #410
    *       -# \c hasNext yields true iff the source has yet more result values to yield
    *       -# \c iterNext advances the POS to the next element 
    * 
    * @see scoped-ptrvect.hpp usage example
+   * @see iter-type-binding.hpp
    * @see iter-adaptor-test.cpp
    */
   template<class POS, class CON>
@@ -164,9 +138,9 @@ namespace lib {
       mutable POS pos_;
       
     public:
-      typedef typename IterTraits<POS>::pointer pointer;
-      typedef typename IterTraits<POS>::reference reference;
-      typedef typename IterTraits<POS>::value_type value_type;
+      typedef typename iter::TypeBinding<POS>::pointer pointer;
+      typedef typename iter::TypeBinding<POS>::reference reference;
+      typedef typename iter::TypeBinding<POS>::value_type value_type;
       
       IterAdapter (CON src, POS const& startpos)
         : source_(src)
@@ -299,9 +273,9 @@ namespace lib {
       IT e_;
       
     public:
-      typedef typename IterTraits<IT>::pointer pointer;
-      typedef typename IterTraits<IT>::reference reference;
-      typedef typename IterTraits<IT>::value_type value_type;
+      typedef typename iter::TypeBinding<IT>::pointer pointer;
+      typedef typename iter::TypeBinding<IT>::reference reference;
+      typedef typename iter::TypeBinding<IT>::value_type value_type;
       
       RangeIter (IT const& start, IT const& end)
         : p_(start)

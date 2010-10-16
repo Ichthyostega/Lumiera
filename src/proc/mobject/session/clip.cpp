@@ -50,7 +50,7 @@ namespace session {
   Clip::isValid ()  const
   {
     TODO ("check consistency of clip length def, implies accessing the underlying media def");
-    return length > Time(0);
+    return length_ > Time(0);
   }
   
   
@@ -58,7 +58,7 @@ namespace session {
   Clip::setupLength()
   {
     TODO ("really calculate the length of a clip and set length field");
-    this->length = mediaDef_.getLength();
+    this->length_ = mediaDef_.getLength();
   }
   
   

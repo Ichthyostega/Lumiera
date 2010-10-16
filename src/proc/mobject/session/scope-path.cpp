@@ -26,24 +26,20 @@
 #include "proc/mobject/session/scope-locator.hpp"
 #include "proc/mobject/session/session-service-explore-scope.hpp"
 #include "proc/mobject/mobject.hpp"
-#include "lib/util-foreach.hpp"
 #include "lib/itertools.hpp"
 #include "lib/symbol.hpp"
 #include "lib/error.hpp"
+#include "lib/util.hpp"
 
-#include <tr1/functional>
 #include <algorithm>
 
 namespace mobject {
 namespace session {
   
   using std::reverse;
-  
-  using std::tr1::bind;
-  using std::tr1::function;
-  using std::tr1::placeholders::_1;
   using lib::append_all;
-  using util::and_all;
+  using util::isSameObject;
+  using util::isnil;
   
   using namespace lumiera;
   
@@ -54,12 +50,12 @@ namespace session {
   
   namespace { // Helpers and shortcuts....
     
-    /** issue a query to discover the path to root,
+    /** issue a query to discover the (raw) path to root,
      *  starting with the given scope */
     inline ScopeQuery<MObject>::iterator
     discoverScopePath (Scope const& leaf)
     {
-      return ScopeLocator::instance().locate<MObject> (leaf);
+      return ScopeLocator::instance().getRawPath (leaf);
     }
     
     
@@ -68,8 +64,8 @@ namespace session {
     {
       REQUIRE (path);
       if (path->empty())
-        throw error::Invalid (operation_descr+" an empty placement scope path"
-                             , LUMIERA_ERROR_EMPTY_SCOPE_PATH);
+        throw error::Logic (operation_descr+" an empty placement scope path"
+                           , LUMIERA_ERROR_EMPTY_SCOPE_PATH);
     }
   }//(End) helpers
   
@@ -105,10 +101,34 @@ namespace session {
     : refcount_(0)
     , path_()
   {
-    if (!leaf.isValid()) return; // invalid leaf defines invalid path....
+    if (leaf == Scope::INVALID) return; // invalid leaf defines invalid path....
     
-    append_all (discoverScopePath(leaf), path_);
-    reverse (path_.begin(), path_.end());
+    clear();
+    navigate (leaf);
+  }
+  
+  
+  ScopePath::ScopePath (ScopePath const& o)
+    : refcount_(0)
+    , path_(o.path_)
+  { }
+  
+  /**
+   * Copy from existing path
+   * @throw error::Logic when current path has nonzero refcount
+   */
+  ScopePath&
+  ScopePath::operator= (ScopePath const& ref)
+  {
+    if (0 < refcount_)
+      throw error::Logic ("Attempt to overwrite a ScopePath with nonzero refcount");
+    
+    if (!isSameObject (*this, ref))
+      {
+        path_ = ref.path_;
+        ENSURE (0 == refcount_);
+      }
+    return *this;
   }
   
   
@@ -122,14 +142,34 @@ namespace session {
   const ScopePath ScopePath::INVALID = ScopePath(Scope());
   
   
+  /** ScopePath diagnostic self display.
+   *  Implemented similar to a filesystem path, where the
+   *  path elements are based on the self-display of the MObject
+   *  attached through the respective scope top placement. */
+  ScopePath::operator string()  const
+  {
+    if (isnil (path_)) return "!";
+    if (1 == length()) return "/";
+    
+    string res;
+    vector<Scope>::const_iterator node (path_.begin());
+    while (++node != path_.end())
+      {
+        res += "/";
+        res += string (*node);
+      }
+    return res;
+  }
+  
+  
   /** a \em valid path consists of more than just the root element.
    *  @note contrary to this, an \em empty path doesn't even contain a root element
    */
   bool
   ScopePath::isValid()  const
   {
-    return (0 < length())
-#ifndef NDEBUG
+    return (1 < length())
+#if NOBUG_MODE_ALPHA
         && hasValidRoot()
 #endif      
            ;
@@ -177,6 +217,8 @@ namespace session {
   bool
   ScopePath::contains (Scope const& aScope)  const
   {
+    if (aScope == Scope::INVALID) return true; // bottom is contained everywhere
+    
     for (iterator ii = this->begin(); ii; ++ii)
       if (aScope == *ii)
         return true;
@@ -188,8 +230,8 @@ namespace session {
   bool
   ScopePath::contains (ScopePath const& otherPath)  const
   {
-    if ( empty())             return false;
     if (!otherPath.isValid()) return true;
+    if ( empty())             return false;
     if (!isValid())           return false;
     
     ASSERT (1 < length());
@@ -243,20 +285,19 @@ namespace session {
   }
   
   
-  Scope&
+  Scope const&
   ScopePath::moveUp()
   {
     ___check_notBottom (this, "Navigating");
-    static Scope invalidScope;
     
     path_.resize (length()-1);
     
-    if (empty()) return invalidScope;
+    if (empty()) return Scope::INVALID;
     else         return path_.back();
   }
   
   
-  Scope&
+  Scope const&
   ScopePath::goRoot()
   {
     ___check_notBottom (this, "Navigating");
@@ -271,8 +312,22 @@ namespace session {
   ScopePath::navigate (Scope const& target)
   {
     ___check_notBottom (this, "Navigating");
-    *this = ScopePath(target);             //////////////////////////////TICKET #424
-  }
+    if (!target.isValid())
+      throw error::Invalid ("can't navigate to a target scope outside the model"
+                           , LUMIERA_ERROR_INVALID_SCOPE);
+    
+    std::vector<Scope> otherPath;
+    append_all (discoverScopePath(target), otherPath);
+    reverse (otherPath.begin(), otherPath.end());
+                                        ////////////////////////////TICKET #663   extension point for meta-clip support
+    ASSERT (path_[0] == otherPath[0]); // sharing the root element
+    this->path_ = otherPath;          //  TODO really relate the two paths, including a treatment for meta-clips
+                                     //   - if both are in the same sequence (same head element): just attach the tail of the other
+                                    //    - if the other path points into a sequence which is attached as meta-clip to the current sequence,
+                                   //          then attach the other path below that meta-clip (problem: resolve multiple attachments)
+                                  //      - otherwise use the first timeline, to which the other path's sequence is attached
+                                 //       - otherwise, if all else fails, use the raw otherPath
+  }                             ////////////////////////////////////TICKET #672
   
   
   void

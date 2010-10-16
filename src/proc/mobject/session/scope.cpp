@@ -21,21 +21,44 @@
 * *****************************************************/
 
 
+/** @file scope.cpp
+ ** Implementation of placement scopes and scope locator.
+ ** This translation unit embeds the (hidden) link to the session implementation
+ ** used to establish the position of a given placement within the hierarchy
+ ** of nested scopes. The rest of the model implementation code mostly builds
+ ** on top of this access point, when it comes to discovering contents or
+ ** navigating within the model. Especially the ScopeLocator singleton
+ ** defined here plays the role of linking together the system of nested scopes,
+ ** the current QueryFocus and the actual session implementation and storage
+ ** (PlacementIndex)
+ ** 
+ ** @see command.hpp
+ ** @see command-registry.hpp
+ **
+ */
+
+
 #include "proc/mobject/session/scope.hpp"
 #include "proc/mobject/session/scope-locator.hpp"
 #include "proc/mobject/session/query-focus-stack.hpp"
 #include "proc/mobject/session/session-service-explore-scope.hpp"
 #include "proc/mobject/mobject.hpp"
-//#include "proc/mobject/session/track.hpp"
-//#include "proc/mobject/placement.hpp"
-//#include "proc/mobject/session/mobjectfactory.hpp"
+#include "lib/iter-source.hpp"                 ////////////////////TICKET #493 : using the IterSource adapters here
+
+#include <vector>
+
+using std::string;
+using std::vector;
+using lib::IterSource;
+using lib::iter_source::wrapIter;
 
 namespace mobject {
 namespace session {
   
   
-  LUMIERA_ERROR_DEFINE (INVALID_SCOPE, "Placement scope invalid an not locatable within model");
-
+  LUMIERA_ERROR_DEFINE (INVALID_SCOPE, "Placement scope invalid and not locatable within model");
+  LUMIERA_ERROR_DEFINE (NO_PARENT_SCOPE, "Parent scope of root not accessible");
+  
   
   
   /** conversion of a scope top (placement) into a Scope.
@@ -43,9 +66,7 @@ namespace session {
    *  to the session, which will be checked by index access */
   Scope::Scope (PlacementMO const& constitutingPlacement)
     : anchor_(constitutingPlacement)
-  {
-    
-  }
+  { }
   
   
   Scope::Scope ()
@@ -57,23 +78,28 @@ namespace session {
   
   Scope::Scope (Scope const& o)
     : anchor_(o.anchor_)
-  { }
+  {
+    ENSURE (anchor_.isValid());
+  }
   
   
   Scope&
   Scope::operator= (Scope const& o)
   {
-    anchor_ = o.anchor_;  ////////////////////////////TODO verify correctness
+    anchor_ = o.anchor_;  // note: actually we're just assigning an hash value
+    ENSURE (o.isValid());
     return *this;
   }
+  
+  
+  /** constant \em invalid scope token. */
+  const Scope Scope::INVALID = Scope();
   
   
   
   ScopeLocator::ScopeLocator()
     : focusStack_(new QueryFocusStack)
-  {
-    TODO ("anything in initialise here?");
-  }
+  { }
   
   ScopeLocator::~ScopeLocator() { }
   
@@ -92,6 +118,13 @@ namespace session {
   ScopeLocator::theResolver()
   {
     return SessionServiceExploreScope::getResolver();
+  }
+  
+  
+  size_t
+  ScopeLocator::stackSize()  const
+  {
+    return focusStack_->size();
   }
   
   
@@ -123,16 +156,37 @@ namespace session {
   }
   
   
-  
-  /** discover the enclosing scope of a given Placement */
-  Scope const&
-  Scope::containing (PlacementMO const& aPlacement)
+  /** navigate the \em current QueryFocus scope location. The resulting
+   *  access path to the new location is chosen such as to be most closely related
+   *  to the original location; this includes picking a timeline or meta-clip
+   *  attachment most similar to the one used in the original path. So effectively
+   *  you'll see things through the same "scoping perspective" as given by the
+   *  original path, if possible to the new location
+   *  given as parameter. use the contents-resolving facility exposed by the session
+   * @note changes the \em current QueryFocus as a sideeffect
+   * @param scope the new target location to navigate
+   * @return an iterator yielding the nested scopes from the new location
+   *         up to root, in a way likely to be similar to the original location
+   */
+  IterSource<const Scope>::iterator
+  ScopeLocator::locate (Scope const& scope)
   {
-    UNIMPLEMENTED ("scope discovery");
+    ScopePath& currentPath = focusStack_->top();
+    currentPath.navigate (scope);
+    return wrapIter (currentPath.begin());
   }
   
   
-  Scope const&
+  
+  /** discover the enclosing scope of a given Placement */
+  Scope
+  Scope::containing (PlacementMO const& aPlacement)
+  {
+    return SessionServiceExploreScope::getScope (aPlacement);
+  }
+  
+  
+  Scope
   Scope::containing (RefPlacement const& refPlacement)
   {
     return containing (*refPlacement);
@@ -150,10 +204,14 @@ namespace session {
   /** retrieve the parent scope which encloses this scope.
    *  @throw error::Invalid if this is the root scope
    */
-  Scope const&
+  Scope
   Scope::getParent()  const
   {
-    UNIMPLEMENTED ("retrieve the enclosing parent scope");
+    if (isRoot())
+        throw lumiera::error::Invalid ("can't get parent of root scope"
+                                      , LUMIERA_ERROR_NO_PARENT_SCOPE);
+    
+    return SessionServiceExploreScope::getScope (*anchor_);
   }
   
   
@@ -161,7 +219,7 @@ namespace session {
   bool
   Scope::isRoot()  const
   {
-    UNIMPLEMENTED ("detection of root scope");
+    return *anchor_ == SessionServiceExploreScope::getScopeRoot();
   }
   
   
@@ -175,14 +233,16 @@ namespace session {
   }
   
   
-  /** enumerate the path of nested scopes up to root scope.
-   *  @return an iterator which starts with this scope and
-   *          successively yields outer scopes, stopping at root.
-   */
-  Scope::IterType_
-  Scope::ascend()  const
+  /** Scope diagnostic self display.
+   *  Implemented based on the self-display of the MObject
+   *  attached through the scope top placement. Usually this
+   *  should yield a reasonably unique, descriptive string. */
+  Scope::operator string()  const
   {
-    UNIMPLEMENTED ("ascend scope hierarchy up to root");
+    string res("[");
+    res += anchor_->shortID();
+    res += "]";
+    return res;
   }
   
   

@@ -41,6 +41,7 @@ namespace test    {
   typedef TestPlacement<DummyMO> PDum;
   
   typedef std::tr1::shared_ptr<PlacementIndex> PPIdx;
+  typedef ScopeQuery<MObject>::iterator _ScopeIterMO;
   
   
   
@@ -67,7 +68,7 @@ namespace test    {
    *  Usually, clients would use QueryFocus or ScopeLocator to perform this task,
    *  but for the purpose of testing we're better off to invoke the query directly
    */
-  ScopeQuery<MObject>::iterator explore_testScope (PlacementMO const& scopeTop);
+  _ScopeIterMO explore_testScope (PlacementMO const& scopeTop);
   
   
   

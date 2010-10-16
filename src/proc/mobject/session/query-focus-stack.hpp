@@ -112,6 +112,7 @@ namespace session {
   QueryFocusStack::clear ()
   {
     paths_.clear();
+    openDefaultFrame();
   }
   
   

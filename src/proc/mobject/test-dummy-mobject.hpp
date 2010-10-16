@@ -81,8 +81,9 @@ namespace test    {
       
       DEFINE_PROCESSABLE_BY (BuilderTool);
       
-      virtual bool isValid()    const      { return true;}
-      virtual operator string() const      { return display("DummyMO"); }
+      virtual bool isValid()       const   { return true;}
+      virtual string initShortID() const   { return buildShortID("DummyMO"); }
+      virtual operator string()    const   { return display("DummyMO"); }
       static void killDummy (MObject* dum) { delete (DummyMO*)dum; }
       
     protected:

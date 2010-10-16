@@ -183,17 +183,22 @@ namespace test{
           // build the test data sources
           WrappedList customList(NUM_ELMS);
           TestSource dedicatedSource(NUM_ELMS);
+          list<int>& rawList(customList.data_);
           
           IntIter iii (eachEntry (customList));
+          IntIter isi (eachEntry (rawList.begin(), rawList.end()));
           StrIter cii (IterSource<CStr>::build(dedicatedSource));
           
           ASSERT (!isnil (iii));
+          ASSERT (!isnil (isi));
           ASSERT (!isnil (cii));
           
           pullOut (iii);
+          pullOut (isi);
           pullOut (cii);
           
           ASSERT (!iii);
+          ASSERT (!isi);
           ASSERT (!cii);
         }
       

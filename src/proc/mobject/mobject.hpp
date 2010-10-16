@@ -34,10 +34,9 @@
 
 #include <boost/noncopyable.hpp>
 #include <boost/operators.hpp>
-#include <list>
+#include <string>
 
 
-using std::list;
 
 #include "proc/assetmanager.hpp"
 using proc_interface::IDA;                   //TODO finally not needed?
@@ -46,6 +45,7 @@ using proc_interface::AssetManager;
 
 namespace mobject {
   
+  using std::string;
   using lumiera::P;
   
   //NOBUG_DECLARE_FLAG (mobjectmem);
@@ -71,10 +71,12 @@ namespace mobject {
       typedef lumiera::Time Time;
       
       // TODO: how to represent time intervals best?
-      Time length;
+      Time length_;
       
-      MObject() {}
-      virtual ~MObject() {};
+      mutable string shortID_;
+      
+      MObject() ;
+      virtual ~MObject() ;
       
       friend class session::MObjectFactory;
       
@@ -82,12 +84,22 @@ namespace mobject {
     public:
       static session::MObjectFactory create;
       
+      /** a short readable ID as a single name-token,
+       *  denoting both the kind of MObject and some sort of
+       *  instance identity. Not necessarily unique but should
+       *  be reasonable unique in most cases */
+      string const& shortID()  const;
+      
       /** MObject self-test (usable for asserting) */
       virtual bool isValid()  const =0;
       
       virtual Time& getLength() =0; ///< @todo how to deal with the time/length field?? ////TICKET #448
+            
+      virtual bool operator== (const MObject& oo)  const =0;  ///< needed for handling by lumiera::P
       
-      virtual bool operator== (const MObject& oo)  const =0;
+    protected:
+      
+      virtual string initShortID()  const =0;
       
     };
   
@@ -98,10 +110,3 @@ namespace mobject {
 
 } // namespace mobject
 #endif
-/*
-// Local Variables:
-// mode: C++
-// c-file-style: "gnu"
-// indent-tabs-mode: nil
-// End:
-*/

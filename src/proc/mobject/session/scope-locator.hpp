@@ -27,6 +27,7 @@
 #include "proc/mobject/session/scope.hpp"
 #include "proc/mobject/session/scope-query.hpp"
 #include "proc/mobject/placement.hpp"
+#include "lib/iter-source.hpp"                 ////////////////////TICKET #493 : the bare interface would be sufficient here
 #include "lib/singleton.hpp"
 
 #include <boost/scoped_ptr.hpp>
@@ -68,18 +69,27 @@ namespace session {
       
       template<typename MO>
       typename ScopeQuery<MO>::iterator
-      explore (Scope);
+      explore (Scope const&);
       
       template<typename MO>
       typename ScopeQuery<MO>::iterator
-      query (Scope);
+      query (Scope const&);
       
       template<typename MO>
       typename ScopeQuery<MO>::iterator
-      locate (Scope scope);
+      getRawPath (Scope const&);
+      
+      ScopeQuery<MObject>::iterator
+      getRawPath (Scope const&);
+      
+      lib::IterSource<const Scope>::iterator
+      locate (Scope const& target);
+      
+      size_t stackSize()  const;
+      
       
      ~ScopeLocator();
-     
+      
     protected:
       ScopeLocator();
       
@@ -97,7 +107,7 @@ namespace session {
    */
   template<typename MO>
   inline typename ScopeQuery<MO>::iterator
-  ScopeLocator::explore (Scope scope)
+  ScopeLocator::explore (Scope const& scope)
   {
     return ScopeQuery<MO> (scope.getTop(), CHILDREN).resolveBy (theResolver());
   }
@@ -108,20 +118,32 @@ namespace session {
    */
   template<typename MO>
   inline typename ScopeQuery<MO>::iterator
-  ScopeLocator::query (Scope scope)
+  ScopeLocator::query (Scope const& scope)
   {
     return ScopeQuery<MO> (scope.getTop(), CONTENTS).resolveBy (theResolver());
   }
   
   
   /** use the contents-resolving facility exposed by the session
-   *  to discover the path up from the given scope to model root
+   *  to discover the path up from the given scope to model root.
+   *  @note this yields the \em raw path (basic containment hierarchy),
+   *        as opposed to an effective or virtual path, which should reflect
+   *        the attachment of Sequences to Timelines or meta-clips. That is,
+   *        you'll always get the top-level track of any sequence as direct
+   *        child of the root node and timelines (BindingMO) just appear
+   *        to be "dead ends"
    */
   template<typename MO>
   inline typename ScopeQuery<MO>::iterator
-  ScopeLocator::locate (Scope scope)
+  ScopeLocator::getRawPath (Scope const& scope)
   {
     return ScopeQuery<MO> (scope.getTop(), PATH).resolveBy (theResolver());
+  }
+
+  inline ScopeQuery<MObject>::iterator
+  ScopeLocator::getRawPath (Scope const& scope)
+  {
+    return ScopeQuery<MObject> (scope.getTop(), PATH).resolveBy (theResolver());
   }
   
   

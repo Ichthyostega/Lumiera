@@ -24,7 +24,7 @@
  ** An Object representing a sequence of nested scopes within the Session.
  ** MObjects are being attached to the model by Placements, and each Placement
  ** is added as belonging \em into another Placement, which defines the Scope
- ** of the addition. There is one (abstract) root element, containing the timelines;
+ ** of the addition. There is one (formal) root element, containing the timelines;
  ** from there a nested sequence of scopes leads down to each Placement.
  ** Ascending this path yields all the scopes to search or query in proper order
  ** to be used when resolving some attribute of placement. Placements use visibility
@@ -36,15 +36,15 @@
  ** A scope path is represented as sequence of scopes, where each Scope is implemented
  ** by a PlacementRef pointing to the »scope top«, i.e. the placement in the session
  ** constituting this scope. The leaf of this path can be considered the current scope.
- ** ScopePath is intended to remember a \em current location within the model, to be
- ** used for resolving queries and discovering contents.
+ ** ScopePath is intended to be used for remembering a \em current location within the
+ ** model, usable for resolving queries and discovering contents.
  ** 
  ** \par operations and behaviour
  ** 
  ** In addition to some search and query functions, a scope path has the ability to 
  ** \em navigate to a given target scope, which must be reachable by ascending and
  ** descending into the branches of the overall tree or DAG (in the general case).
- ** Navigating changes the current path, which usually happens when the current
+ ** Navigating is a mutating operation which usually happens when the current
  ** "focus" shifts while operating on the model.
  ** 
  ** - ScopePath can be default constructed, yielding an \em invalid path.
@@ -55,6 +55,8 @@
  ** - ScopePaths are intended to be handled <b>by value</b> (as are Scopes and
  **   PlacementRefs). They are equality comparable and provide several specialised
  **   relation predicates.
+ ** - while generally copying is permitted, you may not overwrite an ScopePath
+ **   which is attached (referred by a QueryFocus, see below)
  ** - all implementations are focused on clarity, not uttermost performance, as
  **   the assumption is for paths to be relatively short and path operations to
  **   be executed rather in a GUI action triggered context.
@@ -71,7 +73,9 @@
  ** Each of these stack frames represents the current location for some evaluation
  ** context; it is organised as stack to allow intermediate evaluations. Management
  ** of these stack frames is automated, with the assistance of ScopePath by
- ** incorporating a ref-count.
+ ** incorporating a ref-count. Client code usually accesses this mechanism
+ ** through QueryFocus objects as frontend, which is reflected in the
+ ** mentioned embedded refcount
  ** 
  ** @see scope-path-test.cpp
  ** @see Scope
@@ -89,7 +93,30 @@
 #include "lib/error.hpp"
 
 #include <vector>
+#include <string>
 
+
+namespace lib {
+namespace iter{
+
+  using mobject::session::Scope;
+
+  /**
+   * this explicit specialisation allows to build a RangeIter
+   * to yield const Scope elements, based on the const_reverse_iterator
+   * used internally within ScopePath. This specialisation needs to be
+   * injected prior to actually building the iterator type of ScopePath
+   * @see iter-type-binding.hpp
+   * @see iter-adapter.hpp
+   */
+  template<>
+  struct TypeBinding<vector<Scope>::const_reverse_iterator>
+    {
+      typedef const Scope   value_type;
+      typedef Scope const&  reference;
+      typedef const Scope*  pointer;
+    };
+}}
 
 namespace mobject {
 namespace session {
@@ -123,15 +150,21 @@ namespace session {
       ScopePath ();
       ScopePath (Scope const& leaf);
       
+      ScopePath (ScopePath const&);
+      ScopePath&
+      operator= (ScopePath const&);
+      
       static const ScopePath INVALID;
+      
       
       /* == state diagnostics == */
       bool isValid()    const;
       bool empty()      const;
+      bool isRoot()     const;
       size_t size()     const;
       size_t length()   const;
       size_t ref_count()const;
-                        ////////////////////////////////////////TICKET #429 : diagnostic output to be added later
+      operator string() const;
       
       /// Iteration is always ascending from leaf to root
       typedef _IterType iterator;
@@ -156,8 +189,8 @@ namespace session {
       
       /* == mutations == */
       void clear();
-      Scope& moveUp();
-      Scope& goRoot();
+      Scope const& moveUp();
+      Scope const& goRoot();
       void navigate (Scope const&);
       
       
@@ -236,8 +269,22 @@ namespace session {
     return path_.empty();
   }
   
+  inline bool
+  ScopePath::isRoot() const
+  {
+    return (1 == size())
+#if NOBUG_MODE_ALPHA
+        && path_[0].isRoot()
+#endif
+        ;
+  }
   
-  inline ScopePath::iterator
+  
+  
+  /** @note actually this is an Lumiera Forward Iterator,
+   *  yielding the path up to root as a sequence of
+   *  const Scope elements */
+   inline ScopePath::iterator
   ScopePath::begin()  const
   {
     return iterator (path_.rbegin(), path_.rend());

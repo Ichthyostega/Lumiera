@@ -52,8 +52,19 @@ namespace session {
    * because it depends on the actual media type, and we want to encapsulate
    * all these details as much as possible.
    */
-  class Clip : public AbstractMO
+  class Clip
+    : public AbstractMO
     {
+      string
+      initShortID()  const
+        {
+          return buildShortID("Clip");
+        }
+      
+      void setupLength();
+      
+      
+      
     protected:
       /** start position in source */
       Time start_;
@@ -72,10 +83,8 @@ namespace session {
       friend class MObjectFactory;
       
       
-      virtual void setupLength();
-      
     public:
-      virtual bool isValid()  const;
+      bool isValid()  const;
       
       /** access the underlying media asset */
       PMedia getMedia ()  const;

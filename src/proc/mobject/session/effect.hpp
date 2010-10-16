@@ -42,6 +42,12 @@ namespace session {
   
   class Effect : public AbstractMO
     {
+      string
+      initShortID()  const
+        {
+          return buildShortID("Effect");
+        }
+      
     protected:
       /** Identifier of the Plug-in to be used */
       string pluginID;

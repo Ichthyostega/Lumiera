@@ -101,7 +101,7 @@ namespace session {
   PReso  
   QueryResolver::issue (Goal const& query)  const
   {
-    TODO ("ensure proper initialisation");  
+    REQUIRE (!dispatcher_->empty(), "attempt to issue a query without having installed any resolver (yet)");  
     
     if (!canHandle (query))
       throw lumiera::error::Invalid ("unable to resolve this kind of query"); ////TICKET #197

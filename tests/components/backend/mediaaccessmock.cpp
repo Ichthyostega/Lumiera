@@ -24,9 +24,9 @@
 /** @file mediaacessmock.cpp
  ** Mock implementation of the Interface normally used to query media file
  ** informations from the data backend. The Mock implementation instead holds
- ** a map of fixed response which will be deliverd when querying some magic
+ ** a map of fixed response which will be delivered when querying some magic
  ** filenames.
- **
+ ** 
  ** @see mediaaccessmocktest.cpp validating the Mock
  ** @see MediaAccessFactory the real thing
  **
@@ -51,75 +51,72 @@ using std::vector;
 using std::map;
 
 
-namespace backend_interface
-  {
-  namespace test
-    {
+namespace backend_interface {
+namespace test {
+  
   typedef MediaAccessFacade::FileHandle FileHandle;
   typedef MediaAccessFacade::ChanHandle ChanHandle;
-
-
-    namespace // implementation details
-      {
-      typedef vector<ChanDesc> Response;
-      const ChanDesc NULLResponse;
+  
+  
+  namespace { // implementation details
       
-      struct TestCases : map<string,Response>
-        {
-          TestCases ()
-            {
-              // ------------------------------------------------------------------TESTCASES
-              (*this)["test-1"].push_back (ChanDesc ("video","ID", genH()));
-
-              (*this)["test-2"].push_back (ChanDesc ("video","H264", genH()));
-              (*this)["test-2"].push_back (ChanDesc ("audio-L","PCM", genH()));
-              (*this)["test-2"].push_back (ChanDesc ("audio-R","PCM", genH()));
-              // ------------------------------------------------------------------TESTCASES
-            }
-          
-          bool known (string key)
-            {
-              const_iterator i = find (key);
-              return (i != end());
-            }
-        private:
-          int _i_;
-          ChanHandle genH()
-            {
-              return reinterpret_cast<ChanHandle> (++_i_);
-            }
-        };
-        
-        // instantiate TestCasses table
-        TestCases testCases;
-        
-    } // (end) implementation namespace
-
-
-    FileHandle
-    MediaAccessMock::queryFile (const char* name)  throw(Invalid)
-    {
-    if (isnil (name))
-      throw Invalid ("empty filename passed to MediaAccessFacade.");
+    typedef vector<ChanDesc> Response;
+    const ChanDesc NULLResponse;
     
-      if (!testCases.known(name))
-        return 0;
-      else
-        return reinterpret_cast<void*> (&testCases[name]);
-    }
-
-    ChanDesc
-    MediaAccessMock::queryChannel (FileHandle h, uint chanNo)  throw()
-    {
-      const Response* res (reinterpret_cast<Response*> (h));
+    struct TestCases : map<string,Response>
+      {
+        TestCases ()
+          {
+            // ------------------------------------------------------------------TESTCASES
+            (*this)["test-1"].push_back (ChanDesc ("video","ID", genH()));
+            
+            (*this)["test-2"].push_back (ChanDesc ("video","H264", genH()));
+            (*this)["test-2"].push_back (ChanDesc ("audio-L","PCM", genH()));
+            (*this)["test-2"].push_back (ChanDesc ("audio-R","PCM", genH()));
+            // ------------------------------------------------------------------TESTCASES
+          }
+        
+        bool known (string key)
+          {
+            const_iterator i = find (key);
+            return (i != end());
+          }
+      private:
+        int _i_;
+        ChanHandle genH()
+          {
+            return reinterpret_cast<ChanHandle> (++_i_);
+          }
+      };
       
-      if (!res || res->size() <= chanNo) 
-        return NULLResponse;
-      else
-        return (*res)[chanNo];
-    }
-
-
-  } // namespace test
-
-} // namespace backend_interface
+      // instantiate TestCasses table
+      TestCases testCases;
+      
+  } // (end) implementation namespace
+  
+  
+  FileHandle
+  MediaAccessMock::queryFile (const char* name)  throw(Invalid)
+  {
+  if (isnil (name))
+    throw Invalid ("empty filename passed to MediaAccessFacade.");
+  
+    if (!testCases.known(name))
+      return 0;
+    else
+      return reinterpret_cast<void*> (&testCases[name]);
+  }
+  
+  ChanDesc
+  MediaAccessMock::queryChannel (FileHandle h, uint chanNo)  throw()
+  {
+    const Response* res (reinterpret_cast<Response*> (h));
+    
+    if (!res || res->size() <= chanNo) 
+      return NULLResponse;
+    else
+      return (*res)[chanNo];
+  }
+  
+  
+}} // namespace backend_interface::test

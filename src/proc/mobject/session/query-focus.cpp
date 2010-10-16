@@ -22,6 +22,12 @@
 
 
 #include "proc/mobject/session/query-focus.hpp"
+#include "proc/mobject/mobject.hpp"
+
+#include <boost/format.hpp>
+
+using boost::format;
+using boost::str;
 
 
 namespace mobject {
@@ -122,6 +128,21 @@ namespace session {
   }
   
   
+  /** push the "current QueryFocus" aside and open a new focus frame,
+   *  which starts out at the same location as the original */
+  QueryFocus
+  QueryFocus::push ()
+  {
+    Scope currentLocation (ScopeLocator::instance().currPath().getLeaf());
+    ENSURE (currentLocation.isValid());
+    
+    QueryFocus newFocus (ScopeLocator::instance().pushPath());
+    newFocus.attach (currentLocation);
+    return newFocus;
+  }
+  
+  
+  
   /** cease to use \em this specific reference to the current frame.
    *  This operation immediately tries to re-attach to what is "current"
    *  and readjusts the internal handle. But when the previously released
@@ -135,6 +156,16 @@ namespace session {
     focus_ = & currPath();
     
     return *this;
+  }
+  
+  
+  
+  /** diagnostic self-display based on the ScopePath */
+  QueryFocus::operator string()  const 
+  {
+    static format display("Focus(%d)--->%s");
+    return str ( display % ScopeLocator::instance().stackSize() 
+                         % string (*focus_));
   }
   
   

@@ -179,6 +179,12 @@ namespace session {
         {
           return resolvingWrapper_;
         }
+
+      PlacementMO&
+      getScope (PlacementMO const& placement2locate)
+        {
+          return IMPL::getPlacementIndex().getScope(placement2locate);
+        }
       
       PlacementMO& 
       getScopeRoot()

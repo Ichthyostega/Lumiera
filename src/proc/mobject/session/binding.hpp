@@ -50,6 +50,12 @@ namespace session {
       {
         PSequence boundSequence_;
         
+        string
+        initShortID()  const
+          {
+            return buildShortID("Binding");
+          }
+        
         bool isValid()  const;
         
       public:

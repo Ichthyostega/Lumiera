@@ -255,6 +255,13 @@ namespace lib {
           typedef typename IterSource<Val>::iterator Iter;
         };
       
+      template<class IT>
+      struct _RangeT
+        {
+          typedef typename IT::value_type Val;
+          typedef typename IterSource<Val>::iterator Iter;
+        };
+
       template<class MAP>
       struct _MapT
         {
@@ -400,6 +407,21 @@ namespace lib {
       return IterSource<ValType>::build (new WrappedLumieraIterator<Range>(contents)); 
     }
     
+
+    /** @return a Lumiera Forward Iterator yielding all values
+     *          defined by a classical Iterator range.
+     */
+    template<class IT>
+    typename _RangeT<IT>::Iter
+    eachEntry (IT const& begin, IT const& end)
+    {
+      typedef typename _RangeT<IT>::Val ValType;
+      typedef RangeIter<IT> Range;
+
+      Range contents (begin, end);
+      return IterSource<ValType>::build (new WrappedLumieraIterator<Range>(contents));
+    }
+
   }
   using iter_source::wrapIter;
   using iter_source::eachMapKey;

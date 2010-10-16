@@ -23,9 +23,11 @@
 
 #include "proc/mobject/mobject.hpp"
 #include "proc/mobject/session/mobjectfactory.hpp"
+#include "lib/util.hpp"
 
-namespace mobject
-  {
+using util::isnil;
+
+namespace mobject {
 
   using ::NOBUG_FLAG(memory);
   NOBUG_CPP_DEFINE_FLAG_PARENT(mobjectmem, memory);
@@ -34,6 +36,25 @@ namespace mobject
   /** Storage for the (single, static) MObject factory object.
    */
   session::MObjectFactory MObject::create;
+
+  
+  MObject::MObject()
+    : length_()
+    , shortID_()
+    { }
+  
+  
+  MObject::~MObject() { };
+  
+  
+  
+  string const&
+  MObject::shortID()  const
+  {
+    if (isnil (shortID_))
+      shortID_ = initShortID();
+    return shortID_;
+  }
 
 
 

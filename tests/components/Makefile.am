@@ -73,6 +73,7 @@ test_components_SOURCES =								\
 	$(testcomponents_srcdir)/proc/mobject/builder/buildertooltest.cpp		\
 	$(testcomponents_srcdir)/proc/mobject/builder/buildsegmenttest.cpp		\
 	$(testcomponents_srcdir)/proc/mobject/controller/rendersegmenttest.cpp		\
+	$(testcomponents_srcdir)/proc/mobject/mobject-interface-test.cpp 		\
 	$(testcomponents_srcdir)/proc/mobject/mobject-ref-test.cpp			\
 	$(testcomponents_srcdir)/proc/mobject/placement-basic-test.cpp			\
 	$(testcomponents_srcdir)/proc/mobject/placement-hierarchy-test.cpp		\
@@ -84,10 +85,12 @@ test_components_SOURCES =								\
 	$(testcomponents_srcdir)/proc/mobject/session/deletecliptest.cpp		\
 	$(testcomponents_srcdir)/proc/mobject/session/placement-index-query-test.cpp	\
 	$(testcomponents_srcdir)/proc/mobject/session/placement-index-test.cpp		\
+	$(testcomponents_srcdir)/proc/mobject/session/placement-scope-test.cpp		\
 	$(testcomponents_srcdir)/proc/mobject/session/query-focus-stack-test.cpp	\
 	$(testcomponents_srcdir)/proc/mobject/session/query-focus-test.cpp		\
 	$(testcomponents_srcdir)/proc/mobject/session/query-resolver-test.cpp		\
 	$(testcomponents_srcdir)/proc/mobject/session/rebuildfixturetest.cpp		\
+	$(testcomponents_srcdir)/proc/mobject/session/scope-path-test.cpp		\
 	$(testcomponents_srcdir)/proc/mobject/session/scope-query-test.cpp		\
 	$(testcomponents_srcdir)/proc/mobject/session/session-service-access-test.cpp	\
 	$(testcomponents_srcdir)/proc/mobject/session/sessionmanagertest.cpp		\
@@ -101,4 +104,5 @@ noinst_HEADERS +=							\
 	$(testcomponents_srcdir)/proc/asset/testasset.hpp		\
 	$(testcomponents_srcdir)/proc/asset/testclipasset.hpp		\
 	$(testcomponents_srcdir)/proc/mobject/session/testclip.hpp	\
-	$(testcomponents_srcdir)/proc/mobject/session/testsession1.hpp
+	$(testcomponents_srcdir)/proc/mobject/session/testsession1.hpp	\
+	$(testcomponents_srcdir)/proc/mobject/session/test-scope-invalid.hpp
