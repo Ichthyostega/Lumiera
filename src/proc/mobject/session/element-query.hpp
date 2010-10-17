@@ -25,14 +25,11 @@
 #define MOBJECT_SESSION_ELEMENT_QUERY_H
 
 
-//#include "lib/p.hpp"
-//#include "lib/query.hpp"
 #include "proc/mobject/placement.hpp"
 #include "proc/mobject/mobject-ref.hpp"
 #include "proc/mobject/session/specific-contents-query.hpp"
 #include "proc/mobject/session/session-service-explore-scope.hpp"
 
-//#include <boost/scoped_ptr.hpp>
 #include <boost/noncopyable.hpp>
 #include <tr1/functional>
 
@@ -42,8 +39,6 @@ namespace mobject {
 namespace session {
   
   
-//  using lumiera::P;
-//  using boost::scoped_ptr;
   using std::tr1::function;
   
   
@@ -91,6 +86,9 @@ namespace session {
    * For now the motivation to package this as a separate interface module
    * was just to reduce the includes on the top level session API and to allow
    * for templated search functions, based on function objects.
+   * 
+   * @see session-element-query-test.cpp demo test
+   * @see struct-factory-impl.hpp usage example
    */
   class ElementQuery
     : boost::noncopyable
@@ -100,9 +98,12 @@ namespace session {
       
       /** pick the first element from session satisfying a predicate. 
        *  @param searchPredicate applied to \c Placement<MO> for filtering
+       *  @return MObject ref to the fist suitable element. Might be an empty MObjectRef.
        *  @note  the embedded MObject subtype (MO) causes an additional filtering
        *         on that specific kind of MObject (e.g. considering just Clips)
-       *  @return MObject ref to the fist suitable element. Might be an empty MObjectRef.
+       *  @warning be sure the passed predicate actually takes a \code Placement<XX> const& \endcode
+       *         with XX being the correct type. Note the \c const& -- Failing to do so shows up as
+       *         compiler error "no suitable function pick(.....)"
        */
       template<typename PRED>
       typename _PickRes<PRED>::Result

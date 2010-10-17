@@ -1,8 +1,8 @@
 /*
-  ScopeQuery(Test)  -  running queries to discover container contents, filtering (sub)types 
+  SessionElementQuery(Test)  -  querying and retrieving elements from the session 
  
   Copyright (C)         Lumiera.org
-    2009,               Hermann Vosseler <Ichthyostega@web.de>
+    2010,               Hermann Vosseler <Ichthyostega@web.de>
  
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -22,15 +22,14 @@
 
 
 #include "lib/test/run.hpp"
-#include "proc/mobject/session/scope-query.hpp"
-#include "proc/mobject/session/specific-contents-query.hpp"
-#include "proc/mobject/session/session-service-explore-scope.hpp"
 #include "proc/mobject/session/test-scopes.hpp"
-#include "proc/mobject/session/clip.hpp"
-#include "lib/symbol.hpp"
+#include "proc/mobject/session/element-query.hpp"
+#include "proc/mobject/session/scope-path.hpp"
+#include "proc/mobject/session/scope.hpp"
+#include "proc/mobject/mobject-ref.hpp"
 #include "lib/util.hpp"
 
-#include <iostream>
+#include <tr1/functional>
 #include <string>
 
 
@@ -39,39 +38,34 @@ namespace mobject {
 namespace session {
 namespace test    {
   
-  using lib::Literal;
+  using std::tr1::placeholders::_1;
+  using std::tr1::function;
+  using std::tr1::bind;
   using std::string;
-  using std::cout;
-  using std::endl;
   
+  using util::cStr;
   using util::contains;
   
   
   namespace { // helpers and shortcuts....
     
-    /** a filter predicate to pick some objects from a resultset.
+    typedef Placement<DummyMO> const& PDummy;  // note const& required by ElementQuery filter definition
+    
+    
+    /** a filter predicate to pick some objects from a resultset,
+     *  based on string match with the element's self-display string.
      *  @note using the specific API of DummyMO, without cast! */
     bool
-    filter (Placement<DummyMO> const& candidate)
+    filter_typeID (PDummy candidate, string expectedText)
     {
       string desc = candidate->operator string();
-      return contains(desc, "MO2");
+      return contains(desc, expectedText);
     }
     
-    template<class IT>
-    void
-    pullOut (IT const& iter)
+    inline function<bool(PDummy)>
+    elementID_contains (string expectedText)
     {
-      for (IT elm(iter);
-           elm; ++elm)
-        cout << string(*elm) << endl;
-    }
-    
-    void
-    announce (Literal description)
-    {
-      static uint nr(0);
-      cout << "--------------------------------Test-"<< ++nr << ": " << description << endl;
+      return bind (filter_typeID, _1, expectedText);
     }
     
   }
@@ -79,19 +73,21 @@ namespace test    {
   
   
   /**********************************************************************************************
-   * @test how to discover contents or location of a container-like part of the high-level model.
-   *       As this container-like object is just a concept and actually implemented by the
-   *       PlacementIndex, this means querying the index for elements registered with
-   *       a given scope or finding the enclosing scopes. The discovered
-   *       elements will be filtered by a runtime type check.
+   * @test cover the part of the session API allowing to retrieve specific elements by query.
+   *       - This test first picks an object from the test session, where the filter predicate
+   *         utilises the specific MObject subclass (here DummyMO).
+   *       - Then re-fetches the same object using a different filter
+   *         (based on the specific random int-ID).
+   *       - Next the element is removed from the test session to verify the "not found" result
+   *       - finally we re-attach another placement of the same underlying MObject instance
+   *         at a different location in the test session and verify we can again pick this
+   *         element with the specific query.
    *       
-   * @todo change that to use a more realistic test session, based on the actual model types   //////////////// TICKET #532
-   *       
-   * @see  mobject::session::PlacementIndex
-   * @see  mobject::session::QueryResolver
+   * @see  mobject::session::ElementQuery
    * @see  mobject::session::ContentsQuery
+   * @see  scope-query-test.cpp
    */
-  class ScopeQuery_test : public Test
+  class SessionElementQuery_test : public Test
     {
       virtual void
       run (Arg) 
@@ -99,51 +95,54 @@ namespace test    {
           // Prepare an (test)Index (dummy "session")
           PPIdx testSession (build_testScopes());
           
-          PlacementMO   const& scope = SessionServiceExploreScope::getScopeRoot();
+          ElementQuery queryAPI;
           
-          discover (ScopeQuery<MObject>    (scope, CONTENTS) , "contents depth-first");
-          discover (ScopeQuery<Clip>       (scope, CONTENTS) , "contents depth-first, filtered to Clip");
-          discover (ScopeQuery<DummyMO>    (scope, CONTENTS) , "contents depth-first, filtered to DummyMO");  ////////////////////// TICKET #532
-          discover (ScopeQuery<TestSubMO1> (scope, CONTENTS) , "contents depth-first, filtered to TestSubMO1");
-          discover (ScopeQuery<TestSubMO2> (scope, CONTENTS) , "contents depth-first, filtered to TestSubMO2");
+          MORef<DummyMO> dummy1 = queryAPI.pick (elementID_contains("MO2"));
+          CHECK (dummy1);
+          CHECK (dummy1->isValid());
+          INFO (test, "Location in Tree: %s", cStr(ScopePath(dummy1.getPlacement())));
+          string elementID = dummy1->operator string();
+          CHECK (contains (elementID, "MO2"));
           
-          discover (pickAllSuitable(scope, filter)           , "contents depth-first, custom filtered DummyMO");
-                                          // note filter is typed to accept DummyMO
-          ScopeQuery<TestSubMO21> allM021(scope, CONTENTS);
-          ScopeQuery<TestSubMO21>::iterator specialEl (issue(allM021));
-          ++specialEl; // step in to second solution found...
-          ASSERT (specialEl);
+          string specificID = elementID.substr(10);   // should contain the random int-ID
+          MORef<DummyMO> dummy2;
+          CHECK (!dummy2);
+          dummy2 = queryAPI.pick (elementID_contains(specificID));
+          CHECK (dummy2);                         // found the same object again
+          CHECK (dummy2->isValid());
+          CHECK (dummy2 == dummy1);
           
-          discover (ScopeQuery<MObject>    (*specialEl, PARENTS) , "parents of the second TestSubMO2 element found");
-          discover (ScopeQuery<MObject>    (*specialEl, CHILDREN), "children of the this TestSubMO2 element");
-          discover (ScopeQuery<MObject>    (*specialEl, PATH)    , "path from there to root");
-          discover (ScopeQuery<TestSubMO2> (*specialEl, PATH)    , "same path, but filtered to TestSubMO2");
-          announce (                                               "continue exploring partially used TestSubMO2 iterator");
-          pullOut  (specialEl);
+          
+          // put aside a new handle holding onto the MObject
+          PDum newPlacement(dummy1.getPlacement());
+          CHECK (testSession->contains(dummy1.getRef()));
+          CHECK (!testSession->contains(newPlacement));
+          
+          // and now remove the placement and all contained elements
+          testSession->clear (dummy1.getRef());
+          CHECK (!testSession->contains(dummy1.getRef()));
+          
+          MORef<DummyMO> findAgain = queryAPI.pick (elementID_contains(specificID));
+          CHECK (!findAgain);     // empty result because searched element was removed from session...
+          
+          MORef<DummyMO> otherElm = queryAPI.pick (elementID_contains("MO1"));
+          CHECK (otherElm);    // now pick just some other arbitrary element 
+          
+          testSession->insert(newPlacement, otherElm.getRef());
+          dummy2 = queryAPI.pick (elementID_contains(specificID));
+          CHECK (dummy2);
+          CHECK (dummy2 != dummy1);
+          CHECK (dummy2 != newPlacement);
+          CHECK (isSharedPointee(newPlacement, dummy2.getPlacement()));
+          CHECK (Scope::containing(dummy2.getPlacement()) == Scope(otherElm.getPlacement()));
+          INFO (test, "New treelocation: %s", cStr(ScopePath(dummy2.getPlacement())));
         }
-      
-      
-      
-      template<class MO>
-      static void
-      discover (ScopeQuery<MO> const& query, Literal description)
-        {
-          announce (description);
-          pullOut (issue(query));
-        }
-      
-      template<class MO>
-      static typename ScopeQuery<MO>::iterator
-      issue (ScopeQuery<MO> const& query)
-        {
-          return query.resolveBy(SessionServiceExploreScope::getResolver());
-        }
-      
     };
   
   
+  
   /** Register this test class... */
-  LAUNCHER (ScopeQuery_test, "unit session");
+  LAUNCHER (SessionElementQuery_test, "function session");
   
   
 }}} // namespace mobject::session::test

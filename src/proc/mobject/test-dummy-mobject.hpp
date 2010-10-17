@@ -134,6 +134,11 @@ namespace test    {
       TestPlacement(DummyMO& dummyObj) 
         : Placement<DummyMO>::Placement(dummyObj, &DummyMO::killDummy)
         { }
+      
+      // allowing all kinds of copy
+      TestPlacement(Placement<DummyMO> const& refP)
+        : Placement<DummyMO>::Placement(refP)
+        { }
     };
   
   template<class DMO, class B>

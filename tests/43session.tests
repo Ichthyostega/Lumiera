@@ -36,6 +36,11 @@ PLANNED "SessionElementTracker_test" SessionElementTracker_test <<END
 END
 
 
+TEST "Fetching specific elements from Session" SessionElementQuery_test <<END
+return: 0
+END
+
+
 TEST "external MObject references" MObjectRef_test <<END
 out: MRef-NIL
 out: sizeof\( .+MORef.+session.Clip.+ \) =  (32|24)

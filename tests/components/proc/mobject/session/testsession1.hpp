@@ -21,8 +21,8 @@
 */
 
 
-#ifndef MOBJECT_SESSION_TESTSESSION_H
-#define MOBJECT_SESSION_TESTSESSION_H
+#ifndef MOBJECT_SESSION_TESTSESSION1_H
+#define MOBJECT_SESSION_TESTSESSION1_H
 
 
 #include "proc/mobject/session.hpp"
