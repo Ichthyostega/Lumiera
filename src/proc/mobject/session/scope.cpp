@@ -68,6 +68,10 @@ namespace session {
     : anchor_(constitutingPlacement)
   { }
   
+  Scope::Scope (PlacementMO::ID const& constitutingPlacement)
+    : anchor_(constitutingPlacement)
+  { }
+  
   
   Scope::Scope ()
     : anchor_()

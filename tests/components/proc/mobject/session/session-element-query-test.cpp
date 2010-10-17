@@ -100,7 +100,8 @@ namespace test    {
           MORef<DummyMO> dummy1 = queryAPI.pick (elementID_contains("MO2"));
           CHECK (dummy1);
           CHECK (dummy1->isValid());
-          INFO (test, "Location in Tree: %s", cStr(ScopePath(dummy1.getPlacement())));
+          INFO  (test, "Location in Tree: %s", cStr(ScopePath(dummy1.getPlacement())));
+          
           string elementID = dummy1->operator string();
           CHECK (contains (elementID, "MO2"));
           
@@ -115,12 +116,12 @@ namespace test    {
           
           // put aside a new handle holding onto the MObject
           PDum newPlacement(dummy1.getPlacement());
-          CHECK (testSession->contains(dummy1.getRef()));
+          CHECK (testSession->contains(dummy1));
           CHECK (!testSession->contains(newPlacement));
           
           // and now remove the placement and all contained elements
-          testSession->clear (dummy1.getRef());
-          CHECK (!testSession->contains(dummy1.getRef()));
+          testSession->clear (dummy1);
+          CHECK (!testSession->contains(dummy1));
           
           MORef<DummyMO> findAgain = queryAPI.pick (elementID_contains(specificID));
           CHECK (!findAgain);     // empty result because searched element was removed from session...
@@ -128,14 +129,14 @@ namespace test    {
           MORef<DummyMO> otherElm = queryAPI.pick (elementID_contains("MO1"));
           CHECK (otherElm);    // now pick just some other arbitrary element 
           
-          testSession->insert(newPlacement, otherElm.getRef());
+          testSession->insert(newPlacement, otherElm);
           dummy2 = queryAPI.pick (elementID_contains(specificID));
           CHECK (dummy2);
           CHECK (dummy2 != dummy1);
           CHECK (dummy2 != newPlacement);
           CHECK (isSharedPointee(newPlacement, dummy2.getPlacement()));
-          CHECK (Scope::containing(dummy2.getPlacement()) == Scope(otherElm.getPlacement()));
-          INFO (test, "New treelocation: %s", cStr(ScopePath(dummy2.getPlacement())));
+          CHECK (Scope::containing (dummy2.getRef()) == Scope (otherElm));
+          INFO  (test, "New treelocation: %s", cStr(ScopePath(dummy2.getPlacement())));
         }
     };
   

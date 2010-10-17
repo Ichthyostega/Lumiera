@@ -70,6 +70,7 @@ namespace session {
       static QueryResolver const& getResolver();
       
       static PlacementMO& getScope (PlacementMO const&);
+      static PlacementMO& getScope (PlacementMO::ID const&);
       static PlacementMO& getScopeRoot();
     };
   

@@ -72,6 +72,9 @@ namespace session {
       Scope (PlacementMO const& constitutingPlacement);
       Scope (); ///< unlocated NIL scope
       
+      explicit
+      Scope (PlacementMO::ID const& constitutingPlacement);
+      
       Scope (Scope const&);
       Scope& operator= (Scope const&);
       

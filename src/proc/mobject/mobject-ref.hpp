@@ -93,7 +93,8 @@ namespace mobject {
     : public lib::Handle<MO>
     {
       typedef lib::Handle<MO> _Handle;
-      
+      typedef PlacementMO::Id<MO> _Id;
+
       
       PlacementRef<MO> pRef_;
       using _Handle::smPtr_;
@@ -126,9 +127,18 @@ namespace mobject {
       
       
       /** allow to use a MObjectRef like a (bare) PlacementRef
-       *  @note not test if this MObjectRef is NIL  */
+       *  @note no test if this MObjectRef is NIL  */
       PlacementRef<MO> const&
       getRef() const
+        {
+          return pRef_;
+        }
+      
+      /** allow to use MObjectRef instead of a Placement-ID (hash)
+       *  @todo not sure if that leads to unexpected conversions,
+       *        because the underlying implementation can be 
+       *        converted to size_t */                      //////////////////////////TICKET #682  revisit that decision later
+      operator _Id const&()  const
         {
           return pRef_;
         }
