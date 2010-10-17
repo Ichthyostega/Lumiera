@@ -139,6 +139,7 @@ namespace asset {
           if (!track)
             track = Session::current->getRoot().attach (MObject::create (TrackID (desiredID)));
           
+          return track;
         }
       
       

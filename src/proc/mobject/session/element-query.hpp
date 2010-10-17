@@ -98,6 +98,12 @@ namespace session {
       
     public:
       
+      /** pick the first element from session satisfying a predicate. 
+       *  @param searchPredicate applied to \c Placement<MO> for filtering
+       *  @note  the embedded MObject subtype (MO) causes an additional filtering
+       *         on that specific kind of MObject (e.g. considering just Clips)
+       *  @return MObject ref to the fist suitable element. Might be an empty MObjectRef.
+       */
       template<typename PRED>
       typename _PickRes<PRED>::Result
       pick (PRED const& searchPredicate)

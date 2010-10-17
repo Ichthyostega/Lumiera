@@ -92,6 +92,7 @@ test_components_SOURCES =								\
 	$(testcomponents_srcdir)/proc/mobject/session/rebuildfixturetest.cpp		\
 	$(testcomponents_srcdir)/proc/mobject/session/scope-path-test.cpp		\
 	$(testcomponents_srcdir)/proc/mobject/session/scope-query-test.cpp		\
+	$(testcomponents_srcdir)/proc/mobject/session/session-element-query-test.cpp	\
 	$(testcomponents_srcdir)/proc/mobject/session/session-service-access-test.cpp	\
 	$(testcomponents_srcdir)/proc/mobject/session/sessionmanagertest.cpp		\
 	$(testcomponents_srcdir)/proc/mobject/session/test-scopes.cpp			\
