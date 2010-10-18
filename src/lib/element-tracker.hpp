@@ -26,7 +26,7 @@
  ** These helper templates can be used to provide a registry of all objects
  ** of some kind or type. The class to be used with instance tracking needs
  ** to cooperate, typically by inheriting from lib::AutoRegistered. Moreover,
- ** the instance lifecycle handling is assumed to utilize lumiera::P or a
+ ** the instance lifecycle handling is assumed to utilise lumiera::P or a
  ** similar smart-ptr, which allows the registry to hold a safe reference.
  ** Thus, references won't be cleaned up automatically (as there is always
  ** at least one reference left) -- rather we rely on invoking a dispose or
@@ -45,7 +45,7 @@
  ** segfault on application shutdown. ///TICKET #574
  ** 
  ** @see session-element-tracker-test.cpp
- ** @see session-interface-modules
+ ** @see session-interface-modules.hpp
  ** @see Timeline
  ** @see Sequence
  **
@@ -105,7 +105,7 @@ namespace lib {
         {
           _Vec toKill;
           toKill.reserve(_Vec::size());
-          toKill.swap(*this);
+          toKill.swap(*this);       // prevent quadratic detach()
           ASSERT (0 == _Vec::size());
           util::for_each (toKill, unlink_it);
         }

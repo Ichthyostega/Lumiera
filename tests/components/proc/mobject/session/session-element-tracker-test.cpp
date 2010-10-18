@@ -110,7 +110,7 @@ namespace test    {
       run (Arg) 
         {
           verify_trackingMechanism();
-//        verify_integration();        ///////////////////////////////////////////TICKET #499
+//        verify_integration();        ///////////////////////////////////////////TICKET #571
         }
       
       
@@ -185,7 +185,7 @@ namespace test    {
           PTimeline specialTimeline (asset::Struct::create (Query<Timeline> ("id(testical)")));
           CHECK (specialTimeline);
           CHECK (num_timelines + 1 == sess->timelines.size());
-          CHECK (specialTimeline == sess->timelines[num_timelines]);
+          CHECK (specialTimeline == sess->timelines[num_timelines]);    // got appended at the end of the tracking table
           CHECK (specialTimeline.use_count() == 3);                     // we, the AssetManager and the session
           
           PTimeline anotherTimeline (asset::Struct::create (Query<Timeline> ()));
@@ -195,7 +195,7 @@ namespace test    {
           
           AssetManager& assetM (AssetManager::instance());
           CHECK (assetM.known (specialTimeline->getID()));
-          assetM.remove (specialTimeline->getID());                   //////////////TICKET #550
+          assetM.remove (specialTimeline->getID());                   //////////////TICKET #550  modalities of Timeline/Sequence deletion
           CHECK (!assetM.known (specialTimeline->getID()));
           
           CHECK (num_timelines + 1 == sess->timelines.size());

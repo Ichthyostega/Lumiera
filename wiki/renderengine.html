@@ -2519,14 +2519,15 @@ This Design strives to achieve a StrongSeparation between the low-level Structur
 [img[Classess related to the session|uml/fig128133.png]]
 </pre>
 </div>
-<div title="MagicAttachment" modifier="Ichthyostega" created="201006132135" tags="Model spec draft" changecount="1">
+<div title="MagicAttachment" modifier="Ichthyostega" modified="201010180131" created="201006132135" tags="Model spec draft" changecount="3">
 <pre>The HighLevelModel consists of MObjects, which are attached to one another through their [[Placement]]. While this is a generic scheme to arrange objects in a tree of [[scopes|PlacementScope]], some attachments are handled specifically and may trigger side-effects
 
 {{red{drafted feature as of 6/2010}}}
 
 * a [[binding|BindingMO]] attached to root is linked to a [[Timeline]]
-* a [[Track]] attached to rood corresponds to a [[Sequence]]
-</pre>
+* a [[Track]] attached to root corresponds to a [[Sequence]]
+
+&amp;rarr; see ModelDependencies</pre>
 </div>
 <div title="MainMenu" modifier="Ichthyostega" modified="200802031758" created="200706172305" changecount="10">
 <pre>''[[Lumiera|index.html]]''
@@ -4497,10 +4498,10 @@ We need to detect attaching and detaching of
 * root &amp;harr; [[Track]]
 </pre>
 </div>
-<div title="Sequence" modifier="Ichthyostega" modified="201006132117" created="201001252327" tags="def" changecount="15">
+<div title="Sequence" modifier="Ichthyostega" modified="201010180156" created="201001252327" tags="def" changecount="17">
 <pre>A sequence is a collection of media objects, arranged onto a track tree. Sequences are the building blocks within the session. To be visible and editable, a session needs to be bound into a top-level [[Timeline]]. Alternatively, it may be used as a VirtualClip nested within another sequence.
 
-The sequences within the session establish a //logical grouping//, allowing for lots of flexibility. Actually, we can have several sequences within one session, and these sequences can be linked together or not, they may be arranged in temporal order or may constitute a logical grouping of clips used simultaneously in compositional work etc. The data structure comprising a sequence is always a sub-tree of tracks, attached allways directly below root (Sequences at sub-nodes are deliberately disallowed). Through the sequence as frontend, this track tree might be used at various places in the model simultaneously. Tracks in turn are only an organisational (grouping) devices, like folders, so this structure of sequences and track trees referred through them allows to use the contents of such a track or folder at various places within the model. But at any time, we have exactly one [[Fixture]], derived automatically from all sequences and containing the content actually to be rendered.
+The sequences within the session establish a //logical grouping//, allowing for lots of flexibility. Actually, we can have several sequences within one session, and these sequences can be linked together or not, they may be arranged in temporal order or may constitute a logical grouping of clips used simultaneously in compositional work etc. The data structure comprising a sequence is always a sub-tree of tracks, attached allways directly below root (Sequences at sub-nodes are deliberately disallowed). Through the sequence as frontend, this track tree might be used at various places in the model simultaneously. Tracks in turn are only an organisational (grouping) device, like folders &amp;mdash; so this structure of sequences and track trees referred through them allows to use the contents of such a track or folder at various places within the model. But at any time, we have exactly one [[Fixture]], derived automatically from all sequences and containing the content actually to be rendered.
 &amp;rarr; see considerations about [[the role of Tracks and Pipes in conjunction with the sequences|TrackPipeSequence]]
 
 !!Implementation and lifecycle
@@ -6270,10 +6271,10 @@ function addKeyDownHandlers(e)
 <div title="TiddlyWiki" modifier="Ichthyostega" created="200706220430" changecount="1">
 <pre>http://tiddlywiki.com/</pre>
 </div>
-<div title="Timeline" modifier="Ichthyostega" modified="201003020524" created="200706250721" tags="def" changecount="16">
+<div title="Timeline" modifier="Ichthyostega" modified="201010180151" created="200706250721" tags="def" changecount="17">
 <pre>Timeline is the top level element within the [[Session (Project)|Session]]. It is visible within a //timeline view// in the GUI and represents the effective (resulting) arrangement of media objects, to be rendered for output or viewed in a Monitor (viewer window). A timeline is comprised of:
 * a time axis in abolute time ({{red{WIP 1/10}}}: not clear if this is an entity or just a conceptual definition) 
-* a PlayControler
+* a PlayControler ({{red{WIP Summer 2010: see discussion on ML. It seems rather that the controller will be attached}}})
 * a list of global Pipes representing the possible outputs (master busses)
 * //exactly one// top-level [[Sequence]], which in turn may contain further nested Sequences.
 Please note especially that following this design //a timeline doesn't define tracks.// [[Tracks form a Tree|Track]] and are part of the individual sequences, together with the media objects placed to these tracks.

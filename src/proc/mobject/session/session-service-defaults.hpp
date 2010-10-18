@@ -22,7 +22,7 @@
 
 
 /** @file session-service-defaults.hpp
- ** Implementation level session API: manage default configured objects.
+ ** Implementation level session API: to manage default configured objects.
  ** 
  ** @todo rework the existing DefsManager to fit into this scheme. TICKET #404
  ** 
