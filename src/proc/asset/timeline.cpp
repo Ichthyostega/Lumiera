@@ -26,6 +26,7 @@
 //#include "proc/mobject/placement.hpp"
 //#include "proc/mobject/session/mobjectfactory.hpp"
 #include "proc/mobject/session/binding.hpp"
+#include "proc/assetmanager.hpp"
 
 namespace asset {
   
@@ -35,11 +36,24 @@ namespace asset {
   Timeline::Timeline (const Asset::Ident& idi, RBinding const& sequenceBinding)
     : Struct (idi)
     , boundSeqence_(sequenceBinding)
-//  : track (makeDefaultTrack ())
-//  , clips (0)
   {
     REQUIRE (boundSeqence_);
   }
+  
+  
+  PTimeline
+  Timeline::create (Asset::Ident const& idi, RBinding const& sequenceBinding)
+  {
+    REQUIRE (getRegistry);
+    
+    PTimeline newElement (AssetManager::instance().wrap (*new Timeline(idi, sequenceBinding)));
+    getRegistry().append (newElement);
+    
+    ENSURE (newElement);
+    ENSURE (getRegistry().isRegistered(*newElement));
+    return newElement;
+  }
+  
   
   
   

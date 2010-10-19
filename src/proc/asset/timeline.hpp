@@ -57,7 +57,7 @@
 //#include "proc/mobject/placement.hpp"
 #include "proc/mobject/mobject-ref.hpp"
 //#include "proc/mobject/session/binding.hpp"         ////TODO avoidable??
-//#include "lib/p.hpp"
+#include "lib/p.hpp"
 #include "lib/element-tracker.hpp"
 
 
@@ -79,27 +79,32 @@ namespace asset {
   
   
 //  using lumiera::P;
+  class Timeline;
+  typedef lumiera::P<Timeline> PTimeline;
+  
   
   /**
    * TODO type comment
    */
   class Timeline
     : public Struct
+    , public lib::AutoRegistered<Timeline>
     {
       typedef mobject::session::RBinding RBinding;
       
       RBinding boundSeqence_;
       
-    public:
-      void detach() { TODO("Timeline-Session registration"); }
+      Timeline (Ident const&, RBinding const&);
       
-    protected:
-      Timeline (const Asset::Ident& idi, RBinding const& sequenceBinding);
-      friend class StructFactoryImpl;
+    public:
+      /** create and register a new Timeline instance */
+      static PTimeline create (Asset::Ident const& idi, RBinding const& sequenceBinding);
+      
+//      void detach() { TODO("Timeline-Session registration"); }
+      
     };
     
   
-  typedef P<Timeline> PTimeline;
   
   
 ///////////////////////////TODO currently just fleshing the API

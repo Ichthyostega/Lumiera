@@ -212,7 +212,9 @@ namespace asset {
     ASSERT (sequence);
     RBinding newBinding = Session::current->getRoot().attach (MObject::create (sequence));
     ASSERT (newBinding);
-    return new Timeline (idi, newBinding);
+    PTimeline newTimeline = Timeline::create (idi, newBinding);
+    ENSURE (newTimeline);
+    return newTimeline.get();
   }
   
   template<>
