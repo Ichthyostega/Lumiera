@@ -230,7 +230,9 @@ namespace asset {
     // - track doesn't exist --> create and root attach it
     // - track exists and is root attached, but belongs already to a sequence --> throw
     // - track exists, but isn't root attached ---> what do do here? steal it??
-    return new Sequence (createIdent (caps));  ///////////TODO fed track in here
+    PSequence newSequence = Sequence::create (createIdent (caps));                      ///////////TODO fed track in here
+    ENSURE (newSequence);
+    return newSequence.get(); 
   }
   
   

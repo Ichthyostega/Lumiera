@@ -53,6 +53,8 @@
 //#include "proc/mobject/mobject.hpp"
 //#include "proc/mobject/placement.hpp"
 #include "proc/mobject/mobject-ref.hpp"
+#include "lib/p.hpp"
+#include "lib/element-tracker.hpp"
 
 //#include <vector>
 //#include <string>
@@ -71,21 +73,26 @@ namespace session {
 namespace asset {
   
   
+  class Sequence;
+  typedef lumiera::P<Sequence> PSequence;
+   
+  
   
   /**
    * TODO type comment
    */
   class Sequence 
     : public Struct
+    , public lib::AutoRegistered<Sequence>
     {
       typedef mobject::session::RTrack RTrack;
 
+      Sequence (Ident const&);   ///////////TODO pass in track here
+      
     public:
-       void detach() { TODO("Session-Sequence registration"); }
+      /** create and register a new Sequence instance */
+      static PSequence create (Asset::Ident const& idi);
      
-    protected:
-      Sequence (const Asset::Ident& idi);
-      friend class StructFactoryImpl;
     };
     
   

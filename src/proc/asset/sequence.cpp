@@ -23,6 +23,7 @@
 
 #include "proc/asset/sequence.hpp"
 //#include "proc/mobject/session/track.hpp"
+#include "proc/assetmanager.hpp"
 //#include "proc/mobject/placement.hpp"
 //#include "proc/mobject/session/mobjectfactory.hpp"
 
@@ -33,10 +34,20 @@ namespace asset {
   /** create an empty default configured Sequence */
   Sequence::Sequence (const Asset::Ident& idi)
     : Struct (idi)
-//  : track (makeDefaultTrack ())
-//  , clips (0)
+  { }
+  
+  
+  PSequence
+  Sequence::create (Asset::Ident const& idi)
   {
+    REQUIRE (getRegistry);
     
+    PSequence newSeq (AssetManager::instance().wrap (*new Sequence (idi)));
+    getRegistry().append (newSeq);
+    
+    ENSURE (newSeq);
+    ENSURE (getRegistry().isRegistered(*newSeq));
+    return newSeq;
   }
   
   
