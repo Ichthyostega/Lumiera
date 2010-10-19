@@ -64,13 +64,13 @@ namespace mobject {
 namespace session {
   
   class Track;
+  typedef MORef<Track> RTrack;
 }}
 
 
 namespace asset {
   
   
-  typedef mobject::MORef<mobject::session::Track> RTrack;
   
   /**
    * TODO type comment
@@ -78,6 +78,7 @@ namespace asset {
   class Sequence 
     : public Struct
     {
+      typedef mobject::session::RTrack RTrack;
 
     public:
        void detach() { TODO("Session-Sequence registration"); }

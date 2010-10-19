@@ -103,11 +103,11 @@ namespace asset {
   /**
    * registers an asset object in the internal DB, providing its unique key.
    * This includes creating the smart ptr in charge of the asset's lifecycle
+   * @throw error::Invalid in case of invalid identity spec
    */
   template<class KIND>
   ID<KIND>  
   AssetManager::reg (KIND* obj, const Asset::Ident& idi)
-      throw(lumiera::error::Invalid)
   {
     AssetManager& _aMang (AssetManager::instance());
     DB& registry (_aMang.registry);
@@ -123,14 +123,13 @@ namespace asset {
   }
   
   
-  /** find and return the object registered with the given ID.
-   *  @throws Invalid if nothing is found or if the actual KIND
-   *          of the stored object differs and can't be casted.  
+  /** @note the KIND of asset needs to be assignable by the actual stored asset
+   *  @throw error::Invalid if nothing is found or if the actual KIND
+   *         of the stored object differs and can't be casted.  
    */
   template<class KIND>
   P<KIND>
   AssetManager::getAsset (const ID<KIND>& id)  
-      throw(lumiera::error::Invalid)
   {
     if (P<KIND> obj = registry.get (id))
       return obj;
@@ -204,7 +203,7 @@ namespace asset {
   AssetManager::remove (IDA id)  
   {
     PAsset asset = getAsset (id);
-    for_each (asset->dependants, detach_child_recursively());
+    for_each (asset->dependants, detach_child_recursively());             ///// 
     asset->unlink();
     registry.del(id);
   }

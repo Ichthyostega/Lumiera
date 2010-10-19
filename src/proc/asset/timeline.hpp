@@ -58,6 +58,7 @@
 #include "proc/mobject/mobject-ref.hpp"
 //#include "proc/mobject/session/binding.hpp"         ////TODO avoidable??
 //#include "lib/p.hpp"
+#include "lib/element-tracker.hpp"
 
 
 //#include <vector>
@@ -70,12 +71,12 @@ namespace mobject {
 namespace session {
   
   class Binding;
+  typedef MORef<Binding> RBinding;
 }}
 
 
 namespace asset {
   
-  typedef mobject::MORef<mobject::session::Binding> RBinding;   ////TODO why defining this into namespace asset? shouldn't it go into mobject::session ??
   
 //  using lumiera::P;
   
@@ -85,6 +86,8 @@ namespace asset {
   class Timeline
     : public Struct
     {
+      typedef mobject::session::RBinding RBinding;
+      
       RBinding boundSeqence_;
       
     public:

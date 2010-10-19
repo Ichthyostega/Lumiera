@@ -48,24 +48,28 @@ namespace asset {
   
   
   Asset::Ident::Ident(const string& n, const Category& cat, const string& o, const uint ver) 
-    :   name(util::sanitise (n)), 
-        category(cat), org(o), version(ver)
-  { }
+    : name(util::sanitise (n))
+    , category(cat)
+    , org(o)
+    , version(ver)
+    { }
   
   
   /** Asset is a Interface class; usually, objects of 
-   *  concrete subclasses are created via specialized Factories
+   *  concrete subclasses are created via specialised Factories
    */
   Asset::Asset (const Ident& idi) 
-    : ident(idi), id(AssetManager::reg (this, idi)), enabled(true)
-  {
-    TRACE (assetmem, "ctor Asset(id=%lu) :  adr=%p %s", size_t(id), this, cStr(this->ident) );
-  }
+    : ident(idi)
+    , id(AssetManager::reg (this, idi))
+    , enabled(true)
+    {
+      TRACE (assetmem, "ctor Asset(id=%lu) :  adr=%p %s", size_t(id), this, cStr(this->ident) );
+    }
   
   Asset::~Asset ()
-  { 
-    TRACE (assetmem, "dtor Asset(id=%lu) :  adr=%p", size_t(id), this );
-  }
+    { 
+      TRACE (assetmem, "dtor Asset(id=%lu) :  adr=%p", size_t(id), this );
+    }
   
 
   Asset::Ident::operator string ()  const

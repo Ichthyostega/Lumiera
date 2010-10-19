@@ -58,7 +58,6 @@ namespace test    {
 //  using asset::PTimeline;
   using asset::PSequence;
   using asset::Sequence;
-  using asset::RTrack;
   
 //  using lumiera::Time;
   using lumiera::Query;

@@ -62,6 +62,8 @@ using mobject::Session;
 using mobject::MObject;
 using mobject::session::Scope;
 using mobject::session::match_specificTrack;
+using mobject::session::RBinding;
+using mobject::session::RTrack;
 
 using lib::Symbol;
 using util::isnil;

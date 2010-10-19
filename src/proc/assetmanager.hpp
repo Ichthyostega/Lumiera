@@ -21,11 +21,13 @@
 */
 
 /** @file assetmanager.hpp
- ** Proc-Layer Interface: Asset Lookup and Organization.
+ ** Proc-Layer Interface: Asset Lookup and Organisation.
  ** Declares the AssetManager interface used to access individual 
  ** Asset instances.
  ** 
- ** These classes are placed into namespace asset and proc_interface. 
+ ** These classes are placed into namespace asset and proc_interface.
+ **
+ ** @todo 10/10 meanwhile I'm unhappy with some aspects of this implementation //////////////TICKET #691
  **
  ** @see asset.hpp
  ** @see mobject.hpp
@@ -79,7 +81,7 @@ namespace asset {
       
       /** find and return corresponding object */
       template<class KIND>
-      P<KIND>  getAsset (const ID<KIND>& id)  throw(lumiera::error::Invalid);
+      P<KIND>  getAsset (const ID<KIND>& id);
       
       
       /** @return true if the given id is registered in the internal asset DB  */
@@ -102,8 +104,8 @@ namespace asset {
        *  @internal used by the Asset base class ctor to create Asset::id.
        */
       template<class KIND>
-      static ID<KIND>  reg (KIND* obj, const Asset::Ident& idi)
-          throw(lumiera::error::Invalid);
+      static ID<KIND>
+      reg (KIND* obj, const Asset::Ident& idi);
       
       /** deleter function used by the Asset smart pointers to delete Asset objects */
       static void destroy (Asset* aa) { delete aa; }
