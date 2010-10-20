@@ -71,8 +71,7 @@ namespace session {
   bool 
   SessionImpl::isValid ()
   {
-    UNIMPLEMENTED ("session self test");
-    return false; // TODO
+    return true;          //////////////////////////////////////////////////////////////////////////TICKET #694
   }
   
   

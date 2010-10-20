@@ -109,7 +109,7 @@ namespace test    {
       run (Arg) 
         {
           verify_trackingMechanism();
-//        verify_integration();        ///////////////////////////////////////////TICKET #571
+          verify_integration();
         }
       
       
