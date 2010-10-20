@@ -101,6 +101,7 @@ namespace session {
       SequenceTracker sequenceRegistry_;
       
       SessionInterfaceModules();
+     ~SessionInterfaceModules();
     };
   
   
@@ -115,6 +116,14 @@ namespace session {
     asset::Timeline::setRegistryInstance (timelineRegistry_);
     asset::Sequence::setRegistryInstance (sequenceRegistry_);
   }
+  
+  inline
+  SessionInterfaceModules::~SessionInterfaceModules()
+  {
+    asset::Sequence::deactivateRegistryLink();
+    asset::Timeline::deactivateRegistryLink();
+  }
+  
   
   
 }} // namespace mobject::session

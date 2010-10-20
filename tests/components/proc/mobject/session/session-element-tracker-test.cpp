@@ -200,6 +200,19 @@ namespace test    {
           CHECK (num_timelines + 1 == sess->timelines.size());
           CHECK (anotherTimeline == sess->timelines[num_timelines]);    // moved to the previous slot
           CHECK (specialTimeline.use_count() == 1);                     // we're holding the last reference
+          
+          verify_cleanup (anotherTimeline);
+        }
+      
+      
+      /** @test ensure the asset cleanup doesn't interfere with session shutdown
+       */
+      void
+      verify_cleanup (PTimeline aTimeline_in_session)
+        {
+          REQUIRE (1 < aTimeline_in_session.use_count(), "test object should still be attached to session");
+          Session::current.reset();
+          aTimeline_in_session->detach();           // should be a no-op and not cause any invalid access
         }
     };
   

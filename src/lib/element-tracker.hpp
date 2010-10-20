@@ -181,6 +181,7 @@ namespace lib {
       void
       detach()
         {
+          if (!getRegistry) return;
           TAR& element = static_cast<TAR&> (*this);
           
           getRegistry().remove(element);
@@ -220,6 +221,12 @@ namespace lib {
         {
           RegistryLink accessInstance = wrapper::refFunction(registry_to_use);
           establishRegistryLink (accessInstance);
+        }
+      
+      static void
+      deactivateRegistryLink()
+        {
+          getRegistry = RegistryLink();  // empty accessor function
         }
       
     protected:
