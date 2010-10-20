@@ -24,7 +24,6 @@
 #include "lib/test/run.hpp"
 
 #include "lib/element-tracker.hpp"
-#include "proc/mobject/session/session-interface-modules.hpp"
 
 #include "proc/assetmanager.hpp"
 #include "proc/mobject/session.hpp"

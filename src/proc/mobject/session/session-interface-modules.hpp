@@ -99,8 +99,22 @@ namespace session {
       ElementQuery elementQueryAPI_;
       TimelineTracker timelineRegistry_;
       SequenceTracker sequenceRegistry_;
+      
+      SessionInterfaceModules();
     };
   
+  
+  
+  
+  /** init element-tracking mechanism for
+   *  timelines and sequences on session creation
+   */
+  inline 
+  SessionInterfaceModules::SessionInterfaceModules()
+  {
+    asset::Timeline::setRegistryInstance (timelineRegistry_);
+    asset::Sequence::setRegistryInstance (sequenceRegistry_);
+  }
   
   
 }} // namespace mobject::session
