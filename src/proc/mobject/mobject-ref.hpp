@@ -175,7 +175,8 @@ namespace mobject {
       
       
       /** detach this object instance from model,
-       *  including all child elements 
+       *  including all child elements.
+       *  @note the object itself remains accessible
        */
       void
       purge ()

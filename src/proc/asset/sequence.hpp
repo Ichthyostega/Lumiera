@@ -87,12 +87,15 @@ namespace asset {
     {
       typedef mobject::session::RTrack RTrack;
 
-      Sequence (Ident const&);   ///////////TODO pass in track here
+      Sequence (Ident const&);                //////////////////////////////////////////////TICKET #692  pass in track here
       
     public:
       /** create and register a new Sequence instance */
       static PSequence create (Asset::Ident const& idi);
-     
+      
+    protected:
+      virtual void unlink ();
+      
     };
     
   

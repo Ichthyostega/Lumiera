@@ -240,13 +240,14 @@ namespace asset {
       
       /** release all links to other Asset objects held internally.
        *  The lifecycle of Asset objects is managed by smart pointers
-       *  and the Asset manager. Calling \c release() breaks interconnections
+       *  and the Asset manager. Calling \c unlink() breaks interconnections
        *  to other Assets in the central Object network comprising the session.
-       *  It is up to the AssetManager to assure the notification of any other
-       *  components that may need to release references to the Asset object
-       *  being removed. The rationale is, after releasing all interlinking,
-       *  when the AssetManager removes its DB entry for this asset, the
-       *  smart pointer goes out of scope and triggers cleanup.
+       *  Especially, the \em downward links to dependent entities are released,
+       *  while the primary (upward) smart-ptr links to our prerequisites are
+       *  still retained. The rationale is, after releasing these redundant
+       *  or cyclic interlinking, when the AssetManager removes its DB entry
+       *  for this asset, the smart pointer goes out of scope and causes
+       *  unwinding of the whole dependency chain.
        */
       virtual void unlink ();
       

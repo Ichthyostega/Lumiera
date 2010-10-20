@@ -92,7 +92,7 @@ namespace asset {
     {
       typedef mobject::session::RBinding RBinding;
       
-      RBinding boundSeqence_;
+      RBinding boundSequence_;
       
       Timeline (Ident const&, RBinding const&);
       
@@ -100,7 +100,8 @@ namespace asset {
       /** create and register a new Timeline instance */
       static PTimeline create (Asset::Ident const& idi, RBinding const& sequenceBinding);
       
-//      void detach() { TODO("Timeline-Session registration"); }
+    protected:
+      virtual void unlink ();
       
     };
     

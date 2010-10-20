@@ -29,6 +29,7 @@
 
 namespace asset {
   
+  using lib::AutoRegistered;
   
   
   /** create an empty default configured Sequence */
@@ -40,7 +41,7 @@ namespace asset {
   PSequence
   Sequence::create (Asset::Ident const& idi)
   {
-    REQUIRE (getRegistry);
+    REQUIRE (getRegistry, "can't create a Sequence prior to session initialisation");
     
     PSequence newSeq (AssetManager::instance().wrap (*new Sequence (idi)));
     getRegistry().append (newSeq);
@@ -51,7 +52,13 @@ namespace asset {
   }
   
   
-  
+  void
+  Sequence::unlink ()
+  {
+    AutoRegistered<Sequence>::detach();
+    TODO ("purge attached track");             //////////////////////////////////////////////TICKET #692
+    Struct::unlink();
+  }
   
   
   

@@ -28,23 +28,26 @@
 #include "proc/mobject/session/binding.hpp"
 #include "proc/assetmanager.hpp"
 
+
 namespace asset {
   
+  using lib::AutoRegistered;
   
   
-  /** TODO??? */
+  
+  /** @todo anything significant to do here??? */
   Timeline::Timeline (const Asset::Ident& idi, RBinding const& sequenceBinding)
     : Struct (idi)
-    , boundSeqence_(sequenceBinding)
+    , boundSequence_(sequenceBinding)
   {
-    REQUIRE (boundSeqence_);
+    REQUIRE (boundSequence_);
   }
   
   
   PTimeline
   Timeline::create (Asset::Ident const& idi, RBinding const& sequenceBinding)
   {
-    REQUIRE (getRegistry);
+    REQUIRE (getRegistry, "can't create a Timeline prior to session initialisation");
     
     PTimeline newElement (AssetManager::instance().wrap (*new Timeline(idi, sequenceBinding)));
     getRegistry().append (newElement);
@@ -55,7 +58,13 @@ namespace asset {
   }
   
   
-  
+  void
+  Timeline::unlink ()
+  {
+    AutoRegistered<Timeline>::detach();
+    boundSequence_.purge();
+    Struct::unlink();
+  }
   
   
   
