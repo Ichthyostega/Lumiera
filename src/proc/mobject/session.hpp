@@ -166,6 +166,14 @@ namespace mobject {
          */
         virtual void clear () =0;
         
+        /** shut down the current session cleanly.
+         *  Includes discarding of all assets and unloading any
+         *  config rules and additional state. Doesn't save anything.
+         *  Typically invoked on shutdown of the session subsystem.
+         *  @note next access will pull up a empty default session
+         */
+        virtual void close () =0;
+        
         /** reset all session config and 
          *  start with a pristine default session.
          */

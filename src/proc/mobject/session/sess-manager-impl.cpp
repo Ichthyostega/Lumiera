@@ -39,7 +39,7 @@
 #include "proc/mobject/session.hpp"
 #include "proc/mobject/session/sess-manager-impl.hpp"
 #include "proc/mobject/session/defsmanager.hpp"
-//#include "proc/mobject/session/defsregistry.hpp"
+#include "proc/mobject/session/lifecycle-advisor.hpp"
 #include "lib/error.hpp"
 
 using boost::scoped_ptr;
@@ -82,14 +82,23 @@ namespace session {
   
   /** Initially (at static init time), only the single system-wide
    *  Session manger instance is created. It can be used to load an
-   *  existing session; otherwise an empty default Session an a
-   *  Defaults manager (Config Query system) is created at first
+   *  existing session; otherwise an empty default Session, together
+   *  with the core facilities (PlacementIndex, AssetManager, Query
+   *  subsystem and the Defaults manager) is created on first
    *  \link #operator-> access \endlink to the session object.
    */
   SessManagerImpl::SessManagerImpl ()  throw()
     : pImpl_ (0)
+    , lifecycle_(new LifecycleAdvisor)
   {
     Session::initFlag = true;  //////////////////////////////////////// TICKET #518   instead of this hack, implement basic-init of the session manager for real
+  }
+  
+  
+  SessManagerImpl::~SessManagerImpl ()
+  {
+    TODO ("verify sane lifecycle");
+    Session::initFlag = false;
   }
   
   
@@ -100,13 +109,24 @@ namespace session {
     return bool(pImpl_);
   }
   
-  /** @note no transactional behaviour.
-   *        may succeed partial.
+  /** @note no transactional behaviour. may succeed partially.
+   *  @todo clarify relation to command processing/undo     /////////// TICKET #697
    */
   void
   SessManagerImpl::clear ()
   {
     pImpl_->clear();
+  }
+  
+  
+  /** Shut down the current session together with all associated services.
+   *  @todo avoid blocking when aborting render processes ///////////// TICKET #201
+   *  @todo well defined transactional behaviour  ///////////////////// TICKET #698
+   */
+  void
+  SessManagerImpl::close ()
+  {
+    UNIMPLEMENTED("clean session shutdown");
   }
   
   

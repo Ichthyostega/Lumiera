@@ -30,6 +30,7 @@
 namespace mobject {
 namespace session {
   
+  class LifecycleAdvisor;
   
   
   /**
@@ -38,15 +39,17 @@ namespace session {
    */
   class SessManagerImpl : public SessManager
     {
-      scoped_ptr<SessionImplAPI> pImpl_;
+      scoped_ptr<SessionImplAPI>   pImpl_;
+      scoped_ptr<LifecycleAdvisor> lifecycle_;
       
       SessManagerImpl()  throw();
       friend class lib::singleton::StaticCreate<SessManagerImpl>;
       
-      virtual ~SessManagerImpl() {}
+     ~SessManagerImpl() ;
       
       /* ==== SessManager API ==== */
       virtual void clear () ;
+      virtual void close () ;
       virtual void reset () ;
       virtual void load ()  ;
       virtual void save ()  ;

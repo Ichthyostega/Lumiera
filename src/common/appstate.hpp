@@ -22,11 +22,15 @@
 
 /** @file appstate.hpp
  ** Registering and managing some application-global services.
+ ** This can be considered the "main" object of the Lumiera application
  ** Besides encapsulating the logic for starting up the fundamental parts
- ** of the application, there is a mechanism for registering and firing off
- ** application lifecycle event callbacks. 
+ ** of the application, there is a mechanism for registering \em subsystems
+ ** to be brought up and shut down in order. AppState will issue the global
+ ** application lifecycle events (where other parts may have registered
+ ** callbacks) and provides the top-level catch-all error handling.
  **
  ** @see LifecycleHook
+ ** @see Subsys
  ** @see main.cpp
  ** @see logging.h
  */
