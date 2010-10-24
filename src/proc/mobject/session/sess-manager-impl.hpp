@@ -25,6 +25,7 @@
 #define MOBJECT_SESSION_SESS_MANAGER_IMPL_H
 
 #include "proc/mobject/session/session-impl.hpp"
+#include "lib/sync.hpp"
 
 
 namespace mobject {
@@ -37,7 +38,9 @@ namespace session {
    * Session manager implementation class holding the
    * actual smart pointer to the current Session impl.
    */
-  class SessManagerImpl : public SessManager
+  class SessManagerImpl
+    : public SessManager
+    , public lib::Sync<>
     {
       scoped_ptr<SessionImplAPI>   pImpl_;
       scoped_ptr<LifecycleAdvisor> lifecycle_;

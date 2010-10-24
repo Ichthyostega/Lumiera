@@ -2440,7 +2440,7 @@ The general idea is, that each facade interface actually provides access to a sp
 
 </pre>
 </div>
-<div title="LifecycleAdvisor" modifier="Ichthyostega" modified="201010230311" created="201010220319" tags="def SessionLogic impl" changecount="7">
+<div title="LifecycleAdvisor" modifier="Ichthyostega" modified="201010232308" created="201010220319" tags="def SessionLogic impl" changecount="8">
 <pre>An implementation facility used by the session manager implementation to ensure a consistent lifecycle. A template-method-like skeleton of operations can be invoked by the session manager to go through the various lifecycle stages, while the actual implementation functionality is delegated to facilities within the session. The assumption is for the lifecycle advisor to be executed within a controlled environment, a single instance and single threaded.
 
 ---------------------
@@ -2452,15 +2452,16 @@ Reading the source code should convey a complete picture about what is going on 
 ;close
 : the shutdown sequence cleanly unwinds any contents and returns into //uninitialised state.//
 ;reset
-: is compriesd of two phases: shutdown and startup of an empty new session
+: is comprised of two phases: shutdown and startup of an empty new session
 : shutdown will be skipped automatically when uninitialised
 : startup has to inject default session content
 ;load
-: similar to the startup sequence of __reset__, but injects serialised content
+: again, first an existing session is brought down cleanly
+: the startup sequence behaves similarly to __reset__, but injects serialised content
 Note that, while causing a short //freeze period,// __saving__ and __(re-)building__ aren't considered lifecycle operations
 
 !!operation sequences
-The ''pull up'' sequence performes basic initialsiation of the session facilities and then, after the pImpl-switch, executes the various loading and startup phases. Any previous session switched away is assumed to unwind automatically, nothing is done especially to disconnnect such an existing session, we simply require the session subsystem to be in a pristine state initially.
+The ''pull up'' sequence performs basic initialisation of the session facilities and then, after the pImpl-switch, executes the various loading and startup phases. Any previous session switched away is assumed to unwind automatically, nothing is done especially to disconnect such an existing session, we simply require the session subsystem to be in a pristine state initially.
 The ''shut down'' sequence does exactly that: halt processing and rendering, disconnect an existing session, if any, get back into initial state. It doesn't care for unwinding session contents, which is assumed to happen automatically when references to previous session contents go out of scope.
 </pre>
 </div>
@@ -4665,7 +4666,7 @@ Currently, I'm planning to modify MObjectRef to return only a const ref to the u
 &lt;&lt;&lt;
 </pre>
 </div>
-<div title="SessionLifecycle" modifier="Ichthyostega" modified="201010220313" created="200911070329" tags="SessionLogic spec" changecount="25">
+<div title="SessionLifecycle" modifier="Ichthyostega" modified="201010232310" created="200911070329" tags="SessionLogic spec" changecount="26">
 <pre>The current [[Session]] is the root of any state found within Proc-Layer. Thus, events defining the session's lifecycle influence and synchronise the cooperative behaviour of the entities within the model, the ProcDispatcher, [[Fixture]] and any facility below.
 * when ''starting'', on first access an empty session is created, which puts any related facility into a defined initial state.
 * when ''closing'' the session, any dependent facilities are disabled, disconnected, halted or closed
@@ -4700,7 +4701,7 @@ As detailed above, {{{Session::current}}} exposes the management / lifecycle API
 
 !!!closing the session
 # top-level facilities accessing the session (GUI, command processing, scripts) are blocked and the LayerSeparationInterface is closed
-# any render processes are ensured to be terminated (or //disconnected// &amp;mdash; so the can't do any harm)
+# any render processes are ensured to be terminated (or //disconnected// &amp;mdash; so they can't do any harm)
 # the {{{ON_SESSION_END}}} event is emitted
 # the command processing log is tagged
 # the command queue(s) are emptied, discarding any commands not yet executed

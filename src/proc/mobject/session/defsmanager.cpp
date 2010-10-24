@@ -160,14 +160,14 @@ namespace session {
   using mobject::session::Track;
   using mobject::session::PTrack;
   
-  template PPipe       DefsManager::operator() (const Query<Pipe>&);
-  template PProcPatt   DefsManager::operator() (const Query<const ProcPatt>&);
-  template PTrack      DefsManager::operator() (const Query<Track>&);
-  template PTimeline   DefsManager::operator() (const Query<Timeline>&);
-  template PSequence   DefsManager::operator() (const Query<Sequence>&);
+  template PPipe       DefsManager::operator() (Query<Pipe>     const&);
+  template PProcPatt   DefsManager::operator() (Query<const ProcPatt> const&);
+  template PTrack      DefsManager::operator() (Query<Track>    const&);
+  template PTimeline   DefsManager::operator() (Query<Timeline> const&);
+  template PSequence   DefsManager::operator() (Query<Sequence> const&);
   
-  template bool DefsManager::define (const PPipe&, const Query<Pipe>&);
-  template bool DefsManager::forget (const PPipe&);
+  template bool DefsManager::define (PPipe const&, Query<Pipe> const&);
+  template bool DefsManager::forget (PPipe const&);
   
   
 }} // namespace mobject::session

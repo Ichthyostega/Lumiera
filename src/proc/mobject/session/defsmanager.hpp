@@ -72,14 +72,14 @@ namespace mobject {
          *         is considered \e misconfiguration. 
          */
         template<class TAR>
-        P<TAR> operator() (const lumiera::Query<TAR>&);
+        P<TAR> operator() (lumiera::Query<TAR> const&);
         
         
         /** search through the registered defaults, never create anything.
          *  @return object fulfilling the query, \c empty ptr if not found. 
          */
         template<class TAR>
-        P<TAR> search  (const lumiera::Query<TAR>&);
+        P<TAR> search  (lumiera::Query<TAR> const&);
         
         /** retrieve an object fulfilling the query and register it as default.
          *  The resolution is delegated to the ConfigQuery system (which may cause
@@ -87,7 +87,7 @@ namespace mobject {
          *  @return object fulfilling the query, \c empty ptr if no solution.
          */ 
         template<class TAR>
-        P<TAR> create  (const lumiera::Query<TAR>&);
+        P<TAR> create  (lumiera::Query<TAR> const&);
         
         /** register the given object as default, after ensuring it fulfils the
          *  query. The latter may cause some properties of the object to be set,
@@ -96,13 +96,13 @@ namespace mobject {
          *  @note only a weak ref to the object is stored
          */ 
         template<class TAR>
-        bool define  (const P<TAR>&, const lumiera::Query<TAR>&);
+        bool define  (P<TAR> const&, lumiera::Query<TAR> const&);
         
         /** remove the defaults registration of the given object, if there was such
          *  @return false if nothing has been changed because the object wasn't registered
          */
         template<class TAR>
-        bool forget  (const P<TAR>&);
+        bool forget  (P<TAR> const&);
         
         
 // Q: can we have something along the line of...?

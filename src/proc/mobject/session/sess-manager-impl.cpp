@@ -40,9 +40,12 @@
 #include "proc/mobject/session/sess-manager-impl.hpp"
 #include "proc/mobject/session/defsmanager.hpp"
 #include "proc/mobject/session/lifecycle-advisor.hpp"
+#include "proc/asset/timeline.hpp"
 #include "lib/error.hpp"
+#include "lib/query.hpp"
 
 using boost::scoped_ptr;
+
 
 
 
@@ -92,20 +95,34 @@ namespace session {
       : public LifecycleAdvisor
       {
         SessionPImpl & session_;
+        bool shall_load_;         ////////////TODO a placeholder; later we'll pass in a de-serialiser
         
         
         
+        /** @note Any session services get up into default configured state.
+         *        After the swap, \c tmpS holds onto the old session, which
+         *        consequently should unwind on leaving this scope. */
         void
         createSessionFacilities()
           {
-            UNIMPLEMENTED ("create session implementation objects, pImpl switch");
+            SessionPImpl tmpS (new SessionImplAPI);
+            session_.swap (tmpS);
           }
         
         
         void
         injectSessionContent()
           {
-            UNIMPLEMENTED ("load default content of de-serialise");
+            if (shall_load_)
+              {
+                UNIMPLEMENTED ("loading session from persistent storage");
+              }
+            else
+              { // inject some default session content
+                asset::PTimeline initialTimeline = session_->defaults (lumiera::Query<asset::Timeline> ());
+                /////////////TODO howto "attach a timeline"??
+                //session_->attach( timeline );
+              }
           }
         
         
@@ -147,7 +164,8 @@ namespace session {
         void
         deconfigure()
           {
-            UNIMPLEMENTED ("anything berfore destroying objects");
+            TODO ("reset the assets registered with AssetManager");
+            /////////////////////////////////////////////////////////////////// TICKET #154
           }
         
         
@@ -156,6 +174,7 @@ namespace session {
       public:
         SessionLifecycleDetails(SessionPImpl& currentSessionAccessPoint)
           : session_(currentSessionAccessPoint)
+          , shall_load_(false)
           { }
       };
     
@@ -190,7 +209,7 @@ namespace session {
   bool
   SessManagerImpl::isUp ()
   {
-    return bool(pImpl_);
+    return bool(pImpl_);                          ///////////////////// TICKET #702 possible race, because this gets true way before the interface is up
   }
   
   /** @note no transactional behaviour. may succeed partially.
@@ -199,6 +218,7 @@ namespace session {
   void
   SessManagerImpl::clear ()
   {
+    Lock sync(this);
     pImpl_->clear();
   }
   
@@ -210,7 +230,9 @@ namespace session {
   void
   SessManagerImpl::close ()
   {
-    UNIMPLEMENTED("clean session shutdown");
+    Lock sync(this);
+    lifecycle_->shutDown();
+    pImpl_.reset();
   }
   
   
@@ -223,13 +245,9 @@ namespace session {
   void
   SessManagerImpl::reset ()
   {
-    scoped_ptr<SessionImplAPI> tmpS (new SessionImplAPI);
-    
-    TODO ("reset the assets registered with AssetManager");
-    /////////////////////////////////////////////////////////////////// TICKET #154
-    
-    TODO ("thread lock");
-    pImpl_.swap (tmpS);
+    Lock sync(this);
+    lifecycle_->shutDown();
+    lifecycle_->pullUp();
   }
   
   
@@ -237,6 +255,9 @@ namespace session {
   SessManagerImpl::load ()
   {
     UNIMPLEMENTED ("load serialised session");
+    Lock sync(this);
+    lifecycle_->shutDown();
+    lifecycle_->pullUp();
   }
   
   
@@ -252,6 +273,7 @@ namespace session {
   SessManagerImpl::save ()
   {
     UNIMPLEMENTED ("save session (serialised)");
+    /////////////////////////////////////////////////TODO: need lock?
   }
   
   
