@@ -32,15 +32,17 @@
  ** 
  ** The idea of a LifecycleAdvisor is inspired by GUI frameworks, especially 
  ** Spring RichClient. Typically, such frameworks provides a means for flexible
- ** configuration of the application lifecycle. This isn't a goal here, as there
- ** is only one Lumiera application and the session lifecycle can be considered
- ** hard wired, with the exception of some extension points, which are implemented
- ** as "lifecycle events".
- **
+ ** configuration of the application lifecycle. Configurability isn't the primary
+ ** goal here, as there  is only one Lumiera application and the session lifecycle
+ ** can be considered fixed, with the exception of some extension points, which are
+ ** implemented as "lifecycle events".
+ ** 
  ** @see SessManager
  ** @see LifecycleHook
  ** @see lumiera::AppState
  ** @see session.hpp
+ ** @see sess-manager-impl.cpp concrete definition of Lifecycle
+ ** 
  */
 
 
@@ -50,6 +52,7 @@
 #include "lib/error.hpp"
 #include "include/lifecycle.h"
 #include "proc/mobject/session.hpp"
+#include "lib/symbol.hpp"
 
 #include <boost/noncopyable.hpp>
 
@@ -57,7 +60,7 @@
 namespace mobject {
 namespace session {
   
-  using lumiera::LifecycleHook;
+  using lib::Symbol;
   
   
   /**
@@ -73,25 +76,57 @@ namespace session {
       
       
     public:
-      /** operation sequence to pull up the session
-       * 
+      /** operation sequence to pull up the session.
+       *  After building the session implementation with all associated
+       *  sub services in a default configured state, the new session is
+       *  switched in to become the \em current session. Session content
+       *  is loaded, either from default configuration or by de-serialising
+       *  an existing session (loading from persistent storage). When
+       *  everything is wired and ready, the new session is "armed"
+       *  and the public session API is allowed to accept commands.
        */
       void
       pullUp()
         {
-          LifecycleHook::trigger (ON_SESSION_START);
-          LifecycleHook::trigger (ON_SESSION_INIT);
-          LifecycleHook::trigger (ON_SESSION_READY);
+          createSessionFacilities();
+          emitEvent (ON_SESSION_START);
+          injectSessionContent();
+          emitEvent (ON_SESSION_INIT);
+          getSessionReady();
+          openSessionInterface();
+          emitEvent (ON_SESSION_READY);
         }
       
       
-      /** operation sequence for cleanly shutting down the session
-       * 
+      /** operation sequence for cleanly shutting down the session.
+       *  To initiate shutdown, command processing is halted and the
+       *  external session interface is closed. Any ongoing render processes
+       *  are disconnected and asked to terminate. After maybe performing
+       *  cleanup and consolidation routines, the command framework is
+       *  disconnected from the log, discarding any pending commands.
+       *  This brings the session subsystem back into \em de-configured
+       *  state, all asset and content objects pending eviction.
        */
       void
       shutDown()
         {
-          LifecycleHook::trigger (ON_SESSION_END);
+          closeSessionInterface();
+          disconnectRenderProcesses();
+          emitEvent (ON_SESSION_END);
+          commandLogCheckpoint();
+          deconfigure();
+        }
+      
+      
+      virtual ~LifecycleAdvisor() { }   ///< is ABC
+      
+      
+    protected: /* === Lifecycle building blocks === */
+      
+      void
+      emitEvent (Symbol eventLabel)
+        {
+          lumiera::LifecycleHook::trigger (eventLabel);
         }
     };
   

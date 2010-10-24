@@ -80,7 +80,28 @@ namespace session {
   
   
   
-  /** Initially (at static init time), only the single system-wide
+  namespace { // defining details of the Session Lifecycle
+    
+    typedef scoped_ptr<SessionImplAPI> SessionPImpl;
+    
+    class SessionLifecycleDetails
+      : public LifecycleAdvisor
+      {
+        SessionPImpl & session_;
+        
+        
+      public:
+        SessionLifecycleDetails(SessionPImpl& currentSessionAccessPoint)
+          : session_(currentSessionAccessPoint)
+          { }
+      };
+    
+  }//(End) details of Session Lifecycle
+  
+  
+  
+  /** Starting up the session access and lifecycle management.
+   *  Initially (at static init time), only the single system-wide
    *  Session manger instance is created. It can be used to load an
    *  existing session; otherwise an empty default Session, together
    *  with the core facilities (PlacementIndex, AssetManager, Query
@@ -89,7 +110,7 @@ namespace session {
    */
   SessManagerImpl::SessManagerImpl ()  throw()
     : pImpl_ (0)
-    , lifecycle_(new LifecycleAdvisor)
+    , lifecycle_(new SessionLifecycleDetails(pImpl_))
   {
     Session::initFlag = true;  //////////////////////////////////////// TICKET #518   instead of this hack, implement basic-init of the session manager for real
   }
