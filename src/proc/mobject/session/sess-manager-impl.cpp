@@ -80,6 +80,10 @@ namespace session {
   
   
   
+  
+  
+  
+  
   namespace { // defining details of the Session Lifecycle
     
     typedef scoped_ptr<SessionImplAPI> SessionPImpl;
@@ -88,6 +92,65 @@ namespace session {
       : public LifecycleAdvisor
       {
         SessionPImpl & session_;
+        
+        
+        
+        void
+        createSessionFacilities()
+          {
+            UNIMPLEMENTED ("create session implementation objects, pImpl switch");
+          }
+        
+        
+        void
+        injectSessionContent()
+          {
+            UNIMPLEMENTED ("load default content of de-serialise");
+          }
+        
+        
+        void
+        getSessionReady()
+          {
+            UNIMPLEMENTED ("any wiring and configuration to get the session ready");
+          }
+        
+        
+        void
+        openSessionInterface()
+          {
+            UNIMPLEMENTED ("open layer separation interface");
+          }
+        
+        
+        void
+        closeSessionInterface()
+          {
+            UNIMPLEMENTED ("shut down layer separation interface");
+          }
+        
+        
+        void
+        disconnectRenderProcesses()
+          {
+            UNIMPLEMENTED ("halt rendering");
+          }
+        
+        
+        void
+        commandLogCheckpoint()
+          {
+            UNIMPLEMENTED ("tag command log");
+          }
+        
+        
+        void
+        deconfigure()
+          {
+            UNIMPLEMENTED ("anything berfore destroying objects");
+          }
+        
+        
         
         
       public:

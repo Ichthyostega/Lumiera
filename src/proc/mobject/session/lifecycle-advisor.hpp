@@ -128,6 +128,54 @@ namespace session {
         {
           lumiera::LifecycleHook::trigger (eventLabel);
         }
+      
+      
+      /**
+       * 
+       */
+      virtual void createSessionFacilities()   =0;
+      
+      
+      /**
+       * 
+       */
+      virtual void injectSessionContent()      =0;
+      
+      
+      /**
+       * 
+       */
+      virtual void getSessionReady()           =0;
+      
+      
+      /**
+       * 
+       */
+      virtual void openSessionInterface()      =0;
+      
+      
+      /**
+       * 
+       */
+      virtual void closeSessionInterface()     =0;
+      
+      
+      /**
+       * 
+       */
+      virtual void disconnectRenderProcesses() =0;
+      
+      
+      /**
+       * 
+       */
+      virtual void commandLogCheckpoint()      =0;
+      
+      
+      /**
+       * 
+       */
+      virtual void deconfigure()               =0;
     };
   
   
