@@ -35,6 +35,7 @@
  ** All details and consequences of this approach still have to be worked out...
  **
  ** @note this is rather a scrapbook and in flux... don't take this code too literal!
+ ** @todo clarify the relation of config query and query-for-defaults   ///////////////TICKET #705
  **
  ** @see lumiera::Query
  ** @see mobject::session::DefsManager

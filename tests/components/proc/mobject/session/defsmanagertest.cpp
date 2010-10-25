@@ -66,10 +66,10 @@ namespace asset
     
     /***********************************************************************
      * @test basic behaviour of the defaults manager ("the big picture")
-     *       <ol><li>retrieving a "default" object repeatedly</li>
-     *           <li>retrieving a more constrained "default" object</li>
-     *           <li>failure registers a new "default"</li>
-     *       </ol>
+     *       - retrieving a "default" object repeatedly
+     *       - retrieving a more constrained "default" object
+     *       - failure registers a new "default"
+     * 
      * Using pipe assets as an example. The defaults manager shouldn't
      * interfere with memory management (it holds weak refs).
      */
@@ -164,7 +164,7 @@ namespace asset
                 PPipe pipe1 = Session::current->defaults (query_for_pID);
 //
 // this is fine but doesn't work as long as there is another entry in the mock table...
-// ...for now we use hack to overwrite the reference in the mock table                
+// ...for now we use a hack to overwrite the reference in the mock table                
 //
                 ASSERT (3 == pipe1.use_count());  // that's the problem; it should be 2
                 
@@ -173,7 +173,7 @@ namespace asset
                 
                 typeHandler.resolve (pipe2, query_for_pID); // in the mock impl this has the side effect
                 ASSERT (pipe2);                            //  of replacing the mock entry
-                ////////////////////////////////////////////   so from now on the test works as intended....                
+                ////////////////////////////////////////////   so from here onward the test works as intended....                
                 
                 ASSERT (2 == pipe1.use_count());          
                 hash = pipe1->getID();
