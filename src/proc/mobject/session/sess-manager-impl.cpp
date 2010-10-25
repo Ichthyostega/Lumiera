@@ -29,6 +29,8 @@
  ** access via his overloaded operator->() . Because there is no operator*(),
  ** no one can get at the address of the current session object. (correct?)
  **
+ ** TODO: this is an implementation draft, awaiting integration with several other facilities //////////////////TICKET #704
+ **
  ** @see session-impl.hpp
  ** @see mobject::Session#current
  ** @see mobject::session::SessionManager_test
@@ -105,6 +107,7 @@ namespace session {
         void
         createSessionFacilities()
           {
+            INFO (session, "Initialising new Session....");
             SessionPImpl tmpS (new SessionImplAPI);
             session_.swap (tmpS);
           }
@@ -129,35 +132,36 @@ namespace session {
         void
         getSessionReady()
           {
-            UNIMPLEMENTED ("any wiring and configuration to get the session ready");
+            INFO (session, "Session ready for use.");
           }
         
         
         void
         openSessionInterface()
           {
-            UNIMPLEMENTED ("open layer separation interface");
+            TODO ("open public session interface");     /////////////////////// TICKET #699
           }
         
         
         void
         closeSessionInterface()
-          {
-            UNIMPLEMENTED ("shut down layer separation interface");
+          {                                             /////////////////////// TICKET #699
+            INFO (session, "closing session interfaces.");
           }
         
         
         void
         disconnectRenderProcesses()
           {
-            UNIMPLEMENTED ("halt rendering");
+            TODO ("halt rendering");   //////////////////////////////////////// TICKET #703
+            TODO ("possibly terminate builder"); ////////////////////////////// TICKET #201
           }
         
         
         void
         commandLogCheckpoint()
-          {
-            UNIMPLEMENTED ("tag command log");
+          {                            //////////////////////////////////////// TICKET #697
+            INFO (command, " Session shutdown. Command processing stopped.");
           }
         
         
@@ -236,10 +240,8 @@ namespace session {
   }
   
   
-  /** @note this operation is atomic and either succeeds or
-   *        fails completely, in which case the current session
-   *        remains unaltered.
-   *  @todo for this to work, we need to change the implementation of
+  /** @todo error handling, how to deal with a partially configured session?
+   *  @todo for \c reset() to work, we need to change the implementation of
    *        AssetManager so support this kind of transactional switch!
    */
   void
