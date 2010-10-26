@@ -111,6 +111,8 @@ namespace lumiera {
         bool fabricate_matching_new_Pipe (Query<Pipe>& q, string const& pipeID, string const& streamID);
         bool fabricate_just_new_Pipe (Query<Pipe>& q);
         bool fabricate_ProcPatt_on_demand (Query<const ProcPatt>& q);
+        bool fabricate_Timeline_on_demand (Query<asset::Timeline>& q);
+        bool fabricate_Sequence_on_demand (Query<asset::Sequence>& q);
         
         template<class TY>
         bool set_new_mock_solution (Query<TY>& q, typename WrapReturn<TY>::Wrapper& candidate);
@@ -134,12 +136,12 @@ namespace lumiera {
       public:
         /** (dummy) implementation of the QueryHandler interface */
         virtual bool 
-        resolve (Ret& solution, const Query<TY>& q)
+        resolve (Ret& solution, Query<TY> const& q)
           {
             const any& entry = fetch_from_table_for (q.asKey());
             if (!isnil (entry))
               {
-                const Ret& candidate (any_cast<const Ret&> (entry));
+                Ret const& candidate (any_cast<Ret const&> (entry));
                 if (! solution
                    ||(solution &&  solution == candidate)    // simulates a real unification
                    )
@@ -150,7 +152,7 @@ namespace lumiera {
       
       private:
         bool
-        try_special_case (Ret& solution, const Query<TY>& q)
+        try_special_case (Ret& solution, Query<TY> const& q)
           {
             if (solution && isFakeBypass(q))       // backdoor for tests
               return solution;
@@ -212,6 +214,32 @@ namespace lumiera {
       
       q.clear();
       return false;
+    }
+    template<>
+    inline bool 
+    MockTable::detect_case (WrapReturn<asset::Timeline>::Wrapper& candidate, Query<asset::Timeline>& q)
+    {
+      if (!isnil (extractID("make", q)))
+        return false; // failure triggers creation...
+      
+      if (!candidate)
+          return fabricate_Timeline_on_demand (q);
+      
+      q.clear();
+      return bool(candidate);
+    }
+    template<>
+    inline bool 
+    MockTable::detect_case (WrapReturn<asset::Sequence>::Wrapper& candidate, Query<asset::Sequence>& q)
+    {
+      if (!isnil (extractID("make", q)))
+        return false; // failure triggers creation...
+      
+      if (!candidate)
+          return fabricate_Sequence_on_demand (q);
+      
+      q.clear();
+      return bool(candidate);
     }
     
     

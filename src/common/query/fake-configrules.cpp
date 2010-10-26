@@ -143,6 +143,29 @@ namespace lumiera {
       answer_->insert (entry<cPP> (q, newPP));
       return true;
     }
+    /** special case: fabricate new Timeline, maybe using ID specs from the query... */
+    bool 
+    MockTable::fabricate_Timeline_on_demand (Query<asset::Timeline>& q)
+    {
+      typedef asset::Timeline aTl;
+      typedef WrapReturn<aTl>::Wrapper Ptr;
+      
+      Ptr newTimeline (Struct::create (Query<aTl> ("make(TL), "+q)));  // magic token: bail out and invoke factory for new object
+      answer_->insert (entry<aTl> (q, newTimeline));
+      return true;
+    }
+    /** special case: fabricate new Timeline, maybe using ID specs from the query... */
+    bool 
+    MockTable::fabricate_Sequence_on_demand (Query<asset::Sequence>& q)
+    {
+      typedef asset::Sequence aSq;
+      typedef WrapReturn<aSq>::Wrapper Ptr;
+      
+      Ptr newSequence (Struct::create (Query<aSq> ("make(SQ), "+q)));  // magic token: bail out and invoke factory for new object
+      answer_->insert (entry<aSq> (q, newSequence));
+      return true;
+    }
+    
     
     /** for entering "valid" solutions on-the-fly from tests */
     template<class TY>
