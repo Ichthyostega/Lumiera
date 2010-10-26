@@ -32,7 +32,7 @@ namespace session {
     : boundSequence_(sequence_to_bind)
     {
       throwIfInvalid();
-      UNIMPLEMENTED ("what additionally to do when binding a sequence??");
+      TODO ("what additionally to do when binding a sequence??");
     }
   
   

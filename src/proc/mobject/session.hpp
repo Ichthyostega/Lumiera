@@ -129,14 +129,14 @@ namespace mobject {
       TimelineAccess timelines;                 ///< collection of timelines (top level)
       SequenceAccess sequences;                 ///< collection of sequences
       
-      virtual bool isValid ()                    = 0;
-      virtual MObjectRef attach (PMO& placement) = 0;
-      virtual bool       detach (PMO& placement) = 0;
+      virtual bool isValid ()                          = 0;
+      virtual MObjectRef attach (PMO const& placement) = 0;
+      virtual bool       detach (PMO const& placement) = 0;
       
-      virtual MObjectRef getRoot()               = 0;
+      virtual MObjectRef getRoot()                     = 0;
       
-      virtual session::PFix& getFixture ()       = 0;
-      virtual void rebuildFixture ()             = 0;
+      virtual session::PFix& getFixture ()             = 0;
+      virtual void rebuildFixture ()                   = 0;
       
     };
   

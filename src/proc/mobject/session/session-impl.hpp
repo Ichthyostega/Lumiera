@@ -84,8 +84,8 @@ namespace session {
       
       /* ==== Session API ==== */
       virtual bool isValid ();
-      virtual MObjectRef attach (PMO& placement);
-      virtual bool       detach (PMO& placement);
+      virtual MObjectRef attach (PMO const& placement);
+      virtual bool       detach (PMO const& placement);
       
       virtual MObjectRef getRoot();
 

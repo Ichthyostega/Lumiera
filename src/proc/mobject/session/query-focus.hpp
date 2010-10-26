@@ -27,6 +27,7 @@
 #include "proc/mobject/session/scope-path.hpp"
 #include "proc/mobject/session/scope-query.hpp"
 #include "proc/mobject/session/scope-locator.hpp"
+#include "proc/mobject/placement-ref.hpp"
 
 #include <boost/intrusive_ptr.hpp>
 #include <string>
@@ -91,6 +92,7 @@ namespace session {
       QueryFocus();
       
       ScopePath const& currentPath()  const;
+      RefPlacement     currentPoint() const;
       operator Scope()                const;
       operator string()               const;
       
@@ -142,6 +144,15 @@ namespace session {
   QueryFocus::currentPath()  const
   {
     return *focus_;
+  }
+  
+  /** @return placement-ref to the object the
+   *          QueryFocus is currently pointing at
+   */
+  inline RefPlacement
+  QueryFocus::currentPoint() const
+  {
+    return RefPlacement (focus_->getLeaf().getTop());
   }
   
   

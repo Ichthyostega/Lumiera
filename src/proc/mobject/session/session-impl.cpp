@@ -23,9 +23,12 @@
 
 #include "proc/mobject/session/session-impl.hpp"
 #include "proc/mobject/session/mobjectfactory.hpp"
+#include "proc/mobject/session/query-focus.hpp"
 #include "proc/mobject/placement.hpp"
 #include "proc/mobject/mobject.hpp"
 #include "lib/error.hpp"
+
+using namespace lumiera;
 
 namespace mobject {
 namespace session {
@@ -63,7 +66,7 @@ namespace session {
       }
     catch (...)
       {
-        throw lumiera::error::Fatal ("unexpected exception while clearing the session"); ///////////TODO still required??
+        throw error::Fatal ("unexpected exception while clearing the session");          ///////////TODO still required??
       }
   }
   
@@ -75,25 +78,58 @@ namespace session {
   }
   
   
+  
+  /** attach a copy within the scope
+   *  of the current QueryFocus point
+   *  @return reference to the newly created
+   *          instance (placement) which was attached
+   *          below the position given by current focus
+   */
   MObjectRef 
-  SessionImpl::attach (PMO& placement)
+  SessionImpl::attach (PMO const& placement)
   {
-    UNIMPLEMENTED ("add Placement to the current Session");
+    MObjectRef newAttachedInstance;
+    RefPlacement attachmentPoint = QueryFocus().currentPoint();
+    newAttachedInstance.activate(
+        contents_.insert (placement, attachmentPoint));
+    return newAttachedInstance;
   }
   
   
+  /** detach the denoted object (placement) from model,
+   *  together with any child objects contained in the
+   *  scope of this placement. 
+   *  @note as a sideeffect, the current QueryFocus
+   *        is moved to the scope containing the
+   *        object to be removed
+   *  @throw error::Invalid when attempting to kill root
+   *  @return \c true if actually removing something
+   */
   bool 
-  SessionImpl::detach (PMO& placement)
+  SessionImpl::detach (PMO const& placement)
   {
-    UNIMPLEMENTED ("search and remove a given Placement from current Session");
-    return false; // TODO
+    bool is_known = contents_.contains (placement);
+    if (is_known)
+      {
+        if (Scope(placement).isRoot())
+          throw error::Invalid ("Can't detach the model root."
+                               , LUMIERA_ERROR_INVALID_SCOPE);
+        
+        QueryFocus currentFocus;
+        currentFocus.attach (Scope(placement).getParent());
+        contents_.clear (placement);
+      }
+    ENSURE (!contents_.contains (placement));
+    return is_known;
   }
   
   
   MObjectRef
   SessionImpl::getRoot()
   {
-    UNIMPLEMENTED ("access and return the model root, packaged as MObject-ref");
+    MObjectRef refRoot;
+    refRoot.activate (contents_.getRoot());
+    return refRoot;
   }
 
   
