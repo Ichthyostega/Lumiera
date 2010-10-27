@@ -3905,23 +3905,19 @@ Besides, they provide an __inward interface__ for the [[ProcNode]]s, enabling th
 
 </pre>
 </div>
-<div title="ProcLayer and Engine" modifier="Ichthyostega" modified="201003210253" created="200706190056" tags="overview" changecount="29">
-<pre>The Render Engine is the part of the application doing the actual video calculations. Utilising system level services and retrieving raw audio and video data through [[Lumiera's Backend|backend.html]], its operations are guided by the objects and parameters edited by the user in [[the session|Session]]. Thus, the Lumiera Proc-Layer covers the (abstract) edit operations available to the user, the representation of [[&quot;editable things&quot;|MObjects]] and the translation of those into facilities allowing to [[drive the rendering|Rendering]].
-&lt;&lt;&lt;
-''Status'': started out as design draft in summer '07, Ichthyo is now in the middle of a implementing the fundamental parts in C++
-* basic [[AssetManager]] working
-* first attempts to [[integrate with the GUI|GuiIntegration]]
-* bringing toghether the vital parts of the [[session implementation|SessionDataMem]]
-* as a prerequisite, defined and implemented [[Proc-Layer Command frontend|CommandHandling]]
-* near term goal is to get the foundation of the HighLevelModel roughly settled.
-&lt;&lt;&lt;
+<div title="ProcLayer and Engine" modifier="Ichthyostega" modified="201010270249" created="200706190056" tags="overview" changecount="84">
+<pre>The Render Engine is the part of the application doing the actual video calculations. Utilising system level services and retrieving raw audio and video data through [[Lumiera's Backend|backend.html]], its operations are guided by the objects and parameters edited by the user in [[the session|Session]]. The middle layer of the Lumiera architecture, known as the Proc-Layer, spans the area between these two exteremes, providing the the (abstract) edit operations available to the user, the representation of [[&quot;editable things&quot;|MObjects]] and the translation of those into structures and facilities allowing to [[drive the rendering|Rendering]].
 
-!Summary
-We have several kinds of &quot;things&quot; organized as [[assets|Asset]] in the AssetManager, like media, clips, effects, codecs, configuration templates. Within the context of the [[Session]], we can use these as [[&quot;Media Objects&quot;|MObjects]] &amp;mdash; especially, we can [[place|Placement]] them in various kinds within the session and relative to one another. Basically, this is the [[editing work|EditingOperations]] done by the user.
+!About this wiki page
+|background-color:#E3F3F1;width:96ex;padding:2ex; This TiddlyWiki is the central location for design, planning and documentation of the Lumiera Proc-Layer. Some parts are used as //extended brain// &amp;mdash; collecting ideas, considerations and conclusions &amp;mdash; while other tiddlers contain the decisions and document the planned or implemented facilities. The intention is to move over the more mature parts into the emerging technical documentation section on the [[Lumiera website|http://www.lumiera.org]] eventually. &lt;br/&gt;&lt;br/&gt;Besides cross-references, content is largely organised through [[Tags|TabTags]], most notably &lt;br/&gt;&lt;&lt;tag overview&gt;&gt; &amp;middot; &lt;&lt;tag def&gt;&gt; &amp;middot; &lt;&lt;tag decision&gt;&gt; &amp;middot; &lt;&lt;tag Concepts&gt;&gt; &lt;br/&gt; &lt;&lt;tag Model&gt;&gt; &amp;middot; &lt;&lt;tag SessionLogic&gt;&gt; &amp;middot; &lt;&lt;tag GuiIntegration&gt;&gt; &amp;middot; &lt;&lt;tag Builder&gt;&gt; &amp;middot; &lt;&lt;tag Rendering&gt;&gt; &amp;middot; &lt;&lt;tag Player&gt;&gt; &amp;middot; &lt;&lt;tag Rules&gt;&gt; |
 
-Now, from any given configuration within the session, we create sort or a frozen- and tied-down snapshot, here called [[&quot;Fixture&quot;|Fixture]], containing all currently active ~MObjects, broken down to elementary parts and made explicit if necessary. This Fixture acts as a isolation layer towards the Render Engine. We will hand it over to the  [[Builder]], which in turn will transform it into a network of connected [[render nodes|ProcNode]]. This network //implements//&amp;nbsp; the [[Render Engine|OverviewRenderEngine]].
+!~Proc-Layer Summary
+When editing, the user operates several kinds of //things,// organized as [[assets|Asset]] in the AssetManager, like media, clips, effects, codecs, configuration templates. Within the context of the [[Project or Session|Session]], we can use these as &amp;raquo;[[Media Objects|MObjects]]&amp;laquo; &amp;mdash; especially, we can [[place|Placement]] them in various kinds within the session and relative to one another.
+
+Now, from any given configuration within the session, we create sort or a frozen- and tied-down snapshot, here called &amp;raquo;[[Fixture|Fixture]]&amp;laquo;, containing all currently active ~MObjects, broken down to elementary parts and made explicit if necessary. This Fixture acts as a isolation layer towards the Render Engine. We will hand it over to the  [[Builder]], which in turn will transform it into a network of connected [[render nodes|ProcNode]]. This network //implements//&amp;nbsp; the [[Render Engine|OverviewRenderEngine]].
 
 The system is ''open'' inasmuch every part mirrors the structure of corresponding parts in adjacent subsystems, and the transformation of any given structure from one subsystem (e.g. Asset) to another (e.g. Render Engine) is done with minimal &quot;magic&quot;. So the whole system should be able to handle completely new structures mostly by adding new configurations and components, without much need of rewriting basic workings.
+
 
 !!see also
 &amp;rarr; [[Overview]] of Subsystems and Components, and DesignGoals
@@ -6300,8 +6296,12 @@ function addKeyDownHandlers(e)
 
 </pre>
 </div>
-<div title="TiddlyWiki" modifier="Ichthyostega" created="200706220430" changecount="1">
-<pre>http://tiddlywiki.com/</pre>
+<div title="TiddlyWiki" modifier="Ichthyostega" modified="201010270211" created="200706220430" tags="def" changecount="2">
+<pre>The Name of the Software driving this Wiki. Is is written completely in ~JavaScript and contained in one single HTML page.
+Thus no server and no network connection is needed. Simply open the file in your browser and save changes locally. As the [[Proc-Layer wiki|ProcLayer and Engine]] HTML is located in the Lumiera source tree, all changes will be managed and distributed via GIT. While doing so, you sometimes will have to merge conflicing changes manually in the HTML source.
+ * see GettingStarted
+ * see [[Homepage|http://tiddlywiki.com]], [[Wiki-Markup|http://tiddlywiki.org/wiki/TiddlyWiki_Markup]]
+</pre>
 </div>
 <div title="Timeline" modifier="Ichthyostega" modified="201010180151" created="200706250721" tags="def" changecount="17">
 <pre>Timeline is the top level element within the [[Session (Project)|Session]]. It is visible within a //timeline view// in the GUI and represents the effective (resulting) arrangement of media objects, to be rendered for output or viewed in a Monitor (viewer window). A timeline is comprised of:
