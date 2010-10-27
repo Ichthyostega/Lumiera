@@ -43,7 +43,7 @@
 #include "proc/mobject/session.hpp"
 #include "proc/mobject/placement.hpp"
 #include "proc/mobject/session/track.hpp"
-#include "proc/mobject/session/specific-contents-query.hpp"         ///////////////////TODO really necessary?
+//#include "proc/mobject/session/specific-contents-query.hpp"         ///////////////////TODO really necessary?
 
 #include <tr1/functional>
 

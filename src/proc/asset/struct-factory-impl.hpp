@@ -47,6 +47,7 @@
 #include "proc/asset/sequence.hpp"
 #include "proc/asset/procpatt.hpp"
 #include "proc/asset/pipe.hpp"
+#include "lib/query.hpp"
 
 #include "proc/asset/struct-scheme.hpp"
 

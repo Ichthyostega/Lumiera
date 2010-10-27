@@ -40,10 +40,10 @@ using util::isnil;
 using std::string;
 
 
-namespace asset
-  {
-  namespace test
-    {
+
+namespace asset {
+namespace test  {
+  
     using mobject::Session;
     using lumiera::Query;
     using lumiera::query::normaliseID;
@@ -199,6 +199,4 @@ namespace asset
     
     
     
-  } // namespace test
-
-} // namespace asset
+}} // namespace asset::test

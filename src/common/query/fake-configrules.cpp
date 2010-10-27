@@ -23,9 +23,11 @@
 
 #include "common/query/fake-configrules.hpp"
 
+#include "proc/mobject/session.hpp"
 #include "proc/mobject/session/track.hpp"
 #include "proc/asset/procpatt.hpp"
 #include "proc/asset/pipe.hpp"
+#include "lib/query.hpp"
 
 
 #include "include/logging.h"
@@ -44,6 +46,10 @@ namespace lumiera {
     
     using asset::ProcPatt;
     using asset::PProcPatt;
+    
+//  using lumiera::query::extractID;
+    using lumiera::query::removeTerm;
+    
     
     namespace {
       
@@ -122,6 +128,7 @@ namespace lumiera {
       answer_->insert (entry<Pipe> (q, newPipe));
       return true; // denotes query will now succeed...
     }
+    
     /** special case: create a new pipe for a specific stream ID */
     bool 
     MockTable::fabricate_just_new_Pipe (Query<Pipe>& q )
@@ -132,6 +139,7 @@ namespace lumiera {
       answer_->insert (entry<Pipe> (q, newPipe));
       return true;
     }
+    
     /** special case: create/retrieve new processing pattern for given stream ID... */
     bool 
     MockTable::fabricate_ProcPatt_on_demand (Query<const ProcPatt>& q)
@@ -143,26 +151,66 @@ namespace lumiera {
       answer_->insert (entry<cPP> (q, newPP));
       return true;
     }
+    
     /** special case: fabricate new Timeline, maybe using ID specs from the query... */
     bool 
-    MockTable::fabricate_Timeline_on_demand (Query<asset::Timeline>& q)
+    MockTable::fabricate_Timeline_on_demand (Query<asset::Timeline>& query)
     {
       typedef asset::Timeline aTl;
       typedef WrapReturn<aTl>::Wrapper Ptr;
       
-      Ptr newTimeline (Struct::create (Query<aTl> ("make(TL), "+q)));  // magic token: bail out and invoke factory for new object
-      answer_->insert (entry<aTl> (q, newTimeline));
+      string nameID = removeTerm ("id", query);
+      if (isnil (nameID))
+        nameID = removeTerm ("timeline", query);
+      if (isnil (nameID))
+        nameID = "prime";
+      query.insert (0, "id("+nameID+"), ");
+      
+      // try to find an existing one with the desired id
+      Ptr newTimeline;
+      size_t i=0, cnt=Session::current->timelines.size();
+      for ( ; i < cnt; ++i)
+        if (nameID == Session::current->timelines[i]->ident.name)
+          {
+            newTimeline = Session::current->timelines[i];
+            break;
+          }
+      
+      if (!newTimeline)                                               // no suitable Timeline found: create and attach new one
+        newTimeline = Struct::create (Query<aTl> ("make(TL), "+query));
+                                                                    //  "make" magic token: bail out and invoke factory for new object
+      answer_->insert (entry<aTl> (query, newTimeline));           //    learn the found/created Timeline as new solution
       return true;
     }
+    
     /** special case: fabricate new Timeline, maybe using ID specs from the query... */
     bool 
-    MockTable::fabricate_Sequence_on_demand (Query<asset::Sequence>& q)
+    MockTable::fabricate_Sequence_on_demand (Query<asset::Sequence>& query)
     {
       typedef asset::Sequence aSq;
       typedef WrapReturn<aSq>::Wrapper Ptr;
       
-      Ptr newSequence (Struct::create (Query<aSq> ("make(SQ), "+q)));  // magic token: bail out and invoke factory for new object
-      answer_->insert (entry<aSq> (q, newSequence));
+      string nameID = removeTerm ("id", query);
+      if (isnil (nameID))
+        nameID = removeTerm ("sequence", query);
+      if (isnil (nameID))
+        nameID = "first";
+      query.insert (0, "id("+nameID+"), ");
+      
+      // try to find an existing sequence with the desired id
+      Ptr newSequence;
+      size_t i=0, cnt=Session::current->sequences.size();
+      for ( ; i < cnt; ++i)
+        if (nameID == Session::current->sequences[i]->ident.name)
+          {
+            newSequence = Session::current->sequences[i];
+            break;
+          }
+      
+      if (!newSequence)                                            
+        newSequence = Struct::create (Query<aSq> ("make(SQ), "+query)); // no suitable found: create and attach new Sequence
+      
+      answer_->insert (entry<aSq> (query, newSequence));
       return true;
     }
     
