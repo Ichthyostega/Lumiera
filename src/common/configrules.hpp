@@ -81,10 +81,10 @@ namespace lumiera {  ///////TODO: shouldn't that be namespace lib? or proc?
     //  resolve(O, Cap) :- make(O), capabilities(Cap).
     //  capabilities(Q) :- call(Q).
     //  
-    //  stream(T, mpeg) :- type(T, track), type(P, pipe), resolve(P, stream(P,mpeg)), place_to(P, T).
+    //  stream(T, mpeg) :- type(T, track), type(P, pipe), resolve(P, stream(P,mpeg)), placed_to(P, T).
     //
     // The type guard is inserted automatically, while the predicate implementations for
-    // find/1, make/1, stream/2, and place_to/2 are to be provided by the target types.
+    // find/1, make/1, stream/2, and placed_to/2 are to be provided by the target types.
     //
     // As a example, the goal ":-retrieve(T, stream(T,mpeg))." would search a Track object, try to
     // retrieve a pipe object with stream-type=mpeg and associate the track with this Pipe. The

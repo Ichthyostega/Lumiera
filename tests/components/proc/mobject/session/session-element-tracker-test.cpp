@@ -185,7 +185,7 @@ namespace test    {
           CHECK (specialTimeline);
           CHECK (num_timelines + 1 == sess->timelines.size());
           CHECK (specialTimeline == sess->timelines[num_timelines]);    // got appended at the end of the tracking table
-          CHECK (specialTimeline.use_count() == 3);                     // we, the AssetManager and the session
+          CHECK (specialTimeline.use_count() == 4);                     // we, the AssetManager and the session   /////TODO plus one for fake-configrules
           
           PTimeline anotherTimeline (asset::Struct::create (Query<Timeline> ()));
           CHECK (num_timelines + 2 == sess->timelines.size());

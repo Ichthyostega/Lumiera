@@ -84,6 +84,11 @@ namespace asset {
    *  @todo work out the struct asset naming scheme! /////////////////////////////////TICKET #565
    *  @todo for now we're using a faked config query, just pulling preconfigured
    *        hardwired answers from a table. Should be replaced by a real resolution engine.
+   *  @note the exact calling sequence implemented here can be considered a compromise,
+   *        due to not having neither a working resolution, nor a generic interface for
+   *        issuing queries. Thus, directly calling this factory acts as a replacement
+   *        for both. The final algorithm to be implemented later should fabricate
+   *        \em first, and then then query as a second step to define the capabilities.
    *  @return an Struct smart ptr linked to the internally registered smart ptr
    *          created as a side effect of calling the concrete Struct subclass ctor.
    */

@@ -1476,7 +1476,7 @@ For this to work, we need each of the //participating object types// to provide 
 
 @@clear(left):display(block):@@</pre>
 </div>
-<div title="ConfigRules" modifier="Ichthyostega" modified="201010250338" created="200801171352" tags="overview spec Rules" changecount="19">
+<div title="ConfigRules" modifier="Ichthyostega" modified="201010280156" created="200801171352" tags="overview spec Rules" changecount="20">
 <pre>Many features can be implemented by specifically configuring and wiring some unspecific components. Rather than tie the client code in need of some given feature to these configuration internals, in Lumiera the client can //query // for some kind of object providing the //needed capabilities. // Right from start (summer 2007), Ichthyo had the intention to implement such a feature using sort of a ''declarative database'', e.g. by embedding a Prolog system. By adding rules to the basic session configuration, users should be able to customize the semi-automatic part of Lumiera's behaviour to great extent.
 
 [[Configuration Queries|ConfigQuery]] are used at various places, when creating and adding new objects, as well when building or optimizing the render engine node network.
@@ -1504,6 +1504,8 @@ At start and for debugging/testing, there is an ''dummy'' implementation using a
 &amp;rarr; [[accessing and integrating configuration queries|ConfigQueryIntegration]]
 &amp;rarr; see {{{src/common/query/mockconfigrules.cpp}}} for the table with the hard wired (mock) answers
 
+!!!fake implementation guidelines
+The fake implementation should follow the general pattern planned for the Prolog implementation. That is, find, query, create, query. Thus, such a config query can be considered existentially quantised. The interplay with the factories is tricky. Because factories might issue config queries themselves, while a factory invocation driven from within this rule pattern //must not// re-invoke the factory. Besides, a factory invocation should create, not fetch an existing solution (?)
 
 {{red{WARN}}} there is an interference with the (planned) Undo function: a totally correct implementation of &quot;Undo&quot; would need to remember and restore the internal state of the query system (similar to backtracking). But, more generally, such an correct implementation is not achievable, because we are never able to capture and control the whole state of a real world system doing such advanced things like video and sound processing. Seemingly we have to accept that after undoing an action, there is no guarantee we can re-do it the same way as it was first time.
 
@@ -4046,7 +4048,7 @@ This concept deliberately ignores parallelism. But, as the current path state is
 {{red{As of 10/09 it is not clear if there will be any concurrent access to this discovery API}}} &amp;mdash; but it seems not unlikely to happen...
 </pre>
 </div>
-<div title="QueryImplProlog" modifier="Ichthyostega" modified="201006150322" created="200801202321" tags="draft design Rules" changecount="19">
+<div title="QueryImplProlog" modifier="Ichthyostega" modified="201010280120" created="200801202321" tags="draft design Rules" changecount="21">
 <pre>//obviously, getting this one to work requires quite a lot of technical details to be planned and implemented.// This said...
 The intention is to get much more readable (&quot;declarative&quot;) and changeable configuration as by programming the decision logic literately within the implementation of some object.
 
@@ -4057,10 +4059,10 @@ resolve(O, Cap) :- find(O), capabilities(Cap).
 resolve(O, Cap) :- make(O), capabilities(Cap).
 capabilities(Q) :- call(Q).
 
-stream(T, mpeg) :- type(T, track), type(P, pipe), resolve(P, stream(P,mpeg)), place_to(P, T).
+stream(T, mpeg) :- type(T, track), type(P, pipe), resolve(P, stream(P,mpeg)), placed_to(P, T).
 }}}
 
-Then, running the goal {{{:-resolve(T, stream(T,mpeg)).}}} would search a Track object, try to retrieve a pipe object with stream-type=mpeg and associate the track with this pipe. This relies on a predicate &quot;stream(P,mpeg)&quot; implemented (natively) for the pipe object. So, &quot;Cap&quot; is the query issued from calling code &amp;mdash; here {{{stream(T,mpeg)}}}, the type guard {{{type(T, track)}}} will probably be handled or inserted automatically, while the predicate implementations for find/1, make/1, stream/2, and place_to/2 are to be provided by the target types.
+Then, running the goal {{{:-resolve(T, stream(T,mpeg)).}}} would search a Track object, try to retrieve a pipe object with stream-type=mpeg and associate the track with this pipe. This relies on a predicate &quot;stream(P,mpeg)&quot; implemented (natively) for the pipe object. So, &quot;Cap&quot; is the query issued from calling code &amp;mdash; here {{{stream(T,mpeg)}}}, the type guard {{{type(T, track)}}} will probably be handled or inserted automatically, while the predicate implementations for find/1, make/1, stream/2, and placed_to/2 are to be provided by the target types.
 * __The supporting system__ had to combine several code snippets into one rule system to be used for running queries, with some global base rules, rules injected by each individual participating object kind and finally user provided rules added by the current session. The actual query is bound to &quot;Cap&quot; (and consequently run as a goal by {{{call(Q)}}}). The implementation needs to provide a symbol table associating variable terms (like &quot;T&quot; or &quot;P&quot;) to C/C++ object types, enabling the participating object kinds to register their specific predicate implementations. This is crucial, because there can be no general scheme of object-provided predicates (for each object kind different predicates make sense, e.g. [[pipes|PipeHandling]] have other possibilities than [[wiring requests|WiringRequest]]). Basically, a query issues a Prolog goal, which in turn evaluates domain specific predicates provided by the participating objects and thus calls back into C/C++ code. The supporting system maintains the internal connection (via the &quot;type&quot; predicate) such that from Prolog viewpoint it looks as if we were binding Variables directly to object instances. (there are some nasty technical details because of the backtracking nature of Prolog evaluations which need to be hidden away)
 * Any __participating object kind__ needs a way to declare domain specific predicates, thus triggering the registration of the necessary hooks within the supporting system. Moreover, it should be able to inject further prolog code (as shown in the example above with the {{{strem(T, mpeg)}}} predicate. For each of these new domain specific predicates, there needs to be a functor which can be invoked when the C implementation of the predicate is called from Prolog (in some cases even later, when the final solution is &quot;executed&quot;, e.g. a new instance has been created and now some properties need to be set).
 
