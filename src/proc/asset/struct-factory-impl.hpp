@@ -177,21 +177,19 @@ namespace asset {
   {
     TODO ("actually extract properties/capabilities from the query...");
     return new ProcPatt (createIdent (caps));
-  }
+  }                                               ///////////////////////TICKET #565  maybe store the capabilities query within the Struct asset somehow?
   
   template<>
   inline Pipe* 
   StructFactoryImpl::fabricate (const Query<Pipe>& caps)
   {
     const Asset::Ident idi (createIdent (caps));
-    string pipeID = extractID ("pipe", idi.name);
     string streamID = extractID ("stream", caps);
     if (isnil (streamID)) streamID = "default"; 
     PProcPatt processingPattern = Session::current->defaults (Query<const ProcPatt>("stream("+streamID+")"));
     return new Pipe( idi
                    , processingPattern
-                   , pipeID
-                   );
+                   );                             ///////////////////////TICKET #565  maybe store the capabilities query within the Struct asset somehow?
   }
   
   template<>

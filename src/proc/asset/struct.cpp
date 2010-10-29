@@ -58,7 +58,7 @@ namespace asset {
   }
   
   /** query the currently defined properties of this
-      structural asset for a stream-ID predicate */
+      structural asset for a pipe-ID predicate */
   const string
   Struct::queryPipeID()  const
   {
@@ -141,7 +141,7 @@ namespace asset {
    * @see DefaultsManager 
    */ 
   P<Pipe> 
-  StructFactory::operator() (string pipeID, string streamID)
+  StructFactory::newPipe (string pipeID, string streamID)
   {
     normaliseID (pipeID);
     normaliseID (streamID);

@@ -83,7 +83,7 @@ namespace asset
             normaliseID (pID_sane);
             ASSERT (pID_sane != pID);
             
-            PPipe thePipe = asset::Struct::retrieve (pID,sID);
+            PPipe thePipe = asset::Struct::retrieve.newPipe (pID,sID);
             
             ASSERT (thePipe);
             ASSERT (thePipe->getProcPatt());

@@ -153,11 +153,12 @@ namespace asset {
       template<class STRU>
       P<STRU> operator() (Query<STRU> const& query); 
       
-      P<Pipe> operator() (string pipeID, string streamID);
 //    P<Timeline> operator() (MORef<Binding>);  ///////////TODO doesn't this create circular includes?? Any better idea how to refer to an existing binding?
       
       template<class STRU>
       P<STRU> newInstance (Symbol nameID  ="");
+      
+      P<Pipe> newPipe (string pipeID, string streamID);
     };
     
     

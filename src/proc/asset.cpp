@@ -38,6 +38,7 @@ using util::contains;
 using util::removeall;
 using util::for_each;
 using util::and_all;
+using util::isnil;
 using util::cStr;
 
 
@@ -83,6 +84,15 @@ namespace asset {
   {
     format id_tuple("Asset(%2%:%3%.%1% v%4%)");
     return str (id_tuple % ident.name % ident.category % ident.org % ident.version);
+  }
+  
+  
+  bool
+  Asset::Ident::isValid()  const
+  {
+    return !isnil (name)
+        && !isnil (org)
+        && version <= 1000000;
   }
 
 

@@ -190,6 +190,8 @@ namespace asset {
           bool operator<  (Ident const& oi)  const { return compare (oi) < 0; }
     
           operator string ()  const;
+          
+          bool isValid()  const;
         };
       
          

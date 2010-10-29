@@ -38,19 +38,17 @@ namespace asset {
    */
   Pipe::Pipe ( const Asset::Ident& idi
              , PProcPatt& wiring
-             , const string& pipeID
              , string shortName
              , string longName
              ) 
-    : Struct (idi),
-      pipeID_ (pipeID),
-      wiringTemplate(wiring),
-      shortDesc (shortName),
-      longDesc (longName)
+    : Struct (idi)
+    , wiringTemplate(wiring)
+    , shortDesc (shortName)
+    , longDesc (longName)
   {
-    REQUIRE (!isnil (pipeID));
+    REQUIRE (idi.isValid());
     if (isnil (shortDesc))
-      shortDesc = pipeID;
+      shortDesc = string(idi);
   }
 
   

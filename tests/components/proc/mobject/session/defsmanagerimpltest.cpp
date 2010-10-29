@@ -97,8 +97,8 @@ namespace asset {
             
              // create Pipes explicitly 
             //  (without utilising default queries)
-            PPipe pipe1 = Struct::retrieve (newID("pipe"), newID("stream")); 
-            PPipe pipe2 = Struct::retrieve (newID("pipe"), sID            );
+            PPipe pipe1 = Struct::retrieve.newPipe (newID("pipe"), newID("stream")); 
+            PPipe pipe2 = Struct::retrieve.newPipe (newID("pipe"), sID            );
             
             ASSERT (pipe1 != pipe2);
             ASSERT (sID == pipe2->getProcPatt()->queryStreamID());

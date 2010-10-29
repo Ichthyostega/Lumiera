@@ -57,7 +57,6 @@ namespace asset {
    */
   class Pipe : public Struct
     {
-      const string pipeID_;
       PProcPatt wiringTemplate;
       
     public:
@@ -71,12 +70,12 @@ namespace asset {
       
       
     protected:
-      Pipe (const Asset::Ident&, PProcPatt& wiring, const string& pipeID, string shortName ="", string longName ="") ;
+      Pipe (Asset::Ident const&, PProcPatt& wiring, string shortName ="", string longName ="") ;
       friend class StructFactory;
       friend class StructFactoryImpl;
       
     public:
-      const string& getPipeID()       const { return pipeID_; }
+      const string& getPipeID()       const { return ident.name;     }
       const PProcPatt& getProcPatt()  const { return wiringTemplate; }
       
       /** use another wiring template. Triggers complete rebuild of the render engine. */
@@ -90,7 +89,7 @@ namespace asset {
    // catch up with postponed definition of ID<Struct> ctors...
   //
   inline ID<Pipe>::ID(size_t id)        : ID<Struct> (id)           {};
-  inline ID<Pipe>::ID(const Pipe& pipe) : ID<Struct> (pipe.getID()) {};
+  inline ID<Pipe>::ID(Pipe const& pipe) : ID<Struct> (pipe.getID()) {};
   
   
   

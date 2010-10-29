@@ -124,7 +124,7 @@ namespace lumiera {
     {
       typedef WrapReturn<Pipe>::Wrapper Ptr;
       
-      Ptr newPipe (Struct::retrieve (pipeID, streamID));
+      Ptr newPipe (Struct::retrieve.newPipe (pipeID, streamID));
       answer_->insert (entry<Pipe> (q, newPipe));
       return true; // denotes query will now succeed...
     }
