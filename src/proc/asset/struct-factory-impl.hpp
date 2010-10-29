@@ -101,8 +101,6 @@ namespace asset {
       const Asset::Ident
       createIdent (const Query<STRU>& query)
         {
-          string name (query);
-          
           // does the query somehow specify the desired name-ID?
           string nameID = extractID (genericIdSymbol, query);
           if (isnil (nameID))
@@ -113,17 +111,12 @@ namespace asset {
               //  so we'll create a new one
               static int i=0;
               static format namePattern ("%s.%d");
-              static format predPattern ("%s(%s), ");
               nameID = str(namePattern % StructTraits<STRU>::namePrefix() % (++i) );
-              name.insert(0, 
-                       str(predPattern % StructTraits<STRU>::idSymbol() % nameID ));
             }
-          ENSURE (!isnil (name));
           ENSURE (!isnil (nameID));
-          ENSURE (contains (name, nameID));
           
           Category cat (STRUCT, StructTraits<STRU>::catFolder());
-          return Asset::Ident (name, cat );                       ///////////////////////TICKET #565  the ID field should be just the ID, the query should go into a dedicated "capabilities" field.
+          return Asset::Ident (nameID, cat );
         }
       
       
@@ -214,7 +207,7 @@ namespace asset {
     RBinding newBinding = Session::current->getRoot().attach (MObject::create (sequence));
     ASSERT (newBinding);
     PTimeline newTimeline = Timeline::create (idi, newBinding);
-    ENSURE (newTimeline);
+    ENSURE (newTimeline);                         ///////////////////////TICKET #565  maybe store the capabilities query within the Struct asset somehow?
     return newTimeline.get();
   }
   
@@ -232,7 +225,7 @@ namespace asset {
     // - track exists and is root attached, but belongs already to a sequence --> throw
     // - track exists, but isn't root attached ---> what do do here? steal it??
     PSequence newSequence = Sequence::create (createIdent (caps));                      ///////////TODO fed track in here
-    ENSURE (newSequence);
+    ENSURE (newSequence);                         ///////////////////////TICKET #565  maybe store the capabilities query within the Struct asset somehow?
     return newSequence.get(); 
   }
   
