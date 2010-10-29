@@ -68,6 +68,7 @@ namespace lib {
   
   using lumiera::P;
   using std::tr1::function;
+  using util::isSameObject;
   
   /**
    * Registry for tracking object instances.
@@ -227,6 +228,13 @@ namespace lib {
       deactivateRegistryLink()
         {
           getRegistry = RegistryLink();  // empty accessor function
+        }
+      
+      static bool
+      is_attached_to (Registry const& someRegistry)
+        {
+          return bool(getRegistry)
+              && isSameObject (someRegistry, getRegistry());
         }
       
     protected:

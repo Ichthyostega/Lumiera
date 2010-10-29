@@ -120,9 +120,12 @@ namespace session {
   inline
   SessionInterfaceModules::~SessionInterfaceModules()
   {
-    asset::Sequence::deactivateRegistryLink();
-    asset::Timeline::deactivateRegistryLink();
-  }
+    if (asset::Sequence::is_attached_to (sequenceRegistry_))
+      asset::Sequence::deactivateRegistryLink();
+    
+    if (asset::Timeline::is_attached_to (timelineRegistry_))  // as session dtor is invoked automatically (smart-ptr),
+      asset::Timeline::deactivateRegistryLink();             //  another new session might already have grabbed
+  }                                                         //   the Timeline / Sequence registration service.
   
   
   

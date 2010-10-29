@@ -82,7 +82,7 @@ namespace asset {
    *  instances and immediately creates a new one.
    * @param nameID (optional) an ID to use; if omitted an ID
    *        will be default created, based on the kind of Asset.
-   * @throw error::Invalid in case of ID clash with an existing Asset        
+   * @throw error::Invalid in case of ID clash with an existing Asset
    * @return  an Struct smart ptr linked to the internally registered smart ptr
    *        created as a side effect of calling the concrete Struct subclass ctor.
    */

@@ -32,7 +32,7 @@ out: DummyMO\.[0-9]{3}
 END
 
 
-PLANNED "SessionElementTracker_test" SessionElementTracker_test <<END
+TEST "SessionElementTracker_test" SessionElementTracker_test <<END
 END
 
 
