@@ -116,7 +116,7 @@ namespace test    {
           CHECK (track3  == focus.getObject());
           
           RTrack track31 = sess->attach(
-              asset::Struct::create (Query<asset::Track> ("id(track31)")));
+              asset::Struct::retrieve (Query<asset::Track> ("id(track31)")));
           
           
           CHECK (track31 == focus.getObject());

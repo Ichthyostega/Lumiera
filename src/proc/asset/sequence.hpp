@@ -36,7 +36,7 @@
  ** Like every structural asset, the creation of sequences happens automatically
  ** on referral; Sequences can be queried from the StructFactory, providing additional
  ** requested capabilities. Commonly clients will retrieve a given sequence by query
- ** on the name-ID of the sequence: \c Struct::create(Query<Sequence> ("id(theName)."))
+ ** on the name-ID of the sequence: \c Struct::retrieve(Query<Sequence> ("id(theName)."))
  ** Additionally, a specific root track may be requested: \c "id(theName),rootTrack(trackID)." 
  ** 
  ** @see Session

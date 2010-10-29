@@ -83,7 +83,7 @@ namespace asset
             normaliseID (pID_sane);
             ASSERT (pID_sane != pID);
             
-            PPipe thePipe = asset::Struct::create (pID,sID);
+            PPipe thePipe = asset::Struct::retrieve (pID,sID);
             
             ASSERT (thePipe);
             ASSERT (thePipe->getProcPatt());
@@ -139,9 +139,9 @@ namespace asset
             // several variants to query for "the default pipe"
             pipe2 = Session::current->defaults(Query<Pipe> ());
             ASSERT (pipe2 == pipe1);
-            pipe2 = asset::Struct::create (Query<Pipe> ());
+            pipe2 = asset::Struct::retrieve (Query<Pipe> ());
             ASSERT (pipe2 == pipe1);
-            pipe2 = asset::Struct::create (Query<Pipe> ("pipe(default)"));
+            pipe2 = asset::Struct::retrieve (Query<Pipe> ("pipe(default)"));
             ASSERT (pipe2 == pipe1);
             
             string sID = popa->queryStreamID(); // sort of a "default stream type"

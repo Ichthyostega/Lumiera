@@ -181,13 +181,13 @@ namespace test    {
           uint num_timelines = sess->timelines.size();
           CHECK (0 < num_timelines);
           
-          PTimeline specialTimeline (asset::Struct::create (Query<Timeline> ("id(testical)")));
+          PTimeline specialTimeline (asset::Struct::retrieve (Query<Timeline> ("id(testical)")));
           CHECK (specialTimeline);
           CHECK (num_timelines + 1 == sess->timelines.size());
           CHECK (specialTimeline == sess->timelines[num_timelines]);    // got appended at the end of the tracking table
           CHECK (specialTimeline.use_count() == 4);                     // we, the AssetManager and the session   /////TODO plus one for fake-configrules
           
-          PTimeline anotherTimeline (asset::Struct::create (Query<Timeline> ()));
+          PTimeline anotherTimeline (asset::Struct::retrieve (Query<Timeline> ()));
           CHECK (num_timelines + 2 == sess->timelines.size());
           CHECK (specialTimeline == sess->timelines[num_timelines]);
           CHECK (anotherTimeline == sess->timelines[num_timelines+1]);  // new one got appended at the end

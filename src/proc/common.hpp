@@ -1,5 +1,5 @@
 /*
-  LUMIERA.hpp  -  global definitions and common types for the Proc-Layer
+  COMMON.hpp  -  global definitions and common types for the Proc-Layer
  
  
   Copyright (C)         Lumiera.org
@@ -22,10 +22,12 @@
  
 */
 
-/** @file lumiera.hpp
+/** @file common.hpp
  ** Basic set of definitions and includes commonly used together.
- ** Including lumiera.hpp gives you a common set of elementary declarations
- ** widely used within the C++ code of the Proc-Layer.
+ ** Including common.hpp gives you a common set of elementary declarations
+ ** widely used within the C++ code of the Proc-Layer. Besides that, this
+ ** header is used to attach the doxygen documentation comments for all
+ ** the primary Proc-Layer namespaces
  ** 
  ** @see main.cpp
  ** @see pre.hpp
@@ -34,8 +36,8 @@
 
 
 
-#ifndef LUMIERA_H
-#define LUMIERA_H
+#ifndef PROC_COMMON_H
+#define PROC_COMMON_H
 
 
 

@@ -105,13 +105,13 @@ namespace test    {
 #if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #499
           Query<Timeline> query1 = "id("+defaultTimeline->getNameID()+").";
           
-          PTimeline queriedTimeline = asset::Struct::create (query1);
+          PTimeline queriedTimeline = asset::Struct::retrieve (query1);
           CHECK (queriedTimeline);
           CHECK (queriedTimeline == defaultTimeline);  // retrieved the existing timeline asset again
           CHECK (queriedTimeline == sess->timelines[0]);
           
           Query<Sequence> query2 = "id("+defaultTimeline->getSequence()->getNameID()+").";
-          PSequence queriedSequence = asset::Struct::create (query2);
+          PSequence queriedSequence = asset::Struct::retrieve (query2);
           CHECK (queriedSequence);
           CHECK (queriedSequence == sess->sequences[0]);
           CHECK (queriedSequence == sess->timelines[0]->getSequence());
@@ -134,7 +134,7 @@ namespace test    {
                                   + sess->sequences[0]->getNameID()
                                   + "), pipe(ambiance).";
           
-          PTimeline specialTimeline (asset::Struct::create (special));
+          PTimeline specialTimeline (asset::Struct::retrieve (special));
           CHECK (specialTimeline);
           CHECK (num_timelines + 1 == sess->timelines.size());
           CHECK (specialTimeline == session->timelines[num_timelines]);  // new one got appended at the end
@@ -196,7 +196,7 @@ namespace test    {
           
           // create a new Timeline to play with, using the default sequence...
 #if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #499
-          PTimeline aTimeline (asset::Struct::create (Query<Timeline> ("sequence("+
+          PTimeline aTimeline (asset::Struct::retrieve (Query<Timeline> ("sequence("+
                                                                       + sess->sequences[0]->getNameID()
                                                                       +        ").")));
           CHECK (num_timelines + 1 == sess->timelines.size());
@@ -235,7 +235,7 @@ namespace test    {
           uint num_sequences = sess->sequences.size();
           
           // create a new timeline, bound to a new sequence...
-          PTimeline aTimeline (asset::Struct::create (Query<Timeline> ()));
+          PTimeline aTimeline (asset::Struct::retrieve (Query<Timeline> ()));
 #if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #499
           PSequence aSequence (aTimeline->getSequence());
           CHECK (num_timelines + 1 == sess->timelines.size());

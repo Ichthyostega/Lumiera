@@ -68,7 +68,7 @@ namespace asset {
   
   
   /** storage for the static StructFactory instance */
-  StructFactory Struct::create;
+  StructFactory Struct::retrieve;
   
   
   /** using private implementation detail class */
@@ -77,8 +77,27 @@ namespace asset {
   { }
   
   
+  /** invoke the factory to create new Structural Asset.
+   *  This function skips the query and retrieval of existing
+   *  instances and immediately creates a new one.
+   * @param nameID (optional) an ID to use; if omitted an ID
+   *        will be default created, based on the kind of Asset.
+   * @throw error::Invalid in case of ID clash with an existing Asset        
+   * @return  an Struct smart ptr linked to the internally registered smart ptr
+   *        created as a side effect of calling the concrete Struct subclass ctor.
+   */
+  template<class STRU>
+  P<STRU>
+  StructFactory::newInstance (Symbol nameID)
+  {
+    Query<STRU> desired_name (isnil(nameID)? "" : "id("+nameID+")");
+    STRU* pS = impl_->fabricate (desired_name);
+    return AssetManager::instance().wrap (*pS);
+  }
   
-  /** Factory method for Structural Asset instances.
+  
+  
+  /** Retrieve a suitable Structural Asset instance, possibly create.
    *  First tries to resolve the asset by issuing an capability query.
    *  If unsuccessful, use some internally specialised ctor call.
    *  @todo work out the struct asset naming scheme! /////////////////////////////////TICKET #565
@@ -90,11 +109,11 @@ namespace asset {
    *        for both. The final algorithm to be implemented later should fabricate
    *        \em first, and then then query as a second step to define the capabilities.
    *  @return an Struct smart ptr linked to the internally registered smart ptr
-   *          created as a side effect of calling the concrete Struct subclass ctor.
+   *        created as a side effect of calling the concrete Struct subclass ctor.
    */
   template<class STRU>
   P<STRU> 
-  StructFactory::operator() (const Query<STRU>& capabilities)
+  StructFactory::operator() (Query<STRU> const& capabilities)
   {
     P<STRU> res;
     QueryHandler<STRU>& typeHandler = ConfigRules::instance();  
@@ -156,6 +175,11 @@ namespace asset {
   template PProcPatt   StructFactory::operator() (const Query<const ProcPatt>& query);
   template PTimeline   StructFactory::operator() (const Query<Timeline>& query);
   template PSequence   StructFactory::operator() (const Query<Sequence>& query);
+  
+  template P<Pipe>     StructFactory::newInstance (Symbol);
+  template PProcPatt   StructFactory::newInstance (Symbol);
+  template PTimeline   StructFactory::newInstance (Symbol);
+  template PSequence   StructFactory::newInstance (Symbol);
   
   
 } // namespace asset

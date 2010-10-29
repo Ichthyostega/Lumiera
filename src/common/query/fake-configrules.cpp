@@ -71,7 +71,7 @@ namespace lumiera {
         
         string capabilities (caps);
         Query<STRU> query (capabilities); 
-        Ptr obj = Struct::create (query);
+        Ptr obj = Struct::retrieve (query);
         return AnyPair(query.asKey(), obj);
       }
       
@@ -124,7 +124,7 @@ namespace lumiera {
     {
       typedef WrapReturn<Pipe>::Wrapper Ptr;
       
-      Ptr newPipe (Struct::create (pipeID, streamID));
+      Ptr newPipe (Struct::retrieve (pipeID, streamID));
       answer_->insert (entry<Pipe> (q, newPipe));
       return true; // denotes query will now succeed...
     }
@@ -135,7 +135,7 @@ namespace lumiera {
     {
       typedef WrapReturn<Pipe>::Wrapper Ptr;
       
-      Ptr newPipe (Struct::create (Query<Pipe> (string("make(PP), ")+q)));
+      Ptr newPipe (Struct::retrieve (Query<Pipe> (string("make(PP), ")+q)));
       answer_->insert (entry<Pipe> (q, newPipe));
       return true;
     }
@@ -147,7 +147,7 @@ namespace lumiera {
       typedef const ProcPatt cPP;
       typedef WrapReturn<cPP>::Wrapper Ptr;
       
-      Ptr newPP (Struct::create (Query<cPP> ("make(PP), "+q)));   // magic token: bail out and invoke factory for new object
+      Ptr newPP (Struct::retrieve (Query<cPP> ("make(PP), "+q)));   // magic token: bail out and invoke factory for new object
       answer_->insert (entry<cPP> (q, newPP));
       return true;
     }
@@ -176,10 +176,10 @@ namespace lumiera {
             break;
           }
       
-      if (!newTimeline)                                               // no suitable Timeline found: create and attach new one
-        newTimeline = Struct::create (Query<aTl> ("make(TL), "+query));
-                                                                    //  "make" magic token: bail out and invoke factory for new object
-      answer_->insert (entry<aTl> (query, newTimeline));           //    learn the found/created Timeline as new solution
+      if (!newTimeline)                                                 // no suitable Timeline found: create and attach new one
+        newTimeline = Struct::retrieve (Query<aTl> ("make(TL), "+query));
+                                                                      //  "make" magic token: bail out and invoke factory for new object
+      answer_->insert (entry<aTl> (query, newTimeline));             //    learn the found/created Timeline as new solution
       return true;
     }
     
@@ -208,7 +208,7 @@ namespace lumiera {
           }
       
       if (!newSequence)                                            
-        newSequence = Struct::create (Query<aSq> ("make(SQ), "+query)); // no suitable found: create and attach new Sequence
+        newSequence = Struct::retrieve (Query<aSq> ("make(SQ), "+query)); // no suitable found: create and attach new Sequence
       
       answer_->insert (entry<aSq> (query, newSequence));
       return true;

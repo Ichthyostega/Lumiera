@@ -106,9 +106,9 @@ namespace test  {
             ASSERT (pipe2 == pipe1);
             pipe2 = Session::current->defaults(Query<Pipe> ());
             ASSERT (pipe2 == pipe1);
-            pipe2 = asset::Struct::create (Query<Pipe> ());
+            pipe2 = asset::Struct::retrieve (Query<Pipe> ());
             ASSERT (pipe2 == pipe1);
-            pipe2 = asset::Struct::create (Query<Pipe> ("default(P)"));
+            pipe2 = asset::Struct::retrieve (Query<Pipe> ("default(P)"));
             ASSERT (pipe2 == pipe1);
           }
         
@@ -169,7 +169,7 @@ namespace test  {
                 ASSERT (3 == pipe1.use_count());  // that's the problem; it should be 2
                 
                 QueryHandler<Pipe>& typeHandler = ConfigRules::instance();  
-                PPipe pipe2 = asset::Struct::create (pID, "quatsch");
+                PPipe pipe2 = asset::Struct::retrieve (pID, "quatsch");
                 
                 typeHandler.resolve (pipe2, query_for_pID); // in the mock impl this has the side effect
                 ASSERT (pipe2);                            //  of replacing the mock entry

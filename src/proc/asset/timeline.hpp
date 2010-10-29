@@ -38,7 +38,7 @@
  ** Like every structural asset, the creation of timelines happens automatically
  ** on referral; Timelines can be queried from the StructFactory, providing additional
  ** requested capabilities. Commonly clients will retrieve a given timeline by query
- ** on the name-ID of the timeline: \c Struct::create(Query<Timeline>("id(theName)."))
+ ** on the name-ID of the timeline: \c Struct::retrieve(Query<Timeline>("id(theName)."))
  ** Additionally, the binding to a specific sequence may be established alongside:
  ** \c "timeline(theTimelineName),bindSequence(theTimelineName,sequenceID)." 
  ** 

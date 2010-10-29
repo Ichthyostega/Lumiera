@@ -26,8 +26,8 @@
  ** into the "bookkeeping view" as a specific Kind of Asset.
  ** For the different \em kinds of Assets, we use sub-interfaces inheriting
  ** from the general Asset interface, each of which expose a distinguishing feature.
- ** In the case of structural assets, the key point is a naming scheme allowing for
- ** retrieval of instances with specific capabilities; structural assets are created
+ ** In the case of structural assets, the key point is the ability to retrieve an
+ ** instance based on a capabilities query; structural assets are typically created
  ** on demand, just by referral. Thus, the collection of these assets provides a map
  ** for exploring the current session's structure and allow for tweaking of the
  ** default behaviour.
@@ -63,6 +63,7 @@
 #include "lib/query.hpp"
 #include "lib/factory.hpp"
 #include "lib/singleton.hpp"
+#include "lib/symbol.hpp"
 
 #include <boost/scoped_ptr.hpp>
 #include <string>
@@ -74,6 +75,7 @@ namespace asset {
   using std::string;
   using boost::scoped_ptr;
   using lumiera::Query;
+  using lib::Symbol;
   
   class Struct;
   class StructFactory;
@@ -98,13 +100,13 @@ namespace asset {
    * for later referral, search and attachment of metadata.
    * 
    * Examples being tracks, sequences, timelines, pipes, processing patterns
-   * 
-   * @todo WIP as of 1/2010. Need to integrate Sequences and Timelines
+   * @note embedded access point to instance creation or retrieval
+   *       through the static field #retrieve 
    */
   class Struct : public Asset
     {
     public:
-      static StructFactory create;
+      static StructFactory retrieve;
       
       virtual const ID<Struct>&
       getID()  const             ///< @return ID of kind asset::Struct 
@@ -149,11 +151,13 @@ namespace asset {
       typedef P<asset::Struct> PType;
       
       template<class STRU>
-      P<STRU> operator() (const Query<STRU>& query);      ////////////TODO for now we're just using a fake config query with preconfigured hardwired answers 
+      P<STRU> operator() (Query<STRU> const& query); 
       
       P<Pipe> operator() (string pipeID, string streamID);
 //    P<Timeline> operator() (MORef<Binding>);  ///////////TODO doesn't this create circular includes?? Any better idea how to refer to an existing binding?
       
+      template<class STRU>
+      P<STRU> newInstance (Symbol nameID  ="");
     };
     
     
