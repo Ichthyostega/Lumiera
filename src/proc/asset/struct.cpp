@@ -49,22 +49,6 @@ namespace asset {
   
   
   
-  /** query the currently defined properties of this
-      structural asset for a stream-ID predicate */
-  const string
-  Struct::queryStreamID()  const
-  {
-    return lumiera::query::extractID ("stream", this->ident.name);
-  }
-  
-  /** query the currently defined properties of this
-      structural asset for a pipe-ID predicate */
-  const string
-  Struct::queryPipeID()  const
-  {
-    return lumiera::query::extractID ("pipe", this->ident.name);
-  }
-  
   
   
   /** storage for the static StructFactory instance */

@@ -88,13 +88,13 @@ namespace asset
             ASSERT (thePipe);
             ASSERT (thePipe->getProcPatt());
             ASSERT (thePipe->getPipeID() == pID_sane);
-            ASSERT (thePipe->getProcPatt()->queryStreamID() == sID);
+            ASSERT (thePipe->getStreamID() == sID);
             ASSERT (thePipe->shortDesc == pID_sane);
             
             Asset::Ident idi = thePipe->ident;
             ASSERT (idi.org == "lumi");
             ASSERT (contains (idi.name, thePipe->getPipeID()));
-            ASSERT (contains (idi.name, thePipe->getProcPatt()->queryStreamID()));
+            ASSERT (contains (idi.name, thePipe->getStreamID()));
 
             Category cat (idi.category);
             Category refcat (STRUCT,"pipes");
@@ -133,8 +133,8 @@ namespace asset
             ASSERT (pipe1 == Session::current->defaults (Query<Pipe>()));
             ASSERT (pipe1->ident.category.hasKind(VIDEO));
             ASSERT (pipe1->getProcPatt());
-            PProcPatt popa = Session::current->defaults (Query<const ProcPatt>("pipe(default)"));
-            ASSERT (popa == pipe1->getProcPatt());
+            PProcPatt propa = Session::current->defaults (Query<const ProcPatt>("pipe(default)"));
+            ASSERT (propa == pipe1->getProcPatt());
             
             // several variants to query for "the default pipe"
             pipe2 = Session::current->defaults(Query<Pipe> ());
@@ -144,10 +144,10 @@ namespace asset
             pipe2 = asset::Struct::retrieve (Query<Pipe> ("pipe(default)"));
             ASSERT (pipe2 == pipe1);
             
-            string sID = popa->queryStreamID(); // sort of a "default stream type"
+            string sID = pipe1->getStreamID(); // sort of a "default stream type"
             PPipe pipe3 = Pipe::query ("stream("+sID+")");
             ASSERT (pipe3);
-            ASSERT (pipe3->getProcPatt()->queryStreamID() == sID);
+            ASSERT (pipe3->getStreamID() == sID);
             ASSERT (pipe3->getProcPatt() == Session::current->defaults (Query<const ProcPatt>("stream("+sID+")")));
           }
         

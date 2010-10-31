@@ -101,7 +101,7 @@ namespace asset {
             PPipe pipe2 = Struct::retrieve.newPipe (newID("pipe"), sID            );
             
             ASSERT (pipe1 != pipe2);
-            ASSERT (sID == pipe2->getProcPatt()->queryStreamID());
+            ASSERT (sID == pipe2->getStreamID());
             
             ASSERT (!find (pipe1->getPipeID()), "accidental clash of random test-IDs");
             ASSERT (!find (pipe2->getPipeID()), "accidental clash of random test-IDs");
@@ -116,7 +116,7 @@ lumiera::query::setFakeBypass("stream("+sID+")"); //////////////////////////////
             ASSERT ( find (pipe1->getPipeID()), "failure declaring object as default");
             ASSERT ( find (pipe2->getPipeID()), "failure declaring object as default");
             
-            ASSERT (sID != pipe1->getProcPatt()->queryStreamID(), "accidental clash");
+            ASSERT (sID != pipe1->getStreamID(), "accidental clash");
             ASSERT (!Session::current->defaults.define (pipe1, Query<Pipe> ("stream("+sID+")")));
                     // can't be registered with this query, due to failure caused by wrong stream-ID
           }

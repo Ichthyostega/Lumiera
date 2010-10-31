@@ -22,7 +22,7 @@
 
 
 /** @file struct-scheme.hpp
- ** Naming and labeling scheme for structural assets.
+ ** Naming and labelling scheme for structural assets.
  ** Preconfigured traits data for the relevant types encountered in
  ** Lumiera's session data model.
  **

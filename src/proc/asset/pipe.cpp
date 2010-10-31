@@ -37,12 +37,14 @@ namespace asset {
    *  default wiring.
    */
   Pipe::Pipe ( const Asset::Ident& idi
+             , string const& streamID
              , PProcPatt& wiring
              , string shortName
              , string longName
-             ) 
+             )
     : Struct (idi)
-    , wiringTemplate(wiring)
+    , wiringTemplate_(wiring)
+    , streamID_(streamID)
     , shortDesc (shortName)
     , longDesc (longName)
   {
@@ -50,7 +52,7 @@ namespace asset {
     if (isnil (shortDesc))
       shortDesc = string(idi);
   }
-
+  
   
   
   PPipe 
@@ -62,11 +64,11 @@ namespace asset {
   void 
   Pipe::switchProcPatt (PProcPatt& another)
   {
-    wiringTemplate = another;
+    wiringTemplate_ = another;
     TODO ("trigger rebuild fixture");
   }
-
-
-
-
+  
+  
+  
+  
 } // namespace asset

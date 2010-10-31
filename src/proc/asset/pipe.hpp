@@ -55,9 +55,11 @@ namespace asset {
    * of the model forming a processing pipe
    * for generating media output
    */
-  class Pipe : public Struct
+  class Pipe
+    : public Struct
     {
-      PProcPatt wiringTemplate;
+      PProcPatt wiringTemplate_;
+      const string streamID_;                   ///< @todo just a placeholder for now 10/10
       
     public:
       string shortDesc;
@@ -70,13 +72,15 @@ namespace asset {
       
       
     protected:
-      Pipe (Asset::Ident const&, PProcPatt& wiring, string shortName ="", string longName ="") ;
+      Pipe (Asset::Ident const&, string const& streamID, PProcPatt& wiring, string shortName ="", string longName ="") ;
       friend class StructFactory;
       friend class StructFactoryImpl;
       
     public:
-      const string& getPipeID()       const { return ident.name;     }
-      const PProcPatt& getProcPatt()  const { return wiringTemplate; }
+      string const& getPipeID()       const { return ident.name;      }
+      string const& getStreamID()     const { return streamID_;       }
+      PProcPatt const& getProcPatt()  const { return wiringTemplate_; }
+      
       
       /** use another wiring template. Triggers complete rebuild of the render engine. */
       void switchProcPatt (PProcPatt& another);

@@ -90,6 +90,7 @@ namespace asset {
    * Implementation details, especially concerning how configuration
    * queries are resolved and when to create new objects automatically.
    * @todo better use a general struct traits class, esp.for creating the Ident
+   * @todo shouldn't some of the generic factory logic be moved over into the struct baseclass? ////////////////TICKET #565
    */ 
   class StructFactoryImpl
     {
@@ -188,6 +189,7 @@ namespace asset {
     if (isnil (streamID)) streamID = "default"; 
     PProcPatt processingPattern = Session::current->defaults (Query<const ProcPatt>("stream("+streamID+")"));
     return new Pipe( idi
+                   , streamID
                    , processingPattern
                    );                             ///////////////////////TICKET #565  maybe store the capabilities query within the Struct asset somehow?
   }

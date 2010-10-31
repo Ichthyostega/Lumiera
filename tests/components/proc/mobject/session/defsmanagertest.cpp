@@ -117,7 +117,7 @@ namespace test  {
         retrieveConstrainedDefault (string pID, string sID)
           {
             PPipe pipe1 = Pipe::query (""); // "the default pipe"
-            ASSERT (sID != pipe1->getProcPatt()->queryStreamID(),
+            ASSERT (sID != pipe1->getStreamID(),
                     "stream-ID \"%s\" not suitable for test, because "
                     "the default-pipe \"%s\" happens to have the same "
                     "stream-ID. We need it to be different", 
@@ -126,7 +126,7 @@ namespace test  {
             
             string query_for_sID ("stream("+sID+")");
             PPipe pipe2 = Pipe::query (query_for_sID);
-            ASSERT (sID == pipe2->getProcPatt()->queryStreamID());
+            ASSERT (sID == pipe2->getStreamID());
             ASSERT (pipe2 != pipe1);
             ASSERT (pipe2 == Pipe::query (query_for_sID));   // reproducible
           }

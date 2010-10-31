@@ -55,10 +55,10 @@ namespace asset
   
   
   /** create a new ProcPatt asset as a literal copy
-   *  of this one. The new ProcPatt can then be customized
+   *  of this one. The new ProcPatt can then be customised
    *  independently of the original one. This allows using
    *  some ProcPatt as a template for creating more
-   *  spezialized patterns. 
+   *  specialised patterns. 
    */
   P<ProcPatt> 
   ProcPatt::newCopy (string newID)  const

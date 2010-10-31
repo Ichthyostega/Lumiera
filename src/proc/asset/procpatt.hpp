@@ -33,8 +33,8 @@ using std::vector;
 
 
 
-namespace asset
-  {
+namespace asset {
+  
   using lumiera::P;
   using lib::Symbol;
 
@@ -51,7 +51,8 @@ namespace asset
    * representing information how to build some part 
    * of the render engine's processing nodes network.
    */
-  class ProcPatt : public Struct
+  class ProcPatt
+    : public Struct
     {
       InstructionSequence instructions_;
       

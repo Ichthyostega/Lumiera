@@ -31,7 +31,7 @@
  ** on demand, just by referral. Thus, the collection of these assets provides a map
  ** for exploring the current session's structure and allow for tweaking of the
  ** default behaviour.
- ** - Track acts as unique track ID
+ ** - Track acts as unique track ID <i>(note: to be removed and replaced by a plain \c entryID )</i>
  ** - Timeline and Sequence are facades, part of the session API
  ** - Pipe is an attachment point for wiring connections and defines a StreamType
  ** - ProcPatt is used as a blueprint in the build process, a standard connection pattern
@@ -90,7 +90,7 @@ namespace asset {
       ID (size_t id);
       ID (const Struct&);
     };
-
+    
     
     
   /**
@@ -114,8 +114,6 @@ namespace asset {
           return static_cast<const ID<Struct>& > (Asset::getID()); 
         }
       
-      const string queryStreamID()  const;
-      const string queryPipeID()    const;
       
       
     protected:
@@ -126,7 +124,7 @@ namespace asset {
     
     // definition of ID<Struct> ctors is possible now,
    //  after providing full definition of class Struct
-
+  
   inline ID<Struct>::ID(size_t id)          : ID<Asset> (id)           {};
   inline ID<Struct>::ID(const Struct& stru) : ID<Asset> (stru.getID()) {};
   
@@ -141,11 +139,11 @@ namespace asset {
   class StructFactory : public lib::Factory<asset::Struct>
     {
       scoped_ptr<StructFactoryImpl> impl_;
-
+      
     protected:
       StructFactory ();
       friend class Struct;
-
+      
       
     public:
       typedef P<asset::Struct> PType;
@@ -160,8 +158,8 @@ namespace asset {
       
       P<Pipe> newPipe (string pipeID, string streamID);
     };
-    
-    
-    
+  
+  
+  
 } // namespace asset
 #endif
