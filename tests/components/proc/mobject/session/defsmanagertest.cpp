@@ -166,7 +166,7 @@ namespace test  {
 // this is fine but doesn't work as long as there is another entry in the mock table...
 // ...for now we use a hack to overwrite the reference in the mock table                
 //
-                ASSERT (3 == pipe1.use_count());  // that's the problem; it should be 2
+                ASSERT (3 == pipe1.use_count());  // that's the problem; it should be 2 (the pipe1 smart-ptr and the AssetManager) 
                 
                 QueryHandler<Pipe>& typeHandler = ConfigRules::instance();  
                 PPipe pipe2 = asset::Struct::retrieve.newPipe (pID, "quatsch");

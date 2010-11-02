@@ -57,6 +57,7 @@ namespace lumiera {
     
     void setFakeBypass(string const& q)  { fakeBypass = q; }
     bool isFakeBypass (string const& q)  { return q == fakeBypass; }
+    /////////////////////////////////////////////////////////////////////////////TICKET 710
     
   } // namespace query
   

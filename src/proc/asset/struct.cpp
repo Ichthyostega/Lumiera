@@ -113,6 +113,24 @@ namespace asset {
   }
   
   
+  ////////////////////////////////////////////////////////////////////////////////////TICKET #710 : backdoor for fake-configrules
+  /** special backdoor for fake-configrules.hpp
+   *  This allows to simulate creation of objects triggered by rules.
+   *  Actually we use just a fake implementation based on a table lookup
+   *  plus some hard wired special cases, which need to call in here to
+   *  fabricate new objects, which can then be used as "solutions".
+   * @param query a prolog like query string
+   * @note  works quite similar like the #operator(), but without
+   *        re-invoking the ConfigRules....
+   */
+  template<class STRU>
+  P<STRU>
+  StructFactory::made4fake (Query<STRU> const& query)
+  {
+    STRU* pS = impl_->fabricate(query);
+    return AssetManager::instance().wrap (*pS);
+  }
+  ////////////////////////////////////////////////////////////////////////////////////TICKET #710 : backdoor for fake-configrules
   
   
   /** Factory method for creating Pipes explicitly.
@@ -155,15 +173,19 @@ namespace asset {
 
 namespace asset {
   
-  template P<Pipe>     StructFactory::operator() (const Query<Pipe>& query);
-  template PProcPatt   StructFactory::operator() (const Query<const ProcPatt>& query);
-  template PTimeline   StructFactory::operator() (const Query<Timeline>& query);
-  template PSequence   StructFactory::operator() (const Query<Sequence>& query);
+  template P<Pipe>     StructFactory::operator() (Query<Pipe> const&);
+  template PProcPatt   StructFactory::operator() (Query<const ProcPatt> const&);
+  template PTimeline   StructFactory::operator() (Query<Timeline> const&);
+  template PSequence   StructFactory::operator() (Query<Sequence>const&);
   
   template P<Pipe>     StructFactory::newInstance (Symbol);
   template PProcPatt   StructFactory::newInstance (Symbol);
   template PTimeline   StructFactory::newInstance (Symbol);
   template PSequence   StructFactory::newInstance (Symbol);
   
+  template P<Pipe>     StructFactory::made4fake   (Query<Pipe> const&);          
+  template PProcPatt   StructFactory::made4fake   (Query<const ProcPatt> const&);
+  template PTimeline   StructFactory::made4fake   (Query<Timeline> const&);      
+  template PSequence   StructFactory::made4fake   (Query<Sequence>const&);       
   
 } // namespace asset

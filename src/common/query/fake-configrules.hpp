@@ -28,7 +28,9 @@
  ** as answer values. As of 1/2008 it is used to "keep the implementation work going"
  ** -- later on, when we use a real Prolog interpreter, it still may be useful for
  ** testing and debugging.
- **
+ ** 
+ ** @todo to be removed in Alpha, when integrating a real resolution engine /////////////////TICKET #710
+ ** 
  ** @see lumiera::Query
  ** @see lumiera::ConfigRules
  **
@@ -109,7 +111,7 @@ namespace lumiera {
         template<class TY> 
         bool detect_case (typename WrapReturn<TY>::Wrapper&, Query<TY>& q);
         bool fabricate_matching_new_Pipe (Query<Pipe>& q, string const& pipeID, string const& streamID);
-        bool fabricate_just_new_Pipe (Query<Pipe>& q);
+        bool fabricate_just_new_Pipe     (Query<Pipe>& q);
         bool fabricate_ProcPatt_on_demand (Query<const ProcPatt>& q);
         bool fabricate_Timeline_on_demand (Query<asset::Timeline>& q);
         bool fabricate_Sequence_on_demand (Query<asset::Sequence>& q);
@@ -182,9 +184,8 @@ namespace lumiera {
     MockTable::detect_case (WrapReturn<Pipe>::Wrapper& candidate, Query<Pipe>& q)
     {
       if (!isnil (extractID("make", q)))
-        return false; // let the query fail here,
-                     //  so the invoking factory will go ahead
-                    //   and create a new object. (prevents infinite recursion)
+        // used by tests to force fabrication of a new "solution"
+        return fabricate_just_new_Pipe (q);
       
       const string pipeID   = extractID("pipe", q);
       const string streamID = extractID("stream", q);
@@ -205,10 +206,8 @@ namespace lumiera {
     inline bool 
     MockTable::detect_case (WrapReturn<const ProcPatt>::Wrapper& candidate, Query<const ProcPatt>& q)
     {
-      if (!isnil (extractID("make", q)))
-        return false; // failure triggers creation...
-      
       const string streamID = extractID("stream", q);
+      
       if (!candidate && !isnil(streamID))
           return fabricate_ProcPatt_on_demand (q);
       
@@ -219,9 +218,6 @@ namespace lumiera {
     inline bool 
     MockTable::detect_case (WrapReturn<asset::Timeline>::Wrapper& candidate, Query<asset::Timeline>& q)
     {
-      if (!isnil (extractID("make", q)))
-        return false; // failure triggers creation...
-      
       if (!candidate)
           return fabricate_Timeline_on_demand (q);
       
@@ -232,9 +228,6 @@ namespace lumiera {
     inline bool 
     MockTable::detect_case (WrapReturn<asset::Sequence>::Wrapper& candidate, Query<asset::Sequence>& q)
     {
-      if (!isnil (extractID("make", q)))
-        return false; // failure triggers creation...
-      
       if (!candidate)
           return fabricate_Sequence_on_demand (q);
       

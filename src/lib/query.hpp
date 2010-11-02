@@ -60,8 +60,8 @@ namespace lumiera {
           return string(typeid(OBJ).name())+": "+*this;
         }
       
-      operator string& () { return *this; }      // TODO: needed temporarily by fake-configrules
-    };                                          //        for calling removeTerm on the string-ref....
+      operator string& () { return *this; }      //TICKET #710 : needed temporarily by fake-configrules 
+    };                                          //               for calling removeTerm on the string-ref....
   
   
   namespace query {

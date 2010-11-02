@@ -244,6 +244,7 @@ namespace lumiera {  ///////TODO: shouldn't that be namespace lib? or proc?
      *  as the query system is not able to do real query resolution */
     void setFakeBypass(string const& q);
     bool isFakeBypass (string const& q);
+    /////////////////////////////////////////////////////////////////////////////TICKET 710
     
   } // namespace query
   

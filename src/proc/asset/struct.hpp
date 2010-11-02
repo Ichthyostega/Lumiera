@@ -156,6 +156,9 @@ namespace asset {
       template<class STRU>
       P<STRU> newInstance (Symbol nameID  ="");
       
+      template<class STRU>
+      P<STRU> made4fake  (Query<STRU> const& query);  ///< @warning to be removed in Alpha when using a real resolution engine /////TICKET #710
+      
       P<Pipe> newPipe (string pipeID, string streamID);
     };
   

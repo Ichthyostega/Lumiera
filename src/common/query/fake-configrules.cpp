@@ -35,6 +35,7 @@
 
 using util::isnil;
 
+//////////////////////////////////////////////////////////////////TICKET #710 : to be removed entirely in Alpha
 
 namespace lumiera {
   
@@ -135,7 +136,7 @@ namespace lumiera {
     {
       typedef WrapReturn<Pipe>::Wrapper Ptr;
       
-      Ptr newPipe (Struct::retrieve (Query<Pipe> (string("make(PP), ")+q)));
+      Ptr newPipe (Struct::retrieve.made4fake (q));
       answer_->insert (entry<Pipe> (q, newPipe));
       return true;
     }
@@ -147,12 +148,15 @@ namespace lumiera {
       typedef const ProcPatt cPP;
       typedef WrapReturn<cPP>::Wrapper Ptr;
       
-      Ptr newPP (Struct::retrieve (Query<cPP> ("make(PP), "+q)));   // magic token: bail out and invoke factory for new object
+      Ptr newPP (Struct::retrieve.made4fake (q));
       answer_->insert (entry<cPP> (q, newPP));
       return true;
     }
     
-    /** special case: fabricate new Timeline, maybe using ID specs from the query... */
+    /** special case: fabricate new Timeline, maybe using specific sub-objects
+     *  as hinted by the IDs given within the query. This might include searching
+     *  the session's timelines / sequences to retrieve an existing object
+     *  with matching ID... */
     bool 
     MockTable::fabricate_Timeline_on_demand (Query<asset::Timeline>& query)
     {
@@ -176,10 +180,10 @@ namespace lumiera {
             break;
           }
       
-      if (!newTimeline)                                                 // no suitable Timeline found: create and attach new one
-        newTimeline = Struct::retrieve (Query<aTl> ("make(TL), "+query));
-                                                                      //  "make" magic token: bail out and invoke factory for new object
-      answer_->insert (entry<aTl> (query, newTimeline));             //    learn the found/created Timeline as new solution
+      if (!newTimeline)
+        newTimeline = Struct::retrieve.made4fake (query);     // no suitable Timeline found: create and attach new one
+      
+      answer_->insert (entry<aTl> (query, newTimeline));    //   "learn" the found/created Timeline as new solution
       return true;
     }
     
@@ -208,7 +212,7 @@ namespace lumiera {
           }
       
       if (!newSequence)                                            
-        newSequence = Struct::retrieve (Query<aSq> ("make(SQ), "+query)); // no suitable found: create and attach new Sequence
+        newSequence = Struct::retrieve.made4fake (query);   // no suitable found: create and attach new Sequence
       
       answer_->insert (entry<aSq> (query, newSequence));
       return true;
