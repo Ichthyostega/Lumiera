@@ -24,12 +24,12 @@
 #include "pre_a.hpp"
 
 #include "lib/test/run.hpp"
+#include "lib/symbol.hpp"
+#include "lib/query.hpp"
 #include "lib/util.hpp"
 
 #include "proc/asset.hpp"
 #include "proc/asset/pipe.hpp"
-#include "lib/query.hpp"
-#include "common/configrules.hpp"   ///////TODO just temp
 #include "proc/assetmanager.hpp"
 #include "proc/mobject/session.hpp"
 
@@ -43,13 +43,12 @@ using std::string;
 
 namespace asset {
 namespace test  {
-  
+    
+    using util::cStr;
+    using lib::Symbol;
     using mobject::Session;
     using lumiera::Query;
     using lumiera::query::normaliseID;
-    
-    using lumiera::ConfigRules;               ////TODO just temp
-    using lumiera::query::QueryHandler;      ////TODO just temp
     
     
     /** shortcut: run just a query
@@ -57,8 +56,8 @@ namespace test  {
      */
     bool 
     find (Query<Pipe>& q) 
-    { 
-      return Session::current->defaults.search (q); 
+    {
+      return Session::current->defaults.search (q);
     }
     
     
@@ -69,6 +68,7 @@ namespace test  {
      *       - retrieving a "default" object repeatedly
      *       - retrieving a more constrained "default" object
      *       - failure registers a new "default"
+     *       - instance management
      * 
      * Using pipe assets as an example. The defaults manager shouldn't
      * interfere with memory management (it holds weak refs).
@@ -86,8 +86,8 @@ namespace test  {
             
             retrieveSimpleDefault (pipeID);
             retrieveConstrainedDefault (pipeID, streamID);
-            pipeID = failureCreatesNewDefault();
-            verifyRemoval (pipeID);
+            failureCreatesNewDefault();
+            verifyRemoval();
           }
         
         
@@ -132,7 +132,8 @@ namespace test  {
           }
         
         
-        string failureCreatesNewDefault ()
+        void
+        failureCreatesNewDefault()
           { 
             PPipe pipe1 = Session::current->defaults(Query<Pipe> ()); // "the default pipe"
             
@@ -148,7 +149,6 @@ namespace test  {
             
             ASSERT (pipe1 != pipe2);
             ASSERT (pipe2 == Session::current->defaults (query_for_new));
-            return new_pID;
           }
         
         
@@ -156,29 +156,22 @@ namespace test  {
          *  so if an object goes out of scope, any defaults entries
          *  are purged silently
          */
-        void verifyRemoval (string pID)
+        void
+        verifyRemoval()
           { 
+            Symbol pID ("some_pipe");
             Query<Pipe> query_for_pID ("pipe("+pID+")");
             size_t hash;
               {
-                PPipe pipe1 = Session::current->defaults (query_for_pID);
-//
-// this is fine but doesn't work as long as there is another entry in the mock table...
-// ...for now we use a hack to overwrite the reference in the mock table                
-//
-                ASSERT (3 == pipe1.use_count());  // that's the problem; it should be 2 (the pipe1 smart-ptr and the AssetManager) 
+                // create new pipe and declare it to be a default
+                PPipe pipe1 = Struct::retrieve.newInstance<Pipe> (pID);
+                Session::current->defaults.define(pipe1);
                 
-                QueryHandler<Pipe>& typeHandler = ConfigRules::instance();  
-                PPipe pipe2 = asset::Struct::retrieve.newPipe (pID, "quatsch");
-                
-                typeHandler.resolve (pipe2, query_for_pID); // in the mock impl this has the side effect
-                ASSERT (pipe2);                            //  of replacing the mock entry
-                ////////////////////////////////////////////   so from here onward the test works as intended....                
-                
-                ASSERT (2 == pipe1.use_count());          
+                ASSERT (2 == pipe1.use_count());                        // the pipe1 smart-ptr and the AssetManager
                 hash = pipe1->getID();
               }
-             // now AssetManager should hold the only ref
+              // pipe1 out of scope....
+             //  AssetManager now should hold the only ref
             ID<Asset> assetID (hash);
               
             AssetManager& aMang (AssetManager::instance());
@@ -194,9 +187,9 @@ namespace test  {
       };
     
     
+    
     /** Register this test class... */
     LAUNCHER (DefsManager_test, "function session");
-    
     
     
 }} // namespace asset::test

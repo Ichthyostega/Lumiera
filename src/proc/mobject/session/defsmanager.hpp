@@ -96,7 +96,7 @@ namespace mobject {
          *  @note only a weak ref to the object is stored
          */ 
         template<class TAR>
-        bool define  (P<TAR> const&, lumiera::Query<TAR> const&);
+        bool define  (P<TAR> const&, lumiera::Query<TAR> const&  =lumiera::Query<TAR>());
         
         /** remove the defaults registration of the given object, if there was such
          *  @return false if nothing has been changed because the object wasn't registered
