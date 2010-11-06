@@ -41,8 +41,10 @@
  ** @warning AutoRegistered does not check accessibility of the configured
  ** registry, when detaching an element. Especially, when detaching in turn
  ** gets automatically invoked from some kind of cleanup, care has to be taken
- ** to ensure the registry is still available. Ignoring this might lead to
- ** segfault on application shutdown. ///TICKET #574
+ ** to ensure the registry is still available. The Functions
+ ** AutoRegistered::is_attached_to and AutoRegistered::deactivateRegistryLink
+ ** can be used for detaching an Registry explicitly before destruction.
+ ** Ignoring this might lead to segfault on application shutdown. /////////////////TICKET #574
  ** 
  ** @see session-element-tracker-test.cpp
  ** @see session-interface-modules.hpp
@@ -56,18 +58,15 @@
 #define LIB_ELEMENT_TRACKER_H
 
 #include "lib/p.hpp"
-#include "lib/wrapper.hpp"
+#include "lib/optional-ref.hpp"
 #include "lib/util-foreach.hpp"
 #include "lib/ref-array-impl.hpp"
-
-#include <tr1/functional>
 
 
 
 namespace lib {
   
   using lumiera::P;
-  using std::tr1::function;
   using util::isSameObject;
   
   /**
@@ -173,7 +172,7 @@ namespace lib {
     {
     public:
       typedef lib::ElementTracker<TAR> Registry;
-      typedef function<Registry&(void)> RegistryLink;
+      typedef lib::OptionalRef<Registry> RegistryLink;
       
       /** detach this element
        *  from the element-tracking registry.
@@ -210,31 +209,22 @@ namespace lib {
         }
       
       
-      template<typename FUN>
-      static void
-      establishRegistryLink (FUN link)
-        {
-          AutoRegistered::getRegistry = link;
-        }
-      
       static void
       setRegistryInstance (Registry& registry_to_use)
         {
-          RegistryLink accessInstance = wrapper::refFunction(registry_to_use);
-          establishRegistryLink (accessInstance);
+          getRegistry.link_to (registry_to_use);
         }
       
       static void
       deactivateRegistryLink()
         {
-          getRegistry = RegistryLink();  // empty accessor function
+          getRegistry.clear();
         }
       
       static bool
       is_attached_to (Registry const& someRegistry)
         {
-          return bool(getRegistry)
-              && isSameObject (someRegistry, getRegistry());
+          return getRegistry.points_to (someRegistry);
         }
       
     protected:

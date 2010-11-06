@@ -53,7 +53,7 @@ namespace asset {
     getRegistry().append (newElement);
     
     ENSURE (newElement);
-    ENSURE (getRegistry().isRegistered(*newElement));
+    ENSURE (getRegistry().isRegistered (*newElement));
     return newElement;
   }
   

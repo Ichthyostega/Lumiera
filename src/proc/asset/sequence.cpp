@@ -47,7 +47,7 @@ namespace asset {
     getRegistry().append (newSeq);
     
     ENSURE (newSeq);
-    ENSURE (getRegistry().isRegistered(*newSeq));
+    ENSURE (getRegistry().isRegistered (*newSeq));
     return newSeq;
   }
   
