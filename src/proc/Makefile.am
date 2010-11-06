@@ -54,6 +54,7 @@ liblumiprocasset_la_SOURCES =				\
 	$(liblumiprocasset_la_srcdir)/sequence.cpp	\
 	$(liblumiprocasset_la_srcdir)/struct.cpp	\
 	$(liblumiprocasset_la_srcdir)/timeline.cpp	\
+	$(liblumiprocasset_la_srcdir)/typed-lookup.cpp	\
 	$(liblumiprocasset_la_srcdir)/unknown.cpp
 
 

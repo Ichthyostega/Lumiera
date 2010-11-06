@@ -50,6 +50,7 @@ test_components_SOURCES =								\
 	$(testcomponents_srcdir)/proc/asset/mediastructurequerytest.cpp			\
 	$(testcomponents_srcdir)/proc/asset/orderingofassetstest.cpp			\
 	$(testcomponents_srcdir)/proc/asset/testasset.cpp				\
+	$(testcomponents_srcdir)/proc/asset/typed-id-test.cpp				\
 	$(testcomponents_srcdir)/proc/control/argument-tuple-accept-test.cpp		\
 	$(testcomponents_srcdir)/proc/control/command-argument-test.cpp			\
 	$(testcomponents_srcdir)/proc/control/command-basic-test.cpp			\
@@ -73,10 +74,11 @@ test_components_SOURCES =								\
 	$(testcomponents_srcdir)/proc/mobject/builder/buildertooltest.cpp		\
 	$(testcomponents_srcdir)/proc/mobject/builder/buildsegmenttest.cpp		\
 	$(testcomponents_srcdir)/proc/mobject/controller/rendersegmenttest.cpp		\
-	$(testcomponents_srcdir)/proc/mobject/mobject-interface-test.cpp 		\
+	$(testcomponents_srcdir)/proc/mobject/mobject-interface-test.cpp		\
 	$(testcomponents_srcdir)/proc/mobject/mobject-ref-test.cpp			\
 	$(testcomponents_srcdir)/proc/mobject/placement-basic-test.cpp			\
 	$(testcomponents_srcdir)/proc/mobject/placement-hierarchy-test.cpp		\
+	$(testcomponents_srcdir)/proc/mobject/placement-object-identity-test.cpp	\
 	$(testcomponents_srcdir)/proc/mobject/placement-ref-test.cpp			\
 	$(testcomponents_srcdir)/proc/mobject/session/addcliptest.cpp			\
 	$(testcomponents_srcdir)/proc/mobject/session/defsmanagerimpltest.cpp		\
@@ -93,10 +95,14 @@ test_components_SOURCES =								\
 	$(testcomponents_srcdir)/proc/mobject/session/scope-path-test.cpp		\
 	$(testcomponents_srcdir)/proc/mobject/session/scope-query-test.cpp		\
 	$(testcomponents_srcdir)/proc/mobject/session/session-element-query-test.cpp	\
-	$(testcomponents_srcdir)/proc/mobject/session/session-service-access-test.cpp	\
+	$(testcomponents_srcdir)/proc/mobject/session/session-element-tracker-test.cpp	\
 	$(testcomponents_srcdir)/proc/mobject/session/sessionmanagertest.cpp		\
+	$(testcomponents_srcdir)/proc/mobject/session/session-modify-parts-test.cpp	\
+	$(testcomponents_srcdir)/proc/mobject/session/session-service-access-test.cpp	\
+	$(testcomponents_srcdir)/proc/mobject/session/session-structure-test.cpp	\
+	$(testcomponents_srcdir)/proc/mobject/session/testclip.cpp			\
 	$(testcomponents_srcdir)/proc/mobject/session/test-scopes.cpp			\
-	$(testcomponents_srcdir)/proc/mobject/session/testclip.cpp
+	$(testcomponents_srcdir)/proc/mobject/session/timeline-sequence-handling-test.cpp
 
 
 noinst_HEADERS +=							\
