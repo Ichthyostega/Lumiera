@@ -24,15 +24,8 @@
 
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
-//#include "lib/util.hpp"
 
 #include "lib/optional-ref.hpp"
-
-//#include <tr1/functional>
-//#include <iostream>
-//#include <cstdlib>
-//#include <string>
-//#include <vector>
 
 
 
@@ -46,15 +39,14 @@ namespace test{
   
   
   
-  
-  
-  
-  
-  
-  
   /*******************************************************************************
-   * @test verify a reference-like wrapper class, used to provide a switchable link 
-   *       to an already existing object. 
+   * @test verify a reference-like wrapper class,
+   *       used to provide a switchable link to an already existing object.
+   *       - bottom ref can be detected by bool check
+   *       - access to bottom ref raises exception
+   *       - refs can be compared
+   *       - refs can be changed and copied
+   *       - access to refs is secure even after destructor invocation
    *       
    * @see  lib::OptionalRef
    * @see  lib::AutoRegistered usage example
@@ -137,7 +129,7 @@ namespace test{
           
           // access is secured even after destruction
           CHECK (r3);
-          r1.~OptionalRef();
+          r3.~SRef();       // don't try this at home!
           CHECK (!r3);
           VERIFY_ERROR (BOTTOM_VALUE, r3 == s1 );
           CHECK (r3 != r2);
@@ -154,4 +146,3 @@ namespace test{
   
   
 }} // namespace lib::test
-

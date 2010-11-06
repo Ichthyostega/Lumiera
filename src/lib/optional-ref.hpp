@@ -26,11 +26,6 @@
 
 #include "lib/error.hpp"
 #include "lib/bool-checkable.hpp"
-#include "lib/util.hpp"
-
-//#include <boost/type_traits/remove_const.hpp>
-//#include <boost/noncopyable.hpp>
-//#include <tr1/functional>
 
 
 namespace lib {
@@ -38,26 +33,6 @@ namespace lib {
   using lumiera::error::LUMIERA_ERROR_BOTTOM_VALUE;
   
   
-  /** 
-   * Reference wrapper implemented as constant function,
-   * returning the (fixed) reference on invocation
-   */
-  template<typename T>
-  class ReturnRef
-    {
-      T& ref_;
-      
-    public:
-      ReturnRef(T& target) : ref_(target) { }
-      T& operator() ()  const { return ref_;}
-    };
-  
-  template<typename T>
-  ReturnRef<T>
-  refFunction (T& target)
-  {
-    return ReturnRef<T> (target);
-  }
   
   
   
@@ -68,18 +43,108 @@ namespace lib {
    * is managed automatically by ctor and dtor, can be detected
    * through \c bool check and -- contrary to a \c NULL pointer
    * -- produces a real exception instead of crashing.
+   * 
    * @note \em not taking ownership of the pointee
+   * 
+   * @see OptionalRef_test
+   * @see lib::AutoRegistered usage example
+   * @see SessionInterfaceModules::~SessionInterfaceModules()
+   * 
    */
   template<typename T>
   class OptionalRef
+    : public lib::BoolCheckable<OptionalRef<T> >
     {
       T* ref_;
       
+      
     public:
-      OptionalRef() : ref_(0) { }
-      OptionalRef(T& target) : ref_(&target) { }
-     ~OptionalRef() { ref_ = 0; }
+      OptionalRef()
+        : ref_(0)
+        { }
+      
+     ~OptionalRef()
+       {
+         clear();
+       }
+      
+      // using default copy operations...
+      
+      explicit
+      OptionalRef(T& target)     ///< ...\em not allowing implicit conversion from T&
+        : ref_(&target)
+        { }
+      
+      operator T& ()  const      ///< ...allowing implicit conversion to T&
+        {
+          if (!isValid())
+            throw lumiera::error::Logic ("access to this object is (not/yet) enabled"
+                                        , LUMIERA_ERROR_BOTTOM_VALUE);
+          return *ref_;
+        }
+      
+      
+      /* === mutations ===*/
+      
+      void
+      link_to (T& target)
+        {
+          ref_ = &target;
+        }
+      
+      void
+      clear()
+        {
+          ref_ = 0;
+        }
+      
+      
+      /* === comparison and diagnostics === */
+      
+      bool
+      isValid()  const
+        {
+          return bool(ref_);
+        }
+      
+      bool
+      points_to (T const& target)  const
+        {
+          return isValid()
+              && ref_ == &target;
+        }
+      
+      friend bool
+      operator== (OptionalRef const& r1, OptionalRef const& r2)
+      {
+        return r1.ref_ == r2.ref_;
+      }
+      friend bool
+      operator!= (OptionalRef const& r1, OptionalRef const& r2)
+      {
+        return r1.ref_ != r2.ref_;
+      }
+      
+      // mixed comparisons
+      friend bool
+      operator== (OptionalRef const& ref, T const& otherTarget)  ///< @note might throw
+      {
+        T const& thisTarget (ref); // might throw
+        return thisTarget == otherTarget;
+      }
+      
+      friend bool operator== (T const& otherTarget, OptionalRef const& ref) { return ref == otherTarget; }
+      friend bool operator!= (T const& otherTarget, OptionalRef const& ref) { return !(ref == otherTarget); }
+      friend bool operator!= (OptionalRef const& ref, T const& otherTarget) { return !(ref == otherTarget); }
     };
+  
+  
+  template<typename T>
+  OptionalRef<T>
+  optionalRefTo (T& target)
+  {
+    return OptionalRef<T> (target);
+  }
   
   
   

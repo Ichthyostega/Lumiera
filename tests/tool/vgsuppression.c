@@ -26,10 +26,14 @@
 #include "lib/tmpbuf.h"
 #include <stdint.h>
 
+typedef const char* lumiera_err;
 struct lumiera_errorcontext_struct;
 
 struct lumiera_errorcontext_struct*
 lumiera_error_get (void);
+
+lumiera_err
+lumiera_error_set (lumiera_err, const char*);
 
 
 int
@@ -44,6 +48,7 @@ main ()
 
   /* lumiera_error_get() mallocs a LumieraErrorcontext for each thread */
   lumiera_error_get();
+  lumiera_error_set("dummy","dummy");
 
   return 0;
 }
