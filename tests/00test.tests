@@ -7,7 +7,7 @@ return: 0
 END
 
 TEST "test stderr, cat'ing noonexistant file" ,nonexistent_file <<END
-err: /bin/cat: ,nonexistent_file: No such file or directory
+err: /bin/cat: ,nonexistent_file:
 return: 1
 END
 
