@@ -78,6 +78,7 @@ test_lib_SOURCES =							\
 	$(testlib_srcdir)/null-value-test.cpp				\
 	$(testlib_srcdir)/opaque-holder-test.cpp			\
 	$(testlib_srcdir)/opaque-unchecked-buffer-test.cpp		\
+	$(testlib_srcdir)/optional-ref-test.cpp				\
 	$(testlib_srcdir)/query/query-utils-test.cpp			\
 	$(testlib_srcdir)/removefromsettest.cpp				\
 	$(testlib_srcdir)/sanitised-identifier-test.cpp			\
