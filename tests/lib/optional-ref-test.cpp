@@ -65,7 +65,7 @@ namespace test{
           
           SRef r1;
           CHECK (!r1);
-          VERIFY_ERROR (BOTTOM_VALUE, s1 = r1 );
+          VERIFY_ERROR (BOTTOM_VALUE, r1() );
           VERIFY_ERROR (BOTTOM_VALUE, s1 == r1 );
           VERIFY_ERROR (BOTTOM_VALUE, r1 == s1 );
           CHECK (!r1.points_to (s1));
@@ -95,7 +95,7 @@ namespace test{
           
           r2.clear();
           CHECK (!r2);
-          VERIFY_ERROR (BOTTOM_VALUE, s1 = r2 );
+          VERIFY_ERROR (BOTTOM_VALUE, r2() );
           VERIFY_ERROR (BOTTOM_VALUE, s1 == r2 );
           VERIFY_ERROR (BOTTOM_VALUE, r2 == s1 );
           VERIFY_ERROR (BOTTOM_VALUE, r2 == s2 );

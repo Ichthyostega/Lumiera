@@ -38,7 +38,7 @@ namespace lib {
   
   /** 
    * Optional or switchable link to an existing object.
-   * This reference wrapper normally behaves like a reference,
+   * This reference wrapper is accessed like a functor,
    * but has the ability to be \em disabled. This disabled state
    * is managed automatically by ctor and dtor, can be detected
    * through \c bool check and -- contrary to a \c NULL pointer
@@ -75,7 +75,8 @@ namespace lib {
         : ref_(&target)
         { }
       
-      operator T& ()  const      ///< ...allowing implicit conversion to T&
+      T&
+      operator() ()  const
         {
           if (!isValid())
             throw lumiera::error::Logic ("access to this object is (not/yet) enabled"
@@ -129,8 +130,7 @@ namespace lib {
       friend bool
       operator== (OptionalRef const& ref, T const& otherTarget)  ///< @note might throw
       {
-        T const& thisTarget (ref); // might throw
-        return thisTarget == otherTarget;
+        return ref() == otherTarget;
       }
       
       friend bool operator== (T const& otherTarget, OptionalRef const& ref) { return ref == otherTarget; }
