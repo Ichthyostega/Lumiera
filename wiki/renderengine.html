@@ -5110,7 +5110,7 @@ Instead, we should try to just connect the various subsystems via Interfaces and
 * to shield the rendering code of all complexities of thread communication and synchronization, we use the StateProxy
 </pre>
 </div>
-<div title="StructAsset" modifier="Ichthyostega" modified="201010290143" created="200709221353" tags="def classes img" changecount="19">
+<div title="StructAsset" modifier="Ichthyostega" modified="201011060513" created="200709221353" tags="def classes img" changecount="20">
 <pre>Structural Assets are intended mainly for internal use, but the user should be able to see and query them. They are not &quot;loaded&quot; or &quot;created&quot; directly, rather they //leap into existence // by creating or extending some other structures in the session, hence the name. Some of the structural Asset parametrisation can be modified to exert control on some aspects of the Proc Layer's (default) behaviour.
 * [[Processing Patterns|ProcPatt]] encode information how to set up some parts of the render network to be created automatically: for example, when building a clip, we use the processing pattern how to decode and pre-process the actual media data.
 * [[Tracks|Track]] are one of the dimensions used for organizing the session data. They serve as an Anchor to attach parametrisation of output pipe, overlay mode etc. By [[placing|Placement]] to a track, a media object inherits placement properties from this track.
@@ -5119,8 +5119,8 @@ Instead, we should try to just connect the various subsystems via Interfaces and
 * [[Timeline]] assets are the top level structures to access the model; similar to the sequences, they act as façade to relevant parts of the model (BindingMO) and will be created on demand, alongside with a new session if necessary, bound to the new timeline. Likewise, they can be referred by their name-ID 
 
 
-!naming scheme
-The Asset name field of structural Assets utilizes a special naming scheme, which allows to derive the name based on the capabilities of the structural asset. For example, by default all media clips with a given media stream type (e.g. H264) will use the same [[processing Pattern|ProcPatt]] for rendering. {{red{todo: work out the details of this naming scheme??}}}
+
+
 
 !querying
 Structural assets can be queried by specifying the specific type (Pipe, Track, ProcPatt) and a query goal. For example, you can {{{Query&lt;Pipe&gt; (&quot;stream(mpeg)&quot;)}}}, yielding the first pipe found which declares to have stream type &quot;mpeg&quot;. The access point for this querying facility is on the ~StructFactory, which (as usual within Lumiera) can be invoked as static member {{{Struct::retrieve(Query&lt;TY&gt; ...}}}. Given such a query, first an attempt is made to satisfy it by retrieving an existing object of type TY (which might bind variables as a side effect). On failure, a new structural asset of the requested type will be created to satisfy the given goal. In case you want to bypass the resolution step and create a new asset right away, use {{{Struct::retrieve.newInstance&lt;TY&gt;}}}
@@ -6625,10 +6625,13 @@ In case it's not already clear: we don't have &quot;the&quot; Render Engine, rat
 The &amp;raquo;current setup&amp;laquo; of the objects in the session is sort of a global state. Same holds true for the Controller, as the Engine can be at playback, it can run a background render or scrub single frames. But the whole complicated subsystem of the Builder and one given Render Engine configuration can be made ''stateless''. As a benefit of this we can run this subsystems multi-threaded without the need of any precautions (locking, synchronizing). Because all state information is just passed in as function parameters and lives in local variables on the stack, or is contained in the StateProxy which represents the given render //process// and is passed down as function parameter as well. (note: I use the term &quot;stateless&quot; in the usual, slightly relaxed manner; of course there are some configuration values contained in instance variables of the objects carrying out the calculations, but this values are considered to be constant over the course of the object usage).
 </pre>
 </div>
-<div title="Wiring" modifier="Ichthyostega" modified="201009250224" created="201009250223" tags="Concepts Model design draft" changecount="2">
-<pre>within Lumiera's Proc-Layer, on the conceptual level there are two kinds of connections: data streams and control connections. The wiring details on how these connections are defined, how they are to be detected by the builder and finally implemented by links in the RenderEngine.
+<div title="Wiring" modifier="Ichthyostega" modified="201011070501" created="201009250223" tags="Concepts Model design draft" changecount="3">
+<pre>within Lumiera's Proc-Layer, on the conceptual level there are two kinds of connections: data streams and control connections. The wiring details on how these connections are defined and controlled, how they are to be detected by the builder and finally implemented by links in the RenderEngine.
 
 !Stream connections
+A stream connection should result in media data traveling from a source to a sink. Here we have to distinguish between the high-level view and the situation in the render engine. At the session level and thus for the user, a //stream// is the elementary and distinguishable unit of &quot;media content&quot; flowing through the system. It can be described unabigously by having an uniform StreamType &amp;mdash; this doesn't exclude the stream from being inherently structured, like containing several channels. The HighLevelModel can be interpreted as creating a system of stream connections, which can be categorised into two kinds of connections:
+* the [[pipes|Pipe]] are rather rigid processing chains, limited to using one specific StreamType
+* there are flexible interconnections or routing links, including the ability to sum or overlay media streams, and the possibility of stream type conversions.
 
 !Control connections
 </pre>
