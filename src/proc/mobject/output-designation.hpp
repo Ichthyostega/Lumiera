@@ -1,8 +1,8 @@
 /*
-  PARAMETER.hpp  -  representation of an automatable effect/plugin parameter
+  OUTPUT-DESIGNATION.hpp  -  specifying a desired output destination
  
   Copyright (C)         Lumiera.org
-    2008,               Hermann Vosseler <Ichthyostega@web.de>
+    2010,               Hermann Vosseler <Ichthyostega@web.de>
  
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -21,31 +21,30 @@
 */
 
 
-#ifndef PROC_MOBJECT_PARAMETER_H
-#define PROC_MOBJECT_PARAMETER_H
+#ifndef PROC_MOBJECT_OUTPUT_DESIGNATION_H
+#define PROC_MOBJECT_OUTPUT_DESIGNATION_H
 
-
+#include "proc/asset/pipe.hpp"
 
 
 namespace mobject {
   
-  template<class VAL> class ParamProvider;
   
   
   /**
-   * Descriptor and access object for a plugin parameter.
-   * Parameters may be provided with values from the session,
-   * and this values may be automated.
+   * Descriptor to denote the desired target of produced media data.
+   * OutputDesignation is always an internal and relative specification
+   * and boils down to referring a asset::Pipe by ID. In order to get
+   * actually effective, some object within the model additionally
+   * needs to \em claim this pipe-ID, meaning that this object
+   * states to root and represent this pipe. When the builder
+   * encounters a pair of (OutputDesignation, OutputClaim),
+   * an actual stream connection will be wired in the
+   * processing node network.
    */
-  template<class VAL>
-  class Parameter
+  class OutputDesignation
     {
     public:
-      VAL getValue () ;
-      
-    protected:
-      ParamProvider<VAL>* provider;
-      
     };
   
   

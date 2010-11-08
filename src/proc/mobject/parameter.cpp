@@ -21,19 +21,20 @@
 * *****************************************************/
 
 
+#include "lib/error.hpp"
 #include "proc/mobject/parameter.hpp"
 #include "proc/mobject/paramprovider.hpp"
 
-namespace mobject
-  {
-
+namespace mobject {
+  
+  
   template<class VAL>
   VAL
   Parameter<VAL>::getValue ()
   {
-    ////////////TODO
+    UNIMPLEMENTED ("Any idea how to handle various kinds of parameter types");
   }
-
-
-
+  
+  
+  
 } // namespace mobject

@@ -1,8 +1,8 @@
 /*
-  PARAMETER.hpp  -  representation of an automatable effect/plugin parameter
+  OUTPUT-MAPPING.hpp  -  generic interface for translation of output designations
  
   Copyright (C)         Lumiera.org
-    2008,               Hermann Vosseler <Ichthyostega@web.de>
+    2010,               Hermann Vosseler <Ichthyostega@web.de>
  
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -21,31 +21,30 @@
 */
 
 
-#ifndef PROC_MOBJECT_PARAMETER_H
-#define PROC_MOBJECT_PARAMETER_H
+#ifndef PROC_MOBJECT_OUTPUT_MAPPING_H
+#define PROC_MOBJECT_OUTPUT_MAPPING_H
 
-
+#include "proc/mobject/output-designation.hpp"
 
 
 namespace mobject {
   
-  template<class VAL> class ParamProvider;
   
   
   /**
-   * Descriptor and access object for a plugin parameter.
-   * Parameters may be provided with values from the session,
-   * and this values may be automated.
+   * OutputMapping is a facility to resolve output designations.
+   * For a given specification, resolution to the desired
+   * target specification may be derived. Here, the 
+   * type of the target specification is defined 
+   * through the type parameter.
+   * 
+   * This is an Interface, intended to be used in the signature
+   * of API functions either providing or requiring a Mapping.
    */
-  template<class VAL>
-  class Parameter
+  template<class FUNC>
+  class OutputMapping
     {
     public:
-      VAL getValue () ;
-      
-    protected:
-      ParamProvider<VAL>* provider;
-      
     };
   
   
