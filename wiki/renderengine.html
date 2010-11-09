@@ -2964,7 +2964,7 @@ Any external output sink is managed as a [[slot|DisplayerSlot]] in the ~OutputMa
 &amp;rarr; see also the PlayerDummy
 </pre>
 </div>
-<div title="OutputMapping" modifier="Ichthyostega" modified="201011080347" created="201011080238" tags="Model spec draft" changecount="11">
+<div title="OutputMapping" modifier="Ichthyostega" modified="201011090414" created="201011080238" tags="Model spec draft" changecount="18">
 <pre>An output mapping serves to //resolve//&amp;nbsp; [[output designations|OutputDesignation]].
 
 !Mapping situations
@@ -2972,21 +2972,33 @@ Any external output sink is managed as a [[slot|DisplayerSlot]] in the ~OutputMa
 :external outputs aren't addressed directly. Rather we set up a default (channel) mapping, which then can be overridden by local rules.
 :Thus, in this case we query with an internal OutputDesignation as parameter and expect an OutputManager //slot//
 ;viewer connections
-:any Timeline produces a number of [[model ports|ModelPort]]. On the other hand, any viewer exposes a small number of output designations, representing the image and sound output.
-:Thus, in this case we query //in reverse direction// &amp;mdash; given a viewer pipe we expect the model port (again denoted as ~Pipe-ID)
+:any Timeline produces a number of [[model ports|ModelPort]]. On the other hand, any viewer exposes a small number of output designations, representing the image and sound output(s).
+:Thus, in this case we resolve similar to a bus connection, possibly overridden by already pre-existing or predefined connections.
 ;switch board
 :a viewer might receive multiple outputs and overlays, necessitating a user operated control to select what's actually to displayed
-:Thus, in this case we similarly need a backwards resolution, linking together parts of the output network with some model ports
-;virtual media
-:when binding a Sequence as VirtualClip, a mapping from output designations used within the Sequence to virtual channels is required
-:Thus, in this case we need to associate output designations with ~Pipe-IDs encountered in the context 
+:Thus, in this case we need a backwards resolution at the lower end of the output network, to connect to the model port as defined by the switchboard
+;global pipes or virtual media
+:when binding a Sequence as Timeline or VirtualClip, a mapping from output designations used within the Sequence to virtual channels or global pipes is required
+:Thus, in this case we need to associate output designations with ~Pipe-IDs encountered in the context according to some rules &amp;mdash; again maybe overridden by pre-existing connections
 
 !Questions {{red{WIP 11/10}}}
 * shall we rely on ~Pipe-IDs as an uniform designator for various kinds of //further connection?//
 * and then &amp;mdash; wouldn't that immediately necessitate yet another mapping?
 * can output mapping be considered a //substantial concept// &amp;mdash; or is it rather void of specific meaning?
-* are output mappings to be extended? do they include an automatic resolution step in case of non existant mapping?
+* are output mappings to be extended? do they include an automatic resolution step in case of non existent mapping?
 * for any given situation, is there just //one mapping// &amp;mdash; or can there be multiple mappings, to be handled like values?
+
+!Conclusions
+All these mapping steps are listed here, because they exhibit a common pattern.
+* the immediately triggering input key is a ~Pipe-ID (and thus provides a stream type); additional connection hints may be given.
+* the mapped result draws from a limited selection of elements, which again can be keyed by ~Pipe-IDs
+* the mapping is initialised based on default mapping rules acting as fallback
+* the mapping may be extended by explicitly setting some associations
+* the mapping itself is a stateful value object
+* there is an //unconnected//&amp;nbsp; state.
+
+!Implementation notes
+Thus the mapping is a copyable value object, based on a associative array. It may be attached to a model object and persisted alongside. The mapping is assumed to run a defaults query when necessary. To allow for that, it should be configured with a query template (string). Invocations might specify additional predicates (e.g. {{{ord(2)}}} to denote &quot;the second stream of this kind&quot;) to hint the defaults resolution. Moreover, the mapping needs a way to retrieve the set of possible results, allowing to filter the results of the rules based default. Mappings might be defined explicitly. Instead of storing a //bottom value,// an {{{isDefined()}}} predicate might be preferable.
 </pre>
 </div>
 <div title="Overview" modifier="Ichthyostega" modified="200906071810" created="200706190300" tags="overview img" changecount="13">
@@ -6555,11 +6567,14 @@ For now, as of 6/10, we use specialised QueryResolver instances explicitly and d
 &amp;rarr; QueryRegistration
 </pre>
 </div>
-<div title="ViewerPlayConnection" modifier="Ichthyostega" created="201007110305" tags="Model Player spec draft" changecount="1">
+<div title="ViewerPlayConnection" modifier="Ichthyostega" modified="201011090317" created="201007110305" tags="Model Player spec draft" changecount="5">
 <pre>for showing output, three entities are involved
 * the [[Timeline]] holds the relevant part of the model, which gets rendered for playback
 * by connecting to a viewer component, an actual output target is established
 * the playback process itself is coordinated by a PlayController, which in turn creates a PlayProcess
+
+!the viewer connection
+A viewer element gets connected to a given timeline either by direcly attching it, or by //allocating an available free viewer.// Anyway, as a model element, the viewr is just like another set of global pipes cascaded behind the global pipes present in the timeline. The number and kind of busses provided is a configurable property of the viewer element &amp;mdash; more specifically: the viewer's SwitchBoard. Thus, connecting a viewer activates the same internal logic employed when connecting a sequence into a timeline or meta-clip: a default channel association is established, which can be overriden persistently (&amp;rarr; OutputMapping). Each of the viewer's pipes in turn gets connected to a system ouput through an OutputManager slot &amp;mdash; again an ouput mapping step.
 </pre>
 </div>
 <div title="VirtualClip" modifier="Ichthyostega" modified="201003130000" created="200804110321" tags="def" changecount="15">
@@ -6650,7 +6665,7 @@ In case it's not already clear: we don't have &quot;the&quot; Render Engine, rat
 The &amp;raquo;current setup&amp;laquo; of the objects in the session is sort of a global state. Same holds true for the Controller, as the Engine can be at playback, it can run a background render or scrub single frames. But the whole complicated subsystem of the Builder and one given Render Engine configuration can be made ''stateless''. As a benefit of this we can run this subsystems multi-threaded without the need of any precautions (locking, synchronizing). Because all state information is just passed in as function parameters and lives in local variables on the stack, or is contained in the StateProxy which represents the given render //process// and is passed down as function parameter as well. (note: I use the term &quot;stateless&quot; in the usual, slightly relaxed manner; of course there are some configuration values contained in instance variables of the objects carrying out the calculations, but this values are considered to be constant over the course of the object usage).
 </pre>
 </div>
-<div title="Wiring" modifier="Ichthyostega" modified="201011080237" created="201009250223" tags="Concepts Model design draft" changecount="28">
+<div title="Wiring" modifier="Ichthyostega" modified="201011090249" created="201009250223" tags="Concepts Model design draft" changecount="30">
 <pre>within Lumiera's ~Proc-Layer, on the conceptual level there are two kinds of connections: data streams and control connections. The wiring details on how these connections are defined and controlled, how they are to be detected by the builder and finally implemented by links in the render engine.
 &amp;rarr; see OutputManagement
 &amp;rarr; see OutputDesignation
@@ -6673,7 +6688,7 @@ Processing the wiring request drives the actual connection step. It is conducted
 
 The final result, within the render engine, is a network of processing nodes. Each of this nodes holds a WiringDescriptor, created as a result of the wiring operation detailed above. This descriptor lists the predecessors, and (in somewhat encoded form) the other details necessary for the processing node to respond properly at the engine's calculation requests (read: those details are implementation bound and can be expeted to be made to fit)
 
-On a more global level, this LowLevelModel within the engine exposes a number of [[exit nodes|ExitNode]], each corresponding to a ModelPort, thus being a possible source to be handled by the OutputManager, which is responsible for mapping and connecting nominal outputs (the model ports) to actual output sinks (external connections and viewer windows). A model port isn't necessarily an absolute endpoint of connected processing nodes &amp;mdash; it may as well reside in the middle of the network, e.g. as a ProbePoint. Besides the core engine network, there is also an [[output network|OutputNetwork]], built and extended on demand to prepare generated data for the purpose of presentation. This might be scaling or interpolating video for a viewer, adding overlays with control information produced by plugins, or rendering and downmixing multichannel sound. By employing this output network, the same techniques used to control wiring of the main path, can be extended to control this output preparation step. ({{red{WIP 11/20}}} some important details need to be settled here, like how to control semi-automatic adaptation steps. But that is partially true also for the main network: for example, we don't know where to locate and control the faders generated as a consequence of building a summation line)
+On a more global level, this LowLevelModel within the engine exposes a number of [[exit nodes|ExitNode]], each corresponding to a ModelPort, thus being a possible source to be handled by the OutputManager, which is responsible for mapping and connecting nominal outputs (the model ports) to actual output sinks (external connections and viewer windows). A model port isn't necessarily an absolute endpoint of connected processing nodes &amp;mdash; it may as well reside in the middle of the network, e.g. as a ProbePoint. Besides the core engine network, there is also an [[output network|OutputNetwork]], built and extended on demand to prepare generated data for the purpose of presentation. This ViewerPlayConnection might necesitate scaling or interpolating video for a viewer, adding overlays with control information produced by plugins, or rendering and downmixing multichannel sound. By employing this output network, the same techniques used to control wiring of the main path, can be extended to control this output preparation step. ({{red{WIP 11/20}}} some important details are to be settled here, like how to control semi-automatic adaptation steps. But that is partially true also for the main network: for example, we don't know where to locate and control the faders generated as a consequence of building a summation line)
 
 !!!Participants and Requirements
 * the ~Pipe-ID needs to be something easily usable
