@@ -2753,6 +2753,14 @@ These are used as token for dealing with other objects and have no identity of t
 
 </pre>
 </div>
+<div title="ModelPort" modifier="Ichthyostega" created="201011100234" tags="def" changecount="1">
+<pre>Any point where output possibly might be produced. Model port entities are located within the [[Fixture]] &amp;mdash; model port as a concept spans the high-level and low-level view. A model port can be associated both to a pipe in the HighLevelModel and denote a specific ExitNode in the render nodes network.
+
+A model port is rather derived than configured; it emerges when a pipe [[claims|WiringClaim]] an output desitnation and some other entity actually uses this designation as a target, either directly or indirecly. This match of provision and usage is detected during the build process and produces an entry in the fixture's model port table. These model ports in the fixture are keyed by ~Pipe-ID, thus each model port has an associated StreamType.
+
+Model ports are the effective, resulting ouputs of each timeline; additional ports result from [[connecting a viewer|ViewerPlayConnection]]. Any render or display process happens at a model port.
+</pre>
+</div>
 <div title="ModelRootMO" modifier="Ichthyostega" modified="200912110245" created="200912080307" tags="def" changecount="5">
 <pre>A special kind of MObject, serving as a marker or entry point at the root of the HighLevelModel. As any ~MObject, it is attached to the model by a [[Placement]]. And in this special case, this placement froms the ''root scope'' of the model, thus containing any other PlacementScope (e.g. tracks, clips with effects,...)
 
@@ -2964,7 +2972,7 @@ Any external output sink is managed as a [[slot|DisplayerSlot]] in the ~OutputMa
 &amp;rarr; see also the PlayerDummy
 </pre>
 </div>
-<div title="OutputMapping" modifier="Ichthyostega" modified="201011090414" created="201011080238" tags="Model spec draft" changecount="18">
+<div title="OutputMapping" modifier="Ichthyostega" modified="201011100215" created="201011080238" tags="Model spec draft" changecount="19">
 <pre>An output mapping serves to //resolve//&amp;nbsp; [[output designations|OutputDesignation]].
 
 !Mapping situations
@@ -2981,13 +2989,6 @@ Any external output sink is managed as a [[slot|DisplayerSlot]] in the ~OutputMa
 :when binding a Sequence as Timeline or VirtualClip, a mapping from output designations used within the Sequence to virtual channels or global pipes is required
 :Thus, in this case we need to associate output designations with ~Pipe-IDs encountered in the context according to some rules &amp;mdash; again maybe overridden by pre-existing connections
 
-!Questions {{red{WIP 11/10}}}
-* shall we rely on ~Pipe-IDs as an uniform designator for various kinds of //further connection?//
-* and then &amp;mdash; wouldn't that immediately necessitate yet another mapping?
-* can output mapping be considered a //substantial concept// &amp;mdash; or is it rather void of specific meaning?
-* are output mappings to be extended? do they include an automatic resolution step in case of non existent mapping?
-* for any given situation, is there just //one mapping// &amp;mdash; or can there be multiple mappings, to be handled like values?
-
 !Conclusions
 All these mapping steps are listed here, because they exhibit a common pattern.
 * the immediately triggering input key is a ~Pipe-ID (and thus provides a stream type); additional connection hints may be given.
@@ -2999,6 +3000,8 @@ All these mapping steps are listed here, because they exhibit a common pattern.
 
 !Implementation notes
 Thus the mapping is a copyable value object, based on a associative array. It may be attached to a model object and persisted alongside. The mapping is assumed to run a defaults query when necessary. To allow for that, it should be configured with a query template (string). Invocations might specify additional predicates (e.g. {{{ord(2)}}} to denote &quot;the second stream of this kind&quot;) to hint the defaults resolution. Moreover, the mapping needs a way to retrieve the set of possible results, allowing to filter the results of the rules based default. Mappings might be defined explicitly. Instead of storing a //bottom value,// an {{{isDefined()}}} predicate might be preferable.
+
+First and foremost, mapping can be seen as a //functional abstraction.// As it's used at implementation level, encapsulation of detail types in't the primary concern, so it's a candidate for generic programming. But there //is// a concern better to be concealed at the usage site, namely accessing the rules system. Thus mapping leads itself to the frequently used implementation pattern where there is a generic frontend as header, calling into opaque functions embedded within a separate compilation unit.
 </pre>
 </div>
 <div title="Overview" modifier="Ichthyostega" modified="200906071810" created="200706190300" tags="overview img" changecount="13">
@@ -6567,14 +6570,14 @@ For now, as of 6/10, we use specialised QueryResolver instances explicitly and d
 &amp;rarr; QueryRegistration
 </pre>
 </div>
-<div title="ViewerPlayConnection" modifier="Ichthyostega" modified="201011090317" created="201007110305" tags="Model Player spec draft" changecount="5">
+<div title="ViewerPlayConnection" modifier="Ichthyostega" modified="201011100202" created="201007110305" tags="Model Player spec draft" changecount="6">
 <pre>for showing output, three entities are involved
 * the [[Timeline]] holds the relevant part of the model, which gets rendered for playback
 * by connecting to a viewer component, an actual output target is established
 * the playback process itself is coordinated by a PlayController, which in turn creates a PlayProcess
 
 !the viewer connection
-A viewer element gets connected to a given timeline either by direcly attching it, or by //allocating an available free viewer.// Anyway, as a model element, the viewr is just like another set of global pipes cascaded behind the global pipes present in the timeline. The number and kind of busses provided is a configurable property of the viewer element &amp;mdash; more specifically: the viewer's SwitchBoard. Thus, connecting a viewer activates the same internal logic employed when connecting a sequence into a timeline or meta-clip: a default channel association is established, which can be overriden persistently (&amp;rarr; OutputMapping). Each of the viewer's pipes in turn gets connected to a system ouput through an OutputManager slot &amp;mdash; again an ouput mapping step.
+A viewer element gets connected to a given timeline either by directly attaching it, or by //allocating an available free viewer.// Anyway, as a model element, the viewer is just like another set of global pipes cascaded behind the global pipes present in the timeline. The number and kind of pipes provided is a configurable property of the viewer element &amp;mdash; more specifically: the viewer's SwitchBoard. Thus, connecting a viewer activates the same internal logic employed when connecting a sequence into a timeline or meta-clip: a default channel association is established, which can be overridden persistently (&amp;rarr; OutputMapping). Each of the viewer's pipes in turn gets connected to a system output through an OutputManager slot &amp;mdash; again an output mapping step.
 </pre>
 </div>
 <div title="VirtualClip" modifier="Ichthyostega" modified="201003130000" created="200804110321" tags="def" changecount="15">
