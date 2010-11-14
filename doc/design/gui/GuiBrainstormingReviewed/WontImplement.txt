@@ -1,0 +1,147 @@
+GuiBrainstorming Reviewed - Won't Implement
+===========================================
+:Author: JoelHoldsworth
+:Date:2008-07-23
+
+* Help feedback for quality management +
+Sometimes help files and tutorials are improvable. Keeping track of which help is to which amount useful for a majority of users will provide data about which help files are improvable. It will also provide data about which features most often users use help and might be candidate for usability consideration. like: []solved my problem []got me on the right way []needed to find help elsewhere []problem not solved
+ 
+  - This is surprisingly hard to implement (I think), and in a sense it's already obvious to us whether the docs are quality - filled with nice graphics, simple steps, and lots of clear information or whether they need improvement. This feature might have some use on the website.
+-- link:JoelHoldsworth[] [[DateTime(2008-07-23T20:47:35Z)]]
+
+* Suggest an improvement Feature - for users to help improvement +
+Just like the "Help" feature suggested elsewhere, in which the user can edit the help file as they go, so could the user be able to make suggestions to improve the program. Able to get a panel or window grab, and draw arrows lines to show "where" they are talking about. Online linking - There could also be the facility to click on an email link to send a request for help (want to engage in dialog, rather than just notify - without need for response). Or a relevant search is automatically generated for the forum, chat room, faqs, helpdesk, documentation. Or get sent to a link:BrainStorming[] page like this one (specifically for the panel they were in).
+-- link:Tree[][[DateTime(2008-05-26T12:01:00NZ)]]
+
+  - This isn't really a GUI issue - much of this is more for the website, which the GUI will probably link to from an item in the help menu.
+-- link:JoelHoldsworth[] [[DateTime(2008-07-23T20:45:00Z)]]
+
+* Help System - rolling tips and tutorials +
+Sometimes, when a beginner is using the program, they just sit back and look at the general picture. It's a behaviour that gets down naturally. It looks like a "break", but going through their minds are questions like ; "Am I doing this efficiently?", "What would make this easier, and is there already an easy way to do it in the program?", "How long do I think this will take, and what can I do to make it in time?", and much more. Sit back, look at the whole screen, maybe cruise around the menu, conceptualise the project and steps involved - it's a kind of task oriented learning - on the job (self) training.
++
+The closest thing so far to something which takes the opportunity to make use of this "looking at the wider picture", is the tips that come up at the start - a kind of "while you are doing something - we thought you might find this helpful".
++
+Because of the creative effort needed when composing video projects, there is quite a bit of vision based thinking. It is during these times that a help or instructional item could be presented to the user. (I am not talking pop-up advertising). Then user could set aside space for a window that scrolls help text, flashes tips, plays video tutorials or help. This help function could be optionally set to go on all the time, begin after x seconds of inactivity, or be manually triggered. It might even be a kind of screen saver - leave it running while having a coffee break. But what it does, is run a whole heap of options and new information past the user, in a low prompting mode, to a degree that they are prepared to have the minor distraction.
++
+If it was context sensitive, then it would provide relevant information, similar to having a tutor or an expert leaning over your shoulder, explaining further possibilities and applications.
++
+Video tips and Tutorials could be available via Youtube, which also doubles as promotion for the project. Users could choose to download groups of videos on selected topics.
+-- link:Tree[][[DateTime(2008-06-11T17:04:00NZ)]]
+
+  - If the user stops to thing I think we should give them some peace while they get their thoughts together. I'm sure if they want help they'll ask for it. Remember how annoying Clippy was in MS Office? :-P 
+-- link:JoelHoldsworth[] [[DateTime(2008-07-23T20:45:00Z)]]
+
+* Help and visual prompts use GIFs for visual cue as to time behaviour of feature. +
+Icons are handy when they portray some sort of cue for the task that they do. A number of tasks in video editing are time related. It would be handy to have some form of visual que as to what the time related task does. Since Gifs can show motion, they would be very good for this task. PNGs could also do it it they were timed to cycle through their images. Example uses would be to show the difference between "track" and "stabilise" in motion tracker - a strip showing a pogo stick going along a footpath would be suitable to show the differences between track and stabilise (and could also be used to show the differences between the forms of vector calculation. GIFs could also be used to show editing functions that involve several important steps.
+--link:Tree[][[DateTime(2008-05-26T08:45:00NZ)]]
+
+  - If we did want animated icons we'd be better off with MNG or a PNG image strip because then we'd get transparency. There are 2 reasons why I think this is a bad idea. 1. There's an aweful lot of drawing to be done. We already need to produce perhaps 100 high quality tango style icons for the user interface. If they're animate someone would have to draw 1000s of these, with all the quality control problems that go with it. 2. I'm not sure it's something people will find very helpful. Even if the animation only begins when we hover over the icon, it could even be quite annoying and distracting.
+-- link:JoelHoldsworth[] [[DateTime(2008-07-23T20:39:36Z)]]
+
+* Help System - available for user improvement +
+_Similar to tool tip and status bar suggestion above._ A *"hover" hint / help* facility would be a major bonus. Just make the function available, the box can start with an index number, and users can type in their own help comments (either in a *help text entry management* section, or directly into the pop-up hover box - in optional help edit mode).
++
+These can be pooled at a central web site in to languages, and brevity/completeness (options to links to further help, links to examples, links to video tutorials). So the developers do not have to spend time writing help files - just make it possible for the users to. The developers might like to add a few comments to the verbose files at some later point, or clear up inaccuracies. translators can also do the work for other languages. Very quickly the supporting documentation's usefulness would add to the attractiveness of the program.
+-- link:Tree[][[DateTime(2008-05-07T16:44:00NZ)]]
+
+  - A wiki style approach is often an effective way to get community input on documentation. This may be a good way to get people working on it. But it's best for us to publish a tidied up documentation set and ship that, instead of creating a complex editable help system - which is vulnerable to vandalism.
+-- link:JoelHoldsworth[] [[DateTime(2008-07-23T20:29:25Z)]]
+
+* User selectable Experience Level - Task Oriented Layout +
+The user could be asked to choose their experience level, and more complex options then get greyed out. The user could be asked the common tasks that the want to do, and other options could be greyed out. They can choose whether they want "grayed" out options to be available, or viewable, or not. The options which are advanced (or 2 levels greater than their current expertise level) could be "dark grayed" out and the user could have similar choices about their display).
+--link:Tree[][[DateTime(2008-05-09T20:50:00NZ)]]
+
+  - Comments: I can't see any good reason for this. The user interface ought to be usable for everyone. The problem is that we want to enable everyone to be an "expert" by making power intuitively available even to beginners. The other problems is that light users might use only 10% of the functionality - but different light users use a different 10% from each other. So hiding things doesn't actually help make things simpler. It's much better to have things tidily arranged with clear descriptions etc. to help the user understand what a command might do - rather than hiding the command from them.
+-- link:JoelHoldsworth[] [[DateTime(2008-07-22T22:25:58Z)]]
+
+* SVG-based GUI elements (buttons and chevrons) could allow for easy GUI skinning and function calls since one would just have to mod an xml file to create new skins. It also means you could use code from the Webkit project for rendering the interface maybe. My practical reasoning is that if the devs wanted to work on the refining cinelerra/lumeira core technology or add plug-ins to extend its functionality, adding the GUI elements of those plug-ins might be less of a chore. It also may be a practical image format for a node-based compositing interface(if desired) because it supports embedded grouping of vector expressions. It could also be used as the basis for drawing things like masks and vector objects in the compisitor and the xml vector-values of those drawn objects could be communicated back to the programs core for updating events. (Similar to the way some more popular editor/compositors use PostScript to draw objects and place values.) It also the SVG spec supports transparency bluring and the ability to interpolate these events over time...things that can be incorperated into program beyond the the gui. Sorry for the long post...felt I needed to explain my reasoning better. 
+-- jb [[DateTime(2008-07-21T21:58:48Z)]]
+
+  - Comment: I am hoping that we can implement a simple set of skins for Lumiera. But we will be using the GTK based styles system, which is the standard. This allows theming to be done with a simple script file. These styles files are the more natural choice for UI theming, because WebKit is designed primarily for web, and would add a lot of unnecessary bloat to the app. Icons will be drawn as SVGs; a good choice for drawing the graphics, but these will be prerendered into PNGs at compile time as is standard practice for most free-desktop apps. 
+-- link:joelholdsworth[] [[DateTime(2008-07-21T21:58:48Z)]]
+
+* Client / Server Model +
+The server process will act as the master coordinator for the system, and will accept input from multiple GUI clients, and dictate tasks to multiple slave processes (even on separate physical servers). The GUI client application could be multi-platform. File transfer and communication could take place over SSH and make use of SVN for project management. Proxy editing will be the norm, due to the higher resolutions of final videos (the RED Epic will handle 5K). The entire system could easily work on a single Linux workstation, for easy adaptibility from handling home videos to expand to editing cinema films (which could benefit from dedicated GUIs to handle video, sound, etc.).
+
+  - Comment: Because the different parts of a project are so tightly integrated, it won't be possible to have one instance of the GUI that only has audio, and another that only does video etc. Moreover, the controller PC will hold the source video data. It is true that we plan to make a distributed backend, but the proc and GUI layers will remain on the controller PC. It's very hard to make a distributed GUI, and even harder to make lumiera have both a distributed front and backend.
+-- link:joelholdsworth[] [[DateTime(2008-07-21T21:58:48Z)]]
+
+* Navigation Systems +
+There may be several methods to make menu selections, and other choices. The Gui could be made quite adaptable/customisable. Using a "skin" approach to the Gui, would provide a system for users who are not programmers, to help develop improved user interfaces. Mouse "gestures" (may be patent considerations) are another option. The way that options are communicated with the program functions could be made so that even as yet undesigned "user chooser systems" can be added.
+-- link:Tree[] [[DateTime(2008-05-14T08:40:00NZ)]]
+
+  - Comment: Allowing customization is good in some ways. But every customization has a cost; in terms of development effort, debugging, maintenance, user support etc. so one must weight up the cost/benefit of allowing the user to reprogram the UI. IMO it's better for the UI to be right rather than to allow the user to reprogram it. If there's something sub-optimal about the UI then it should be fixed - for everyone. So we should be encouraging users with programming skills to contribute the code to us rather than them all making their own little customizations for themselves. That way lumiera becomes better for everyone!
+-- link:joelholdsworth[] [[DateTime(2008-07-21T21:58:48Z)]]
++
+--
+* I completely agree, while I have to add that we can't know about all possible workflow scenarios. In sense of workflow Lumiera should be customizeable/scriptable somehow. This might be more intrusive/costly than just customizing a theme but should be less than hacking in the C++ source and have to o recompile.
+-- link:ct[] [[DateTime(2008-07-22T07:11:11Z)]]
+--
+
+* Burst frames to graphics card. +
+I am not sure how the current video play system works, but speed might be increased if several frames got sent to the video card at once. The video card can act as a video cache and play them as required. The number of interrupts to the process is reduced, to much less than one per frame, freeing up more CPU time for calculating the effects etc..
+--link:Tree[][[DateTime(2008-07-18T18:18:00NZ)]].
+
+  - Comment: Good idea, but not really necessarily. Firstly because XVideo is pretty fast, and the bottle neck is in rendering not drawing. Second, we can't get direct access to video RAM anyway because X abstracts it away. 
+-- link:joelholdsworth[] [[DateTime(2008-07-19T19:42:04Z)]]
+
+* GUI development - flexible approach - using "Skin Methods" +
+In developing a GUI, the approach would normally be for the developers to design the Gui as the project progresses, and it comes out at the end. This is not bad, especially as there is a GUI to be had. But if there is a desire (which there appears to be a healthy desire here) to try new things, and look at options, then it would be quite useful to have a development method that allows for experimentation with options, side by side comparisons and assessments. Assessments by users and developers.
++
+GUI design could be available for release for whoever wants to do a spin-off project re-GUI. So a GUI gets made by default by the development team, but the _skin kit_, and _methods of activating/interaction with the "engine"_ are made available. Users can then run their own tests and some sort of concensus arrived at later as to what is considered to work well, in what sorts of different user situations (newbie, small, large/expert).
++
+If there is vibrant enthusiasm for teams to work on alternative GUIs, then the developers may even avoid the need to do much of the work on GUI, and just announce what the interface requirements are - the (choices of) GUIs for some sections could be ready before the program is finished. The GUIs could be developed and discussed concurrently (or advance of) the respective program code. On the other hand the GUIs could lag behind the developemnt of the engine, but not hold the engine up. Some GUI groups could be ahead of others in some parts of the program and behind in others - the user could even choose to the GUI (widget appearance) from one theme for one part of the interface, and GUI from another theme for other parts.
++
+There could be agreement between GUI teams working on different themes, to cover separate parts of the interface first, so that there is at least some type of theme for the GUI for the whole program ASAP.
+--link:Tree[] [[DateTime(2008-06-05T20:33:00NZ)]]
+
+  - Comment: To achieve that sort of thing one would normally expect the project to be forked. If our architecture is any good (and I think it will be), then a Lumiera fork would have no problem attaching a different UI to the system because there will be clear separation between the layers. But I can't see any good reason to help people fragment the project. If there are problems with the standard UI then we should fix them for everyone. If people want to write code for better UI they should contribute it patches. We really don't want to encourage people to fork any part of Lumiera.
+-- link:JoelHoldsworth[] [[DateTime(2008-07-22T20:56:07Z)]]
+
+* About Tooltips and Statusbar +
+Tooltips are really valuable items, they should not be wasted for simple things like brief help texts. Instead they might display the actual state of the underlying widget in a textual form (numeric+unit) with _maybe_ some hints. Long time ago I proposed for Cinelerra to add a special mode to make tooltips editable, that is with a shortcut the actual tooltip becomes a small text input field where the user can enter exact values for some things, this value is committed with the return key and leaving this mode should be really easy (as simple as just moving the mouse, ESC key).
++
+The Status bar can show more information but isn't directly in the users view, here we may play help infos like available options on the mouse buttons, important keyboard shortcuts etc. take a look at \'qcad' .. xfig has also static area where it shows available (mouse) options, just not a status bar but in the upper right of the screen.
++
+This might be a bit different to some common other user interfaces (M$...) but I think this is much more valuable.
+-- link:ct[] [[DateTime(2008-04-08T01:26:06Z)]]
+  
+  - Comment:The thing about tooltips is that one usually uses them to aid the user in figuring out what a toolbar button (which would otherwise be a crytic icon bitmap) actually does - and so in this sense they're not a waste - they help users figure out how the application works. Users expect to find those hints in tooltips, and so it's rather unkind to the user to do something different and unexpected, and so we should avoid breaking the norms if we can. The actual state of the widget should be visible to see straight off and editing that value should be allowed straight off. That functionality should not be hidden inside a tooltips. People will find it really counter-intuitive to have to edit a value inside a tooltip in order to make a change.
+-- link:JoelHoldsworth[] [[DateTime(2008-07-22T21:42:32Z)]]
++
+--
+* My argument is, that the \'figure out' thing could be done in the status bar, thats slightly less convinient but a user who searches for help will discover it (xfig, qcad and other programs do such kinds of dedicated help places instead tooltips). Popping up Tooltips only help _very_ early beginners, for someone who is even marginally used to the programm they don't add any value anymore, yet to be at a very prominent screenspace, right at your cursor. I think thats really a waste. I want interactive tips and help, but please where they are disciverable for help, but don't waste screen estate with information one might not really need. In contrast, the numeric value of a fader is a very important thing to know, at least when you want to alter it (cinelerra does that with its round knobs). And having a direct enter mode would be even more powerful for experienced users while not disturb anyone else. This might only complement the 'generalized fader' fader above, means when the fader is configured to show only a small scroller entry (to safe screen space) then displaying the numeric value and/or offer to edit it in a tooltip would be a good way to make it precise, without needing to reconfigure the fader, taking more screen space.
+-- link:ct[] [[DateTime(2008-07-23T09:41:25Z)]]
+--
+
+* Default settings after install set to most reliable and least requirements +
+The program may be tweaked to get performance on PC with great graphics systems, plenty of Ram and good hard drive speed. For people with lower spec'd gear, there may be some tuning needed, just to get going. There is the likelihood that people with low spec'd gear are not so able or inclined to read up on their hardware, and "search" for help on their video editor, to find out the solution to a problem (which they may not even have much idea of what the problem is). Consequently, they are likely to give up and not use the program.
++
+Everybody enjoys a program that can be easily installed, and is ready to run. Few are upset by a program that is easy to install, setup, and is ready to run. But quite a few have nothing but disappointment with a program that is relatively easy to install, no idea how to set up, won't run or crashes, and not much clue about where to get help which is much further away than a click.
++
+So it would do the program a great service to be able to run on just about any gear, straight away. This means using setup defaults which are general and as universal as possible, unless the program is given some sort of intelligent hardware detection function (not a big priority at this stage as it would require more programming work and folks are busy on more important tasks).
++
+The tweaking could be left for the experts to get speed, rather than the noobies.
++
+The tweak options could have say three general default settings, that progressively ramp up the performance demands, so the user can try the settings to very quickly get an idea of their gears trade-off between speed and reliability. each section of settings that has options, could be laid out so that increasingly demanding options are lower down the choices or colour coded for System requirement.
++
+Colour coding may be red for heavy loadings and risk, yellow for low demands, and a colour blend between. The saturation of the colour may also indicate the preference to reach at least that level with your gear, so you know how to "trade off" between parameters that your are going to tweak up. This makes it a little more intuitive for how to drive your gear up to "red line" level.
++
+A similar colour coding for speed could be used ; blue for low speed, green for high speed.
++
+This colour coding for the two parameters (reliability and speed) means that when new driver/setup options are available that provide a speed increase, (yet are unreliable or unknown reliability at the time), the user has a very easy visual prompt to help them make decisions, and adapt their trial and error path to optimisation.
++
+Feature to save different hardware settings, with notes in the hardware specs, and share them. Upload to Lumiera web site, so that better first guesses for new users are available. And if an intelligent system is used for hardware detection in future, then the information for best choices will already be available.
+-- link:Tree[] [[DateTime(2008-05-28T09:41:00NZ)]]
+
+  - Comment: The problem is that unlike games, in movie editors there isn't very much that can be done in the way of tweaking. With video editing, by and large there are no shortcuts. So the calculations that must take place to render a video on a Quad Core workstation are the same as the ones that need to happen on an EeePC. Lumiera needs to be intelligent about how much RAM it uses etc. but that sort of thing ought to be automatic. The only thing that this could apply to is reduced quality previews, which I've put in the blueprint list.
+-- link:JoelHoldsworth[] [[DateTime(2008-07-24T16:34:20Z)]]
+
+* Menu Bar disconnectable from track view +
+The menu bar could be made disconnected from the track view. This would allow the track view to be covered by a window, but the menu still kept on top. The menu bar could by default start at the top left and run across the screen. It could remain on top view. It could include easy single click tabs to jump from one window view to another.
++
+The menu items that are specific to track view could be separated out and left as dedicated menu attached to the top of the track view.
+-- link:Tree[][[DateTime(2008-05-07T21:06:00NZ)]]
+
+  - Comment: Actually if you look at the state-of-ui you can see that the menu bar will be shown at the top of workspace. We might make it detachable, but actually it's not very useful to be able to attach the menu bar to the sides or bottoms of windows.
+-- link:JoelHoldsworth[] [[DateTime(2008-07-24T16:47:08Z)]]

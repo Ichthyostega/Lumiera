@@ -1,0 +1,317 @@
+GUI Brainstorming Reviewed
+==========================
+:Author: JoelHoldsworth
+:Date: 2009-01-24
+
+State of the GUI
+----------------
+image::images/screenshot090124-resources.jpg
+
+Updated 18/01/09
+
+
+Done
+~~~~
+
+// AsciiDoc doesn't support strikethrough text so I left this as is -- daylife
+
+* Tiled Windows +
+One Window can be tiled (horizontally/vertically) giving areas where screen elements can be placed (see blender)
+
+* Multiple windows +
+Can open multiple windows on one head and (optionally) tile them as above
+-- link:ct[] [[DateTime(2008-02-07T20:42:54Z)]]
+
+* My personal preference would be to produce the GUI in C++ with Gtkmm. Gnome is the most popular desktop for Linux, and GTK now has good support both for Win32, Mac and KDE (except that GTK on Mac still needs X11, probably for some more time)
+
+* This sketch shows the GTK docking system, as seen in Anjuta (and to some extent in Inkscape). The GTK docking system is like a tiling window manager in a window. This allows the layout of panels to be totally rearranged, or even detached into floating windows. These floating panels can be stuck together in a single child window. This would be a perfect way to span the workflow across 2 screens. For me, it's this feature that most attracts me to GTK.
+
+
+Reviewed Ideas
+--------------
+
+High Priority
+~~~~~~~~~~~~~
+
+* IMHO it's much better to make an interface out of standard bits (controls, fonts, colours) wherever possible. We really want to make Lumiera "like other apps", rather than making our own unique GUI elements just for this project - the way Cinelerra does. This makes it quicker for new users to begin work, and feel comfortable.
+
+* Tango style icons mean the Lumiera will look consistent with Gnome, Windows, Mac and KDE - and the rest of the free desktop applications.
+
+* Stealing ideas from Windows Movie Maker, it seems better to display transitions and filters in a way that shows the user what the filter will _do_ to the video/audio, rather than using metaphors: like George Bush=Unsharp in Cinelerra.
+
+* A good entry level gui together with an advanced key driven system like about blender (not so much the ui)
+
+  - Yes Blender's UI isn't that great a model to follow (though there is some good stuff in there). I agree about good keyboard support. A good place to start would be the standard <Modkeys>+<Letter> accelerators, as well as context menu mnemonics. We should be able cover the entire command set with the these. I don't see us needing anything more advanced than that.
+-- link:JoelHoldsworth[] [[DateTime(2008-07-22T20:48:03Z)]]
+
+
+Medium Priority
+~~~~~~~~~~~~~~~
+
+* Fullscreen Support +
+Windows can be made fullscreen with no decorations (but tiling left intact)
+-- link:ct[] [[DateTime(2008-02-07T20:42:54Z)]]
+
+  - Comment: This can be done with relative ease. We should add this feature.
+-- link:joelholdsworth[] [[DateTime(2008-07-21T21:58:48Z)]]
+
+* Work well with tiling window managers +
+I propose that the future Lumiera GUI is designed without too much (or anything) about the user's screen apart from what is acceptable based on the X11 protocol(?) in order to work well with tiling window managers. The main problem to watch out for is assuming specific dimensions. The nature of tiling window managers is that most of the time, the windows without focus are dramatically downsized in one or two dimensions. This causes poorly designed GUIs to behave strangely, sometimes as bad as constantly jumping between layouts and thus causing unnecessary CPU load.
+-- link:MichaelPloujnikov[] [[DateTime(2008-04-14T22:29:12Z)]]
+
+  - Comment: As much as anything this is a case for good testing on tiling window managers. People who use them need to do this, and file bugs, or better yet patches. It would be good for me to start using one as well, I think.
+-- link:joelholdsworth[] [[DateTime(2008-07-21T21:58:48Z)]]
+
+* Window configurations can be stored/restored in customizable presets and are part of the project (see blender again)
+
+* Jog feature +
+A jog tool is a sliding ui element that when clicked and held, will play the video at a certain rate as the mouse drags left or right.  As the mouse drags the the left the video plays forward faster (It should advance very slowly at first.).  It acts the same way when the mouse drags to the right, except that the video plays in reverse. Again, it can be tedious trying to make frame-accurate cuts to long video files.  Without a jog tool it makes it more tedious to get to the exact frame you want to cut on because you must scan through, then click the next frame button half a dozen times.  A jog tool would remedy this because one could easily vary the playback rate, even reverse it, zeroing in on the frame much more quickly. Together these two features could really increase the speed at which one can edit precisely in Cinelerra.
+
+  - Comment: This idea seems feasible, it could be worked together with cehteh shuttle slider proposal. 
+-- link:joelholdsworth[] [[DateTime(2008-07-19T19:42:04Z)]]
+
+* most numeric value entries (sliders, spinbuttons) can be changed when hovering the mouse over it and turn the scroll wheel (maybe with an additional modifier key?) -- The scroll wheel is accelerated depending on how fast it is operated by the user, snapping it slowly gives frame/interval precise increments, turning it faster will exponentially increases the increment (2,4,8.. frames per click)
+-- link:ct[] [[DateTime(2008-02-07T20:42:54Z)]]
+
+* "Render AS" +
+The *process for creating a DVD* where Video and Audio have to be rendered separately is laborious. A script could easily handle this, and make the use of the program so much easier, attractive, inviting, productive, time efficient, bla bla. All the user needs to do is set the parameters and file name (once) and then "do". Many commonly used formats for saving could be saved as presets that completely avoid all the questions (say in the "File" drop down menu, as a customizable "Render AS" choice). This could also be done for HDTV, iPod, Ringtones, VCD, Various formats that give the best performance for uploading to Youtube and all the other video sharing sites.
++
+When a whole magazine article(s) can be written about the task of exporting a file to make a DVD, you know the process is a long one. mmm ... Any well paid journalists out there want to sponsor programmed task efficiency? - "NO?" - oh well.
+-- link:Tree[] [[DateTime(2008-05-07T16:44:00Z)]]
+
+  - This could probably be solved by having a series of format presets in the Render dialog. The default set could contain settings for the values you mention. We could even allow the user to save their own presets. Cinelerra already has this functionality - these are called profiles, but it doesn't come with a default set at all.
+-- link:JoelHoldsworth[] [[DateTime(2008-07-24T16:13:28Z)]]
+
+* Reduced quality previews +
+There needs to be a way of giving the user the choice to see the movie at full quality - computationally expensive, or at reduced quality for times when full framerate would be impossible.
+
+* Track View Height +
+Let the user have more flexibility over the track view height. Some tracks can be set to minimal, others to visible (but basically iconic), others enough to see features, and one or two to good resolution. Some may even be blanked.
++
+The track view height could be individually selectable , for example, by changing the "draw media" icon from toggle mode to drop down menu. The drop down selection options could include "don't show", followed by track sizes as per the drop down menu at the bottom of track view.
+-- link:Tree[][[DateTime(2008-05-07T17:30:00NZ)]]
+
+  - Comment: Yes, I was thinking about this idea myself. At first I was thinking of just allowing the user to expand or collapse the track with a +/- button. But then I wondered if it would be good to have the track completely sizable. My current thinking is the best way would be to have it sizable but with a kind of snap-to-grid behaviour so the whole thing doesn't become really messy. 
+-- link:JoelHoldsworth[] [[DateTime(2008-08-04T16:03:24Z)]]
++
+--
+* Ardour provides an example for this: the track height can be changed (by buttons or with the mouse wheel + modifyer key), but there is only a fixed set of possible track heights, some of which have a preconfigured layout. For example, in "smallest" size the track head shows only the track label without any buttons and the track is reduced to a tiny waveform.  
+-- link:Ichthyostega[] [[DateTime(2008-08-08T15:18:31Z)]]
+--
+
+
+Low Priority
+~~~~~~~~~~~~
+
+* Multi Head +
+Can open Windows on different heads of the same server, and is aware of the existence of different physical monitors (ie. Xinerama-aware)
+
+  - Comment: Xinerama seems to be a decreasingly popular way of doing multi-monitor. This probably could be implemented, but I don't have a Xinerama based setup, and I've never talked to anyone who does. I use link:TwinView[], and it seems like a more practical way of doing dual screen to me. Surely RandR based multi-monitor is the main need today.
+-- link:joelholdsworth[] [[DateTime(2008-07-21T21:58:48Z)]]
++
+--
+* Multi-Head != Xinerama ... This is very important and quite common, We want to support monitors driven at the native Video Format (resolution, framerate, interlacing, overscan, ....). For a professional setup this is really required!
+-- link:ct[] [[DateTime(2008-07-22T07:11:11Z)]] +
+Xinerama and twinView test comparison http://www.phoronix.com/scan.php?page=article&item=387&num=1[]
+--
+
+* Automatic Clip Creation based on video content. +
+When scanning through an hour long video clip, it can be tedious to go through it all making clips.  It would allow the user to get right to work if Lumiera could split the video into clips based on scene changes.  Each clip would begin at precisely the frame the current shot begins and end at the last frame before the next shot.  As long as the user could then edit these clips on the timeline, this would decrease the time spent sifting through the raw footage.
+
+  - Comment: This seems like a good idea, and quite easy to implement. I think that when we get the video-capture and media manager code working this would a be a good subproject for someone to take on. 
+-- link:joelholdsworth[] [[DateTime(2008-07-19T19:42:04Z)]]
+
+* Import and Export SMIL files +
+Many current cinelerra users probably use kino for their capturing of DV. it uses less resources, so less system demand during capture. Good display monitor while capturing. Open Movie Editor is a good multitrack editor that can share Kino's SMIL files. A good progression in complexity of editing is start with kino, move to OME, then cinelerra (lumiera). A really convenient way to assist stepping up from Kino is to handle the SMIL files.
++
+Automatic scene detection is a great feature in Kino. The simpler editors make it easy for less skilled people to look after the selection of preliminary clips, while lumiera is used by the folks who put it all together, and finish it off.
+--link:Tree[][[DateTime(2008-05-09T15:10:00NZ)]] .
+
+  - Comment: SMIL is quite cool technology. It's not just a Kino thing. It'd be quite good to be able to import this standard format.
+-- link:JoelHoldsworth[] [[DateTime(2008-07-24T16:41:02Z)]]
+
+
+More Discussion Needed
+~~~~~~~~~~~~~~~~~~~~~~
+
+Timeline
+^^^^^^^^
+
+* Sparse Timeline +
+Make the timeline view _sparse_, that means the time on top is not continuous anymore but \'boring' sequences get omitted and \'interesting' sequences get displayed, probably even stretched to cover at least a single thumbnail.
++
+This needs an ui (menu or whatever) to turn this feature on and some selection which events the user is interested in (scene cuts, transitions begin/end/mids, keyframes (begin/mid), labels, ...)
+-- link:ct[] [[DateTime(2008-05-21T13:46:51Z)]]
+
+  - Comment: Do you think we could use view splitting to accomplish this? You can see this sort of thing OpenOffice.org calc. Where you drag a splitter out from the ends of the scrollbar, this allows you compare 2 or 4 parts of a big spreadsheet at the same time. Implementing something like that might be reasonably doable. But if you're talking about hiding periods on the timeline, that sounds a lot less easy to me, and it feels like a bit a bit of an odd thing to do. What do you think ct? 
+-- link:joelholdsworth[] [[DateTime(2008-07-21T21:58:48Z)]]
++
+--
+* No, view-splitting is something different, usually one splits the timeline to few places (2 or 3). Managing those splits requires a lot manual interaction (resizing the splits, zooming into the right time resolution, scrolling to the desired range, ...). In contrast this 'sparse' timeline does that all automatically by possibly adding hundreds of those split points (there should be no split bar on the gui). One just has to select POI's with some menu or such. Well and the timeline ruler needs to adapt to it, that might be tricky
+-- link:ct[] [[DateTime(2008-07-22T07:11:11Z)]]
+--
+
+* "Sparse Timeline" is in Trackview" - see Track view section lower down the page +
+This is the kind of features I have suggested in the Trackview section lower down the page. I like the name you give it - "Sparse" because it allows the user to not have to bother viewing OR scrolling past all the stuff in between two end points (or more items) just to tweak the ends of a segment. But I would emphasize that instead of reducing the width of the timeline because of the narrow time span needs for the one task, that more tasks can be carried out in the same view. This is because the view just misses out all the stuff in between, for each task.
++
+I am playing around with a few thoughts and maybe might attach an image of how it might work. But in conjunction with "tabbed views" it would result in the convenient ability to display all the work areas in a concentrated display, meaning a whole lot less scrolling around, and clicking to bring windows to the foreground.
+-- link:Tree[][[DateTime(2008-05-23T16:59:00NZ)]]
+
+  - Comment: See above. With regards to tabbed based UI in the timeline view, I do have this in mind, and it seems reasonably straightforward to allow two tabs which contain views of the same timeline - just scrolled to different places.
+-- link:joelholdsworth[] [[DateTime(2008-07-21T21:58:48Z)]]
+
+* Clip Mode +
+This would be a clone of the clip mode in Apple's iMovie. In this mode, users would be working with discreet (read untrimable) clips. Dragging a new clip into the sequence would cause it to be inserted between two clips, not overwriting them. Once all of the clips are layed out to the users satisfaction, they could then switch to the normal multitrack mode and trim the heads and tails of the clips from there. -- link:rexbron[]
++
+The advantage to this sort of work flow is that it allows an editor to very quick create an assembly cut of a film. During this phase of editing, the editor and director are examining the takes and deciding on which ones they like best. As such, it makes sense to be able to easily change the order of clips and add new ones to see how the shots fit together.
+
+  - Comment: This sounds a bit odd in some ways. But I'd be interested to find out more. I'll probably do some research into it at some stage. Maybe you can post some screenshots.
+-- link:joelholdsworth[] [[DateTime(2008-07-21T21:58:48Z)]]
+
+* I propose an assembly system where the source material is left untouched where effects are added on the fly similar to html and dtp packages. In this system the system is linked together using an node system similar to gstreamer and jack.
+
+  - Comment: Yes the core of lumiera will work on a scen graph of connected nodes, and we want to provide the user with a way of using that power. We need to discuss how node wiring and the timeline-track tree go together. Note that node wiring only seems to make good UI when the node graph is fixed for the duration of the whole project timeline. We need to work out how this fits together with the timeline tree, and if metaclips help this problem at all.
+-- link:joelholdsworth[] [[DateTime(2008-07-21T21:58:48Z)]]
+
+Comment to all those sparse timeline and clip mode proposals: The benefits of those are obvious, as they directly correspond to the working with storyboards. Almost every serious movie uses storyboards to quite some extent. But for the implementation, I'd propose not to see it as an alternative view/mode of the timeline. Rather, I'd treat it like a media/asset folder. Probably we'll have the ability for the user to group the media asset into various "bins" (virtual sub folders). Moreover, pre-cut clips appear as clip assets as well (similar in Cinelerra and most other video editors). Thus, we just need a function to "play" such a clip bin. It could be implemented by defining a ordering on the clips in the bin (from top to bottom and from left to right?). Then, this function would create an transient EDL on-the-fly, containing just these clips, and hand it over to the engine for building/playback. Thus, the user can see his "draft-cut" played back in real time, and thats all what is really needed. When satisfied, he could mark the clips in the bin and drag them to the timeline, which would add them in the same order starting at the current position.  I don't think we need to go though all the pain of creating an separate, dedicated UI for this purpose.
+-- link:Ichthyostega[] [[DateTime(2008-07-27T23:20:19Z)]]
+
+
+Widgets
+^^^^^^^
+
+* Generalized Fader
++
+image:images/fader.png[fader.png]
++
+All faders are the same kind of custom widget, that is:
+
+  a. a slider to adjust the value with the mouse
+  .. a level indicator (progress bar?) reflecting the actual level of the signal
+  .. a spinbutton/text entry to add a value with the keyboard
+  .. a label showing the measurement unit and other information
+  .. a popup menu to configure this widget itself
++
+--
+* enable/disable the things above
+* set start and end values (the application gives an absolute allowed range)
+* change the measurement unit (byte, percent, dB, ...)
+* change between linear/logarithmic behavior
+* snap at specific intervals
+* horizontal/vertical slider/level
+* adaptive scroll wheel (see below)
+--
++
+for the application all faders provide a float (or double) value, nothing else.
+-- link:ct[] [[DateTime(2008-02-07T20:42:54Z)]]
+
+  - Comment: I think making some kind standardized fader widget is probably going to be necessary for this project. We need a good way of combining together the artistic "genstural" elements of a slider widget with the precise numerical behavior of an edit widget, and it needs to be compact - the UI will have a lot of these. I'm not sure how often we'll need to see a level meter with these. Most of the time a control is either an input or a readout - very rarely both. Generally speaking I'm against the idea of having a popup menu to configure this widget. I believe that it should be configured to work in a way which is user friendly by default. There may be many of these widgets and asking the user to configure each of these before they behave well seems a bit unfair to me.
+-- link:joelholdsworth[] [[DateTime(2008-07-21T21:58:48Z)]]
++
+--
+* I agree, the defaults should be reasonable set per-item, that will be that the meter is in most cases off and the spinner will be off on many cases too. I tried to show whats needed for the most generic case with all bells and whistles. When we generalize this we need to support all eventualities even if turned off by default. Note that some things could be done in tooltips, see below "about tooltips and statusbar", the above fader is just an early proposal/brainstorm
+-- link:ct[] [[DateTime(2008-07-23T09:41:25Z)]]
+--
+
+* Magnifying Glass for the Faders +
+Faders should have a "magnifying glass" mode, which can be activated by a key combination or modifier key. When activated, you can fine tune the current value: The step increment is lowered ideally to the real limit of the underlaying parameter, or, if this is too much, at least it should be much smaller than anything you get by dividing the possible value range by the fader length in  screen pixels. In this mode, the fader doesn't cover the whole range, rather it is centered at the current value. Changing the value by these small increments should give an obvious visible feedback. Ideally, an accompanying automation curve display will switch to the extreme vertical zoom as well. And it's important that you don't have to zoom, you enter/leave with one keypress.
++
+Partially, this is covered by the Adaptive Mouse Wheel too; but, especially when working with sound, the problem is that the parameter range cover several orders of magnitude. For example, even 16bit PCM sound has a volume parameter which can be adjusted in 32768 steps, and yes, there are situations when these fine steps make an audible difference, while most software faders give you not much more then a view hundred subdivisions even under optimal circumstances.
+-- link:Ichthyostega[] [[DateTime(2008-02-07T22:34:08Z)]]
+
+  - Comment: This is definitely a problem we need a solution to. Is modifier keys the most discoverable way of doing it - I'm not sure. We need ideas for this (see below).
+-- link:joelholdsworth[] [[DateTime(2008-07-21T21:58:48Z)]]
+
+  - This concept of "magnifying faders", is well explained in http://thorwil.wordpress.com/2007/05/01/fan-sliders/[Thorsten Wilms Fan-sliders Article], the Article also links to an implementation.
+-- link:oracle2025[] [[DateTime(2008-02-08T00:40:05Z)]]
+
+  - Comment: In one sense this is bad because it's so incredibly non-standard. Bun in other ways it seems to me like a rather ingenious solution to the problem. Aparently Ardour has these. I must investigate.
+-- link:joelholdsworth[] [[DateTime(2008-07-21T21:58:48Z)]]
+
+
+Scripting
+^^^^^^^^^
+
+* Usability (ease of use) - mouse clicks and motions, inputs decisions, etc required to achieve tasks. Macros are really handy for allowing the user to speed up repetitive tasks that the program designers have not anticipated and made easy to do from the outset. Macros can be shared on  a central web site. Plus developers can look and see what the macros are being used for, as this gives a very important indication of where vital tasks are.
+-- link:Tree[][[DateTime(2008-05-07T16:44:00NZ)]]
+
+  - Comment: We need to have some discussion about scripting. To do macro scripting we'll need to implement a DOM interfaces etc. into 2 or even all 3 layers of the system. If we want to do this, then we'll need to begin planning for it early. We have talked already about making scripting the movie itself AviSynth style. Both are worth talking about.
+-- link:JoelHoldsworth[] [[DateTime(2008-07-22T21:58:22Z)]]
++
+  - See also rcbarnes compound filters proposal.
+-- link:JoelHoldsworth[] [[DateTime(2008-07-24T16:25:57Z)]]
+
+
+Others
+^^^^^^
+
+* Time estimates for lengthy Tasks before committing to the action. +
+Handy to have time estimates for lengthy task indicated even before committing to the task. Also an estimate for the % increase or reduction in time of adjusting parameters. So you can make a good tradeoff between the result and and the time taken to get it. When a task is carried out, measurements are made to improve the accuracy of future guesses.
+--link:Tree[][[DateTime(2008-05-07T21:34:00NZ)]]
+
+  - Comment: This would be quite a nice feature if we can do it. Though it's often hard to know how long something will take until you start doing it. For example estimating the time to render a 1000 frame animation might involve rendering the first 10 frames, then multiplying that time by 100. Problem is that could potentially be quite complex to set up - especially when we're working with render farms. The backend guys would need to think about this I think.
+-- link:JoelHoldsworth[] [[DateTime(2008-07-24T16:24:50Z)]]
+
+
+Joelholdsworth is Skeptical
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+* Multi server +
+Display GUI components on different Xservers, some critical components (GL rendering etc) might be only supported on local displays
+-- link:ct[] [[DateTime(2008-02-07T20:42:54Z)]]
+
+  - Comment: This doesn't seem like a very common use case. I can't see any immediate advantage in doing this, and I'm struggling to think of a scenario where this would be helpful.
+-- link:joelholdsworth[] [[DateTime(2008-07-21T21:58:48Z)]]
++
+--
+* Having more than one workstation each driving a display on its own, getting more bang. But I agree this is not a important feature and rather a corner case.
+-- link:ct[] [[DateTime(2008-07-22T07:11:11Z)]]
+--
+
+* 3x3 Menus +
+Have a mostly quadratic 3x3 dialpad like popup menu poping up so that the center is the mouse position (adjusted when near screen corners). The middle field is always the close/cancel functionality and the 8 fields around offer the menu entries. Navigation can be done by mouse, cursor keys or numpad! Menu entries can open 3x3 submenus again, either incremental so that closing brings you up to the higher menu or exclusive that closing aborts the whole menu.
+-- link:ct[] [[DateTime(2008-02-07T20:42:54Z)]]
+
+  - Comment: Cehteh really want this feature. Personally I'm skeptical. It seems clumsy and non-standard to me, and not good in terms of command discoverability, so I don't want to implement it. But then he does seem to want it pretty badly, so I'm a bit cautious about putting it straight in the "Won't Implement" category.
+-- link:joelholdsworth[] [[DateTime(2008-07-21T21:58:48Z)]]
++
+--
+* not only me, but ichthyo and simav too and anyone i talked with liked this idea but you
+-- link:ct[] [[DateTime(2008-07-22T07:11:11Z)]]
+--
+
+* User Precautions get built out of user interface and into program.+
+When attaching such and such effect to a track, disable "play" before attaching it, then re-enable play aft attaching it. (we don't tell you this before hand, and we never will, unless you ask the question and search the net, then you might find out in the "secrets manual", And you'll have to remember this (always)!! If there are circumstances that apply to an effect (or for that matter any other part of the program), then the feature could have a flag in it that warns the system to take note of it, and it then reports what its requirement or tweak feature is, so the system can automatically handle it the best way. (A sort of OO process handler). This not only saves potential lengthy wastes of time, but saves concentration on sideline issues, speeds up work, adds to reliability and good time user experience.
+--link:Tree[][[DateTime(2008-05-07T21:34:00NZ)]]
+
+  - Comment: I'm not sure I quite understand what this is about. Your explanation is a bit hard to read.
+-- link:JoelHoldsworth[] [[DateTime(2008-07-24T16:24:50Z)]]
++
+--
+* I wouldn't even be skeptical, I am against such a proposal. Any feature we add should just work, without crashing the application and trashing the users efforts. If a feature doesn't work, it needs to be fixed, instead of automatically warning the user that this feature is broken. The fact that for Cinelerra you need the "secrets" tells quite a lot about the state of affairs regarding Cinelerra, and because we wanted to change this, Lumiera was born. ;-)  
+-- link:Ichthyostega[] [[DateTime(2008-07-27T23:04:42Z)]]
+--
+
+
+May Implement Some Day
+~~~~~~~~~~~~~~~~~~~~~~
+
+* Widget overlay/Fullscreen +
+Some Widgets can be made half transparent and overlay video giving a head up display editing while the video is at native resolution in background.
+Window configurations can be stored/restored in customizable presets and are part of the project (see blender again)
+-- link:ct[] [[DateTime(2008-02-07T20:42:54Z)]]
+
+  - Comment: This is difficult to do. XVideo and Gtk don't really mix. But I can't think of any controls that need to be overlaid.
+-- link:joelholdsworth[] [[DateTime(2008-07-21T21:58:48Z)]]
++
+--
+* Would be nice but not a primary feature. I'd rather think about some some special on-screen-menu overlay, not necessary gtk (libosd?) maybe this can be implemented with OpenGL overlay or so. As noted before, having a monitor which runs on the native Video resolution is a requirement. Giving this Monitor some (limited) GUI features, like mask editing or other simple manipulations gains extra points. Not a primary/important feature but I'd rather like it seen as "Will implement _someday_" The window configuration customization should be its own point, I think thats easy with GTK (Gimp does that) adding a small Configuration management GUI shouldn't be hard.
+-- link:ct[] [[DateTime(2008-07-22T07:11:11Z)]]
+--
+
+
+Won't Implement
+~~~~~~~~~~~~~~~
+
+[[Include(/WontImplement, , editlink)]]
+

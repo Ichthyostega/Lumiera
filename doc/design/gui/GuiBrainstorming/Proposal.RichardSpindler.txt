@@ -1,0 +1,28 @@
+GUI Brainstorming Proposal
+==========================
+:Author: Richard Spindler
+:Date: 2008-30-03
+
+
+Node Graph proposal
+-------------------
+
+on 2/6/2008 Richard Spindler wrote:
+
+ I've made a little Picture about how I think the User Interface of a
+ yet to be named Video Editor could be presented. There is no central
+ notion of the camera/projector Model, which I think could be added
+ anywhere in the Graphs as a Node with an unlimited Number of inputs.
+
+ Automations are not yet part of the  Mockup, but could be added.
+ Cross Bus connections would likely not be represented by Arrows in a
+ real UI, but rather the Bus would be adressed by Name.
+
+ The dotted Lines mean that one element expands to a different View,
+ for example in a new Window.
+ The same goes for the rectangles with the slashed outline, they
+ represent another View, and the connection from the timeline to the
+ compositing nodes will be by Name, and not by arrows. Default Names
+ would be "Video Track #1", etc.
+
+image::RichardSpindler.proposal.png[]
