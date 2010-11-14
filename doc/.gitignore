@@ -1,0 +1,6 @@
+*.html
+user/**/*.html
+devel/rfc*/**/*.html
+devel/draw/**/*.png
+user/**/*.html
+
