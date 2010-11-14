@@ -1,0 +1,13 @@
+Documentation
+=============
+
+All kinds of documentation goes here, both user and developer documentation.
+
+ * link:manual.html[User Manual]  _(planned)_
+ * link:white-papers-presentations.html[Whitepapers and Presentations]
+ * link:design/index.html[Design Documents]
+ * link:technical/index.html[Technical and Documentation]
+
+[icon="warning.png"]
+WARNING: Website under construction
+
