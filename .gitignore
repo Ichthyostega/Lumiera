@@ -20,10 +20,4 @@ autom4te.cache
 semantic.cache
 tests/,*
 wiki/backups/*
-doc/*.html
-doc/devel/rfc/*.html
-doc/devel/rfc_pending/*.html
-doc/devel/draw/*.png
-doc/user/*.html
-doc/user/lumiera_from_outer_space/*.html
 m4/*
