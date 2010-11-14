@@ -1,0 +1,104 @@
+Workspaces
+==========
+:Author: JoelHoldsworth, ct, Ichthyostega
+
+2 Conflicting Approaches to Workspace Management
+------------------------------------------------
+
+After some debate on IRC last night, it emerged that there are some differing ideas about how projects, sessions, panels and main-windows should work together, and it seems that there are different paradigms for workspaces.
+
+I have my personal preferences, but my thinking is definitely incomplete - I don't think any of us have yet groked all the ramifications of the different ideas, so I'm hoping this will help us elucidate the differences.
+
+
+Paradigm 1: Super-IDE Style
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+This approach is a sort-of free for all. Each window is a bucket for N~d~ docking panels, and any docking panel can be attached to any window. This total state of windows and panels would be a workspace made of N~p~ projects. Any number of windows can be created, and windows can contain as many or as few panels as you like, and panels can be dragged between windows.
+
+The end result would be like getting multiple Xnests of Ion, and bear some similarity to the way some IDEs such as Eclipse, and Visual Studio work, but with a greater emphasis on multiple parent windows.
+
+This would make sense if the normal workflow would involves many projects, and a lot of inter-project work.
+
+There are some plusses:
+
+ * It's very orthogonal, and it lets the user configure their window layout to be exactly what they want. Lots of flexibility.
+
+But, this idea has some difficulties:
+
+ * How does the user open different sequences and elements of the many projects? In IDEs, the answer is to have a project browser which usually remains open all the time. The user then double clicks on source files to open them. This takes up a lot of screen real estate, but in IDEs this doesn't matter; I think in lumiera we don't want to spend space on this. The alternative would be to put the sequence list into a menu somewhere, but this would quickly become cumbersome even for medium complexity projects.
+
+ * Every single panel will have to explicitly state which project it's connected to. It might be possible that this text could double as a drop-down selector, but even so that's pretty cumbersome for something that would otherwise be implicit.
+
+ * Closing one of the projects would cause many panels to disappear which would leave a nasty mess behind in UI. The user would have to waste time clearing it up.
+
+ * From a usability perspective it's not necessarily desirable to allow various mix-n-match UI because it allows the user to enter a create confusing mixture, where different parts of different project are shown in different places. Even for simple projects the user may end up having to spend a lot of time tending to the window layout - tweaking it. I'd prefer the user not to have to think about that.
+
+ * This may not be very helpful for viewing multiple projects which are _not_ inter-connected. It would be very easy for projects which are isolated to end up being mixed panel-wise, and acquiring weird dependencies on each other.
+
+
+Paradigm 2: SDI Style
+~~~~~~~~~~~~~~~~~~~~~
+In this approach, every project gets it's own main window. It would be possible to create multiple main windows connected to a single project with View>New Window, but still no more than one project per window. This style is basically Single Document Interface (SDI), as seen in many applications: e.g. Inkscape.
+
+I believe this makes sense if we think that projects are first class citizens. So a given feature film really would just be one project. In this case you'd really never want to look at more than one project at once. Complex projects would have have many sequences, so we'd need to have a good way to make sure the user doesn't get swamped.
+
+Doing inter-project work would require the user to spend time arranging windows, but this paradigm assumes you very rarely want to. The payoff of it is simplicity - the panels of projects are kept together in one place.
+
+
+joelholdsworths's Conclusion
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+I favour this paradigm #2. The freedom from paradigm #1 enables some extra possibilities for window arrangement, but at the cost of a lot of extra complexity, and at the cost of allowing some pretty ugly configurations that both the programmer and the user would rather not have to think about. It seems to me that if you're doing a lot of inter-project work, you can drag windows into a formation - that's pretty normal for this rare case.
+
+I wonder what the proffessional video editors think. Please leave comments.
+
+
+
+
+Comments
+--------
+
+Basically I agree/you convinced me with #2, Initially I was more after #1 but you pointed out some problems. But still
+I would like to make some execptions from the rule, because I see viable use-cases.
+As you suggest, a window is related to a project, I would like to have a \'import' feature there where one can
+include/dock a component from another project. This then becomes a \'real' import which means the first project notes
+"display the timeline of project 2 in my window". This gives clean semantics for working with projects and windows and
+gives a clean abstraction of an \'import' we can even store in the session down. This imported components are then not
+part of project 2's session. Usecases are side by side comparsion and work on 2 or more pojects, arrange timelines for
+easier drag and drop operations, make this config a project setting (you dont have to open all dependent projects and
+arrange a multitude of windows). Prolly the same (to a lesser extent) counts for importing the \'resources' of another
+project (hey have you thought about some collection of boilerplace footage, logos, intro sequence etc as clips stored
+in a site-wide project withot timeline, but then you have all your production companies \'default' resources at
+hand?). Next sharing viewers in one window, possible fullscreen on a 2nd monitor then you can have a 2x2 tiling or
+such for all kinds of previews, even external projects. +
+-- link:ct[] [[DateTime(2009-01-29T03:03:22Z)]]
+
+- Agreed. A nice "include" feature, so one project could refer to another would cover most of what you could
+imagine to do with multiple projects +
+-- link:Ichthyostega[] [[DateTime(2009-01-29T03:36:08Z)]]
+
+Ah just to have it noted, I told that often on irc: Dock windows shall not be a second class citizen. You mentioned
+that you want one able to open more windows for a project, undocking a pane shall just do that too. All windows can
+then be treated equal, can have a (toggleable) menu, toolbar and statusbar etc. Especially when working with big
+and/or multiple monitors it becomes really ugly when you have to move the mouse over your whole desktop setup just to
+reach a menu entry. (same for looking around to check information on the status bar, which shall represent the status
+of the window which has focus anyways). And last but not least, the current GDL docks implement thir own drag handles,
+moving windows around has a big performance problem with some window managers, moving windows shall be the job of the
+window manager and not the job of the application, the only thing the application may do is hinting positions to the
+WM. These second class dock windows are neither ICCCM conforming (http://tronche.com/gui/x/icccm/[]) nor do they add any
+extra user experience, instead the user has to learn a new kind of window class. +
+-- link:ct[] [[DateTime(2009-01-29T03:15:03Z)]]
+
+
+To chime in with the commenting... this comparison rather strengthened my preference for paradigm #2 _for our situation here._
+But I think we should try to exploit some of the extended possibilities which you usually rather find in those Super-IDE type applications:
+perspectives, freely configurable pannels, multiple top level windows, something like palettes or tiling.
+ 
+When you compare the situation when working on software with the situation when working on a feature film, it seems to me that the situation 
+don't match up. The rationale of having multiple software projects opened is (a) "lets see how I solved the same problem 2 months ago there..."
+and (b) working on a larger software compound, comprised of multiple parts, which may even be deployed distributed.
+I think none of these applies to film editing. (Maybe the situation is a bit different for putting together a TV show)
+
+According to my own editing experiences, both film and sound, the "bringing in media into the project"-phase makes only a very small percentage of the overall time spent with a given project. Initially, after bringing in the raw footage, for me there is a long lasting phase where I just explore the material, i.e. I am viewing (or listening) to the footage and maybe try out some possible cuts and combinations in a throwaway fashion, just to get a feeling about the material. Then I build up the backbone of the cut rather quickly (and this is the only time where I could imagine having muliple projects opened at the same time). What follows is a long fine tuning and augmenting phase. So, for me, setting things up so I can work comfortably in a rather focussed and limited part of the application couold be more important then exploring multiple projects at the same time. +
+-- link:Ichthyostega[] [[DateTime(2009-01-29T03:31:54Z)]]
+ 
+Another important thing: Do not automatically pop up windows. Creating a new window (even dialog boxes) must always be a consequence an user action. Even error conditions shall _NOT_ pop up an window (with one exception, that is fatal errors which will block the application until resolved). Otherwise the \'error' window shall be some log (perhaps with filtering capabilities) similar to cinelerra, but when an error happens some big red ERROR might blink in the status bar instead and only clicking on that will open the error log. +
+-- link:ct[] [[DateTime(2009-02-01T09:40:08Z)]]
