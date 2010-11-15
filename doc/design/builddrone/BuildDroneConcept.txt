@@ -1,0 +1,200 @@
+A Build Drone for Lumiera
+=========================
+:Author: Christian Thäter
+:Date: 2008
+
+
+This is a brainstorming page for what a build system on the server would need.
+First of all, it should be simple and extensible, preferably by simple shell
+scripts (note that *anything* else is a subset of a shell script!). We should
+use existing good ol' unix utilities when applicable (batch, mail,...).
+In my opinion this all can be a lot shell code glued together. Things should be
+isolated to single tasks and well refactored to make it maintainable.
+
+Lets go:
+
+
+Whats needed?
+-------------
+
+ * A description/configuration what needs to be done, these may be recursive.
+ * a batch/scheduling system (batch)
+ * triggers/events which are passed along (initiate a build by a git commit, ...)
+ * actions to perform
+ * handlers for success and failure cases which act on the outcome of a action
+   (scp, mail, rsync, filters to produce asciidoc output...)
+ * maybe some dependency handing (only build lumiera after installing the recent nobug version successfully)
+
+
+Top Down scratch
+----------------
+
+Lets say the configs are shell scripts.
+
+first a verbose one:
+
+------------------------------------------------------------
+cd project_dir
+if git pull; then
+  # call handlers for success case
+  sendmail foo@bar.com <<EOF
+  blablah
+  EOF
+  sendmail other@blah.net <<EOF
+  blahblah
+  EOF
+  # success event which tells the caller to proceed
+  Huh?
+else
+  # call handlers for the fail case
+  sendmail boss@bar.com <<EOF
+  blablah
+  EOF
+  # fail event which tells the caller to abort (or whatever)
+  Hah!
+fi
+------------------------------------------------------------
+
+Ok that above doesnt look good, but would do the job with some efforts
+Now lets factor this to some shell functions:
+
+------------------------------------------------------------
+function link:AddToReport[]()
+{
+  cat >>,build_drone_report
+}
+
+function link:GitPull[]()
+{
+  local dir="$1"
+  local repo="${2:-origin}"
+  local branch="${3:-master}"
+  ACTION="GitPull $*"
+  RESULT=FAILURE
+  cd "$dir" 2>&1 | link:AddToReport[] ,  return 1
+  git pull "$repo" "$branch" 2>&1 | link:AddToReport[] ,  return 1
+  RESULT=SUCCESS
+  return 0
+}
+
+function link:SendMail[]
+{
+  cat ,build_drone_mail <<EOF
+Subject: Build Drone Report
+
+$ACTION $RESULT
+blah blah
+
+EOF
+  cat ,build_drone_report >>,build_drone_mail
+ 
+  for i in "$@"; do
+    sendmail "$i" <,build_drone_mail
+  done
+}
+------------------------------------------------------------
+
+
+now we can do following: (looks much nicer or?)
+
+------------------------------------------------------------
+if link:GitPull[] project_dir; then
+  link:SendMail[] foo@bar.com other@blah.net
+else
+  link:SendMail[] boss@bar.com
+fi
+------------------------------------------------------------
+
+the above snippet can be a file in some config dir and will be processed by sourcing it with proper setup
+lets place it in /build_drone/project/10GitPull
+
+------------------------------------------------------------
+for i in "/build_drone/project/*"; do
+  (
+    source "$i"
+  )
+  link:CallTrigger[]
+done
+------------------------------------------------------------
+
+... ok enough for now, whats needed is the link:CallTrigger[] implementation,
+stopping processes waiting (either reading on a pipe or wait for signal (-CONT
+for success, -TERM for failure))
+
+setup of the function scriptlets:
+ for i in link:/usr/local/lib/BuildDrone/[]*; do source $i; done ...
+and so on
+..
+
+
+Conventions
+-----------
+
+. one drone runs always in a well defined directory, if commands have to go into subdirs, use subshells (good idea anyways)
+. all jobs need to run in serial order, nothing parallel. What the job then does itself (make -j3 ..) can be parallelized.
+. we need a well defined environment and some file where it is registered ,bd_env or so
+. all jobs append write their output to some well defined logfile (logfiles ..)
+. the status must be recorded in a file too
+
+Example:
+
+
+------------------------------------------------------------
+function link:BatchJob[]()
+{
+  batch <<EOF
+
+(
+ $(cat)
+) >&log
+echo $? >,bd_exitcode
+
+kill -CONT $$
+EOF
+
+  # wait for signal
+  suspend
+  return $(<,bd_exitcode)
+}
+------------------------------------------------------------
+
+This of course needs some more work, trap handlers for signals etc. I am not
+sure if the idea with signals is good, maybe better use a pipe, lets see.
+
+
+ 
+
+Actions and Handlers Brainstorming
+----------------------------------
+
+Ideas, not in order
+
+link:SendMail[]::
+  send report as email
+link:GitPull[]::
+  updates a git checkout +
+  Split this in
+  * link:GitFetch[]
+    fetch from remote
+  * link:GitHasChanges[]
+    are there changes between HEAD and remote?
+  * link:GitCheckout[]
+    reset to the remote head and checkout
+Bootstrap::
+  autoreconf and configure
+Make::
+  runs 'make'
+Check::
+  runs 'make check'
+Distcheck::
+  runs 'make distcheck'
+Doxygen::
+  runs doxygen
+link:StyleCheck[]::
+  checks if files violate the style rules, something like:
+  'astyle --style=gnu <$FILE.c | diff -u FILE.c - ...'
+link:ToDos[]::
+  greps for TODO (with some -A context) and produces a report
+  * beautify (asciidoc) reports
+  * publish reports, packages etc to the webserver (scp, rsync)
+

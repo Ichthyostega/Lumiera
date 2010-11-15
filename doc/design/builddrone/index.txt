@@ -1,6 +1,7 @@
 Lumiera Builddrone
 ==================
 
+* link:BuildDroneConcept.html[initial concept from 2008]
 
 [icon="warning.png"]
 WARNING: Website under construction

@@ -1,7 +1,7 @@
 GUI Brainstorming Proposal
 ==========================
-:Author: AkhiL
-:Date: 2008-30-03
+:Author: IL'dar AKHmetgaleev (»AkhIL«)
+Date: 2008-30-03
 
 
 Wiring nodes within the timeline
@@ -10,4 +10,5 @@ Wiring nodes within the timeline
 In fall 2007, rather then using an external node editor, AkhiL proposed to do wiring
 of effect nodes directly within the timeline. He did the following Mockup:
 
-image::AkhiL.proposal.png[]
+image::{imgg}/AkhiL.proposal.png[]
+

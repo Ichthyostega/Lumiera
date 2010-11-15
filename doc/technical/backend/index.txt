@@ -1,6 +1,8 @@
 Technical Documentation: Backend
 ================================
 
+ * link:ConfigLoader.html[Config Loader brainstorming from 2008]
+
 
 [icon="warning.png"]
 WARNING: Website under construction

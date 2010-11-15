@@ -1,9 +1,9 @@
 Design Documents: Application Framework
 =======================================
 
- * link:config.html[Configuration]
+ * link:Config.html[Configuration]
  * link:plugin_loader.html[Plugin Loader]
- * Application startup- and shutdown
+ * link:SubsystemLifecycle.html[Application Subsystems and Lifecycle]
 
 [icon="warning.png"]
 WARNING: Website under construction
