@@ -1,6 +1,7 @@
 Design Documents: Plug-In
 =========================
 
+ * link:PluginBrainstorm.html[early draft for the plugin interface]
 
 [icon="warning.png"]
 WARNING: Website under construction

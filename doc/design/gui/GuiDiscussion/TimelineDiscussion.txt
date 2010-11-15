@@ -1,0 +1,381 @@
+Timeline: Discussion
+====================
+:author: Joel Holdsworth
+
+This is Joel Holdsworth's attempt to amalgamate all the ideas from all the brainstorming to one consistent idea that makes sense, can be implemented, and seems like it would be nice to use. Comments are welcome.
+
+ * Avid vs FCP 2006 - http://www.fini.tv/articles/avidfcp2006.html[]
+
+ * Final Cut Pro 5 - A First Look - http://www.kenstone.net/fcp_homepage/fcp_5_new_martin.html[]
+
+ * SpeedEdit Tutorials - http://www.newtek.com/speededit/tutorials/index.php[]
+
+
+Brainstorming
+-------------
+
+Akhil
+~~~~~
+-> link:Proposal.AkhiL.html[AkhIL's Proposal]
+
+.Things I like
+ * The roots of group tracks show what's being rendered inside (Ichthyo calls these root tracks "group bars"). This makes sense - I think it might do more harm than good to let the user edit in group roots.
+ * The power of manual wiring. I like the way you can wire things together on the timeline.
+
+.Things I don't like
+ * Tracks seem to be generic - all tracks are the same: either a group track or a normal "track". Yet you've got some tracks with just filters, some with just automation curves, and some with just clips. The problem here is that it gets confusing to know what to do if we allow the user to mix and match. I think that tracks 1-4 and 5-6 in your diagram need to lumped together in a single complex track.
+ * Some of your links seem to go from clips, and some from full tracks. This behaviour needs to be consistent. It's difficult to know what to suggest. Either links go from clips only - in which case 1hour long effect applied to 100 clips becomes a pain in the arse (maybe you'd use busses in this case). The alternative is only applying constant links between tracks, but this is quite inflexible, and would force you to make lots of meta-clips, anytime you wanted the linkage to change in the middle of the timeline.
+
+
+Richard Spindler 
+~~~~~~~~~~~~~~~~
+-> link:Proposal.RichardSpindler.html[Richard's Proposal]
+
+.Things I like
+ * You've got a concept of sub-EDLs and metaclips. We're definitely going to do that. If a clip is a metaclip, you can open up the nested timeline in another tab on the timeline view.
+ * Lots of flexibility by having filter graphs on the input stage of clips, and on the output stage of the timeline.
+ * Your scratch bus provokes the idea of busses in general - these are going to be really useful for routing video around.
+
+.Things I don't like
+ * Filter graphs on the input stage: This concept might be better expressed with "compound effects", which would be a filter-graph-in-a-box. These would work much like any effects, and could be reused, rather than forcing the user to rebuild the same graph for 100s of clips which need the same processing. (See Alcarinque's suggestion for "Node Layouts").
+ * Output stage filter graph: It's a good idea, but I think we need to re-express it in terms of busses and the track tree. We should be able to give the user the same results, but it reduces the number of distinct "views" that the user has to deal with in the normal workflow. I believe we can find a way of elegantly expressing this concept through the views that we already have.
+
+
+Alcarinque 
+~~~~~~~~~~
+-> http://telniratha.atspace.com/spec.html[]
+
+.Things I like
+ * Node Layouts in the media library. This isn't a page about the ML, but I like your ideas of having stored node layouts in the library. My own name for these is compound effects - but it's the same idea. Your idea of having collecting a library of these on the website is pretty cool as well. 
+ * Being able to connect the view port to different plugs in the compositing system - rather like the PFL buttons on a mixing desk.
+ * Keyable parameters, automatable on the timeline
+ * Having a transform trajectory applied to every track
+ * Tabbed timeline for sub-EDLs for having more than one timeline in a project - e.g. metaclips: scne 1, scene 2 etc.
+
+.Things I don't like
+ * I'm not sure, but I think some of these ideas stumble on the problems of
+   reconciling fixed node layouts with the variable nature of a timeline. Either
+   you make connections "per track", in which case there's not enough flexibility,
+   or "per clip", in which case I think there's too much if you have 100s of
+   clips.
+
+
+Hermann Vosseler (Ichthyo) 
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+-> http://ichthyostega.de/cin3/drafts/GUI-draft1.html[]
+
+.Things I like
+ * All clips are compound audio/video clips.
+ * Groups can be expanded and collapsed.
+
+... more here ...
+
+
+Clay Barnes (rcbarnes)
+~~~~~~~~~~~~~~~~~~~~~~
+-> http://www.hci-matters.com/blog/2008/05/21/lumiera-timeline-first-draft/[]
+
+.Things I like
+ * Nudge buttons are shown when the user hovers over the clip. This could be quite a timesaver.
+ * Video filters are shown above the top track in the set of inputs that the effect is applied to. This is useful for displaying filters which have multiple inputs. The highlighting of other attached inputs is cool and useful.
+ * Automation curves are show in effects just the same as everything else.
+ * Split and heal buttons. Heal would be hard to do well - but still, it's a great idea. Might requre extra metadata to be stored in the clip fragments so they can be recombined.
+ * ichthyo: "you create sort-of “sub-tracks” within each track for each of the contained media types (here video and audio). To me this seems a good idea, as I am myself pushing the Idea (and implementing the necessary infrastructure) of the clips being typically multi-channel. So, rather than having a Audio and Video section, separate Video and audio tracks, and then having to solve the problem how to “link” audio to video, I favour to treat each clip as a compound of related media streams."
+
+.Things I don't like
+ * If a filter has multiple inputs, then how does the user control which track in the tree actually sees the output of the effect? cehteh says: "You showing that effects and tracks are grouped by dashed boxes, which is rather limiting to the layout how you can organize things on screen and how things get wired together". Perhaps it would be better to require all input tracks to an effect to be part of a group track, rather than being able to spaghetti lots of tracks together. The down side of this is it would make it difficult to to use a group twice i.e. have a track that is both an input to an effect, and a normal track - part of the another tree.
+ * I'm not sure I understand the (+) feature. Can you explain it more for me?
+ * cehteh: "curves need to be way bigger". Maybe the tracks could be sizable.
+ * cehteh: "You show that some things (audio) tracks can be hidden, for tree like organization this would be just a tree collapse."
+
+
+Joel Conclusions:
+-----------------
+
+Timeline like this:
+
+image::http://www.kenstone2.net/fcp_homepage/images_fcp_5_new_martin/07_fc_studio_new_martin.jpg[]
+
+ Tracks
+''''''''''
+ Busses
+''''''''''
+ Outputs
+
+
+- Multicamera Angles
+- Track Tree?
+- Mixed Mode Tracks? __such a good idea?__
+- Scalable UI
+- Small text
+- Storyboard view?
+- "M" key to add markers during playback
+- Hovering nudge buttons.
+
+- Compound Effects/Stored Node Layouts
+- Keyable parameters, automatable on the timeline
+- Tabbed timeline
+- All clips are compound audio/video clips
+- Groups can be expanded and collapsed.
+
+- Extra Headers to display video and audio headings - multi-part headers.
+- Groups are read only tracks, as are the outputs from busses.
+- Every group a bus?
+- Pointers instead of wiring?
+
+Every group would actually be a multi-input effect. If no effect is explicitly
+applied to the track, the default effect could be "overlay N-tracks". If a 1 or
+2 or 3 input effect is applied, then only 1 or 2 or 3 child tracks would be
+allowed. Some effects allow N-inputs. Note that we'd need an effect/effect-stack
+for every type of media in the group - audio and video.
+
+I want to say effects apply to not to clips, or to the whole length of tracks,
+apply to the periods of a timeline, and in the UI as you change the period of an
+effect it snaps to clips. However, I think effects have to applied upstream of
+transitions. This means that effects have to be per-clip. One way to make long
+effects would be to put the whole track in a group, and apply the effect to the
+whole group.
+
+What happens if you put a 4 channel audio clip in a timeline with 2 channel
+clips? I guess we display the stereo and 4 channels are equal citizens, then
+upmix all audio into sound space, then down-mix somewhere downstream.
+
+.Node Stuff:
+* In a compound plugin (stored node layout), I guess some of the parameters
+  would be fixed, but I guess you'd want to present params to the user. The
+  question is how. The most obvious way is to load the params of individual effect
+  nodes with mathematical expressions that relate their params to a list of
+  user-params for the compound node. These user-params would of course be
+  automatable. Mathematical expressions are pretty unfriendly to users though. I
+  wonder if it would be if these node-layouts were simply expressed with AviSynth
+  style script.
+* See Open Movie Editor's node editor: http://www.openmovieeditor.org/nodefilters.html[]
+
+
+Ichthyo's Comments
+------------------
+Hi Joel, I'll summarize some of my thoughts here. Maybe we should split of this
+discussion to a separate page? Maybe we should carry over more detailed
+discussions to the Mailinglist? First of all -- I really like your work and the
+effort to get the GUI reasonable complete but simple. Next, when I choose to
+take a certain approach for implementing a basic feature in the Proc-Layer, this
+doesn't bind the GUI to present it exactly the way it's implemented. Of course,
+in many cases the GUI will be reasonable close to the actual underlying
+implementation, but it's an independent layer after all. The Proc I am building
+is very flexible, and I take it for guaranteed that the GUI has the freedom of
+using some of those possibilities always in one certain limited way. And,
+finally, please don't take my arguments as general criticism -- I am just
+questioning some of the "usual" approaches at places where I have the feeling or
+the experience that it would be beneficial, i.e.where re-thinking the solution
+could lead to a smoother treatment of the problems at hand.
+
+
+Signal processing, signal routing and control of parameters
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Most existing solutions we know or have worked with are more or less derived
+conceptually from hardware sound mixing consoles and multitrack tape machines.
+Most noticeable, a mixer strip, (track, bus) means at the same time actual data
+processing, routing of signals and controlling of parameters. Actual hardware
+works this way, but in software this is only a metaphor. The hard wiring is
+rather within our brains. We think it's most reasonable and simple this way, but
+actually it creates a bunch of artificial problems. That's why I am stressing
+this point all the time.
+
+You pointed out that my placement concept may go a bit too far, especially when
+it attempts to think of sound panning or output routing also as a kind of
+placement of an object in a configuraton space. And, on the other hand,
+Christian asked "why then not also controlling plugin parameters by placement?".
+I must admit, both of you have a point. Christians proposal goes even beyond
+what I proposed. It is completely straight forward when considered structurally,
+but it is also clearly beyond the meaning of the term/idea/concept "placement".
+But what, if we re-adjust the concepts and think in terms of ''Advice'' ?
+Thus, a placement would bind an media object into the session/sequence and also attach additional advice?
+
+As an example, to apply this re-adjusted Idea to the gain control: When a track
+group head has an gain/fade control this would just denote an advice to set the
+gain. It does ''not'' mean that signal data has to flow "through" this
+track/track group, it does ''not'' mean the gain is actually applied at this
+point and it does ''not'' mean that any routing decision is tied to this gain.
+Even signal chains being routed to quite different master busses can receive
+this advice, given the source clips are placed within the scope of this track
+group. The only difference needed on the GUI to implement this approach would be
+an additional setting on the fader, which allows to disable it (no advice at
+this point), to apply it to audio or video only, or to specify an custom
+condition (like applying only to media with a certain tag).
+
+Obviously, the concept similarly applies to output destination and routing.
+Actually, by doing this switch-of-concept, most of the problems you and other
+people noted in the various drafts simply go away. For example the scalability
+problem which plagues all explicit node editor GUIs. Instead of doing
+connections manually, just by putting an media object into a given context
+(sequence, track, track group), it receives any routing advice available in this
+context. Only those cases really in need of a special wiring would necessitate
+an additional routing advice directly at the media object ("send to...").
+Similar to the example with the fader control, the change needed in the GUI
+would be an additional setting on the output chooser, allowing to disable it (no
+advice here), applying it just to audio, video (text, midi or whatever media
+type we get), or an custom condition or tag.
+
+Thus, generally the price to pay would be a more elaborate track head area,
+which actually is a collection of advice. Besides, of course it causes a lot
+more work in the Proc Layer (which obviously I am willing to take or already try
+to implement). And, finally, one price to pay is a steeper learning curve for
+anyone accustomed to the conventional approach.
+
+
+kinds of effects
+~~~~~~~~~~~~~~~~
+I am mulling this question over and over again, but up to now I didn't come up
+with an unifying idea. Maybe we should face the fact that there are some
+fundamentally different ways you need to apply an effect. It is very common for
+sound applications to overlook the "per object" effects, thus forcing you to
+create a separate track/bus just because you need some EQ for a single clip, but
+you need it non-destructive and automatable. On the other hand, solely having
+effects on individual objects doesn't scale. Overall, we have
+
+ * effects on individual clips/objects, often even only on parts of them
+
+ * effects applied to a certain time range and typically just to a group of tracks
+
+ * global effects on the master/bus level
+
+Besides, there are things like "pre/post fader", but I take it that in our model
+the user just can control the order in which effects are attached. Basically,
+the mentioned global level could be unified with the track/time range level
+effects. But especially for Lumiera, with our considerations of using multiple
+timelines, meta-clips and nested sequences, we've probably killed this possible
+simplification. Because now, an effect applied to the root track in a given
+sequence indeed is something different than an effect applied to the master
+output. Because the latter is something global, it's associated with the
+timeline you currently render/playback, while the former sticks with the
+sequence and thus could also go within a meta-clip or sit within a sub-sequence
+which is used just as one scene in a larger movie. Anyway, I'm doubtful if a
+global colour correction or a global sound balance mix could be emulated by
+using a master sequence and effects placed on the root tracks there. Actually, I
+can't see what would be better, in terms of handling or workflow. Is this
+situation so common (probably yes) as to justify building a specific facility?
+Or would it be enough just to build a specific GUI for this case (which then
+would necessitate to define a binding between the specific GUI and some
+otherwise just normal effects in a master sequence)?
+
+Regarding effects, I should point out that in our concept, mask, "camera" and
+"projector" (Cinelerra's terms) are just some specific effects. Given that, it
+is clear that effects need to be applicable ''both'' pre transition and post
+transition. But the following limitation seems reasonable to me and seems to
+match the actual use:
+
+ * all per-object effects are pre-transition. Including a local source viewport
+   transformation ("camera"), flip and mirror, reframing (changing playback speed
+   of just one clip) and a masking of just this media object. Thus, the realm of
+   the individual media object would end at the transition(s)
+
+ * all per time/track-range effects are post-transition. Meaning, they are
+   placed to a time range and track group, and not attached at an individual
+   object. They use the individual objects on the track as source, already tied
+   together by transitions. This includes colour changes, visual effects like
+   blur, maybe again masking (track-level mask) and again a viewport change
+   ("projector")
+
+Btw. I very much agree with you that putting clips on group head tracks would be
+rather confusing, while I think placing an effect at a group head track is OK
+and feels natural. It will just be applied post-transition to all media within
+the covered range. And, note again the power of the placement+advice concept:
+this does ''not'' mean the data need to be merged together and piped through the
+effect at this point. Rather, it means that each signal processing chain in the
+covered range will get an instance of this plugin wired in at a position
+equivalent to the place the effect is found on the group track with respect to
+the track hierarchy. I.e. after wiring in the transition(s), instances for
+effects placed at tracks are wired in order and ascending the track tree, and
+finally the connection will be made to the mixing step or output destination
+according to the output advice found for ''this individual'' object (but in most
+cases this output destination advice will be inherited from the context, i.e.
+some root track)
+
+
+type free tracks and multichannel clips
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Actually, what I am proposing is not to have multi-mode tracks, but rather to
+have type-free tracks. Type is figured out on a per-connection base while
+building (or on demand). The rationale is, we should prefer to think in media
+types, not so much in channel numbers etc. Each media type incurs some specific
+limitations on how it needs to be handled. E.g, even if two audio clips both
+have two channels doesn't mean they are compatible. One of them could be
+binaural audio, meaning, that the other one need to be spatialized with an HRTF
+prior to mixing (assumed your intention is to create an binaural sound track).
+Thus, when trying to get the type handling correct based on tracks, we'll
+quickly end up with lots of tracks, with the consequence that closely related
+objects are teared apart in the GUI display, just because you need to put them
+on different tracks based on their type or some other specific handling. That's
+why I am going through the hassle of creating a real type system, so we can stop
+(ab)using the tracks as "poor man's type system"
+
+Now, what are the foreseeable UI problems we create with such an approach?
+
+ * getting the display/preview steamlined
+
+ * having to handle L-cuts as real transitions
+
+ * the need for an switching advice on the clip to control the streams actually to be used
+
+ * how to control which effect applies where
+
+I think, all of those problems are solvable, and my feeling is that the benefits
+of such an approach outweigh the problems.
+
+The problems with the preview could be solved by introducing a preview renderer
+component, instead of doing it hard-wired in code as most applications do. To
+elaborate on this, what exactly is the benefit of showing 8 microscopically
+small waveforms for an 7.1 sound track? It would be far better to use a preview
+renderer, which could visualize a sum waveform, an sound energy average, maximum
+or even an spectral display. Similarly, a video preview renderer could either
+produce a strip of images taken from the footage, or just a single image (pivot
+image), or a colouring derived from motion detection etc. This way, all clip
+displays could be made to fit the same space in the GUI.
+
+Regarding transitions, the Proc-Layer (with the use of the type information) has
+to find out if an transition is applicable to a given pair of clips. If it is
+not, it will be flagged as error. Besides, we need an editor for tweaking the
+transition curve. Now we could consider differentiating this transition curve
+for several media kinds contained the same clip (audio crossfade goes
+differently than the video crossfade). But I think, this isn't worth the hassle,
+as the user is always free to split off the sound channels into a separate clip
+and put it on a neighbouring track (and by using a relative placement, the link
+between both could be kept intact). Just, only the L-cut is such an common
+editing technique, that it's worth just supporting it as a special kind of
+transition.
+
+Having type-free tracks and compound clips allows us to handle multicam
+natively, without the need of a special "multicam-feature". Some thoughts:
+
+ * we need an additional advice to specify which channel from the clip should be
+   sent to output. (Implementation-wise, this advice is identical to the advice
+   used to select the output on a per-track base; but we need an UI to set and
+   control it at the clip). Of course, different channels (e.g different sound
+   pickups) could be sent to different destinations (mixing subgroup busses).
+   For multicam, this advice would select the angle to be used.
+
+ * now we could think of allowing such angle switching to happen in the middle
+   of an clip. Meaning, the advice would be attached like an label. Personally, I
+   am rather against it, as it seems to create a lot of secondary problems. The
+   same effect can be easily achieved by splitting into multiple clips and then
+   using rolling edits. Plus, this way you also could attach transitions or
+   deliberately use slide and shuffle edits (creating temporal jumps in the
+   overall flow)
+
+When a clip contains multiple media streams, we build an pipe for every stream
+actually sent to some output. Now the question is, what happens when attaching
+an effect (either attaching it directly to the clip, or placing the effect on a
+track/trackgroup in a timerange touching this clip). Basically, Proc-Layer will
+be able to determine if an effect is applicable at all. It won't try to wire in
+an sound effect into a video pipe. It won't wire an stereo reverb into a mono
+sound pipe. Thus, I would propose a pragmatic approach to this problem: Let the
+effect apply to those processing pipes he is applicable and ignore the others.
+Plus having the ability to limit by an additional advice with an condition or
+tag (a possibility which I take for granted anyway). We could go for a much more
+elaborate solution, like being able to expand the clip and then specify
+explicitly which effect to attach where. But I think, as we have real nested
+sequences which appear as meta-clips when used, limiting the effects to just
+apply to "all applicable" is not actually a problem. Again, in the rare cases
+where more is needed, the user is free to split off a channel as a separate
+clip.
+

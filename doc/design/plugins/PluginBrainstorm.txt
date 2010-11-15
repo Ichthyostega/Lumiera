@@ -1,0 +1,21 @@
+Plugin Brainstorm
+=================
+:Author: Christian Thäter
+:Date: 2008-09-15
+
+Raw Version
+-----------
+
+
+[cpp]
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+LUMIERA_INTERFACE_DECLARE (interface_descriptor, 0,
+                           /* The following slots are some human-readable descriptions of certain properties */
+                           LUMIERA_INTERFACE_SLOT (const char*, name, (LumieraInterface)),
+                           LUMIERA_INTERFACE_SLOT (const char*, version, (LumieraInterface)),
+                           LUMIERA_INTERFACE_SLOT (const char*, author, (LumieraInterface)),
+                           LUMIERA_INTERFACE_SLOT (const char*, copyright, (LumieraInterface)),
+                           LUMIERA_INTERFACE_SLOT (const char*, license, (LumieraInterface))
+                           /* TODO add more things here, dependencies, provisions etc */
+                           );
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

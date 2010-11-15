@@ -313,5 +313,5 @@ Window configurations can be stored/restored in customizable presets and are par
 Won't Implement
 ~~~~~~~~~~~~~~~
 
-[[Include(/WontImplement, , editlink)]]
+-> link:GuiBrainstormingWontImplement.html[Review of features we won't implement...]
 
