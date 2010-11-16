@@ -37,7 +37,7 @@ Description
     nominal start time is)
   * Each frame starts when the locator hits its lower border (inclusively) and
     ends when the locator is on its upper border (exclusively)
-  image:images/Lumi.FramePositions1.png[]
+  image:{imgd}/Lumi.FramePositions1.png[]
   * When the locator snaps to frames this means it can be placed on the start
     positions of the frames solely
   * When the locator is placed on such a start position, this means 'always'
@@ -50,7 +50,7 @@ Description
     direction
   * There is no single best choice where to put this "POE", thus we provide a
     switch
-image:images/Lumi.FramePositions2.png[]
+image:{imgd}/Lumi.FramePositions2.png[]
     - 'Point of evaluation' of the automation is in the middle of the timespan
        covered by a frame
     - 'Point of evaluation' is on the lower bound of each frame

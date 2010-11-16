@@ -9,6 +9,9 @@ Lumiera Design Documents
  * link:application/index.html[Application]
  * link:plugins/index.html[Plug-ins]
 
+The following document might become an introduction into 
+Lumiera internals: link:innerCore/the_inner_core.html[Lumiera the Inner Core]
+
 
 [icon="warning.png"]
 WARNING: Website under construction
