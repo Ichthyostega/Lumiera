@@ -126,6 +126,10 @@ def configure(env):
         if not conf.CheckPkgConfig('gdl-lum', verGDL, alias='gdl'):
             problems.append('GNOME Docking Library not found. We either need a sufficiently recent GDL '
                             'version (>=%s), or the custom package "gdl-lum" from Lumiera.org.' % verGDL)
+    verGDLmm = '2.30.0'
+    if not conf.CheckPkgConfig('gdlmm-1.0', verGDLmm, alias='gdlmm'):
+        problems.append('GNOME Docking Library not found. We need a sufficiently recent GDL mm-bindings '
+                            'version (>=%s).' % verGDL)
     
     if not conf.CheckPkgConfig('librsvg-2.0', '2.18.1'):
         problems.append('Need rsvg Library for rendering icons.')
