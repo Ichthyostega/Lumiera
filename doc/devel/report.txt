@@ -1,0 +1,35 @@
+Statistics and Reports
+======================
+
+
+
+++++++++++++++++++++++++++++++++++++++
+<div style="float:left">
+<script type="text/javascript" src="http://www.ohloh.net/p/13239/widgets/project_basic_stats.js"></script>
+</div>
+++++++++++++++++++++++++++++++++++++++
+
+++++++++++++++++++++++++++++++++++++++
+<div style="float:right; margin-left: 2em;">
+<script type="text/javascript" src="http://www.ohloh.net/p/13239/widgets/project_cocomo.js" ></script>
+</div>
+<p style="clear:both" />
+++++++++++++++++++++++++++++++++++++++
+
+''''
+^Statistics generated automatically by *Ohloh* based on Git master^
+
+
+Tickets
+-------
+
+ * link:http://issues.lumiera.org/report/14[recently changed tickets]
+ * link:http://issues.lumiera.org/report/8[core tickets in work]
+ * link:http://issues.lumiera.org/report/5[stalled tickets]
+ * link:http://issues.lumiera.org/report/15[non-codin small tasks]
+
+See the link:http://issues.lumiera.org/report[Trac overview for more ticket reports]
+
+[icon="warning.png"]
+WARNING: Website under construction
+
