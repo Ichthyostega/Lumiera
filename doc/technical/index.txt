@@ -5,6 +5,7 @@ Technote Documentation
  * link:gui/index.html[GUI-Layer]
  * link:proc/index.html[Proc-Layer]
  * link:backend/index.html[Backend]
+ * link:build/index.html[Buildsystem]
 
 
 [icon="warning.png"]

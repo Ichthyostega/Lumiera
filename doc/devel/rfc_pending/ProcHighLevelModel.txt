@@ -57,7 +57,7 @@ _pull-based processing,_ but this is rather of no relevance for the high-level
 model.
 
 
-image:images/high-level1.png[]
+image:{imgd}/high-level1.png[]
 
 Normally, pipes are limited to a _strictly linear chain_ of data processors
 ("*effects*") working on a single data stream type, and consequently there is a
@@ -101,7 +101,7 @@ mechaics, the wiring and configuration within the high-level model can be quite
 time dependant.
 
 
-image:images/high-level2.png[]
+image:{imgd}/high-level2.png[]
 
 Actually a *clip* is handled as if it was comprised of local pipe(s). In the
 example shown here, a two-channel clip has three effects attached, plus a
@@ -119,7 +119,7 @@ adapted processing pipe.
 Example of an complete Session
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-image:images/high-level3.png[]
+image:{imgd}/high-level3.png[]
 
 The Session contains several independent
 http://www.lumiera.org/wiki/renderengine.html#EDL[EDL]s plus an output bus
