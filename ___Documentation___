@@ -1,0 +1,9 @@
+|This is the Lumiera Documentation Tree|
+
+Lumiera documentation is meant to be self contained and included in the main tree.
+The 'current' documentation is prepared, collected and tracked in a 'documentation' branch
+of the main repository; there, documentation resides in the /doc subdirectory, while the
+actual source goes into /src
+
+Moreover, the /doc subdirectory of the documentation tree is linked into the
+Lumiera website.

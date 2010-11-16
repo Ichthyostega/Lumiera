@@ -1,0 +1,15 @@
+Lumiera Buildsystem
+===================
+
+build -- continuous integration -- packaging
+
+* SCons
+* Autotools
+* Dependencies
+* link:BuildDroneDraft.html[»Builddrone« concept from 2008]
+* packaging: Debian RPM
+* Lumiera debian depot
+
+[icon="warning.png"]
+WARNING: Website under construction
+

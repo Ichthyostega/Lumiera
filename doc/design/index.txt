@@ -8,7 +8,6 @@ Lumiera Design Documents
  * link:backend/index.html[Backend]
  * link:application/index.html[Application]
  * link:plugins/index.html[Plug-ins]
- * link:builddrone/index.html[Lumiera Builddrone]
 
 
 [icon="warning.png"]
