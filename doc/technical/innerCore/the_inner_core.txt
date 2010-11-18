@@ -18,6 +18,7 @@ into three layers plus some extra components. This structure is mostly kept in
 the source directory structures.
 
 This three Layers are:
+
  The User Interface::
      User interfaces are implemented as plug-ins, most commonly one will see
      the default GUI. But also scripting interfaces or specialized GUI's are
@@ -31,6 +32,7 @@ This three Layers are:
      heavy multimedia data.
 
 The extra components are:
+
  Lumiera::
      The main program itself, basically acts only as loader to pull the rest up.
 

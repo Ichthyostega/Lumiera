@@ -14,10 +14,9 @@ WARNING: Website under construction
 ////
 == Technical Documentation
 
-[icon="warning.png"]
-WARNING: Website under construction
-
 This documentation section contains technical documentation about Lumiera.
+To get an overview of all the internals and components, you might want to read
+link:innerCore/the_inner_core.html[Lumiera the Inner Core]
 
 === Three Layers
 The technical documentation is split in three parts, one for each of the three main layers of Lumiera.
@@ -35,3 +34,9 @@ You may want to read the link:../design/index.html[Design Documents] first to ge
 
 .Building
 * link:build/index.html[*Buildsystem*] : Installation & compilation tools, dependencies and packaging.
+
+
+[icon="warning.png"]
+WARNING: Website under construction
+
+

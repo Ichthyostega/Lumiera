@@ -9,8 +9,8 @@ Lumiera Design Documents
  * link:application/index.html[Application]
  * link:plugins/index.html[Plug-ins]
 
-The following document might become an introduction into 
-Lumiera internals: link:innerCore/the_inner_core.html[Lumiera the Inner Core]
+See the following document for more technical overview of all internals: +
+link:../technical/innerCore/the_inner_core.html[Lumiera the Inner Core]
 
 
 [icon="warning.png"]
