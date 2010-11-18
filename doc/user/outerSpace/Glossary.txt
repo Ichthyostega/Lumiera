@@ -27,18 +27,17 @@ explanations, the long explanation is the topic of the document above..'
         Timeline. (Intended for editing meta-clips)
 
  Track-head/patchbay::
-        TODO: better term for this
-
-//Note by Ichthyo: while I like the term "patchbay", my concern with this is that
-// it has already a very specific meaning in audio applications; and while our track heads
-// certainly can serve as a patchbay, that is not the main purpose and they can do things
-// beyond that..
-
         the box in front of a track allowing to control properties of the
         elements contained within this track, unfold nested tracks and so on.
         To a large extent, it corresponds to the placement of this track and
         allows to manipulate this placement
-
+        
+        - *TODO*: better term for this
+        - Note by Ichthyo: while I like the term "patchbay", my concern with
+          this is that it has already a very specific meaning in audio
+          applications; and while our track heads certainly can serve as a
+          patchbay, that is not the main purpose and they can do things beyond
+          that..
 
  Timeline::
         the top level element(s) within the Project. It is visible within a
@@ -56,7 +55,6 @@ explanations, the long explanation is the topic of the document above..'
          * exactly one top level Sequence
 
  Time Axis::
-
         An entity defining the temporal properties of a timeline. A time axis
         defines the time base, kind of timecode and absolute anchor point.
         Besides, it manages a set of frame quantisation grids, corresponding
@@ -100,19 +98,50 @@ explanations, the long explanation is the topic of the document above..'
         (busses) in each Timeline, each clip automatically creates N pipes
         (one for each distinct content stream. Typically N=2, for video and
         audio)
+ 
+ MediaStream::
+        Media data is supposed to appear structured as stream(s) over time.
+        While there may be an inherent internal structuring, at a given
+        perspective any stream is a unit and homogeneous. In the context of
+        digital media data processing, streams are always quantized, which means
+        they appear as a temporal sequence of data chunks called frames.
+
+ StreamType::
+        Classification of a media stream. StreamType is a descriptor record.
+        While external media processing libraries usually do provide some kind
+        of classification already, within lumiera we rely on an uniform yet
+        abstract classification which is owned by the project and geared to
+        fit the internal needs, especially for the wiring and connecting.
+        A Lumiera stream type is comprised of the parts
+        - media kind (Video, Image, Audio, MIDI, Text,... )
+        - prototype (open ended collection of semantical kinds of media,
+          examples being stereoscopic, periphonic, monaural, binaural,
+          film quality, TV, youtube).
+        - implementation type (e.g. 96kHz 24bit PCM, 2 channels muxed)
+        - intention tag (Source, Raw, Intermediary and Target)
 
  OutputDesignation::
         A specification denoting where to connect the output of a pipe.
         It might either be given _absoulutely_, i.e as Pipe-ID,
         or by an _relative_ or _indirect_ specification
 
+ OutputMapping::
+        translates one output designation into another one, e.g. when hooking
+        up a sequence as virtual clip within another sequence
+
+ OutputSlot::
+        opaque descriptor for an output facility, ready to dispose frames
+        of data to be output.
+
+ OutputManager::
+        manages all external outputs of the application and provides output
+        slots targetting these
+
  PlayController::
         coordinating playback, cueing and rewinding of a playback position,
         visible as 'Playhead' cursor in the GUI. When in play state, a
         PlayController requests and directs a render process to deliver the
         media data needed for playback.
-
-//TODO not sure about the term and if it's appropriate to include it here
 
  RenderTask::
         basically a PlayController, but collecting output directly, without
