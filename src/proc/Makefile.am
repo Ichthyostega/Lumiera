@@ -92,6 +92,7 @@ liblumiprocmobject_la_SOURCES =					\
 	$(liblumiprocmobject_la_srcdir)/interpolator.cpp	\
 	$(liblumiprocmobject_la_srcdir)/mobject-ref.cpp		\
 	$(liblumiprocmobject_la_srcdir)/mobject.cpp		\
+	$(liblumiprocmobject_la_srcdir)/output-designation.cpp	\
 	$(liblumiprocmobject_la_srcdir)/parameter.cpp		\
 	$(liblumiprocmobject_la_srcdir)/paramprovider.cpp	\
 	$(liblumiprocmobject_la_srcdir)/placement.cpp

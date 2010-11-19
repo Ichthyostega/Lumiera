@@ -25,16 +25,24 @@
 #define PROC_MOBJECT_OUTPUT_DESIGNATION_H
 
 #include "proc/asset/pipe.hpp"
+#include "lib/opaque-holder.hpp"
 
 
 namespace mobject {
   
+  class MObject;
+  
+  template<class MX>
+  class PlacementRef;
+  
+  typedef PlacementRef<MObject> RefPlacement;
+
   
   
   /**
    * Descriptor to denote the desired target of produced media data.
    * OutputDesignation is always an internal and relative specification
-   * and boils down to referring a asset::Pipe by ID. In order to get
+   * and boils down to referring an asset::Pipe by ID. In order to get
    * actually effective, some object within the model additionally
    * needs to \em claim this pipe-ID, meaning that this object
    * states to root and represent this pipe. When the builder
@@ -45,6 +53,35 @@ namespace mobject {
   class OutputDesignation
     {
     public:
+      typedef asset::ID<asset::Pipe> PID;
+      typedef asset::PPipe PPipe;
+      
+      PID resolve (PPipe origin);
+      
+      //TODO: API to retrieve target stream type
+      
+      
+      explicit OutputDesignation (PID explicitTarget);
+      explicit OutputDesignation (RefPlacement const& indirectTarget); 
+      explicit OutputDesignation (uint relative_busNr =0);
+      
+      // using default copying
+      
+    private:
+      
+      class TargetSpec
+        {
+        public:
+          virtual ~TargetSpec();
+          PID resolve (PPipe origin);
+        };
+      
+      enum{ SPEC_SIZ = sizeof(PID) };
+      typedef lib::OpaqueHolder<TargetSpec, SPEC_SIZ> SpecBuff;
+      
+      /** Storage to hold the Target Spec inline */
+      SpecBuff spec_;
+
     };
   
   

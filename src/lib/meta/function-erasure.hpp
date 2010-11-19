@@ -40,9 +40,10 @@
  ** usage context to provide the correct function signature; only when using a
  ** virtual function for the re-access, we can perform at least a runtime-check.
  ** 
- ** Thus there are various flavours for actually implementing this idea, and the
+ ** Thus there are various flavours for actually implementing this idea, and
  ** picking a suitable implementation depends largely on the context. Thus we
- ** provide a common and expect the client code to pick an implementation policy.
+ ** provide a common frontend for access and expect the client code to pick
+ ** a suitable implementation policy.
  ** 
  ** @see control::Mutation usage example
  ** @see function-erasure-test.cpp
