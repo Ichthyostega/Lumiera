@@ -22,6 +22,7 @@
 
 
 #include "lib/error.hpp"
+#include "proc/mobject/mobject.hpp"
 #include "proc/mobject/placement-ref.hpp"
 #include "proc/mobject/output-designation.hpp"
 
@@ -29,13 +30,65 @@ namespace mobject {
   
   typedef OutputDesignation::PPipe PPipe;
   typedef OutputDesignation::PID PID;
+  typedef OutputDesignation::TargetSpec TargetSpec;
+  
+  
+  struct AbsoluteSpec
+    : TargetSpec
+    {
+      PID target_;
+      
+      AbsoluteSpec (PID explicitTarget)
+        : target_(explicitTarget)
+        { }
+      
+      PID resolve (PPipe) { return target_; }
+    };
+  
+  struct IndirectSpec
+    : TargetSpec
+    {
+      RefPlacement mediator_;
+      
+      IndirectSpec (RefPlacement const& indirectTarget)
+        : mediator_(indirectTarget)
+        { }
+      
+      PID
+      resolve (PPipe)
+        {
+          REQUIRE (mediator_);
+          UNIMPLEMENTED ("how to query a placement for output designation");
+        }
+    };
+  
+  struct RelativeSpec
+    : TargetSpec
+    {
+      uint busNr_;
+      
+      RelativeSpec (uint relative_busNr)
+        : busNr_(relative_busNr)
+        { }
+      
+      PID
+      resolve (PPipe)
+        {
+          UNIMPLEMENTED ("how the hell can we get a grip on the target to resolve the bus??");
+        }
+    };
+  
+  
+  
+  
+  OutputDesignation::TargetSpec::~TargetSpec() { } 
   
   
   /** create an output designation by directly
    *  specifying the target to connect 
    */
   OutputDesignation::OutputDesignation (PID explicitTarget)
-    : spec_() //////////TODO
+    : spec_(AbsoluteSpec (explicitTarget))
     { }
   
   
@@ -44,7 +97,7 @@ namespace mobject {
    *  to the given reference scope / mediator. 
    */
   OutputDesignation::OutputDesignation (RefPlacement const& indirectTarget)
-    : spec_() //////////TODO
+    : spec_(IndirectSpec (indirectTarget))
     { }
   
   
@@ -58,7 +111,7 @@ namespace mobject {
    *        "connect me to the first bus suitable for my stream type" 
    */
   OutputDesignation::OutputDesignation (uint relative_busNr)
-    : spec_() //////////TODO
+    : spec_(RelativeSpec (relative_busNr))
     { }
   
   

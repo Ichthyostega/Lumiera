@@ -26,7 +26,11 @@
 
 #include "proc/asset/pipe.hpp"
 #include "lib/opaque-holder.hpp"
+#include "lib/meta/typelist-util.hpp"
 
+extern "C" {
+#include "lib/luid.h"
+}
 
 namespace mobject {
   
@@ -67,7 +71,6 @@ namespace mobject {
       
       // using default copying
       
-    private:
       
       class TargetSpec
         {
@@ -76,12 +79,17 @@ namespace mobject {
           PID resolve (PPipe origin);
         };
       
-      enum{ SPEC_SIZ = sizeof(PID) };
+    private:
+      enum {
+        SPEC_SIZ = lumiera::typelist::maxSize<
+                       lumiera::typelist::Types<PID,lumiera_uid,uint>::List>::value 
+      };
       typedef lib::OpaqueHolder<TargetSpec, SPEC_SIZ> SpecBuff;
+      
       
       /** Storage to hold the Target Spec inline */
       SpecBuff spec_;
-
+      
     };
   
   
