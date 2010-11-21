@@ -1250,6 +1250,14 @@ at the lowest level within the builder there is the step of building a //connect
 &amp;rarr;see also: BuilderPrimitives for the elementary working situations corresponding to each of these [[builder moulds|BuilderMould]]
 </pre>
 </div>
+<div title="BusMO" modifier="Ichthyostega" modified="201011210111" created="201011210045" tags="def Model" changecount="7">
+<pre>''Bus-~MObjects'' create a scope and act as attachment point for building up [[global pipes|GlobalPipe]] within each timeline. While [[Sequence]] is a frontend -- actually implemented by attaching a root-[[Track]] object -- for //each global pipe// a BusMO is attached as child scope of the [[binding object|BindingMO]], which in turn actualy implements either a timeline or a [[meta-clip|VirtualClip]].
+* each global pipe corresponds to a bus object, which thus refers to the respective ~Pipe-ID
+* bus objects may be nested, forming a //subgroup//
+* the placement of a bus holds a WiringClaim, denoting that this bus //claims to be the corresponding pipe.//
+* by default, a timeline is outfitted with one video and one sound master bus
+</pre>
+</div>
 <div title="ColorPalette" modifier="Ichthyostega" modified="200807131329" created="200706190033" tags="excludeMissing" changecount="14">
 <pre>Background: #fefefd
 Foreground: #000
@@ -1554,15 +1562,16 @@ As we don't have a Prolog interpreter on board yet, we utilize a mock store with
 {{{default(Obj)}}} is a predicate expressing that the object {{{Obj}}} can be considered the default setup under the given conditions. Using the //default// can be considered as a shortcut for actually finding a exact and unique solution. The latter would require to specify all sorts of detailed properties up to the point where only one single object can satisfy all conditions. On the other hand, leaving some properties unspecified would yield a set of solutions (and the user code issuing the query had to provide means for selecting one soltution from this set). Just falling back on the //default// means that the user code actually doesn't care for any additional properties (as long as the properties he //does// care for are satisfied). Nothing is said specifically on //how//&amp;nbsp; this default gets configured; actually there can be rules //somewhere,// and, additionally, anything encountered once while asking for a default can be re-used as default under similar circumstances.
 &amp;rarr; [[implementing defaults|DefaultsImplementation]]</pre>
 </div>
-<div title="DesignDecisions" modifier="Ichthyostega" modified="201009240010" created="200801062209" tags="decision design discuss Concepts" changecount="28">
+<div title="DesignDecisions" modifier="Ichthyostega" modified="201011210034" created="200801062209" tags="decision design discuss Concepts" changecount="33">
 <pre>Along the way of working out various [[implementation details|ImplementationDetails]], decisions need to be made on how to understand the different facilities and entities and how to tackle some of the problems. This page is mainly a collection of keywords, summaries and links to further the discussion. And the various decisions should allways be read as proposals to solve some problem at hand...
 
 ''Everything is an object'' &amp;mdash; yes of course, that's a //no-brainer,// todays. Rather, important is to note what is not &quot;an object&quot;, meaning it can't be arranged arbitrarily
-* we have one and only one global [[Session]] which directly contains a collection of multiple [[Sequences|Sequence]] and is associated with a globally managed collection of [[assets|Asset]]. We don't utilise scoped variables here (no &quot;mandantisation&quot;); if e.g. a media has been //opened,// it is just plain //globally known//&amp;nbsp; as asset.
+* we have one and only one global [[Session]] which directly contains a collection of multiple [[Timelines|Timeline]] and is associated with a globally managed collection of [[assets|Asset]]. We don't utilise scoped variables here (no &quot;mandantisation&quot;); if  a media has been //opened,// it is just plain //globally known//&amp;nbsp; as asset.
 * the [[knowledge base|ConfigRules]] is just available globally. Obviously, the session gets a chance to install rules into this knowledge base, but we don't stress ownership here.
 * we have a [[Fixture]] which acts as isolation layer towards the render engine and is (re)built automatically.
+The high-level view of the tangible entities within the session is unified into a ''single tree'' -- with the notable exception of [[external outputs|OutputManagement]] and the [[assets|Asset]], which are understood as representing a //bookkeeping view// and kept separate from the //things to be manipulated// (MObjects).
 
-We ''separate'' processing (rendering) and configuration (building). We have a [[Builder]] which creates a network of [[render nodes|ProcNode]], to be processed by //pulling data // from some [[Pipe]]
+We ''separate'' processing (rendering) and configuration (building). The [[Builder]] creates a network of [[render nodes|ProcNode]], to be processed by //pulling data // from some [[Pipe]]
 
 ''Objects are [[placed|Placement]] rather'' than assembled, connected, wired, attached. This is more of a rule-based approach and gives us one central metaphor and abstraction, allowing us to treat everything in an uniform manner. You can place it as you like, and the builder tries to make sense out of it, silently disabling what doesn't make sense.
 An [[Sequence]] is just a collection of configured and placed objects (and has no additional, fixed structure). [[Tracks|Track]] form a mere organisational grid, they are grouping devices not first-class entities (a track doesn't &quot;have&quot; a pipe or &quot;is&quot; a video track and the like; it can be configured to behave in such manner by using placements though). [[Pipes|Pipe]] are hooks for making connections and are the only facility to build processing chains. We have global pipes, and each clip is built around a lokal [[source port|ClipSourcePort]] &amp;mdash; and that's all. No special &quot;media viewer&quot; and &quot;arranger&quot;, no special role for media sources, no commitment to some fixed media stream types (video and audio). All of this is sort of pushed down to be configuration, represented as asset of some kind. For example, we have [[processing pattern|ProcPatt]] assets to represent the way of building the source network for reading from some media file (including codecs treated like effect plugin nodes)
@@ -1893,11 +1902,25 @@ For this Lumiera design, we could consider making GOP just another raw media dat
 &amp;rarr;see in [[Wikipedia|http://en.wikipedia.org/wiki/Group_of_pictures]]
 </pre>
 </div>
-<div title="GlobalPipe" modifier="Ichthyostega" modified="201011072139" created="201007110200" tags="Model design spec draft" changecount="23">
+<div title="GlobalPipe" modifier="Ichthyostega" modified="201011202343" created="201007110200" tags="Model spec draft" changecount="29">
 <pre>Each [[Timeline]] has an associated set of global [[pipes|Pipe]] (global busses), similar to the subgroups of a sound mixing desk.
 In the typical standard configuration, there is (at least) a video master and a sound master pipe. Like any pipe, ingoing connections attach to the input side, attached effects form a chain, where the last node acts as exit node. The ~Pipe-ID of such a global bus can be used to route media streams, allowing the global pipe to act as a summation bus bar.
+&amp;rarr; discussion and design rationale of [[global pipes|GlobalPipeDesign]]
 
-!{{red{WIP}}} Design problem with global Pipes
+!Properties and decisions
+* each timeline carries its own set of global pipes, as each timeline is an top-level element on its own
+* like all [[pipes|Pipe]] the global ones are kept separated per stream (proto)type
+* any global pipe //not// connected to another OutputDesignation automatically creates a ModelPort
+* global pipes //do not appear automagically just by sending output to them// -- they need to be set up explicitly
+* the top-level (BusMO) of the global pipes isn't itself a pipe. Thus the top-level of the pipes forms a list (typically a video and sound master)
+* below, a tree-like structure //may// be created, building upon the same scope based routing technique as used for the tracks
+</pre>
+</div>
+<div title="GlobalPipeDesign" modifier="Ichthyostega" modified="201011210016" created="201011202308" tags="design decision discuss" changecount="6">
+<pre>//This page serves to shape and document the design of the global pipes//
+Many aspects regarding the global pipes turned out while clarifying other parts of ~Proc-Layer's design. For some time it wasn't even clear if we'd need global pipes -- common video editing applications get on without. Mostly it was due to the usefulness of the layout found on sound mixing desks, and a vague notion to separate time-dependant from global parts, which finally led me to favouring such a global facility. This decision then helped in separating the concerns of timeline and sequence, making the //former// a collection of non-temporal entities, while the latter concentrates on time varying aspects.
+
+!Design problem with global Pipes
 actually building up the implementation of global pipes seems to pose a rather subtle design problem: it is difficult to determine how to do it //right.//
 To start with, we need the ability to attach effects to global pipes. There is already an obvious way how to attach effects to clips (=local pipes), and thus it's desirable to handle it the same way for global pipes. At least there should be a really good reason //not//&amp;nbsp; to do it the same way. Thus, we're going to attach these effects by placement into the scope of another placed MObject. And, moreover, this other object should be part of the HighLevelModel's tree, to allow using the PlacementIndex as implementation. So this reasoning brings us to re-using or postulating some kind of object, while lacking a point or reference //outside this design considerations//&amp;nbsp; to justify the existence of the corresponding class or shaping its properties on itself. Which means &amp;mdash; from a design view angle &amp;mdash; we're entering slippery ground.
 !!!~Model-A: dedicated object per pipe
@@ -1905,7 +1928,7 @@ Just for the sake of symmetry, for each global pipe we'd attach some suitable ~M
 !!!~Model-B: attaching to the container
 Acknowledging the missing justification, we could instead use //just something to attach// &amp;mdash; and actually handle the real association elsewhere. The obvious &quot;something&quot; in this case would be the BindingMO, which already acts as implementation of the timeline (which is a façade asset). Thus, for this approach, the bus-level effects would be attached as direct children of the {{{Placement&lt;BindingMO&gt;}}}, just for the sake of beeing attached and stored within the session, with an additional convention for the actual ordering and association to a specific pipe. The Builder then would rather query the ~BindingMO to discover and build up the implementation of the global pipes in terms of the render nodes.
 
-!!!Comparision
+!!!Comparison
 While there might still be some compromises or combined solutions &amp;mdash; to support the decision, the following table detailes the handling in each case
 |&gt;|   !~Model-B|!~Model-A |
 |Association: | by plug in placement|by scope |
@@ -1916,6 +1939,19 @@ While there might still be some compromises or combined solutions &amp;mdash; to
 
 So through this detailed comparison ''~Model-A looks favourable'': while the other model requires us to invent a good deal of the handling specifically for the global pipes, the former can be combined from patterns and solutions already used in other parts of the model, plus it allows some interesting extensions. 
 On a second thought, the fact that the [[Bus-MObject|BusMO]] is rather void of any specific meaning doesn't weight so much: As the Builder is based on the visitor pattern, the individual objects can be seen as //algebraic data types.// Besides, there is at least one little bit of specific functionality: a Bus object actually needs to //claim//&amp;nbsp; to be the OutputDesignation, by referring to the same ~Pipe-ID used in other parts of the model to request output routing to this Bus. Without this match on both ends, an ~OutputDesignation may be mentioned at will, but no connection whatsoever will happen.
+
+
+!{{red{WIP}}} Structure of the global pipes
+;creating global pipes automatically?
+:defining the global bus configuration is considered a crucial part of each project setup. Lumiera isn't meant to support fiddling around thoughtlessly. The user should be able to rely on crucial aspects of the global setup never being changed without notice.
+;isn't wiring and routing going to be painful then?
+:routing is scope based and we employ a hierarchical structure, so subgroups are routed automatically. Moreover, wiring is done based on best match regarding the stream type. We might consider feeding all non-connected output designations to the GUI after the build process, to allow short-cuts for creating further buses.
+;why not making buses just part of the track tree?
+:anything on a track has a temporal extension and may vary -- while it's the very nature of the global pipes to be static anchor points.
+;why not having one grand unified root, including the outputs?
+:you might consider that a matter of taste (or better common-sense). Things different in nature should not be forced into uniformity
+;should global pipes be arranged as list or tree?
+:sound mixing desks use list style arrangement, and this has proven to be quite viable, when combined with the ability to //send over// output from one mixer stripe to the input of another, allowing to build arbitrary complex filter matrices. On the other hand, organising a mix in //subgroups// can be considered best practice. This leads to arranging the pipes //as wood:// by default and on top level as list, optionally expanding into a subtree with automatic rooting, augmented by the ability to route any output to any input (cycles being detected and flagged as error).
 </pre>
 </div>
 <div title="GuiCommunication" modifier="Ichthyostega" modified="200812050555" created="200812050543" tags="GuiIntegration draft" changecount="2">
@@ -6582,10 +6618,10 @@ For now, as of 6/10, we use specialised QueryResolver instances explicitly and d
 A viewer element gets connected to a given timeline either by directly attaching it, or by //allocating an available free viewer.// Anyway, as a model element, the viewer is just like another set of global pipes cascaded behind the global pipes present in the timeline. The number and kind of pipes provided is a configurable property of the viewer element &amp;mdash; more specifically: the viewer's SwitchBoard. Thus, connecting a viewer activates the same internal logic employed when connecting a sequence into a timeline or meta-clip: a default channel association is established, which can be overridden persistently (&amp;rarr; OutputMapping). Each of the viewer's pipes in turn gets connected to a system output through an OutputManager slot &amp;mdash; again an output mapping step.
 </pre>
 </div>
-<div title="VirtualClip" modifier="Ichthyostega" modified="201003130000" created="200804110321" tags="def" changecount="15">
+<div title="VirtualClip" modifier="Ichthyostega" modified="201011210048" created="200804110321" tags="def" changecount="16">
 <pre>A ''~Meta-Clip'' or ''Virtual Clip'' (both are synonymous) denotes a clip which doesn't just pull media streams out of a source media asset, but rather provides the results of rendering a complete sub-network. In all other respects it behaves exactly like a &quot;real&quot; clip, i.e. it has [[source ports|ClipSourcePort]], can have attached effects (thus forming a local render pipe) and can be placed and combined with other clips. Depending on what is wired to the source ports, we get two flavours:
 * a __placeholder clip__ has no &quot;embedded&quot; content. Rather, by virtue of placements and wiring requests, the output of some other pipe somewhere in the session will be wired to the clip's source ports. Thus, pulling data from this clip will effectively pull from these source pipes wired to it.
-* a __nested sequence__ is like the other sequences in the Session, just in this case any missing placement properties will be derived from the Virtual Clip, which is thought as to &quot;contain&quot; the objects of the nested sequence. Typically, this also [[configures the tracks|TrackHandling]] of the &quot;inner&quot; sequence such as to connect any output to the source ports of the Virtual Clip.
+* a __nested sequence__ is like the other sequences in the Session, just in this case any missing placement properties will be derived from the Virtual Clip, which is thought as to &quot;contain&quot; the objects of the nested sequence. Typically, this also configures the tracks of the &quot;inner&quot; sequence such as to [[connect any output|OutputMapping]] to the source ports of the Virtual Clip.
 
 Like any &quot;real&quot; clip, Virtual Clips have a start offset and a length, which will simply translate into an offset of the frame number pulled from the Virtual Clip's source connection or embedded sequence, making it possible to cut, splice, trim and roll them as usual. This of course implies we can have several instances of the same virtual clip with different start offset and length placed differently. The only limitation is that we can't handle cyclic dependencies for pulling data (which has to be detected and flagged as an error by the builder)
 </pre>

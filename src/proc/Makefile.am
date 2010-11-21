@@ -150,6 +150,7 @@ liblumiprocmobjectsession_la_SOURCES =							\
 	$(liblumiprocmobjectsession_la_srcdir)/allocation.cpp				\
 	$(liblumiprocmobjectsession_la_srcdir)/auto.cpp					\
 	$(liblumiprocmobjectsession_la_srcdir)/binding.cpp				\
+	$(liblumiprocmobjectsession_la_srcdir)/bus-mo.cpp				\
 	$(liblumiprocmobjectsession_la_srcdir)/clip.cpp					\
 	$(liblumiprocmobjectsession_la_srcdir)/compoundclip.cpp				\
 	$(liblumiprocmobjectsession_la_srcdir)/constraint.cpp				\
