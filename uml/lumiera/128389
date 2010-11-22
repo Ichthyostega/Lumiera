@@ -1,6 +1,6 @@
 format 58
 "RenderEngine" // ProcessingLayer::RenderEngine
-  revision 19
+  revision 20
   modified_by 5 "hiv"
   // class settings
   //class diagram settings
@@ -311,28 +311,6 @@ ${class}::${name} ${(}${)}${const}${volatile} ${throw}${staticnl}
       end
     end
 
-    class 131845 "Trafo"
-      visibility package 
-      cpp_decl "${comment}${template}class ${name}${inherit}
-  {
-${members}  };
-${inlines}
-"
-      java_decl ""
-      php_decl ""
-      python_2_2 python_decl ""
-      idl_decl ""
-      explicit_switch_type ""
-      
-      classrelation 132997 // <generalisation>
-	relation 132229 ---|>
-	  a public
-	    cpp default "${type}"
-	    classrelation_ref 132997 // <generalisation>
-	  b parent class_ref 131717 // ProcNode
-      end
-    end
-
     class 131973 "Link"
       visibility package 
       cpp_decl "${comment}${template}class ${name}${inherit}
@@ -369,13 +347,6 @@ ${inlines}
       explicit_switch_type ""
       
       comment "Special video processing node used to scale and translate image data."
-      classrelation 133509 // <generalisation>
-	relation 132741 ---|>
-	  a public
-	    cpp default "${type}"
-	    classrelation_ref 133509 // <generalisation>
-	  b parent class_ref 131845 // Trafo
-      end
     end
 
     class 132357 "Mask"
@@ -391,13 +362,6 @@ ${inlines}
       idl_decl ""
       explicit_switch_type ""
       
-      classrelation 133637 // <generalisation>
-	relation 132869 ---|>
-	  a public
-	    cpp default "${type}"
-	    classrelation_ref 133637 // <generalisation>
-	  b parent class_ref 131845 // Trafo
-      end
     end
 
     class 132485 "PluginAdapter"
@@ -414,56 +378,6 @@ ${inlines}
       explicit_switch_type ""
       
       comment "Adapter used to integrage an effects processor in the render pipeline"
-      classrelation 133765 // <generalisation>
-	relation 132997 ---|>
-	  a public
-	    cpp default "${type}"
-	    classrelation_ref 133765 // <generalisation>
-	  b parent class_ref 131845 // Trafo
-      end
-    end
-
-    class 135045 "CodecAdapter"
-      visibility package 
-      cpp_decl "${comment}${template}class ${name}${inherit}
-  {
-${members}  };
-${inlines}
-"
-      java_decl ""
-      php_decl ""
-      python_2_2 python_decl ""
-      idl_decl ""
-      explicit_switch_type ""
-      
-      classrelation 138757 // <generalisation>
-	relation 136965 ---|>
-	  a public
-	    cpp default "${type}"
-	    classrelation_ref 138757 // <generalisation>
-	  b parent class_ref 131845 // Trafo
-      end
-    end
-
-    class 133253 "Frame"
-      abstract visibility public stereotype "interface"
-      cpp_decl "${comment}${template}class ${name}${inherit}
-  {
-${members}  };
-${inlines}
-"
-      java_decl "${comment}${@}${visibility}interface ${name}${extends} {
-${members}}
-"
-      php_decl ""
-      python_2_2 python_decl ""
-      idl_decl "${comment}${abstract}${local}interface ${name}${inherit} {
-${members}};
-"
-      explicit_switch_type ""
-      
-      comment "TODO: how to relate to Cehteh's Frame entity in the Backend?
-The latter is the fundamental Frame entity, wheras this Object rather represents a buffer set containing frame date"
     end
 
     class 133381 "AFrame"
@@ -479,13 +393,6 @@ ${inlines}
       idl_decl ""
       explicit_switch_type ""
       
-      classrelation 135045 // <generalisation>
-	relation 133893 ---|>
-	  a public
-	    cpp default "${type}"
-	    classrelation_ref 135045 // <generalisation>
-	  b parent class_ref 133253 // Frame
-      end
     end
 
     class 133509 "VFrame"
@@ -501,13 +408,6 @@ ${inlines}
       idl_decl ""
       explicit_switch_type ""
       
-      classrelation 135173 // <generalisation>
-	relation 134021 ---|>
-	  a public
-	    cpp default "${type}"
-	    classrelation_ref 135173 // <generalisation>
-	  b parent class_ref 133253 // Frame
-      end
     end
 
     class 133637 "GLBuf"
@@ -523,13 +423,6 @@ ${inlines}
       idl_decl ""
       explicit_switch_type ""
       
-      classrelation 135301 // <generalisation>
-	relation 134149 ---|>
-	  a public
-	    cpp default "${type}"
-	    classrelation_ref 135301 // <generalisation>
-	  b parent class_ref 133253 // Frame
-      end
     end
 
     class 133765 "Source"
@@ -632,14 +525,6 @@ ${class}::${name} ${(}${)}${const}${volatile} ${throw}${staticnl}
 	  b parent class_ref 142469 // StateProxy
       end
 
-      classrelation 152837 // <unidirectional association>
-	relation 149381 --->
-	  a role_name "" protected
-	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
-"
-	    classrelation_ref 152837 // <unidirectional association>
-	  b parent class_ref 133253 // Frame
-      end
     end
 
     class 142725 "WiringDescriptor"

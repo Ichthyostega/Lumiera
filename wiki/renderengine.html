@@ -1000,7 +1000,7 @@ config.macros.timeline.handler = function(place,macroName,params,wikifier,paramS
 }
 //}}}</pre>
 </div>
-<div title="BindingMO" modifier="Ichthyostega" modified="201011170334" created="200905210144" tags="def design discuss SessionLogic" changecount="22">
+<div title="BindingMO" modifier="Ichthyostega" modified="201011210253" created="200905210144" tags="def design discuss Model SessionLogic" changecount="24">
 <pre>Binding-~MObjects are used to associate two entities within the high-level model.
 More specifically, such a binding serves 
 * to outfit any top-level [[Timeline]] with real content, which is contained within a [[Sequence]]
@@ -2692,10 +2692,11 @@ And, last but not least, doing large scale allocations is the job of the backend
 <div title="Model" modifier="Ichthyostega" modified="201003210021" created="201003210020" tags="overview" changecount="2">
 <pre>Lumiera's Proc-Layer is built around //two interconnected models,// mediated by the [[Builder]]. Basically, the &amp;rarr;[[Session]] is an external interface to the HighLevelModel, while the &amp;rarr;RenderEngine operates the structures of the LowLevelModel.</pre>
 </div>
-<div title="ModelDependencies" modifier="Ichthyostega" modified="201006140007" created="201003020150" tags="SessionLogic Model operational spec draft img" changecount="35">
+<div title="ModelDependencies" modifier="Ichthyostega" modified="201011220126" created="201003020150" tags="SessionLogic Model operational spec draft img" changecount="37">
 <pre>Our design of the models (both [[high-level|HighLevelModel]] and [[low-level|LowLevelModel]]) relies partially on dependent objects being kept consitently in sync. Currently (2/2010), __ichthyo__'s assessment is to consider this topic not important and pervasive enough to justify building a dedicated solution, like e.g. a central tracking and registration service. An important point to consider with this assesment is the fact that the session implementation is beeing kept mostly single-threaded. Thus, lacking one central place to handle this issue, care has to be taken to capture and treat all the relevant individual dependencies properly at the implementation level.
 
 !known interdependencies
+[&gt;img[Fundamental object relations used in the session|uml/fig136453.png]]
 * the session API relies on two kinds of facade like assets: [[Timeline]] and [[Sequence]], linked to the BindingMO and Track objects within the model respectively.
 * conceptually, the DefaultsManagement and the AssetManager count as being part of the [[global model scope|ModelRootMO]], but, due to their importance, these facilities are accessible through an singleton interface.
 * currently as of 2/2010 the exact dependency of the automation calculation during the render process onto the automation definitions within the HighLevelModel remains to be specified.
@@ -4813,7 +4814,7 @@ On the implementation level, there are some interdependencies to consider betwee
 <pre>The session manager is responsible for maintaining session state as a whole and for conducting the session [[lifecycle|SessionLifecycle]]. The session manager API allows for saving, loading, closing and resetting the session. Accessible through the static interface {{{Session::current}}}, it exposes the actual session as a ~PImpl. Actually, both session and session manager are interfaces.
 </pre>
 </div>
-<div title="SessionMutation" modifier="Ichthyostega" modified="201003020143" created="201002170332" tags="SessionLogic spec decision draft" changecount="3">
+<div title="SessionMutation" modifier="Ichthyostega" modified="201011210252" created="201002170332" tags="SessionLogic spec decision draft" changecount="5">
 <pre>//Any modification of the session will pass through the [[command system|CommandHandling]].//
 Thus any possible mutation comes in two flavours: a raw operation invoked directly on an object instance attached to the model, and a command taking an MObjectRef as parameter. The latter approach &amp;mdash; invoking any mutation through a command &amp;mdash; will pass the mutations trough the ProcDispatcher to ensure the're logged for [[UNDO|UndoManager]] and executed sequentially, which is important, because the session's internals are //not threadsafe by design.// Thus we're kind of enforcing the use of Commands: mutating operations include a check for a &amp;raquo;permission to mutate&amp;laquo;, which is automatically available within a command execution {{red{TODO as of 2/10}}}. Moreover, the session API and the corresponding LayerSeparationInterfaces expose MObjectRef instances, not raw (language) refs.
 
@@ -4824,7 +4825,7 @@ Thus any possible mutation comes in two flavours: a raw operation invoked direct
 * how to keep [[dependencies within the model|ModelDependencies]] up-to date?
 
 !!who defines commands?
-The answer is simple: the one who needs to know about their existence. Because basically commands are invoked //by-name// &amp;mdash; someone needs to be aware of that name and what it denotes. Thus, for any given mutation, there is a place where it's meaningful to specify the details //and// to subsume them under a meaningful term. An entity responsible for this place could then act as the provider of the command in question.
+The answer is simple: the one who needs to know about their existence. Because basically commands are invoked //by-name// -- someone needs to be aware of that name and its meaning. Thus, for any given mutation, there is a place where it's meaningful to specify the details //and//&amp;nbsp; to subsume them under a meaningful term. An entity responsible for this place could then act as the provider of the command in question.
 
 Interestingly, there seems to be an alternative answer to this question. We could locate the setup and definition of all commands into a central administrative facility. Everyone in need of a command then ought to know the name and retrieve this command. Sounds like bureaucracy.
 </pre>
@@ -6383,13 +6384,14 @@ Thus no server and no network connection is needed. Simply open the file in your
  * see [[Homepage|http://tiddlywiki.com]], [[Wiki-Markup|http://tiddlywiki.org/wiki/TiddlyWiki_Markup]]
 </pre>
 </div>
-<div title="Timeline" modifier="Ichthyostega" modified="201010180151" created="200706250721" tags="def" changecount="17">
+<div title="Timeline" modifier="Ichthyostega" modified="201011220126" created="200706250721" tags="def" changecount="21">
 <pre>Timeline is the top level element within the [[Session (Project)|Session]]. It is visible within a //timeline view// in the GUI and represents the effective (resulting) arrangement of media objects, to be rendered for output or viewed in a Monitor (viewer window). A timeline is comprised of:
 * a time axis in abolute time ({{red{WIP 1/10}}}: not clear if this is an entity or just a conceptual definition) 
 * a PlayControler ({{red{WIP Summer 2010: see discussion on ML. It seems rather that the controller will be attached}}})
-* a list of global Pipes representing the possible outputs (master busses)
+* a list of [[global Pipes|GlobalPipe]] representing the possible outputs (master busses)
 * //exactly one// top-level [[Sequence]], which in turn may contain further nested Sequences.
-Please note especially that following this design //a timeline doesn't define tracks.// [[Tracks form a Tree|Track]] and are part of the individual sequences, together with the media objects placed to these tracks.
+Please note especially that following this design //a timeline doesn't define tracks.// [[Tracks form a Tree|Track]] and are part of the individual sequences, together with the media objects placed to these tracks. Thus sequences are independent entities which may exist stand-alone within the model, while a timeline is //always bound to hold a sequence.// &amp;rarr; see ModelDependencies
+[&gt;img[Fundamental object relations used in the session|uml/fig136453.png]]
 
 Within the Project, there may be ''multiple timelines'', to be viewed and rendered independently. But, being the top-level entities, multiple timelines may not be combined further. You can always just render (or view) one specific timeline. A given sequence may be referred directly or indirectly from multiple timelines though.
 

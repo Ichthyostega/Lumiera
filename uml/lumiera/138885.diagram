@@ -25,10 +25,10 @@ classinstancecanvas 128901 classinstance_ref 139269 //
   xyz 96 211 2000
 end
 classinstancecanvas 130693 classinstance_ref 139397 // 
-  xyz 319 251 2000
+  xyz 319 191 2000
 end
 classinstancecanvas 130949 classinstance_ref 139525 // 
-  xyz 313 211 2000
+  xyz 313 157 2000
 end
 classinstancecanvas 131333 classinstance_ref 139653 // 
   xyz 319 308 2000
@@ -52,7 +52,7 @@ classinstancecanvas 133637 classinstance_ref 140421 //
   xyz 503 308 2000
 end
 classinstancecanvas 133893 classinstance_ref 140677 // 
-  xyz 492 211 2000
+  xyz 492 252 2000
 end
 classinstancecanvas 134021 classinstance_ref 140805 // 
   xyz 562 129 2000
@@ -84,12 +84,15 @@ packagecanvas 137477
 end
 packagecanvas 137605 
   package_ref 132229 // Session
-  name_in_tab yes  xyzwh 15 25 1994 456 408
+  name_in_tab yes  xyzwh 15 25 1984 456 408
 end
 note 137733 "top-level Timeline"
   xyzwh 91 263 2000 64 45
 note 137861 "virtual clip"
-  xyzwh 379 233 2010 69 35
+  xyzwh 393 235 2010 69 35
+classinstancecanvas 138117 classinstance_ref 139653 // 
+  xyz 319 252 2015
+end
 objectlinkcanvas 129029 norel
   from ref 128773 z 1999 to ref 128901
   no_role_a no_role_b
@@ -117,9 +120,6 @@ objectlinkcanvas 129797 norel
   from ref 128261 z 1999 to point 223 315
   line 130437 z 1999 to ref 128645
   no_role_a no_role_b
-objectlinkcanvas 130821 norel
-  from ref 128389 z 1999 to ref 130693
-  no_role_a no_role_b
 objectlinkcanvas 131077 norel
   from ref 130693 z 1999 to ref 130949
   no_role_a no_role_b
@@ -136,11 +136,6 @@ objectlinkcanvas 132229 norel
   from ref 131333 z 1999 to point 342 351
   line 132357 z 1999 to ref 131589
   no_role_a no_role_b
-objectlinkcanvas 132485 norel
-  geometry VH
-  from ref 130693 z 1999 to point 342 282
-  line 132613 z 1999 to ref 131717
-  no_role_a no_role_b
 objectlinkcanvas 133253 norel
   geometry VH
   from ref 128133 z 1999 to point 223 137
@@ -156,6 +151,19 @@ objectlinkcanvas 134917 norel
   from ref 133125 z 1999 to point 259 61
   line 135045 z 1999 to ref 134789
   no_role_a no_role_b
+objectlinkcanvas 138245 norel
+  from ref 128389 z 1999 to ref 138117
+  no_role_a no_role_b
+objectlinkcanvas 138373 norel
+  geometry VH
+  from ref 138117 z 2004 to point 342 282
+  line 138629 z 2004 to ref 131717
+  no_role_a no_role_b
+objectlinkcanvas 138885 norel
+  decenter_begin 205
+  from ref 133893 z 1999 to point 411 198
+  line 139013 z 1999 to ref 130693
+  no_role_a no_role_b
 line 130565 -_-_
   from ref 128901 z 1999 to ref 128261
 line 131205 -_-_
@@ -168,8 +176,6 @@ line 135685 -_-_
   from ref 133125 z 1999 to ref 134021
 line 135941 -_-_
   from ref 131333 z 1999 to ref 133637
-line 136069 -_-_
-  from ref 130949 z 1999 to ref 133893
 line 136581 -_-_
   from ref 131589 z 1999 to ref 136197
 line 136965 -_-_ decenter_end 181
@@ -178,5 +184,7 @@ line 137093 -_-_
   from ref 131461 z 1999 to ref 136325
 line 137349 -_-_
   from ref 137221 z 1999 to ref 128773
+line 138757 -_-_
+  from ref 138117 z 1999 to ref 133893
 preferred_whz 730 488 1
 end

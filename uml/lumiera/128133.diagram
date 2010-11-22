@@ -112,6 +112,8 @@ classcanvas 148613 class_ref 152453 // PlacementRef
   draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default show_stereotype_properties default
   xyz 685 342 2005
 end
+textcanvas 151301 "note: this is a simplified / conceptual view"
+  xyzwh 217 657 2000 191 13
 relationcanvas 128389 relation_ref 128005 // <directional composition>
   from ref 128005 z 1999 to ref 128133
   role_a_pos 171 615 3000 no_role_b
@@ -121,13 +123,6 @@ relationcanvas 128517 relation_ref 128133 // <unidirectional association>
   from ref 128005 z 1999 to ref 128261
   role_a_pos 237 811 3000 no_role_b
   multiplicity_a_pos 211 811 3000 no_multiplicity_b
-end
-relationcanvas 128645 relation_ref 128261 // <generalisation>
-  geometry VHr
-  from ref 128261 z 1999 to point 253 859
-  line 128901 z 1999 to ref 128133
-  no_role_a no_role_b
-  no_multiplicity_a no_multiplicity_b
 end
 relationcanvas 130821 relation_ref 128517 // <directional aggregation>
   geometry VH
@@ -168,7 +163,7 @@ relationcanvas 134533 relation_ref 130309 // <generalisation>
 end
 relationcanvas 135941 relation_ref 131077 // <directional composition>
   from ref 128261 z 1999 stereotype "<<list>>" xyz 578 844 3000 to ref 135813
-  role_a_pos 642 844 3000 no_role_b
+  role_a_pos 641 843 3000 no_role_b
   multiplicity_a_pos 714 866 3000 no_multiplicity_b
 end
 relationcanvas 136709 relation_ref 131333 // <generalisation>
@@ -240,7 +235,7 @@ relationcanvas 144517 relation_ref 143877 // <unidirectional association>
   from ref 141317 z 1999 to point 499 150
   line 144645 z 1999 to point 499 180
   line 144773 z 1999 to ref 141317
-  role_a_pos 498 156 3000 no_role_b
+  role_a_pos 504 161 3000 no_role_b
   no_multiplicity_a no_multiplicity_b
 end
 relationcanvas 144901 relation_ref 144901 // <generalisation>
@@ -263,7 +258,7 @@ relationcanvas 146565 relation_ref 145669 // <generalisation>
 end
 relationcanvas 146693 relation_ref 145797 // <unidirectional association>
   from ref 146437 z 1999 to ref 146053
-  role_a_pos 408 527 3000 no_role_b
+  role_a_pos 400 525 3000 no_role_b
   no_multiplicity_a no_multiplicity_b
 end
 relationcanvas 147077 relation_ref 155653 // <directional composition>
@@ -307,9 +302,9 @@ relationcanvas 150149 relation_ref 184581 // <unidirectional association>
   no_multiplicity_a no_multiplicity_b
 end
 relationcanvas 150277 relation_ref 184709 // <directional composition>
-  from ref 128005 z 1999 to point 137 602
+  from ref 128005 z 1999 to point 137 608
   line 150405 z 1999 to ref 146949
-  role_a_pos 171 567 3000 no_role_b
+  role_a_pos 172 567 3000 no_role_b
   no_multiplicity_a no_multiplicity_b
 end
 relationcanvas 151045 relation_ref 142853 // <unidirectional association>
