@@ -1000,7 +1000,7 @@ config.macros.timeline.handler = function(place,macroName,params,wikifier,paramS
 }
 //}}}</pre>
 </div>
-<div title="BindingMO" modifier="Ichthyostega" modified="201011210253" created="200905210144" tags="def design discuss Model SessionLogic" changecount="24">
+<div title="BindingMO" modifier="Ichthyostega" modified="201011220258" created="200905210144" tags="def design discuss Model SessionLogic" changecount="30">
 <pre>Binding-~MObjects are used to associate two entities within the high-level model.
 More specifically, such a binding serves 
 * to outfit any top-level [[Timeline]] with real content, which is contained within a [[Sequence]]
@@ -1009,8 +1009,8 @@ More specifically, such a binding serves
 !Properties of a Binding
 Binding is a relation entity, maintaining a link between parts of the session. Actually this link is achieved somewhat indirect: The binding itself is an MObject, but it points to a [[sequence asset|Sequence]]. Moreover, in case of the (top-level) timelines, there is a timeline asset acting frontend for the ~BindingMO. 
 * the binding exposes special functions needed to implement the timeline {{red{planned as of 11/10}}}
-* similarily, the binding exposes functions allowing to stand-in for a regular clip (when acting as VirtualClip).
-* the Bining holds an OutputMapping &amp;mdash; allowing to specify, resolve and remember [[output designations|OutputDesignation]]
+* similarly, the binding exposes functions allowing to stand-in for a regular clip (when acting as VirtualClip).
+* the Binding holds an OutputMapping -- allowing to specify, resolve and remember [[output designations|OutputDesignation]]
 
 Note: there are other binding-like entities within the model, which are deliberately not subsumed below this specification, but rather implemented stand alone.
 &amp;rarr; see also SessionInterface
@@ -1020,20 +1020,21 @@ Note: there are other binding-like entities within the model, which are delibera
 !Implementation
 On the implementation side, we use a special kind of MObject, acting as an anchor and providing an unique identity. Like any ~MObject, actually a placement establishes the connection and the scope, and typically constitutes a nested scope (e.g. the scope of all objects //within// the sequence to be bound into a timeline)
 
-Binding can be considered an implementation object, rarely to be created direcly. Yet it is part of the high-level model
-{{red{WIP 11/10}}}: it is likely that BindingMO becomes a subclass (mix-in) of {{{mobject::session::Clip}}}
+Binding can be considered an implementation object, rarely to be created directly. Yet it is part of the high-level model
+{{red{WIP 11/10}}}: it is likely that -- in case of creating a VirtualClip -- BindingMO will be hooked up behind another façade asset, acting as ''virtual media''
 
-!!!channel / output mapping
+!!!channel / output mapping {{red{WIP 11/10}}}
 The Binding-~MObject stores an OutputMapping. Basically this, together with OutputDesignation, implements the mapping behaviour
-* after a build process, all unresolved connection requests are announced to the next enclosing binding {{red{TODO: just an idea as of 11/10}}}
-* a relative output designation (the N^^th^^ channel of this kind) is just carried over to the target binding.
-* a direct output designation gets connected to a global pipe in the binding.
-* when the binding is used to implement a virtual clip, then after resolving all connection requests...
-** a relative output designation (the N^^th^^ channel of this kind) is just carried over to the target scope and re-resolved there.
-** a direct output designation specicfiation yields a summation pipe at the binding, i.e. a position corresponding to the global pipes when using the same sequence as timeline.
-** The output of this summation pipe is treated like a media channel
+* during the build process, output designation(s) are to be retrieved for each pipe.
+* indirect and relative designations are to resolved; the relative ones are forwarded to the next enclosing binding
+* in any case, the result is an direct WiringPlug, which can then be matched up and wired
+* but in case of implementing a virtual clip, in addition to the direct wiring...
+** a relative output designation (the N^^th^^ channel of this kind) is carried over to the target scope to be re-resolved there.
+** any output designation specification yields a summation pipe at the binding, i.e. a position corresponding to the global pipes when using the same sequence as timeline.
+** The output of these summation pipes is treated like a media channels
+** but for each of those channels, an OutputDesignation is //carried over//&amp;nbsp; into the target (virtual clip)
 *** now, if a distinct output designation can be determined at this placement of the virtual clip, it will be used for the further routing
-*** otherwise, we try to //carry over//&amp;nbsp; the original output designation (which has led to the summation bus on the binding for the meta-clip). Thus, routing will be done as if the original output designation was given at this placement of the virtual clip.
+*** otherwise, we try to re-evaluate the original output designation carried over. &lt;br/&gt;Thus, routing will be done as if the original output designation was given at this placement of the virtual clip.
 </pre>
 </div>
 <div title="BindingScopeProblem" modifier="Ichthyostega" modified="201010021417" created="200910181435" tags="SessionLogic spec" changecount="20">
@@ -3011,7 +3012,7 @@ Any external output sink is managed as a [[slot|DisplayerSlot]] in the ~OutputMa
 &amp;rarr; see also the PlayerDummy
 </pre>
 </div>
-<div title="OutputMapping" modifier="Ichthyostega" modified="201011100215" created="201011080238" tags="Model spec draft" changecount="19">
+<div title="OutputMapping" modifier="Ichthyostega" modified="201011220305" created="201011080238" tags="Model spec draft" changecount="21">
 <pre>An output mapping serves to //resolve//&amp;nbsp; [[output designations|OutputDesignation]].
 
 !Mapping situations
@@ -3030,7 +3031,7 @@ Any external output sink is managed as a [[slot|DisplayerSlot]] in the ~OutputMa
 
 !Conclusions
 All these mapping steps are listed here, because they exhibit a common pattern.
-* the immediately triggering input key is a ~Pipe-ID (and thus provides a stream type); additional connection hints may be given.
+* the immediately triggering input key is a [[Pipe]]-ID (and thus provides a stream type); additional connection hints may be given.
 * the mapped result draws from a limited selection of elements, which again can be keyed by ~Pipe-IDs
 * the mapping is initialised based on default mapping rules acting as fallback
 * the mapping may be extended by explicitly setting some associations
@@ -3038,7 +3039,7 @@ All these mapping steps are listed here, because they exhibit a common pattern.
 * there is an //unconnected//&amp;nbsp; state.
 
 !Implementation notes
-Thus the mapping is a copyable value object, based on a associative array. It may be attached to a model object and persisted alongside. The mapping is assumed to run a defaults query when necessary. To allow for that, it should be configured with a query template (string). Invocations might specify additional predicates (e.g. {{{ord(2)}}} to denote &quot;the second stream of this kind&quot;) to hint the defaults resolution. Moreover, the mapping needs a way to retrieve the set of possible results, allowing to filter the results of the rules based default. Mappings might be defined explicitly. Instead of storing a //bottom value,// an {{{isDefined()}}} predicate might be preferable.
+Thus the mapping is a copyable value object, based on a associative array. It may be attached to a model object and persisted alongside. The mapping is assumed to run a defaults query when necessary. To allow for that, it should be configured with a query template (string). Frequently, special //default pipe// markers will be used at places, where no distinct pipe-~ID is explicitly specified. Besides that, invocations might supply additional predicates (e.g. {{{ord(2)}}} to denote &quot;the second stream of this kind&quot;) to hint the defaults resolution. Moreover, the mapping needs a way to retrieve the set of possible results, allowing to filter the results of the rules based default. Mappings might be defined explicitly. Instead of storing a //bottom value,// an {{{isDefined()}}} predicate might be preferable.
 
 First and foremost, mapping can be seen as a //functional abstraction.// As it's used at implementation level, encapsulation of detail types in't the primary concern, so it's a candidate for generic programming. But there //is// a concern better to be concealed at the usage site, namely accessing the rules system. Thus mapping leads itself to the frequently used implementation pattern where there is a generic frontend as header, calling into opaque functions embedded within a separate compilation unit.
 </pre>
@@ -3619,19 +3620,23 @@ DAMAGE.
 <div title="PathManager" modifier="Ichthyostega" created="200909041748" tags="def Builder" changecount="1">
 <pre>Facility guiding decisions regarding the strategy to employ for rendering or wiring up connections. The PathManager is querried through the OperationPoint, when executing the connection steps within the Build process.</pre>
 </div>
-<div title="Pipe" modifier="Ichthyostega" modified="200804110301" created="200801062110" tags="def decision" changecount="6">
+<div title="Pipe" modifier="Ichthyostega" modified="201011220317" created="200801062110" tags="def decision" changecount="7">
 <pre>Pipes play an central role within the Proc Layer, because for everything placed and handled within the session, the final goal is to get it transformed into data which can be retrieved at some pipe's exit port. Pipes are special facilities, rather like inventory, separate and not treated like all the other objects.
 We don't distinguish between &quot;input&quot; and &quot;output&quot; ports &amp;mdash; rather, pipes are thought to be ''hooks for making connections to''. By following this line of thought, each pipe has an input side and an output side and is in itself something like a ''Bus'' or ''processing chain''. Other processing entities like effects and transitions can be placed (attached) at the pipe, resulting them to be appended to form this chain. Likewise, we can place [[wiring requests|WiringRequest]] to the pipe, meaning we want it connected so to send it's output to another destination pipe. The [[Builder]] may generate further wiring requests to fulfil the placement of other entities.
 Thus //Pipes are the basic building blocks// of the whole render network. We distinguish ''global available'' Pipes, which are like the sum groups of a mixing console, and the ''lokal pipe'' or [[source ports|ClipSourcePort]] of the individual clips, which exist only within the duration of the corresponding clip. The design //limits the possible kinds of pipes // to these two types &amp;mdash; thus we can build local processing chains at clips and global processing chains at the global pipes of the session and that's all we can do. (because of the flexibility which comes with the concept of [[placements|Placement]], this is no real limitation)
 
-The GUI can connect the viewer(s) to some pipe (and moreover can use [[probe points|ProbePoint]] placed like effects and connected to some pipe), and likewise, when starting a ''render'', we get the opportunity to specify the pipes to pull the data from. Pulling data from some pipe is the (only) way to activate the render nodes network reachable from this pipe.
+Pipes are denoted and addressed by ~Pipe-IDs, implemented as ID of a pipe asset. Besides explicitly named pipes, there are some generic placeholder ~IDs for a standard configured pipe of a given type. This is done to avoid creating a separate ~Pipe-ID for each and every clip to build.
+
+While pipes are rather rigid building blocks -- and especially are limited to a single StreamType without conversions, the interconnections or ''routing'' links to the contrary are more flexible. They are specified and controled through the use of an OutputDesignation, which, when fully resolved, should again yield a target ~Pipe-ID to connect. The mentioned resolution of an output designation typically involves an OutputMapping.
+
+Similar structures and mechanisms are extended beyond the core model: The GUI can connect the viewer(s) to some pipe (and moreover can use [[probe points|ProbePoint]] placed like effects and connected to some pipe), and likewise, when starting a ''render'', we get the opportunity to specify the ModelPort (exit point of a GlobalPipe) to pull the data from. Pulling data from some pipe is the (only) way to activate the render nodes network reachable from this pipe.
 
 &amp;rarr; [[Handling of Tracks|TrackHandling]]
 &amp;rarr; [[Handling of Pipes|PipeHandling]]
 
 </pre>
 </div>
-<div title="PipeHandling" modifier="Ichthyostega" modified="201007210309" created="200801101352" tags="spec" changecount="16">
+<div title="PipeHandling" modifier="Ichthyostega" modified="201011220320" created="200801101352" tags="spec" changecount="19">
 <pre>!Identification
 Pipes are distinct objects and can be identified by their asset ~IDs. Besides, as for all [[structural assets|StructAsset]] there are extended query capabilities, including a symbolic pipe-id and a media (stream) type id. Any pipe can accept and deliver exactly one media stream kind (which may be inherently structured though, e.g. spatial sound systems or stereoscopic video)
 
@@ -3642,8 +3647,8 @@ Pipe assets are created automatically by being used and referred. Each [[Timelin
 Deleting a Pipe is an advanced operation, because it includes finding and &quot;detaching&quot; all references, otherwise the pipe will leap back into existence immediately. Thus, global pipe entries in the Session and pipe references in [[locating pins|LocatingPin]] within any placement have to be removed, while clips using a given source port will be disabled. {{red{todo: implementation deferred}}}
 
 !using Pipes
-there is not much you can do directly with a pipe asset. It is an point of reference, after all. Any connection to some pipe is only temporarily done by a placement in some part of the timeline (&amp;rarr; OutputDesignation), so it isn't stored with the pipe. You can edit the (user visible) description an you can globally disable a pipe asset. The pipe's ID and media stream type of course are fixed, because any connection and referral (via the asset ID) is based on them. Later on, we should provide a {{{rewire(oldPipe, newPipe)}}} to search any ref to the {{{oldPipe}}} and try to rewrite it to use the {{{newPipe}}}, possibly with a new media stream type.
-Pipes are integrated with the [[management of defaults|DefaultsManagement]]. For example, any pipe implicitly uses some [[processing pattern|ProcPatt]] &amp;mdash; it may default to the empty pattern. This way, any kind of standard wiring might be applied to the pipes (e.g a fader for audio, similar to the classic mixing consoles). This //is // a global property of the pipe, but &amp;mdash; contrary to the stream type &amp;mdash; this pattern may be switched {{red{really?}}}
+there is not much you can do directly with a pipe asset. It is an point of reference, after all. Any connection or routing to a target pipe is done by a placement with a suitable WiringPlug in some part of the timeline (&amp;rarr; OutputDesignation), so it isn't stored with the pipe. You can edit the (user visible) description an you can globally disable a pipe asset. The pipe's ID and media stream type of course are fixed, because any connection and referral (via the asset ID) is based on them. Later on, we should provide a {{{rewire(oldPipe, newPipe)}}} to search any ref to the {{{oldPipe}}} and try to rewrite it to use the {{{newPipe}}}, possibly with a new media stream type.
+Pipes are integrated with the [[management of defaults|DefaultsManagement]]. For example, any pipe implicitly uses some [[processing pattern|ProcPatt]] &amp;mdash; it may default to the empty pattern. This way, any kind of standard wiring might be applied to the pipes (e.g a fader for audio, similar to the classic mixing consoles). This //is // a global property of the pipe, but &amp;mdash; contrary to the stream type &amp;mdash; this pattern may be switched {{red{really? -- lots of open questions here as of 11/10}}}
 </pre>
 </div>
 <div title="Placement" modifier="Ichthyostega" modified="200910311753" created="200706220306" tags="Concepts def" changecount="11">
@@ -6620,12 +6625,17 @@ For now, as of 6/10, we use specialised QueryResolver instances explicitly and d
 A viewer element gets connected to a given timeline either by directly attaching it, or by //allocating an available free viewer.// Anyway, as a model element, the viewer is just like another set of global pipes cascaded behind the global pipes present in the timeline. The number and kind of pipes provided is a configurable property of the viewer element &amp;mdash; more specifically: the viewer's SwitchBoard. Thus, connecting a viewer activates the same internal logic employed when connecting a sequence into a timeline or meta-clip: a default channel association is established, which can be overridden persistently (&amp;rarr; OutputMapping). Each of the viewer's pipes in turn gets connected to a system output through an OutputManager slot &amp;mdash; again an output mapping step.
 </pre>
 </div>
-<div title="VirtualClip" modifier="Ichthyostega" modified="201011210048" created="200804110321" tags="def" changecount="16">
+<div title="VirtualClip" modifier="Ichthyostega" modified="201011220152" created="200804110321" tags="def Model" changecount="17">
 <pre>A ''~Meta-Clip'' or ''Virtual Clip'' (both are synonymous) denotes a clip which doesn't just pull media streams out of a source media asset, but rather provides the results of rendering a complete sub-network. In all other respects it behaves exactly like a &quot;real&quot; clip, i.e. it has [[source ports|ClipSourcePort]], can have attached effects (thus forming a local render pipe) and can be placed and combined with other clips. Depending on what is wired to the source ports, we get two flavours:
 * a __placeholder clip__ has no &quot;embedded&quot; content. Rather, by virtue of placements and wiring requests, the output of some other pipe somewhere in the session will be wired to the clip's source ports. Thus, pulling data from this clip will effectively pull from these source pipes wired to it.
 * a __nested sequence__ is like the other sequences in the Session, just in this case any missing placement properties will be derived from the Virtual Clip, which is thought as to &quot;contain&quot; the objects of the nested sequence. Typically, this also configures the tracks of the &quot;inner&quot; sequence such as to [[connect any output|OutputMapping]] to the source ports of the Virtual Clip.
 
 Like any &quot;real&quot; clip, Virtual Clips have a start offset and a length, which will simply translate into an offset of the frame number pulled from the Virtual Clip's source connection or embedded sequence, making it possible to cut, splice, trim and roll them as usual. This of course implies we can have several instances of the same virtual clip with different start offset and length placed differently. The only limitation is that we can't handle cyclic dependencies for pulling data (which has to be detected and flagged as an error by the builder)
+
+!Implementation
+The implementation is based on the observation, that a virtual clip is like a real clip, just referring to a ''virtual media''.
+Thus we'll employ a special kind of media asset, which actually links to a [[binding|BindingMO]], which in turn connects to a [[Sequence]]. Its the binding's job to help translating the sequence's contents into a media-like entity, with just //content// apearing in several channels.
+{{red{WIP as of 11/2010 -- most details yet to be defined}}} 
 </pre>
 </div>
 <div title="VisitingToolImpl" modifier="Ichthyostega" modified="200802031822" created="200801032003" tags="impl excludeMissing" changecount="21">
