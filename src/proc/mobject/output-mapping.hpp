@@ -41,7 +41,7 @@ namespace mobject {
    * This is an Interface, intended to be used in the signature
    * of API functions either providing or requiring a Mapping.
    */
-  template<class FUNC>
+  template<class DEF>
   class OutputMapping
     {
     public:

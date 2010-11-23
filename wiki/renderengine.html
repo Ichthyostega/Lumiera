@@ -3012,7 +3012,7 @@ Any external output sink is managed as a [[slot|DisplayerSlot]] in the ~OutputMa
 &amp;rarr; see also the PlayerDummy
 </pre>
 </div>
-<div title="OutputMapping" modifier="Ichthyostega" modified="201011220305" created="201011080238" tags="Model spec draft" changecount="21">
+<div title="OutputMapping" modifier="Ichthyostega" modified="201011230136" created="201011080238" tags="Model spec draft" changecount="22">
 <pre>An output mapping serves to //resolve//&amp;nbsp; [[output designations|OutputDesignation]].
 
 !Mapping situations
@@ -3039,7 +3039,7 @@ All these mapping steps are listed here, because they exhibit a common pattern.
 * there is an //unconnected//&amp;nbsp; state.
 
 !Implementation notes
-Thus the mapping is a copyable value object, based on a associative array. It may be attached to a model object and persisted alongside. The mapping is assumed to run a defaults query when necessary. To allow for that, it should be configured with a query template (string). Frequently, special //default pipe// markers will be used at places, where no distinct pipe-~ID is explicitly specified. Besides that, invocations might supply additional predicates (e.g. {{{ord(2)}}} to denote &quot;the second stream of this kind&quot;) to hint the defaults resolution. Moreover, the mapping needs a way to retrieve the set of possible results, allowing to filter the results of the rules based default. Mappings might be defined explicitly. Instead of storing a //bottom value,// an {{{isDefined()}}} predicate might be preferable.
+Thus the mapping is a copyable value object, based on a associative array. It may be attached to a model object and persisted alongside. The mapping is assumed to run a defaults query when necessary. To allow for that, it should be configured with a query template (string). Frequently, special //default pipe// markers will be used at places, where no distinct pipe-ID is explicitly specified. Besides that, invocations might supply additional predicates (e.g. {{{ord(2)}}} to denote &quot;the second stream of this kind&quot;) to hint the defaults resolution. Moreover, the mapping needs a way to retrieve the set of possible results, allowing to filter the results of the rules based default. Mappings might be defined explicitly. Instead of storing a //bottom value,// an {{{isDefined()}}} predicate might be preferable.
 
 First and foremost, mapping can be seen as a //functional abstraction.// As it's used at implementation level, encapsulation of detail types in't the primary concern, so it's a candidate for generic programming. But there //is// a concern better to be concealed at the usage site, namely accessing the rules system. Thus mapping leads itself to the frequently used implementation pattern where there is a generic frontend as header, calling into opaque functions embedded within a separate compilation unit.
 </pre>
