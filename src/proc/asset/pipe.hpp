@@ -86,7 +86,10 @@ namespace asset {
       void switchProcPatt (PProcPatt& another);
       
       /** convenience shortcut for retrieving default configured pipes */
-      static PPipe query (string properties)  ;
+      static PPipe query (string properties);
+      
+      /** convenience shortcut for lookup by id */
+      static PPipe lookup (ID<Pipe> id);
     };
     
     
