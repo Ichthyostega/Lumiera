@@ -34,12 +34,13 @@
 
 //#include <boost/format.hpp>
 //#include <iostream>
+#include <string>
 
 //using boost::format;
 //using lumiera::Time;
 //using util::contains;
 using util::isnil;
-//using std::string;
+using std::string;
 //using std::cout;
 
 
@@ -50,6 +51,8 @@ namespace test  {
   using asset::Pipe;
   using asset::PPipe;
   
+  typedef asset::ID<Pipe> PID;
+
   namespace {
     
   }
@@ -66,7 +69,11 @@ namespace test  {
     {
       struct DummyDef
         {
-          
+          string
+          output (PID target)
+            {
+              return Pipe::lookup(target)->ident.name;
+            }
         };
       
       typedef OutputMapping<DummyDef> Mapping;
@@ -88,7 +95,7 @@ namespace test  {
           
           PPipe p1 = Pipe::query("id(hairy)");
           PPipe p2 = Pipe::query("id(furry)");
-          PPipe pX = Pipe::query("");
+          PPipe pX = Pipe::query("id(curly)");
           
           map[p1] = p2;
           CHECK (!isnil (map));
@@ -109,16 +116,16 @@ namespace test  {
           
           PPipe p1 = Pipe::query("id(hairy)");
           PPipe p2 = Pipe::query("id(furry)");
-          PPipe pX = Pipe::query("");
+          PPipe pi = Pipe::query("id(nappy)");
           
-          m1[pX] = p1;
+          m1[pi] = p1;
           Mapping m2(m1);
           CHECK (!isnil (m2));
           CHECK (1 == m2.size());
           CHECK (m1[p1] == "hairy");
           CHECK (m2[p1] == "hairy");
           
-          m1[pX] = p2;
+          m1[pi] = p2;
           CHECK (m1[p1] == "furry");
           CHECK (m2[p1] == "hairy");
           
