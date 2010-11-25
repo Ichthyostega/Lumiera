@@ -105,7 +105,6 @@ namespace test  {
           
           CHECK (!map[pX].isDefined());
           CHECK (!map[p2].isDefined());
-          VERIFY_ERROR (UNKNOWN_MAPPING, map[pX] );
         }
       
       

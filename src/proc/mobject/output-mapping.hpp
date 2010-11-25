@@ -26,11 +26,12 @@
 
 #include "proc/mobject/output-designation.hpp"
 #include "lib/meta/function.hpp"
+#include "lib/query.hpp"
 
 
 
 namespace mobject {
-
+  
   namespace { // Helper to extract and rebind definition types
     
     using std::tr1::function;
@@ -54,10 +55,13 @@ namespace mobject {
         
       public:
         typedef typename Rebinder::Res Target;
-        typedef function<Target(PId)>  OutputMappingFunc; 
+        typedef function<Target(PId)>  OutputMappingFunc;
+        
       };
     
   }
+  
+  using lumiera::Query;
   
   
   /**
@@ -75,9 +79,83 @@ namespace mobject {
     {
       typedef _def<DEF> Setup;
       
+      typedef asset::ID<asset::Pipe> PId;
+      typedef asset::PPipe         PPipe;
+      
     public:
-      typedef typename Setup::Target Target;
+      typedef typename Setup::Target   Target;
+      
+      size_t
+      size()  const
+        {
+          UNIMPLEMENTED ("size of mapping table");
+        }
+      
+      bool
+      empty()  const
+        {
+          return 0 == size();
+        }
+      
+      void
+      clear()
+        {
+          UNIMPLEMENTED ("purge mapping table");
+        }
+    
+      class Resolver
+        {
+        public:
+          Resolver () { }
+          Resolver  (PId newId2map)
+            {
+              UNIMPLEMENTED ("store new fixed mapping");
+            }
+          Resolver  (PPipe newPipe2map)
+            {
+              UNIMPLEMENTED ("store new fixed mapping");
+            }
+          
+          operator Target()
+            {
+              UNIMPLEMENTED ("invoke output mapping functor, maybe issue defaults query");
+            }
+          
+          bool
+          isDefined()  const
+            {
+              UNIMPLEMENTED ("is this a NULL object, or a valid stored mapping?");
+            }
+          
+          bool
+          operator== (Target const& oval)
+            {
+              UNIMPLEMENTED ("compare this resolution to given other target value"); 
+            }
+          
+          ////TODO: better use boost::operators
+        };
+      
+      Resolver
+      operator[] (PId)
+        {
+          UNIMPLEMENTED ("standard lookup");
+        }
+      
+      Resolver
+      operator[] (PPipe const& pipe)
+        {
+          REQUIRE (pipe);
+          return (*this) [pipe->getID()];
+        }
+      
+      Resolver
+      operator[] (Query<asset::Pipe> const& query4pipe)
+        {
+          UNIMPLEMENTED ("lookup by extended query");
+        }
     };
+  
   
   
   
