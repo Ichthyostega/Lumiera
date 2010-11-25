@@ -245,11 +245,12 @@ namespace asset {
   template ID<Asset> AssetManager::reg (Asset* obj, const Asset::Ident& idi);
   
   
-  template P<Asset>  AssetManager::getAsset (const ID<Asset>&  id)  throw(lumiera::error::Invalid);
-  template P<Media>  AssetManager::getAsset (const ID<Media>&  id)  throw(lumiera::error::Invalid);
-  template P<Proc>   AssetManager::getAsset (const ID<Proc>&   id)  throw(lumiera::error::Invalid);
-  template P<Struct> AssetManager::getAsset (const ID<Struct>& id)  throw(lumiera::error::Invalid);
-  template P<Meta>   AssetManager::getAsset (const ID<Meta>&   id)  throw(lumiera::error::Invalid);
+  template P<Asset>  AssetManager::getAsset (const ID<Asset>&  id);
+  template P<Media>  AssetManager::getAsset (const ID<Media>&  id);
+  template P<Proc>   AssetManager::getAsset (const ID<Proc>&   id);
+  template P<Struct> AssetManager::getAsset (const ID<Struct>& id);
+  template P<Meta>   AssetManager::getAsset (const ID<Meta>&   id);
+  template P<Pipe>   AssetManager::getAsset (const ID<Pipe>&   id);
   
   template P<Asset>    AssetManager::wrap (const Asset& asset);
   template P<Media>    AssetManager::wrap (const Media& asset);

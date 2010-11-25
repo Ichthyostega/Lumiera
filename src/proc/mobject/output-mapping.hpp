@@ -33,13 +33,12 @@ namespace mobject {
 
   namespace { // Helper to extract and rebind definition types
     
+    using std::tr1::function;
+    
     template<class DEF>
-    struct _def
+    class _def
       {
-        typedef asset::ID<asset::Pipe>      PId;
-        
-        template<typename RET>
-        RET extractFunctionSignature (RET(DEF::*func)(PId));
+        typedef asset::ID<asset::Pipe> PId;
         
         template<typename FUN>
         struct Rebind;
@@ -50,11 +49,12 @@ namespace mobject {
             typedef RET Res;
           };
         
+        typedef typeof(&DEF::output) OutputMappingMemberFunc;              // GCC extension: "typeof"
+        typedef Rebind<OutputMappingMemberFunc> Rebinder;
         
-        typedef typename Rebind<&DEF::output> Rebinder;
-        
-        typedef typename Rebinder::Res      Res;
-        typedef typename function<Res(PId)> OutputMappingFunc; 
+      public:
+        typedef typename Rebinder::Res Target;
+        typedef function<Target(PId)>  OutputMappingFunc; 
       };
     
   }
@@ -73,7 +73,10 @@ namespace mobject {
   template<class DEF>
   class OutputMapping
     {
+      typedef _def<DEF> Setup;
+      
     public:
+      typedef typename Setup::Target Target;
     };
   
   
