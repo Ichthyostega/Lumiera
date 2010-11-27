@@ -30,6 +30,7 @@
 #include "lib/query.hpp"
 
 #include <boost/noncopyable.hpp>
+#include <boost/operators.hpp>
 
 
 
@@ -108,7 +109,9 @@ namespace mobject {
     
       class Resolver
         : public lib::BoolCheckable<Resolver
-        , boost::noncopyable>
+        , boost::equality_comparable<Resolver, Target,
+          boost::equality_comparable<Resolver> 
+        , boost::noncopyable> >
         {
         public:
           Resolver () { }
@@ -136,13 +139,20 @@ namespace mobject {
               UNIMPLEMENTED ("is this a NULL object, or a valid stored mapping?");
             }
           
-          bool
-          operator== (Target const& oval)
-            {
-              UNIMPLEMENTED ("compare this resolution to given other target value"); 
-            }
           
-          ////TODO: better use boost::operators
+          /* === equality comparisons (boost::operators) === */
+          
+          friend bool
+          operator== (Resolver const& a, Resolver const& b)
+          {
+              UNIMPLEMENTED ("compare two resolution wrappers"); 
+          }
+          
+          friend bool
+          operator== (Resolver const& rr, Target const& tval)
+          {
+              UNIMPLEMENTED ("compare this resolution to given other target value"); 
+          }
         };
       
       Resolver&
