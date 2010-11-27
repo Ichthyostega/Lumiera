@@ -28,12 +28,11 @@
 
 
 
-namespace asset
-  {
+namespace asset {
   
-
+  
   const lumiera::Time DUMMY_TIME (25); ///< @todo solve config management
-
+  
   /**
    * Placeholder Asset for unknown or unavailable media source.
    * @todo maybe do special handling of the media length, allowing
@@ -50,11 +49,11 @@ namespace asset
       virtual Media::PMedia getOrg()  throw(lumiera::error::Invalid);
       
     };
-    
+  
   LUMIERA_ERROR_DECLARE (ORIG_NOT_FOUND);
-    
-    
-    
-    
+  
+  
+  
+  
 } // namespace asset
 #endif

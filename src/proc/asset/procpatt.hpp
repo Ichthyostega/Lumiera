@@ -37,15 +37,15 @@ namespace asset {
   
   using lumiera::P;
   using lib::Symbol;
-
+  
   class Proc;
   class ProcPatt;
   class BuildInstruct; 
   typedef P<const asset::Proc> PProc;
   typedef P<const asset::ProcPatt> PProcPatt;
   
-  typedef vector<BuildInstruct> InstructionSequence;    
-
+  typedef vector<BuildInstruct> InstructionSequence;
+  
   /**
    * "Processing Pattern" is a structural Asset 
    * representing information how to build some part 
@@ -56,7 +56,7 @@ namespace asset {
     {
       InstructionSequence instructions_;
       
-      ProcPatt (const Asset::Ident&, const InstructionSequence&);      
+      ProcPatt (const Asset::Ident&, const InstructionSequence&);
       
     protected:
       explicit ProcPatt (const Asset::Ident& idi);
@@ -67,11 +67,11 @@ namespace asset {
       
       ProcPatt& attach (Symbol where, PProc& node);
       ProcPatt& operator+= (PProcPatt& toReuse);
-
+      
     };
-    
-    
-    
-    
+  
+  
+  
+  
 } // namespace asset
 #endif

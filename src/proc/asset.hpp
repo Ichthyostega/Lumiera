@@ -86,6 +86,7 @@ namespace asset {
   
   //NOBUG_DECLARE_FLAG (assetmem);
   
+  typedef size_t HashVal;                        /////////////////TICKET #722
   
   /** 
    * thin wrapper around a size_t hash ID 
@@ -103,10 +104,10 @@ namespace asset {
   class ID
     {
     public:
-      const size_t hash;
-      ID (size_t id)         : hash(id)         {}
+      const HashVal hash;
+      ID (HashVal id)        : hash(id)         {}
       ID (const KIND& asset) : hash(asset.getID()) {}
-      operator size_t()  const { return hash; }
+      operator HashVal() const { return hash; }
     };
     
   class DB;

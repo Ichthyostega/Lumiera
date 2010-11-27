@@ -32,8 +32,7 @@ using std::vector;
 
 
 
-namespace asset
-  {
+namespace asset {
 
 
   /**

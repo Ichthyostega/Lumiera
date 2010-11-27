@@ -28,9 +28,8 @@
 
 
 
-namespace asset
-  {
-
+namespace asset {
+  
   /**
    * special placeholder denoting an alternative version of the media data,
    * typically with lower resolution ("proxy media")
@@ -41,8 +40,8 @@ namespace asset
       Preview (Media& mediaref);
       friend class MediaFactory;
     };
-    
-    
-    
+  
+  
+  
 } // namespace asset
 #endif
