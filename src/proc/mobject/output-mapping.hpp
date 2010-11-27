@@ -28,9 +28,11 @@
 #include "lib/meta/function.hpp"
 #include "lib/bool-checkable.hpp"
 #include "lib/query.hpp"
+#include "lib/util.hpp"
 
 #include <boost/noncopyable.hpp>
 #include <boost/operators.hpp>
+#include <map>
 
 
 
@@ -39,6 +41,7 @@ namespace mobject {
   namespace { // Helper to extract and rebind definition types
     
     using std::tr1::function;
+    using util::contains;
     
     template<class DEF>
     class _def
@@ -66,6 +69,7 @@ namespace mobject {
   }
   
   using lumiera::Query;
+  using asset::HashVal;
   
   
   /**
@@ -75,68 +79,100 @@ namespace mobject {
    * type of the target specification is defined 
    * through the type parameter.
    * 
-   * This is an Interface, intended to be used in the signature
-   * of API functions either providing or requiring a Mapping.
+   * \par definition of specific mapping behaviour
+   * 
+   * This is an generic map-like container, acting as Interface to be used
+   * in the signature of API functions either providing or requiring a Mapping.
+   * For each distinct usage situation, an instantiation of this template should
+   * be created, providing a <i>definition context</i> as template parameter.
+   * Instances of this concrete mapping type may then be default constructed
+   * and copied freely. The definition context is supposed to provide
+   * - a functor \c DEF::output usable as function pipe-ID --> Target
+   * - the concrete output-functor also defines the concrete Target type,
+   *   which will be returned when accessing the OutputMapping
    */
   template<class DEF>
   class OutputMapping
+    : public DEF
     {
       typedef _def<DEF> Setup;
       
       typedef asset::ID<asset::Pipe> PId;
       typedef asset::PPipe         PPipe;
       
+      /* == mapping table storage == */
+      std::map<HashVal,HashVal> table_;
+      
     public:
       typedef typename Setup::Target   Target;
       
-      size_t
-      size()  const
-        {
-          UNIMPLEMENTED ("size of mapping table");
-        }
+      // using default ctor and copy operations
       
-      bool
-      empty()  const
-        {
-          return 0 == size();
-        }
+      size_t size() const { return table_.size(); }
+      bool empty()  const { return 0 == size(); }
+      void clear()        { table_.clear(); }
       
-      void
-      clear()
-        {
-          UNIMPLEMENTED ("purge mapping table");
-        }
-    
+      
+      /**
+       * @internal transient resolution wrapper to be exposed by map-style access.
+       * A Resolver instance represents an output mapping result, yet to be fully resolved.
+       * It is created on the stack by the OutputMapping container and internally wired
+       * back to the container and the actually stored value (pipe-ID-hash) in the table.
+       * Actually retrieving the result value by the client code triggers invocation
+       * of the specific resolution functor, embedded in the definition context DEF,
+       * which was given when instantiating the OutputMapping template.
+       */
       class Resolver
         : public lib::BoolCheckable<Resolver
         , boost::equality_comparable<Resolver, Target,
           boost::equality_comparable<Resolver> 
-        , boost::noncopyable> >
+                                  > >
         {
-        public:
-          Resolver () { }
+          OutputMapping& thisMapping_;
+          HashVal& pID_;
           
+          Resolver (OutputMapping& container, HashVal& resultVal)
+            : thisMapping_(container)
+            , pID_(resultVal)
+            { }
+          
+          friend class OutputMapping;
+          
+          /* copy by clients prohibited */
+          Resolver& operator= (Resolver const&);
+          
+          
+          Target
+          resolve()  const
+            {
+              REQUIRE (pID_);
+              PId targetPipeID (pID_);
+              return thisMapping_.resolve (targetPipeID);
+            }
+          
+        public:
           void
           operator= (PId newId2map)
             {
-              UNIMPLEMENTED ("store new fixed mapping");
+              pID_ = newId2map;
             }
           
           void
           operator= (PPipe newPipe2map)
             {
-              UNIMPLEMENTED ("store new fixed mapping");
+              REQUIRE (newPipe2map);
+              pID_ = newPipe2map->getID();
             }
           
           operator Target()
             {
-              UNIMPLEMENTED ("invoke output mapping functor, maybe issue defaults query");
+              return resolve();
             }
           
           bool
           isValid()  const
             {
-              UNIMPLEMENTED ("is this a NULL object, or a valid stored mapping?");
+              return bool(pID_);
             }
           
           
@@ -145,33 +181,56 @@ namespace mobject {
           friend bool
           operator== (Resolver const& a, Resolver const& b)
           {
-              UNIMPLEMENTED ("compare two resolution wrappers"); 
-          }
-          
+            return a.pID_ == b.pID_; 
+          }                 // note: Resolver depends on tempate parameter DEF
+                           //        All instances of DEF are considered equivalent!
           friend bool
           operator== (Resolver const& rr, Target const& tval)
           {
-              UNIMPLEMENTED ("compare this resolution to given other target value"); 
+            return rr.resolve() == tval; 
           }
         };
       
-      Resolver&
-      operator[] (PId)
+      Resolver
+      operator[] (PId sourcePipeID)
         {
-          UNIMPLEMENTED ("standard lookup");
+          if (!contains (table_, sourcePipeID))
+            {
+              UNIMPLEMENTED ("how to resolve");
+            }
+          return buildResolutionWrapper (sourcePipeID);
         }
       
-      Resolver&
+      Resolver
       operator[] (PPipe const& pipe)
         {
           REQUIRE (pipe);
           return (*this) [pipe->getID()];
         }
       
-      Resolver&
+      Resolver
       operator[] (Query<asset::Pipe> const& query4pipe)
         {
           UNIMPLEMENTED ("lookup by extended query");
+          HashVal hash4query;
+          HashVal resulting_targetPipeID;
+          table_[hash4query] = resulting_targetPipeID;
+          return buildResolutionWrapper (hash4query);
+        }
+      
+      
+    private:
+      Target
+      resolve (PId resultingPipeID)
+        {
+          return DEF::output(resultingPipeID);
+        }
+      
+      Resolver
+      buildResolutionWrapper (HashVal tableSlot)
+        {
+          ASSERT (contains (table_, tableSlot));
+          return Resolver (*this, table_[tableSlot]);
         }
     };
   
