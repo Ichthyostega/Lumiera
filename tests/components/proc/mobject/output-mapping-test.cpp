@@ -101,10 +101,11 @@ namespace test  {
           CHECK (!isnil (map));
           CHECK (1 == map.size());
           CHECK (map[p1] == "furry");
-          CHECK (map[p1].isDefined());
+          CHECK (map[p1].isValid());
+          CHECK (map[p1]);
           
-          CHECK (!map[pX].isDefined());
-          CHECK (!map[p2].isDefined());
+          CHECK (!map[pX]);
+          CHECK (!map[p2]);
         }
       
       
@@ -136,7 +137,7 @@ namespace test  {
           CHECK (isnil(m1));
           CHECK (!isnil(m2));
           CHECK (m2[p1] == "furry");
-          CHECK (!m1[p1].isDefined());
+          CHECK (!m1[p1].isValid());
         }
       
       

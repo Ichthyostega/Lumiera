@@ -45,8 +45,19 @@ namespace lumiera {
   
   
   /**
-   * Generic query interface for retrieving objects matching
-   * some capability query
+   * Generic query interface for retrieving objects
+   * matching the given capability query
+   * @note until really integrating a rules based system
+   *       this is a dummy placeholder implementation
+   *       based on a dressed-up std::string
+   * @warning in this preliminary implementation, the
+   *       given query-string is used as-is, without any
+   *       normalisation. Moreover, as espeically the
+   *       fake-configrules match by string comparision,
+   *       this may led to unexpected mis-matches.
+   * @todo the »real thing« should be based on a
+   *       normalised syntax tree representation
+   *       of the atoms in the query.
    */
   template<class OBJ>
   class Query : public std::string

@@ -26,7 +26,10 @@
 
 #include "proc/mobject/output-designation.hpp"
 #include "lib/meta/function.hpp"
+#include "lib/bool-checkable.hpp"
 #include "lib/query.hpp"
+
+#include <boost/noncopyable.hpp>
 
 
 
@@ -104,14 +107,20 @@ namespace mobject {
         }
     
       class Resolver
+        : public lib::BoolCheckable<Resolver
+        , boost::noncopyable>
         {
         public:
           Resolver () { }
-          Resolver  (PId newId2map)
+          
+          void
+          operator= (PId newId2map)
             {
               UNIMPLEMENTED ("store new fixed mapping");
             }
-          Resolver  (PPipe newPipe2map)
+          
+          void
+          operator= (PPipe newPipe2map)
             {
               UNIMPLEMENTED ("store new fixed mapping");
             }
@@ -122,7 +131,7 @@ namespace mobject {
             }
           
           bool
-          isDefined()  const
+          isValid()  const
             {
               UNIMPLEMENTED ("is this a NULL object, or a valid stored mapping?");
             }
@@ -136,20 +145,20 @@ namespace mobject {
           ////TODO: better use boost::operators
         };
       
-      Resolver
+      Resolver&
       operator[] (PId)
         {
           UNIMPLEMENTED ("standard lookup");
         }
       
-      Resolver
+      Resolver&
       operator[] (PPipe const& pipe)
         {
           REQUIRE (pipe);
           return (*this) [pipe->getID()];
         }
       
-      Resolver
+      Resolver&
       operator[] (Query<asset::Pipe> const& query4pipe)
         {
           UNIMPLEMENTED ("lookup by extended query");
