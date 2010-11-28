@@ -23,29 +23,27 @@
 
 #include "proc/asset/preview.hpp"
 
-namespace asset
-  {
+namespace asset {
   
   
-  namespace
+  namespace {
+    /** @internal derive a sensible asset ident tuple when creating 
+     *  a proxy placeholder media based on some existing asset::Media
+     *  @todo getting this one right is important for the handling
+     *        of "proxy editing"....
+     */
+    const Asset::Ident
+    createProxyIdent (const Asset::Ident& mediaref)
     {
-      /** @internal derive a sensible asset ident tuple when creating 
-       *  a proxy placeholder media based on some existing asset::Media
-       *  @todo getting this one right is important for the handling
-       *        of "proxy editing"....
-       */
-      const Asset::Ident
-      createProxyIdent (const Asset::Ident& mediaref)
-        {
-          string name (mediaref.name + "-proxy");  // TODO something sensible here; append number, sanitise etc.
-          Category category (mediaref.category);
-          TODO ("put it in another subfolder within the same category??");
-          return Asset::Ident (name, category, 
-                               mediaref.org, 
-                               mediaref.version );
-          
-        }
+      string name (mediaref.name + "-proxy");  // TODO something sensible here; append number, sanitise etc.
+      Category category (mediaref.category);
+      TODO ("put it in another subfolder within the same category??");
+      return Asset::Ident (name, category, 
+                           mediaref.org, 
+                           mediaref.version );
+      
     }
+  }//(End)implementation helper
   
   
   
@@ -62,8 +60,8 @@ namespace asset
     this->defineDependency (mediaref);
     UNIMPLEMENTED ("do something to setup proxy media");
   }
-
-
-
-
+  
+  
+  
+  
 } // namespace asset

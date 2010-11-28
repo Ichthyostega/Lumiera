@@ -27,15 +27,8 @@
 #include "include/logging.h"
 
 
-namespace asset
-  {
+namespace asset {
   
-  namespace // Implementation details
-  {
-    /** helper: .....*/
-  } 
-
-
   
   ProcFactory Proc::create;  ///< storage for the static ProcFactory instance
   

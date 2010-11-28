@@ -23,8 +23,7 @@
 
 #include "proc/asset/codec.hpp"
 
-namespace asset
-  {
+namespace asset {
 
 
 

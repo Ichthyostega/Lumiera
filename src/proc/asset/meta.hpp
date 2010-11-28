@@ -55,7 +55,7 @@ namespace asset {
   class ID<Meta> : public ID<Asset>
     {
     public:
-      ID (size_t id);
+      ID (HashVal id);
       ID (const Meta&);
     };
   
@@ -84,7 +84,7 @@ namespace asset {
     // definition of ID<Meta> ctors is possible now,
    //  after providing full definition of class Proc
   
-  inline ID<Meta>::ID(size_t id)        : ID<Asset> (id)           {};
+  inline ID<Meta>::ID(HashVal id)       : ID<Asset> (id)           {};
   inline ID<Meta>::ID(const Meta& meta) : ID<Asset> (meta.getID()) {};
   
   typedef P<Meta> PMeta;

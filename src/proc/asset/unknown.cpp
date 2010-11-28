@@ -27,8 +27,9 @@
 
 using boost::format;
 
-namespace asset
-  {
+namespace asset {
+  
+  LUMIERA_ERROR_DEFINE (ORIG_NOT_FOUND, "Media referred by placeholder not found");
   
   
   
@@ -60,8 +61,6 @@ namespace asset
                                     );
   }
   
-  LUMIERA_ERROR_DEFINE (ORIG_NOT_FOUND, "Media referred by placeholder not found");
-
   
   
 } // namespace asset

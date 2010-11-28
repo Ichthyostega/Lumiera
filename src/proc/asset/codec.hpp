@@ -28,8 +28,7 @@
 
 
 
-namespace asset
-  {
+namespace asset {
   
   /**
    * description of some media data decoder or encoder facility
@@ -38,8 +37,8 @@ namespace asset
     {
       
     };
-    
-    
-    
+  
+  
+  
 } // namespace asset
 #endif

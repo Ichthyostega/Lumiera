@@ -60,16 +60,17 @@ objectlinkcanvas 131973 norel
   from ref 128901 z 1999 to ref 128261
   no_role_a no_role_b
 line 130053 -_-_
-  from ref 128389 z 1999 to ref 128645
+  from ref 128389 z 1999 to point 29 139
+  line 132101 z 1999 to ref 128645
 line 130181 -_-_
   from ref 128645 z 1999 to ref 128261
 line 130309 -_-_
   from ref 128773 z 1999 to ref 128901
 line 130437 -_-_ geometry HVr
-  from ref 128901 z 1999 to point 428 316
+  from ref 128901 z 1999 to point 413 316
   line 130565 z 1999 to ref 129413
 line 130693 -_-_ geometry VH
-  from ref 128261 z 1999 to point 191 316
+  from ref 128261 z 1999 to point 175 316
   line 130949 z 1999 to ref 129797
 preferred_whz 556 483 1
 end

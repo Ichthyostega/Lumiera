@@ -1,8 +1,8 @@
 /*
-  PARAMETER.hpp  -  representation of an automatable effect/plugin parameter
+  BusMO  -  attachment point to form a global pipe
  
   Copyright (C)         Lumiera.org
-    2008,               Hermann Vosseler <Ichthyostega@web.de>
+    2010,               Hermann Vosseler <Ichthyostega@web.de>
  
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -18,37 +18,33 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  
-*/
+* *****************************************************/
 
 
-#ifndef PROC_MOBJECT_PARAMETER_H
-#define PROC_MOBJECT_PARAMETER_H
-
-
-
+#include "proc/mobject/session/bus-mo.hpp"
 
 namespace mobject {
+namespace session {
   
-  template<class VAL> class ParamProvider;
-  
-  
-  /**
-   * Descriptor and access object for a plugin parameter.
-   * Parameters may be provided with values from the session,
-   * and this values may be automated.
-   */
-  template<class VAL>
-  class Parameter
+  /** */
+  BusMO::BusMO (PPipe const& pipe_to_represent)
+    : pipe_(pipe_to_represent)
     {
-    public:
-      VAL getValue () ;
-      
-    protected:
-      ParamProvider<VAL>* provider;
-      
-    };
+      throwIfInvalid();
+      TODO ("what additionally to do when rooting a global pipe??");
+    }
+  
+  
+  bool
+  BusMO::isValid()  const
+  {
+    TODO ("self-check of a global pipe within the model"); ///////////////////////////////TICKET #584
+    return true;
+    // Ideas: - maybe re-access the pipe "from outward"
+    //        - and then verify matching WiringClaim in the corresponding placement
+  }
   
   
   
-} // namespace mobject
-#endif
+  
+}} // namespace mobject::session

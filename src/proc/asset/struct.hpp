@@ -87,12 +87,12 @@ namespace asset {
   class ID<Struct> : public ID<Asset>
     {
     public:
-      ID (size_t id);
+      ID (HashVal id);
       ID (const Struct&);
     };
-    
-    
-    
+  
+  
+  
   /**
    * key abstraction: structural asset
    * Created automatically as a sideeffect of building the structure
@@ -125,7 +125,7 @@ namespace asset {
     // definition of ID<Struct> ctors is possible now,
    //  after providing full definition of class Struct
   
-  inline ID<Struct>::ID(size_t id)          : ID<Asset> (id)           {};
+  inline ID<Struct>::ID(HashVal id)         : ID<Asset> (id)           {};
   inline ID<Struct>::ID(const Struct& stru) : ID<Asset> (stru.getID()) {};
   
   

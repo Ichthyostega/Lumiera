@@ -22,6 +22,7 @@
 
 
 #include "proc/asset/pipe.hpp"
+#include "proc/assetmanager.hpp"
 #include "lib/util.hpp"
 
 using util::isnil;
@@ -57,9 +58,20 @@ namespace asset {
   
   PPipe 
   Pipe::query (string properties)
-    { 
-      return Struct::retrieve (Query<Pipe> (properties)); 
-    }
+  { 
+    return Struct::retrieve (Query<Pipe> (properties)); 
+  }
+  
+  
+  /** @param id asset-ID of the pipe to retrieve
+   *  @throw error::Invalid when not found
+   */ 
+  PPipe
+  Pipe::lookup (ID<Pipe> id)
+  {
+    return AssetManager::instance().getAsset(id);
+  }
+
   
   void 
   Pipe::switchProcPatt (PProcPatt& another)

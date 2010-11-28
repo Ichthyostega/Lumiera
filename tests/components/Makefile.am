@@ -76,6 +76,7 @@ test_components_SOURCES =								\
 	$(testcomponents_srcdir)/proc/mobject/controller/rendersegmenttest.cpp		\
 	$(testcomponents_srcdir)/proc/mobject/mobject-interface-test.cpp		\
 	$(testcomponents_srcdir)/proc/mobject/mobject-ref-test.cpp			\
+	$(testcomponents_srcdir)/proc/mobject/output-mapping-test.cpp			\
 	$(testcomponents_srcdir)/proc/mobject/placement-basic-test.cpp			\
 	$(testcomponents_srcdir)/proc/mobject/placement-hierarchy-test.cpp		\
 	$(testcomponents_srcdir)/proc/mobject/placement-object-identity-test.cpp	\
