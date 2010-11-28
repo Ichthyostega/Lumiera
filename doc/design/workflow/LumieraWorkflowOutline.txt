@@ -1,5 +1,5 @@
-﻿Lumiera Workflows
-=================
+Requirement for Professional Workflows
+======================================
 
 :Author:    Brian J.M. Rytel
 :Email:     <tesla.drummer@gmail.com>
@@ -25,11 +25,16 @@ All ingest sources need a solid metadata structure, suggestions welcome:
   name, DP, Camera Op, Director, set/location, date shot, actors/characters)
 
 ===== Tape/Video Ingest
-Connect to capture system through back-end/modules/plug-in
+Connect to capture system through back-end/modules/plug-in.
 Deck-control needs to handle both Firewire (1394) and Serial (RS232, RS422,
 Sony, Panasonic, JVC) could be internal controller, but at least a timecode
 hand-off to a plug-in. Needs to be able to control decks in single frame
 increments with precise TC.
+
+Ability to mark the source tape it came from in the metadata, with the ability
+to reconnect a when later rerunning the ingestation step. Integration with batch capture
+
+Question: would it make sense just to integrage +dvgrab* ?
 
 ===== Data Ingest
 Extract/Write metadata to file module needed. Should parse files to make sure they're not corrupted
@@ -44,9 +49,12 @@ Extract/Write metadata to file module needed. Should parse files to make sure th
 ==== i.Technical
 
 ===== A. Video & Audio playback
-*Requirement-1*: Coding should handle at least 4k, 32-bit, 200+MB/s, selectable LUTs (?)
+*Requirement-1*: Engine should handle at least 4k, 32-bit, 200+MB/s, selectable LUTs (?)
 Real-time of native codecs is important.
-Coding should handle in-sync minimum 8 audio tracks, 96kHz/24bit
+Engine should handle in-sync minimum 8 audio tracks, 96kHz/24bit
+
+- Support for extended colour space, no built-in hard limits (-> Gimp is limited to 8bit)
+- ``offline'' capability
 
 *Requirement-2*: Main media playback windows, clip selector & timeline output both should meet *Req-1*
 Live scope simulators, vector and waveform a must, 3d/wheel good choice
@@ -55,7 +63,7 @@ Live playback TC readouts from playheads
 *Requirement-3*: Compatibility for low-latency hardware output to video & audio devices,
 w/timecode, likely a hand-off but would latency is important.
 - Integration to JACK, ALSA, or OSS would be ideal.
-- Real-time (OpenGL?) rendering of simple filters
+- Real-time rendering of simple filters: support OpenGL
 - Background CPU rendering
 
 ===== B. File Handling
@@ -90,10 +98,11 @@ change the “blend” modes.
 Draw-on automation/keyframes & editing for both video & audio tracks.
 
 ===== E. Misc
-- We need to have accessible, easily scriptable FX/Filter menus for clips, all
-  NLEs throw a tab into the clip selector pain.
+- We need to have accessible, easily scriptable FX/Filter menus for clips,
+  all NLEs throw a tab into the clip selector pain.
 - Whole app should be multi-core aware, especially any rendering engines.
 - Needs to work on multiple monitors
+- auto save / auto log operations
 
 
 
@@ -103,8 +112,14 @@ Draw-on automation/keyframes & editing for both video & audio tracks.
 - Timeline
 - Timeline output
 - The edit tools
+  * slice / roll / slide / slide through
+  * move selection
+  * fill
 - Transitions
 - Filters/FX
+  * no need for gimmick filters
+  * matte filters, colour keying
+  * automatable mask
 
 ===== B.Features that make life better
 - Edit review/edit on the fly (Avid)
@@ -143,6 +158,7 @@ Media Export::
 Tape Export::
   Should be able to handle both straight lay-off and “edit-to-tape”.
 
+Batch export of multiple projects with multiple selectable output formats at once.
 
 
 2. Types of Workflows
@@ -151,7 +167,7 @@ Tape Export::
 === (a) Film
 . Captured Film-TK-Sound Sync
 . Ingest-NLE-
-. (3) Possible output formats
+. Three possible output formats
   .. EDL-Optical Print+Neg Cutting
   .. DI (Either new or oringinal TK)-Film
   .. DI (Either new or oringinal TK)-Video/Media
