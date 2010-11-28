@@ -74,6 +74,12 @@ namespace test  {
             {
               return Pipe::lookup(target)->ident.name;
             }
+          
+          Query<Pipe>
+          buildQuery (PID sourcePipeID)
+            {
+              UNIMPLEMENTED ("fabricate defaults query for unit-test");
+            }
         };
       
       typedef OutputMapping<DummyDef> Mapping;

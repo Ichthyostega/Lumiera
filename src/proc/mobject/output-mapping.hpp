@@ -120,6 +120,8 @@ namespace mobject {
    * - a functor \c DEF::output usable as function pipe-ID --> Target
    * - the concrete output-functor also defines the concrete Target type,
    *   which will be returned when accessing the OutputMapping
+   * - a function \c DEF::buildQuery(sourcePipeID) yielding a defaults querry,
+   *   to be issued in case of accessing a non existant mapping
    */
   template<class DEF>
   class OutputMapping
@@ -245,25 +247,9 @@ namespace mobject {
       
       /* === Map-style access for clients === */
       
-      Resolver
-      operator[] (PId sourcePipeID)
-        {
-          if (!contains (table_, sourcePipeID))
-            {
-              UNIMPLEMENTED ("how to resolve");
-            }
-          return buildResolutionWrapper (sourcePipeID);
-        }
-      
-      Resolver
-      operator[] (PPipe const& pipe)
-        {
-          REQUIRE (pipe);
-          return (*this) [pipe->getID()];
-        }
-      
-      Resolver
-      operator[] (Query<asset::Pipe> const& query4pipe);
+      Resolver operator[] (PId sourcePipeID);
+      Resolver operator[] (PPipe const& pipe);
+      Resolver operator[] (Query<asset::Pipe> const& query4pipe);
       
       
       
@@ -283,6 +269,10 @@ namespace mobject {
     };
   
   
+  
+  
+  /* ===== Implementation details ===== */
+  
   namespace _mapping {
     
     /** yield a suitable table slot for this query */
@@ -292,6 +282,28 @@ namespace mobject {
     HashVal resolveQuery (Query<asset::Pipe> const&);
   }
   
+  
+  template<class DEF>
+  inline typename OutputMapping<DEF>::Resolver
+  OutputMapping<DEF>::operator[] (PId sourcePipeID)
+  {
+    if (!contains (table_, sourcePipeID))
+      {
+        // issue a defaults query to resolve this mapping first
+        Query<asset::Pipe> query4pipe = DEF::buildQuery (sourcePipeID);
+        table_[sourcePipeID] = _mapping::resolveQuery (query4pipe);
+      }
+    return buildResolutionWrapper (sourcePipeID);
+  }
+  
+  
+  template<class DEF>
+  inline typename OutputMapping<DEF>::Resolver
+  OutputMapping<DEF>::operator[] (PPipe const& pipe)
+  {
+    REQUIRE (pipe);
+    return (*this) [pipe->getID()];
+  }
   
   
   /** determine an OutputMapping by resolving a complex query,
@@ -312,17 +324,17 @@ namespace mobject {
    *        if in doubt.
    */
   template<class DEF>
-  typename OutputMapping<DEF>::Resolver
+  inline typename OutputMapping<DEF>::Resolver
   OutputMapping<DEF>::operator[] (Query<asset::Pipe> const& query4pipe)
-    {
-      HashVal hash4query = _mapping::slot (query4pipe);
-      if (!contains (table_, hash4query))
-        // need to resolve this query first
-        table_[hash4query] = _mapping::resolveQuery (query4pipe);
-      
-      ENSURE (contains (table_, hash4query));
-      return buildResolutionWrapper (hash4query);
-    }
+  {
+    HashVal hash4query = _mapping::slot (query4pipe);
+    if (!contains (table_, hash4query))
+      // need to resolve this query first
+      table_[hash4query] = _mapping::resolveQuery (query4pipe);
+    
+    ENSURE (contains (table_, hash4query));
+    return buildResolutionWrapper (hash4query);
+  }
   
   
 } // namespace mobject
