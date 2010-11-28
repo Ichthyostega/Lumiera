@@ -40,7 +40,7 @@ namespace mobject {
   class PlacementRef;
   
   typedef PlacementRef<MObject> RefPlacement;
-
+  
   
   
   /**
@@ -53,17 +53,16 @@ namespace mobject {
    * encounters a pair of (OutputDesignation, OutputClaim),
    * an actual stream connection will be wired in the
    * processing node network.
+   * 
+   * @todo couldn't the inline buffer be "downgraded" to InPlaceBuffer ??
+   *       Seemingly we never-ever need to re-discover the erased type of the embedded spec.
+   *       Thus for this to work, we'd just need to add an "empty" spec       ///////////////////TICKET #723
    */
   class OutputDesignation
     {
     public:
       typedef asset::ID<asset::Pipe> PID;
       typedef asset::PPipe PPipe;
-      
-      PID resolve (PPipe origin);
-      
-      //TODO: API to retrieve target stream type
-      
       
       explicit OutputDesignation (PID explicitTarget);
       explicit OutputDesignation (RefPlacement const& indirectTarget); 
@@ -72,11 +71,30 @@ namespace mobject {
       // using default copying
       
       
+      /** retrieve the direct destination
+       *  this descriptor is actually pointing to.
+       *  In case of a target pipe not explicitly specified
+       *  this might involve a resolution step and take the 
+       *  current context into account. 
+       * @param origin starting point for figuring out connections
+       * @return a pipe-ID, which should be used as next connection.
+       *         This might not be the final designation, but the
+       *         directly visible next pipe to connect to
+       */
+      PID
+      resolve (PPipe origin)
+        {
+          return spec_->resolve (origin);
+        }
+      
+      //TODO: API to retrieve target stream type
+      
+      
       class TargetSpec
         {
         public:
           virtual ~TargetSpec();
-          PID resolve (PPipe origin);
+          virtual PID resolve (PPipe origin)  =0;
         };
       
     private:

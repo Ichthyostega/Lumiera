@@ -21,10 +21,33 @@
 * *****************************************************/
 
 
+/** @file output-designation.cpp 
+ ** Implementation details of OutputDesignation and OutputMapping.
+ ** Both of these are mostly intended as interface elements to represent
+ ** the intention to connect to another MObject, or a translation and mapping
+ ** of such connection intentions. But parts of the implementation are kept
+ ** here in a translation unit separate of the usage site: The implementation
+ ** of the various kinds of OutputDesignation spec (absolute, indirect, relative)
+ ** and the connection between OutputMapping and the rules based system.
+ ** 
+ ** @see OutputDesignation
+ ** @see OutputMapping
+ ** @see OutputMapping_test
+ **
+ */
+
+
 #include "lib/error.hpp"
 #include "proc/mobject/mobject.hpp"
 #include "proc/mobject/placement-ref.hpp"
 #include "proc/mobject/output-designation.hpp"
+#include "proc/mobject/output-mapping.hpp"
+#include "common/configrules.hpp"
+
+#include <boost/functional/hash.hpp>
+
+using lumiera::query::QueryHandler;
+using lumiera::ConfigRules;
 
 namespace mobject {
   
@@ -116,10 +139,34 @@ namespace mobject {
   
   
   
-  PID
-  OutputDesignation::resolve (PPipe origin)
-  {
-    UNIMPLEMENTED ("Forward output designation resolution request to the embedded spec object");
+  
+  
+  
+  namespace _mapping {
+    
+    /** @internal to allow for the use of queries mixed with normal Pipe-IDs
+     *  in a single table, we rely on the \c hash_value() function, to be
+     *  picked up by ADL */
+    HashVal
+    slot (Query<asset::Pipe> const& query)
+    {
+      return hash_value (query);
+    }
+    
+    /** @param Query for pipe, which is handed over as-is to the rules engine.
+     * @return key for a table slot to hold the associated mapping. This slot
+     *         is assumed to contain the mapped Pipe-ID for the given
+     *         query -- including the possibility of a zero hash
+     *         to signal an \em unconnected mapping. */
+    HashVal
+    resolveQuery (Query<asset::Pipe> const& query4pipe)
+    {
+      PPipe res;
+      QueryHandler<asset::Pipe>& typeHandler = ConfigRules::instance();  
+      typeHandler.resolve (res, query4pipe);
+      HashVal resulting_targetPipeID (res? (HashVal)res->getID() : 0 );
+      return resulting_targetPipeID;
+    }
   }
   
   

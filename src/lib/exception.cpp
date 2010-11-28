@@ -82,6 +82,7 @@ namespace lumiera {
     LUMIERA_ERROR_DEFINE (WRONG_TYPE, "runtime type mismatch");
     LUMIERA_ERROR_DEFINE (ITER_EXHAUST, "end of sequence reached");
     LUMIERA_ERROR_DEFINE (BOTTOM_VALUE, "invalid or NIL value");
+    LUMIERA_ERROR_DEFINE (UNCONNECTED, "missing connection"); 
     
     
   } // namespace error

@@ -21,16 +21,42 @@
 */
 
 
+/** @file output-mapping.hpp
+ ** Translating and wiring output designations.
+ ** OutputMapping is a complement to the OutputDesignation handles
+ ** used at various places in the high-level model. It is used when
+ ** translating a given output spec into another connection target
+ ** - when connecting an model port to a concrete external output
+ ** - when connecting a timeline to a viewer element
+ ** - for implementing the viewer input selection "switchbord"
+ ** - for translating output designation of virtual clips
+ ** OutputMapping is to be used as value object, holding concrete
+ ** connections and wiring. For each of the mentioned usage situations,
+ ** it needs to be adapted specifically, which is achieved by template
+ ** (generic) programming: The usage situation provides a definition
+ ** context DEF to fill in the variable parts of the implementation.
+ ** This definition context is actually instantiated (as base class).
+ ** The mapping table actually just stores an association of hash
+ ** values, which typically are interpreted as asset::ID<Pipe>.
+ ** But the actual mapping result is retrieved on each acces
+ ** by invoking a functor on the stored hash value,
+ ** thus the final resolution is done \em late.
+ ** 
+ ** @see OutputDesignation
+ ** @see OutputMapping_test
+ **
+ */
+
+
+
 #ifndef PROC_MOBJECT_OUTPUT_MAPPING_H
 #define PROC_MOBJECT_OUTPUT_MAPPING_H
 
-#include "proc/mobject/output-designation.hpp"
-#include "lib/meta/function.hpp"
+#include "lib/error.hpp"
 #include "lib/bool-checkable.hpp"
 #include "lib/query.hpp"
 #include "lib/util.hpp"
 
-#include <boost/noncopyable.hpp>
 #include <boost/operators.hpp>
 #include <map>
 
@@ -40,9 +66,12 @@ namespace mobject {
   
   namespace { // Helper to extract and rebind definition types
     
-    using std::tr1::function;
     using util::contains;
     
+    /** 
+     * @internal used by OutputMapping
+     * to figure out the mapping target type
+     */
     template<class DEF>
     class _def
       {
@@ -57,19 +86,20 @@ namespace mobject {
             typedef RET Res;
           };
         
-        typedef typeof(&DEF::output) OutputMappingMemberFunc;              // GCC extension: "typeof"
+        typedef typeof(&DEF::output) OutputMappingMemberFunc;        // GCC extension: "typeof"
         typedef Rebind<OutputMappingMemberFunc> Rebinder;
         
       public:
         typedef typename Rebinder::Res Target;
-        typedef function<Target(PId)>  OutputMappingFunc;
         
       };
-    
-  }
+  }//(End) type rebinding helper
   
+  namespace error = lumiera::error;
   using lumiera::Query;
   using asset::HashVal;
+  
+  
   
   
   /**
@@ -104,7 +134,7 @@ namespace mobject {
       std::map<HashVal,HashVal> table_;
       
     public:
-      typedef typename Setup::Target   Target;
+      typedef typename Setup::Target Target;
       
       // using default ctor and copy operations
       
@@ -121,12 +151,13 @@ namespace mobject {
        * Actually retrieving the result value by the client code triggers invocation
        * of the specific resolution functor, embedded in the definition context DEF,
        * which was given when instantiating the OutputMapping template.
+       * @note depends on the template parameter of the enclosing OutputMapping type!
        */
       class Resolver
-        : public lib::BoolCheckable<Resolver
-        , boost::equality_comparable<Resolver, Target,
-          boost::equality_comparable<Resolver> 
-                                  > >
+        : public lib::BoolCheckable<Resolver              // bool conversion to signal "unconnected"...
+        , boost::equality_comparable<Resolver, Target,   //  final mapping result can be compared to Target...
+          boost::equality_comparable<Resolver>          //   mapping values can be compared.
+                                  > >                  //    
         {
           OutputMapping& thisMapping_;
           HashVal& pID_;
@@ -147,10 +178,14 @@ namespace mobject {
             {
               REQUIRE (pID_);
               PId targetPipeID (pID_);
-              return thisMapping_.resolve (targetPipeID);
+              return thisMapping_.resolveTarget (targetPipeID);
             }
           
         public:
+          /** explicitly define a new target ID for this individual mapping
+           * @note the actually returned result depends on what the configured
+           *       \c DEF::output functor will yield when invoked on this ID
+           */
           void
           operator= (PId newId2map)
             {
@@ -164,13 +199,28 @@ namespace mobject {
               pID_ = newPipe2map->getID();
             }
           
+          void
+          disconnect() ///< switch this individual mapping into \em unconnected state
+            {
+              pID_ = 0;
+            }
+          
+          /** actually retrieve the target object of the mapping.
+           *  This operation is invoked when client code accesses
+           *  the result of an OutputMapping query. 
+           * @return result of invoking the configured \c DEF::output functor
+           * @throw  error::Logic when resoving an \em unconnected mapping
+           */
           operator Target()
             {
+              if (!isValid())
+                throw error::Logic ("attempt to resolve an unconnected output mapping"
+                                   , error::LUMIERA_ERROR_UNCONNECTED);
               return resolve();
             }
           
           bool
-          isValid()  const
+          isValid()  const    ///< is this a valid \em connected mapping?
             {
               return bool(pID_);
             }
@@ -191,6 +241,10 @@ namespace mobject {
           }
         };
       
+      
+      
+      /* === Map-style access for clients === */
+      
       Resolver
       operator[] (PId sourcePipeID)
         {
@@ -209,21 +263,15 @@ namespace mobject {
         }
       
       Resolver
-      operator[] (Query<asset::Pipe> const& query4pipe)
-        {
-          UNIMPLEMENTED ("lookup by extended query");
-          HashVal hash4query;
-          HashVal resulting_targetPipeID;
-          table_[hash4query] = resulting_targetPipeID;
-          return buildResolutionWrapper (hash4query);
-        }
+      operator[] (Query<asset::Pipe> const& query4pipe);
+      
       
       
     private:
       Target
-      resolve (PId resultingPipeID)
+      resolveTarget (PId mappedPipeID)
         {
-          return DEF::output(resultingPipeID);
+          return DEF::output (mappedPipeID);
         }
       
       Resolver
@@ -235,6 +283,46 @@ namespace mobject {
     };
   
   
+  namespace _mapping {
+    
+    /** yield a suitable table slot for this query */
+    HashVal slot (Query<asset::Pipe> const&);
+    
+    /** delegate target pipe resolution to the rules system */
+    HashVal resolveQuery (Query<asset::Pipe> const&);
+  }
+  
+  
+  
+  /** determine an OutputMapping by resolving a complex query,
+   *  instead of just picking a mapped pipe (which is the default usage).
+   *  Accessing the OutputMapping this way by query enables all kinds of
+   *  extended usages: It suffices that the given query somehow yields a Pipe,
+   *  which then is considered the mapped result and handed over to the \c DEF::output
+   *  functor for resolution to a result object to be returned. 
+   *  @note the mapped result is remembered within this mapping. Further invocations
+   *        with the \em same query will just fetch this stored pipe-ID and hand it
+   *        to the functor, without resolving the query again. You might want to
+   *        \link Resolver::disconnect remove \endlink this specific mapping 
+   *        in order to force re-evaluation of the query.  
+   * @param Query for a pipe, which is handed over as-is to the rules engine.
+   * @warning depending on the actual query, there might be no solution,
+   *        in which case an \em unconnected marker is retrieved and
+   *        stored. Thus the yielded Resolver should be checked,
+   *        if in doubt.
+   */
+  template<class DEF>
+  typename OutputMapping<DEF>::Resolver
+  OutputMapping<DEF>::operator[] (Query<asset::Pipe> const& query4pipe)
+    {
+      HashVal hash4query = _mapping::slot (query4pipe);
+      if (!contains (table_, hash4query))
+        // need to resolve this query first
+        table_[hash4query] = _mapping::resolveQuery (query4pipe);
+      
+      ENSURE (contains (table_, hash4query));
+      return buildResolutionWrapper (hash4query);
+    }
   
   
 } // namespace mobject
