@@ -56,6 +56,7 @@
 #include "lib/util.hpp"
 
 #include <boost/format.hpp>
+#include <cstdlib>
 
 using boost::format;
 
@@ -80,7 +81,13 @@ namespace asset {
   namespace {
     
     Symbol genericIdSymbol ("id");
+    Symbol seqNrPredicate  ("ord");
     
+    inline uint
+    asNumber (string const& spec)
+    {
+      return abs(std::atoi (spec.c_str()));
+    }        // returns 0 in case of unparseable number
   }
   
   
@@ -115,6 +122,11 @@ namespace asset {
               nameID = str(namePattern % StructTraits<STRU>::namePrefix() % (++i) );
             }
           ENSURE (!isnil (nameID));
+          
+          // does the query actually demand the Nth instance/element?
+          string seqID = extractID (seqNrPredicate, query);
+          if (!isnil (seqID) && 1 < asNumber(seqID))
+            nameID += "."+seqID;
           
           Category cat (STRUCT, StructTraits<STRU>::catFolder());
           return Asset::Ident (nameID, cat );

@@ -38,6 +38,7 @@
 
 
 #include "lib/error.hpp"
+#include "lib/symbol.hpp"
 #include "proc/mobject/mobject.hpp"
 #include "proc/mobject/placement-ref.hpp"
 #include "proc/mobject/output-designation.hpp"
@@ -45,9 +46,13 @@
 #include "common/configrules.hpp"
 
 #include <boost/functional/hash.hpp>
+#include <cstdlib>
 
 using lumiera::query::QueryHandler;
+using lumiera::query::removeTerm;
+using lumiera::query::extractID;
 using lumiera::ConfigRules;
+using lumiera::Symbol;
 
 namespace mobject {
   
@@ -166,6 +171,23 @@ namespace mobject {
       typeHandler.resolve (res, query4pipe);
       HashVal resulting_targetPipeID (res? (HashVal)res->getID() : 0 );
       return resulting_targetPipeID;
+    }
+    
+    Symbol SEQNR_PREDICATE = "ord";
+    
+    uint
+    is_defaults_query_with_channel (Query<asset::Pipe> const& query4pipe)
+    {
+      string seqNr = extractID (SEQNR_PREDICATE, query4pipe);
+      return abs(std::atoi (seqNr.c_str()));  // also 0 in case of an invalid number
+    }
+    
+    Query<asset::Pipe>
+    build_corresponding_sourceQuery (Query<asset::Pipe> const& query4pipe)
+    {
+      Query<asset::Pipe> srcQuery = query4pipe;
+      removeTerm (SEQNR_PREDICATE, srcQuery);
+      return srcQuery;
     }
   }
   

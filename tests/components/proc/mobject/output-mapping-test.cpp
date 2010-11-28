@@ -23,44 +23,40 @@
 
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
-//#include "proc/asset/media.hpp"
-//#include "proc/mobject/session.hpp"
-//#include "proc/mobject/session/testclip.hpp"
-#include "proc/asset/pipe.hpp"
-//#include "proc/mobject/placement.hpp"
 #include "proc/mobject/output-mapping.hpp"
+#include "proc/asset/pipe.hpp"
 #include "lib/util.hpp"
-//#include "proc/mobject/session/mobjectfactory.hpp"   ////TODO: avoidable?
 
-//#include <boost/format.hpp>
-//#include <iostream>
+#include <boost/format.hpp>
 #include <string>
 
-//using boost::format;
-//using lumiera::Time;
-//using util::contains;
+using boost::format;
 using util::isnil;
 using std::string;
-//using std::cout;
 
 
 namespace mobject {
 namespace test  {
   
-//using asset::VIDEO;
   using asset::Pipe;
   using asset::PPipe;
   
   typedef asset::ID<Pipe> PID;
-
-  namespace {
-    
-  }
   
   
-  /*******************************************************************
-   * @test create a synthetic / example mapping to verify
-   *       generic mapping behaviour
+  /*********************************************************************************
+   * @test create a synthetic / example mapping to verify generic mapping behaviour.
+   *       We're creating a custom mapping type here, for this test only: The
+   *       struct DummyDef provides a "definition context" for this custom mapping
+   *       - there is a function to retrieve the actual target object
+   *         for any target pipe stored in the mapping. In this case,
+   *         we just extract the name-ID string from the pipe as result
+   *       - as an additional sideeffect, this DummyDef::output functor
+   *         also defines the Target type of this custom mapping to be std::string
+   *       - DummyDef::buildQuery provides a template query, to be issued whenever
+   *         a yet nonexistent mapping is requested. In this special case here
+   *         we query for a pipe with the name "master_XXX", where XXX denotes
+   *         the stream-type of the source pipe to be mapped.
    *       
    * @see  mobject::OutputDesignation
    * @see  mobject::session::Binding
@@ -76,9 +72,11 @@ namespace test  {
             }
           
           Query<Pipe>
-          buildQuery (PID sourcePipeID)
+          buildQuery (PID sourcePipeID, uint seqNr =0)
             {
-              UNIMPLEMENTED ("fabricate defaults query for unit-test");
+              PPipe srcP = Pipe::lookup (sourcePipeID);
+              format queryPattern ("id(master_%1%), stream(%1%), ord(%2%)");
+              return Query<Pipe> (queryPattern % srcP->getStreamID() % seqNr);
             }
         };
       
@@ -110,8 +108,14 @@ namespace test  {
           CHECK (map[p1].isValid());
           CHECK (map[p1]);
           
+          CHECK (!map.contains (pX));
+          CHECK (!map.contains (p2));
+          
+          // create an unconnected mapping
+          map[pX].disconnect();
+          CHECK (map.contains (pX));
+          CHECK (!map[pX].isValid());
           CHECK (!map[pX]);
-          CHECK (!map[p2]);
         }
       
       
@@ -128,22 +132,22 @@ namespace test  {
           Mapping m2(m1);
           CHECK (!isnil (m2));
           CHECK (1 == m2.size());
-          CHECK (m1[p1] == "hairy");
-          CHECK (m2[p1] == "hairy");
+          CHECK (m1[pi] == "hairy");
+          CHECK (m2[pi] == "hairy");
           
           m1[pi] = p2;
-          CHECK (m1[p1] == "furry");
-          CHECK (m2[p1] == "hairy");
+          CHECK (m1[pi] == "furry");
+          CHECK (m2[pi] == "hairy");
           
           m2 = m1;
-          CHECK (m1[p1] == "furry");
-          CHECK (m2[p1] == "furry");
+          CHECK (m1[pi] == "furry");
+          CHECK (m2[pi] == "furry");
           
           m1.clear();
           CHECK (isnil(m1));
           CHECK (!isnil(m2));
-          CHECK (m2[p1] == "furry");
-          CHECK (!m1[p1].isValid());
+          CHECK (m2[pi] == "furry");
+          CHECK (!m1.contains (pi));
         }
       
       
@@ -156,17 +160,22 @@ namespace test  {
           PPipe p1 = Pipe::query("stream(hairy)");
           PPipe p2 = Pipe::query("stream(furry)");
           
-          CHECK (map[p1] == "master(hairy)");
-          CHECK (map[p2] == "master(furry)");
+          CHECK (map[p1] == "master_hairy");
+          CHECK (map[p2] == "master_furry");
           
+          // create new mapping to an explicitly queried target
+          Query<Pipe> some_pipe ("pipe(super_curly)");
+          CHECK (map[some_pipe] == "super_curly");
+          
+          // create a new mapping to the 2nd master for "furry" data
           Query<Pipe> special_bus ("stream(furry), ord(2)");
-          CHECK (map[special_bus] == "master.2(furry)");
+          CHECK (map[special_bus] == "master_furry.2");
         }
     };
   
   
   /** Register this test class... */
-  LAUNCHER (OutputMapping_test, "unit session");
+  LAUNCHER (OutputMapping_test, "unit session builder");
   
   
   

@@ -52,8 +52,9 @@
 #ifndef PROC_MOBJECT_OUTPUT_MAPPING_H
 #define PROC_MOBJECT_OUTPUT_MAPPING_H
 
-#include "lib/error.hpp"
+#include "proc/asset/pipe.hpp"
 #include "lib/bool-checkable.hpp"
+#include "lib/error.hpp"
 #include "lib/query.hpp"
 #include "lib/util.hpp"
 
@@ -65,8 +66,6 @@
 namespace mobject {
   
   namespace { // Helper to extract and rebind definition types
-    
-    using util::contains;
     
     /** 
      * @internal used by OutputMapping
@@ -120,8 +119,8 @@ namespace mobject {
    * - a functor \c DEF::output usable as function pipe-ID --> Target
    * - the concrete output-functor also defines the concrete Target type,
    *   which will be returned when accessing the OutputMapping
-   * - a function \c DEF::buildQuery(sourcePipeID) yielding a defaults querry,
-   *   to be issued in case of accessing a non existant mapping
+   * - a function \c DEF::buildQuery(sourcePipeID,seqNr) yielding a (defaults)
+   *   query to be issued in case of accessing a non existent mapping
    */
   template<class DEF>
   class OutputMapping
@@ -234,7 +233,7 @@ namespace mobject {
           operator== (Resolver const& a, Resolver const& b)
           {
             return a.pID_ == b.pID_; 
-          }                 // note: Resolver depends on tempate parameter DEF
+          }                 // note: Resolver depends on template parameter DEF
                            //        All instances of DEF are considered equivalent!
           friend bool
           operator== (Resolver const& rr, Target const& tval)
@@ -249,7 +248,20 @@ namespace mobject {
       
       Resolver operator[] (PId sourcePipeID);
       Resolver operator[] (PPipe const& pipe);
-      Resolver operator[] (Query<asset::Pipe> const& query4pipe);
+      Resolver operator[] (Query<asset::Pipe> query4pipe);
+      
+      bool
+      contains (PId mapping4sourcePipeID)
+        {
+          return util::contains (table_, mapping4sourcePipeID);
+        }
+      
+      bool
+      contains (PPipe sourcePipe)
+        {
+          return !sourcePipe
+              || this->contains (sourcePipe->getID());
+        }
       
       
       
@@ -263,7 +275,7 @@ namespace mobject {
       Resolver
       buildResolutionWrapper (HashVal tableSlot)
         {
-          ASSERT (contains (table_, tableSlot));
+          ASSERT (this->contains (tableSlot));
           return Resolver (*this, table_[tableSlot]);
         }
     };
@@ -280,14 +292,35 @@ namespace mobject {
     
     /** delegate target pipe resolution to the rules system */
     HashVal resolveQuery (Query<asset::Pipe> const&);
+    
+    /** detect the special case, when actually the Nth
+     *  solution of a defaults query is requested */
+    uint is_defaults_query_with_channel (Query<asset::Pipe> const&);
+    
+    /** ..and build the corresponding defaults source query for this case */
+    Query<asset::Pipe> build_corresponding_sourceQuery (Query<asset::Pipe> const&);
   }
   
   
+  /** standard map-style access to an OutputMapping.
+   *  For the given source pipe-ID the mapped target pipe-ID is fetched
+   *  and then handed over to the configured \c DEF::output functor, which
+   *  is assumed to calculate or retrieve the actual result object.
+   *  
+   *  \par default mappings
+   *  whenever accessing an yet non-existent mapping, a query is issued
+   *  behind the scenes to establish a suitable default mapping. The actual
+   *  query is built from a query template by the \c DEF::buildQuery function
+   *  and thus can be configured for the concrete usage situation of the mapping.
+   * @warning depending on the actually configured defaults query, there might be
+   *        no solution, in which case an \em unconnected marker is retrieved and
+   *        stored. Thus the yielded Resolver should be checked, if in doubt.
+   */
   template<class DEF>
   inline typename OutputMapping<DEF>::Resolver
   OutputMapping<DEF>::operator[] (PId sourcePipeID)
   {
-    if (!contains (table_, sourcePipeID))
+    if (!contains (sourcePipeID))
       {
         // issue a defaults query to resolve this mapping first
         Query<asset::Pipe> query4pipe = DEF::buildQuery (sourcePipeID);
@@ -297,6 +330,8 @@ namespace mobject {
   }
   
   
+  /** similar to the standard map-style access, but accepts
+   *  a source pipe object instead of just a pipe-ID */
   template<class DEF>
   inline typename OutputMapping<DEF>::Resolver
   OutputMapping<DEF>::operator[] (PPipe const& pipe)
@@ -311,7 +346,20 @@ namespace mobject {
    *  Accessing the OutputMapping this way by query enables all kinds of
    *  extended usages: It suffices that the given query somehow yields a Pipe,
    *  which then is considered the mapped result and handed over to the \c DEF::output
-   *  functor for resolution to a result object to be returned. 
+   *  functor for resolution to a result object to be returned.
+   *  
+   *  \par Query for the Nth default instance
+   *  OutputMapping provides a special behaviour for retrieving "the Nth default pipe".
+   *  The rationale being the request for connection to the Nth bus of a given kind, like
+   *  e.g. the 3rd audio subgroup or the 2nd video master. This special behaviour is triggered
+   *  by the predicate "ord(##)" in the query. The \em remainder of the query is supposed to
+   *  designate a \em default in this case, rather then querying directly for the result of
+   *  the mapping. Thus this remainder of the query is used to retrieve a \em source pipe,
+   *  which then is treated as if accessing a non-existent mapping: a suitable default
+   *  solution for this mapping is retrieved, but in this special case, we append the
+   *  given sequence number to the ID of the retrieved pipe, i.e. we get the Nth
+   *  (identical) solution to the aforementioned query for a default pipe. 
+   *  
    *  @note the mapped result is remembered within this mapping. Further invocations
    *        with the \em same query will just fetch this stored pipe-ID and hand it
    *        to the functor, without resolving the query again. You might want to
@@ -325,14 +373,29 @@ namespace mobject {
    */
   template<class DEF>
   inline typename OutputMapping<DEF>::Resolver
-  OutputMapping<DEF>::operator[] (Query<asset::Pipe> const& query4pipe)
+  OutputMapping<DEF>::operator[] (Query<asset::Pipe> query4pipe)
   {
     HashVal hash4query = _mapping::slot (query4pipe);
-    if (!contains (table_, hash4query))
-      // need to resolve this query first
-      table_[hash4query] = _mapping::resolveQuery (query4pipe);
+    if (!contains (hash4query))
+      {
+        if (uint seqNr = _mapping::is_defaults_query_with_channel (query4pipe))
+          {
+            // treat the special case
+            // when actually requesting the "Nth default of this kind" 
+            PPipe corresponding_sourcePipe
+              = asset::Pipe::query(
+                  _mapping::build_corresponding_sourceQuery (query4pipe));
+            ENSURE (corresponding_sourcePipe);
+            
+            PId sourcePipeID = corresponding_sourcePipe->getID();
+            query4pipe = DEF::buildQuery (sourcePipeID, seqNr);
+          }
+        
+        // need to resolve this query first
+        table_[hash4query] = _mapping::resolveQuery (query4pipe);
+      }
     
-    ENSURE (contains (table_, hash4query));
+    ENSURE (this->contains (hash4query));
     return buildResolutionWrapper (hash4query);
   }
   
