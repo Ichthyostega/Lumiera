@@ -8,6 +8,8 @@ integral, so it's rather treated separately of individual GUI features.
 
 -> see also link:../gui/index.html[general GUI discussion...]
 
+* link:LumieraWorkflowOutline.txt[Workflow outline by BJMR]
+
 
 [icon="warning.png"]
 WARNING: Website under construction
