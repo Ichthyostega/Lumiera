@@ -54,7 +54,7 @@
 #include "lib/error.hpp"
 #include "lib/sync-classlock.hpp"
 #include "lib/scoped-holder.hpp"
-#include "lib/scopedholdertransfer.hpp"
+#include "lib/scoped-holder-transfer.hpp"
 
 
 
