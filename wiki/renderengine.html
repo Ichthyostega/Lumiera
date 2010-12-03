@@ -1786,7 +1786,7 @@ Some further details
 * a special case of this factory use is the [[Singleton]] factory, which is used a lot within the Proy-Layer code
 </pre>
 </div>
-<div title="Fixture" modifier="Ichthyostega" modified="201011290357" created="200706220324" tags="def spec Builder Model" changecount="41">
+<div title="Fixture" modifier="Ichthyostega" modified="201012030310" created="200706220324" tags="def spec Builder Model" changecount="42">
 <pre>a specially configured view -- joining together high-level and low-level model
 * all MObjects have their position, length and configuration set up ready for rendering.
 * any nested sequences (or other kinds of indirections) have been resolved.
@@ -1799,7 +1799,7 @@ As the builder and thus render engine //only consults the fixture,// while all e
 !{{red{WIP}}} Structure of the fixture
 [&lt;img[Structure of the Fixture|draw/Fixture1.png]]
 
-The fixture is like a grid, where one dimension is given by the [[model ports|ModelPort]], and the other dimension extends in time. Within the time dimension there is a grouping into [[segments|Segmentation]] of constant structure.
+The fixture is like a grid, where one dimension is given by the [[model ports|ModelPortTable]], and the other dimension extends in time. Within the time dimension there is a grouping into [[segments|Segmentation]] of constant structure.
 
 ;Model Ports
 :The model ports share a single uniform and global name space: actually they're keyed by ~Pipe-ID
@@ -2819,12 +2819,39 @@ These are used as token for dealing with other objects and have no identity of t
 
 </pre>
 </div>
-<div title="ModelPort" modifier="Ichthyostega" modified="201011290333" created="201011100234" tags="def" changecount="2">
+<div title="ModelPort" modifier="Ichthyostega" modified="201012030404" created="201011100234" tags="def spec" changecount="5">
 <pre>Any point where output possibly might be produced. Model port entities are located within the [[Fixture]] &amp;mdash; model port as a concept spans the high-level and low-level view. A model port can be associated both to a pipe in the HighLevelModel but at the same time denote a set of corresponding [[exit nodes|ExitNode]] within the [[segments|Segmentation]] of the render nodes network.
 
-A model port is rather derived than configured; it emerges when a pipe [[claims|WiringClaim]] an output desitnation and some other entity actually uses this designation as a target, either directly or indirecly. This match of provision and usage is detected during the build process and produces an entry in the fixture's model port table. These model ports in the fixture are keyed by ~Pipe-ID, thus each model port has an associated StreamType.
+A model port is rather derived than configured; it emerges when a pipe [[claims|WiringClaim]] an output destination and some other entity actually uses this designation as a target, either directly or indirectly. This match of provision and usage is detected during the build process and produces an entry in the fixture's model port table. These model ports in the fixture are keyed by ~Pipe-ID, thus each model port has an associated StreamType.
 
-Model ports are the effective, resulting ouputs of each timeline; additional ports result from [[connecting a viewer|ViewerPlayConnection]]. Any render or display process happens at a model port.
+Model ports are the effective, resulting outputs of each timeline; additional ports result from [[connecting a viewer|ViewerPlayConnection]]. Any render or display process happens at a model port.
+
+!formal specification
+Model port is a //conceptual entity,// denoting the possibility to pull generated data of a distinct (stream)type from a specific bus within the model -- any possible output produced or provided by Lumiera is bound to appear at a model port. The namespace of model ports is global, each being denoted by a ~Pipe-ID.
+
+Model ports are represented by small non-copyable descriptor objects with distinct identity, which are owned and managed by the [[Fixture]]. Clients are bound to resolve a model port on each usage, as configuration changes within the model might cause ports to appear and decease. Each model port belongs to a specific Timeline and is aware of this association, as is the timeline, allowing to get the collection of all ports of a given timeline. Besides, within the Fixture each model port refers to a specific [[segmentation of the time axis|Segmentation]] (relevant for this special timeline actually). Thus, with the help of this segmentation, a model port can yield an ExitNode to pull frames for a given time.
+
+</pre>
+</div>
+<div title="ModelPortTable" modifier="Ichthyostega" modified="201012030345" created="201012030314" tags="Model impl" changecount="2">
+<pre>Model ports are conceptual entities, denoting the points where output might possibly be produced &amp;rarr; see [[definition|ModelPort]].
+But there is an actual representation, a collection of small descriptor objects managed by the Fixture and organised within the model port table datastructure. Because model ports are discovered during the build process, we need the ability to (re)build this table dynamically, finally swapping in the modified configuration with a transactional switch. Only the builder is allowed to perform such mutations, while for client code model ports are immutable.
+
+!supported operations
+* get the model port by ~Pipe-ID
+* a collection of model ports per timeline
+* sub-grouping by media kind, possibly even by StreamType
+* possibility to enumerate model ports in distinct //order,// defined within the timeline
+* with the additional possibility to filter by media kind or suitable stream type.
+* a way to express the fact of //not having a model port.//
+
+!!!mutating and rebuilding
+Model ports are added once and never changed. The corresponding timeline and pipe is known at setup time, but the overall number of model ports is determined only as a result of completing the build process. At that point, the newly built configuration is swapped in transactionally to become the current configuration.
+
+!Implementation considerations
+The transactional switch creates a clear partitioning in the lifespan of the model port table. //Before// that point, entries are just added, but not accessed in any way. //After// that point, no further mutation occurs, but lookup is frequent and happens in a variety of different configurations and transient orderings.
+
+This observation leads to the idea of using //model port references// to provide all kinds of access, searching and reordering. These encapsulate the actual access by silently assuming reference to &quot;the&quot; global current model port configuration. Thus, the actual model port descriptors could be bulk allocated in a similar manner as the processing nodes and wiring descriptors. Access to stale model ports could be detected by the port references, allowing also for a {{{bool}}} checkable &quot;has no port&quot; information.
 </pre>
 </div>
 <div title="ModelRootMO" modifier="Ichthyostega" modified="200912110245" created="200912080307" tags="def" changecount="5">
