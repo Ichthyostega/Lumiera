@@ -23,7 +23,9 @@
 
 
 #include "lib/test/run.hpp"
+#include "lib/test/test-helper.hpp"
 #include "lib/util.hpp"
+#include "lib/error.hpp"
 
 #include "lib/scoped-holder.hpp"
 #include "testdummy.hpp"
@@ -38,6 +40,7 @@ namespace test{
   
   using ::Test;
   using util::isnil;
+  using lumiera::error::LUMIERA_ERROR_LOGIC;
   
   using std::map;
   using std::cout;
@@ -105,8 +108,8 @@ namespace test{
             
             TRACE (test, "holder at %p", &holder);
             TRACE (test, "object at %p", holder.get() );
-            TRACE (test, "size(object) = %u", sizeof(*holder));
-            TRACE (test, "size(holder) = %u", sizeof(holder));
+            TRACE (test, "size(object) = %lu", sizeof(*holder));
+            TRACE (test, "size(holder) = %lu", sizeof(holder));
           }
           ASSERT (0==checksum);
         }
@@ -157,60 +160,34 @@ namespace test{
             ASSERT (holder);
             long currSum = checksum;
             void* adr = holder.get();
-            try
-              {
-                holder2 = holder;
-                NOTREACHED ();
-              }
-            catch (lumiera::error::Logic&)
-              {
-                ASSERT (holder);
-                ASSERT (!holder2);
-                ASSERT (holder.get()==adr);
-                ASSERT (checksum==currSum);
-              }
             
-            try
-              {
-                holder = holder2;
-                NOTREACHED ();
-              }
-            catch (lumiera::error::Logic&)
-              {
-                ASSERT (holder);
-                ASSERT (!holder2);
-                ASSERT (holder.get()==adr);
-                ASSERT (checksum==currSum);
-              }
+            VERIFY_ERROR(LOGIC, holder2 = holder );
+            ASSERT (holder);
+            ASSERT (!holder2);
+            ASSERT (holder.get()==adr);
+            ASSERT (checksum==currSum);
+            
+            VERIFY_ERROR(LOGIC, holder = holder2 );
+            ASSERT (holder);
+            ASSERT (!holder2);
+            ASSERT (holder.get()==adr);
+            ASSERT (checksum==currSum);
             
             create_contained_object (holder2);
             ASSERT (holder2);
             ASSERT (checksum != currSum);
             currSum = checksum;
-            try
-              {
-                holder = holder2;
-                NOTREACHED ();
-              }
-            catch (lumiera::error::Logic&)
-              {
-                ASSERT (holder);
-                ASSERT (holder2);
-                ASSERT (holder.get()==adr);
-                ASSERT (checksum==currSum);
-              }
+
+            VERIFY_ERROR(LOGIC, holder = holder2 );
+            ASSERT (holder);
+            ASSERT (holder2);
+            ASSERT (holder.get()==adr);
+            ASSERT (checksum==currSum);
             
-            try
-              {
-                HO holder3 (holder2);
-                NOTREACHED ();
-              }
-            catch (lumiera::error::Logic&)
-              {
-                ASSERT (holder);
-                ASSERT (holder2);
-                ASSERT (checksum==currSum);
-              }
+            VERIFY_ERROR(LOGIC, HO holder3 (holder2) );
+            ASSERT (holder);
+            ASSERT (holder2);
+            ASSERT (checksum==currSum);
           }
           ASSERT (0==checksum);
         }
