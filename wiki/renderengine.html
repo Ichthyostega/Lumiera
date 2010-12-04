@@ -1000,49 +1000,41 @@ config.macros.timeline.handler = function(place,macroName,params,wikifier,paramS
 }
 //}}}</pre>
 </div>
-<div title="BindingMO" modifier="Ichthyostega" modified="201007110149" created="200905210144" tags="def design discuss SessionLogic" changecount="17">
-<pre>Sometimes, two entities within the [[Session]] are deliberately associated, and this association has to carry some specific mappings between properties or facilities within the entities to be linked together. When this connection isn't just the [[Placement]] of an object, and isn't just a logical or structural relationship either &amp;mdash; then we create an explicit Binding object to be stored into the session.
-* When connecting a [[Sequence]] to a certain [[Timeline]], we also establish a mapping between the possible media stream channels produced by the sequence and the real output slots found within the timeline.
-* similarly, using a sequence within a [[meta-clip|VirtualClip]] requires to remember such a mapping.
-* another example is the root [[scope|PlacementScope]], which (conceptually) is a link between the definition part of the Session and the graph of MObjects, which are the session's contents.
+<div title="BindingMO" modifier="Ichthyostega" modified="201011252205" created="200905210144" tags="def design discuss Model SessionLogic" changecount="33">
+<pre>Binding-~MObjects are used to associate two entities within the high-level model.
+More specifically, such a binding serves 
+* to outfit any top-level [[Timeline]] with real content, which is contained within a [[Sequence]]
+* to build a VirtualClip, that is to link a complete sequence into another sequence, where it appears like a new virtual media or clip.
 
 !Properties of a Binding
-Binding is a relation entity, maintaining a link between parts of the session. This 1:1 relation may be part of a n:1 (or maybe even n:m?) relation. In addition to representing this link, a binding allows to maintain a set of ''mappings'' attached to this link.
+Binding is a relation entity, maintaining a link between parts of the session. Actually this link is achieved somewhat indirect: The binding itself is an MObject, but it points to a [[sequence asset|Sequence]]. Moreover, in case of the (top-level) timelines, there is a timeline asset acting as a frontend for the ~BindingMO. 
+* the binding exposes special functions needed to implement the timeline {{red{planned as of 11/10}}}
+* similarly, the binding exposes functions allowing to wrap up the bound sequence as VirtualMedia (when acting as VirtualClip).
+* the Binding holds an OutputMapping -- allowing to specify, resolve and remember [[output designations|OutputDesignation]]
 
-This creates a typing related problem: In order to maintain the link and the mappings, in each case we need a common denominator to subsume the elements to be maintained.
-* in the case of the basic link, this common denominator is given by the basic structure of the HighLevelModel: ~MObjects attached by Placements. Consequently, the link maintained through a binding is limited to linking together first-class entities within the model, and the implementation is tied into the existing mechanisms for associating Placements (&amp;rarr; PlacementScope and PlacementIndex)
-* in the case of the attached mappings it seems we're best off limiting ourselves to symbolic mappings (ID mappings). Because, going beyond that would either create sub-groupings (based on varying target types to be mapped), or push the »everything is an object« approach beyond the beneficial level.
-
-!Critique {{red{WIP 12/09}}}
-Now I'm in doubt if there is any point in treating the &quot;binding&quot; in a abstract fashion. Is there any common denominator? It seems there is just a common conceptional pattern, but mapping this pattern onto distinct types (classes) seems unnecessary. Rather, we have three very similar kinds of ~MObjects:
-* ModelRootMO
-* BindingMO
-* [[Track]]
-While each of these actually represents a high-level concept (the session, the timeline(s) the sequence(s)) and moreover links to other parts and provides mappings, it seems there is no re-usable similarity at the code level.
-//According to this reasoning, I should proceed rather with these three distinct entities and postpone any search for similarities to a later refactoring round.//
-
+Note: there are other binding-like entities within the model, which are deliberately not subsumed below this specification, but rather implemented stand alone.
 &amp;rarr; see also SessionInterface
 
-!Problems and Questions {{red{WIP 3/10}}}
-Meanwhile I've settled down on implementing the [[top-level entities|Timeline]] as façade assets, backed by a {{{Placement&lt;Binding&gt;}}}. But the addressing and mapping of media channels still remains unsettled. Moreover, what happens when binding the sequence into a VirtualClip?
-* because a Binding was assumed to link two entities, I concluded that the binding is dependent on those entities
-* but then the two cases don't match:
-** Timeline is an asset, not an MObject. Having a Timeline MObject would clearly be redundant. But then, consequently, //binding has to provide the global pipes,// because we need the possibility to attach effects to them (by placing the effects into the binding's scope)
-** to the contrary, a VirtualClip requires somehow a ClipMO, which then in turn would need a channel configuration
-*** so either, we could rework the clip asset into such a channel configuration (it looks pretty much redundant otherwise)
-*** or the binding could take on the role of the channel configuration (which would be more in-line with the first case)
-** unfortunately, both solutions bring the binding rather on the level of an asset (a media or channel configuration).
-* //multiplicity// is yet another open question:
-** can multiple placements refer to the same binding?
-** what would be the semantics or such an arrangement?
-** if we decide against it, what happens if we nevertheless encounter this situation?
 
-&amp;harr; related to the handling of MultichannelMedia, which likewhise needs to be re-adjusted meanwhile!
-
-&amp;rArr; {{red{rework of the model 6/10}}} taking these problems into account. Mostly cleanup and straightening. See AssetModelConnection
 
 !Implementation
 On the implementation side, we use a special kind of MObject, acting as an anchor and providing an unique identity. Like any ~MObject, actually a placement establishes the connection and the scope, and typically constitutes a nested scope (e.g. the scope of all objects //within// the sequence to be bound into a timeline)
+
+Binding can be considered an implementation object, rarely to be created directly. Yet it is part of the high-level model
+{{red{WIP 11/10}}}: it is likely that -- in case of creating a VirtualClip -- BindingMO will be hooked up behind another façade asset, acting as ''virtual media''
+
+!!!channel / output mapping {{red{WIP 11/10}}}
+The Binding-~MObject stores an OutputMapping. Basically this, together with OutputDesignation, implements the mapping behaviour
+* during the build process, output designation(s) will be retrieved for each pipe.
+* indirect and relative designations are to resolved; the relative ones are forwarded to the next enclosing binding
+* in any case, the result is an direct WiringPlug, which can then be matched up and wired
+* but in case of implementing a virtual clip, in addition to the direct wiring...
+** a relative output designation (the N^^th^^ channel of this kind) is carried over to the target scope to be re-resolved there.
+** any output designation specification yields a summation pipe at the binding, i.e. a position corresponding to the global pipes when using the same sequence as timeline.
+** The output of these summation pipes is treated like a media channels
+** but for each of those channels, an OutputDesignation is //carried over//&amp;nbsp; into the target (virtual clip)
+*** now, if a distinct output designation can be determined at this placement of the virtual clip, it will be used for the further routing
+*** otherwise, we try to re-evaluate the original output designation carried over. &lt;br/&gt;Thus, routing will be done as if the original output designation was given at this placement of the virtual clip.
 </pre>
 </div>
 <div title="BindingScopeProblem" modifier="Ichthyostega" modified="201010021417" created="200910181435" tags="SessionLogic spec" changecount="20">
@@ -1257,6 +1249,14 @@ When {{{operate()}}} doesn't throw, the result is a list of //successor moulds//
 at the lowest level within the builder there is the step of building a //connection.// This step is executed by the processing pattern with the help of the mould. Actually, making such a connection is more complicated, because in the standard case it will connect N media streams simultaneously (N=2 for stereo sound or 3D video, N=6 for 5.1 Surround, N=9 for 2nd order Ambisonics). These details are encapsulated within the OperationPoint, which is provided by the mould and exhibits a common interface for the processing pattern to express the connecting operation.
 
 &amp;rarr;see also: BuilderPrimitives for the elementary working situations corresponding to each of these [[builder moulds|BuilderMould]]
+</pre>
+</div>
+<div title="BusMO" modifier="Ichthyostega" modified="201011210111" created="201011210045" tags="def Model" changecount="7">
+<pre>''Bus-~MObjects'' create a scope and act as attachment point for building up [[global pipes|GlobalPipe]] within each timeline. While [[Sequence]] is a frontend -- actually implemented by attaching a root-[[Track]] object -- for //each global pipe// a BusMO is attached as child scope of the [[binding object|BindingMO]], which in turn actualy implements either a timeline or a [[meta-clip|VirtualClip]].
+* each global pipe corresponds to a bus object, which thus refers to the respective ~Pipe-ID
+* bus objects may be nested, forming a //subgroup//
+* the placement of a bus holds a WiringClaim, denoting that this bus //claims to be the corresponding pipe.//
+* by default, a timeline is outfitted with one video and one sound master bus
 </pre>
 </div>
 <div title="ColorPalette" modifier="Ichthyostega" modified="200807131329" created="200706190033" tags="excludeMissing" changecount="14">
@@ -1563,15 +1563,16 @@ As we don't have a Prolog interpreter on board yet, we utilize a mock store with
 {{{default(Obj)}}} is a predicate expressing that the object {{{Obj}}} can be considered the default setup under the given conditions. Using the //default// can be considered as a shortcut for actually finding a exact and unique solution. The latter would require to specify all sorts of detailed properties up to the point where only one single object can satisfy all conditions. On the other hand, leaving some properties unspecified would yield a set of solutions (and the user code issuing the query had to provide means for selecting one soltution from this set). Just falling back on the //default// means that the user code actually doesn't care for any additional properties (as long as the properties he //does// care for are satisfied). Nothing is said specifically on //how//&amp;nbsp; this default gets configured; actually there can be rules //somewhere,// and, additionally, anything encountered once while asking for a default can be re-used as default under similar circumstances.
 &amp;rarr; [[implementing defaults|DefaultsImplementation]]</pre>
 </div>
-<div title="DesignDecisions" modifier="Ichthyostega" modified="201009240010" created="200801062209" tags="decision design discuss Concepts" changecount="28">
+<div title="DesignDecisions" modifier="Ichthyostega" modified="201011210034" created="200801062209" tags="decision design discuss Concepts" changecount="33">
 <pre>Along the way of working out various [[implementation details|ImplementationDetails]], decisions need to be made on how to understand the different facilities and entities and how to tackle some of the problems. This page is mainly a collection of keywords, summaries and links to further the discussion. And the various decisions should allways be read as proposals to solve some problem at hand...
 
 ''Everything is an object'' &amp;mdash; yes of course, that's a //no-brainer,// todays. Rather, important is to note what is not &quot;an object&quot;, meaning it can't be arranged arbitrarily
-* we have one and only one global [[Session]] which directly contains a collection of multiple [[Sequences|Sequence]] and is associated with a globally managed collection of [[assets|Asset]]. We don't utilise scoped variables here (no &quot;mandantisation&quot;); if e.g. a media has been //opened,// it is just plain //globally known//&amp;nbsp; as asset.
+* we have one and only one global [[Session]] which directly contains a collection of multiple [[Timelines|Timeline]] and is associated with a globally managed collection of [[assets|Asset]]. We don't utilise scoped variables here (no &quot;mandantisation&quot;); if  a media has been //opened,// it is just plain //globally known//&amp;nbsp; as asset.
 * the [[knowledge base|ConfigRules]] is just available globally. Obviously, the session gets a chance to install rules into this knowledge base, but we don't stress ownership here.
 * we have a [[Fixture]] which acts as isolation layer towards the render engine and is (re)built automatically.
+The high-level view of the tangible entities within the session is unified into a ''single tree'' -- with the notable exception of [[external outputs|OutputManagement]] and the [[assets|Asset]], which are understood as representing a //bookkeeping view// and kept separate from the //things to be manipulated// (MObjects).
 
-We ''separate'' processing (rendering) and configuration (building). We have a [[Builder]] which creates a network of [[render nodes|ProcNode]], to be processed by //pulling data // from some [[Pipe]]
+We ''separate'' processing (rendering) and configuration (building). The [[Builder]] creates a network of [[render nodes|ProcNode]], to be processed by //pulling data // from some [[Pipe]]
 
 ''Objects are [[placed|Placement]] rather'' than assembled, connected, wired, attached. This is more of a rule-based approach and gives us one central metaphor and abstraction, allowing us to treat everything in an uniform manner. You can place it as you like, and the builder tries to make sense out of it, silently disabling what doesn't make sense.
 An [[Sequence]] is just a collection of configured and placed objects (and has no additional, fixed structure). [[Tracks|Track]] form a mere organisational grid, they are grouping devices not first-class entities (a track doesn't &quot;have&quot; a pipe or &quot;is&quot; a video track and the like; it can be configured to behave in such manner by using placements though). [[Pipes|Pipe]] are hooks for making connections and are the only facility to build processing chains. We have global pipes, and each clip is built around a lokal [[source port|ClipSourcePort]] &amp;mdash; and that's all. No special &quot;media viewer&quot; and &quot;arranger&quot;, no special role for media sources, no commitment to some fixed media stream types (video and audio). All of this is sort of pushed down to be configuration, represented as asset of some kind. For example, we have [[processing pattern|ProcPatt]] assets to represent the way of building the source network for reading from some media file (including codecs treated like effect plugin nodes)
@@ -1902,11 +1903,25 @@ For this Lumiera design, we could consider making GOP just another raw media dat
 &amp;rarr;see in [[Wikipedia|http://en.wikipedia.org/wiki/Group_of_pictures]]
 </pre>
 </div>
-<div title="GlobalPipe" modifier="Ichthyostega" modified="201007190107" created="201007110200" tags="Model design spec draft" changecount="22">
+<div title="GlobalPipe" modifier="Ichthyostega" modified="201011202343" created="201007110200" tags="Model spec draft" changecount="29">
 <pre>Each [[Timeline]] has an associated set of global [[pipes|Pipe]] (global busses), similar to the subgroups of a sound mixing desk.
 In the typical standard configuration, there is (at least) a video master and a sound master pipe. Like any pipe, ingoing connections attach to the input side, attached effects form a chain, where the last node acts as exit node. The ~Pipe-ID of such a global bus can be used to route media streams, allowing the global pipe to act as a summation bus bar.
+&amp;rarr; discussion and design rationale of [[global pipes|GlobalPipeDesign]]
 
-!{{red{WIP}}} Design problem with global Pipes
+!Properties and decisions
+* each timeline carries its own set of global pipes, as each timeline is an top-level element on its own
+* like all [[pipes|Pipe]] the global ones are kept separated per stream (proto)type
+* any global pipe //not// connected to another OutputDesignation automatically creates a ModelPort
+* global pipes //do not appear automagically just by sending output to them// -- they need to be set up explicitly
+* the top-level (BusMO) of the global pipes isn't itself a pipe. Thus the top-level of the pipes forms a list (typically a video and sound master)
+* below, a tree-like structure //may// be created, building upon the same scope based routing technique as used for the tracks
+</pre>
+</div>
+<div title="GlobalPipeDesign" modifier="Ichthyostega" modified="201011210016" created="201011202308" tags="design decision discuss" changecount="6">
+<pre>//This page serves to shape and document the design of the global pipes//
+Many aspects regarding the global pipes turned out while clarifying other parts of ~Proc-Layer's design. For some time it wasn't even clear if we'd need global pipes -- common video editing applications get on without. Mostly it was due to the usefulness of the layout found on sound mixing desks, and a vague notion to separate time-dependant from global parts, which finally led me to favouring such a global facility. This decision then helped in separating the concerns of timeline and sequence, making the //former// a collection of non-temporal entities, while the latter concentrates on time varying aspects.
+
+!Design problem with global Pipes
 actually building up the implementation of global pipes seems to pose a rather subtle design problem: it is difficult to determine how to do it //right.//
 To start with, we need the ability to attach effects to global pipes. There is already an obvious way how to attach effects to clips (=local pipes), and thus it's desirable to handle it the same way for global pipes. At least there should be a really good reason //not//&amp;nbsp; to do it the same way. Thus, we're going to attach these effects by placement into the scope of another placed MObject. And, moreover, this other object should be part of the HighLevelModel's tree, to allow using the PlacementIndex as implementation. So this reasoning brings us to re-using or postulating some kind of object, while lacking a point or reference //outside this design considerations//&amp;nbsp; to justify the existence of the corresponding class or shaping its properties on itself. Which means &amp;mdash; from a design view angle &amp;mdash; we're entering slippery ground.
 !!!~Model-A: dedicated object per pipe
@@ -1914,7 +1929,7 @@ Just for the sake of symmetry, for each global pipe we'd attach some suitable ~M
 !!!~Model-B: attaching to the container
 Acknowledging the missing justification, we could instead use //just something to attach// &amp;mdash; and actually handle the real association elsewhere. The obvious &quot;something&quot; in this case would be the BindingMO, which already acts as implementation of the timeline (which is a façade asset). Thus, for this approach, the bus-level effects would be attached as direct children of the {{{Placement&lt;BindingMO&gt;}}}, just for the sake of beeing attached and stored within the session, with an additional convention for the actual ordering and association to a specific pipe. The Builder then would rather query the ~BindingMO to discover and build up the implementation of the global pipes in terms of the render nodes.
 
-!!!Comparision
+!!!Comparison
 While there might still be some compromises or combined solutions &amp;mdash; to support the decision, the following table detailes the handling in each case
 |&gt;|   !~Model-B|!~Model-A |
 |Association: | by plug in placement|by scope |
@@ -1924,7 +1939,20 @@ While there might still be some compromises or combined solutions &amp;mdash; to
 |Extras:      | ? |tree-like bus arrangement,&lt;br/&gt; multi-stream bus |
 
 So through this detailed comparison ''~Model-A looks favourable'': while the other model requires us to invent a good deal of the handling specifically for the global pipes, the former can be combined from patterns and solutions already used in other parts of the model, plus it allows some interesting extensions. 
-On a second thought, the fact that the Bus-~MObject is rather void of any specific meaning doesn't weight so much: As the Builder is based on the visitor pattern, the individual objects can be seen as //algebraic data types.// Besides, there is at least one little bit of specific functionality: a Bus object actually needs to //claim//&amp;nbsp; to be the OutputDesignation, by referring to the same ~Pipe-ID used in other parts of the model to request output routing to this Bus. Without this match on both ends, an ~OutputDesignation may be mentioned at will, but no connection whatsoever will happen.
+On a second thought, the fact that the [[Bus-MObject|BusMO]] is rather void of any specific meaning doesn't weight so much: As the Builder is based on the visitor pattern, the individual objects can be seen as //algebraic data types.// Besides, there is at least one little bit of specific functionality: a Bus object actually needs to //claim//&amp;nbsp; to be the OutputDesignation, by referring to the same ~Pipe-ID used in other parts of the model to request output routing to this Bus. Without this match on both ends, an ~OutputDesignation may be mentioned at will, but no connection whatsoever will happen.
+
+
+!{{red{WIP}}} Structure of the global pipes
+;creating global pipes automatically?
+:defining the global bus configuration is considered a crucial part of each project setup. Lumiera isn't meant to support fiddling around thoughtlessly. The user should be able to rely on crucial aspects of the global setup never being changed without notice.
+;isn't wiring and routing going to be painful then?
+:routing is scope based and we employ a hierarchical structure, so subgroups are routed automatically. Moreover, wiring is done based on best match regarding the stream type. We might consider feeding all non-connected output designations to the GUI after the build process, to allow short-cuts for creating further buses.
+;why not making buses just part of the track tree?
+:anything on a track has a temporal extension and may vary -- while it's the very nature of the global pipes to be static anchor points.
+;why not having one grand unified root, including the outputs?
+:you might consider that a matter of taste (or better common-sense). Things different in nature should not be forced into uniformity
+;should global pipes be arranged as list or tree?
+:sound mixing desks use list style arrangement, and this has proven to be quite viable, when combined with the ability to //send over// output from one mixer stripe to the input of another, allowing to build arbitrary complex filter matrices. On the other hand, organising a mix in //subgroups// can be considered best practice. This leads to arranging the pipes //as wood:// by default and on top level as list, optionally expanding into a subtree with automatic rooting, augmented by the ability to route any output to any input (cycles being detected and flagged as error).
 </pre>
 </div>
 <div title="GuiCommunication" modifier="Ichthyostega" modified="200812050555" created="200812050543" tags="GuiIntegration draft" changecount="2">
@@ -2014,7 +2042,7 @@ Besides routing to a global pipe, wiring plugs can also connect to the source po
 Finally, this example shows an ''automation'' data set controlling some parameter of an effect contained in one of the global pipes. From the effect's POV, the automation is simply a ParamProvider, i.e a function yielding a scalar value over time. The automation data set may be implemented as a bézier curve, or by a mathematical function (e.g. sine or fractal pseudo random) or by some captured and interpolated data values. Interestingly, in this example the automation data set has been placed relatively to the meta clip (albeit on another track), thus it will follow and adjust when the latter is moved.
 </pre>
 </div>
-<div title="ImplementationDetails" modifier="Ichthyostega" modified="201001070900" created="200708080322" tags="overview" changecount="38">
+<div title="ImplementationDetails" modifier="Ichthyostega" modified="201011190301" created="200708080322" tags="overview" changecount="39">
 <pre>This wiki page is the entry point to detail notes covering some technical decisions, details and problems encountered in the course of the implementation of the Lumiera Renderengine, the Builder and the related parts.
 
 * [[Packages, Interfaces and Namespaces|InterfaceNamespaces]]
@@ -2041,19 +2069,21 @@ Finally, this example shows an ''automation'' data set controlling some paramete
 * create an uniform pattern for [[passing and accessing object collections|ForwardIterator]]
 * decide on SessionInterface and create [[Session datastructure layout|SessionDataMem]]
 * shaping the GUI/~Proc-Interface, based on MObjectRef and the [[Command frontend|CommandHandling]]
-* defining PlacementScope in order to allow for [[discovering session contents|Query]]</pre>
+* defining PlacementScope in order to allow for [[discovering session contents|Query]]
+* working out a [[Wiring concept|Wiring]] and the foundations of OutputManagement
+</pre>
 </div>
-<div title="ImplementationGuidelines" modifier="Ichthyostega" modified="200910311727" created="200711210531" tags="Concepts design discuss" changecount="16">
+<div title="ImplementationGuidelines" modifier="Ichthyostega" modified="201011190306" created="200711210531" tags="Concepts design discuss" changecount="17">
 <pre>!Observations, Ideas, Proposals
 ''this page is a scrapbook for collecting ideas'' &amp;mdash; please don't take anything noted here too literal. While writing code, I observe that I (ichthyo) follow certain informal guidelines, some of which I'd like to note down because they could evolve into general style guidelines for the Proc-Layer code.
 * ''Inversion of Control'' is the leading design principle.
 * but deliberately we stay just below the level of using Dependency Injection. Singletons and call-by-name are good enough. We're going to build //one// application, not any conceivable application.
-* avoid doing anything non-local during the startup phase or shutdown phase of the application. consequently, always prefer using an explicit lumiera::Singleton&lt;T&gt; over using an static instance directly, thus yielding better control when the ctor and dtor will be invoked.
 * write error handling code only if the error situation can be actually //handled// at this place. Otherwise, be prepared for exceptions just passing by and thus handle any resources by &quot;resource acquisition is initialisation&quot; (RAII). Remember: error handling defeats decoupling and encapsulation
 * (almost) never {{{delete}}} an object directly, use {{{new}}} only when some smart pointer is at hand.
 * when user/client code is intended to create objects, make the ctor protected and provide a factory member called {{{create}}} instead, returning a smart pointer
 * similarly, when we need just one instance of a given service, make the ctor protected and provide a factory member called {{{instance}}}, to be implemented by the lumiera::[[Singleton]] factory.
 * whenever possible, prefer this (lazy initialised [[Singleton]]) approach and avoid static initialisation magic
+* avoid doing anything non-local during the startup phase or shutdown phase of the application, especially avoid doing substantial work in any dtor.
 * avoid asuming anything that can't be enforced by types, interfaces or signatures; this means: be prepared for open possibilities
 * prefer {{{const}}} and initialisation code over assignment and active changes (inspired by functional programming)
 </pre>
@@ -2663,10 +2693,11 @@ And, last but not least, doing large scale allocations is the job of the backend
 <div title="Model" modifier="Ichthyostega" modified="201003210021" created="201003210020" tags="overview" changecount="2">
 <pre>Lumiera's Proc-Layer is built around //two interconnected models,// mediated by the [[Builder]]. Basically, the &amp;rarr;[[Session]] is an external interface to the HighLevelModel, while the &amp;rarr;RenderEngine operates the structures of the LowLevelModel.</pre>
 </div>
-<div title="ModelDependencies" modifier="Ichthyostega" modified="201006140007" created="201003020150" tags="SessionLogic Model operational spec draft img" changecount="35">
+<div title="ModelDependencies" modifier="Ichthyostega" modified="201011220126" created="201003020150" tags="SessionLogic Model operational spec draft img" changecount="37">
 <pre>Our design of the models (both [[high-level|HighLevelModel]] and [[low-level|LowLevelModel]]) relies partially on dependent objects being kept consitently in sync. Currently (2/2010), __ichthyo__'s assessment is to consider this topic not important and pervasive enough to justify building a dedicated solution, like e.g. a central tracking and registration service. An important point to consider with this assesment is the fact that the session implementation is beeing kept mostly single-threaded. Thus, lacking one central place to handle this issue, care has to be taken to capture and treat all the relevant individual dependencies properly at the implementation level.
 
 !known interdependencies
+[&gt;img[Fundamental object relations used in the session|uml/fig136453.png]]
 * the session API relies on two kinds of facade like assets: [[Timeline]] and [[Sequence]], linked to the BindingMO and Track objects within the model respectively.
 * conceptually, the DefaultsManagement and the AssetManager count as being part of the [[global model scope|ModelRootMO]], but, due to their importance, these facilities are accessible through an singleton interface.
 * currently as of 2/2010 the exact dependency of the automation calculation during the render process onto the automation definitions within the HighLevelModel remains to be specified.
@@ -2751,6 +2782,14 @@ These are used as token for dealing with other objects and have no identity of t
 * these reference handles simply reflect the equality relation on placements, by virtue of comparing the hash-ID.
 * besides, we could build upon the placement locating chain equivalence relations to define a semantic equivalence on ~MObjectRefs
 
+</pre>
+</div>
+<div title="ModelPort" modifier="Ichthyostega" created="201011100234" tags="def" changecount="1">
+<pre>Any point where output possibly might be produced. Model port entities are located within the [[Fixture]] &amp;mdash; model port as a concept spans the high-level and low-level view. A model port can be associated both to a pipe in the HighLevelModel and denote a specific ExitNode in the render nodes network.
+
+A model port is rather derived than configured; it emerges when a pipe [[claims|WiringClaim]] an output desitnation and some other entity actually uses this designation as a target, either directly or indirecly. This match of provision and usage is detected during the build process and produces an entry in the fixture's model port table. These model ports in the fixture are keyed by ~Pipe-ID, thus each model port has an associated StreamType.
+
+Model ports are the effective, resulting ouputs of each timeline; additional ports result from [[connecting a viewer|ViewerPlayConnection]]. Any render or display process happens at a model port.
 </pre>
 </div>
 <div title="ModelRootMO" modifier="Ichthyostega" modified="200912110245" created="200912080307" tags="def" changecount="5">
@@ -2878,17 +2917,17 @@ But because I know the opinions on this topc are varying (users tend to be delig
 My proposed aproach is to treat OpenGL as a separate video raw data type, requiring separete and specialized [[Processing Nodes|ProcNode]] for all calculations. Thus the Builder could connect OpenGL nodes if it is possible to cover the render path in whole or partially or maybe even just for preview.
 </pre>
 </div>
-<div title="OperationPoint" modifier="Ichthyostega" modified="200909041742" created="200805270334" tags="def impl Builder" changecount="8">
+<div title="OperationPoint" modifier="Ichthyostega" modified="201011071905" created="200805270334" tags="def impl Builder" changecount="9">
 <pre>A low-level abstraction within the [[Builder]] &amp;mdash; it serves to encapsulate the details of making multi-channel connections between the render nodes: In some cases, a node can handle N channels internally, while in other cases we need to replicate the node N times and wire each channel individually. As it stands, the OperationPoint marks the ''borderline between high-level and low-level model'': it is invoked in terms of ~MObjects and other entities of the high-level view, but internally it manages to create ProcNode and similar entities of the low-level model.
 
 The operation point is provided by the current BuilderMould and used by the [[processing pattern|ProcPatt]] executing within this mould and conducting the current build step. The operation point's interface allows //to abstract//&amp;nbsp; these details, as well as to //gain additional control//&amp;nbsp; if necessary (e.g. addressing only one of the channels). The most prominent build instruction used within the processing patterns (which is the instruction {{{&quot;attach&quot;}}}) relies on the aforementioned //approach of abstracted handling,// letting the operation point determine automatically how to make the connection.
 
-This is possible because the operation point has been provided (by the mould) with informations about the media stream type to be wired, which, together with information accessible at the the [[render node interface|ProcNode]] and from the [[referred processing assets|ProcAsset]], with the help of the [[connection manager|ConManager]] allows to figure out what's possible and how to do the desired connections. Additionally, in the course of deciding about possible connections, the PathManager is consulted to guide strategic decisions regarding the [[render node configuration|NodeConfiguration]], possible type conversions and the rendering technology to employ.
+This is possible because the operation point has been provided (by the mould) with informations about the media stream type to be wired, which, together with information accessible at the [[render node interface|ProcNode]] and from the [[referred processing assets|ProcAsset]], with the help of the [[connection manager|ConManager]] allows to figure out what's possible and how to do the desired connections. Additionally, in the course of deciding about possible connections, the PathManager is consulted to guide strategic decisions regarding the [[render node configuration|NodeConfiguration]], possible type conversions and the rendering technology to employ.
 </pre>
 </div>
-<div title="OutputDesignation" modifier="Ichthyostega" modified="201009242320" created="201006220126" tags="Model draft design discuss" changecount="42">
-<pre>__6/2010__: an ever recurring (and yet unsolved) problem in the design of Luimiera's ~Proc-Layer is how to refer to output destinations, and how to organise them.
-To get ahead with this problem, I'll start collecting observations, relations and drafts on this tiddler.
+<div title="OutputDesignation" modifier="Ichthyostega" modified="201011190258" created="201006220126" tags="Model draft design discuss" changecount="50">
+<pre>An ever recurring problem in the design of Luimiera's ~Proc-Layer is how to refer to output destinations, and how to organise them.
+Wiring the flexible interconnections between the [[pipes|Pipe]] should take into account both the StreamType and the specific usage context ([[scope|PlacementScope]]) -- and the challenge is to avoid hard-linking of connections and tangling with the specifics of the target to be addressed and connected. This page, started __6/2010__ by collecting observations to work out the relations, arrives at defining a //key abstraction// of output management.
 
 !Observations
 * effectively each [[Timeline]] is known to expose a set of global Pipes
@@ -2923,21 +2962,30 @@ System level output connections seem to be an exception to the above rule. There
 The immediate consequence is that a [[Pipe]] with the given ID exists as an accountable entity. Only if &amp;mdash; additionally &amp;mdash; a suitable object within the model //claims to root this pipe,//  a connection to this designation is wired, using an appropriate [[processing pattern|ProcPatt]]. A further consequence then is for the mentioned output designation to become a possible candidate for a ModelPort, an exit node of the built render nodes network. By default, only those designations without further outgoing connections actually become active model ports (but an existing and wired pipe exit node can be promoted to a model port explicitly).
 &amp;rarr; OutputManagement
 
-!Mapping of output designations
-An entire sequence can be embedded within another sequence as a VirtualClip. While for a simple clip there is a Clip-~MObject placed into the model, holding an reference to a media asset, in case of a virtual clip an BindingMO takes on the role of the clip object. Note that BindingMO also acts as [[Timeline]] implementation &amp;mdash; indeed the same sequence might be bound simultaneously as a timeline and into a virtual clip. This flexibility creates a special twist, as the contents of this sequence have no way of finding out if they're used as timeline or embedded virtual clip. So parts of this sequence might mention a OutputDesignation which, when using the sequence as virtual clip, needs to be translated into a virtual media channel, which can be treated in the same fashion as any channel (video, audio,...) found within real media. Especially, a new output designation has to be derived in a sensible way, which largely depends on how the original output designation has been specified
-* a direct output designation specicfiation from within the sequence is captured and translated into a summation pipe at a position corresponding to the global pipes when using the same sequence as timeline. The output of this summation pipe is treated like a media channel
-** now, if a distinct output designation can be determined at this placement of the virtual clip, it will be used for the further routing
-** otherwise, the routing will be done as if the original output designation was given at this placement of the virtual clip.
-* a relative output designation (the N^^th^^ channel of this kind) is just carried over to the enclosing scope.
+!!Challenge: mapping of output designations
+An entire sequence can be embedded within another sequence as a VirtualClip. While for a simple clip there is a Clip-~MObject placed into the model, holding an reference to a media asset, in case of a virtual clip an BindingMO takes on the role of the clip object. Note that BindingMO also acts as [[Timeline]] implementation &amp;mdash; indeed the same sequence might be bound simultaneously as a timeline and into a virtual clip. This flexibility creates a special twist, as the contents of this sequence have no way of finding out if they're used as timeline or embedded virtual clip. So parts of this sequence might mention a OutputDesignation which, when using the sequence as virtual clip, needs to be translated into a virtual media channel, which can be treated in the same fashion as any channel (video, audio,...) found within real media. Especially, a new output designation has to be derived in a sensible way, which largely depends on how the original output designation has been specified.
+&amp;rarr; see OutputMapping regarding details and implementation of this mapping mechanism
 
-!Using output designations
+
+
+
+!Output designation definition
+OutputDesignation is a handle, denoting a target [[Pipe]] to connect.
+It exposes a function to resolve to a Pipe, and to retrieve the StreamType of that resolved output. It can be ''defined'' either explicitly by ~Pipe-ID, or by an indirect or relative specification. The later cases are resolved on demand only (which may be later and might change the meaning depending on the context). It's done this way intentionally to gain flexibility and avoid hard wiring (=explicit ~Pipe-ID)
+
+!!!Implementation notes
+Thus the output designation needs to be a copyable value object, but opaque beyond that. Mandated by the various ways to specify an output designation, a hidden state arises regarding the partial resolution. The implementation solves that dilemma by relying on the [[State|http://en.wikipedia.org/wiki/State_pattern]] pattern in combination with an opaque in-place buffer.
+
+
+!Use of output designations
 While actually data frames are //pulled,// on a conceptual level data is assumed to &quot;flow&quot; through the pipes from source to output. This conceptual (&quot;high level&quot;) model of data flow is comprised of the pipes (which are rather rigid), and flexible interconnections. The purpose of an output designation is to specify where the data should go, especially through these flexible interconnections. Thus, when reaching the exit point of a pipe, an output designation will be //queried.// Finding a suitable output designation involves two parts:
-* first of all, we need to know //what to route// &amp;mdash; kind of the traits of the data. This is given by the //current pipe.//
+* first of all, we need to know //what to route// -- kind of the traits of the data. This is given by the //current pipe.//
 * then we'll need to determine an output designation //suitable for this data.// This is given by a &quot;Plug&quot; (WiringRequest) in the placement, and may be derived.
+* finally, this output designation will be //resolved// -- at least partially, resulting in a target pipe to be used for the wiring
 As both of these specifications are given by [[Pipe]]-~IDs, the actual designation information may be reduced. Much can be infered from the circumstances, because any pipe includes a StreamType, and an output designation for an incompatible stream type (e.g. and audio output when the pipe currently in question deals with video) is irrelevant.
 </pre>
 </div>
-<div title="OutputManagement" modifier="Ichthyostega" modified="201007190254" created="201007090155" tags="Model Rendering Player spec draft" changecount="17">
+<div title="OutputManagement" modifier="Ichthyostega" modified="201011072240" created="201007090155" tags="Model Rendering Player spec draft" changecount="18">
 <pre>//writing down some thoughts//
 
 * ruled out the system outputs as OutputDesignation.
@@ -2953,7 +3001,7 @@ From the implementation side, the only interesting exit nodes are the ones to be
 * __playback__ always happens at a viewer element
 
 !Attaching and mapping of exit nodes
-[[Output designations|OutputDesignation]] are created by using a [[Pipe]]-ID and &amp;mdash; at the same time &amp;mdash; by some object //claiming to root this pipe.// The applicability of this pattern is figured out dynamically while building the render network, resulting in a collection of model ports as part of the current [[Fixture]]. A RenderProcess can be started to pull from these active exit points of a given timeline. Besides, when the timeline enclosing these model ports is [[connected to a viewer|ViewerPlayConnection]], an //output network is built,// to allow hooking exit points to the viewer component. Both cases encompass a mapping of exit nodes to actual output channels. Usually, this mapping relies on relative addressing of the output sinks, starting connections at the &quot;first of each kind&quot;.
+[[Output designations|OutputDesignation]] are created by using a [[Pipe]]-ID and &amp;mdash; at the same time &amp;mdash; by some object //claiming to root this pipe.// The applicability of this pattern is figured out dynamically while building the render network, resulting in a collection of model ports as part of the current [[Fixture]]. A RenderProcess can be started to pull from these active exit points of a given timeline. Besides, when the timeline enclosing these model ports is [[connected to a viewer|ViewerPlayConnection]], an [[output network|OutputNetwork]] //is built to allow hooking exit points to the viewer component.// Both cases encompass a mapping of exit nodes to actual output channels. Usually, this mapping relies on relative addressing of the output sinks, starting connections at the &quot;first of each kind&quot;.
 
 We should note that in both cases this mapping operation is controlled and driven by the output side of the connection: A viewer has fixed output capabilities, and rendering targets a specific container format, again with fixed and pre-settled channel configuration (when configurting a render process, it might be necessary to account for //possible kinds of output streams,// so to provide a sensible pre-selection of possible output container formats for the user to select from). Thus, as a starting point, we'll create a default configured mapping, assigning channels in order. This mapping then should be exposed to modification and tweaking by the user. For rendering, this is part of the render options dialog, while in case of a viwer connection, a switch board is created to allow modifying the default mapping.
 
@@ -2962,6 +3010,38 @@ External output destinations are never addressed directly from within the model.
 
 Any external output sink is managed as a [[slot|DisplayerSlot]] in the ~OutputManager. Such a slot can be opened and allocated for a playback process, which allows the latter to push calculated data frames to the output. Depending on the kind of output, there might be various, often tight requirements on the timed delivery of output data, but any details are abstracted away &amp;mdash; any slot implementation provides a way to handle timeouts gracefully, e.g. by just showing the last video frame delivered, or by looping and fading sound
 &amp;rarr; see also the PlayerDummy
+</pre>
+</div>
+<div title="OutputMapping" modifier="Ichthyostega" modified="201011270311" created="201011080238" tags="Model spec draft" changecount="23">
+<pre>An output mapping serves to //resolve//&amp;nbsp; [[output designations|OutputDesignation]].
+
+!Mapping situations
+;external outputs
+:external outputs aren't addressed directly. Rather we set up a default (channel) mapping, which then can be overridden by local rules.
+:Thus, in this case we query with an internal OutputDesignation as parameter and expect an OutputManager //slot//
+;viewer connections
+:any Timeline produces a number of [[model ports|ModelPort]]. On the other hand, any viewer exposes a small number of output designations, representing the image and sound output(s).
+:Thus, in this case we resolve similar to a bus connection, possibly overridden by already pre-existing or predefined connections.
+;switch board
+:a viewer might receive multiple outputs and overlays, necessitating a user operated control to select what's actually to displayed
+:Thus, in this case we need a backwards resolution at the lower end of the output network, to connect to the model port as defined by the switchboard
+;global pipes or virtual media
+:when binding a Sequence as Timeline or VirtualClip, a mapping from output designations used within the Sequence to virtual channels or global pipes is required
+:Thus, in this case we need to associate output designations with ~Pipe-IDs encountered in the context according to some rules &amp;mdash; again maybe overridden by pre-existing connections
+
+!Conclusions
+All these mapping steps are listed here, because they exhibit a common pattern.
+* the immediately triggering input key is a [[Pipe]]-ID (and thus provides a stream type); additional connection hints may be given.
+* the mapped result draws from a limited selection of elements, which again can be keyed by ~Pipe-IDs
+* the mapping is initialised based on default mapping rules acting as fallback
+* the mapping may be extended by explicitly setting some associations
+* the mapping itself is a stateful value object
+* there is an //unconnected//&amp;nbsp; state.
+
+!Implementation notes
+Thus the mapping is a copyable value object, based on a associative array. It may be attached to a model object and persisted alongside. The mapping is assumed to run a defaults query when necessary. To allow for that, it should be configured with a query template (string). Frequently, special //default pipe// markers will be used at places, where no distinct pipe-ID is explicitly specified. Besides that, invocations might supply additional predicates (e.g. {{{ord(2)}}} to denote &quot;the second stream of this kind&quot;) to hint the defaults resolution. Moreover, the mapping needs a way to retrieve the set of possible results, allowing to filter the results of the rules based default. Mappings might be defined explicitly. Instead of storing a //bottom value,// an {{{isDefined()}}} predicate might be preferable.
+
+First and foremost, mapping can be seen as a //functional abstraction.// As it's used at implementation level, encapsulation of detail types in't the primary concern, so it's a candidate for generic programming: For each of those use cases outlined above, a distinct mapping type is created by instantiating the {{{OutputMapping&lt;DEF&gt;}}} template with a specifically tailored definition context ({{{DEF}}}), which takes on the role of a strategy. Individual instances of this concrete mapping type may be default created and copied freely. This instantiation process includes picking up the concrete result type and building a functor object for resolving on the fly. Thus, in the way typical for generic programming, the more involved special details are moved out of sight, while being still in scope for the purpose of inlining. But there //is// a concern better to be encapsulated and concealed at the usage site, namely accessing the rules system. Thus mapping leads itself to the frequently used implementation pattern where there is a generic frontend as header, calling into opaque functions embedded within a separate compilation unit.
 </pre>
 </div>
 <div title="Overview" modifier="Ichthyostega" modified="200906071810" created="200706190300" tags="overview img" changecount="13">
@@ -3540,19 +3620,23 @@ DAMAGE.
 <div title="PathManager" modifier="Ichthyostega" created="200909041748" tags="def Builder" changecount="1">
 <pre>Facility guiding decisions regarding the strategy to employ for rendering or wiring up connections. The PathManager is querried through the OperationPoint, when executing the connection steps within the Build process.</pre>
 </div>
-<div title="Pipe" modifier="Ichthyostega" modified="200804110301" created="200801062110" tags="def decision" changecount="6">
+<div title="Pipe" modifier="Ichthyostega" modified="201011220317" created="200801062110" tags="def decision" changecount="7">
 <pre>Pipes play an central role within the Proc Layer, because for everything placed and handled within the session, the final goal is to get it transformed into data which can be retrieved at some pipe's exit port. Pipes are special facilities, rather like inventory, separate and not treated like all the other objects.
 We don't distinguish between &quot;input&quot; and &quot;output&quot; ports &amp;mdash; rather, pipes are thought to be ''hooks for making connections to''. By following this line of thought, each pipe has an input side and an output side and is in itself something like a ''Bus'' or ''processing chain''. Other processing entities like effects and transitions can be placed (attached) at the pipe, resulting them to be appended to form this chain. Likewise, we can place [[wiring requests|WiringRequest]] to the pipe, meaning we want it connected so to send it's output to another destination pipe. The [[Builder]] may generate further wiring requests to fulfil the placement of other entities.
 Thus //Pipes are the basic building blocks// of the whole render network. We distinguish ''global available'' Pipes, which are like the sum groups of a mixing console, and the ''lokal pipe'' or [[source ports|ClipSourcePort]] of the individual clips, which exist only within the duration of the corresponding clip. The design //limits the possible kinds of pipes // to these two types &amp;mdash; thus we can build local processing chains at clips and global processing chains at the global pipes of the session and that's all we can do. (because of the flexibility which comes with the concept of [[placements|Placement]], this is no real limitation)
 
-The GUI can connect the viewer(s) to some pipe (and moreover can use [[probe points|ProbePoint]] placed like effects and connected to some pipe), and likewise, when starting a ''render'', we get the opportunity to specify the pipes to pull the data from. Pulling data from some pipe is the (only) way to activate the render nodes network reachable from this pipe.
+Pipes are denoted and addressed by ~Pipe-IDs, implemented as ID of a pipe asset. Besides explicitly named pipes, there are some generic placeholder ~IDs for a standard configured pipe of a given type. This is done to avoid creating a separate ~Pipe-ID for each and every clip to build.
+
+While pipes are rather rigid building blocks -- and especially are limited to a single StreamType without conversions, the interconnections or ''routing'' links to the contrary are more flexible. They are specified and controled through the use of an OutputDesignation, which, when fully resolved, should again yield a target ~Pipe-ID to connect. The mentioned resolution of an output designation typically involves an OutputMapping.
+
+Similar structures and mechanisms are extended beyond the core model: The GUI can connect the viewer(s) to some pipe (and moreover can use [[probe points|ProbePoint]] placed like effects and connected to some pipe), and likewise, when starting a ''render'', we get the opportunity to specify the ModelPort (exit point of a GlobalPipe) to pull the data from. Pulling data from some pipe is the (only) way to activate the render nodes network reachable from this pipe.
 
 &amp;rarr; [[Handling of Tracks|TrackHandling]]
 &amp;rarr; [[Handling of Pipes|PipeHandling]]
 
 </pre>
 </div>
-<div title="PipeHandling" modifier="Ichthyostega" modified="201007210309" created="200801101352" tags="spec" changecount="16">
+<div title="PipeHandling" modifier="Ichthyostega" modified="201011220320" created="200801101352" tags="spec" changecount="19">
 <pre>!Identification
 Pipes are distinct objects and can be identified by their asset ~IDs. Besides, as for all [[structural assets|StructAsset]] there are extended query capabilities, including a symbolic pipe-id and a media (stream) type id. Any pipe can accept and deliver exactly one media stream kind (which may be inherently structured though, e.g. spatial sound systems or stereoscopic video)
 
@@ -3563,8 +3647,8 @@ Pipe assets are created automatically by being used and referred. Each [[Timelin
 Deleting a Pipe is an advanced operation, because it includes finding and &quot;detaching&quot; all references, otherwise the pipe will leap back into existence immediately. Thus, global pipe entries in the Session and pipe references in [[locating pins|LocatingPin]] within any placement have to be removed, while clips using a given source port will be disabled. {{red{todo: implementation deferred}}}
 
 !using Pipes
-there is not much you can do directly with a pipe asset. It is an point of reference, after all. Any connection to some pipe is only temporarily done by a placement in some part of the timeline (&amp;rarr; OutputDesignation), so it isn't stored with the pipe. You can edit the (user visible) description an you can globally disable a pipe asset. The pipe's ID and media stream type of course are fixed, because any connection and referral (via the asset ID) is based on them. Later on, we should provide a {{{rewire(oldPipe, newPipe)}}} to search any ref to the {{{oldPipe}}} and try to rewrite it to use the {{{newPipe}}}, possibly with a new media stream type.
-Pipes are integrated with the [[management of defaults|DefaultsManagement]]. For example, any pipe implicitly uses some [[processing pattern|ProcPatt]] &amp;mdash; it may default to the empty pattern. This way, any kind of standard wiring might be applied to the pipes (e.g a fader for audio, similar to the classic mixing consoles). This //is // a global property of the pipe, but &amp;mdash; contrary to the stream type &amp;mdash; this pattern may be switched {{red{really?}}}
+there is not much you can do directly with a pipe asset. It is an point of reference, after all. Any connection or routing to a target pipe is done by a placement with a suitable WiringPlug in some part of the timeline (&amp;rarr; OutputDesignation), so it isn't stored with the pipe. You can edit the (user visible) description an you can globally disable a pipe asset. The pipe's ID and media stream type of course are fixed, because any connection and referral (via the asset ID) is based on them. Later on, we should provide a {{{rewire(oldPipe, newPipe)}}} to search any ref to the {{{oldPipe}}} and try to rewrite it to use the {{{newPipe}}}, possibly with a new media stream type.
+Pipes are integrated with the [[management of defaults|DefaultsManagement]]. For example, any pipe implicitly uses some [[processing pattern|ProcPatt]] &amp;mdash; it may default to the empty pattern. This way, any kind of standard wiring might be applied to the pipes (e.g a fader for audio, similar to the classic mixing consoles). This //is // a global property of the pipe, but &amp;mdash; contrary to the stream type &amp;mdash; this pattern may be switched {{red{really? -- lots of open questions here as of 11/10}}}
 </pre>
 </div>
 <div title="Placement" modifier="Ichthyostega" modified="200910311753" created="200706220306" tags="Concepts def" changecount="11">
@@ -4735,7 +4819,7 @@ On the implementation level, there are some interdependencies to consider betwee
 <pre>The session manager is responsible for maintaining session state as a whole and for conducting the session [[lifecycle|SessionLifecycle]]. The session manager API allows for saving, loading, closing and resetting the session. Accessible through the static interface {{{Session::current}}}, it exposes the actual session as a ~PImpl. Actually, both session and session manager are interfaces.
 </pre>
 </div>
-<div title="SessionMutation" modifier="Ichthyostega" modified="201003020143" created="201002170332" tags="SessionLogic spec decision draft" changecount="3">
+<div title="SessionMutation" modifier="Ichthyostega" modified="201011210252" created="201002170332" tags="SessionLogic spec decision draft" changecount="5">
 <pre>//Any modification of the session will pass through the [[command system|CommandHandling]].//
 Thus any possible mutation comes in two flavours: a raw operation invoked directly on an object instance attached to the model, and a command taking an MObjectRef as parameter. The latter approach &amp;mdash; invoking any mutation through a command &amp;mdash; will pass the mutations trough the ProcDispatcher to ensure the're logged for [[UNDO|UndoManager]] and executed sequentially, which is important, because the session's internals are //not threadsafe by design.// Thus we're kind of enforcing the use of Commands: mutating operations include a check for a &amp;raquo;permission to mutate&amp;laquo;, which is automatically available within a command execution {{red{TODO as of 2/10}}}. Moreover, the session API and the corresponding LayerSeparationInterfaces expose MObjectRef instances, not raw (language) refs.
 
@@ -4746,7 +4830,7 @@ Thus any possible mutation comes in two flavours: a raw operation invoked direct
 * how to keep [[dependencies within the model|ModelDependencies]] up-to date?
 
 !!who defines commands?
-The answer is simple: the one who needs to know about their existence. Because basically commands are invoked //by-name// &amp;mdash; someone needs to be aware of that name and what it denotes. Thus, for any given mutation, there is a place where it's meaningful to specify the details //and// to subsume them under a meaningful term. An entity responsible for this place could then act as the provider of the command in question.
+The answer is simple: the one who needs to know about their existence. Because basically commands are invoked //by-name// -- someone needs to be aware of that name and its meaning. Thus, for any given mutation, there is a place where it's meaningful to specify the details //and//&amp;nbsp; to subsume them under a meaningful term. An entity responsible for this place could then act as the provider of the command in question.
 
 Interestingly, there seems to be an alternative answer to this question. We could locate the setup and definition of all commands into a central administrative facility. Everyone in need of a command then ought to know the name and retrieve this command. Sounds like bureaucracy.
 </pre>
@@ -4934,7 +5018,7 @@ Consequently, as we can't get away with an fixed Enum of all stream prototypes, 
 NTSC and PAL video, video versus digitized film, HD video versus SD video, 3D versus flat video, cinemascope versus 4:3, stereophonic versus monaural, periphonic versus panoramic sound, Ambisonics versus 5.1, dolby versus linear PCM...
 </pre>
 </div>
-<div title="StreamType" modifier="Ichthyostega" modified="201003160202" created="200808060244" tags="spec draft" changecount="16">
+<div title="StreamType" modifier="Ichthyostega" modified="201011071741" created="200808060244" tags="spec draft" changecount="21">
 <pre>//how to classify and describe media streams//
 Media data is supposed to appear structured as stream(s) over time. While there may be an inherent internal structuring, at a given perspective ''any stream is a unit and homogeneous''. In the context of digital media data processing, streams are always ''quantized'', which means they appear as a temporal sequence of data chunks called ''frames''.
 
@@ -4949,13 +5033,13 @@ Media data is supposed to appear structured as stream(s) over time. While there 
 ! Problem of Stream Type Description
 Media types vary largely and exhibit a large number of different properties, which can't be subsumed under a single classification scheme. On the other hand we want to deal with media objects in a uniform and generic manner, because generally all kinds of media behave somewhat similar. But the twist is, these similarities disappear when describing media with logical precision. Thus we are forced into specialized handling and operations for each kind of media, while we want to implement a generic handling concept.
 
-! Stream Type handling in the Proc-Layer
+! Lumiera Stream Type handling
 !! Identification
 A stream type is denoted by a StreamTypeID, which is an identifier, acting as an unique key for accessing information related to the stream type. It corresponds to an StreamTypeDescriptor record, containing an &amp;mdash; //not necessarily complete// &amp;mdash; specification of the stream type, according to the classification detailed below.
 
 !! Classification
 Within the Proc-Layer, media streams are treated largely in a similar manner. But, looking closer, not everything can be connected together, while on the other hand there may be some classes of media streams which can be considered //equivalent// in most respects. Thus separating the distinction between various media streams into several levels seems reasonable...
-* Each media belongs to a fundamental ''kind'' of media, examples being __Video__, __Image__, __Audio__, __MIDI__,... Media streams of different kind can be considered somewhat &quot;completely separate&quot; &amp;mdash; just the handling of each of those media kinds follows a common //generic pattern// augmented with specialisations. Basically, it is //impossible to connect// media streams of different kind. Under some circumstances there may be the possibility of a //transformation// though. For example, a still image can be incorporated into video, sound may be visualized, MIDI may control a sound synthesizer.
+* Each media belongs to a fundamental ''kind'' of media, examples being __Video__, __Image__, __Audio__, __MIDI__, __Text__,... &lt;br/&gt;Media streams of different kind can be considered somewhat &quot;completely separate&quot; &amp;mdash; just the handling of each of those media kinds follows a common //generic pattern// augmented with specialisations. Basically, it is //impossible to connect// media streams of different kind. Under some circumstances there may be the possibility of a //transformation// though. For example, a still image can be incorporated into video, sound may be visualized, MIDI may control a sound synthesizer.
 * Below the level of distinct kinds of media streams, within every kind we have an open ended collection of ''prototypes'', which, when compared directly, may each be quite distinct and different, but which may be //rendered//&amp;nbsp; into each other. For example, we have stereoscopic (3D) video and we have the common flat video lacking depth information, we have several spatial audio systems (Ambisonics, Wave Field Synthesis), we have panorama simulating sound systems (5.1, 7.1,...), we have common stereophonic and monaural audio. It is considered important to retain some openness and configurability within this level of distinction, which means this classification should better be done by rules then by setting up a fixed property table. For example, it may be desirable for some production to distinguish between digitized film and video NTSC and PAL, while in another production everything is just &quot;video&quot; and can be converted automatically. The most noticeable consequence of such a distinction is that any Bus or [[Pipe]] is always limited to a media stream of a single prototype. (&amp;rarr; [[more|StreamPrototype]])
 * Besides the distinction by prototypes, there are the various media ''implementation types''. This classification is not necessarily hierarchically related to the prototype classification, while in practice commonly there will be some sort of dependency. For example, both stereophonic and monaural audio may be implemented as 96kHz 24bit PCM with just a different number of channel streams, but we may as well get a dedicated stereo audio stream with two channels multiplexed into a single stream. For dealing with media streams of various implementation type, we need //library// routines, which also yield a //type classification system.// Most notably, for raw sound and video data we use the [[GAVL]] library, which defines a classification system for buffers and streams.
 * Besides the type classification detailed thus far, we introduce an ''intention tag''. This is a synthetic classification owned by Lumiera and used for internal wiring decisions. Currently (8/08), we recognize the following intention tags: __Source__, __Raw__, __Intermediary__ and __Target__. Only media streams tagged as __Raw__ can be processed.
@@ -5110,7 +5194,7 @@ Instead, we should try to just connect the various subsystems via Interfaces and
 * to shield the rendering code of all complexities of thread communication and synchronization, we use the StateProxy
 </pre>
 </div>
-<div title="StructAsset" modifier="Ichthyostega" modified="201010290143" created="200709221353" tags="def classes img" changecount="19">
+<div title="StructAsset" modifier="Ichthyostega" modified="201011060513" created="200709221353" tags="def classes img" changecount="20">
 <pre>Structural Assets are intended mainly for internal use, but the user should be able to see and query them. They are not &quot;loaded&quot; or &quot;created&quot; directly, rather they //leap into existence // by creating or extending some other structures in the session, hence the name. Some of the structural Asset parametrisation can be modified to exert control on some aspects of the Proc Layer's (default) behaviour.
 * [[Processing Patterns|ProcPatt]] encode information how to set up some parts of the render network to be created automatically: for example, when building a clip, we use the processing pattern how to decode and pre-process the actual media data.
 * [[Tracks|Track]] are one of the dimensions used for organizing the session data. They serve as an Anchor to attach parametrisation of output pipe, overlay mode etc. By [[placing|Placement]] to a track, a media object inherits placement properties from this track.
@@ -5119,8 +5203,8 @@ Instead, we should try to just connect the various subsystems via Interfaces and
 * [[Timeline]] assets are the top level structures to access the model; similar to the sequences, they act as façade to relevant parts of the model (BindingMO) and will be created on demand, alongside with a new session if necessary, bound to the new timeline. Likewise, they can be referred by their name-ID 
 
 
-!naming scheme
-The Asset name field of structural Assets utilizes a special naming scheme, which allows to derive the name based on the capabilities of the structural asset. For example, by default all media clips with a given media stream type (e.g. H264) will use the same [[processing Pattern|ProcPatt]] for rendering. {{red{todo: work out the details of this naming scheme??}}}
+
+
 
 !querying
 Structural assets can be queried by specifying the specific type (Pipe, Track, ProcPatt) and a query goal. For example, you can {{{Query&lt;Pipe&gt; (&quot;stream(mpeg)&quot;)}}}, yielding the first pipe found which declares to have stream type &quot;mpeg&quot;. The access point for this querying facility is on the ~StructFactory, which (as usual within Lumiera) can be invoked as static member {{{Struct::retrieve(Query&lt;TY&gt; ...}}}. Given such a query, first an attempt is made to satisfy it by retrieving an existing object of type TY (which might bind variables as a side effect). On failure, a new structural asset of the requested type will be created to satisfy the given goal. In case you want to bypass the resolution step and create a new asset right away, use {{{Struct::retrieve.newInstance&lt;TY&gt;}}}
@@ -6305,13 +6389,14 @@ Thus no server and no network connection is needed. Simply open the file in your
  * see [[Homepage|http://tiddlywiki.com]], [[Wiki-Markup|http://tiddlywiki.org/wiki/TiddlyWiki_Markup]]
 </pre>
 </div>
-<div title="Timeline" modifier="Ichthyostega" modified="201010180151" created="200706250721" tags="def" changecount="17">
+<div title="Timeline" modifier="Ichthyostega" modified="201011220126" created="200706250721" tags="def" changecount="21">
 <pre>Timeline is the top level element within the [[Session (Project)|Session]]. It is visible within a //timeline view// in the GUI and represents the effective (resulting) arrangement of media objects, to be rendered for output or viewed in a Monitor (viewer window). A timeline is comprised of:
 * a time axis in abolute time ({{red{WIP 1/10}}}: not clear if this is an entity or just a conceptual definition) 
 * a PlayControler ({{red{WIP Summer 2010: see discussion on ML. It seems rather that the controller will be attached}}})
-* a list of global Pipes representing the possible outputs (master busses)
+* a list of [[global Pipes|GlobalPipe]] representing the possible outputs (master busses)
 * //exactly one// top-level [[Sequence]], which in turn may contain further nested Sequences.
-Please note especially that following this design //a timeline doesn't define tracks.// [[Tracks form a Tree|Track]] and are part of the individual sequences, together with the media objects placed to these tracks.
+Please note especially that following this design //a timeline doesn't define tracks.// [[Tracks form a Tree|Track]] and are part of the individual sequences, together with the media objects placed to these tracks. Thus sequences are independent entities which may exist stand-alone within the model, while a timeline is //always bound to hold a sequence.// &amp;rarr; see ModelDependencies
+[&gt;img[Fundamental object relations used in the session|uml/fig136453.png]]
 
 Within the Project, there may be ''multiple timelines'', to be viewed and rendered independently. But, being the top-level entities, multiple timelines may not be combined further. You can always just render (or view) one specific timeline. A given sequence may be referred directly or indirectly from multiple timelines though.
 
@@ -6530,19 +6615,27 @@ For now, as of 6/10, we use specialised QueryResolver instances explicitly and d
 &amp;rarr; QueryRegistration
 </pre>
 </div>
-<div title="ViewerPlayConnection" modifier="Ichthyostega" created="201007110305" tags="Model Player spec draft" changecount="1">
+<div title="ViewerPlayConnection" modifier="Ichthyostega" modified="201011100202" created="201007110305" tags="Model Player spec draft" changecount="6">
 <pre>for showing output, three entities are involved
 * the [[Timeline]] holds the relevant part of the model, which gets rendered for playback
 * by connecting to a viewer component, an actual output target is established
 * the playback process itself is coordinated by a PlayController, which in turn creates a PlayProcess
+
+!the viewer connection
+A viewer element gets connected to a given timeline either by directly attaching it, or by //allocating an available free viewer.// Anyway, as a model element, the viewer is just like another set of global pipes cascaded behind the global pipes present in the timeline. The number and kind of pipes provided is a configurable property of the viewer element &amp;mdash; more specifically: the viewer's SwitchBoard. Thus, connecting a viewer activates the same internal logic employed when connecting a sequence into a timeline or meta-clip: a default channel association is established, which can be overridden persistently (&amp;rarr; OutputMapping). Each of the viewer's pipes in turn gets connected to a system output through an OutputManager slot &amp;mdash; again an output mapping step.
 </pre>
 </div>
-<div title="VirtualClip" modifier="Ichthyostega" modified="201003130000" created="200804110321" tags="def" changecount="15">
+<div title="VirtualClip" modifier="Ichthyostega" modified="201011220152" created="200804110321" tags="def Model" changecount="17">
 <pre>A ''~Meta-Clip'' or ''Virtual Clip'' (both are synonymous) denotes a clip which doesn't just pull media streams out of a source media asset, but rather provides the results of rendering a complete sub-network. In all other respects it behaves exactly like a &quot;real&quot; clip, i.e. it has [[source ports|ClipSourcePort]], can have attached effects (thus forming a local render pipe) and can be placed and combined with other clips. Depending on what is wired to the source ports, we get two flavours:
 * a __placeholder clip__ has no &quot;embedded&quot; content. Rather, by virtue of placements and wiring requests, the output of some other pipe somewhere in the session will be wired to the clip's source ports. Thus, pulling data from this clip will effectively pull from these source pipes wired to it.
-* a __nested sequence__ is like the other sequences in the Session, just in this case any missing placement properties will be derived from the Virtual Clip, which is thought as to &quot;contain&quot; the objects of the nested sequence. Typically, this also [[configures the tracks|TrackHandling]] of the &quot;inner&quot; sequence such as to connect any output to the source ports of the Virtual Clip.
+* a __nested sequence__ is like the other sequences in the Session, just in this case any missing placement properties will be derived from the Virtual Clip, which is thought as to &quot;contain&quot; the objects of the nested sequence. Typically, this also configures the tracks of the &quot;inner&quot; sequence such as to [[connect any output|OutputMapping]] to the source ports of the Virtual Clip.
 
 Like any &quot;real&quot; clip, Virtual Clips have a start offset and a length, which will simply translate into an offset of the frame number pulled from the Virtual Clip's source connection or embedded sequence, making it possible to cut, splice, trim and roll them as usual. This of course implies we can have several instances of the same virtual clip with different start offset and length placed differently. The only limitation is that we can't handle cyclic dependencies for pulling data (which has to be detected and flagged as an error by the builder)
+
+!Implementation
+The implementation is based on the observation, that a virtual clip is like a real clip, just referring to a ''virtual media''.
+Thus we'll employ a special kind of media asset, which actually links to a [[binding|BindingMO]], which in turn connects to a [[Sequence]]. Its the binding's job to help translating the sequence's contents into a media-like entity, with just //content// apearing in several channels.
+{{red{WIP as of 11/2010 -- most details yet to be defined}}} 
 </pre>
 </div>
 <div title="VisitingToolImpl" modifier="Ichthyostega" modified="200802031822" created="200801032003" tags="impl excludeMissing" changecount="21">
@@ -6625,10 +6718,40 @@ In case it's not already clear: we don't have &quot;the&quot; Render Engine, rat
 The &amp;raquo;current setup&amp;laquo; of the objects in the session is sort of a global state. Same holds true for the Controller, as the Engine can be at playback, it can run a background render or scrub single frames. But the whole complicated subsystem of the Builder and one given Render Engine configuration can be made ''stateless''. As a benefit of this we can run this subsystems multi-threaded without the need of any precautions (locking, synchronizing). Because all state information is just passed in as function parameters and lives in local variables on the stack, or is contained in the StateProxy which represents the given render //process// and is passed down as function parameter as well. (note: I use the term &quot;stateless&quot; in the usual, slightly relaxed manner; of course there are some configuration values contained in instance variables of the objects carrying out the calculations, but this values are considered to be constant over the course of the object usage).
 </pre>
 </div>
-<div title="Wiring" modifier="Ichthyostega" modified="201009250224" created="201009250223" tags="Concepts Model design draft" changecount="2">
-<pre>within Lumiera's Proc-Layer, on the conceptual level there are two kinds of connections: data streams and control connections. The wiring details on how these connections are defined, how they are to be detected by the builder and finally implemented by links in the RenderEngine.
+<div title="Wiring" modifier="Ichthyostega" modified="201011090249" created="201009250223" tags="Concepts Model design draft" changecount="30">
+<pre>within Lumiera's ~Proc-Layer, on the conceptual level there are two kinds of connections: data streams and control connections. The wiring details on how these connections are defined and controlled, how they are to be detected by the builder and finally implemented by links in the render engine.
+&amp;rarr; see OutputManagement
+&amp;rarr; see OutputDesignation
+&amp;rarr; see OperationPoint
+&amp;rarr; see StreamType
+
 
 !Stream connections
+A stream connection should result in media data traveling from a source to a sink. Here we have to distinguish between the high-level view and the situation in the render engine. At the session level and thus for the user, a //stream// is the elementary unit of &quot;media content&quot; flowing through the system. It can be described unambigously by having an uniform StreamType &amp;mdash; this doesn't exclude the stream from being inherently structured, like containing several channels. The HighLevelModel can be interpreted as creating a system of stream connections, which can be categorised as yielding two kinds of connections:
+* the [[Pipes|Pipe]] are rather rigid ''processing chains'', limited to using one specific StreamType. Pipes are build by attaching processing descriptors (Effect ~MObjects), where the order of attachment is given by the placement.
+* there are flexible interconnections or ''routing links'', including the ability to sum or overlay media streams, and the possibility of stream type conversions. They are controlled by the OutputDesignation (&quot;wiring plug&quot;), to be queried from the placement at the source side of the interconnection (i.e. at the exit point of a pipe)
+Please note, the high-level model comprises a blue print for constructing the render engine. There is no data &quot;flowing&quot; through this model, thus any &quot;wiring&quot; may be considered conceptual. Any wiring specifications here just express the intention of getting things connected in a given way. Like e.g. a clip may find out (through query of his placement) that he's intended to produce output for some destination / bus / subgroup called &quot;XYZ&quot;
+
+The builder to the contrary considers matters locally. He's confined to a given set of objects handed in for processing, and during that processing will collect all [[plugs|WiringPlug]] and [[claims|WiringClaim]] encountered. While the former denote the desired //destination//&amp;nbsp; of data emerging from a pipe, the wiring claim expresses the fact that a given object //claims to be some output destination.// Typically, each [[global pipe or bus|GlobalPipe]] raises such a claim. Both plugs and claims are processed on a &quot;just in case they exist&quot; base: When encountering a plug and //resolving//&amp;nbsp; the corresponding claim, the builder drops off a WiringRequest accordingly. Note the additional resolution, which might be necessary due to virtual media and nested sequences (read: the output designation might need to be translated into another designation, using the media/channel mapping created by the virtual entity &amp;rarr; see [[mapping of output designations|OutputMapping]])
+
+Processing the wiring request drives the actual connection step. It is conducted by the OperationPoint, provided by and executing within a BuilderMould and controlled by a [[processing pattern|ProcPatt]]. This rather flexible setup allows for wiring summation lines, include faders, scale and offset changes and various overlay modes. Thus the specific form of the connection wired in here depends on all the local circumstances visible at that point of operation:
+* the mould is picked from a small number of alternatives, based on the general wiring situation.
+* the processing pattern is queried to fit the mould, the stream type and additional placement specifications ({{red{TODO 11/10: work out details}}})
+* the stream type system itself contributes in determining possible connections and conversions, introducing further processing patterns
+
+The final result, within the render engine, is a network of processing nodes. Each of this nodes holds a WiringDescriptor, created as a result of the wiring operation detailed above. This descriptor lists the predecessors, and (in somewhat encoded form) the other details necessary for the processing node to respond properly at the engine's calculation requests (read: those details are implementation bound and can be expeted to be made to fit)
+
+On a more global level, this LowLevelModel within the engine exposes a number of [[exit nodes|ExitNode]], each corresponding to a ModelPort, thus being a possible source to be handled by the OutputManager, which is responsible for mapping and connecting nominal outputs (the model ports) to actual output sinks (external connections and viewer windows). A model port isn't necessarily an absolute endpoint of connected processing nodes &amp;mdash; it may as well reside in the middle of the network, e.g. as a ProbePoint. Besides the core engine network, there is also an [[output network|OutputNetwork]], built and extended on demand to prepare generated data for the purpose of presentation. This ViewerPlayConnection might necesitate scaling or interpolating video for a viewer, adding overlays with control information produced by plugins, or rendering and downmixing multichannel sound. By employing this output network, the same techniques used to control wiring of the main path, can be extended to control this output preparation step. ({{red{WIP 11/20}}} some important details are to be settled here, like how to control semi-automatic adaptation steps. But that is partially true also for the main network: for example, we don't know where to locate and control the faders generated as a consequence of building a summation line)
+
+!!!Participants and Requirements
+* the ~Pipe-ID needs to be something easily usable
+* output designation is just a ~Pipe-ID, actually a thin wrapper to make the intention explicit
+* claims and plugs are to be implemented as LocatingPin
+* as decided elsewhere, we get a [[Bus-MObject|BusMO]] as an attachment point
+* we need OutputMapping as a new generic interface, allowing us to define ~APIs in terms of mappings
+* builder moulds, operation point and processing patterns basically are in place, but need to be shaped
+* the actual implementation in the engine will evolve as we go; necessary adaptations are limited to the processing patterns (which is intentional)
+
 
 !Control connections
 </pre>

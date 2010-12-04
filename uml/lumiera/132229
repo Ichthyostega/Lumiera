@@ -1,6 +1,6 @@
 format 58
 "Session" // ProcessingLayer::MObject::Session
-  revision 3
+  revision 4
   modified_by 5 "hiv"
   // class settings
   //class diagram settings
@@ -143,17 +143,6 @@ ${inlines}
 	  b parent class_ref 139653 // Session
       end
 
-      classrelation 147717 // pipes (<directional aggregation>)
-	relation 145541 o-->
-	  stereotype "vector"
-	  a role_name "pipes" multiplicity "*" protected
-	    comment "the global ports (busses) of the session"
-	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
-"
-	    classrelation_ref 147717 // pipes (<directional aggregation>)
-	  b parent class_ref 138117 // Pipe
-      end
-
       classrelation 195205 // timelines (<directional composition>)
 	relation 184709 *-->
 	  a role_name "timelines" protected
@@ -161,6 +150,15 @@ ${inlines}
 "
 	    classrelation_ref 195205 // timelines (<directional composition>)
 	  b parent class_ref 145541 // Timeline
+      end
+
+      classrelation 204677 // <unidirectional association>
+	relation 193797 --->
+	  a role_name "" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 204677 // <unidirectional association>
+	  b parent class_ref 152069 // PlacementIndex
       end
     end
 
@@ -321,6 +319,14 @@ ${inlines}
 	    classrelation_ref 195077 // <unidirectional association>
 	  b parent class_ref 128133 // Seq
       end
+
+      classrelation 204421 // <dependency>
+	relation 193541 -_->
+	  a default
+	    cpp default "#include in source"
+	    classrelation_ref 204421 // <dependency>
+	  b parent class_ref 152325 // Binding
+      end
     end
 
     class 145797 "TimelineView"
@@ -413,14 +419,6 @@ ${inlines}
       idl_decl ""
       explicit_switch_type ""
       
-      classrelation 128517 // <generalisation>
-	relation 128261 ---|>
-	  a public
-	    cpp default "${type}"
-	    classrelation_ref 128517 // <generalisation>
-	  b parent class_ref 128133 // Seq
-      end
-
       classrelation 131717 // effectiveTimeline (<directional composition>)
 	relation 131077 *-->
 	  stereotype "list"
@@ -607,18 +605,6 @@ ${inlines}
 	  b parent class_ref 129157 // Meta
       end
 
-      classrelation 147205 // subTracks (<directional composition>)
-	relation 145029 *-->
-	  stereotype "vector"
-	  a role_name "subTracks" multiplicity "*" public
-	    comment "Child tracks in a tree structure"
-	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
-"
-	    classrelation_ref 147205 // subTracks (<directional composition>)
-	  b parent class_ref 128389 // Track
-	  association_type class_ref 128645 // Placement
-      end
-
       classrelation 161413 // <realization>
 	relation 156805 -_-|>
 	  a public
@@ -641,6 +627,46 @@ ${inlines}
       idl_decl ""
       explicit_switch_type ""
       
+      classrelation 204293 // <unidirectional association>
+	relation 193413 --->
+	  a role_name "" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 204293 // <unidirectional association>
+	  b parent class_ref 152197 // Sequence
+      end
+
+      classrelation 204805 // <directional aggregation>
+	relation 193925 o-->
+	  a role_name "" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 204805 // <directional aggregation>
+	  b parent class_ref 167429 // BusMO
+      end
+    end
+
+    class 167429 "BusMO"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 204933 // <unidirectional association>
+	relation 194053 --->
+	  a role_name "" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 204933 // <unidirectional association>
+	  b parent class_ref 138117 // Pipe
+      end
     end
 
     class 128517 "MObject"
@@ -821,15 +847,6 @@ ${members}};
 	idl_decl ""
       end
 
-      classrelation 131845 // <unidirectional association>
-	relation 131205 --->
-	  a role_name "" protected
-	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
-"
-	    classrelation_ref 131845 // <unidirectional association>
-	  b parent class_ref 128389 // Track
-	  association_type class_ref 128389 // Track
-      end
     end
 
     class 128773 "AbstractMO"
@@ -1623,7 +1640,7 @@ ${inlines}
     package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
     show_infonote default drawing_language default show_stereotype_properties default
     classdiagram 136453 "Session backbone"
-      draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default show_stereotype_properties default
+      draw_all_relations no hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default show_stereotype_properties default
       size A4
     end
 

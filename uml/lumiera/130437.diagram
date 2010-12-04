@@ -32,18 +32,6 @@ classcanvas 130821 class_ref 133765 // Source
   draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default show_stereotype_properties default
   xyz 371 407 2000
 end
-classcanvas 131077 class_ref 135045 // CodecAdapter
-  draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default show_stereotype_properties default
-  xyz 309 472 2000
-end
-classcanvas 131205 class_ref 131845 // Trafo
-  draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default show_stereotype_properties default
-  xyz 309 407 2000
-end
-classcanvas 134661 class_ref 133253 // Frame
-  draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default show_stereotype_properties default
-  xyz 193 472 2000
-end
 packagecanvas 135685 
   package_ref 128261 // MObject
     xyzwh 24 10 1994 187 356
@@ -52,8 +40,8 @@ packagecanvas 135813
   package_ref 128133 // Asset
     xyzwh 447 9 1994 391 570
 end
-note 136837 "the Builder implements each Clip by a source node and maybe some codec"
-  xyzwh 59 390 2000 209 46
+note 136837 "the Builder implements each Clip by a chain of nodes, finally leading to a source node"
+  xyzwh 59 382 2000 227 46
 classcanvas 137221 class_ref 138501 // CompoundMedia
   draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default show_stereotype_properties default
   xyz 594 147 3005
@@ -106,25 +94,12 @@ relationcanvas 129669 relation_ref 129285 // <generalisation>
   no_role_a no_role_b
   no_multiplicity_a no_multiplicity_b
 end
-relationcanvas 132357 relation_ref 132229 // <generalisation>
-  geometry VHV
-  from ref 131205 z 1999 to point 329 381
-  line 132485 z 1999 to point 301 381
-  line 132613 z 1999 to ref 130309
-  no_role_a no_role_b
-  no_multiplicity_a no_multiplicity_b
-end
 relationcanvas 132741 relation_ref 135429 // <unidirectional association>
   from ref 130309 z 1999 to point 235 278
   line 132869 z 1999 to point 235 314
   line 132997 z 1999 to ref 130309
   role_a_pos 220 299 3000 no_role_b
   no_multiplicity_a multiplicity_b_pos 248 306 3000
-end
-relationcanvas 133125 relation_ref 136965 // <generalisation>
-  from ref 131077 z 1999 to ref 131205
-  no_role_a no_role_b
-  no_multiplicity_a no_multiplicity_b
 end
 relationcanvas 133893 relation_ref 134661 // <generalisation>
   geometry VHV

@@ -2,16 +2,10 @@ window_sizes 1324 1020 270 1044 872 71
 diagrams
   classdiagram_ref 136453 // Session backbone
     631 352 100 4 0 0
-  objectdiagram_ref 138885 // ModelAssetRelations
+  active  objectdiagram_ref 138885 // ModelAssetRelations
     730 488 100 4 0 0
-  classdiagram_ref 139141 // Meta-Asset Relations
-    469 451 100 4 0 0
-  classdiagram_ref 140293 // TypedLookup
-    721 697 100 4 0 0
-  active  classdiagram_ref 141445 // Advice entities
-    635 331 100 4 0 0
-  objectdiagram_ref 141573 // Advice solving
-    556 483 100 4 0 0
+  classdiagram_ref 128133 // Session structure
+    835 697 100 4 0 0
 end
 show_stereotypes
 selected 
@@ -26,17 +20,20 @@ open
   class_ref 162821 // TypedID::Link
   classview_ref 128389 // Controller Workings
   class_ref 139653 // Session
+  class_ref 145541 // Timeline
   class_ref 128133 // Seq
   class_ref 160517 // Root
   class_ref 128389 // Track
   class_ref 152325 // Binding
   class_ref 129797 // ExplicitPlacement
+  class_ref 129029 // Effect
+  class_ref 139909 // LocatingPin
   class_ref 152453 // PlacementRef
   classrelation_ref 178437 // <realization>
   class_ref 153733 // QueryFocusStack
   classview_ref 128261 // Builder Workings
   usecaseview_ref 128261 // config examples
-  class_ref 133253 // Frame
+  classview_ref 128133 // Engine Workings
   class_ref 164485 // Request
   class_ref 164613 // Provision
   class_ref 166021 // ActiveProvision

@@ -19,12 +19,24 @@ Akhil
 -> link:Proposal.AkhiL.html[AkhIL's Proposal]
 
 .Things I like
- * The roots of group tracks show what's being rendered inside (Ichthyo calls these root tracks "group bars"). This makes sense - I think it might do more harm than good to let the user edit in group roots.
+ * The roots of group tracks show what's being rendered inside (_Ichthyo_ calls these root tracks "group bars").
+   This makes sense - I think it might do more harm than good to let the user edit in group roots.
  * The power of manual wiring. I like the way you can wire things together on the timeline.
 
 .Things I don't like
- * Tracks seem to be generic - all tracks are the same: either a group track or a normal "track". Yet you've got some tracks with just filters, some with just automation curves, and some with just clips. The problem here is that it gets confusing to know what to do if we allow the user to mix and match. I think that tracks 1-4 and 5-6 in your diagram need to lumped together in a single complex track.
- * Some of your links seem to go from clips, and some from full tracks. This behaviour needs to be consistent. It's difficult to know what to suggest. Either links go from clips only - in which case 1hour long effect applied to 100 clips becomes a pain in the arse (maybe you'd use busses in this case). The alternative is only applying constant links between tracks, but this is quite inflexible, and would force you to make lots of meta-clips, anytime you wanted the linkage to change in the middle of the timeline.
+ * Tracks seem to be generic - all tracks are the same: either a group track or
+   a normal "track". Yet you've got some tracks with just filters, some with just
+   automation curves, and some with just clips. The problem here is that it gets
+   confusing to know what to do if we allow the user to mix and match. I think
+   that tracks 1-4 and 5-6 in your diagram need to lumped together in a single
+   complex track.
+ * Some of your links seem to go from clips, and some from full tracks. This
+   behaviour needs to be consistent. It's difficult to know what to suggest.
+   Either links go from clips only - in which case 1hour long effect applied to
+   100 clips becomes a pain in the arse (maybe you'd use busses in this case). The
+   alternative is only applying constant links between tracks, but this is quite
+   inflexible, and would force you to make lots of meta-clips, anytime you wanted
+   the linkage to change in the middle of the timeline.
 
 
 Richard Spindler 
@@ -32,13 +44,23 @@ Richard Spindler
 -> link:Proposal.RichardSpindler.html[Richard's Proposal]
 
 .Things I like
- * You've got a concept of sub-EDLs and metaclips. We're definitely going to do that. If a clip is a metaclip, you can open up the nested timeline in another tab on the timeline view.
+ * You've got a concept of sub-EDLs and metaclips. We're definitely going to do
+   that. If a clip is a metaclip, you can open up the nested timeline in another
+   tab on the timeline view.
  * Lots of flexibility by having filter graphs on the input stage of clips, and on the output stage of the timeline.
  * Your scratch bus provokes the idea of busses in general - these are going to be really useful for routing video around.
 
 .Things I don't like
- * Filter graphs on the input stage: This concept might be better expressed with "compound effects", which would be a filter-graph-in-a-box. These would work much like any effects, and could be reused, rather than forcing the user to rebuild the same graph for 100s of clips which need the same processing. (See Alcarinque's suggestion for "Node Layouts").
- * Output stage filter graph: It's a good idea, but I think we need to re-express it in terms of busses and the track tree. We should be able to give the user the same results, but it reduces the number of distinct "views" that the user has to deal with in the normal workflow. I believe we can find a way of elegantly expressing this concept through the views that we already have.
+ * Filter graphs on the input stage: This concept might be better expressed with
+   "compound effects", which would be a filter-graph-in-a-box. These would work
+   much like any effects, and could be reused, rather than forcing the user to
+   rebuild the same graph for 100s of clips which need the same processing.
+   (See __Alcarinque's__ suggestion for "Node Layouts").
+ * Output stage filter graph: It's a good idea, but I think we need to
+   re-express it in terms of busses and the track tree. We should be able to give
+   the user the same results, but it reduces the number of distinct "views" that
+   the user has to deal with in the normal workflow. I believe we can find a way
+   of elegantly expressing this concept through the views that we already have.
 
 
 Alcarinque 
@@ -79,14 +101,23 @@ Clay Barnes (rcbarnes)
  * Nudge buttons are shown when the user hovers over the clip. This could be quite a timesaver.
  * Video filters are shown above the top track in the set of inputs that the effect is applied to. This is useful for displaying filters which have multiple inputs. The highlighting of other attached inputs is cool and useful.
  * Automation curves are show in effects just the same as everything else.
- * Split and heal buttons. Heal would be hard to do well - but still, it's a great idea. Might requre extra metadata to be stored in the clip fragments so they can be recombined.
- * ichthyo: "you create sort-of “sub-tracks” within each track for each of the contained media types (here video and audio). To me this seems a good idea, as I am myself pushing the Idea (and implementing the necessary infrastructure) of the clips being typically multi-channel. So, rather than having a Audio and Video section, separate Video and audio tracks, and then having to solve the problem how to “link” audio to video, I favour to treat each clip as a compound of related media streams."
+ * Split and heal buttons. Heal would be hard to do well - but still, it's a
+   great idea. Might require extra metadata to be stored in the clip fragments so
+   they can be recombined.
+ * _Ichthyo_: "you create sort-of “sub-tracks” within each track for each of the
+   contained media types (here video and audio). To me this seems a good idea, as
+   I am myself pushing the Idea (and implementing the necessary infrastructure) of
+   the clips being typically multi-channel. So, rather than having a Audio and
+   Video section, separate Video and audio tracks, and then having to solve the
+   problem how to “link” audio to video, I favour to treat each clip as a compound
+   of related media streams."
 
 .Things I don't like
  * If a filter has multiple inputs, then how does the user control which track in the tree actually sees the output of the effect? cehteh says: "You showing that effects and tracks are grouped by dashed boxes, which is rather limiting to the layout how you can organize things on screen and how things get wired together". Perhaps it would be better to require all input tracks to an effect to be part of a group track, rather than being able to spaghetti lots of tracks together. The down side of this is it would make it difficult to to use a group twice i.e. have a track that is both an input to an effect, and a normal track - part of the another tree.
  * I'm not sure I understand the (+) feature. Can you explain it more for me?
- * cehteh: "curves need to be way bigger". Maybe the tracks could be sizable.
- * cehteh: "You show that some things (audio) tracks can be hidden, for tree like organization this would be just a tree collapse."
+ * _Cehteh_: "curves need to be way bigger". Maybe the tracks could be sizable.
+ * _Cehteh_: "You show that some things (audio) tracks can be hidden, for tree
+   like organization this would be just a tree collapse."
 
 
 Joel Conclusions:
@@ -183,7 +214,7 @@ this point all the time.
 
 You pointed out that my placement concept may go a bit too far, especially when
 it attempts to think of sound panning or output routing also as a kind of
-placement of an object in a configuraton space. And, on the other hand,
+placement of an object in a configuration space. And, on the other hand,
 Christian asked "why then not also controlling plugin parameters by placement?".
 I must admit, both of you have a point. Christians proposal goes even beyond
 what I proposed. It is completely straight forward when considered structurally,
@@ -311,7 +342,7 @@ why I am going through the hassle of creating a real type system, so we can stop
 
 Now, what are the foreseeable UI problems we create with such an approach?
 
- * getting the display/preview steamlined
+ * getting the display/preview streamlined
 
  * having to handle L-cuts as real transitions
 
@@ -351,7 +382,7 @@ natively, without the need of a special "multicam-feature". Some thoughts:
    sent to output. (Implementation-wise, this advice is identical to the advice
    used to select the output on a per-track base; but we need an UI to set and
    control it at the clip). Of course, different channels (e.g different sound
-   pickups) could be sent to different destinations (mixing subgroup busses).
+   pick-ups) could be sent to different destinations (mixing subgroup busses).
    For multicam, this advice would select the angle to be used.
 
  * now we could think of allowing such angle switching to happen in the middle

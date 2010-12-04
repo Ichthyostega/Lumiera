@@ -59,7 +59,7 @@ namespace asset {
   class ID<Media> : public ID<Asset>
     {
     public:
-      ID (size_t id);
+      ID (HashVal id);
       ID (const Media&);
     };
 
@@ -130,7 +130,7 @@ namespace asset {
     // definition of ID<Media> ctors is possible now,
    //  after providing full definition of class Media
 
-  inline ID<Media>::ID(size_t id)          : ID<Asset> (id)            {};
+  inline ID<Media>::ID(HashVal id)         : ID<Asset> (id)            {};
   inline ID<Media>::ID(const Media& media) : ID<Asset> (media.getID()) {};
   
   

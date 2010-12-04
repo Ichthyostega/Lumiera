@@ -86,7 +86,7 @@ namespace asset {
     , public lib::AutoRegistered<Sequence>
     {
       typedef mobject::session::RTrack RTrack;
-
+      
       Sequence (Ident const&);                //////////////////////////////////////////////TICKET #692  pass in track here
       
     public:
@@ -100,7 +100,7 @@ namespace asset {
     
   
   typedef P<Sequence> PSequence;
-    
+  
 ///////////////////////////TODO currently just fleshing the API
   
   

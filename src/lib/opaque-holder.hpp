@@ -30,7 +30,7 @@
  ** this situation arises when dealing with functor objects.
  ** 
  ** These templates help with building custom objects and wrappers based on
- ** this pattern: InPlaceAnyHolder provides an buffer for the target objects
+ ** this pattern: lib::InPlaceAnyHolder provides a buffer for target objects
  ** and controls access through a two-layer capsule; while the outer container
  ** exposes a neutral interface, the inner container keeps track of the actual
  ** type by means of a vtable. OpaqueHolder is built on top of InPlaceAnyHolder
@@ -45,7 +45,11 @@
  ** of course this rules out anything beyond re-accessing the embedded object
  ** by knowing it's exact type. Generally speaking, re-accessing the concrete
  ** object requires knowledge of the actual type, similar to boost::any
- ** (but contrary to OpaqueHolder the latter uses heap storage). 
+ ** (but contrary to OpaqueHolder the latter uses heap storage).
+ ** 
+ ** As a supplement, a more lightweight implementation is provided as
+ ** lib::InPlaceBuffer, requiring just the object storage and lacking the
+ ** ability to track the actual type of the embedded object.
  ** 
  ** Using this approach is bound to specific stipulations regarding the
  ** properties of the contained object and the kind of access needed.

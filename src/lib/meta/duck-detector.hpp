@@ -41,7 +41,7 @@
  ** 
  ** Most of these trait templates rely on a creative use of function overloading. The C++ standard
  ** requires the compiler <i>silently to drop</i> any candidate of overload resolution which has
- ** gotten an invalid function signature as a result of instantiating a template (type). This allow
+ ** gotten an invalid function signature as a result of instantiating a template (type). This allows
  ** us to set up kind of a "trap" for the compiler: we present two overloaded candidate functions
  ** with a different return type; by investigating the resulting return type we're able to figure
  ** out the overload actually picked by the compiler.

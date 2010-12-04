@@ -44,7 +44,7 @@ namespace asset {
   class ID<Pipe> : public ID<Struct>
     {
     public:
-      ID (size_t id);
+      ID (HashVal id);
       ID (const Pipe&);
     };
   
@@ -86,13 +86,16 @@ namespace asset {
       void switchProcPatt (PProcPatt& another);
       
       /** convenience shortcut for retrieving default configured pipes */
-      static PPipe query (string properties)  ;
+      static PPipe query (string properties);
+      
+      /** convenience shortcut for lookup by id */
+      static PPipe lookup (ID<Pipe> id);
     };
     
     
    // catch up with postponed definition of ID<Struct> ctors...
   //
-  inline ID<Pipe>::ID(size_t id)        : ID<Struct> (id)           {};
+  inline ID<Pipe>::ID(HashVal id)       : ID<Struct> (id)           {};
   inline ID<Pipe>::ID(Pipe const& pipe) : ID<Struct> (pipe.getID()) {};
   
   
