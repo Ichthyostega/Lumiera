@@ -1,11 +1,10 @@
 == Lumiera Design Documents
 
-The goal of Lumiera is to provide a professionnal tool for video editing on GNU/Linux systems. +
+The goal of Lumiera is to provide a professionnal tool for video editing on GNU/Linux systems.
 The vision of the development team defines a modern design for the core of a Non-Linear Editing software.
-One of the key aspect of Lumiera is the strong separation between the user interface and the processing core. +
- +
-Lumiera as a software will come along with a GTK GUI but that does not make this exclusive, any other GUI could be written as well as scripts to drive the core. +
-This is made possible by the above-mentioned quality of Lumiera being considered as two strictly separate parts. +
+One of the key aspect of Lumiera is the strong separation between the user interface and the processing core.
+Lumiera as a software will come along with a GTK GUI but that does not make this exclusive, any other GUI could be written as well as scripts to drive the core.
+This is made possible by the above-mentioned quality of Lumiera being considered as two strictly separate parts.
 Lumiera as a processing core will be able to do anything possibly conceivable and thus enabling it to be used to do any task on video (and audio?), even unrelated to video editing.
 
 === Overview
@@ -14,9 +13,9 @@ The internal structure of Lumiera is divided in numerous subsystems.
 This overview will try to go through the elements from the highest to the lowest piece of the structure.
 They can be categorized into three main categories plus extra components :
 
-==== Graphical User Interface
+==== link:gui/index.html[Graphical User Interface]
 
-link:gui/index.html[User interfaces] are basically handled like plugins, consequently it is possible to interface with Lumiera through scripts. It is also possible to create specialized GUIs.
+User interfaces are basically handled like plugins, consequently it is possible to interface with Lumiera through scripts. It is also possible to create specialized GUIs.
 The interface is the closest component to the user, it is purely visual. There the user manipulates, organizes, loads, configures all sorts of datas that are called Assets. These Assets are grouped in a structure called the Session.
 
 ==== The Processing Layer
@@ -26,9 +25,9 @@ The Processing layer (or proc) is where the elements from the Session are assemb
  * link:model/index.html[Model] +
  * link:engine/index.html[Engine]
 
-==== The Backend
+==== link:backend/index.html[The Backend]
 
-link:backend/index.html[The Backend] uses the Low-level model. It does the rendering process and makes a heavy use of the Input/Output System to the screen or to external monitors.
+The backend uses the Low-level model. It does the rendering process and makes a heavy use of the Input/Output System to the screen or to external monitors.
  +
  +
 
