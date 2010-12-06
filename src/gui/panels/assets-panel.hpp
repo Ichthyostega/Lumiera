@@ -31,7 +31,7 @@
 namespace gui {
 namespace panels {
 
-class ResourcesPanel : public Panel
+class AssetsPanel : public Panel
 {
 public:
   /**
@@ -39,7 +39,7 @@ public:
    * @param panel_manager The owner panel manager widget.
    * @param dock_item The GdlDockItem that will host this panel.
    **/
-  ResourcesPanel(workspace::PanelManager &panel_manager,
+  AssetsPanel(workspace::PanelManager &panel_manager,
     GdlDockItem *dock_item);
   
   /**

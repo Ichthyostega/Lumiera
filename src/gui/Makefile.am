@@ -89,8 +89,8 @@ gtk_gui_la_SOURCES =								\
 	$(lumigui_srcdir)/output/xvdisplayer.hpp				\
 	$(lumigui_srcdir)/panels/panel.cpp					\
 	$(lumigui_srcdir)/panels/panel.hpp					\
-	$(lumigui_srcdir)/panels/resources-panel.cpp				\
-	$(lumigui_srcdir)/panels/resources-panel.hpp				\
+	$(lumigui_srcdir)/panels/assets-panel.cpp				\
+	$(lumigui_srcdir)/panels/assets-panel.hpp				\
 	$(lumigui_srcdir)/panels/timeline-panel.cpp				\
 	$(lumigui_srcdir)/panels/timeline-panel.hpp				\
 	$(lumigui_srcdir)/panels/viewer-panel.cpp				\

@@ -90,10 +90,10 @@ Actions::populate_main_actions(Glib::RefPtr<Gtk::UIManager> uiManager)
   // View Menu
   actionGroup->add(Action::create("ViewMenu", _("_View")));
   
-  assetsPanelAction = ToggleAction::create("ViewResources",
-    StockID("panel_resources"));
+  assetsPanelAction = ToggleAction::create("ViewAssets",
+    StockID("panel_assets"));
   assetsPanelAction->signal_toggled().connect(
-    mem_fun(*this, &Actions::on_menu_view_resources));
+    mem_fun(*this, &Actions::on_menu_view_assets));
   actionGroup->add(assetsPanelAction);
   
   timelinePanelAction = ToggleAction::create("ViewTimeline",
@@ -160,7 +160,7 @@ Actions::populate_main_actions(Glib::RefPtr<Gtk::UIManager> uiManager)
       "      <menuitem action='EditPreferences'/>"
       "    </menu>"
       "    <menu action='ViewMenu'>"
-      "      <menuitem action='ViewResources'/>"
+      "      <menuitem action='ViewAssets'/>"
       "      <menuitem action='ViewTimeline'/>"
       "      <menuitem action='ViewViewer'/>"
       "    </menu>"
@@ -234,13 +234,13 @@ Actions::populate_show_panel_actions(Glib::RefPtr<Gtk::UIManager> uiManager)
 void
 Actions::update_action_state()
 {
-  /*REQUIRE(workspaceWindow.resourcesPanel != NULL);
+  /*REQUIRE(workspaceWindow.assetsPanel != NULL);
   REQUIRE(workspaceWindow.timelinePanel != NULL);
   REQUIRE(workspaceWindow.viewerPanel != NULL); 
   
   is_updating_action_state = true;
   assetsPanelAction->set_active(
-    workspaceWindow.resourcesPanel->is_shown());
+    workspaceWindow.assetsPanel->is_shown());
   timelinePanelAction->set_active(
     workspaceWindow.timelinePanel->is_shown());
   viewerPanelAction->set_active(
@@ -289,10 +289,10 @@ Actions::on_menu_edit_preferences()
 /* ===== View Menu Event Handlers ===== */
 
 void
-Actions::on_menu_view_resources()
+Actions::on_menu_view_assets()
 {
   //if(!is_updating_action_state)
-  //  workspaceWindow.resourcesPanel->show(
+  //  workspaceWindow.assetsPanel->show(
   //    assetsPanelAction->get_active());
 }
 

@@ -34,7 +34,7 @@
 #include "actions.hpp"
 #include "panel-manager.hpp"
 
-#include "../panels/resources-panel.hpp"
+#include "../panels/assets-panel.hpp"
 #include "../panels/viewer-panel.hpp"
 #include "../panels/timeline-panel.hpp"
 

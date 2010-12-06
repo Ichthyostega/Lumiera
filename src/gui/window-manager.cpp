@@ -177,7 +177,7 @@ WindowManager::register_stock_items()
 {
   Glib::RefPtr<IconFactory> factory = IconFactory::create();
   
-  add_stock_icon_set(factory, "panel-resources", "panel_resources", _("_Resources"));
+  add_stock_icon_set(factory, "panel-assets", "panel_assets", _("_Assets"));
   add_stock_icon_set(factory, "panel-timeline", "panel_timeline", _("_Timeline"));
   add_stock_icon_set(factory, "panel-viewer", "panel_viewer", _("_Viewer"));
   
