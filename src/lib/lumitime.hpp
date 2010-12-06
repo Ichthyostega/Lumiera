@@ -85,8 +85,8 @@ namespace lumiera {
       int getSecs   () const; 
       int getMins   () const; 
       int getHours  () const; 
-      
-      
+      int getFrames () const;
+
       operator std::string ()  const;
       operator gavl_time_t ()  const { return t_; }
       
