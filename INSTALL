@@ -67,11 +67,11 @@ make check
 
 This will take some time. After it has finished:
 
-./lumigui
+./lumiera
 
 [NewbiesTut]
 
-Contibuting
+Contributing
 
 Nothing is easier, follow the basic instructions at http://www.kernel.org/pub/
 software/scm/git/docs/gittutorial.html, notably the
