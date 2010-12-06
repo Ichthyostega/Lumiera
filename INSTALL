@@ -27,6 +27,10 @@ For Ubuntu Hardy also:
   * libgtkmm-2.4-dev
   * libxv-dev
 
+Optionally, you may also want to install:
+
+  * gtk2-engines
+
 also check http://gnuradio.org/trac/wiki/UbuntuInstall#InstallationOptions to
 see that all your installations options are met.
 
