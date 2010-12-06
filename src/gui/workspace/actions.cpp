@@ -253,13 +253,13 @@ Actions::update_action_state()
 void
 Actions::on_menu_file_new_project()
 {
-  g_message("A File|New menu item was selecteda.");
+  g_message("A File|New menu item was selected.");
 }
 
 void
 Actions::on_menu_file_open_project()
 {
-  g_message("A File|Open menu item was selecteda.");
+  g_message("A File|Open menu item was selected.");
 }
 
 void
