@@ -1,0 +1,10 @@
+TESTING "Time conversion" ./test-time
+
+TEST "basic functionality" basic <<END
+err: ECHO: .*: 0
+err: ECHO: .*: 1
+err: ECHO: .*: 0
+err: ECHO: .*: 1
+err: ECHO: .*: 0$
+err: ECHO: .*: 03:55:20.700
+END
