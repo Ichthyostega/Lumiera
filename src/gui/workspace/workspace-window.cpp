@@ -117,7 +117,13 @@ WorkspaceWindow::create_ui()
  
   show_all_children();
 }
-  
+
+void
+WorkspaceWindow::set_close_window_sensitive(bool enable)
+{
+  uiManager->get_action("/MenuBar/WindowMenu/WindowCloseWindow")
+    ->set_sensitive(enable);
+}
 
 }   // namespace workspace
 }   // namespace gui

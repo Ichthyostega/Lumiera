@@ -56,6 +56,8 @@ WindowManager::new_window(gui::model::Project &source_project,
   windowList.push_back(window);
   
   window->show();
+
+  update_close_window_in_menus();
 }
 
 bool
@@ -107,9 +109,29 @@ WindowManager::on_window_closed(GdkEventAny* event)
       REQUIRE(main);
       main->quit();
     }
+
+  update_close_window_in_menus();
       
   // Unless this is false, the window won't close
   return false;
+}
+
+void
+WindowManager::update_close_window_in_menus()
+{
+  bool enable = windowList.size() > 1;
+
+  list< shared_ptr<WorkspaceWindow> >::iterator iterator = 
+    windowList.begin();
+
+  while (iterator != windowList.end())
+    {
+      shared_ptr<WorkspaceWindow> workspace_window(*iterator);
+      REQUIRE(workspace_window);
+
+      workspace_window->set_close_window_sensitive(enable);
+      iterator++;
+    }
 }
 
 GdkColor

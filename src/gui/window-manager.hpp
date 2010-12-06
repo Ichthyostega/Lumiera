@@ -95,6 +95,15 @@ private:
 private:
 
   /**
+   * On creating and closing of any window, handle enabling or disabling of the
+   * Window/Close Window menu option.
+   *
+   * It should be enabled when there is more than one window and disabled
+   * otherwise.
+   **/
+  void update_close_window_in_menus();
+
+  /**
    * Registers the custom icon sizes.
    **/
   static void register_app_icon_sizes();

@@ -93,6 +93,7 @@ private:
   void on_menu_track_add();
 
   void on_menu_window_new_window();
+  void on_menu_window_close_window();
   void on_menu_show_panel(int panel_index);
 
   void on_menu_help_about();

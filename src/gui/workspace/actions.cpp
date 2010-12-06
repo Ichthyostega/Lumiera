@@ -123,6 +123,9 @@ Actions::populate_main_actions(RefPtr<Gtk::UIManager> uiManager)
   actionGroup->add(Action::create("WindowNewWindow",
     StockID("new_window")),
     mem_fun(*this, &Actions::on_menu_window_new_window));
+  actionGroup->add(Action::create("WindowCloseWindow",
+    _("Close Window")),
+    mem_fun(*this, &Actions::on_menu_window_close_window));
   actionGroup->add(Action::create("WindowShowPanel", _("_Show Panel")));
 
   // Help Menu
@@ -169,6 +172,7 @@ Actions::populate_main_actions(RefPtr<Gtk::UIManager> uiManager)
       "    </menu>"
       "    <menu action='WindowMenu'>"
       "      <menuitem action='WindowNewWindow'/>"
+      "      <menuitem action='WindowCloseWindow'/>"
       "      <menu action='WindowShowPanel'/>"
       "    </menu>"
       "    <menu action='HelpMenu'>"
@@ -333,6 +337,13 @@ Actions::on_menu_window_new_window()
   application().get_window_manager().new_window(
     workspaceWindow.get_project(),
     workspaceWindow.get_controller()); 
+}
+
+void
+Actions::on_menu_window_close_window()
+{
+  workspaceWindow.hide();
+  // delete &workspaceWindow;
 }
 
 void

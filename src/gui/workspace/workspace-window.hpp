@@ -69,6 +69,8 @@ public:
   
   PanelManager& get_panel_manager();
 
+  void set_close_window_sensitive(bool enable);
+
 private:
   void create_ui();
   
