@@ -141,6 +141,8 @@ private:
 private:
 
   //----- Event Handlers -----//
+  void on_enable();
+  void on_lock();
   void on_set_name();
   
   /**
@@ -158,11 +160,16 @@ protected:
 private:
 
   /**
+   * True if this track is enabled.
+   */
+  bool enabled;
+
+  /**
    * This bool is true if this branch is expanded. false if it is
    * collapsed.
    **/
   bool expanded;
-  
+
   /**
    * This enum specifies which direction the expand/collapse animation
    * is moving - if any.
@@ -186,6 +193,11 @@ private:
    * An internal timer used for the expand/collapse animation.
    **/
   boost::scoped_ptr<Glib::Timer> expand_timer;
+
+  /**
+   * True if this track is locked.
+   */
+  bool locked;
 
   //----- Header Widgets ------//
   
