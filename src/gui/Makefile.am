@@ -95,6 +95,8 @@ gtk_gui_la_SOURCES =								\
 	$(lumigui_srcdir)/panels/timeline-panel.hpp				\
 	$(lumigui_srcdir)/panels/viewer-panel.cpp				\
 	$(lumigui_srcdir)/panels/viewer-panel.hpp				\
+	$(lumigui_srcdir)/util/convert.cpp					\
+	$(lumigui_srcdir)/util/convert.hpp					\
 	$(lumigui_srcdir)/util/rectangle.cpp					\
 	$(lumigui_srcdir)/util/rectangle.hpp					\
 	$(lumigui_srcdir)/widgets/button-bar.cpp				\
@@ -104,6 +106,8 @@ gtk_gui_la_SOURCES =								\
 	$(lumigui_srcdir)/widgets/mini-button.hpp				\
 	$(lumigui_srcdir)/widgets/panel-bar.cpp					\
 	$(lumigui_srcdir)/widgets/panel-bar.hpp					\
+	$(lumigui_srcdir)/widgets/timecode-widget.cpp				\
+	$(lumigui_srcdir)/widgets/timecode-widget.hpp				\
 	$(lumigui_srcdir)/widgets/timeline-widget.cpp				\
 	$(lumigui_srcdir)/widgets/timeline-widget.hpp				\
 	$(lumigui_srcdir)/widgets/timeline/timeline-arrow-tool.cpp		\

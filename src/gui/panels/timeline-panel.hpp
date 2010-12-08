@@ -27,6 +27,7 @@
 #define TIMELINE_PANEL_HPP
 
 #include "panel.hpp"
+#include "../widgets/timecode-widget.hpp"
 #include "../widgets/timeline-widget.hpp"
 
 using namespace gui::widgets;
@@ -168,8 +169,7 @@ private:
     timelineStates;
   
   // Toolbar Widgets
-  Gtk::Label timeIndicator;
-  Gtk::Button timeIndicatorButton;
+  TimeCode timeCode;
   
   MiniButton previousButton;
   MiniButton rewindButton;

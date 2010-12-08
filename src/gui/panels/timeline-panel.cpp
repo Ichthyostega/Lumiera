@@ -49,8 +49,7 @@ const int TimelinePanel::ZoomToolSteps = 2; // 2 seems comfortable
 TimelinePanel::TimelinePanel(workspace::PanelManager &panel_manager,
     GdlDockItem *dock_item) :
   Panel(panel_manager, dock_item, get_title(), get_stock_id()),
-  timeIndicator(),
-  timeIndicatorButton(),
+  timeCode("sequence_clock", "timecode_widget", true),
   previousButton(Stock::MEDIA_PREVIOUS),
   rewindButton(Stock::MEDIA_REWIND),
   playPauseButton(Stock::MEDIA_PLAY),
@@ -82,11 +81,7 @@ TimelinePanel::TimelinePanel(workspace::PanelManager &panel_manager,
   panelBar.pack_start(sequenceChooser, PACK_SHRINK);
 
   // Setup the toolbar
-  timeIndicatorButton.add(timeIndicator);
-  timeIndicatorButton.set_relief(Gtk::RELIEF_NONE);
-  timeIndicatorButton.set_focus_on_click(false);
-  
-  toolbar.append(timeIndicatorButton);
+  toolbar.append(timeCode);
   
   toolbar.append(previousButton);
   toolbar.append(rewindButton);
@@ -114,7 +109,6 @@ TimelinePanel::TimelinePanel(workspace::PanelManager &panel_manager,
 
   // Setup tooltips
   sequenceChooser     .set_tooltip_text(_("Change sequence"));
-  timeIndicatorButton .set_tooltip_text(_("Go to time code"));
 
   previousButton  .set_tooltip_text(_("To beginning"));
   rewindButton    .set_tooltip_text(_("Rewind"));
@@ -374,7 +368,7 @@ TimelinePanel::set_tool(timeline::ToolType tool)
 void
 TimelinePanel::show_time(gavl_time_t time)
 {
-  timeIndicator.set_text(lumiera_tmpbuf_print_time(time));
+  // timeIndicator.set_text(lumiera_tmpbuf_print_time(time));
 }
 
 bool
