@@ -30,8 +30,8 @@ namespace mobject {
     using ::NOBUG_FLAG(memory);
     NOBUG_CPP_DEFINE_FLAG_PARENT(buildermem, memory);
   }
-
-
+  
+  
   /**
    * Main Operation of the Builder: 
    * create a render engine for a given part of the timeline
@@ -41,7 +41,7 @@ namespace mobject {
   {
     //////////////////////TODO
   }
-
-
-
+  
+  
+  
 } // namespace mobject

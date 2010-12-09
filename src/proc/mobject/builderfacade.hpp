@@ -30,8 +30,8 @@
 
 
 namespace mobject {
-
-
+  
+  
   /**
    * Provides unified access to the builder functionality.
    * While individual components of the builder subsystem may be called
@@ -44,12 +44,14 @@ namespace mobject {
       /**
        * Main Operation of the Builder:
        * create a render engine for a given part of the timeline
+       * @deprecated thats a placeholder! the real invocation is now
+       *             in the course of being worked out ////////////TODO 12/2010
        */
       engine::RenderEngine & buildEngine () ;
       // TODO: allocation, GC??????
     };
-
-
-
+  
+  
+  
 } // namespace mobject
 #endif

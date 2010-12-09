@@ -29,25 +29,27 @@
 
 
 
-namespace engine
-  {
-
+namespace engine {
+  
   class ExitNode;
-
+  
+  /**
+   * @todo likely to be reworked into the engine backbone  /////////////TODO WIP as of 12/2010
+   */
   class RenderGraph
     {
     protected:
       ExitNode * output;
-
+      
       /** begin of the timerange covered by this RenderGraph */
       lumiera::Time start;
-
+      
       /**end (exclusive) of the timerange  */
       lumiera::Time end;
-
+      
     };
-
-
-
+  
+  
+  
 } // namespace engine
 #endif
