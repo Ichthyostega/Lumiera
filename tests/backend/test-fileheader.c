@@ -56,7 +56,7 @@ TEST (create_nowrite)
 {
   lumiera_backend_init ();
   LumieraFile file = lumiera_file_new (",tmp-fileheader", LUMIERA_FILE_READONLY);
-  REQUIRE(file);
+  CHECK(file);
 
   LUMIERA_FILE_RDLOCK_SECTION (NOBUG_ON, file)
     {

@@ -112,14 +112,14 @@ namespace test  {
           bool
           start (lumiera::Option&, Subsys::SigTerm termination)
             {
-              REQUIRE (!(isUp_|started_|didRun_), "attempt to start %s twice!", cStr(*this));
+              CHECK (!(isUp_|started_|didRun_), "attempt to start %s twice!", cStr(*this));
               
               string startSpec (extractID ("start",spec_));
               CHECK (!isnil (startSpec));
               
               if ("true"==startSpec) //----simulate successful subsystem start
                 {
-                  REQUIRE (!started_);
+                  CHECK (!started_);
                    
                   Thread (id_, bind (&MockSys::run, this, termination))
                         .sync();     // run-status handshake
@@ -281,8 +281,8 @@ namespace test  {
             
             MockSys unit ("one", "start(true), run(true).");
             SubsystemRunner runner(dummyOpt);
-            REQUIRE (!unit.isRunning());
-            REQUIRE (!unit.didRun());
+            CHECK (!unit.isRunning());
+            CHECK (!unit.didRun());
             
             runner.maybeRun (unit);
             bool emergency = runner.wait();

@@ -210,7 +210,7 @@ namespace test    {
       void
       verify_cleanup (PTimeline aTimeline_in_session)
         {
-          REQUIRE (1 < aTimeline_in_session.use_count(), "test object should still be attached to session");
+          CHECK (1 < aTimeline_in_session.use_count(), "test object should still be attached to session");
           Session::current.reset();
           aTimeline_in_session->detach();              // should be a no-op and not cause any invalid access
         }

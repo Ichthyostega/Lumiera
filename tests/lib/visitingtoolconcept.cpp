@@ -175,7 +175,7 @@ namespace lumiera
         callTrampoline (TAR& obj, TOOL& tool)
           {
             // cast down to real implementation type
-            REQUIRE (INSTANCEOF (TOOLImpl, &tool));  
+            CHECK (INSTANCEOF (TOOLImpl, &tool));  
             TOOLImpl& toolObj = static_cast<TOOLImpl&> (tool);
             
             // trigger (compile time) overload resolution

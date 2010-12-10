@@ -176,7 +176,7 @@ namespace test{
       virtual void
       run (Arg)
         {
-          REQUIRE (ourVictim.checkAllEqual());
+          CHECK (ourVictim.checkAllEqual());
           {
             HavocThread threads[NUM_THREADS]   SIDEEFFECT;
           } 

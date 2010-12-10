@@ -63,7 +63,7 @@ namespace test{
         
        ~Probe()
           {
-            REQUIRE (siz == mySiz_, "using wrong type information for de-allocation");
+            CHECK (siz == mySiz_, "using wrong type information for de-allocation");
             for (uint i=0; i<siz; ++i)
               checksum -= myCrap_[i];
           }

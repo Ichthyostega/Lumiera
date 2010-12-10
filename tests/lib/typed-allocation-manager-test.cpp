@@ -86,7 +86,7 @@ namespace test{
       virtual void
       run (Arg) 
         {
-          REQUIRE (0 == checksum_);
+          CHECK (0 == checksum_);
           
           TypedAllocationManager allocator;
           
