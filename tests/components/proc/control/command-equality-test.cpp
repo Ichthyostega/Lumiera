@@ -119,9 +119,9 @@ namespace test    {
       virtual void
       run (Arg) 
         {
-          ASSERT (&oper_1 != &oper_2);
-          ASSERT (&capt_1 != &capt_2);
-          ASSERT (&undo_1 != &undo_2);
+          CHECK (&oper_1 != &oper_2);
+          CHECK (&capt_1 != &capt_2);
+          CHECK (&undo_1 != &undo_2);
           
           verifyMutationEquality();
           verifyMementoEquality();
@@ -144,23 +144,23 @@ namespace test    {
           Mutation mut1 (oFun_1);
           Mutation muti (oFun_1);
           Mutation mut2 (oFun_2);
-          ASSERT (mut1 == mut1);
-          ASSERT (mut1 == muti);
-          ASSERT (muti == mut1);
-          ASSERT (mut1 != mut2);
-          ASSERT (mut2 != mut1);
-          ASSERT (muti != mut2);
-          ASSERT (mut2 != muti);
+          CHECK (mut1 == mut1);
+          CHECK (mut1 == muti);
+          CHECK (muti == mut1);
+          CHECK (mut1 != mut2);
+          CHECK (mut2 != mut1);
+          CHECK (muti != mut2);
+          CHECK (mut2 != muti);
           
           Mutation umu (oFun_empty);    // empty operation function
-          ASSERT (mut1 != umu);
+          CHECK (mut1 != umu);
           
           Mutation mut_u0 (uFun_empty); // empty undo function
-          ASSERT (mut_u0 != umu);
-          ASSERT (mut_u0 != muti);
+          CHECK (mut_u0 != umu);
+          CHECK (mut_u0 != muti);
           
           Mutation mut_u1 (uFun_1); 
-          ASSERT (mut_u0 != mut_u1);    // function signatures differing
+          CHECK (mut_u0 != mut_u1);    // function signatures differing
         }
       
       
@@ -169,40 +169,40 @@ namespace test    {
         {
           ArgHolder a1 (tuple::make ('a'));
           ArgHolder a2 (tuple::make ('z'));
-          ASSERT (a1 == a1);
-          ASSERT (a1 != a2);
-          ASSERT (a2 != a1);
+          CHECK (a1 == a1);
+          CHECK (a1 != a2);
+          CHECK (a2 != a1);
           
           TypedArguments<ArgTuple> newArgs (tuple::make ('z'));
           a1.bindArguments(newArgs);
-          ASSERT (a1 == a2);
-          ASSERT (a2 == a1);
+          CHECK (a1 == a2);
+          CHECK (a2 == a1);
           
           typedef ArgumentHolder<Sig_oper,string> AHImpl;
           AHImpl abuff1;
           AHImpl abuff2;
-          ASSERT (abuff1 == abuff2);
+          CHECK (abuff1 == abuff2);
           abuff1.bindArguments(newArgs);
-          ASSERT (abuff1 != abuff2);
+          CHECK (abuff1 != abuff2);
           abuff2.bindArguments(newArgs);
-          ASSERT (abuff1 == abuff2);
+          CHECK (abuff1 == abuff2);
           UndoMutation umu1 (abuff1.tie (undo_1, capt_1));
-          ASSERT (abuff1 != abuff2);                       // abuff2 isn't tied yet, i.e. has no undo/capture function
+          CHECK (abuff1 != abuff2);                       // abuff2 isn't tied yet, i.e. has no undo/capture function
           UndoMutation umu2 (abuff2.tie (undo_1, capt_1));
-          ASSERT (abuff1 == abuff2);                       // same capture function, no memento state!
+          CHECK (abuff1 == abuff2);                       // same capture function, no memento state!
           
           umu1.captureState(a1);
-          ASSERT (abuff1 != abuff2);
+          CHECK (abuff1 != abuff2);
           umu2.captureState(a1);
-          ASSERT (abuff1 == abuff2); // same functions, same memento state
+          CHECK (abuff1 == abuff2); // same functions, same memento state
           
           check_ += "fake";          // manipulate the "state" to be captured
           umu2.captureState(a1);     // capture again...
-          ASSERT (abuff1 != abuff2); // captured memento differs!
+          CHECK (abuff1 != abuff2); // captured memento differs!
           
           UndoMutation umu3 (abuff2.tie (undo_1, capt_2));
           umu3.captureState(a1);
-          ASSERT (abuff1 != abuff2); // differing functions detected
+          CHECK (abuff1 != abuff2); // differing functions detected
         }
       
       
@@ -222,40 +222,40 @@ namespace test    {
           MemHolder m21 (uFun_2, cFun_empty);   // note: unbound capture function
           MemHolder m22 (uFun_2, cFun_2);
           
-          ASSERT (m11 == m11);
-          ASSERT (m12 == m12);
-          ASSERT (m21 == m21);
-          ASSERT (m22 == m22);
-          ASSERT (!(m11 != m11));
+          CHECK (m11 == m11);
+          CHECK (m12 == m12);
+          CHECK (m21 == m21);
+          CHECK (m22 == m22);
+          CHECK (!(m11 != m11));
           
-          ASSERT (m11 != m12);
-          ASSERT (m11 != m21);
-          ASSERT (m11 != m22);
-          ASSERT (m12 != m11);
-          ASSERT (m12 != m21);
-          ASSERT (m12 != m22);
-          ASSERT (m21 != m11);
-          ASSERT (m21 != m12);
-          ASSERT (m21 != m22);
-          ASSERT (m22 != m11);
-          ASSERT (m22 != m12);
-          ASSERT (m22 != m21);
+          CHECK (m11 != m12);
+          CHECK (m11 != m21);
+          CHECK (m11 != m22);
+          CHECK (m12 != m11);
+          CHECK (m12 != m21);
+          CHECK (m12 != m22);
+          CHECK (m21 != m11);
+          CHECK (m21 != m12);
+          CHECK (m21 != m22);
+          CHECK (m22 != m11);
+          CHECK (m22 != m12);
+          CHECK (m22 != m21);
           
           MemHolder m22x (m22); // clone copy
-          ASSERT (!m22x);
-          ASSERT (m22 == m22x); // same functions, no state --> equal
+          CHECK (!m22x);
+          CHECK (m22 == m22x); // same functions, no state --> equal
           
           m22x.tieCaptureFunc() ('x');   // produce a memento state
-          ASSERT (!isnil (m22x.getState()));
+          CHECK (!isnil (m22x.getState()));
           
-          ASSERT (m22 != m22x);
+          CHECK (m22 != m22x);
           m22.tieCaptureFunc() ('x'); // get same value into the memento within m22
-          ASSERT (m22 == m22x);
+          CHECK (m22 == m22x);
           
           // document shortcomings on UndoMutation comparisons
           UndoMutation umu11 (m11);
           UndoMutation umu12 (m11);    // note: due to cloning the embedded functor,
-          ASSERT (umu11 != umu12);     //       our hacked-in comparison operator fails
+          CHECK (umu11 != umu12);     //       our hacked-in comparison operator fails
         }
       
       
@@ -275,22 +275,22 @@ namespace test    {
           
           Command c1 = Command::get(COMMAND1);
           Command c2 = Command::get(COMMAND2);
-          ASSERT (c1 == c1);
-          ASSERT (c1 != c2);
-          ASSERT (c2 != c1);
+          CHECK (c1 == c1);
+          CHECK (c1 != c2);
+          CHECK (c2 != c1);
           
           Command cx = c1;
-          ASSERT (c1 == cx);
-          ASSERT (cx == c1);
-          ASSERT (!isSameObject (c1, c2));
+          CHECK (c1 == cx);
+          CHECK (cx == c1);
+          CHECK (!isSameObject (c1, c2));
           
           // verify equality matches behaviour
           string protocol1 = execCommand(c1);
           string protocolX = execCommand(cx);
           string protocol2 = execCommand(c2);
           
-          ASSERT (protocol1 == protocolX);
-          ASSERT (protocol1 != protocol2);
+          CHECK (protocol1 == protocolX);
+          CHECK (protocol1 != protocol2);
         }
       
       

@@ -162,7 +162,7 @@ namespace test  {
           
           ++counter;
           BuffTableChunk thisChunk (numbers, *pStorage);
-          ASSERT (consistencyCheck (thisChunk, numbers, lastLevel));
+          CHECK (consistencyCheck (thisChunk, numbers, lastLevel));
           
           uint nrBranches ( 1 + (rand() % WIDTH_MAX));
           while (nrBranches--)

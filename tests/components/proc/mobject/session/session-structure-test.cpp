@@ -64,7 +64,7 @@ namespace test    {
       run (Arg) 
         {
           Session::current.reset();
-          ASSERT (Session::current.isUp());
+          CHECK (Session::current.isUp());
           
           verify_defaultStructure();
         }
@@ -75,7 +75,7 @@ namespace test    {
         {
           
           PSess sess = Session::current;
-          ASSERT (sess->isValid());
+          CHECK (sess->isValid());
           
           UNIMPLEMENTED("the real standard structure of the session"); //////////////////////////TICKET #499
           
@@ -83,53 +83,53 @@ namespace test    {
           
 /////TODO the following is code from the old session mockup... try to rephrase it into the new (real) session API
 //        
-          ASSERT (0 <= sess->currEDL().size());                // TODO implement
-          ASSERT (0 <= sess->getFixture()->size());             // TODO implement
-          ASSERT (sess->currEDL().getTracks()->isValid());
+          CHECK (0 <= sess->currEDL().size());                // TODO implement
+          CHECK (0 <= sess->getFixture()->size());             // TODO implement
+          CHECK (sess->currEDL().getTracks()->isValid());
           
 //              PAsset track = sess->currEDL().getTracks()[0];    // TODO obsolete
 //              AssetManager& aMang = AssetManager::instance();
-//              ASSERT (track == aMang.getAsset (track->getID()));
+//              CHECK (track == aMang.getAsset (track->getID()));
           
 #endif //////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #546              
           UNIMPLEMENTED ("how to refer to tracks...");
           
-          ASSERT (0 < sess->timelines.size());
+          CHECK (0 < sess->timelines.size());
           PTimeline til = sess->timelines[0];
           
-          ASSERT (0 < sess->sequences.size());
+          CHECK (0 < sess->sequences.size());
           PSequence seq = sess->sequences[0];
           
 #if false //////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #546              
-          ASSERT (isSameObject (seq, til->getSequence()));
+          CHECK (isSameObject (seq, til->getSequence()));
           
           //verify default timeline
           Axis& axis = til->getAxis();
-          ASSERT (Time(0) == axis.origin());
-          ASSERT (Time(0) == til->length());                   ////////////////////////TICKET #177
+          CHECK (Time(0) == axis.origin());
+          CHECK (Time(0) == til->length());                   ////////////////////////TICKET #177
           
           //verify global pipes
           //TODO
           
           //verify default sequence
           RTrack rootTrack = seq->rootTrack();
-          ASSERT (rootTrack->isValid());
-          ASSERT (Time(0) == rootTrack->length());
-          ASSERT (0 == rootTrack->subTracks.size());
-          ASSERT (0 == rootTrack->clips.size());
+          CHECK (rootTrack->isValid());
+          CHECK (Time(0) == rootTrack->length());
+          CHECK (0 == rootTrack->subTracks.size());
+          CHECK (0 == rootTrack->clips.size());
           //TODO verify the output slots of the sequence
           
           //TODO now use the generic query API to discover the same structure.
-          ASSERT (til == *(sess->all<Timeline>()));
-          ASSERT (seq == *(sess->all<Sequence>()));
-          ASSERT (rootTrack == *(sess->all<Track>()));
-          ASSERT (! sess->all<Clip>());
+          CHECK (til == *(sess->all<Timeline>()));
+          CHECK (seq == *(sess->all<Sequence>()));
+          CHECK (rootTrack == *(sess->all<Track>()));
+          CHECK (! sess->all<Clip>());
           
           QueryFocus& focus = sess->focus();
-          ASSERT (rootTrack == focus.getObject());
+          CHECK (rootTrack == focus.getObject());
           focus.navigate (til);
-          ASSERT (til.getBinding() == focus.getObject());
-          ASSERT (rootTrack == *(focus.children()));
+          CHECK (til.getBinding() == focus.getObject());
+          CHECK (rootTrack == *(focus.children()));
 #endif //////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #546              
         }
     };

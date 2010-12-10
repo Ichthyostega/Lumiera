@@ -74,22 +74,22 @@ namespace asset
             
             Asset::Ident idi (mm1->ident);         // duplicate Ident record
             PM mm1X = asset::Media::create (idi); //  note: we actually don't call any ctor
-            ASSERT (mm1 == mm1X);                //         instead, we got mm1 back.
+            CHECK (mm1 == mm1X);                //         instead, we got mm1 back.
             
             PM mm2 = asset::Media::create (idi,"testfile2.mov");
             
-            ASSERT (mm1->getID() == mm2->getID()); // different object, same hash
+            CHECK (mm1->getID() == mm2->getID()); // different object, same hash
 
             AssetManager& aMang = AssetManager::instance();
-            ASSERT (aMang.getAsset (mm1->getID()) == mm2); // record of mm1 was replaced by mm2
-            ASSERT (aMang.getAsset (mm2->getID()) == mm2);
+            CHECK (aMang.getAsset (mm1->getID()) == mm2); // record of mm1 was replaced by mm2
+            CHECK (aMang.getAsset (mm2->getID()) == mm2);
             
-            ASSERT (aMang.known (mm1->getID()));
-            ASSERT (aMang.known (mm2->getID()));
-            ASSERT (mm1->ident.name == "testfile1");
-            ASSERT (mm2->ident.name == "testfile1");
-            ASSERT (mm1->getFilename() == "testfile1.mov");
-            ASSERT (mm2->getFilename() == "testfile2.mov");
+            CHECK (aMang.known (mm1->getID()));
+            CHECK (aMang.known (mm2->getID()));
+            CHECK (mm1->ident.name == "testfile1");
+            CHECK (mm2->ident.name == "testfile1");
+            CHECK (mm1->getFilename() == "testfile1.mov");
+            CHECK (mm2->getFilename() == "testfile2.mov");
             
             
             TRACE (asset_mem, "leaving test method scope");

@@ -99,7 +99,7 @@ namespace test    {
           
           MemHolder mementoHolder (undo_func,cap_func);
           
-          ASSERT (sizeof(MemHolder) <= sizeof(int)                   // storage for the memento
+          CHECK (sizeof(MemHolder) <= sizeof(int)                   // storage for the memento
                                      + 2 * sizeof(function<void()>)  // storage for the 2 undecorated functors
                                      + ALIGNMENT);
           
@@ -113,21 +113,21 @@ namespace test    {
           testVal = 0;
           bound_cap_func(rr);     // invoke state capturing 
           
-          ASSERT (rr == mementoHolder.getState());
+          CHECK (rr == mementoHolder.getState());
           
           testVal = 10;           // meanwhile "somehow" mutate the state
           bound_undo_func(0);     // invoking the undo() feeds back the memento
-          ASSERT (testVal == 10-rr);
+          CHECK (testVal == 10-rr);
           
           // this cycle can be repeated with different state values
           rr = (rand() %100);
           testVal = rr;
           bound_cap_func(5);      // capture new state
-          ASSERT (5+rr == mementoHolder.getState());
+          CHECK (5+rr == mementoHolder.getState());
           
           testVal = -20;
           bound_undo_func(3*rr);
-          ASSERT (testVal == -20 + 3*rr - (5+rr));
+          CHECK (testVal == -20 + 3*rr - (5+rr));
         }
       
       
@@ -144,34 +144,34 @@ namespace test    {
           MemHolder m21 (u2_fun, c1_fun);
           MemHolder m22 (u2_fun, c2_fun);
           
-          ASSERT (!m11 && !m12 && !m21 && !m22);
-          ASSERT ( (m11 == m11));
-          ASSERT (!(m11 != m11));
+          CHECK (!m11 && !m12 && !m21 && !m22);
+          CHECK ( (m11 == m11));
+          CHECK (!(m11 != m11));
           
-          ASSERT (m11 != m12);
-          ASSERT (m11 != m21);
-          ASSERT (m11 != m22);
-          ASSERT (m12 != m11);
-          ASSERT (m12 != m21);
-          ASSERT (m12 != m22);
-          ASSERT (m21 != m11);
-          ASSERT (m21 != m12);
-          ASSERT (m21 != m22);
-          ASSERT (m22 != m11);
-          ASSERT (m22 != m12);
-          ASSERT (m22 != m21);
+          CHECK (m11 != m12);
+          CHECK (m11 != m21);
+          CHECK (m11 != m22);
+          CHECK (m12 != m11);
+          CHECK (m12 != m21);
+          CHECK (m12 != m22);
+          CHECK (m21 != m11);
+          CHECK (m21 != m12);
+          CHECK (m21 != m22);
+          CHECK (m22 != m11);
+          CHECK (m22 != m12);
+          CHECK (m22 != m21);
          
           MemHolder m22x (m22); // clone copy
-          ASSERT (!m22x);
-          ASSERT (m22 == m22x); // same functions, no state --> equal
+          CHECK (!m22x);
+          CHECK (m22 == m22x); // same functions, no state --> equal
           
           testVal = 0;
           m22x.tieCaptureFunc() (1 + (rand() % 9));   // produce a random memento value != 0
-          ASSERT (0 < m22x.getState());
+          CHECK (0 < m22x.getState());
           
-          ASSERT (m22 != m22x);
+          CHECK (m22 != m22x);
           m22.tieCaptureFunc() (m22x.getState()); // get the same value into the memento within m22
-          ASSERT (m22 == m22x);
+          CHECK (m22 == m22x);
         }
     };
   

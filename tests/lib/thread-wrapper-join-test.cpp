@@ -126,7 +126,7 @@ namespace test {
                                 , bind (&ThreadWrapperJoin_test::theAction, this, DESTRUCTION_CODE)
                                 );
           
-          ASSERT (!thread2.join().isValid() ); // can check success without throwing
+          CHECK (!thread2.join().isValid() ); // can check success without throwing
         }
     };
   

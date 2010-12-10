@@ -101,13 +101,13 @@ namespace test    {
           Command ourCmd = Command::get("test.command1");
           
           // invoke the command
-          ASSERT (*obj == Time(5));
+          CHECK (*obj == Time(5));
           ourCmd();
-          ASSERT (*obj == Time(5) + Time(randVal));
+          CHECK (*obj == Time(5) + Time(randVal));
           
           // undo the effect of the command
           ourCmd.undo();
-          ASSERT (*obj == Time(5));
+          CHECK (*obj == Time(5));
         }
     };
   

@@ -70,7 +70,7 @@ namespace test    {
             { 
               Placement<Clip>& pC = getPlacement<Clip>();
               cout << "Clip on media : "<< str(pC->getMedia()) <<"\n";
-              ASSERT (pC->operator==(c));
+              CHECK (pC->operator==(c));
               log_ = string (pC);
             }
           void treat (AbstractMO&)
@@ -120,17 +120,17 @@ namespace test    {
               cout << "apply (tool, clip);\n";
               apply (tool, clip);
               INFO (test, "got Wrapper = %s", t1.log_.c_str());
-              ASSERT (t1.log_ == string(clip));
+              CHECK (t1.log_ == string(clip));
               
               cout << "apply (tool, test1);\n"; 
               apply (tool, test1);
               INFO (test, "got Wrapper = %s", t1.log_.c_str());
-              ASSERT (t1.log_ == string(test1));
+              CHECK (t1.log_ == string(test1));
               
               cout << "apply (tool, test2);\n"; 
               apply (tool, test2);
               INFO (test, "got Wrapper = %s", t1.log_.c_str());
-              ASSERT (t1.log_ == string(test2));
+              CHECK (t1.log_ == string(test2));
             } 
         };
       

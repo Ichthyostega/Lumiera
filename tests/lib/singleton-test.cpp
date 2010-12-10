@@ -120,7 +120,7 @@ namespace test{
           TargetObj& t1 = instance();
           TargetObj& t2 = instance();
           
-          ASSERT ( &t1 == &t2, "not a Singleton, got two different instances." );
+          CHECK ( &t1 == &t2, "not a Singleton, got two different instances." );
           
           cout << "calling a non-static method on the Singleton instance\n"
                << string (t1) << "\n";

@@ -150,13 +150,13 @@ namespace test {
           check_existence_quant (container);
           check_existence_quant (iterator);
           
-          ASSERT (int(NUM_ELMS) ==container[0]);
+          CHECK (int(NUM_ELMS) ==container[0]);
           
           check_ref_argument_bind (container);
-          ASSERT (int(NUM_ELMS) ==container[0]);
+          CHECK (int(NUM_ELMS) ==container[0]);
           
           check_ref_argument_bind (iterator);
-          ASSERT (60+int(NUM_ELMS) ==container[0]);
+          CHECK (60+int(NUM_ELMS) ==container[0]);
           // changes got propagated through the iterator
           
           check_wrapped_container_passing(container);
@@ -354,10 +354,10 @@ namespace test {
           
           for_each (coll, var(sum) += _1_ );
           
-          ASSERT (sum == (NUM_ELMS+1) * NUM_ELMS/2);
+          CHECK (sum == (NUM_ELMS+1) * NUM_ELMS/2);
           
-          ASSERT (!and_all  (coll, _1_ - 1 ));
-          ASSERT ( has_any  (coll, _1_ + 1 ));
+          CHECK (!and_all  (coll, _1_ - 1 ));
+          CHECK ( has_any  (coll, _1_ + 1 ));
         }
       
       
@@ -369,12 +369,12 @@ namespace test {
         {
           ANNOUNCE (check_existence_quant);
           
-          ASSERT ( and_all (coll, 0 < _1_ ));
-          ASSERT (!and_all (coll, 1 < _1_ ));
+          CHECK ( and_all (coll, 0 < _1_ ));
+          CHECK (!and_all (coll, 1 < _1_ ));
           
-          ASSERT ( has_any (coll, 0 < _1_ ));
-          ASSERT ( has_any (coll, _1_ >= NUM_ELMS ));
-          ASSERT (!has_any (coll, _1_ >  NUM_ELMS ));
+          CHECK ( has_any (coll, 0 < _1_ ));
+          CHECK ( has_any (coll, _1_ >= NUM_ELMS ));
+          CHECK (!has_any (coll, _1_ >  NUM_ELMS ));
         }
       
       
@@ -443,7 +443,7 @@ namespace test {
           
           SHOW_CONTAINER
           // indeed got modifications into the original container!
-          ASSERT (0 == counter);
+          CHECK (0 == counter);
           
           // passing anonymous temporary
           for_each (buildTestNumberz(NUM_ELMS), _1_ = var(counter)-- );
@@ -455,8 +455,8 @@ namespace test {
           
           // both didn't influence the original container
           SHOW_CONTAINER
-          ASSERT (-2*int(NUM_ELMS)   == counter);
-          ASSERT (bySmartPtr->back() == counter+1);
+          CHECK (-2*int(NUM_ELMS)   == counter);
+          CHECK (bySmartPtr->back() == counter+1);
           
           // passing by pointer is also possible
           const VecI * const passByConstPointer (&coll);

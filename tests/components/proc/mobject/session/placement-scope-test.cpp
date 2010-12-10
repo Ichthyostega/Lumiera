@@ -99,7 +99,7 @@ namespace test    {
           for (_Iter ii = contents_of_testSession(sess); ii; ++ii)
             {
               PlacementMO& elm = *ii;
-              ASSERT (elm.isValid());
+              CHECK (elm.isValid());
               Scope const& scope1 = Scope::containing(elm);
               std::cout << "Scope: " << string(scope1) << std::endl;
               std::cout << string(elm) << std::endl;
@@ -109,11 +109,11 @@ namespace test    {
               
               // verify this with the scope registered within the index...
               PlacementMO& scopeTop = sess->getScope(elm);
-              ASSERT (scope1 == scopeTop);
-              ASSERT (scope2 == scopeTop);
-              ASSERT (scope1 == scope2);
+              CHECK (scope1 == scopeTop);
+              CHECK (scope2 == scopeTop);
+              CHECK (scope1 == scope2);
               
-              ASSERT (!isSameObject (scope1,scope2));
+              CHECK (!isSameObject (scope1,scope2));
             }
         }
       
@@ -128,23 +128,23 @@ namespace test    {
           Scope scope2(aPlac);
           Scope nil;
           
-          ASSERT (scope1 == scope2); ASSERT (scope2 == scope1);
-          ASSERT (scope1 != nil);    ASSERT (nil != scope1);
-          ASSERT (scope2 != nil);    ASSERT (nil != scope2);
+          CHECK (scope1 == scope2); CHECK (scope2 == scope1);
+          CHECK (scope1 != nil);    CHECK (nil != scope1);
+          CHECK (scope2 != nil);    CHECK (nil != scope2);
           
-          ASSERT (aPlac == scope1);  ASSERT (scope1 == aPlac);
-          ASSERT (aPlac == scope2);  ASSERT (scope2 == aPlac);
-          ASSERT (aPlac != nil);     ASSERT (nil != aPlac);
+          CHECK (aPlac == scope1);  CHECK (scope1 == aPlac);
+          CHECK (aPlac == scope2);  CHECK (scope2 == aPlac);
+          CHECK (aPlac != nil);     CHECK (nil != aPlac);
           
           Scope par (scope1.getParent());
-          ASSERT (scope1 != par);    ASSERT (par != scope1);
-          ASSERT (scope2 != par);    ASSERT (par != scope2);
+          CHECK (scope1 != par);    CHECK (par != scope1);
+          CHECK (scope2 != par);    CHECK (par != scope2);
           
           PlacementMO& placm2 (scope2.getTop());
-          ASSERT (aPlac.getID() == placm2.getID());
+          CHECK (aPlac.getID() == placm2.getID());
           
           PlacementMO& parPlac (par.getTop());
-          ASSERT (aPlac.getID() != parPlac.getID());
+          CHECK (aPlac.getID() != parPlac.getID());
         }
       
       
@@ -163,8 +163,8 @@ namespace test    {
             {
               _Iter pathIter = pathToRoot(*elm);
               Scope const& enclosing = Scope::containing(*elm);
-              ASSERT (enclosing == Scope(*elm).getParent());
-              ASSERT (*pathIter == Scope(*elm));
+              CHECK (enclosing == Scope(*elm).getParent());
+              CHECK (*pathIter == Scope(*elm));
               
               for ( ; pathIter; ++pathIter)
                 {
@@ -175,7 +175,7 @@ namespace test    {
                       PlacementMO& top = sco.getTop();
                       PlacementMO& root = sess->getRoot();
                       
-                      ASSERT (isSameObject (top,root));
+                      CHECK (isSameObject (top,root));
                     }
                   else
                     {
@@ -183,8 +183,8 @@ namespace test    {
                       PlacementMO& top = sco.getTop();
                       Scope parentsScope = Scope::containing(top);
                       PlacementMO& topsTop = sess->getScope(top);   ///////////////////TODO impact of Binding a Sequence? see Ticket #311
-                      ASSERT (topsTop == parentsScope);
-                      ASSERT (isSameObject (topsTop, parentsScope.getTop()));
+                      CHECK (topsTop == parentsScope);
+                      CHECK (isSameObject (topsTop, parentsScope.getTop()));
                     }}}
         }
       

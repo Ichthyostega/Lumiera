@@ -82,33 +82,33 @@ namespace test{
       void
       checkAllocation()
         {
-          ASSERT (0==checksum);
+          CHECK (0==checksum);
           {
             HO holder;
-            ASSERT (!holder);
-            ASSERT (0==checksum);
+            CHECK (!holder);
+            CHECK (0==checksum);
             
             create_contained_object (holder);
-            ASSERT (holder);
-            ASSERT (false!=holder);
-            ASSERT (holder!=false);
+            CHECK (holder);
+            CHECK (false!=holder);
+            CHECK (holder!=false);
             
-            ASSERT (0!=checksum);
-            ASSERT ( &(*holder));
-            ASSERT (holder->add(2) == checksum+2);
+            CHECK (0!=checksum);
+            CHECK ( &(*holder));
+            CHECK (holder->add(2) == checksum+2);
             
             Dummy *rawP = holder.get();
-            ASSERT (rawP);
-            ASSERT (holder);
-            ASSERT (rawP == &(*holder));
-            ASSERT (rawP->add(-5) == holder->add(-5));
+            CHECK (rawP);
+            CHECK (holder);
+            CHECK (rawP == &(*holder));
+            CHECK (rawP->add(-5) == holder->add(-5));
             
             TRACE (test, "holder at %p", &holder);
             TRACE (test, "object at %p", holder.get() );
             TRACE (test, "size(object) = %u", sizeof(*holder));
             TRACE (test, "size(holder) = %u", sizeof(holder));
           }
-          ASSERT (0==checksum);
+          CHECK (0==checksum);
         }
       
       
@@ -116,7 +116,7 @@ namespace test{
       void
       checkErrorHandling()
         {
-          ASSERT (0==checksum);
+          CHECK (0==checksum);
           {
             HO holder;
             
@@ -128,15 +128,15 @@ namespace test{
               }
             catch (int val)
               {
-                ASSERT (0!=checksum);
+                CHECK (0!=checksum);
                 checksum -= val;
-                ASSERT (0==checksum);
+                CHECK (0==checksum);
               }
-            ASSERT (!holder); /* because the exception happens in ctor
+            CHECK (!holder); /* because the exception happens in ctor
                                  object doesn't count as "created" */
             throw_in_ctor = false;
           }
-          ASSERT (0==checksum);
+          CHECK (0==checksum);
         }
       
       
@@ -144,7 +144,7 @@ namespace test{
       void
       checkCopyProtocol()
         {
-          ASSERT (0==checksum);
+          CHECK (0==checksum);
           {
             HO holder;
             HO holder2 (holder);
@@ -152,9 +152,9 @@ namespace test{
             // copy and assignment of empty holders is tolerated
             
             // but after enclosing an object it will be copy protected...
-            ASSERT (!holder);
+            CHECK (!holder);
             create_contained_object (holder);
-            ASSERT (holder);
+            CHECK (holder);
             long currSum = checksum;
             void* adr = holder.get();
             try
@@ -164,10 +164,10 @@ namespace test{
               }
             catch (lumiera::error::Logic&)
               {
-                ASSERT (holder);
-                ASSERT (!holder2);
-                ASSERT (holder.get()==adr);
-                ASSERT (checksum==currSum);
+                CHECK (holder);
+                CHECK (!holder2);
+                CHECK (holder.get()==adr);
+                CHECK (checksum==currSum);
               }
             
             try
@@ -177,15 +177,15 @@ namespace test{
               }
             catch (lumiera::error::Logic&)
               {
-                ASSERT (holder);
-                ASSERT (!holder2);
-                ASSERT (holder.get()==adr);
-                ASSERT (checksum==currSum);
+                CHECK (holder);
+                CHECK (!holder2);
+                CHECK (holder.get()==adr);
+                CHECK (checksum==currSum);
               }
             
             create_contained_object (holder2);
-            ASSERT (holder2);
-            ASSERT (checksum != currSum);
+            CHECK (holder2);
+            CHECK (checksum != currSum);
             currSum = checksum;
             try
               {
@@ -194,10 +194,10 @@ namespace test{
               }
             catch (lumiera::error::Logic&)
               {
-                ASSERT (holder);
-                ASSERT (holder2);
-                ASSERT (holder.get()==adr);
-                ASSERT (checksum==currSum);
+                CHECK (holder);
+                CHECK (holder2);
+                CHECK (holder.get()==adr);
+                CHECK (checksum==currSum);
               }
             
             try
@@ -207,12 +207,12 @@ namespace test{
               }
             catch (lumiera::error::Logic&)
               {
-                ASSERT (holder);
-                ASSERT (holder2);
-                ASSERT (checksum==currSum);
+                CHECK (holder);
+                CHECK (holder2);
+                CHECK (checksum==currSum);
               }
           }
-          ASSERT (0==checksum);
+          CHECK (0==checksum);
         }
       
       
@@ -225,44 +225,44 @@ namespace test{
         {
           typedef std::map<int,HO> MapHO;
           
-          ASSERT (0==checksum);
+          CHECK (0==checksum);
           {
             MapHO maph;
-            ASSERT (isnil (maph));
+            CHECK (isnil (maph));
             
             for (uint i=0; i<100; ++i)
               {
                 HO & contained = maph[i];
-                ASSERT (!contained);
+                CHECK (!contained);
               }                      // 100 holder objects created by sideeffect
                                     
-            ASSERT (0==checksum);  // ..... without creating any contained object!
-            ASSERT (!isnil (maph));
-            ASSERT (100==maph.size());
+            CHECK (0==checksum);  // ..... without creating any contained object!
+            CHECK (!isnil (maph));
+            CHECK (100==maph.size());
             
             for (uint i=0; i<100; ++i)
               {
                 create_contained_object (maph[i]);
-                ASSERT (maph[i]);
-                ASSERT (0 < maph[i]->add(12));
+                CHECK (maph[i]);
+                CHECK (0 < maph[i]->add(12));
               }
-            ASSERT (100==maph.size());
-            ASSERT (0!=checksum);
+            CHECK (100==maph.size());
+            CHECK (0!=checksum);
             
             
             long value55 = maph[55]->add(0); 
             long currSum = checksum;
             
-            ASSERT (1 == maph.erase(55));
-            ASSERT (checksum == currSum - value55); // proves object#55's dtor has been invoked
-            ASSERT (maph.size() == 99);
+            CHECK (1 == maph.erase(55));
+            CHECK (checksum == currSum - value55); // proves object#55's dtor has been invoked
+            CHECK (maph.size() == 99);
             
             maph[55];                            // create new empty holder by sideeffect...
-            ASSERT (&maph[55]);
-            ASSERT (!maph[55]);
-            ASSERT (maph.size() == 100);
+            CHECK (&maph[55]);
+            CHECK (!maph[55]);
+            CHECK (maph.size() == 100);
           }
-          ASSERT (0==checksum);
+          CHECK (0==checksum);
         }
       
       

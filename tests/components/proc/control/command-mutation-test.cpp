@@ -104,7 +104,7 @@ namespace test    {
           Mutation functor (funky);
           
           MissingArguments<SIG_fun> nullClosure;
-          ASSERT (!nullClosure);
+          CHECK (!nullClosure);
           cout << "empty placeholder closure: " << nullClosure << endl;
           VERIFY_ERROR (UNBOUND_ARGUMENTS, functor(nullClosure) );
           
@@ -113,15 +113,15 @@ namespace test    {
           Closure<void(int)> close_over (param);
           
           CmdClosure& closure (close_over);
-          ASSERT (closure);
+          CHECK (closure);
           
           cout << "param values: " << closure << endl;
           
           testVal = 0;
           functor(closure);
-          ASSERT (testVal == 23);
+          CHECK (testVal == 23);
           functor(closure);
-          ASSERT (testVal == 2*23);
+          CHECK (testVal == 2*23);
         }
       
       
@@ -150,7 +150,7 @@ namespace test    {
           
           MemHolder mementoHolder (undo_func,cap_func);
           UndoMutation undoFunctor (mementoHolder);
-          ASSERT (!mementoHolder);
+          CHECK (!mementoHolder);
           
           MissingArguments<void(void)> nullClosure;
           VERIFY_ERROR (UNBOUND_ARGUMENTS, undoFunctor(nullClosure) );
@@ -159,29 +159,29 @@ namespace test    {
           Tuple<Types<> > param;
           Closure<void()> clo (param);
           
-          ASSERT (!mementoHolder);
+          CHECK (!mementoHolder);
           VERIFY_ERROR (MISSING_MEMENTO, undoFunctor (clo) );
           VERIFY_ERROR (MISSING_MEMENTO, mementoHolder.getState() );
           
           testVal = 11;
           undoFunctor.captureState(clo);
-          ASSERT (mementoHolder);
-          ASSERT (testVal == 11);
+          CHECK (mementoHolder);
+          CHECK (testVal == 11);
           
           int mem = mementoHolder.getState();
           cout << "saved state: " << mem << endl;
           
           undoFunctor(clo);
-          ASSERT (testVal == 11 + 11);
+          CHECK (testVal == 11 + 11);
           undoFunctor(clo);
-          ASSERT (testVal == 11 + 11 + 11);
+          CHECK (testVal == 11 + 11 + 11);
           undoFunctor.captureState(clo);
-          ASSERT (33 == mementoHolder.getState());
+          CHECK (33 == mementoHolder.getState());
           undoFunctor(clo);
-          ASSERT (testVal == 33 + 33);
+          CHECK (testVal == 33 + 33);
           testVal = 9;
           undoFunctor(clo);
-          ASSERT (testVal == 42);
+          CHECK (testVal == 42);
         }
       
       
@@ -201,11 +201,11 @@ namespace test    {
           int rr (rand() % 100);
           testVal = rr;
           bound_cap_func();       // invoke state capturing 
-          ASSERT (rr == mementoHolder.getState());
+          CHECK (rr == mementoHolder.getState());
           
           testVal = 10;        // meanwhile "somehow" mutate the state
           bound_undo_func();  // invoking the undo() feeds back the memento
-          ASSERT (testVal == 10+rr);
+          CHECK (testVal == 10+rr);
         }
     };
   

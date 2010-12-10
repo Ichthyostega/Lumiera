@@ -58,12 +58,12 @@ namespace test   {
       virtual void 
       run (Arg)
         {
-          ASSERT (basicInit, "the basic-init callback hasn't been invoked automatically");
-          ASSERT (1 == basicInit, "the basic-init callback has been invoked more than once");
+          CHECK (basicInit, "the basic-init callback hasn't been invoked automatically");
+          CHECK (1 == basicInit, "the basic-init callback has been invoked more than once");
           
-          ASSERT (!customCallback);
+          CHECK (!customCallback);
           LifecycleHook::trigger  (MY_DEADLY_EVENT);
-          ASSERT ( 1 == customCallback);
+          CHECK ( 1 == customCallback);
         }
       
     };

@@ -321,26 +321,26 @@ namespace test{
       simpleUsageTest ()
         {
           TypedCounter myCounter;
-          ASSERT (isnil (myCounter));
-          ASSERT (0==myCounter.size());
+          CHECK (isnil (myCounter));
+          CHECK (0==myCounter.size());
           
-          ASSERT (0 == myCounter.get<short>());
-          ASSERT (1 == myCounter.size());
+          CHECK (0 == myCounter.get<short>());
+          CHECK (1 == myCounter.size());
           
-          ASSERT (0 == myCounter.get<long>());
-          ASSERT (2 == myCounter.size());
+          CHECK (0 == myCounter.get<long>());
+          CHECK (2 == myCounter.size());
           
-          ASSERT (-1 == myCounter.dec<short>());
-          ASSERT (-2 == myCounter.dec<short>());
-          ASSERT (+1 == myCounter.inc<long>());
+          CHECK (-1 == myCounter.dec<short>());
+          CHECK (-2 == myCounter.dec<short>());
+          CHECK (+1 == myCounter.inc<long>());
           
-          ASSERT (-2 == myCounter.get<short>());
-          ASSERT (+1 == myCounter.get<long>());
+          CHECK (-2 == myCounter.get<short>());
+          CHECK (+1 == myCounter.get<long>());
           
           
-          ASSERT (1 == TypedContext<TypedCounter>::ID<short>::get());
-          ASSERT (2 == TypedContext<TypedCounter>::ID<long>::get());
-          ASSERT (2 == myCounter.size());
+          CHECK (1 == TypedContext<TypedCounter>::ID<short>::get());
+          CHECK (2 == TypedContext<TypedCounter>::ID<long>::get());
+          CHECK (2 == myCounter.size());
         }
       
       
@@ -360,7 +360,7 @@ namespace test{
           testFamilies.clear(); // blocks until all threads have terminated
           
           for_each (targetCollection, accountInternal);
-          ASSERT (sum_TypedCounter_ == sum_internal_);
+          CHECK (sum_TypedCounter_ == sum_internal_);
         }
     };
   

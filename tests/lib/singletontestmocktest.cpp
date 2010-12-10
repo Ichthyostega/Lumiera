@@ -143,7 +143,7 @@ namespace test{
           TestSingletonO* sing = &instance();
           sing->doIt();
           sing->doIt();
-          ASSERT (sing->getCnt() == 2);
+          CHECK (sing->getCnt() == 2);
           
           instance.injectSubclass (new Mock_1);
           sing = &instance();
@@ -152,18 +152,18 @@ namespace test{
           sing->doIt();
           sing->doIt();
           sing->doIt();
-          ASSERT (sing->getCnt() == 5);
+          CHECK (sing->getCnt() == 5);
           
           instance.injectSubclass (new Mock_2);
           sing = &instance();
           sing->doIt();
-          ASSERT (sing->getCnt() == 1);
+          CHECK (sing->getCnt() == 1);
           
           instance.injectSubclass (0); // un-shadowing original instance
           sing = &instance();
-          ASSERT (sing->getCnt() == 2);
+          CHECK (sing->getCnt() == 2);
           sing->doIt();
-          ASSERT (sing->getCnt() == 3);
+          CHECK (sing->getCnt() == 3);
         }
       
       
@@ -198,12 +198,12 @@ namespace test{
           TestSingletonO* sing = &instance();
           sing->doIt();
           sing->doIt();
-          ASSERT (sing->getCnt() == 2);
+          CHECK (sing->getCnt() == 2);
           
           instance.injectSubclass (0);
           sing = &instance();
           sing->doIt();
-          ASSERT (sing->getCnt() == 1);
+          CHECK (sing->getCnt() == 1);
         }
     };
   

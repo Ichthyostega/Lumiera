@@ -167,8 +167,8 @@ namespace test {
               // should denote the same type
               Flags1::Flags flags1 = Flags2::Tuple();
               Flags2::Tuple flags2 = flags1;
-              ASSERT (1==sizeof(flags1));   // pure marker-type without content
-              ASSERT (1==sizeof(flags2));
+              CHECK (1==sizeof(flags1));   // pure marker-type without content
+              CHECK (1==sizeof(flags2));
               
               typedef DefineConfigByFlags<Node<Flag<ONE>,NullType> >::Config SimpleConfig_defined_by_Typelist;
               DISPLAY (SimpleConfig_defined_by_Typelist);

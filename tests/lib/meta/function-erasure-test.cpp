@@ -98,12 +98,12 @@ namespace test {
           check_Comparisons (Efp(testFunc),   Efp(returnIt));
           check_Comparisons (Evoid(testFunc), Evoid(returnIt));
           
-          ASSERT ( detect_Clone (Efun(testFunc)));
-          ASSERT (!detect_Clone (Efun(bindFunc)));  //note equality not detected when cloning a bind term
-          ASSERT (!detect_Clone (Efun(pAplFunc)));  //similarly
-          ASSERT (!detect_Clone (Efun(membFunc)));  //analogous for bound member function
-          ASSERT ( detect_Clone (Efp(testFunc) ));
-          ASSERT ( detect_Clone (Evoid(testFunc)));
+          CHECK ( detect_Clone (Efun(testFunc)));
+          CHECK (!detect_Clone (Efun(bindFunc)));  //note equality not detected when cloning a bind term
+          CHECK (!detect_Clone (Efun(pAplFunc)));  //similarly
+          CHECK (!detect_Clone (Efun(membFunc)));  //analogous for bound member function
+          CHECK ( detect_Clone (Efp(testFunc) ));
+          CHECK ( detect_Clone (Evoid(testFunc)));
           
           detect_unboundFunctor(Efun(testFunc), Efun(getterFunc), Efun(membFunc));
           detect_unboundFunctor(Efp(testFunc),Efp(&testFunc), Efp(returnIt));
@@ -127,22 +127,22 @@ namespace test {
           
           _sum_ = 0;
           f1.getFun<Sig1>() (-11,'M');                // invoke stored tr1::function...
-          ASSERT (_sum_ == 'M'-11);
+          CHECK (_sum_ == 'M'-11);
           
           _sum_ = 0;
           f2.getFun<Sig1>() (-22,'M');
-          ASSERT (_sum_ == 'M'-22);
+          CHECK (_sum_ == 'M'-22);
           
           _sum_ = 0;
           f3.getFun<Sig2>() (-33);
-          ASSERT (_sum_ == 'x'-33);
+          CHECK (_sum_ == 'x'-33);
           
           _sum_ = 0;
           f4.getFun<Sig3>() ('U');
-          ASSERT (_sum_ == 'u');
+          CHECK (_sum_ == 'u');
           
-          ASSERT ( 'u' == f5.getFun<Sig4>() () );
-          ASSERT (INSTANCEOF (function<Sig4>, &f5.getFun<Sig4>()));
+          CHECK ( 'u' == f5.getFun<Sig4>() () );
+          CHECK (INSTANCEOF (function<Sig4>, &f5.getFun<Sig4>()));
           
           
 #if false ///////////////////////////////////////////////////////////////////////////////////////////////TICKET #537 : restore throwing ASSERT
@@ -181,15 +181,15 @@ namespace test {
           
           _sum_ = 0;
           (*fun1) (10, 'a');                          // invoke retrieved function pointer
-          ASSERT (_sum_ == 10+'a');
+          CHECK (_sum_ == 10+'a');
           
           (*fun2) (20, 'b');
-          ASSERT (_sum_ == 10+'a'+20+'b');
+          CHECK (_sum_ == 10+'a'+20+'b');
           
           fun2r (30, 'c');
-          ASSERT (_sum_ == 10+'a'+20+'b'+30+'c');
+          CHECK (_sum_ == 10+'a'+20+'b'+30+'c');
           
-          ASSERT (_sum_ == (f3.getFun<int(void)>()) () );
+          CHECK (_sum_ == (f3.getFun<int(void)>()) () );
           
 #if false ////////////////////////////////////////////////////////TODO: restore throwing ASSERT
           VERIFY_ERROR (ASSERTION, f1.getFun<int(int)>() );
@@ -210,18 +210,18 @@ namespace test {
           
           _sum_ = 0;
           (*fun1) (10, 'a');
-          ASSERT (_sum_ == 10+'a');
+          CHECK (_sum_ == 10+'a');
           
           (*fun2) (20, 'b');
-          ASSERT (_sum_ == 10+'a'+20+'b');
+          CHECK (_sum_ == 10+'a'+20+'b');
           
           fun2r (30, 'c');
-          ASSERT (_sum_ == 10+'a'+20+'b'+30+'c');
+          CHECK (_sum_ == 10+'a'+20+'b'+30+'c');
           
-          ASSERT (_sum_ == (f3.getFun<int(void)>()) () );
+          CHECK (_sum_ == (f3.getFun<int(void)>()) () );
           
           FP bad_fun = &f3.getFun<void(int,char)>();
-          ASSERT ((void*)bad_fun == &returnIt);   // got wrong function!
+          CHECK ((void*)bad_fun == &returnIt);   // got wrong function!
           
         //(*bad_fun) (11, 'x');  // The compiler would accept this line!
         }                       //  likely to result in heap corruption or SEGV
@@ -231,11 +231,11 @@ namespace test {
       void
       check_Comparisons (HOL h1, HOL h2)
         {
-          ASSERT (h1 == h1); ASSERT (!(h1 != h1));
-          ASSERT (h2 == h2); ASSERT (!(h2 != h2));
+          CHECK (h1 == h1); CHECK (!(h1 != h1));
+          CHECK (h2 == h2); CHECK (!(h2 != h2));
           
-          ASSERT (h1 != h2);
-          ASSERT (h2 != h1);
+          CHECK (h1 != h2);
+          CHECK (h2 != h1);
         }
       
       
@@ -257,11 +257,11 @@ namespace test {
           typedef typename BuildEmptyFunctor<HOL>::Type NoFunc;
           NoFunc noFunction = NoFunc();
           HOL emptyHolder (noFunction);
-          ASSERT (!emptyHolder);
+          CHECK (!emptyHolder);
           
-          ASSERT ( h1 );
-          ASSERT ( h2 );
-          ASSERT ( h3 );
+          CHECK ( h1 );
+          CHECK ( h2 );
+          CHECK ( h3 );
         }
       
       

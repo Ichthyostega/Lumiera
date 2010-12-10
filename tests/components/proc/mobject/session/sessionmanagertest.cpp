@@ -59,7 +59,7 @@ namespace test    {
           string serialized;
           saveSession (serialized);
           loadSession (serialized);
-          ASSERT (checkTestsession1());
+          CHECK (checkTestsession1());
         } 
       
       
@@ -68,7 +68,7 @@ namespace test    {
       getCurrentSession ()
         {
           PSess sess = Session::current;
-          ASSERT (sess->isValid());
+          CHECK (sess->isValid());
         }
       
       

@@ -189,17 +189,17 @@ namespace test{
           IntIter isi (eachEntry (rawList.begin(), rawList.end()));
           StrIter cii (IterSource<CStr>::build(dedicatedSource));
           
-          ASSERT (!isnil (iii));
-          ASSERT (!isnil (isi));
-          ASSERT (!isnil (cii));
+          CHECK (!isnil (iii));
+          CHECK (!isnil (isi));
+          CHECK (!isnil (cii));
           
           pullOut (iii);
           pullOut (isi);
           pullOut (cii);
           
-          ASSERT (!iii);
-          ASSERT (!isi);
-          ASSERT (!cii);
+          CHECK (!iii);
+          CHECK (!isi);
+          CHECK (!cii);
         }
       
       
@@ -225,11 +225,11 @@ namespace test{
           StringIter sIter = eachMapKey (testMap);
           TimeIter   tIter = eachMapVal (testMap);
           
-          ASSERT (sIter && tIter);
+          CHECK (sIter && tIter);
           pullOut (sIter);
           pullOut (tIter);
           
-          ASSERT (!sIter && !tIter);
+          CHECK (!sIter && !tIter);
           
           
           // The each-value-for-given-key-Iterator can be used for a map or multimap.
@@ -239,16 +239,16 @@ namespace test{
           TimeIter correspondingVal = eachMapVal (testMap);
           ++justSomeKey;
           ++correspondingVal;
-          ASSERT (justSomeKey);
+          CHECK (justSomeKey);
           
           TimeIter value4key = eachValForKey (testMap, "nonexistent key");
-          ASSERT (!value4key);
+          CHECK (!value4key);
           
           value4key = eachValForKey (testMap, *justSomeKey);
-          ASSERT (value4key);
-          ASSERT (*value4key == *correspondingVal);
+          CHECK (value4key);
+          CHECK (*value4key == *correspondingVal);
           ++value4key;
-          ASSERT (!value4key);
+          CHECK (!value4key);
         }
       
       
@@ -263,23 +263,23 @@ namespace test{
               do testMap.insert (make_pair (i,n));
               while (--n);
             }
-          ASSERT (NUM_ELMS < testMap.size(), "no repetition in test data??");
+          CHECK (NUM_ELMS < testMap.size(), "no repetition in test data??");
           
           IntIter keys = eachDistinctKey (testMap);
           
           cout << "distinct_keys";
-          ASSERT (keys);
+          CHECK (keys);
           pullOut (keys);
-          ASSERT (!keys);
+          CHECK (!keys);
           
           cout << "values_4_key";
           IntIter vals = eachValForKey (testMap, NUM_ELMS); // non-existent key
-          ASSERT (!vals);
+          CHECK (!vals);
           
           vals = eachValForKey (testMap, 0);
-          ASSERT (vals);
+          CHECK (vals);
           pullOut (vals); // should produce anything between 1 and 100 entries
-          ASSERT (!vals);
+          CHECK (!vals);
           
         }
     };

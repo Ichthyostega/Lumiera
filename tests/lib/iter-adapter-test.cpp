@@ -211,15 +211,15 @@ namespace test{
           typedef RangeIter<I> Range;
           
           Range range (iVec.begin(), iVec.end());
-          ASSERT (!isnil (range) || !NUM_ELMS);
+          CHECK (!isnil (range) || !NUM_ELMS);
           
           // now for example the client could....
           while ( range )
             cout << "::" << *range++;
           
           cout << endl;
-          ASSERT (isnil (range));
-          ASSERT (range == Range());
+          CHECK (isnil (range));
+          CHECK (range == Range());
         }
       
       
@@ -263,11 +263,11 @@ namespace test{
                iter; ++iter, ++i
               )
             {
-              ASSERT (iter);
-              ASSERT (iter != elms.end());
-              ASSERT (**iter == i);
+              CHECK (iter);
+              CHECK (iter != elms.end());
+              CHECK (**iter == i);
               --(**iter);
-              ASSERT (**iter == i-1);
+              CHECK (**iter == i-1);
             }
           
           i = 0;
@@ -275,9 +275,9 @@ namespace test{
                iter; ++iter, ++i
               )
             {
-              ASSERT (iter);
-              ASSERT (iter != elms.end());
-              ASSERT (**iter == i-1);
+              CHECK (iter);
+              CHECK (iter != elms.end());
+              CHECK (**iter == i-1);
               
               // note: the previous run indeed modified
               // the element within the container.
@@ -290,10 +290,10 @@ namespace test{
                iter; ++iter, ++i
               )
             {
-              ASSERT (iter);
-              ASSERT ((*iter) == i-1);
+              CHECK (iter);
+              CHECK ((*iter) == i-1);
               ++(*iter);
-              ASSERT ((*iter) == i);
+              CHECK ((*iter) == i);
             }
           
           i = 0;
@@ -301,8 +301,8 @@ namespace test{
                iter; ++iter, ++i
               )
             {
-              ASSERT (iter);
-              ASSERT ((*iter) == i);
+              CHECK (iter);
+              CHECK ((*iter) == i);
               
              // *iter = i+1;   ///////////TODO this should be const, but it isn't
             }
@@ -316,31 +316,31 @@ namespace test{
         {
           TestContainer::ref_iterator rI (elms.begin_ref());
           
-          ASSERT (0 == *rI );
-          ASSERT (0 == *rI++);
-          ASSERT (1 == *rI  );
-          ASSERT (2 == *++rI);
+          CHECK (0 == *rI );
+          CHECK (0 == *rI++);
+          CHECK (1 == *rI  );
+          CHECK (2 == *++rI);
           
           TestContainer const& const_elms (elms);
           TestContainer::const_ref_iter rI2 (const_elms.begin_ref());
           
-          ASSERT (rI2 != rI);
-          ASSERT (rI2 == elms.begin_ref());
-          ASSERT (rI2 == const_elms.begin_ref());
+          CHECK (rI2 != rI);
+          CHECK (rI2 == elms.begin_ref());
+          CHECK (rI2 == const_elms.begin_ref());
           
           ++++rI2;
           
-          ASSERT (rI2 == rI);
-          ASSERT (rI2 != ++rI);
-          ASSERT (!isnil (rI2));
+          CHECK (rI2 == rI);
+          CHECK (rI2 != ++rI);
+          CHECK (!isnil (rI2));
           
-          ASSERT (TestContainer::iterator() == elms.end());
-          ASSERT (!(TestContainer::iterator()));
-          ASSERT (!(elms.end()));
-          ASSERT (isnil (elms.end()));
+          CHECK (TestContainer::iterator() == elms.end());
+          CHECK (!(TestContainer::iterator()));
+          CHECK (!(elms.end()));
+          CHECK (isnil (elms.end()));
           
-          ASSERT (elms.begin());
-          ASSERT (!isnil (elms.begin()));
+          CHECK (elms.begin());
+          CHECK (!isnil (elms.begin()));
         }
       
       

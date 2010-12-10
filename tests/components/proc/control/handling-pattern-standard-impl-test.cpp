@@ -108,13 +108,13 @@ namespace test    {
       run (Arg) 
         {
           CommandRegistry& registry = CommandRegistry::instance();
-          ASSERT (&registry);
+          CHECK (&registry);
           
           cnt_inst = registry.instance_count();
           
           UNIMPLEMENTED ("unit test to cover the standard command handling patterns");
           
-          ASSERT (cnt_inst == registry.instance_count());
+          CHECK (cnt_inst == registry.instance_count());
         }
     };
   

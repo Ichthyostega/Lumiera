@@ -79,24 +79,24 @@ namespace test    {
           
           PMObj  pClip = asset::Media::create("test-1", asset::VIDEO)->createClip();
           
-          ASSERT (INSTANCEOF (Placement<MObject>, &pSub1));
-          ASSERT (INSTANCEOF (Placement<MObject>, &pSub2));
-          ASSERT (INSTANCEOF (Placement<MObject>, &pSub3));
-          ASSERT (INSTANCEOF (Placement<MObject>, &pSubM));
+          CHECK (INSTANCEOF (Placement<MObject>, &pSub1));
+          CHECK (INSTANCEOF (Placement<MObject>, &pSub2));
+          CHECK (INSTANCEOF (Placement<MObject>, &pSub3));
+          CHECK (INSTANCEOF (Placement<MObject>, &pSubM));
           
-          ASSERT (INSTANCEOF (Placement<DummyMO>, &pSub1));
-          ASSERT (INSTANCEOF (Placement<DummyMO>, &pSub2));
-          ASSERT (INSTANCEOF (Placement<DummyMO>, &pSub3));
+          CHECK (INSTANCEOF (Placement<DummyMO>, &pSub1));
+          CHECK (INSTANCEOF (Placement<DummyMO>, &pSub2));
+          CHECK (INSTANCEOF (Placement<DummyMO>, &pSub3));
           
-          ASSERT (INSTANCEOF (TestPlacement<DummyMO>, &pSub1));
-          ASSERT (INSTANCEOF (TestPlacement<DummyMO>, &pSub2));
-          ASSERT (INSTANCEOF (TestPlacement<DummyMO>, &pSub3));
+          CHECK (INSTANCEOF (TestPlacement<DummyMO>, &pSub1));
+          CHECK (INSTANCEOF (TestPlacement<DummyMO>, &pSub2));
+          CHECK (INSTANCEOF (TestPlacement<DummyMO>, &pSub3));
           
-          ASSERT ( INSTANCEOF (TestPlacement<TestSubMO2>,  &pSub3));
+          CHECK ( INSTANCEOF (TestPlacement<TestSubMO2>,  &pSub3));
           
           // the following won't succeed...
-//        ASSERT (INSTANCEOF (TestPlacement<TestSubMO21>, &pSub2)); // parent not instance of subclass
-//        ASSERT (INSTANCEOF (TestPlacement<TestSubMO2>,  &pSub1)); // separate branch in the hierarchy
+//        CHECK (INSTANCEOF (TestPlacement<TestSubMO21>, &pSub2)); // parent not instance of subclass
+//        CHECK (INSTANCEOF (TestPlacement<TestSubMO2>,  &pSub1)); // separate branch in the hierarchy
           
           cout << showSizeof(pSub1) << endl;
           cout << showSizeof(pSub2) << endl;
@@ -104,8 +104,8 @@ namespace test    {
           cout << showSizeof(pSubM) << endl;
           cout << showSizeof(pClip) << endl;
           
-          ASSERT (sizeof(pSub1) == sizeof(pSub3));
-          ASSERT (sizeof(pClip) == sizeof(pSub3));
+          CHECK (sizeof(pSub1) == sizeof(pSub3));
+          CHECK (sizeof(pClip) == sizeof(pSub3));
           
           cout << string(pSub1) << endl;
           cout << string(pSub2) << endl;
@@ -118,12 +118,12 @@ namespace test    {
           
           pSub3->specialAPI();
           
-          ASSERT (2 == pSubM.use_count());
-          ASSERT (2 == pSub3.use_count());
+          CHECK (2 == pSubM.use_count());
+          CHECK (2 == pSub3.use_count());
           pClip = pSubM;                      // slicing and shared ownership
-          ASSERT (3 == pSubM.use_count());
-          ASSERT (3 == pSub3.use_count());
-          ASSERT (3 == pClip.use_count());
+          CHECK (3 == pSubM.use_count());
+          CHECK (3 == pSub3.use_count());
+          CHECK (3 == pClip.use_count());
           
           
           // now do a brute-force re-interpretation
@@ -131,8 +131,8 @@ namespace test    {
           PSub21& hijacked = reinterpret_cast<PSub21&> (pClip);
           
           hijacked->specialAPI();
-          ASSERT (3 == hijacked.use_count());
-          ASSERT (hijacked.getID() == pClip.getID());
+          CHECK (3 == hijacked.use_count());
+          CHECK (hijacked.getID() == pClip.getID());
           
           cout << format_PlacementID(pSub1) << endl;
           cout << format_PlacementID(pSub2) << endl;
@@ -141,11 +141,11 @@ namespace test    {
           cout << format_PlacementID(pClip) << endl;
           
           pClip = pSub1;
-          ASSERT (2 == pSubM.use_count());
-          ASSERT (2 == pSub3.use_count());
+          CHECK (2 == pSubM.use_count());
+          CHECK (2 == pSub3.use_count());
           
-          ASSERT (2 == pClip.use_count());
-          ASSERT (2 == pSub1.use_count());
+          CHECK (2 == pClip.use_count());
+          CHECK (2 == pSub1.use_count());
           
 ///////////////////////////////////////////////////////////////////////////////TODO: find a way to configure NoBug to throw in case of assertion
 ///////////////////////////////////////////////////////////////////////////////TODO: configure NoBug specifically for the testsuite
@@ -154,12 +154,12 @@ namespace test    {
 #endif
           
           // runtime type diagnostics based on pointee RTTI
-          ASSERT ( pSub2.isCompatible<MObject>());
-          ASSERT ( pSub2.isCompatible<DummyMO>());
-          ASSERT ( pSub2.isCompatible<TestSubMO2>());
-          ASSERT (!pSub2.isCompatible<TestSubMO21>());
-          ASSERT (!pSub2.isCompatible<TestSubMO1>());
-          ASSERT (!pSub2.isCompatible<Clip>());
+          CHECK ( pSub2.isCompatible<MObject>());
+          CHECK ( pSub2.isCompatible<DummyMO>());
+          CHECK ( pSub2.isCompatible<TestSubMO2>());
+          CHECK (!pSub2.isCompatible<TestSubMO21>());
+          CHECK (!pSub2.isCompatible<TestSubMO1>());
+          CHECK (!pSub2.isCompatible<Clip>());
         }
     };
   

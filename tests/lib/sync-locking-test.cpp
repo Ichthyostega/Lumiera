@@ -138,7 +138,7 @@ namespace test{
                    , bind (&HavocThread::doIt, this)
                    )
           {
-            ASSERT (thread_);
+            CHECK (thread_);
           }
         
         ~HavocThread ()

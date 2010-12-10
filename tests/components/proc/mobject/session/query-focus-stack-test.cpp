@@ -77,9 +77,9 @@ namespace test    {
         {
           QueryFocusStack stack;
           
-          ASSERT (!isnil (stack));
-          ASSERT (!isnil (stack.top()));
-          ASSERT (stack.top().isRoot());
+          CHECK (!isnil (stack));
+          CHECK (!isnil (stack.top()));
+          CHECK (stack.top().isRoot());
         }
       
       
@@ -93,39 +93,39 @@ namespace test    {
           intrusive_ptr_add_ref (&firstFrame);
           stack.top().navigate(startPoint);
           stack.top().moveUp();
-          ASSERT (Scope(startPoint).getParent() == stack.top().getLeaf());
-          ASSERT (1 == stack.size());
+          CHECK (Scope(startPoint).getParent() == stack.top().getLeaf());
+          CHECK (1 == stack.size());
           
           // now open a second path frame, pushing aside the initial one
           ScopePath& secondFrame = stack.push(startPoint);
           intrusive_ptr_add_ref (&secondFrame);
-          ASSERT (2 == stack.size());
-          ASSERT (secondFrame == stack.top());
-          ASSERT (secondFrame.getLeaf() == startPoint);
-          ASSERT (secondFrame.getLeaf() != firstFrame.getLeaf());
+          CHECK (2 == stack.size());
+          CHECK (secondFrame == stack.top());
+          CHECK (secondFrame.getLeaf() == startPoint);
+          CHECK (secondFrame.getLeaf() != firstFrame.getLeaf());
           
           // can still reach and manipulate the ref-count of the first frame
           intrusive_ptr_add_ref (&firstFrame);
-          ASSERT (2 == firstFrame.ref_count());
-          ASSERT (1 == secondFrame.ref_count());
+          CHECK (2 == firstFrame.ref_count());
+          CHECK (1 == secondFrame.ref_count());
           
           // can use/navigate the stack top frame
           stack.top().goRoot();
-          ASSERT (!stack.top()); // now indeed at root == no path
-          ASSERT (secondFrame.getLeaf().isRoot());
-          ASSERT (secondFrame == stack.top());
+          CHECK (!stack.top()); // now indeed at root == no path
+          CHECK (secondFrame.getLeaf().isRoot());
+          CHECK (secondFrame == stack.top());
           
           // now drop back to the first frame:
-          ASSERT (1 == secondFrame.ref_count());
+          CHECK (1 == secondFrame.ref_count());
           intrusive_ptr_release (&secondFrame);
-          ASSERT (0 == secondFrame.ref_count());
+          CHECK (0 == secondFrame.ref_count());
           stack.pop_unused();
-          ASSERT (1 == stack.size());
-          ASSERT (firstFrame == stack.top());
+          CHECK (1 == stack.size());
+          CHECK (firstFrame == stack.top());
           
           // ...still pointing at the previous location
-          ASSERT (Scope(startPoint).getParent() == stack.top().getLeaf());
-          ASSERT (2 == firstFrame.ref_count());
+          CHECK (Scope(startPoint).getParent() == stack.top().getLeaf());
+          CHECK (2 == firstFrame.ref_count());
         }
       
       
@@ -137,47 +137,47 @@ namespace test    {
           
           ScopePath& firstFrame = stack.top();   // remember for later
           stack.top().navigate(startPoint);
-          ASSERT (1 == stack.size());
+          CHECK (1 == stack.size());
           intrusive_ptr_add_ref (&firstFrame);
           
           // now open two new frames, but don't add ref-counts on them
           ScopePath& secondFrame = stack.push(startPoint);
           ScopePath& thirdFrame  = stack.push(startPoint);
-          ASSERT (3 == stack.size());
-          ASSERT (1 == firstFrame.ref_count());
-          ASSERT (0 == secondFrame.ref_count());
-          ASSERT (0 == thirdFrame.ref_count());
+          CHECK (3 == stack.size());
+          CHECK (1 == firstFrame.ref_count());
+          CHECK (0 == secondFrame.ref_count());
+          CHECK (0 == thirdFrame.ref_count());
           
           // any ref to top detects the non-referred-to state (by ref count==0)
           // and will automatically pop and clean up...
           ScopePath& newTop = stack.top();
-          ASSERT (1 == stack.size());
-          ASSERT (firstFrame == stack.top());
-          ASSERT (isSameObject(newTop, firstFrame));
-          ASSERT (stack.top().getLeaf() == startPoint);
+          CHECK (1 == stack.size());
+          CHECK (firstFrame == stack.top());
+          CHECK (isSameObject(newTop, firstFrame));
+          CHECK (stack.top().getLeaf() == startPoint);
           
           // second exercise: a pop_unused may even completely empty the stack
           ScopePath& anotherFrame = stack.push(startPoint);
-          ASSERT (0 == anotherFrame.ref_count());
-          ASSERT (1 == firstFrame.ref_count());
+          CHECK (0 == anotherFrame.ref_count());
+          CHECK (1 == firstFrame.ref_count());
           intrusive_ptr_release (&firstFrame);
-          ASSERT (0 == firstFrame.ref_count());
-          ASSERT (firstFrame.getLeaf() == startPoint);
+          CHECK (0 == firstFrame.ref_count());
+          CHECK (firstFrame.getLeaf() == startPoint);
           
           stack.pop_unused();
-          ASSERT (1 == stack.size());
+          CHECK (1 == stack.size());
                           // Note: don't use previously taken pointers
                           //       or references anymore, after the stack
                           //       triggered a cleanup!
           ScopePath& anotherFrame2 = stack.top();
-          ASSERT (0 == anotherFrame2.ref_count());
-          ASSERT (anotherFrame2.getLeaf().isRoot());
+          CHECK (0 == anotherFrame2.ref_count());
+          CHECK (anotherFrame2.getLeaf().isRoot());
           anotherFrame2.navigate(startPoint);
-          ASSERT (anotherFrame2.getLeaf() == startPoint);
+          CHECK (anotherFrame2.getLeaf() == startPoint);
           
           stack.top();
-          ASSERT (1 == stack.size());
-          ASSERT (stack.top().getLeaf().isRoot());
+          CHECK (1 == stack.size());
+          CHECK (stack.top().getLeaf().isRoot());
         }
       
       
@@ -189,7 +189,7 @@ namespace test    {
           
           ScopePath& firstFrame = stack.top();   // remember for later
           stack.top().navigate(startPoint);
-          ASSERT (1 == stack.size());
+          CHECK (1 == stack.size());
           intrusive_ptr_add_ref (&firstFrame);
           
           ScopePath beforeInvalidNavigation = firstFrame;
@@ -197,15 +197,15 @@ namespace test    {
           
           // try to navigate to an invalid place
           VERIFY_ERROR (INVALID_SCOPE, stack.top().navigate (unrelatedScope) );
-          ASSERT (1 == stack.size());
-          ASSERT (1 == firstFrame.ref_count());
-          ASSERT (stack.top().getLeaf() == startPoint);
+          CHECK (1 == stack.size());
+          CHECK (1 == firstFrame.ref_count());
+          CHECK (stack.top().getLeaf() == startPoint);
           
           // try to push an invalid place
           VERIFY_ERROR (INVALID_SCOPE, stack.push (unrelatedScope) );
-          ASSERT (1 == stack.size());
-          ASSERT (1 == firstFrame.ref_count());
-          ASSERT (stack.top().getLeaf() == startPoint);
+          CHECK (1 == stack.size());
+          CHECK (1 == firstFrame.ref_count());
+          CHECK (stack.top().getLeaf() == startPoint);
         }
       
       
@@ -215,7 +215,7 @@ namespace test    {
           QueryFocusStack stack;
           intrusive_ptr_add_ref (&stack.top());
           stack.top().moveUp();
-          ASSERT (stack.top().empty());
+          CHECK (stack.top().empty());
           
           PMO& startPoint = retrieve_startElm();
           intrusive_ptr_add_ref ( & stack.push(startPoint) );
@@ -227,16 +227,16 @@ namespace test    {
           intrusive_ptr_add_ref ( & stack.push(startPoint) );
           intrusive_ptr_add_ref ( & stack.push(startPoint) );
           intrusive_ptr_add_ref ( & stack.push(startPoint) );
-          ASSERT (10 == stack.size());
+          CHECK (10 == stack.size());
           stack.pop_unused();
-          ASSERT (10 == stack.size());
-          ASSERT (1 == stack.top().ref_count());
+          CHECK (10 == stack.size());
+          CHECK (1 == stack.top().ref_count());
           
           stack.clear();
-          ASSERT (1 == stack.size());
-          ASSERT (!stack.top().empty());
-          ASSERT (stack.top().getLeaf().isRoot());
-          ASSERT (0 == stack.top().ref_count());
+          CHECK (1 == stack.size());
+          CHECK (!stack.top().empty());
+          CHECK (stack.top().getLeaf().isRoot());
+          CHECK (0 == stack.top().ref_count());
         }
       
     };

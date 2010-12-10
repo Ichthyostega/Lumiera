@@ -89,10 +89,10 @@ namespace test    {
           UNIMPLEMENTED ("more elaborate command handling patterns");
           ////////////////////////////////////////////////////////////////////////////////TODO: devise tests for async, repeated and compound sequences
           
-          ASSERT (cnt_inst == Command::instance_count());
+          CHECK (cnt_inst == Command::instance_count());
           
           Command::remove ("test.command1.1");
-          ASSERT (cnt_defs == Command::definition_count());
+          CHECK (cnt_defs == Command::definition_count());
         }
       
       

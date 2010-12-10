@@ -93,11 +93,11 @@ namespace test    {
           PDummy testDummy1(*new DummyMO);
           PDummy testDummy2(*new TestSubMO1);
           
-          ASSERT (testClip1->isValid());
-          ASSERT (testClip2->isValid());
-          ASSERT (testLabel1->isValid());
-          ASSERT (testDummy1->isValid());
-          ASSERT (testDummy2->isValid());
+          CHECK (testClip1->isValid());
+          CHECK (testClip2->isValid());
+          CHECK (testLabel1->isValid());
+          CHECK (testDummy1->isValid());
+          CHECK (testDummy2->isValid());
           
           Time lenC1 = testClip1->getLength();
           Time lenC2 = testClip2->getLength();

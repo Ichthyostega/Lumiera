@@ -112,7 +112,7 @@ namespace test    {
           ScopeQuery<TestSubMO21> allM021(scope, CONTENTS);
           ScopeQuery<TestSubMO21>::iterator specialEl (issue(allM021));
           ++specialEl; // step in to second solution found...
-          ASSERT (specialEl);
+          CHECK (specialEl);
           
           discover (ScopeQuery<MObject>    (*specialEl, PARENTS) , "parents of the second TestSubMO2 element found");
           discover (ScopeQuery<MObject>    (*specialEl, CHILDREN), "children of the this TestSubMO2 element");

@@ -112,7 +112,7 @@ namespace test    {
           cout << showSizeof(testTime) << endl;
           
           cout << testTime.getHead() << endl;
-          ASSERT (23 == testTime.getTail().getHead());
+          CHECK (23 == testTime.getTail().getHead());
         }
       
     };

@@ -116,15 +116,15 @@ namespace test{
           
           Interface & o1 = theFact(ONE);
           Interface & o2 = theFact(ONE);
-          ASSERT (isSameObject(o1,o2));
+          CHECK (isSameObject(o1,o2));
           
           TestFactory anotherFact;
-          ASSERT (isnil (anotherFact));
+          CHECK (isnil (anotherFact));
           VERIFY_ERROR (INVALID, anotherFact(ONE) );
           
           TestFactory::Singleton<Implementation<ONE> > anotherSingletonHolder (anotherFact,ONE);
           Interface & o3 = anotherFact(ONE);
-          ASSERT (isSameObject(o2,o3));
+          CHECK (isSameObject(o2,o3));
         } 
     };
   

@@ -74,13 +74,13 @@ namespace test    {
                                                               // global Var assigned in buildTestsession1()
           PMedia media = clipPlacement->getMedia();
           IDA clipAID = media->getID();
-          ASSERT (clipPlacement);
+          CHECK (clipPlacement);
           
           sess->remove (clipPlacement);
           
-          ASSERT (!sess->currEDL().find(SESSION1_CLIP));            // Session forgot the Clip/Placement
-          ASSERT (!aMang.known (clipAID));                          // corresponding Clip Asset has disappeared
-          ASSERT (!clipPlacement->getMedia());                      // internal cross-links removed
+          CHECK (!sess->currEDL().find(SESSION1_CLIP));            // Session forgot the Clip/Placement
+          CHECK (!aMang.known (clipAID));                          // corresponding Clip Asset has disappeared
+          CHECK (!clipPlacement->getMedia());                      // internal cross-links removed
 #endif    /////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #639 : work out how to search within the Model!!
         }
     };

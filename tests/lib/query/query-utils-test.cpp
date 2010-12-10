@@ -110,15 +110,15 @@ namespace test{
       void
       check_extractID ()
         {
-          ASSERT ("tok" == extractID ("pred", "pred(tok)." ));
-          ASSERT ("tok" == extractID ("pred", "    pred( tok )" ));
-          ASSERT ("tok" == extractID ("pred", "pred(tok), pred(tux)." ));
-          ASSERT ("tok" == extractID ("pred", "other(xyz) pred(tok) pred(tux)" ));
-          ASSERT ("tok" == extractID ("pred", "some( pred(tok)" ));
+          CHECK ("tok" == extractID ("pred", "pred(tok)." ));
+          CHECK ("tok" == extractID ("pred", "    pred( tok )" ));
+          CHECK ("tok" == extractID ("pred", "pred(tok), pred(tux)." ));
+          CHECK ("tok" == extractID ("pred", "other(xyz) pred(tok) pred(tux)" ));
+          CHECK ("tok" == extractID ("pred", "some( pred(tok)" ));
           
-          ASSERT (isnil (extractID ("pred", "pred (tok)")));
-          ASSERT (isnil (extractID ("pred", "pred tok)" )));
-          ASSERT (isnil (extractID ("pred", "pred(tok " )));
+          CHECK (isnil (extractID ("pred", "pred (tok)")));
+          CHECK (isnil (extractID ("pred", "pred tok)" )));
+          CHECK (isnil (extractID ("pred", "pred(tok " )));
         }
       
       
@@ -128,23 +128,23 @@ namespace test{
       check_removeTerm ()
         {
           // successful------Symbol---input-string----------------------extracted------remaining-------------
-          ASSERT_removeTerm ("pred", "pred(tok).",                     "pred(tok)",   "."                    );
-          ASSERT_removeTerm ("pred", "    pred( tok )",                "pred(tok)",   "    "                 );
-          ASSERT_removeTerm ("pred", "pred(tok), pred(tux).",          "pred(tok)",   "pred(tux)."           );
-          ASSERT_removeTerm ("pred", "other(xyz) pred(tok) pred(tux)", "pred(tok)",   "other(xyz) pred(tux)" );
-          ASSERT_removeTerm ("pred", "some( pred(tok)",                "pred(tok)",   "some( "               );
+          CHECK_removeTerm ("pred", "pred(tok).",                     "pred(tok)",   "."                    );
+          CHECK_removeTerm ("pred", "    pred( tok )",                "pred(tok)",   "    "                 );
+          CHECK_removeTerm ("pred", "pred(tok), pred(tux).",          "pred(tok)",   "pred(tux)."           );
+          CHECK_removeTerm ("pred", "other(xyz) pred(tok) pred(tux)", "pred(tok)",   "other(xyz) pred(tux)" );
+          CHECK_removeTerm ("pred", "some( pred(tok)",                "pred(tok)",   "some( "               );
           
           // not successful
-          ASSERT_removeTerm ("pred", "pred (tok",                      "",            "pred (tok" );
-          ASSERT_removeTerm ("pred", "pred tok)",                      "",            "pred tok)" );
-          ASSERT_removeTerm ("pred", "pred(tok",                       "",            "pred(tok"  );
+          CHECK_removeTerm ("pred", "pred (tok",                      "",            "pred (tok" );
+          CHECK_removeTerm ("pred", "pred tok)",                      "",            "pred tok)" );
+          CHECK_removeTerm ("pred", "pred(tok",                       "",            "pred(tok"  );
         }
       
       void
-      ASSERT_removeTerm (Symbol sym, string input, string extracted, string modified)
+      CHECK_removeTerm (Symbol sym, string input, string extracted, string modified)
         {
-          ASSERT (extracted == removeTerm (sym, input));
-          ASSERT (modified  == input);
+          CHECK (extracted == removeTerm (sym, input));
+          CHECK (modified  == input);
         }
       
       
@@ -156,7 +156,7 @@ namespace test{
       check_countPred ()
         {
           for (uint i=1; i <= 30; ++i)
-              ASSERT ( i == countPred (garbage_query (i)));
+              CHECK ( i == countPred (garbage_query (i)));
         }
     };
   

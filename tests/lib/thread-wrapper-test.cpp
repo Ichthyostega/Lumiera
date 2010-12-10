@@ -130,7 +130,7 @@ namespace backend {
             
             usleep (200000);  // pause 200ms for the threads to terminate.....
             
-            ASSERT (checksum.verify());
+            CHECK (checksum.verify());
           }
       };
     

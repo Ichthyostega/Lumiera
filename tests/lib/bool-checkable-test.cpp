@@ -88,12 +88,12 @@ namespace test{
               if (test)
                 cout << i << "\n";
               
-              ASSERT (test.isValid() == bool(test) );
-              ASSERT (test.isValid() != !test);
+              CHECK (test.isValid() == bool(test) );
+              CHECK (test.isValid() != !test);
             }
           
           cout << showSizeof<ExampleCustomType123>() <<"\n";
-          ASSERT (sizeof (int) == sizeof (ExampleCustomType123));
+          CHECK (sizeof (int) == sizeof (ExampleCustomType123));
         }
     };
   

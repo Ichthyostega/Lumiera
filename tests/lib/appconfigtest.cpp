@@ -46,7 +46,7 @@ namespace lumiera {
         void testAccess (const string& key)
         {
 //        string ver = lumiera::AppState::get(key);
-//        ASSERT ( !util::isnil(ver));
+//        CHECK ( !util::isnil(ver));
         }
       };
     

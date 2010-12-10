@@ -175,14 +175,14 @@ namespace lib {
             Dummy<37>& ref3 = clu.create<Dummy<37> > (c2);
             Dummy<1234>& rX = clu.create<Dummy<1234> > (c3,c4,c5);
             
-            ASSERT (&ref1);
-            ASSERT (&ref2);
-            ASSERT (&ref3);
-            ASSERT (&rX);
+            CHECK (&ref1);
+            CHECK (&ref2);
+            CHECK (&ref3);
+            CHECK (&rX);
             TRACE (test, "%s", showSizeof(rX).c_str());
             
-            ASSERT (123==ref2.getID());
-            ASSERT (3+4+5==rX.getID());
+            CHECK (123==ref2.getID());
+            CHECK (3+4+5==rX.getID());
             // shows that the returned references actually
             // point at the objects we created. Just use them
             // and let them go. When clu goes out of scope,
@@ -193,20 +193,20 @@ namespace lib {
         void
         checkAllocation()
           {
-            ASSERT (0==checksum);
+            CHECK (0==checksum);
             {
               ClusterList clusters (NUM_CLUSTERS);
               for_each (clusters, fillIt);
-              ASSERT (0!=checksum);
+              CHECK (0!=checksum);
             }
-            ASSERT (0==checksum);
+            CHECK (0==checksum);
           }
         
         
         void
         checkErrorHandling()
           {
-            ASSERT (0==checksum);
+            CHECK (0==checksum);
             {
               randomFailures = true;
               
@@ -224,7 +224,7 @@ namespace lib {
                   }                 //  thus dtor won't be called. Repair the checksum!
             }
             randomFailures = false;
-            ASSERT (0==checksum);
+            CHECK (0==checksum);
           }
       };
     

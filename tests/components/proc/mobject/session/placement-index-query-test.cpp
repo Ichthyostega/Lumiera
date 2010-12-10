@@ -73,15 +73,15 @@ namespace test    {
           QueryResolver const& resolver1 (SessionServiceExploreScope::getResolver());
           QueryResolver const& resolver2 (SessionServiceExploreScope::getResolver());
           
-          ASSERT (isSameObject (resolver1, resolver2));
+          CHECK (isSameObject (resolver1, resolver2));
           
           PlacementMO& root1 = index->getRoot();          
           PlacementMO& root2 = SessionServiceExploreScope::getScopeRoot();          
-          ASSERT (isSameObject (root1, root2));
+          CHECK (isSameObject (root1, root2));
           
           PlacementMO& elm1 = *ContentsQuery<TestSubMO21>(root1).resolveBy(resolver1);
           PlacementMO& elm2 = *(index->getReferrers(root1));
-          ASSERT (isSameObject (elm1, elm2));
+          CHECK (isSameObject (elm1, elm2));
         }
       
       void

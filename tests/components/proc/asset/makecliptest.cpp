@@ -60,14 +60,14 @@ namespace asset {
             PC cc = mm->createClip();
             PM cm = cc->getMedia();
             
-            ASSERT (cm);
-            ASSERT (Time(0) < cc->getLength());
-            ASSERT (cm->ident.category.hasKind (VIDEO));
-            ASSERT (cm->getFilename() == mm->getFilename());
+            CHECK (cm);
+            CHECK (Time(0) < cc->getLength());
+            CHECK (cm->ident.category.hasKind (VIDEO));
+            CHECK (cm->getFilename() == mm->getFilename());
 TODO ("implement Processing Pattern!!!");   
-//            ASSERT (cm->howtoProc() == mm->howtoProc());
-            ASSERT (cm->ident.org == mm->ident.org);
-            ASSERT (dependencyCheck (cm,mm));
+//            CHECK (cm->howtoProc() == mm->howtoProc());
+            CHECK (cm->ident.org == mm->ident.org);
+            CHECK (dependencyCheck (cm,mm));
 
             TRACE (asset_mem,   "leaving MakeClip_test::run()");
             TRACE (mobject_mem, "leaving MakeClip_test::run()");

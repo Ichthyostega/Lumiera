@@ -89,13 +89,13 @@ namespace test  {
           
           PEffect pEffect = createTestEffectMObject();
           ProcNode* pNode = nodeFab (pEffect, setup);
-          ASSERT (pNode);
+          CHECK (pNode);
           
           TestContext simulatedInvocation;
           BuffHandle result = pNode->pull(simulatedInvocation, 0);
           
-          ASSERT (result);
-          // ASSERT we got calculated data in the result buffer
+          CHECK (result);
+          // CHECK we got calculated data in the result buffer
         } 
     };
   

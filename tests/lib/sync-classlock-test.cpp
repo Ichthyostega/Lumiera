@@ -81,11 +81,11 @@ namespace test {
           {
             Probe objs[NUM_INSTANCES];
             
-            ASSERT (1 == objs[0].shared_lock_.use_count());
+            CHECK (1 == objs[0].shared_lock_.use_count());
           }
           
           ClassLock<Probe> get_class_lock;
-          ASSERT ( 1 ==  get_class_lock.use_count()); // embedded PerClassMonitor<Probe> got created exactly once
+          CHECK ( 1 ==  get_class_lock.use_count()); // embedded PerClassMonitor<Probe> got created exactly once
         }                                            //  and stays alive until static dtors are called....
       
     };

@@ -70,7 +70,7 @@ namespace lumiera {
             UNIMPLEMENTED ("at least preliminary implementation of the MediaImplLib interface for lib GAVL");
             
             TODO ("how to do a simple consistency check on the returned ImplFacade? can we re-create the GAVL frame type?");
-            ASSERT (GAVL==iTy.libraryID);
+            CHECK (GAVL==iTy.libraryID);
             return iTy;
           }
         
@@ -78,11 +78,11 @@ namespace lumiera {
         basicImplTypeProperties (ImplType refType)
           {
             ImplType iTy2 = test_createImplType ();
-            ASSERT (iTy2==refType);
-            ASSERT (refType==iTy2);
+            CHECK (iTy2==refType);
+            CHECK (refType==iTy2);
             TODO ("add equality comparable concept to the ImplType class");
             
-            ASSERT (StreamType::VIDEO==refType.getKind());
+            CHECK (StreamType::VIDEO==refType.getKind());
             UNIMPLEMENTED ("get a lib descriptor"); 
             UNIMPLEMENTED ("check the lib of the type"); 
             UNIMPLEMENTED ("compare two types"); 
@@ -97,18 +97,18 @@ namespace lumiera {
         void
         basicStreamTypeProperties (SType type, ImplType iTy)
           {
-            ASSERT (type.implType);
-            ASSERT (iTy==(*type.implType));  /////////////TODO: really by ptr???
-            ASSERT (&iTy==type.implType);   // actually using the same object (in the registry)
+            CHECK (type.implType);
+            CHECK (iTy==(*type.implType));  /////////////TODO: really by ptr???
+            CHECK (&iTy==type.implType);   // actually using the same object (in the registry)
             
-            ASSERT (!isnil (type.prototype.id));
-            ASSERT (StreamType::VIDEO==type.prototype.kind);
-            ASSERT (StreamType::VIDEO==type.implType->getKind());
+            CHECK (!isnil (type.prototype.id));
+            CHECK (StreamType::VIDEO==type.prototype.kind);
+            CHECK (StreamType::VIDEO==type.implType->getKind());
             
-            ASSERT (type.implType->canConvert(iTy));  // of course... they are actually the same
-            ASSERT (iTy.canConvert(type));           // because it's based on the same impl type
+            CHECK (type.implType->canConvert(iTy));  // of course... they are actually the same
+            CHECK (iTy.canConvert(type));           // because it's based on the same impl type
             
-            ASSERT (StreamType::RAW==type.intentionTag);
+            CHECK (StreamType::RAW==type.intentionTag);
           }
       };
     

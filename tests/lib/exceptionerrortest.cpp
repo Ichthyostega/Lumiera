@@ -138,20 +138,20 @@ namespace lumiera {
         void checkErrorIntegration()
         {
           lumiera_error ();
-          ASSERT (!lumiera_error ());
+          CHECK (!lumiera_error ());
           
           Error err1;
           Error err2("boo",LUMIERA_ERROR_DERIVED);
-          ASSERT (err1.getID () == lumiera_error ()); // (we didn't clear the first one!)
+          CHECK (err1.getID () == lumiera_error ()); // (we didn't clear the first one!)
           
           Error err3("boooo",LUMIERA_ERROR_DERIVED);
-          ASSERT (err3.getID () == lumiera_error ());
+          CHECK (err3.getID () == lumiera_error ());
           
           SpecificError err4;
-          ASSERT (err4.getID () == LUMIERA_ERROR_LIFE_AND_UNIVERSE);
-          ASSERT (err4.getID () == lumiera_error ());
+          CHECK (err4.getID () == LUMIERA_ERROR_LIFE_AND_UNIVERSE);
+          CHECK (err4.getID () == lumiera_error ());
           
-          ASSERT (!lumiera_error ());
+          CHECK (!lumiera_error ());
         }
         
         
@@ -165,13 +165,13 @@ namespace lumiera {
         void checkErrorFlagPropagation()
         {
           lumiera_error_set(LUMIERA_ERROR_LIFE_AND_UNIVERSE, "what is the answer?");
-          ASSERT (lumiera_error_peek());
+          CHECK (lumiera_error_peek());
           
           catcher (&test::detectErrorflag, "");
-          ASSERT (LUMIERA_ERROR_LIFE_AND_UNIVERSE == lumiera_error_peek());
+          CHECK (LUMIERA_ERROR_LIFE_AND_UNIVERSE == lumiera_error_peek());
           
           catcher (&test::detectErrorflagChained, "the big bang");
-          ASSERT (LUMIERA_ERROR_LIFE_AND_UNIVERSE == lumiera_error());
+          CHECK (LUMIERA_ERROR_LIFE_AND_UNIVERSE == lumiera_error());
         }
         
         
@@ -189,12 +189,12 @@ namespace lumiera {
           error::External err5(rerr);
           Error err6(err5);
           
-          ASSERT (err2.rootCause() == err1.what());
-          ASSERT (err3.rootCause() == err1.what());
-          ASSERT (err4.rootCause() == err1.what());
+          CHECK (err2.rootCause() == err1.what());
+          CHECK (err3.rootCause() == err1.what());
+          CHECK (err4.rootCause() == err1.what());
           
-          ASSERT (err5.rootCause() == rerr.what());
-          ASSERT (err6.rootCause() == rerr.what());
+          CHECK (err5.rootCause() == rerr.what());
+          CHECK (err6.rootCause() == rerr.what());
         }
         
         

@@ -79,7 +79,7 @@ namespace test    {
           
           QueryFocus theFocus;
           theFocus.reset();
-          ASSERT (Scope(root) == Scope(theFocus));
+          CHECK (Scope(root) == Scope(theFocus));
           
           checkNavigation (theFocus);
           
@@ -87,10 +87,10 @@ namespace test    {
           manipulate_subFocus();
           
           QueryFocus currentFocus;
-          ASSERT (scopePosition == Scope(currentFocus));
-          ASSERT (currentFocus == theFocus);
-          ASSERT (2 == refs(currentFocus));
-          ASSERT (2 == refs(theFocus));
+          CHECK (scopePosition == Scope(currentFocus));
+          CHECK (currentFocus == theFocus);
+          CHECK (2 == refs(currentFocus));
+          CHECK (2 == refs(theFocus));
         }
       
       
@@ -101,24 +101,24 @@ namespace test    {
       checkNavigation (QueryFocus& focus)
         {
           focus.reset();
-          ASSERT (Scope(focus).isRoot());
+          CHECK (Scope(focus).isRoot());
           
           PMO& someObj = *focus.query<TestSubMO1>();
                          // by construction of the test fixture,
                          // we know this object is root -> ps2 -> ps3
           
-          ASSERT (Scope(focus).isRoot());
+          CHECK (Scope(focus).isRoot());
           focus.attach (someObj);
-          ASSERT (!Scope(focus).isRoot());
+          CHECK (!Scope(focus).isRoot());
           ScopePath path = focus.currentPath();
-          ASSERT (someObj == path.getLeaf());
-          ASSERT (Scope(focus).getParent().getParent().isRoot());
+          CHECK (someObj == path.getLeaf());
+          CHECK (Scope(focus).getParent().getParent().isRoot());
           
           focus.attach (path.getLeaf().getParent());
-          ASSERT (Scope(focus) == path.getLeaf().getParent());
-          ASSERT (someObj != Scope(focus));
-          ASSERT (path.contains (focus.currentPath()));
-          ASSERT (focus.currentPath().getLeaf().getParent().isRoot());
+          CHECK (Scope(focus) == path.getLeaf().getParent());
+          CHECK (someObj != Scope(focus));
+          CHECK (path.contains (focus.currentPath()));
+          CHECK (focus.currentPath().getLeaf().getParent().isRoot());
           
             // as the focus now has been moved up one level,
            //  we'll re-discover the original starting point as immediate child
@@ -134,19 +134,19 @@ namespace test    {
         {
           QueryFocus original;    // automatically attaches to current stack top
           uint num_refs = refs (original);
-          ASSERT (num_refs > 1);  // because the run() function also holds a ref
+          CHECK (num_refs > 1);  // because the run() function also holds a ref
           
           QueryFocus subF = QueryFocus::push();
           cout << string(subF) << endl;
-          ASSERT (subF == original);
+          CHECK (subF == original);
           
-          ASSERT (       1 == refs(subF) );
-          ASSERT (num_refs == refs(original));
+          CHECK (       1 == refs(subF) );
+          CHECK (num_refs == refs(original));
           
           { // temporarily creating an independent focus attached differently
             QueryFocus subF2 = QueryFocus::push(Scope(subF).getParent());
-            ASSERT (subF2 != subF);
-            ASSERT (subF == original);
+            CHECK (subF2 != subF);
+            CHECK (subF == original);
             cout << string(subF2) << endl;
             
             ScopeQuery<TestSubMO21>::iterator ii = subF2.explore<TestSubMO21>();
@@ -160,15 +160,15 @@ namespace test    {
             
             subF2.pop(); // releasing this focus and re-attaching to what's on stack top
             cout << string(subF2) << "<<<--after pop()" << endl;
-            ASSERT (subF2 == subF);
-            ASSERT (2 == refs(subF2));  // both are now attached to the same path
-            ASSERT (2 == refs(subF));
+            CHECK (subF2 == subF);
+            CHECK (2 == refs(subF2));  // both are now attached to the same path
+            CHECK (2 == refs(subF));
           }
           // subF2 went out of scope, but no auto-pop happens (because subF is still there)
           cout << string(subF) << endl;
           
-          ASSERT (       1 == refs(subF));
-          ASSERT (num_refs == refs(original));
+          CHECK (       1 == refs(subF));
+          CHECK (num_refs == refs(original));
          // when subF goes out of scope now, auto-pop will happen...
         }
       

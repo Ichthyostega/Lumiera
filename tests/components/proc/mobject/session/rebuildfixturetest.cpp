@@ -58,7 +58,7 @@ namespace test    {
           PSess sess = Session::current;
           sess.clear();
           buildTestsession1();
-          ASSERT (sess->isValid());
+          CHECK (sess->isValid());
           sess->rebuildFixture();
 #if false ////////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #548
           TODO ("check the fixture has been touched. e.g. by hash.");
@@ -79,7 +79,7 @@ namespace test    {
 ////TODO do we still support this? can it be replaced by a directly checking predicate on ExplicitPlacement??
           
 //        PMO originalPlacement = explicitPlacement->subject->getPlacement();
-//        ASSERT (edl.contains(originalPlacement));
+//        CHECK (edl.contains(originalPlacement));
 #endif ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #548
         }
     };

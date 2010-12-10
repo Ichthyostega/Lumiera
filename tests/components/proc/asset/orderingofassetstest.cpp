@@ -74,45 +74,45 @@ namespace asset {
             
             
             // ordering of keys
-            ASSERT (key1 == key2);
-            ASSERT (key2 != key3);
-            ASSERT (key3 != key4);
-            ASSERT (key4 != key5);
-            ASSERT (key1 != key5);
+            CHECK (key1 == key2);
+            CHECK (key2 != key3);
+            CHECK (key3 != key4);
+            CHECK (key4 != key5);
+            CHECK (key1 != key5);
 
-            ASSERT ( 0 > key2.compare(key3));
-            ASSERT ( 0 < key3.compare(key2));
+            CHECK ( 0 > key2.compare(key3));
+            CHECK ( 0 < key3.compare(key2));
 
-            ASSERT ( 0 > key3.compare(key4));
-            ASSERT ( 0 > key4.compare(key5));
-            ASSERT ( 0 > key1.compare(key5));
-            ASSERT ( 0 > key2.compare(key5));
-            ASSERT ( 0 > key3.compare(key5));
-            ASSERT ( 0 > key1.compare(key3));
-            ASSERT ( 0 > key1.compare(key4));
-            ASSERT ( 0 > key2.compare(key4));
+            CHECK ( 0 > key3.compare(key4));
+            CHECK ( 0 > key4.compare(key5));
+            CHECK ( 0 > key1.compare(key5));
+            CHECK ( 0 > key2.compare(key5));
+            CHECK ( 0 > key3.compare(key5));
+            CHECK ( 0 > key1.compare(key3));
+            CHECK ( 0 > key1.compare(key4));
+            CHECK ( 0 > key2.compare(key4));
             
             
             // ordering of Asset smart ptrs
-            ASSERT (mm1 == mm2);
-            ASSERT (mm2 != mm3);
-            ASSERT (mm3 != mm4);
-            ASSERT (mm4 != mm5);
-            ASSERT (mm1 != mm5);
+            CHECK (mm1 == mm2);
+            CHECK (mm2 != mm3);
+            CHECK (mm3 != mm4);
+            CHECK (mm4 != mm5);
+            CHECK (mm1 != mm5);
 
-            ASSERT (mm2 < mm3);
-            ASSERT (mm2 <= mm3);
-            ASSERT (mm3 > mm2);
-            ASSERT (mm3 >= mm2);
+            CHECK (mm2 < mm3);
+            CHECK (mm2 <= mm3);
+            CHECK (mm3 > mm2);
+            CHECK (mm3 >= mm2);
 
-            ASSERT (mm3 < mm4);
-            ASSERT (mm4 < mm5);
-            ASSERT (mm1 < mm5);
-            ASSERT (mm2 < mm5);
-            ASSERT (mm3 < mm5);
-            ASSERT (mm1 < mm3);
-            ASSERT (mm1 < mm4);
-            ASSERT (mm2 < mm4);
+            CHECK (mm3 < mm4);
+            CHECK (mm4 < mm5);
+            CHECK (mm1 < mm5);
+            CHECK (mm2 < mm5);
+            CHECK (mm3 < mm5);
+            CHECK (mm1 < mm3);
+            CHECK (mm1 < mm4);
+            CHECK (mm2 < mm4);
 
           }
       };

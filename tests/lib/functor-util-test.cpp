@@ -80,21 +80,21 @@ namespace test {
           Fvi f1 (fun1);
           Fvi f2 (fun2);
           
-          ASSERT (!rawComparison(f0, f1));
-          ASSERT (!rawComparison(f1, f2));
-          ASSERT (!rawComparison(f0, f2));
+          CHECK (!rawComparison(f0, f1));
+          CHECK (!rawComparison(f1, f2));
+          CHECK (!rawComparison(f0, f2));
           
           Fvi f22 (f2);
-          ASSERT ( rawComparison(f2, f22));
+          CHECK ( rawComparison(f2, f22));
           
           f1 = f2;
-          ASSERT ( rawComparison(f1, f2));
+          CHECK ( rawComparison(f1, f2));
           
-          ASSERT (!rawComparison(f0, Fvi()));   // note: can't detect they are equivalent
-          ASSERT (!rawComparison(f0, Fiv()));
+          CHECK (!rawComparison(f0, Fvi()));   // note: can't detect they are equivalent
+          CHECK (!rawComparison(f0, Fiv()));
           
           f1 = bind (fun2, _1);
-          ASSERT (!rawComparison(f1, f2));
+          CHECK (!rawComparison(f1, f2));
           
           Dummy dum1, dum2;
           Fvi fm1 = bind (&Dummy::gummi, dum1, _1);
@@ -104,23 +104,23 @@ namespace test {
           Fvv fm5 = bind (&Dummy::gummi, dum2, 24);
           Fvv fm6 = bind (&Dummy::gummi, dum2, 24);
           
-          ASSERT (!rawComparison(f1, fm1));
+          CHECK (!rawComparison(f1, fm1));
           
-          ASSERT (!rawComparison(fm1, fm2));
-          ASSERT (!rawComparison(fm1, fm3));
-          ASSERT (!rawComparison(fm1, fm4));
-          ASSERT (!rawComparison(fm1, fm5));
-          ASSERT (!rawComparison(fm1, fm6));
-          ASSERT (!rawComparison(fm2, fm3));
-          ASSERT (!rawComparison(fm2, fm4));
-          ASSERT (!rawComparison(fm2, fm5));
-          ASSERT (!rawComparison(fm2, fm6));
-          ASSERT (!rawComparison(fm3, fm4));
-          ASSERT (!rawComparison(fm3, fm5));
-          ASSERT (!rawComparison(fm3, fm6));
-          ASSERT (!rawComparison(fm4, fm5));
-          ASSERT (!rawComparison(fm4, fm6));
-          ASSERT (!rawComparison(fm5, fm6));   // again: can't detect they are equivalent
+          CHECK (!rawComparison(fm1, fm2));
+          CHECK (!rawComparison(fm1, fm3));
+          CHECK (!rawComparison(fm1, fm4));
+          CHECK (!rawComparison(fm1, fm5));
+          CHECK (!rawComparison(fm1, fm6));
+          CHECK (!rawComparison(fm2, fm3));
+          CHECK (!rawComparison(fm2, fm4));
+          CHECK (!rawComparison(fm2, fm5));
+          CHECK (!rawComparison(fm2, fm6));
+          CHECK (!rawComparison(fm3, fm4));
+          CHECK (!rawComparison(fm3, fm5));
+          CHECK (!rawComparison(fm3, fm6));
+          CHECK (!rawComparison(fm4, fm5));
+          CHECK (!rawComparison(fm4, fm6));
+          CHECK (!rawComparison(fm5, fm6));   // again: can't detect they are equivalent
         }
     };
   

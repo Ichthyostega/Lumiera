@@ -140,9 +140,9 @@ namespace test{
             typedef InPlaceBuffer<Base, sizeof(DD<42>), DD<0> > Buffer;
             
             Buffer buff;
-            ASSERT (sizeof(buff) <= sizeof(DD<42>) + _ALIGN_);
-            ASSERT (1 == _create_count);
-            ASSERT (0 == _checksum);
+            CHECK (sizeof(buff) <= sizeof(DD<42>) + _ALIGN_);
+            CHECK (1 == _create_count);
+            CHECK (0 == _checksum);
             buff->confess();          // one default object of type DD<0> has been created
             
             buff.create<DD<5> > ();
@@ -153,15 +153,15 @@ namespace test{
             
             VERIFY_ERROR( FATAL, buff.create<Killer> () );
             
-            ASSERT(0 == buff->id_);   // default object was created, due to exception...
+            CHECK(0 == buff->id_);   // default object was created, due to exception...
             
             buff.create<D42Sub> ("what the f**","is going on here?");
             buff->confess();
             
-            ASSERT (6 == _create_count);
-            ASSERT (42 == _checksum); // No.42 is alive
+            CHECK (6 == _create_count);
+            CHECK (42 == _checksum); // No.42 is alive
           }
-          ASSERT (0 == _checksum);  // all dead
+          CHECK (0 == _checksum);  // all dead
         }
     };
   

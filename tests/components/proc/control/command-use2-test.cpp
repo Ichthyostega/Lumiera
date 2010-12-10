@@ -122,8 +122,8 @@ namespace test    {
           
           Command::remove ("test.command2");
           Command::remove ("test.command2.1");
-          ASSERT (cnt_defs == Command::definition_count());
-          ASSERT (cnt_inst == Command::instance_count());
+          CHECK (cnt_defs == Command::definition_count());
+          CHECK (cnt_inst == Command::instance_count());
         }
       
       
@@ -133,31 +133,31 @@ namespace test    {
         {
           Command com = Command::get("test.command2");
           
-          ASSERT (!protocolled("invoked"));
+          CHECK (!protocolled("invoked"));
           
           bool res = com();
           
-          ASSERT (res);
-          ASSERT (protocolled("invoked"));
-          ASSERT (protocolled(randVal_));
+          CHECK (res);
+          CHECK (protocolled("invoked"));
+          CHECK (protocolled(randVal_));
           
           res = com.undo();
-          ASSERT (res);        // UNDO invoked successfully
-          ASSERT (!protocolled(randVal_));
-          ASSERT (protocolled("UNDO"));
+          CHECK (res);        // UNDO invoked successfully
+          CHECK (!protocolled(randVal_));
+          CHECK (protocolled("UNDO"));
           
           blowUp_ = true;
           string current = command2::check_.str();
           
           res = com();
-          ASSERT (!res);       // not executed successfully (exception thrown)
-          ASSERT (command2::check_.str() == current);
-          ASSERT (LUMIERA_ERROR_EXTERNAL == lumiera_error());
+          CHECK (!res);       // not executed successfully (exception thrown)
+          CHECK (command2::check_.str() == current);
+          CHECK (LUMIERA_ERROR_EXTERNAL == lumiera_error());
           
           res = com.undo();
-          ASSERT (!res);       // UNDO failed (exception thrown)
-          ASSERT (command2::check_.str() == current);
-          ASSERT (LUMIERA_ERROR_EXTERNAL == lumiera_error());
+          CHECK (!res);       // UNDO failed (exception thrown)
+          CHECK (command2::check_.str() == current);
+          CHECK (LUMIERA_ERROR_EXTERNAL == lumiera_error());
           
           blowUp_ = false;
         }
@@ -171,14 +171,14 @@ namespace test    {
           
           blowUp_ = false;
           com.exec(HandlingPattern::SYNC_THROW);
-          ASSERT (protocolled(randVal_));
+          CHECK (protocolled(randVal_));
           
           blowUp_ = true;
           string current = command2::check_.str();
           HandlingPattern const& doThrow = HandlingPattern::get(HandlingPattern::SYNC_THROW);
           
           VERIFY_ERROR( EXTERNAL, com.exec (doThrow) );
-          ASSERT (command2::check_.str() == current);
+          CHECK (command2::check_.str() == current);
           
           // we can achieve the same effect,
           // after changing the default HandlingPatern for this command instance
@@ -187,15 +187,15 @@ namespace test    {
           
           Command com2 = Command::get("test.command2.1");
           VERIFY_ERROR( EXTERNAL, com2() );
-          ASSERT (command2::check_.str() == current);
+          CHECK (command2::check_.str() == current);
 
           blowUp_ = false;
           com2();
-          ASSERT (command2::check_.str() > current);
-          ASSERT (protocolled(randVal_));
+          CHECK (command2::check_.str() > current);
+          CHECK (protocolled(randVal_));
           
           com2.undo();
-          ASSERT (!protocolled(randVal_));
+          CHECK (!protocolled(randVal_));
         }
     };
   

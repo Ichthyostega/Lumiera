@@ -156,7 +156,7 @@ namespace test{
           verify (KEY key)
             {
               cout << "verify....." << key << endl;
-              ASSERT (string(key) == (*this)[key]);
+              CHECK (string(key) == (*this)[key]);
             }
         };
       

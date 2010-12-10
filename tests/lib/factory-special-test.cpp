@@ -215,7 +215,7 @@ namespace test{
           format msg ("created %d shared_ptrs to Object placed in static buffer.\n");
           void* raw (0);
           P pX;
-          ASSERT (0 == pX.use_count());
+          CHECK (0 == pX.use_count());
           
             {
               P p1 (placement_fac (cnt));
@@ -228,7 +228,7 @@ namespace test{
               raw = p1.get(); // remember raw mem address
             }
             
-          ASSERT (0 == pX.use_count());
+          CHECK (0 == pX.use_count());
           
             {
               P p1 (placement_fac (cnt+1));
@@ -238,10 +238,10 @@ namespace test{
               
               cout << msg % p2.use_count();
               
-              ASSERT (raw == p1.get(), "explicit object placement at fixed buffer doesn't work.");
+              CHECK (raw == p1.get(), "explicit object placement at fixed buffer doesn't work.");
             }
             
-          ASSERT (0 == pX.use_count());
+          CHECK (0 == pX.use_count());
         } 
       
       
@@ -258,7 +258,7 @@ namespace test{
           format msg ("created %d shared_ptrs to paranoid Object.\n");
           P pX;
           
-          ASSERT (0 == pX.use_count());
+          CHECK (0 == pX.use_count());
             {
               P p1 (paranoid_fac (cnt));
               P p2 (p1);
@@ -267,7 +267,7 @@ namespace test{
               cout << msg % p2.use_count() 
                    << string (*pX) << "\n";
             }
-          ASSERT (0 == pX.use_count());
+          CHECK (0 == pX.use_count());
         }
       
       
@@ -288,7 +288,7 @@ namespace test{
           cout << ("created auto_ptr to malloc-ed Object.\n")
                << string (*p2) << "\n";
           
-          ASSERT (!p1.get());
+          CHECK (!p1.get());
         }
       
       
@@ -309,7 +309,7 @@ namespace test{
           cout << ("created auto_ptr to Interface Object.\n");
           p2->funky(); // call a Interface function
           
-          ASSERT (!p1.get());
+          CHECK (!p1.get());
         }
     };
   

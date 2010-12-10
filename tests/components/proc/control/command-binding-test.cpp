@@ -65,8 +65,8 @@ namespace test    {
           Command::remove("test.command3.1");
           Command::remove("test.command3.2");
           
-          ASSERT (cnt_defs == Command::definition_count());
-          ASSERT (cnt_inst == Command::instance_count());
+          CHECK (cnt_defs == Command::definition_count());
+          CHECK (cnt_inst == Command::instance_count());
         }
       
       
@@ -83,7 +83,7 @@ namespace test    {
               .execSync()
               ;
           
-          ASSERT ( 1 == command3::check_);
+          CHECK ( 1 == command3::check_);
           
           CommandDef ("test.command3.2")
               .operation (command3::operate)
@@ -91,28 +91,28 @@ namespace test    {
               .undoOperation (command3::undoIt)
               ;
           Command com ("test.command3.2");
-          ASSERT (com.canExec());
+          CHECK (com.canExec());
           cout << string(com) << endl;
           
           com();
-          ASSERT ( 2 == command3::check_);
+          CHECK ( 2 == command3::check_);
           com.undo();
-          ASSERT ( 1 == command3::check_);
+          CHECK ( 1 == command3::check_);
           
           Command commi = com.newInstance();
           com();
           com();
           com();
-          ASSERT ( 4 == command3::check_);
+          CHECK ( 4 == command3::check_);
           
           commi.undo();  // it uses the inherited UNDO state
-          ASSERT ( 1 == command3::check_);
+          CHECK ( 1 == command3::check_);
           
           com.undo();
-          ASSERT ( 3 == command3::check_);
+          CHECK ( 3 == command3::check_);
           
           Command::get("test.command3.1").undo();
-          ASSERT ( 0 == command3::check_);
+          CHECK ( 0 == command3::check_);
         }
     };
   

@@ -62,7 +62,7 @@ namespace mobject
               sess->attach (clip);
 
 ///////////////////////////////////////////////////////////////////TICKET #499              
-//            ASSERT (sess->currEDL().contains (clip));
+//            CHECK (sess->currEDL().contains (clip));
               // TODO: Clip-Asset and Placement magic??
             } 
         };

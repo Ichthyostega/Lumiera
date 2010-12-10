@@ -79,7 +79,7 @@ namespace test    {
     : Clip(testbed_1().clipA_,
            testbed_1().media_)
   {
-    ASSERT (isValid());
+    CHECK (isValid());
   }
   
   

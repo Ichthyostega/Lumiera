@@ -92,9 +92,9 @@ namespace test{
           Wrmpf3 rmpf3;
           Murpf murpf;
           
-          ASSERT (1 == sizeof (rmpf1));
-          ASSERT (2 == sizeof (rmpf2));
-          ASSERT (3 == sizeof (rmpf3));
+          CHECK (1 == sizeof (rmpf1));
+          CHECK (2 == sizeof (rmpf2));
+          CHECK (3 == sizeof (rmpf3));
           
           cout << showSizeof((size_t)42, "theUniverse") << endl;
           cout << showSizeof<char>("just a char")       << endl;
@@ -116,7 +116,7 @@ namespace test{
       checkGarbageStr()
         {
           string garN = randStr(0);
-          ASSERT (0 == garN.size());
+          CHECK (0 == garN.size());
           
           typedef function<bool(string::value_type)> ChPredicate;
           ChPredicate is_OK (is_lower() || is_digit());

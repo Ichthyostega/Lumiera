@@ -1,23 +1,23 @@
 /*
   PlacementBasic(Test)  -  basic Placement and MObject handling
- 
+
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
- 
+
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
   published by the Free Software Foundation; either version 2 of the
   License, or (at your option) any later version.
- 
+
   This program is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
- 
+
   You should have received a copy of the GNU General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- 
+
 * *****************************************************/
 
 
@@ -43,11 +43,11 @@ using std::cout;
 namespace mobject {
   namespace session {
     namespace test  {
-      
+
       using asset::VIDEO;
-      
-      
-      
+
+
+
       /*******************************************************************
        * @test basic behaviour of Placements and access to MObjects.
        * @see  mobject::Placement
@@ -59,9 +59,9 @@ namespace mobject {
         {
           typedef shared_ptr<asset::Media> PM;
           typedef shared_ptr<asset::Clip> PCA;
-          
+
           virtual void
-          run (Arg) 
+          run (Arg)
             {
               // create Clip-MObject, which is wrapped into a placement (smart ptr)
               PM media = asset::Media::create("test-1", VIDEO);
@@ -70,32 +70,32 @@ namespace mobject {
 
               // use of the Clip-MObject interface by dereferencing the placement
               PM clip_media = pc->getMedia();
-              ASSERT (clip_media->ident.category.hasKind (VIDEO));
-              
+              CHECK (clip_media->ident.category.hasKind (VIDEO));
+
               // using the Placement interface
               // TODO: how to handle insufficiently determinated Placement? Throw?
               FixedLocation & fixloc = pc.chain(Time(1)); // TODO: the track??
               ExplicitPlacement expla = pc.resolve();
-              ASSERT (expla.time == Time(1));
-              ASSERT (!expla.chain.isOverdetermined());
-//            ASSERT (*expla == *pc);  ////////////////////////////////////////////TICKET #511 define equivalence of locating chains and solutions
-              
+              CHECK (expla.time == Time(1));
+              CHECK (!expla.chain.isOverdetermined());
+//            CHECK (*expla == *pc);  ////////////////////////////////////////////TICKET #511 define equivalence of locating chains and solutions
+
               // now overconstraining with another Placement
               pc.chain(Time(2));
               ExplicitPlacement expla2 = pc.resolve();
-              ASSERT (expla2.time == Time(2)); // the latest addition wins
-              ASSERT (expla2.chain.isOverdetermined()); 
-            } 
+              CHECK (expla2.time == Time(2)); // the latest addition wins
+              CHECK (expla2.chain.isOverdetermined());
+            }
         };
-      
-      
+
+
       /** Register this test class... */
       LAUNCHER (PlacementBasic_test, "unit session");
-      
-      
-      
+
+
+
     } // namespace test
-  
+
   } // namespace session
 
 } // namespace mobject

@@ -103,14 +103,14 @@ namespace test{
           theFact.defineProduction (TWO, bind (&fabricateNumberz, 2, _1 ));
           
           cout << showSizeof (theFact) << endl;
-          ASSERT (sizeof(theFact) == sizeof(DispatcherMap));
+          CHECK (sizeof(theFact) == sizeof(DispatcherMap));
           
           typedef TestFactory::Product PP;
           
           PP p1 = theFact(ONE, 2);
           PP p2 = theFact(TWO, 3);
-          ASSERT (1*2 == p1->n_);
-          ASSERT (2*3 == p2->n_);
+          CHECK (1*2 == p1->n_);
+          CHECK (2*3 == p2->n_);
         }
     };
   
