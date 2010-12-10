@@ -1786,20 +1786,20 @@ Some further details
 * a special case of this factory use is the [[Singleton]] factory, which is used a lot within the Proy-Layer code
 </pre>
 </div>
-<div title="Fixture" modifier="Ichthyostega" modified="201012030310" created="200706220324" tags="def spec Builder Model" changecount="42">
+<div title="Fixture" modifier="Ichthyostega" modified="201012092320" created="200706220324" tags="def spec Builder Model" changecount="44">
 <pre>a specially configured view -- joining together high-level and low-level model
 * all MObjects have their position, length and configuration set up ready for rendering.
 * any nested sequences (or other kinds of indirections) have been resolved.
 * every MObject is attached by an ExplicitPlacement, which declares a fixed position (Time, [[Pipe|OutputDesignation]])
 * these ~ExplicitPlacements are contained immediately within the Fixture, ordered by time
-* besides, there is a collection of all effective, possibly externally visible [[model ports|ModelPort]]
+* besides, there is a collection of all effective, possibly externally visible [[model ports|ModelPortRegistry]]
 
 As the builder and thus render engine //only consults the fixture,// while all editing operations finally propagate to the fixture as well, we get an isolation layer between the high level part of the Proc layer (editing, object manipulation) and the render engine. [[Creating the Fixture|BuildFixture]] is an important sideeffect of running the [[Builder]] when createing the [[render engine network|LowLevelModel]].
 
 !{{red{WIP}}} Structure of the fixture
 [&lt;img[Structure of the Fixture|draw/Fixture1.png]]
 
-The fixture is like a grid, where one dimension is given by the [[model ports|ModelPortTable]], and the other dimension extends in time. Within the time dimension there is a grouping into [[segments|Segmentation]] of constant structure.
+The fixture is like a grid, where one dimension is given by the [[model ports|ModelPortRegistry]], and the other dimension extends in time. Within the time dimension there is a grouping into [[segments|Segmentation]] of constant structure.
 
 ;Model Ports
 :The model ports share a single uniform and global name space: actually they're keyed by ~Pipe-ID
@@ -2819,8 +2819,8 @@ These are used as token for dealing with other objects and have no identity of t
 
 </pre>
 </div>
-<div title="ModelPort" modifier="Ichthyostega" modified="201012030404" created="201011100234" tags="def spec" changecount="5">
-<pre>Any point where output possibly might be produced. Model port entities are located within the [[Fixture]] &amp;mdash; model port as a concept spans the high-level and low-level view. A model port can be associated both to a pipe in the HighLevelModel but at the same time denote a set of corresponding [[exit nodes|ExitNode]] within the [[segments|Segmentation]] of the render nodes network.
+<div title="ModelPort" modifier="Ichthyostega" modified="201012091252" created="201011100234" tags="def spec" changecount="6">
+<pre>Any point where output possibly might be produced. Model port entities are located within the [[Fixture]] &amp;mdash; model port as a concept spans the high-level and low-level view. A model port can be associated both to a pipe in the HighLevelModel but at the same time denotes a set of corresponding [[exit nodes|ExitNode]] within the [[segments|Segmentation]] of the render nodes network.
 
 A model port is rather derived than configured; it emerges when a pipe [[claims|WiringClaim]] an output destination and some other entity actually uses this designation as a target, either directly or indirectly. This match of provision and usage is detected during the build process and produces an entry in the fixture's model port table. These model ports in the fixture are keyed by ~Pipe-ID, thus each model port has an associated StreamType.
 
@@ -2833,7 +2833,7 @@ Model ports are represented by small non-copyable descriptor objects with distin
 
 </pre>
 </div>
-<div title="ModelPortTable" modifier="Ichthyostega" modified="201012030345" created="201012030314" tags="Model impl" changecount="2">
+<div title="ModelPortRegistry" modifier="Ichthyostega" modified="201012092325" created="201012030314" tags="Model impl" changecount="2">
 <pre>Model ports are conceptual entities, denoting the points where output might possibly be produced &amp;rarr; see [[definition|ModelPort]].
 But there is an actual representation, a collection of small descriptor objects managed by the Fixture and organised within the model port table datastructure. Because model ports are discovered during the build process, we need the ability to (re)build this table dynamically, finally swapping in the modified configuration with a transactional switch. Only the builder is allowed to perform such mutations, while for client code model ports are immutable.
 
@@ -2852,6 +2852,8 @@ Model ports are added once and never changed. The corresponding timeline and pip
 The transactional switch creates a clear partitioning in the lifespan of the model port table. //Before// that point, entries are just added, but not accessed in any way. //After// that point, no further mutation occurs, but lookup is frequent and happens in a variety of different configurations and transient orderings.
 
 This observation leads to the idea of using //model port references// to provide all kinds of access, searching and reordering. These encapsulate the actual access by silently assuming reference to &quot;the&quot; global current model port configuration. Thus, the actual model port descriptors could be bulk allocated in a similar manner as the processing nodes and wiring descriptors. Access to stale model ports could be detected by the port references, allowing also for a {{{bool}}} checkable &quot;has no port&quot; information.
+
+A model port registry, maintained by the builder, is responsible for storing the discovered model ports within a model port table, which is then swapped in after completing the build process. The {{{builder::ModelPortRegistry}}} acts as management interface, while client code accesses just the {{{ModelPort}}} frontend. A link to the actual registry instance is hooked into that frontend when bringing up the builder subsystem.
 </pre>
 </div>
 <div title="ModelRootMO" modifier="Ichthyostega" modified="200912110245" created="200912080307" tags="def" changecount="5">

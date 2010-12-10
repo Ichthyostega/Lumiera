@@ -1,5 +1,5 @@
 /*
-  ModelPort  -  point to pull output data from the model
+  ModelPortRegistry  -  creating and organising and accessing model ports
  
   Copyright (C)         Lumiera.org
     2010,               Hermann Vosseler <Ichthyostega@web.de>
@@ -21,7 +21,7 @@
 * *****************************************************/
 
 
-/** @file model-port.cpp 
+/** @file model-port-registry.cpp 
  ** Implementation details of model port descriptors and references.
  ** Especially, the handling of the ModelPortTable datastructure is
  ** kept an opaque implementation detail and confined entirely within
@@ -39,6 +39,7 @@
 #include "lib/error.hpp"
 //#include "lib/symbol.hpp"//
 #include "proc/mobject/model-port.hpp"
+#include "proc/mobject/builder/model-port-registry.hpp"
 
 //#include <boost/functional/hash.hpp>
 //#include <cstdlib>
@@ -52,6 +53,7 @@
 //using lumiera::Symbol;
 
 namespace mobject {
+namespace builder {
   
   
   /**
@@ -66,4 +68,4 @@ namespace mobject {
   
   
   
-} // namespace mobject
+}} // namespace mobject
