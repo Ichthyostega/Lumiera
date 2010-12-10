@@ -44,7 +44,7 @@ TEST (configitem_simple)
   LumieraConfigitem item;
 
   item = lumiera_configitem_new (argv[2]);
-  ENSURE (item);
+  CHECK (item);
 
   printf ("line = '%s'\n", item->line);
   if (item->key)
@@ -71,10 +71,10 @@ TEST (lookup)
   lumiera_config_lookup_insert (&lookup, item);
 
   LumieraConfigitem found = lumiera_config_lookup_item_find (&lookup, "foo.bar");
-  ENSURE (found == item);
+  CHECK (found == item);
 
   lumiera_config_lookup_remove (&lookup, found);
-  ENSURE (!lumiera_config_lookup_item_find (&lookup, "foo.bar"));
+  CHECK (!lumiera_config_lookup_item_find (&lookup, "foo.bar"));
 
   lumiera_config_lookup_destroy (&lookup);
   lumiera_config_destroy ();

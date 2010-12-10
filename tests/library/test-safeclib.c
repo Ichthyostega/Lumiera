@@ -37,7 +37,7 @@ TEST (allocation1024)
   for (int i = 0; i < 1024; ++i)
     {
       data[i] = lumiera_malloc (1024);
-      ENSURE (data[i]);
+      CHECK (data[i]);
     }
   for (int i = 0; i < 1024; ++i)
     {

@@ -38,7 +38,7 @@ TEST ("basic")
   int fd = lumiera_file_handle_acquire (file);
 
   /* we now 'own'it and can use it */
-  ENSURE (fd > -1);
+  CHECK (fd > -1);
   printf ("got filehandle #%d\n", fd);
 
   /* put it into aging, can't use anymore */
@@ -67,7 +67,7 @@ TEST ("more")
   for (int i=0; i<100; ++i)
     {
       fds[i] = lumiera_file_handle_acquire (files[i]);
-      ENSURE (fds[i] > -1);
+      CHECK (fds[i] > -1);
       printf ("got filehandle #%d\n", fds[i]);
     }
 

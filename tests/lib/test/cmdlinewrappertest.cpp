@@ -71,13 +71,13 @@ namespace test {
           // consistency checks
           std::ostringstream output;
           output << theCmdline;
-          ENSURE (output.str() == string(theCmdline));
+          CHECK (output.str() == string(theCmdline));
           
           i=0;
           string token;
           std::istringstream input(theCmdline);
           while (input >> token)
-            ENSURE (token == theCmdline[i++]);
+            CHECK (token == theCmdline[i++]);
         }
       
       /** @test wrapping a (albeit faked) standard commandline

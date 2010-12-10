@@ -199,7 +199,7 @@ TEST (relocate)
   target = source;
 
   llist_relocate (&target);
-  ENSURE (llist_is_head (&target, &something));
+  CHECK (llist_is_head (&target, &something));
 }
 
 
