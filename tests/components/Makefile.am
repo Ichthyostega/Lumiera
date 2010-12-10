@@ -73,6 +73,7 @@ test_components_SOURCES =								\
 	$(testcomponents_srcdir)/proc/engine/node-source-test.cpp			\
 	$(testcomponents_srcdir)/proc/mobject/builder/buildertooltest.cpp		\
 	$(testcomponents_srcdir)/proc/mobject/builder/buildsegmenttest.cpp		\
+	$(testcomponents_srcdir)/proc/mobject/builder/model-port-registry-test.cpp	\
 	$(testcomponents_srcdir)/proc/mobject/controller/rendersegmenttest.cpp		\
 	$(testcomponents_srcdir)/proc/mobject/mobject-interface-test.cpp		\
 	$(testcomponents_srcdir)/proc/mobject/mobject-ref-test.cpp			\

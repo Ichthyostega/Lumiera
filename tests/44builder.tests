@@ -15,6 +15,11 @@ PLANNED "BuildSegment_test" BuildSegment_test <<END
 END
 
 
+PLANNED "ModelPort registry" ModelPortRegistry_test <<END
+return: 0
+END
+
+
 TEST "Output pipe mapping" OutputMapping_test <<END
 return: 0
 END

@@ -30,7 +30,7 @@
  ** and low-level view. A model port can be associated both to a pipe within a timeline
  ** in the HighLevelModel, as well as to denote a set of corresponding exit nodes within
  ** the segments of the render nodes network. Model ports are keyed by Pipe-ID and thus
- ** are unique within the application.
+ ** are bound to be unique within the application.
  ** 
  ** A model port is rather derived than configured; it emerges during the build process
  ** when a pipe claims an OutputDesignation and some other entity actually uses this
@@ -41,21 +41,22 @@
  ** 
  ** Because model ports are discovered this way, dynamically during the build process,
  ** at some point there is a <i>transactional switch</i> to promote the new configuration
- ** to be come the valid current model port configuration. After that switch, model ports
+ ** to become the valid current model port configuration. After that switch, model ports
  ** are immutable.
  ** 
  ** Model ports are to be accessed, enumerated and grouped in various ways, because each
  ** port belongs to a specific timeline and is used for producing data of a single
  ** StreamType solely. But all those referrals, searching and grouping happens only
  ** after the build process has discovered all model ports currently available.
- ** Thus we provide a MPortRef smart-pointer to ease handling of those access
- ** operations. The actual model port descriptors are owned and managed by
- ** the fixture; they are bulk allocated in a similar manner than the
+ ** Thus actually the ModelPort elements handed out to client code are just
+ ** smart-handles, accessing a global ModelPortRegistry behind the scenes.
+ ** Validity of these handles will be checked on each access. The actual
+ ** model port descriptors are owned and managed by the fixture;
+ ** they are bulk allocated in a similar manner than the
  ** ProcNode and WiringDescriptor objects.
  ** 
- ** TODO fill in more details?
- ** TODO where to put the ModelPortTable
- ** 
+ ** @see ModelPortRegistry_test abstract usage example
+ ** @see ModelPortRegistry management interface 
  ** @see OutputDesignation
  ** @see OutputMapping
  ** @see Timeline
@@ -66,23 +67,83 @@
 #define PROC_MOBJECT_MODEL_PORT_H
 
 #include "proc/asset/pipe.hpp"
-//#include "lib/opaque-holder.hpp"
-//#include "lib/meta/typelist-util.hpp"
-
-//extern "C" {
-//#include "lib/luid.h"
-//}
+#include "lib/bool-checkable.hpp"
+#include "lib/streamtype.hpp"
 
 namespace mobject {
   
+  LUMIERA_ERROR_DECLARE (INVALID_MODEL_PORT);      ///< Referral to unknown model port
+  LUMIERA_ERROR_DECLARE (UNCONNECTED_MODEL_PORT);  ///< Attempt to operate on an existing but unconnected model port
+  
+  
+  using asset::ID;
+  using lumiera::StreamType;
+  
+  
   /**
-   * TODO type comment
+   * Handle denoting a port within the model,
+   * where actually output data can be pulled.
+   * ModelPort is a frontend to be used by clients.
+   * These ModelPort handle objects may be copied and stored
+   * at will, but their validity will be verified on each access. 
+   * Actually, the Builder will discover any model ports and
+   * maintain a ModelPortRegistry behind the scenes.
+   * 
+   * Each model port corresponds to a (global) pipe within a
+   * specific Timeline; consequently each such port is also
+   * bound to produce data of a specific StreamType (as defined by
+   * the corresponding pipe). A model port may be in \em unconnected
+   * state, which can be checked by \c bool conversion. While the
+   * ModelPort handles are value objects, the identity of the
+   * underlying model port (descriptor) is given by the 
+   * corresponding pipe-ID, thus effectively resulting
+   * in a global namespace for model ports.
+   * 
+   * @see builder::ModelPortRegistry management interface
+   * @see ModelPortRegistry_test abstract usage example
    */
   class ModelPort
-    : boost::noncopyable
+    : public lib::BoolCheckable<ModelPort>
     {
+      ID<asset::Pipe> id_;
       
     public:
+      ModelPort()                         ///< \em unconnected model port
+        : id_(ID<asset::Pipe>::INVALID)
+        { }
+      
+      ModelPort (ID<asset::Pipe> refID);  ///< @note conversion from pipe-ID
+      
+      // using default copy operations
+      
+      
+      static bool exists (ID<asset::Pipe>);
+      
+      ID<asset::Pipe>   pipe()    const;
+      ID<asset::Struct> holder()  const;
+      StreamType::ID streamType() const;
+      
+      bool
+      isValid()  const
+        {
+          return exists (this->id_);
+        }
+      
+      
+      friend bool
+      operator== (ModelPort const& mp1, ModelPort const& mp2)
+      {
+        return mp1.id_ == mp2.id_;
+      }
+      
+      friend bool
+      operator!= (ModelPort const& mp1, ModelPort const& mp2)
+      {
+        return mp1.id_ != mp2.id_;
+      }
+      
+    private:
+      
     };
   
   

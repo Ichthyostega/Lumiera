@@ -25,28 +25,51 @@
 #include "lib/test/test-helper.hpp"
 #include "proc/mobject/builder/model-port-registry.hpp"
 #include "proc/asset/pipe.hpp"
+#include "proc/asset/timeline.hpp"
+#include "lib/query.hpp"
 #include "lib/util.hpp"
 
 //#include <boost/format.hpp>
 //#include <boost/scoped_ptr.hpp>
 #include <string>
 
-//using boost::format;
-//using boost::scoped_ptr;
-using util::isSameObject;
-using util::isnil;
-using std::string;
-
 
 namespace mobject {
 namespace builder {
 namespace test  {
   
+  //using boost::format;
+  //using boost::scoped_ptr;
+  using util::isSameObject;
+  using util::isnil;
+  using std::string;
+  
   using asset::Pipe;
   using asset::PPipe;
+  using asset::Struct;
+  using asset::Timeline;
+  using asset::PTimeline;
+  using lumiera::Query;
   
-  //typedef asset::ID<Pipe> PID;
+  typedef asset::ID<Pipe> PID;
+  typedef asset::ID<Struct> TID;
+  
+  
   namespace { // test environment
+    
+    inline PID
+    getPipe (string id)
+    {
+      return Pipe::query("id("+id+")");
+    }
+    
+    inline TID
+    getTimeline (string id)
+    {
+      return asset::Struct::retrieve (Query<Timeline> ("id("+id+")"))->getID();
+    }
+    
+    typedef ModelPortRegistry::ModelPortDescriptor const& MPDescriptor;
     
     struct TestContext
       {
@@ -88,30 +111,35 @@ namespace test  {
         {
           TestContext ctx;
           
-          fabricating_ModelPorts (ctx);
+          fabricating_ModelPorts (ctx.registry_);
           accessing_ModelPorts();
-          transactionalSwitch (ctx);
+          transactionalSwitch (ctx.registry_);
         }
       
       
       void
       fabricating_ModelPorts (ModelPortRegistry& registry)
         {
-          ModelPortDescriptor& p1 = registry.definePort (pipeA, someTimeline);
-          ModelPortDescriptor& p2 = registry.definePort (pipeB, someTimeline);
+          /* == some Assets to play with == */
+          PID pipeA        = getPipe ("pipeA");
+          PID pipeB        = getPipe ("pipeB");
+          PID pipeWC       = getPipe ("WCpipe");
+          TID someTimeline = getTimeline ("some_test_Timeline");
           
-          CHECK (p1);
-          CHECK (p2);
+          // start out with defining some new model ports......
+          MPDescriptor p1 = registry.definePort (pipeA, someTimeline);
+          MPDescriptor p2 = registry.definePort (pipeB, someTimeline);
+          
+          CHECK (registry.contains (pipeA));
+          CHECK (registry.contains (pipeB));
           
           VERIFY_ERROR (DUPLICATE_MODEL_PORT, registry.definePort(pipeB, someTimeline) );
-          CHECK (p2);
+          CHECK (registry.contains (pipeB));
           
-          CHECK (p1.getID() == pipeA);
-          CHECK (p2.getID() == pipeB);
-          CHECK (p1.getPipe() == pipeA);
-          CHECK (p2.getPipe() == pipeB);
-          CHECK (p1.getTimeline() == someTimeline);
-          CHECK (p2.getTimeline() == someTimeline);
+          CHECK (p1.id == pipeA);
+          CHECK (p2.id == pipeB);
+          CHECK (p1.holder == someTimeline);
+          CHECK (p2.holder == someTimeline);
           
           registry.commit();
         }
@@ -120,6 +148,10 @@ namespace test  {
       void
       accessing_ModelPorts ()
         {
+          PID pipeA  = getPipe ("pipeA");
+          PID pipeB  = getPipe ("pipeB");
+          PID pipeWC = getPipe ("WCpipe");
+          
           ModelPort mp1(pipeA);
           ModelPort mp2(pipeB);
           
@@ -149,26 +181,32 @@ namespace test  {
           CHECK (mp1x.pipe() == pipeA);
           VERIFY_ERROR (UNCONNECTED_MODEL_PORT, mpNull.pipe());
           
-          CHECK (mp1.streamType() == pipeA.getStreamType());
+          CHECK (mp1.streamType() == pipeA.streamType());
         }
       
       
       void
       transactionalSwitch (ModelPortRegistry& registry)
         {
+          PID pipeA  = getPipe ("pipeA");
+          PID pipeB  = getPipe ("pipeB");
+          PID pipeWC = getPipe ("WCpipe");
+          
           CHECK ( ModelPort::exists (pipeB));
           CHECK (!ModelPort::exists (pipeWC));
           
           CHECK (ModelPort::exists (pipeA));
           CHECK (registry.contains (pipeA));
           registry.remove (pipeA);
-          CHECK (ModelPort::exists (pipeA));
+          CHECK ( ModelPort::exists (pipeA));
           CHECK (!registry.contains (pipeA));
-    
-          ModelPortDescriptor& p1 = registry.definePort (pipeA, anotherTimeline);
+          
+          // now create a new and differing definition of port A 
+          TID anotherTimeline = getTimeline ("another_test_Timeline");
+          MPDescriptor p1 = registry.definePort (pipeA, anotherTimeline);
           CHECK (registry.contains (pipeA));
-          CHECK (p1.getTimeline() == anotherTimeline);
-          CHECK (ModelPort(pipeA).timeline() != anotherTimeline);
+          CHECK (p1.holder == anotherTimeline);
+          CHECK (ModelPort(pipeA).holder() != anotherTimeline);
           
           registry.remove (pipeB);
           registry.definePort (pipeWC,anotherTimeline);
@@ -184,7 +222,7 @@ namespace test  {
           CHECK (portB);
           CHECK (portA.pipe() == pipeA);
           CHECK (portB.pipe() == pipeB);
-          CHECK (portA.timeline() != anotherTimeline);
+          CHECK (portA.holder() != anotherTimeline);
           
           registry.commit();
           CHECK ( ModelPort::exists (pipeA));
@@ -192,14 +230,25 @@ namespace test  {
           CHECK ( ModelPort::exists (pipeWC));
           CHECK ( portA);
           CHECK (!portB);
-          CHECK (portA.timeline() == anotherTimeline);
+          CHECK (portA.holder() == anotherTimeline);
           CHECK (portA.pipe() == pipeA);
           VERIFY_ERROR (UNCONNECTED_MODEL_PORT, portB.pipe());
           
           ModelPort pwc(pipeWC);
           CHECK (pwc);
           CHECK (pwc.pipe() == pipeWC);
-          CHECK (pwc.timeline() == anotherTimeline);
+          CHECK (pwc.holder() == anotherTimeline);
+          
+          registry.remove (pipeA);
+          registry.clear();
+          CHECK (!registry.contains (pipeA));
+          CHECK (!registry.contains (pipeB));
+          CHECK (!registry.contains (pipeWC));
+          
+          registry.rollback();
+          CHECK ( registry.contains (pipeA));
+          CHECK ( registry.contains (pipeB));
+          CHECK ( registry.contains (pipeWC));
         }
     };
   

@@ -53,19 +53,176 @@
 //using lumiera::Symbol;
 
 namespace mobject {
-namespace builder {
-  
-  
-  /**
-   * TODO type comment
-   */
-  class ModelPortTable
-    : boost::noncopyable
-    {
+  namespace builder {
+    
+    
+    /**
+     * TODO type comment
+     */
+    class ModelPortTable
+      : boost::noncopyable
+      {
+        
+      public:
+      };
+    
       
-    public:
-    };
+    typedef ModelPortRegistry::ModelPortDescriptor const& MPDescriptor;
+    
+      inline MPDescriptor
+      accessDescriptor() 
+      {
+        
+      }
+    
+    ModelPortRegistry&
+    ModelPortRegistry::setActiveInstance (ModelPortRegistry& newRegistry)
+    {
+      UNIMPLEMENTED ("handling of active model port registry"); 
+    }
+    
+    
+    /** */
+    ModelPortRegistry&
+    ModelPortRegistry::globalInstance()
+    {
+      UNIMPLEMENTED ("access the globally valid registry instance"); 
+    }
+   
+    
+    
+    /** */
+    bool
+    ModelPortRegistry::contains (ID<Pipe> pID)  const
+    {
+      UNIMPLEMENTED ("diagnostics querying the state of the pending transaction"); 
+    }
+    
+    
+    /** @return true if the given pipe-ID actually denotes an
+     *          existing, connected and usable model port. 
+     *  @note reflects the state of the publicly visible 
+     *          model port registry, \em not any model ports
+     *          being registered within a currently pending
+     *          transaction (ongoing build process). */
+    bool
+    ModelPortRegistry::isRegistered (ID<Pipe> key)  const
+    {
+      if (!key) return false;
+      
+      UNIMPLEMENTED ("query the publicly valid contents"); 
+    }
+    
+    
+    /** */
+    MPDescriptor
+    ModelPortRegistry::operator[] (ID<Pipe> key)  const
+    {
+      UNIMPLEMENTED ("access registered model port");
+    }
+    
+    
+    /** */
+    MPDescriptor
+    ModelPortRegistry::accessDescriptor (ID<Pipe> key)
+    {
+      UNIMPLEMENTED ("access the current global registry and fetch model port");
+    }
+    
+    
+    /** */
+    MPDescriptor
+    ModelPortRegistry::definePort (ID<Pipe> pipeA, ID<Struct> element_exposing_this_port)
+    {
+      UNIMPLEMENTED ("create and register a new model port entry, within the pending transaction"); 
+    }
+    
+    
+    /** */
+    void
+    ModelPortRegistry::remove (PID key)
+    {
+      UNIMPLEMENTED ("remove a model port entry from the pending transaction"); 
+    }
+    
+    
+    /** */
+    void
+    ModelPortRegistry::clear()
+    {
+      UNIMPLEMENTED ("schedule removal of all registry contents into the pending transaction"); 
+    }
+    
+    
+    /** */
+    void
+    ModelPortRegistry::commit()
+    {
+      UNIMPLEMENTED ("transactional switch for new/modified model ports"); 
+    }
+    
+    
+    /** */
+    void
+    ModelPortRegistry::rollback()
+    {
+      UNIMPLEMENTED ("discard current transaction"); 
+    }
+  
+    
+    
+    LUMIERA_ERROR_DEFINE (DUPLICATE_MODEL_PORT, "Attempt to define a new model port with an pipe-ID already denoting an existing port");
+  
+  } // namespace builder  
   
   
   
-}} // namespace mobject
+  
+  LUMIERA_ERROR_DEFINE (INVALID_MODEL_PORT, "Referral to unknown model port");
+  LUMIERA_ERROR_DEFINE (UNCONNECTED_MODEL_PORT, "Attempt to operate on an existing but unconnected model port");
+
+  
+  ModelPort::ModelPort (ID<asset::Pipe> refID)
+    : id_(refID)
+    {
+      builder::ModelPortRegistry::accessDescriptor (refID);
+    }
+  
+  
+  /** */
+  bool
+  ModelPort::exists (ID<asset::Pipe> key)
+  {
+    return builder::ModelPortRegistry::globalInstance().isRegistered (key);
+  }
+  
+  
+  /** */
+  ID<asset::Pipe>
+  ModelPort::pipe()  const
+  {
+    ENSURE (this->id_ == builder::ModelPortRegistry::accessDescriptor(this->id_).id);
+    
+    return builder::ModelPortRegistry::accessDescriptor(this->id_).id;
+  }
+  
+  
+  /** */
+  ID<asset::Struct>
+  ModelPort::holder()  const
+  {
+    return builder::ModelPortRegistry::accessDescriptor(this->id_).holder;
+  }
+  
+  
+  /** */
+  StreamType::ID
+  ModelPort::streamType() const
+  {
+    return this->id_.streamType();
+  }
+
+
+  
+  
+} // namespace mobject

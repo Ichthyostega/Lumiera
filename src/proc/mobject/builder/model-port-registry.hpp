@@ -34,8 +34,6 @@
  ** for setting up such a registry, while all other parts of the system just access the current
  ** model ports through the mobject::ModelPort frontend.
  ** 
- ** TODO fill in more details?
- ** 
  ** @see ModelPort
  ** @see OutputDesignation
  ** @see ModelPortRegistry_test
@@ -45,7 +43,11 @@
 #ifndef PROC_MOBJECT_BUILDER_MODEL_PORT_REGISTRY_H
 #define PROC_MOBJECT_BUILDER_MODEL_PORT_REGISTRY_H
 
+#include "lib/error.hpp"
 #include "proc/asset/pipe.hpp"
+#include "proc/asset/struct.hpp"
+#include "proc/mobject/model-port.hpp"
+
 //#include "lib/opaque-holder.hpp"
 //#include "lib/meta/typelist-util.hpp"
 
@@ -56,16 +58,104 @@
 namespace mobject {
 namespace builder {
   
+  using asset::ID;
+  using asset::Pipe;
+//using asset::PPipe;
+  using asset::Struct;
+  
+  LUMIERA_ERROR_DECLARE (DUPLICATE_MODEL_PORT); ///< Attempt to define a new model port with an pipe-ID already denoting an existing port
+  
+  
   /**
-   * TODO type comment
+   * Management facility for tracking model ports.
+   * ModelPort handles are exposed as frontend for usage
+   * by client code. Model ports are discovered by the builder
+   * when re-creating the low-level model; during such an ongoing
+   * build process, newly discovered ports are accumulated within
+   * a transaction, which then gets committed atomically when the
+   * new model is complete and ready for use.
    */
   class ModelPortRegistry
     : boost::noncopyable
     {
       
+      typedef ID<Pipe>   PID;
+      typedef ID<Struct> StID;
+      
     public:
+      /** @internal record to describe a model port */
+      struct ModelPortDescriptor;
+      
+      
+      static ModelPortRegistry&
+      setActiveInstance (ModelPortRegistry& newRegistry);
+      
+      static ModelPortRegistry&
+      globalInstance();
+
+      static ModelPortDescriptor const&
+      accessDescriptor (PID); 
+      
+      
+      ModelPortDescriptor const&
+      definePort (PID pipe, StID element_exposing_this_port);
+      
+      bool contains (PID)     const;
+      bool isRegistered (PID) const;
+      
+      ModelPortDescriptor const&
+      operator[] (PID)  const;
+      
+      
+      void remove (PID);
+      void clear();
+      
+      
+      /** activate pending model port changes.
+       *  Any accumulated changes and newly defined model ports
+       *  are promoted to become part of the current active configuration
+       *  with a single atomic (transactional) switch.
+       */
+      void commit();
+      
+      /** discard pending changes.
+       *  Silently drop model port definition changes since the last commit.
+       */
+      void rollback();
     };
   
+  
+  
+  /** ModelPortDescriptor records are used as actual storage
+   *  within the model port registration table; they are never
+   *  exposed to client code directly.
+   */
+  struct ModelPortRegistry::ModelPortDescriptor
+    {
+      const PID  id;
+      const StID holder;
+      
+      bool
+      isValid()  const
+        {
+          return bool(id);
+        }
+      
+      
+      ModelPortDescriptor()
+        : id(PID::INVALID)
+        , holder(StID::INVALID)
+        { }
+      
+      // default copy operations permitted
+      
+    protected:
+      ModelPortDescriptor (PID pipe, StID element_exposing_this_port)
+        : id(pipe)
+        , holder(element_exposing_this_port)
+        { }
+    };
+
   
   
 }} // namespace mobject::builder
