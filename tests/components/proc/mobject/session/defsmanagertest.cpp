@@ -32,6 +32,7 @@
 #include "proc/asset/pipe.hpp"
 #include "proc/assetmanager.hpp"
 #include "proc/mobject/session.hpp"
+#include "lib/streamtype.hpp"
 
 #include <boost/format.hpp>
 
@@ -49,6 +50,7 @@ namespace test  {
     using mobject::Session;
     using lumiera::Query;
     using lumiera::query::normaliseID;
+    using lumiera::StreamType;
     
     
     /** shortcut: run just a query
@@ -117,7 +119,7 @@ namespace test  {
         retrieveConstrainedDefault (string pID, string sID)
           {
             PPipe pipe1 = Pipe::query (""); // "the default pipe"
-            ASSERT (sID != pipe1->getStreamID(),
+            ASSERT ( pipe1->getStreamID() != StreamType::ID(sID),
                     "stream-ID \"%s\" not suitable for test, because "
                     "the default-pipe \"%s\" happens to have the same "
                     "stream-ID. We need it to be different", 
@@ -126,7 +128,7 @@ namespace test  {
             
             string query_for_sID ("stream("+sID+")");
             PPipe pipe2 = Pipe::query (query_for_sID);
-            ASSERT (sID == pipe2->getStreamID());
+            ASSERT (pipe2->getStreamID() == StreamType::ID(sID));
             ASSERT (pipe2 != pipe1);
             ASSERT (pipe2 == Pipe::query (query_for_sID));   // reproducible
           }

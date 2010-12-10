@@ -31,6 +31,7 @@
 #include "common/configrules.hpp"
 #include "proc/assetmanager.hpp"
 #include "proc/mobject/session.hpp"
+#include "lib/streamtype.hpp"
 
 #include <boost/format.hpp>
 
@@ -49,6 +50,7 @@ namespace asset {
     
     using lumiera::ConfigRules;
     using lumiera::query::QueryHandler;
+    using lumiera::StreamType;
     
     
     
@@ -94,6 +96,7 @@ namespace asset {
         define_and_search ()
           {
             string sID = newID ("stream");
+            StreamType::ID stID (sID);
             
              // create Pipes explicitly 
             //  (without utilising default queries)
@@ -101,7 +104,7 @@ namespace asset {
             PPipe pipe2 = Struct::retrieve.newPipe (newID("pipe"), sID            );
             
             ASSERT (pipe1 != pipe2);
-            ASSERT (sID == pipe2->getStreamID());
+            ASSERT (stID == pipe2->getStreamID());
             
             ASSERT (!find (pipe1->getPipeID()), "accidental clash of random test-IDs");
             ASSERT (!find (pipe2->getPipeID()), "accidental clash of random test-IDs");
@@ -116,7 +119,7 @@ lumiera::query::setFakeBypass("stream("+sID+")"); //////////////////////////////
             ASSERT ( find (pipe1->getPipeID()), "failure declaring object as default");
             ASSERT ( find (pipe2->getPipeID()), "failure declaring object as default");
             
-            ASSERT (sID != pipe1->getStreamID(), "accidental clash");
+            ASSERT (stID != pipe1->getStreamID(), "accidental clash");
             ASSERT (!Session::current->defaults.define (pipe1, Query<Pipe> ("stream("+sID+")")));
                     // can't be registered with this query, due to failure caused by wrong stream-ID
           }

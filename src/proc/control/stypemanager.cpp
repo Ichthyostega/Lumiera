@@ -79,6 +79,14 @@ namespace control {
   }
   
   
+  /** */
+  StreamType const&
+  STypeManager::getType (StreamType::ID stID) 
+  {
+    UNIMPLEMENTED ("get type just by symbolic ID (query defaults manager)");
+  }
+  
+  
   StreamType const& 
   STypeManager::getType (StreamType::Prototype const& protoType)
   {
