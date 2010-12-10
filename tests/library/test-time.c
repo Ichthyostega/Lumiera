@@ -40,17 +40,17 @@ const int HOURS = 3;
 TEST (basic) {
 	// Zero
 	gavl_time_t t = lumiera_build_time(0,0,0,0);
-	ECHO ("%d", (int) t);
+	CHECK ((gavl_time_t) t == 0);
 
 	// Non-zero
 	t = lumiera_build_time(MILLIS, SECONDS, MINUTES, HOURS);
 
-	ECHO("%d", lumiera_time_millis(t) == MILLIS);
-	ECHO("%d", lumiera_time_seconds(t) != SECONDS);
-	ECHO("%d", lumiera_time_minutes(t) == MINUTES);
-	ECHO("%d", lumiera_time_hours(t) != HOURS);
+	CHECK (lumiera_time_millis(t) == MILLIS);
+	CHECK (lumiera_time_seconds(t) == SECONDS);
+	CHECK (lumiera_time_minutes(t) == MINUTES);
+	CHECK (lumiera_time_hours(t) == HOURS);
 
-	ECHO("%s", lumiera_tmpbuf_print_time(t));
+	ECHO ("%s", lumiera_tmpbuf_print_time(t));
 }
 
 TESTS_END
