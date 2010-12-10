@@ -33,12 +33,6 @@
 #include "timecode-widget.hpp"
 #include "../util/convert.hpp"
 
-#include "../../lib/lumitime.hpp"
-
-extern "C" {
-#include "../../lib/time.h"
-}
-
 using namespace sigc;
 using namespace Gtk;
 using namespace std;
@@ -75,7 +69,7 @@ TimeCode::TimeCode(std::string clock_name, std::string widget_name, bool allow_e
     colon4(":"),
     colon5(":")
 {
-  last_when = 0;
+  last_when = Time(0);
   last_pdelta = 0;
   last_sdelta = 0;
   key_entry_state = 0;
@@ -380,7 +374,7 @@ TimeCode::on_realize()
 }
 
 void
-TimeCode::set(gavl_time_t when, bool force)
+TimeCode::set(Time when, bool force)
 {
   if (!force && when == last_when)
     return;
@@ -425,7 +419,7 @@ TimeCode::set(gavl_time_t when, bool force)
 // }
 
 void
-TimeCode::set_frames(gavl_time_t when, bool force)
+TimeCode::set_frames(Time when, bool force)
 {
   char buf[32];
   snprintf(buf, sizeof(buf), "%u", (unsigned int)when);
@@ -433,15 +427,13 @@ TimeCode::set_frames(gavl_time_t when, bool force)
 }  
 
 void
-TimeCode::set_minsec(gavl_time_t when, bool force)
+TimeCode::set_minsec(Time when, bool force)
 {
   char buf[32];
 
-  lumiera::Time t(when);
-
-  int hrs    = t.getHours();
-  int mins   = t.getMins();
-  float secs = t.getSecs();
+  int hrs    = when.getHours();
+  int mins   = when.getMins();
+  float secs = when.getSecs();
   
   if (force || hrs != ms_last_hrs)
     {
@@ -466,17 +458,15 @@ TimeCode::set_minsec(gavl_time_t when, bool force)
 }
 
 void
-TimeCode::set_smpte(gavl_time_t when, bool force)
+TimeCode::set_smpte(Time when, bool force)
 {
   char buf[32];
 
-  lumiera::Time t(when);
-
-  int smpte_negative = when < 0;
-  int smpte_hours    = t.getHours();
-  int smpte_minutes  = t.getMins();
-  int smpte_seconds  = t.getSecs();
-  int smpte_frames   = 0; //t.getFrames(framerate);
+  int smpte_negative = 0; // FIXME: when < 0;
+  int smpte_hours    = when.getHours();
+  int smpte_minutes  = when.getMins();
+  int smpte_seconds  = when.getSecs();
+  int smpte_frames   = 0; //when.getFrames(framerate);
 
   // if (is_duration) {
   //  session->smpte_duration(when, smpte);
@@ -933,7 +923,7 @@ TimeCode::field_button_press_event(GdkEventButton *ev, Field field)
   return false;
   // if (session == 0) return false;
 
-  // gavl_time_t frames = 0;
+  // Time frames = 0;
 
   switch (ev->button) {
   case 1:
@@ -981,7 +971,7 @@ TimeCode::field_button_scroll_event (GdkEventScroll *ev, Field field)
   //  return false;
   // }
 
-  // gavl_time_t frames = 0;
+  // Time frames = 0;
 
   switch (ev->direction) {
 
@@ -1050,21 +1040,21 @@ TimeCode::field_motion_notify_event (GdkEventMotion *ev, Field field)
 
   if (trunc(drag_accum) != 0)
     {
-      gavl_time_t frames;
-      gavl_time_t pos ;
+      int frames;
+      Time pos;
       int dir;
       dir = (drag_accum < 0 ? 1:-1);
       pos = current_time();
       frames = get_frames(field,pos,dir);
     
-      if (frames  != 0 &&  frames * drag_accum < current_time())
+      if (frames  != 0 &&  frames * drag_accum < ((gavl_time_t)current_time()))
         {
           // minus because up is negative in computer-land
-          set ((gavl_time_t) floor (pos - drag_accum * frames), false);
+          set ((Time) floor (pos - drag_accum * frames), false);
         }
       else
         {
-          set (0 , false);
+          set (Time(0) , false);
         }
 
       drag_accum = 0;
@@ -1074,23 +1064,23 @@ TimeCode::field_motion_notify_event (GdkEventMotion *ev, Field field)
   return true;
 }
 
-gavl_time_t
-TimeCode::get_frames(Field field, gavl_time_t pos, int dir)
+int
+TimeCode::get_frames(Field field, Time pos, int dir)
 {
-  gavl_time_t frames = 0;
+  int frames = 0;
   // switch (field)
   //   {
   //   case SMPTE_Hours:
-  //     frames = (gavl_time_t) floor (3600.0 * session->frame_rate());
+  //     frames = (Time) floor (3600.0 * session->frame_rate());
   //     break;
   //   case SMPTE_Minutes:
-  //     frames = (gavl_time_t) floor (60.0 * session->frame_rate());
+  //     frames = (Time) floor (60.0 * session->frame_rate());
   //     break;
   //   case SMPTE_Seconds:
   //     frames = session->frame_rate();
   //     break;
   //   case SMPTE_Frames:
-  //     frames = (gavl_time_t) floor (session->frame_rate() / session->smpte_frames_per_second());
+  //     frames = (Time) floor (session->frame_rate() / session->smpte_frames_per_second());
   //     break;
 
   //   case VFrames:
@@ -1098,10 +1088,10 @@ TimeCode::get_frames(Field field, gavl_time_t pos, int dir)
   //     break;
 
   //   case MS_Hours:
-  //     frames = (gavl_time_t) floor (3600.0 * session->frame_rate());
+  //     frames = (Time) floor (3600.0 * session->frame_rate());
   //     break;
   //   case MS_Minutes:
-  //     frames = (gavl_time_t) floor (60.0 * session->frame_rate());
+  //     frames = (Time) floor (60.0 * session->frame_rate());
   //     break;
   //   case MS_Seconds:
   //     frames = session->frame_rate();
@@ -1111,10 +1101,10 @@ TimeCode::get_frames(Field field, gavl_time_t pos, int dir)
   return frames;
 }
 
-gavl_time_t
-TimeCode::current_time(gavl_time_t pos) const
+Time
+TimeCode::current_time(Time pos) const
 {
-  gavl_time_t ret = 0;
+  Time ret = Time(0);
 
   switch (_mode)
     {
@@ -1137,10 +1127,10 @@ TimeCode::current_time(gavl_time_t pos) const
   return ret;
 }
 
-gavl_time_t
-TimeCode::current_duration(gavl_time_t pos) const
+Time
+TimeCode::current_duration(Time pos) const
 {
-  gavl_time_t ret = 0;
+  Time ret = Time(0);
 
   switch (_mode)
     {
@@ -1193,13 +1183,13 @@ TimeCode::smpte_sanitize_display()
   // }
 }
 
-gavl_time_t
+Time
 TimeCode::smpte_time_from_display() const
 {
   // TODO
 
   // SMPTE::Time smpte;
-  // gavl_time_t sample;
+  // Time sample;
   
   // smpte.hours = atoi (hours_label.get_text());
   // smpte.minutes = atoi (minutes_label.get_text());
@@ -1210,10 +1200,10 @@ TimeCode::smpte_time_from_display() const
 
   // session->smpte_to_sample(smpte, sample, false /* use_offset */, false /* use_subframes */ );
   
-  return 0;
+  return Time(0);
 }
 
-gavl_time_t
+Time
 TimeCode::minsec_time_from_display () const
 {
   // TODO
@@ -1222,17 +1212,17 @@ TimeCode::minsec_time_from_display () const
   // int mins = atoi (ms_minutes_label.get_text());
   // float secs = atof (ms_seconds_label.get_text());
 
-  // gavl_time_t sr = session->frame_rate();
+  // Time sr = session->frame_rate();
 
-  // return (gavl_time_t) floor ((hrs * 60.0f * 60.0f * sr) + (mins * 60.0f * sr) + (secs * sr));
+  // return (Time) floor ((hrs * 60.0f * 60.0f * sr) + (mins * 60.0f * sr) + (secs * sr));
 
-  return 0;
+  return Time(0);
 }
 
-gavl_time_t
+Time
 TimeCode::audio_time_from_display () const
 {
-  return (gavl_time_t) atoi (audio_frames_label.get_text());
+  return Time((gavl_time_t) atoi (audio_frames_label.get_text()));
 }
 
 void

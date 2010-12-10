@@ -33,6 +33,10 @@
 #include <gtkmm/label.h>
 #include <gtkmm/frame.h>
 
+#include "lib/lumitime.hpp"
+
+using lumiera::Time;
+
 namespace gui {
 namespace widgets {
 
@@ -52,15 +56,15 @@ public:
 
   void focus();
 
-  void set(gavl_time_t, bool force = false);
+  void set(Time when, bool force = false);
   void set_mode(Mode);
 
   void set_widget_name(std::string);
 
   std::string name() const { return _name; }
 
-  gavl_time_t current_time(gavl_time_t position = 0) const;
-  gavl_time_t current_duration(gavl_time_t position = 0) const;
+  Time current_time(Time position = Time(0)) const;
+  Time current_duration(Time position = Time(0)) const;
 
   sigc::signal<void> ValueChanged;
   sigc::signal<void> ChangeAborted;
@@ -127,7 +131,7 @@ private:
   Gtk::EventBox  clock_base;
   Gtk::Frame     clock_frame;
 
-  gavl_time_t last_when;
+  Time last_when;
   bool last_pdelta;
   bool last_sdelta;
 
@@ -152,22 +156,22 @@ private:
   bool field_button_press_event(GdkEventButton *ev, Field);
   bool field_button_release_event(GdkEventButton *ev, Field);
   bool field_button_scroll_event(GdkEventScroll *ev, Field);
-  bool field_key_press_event(GdkEventKey *, Field);
-  bool field_key_release_event(GdkEventKey *, Field);
-  bool field_focus_in_event(GdkEventFocus *, Field);
-  bool field_focus_out_event(GdkEventFocus *, Field);
-  bool drop_focus_handler(GdkEventFocus*);
+  bool field_key_press_event(GdkEventKey *ev, Field);
+  bool field_key_release_event(GdkEventKey *ev, Field);
+  bool field_focus_in_event(GdkEventFocus *ev, Field);
+  bool field_focus_out_event(GdkEventFocus *ev, Field);
+  bool drop_focus_handler(GdkEventFocus *ev);
 
-  void set_smpte(gavl_time_t, bool);
-  void set_minsec(gavl_time_t, bool);
-  void set_frames(gavl_time_t, bool);
+  void set_smpte(Time, bool);
+  void set_minsec(Time, bool);
+  void set_frames(Time, bool);
 
-  gavl_time_t get_frames(Field, gavl_time_t pos = 0, int dir=1);
+  int get_frames(Field, Time pos = Time(0), int dir=1);
   
   void smpte_sanitize_display();
-  gavl_time_t smpte_time_from_display() const;
-  gavl_time_t minsec_time_from_display() const;
-  gavl_time_t audio_time_from_display() const;
+  Time smpte_time_from_display() const;
+  Time minsec_time_from_display() const;
+  Time audio_time_from_display() const;
 
   void build_ops_menu();
   void setup_events();
