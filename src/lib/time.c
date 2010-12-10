@@ -91,3 +91,16 @@ lumiera_time_millis(gavl_time_t time)
 {
   return (time / GAVL_TIME_SCALE_MS) % 1000;
 }
+
+int
+lumiera_time_frames(gavl_time_t time, float fps)
+{
+  return (fps * (lumiera_time_millis(time))) / 1000;
+}
+
+int
+lumiera_time_frame_count(gavl_time_t time, float fps)
+{
+  int ms = (time / GAVL_TIME_SCALE_MS);
+  return fps * ms / 1000;
+}

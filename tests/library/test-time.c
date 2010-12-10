@@ -32,6 +32,7 @@ const int MILLIS = 700;
 const int SECONDS = 20;
 const int MINUTES = 55;
 const int HOURS = 3;
+const float FPS = 24.0;
 
 /*
  * 1. Basic functionality
@@ -46,6 +47,10 @@ TEST (basic) {
   CHECK (lumiera_time_seconds(t)            == 0);
   CHECK (lumiera_time_minutes(t)            == 0);
   CHECK (lumiera_time_hours(t)              == 0);
+  CHECK (lumiera_time_frames(t, FPS)        == 0);
+  CHECK (lumiera_time_frames(t, FPS+5)      == 0);
+  CHECK (lumiera_time_frame_count(t, FPS)   == 0);
+  CHECK (lumiera_time_frame_count(t, FPS+5) == 0);
 
   ECHO ("%s", lumiera_tmpbuf_print_time(t));
 
@@ -56,6 +61,10 @@ TEST (basic) {
   CHECK (lumiera_time_seconds(t)            == SECONDS);
   CHECK (lumiera_time_minutes(t)            == MINUTES);
   CHECK (lumiera_time_hours(t)              == HOURS);
+  CHECK (lumiera_time_frames(t, FPS)        == (int)((FPS * MILLIS) / 1000));
+  CHECK (lumiera_time_frames(t, FPS+5)      == (int)(((FPS+5) * MILLIS) / 1000));
+  CHECK (lumiera_time_frame_count(t, FPS)   == 338896);
+  CHECK (lumiera_time_frame_count(t, FPS+5) == 409500);
 
   ECHO ("%s", lumiera_tmpbuf_print_time(t));
 }
