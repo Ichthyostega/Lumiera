@@ -45,7 +45,13 @@ namespace asset {
     {
     public:
       ID (HashVal id);
-      ID (const Pipe&);
+      ID (Pipe const&);
+      ID (PPipe const&);
+      
+      /** allows a Pipe-ID to stand in for a full Pipe Asset
+       *  @throw error::Invalid when there is no corresponding Pipe
+       */
+      operator PPipe()  const;
     };
   
   
@@ -95,8 +101,10 @@ namespace asset {
     
    // catch up with postponed definition of ID<Struct> ctors...
   //
-  inline ID<Pipe>::ID(HashVal id)       : ID<Struct> (id)           {};
-  inline ID<Pipe>::ID(Pipe const& pipe) : ID<Struct> (pipe.getID()) {};
+  inline ID<Pipe>::ID(HashVal id)        : ID<Struct> (id)            {};
+  inline ID<Pipe>::ID(Pipe const& pipe)  : ID<Struct> (pipe.getID())  {};
+  inline ID<Pipe>::ID(PPipe const& pipe) : ID<Struct> (pipe->getID()) {};
+  inline ID<Pipe>::operator PPipe() const { return Pipe::lookup(*this); }
   
   
   
