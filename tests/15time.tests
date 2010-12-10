@@ -1,5 +1,6 @@
 TESTING "Time conversion" ./test-time
 
 TEST "basic functionality" basic <<END
+err: ECHO: .*: 00:00:00.000
 err: ECHO: .*: 03:55:20.700
 END

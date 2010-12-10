@@ -38,19 +38,26 @@ const int HOURS = 3;
  */
 
 TEST (basic) {
-	// Zero
-	gavl_time_t t = lumiera_build_time(0,0,0,0);
-	CHECK ((gavl_time_t) t == 0);
+  // Zero
+  gavl_time_t t = lumiera_build_time(0,0,0,0);
 
-	// Non-zero
-	t = lumiera_build_time(MILLIS, SECONDS, MINUTES, HOURS);
+  CHECK ((gavl_time_t) t                    == 0);
+  CHECK (lumiera_time_millis(t)             == 0);
+  CHECK (lumiera_time_seconds(t)            == 0);
+  CHECK (lumiera_time_minutes(t)            == 0);
+  CHECK (lumiera_time_hours(t)              == 0);
 
-	CHECK (lumiera_time_millis(t) == MILLIS);
-	CHECK (lumiera_time_seconds(t) == SECONDS);
-	CHECK (lumiera_time_minutes(t) == MINUTES);
-	CHECK (lumiera_time_hours(t) == HOURS);
+  ECHO ("%s", lumiera_tmpbuf_print_time(t));
 
-	ECHO ("%s", lumiera_tmpbuf_print_time(t));
+  // Non-zero
+  t = lumiera_build_time(MILLIS, SECONDS, MINUTES, HOURS);
+
+  CHECK (lumiera_time_millis(t)             == MILLIS);
+  CHECK (lumiera_time_seconds(t)            == SECONDS);
+  CHECK (lumiera_time_minutes(t)            == MINUTES);
+  CHECK (lumiera_time_hours(t)              == HOURS);
+
+  ECHO ("%s", lumiera_tmpbuf_print_time(t));
 }
 
 TESTS_END
