@@ -103,11 +103,11 @@ namespace asset {
   template<class KIND>
   class ID
     {
+      HashVal hash_;
     public:
-      const HashVal hash;
-      ID (HashVal id)        : hash(id)         {}
-      ID (const KIND& asset) : hash(asset.getID()) {}
-      operator HashVal() const { return hash; }
+      ID (HashVal id)        : hash_(id)         {}
+      ID (const KIND& asset) : hash_(asset.getID()) {}
+      operator HashVal() const { return hash_; }
       
       static ID INVALID;
     };

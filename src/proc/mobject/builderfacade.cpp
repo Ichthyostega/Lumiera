@@ -26,11 +26,6 @@
 
 namespace mobject {
   
-  namespace builder {
-    using ::NOBUG_FLAG(memory);
-    NOBUG_CPP_DEFINE_FLAG_PARENT(buildermem, memory);
-  }
-  
   
   /**
    * Main Operation of the Builder: 
@@ -41,6 +36,9 @@ namespace mobject {
   {
     //////////////////////TODO
   }
+  
+  LUMIERA_ERROR_DEFINE (BUILDER_LIFECYCLE, "Builder activated while in non operational state");
+  
   
   
   

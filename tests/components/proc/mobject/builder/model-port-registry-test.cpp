@@ -74,7 +74,7 @@ namespace test  {
     struct TestContext
       {
         ModelPortRegistry registry_;
-        ModelPortRegistry& previous_;
+        ModelPortRegistry* previous_;
         
         /** setup */
         TestContext()
@@ -85,7 +85,10 @@ namespace test  {
         /** tear-down */
        ~TestContext()
           {
-            ModelPortRegistry::setActiveInstance (previous_);
+            if (previous_)
+              ModelPortRegistry::setActiveInstance (*previous_);
+            else
+              ModelPortRegistry::shutdown();
           }
       };
     
@@ -136,10 +139,10 @@ namespace test  {
           VERIFY_ERROR (DUPLICATE_MODEL_PORT, registry.definePort(pipeB, someTimeline) );
           CHECK (registry.contains (pipeB));
           
-          CHECK (p1.id == pipeA);
-          CHECK (p2.id == pipeB);
-          CHECK (p1.holder == someTimeline);
-          CHECK (p2.holder == someTimeline);
+          CHECK (pipeA        == p1.id());
+          CHECK (pipeB        == p2.id());
+          CHECK (someTimeline == p1.holder());
+          CHECK (someTimeline == p2.holder());
           
           registry.commit();
         }
@@ -205,7 +208,7 @@ namespace test  {
           TID anotherTimeline = getTimeline ("another_test_Timeline");
           MPDescriptor p1 = registry.definePort (pipeA, anotherTimeline);
           CHECK (registry.contains (pipeA));
-          CHECK (p1.holder == anotherTimeline);
+          CHECK (anotherTimeline == p1.holder());
           CHECK (ModelPort(pipeA).holder() != anotherTimeline);
           
           registry.remove (pipeB);

@@ -34,6 +34,12 @@
  ** for setting up such a registry, while all other parts of the system just access the current
  ** model ports through the mobject::ModelPort frontend.
  ** 
+ ** @note the locking is rather coarse grained; basically we're using just one
+ **       single global lock for all ModelPortRegistry instances and all access/mutations,
+ **       as well as for accessing the globally valid Registry through the ModelPort frontend.
+ **       Assumed that usually there is just one Registry maintained by the builder, this is
+ **       likely to be sufficient.
+ ** 
  ** @see ModelPort
  ** @see OutputDesignation
  ** @see ModelPortRegistry_test
@@ -44,9 +50,12 @@
 #define PROC_MOBJECT_BUILDER_MODEL_PORT_REGISTRY_H
 
 #include "lib/error.hpp"
+#include "lib/optional-ref.hpp"
 #include "proc/asset/pipe.hpp"
 #include "proc/asset/struct.hpp"
 #include "proc/mobject/model-port.hpp"
+
+#include <map>
 
 //#include "lib/opaque-holder.hpp"
 //#include "lib/meta/typelist-util.hpp"
@@ -87,7 +96,9 @@ namespace builder {
       struct ModelPortDescriptor;
       
       
-      static ModelPortRegistry&
+      static void shutdown ();
+
+      static ModelPortRegistry*
       setActiveInstance (ModelPortRegistry& newRegistry);
       
       static ModelPortRegistry&
@@ -104,7 +115,7 @@ namespace builder {
       bool isRegistered (PID) const;
       
       ModelPortDescriptor const&
-      operator[] (PID)  const;
+      get (PID)  const;
       
       
       void remove (PID);
@@ -122,38 +133,51 @@ namespace builder {
        *  Silently drop model port definition changes since the last commit.
        */
       void rollback();
+      
+    private:
+      static lib::OptionalRef<ModelPortRegistry> theGlobalRegistry;
+      
+      typedef std::map<PID, ModelPortDescriptor> MPTable;
+      
+      MPTable currentReg_;
+      MPTable transaction_;
     };
   
   
   
   /** ModelPortDescriptor records are used as actual storage
-   *  within the model port registration table; they are never
-   *  exposed to client code directly.
+   *  within the model port registration table; they are immutable
+   *  value objects and never exposed to client code directly.
    */
-  struct ModelPortRegistry::ModelPortDescriptor
+  class ModelPortRegistry::ModelPortDescriptor
     {
-      const PID  id;
-      const StID holder;
+      PID  id_;
+      StID holder_;
       
-      bool
-      isValid()  const
-        {
-          return bool(id);
-        }
+    protected:
+      ModelPortDescriptor (PID pipe, StID element_exposing_this_port)
+        : id_(pipe)
+        , holder_(element_exposing_this_port)
+        { }
       
+      friend class ModelPortRegistry;
       
+    public:
       ModelPortDescriptor()
-        : id(PID::INVALID)
-        , holder(StID::INVALID)
+        : id_(PID::INVALID)
+        , holder_(StID::INVALID)
         { }
       
       // default copy operations permitted
       
-    protected:
-      ModelPortDescriptor (PID pipe, StID element_exposing_this_port)
-        : id(pipe)
-        , holder(element_exposing_this_port)
-        { }
+      bool
+      isValid()  const
+        {
+          return bool(id_);
+        }
+      
+      const PID  id()      const { return id_; }
+      const StID holder()  const { return holder_; }
     };
 
   

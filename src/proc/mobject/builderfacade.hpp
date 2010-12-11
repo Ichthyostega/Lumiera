@@ -31,6 +31,7 @@
 
 namespace mobject {
   
+  LUMIERA_ERROR_DECLARE (BUILDER_LIFECYCLE);  ///< Builder activated while in non operational state
   
   /**
    * Provides unified access to the builder functionality.

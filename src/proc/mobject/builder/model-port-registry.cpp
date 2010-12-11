@@ -37,7 +37,10 @@
 
 
 #include "lib/error.hpp"
+#include "include/logging.h"
+#include "lib/sync-classlock.hpp"
 //#include "lib/symbol.hpp"//
+#include "proc/mobject/builderfacade.hpp"
 #include "proc/mobject/model-port.hpp"
 #include "proc/mobject/builder/model-port-registry.hpp"
 
@@ -55,47 +58,72 @@
 namespace mobject {
   namespace builder {
     
+    namespace error = lumiera::error;
     
-    /**
-     * TODO type comment
-     */
-    class ModelPortTable
-      : boost::noncopyable
-      {
-        
-      public:
-      };
     
-      
     typedef ModelPortRegistry::ModelPortDescriptor const& MPDescriptor;
+    typedef lib::ClassLock<ModelPortRegistry> LockRegistry;
     
-      inline MPDescriptor
-      accessDescriptor() 
-      {
-        
-      }
     
-    ModelPortRegistry&
-    ModelPortRegistry::setActiveInstance (ModelPortRegistry& newRegistry)
+    /** storage for the link to the 
+        global Registry instance currently in charge  */
+    lib::OptionalRef<ModelPortRegistry> ModelPortRegistry::theGlobalRegistry;
+    
+    
+    
+    /** globally deactivate access to model ports */
+    void
+    ModelPortRegistry::shutdown ()
     {
-      UNIMPLEMENTED ("handling of active model port registry"); 
+      INFO (builder, "disabling ModelPort registry....");
+      LockRegistry global_lock;
+      theGlobalRegistry.clear(); 
     }
     
     
-    /** */
+    /** switch the implicit link to \em the global ModelPort registry
+     *  to point to the given implementation instance. Typically used within
+     *  the Builder subsystem lifecycle methods, or for unit tests to use
+     *  a test instance of the registry temporarily
+     * @return the registry instance previously in use or \c NULL
+     */
+    ModelPortRegistry*
+    ModelPortRegistry::setActiveInstance (ModelPortRegistry& newRegistry)
+    {
+      INFO (builder, "activating new ModelPort registry.");
+      LockRegistry global_lock;
+      ModelPortRegistry *previous = theGlobalRegistry.isValid()? 
+                                       &(theGlobalRegistry()) : 0; 
+      theGlobalRegistry.link_to (newRegistry);
+      return previous;
+    }
+    
+    
+    /** access the globally valid registry instance.
+     *  @throw error::State if this global registry is
+     *         already closed or not yet initialised. */
     ModelPortRegistry&
     ModelPortRegistry::globalInstance()
     {
-      UNIMPLEMENTED ("access the globally valid registry instance"); 
+      LockRegistry global_lock;
+      if (theGlobalRegistry.isValid())
+        return theGlobalRegistry();
+      
+      throw error::State ("global model port registry is not accessible"
+                         , LUMIERA_ERROR_BUILDER_LIFECYCLE); 
     }
    
     
     
-    /** */
+    /** does the <i>transaction currently being built</i>
+     *  already contain a model port registration for the given ID?
+     * @note this does \em not query registration state of the
+     *       global registry; use #isRegistered for that...*/
     bool
-    ModelPortRegistry::contains (ID<Pipe> pID)  const
+    ModelPortRegistry::contains (ID<Pipe> key)  const
     {
-      UNIMPLEMENTED ("diagnostics querying the state of the pending transaction"); 
+      return bool(key)
+          && util::contains (transaction_, key); 
     }
     
     
@@ -103,70 +131,117 @@ namespace mobject {
      *          existing, connected and usable model port. 
      *  @note reflects the state of the publicly visible 
      *          model port registry, \em not any model ports
-     *          being registered within a currently pending
-     *          transaction (ongoing build process). */
+     *          being registered within a pending transaction
+     *          (ongoing build process). */
     bool
     ModelPortRegistry::isRegistered (ID<Pipe> key)  const
     {
-      if (!key) return false;
-      
-      UNIMPLEMENTED ("query the publicly valid contents"); 
+      return bool(key)
+          && util::contains (currentReg_, key); 
     }
     
     
-    /** */
+    /** basic access operation: access the descriptor
+     *  of a currently valid model port.
+     * @note no locking (but #accessDescriptor does lock!) 
+     * @throw error::Logic if accessing a non registered port
+     * @throw error::State if accessing an invalid / disconnected port
+     */
     MPDescriptor
-    ModelPortRegistry::operator[] (ID<Pipe> key)  const
+    ModelPortRegistry::get (ID<Pipe> key)  const
     {
-      UNIMPLEMENTED ("access registered model port");
+      if (!key)
+        throw error::State ("This model port is disconnected or NIL"
+                           , LUMIERA_ERROR_UNCONNECTED_MODEL_PORT);
+      if (!isRegistered (key))
+        throw error::Logic ("Model port was never registered, or got unregistered meanwhile."
+                           ,LUMIERA_ERROR_INVALID_MODEL_PORT);
+      
+      MPTable::const_iterator pos = currentReg_.find (key);
+      ASSERT (pos != currentReg_.end());
+      ASSERT (pos->second.isValid());
+      return pos->second;
     }
     
     
-    /** */
+    /** access \em the globally valid model port for the given pipe.
+     *  This (static) function locks and accesses the global model port registry
+     *  to fetch the descriptor record. Typically invoked by client code
+     *  through the ModelPort frontend
+     * @throw error::State when registry is down or the model port is disconnected
+     * @throw error::Logic when the given key wasn't registered for a model port */
     MPDescriptor
     ModelPortRegistry::accessDescriptor (ID<Pipe> key)
     {
-      UNIMPLEMENTED ("access the current global registry and fetch model port");
+      LockRegistry global_lock;
+      return theGlobalRegistry().get(key);
     }
     
     
-    /** */
+    /* === Mutations === */
+    
+    /** create and register a new model port entry,
+     *  within the pending transaction */
     MPDescriptor
-    ModelPortRegistry::definePort (ID<Pipe> pipeA, ID<Struct> element_exposing_this_port)
+    ModelPortRegistry::definePort (ID<Pipe> pipe, ID<Struct> element_exposing_this_port)
     {
-      UNIMPLEMENTED ("create and register a new model port entry, within the pending transaction"); 
+      LockRegistry global_lock;
+      if (contains (pipe))
+        throw error::Logic ("attempt to register a model port with a pipe-ID, "
+                            "which has already been used to register a "
+                            "model port within this transaction (build process)."
+                           , LUMIERA_ERROR_DUPLICATE_MODEL_PORT);
+      return (transaction_[pipe] = ModelPortDescriptor(pipe, element_exposing_this_port));
     }
     
     
-    /** */
+    /** remove a model port entry from the pending transaction */
     void
     ModelPortRegistry::remove (PID key)
     {
-      UNIMPLEMENTED ("remove a model port entry from the pending transaction"); 
+      LockRegistry global_lock;
+      transaction_.erase (key);
     }
     
     
-    /** */
+    /** schedule removal of all registry contents.
+     *  When the currently pending transaction is committed,
+     *  all registered model ports will be removed */
     void
     ModelPortRegistry::clear()
     {
-      UNIMPLEMENTED ("schedule removal of all registry contents into the pending transaction"); 
+      LockRegistry global_lock;
+      transaction_.clear();
     }
     
     
-    /** */
+    /** transactional switch for new/modified model ports.
+     *  Promote the registered model ports from the currently
+     *  pending transaction to become the globally valid model ports
+     * @note automatically starts a new transaction, initialised
+     *       with the now published mappings.
+     */
     void
     ModelPortRegistry::commit()
     {
-      UNIMPLEMENTED ("transactional switch for new/modified model ports"); 
+      LockRegistry global_lock;
+      MPTable newTransaction(transaction_);
+      TRACE (builder, "committing new ModelPort list....");
+      swap (currentReg_, transaction_);
+      swap (transaction_, newTransaction);
     }
     
     
-    /** */
+    /** discard current transaction.
+     *  The global port registration thus
+     *  remains unaltered. */
     void
     ModelPortRegistry::rollback()
     {
-      UNIMPLEMENTED ("discard current transaction"); 
+      LockRegistry global_lock;
+      TRACE (builder, "discarding changes to ModelPort list (rollback)....");
+      MPTable newTransaction(transaction_);
+      swap (transaction_, newTransaction);
     }
   
     
@@ -189,7 +264,8 @@ namespace mobject {
     }
   
   
-  /** */
+  /** check if the global model port registration
+   *  contains a mapping for the given pipe-ID*/
   bool
   ModelPort::exists (ID<asset::Pipe> key)
   {
@@ -197,25 +273,35 @@ namespace mobject {
   }
   
   
-  /** */
+  /** access the Pipe (ID) of the global model port registered
+   *  with the ID underlying this model port.
+   * @throw error::Logic if no model port is registered for this Pipe-ID
+   */
   ID<asset::Pipe>
   ModelPort::pipe()  const
   {
-    ENSURE (this->id_ == builder::ModelPortRegistry::accessDescriptor(this->id_).id);
+    ENSURE (this->id_ == builder::ModelPortRegistry::accessDescriptor(this->id_).id());
     
-    return builder::ModelPortRegistry::accessDescriptor(this->id_).id;
+    return builder::ModelPortRegistry::accessDescriptor(this->id_).id();
   }
   
   
-  /** */
+  /** access the timeline (or similar structural element) holding
+   *  a global pipe which corresponds to this model port
+   * @throw error::Logic if no model port is registered for this Pipe-ID
+   */
   ID<asset::Struct>
   ModelPort::holder()  const
   {
-    return builder::ModelPortRegistry::accessDescriptor(this->id_).holder;
+    return builder::ModelPortRegistry::accessDescriptor(this->id_).holder();
   }
   
   
-  /** */
+  /** convenience shortcut to access the stream type
+   *  associated with the pipe-ID corresponding to this model port.
+   * @note no check if this model port actually is valid
+   * @throw error::Invalid in case of unknown/unregistered Pipe-ID
+   */
   StreamType::ID
   ModelPort::streamType() const
   {

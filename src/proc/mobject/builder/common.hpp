@@ -24,25 +24,14 @@
 #ifndef MOBJECT_BUILDER_COMMON_H
 #define MOBJECT_BUILDER_COMMON_H
 
+#include "lib/error.hpp"
 #include "include/logging.h"
 
 
 namespace mobject {
-  namespace builder {
+namespace builder {
     
     
-    // TODO NOBUG_DECLARE_FLAG (builder_mem);
     
-    
-  } // namespace builder
-
-} // namespace mobject
+}} // namespace mobject::builder
 #endif
-
-/*
-// Local Variables:
-// mode: C
-// c-file-style: "gnu"
-// indent-tabs-mode: nil
-// End:
-*/
