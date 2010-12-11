@@ -24,25 +24,18 @@
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
 #include "proc/mobject/builder/model-port-registry.hpp"
-#include "proc/asset/pipe.hpp"
 #include "proc/asset/timeline.hpp"
+#include "proc/asset/pipe.hpp"
 #include "lib/query.hpp"
 #include "lib/util.hpp"
-
-//#include <boost/format.hpp>
-//#include <boost/scoped_ptr.hpp>
-#include <string>
 
 
 namespace mobject {
 namespace builder {
 namespace test  {
   
-  //using boost::format;
-  //using boost::scoped_ptr;
   using util::isSameObject;
   using util::isnil;
-  using std::string;
   
   using asset::Pipe;
   using asset::PPipe;
@@ -53,6 +46,8 @@ namespace test  {
   
   typedef asset::ID<Pipe> PID;
   typedef asset::ID<Struct> TID;
+    
+  typedef ModelPortRegistry::ModelPortDescriptor const& MPDescriptor;
   
   
   namespace { // test environment
@@ -68,8 +63,6 @@ namespace test  {
     {
       return asset::Struct::retrieve (Query<Timeline> ("id("+id+")"))->getID();
     }
-    
-    typedef ModelPortRegistry::ModelPortDescriptor const& MPDescriptor;
     
     struct TestContext
       {
@@ -91,14 +84,15 @@ namespace test  {
               ModelPortRegistry::shutdown();
           }
       };
-    
   }
+  
+  
   
   
   /*********************************************************************************
    * @test create a standalone model port registry to verify the behaviour of
-   *       model ports, accessed through reference handles. This test provides
-   *       an example setup detached from the real usage situation within the builder.
+   *       model ports, accessed through reference handles. This test provides an
+   *       example setup detached from the real usage situation within the builder.
    *       The ModelPortRegistry management interface is used to create and track a
    *       set of model ports, to be made visible by an atomic, transactional switch.
    *       The access for client code through the ModelPort frontend is then verified.
@@ -126,7 +120,6 @@ namespace test  {
           /* == some Assets to play with == */
           PID pipeA        = getPipe ("pipeA");
           PID pipeB        = getPipe ("pipeB");
-          PID pipeWC       = getPipe ("WCpipe");
           TID someTimeline = getTimeline ("some_test_Timeline");
           
           // start out with defining some new model ports......
@@ -158,17 +151,18 @@ namespace test  {
           ModelPort mp1(pipeA);
           ModelPort mp2(pipeB);
           
-          VERIFY_ERROR (INVALID_MODEL_PORT, ModelPort(pipeWC));
+          VERIFY_ERROR (INVALID_MODEL_PORT, ModelPort unbefitting(pipeWC) );
           
-          ModelPort mp1x(pipeA);
-          ModelPort mpNull;
+          ModelPort mp1x(pipeA);                 // can be created multiple times
+          ModelPort mp2x(mp1x);                  // can be copied at will
+          ModelPort mpNull;                      // can be default constructed (->unconnected)
           
           CHECK (mp1);
           CHECK (mp2);
           CHECK (mp1x);
-          CHECK (!mpNull);
+          CHECK (!mpNull);                       // bool check verifies setup and connected state
           
-          CHECK ( ModelPort::exists (pipeA));
+          CHECK ( ModelPort::exists (pipeA));    // this is the same check, but invoked just with an pipe-ID
           CHECK ( ModelPort::exists (pipeB));
           CHECK (!ModelPort::exists (pipeWC));
           
@@ -182,7 +176,8 @@ namespace test  {
           CHECK (mp1.pipe() == pipeA);
           CHECK (mp2.pipe() == pipeB);
           CHECK (mp1x.pipe() == pipeA);
-          VERIFY_ERROR (UNCONNECTED_MODEL_PORT, mpNull.pipe());
+          VERIFY_ERROR (UNCONNECTED_MODEL_PORT, mpNull.pipe()); // any further operations on an unconnected port will throw
+          VERIFY_ERROR (UNCONNECTED_MODEL_PORT, mpNull.holder());
           
           CHECK (mp1.streamType() == pipeA.streamType());
         }
@@ -201,8 +196,8 @@ namespace test  {
           CHECK (ModelPort::exists (pipeA));
           CHECK (registry.contains (pipeA));
           registry.remove (pipeA);
-          CHECK ( ModelPort::exists (pipeA));
-          CHECK (!registry.contains (pipeA));
+          CHECK (!registry.contains (pipeA));    // removed from the current (pending) transaction
+          CHECK ( ModelPort::exists (pipeA));    // but not yet publicly visible
           
           // now create a new and differing definition of port A 
           TID anotherTimeline = getTimeline ("another_test_Timeline");
@@ -211,16 +206,18 @@ namespace test  {
           CHECK (anotherTimeline == p1.holder());
           CHECK (ModelPort(pipeA).holder() != anotherTimeline);
           
-          registry.remove (pipeB);
-          registry.definePort (pipeWC,anotherTimeline);
+          registry.remove (pipeB);               // some more wired definitions 
+          registry.definePort (pipeWC, anotherTimeline);
           CHECK (!registry.contains (pipeB));
           CHECK ( registry.contains (pipeWC));
           CHECK ( ModelPort::exists (pipeB));
           CHECK (!ModelPort::exists (pipeWC));
-
-          ModelPort portA(pipeA);
+          CHECK ( registry.isRegistered (pipeB));   // this is the same as ModelPort::exists
+          CHECK (!registry.isRegistered (pipeWC)); // 
+                                                  //  Note: pending transaction not yet committed
+          ModelPort portA(pipeA);                // ...... thus the changes aren't reflected to client code
           ModelPort portB(pipeB);
-          VERIFY_ERROR (INVALID_MODEL_PORT, ModelPort(pipeWC));
+          VERIFY_ERROR (INVALID_MODEL_PORT, ModelPort ineptly(pipeWC));
           CHECK (portA);
           CHECK (portB);
           CHECK (portA.pipe() == pipeA);
@@ -228,30 +225,44 @@ namespace test  {
           CHECK (portA.holder() != anotherTimeline);
           
           registry.commit();
-          CHECK ( ModelPort::exists (pipeA));
+          CHECK ( ModelPort::exists (pipeA));    // now all our changes got publicly visible
           CHECK (!ModelPort::exists (pipeB));
           CHECK ( ModelPort::exists (pipeWC));
           CHECK ( portA);
           CHECK (!portB);
           CHECK (portA.holder() == anotherTimeline);
           CHECK (portA.pipe() == pipeA);
-          VERIFY_ERROR (UNCONNECTED_MODEL_PORT, portB.pipe());
+          VERIFY_ERROR (INVALID_MODEL_PORT, portB.pipe());
           
-          ModelPort pwc(pipeWC);
+          ModelPort pwc(pipeWC);                 // now clients may also use the now officially promoted new port
           CHECK (pwc);
           CHECK (pwc.pipe() == pipeWC);
           CHECK (pwc.holder() == anotherTimeline);
           
+          // Next: doing several changes,
+          //       but finally *not* committing them...
+          CHECK ( registry.contains (pipeA));
+          CHECK (!registry.contains (pipeB));
+          CHECK ( registry.contains (pipeWC));
           registry.remove (pipeA);
-          registry.clear();
+          registry.clear();                      // remove everything from the pending transaction
           CHECK (!registry.contains (pipeA));
           CHECK (!registry.contains (pipeB));
           CHECK (!registry.contains (pipeWC));
           
-          registry.rollback();
-          CHECK ( registry.contains (pipeA));
+          registry.definePort (pipeB, anotherTimeline);
           CHECK ( registry.contains (pipeB));
+          CHECK (!portB);                        // not committed and thus not visible
+          CHECK (portA);
+          CHECK (pwc);
+          
+          registry.rollback();
+          CHECK ( registry.contains (pipeA));    // no effect to the officialy visible state
+          CHECK (!registry.contains (pipeB));
           CHECK ( registry.contains (pipeWC));
+          
+          VERIFY_ERROR(INVALID_MODEL_PORT, registry.get(pipeB) );
+          CHECK (!portB);
         }
     };
   

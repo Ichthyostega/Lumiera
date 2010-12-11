@@ -21,13 +21,13 @@
 * *****************************************************/
 
 
-/** @file model-port-registry.cpp 
+/** @file model-port-registry.cpp
  ** Implementation details of model port descriptors and references.
- ** Especially, the handling of the ModelPortTable datastructure is
+ ** Essentially the handling of the ModelPortRegistry datastructure is
  ** kept an opaque implementation detail and confined entirely within
- ** this translation unit.
- ** 
- ** TODO: comment necessary?
+ ** this translation unit. Both the client interface (ModelPort) and
+ ** the management interface (ModelPortRegistry) are backed by this
+ ** common translation unit.
  ** 
  ** @see OutputDesignation
  ** @see OutputMapping
@@ -39,21 +39,9 @@
 #include "lib/error.hpp"
 #include "include/logging.h"
 #include "lib/sync-classlock.hpp"
-//#include "lib/symbol.hpp"//
 #include "proc/mobject/builderfacade.hpp"
 #include "proc/mobject/model-port.hpp"
 #include "proc/mobject/builder/model-port-registry.hpp"
-
-//#include <boost/functional/hash.hpp>
-//#include <cstdlib>
-#include <boost/noncopyable.hpp>
-
-//using lumiera::query::QueryHandler;
-//using lumiera::query::removeTerm;
-//using lumiera::query::extractID;
-//using lumiera::ConfigRules;
-
-//using lumiera::Symbol;
 
 namespace mobject {
   namespace builder {
@@ -65,8 +53,8 @@ namespace mobject {
     typedef lib::ClassLock<ModelPortRegistry> LockRegistry;
     
     
-    /** storage for the link to the 
-        global Registry instance currently in charge  */
+    /** storage for the link to the global
+        Registry instance currently in charge  */
     lib::OptionalRef<ModelPortRegistry> ModelPortRegistry::theGlobalRegistry;
     
     
@@ -82,18 +70,19 @@ namespace mobject {
     
     
     /** switch the implicit link to \em the global ModelPort registry
-     *  to point to the given implementation instance. Typically used within
-     *  the Builder subsystem lifecycle methods, or for unit tests to use
-     *  a test instance of the registry temporarily
+     *  to point to the given implementation instance. Typically used
+     *  within the Builder subsystem lifecycle methods, or for
+     *  temporarily exchanging the registry for unit tests
      * @return the registry instance previously in use or \c NULL
      */
     ModelPortRegistry*
     ModelPortRegistry::setActiveInstance (ModelPortRegistry& newRegistry)
     {
-      INFO (builder, "activating new ModelPort registry.");
       LockRegistry global_lock;
       ModelPortRegistry *previous = theGlobalRegistry.isValid()? 
-                                       &(theGlobalRegistry()) : 0; 
+                                      &( theGlobalRegistry()) : 0;
+      INFO_IF (!previous, builder, "activating new ModelPort registry.");
+      WARN_IF ( previous, builder, "switching ModelPort registry instance.");
       theGlobalRegistry.link_to (newRegistry);
       return previous;
     }
@@ -112,7 +101,7 @@ namespace mobject {
       throw error::State ("global model port registry is not accessible"
                          , LUMIERA_ERROR_BUILDER_LIFECYCLE); 
     }
-   
+    
     
     
     /** does the <i>transaction currently being built</i>
@@ -128,8 +117,8 @@ namespace mobject {
     
     
     /** @return true if the given pipe-ID actually denotes an
-     *          existing, connected and usable model port. 
-     *  @note reflects the state of the publicly visible 
+     *          existing, connected and usable model port.
+     *  @note reflects the state of the publicly visible
      *          model port registry, \em not any model ports
      *          being registered within a pending transaction
      *          (ongoing build process). */
@@ -240,22 +229,22 @@ namespace mobject {
     {
       LockRegistry global_lock;
       TRACE (builder, "discarding changes to ModelPort list (rollback)....");
-      MPTable newTransaction(transaction_);
+      MPTable newTransaction(currentReg_);
       swap (transaction_, newTransaction);
     }
-  
+    
     
     
     LUMIERA_ERROR_DEFINE (DUPLICATE_MODEL_PORT, "Attempt to define a new model port with an pipe-ID already denoting an existing port");
-  
-  } // namespace builder  
+    
+  }// namespace builder  
   
   
   
   
   LUMIERA_ERROR_DEFINE (INVALID_MODEL_PORT, "Referral to unknown model port");
   LUMIERA_ERROR_DEFINE (UNCONNECTED_MODEL_PORT, "Attempt to operate on an existing but unconnected model port");
-
+  
   
   ModelPort::ModelPort (ID<asset::Pipe> refID)
     : id_(refID)
@@ -307,8 +296,7 @@ namespace mobject {
   {
     return this->id_.streamType();
   }
-
-
+  
   
   
 } // namespace mobject

@@ -24,7 +24,7 @@
  ** Organising the output data calculation possibilities.
  ** Model ports are conceptual entities, denoting the points where output might
  ** possibly be produced. There is an actual representation, a collection of small
- ** descriptor objects managed by the Fixture and organised within the ModelPortTable
+ ** descriptor objects managed by the Fixture and organised within the registry
  ** datastructure. Thus, while the actual ModelPort descriptor entities are located
  ** within and managed by the Fixture -- model port as a concept spans the high-level
  ** and low-level view. A model port can be associated both to a pipe within a timeline
@@ -44,16 +44,16 @@
  ** to become the valid current model port configuration. After that switch, model ports
  ** are immutable.
  ** 
- ** Model ports are to be accessed, enumerated and grouped in various ways, because each
- ** port belongs to a specific timeline and is used for producing data of a single
+ ** Model ports are to be accessed, enumerated and grouped in various ways, because
+ ** each port belongs to a specific timeline and is used to produce data of a single
  ** StreamType solely. But all those referrals, searching and grouping happens only
  ** after the build process has discovered all model ports currently available.
  ** Thus actually the ModelPort elements handed out to client code are just
  ** smart-handles, accessing a global ModelPortRegistry behind the scenes.
  ** Validity of these handles will be checked on each access. The actual
  ** model port descriptors are owned and managed by the fixture;
- ** they are bulk allocated in a similar manner than the
- ** ProcNode and WiringDescriptor objects.
+ ** @todo they might bulk allocated in a similar manner than the
+ **       ProcNode and WiringDescriptor objects are.
  ** 
  ** @see ModelPortRegistry_test abstract usage example
  ** @see ModelPortRegistry management interface 
@@ -72,8 +72,8 @@
 
 namespace mobject {
   
-  LUMIERA_ERROR_DECLARE (INVALID_MODEL_PORT);      ///< Referral to unknown model port
-  LUMIERA_ERROR_DECLARE (UNCONNECTED_MODEL_PORT);  ///< Attempt to operate on an existing but unconnected model port
+  LUMIERA_ERROR_DECLARE (INVALID_MODEL_PORT);     ///< Referral to unknown model port
+  LUMIERA_ERROR_DECLARE (UNCONNECTED_MODEL_PORT); ///< Attempt to operate on an existing but unconnected model port
   
   
   using asset::ID;
@@ -81,21 +81,21 @@ namespace mobject {
   
   
   /**
-   * Handle denoting a port within the model,
+   * Handle denoting a point within the model,
    * where actually output data can be pulled.
    * ModelPort is a frontend to be used by clients.
    * These ModelPort handle objects may be copied and stored
-   * at will, but their validity will be verified on each access. 
+   * at will, but their validity will be verified on each access.
    * Actually, the Builder will discover any model ports and
    * maintain a ModelPortRegistry behind the scenes.
    * 
    * Each model port corresponds to a (global) pipe within a
-   * specific Timeline; consequently each such port is also
+   * specific Timeline ("holder"); consequently each such port is also
    * bound to produce data of a specific StreamType (as defined by
    * the corresponding pipe). A model port may be in \em unconnected
-   * state, which can be checked by \c bool conversion. While the
-   * ModelPort handles are value objects, the identity of the
-   * underlying model port (descriptor) is given by the 
+   * state, which can be checked through \c bool conversion. While
+   * the ModelPort handles are value objects, the identity of the
+   * underlying model port (descriptor) is given by the
    * corresponding pipe-ID, thus effectively resulting
    * in a global namespace for model ports.
    * 

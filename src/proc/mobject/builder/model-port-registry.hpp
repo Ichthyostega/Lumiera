@@ -57,19 +57,11 @@
 
 #include <map>
 
-//#include "lib/opaque-holder.hpp"
-//#include "lib/meta/typelist-util.hpp"
-
-//extern "C" {
-//#include "lib/luid.h"
-//}
-
 namespace mobject {
 namespace builder {
   
   using asset::ID;
   using asset::Pipe;
-//using asset::PPipe;
   using asset::Struct;
   
   LUMIERA_ERROR_DECLARE (DUPLICATE_MODEL_PORT); ///< Attempt to define a new model port with an pipe-ID already denoting an existing port
@@ -92,18 +84,19 @@ namespace builder {
       typedef ID<Struct> StID;
       
     public:
+      
       /** @internal record to describe a model port */
       struct ModelPortDescriptor;
       
       
       static void shutdown ();
-
+      
       static ModelPortRegistry*
       setActiveInstance (ModelPortRegistry& newRegistry);
       
       static ModelPortRegistry&
       globalInstance();
-
+      
       static ModelPortDescriptor const&
       accessDescriptor (PID); 
       
@@ -134,6 +127,7 @@ namespace builder {
        */
       void rollback();
       
+      
     private:
       static lib::OptionalRef<ModelPortRegistry> theGlobalRegistry;
       
@@ -142,6 +136,7 @@ namespace builder {
       MPTable currentReg_;
       MPTable transaction_;
     };
+  
   
   
   
@@ -179,7 +174,7 @@ namespace builder {
       const PID  id()      const { return id_; }
       const StID holder()  const { return holder_; }
     };
-
+  
   
   
 }} // namespace mobject::builder

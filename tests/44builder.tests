@@ -15,7 +15,7 @@ PLANNED "BuildSegment_test" BuildSegment_test <<END
 END
 
 
-PLANNED "ModelPort registry" ModelPortRegistry_test <<END
+TEST "ModelPort registry" ModelPortRegistry_test <<END
 return: 0
 END
 
