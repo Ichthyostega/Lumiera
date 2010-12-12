@@ -69,6 +69,7 @@ namespace lib {
               throw to.getVal();
             
             swap (from,to);
+            from.setVal(0); // remove the old Dummy from accounting (checksum) 
           }
           
         };
