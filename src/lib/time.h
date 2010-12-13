@@ -25,6 +25,8 @@
 #include <inttypes.h>
 #include <gavl/gavl.h>
 
+#define NTSC_DROP_FRAME_FPS 29.97
+
 /**
  * Formats a time in a safeclib tmpbuf in HH:MM:SS:mmm format.
  * @param size maximal length for the string
@@ -54,6 +56,18 @@ lumiera_build_time (long millis, uint secs, uint mins, uint hours);
  */
 gavl_time_t
 lumiera_build_time_fps (float fps, uint frames, uint secs, uint mins, uint hours);
+
+/**
+ * Builds a time value by summing up the given components.
+ * The components are interpreted as a NTSC drop-frame timecode.
+ * @param frames number of frames
+ * @param secs number of seconds
+ * @param mins number of minutes
+ * @param hours number of hours
+ * You must take care not to specify time codes that are illegal NTSC drop-frame times.
+ */
+gavl_time_t
+lumiera_build_time_ntsc_drop (uint frames, uint secs, uint mins, uint hours);
 
 /**
  * Get the hour part of given time.
@@ -98,5 +112,33 @@ lumiera_time_frames (gavl_time_t time, float fps);
  */
 int
 lumiera_time_frame_count (gavl_time_t time, float fps);
+
+/**
+ * Get the frame part of given time, using NTSC drop-frame timecode.
+ * @param time the time value to use
+ */
+int
+lumiera_time_ntsc_drop_frames (gavl_time_t time);
+
+/**
+ * Get the second part of given time, using NTSC drop-frame timecode.
+ * @param time the time value to use
+ */
+int
+lumiera_time_ntsc_drop_seconds (gavl_time_t time);
+
+/**
+ * Get the minute part of given time, using NTSC drop-frame timecode.
+ * @param time the time value to use
+ */
+int
+lumiera_time_ntsc_drop_minutes (gavl_time_t time);
+
+/**
+ * Get the hour part of given time, using NTSC drop-frame timecode.
+ * @param time the time value to use
+ */
+int
+lumiera_time_ntsc_drop_hours (gavl_time_t time);
 
 #endif

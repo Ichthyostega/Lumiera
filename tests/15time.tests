@@ -7,3 +7,6 @@ END
 
 TEST "frame rate dependent calculations" fps <<END
 END
+
+TEST "ntsc drop-frame calculations" ntsc_drop_frame << END
+END
