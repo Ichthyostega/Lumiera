@@ -1728,8 +1728,12 @@ To make the intended use of the classes more clear, consider the following two e
 <pre>a special ProcNode which is used to pull the finished output of one Render Pipeline (Tree or Graph). This term is already used in the Cinelerra2 codebase. I am unsure at the moment if it is a distinct subclass or rahter a specially configured ProcNode (a general design rule tells us to err in favour of the latter if in doubt).
 </pre>
 </div>
-<div title="ExplicitPlacement" modifier="Ichthyostega" modified="201011290457" created="200706220304" tags="def" changecount="3">
-<pre>A special kind (subclass) of [[Placement]]. As such it is always linked to a //Subject//, i.e. a MObject. But contrary to the (standard) placements, which may exhibit all kinds of fancy dynamic and scope dependent behaviour, within an explicit placement all properties are resolved and materialised. While the (standard) placement may contain an arbitrary list of LocatingPin objects, the resolution into an explicit placement performs a kind of »orthogonalisation«: each remaining LocatingPin defines exactly one degree of freedom independent of all others. Most notably, the explicit placement always specifies a absolute time and [[output designation|OutputDesignation]] for for locating the Subject.
+<div title="ExplicitPlacement" modifier="Ichthyostega" modified="201012122052" created="200706220304" tags="def" changecount="6">
+<pre>A special kind (subclass) of [[Placement]]. As such it is always linked to a //Subject//, i.e. a MObject. But contrary to the (standard) placements, which may exhibit all kinds of fancy dynamic and scope dependent behaviour, within an explicit placement all properties are resolved and materialised. While the (standard) placement may contain an arbitrary list of LocatingPin objects, the resolution into an explicit placement performs a kind of »orthogonalisation«: each remaining LocatingPin defines exactly one degree of freedom independent of all others. Most notably, the explicit placement always specifies a absolute time and [[output designation|OutputDesignation]] for for locating the Subject. Explicit placements are ''immutable''.
+
+!!Implementation considerations
+Explicit placements are just created and never mutated, but copying and storage might become a problem.
+It would thus be desirable to have a fixed-sized allocation, able to hold the placement body as well as the (fixed) locating pins inline.
 </pre>
 </div>
 <div title="Factories" modifier="Ichthyostega" modified="201003160211" created="200708100401" tags="impl discuss excludeMissing rewrite" changecount="24">
@@ -4673,6 +4677,44 @@ ScopePath represents an ''effective scoping location'' within the model &amp;mda
 We need to detect attaching and detaching of
 * root &amp;harr; BindingMO
 * root &amp;harr; [[Track]]
+</pre>
+</div>
+<div title="Segmentation" modifier="Ichthyostega" modified="201012122202" created="201012121901" tags="def spec Builder" changecount="24">
+<pre>//Segmentation of timeline// denotes a data structure and a step in the BuildProcess.
+When [[building the fixture|BuildFixture]], ~MObjects -- as handled by their Placements -- are grouped below each timeline using them; Placements are then to be resolved into [[explicit Placements|ExplicitPlacement]], resulting in a single well defined time interval for each object. This allows to cut this effective timeline into slices of constant wiring structure, which are represented through the ''Segmentation Datastructure'', a time axis with segments holding object placements and [[exit nodes|ExitNode]]. &amp;nbsp;&amp;rarr; see [[structure of the Fixture|Fixture]]
+* for each Timeline we get a Segmentation
+** which in turn is a list of non-overlapping segments
+*** each holding
+**** an ExplicitPlacement for each covered object
+**** an ExitNode for each ModelPort of the corresponding timeline
+
+!Storage considerations
+;(1) build process
+:&amp;rarr; a tree walk yields the placements per timeline, which then get //resolved//
+:&amp;rarr; after //sorting,// the segmentation can be established, thereby copying placements spanning multiple segments
+:&amp;rarr; only //after running the complete build process for each segment,// the list of model ports and exit nodes can be established
+;(2) commit stage
+: -- after the build process(es) are completed, the new fixture gets ''committed'', thus becoming the officially valid state to be rendered. As render processes might be going on in parallel, some kind of locking or barrier is required. It seems advisable to make the change into a single atomic hot-swap. Meaning we'd get a single access point to be protected. But there is another twist: We need to find out which render processes to cancel an restart, to pick up the changes introduced by this build process, which might include adding and deleting of timelines as a whole, and any changes to the segmentation grid. Because of the highly dynamic nature of the placements, on the other hand it isn't viable to expect the high-level model to provide this information. Thus we need to find out about a ''change coverage'' at this point. We might expand on that idea to //prune any new segments which aren't changed.// This way, only a write barrier would be necessary on switching the actually changed segments, and any render processes touching these would be //tainted.// Old allocations could be released after all tainted processes are known to be terminated.
+;(3) rendering use
+:Each play/render process employs a ''frame dispatch step'' to get the right exit node for pulling a given frame. From there on, the process proceeds into the [[processing nodes|ProcNodes]], interleaved with backend/scheduler actions due to splitting into individually scheduled jobs. The storage of these processing nodes and accompanying wiring descriptors is hooked up behind the individual segments, by sharing a common {{{AllocationCluster}}}. Yet the calculation of individual frames also depends on ''parameters'' and especially ''automation'' connected with objects in the high-level model. It is likely that there might be some sharing, as the intention was to allow ''live changes'' to automated values. &lt;br/&gt;{{red{WIP 12/2010}}} details need to be worked out. &amp;rarr; [[parameter wiring concept|Wiring]]
+!!!observations
+* Storage and initialisation for explicit placements is an issue. We should strive at making that inline as much as possible.
+* the overall segmentation emerges from a sorting of time points, which are start points of explicit placements
+* after the segmentation has been built, the usage pattern changes entirely into a lookup of segment by time
+* the individual segments act as umbrella for a lot of further objects hooked up behind.
+* we need the ability to exchange or swap-in whole segments
+* each segment controls an AllocationCluster
+* we need to track processes for tainting
+* access happens per ModelPort
+
+!!!conclusions
+The Fixture is mostly comprised of the Segementation datastructure, but some other facilities are involved too
+# at top level, we need somehow to organise access per groups of model ports, actually grouped by timeline
+# during the build process, there is a collection of placements; this can be discarded afterwards
+# the backbone of the segmentation is closely linked to an ordering by time. Initially it should support sorting, access by time interval search later on.
+# discarding a segment (or failing to do so) has an high impact on the whole application. We should employ a reliable mechanism for that.
+# the frame dispatch and the tracking of processes can be combined; data duplication is a virtue when it comes to parallel processes
+# the process of comparing and tainting is broken out into a separate data structure to be used just once
 </pre>
 </div>
 <div title="Sequence" modifier="Ichthyostega" modified="201010180156" created="201001252327" tags="def" changecount="17">

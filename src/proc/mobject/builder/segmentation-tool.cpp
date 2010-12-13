@@ -21,7 +21,7 @@
 * *****************************************************/
 
 
-#include "proc/mobject/builder/segmentationtool.hpp"
+#include "proc/mobject/builder/segmentation-tool.hpp"
 
 
 using mobject::Buildable;
@@ -30,52 +30,50 @@ using mobject::session::Effect;
 
 
 namespace mobject {
-  namespace builder {
-
-                                        /////////////////////////////////TICKET #414
-
+namespace builder {
   
-    SegmentationTool::SegmentationTool(mobject::session::Fixture&)
-    {
-      UNIMPLEMENTED ("create new SegmentationTool");
-    }
-    
-
-    void
-    SegmentationTool::treat (Buildable& something)
-    {
-      UNIMPLEMENTED ("??? when partitioning timeline");
-    }
-
-
-    void
-    SegmentationTool::treat (Clip& clip)
-    {
-      UNIMPLEMENTED ("consider clip when partitioning timeline");
-    }
-
-
-    void
-    SegmentationTool::treat (Effect& effect)
-    {
-      UNIMPLEMENTED ("note applied effect when partitioning timeline");
-    }
-    
-    
-    void
-    SegmentationTool::onUnknown (Buildable& target)
-    {
-      UNIMPLEMENTED ("catch-all when partitioning timeline");
-    }
-
-    
-    bool
-    SegmentationTool::empty()  const
-    {
-      UNIMPLEMENTED ("detect an empty segmentation");
-    }
-
-
-  } // namespace mobject::builder
-
-} // namespace mobject
+                                      /////////////////////////////////TICKET #414
+  
+  
+  SegmentationTool::SegmentationTool(mobject::session::Fixture&)
+  {
+    UNIMPLEMENTED ("create new SegmentationTool");
+  }
+  
+  
+  void
+  SegmentationTool::treat (Buildable& something)
+  {
+    UNIMPLEMENTED ("??? when partitioning timeline");
+  }
+  
+  
+  void
+  SegmentationTool::treat (Clip& clip)
+  {
+    UNIMPLEMENTED ("consider clip when partitioning timeline");
+  }
+  
+  
+  void
+  SegmentationTool::treat (Effect& effect)
+  {
+    UNIMPLEMENTED ("note applied effect when partitioning timeline");
+  }
+  
+  
+  void
+  SegmentationTool::onUnknown (Buildable& target)
+  {
+    UNIMPLEMENTED ("catch-all when partitioning timeline");
+  }
+  
+  
+  bool
+  SegmentationTool::empty()  const
+  {
+    UNIMPLEMENTED ("detect an empty segmentation");
+  }
+  
+  
+}} // namespace mobject::builder

@@ -74,6 +74,8 @@ test_components_SOURCES =								\
 	$(testcomponents_srcdir)/proc/mobject/builder/buildertooltest.cpp		\
 	$(testcomponents_srcdir)/proc/mobject/builder/buildsegmenttest.cpp		\
 	$(testcomponents_srcdir)/proc/mobject/builder/model-port-registry-test.cpp	\
+	$(testcomponents_srcdir)/proc/mobject/builder/fixture-change-detector-test.cpp	\
+	$(testcomponents_srcdir)/proc/mobject/builder/segmentation-datastructure-test.cpp\
 	$(testcomponents_srcdir)/proc/mobject/controller/rendersegmenttest.cpp		\
 	$(testcomponents_srcdir)/proc/mobject/mobject-interface-test.cpp		\
 	$(testcomponents_srcdir)/proc/mobject/mobject-ref-test.cpp			\
