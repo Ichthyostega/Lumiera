@@ -134,6 +134,11 @@ Tasks
 // * item ...
 
 
+
+
+Discussion
+~~~~~~~~~~
+
 Pros
 ^^^^
 // add just a fact list/enumeration which make this suitable:
@@ -149,7 +154,7 @@ Cons
 
 
 Alternatives
-------------
+^^^^^^^^^^^^
 //alternatives: if possible explain/link alternatives and tell why they are not
   viable:
 

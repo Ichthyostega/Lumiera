@@ -41,8 +41,8 @@ _corresponds to a single data stream_ to be rendered. Thus, when the play
 in _playing_ or _paused_ state, typically multiple corresponding render
 processes exist.
 
-* there is an displayer- or output slot, which got allocated on creation of the
-  process
+* there is an displayer- or output slot, which got allocated on creation
+  of the process
 * the process disposes calculated data frames "into" this slot
 * the process can be paused/started and stopped (aborted, halted).
 * some processes allow for changing parameters dynamically (e.g. speed,
@@ -52,23 +52,31 @@ processes exist.
 
 .Process parameters
 A process is linked to a single stream data format (a -> 
-link:StreamTypeSystem.html[stream implementation type]). + It is configured
-with _frame quantisation_ and _timings_, and a _model port_ identifier and
-_channel selector_.
+link:StreamTypeSystem.html[stream implementation type]). +
+It is configured with _frame quantisation_ and _timings_, and a _model port_
+identifier and _channel selector_.
 
- quantisation:: translates time values into frame numbers. (In the most general
- case this is a function, connected to the session) timings:: a definition to
- translate global model time units in real clock time, including _alignment_ to
- an external time grid. model port:: a point in the (high level) model where
- output can be produced. +
-              This might be a global pipe in one of the model's timelines, or
-              it might be a _probe point_.
- channel:: within the session and high level model, details of the stream
- implementation are abstracted. Typically,
-           a global pipe (master bus or subgroup) corresponds to a multichannel
-           stream, and each of these channels might be hooked up to an
-           individual render process (we have to work out if that's _always the
-           case_ or just under _some circumstances_)
+ quantisation::
+   translates time values into frame numbers. (In the most general
+   case this is a function, connected to the session)
+   
+ timings::
+   a definition to translate global model time units in real clock time,
+   including _alignment_ to an external time grid.
+   
+ model port::
+   a point in the (high level) model where output can be produced. +
+   This might be a global pipe in one of the model's timelines, or
+   it might be a _probe point_.
+   
+ channel::
+   within the session and high level model, details of the stream
+   implementation are abstracted. Typically, a global pipe (master bus
+   or subgroup) corresponds to a multichannel stream, and each of these
+   channels might be hooked up to an individual render process
+   (we have to work out if that's _always the case_ or just under
+   _some circumstances_)
+
 
 [NOTE]
 ===================
