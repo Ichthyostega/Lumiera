@@ -22,6 +22,7 @@
 #include <nobug.h>
 #include "lib/time.h"
 #include "lib/tmpbuf.h"
+#include <math.h>
 
 /* GAVL_TIME_SCALE is the correct factor or dividend when using gavl_time_t for
  * units of whole seconds from gavl_time_t.  Since we want to use milliseconds,
@@ -58,8 +59,12 @@ lumiera_tmpbuf_print_time (gavl_time_t time)
 }
 
 gavl_time_t
-lumiera_build_time(long millis, uint secs, uint mins, uint hours)
+lumiera_build_time (long millis, uint secs, uint mins, uint hours)
 {
+  REQUIRE (millis >= 0 && millis <= 999);
+  REQUIRE (mins < 60);
+  REQUIRE (secs < 60);
+
   gavl_time_t time = millis
                    + 1000 * secs
                    + 1000 * 60 * mins
@@ -68,39 +73,55 @@ lumiera_build_time(long millis, uint secs, uint mins, uint hours)
   return time;
 }
 
+gavl_time_t
+lumiera_build_time_fps (float fps, uint frames, uint secs, uint mins, uint hours)
+{
+  REQUIRE (mins < 60);
+  REQUIRE (secs < 60);
+  REQUIRE (frames < fps);
+
+  gavl_time_t time = frames * (1000.0 / fps)
+                   + 1000 * secs
+                   + 1000 * 60 * mins
+                   + 1000 * 60 * 60 * hours;
+  time *= GAVL_TIME_SCALE_MS;
+  return time;
+}
+
 int
-lumiera_time_hours(gavl_time_t time)
+lumiera_time_hours (gavl_time_t time)
 {
   return time / GAVL_TIME_SCALE_MS / 1000 / 60 / 60;
 }
 
 int
-lumiera_time_minutes(gavl_time_t time)
+lumiera_time_minutes (gavl_time_t time)
 {
   return (time / GAVL_TIME_SCALE_MS / 1000 / 60) % 60;
 }
 
 int
-lumiera_time_seconds(gavl_time_t time)
+lumiera_time_seconds (gavl_time_t time)
 {
   return (time / GAVL_TIME_SCALE_MS / 1000) % 60;
 }
 
 int
-lumiera_time_millis(gavl_time_t time)
+lumiera_time_millis (gavl_time_t time)
 {
   return (time / GAVL_TIME_SCALE_MS) % 1000;
 }
 
 int
-lumiera_time_frames(gavl_time_t time, float fps)
+lumiera_time_frames (gavl_time_t time, float fps)
 {
   return (fps * (lumiera_time_millis(time))) / 1000;
 }
 
 int
-lumiera_time_frame_count(gavl_time_t time, float fps)
+lumiera_time_frame_count (gavl_time_t time, float fps)
 {
-  int ms = (time / GAVL_TIME_SCALE_MS);
-  return fps * ms / 1000;
+  REQUIRE (fps > 0);
+
+  return roundf((time / GAVL_TIME_SCALE_MS / 1000.0f) * fps);
 }

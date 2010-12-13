@@ -28,6 +28,7 @@ typedef unsigned int uint;
 
 TESTS_BEGIN
 
+const int FRAMES = 15;
 const int MILLIS = 700;
 const int SECONDS = 20;
 const int MINUTES = 55;
@@ -38,35 +39,54 @@ const float FPS = 24.0;
  * 1. Basic functionality
  */
 
-TEST (basic) {
+TEST (basic)
+{
   // Zero
-  gavl_time_t t = lumiera_build_time(0,0,0,0);
+  gavl_time_t t = lumiera_build_time (0,0,0,0);
 
-  CHECK ((gavl_time_t) t                    == 0);
-  CHECK (lumiera_time_millis(t)             == 0);
-  CHECK (lumiera_time_seconds(t)            == 0);
-  CHECK (lumiera_time_minutes(t)            == 0);
-  CHECK (lumiera_time_hours(t)              == 0);
-  CHECK (lumiera_time_frames(t, FPS)        == 0);
-  CHECK (lumiera_time_frames(t, FPS+5)      == 0);
-  CHECK (lumiera_time_frame_count(t, FPS)   == 0);
-  CHECK (lumiera_time_frame_count(t, FPS+5) == 0);
+  CHECK ((gavl_time_t) t                     == 0);
+  CHECK (lumiera_time_millis (t)             == 0);
+  CHECK (lumiera_time_seconds (t)            == 0);
+  CHECK (lumiera_time_minutes (t)            == 0);
+  CHECK (lumiera_time_hours (t)              == 0);
+  CHECK (lumiera_time_frames (t, FPS)        == 0);
+  CHECK (lumiera_time_frames (t, FPS+5)      == 0);
+  CHECK (lumiera_time_frame_count (t, FPS)   == 0);
+  CHECK (lumiera_time_frame_count (t, FPS+5) == 0);
 
-  ECHO ("%s", lumiera_tmpbuf_print_time(t));
+  ECHO ("%s", lumiera_tmpbuf_print_time (t));
 
   // Non-zero
-  t = lumiera_build_time(MILLIS, SECONDS, MINUTES, HOURS);
+  t = lumiera_build_time (MILLIS, SECONDS, MINUTES, HOURS);
 
-  CHECK (lumiera_time_millis(t)             == MILLIS);
-  CHECK (lumiera_time_seconds(t)            == SECONDS);
-  CHECK (lumiera_time_minutes(t)            == MINUTES);
-  CHECK (lumiera_time_hours(t)              == HOURS);
-  CHECK (lumiera_time_frames(t, FPS)        == (int)((FPS * MILLIS) / 1000));
-  CHECK (lumiera_time_frames(t, FPS+5)      == (int)(((FPS+5) * MILLIS) / 1000));
-  CHECK (lumiera_time_frame_count(t, FPS)   == 338896);
-  CHECK (lumiera_time_frame_count(t, FPS+5) == 409500);
+  CHECK (lumiera_time_millis (t)             == MILLIS);
+  CHECK (lumiera_time_seconds (t)            == SECONDS);
+  CHECK (lumiera_time_minutes (t)            == MINUTES);
+  CHECK (lumiera_time_hours (t)              == HOURS);
+  CHECK (lumiera_time_frames (t, FPS)        == (int)((FPS * MILLIS) / 1000));
+  CHECK (lumiera_time_frames (t, FPS+5)      == (int)(((FPS+5) * MILLIS) / 1000));
+  CHECK (lumiera_time_frame_count (t, FPS)   == 338897);
+  CHECK (lumiera_time_frame_count (t, FPS+5) == 409500);
 
-  ECHO ("%s", lumiera_tmpbuf_print_time(t));
+  ECHO ("%s", lumiera_tmpbuf_print_time (t));
+}
+
+/*
+ * 2. Frame rate dependent calculations.
+ */
+
+TEST (fps)
+{
+  gavl_time_t t = lumiera_build_time_fps (FPS, FRAMES, SECONDS, MINUTES, HOURS);
+
+  CHECK (lumiera_time_millis (t)             == (int)(FRAMES * (1000.0 / FPS)));
+  CHECK (lumiera_time_seconds (t)            == SECONDS);
+  CHECK (lumiera_time_minutes (t)            == MINUTES);
+  CHECK (lumiera_time_hours (t)              == HOURS);
+  CHECK (lumiera_time_frames (t, FPS)        == FRAMES);
+  CHECK (lumiera_time_frames (t, FPS+5)      == (int)(((FPS+5) * 625) / 1000));
+  CHECK (lumiera_time_frame_count (t, FPS)   == 338895);
+  CHECK (lumiera_time_frame_count (t, FPS+5) == 409498);
 }
 
 TESTS_END

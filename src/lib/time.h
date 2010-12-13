@@ -36,43 +36,67 @@ lumiera_tmpbuf_print_time (gavl_time_t time);
 
 /**
  * Builds a time value by summing up the given components.
+ * @param millis number of milliseconds
+ * @param secs number of seconds
+ * @param mins number of minutes
+ * @param hours number of hours
  */
 gavl_time_t
 lumiera_build_time (long millis, uint secs, uint mins, uint hours);
 
 /**
- * Get the hour part of given time.
+ * Builds a time value by summing up the given components.
+ * @param fps the frame rate to be used
+ * @param frames number of frames
+ * @param secs number of seconds
+ * @param mins number of minutes
+ * @param hours number of hours
  */
-int lumiera_time_hours(gavl_time_t time);
+gavl_time_t
+lumiera_build_time_fps (float fps, uint frames, uint secs, uint mins, uint hours);
+
+/**
+ * Get the hour part of given time.
+ * @param time the time value to use
+ */
+int
+lumiera_time_hours (gavl_time_t time);
 
 /**
  * Get the minute part of given time.
+ * @param time the time value to use
  */
-int lumiera_time_minutes(gavl_time_t time);
+int
+lumiera_time_minutes (gavl_time_t time);
 
 /**
  * Get the seconds part of given time.
+ * @param time the time value to use
  */
-int lumiera_time_seconds(gavl_time_t time);
+int
+lumiera_time_seconds (gavl_time_t time);
 
 /**
  * Get the milliseconds part of given time.
+ * @param time the time value to use
  */
-int lumiera_time_millis(gavl_time_t time);
+int
+lumiera_time_millis (gavl_time_t time);
 
 /**
- * Get the frame part of given time, using the given number of frames.
- * @param gavl_time_t the time we are interested in converting
- * @param fps Frame rate (float for now, but should be a rational)
+ * Get the frame part of given time, using the given fps.
+ * @param time the time value to use
+ * @param fps frame rate (float for now, but should be a rational)
  */
-int lumiera_time_frames(gavl_time_t time, float fps);
+int
+lumiera_time_frames (gavl_time_t time, float fps);
 
 /**
- * Get the frame count for the given time.
- * @param gavl_time_t the time we are interested in converting
- * @param fps Frame rate (float for now, but should be a rational)
+ * Get the frame count for the given time, using the given fps.
+ * @param time the time value to use
+ * @param fps frame rate (float for now, but should be a rational)
  */
-int lumiera_time_frame_count(gavl_time_t time, float fps);
+int
+lumiera_time_frame_count (gavl_time_t time, float fps);
 
 #endif
-
