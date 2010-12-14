@@ -61,10 +61,6 @@ lumiera_tmpbuf_print_time (gavl_time_t time)
 gavl_time_t
 lumiera_build_time (long millis, uint secs, uint mins, uint hours)
 {
-  REQUIRE (millis >= 0 && millis <= 999);
-  REQUIRE (mins < 60);
-  REQUIRE (secs < 60);
-
   gavl_time_t time = millis
                    + 1000 * secs
                    + 1000 * 60 * mins
@@ -76,10 +72,6 @@ lumiera_build_time (long millis, uint secs, uint mins, uint hours)
 gavl_time_t
 lumiera_build_time_fps (float fps, uint frames, uint secs, uint mins, uint hours)
 {
-  REQUIRE (mins < 60);
-  REQUIRE (secs < 60);
-  REQUIRE (frames < fps);
-
   gavl_time_t time = frames * (1000.0 / fps)
                    + 1000 * secs
                    + 1000 * 60 * mins
@@ -91,11 +83,6 @@ lumiera_build_time_fps (float fps, uint frames, uint secs, uint mins, uint hours
 gavl_time_t
 lumiera_build_time_ntsc_drop (uint frames, uint secs, uint mins, uint hours)
 {
-  REQUIRE (mins < 60);
-  REQUIRE (secs < 60);
-  REQUIRE (frames < 30);
-  REQUIRE_IF (secs == 0 && mins % 10, frames >= 2, "non-existent frame in NTSC drop-frame");
-
   int total_mins = 60 * hours + mins;
   int total_frames  = 108000 * hours
                     + 1800 * mins
