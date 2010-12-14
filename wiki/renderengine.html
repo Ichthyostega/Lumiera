@@ -1801,7 +1801,7 @@ Some further details
 * a special case of this factory use is the [[Singleton]] factory, which is used a lot within the Proy-Layer code
 </pre>
 </div>
-<div title="Fixture" modifier="Ichthyostega" modified="201012092320" created="200706220324" tags="def spec Builder Model" changecount="44">
+<div title="Fixture" modifier="Ichthyostega" modified="201012140217" created="200706220324" tags="def spec Builder Model" changecount="46">
 <pre>a specially configured view -- joining together high-level and low-level model
 * all MObjects have their position, length and configuration set up ready for rendering.
 * any nested sequences (or other kinds of indirections) have been resolved.
@@ -1810,6 +1810,7 @@ Some further details
 * besides, there is a collection of all effective, possibly externally visible [[model ports|ModelPortRegistry]]
 
 As the builder and thus render engine //only consults the fixture,// while all editing operations finally propagate to the fixture as well, we get an isolation layer between the high level part of the Proc layer (editing, object manipulation) and the render engine. [[Creating the Fixture|BuildFixture]] is an important sideeffect of running the [[Builder]] when createing the [[render engine network|LowLevelModel]].
+''Note'': all of the especially managed storage of the LowLevelModel is hooked up behind the Fixture &amp;rarr; FixtureStorage
 
 !{{red{WIP}}} Structure of the fixture
 [&lt;img[Structure of the Fixture|draw/Fixture1.png]]
@@ -1829,6 +1830,32 @@ The fixture is like a grid, where one dimension is given by the [[model ports|Mo
 ;Exit Nodes
 :Each segment holds an ExitNode for each relevant ModelPort of the corresponding timeline.
 :Thus the exit nodes are keyed by ~Pipe-ID as well (and consequently have a distinct [[stream type|StreamType]]) -- each model port coresponds to {{{&lt;number_of_segments&gt;}}} separate exit nodes, but of course an exit node may be //mute.//
+</pre>
+</div>
+<div title="FixtureStorage" modifier="Ichthyostega" modified="201012140505" created="201012140231" tags="Builder impl operational draft" changecount="7">
+<pre>The Fixture datastructure acts as umbrella to hook up the elements of the render engine's processing nodes network (LowLevelModel).
+Each segment within the [[Segmentation]] of any timeline serves as ''extent'' or unit of memory management: it is built up completely during the corresponding build process and becomes immutable thereafter, finally to be discarded as a whole when superseded by a modified version of that segment (new build process) -- but only after all related render processes are known to be terminated.
+
+Each segment owns an AllocationCluster, which in turn manages all the numerous small-sized objects comprising the render network implementing this segment -- thus the central question is when to //release the segment.//
+* for one, we easily detect the point when a segment is swapped out of the segmentation; at this point we also have to detect the //tainted render processes.//
+* but those render processes terminate asynchronously, and that forces us to do some kind of registration and deregistration.
+
+!!question: is ref-counting acceptable here?
+//Not sure yet.// Of course it would be the simplest approach. KISS.
+Basically the concern is that each new render process had to access the shared counts of all segments it touches.
+
+''Note'': {{{shared_ptr}}} is known to be implemented by a lock-free algorithm (yes it is, at least since boost 1.33. Don't believe what numerous FUD spreaders have written). Thus lock contention isn't a problem, but at least a memory barrier is involved (and if I judge GCC's internal documentation right, currently their barriers extend to //all// globally visible variables)
+
+!!question: alternatives?
+There are. As the builder is known to be run again and again, no one forces us to deallocate as soon as we could. That's the classical argument exploited by any garbage collector too. Thus we could just note the fact that a render process had terminated and evaluate all those noted results on later occasion.
+
+!!exploiting the frame-dispatch step
+Irrespective of the dicision for or against ref-counting, it seems reasonable to make use of the //frame dispatch step,// which is necessary anyway. The idea is to give each render proces a //copy//&amp;nbsp; of an dispatcher table object -- basically just a list of time breaking points and a pointer to the relevant exit node. If we keep track of those dispather tables, add a back-link to identify the process and require the process in turn to deregister, we get a tracking of tainted processes for free.
+
+But the distinguishing question here is that regarding the impact of such an implementation. What would be the costs?
+# creating individual dispatcher tables uses memory
+# the per-frame lookup is efficient and negligible compared with just building the render context (StateProxy) for that frame
+# when a process terminates, we need to take out that dispatcher and do deregistration stuff for each touched segment (?)
 </pre>
 </div>
 <div title="ForwardIterator" modifier="Ichthyostega" modified="200912190027" created="200910312114" tags="Concepts def spec" changecount="17">
@@ -4802,7 +4829,7 @@ We need to detect attaching and detaching of
 * root &amp;harr; [[Track]]
 </pre>
 </div>
-<div title="Segmentation" modifier="Ichthyostega" modified="201012122202" created="201012121901" tags="def spec Builder" changecount="24">
+<div title="Segmentation" modifier="Ichthyostega" modified="201012140222" created="201012121901" tags="def spec Builder" changecount="27">
 <pre>//Segmentation of timeline// denotes a data structure and a step in the BuildProcess.
 When [[building the fixture|BuildFixture]], ~MObjects -- as handled by their Placements -- are grouped below each timeline using them; Placements are then to be resolved into [[explicit Placements|ExplicitPlacement]], resulting in a single well defined time interval for each object. This allows to cut this effective timeline into slices of constant wiring structure, which are represented through the ''Segmentation Datastructure'', a time axis with segments holding object placements and [[exit nodes|ExitNode]]. &amp;nbsp;&amp;rarr; see [[structure of the Fixture|Fixture]]
 * for each Timeline we get a Segmentation
@@ -4811,7 +4838,7 @@ When [[building the fixture|BuildFixture]], ~MObjects -- as handled by their Pla
 **** an ExplicitPlacement for each covered object
 **** an ExitNode for each ModelPort of the corresponding timeline
 
-!Storage considerations
+!Usage pattern
 ;(1) build process
 :&amp;rarr; a tree walk yields the placements per timeline, which then get //resolved//
 :&amp;rarr; after //sorting,// the segmentation can be established, thereby copying placements spanning multiple segments
@@ -4832,12 +4859,14 @@ When [[building the fixture|BuildFixture]], ~MObjects -- as handled by their Pla
 
 !!!conclusions
 The Fixture is mostly comprised of the Segementation datastructure, but some other facilities are involved too
-# at top level, we need somehow to organise access per groups of model ports, actually grouped by timeline
+# at top level, access is structured by groups of model ports, actually grouped by timeline. This first access level handled by the Fixture
 # during the build process, there is a collection of placements; this can be discarded afterwards
 # the backbone of the segmentation is closely linked to an ordering by time. Initially it should support sorting, access by time interval search later on.
 # discarding a segment (or failing to do so) has an high impact on the whole application. We should employ a reliable mechanism for that.
 # the frame dispatch and the tracking of processes can be combined; data duplication is a virtue when it comes to parallel processes
 # the process of comparing and tainting is broken out into a separate data structure to be used just once
+
+Largely the storage of the render nodes network is hooked up behind the Fixture &amp;rarr; [[storage considerations|FixtureStorage]]
 </pre>
 </div>
 <div title="Sequence" modifier="Ichthyostega" modified="201010180156" created="201001252327" tags="def" changecount="17">
