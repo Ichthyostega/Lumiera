@@ -1801,7 +1801,7 @@ Some further details
 * a special case of this factory use is the [[Singleton]] factory, which is used a lot within the Proy-Layer code
 </pre>
 </div>
-<div title="Fixture" modifier="Ichthyostega" modified="201012140217" created="200706220324" tags="def spec Builder Model" changecount="46">
+<div title="Fixture" modifier="Ichthyostega" modified="201012162259" created="200706220324" tags="def spec Builder Model" changecount="47">
 <pre>a specially configured view -- joining together high-level and low-level model
 * all MObjects have their position, length and configuration set up ready for rendering.
 * any nested sequences (or other kinds of indirections) have been resolved.
@@ -1810,7 +1810,9 @@ Some further details
 * besides, there is a collection of all effective, possibly externally visible [[model ports|ModelPortRegistry]]
 
 As the builder and thus render engine //only consults the fixture,// while all editing operations finally propagate to the fixture as well, we get an isolation layer between the high level part of the Proc layer (editing, object manipulation) and the render engine. [[Creating the Fixture|BuildFixture]] is an important sideeffect of running the [[Builder]] when createing the [[render engine network|LowLevelModel]].
-''Note'': all of the especially managed storage of the LowLevelModel is hooked up behind the Fixture &amp;rarr; FixtureStorage
+''Note'': all of the especially managed storage of the LowLevelModel is hooked up behind the Fixture
+&amp;rarr; FixtureStorage
+&amp;rarr; FixtureDatastructure
 
 !{{red{WIP}}} Structure of the fixture
 [&lt;img[Structure of the Fixture|draw/Fixture1.png]]
@@ -1832,8 +1834,38 @@ The fixture is like a grid, where one dimension is given by the [[model ports|Mo
 :Thus the exit nodes are keyed by ~Pipe-ID as well (and consequently have a distinct [[stream type|StreamType]]) -- each model port coresponds to {{{&lt;number_of_segments&gt;}}} separate exit nodes, but of course an exit node may be //mute.//
 </pre>
 </div>
-<div title="FixtureStorage" modifier="Ichthyostega" modified="201012160307" created="201012140231" tags="Builder impl operational draft" changecount="25">
-<pre>The Fixture data structure acts as umbrella to hook up the elements of the render engine's processing nodes network (LowLevelModel).
+<div title="FixtureDatastructure" modifier="Ichthyostega" modified="201012162342" created="201012162304" tags="spec Builder" changecount="6">
+<pre>Generally speaking, the [[here|Fixture]] comprised of a ModelPortRegistry and a set of [[segmentations|Segmentation]] per Timeline.
+This page focusses on the actual datastructure and usage details on that level. See also &amp;rarr; [[storage|FixtureStorage]] considerations.
+
+!transactional switch
+A key point to note is the fact that the fixture is frequently [[re-built||BuildFixture]] by the [[Builder]], while render processes may be going in in parallel. Thus, when a build process is finished, a transactional ''commit'' happens to ''hot swap'' the new parts of the model. This is complemented by a cleanup of tainted render processes; finally, storage can be relaimed.
+
+To support this usage pattern, the Fixture implementation makes use of the [[PImpl pattern|http://c2.com/cgi/wiki?PimplIdiom]]
+
+!Collecting usage scenarios {{red{WIP 12/10}}}
+* ModelPort access
+** get the model port for a given ~Pipe-ID
+** ennumerate the model ports for a Timeline
+* rendering frame dispatch
+** get or create the frame dispatcher table
+** dispatch a single frame to yield the corresponding ExitNode
+* (re)building
+** create a new implementation frame
+** create a new segmentation
+** establish what segments actually need to be rebuilt
+** dispatch a newly built segment into the transaction
+** schedule superseded segments and tainted process for cleanup
+** commit a transaction
+ 
+
+!Conclusions about the structure {{red{WIP 12/10}}}
+* the ~PImpl needs to be a single (language) pointer. This necessitates having a monolithic Fixture implementation holder
+* moreover, this necessitates a tight integration up to implementation level, both with the cleanup and the render processes themselves
+</pre>
+</div>
+<div title="FixtureStorage" modifier="Ichthyostega" modified="201012162324" created="201012140231" tags="Builder impl operational draft" changecount="30">
+<pre>The Fixture &amp;rarr; [[data structure|FixtureDatastructure]] acts as umbrella to hook up the elements of the render engine's processing nodes network (LowLevelModel).
 Each segment within the [[Segmentation]] of any timeline serves as ''extent'' or unit of memory management: it is built up completely during the corresponding build process and becomes immutable thereafter, finally to be discarded as a whole when superseded by a modified version of that segment (new build process) -- but only after all related render processes are known to be terminated.
 
 Each segment owns an AllocationCluster, which in turn manages all the numerous small-sized objects comprising the render network implementing this segment -- thus the central question is when to //release the segment.//
@@ -1852,7 +1884,7 @@ There are. As the builder is known to be run again and again, no one forces us t
 !!exploiting the frame-dispatch step
 Irrespective of the decision in favour or against ref-counting, it seems reasonable to make use of the //frame dispatch step,// which is necessary anyway. The idea is to give each render process a //copy//&amp;nbsp; of an dispatcher table object -- basically just a list of time breaking points and a pointer to the relevant exit node. If we keep track of those dispatcher tables, add a back-link to identify the process and require the process in turn to deregister, we get a tracking of tainted processes for free.
 
-!!assessment
+!!assessment {{red{WIP 12/10}}}
 But the primary question here is to judge the impact of such an implementation. What would be the costs?
 # creating individual dispatcher tables trades memory for simplified parallelism
 # the per-frame lookup is efficient and negligible compared with just building the render context (StateProxy) for that frame
@@ -1876,8 +1908,15 @@ Above estimation hints at the necessity of frequently finding some 30 to 100 seg
 
 ;Model A
 :use a logarithmic datastructure, e.g. a priority queue
+:problem here is that the priorities change, which either means shared access or a lot of &quot;superseeded&quot; entries
 ;Model B
 :keep all candidates around and track the tainted processes instead
+:problem here is how to get the tainted processes precisely and with low overhead
+//currently {{red{12/10}}} I tend to prefer Model B...// while the priority queue remains to be investigated in more detail for organising the actual build process.
+But actually I'm struck here, because of the yet limited knowledge about those render processes....
+* how do we //join// an aborted/changed rendering process to his successor, without creating a jerk in the output?
+* is it even possible to continue a process when parts of the covered timerange is affected by a build?
+If the latter question is answered with &quot;No!&quot;, then the problem gets simple in solution, but maybe memory consuming: In that case, //all//&amp;nbsp; processes linked to a timeline gets affected and thus tainted; we'd just dump them onto a pile and delay releasing all of the superseeded segments until all of them are known to be terminated.
 </pre>
 </div>
 <div title="ForwardIterator" modifier="Ichthyostega" modified="200912190027" created="200910312114" tags="Concepts def spec" changecount="17">
