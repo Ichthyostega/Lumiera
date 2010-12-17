@@ -26,17 +26,17 @@
 #include "proc/state.hpp"
 
 namespace lumiera {
-
+  
   /** storage for the unique node-ID counter */
   ulong NodeID::currID (0);
 }
 
 
 namespace engine {
-
+  
   /** */
-
-
-
-
+  
+  
+  
+  
 } // namespace engine

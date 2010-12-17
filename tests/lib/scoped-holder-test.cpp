@@ -23,7 +23,9 @@
 
 
 #include "lib/test/run.hpp"
+#include "lib/test/test-helper.hpp"
 #include "lib/util.hpp"
+#include "lib/error.hpp"
 
 #include "lib/scoped-holder.hpp"
 #include "testdummy.hpp"
@@ -38,6 +40,7 @@ namespace test{
   
   using ::Test;
   using util::isnil;
+  using lumiera::error::LUMIERA_ERROR_LOGIC;
   
   using std::map;
   using std::cout;
@@ -47,7 +50,7 @@ namespace test{
   
   
   /**********************************************************************************
-   *  @test ScopedHolder and ScopedPtrHolder are initially empty and copyable. 
+   *  @test ScopedHolder and ScopedPtrHolder are initially empty and copyable.
    *        After taking ownership, they prohibit copy operations, manage the
    *        lifecycle of the contained object and provide smart-ptr like access.
    *        A series of identical tests is conducted both with the ScopedPtrHolder
@@ -105,8 +108,8 @@ namespace test{
             
             TRACE (test, "holder at %p", &holder);
             TRACE (test, "object at %p", holder.get() );
-            TRACE (test, "size(object) = %u", sizeof(*holder));
-            TRACE (test, "size(holder) = %u", sizeof(holder));
+            TRACE (test, "size(object) = %lu", sizeof(*holder));
+            TRACE (test, "size(holder) = %lu", sizeof(holder));
           }
           CHECK (0==checksum);
         }
@@ -132,7 +135,7 @@ namespace test{
                 checksum -= val;
                 CHECK (0==checksum);
               }
-            CHECK (!holder); /* because the exception happens in ctor
+            CHECK (!holder);  /* because the exception happens in ctor
                                  object doesn't count as "created" */
             throw_in_ctor = false;
           }
@@ -157,60 +160,34 @@ namespace test{
             CHECK (holder);
             long currSum = checksum;
             void* adr = holder.get();
-            try
-              {
-                holder2 = holder;
-                NOTREACHED ();
-              }
-            catch (lumiera::error::Logic&)
-              {
-                CHECK (holder);
-                CHECK (!holder2);
-                CHECK (holder.get()==adr);
-                CHECK (checksum==currSum);
-              }
             
-            try
-              {
-                holder = holder2;
-                NOTREACHED ();
-              }
-            catch (lumiera::error::Logic&)
-              {
-                CHECK (holder);
-                CHECK (!holder2);
-                CHECK (holder.get()==adr);
-                CHECK (checksum==currSum);
-              }
+            VERIFY_ERROR(LOGIC, holder2 = holder );
+            CHECK (holder);
+            CHECK (!holder2);
+            CHECK (holder.get()==adr);
+            CHECK (checksum==currSum);
+            
+            VERIFY_ERROR(LOGIC, holder = holder2 );
+            CHECK (holder);
+            CHECK (!holder2);
+            CHECK (holder.get()==adr);
+            CHECK (checksum==currSum);
             
             create_contained_object (holder2);
             CHECK (holder2);
             CHECK (checksum != currSum);
             currSum = checksum;
-            try
-              {
-                holder = holder2;
-                NOTREACHED ();
-              }
-            catch (lumiera::error::Logic&)
-              {
-                CHECK (holder);
-                CHECK (holder2);
-                CHECK (holder.get()==adr);
-                CHECK (checksum==currSum);
-              }
             
-            try
-              {
-                HO holder3 (holder2);
-                NOTREACHED ();
-              }
-            catch (lumiera::error::Logic&)
-              {
-                CHECK (holder);
-                CHECK (holder2);
-                CHECK (checksum==currSum);
-              }
+            VERIFY_ERROR(LOGIC, holder = holder2 );
+            CHECK (holder);
+            CHECK (holder2);
+            CHECK (holder.get()==adr);
+            CHECK (checksum==currSum);
+            
+            VERIFY_ERROR(LOGIC, HO holder3 (holder2) );
+            CHECK (holder);
+            CHECK (holder2);
+            CHECK (checksum==currSum);
           }
           CHECK (0==checksum);
         }
@@ -236,7 +213,7 @@ namespace test{
                 CHECK (!contained);
               }                      // 100 holder objects created by sideeffect
                                     
-            CHECK (0==checksum);  // ..... without creating any contained object!
+            CHECK (0==checksum);   // ..... without creating any contained object!
             CHECK (!isnil (maph));
             CHECK (100==maph.size());
             
@@ -257,7 +234,7 @@ namespace test{
             CHECK (checksum == currSum - value55); // proves object#55's dtor has been invoked
             CHECK (maph.size() == 99);
             
-            maph[55];                            // create new empty holder by sideeffect...
+            maph[55];                              // create new empty holder by sideeffect...
             CHECK (&maph[55]);
             CHECK (!maph[55]);
             CHECK (maph.size() == 100);
@@ -272,4 +249,3 @@ namespace test{
   
   
 }} // namespace lib::test
-

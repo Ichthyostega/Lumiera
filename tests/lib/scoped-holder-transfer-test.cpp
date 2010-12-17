@@ -26,7 +26,7 @@
 #include "lib/util.hpp"
 
 #include "lib/scoped-holder.hpp"
-#include "lib/scopedholdertransfer.hpp"
+#include "lib/scoped-holder-transfer.hpp"
 #include "testdummy.hpp"
 
 #include <iostream>
@@ -67,9 +67,9 @@ namespace lib {
 
             if (throw_in_transfer)
               throw to.getVal();
-
-            to.setVal (from.getVal());
-            from.setVal(0);
+            
+            swap (from,to);
+            from.setVal(0); // remove the old Dummy from accounting (checksum) 
           }
 
         };

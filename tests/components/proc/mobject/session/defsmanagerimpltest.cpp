@@ -31,6 +31,7 @@
 #include "common/configrules.hpp"
 #include "proc/assetmanager.hpp"
 #include "proc/mobject/session.hpp"
+#include "lib/streamtype.hpp"
 
 #include <boost/format.hpp>
 
@@ -49,9 +50,10 @@ namespace asset {
 
     using lumiera::ConfigRules;
     using lumiera::query::QueryHandler;
-
-
-
+    using lumiera::StreamType;
+    
+    
+    
     /** shortcut: query for given Pipe-ID */
     bool
     find (const string& pID)
@@ -94,29 +96,30 @@ namespace asset {
         define_and_search ()
           {
             string sID = newID ("stream");
-
-             // create Pipes explicitly
+            StreamType::ID stID (sID);
+            
+             // create Pipes explicitly 
             //  (without utilising default queries)
             PPipe pipe1 = Struct::retrieve.newPipe (newID("pipe"), newID("stream"));
             PPipe pipe2 = Struct::retrieve.newPipe (newID("pipe"), sID            );
-
+            
             CHECK (pipe1 != pipe2);
-            CHECK (sID == pipe2->getStreamID());
-
+            CHECK (stID == pipe2->getStreamID());
+            
             CHECK (!find (pipe1->getPipeID()), "accidental clash of random test-IDs");
             CHECK (!find (pipe2->getPipeID()), "accidental clash of random test-IDs");
-
+            
             // now declare that these objects should be considered "default"
-lumiera::query::setFakeBypass("");  /////////////////////////////////////////////////TODO mock resolution
-            CHECK (Session::current->defaults.define (pipe1, Query<Pipe> (""))); // unrestricted default
+lumiera::query::setFakeBypass("");  /////////////////////////////////////////////////TODO mock resolution            
+            CHECK (Session::current->defaults.define (pipe1, Query<Pipe> ("")));   // unrestricted default
 
-lumiera::query::setFakeBypass("stream("+sID+")"); ///////////////////////////////////TODO mock resolution
+lumiera::query::setFakeBypass("stream("+sID+")"); ///////////////////////////////////TODO mock resolution            
             CHECK (Session::current->defaults.define (pipe2, Query<Pipe> ("stream("+sID+")")));
-
+            
             CHECK ( find (pipe1->getPipeID()), "failure declaring object as default");
             CHECK ( find (pipe2->getPipeID()), "failure declaring object as default");
-
-            CHECK (sID != pipe1->getStreamID(), "accidental clash");
+            
+            CHECK (stID != pipe1->getStreamID(), "accidental clash");
             CHECK (!Session::current->defaults.define (pipe1, Query<Pipe> ("stream("+sID+")")));
                     // can't be registered with this query, due to failure caused by wrong stream-ID
           }

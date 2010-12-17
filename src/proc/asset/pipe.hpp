@@ -26,6 +26,7 @@
 
 #include "proc/asset/struct.hpp"
 #include "proc/asset/procpatt.hpp"
+#include "lib/streamtype.hpp"
 
 #include <string>
 
@@ -34,6 +35,7 @@
 namespace asset {
   
   using lumiera::P;
+  using lumiera::StreamType;
   using std::string;
   
   class Pipe;
@@ -45,7 +47,16 @@ namespace asset {
     {
     public:
       ID (HashVal id);
-      ID (const Pipe&);
+      ID (Pipe const&);
+      ID (PPipe const&);
+      
+      /** allows a Pipe-ID to stand in for a full Pipe Asset
+       *  @throw error::Invalid when there is no corresponding Pipe */
+      operator PPipe()  const;
+      
+      /** allows to fetch the StreamType directly just from a Pipe-ID
+       *  @throw error::Invalid when there is no corresponding Pipe */
+      StreamType::ID streamType()  const;
     };
   
   
@@ -59,7 +70,7 @@ namespace asset {
     : public Struct
     {
       PProcPatt wiringTemplate_;
-      const string streamID_;                   ///< @todo just a placeholder for now 10/10
+      StreamType::ID streamID_;              ////////////////////////////////////////TICKET #648
       
     public:
       string shortDesc;
@@ -78,7 +89,7 @@ namespace asset {
       
     public:
       string const& getPipeID()       const { return ident.name;      }
-      string const& getStreamID()     const { return streamID_;       }
+      StreamType::ID getStreamID()    const { return streamID_;       }   ////////////////////////////////////////TICKET #648
       PProcPatt const& getProcPatt()  const { return wiringTemplate_; }
       
       
@@ -95,9 +106,21 @@ namespace asset {
     
    // catch up with postponed definition of ID<Struct> ctors...
   //
-  inline ID<Pipe>::ID(HashVal id)       : ID<Struct> (id)           {};
-  inline ID<Pipe>::ID(Pipe const& pipe) : ID<Struct> (pipe.getID()) {};
+  inline ID<Pipe>::ID(HashVal id)        : ID<Struct> (id)            {};
+  inline ID<Pipe>::ID(Pipe const& pipe)  : ID<Struct> (pipe.getID())  {};
+  inline ID<Pipe>::ID(PPipe const& pipe) : ID<Struct> (pipe->getID()) {};
   
+  inline
+  ID<Pipe>::operator PPipe() const
+    {
+      return Pipe::lookup(*this);
+    }
+  
+  inline StreamType::ID
+  ID<Pipe>::streamType() const
+    {
+      return Pipe::lookup(*this)->getStreamID();
+    }
   
   
   

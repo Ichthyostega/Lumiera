@@ -52,6 +52,9 @@ namespace session {
   class Clip;
   
 }}
+namespace lumiera {
+  class StreamType;
+}
 
 namespace asset{
   
@@ -103,6 +106,12 @@ namespace asset{
         static Symbol namePrefix() { return "pipe"; }
         static Symbol catFolder()  { return "pipes";}
         static Symbol idSymbol()   { return "pipe"; }
+      };
+    template<> struct StructTraits<lumiera::StreamType>
+      {
+        static Symbol namePrefix() { return "type"; }
+        static Symbol catFolder()  { return "stream-types";}
+        static Symbol idSymbol()   { return "stype"; }
       };
     template<> struct StructTraits<const ProcPatt>
       {

@@ -23,6 +23,7 @@
 
 
 #include <boost/noncopyable.hpp>
+#include <algorithm>
 
 
 namespace lib {
@@ -62,6 +63,12 @@ namespace test{
             checksum += newVal - val_;
             val_ = newVal;
           }
+        
+        friend void
+        swap (Dummy& dum1, Dummy& dum2)  ///< checksum neutral
+        {
+          std::swap(dum1.val_, dum2.val_);
+        }
         
       private:
         void

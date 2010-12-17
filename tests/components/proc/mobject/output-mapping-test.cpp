@@ -76,7 +76,7 @@ namespace test  {
             {
               PPipe srcP = Pipe::lookup (sourcePipeID);
               format queryPattern ("id(master_%1%), stream(%1%), ord(%2%)");
-              return Query<Pipe> (queryPattern % srcP->getStreamID() % seqNr);
+              return Query<Pipe> (str(queryPattern % srcP->getStreamID().getSym() % seqNr));
             }
         };
       

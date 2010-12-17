@@ -99,7 +99,7 @@ namespace test    {
           
           MemHolder mementoHolder (undo_func,cap_func);
           
-          CHECK (sizeof(MemHolder) <= sizeof(int)                   // storage for the memento
+          CHECK (sizeof(MemHolder) <= sizeof(int)                    // storage for the memento
                                      + 2 * sizeof(function<void()>)  // storage for the 2 undecorated functors
                                      + ALIGNMENT);
           
@@ -160,10 +160,10 @@ namespace test    {
           CHECK (m22 != m11);
           CHECK (m22 != m12);
           CHECK (m22 != m21);
-         
+          
           MemHolder m22x (m22); // clone copy
           CHECK (!m22x);
-          CHECK (m22 == m22x); // same functions, no state --> equal
+          CHECK (m22 == m22x);  // same functions, no state --> equal
           
           testVal = 0;
           m22x.tieCaptureFunc() (1 + (rand() % 9));   // produce a random memento value != 0

@@ -37,6 +37,7 @@
 
 #include "lib/symbol.hpp"
 #include "lib/query.hpp"
+#include "proc/asset/entry-id.hpp"
 
 #include <boost/noncopyable.hpp>
 
@@ -47,7 +48,7 @@ namespace lumiera {
   
   
   /**
-   * 
+   * TODO write type comment
    */
   struct StreamType : boost::noncopyable
     {
@@ -71,6 +72,8 @@ namespace lumiera {
       
       class ImplFacade;
       class ImplConstraint;
+      
+      typedef asset::EntryID<StreamType> ID;
       
       
       Prototype const& prototype;
@@ -149,9 +152,9 @@ namespace lumiera {
        *  and use it to create a new framebuffer */
       virtual DataBuffer* createFrame ()  const =0;
       
-      /** similarily create a impl type which complies to this constraint
+      /** Similarly create a impl type which complies to this constraint
        *  as well as to the additional constraints (e.g. frame size).
-       *  Create a new framebuffer of the resutling type */
+       *  Create a new frame buffer of the resulting type */
       virtual DataBuffer* createFrame (ImplConstraint const& furtherConstraints)  const =0;
       
       //TODO: do we need functions to represent and describe this constraint?

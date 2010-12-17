@@ -84,7 +84,7 @@ test_lib_SOURCES =							\
 	$(testlib_srcdir)/sanitised-identifier-test.cpp			\
 	$(testlib_srcdir)/scoped-holder-test.cpp			\
 	$(testlib_srcdir)/scoped-ptrvect-test.cpp			\
-	$(testlib_srcdir)/scopedholdertransfertest.cpp			\
+	$(testlib_srcdir)/scoped-holder-transfer-test.cpp		\
 	$(testlib_srcdir)/singleton-subclass-test.cpp			\
 	$(testlib_srcdir)/singleton-test.cpp				\
 	$(testlib_srcdir)/singletontestmocktest.cpp			\
@@ -106,7 +106,7 @@ test_lib_SOURCES =							\
 	$(testlib_srcdir)/typed-allocation-manager-test.cpp		\
 	$(testlib_srcdir)/typed-counter-test.cpp			\
 	$(testlib_srcdir)/util-foreach-test.cpp				\
-	$(testlib_srcdir)/vectortransfertest.cpp			\
+	$(testlib_srcdir)/vector-transfer-test.cpp			\
 	$(testlib_srcdir)/visitingtoolconcept.cpp			\
 	$(testlib_srcdir)/visitingtoolextendedtest.cpp			\
 	$(testlib_srcdir)/visitingtooltest.cpp

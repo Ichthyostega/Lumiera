@@ -109,7 +109,8 @@ liblumiprocmobjectbuilder_la_SOURCES =					\
 	$(liblumiprocmobjectbuilder_la_srcdir)/assembler.cpp		\
 	$(liblumiprocmobjectbuilder_la_srcdir)/conmanager.cpp		\
 	$(liblumiprocmobjectbuilder_la_srcdir)/nodecreatortool.cpp	\
-	$(liblumiprocmobjectbuilder_la_srcdir)/segmentationtool.cpp	\
+	$(liblumiprocmobjectbuilder_la_srcdir)/segmentation.cpp		\
+	$(liblumiprocmobjectbuilder_la_srcdir)/segmentation-tool.cpp	\
 	$(liblumiprocmobjectbuilder_la_srcdir)/toolfactory.cpp
 
 
@@ -219,7 +220,8 @@ noinst_HEADERS +=									\
 	$(liblumiproc_la_srcdir)/mobject/builder/assembler.hpp				\
 	$(liblumiproc_la_srcdir)/mobject/builder/buildertool.hpp			\
 	$(liblumiproc_la_srcdir)/mobject/builder/conmanager.hpp				\
-	$(liblumiproc_la_srcdir)/mobject/builder/segmentationtool.hpp			\
+	$(liblumiproc_la_srcdir)/mobject/builder/segmentation.hpp			\
+	$(liblumiproc_la_srcdir)/mobject/builder/segmentation-tool.hpp			\
 	$(liblumiproc_la_srcdir)/mobject/builder/toolfactory.hpp			\
 	$(liblumiproc_la_srcdir)/mobject/builderfacade.hpp				\
 	$(liblumiproc_la_srcdir)/mobject/explicitplacement.hpp				\

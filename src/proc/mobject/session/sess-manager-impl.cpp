@@ -152,6 +152,7 @@ namespace session {
         closeSessionInterface()
           {                                             /////////////////////// TICKET #699
             INFO (session, "closing session interfaces.");
+            TODO ("actually close session interfaces :) and don't babble in the log when NOT closing anything...");
           }
         
         

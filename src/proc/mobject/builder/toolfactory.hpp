@@ -25,7 +25,7 @@
 #define MOBJECT_BUILDER_TOOLFACTORY_H
 
 #include "proc/mobject/session/fixture.hpp"
-#include "proc/mobject/builder/segmentationtool.hpp"
+#include "proc/mobject/builder/segmentation-tool.hpp"
 #include "proc/mobject/builder/nodecreatortool.hpp"
 #include "proc/mobject/builder/mould.hpp"
 #include "proc/engine/rendergraph.hpp"

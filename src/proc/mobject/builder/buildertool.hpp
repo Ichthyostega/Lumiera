@@ -62,7 +62,7 @@
 
 
 namespace mobject {
-
+  
   class Buildable;
   
   namespace builder {
@@ -105,7 +105,7 @@ namespace mobject {
      *       as we simply store a pointer within the BuilderTool instance.
      */
     class BuilderTool
-      : public lumiera::visitor::Tool<void, InvokeCatchAllFunction> 
+      : public lumiera::visitor::Tool<void, InvokeCatchAllFunction>
       {
         lumiera::WrapperPtr currentWrapper_;
         
@@ -172,7 +172,9 @@ namespace mobject {
       
     using lumiera::typelist::Types;  // convenience for the users of "Applicable"
   
-  } // namespace mobject::builder
+  }// namespace mobject::builder
+  
+  
   
   
   
@@ -185,8 +187,15 @@ namespace mobject {
   
   
   
-  namespace builder { // to be found by ADL
+  namespace builder {
     
+    /** to be picked up by ADL: redirect tool invocation for double dispatch.
+     *  The purpose of this function is to apply a visitor, while the actual target
+     *  is managed by a generic wrapper (smart-ptr). This template function serves
+     *  to generate forwarding functions, which pass on the \c apply() call to the
+     *  actual embedded target, while passing on the fully wrapped object for later
+     *  referral and usage too.
+     */
     template<typename WRA>
     inline Buildable::ReturnType
     apply (BuilderTool& tool, WRA& wrappedTargetObj)
@@ -195,8 +204,7 @@ namespace mobject {
       wrappedTargetObj->apply (tool);   // dispatch to suitable treat() function
       tool.forgetWrapper();
     }
-    
-  } // namespace mobject::builder
   
-} // namespace mobject
+  
+}} // namespace mobject::builder
 #endif

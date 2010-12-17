@@ -42,13 +42,13 @@ using std::string;
 using std::cout;
 
 
-namespace asset
-  {
-  namespace test
-    {
+namespace asset {
+namespace test  {
+  
     using mobject::Session;
     using lumiera::Query;
     using lumiera::query::normaliseID;
+    using lumiera::StreamType;
     
     
     
@@ -88,7 +88,7 @@ namespace asset
             CHECK (thePipe);
             CHECK (thePipe->getProcPatt());
             CHECK (thePipe->getPipeID() == pID_sane);
-            CHECK (thePipe->getStreamID() == sID);
+            CHECK (thePipe->getStreamID() == StreamType::ID(sID));
             CHECK (thePipe->shortDesc == pID_sane);
             
             Asset::Ident idi = thePipe->ident;
@@ -147,7 +147,7 @@ namespace asset
             string sID = pipe1->getStreamID(); // sort of a "default stream type"
             PPipe pipe3 = Pipe::query ("stream("+sID+")");
             CHECK (pipe3);
-            CHECK (pipe3->getStreamID() == sID);
+            CHECK (pipe3->getStreamID() == StreamType::ID(sID));
             CHECK (pipe3->getProcPatt() == Session::current->defaults (Query<const ProcPatt>("stream("+sID+")")));
           }
         

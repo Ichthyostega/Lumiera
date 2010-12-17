@@ -134,7 +134,7 @@ namespace test    {
         {
           QueryFocus original;    // automatically attaches to current stack top
           uint num_refs = refs (original);
-          CHECK (num_refs > 1);  // because the run() function also holds a ref
+          CHECK (num_refs > 1);   // because the run() function also holds a ref
           
           QueryFocus subF = QueryFocus::push();
           cout << string(subF) << endl;
@@ -161,7 +161,7 @@ namespace test    {
             subF2.pop(); // releasing this focus and re-attaching to what's on stack top
             cout << string(subF2) << "<<<--after pop()" << endl;
             CHECK (subF2 == subF);
-            CHECK (2 == refs(subF2));  // both are now attached to the same path
+            CHECK (2 == refs(subF2));   // both are now attached to the same path
             CHECK (2 == refs(subF));
           }
           // subF2 went out of scope, but no auto-pop happens (because subF is still there)

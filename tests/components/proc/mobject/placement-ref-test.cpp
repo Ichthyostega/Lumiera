@@ -44,10 +44,10 @@ using std::endl;
 namespace mobject {
 namespace session {
 namespace test    {
-
+  
   using namespace mobject::test;
   typedef TestPlacement<TestSubMO21> PSub;
-
+  
   typedef PlacementMO::ID P_ID;
 
 
@@ -65,68 +65,68 @@ namespace test    {
    */
   class PlacementRef_test : public Test
     {
-
+      
       virtual void
       run (Arg)
         {
           PSub testPlacement1(*new TestSubMO21);
           PSub testPlacement2(*new TestSubMO21);
           testPlacement2.chain(Time(2));     // define start time of Placement-2 to be at t=2
-
+          
           // Prepare an (test)Index backing the PlacementRefs
           PPIdx index = SessionServiceMockIndex::install();
           PMO& root = index->getRoot();
-
+          
           P_ID id1   = index->insert (testPlacement1, root);
           P_ID tmpID = index->insert (testPlacement2, root);
           CHECK (2 == index->size());
-
+          
           // References to the "live" placements within our test index
           PMO&  p1 = index->find(id1);
           PMO&  p2 = index->find(tmpID);
-
+          
           PlacementMO::Id<TestSubMO21> id2 = p2.recastID<TestSubMO21>();
           CHECK (id2);
           CHECK (id2 != p1.getID());
-
+          
           // create placement refs
           PlacementRef<TestSubMO21> ref1 (p1);
           PlacementRef<TestSubMO21> ref2 (id2);
-
+          
           PlacementRef<MObject> refX (ref2);
-
+          
           CHECK (ref1);
           CHECK (ref2);
           CHECK (refX);
           CHECK (ref1 != ref2);
           CHECK (ref2 == refX);
-
+          
           // indeed a "reference": resolves to the same memory location
           CHECK (isSameObject (p1, *ref1));
           CHECK (isSameObject (p2, *ref2));
           CHECK (isSameObject (p2, *refX));
-
+          
           cout << string(*ref1) << endl;
           cout << string(*ref2) << endl;
           cout << string(*refX) << endl;
-
+          
           // PlacementRef mimics placement behaviour
           ref1->specialAPI();
           CHECK (2 == ref1.use_count());
           CHECK (2 == ref2.use_count());
           ExplicitPlacement exPla = refX.resolve();
-          CHECK (exPla.time == Time(2));          // indeed get back the time we set on p2 above
-          CHECK (3 == ref2.use_count());          // exPla shares ownership with p2
-
-          CHECK (index->contains(ref1));          // ref can stand-in for a placement-ID
-          CHECK (sizeof(id2) == sizeof(ref2));    // (and is actually implemented based on an ID)
-
+          CHECK (exPla.time == Time(2));           // indeed get back the time we set on p2 above
+          CHECK (3 == ref2.use_count());           // exPla shares ownership with p2
+          
+          CHECK (index->contains(ref1));           // ref can stand-in for a placement-ID
+          CHECK (sizeof(id2) == sizeof(ref2));     // (and is actually implemented based on an ID)
+          
           // assignment on placement refs
           refX = ref1;
           CHECK (ref1 != ref2);
           CHECK (ref1 == refX);
           CHECK (ref2 != refX);
-
+          
           // re-assignment with a new placement
           refX = p2;
           CHECK (refX == ref2);
@@ -135,7 +135,7 @@ namespace test    {
           CHECK (refX == ref1);
           CHECK (refX != ref2);
           CHECK (isSameObject (*refX, p1));
-
+          
           LumieraUid luid2 (p2.getID().get());
           refX = luid2;                            // assignment works even based on a plain LUID
           ref2 = ref1;
@@ -151,40 +151,40 @@ namespace test    {
           CHECK (ref1 != ref2);
           CHECK (ref1 == refX);
           CHECK (ref2 != refX);
-
+          
           // resolution is indeed "live", we see changes to the referred placement
           CHECK (refX.resolve().time == Time::MIN);
           p1.chain = p2.chain;                     // do a change on the placement within index....
-          CHECK (refX.resolve().time == Time(2)); // now we get the time tie we originally set on p2
-
-          CHECK (p1.getID() != p2.getID());       // but the instance identities are still unaltered
+          CHECK (refX.resolve().time == Time(2));  // now we get the time tie we originally set on p2
+          
+          CHECK (p1.getID() != p2.getID());        // but the instance identities are still unaltered
           CHECK (2 == ref1.use_count());
-          CHECK (3 == ref2.use_count());          // one more because of shared ownership with exPla
-
-
+          CHECK (3 == ref2.use_count());           // one more because of shared ownership with exPla
+          
+          
           // actively removing p2 invalidates the other refs to
           index->remove (ref1);
-          CHECK (!ref1);                          // checks invalidity without throwing
+          CHECK (!ref1);                           // checks invalidity without throwing
           CHECK (!refX);
           VERIFY_ERROR(NOT_IN_SESSION, *ref1 );
-
+          
           // deliberately create an invalid PlacementRef
           PlacementRef<TestSubMO21> bottom;
           CHECK (!bottom);
           VERIFY_ERROR(BOTTOM_PLACEMENTREF, *bottom );
           VERIFY_ERROR(BOTTOM_PLACEMENTREF, bottom->specialAPI() );
           VERIFY_ERROR(BOTTOM_PLACEMENTREF, bottom.resolve() );
-
+          
           //consistency check; then reset PlacementRef index to default
           CHECK (1 == index->size());
           CHECK (index->isValid());
           index.reset();
         }
     };
-
-
+  
+  
   /** Register this test class... */
   LAUNCHER (PlacementRef_test, "unit session");
-
-
+  
+  
 }}} // namespace mobject::session::test

@@ -38,7 +38,7 @@ namespace asset {
    *  default wiring.
    */
   Pipe::Pipe ( const Asset::Ident& idi
-             , string const& streamID
+             , string const& streamID     ////////////////////////////////////////TICKET #648
              , PProcPatt& wiring
              , string shortName
              , string longName

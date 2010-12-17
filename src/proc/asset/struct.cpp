@@ -148,7 +148,7 @@ namespace asset {
     normaliseID (pipeID);
     normaliseID (streamID);
     static format descriptor("pipe(%s), stream(%s).");
-    Pipe* pP = impl_->fabricate (Query<Pipe> (descriptor % pipeID % streamID));
+    Pipe* pP = impl_->fabricate (Query<Pipe> (str(descriptor % pipeID % streamID)));
     return AssetManager::instance().wrap (*pP);
   }
   

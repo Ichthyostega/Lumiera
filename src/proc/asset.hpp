@@ -103,11 +103,13 @@ namespace asset {
   template<class KIND>
   class ID
     {
+      HashVal hash_;
     public:
-      const HashVal hash;
-      ID (HashVal id)        : hash(id)         {}
-      ID (const KIND& asset) : hash(asset.getID()) {}
-      operator HashVal() const { return hash; }
+      ID (HashVal id)        : hash_(id)         {}
+      ID (const KIND& asset) : hash_(asset.getID()) {}
+      operator HashVal() const { return hash_; }
+      
+      static ID INVALID;
     };
     
   class DB;
@@ -303,53 +305,59 @@ namespace asset {
     
     
     
-    /* ====== ordering of Assets and Asset-Pointers ====== */
-    
-    /** ordering of Assets is based on the ordering
-     *  of Ident tuples, which are supposed to be unique.
-     *  By using our customised lumiera::P as smart ptr,
-     *  comparison on P<Asset> ptrs will be automatically
-     *  forwarded to the Asset comparison operators.
-     *  @note version info is irrelevant */
-    inline int 
-    Asset::Ident::compare (Asset::Ident const& oi)  const
-    { 
-      int res;
-      if (0 != (res=category.compare (oi.category)))  return res;
-      if (0 != (res=org.compare (oi.org)))            return res;
-      return name.compare (oi.name);
-    }
-    
-    
-    /** promote subtype-ptr to PAsset, e.g. for comparing */
-    template<class A>
-    inline const PcAsset
-    pAsset (shared_ptr<A> const& subPtr)
-    {
-      return static_pointer_cast<const Asset,A> (subPtr);
-    }
-    
-    
-    /** type trait for detecting a shared-ptr-to-asset */
-    template <class X>
-    struct is_pAsset : boost::false_type {};
-    
-    template <class A>
-    struct is_pAsset<shared_ptr<A> >
-      : boost::is_base_of<Asset, A>      {}; 
-    
-    
-    /** convenient for debugging */
-    inline string str (PcAsset const& a) 
-    {
-      if (a)
-        return string (*a.get());
-      else
-        return "Asset(NULL)";
-    }
-    
-    
-
+  /* ====== ordering of Assets and Asset-Pointers ====== */
+  
+  /** ordering of Assets is based on the ordering
+   *  of Ident tuples, which are supposed to be unique.
+   *  By using our customised lumiera::P as smart ptr,
+   *  comparison on P<Asset> ptrs will be automatically
+   *  forwarded to the Asset comparison operators.
+   *  @note version info is irrelevant */
+  inline int 
+  Asset::Ident::compare (Asset::Ident const& oi)  const
+  { 
+    int res;
+    if (0 != (res=category.compare (oi.category)))  return res;
+    if (0 != (res=org.compare (oi.org)))            return res;
+    return name.compare (oi.name);
+  }
+  
+  
+  /** promote subtype-ptr to PAsset, e.g. for comparing */
+  template<class A>
+  inline const PcAsset
+  pAsset (shared_ptr<A> const& subPtr)
+  {
+    return static_pointer_cast<const Asset,A> (subPtr);
+  }
+  
+  
+  /** type trait for detecting a shared-ptr-to-asset */
+  template <class X>
+  struct is_pAsset : boost::false_type {};
+  
+  template <class A>
+  struct is_pAsset<shared_ptr<A> >
+    : boost::is_base_of<Asset, A>      {};
+  
+  
+  /** marker constant denoting a NIL asset */
+  template<class KIND>
+  ID<KIND> ID<KIND>::INVALID = ID(0);
+  
+  
+  /** convenient for debugging */
+  inline string str (PcAsset const& a) 
+  {
+    if (a)
+      return string (*a.get());
+    else
+      return "Asset(NULL)";
+  }
+  
+  
+  
+  
 } // namespace asset
 
 

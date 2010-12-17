@@ -53,6 +53,8 @@ namespace control {
        *  just a symbolic ID. Effectively this queries a default */
       StreamType const& getType (Symbol sTypeID) ;
       
+      StreamType const& getType (StreamType::ID stID) ;
+      
       /** build or retrieve a complete StreamType implementing the given Prototype */
       StreamType const& getType (StreamType::Prototype const& protoType) ;
       

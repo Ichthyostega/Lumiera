@@ -171,7 +171,7 @@ namespace lib {
       
       
     private:
-      /** @internal element access, including null check */
+      /** @internal element access, including range and null check */
       T*
       get (size_type i)
         {

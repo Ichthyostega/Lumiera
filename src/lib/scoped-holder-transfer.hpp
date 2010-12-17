@@ -1,5 +1,5 @@
 /*
-  SCOPEDHOLDERVECTOR.hpp  -  using ScopedHolder within a STL vector 
+  SCOPED-HOLDER-TRANSFER.hpp  -  using ScopedHolder within a STL vector 
  
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
@@ -22,8 +22,8 @@
 
 
 
-#ifndef LIB_SCOPEDHOLDERVECTOR_H
-#define LIB_SCOPEDHOLDERVECTOR_H
+#ifndef LIB_SCOPEDHOLDER_TRANSFER_H
+#define LIB_SCOPEDHOLDER_TRANSFER_H
 
 #include "lib/error.hpp"
 #include <memory>

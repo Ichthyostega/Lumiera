@@ -85,7 +85,7 @@ namespace test {
           }
           
           ClassLock<Probe> get_class_lock;
-          CHECK ( 1 ==  get_class_lock.use_count()); // embedded PerClassMonitor<Probe> got created exactly once
+          CHECK ( 1 ==  get_class_lock.use_count());  // embedded PerClassMonitor<Probe> got created exactly once
         }                                            //  and stays alive until static dtors are called....
       
     };

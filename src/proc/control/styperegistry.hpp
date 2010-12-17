@@ -23,7 +23,7 @@
 
 /** @file styperegistry.hpp
  ** This is part of the \i implementation of the stream type manager (include).
- ** Only used in stypemanager.cpp and accompaning unit tests.
+ ** Only used in stypemanager.cpp and accompanying unit tests.
  ** 
  ** @see control::STypeManager
  ** @see lumiera::StreamType
@@ -62,7 +62,7 @@ namespace control {
   
   
   /**
-   * @internal Helper for organizing preconfigured default objects.
+   * @internal Helper for organising preconfigured default objects.
    * Maintaines a collection of objects known or encountered as "default"
    * for a given type. This collection is ordered by "degree of constriction",
    * which is implemented by counting the number of predicates in the query

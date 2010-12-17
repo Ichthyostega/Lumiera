@@ -47,7 +47,7 @@
  ** friend function.  
  ** 
  ** @see scoped-holder-test.cpp
- ** @see scopedholdertransfer.hpp use in std::vector
+ ** @see scoped-holder-transfer.hpp use in std::vector
  ** @see AllocationCluster usage example
  ** @see scoped-ptrvect.hpp simple pointer-holding collection
  */

@@ -45,13 +45,13 @@ namespace test{
    * @test properties of Symbol data type. Currently this is
    *       just a thin wrapper for a const char *
    * @todo this test is very much WIP, as the implementation
-   *       of a real symbol type and symbol table remains 
-   *       to be done. See Ticket #157
+   *       of a real symbol type and symbol table remains
+   *       to be done. ///////////////////////////Ticket #157
    */
   class Symbol_test : public Test
     {
       
-      void
+      virtual void
       run (Arg)
         {
           checkLiteral();
@@ -126,4 +126,3 @@ namespace test{
   
   
 }} // namespace lib::test
-

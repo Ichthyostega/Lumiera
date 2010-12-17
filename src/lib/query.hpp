@@ -28,7 +28,7 @@
 #include <string>
 #include <typeinfo>
 
-#include <boost/format.hpp>
+#include <boost/format.hpp>                      /////////////////////////////////////////TICKET #166  Oh RLY ... need to do away with this 
 
 #include "lib/symbol.hpp"
 
@@ -64,7 +64,7 @@ namespace lumiera {
     {
     public:
       explicit Query (string const& predicate="") : string(predicate) {}
-      explicit Query (format& pattern)            : string(str(pattern)) {}
+//    explicit Query (format& pattern)            : string(str(pattern)) {} //////////////TICKET #166  outch... that needs to disappear
       
       const string asKey()  const
         {
