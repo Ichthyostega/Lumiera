@@ -25,13 +25,17 @@ Description
 
 Tasks
 ~~~~~
-// List what would need to be done to implement this Proposal in a few words:
-// * item ...
+// List what needs to be done to implement this Proposal:
+// * first step ([green]#✔ done#)
+// * second step [,yellow]#WIP#
 
+
+Discussion
+~~~~~~~~~~
 
 Pros
 ^^^^
-// add just a fact list/enumeration which make this suitable:
+// add a fact list/enumeration which make this suitable:
 //  * foo
 //  * bar ...
 
@@ -44,14 +48,14 @@ Cons
 
 
 Alternatives
-------------
+^^^^^^^^^^^^
 //alternatives: explain alternatives and tell why they are not viable:
 
 
 
 Rationale
 ---------
-//rationale: Describe why it should be done *this* way:
+//rationale: Give a concise summary why it should be done *this* way:
 
 
 

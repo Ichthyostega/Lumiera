@@ -1,0 +1,160 @@
+WebsiteNavigation
+=================
+
+// please don't remove the //word: comments
+
+[grid="all"]
+`------------`-----------------------
+*State*         _Idea_
+*Date*          _Mi 08 Dez 2010 11:32:32 CET_
+*Proposed by*   Ichthyostega <prg@ichthyostega.de>
+-------------------------------------
+
+[abstract]
+********************************************************************************
+The Lumiera website is assumed to accumulate a lot of content. Thus we need
+to care about making that content accessible, to help finding the relevant
+topics and to keep the overall structure intact. This RfC is to collect,
+discuss and agree upon the guidelines and requirements.
+********************************************************************************
+
+Description
+-----------
+//description: add a detailed description:
+
+Issues to care
+~~~~~~~~~~~~~~
+
+Navigation::
+  The page hierarchy becomes at least 5 levels deep, likely even deeper.
+  When reading a page, the current subtree leading down to this page should
+  be right at hand; especially access to the siblings and the parent's siblings
+  is important. For re-accessing content, it is necessary to be able to drill
+  down to an known location (``within the design docs, detailing the application,
+  I need the configuration section'') +
+  -> we need an *auto generated navigation* and an embedded *menu tree widget* in the web pages.
+
+Tagging::
+  There should be an easy way to categorise individual pages *by keyword(s)*
+  and an automatically generated indexing by tags, possibly with an per tag
+  overview page.
+
+Search::
+  The usual *site search*. It should include the contents of the issue tracker.
+  Even today such a scoped search is valuable and even necessary for working
+  with the informations collected within the Lumiera project
+
+Sanity::
+  Each relevant page needs to be reachable. There are some additional pages and
+  especially subdirectories which should not be linked into the website navigation.
+  Moreover, all (internal) links on the pages should be valid. +
+  -> this could be addressed by a **sanity checker script**
+
+Usage situations
+~~~~~~~~~~~~~~~~
+
+(a) working on content
+^^^^^^^^^^^^^^^^^^^^^^
+Working on content should be readily accessible for _everyone_. One time contributions
+are especially encouraged. This leads to the following usage scenario:
+
+A contributor has some informations to share or wants to do some additions or modifications.
+(S)he locates somehow the place where relevant informations are stored, adds some text,
+possibly adds a new page or splits another page in two.
+
+_Note_: no awareness of the issues of navigation can be assumed. The occasional contributor
+won't notice any concern which isn't right at hand.
+
+(b) maintaining a subsystem
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Some person(s) will be responsible for a subsystem or some segment of the informations
+on the website. This responsibility is content centric. It might include frequent rearranging,
+regrouping and reordering of pages to accommodate the increasing scope of informations.
+
+_Note_: while here some awareness of website organisational issues can be assumed,
+any requirement to care for external organisational issues is a burden and distracts
+from the actual work to be done -- thus it is likely to be short circuited or postponed
+``for later''. Note especially, reorganising content in a subsection *must not* incur
+the burden of re-doing the same reorganisation steps mirrored in some central navigation
+configuration or table of contents. (this is a knock out criterion)
+
+(c) maintaining the website
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+The website maintainer is responsible for the overall sanity of the website, without
+being familiar with all details of ongoing work in some part or section of the information.
+Another concern here is the outward perception of the website, which might incur changes
+on the top level navigation or some rewording of overview pages.
+
+_Note_: this kind of work is rather unrewarding. There is the danger of collisions with the
+work of the subsystem maintainer
+
+
+Conclusion: Requirements for any navigation solution
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ * ability to to pick up a nested page structure
+ * ability to cope with any additions and changes in the lower levels automatically, without help by the user
+ * ability to override:
+ 
+   - not including some subdirectories
+   - including links-to-external at arbitrary positions
+
+optional/additional features
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+The following features would be handy, but can be considered optional
+
+ * ability to change the displayed title of a page in the navigation
+ * ability to control the ordering of pages in the navigation
+ * complete manual override of the visible content of a specific subdirectory
+
+
+
+Tasks
+~~~~~
+// List what would need to be done to implement this Proposal in a few words:
+// * item ...
+
+
+
+Discussion
+~~~~~~~~~~
+
+Pros
+^^^^
+// add just a fact list/enumeration which make this suitable:
+//  * foo
+//  * bar ...
+
+
+
+Cons
+^^^^
+// fact list of the known/considered bad implications:
+
+
+
+Alternatives
+^^^^^^^^^^^^
+//alternatives: explain alternatives and tell why they are not viable:
+
+
+
+Rationale
+---------
+//rationale: Describe why it should be done *this* way:
+
+
+
+//Conclusion
+//----------
+//conclusion: When approbate (this proposal becomes a Final)
+//            write some conclusions about its process:
+
+
+
+
+Comments
+--------
+//comments: append below
+
+
+//endof_comments:
