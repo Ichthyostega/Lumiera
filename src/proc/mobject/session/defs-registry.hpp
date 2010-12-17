@@ -1,5 +1,5 @@
 /*
-  DEFSREGISTRY.hpp  -  implementation of the default object store
+  DEFS-REGISTRY.hpp  -  implementation of the default object store
 
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
@@ -21,23 +21,23 @@
 */
 
 
-/** @file defsregistry.hpp
+/** @file defs-registry.hpp
  ** A piece of implementation code factored out into a separate header (include).
- ** Only used in defsmanager.cpp and for the unit tests. We can't place it into
- ** a separate compilation unit, because defsmanager.cpp defines some explicit
+ ** Only used in defs-manager.cpp and for the unit tests. We can't place it into
+ ** a separate compilation unit, because defs-manager.cpp defines some explicit
  ** template instantiation, which cause the different Slots of the DefsrRegistry#table_
  ** to be filled with data and defaults for the specific Types.
  ** 
  ** @see mobject::session::DefsManager
- ** @see defsregistryimpltest.cpp
+ ** @see DefsRegistryImpl_test
  **
  */
 
 
 
 
-#ifndef MOBJECT_SESSION_DEFSREGISTRY_H
-#define MOBJECT_SESSION_DEFSREGISTRY_H
+#ifndef MOBJECT_SESSION_DEFS_REGISTRY_H
+#define MOBJECT_SESSION_DEFS_REGISTRY_H
 
 
 #include "lib/sync-classlock.hpp"
@@ -55,131 +55,131 @@
 
 
 namespace mobject {
-  namespace session {
+namespace session {
+  
+  using lumiera::P;
+  using lumiera::Query;
+  using lib::ClassLock;
+  using std::tr1::weak_ptr;
+  
+  using std::string;
+  using boost::format;
+  using boost::lambda::_1;
+  using boost::lambda::var;  
+  
+  namespace impl {
     
-    using lumiera::P;
-    using lumiera::Query;
-    using lib::ClassLock;
-    using std::tr1::weak_ptr;
+    namespace {
+      uint maxSlots (0); ///< number of different registered Types
+      format dumpRecord ("%2i| %64s --> %s\n");
+    }
     
-    using std::string;
-    using boost::format;
-    using boost::lambda::_1;
-    using boost::lambda::var;  
     
-    namespace impl {
-      
-      namespace {
-        uint maxSlots (0); ///< number of different registered Types
-        format dumpRecord ("%2i| %64s --> %s\n");
-      }
-      
-      
-      struct TableEntry 
-        {
-          virtual ~TableEntry() {};
-        };
-      
-      /** we maintain an independent defaults registry
-       *  for every participating kind of object. */
-      typedef std::vector< P<TableEntry> > Table;
-      
-      
-      /** 
-       * holding a single "default object" entry 
-       */
-      template<class TAR>
-      struct Record
-        {
-          uint degree;
-          Query<TAR> query;
-          weak_ptr<TAR> objRef;
-          
-          Record (const Query<TAR>& q, const P<TAR>& obj)
-            : degree (lumiera::query::countPred (q)),
-              query (q),
-              objRef (obj)
-            { }
-          
-          
-          struct Search  ///< Functor searching for a specific object
-            {
-              Search (const P<TAR>& obj)
-                : obj_(obj) { }
-              
-              const P<TAR>& obj_;
-              
-              bool 
-              operator() (const Record& rec)
-              {
-                P<TAR> storedObj (rec.objRef.lock());
-                return storedObj && (storedObj == obj_);
-              }
-            };
-          
-          struct OrderRelation
-            {
-              inline bool
-              operator() (Record one, Record two) ///< @note doesn't touch the objRef
-                {
-                  return (  one.degree < two.degree
-                         ||(one.degree == two.degree && one.query < two.query)
-                         );
-                }
-            };
+    struct TableEntry 
+      {
+        virtual ~TableEntry() {};
+      };
+    
+    /** we maintain an independent defaults registry
+     *  for every participating kind of object. */
+    typedef std::vector< P<TableEntry> > Table;
+    
+    
+    /**
+     * holding a single "default object" entry 
+     */
+    template<class TAR>
+    struct Record
+      {
+        uint degree;
+        Query<TAR> query;
+        weak_ptr<TAR> objRef;
+        
+        Record (const Query<TAR>& q, const P<TAR>& obj)
+          : degree (lumiera::query::countPred (q)),
+            query (q),
+            objRef (obj)
+          { }
+        
+        
+        struct Search  ///< Functor searching for a specific object
+          {
+            Search (const P<TAR>& obj)
+              : obj_(obj) { }
             
-          operator string ()  const { return str (dumpRecord % degree % query % dumpObj()); }
-          string  dumpObj ()  const { P<TAR> o (objRef.lock()); return o? string(*o):"dead"; }
-        };
-        
-      /** every new kind of object (Type) creates a new
-       *  slot in the main Table holding all registered 
-       *  default objects. Each slot actually holds a
-       *  separate tree (set) of registry entries
-       */
-      template<class TAR>
-      struct Slot : public TableEntry
-        {
-          typedef typename Record<TAR>::OrderRelation Ordering;
-          typedef std::set<Record<TAR>, Ordering> Registry;
-          
-          Registry registry;
-          static size_t index; ///< where to find this Slot in every Table
-          
-          static Registry&
-          access (Table& table)
+            const P<TAR>& obj_;
+            
+            bool 
+            operator() (const Record& rec)
             {
-              if ( !index 
-                 || index > table.size() 
-                 ||!table[index-1])
-                createSlot (table);
-              
-              ASSERT (0 < index && index<=table.size() && table[index-1]);
-              Slot* item = static_cast<Slot*> (table[index-1].get());
-              return item->registry;
+              P<TAR> storedObj (rec.objRef.lock());
+              return storedObj && (storedObj == obj_);
             }
-          
-        private:
-          static void
-          createSlot (Table& table)
-            {
-              ClassLock<TableEntry> guard();
-              if (!index)
-                index = ++maxSlots;
-              if (index > table.size())
-                table.resize (index);
-              table[index-1].reset(new Slot);   
-            }
-        };
+          };
         
+        struct OrderRelation
+          {
+            inline bool
+            operator() (Record one, Record two) ///< @note doesn't touch the objRef
+              {
+                return (  one.degree < two.degree
+                       ||(one.degree == two.degree && one.query < two.query)
+                       );
+              }
+          };
         
-      // static vars to organise one Table Slot per type....
-      template<class TAR>
-      size_t Slot<TAR>::index (0);
+        operator string ()  const { return str (dumpRecord % degree % query % dumpObj()); }
+        string  dumpObj ()  const { P<TAR> o (objRef.lock()); return o? string(*o):"dead"; }
+      };
+      
+    /** every new kind of object (Type) creates a new
+     *  slot in the main Table holding all registered 
+     *  default objects. Each slot actually holds a
+     *  separate tree (set) of registry entries
+     */
+    template<class TAR>
+    struct Slot : public TableEntry
+      {
+        typedef typename Record<TAR>::OrderRelation Ordering;
+        typedef std::set<Record<TAR>, Ordering> Registry;
+        
+        Registry registry;
+        static size_t index; ///< where to find this Slot in every Table
+        
+        static Registry&
+        access (Table& table)
+          {
+            if ( !index 
+               || index > table.size() 
+               ||!table[index-1])
+              createSlot (table);
+            
+            ASSERT (0 < index && index<=table.size() && table[index-1]);
+            Slot* item = static_cast<Slot*> (table[index-1].get());
+            return item->registry;
+          }
+        
+      private:
+        static void
+        createSlot (Table& table)
+          {
+            ClassLock<TableEntry> guard();
+            if (!index)
+              index = ++maxSlots;
+            if (index > table.size())
+              table.resize (index);
+            table[index-1].reset(new Slot);   
+          }
+      };
       
       
-      
-      
+    // static vars to organise one Table Slot per type....
+    template<class TAR>
+    size_t Slot<TAR>::index (0);
+    
+    
+    
+    
     /**
      * @internal Helper for organising preconfigured default objects.
      * Maintains a collection of objects known or encountered as "default"
@@ -235,8 +235,8 @@ namespace mobject {
           public:
             P<TAR> operator* ()    { return ptr; }
             bool  hasNext ()       { return next || findNext(); }
-            Iter  operator++ (int) { Iter tmp=*this; operator++(); return tmp; }            
-            Iter& operator++ ()           
+            Iter  operator++ (int) { Iter tmp=*this; operator++(); return tmp; }
+            Iter& operator++ ()
               { 
                 ptr=findNext();
                 next.reset();
@@ -332,16 +332,13 @@ namespace mobject {
             return res;
           }
       };
-      
-      
-      
-    } // (End) impl namespace
-    
-    using impl::DefsRegistry;
     
     
-  } // namespace mobject::session
-
-} // namespace mobject
-
+    
+  } // (End) impl namespace
+  
+  using impl::DefsRegistry;
+  
+  
+}} // namespace mobject::session
 #endif

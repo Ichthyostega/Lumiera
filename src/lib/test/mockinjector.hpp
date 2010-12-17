@@ -26,7 +26,7 @@
 #define LUMIERA_TEST_MOCKINJECTOR_H
 
 
-#include "lib/singletonfactory.hpp"
+#include "lib/singleton-factory.hpp"
 
 #include <boost/scoped_ptr.hpp>
 

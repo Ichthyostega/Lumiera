@@ -40,7 +40,7 @@
 
 #include "proc/mobject/session.hpp"
 #include "proc/mobject/session/sess-manager-impl.hpp"
-#include "proc/mobject/session/defsmanager.hpp"
+#include "proc/mobject/session/defs-manager.hpp"
 #include "proc/mobject/session/lifecycle-advisor.hpp"
 #include "proc/asset/timeline.hpp"
 #include "lib/error.hpp"

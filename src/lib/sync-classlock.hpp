@@ -29,7 +29,7 @@
  **
  ** @note simply using the ClassLock may cause a Monitor object (with a mutex) to be
  **       created at static initialisation and destroyed on application shutdown.
- ** @see singletonfactory.hpp usage example
+ ** @see singleton-factory.hpp usage example
  */
 
 

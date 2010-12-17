@@ -23,7 +23,7 @@
 
 #include "proc/engine/nodefactory.hpp"
 #include "proc/mobject/session/effect.hpp"
-#include "lib/allocationcluster.hpp"
+#include "lib/allocation-cluster.hpp"
 
 #include "proc/engine/nodewiring.hpp"
 

@@ -73,7 +73,7 @@
 #include "lib/element-tracker.hpp"
 #include "proc/asset/timeline.hpp"
 #include "proc/asset/sequence.hpp"
-#include "proc/mobject/session/defsmanager.hpp"
+#include "proc/mobject/session/defs-manager.hpp"
 #include "proc/mobject/session/element-query.hpp"
 
 

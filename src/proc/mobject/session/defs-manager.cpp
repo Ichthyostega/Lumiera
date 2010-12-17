@@ -21,8 +21,8 @@
 * *****************************************************/
 
 
-#include "proc/mobject/session/defsmanager.hpp"
-#include "proc/mobject/session/defsregistry.hpp"
+#include "proc/mobject/session/defs-manager.hpp"
+#include "proc/mobject/session/defs-registry.hpp"
 #include "common/configrules.hpp"
 #include "lib/error.hpp"
 

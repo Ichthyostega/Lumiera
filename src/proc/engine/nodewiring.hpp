@@ -26,7 +26,7 @@
 
 
 #include "proc/engine/procnode.hpp"
-#include "lib/allocationcluster.hpp"
+#include "lib/allocation-cluster.hpp"
 #include "proc/engine/nodewiring-def.hpp"
 
 //#include <boost/noncopyable.hpp>

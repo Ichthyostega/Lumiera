@@ -30,10 +30,8 @@
 #include "lib/util.hpp"
 #include "proc/mobject/session/mobjectfactory.hpp"   ////TODO: avoidable?
 
-//#include <boost/format.hpp>
 #include <iostream>
 
-//using boost::format;
 using lumiera::Time;
 using util::contains;
 using std::string;
@@ -41,61 +39,57 @@ using std::cout;
 
 
 namespace mobject {
-  namespace session {
-    namespace test  {
-
-      using asset::VIDEO;
-
-
-
-      /*******************************************************************
-       * @test basic behaviour of Placements and access to MObjects.
-       * @see  mobject::Placement
-       * @see  mobject::MObject#create
-       * @see  mobject::Placement#addPlacement
-       * @see  mobject::Placement#resolve
-       */
-      class PlacementBasic_test : public Test
+namespace session {
+namespace test    {
+  
+  using asset::VIDEO;
+  
+  
+  
+  /*******************************************************************
+   * @test basic behaviour of Placements and access to MObjects.
+   * @see  mobject::Placement
+   * @see  mobject::MObject#create
+   * @see  mobject::Placement#addPlacement
+   * @see  mobject::Placement#resolve
+   */
+  class PlacementBasic_test : public Test
+    {
+      typedef shared_ptr<asset::Media> PM;
+      typedef shared_ptr<asset::Clip> PCA;
+      
+      virtual void
+      run (Arg)
         {
-          typedef shared_ptr<asset::Media> PM;
-          typedef shared_ptr<asset::Clip> PCA;
-
-          virtual void
-          run (Arg)
-            {
-              // create Clip-MObject, which is wrapped into a placement (smart ptr)
-              PM media = asset::Media::create("test-1", VIDEO);
-              PCA clipAsset = Media::create(*media);
-              Placement<Clip> pc = MObject::create (*clipAsset, *media);
-
-              // use of the Clip-MObject interface by dereferencing the placement
-              PM clip_media = pc->getMedia();
-              CHECK (clip_media->ident.category.hasKind (VIDEO));
-
-              // using the Placement interface
-              // TODO: how to handle insufficiently determinated Placement? Throw?
-              FixedLocation & fixloc = pc.chain(Time(1)); // TODO: the track??
-              ExplicitPlacement expla = pc.resolve();
-              CHECK (expla.time == Time(1));
-              CHECK (!expla.chain.isOverdetermined());
+          // create Clip-MObject, which is wrapped into a placement (smart ptr)
+          PM media = asset::Media::create("test-1", VIDEO);
+          PCA clipAsset = Media::create(*media);
+          Placement<Clip> pc = MObject::create (*clipAsset, *media);
+          
+          // use of the Clip-MObject interface by dereferencing the placement
+          PM clip_media = pc->getMedia();
+          CHECK (clip_media->ident.category.hasKind (VIDEO));
+          
+          // using the Placement interface
+          // TODO: how to handle insufficiently determinated Placement? Throw?
+          FixedLocation & fixloc = pc.chain(Time(1)); // TODO: the track??
+          ExplicitPlacement expla = pc.resolve();
+          CHECK (expla.time == Time(1));
+          CHECK (!expla.chain.isOverdetermined());
 //            CHECK (*expla == *pc);  ////////////////////////////////////////////TICKET #511 define equivalence of locating chains and solutions
-
-              // now overconstraining with another Placement
-              pc.chain(Time(2));
-              ExplicitPlacement expla2 = pc.resolve();
-              CHECK (expla2.time == Time(2)); // the latest addition wins
-              CHECK (expla2.chain.isOverdetermined());
-            }
-        };
-
-
-      /** Register this test class... */
-      LAUNCHER (PlacementBasic_test, "unit session");
-
-
-
-    } // namespace test
-
-  } // namespace session
-
-} // namespace mobject
+          
+          // now overconstraining with another Placement
+          pc.chain(Time(2));
+          ExplicitPlacement expla2 = pc.resolve();
+          CHECK (expla2.time == Time(2)); // the latest addition wins
+          CHECK (expla2.chain.isOverdetermined());
+        }
+    };
+  
+  
+  /** Register this test class... */
+  LAUNCHER (PlacementBasic_test, "unit session");
+  
+  
+  
+}}} // namespace mobject::session::test

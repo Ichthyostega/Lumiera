@@ -34,205 +34,204 @@
 
 
 namespace lib {
-  namespace test {
-
-    using ::Test;
-    using util::isnil;
-
-    using std::vector;
-    using std::cout;
-
-    namespace { // extending the Dummy for our special purpose....
-
-      bool throw_in_transfer = false;
-
-      class FixedDummy
-        : public Dummy
-        {
-        public:
-          FixedDummy()
-            {
-              TRACE  (test, "CTOR      FixedDummy() --> this=%p val=%d", this, getVal());
-            }
-
-          ~FixedDummy()
-            {
-              TRACE  (test, "DTOR     ~FixedDummy()  this=%p val=%d", this, getVal());
-            }
-
-          friend void
-          transfer_control (FixedDummy& from, FixedDummy& to)
-          {
-            TRACE  (test, "TRANSFER  target=%p   <-- source=%p  (%d,%d)", &to,&from, to.getVal(),from.getVal());
-
-            if (throw_in_transfer)
-              throw to.getVal();
-            
-            swap (from,to);
-            from.setVal(0); // remove the old Dummy from accounting (checksum) 
-          }
-
-        };
-
-
-      typedef ScopedHolder<FixedDummy>    HolderD;
-      typedef ScopedPtrHolder<FixedDummy> PtrHolderD;
-
-      template<class HOL>
-      struct Table
-        {
-          typedef Allocator_TransferNoncopyable<HOL> Allo;
-          typedef typename std::vector<HOL,Allo> Type;
-
-        };
-    }
-
-
-
-
-    /**********************************************************************************
-     *  @test growing a vector containing noncopyable objects wrapped into ScopedHolder
-     *        instances. This requires the use of a custom allocator, invoking a
-     *        \c transfer_control() function to be provided for the concrete
-     *        noncopyable class type, being invoked when the vector
-     *        needs to reallocate.
-     */
-    class ScopedHolderTransfer_test : public Test
+namespace test {
+  
+  using ::Test;
+  using util::isnil;
+  
+  using std::vector;
+  using std::cout;
+  
+  namespace { // extending the Dummy for our special purpose....
+    
+    bool throw_in_transfer = false;
+    
+    class FixedDummy
+      : public Dummy
       {
-
-        virtual void
-        run (Arg)
+      public:
+        FixedDummy()
           {
-
-            cout << "checking ScopedHolder<Dummy>...\n";
-            buildVector<HolderD>();
-            growVector<HolderD>();
-            checkErrorHandling<HolderD>();
-
-            cout << "checking ScopedPtrHolder<Dummy>...\n";
-            buildVector<PtrHolderD>();
-            growVector<PtrHolderD>();
-            checkErrorHandling<PtrHolderD>();
+            TRACE  (test, "CTOR      FixedDummy() --> this=%p val=%d", this, getVal());
           }
-
-        void create_contained_object (HolderD&    holder) { holder.create();                }
-        void create_contained_object (PtrHolderD& holder) { holder.reset(new FixedDummy()); }
-
-
-        template<class HO>
-        void
-        buildVector()
+        
+       ~FixedDummy()
           {
-            CHECK (0==checksum);
-            {
-              typedef typename Table<HO>::Type Vect;
-
-              Vect table(50);
-              CHECK (0==checksum);
-
-              for (uint i=0; i<10; ++i)
-                create_contained_object (table[i]);
-
-              CHECK (0 < checksum);
-              CHECK ( table[9]);
-              CHECK (!table[10]);
-
-              Dummy *rawP = table[5].get();
-              CHECK (rawP);
-              CHECK (table[5]);
-              CHECK (rawP == &(*table[5]));
-              CHECK (rawP->add(-555) == table[5]->add(-555));
-            }
-            CHECK (0==checksum);
+            TRACE  (test, "DTOR     ~FixedDummy()  this=%p val=%d", this, getVal());
           }
-
-
-        template<class HO>
-        void
-        growVector()
-          {
-            CHECK (0==checksum);
-            {
-              typedef typename Table<HO>::Type Vect;
-
-              Vect table;
-              table.reserve(2);
-              CHECK (0==checksum);
-
-              cout << ".\n..install one element at index[0]\n";
-              table.push_back(HO());
-              CHECK (0==checksum);
-
-              create_contained_object (table[0]); // switches into "managed" state
-              CHECK (0 < checksum);
-              int theSum = checksum;
-
-              cout << ".\n..*** resize table to 16 elements\n";
-              for (uint i=0; i<15; ++i)
-                table.push_back(HO());
-
-              CHECK (theSum==checksum);
-            }
-            CHECK (0==checksum);
-          }
-
-
-        template<class HO>
-        void
-        checkErrorHandling()
-          {
-            CHECK (0==checksum);
-            {
-              typedef typename Table<HO>::Type Vect;
-
-              Vect table(5);
-              table.reserve(5);
-              CHECK (0==checksum);
-
-              create_contained_object (table[2]);
-              create_contained_object (table[4]);
-              CHECK (0 < checksum);
-              int theSum = checksum;
-
-              cout << ".\n.throw some exceptions...\n";
-              throw_in_ctor = true;
-              try
-                {
-                  create_contained_object (table[3]);
-                  NOTREACHED ();
-                }
-              catch (int val)
-                {
-                  CHECK (theSum < checksum);
-                  checksum -= val;
-                  CHECK (theSum==checksum);
-                }
-              CHECK ( table[2]);
-              CHECK (!table[3]); // not created because of exception
-              CHECK ( table[4]);
-
-              throw_in_ctor = false;
-              throw_in_transfer=true;  // can do this only when using ScopedHolder
-              try
-                {
-                  table.resize(10);
-                }
-              catch (int val)
-                {
-                  CHECK ( table.size() < 10);
-                }
-              CHECK (theSum == checksum);
-              throw_in_transfer=false;
-            }
-            CHECK (0==checksum);
-          }
-
+        
+        friend void
+        transfer_control (FixedDummy& from, FixedDummy& to)
+        {
+          TRACE  (test, "TRANSFER  target=%p   <-- source=%p  (%d,%d)", &to,&from, to.getVal(),from.getVal());
+          
+          if (throw_in_transfer)
+            throw to.getVal();
+          
+          swap (from,to);
+          from.setVal(0); // remove the old Dummy from accounting (checksum) 
+        }
+        
       };
-
-    LAUNCHER (ScopedHolderTransfer_test, "unit common");
-
-
-  }// namespace test
-
-} // namespace lib
-
+    
+    
+    typedef ScopedHolder<FixedDummy>    HolderD;
+    typedef ScopedPtrHolder<FixedDummy> PtrHolderD;
+    
+    template<class HOL>
+    struct Table
+      {
+        typedef Allocator_TransferNoncopyable<HOL> Allo;
+        typedef typename std::vector<HOL,Allo> Type;
+        
+      };
+    
+  }//(End) test helpers
+  
+  
+  
+  
+  
+  /**********************************************************************************
+   *  @test growing a vector containing noncopyable objects wrapped into ScopedHolder
+   *        instances. This requires the use of a custom allocator, invoking a
+   *        \c transfer_control() function to be provided for the concrete
+   *        noncopyable class type, being invoked when the vector
+   *        needs to reallocate.
+   */
+  class ScopedHolderTransfer_test : public Test
+    {
+      
+      virtual void
+      run (Arg)
+        {
+          
+          cout << "checking ScopedHolder<Dummy>...\n";
+          buildVector<HolderD>();
+          growVector<HolderD>();
+          checkErrorHandling<HolderD>();
+          
+          cout << "checking ScopedPtrHolder<Dummy>...\n";
+          buildVector<PtrHolderD>();
+          growVector<PtrHolderD>();
+          checkErrorHandling<PtrHolderD>();
+        }
+      
+      void create_contained_object (HolderD&    holder) { holder.create();                }
+      void create_contained_object (PtrHolderD& holder) { holder.reset(new FixedDummy()); }
+      
+      
+      template<class HO>
+      void
+      buildVector()
+        {
+          CHECK (0==checksum);
+          {
+            typedef typename Table<HO>::Type Vect;
+            
+            Vect table(50);
+            CHECK (0==checksum);
+            
+            for (uint i=0; i<10; ++i)
+              create_contained_object (table[i]);
+            
+            CHECK (0 < checksum);
+            CHECK ( table[9]);
+            CHECK (!table[10]);
+            
+            Dummy *rawP = table[5].get();
+            CHECK (rawP);
+            CHECK (table[5]);
+            CHECK (rawP == &(*table[5]));
+            CHECK (rawP->add(-555) == table[5]->add(-555));
+          }
+          CHECK (0==checksum);
+        }
+      
+      
+      template<class HO>
+      void
+      growVector()
+        {
+          CHECK (0==checksum);
+          {
+            typedef typename Table<HO>::Type Vect;
+            
+            Vect table;
+            table.reserve(2);
+            CHECK (0==checksum);
+            
+            cout << ".\n..install one element at index[0]\n";
+            table.push_back(HO());
+            CHECK (0==checksum);
+            
+            create_contained_object (table[0]); // switches into "managed" state
+            CHECK (0 < checksum);
+            int theSum = checksum;
+            
+            cout << ".\n..*** resize table to 16 elements\n";
+            for (uint i=0; i<15; ++i)
+              table.push_back(HO());
+            
+            CHECK (theSum==checksum);
+          }
+          CHECK (0==checksum);
+        }
+      
+      
+      template<class HO>
+      void
+      checkErrorHandling()
+        {
+          CHECK (0==checksum);
+          {
+            typedef typename Table<HO>::Type Vect;
+            
+            Vect table(5);
+            table.reserve(5);
+            CHECK (0==checksum);
+            
+            create_contained_object (table[2]);
+            create_contained_object (table[4]);
+            CHECK (0 < checksum);
+            int theSum = checksum;
+            
+            cout << ".\n.throw some exceptions...\n";
+            throw_in_ctor = true;
+            try
+              {
+                create_contained_object (table[3]);
+                NOTREACHED ();
+              }
+            catch (int val)
+              {
+                CHECK (theSum < checksum);
+                checksum -= val;
+                CHECK (theSum==checksum);
+              }
+            CHECK ( table[2]);
+            CHECK (!table[3]); // not created because of exception
+            CHECK ( table[4]);
+            
+            throw_in_ctor = false;
+            throw_in_transfer=true;  // can do this only when using ScopedHolder
+            try
+              {
+                table.resize(10);
+              }
+            catch (int val)
+              {
+                CHECK ( table.size() < 10);
+              }
+            CHECK (theSum == checksum);
+            throw_in_transfer=false;
+          }
+          CHECK (0==checksum);
+        }
+      
+    };
+  
+  LAUNCHER (ScopedHolderTransfer_test, "unit common");
+  
+  
+}} // namespace lib::test

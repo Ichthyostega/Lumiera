@@ -24,19 +24,19 @@
  ** Factory for creating Singleton instances.
  ** This configuration header just pulls in some other implementation headers in 
  ** the right order. The basic class template for creating singletons resides in
- ** singletonfactory.hpp, besides we need policy classes defining how to create
+ ** singleton-factory.hpp, besides we need policy classes defining how to create
  ** the singleton objects and  how to manage singleton lifecycle. Finally,
  ** we want to preconfigure singleton factories for some important facilities;
  ** e.g. sometimes we want to include a hook for injecting Test Mock instances.
  **
- ** You'll find the default Policies in singletonfactory.hpp and the default
- ** definition of type lumiera::singleton in singletonpreconfigure.hpp
+ ** You'll find the default Policies in singleton-factory.hpp and the default
+ ** definition of type lumiera::singleton in singleton-preconfigure.hpp
  ** 
  ** @see SingletonFactory
  ** @see singleton::StaticCreate
  ** @see singleton::AutoDestroy 
  ** @see singletontest.hpp
- ** @see singletontestmocktest.hpp
+ ** @see SingletonTestMock_test
  */
 
 
@@ -44,9 +44,9 @@
 #define LIB_SINGLETON_H
 
 
-#include "lib/singletonpolicies.hpp"
-#include "lib/singletonfactory.hpp"
-#include "lib/singletonpreconfigure.hpp"
+#include "lib/singleton-policies.hpp"
+#include "lib/singleton-factory.hpp"
+#include "lib/singleton-preconfigure.hpp"
 
 
 #endif

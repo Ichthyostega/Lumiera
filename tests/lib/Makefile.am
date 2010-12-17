@@ -43,7 +43,7 @@ test_lib_SOURCES =							\
 	$(testlib_srcdir)/advice/advice-index-test.cpp			\
 	$(testlib_srcdir)/advice/advice-multiplicity-test.cpp		\
 	$(testlib_srcdir)/advice/advice-situations-test.cpp		\
-	$(testlib_srcdir)/allocationclustertest.cpp			\
+	$(testlib_srcdir)/allocation-cluster-test.cpp			\
 	$(testlib_srcdir)/appconfigtest.cpp				\
 	$(testlib_srcdir)/bool-checkable-test.cpp			\
 	$(testlib_srcdir)/custom-shared-ptr-test.cpp			\
@@ -87,7 +87,7 @@ test_lib_SOURCES =							\
 	$(testlib_srcdir)/scoped-holder-transfer-test.cpp		\
 	$(testlib_srcdir)/singleton-subclass-test.cpp			\
 	$(testlib_srcdir)/singleton-test.cpp				\
-	$(testlib_srcdir)/singletontestmocktest.cpp			\
+	$(testlib_srcdir)/singleton-testmock-test.cpp			\
 	$(testlib_srcdir)/streamtypebasicstest.cpp			\
 	$(testlib_srcdir)/streamtypelifecycletest.cpp			\
 	$(testlib_srcdir)/sub-id-test.cpp				\

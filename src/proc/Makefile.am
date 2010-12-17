@@ -155,7 +155,7 @@ liblumiprocmobjectsession_la_SOURCES =							\
 	$(liblumiprocmobjectsession_la_srcdir)/clip.cpp					\
 	$(liblumiprocmobjectsession_la_srcdir)/compoundclip.cpp				\
 	$(liblumiprocmobjectsession_la_srcdir)/constraint.cpp				\
-	$(liblumiprocmobjectsession_la_srcdir)/defsmanager.cpp				\
+	$(liblumiprocmobjectsession_la_srcdir)/defs-manager.cpp				\
 	$(liblumiprocmobjectsession_la_srcdir)/effect.cpp				\
 	$(liblumiprocmobjectsession_la_srcdir)/fixedlocation.cpp			\
 	$(liblumiprocmobjectsession_la_srcdir)/fixture.cpp				\
@@ -237,8 +237,8 @@ noinst_HEADERS +=									\
 	$(liblumiproc_la_srcdir)/mobject/session/clip.hpp				\
 	$(liblumiproc_la_srcdir)/mobject/session/compoundclip.hpp			\
 	$(liblumiproc_la_srcdir)/mobject/session/constraint.hpp				\
-	$(liblumiproc_la_srcdir)/mobject/session/defsmanager.hpp			\
-	$(liblumiproc_la_srcdir)/mobject/session/defsregistry.hpp			\
+	$(liblumiproc_la_srcdir)/mobject/session/defs-manager.hpp			\
+	$(liblumiproc_la_srcdir)/mobject/session/defs-registry.hpp			\
 	$(liblumiproc_la_srcdir)/mobject/session/effect.hpp				\
 	$(liblumiproc_la_srcdir)/mobject/session/fixedlocation.hpp			\
 	$(liblumiproc_la_srcdir)/mobject/session/fixture.hpp				\

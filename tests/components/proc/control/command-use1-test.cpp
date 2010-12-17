@@ -127,7 +127,7 @@ namespace test    {
           CHECK ( 0 == command1::check_);
           
           VERIFY_ERROR (INVALID_ARGUMENTS, com.bind ("foo") );
-          com.bind (random());             // note: run-time type check only
+          com.bind (random());              // note: run-time type check only
           CHECK ( com.canExec());
           CHECK (!com.canUndo());
           com();
@@ -159,7 +159,7 @@ namespace test    {
           
           def.operation (command1::operate)
              .captureUndo (command1::capture);
-          CHECK (!def);                       // undo functor still missing
+          CHECK (!def);                        // undo functor still missing
           VERIFY_ERROR (INVALID_COMMAND, Command::get("test.command1.2") );
           
           def.operation (command1::operate)

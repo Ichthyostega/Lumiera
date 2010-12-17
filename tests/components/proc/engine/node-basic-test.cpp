@@ -28,7 +28,7 @@
 #include "proc/engine/stateproxy.hpp"
 #include "proc/engine/buffhandle.hpp"
 #include "proc/mobject/session/effect.hpp"
-#include "lib/allocationcluster.hpp"
+#include "lib/allocation-cluster.hpp"
 
 //#include <boost/format.hpp>
 //#include <iostream>

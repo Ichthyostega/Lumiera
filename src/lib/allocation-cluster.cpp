@@ -21,7 +21,7 @@
 * *****************************************************/
 
 
-#include "lib/allocationcluster.hpp"
+#include "lib/allocation-cluster.hpp"
 #include "lib/error.hpp"
 #include "lib/util.hpp"
 #include "lib/sync.hpp"

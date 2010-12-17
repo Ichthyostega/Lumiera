@@ -22,7 +22,7 @@
 
 
 #include "proc/mobject/session/root.hpp"
-#include "proc/mobject/session/defsmanager.hpp"
+#include "proc/mobject/session/defs-manager.hpp"
 
 
 namespace mobject {

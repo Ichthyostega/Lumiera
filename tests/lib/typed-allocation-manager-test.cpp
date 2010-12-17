@@ -78,7 +78,7 @@ namespace test{
    *        
    * @see CommandRegistry
    * @see command-registry-test.cpp
-   * @see allocationclustertest.cpp
+   * @see allocation-cluster-test.cpp
    */
   class TypedAllocationManager_test : public Test
     {

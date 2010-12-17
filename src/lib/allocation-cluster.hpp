@@ -1,5 +1,5 @@
 /*
-  ALLOCATIONCLUSTER.hpp  -  allocating and owning a pile of objects
+  ALLOCATION-CLUSTER.hpp  -  allocating and owning a pile of objects
 
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
@@ -20,7 +20,7 @@
 
 */
 
-/** @file allocationcluster.hpp
+/** @file allocation-cluster.hpp
  ** Memory management for the low-level model (render nodes network).
  ** The model is organised into temporal segments, which are considered
  ** to be structurally constant and uniform. The objects within each
@@ -35,17 +35,17 @@
  ** templates, and thus need to be in the header. This way they can
  ** exploit the type information available in call context. This
  ** information is passed to generic implementation functions
- ** defined in allocationcluster.cpp . In a similar vein, the 
+ ** defined in allocation-cluster.cpp . In a similar vein, the 
  ** AllocationCluster::MemoryManger is just forward declared.
  **
- ** @see allocationclustertest.cpp
+ ** @see allocation-cluster-test.cpp
  ** @see builder::ToolFactory
  ** @see frameid.hpp
  */
 
 
-#ifndef LIB_ALLOCATIONCLUSTER_H
-#define LIB_ALLOCATIONCLUSTER_H
+#ifndef LIB_ALLOCATION_CLUSTER_H
+#define LIB_ALLOCATION_CLUSTER_H
 
 #include <vector>
 #include <boost/scoped_ptr.hpp>

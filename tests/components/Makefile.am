@@ -85,9 +85,9 @@ test_components_SOURCES =								\
 	$(testcomponents_srcdir)/proc/mobject/placement-object-identity-test.cpp	\
 	$(testcomponents_srcdir)/proc/mobject/placement-ref-test.cpp			\
 	$(testcomponents_srcdir)/proc/mobject/session/addcliptest.cpp			\
-	$(testcomponents_srcdir)/proc/mobject/session/defsmanagerimpltest.cpp		\
-	$(testcomponents_srcdir)/proc/mobject/session/defsmanagertest.cpp		\
-	$(testcomponents_srcdir)/proc/mobject/session/defsregistryimpltest.cpp		\
+	$(testcomponents_srcdir)/proc/mobject/session/defs-manager-impl-test.cpp	\
+	$(testcomponents_srcdir)/proc/mobject/session/defs-manager-test.cpp		\
+	$(testcomponents_srcdir)/proc/mobject/session/defs-registry-impl-test.cpp	\
 	$(testcomponents_srcdir)/proc/mobject/session/deletecliptest.cpp		\
 	$(testcomponents_srcdir)/proc/mobject/session/placement-index-query-test.cpp	\
 	$(testcomponents_srcdir)/proc/mobject/session/placement-index-test.cpp		\

@@ -51,7 +51,7 @@
 
 #include "proc/mobject/placement.hpp"
 #include "proc/mobject/mobject-ref.hpp"
-#include "proc/mobject/session/defsmanager.hpp"               ////////////////////////////TICKET #643  forward declare this?
+#include "proc/mobject/session/defs-manager.hpp"               ////////////////////////////TICKET #643  forward declare this?
 #include "lib/ref-array.hpp"
 #include "lib/singleton.hpp"
 #include "lib/symbol.hpp"

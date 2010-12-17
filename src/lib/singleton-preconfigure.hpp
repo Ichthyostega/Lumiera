@@ -1,5 +1,5 @@
 /*
-  SINGLETONPRECONFIGURE  -  declare the configuration of some Singleton types in advance
+  SINGLETON-PRECONFIGURE  -  declare the configuration of some Singleton types in advance
 
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
@@ -20,7 +20,7 @@
 
 */
 
-/** @file singletonpreconfigure.hpp
+/** @file singleton-preconfigure.hpp
  ** Pre-configuration of some Singleton types, done by template specialisation.
  ** Typically the client code just includes singleton.h and uses the Singleton
  ** type. But in some cases, we want to configure specific (dependency injection)
@@ -37,12 +37,12 @@
  ** @note we declare the specialisations into the target namespace
  ** 
  ** @see SingletonFactory
- ** @see singletontestmocktest.hpp
+ ** @see SingletonTestMock_test
  */
 
 
-#ifndef LIB_SINGLETONPRECONFIGURE_H
-#define LIB_SINGLETONPRECONFIGURE_H
+#ifndef LIB_SINGLETON_PRECONFIGURE_H
+#define LIB_SINGLETON_PRECONFIGURE_H
 
 #include "lib/test/mockinjector.hpp"
 
