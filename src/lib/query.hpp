@@ -1,23 +1,23 @@
 /*
   QUERY.hpp  -  interface for capability queries
- 
+
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
- 
+
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of the
-  License, or (at your option) any later version.
- 
+  published by the Free Software Foundation; either version 2 of
+  the License, or (at your option) any later version.
+
   This program is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
- 
+
   You should have received a copy of the GNU General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- 
+
 */
 
 
@@ -28,7 +28,7 @@
 #include <string>
 #include <typeinfo>
 
-#include <boost/format.hpp>
+#include <boost/format.hpp>                      /////////////////////////////////////////TICKET #166  Oh RLY ... need to do away with this 
 
 #include "lib/symbol.hpp"
 
@@ -64,7 +64,7 @@ namespace lumiera {
     {
     public:
       explicit Query (string const& predicate="") : string(predicate) {}
-      explicit Query (format& pattern)            : string(str(pattern)) {}
+//    explicit Query (format& pattern)            : string(str(pattern)) {} //////////////TICKET #166  outch... that needs to disappear
       
       const string asKey()  const
         {

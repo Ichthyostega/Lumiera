@@ -1,23 +1,23 @@
 /*
   PlacementRef(Test)  -  generic reference to a Placement within the Session
- 
+
   Copyright (C)         Lumiera.org
     2009,               Hermann Vosseler <Ichthyostega@web.de>
- 
+
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of the
-  License, or (at your option) any later version.
- 
+  published by the Free Software Foundation; either version 2 of
+  the License, or (at your option) any later version.
+
   This program is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
- 
+
   You should have received a copy of the GNU General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- 
+
 * *****************************************************/
 
 
@@ -49,8 +49,8 @@ namespace test    {
   typedef TestPlacement<TestSubMO21> PSub;
   
   typedef PlacementMO::ID P_ID;
-  
-  
+
+
   /***************************************************************************
    * @test properties and behaviour of the reference-mechanism for Placements.
    *       We create an mock placement index and install it to be used
@@ -67,7 +67,7 @@ namespace test    {
     {
       
       virtual void
-      run (Arg) 
+      run (Arg)
         {
           PSub testPlacement1(*new TestSubMO21);
           PSub testPlacement2(*new TestSubMO21);
@@ -79,15 +79,15 @@ namespace test    {
           
           P_ID id1   = index->insert (testPlacement1, root);
           P_ID tmpID = index->insert (testPlacement2, root);
-          ASSERT (2 == index->size());
+          CHECK (2 == index->size());
           
           // References to the "live" placements within our test index
           PMO&  p1 = index->find(id1);
           PMO&  p2 = index->find(tmpID);
           
           PlacementMO::Id<TestSubMO21> id2 = p2.recastID<TestSubMO21>();
-          ASSERT (id2);
-          ASSERT (id2 != p1.getID());
+          CHECK (id2);
+          CHECK (id2 != p1.getID());
           
           // create placement refs
           PlacementRef<TestSubMO21> ref1 (p1);
@@ -95,16 +95,16 @@ namespace test    {
           
           PlacementRef<MObject> refX (ref2);
           
-          ASSERT (ref1);
-          ASSERT (ref2);
-          ASSERT (refX);
-          ASSERT (ref1 != ref2);
-          ASSERT (ref2 == refX);
+          CHECK (ref1);
+          CHECK (ref2);
+          CHECK (refX);
+          CHECK (ref1 != ref2);
+          CHECK (ref2 == refX);
           
           // indeed a "reference": resolves to the same memory location
-          ASSERT (isSameObject (p1, *ref1));
-          ASSERT (isSameObject (p2, *ref2));
-          ASSERT (isSameObject (p2, *refX));
+          CHECK (isSameObject (p1, *ref1));
+          CHECK (isSameObject (p2, *ref2));
+          CHECK (isSameObject (p2, *refX));
           
           cout << string(*ref1) << endl;
           cout << string(*ref2) << endl;
@@ -112,72 +112,72 @@ namespace test    {
           
           // PlacementRef mimics placement behaviour
           ref1->specialAPI();
-          ASSERT (2 == ref1.use_count());
-          ASSERT (2 == ref2.use_count());
+          CHECK (2 == ref1.use_count());
+          CHECK (2 == ref2.use_count());
           ExplicitPlacement exPla = refX.resolve();
-          ASSERT (exPla.time == Time(2));          // indeed get back the time we set on p2 above
-          ASSERT (3 == ref2.use_count());          // exPla shares ownership with p2
+          CHECK (exPla.time == Time(2));           // indeed get back the time we set on p2 above
+          CHECK (3 == ref2.use_count());           // exPla shares ownership with p2
           
-          ASSERT (index->contains(ref1));          // ref can stand-in for a placement-ID 
-          ASSERT (sizeof(id2) == sizeof(ref2));    // (and is actually implemented based on an ID)
+          CHECK (index->contains(ref1));           // ref can stand-in for a placement-ID
+          CHECK (sizeof(id2) == sizeof(ref2));     // (and is actually implemented based on an ID)
           
           // assignment on placement refs
           refX = ref1;
-          ASSERT (ref1 != ref2);
-          ASSERT (ref1 == refX);
-          ASSERT (ref2 != refX);
+          CHECK (ref1 != ref2);
+          CHECK (ref1 == refX);
+          CHECK (ref2 != refX);
           
           // re-assignment with a new placement
           refX = p2;
-          ASSERT (refX == ref2);
-          ASSERT (isSameObject (*refX, p2));
+          CHECK (refX == ref2);
+          CHECK (isSameObject (*refX, p2));
           refX = p1.getID();
-          ASSERT (refX == ref1);
-          ASSERT (refX != ref2);
-          ASSERT (isSameObject (*refX, p1));
+          CHECK (refX == ref1);
+          CHECK (refX != ref2);
+          CHECK (isSameObject (*refX, p1));
           
           LumieraUid luid2 (p2.getID().get());
           refX = luid2;                            // assignment works even based on a plain LUID
           ref2 = ref1;
           ref1 = refX;                             // dynamic type check when downcasting
-          ASSERT (isSameObject (p1, *ref2));
-          ASSERT (isSameObject (p2, *ref1));
+          CHECK (isSameObject (p1, *ref2));
+          CHECK (isSameObject (p2, *ref1));
           refX = ref2;
           ref2 = ref1;
           ref1 = refX;
-          ASSERT (isSameObject (p1, *ref1));
-          ASSERT (isSameObject (p1, *refX));
-          ASSERT (isSameObject (p2, *ref2));
-          ASSERT (ref1 != ref2);
-          ASSERT (ref1 == refX);
-          ASSERT (ref2 != refX);
+          CHECK (isSameObject (p1, *ref1));
+          CHECK (isSameObject (p1, *refX));
+          CHECK (isSameObject (p2, *ref2));
+          CHECK (ref1 != ref2);
+          CHECK (ref1 == refX);
+          CHECK (ref2 != refX);
           
           // resolution is indeed "live", we see changes to the referred placement
-          ASSERT (refX.resolve().time == Time::MIN);
+          CHECK (refX.resolve().time == Time::MIN);
           p1.chain = p2.chain;                     // do a change on the placement within index....
-          ASSERT (refX.resolve().time == Time(2)); // now we get the time tie we originally set on p2
+          CHECK (refX.resolve().time == Time(2));  // now we get the time tie we originally set on p2
           
-          ASSERT (p1.getID() != p2.getID());       // but the instance identities are still unaltered
-          ASSERT (2 == ref1.use_count());
-          ASSERT (3 == ref2.use_count());          // one more because of shared ownership with exPla
+          CHECK (p1.getID() != p2.getID());        // but the instance identities are still unaltered
+          CHECK (2 == ref1.use_count());
+          CHECK (3 == ref2.use_count());           // one more because of shared ownership with exPla
           
           
           // actively removing p2 invalidates the other refs to
           index->remove (ref1);
-          ASSERT (!ref1);                          // checks invalidity without throwing
-          ASSERT (!refX);
+          CHECK (!ref1);                           // checks invalidity without throwing
+          CHECK (!refX);
           VERIFY_ERROR(NOT_IN_SESSION, *ref1 );
           
           // deliberately create an invalid PlacementRef
           PlacementRef<TestSubMO21> bottom;
-          ASSERT (!bottom);
+          CHECK (!bottom);
           VERIFY_ERROR(BOTTOM_PLACEMENTREF, *bottom );
           VERIFY_ERROR(BOTTOM_PLACEMENTREF, bottom->specialAPI() );
           VERIFY_ERROR(BOTTOM_PLACEMENTREF, bottom.resolve() );
           
           //consistency check; then reset PlacementRef index to default
-          ASSERT (1 == index->size());
-          ASSERT (index->isValid());
+          CHECK (1 == index->size());
+          CHECK (index->isValid());
           index.reset();
         }
     };

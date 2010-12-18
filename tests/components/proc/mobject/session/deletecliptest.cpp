@@ -1,23 +1,23 @@
 /*
   DeleteClip(Test)  -  removing an Clip-MObject from the Session
- 
+
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
- 
+
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of the
-  License, or (at your option) any later version.
- 
+  published by the Free Software Foundation; either version 2 of
+  the License, or (at your option) any later version.
+
   This program is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
- 
+
   You should have received a copy of the GNU General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- 
+
 * *****************************************************/
 
 
@@ -74,13 +74,13 @@ namespace test    {
                                                               // global Var assigned in buildTestsession1()
           PMedia media = clipPlacement->getMedia();
           IDA clipAID = media->getID();
-          ASSERT (clipPlacement);
+          CHECK (clipPlacement);
           
           sess->remove (clipPlacement);
           
-          ASSERT (!sess->currEDL().find(SESSION1_CLIP));            // Session forgot the Clip/Placement
-          ASSERT (!aMang.known (clipAID));                          // corresponding Clip Asset has disappeared
-          ASSERT (!clipPlacement->getMedia());                      // internal cross-links removed
+          CHECK (!sess->currEDL().find(SESSION1_CLIP));            // Session forgot the Clip/Placement
+          CHECK (!aMang.known (clipAID));                          // corresponding Clip Asset has disappeared
+          CHECK (!clipPlacement->getMedia());                      // internal cross-links removed
 #endif    /////////////////////////////////////////////////////////////////////////////////////////////////////TICKET #639 : work out how to search within the Model!!
         }
     };

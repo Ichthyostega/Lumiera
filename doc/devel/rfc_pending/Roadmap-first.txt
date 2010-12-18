@@ -136,6 +136,11 @@ Please review and discuss this proposal, consider if it's of any use setting it
 up this way...
 
 
+
+
+Discussion
+~~~~~~~~~~
+
 Pros
 ^^^^
  * doesn't hinder us

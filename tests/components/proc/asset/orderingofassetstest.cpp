@@ -1,23 +1,23 @@
 /*
   OrderingOfAssets(Test)  -  equality and comparisons
- 
+
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
- 
+
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of the
-  License, or (at your option) any later version.
- 
+  published by the Free Software Foundation; either version 2 of
+  the License, or (at your option) any later version.
+
   This program is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
- 
+
   You should have received a copy of the GNU General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- 
+
 * *****************************************************/
 
 
@@ -74,45 +74,45 @@ namespace asset {
             
             
             // ordering of keys
-            ASSERT (key1 == key2);
-            ASSERT (key2 != key3);
-            ASSERT (key3 != key4);
-            ASSERT (key4 != key5);
-            ASSERT (key1 != key5);
+            CHECK (key1 == key2);
+            CHECK (key2 != key3);
+            CHECK (key3 != key4);
+            CHECK (key4 != key5);
+            CHECK (key1 != key5);
 
-            ASSERT ( 0 > key2.compare(key3));
-            ASSERT ( 0 < key3.compare(key2));
+            CHECK ( 0 > key2.compare(key3));
+            CHECK ( 0 < key3.compare(key2));
 
-            ASSERT ( 0 > key3.compare(key4));
-            ASSERT ( 0 > key4.compare(key5));
-            ASSERT ( 0 > key1.compare(key5));
-            ASSERT ( 0 > key2.compare(key5));
-            ASSERT ( 0 > key3.compare(key5));
-            ASSERT ( 0 > key1.compare(key3));
-            ASSERT ( 0 > key1.compare(key4));
-            ASSERT ( 0 > key2.compare(key4));
+            CHECK ( 0 > key3.compare(key4));
+            CHECK ( 0 > key4.compare(key5));
+            CHECK ( 0 > key1.compare(key5));
+            CHECK ( 0 > key2.compare(key5));
+            CHECK ( 0 > key3.compare(key5));
+            CHECK ( 0 > key1.compare(key3));
+            CHECK ( 0 > key1.compare(key4));
+            CHECK ( 0 > key2.compare(key4));
             
             
             // ordering of Asset smart ptrs
-            ASSERT (mm1 == mm2);
-            ASSERT (mm2 != mm3);
-            ASSERT (mm3 != mm4);
-            ASSERT (mm4 != mm5);
-            ASSERT (mm1 != mm5);
+            CHECK (mm1 == mm2);
+            CHECK (mm2 != mm3);
+            CHECK (mm3 != mm4);
+            CHECK (mm4 != mm5);
+            CHECK (mm1 != mm5);
 
-            ASSERT (mm2 < mm3);
-            ASSERT (mm2 <= mm3);
-            ASSERT (mm3 > mm2);
-            ASSERT (mm3 >= mm2);
+            CHECK (mm2 < mm3);
+            CHECK (mm2 <= mm3);
+            CHECK (mm3 > mm2);
+            CHECK (mm3 >= mm2);
 
-            ASSERT (mm3 < mm4);
-            ASSERT (mm4 < mm5);
-            ASSERT (mm1 < mm5);
-            ASSERT (mm2 < mm5);
-            ASSERT (mm3 < mm5);
-            ASSERT (mm1 < mm3);
-            ASSERT (mm1 < mm4);
-            ASSERT (mm2 < mm4);
+            CHECK (mm3 < mm4);
+            CHECK (mm4 < mm5);
+            CHECK (mm1 < mm5);
+            CHECK (mm2 < mm5);
+            CHECK (mm3 < mm5);
+            CHECK (mm1 < mm3);
+            CHECK (mm1 < mm4);
+            CHECK (mm2 < mm4);
 
           }
       };

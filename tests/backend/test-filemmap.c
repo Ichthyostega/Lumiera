@@ -6,8 +6,8 @@
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of the
-  License, or (at your option) any later version.
+  published by the Free Software Foundation; either version 2 of
+  the License, or (at your option) any later version.
 
   This program is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -159,7 +159,7 @@ TEST (mmap_simple)
   /* check that the file got truncated to the desired size */
   struct stat st;
   stat (",tmp-filemmap", &st);
-  ENSURE (st.st_size == 100);
+  CHECK (st.st_size == 100);
 
   lumiera_backend_destroy ();
   lumiera_config_destroy ();
@@ -179,7 +179,7 @@ TEST (mmap_checkout_twice)
 
   LumieraMMap map2 = lumiera_mmapings_mmap_acquire (mmaps, file, 0, 100);
 
-  ENSURE (map->address == map2->address);
+  CHECK (map->address == map2->address);
 
   lumiera_mmapings_release_mmap (mmaps, map);
 
@@ -190,7 +190,7 @@ TEST (mmap_checkout_twice)
   /* check that the file got truncated to the desired size */
   struct stat st;
   stat (",tmp-filemmap", &st);
-  ENSURE (st.st_size == 100);
+  CHECK (st.st_size == 100);
 
   lumiera_backend_destroy ();
   lumiera_config_destroy ();
@@ -217,7 +217,7 @@ TEST (mmap_checkout_again)
   /* check that the file got truncated to the desired size */
   struct stat st;
   stat (",tmp-filemmap", &st);
-  ENSURE (st.st_size == 100);
+  CHECK (st.st_size == 100);
 
   lumiera_backend_destroy ();
   lumiera_config_destroy ();
@@ -242,7 +242,7 @@ TEST (mmap_grow_existing_file)
   /* check that the file got truncated to the desired size */
   struct stat st;
   stat (",tmp-filemmap", &st);
-  ENSURE (st.st_size == 100);
+  CHECK (st.st_size == 100);
 
   lumiera_backend_destroy ();
   lumiera_config_destroy ();
@@ -266,7 +266,7 @@ TEST (mmap_readonly_file)
   /* check that the file got truncated to the desired size */
   struct stat st;
   stat (",tmp-filemmap", &st);
-  ENSURE (st.st_size == 100);
+  CHECK (st.st_size == 100);
 
   lumiera_backend_destroy ();
   lumiera_config_destroy ();

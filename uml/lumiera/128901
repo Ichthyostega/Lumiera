@@ -1,6 +1,6 @@
 format 58
 "Builder" // ProcessingLayer::MObject::Builder
-  revision 20
+  revision 21
   modified_by 5 "hiv"
   // class settings
   //class diagram settings
@@ -74,7 +74,7 @@ format 58
 	iterative
 	activityaction 128773 "define segment"
 	  opaque_action
-	  pin 128133 "inFixture" explicit_type ""
+	  pin 128133 "inContent" explicit_type ""
 	    unordered 
 	    in
 	  end
@@ -107,11 +107,11 @@ format 58
 	end
 
 	flow 130181 "<flow>"
-	  on pin_ref 128133 // inFixture
+	  on pin_ref 128133 // inContent
 	end
 
 	flow 131717 "<flow>"
-	  on pin_ref 128133 // inFixture
+	  on pin_ref 128133 // inContent
 	end
       end
 
@@ -167,6 +167,14 @@ format 58
       end
 
       activitynode 129157 activity_final ""
+      end
+
+      activityobject 129157 "Timeline contents"
+	 explicit_type ""
+	unordered 
+	flow 133125 "<flow>"
+	  on pin_ref 128133 // inContent
+	end
       end
     end
 

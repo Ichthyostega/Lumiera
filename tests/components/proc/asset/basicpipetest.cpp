@@ -1,23 +1,23 @@
 /*
   BasicPipe(Test)  -  checking the basic properties of Pipe Assets
- 
+
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
- 
+
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of the
-  License, or (at your option) any later version.
- 
+  published by the Free Software Foundation; either version 2 of
+  the License, or (at your option) any later version.
+
   This program is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
- 
+
   You should have received a copy of the GNU General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- 
+
 * *****************************************************/
 
 
@@ -42,13 +42,13 @@ using std::string;
 using std::cout;
 
 
-namespace asset
-  {
-  namespace test
-    {
+namespace asset {
+namespace test  {
+  
     using mobject::Session;
     using lumiera::Query;
     using lumiera::query::normaliseID;
+    using lumiera::StreamType;
     
     
     
@@ -81,25 +81,25 @@ namespace asset
           { 
             string pID_sane (pID);
             normaliseID (pID_sane);
-            ASSERT (pID_sane != pID);
+            CHECK (pID_sane != pID);
             
             PPipe thePipe = asset::Struct::retrieve.newPipe (pID,sID);
             
-            ASSERT (thePipe);
-            ASSERT (thePipe->getProcPatt());
-            ASSERT (thePipe->getPipeID() == pID_sane);
-            ASSERT (thePipe->getStreamID() == sID);
-            ASSERT (thePipe->shortDesc == pID_sane);
+            CHECK (thePipe);
+            CHECK (thePipe->getProcPatt());
+            CHECK (thePipe->getPipeID() == pID_sane);
+            CHECK (thePipe->getStreamID() == StreamType::ID(sID));
+            CHECK (thePipe->shortDesc == pID_sane);
             
             Asset::Ident idi = thePipe->ident;
-            ASSERT (idi.org == "lumi");
-            ASSERT (contains (idi.name, thePipe->getPipeID()));
-            ASSERT (contains (idi.name, thePipe->getStreamID()));
+            CHECK (idi.org == "lumi");
+            CHECK (contains (idi.name, thePipe->getPipeID()));
+            CHECK (contains (idi.name, thePipe->getStreamID()));
 
             Category cat (idi.category);
             Category refcat (STRUCT,"pipes");
-            ASSERT ( cat.hasKind(STRUCT) );
-            ASSERT ( cat.isWithin(refcat) );
+            CHECK ( cat.hasKind(STRUCT) );
+            CHECK ( cat.isWithin(refcat) );
           }
         
         
@@ -108,20 +108,20 @@ namespace asset
             normaliseID (pID);
             
             PPipe pipe1 = Pipe::query ("pipe("+pID+")");
-            ASSERT (pipe1);
-            ASSERT (pipe1->getPipeID() == pID);
+            CHECK (pipe1);
+            CHECK (pipe1->getPipeID() == pID);
             
             string pID2 = "another-" + pID;
             PPipe pipe2 = Pipe::query ("pipe("+pID2+")");
-            ASSERT (pipe2);
-            ASSERT (pipe2 != pipe1);
+            CHECK (pipe2);
+            CHECK (pipe2 != pipe1);
             Category c1 = pipe1->ident.category;
             Category c2 = pipe2->ident.category;
-            ASSERT (c1 == c2);
+            CHECK (c1 == c2);
             
             PPipe pipe3 = Pipe::query ("pipe("+pID2+")");
 //////////////////////////////////////////////////////////////TODO: that's broken; creating a new one instead to find the existing one, as it should be            
-            ASSERT (pipe3 == pipe2);
+            CHECK (pipe3 == pipe2);
           }
         
         
@@ -129,26 +129,26 @@ namespace asset
           { 
             PPipe pipe1 = Pipe::query (""); // "the default pipe"
             PPipe pipe2;
-            ASSERT (pipe1);
-            ASSERT (pipe1 == Session::current->defaults (Query<Pipe>()));
-            ASSERT (pipe1->ident.category.hasKind(VIDEO));
-            ASSERT (pipe1->getProcPatt());
+            CHECK (pipe1);
+            CHECK (pipe1 == Session::current->defaults (Query<Pipe>()));
+            CHECK (pipe1->ident.category.hasKind(VIDEO));
+            CHECK (pipe1->getProcPatt());
             PProcPatt propa = Session::current->defaults (Query<const ProcPatt>("pipe(default)"));
-            ASSERT (propa == pipe1->getProcPatt());
+            CHECK (propa == pipe1->getProcPatt());
             
             // several variants to query for "the default pipe"
             pipe2 = Session::current->defaults(Query<Pipe> ());
-            ASSERT (pipe2 == pipe1);
+            CHECK (pipe2 == pipe1);
             pipe2 = asset::Struct::retrieve (Query<Pipe> ());
-            ASSERT (pipe2 == pipe1);
+            CHECK (pipe2 == pipe1);
             pipe2 = asset::Struct::retrieve (Query<Pipe> ("pipe(default)"));
-            ASSERT (pipe2 == pipe1);
+            CHECK (pipe2 == pipe1);
             
             string sID = pipe1->getStreamID(); // sort of a "default stream type"
             PPipe pipe3 = Pipe::query ("stream("+sID+")");
-            ASSERT (pipe3);
-            ASSERT (pipe3->getStreamID() == sID);
-            ASSERT (pipe3->getProcPatt() == Session::current->defaults (Query<const ProcPatt>("stream("+sID+")")));
+            CHECK (pipe3);
+            CHECK (pipe3->getStreamID() == StreamType::ID(sID));
+            CHECK (pipe3->getProcPatt() == Session::current->defaults (Query<const ProcPatt>("stream("+sID+")")));
           }
         
         
@@ -158,46 +158,46 @@ namespace asset
             typedef P<const ProcPatt> PProcPatt;
             
             PPipe thePipe = Pipe::query ("pipe("+pID+")");
-            ASSERT (thePipe);
+            CHECK (thePipe);
             PProcPatt thePatt = thePipe->getProcPatt();
-            ASSERT (thePatt);
-            ASSERT (dependencyCheck (thePipe, thePatt));
+            CHECK (thePatt);
+            CHECK (dependencyCheck (thePipe, thePatt));
             
             PProcPatt pattern2 = thePatt->newCopy("another");
-            ASSERT (thePatt != pattern2);
-            ASSERT (!dependencyCheck (thePipe, pattern2));
+            CHECK (thePatt != pattern2);
+            CHECK (!dependencyCheck (thePipe, pattern2));
             TODO ("add something to the new pattern, e.g. an effect");
 
               // now querying for a pipe using this pattern (created on-the-fly)
              //  note: because the pattern is new, this new pipe will be used as
             //         default pipe for this pattern automatically
             PPipe pipe2x = Pipe::query ("pattern(another)");
-            ASSERT (pattern2 == pipe2x->getProcPatt());
-            ASSERT (pipe2x == Session::current->defaults (Query<Pipe>("pattern(another)")));
+            CHECK (pattern2 == pipe2x->getProcPatt());
+            CHECK (pipe2x == Session::current->defaults (Query<Pipe>("pattern(another)")));
             
             thePipe->switchProcPatt(pattern2);
-            ASSERT ( dependencyCheck (thePipe, pattern2));
-            ASSERT (!dependencyCheck (thePipe, thePatt));
+            CHECK ( dependencyCheck (thePipe, pattern2));
+            CHECK (!dependencyCheck (thePipe, thePatt));
             
             AssetManager& aMang = AssetManager::instance();
-            ASSERT ( aMang.known (thePipe->getID()));
-            ASSERT ( aMang.known (thePatt->getID()));
-            ASSERT ( aMang.known (pattern2->getID()));
+            CHECK ( aMang.known (thePipe->getID()));
+            CHECK ( aMang.known (thePatt->getID()));
+            CHECK ( aMang.known (pattern2->getID()));
             aMang.remove (pattern2->getID());
-            ASSERT ( aMang.known (thePatt->getID()));
-            ASSERT (!aMang.known (pattern2->getID()));
-            ASSERT (!aMang.known (thePipe->getID()));  // has been unlinked too, because dependant on pattern2
+            CHECK ( aMang.known (thePatt->getID()));
+            CHECK (!aMang.known (pattern2->getID()));
+            CHECK (!aMang.known (thePipe->getID()));  // has been unlinked too, because dependant on pattern2
             
-            ASSERT (thePipe);
+            CHECK (thePipe);
             PProcPatt pattern3 = thePipe->getProcPatt();                                   /////TODO: transition to P<>
-            ASSERT (thePipe->getProcPatt());
-            ASSERT (              pattern3 == pattern2); // but is still valid, as long as the ref is alive....
+            CHECK (thePipe->getProcPatt());
+            CHECK (              pattern3 == pattern2); // but is still valid, as long as the ref is alive....
             
             PPipe pipe3x = Pipe::query ("pattern(another)");
             pattern3 = pipe3x->getProcPatt();                                              /////TODO: transition to P<>
-            ASSERT (pattern3 != pattern2);  // because pattern2 is already unlinked...
-            ASSERT (pipe3x == Session::current->defaults (Query<Pipe>("pattern(another)")));
-            ASSERT (pipe3x != pipe2x);                 // ..we got a new default pipe for "pattern(another)" too!
+            CHECK (pattern3 != pattern2);  // because pattern2 is already unlinked...
+            CHECK (pipe3x == Session::current->defaults (Query<Pipe>("pattern(another)")));
+            CHECK (pipe3x != pipe2x);                 // ..we got a new default pipe for "pattern(another)" too!
             
             
             TRACE (asset_mem, "leaving BasicPipe_test::dependProcPatt()");

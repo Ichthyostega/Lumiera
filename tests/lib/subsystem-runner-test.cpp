@@ -1,23 +1,23 @@
 /*
   SubsystemRunner(Test)  -  validate starting and stopping of dependent subsystems
- 
+
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
- 
+
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of the
-  License, or (at your option) any later version.
- 
+  published by the Free Software Foundation; either version 2 of
+  the License, or (at your option) any later version.
+
   This program is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
- 
+
   You should have received a copy of the GNU General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- 
+
 * *****************************************************/
 
 
@@ -112,19 +112,19 @@ namespace test  {
           bool
           start (lumiera::Option&, Subsys::SigTerm termination)
             {
-              REQUIRE (!(isUp_|started_|didRun_), "attempt to start %s twice!", cStr(*this));
+              CHECK (!(isUp_|started_|didRun_), "attempt to start %s twice!", cStr(*this));
               
               string startSpec (extractID ("start",spec_));
-              ASSERT (!isnil (startSpec));
+              CHECK (!isnil (startSpec));
               
               if ("true"==startSpec) //----simulate successful subsystem start
                 {
-                  REQUIRE (!started_);
+                  CHECK (!started_);
                    
                   Thread (id_, bind (&MockSys::run, this, termination))
                         .sync();     // run-status handshake
                   
-                  ASSERT (started_);
+                  CHECK (started_);
                 }
               else
               if ("fail"==startSpec) //----not starting, incorrectly reporting success
@@ -165,7 +165,7 @@ namespace test  {
           run (Subsys::SigTerm termination)
             {
               string runSpec (extractID ("run",spec_));
-              ASSERT (!isnil (runSpec));
+              CHECK (!isnil (runSpec));
               
               // run-status handshake
               started_ = true;
@@ -281,15 +281,15 @@ namespace test  {
             
             MockSys unit ("one", "start(true), run(true).");
             SubsystemRunner runner(dummyOpt);
-            REQUIRE (!unit.isRunning());
-            REQUIRE (!unit.didRun());
+            CHECK (!unit.isRunning());
+            CHECK (!unit.didRun());
             
             runner.maybeRun (unit);
             bool emergency = runner.wait();
             
-            ASSERT (!emergency);
-            ASSERT (!unit.isRunning());
-            ASSERT (unit.didRun());
+            CHECK (!emergency);
+            CHECK (!unit.isRunning());
+            CHECK (unit.didRun());
           }
         
         
@@ -322,14 +322,14 @@ namespace test  {
             usleep (DELAY_FOR_FLOUNDERING_THRAD_ms * 1000);     // preempt to allow unit4 to go away
             runner.wait();
             
-            ASSERT (!unit1.isRunning());
-            ASSERT (!unit2.isRunning());
-            ASSERT (!unit3.isRunning());
-            ASSERT (!unit4.isRunning());
-            ASSERT (!unit1.didRun());
-            ASSERT (!unit2.didRun());
-            ASSERT (!unit3.didRun());
-            ASSERT ( unit4.didRun()); // ...but it failed immediately
+            CHECK (!unit1.isRunning());
+            CHECK (!unit2.isRunning());
+            CHECK (!unit3.isRunning());
+            CHECK (!unit4.isRunning());
+            CHECK (!unit1.didRun());
+            CHECK (!unit2.didRun());
+            CHECK (!unit3.didRun());
+            CHECK ( unit4.didRun()); // ...but it failed immediately
           }
         
         
@@ -344,9 +344,9 @@ namespace test  {
             runner.maybeRun (unit);
             bool emergency = runner.wait();
             
-            ASSERT (emergency);      // emergency state got propagated
-            ASSERT (!unit.isRunning());
-            ASSERT (unit.didRun());
+            CHECK (emergency);      // emergency state got propagated
+            CHECK (!unit.isRunning());
+            CHECK (unit.didRun());
           }
         
         
@@ -366,22 +366,22 @@ namespace test  {
             SubsystemRunner runner(dummyOpt);
             
             runner.maybeRun (unit4);
-            ASSERT (unit1.isRunning());
-            ASSERT (unit2.isRunning());
-            ASSERT (unit3.isRunning());
-            ASSERT (unit4.isRunning());
+            CHECK (unit1.isRunning());
+            CHECK (unit2.isRunning());
+            CHECK (unit3.isRunning());
+            CHECK (unit4.isRunning());
             
             bool emergency = runner.wait();
             
-            ASSERT (!emergency);
-            ASSERT (!unit1.isRunning());
-            ASSERT (!unit2.isRunning());
-            ASSERT (!unit3.isRunning());
-            ASSERT (!unit4.isRunning());
-            ASSERT (unit1.didRun());
-            ASSERT (unit2.didRun());
-            ASSERT (unit3.didRun());
-            ASSERT (unit4.didRun());
+            CHECK (!emergency);
+            CHECK (!unit1.isRunning());
+            CHECK (!unit2.isRunning());
+            CHECK (!unit3.isRunning());
+            CHECK (!unit4.isRunning());
+            CHECK (unit1.didRun());
+            CHECK (unit2.didRun());
+            CHECK (unit3.didRun());
+            CHECK (unit4.didRun());
           }
         
         
@@ -401,21 +401,21 @@ namespace test  {
             SubsystemRunner runner(dummyOpt);
             
             VERIFY_ERROR (LOGIC, runner.maybeRun (unit4) );   // failure to bring up prerequisites is detected
-            ASSERT ( unit1.isRunning());
-            ASSERT ( unit2.isRunning());
-            ASSERT (!unit3.isRunning());
+            CHECK ( unit1.isRunning());
+            CHECK ( unit2.isRunning());
+            CHECK (!unit3.isRunning());
             // shutdown has been triggered for unit4, but may require some time
             
             bool emergency = runner.wait();
             
-            ASSERT (!emergency);     // no problems with the subsystems actually running...
-            ASSERT (!unit1.isRunning());
-            ASSERT (!unit2.isRunning());
-            ASSERT (!unit3.isRunning());
-            ASSERT (!unit4.isRunning());
-            ASSERT ( unit1.didRun());
-            ASSERT ( unit2.didRun());
-            ASSERT (!unit3.didRun());
+            CHECK (!emergency);     // no problems with the subsystems actually running...
+            CHECK (!unit1.isRunning());
+            CHECK (!unit2.isRunning());
+            CHECK (!unit3.isRunning());
+            CHECK (!unit4.isRunning());
+            CHECK ( unit1.didRun());
+            CHECK ( unit2.didRun());
+            CHECK (!unit3.didRun());
             // can't say for sure if unit4 actually did run
           }
       };

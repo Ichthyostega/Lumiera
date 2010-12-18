@@ -1,23 +1,23 @@
 /*
   SymbolHashtable(Test)  -  building a hashtable with Symbol (id) keys
- 
+
   Copyright (C)         Lumiera.org
     2009,               Hermann Vosseler <Ichthyostega@web.de>
- 
+
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of the
-  License, or (at your option) any later version.
- 
+  published by the Free Software Foundation; either version 2 of
+  the License, or (at your option) any later version.
+
   This program is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
- 
+
   You should have received a copy of the GNU General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- 
+
 * *****************************************************/
 
 
@@ -66,38 +66,38 @@ namespace test{
   class SymbolHashtable_test : public Test
     {
       
-      void
+      virtual void
       run (Arg)
         {
           checkHashFunction();
           
           HTable table;
-          ASSERT (isnil(table));
+          CHECK (isnil(table));
           
           table[KEY1] = string (KEY1);
           table[KEY2] = string (KEY2);
           table[KEY3] = string (KEY3);
           table[KEY4] = string (KEY4);
           
-          ASSERT (!isnil(table));
-          ASSERT (4 == table.size());
-          ASSERT (contains (table, KEY1));
-          ASSERT (contains (table, KEY2));
-          ASSERT (contains (table, KEY3));
-          ASSERT (contains (table, KEY4));
-          ASSERT (!contains (table, KEY5));
+          CHECK (!isnil(table));
+          CHECK (4 == table.size());
+          CHECK (contains (table, KEY1));
+          CHECK (contains (table, KEY2));
+          CHECK (contains (table, KEY3));
+          CHECK (contains (table, KEY4));
+          CHECK (!contains (table, KEY5));
           
-          ASSERT (string (KEY1) == table[KEY1]);
-          ASSERT (string (KEY2) == table[KEY2]);
-          ASSERT (string (KEY3) == table[KEY3]);
-          ASSERT (string (KEY4) == table[KEY4]);
+          CHECK (string (KEY1) == table[KEY1]);
+          CHECK (string (KEY2) == table[KEY2]);
+          CHECK (string (KEY3) == table[KEY3]);
+          CHECK (string (KEY4) == table[KEY4]);
           
-          table[KEY3] += "..."; 
-          ASSERT (string(KEY3)       != table[KEY3]);
-          ASSERT (string(KEY3)+"..." == table[KEY3]);
+          table[KEY3] += "...";
+          CHECK (string(KEY3)       != table[KEY3]);
+          CHECK (string(KEY3)+"..." == table[KEY3]);
           
-          ASSERT (isnil (table[KEY5])); // adds a new empty value object as side effect
-          ASSERT (5 == table.size());
+          CHECK (isnil (table[KEY5])); // adds a new empty value object as side effect
+          CHECK (5 == table.size());
         }
       
       
@@ -109,7 +109,7 @@ namespace test{
           string copy1(random);
           copy1[5] = '\0';      // truncate the c-String to 5 chars
           
-          string copy2(random);           
+          string copy2(random);
           copy2[rand() % STRING_MAX_RELEVANT] = '*';  // modify a random position
           
           string copy3(copy2);
@@ -123,15 +123,15 @@ namespace test{
           Literal l_2 (copy2.c_str());
           Literal l_3 (copy3.c_str());
           
-          ASSERT (isnil (l0));
-          ASSERT (l0  != l51);
-          ASSERT (l51 == l52);
+          CHECK (isnil (l0));
+          CHECK (l0  != l51);
+          CHECK (l51 == l52);
           
-          ASSERT (l51 != l_1);
-          ASSERT (l_1 != l_2);
-          ASSERT (l_2 == l_3);  // difference not detected due to observation limit...
-          ASSERT (!std::strncmp (l_2, l_3, STRING_MAX_RELEVANT  ));
-          ASSERT ( std::strncmp (l_2, l_3, STRING_MAX_RELEVANT+1));
+          CHECK (l51 != l_1);
+          CHECK (l_1 != l_2);
+          CHECK (l_2 == l_3);  // difference not detected due to observation limit...
+          CHECK (!std::strncmp (l_2, l_3, STRING_MAX_RELEVANT  ));
+          CHECK ( std::strncmp (l_2, l_3, STRING_MAX_RELEVANT+1));
           
           size_t h0   = hash_value (l0);
           size_t h51  = hash_value (l51);
@@ -140,21 +140,21 @@ namespace test{
           size_t h_2  = hash_value (l_2);
           size_t h_3  = hash_value (l_3);
           
-          ASSERT (h0  == 0);
-          ASSERT (h51 != 0);
-          ASSERT (h52 != 0);
-          ASSERT (h_1 != 0);
-          ASSERT (h_2 != 0);
-          ASSERT (h_3 != 0);
+          CHECK (h0  == 0);
+          CHECK (h51 != 0);
+          CHECK (h52 != 0);
+          CHECK (h_1 != 0);
+          CHECK (h_2 != 0);
+          CHECK (h_3 != 0);
           
-          ASSERT (h51 == h52);    // verify the hash function indeed stops at '\0'
-          ASSERT (h51 != h_1);    // share a common prefix, but the hash differs
-          ASSERT (h_1 != h_2);    // the single random modification is detected
-          ASSERT (h_2 == h_3);    // because l_2 and l_3 differ behind the fixed observation limit
+          CHECK (h51 == h52);    // verify the hash function indeed stops at '\0'
+          CHECK (h51 != h_1);    // share a common prefix, but the hash differs
+          CHECK (h_1 != h_2);    // the single random modification is detected
+          CHECK (h_2 == h_3);    // because l_2 and l_3 differ behind the fixed observation limit
           
-          ASSERT (h_1 == hash_value (l_1)); //reproducible
-          ASSERT (h_2 == hash_value (l_2));
-          ASSERT (h_3 == hash_value (l_3));
+          CHECK (h_1 == hash_value (l_1)); //reproducible
+          CHECK (h_2 == hash_value (l_2));
+          CHECK (h_3 == hash_value (l_3));
         }
     };
   
@@ -162,4 +162,3 @@ namespace test{
   
   
 }} // namespace lib::test
-

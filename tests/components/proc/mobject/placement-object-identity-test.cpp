@@ -1,23 +1,23 @@
 /*
   PlacementObjectIdentity(Test)  -  object identity for placements into the session
- 
+
   Copyright (C)         Lumiera.org
     2010,               Hermann Vosseler <Ichthyostega@web.de>
- 
+
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of the
-  License, or (at your option) any later version.
- 
+  published by the Free Software Foundation; either version 2 of
+  the License, or (at your option) any later version.
+
   This program is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
- 
+
   You should have received a copy of the GNU General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- 
+
 * *****************************************************/
 
 
@@ -84,10 +84,10 @@ namespace test    {
           pClip1.chain(Time(10));
           pClip2.chain(Time(20));
           
-          ASSERT (pClip1->isValid());
-          ASSERT (pClip2->isValid());
-          ASSERT (2 == pClip1.use_count());  // one by the placement and one by the clip-Asset
-          ASSERT (2 == pClip2.use_count());
+          CHECK (pClip1->isValid());
+          CHECK (pClip2->isValid());
+          CHECK (2 == pClip1.use_count());  // one by the placement and one by the clip-Asset
+          CHECK (2 == pClip2.use_count());
           
           ////////////////TODO direct comparisons
           ////////////////TODO direct comparisons
@@ -118,24 +118,24 @@ namespace test    {
           PlacementRef<MObject> ref2 (pClip2);
           
           MORef<Clip> rMO;
-          ASSERT (!rMO);                    // still empty (not bound)
+          CHECK (!rMO);                    // still empty (not bound)
           
           // activate by binding to provided ref
           rMO.activate(refObj);
-          ASSERT (rMO);                     // now bound
+          CHECK (rMO);                     // now bound
           
           ///TODO access Placement, fetch ID
           
           // re-link to the Placement (note we get the Clip API!)
           Placement<Clip> & refP = rMO.getPlacement();
-          ASSERT (refP);
-          ASSERT (3 == refP.use_count());
-          ASSERT (&refP == placementAdr);   // actually denotes the address of the original Placement in the "session"
+          CHECK (refP);
+          CHECK (3 == refP.use_count());
+          CHECK (&refP == placementAdr);   // actually denotes the address of the original Placement in the "session"
           
           ExplicitPlacement exPla = refP.resolve();
-          ASSERT (exPla.time == start);     // recovered Placement resolves to the same time as provided by the proxied API
-          ASSERT (4 == refP.use_count());   // but now we've indeed created an additional owner (exPla)
-          ASSERT (4 == rMO.use_count());
+          CHECK (exPla.time == start);     // recovered Placement resolves to the same time as provided by the proxied API
+          CHECK (4 == refP.use_count());   // but now we've indeed created an additional owner (exPla)
+          CHECK (4 == rMO.use_count());
           
           
           ////////////////TODO now do the cross comparisons

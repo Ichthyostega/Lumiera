@@ -1,23 +1,23 @@
 /*
   PlacementIndexQuery(Test)  -  querying the placement index through the generic query interface 
- 
+
   Copyright (C)         Lumiera.org
     2009,               Hermann Vosseler <Ichthyostega@web.de>
- 
+
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of the
-  License, or (at your option) any later version.
- 
+  published by the Free Software Foundation; either version 2 of
+  the License, or (at your option) any later version.
+
   This program is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
- 
+
   You should have received a copy of the GNU General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- 
+
 * *****************************************************/
 
 
@@ -73,15 +73,15 @@ namespace test    {
           QueryResolver const& resolver1 (SessionServiceExploreScope::getResolver());
           QueryResolver const& resolver2 (SessionServiceExploreScope::getResolver());
           
-          ASSERT (isSameObject (resolver1, resolver2));
+          CHECK (isSameObject (resolver1, resolver2));
           
           PlacementMO& root1 = index->getRoot();          
           PlacementMO& root2 = SessionServiceExploreScope::getScopeRoot();          
-          ASSERT (isSameObject (root1, root2));
+          CHECK (isSameObject (root1, root2));
           
           PlacementMO& elm1 = *ContentsQuery<TestSubMO21>(root1).resolveBy(resolver1);
           PlacementMO& elm2 = *(index->getReferrers(root1));
-          ASSERT (isSameObject (elm1, elm2));
+          CHECK (isSameObject (elm1, elm2));
         }
       
       void

@@ -1,23 +1,23 @@
 /*
   IterTools(Test)  -  building combined and filtering iterators based on the Iterator tools
- 
+
   Copyright (C)         Lumiera.org
     2009,               Hermann Vosseler <Ichthyostega@web.de>
- 
+
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of the
-  License, or (at your option) any later version.
- 
+  published by the Free Software Foundation; either version 2 of
+  the License, or (at your option) any later version.
+
   This program is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
- 
+
   You should have received a copy of the GNU General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- 
+
 * *****************************************************/
 
 
@@ -50,7 +50,7 @@ namespace test{
   
   
   namespace { // Test data
-  
+    
     uint NUM_ELMS = 10;
     
     struct TestSource
@@ -81,9 +81,9 @@ namespace test{
   
   /*******************************************************************************
    *  @test build combined and filtering iterators with the help of lib::IterTool.
-   *        Check correct behaviour of the resulting iterators and 
+   *        Check correct behaviour of the resulting iterators and
    *        verify they fulfil the Lumiera Forward Iterator concept
-   *        
+   * 
    * @todo implement more iterator tools.... see Ticket #347
    */
   class IterTools_test : public Test
@@ -132,7 +132,7 @@ namespace test{
       void
       buildFilterIterator (Iter const& ii)
         {
-          pullOut (filterIterator (ii, takeAll));  // note: using the convenient builder function 
+          pullOut (filterIterator (ii, takeAll));  // note: using the convenient builder function
           pullOut (filterIterator (ii, takeEve));
           pullOut (filterIterator (ii, takeOdd));
           
@@ -142,11 +142,11 @@ namespace test{
           verifyComparisons (odd);
           
           while (++all && ++odd)
-            ASSERT (all != odd);
+            CHECK (all != odd);
           
           while (++all) { }
-          ASSERT (isnil (odd));
-          ASSERT (all == odd);
+          CHECK (isnil (odd));
+          CHECK (all == odd);
         }
       
       
@@ -164,7 +164,7 @@ namespace test{
               do numberz.push_back(i);
               while (--n);
             }
-          ASSERT (NUM_ELMS < numberz.size(), "no repetition in test data??");
+          CHECK (NUM_ELMS < numberz.size(), "no repetition in test data??");
           
           typedef vector<uint>::iterator SrcIter;
           typedef RangeIter<SrcIter> SeqIter;
@@ -178,9 +178,9 @@ namespace test{
                ++num,
                ++filtered
               )
-            ASSERT (num == *filtered);
+            CHECK (num == *filtered);
           
-          ASSERT (num == NUM_ELMS && isnil(filtered));
+          CHECK (num == NUM_ELMS && isnil(filtered));
         }
       
       
@@ -201,14 +201,14 @@ namespace test{
           verifyComparisons (idi);
           verifyComparisons (neg);
           
-          ASSERT (idi);
-          ASSERT (neg);
+          CHECK (idi);
+          CHECK (neg);
           for ( ;idi&&neg;
               ++idi,++neg)
-            ASSERT (idi != neg);
+            CHECK (idi != neg);
           
-          ASSERT (!idi && !neg);
-          ASSERT (idi == neg);
+          CHECK (!idi && !neg);
+          CHECK (idi == neg);
         }
       
       
@@ -224,32 +224,32 @@ namespace test{
           IT i1(ii);
           IT i2(ii);
           IT iN;
-          ASSERT ( isnil (iN));
-          ASSERT (!isnil (i1));
-          ASSERT (!isnil (i2));
+          CHECK ( isnil (iN));
+          CHECK (!isnil (i1));
+          CHECK (!isnil (i2));
           
-          ASSERT (i1 == i2); ASSERT (i2 == i1);
-          ASSERT (i1 != iN); ASSERT (iN != i1); 
-          ASSERT (i2 != iN); ASSERT (iN != i2);
+          CHECK (i1 == i2); CHECK (i2 == i1);
+          CHECK (i1 != iN); CHECK (iN != i1);
+          CHECK (i2 != iN); CHECK (iN != i2);
           
           ++i1;
-          ASSERT (i1 != i2);
-          ASSERT (i1 != iN);
+          CHECK (i1 != i2);
+          CHECK (i1 != iN);
           
           ++i2;
-          ASSERT (i1 == i2);
-          ASSERT (i1 != iN); 
-          ASSERT (i2 != iN);
+          CHECK (i1 == i2);
+          CHECK (i1 != iN);
+          CHECK (i2 != iN);
           
           while (++i1) { }
-          ASSERT (isnil(i1));
-          ASSERT (i1 != i2);
-          ASSERT (i1 == iN);
+          CHECK (isnil(i1));
+          CHECK (i1 != i2);
+          CHECK (i1 == iN);
           
           while (++i2) { }
-          ASSERT (isnil(i2));
-          ASSERT (i2 == i1);
-          ASSERT (i2 == iN);
+          CHECK (isnil(i2));
+          CHECK (i2 == i1);
+          CHECK (i2 == iN);
         }
       
       

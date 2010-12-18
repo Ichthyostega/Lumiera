@@ -1077,6 +1077,26 @@ Please note the shortcomings and logical contradictions in the solution currentl
 * The current design rather places the implementation according to the roles of the involved entities, which causes some ping-pong on the implementation level. Especially the ScopeLocator singleton can be accessed multiple times. This is the usual clarity vs. performance tradeoff. Scope resolution is assumed rather to be //not performance critical.//
 </pre>
 </div>
+<div title="BuildFixture" modifier="Ichthyostega" modified="201011290504" created="201011282003" tags="Builder spec operational" changecount="32">
+<pre>//Building the fixture is actually at the core of the [[builder's operation|Builder]]//
+{{red{WIP as of 11/10}}} &amp;rarr; see also the [[planning page|PlanningBuildFixture]]
+
+;Resolving the DAG[&gt;img[Steps towards creating a Segmentation|draw/SegmentationSteps1.png]]
+Because of the possibility of binding a Sequence multiple times, and maybe even nested as virtual clip, the [[high-level model|HighLevelModel]] actually constitutes a DAG, not a tree. This leds to quite some tricky problems, which we try to resolve by //rectifying the DAG into N virtual trees.// (&amp;rarr; BindingScopeProblem)
+
+Relying on this transformation, each Timeline spans a sub-tree virtually separated from all other timelines; the BuildProcess is driven by [[visiting|VisitorUse]] all the //tangible// objects within this subtree. In the example shown to the right, Sequence-β is both bound as VirtualClip into Sequence-α, as well as bound independently as top-level sequence into Timeline-2. Thus it will be visited twice, but the QueryFocus mechanism ensures that each visitation »sees« the proper context.
+
+;Explicit Placements
+Each tangible object placement (relevant for rendering), which is encountered during that visitation, gets //resolved// into an [[explicit placement|ExplicitPlacement]]. If we see [[Placement]] as a positioning within a multi dimensional configuration space, then the resolution into an explicit placement is like the creation of an ''orthogonal base'': Within the explicit placement, each LocatingPin corresponds exactly to one degree of freedom and can be considered independently from all other locating pins. This resolution step removes any fancy dynamic behaviour and all scoping and indirect references. Indeed, an explicit placement is a mere //value object;// it isn't part of the session core (PlacementIndex), isn't typed and can't be referred indirectly.
+
+;Segmentation of Time axis
+This simple and explicit positioning thus allows to arrange all objects as time intervals on a single axis. Any change and especially any overlap is likely to create a different wiring configuration. Thus, for each such configuration change, we fork off a new //segment// and //copy over// all partially touched placements. The resulting seamless sequence of non-overlapping time intervals provides the backbone of the datastructure called [[Fixture]].
+
+;Building the Network
+From this backbone, the actual [[building mechanism|BuilderMechanics]] proceeds as a ongoing visitation and resolution, resulting in the gowth of a network of [[render nodes|ProcNode]] starting out from the source reading nodes and proceeding up through the local pipes, the transitions and the global pipes. When this build process is exhausted, besides the actual network, the result is a //residuum of nodes not connected any further.// Any of these [[exit nodes|ExitNode]] can be associated to a ~Pipe-ID in the high-level model. Within each segment, there should be one exit node per pipe-ID at max. These are the [[model ports|ModelPort]] resulting from the build process, keyed by their corresponding ~Pipe-ID.
+&amp;rarr; see [[Structure of the Fixture|Fixture]]
+</pre>
+</div>
 <div title="BuildProcess" modifier="Ichthyostega" modified="200906071813" created="200706190658" tags="Builder operational img" changecount="30">
 <pre>All decisions on //how // the RenderProcess has to be carried out are concentrated in this rather complicated Builder Subsystem. The benefit of this approach is, besides decoupling of subsystems, to keep the actual performance-intensive video processing code as simple and transparent as possible. The price, in terms of increased complexity &amp;mdash; to pay in the Builder &amp;mdash; can be handled by making the Build Process generic to a large degree. Using a Design By Contract approach we can decompose the various decisions into small decision modules without having to trace the actual workings of the Build Process as a whole.
 
@@ -1708,8 +1728,12 @@ To make the intended use of the classes more clear, consider the following two e
 <pre>a special ProcNode which is used to pull the finished output of one Render Pipeline (Tree or Graph). This term is already used in the Cinelerra2 codebase. I am unsure at the moment if it is a distinct subclass or rahter a specially configured ProcNode (a general design rule tells us to err in favour of the latter if in doubt).
 </pre>
 </div>
-<div title="ExplicitPlacement" modifier="MichaelPloujnikov" modified="200706271458" created="200706220304" tags="def" changecount="2">
-<pre>A special kind (subclass) of [[Placement]]. As such it is always linked to a //Subject//, i.e. a MObject. In addition to the properties of a (unspecific) Placement, the ExplicitPlacement specifies a absolute time and track position for locating the Subject
+<div title="ExplicitPlacement" modifier="Ichthyostega" modified="201012122052" created="200706220304" tags="def" changecount="6">
+<pre>A special kind (subclass) of [[Placement]]. As such it is always linked to a //Subject//, i.e. a MObject. But contrary to the (standard) placements, which may exhibit all kinds of fancy dynamic and scope dependent behaviour, within an explicit placement all properties are resolved and materialised. While the (standard) placement may contain an arbitrary list of LocatingPin objects, the resolution into an explicit placement performs a kind of »orthogonalisation«: each remaining LocatingPin defines exactly one degree of freedom independent of all others. Most notably, the explicit placement always specifies a absolute time and [[output designation|OutputDesignation]] for for locating the Subject. Explicit placements are ''immutable''.
+
+!!Implementation considerations
+Explicit placements are just created and never mutated, but copying and storage might become a problem.
+It would thus be desirable to have a fixed-sized allocation, able to hold the placement body as well as the (fixed) locating pins inline.
 </pre>
 </div>
 <div title="Factories" modifier="Ichthyostega" modified="201003160211" created="200708100401" tags="impl discuss excludeMissing rewrite" changecount="24">
@@ -1766,19 +1790,34 @@ Some further details
 * a special case of this factory use is the [[Singleton]] factory, which is used a lot within the Proy-Layer code
 </pre>
 </div>
-<div title="Fixture" modifier="Ichthyostega" modified="201007160052" created="200706220324" tags="def" changecount="10">
-<pre>a specially configured sequence list
+<div title="Fixture" modifier="Ichthyostega" modified="201012092320" created="200706220324" tags="def spec Builder Model" changecount="44">
+<pre>a specially configured view -- joining together high-level and low-level model
 * all MObjects have their position, length and configuration set up ready for rendering.
 * any nested sequences (or other kinds of indirections) have been resolved.
-* every MObject is associated with an ExplicitPlacement, which declares a fixed position (Time, [[Pipe-ID|OutputDesignation]])
-* these ~ExplicitPlacements are contained in a ordered List, sometimes denoted as the //effective timeline.//
-* besides, there is a collection of all effective, possibly externally visible [[model ports|ModelPort]]
+* every MObject is attached by an ExplicitPlacement, which declares a fixed position (Time, [[Pipe|OutputDesignation]])
+* these ~ExplicitPlacements are contained immediately within the Fixture, ordered by time
+* besides, there is a collection of all effective, possibly externally visible [[model ports|ModelPortRegistry]]
 
-As the builder and thus render engine //only consults the fixture,// while all editing operations finally propagate to the fixture as well, we get an isolation layer between the high level part of the Proc layer (editing, object manipulation) and the render engine. Creating the Fixture can be seen as a preprocessing step to simplify the build process. For this reason, the process of [[(re)building the fixture|PlanningBuildFixture]] has been designed together with the [[Builder]]
+As the builder and thus render engine //only consults the fixture,// while all editing operations finally propagate to the fixture as well, we get an isolation layer between the high level part of the Proc layer (editing, object manipulation) and the render engine. [[Creating the Fixture|BuildFixture]] is an important sideeffect of running the [[Builder]] when createing the [[render engine network|LowLevelModel]].
 
 !{{red{WIP}}} Structure of the fixture
-The fixture is like a grid, where one dimension is given by the [[model ports|ModelPort]], and the other dimension extends in time. The time axis is grouped in segments of constant structure.
-A problem yet to be solved is how the fixture relates to the mulitude of top-level timelines, without generating a too fine grained segmentation.
+[&lt;img[Structure of the Fixture|draw/Fixture1.png]]
+
+The fixture is like a grid, where one dimension is given by the [[model ports|ModelPortRegistry]], and the other dimension extends in time. Within the time dimension there is a grouping into [[segments|Segmentation]] of constant structure.
+
+;Model Ports
+:The model ports share a single uniform and global name space: actually they're keyed by ~Pipe-ID
+:Model ports are derived as a result of the build process, as the //residuum// of all nodes not connected any further
+:Each port belongs to a specific Timeline and is associated with the [[Segmentation]] of that timeline.
+
+;Segmentation
+:The segmentation partitiones the time axis of a single timeline into segments of constant (wiring) configuration
+:Together, the segments form a seamless sequence of time intervals. They contain a copy of each (explicit) placement of a visible object touching that time interval. Besides that, segments are the top level grouping device of the render engine node graph; they are always built and discarded at once.
+:Segments may be //hot swapped// into an ongoing render.
+
+;Exit Nodes
+:Each segment holds an ExitNode for each relevant ModelPort of the corresponding timeline.
+:Thus the exit nodes are keyed by ~Pipe-ID as well (and consequently have a distinct [[stream type|StreamType]]) -- each model port coresponds to {{{&lt;number_of_segments&gt;}}} separate exit nodes, but of course an exit node may be //mute.//
 </pre>
 </div>
 <div title="ForwardIterator" modifier="Ichthyostega" modified="200912190027" created="200910312114" tags="Concepts def spec" changecount="17">
@@ -2784,12 +2823,41 @@ These are used as token for dealing with other objects and have no identity of t
 
 </pre>
 </div>
-<div title="ModelPort" modifier="Ichthyostega" created="201011100234" tags="def" changecount="1">
-<pre>Any point where output possibly might be produced. Model port entities are located within the [[Fixture]] &amp;mdash; model port as a concept spans the high-level and low-level view. A model port can be associated both to a pipe in the HighLevelModel and denote a specific ExitNode in the render nodes network.
+<div title="ModelPort" modifier="Ichthyostega" modified="201012112233" created="201011100234" tags="def spec" changecount="8">
+<pre>Any point where output possibly might be produced. Model port entities are located within the [[Fixture]] &amp;mdash; model port as a concept spans the high-level and low-level view. A model port can be associated both to a pipe in the HighLevelModel but at the same time denotes a set of corresponding [[exit nodes|ExitNode]] within the [[segments|Segmentation]] of the render nodes network.
 
-A model port is rather derived than configured; it emerges when a pipe [[claims|WiringClaim]] an output desitnation and some other entity actually uses this designation as a target, either directly or indirecly. This match of provision and usage is detected during the build process and produces an entry in the fixture's model port table. These model ports in the fixture are keyed by ~Pipe-ID, thus each model port has an associated StreamType.
+A model port is rather derived than configured; it emerges when a pipe [[claims|WiringClaim]] an output destination and some other entity actually uses this designation as a target, either directly or indirectly. This match of provision and usage is detected during the build process and produces an entry in the fixture's model port table. These model ports in the fixture are keyed by ~Pipe-ID, thus each model port has an associated StreamType.
 
-Model ports are the effective, resulting ouputs of each timeline; additional ports result from [[connecting a viewer|ViewerPlayConnection]]. Any render or display process happens at a model port.
+Model ports are the effective, resulting outputs of each timeline; additional ports result from [[connecting a viewer|ViewerPlayConnection]]. Any render or display process happens at a model port.
+
+!formal specification
+Model port is a //conceptual entity,// denoting the possibility to pull generated data of a distinct (stream)type from a specific bus within the model -- any possible output produced or provided by Lumiera is bound to appear at a model port. The namespace of model ports is global, each being associated with a ~Pipe-ID.
+
+Model ports are represented by small non-copyable descriptor objects with distinct identity, which are owned and managed by the [[Fixture]]. Clients are bound to resolve a model port on each usage, as configuration changes within the model might cause ports to appear and decease. To stress this usage pattern, actually {{{ModelPort}}} instances are small copyable value objects (smart handles), which can be used to access data within an opaque registry. Each model port belongs to a specific Timeline and is aware of this association, as is the timeline, allowing to get the collection of all ports of a given timeline. Besides, within the Fixture each model port refers to a specific [[segmentation of the time axis|Segmentation]] (relevant for this special timeline actually). Thus, with the help of this segmentation, a model port can yield an ExitNode to pull frames for a given time.
+
+</pre>
+</div>
+<div title="ModelPortRegistry" modifier="Ichthyostega" modified="201012112230" created="201012030314" tags="Model impl" changecount="3">
+<pre>Model ports are conceptual entities, denoting the points where output might possibly be produced &amp;rarr; see [[definition|ModelPort]].
+But there is an actual representation, a collection of small descriptor objects managed by the Fixture and organised within the model port table datastructure. Because model ports are discovered during the build process, we need the ability to (re)build this table dynamically, finally swapping in the modified configuration with a transactional switch. Only the builder is allowed to perform such mutations, while for client code model ports are immutable.
+
+!supported operations
+* get the model port by ~Pipe-ID
+* a collection of model ports per timeline
+* sub-grouping by media kind, possibly even by StreamType
+* possibility to enumerate model ports in distinct //order,// defined within the timeline
+* with the additional possibility to filter by media kind or suitable stream type.
+* a way to express the fact of //not having a model port.//
+
+!!!mutating and rebuilding
+Model ports are added once and never changed. The corresponding timeline and pipe is known at setup time, but the overall number of model ports is determined only as a result of completing the build process. At that point, the newly built configuration is swapped in transactionally to become the current configuration.
+
+!Implementation considerations
+The transactional switch creates a clear partitioning in the lifespan of the model port table. //Before// that point, entries are just added, but not accessed in any way. //After// that point, no further mutation occurs, but lookup is frequent and happens in a variety of different configurations and transient orderings.
+
+This observation leads to the idea of using //model port references// as frontend to provide all kinds of access, searching and reordering. These encapsulate the actual access by silently assuming reference to &quot;the&quot; global current model port configuration. This way the actual model port descriptors could be bulk allocated in a similar manner as the processing nodes and wiring descriptors. Access to stale model ports could be detected by the port references, allowing also for a {{{bool}}} checkable &quot;has no port&quot; information.
+
+A model port registry, maintained by the builder, is responsible for storing the discovered model ports within a model port table, which is then swapped in after completing the build process. The {{{builder::ModelPortRegistry}}} acts as management interface, while client code accesses just the {{{ModelPort}}} frontend. A link to the actual registry instance is hooked into that frontend when bringing up the builder subsystem.
 </pre>
 </div>
 <div title="ModelRootMO" modifier="Ichthyostega" modified="200912110245" created="200912080307" tags="def" changecount="5">
@@ -4609,6 +4677,44 @@ ScopePath represents an ''effective scoping location'' within the model &amp;mda
 We need to detect attaching and detaching of
 * root &amp;harr; BindingMO
 * root &amp;harr; [[Track]]
+</pre>
+</div>
+<div title="Segmentation" modifier="Ichthyostega" modified="201012122202" created="201012121901" tags="def spec Builder" changecount="24">
+<pre>//Segmentation of timeline// denotes a data structure and a step in the BuildProcess.
+When [[building the fixture|BuildFixture]], ~MObjects -- as handled by their Placements -- are grouped below each timeline using them; Placements are then to be resolved into [[explicit Placements|ExplicitPlacement]], resulting in a single well defined time interval for each object. This allows to cut this effective timeline into slices of constant wiring structure, which are represented through the ''Segmentation Datastructure'', a time axis with segments holding object placements and [[exit nodes|ExitNode]]. &amp;nbsp;&amp;rarr; see [[structure of the Fixture|Fixture]]
+* for each Timeline we get a Segmentation
+** which in turn is a list of non-overlapping segments
+*** each holding
+**** an ExplicitPlacement for each covered object
+**** an ExitNode for each ModelPort of the corresponding timeline
+
+!Storage considerations
+;(1) build process
+:&amp;rarr; a tree walk yields the placements per timeline, which then get //resolved//
+:&amp;rarr; after //sorting,// the segmentation can be established, thereby copying placements spanning multiple segments
+:&amp;rarr; only //after running the complete build process for each segment,// the list of model ports and exit nodes can be established
+;(2) commit stage
+: -- after the build process(es) are completed, the new fixture gets ''committed'', thus becoming the officially valid state to be rendered. As render processes might be going on in parallel, some kind of locking or barrier is required. It seems advisable to make the change into a single atomic hot-swap. Meaning we'd get a single access point to be protected. But there is another twist: We need to find out which render processes to cancel an restart, to pick up the changes introduced by this build process, which might include adding and deleting of timelines as a whole, and any changes to the segmentation grid. Because of the highly dynamic nature of the placements, on the other hand it isn't viable to expect the high-level model to provide this information. Thus we need to find out about a ''change coverage'' at this point. We might expand on that idea to //prune any new segments which aren't changed.// This way, only a write barrier would be necessary on switching the actually changed segments, and any render processes touching these would be //tainted.// Old allocations could be released after all tainted processes are known to be terminated.
+;(3) rendering use
+:Each play/render process employs a ''frame dispatch step'' to get the right exit node for pulling a given frame. From there on, the process proceeds into the [[processing nodes|ProcNodes]], interleaved with backend/scheduler actions due to splitting into individually scheduled jobs. The storage of these processing nodes and accompanying wiring descriptors is hooked up behind the individual segments, by sharing a common {{{AllocationCluster}}}. Yet the calculation of individual frames also depends on ''parameters'' and especially ''automation'' connected with objects in the high-level model. It is likely that there might be some sharing, as the intention was to allow ''live changes'' to automated values. &lt;br/&gt;{{red{WIP 12/2010}}} details need to be worked out. &amp;rarr; [[parameter wiring concept|Wiring]]
+!!!observations
+* Storage and initialisation for explicit placements is an issue. We should strive at making that inline as much as possible.
+* the overall segmentation emerges from a sorting of time points, which are start points of explicit placements
+* after the segmentation has been built, the usage pattern changes entirely into a lookup of segment by time
+* the individual segments act as umbrella for a lot of further objects hooked up behind.
+* we need the ability to exchange or swap-in whole segments
+* each segment controls an AllocationCluster
+* we need to track processes for tainting
+* access happens per ModelPort
+
+!!!conclusions
+The Fixture is mostly comprised of the Segementation datastructure, but some other facilities are involved too
+# at top level, we need somehow to organise access per groups of model ports, actually grouped by timeline
+# during the build process, there is a collection of placements; this can be discarded afterwards
+# the backbone of the segmentation is closely linked to an ordering by time. Initially it should support sorting, access by time interval search later on.
+# discarding a segment (or failing to do so) has an high impact on the whole application. We should employ a reliable mechanism for that.
+# the frame dispatch and the tracking of processes can be combined; data duplication is a virtue when it comes to parallel processes
+# the process of comparing and tainting is broken out into a separate data structure to be used just once
 </pre>
 </div>
 <div title="Sequence" modifier="Ichthyostega" modified="201010180156" created="201001252327" tags="def" changecount="17">

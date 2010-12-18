@@ -1,23 +1,23 @@
 /*
   HashIndexed(Test)  -  proof-of-concept test for a hash based and typed ID
- 
+
   Copyright (C)         Lumiera.org
     2009,               Hermann Vosseler <Ichthyostega@web.de>
- 
+
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of the
-  License, or (at your option) any later version.
- 
+  published by the Free Software Foundation; either version 2 of
+  the License, or (at your option) any later version.
+
   This program is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
- 
+
   You should have received a copy of the GNU General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- 
+
 * *****************************************************/
 
 
@@ -94,19 +94,19 @@ namespace test{
           TestB::Id<TestDB> idDB1 ;
           TestB::Id<TestDB> idDB2 (idDB1);
           
-          ASSERT (sizeof (idDB1)     == sizeof (idDA) );
-          ASSERT (sizeof (TestB::ID) == sizeof (hash::LuidH));
-          ASSERT (sizeof (TestDA)    == sizeof (hash::LuidH) + sizeof (DummyAncestor));
+          CHECK (sizeof (idDB1)     == sizeof (idDA) );
+          CHECK (sizeof (TestB::ID) == sizeof (hash::LuidH));
+          CHECK (sizeof (TestDA)    == sizeof (hash::LuidH) + sizeof (DummyAncestor));
           
-          ASSERT (idDA  == bb.getID() );
-          ASSERT (idDB1 == idDB2 );            // equality handled by the hash impl (here LuidH)
+          CHECK (idDA  == bb.getID() );
+          CHECK (idDB1 == idDB2 );            // equality handled by the hash impl (here LuidH)
           
           TestDA d1;
           TestDA d2;
-          ASSERT (d1.getID() != d2.getID());   // should be different because LUIDs are random
+          CHECK (d1.getID() != d2.getID());   // should be different because LUIDs are random
           
           d2 = d1; 
-          ASSERT (d1.getID() == d2.getID());   // default assignment operator works as expected
+          CHECK (d1.getID() == d2.getID());   // default assignment operator works as expected
         }
       
       
@@ -121,7 +121,7 @@ namespace test{
           // now, maybe after passing it through a Layer barrier...
           TestB::ID const& idCopy = reinterpret_cast<TestB::ID & > (plainLUID);
           
-          ASSERT (idOrig == idCopy);
+          CHECK (idOrig == idCopy);
         }
       
       
@@ -141,17 +141,17 @@ namespace test{
           tab[key2] = o2;
           tab[key3] = o3;
           
-          ASSERT (!isSameObject (o1, tab[key1]));     // indeed a copy...
-          ASSERT (!isSameObject (o2, tab[key2]));
-          ASSERT (!isSameObject (o3, tab[key3]));
+          CHECK (!isSameObject (o1, tab[key1]));     // indeed a copy...
+          CHECK (!isSameObject (o2, tab[key2]));
+          CHECK (!isSameObject (o3, tab[key3]));
           
-          ASSERT (o1.getID() == tab[key1].getID());   // but "equal" by ID
-          ASSERT (o2.getID() == tab[key2].getID());
-          ASSERT (o3.getID() == tab[key3].getID());
+          CHECK (o1.getID() == tab[key1].getID());   // but "equal" by ID
+          CHECK (o2.getID() == tab[key2].getID());
+          CHECK (o3.getID() == tab[key3].getID());
           
-          ASSERT (o1.getID() != tab[key2].getID());
-          ASSERT (o1.getID() != tab[key3].getID());
-          ASSERT (o2.getID() != tab[key3].getID());
+          CHECK (o1.getID() != tab[key2].getID());
+          CHECK (o1.getID() != tab[key3].getID());
+          CHECK (o2.getID() != tab[key3].getID());
         }
       
     };

@@ -1,23 +1,23 @@
 /*
   BuilderTool(Test)  -  specialised visitor used within the builder for processing Placements
- 
+
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
- 
+
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of the
-  License, or (at your option) any later version.
- 
+  published by the Free Software Foundation; either version 2 of
+  the License, or (at your option) any later version.
+
   This program is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
- 
+
   You should have received a copy of the GNU General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- 
+
 * *****************************************************/
 
 
@@ -70,7 +70,7 @@ namespace test    {
             { 
               Placement<Clip>& pC = getPlacement<Clip>();
               cout << "Clip on media : "<< str(pC->getMedia()) <<"\n";
-              ASSERT (pC->operator==(c));
+              CHECK (pC->operator==(c));
               log_ = string (pC);
             }
           void treat (AbstractMO&)
@@ -120,17 +120,17 @@ namespace test    {
               cout << "apply (tool, clip);\n";
               apply (tool, clip);
               INFO (test, "got Wrapper = %s", t1.log_.c_str());
-              ASSERT (t1.log_ == string(clip));
+              CHECK (t1.log_ == string(clip));
               
               cout << "apply (tool, test1);\n"; 
               apply (tool, test1);
               INFO (test, "got Wrapper = %s", t1.log_.c_str());
-              ASSERT (t1.log_ == string(test1));
+              CHECK (t1.log_ == string(test1));
               
               cout << "apply (tool, test2);\n"; 
               apply (tool, test2);
               INFO (test, "got Wrapper = %s", t1.log_.c_str());
-              ASSERT (t1.log_ == string(test2));
+              CHECK (t1.log_ == string(test2));
             } 
         };
       

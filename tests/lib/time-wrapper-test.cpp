@@ -1,23 +1,23 @@
 /*
   TimeWrapper(Test)  -  working with gavl_time_t values in C++...
- 
+
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
- 
+
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of the
-  License, or (at your option) any later version.
- 
+  published by the Free Software Foundation; either version 2 of
+  the License, or (at your option) any later version.
+
   This program is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
- 
+
   You should have received a copy of the GNU General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- 
+
 * *****************************************************/
 
 
@@ -74,10 +74,10 @@ namespace test   {
           
           val += Time(2);
           val *= 2;
-          ASSERT (zero == (val - 2*(ref + Time(2))) );
+          CHECK (zero == (val - 2*(ref + Time(2))) );
           
           val = ref;
-          ASSERT (zero == (val - ref));
+          CHECK (zero == (val - ref));
         }
       
       
@@ -88,40 +88,40 @@ namespace test   {
           Time max (Time::MAX);
           Time min (Time::MIN);
           
-          ASSERT (zero == Time(0));
-          ASSERT (min < zero);
-          ASSERT (max > zero);
+          CHECK (zero == Time(0));
+          CHECK (min < zero);
+          CHECK (max > zero);
           
           Time val (ref);
-          ASSERT ( (val == ref) );
-          ASSERT (!(val != ref) );
-          ASSERT ( (val >= ref) );
-          ASSERT ( (val <= ref) );
-          ASSERT (!(val <  ref) );
-          ASSERT (!(val >  ref) );
+          CHECK ( (val == ref) );
+          CHECK (!(val != ref) );
+          CHECK ( (val >= ref) );
+          CHECK ( (val <= ref) );
+          CHECK (!(val <  ref) );
+          CHECK (!(val >  ref) );
           
           val += Time(2);
-          ASSERT (!(val == ref) );
-          ASSERT ( (val != ref) );
-          ASSERT ( (val >= ref) );
-          ASSERT (!(val <= ref) );
-          ASSERT (!(val <  ref) );
-          ASSERT ( (val >  ref) );
+          CHECK (!(val == ref) );
+          CHECK ( (val != ref) );
+          CHECK ( (val >= ref) );
+          CHECK (!(val <= ref) );
+          CHECK (!(val <  ref) );
+          CHECK ( (val >  ref) );
           
           gavl_time_t gat(val);
-          ASSERT (!(gat == ref) );
-          ASSERT ( (gat != ref) );
-          ASSERT ( (gat >= ref) );
-          ASSERT (!(gat <= ref) );
-          ASSERT (!(gat <  ref) );
-          ASSERT ( (gat >  ref) );
+          CHECK (!(gat == ref) );
+          CHECK ( (gat != ref) );
+          CHECK ( (gat >= ref) );
+          CHECK (!(gat <= ref) );
+          CHECK (!(gat <  ref) );
+          CHECK ( (gat >  ref) );
           
-          ASSERT ( (val == gat) );
-          ASSERT (!(val != gat) );
-          ASSERT ( (val >= gat) );
-          ASSERT ( (val <= gat) );
-          ASSERT (!(val <  gat) );
-          ASSERT (!(val >  gat) );
+          CHECK ( (val == gat) );
+          CHECK (!(val != gat) );
+          CHECK ( (val >= gat) );
+          CHECK ( (val <= gat) );
+          CHECK (!(val <  gat) );
+          CHECK (!(val >  gat) );
         }
       
       
@@ -134,32 +134,32 @@ namespace test   {
           int hours  = rand() % 100;
           
           Time time(millis,secs,mins,hours);
-          ASSERT (millis == time.getMillis());
-          ASSERT (secs   == time.getSecs());
-          ASSERT (mins   == time.getMins());
-          ASSERT (hours  == time.getHours());
+          CHECK (millis == time.getMillis());
+          CHECK (secs   == time.getSecs());
+          CHECK (mins   == time.getMins());
+          CHECK (hours  == time.getHours());
           cout << time << endl;
           
           Time t2(2008,0);
           cout << t2 << endl;
-          ASSERT ( 8 == t2.getMillis());
-          ASSERT ( 2 == t2.getSecs());
-          ASSERT ( 0 == t2.getMins());
-          ASSERT ( 0 == t2.getHours());
+          CHECK ( 8 == t2.getMillis());
+          CHECK ( 2 == t2.getSecs());
+          CHECK ( 0 == t2.getMins());
+          CHECK ( 0 == t2.getHours());
           
           Time t3(2008,88);
           cout << t3 << endl;
-          ASSERT ( 8 == t3.getMillis());
-          ASSERT (30 == t3.getSecs());
-          ASSERT ( 1 == t3.getMins());
-          ASSERT ( 0 == t3.getHours());
+          CHECK ( 8 == t3.getMillis());
+          CHECK (30 == t3.getSecs());
+          CHECK ( 1 == t3.getMins());
+          CHECK ( 0 == t3.getHours());
           
           Time t4(2008,118,58);
           cout << t4 << endl;
-          ASSERT ( 8 == t4.getMillis());
-          ASSERT ( 0 == t4.getSecs());
-          ASSERT ( 0 == t4.getMins());
-          ASSERT ( 1 == t4.getHours());
+          CHECK ( 8 == t4.getMillis());
+          CHECK ( 0 == t4.getSecs());
+          CHECK ( 0 == t4.getMins());
+          CHECK ( 1 == t4.getHours());
         }
       
     };

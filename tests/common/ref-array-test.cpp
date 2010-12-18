@@ -1,23 +1,23 @@
 /*
   RefArray(Test)  -  unittest for wrapping with array-of-refs access
- 
+
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
- 
+
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of the
-  License, or (at your option) any later version.
- 
+  published by the Free Software Foundation; either version 2 of
+  the License, or (at your option) any later version.
+
   This program is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
- 
+
   You should have received a copy of the GNU General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- 
+
 * *****************************************************/
 
 
@@ -129,12 +129,12 @@ namespace test{
           
           RefArray<I> & rArr (subWrap);
           
-          ASSERT (subWrap.size()==subz.size());
-          ASSERT (INSTANCEOF(I, &rArr[0]));
+          CHECK (subWrap.size()==subz.size());
+          CHECK (INSTANCEOF(I, &rArr[0]));
           for (size_t i=0; i<rArr.size(); ++i)
             {
-              ASSERT (&rArr[i] == &subz[i]);
-              ASSERT (rArr[i].op(i) == subz[i].op(i));
+              CHECK (&rArr[i] == &subz[i]);
+              CHECK (rArr[i].op(i) == subz[i].op(i));
             }
         }
       
@@ -146,12 +146,12 @@ namespace test{
           vector<Sub2> & vect (subz);
           RefArray<I> & rArr (subz);
           
-          ASSERT (vect.size()==subz.size());
-          ASSERT (INSTANCEOF(I, &rArr[0]));
+          CHECK (vect.size()==subz.size());
+          CHECK (INSTANCEOF(I, &rArr[0]));
           for (size_t i=0; i<rArr.size(); ++i)
             {
-              ASSERT (&rArr[i] == &vect[i]);
-              ASSERT (rArr[i].op(i) == vect[i].op(i));
+              CHECK (&rArr[i] == &vect[i]);
+              CHECK (rArr[i].op(i) == vect[i].op(i));
             }
         }
       
@@ -164,17 +164,17 @@ namespace test{
           RefArrayTable<I,20,Sub1> tab;  
           // creates 20 Sub1-objects in-place
           // which are indeed located within the object
-          ASSERT (sizeof(tab) >= 20 * sizeof(Sub1));
-          ASSERT (ADR(tab) < ADR(tab[19]) && ADR(tab[19]) < ADR(tab) + sizeof(tab));
+          CHECK (sizeof(tab) >= 20 * sizeof(Sub1));
+          CHECK (ADR(tab) < ADR(tab[19]) && ADR(tab[19]) < ADR(tab) + sizeof(tab));
           
           RefArray<I> & rArr (tab);
           
-          ASSERT (20 == tab.size());
-          ASSERT (INSTANCEOF(I, &rArr[0]));
+          CHECK (20 == tab.size());
+          CHECK (INSTANCEOF(I, &rArr[0]));
           for (size_t i=0; i<rArr.size(); ++i)
             {
-              ASSERT (i*sizeof(Sub1) == ADR(rArr[i]) - ADR(rArr[0]) ); // indeed array-like storage
-              ASSERT (int(i+1) == rArr[i].op(i));                     //  check the known result
+              CHECK (i*sizeof(Sub1) == ADR(rArr[i]) - ADR(rArr[0]) ); // indeed array-like storage
+              CHECK (int(i+1) == rArr[i].op(i));                     //  check the known result
             }
         }
       
@@ -186,7 +186,7 @@ namespace test{
           
           void operator() (void* place)
             {
-              ASSERT (place);
+              CHECK (place);
               new(place) SUB (offset_++); // note: varying ctor parameter
             }
         };
@@ -198,9 +198,9 @@ namespace test{
           Fac<Sub1> theFact;
           RefArrayTable<I,30,Sub1> tab (theFact);
           RefArray<I> & rArr (tab);
-          ASSERT (30 == tab.size());
+          CHECK (30 == tab.size());
           for (size_t i=0; i<rArr.size(); ++i)
-            ASSERT (int(i+i) == rArr[i].op(i)); // each one has gotten another offset ctor parameter
+            CHECK (int(i+i) == rArr[i].op(i)); // each one has gotten another offset ctor parameter
         }
       
       
@@ -216,15 +216,15 @@ namespace test{
                   {
                     Fac<Sub3> factory;
                     RefArrayTable<I,30,Sub3> table (factory);
-                    ASSERT (Sub3::sum == (29+1)*29/2);
+                    CHECK (Sub3::sum == (29+1)*29/2);
                   }
-                  ASSERT (Sub3::sum == 0);
+                  CHECK (Sub3::sum == 0);
                 }
               
               catch(long id)
                 {
-                  ASSERT (id == Sub3::trigger);
-                  ASSERT (Sub3::sum == id);
+                  CHECK (id == Sub3::trigger);
+                  CHECK (Sub3::sum == id);
                   // meaning: all objects have been cleaned up,
                   // with the exception of the one hitting the trigger
             }   }

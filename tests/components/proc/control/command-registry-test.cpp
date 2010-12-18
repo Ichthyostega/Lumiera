@@ -1,23 +1,23 @@
 /*
   CommandRegistry(Test)  -  verify command registration and allocation
- 
+
   Copyright (C)         Lumiera.org
     2009,               Hermann Vosseler <Ichthyostega@web.de>
- 
+
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of the
-  License, or (at your option) any later version.
- 
+  published by the Free Software Foundation; either version 2 of
+  the License, or (at your option) any later version.
+
   This program is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
- 
+
   You should have received a copy of the GNU General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- 
+
 * *****************************************************/
 
 
@@ -73,7 +73,7 @@ namespace test    {
       run (Arg) 
         {
           CommandRegistry& registry = CommandRegistry::instance();
-          ASSERT (&registry);
+          CHECK (&registry);
           
           cnt_defs = registry.index_size();
           cnt_inst = registry.instance_count();
@@ -87,17 +87,17 @@ namespace test    {
           
           // this command definition is
           // represented internally by a prototype instance
-          ASSERT (++cnt_inst == registry.instance_count());
-          ASSERT (++cnt_defs == registry.index_size());
+          CHECK (++cnt_inst == registry.instance_count());
+          CHECK (++cnt_defs == registry.index_size());
           
           checkRegistration (registry);
           checkAllocation(registry);
           
-          ASSERT (cnt_inst == registry.instance_count());
-          ASSERT (cnt_defs == registry.index_size());
+          CHECK (cnt_inst == registry.instance_count());
+          CHECK (cnt_defs == registry.index_size());
           
           Command::remove (TEST_CMD);
-          ASSERT (--cnt_inst == registry.instance_count());
+          CHECK (--cnt_inst == registry.instance_count());
         }
       
       
@@ -108,59 +108,59 @@ namespace test    {
       void
       checkRegistration (CommandRegistry& registry)
         {
-          ASSERT (cnt_inst == registry.instance_count());
+          CHECK (cnt_inst == registry.instance_count());
           
           Command cmd1 = registry.queryIndex (TEST_CMD);
-          ASSERT (cmd1);
-          ASSERT (TEST_CMD == registry.findDefinition(cmd1));
+          CHECK (cmd1);
+          CHECK (TEST_CMD == registry.findDefinition(cmd1));
           
           Command nonexistant = registry.queryIndex("miraculous");
-          ASSERT (!nonexistant);
+          CHECK (!nonexistant);
           
           // now create a clone, registered under a different ID
           Command cmd2 = cmd1.storeDef(TEST_CMD2);
-          ASSERT (cmd2 == cmd1);
+          CHECK (cmd2 == cmd1);
           cmd2.bind(54321);
-          ASSERT (cmd2 != cmd1);
+          CHECK (cmd2 != cmd1);
           
           // this created exactly one additional instance allocation:
-          ASSERT (1+cnt_inst == registry.instance_count());
-          ASSERT (1+cnt_defs == registry.index_size());
+          CHECK (1+cnt_inst == registry.instance_count());
+          CHECK (1+cnt_defs == registry.index_size());
           // ...and another index entry
           
           
           Command cmdX = registry.queryIndex(TEST_CMD2);
-          ASSERT (cmdX == cmd2);
-          ASSERT (cmdX != cmd1);
+          CHECK (cmdX == cmd2);
+          CHECK (cmdX != cmd1);
           
-          ASSERT (registry.remove(TEST_CMD2));
-          ASSERT (!registry.queryIndex(TEST_CMD2));
-          ASSERT (cnt_defs == registry.index_size());        //  removed from index
-          ASSERT (1+cnt_inst == registry.instance_count()); //...but still alive
+          CHECK (registry.remove(TEST_CMD2));
+          CHECK (!registry.queryIndex(TEST_CMD2));
+          CHECK (cnt_defs == registry.index_size());        //  removed from index
+          CHECK (1+cnt_inst == registry.instance_count()); //...but still alive
           
           // create a new registration..
           registry.track(TEST_CMD2, cmd2);
-          ASSERT (registry.queryIndex(TEST_CMD2));
-          ASSERT (1+cnt_defs == registry.index_size()); // again holding two distinct entries
-          ASSERT (cmdX == cmd2);
-          ASSERT (cmdX != cmd1);
+          CHECK (registry.queryIndex(TEST_CMD2));
+          CHECK (1+cnt_defs == registry.index_size()); // again holding two distinct entries
+          CHECK (cmdX == cmd2);
+          CHECK (cmdX != cmd1);
           
-          ASSERT (TEST_CMD  == registry.findDefinition(cmd1));
-          ASSERT (TEST_CMD2 == registry.findDefinition(cmd2));
-          ASSERT (TEST_CMD2 == registry.findDefinition(cmdX));
+          CHECK (TEST_CMD  == registry.findDefinition(cmd1));
+          CHECK (TEST_CMD2 == registry.findDefinition(cmd2));
+          CHECK (TEST_CMD2 == registry.findDefinition(cmdX));
           
-          ASSERT ( registry.remove(TEST_CMD2));
-          ASSERT (!registry.remove("miraculous"));
+          CHECK ( registry.remove(TEST_CMD2));
+          CHECK (!registry.remove("miraculous"));
           
-          ASSERT (!registry.queryIndex(TEST_CMD2));
-          ASSERT ( registry.queryIndex(TEST_CMD));
-          ASSERT (cnt_defs == registry.index_size());       // the index entry is gone,
+          CHECK (!registry.queryIndex(TEST_CMD2));
+          CHECK ( registry.queryIndex(TEST_CMD));
+          CHECK (cnt_defs == registry.index_size());       // the index entry is gone,
           
-          ASSERT (1+cnt_inst == registry.instance_count()); // but the allocation still lives
+          CHECK (1+cnt_inst == registry.instance_count()); // but the allocation still lives
           cmdX.close();
-          ASSERT (1+cnt_inst == registry.instance_count());
+          CHECK (1+cnt_inst == registry.instance_count());
           cmd2.close();
-          ASSERT (0+cnt_inst == registry.instance_count()); // ...as long as it's still referred
+          CHECK (0+cnt_inst == registry.instance_count()); // ...as long as it's still referred
         }
       
       
@@ -182,8 +182,8 @@ namespace test    {
           function<Sig_capt> c_Fun (command1::capture);
           function<Sig_undo> u_Fun (command1::undoIt);
           
-          ASSERT (o_Fun && c_Fun && u_Fun);
-          ASSERT (cnt_inst == registry.instance_count());
+          CHECK (o_Fun && c_Fun && u_Fun);
+          CHECK (cnt_inst == registry.instance_count());
           
           // when the CommandDef is complete, it issues the
           // allocation call to the registry behind the scenes....
@@ -191,42 +191,42 @@ namespace test    {
           typedef shared_ptr<CommandImpl> PImpl;
           
           PImpl pImpl = registry.newCommandImpl(o_Fun,c_Fun,u_Fun);
-          ASSERT (1+cnt_inst == registry.instance_count());
+          CHECK (1+cnt_inst == registry.instance_count());
           
-          ASSERT (pImpl);
-          ASSERT (pImpl->isValid());
-          ASSERT (!pImpl->canExec());
-          ASSERT (1 == pImpl.use_count());   // no magic involved, we hold the only instance
+          CHECK (pImpl);
+          CHECK (pImpl->isValid());
+          CHECK (!pImpl->canExec());
+          CHECK (1 == pImpl.use_count());   // no magic involved, we hold the only instance
           
           PImpl clone = registry.createCloneImpl(*pImpl);
-          ASSERT (clone->isValid());
-          ASSERT (!clone->canExec());
-          ASSERT (1 == clone.use_count());
-          ASSERT (1 == pImpl.use_count());
-          ASSERT (2+cnt_inst == registry.instance_count());
+          CHECK (clone->isValid());
+          CHECK (!clone->canExec());
+          CHECK (1 == clone.use_count());
+          CHECK (1 == pImpl.use_count());
+          CHECK (2+cnt_inst == registry.instance_count());
           
-          ASSERT (!isSameObject (*pImpl, *clone));
-          ASSERT (*pImpl == *clone);
+          CHECK (!isSameObject (*pImpl, *clone));
+          CHECK (*pImpl == *clone);
           
-          ASSERT (!pImpl->canExec());
+          CHECK (!pImpl->canExec());
           typedef Types<int> ArgType;
           TypedArguments<Tuple<ArgType> > arg (Tuple<ArgType>(98765));
           pImpl->setArguments(arg);
-          ASSERT (pImpl->canExec());
+          CHECK (pImpl->canExec());
           
-          ASSERT (!clone->canExec()); // this proves the clone has indeed a separate identity
-          ASSERT (*pImpl != *clone);
+          CHECK (!clone->canExec()); // this proves the clone has indeed a separate identity
+          CHECK (*pImpl != *clone);
           
           // discard the first clone and overwrite with a new one
           clone = registry.createCloneImpl(*pImpl);
-          ASSERT (2+cnt_inst == registry.instance_count());
-          ASSERT (*pImpl == *clone);
-          ASSERT (clone->canExec());
+          CHECK (2+cnt_inst == registry.instance_count());
+          CHECK (*pImpl == *clone);
+          CHECK (clone->canExec());
           
           clone.reset();
           pImpl.reset();
           // corresponding allocation slots cleared automatically
-          ASSERT (cnt_inst == registry.instance_count());
+          CHECK (cnt_inst == registry.instance_count());
         }
       
     };

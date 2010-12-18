@@ -1,23 +1,23 @@
 /*
   CommandCloneBuilder(Test)  -  verify building an implementation clone
- 
+
   Copyright (C)         Lumiera.org
     2009,               Hermann Vosseler <Ichthyostega@web.de>
- 
+
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of the
-  License, or (at your option) any later version.
- 
+  published by the Free Software Foundation; either version 2 of
+  the License, or (at your option) any later version.
+
   This program is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
- 
+
   You should have received a copy of the GNU General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- 
+
 * *****************************************************/
 
 
@@ -73,7 +73,7 @@ namespace test    {
       run (Arg) 
         {
           CommandRegistry& registry = CommandRegistry::instance();
-          ASSERT (&registry);
+          CHECK (&registry);
           uint cnt_inst = registry.instance_count();
           
           {
@@ -83,7 +83,7 @@ namespace test    {
             verifySeparation (source, clone);
           }
           
-          ASSERT (cnt_inst == registry.instance_count());
+          CHECK (cnt_inst == registry.instance_count());
         }
       
       
@@ -100,12 +100,12 @@ namespace test    {
           function<Sig_capt> c_Fun (command1::capture);
           function<Sig_undo> u_Fun (command1::undoIt);
           
-          ASSERT (o_Fun && c_Fun && u_Fun);
+          CHECK (o_Fun && c_Fun && u_Fun);
           PCmdImpl cmd = registry.newCommandImpl(o_Fun,c_Fun,u_Fun);
           
           // make ready for execution
           bindRandArgument (*cmd);
-          ASSERT (cmd->canExec());
+          CHECK (cmd->canExec());
           return cmd;
         }
       
@@ -117,7 +117,7 @@ namespace test    {
           typedef Types<int> ArgType;
           TypedArguments<Tuple<ArgType> > arg (tuple::make (rand() % 10000));
           cmd.setArguments (arg);
-          ASSERT (cmd.canExec());
+          CHECK (cmd.canExec());
         }
       
       
@@ -129,10 +129,10 @@ namespace test    {
       void
       verifySeparation (PCmdImpl orig, PCmdImpl copy)
         {
-          ASSERT (orig && copy);
-          ASSERT (orig->canExec());
-          ASSERT (copy->canExec());
-          ASSERT (orig == copy);
+          CHECK (orig && copy);
+          CHECK (orig->canExec());
+          CHECK (copy->canExec());
+          CHECK (orig == copy);
           
           
           // prepare for command invocation on implementation level....
@@ -141,29 +141,29 @@ namespace test    {
           command1::check_ = 0;
           
           bindRandArgument (*orig);
-          ASSERT ( orig->canExec());
-          ASSERT (!orig->canUndo());
+          CHECK ( orig->canExec());
+          CHECK (!orig->canUndo());
           testExec.invoke (*orig, "Execute original");     // EXEC 1
           long state_after_exec1 = command1::check_;
-          ASSERT (command1::check_ > 0);
-          ASSERT (orig->canUndo());
-          ASSERT (orig != copy);
+          CHECK (command1::check_ > 0);
+          CHECK (orig->canUndo());
+          CHECK (orig != copy);
           
-          ASSERT (!copy->canUndo());
+          CHECK (!copy->canUndo());
           testExec.invoke (*copy, "Execute clone");        // EXEC 2
-          ASSERT (command1::check_ != state_after_exec1);
-          ASSERT (copy->canUndo());
-          ASSERT (copy != orig);
+          CHECK (command1::check_ != state_after_exec1);
+          CHECK (copy->canUndo());
+          CHECK (copy != orig);
           
           // invoke UNDO on the clone
           testUndo.invoke (*copy, "Undo clone");           // UNDO 2
-          ASSERT (command1::check_ == state_after_exec1);
+          CHECK (command1::check_ == state_after_exec1);
           
           // invoke UNDO on original
           testUndo.invoke (*orig, "Undo original");        // UNDO 1
-          ASSERT (command1::check_ ==0);
+          CHECK (command1::check_ ==0);
           
-          ASSERT (copy != orig);
+          CHECK (copy != orig);
         }
       
     };
