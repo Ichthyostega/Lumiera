@@ -1,23 +1,23 @@
 /*
   TypedCounter(Test)  -  managing a set of type based contexts
- 
+
   Copyright (C)         Lumiera.org
     2009,               Hermann Vosseler <Ichthyostega@web.de>
- 
+
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of the
-  License, or (at your option) any later version.
- 
+  published by the Free Software Foundation; either version 2 of
+  the License, or (at your option) any later version.
+
   This program is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
- 
+
   You should have received a copy of the GNU General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- 
+
 * *****************************************************/
 
 
@@ -321,26 +321,26 @@ namespace test{
       simpleUsageTest ()
         {
           TypedCounter myCounter;
-          ASSERT (isnil (myCounter));
-          ASSERT (0==myCounter.size());
+          CHECK (isnil (myCounter));
+          CHECK (0==myCounter.size());
           
-          ASSERT (0 == myCounter.get<short>());
-          ASSERT (1 == myCounter.size());
+          CHECK (0 == myCounter.get<short>());
+          CHECK (1 == myCounter.size());
           
-          ASSERT (0 == myCounter.get<long>());
-          ASSERT (2 == myCounter.size());
+          CHECK (0 == myCounter.get<long>());
+          CHECK (2 == myCounter.size());
           
-          ASSERT (-1 == myCounter.dec<short>());
-          ASSERT (-2 == myCounter.dec<short>());
-          ASSERT (+1 == myCounter.inc<long>());
+          CHECK (-1 == myCounter.dec<short>());
+          CHECK (-2 == myCounter.dec<short>());
+          CHECK (+1 == myCounter.inc<long>());
           
-          ASSERT (-2 == myCounter.get<short>());
-          ASSERT (+1 == myCounter.get<long>());
+          CHECK (-2 == myCounter.get<short>());
+          CHECK (+1 == myCounter.get<long>());
           
           
-          ASSERT (1 == TypedContext<TypedCounter>::ID<short>::get());
-          ASSERT (2 == TypedContext<TypedCounter>::ID<long>::get());
-          ASSERT (2 == myCounter.size());
+          CHECK (1 == TypedContext<TypedCounter>::ID<short>::get());
+          CHECK (2 == TypedContext<TypedCounter>::ID<long>::get());
+          CHECK (2 == myCounter.size());
         }
       
       
@@ -360,7 +360,7 @@ namespace test{
           testFamilies.clear(); // blocks until all threads have terminated
           
           for_each (targetCollection, accountInternal);
-          ASSERT (sum_TypedCounter_ == sum_internal_);
+          CHECK (sum_TypedCounter_ == sum_internal_);
         }
     };
   

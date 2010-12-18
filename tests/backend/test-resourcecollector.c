@@ -6,8 +6,8 @@
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of the
-  License, or (at your option) any later version.
+  published by the Free Software Foundation; either version 2 of
+  the License, or (at your option) any later version.
 
   This program is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -57,7 +57,7 @@ TEST (basic)
 
 TEST (memory_collection_mockup)
 {
-  REQUIRE (argv[2]);
+  CHECK (argv[2]);
   lumiera_resourcecollector_init ();
 
   lumiera_resourcecollector_register_handler (LUMIERA_RESOURCE_MEMORY, test_memory_handler, NULL);

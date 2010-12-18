@@ -1,23 +1,23 @@
 /*
   SingletonSubclass(Test)  -  actually creating a subclass of the Singleton Type
- 
+
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
- 
+
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of the
-  License, or (at your option) any later version.
- 
+  published by the Free Software Foundation; either version 2 of
+  the License, or (at your option) any later version.
+
   This program is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
- 
+
   You should have received a copy of the GNU General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- 
+
 * *****************************************************/
 
 
@@ -84,7 +84,7 @@ namespace test{
   
   /*******************************************************************
    * @test specialised variant of the Singleton Factory, for creating
-   *       subclasses (implementation classes) without coupling the 
+   *       subclasses (implementation classes) without coupling the
    *       caller to the concrete class type.
    * Expected results: an instance of the subclass is created.
    * @see  lib::Singleton
@@ -94,7 +94,8 @@ namespace test{
   class SingletonSubclass_test : public Test
     {
       
-      virtual void run(Arg arg) 
+      virtual void
+      run(Arg arg)
         {
           uint num= isnil(arg)? 1 : lexical_cast<uint>(arg[1]);
           
@@ -103,7 +104,7 @@ namespace test{
           Interface::setCountParam(num);
           
           // marker to declare the concrete type to be created
-          singleton::UseSubclass<Impl> typeinfo;                       
+          singleton::UseSubclass<Impl> typeinfo;
           
           // define an instance of the Singleton factory,
           // Specialised to create the concrete Type passed in
@@ -114,9 +115,9 @@ namespace test{
           Interface& t1 = instance();
           Interface& t2 = instance();
           
-          ASSERT ( &t1 == &t2, "not a Singleton, got two different instances." ); 
+          CHECK ( &t1 == &t2, "not a Singleton, got two different instances." );
           
-          cout << "calling a non-static method on the Singleton-" 
+          cout << "calling a non-static method on the Singleton-"
                << t1.identify() << "\n"
                << string (t1)   << "\n";
           
@@ -126,11 +127,12 @@ namespace test{
 //#ifdef DEBUG
 //        verify_error_detection ();
 //#endif
-        } 
+        }
       
       
       
-      void verify_error_detection ()
+      void
+      verify_error_detection ()
         {
           
           singleton::UseSubclass<Impl_XXX> more_special_type;
@@ -143,7 +145,7 @@ namespace test{
           
           // Note: the following won't compile, because the "subclass" isn't a subclass...
           //
-          // singleton::UseSubclass<Unrelated> yet_another_type;                       
+          // singleton::UseSubclass<Unrelated> yet_another_type;
           // SingletonSubclassFactory<Interface> instance (yet_another_type);
         }
     };

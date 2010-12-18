@@ -1,14 +1,14 @@
 /*
-  SINGLETONFACTORY.hpp  -  template for implementing the singleton pattern
- 
+  SINGLETON-FACTORY.hpp  -  template for implementing the singleton pattern
+
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
- 
+
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of the
-  License, or (at your option) any later version.
- 
+  published by the Free Software Foundation; either version 2 of
+  the License, or (at your option) any later version.
+
   This program is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -31,11 +31,11 @@ This code is heavily inspired by
 
 
 
-#ifndef LIB_SINGLETONFACTORY_H
-#define LIB_SINGLETONFACTORY_H
+#ifndef LIB_SINGLETON_FACTORY_H
+#define LIB_SINGLETON_FACTORY_H
 
 
-#include "lib/singletonpolicies.hpp"  // several Policies usable together with SingletonFactory
+#include "lib/singleton-policies.hpp"  // several Policies usable together with SingletonFactory
 
 #include "lib/nobug-init.hpp"
 #include "include/logging.h"
@@ -45,9 +45,9 @@ This code is heavily inspired by
 namespace lib {
   
   /**
-   * A configurable Template for implementing Singletons. 
+   * A configurable Template for implementing Singletons.
    * Actually this is a Factory object, which could be placed into a static field
-   * of the Singleton (target) class or used directly. 
+   * of the Singleton (target) class or used directly.
    * @note internally uses static fields, so all factory instances share pInstance_
    * @note there is an ongoing discussion regarding Double Checked Locking pattern,
    *       which in this case boils down to the question: does \c pthread_mutex_lock/unlock
@@ -71,7 +71,7 @@ namespace lib {
       
       static PType pInstance_;
       static bool isDead_;
-
+      
       
     public:
       /** Interface to be used by SingletonFactory's clients.
@@ -84,7 +84,7 @@ namespace lib {
           if (!pInstance_)
             {
               ThreadLock guard  SIDEEFFECT;
-
+              
               if (!pInstance_)
                 {
                   if (isDead_)
@@ -114,15 +114,15 @@ namespace lib {
           isDead_ = true;
         }
     };
-    
   
-  // Storage for SingletonFactory's static fields...  
+  
+  // Storage for SingletonFactory's static fields...
   template
     < class SI,
       template <class> class C,
       template <class> class L
     >
-    typename SingletonFactory<SI,C,L>::PType 
+    typename SingletonFactory<SI,C,L>::PType
     SingletonFactory<SI,C,L>::pInstance_;
   
   template

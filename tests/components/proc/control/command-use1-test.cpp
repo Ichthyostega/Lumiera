@@ -1,23 +1,23 @@
 /*
   CommandUse1(Test)  -  usage aspects I
- 
+
   Copyright (C)         Lumiera.org
     2009,               Hermann Vosseler <Ichthyostega@web.de>
- 
+
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of the
-  License, or (at your option) any later version.
- 
+  published by the Free Software Foundation; either version 2 of
+  the License, or (at your option) any later version.
+
   This program is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
- 
+
   You should have received a copy of the GNU General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- 
+
 * *****************************************************/
 
 
@@ -80,9 +80,9 @@ namespace test    {
           stringRepresentation();
           undef();
           
-          ASSERT (0 == command1::check_);
-          ASSERT (cnt_defs == Command::definition_count());
-          ASSERT (cnt_inst == Command::instance_count());
+          CHECK (0 == command1::check_);
+          CHECK (cnt_defs == Command::definition_count());
+          CHECK (cnt_inst == Command::instance_count());
         }
       
       
@@ -98,10 +98,10 @@ namespace test    {
               .execSync()
               ;
           
-          ASSERT (randVal == command1::check_);
+          CHECK (randVal == command1::check_);
           
           Command::get("test.command1.1").undo();
-          ASSERT ( 0 == command1::check_);
+          CHECK ( 0 == command1::check_);
         }
       
       
@@ -115,36 +115,36 @@ namespace test    {
                  .undoOperation (command1::undoIt)
                  ;
           }
-          ASSERT (CommandDef("test.command1.2"));
+          CHECK (CommandDef("test.command1.2"));
           
           Command com ("test.command1.2");
-          ASSERT (com);
-          ASSERT (com == Command::get("test.command1.2"));
-          ASSERT (contains (str(com), "test.command1.2"));
-          ASSERT (contains (str(com), "{def}"));
-          ASSERT (!com.canExec());
+          CHECK (com);
+          CHECK (com == Command::get("test.command1.2"));
+          CHECK (contains (str(com), "test.command1.2"));
+          CHECK (contains (str(com), "{def}"));
+          CHECK (!com.canExec());
           VERIFY_ERROR (UNBOUND_ARGUMENTS, com() );
-          ASSERT ( 0 == command1::check_);
+          CHECK ( 0 == command1::check_);
           
           VERIFY_ERROR (INVALID_ARGUMENTS, com.bind ("foo") );
-          com.bind (random());             // note: run-time type check only
-          ASSERT ( com.canExec());
-          ASSERT (!com.canUndo());
+          com.bind (random());              // note: run-time type check only
+          CHECK ( com.canExec());
+          CHECK (!com.canUndo());
           com();
-          ASSERT (randVal == command1::check_);
+          CHECK (randVal == command1::check_);
           com.undo();
-          ASSERT ( 0 == command1::check_);
+          CHECK ( 0 == command1::check_);
           
           // the following shortcut does the same:
           invoke ("test.command1.2") (1234);
-          ASSERT ( 1234 == command1::check_);
+          CHECK ( 1234 == command1::check_);
           
           // another shortcut, with static type check:
 //        invoke (command1::operate) (5678);                                  //////////////////TICKET #291  : unimplemented for now (9/09)
-//        ASSERT ( 1234+5678 == command1::check_);
+//        CHECK ( 1234+5678 == command1::check_);
           
           com.undo();
-          ASSERT ( 0 == command1::check_);
+          CHECK ( 0 == command1::check_);
         }
       
       
@@ -155,43 +155,43 @@ namespace test    {
           VERIFY_ERROR (INVALID_COMMAND, Command::get("test.command1.2") );
           
           CommandDef def ("test.command1.2");
-          ASSERT (!def);
+          CHECK (!def);
           
           def.operation (command1::operate)
              .captureUndo (command1::capture);
-          ASSERT (!def);                       // undo functor still missing
+          CHECK (!def);                        // undo functor still missing
           VERIFY_ERROR (INVALID_COMMAND, Command::get("test.command1.2") );
           
           def.operation (command1::operate)
              .captureUndo (command1::capture)
              .undoOperation (command1::undoIt);
-          ASSERT (def);
-          ASSERT (CommandDef("test.command1.2"));
-          ASSERT (Command::get("test.command1.2"));
+          CHECK (def);
+          CHECK (CommandDef("test.command1.2"));
+          CHECK (Command::get("test.command1.2"));
           
-          ASSERT ( Command::defined("test.command1.2"));
-          ASSERT (!Command::canExec("test.command1.2"));
-          ASSERT (!Command::canUndo("test.command1.2"));
+          CHECK ( Command::defined("test.command1.2"));
+          CHECK (!Command::canExec("test.command1.2"));
+          CHECK (!Command::canUndo("test.command1.2"));
           
           Command com = Command::get("test.command1.2");
-          ASSERT (com);
-          ASSERT (!com.canExec());
-          ASSERT (!com.canUndo());
+          CHECK (com);
+          CHECK (!com.canExec());
+          CHECK (!com.canUndo());
           
           com.bind (11111);
-          ASSERT ( Command::defined("test.command1.2"));
-          ASSERT ( Command::canExec("test.command1.2"));
-          ASSERT (!Command::canUndo("test.command1.2"));
+          CHECK ( Command::defined("test.command1.2"));
+          CHECK ( Command::canExec("test.command1.2"));
+          CHECK (!Command::canUndo("test.command1.2"));
           
           com();
-          ASSERT ( Command::defined("test.command1.2"));
-          ASSERT ( Command::canExec("test.command1.2"));
-          ASSERT ( Command::canUndo("test.command1.2"));
+          CHECK ( Command::defined("test.command1.2"));
+          CHECK ( Command::canExec("test.command1.2"));
+          CHECK ( Command::canUndo("test.command1.2"));
           
           com.undo();
-          ASSERT ( Command::defined("test.command1.2"));
-          ASSERT ( Command::canExec("test.command1.2"));
-          ASSERT ( Command::canUndo("test.command1.2"));
+          CHECK ( Command::defined("test.command1.2"));
+          CHECK ( Command::canExec("test.command1.2"));
+          CHECK ( Command::canUndo("test.command1.2"));
         }
       
       
@@ -205,7 +205,7 @@ namespace test    {
                .bind (random())
                ;
           
-          ASSERT (Command::get("test.command1.3").canExec());
+          CHECK (Command::get("test.command1.3").canExec());
         }
       
       
@@ -213,73 +213,73 @@ namespace test    {
       usePrototype()
         {
           Command c1 = Command::get("test.command1.3");
-          ASSERT (c1);
-          ASSERT (c1.canExec());
-          ASSERT (!c1.canUndo());
+          CHECK (c1);
+          CHECK (c1.canExec());
+          CHECK (!c1.canUndo());
           
           Command c2 = c1.newInstance();
-          ASSERT (c2);
-          ASSERT (c2.canExec());
-          ASSERT (!c2.canUndo());
+          CHECK (c2);
+          CHECK (c2.canExec());
+          CHECK (!c2.canUndo());
           
-          ASSERT (c1 == c2);
-          ASSERT (!isSameObject(c1, c2));
+          CHECK (c1 == c2);
+          CHECK (!isSameObject(c1, c2));
           
-          ASSERT (0 == command1::check_);
+          CHECK (0 == command1::check_);
           
           c1();
           
-          ASSERT (randVal == command1::check_);
-          ASSERT ( c1.canUndo());
-          ASSERT (!c2.canUndo());
-          ASSERT (c1 != c2);
+          CHECK (randVal == command1::check_);
+          CHECK ( c1.canUndo());
+          CHECK (!c2.canUndo());
+          CHECK (c1 != c2);
           
           c2();
-          ASSERT (randVal + randVal == command1::check_);
-          ASSERT (c2.canUndo());
-          ASSERT (c1 != c2);
+          CHECK (randVal + randVal == command1::check_);
+          CHECK (c2.canUndo());
+          CHECK (c1 != c2);
           
           c1.undo();
-          ASSERT (0 == command1::check_);
+          CHECK (0 == command1::check_);
           c2.undo();
-          ASSERT (randVal == command1::check_);
+          CHECK (randVal == command1::check_);
           
           c2.bind(23);
           c2();
-          ASSERT (randVal + 23 == command1::check_);
+          CHECK (randVal + 23 == command1::check_);
           
           // you should not use a command more than once (but it works...)
           c1();
-          ASSERT (randVal + 23 + randVal == command1::check_);
+          CHECK (randVal + 23 + randVal == command1::check_);
           c1.undo();
-          ASSERT (randVal + 23 == command1::check_);
+          CHECK (randVal + 23 == command1::check_);
           // note we've overwritten the previous undo state
           // and get the sate captured on the second invocation
           
           c2.undo();
-          ASSERT (randVal == command1::check_);
+          CHECK (randVal == command1::check_);
           c1.undo();
-          ASSERT (randVal + 23 == command1::check_);
+          CHECK (randVal + 23 == command1::check_);
           
           // use the current sate of c2 as Prototype for new command definition
           c2.storeDef ("test.command1.4");
           Command c4 = Command::get("test.command1.4");
-          ASSERT (c4);
-          ASSERT (c4.canExec());
-          ASSERT (c4.canUndo());
-          ASSERT (c4 == c2);
-          ASSERT (c4 != c1);
+          CHECK (c4);
+          CHECK (c4.canExec());
+          CHECK (c4.canUndo());
+          CHECK (c4 == c2);
+          CHECK (c4 != c1);
           c4();
-          ASSERT (c4 != c2); // now lives independently from the original
-          ASSERT (randVal + 2*23 == command1::check_);
+          CHECK (c4 != c2); // now lives independently from the original
+          CHECK (randVal + 2*23 == command1::check_);
           
           c4.bind(int(-command1::check_)); // new command argument binding
           c4();
-          ASSERT (0 == command1::check_);
+          CHECK (0 == command1::check_);
           c2();
-          ASSERT (23 == command1::check_);
+          CHECK (23 == command1::check_);
           c2.undo();
-          ASSERT (0 == command1::check_);
+          CHECK (0 == command1::check_);
         }
       
       
@@ -292,13 +292,13 @@ namespace test    {
               .captureUndo (command1::capture)   \
               .undoOperation (command1::undoIt)
           
-          ASSERT (CommandDef ("test.command1.1"));
+          CHECK (CommandDef ("test.command1.1"));
           VERIFY_ERROR (DUPLICATE_COMMAND, BUILD_NEW_COMMAND_DEF ("test.command1.1") );
-          ASSERT (CommandDef ("test.command1.2"));
+          CHECK (CommandDef ("test.command1.2"));
           VERIFY_ERROR (DUPLICATE_COMMAND, BUILD_NEW_COMMAND_DEF ("test.command1.2") );
-          ASSERT (CommandDef ("test.command1.3"));
+          CHECK (CommandDef ("test.command1.3"));
           VERIFY_ERROR (DUPLICATE_COMMAND, BUILD_NEW_COMMAND_DEF ("test.command1.3") );
-          ASSERT (CommandDef ("test.command1.4"));
+          CHECK (CommandDef ("test.command1.4"));
           VERIFY_ERROR (DUPLICATE_COMMAND, BUILD_NEW_COMMAND_DEF ("test.command1.4") );
         }
       
@@ -331,21 +331,21 @@ namespace test    {
       void
       undef()
         {
-          ASSERT (CommandDef ("test.command1.1"));
-          ASSERT (CommandDef ("test.command1.2"));
-          ASSERT (CommandDef ("test.command1.3"));
-          ASSERT (CommandDef ("test.command1.4"));
+          CHECK (CommandDef ("test.command1.1"));
+          CHECK (CommandDef ("test.command1.2"));
+          CHECK (CommandDef ("test.command1.3"));
+          CHECK (CommandDef ("test.command1.4"));
           
-          ASSERT (Command::get("test.command1.1"));
-          ASSERT (Command::get("test.command1.2"));
-          ASSERT (Command::get("test.command1.3"));
-          ASSERT (Command::get("test.command1.4"));
+          CHECK (Command::get("test.command1.1"));
+          CHECK (Command::get("test.command1.2"));
+          CHECK (Command::get("test.command1.3"));
+          CHECK (Command::get("test.command1.4"));
           
           VERIFY_ERROR (INVALID_COMMAND, Command::get("miracle"));
           VERIFY_ERROR (INVALID_COMMAND, invoke ("miracle") (1,2,3));
           
           CommandDef unbelievable ("miracle");
-          ASSERT (!unbelievable);
+          CHECK (!unbelievable);
           
           Command miracle;
           // but because the miracle isn't yet defined, any use throws
@@ -353,19 +353,19 @@ namespace test    {
           VERIFY_ERROR (INVALID_COMMAND, miracle.execSync());
           VERIFY_ERROR (INVALID_COMMAND, miracle.undo());
           VERIFY_ERROR (INVALID_COMMAND, miracle());
-          ASSERT (!miracle.canExec());
-          ASSERT (!miracle.canUndo());
-          ASSERT (!miracle);
+          CHECK (!miracle.canExec());
+          CHECK (!miracle.canUndo());
+          CHECK (!miracle);
           
           Command c5 (Command::get("test.command1.5"));
           
-          ASSERT (Command::remove("test.command1.1"));
-          ASSERT (Command::remove("test.command1.2"));
-          ASSERT (Command::remove("test.command1.3"));
-          ASSERT (Command::remove("test.command1.4"));
-          ASSERT (Command::remove("test.command1.5"));
+          CHECK (Command::remove("test.command1.1"));
+          CHECK (Command::remove("test.command1.2"));
+          CHECK (Command::remove("test.command1.3"));
+          CHECK (Command::remove("test.command1.4"));
+          CHECK (Command::remove("test.command1.5"));
           
-          ASSERT (!Command::remove("miracle")); // there is no such thing...
+          CHECK (!Command::remove("miracle")); // there is no such thing...
           
           VERIFY_ERROR (INVALID_COMMAND,   Command::get("test.command1.1"));
           VERIFY_ERROR (INVALID_COMMAND,   Command::get("test.command1.2"));
@@ -378,8 +378,8 @@ namespace test    {
           // note, removed the registered definitions,
           // but existing instances remain valid...
           // thus we're free to create new instances...
-          ASSERT (c5.isValid());
-          ASSERT (c5.canExec());
+          CHECK (c5.isValid());
+          CHECK (c5.canExec());
         }
     };
   

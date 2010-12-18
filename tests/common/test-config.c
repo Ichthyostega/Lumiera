@@ -7,8 +7,8 @@
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of the
-  License, or (at your option) any later version.
+  published by the Free Software Foundation; either version 2 of
+  the License, or (at your option) any later version.
 
   This program is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -39,12 +39,12 @@ TEST (init)
 
 TEST (configitem_simple)
 {
-  REQUIRE (argv[2]);
+  CHECK (argv[2]);
 
   LumieraConfigitem item;
 
   item = lumiera_configitem_new (argv[2]);
-  ENSURE (item);
+  CHECK (item);
 
   printf ("line = '%s'\n", item->line);
   if (item->key)
@@ -71,10 +71,10 @@ TEST (lookup)
   lumiera_config_lookup_insert (&lookup, item);
 
   LumieraConfigitem found = lumiera_config_lookup_item_find (&lookup, "foo.bar");
-  ENSURE (found == item);
+  CHECK (found == item);
 
   lumiera_config_lookup_remove (&lookup, found);
-  ENSURE (!lumiera_config_lookup_item_find (&lookup, "foo.bar"));
+  CHECK (!lumiera_config_lookup_item_find (&lookup, "foo.bar"));
 
   lumiera_config_lookup_destroy (&lookup);
   lumiera_config_destroy ();
@@ -83,9 +83,9 @@ TEST (lookup)
 
 TEST (change_value)
 {
-  REQUIRE (argv[2]);
-  REQUIRE (argv[3]);
-  REQUIRE (argv[4]);
+  CHECK (argv[2]);
+  CHECK (argv[3]);
+  CHECK (argv[4]);
 
   const char* value;
 
@@ -112,8 +112,8 @@ TEST (change_value)
 
 TEST (basic_set_get)
 {
-  REQUIRE (argv[2]);
-  REQUIRE (argv[3]);
+  CHECK (argv[2]);
+  CHECK (argv[3]);
 
   if (!lumiera_config_set (argv[2], argv[3]))
     printf ("failure setting first time '%s%s': %s\n", argv[2], argv[3], lumiera_error ());
@@ -135,8 +135,8 @@ TEST (basic_set_get)
 
 TEST (number_get)
 {
-  REQUIRE (argv[2]);
-  REQUIRE (argv[3]);
+  CHECK (argv[2]);
+  CHECK (argv[3]);
 
   long long number = 0;
 
@@ -153,7 +153,7 @@ TEST (number_get)
 
 TEST (number_get_nodefault)
 {
-  REQUIRE (argv[2]);
+  CHECK (argv[2]);
 
   long long number = 0;
 
@@ -168,8 +168,8 @@ TEST (number_get_nodefault)
 
 TEST (number_set)
 {
-  REQUIRE (argv[2]);
-  REQUIRE (argv[3]);
+  CHECK (argv[2]);
+  CHECK (argv[3]);
 
   signed long long number = atoll (argv[3]);
 
@@ -187,8 +187,8 @@ TEST (number_set)
 
 TEST (string_get)
 {
-  REQUIRE (argv[2]);
-  REQUIRE (argv[3]);
+  CHECK (argv[2]);
+  CHECK (argv[3]);
 
   const char* string;
 
@@ -205,8 +205,8 @@ TEST (string_get)
 
 TEST (string_set)
 {
-  REQUIRE (argv[2]);
-  REQUIRE (argv[3]);
+  CHECK (argv[2]);
+  CHECK (argv[3]);
 
   if (!lumiera_config_string_set (argv[2], &argv[3]))
     printf ("failed setting string '%s=%s': %s\n", argv[2], argv[3], lumiera_error ());
@@ -223,8 +223,8 @@ TEST (string_set)
 
 TEST (word_get)
 {
-  REQUIRE (argv[2]);
-  REQUIRE (argv[3]);
+  CHECK (argv[2]);
+  CHECK (argv[3]);
 
   const char* word;
 
@@ -241,8 +241,8 @@ TEST (word_get)
 
 TEST (word_set)
 {
-  REQUIRE (argv[2]);
-  REQUIRE (argv[3]);
+  CHECK (argv[2]);
+  CHECK (argv[3]);
 
   if (!lumiera_config_word_set (argv[2], &argv[3]))
     printf ("failed setting word '%s=%s': %s\n", argv[2], argv[3], lumiera_error ());
@@ -259,7 +259,7 @@ TEST (word_set)
 
 TEST (configitem_simple_ctor_dtor)
 {
-  REQUIRE (argv[2]);
+  CHECK (argv[2]);
 
   LumieraConfigitem item;
 
@@ -271,7 +271,7 @@ TEST (configitem_simple_ctor_dtor)
 
 TEST (configitem_simple_content_check)
 {
-  REQUIRE (argv[2]);
+  CHECK (argv[2]);
 
   LumieraConfigitem item;
 
@@ -300,9 +300,9 @@ TEST (configitem_simple_content_check)
 
 TEST (wordlist_get_nth)
 {
-  REQUIRE (argv[2]);
-  REQUIRE (argv[3]);
-  REQUIRE (argv[4]);
+  CHECK (argv[2]);
+  CHECK (argv[3]);
+  CHECK (argv[4]);
 
   if (!lumiera_config_wordlist_set (argv[2], &argv[3]))
     printf ("failed setting word '%s=%s': %s\n", argv[2], argv[3], lumiera_error ());
@@ -317,9 +317,9 @@ TEST (wordlist_get_nth)
 
 TEST (wordlist_find)
 {
-  REQUIRE (argv[2]);
-  REQUIRE (argv[3]);
-  REQUIRE (argv[4]);
+  CHECK (argv[2]);
+  CHECK (argv[3]);
+  CHECK (argv[4]);
 
   if (!lumiera_config_wordlist_set (argv[2], &argv[3]))
     printf ("failed setting word '%s=%s': %s\n", argv[2], argv[3], lumiera_error ());
@@ -334,11 +334,11 @@ TEST (wordlist_find)
 
 TEST (wordlist_replace)
 {
-  REQUIRE (argv[2]);
-  REQUIRE (argv[3]);
-  REQUIRE (argv[4]);
-  REQUIRE (argv[5]);
-  REQUIRE (argv[6]);
+  CHECK (argv[2]);
+  CHECK (argv[3]);
+  CHECK (argv[4]);
+  CHECK (argv[5]);
+  CHECK (argv[6]);
 
   if (!lumiera_config_wordlist_set (argv[2], &argv[3]))
     printf ("failed setting word '%s=%s': %s\n", argv[2], argv[3], lumiera_error ());
@@ -356,10 +356,10 @@ TEST (wordlist_replace)
 
 TEST (wordlist_add)
 {
-  REQUIRE (argv[2]);
-  REQUIRE (argv[3]);
-  REQUIRE (argv[4]);
-  REQUIRE (argv[5]);
+  CHECK (argv[2]);
+  CHECK (argv[3]);
+  CHECK (argv[4]);
+  CHECK (argv[5]);
 
   if (!lumiera_config_wordlist_set (argv[2], &argv[3]))
     printf ("failed setting word '%s=%s': %s\n", argv[2], argv[3], lumiera_error ());

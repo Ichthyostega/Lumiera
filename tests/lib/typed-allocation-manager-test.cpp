@@ -1,23 +1,23 @@
 /*
   TypedAllocationManager(Test)  -  check interface to pooled allocations
- 
+
   Copyright (C)         Lumiera.org
     2009,               Hermann Vosseler <Ichthyostega@web.de>
- 
+
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of the
-  License, or (at your option) any later version.
- 
+  published by the Free Software Foundation; either version 2 of
+  the License, or (at your option) any later version.
+
   This program is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
- 
+
   You should have received a copy of the GNU General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- 
+
 * *****************************************************/
 
 
@@ -78,7 +78,7 @@ namespace test{
    *        
    * @see CommandRegistry
    * @see command-registry-test.cpp
-   * @see allocationclustertest.cpp
+   * @see allocation-cluster-test.cpp
    */
   class TypedAllocationManager_test : public Test
     {
@@ -86,49 +86,49 @@ namespace test{
       virtual void
       run (Arg) 
         {
-          REQUIRE (0 == checksum_);
+          CHECK (0 == checksum_);
           
           TypedAllocationManager allocator;
           
           typedef shared_ptr<DummyObj<1> >  PD1;
           typedef shared_ptr<DummyObj<22> > PD22;
-          ASSERT (sizeof(DummyObj<1>) != sizeof(DummyObj<22>));
+          CHECK (sizeof(DummyObj<1>) != sizeof(DummyObj<22>));
           
             {
               PD1  pD11 = allocator.create<DummyObj<1> >();
               PD1  pD12 = allocator.create<DummyObj<1> >();
               PD22 pD21 = allocator.create<DummyObj<22> >();
               PD22 pD22 = allocator.create<DummyObj<22> >();
-              ASSERT (pD11);
-              ASSERT (pD12);
-              ASSERT (pD21);
-              ASSERT (pD22);
-              ASSERT (1 == pD11.use_count());
-              ASSERT (1 == pD12.use_count());
-              ASSERT (1 == pD21.use_count());
-              ASSERT (1 == pD22.use_count());
-              ASSERT (!isSameObject (*pD11, *pD12));
-              ASSERT (!isSameObject (*pD11, *pD21));
-              ASSERT (!isSameObject (*pD11, *pD22));
-              ASSERT (!isSameObject (*pD12, *pD21));
-              ASSERT (!isSameObject (*pD12, *pD22));
-              ASSERT (!isSameObject (*pD21, *pD22));
+              CHECK (pD11);
+              CHECK (pD12);
+              CHECK (pD21);
+              CHECK (pD22);
+              CHECK (1 == pD11.use_count());
+              CHECK (1 == pD12.use_count());
+              CHECK (1 == pD21.use_count());
+              CHECK (1 == pD22.use_count());
+              CHECK (!isSameObject (*pD11, *pD12));
+              CHECK (!isSameObject (*pD11, *pD21));
+              CHECK (!isSameObject (*pD11, *pD22));
+              CHECK (!isSameObject (*pD12, *pD21));
+              CHECK (!isSameObject (*pD12, *pD22));
+              CHECK (!isSameObject (*pD21, *pD22));
               
               PD22 pD2x = pD21;
-              ASSERT (pD2x);
-              ASSERT (2 == pD21.use_count());
-              ASSERT (2 == pD2x.use_count());
-              ASSERT (isSameObject (*pD21, *pD2x));
+              CHECK (pD2x);
+              CHECK (2 == pD21.use_count());
+              CHECK (2 == pD2x.use_count());
+              CHECK (isSameObject (*pD21, *pD2x));
               
-              ASSERT (2 == allocator.numSlots<DummyObj<1> >());
-              ASSERT (2 == allocator.numSlots<DummyObj<22> >());
+              CHECK (2 == allocator.numSlots<DummyObj<1> >());
+              CHECK (2 == allocator.numSlots<DummyObj<22> >());
               
-              ASSERT (0 == allocator.numSlots<long>()); // query just some unrelated type...
+              CHECK (0 == allocator.numSlots<long>()); // query just some unrelated type...
             }
           
-          ASSERT (0 == allocator.numSlots<DummyObj<1> >());
-          ASSERT (0 == allocator.numSlots<DummyObj<22> >());
-          ASSERT (0 == checksum_);
+          CHECK (0 == allocator.numSlots<DummyObj<1> >());
+          CHECK (0 == allocator.numSlots<DummyObj<22> >());
+          CHECK (0 == checksum_);
         }
     };
   

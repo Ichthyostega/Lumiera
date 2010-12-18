@@ -1,23 +1,23 @@
 /*
   SyncTimedwait(Test)  -  check the monitor object based timed condition wait
- 
+
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
- 
+
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of the
-  License, or (at your option) any later version.
- 
+  published by the Free Software Foundation; either version 2 of
+  the License, or (at your option) any later version.
+
   This program is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
- 
+
   You should have received a copy of the GNU General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- 
+
 * *****************************************************/
 
 
@@ -61,7 +61,7 @@ namespace test{
    * @see sync::Timeout
    * @see sync.hpp
    */
-  class SyncTimedwait_test 
+  class SyncTimedwait_test
     : public Test,
       Sync<RecursiveLock_Waitable>
     {
@@ -77,7 +77,7 @@ namespace test{
           Lock block(this, &SyncTimedwait_test::neverHappens);
           
           cout << "back from LaLaLand, alive and thriving!\n";
-          ASSERT (block.isTimedWait());
+          CHECK (block.isTimedWait());
         }
       
       
@@ -88,7 +88,7 @@ namespace test{
           if (!currentLock.isTimedWait())         // right from within the condition test:
             currentLock.setTimeout(WAIT_mSec);    // switch waiting mode to timed wait and set timeout
           
-          return false; 
+          return false;
         }
       
       
@@ -98,30 +98,30 @@ namespace test{
         {
           sync::Timeout tout;
           
-          ASSERT (!tout);
-          ASSERT (0 == tout.tv_sec);
-          ASSERT (0 == tout.tv_nsec);
+          CHECK (!tout);
+          CHECK (0 == tout.tv_sec);
+          CHECK (0 == tout.tv_nsec);
           
           tout.setOffset (0);
-          ASSERT (!tout);
-          ASSERT (0 == tout.tv_sec);
-          ASSERT (0 == tout.tv_nsec);
+          CHECK (!tout);
+          CHECK (0 == tout.tv_sec);
+          CHECK (0 == tout.tv_nsec);
           
           timespec ref;
           clock_gettime(CLOCK_REALTIME, &ref);
           tout.setOffset (1);
-          ASSERT (tout);
-          ASSERT (0 < tout.tv_sec);
-          ASSERT (ref.tv_sec <= tout.tv_sec);
-          ASSERT (ref.tv_nsec <= 1000000 + tout.tv_nsec || ref.tv_nsec > 1000000000-100000);
+          CHECK (tout);
+          CHECK (0 < tout.tv_sec);
+          CHECK (ref.tv_sec <= tout.tv_sec);
+          CHECK (ref.tv_nsec <= 1000000 + tout.tv_nsec || ref.tv_nsec > 1000000000-100000);
           
           clock_gettime(CLOCK_REALTIME, &ref);
           tout.setOffset (1000);
-          ASSERT (tout);
+          CHECK (tout);
           if (ref.tv_nsec!=0) // should have gotten an overflow to the seconds part
             {
-              ASSERT (ref.tv_sec <= 2 + tout.tv_sec );
-              ASSERT ((ref.tv_nsec +  1000000 * 999) % 1000000000 
+              CHECK (ref.tv_sec <= 2 + tout.tv_sec );
+              CHECK ((ref.tv_nsec +  1000000 * 999) % 1000000000
                                  <= tout.tv_nsec);
             }
         }

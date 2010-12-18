@@ -1,26 +1,26 @@
 /*
-  ALLOCATIONCLUSTER.hpp  -  allocating and owning a pile of objects
- 
+  ALLOCATION-CLUSTER.hpp  -  allocating and owning a pile of objects
+
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
- 
+
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of the
-  License, or (at your option) any later version.
- 
+  published by the Free Software Foundation; either version 2 of
+  the License, or (at your option) any later version.
+
   This program is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
- 
+
   You should have received a copy of the GNU General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- 
+
 */
 
-/** @file allocationcluster.hpp
+/** @file allocation-cluster.hpp
  ** Memory management for the low-level model (render nodes network).
  ** The model is organised into temporal segments, which are considered
  ** to be structurally constant and uniform. The objects within each
@@ -35,17 +35,17 @@
  ** templates, and thus need to be in the header. This way they can
  ** exploit the type information available in call context. This
  ** information is passed to generic implementation functions
- ** defined in allocationcluster.cpp . In a similar vein, the 
+ ** defined in allocation-cluster.cpp . In a similar vein, the 
  ** AllocationCluster::MemoryManger is just forward declared.
  **
- ** @see allocationclustertest.cpp
+ ** @see allocation-cluster-test.cpp
  ** @see builder::ToolFactory
  ** @see frameid.hpp
  */
 
 
-#ifndef LIB_ALLOCATIONCLUSTER_H
-#define LIB_ALLOCATIONCLUSTER_H
+#ifndef LIB_ALLOCATION_CLUSTER_H
+#define LIB_ALLOCATION_CLUSTER_H
 
 #include <vector>
 #include <boost/scoped_ptr.hpp>
@@ -54,7 +54,7 @@
 #include "lib/error.hpp"
 #include "lib/sync-classlock.hpp"
 #include "lib/scoped-holder.hpp"
-#include "lib/scopedholdertransfer.hpp"
+#include "lib/scoped-holder-transfer.hpp"
 
 
 

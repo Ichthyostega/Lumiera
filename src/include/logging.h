@@ -7,8 +7,8 @@
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of the
-  License, or (at your option) any later version.
+  published by the Free Software Foundation; either version 2 of
+  the License, or (at your option) any later version.
 
   This program is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -132,6 +132,12 @@ NOBUG_CPP_DEFINE_FLAG_PARENT    (   proc,                       progress);
 NOBUG_CPP_DEFINE_FLAG_PARENT    (    command,                   proc);
 /** progress log for session datastructure */
 NOBUG_CPP_DEFINE_FLAG_PARENT    (    session,                   proc);
+/** progress log for the builder and build process */
+NOBUG_CPP_DEFINE_FLAG_PARENT    (    builder,                   proc);
+/** progress log for running the engine */
+NOBUG_CPP_DEFINE_FLAG_PARENT    (    engine,                    proc);
+/** progress log for play- and render subsystem */
+NOBUG_CPP_DEFINE_FLAG_PARENT    (    play,                      proc);
 /** progress log for the gui */
 NOBUG_CPP_DEFINE_FLAG_PARENT    (   gui,                        progress);
 /** progress log for the support lib */
@@ -158,13 +164,13 @@ NOBUG_CPP_DEFINE_FLAG_PARENT    (  config,                      logging);       
 
 /** base flag for software testing */
 NOBUG_CPP_DEFINE_FLAG_PARENT    (  test,                        logging);
-/** base flag for syncronization logging */
+/** base flag for synchronisation logging */
 NOBUG_CPP_DEFINE_FLAG_PARENT    (  sync,                        logging);       // do we need subsections here? backend_mutex_sync proc_mutex_sync etc?
 NOBUG_CPP_DEFINE_FLAG_PARENT    (   mutex_sync,                 sync);          //locking/unlocking mutexes
 NOBUG_CPP_DEFINE_FLAG_PARENT    (   cond_sync,                  sync);          //waiting and signalling condition vars
 /** base flag for memory related logging */
 NOBUG_CPP_DEFINE_FLAG_PARENT    (  memory,                      logging);
-/** memory busines of the proc layer */
+/** proc layer memory handling */
 NOBUG_CPP_DEFINE_FLAG_PARENT    (   proc_mem,                   memory);
 NOBUG_CPP_DEFINE_FLAG_PARENT    (    mobject_mem,               proc_mem);
 NOBUG_CPP_DEFINE_FLAG_PARENT    (    builder_mem,               proc_mem);

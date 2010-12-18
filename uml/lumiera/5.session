@@ -1,11 +1,13 @@
-window_sizes 1324 1020 270 1044 872 71
+window_sizes 1615 1020 270 1335 872 71
 diagrams
   classdiagram_ref 136453 // Session backbone
     631 352 100 4 0 0
-  active  objectdiagram_ref 138885 // ModelAssetRelations
+  objectdiagram_ref 138885 // ModelAssetRelations
     730 488 100 4 0 0
   classdiagram_ref 128133 // Session structure
-    835 697 100 4 0 0
+    835 697 100 4 300 0
+  active  activitydiagram_ref 129413 // build flow
+    627 621 100 4 0 0
 end
 show_stereotypes
 selected 
@@ -31,7 +33,7 @@ open
   class_ref 152453 // PlacementRef
   classrelation_ref 178437 // <realization>
   class_ref 153733 // QueryFocusStack
-  classview_ref 128261 // Builder Workings
+  expansionregion_ref 128133 // establish partitioning
   usecaseview_ref 128261 // config examples
   classview_ref 128133 // Engine Workings
   class_ref 164485 // Request

@@ -1,23 +1,23 @@
 /*
   Factory-Special(Test)  -  testing the more advanced features of factory
- 
+
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
- 
+
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of the
-  License, or (at your option) any later version.
- 
+  published by the Free Software Foundation; either version 2 of
+  the License, or (at your option) any later version.
+
   This program is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
- 
+
   You should have received a copy of the GNU General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- 
+
 * *****************************************************/
 
 
@@ -215,7 +215,7 @@ namespace test{
           format msg ("created %d shared_ptrs to Object placed in static buffer.\n");
           void* raw (0);
           P pX;
-          ASSERT (0 == pX.use_count());
+          CHECK (0 == pX.use_count());
           
             {
               P p1 (placement_fac (cnt));
@@ -228,7 +228,7 @@ namespace test{
               raw = p1.get(); // remember raw mem address
             }
             
-          ASSERT (0 == pX.use_count());
+          CHECK (0 == pX.use_count());
           
             {
               P p1 (placement_fac (cnt+1));
@@ -238,10 +238,10 @@ namespace test{
               
               cout << msg % p2.use_count();
               
-              ASSERT (raw == p1.get(), "explicit object placement at fixed buffer doesn't work.");
+              CHECK (raw == p1.get(), "explicit object placement at fixed buffer doesn't work.");
             }
             
-          ASSERT (0 == pX.use_count());
+          CHECK (0 == pX.use_count());
         } 
       
       
@@ -258,7 +258,7 @@ namespace test{
           format msg ("created %d shared_ptrs to paranoid Object.\n");
           P pX;
           
-          ASSERT (0 == pX.use_count());
+          CHECK (0 == pX.use_count());
             {
               P p1 (paranoid_fac (cnt));
               P p2 (p1);
@@ -267,7 +267,7 @@ namespace test{
               cout << msg % p2.use_count() 
                    << string (*pX) << "\n";
             }
-          ASSERT (0 == pX.use_count());
+          CHECK (0 == pX.use_count());
         }
       
       
@@ -288,7 +288,7 @@ namespace test{
           cout << ("created auto_ptr to malloc-ed Object.\n")
                << string (*p2) << "\n";
           
-          ASSERT (!p1.get());
+          CHECK (!p1.get());
         }
       
       
@@ -309,7 +309,7 @@ namespace test{
           cout << ("created auto_ptr to Interface Object.\n");
           p2->funky(); // call a Interface function
           
-          ASSERT (!p1.get());
+          CHECK (!p1.get());
         }
     };
   

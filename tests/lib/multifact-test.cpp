@@ -1,23 +1,23 @@
 /*
   MultiFact(Test)  -  unittest for the configurable object-family creating factory
- 
+
   Copyright (C)         Lumiera.org
     2009,               Hermann Vosseler <Ichthyostega@web.de>
- 
+
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of the
-  License, or (at your option) any later version.
- 
+  published by the Free Software Foundation; either version 2 of
+  the License, or (at your option) any later version.
+
   This program is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
- 
+
   You should have received a copy of the GNU General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- 
+
 * *****************************************************/
 
 
@@ -116,15 +116,15 @@ namespace test{
           
           Interface & o1 = theFact(ONE);
           Interface & o2 = theFact(ONE);
-          ASSERT (isSameObject(o1,o2));
+          CHECK (isSameObject(o1,o2));
           
           TestFactory anotherFact;
-          ASSERT (isnil (anotherFact));
+          CHECK (isnil (anotherFact));
           VERIFY_ERROR (INVALID, anotherFact(ONE) );
           
           TestFactory::Singleton<Implementation<ONE> > anotherSingletonHolder (anotherFact,ONE);
           Interface & o3 = anotherFact(ONE);
-          ASSERT (isSameObject(o2,o3));
+          CHECK (isSameObject(o2,o3));
         } 
     };
   

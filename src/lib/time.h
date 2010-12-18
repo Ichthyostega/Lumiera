@@ -6,8 +6,8 @@
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of the
-  License, or (at your option) any later version.
+  published by the Free Software Foundation; either version 2 of
+  the License, or (at your option) any later version.
 
   This program is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -34,12 +34,31 @@
 char*
 lumiera_tmpbuf_print_time (gavl_time_t time);
 
-
 /**
  * Builds a time value by summing up the given components.
  */
 gavl_time_t
 lumiera_build_time (long millis, uint secs, uint mins, uint hours);
+
+/**
+ * Get the hour part of given time.
+ */
+int lumiera_time_hours(gavl_time_t time);
+
+/**
+ * Get the minute part of given time.
+ */
+int lumiera_time_minutes(gavl_time_t time);
+
+/**
+ * Get the seconds part of given time.
+ */
+int lumiera_time_seconds(gavl_time_t time);
+
+/**
+ * Get the milliseconds part of given time.
+ */
+int lumiera_time_millis(gavl_time_t time);
 
 #endif
 

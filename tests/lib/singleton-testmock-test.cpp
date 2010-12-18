@@ -1,23 +1,23 @@
 /*
   SingletonTestMock(Test)  -  using Singleton for injecting Test-Mocks
- 
+
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
- 
+
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of the
-  License, or (at your option) any later version.
- 
+  published by the Free Software Foundation; either version 2 of
+  the License, or (at your option) any later version.
+
   This program is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
- 
+
   You should have received a copy of the GNU General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- 
+
 * *****************************************************/
 
 
@@ -143,7 +143,7 @@ namespace test{
           TestSingletonO* sing = &instance();
           sing->doIt();
           sing->doIt();
-          ASSERT (sing->getCnt() == 2);
+          CHECK (sing->getCnt() == 2);
           
           instance.injectSubclass (new Mock_1);
           sing = &instance();
@@ -152,18 +152,18 @@ namespace test{
           sing->doIt();
           sing->doIt();
           sing->doIt();
-          ASSERT (sing->getCnt() == 5);
+          CHECK (sing->getCnt() == 5);
           
           instance.injectSubclass (new Mock_2);
           sing = &instance();
           sing->doIt();
-          ASSERT (sing->getCnt() == 1);
+          CHECK (sing->getCnt() == 1);
           
           instance.injectSubclass (0); // un-shadowing original instance
           sing = &instance();
-          ASSERT (sing->getCnt() == 2);
+          CHECK (sing->getCnt() == 2);
           sing->doIt();
-          ASSERT (sing->getCnt() == 3);
+          CHECK (sing->getCnt() == 3);
         }
       
       
@@ -198,12 +198,12 @@ namespace test{
           TestSingletonO* sing = &instance();
           sing->doIt();
           sing->doIt();
-          ASSERT (sing->getCnt() == 2);
+          CHECK (sing->getCnt() == 2);
           
           instance.injectSubclass (0);
           sing = &instance();
           sing->doIt();
-          ASSERT (sing->getCnt() == 1);
+          CHECK (sing->getCnt() == 1);
         }
     };
   

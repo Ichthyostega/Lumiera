@@ -1,23 +1,23 @@
 /*
   SyncClasslock(Test)  -  validate the type-based Monitor locking
- 
+
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
- 
+
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of the
-  License, or (at your option) any later version.
- 
+  published by the Free Software Foundation; either version 2 of
+  the License, or (at your option) any later version.
+
   This program is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
- 
+
   You should have received a copy of the GNU General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- 
+
 * *****************************************************/
 
 
@@ -81,11 +81,11 @@ namespace test {
           {
             Probe objs[NUM_INSTANCES];
             
-            ASSERT (1 == objs[0].shared_lock_.use_count());
+            CHECK (1 == objs[0].shared_lock_.use_count());
           }
           
           ClassLock<Probe> get_class_lock;
-          ASSERT ( 1 ==  get_class_lock.use_count()); // embedded PerClassMonitor<Probe> got created exactly once
+          CHECK ( 1 ==  get_class_lock.use_count());  // embedded PerClassMonitor<Probe> got created exactly once
         }                                            //  and stays alive until static dtors are called....
       
     };

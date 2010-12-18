@@ -1,23 +1,23 @@
 /*
   ItemWrapper(Test)  -  wrapping and holding arbitrary values, pointers and references
- 
+
   Copyright (C)         Lumiera.org
     2009,               Hermann Vosseler <Ichthyostega@web.de>
- 
+
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of the
-  License, or (at your option) any later version.
- 
+  published by the Free Software Foundation; either version 2 of
+  the License, or (at your option) any later version.
+
   This program is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
- 
+
   You should have received a copy of the GNU General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- 
+
 * *****************************************************/
 
 
@@ -84,8 +84,6 @@ namespace test{
     {
       return std::tr1::bind (pickElement, ref(vec), _1 );
     }
-    
-    
   } // (END) Test helpers
   
   
@@ -98,13 +96,13 @@ namespace test{
    * @test use the ItemWrapper to define inline-storage holding values,
    *       pointers and references. Verify correct behaviour in each case,
    *       including (self)assignment, empty check, invalid dereferentiation.
-   *       
+   * 
    * @see  wrapper.hpp
    */
   class ItemWrapper_test : public Test
     {
-      
-      
+    
+    
       virtual void
       run (Arg)
         {
@@ -141,7 +139,7 @@ namespace test{
       verifyWrapper (X val, X otherVal)
         {
           const ItemWrapper<X> wrap(val);
-          ASSERT (wrap);
+          CHECK (wrap);
           
           cout << "ItemWrapper: " << showSizeof(wrap) << endl;
           
@@ -149,52 +147,52 @@ namespace test{
           ItemWrapper<X> copy2;
           ItemWrapper<X> empty;
           
-          ASSERT (copy1);
-          ASSERT (!copy2);
-          ASSERT (false == bool(empty));
+          CHECK (copy1);
+          CHECK (!copy2);
+          CHECK (false == bool(empty));
           
-          ASSERT (wrap == copy1);
-          ASSERT (wrap != copy2);
-          ASSERT (wrap != empty);
+          CHECK (wrap == copy1);
+          CHECK (wrap != copy2);
+          CHECK (wrap != empty);
           
           copy2 = copy1;
-          ASSERT (copy2);
-          ASSERT (wrap == copy2);
-          ASSERT (wrap != empty);
+          CHECK (copy2);
+          CHECK (wrap == copy2);
+          CHECK (wrap != empty);
           
           copy2 = otherVal;
-          ASSERT (copy2);
-          ASSERT (wrap != copy2);
-          ASSERT (wrap != empty);
+          CHECK (copy2);
+          CHECK (wrap != copy2);
+          CHECK (wrap != empty);
           
-          ASSERT (val == *wrap);
-          ASSERT (val == *copy1);
-          ASSERT (val != *copy2);
+          CHECK (val == *wrap);
+          CHECK (val == *copy1);
+          CHECK (val != *copy2);
           VERIFY_ERROR (BOTTOM_VALUE, *empty );
           
-          ASSERT (otherVal == *copy2);
+          CHECK (otherVal == *copy2);
           copy1 = copy2;
-          ASSERT (otherVal == *copy1);
-          ASSERT (otherVal == *copy2);
-          ASSERT (wrap != copy1);
-          ASSERT (wrap != copy2);
+          CHECK (otherVal == *copy1);
+          CHECK (otherVal == *copy2);
+          CHECK (wrap != copy1);
+          CHECK (wrap != copy2);
           
           copy1 = empty;                   // assign empty to discard value
           copy1 = copy1;                   // self-assign empty value
-          ASSERT (!copy1);
+          CHECK (!copy1);
           
           copy1 = copy2;
-          ASSERT (otherVal == *copy1);
+          CHECK (otherVal == *copy1);
           copy1 = copy1;                   // self-assign (will be suppressed)
-          ASSERT (otherVal == *copy1);
+          CHECK (otherVal == *copy1);
           copy1 = *copy1;                  // self-assign also detected in this case
-          ASSERT (otherVal == *copy2);
+          CHECK (otherVal == *copy2);
           
-          ASSERT (copy1);
+          CHECK (copy1);
           copy1.reset();
-          ASSERT (!copy1);
-          ASSERT (empty == copy1);
-          ASSERT (copy2 != copy1);
+          CHECK (!copy1);
+          CHECK (empty == copy1);
+          CHECK (copy2 != copy1);
           VERIFY_ERROR (BOTTOM_VALUE, *copy1 );
         };
       
@@ -213,9 +211,9 @@ namespace test{
             verifyWrapper<Tracker> (t1, t2);
             verifyWrapper<Tracker&> (t1, t2);
             verifyWrapper<Tracker*> (&t1, &t2);
-              
+            
           }
-          ASSERT (0 == cntTracker);  
+          CHECK (0 == cntTracker);
         }
       
       
@@ -227,21 +225,21 @@ namespace test{
         {
           int x = 5;
           ItemWrapper<int&> refWrap;
-          ASSERT (!refWrap);
+          CHECK (!refWrap);
           
           refWrap = x;
-          ASSERT (refWrap);
-          ASSERT (5 == *refWrap);
-          ASSERT (x == *refWrap);
+          CHECK (refWrap);
+          CHECK (5 == *refWrap);
+          CHECK (x == *refWrap);
           
           *refWrap += 5;
-          ASSERT (x == 10);
+          CHECK (x == 10);
           
           ItemWrapper<int*> ptrWrap (& *refWrap);
-          ASSERT ( isSameObject (**ptrWrap,  x));
-          ASSERT (!isSameObject ( *ptrWrap, &x));
+          CHECK ( isSameObject (**ptrWrap,  x));
+          CHECK (!isSameObject ( *ptrWrap, &x));
           **ptrWrap += 13;
-          ASSERT (x == 23);
+          CHECK (x == 23);
         }
       
       
@@ -256,21 +254,21 @@ namespace test{
           FunctionResult<int(void)> randomVal (std::rand);
           
           // function was never invoked, thus the remembered result is NIL
-          ASSERT (!randomVal);
+          CHECK (!randomVal);
           VERIFY_ERROR (BOTTOM_VALUE, *randomVal );
           
           int v1 = randomVal();
-          ASSERT (v1 == *randomVal);
-          ASSERT (v1 == *randomVal);
-          ASSERT (v1 == *randomVal);
-          ASSERT (randomVal);
+          CHECK (v1 == *randomVal);
+          CHECK (v1 == *randomVal);
+          CHECK (v1 == *randomVal);
+          CHECK (randomVal);
           
           int v2;
           do v2 = randomVal();
           while (v1 == v2);
-          ASSERT (v2 == *randomVal);
-          ASSERT (v2 == *randomVal);
-          ASSERT (v1 != *randomVal);
+          CHECK (v2 == *randomVal);
+          CHECK (v2 == *randomVal);
+          CHECK (v1 != *randomVal);
         }
       
       
@@ -292,28 +290,28 @@ namespace test{
           FunctionResult<int&(size_t)> funRes (pickElement_ofVector(testVec));
           
           // function was never invoked, thus the remembered result is NIL
-          ASSERT (!funRes);
+          CHECK (!funRes);
           VERIFY_ERROR (BOTTOM_VALUE, *funRes );
           
           int& r5 = funRes (5);
-          ASSERT (funRes); // indicates existence of cached result
+          CHECK (funRes);  // indicates existence of cached result
           
-          ASSERT (5 == r5);
-          ASSERT (isSameObject (r5, testVec[5]));
+          CHECK (5 == r5);
+          CHECK (isSameObject (r5, testVec[5]));
           
           int& r5x = *funRes;
-          ASSERT (isSameObject (r5, r5x));
+          CHECK (isSameObject (r5, r5x));
           
-          ASSERT ( isSameObject (r5, *funRes));
+          CHECK ( isSameObject (r5, *funRes));
           int& r7 = funRes (7);
-          ASSERT (!isSameObject (r5, *funRes));
-          ASSERT ( isSameObject (r7, *funRes));
+          CHECK (!isSameObject (r5, *funRes));
+          CHECK ( isSameObject (r7, *funRes));
           
           -- r5x;
           ++ *funRes;
-          ASSERT (5-1 == testVec[5]);
-          ASSERT (7+1 == testVec[7]);
-          ASSERT (7+1 == r7);
+          CHECK (5-1 == testVec[5]);
+          CHECK (7+1 == testVec[7]);
+          CHECK (7+1 == r7);
         }
     };
   
