@@ -2081,7 +2081,7 @@ Besides routing to a global pipe, wiring plugs can also connect to the source po
 Finally, this example shows an ''automation'' data set controlling some parameter of an effect contained in one of the global pipes. From the effect's POV, the automation is simply a ParamProvider, i.e a function yielding a scalar value over time. The automation data set may be implemented as a bézier curve, or by a mathematical function (e.g. sine or fractal pseudo random) or by some captured and interpolated data values. Interestingly, in this example the automation data set has been placed relatively to the meta clip (albeit on another track), thus it will follow and adjust when the latter is moved.
 </pre>
 </div>
-<div title="ImplementationDetails" modifier="Ichthyostega" modified="201011190301" created="200708080322" tags="overview" changecount="39">
+<div title="ImplementationDetails" modifier="Ichthyostega" modified="201012192119" created="200708080322" tags="overview" changecount="41">
 <pre>This wiki page is the entry point to detail notes covering some technical decisions, details and problems encountered in the course of the implementation of the Lumiera Renderengine, the Builder and the related parts.
 
 * [[Packages, Interfaces and Namespaces|InterfaceNamespaces]]
@@ -2110,6 +2110,10 @@ Finally, this example shows an ''automation'' data set controlling some paramete
 * shaping the GUI/~Proc-Interface, based on MObjectRef and the [[Command frontend|CommandHandling]]
 * defining PlacementScope in order to allow for [[discovering session contents|Query]]
 * working out a [[Wiring concept|Wiring]] and the foundations of OutputManagement
+* shaping the foundations of the [[player subsystem|Player]]
+* detail considerations regarding [[time and time quantisation|TimeQuant]]
+* designing how to [[build|BuildFixture]] the [[Fixture]] (...{{red{WIP}}}...)
+
 </pre>
 </div>
 <div title="ImplementationGuidelines" modifier="Ichthyostega" modified="201011190306" created="200711210531" tags="Concepts design discuss" changecount="17">
@@ -3968,6 +3972,33 @@ We need a way of addressing existing [[pipes|Pipe]]. Besides, as the Pipes and T
 &lt;&lt;task&gt;&gt;sort and group the assembled list of [[wiring requests|WiringRequest]] by pipes
 
 &lt;&lt;tasksum end&gt;&gt;
+</pre>
+</div>
+<div title="PlayProcess" modifier="Ichthyostega" modified="201012181732" created="201012181714" tags="def spec Player" changecount="2">
+<pre>With //play process//&amp;nbsp; we denote an ongoing effort to calculate a stream of frames for playback or rendering.
+The play process is an conceptual entity linking together several activities in the [[Backend]] and the RenderEngine. Creating a play process is the central service provided by the [[player subsystem|Player]]: it maintains a registration entry for the process to keep track of associated entities, resources allocated and calls dispatched as a consequence, and it wires and exposes a PlayController to serve as an interface and information hub.
+
+''Note'': the player is in no way engaged in any of the actual calculation and management tasks necessary to make this stream of calculations happen. The play process code contained within the player subsystem is largely comprised of organisational concerns and not especially performance critical.
+* the [[Backend]] is responsible for scheduling and dispatching the calculations
+* the RenderEngine has the ability to cary out individual frame calculations
+* the OutputSlot exposed by the [[output manager|OutputManagement]] is responsible for accepting timed frame delivery</pre>
+</div>
+<div title="Player" modifier="Ichthyostega" modified="201012181726" created="201012181700" tags="def overview" changecount="8">
+<pre>Within Lumiera, &amp;raquo;Player&amp;laquo; denotes the [[Subsystem]] responsible for organising and tracking //ongoing playback and render processes.// &amp;rarr; [[PlayProcess]]
+The player subsystem does not perform or even manage any render operations, nor does it handle the outputs directly.
+Yet it adresses some central concerns:
+
+;uniformity
+:all playback and render processes are on equal footing, handled in a similar way.
+;integration
+:the player cares for the necessary integration with the other subsystems
+:it consults the OutputManagement, retrieves the necessary informations from the [[Session]] and coordinates [[Backend]] calls.
+;time quantisation
+:the player translates continuous time values into discrete frame counts.
+:to perform this [[quantisation|TimeQuant]], the help of the session for building a TimeGrid for each output channel is required.
+
+!{{red{WIP 12/10}}} under construction
+The player subsystem is currently about to be designed and built up; some time ago, __Joel Holdsworth__ and __Ichthyo__ did a design study with a PlayerDummy, which is currently hooked up with the TransportControl in the Lumiera GUI.
 </pre>
 </div>
 <div title="PlayerDummy" modifier="Ichthyostega" modified="200906071810" created="200901300209" tags="GuiIntegration operational img" changecount="17">
@@ -6493,6 +6524,63 @@ function addKeyDownHandlers(e)
 Thus no server and no network connection is needed. Simply open the file in your browser and save changes locally. As the [[Proc-Layer wiki|ProcLayer and Engine]] HTML is located in the Lumiera source tree, all changes will be managed and distributed via GIT. While doing so, you sometimes will have to merge conflicing changes manually in the HTML source.
  * see GettingStarted
  * see [[Homepage|http://tiddlywiki.com]], [[Wiki-Markup|http://tiddlywiki.org/wiki/TiddlyWiki_Markup]]
+</pre>
+</div>
+<div title="TimeQuant" modifier="Ichthyostega" modified="201012200636" created="201012181753" tags="Concepts Player spec discuss draft" changecount="44">
+<pre>The term &amp;raquo;Time&amp;laquo; spans a variety of vastly different entities. Within a NLE we get to deal with various //flavours of time values.//
+;continuous time
+:without any additional assumptions, ''points in time'' can be specified with arbitrary precision.
+:the time values are just numbers; the point of reference and the meaning is implicit.
+:within Lumiera, time is encoded as integral number of //micro ticks,// practically continuous
+;duration
+:a range of time, a ''distance'' on the time axis, measured with the same arbitrary precision as time points.
+:distances and durations can be determined by //subtracting// two time points, consequently they are //signed numbers.//
+:a duration always abstracts from the time //when// this duration or distance happens, the relation to any time scale remains implicit
+;offset
+:offsetting a time or a duration is an operation (not an entity): it means changing the denoted time point or duration.
+:the //target// of an offset operation is a time or duration, while it's //argument// is a distance (synonymous to duration).
+:Time values are //immutable,// like numbers. Only a ''time variable'' can be changed. Durations to the contrary can be mutable or  const.
+;time span
+:contrary to a mere duration, a ''time interval'' or time span is actually //anchored// at a specific point in time.
+:it can be seen as a //special kind of duration,// which explicitly states the information //when// this time span takes place.
+
+;internal time
+:While the basic continuous time values don't imply any provision regarding the time scale and origin to be used, actually, within the implementation of the application, the meaning of time values is uniform and free of contradictions. Thus effectively there is an ''implementation time scale'' -- but its scope of validity is //strictly limited to the implementation level of a single application instance.// It is never exposed and never persisted. It might not be reproducible over multiple instantiations of the application. The implementation reserves the right to recalibrate this internal scale. Later, when Lumiera gains the capability to run within a network of render nodes, these instance connections will include a negotiation about the internal time scale, which remains completely opaque to the outer world. This explains, why {{{lumiera::Time}}} instances lack the ability to show their time value beyond debugging purposes. This is to avoid confusion and to stress their opaque nature.
+;wall clock and system time
+:The core property of any external real world time is that it is //running// -- we have to synchronise to an external time source.
+:This implies the presence of a //running synchronisation process,// with the authority to adjust the time base;
+:contrast this to the internal time, which is static and unconnected -- 
+;quantised time
+:The ''act of quantisation'' transforms a continuous property into a ''discrete'' structure. Prominent examples can be found in the domain of micro physics and with digital information processing. In a broader sense, any measurement or //quantification// also encompasses a quantisation. Regarding time and time measurement, quantisation means alignment to a predefined ''time grid''. Quantisation necessarily is an //irreversible process// -- possible additional informations get discarded.
+:Note that quantisation introduces an ''time origin'' and a ''reference scale''
+;frame count
+:within the context of film and media editing, the specification of a ''frame number'' is an especially important instance of quantisation.
+:all the properties of quantisation apply indeed to this special case: it is a time measurement or specification, where the values are aligned to a grid, and there is a reference time point where the counting starts (origin) and a reference scale (frames per second). Handling of quantised time values in Lumiera is defined such as to ensure the presence of all those bits of information. Without such precautions, operating with bare frame numbers leads itself to all kinds of confusions, mismatches, quantisation errors and unnecessary limitations of functionality.
+;timecode
+:Quantisation also is the foundation of all kinds of formalised time specifications
+:actually even a frame count is some kind of (informal) timecode -- other timecodes employ a standardised format.
+://every// presentation of time values and every persistent storage and exchange of such values is based on time codes.
+:but quantisation and time code aren't identical: a given quantised time value typically can be cast into multiple timecode formats.
+
+!Patterns for handling quantised time
+When it comes to actually handling quantised time values, several patterns are conceivable for dealing with the quantisation operation and representing quantised data. As guideline for judging these patterns, the general properties of time quantisation, as detailed above, should be taken into account. Quantising a time value means both //discarding information,// while at the same time //adding information// pertaining the assumptions of the context.
+
+__casual handling__: this is rather an frequently encountered ''anti pattern''. When reading such code, most striking is the sense of general unawareness of the problem, which is then &quot;discovered&quot; on a per case base, which leads to numerous repetitions of the same basic undertakings, but done with individual treatment of each instance (not so much copy-n-paste). Typical code smells:
+* the rounding, modulo and subtract-base operations pertinent with scale handling are seemingly inserted as bugfix
+* local code path forks to circumvent or compensate for otherwise hard wired calculations based on specific ways to invoke a function
+* playing strikingly clever tricks or employing heuristics to &quot;figure out&quot; the missing scale information from accessible context after the fact
+* advertising support for some of the conceivable cases as special feature, or adding it as plugin or extension module with limited scope
+* linking parts of the necessary additional information to completely unrelated other structures, thus causing code tangling and scattering
+* result or behaviour of calculations depends on the way things are set up in a seemingly contingent way, forcing users to stick to very specific procedures and ordered steps.
+[&gt;img[Time and Time Quantisation in Lumiera|uml/fig142725.png]]
+__static typing__: an analysis of the cases to be expected establishes common patterns and some base cases, which are then represented by distinct types with well established conversions. This can be combined with generic programming for the common parts. Close to the data input, a factory establishes these statically typed values.
+
+__tagged values__: quantised values are explicitly created out of continuous values by a quantiser entity. These quantised data values contain a copy of the original data, adjusted to be exactly aligned with respect to the underlying time grid. In addition, they carry a tag or ID to denote the respective scale, grid or timecode system. This tag can be used later on to assess compatibility or to recast values into another timecode system.
+
+__delayed quantisation__: with this approach, the information loss is delayed as long as possible. Quantised time values are rather treated as promise for quantisation, while the actual time data remains unaltered. Additionally, they carry a tag, or even a direct link to the responsible quantiser instance. Effectively, these are specialised time values, instances of a sub-concept, able to stand-in for general time values, but exposing additional accessors to get a quantised value.
+
+!!!discussion
+For Lumiera, the static typing approach is of limited value -- it excels when values belonging to different scales are actually treated differently. There are such cases, but rather on the data handling level, e.g. sound samples are always handled block wise. But regarding time values, the unifying aspect is more important, which leads to prefering a dynamic (run time typed) approach, while //erasing// the special differences most of the time. Yet the dynamic and open nature of the Lumiera high-level model favours the delayed quantisation pattern; the same values may require different quantisation depending on the larger model context an object is encountered in. This solution might be to general and heavy weight at times though. Thus, for important special cases, the accessors should return tagged values, preferably even with differing static type. Time codes can be integrated this way, but most notably the ''frame numbers'' used for addressing throughout the backend, can be implemented as such specifically typed tagged values; the tag here denotes the quantiser and thus the underlying grid -- it should be implemented as hash-ID for smooth integration with code written in plain C.
 </pre>
 </div>
 <div title="Timeline" modifier="Ichthyostega" modified="201011220126" created="200706250721" tags="def" changecount="21">
