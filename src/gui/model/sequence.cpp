@@ -46,17 +46,21 @@ Sequence::Sequence()
   {
     group_track->get_child_track_list().push_back(
       clip_track = shared_ptr<ClipTrack>(new ClipTrack()));
+    clip_track->set_name("Clip Track 1");
     group_track->get_child_track_list().push_back(
       group_track2 = shared_ptr<GroupTrack>(new GroupTrack()));
     group_track2->set_name("Group Track 2");
     group_track2->get_child_track_list().push_back(
-      shared_ptr<ClipTrack>(new ClipTrack()));
+      clip_track = shared_ptr<ClipTrack>(new ClipTrack()));
+    clip_track->set_name("Clip Track 2");
     first = false;
   }
   
-  tracks.push_back(shared_ptr<GroupTrack>(new GroupTrack()));
+  tracks.push_back(group_track = shared_ptr<GroupTrack>(new GroupTrack()));
+  group_track->set_name("Group Track 3");
   
-  tracks.push_back(shared_ptr<Track>(new ClipTrack()));
+  tracks.push_back(clip_track = shared_ptr<ClipTrack>(new ClipTrack()));
+  clip_track->set_name("Clip Track 3");
   
   // END TEST CODE
   
