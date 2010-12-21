@@ -22,6 +22,8 @@
 
 
 #include "lib/lumitime.hpp"
+#include "lib/time/timevalue.hpp"
+
 extern "C" {
 #include "lib/time.h"
 }
@@ -39,7 +41,7 @@ namespace lumiera {
   const Time Time::MIN ( -std::numeric_limits<int64_t>::max() );
   
   
-      
+  
   Time::Time ( long millis
              , uint secs 
              , uint mins
@@ -47,7 +49,7 @@ namespace lumiera {
              )
     : t_(lumiera_build_time (millis,secs,mins,hours))
   { }
-
+  
   int
   Time::getMillis() const
   {
@@ -81,7 +83,7 @@ namespace lumiera {
     // TODO
     return 0;
   }
-
+  
   
   Time::operator string()  const
   {
