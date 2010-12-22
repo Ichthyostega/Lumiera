@@ -627,8 +627,23 @@ return: 0
 END
 
 
-TEST "Time Wrapper" TimeWrapper_test  <<END
+TEST "Lumiera Time Wrapper" LumiTime_test  <<END
 out: ..:..:..\....
+return: 0
+END
+
+
+PLANNED "Times and time intervals" TimeValue_test  <<END
+return: 0
+END
+
+
+PLANNED "Time Quantisation" TimeQuantisation_test  <<END
+return: 0
+END
+
+
+PLANNED "Time formats and timecodes" TimeFormats_test  <<END
 return: 0
 END
 

@@ -1,5 +1,5 @@
 /*
-  TimeWrapper(Test)  -  working with gavl_time_t values in C++...
+  LumiTime(Test)  -  working with Lumiera's internal Time values
 
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
@@ -47,7 +47,7 @@ namespace test   {
   /********************************************
    * @test sanity of the C++ time wrapper.
    */
-  class TimeWrapper_test : public Test
+  class LumiTime_test : public Test
     {
       virtual void
       run (Arg arg) 
@@ -166,7 +166,7 @@ namespace test   {
   
   
   /** Register this test class... */
-  LAUNCHER (TimeWrapper_test, "unit common");
+  LAUNCHER (LumiTime_test, "unit common");
   
   
   

@@ -102,7 +102,10 @@ test_lib_SOURCES =							\
 	$(testlib_srcdir)/test/testoptiontest.cpp			\
 	$(testlib_srcdir)/thread-wrapper-join-test.cpp			\
 	$(testlib_srcdir)/thread-wrapper-test.cpp			\
-	$(testlib_srcdir)/time-wrapper-test.cpp				\
+	$(testlib_srcdir)/lumitime-test.cpp				\
+	$(testlib_srcdir)/time/time-value-test.cpp			\
+	$(testlib_srcdir)/time/time-quantisation-test.cpp		\
+	$(testlib_srcdir)/time/time-formats-test.cpp			\
 	$(testlib_srcdir)/typed-allocation-manager-test.cpp		\
 	$(testlib_srcdir)/typed-counter-test.cpp			\
 	$(testlib_srcdir)/util-foreach-test.cpp				\
