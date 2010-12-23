@@ -6526,7 +6526,7 @@ Thus no server and no network connection is needed. Simply open the file in your
  * see [[Homepage|http://tiddlywiki.com]], [[Wiki-Markup|http://tiddlywiki.org/wiki/TiddlyWiki_Markup]]
 </pre>
 </div>
-<div title="TimeQuant" modifier="Ichthyostega" modified="201012200636" created="201012181753" tags="Concepts Player spec discuss draft" changecount="44">
+<div title="TimeQuant" modifier="Ichthyostega" modified="201012230154" created="201012181753" tags="Concepts Player spec discuss draft" changecount="45">
 <pre>The term &amp;raquo;Time&amp;laquo; spans a variety of vastly different entities. Within a NLE we get to deal with various //flavours of time values.//
 ;continuous time
 :without any additional assumptions, ''points in time'' can be specified with arbitrary precision.
@@ -6581,6 +6581,36 @@ __delayed quantisation__: with this approach, the information loss is delayed as
 
 !!!discussion
 For Lumiera, the static typing approach is of limited value -- it excels when values belonging to different scales are actually treated differently. There are such cases, but rather on the data handling level, e.g. sound samples are always handled block wise. But regarding time values, the unifying aspect is more important, which leads to prefering a dynamic (run time typed) approach, while //erasing// the special differences most of the time. Yet the dynamic and open nature of the Lumiera high-level model favours the delayed quantisation pattern; the same values may require different quantisation depending on the larger model context an object is encountered in. This solution might be to general and heavy weight at times though. Thus, for important special cases, the accessors should return tagged values, preferably even with differing static type. Time codes can be integrated this way, but most notably the ''frame numbers'' used for addressing throughout the backend, can be implemented as such specifically typed tagged values; the tag here denotes the quantiser and thus the underlying grid -- it should be implemented as hash-ID for smooth integration with code written in plain C.
+&amp;rarr; more on [[usage situations|TimeUsage]]
+</pre>
+</div>
+<div title="TimeUsage" modifier="Ichthyostega" modified="201012232112" created="201012230204" tags="design discuss" changecount="5">
+<pre>the following collection of usage situations helps to shape the details of the time values and time quantisation design. &amp;rarr; see also  [[time quantisation|TimeQuant]]
+
+;time position of an object
+:indeed the term &quot;time position&quot; encompasses two quite different questtions
+:* a time or timing specification within the object
+:* determining the time point in reference to an existing scale
+;time and length of an object
+:basically the same situation, but length could be treated in two ways for quantisation
+:* having a precise specification and then quantise the start and endpoint
+:* quantise the start position and then establish an (independently quantised length)
+;moving and resizing an object
+:this can in itself be done in two different ways, and each of them can be applied in a quantised flavour
+:which sums up to 8 possible combinations, considereing that position and length are 2 degrees of freedom.
+:* a variable can be /changed/ by an offset
+:* a variable can be /defined/ to a new value
+:another (hidden) degree of freedom lies in how to apply an quantised offset to an unquantised value (and reversed)
+:because this operation might be done both in the quantised or non-quantised domain, and also the result might be (un)quantised
+;updating the playback position
+:this can be seen as a practical application of the above; basically we can choose to show the wall clock time or we can advance the playback position in frame increments, thus denoting the frame currently in display. These distinctions may look mood for video, but are relevant for precise audio editing, especially when combined with loop playback (recall that audio is processed block wise, but the individual sample frames and thus the possible loop positions are way finer than the processing block size)
+;displaying time intervals
+:for display, time intervals get //re-quantised// into display array coordinates.
+:While evidently the display coordinates are themselves quantised and we obviously don't want to cancel out the effect of an quantisation of the values or intervals to be displayed (which means, we get two quantisations chained up after each other), there remains the question if the display array coordinates should be aligned to the grid of the //elements to be displayed,// and especially if the allowd zoom factors should be limited. This decision isn't an easy one, as it has an immediate and tangible effect on what can be showed, how reversible and reproducible a view is and (note) on the actual values which can be set and changed through the GUI.
+;time value arithmetic
+:Client code as well as the internal implementation of time handling needs to do arrithmetic operations with time values. Time values are additive and totally ordered. Distance, as calculated by subtraction, can be made into a metric. Another and quite different question is to what extent a quantised variant of this arrithmetics is required.
+;relative placement
+:because of the divergence between quantised and unquantised values, the quesion arises, if placement relative to another object referes to the raw position or the already quantised position. Baiscally all the variations discussed for //time and length of an object// also do apply here.
 </pre>
 </div>
 <div title="Timeline" modifier="Ichthyostega" modified="201011220126" created="200706250721" tags="def" changecount="21">
