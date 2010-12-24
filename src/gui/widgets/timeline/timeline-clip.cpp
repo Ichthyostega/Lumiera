@@ -66,7 +66,7 @@ Clip::draw_clip(Cairo::RefPtr<Cairo::Context> cr,
                                Cairo::FONT_WEIGHT_NORMAL);
   cr->set_font_face(font);
   cr->set_font_size(11);
-  cr->show_text("Track");  // TODO: get clip name from model
+  cr->show_text("Clip Name");  // TODO: get clip name from model
 
   // TODO: Show thumbnails for clip
 }

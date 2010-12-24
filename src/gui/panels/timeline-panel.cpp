@@ -92,14 +92,14 @@ TimelinePanel::TimelinePanel(workspace::PanelManager &panel_manager,
   toolbar.append(forwardButton);
   toolbar.append(nextButton);
   
-  toolbar.append(seperator1);
+  toolbar.append(separator1);
   
   toolbar.append(arrowTool,
     mem_fun(this, &TimelinePanel::on_arrow_tool));
   toolbar.append(iBeamTool,
     mem_fun(this, &TimelinePanel::on_ibeam_tool));
     
-  toolbar.append(seperator2);
+  toolbar.append(separator2);
   
   toolbar.append(zoomIn, mem_fun(this, &TimelinePanel::on_zoom_in));
   toolbar.append(zoomOut, mem_fun(this, &TimelinePanel::on_zoom_out));
