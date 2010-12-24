@@ -1,6 +1,6 @@
 /*
-  timeline-window.hpp  -  Implementation of the timeline window object
-
+  timeline-view-window.hpp  -  Implementation of the timeline window object
+ 
   Copyright (C)         Lumiera.org
     2008,               Joel Holdsworth <joel@airwebreathe.org.uk>
 

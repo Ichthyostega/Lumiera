@@ -1,6 +1,6 @@
 /*
-  timeline-track.cpp  -  Implementation of the timeline clip object
-
+  clip.cpp  -  Implementation of the Clip object
+ 
   Copyright (C)         Lumiera.org
     2008,               Joel Holdsworth <joel@airwebreathe.org.uk>
 

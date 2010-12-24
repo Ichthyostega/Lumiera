@@ -1,5 +1,5 @@
 /*
-  timeline-clip.hpp  -  Declaration of the timeline clip object
+  clip.hpp  -  Definition of the Clip class
 
   Copyright (C)         Lumiera.org
     2008,               Joel Holdsworth <joel@airwebreathe.org.uk>
@@ -19,8 +19,8 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 */
-/** @file widgets/timeline/timeline-clip.hpp
- ** This file contains the definition of timeline clip object
+/** @file model/clip.hpp
+ ** This file contains the definition of the Clip object
  */
 
 #ifndef CLIP_HPP
@@ -32,6 +32,9 @@ namespace model {
 class Clip
 {
 public:
+  /**
+   * Constructor
+   **/
   Clip();
 
 };

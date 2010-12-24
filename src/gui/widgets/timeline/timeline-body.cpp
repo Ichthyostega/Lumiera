@@ -1,6 +1,11 @@
 /*
+<<<<<<< HEAD
   timeline.cpp  -  Implementation of the timeline widget
 
+=======
+  timeline-body.cpp  -  Implementation of the timeline body widget
+ 
+>>>>>>> Fix several incorrect comments (refering to the wrong file).
   Copyright (C)         Lumiera.org
     2008,               Joel Holdsworth <joel@airwebreathe.org.uk>
 
