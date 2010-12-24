@@ -61,7 +61,7 @@ TimelinePanel::TimelinePanel(workspace::PanelManager &panel_manager,
   zoomIn(Stock::ZOOM_IN),
   zoomOut(Stock::ZOOM_OUT),
   updatingToolbar(false),
-  currentTool(timeline::IBeam)
+  currentTool(timeline::Arrow)
 {
   // Hook up notifications
   get_project().get_sequences().signal_changed().connect(mem_fun(this,
