@@ -6584,11 +6584,11 @@ For Lumiera, the static typing approach is of limited value -- it excels when va
 &amp;rarr; more on [[usage situations|TimeUsage]]
 </pre>
 </div>
-<div title="TimeUsage" modifier="Ichthyostega" modified="201012232112" created="201012230204" tags="design discuss" changecount="5">
+<div title="TimeUsage" modifier="Ichthyostega" modified="201012241820" created="201012230204" tags="design discuss" changecount="12">
 <pre>the following collection of usage situations helps to shape the details of the time values and time quantisation design. &amp;rarr; see also  [[time quantisation|TimeQuant]]
 
 ;time position of an object
-:indeed the term &quot;time position&quot; encompasses two quite different questtions
+:indeed the term &quot;time position&quot; encompasses two quite different questions
 :* a time or timing specification within the object
 :* determining the time point in reference to an existing scale
 ;time and length of an object
@@ -6597,7 +6597,7 @@ For Lumiera, the static typing approach is of limited value -- it excels when va
 :* quantise the start position and then establish an (independently quantised length)
 ;moving and resizing an object
 :this can in itself be done in two different ways, and each of them can be applied in a quantised flavour
-:which sums up to 8 possible combinations, considereing that position and length are 2 degrees of freedom.
+:which sums up to 8 possible combinations, considering that position and length are 2 degrees of freedom.
 :* a variable can be /changed/ by an offset
 :* a variable can be /defined/ to a new value
 :another (hidden) degree of freedom lies in how to apply an quantised offset to an unquantised value (and reversed)
@@ -6606,11 +6606,24 @@ For Lumiera, the static typing approach is of limited value -- it excels when va
 :this can be seen as a practical application of the above; basically we can choose to show the wall clock time or we can advance the playback position in frame increments, thus denoting the frame currently in display. These distinctions may look mood for video, but are relevant for precise audio editing, especially when combined with loop playback (recall that audio is processed block wise, but the individual sample frames and thus the possible loop positions are way finer than the processing block size)
 ;displaying time intervals
 :for display, time intervals get //re-quantised// into display array coordinates.
-:While evidently the display coordinates are themselves quantised and we obviously don't want to cancel out the effect of an quantisation of the values or intervals to be displayed (which means, we get two quantisations chained up after each other), there remains the question if the display array coordinates should be aligned to the grid of the //elements to be displayed,// and especially if the allowd zoom factors should be limited. This decision isn't an easy one, as it has an immediate and tangible effect on what can be showed, how reversible and reproducible a view is and (note) on the actual values which can be set and changed through the GUI.
+:While evidently the display coordinates are themselves quantised and we obviously don't want to cancel out the effect of an quantisation of the values or intervals to be displayed (which means, we get two quantisations chained up after each other), there remains the question if the display array coordinates should be aligned to the grid of the //elements to be displayed,// and especially if the allowed zoom factors should be limited. This decision isn't an easy one, as it has an immediate and tangible effect on what can be showed, how reversible and reproducible a view is and (note) on the actual values which can be set and changed through the GUI.
 ;time value arithmetic
-:Client code as well as the internal implementation of time handling needs to do arrithmetic operations with time values. Time values are additive and totally ordered. Distance, as calculated by subtraction, can be made into a metric. Another and quite different question is to what extent a quantised variant of this arrithmetics is required.
+:Client code as well as the internal implementation of time handling needs to do arithmetic operations with time values. Time values are additive and totally ordered. Distance, as calculated by subtraction, can be made into a metric. Another and quite different question is to what extent a quantised variant of this arithmetics is required.
 ;relative placement
-:because of the divergence between quantised and unquantised values, the quesion arises, if placement relative to another object referes to the raw position or the already quantised position. Baiscally all the variations discussed for //time and length of an object// also do apply here.
+:because of the divergence between quantised and unquantised values, the question arises, if placement relative to another object refers to the raw position or the already quantised position. Basically all the variations discussed for //time and length of an object// also do apply here.
+
+!notable problems
+''Direct quantisation of length is not possible''. This is due to the non-linear nature of all but the most trivial time grids: Already such a simple addition like a start offset destroys linearity, and this still the more is true within a compound grid where the grid spacing changes at some point. Thus, the length has to be re-established at the target position of an time interval after each change involving quantisation. Regarding the //strategy// to apply when re-establishing the length, it seems more appropriate to treat the object as an entity which is moved, which means to do quantisation in two steps, first the position, then the endpoint (the second option in the description above). But it seems advisable not to hard wire that strategy -- better put it into the quantiser.
+
+''When to materialise a quantisation''. Because of the basic intention to retain information, we delay actually applying the quantisation to the stored values as much as possible. This has the downside of possibly accumulating off-grid values without that being evident. On the other hand, allowing for quantised changes inevitably pulls in all the complexity of mixing quantised and non-quantised values. It seems more appropriate to move these distinctions out of the cope of this design and offload them onto the client (code using these time classes): thus we'd //only accept raw time values for redefining a quantised interval.// But the client code is still free to use a separate quantisation, which might even utilise a different grid. For example, when moving a clip taken from 50fps media, the new position might be quantised to the 50fps grid established by the media, while the target timeline runs with 25fps, allowing for finer adjustments based on the intermediate frames present in the source material.
+
+Taking this approach also nicely removes the problem with the ''impossibility to quantise offsets''. This problem is an immediate consequence of the nonlinearity of most grids (as stated above). By just accepting raw time values for change, and indeed preferring just to re-set to new values, we don't solve that problem, but move it out of scope.
+
+Another closely related problem is ''when to allow mutations'', if at all. We can't completely do away with mutations, simply because we don't have a pure functional language at our disposal. The whole concept of //reference semantics// doesn't play so well with immutable objects. The Lumiera high-level (session) model certainly relies on objects intended to be //manipulated.// Thus we need a re-settable length field in {{{MObject}}} and we need a time variable for position calculations. Yet we could make any //derived objects// into immutable descriptor records, which certainly helps with parallelism.
+
+The ''problem with playback position'' is -- that it's an attempt to conceptualise a non-existing entity. There is no such thing like &quot;the&quot; playback position. Yet most applications I'm aware off employ this concept. Likely they got trapped by the metaphor of the tape head, again. We should do away with that. On playback, we should show a //projection of wall-clock time onto the expected playback range// -- not more, not less. It should be acknowledged that there is //no direct link to the ongoing playback processes,// besides the fact that they're assumed to sync to wall-clock time as well. Recall, typically there are multiple playback processes going on in compound, and each might run on a different update rate. If we really want a //visual out-of-sync indicator,// we should treat that as a separate reporting facility and display it apart of the playback cursor.
+
+Note that the ''display window might be treated as just an independent instance of quantisation''. This is similar to the approach taken above for modifying quantised time span values. We should provide a special kind of time grid, the display coordinates. The origin of these is always defined to the left (lower) side of the interval to be displayed, and they are gauged in screen units (pixels or similar, as used by the GUI toolkit set). The rest is handled by the general quantisation mechanisms. The problem of aligning the display should be transformed into a general facility to align grids, and solved for the general case. Doing so solves the remaining problems with quantised value changes and with ''specifying relative placements'' as well: If we choose to represent them as quantised values, we might (or might not) also choose to apply this //grid-alignment function.//
 </pre>
 </div>
 <div title="Timeline" modifier="Ichthyostega" modified="201011220126" created="200706250721" tags="def" changecount="21">
