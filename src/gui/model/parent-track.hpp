@@ -89,7 +89,7 @@ public:
 
 protected:
   /**
-   * The internal list of child tracks of this paremt.
+   * The internal list of child tracks of this parent.
    **/
   lumiera::observable_list< boost::shared_ptr<Track> > tracks;
 };

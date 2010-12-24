@@ -20,6 +20,9 @@
 
 * *****************************************************/
 
+#include <boost/foreach.hpp>
+
+#include "timeline-clip.hpp"
 #include "timeline-clip-track.hpp"
 #include "timeline-view-window.hpp"
 
@@ -28,19 +31,26 @@ using namespace Gtk;
 namespace gui {
 namespace widgets {
 namespace timeline {
-  
+
 ClipTrack::ClipTrack(TimelineWidget &timeline_widget,
   boost::shared_ptr<model::Track> track) :
   Track(timeline_widget, track)
 {
+  // TEST CODE: add a clip to the track
+  boost::shared_ptr<model::Clip> model_clip(new model::Clip());
+  boost::shared_ptr<timeline::Clip> timeline_clip(new timeline::Clip(model_clip));
+  clips.push_back(timeline_clip);
+  // END TEST CODE
 }
 
 void
 ClipTrack::draw_track(Cairo::RefPtr<Cairo::Context> cairo,
     TimelineViewWindow* const window) const
 {
-  
-  
+  REQUIRE(cairo);
+  REQUIRE(window);
+
+  // Draw a rectangle to let us know it works? :-)
   cairo->rectangle(window->time_to_x(0), 1,
     window->time_to_x(500000) - window->time_to_x(0),
     get_height() - 2);
@@ -50,6 +60,12 @@ ClipTrack::draw_track(Cairo::RefPtr<Cairo::Context> cairo,
   
   cairo->set_source_rgb(0.25, 0.25, 0.25);
   cairo->stroke();
+
+  // Draw all clips
+  BOOST_FOREACH(boost::shared_ptr<timeline::Clip> c, clips)
+    {
+      c->draw_clip(cairo, window);
+    }
 }
 
 }   // namespace timeline

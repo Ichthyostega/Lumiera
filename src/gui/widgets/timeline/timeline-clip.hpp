@@ -23,7 +23,11 @@
  ** This file contains the definition of timeline clip object
  */
  
+
+#include "../../gtk-lumiera.hpp"
 #include "../../model/clip.hpp"
+#include "timeline-view-window.hpp"
+#include "include/logging.h"
 
 #ifndef TIMELINE_CLIP_HPP
 #define TIMELINE_CLIP_HPP
@@ -35,10 +39,15 @@ namespace timeline {
 class Clip : public model::Clip
 {
 public:
-  Clip();
+  Clip(boost::shared_ptr<model::Clip> clip);
 
+  void draw_clip(Cairo::RefPtr<Cairo::Context> cairo,
+    TimelineViewWindow* const window) const;
+
+private:
+
+  boost::shared_ptr<model::Clip> model_clip;
 };
-
 
 }   // namespace timeline
 }   // namespace widgets
