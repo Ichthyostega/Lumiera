@@ -95,6 +95,8 @@ gtk_gui_la_SOURCES =								\
 	$(lumigui_srcdir)/panels/timeline-panel.hpp				\
 	$(lumigui_srcdir)/panels/viewer-panel.cpp				\
 	$(lumigui_srcdir)/panels/viewer-panel.hpp				\
+	$(lumigui_srcdir)/util/cairo-util.cpp					\
+	$(lumigui_srcdir)/util/cairo-util.hpp					\
 	$(lumigui_srcdir)/util/convert.cpp					\
 	$(lumigui_srcdir)/util/convert.hpp					\
 	$(lumigui_srcdir)/util/rectangle.cpp					\

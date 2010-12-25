@@ -91,7 +91,7 @@ WindowManager::on_window_closed(GdkEventAny* event)
       shared_ptr<WorkspaceWindow> workspace_window(*iterator);
       REQUIRE(workspace_window);
 
-      RefPtr<Gdk::Window> window = workspace_window->get_window();
+      Glib::RefPtr<Gdk::Window> window = workspace_window->get_window();
       REQUIRE(window);
       if(window->gobj() == event->window)
         {
@@ -134,25 +134,33 @@ WindowManager::update_close_window_in_menus()
     }
 }
 
-GdkColor
-WindowManager::read_style_colour_property(
+Cairo::RefPtr<Cairo::SolidPattern>
+WindowManager::read_style_colour_property (
   Gtk::Widget &widget, const gchar *property_name,
   guint16 red, guint16 green, guint16 blue)
 {
-  GdkColor *colour;
+  REQUIRE (property_name);
 
-  gtk_widget_style_get(widget.gobj(), property_name, &colour, NULL);
+  // TODO: Can we get rid of the GdkColor completely here?
+  GdkColor *color;
+  gtk_widget_style_get(widget.gobj(), property_name, &color, NULL);
 
+  Cairo::RefPtr<Cairo::SolidPattern> pattern;
   // Did the color load successfully?
-  if(colour != NULL)
-    return *colour;
+  if (color != NULL)
+    {
+      pattern = Cairo::SolidPattern::create_rgb ( (double)color->red   / 0xFFFF,
+                                                  (double)color->green / 0xFFFF,
+                                                  (double)color->blue  / 0xFFFF);
+    }
   else
-  {
-    WARN(gui, "%s style value failed to load", property_name);
-    
-    const GdkColor default_colour = {0, red, green, blue};  
-    return default_colour;
-  }
+    {
+      WARN(gui, "%s style value failed to load", property_name);
+
+      pattern = Cairo::SolidPattern::create_rgb ( red, green, blue );
+    }
+
+  return pattern;
 }
 
 void
@@ -167,7 +175,7 @@ WindowManager::register_app_icon_sizes()
 void
 WindowManager::register_stock_items()
 {
-  RefPtr<IconFactory> factory = IconFactory::create();
+  Glib::RefPtr<IconFactory> factory = IconFactory::create();
   
   add_stock_icon_set(factory, "panel-resources", "panel_resources", _("_Resources"));
   add_stock_icon_set(factory, "panel-timeline", "panel_timeline", _("_Timeline"));
@@ -256,7 +264,7 @@ WindowManager::add_theme_icon_source(Gtk::IconSet &icon_set,
   REQUIRE(width > 0);
   
   // Try to load the icon
-  RefPtr<Gtk::IconTheme> theme = Gtk::IconTheme::get_default();
+  Glib::RefPtr<Gtk::IconTheme> theme = Gtk::IconTheme::get_default();
   REQUIRE(theme);
   
   TODO ("find out how IconInfo could be made const. For example, GTKmm 2.10.10 is missing the const on operator bool() in iconinfo.h");

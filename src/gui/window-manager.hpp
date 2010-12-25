@@ -25,6 +25,8 @@
  ** @see gtk-lumiera.hpp
  */
 
+#include <cairomm/cairomm.h>
+
 #include "gtk-lumiera.hpp"
 //#include "workspace/workspace-window.hpp"
 
@@ -81,9 +83,9 @@ public:
    * @param blue The fallback blue intensity.
    * @return The loaded colour.
    **/
-  static GdkColor read_style_colour_property(
-    Gtk::Widget &widget, const gchar *property_name,
-    guint16 red, guint16 green, guint16 blue);
+  static Cairo::RefPtr<Cairo::SolidPattern>
+  read_style_colour_property (Gtk::Widget &widget, const gchar *property_name,
+                              guint16 red, guint16 green, guint16 blue);
 
 private:
 

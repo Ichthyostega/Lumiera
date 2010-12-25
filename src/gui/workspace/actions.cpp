@@ -49,7 +49,7 @@ Actions::Actions(WorkspaceWindow &workspace_window) :
 }
 
 void
-Actions::populate_main_actions(RefPtr<Gtk::UIManager> uiManager)
+Actions::populate_main_actions(Glib::RefPtr<Gtk::UIManager> uiManager)
 {
   REQUIRE(uiManager);
   
@@ -208,11 +208,11 @@ Actions::populate_main_actions(RefPtr<Gtk::UIManager> uiManager)
 }
 
 void
-Actions::populate_show_panel_actions(RefPtr<Gtk::UIManager> uiManager)
+Actions::populate_show_panel_actions(Glib::RefPtr<Gtk::UIManager> uiManager)
 {  
   const int count = PanelManager::get_panel_description_count();
   
-  RefPtr<Gtk::ActionGroup> actionGroup = ActionGroup::create();
+  Glib::RefPtr<Gtk::ActionGroup> actionGroup = ActionGroup::create();
   for(int i = 0; i < count; i++)
     {
       const gchar *stock_id = PanelManager::get_panel_stock_id(i);
