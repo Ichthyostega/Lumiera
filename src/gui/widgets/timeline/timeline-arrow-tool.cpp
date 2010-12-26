@@ -41,7 +41,7 @@ ArrowTool::get_type() const
 Gdk::Cursor
 ArrowTool::get_cursor() const
 {
-  return Gdk::Cursor(Gdk::ARROW);
+  return Gdk::Cursor(Gdk::LEFT_PTR);
 }
 
 void

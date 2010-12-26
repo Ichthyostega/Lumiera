@@ -1,0 +1,22 @@
+TESTING "Component Test Suite: GUI Model Parts" ./test-components --group=gui
+
+PLANNED "ModelClipTrack_test" ModelClipTrack_test <<END
+END
+
+PLANNED "ModelClip_test" ModelClip_test <<END
+END
+
+PLANNED "ModelGroupTrack_test" ModelGroupTrack_test <<END
+END
+
+PLANNED "ModelParentTrack_test" ModelParentTrack_test <<END
+END
+
+PLANNED "ModelProject_test" ModelProject_test <<END
+END
+
+PLANNED "ModelSequence_test" ModelSequence_test <<END
+END
+
+PLANNED "ModelTrack_test" ModelTrack_test <<END
+END

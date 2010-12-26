@@ -1,6 +1,6 @@
 format 58
 "ConfigQuery" // CommonLib::ConfigQuery
-  revision 18
+  revision 19
   modified_by 5 "hiv"
   // class settings
   //class diagram settings

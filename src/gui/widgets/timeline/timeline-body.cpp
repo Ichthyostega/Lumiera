@@ -1,6 +1,6 @@
 /*
-  timeline.cpp  -  Implementation of the timeline widget
-
+  timeline-body.cpp  -  Implementation of the timeline body widget
+ 
   Copyright (C)         Lumiera.org
     2008,               Joel Holdsworth <joel@airwebreathe.org.uk>
 
@@ -26,6 +26,7 @@
 #include "timeline-body.hpp"
 #include "../timeline-widget.hpp"
 #include "../../window-manager.hpp"
+#include "../../util/cairo-util.hpp"
 
 #include "timeline-arrow-tool.hpp"
 #include "timeline-ibeam-tool.hpp"
@@ -35,6 +36,8 @@ using namespace Gtk;
 using namespace std;
 using namespace boost;
 using namespace lumiera;
+
+using gui::util::CairoUtil;
 
 namespace gui {
 namespace widgets {
@@ -357,8 +360,8 @@ TimelineBody::draw_track(Cairo::RefPtr<Cairo::Context> cr,
   
   // Draw the track background
   cr->rectangle(0, 0, view_width, height);
-  GdkColor colour = backgroundColour;   // Needed to preserve const qualifier
-  gdk_cairo_set_source_color(cr->cobj(), &colour);
+  Cairo::RefPtr<Cairo::SolidPattern> bg_col = backgroundColour;   // Needed to preserve const qualifier
+  cr->set_source(bg_col);
   cr->fill();
 
   // Render the track
@@ -386,17 +389,13 @@ TimelineBody::draw_selection(Cairo::RefPtr<Cairo::Context> cr)
   // Draw the cover
   if(end_x > 0 && start_x < allocation.get_width())
     {
-      cr->set_source_rgba(
-        (float)selectionColour.red / 0xFFFF,
-        (float)selectionColour.green / 0xFFFF,
-        (float)selectionColour.blue / 0xFFFF,
-        selectionAlpha);
+      cr->set_source (CairoUtil::pattern_set_alpha (selectionColour, selectionAlpha));
       cr->rectangle(start_x + 0.5, 0,
         end_x - start_x, allocation.get_height());
       cr->fill();
     }
   
-  gdk_cairo_set_source_color(cr->cobj(), &selectionColour);
+  cr->set_source(selectionColour);
   cr->set_line_width(1);
   
   // Draw the start
@@ -435,7 +434,7 @@ TimelineBody::draw_playback_point(Cairo::RefPtr<Cairo::Context> cr)
       const int x = view_window().time_to_x(point);
         
       // Set source
-      gdk_cairo_set_source_color(cr->cobj(), &playbackPointColour);
+      cr->set_source(playbackPointColour);
       cr->set_line_width(1);
         
       // Draw

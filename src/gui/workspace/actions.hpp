@@ -84,7 +84,7 @@ private:
 
   void on_menu_edit_preferences();
 
-  void on_menu_view_resources();
+  void on_menu_view_assets();
   void on_menu_view_timeline();
   void on_menu_view_viewer();
   
@@ -93,6 +93,7 @@ private:
   void on_menu_track_add();
 
   void on_menu_window_new_window();
+  void on_menu_window_close_window();
   void on_menu_show_panel(int panel_index);
 
   void on_menu_help_about();

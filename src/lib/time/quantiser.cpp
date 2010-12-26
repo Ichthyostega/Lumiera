@@ -1,8 +1,8 @@
 /*
-  clip.hpp  -  Definition of the Clip class
+  Quantiser  -  aligning time values to a time grid
 
   Copyright (C)         Lumiera.org
-    2008,               Joel Holdsworth <joel@airwebreathe.org.uk>
+    2010,               Hermann Vosseler <Ichthyostega@web.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -18,28 +18,22 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
-*/
-/** @file model/clip.hpp
- ** This file contains the definition of the Clip object
- */
+* *****************************************************/
 
-#ifndef CLIP_HPP
-#define CLIP_HPP
 
-namespace gui {
-namespace model {
+#include "lib/lumitime.hpp"
+#include "lib/time/timevalue.hpp"
 
-class Clip
-{
-public:
-  /**
-   * Constructor
-   **/
-  Clip();
+using std::string;
 
-};
 
-}   // namespace model
-}   // namespace gui
-
-#endif // CLIP_HPP
+namespace lib {
+namespace time {
+  
+  
+  /** */
+  
+  
+  
+}} // lib::time
+  

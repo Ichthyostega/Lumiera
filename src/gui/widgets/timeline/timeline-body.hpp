@@ -183,10 +183,10 @@ private:
   int beginShiftVerticalOffset; 
 
   // Style properties
-  GdkColor backgroundColour;
-  GdkColor selectionColour;
+  Cairo::RefPtr<Cairo::SolidPattern> backgroundColour;
+  Cairo::RefPtr<Cairo::SolidPattern> selectionColour;
   float selectionAlpha;
-  GdkColor playbackPointColour;
+  Cairo::RefPtr<Cairo::SolidPattern> playbackPointColour;
   
   gui::widgets::TimelineWidget &timelineWidget;
 

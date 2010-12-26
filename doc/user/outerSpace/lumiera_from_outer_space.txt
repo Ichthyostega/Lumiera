@@ -248,8 +248,6 @@ Timeline View
 Asset View
 ~~~~~~~~~~
 
-// currently named 'resources' should be renamed to 'assets'
-
 // Manages all assets available in one project.
 //  * source media/footage/soundfiles
 //  * prepared clips, known subprojects

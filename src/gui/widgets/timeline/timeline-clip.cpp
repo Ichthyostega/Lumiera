@@ -1,6 +1,6 @@
 /*
-  timeline-track.cpp  -  Implementation of the timeline clip object
-
+  timeline-clip.cpp  -  Implementation of the timeline clip object
+ 
   Copyright (C)         Lumiera.org
     2008,               Joel Holdsworth <joel@airwebreathe.org.uk>
 
@@ -26,10 +26,47 @@ namespace gui {
 namespace widgets {
 namespace timeline {
 
-Clip::Clip()
+Clip::Clip(boost::shared_ptr<model::Clip> clip)
+  : model_clip(clip)
 {
-  
+  REQUIRE(model_clip);
 }
+
+void
+Clip::draw_clip(Cairo::RefPtr<Cairo::Context> cr,
+    TimelineViewWindow* const window) const
+{
+  REQUIRE(cr);
+  REQUIRE(window);
+
+  int x = window->time_to_x(1000000);
+  int width = window->time_to_x(2000000) - window->time_to_x(1000000);
+  
+  // Draw a rectangle for the clip
+  cr->rectangle(x, 1, width, 100-2); 
+
+  // TODO: get duration from the model::Clip
+  // TODO: get height from the Timeline::Track
+
+  cr->set_source_rgb(0.4, 0.4, 0.4);
+  cr->fill_preserve();
+  
+  cr->set_source_rgb(0.25, 0.25, 0.25);
+  cr->stroke();
+
+  // Show the clip name
+  cr->rectangle(x, 1, width, 100-2); 
+  cr->clip();
+
+  cr->move_to (x + 3, 12);
+  cr->set_source_rgb (1.0, 1.0, 1.0);
+
+  cr->set_font_size (9);
+  cr->show_text ("Clip Name");  // TODO: get clip name from model
+
+  // TODO: Show thumbnails for clip
+}
+
 
 }   // namespace timeline
 }   // namespace widgets

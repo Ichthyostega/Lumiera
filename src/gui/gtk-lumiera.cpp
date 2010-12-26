@@ -116,7 +116,7 @@ GtkLumiera::get_app_authors()
     "Joel Holdsworth",
     "Christian Thaeter",
     "Hermann Vosseler",
-    "<Other Authors Here>"};
+    "[Other Authors Here]"};
   
   const int count = sizeof(app_authors) / sizeof(gchar*);
   std::vector<Glib::ustring> list(count);

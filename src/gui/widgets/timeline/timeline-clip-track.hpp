@@ -28,6 +28,8 @@
 #ifndef TIMELINE_CLIP_TRACK_HPP
 #define TIMELINE_CLIP_TRACK_HPP
 
+#include <vector>
+
 #include "timeline-track.hpp"
 #include "../../model/clip-track.hpp"
 
@@ -46,7 +48,9 @@ public:
   
   void draw_track(Cairo::RefPtr<Cairo::Context> cairo,
     TimelineViewWindow* const window) const;
-  
+
+private:
+  std::vector<boost::shared_ptr<timeline::Clip> > clips;
 };
 
 }   // namespace timeline

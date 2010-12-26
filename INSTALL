@@ -27,6 +27,10 @@ For Ubuntu Hardy also:
   * libgtkmm-2.4-dev
   * libxv-dev
 
+Optionally, you may also want to install:
+
+  * gtk2-engines
+
 also check http://gnuradio.org/trac/wiki/UbuntuInstall#InstallationOptions to
 see that all your installations options are met.
 
@@ -67,11 +71,11 @@ make check
 
 This will take some time. After it has finished:
 
-./lumigui
+./lumiera
 
 [NewbiesTut]
 
-Contibuting
+Contributing
 
 Nothing is easier, follow the basic instructions at http://www.kernel.org/pub/
 software/scm/git/docs/gittutorial.html, notably the

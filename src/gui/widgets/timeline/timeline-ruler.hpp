@@ -218,11 +218,11 @@ private:
   int mouseChevronSize;
   int selectionChevronSize;
   
-  GdkColor playbackPointColour;
+  Cairo::RefPtr<Cairo::SolidPattern> playbackPointColour;
   float playbackPointAlpha;
   int playbackPointSize;
     
-  GdkColor playbackPeriodArrowColour;
+  Cairo::RefPtr<Cairo::SolidPattern> playbackPeriodArrowColour;
   float playbackPeriodArrowAlpha;
   int playbackPeriodArrowSize;
   int playbackPeriodArrowStemSize;

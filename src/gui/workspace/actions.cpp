@@ -49,7 +49,7 @@ Actions::Actions(WorkspaceWindow &workspace_window) :
 }
 
 void
-Actions::populate_main_actions(RefPtr<Gtk::UIManager> uiManager)
+Actions::populate_main_actions(Glib::RefPtr<Gtk::UIManager> uiManager)
 {
   REQUIRE(uiManager);
   
@@ -90,10 +90,10 @@ Actions::populate_main_actions(RefPtr<Gtk::UIManager> uiManager)
   // View Menu
   actionGroup->add(Action::create("ViewMenu", _("_View")));
   
-  assetsPanelAction = ToggleAction::create("ViewResources",
-    StockID("panel_resources"));
+  assetsPanelAction = ToggleAction::create("ViewAssets",
+    StockID("panel_assets"));
   assetsPanelAction->signal_toggled().connect(
-    mem_fun(*this, &Actions::on_menu_view_resources));
+    mem_fun(*this, &Actions::on_menu_view_assets));
   actionGroup->add(assetsPanelAction);
   
   timelinePanelAction = ToggleAction::create("ViewTimeline",
@@ -123,6 +123,9 @@ Actions::populate_main_actions(RefPtr<Gtk::UIManager> uiManager)
   actionGroup->add(Action::create("WindowNewWindow",
     StockID("new_window")),
     mem_fun(*this, &Actions::on_menu_window_new_window));
+  actionGroup->add(Action::create("WindowCloseWindow",
+    _("Close Window")),
+    mem_fun(*this, &Actions::on_menu_window_close_window));
   actionGroup->add(Action::create("WindowShowPanel", _("_Show Panel")));
 
   // Help Menu
@@ -157,7 +160,7 @@ Actions::populate_main_actions(RefPtr<Gtk::UIManager> uiManager)
       "      <menuitem action='EditPreferences'/>"
       "    </menu>"
       "    <menu action='ViewMenu'>"
-      "      <menuitem action='ViewResources'/>"
+      "      <menuitem action='ViewAssets'/>"
       "      <menuitem action='ViewTimeline'/>"
       "      <menuitem action='ViewViewer'/>"
       "    </menu>"
@@ -169,6 +172,7 @@ Actions::populate_main_actions(RefPtr<Gtk::UIManager> uiManager)
       "    </menu>"
       "    <menu action='WindowMenu'>"
       "      <menuitem action='WindowNewWindow'/>"
+      "      <menuitem action='WindowCloseWindow'/>"
       "      <menu action='WindowShowPanel'/>"
       "    </menu>"
       "    <menu action='HelpMenu'>"
@@ -204,11 +208,11 @@ Actions::populate_main_actions(RefPtr<Gtk::UIManager> uiManager)
 }
 
 void
-Actions::populate_show_panel_actions(RefPtr<Gtk::UIManager> uiManager)
+Actions::populate_show_panel_actions(Glib::RefPtr<Gtk::UIManager> uiManager)
 {  
   const int count = PanelManager::get_panel_description_count();
   
-  RefPtr<Gtk::ActionGroup> actionGroup = ActionGroup::create();
+  Glib::RefPtr<Gtk::ActionGroup> actionGroup = ActionGroup::create();
   for(int i = 0; i < count; i++)
     {
       const gchar *stock_id = PanelManager::get_panel_stock_id(i);
@@ -230,13 +234,13 @@ Actions::populate_show_panel_actions(RefPtr<Gtk::UIManager> uiManager)
 void
 Actions::update_action_state()
 {
-  /*REQUIRE(workspaceWindow.resourcesPanel != NULL);
+  /*REQUIRE(workspaceWindow.assetsPanel != NULL);
   REQUIRE(workspaceWindow.timelinePanel != NULL);
   REQUIRE(workspaceWindow.viewerPanel != NULL); 
   
   is_updating_action_state = true;
   assetsPanelAction->set_active(
-    workspaceWindow.resourcesPanel->is_shown());
+    workspaceWindow.assetsPanel->is_shown());
   timelinePanelAction->set_active(
     workspaceWindow.timelinePanel->is_shown());
   viewerPanelAction->set_active(
@@ -249,13 +253,13 @@ Actions::update_action_state()
 void
 Actions::on_menu_file_new_project()
 {
-  g_message("A File|New menu item was selecteda.");
+  g_message("A File|New menu item was selected.");
 }
 
 void
 Actions::on_menu_file_open_project()
 {
-  g_message("A File|Open menu item was selecteda.");
+  g_message("A File|Open menu item was selected.");
 }
 
 void
@@ -285,10 +289,10 @@ Actions::on_menu_edit_preferences()
 /* ===== View Menu Event Handlers ===== */
 
 void
-Actions::on_menu_view_resources()
+Actions::on_menu_view_assets()
 {
   //if(!is_updating_action_state)
-  //  workspaceWindow.resourcesPanel->show(
+  //  workspaceWindow.assetsPanel->show(
   //    assetsPanelAction->get_active());
 }
 
@@ -333,6 +337,13 @@ Actions::on_menu_window_new_window()
   application().get_window_manager().new_window(
     workspaceWindow.get_project(),
     workspaceWindow.get_controller()); 
+}
+
+void
+Actions::on_menu_window_close_window()
+{
+  workspaceWindow.hide();
+  // delete &workspaceWindow;
 }
 
 void

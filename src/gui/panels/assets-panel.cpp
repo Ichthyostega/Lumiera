@@ -21,12 +21,12 @@
 * *****************************************************/
 
 #include "../gtk-lumiera.hpp"
-#include "resources-panel.hpp"
+#include "assets-panel.hpp"
 
 namespace gui {
 namespace panels {
 
-ResourcesPanel::ResourcesPanel(workspace::PanelManager &panel_manager,
+AssetsPanel::AssetsPanel(workspace::PanelManager &panel_manager,
     GdlDockItem *dock_item) :
   Panel(panel_manager, dock_item, get_title(), get_stock_id())
 {
@@ -39,15 +39,15 @@ ResourcesPanel::ResourcesPanel(workspace::PanelManager &panel_manager,
 }
 
 const char*
-ResourcesPanel::get_title()
+AssetsPanel::get_title()
 {
-  return _("Resources");
+  return _("Assets");
 }
 
 const gchar*
-ResourcesPanel::get_stock_id()
+AssetsPanel::get_stock_id()
 {
-  return "panel_resources";
+  return "panel_assets";
 }
 
 }   // namespace panels

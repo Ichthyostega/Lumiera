@@ -27,6 +27,7 @@
 #define TIMELINE_PANEL_HPP
 
 #include "panel.hpp"
+#include "../widgets/timecode-widget.hpp"
 #include "../widgets/timeline-widget.hpp"
 
 using namespace gui::widgets;
@@ -168,8 +169,7 @@ private:
     timelineStates;
   
   // Toolbar Widgets
-  Gtk::Label timeIndicator;
-  Gtk::Button timeIndicatorButton;
+  TimeCode timeCode;
   
   MiniButton previousButton;
   MiniButton rewindButton;
@@ -181,12 +181,12 @@ private:
   MiniToggleButton arrowTool;
   MiniToggleButton iBeamTool;
   
-  Gtk::SeparatorToolItem seperator1;
+  Gtk::SeparatorToolItem separator1;
   
   MiniButton zoomIn;
   MiniButton zoomOut;
   
-  Gtk::SeparatorToolItem seperator2;
+  Gtk::SeparatorToolItem separator2;
     
   // Internals
   bool updatingToolbar;

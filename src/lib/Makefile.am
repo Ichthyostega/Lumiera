@@ -44,7 +44,6 @@ liblumiera_la_SOURCES =					\
 	$(liblumiera_la_srcdir)/lockerror.c		\
 	$(liblumiera_la_srcdir)/logging.cpp		\
 	$(liblumiera_la_srcdir)/luid.c			\
-	$(liblumiera_la_srcdir)/lumitime.cpp		\
 	$(liblumiera_la_srcdir)/mpool.c			\
 	$(liblumiera_la_srcdir)/mrucache.c		\
 	$(liblumiera_la_srcdir)/mutex.c			\
@@ -61,6 +60,8 @@ liblumiera_la_SOURCES =					\
 	$(liblumiera_la_srcdir)/test/test-helper.cpp	\
 	$(liblumiera_la_srcdir)/test/testoption.cpp	\
 	$(liblumiera_la_srcdir)/time.c			\
+	$(liblumiera_la_srcdir)/time/lumitime.cpp	\
+	$(liblumiera_la_srcdir)/time/quantiser.cpp	\
 	$(liblumiera_la_srcdir)/tmpbuf.c		\
 	$(liblumiera_la_srcdir)/util.cpp
 

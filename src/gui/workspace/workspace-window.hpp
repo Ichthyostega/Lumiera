@@ -34,7 +34,7 @@
 #include "actions.hpp"
 #include "panel-manager.hpp"
 
-#include "../panels/resources-panel.hpp"
+#include "../panels/assets-panel.hpp"
 #include "../panels/viewer-panel.hpp"
 #include "../panels/timeline-panel.hpp"
 
@@ -68,6 +68,8 @@ public:
   gui::controller::Controller& get_controller();
   
   PanelManager& get_panel_manager();
+
+  void set_close_window_sensitive(bool enable);
 
 private:
   void create_ui();

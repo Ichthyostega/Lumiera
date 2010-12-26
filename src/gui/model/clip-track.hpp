@@ -20,7 +20,7 @@
 
 */
 /**
- * @file widgets/timeline/clip-track.hpp
+ * @file model/clip-track.hpp
  * This file contains the definition of timeline track objects which
  * contain clips.
  */
