@@ -36,27 +36,15 @@ namespace lumiera {
 
 
   /**
-   * C++ convenience wrapper representing a time value, which could denote
-   * a temporal position (time point) relative to an (implicit) timeline zero
-   * point, or it could represent a time interval.
+   * Lumiera's internal time data.
+   * Time denotes a time point, specified as opaque value on an 
+   * quasi continuous ("sufficiently precise") internal time scale, relative
+   * to an (implicit) timeline zero point. The actual implementation relies
+   * on gavl_time_t (long) values.
    * 
-   * This wrapper is deliberately kept rather limited as not to be completely
-   * interchangeable with and integral type. The rationale is that time values
-   * should be kept separate and tagged as time values. The following is supported:
-   * - conversions from / to gavl_time_t (which is effectively a int64_t)
-   * - additions and subtractions of time values
-   * - multiplication with an integral factor
-   * - comparisons between time values and gavl_time_t values
+   * @see lib::time::TimeVar for an number-like time value usable for calculations
    * 
-   * @todo consider the possible extensions
-   *       - parsing and pretty printing
-   *       - quantising of floating point values
-   *       - conversion to boost::rational
-   *       - define a Framerate type
-   * 
-   * @note this is currently (10/08) an experimental implementation to ease
-   *       the time handling within C++ code. It is advisable not to use it
-   *       on external interfaces (use gavl_time_t there please).
+   * @todo it is not clear to which degree Time is mutable...
    */
   class Time 
     : boost::additive<Time,

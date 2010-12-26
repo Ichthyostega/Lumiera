@@ -1,6 +1,6 @@
 format 58
 "CommonLib" // CommonLib
-  revision 20
+  revision 22
   modified_by 5 "hiv"
   // class settings
   //class diagram settings
@@ -811,6 +811,380 @@ ${items}};
     end
   end
 
+  classview 135685 "Time Handling"
+    //class diagram settings
+    draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default show_stereotype_properties default
+    //collaboration diagram settings
+    show_full_operations_definition default show_hierarchical_rank default write_horizontally default drawing_language default package_name_in_tab default show_context default draw_all_relations default shadow default show_stereotype_properties default
+    //object diagram settings
+     write_horizontally default package_name_in_tab default show_context default auto_label_position default draw_all_relations default shadow default show_stereotype_properties default
+    //sequence diagram settings
+    show_full_operations_definition default write_horizontally default class_drawing_mode default drawing_language default draw_all_relations default shadow default show_stereotype_properties default
+    //state diagram settings
+    package_name_in_tab default show_context default auto_label_position default write_trans_label_horizontally default show_trans_definition default draw_all_relations default shadow default
+    show_activities default region_horizontally default drawing_language default show_stereotype_properties default
+    //class settings
+    //activity diagram settings
+    package_name_in_tab default show_context default show_opaque_action_definition default auto_label_position default write_flow_label_horizontally default draw_all_relations default shadow default
+    show_infonote default drawing_language default show_stereotype_properties default
+    classdiagram 142725 "Time flavours"
+      draw_all_relations no hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default show_stereotype_properties default
+      size A4
+    end
+
+    class 134917 "Time"
+      visibility public 
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      comment "denotes a temporal position (time point) in continuous time.
+This implies a time origin (point of reference), which is kept implicit and depends on the context.
+"
+      classrelation 206085 // <generalisation>
+	relation 195205 ---|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 206085 // <generalisation>
+	  b parent class_ref 168709 // TimeValue
+      end
+    end
+
+    class 168581 "TimeSpan"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 206341 // <generalisation>
+	relation 195461 ---|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 206341 // <generalisation>
+	  b parent class_ref 168837 // Duration
+      end
+
+      classrelation 206469 // start (<unidirectional association>)
+	relation 195589 --->
+	  a role_name "start" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 206469 // start (<unidirectional association>)
+	  b parent class_ref 134917 // Time
+      end
+    end
+
+    class 168709 "TimeValue"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+    end
+
+    class 168837 "Duration"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 206213 // <generalisation>
+	relation 195333 ---|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 206213 // <generalisation>
+	  b parent class_ref 168709 // TimeValue
+      end
+    end
+
+    class 168965 "QuTime"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 206853 // <unidirectional association>
+	relation 195973 --->
+	  stereotype "refers_to"
+	  a role_name "" multiplicity "1" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 206853 // <unidirectional association>
+	  b multiplicity "*" parent class_ref 169093 // Quantiser
+      end
+
+      classrelation 208133 // <generalisation>
+	relation 197253 ---|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 208133 // <generalisation>
+	  b parent class_ref 134917 // Time
+      end
+
+      classrelation 208901 // <unidirectional association>
+	relation 198021 --->
+	  stereotype "yield"
+	  a role_name "" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 208901 // <unidirectional association>
+	  b parent class_ref 170629 // TCode
+      end
+    end
+
+    class 169093 "Quantiser"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 206981 // <unidirectional association>
+	relation 196101 --->
+	  stereotype "use"
+	  a role_name "" multiplicity "1" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 206981 // <unidirectional association>
+	  b parent class_ref 169221 // TimeGrid
+      end
+
+      classrelation 209029 // <directional aggregation>
+	relation 198149 o-->
+	  stereotype "provide"
+	  a role_name "" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 209029 // <directional aggregation>
+	  b parent class_ref 170757 // Format
+      end
+    end
+
+    class 169221 "TimeGrid"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      attribute 134277 "origin"
+	protected type class_ref 134917 // Time
+	multiplicity "1"
+	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+      end
+
+      attribute 134405 "scale"
+	protected type class_ref 168837 // Duration
+	cpp_decl "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+      end
+    end
+
+    class 170373 "TimeVar"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 208261 // <generalisation>
+	relation 197381 ---|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 208261 // <generalisation>
+	  b parent class_ref 168709 // TimeValue
+      end
+
+      classrelation 208389 // val (<unidirectional association>)
+	relation 197509 --->
+	  a role_name "val" multiplicity "1" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 208389 // val (<unidirectional association>)
+	  b multiplicity "*" parent class_ref 134917 // Time
+      end
+    end
+
+    class 170501 "QuTimeSpan"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 208517 // <generalisation>
+	relation 197637 ---|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 208517 // <generalisation>
+	  b parent class_ref 168581 // TimeSpan
+      end
+    end
+
+    class 170629 "TCode"
+      visibility package 
+      nformals 1
+      formal name "F" type "class" explicit_default_value ""
+        explicit_extends ""
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 208645 // <dependency>
+	relation 197765 -_->
+	  a default
+	    cpp default "#include in source"
+	    classrelation_ref 208645 // <dependency>
+	  b parent class_ref 170629 // TCode
+      end
+
+      classrelation 208773 // <dependency>
+	relation 197893 -_->
+	  a default
+	    cpp default "#include in source"
+	    classrelation_ref 208773 // <dependency>
+	  b parent class_ref 170757 // Format
+      end
+    end
+
+    class 170757 "Format"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+    end
+
+    class 170885 "FrameNr"
+      visibility package 
+      nactuals 1
+      actual class class_ref 170629 // TCode
+        rank 0 explicit_value ""
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 209157 // <generalisation>
+	relation 198277 ---|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 209157 // <generalisation>
+	  b parent class_ref 170629 // TCode
+      end
+    end
+
+    class 171013 "CompoundGrid"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 209285 // <generalisation>
+	relation 198405 ---|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 209285 // <generalisation>
+	  b parent class_ref 169221 // TimeGrid
+      end
+    end
+  end
+
   package_ref 131077 // ConfigQuery
 
   package_ref 132485 // Containers
@@ -1159,24 +1533,6 @@ ${inlines}
 	
 	
       end
-    end
-
-    class 134917 "Time"
-      visibility public 
-      cpp_decl "${comment}${template}class ${name}${inherit}
-  {
-${members}  };
-${inlines}
-"
-      java_decl ""
-      php_decl ""
-      python_2_2 python_decl ""
-      idl_decl ""
-      explicit_switch_type ""
-      
-      comment "denotes a temporal position (time point), based on timeline start.
-
-investigate posix.4 realtime timers, wrap these here"
     end
 
     class 135301 "Factory"
