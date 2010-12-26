@@ -6584,7 +6584,7 @@ For Lumiera, the static typing approach is of limited value -- it excels when va
 &amp;rarr; more on [[usage situations|TimeUsage]]
 </pre>
 </div>
-<div title="TimeUsage" modifier="Ichthyostega" modified="201012241820" created="201012230204" tags="design discuss" changecount="12">
+<div title="TimeUsage" modifier="Ichthyostega" modified="201012260235" created="201012230204" tags="design discuss" changecount="15">
 <pre>the following collection of usage situations helps to shape the details of the time values and time quantisation design. &amp;rarr; see also  [[time quantisation|TimeQuant]]
 
 ;time position of an object
@@ -6612,18 +6612,40 @@ For Lumiera, the static typing approach is of limited value -- it excels when va
 ;relative placement
 :because of the divergence between quantised and unquantised values, the question arises, if placement relative to another object refers to the raw position or the already quantised position. Basically all the variations discussed for //time and length of an object// also do apply here.
 
-!notable problems
+!notable issues
 ''Direct quantisation of length is not possible''. This is due to the non-linear nature of all but the most trivial time grids: Already such a simple addition like a start offset destroys linearity, and this still the more is true within a compound grid where the grid spacing changes at some point. Thus, the length has to be re-established at the target position of an time interval after each change involving quantisation. Regarding the //strategy// to apply when re-establishing the length, it seems more appropriate to treat the object as an entity which is moved, which means to do quantisation in two steps, first the position, then the endpoint (the second option in the description above). But it seems advisable not to hard wire that strategy -- better put it into the quantiser.
 
-''When to materialise a quantisation''. Because of the basic intention to retain information, we delay actually applying the quantisation to the stored values as much as possible. This has the downside of possibly accumulating off-grid values without that being evident. On the other hand, allowing for quantised changes inevitably pulls in all the complexity of mixing quantised and non-quantised values. It seems more appropriate to move these distinctions out of the cope of this design and offload them onto the client (code using these time classes): thus we'd //only accept raw time values for redefining a quantised interval.// But the client code is still free to use a separate quantisation, which might even utilise a different grid. For example, when moving a clip taken from 50fps media, the new position might be quantised to the 50fps grid established by the media, while the target timeline runs with 25fps, allowing for finer adjustments based on the intermediate frames present in the source material.
+We should note, that the problems regarding quantised durations also carry over to //offsets:// it is difficult to ''define the semantics of a quantised offset''. Seemingly the only viable approach is to have a //intended offset,// and then to apply a re-quantisation to the target after applying the (raw) offset.
 
-Taking this approach also nicely removes the problem with the ''impossibility to quantise offsets''. This problem is an immediate consequence of the nonlinearity of most grids (as stated above). By just accepting raw time values for change, and indeed preferring just to re-set to new values, we don't solve that problem, but move it out of scope.
+''When to materialise a quantisation''. Because of the basic intention to retain information, we delay actually applying the quantisation to the stored values as much as possible. But not materialising immediately at quantisation has the downside of possibly accumulating off-grid values without that being evident. Most notably, if we apply the raw offsets produced by GUI interactions, the object's positions and lengthes are bound to accumulate spurious information never intended by the user.
+
+Thus, an especially important instance of that problem is ''how to deal with updates in a quantised environment''. If we handle quantisation stictly as a view employed on output, we run into the problems with accumulating spurious information. On the other hand, allowing for quantised changes inevitably pulls in all the complexity of mixing quantised and non-quantised values. It would be desirable somehow to move these distinctions out of the scope of this design and offload them onto the client (code using these time classes).
 
 Another closely related problem is ''when to allow mutations'', if at all. We can't completely do away with mutations, simply because we don't have a pure functional language at our disposal. The whole concept of //reference semantics// doesn't play so well with immutable objects. The Lumiera high-level (session) model certainly relies on objects intended to be //manipulated.// Thus we need a re-settable length field in {{{MObject}}} and we need a time variable for position calculations. Yet we could make any //derived objects// into immutable descriptor records, which certainly helps with parallelism.
 
 The ''problem with playback position'' is -- that it's an attempt to conceptualise a non-existing entity. There is no such thing like &quot;the&quot; playback position. Yet most applications I'm aware off employ this concept. Likely they got trapped by the metaphor of the tape head, again. We should do away with that. On playback, we should show a //projection of wall-clock time onto the expected playback range// -- not more, not less. It should be acknowledged that there is //no direct link to the ongoing playback processes,// besides the fact that they're assumed to sync to wall-clock time as well. Recall, typically there are multiple playback processes going on in compound, and each might run on a different update rate. If we really want a //visual out-of-sync indicator,// we should treat that as a separate reporting facility and display it apart of the playback cursor.
 
 Note that the ''display window might be treated as just an independent instance of quantisation''. This is similar to the approach taken above for modifying quantised time span values. We should provide a special kind of time grid, the display coordinates. The origin of these is always defined to the left (lower) side of the interval to be displayed, and they are gauged in screen units (pixels or similar, as used by the GUI toolkit set). The rest is handled by the general quantisation mechanisms. The problem of aligning the display should be transformed into a general facility to align grids, and solved for the general case. Doing so solves the remaining problems with quantised value changes and with ''specifying relative placements'' as well: If we choose to represent them as quantised values, we might (or might not) also choose to apply this //grid-alignment function.//
+
+!substantial problems to be solved
+* how to align multiple grids
+* how to integrate modifications of quantised values.
+
+The problem with modification of quantised values highlights an inner contratiction or conflicting goals
+* the whole system should fit in naturally and just feel like using raw time values
+* quantisation should be added //late// -- like a view
+* there should be a guidance towards the intended proper use
+
+!!! possible solutions{{red{WIP 12/10}}}
+* only allow to assign a completely new setting
+* only accept raw time values for redefining a quantised interval
+* only accept an abstract //modification object.//
+
+!!!usage considerations
+Question is: how fine grained and configurable needs this to be?
+* for example, when moving a clip taken from 50fps media, the new position might be quantised to the 50fps grid established by the media, while the target timeline runs with 25fps, allowing for finer adjustments based on the intermediate frames present in the source material.
+* likely we need a &quot;nudge by unit(s)&quot;
+
 </pre>
 </div>
 <div title="Timeline" modifier="Ichthyostega" modified="201011220126" created="200706250721" tags="def" changecount="21">
