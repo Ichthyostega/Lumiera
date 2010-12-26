@@ -58,15 +58,11 @@ Clip::draw_clip(Cairo::RefPtr<Cairo::Context> cr,
   cr->rectangle(x, 1, width, 100-2); 
   cr->clip();
 
-  cr->move_to(x + 3, 15);
-  cr->set_source_rgb(1.0, 1.0, 1.0);
-  Cairo::RefPtr<Cairo::ToyFontFace> font =
-    Cairo::ToyFontFace::create("Bitstream Charter",
-                               Cairo::FONT_SLANT_NORMAL,
-                               Cairo::FONT_WEIGHT_NORMAL);
-  cr->set_font_face(font);
-  cr->set_font_size(11);
-  cr->show_text("Clip Name");  // TODO: get clip name from model
+  cr->move_to (x + 3, 12);
+  cr->set_source_rgb (1.0, 1.0, 1.0);
+
+  cr->set_font_size (9);
+  cr->show_text ("Clip Name");  // TODO: get clip name from model
 
   // TODO: Show thumbnails for clip
 }
