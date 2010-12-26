@@ -36,6 +36,8 @@ extern "C" {
 namespace lib {
 namespace time {
   
+  using lumiera::Time;
+  
   
   /**
    * fixed format time specification.
@@ -46,6 +48,7 @@ namespace time {
     : boost::totally_ordered<Time,
       boost::totally_ordered<Time, gavl_time_t> >
     {
+    protected:
       gavl_time_t t_;
       
     public:
@@ -62,11 +65,11 @@ namespace time {
       operator gavl_time_t ()  const { return t_; }
       
       // Supporting totally_ordered
-      friend bool operator<  (Time const& t1, Time const& t2)  { return t1.t_ <  t2.t_; }
-      friend bool operator<  (Time const& t1, gavl_time_t t2)  { return t1.t_ <  t2   ; }
-      friend bool operator>  (Time const& t1, gavl_time_t t2)  { return t1.t_ >  t2   ; }
-      friend bool operator== (Time const& t1, Time const& t2)  { return t1.t_ == t2.t_; }
-      friend bool operator== (Time const& t1, gavl_time_t t2)  { return t1.t_ == t2   ; }
+      friend bool operator<  (TimeValue const& t1, TimeValue const& t2)  { return t1.t_ <  t2.t_; }
+      friend bool operator<  (TimeValue const& t1, gavl_time_t t2)       { return t1.t_ <  t2   ; }
+      friend bool operator>  (TimeValue const& t1, gavl_time_t t2)       { return t1.t_ >  t2   ; }
+      friend bool operator== (TimeValue const& t1, TimeValue const& t2)  { return t1.t_ == t2.t_; }
+      friend bool operator== (TimeValue const& t1, gavl_time_t t2)       { return t1.t_ == t2   ; }
     };
   
   
@@ -97,21 +100,21 @@ namespace time {
   /**
    * Lumiera's internal time value datatype
    */
-  class Time
-    : public TimeValue
-    {
-    public:
-      explicit 
-      Time (TimeValue val=0)
-        : TimeValue(val)
-        { }
-      
-      Time ( long millis
-           , uint secs 
-           , uint mins =0
-           , uint hours=0
-           );
-    };
+//class Time
+//  : public TimeValue
+//  {
+//  public:
+//    explicit 
+//    Time (TimeValue val=0)
+//      : TimeValue(val)
+//      { }
+//    
+//    Time ( long millis
+//         , uint secs 
+//         , uint mins =0
+//         , uint hours=0
+//         );
+//  };
   
   
   class Offset
@@ -128,9 +131,9 @@ namespace time {
   inline Offset
   operator- (Time const& end, Time const& start)
   {
-    TimeVar distance(end);
-    distance -= start;
-    return Offset(distance);
+//  TimeVar distance(end);
+//  distance -= start;
+//  return Offset(distance);
   }
     
   typedef const Offset TimeDistance;
