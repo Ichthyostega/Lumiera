@@ -47,20 +47,30 @@ namespace time {
       boost::totally_ordered<TimeValue, gavl_time_t> >
     {
     protected:
+      /** the raw (internal) time value
+       *  used to implement the time types */
       gavl_time_t t_;
       
-    public:
-      static const TimeValue MAX ; 
-      static const TimeValue MIN ;
       
+      /** Assigning of time values is not allowed,
+       *  but derived classed might allow that */
+      TimeValue&
+      operator= (TimeValue const& o)
+        {
+          t_ = o.t_;
+          return *this;
+        }
+      
+    public:
       explicit 
       TimeValue (gavl_time_t val=0)
         : t_(val)
         { }
       
-      // using standard copy operations
-      
-      operator gavl_time_t ()  const { return t_; }
+      /** copy initialisation allowed */
+      TimeValue (TimeValue const& o)
+        : t_(o.t_)
+        { }
       
       // Supporting totally_ordered
       friend bool operator<  (TimeValue const& t1, TimeValue const& t2)  { return t1.t_ <  t2.t_; }
@@ -71,6 +81,11 @@ namespace time {
     };
   
   
+  
+  /** a mutable time value,
+   *  behaving like a plain number
+   *  and allowing copying and re-accessing
+   */
   class TimeVar
     : public TimeValue
     , boost::additive<TimeVar>
@@ -81,6 +96,21 @@ namespace time {
         : TimeValue(time)
         { }
       
+      // Allowing copy and assignment
+      TimeVar (TimeVar const& o)
+        : TimeValue(o)
+        { }
+      
+      TimeVar&
+      operator= (TimeValue const& o)
+        {
+          t_ = TimeVar(o);
+          return *this;
+        }
+      
+      
+      // Supporting mixing with plain long int arithmetics
+      operator gavl_time_t ()  const { return t_; }
       
       // Supporting additive
       TimeVar& operator+= (TimeVar const& tx)  { t_ += tx.t_; return *this; }
@@ -102,6 +132,9 @@ namespace time {
     : public TimeValue
     {
     public:
+      static const Time MAX ; 
+      static const Time MIN ;
+      
       explicit 
       Time (TimeValue val= TimeValue(0))
         : TimeValue(val)
@@ -121,17 +154,17 @@ namespace time {
         
     public:
       explicit 
-      Offset (TimeValue distance)
+      Offset (TimeValue const& distance)
         : TimeValue(distance)
         { }
     };
       
   inline Offset
-  operator- (Time const& end, Time const& start)
+  operator- (TimeValue const& end, TimeValue const& start)
   {
-//  TimeVar distance(end);
-//  distance -= start;
-//  return Offset(distance);
+    TimeVar distance(end);
+    distance -= start;
+    return Offset(distance);
   }
     
   typedef const Offset TimeDistance;

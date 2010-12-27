@@ -49,27 +49,64 @@ namespace test{
    */
   class TimeValue_test : public Test
     {
+      gavl_time_t
+      random_or_get (Arg arg)
+        {
+          if (isnil(arg))
+            return (rand() % 10000);
+          else
+            return lexical_cast<gavl_time_t> (arg[1]);
+        }
+      
+      
       virtual void
       run (Arg arg) 
         {
-          long refval= isnil(arg)?  1 : lexical_cast<long> (arg[1]);
+          TimeValue ref (random_or_get(arg));
           
-          TimeValue ref (refval);
-          
-          checkBasics (ref);
+          checkBasicTimeValues (ref);
           checkComparisons (ref);
           checkComponentAccess();
         } 
       
       
+      /** @test creating some time values and performing trivial comparisons.
+       *  @note you can't do much beyond that, because TimeValues as such
+       *        are a "dead end": they are opaque and can't be altered.
+       */
       void
-      checkBasics (TimeValue ref)
+      checkBasicTimeValues (TimeValue org)
         {
+          TimeValue zero;
+          TimeValue one (1);
+          TimeValue max (Time::MAX);
+          TimeValue min (Time::MIN);
+          
+          TimeValue val (org);
+          
+          CHECK (zero == zero);
+          CHECK (zero <= zero);
+          CHECK (zero >= zero);
+          
+          CHECK (zero < one);
+          CHECK (min  < max);
+          CHECK (min  < val);
+          CHECK (val  < max);
+          
+          // mixed comparisons with raw numeric time
+          gavl_time_t g2 (-2);
+          CHECK (zero > g2);
+          CHECK (one  > g2);
+          CHECK (one >= g2);
+          CHECK (g2  < max);
+          
+          CHECK (!(g2 > max));
+          CHECK (!(g2 < min));
         }
       
       
       void
-      checkComparisons (TimeValue ref)
+      checkComparisons (TimeValue org)
         {
         }
       
