@@ -49,26 +49,55 @@ protected:
 public:
 
   /**
+   * Returns true if this track can own any child tracks.
+   **/
+  virtual bool
+  can_host_children () const;
+
+  /**
    * Gets the list of child tracks.
    **/
   virtual const std::list< boost::shared_ptr<Track> >&
-    get_child_tracks() const;
+  get_child_tracks () const;
   
+  /**
+   * Gets the enabled status of this track, i.e. if the track is to be rendered.
+   **/
+  bool
+  getEnabled () const;
+
+  /**
+   * Gets the locked status of this track, i.e. if the track can be edited.
+   **/
+  bool
+  getLocked () const;
+
   /**
    * Gets the name of this track.
    **/
-  const std::string get_name() const;
-  
+  const std::string
+  get_name () const;
+
+  /**
+   * Sets the enabled status of this track, i.e. if the track is to be rendered.
+   * @param[in] name The new enabled status.
+   **/
+  void
+  setEnabled (bool enabled);
+
+  /**
+   * Gets the locked status of this track, i.e. if the track can be edited.
+   * @param[in] name The new locked status.
+   **/
+  void
+  setLocked (bool locked);
+
   /**
    * Sets the name of this track.
    * @param[in] name The new name to set this track to.
    **/
-  void set_name(const std::string &name);
-  
-  /**
-   * Returns true if this track can own any child tracks.
-   **/
-  virtual bool can_host_children() const;
+  void
+  set_name (const std::string &name);
       
   /**
    * A utility function that attempts to find the parent of a track by
@@ -78,59 +107,94 @@ public:
    * shared_ptr if none was found.
    **/
   virtual boost::shared_ptr<ParentTrack>
-    find_descendant_track_parent(boost::shared_ptr<Track> child);
+  find_descendant_track_parent (boost::shared_ptr<Track> child);
 
-public:
+  /**
+   * A signal which fires when the enabled status changes.
+   * @return Returns the signal. The signal sends the new name for the
+   * track.
+   **/
+  sigc::signal<void, bool>
+  signalEnabledChanged () const;
+
+  /**
+   * A signal which fires when the locked status changes changes.
+   * @return Returns the signal. The signal sends the new name for the
+   * track.
+   **/
+  sigc::signal<void, bool>
+  signalLockedChanged () const;
 
   /**
    * A signal which fires when the name changes.
    * @return Returns the signal. The signal sends the new name for the
    * track.
    **/
-  sigc::signal<void, std::string> signal_name_changed() const;
+  sigc::signal<void, std::string>
+  signalNameChanged () const;
 
-public:
   /**
    * A debugging helper function that prints this track, and all it's
    * child tracks in a human-readable form.
    * @return Returns the human readable string.
    **/
-  std::string print_branch();
+  std::string
+  print_branch ();
   
   /**
    * A pure-virtual function which is the base of functions that print
    * this track in human readable form.
    * @return Returns the human readable string.
    **/
-  virtual std::string print_track() = 0;
+  virtual std::string
+  print_track () = 0;
    
-protected:
-  /**
-   * The internal implementation of print_branch.
-   * @param indentation The level of recursion into the tree. This value
-   * is used to specify the width of indentation to print with.
-   * @return Returns the human readable string.
-   **/
-  std::string print_branch_recursive(const unsigned int indentation);
-
-private:
-  //----- Data -----//
-  /**
-   * The name of this track.
-   **/
-  std::string name;
-  
-  /**
-   * A signal which fires when the name changes.
-   **/
-  sigc::signal<void, std::string> nameChangedSignal;
-
 protected:
   /**
    * An object used internally as a return value for when there's no
    * children.
    **/
   static const std::list< boost::shared_ptr<Track> > NoChildren;
+
+  /**
+   * The internal implementation of print_branch.
+   * @param indentation The level of recursion into the tree. This value
+   * is used to specify the width of indentation to print with.
+   * @return Returns the human readable string.
+   **/
+  std::string
+  print_branch_recursive (const unsigned int indentation);
+
+private:
+  /**
+   * The name of this track.
+   **/
+  std::string name;
+
+  /**
+   * True if this track is enabled, i.e. will not be rendered.
+   */
+  bool enabled;
+
+  /**
+   * True if this track is locked, i.e. cannot be edited.
+   */
+  bool locked;
+
+  /**
+   * A signal which fires when the enabled status changes.
+   **/
+  sigc::signal<void, bool> enabledChangedSignal;
+
+  /**
+   * A signal which fires when the locked status changes.
+   **/
+  sigc::signal<void, bool> lockedChangedSignal;
+
+  /**
+   * A signal which fires when the name changes.
+   **/
+  sigc::signal<void, std::string> nameChangedSignal;
 };
 
 }   // namespace model

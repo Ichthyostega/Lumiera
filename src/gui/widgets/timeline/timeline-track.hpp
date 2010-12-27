@@ -62,6 +62,9 @@ public:
   };
   
 public:
+  /**
+   * Constructor
+   */
   Track(TimelineWidget &timeline_widget,
     boost::shared_ptr<model::Track> track);
    
@@ -74,6 +77,10 @@ public:
   
   boost::shared_ptr<model::Track> get_model_track() const;
   
+  /**
+   * Return the visual height of the track in pixels.
+   * @return The visual height of the track in pixels.
+   */
   int get_height() const;
   
   /**
@@ -125,45 +132,63 @@ public:
   virtual void draw_track(Cairo::RefPtr<Cairo::Context> cairo,
     TimelineViewWindow* const window)
     const = 0;
-    
-public:
-  //----- Constants -----//
-  
+
+private:
+
   /**
    * Specifies the period of the expand animation in seconds.
    **/
   static const float ExpandAnimationPeriod;
 
 private:
-  //----- Internals -----//
-  void update_name();
-  
-private:
 
-  //----- Event Handlers -----//
-  void on_enable();
-  void on_lock();
+  /**
+   * Event handler for when the enabled status changes.
+   **/
+  void onEnabledChanged(bool);
+
+  /**
+   * Event handler for when the track name changes.
+   **/
+  void onNameChanged(std::string);
+
+  /**
+   * Event handler for when the user requested to remove the track.
+   **/
+  void on_remove_track();
+
+  /**
+   * Event handler for when the locked status changes.
+   **/
+  void onLockedChanged(bool);
+
+  /**
+   * Event handler for when the user requested a name change.
+   **/
   void on_set_name();
   
   /**
-   * Event handler for when the track name changes
-   **/
-  void on_name_changed(std::string);
+   * Event handler for when the user pressed the Enable button.
+   */
+  void onToggleEnabled();
 
-  void on_remove_track();
-  
+  /**
+   * Event handler for when the user pressed the Lock button.
+   */
+  void onToggleLocked();
+
+  void updateEnableButton();
+
+  void updateLockButton();
+
+  void updateName();
+
 protected:
 
   TimelineWidget &timelineWidget;
   boost::shared_ptr<model::Track> model_track;
 
 private:
-
-  /**
-   * True if this track is enabled.
-   */
-  bool enabled;
-
   /**
    * This bool is true if this branch is expanded. false if it is
    * collapsed.
@@ -193,11 +218,6 @@ private:
    * An internal timer used for the expand/collapse animation.
    **/
   boost::scoped_ptr<Glib::Timer> expand_timer;
-
-  /**
-   * True if this track is locked.
-   */
-  bool locked;
 
   //----- Header Widgets ------//
   

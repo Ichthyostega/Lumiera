@@ -40,10 +40,8 @@ Track::Track(TimelineWidget &timeline_widget,
   shared_ptr<model::Track> track) :
   timelineWidget(timeline_widget),
   model_track(track),
-  enabled(true),
   expanded(true),
   expandDirection(None),
-  locked(false),
   headerWidget(*this),
   enableButton(Gtk::StockID("track_enabled"), WindowManager::MenuIconSize),
   lockButton(Gtk::StockID("track_unlocked"), WindowManager::MenuIconSize)
@@ -53,8 +51,8 @@ Track::Track(TimelineWidget &timeline_widget,
   titleMenuButton.set_relief(RELIEF_HALF);
   titleMenuButton.unset_flags(CAN_FOCUS);
     
-  buttonBar.append(enableButton, mem_fun(this, &Track::on_enable));
-  buttonBar.append(lockButton, mem_fun(this, &Track::on_lock));
+  buttonBar.append(enableButton, mem_fun(this, &Track::onToggleEnabled));
+  buttonBar.append(lockButton, mem_fun(this, &Track::onToggleLocked));
   
   headerWidget.set_child_widget(headerBox);
 
@@ -71,11 +69,11 @@ Track::Track(TimelineWidget &timeline_widget,
   title_list.push_back( Menu_Helpers::MenuElem(_("_Remove"),
     mem_fun(this, &Track::on_remove_track) ) );
     
-  update_name();
-  
-  // Setup tooltips
-  enableButton.set_tooltip_text(_("Disable track"));
-  lockButton.set_tooltip_text(_("Lock track"));
+  updateEnableButton();
+
+  updateLockButton();
+
+  updateName();
 
   // Setup the context menu
   Menu::MenuList& context_list = contextMenu.items();
@@ -85,9 +83,12 @@ Track::Track(TimelineWidget &timeline_widget,
     mem_fun(this, &Track::on_remove_track) ) );
     
   // Connect to the model
-  model_track->signal_name_changed().connect(sigc::mem_fun(this,
-    &Track::on_name_changed));
-    
+  model_track->signalEnabledChanged().connect(sigc::mem_fun(this,
+    &Track::onEnabledChanged));
+  model_track->signalLockedChanged().connect(sigc::mem_fun(this,
+    &Track::onLockedChanged));
+  model_track->signalNameChanged().connect(sigc::mem_fun(this,
+    &Track::onNameChanged));
 }
 
 Track::~Track()
@@ -226,42 +227,15 @@ Track::show_header_context_menu(guint button, guint32 time)
 }
 
 void
-Track::update_name()
+Track::onEnabledChanged(bool)
 {
-  REQUIRE(model_track);
-  titleMenuButton.set_label(model_track->get_name());
+  updateEnableButton();
 }
 
 void
-Track::on_enable()
+Track::onLockedChanged(bool)
 {
-  enabled = !enabled;
-  if (enabled)
-    {
-      enableButton.set_stock_id(Gtk::StockID("track_enabled"), WindowManager::MenuIconSize);
-      enableButton.set_tooltip_text(_("Disable track"));
-    }
-  else
-    {
-      enableButton.set_stock_id(Gtk::StockID("track_disabled"), WindowManager::MenuIconSize);
-      enableButton.set_tooltip_text(_("Enable track"));
-    }
-}
-
-void
-Track::on_lock()
-{
-  locked = !locked;
-  if (locked)
-    {
-      lockButton.set_stock_id(Gtk::StockID("track_locked"), WindowManager::MenuIconSize);
-      lockButton.set_tooltip_text(_("Unlock track"));
-    }
-  else
-    {
-      lockButton.set_stock_id(Gtk::StockID("track_unlocked"), WindowManager::MenuIconSize);
-      lockButton.set_tooltip_text(_("Lock track"));
-    }
+  updateLockButton();
 }
 
 void
@@ -281,9 +255,9 @@ Track::on_set_name()
 }
 
 void
-Track::on_name_changed(std::string)
+Track::onNameChanged(std::string)
 {
-  update_name();
+  updateName();
 }
 
 void
@@ -294,6 +268,61 @@ Track::on_remove_track()
   REQUIRE(state);
   
   state->get_sequence()->remove_descendant_track(model_track);
+}
+
+void
+Track::onToggleEnabled()
+{
+  bool status = model_track->getEnabled();
+  model_track->setEnabled(!status);
+}
+
+void
+Track::onToggleLocked()
+{
+  bool status = model_track->getLocked();
+  model_track->setLocked(!status);
+}
+
+void
+Track::updateEnableButton()
+{
+  REQUIRE (model_track);
+
+  if (model_track->getEnabled())
+    {
+      enableButton.set_stock_id(Gtk::StockID("track_enabled"), WindowManager::MenuIconSize);
+      enableButton.set_tooltip_text(_("Disable track"));
+    }
+  else
+    {
+      enableButton.set_stock_id(Gtk::StockID("track_disabled"), WindowManager::MenuIconSize);
+      enableButton.set_tooltip_text(_("Enable track"));
+    }
+}
+
+void
+Track::updateLockButton()
+{
+  REQUIRE (model_track);
+
+  if (model_track->getLocked())
+    {
+      lockButton.set_stock_id(Gtk::StockID("track_locked"), WindowManager::MenuIconSize);
+      lockButton.set_tooltip_text(_("Unlock track"));
+    }
+  else
+    {
+      lockButton.set_stock_id(Gtk::StockID("track_unlocked"), WindowManager::MenuIconSize);
+      lockButton.set_tooltip_text(_("Lock track"));
+    }
+}
+
+void
+Track::updateName()
+{
+  REQUIRE(model_track);
+  titleMenuButton.set_label(model_track->get_name());
 }
 
 }   // namespace timeline
