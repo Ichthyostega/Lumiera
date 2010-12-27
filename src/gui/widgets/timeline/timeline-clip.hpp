@@ -22,7 +22,8 @@
 /** @file widgets/timeline/timeline-clip.hpp
  ** This file contains the definition of timeline clip object
  */
- 
+
+#include <cairomm/pattern.h>
 
 #include "gui/gtk-lumiera.hpp"
 #include "gui/model/clip.hpp"
@@ -44,9 +45,18 @@ public:
   void draw_clip(Cairo::RefPtr<Cairo::Context> cairo,
     TimelineViewWindow* const window) const;
 
+  void
+  setSelected(bool state);
+
 private:
 
-  boost::shared_ptr<model::Clip> model_clip;
+  boost::shared_ptr<model::Clip> modelClip;
+
+  /**
+   * True when this clip is selected in the GUI.
+   */
+  bool selected;
+
 };
 
 }   // namespace timeline

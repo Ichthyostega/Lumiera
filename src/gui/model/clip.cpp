@@ -1,6 +1,6 @@
 /*
   clip.cpp  -  Implementation of the Clip object
- 
+
   Copyright (C)         Lumiera.org
     2008,               Joel Holdsworth <joel@airwebreathe.org.uk>
 
@@ -25,10 +25,55 @@
 namespace gui {
 namespace model {
 
-Clip::Clip()
-{
-  
-}
+  Clip::Clip()
+    : begin(1000000),
+      end(2000000)
+  {  }
+
+  gavl_time_t
+  Clip::getBegin() const
+  {
+    return begin;
+  }
+
+  gavl_time_t
+  Clip::getEnd() const
+  {
+    return end;
+  }
+
+  const std::string
+  Clip::getName() const
+  {
+    return name;
+  }
+
+  void
+  Clip::setBegin(gavl_time_t begin)
+  {
+    this->begin = begin;
+    // TODO: emit signal
+  }
+
+  void
+  Clip::setEnd(gavl_time_t end)
+  {
+    this->end = end;
+    // TODO: emit signal
+  }
+
+  void
+  Clip::setName(const std::string &name)
+  {
+    this->name = name;
+    nameChangedSignal.emit(name);
+  }
+
+  sigc::signal<void, std::string>
+  Clip::signalNameChanged() const
+  {
+    return nameChangedSignal;
+  }
 
 }   // namespace model
 }   // namespace gui

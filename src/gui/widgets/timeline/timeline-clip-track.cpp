@@ -32,12 +32,13 @@ namespace gui {
 namespace widgets {
 namespace timeline {
 
-ClipTrack::ClipTrack(TimelineWidget &timeline_widget,
+ClipTrack::ClipTrack(TimelineWidget &timelineWidget,
   boost::shared_ptr<model::Track> track) :
-  Track(timeline_widget, track)
+  Track(timelineWidget, track)
 {
   // TEST CODE: add a clip to the track
   boost::shared_ptr<model::Clip> model_clip(new model::Clip());
+  model_clip->setName("Clip Name");
   boost::shared_ptr<timeline::Clip> timeline_clip(new timeline::Clip(model_clip));
   clips.push_back(timeline_clip);
   // END TEST CODE

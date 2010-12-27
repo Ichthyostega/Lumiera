@@ -324,7 +324,7 @@ TimelineBody::draw_tracks(Cairo::RefPtr<Cairo::Context> cr)
     iterator != layout_tree.end();
     iterator++)
     {
-      const shared_ptr<model::Track> model_track(*iterator);
+      // const shared_ptr<model::Track> model_track(*iterator);
       const shared_ptr<timeline::Track> timeline_track =
         timelineWidget.lookup_timeline_track(*iterator);
         

@@ -105,7 +105,7 @@ TimelineWidget::set_state(shared_ptr<timeline::TimelineState> new_state)
   // Clear the track tree
   trackMap.clear();
 
-  if(state)
+  if (state)
     {
       // Hook up event handlers
       state->get_view_window().changed_signal().connect( sigc::mem_fun(

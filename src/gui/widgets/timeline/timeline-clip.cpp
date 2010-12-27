@@ -1,6 +1,6 @@
 /*
   timeline-clip.cpp  -  Implementation of the timeline clip object
- 
+
   Copyright (C)         Lumiera.org
     2008,               Joel Holdsworth <joel@airwebreathe.org.uk>
 
@@ -27,9 +27,14 @@ namespace widgets {
 namespace timeline {
 
 Clip::Clip(boost::shared_ptr<model::Clip> clip)
-  : model_clip(clip)
+  : modelClip(clip),
+    selected(false)
 {
-  REQUIRE(model_clip);
+  REQUIRE(modelClip);
+
+  // TODO: Connect signals
+  //modelClip->signalNameChanged().connect(mem_fun(this,
+  //  &Clip::onNameChanged);
 }
 
 void
@@ -38,35 +43,37 @@ Clip::draw_clip(Cairo::RefPtr<Cairo::Context> cr,
 {
   REQUIRE(cr);
   REQUIRE(window);
+  REQUIRE(modelClip);
 
-  int x = window->time_to_x(1000000);
-  int width = window->time_to_x(2000000) - window->time_to_x(1000000);
-  
+  int x = window->time_to_x(modelClip->getBegin());
+  int width = window->time_to_x(
+    modelClip->getEnd()) - window->time_to_x(modelClip->getBegin());
+
   // Draw a rectangle for the clip
-  cr->rectangle(x, 1, width, 100-2); 
-
-  // TODO: get duration from the model::Clip
+  cr->rectangle(x, 1, width, 100-2);
   // TODO: get height from the Timeline::Track
 
-  cr->set_source_rgb(0.4, 0.4, 0.4);
+  if (selected)
+    cr->set_source(Cairo::SolidPattern::create_rgb (0.3, 0.3, 0.3));
+  else
+    cr->set_source(Cairo::SolidPattern::create_rgb (0.4, 0.4, 0.4));
   cr->fill_preserve();
-  
+
   cr->set_source_rgb(0.25, 0.25, 0.25);
   cr->stroke();
 
   // Show the clip name
-  cr->rectangle(x, 1, width, 100-2); 
+  cr->rectangle(x, 1, width, 100-2);
   cr->clip();
 
   cr->move_to (x + 3, 12);
   cr->set_source_rgb (1.0, 1.0, 1.0);
 
   cr->set_font_size (9);
-  cr->show_text ("Clip Name");  // TODO: get clip name from model
+  cr->show_text (modelClip->getName());
 
   // TODO: Show thumbnails for clip
 }
-
 
 }   // namespace timeline
 }   // namespace widgets

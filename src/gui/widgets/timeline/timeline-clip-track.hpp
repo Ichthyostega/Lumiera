@@ -43,7 +43,7 @@ class TimelineViewWindow;
 class ClipTrack : public timeline::Track
 {
 public:
-  ClipTrack(TimelineWidget &timeline_widget,
+  ClipTrack(TimelineWidget &timelineWidget,
     boost::shared_ptr<model::Track> track);
   
   void draw_track(Cairo::RefPtr<Cairo::Context> cairo,
