@@ -55,7 +55,7 @@ namespace lumiera {
    * error reporting is similar to the behaviour of dynamic_cast<T>: when retrieving
    * a pointer, NULL is returned in case of mismatch.
    */
-  typedef lumiera::Variant<WrapperTypes, util::AccessCasted> WrapperPtr;
+  typedef lib::Variant<WrapperTypes, util::AccessCasted> WrapperPtr;
   
   
   
