@@ -65,6 +65,7 @@ namespace test{
           TimeValue ref (random_or_get(arg));
           
           checkBasicTimeValues (ref);
+          checkMutableTime (ref);
           checkComparisons (ref);
           checkComponentAccess();
         } 
@@ -102,6 +103,37 @@ namespace test{
           
           CHECK (!(g2 > max));
           CHECK (!(g2 < min));
+        }
+      
+      
+      void
+      checkMutableTime (TimeValue org)
+        {
+          TimeVar zero;
+          TimeVar one = TimeValue(1);
+          TimeVar two = TimeValue(2);
+          
+          TimeVar var (org);
+          
+          var += two;
+          var *= 2;
+          CHECK (zero == (var - 2*(org + two)) );
+          
+          // the transient vars caused no side-effects
+          CHECK (var == 2*two + org + org);
+          CHECK (two == TimeValue(2));
+          
+          var = org;   // assign new value
+          CHECK (zero == (var - org));
+          
+          CHECK (zero < one);
+          CHECK (one  < two);
+          CHECK (var < Time::MAX);
+          CHECK (var > Time::MIN);
+          
+          gavl_time_t raw (var);
+          CHECK (raw == org);
+          CHECK (raw >  org - two);
         }
       
       

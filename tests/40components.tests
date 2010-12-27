@@ -633,7 +633,7 @@ return: 0
 END
 
 
-PLANNED "Times and time intervals" TimeValue_test  <<END
+TEST "Times and time intervals" TimeValue_test  <<END
 return: 0
 END
 

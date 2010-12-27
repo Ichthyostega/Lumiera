@@ -38,9 +38,16 @@ namespace time {
   
   
   /**
-   * fixed format time specification.
-   * 
-   * @todo WIP-WIP-WIP
+   * basic constant internal time value.
+   * These time values provide the implementation base
+   * for all further time types. They can be created by
+   * wrapping up a raw micro tick value (gavl_time_t),
+   * are totally ordered, but besides that,
+   * they are opaque and non-mutable.
+   * @note clients should prefer to use Time instances,
+   *       which explicitly denote an Lumiera internal
+   *       time value and are easier to use.
+   * @see TimeVar when full arithmetics are required 
    */
   class TimeValue
     : boost::totally_ordered<TimeValue,
@@ -83,16 +90,19 @@ namespace time {
   
   
   /** a mutable time value,
-   *  behaving like a plain number
-   *  and allowing copying and re-accessing
+   *  behaving like a plain number,
+   *  allowing copy and re-accessing
    */
   class TimeVar
     : public TimeValue
-    , boost::additive<TimeVar>
+    , boost::additive<TimeVar,
+      boost::additive<TimeVar, TimeValue,
+      boost::multipliable<TimeVar, int>
+      > >
     {
-        
+      
     public:
-      TimeVar (TimeValue time)
+      TimeVar (TimeValue time = TimeValue())
         : TimeValue(time)
         { }
       
@@ -117,13 +127,13 @@ namespace time {
       TimeVar& operator-= (TimeVar const& tx)  { t_ -= tx.t_; return *this; }
       
       // Supporting multiplication with integral factor
-      TimeVar& operator*= (int64_t fact)       { t_ *= fact;  return *this; }
+      TimeVar& operator*= (int fact)           { t_ *= fact;  return *this; }
        
       // baseclass TimeValue is already totally_ordered 
     };
   
   
-  class Offset;  
+  class Offset;
     
   /**
    * Lumiera's internal time value datatype
@@ -158,14 +168,17 @@ namespace time {
         : TimeValue(distance)
         { }
     };
-      
-  inline Offset
-  operator- (TimeValue const& end, TimeValue const& start)
-  {
-    TimeVar distance(end);
-    distance -= start;
-    return Offset(distance);
-  }
+  
+
+//////////////////////////////////////////////////////////////TODO this seems rather like a bad idea,
+//                                                                 because it opens a lot of implicit conversions which we don't want!
+//inline Offset
+//operator- (TimeValue const& end, TimeValue const& start)
+//{
+//  TimeVar distance(end);
+//  distance -= start;
+//  return Offset(distance);
+//}
     
   typedef const Offset TimeDistance;
   
