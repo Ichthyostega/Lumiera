@@ -21,7 +21,7 @@
 * *****************************************************/
 
 #include "timeline-tool.hpp"
-#include "../timeline-widget.hpp"
+#include "gui/widgets/timeline-widget.hpp"
 
 using namespace Gdk;
 using namespace boost;

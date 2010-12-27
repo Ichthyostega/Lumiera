@@ -28,7 +28,7 @@
 
 #include <gtkmm.h>
 
-#include "../output/displayer.hpp"
+#include "gui/output/displayer.hpp"
 
 using namespace gui::output;
 

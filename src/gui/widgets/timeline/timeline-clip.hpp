@@ -24,8 +24,8 @@
  */
  
 
-#include "../../gtk-lumiera.hpp"
-#include "../../model/clip.hpp"
+#include "gui/gtk-lumiera.hpp"
+#include "gui/model/clip.hpp"
 #include "timeline-view-window.hpp"
 #include "include/logging.h"
 

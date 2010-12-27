@@ -22,7 +22,7 @@
 
 * *****************************************************/
 
-#include "../gtk-lumiera.hpp"
+#include "gui/gtk-lumiera.hpp"
 #include "displayer.hpp"
 #include "xvdisplayer.hpp"
 #include "gdkdisplayer.hpp"

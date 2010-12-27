@@ -23,12 +23,12 @@
 #include <cairomm-1.0/cairomm/cairomm.h>
 
 #include "timeline-ruler.hpp"
-#include "../timeline-widget.hpp"
-#include "../../window-manager.hpp"
-#include "../../util/cairo-util.hpp"
+#include "gui/widgets/timeline-widget.hpp"
+#include "gui/window-manager.hpp"
+#include "gui/util/cairo-util.hpp"
 
 extern "C" {
-#include "../../../lib/time.h"
+#include "lib/time.h"
 }
 
 using namespace Gtk;

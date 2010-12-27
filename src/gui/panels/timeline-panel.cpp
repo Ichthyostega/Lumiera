@@ -22,15 +22,15 @@
 
 #include <boost/foreach.hpp>
 
-#include "../gtk-lumiera.hpp"
+#include "gui/gtk-lumiera.hpp"
 #include "timeline-panel.hpp"
 
-#include "../workspace/workspace-window.hpp"
-#include "../model/project.hpp"
-#include "../controller/controller.hpp"
+#include "gui/workspace/workspace-window.hpp"
+#include "gui/model/project.hpp"
+#include "gui/controller/controller.hpp"
 
 extern "C" {
-#include "../../lib/time.h"
+#include "lib/time.h"
 }
 
 using namespace Gtk;

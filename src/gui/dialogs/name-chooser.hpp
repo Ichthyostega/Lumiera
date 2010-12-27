@@ -27,7 +27,7 @@
 #ifndef NAME_CHOOSER_H
 #define NAME_CHOOSER_H
 
-#include "../gtk-lumiera.hpp"
+#include "gui/gtk-lumiera.hpp"
 
 namespace gui {
 namespace dialogs {

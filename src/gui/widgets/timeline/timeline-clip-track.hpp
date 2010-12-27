@@ -31,7 +31,7 @@
 #include <vector>
 
 #include "timeline-track.hpp"
-#include "../../model/clip-track.hpp"
+#include "gui/model/clip-track.hpp"
 
 namespace gui {
 namespace widgets {

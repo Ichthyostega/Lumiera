@@ -23,11 +23,11 @@
  ** This file contains the definition of timeline track object
  */
 
-#include "../../gtk-lumiera.hpp"
-#include "../../model/track.hpp"
-#include "../menu-button.hpp"
-#include "../mini-button.hpp"
-#include "../button-bar.hpp"
+#include "gui/gtk-lumiera.hpp"
+#include "gui/model/track.hpp"
+#include "gui/widgets/menu-button.hpp"
+#include "gui/widgets/mini-button.hpp"
+#include "gui/widgets/button-bar.hpp"
 #include "timeline-header-container.hpp"
 #include "timeline-header-widget.hpp"
 

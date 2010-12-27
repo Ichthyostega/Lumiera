@@ -21,9 +21,9 @@
 * *****************************************************/
 
 #include "timeline-track.hpp"
-#include "../timeline-widget.hpp"
-#include "../../window-manager.hpp"
-#include "../../dialogs/name-chooser.hpp"
+#include "gui/widgets/timeline-widget.hpp"
+#include "gui/window-manager.hpp"
+#include "gui/dialogs/name-chooser.hpp"
 #include "include/logging.h"
 
 using namespace boost;

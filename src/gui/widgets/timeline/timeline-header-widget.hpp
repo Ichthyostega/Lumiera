@@ -27,7 +27,7 @@
 #ifndef HEADER_WIDGET_HPP
 #define HEADER_WIDGET_HPP
 
-#include "../../gtk-lumiera.hpp"
+#include "gui/gtk-lumiera.hpp"
 
 namespace gui {  
 namespace widgets {

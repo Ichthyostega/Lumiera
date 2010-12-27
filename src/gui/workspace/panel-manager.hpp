@@ -31,7 +31,7 @@
 #include <gdl/gdl.h>
 #include <typeinfo>
 
-#include "../panels/panel.hpp"
+#include "gui/panels/panel.hpp"
 
 using namespace gui::panels;
 

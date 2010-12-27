@@ -22,9 +22,9 @@
 
 #include "panel-manager.hpp"
 
-#include "../panels/assets-panel.hpp"
-#include "../panels/viewer-panel.hpp"
-#include "../panels/timeline-panel.hpp"
+#include "gui/panels/assets-panel.hpp"
+#include "gui/panels/viewer-panel.hpp"
+#include "gui/panels/timeline-panel.hpp"
 
 #include "include/logging.h"
 

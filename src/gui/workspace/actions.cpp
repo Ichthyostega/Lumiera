@@ -23,13 +23,13 @@
 #include "actions.hpp"
 #include "workspace-window.hpp"
 
-#include "../window-manager.hpp"
+#include "gui/window-manager.hpp"
 
-#include "../dialogs/render.hpp"
-#include "../dialogs/preferences-dialog.hpp"
-#include "../dialogs/name-chooser.hpp"
+#include "gui/dialogs/render.hpp"
+#include "gui/dialogs/preferences-dialog.hpp"
+#include "gui/dialogs/name-chooser.hpp"
 
-#include "../model/project.hpp"
+#include "gui/model/project.hpp"
 
 #include "include/logging.h"
 

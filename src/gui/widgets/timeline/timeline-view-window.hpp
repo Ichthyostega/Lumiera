@@ -27,7 +27,7 @@
 #ifndef TIMELINE_VIEW_WINDOW_HPP
 #define TIMELINE_VIEW_WINDOW_HPP
 
-#include "../../gtk-lumiera.hpp"
+#include "gui/gtk-lumiera.hpp"
 
 namespace gui {
 namespace widgets {

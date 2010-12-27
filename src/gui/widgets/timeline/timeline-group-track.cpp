@@ -21,7 +21,7 @@
 * *****************************************************/
 
 #include "timeline-group-track.hpp"
-#include "../timeline-widget.hpp"
+#include "gui/widgets/timeline-widget.hpp"
 
 using namespace Gtk;
 using namespace boost;

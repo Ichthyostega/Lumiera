@@ -27,8 +27,8 @@
 #define TIMELINE_PANEL_HPP
 
 #include "panel.hpp"
-#include "../widgets/timecode-widget.hpp"
-#include "../widgets/timeline-widget.hpp"
+#include "gui/widgets/timecode-widget.hpp"
+#include "gui/widgets/timeline-widget.hpp"
 
 using namespace gui::widgets;
 

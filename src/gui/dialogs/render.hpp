@@ -27,7 +27,7 @@
 #ifndef RENDER_HPP
 #define RENDER_HPP
 
-#include "../gtk-lumiera.hpp"
+#include "gui/gtk-lumiera.hpp"
 
 namespace gui {
 namespace dialogs {

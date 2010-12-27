@@ -32,7 +32,7 @@
 #include <gdl/gdl-dock-item.h>
 #include <gdl/gdl-dock-placeholder.h>
 
-#include "../gtk-lumiera.hpp"
+#include "gui/gtk-lumiera.hpp"
 #include "workspace-window.hpp"
 #include "include/logging.h"
 

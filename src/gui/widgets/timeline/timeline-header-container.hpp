@@ -28,7 +28,7 @@
 #ifndef HEADER_CONTAINER_HPP
 #define HEADER_CONTAINER_HPP
 
-#include "../../gtk-lumiera.hpp"
+#include "gui/gtk-lumiera.hpp"
 #include "timeline-layout-helper.hpp"
 
 namespace gui {
