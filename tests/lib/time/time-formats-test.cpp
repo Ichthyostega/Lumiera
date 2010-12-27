@@ -40,8 +40,6 @@ namespace lib {
 namespace time{
 namespace test{
   
-  using lumiera::Time;
-  
   
   /********************************************************
    * @test verify handling of grid aligned timecode values.
@@ -56,7 +54,7 @@ namespace test{
         {
           long refval= isnil(arg)?  1 : lexical_cast<long> (arg[1]);
           
-          Time ref (refval);
+          TimeValue ref (refval);
           
           checkBasics (ref);
           checkComparisons (ref);
@@ -65,13 +63,13 @@ namespace test{
       
       
       void
-      checkBasics (Time const& ref)
+      checkBasics (TimeValue ref)
         {
         }
       
       
       void
-      checkComparisons (Time const& ref)
+      checkComparisons (TimeValue ref)
         {
         }
       

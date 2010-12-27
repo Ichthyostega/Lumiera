@@ -36,8 +36,6 @@ extern "C" {
 namespace lib {
 namespace time {
   
-  using lumiera::Time;
-  
   
   /**
    * fixed format time specification.
@@ -45,15 +43,15 @@ namespace time {
    * @todo WIP-WIP-WIP
    */
   class TimeValue
-    : boost::totally_ordered<Time,
-      boost::totally_ordered<Time, gavl_time_t> >
+    : boost::totally_ordered<TimeValue,
+      boost::totally_ordered<TimeValue, gavl_time_t> >
     {
     protected:
       gavl_time_t t_;
       
     public:
-      static const Time MAX ; 
-      static const Time MIN ;
+      static const TimeValue MAX ; 
+      static const TimeValue MIN ;
       
       explicit 
       TimeValue (gavl_time_t val=0)
@@ -100,21 +98,21 @@ namespace time {
   /**
    * Lumiera's internal time value datatype
    */
-//class Time
-//  : public TimeValue
-//  {
-//  public:
-//    explicit 
-//    Time (TimeValue val=0)
-//      : TimeValue(val)
-//      { }
-//    
-//    Time ( long millis
-//         , uint secs 
-//         , uint mins =0
-//         , uint hours=0
-//         );
-//  };
+  class Time
+    : public TimeValue
+    {
+    public:
+      explicit 
+      Time (TimeValue val= TimeValue(0))
+        : TimeValue(val)
+        { }
+      
+      Time ( long millis
+           , uint secs 
+           , uint mins =0
+           , uint hours=0
+           );
+    };
   
   
   class Offset

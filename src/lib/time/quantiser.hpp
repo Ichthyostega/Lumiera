@@ -24,6 +24,8 @@
 #ifndef LIB_TIME_QUANTISER_H
 #define LIB_TIME_QUANTISER_H
 
+#include "lib/time/timevalue.hpp"
+
 //#include <boost/operators.hpp>
 #include <string>
 
