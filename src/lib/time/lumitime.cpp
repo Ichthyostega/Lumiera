@@ -41,6 +41,39 @@ namespace time {
   const Time Time::MIN ( TimeValue (-std::numeric_limits<gavl_time_t>::max()) );
   
   
+  /** convenience constructor to build an
+   *  internal Lumiera Time value from the usual parts
+   *  of an hexagesimal time specification. Arbitrary integral
+   *  values are acceptable and will be summed up accordingly.
+   *  The minute and hour part can be omitted.
+   * @warning internal Lumiera time values refer to an
+   *         implementation dependent time origin/scale.
+   *         The given value will be used as-is, without
+   *         any further adjustments.
+   */
+  Time::Time ( long millis
+             , uint secs 
+             , uint mins
+             , uint hours
+             )
+    : TimeValue(lumiera_build_time (millis,secs,mins,hours))
+  { }
+  
+  
+  /** displaying an internal Lumiera Time value
+   *  for diagnostic purposes or internal reporting.
+   * @warning internal Lumiera time values refer to an
+   *         implementation dependent time origin/scale.
+   * @return string rendering of the actual, underlying
+   *         implementation value, as \c h:m:s:ms
+   */
+  Time::operator string()  const
+  {
+    return string (lumiera_tmpbuf_print_time (t_));
+  }
+  
+  
+  
 }} // namespace lib::Time
 
 ///////////////////////////////////////////////////////////////////////////TODO leftover of the existing/initial lumitime-Implementation

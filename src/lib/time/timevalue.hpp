@@ -93,6 +93,10 @@ namespace time {
   /** a mutable time value,
    *  behaving like a plain number,
    *  allowing copy and re-accessing
+   * @note supports scaling by a factor,
+   *       which \em deliberately is chosen 
+   *       as int, not gavl_time_t, because the
+   *       multiplying times is meaningless.
    */
   class TimeVar
     : public TimeValue
@@ -139,7 +143,10 @@ namespace time {
    * It may be used to relate two points in time,
    * or to create a modification for time-like entities.
    * Similar to (basic) time values, offsets can be compared,
-   * but are otherwise opaque and immutable.
+   * but are otherwise opaque and immutable. Yet they allow
+   * to build derived values, including
+   * - the \em absolute (positive) distance for this offset
+   * - a combined offset by chaining another offset
    */
   class Offset
     : public TimeValue
@@ -159,6 +166,14 @@ namespace time {
       abs()  const
         {
           return TimeValue(std::llabs (t_));
+        }
+      
+      Offset
+      operator+ (Offset const& toChain)  const
+        {
+          TimeVar distance(*this);
+          distance += toChain;
+          return Offset(distance);
         }
     };
   
@@ -198,6 +213,10 @@ namespace time {
       explicit 
       Time (TimeValue const& val =TimeValue(0))
         : TimeValue(val)
+        { }
+      
+      Time (TimeVar const& calcResult)
+        : TimeValue(calcResult)
         { }
       
       Time ( long millis
@@ -240,8 +259,8 @@ namespace time {
    * to fully specify the temporal properties of an
    * object within the model.
    * 
-   * Similar to Time and Duration, a TimeSpan also may
-   * receive an (opaque) mutation message
+   * Similar to Time and Duration, a TimeSpan may
+   * also receive an (opaque) mutation message.
    */
   class TimeSpan
     : public Time
@@ -253,6 +272,7 @@ namespace time {
         : Time(start)
         , dur_(length)
         { }
+                                                ///////////TODO creating timespans needs to be more convenient....
       
       operator Duration()  const 
         {
@@ -263,7 +283,7 @@ namespace time {
       getEnd()  const
         {
           TimeVar startPoint (*this);
-          return Time(startPoint + dur_);
+          return (startPoint + dur_);
         }
     };
   

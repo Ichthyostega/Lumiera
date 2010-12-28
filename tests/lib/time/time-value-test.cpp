@@ -26,14 +26,16 @@
 #include "lib/util.hpp"
 
 #include <boost/lexical_cast.hpp>
-//#include <iostream>
+#include <iostream>
 //#include <cstdlib>
+#include <string>
 
 using boost::lexical_cast;
 using util::isnil;
 //using std::rand;
-//using std::cout;
-//using std::endl;
+using std::cout;
+using std::endl;
+using std::string;
 
 
 namespace lib {
@@ -53,7 +55,7 @@ namespace test{
       random_or_get (Arg arg)
         {
           if (isnil(arg))
-            return (rand() % 10000);
+            return 1 + (rand() % 10000);
           else
             return lexical_cast<gavl_time_t> (arg[1]);
         }
@@ -66,8 +68,9 @@ namespace test{
           
           checkBasicTimeValues (ref);
           checkMutableTime (ref);
-          checkComparisons (ref);
-          checkComponentAccess();
+          createOffsets (ref);
+          buildDuration (ref);
+          buildTimeSpan (ref);
         } 
       
       
@@ -106,6 +109,11 @@ namespace test{
         }
       
       
+      /** @test time variables can be used for the typical calculations,
+       *        like summing and subtracting values, as well as multiplication
+       *        with a scale factor. Additionally, the raw time value is
+       *        accessible by conversion.
+       */
       void
       checkMutableTime (TimeValue org)
         {
@@ -138,16 +146,77 @@ namespace test{
       
       
       void
-      checkComparisons (TimeValue org)
+      createOffsets (TimeValue org)
         {
+          TimeValue four(4);
+          TimeValue five(5);
+          
+          Offset off5 (five);
+          CHECK (0 < off5);
+          
+          TimeVar point(org);
+          point += off5;
+          CHECK (org < point);
+          
+          Offset reverse(point,org);
+          CHECK (reverse < off5);
+          CHECK (reverse.abs() == off5);
+          
+          CHECK (0 == off5 + reverse);
+          
+          // chaining and copy construction
+          Offset off9 (off5 + Offset(four));
+          CHECK (9 == off9);
         }
       
       
       void
-      checkComponentAccess()
+      buildDuration (TimeValue org)
         {
+          TimeValue zero;
+          TimeVar point(org);
+          point += TimeValue(5);
+          CHECK (org < point);
+          
+          Offset backwards(point,org);
+          CHECK (backwards < zero);
+          
+          Duration distance(backwards);
+          CHECK (distance > zero);
+          CHECK (distance == backwards.abs());
+          
+          point = backwards;
+          point *= 2;
+          CHECK (point < zero);
+          CHECK (point < backwards);
+          
+          CHECK (distance + point < zero);      // using the duration as offset
+          CHECK (distance == backwards.abs()); //  while this didn't alter the duration as such
         }
       
+      
+      void
+      buildTimeSpan (TimeValue org)
+        {
+          TimeValue zero;
+          TimeValue five(5);
+          
+          TimeSpan interval (Time(org), Duration(Offset (org,five)));
+          
+          // the time span behaves like a time
+          CHECK (org == interval);
+          CHECK (string(Time(org)) == string(interval));
+          
+          // can get the length by direct conversion
+          Duration theLength(interval);
+          CHECK (theLength == Offset(org,five).abs());
+          
+          Time endpoint = interval.getEnd();
+          CHECK (Offset(interval,endpoint) == Offset(org,five).abs());
+          
+          cout << "Interval: " << string(interval) 
+               << " Endpoint: " << string(endpoint) << endl; 
+        }
     };
   
   
