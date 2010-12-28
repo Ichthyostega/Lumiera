@@ -25,6 +25,7 @@
 #define LIB_TIME_TIMEVALUE_H
 
 #include <boost/operators.hpp>
+#include <cstdlib>
 #include <string>
 
 extern "C" {
@@ -100,7 +101,6 @@ namespace time {
       boost::multipliable<TimeVar, int>
       > >
     {
-      
     public:
       TimeVar (TimeValue time = TimeValue())
         : TimeValue(time)
@@ -133,31 +133,14 @@ namespace time {
     };
   
   
-  class Offset;
-    
+  
   /**
-   * Lumiera's internal time value datatype
+   * Offset measures a distance in time.
+   * It may be used to relate two points in time,
+   * or to create a modification for time-like entities.
+   * Similar to (basic) time values, offsets can be compared,
+   * but are otherwise opaque and immutable.
    */
-  class Time
-    : public TimeValue
-    {
-    public:
-      static const Time MAX ; 
-      static const Time MIN ;
-      
-      explicit 
-      Time (TimeValue val= TimeValue(0))
-        : TimeValue(val)
-        { }
-      
-      Time ( long millis
-           , uint secs 
-           , uint mins =0
-           , uint hours=0
-           );
-    };
-  
-  
   class Offset
     : public TimeValue
     {
@@ -167,29 +150,99 @@ namespace time {
       Offset (TimeValue const& distance)
         : TimeValue(distance)
         { }
+      
+      Offset (TimeValue const& origin, TimeValue const& target)
+        : TimeValue(TimeVar(target) -= origin)
+        { }
+      
+      TimeValue
+      abs()  const
+        {
+          return TimeValue(std::llabs (t_));
+        }
     };
   
-
-//////////////////////////////////////////////////////////////TODO this seems rather like a bad idea,
-//                                                                 because it opens a lot of implicit conversions which we don't want!
-//inline Offset
-//operator- (TimeValue const& end, TimeValue const& start)
-//{
-//  TimeVar distance(end);
-//  distance -= start;
-//  return Offset(distance);
-//}
-    
-  typedef const Offset TimeDistance;
   
   
-  class Duration
+  
+  /* ======= specific Time entities ==================== */
+  
+  /**
+   * Lumiera's internal time value datatype.
+   * This is a TimeValue, but now more specifically denoting
+   * a point in time, measured in reference to an internal
+   * (opaque) time scale.
+   * 
+   * Lumiera Time provides some limited capabilities for
+   * direct manipulation; Time values can be created directly
+   * from \c (h,m,s,ms) specification and there is an string
+   * representation intended for internal use (reporting and
+   * debugging). Any real output, formatting and persistent
+   * storage should be based on the (quantised) timecode
+   * formats though, which can be generated from time values.
+   * 
+   * Non constant Time objects can receive an encapsulated
+   * \em mutation message, which is also the basis for
+   * changing time spans, durations and for re-aligning
+   * quantised values to some other grid.
+   * 
+   * @todo define these mutations
+   */
+  class Time
     : public TimeValue
     {
-      // always positive
+    public:
+      static const Time MAX ; 
+      static const Time MIN ;
+      
+      explicit 
+      Time (TimeValue const& val =TimeValue(0))
+        : TimeValue(val)
+        { }
+      
+      Time ( long millis
+           , uint secs 
+           , uint mins =0
+           , uint hours=0
+           );
+      
+      /** @internal diagnostics */
+      operator std::string ()  const;
+      
     };
   
   
+  
+  /**
+   * Duration is the internal Lumiera time metric.
+   * It is an absolute (positive) value, but can be
+   * promoted from an offset. Similar to Time,
+   * Duration can receive mutation messages.
+   * 
+   * @todo define these mutations
+   */
+  class Duration
+    : public Offset
+    {
+    public:
+      Duration (Offset const& distance)
+        : Offset(distance.abs())
+        { }
+    };
+  
+  
+  
+  /**
+   * A time interval anchored at a specific point in time.
+   * The start point of this timespan is also its nominal
+   * position, and the end point is normalised to happen
+   * never before the start point. A TimeSpan is enough
+   * to fully specify the temporal properties of an
+   * object within the model.
+   * 
+   * Similar to Time and Duration, a TimeSpan also may
+   * receive an (opaque) mutation message
+   */
   class TimeSpan
     : public Time
     {
@@ -200,6 +253,18 @@ namespace time {
         : Time(start)
         , dur_(length)
         { }
+      
+      operator Duration()  const 
+        {
+          return dur_;
+        }
+      
+      Time
+      getEnd()  const
+        {
+          TimeVar startPoint (*this);
+          return Time(startPoint + dur_);
+        }
     };
   
   
