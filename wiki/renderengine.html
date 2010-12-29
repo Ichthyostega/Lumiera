@@ -747,7 +747,7 @@ Even if the low-level memory manager(s) may use raw storage, we require that the
 &amp;rarr; see MemoryManagement
 </pre>
 </div>
-<div title="Asset" modifier="Ichthyostega" modified="201002272329" created="200708100337" tags="def classes img" changecount="18">
+<div title="Asset" modifier="Ichthyostega" modified="201012290314" created="200708100337" tags="def classes img" changecount="19">
 <pre>Asset management is a subsystem on its own. Assets are &quot;things&quot; that can be loaded into a session, like Media, Clips, Effects, Transitions. It is the &quot;bookkeeping view&quot;, while the Objects in the Session relate to the &quot;manipulation and process view&quot;. Some Assets can be //loaded// and a collection of Assets is saved with each Session. Besides, there is a collection of basic Assets always available by default.
 
 The Assets are important reference points holding the information needed to access external resources. For example, an Clip asset can reference a Media asset, which in turn holds the external filename from which to get the media stream. For Effects, the situation is similar. Assets thus serve two quite distinct purposes. One is to load, list, group search and browse them, and to provide an entry point to create new or get at existing MObject in the Session, while the other purpose is to provide attribute and property informations to the inner parts of the engine, while at the same time isolating and decoupling them from environmental details. 
@@ -772,13 +772,13 @@ Some software component able to work on media data in the Lumiera Render engine 
 Some of the building blocks providing the framework for the objects placed into the current Session. Notable examples are [[processing pipes|Pipe]] within the high-level-model, Viewer attachment points, Tracks, Sequences, Timelines etc.
 * __outward interface operations__ include...
 * __inward interface operations__ include...
-&amp;rarr; StructAsset {{red{to be defined}}}
+&amp;rarr; StructAsset {{red{still a bit vague...}}}
 
 !Meta Asset
-Some additional, virtual facilities created in the course of the editing process. Examples are Automation data sets, Labels and reference points, Meta Clips (nested sub-sequences)
+Any resources related to the //reflective recurse of the application on itself,// including parametrisation and customisation aspects and similar metadata, are categorised and tracked apart of the primary entities. Examples being types, scales and quantisation grids, decision rules, control data stores (automation data), labels and annotations, inventory entities etc.
 * __outward interface operations__ include...
 * __inward interface operations__ include...
-&amp;rarr; MetaAsset {{red{to be defined}}}
+&amp;rarr; MetaAsset {{red{just emerging as of 12/2010}}}
 
 !!!!still to be worked out..
 is how to implement the relationship between [[MObject]]s and Assets. Do we use direct pointers, or do we prefer an ID + central registry approach? And how to handle the removal of an Asset.
@@ -2733,6 +2733,13 @@ For the case here in question this seems to be the ''resource allocation is cons
 And, last but not least, doing large scale allocations is the job of the backend. Exceptions being long-lived objects, like the session or the sequences, which are created once and don't bear the danger of causing memory pressure. Besides, the ProcLayer code shouldn't issue &quot;new&quot; and &quot;delete&quot; when it comes in hand, rather it should use some centralized [[Factories]] for all allocation and freeing, so we can redirect these calls down to the backend, which may use pooling or special placement allocators or the like. The rationale is, for modern hardware/architectures, care has to be taken with heap allocations, esp. with many small objects and irregular usage patterns.
 </pre>
 </div>
+<div title="MetaAsset" modifier="Ichthyostega" created="201012290320" tags="def" changecount="1">
+<pre>This category is comprised of the various aspects of the way the application controls and manages its own behaviour. They are more related to the way the application behaves, as oposed to the way the editied data is structured and organised.
+* StreamType
+* ScaleGrid
+
+</pre>
+</div>
 <div title="Model" modifier="Ichthyostega" modified="201003210021" created="201003210020" tags="overview" changecount="2">
 <pre>Lumiera's Proc-Layer is built around //two interconnected models,// mediated by the [[Builder]]. Basically, the &amp;rarr;[[Session]] is an external interface to the HighLevelModel, while the &amp;rarr;RenderEngine operates the structures of the LowLevelModel.</pre>
 </div>
@@ -4657,6 +4664,10 @@ Later on we expect a distinct __query subsystem__ to emerge, presumably embeddin
 </div>
 <div title="STypeManager" modifier="Ichthyostega" created="200809220230" changecount="1">
 <pre>A facility allowing the Proc-Layer to work with abstracted [[media stream types|StreamType]], linking (abstract or opaque) [[type tags|StreamTypeDescriptor]] to an [[library|MediaImplLib]], which provides functionality for acutally dealing with data of this media stream type. Thus, the stream type manager is a kind of registry of all the external libraries which can be bridged and accessed by Lumiera (for working with media data, that is). The most basic set of libraries is instelled here automatically at application start, most notably the [[GAVL]] library for working with uncompressed video and audio data. //Later on, when plugins will introduce further external libraries, these need to be registered here too.//</pre>
+</div>
+<div title="ScaleGrid" modifier="Ichthyostega" created="201012290325" tags="def" changecount="1">
+<pre>A scale grid controls the way of measuring and aligining a quantity the application has to deal with. The most prominent example is the way to handle time in fixed atomic chunks (''frames'') addressed through a fixed format (''timecode''): while internally the application uses time values of sufficiently fine grained resolution, the acutally visible timing coordinates of objects within the session are ''quantised'' to some predefined and fixed time grid.
+</pre>
 </div>
 <div title="ScopeLocator" modifier="Ichthyostega" modified="200911202035" created="200911192145" tags="def SessionLogic" changecount="10">
 <pre>A link to relate a compound of [[nested placement scopes|PlacementScope]] to the //current// session and the //current//&amp;nbsp; [[focus for querying|QueryFocus]] and exploring the structure. ScopeLocator is a singleton service, allowing to ''explore'' a [[Placement]] as a scope, i.e. discover any other placements within this scope, and allowing to locate the position of this scope by navigating up the ScopePath finally to reach the root scope of the HighLevelModel.
