@@ -41,6 +41,7 @@
 #include "pre_a.hpp"
 
 #include "proc/asset.hpp"
+#include "proc/asset/entry-id.hpp"
 #include "lib/factory.hpp"
 
 
@@ -59,13 +60,27 @@ namespace asset {
       ID (const Meta&);
     };
   
+  namespace meta {
+    
+    /**
+     * Interface: the unspecific, reflective base of meta assets.
+     * Based on descriptors, meta assets form a self referential structure.
+     */
+    class Descriptor
+      {
+      public:
+        virtual ~Descriptor();  ///< this is an ABC
+      };
+  }
   
   
   /**
-   * key abstraction: metadata and organisational asset
+   * key abstraction: metadata, parametrisation, customisation and similar organisational traits.
    * @todo just a stub, still have to figure out the distinctive properties of asset::Meta
    */
-  class Meta : public Asset
+  class Meta
+    : public Asset
+    , public meta::Descriptor
     {
     public:
       static MetaFactory create;
@@ -76,13 +91,14 @@ namespace asset {
         }
       
     protected:
-      Meta (const Asset::Ident& idi) : Asset(idi) {}  //////////////TODO
-      friend class MetaFactory;
+      Meta (Asset::Ident const& idi) : Asset(idi) {}  //////////////TODO
+      
+//    friend class MetaFactory;  ///////////////////////////////////TODO still necessary?
     };
     
     
     // definition of ID<Meta> ctors is possible now,
-   //  after providing full definition of class Proc
+   //  after providing full definition of class Meta
   
   inline ID<Meta>::ID(HashVal id)       : ID<Asset> (id)           {};
   inline ID<Meta>::ID(const Meta& meta) : ID<Asset> (meta.getID()) {};
@@ -98,8 +114,12 @@ namespace asset {
     {
     public:
       typedef P<asset::Meta> PType;
-       
-      PType operator() (Asset::Ident& key);      ////////////TODO define actual operation 
+      
+      template<class MA>
+      P<MA> operator() (EntryID<MA> elementIdentity); 
+      
+      template<class MA>
+      P<MA> operator() (meta::Descriptor const& prototype, EntryID<MA> elementIdentity); 
       
     };
   

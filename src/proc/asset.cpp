@@ -59,7 +59,7 @@ namespace asset {
   /** Asset is a Interface class; usually, objects of 
    *  concrete subclasses are created via specialised Factories
    */
-  Asset::Asset (const Ident& idi) 
+  Asset::Asset (Ident const& idi) 
     : ident(idi)
     , id(AssetManager::reg (this, idi))
     , enabled(true)

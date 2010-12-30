@@ -747,7 +747,7 @@ Even if the low-level memory manager(s) may use raw storage, we require that the
 &amp;rarr; see MemoryManagement
 </pre>
 </div>
-<div title="Asset" modifier="Ichthyostega" modified="201012290314" created="200708100337" tags="def classes img" changecount="19">
+<div title="Asset" modifier="Ichthyostega" modified="201012292209" created="200708100337" tags="def classes img" changecount="20">
 <pre>Asset management is a subsystem on its own. Assets are &quot;things&quot; that can be loaded into a session, like Media, Clips, Effects, Transitions. It is the &quot;bookkeeping view&quot;, while the Objects in the Session relate to the &quot;manipulation and process view&quot;. Some Assets can be //loaded// and a collection of Assets is saved with each Session. Besides, there is a collection of basic Assets always available by default.
 
 The Assets are important reference points holding the information needed to access external resources. For example, an Clip asset can reference a Media asset, which in turn holds the external filename from which to get the media stream. For Effects, the situation is similar. Assets thus serve two quite distinct purposes. One is to load, list, group search and browse them, and to provide an entry point to create new or get at existing MObject in the Session, while the other purpose is to provide attribute and property informations to the inner parts of the engine, while at the same time isolating and decoupling them from environmental details. 
@@ -775,7 +775,7 @@ Some of the building blocks providing the framework for the objects placed into 
 &amp;rarr; StructAsset {{red{still a bit vague...}}}
 
 !Meta Asset
-Any resources related to the //reflective recurse of the application on itself,// including parametrisation and customisation aspects and similar metadata, are categorised and tracked apart of the primary entities. Examples being types, scales and quantisation grids, decision rules, control data stores (automation data), labels and annotations, inventory entities etc.
+Any resources related to the //reflective recurse of the application on itself,// including parametrisation and customisation aspects and similar metadata, are categorised and tracked apart of the primary entities. Examples being types, scales and quantisation grids, decision rules, control data stores (automation data), annotations attached to labels, inventory entities etc.
 * __outward interface operations__ include...
 * __inward interface operations__ include...
 &amp;rarr; MetaAsset {{red{just emerging as of 12/2010}}}
@@ -1691,6 +1691,17 @@ The effect asset (which is a [[processing asset|ProcAsset]]) provides an unified
 When building the low-level model, the actual processing code is resolved and a processing function is installed into the processing node representing the effect. This step includes checking of actual [[media type information|StreamType]], which may result in selecting a specifically tailored implementation function. The parameter wiring on the other hand is //shared// between the effect ~MObject, the corresponding GUI module and all low-level processing nodes. Actually, parameters are more of a reference than actually being values: they provide a {{{getValue()}}} function, which also works with automation. This way, any parameter or automation changes are reflected immediately into the produced output.
 
 Initially, only the parameter (descriptors) are present on the effect ~MObject, while the actual [[parameter providers|ParamProvider]] are created or wired (by the ConManager) on demand.
+</pre>
+</div>
+<div title="EntryID" modifier="Ichthyostega" modified="201012300036" created="201012300026" tags="def Types" changecount="5">
+<pre>A general identification scheme, ombining a human readable symbolic name, unique within a //specifically typed context,// and machine readable hash ID (LUID). ~Entry-IDs allow for asset-like position accounting and for type safe binding between configuration rules and model obects. They allow for creating an entry with symbolic id and distinct type, combined with an derived hash value, without the overhead in storage and instance management imposed by using a full-fledged Asset.
+                                                                                      
+Similar to an Asset, an identification tuple is available (generated on the fly), as is an unique LUID and total ordering. The type information is attached as template parameter, but included into the hash calculation. All instantiations of the EntryID template share a common baseclass, usable for type erased common registration.
+
+~Entry-IDs as such do not provide any automatic registration or ensure uniqueness of any kind, but they can be used to that end. Especially, they're used within the TypedID registration framework for addressing individual entries {{red{planned as of 12/2010}}}
+&amp;rarr; TypedLookup
+&amp;rarr; TypeHandler
+&amp;rarr; MetaAsset
 </pre>
 </div>
 <div title="Example1" modifier="Ichthyostega" modified="200906071812" created="200706220239" tags="example img" changecount="5">
@@ -2733,11 +2744,24 @@ For the case here in question this seems to be the ''resource allocation is cons
 And, last but not least, doing large scale allocations is the job of the backend. Exceptions being long-lived objects, like the session or the sequences, which are created once and don't bear the danger of causing memory pressure. Besides, the ProcLayer code shouldn't issue &quot;new&quot; and &quot;delete&quot; when it comes in hand, rather it should use some centralized [[Factories]] for all allocation and freeing, so we can redirect these calls down to the backend, which may use pooling or special placement allocators or the like. The rationale is, for modern hardware/architectures, care has to be taken with heap allocations, esp. with many small objects and irregular usage patterns.
 </pre>
 </div>
-<div title="MetaAsset" modifier="Ichthyostega" created="201012290320" tags="def" changecount="1">
-<pre>This category is comprised of the various aspects of the way the application controls and manages its own behaviour. They are more related to the way the application behaves, as oposed to the way the editied data is structured and organised.
+<div title="MetaAsset" modifier="Ichthyostega" modified="201012300230" created="201012290320" tags="def" changecount="5">
+<pre>This category is comprised of the various aspects of the way the application controls and manages its own behaviour. They are more related to the way the application behaves, as opposed to the way the edited data is structured and organised.
 * StreamType
 * ScaleGrid
 
+!accessing meta assets
+It turns out that all meta assets follow a distinct usage pattern: //they aren't built as individual entities.// Either, they are introduced into the system as part of a larger scale configuration activity, or they are //derived from category.// The latter is a prototype-like approach; mostly, the individual entry just serves to keep track of a categorisation, while at some point, such a link into a describing category may evolve into a local differentiation of some settings.
+
+Another distinct property of meta assets is to be just a generic front-end to some very specific data entry, which needs to be allocated and maintained and provided on demand. Consider for example configuration rules, which have a textual and AST representation and will be assembled and composed into an effective rule set. Another example would be the enormous amount of parameter data created by parameter automation in the session. While certainly the raw data needs to be stored and retrieved somehow, the purpose of the corresponding meta asset is to access and manipulate this data in a structured and specific fashion.
+
+!!!self referential structure
+These observation leads to a design relying on a self referential structure: each meta asset is a {{{meta::Descriptor}}}. In the most basic version -- as provided by the generic implementation by {{{asset::Meta}}}, this descriptor is just the link to another descriptor, which represents a category. Thus, meta assets are created or accessed by
+* just an EntryID, which implicitly also establishes a type, the intent being &quot;get me yet another of this kind&quot;
+* a descriptor and an EntryID, to get a new element with a more distinct characterisation.
+
+!!!mutating meta assets
+Meta assets are ''immutable'' -- but they can be //superseded.//
+For each meta asset instance, initially a //builder// is created for setting up the properties; when done, the builder will &quot;drop off&quot; the new meta asset instance. The same procedure is used augmenting or superseding an existing element.
 </pre>
 </div>
 <div title="Model" modifier="Ichthyostega" modified="201003210021" created="201003210020" tags="overview" changecount="2">
@@ -6786,7 +6810,7 @@ Using transitions is a very basic task and thus needs viable support by the GUI.
 Because of this experience, ichthyo wants to support a more general case of transitions, which have N output connections, behave similar to their &quot;simple&quot; counterpart, but leave out the mixing step. As a plus, such transitions can be inserted at the source ports of N clips or between any intermediary or final output pipes as well. Any transition processor capable of handling this situation should provide some flag, in order to decide if he can be placed in such a manner. (wichin the builder, encountering a  inconsistently placed transition is just an [[building error|BuildingError]])
 </pre>
 </div>
-<div title="TypedID" modifier="Ichthyostega" modified="201006250014" created="201003200157" tags="Model Rules design draft" changecount="32">
+<div title="TypedID" modifier="Ichthyostega" modified="201012292351" created="201003200157" tags="Model Types Rules design draft" changecount="33">
 <pre>//drafted service as of 4/10 &amp;mdash; &amp;rarr;[[implementation plans|TypedLookup]]//
 A registration service to associate object identities, symbolic identifiers and types.
 
@@ -6833,7 +6857,7 @@ Just an ''registration scheme'' should be implemented right now, working complet
 see [[implementation planning|TypedLookup]]
 </pre>
 </div>
-<div title="TypedLookup" modifier="Ichthyostega" modified="201010140129" created="201004031607" tags="Rules spec impl draft" changecount="19">
+<div title="TypedLookup" modifier="Ichthyostega" modified="201012292351" created="201004031607" tags="Rules Types spec impl draft" changecount="22">
 <pre>TypedID is a registration service to associate object identities, symbolic identifiers and types. It acts as frontend to the TypedLookup service within Proc-Layer, at the implementation level. While TypedID works within a strictly typed context, this type information is translated into an internal index on passing over to the implementation, which manages a set of tables containing base entries with an combined symbolic+hash ID, plus an opaque buffer. Thus, the strictly typed context is required to re-access the stored data. But the type information wasn't erased entirely, so this typed context can be re-gained with the help of an internal type index. All of this is considered implementation detail and may be subject to change without further notice; any access is assumed to happen through the TypedID frontend. Besides, there are two more specialised frontends.
 
 !Front-ends
@@ -6844,7 +6868,7 @@ see [[implementation planning|TypedLookup]]
 !Tables and index
 The Table consists of several registration groups, each of which contains a hashtable and deals with one specific type. Groups are created on demand, but there is initially one group holding the internal type index (translation table). There may be even sub-groups, usable to create clusterings within one group.
 
-__Individual entries__ are comprised of a ''~EntryID'' as key (actually a ~BareEntryID, without the typing) and a payload, which //doesn't store data,// but informations necessary to ''lookup and access'' the registered object. Obviously, this information is type specific, and thus the ~TypedLookup implementation can't know how to deal with it directly. Rather, we store a ''functor'' in the payload of the type index group. This functor is directly linked to the TypeHandler, i.e. any type wanting to be a primary type within Lumiera, so as to be directly usable within the ConfigRules, needs to provide a suitable functor implementation through its ~TypeHandler. These functors are then invoked by the ~TypedID frontend, when it comes to re-accessing an registered entity by ID
+__Individual entries__ are comprised of a EntryID as key (actually a ~BareEntryID, without the typing) and a payload, which //doesn't store data,// but informations necessary to ''lookup and access'' the registered object. Obviously, this information is type specific, and thus the ~TypedLookup implementation can't know how to deal with it directly. Rather, we store a ''functor'' in the payload of the type index group. This functor is directly linked to the TypeHandler, i.e. any type wanting to be a primary type within Lumiera, so as to be directly usable within the ConfigRules, needs to provide a suitable functor implementation through its ~TypeHandler. These functors are then invoked by the ~TypedID frontend, when it comes to re-accessing a registered entity by ID
 
 !link for automatic registration
 An entity can be linked with the TypedLookup system to be registered and deregistered automatically. This is achieved by mixing in the {{{TypedID::Link}}}. On creation, this will set up an EntryID for this individual instance and cause creation of an empty entry within the suitable registration group. As a side-effect, uniqueness of any symbolic-ID within one group (type) is enforced. Obviously, the dtor of this registration Link cares for de-registration automatically. Be forwarned though, by creating an unique identity, this mechanism will interfere with copying and cloning of the registered entity.
@@ -6863,8 +6887,8 @@ Obviously, the ~TypedLookup system is open for addition of completely separate a
 |~| Sequence| Asset|
 |~| StreamType| Asset|
 |1:n| Tag| Asset|
-|~| Clip|~MObject|
-|~| Effect|~MObejct|
+|~| Clip| ~MObject|
+|~| Effect| ~MObejct|
 |~| Transition| Asset(?)|
 </pre>
 </div>

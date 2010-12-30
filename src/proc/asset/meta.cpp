@@ -27,31 +27,79 @@
 #include "include/logging.h"
 
 
-namespace asset
-  {
+namespace asset {
+  
+  using meta::Descriptor;
   
   namespace // Implementation details
   {
     /** helper: .....*/
-  } 
-
-
+  }
   
-  MetaFactory Meta::create;  ///< storage for the static MetaFactory instance
+  namespace meta {
+    
+    Descriptor::~Descriptor() { } // emit vtable here...
+    
+  }
+  
+  
+  /**storage for the static MetaFactory instance */
+  MetaFactory Meta::create;
   
   
   
-  /** Factory method for Metadata Asset instances. ....
-   *  @todo actually define
+  /** Generic factory method for Metadata Asset instances.
+   *  @param  EntryID specifying the type and a human readable name-ID
    *  @return an Meta smart ptr linked to the internally registered smart ptr
    *          created as a side effect of calling the concrete Meta subclass ctor.
    */
-  MetaFactory::PType 
-  MetaFactory::operator() (Asset::Ident& key) ////TODO
+  template<class MA>
+  P<MA>
+  MetaFactory::operator() (EntryID<MA> elementIdentity)
   {
     UNIMPLEMENTED ("Meta-Factory");
   }
   
   
+  /** Generic factory method for specialising Metadata.
+   *  @param  prototype Descriptor of a special kind of metadata,
+   *          to be augmented and further specialised. Can indeed
+   *          be an existing asset::Meta instance
+   *  @param  EntryID specifying the type and a human readable name-ID
+   *  @return an Meta smart ptr linked to the internally registered smart ptr
+   *          created as a side effect of calling the concrete Meta subclass ctor.
+   */
+  template<class MA>
+  P<MA>
+  MetaFactory::operator() (Descriptor const& prototype, EntryID<MA> elementIdentity)
+  {
+    UNIMPLEMENTED ("Meta-Factory");
+  }
+  
+  
+  
+} // namespace asset
+
+
+
+
+   /**************************************************/
+   /* explicit instantiations of the factory methods */
+   /**************************************************/
+
+#include "proc/asset/meta/time-grid.hpp"
+//#include "proc/asset/procpatt.hpp"
+//#include "proc/asset/timeline.hpp"
+//#include "proc/asset/sequence.hpp"
+
+
+namespace asset {
+  
+  using meta::Descriptor;
+  using meta::TimeGrid;
+  
+  template P<TimeGrid>  MetaFactory::operator() (EntryID<TimeGrid>);
+  
+  template P<TimeGrid>  MetaFactory::operator() (Descriptor const&, EntryID<TimeGrid>);
   
 } // namespace asset

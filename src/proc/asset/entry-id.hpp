@@ -31,7 +31,7 @@
  ** 
  ** @note as of 3/2010 this is an experimental setup and exists somewhat in parallel
  **       to the assets. We're still in the process of finding out what's really required
- **       to keep track of all the various kinds of objects.
+ **       to keep track of all the various kinds of objects.                 ///////////////////TICKET #739
  ** 
  ** @see asset::Asset::Ident
  ** @see entry-id-test.cpp
@@ -79,7 +79,8 @@ namespace asset {
      *        char[] of the LUID as a LuidH class, which is ugly, but granted to work.
      *  @todo several unsolved design problems. How to deal with std hash values in
      *        conjunction with LUID. How to create a LuidH instance, if not generating
-     *        a new random value
+     *        a new random value. How to make EntryID and asset::Ident interchangeable,  /////////TICKET #739
+     *        which would require both to yield the same hash values....
      *  @warning this code isn't portable and breaks if sizeof(size_t) < sizeof(void*)
      */
     inline LuidH
@@ -198,6 +199,9 @@ namespace asset {
       /** generate an Asset identification tuple
        *  based on this EntryID's symbolic ID and type information.
        *  The remaining fields are filled in with hardwired defaults.
+       * @note there is a twist, as this asset identity tuple generates
+       *       a different hash as the EntryID. It would be desirable
+       *       to make those two addressing systems interchangeable.      /////////////TICKET #739
        */
       Asset::Ident
       getIdent()  const
