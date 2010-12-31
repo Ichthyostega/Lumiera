@@ -22,13 +22,33 @@
 
 
 /** @file meta.hpp
- ** Internal and organisational metadata. Some internally created data elements,
- ** like automation data sets, inventory of session contents, can be exposed and 
- ** treated as specific Kind of Asset.
+ ** Internal and organisational metadata. Some internally created data elements
+ ** rather serve the purpose of controlling the way the application behaves, as
+ ** opposed to organising the \link struct.hpp structure \endlink of the data the
+ ** user works with. Lumiera exposes this self-referential control and customisation
+ ** aspects as a special kind of Asset. Examples being types, scales and quantisation
+ ** grids, decision rules, control data stores (automation data), annotations attached
+ ** to labels, inventory entities etc. 
  ** 
  ** For the different <i>Kinds</i> of Assets, we use sub-interfaces inheriting
  ** from the general Asset interface. To be able to get asset::Meta instances
  ** directly from the AssetManager, we define a specialisation of the Asset ID.
+ ** 
+ ** \par using meta assets
+ ** The usage pattern of asset::Meta entities differs from the other assets,
+ ** insofar they aren't created as individual entries, rather added as part
+ ** of a larger scale configuration activity, or they are derived from category.
+ ** The latter fits in with a prototype-like approach; initially, the individual
+ ** entry just serves to keep track of a categorisation, while at some point,
+ ** such a link into a describing category may evolve into a local
+ ** differentiation of some settings (copy on modification).
+ ** 
+ ** To cope with this special usage, the meta assets are defined to be immutable.
+ ** They are created from a descriptor, which stands for a category or sub-category
+ ** and can be another already existing asset::Meta (inheriting from meta::Descriptor)
+ ** Generally this yields a Builder object, which can be used for outfitting the new
+ ** or changed metadata entry, finally \em committing this builder to yield a new
+ ** asset::Meta (which, in case of a mutation, might superseede an existin one).
  ** 
  ** @see asset.hpp explanation of assets in general
  ** @see MetaFactory creating concrete asset::Meta instances
@@ -71,6 +91,21 @@ namespace asset {
       public:
         virtual ~Descriptor();  ///< this is an ABC
       };
+      
+      /**
+       * Building and configuring a meta asset.
+       * The finished elements are defined to be immutable,
+       * thus, on creation or when changing / superseding a
+       * meta asset, the client gets a special builder instance,
+       * which is a value object for configuring the specific details
+       * to set. When done, the client invokes a \c commit() function,
+       * which yields a smart-ptr to the new meta asset.
+       * Individual meta asset subclasses are bound to define a 
+       * specialisation of this Builder template, which will then be
+       * instantiated and provided by the MetaFactory.
+       */
+      template<class MA>
+      struct Builder;
   }
   
   
@@ -116,10 +151,10 @@ namespace asset {
       typedef P<asset::Meta> PType;
       
       template<class MA>
-      P<MA> operator() (EntryID<MA> elementIdentity); 
+      meta::Builder<MA> operator() (EntryID<MA> elementIdentity); 
       
       template<class MA>
-      P<MA> operator() (meta::Descriptor const& prototype, EntryID<MA> elementIdentity); 
+      meta::Builder<MA> operator() (meta::Descriptor const& prototype, EntryID<MA> elementIdentity); 
       
     };
   

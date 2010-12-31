@@ -38,7 +38,7 @@ namespace asset {
   
   namespace meta {
     
-    Descriptor::~Descriptor() { } // emit vtable here...
+    Descriptor::~Descriptor() { } // emit VTable here...
     
   }
   
@@ -54,8 +54,8 @@ namespace asset {
    *          created as a side effect of calling the concrete Meta subclass ctor.
    */
   template<class MA>
-  P<MA>
-  MetaFactory::operator() (EntryID<MA> elementIdentity)
+  meta::Builder<MA>
+  MetaFactory::operator () (EntryID<MA> elementIdentity)
   {
     UNIMPLEMENTED ("Meta-Factory");
   }
@@ -70,7 +70,7 @@ namespace asset {
    *          created as a side effect of calling the concrete Meta subclass ctor.
    */
   template<class MA>
-  P<MA>
+  meta::Builder<MA>
   MetaFactory::operator() (Descriptor const& prototype, EntryID<MA> elementIdentity)
   {
     UNIMPLEMENTED ("Meta-Factory");
@@ -96,10 +96,11 @@ namespace asset {
 namespace asset {
   
   using meta::Descriptor;
+  using meta::Builder;
   using meta::TimeGrid;
   
-  template P<TimeGrid>  MetaFactory::operator() (EntryID<TimeGrid>);
+  template Builder<TimeGrid>  MetaFactory::operator() (EntryID<TimeGrid>);
   
-  template P<TimeGrid>  MetaFactory::operator() (Descriptor const&, EntryID<TimeGrid>);
+  template Builder<TimeGrid>  MetaFactory::operator() (Descriptor const&, EntryID<TimeGrid>);
   
 } // namespace asset

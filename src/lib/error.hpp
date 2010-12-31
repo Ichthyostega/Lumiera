@@ -125,7 +125,8 @@ namespace lumiera {
     LUMIERA_ERROR_DECLARE (WRONG_TYPE);   ///< runtime type mismatch
     LUMIERA_ERROR_DECLARE (ITER_EXHAUST); ///< end of sequence reached
     LUMIERA_ERROR_DECLARE (BOTTOM_VALUE); ///< invalid or NIL value
-    LUMIERA_ERROR_DECLARE (UNCONNECTED);  ///< missing connection 
+    LUMIERA_ERROR_DECLARE (UNCONNECTED);  ///< missing connection
+    LUMIERA_ERROR_DECLARE (UNIMPLEMENTED);///< unimplemented feature
     
     
     

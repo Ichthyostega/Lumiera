@@ -201,7 +201,7 @@ namespace test{
           TimeValue zero;
           TimeValue five(5);
           
-          TimeSpan interval (Time(org), Duration(Offset (org,five)));
+          TimeSpan interval (Time(org), Duration(Offset (org,five)));        /////////////TODO need more convenient constructors
           
           // the time span behaves like a time
           CHECK (org == interval);

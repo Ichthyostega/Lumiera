@@ -34,6 +34,11 @@
  ** Time grid specifications are integrated into Lumiera's framework
  ** for meta assets, automation, configuration and similar metadata.
  ** 
+ ** \par using time grids
+ ** TimeGrid is an interface (ABC), but provides some actual factory
+ ** functions, which can be used as a convenience shortcut to fabricate
+ ** the kind of simple time grid used most often.
+ ** 
  ** @see MetaFactory creating concrete asset::Meta instances
  ** @see time::Quantiser
  **
@@ -43,14 +48,14 @@
 #define ASSET_META_TIME_GRID_H
 
 #include "proc/asset/meta.hpp"
-#include "lib/time/quantiser.hpp"
+#include "lib/time/timevalue.hpp"
 
 
 
 namespace asset {
 namespace meta {
   
- 
+  
   /**
    * Interface: a grid and scale for time quantisation.
    * This meta-Asset describes a coordinate system or
@@ -61,17 +66,52 @@ namespace meta {
     {
       
     public:
-      struct Builder
-        {
-        
-        };
+      
+      // TODO define the TimeGrid API here
+      
       
     protected:
-      friend class Builder;
-      
-      TimeGrid (Builder const& setup); //////////////TODO
+      TimeGrid (EntryID<TimeGrid> const&);
     };
   
+    
+  
+  
+  using lib::time::Time;
+  using lib::time::TimeValue;
+  using lib::time::TimeFract;
+  
+  
+  template<>
+  struct Builder<TimeGrid>
+    {
+      TimeFract fps_;
+      Time      origin_;
+      
+      /** when building a compound or variable grid,
+       *  the predecessor is the grid active \em before
+       *  the origin of this (local) grid.
+       * @todo currently not supported (as of 12/2010)
+       */
+      P<TimeGrid> predecessor_;
+      
+      /** 
+       * initialise to blank (zero).
+       * You need at least to set the framerate,
+       * in order to create a usable TimeGrid
+       */
+      Builder()
+        : fps_(0)
+        , origin_(TimeValue(0))
+        , predecessor_()
+        { }
+      
+      /** create a time grid
+       *  based on settings within this builder
+       */
+      P<TimeGrid> commit();
+      
+    };
   
 }} // namespace asset::meta
 #endif

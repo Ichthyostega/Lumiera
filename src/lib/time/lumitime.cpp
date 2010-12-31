@@ -30,12 +30,25 @@ extern "C" {
 
 #include <limits>
 #include <string>
+#include <boost/rational.hpp>
 
 using std::string;
 
 
 namespace lib {
 namespace time {
+  
+  namespace {
+    /** implementation detail: convert a rational number denoting fractionalSeconds
+     *  into the internal time scale used by GAVL and Lumiera internal time values.
+     */
+    inline gavl_time_t
+    rational2time (TimeFract const& fractionalSeconds)
+    {
+      return boost::rational_cast<gavl_time_t> (GAVL_TIME_SCALE * fractionalSeconds);
+    }
+  }
+  
   
   const Time Time::MAX ( TimeValue (+std::numeric_limits<gavl_time_t>::max()) );
   const Time Time::MIN ( TimeValue (-std::numeric_limits<gavl_time_t>::max()) );
@@ -58,6 +71,15 @@ namespace time {
              )
     : TimeValue(lumiera_build_time (millis,secs,mins,hours))
   { }
+  
+  
+  /** convenience constructor to build an Time value
+   *  from a fraction of seconds, given as rational number.
+   *  An example would be to the time unit of a framerate.
+   */
+  Time::Time (TimeFract const& fractionalSeconds)
+    : TimeValue(rational2time (fractionalSeconds))
+    { }
   
   
   /** displaying an internal Lumiera Time value

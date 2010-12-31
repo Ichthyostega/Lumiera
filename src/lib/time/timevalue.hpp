@@ -25,6 +25,7 @@
 #define LIB_TIME_TIMEVALUE_H
 
 #include <boost/operators.hpp>
+#include <boost/rational.hpp>
 #include <cstdlib>
 #include <string>
 
@@ -182,6 +183,9 @@ namespace time {
   
   /* ======= specific Time entities ==================== */
   
+  /** rational representation of fractional seconds */
+  typedef boost::rational<gavl_time_t> TimeFract;
+
   /**
    * Lumiera's internal time value datatype.
    * This is a TimeValue, but now more specifically denoting
@@ -218,6 +222,8 @@ namespace time {
       Time (TimeVar const& calcResult)
         : TimeValue(calcResult)
         { }
+      
+      Time (TimeFract const& fractionalSeconds);
       
       Time ( long millis
            , uint secs 
