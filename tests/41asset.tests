@@ -68,3 +68,8 @@ END
 TEST "OrderingOfAssets_test" OrderingOfAssets_test <<END
 return: 0
 END
+
+
+PLANNED "Simple TimeGrid" TimeGridBasics_test <<END
+return: 0
+END

@@ -51,6 +51,7 @@ test_components_SOURCES =								\
 	$(testcomponents_srcdir)/proc/asset/orderingofassetstest.cpp			\
 	$(testcomponents_srcdir)/proc/asset/testasset.cpp				\
 	$(testcomponents_srcdir)/proc/asset/typed-id-test.cpp				\
+	$(testcomponents_srcdir)/proc/asset/meta/time-grid-basics-test.cpp		\
 	$(testcomponents_srcdir)/proc/control/argument-tuple-accept-test.cpp		\
 	$(testcomponents_srcdir)/proc/control/command-argument-test.cpp			\
 	$(testcomponents_srcdir)/proc/control/command-basic-test.cpp			\

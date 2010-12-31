@@ -74,6 +74,8 @@ namespace meta {
       TimeGrid (EntryID<TimeGrid> const&);
     };
   
+  typedef lumiera::P<TimeGrid> PGrid;
+  
     
   
   
