@@ -22,18 +22,22 @@
 
 
 #include "lib/test/run.hpp"
+#include "lib/test/test-helper.hpp"
 #include "lib/time/quantiser.hpp"
 #include "lib/util.hpp"
 
 #include <boost/lexical_cast.hpp>
-//#include <iostream>
+#include <boost/algorithm/string/join.hpp>
+#include <iostream>
 //#include <cstdlib>
 
 using boost::lexical_cast;
 using util::isnil;
 //using std::rand;
-//using std::cout;
-//using std::endl;
+using std::cout;
+using std::endl;
+
+using boost::algorithm::join;
 
 
 namespace lib {
@@ -42,7 +46,7 @@ namespace test{
   
   
   /********************************************************
-   * @test verify handling of time values, time intervals.
+   * @test verify handling of quantised time values.
    *       - creating times and time intervals
    *       - comparisons
    *       - time arithmetics
@@ -55,30 +59,88 @@ namespace test{
           long refval= isnil(arg)?  1 : lexical_cast<long> (arg[1]);
           
           TimeValue ref (refval);
+          CHECK (Time(0) < ref);
           
-          checkBasics (ref);
-          checkComparisons (ref);
-          checkComponentAccess();
+          checkUsage (ref);
+          check_theFullStory (ref);
+          checkMultipleGrids (ref);
         } 
       
       
       void
-      checkBasics (TimeValue ref)
+      checkUsage (TimeValue org)
         {
+          TimeGrid::build("my_simple_grid", 25);    // "someone" has defined a time grid
+          
+          QuTime qVal (org, "my_simple_grid");      // create time quantised to this grid
+          
+          FrameNr count(qVal);                      // materialise this quantised time into..
+          int n = count;                            // frame count, accessible as plain number
+          
+          CHECK (TimeFract(n-1, 25) < org);         // verify quantisation: the original time
+          CHECK (org < TimeFract(n+1, 25));         // is properly bracketed by (n-1, n+2)
         }
       
       
       void
-      checkComparisons (TimeValue ref)
+      check_theFullStory (TimeValue org)
         {
+          FixedFrameQuantiser fixQ(25);
+          QuTime qVal (org, fixQ);
+          
+          CHECK (contains (qVal.supportedFormats, format::FRAMES));
+          CHECK (contains (qVal.supportedFormats, format::SMPTE));
+          
+          TCode<format::Smpte> smpteTCode = qVal.formatAs<format::Smpte>();
+          showTimeCode (smpteTCode);
+          
+          TCode<format::Frames> frameTCode = qVal.formatAs<format::Frames>();
+          showTimeCode (frameTCode);
+          
+          FrameNr count(frameTCode);
+          CHECK (string(count) == *(frameTCode.components()));
+        }
+      
+      template<class TC>
+      void
+      showTimeCode (TC timecodeValue)
+        {
+          cout << timecodeValue.describe() << " = " << join (timecodeValue.components(), ":") << endl;
         }
       
       
       void
-      checkComponentAccess()
+      checkMultipleGrids (TimeValue org)
         {
+          TimeGrid::build("my_alternate_grid", TimeFract(30000,1001));
+          
+          QuTime palVal (org, "my_simple_grid");
+          QuTime ntscVal (org, "my_alternate_grid");
+          
+          CHECK (org == palVal);
+          CHECK (org == ntscVal);
+          
+          FrameNr palNr (palVal);
+          FrameNr ntscNr(ntscVal);
+          CHECK (palNr < ntscNr);
         }
       
+      
+      void
+      checkGridLateBinding (TimeValue org)
+        {
+          QuTime funny (org, "special_funny_grid");      // refer a not yet existing grid
+          CHECK (org == funny);                          // no problem, unless we request quantisation
+          
+          VERIFY_ERROR (UNKNOWN_GRID, funny.formatAs<format::Frames>() );
+          
+          TimeGrid::build("special_funny_grid", 1);      // provide the grid's definition (1 frame per second)
+          
+          int cnt = funny.formatAs<format::Frames>();    // and now performing quantisation is OK 
+          SmpteTC smpte (funny);                         // also converting into SMPTE (which implies frame quantisation)
+          CHECK (0 == smpte.getFrames());                // we have 1fps, thus the frame part is always zero!
+          CHECK (cnt % 60 == smpte.getSecs());           // and the seconds part will be in sync with the frame count
+        }
     };
   
   

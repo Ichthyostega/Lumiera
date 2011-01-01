@@ -185,6 +185,7 @@ namespace test{
           CHECK (distance > zero);
           CHECK (distance == backwards.abs());
           
+          // assign to variable for calculations
           point = backwards;
           point *= 2;
           CHECK (point < zero);
