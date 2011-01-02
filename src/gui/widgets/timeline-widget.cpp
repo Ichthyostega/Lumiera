@@ -315,7 +315,7 @@ TimelineWidget::create_timeline_track_from_model_track(
   // class
   if(typeid(*model_track) == typeid(model::ClipTrack))
     return shared_ptr<timeline::Track>(new timeline::ClipTrack(
-      *this, model_track));
+      *this, dynamic_pointer_cast<model::ClipTrack>(model_track)));
   else if(typeid(*model_track) == typeid(model::GroupTrack))
     return shared_ptr<timeline::Track>(new timeline::GroupTrack(
       *this, dynamic_pointer_cast<model::GroupTrack>(model_track)));

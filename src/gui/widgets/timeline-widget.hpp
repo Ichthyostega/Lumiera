@@ -241,9 +241,9 @@ protected:
   /**
    * The trackMap maps model tracks to timeline widget tracks which are
    * responsible for the UI representation of a track.
-   * @remarks The tree structure is maintianed by the model, and as the
+   * @remarks The tree structure is maintained by the model, and as the
    * widget is updated with update_tracks, timeline tracks are added and
-   * removed from the map in correspondance with the tree.
+   * removed from the map in correspondence with the tree.
    **/
   std::map<boost::shared_ptr<model::Track>,
     boost::shared_ptr<timeline::Track> >
