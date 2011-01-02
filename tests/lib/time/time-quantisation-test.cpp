@@ -81,8 +81,8 @@ namespace test{
           FrameNr count(qVal);                      // materialise this quantised time into..
           int n = count;                            // frame count, accessible as plain number
           
-          CHECK (TimeFract(n-1, 25) < org);         // verify quantisation: the original time
-          CHECK (org < TimeFract(n+1, 25));         // is properly bracketed by (n-1, n+2)
+          CHECK (Time(FSecs(n-1, 25)) < org);       // verify quantisation: the original time
+          CHECK (org < Time(FSecs(n+1, 25)));       // is properly bracketed by (n-1, n+2)
         }
       
       
@@ -116,7 +116,7 @@ namespace test{
       void
       checkMultipleGrids (TimeValue org)
         {
-          TimeGrid::build("my_alternate_grid", TimeFract(30000,1001));
+          TimeGrid::build("my_alternate_grid", FSecs(30000,1001));
           
           QuTime palVal (org, "my_simple_grid");
           QuTime ntscVal (org, "my_alternate_grid");

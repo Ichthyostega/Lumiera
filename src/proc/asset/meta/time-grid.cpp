@@ -117,14 +117,14 @@ namespace meta {
   /* === TimeGrid shortcut builder functions === */
   
   PGrid
-  TimeGrid::build (Symbol gridID, TimeFract frames_per_second)
+  TimeGrid::build (Symbol gridID, FSecs frames_per_second)
   {
     return build (gridID,frames_per_second, Time(0));
   }
   
   
   PGrid
-  TimeGrid::build (Symbol gridID, TimeFract frames_per_second, Time origin)
+  TimeGrid::build (Symbol gridID, FSecs frames_per_second, Time origin)
   {
     UNIMPLEMENTED ("build a trivial time grid");
   }

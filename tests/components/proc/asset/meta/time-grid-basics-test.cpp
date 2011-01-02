@@ -66,7 +66,7 @@ namespace test {
   namespace { // Test definitions...
     
     Time testOrigin (12,23);
-    TimeFract testFps (5,4);
+    FSecs testFps (5,4);
     
   }
   

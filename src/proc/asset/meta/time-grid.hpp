@@ -59,7 +59,7 @@ namespace meta {
   using lib::Symbol;
   using lib::time::Time;
   using lib::time::TimeValue;
-  using lib::time::TimeFract;
+  using lib::time::FSecs;
   
   
   class TimeGrid;
@@ -80,8 +80,8 @@ namespace meta {
       // TODO define the TimeGrid API here
       
       /* === shortcut builder functions === */
-      static PGrid build (Symbol gridID, TimeFract frames_per_second);
-      static PGrid build (Symbol gridID, TimeFract frames_per_second, Time origin);
+      static PGrid build (Symbol gridID, FSecs frames_per_second);
+      static PGrid build (Symbol gridID, FSecs frames_per_second, Time origin);
       
     protected:
       TimeGrid (EntryID<TimeGrid> const&);
@@ -94,7 +94,7 @@ namespace meta {
   template<>
   struct Builder<TimeGrid>
     {
-      TimeFract fps_;
+      FSecs fps_;
       Time      origin_;
       
       /** when building a compound or variable grid,

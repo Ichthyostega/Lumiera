@@ -183,8 +183,9 @@ namespace time {
   
   /* ======= specific Time entities ==================== */
   
-  /** rational representation of fractional seconds */
-  typedef boost::rational<gavl_time_t> TimeFract;
+  /** rational representation of fractional seconds
+   * @warning do not mix up gavl_time_t and FSecs */
+  typedef boost::rational<long> FSecs;
 
   /**
    * Lumiera's internal time value datatype.
@@ -223,7 +224,7 @@ namespace time {
         : TimeValue(calcResult)
         { }
       
-      Time (TimeFract const& fractionalSeconds);
+      Time (FSecs const& fractionalSeconds);
       
       Time ( long millis
            , uint secs 

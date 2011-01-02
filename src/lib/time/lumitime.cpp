@@ -43,7 +43,7 @@ namespace time {
      *  into the internal time scale used by GAVL and Lumiera internal time values.
      */
     inline gavl_time_t
-    rational2time (TimeFract const& fractionalSeconds)
+    rational2time (FSecs const& fractionalSeconds)
     {
       return boost::rational_cast<gavl_time_t> (GAVL_TIME_SCALE * fractionalSeconds);
     }
@@ -77,7 +77,7 @@ namespace time {
    *  from a fraction of seconds, given as rational number.
    *  An example would be to the time unit of a framerate.
    */
-  Time::Time (TimeFract const& fractionalSeconds)
+  Time::Time (FSecs const& fractionalSeconds)
     : TimeValue(rational2time (fractionalSeconds))
     { }
   

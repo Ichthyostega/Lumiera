@@ -62,7 +62,7 @@ namespace time {
     {
       
     public:
-      FixedFrameQuantiser (TimeFract frames_per_second);
+      FixedFrameQuantiser (FSecs frames_per_second);
     };
   
   

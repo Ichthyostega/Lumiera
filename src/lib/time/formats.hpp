@@ -107,7 +107,7 @@ namespace time {
     class Seconds
       : public Format
       {
-        TimeFract secs_;
+        
       };
     
     
