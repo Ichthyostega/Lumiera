@@ -160,7 +160,7 @@ TimelineHeaderWidget::on_expose_event(GdkEventExpose *event)
   REQUIRE(style);
   REQUIRE(gdkWindow);
   
-  shared_ptr<model::Track> modelTrack = track.get_modelTrack();
+  shared_ptr<model::Track> modelTrack = track.getModelTrack();
   REQUIRE(modelTrack);
     
   // Get the header box  

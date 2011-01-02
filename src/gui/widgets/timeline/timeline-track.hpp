@@ -28,6 +28,7 @@
 #include "gui/widgets/menu-button.hpp"
 #include "gui/widgets/mini-button.hpp"
 #include "gui/widgets/button-bar.hpp"
+#include "timeline-clip.hpp"
 #include "timeline-header-container.hpp"
 #include "timeline-header-widget.hpp"
 
@@ -75,7 +76,7 @@ public:
   Gtk::Widget& get_header_widget();
   
   boost::shared_ptr<model::Track>
-  get_modelTrack() const;
+  getModelTrack() const;
   
   /**
    * Return the visual height of the track in pixels.
@@ -109,24 +110,24 @@ public:
    * @see tick_expand_animation
    **/
   float get_expand_animation_state() const;
-  
+
   /**
    * Gets whether the branch is animation.
    * @return Returns true if the branch is animating, false if not.
    **/
   bool is_expand_animating() const;
-  
+
   /**
    * When this track is being animated, tick_expand_animation must be
    * called repeatedly to cause the animation to progress.
-   **/ 
+   **/
   void tick_expand_animation();
-  
+
   /**
    * Calculates the expander style, given the animation state.
    **/
   Gtk::ExpanderStyle get_expander_style() const;
-  
+
   /**
    *
    **/
@@ -138,6 +139,14 @@ public:
   virtual void draw_track(Cairo::RefPtr<Cairo::Context> cairo,
     TimelineViewWindow* const window)
     const = 0;
+
+  /**
+   * Gets the clip that is occupying the given time.
+   * The default implementation simply returns an empty pointer.
+   * @param the given time
+   **/
+  virtual boost::shared_ptr<timeline::Clip>
+  getClipAt(lumiera::Time position) const;
 
 private:
 

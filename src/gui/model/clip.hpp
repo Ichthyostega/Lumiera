@@ -26,6 +26,8 @@
 #include <string>
 #include "gui/gtk-lumiera.hpp"
 
+#include "lib/lumitime.hpp"
+
 // TODO: Remove once we get real measure of duration.
 //       This is here *only* for purposes of testing the GUI.
 extern "C" {
@@ -66,6 +68,12 @@ namespace model {
      **/
     const std::string
     getName() const;
+
+    /**
+     * Check whether or not the clip will be playing during the given time.
+     **/
+    bool
+    isPlayingAt(lumiera::Time position) const;
 
     /**
      * Sets the begin time of this clip.

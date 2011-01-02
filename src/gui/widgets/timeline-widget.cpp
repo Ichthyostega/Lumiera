@@ -326,7 +326,7 @@ TimelineWidget::create_timeline_track_from_modelTrack(
 
 void
 TimelineWidget::remove_orphaned_tracks()
-{  
+{
   std::map<boost::shared_ptr<model::Track>,
     boost::shared_ptr<timeline::Track> >
     orphan_track_map(trackMap);

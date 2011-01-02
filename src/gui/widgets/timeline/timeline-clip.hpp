@@ -37,27 +37,29 @@ namespace gui {
 namespace widgets {
 namespace timeline {
 
-class Clip : public model::Clip
-{
-public:
-  Clip(boost::shared_ptr<model::Clip> clip);
+  class Clip : public model::Clip
+  {
+  public:
+    Clip(boost::shared_ptr<model::Clip> clip);
 
-  void draw_clip(Cairo::RefPtr<Cairo::Context> cairo,
-    TimelineViewWindow* const window) const;
+    void draw_clip(Cairo::RefPtr<Cairo::Context> cairo,
+                   TimelineViewWindow* const window) const;
 
-  void
-  setSelected(bool state);
+    /**
+     * Sets the selected status of the clip.
+     **/
+    void
+    setSelected (bool state);
 
-private:
+  private:
 
-  boost::shared_ptr<model::Clip> modelClip;
+    boost::shared_ptr<model::Clip> modelClip;
 
-  /**
-   * True when this clip is selected in the GUI.
-   */
-  bool selected;
-
-};
+    /**
+     * True when this clip is selected in the GUI.
+     */
+    bool selected;
+  };
 
 }   // namespace timeline
 }   // namespace widgets

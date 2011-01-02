@@ -69,6 +69,12 @@ TimelineBody::~TimelineBody()
   WARN_IF(!tool, gui, "An invalid tool pointer is unexpected here");
 }
 
+TimelineWidget&
+TimelineBody::getTimelineWidget () const
+{
+  return timelineWidget;
+}
+
 ToolType
 TimelineBody::get_tool() const
 {

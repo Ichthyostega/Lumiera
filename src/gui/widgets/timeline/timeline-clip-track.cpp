@@ -76,6 +76,21 @@ namespace timeline {
       }
   }
 
+  boost::shared_ptr<timeline::Clip>
+  ClipTrack::getClipAt(lumiera::Time position) const
+  {
+    std::pair<shared_ptr<model::Clip>, shared_ptr<timeline::Clip> >
+      pair; 
+    BOOST_FOREACH (pair, clipMap)
+      {
+        if (pair.first->isPlayingAt(position))
+          return pair.second;
+      }
+
+    // Nothing found
+    return boost::shared_ptr<timeline::Clip>();
+  }
+
   //// private methods
 
   void

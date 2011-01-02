@@ -50,10 +50,19 @@ namespace timeline {
               boost::shared_ptr<model::ClipTrack> track);
   
     /**
-     *
+     * Draw the track in the timeline.
      **/
-    void draw_track(Cairo::RefPtr<Cairo::Context> cairo,
-                    TimelineViewWindow* const window) const;
+    void
+    draw_track(Cairo::RefPtr<Cairo::Context> cairo,
+      TimelineViewWindow* const window) const;
+
+    /**
+     * Gets the clip that is occupying the given time. If there is no track, return a NULL
+     * pointer.
+     * @param the given time
+     **/
+    boost::shared_ptr<timeline::Clip>
+    getClipAt(lumiera::Time position) const;
 
   private:
 

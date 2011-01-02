@@ -150,7 +150,7 @@ TimelineLayoutHelper::begin_dragging_track(
     dragPoint.get_y() - rect.get_y());
   
   const shared_ptr<model::Track> modelTrack =
-    dragging_track->get_modelTrack();
+    dragging_track->getModelTrack();
   draggingTrackIter = iterator_from_track(modelTrack);
   dragBranchHeight = measure_branch_height(draggingTrackIter);
   

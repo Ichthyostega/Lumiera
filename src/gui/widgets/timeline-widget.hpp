@@ -102,7 +102,8 @@ public:
    */
   void set_tool(timeline::ToolType tool_type);
   
-  boost::shared_ptr<timeline::Track> get_hovering_track() const;
+  boost::shared_ptr<timeline::Track>
+  get_hovering_track() const;
   
 public:
   /* ===== Signals ===== */

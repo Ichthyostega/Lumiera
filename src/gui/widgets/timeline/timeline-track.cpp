@@ -103,7 +103,7 @@ Track::get_header_widget()
 }
 
 shared_ptr<model::Track>
-Track::get_modelTrack() const
+Track::getModelTrack() const
 {
   return modelTrack;
 }
@@ -118,6 +118,13 @@ bool
 Track::get_expanded() const
 {
   return expanded;
+}
+
+boost::shared_ptr<timeline::Clip>
+Track::getClipAt(lumiera::Time) const
+{
+  // Default implementation returns empty pointer
+  return boost::shared_ptr<timeline::Clip>();
 }
 
 void

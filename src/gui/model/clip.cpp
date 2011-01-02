@@ -48,6 +48,12 @@ namespace model {
     return name;
   }
 
+  bool
+  Clip::isPlayingAt(lumiera::Time position) const
+  {
+    return (begin <= position && end >= position);
+  }
+
   void
   Clip::setBegin(gavl_time_t begin)
   {

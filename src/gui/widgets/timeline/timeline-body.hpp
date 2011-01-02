@@ -65,6 +65,9 @@ public:
    */
   ~TimelineBody();
   
+  TimelineWidget&
+  getTimelineWidget () const;
+
   /**
    * Returns the type of the currently selected timeline tool.
    */
