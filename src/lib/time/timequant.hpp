@@ -1,5 +1,5 @@
 /*
-  QUANTISER.hpp  -  aligning time values to a time grid
+  TIMEQUANT.hpp  -  quantised (grid aligned) time values
 
   Copyright (C)         Lumiera.org
     2010,               Hermann Vosseler <Ichthyostega@web.de>
@@ -21,11 +21,13 @@
 */
 
 
-#ifndef LIB_TIME_QUANTISER_H
-#define LIB_TIME_QUANTISER_H
+#ifndef LIB_TIME_TIMEQUQNT_H
+#define LIB_TIME_TIMEQUQNT_H
 
 #include "lib/time/timevalue.hpp"
-#include "lib/time/formats.hpp"
+#include "lib/time/quantiser.hpp"
+#include "lib/time/timecode.hpp"
+#include "lib/symbol.hpp"
 
 //#include <boost/operators.hpp>
 #include <string>
@@ -34,35 +36,20 @@
 namespace lib {
 namespace time {
   
+  using lib::Symbol;
+  
   
   /**
-   * Facility to create grid-aligned time values.
+   * fixed format time specification.
    * 
    * @todo WIP-WIP-WIP
    */
-  class Quantiser
+  class QuTime
     {
       
     public:
-    };
-  
-  
-  
-  /**
-   * Simple stand-alone Quantiser implementation for debugging and test.
-   * This is a self-contained quantiser implementation without any implicit
-   * referral to the Lumiera session. It is mainly intended for simplified unit testing.
-   * @warning real GUI and Proc-Layer code should always prefer to build a real quantiser,
-   * which referres some TimeGrid definition within the session. Basically, the overall
-   * purpose of the time-quantisation framework is to enforce such a link to a specific
-   * time and quantisation scale and to prevent "wild and uncoordinated" rounding attempts.
-   */
-  class FixedFrameQuantiser
-    : public Quantiser
-    {
-      
-    public:
-      FixedFrameQuantiser (TimeFract frames_per_second);
+      QuTime (TimeValue raw, Symbol gridID);
+      QuTime (TimeValue raw, Quantiser const& quantisation_to_use);
     };
   
   

@@ -25,6 +25,7 @@
 #define LIB_TIME_TIMECODE_H
 
 #include "lib/time/timevalue.hpp"
+#include "lib/time/formats.hpp"
 
 //#include <boost/operators.hpp>
 #include <string>
@@ -36,13 +37,35 @@ namespace time {
   
   /**
    * fixed format time specification.
-   * 
+   * @param FMT the actual timecode format to use
+   * @see time::Format
    * @todo WIP-WIP-WIP
    */
+  template<class FMT>
   class TCode
     {
       
     public:
+    };
+  
+  
+  class QuTime;
+  
+  /**
+   * A frame counting timecode value.
+   * This is an hard-coded representation of
+   * TCode<format::Frames>, with additional convenience
+   * constructors and conversions, which basically make
+   * FrameNr values interchangeable with integral numbers. 
+   */
+  class FrameNr
+    : public TCode<format::Frames>
+    {
+      
+    public:
+      FrameNr (QuTime const& quantisedTime);
+      
+      operator long()  const;
     };
   
   

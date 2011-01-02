@@ -49,11 +49,21 @@
 
 #include "proc/asset/meta.hpp"
 #include "lib/time/timevalue.hpp"
+#include "lib/symbol.hpp"
 
 
 
 namespace asset {
 namespace meta {
+  
+  using lib::Symbol;
+  using lib::time::Time;
+  using lib::time::TimeValue;
+  using lib::time::TimeFract;
+  
+  
+  class TimeGrid;
+  typedef lumiera::P<TimeGrid> PGrid;
   
   
   /**
@@ -69,19 +79,16 @@ namespace meta {
       
       // TODO define the TimeGrid API here
       
+      /* === shortcut builder functions === */
+      static PGrid build (Symbol gridID, TimeFract frames_per_second);
+      static PGrid build (Symbol gridID, TimeFract frames_per_second, Time origin);
       
     protected:
       TimeGrid (EntryID<TimeGrid> const&);
     };
-  
-  typedef lumiera::P<TimeGrid> PGrid;
-  
     
   
   
-  using lib::time::Time;
-  using lib::time::TimeValue;
-  using lib::time::TimeFract;
   
   
   template<>

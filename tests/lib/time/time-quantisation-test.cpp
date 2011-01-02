@@ -23,7 +23,8 @@
 
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
-#include "lib/time/quantiser.hpp"
+#include "lib/time/timequant.hpp"
+#include "proc/asset/meta/time-grid.hpp"
 #include "lib/util.hpp"
 
 #include <boost/lexical_cast.hpp>
@@ -33,6 +34,7 @@
 
 using boost::lexical_cast;
 using util::isnil;
+using util::contains;
 //using std::rand;
 using std::cout;
 using std::endl;
@@ -43,6 +45,8 @@ using boost::algorithm::join;
 namespace lib {
 namespace time{
 namespace test{
+  
+  using asset::meta::TimeGrid;
   
   
   /********************************************************
@@ -61,14 +65,14 @@ namespace test{
           TimeValue ref (refval);
           CHECK (Time(0) < ref);
           
-          checkUsage (ref);
+          checkSimpleUsage (ref);
           check_theFullStory (ref);
           checkMultipleGrids (ref);
         } 
       
       
       void
-      checkUsage (TimeValue org)
+      checkSimpleUsage (TimeValue org)
         {
           TimeGrid::build("my_simple_grid", 25);    // "someone" has defined a time grid
           
@@ -88,8 +92,8 @@ namespace test{
           FixedFrameQuantiser fixQ(25);
           QuTime qVal (org, fixQ);
           
-          CHECK (contains (qVal.supportedFormats, format::FRAMES));
-          CHECK (contains (qVal.supportedFormats, format::SMPTE));
+          CHECK (contains (qVal.supportedFormats(), format::FRAMES));
+          CHECK (contains (qVal.supportedFormats(), format::SMPTE));
           
           TCode<format::Smpte> smpteTCode = qVal.formatAs<format::Smpte>();
           showTimeCode (smpteTCode);

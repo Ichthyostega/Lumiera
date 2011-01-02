@@ -20,4 +20,5 @@ autom4te.cache
 semantic.cache
 tests/,*
 wiki/backups/*
+doc/devel/uml/fig128309.png
 m4/*

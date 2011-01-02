@@ -56,7 +56,7 @@ namespace time {
   
   /** convenience constructor to build an
    *  internal Lumiera Time value from the usual parts
-   *  of an hexagesimal time specification. Arbitrary integral
+   *  of an sexagesimal time specification. Arbitrary integral
    *  values are acceptable and will be summed up accordingly.
    *  The minute and hour part can be omitted.
    * @warning internal Lumiera time values refer to an
