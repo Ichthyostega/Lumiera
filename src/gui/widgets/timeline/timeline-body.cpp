@@ -43,7 +43,7 @@ namespace gui {
 namespace widgets {
 namespace timeline {
 
-TimelineBody::TimelineBody(TimelineWidget &timeline_widget) :
+TimelineBody::TimelineBody(TimelineWidget &timelineWidget) :
     Glib::ObjectBase("TimelineBody"),
     tool(NULL),
     mouseDownX(0),
@@ -51,10 +51,10 @@ TimelineBody::TimelineBody(TimelineWidget &timeline_widget) :
     dragType(None),
     beginShiftTimeOffset(0),
     selectionAlpha(0.5),
-    timelineWidget(timeline_widget)
+    timelineWidget(timelineWidget)
 {      
   // Connect up some events
-  timeline_widget.state_changed_signal().connect(
+  timelineWidget.state_changed_signal().connect(
     sigc::mem_fun(this, &TimelineBody::on_state_changed) );
   
   // Install style properties
@@ -274,12 +274,12 @@ TimelineBody::on_motion_notify_event(GdkEventMotion *event)
       
       // Forward the event to the tool
       tool->on_motion_notify_event(event);
-      
+
       // See if the track that we're hovering over has changed
-      shared_ptr<timeline::Track> new_hovering_track(
+      shared_ptr<timeline::Track> newHoveringTrack(
         timelineWidget.layoutHelper.track_from_y(event->y));
-      if(timelineWidget.get_hovering_track() != new_hovering_track)
-          timelineWidget.set_hovering_track(new_hovering_track);
+      if (timelineWidget.get_hovering_track() != newHoveringTrack)
+        timelineWidget.set_hovering_track(newHoveringTrack);
     }
   
   // false so that the message is passed up to the owner TimelineWidget
@@ -507,7 +507,7 @@ TimelineBody::register_styles() const
       "The colour of the playback marker line",
       GDK_TYPE_COLOR, G_PARAM_READABLE));
 }
-  
+
 void
 TimelineBody::read_styles()
 {

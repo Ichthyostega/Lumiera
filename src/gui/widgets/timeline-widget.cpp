@@ -175,6 +175,7 @@ TimelineWidget::hovering_track_changed_signal() const
 {
   return hoveringTrackChangedSignal;
 }
+
 sigc::signal<void>
 TimelineWidget::state_changed_signal() const
 {

@@ -21,7 +21,7 @@
 
 */
 /** @file timeline-layout-helper.cpp
- ** This file contains the definition of the layout helpeer class
+ ** This file contains the definition of the layout helper class
  */
 
 #ifndef TIMELINE_LAYOUT_HELPER_HPP

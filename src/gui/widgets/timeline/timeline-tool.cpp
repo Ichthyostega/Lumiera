@@ -30,8 +30,8 @@ namespace gui {
 namespace widgets {
 namespace timeline {
 
-Tool::Tool(TimelineBody &timeline_body) :
-  timelineBody(timeline_body),
+Tool::Tool(TimelineBody &timelineBody) :
+  timelineBody(timelineBody),
   isDragging(false)
 {
 }
@@ -40,7 +40,7 @@ bool
 Tool::apply_cursor()
 {     
   Glib::RefPtr<Window> window = timelineBody.get_window();
-  if(!window)
+  if (!window)
     return false;
   
   window->set_cursor(get_cursor());
@@ -69,6 +69,8 @@ Tool::on_button_release_event(GdkEventButton* event)
 void
 Tool::on_motion_notify_event(GdkEventMotion *event)
 {
+  REQUIRE (event != NULL);
+
   mousePoint = Point(event->x, event->y);
 }
 

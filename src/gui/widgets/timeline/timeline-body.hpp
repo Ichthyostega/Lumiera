@@ -68,13 +68,15 @@ public:
   /**
    * Returns the type of the currently selected timeline tool.
    */
-  ToolType get_tool() const;
+  ToolType
+  get_tool() const;
   
   /**
    * Selects a tool of a specified type.
    * @param tool_type The type of tool to set.
    */
-  void set_tool(ToolType tool_type);
+  void
+  set_tool(ToolType tool_type);
   
   /* ===== Events ===== */
 protected:

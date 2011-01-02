@@ -58,13 +58,13 @@ class Tool
 protected:
   /**
    * Constructor
-   * @param timeline_body The owner timeline body object
+   * @param timelineBody The owner timeline body object
    */
-  Tool(TimelineBody &timeline_body);
+  Tool(TimelineBody &timelineBody);
   
 public:
   /**
-   * Destructor to be overriden by derived classes.
+   * Destructor to be overridden by derived classes.
    * @remarks If this were not present, derrived class destructors
    * would not be called.
    */
@@ -85,25 +85,25 @@ public:
   /* ===== Event Handlers ===== */
   /**
    * The event handler for button press events.
-   * @remarks This can be overriden by the derrived classes, but
+   * @remarks This can be overridden by the derived classes, but
    * Tool::on_button_press_event must be called <b>at the start</b>
-   * of the derrived class's override.
+   * of the derived class's override.
    */
   virtual void on_button_press_event(GdkEventButton* event);
   
   /**
    * The event handler for button release events.
-   * @remarks This can be overriden by the derrived classes, but
+   * @remarks This can be overridden by the derived classes, but
    * Tool::on_button_release_event must be called <b>at the end</b> of
-   * the derrived class's override.
+   * the derived class's override.
    */
   virtual void on_button_release_event(GdkEventButton* event);
   
   /**
    * The event handler for mouse move events.
-   * @remarks This can be overriden by the derrived classes, but
+   * @remarks This can be overridden by the derived classes, but
    * Tool::on_motion_notify_event must be called <b>at the start</b> of
-   * the derrived class's override.
+   * the derived class's override.
    */
   virtual void on_motion_notify_event(GdkEventMotion *event);
   

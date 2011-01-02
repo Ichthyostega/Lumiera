@@ -61,7 +61,6 @@ public:
     Collapse
   };
   
-public:
   /**
    * Constructor
    */
@@ -75,7 +74,8 @@ public:
   
   Gtk::Widget& get_header_widget();
   
-  boost::shared_ptr<model::Track> get_model_track() const;
+  boost::shared_ptr<model::Track>
+  get_model_track() const;
   
   /**
    * Return the visual height of the track in pixels.
@@ -127,8 +127,14 @@ public:
    **/
   Gtk::ExpanderStyle get_expander_style() const;
   
+  /**
+   *
+   **/
   void show_header_context_menu(guint button, guint32 time);
 
+  /**
+   * Draw the track
+   **/
   virtual void draw_track(Cairo::RefPtr<Cairo::Context> cairo,
     TimelineViewWindow* const window)
     const = 0;
@@ -139,8 +145,6 @@ private:
    * Specifies the period of the expand animation in seconds.
    **/
   static const float ExpandAnimationPeriod;
-
-private:
 
   /**
    * Event handler for when the enabled status changes.
