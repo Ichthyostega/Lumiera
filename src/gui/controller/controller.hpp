@@ -40,7 +40,7 @@ namespace controller {
 class Controller
 {
 public:
-  Controller(model::Project &model_project);
+  Controller(model::Project &modelProject);
 
   PlaybackController& get_playback_controller();
 

@@ -162,28 +162,28 @@ private:
 
   /**
    * Draws the border decoration around the track header.
-   * @param model_track The track to draw the decoration for.
+   * @param modelTrack The track to draw the decoration for.
    * @param clip_rect The clip to drawing to.
    * @param depth The depth within the tree of this track. This is used
    * to control the amount of indention.
    * @param offset The vertical offset of the headers in pixels.
    **/
   void draw_header_decoration(
-    boost::shared_ptr<model::Track> model_track,
+    boost::shared_ptr<model::Track> modelTrack,
     const Gdk::Rectangle &clip_rect);
   
   /**
    * A helper function which calls lookup_timeline_track within the
    * parent timeline widget, but also applies lots of data consistency
    * checks in the process.
-   * @param model_track The model track to look up in the parent widget.
+   * @param modelTrack The model track to look up in the parent widget.
    * @return Returns the track found, or returns NULL if no matching
    * track was found.
    * @remarks If the return value is going to be NULL, an ENSURE will
    * fail.
    **/
   boost::shared_ptr<timeline::Track> lookup_timeline_track(
-    boost::shared_ptr<model::Track> model_track);
+    boost::shared_ptr<model::Track> modelTrack);
     
   void begin_drag();
   

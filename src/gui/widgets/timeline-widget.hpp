@@ -159,17 +159,17 @@ private:
    * @param list The parent track of the branch.
    **/
   void create_timeline_tracks_from_branch(
-    boost::shared_ptr<model::Track> model_track);
+    boost::shared_ptr<model::Track> modelTrack);
   
   /**
    * Creates a timeline UI track to correspond to a model track.
-   * @param model_track The model track to create a timeline track from.
+   * @param modelTrack The model track to create a timeline track from.
    * @return The timeline track created, or an empty shared_ptr if
-   * model_track has an unreckognised type (this is an error condition).
+   * modelTrack has an unreckognised type (this is an error condition).
    **/
   boost::shared_ptr<timeline::Track>
-    create_timeline_track_from_model_track(
-    boost::shared_ptr<model::Track> model_track);
+    create_timeline_track_from_modelTrack(
+    boost::shared_ptr<model::Track> modelTrack);
   
   /**
    * Removes any UI tracks which no longer have corresponding model
@@ -178,20 +178,20 @@ private:
   void remove_orphaned_tracks();
   
   void search_orphaned_tracks_in_branch(
-    boost::shared_ptr<model::Track> model_track,
+    boost::shared_ptr<model::Track> modelTrack,
     std::map<boost::shared_ptr<model::Track>,
     boost::shared_ptr<timeline::Track> > &orphan_track_map);
   
   /**
    * Looks up a timeline UI track in trackMap that corresponds to a
-   * given model_track.
-   * @param model_track The model track to look up.
+   * given modelTrack.
+   * @param modelTrack The model track to look up.
    * @returns The timeline UI track found, or an empty shared_ptr if
-   * model_track has no corresponding timeline UI track (this is an
+   * modelTrack has no corresponding timeline UI track (this is an
    * error condition).
    **/
   boost::shared_ptr<timeline::Track> lookup_timeline_track(
-    boost::shared_ptr<model::Track> model_track) const;
+    boost::shared_ptr<model::Track> modelTrack) const;
   
   // ----- Layout Functions ----- //
   

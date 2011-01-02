@@ -33,9 +33,9 @@ namespace model {
   {
     // TEST CODE: add a clip to the track
 
-    boost::shared_ptr<model::Clip> model_clip(new model::Clip());
-    model_clip->setName("Clip Name");
-    clips.push_back(model_clip);
+    boost::shared_ptr<model::Clip> modelClip(new model::Clip());
+    modelClip->setName("Clip Name");
+    clips.push_back(modelClip);
 
     // END TEST CODE
   }

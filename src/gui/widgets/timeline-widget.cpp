@@ -286,39 +286,39 @@ TimelineWidget::create_timeline_tracks()
 
 void
 TimelineWidget::create_timeline_tracks_from_branch(
-  shared_ptr<model::Track> model_track)
+  shared_ptr<model::Track> modelTrack)
 {
-  REQUIRE(model_track);
+  REQUIRE(modelTrack);
   
   // Is a timeline UI track present in the map already?
-  if(!contains(trackMap, model_track))
+  if(!contains(trackMap, modelTrack))
     {
       // The timeline UI track is not present
       // We will need to create one
-      trackMap[model_track] = 
-        create_timeline_track_from_model_track(model_track);
+      trackMap[modelTrack] = 
+        create_timeline_track_from_modelTrack(modelTrack);
     }
   
   // Recurse to child tracks
   BOOST_FOREACH(shared_ptr<model::Track> child,
-    model_track->get_child_tracks())
+    modelTrack->get_child_tracks())
     create_timeline_tracks_from_branch(child);
 }
 
 shared_ptr<timeline::Track>
-TimelineWidget::create_timeline_track_from_model_track(
-  shared_ptr<model::Track> model_track)
+TimelineWidget::create_timeline_track_from_modelTrack(
+  shared_ptr<model::Track> modelTrack)
 {
-  REQUIRE(model_track);
+  REQUIRE(modelTrack);
   
   // Choose a corresponding timeline track class from the model track's
   // class
-  if(typeid(*model_track) == typeid(model::ClipTrack))
+  if(typeid(*modelTrack) == typeid(model::ClipTrack))
     return shared_ptr<timeline::Track>(new timeline::ClipTrack(
-      *this, dynamic_pointer_cast<model::ClipTrack>(model_track)));
-  else if(typeid(*model_track) == typeid(model::GroupTrack))
+      *this, dynamic_pointer_cast<model::ClipTrack>(modelTrack)));
+  else if(typeid(*modelTrack) == typeid(model::GroupTrack))
     return shared_ptr<timeline::Track>(new timeline::GroupTrack(
-      *this, dynamic_pointer_cast<model::GroupTrack>(model_track)));
+      *this, dynamic_pointer_cast<model::GroupTrack>(modelTrack)));
   
   ASSERT(NULL); // Unknown track type;
   return shared_ptr<timeline::Track>();
@@ -349,32 +349,32 @@ TimelineWidget::remove_orphaned_tracks()
 
 void
 TimelineWidget::search_orphaned_tracks_in_branch(
-    boost::shared_ptr<model::Track> model_track,
+    boost::shared_ptr<model::Track> modelTrack,
     std::map<boost::shared_ptr<model::Track>,
     boost::shared_ptr<timeline::Track> > &orphan_track_map)
 {
-  REQUIRE(model_track);
+  REQUIRE(modelTrack);
   
   // Is the timeline UI still present?
-  if(contains(orphan_track_map, model_track))
-    orphan_track_map.erase(model_track);
+  if(contains(orphan_track_map, modelTrack))
+    orphan_track_map.erase(modelTrack);
   
   // Recurse to child tracks
   BOOST_FOREACH(shared_ptr<model::Track> child,
-    model_track->get_child_tracks())
+    modelTrack->get_child_tracks())
     search_orphaned_tracks_in_branch(child, orphan_track_map);
 }
 
 shared_ptr<timeline::Track>
 TimelineWidget::lookup_timeline_track(
-  shared_ptr<model::Track> model_track) const
+  shared_ptr<model::Track> modelTrack) const
 {
-  REQUIRE(model_track);
-  REQUIRE(model_track != sequence()); // The sequence isn't
+  REQUIRE(modelTrack);
+  REQUIRE(modelTrack != sequence()); // The sequence isn't
                                       // really a track
 
   std::map<shared_ptr<model::Track>, shared_ptr<timeline::Track> >::
-    const_iterator iterator = trackMap.find(model_track);
+    const_iterator iterator = trackMap.find(modelTrack);
   if(iterator == trackMap.end())
     {
       // The track is not present in the map

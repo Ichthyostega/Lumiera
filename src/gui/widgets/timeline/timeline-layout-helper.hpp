@@ -179,12 +179,12 @@ public:
   /**
    * A utility function which finds the iterator of a track in the
    * layout tree.
-   * @param model_track The model track to look for.
+   * @param modelTrack The model track to look for.
    * @return Returns the model iterator of layoutTree.end() if no
    * iterator was found.
    **/
   TrackTree::pre_order_iterator iterator_from_track(
-    boost::shared_ptr<model::Track> model_track);
+    boost::shared_ptr<model::Track> modelTrack);
   
   /**
    * A function that recursively calculates the visible height of a
@@ -290,14 +290,14 @@ protected:
    * A helper function which calls lookup_timeline_track within the
    * parent timeline widget, but also applies lots of data consistency
    * checks in the process.
-   * @param model_track The model track to look up in the parent widget.
+   * @param modelTrack The model track to look up in the parent widget.
    * @return Returns the track found, or returns NULL if no matching
    * track was found.
    * @remarks If the return value is going to be NULL, an ENSURE will
    * fail.
    **/
   boost::shared_ptr<timeline::Track> lookup_timeline_track(
-    boost::shared_ptr<model::Track> model_track);
+    boost::shared_ptr<model::Track> modelTrack);
   
   /**
    * A helper function which kicks off the animation timer.
@@ -335,7 +335,7 @@ protected:
    * specified by drop.
    * @param[in] drop The point in the tree to drop onto.
    **/
-  void apply_drop_to_model_tree(const DropPoint &drop);
+  void apply_drop_to_modelTree(const DropPoint &drop);
   
   /**
    * Helper to get the sequence object from the state.

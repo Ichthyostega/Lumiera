@@ -97,7 +97,7 @@ namespace timeline {
   shared_ptr<model::ClipTrack>
   ClipTrack::getModelTrack ()
   {
-    return dynamic_pointer_cast<model::ClipTrack>(model_track);
+    return dynamic_pointer_cast<model::ClipTrack>(modelTrack);
   }
 
   void

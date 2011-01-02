@@ -39,14 +39,14 @@ const float Track::ExpandAnimationPeriod = 0.15;
 Track::Track(TimelineWidget &timeline_widget,
   shared_ptr<model::Track> track) :
   timelineWidget(timeline_widget),
-  model_track(track),
+  modelTrack(track),
   expanded(true),
   expandDirection(None),
   headerWidget(*this),
   enableButton(Gtk::StockID("track_enabled"), WindowManager::MenuIconSize),
   lockButton(Gtk::StockID("track_unlocked"), WindowManager::MenuIconSize)
 {
-  REQUIRE(model_track);
+  REQUIRE(modelTrack);
   
   titleMenuButton.set_relief(RELIEF_HALF);
   titleMenuButton.unset_flags(CAN_FOCUS);
@@ -83,11 +83,11 @@ Track::Track(TimelineWidget &timeline_widget,
     mem_fun(this, &Track::on_remove_track) ) );
     
   // Connect to the model
-  model_track->signalEnabledChanged().connect(sigc::mem_fun(this,
+  modelTrack->signalEnabledChanged().connect(sigc::mem_fun(this,
     &Track::onEnabledChanged));
-  model_track->signalLockedChanged().connect(sigc::mem_fun(this,
+  modelTrack->signalLockedChanged().connect(sigc::mem_fun(this,
     &Track::onLockedChanged));
-  model_track->signalNameChanged().connect(sigc::mem_fun(this,
+  modelTrack->signalNameChanged().connect(sigc::mem_fun(this,
     &Track::onNameChanged));
 }
 
@@ -103,9 +103,9 @@ Track::get_header_widget()
 }
 
 shared_ptr<model::Track>
-Track::get_model_track() const
+Track::get_modelTrack() const
 {
-  return model_track;
+  return modelTrack;
 }
 
 int
@@ -241,17 +241,17 @@ Track::onLockedChanged(bool)
 void
 Track::on_set_name()
 {
-  REQUIRE(model_track);
+  REQUIRE(modelTrack);
   
   Gtk::Window *window = dynamic_cast<Window*>(
     timelineWidget.get_toplevel());
   REQUIRE(window != NULL); 
     
   dialogs::NameChooser dialog(*window,
-    _("Set Track Name"), model_track->get_name());
+    _("Set Track Name"), modelTrack->get_name());
     
   if(dialog.run() == RESPONSE_OK)
-    model_track->set_name(dialog.get_name());
+    modelTrack->set_name(dialog.get_name());
 }
 
 void
@@ -263,33 +263,33 @@ Track::onNameChanged(std::string)
 void
 Track::on_remove_track()
 {
-  REQUIRE(model_track);
+  REQUIRE(modelTrack);
   boost::shared_ptr<TimelineState> state = timelineWidget.get_state();
   REQUIRE(state);
   
-  state->get_sequence()->remove_descendant_track(model_track);
+  state->get_sequence()->remove_descendant_track(modelTrack);
 }
 
 void
 Track::onToggleEnabled()
 {
-  bool status = model_track->getEnabled();
-  model_track->setEnabled(!status);
+  bool status = modelTrack->getEnabled();
+  modelTrack->setEnabled(!status);
 }
 
 void
 Track::onToggleLocked()
 {
-  bool status = model_track->getLocked();
-  model_track->setLocked(!status);
+  bool status = modelTrack->getLocked();
+  modelTrack->setLocked(!status);
 }
 
 void
 Track::updateEnableButton()
 {
-  REQUIRE (model_track);
+  REQUIRE (modelTrack);
 
-  if (model_track->getEnabled())
+  if (modelTrack->getEnabled())
     {
       enableButton.set_stock_id(Gtk::StockID("track_enabled"), WindowManager::MenuIconSize);
       enableButton.set_tooltip_text(_("Disable track"));
@@ -304,9 +304,9 @@ Track::updateEnableButton()
 void
 Track::updateLockButton()
 {
-  REQUIRE (model_track);
+  REQUIRE (modelTrack);
 
-  if (model_track->getLocked())
+  if (modelTrack->getLocked())
     {
       lockButton.set_stock_id(Gtk::StockID("track_locked"), WindowManager::MenuIconSize);
       lockButton.set_tooltip_text(_("Unlock track"));
@@ -321,8 +321,8 @@ Track::updateLockButton()
 void
 Track::updateName()
 {
-  REQUIRE(model_track);
-  titleMenuButton.set_label(model_track->get_name());
+  REQUIRE(modelTrack);
+  titleMenuButton.set_label(modelTrack->get_name());
 }
 
 }   // namespace timeline

@@ -25,8 +25,8 @@
 namespace gui {
 namespace controller {
   
-Controller::Controller(model::Project &model_project) :
-  project(model_project)
+Controller::Controller(model::Project &modelProject) :
+  project(modelProject)
 {
   
 }

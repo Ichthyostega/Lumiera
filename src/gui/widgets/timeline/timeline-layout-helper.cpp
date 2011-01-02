@@ -149,9 +149,9 @@ TimelineLayoutHelper::begin_dragging_track(
     dragPoint.get_x() - rect.get_x(),
     dragPoint.get_y() - rect.get_y());
   
-  const shared_ptr<model::Track> model_track =
-    dragging_track->get_model_track();
-  draggingTrackIter = iterator_from_track(model_track);
+  const shared_ptr<model::Track> modelTrack =
+    dragging_track->get_modelTrack();
+  draggingTrackIter = iterator_from_track(modelTrack);
   dragBranchHeight = measure_branch_height(draggingTrackIter);
   
   dropPoint.relation = None;
@@ -163,7 +163,7 @@ void
 TimelineLayoutHelper::end_dragging_track(bool apply)
 {
   if(apply)
-    apply_drop_to_model_tree(dropPoint);
+    apply_drop_to_modelTree(dropPoint);
   
   draggingTrackIter.node = NULL;
   clone_tree_from_sequence();
@@ -300,14 +300,14 @@ TimelineLayoutHelper::is_animating() const
 
 TimelineLayoutHelper::TrackTree::pre_order_iterator
 TimelineLayoutHelper::iterator_from_track(
-  boost::shared_ptr<model::Track> model_track)
+  boost::shared_ptr<model::Track> modelTrack)
 {
-  REQUIRE(model_track);
+  REQUIRE(modelTrack);
   
   TrackTree::pre_order_iterator iter;
   for(iter = layoutTree.begin(); iter != layoutTree.end(); iter++)
     {
-      if(*iter == model_track)
+      if(*iter == modelTrack)
         break;
     }
     
@@ -384,15 +384,15 @@ TimelineLayoutHelper::layout_headers_recursive(
       Gdk::Rectangle rect;
       int track_height = 0;
             
-      const shared_ptr<model::Track> &model_track = *iterator;
-      REQUIRE(model_track);
+      const shared_ptr<model::Track> &modelTrack = *iterator;
+      REQUIRE(modelTrack);
       shared_ptr<timeline::Track> timeline_track =
-        lookup_timeline_track(model_track);
+        lookup_timeline_track(modelTrack);
       
       // Is this the root track of a dragging branch?
       bool being_dragged = false;
       if(dragging)
-        being_dragged = (model_track == *draggingTrackIter);
+        being_dragged = (modelTrack == *draggingTrackIter);
             
       // Is the track going to be shown?
       if(parent_expanded)
@@ -473,11 +473,11 @@ TimelineLayoutHelper::layout_headers_recursive(
 
 shared_ptr<timeline::Track>
 TimelineLayoutHelper::lookup_timeline_track(
-  shared_ptr<model::Track> model_track)
+  shared_ptr<model::Track> modelTrack)
 {
-  REQUIRE(model_track != NULL);
+  REQUIRE(modelTrack != NULL);
   shared_ptr<timeline::Track> timeline_track =
-    timelineWidget.lookup_timeline_track(model_track);
+    timelineWidget.lookup_timeline_track(modelTrack);
   ENSURE(timeline_track);
   
   return timeline_track;
@@ -503,10 +503,10 @@ TimelineLayoutHelper::attempt_drop(TrackTree::pre_order_iterator target,
   const Gdk::Point &point)
 {
   // Lookup the tracks
-  const shared_ptr<model::Track> model_track(*target);
-  REQUIRE(model_track);
+  const shared_ptr<model::Track> modelTrack(*target);
+  REQUIRE(modelTrack);
   const weak_ptr<timeline::Track> timeline_track =
-    lookup_timeline_track(model_track);
+    lookup_timeline_track(modelTrack);
     
   // Calculate coordinates
   const Gdk::Rectangle &rect = headerBoxes[timeline_track];
@@ -530,9 +530,9 @@ TimelineLayoutHelper::attempt_drop(TrackTree::pre_order_iterator target,
     full_width, half_height)))
     {
       // We're hovering over the lower half of the header
-      if(model_track->can_host_children())
+      if(modelTrack->can_host_children())
         {
-          if(model_track->get_child_tracks().empty())
+          if(modelTrack->get_child_tracks().empty())
             {
               // Is our track being dragged after this header?
               if(dragPoint.get_x() < x_mid)
@@ -596,7 +596,7 @@ TimelineLayoutHelper::apply_drop_to_layout_tree(
 }
 
 void
-TimelineLayoutHelper::apply_drop_to_model_tree(
+TimelineLayoutHelper::apply_drop_to_modelTree(
   const TimelineLayoutHelper::DropPoint &drop)
 {
   const shared_ptr<model::Sequence> sequence = get_sequence();

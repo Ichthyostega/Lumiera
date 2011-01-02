@@ -75,7 +75,7 @@ public:
   Gtk::Widget& get_header_widget();
   
   boost::shared_ptr<model::Track>
-  get_model_track() const;
+  get_modelTrack() const;
   
   /**
    * Return the visual height of the track in pixels.
@@ -190,7 +190,7 @@ private:
 protected:
 
   TimelineWidget &timelineWidget;
-  boost::shared_ptr<model::Track> model_track;
+  boost::shared_ptr<model::Track> modelTrack;
 
 private:
   /**
