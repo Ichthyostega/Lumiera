@@ -132,12 +132,12 @@ protected:
   
   /**
    * A helper function to get the state
-   **/
+   */
   boost::shared_ptr<TimelineState> get_state() const;
   
   /**
    * A helper function to get the view window
-   **/
+   */
   TimelineViewWindow& view_window() const;
 
 protected:

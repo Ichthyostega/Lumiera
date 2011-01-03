@@ -40,7 +40,7 @@ namespace timeline {
  * TimelineViewWindow is a helper class for TimelineWidget which manages
  * the view window of the timeline: the zoom and shift. The class also
  * provides utility functions for handling time in the timeline.
- **/ 
+ */
 class TimelineViewWindow
 {
 public:
@@ -49,7 +49,7 @@ public:
    * Constructor
    * @param offset The initial view offset.
    * @param scale The initial scale.
-   **/
+   */
   TimelineViewWindow(lumiera::Time offset, int64_t scale);
     
   /**
@@ -84,14 +84,14 @@ public:
    * given point on the timeline still.
    * @param zoom_size The number of steps to zoom by. The scale factor
    * is 1.25^(-zoom_size).
-   **/
+   */
   void zoom_view(int point, int zoom_size);
   
   /**
    * Scrolls the view horizontally as a proportion of the view area.
    * @param shift_size The size of the shift in 1/256ths of the view
    * width.
-   **/
+   */
   void shift_view(int view_width, int shift_size);
   
   /**
@@ -99,7 +99,7 @@ public:
    * @param time The time value to convert.
    * @return Returns the x-value as pixels from the left hand edge of
    * the timeline body.
-   **/
+   */
   int time_to_x(int64_t time) const;
   
   /**
@@ -107,12 +107,12 @@ public:
    * @param x The x coordinte (as pixels from the left hand edge of
    * the timeline body) to convert.
    * @return Returns the time at the coordinate.
-   **/
+   */
   lumiera::Time x_to_time(int x) const;
   
   /**
    * A signal to indicate that the scale or offset have been changed.
-   **/
+   */
   sigc::signal<void> changed_signal() const; 
 
 private:

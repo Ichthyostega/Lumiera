@@ -46,13 +46,13 @@ public:
   /**
    * Constructor
    * @param workspace_window The owner workspace window.
-   **/
+   */
   Actions(WorkspaceWindow &workspace_window);
   
   /**
    * Populates a uiManager with the main set of actions.
    * @param uiManager A pointer to the uiManager to populate.
-   **/
+   */
   void populate_main_actions(Glib::RefPtr<Gtk::UIManager> uiManager);
 
   /* ===== Internals ===== */
@@ -61,7 +61,7 @@ private:
   /**
    * Populates a uiManager with actions for the Show Panel menu.
    * @param uiManager A pointer to the uiManager to populate.
-   **/
+   */
   void populate_show_panel_actions(
     Glib::RefPtr<Gtk::UIManager> uiManager);
 

@@ -48,7 +48,7 @@ namespace timeline {
 
     /**
      * Sets the selected status of the clip.
-     **/
+     */
     void
     setSelected (bool state);
 

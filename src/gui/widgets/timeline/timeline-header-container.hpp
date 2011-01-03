@@ -119,14 +119,14 @@ private:
   
   /**
    * Applies a given function to all the widgets in the container.
-   **/
+   */
   void forall_vfunc(gboolean include_internals, GtkCallback callback,
                     gpointer callback_data);
   
   /**
    * An event handler that is called when a widget is removed from the
    * container.
-   **/             
+   */
   void on_remove(Widget* widget);
 
   /* ===== Events ===== */      
@@ -167,7 +167,7 @@ private:
    * @param depth The depth within the tree of this track. This is used
    * to control the amount of indention.
    * @param offset The vertical offset of the headers in pixels.
-   **/
+   */
   void draw_header_decoration(
     boost::shared_ptr<model::Track> modelTrack,
     const Gdk::Rectangle &clip_rect);
@@ -181,7 +181,7 @@ private:
    * track was found.
    * @remarks If the return value is going to be NULL, an ENSURE will
    * fail.
-   **/
+   */
   boost::shared_ptr<timeline::Track> lookup_timeline_track(
     boost::shared_ptr<model::Track> modelTrack);
     
@@ -194,7 +194,7 @@ private:
    * top of the Z-order.
    * @param node The window of node's track header will be raised, as
    * well as all it's descendant nodes.
-   **/
+   */
   void raise_recursive(
     TimelineLayoutHelper::TrackTree::iterator_base node);
     
@@ -230,7 +230,7 @@ private:
    * the user right clicks on the header container.
    * @remarks The context menu will be displayed when the user's right
    * click is not processed by track headers.
-   **/
+   */
   Gtk::Menu contextMenu;
   
   /**

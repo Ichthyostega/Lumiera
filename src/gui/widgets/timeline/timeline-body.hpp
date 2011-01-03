@@ -119,7 +119,7 @@ protected:
   /**
    * The event handler for when the TimelineWidget's state object is
    * replaced.
-   **/
+   */
   void on_state_changed();
   
   /* ===== Internals ===== */
@@ -157,7 +157,7 @@ private:
    * A helper function to get the view window
    * @remarks This function must not be called unless the TimlineWidget
    * has a valid state.
-   **/
+   */
   TimelineViewWindow& view_window() const;
    
   /**

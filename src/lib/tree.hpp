@@ -93,7 +93,7 @@ class tree_node_ { // size: 5*4=20 bytes (on 32 bit arch), can be reduced by 8.
  * pre-order, and others). Where possible the access methods are
  * compatible with the STL or alternative algorithms are
  * available.
- **/
+ */
 template <class T, class tree_node_allocator = std::allocator<tree_node_<T> > >
 class tree {
    protected:

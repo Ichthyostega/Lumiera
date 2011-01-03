@@ -35,7 +35,7 @@ namespace output {
 
 /**
  * Supported Displayer formats
- **/
+ */
 typedef enum {
     DISPLAY_NONE,
     DISPLAY_YUV,

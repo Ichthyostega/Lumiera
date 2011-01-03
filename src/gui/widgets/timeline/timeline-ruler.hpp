@@ -109,7 +109,7 @@ private:
   /**
    * The event handler for when the TimelineWidget's state object is
    * replaced.
-   **/
+   */
   void on_state_changed();
   
 private:
@@ -170,7 +170,7 @@ private:
   
   /**
    * A helper function to get the view window
-   **/
+   */
   TimelineViewWindow& view_window() const;
 
   /**

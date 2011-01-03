@@ -38,14 +38,14 @@ namespace util {
  * @param rect The rect to test.
  * @return Returns true if the point is within the rectangle, false if
  * not.
- **/
+ */
 bool pt_in_rect(const Gdk::Point &point, const Gdk::Rectangle &rect);
 
 /**
  * Tests whether two rectangles overlap.
  * @param a The first rectangle.
  * @param b The second rectangle.
- **/
+ */
 bool rects_overlap(const Gdk::Rectangle &a, const Gdk::Rectangle &b);
 
 }   // util

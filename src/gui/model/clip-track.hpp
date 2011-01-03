@@ -41,18 +41,18 @@ namespace model {
   public:
     /**
      * Constructor
-     **/
+     */
     ClipTrack();
 
     /**
      * Gets a string representation of the track that is suitable for debugging
-     **/
+     */
     std::string
     print_track();
 
     /**
      * Gets the list of clips associated with this track.
-     **/
+     */
     lumiera::observable_list< boost::shared_ptr<Clip> >&
     getClipList(void);
 

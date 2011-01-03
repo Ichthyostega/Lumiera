@@ -33,20 +33,20 @@ namespace model {
 
 /**
  * A class representation of a grouping of tracks.
- **/
+ */
 class GroupTrack : public ParentTrack
 {
 public:
   /**
    * Constructor
-   **/
+   */
   GroupTrack();
 
   /**
    * Produces a human readable debug string representation of this
    * track.
    * @return Returns the human readable string.
-   **/
+   */
   std::string print_track();
 };
 

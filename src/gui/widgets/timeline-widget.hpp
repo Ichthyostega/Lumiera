@@ -75,13 +75,13 @@ public:
    * Gets a pointer to the current state object.
    * @return The state object that the timeline widget is currently
    * working with.
-   **/
+   */
   boost::shared_ptr<timeline::TimelineState> get_state();
   
   /**
    * Replaces the current TimelineState object with another.
    * @param new_state The new state to swap in.
-   **/
+   */
   void set_state(boost::shared_ptr<timeline::TimelineState> new_state);
 
   /**
@@ -89,7 +89,7 @@ public:
    * given point on the timeline still.
    * @param zoom_size The number of steps to zoom by. The scale factor
    * is 1.25^(-zoom_size).
-   **/
+   */
   void zoom_view(int zoom_size);
   
   /**
@@ -140,7 +140,7 @@ private:
 
   /**
    * Updates the timeline widget to match the state of the track tree.
-   **/
+   */
   void update_tracks();
   
   void freeze_update_tracks();
@@ -150,7 +150,7 @@ private:
   /**
    * Ensures timeline UI tracks have been created for every model track
    * present in sequence.
-   **/
+   */
   void create_timeline_tracks();
   
   /**
@@ -158,7 +158,7 @@ private:
    * creating UI timeline tracks for each model track if they don't
    * already exist in trackMap.
    * @param list The parent track of the branch.
-   **/
+   */
   void create_timeline_tracks_from_branch(
     boost::shared_ptr<model::Track> modelTrack);
   
@@ -167,7 +167,7 @@ private:
    * @param modelTrack The model track to create a timeline track from.
    * @return The timeline track created, or an empty shared_ptr if
    * modelTrack has an unreckognised type (this is an error condition).
-   **/
+   */
   boost::shared_ptr<timeline::Track>
     create_timeline_track_from_modelTrack(
     boost::shared_ptr<model::Track> modelTrack);
@@ -175,7 +175,7 @@ private:
   /**
    * Removes any UI tracks which no longer have corresponding model
    * tracks present in the sequence.
-   **/
+   */
   void remove_orphaned_tracks();
   
   void search_orphaned_tracks_in_branch(
@@ -190,7 +190,7 @@ private:
    * @returns The timeline UI track found, or an empty shared_ptr if
    * modelTrack has no corresponding timeline UI track (this is an
    * error condition).
-   **/
+   */
   boost::shared_ptr<timeline::Track> lookup_timeline_track(
     boost::shared_ptr<model::Track> modelTrack) const;
   
@@ -209,7 +209,7 @@ private:
   /**
    * An event handler that receives notifications for when the
    * sequence's track tree has been changed.
-   **/
+   */
   void on_track_list_changed();
     
   void on_playback_period_drag_released();
@@ -221,7 +221,7 @@ private:
   /**
    * Helper to get the sequence object from the state.
    * @return Returns a shared pointer to the sequence.
-   **/  
+   */
   boost::shared_ptr<model::Sequence> sequence() const;
   
   // ----- Other Functions ----- //
@@ -234,7 +234,7 @@ protected:
   /**
    * The state that will be used as the data source for this timeline
    * widget.
-   **/
+   */
   boost::shared_ptr<timeline::TimelineState> state;
 
   // Model Data
@@ -245,7 +245,7 @@ protected:
    * @remarks The tree structure is maintained by the model, and as the
    * widget is updated with update_tracks, timeline tracks are added and
    * removed from the map in correspondence with the tree.
-   **/
+   */
   std::map<boost::shared_ptr<model::Track>,
     boost::shared_ptr<timeline::Track> >
     trackMap;

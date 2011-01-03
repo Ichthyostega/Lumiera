@@ -45,13 +45,13 @@ namespace timeline {
   public:
     /**
      * Constructor.
-     **/
+     */
     ClipTrack(TimelineWidget &timelineWidget,
               boost::shared_ptr<model::ClipTrack> track);
   
     /**
      * Draw the track in the timeline.
-     **/
+     */
     void
     draw_track(Cairo::RefPtr<Cairo::Context> cairo,
       TimelineViewWindow* const window) const;
@@ -60,7 +60,7 @@ namespace timeline {
      * Gets the clip that is occupying the given time. If there is no track, return a NULL
      * pointer.
      * @param the given time
-     **/
+     */
     boost::shared_ptr<timeline::Clip>
     getClipAt(lumiera::Time position) const;
 
@@ -68,40 +68,40 @@ namespace timeline {
 
     /**
      * Ensures timeline UI clips have been created for every model clip in track.
-     **/
+     */
     void
     createTimelineClips();
 
     /**
      * Gets the modelTrack as a ClipTrack.
-     **/
+     */
     boost::shared_ptr<model::ClipTrack>
     getModelTrack ();
 
     /**
      * An event handler that receives notifications for when the models clip list has been
      * changed.
-     **/
+     */
     void
     onClipListChanged();
 
     /**
      * Removes any UI clips which no longer have corresponding model clips present in the
      * sequence.
-     **/
+     */
     void
     removeOrphanedClips();
 
     /**
      * Update the attached timeline clips.
-     **/
+     */
     void
     updateClips();
 
     /**
      * The clipMap maps model clips to timeline widget clips which are responsible for the
      * UI representation of a clip.
-     **/
+     */
     std::map<boost::shared_ptr<model::Clip>,
              boost::shared_ptr<timeline::Clip> >
       clipMap;
