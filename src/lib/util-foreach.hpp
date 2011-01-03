@@ -55,6 +55,7 @@
 #include "lib/meta/trait.hpp"
 
 #include <boost/utility/enable_if.hpp>
+#include <tr1/functional>
 #include <algorithm>
 
 

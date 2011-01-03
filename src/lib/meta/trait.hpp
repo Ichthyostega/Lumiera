@@ -27,7 +27,6 @@
 
 #include "lib/meta/util.hpp"
 #include "lib/meta/duck-detector.hpp"
-#include "lib/wrapper.hpp"     ////////////////////////TODO only because of AssignableRefWrapper -- can we get rid of this import?
 
 #include <boost/type_traits/is_convertible.hpp>
 #include <boost/type_traits/is_arithmetic.hpp>
@@ -196,7 +195,6 @@ namespace meta {
       typedef TY* pointer;
       typedef TY& reference;
       typedef TY  value_type;
-      typedef value_type member_type;
     };
   
   template<typename TY>
@@ -205,7 +203,6 @@ namespace meta {
       typedef TY* pointer;
       typedef TY& reference;
       typedef TY  value_type;
-      typedef pointer member_type;
     };
   
   template<typename TY>
@@ -214,9 +211,7 @@ namespace meta {
       typedef TY* pointer;
       typedef TY& reference;
       typedef TY  value_type;
-      typedef lib::wrapper::AssignableRefWrapper<TY> member_type;
     };
-  //////////////////////////////////////////TODO: member_type not needed anymore 12/09 -- obsolete? useful? keep it?
   
   
   
