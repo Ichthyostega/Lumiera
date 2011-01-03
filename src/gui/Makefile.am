@@ -120,6 +120,8 @@ gtk_gui_la_SOURCES =								\
 	$(lumigui_srcdir)/widgets/timeline/timeline-clip-track.hpp		\
 	$(lumigui_srcdir)/widgets/timeline/timeline-clip.cpp			\
 	$(lumigui_srcdir)/widgets/timeline/timeline-clip.hpp			\
+	$(lumigui_srcdir)/widgets/timeline/timeline-entity.cpp			\
+	$(lumigui_srcdir)/widgets/timeline/timeline-entity.hpp			\
 	$(lumigui_srcdir)/widgets/timeline/timeline-group-track.cpp		\
 	$(lumigui_srcdir)/widgets/timeline/timeline-group-track.hpp		\
 	$(lumigui_srcdir)/widgets/timeline/timeline-header-container.cpp	\

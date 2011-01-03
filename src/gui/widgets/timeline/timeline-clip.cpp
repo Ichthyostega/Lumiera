@@ -27,7 +27,8 @@ namespace widgets {
 namespace timeline {
 
   Clip::Clip(boost::shared_ptr<model::Clip> clip)
-    : modelClip(clip),
+    : Entity(),
+      modelClip(clip),
       selected(false)
   {
     REQUIRE(modelClip);

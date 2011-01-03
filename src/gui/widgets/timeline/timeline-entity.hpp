@@ -1,8 +1,8 @@
 /*
-  timeline-clip.hpp  -  Declaration of the timeline clip object
+  timeline-entity.hpp  -  Declaration of the timeline entity class
 
   Copyright (C)         Lumiera.org
-    2008,               Joel Holdsworth <joel@airwebreathe.org.uk>
+    2010,               Stefan Kangas <skangas@skangas.se>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -18,52 +18,54 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
-*/
-/** @file widgets/timeline/timeline-clip.hpp
- ** This file contains the definition of timeline clip object
+* *****************************************************/
+/** @file timeline-entity.hpp
+ ** Declares the Timeline Entity class.
  */
 
-#include <cairomm/pattern.h>
-
-#include "gui/gtk-lumiera.hpp"
-#include "gui/model/clip.hpp"
-#include "include/logging.h"
-#include "timeline-entity.hpp"
-#include "timeline-view-window.hpp"
-
-#ifndef TIMELINE_CLIP_HPP
-#define TIMELINE_CLIP_HPP
+#ifndef TIMELINE_ENTITY_HPP
+#define TIMELINE_ENTITY_HPP
 
 namespace gui {
 namespace widgets {
 namespace timeline {
 
-  class Clip : public Entity
-  {
-  public:
-    Clip(boost::shared_ptr<model::Clip> clip);
-
-    void draw_clip(Cairo::RefPtr<Cairo::Context> cairo,
-                   TimelineViewWindow* const window) const;
+  /**
+   * Base class for timeline entities.
+   * Everything that can be placed on the timeline is a timeline Entity.
+   */
+  class Entity {
+  protected:
 
     /**
-     * Sets the selected status of the clip.
-     **/
+     * Constructor
+     */
+    Entity();
+
+  public:
+
+    /**
+     *
+     */
+    bool
+    getEnabled();
+
+    /**
+     *
+     */
     void
-    setSelected (bool state);
+    setEnabled(bool selected);
 
   private:
 
-    boost::shared_ptr<model::Clip> modelClip;
-
     /**
-     * True when this clip is selected in the GUI.
+     * True when this entity is enabled.
      */
-    bool selected;
+    bool enabled;
   };
 
 }   // namespace timeline
 }   // namespace widgets
 }   // namespace gui
 
-#endif // TIMELINE_CLIP_HPP
+#endif // TIMELINE_ENTITY_HPP
