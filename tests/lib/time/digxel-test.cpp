@@ -55,6 +55,7 @@ namespace test{
     const uint REPEAT = 40;
     const uint RAND_RANGE = 100;
     const uint RAND_DENOM = 3;
+    const uint TIMING_CNT = 10000;
     
     inline double
     randomFrac()
@@ -63,7 +64,25 @@ namespace test{
         arbitrary /= (1 + rand() % RAND_DENOM);
         return arbitrary;
       }
-
+    
+    
+    /* === special Digxel configuration for this test === */
+    
+    double
+    limitingMutator (double value2set)
+    {
+      return (+1 < value2set) ? 1.0
+           : (-1 > value2set) ? -1.0
+                              : value2set;
+    }
+    
+    
+    struct VerySpecialFormat
+      {
+        
+      };
+    
+    typedef digxel::Holder<double, VerySpecialFormat> TestDigxel;
 
   }
   
@@ -79,9 +98,14 @@ namespace test{
   class Digxel_test : public Test
     {
       virtual void
-      run (Arg arg) 
+      run (Arg) 
         {
-          checkSimpleUsage (ref);
+          checkSimpleUsage ();
+          checkMutation ();
+          verifyMutatorInfluence ();
+          checkCopy ();
+          checkDisplayOverrun ();
+          verifyDisplayCaching ();
         } 
       
       
@@ -114,21 +138,30 @@ namespace test{
               double arbitrary = randomFrac();
               checksum += arbitrary;
               
-              digi.mutate (arbitrary);  // invoke the mutation functor 
+              digi = arbitrary;         // invoke the mutation functor 
               
               CHECK (sum == checksum, "divergence after adding %f in iteration %d", arbitrary, i);
-              CHECK (0 == digi);     // the value itself is not touched
+              CHECK (digi == abitrary);
             }
         }
       
       
       void
-      checkDefaultMutator ()
+      verifyMutatorInfluence ()
         {
           TestDigxel digi;
           
+          // using the default mutator
           CHECK (0 == digi);
-          digi.mutate(12.3);
+          digi = 12.3;
+          CHECK (12.3 == digi);
+          
+          digi.mutator = limitingMutator;
+          CHECK (12.3 == digi);
+          digi = 12.3;
+          CHECK (1 == digi);
+          
+          digi.setValueRaw(12.3);
           CHECK (12.3 == digi);
         }
       
@@ -159,7 +192,7 @@ namespace test{
           TestDigxel digi;
           digi = 123456789.12345678;
           
-          string formatted (digi.show());  
+          string formatted (digi.show());              // should trigger assertion
           CHECK (formatted.length() <= digi.maxlen());
         }
       

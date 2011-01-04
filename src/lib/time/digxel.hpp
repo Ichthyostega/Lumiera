@@ -63,6 +63,7 @@
 #define LIB_TIME_DIGXEL_H
 
 #include "lib/error.hpp"
+//#include "lib/symbol.hpp"
 
 //#include <boost/operators.hpp>
 #include <cstdlib>  ////////////////////TODO
@@ -72,8 +73,7 @@
 namespace lib {
 namespace time {
   
-  using std::string;
-  
+//  using std::string;
   
   /**
    * A number element for building structured numeric displays.
@@ -89,16 +89,76 @@ namespace time {
    * @see lib::time::TCode
    * @todo WIP-WIP-WIP
    */
-  template<class FMT>
   class Digxel
     {
       
     public:
-      
-      string describe()  const;
-      
-      
+      virtual ~Digxel ();  ///< this is an ABC
+        
     };
+  
+  namespace digxel {
+    
+//  using lib::Literal;
+    
+    template<typename NUM>
+    struct PrintfFormatter
+      {
+        enum{ len = 6
+            , bufsiz = len+1
+        };
+        
+        char printbuffer_[bufsiz];
+        
+        static void
+        show (NUM val)
+          {
+            size_t space = std::snprintf (printbuffer_, bufsiz, "%5d", val);
+            REQUIRE (space <= bufsiz, "Digxel value exceeded available buffer size. "
+                                      "For showing %d, %d chars instead of just %d would be required."
+                                    , val, space, bufsiz);
+          }
+      };
+    
+    template<typename NUM>
+    struct Formatter;
+    
+    template<>
+    struct Formatter<int>
+      : PrintfFormatter<int>
+      {
+        enum{ len = 6
+            , bufsiz = len+1
+            };
+        
+      };
+  
+    /**
+     * The outward hull of a concrete Digxel implementation.
+     * Inheriting from the Digxel interface, it embodies a concrete
+     * Formatter specialised to yield the desired behaviour.
+     *  
+     * @param TODO
+     * @todo WIP-WIP-WIP
+     */
+    template< typename NUM
+            , class FMT  = digxel::Formatter<NUM>
+            >
+    class Holder
+      : public Digxel
+      {
+        FMT buffer_;
+        NUM value_;
+        
+      public:
+        Holder ()
+          : buffer_()
+          , value_()
+          { }
+          
+      };
+    
+  }
   
   
   
