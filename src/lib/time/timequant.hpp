@@ -45,11 +45,18 @@ namespace time {
    * @todo WIP-WIP-WIP
    */
   class QuTime
+    : public Time
     {
       
     public:
       QuTime (TimeValue raw, Symbol gridID);
       QuTime (TimeValue raw, Quantiser const& quantisation_to_use);
+      
+      template<class FMT>
+      bool supports()  const;
+      
+      template<class FMT>
+      TCode<FMT> formatAs()  const;
     };
   
   

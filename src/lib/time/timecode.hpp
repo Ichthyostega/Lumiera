@@ -34,6 +34,8 @@
 namespace lib {
 namespace time {
   
+  using std::string;
+  
   
   /**
    * fixed format time specification.
@@ -46,6 +48,10 @@ namespace time {
     {
       
     public:
+      
+      string describe()  const;
+      
+      
     };
   
   
@@ -64,8 +70,28 @@ namespace time {
       
     public:
       FrameNr (QuTime const& quantisedTime);
+      FrameNr (TCode<format::Frames> const&);
       
       operator long()  const;
+    };
+  
+  
+  
+  /**
+   * 
+   */
+  class SmpteTC
+    : public TCode<format::Smpte>
+    {
+      
+    public:
+      SmpteTC (QuTime const& quantisedTime);
+      SmpteTC (TCode<format::Smpte> const&);
+      
+      int getSecs   () const; 
+      int getMins   () const; 
+      int getHours  () const; 
+      int getFrames () const;
     };
   
   

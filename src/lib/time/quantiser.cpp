@@ -21,7 +21,7 @@
 * *****************************************************/
 
 
-#include "lib/lumitime.hpp"
+#include "lib/time/quantiser.hpp"
 #include "lib/time/timevalue.hpp"
 
 using std::string;
@@ -32,6 +32,10 @@ namespace time {
   
   
   /** */
+  
+  
+  
+  LUMIERA_ERROR_DEFINE (UNKNOWN_GRID, "referring to an undefined grid or scale in value quantisation");
   
   
   

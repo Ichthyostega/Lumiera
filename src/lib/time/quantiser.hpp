@@ -24,16 +24,20 @@
 #ifndef LIB_TIME_QUANTISER_H
 #define LIB_TIME_QUANTISER_H
 
+#include "lib/error.hpp"
 #include "lib/time/timevalue.hpp"
 #include "lib/time/formats.hpp"
+#include "lib/iter-adapter.hpp"
 
 //#include <boost/operators.hpp>
+#include <vector>
 #include <string>
 
 
 namespace lib {
 namespace time {
   
+  LUMIERA_ERROR_DECLARE (UNKNOWN_GRID); ///< referring to an undefined grid or scale in value quantisation
   
   /**
    * Facility to create grid-aligned time values.
@@ -42,8 +46,17 @@ namespace time {
    */
   class Quantiser
     {
+      typedef std::vector<Format*>         _FormatTable;
+      typedef _FormatTable::const_iterator _SrcIter;
+      typedef lib::PtrDerefIter<_SrcIter>  _Iter;
       
     public:
+      template<class FMT>
+      bool supports()  const;
+      
+      typedef _Iter iterator;
+      iterator getSupportedFormats()  const;
+      
     };
   
   
