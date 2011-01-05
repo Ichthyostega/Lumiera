@@ -64,9 +64,11 @@
 
 #include "lib/error.hpp"
 #include "lib/symbol.hpp"
+#include "lib/util.hpp"
 
 #include <boost/operators.hpp>
 #include <boost/lexical_cast.hpp>
+#include <tr1/functional>
 #include <cstdlib>  ///////////TODO
 #include <cmath>
 #include <string>
@@ -75,11 +77,11 @@
 namespace lib {
 namespace time {
   
-//  using std::string;
+  using std::string;
   
   namespace digxel {
     
-    using std::string;
+    using util::cStr;
     using lib::Literal;
     using boost::lexical_cast;
     
@@ -117,17 +119,31 @@ namespace time {
         PrintfFormatter (Literal fmt)
           : printbuffer_()
           , formatSpec_(fmt)
-          { 
-            printbuffer_[0] = '\0';
+          {
+            clear();
           }
         
-        void
+        void clear() { printbuffer_[0] = '\0'; }
+        bool empty() { return bool(*printbuffer_); }
+        
+        size_t
+        maxlen()  const
+          {
+            return len;
+          } 
+        
+        CBuf
         show (NUM val)
           {
-            size_t space = std::snprintf (printbuffer_, bufsiz, "%5d", val);
-            REQUIRE (space <= bufsiz, "Digxel value exceeded available buffer size. "
-                                      "For showing %s, %d chars instead of just %d would be required."
-                                    , lexical_cast<string>(val), space, bufsiz);
+            if (empty())
+              {
+                size_t space = std::snprintf (printbuffer_, bufsiz, formatSpec_, val);
+                REQUIRE (space < bufsiz, "Digxel value exceeded available buffer size. "
+                                         "For showing %s, %lu chars instead of just %d would be required."
+                                       , cStr(lexical_cast<string>(val)), space, bufsiz);               ///////////TICKET #197
+              }
+            ENSURE (!empty());
+            return printbuffer_;
           }
       };
     
@@ -149,60 +165,9 @@ namespace time {
         Formatter() : PrintfFormatter<double,7>("%06.3f") { }
         
       };
-  
-    /**
-     * The outward hull of a concrete Digxel implementation.
-     * Inheriting from the Digxel interface, it embodies a concrete
-     * Formatter specialised to yield the desired behaviour.
-     *  
-     * @param TODO
-     * @todo WIP-WIP-WIP
-     */
-    template< typename NUM
-            , class FMT
-            >
-    class Holder
-      {
-      protected:
-        FMT buffer_;
-        NUM value_;
-        
-        
-        /* === Digxel implementation === */
-        int
-        getIntValue()  const
-          {
-            return ValTrait<NUM>::asInt (value_);
-          }
-        
-        CBuf
-        getFormatted()
-          {
-            UNIMPLEMENTED("call formatting or cache");
-          }
-//      
-//      void
-//      changeTo (int i)
-//        {
-//          UNIMPLEMENTED("mutate INT");
-//        }
-//      
-//      void
-//      changeTo (double d)
-//        {
-//          UNIMPLEMENTED("mutate FLOAT");
-//        }
-
-        
-      public:
-        Holder ()
-          : buffer_()
-          , value_()
-          { }
-        
-      };
     
   } //(End) digxel configuration namespace
+  
   
   /**
    * A number element for building structured numeric displays.
@@ -222,32 +187,74 @@ namespace time {
             , class FMT  = digxel::Formatter<NUM>
             >
   class Digxel
-    : public digxel::Holder<NUM,FMT>
-    , public boost::totally_ordered<Digxel<NUM,FMT>,
-             boost::totally_ordered<Digxel<NUM,FMT>, NUM
-             > > 
+    : public boost::totally_ordered<Digxel<NUM,FMT> >
+//    ,
+//             boost::totally_ordered<Digxel<NUM,FMT>, NUM
+//             > > 
     {
-      typedef digxel::Holder<NUM,FMT> _Holder;
+      mutable
+      FMT buffer_;
+      NUM value_;
       
-      typedef const char* CBuf;
+      static NUM use_newValue_as_is (NUM n) { return n; }
+      typedef std::tr1::function<NUM(NUM)> _Mutator;
       
     public:
+      /** a functor to be applied on any new digxel value.
+       * This allows individual instances to limit the possible digxel values,
+       * or to update an compound value (e.g. a time comprised of hour, minute
+       * and second digxel elements). By default, new values can be set without
+       * any restrictions or side effects.
+       */
+      _Mutator mutator;
       
-      operator int()     const { return getIntValue(); }
       
-      CBuf     show()          { return getFormatted(); }
+      Digxel ()
+        : buffer_()
+        , value_()
+        , mutator(use_newValue_as_is)
+        { }
+      
+      // using the standard copy operations
+      
+      operator NUM()    const { return value_; }
+      operator string() const { return show(); }
+      
+      size_t maxlen()   const { return buffer_.maxlen(); }
+      
+      digxel::CBuf
+      show()  const
+        {
+          return buffer_.show (value_);
+        }
+      
+      
+      void
+      operator= (NUM n)
+        {
+          NUM changedValue = mutator(n); 
+          this->setValueRaw (changedValue);
+        }
+      
+      void
+      setValueRaw (NUM newVal)
+        {
+          if (newVal != value_)
+            {
+              value_ = newVal;
+              buffer_.clear();
+            }
+        }
+      
       
       
       //---Supporting-totally_ordered---------
       bool operator<  (Digxel const& o)  const { return value_ <  NUM(o); }
       bool operator== (Digxel const& o)  const { return value_ == NUM(o); }
-      bool operator== (NUM n)            const { return value_ == n ;     }
-      bool operator<  (NUM n)            const { return value_ <  n ;     }
-      bool operator>  (NUM n)            const { return value_ >  n ;     }
+//      bool operator== (NUM n)            const { return value_ == n ;     }
+//      bool operator<  (NUM n)            const { return value_ <  n ;     }
+//      bool operator>  (NUM n)            const { return value_ >  n ;     }
       
-    protected:
-      virtual int    getIntValue()    const   =0;
-      virtual CBuf   getFormatted()           =0;
     };
   
   

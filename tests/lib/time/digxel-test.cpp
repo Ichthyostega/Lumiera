@@ -28,7 +28,7 @@
 
 //#include <boost/lexical_cast.hpp>
 //#include <boost/algorithm/string/join.hpp>
-#include <boost/lambda/lambda.hpp>
+//#include <boost/lambda/lambda.hpp>
 #include <iostream>  //TODO
 #include <cstdlib>
 
@@ -49,9 +49,6 @@ namespace test{
   
   namespace { // Test data
     
-    // Placeholder to mark the function argument in a "lambda-expression"
-    boost::lambda::placeholder1_type _1_;
-    
     const uint REPEAT = 40;
     const uint RAND_RANGE = 100;
     const uint RAND_DENOM = 3;
@@ -65,6 +62,21 @@ namespace test{
         return arbitrary;
       }
     
+    inline uint
+    isOdd (uint i)
+      {
+        return i % 2;
+      }
+    
+    double sum(0),
+      checksum(0);
+   
+    double
+    sideeffectSum (double val)
+    {
+      sum += val;
+      return val;
+    }
     
     /* === special Digxel configuration for this test === */
     
@@ -78,11 +90,12 @@ namespace test{
     
     
     struct VerySpecialFormat
+      : digxel::PrintfFormatter<double, 11>
       {
-        
+        VerySpecialFormat() : digxel::PrintfFormatter<double,11>("## %4.1f ##") { }
       };
     
-    typedef digxel::Holder<double, VerySpecialFormat> TestDigxel;
+    typedef Digxel<double, VerySpecialFormat> TestDigxel;
 
   }
   
@@ -114,11 +127,11 @@ namespace test{
         {
           TestDigxel digi;
           CHECK (0 == digi);
-          CHECK ("## 0 ##" == digi.show());
+          CHECK ("## 0 ##" == string(digi));
           
           digi = 88;
           CHECK (88 == digi);
-          CHECK ("## 88.0 ##" == digi.show());
+          CHECK ("## 88.0 ##" == string(digi));
         }
       
       
@@ -127,10 +140,9 @@ namespace test{
         {
           TestDigxel digi;
           
-          uint sum(0), checksum(0);
-          
           // configure what the Digxel does on "mutation"
-          digi.mutator = ( var(sum) += _1_ );
+          digi.mutator = sideeffectSum;
+          sum = checksum = 0;
           
           CHECK (0 == digi);
           for (uint i=0; i < REPEAT; ++i)
@@ -176,7 +188,7 @@ namespace test{
           d1 = someValue;
           CHECK (d1 == someValue);
           
-          TextDigxel d2(d1);
+          TestDigxel d2(d1);
           CHECK (d2 == someValue);
           CHECK (!isSameObject (d1, d2));
           
@@ -192,7 +204,7 @@ namespace test{
           TestDigxel digi;
           digi = 123456789.12345678;
           
-          string formatted (digi.show());              // should trigger assertion
+          string formatted (digi);                // should trigger assertion
           CHECK (formatted.length() <= digi.maxlen());
         }
       
@@ -207,8 +219,8 @@ namespace test{
           start = clock();
           for (uint i=0; i < TIMING_CNT; ++i)
             {
-              val odd = i % 2;
               digi = 1;
+              isOdd (i);
             }
           stop = clock();
           uint without_reformatting = stop - start;
@@ -217,8 +229,7 @@ namespace test{
           start = clock();
           for (uint i=0; i < TIMING_CNT; ++i)
             {
-              val odd = i % 2;
-              digi = odd;
+              digi = isOdd (i);
             }
           stop = clock();
           uint with_reformatting = stop - start;
