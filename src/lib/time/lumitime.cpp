@@ -94,6 +94,11 @@ namespace time {
     return string (lumiera_tmpbuf_print_time (t_));
   }
   
+  TimeVar::operator string()  const
+  {
+    return string (lumiera_tmpbuf_print_time (t_));
+  }
+  
   
   
 }} // namespace lib::Time

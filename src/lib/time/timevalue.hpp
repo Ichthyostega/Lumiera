@@ -107,7 +107,7 @@ namespace time {
       > >
     {
     public:
-      TimeVar (TimeValue time = TimeValue())
+      TimeVar (TimeValue const& time = TimeValue())
         : TimeValue(time)
         { }
       
@@ -123,6 +123,8 @@ namespace time {
           return *this;
         }
       
+      /** @internal diagnostics */
+      operator std::string ()  const;
       
       // Supporting mixing with plain long int arithmetics
       operator gavl_time_t ()  const { return t_; }

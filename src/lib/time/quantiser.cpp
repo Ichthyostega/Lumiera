@@ -23,6 +23,7 @@
 
 #include "lib/time/quantiser.hpp"
 #include "lib/time/timevalue.hpp"
+#include "lib/time/timequant.hpp"
 
 using std::string;
 
@@ -32,6 +33,24 @@ namespace time {
   
   
   /** */
+  QuTime::QuTime (TimeValue raw, Symbol gridID)
+    : Time(raw)          /////////////////////////////////////////////////TODO fetch quantiser
+    { }
+  
+  
+  /** */
+  QuTime::QuTime (TimeValue raw, Quantiser const& quantisation_to_use)
+    : Time(raw)          /////////////////////////////////////////////////TODO fetch quantiser
+    { }
+  
+  
+  
+  /** */
+  FixedFrameQuantiser::FixedFrameQuantiser (FSecs frames_per_second)
+    : Quantiser()        /////////////////////////////////////////////////TODO we ought to do something
+    { }
+
+  
   
   
   

@@ -23,8 +23,14 @@
 
 #include "lib/lumitime.hpp"
 #include "lib/time/timecode.hpp"
+#include "lib/time/timevalue.hpp"
 #include "lib/time/timequant.hpp"
 #include "lib/time/formats.hpp"
+
+extern "C" {
+#include "lib/time.h"
+}
+
 
 using std::string;
 
@@ -38,6 +44,90 @@ namespace time {
   
   
   /** */
+  FrameNr::FrameNr (QuTime const& quantisedTime)
+    : FACTOR_TODO (1,25)
+    , nr_(TimeVar(quantisedTime) / (25*GAVL_TIME_SCALE))
+    { }                                /////////////////////////////TODO temporary bullshit (of course that is the job of the quantiser)
+  
+  
+  /** */
+  SmpteTC::SmpteTC (QuTime const& quantisedTime)
+    : tpoint_(quantisedTime)           /////////////////////////////TODO eternal bullshit
+    { }
+  
+  
+  /** */
+  HmsTC::HmsTC (QuTime const& quantisedTime)
+    : tpoint_(quantisedTime)           /////////////////////////////TODO bullshit
+    { }
+  
+  
+  /** */
+  Secs::Secs (QuTime const& quantisedTime)
+    : sec_(TimeVar(quantisedTime) / GAVL_TIME_SCALE)   /////////////TODO bullshit
+    { }
+  
+  
+  
+  /** */
+  int
+  SmpteTC::getSecs() const
+  {
+    return lumiera_time_seconds (tpoint_);
+  }
+  
+  /** */
+  int
+  SmpteTC::getMins() const 
+  {
+    return lumiera_time_minutes (tpoint_);
+  }
+  
+  /** */
+  int
+  SmpteTC::getHours() const 
+  {
+    return lumiera_time_hours (tpoint_);
+  }
+  
+  /** */
+  int
+  SmpteTC::getFrames() const
+  {
+    UNIMPLEMENTED ("Frame-Quantisation");
+  }
+  
+  /** */
+  int
+  HmsTC::getSecs() const
+  {
+    return lumiera_time_seconds (tpoint_);
+  }
+  
+  /** */
+  int
+  HmsTC::getMins() const 
+  {
+    return lumiera_time_minutes (tpoint_);
+  }
+  
+  /** */
+  int
+  HmsTC::getHours() const 
+  {
+    return lumiera_time_hours (tpoint_);
+  }
+  
+  /** */
+  double
+  HmsTC::getMillis() const
+  {
+    TODO ("Frame-Quantisation");
+    return lumiera_time_millis (tpoint_);
+  }
+  
+  /** */
+
   
   
   

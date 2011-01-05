@@ -62,5 +62,23 @@ namespace time {
   
   
   
+  /* == implementation == */
+  template<class FMT>
+  bool
+  QuTime::supports()  const
+  {
+    return false;   ////////////////TODO;
+  }
+  
+  
+  template<class FMT>
+  typename format::Traits<FMT>::TimeCode
+  QuTime::formatAs()  const
+  {
+    typedef typename format::Traits<FMT>::TimeCode TimeCode; 
+    return TimeCode(*this);
+  }
+  
+  
 }} // lib::time
 #endif
