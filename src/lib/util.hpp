@@ -26,7 +26,6 @@
 
 #include <set>
 #include <string>
-#include <cstring>
 #include <algorithm>
 
 
@@ -84,7 +83,7 @@ namespace util {
   inline bool
   isnil (const char* pCStr)
   {
-    return !pCStr || 0 == std::strlen(pCStr);
+    return !pCStr || !(*pCStr);
   }
   
   
