@@ -27,6 +27,7 @@
 #include "lib/time/timevalue.hpp"
 #include "lib/time/formats.hpp"
 
+//#include <iostream>
 //#include <boost/operators.hpp>
 #include <string>
 
@@ -48,9 +49,14 @@ namespace time {
     public:
       virtual ~TCode();
       
-      virtual string show()      const   =0;
-      virtual string describe()  const   =0;
-      virtual Time   getTime()   const   =0;
+      operator string()  const { return show(); }
+      string describe()  const { return tcID(); }
+      Time   getTime()   const { return Time(calc()); }
+      
+    protected:
+      virtual string show()     const   =0;
+      virtual string tcID()     const   =0;
+      virtual TimeValue calc()  const   =0;
     };
   
   
@@ -66,6 +72,10 @@ namespace time {
   class FrameNr
     : public TCode
     {
+        
+      virtual string show()     const ;
+      virtual string tcID()     const ;
+      virtual TimeValue calc()  const ;
       
     public:
       FrameNr (QuTime const& quantisedTime);
@@ -81,6 +91,10 @@ namespace time {
   class SmpteTC
     : public TCode
     {
+      
+      virtual string show()     const ;
+      virtual string tcID()     const ;
+      virtual TimeValue calc()  const ;
       
     public:
       SmpteTC (QuTime const& quantisedTime);
@@ -100,6 +114,10 @@ namespace time {
     : public TCode
     {
       
+      virtual string show()     const ;
+      virtual string tcID()     const ;
+      virtual TimeValue calc()  const ;
+      
     public:
       HmsTC (QuTime const& quantisedTime);
       
@@ -118,13 +136,20 @@ namespace time {
     : public TCode
     {
       
+      virtual string show()     const ;
+      virtual string tcID()     const ;
+      virtual TimeValue calc()  const ;
+      
     public:
       Secs (QuTime const& quantisedTime);
       
       operator FSecs()  const;
     };
   
+    
+  /** writes time value, formatted as HH:MM:SS:mmm */
   
+
   
 }} // lib::time
 #endif

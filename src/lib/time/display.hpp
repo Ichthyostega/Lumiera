@@ -34,14 +34,12 @@
 namespace lib {
 namespace time {
   
-
-  /** writes time value, formatted as HH:MM:SS:mmm
-   *  @see lumiera_tmpbuf_print_time  */
-  inline std::ostream&
-  operator<< (std::ostream& os, Time const& t)
-    {
-      return os << std::string(t);
-    }
+  
+   /* === shortcuts for diagnostic output === */
+    
+  /** writes time value, formatted as HH:MM:SS:mmm */
+  inline std::ostream& operator<< (std::ostream& os, Time const& t)  { return os << string(t); }
+  inline std::ostream& operator<< (std::ostream& os, TCode const& t) { return os << string(t); }
   
   
   

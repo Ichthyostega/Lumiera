@@ -23,8 +23,9 @@
 
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
-#include "lib/time/timequant.hpp"
 #include "proc/asset/meta/time-grid.hpp"
+#include "lib/time/timequant.hpp"
+#include "lib/time/display.hpp"
 #include "lib/util.hpp"
 
 #include <boost/lexical_cast.hpp>
@@ -114,7 +115,7 @@ namespace test{
         {
           cout << timecodeValue.describe() 
                << " time = "<< timecodeValue.getTime() 
-               << " code = "<< timecodeValue.show()
+               << " code = "<< timecodeValue
                << endl;
         }
       
