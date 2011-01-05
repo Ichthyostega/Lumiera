@@ -21,12 +21,7 @@
 * *****************************************************/
 
 
-#include "lib/lumitime.hpp"
-#include "lib/time/timecode.hpp"
-#include "lib/time/timequant.hpp"
-#include "lib/time/formats.hpp"
-
-using std::string;
+#include "lib/time/digxel.hpp"
 
 
 namespace lib {

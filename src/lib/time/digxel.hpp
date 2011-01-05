@@ -63,10 +63,12 @@
 #define LIB_TIME_DIGXEL_H
 
 #include "lib/error.hpp"
-//#include "lib/symbol.hpp"
+#include "lib/symbol.hpp"
 
-//#include <boost/operators.hpp>
-#include <cstdlib>  ////////////////////TODO
+#include <boost/operators.hpp>
+#include <boost/lexical_cast.hpp>
+#include <cstdlib>  ///////////TODO
+#include <cmath>
 #include <string>
 
 
@@ -85,38 +87,97 @@ namespace time {
    * - will then format these numbers and cache the formatted representation
    * - can store and invoke a mutation functor
    *  
-   * @param TODO
+   * @note comparisons are assumed to be not performance relevant
    * @see lib::time::TCode
    * @todo WIP-WIP-WIP
    */
   class Digxel
+    : public boost::totally_ordered<Digxel,
+             boost::totally_ordered<Digxel, int,
+             boost::totally_ordered<Digxel, double
+             > > >
     {
+      typedef const char* CBuf;
       
     public:
       virtual ~Digxel ();  ///< this is an ABC
-        
+      
+      operator int()     const { return getIntValue(); }
+      operator double()  const { return getDoubleValue(); }
+      
+      CBuf     show()          { return getFormatted(); }
+      void operator= (int i)   { return changeTo(i); }
+      void operator= (double d){ return changeTo(d); }
+      
+      
+      // Supporting totally_ordered
+      bool operator<  (Digxel const& o)  const { return double(*this) <  double(o); }
+      bool operator== (Digxel const& o)  const { return double(*this) == double(o); }
+      bool operator== (int    i)         const { return    int(*this) ==        i ; }
+      bool operator<  (int    i)         const { return    int(*this) <         i ; }
+      bool operator>  (int    i)         const { return    int(*this) >         i ; }
+      bool operator== (double d)         const { return double(*this) ==        d ; }
+      bool operator<  (double d)         const { return double(*this) <         d ; }
+      bool operator>  (double d)         const { return double(*this) >         d ; }
+      
+    protected:
+      virtual int    getIntValue()    const   =0;
+      virtual double getDoubleValue() const   =0;
+      virtual CBuf   getFormatted()           =0;
+      virtual void   changeTo (int i)         =0;
+      virtual void   changeTo (double d)      =0;
     };
   
   namespace digxel {
     
-//  using lib::Literal;
+    using std::string;
+    using lib::Literal;
+    using boost::lexical_cast;
+    
+    
     
     template<typename NUM>
-    struct PrintfFormatter
+    struct ValTrait;
+    
+    template<>
+    struct ValTrait<int>
       {
-        enum{ len = 6
-            , bufsiz = len+1
-        };
+        static int    asInt    (int val) { return val; }
+        static double asDouble (int val) { return val; }
+      };
+    
+    template<>
+    struct ValTrait<double>
+      {
+        static int    asInt    (double val) { return std::floor(0.5+val); }  ///< in accordance with Lumiera's time handling RfC
+        static double asDouble (double val) { return val; }
+      };
+    
+    
+    
+    template<typename NUM, size_t len>
+    class PrintfFormatter
+      {
+        enum{ bufsiz = len+1 };
         
         char printbuffer_[bufsiz];
+        Literal formatSpec_;
         
-        static void
+      public:
+        PrintfFormatter (Literal fmt)
+          : printbuffer_()
+          , formatSpec_(fmt)
+          { 
+            printbuffer_[0] = '\0';
+          }
+        
+        void
         show (NUM val)
           {
             size_t space = std::snprintf (printbuffer_, bufsiz, "%5d", val);
             REQUIRE (space <= bufsiz, "Digxel value exceeded available buffer size. "
-                                      "For showing %d, %d chars instead of just %d would be required."
-                                    , val, space, bufsiz);
+                                      "For showing %s, %d chars instead of just %d would be required."
+                                    , lexical_cast<string>(val), space, bufsiz);
           }
       };
     
@@ -125,11 +186,17 @@ namespace time {
     
     template<>
     struct Formatter<int>
-      : PrintfFormatter<int>
+      : PrintfFormatter<int, 6>
       {
-        enum{ len = 6
-            , bufsiz = len+1
-            };
+        Formatter() : PrintfFormatter<int,6>("%5d") { }
+        
+      };
+    
+    template<>
+    struct Formatter<double>
+      : PrintfFormatter<double, 7>
+      {
+        Formatter() : PrintfFormatter<double,7>("%06.3f") { }
         
       };
   
@@ -150,12 +217,46 @@ namespace time {
         FMT buffer_;
         NUM value_;
         
+        
+        /* === Digxel implementation === */
+        int
+        getIntValue()  const
+          {
+            return ValTrait<NUM>::asInt (value_);
+          }
+        
+        double
+        getDoubleValue()  const
+          {
+            return ValTrait<NUM>::asDouble (value_);
+          }
+        
+        CBuf
+        getFormatted()
+          {
+            UNIMPLEMENTED("call formatting or cache");
+          }
+        
+        void
+        changeTo (int i)
+          {
+            UNIMPLEMENTED("mutate INT");
+          }
+        
+        void
+        changeTo (double d)
+          {
+            UNIMPLEMENTED("mutate FLOAT");
+          }
+
+        
       public:
         Holder ()
           : buffer_()
           , value_()
           { }
-          
+        
+        using Digxel::operator=;
       };
     
   }

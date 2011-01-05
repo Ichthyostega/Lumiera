@@ -141,7 +141,7 @@ namespace test{
               digi = arbitrary;         // invoke the mutation functor 
               
               CHECK (sum == checksum, "divergence after adding %f in iteration %d", arbitrary, i);
-              CHECK (digi == abitrary);
+              CHECK (digi == arbitrary);
             }
         }
       
