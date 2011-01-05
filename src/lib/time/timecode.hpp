@@ -38,20 +38,19 @@ namespace time {
   
   
   /**
-   * fixed format time specification.
-   * @param FMT the actual timecode format to use
+   * Interface: fixed format timecode specification.
    * @see time::Format
    * @todo WIP-WIP-WIP
    */
-  template<class FMT>
   class TCode
     {
       
     public:
+      virtual ~TCode();
       
-      string describe()  const;
-      
-      
+      virtual string show()      const   =0;
+      virtual string describe()  const   =0;
+      virtual Time   getTime()   const   =0;
     };
   
   
@@ -65,12 +64,11 @@ namespace time {
    * FrameNr values interchangeable with integral numbers. 
    */
   class FrameNr
-    : public TCode<format::Frames>
+    : public TCode
     {
       
     public:
       FrameNr (QuTime const& quantisedTime);
-      FrameNr (TCode<format::Frames> const&);
       
       operator long()  const;
     };
@@ -81,17 +79,49 @@ namespace time {
    * 
    */
   class SmpteTC
-    : public TCode<format::Smpte>
+    : public TCode
     {
       
     public:
       SmpteTC (QuTime const& quantisedTime);
-      SmpteTC (TCode<format::Smpte> const&);
       
       int getSecs   () const; 
       int getMins   () const; 
       int getHours  () const; 
       int getFrames () const;
+    };
+  
+  
+  
+  /**
+   * 
+   */
+  class HmsTC
+    : public TCode
+    {
+      
+    public:
+      HmsTC (QuTime const& quantisedTime);
+      
+      double getMillis () const;
+      int getSecs      () const; 
+      int getMins      () const; 
+      int getHours     () const; 
+    };
+  
+  
+  
+  /**
+   * 
+   */
+  class Secs
+    : public TCode
+    {
+      
+    public:
+      Secs (QuTime const& quantisedTime);
+      
+      operator FSecs()  const;
     };
   
   

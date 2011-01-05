@@ -34,6 +34,7 @@ namespace time {
   
   
   Format::~Format() { }  // emit VTable here....
+  TCode::~TCode()   { }
   
   
   /** */

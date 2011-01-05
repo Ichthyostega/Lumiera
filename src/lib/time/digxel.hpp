@@ -92,10 +92,10 @@ namespace time {
    * @todo WIP-WIP-WIP
    */
   class Digxel
-    : public boost::totally_ordered<Digxel,
-             boost::totally_ordered<Digxel, int,
-             boost::totally_ordered<Digxel, double
-             > > >
+//  : public boost::totally_ordered<Digxel,
+//           boost::totally_ordered<Digxel, int,
+//           boost::totally_ordered<Digxel, double
+//           > > >
     {
       typedef const char* CBuf;
       
@@ -103,29 +103,23 @@ namespace time {
       virtual ~Digxel ();  ///< this is an ABC
       
       operator int()     const { return getIntValue(); }
-      operator double()  const { return getDoubleValue(); }
       
       CBuf     show()          { return getFormatted(); }
-      void operator= (int i)   { return changeTo(i); }
-      void operator= (double d){ return changeTo(d); }
       
       
-      // Supporting totally_ordered
-      bool operator<  (Digxel const& o)  const { return double(*this) <  double(o); }
-      bool operator== (Digxel const& o)  const { return double(*this) == double(o); }
-      bool operator== (int    i)         const { return    int(*this) ==        i ; }
-      bool operator<  (int    i)         const { return    int(*this) <         i ; }
-      bool operator>  (int    i)         const { return    int(*this) >         i ; }
-      bool operator== (double d)         const { return double(*this) ==        d ; }
-      bool operator<  (double d)         const { return double(*this) <         d ; }
-      bool operator>  (double d)         const { return double(*this) >         d ; }
+//    // Supporting totally_ordered
+//    bool operator<  (Digxel const& o)  const { return double(*this) <  double(o); }
+//    bool operator== (Digxel const& o)  const { return double(*this) == double(o); }
+//    bool operator== (int    i)         const { return    int(*this) ==        i ; }
+//    bool operator<  (int    i)         const { return    int(*this) <         i ; }
+//    bool operator>  (int    i)         const { return    int(*this) >         i ; }
+//    bool operator== (double d)         const { return double(*this) ==        d ; }
+//    bool operator<  (double d)         const { return double(*this) <         d ; }
+//    bool operator>  (double d)         const { return double(*this) >         d ; }
       
     protected:
       virtual int    getIntValue()    const   =0;
-      virtual double getDoubleValue() const   =0;
       virtual CBuf   getFormatted()           =0;
-      virtual void   changeTo (int i)         =0;
-      virtual void   changeTo (double d)      =0;
     };
   
   namespace digxel {
@@ -225,29 +219,23 @@ namespace time {
             return ValTrait<NUM>::asInt (value_);
           }
         
-        double
-        getDoubleValue()  const
-          {
-            return ValTrait<NUM>::asDouble (value_);
-          }
-        
         CBuf
         getFormatted()
           {
             UNIMPLEMENTED("call formatting or cache");
           }
-        
-        void
-        changeTo (int i)
-          {
-            UNIMPLEMENTED("mutate INT");
-          }
-        
-        void
-        changeTo (double d)
-          {
-            UNIMPLEMENTED("mutate FLOAT");
-          }
+//      
+//      void
+//      changeTo (int i)
+//        {
+//          UNIMPLEMENTED("mutate INT");
+//        }
+//      
+//      void
+//      changeTo (double d)
+//        {
+//          UNIMPLEMENTED("mutate FLOAT");
+//        }
 
         
       public:

@@ -95,21 +95,27 @@ namespace test{
           CHECK ( qVal.supports<format::Frames>());
           CHECK ( qVal.supports<format::Smpte>());
           
-          TCode<format::Smpte> smpteTCode = qVal.formatAs<format::Smpte>();
+          SmpteTC smpteTCode = qVal.formatAs<format::Smpte>();
           showTimeCode (smpteTCode);
           
-          TCode<format::Frames> frameTCode = qVal.formatAs<format::Frames>();
+          HmsTC pureTimeCode = qVal.formatAs<format::Hms>();
+          showTimeCode (pureTimeCode);
+          
+          FrameNr frameTCode = qVal.formatAs<format::Frames>();
           showTimeCode (frameTCode);
           
-          FrameNr count(frameTCode);
-//        CHECK (string(count) == frameTCode.part[0]));
+          Secs seconds  = qVal.formatAs<format::Seconds>();
+          showTimeCode (seconds);
         }
       
       template<class TC>
       void
       showTimeCode (TC timecodeValue)
         {
-//        cout << timecodeValue.describe() << " = " << join (timecodeValue.part(), ":") << endl;
+          cout << timecodeValue.describe() 
+               << " time = "<< timecodeValue.getTime() 
+               << " code = "<< timecodeValue.show()
+               << endl;
         }
       
       
@@ -140,7 +146,7 @@ namespace test{
           
           TimeGrid::build("special_funny_grid", 1);      // provide the grid's definition (1 frame per second)
           
-          int cnt = 0;//////funny.formatAs<format::Frames>().part["count"];
+          int cnt = funny.formatAs<format::Frames>();
                                                          // and now performing quantisation is OK 
           SmpteTC smpte (funny);                         // also converting into SMPTE (which implies frame quantisation)
           CHECK (0 == smpte.getFrames());                // we have 1fps, thus the frame part is always zero!

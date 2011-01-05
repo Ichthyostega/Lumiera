@@ -38,7 +38,7 @@ classcanvas 131589 class_ref 170501 // QuTimeSpan
 end
 classcanvas 131973 class_ref 170629 // TCode
   draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default show_stereotype_properties default
-  xyz 248 450 2000
+  xyz 319 434 2000
 end
 classcanvas 132101 class_ref 170757 // Format
   draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default show_stereotype_properties default
@@ -46,7 +46,7 @@ classcanvas 132101 class_ref 170757 // Format
 end
 classcanvas 132997 class_ref 170885 // FrameNr
   draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default show_stereotype_properties default
-  xyz 243 545 2000
+  xyz 314 507 2000
 end
 classcanvas 133253 class_ref 171013 // CompoundGrid
   draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default show_stereotype_properties default
@@ -58,25 +58,29 @@ classcanvas 133509 class_ref 172165 // Offset
 end
 classcanvas 135045 class_ref 137093 // Meta
   draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default show_stereotype_properties default
-  xyz 514 237 2000
+  xyz 514 237 2005
 end
 note 135429 "Asset System"
   xyzwh 504 197 2000 66 47
 classcanvas 135557 class_ref 172293 // Frames
   draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default show_stereotype_properties default
-  xyz 392 507 1995
+  xyz 392 507 1979
 end
 classcanvas 135685 class_ref 172421 // Smpte
   draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default show_stereotype_properties default
-  xyz 446 533 2010
+  xyz 446 533 1994
 end
 classcanvas 136069 class_ref 172549 // Hms
   draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default show_stereotype_properties default
-  xyz 421 523 2005
+  xyz 421 523 1984
 end
 classcanvas 136325 class_ref 172677 // SmpteTC
   draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default show_stereotype_properties default
-  xyz 308 546 2000
+  xyz 242 507 2000
+end
+classcanvas 137349 class_ref 173829 // Digxel
+  draw_all_relations default hide_attributes default hide_operations default show_members_full_definition default show_members_visibility default show_members_stereotype default show_members_multiplicity default show_members_initialization default member_max_width 0 show_parameter_dir default show_parameter_name default package_name_in_tab default class_drawing_mode default drawing_language default show_context_mode default auto_label_position default show_infonote default shadow default show_stereotype_properties default
+  xyz 191 548 2000
 end
 relationcanvas 128517 relation_ref 195205 // <generalisation>
   geometry VHV unfixed
@@ -120,20 +124,9 @@ relationcanvas 131717 relation_ref 197637 // <generalisation>
   no_role_a no_role_b
   no_multiplicity_a no_multiplicity_b
 end
-relationcanvas 132485 relation_ref 197893 // <dependency>
-  from ref 131973 z 1999 to point 290 450
-  line 132869 z 1999 to ref 132101
-  no_role_a no_role_b
-  no_multiplicity_a no_multiplicity_b
-end
-relationcanvas 132613 relation_ref 198021 // <unidirectional association>
-  from ref 129669 z 1999 stereotype "<<yield>>" xyz 275 415 3000 to ref 131973
-  no_role_a no_role_b
-  no_multiplicity_a no_multiplicity_b
-end
 relationcanvas 132741 relation_ref 198149 // <directional aggregation>
   decenter_end 595
-  from ref 130181 z 1999 stereotype "<<provide>>" xyz 360 414 3000 to ref 132101
+  from ref 130181 z 1999 stereotype "<<provide>>" xyz 360 413 3000 to ref 132101
   no_role_a no_role_b
   no_multiplicity_a no_multiplicity_b
 end
@@ -194,10 +187,29 @@ relationcanvas 136197 relation_ref 200453 // <generalisation>
 end
 relationcanvas 136453 relation_ref 200581 // <generalisation>
   geometry VHV
-  from ref 136325 z 1999 to point 334 522
-  line 136581 z 1999 to point 268 522
+  from ref 136325 z 1999 to point 268 487
+  line 136581 z 1999 to point 339 487
   line 136709 z 1999 to ref 131973
   no_role_a no_role_b
   no_multiplicity_a no_multiplicity_b
+end
+relationcanvas 136837 relation_ref 201733 // <unidirectional association>
+  from ref 129669 z 1999 to ref 132997
+  no_role_a no_role_b
+  no_multiplicity_a no_multiplicity_b
+end
+relationcanvas 136965 relation_ref 201861 // <unidirectional association>
+  decenter_end 754
+  from ref 129669 z 1999 stereotype "<<yield>>" xyz 244 416 3000 to point 295 437
+  line 137093 z 1999 to ref 136325
+  no_role_a no_role_b
+  no_multiplicity_a no_multiplicity_b
+end
+relationcanvas 137477 relation_ref 201989 // <directional composition>
+  geometry HVr
+  from ref 136325 z 1999 to point 268 565
+  line 137605 z 1999 to ref 137349
+  role_a_pos 245 554 3000 no_role_b
+  multiplicity_a_pos 245 573 3000 no_multiplicity_b
 end
 end

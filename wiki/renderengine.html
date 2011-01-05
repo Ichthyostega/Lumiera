@@ -6561,7 +6561,7 @@ Thus no server and no network connection is needed. Simply open the file in your
  * see [[Homepage|http://tiddlywiki.com]], [[Wiki-Markup|http://tiddlywiki.org/wiki/TiddlyWiki_Markup]]
 </pre>
 </div>
-<div title="TimeQuant" modifier="Ichthyostega" modified="201012230154" created="201012181753" tags="Concepts Player spec discuss draft" changecount="45">
+<div title="TimeQuant" modifier="Ichthyostega" modified="201101050143" created="201012181753" tags="Concepts Player spec discuss draft" changecount="47">
 <pre>The term &amp;raquo;Time&amp;laquo; spans a variety of vastly different entities. Within a NLE we get to deal with various //flavours of time values.//
 ;continuous time
 :without any additional assumptions, ''points in time'' can be specified with arbitrary precision.
@@ -6616,6 +6616,8 @@ __delayed quantisation__: with this approach, the information loss is delayed as
 
 !!!discussion
 For Lumiera, the static typing approach is of limited value -- it excels when values belonging to different scales are actually treated differently. There are such cases, but rather on the data handling level, e.g. sound samples are always handled block wise. But regarding time values, the unifying aspect is more important, which leads to prefering a dynamic (run time typed) approach, while //erasing// the special differences most of the time. Yet the dynamic and open nature of the Lumiera high-level model favours the delayed quantisation pattern; the same values may require different quantisation depending on the larger model context an object is encountered in. This solution might be to general and heavy weight at times though. Thus, for important special cases, the accessors should return tagged values, preferably even with differing static type. Time codes can be integrated this way, but most notably the ''frame numbers'' used for addressing throughout the backend, can be implemented as such specifically typed tagged values; the tag here denotes the quantiser and thus the underlying grid -- it should be implemented as hash-ID for smooth integration with code written in plain C.
+
+At the level of individual timecode formats, we're lacking a common denominator; thus it is preferrable to work with different concrete timecode classes through //generic programming.// This way, each timecode format can expose operations specific only to the given format. Especially, different timecode formats expose different //component fields,// modelled by the generic ''Digxel'' concept. There is a common baseclass ~TCode though, which can be used for //type erasure.//
 &amp;rarr; more on [[usage situations|TimeUsage]]
 </pre>
 </div>

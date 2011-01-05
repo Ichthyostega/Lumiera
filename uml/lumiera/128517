@@ -1,6 +1,6 @@
 format 58
 "CommonLib" // CommonLib
-  revision 23
+  revision 24
   modified_by 5 "hiv"
   // class settings
   //class diagram settings
@@ -956,14 +956,23 @@ ${inlines}
 	  b parent class_ref 134917 // Time
       end
 
-      classrelation 208901 // <unidirectional association>
-	relation 198021 --->
+      classrelation 212613 // <unidirectional association>
+	relation 201733 --->
+	  a role_name "" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 212613 // <unidirectional association>
+	  b parent class_ref 170885 // FrameNr
+      end
+
+      classrelation 212741 // <unidirectional association>
+	relation 201861 --->
 	  stereotype "yield"
 	  a role_name "" protected
 	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
 "
-	    classrelation_ref 208901 // <unidirectional association>
-	  b parent class_ref 170629 // TCode
+	    classrelation_ref 212741 // <unidirectional association>
+	  b parent class_ref 172677 // SmpteTC
       end
     end
 
@@ -1099,9 +1108,6 @@ ${inlines}
 
     class 170629 "TCode"
       visibility package 
-      nformals 1
-      formal name "F" type "class" explicit_default_value ""
-        explicit_extends ""
       cpp_decl "${comment}${template}class ${name}${inherit}
   {
 ${members}  };
@@ -1121,13 +1127,6 @@ ${inlines}
 	  b parent class_ref 170629 // TCode
       end
 
-      classrelation 208773 // <dependency>
-	relation 197893 -_->
-	  a default
-	    cpp default "#include in source"
-	    classrelation_ref 208773 // <dependency>
-	  b parent class_ref 170757 // Format
-      end
     end
 
     class 170757 "Format"
@@ -1147,9 +1146,6 @@ ${inlines}
 
     class 170885 "FrameNr"
       visibility package 
-      nactuals 1
-      actual class class_ref 170629 // TCode
-        rank 0 explicit_value ""
       cpp_decl "${comment}${template}class ${name}${inherit}
   {
 ${members}  };
@@ -1282,9 +1278,6 @@ ${inlines}
 
     class 172677 "SmpteTC"
       visibility package 
-      nactuals 1
-      actual class class_ref 170629 // TCode
-        rank 0 explicit_value ""
       cpp_decl "${comment}${template}class ${name}${inherit}
   {
 ${members}  };
@@ -1303,6 +1296,30 @@ ${inlines}
 	    classrelation_ref 211461 // <generalisation>
 	  b parent class_ref 170629 // TCode
       end
+
+      classrelation 212869 // parts (<directional composition>)
+	relation 201989 *-->
+	  a role_name "parts" multiplicity "4" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	    classrelation_ref 212869 // parts (<directional composition>)
+	  b parent class_ref 173829 // Digxel
+      end
+    end
+
+    class 173829 "Digxel"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
     end
   end
 

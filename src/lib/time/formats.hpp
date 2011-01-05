@@ -118,7 +118,46 @@ namespace time {
     static const Frames  FRAMES;
     static const Smpte   SMPTE;
     static const Hms     HMS;
+    
+  }
+  // ====== forward declarationss of concrete Timecode types
+  
+  class FrameNr;
+  class SmpteTC;
+  class HmsTC;
+  class Secs;
   
   
+  namespace format {
+    
+    template<class FMT>
+    struct Traits;
+    
+    template<>
+    struct Traits<Frames>
+      {
+        typedef FrameNr TimeCode;
+      };
+    
+    template<>
+    struct Traits<Smpte>
+      {
+        typedef SmpteTC TimeCode;
+      };
+    
+    template<>
+    struct Traits<Hms>
+      {
+        typedef HmsTC TimeCode;
+      };
+    
+    template<>
+    struct Traits<Seconds>
+      {
+        typedef Secs TimeCode;
+      };
+    
+    
+    
 }}} // lib::time::format
 #endif

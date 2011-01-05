@@ -56,7 +56,8 @@ namespace time {
       bool supports()  const;
       
       template<class FMT>
-      TCode<FMT> formatAs()  const;
+      typename format::Traits<FMT>::TimeCode
+      formatAs()  const;
     };
   
   
