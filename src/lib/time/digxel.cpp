@@ -28,8 +28,6 @@ namespace lib {
 namespace time {
   
   
-  Digxel::~Digxel () { }
-  // A hint for the compiler to emit VTables and magic stuff here
 
   
   /** */

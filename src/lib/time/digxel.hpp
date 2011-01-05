@@ -77,58 +77,14 @@ namespace time {
   
 //  using std::string;
   
-  /**
-   * A number element for building structured numeric displays.
-   * The purpose is to represent parts of a numeric format, like
-   * e.g. the sexagesimal "digits" of a timecode display. Digxel
-   * - is customised by template parameters to a specific number format
-   * - requires that any number set must not overflow the format buffer
-   * - can receive new numbers by assignment
-   * - will then format these numbers and cache the formatted representation
-   * - can store and invoke a mutation functor
-   *  
-   * @note comparisons are assumed to be not performance relevant
-   * @see lib::time::TCode
-   * @todo WIP-WIP-WIP
-   */
-  class Digxel
-//  : public boost::totally_ordered<Digxel,
-//           boost::totally_ordered<Digxel, int,
-//           boost::totally_ordered<Digxel, double
-//           > > >
-    {
-      typedef const char* CBuf;
-      
-    public:
-      virtual ~Digxel ();  ///< this is an ABC
-      
-      operator int()     const { return getIntValue(); }
-      
-      CBuf     show()          { return getFormatted(); }
-      
-      
-//    // Supporting totally_ordered
-//    bool operator<  (Digxel const& o)  const { return double(*this) <  double(o); }
-//    bool operator== (Digxel const& o)  const { return double(*this) == double(o); }
-//    bool operator== (int    i)         const { return    int(*this) ==        i ; }
-//    bool operator<  (int    i)         const { return    int(*this) <         i ; }
-//    bool operator>  (int    i)         const { return    int(*this) >         i ; }
-//    bool operator== (double d)         const { return double(*this) ==        d ; }
-//    bool operator<  (double d)         const { return double(*this) <         d ; }
-//    bool operator>  (double d)         const { return double(*this) >         d ; }
-      
-    protected:
-      virtual int    getIntValue()    const   =0;
-      virtual CBuf   getFormatted()           =0;
-    };
-  
   namespace digxel {
     
     using std::string;
     using lib::Literal;
     using boost::lexical_cast;
     
-    
+    typedef const char* CBuf;
+
     
     template<typename NUM>
     struct ValTrait;
@@ -203,11 +159,11 @@ namespace time {
      * @todo WIP-WIP-WIP
      */
     template< typename NUM
-            , class FMT  = digxel::Formatter<NUM>
+            , class FMT
             >
     class Holder
-      : public Digxel
       {
+      protected:
         FMT buffer_;
         NUM value_;
         
@@ -244,10 +200,55 @@ namespace time {
           , value_()
           { }
         
-        using Digxel::operator=;
       };
     
-  }
+  } //(End) digxel configuration namespace
+  
+  /**
+   * A number element for building structured numeric displays.
+   * The purpose is to represent parts of a numeric format, like
+   * e.g. the sexagesimal "digits" of a timecode display. Digxel
+   * - is customised by template parameters to a specific number format
+   * - requires that any number set must not overflow the format buffer
+   * - can receive new numbers by assignment
+   * - will then format these numbers and cache the formatted representation
+   * - can store and invoke a mutation functor
+   *  
+   * @note comparisons are assumed to be not performance relevant
+   * @see lib::time::TCode
+   * @todo WIP-WIP-WIP
+   */
+    template< typename NUM
+            , class FMT  = digxel::Formatter<NUM>
+            >
+  class Digxel
+    : public digxel::Holder<NUM,FMT>
+    , public boost::totally_ordered<Digxel<NUM,FMT>,
+             boost::totally_ordered<Digxel<NUM,FMT>, NUM
+             > > 
+    {
+      typedef digxel::Holder<NUM,FMT> _Holder;
+      
+      typedef const char* CBuf;
+      
+    public:
+      
+      operator int()     const { return getIntValue(); }
+      
+      CBuf     show()          { return getFormatted(); }
+      
+      
+      //---Supporting-totally_ordered---------
+      bool operator<  (Digxel const& o)  const { return value_ <  NUM(o); }
+      bool operator== (Digxel const& o)  const { return value_ == NUM(o); }
+      bool operator== (NUM n)            const { return value_ == n ;     }
+      bool operator<  (NUM n)            const { return value_ <  n ;     }
+      bool operator>  (NUM n)            const { return value_ >  n ;     }
+      
+    protected:
+      virtual int    getIntValue()    const   =0;
+      virtual CBuf   getFormatted()           =0;
+    };
   
   
   
