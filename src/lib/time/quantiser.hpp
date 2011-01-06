@@ -75,11 +75,16 @@ namespace time {
       typedef lib::PtrDerefIter<_SrcIter>  _Iter;
       
     public:
+      virtual ~Quantiser();  ///< this is an ABC
+      
+      
       template<class FMT>
       bool supports()  const;
       
       typedef _Iter iterator;
       iterator getSupportedFormats()  const;
+      
+      virtual Time align (TimeValue const& raw)   =0;
       
     };
   
@@ -98,8 +103,12 @@ namespace time {
     : public Quantiser
     {
       
+      
     public:
       FixedFrameQuantiser (FSecs frames_per_second);
+      
+      
+      Time align (TimeValue const& raw);
     };
   
   

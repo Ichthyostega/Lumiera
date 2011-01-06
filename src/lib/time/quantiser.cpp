@@ -32,6 +32,9 @@ namespace lib {
 namespace time {
   
   
+  Quantiser::~Quantiser() { } // hint to emit the VTable here...
+  
+
   /** */
   QuTime::QuTime (TimeValue raw, Symbol gridID)
     : Time(raw)          /////////////////////////////////////////////////TODO fetch quantiser
@@ -49,8 +52,15 @@ namespace time {
   FixedFrameQuantiser::FixedFrameQuantiser (FSecs frames_per_second)
     : Quantiser()        /////////////////////////////////////////////////TODO we ought to do something
     { }
-
   
+  
+  
+  /** */
+  Time
+  FixedFrameQuantiser::align (TimeValue const& raw)
+  {
+    UNIMPLEMENTED ("simple demo quantisation to hard wired grid");
+  }
   
   
   
