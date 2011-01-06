@@ -84,7 +84,7 @@ namespace time {
       typedef _Iter iterator;
       iterator getSupportedFormats()  const;
       
-      virtual Time align (TimeValue const& raw)   =0;
+      virtual TimeValue gridAlign (TimeValue const& raw)   =0;
       
     };
   
@@ -102,13 +102,14 @@ namespace time {
   class FixedFrameQuantiser
     : public Quantiser
     {
-      
+      Time   origin_;
+      double raster_;
       
     public:
-      FixedFrameQuantiser (FSecs frames_per_second);
+      FixedFrameQuantiser (FSecs frames_per_second, TimeValue referencePoint  =TimeValue(0));
       
       
-      Time align (TimeValue const& raw);
+      TimeValue gridAlign (TimeValue const&);
     };
   
   

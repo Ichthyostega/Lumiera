@@ -94,8 +94,8 @@ namespace meta {
   template<>
   struct Builder<TimeGrid>
     {
-      FSecs fps_;
-      Time      origin_;
+      FSecs   fps_;
+      Time origin_;
       
       /** when building a compound or variable grid,
        *  the predecessor is the grid active \em before

@@ -25,16 +25,41 @@
 #include "lib/time/timevalue.hpp"
 #include "lib/time/timequant.hpp"
 
+extern "C" {
+#include "lib/time.h"
+}
+
+#include <boost/rational.hpp>
+
+using boost::rational_cast;
 using std::string;
 
+
+namespace error = lumiera::error;
 
 namespace lib {
 namespace time {
   
   
+  namespace { // implementation helpers...
+    
+    template<typename NUM>
+    inline NUM
+    __ensure_notZero (NUM n)
+    {
+      if (!n)
+        throw error::Logic ("Impossible to quantise to an zero spaced grid"
+                           , error::LUMIERA_ERROR_BOTTOM_VALUE);
+      return n;
+    }
+    
+  }//(End) implementation helpers
+  
+  
+  
   Quantiser::~Quantiser() { } // hint to emit the VTable here...
   
-
+  
   /** */
   QuTime::QuTime (TimeValue raw, Symbol gridID)
     : Time(raw)          /////////////////////////////////////////////////TODO fetch quantiser
@@ -48,18 +73,33 @@ namespace time {
   
   
   
-  /** */
-  FixedFrameQuantiser::FixedFrameQuantiser (FSecs frames_per_second)
-    : Quantiser()        /////////////////////////////////////////////////TODO we ought to do something
+  /** Create a quantiser based on a fixed constant spaced grid, rooted at the reference point
+   *  as origin of the scale. Quantisation then means to determine the grid interval containing
+   *  a given raw time value. Here, the grid interval number zero \em starts at the origin;
+   *  each interval includes its lower bound and excludes its upper bound.*/
+  FixedFrameQuantiser::FixedFrameQuantiser (FSecs frames_per_second, TimeValue referencePoint)
+    : origin_(referencePoint)
+    , raster_(rational_cast<double> (GAVL_TIME_SCALE / __ensure_notZero(frames_per_second)))
     { }
   
   
   
-  /** */
-  Time
-  FixedFrameQuantiser::align (TimeValue const& raw)
+  /** alignment to a simple fixed size grid.
+   *  The actual calculation first determines the number
+   *  of the grid interval containing the given rawTime,
+   *  then followed by multiplying this interval number
+   *  with the grid spacing.
+   * @return time of the start point of the grid interval
+   *      containing the rawTime, relative to the origin
+   *      of the time scale used by this quantiser.
+   * @warning returned time values are limited by the
+   *      range of an 64bit integer  
+   * @see #lumiera_quantise_time
+   */
+  TimeValue
+  FixedFrameQuantiser::gridAlign (TimeValue const& rawTime)
   {
-    UNIMPLEMENTED ("simple demo quantisation to hard wired grid");
+    return TimeValue (lumiera_quantise_time (_raw(rawTime), raster_, _raw(origin_)));
   }
   
   
@@ -69,4 +109,4 @@ namespace time {
   
   
 }} // lib::time
-  
+

@@ -86,7 +86,7 @@ namespace test{
           CHECK (Time(    frames*F25) <= rawTime);
           CHECK (Time((frames+1)*F25) >  rawTime);
           
-          Time quantTime = fixQ.align (rawTime);
+          Time quantTime (fixQ.gridAlign (rawTime));
           
           CHECK (Time(frames*F25) == quantTime);
         }

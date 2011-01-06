@@ -81,6 +81,9 @@ namespace time {
         : t_(o.t_)
         { }
       
+      /** @internal to pass Time values to C functions */
+      friend gavl_time_t _raw (TimeValue const& time) { return time.t_; }
+      
       // Supporting totally_ordered
       friend bool operator<  (TimeValue const& t1, TimeValue const& t2)  { return t1.t_ <  t2.t_; }
       friend bool operator<  (TimeValue const& t1, gavl_time_t t2)       { return t1.t_ <  t2   ; }
@@ -236,7 +239,6 @@ namespace time {
       
       /** @internal diagnostics */
       operator std::string ()  const;
-      
     };
   
   
