@@ -124,7 +124,7 @@ namespace time {
           }
         
         void clear() { printbuffer_[0] = '\0'; }
-        bool empty() { return bool(*printbuffer_); }
+        bool empty() { return ! bool(*printbuffer_); }
         
         size_t
         maxlen()  const
@@ -139,8 +139,8 @@ namespace time {
               {
                 size_t space = std::snprintf (printbuffer_, bufsiz, formatSpec_, val);
                 REQUIRE (space < bufsiz, "Digxel value exceeded available buffer size. "
-                                         "For showing %s, %lu chars instead of just %d would be required."
-                                       , cStr(lexical_cast<string>(val)), space, bufsiz);               ///////////TICKET #197
+                                         "For showing %s, %lu+1 chars instead of just %lu+1 would be required."
+                                       , cStr(lexical_cast<string>(val)), space, len);               ///////////TICKET #197
               }
             ENSURE (!empty());
             return printbuffer_;
@@ -188,9 +188,6 @@ namespace time {
             >
   class Digxel
     : public boost::totally_ordered<Digxel<NUM,FMT> >
-//    ,
-//             boost::totally_ordered<Digxel<NUM,FMT>, NUM
-//             > > 
     {
       mutable
       FMT buffer_;

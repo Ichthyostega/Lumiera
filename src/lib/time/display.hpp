@@ -25,6 +25,7 @@
 #define LIB_TIME_DISPLAY_H
 
 #include "lib/time/timecode.hpp"
+#include "lib/time/digxel.hpp"
 
 #include <iostream>
 #include <string>
@@ -40,6 +41,10 @@ namespace time {
   /** writes time value, formatted as HH:MM:SS:mmm */
   inline std::ostream& operator<< (std::ostream& os, Time const& t)  { return os << string(t); }
   inline std::ostream& operator<< (std::ostream& os, TCode const& t) { return os << string(t); }
+  
+  /** display a single timecode component */
+  template< typename NUM, class FMT>
+  inline std::ostream& operator<< (std::ostream& os, Digxel<NUM,FMT> const& d) { return os << string(d); }
   
   
   
