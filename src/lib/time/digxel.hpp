@@ -35,21 +35,23 @@
  ** \par properties of a "Digxel"
  ** 
  ** Semantically, it's a number or number component. It holds an internal numeric representation
- ** and is implicitly convertible both to integrals and floating point numbers. This implicit
- ** conversion is a compromise to support generic processing.
+ ** and is implicitly convertible back to the underlying numeric type (usually int or double).
  ** 
  ** But at the same time, a Digxel has a definite textual format and the ability to present
  ** its numeric value formatted accordingly. To this end, the contract \em requires that
  ** numeric data pushed to the Digxel be kept within such limits to prevent exceeding the
  ** embedded formatting buffer. There is an assertion in debug mode, and a range check,
- ** but the result will be just truncated, so this is clearly the caller's responsibility.
- ** Digxel might be considered an implementation support class, and performance is important
- ** to some limited degree; especially, formatted values will be cached.
+ ** but the result will be just truncated, so passing only sane values is clearly the
+ ** caller's responsibility. Digxel might be considered an implementation support class,
+ ** and performance is important to some limited degree;
+ ** especially, formatted values will be \em cached.
  ** 
- ** To support in-place modification, the digxel stores a mutation signal (functor) and exposes
- ** a special \c mutate(newVal) function, which invokes this stored functor, if defined. Usually
- ** this should invoke some internal recalculations, resulting in a new value being pushed to
- ** the Digxel for display.
+ ** To support in-place modification, the digxel stores a mutation signal (functor). This
+ ** functor will be invoked, whenever a new value gets assigned. The actual functor is free
+ ** to cause side effects; the value returned from this functor will be the new value to set.
+ ** If not configured, the default implementation just accepts the given value unaltered. Usually
+ ** this mutation functor should invoke some internal recalculations, maybe resulting in a new
+ ** value being pushed to the Digxel for display.
  ** 
  ** \par configuration
  ** the Digxel template can be configured to some degree to adjust the stored numeric data
@@ -69,15 +71,14 @@
 #include <boost/operators.hpp>
 #include <boost/lexical_cast.hpp>
 #include <tr1/functional>
-#include <cstdlib>  ///////////TODO
-#include <cmath>
 #include <string>
+#include <cmath>
+
+using std::string;
 
 
 namespace lib {
 namespace time {
-  
-  using std::string;
   
   namespace digxel {
     
@@ -86,27 +87,13 @@ namespace time {
     using boost::lexical_cast;
     
     typedef const char* CBuf;
-
-    
-    template<typename NUM>
-    struct ValTrait;
-    
-    template<>
-    struct ValTrait<int>
-      {
-        static int    asInt    (int val) { return val; }
-        static double asDouble (int val) { return val; }
-      };
-    
-    template<>
-    struct ValTrait<double>
-      {
-        static int    asInt    (double val) { return std::floor(0.5+val); }  ///< in accordance with Lumiera's time handling RfC
-        static double asDouble (double val) { return val; }
-      };
     
     
-    
+    /**
+     * Default / base implementation for Digxel formatting.
+     * This formatter holds an inline buffer of limited size,
+     * receiving and caching the textual representation
+     */
     template<typename NUM, size_t len>
     class PrintfFormatter
       {
@@ -124,7 +111,7 @@ namespace time {
           }
         
         void clear() { printbuffer_[0] = '\0'; }
-        bool empty() { return ! bool(*printbuffer_); }
+        bool empty() { return '\0' == *printbuffer_; }
         
         size_t
         maxlen()  const
@@ -147,6 +134,11 @@ namespace time {
           }
       };
     
+    
+    /** 
+     * default configured Formatter implementations
+     * for some of the basic numeric types 
+     */
     template<typename NUM>
     struct Formatter;
     
@@ -154,8 +146,7 @@ namespace time {
     struct Formatter<int>
       : PrintfFormatter<int, 6>
       {
-        Formatter() : PrintfFormatter<int,6>("%5d") { }
-        
+        Formatter() : PrintfFormatter<int,6>("%3d") { }
       };
     
     template<>
@@ -163,25 +154,46 @@ namespace time {
       : PrintfFormatter<double, 7>
       {
         Formatter() : PrintfFormatter<double,7>("%06.3f") { }
-        
       };
     
+    /* == other specialised Formatters == */
+    struct SexaFormatter
+      : PrintfFormatter<int, 4>
+      {
+        SexaFormatter() : PrintfFormatter<int,4>("%02d") { }
+      };
+    
+    struct HexaFormatter
+      : PrintfFormatter<uint, 2>
+      {
+        HexaFormatter() : PrintfFormatter<uint,2>("%02X") { }
+      };
+    
+    
   } //(End) digxel configuration namespace
+  
+  
+  
   
   
   /**
    * A number element for building structured numeric displays.
    * The purpose is to represent parts of a numeric format, like
-   * e.g. the sexagesimal "digits" of a timecode display. Digxel
+   * e.g. the sexagesimal "digits" of a timecode display. A Digxel
    * - is customised by template parameters to a specific number format
-   * - requires that any number set must not overflow the format buffer
+   * - requires that any given number must not overflow the format buffer
    * - can receive new numbers by assignment
+   * - stores and these given value numerically
    * - will then format these numbers and cache the formatted representation
-   * - can store and invoke a mutation functor
-   *  
+   * - can store and invoke a mutation functor to pre-process values on setting
+   * 
    * @note comparisons are assumed to be not performance relevant
+   * @param NUM numeric type to be used for the value
+   * @param FMT a formatter and buffer holder type
+   * @see digxel::Formatter default printf based formatter
    * @see lib::time::TCode
-   * @todo WIP-WIP-WIP
+   * @see Digxel_test
+   * 
    */
     template< typename NUM
             , class FMT  = digxel::Formatter<NUM>
@@ -208,7 +220,7 @@ namespace time {
       
       Digxel ()
         : buffer_()
-        , value_()
+        , value_ ()
         , mutator(use_newValue_as_is)
         { }
       
@@ -218,6 +230,7 @@ namespace time {
       operator string() const { return show(); }
       
       size_t maxlen()   const { return buffer_.maxlen(); }
+      
       
       digxel::CBuf
       show()  const
@@ -229,7 +242,7 @@ namespace time {
       void
       operator= (NUM n)
         {
-          NUM changedValue = mutator(n); 
+          NUM changedValue = mutator(n);
           this->setValueRaw (changedValue);
         }
       
@@ -248,12 +261,13 @@ namespace time {
       //---Supporting-totally_ordered---------
       bool operator<  (Digxel const& o)  const { return value_ <  NUM(o); }
       bool operator== (Digxel const& o)  const { return value_ == NUM(o); }
-//      bool operator== (NUM n)            const { return value_ == n ;     }
-//      bool operator<  (NUM n)            const { return value_ <  n ;     }
-//      bool operator>  (NUM n)            const { return value_ >  n ;     }
-      
     };
   
+  
+  
+  /* == predefined Digxel configurations == */
+  typedef Digxel< int, digxel::SexaFormatter> SexaDigit;  ///< for displaying time components (sexagesimal)
+  typedef Digxel<uint, digxel::HexaFormatter> HexaDigit;  ///< for displaying a hex byte
   
   
 }} // lib::time

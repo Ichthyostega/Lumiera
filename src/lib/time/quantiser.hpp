@@ -32,12 +32,36 @@
 //#include <boost/operators.hpp>
 #include <vector>
 #include <string>
+#include <cmath>
 
 
 namespace lib {
 namespace time {
   
   LUMIERA_ERROR_DECLARE (UNKNOWN_GRID); ///< referring to an undefined grid or scale in value quantisation
+  
+  
+  namespace { // stashed here for later
+    
+    template<typename NUM>
+    struct ValTrait;
+    
+    template<>
+    struct ValTrait<int>
+      {
+        static int    asInt    (int val) { return val; }
+        static double asDouble (int val) { return val; }
+      };
+    
+    template<>
+    struct ValTrait<double>
+      {
+        static int    asInt    (double val) { return std::floor(0.5+val); }  ///< in accordance with Lumiera's time handling RfC
+        static double asDouble (double val) { return val; }
+      };
+    
+  }
+  
   
   /**
    * Facility to create grid-aligned time values.

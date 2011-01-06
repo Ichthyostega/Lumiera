@@ -30,6 +30,7 @@
 #include <iostream>
 #include <cstdlib>
 
+using lumiera::error::LUMIERA_ERROR_ASSERTION;
 using util::isSameObject;
 using std::rand;
 using std::cout;
@@ -247,7 +248,7 @@ namespace test{
           string formatted;
 #if false ///////////////////////////////////////////////////////////////////////////////////////////////TICKET #537 : restore throwing ASSERT
           VERIFY_ERROR (ASSERTION, formatted = digi.show() ); // should trigger assertion
-          formatted = digi.show();                            // second time doesn't reformat                
+          formatted = digi.show();                            // second time doesn't reformat
 #endif    ///////////////////////////////////////////////////////////////////////////////////////////////TICKET #537 : restore throwing ASSERT
           
           CHECK (formatted.length() <= digi.maxlen());
