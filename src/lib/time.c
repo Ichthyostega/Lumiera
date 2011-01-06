@@ -23,6 +23,10 @@
 #include "lib/time.h"
 #include "lib/tmpbuf.h"
 
+#include <math.h>
+#include <limits.h>
+
+
 /* GAVL_TIME_SCALE is the correct factor or dividend when using gavl_time_t for
  * units of whole seconds from gavl_time_t.  Since we want to use milliseconds,
  * we need to multiply or divide by 1000 to get correct results. */
@@ -56,6 +60,46 @@ lumiera_tmpbuf_print_time (gavl_time_t time)
   ENSURE(buffer != NULL);
   return buffer;
 }
+
+
+static double
+calculate_quantisation (gavl_time_t time, double grid, gavl_time_t origin)
+{
+  double val = time;
+  val -= origin;
+  val /= grid;
+  return floor (val);
+}
+
+static double
+clip_to_64bit (double val)
+{
+  if (val > LLONG_MAX)
+    val = LLONG_MAX;
+  else
+  if (val < LLONG_MIN)
+    val = LLONG_MIN;
+  
+  return val;
+}
+
+
+int64_t
+lumiera_quantise_frames (gavl_time_t time, double grid, gavl_time_t origin)
+{
+  double gridNr = calculate_quantisation (time, grid, origin);
+  gridNr = clip_to_64bit (gridNr);
+  return (int64_t) gridNr;
+}
+
+gavl_time_t
+lumiera_quantise_time (gavl_time_t time, double grid, gavl_time_t origin)
+{
+  double count = calculate_quantisation (time, grid, origin);
+  double alignedTime = clip_to_64bit (count * grid);
+  return (gavl_time_t) alignedTime;
+}
+
 
 gavl_time_t
 lumiera_build_time(long millis, uint secs, uint mins, uint hours)

@@ -4121,11 +4121,11 @@ Besides, they provide an __inward interface__ for the [[ProcNode]]s, enabling th
 
 </pre>
 </div>
-<div title="ProcLayer and Engine" modifier="Ichthyostega" modified="201010270249" created="200706190056" tags="overview" changecount="84">
+<div title="ProcLayer and Engine" modifier="Ichthyostega" modified="201101060814" created="200706190056" tags="overview" changecount="85">
 <pre>The Render Engine is the part of the application doing the actual video calculations. Utilising system level services and retrieving raw audio and video data through [[Lumiera's Backend|backend.html]], its operations are guided by the objects and parameters edited by the user in [[the session|Session]]. The middle layer of the Lumiera architecture, known as the Proc-Layer, spans the area between these two exteremes, providing the the (abstract) edit operations available to the user, the representation of [[&quot;editable things&quot;|MObjects]] and the translation of those into structures and facilities allowing to [[drive the rendering|Rendering]].
 
 !About this wiki page
-|background-color:#E3F3F1;width:96ex;padding:2ex; This TiddlyWiki is the central location for design, planning and documentation of the Lumiera Proc-Layer. Some parts are used as //extended brain// &amp;mdash; collecting ideas, considerations and conclusions &amp;mdash; while other tiddlers contain the decisions and document the planned or implemented facilities. The intention is to move over the more mature parts into the emerging technical documentation section on the [[Lumiera website|http://www.lumiera.org]] eventually. &lt;br/&gt;&lt;br/&gt;Besides cross-references, content is largely organised through [[Tags|TabTags]], most notably &lt;br/&gt;&lt;&lt;tag overview&gt;&gt; &amp;middot; &lt;&lt;tag def&gt;&gt; &amp;middot; &lt;&lt;tag decision&gt;&gt; &amp;middot; &lt;&lt;tag Concepts&gt;&gt; &lt;br/&gt; &lt;&lt;tag Model&gt;&gt; &amp;middot; &lt;&lt;tag SessionLogic&gt;&gt; &amp;middot; &lt;&lt;tag GuiIntegration&gt;&gt; &amp;middot; &lt;&lt;tag Builder&gt;&gt; &amp;middot; &lt;&lt;tag Rendering&gt;&gt; &amp;middot; &lt;&lt;tag Player&gt;&gt; &amp;middot; &lt;&lt;tag Rules&gt;&gt; |
+|background-color:#E3F3F1;width:96ex;padding:2ex; This TiddlyWiki is the central location for design, planning and documentation of the Lumiera Proc-Layer. Some parts are used as //extended brain// &amp;mdash; collecting ideas, considerations and conclusions &amp;mdash; while other tiddlers contain the decisions and document the planned or implemented facilities. The intention is to move over the more mature parts into the emerging technical documentation section on the [[Lumiera website|http://www.lumiera.org]] eventually. &lt;br/&gt;&lt;br/&gt;Besides cross-references, content is largely organised through [[Tags|TabTags]], most notably &lt;br/&gt;&lt;&lt;tag overview&gt;&gt; &amp;middot; &lt;&lt;tag def&gt;&gt; &amp;middot; &lt;&lt;tag decision&gt;&gt; &amp;middot; &lt;&lt;tag Concepts&gt;&gt; &lt;br/&gt; &lt;&lt;tag Model&gt;&gt; &amp;middot; &lt;&lt;tag SessionLogic&gt;&gt; &amp;middot; &lt;&lt;tag GuiIntegration&gt;&gt; &amp;middot; &lt;&lt;tag Builder&gt;&gt; &amp;middot; &lt;&lt;tag Rendering&gt;&gt; &amp;middot; &lt;&lt;tag Player&gt;&gt; &amp;middot; &lt;&lt;tag Rules&gt;&gt; &amp;middot; &lt;&lt;tag Types&gt;&gt; |
 
 !~Proc-Layer Summary
 When editing, the user operates several kinds of //things,// organized as [[assets|Asset]] in the AssetManager, like media, clips, effects, codecs, configuration templates. Within the context of the [[Project or Session|Session]], we can use these as &amp;raquo;[[Media Objects|MObjects]]&amp;laquo; &amp;mdash; especially, we can [[place|Placement]] them in various kinds within the session and relative to one another.
@@ -4190,6 +4190,19 @@ Viewed as a micro program, the processing patterns are ''weak typed'' &amp;mdash
 </div>
 <div title="Processors" modifier="Ichthyostega" created="200706220412" tags="def" changecount="1">
 <pre>a given Render Engine configuration is a list of Processors. Each Processor in turn contains a Graph of ProcNode.s to do the acutal data processing. In order to cary out any calculations, the Processor needs to be called with a StateProxy containing the state information for this RenderProcess
+</pre>
+</div>
+<div title="QuantiserImpl" modifier="Ichthyostega" modified="201101061229" created="201101061212" tags="impl spec" changecount="5">
+<pre>The Quantiser implementation works by determining the grid interval containing a given raw time.
+
+!frame quantisation convention
+Within Lumiera, there is a fixed convention how these frame intervals are to be defined (&amp;rArr; time handling RfC)
+[img[Lumiera's frame quantisation convention|draw/FramePositions1.png]]
+
+!range limitation problems
+because times are represented as 64bit integers, the time points addressable within a given scale grid can be limited, compared with time points addressable through raw (internal) time values. As an extreme example, consider a time scale with origin at Time::MIN -- such a scale is unable to represent any value above zero, because the resulting coordinates would exceed the range of the 64bit integer.
+
+To avoid problems with larger intermediate values, the actual calculations are performed with doubles, which are clipped to the allowed value range prior to casting back to the integral data type. In all practically relevant cases, there is no danger of imprecisions or rounding errors, because the quantisation includes a floor operation. (Hypothetically, an imprecision could arise through extinction, when calculating the offset from the origin; but in practice this is irrelevant, assumed that the conversion 64bit integer to double yields reproducible double values)
 </pre>
 </div>
 <div title="Query" modifier="Ichthyostega" modified="201006190049" created="200910171621" tags="Rules spec draft discuss" changecount="17">
@@ -4689,9 +4702,10 @@ Later on we expect a distinct __query subsystem__ to emerge, presumably embeddin
 <div title="STypeManager" modifier="Ichthyostega" created="200809220230" changecount="1">
 <pre>A facility allowing the Proc-Layer to work with abstracted [[media stream types|StreamType]], linking (abstract or opaque) [[type tags|StreamTypeDescriptor]] to an [[library|MediaImplLib]], which provides functionality for acutally dealing with data of this media stream type. Thus, the stream type manager is a kind of registry of all the external libraries which can be bridged and accessed by Lumiera (for working with media data, that is). The most basic set of libraries is instelled here automatically at application start, most notably the [[GAVL]] library for working with uncompressed video and audio data. //Later on, when plugins will introduce further external libraries, these need to be registered here too.//</pre>
 </div>
-<div title="ScaleGrid" modifier="Ichthyostega" created="201012290325" tags="def" changecount="1">
+<div title="ScaleGrid" modifier="Ichthyostega" modified="201101061209" created="201012290325" tags="def" changecount="2">
 <pre>A scale grid controls the way of measuring and aligining a quantity the application has to deal with. The most prominent example is the way to handle time in fixed atomic chunks (''frames'') addressed through a fixed format (''timecode''): while internally the application uses time values of sufficiently fine grained resolution, the acutally visible timing coordinates of objects within the session are ''quantised'' to some predefined and fixed time grid.
-</pre>
+
+&amp;rarr; QuantiserImpl</pre>
 </div>
 <div title="ScopeLocator" modifier="Ichthyostega" modified="200911202035" created="200911192145" tags="def SessionLogic" changecount="10">
 <pre>A link to relate a compound of [[nested placement scopes|PlacementScope]] to the //current// session and the //current//&amp;nbsp; [[focus for querying|QueryFocus]] and exploring the structure. ScopeLocator is a singleton service, allowing to ''explore'' a [[Placement]] as a scope, i.e. discover any other placements within this scope, and allowing to locate the position of this scope by navigating up the ScopePath finally to reach the root scope of the HighLevelModel.
@@ -6561,7 +6575,7 @@ Thus no server and no network connection is needed. Simply open the file in your
  * see [[Homepage|http://tiddlywiki.com]], [[Wiki-Markup|http://tiddlywiki.org/wiki/TiddlyWiki_Markup]]
 </pre>
 </div>
-<div title="TimeQuant" modifier="Ichthyostega" modified="201101050143" created="201012181753" tags="Concepts Player spec discuss draft" changecount="47">
+<div title="TimeQuant" modifier="Ichthyostega" modified="201101061209" created="201012181753" tags="Concepts Player spec discuss draft" changecount="48">
 <pre>The term &amp;raquo;Time&amp;laquo; spans a variety of vastly different entities. Within a NLE we get to deal with various //flavours of time values.//
 ;continuous time
 :without any additional assumptions, ''points in time'' can be specified with arbitrary precision.
@@ -6619,6 +6633,8 @@ For Lumiera, the static typing approach is of limited value -- it excels when va
 
 At the level of individual timecode formats, we're lacking a common denominator; thus it is preferrable to work with different concrete timecode classes through //generic programming.// This way, each timecode format can expose operations specific only to the given format. Especially, different timecode formats expose different //component fields,// modelled by the generic ''Digxel'' concept. There is a common baseclass ~TCode though, which can be used for //type erasure.//
 &amp;rarr; more on [[usage situations|TimeUsage]]
+&amp;rarr; Quantiser [[implementation details|QuantiserImpl]]
+
 </pre>
 </div>
 <div title="TimeUsage" modifier="Ichthyostega" modified="201012260235" created="201012230204" tags="design discuss" changecount="15">

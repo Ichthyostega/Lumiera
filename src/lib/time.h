@@ -35,6 +35,30 @@ char*
 lumiera_tmpbuf_print_time (gavl_time_t time);
 
 /**
+ * Quantise the given time into a fixed grid, relative to the origin.
+ * The time grid used for quantisation is comprised of equally spaced intervals,
+ * rooted at the given origin. The interval starting with the origin is numbered
+ * as zero. Each interval includes its lower bound, but excludes its upper bound.
+ * @param grid spacing of the grid intervals, measured in GAVL_TIME_SCALE
+ * @return number of the grid interval containing the given time.
+ * @warning the resulting value is limited such as to fit into a 64bit long 
+ */
+int64_t
+lumiera_quantise_frames (gavl_time_t time, double grid, gavl_time_t origin);
+
+/**
+ * Similar to #lumiera_quantise_frames, but returns a grid aligned \em time value 
+ * @return time of start of the grid interval containing the given time, 
+ *         but measured relative to the origin
+ * @warning because the resulting value needs to be limited to fit into a 64bit long,
+ *         the addressable time range can be considerably reduced. For example, if
+ *         origin = LLONG_MIN, then all original time values above zero will be
+ *         clipped, because the result, relative to origin, needs to be <= LLONG_MAX 
+ */
+gavl_time_t
+lumiera_quantise_time (gavl_time_t time, double grid, gavl_time_t origin);
+
+/**
  * Builds a time value by summing up the given components.
  */
 gavl_time_t
