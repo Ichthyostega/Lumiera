@@ -54,7 +54,7 @@ lumiera_tmpbuf_print_time (gavl_time_t time)
   time /= 60;
   hours = time;
   
-  char *buffer = lumiera_tmpbuf_snprintf(64, "%s%02d:%02d:%02d.%03d",
+  char *buffer = lumiera_tmpbuf_snprintf(64, "%s%01d:%02d:%02d.%03d",
     negative ? "-" : "", hours, minutes, seconds, milliseconds);
     
   ENSURE(buffer != NULL);

@@ -23,6 +23,7 @@
 
 #include "lib/test/run.hpp"
 #include "lib/time/timevalue.hpp"
+#include "lib/time/display.hpp"
 #include "lib/util.hpp"
 
 #include <boost/lexical_cast.hpp>
@@ -68,6 +69,7 @@ namespace test{
           
           checkBasicTimeValues (ref);
           checkMutableTime (ref);
+          checkTimeConveniance (ref);
           createOffsets (ref);
           buildDuration (ref);
           buildTimeSpan (ref);
@@ -145,6 +147,48 @@ namespace test{
         }
       
       
+      /** @test additional convenience shortcuts supported
+       *        especially by the canonical Time values.
+       */
+      void
+      checkTimeConveniance (TimeValue org)
+        {
+          Time o1(org);
+          TimeVar v(org);
+          Time o2(v);
+          CHECK (o1 == o2);
+          CHECK (o1 == org);
+          
+          // integer interpreted as second
+          Time t1(1);
+          CHECK (t1 == TimeValue(GAVL_TIME_SCALE));
+          
+          // create from fractional seconds
+          FSecs halve(1,2);
+          CHECK (0.5 == boost::rational_cast<double> (halve));
+          Time th(halve);
+          CHECK (th == TimeValue(GAVL_TIME_SCALE/2));
+          
+          Time tx1(500,0);
+          CHECK (tx1 == th);
+          Time tx2(1,2);
+          CHECK (tx2 == TimeValue(2.001*GAVL_TIME_SCALE));
+          Time tx3(1,1,1,1);
+          CHECK (tx3 == TimeValue(GAVL_TIME_SCALE*(0.001 + 1 + 60 + 60*60)));
+          
+          CHECK ("1:01:01.001" == string(tx3));
+          
+          // create time variable on the fly....
+          CHECK (th+th == t1);
+          CHECK (t1-th == th);
+          CHECK (((t1-th)*=2) == t1);
+          
+          // that was indeed a temporary and didn't affect the originals
+          CHECK (t1 == TimeValue(GAVL_TIME_SCALE));
+          CHECK (th == TimeValue(GAVL_TIME_SCALE/2));
+        }
+      
+      
       void
       createOffsets (TimeValue org)
         {
@@ -215,8 +259,8 @@ namespace test{
           Time endpoint = interval.getEnd();
           CHECK (Offset(interval,endpoint) == Offset(org,five).abs());
           
-          cout << "Interval: " << string(interval) 
-               << " Endpoint: " << string(endpoint) << endl; 
+          cout << "Interval: " << interval 
+               << " Endpoint: " << endpoint << endl; 
         }
     };
   

@@ -239,6 +239,10 @@ namespace time {
       
       /** @internal diagnostics */
       operator std::string ()  const;
+      
+      /** convenience start for time calculations */
+      TimeVar operator+ (TimeValue const& tval)  const { return TimeVar(*this) + tval; }
+      TimeVar operator- (TimeValue const& tval)  const { return TimeVar(*this) - tval; }
     };
   
   
