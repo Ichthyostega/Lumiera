@@ -60,7 +60,7 @@ main (int, char**)
     
     
     int64_t muks = std::numeric_limits<int64_t>::max();
-    muks -= 5;
+    muks /= 30;
     double murks(muks);
     
     cout << format("%f // %f || %g \n") % muks % murks % std::numeric_limits<double>::epsilon();

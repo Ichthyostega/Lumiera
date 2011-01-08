@@ -71,9 +71,13 @@ namespace time {
         }
       
     public:
+      /** explicit limit of allowed time range */
+      static gavl_time_t limited (gavl_time_t raw);
+      
+      
       explicit 
       TimeValue (gavl_time_t val=0)
-        : t_(val)
+        : t_(limited (val))
         { }
       
       /** copy initialisation allowed */
@@ -83,6 +87,7 @@ namespace time {
       
       /** @internal to pass Time values to C functions */
       friend gavl_time_t _raw (TimeValue const& time) { return time.t_; }
+      static TimeValue buildRaw_(gavl_time_t);
       
       // Supporting totally_ordered
       friend bool operator<  (TimeValue const& t1, TimeValue const& t2)  { return t1.t_ <  t2.t_; }
@@ -304,6 +309,26 @@ namespace time {
           return (startPoint + dur_);
         }
     };
+  
+  
+  
+  
+  /* == implementations == */
+  
+  /** @internal applies a limiter on the provided
+   * raw time value to keep it within the arbitrary
+   * boundaries defined by (Time::MAX, Time::MIN).
+   * While Time entities are \c not a "safeInt"
+   * implementation, we limit new values and
+   * establish this safety margin to prevent
+   * wrap-around during time quantisation */
+  inline gavl_time_t
+  TimeValue::limited (gavl_time_t raw)
+  {
+    return raw > Time::MAX? Time::MAX.t_ 
+         : raw < Time::MIN? Time::MIN.t_ 
+         :                  raw;
+  }
   
   
 }} // lib::time

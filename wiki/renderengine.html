@@ -4192,7 +4192,7 @@ Viewed as a micro program, the processing patterns are ''weak typed'' &amp;mdash
 <pre>a given Render Engine configuration is a list of Processors. Each Processor in turn contains a Graph of ProcNode.s to do the acutal data processing. In order to cary out any calculations, the Processor needs to be called with a StateProxy containing the state information for this RenderProcess
 </pre>
 </div>
-<div title="QuantiserImpl" modifier="Ichthyostega" modified="201101080226" created="201101061212" tags="impl spec" changecount="17">
+<div title="QuantiserImpl" modifier="Ichthyostega" modified="201101081815" created="201101061212" tags="impl spec" changecount="21">
 <pre>The Quantiser implementation works by determining the grid interval containing a given raw time.
 These grid intervals are denoted by ordinal numbers (frame numbers), with interval #0 starting at the grid's origin and negative ordinals allowed.
 
@@ -4241,6 +4241,10 @@ There is an existing [[SafeInt class by David LeBlanc|http://safeint.codeplex.co
 ;ignore the problem
 :again, because of the huge time range, the problem could generally be deemed irrelevant
 :we could apply a limiter to enforce a reduced time range just in the quantisation and evaluation of timecodes
+
+A combination of the last approaches seems to be most appropriate here:
+Limit the officially allowed time range and perform simple checks when quantising a time value and when applying a scale factor.
+We limit {{{Time::MAX}}} by factor 1/30 and define the minimum //symmetrically to this.// This still leaves us with ''±9700 years allowed timerange''.
 </pre>
 </div>
 <div title="Query" modifier="Ichthyostega" modified="201006190049" created="200910171621" tags="Rules spec draft discuss" changecount="17">

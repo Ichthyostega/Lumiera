@@ -50,8 +50,9 @@ namespace time {
   }
   
   
-  const Time Time::MAX ( TimeValue (+std::numeric_limits<gavl_time_t>::max()) );
-  const Time Time::MIN ( TimeValue (-std::numeric_limits<gavl_time_t>::max()) );
+  /** @note the allowed time range is explicitly limited to help overflow protection */
+  const Time Time::MAX ( TimeValue::buildRaw_(+std::numeric_limits<gavl_time_t>::max() / 30) );
+  const Time Time::MIN ( TimeValue::buildRaw_(-_raw(Time::MAX)                             ) );
   
   
   /** convenience constructor to build an
@@ -97,6 +98,15 @@ namespace time {
   TimeVar::operator string()  const
   {
     return string (lumiera_tmpbuf_print_time (t_));
+  }
+  
+  
+  /** @internal backdoor to sneak in a raw time value
+   *   bypassing any normalisation and limiting */
+  TimeValue
+  TimeValue::buildRaw_ (gavl_time_t raw)
+  {
+    return reinterpret_cast<TimeValue const&> (raw);
   }
   
   
