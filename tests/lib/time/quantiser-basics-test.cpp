@@ -71,6 +71,8 @@ namespace test{
       run (Arg) 
         {
           checkSimpleQuantisation ();
+          coverQuantisationStandardCases();
+          coverQuantisationCornerCases();
         }
       
       
@@ -89,6 +91,72 @@ namespace test{
           Time quantTime (fixQ.gridAlign (rawTime));
           
           CHECK (Time(frames*F25) == quantTime);
+        }
+      
+      
+      /** Test Quantiser
+       *  allowing to use plain numbers.
+       *  1 Frame == 3 micro ticks */
+      struct TestQuant
+        : FixedFrameQuantiser
+        {
+          TestQuant (int origin=0)
+            : FixedFrameQuantiser(FSecs(GAVL_TIME_SCALE,3), TimeValue(origin))
+            { }
+          
+          int
+          quant (int testPoint)
+            {
+              TimeVar quantised = this->gridAlign(TimeValue(testPoint));
+              return int(quantised);
+            }
+        };
+      
+      void
+      coverQuantisationStandardCases()
+        {
+          TestQuant q0;
+          TestQuant q1(1);
+          
+          CHECK ( 6 == q0.quant(7) );
+          CHECK ( 6 == q0.quant(6) );
+          CHECK ( 3 == q0.quant(5) );
+          CHECK ( 3 == q0.quant(4) );
+          CHECK ( 3 == q0.quant(3) );
+          CHECK ( 0 == q0.quant(2) );
+          CHECK ( 0 == q0.quant(1) );
+          CHECK ( 0 == q0.quant(0) );
+          CHECK (-3 == q0.quant(-1));
+          CHECK (-3 == q0.quant(-2));
+          CHECK (-3 == q0.quant(-3));
+          CHECK (-6 == q0.quant(-4));
+          
+          CHECK ( 6 == q1.quant(7) );
+          CHECK ( 3 == q1.quant(6) );
+          CHECK ( 3 == q1.quant(5) );
+          CHECK ( 3 == q1.quant(4) );
+          CHECK ( 0 == q1.quant(3) );
+          CHECK ( 0 == q1.quant(2) );
+          CHECK ( 0 == q1.quant(1) );
+          CHECK (-3 == q1.quant(0) );
+          CHECK (-3 == q1.quant(-1));
+          CHECK (-3 == q1.quant(-2));
+          CHECK (-6 == q1.quant(-3));
+          CHECK (-6 == q1.quant(-4));
+        }
+      
+      
+      void
+      coverQuantisationCornerCases()
+        {
+          FixedFrameQuantiser case1 (1, Time::MIN);
+          CHECK (Time(0) == case1.gridAlign(Time::MIN));
+          CHECK (Time(0) == case1.gridAlign(Time::MIN + TimeValue(1) ));
+          CHECK (Time(1) == case1.gridAlign(Time::MIN + Time(1)    ));
+          CHECK (Time::MAX - Time(1) >  case1.gridAlign( Time(-1)  ));
+          CHECK (Time::MAX - Time(1) <= case1.gridAlign( Time (0)  ));
+          CHECK (Time::MAX           >  case1.gridAlign( Time (0)  ));
+          CHECK (Time::MAX           == case1.gridAlign( Time(+1)  ));
         }
     };
   

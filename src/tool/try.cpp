@@ -16,27 +16,32 @@
 // 12/9  - tracking down a strange "warning: type qualifiers ignored on function return type"
 // 1/10  - can we determine at compile time the presence of a certain function (for duck-typing)?
 // 4/10  - pretty printing STL containers with python enabled GDB?
+// 1/11  - exploring numeric limits
 
 
 //#include <nobug.h>
-//#define LUMIERA_LOGGING_CXX
-//#include "include/logging.h"
-//#include "include/nobugcfg.h"
 
 
 #include <iostream>
 //#include <typeinfo>
 #include <string>
-#include <vector>
-#include <cstdlib>
-#include <cstdio>
+//#include <cstdlib>
+#include <limits>
+
+#include <boost/format.hpp>
 
 
+using boost::format;
 //using std::rand;
 using std::string;
 using std::cout;
 using std::endl;
 
+void
+checkDiv(int lhs, int rhs)
+  {
+    cout << format ("%f / %f = %f \n") % lhs % rhs % (lhs / rhs); 
+  }
 
 int 
 main (int, char**)
@@ -44,21 +49,26 @@ main (int, char**)
     
 //  NOBUG_INIT;
     
-    std::string str = "hullo wöld";
-    std::vector<int> vec (1000);
+    checkDiv (8,4);
+    checkDiv (9,4);
+    checkDiv (-8,4);
+    checkDiv (-9,4);
+    checkDiv (8,-4);
+    checkDiv (9,-4);
+    checkDiv (-8,-4);
+    checkDiv (-9,-4);
     
-    for (uint i = 0; i < vec.size(); ++i)
-        vec[i] = i;
     
-    cout << str <<  "\n.gulp.\n";
+    int64_t muks = std::numeric_limits<int64_t>::max();
+    muks -= 5;
+    double murks(muks);
     
-    // Note: when selecting the string or the vector in the Eclipse variables view
-    //       (or when issuing "print str" at the GDB prompt), the GDB python pretty-printer
-    //       should be activated. Requires an python enabled GDB (>6.8.50). Debian/Lenny isn't enough,
-    //       but compiling the GDB package from Debian/Squeeze (GDB-7.1) is straightforward.
-    //       Moreover, you need to check out and install the python pretty-printers and 
-    //       you need to activate them through your ~/.gdbinit
-    //       see http://sourceware.org/gdb/wiki/STLSupport
+    cout << format("%f // %f || %g \n") % muks % murks % std::numeric_limits<double>::epsilon();
+    
+    int64_t glucks = murks;
+    cout << glucks <<endl;
+    
+    cout << "\n.gulp.\n";
     
     return 0;
   }

@@ -65,10 +65,10 @@ lumiera_tmpbuf_print_time (gavl_time_t time)
 static double
 calculate_quantisation (gavl_time_t time, double grid, gavl_time_t origin)
 {
-  double val = time;
+  double val = time;    //////TODO this solution doesn't work due to precission loss!
   val -= origin;
   val /= grid;
-  return floor (val);
+  return floor (val);   //////TODO need a hand coded floor-function for integers
 }
 
 static double

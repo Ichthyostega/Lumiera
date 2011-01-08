@@ -4192,17 +4192,55 @@ Viewed as a micro program, the processing patterns are ''weak typed'' &amp;mdash
 <pre>a given Render Engine configuration is a list of Processors. Each Processor in turn contains a Graph of ProcNode.s to do the acutal data processing. In order to cary out any calculations, the Processor needs to be called with a StateProxy containing the state information for this RenderProcess
 </pre>
 </div>
-<div title="QuantiserImpl" modifier="Ichthyostega" modified="201101061229" created="201101061212" tags="impl spec" changecount="5">
+<div title="QuantiserImpl" modifier="Ichthyostega" modified="201101080226" created="201101061212" tags="impl spec" changecount="17">
 <pre>The Quantiser implementation works by determining the grid interval containing a given raw time.
+These grid intervals are denoted by ordinal numbers (frame numbers), with interval #0 starting at the grid's origin and negative ordinals allowed.
 
 !frame quantisation convention
-Within Lumiera, there is a fixed convention how these frame intervals are to be defined (&amp;rArr; time handling RfC)
+Within Lumiera, there is a fixed convention how these frame intervals are to be defined (&amp;rArr; [[time handling RfC|http://staging.lumiera.org/documentation/devel/rfc/TimeHandling.html]])
 [img[Lumiera's frame quantisation convention|draw/FramePositions1.png]]
+Especially, this convention is agnostic of the actual zero-point of the scale and allows direct length calculations and seamless sequences of intervals.
+The //nominal coordinate// of an interval is also the starting point -- for automation keys frames we'll utilise special provisions.
 
 !range limitation problems
-because times are represented as 64bit integers, the time points addressable within a given scale grid can be limited, compared with time points addressable through raw (internal) time values. As an extreme example, consider a time scale with origin at Time::MIN -- such a scale is unable to represent any value above zero, because the resulting coordinates would exceed the range of the 64bit integer.
+because times are represented as 64bit integers, the time points addressable within a given scale grid can be limited, compared with time points addressable through raw (internal) time values. As an extreme example, consider a time scale with origin at Time::MIN -- such a scale is unable to represent any of the original scale's value above zero, because the resulting coordinates would exceed the range of the 64bit integer. Did I mention that 64bit micro ticks can represent about 300000 years?
 
-To avoid problems with larger intermediate values, the actual calculations are performed with doubles, which are clipped to the allowed value range prior to casting back to the integral data type. In all practically relevant cases, there is no danger of imprecisions or rounding errors, because the quantisation includes a floor operation. (Hypothetically, an imprecision could arise through extinction, when calculating the offset from the origin; but in practice this is irrelevant, assumed that the conversion 64bit integer to double yields reproducible double values)
+Now the actual problem is that using 64bit integers already means pushing to the limit. There is no easy escape hatch, like using a larger scale data type for intermediaries -- it //is// the largest built-in type. Basically we're touching the topic of ''safe integer arithmetics'' here, which is frequently discussed as a security concern. The situation is as follows:
+* every programmer promises &quot;I'll do the checks when necessary&quot; -- just to forget doing so in practice then.
+* for C programming, the situation is hopeless. Calling functions for simple arithmetics is outright impractical -- that won't happen volountarily
+* it is possible to build a ~SafeInt datatype in C++ though. While theoretically fine, in practice this also creates a host of problems:
+** actually detecting all cases and coding the checks is surprisingly hard and intricate.
+** the attempt to create a smooth integration with the built-in data types drives us right into one of the most problematic areas of C++
+** the performance hit is considerable (factor 2 - 4)  -- again luring people into &quot;being clever&quot;.
+
+There is an existing [[SafeInt class by David LeBlanc|http://safeint.codeplex.com/]], provided by Microsoft through the ~CodePlex platform. It is part of the libraries shipped with ~VisualStudio and extensively used in Office 2010 and Windows, but also provided under a somewhat liberal license (you may use it but any derived work has to reproduce copyright and usage terms). Likely this situation also hindered the further [[development|http://thread.gmane.org/gmane.comp.lib.boost.devel/191010]] of a comparable library in boost (&amp;rarr; [[vault|https://svn.boost.org/trac/boost/wiki/LibrariesUnderConstruction#Boost.SafeInt]]).
+
+!!!solution possibilities
+;abort operation
+:an incriminating calculation need to be detected somehow (see below).
+:the whole usage context gets aborted by excaption in case of an alarm, similar to an out of memory...
+:thus immediate corruption is avoided, but the user has to realise and avoid the general situation.
+;limit values
+:provide a limiter to kick in after detecting an alarm (see below).
+:time values will just stick to the maximum/minimum boundary value....
+:the rest of the application needs to be prepared for timing calculations to return degenerate results
+;~SafeInt
+:base ~TimeValue on a ~SafeInt&lt;gavl_time_t&gt;
+:this way we could easily guarantee for detecting any //situation.//
+:of course the price is the performance hit on all timing calculations.
+:Moreover -- if we want to limit values instead of raising an exception, we'd need to write our own ~SaveInt.
+;check some operations
+:time values are mostly immutable, thus it would likely be sufficient only to check some strategically important points
+:#parsing or de-serialising
+:#calculations in ~TimeVar
+:#quantisation
+:#build Time from framecount
+;limit time range
+:because the available time range is so huge, it wouldn't hurt to reduce it by one or two decimals
+:this way both the implementation of the checks could be simplified and the probability of an overflow reduced
+;ignore the problem
+:again, because of the huge time range, the problem could generally be deemed irrelevant
+:we could apply a limiter to enforce a reduced time range just in the quantisation and evaluation of timecodes
 </pre>
 </div>
 <div title="Query" modifier="Ichthyostega" modified="201006190049" created="200910171621" tags="Rules spec draft discuss" changecount="17">
