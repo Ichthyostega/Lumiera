@@ -27,6 +27,7 @@
 #include <string>
 //#include <cstdlib>
 #include <limits>
+#include <cmath>
 
 #include <boost/format.hpp>
 
@@ -37,10 +38,31 @@ using std::string;
 using std::cout;
 using std::endl;
 
+long
+floordiv (long num, long den)
+  {
+    if (0 < (num^den))
+      return num/den;
+    else
+      {
+        ldiv_t res = ldiv(num,den);
+        return (res.rem)? res.quot-1 
+                        : res.quot;
+      }
+  }
+
+long
+floordiv2 (long num, long den)
+  {
+    ldiv_t res = ldiv(num,den);
+    return (0 >= res.quot && res.rem)? res.quot-1
+                                     : res.quot;
+  }
+
 void
 checkDiv(int lhs, int rhs)
   {
-    cout << format ("%f / %f = %f \n") % lhs % rhs % (lhs / rhs); 
+    cout << format ("%f / %f = %f  \tfloor=%f  floordiv=%f \n") % lhs % rhs % (lhs / rhs) % floor(double(lhs)/rhs) % floordiv2(lhs,rhs); 
   }
 
 int 
@@ -57,6 +79,14 @@ main (int, char**)
     checkDiv (9,-4);
     checkDiv (-8,-4);
     checkDiv (-9,-4);
+
+    checkDiv (0,4);
+    checkDiv (0,-4);
+    checkDiv (1,4);
+    checkDiv (1,-4);
+    checkDiv (-1,4);
+    checkDiv (-1,-4);
+    
     
     
     int64_t muks = std::numeric_limits<int64_t>::max();

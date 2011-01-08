@@ -56,6 +56,27 @@ namespace util {
     return n1 < n2? N1(n2) : n1;
   }
   
+  /** floor function for integer arithmetics.
+   *  Unlike the built-in integer division, this function
+   *  always rounds towards the next \em smaller integer,
+   *  even for negative numbers.
+   * @warning floor on doubles performs way better
+   * @see UtilFloordiv_test
+   */
+  template<typename LI>
+  inline LI
+  floordiv (LI num, LI den)
+  {
+    if (0 < (num^den))
+      return num/den;
+    else
+      {
+        ldiv_t res = ldiv(num,den);
+        return (res.rem)? res.quot-1 
+                        : res.quot;
+      }
+  }
+  
   
   /** a family of util functions providing a "no value whatsoever" test.
       Works on strings and all STL containers, includes NULL test for pointers */
