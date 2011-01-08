@@ -138,6 +138,9 @@ namespace time {
       
       // Supporting multiplication with integral factor
       TimeVar& operator*= (int fact)           { t_ *= fact;  return *this; }
+      
+      // Supporting flip sign
+      TimeVar  operator-  ()         const     { return TimeVar(*this)*=-1; }
        
       // baseclass TimeValue is already totally_ordered 
     };

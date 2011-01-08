@@ -144,6 +144,11 @@ namespace test{
           gavl_time_t raw (var);
           CHECK (raw == org);
           CHECK (raw >  org - two);
+          
+          // unary minus will flip around origin
+          CHECK (zero == -var + var);
+          CHECK (zero != -var);
+          CHECK (var  == org);  // unaltered
         }
       
       
