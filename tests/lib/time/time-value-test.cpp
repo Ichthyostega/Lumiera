@@ -248,6 +248,13 @@ namespace test{
           CHECK (distance > zero);
           CHECK (distance == backwards.abs());
           
+          Duration len1(Time(23,4,5,6));
+          CHECK (len1 == Time(FSecs(23,1000)) + Time(4 + 5*60 + 6*3600));
+          
+          Duration len2(Time(-10)); // negative specs...
+          CHECK (len2 == Time(10));//
+          CHECK (len2 > zero);    //   will be taken absolute
+          
           Duration unit(50, FrameRate::PAL);
           CHECK (Time(2) == unit);              // duration of 50 frames at 25fps is... (guess what)
           
@@ -275,7 +282,7 @@ namespace test{
           TimeValue zero;
           TimeValue five(5);
           
-          TimeSpan interval (Time(org), Duration(Offset (org,five)));        /////////////TODO need more convenient constructors
+          TimeSpan interval (Time(org), Duration(Offset (org,five)));
           
           // the time span behaves like a time
           CHECK (org == interval);
@@ -285,11 +292,16 @@ namespace test{
           Duration theLength(interval);
           CHECK (theLength == Offset(org,five).abs());
           
-          Time endpoint = interval.getEnd();
-          CHECK (Offset(interval,endpoint) == Offset(org,five).abs());
+          Time endpoint = interval.end();
+          TimeSpan successor (endpoint, Duration(Time(2)));
           
-          cout << "Interval: " << interval 
-               << " Endpoint: " << endpoint << endl; 
+          CHECK (Offset(interval,endpoint) == Offset(org,five).abs());
+          CHECK (Offset(endpoint,successor.end()) == Duration(successor));
+          
+          cout <<   "Interval-1: " << interval 
+               << "  Interval-2: " << successor 
+               << "  End point: "  << successor.end()
+               << endl; 
         }
     };
   

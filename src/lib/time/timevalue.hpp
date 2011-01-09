@@ -261,6 +261,8 @@ namespace time {
   
   
   
+  class TimeSpan;
+  
   /**
    * Duration is the internal Lumiera time metric.
    * It is an absolute (positive) value, but can be
@@ -277,6 +279,12 @@ namespace time {
         : Offset(distance.abs())
         { }
       
+      explicit
+      Duration (Time const& timeSpec)
+        : Offset(Offset(timeSpec).abs())
+        { }
+      
+      Duration (TimeSpan const& interval);
       Duration (ulong count, FrameRate const& fps);
       
       static const Duration NIL;
@@ -307,13 +315,14 @@ namespace time {
         { }
                                                 ///////////TODO creating timespans needs to be more convenient....
       
-      operator Duration()  const 
+      Duration
+      duration()  const 
         {
           return dur_;
         }
       
       Time
-      getEnd()  const
+      end()  const
         {
           TimeVar startPoint (*this);
           return (startPoint + dur_);
@@ -380,6 +389,11 @@ namespace time {
          : raw < Time::MIN? Time::MIN.t_ 
          :                  raw;
   }
+  
+  inline
+  Duration::Duration (TimeSpan const& interval)
+    : Offset(interval.duration())
+    { }
   
   inline
   FrameRate::FrameRate (uint fps)
