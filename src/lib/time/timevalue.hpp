@@ -366,7 +366,7 @@ namespace time {
     inline NUM
     __ensure_nonzero (NUM n)
     {
-      if (!n)
+      if (n == 0)
         throw error::Logic ("Zero spaced grid not allowed"
                            , error::LUMIERA_ERROR_BOTTOM_VALUE);
       return n;
@@ -415,7 +415,7 @@ namespace time {
   {
     return boost::rational_cast<double> (*this);
   }
-
+  
   
   
   

@@ -107,6 +107,7 @@ namespace time {
       
     public:
       FixedFrameQuantiser (FrameRate const& frames_per_second, TimeValue referencePoint  =TimeValue(0));
+      FixedFrameQuantiser (Duration const& frame_duration,     TimeValue referencePoint  =TimeValue(0));
       
       
       TimeValue gridAlign (TimeValue const&);

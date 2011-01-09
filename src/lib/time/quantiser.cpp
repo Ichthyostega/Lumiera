@@ -40,15 +40,7 @@ namespace time {
   
   namespace { // implementation helpers...
     
-    template<typename NUM>
-    inline NUM
-    __ensure_notZero (NUM n)
-    {
-      if (!n)
-        throw error::Logic ("Impossible to quantise to an zero spaced grid"
-                           , error::LUMIERA_ERROR_BOTTOM_VALUE);
-      return n;
-    }
+    ///////////TODO superfluous??
     
   }//(End) implementation helpers
   
@@ -76,7 +68,12 @@ namespace time {
    *  each interval includes its lower bound and excludes its upper bound.*/
   FixedFrameQuantiser::FixedFrameQuantiser (FrameRate const& frames_per_second, TimeValue referencePoint)
     : origin_(referencePoint)
-    , raster_(frames_per_second.duration())
+    , raster_(__ensure_nonzero(frames_per_second.duration()))
+    { }
+  
+  FixedFrameQuantiser::FixedFrameQuantiser (Duration const& frame_duration,     TimeValue referencePoint)
+    : origin_(referencePoint)
+    , raster_(__ensure_nonzero(frame_duration))
     { }
   
   
