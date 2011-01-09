@@ -70,10 +70,10 @@ namespace util {
     if (0 < (num^den))
       return num/den;
     else
-      {
+      { // truncate similar to floor()
         ldiv_t res = ldiv(num,den);
-        return (res.rem)? res.quot-1 
-                        : res.quot;
+        return (res.rem)? res.quot-1   // negative results truncated towards next smaller int
+                        : res.quot;   //..unless the division result not truncated at all
       }
   }
   

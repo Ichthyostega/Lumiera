@@ -101,7 +101,7 @@ namespace test{
         : FixedFrameQuantiser
         {
           TestQuant (int origin=0)
-            : FixedFrameQuantiser(FSecs(GAVL_TIME_SCALE,3), TimeValue(origin))
+            : FixedFrameQuantiser( FrameRate(3,GAVL_TIME_SCALE), TimeValue(origin))
             { }
           
           int

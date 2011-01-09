@@ -24,6 +24,8 @@
 #ifndef LIB_TIME_TIMEVALUE_H
 #define LIB_TIME_TIMEVALUE_H
 
+#include "lib/error.hpp"
+
 #include <boost/operators.hpp>
 #include <boost/rational.hpp>
 #include <cstdlib>
@@ -37,6 +39,8 @@ extern "C" {
 
 namespace lib {
 namespace time {
+  
+  namespace error = lumiera::error;
   
   
   /**
@@ -199,7 +203,9 @@ namespace time {
   /** rational representation of fractional seconds
    * @warning do not mix up gavl_time_t and FSecs */
   typedef boost::rational<long> FSecs;
-
+  
+  class FrameRate;
+  
   /**
    * Lumiera's internal time value datatype.
    * This is a TimeValue, but now more specifically denoting
@@ -270,6 +276,10 @@ namespace time {
       Duration (Offset const& distance)
         : Offset(distance.abs())
         { }
+      
+      Duration (ulong count, FrameRate const& fps);
+      
+      static const Duration NIL;
     };
   
   
@@ -311,9 +321,48 @@ namespace time {
     };
   
   
+  /**
+   * Framerate specified as frames per second.
+   * Implemented as rational number.
+   */
+  class FrameRate
+    : public boost::rational<uint>
+    {
+      typedef boost::rational<uint> IFrac;
+      
+    public:
+      FrameRate (uint fps) ;
+      FrameRate (uint num, uint denom);
+      FrameRate (IFrac const& fractionalRate);
+      
+      // standard copy acceptable;
+      
+      static const FrameRate PAL;
+      static const FrameRate NTSC;
+      
+      /** duration of one frame */
+      Duration duration() const;
+    };
+  
+  
   
   
   /* == implementations == */
+    
+  namespace { // implementation helpers...
+    
+    template<typename NUM>
+    inline NUM
+    __ensure_nonzero (NUM n)
+    {
+      if (!n)
+        throw error::Logic ("Zero spaced grid not allowed"
+                           , error::LUMIERA_ERROR_BOTTOM_VALUE);
+      return n;
+    }
+  }//(End) implementation helpers
+  
+  
   
   /** @internal applies a limiter on the provided
    * raw time value to keep it within the arbitrary
@@ -330,6 +379,33 @@ namespace time {
          :                  raw;
   }
   
+  inline
+  FrameRate::FrameRate (uint fps)
+    : IFrac (__ensure_nonzero(fps))
+    { }
+  
+  inline
+  FrameRate::FrameRate (uint num, uint denom)
+    : IFrac (__ensure_nonzero(num), denom)
+    { }
+  
+  inline
+  FrameRate::FrameRate (IFrac const& fractionalRate)
+    : IFrac (__ensure_nonzero(fractionalRate))
+    { }
+  
+  
   
 }} // lib::time
+
+
+namespace util {
+    
+  inline bool
+  isnil (lib::time::Duration const& dur)
+  {
+    return 0 == dur;
+  }
+
+}
 #endif

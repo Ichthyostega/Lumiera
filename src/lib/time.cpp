@@ -21,12 +21,23 @@
 
 #include "lib/time.h"
 #include "lib/error.hpp"
+#include "lib/util.hpp"
+
 extern "C" {
 #include "lib/tmpbuf.h"
 }
 
 #include <limits.h>
 #include <math.h>
+
+using util::floordiv;
+using lib::time::FSecs;
+using lib::time::FrameRate;
+using boost::rational_cast;
+
+namespace error = lumiera::error;
+
+
 
 
 /* GAVL_TIME_SCALE is the correct factor or dividend when using gavl_time_t for
@@ -63,43 +74,48 @@ lumiera_tmpbuf_print_time (gavl_time_t time)
   return buffer;
 }
 
-
-static double
-calculate_quantisation (gavl_time_t time, double grid, gavl_time_t origin)
+gavl_time_t
+lumiera_rational_to_time (FSecs const& fractionalSeconds)
 {
-  double val = time;    //////TODO this solution doesn't work due to precission loss!
-  val -= origin;
-  val /= grid;
-  return floor (val);   //////TODO need a hand coded floor-function for integers
+  return rational_cast<gavl_time_t> (GAVL_TIME_SCALE * fractionalSeconds);
 }
 
-static double
-clip_to_64bit (double val)
+
+gavl_time_t
+lumiera_frame_duration (FrameRate const& fps)
 {
-  if (val > LLONG_MAX)
-    val = LLONG_MAX;
-  else
-  if (val < LLONG_MIN)
-    val = LLONG_MIN;
+  if (!fps)
+    throw error::Logic ("Impossible to quantise to an zero spaced frame grid"
+                       , error::LUMIERA_ERROR_BOTTOM_VALUE);
   
-  return val;
+  FSecs duration = rational_cast<FSecs> (1/fps);
+  return lumiera_rational_to_time (duration);
 }
 
 
-int64_t
-lumiera_quantise_frames (gavl_time_t time, double grid, gavl_time_t origin)
+namespace { // implementation helper
+  
+  inline long
+  calculate_quantisation (gavl_time_t time, gavl_time_t origin, gavl_time_t grid)
+  {
+    time -= origin;
+    return floordiv (time,grid);
+  }
+}
+
+
+long
+lumiera_quantise_frames (gavl_time_t time, gavl_time_t grid, gavl_time_t origin)
 {
-  double gridNr = calculate_quantisation (time, grid, origin);
-  gridNr = clip_to_64bit (gridNr);
-  return (int64_t) gridNr;
+  return calculate_quantisation (time, origin, grid);
 }
 
 gavl_time_t
-lumiera_quantise_time (gavl_time_t time, double grid, gavl_time_t origin)
+lumiera_quantise_time (gavl_time_t time, gavl_time_t grid, gavl_time_t origin)
 {
-  double count = calculate_quantisation (time, grid, origin);
-  double alignedTime = clip_to_64bit (count * grid);
-  return (gavl_time_t) alignedTime;
+  int64_t count = calculate_quantisation (time, origin, grid);
+  gavl_time_t alignedTime = count * grid;
+  return alignedTime;
 }
 
 

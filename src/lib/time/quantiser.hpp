@@ -102,11 +102,11 @@ namespace time {
   class FixedFrameQuantiser
     : public Quantiser
     {
-      Time   origin_;
-      double raster_;
+      Time     origin_;
+      Duration raster_;
       
     public:
-      FixedFrameQuantiser (FSecs frames_per_second, TimeValue referencePoint  =TimeValue(0));
+      FixedFrameQuantiser (FrameRate const& frames_per_second, TimeValue referencePoint  =TimeValue(0));
       
       
       TimeValue gridAlign (TimeValue const&);

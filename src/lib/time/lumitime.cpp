@@ -35,16 +35,6 @@ using std::string;
 namespace lib {
 namespace time {
   
-  namespace {
-    /** implementation detail: convert a rational number denoting fractionalSeconds
-     *  into the internal time scale used by GAVL and Lumiera internal time values.
-     */
-    inline gavl_time_t
-    rational2time (FSecs const& fractionalSeconds)
-    {
-      return boost::rational_cast<gavl_time_t> (GAVL_TIME_SCALE * fractionalSeconds);
-    }
-  }
   
   
   /** @note the allowed time range is explicitly limited to help overflow protection */
@@ -76,7 +66,7 @@ namespace time {
    *  An example would be to the time unit of a framerate.
    */
   Time::Time (FSecs const& fractionalSeconds)
-    : TimeValue(rational2time (fractionalSeconds))
+    : TimeValue(lumiera_rational_to_time (fractionalSeconds))
     { }
   
   
@@ -105,6 +95,38 @@ namespace time {
   {
     return reinterpret_cast<TimeValue const&> (raw);
   }
+  
+  
+  
+  /** predefined constant for PAL framerate */
+  const FrameRate FrameRate::PAL  (25);
+  const FrameRate FrameRate::NTSC (3000,1001);
+  
+  
+  /** @return time span of one frame of this rate,
+   *   cast into internal Lumiera time scale */
+  Duration
+  FrameRate::duration() const
+  {
+    if (0 == *this)
+      throw error::Logic ("Impossible to quantise to an zero spaced frame grid"
+                         , error::LUMIERA_ERROR_BOTTOM_VALUE);
+    
+    return Duration (1, *this);
+  }
+  
+  
+  /** duration of the given number of frames */
+  Duration::Duration (ulong count, FrameRate const& fps)
+    : Offset(TimeValue (count? lumiera_frame_duration (fps/count) : _raw(Duration::NIL)))
+    { }
+  
+  
+  /** constant to indicate "no duration" */
+  const Duration Duration::NIL = Offset(TimeValue(0));
+  
+  
+  
   
   
   

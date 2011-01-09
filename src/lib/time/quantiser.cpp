@@ -74,9 +74,9 @@ namespace time {
    *  as origin of the scale. Quantisation then means to determine the grid interval containing
    *  a given raw time value. Here, the grid interval number zero \em starts at the origin;
    *  each interval includes its lower bound and excludes its upper bound.*/
-  FixedFrameQuantiser::FixedFrameQuantiser (FSecs frames_per_second, TimeValue referencePoint)
+  FixedFrameQuantiser::FixedFrameQuantiser (FrameRate const& frames_per_second, TimeValue referencePoint)
     : origin_(referencePoint)
-    , raster_(rational_cast<double> (GAVL_TIME_SCALE / __ensure_notZero(frames_per_second)))
+    , raster_(frames_per_second.duration())
     { }
   
   
@@ -96,7 +96,7 @@ namespace time {
   TimeValue
   FixedFrameQuantiser::gridAlign (TimeValue const& rawTime)
   {
-    return TimeValue (lumiera_quantise_time (_raw(rawTime), raster_, _raw(origin_)));
+    return TimeValue (lumiera_quantise_time (_raw(rawTime), _raw(origin_), _raw(raster_)));
   }
   
   

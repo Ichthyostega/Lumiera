@@ -61,12 +61,21 @@
 /**
  * Converts a fraction of seconds to Lumiera's internal opaque time scale.
  * @param fractionalSeconds given as rational number
+ * @note inconsistent with Lumiera's general quantisation behaviour,
+ *       here negative fractional micro-ticks are truncated towards zero.
+ *       This was deemed irrelevant in practice.
  */
-inline gavl_time_t
-lumiera_rational_to_time (lib::time::FSecs const& fractionalSeconds)
-{
-  return boost::rational_cast<gavl_time_t> (GAVL_TIME_SCALE * fractionalSeconds);
-}
+gavl_time_t
+lumiera_rational_to_time (lib::time::FSecs const& fractionalSeconds);
+
+
+/**
+ * Calculates the duration of one frame in Lumiera time units.
+ * @param framerate underlying framerate as rational number
+ * @throw error::Logic on zero framerate
+ */
+gavl_time_t
+lumiera_frame_duration (lib::time::FrameRate const& fps);
 
 
 
@@ -92,7 +101,7 @@ lumiera_tmpbuf_print_time (gavl_time_t time);
  * @return number of the grid interval containing the given time.
  * @warning the resulting value is limited to (Time::Min, Time::MAX) 
  */
-int64_t
+long
 lumiera_quantise_frames (gavl_time_t time, double grid, gavl_time_t origin);
 
 /**
@@ -105,7 +114,7 @@ lumiera_quantise_frames (gavl_time_t time, double grid, gavl_time_t origin);
  *         clipped, because the result, relative to origin, needs to be <= Time::MAX 
  */
 gavl_time_t
-lumiera_quantise_time (gavl_time_t time, double grid, gavl_time_t origin);
+lumiera_quantise_time (gavl_time_t time, gavl_time_t origin, gavl_time_t grid);
 
 /**
  * Builds a time value by summing up the given components.
