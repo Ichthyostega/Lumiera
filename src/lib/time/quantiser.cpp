@@ -24,10 +24,7 @@
 #include "lib/time/quantiser.hpp"
 #include "lib/time/timevalue.hpp"
 #include "lib/time/timequant.hpp"
-
-extern "C" {
 #include "lib/time.h"
-}
 
 #include <boost/rational.hpp>
 

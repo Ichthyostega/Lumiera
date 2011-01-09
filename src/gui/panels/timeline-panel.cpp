@@ -29,9 +29,8 @@
 #include "gui/model/project.hpp"
 #include "gui/controller/controller.hpp"
 
-extern "C" {
 #include "lib/time.h"
-}
+
 
 using namespace Gtk;
 using namespace sigc;

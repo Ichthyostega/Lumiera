@@ -59,7 +59,7 @@ liblumiera_la_SOURCES =					\
 	$(liblumiera_la_srcdir)/test/suite.cpp		\
 	$(liblumiera_la_srcdir)/test/test-helper.cpp	\
 	$(liblumiera_la_srcdir)/test/testoption.cpp	\
-	$(liblumiera_la_srcdir)/time.c			\
+	$(liblumiera_la_srcdir)/time.cpp		\
 	$(liblumiera_la_srcdir)/time/lumitime.cpp	\
 	$(liblumiera_la_srcdir)/time/quantiser.cpp	\
 	$(liblumiera_la_srcdir)/time/timecode.cpp	\

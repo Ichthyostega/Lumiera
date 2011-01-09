@@ -27,9 +27,8 @@
 #include "gui/window-manager.hpp"
 #include "gui/util/cairo-util.hpp"
 
-extern "C" {
 #include "lib/time.h"
-}
+
 
 using namespace Gtk;
 using namespace Cairo;

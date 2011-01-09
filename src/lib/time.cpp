@@ -19,12 +19,14 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
-#include <nobug.h>
 #include "lib/time.h"
+#include "lib/error.hpp"
+extern "C" {
 #include "lib/tmpbuf.h"
+}
 
-#include <math.h>
 #include <limits.h>
+#include <math.h>
 
 
 /* GAVL_TIME_SCALE is the correct factor or dividend when using gavl_time_t for

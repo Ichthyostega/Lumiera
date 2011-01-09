@@ -21,8 +21,8 @@
 
 typedef unsigned int uint;
 
-#include "lib/time.h"
 #include "tests/test.h"
+#include "lib/time.h"
 
 #include <nobug.h>
 

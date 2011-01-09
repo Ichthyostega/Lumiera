@@ -23,10 +23,7 @@
 
 #include "lib/lumitime.hpp"
 #include "lib/time/timevalue.hpp"
-
-extern "C" {
 #include "lib/time.h"
-}
 
 #include <limits>
 #include <string>

@@ -26,10 +26,7 @@
 #include "lib/time/timevalue.hpp"
 #include "lib/time/timequant.hpp"
 #include "lib/time/formats.hpp"
-
-extern "C" {
 #include "lib/time.h"
-}
 
 
 using std::string;
