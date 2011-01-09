@@ -102,7 +102,7 @@ lumiera_tmpbuf_print_time (gavl_time_t time);
  * @warning the resulting value is limited to (Time::Min, Time::MAX) 
  */
 long
-lumiera_quantise_frames (gavl_time_t time, double grid, gavl_time_t origin);
+lumiera_quantise_frames (gavl_time_t time, gavl_time_t origin, gavl_time_t grid);
 
 /**
  * Similar to #lumiera_quantise_frames, but returns a grid aligned \em time value

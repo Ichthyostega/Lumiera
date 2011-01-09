@@ -105,13 +105,13 @@ namespace { // implementation helper
 
 
 long
-lumiera_quantise_frames (gavl_time_t time, gavl_time_t grid, gavl_time_t origin)
+lumiera_quantise_frames (gavl_time_t time, gavl_time_t origin, gavl_time_t grid)
 {
   return calculate_quantisation (time, origin, grid);
 }
 
 gavl_time_t
-lumiera_quantise_time (gavl_time_t time, gavl_time_t grid, gavl_time_t origin)
+lumiera_quantise_time (gavl_time_t time, gavl_time_t origin, gavl_time_t grid)
 {
   int64_t count = calculate_quantisation (time, origin, grid);
   gavl_time_t alignedTime = count * grid;

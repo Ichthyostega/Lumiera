@@ -101,7 +101,7 @@ namespace test{
         : FixedFrameQuantiser
         {
           TestQuant (int origin=0)
-            : FixedFrameQuantiser( FrameRate(3,GAVL_TIME_SCALE), TimeValue(origin))
+            : FixedFrameQuantiser( FrameRate(GAVL_TIME_SCALE, 3 ), TimeValue(origin))
             { }
           
           int
@@ -157,6 +157,7 @@ namespace test{
           CHECK (Time::MAX - Time(1) <= case1.gridAlign( Time (0)  ));
           CHECK (Time::MAX           >  case1.gridAlign( Time (0)  ));
           CHECK (Time::MAX           == case1.gridAlign( Time(+1)  ));
+          CHECK (Time::MAX           == case1.gridAlign( Time(+2)  ));
         }
     };
   

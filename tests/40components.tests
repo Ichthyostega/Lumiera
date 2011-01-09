@@ -663,7 +663,7 @@ return: 0
 END
 
 
-PLANNED "Quantiser API basics" QuantiserBasics_test  <<END
+TEST "Quantiser API basics" QuantiserBasics_test  <<END
 return: 0
 END
 
