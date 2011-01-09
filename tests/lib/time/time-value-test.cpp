@@ -22,6 +22,7 @@
 
 
 #include "lib/test/run.hpp"
+#include "lib/test/test-helper.hpp"
 #include "lib/time/timevalue.hpp"
 #include "lib/time/display.hpp"
 #include "lib/util.hpp"
@@ -38,6 +39,7 @@ using std::cout;
 using std::endl;
 using std::string;
 
+using lumiera::error::LUMIERA_ERROR_BOTTOM_VALUE;
 
 namespace lib {
 namespace time{
@@ -70,6 +72,7 @@ namespace test{
           checkBasicTimeValues (ref);
           checkMutableTime (ref);
           checkTimeConveniance (ref);
+          verify_invalidFramerateProtection();
           createOffsets (ref);
           buildDuration (ref);
           buildTimeSpan (ref);
@@ -195,6 +198,17 @@ namespace test{
       
       
       void
+      verify_invalidFramerateProtection()
+        {
+          VERIFY_ERROR (BOTTOM_VALUE, FrameRate infinite(0) );
+          VERIFY_ERROR (BOTTOM_VALUE, FrameRate infinite(0,123) );
+          
+          CHECK (isnil (Duration (0, FrameRate::PAL)));
+          CHECK (isnil (Duration (0, FrameRate(123))));
+        }
+      
+      
+      void
       createOffsets (TimeValue org)
         {
           TimeValue four(4);
@@ -233,6 +247,16 @@ namespace test{
           Duration distance(backwards);
           CHECK (distance > zero);
           CHECK (distance == backwards.abs());
+          
+          Duration unit(50, FrameRate::PAL);
+          CHECK (Time(2) == unit);              // duration of 50 frames at 25fps is... (guess what)
+          
+          CHECK (FrameRate::PAL.duration() == Time(FSecs(1,25)));
+          CHECK (FrameRate::NTSC.duration() == Time(FSecs(1001,3000)));
+          cout << "NTSC-Framerate = " << FrameRate::NTSC.asDouble() << endl;
+          
+          CHECK (zero == Duration::NIL);
+          CHECK (isnil (Duration::NIL));
           
           // assign to variable for calculations
           point = backwards;

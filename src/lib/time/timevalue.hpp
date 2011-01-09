@@ -337,6 +337,8 @@ namespace time {
       
       // standard copy acceptable;
       
+      double asDouble()  const;
+      
       static const FrameRate PAL;
       static const FrameRate NTSC;
       
@@ -393,6 +395,13 @@ namespace time {
   FrameRate::FrameRate (IFrac const& fractionalRate)
     : IFrac (__ensure_nonzero(fractionalRate))
     { }
+  
+  inline double
+  FrameRate::asDouble()  const
+  {
+    return boost::rational_cast<double> (*this);
+  }
+
   
   
   
