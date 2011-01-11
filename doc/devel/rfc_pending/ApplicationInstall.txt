@@ -1,0 +1,128 @@
+ApplicationInstall
+==================
+
+// please don't remove the //word: comments
+
+[grid="all"]
+`------------`-----------------------
+*State*         _Idea_
+*Date*          _Di 11 Jan 2011 17:00:55 CET_
+*Proposed by*   Ichthyostega <prg@ichthyostega.de>
+-------------------------------------
+
+[abstract]
+*********************************************************************************
+Lumiera should be a _freely relocatable_ application bundle.
+Relying only on the relative folder structure within this bundle, the application
+will be fully functional at any location, provided that the external library
+dependencies are resolvable using the standard mechanisms of the platform.
+The setup mechanism must be obvious, self-explanatory and must not rely
+on compiled in magic or buildsystem trickery. Yet packaging into a FSH conforming
+installation location should be supported by the same mechanisms.
+*********************************************************************************
+
+Description
+-----------
+//description: add a detailed description:
+Lumiera is planned to become a large professional application bundle, relying
+on several external resources for proper operation. An installed Lumiera
+application will be more like Gimp, Blender, Ardour, OpenOffice or Eclipse,
+not like bash, autotools, emcas or [add your favourite hacker tool here].
+This is a question of professionalism.
+
+Besides that, it can be expected that Lumiera frequently will be used in a
+project or studio like setup, where the application isn't installed, but just
+unZIPped / unTARed and used as-is. Thus, it should be sufficient to unpack
+the application bundle and point it to the session file and maybe the
+media storage.
+
+This RfC can be seen as an commitment to an professional approach and a
+clarification: Traditionally, the Unix community hailed a lot of _black magic_
+practices like compiling in installation paths, macro magic, relying on 
+very specific and un-obvious behaviour of some build script, configuration
+via environment variables and the like. These practices turned out to be
+not so helpful and are known to lead to maintenance problems.
+
+The Eclipse platform can serve as a model for the setup of an modern
+application: It can be just unpacked, and when looking into the folder
+structure, the meaning of the parts is obvious, and the basic bootstrap
+is controlled by two short text based INI files. While Lumiera presumably
+won't get _that_ heavyweight and is clearly not intended to become a
+general business application platform like OSGi -- the underlying
+principles can serve as a point of reference for modern
+development standards.
+
+Judging from our current planning and the existing codebase, Lumiera
+is on a good way in that direction, yet some cleanup needs to be done,
+especially removing some convenience shortcuts from the early days of
+development and catching up with the repair of some sloppiness here
+and there.
+
+Tasks
+~~~~~
+// List what needs to be done to implement this Proposal:
+* identify what impedes such a modern setup procedure ([green]#✔ done#)
+* rectify the folder structure created in the build target 
+  directory [,yellow]#WIP#
+* build the executables in a way to allow relative resolution of the
+  internal shared modules [,red]#TODO#
+* replace the compiled-in path definitions for plugin loading by a
+  configurable bootstrap [,red]#TODO#
+* add an working library implementation for a config loader [,red]#TODO#
+* add a mechanism for establishing the path of the current execubable.
+  This is _non-portable_ [,red]#TODO#
+* wire the prepared API in the GUI to use this working config loader
+  for resolving GUI resources [,red]#TODO#
+* try to extract the path search code from the existing config loader,
+  or build a new solution based on stanard libraries [,red]#TODO#
+* introduce a output root directory into the buildsystem to allow
+  for building packages [,red]#TODO#
+* define a _Debian packaging_ as proof-of-concept [,red]#TODO#
+
+
+Discussion
+~~~~~~~~~~
+
+Pros
+^^^^
+* self-contained
+* self-explanatory
+* based on _best practices_
+* conforming with FSH and Debian policy
+
+
+Cons
+^^^^
+* breaks with some beloved habits of the Unix community
+* requires work
+* raises the bar on the implementation side
+* requires an bootstrap sequence to be explicitly performed
+  on application startup
+
+
+Alternatives
+^^^^^^^^^^^^
+//alternatives: explain alternatives and tell why they are not viable:
+
+
+
+Rationale
+---------
+//rationale: Give a concise summary why it should be done *this* way:
+
+
+
+//Conclusion
+//----------
+//conclusion: When approbate (this proposal becomes a Final)
+//            write some conclusions about its process:
+
+
+
+
+Comments
+--------
+//comments: append below
+
+
+//endof_comments:
