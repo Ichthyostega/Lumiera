@@ -1,5 +1,5 @@
 /*
-  timeline-entity.cpp  -  Implementation of the timeline entity object
+  draw-strategy.hpp  -  Definition the timeline draw strategy interface
 
   Copyright (C)         Lumiera.org
     2010,               Stefan Kangas <skangas@skangas.se
@@ -19,38 +19,46 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 * *****************************************************/
+/** @file draw-strategy.hpp
+ ** Declares the timeline entity drawing strategy interface.
+ */
+
+#ifndef TIMELINE_DRAW_STRATEGY_HPP
+#define TIMELINE_DRAW_STRATEGY_HPP
 
 #include "timeline-entity.hpp"
+#include "timeline-view-window.hpp"
 
 namespace gui {
 namespace widgets {
 namespace timeline {
 
-  Entity::Entity(boost::shared_ptr<timeline::DrawStrategy> drawStrategy)
-    : enabled(true),
-      drawStrategy(drawStrategy)
-  {  }
-
-  
-  boost::shared_ptr<timeline::DrawStrategy>
-  Entity::getDrawStrategy () const
+  /**
+   * An interface for drawing strategies for timeline entities.
+   */
+  class DrawStrategy
   {
-    return drawStrategy;
-  }
+  protected:
 
-  bool
-  Entity::getEnabled () const
-  {
-    return enabled;
-  }
+    /**
+     * Constructor.
+     */
+    DrawStrategy()
+    {  }
 
-  void
-  Entity::setEnabled (bool enabled)
-  {
-    this->enabled = enabled;
-  }
-  
+  public:
+
+    /**
+     * Draw the entity.
+     * @param entity draw the 
+     */
+    virtual void draw(const Entity &entity,
+      Cairo::RefPtr<Cairo::Context> cr,
+      TimelineViewWindow* const window) const = 0;
+  };
+
 }   // namespace timeline
 }   // namespace widgets
 }   // namespace gui
 
+#endif // TIMELINE_DRAW_STRATEGY_HPP

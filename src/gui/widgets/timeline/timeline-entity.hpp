@@ -26,9 +26,21 @@
 #ifndef TIMELINE_ENTITY_HPP
 #define TIMELINE_ENTITY_HPP
 
+#include <string>
+
+// TODO: Remove once we get better measure of duration.
+extern "C" {
+#include <stdint.h>
+#include <gavl/gavltime.h>
+}
+
+#include "boost/shared_ptr.hpp"
+
 namespace gui {
 namespace widgets {
 namespace timeline {
+
+  class DrawStrategy;
 
   /**
    * Base class for timeline entities.
@@ -40,18 +52,40 @@ namespace timeline {
     /**
      * Constructor
      */
-    Entity();
+    Entity(boost::shared_ptr<timeline::DrawStrategy> drawStrategy);
 
   public:
 
     /**
-     *
+     * Gets the beginning of this entity's duration.
      */
-    bool
-    getEnabled();
+    virtual gavl_time_t
+    getBegin () const = 0;
+
+    
+    boost::shared_ptr<timeline::DrawStrategy>
+    getDrawStrategy () const;
 
     /**
-     *
+     * Gets the enabled property of this entity. 
+     */
+    bool
+    getEnabled () const;
+
+    /**
+     * Gets the end of this entity's duration.
+     */
+    virtual gavl_time_t
+    getEnd () const = 0;
+
+    /**
+     * Gets the name of this entity.
+     */
+    virtual std::string
+    getName () const = 0;
+
+    /**
+     * Sets the enabled property of this entity.
      */
     void
     setEnabled(bool selected);
@@ -62,6 +96,8 @@ namespace timeline {
      * True when this entity is enabled.
      */
     bool enabled;
+
+    boost::shared_ptr<timeline::DrawStrategy> drawStrategy;
   };
 
 }   // namespace timeline

@@ -96,6 +96,9 @@ namespace timeline {
   void
   ClipTrack::createTimelineClips()
   {
+    // Share the draw strategy between all objects
+    // TODO: use factory/builder here
+    static boost::shared_ptr<timeline::DrawStrategy> drawStrategy(new BasicDrawStrategy());
     BOOST_FOREACH (shared_ptr<model::Clip> modelClip, getModelTrack()->getClipList())
       {
         // Is a timeline UI clip present in the map already?
@@ -104,7 +107,7 @@ namespace timeline {
             // The timeline UI clip is not present
             // We will need to create one
             clipMap[modelClip] = shared_ptr<timeline::Clip>(
-              new timeline::Clip (modelClip));
+              new timeline::Clip (modelClip, drawStrategy));
           }
       }
   }

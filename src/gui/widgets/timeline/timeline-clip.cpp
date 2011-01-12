@@ -26,8 +26,9 @@ namespace gui {
 namespace widgets {
 namespace timeline {
 
-  Clip::Clip(boost::shared_ptr<model::Clip> clip)
-    : Entity(),
+  Clip::Clip(boost::shared_ptr<model::Clip> clip,
+             boost::shared_ptr<timeline::DrawStrategy> drawStrategy)
+    : Entity(drawStrategy),
       modelClip(clip),
       selected(false)
   {
@@ -40,40 +41,34 @@ namespace timeline {
 
   void
   Clip::draw_clip(Cairo::RefPtr<Cairo::Context> cr,
-                  TimelineViewWindow* const window) const
+    TimelineViewWindow* const window) const
   {
-    REQUIRE(cr);
-    REQUIRE(window);
-    REQUIRE(modelClip);
+    REQUIRE (cr);
+    REQUIRE (window);
+    REQUIRE (modelClip);
 
-    int x = window->time_to_x(modelClip->getBegin());
-    int width = window->time_to_x(
-      modelClip->getEnd()) - window->time_to_x(modelClip->getBegin());
+    getDrawStrategy()->draw(*this, cr, window);
+  }
 
-    // Draw a rectangle for the clip
-    cr->rectangle(x, 1, width, 100-2);
-    // TODO: get height from the Timeline::Track
+  gavl_time_t
+  Clip::getBegin () const
+  {
+    REQUIRE (modelClip);
+    return modelClip->getBegin();
+  }
 
-    if (selected)
-      cr->set_source(Cairo::SolidPattern::create_rgb (0.4, 0.4, 0.8));
-    else
-      cr->set_source(Cairo::SolidPattern::create_rgb (0.4, 0.4, 0.4));
-    cr->fill_preserve();
+  gavl_time_t
+  Clip::getEnd () const
+  {
+    REQUIRE (modelClip);
+    return modelClip->getEnd();
+  }
 
-    cr->set_source_rgb(0.25, 0.25, 0.25);
-    cr->stroke();
-
-    // Show the clip name
-    cr->rectangle(x, 1, width, 100-2);
-    cr->clip();
-
-    cr->move_to (x + 3, 12);
-    cr->set_source_rgb (1.0, 1.0, 1.0);
-
-    cr->set_font_size (9);
-    cr->show_text (modelClip->getName());
-
-    // TODO: Show thumbnails for clip
+  std::string
+  Clip::getName () const
+  {
+    REQUIRE (modelClip);
+    return modelClip->getName();
   }
 
   void
@@ -81,6 +76,7 @@ namespace timeline {
   {
     this->selected = selected;
   }
+
 
 }   // namespace timeline
 }   // namespace widgets

@@ -30,6 +30,7 @@
 
 #include <vector>
 
+#include "basic-draw-strategy.hpp"
 #include "timeline-track.hpp"
 #include "gui/model/clip-track.hpp"
 

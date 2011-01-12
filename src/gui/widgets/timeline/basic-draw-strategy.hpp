@@ -1,5 +1,5 @@
 /*
-  timeline-entity.cpp  -  Implementation of the timeline entity object
+  basic-draw-strategy.hpp  -  Declaration of a basic draw strategy
 
   Copyright (C)         Lumiera.org
     2010,               Stefan Kangas <skangas@skangas.se
@@ -19,38 +19,35 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 * *****************************************************/
+/** @file basic-draw-strategy.hpp
+ ** Declares the Timeline Entity draw strategy class.
+ */
 
-#include "timeline-entity.hpp"
+#ifndef TIMELINE_BASIC_DRAW_STRATEGY_HPP
+#define TIMELINE_BASIC_DRAW_STRATEGY_HPP
+
+#include "draw-strategy.hpp"
 
 namespace gui {
 namespace widgets {
 namespace timeline {
 
-  Entity::Entity(boost::shared_ptr<timeline::DrawStrategy> drawStrategy)
-    : enabled(true),
-      drawStrategy(drawStrategy)
-  {  }
-
-  
-  boost::shared_ptr<timeline::DrawStrategy>
-  Entity::getDrawStrategy () const
+  class BasicDrawStrategy : public DrawStrategy
   {
-    return drawStrategy;
-  }
+  public:
 
-  bool
-  Entity::getEnabled () const
-  {
-    return enabled;
-  }
+    /**
+     * Constructor.
+     */
+    BasicDrawStrategy();
 
-  void
-  Entity::setEnabled (bool enabled)
-  {
-    this->enabled = enabled;
-  }
-  
+    void draw(const Entity &entity,
+      Cairo::RefPtr<Cairo::Context> cr,
+      TimelineViewWindow* const window) const;
+  };
+
 }   // namespace timeline
 }   // namespace widgets
 }   // namespace gui
 
+#endif // TIMELINE_BASIC_DRAW_STRATEGY_HPP
