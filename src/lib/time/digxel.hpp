@@ -169,6 +169,11 @@ namespace time {
         HexaFormatter() : PrintfFormatter<uint,2>("%02X") { }
       };
     
+    struct CountFormatter
+      : PrintfFormatter<long, 20>
+      {
+        CountFormatter() : PrintfFormatter<long,20>("%04l") { }
+      };
     
   } //(End) digxel configuration namespace
   
@@ -268,6 +273,7 @@ namespace time {
   /* == predefined Digxel configurations == */
   typedef Digxel< int, digxel::SexaFormatter> SexaDigit;  ///< for displaying time components (sexagesimal)
   typedef Digxel<uint, digxel::HexaFormatter> HexaDigit;  ///< for displaying a hex byte
+  typedef Digxel<long, digxel::CountFormatter> CountVal;   ///< for displaying a hex byte
   
   
 }} // lib::time

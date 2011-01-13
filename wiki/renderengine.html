@@ -540,7 +540,7 @@ In a more elaborate scheme, the advised entity could provide a signal to be invo
 &amp;rarr; AdviceImplementation
 </pre>
 </div>
-<div title="AdviceImplementation" modifier="Ichthyostega" modified="201006050152" created="201004100056" tags="impl draft img" changecount="58">
+<div title="AdviceImplementation" modifier="Ichthyostega" modified="201101100014" created="201004100056" tags="impl draft img" changecount="59">
 <pre>[&lt;img[Advice solution|uml/fig141573.png]]
 
 
@@ -601,7 +601,7 @@ Thus the second approach looks favourable, but we should //note the fact that it
 The advice system is (hopefully) written such as not to be corrupted in case an exception is thrown. Adding new requests, setting advice data on a provision and any binding change might fail due to exhausted memory. The advice system remains operational in this case, but the usual reaction would be //subsystem shutdown,// because the Advice facility typically is used in a very low-level manner, assuming it //just works.// As far as I can see, the other mutation operations can't throw.
 
 The individual operations on the interface objects are //deliberately not thread-safe.// The general assumption is that {{{advice::Request}}} and {{{advice::Provision}}} will be used in a safe environment and not be accessed or modified concurrently. An notable exception to this rule is accessing Advice: as this just includes checking and dereferentiating a pointer, it might be done concurrently. But note, //the advice system does nothing to ensure visibility of the solution within a separate thread.// If this thread still has the old pointer value in his local cache, it won't pick up the new solution. In case the old solution got retracted, this even might cause access to already released objects. You have been warned. So it's probably a good idea to ensure a read barrier happens somewhere in the enclosing usage context prior to picking up a possibly changed advice solution concurrently.
-{{red{TODO}}}: the underlying operations on the embedded global {{{advice::Index}}} obviously need to be protected by locking the whole index table on each mutation, which also ensures a memory barrier and thus propagates changed solutions.
+''Note'': the underlying operations on the embedded global {{{advice::Index}}} obviously need to be protected by locking the whole index table on each mutation, which also ensures a memory barrier and thus propagates changed solutions. While this settles the problem for the moment, we might be forced into a more fine grained locking due to contention prolems later on...
 
 !!!index datastructure
 It is clear by now that the implementation datastrucutre has to serve as a kind of //reference count.// Within this datastructure, any constructed advice solution needs to be reflected somehow, to prevent us from discarding an advice provision still accessible. Allowing lock-free access to the advice solution (planned feature) adds an special twist, because in this case we can't even tell for sure if an overwritten old solution is actually gone (or if its still referred from some thread's cached memeory). This could be addressed with an transactional approach (which might be good anyway) &amp;mdash; but I tend to leave this special concern asside for now.
@@ -2092,7 +2092,7 @@ Besides routing to a global pipe, wiring plugs can also connect to the source po
 Finally, this example shows an ''automation'' data set controlling some parameter of an effect contained in one of the global pipes. From the effect's POV, the automation is simply a ParamProvider, i.e a function yielding a scalar value over time. The automation data set may be implemented as a bézier curve, or by a mathematical function (e.g. sine or fractal pseudo random) or by some captured and interpolated data values. Interestingly, in this example the automation data set has been placed relatively to the meta clip (albeit on another track), thus it will follow and adjust when the latter is moved.
 </pre>
 </div>
-<div title="ImplementationDetails" modifier="Ichthyostega" modified="201012192119" created="200708080322" tags="overview" changecount="41">
+<div title="ImplementationDetails" modifier="Ichthyostega" modified="201101100256" created="200708080322" tags="overview" changecount="42">
 <pre>This wiki page is the entry point to detail notes covering some technical decisions, details and problems encountered in the course of the implementation of the Lumiera Renderengine, the Builder and the related parts.
 
 * [[Packages, Interfaces and Namespaces|InterfaceNamespaces]]
@@ -2103,7 +2103,7 @@ Finally, this example shows an ''automation'' data set controlling some paramete
 * [[Editing Operations|EditingOperations]]
 * [[Handling of the current Session|CurrentSession]]
 * [[collecting Ideas for Implementation Guidelines|ImplementationGuidelines]]
-* [[using the Visitor pattern?|VisitorUse]] &amp;mdash; resulting in [[»Visiting-Tool« library implementation|VisitingToolImpl]]
+* [[using the Visitor pattern?|VisitorUse]] -- resulting in [[»Visiting-Tool« library implementation|VisitingToolImpl]]
 * [[Handling of Tracks and render Pipes in the session|TrackPipeSequence]]. [[Handling of Tracks|TrackHandling]] and [[Pipes|PipeHandling]]
 * [[getting default configured|DefaultsManagement]] Objects relying on [[rule-based Configuration Queries|ConfigRules]]
 * [[integrating the Config Query system|ConfigQueryIntegration]]
@@ -2123,6 +2123,7 @@ Finally, this example shows an ''automation'' data set controlling some paramete
 * working out a [[Wiring concept|Wiring]] and the foundations of OutputManagement
 * shaping the foundations of the [[player subsystem|Player]]
 * detail considerations regarding [[time and time quantisation|TimeQuant]]
+* [[Timecode]] -- especially the link of [[TC formats and quantisation|TimecodeFormat]]
 * designing how to [[build|BuildFixture]] the [[Fixture]] (...{{red{WIP}}}...)
 
 </pre>
@@ -6617,7 +6618,7 @@ Thus no server and no network connection is needed. Simply open the file in your
  * see [[Homepage|http://tiddlywiki.com]], [[Wiki-Markup|http://tiddlywiki.org/wiki/TiddlyWiki_Markup]]
 </pre>
 </div>
-<div title="TimeQuant" modifier="Ichthyostega" modified="201101061209" created="201012181753" tags="Concepts Player spec discuss draft" changecount="48">
+<div title="TimeQuant" modifier="Ichthyostega" modified="201101100251" created="201012181753" tags="Concepts Player spec discuss draft" changecount="49">
 <pre>The term &amp;raquo;Time&amp;laquo; spans a variety of vastly different entities. Within a NLE we get to deal with various //flavours of time values.//
 ;continuous time
 :without any additional assumptions, ''points in time'' can be specified with arbitrary precision.
@@ -6675,11 +6676,11 @@ For Lumiera, the static typing approach is of limited value -- it excels when va
 
 At the level of individual timecode formats, we're lacking a common denominator; thus it is preferrable to work with different concrete timecode classes through //generic programming.// This way, each timecode format can expose operations specific only to the given format. Especially, different timecode formats expose different //component fields,// modelled by the generic ''Digxel'' concept. There is a common baseclass ~TCode though, which can be used for //type erasure.//
 &amp;rarr; more on [[usage situations|TimeUsage]]
+&amp;rarr; Timecode [[format and quantisation|TimecodeFormat]]
 &amp;rarr; Quantiser [[implementation details|QuantiserImpl]]
-
 </pre>
 </div>
-<div title="TimeUsage" modifier="Ichthyostega" modified="201012260235" created="201012230204" tags="design discuss" changecount="15">
+<div title="TimeUsage" modifier="Ichthyostega" modified="201101100253" created="201012230204" tags="design discuss" changecount="16">
 <pre>the following collection of usage situations helps to shape the details of the time values and time quantisation design. &amp;rarr; see also  [[time quantisation|TimeQuant]]
 
 ;time position of an object
@@ -6725,6 +6726,8 @@ Note that the ''display window might be treated as just an independent instance 
 !substantial problems to be solved
 * how to align multiple grids
 * how to integrate modifications of quantised values.
+* how to isolate the Time/Quantisation part from the grid MetaAsset in the session
+* how to design the relation of Timecode, Timecode formatting and Quantisation &amp;rarr; [[more here|TimecodeFormat]]
 
 The problem with modification of quantised values highlights an inner contratiction or conflicting goals
 * the whole system should fit in naturally and just feel like using raw time values
@@ -6741,6 +6744,36 @@ Question is: how fine grained and configurable needs this to be?
 * for example, when moving a clip taken from 50fps media, the new position might be quantised to the 50fps grid established by the media, while the target timeline runs with 25fps, allowing for finer adjustments based on the intermediate frames present in the source material.
 * likely we need a &quot;nudge by unit(s)&quot;
 
+</pre>
+</div>
+<div title="TimecodeFormat" modifier="Ichthyostega" modified="201101131510" created="201101100308" tags="Player spec discuss draft" changecount="15">
+<pre>The handling of [[Timecode]] is closely related to [[time representation and quantisation|TimeQuant]]. In fact, these two topics blend into one another. Time will be quantised into a //grid,// but this grid only makes sense when linked to a externally relevant meaning and representation, which is the Timecode. But a timecode value also denotes a specific point in time -- performing operations on a timecode is equivalent to manipulating a quantised time value.
+
+!Problem of dependencies
+The general design of time and time quantisation in Lumiera requires us to do the actual quantisation as late as possible. The relation of the time-like entities creates a //one way route:// starting from the ''internal time'', which is contiguous and definite, but completely opaque for the client, the usage proceeds to a ''quantised time value'', requiring the specification of a concrete ''time grid''. Now, the possible ''timecode formats'' can be determined, and commiting to one specific timecode format finally allows to get an explicit, number-like value, e.g. the frame count, or the seconds part of a SMPTE Timecode.
+
+In this handling sequence, the ~QuTime with the embedded link to a ''quantiser'' plays the role of an coordinating hub.
+* a quantised time element depends on a concrete quantiser, which might be fetched by symbolic ID.
+* the quantiser draws upon a configured collection of concrete timecode ''formats''.
+* only the concrete format knows how to build the components of a value representation in that format, but in doing so, has to rely on the primitives exposed by the quantiser.
+* the concrete individual ''timecode value'' is comprised of several value-like components called ''Digxel'' (generalised digits)
+* the timecode value can be //(re)-built,// assumed there is a concrete quantised time and a format and a quantiser
+
+!Usage and operations
+Timecode //is a value.// It has an explicit and distinct structure, and the component parts can be accessed as plain numeric values, or in a formatted string representation. To this end, these values need to be (re)-built. This operation -- building the value(s) -- is what effectively //materialises// the quantisation: At this point, the actual rounding and truncating operation is performed.
+
+But timecode values can also be //mutated.// In this respect they differ from a plain ~TimeValue, which is immutable like a number.
+* the individual components (digxels) can be assigned, causing rebuilding of the timecode
+* the value as a whole can be incremented, decremented or be offset.
+
+And last but not least, it is possible to get a new ~TimeValue, reflecting the current (quantised) time of this timecode. This closes the circle of time handling and quantisation; actually this is the usual way to enter a new time value into the system, by starting out from an explicitly specified grid aligned timecode value.
+
+!!{{red{WIP 1/11}}}design tasks
+* @@color:green;✔@@ find out about the connection to the MetaAsset &amp;rarr; [[Advice]]
+* determine the primitives which need to be on the //real quantiser API.//
+* find out how a format can address the individual components it's comprised of
+* decide how a concrete TC value can refer to his quantiser
+* maybe coin a //value handle// -- to tie the three required parts together
 </pre>
 </div>
 <div title="Timeline" modifier="Ichthyostega" modified="201011220126" created="200706250721" tags="def" changecount="21">

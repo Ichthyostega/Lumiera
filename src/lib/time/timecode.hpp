@@ -26,6 +26,7 @@
 
 #include "lib/time/timevalue.hpp"
 #include "lib/time/formats.hpp"
+#include "lib/time/digxel.hpp"
 #include "lib/symbol.hpp"
 
 //#include <iostream>
@@ -49,6 +50,7 @@ namespace time {
    */
   class TCode
     {
+      QuantiserRef qID_;
       
     public:
       virtual ~TCode();
@@ -58,6 +60,10 @@ namespace time {
       Time   getTime()   const { return Time(value()); }
       
     protected:
+      TCode (QuantiserRef const& qID)
+        : qID_(qID)
+        { }
+      
       virtual string show()     const   =0;
       virtual Literal tcID()    const   =0;
       virtual TimeValue value() const   =0;
@@ -75,18 +81,22 @@ namespace time {
    */
   class FrameNr
     : public TCode
+    , CountVal
     {
-      FSecs FACTOR_TODO;              /////////////////////////////TODO temporary bullshit (of course that is the job of the quantiser)
-      
-      long nr_;
-      
       
       string show()     const { return lexical_cast<string>(nr_)+"fr"; }
       Literal tcID()    const { return "Frame-count"; } 
       TimeValue value() const { return Time(FACTOR_TODO * nr_); }
       
     public:
-      FrameNr (QuTime const& quantisedTime); 
+      typedef format::Frames Format;
+      
+      FrameNr (QuTime const& quantisedTime)
+        : TCode(quantisedTime)
+        , CountVal()
+        {
+          quantisedTime.castInto (*this);
+        }
       
       operator long()   const { return nr_; }  
     };
@@ -106,6 +116,8 @@ namespace time {
       virtual TimeValue value() const { return tpoint_; }
       
     public:
+      typedef format::Smpte Format;
+      
       SmpteTC (QuTime const& quantisedTime);
       
       int getSecs   () const; 
@@ -129,6 +141,8 @@ namespace time {
       virtual TimeValue value() const { return tpoint_; }        
       
     public:
+      typedef format::Hms Format;
+      
       HmsTC (QuTime const& quantisedTime);
       
       double getMillis () const;
@@ -152,6 +166,8 @@ namespace time {
       virtual TimeValue value() const { return Time(sec_); }
       
     public:
+      typedef format::Seconds Format;
+      
       Secs (QuTime const& quantisedTime);
       
       operator FSecs()  const;

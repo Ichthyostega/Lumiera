@@ -57,7 +57,8 @@ namespace time {
   
   /** */
   QuTime::QuTime (TimeValue raw, Quantiser const& quantisation_to_use)
-    : Time(raw)          /////////////////////////////////////////////////TODO fetch quantiser
+    : Time(raw)
+    , quantiser_(&quantisation_to_use)
     { }
   
   
@@ -87,7 +88,7 @@ namespace time {
    *      containing the rawTime, relative to the origin
    *      of the time scale used by this quantiser.
    * @warning returned time values are limited by the
-   *      range of an 64bit integer  
+   *      valid range of lumiera::Time  
    * @see #lumiera_quantise_time
    */
   TimeValue
@@ -95,6 +96,22 @@ namespace time {
   {
     return TimeValue (lumiera_quantise_time (_raw(rawTime), _raw(origin_), _raw(raster_)));
   }
+  
+  
+  /** grid quantisation (alignment).
+   *  Determine the next lower grid interval start point,
+   *  using a simple constant spaced time grid defined by
+   *  origin and framerate stored within this quantiser.
+   * @warning returned frame count might exceed the valid
+   *      range when converting back into a TimeValue.
+   * @see #lumiera_quantise_frames
+   */
+  long
+  FixedFrameQuantiser::gridPoint (TimeValue const& rawTime)
+  {
+    return lumiera_quantise_frames (_raw(rawTime), _raw(origin_), _raw(raster_));
+  }
+
   
   
   

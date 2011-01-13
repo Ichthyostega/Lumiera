@@ -85,7 +85,30 @@ namespace time {
       iterator getSupportedFormats()  const;
       
       virtual TimeValue gridAlign (TimeValue const& raw)   =0;
+      virtual long      gridPoint (TimeValue const& raw)   =0;
       
+    };
+  
+  
+  /** 
+   * smart reference
+   * for accessing an existing quantiser 
+   */
+  class QuantiserRef
+    {
+      size_t hashID_;
+      
+    public:
+      QuantiserRef (Quantiser const&);
+      
+      // using standard copy;
+      
+      
+      Quantiser const&
+      operator-> ()
+        {
+          UNIMPLEMENTED ("how to manage and address the existing quantisers");
+        }
     };
   
   
@@ -111,6 +134,7 @@ namespace time {
       
       
       TimeValue gridAlign (TimeValue const&);
+      long      gridPoint (TimeValue const&);
     };
   
   

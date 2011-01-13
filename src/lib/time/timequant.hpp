@@ -47,22 +47,36 @@ namespace time {
   class QuTime
     : public Time
     {
+      const Quantiser *quantiser_;
       
     public:
       QuTime (TimeValue raw, Symbol gridID);
       QuTime (TimeValue raw, Quantiser const& quantisation_to_use);
       
+      operator QuantiserRef()  const;
+          
       template<class FMT>
       bool supports()  const;
       
       template<class FMT>
       typename format::Traits<FMT>::TimeCode
       formatAs()  const;
+      
+      template<class TC>
+      void
+      castInto (TC& timecode)  const;
     };
   
   
   
   /* == implementation == */
+    
+  QuTime::operator QuantiserRef()  const
+  {
+    ASSERT (quantiser_);
+    return QuantiserRef(*quantiser_);
+  }
+
   template<class FMT>
   bool
   QuTime::supports()  const
@@ -75,8 +89,18 @@ namespace time {
   typename format::Traits<FMT>::TimeCode
   QuTime::formatAs()  const
   {
-    typedef typename format::Traits<FMT>::TimeCode TimeCode; 
-    return TimeCode(*this);
+    typedef typename format::Traits<FMT>::TimeCode TC; 
+    return TC(*this);
+  }
+  
+  
+  template<class TC>
+  void
+  QuTime::castInto (TC& timecode)  const
+  {
+    typedef typename TC::Format Format;
+    
+    Format::rebuild (timecode, *quantiser_);
   }
   
   

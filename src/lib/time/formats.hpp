@@ -34,6 +34,18 @@ namespace lib {
 namespace time {
   
   
+  // ====== forward declarations of concrete Timecode types
+  
+  class FrameNr;
+  class SmpteTC;
+  class HmsTC;
+  class Secs;
+  
+  
+  class Quantiser; // API for grid aligning 
+  
+  
+  
   /**
    * descriptor for a time representation format (ABC).
    * A time format describes how to specify time; it allows
@@ -51,6 +63,7 @@ namespace time {
       virtual ~Format();
     };
   
+  
   namespace format {
     
     /** 
@@ -64,7 +77,7 @@ namespace time {
     class Frames
       : public Format
       {
-        
+        static void rebuild (FrameNr&, Quantiser const&, TimeValue const&);
       };
     
     
@@ -77,7 +90,7 @@ namespace time {
     class Smpte
       : public Format
       {
-        
+        static void rebuild (SmpteTC&, Quantiser const&);
       };
     
     
@@ -91,7 +104,7 @@ namespace time {
     class Hms
       : public Format
       {
-        
+        static void rebuild (HmsTC&, Quantiser const&);
       };
     
     
@@ -107,28 +120,12 @@ namespace time {
     class Seconds
       : public Format
       {
-        
+        static void rebuild (Secs&, Quantiser const&);
       };
     
     
     
-    /* ==== predefined constants for specifying the format to use ==== */
-      
-    static const Seconds SECONDS;
-    static const Frames  FRAMES;
-    static const Smpte   SMPTE;
-    static const Hms     HMS;
     
-  }
-  // ====== forward declarationss of concrete Timecode types
-  
-  class FrameNr;
-  class SmpteTC;
-  class HmsTC;
-  class Secs;
-  
-  
-  namespace format {
     
     template<class FMT>
     struct Traits;

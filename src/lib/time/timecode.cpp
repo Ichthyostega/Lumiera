@@ -39,12 +39,17 @@ namespace time {
   Format::~Format() { }  // emit VTable here....
   TCode::~TCode()   { }
   
-  
-  /** */
-  FrameNr::FrameNr (QuTime const& quantisedTime)
-    : FACTOR_TODO (1,25)
-    , nr_(TimeVar(quantisedTime) / (25*GAVL_TIME_SCALE))
-    { }                                /////////////////////////////TODO temporary bullshit (of course that is the job of the quantiser)
+  namespace format {
+    
+    /** build up a frame count
+     *  by quantising the given time value 
+     */
+    void
+    Frames::rebuild (FrameNr& framecnt, Quantiser const& quantiser, TimeValue const& rawTime)
+    {
+      framecnt.setValueRaw(quantiser.gridPoint (rawTime));
+    }
+  }
   
   
   /** */
