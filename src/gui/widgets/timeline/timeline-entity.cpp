@@ -22,6 +22,11 @@
 
 #include "timeline-entity.hpp"
 
+#include "draw-strategy.hpp"
+
+#include "gui/gtk-lumiera.hpp"
+#include "include/logging.h"
+
 namespace gui {
 namespace widgets {
 namespace timeline {
@@ -31,11 +36,17 @@ namespace timeline {
       drawStrategy(drawStrategy)
   {  }
 
+  Entity::~Entity()
+  {  }
   
-  boost::shared_ptr<timeline::DrawStrategy>
-  Entity::getDrawStrategy () const
+  void
+  Entity::draw(Cairo::RefPtr<Cairo::Context> cr,
+    TimelineViewWindow* const window) const
   {
-    return drawStrategy;
+    REQUIRE (cr);
+    REQUIRE (window);
+
+    drawStrategy->draw(*this, cr, window);
   }
 
   bool

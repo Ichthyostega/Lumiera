@@ -39,17 +39,6 @@ namespace timeline {
     //  &Clip::onNameChanged);
   }
 
-  void
-  Clip::draw_clip(Cairo::RefPtr<Cairo::Context> cr,
-    TimelineViewWindow* const window) const
-  {
-    REQUIRE (cr);
-    REQUIRE (window);
-    REQUIRE (modelClip);
-
-    getDrawStrategy()->draw(*this, cr, window);
-  }
-
   gavl_time_t
   Clip::getBegin () const
   {

@@ -72,7 +72,7 @@ namespace timeline {
       pair; 
     BOOST_FOREACH (pair, clipMap)
       {
-        pair.second->draw_clip(cairo, window);
+        pair.second->draw(cairo, window);
       }
   }
 

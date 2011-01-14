@@ -23,15 +23,12 @@
  ** This file contains the definition of timeline clip object
  */
 
-#include <cairomm/pattern.h>
-
 #include "gui/gtk-lumiera.hpp"
 #include "gui/model/clip.hpp"
 #include "include/logging.h"
 
 #include "draw-strategy.hpp"
 #include "timeline-entity.hpp"
-#include "timeline-view-window.hpp"
 
 #ifndef TIMELINE_CLIP_HPP
 #define TIMELINE_CLIP_HPP
@@ -45,9 +42,6 @@ namespace timeline {
   public:
     Clip(boost::shared_ptr<model::Clip> clip,
          boost::shared_ptr<timeline::DrawStrategy> drawStrategy);
-
-    void draw_clip(Cairo::RefPtr<Cairo::Context> cairo,
-                   TimelineViewWindow* const window) const;
 
     gavl_time_t
     getBegin () const;

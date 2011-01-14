@@ -36,9 +36,6 @@ namespace timeline {
   {
   public:
 
-    /**
-     * Constructor.
-     */
     BasicDrawStrategy();
 
     void draw(const Entity &entity,

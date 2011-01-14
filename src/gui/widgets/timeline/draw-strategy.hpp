@@ -40,18 +40,12 @@ namespace timeline {
   {
   protected:
 
-    /**
-     * Constructor.
-     */
-    DrawStrategy()
-    {  }
+    DrawStrategy() {  }
+
+    virtual ~DrawStrategy() {  }
 
   public:
 
-    /**
-     * Draw the entity.
-     * @param entity draw the 
-     */
     virtual void draw(const Entity &entity,
       Cairo::RefPtr<Cairo::Context> cr,
       TimelineViewWindow* const window) const = 0;

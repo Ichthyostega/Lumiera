@@ -34,13 +34,15 @@ extern "C" {
 #include <gavl/gavltime.h>
 }
 
-#include "boost/shared_ptr.hpp"
+#include <boost/shared_ptr.hpp>
+#include <cairomm/cairomm.h>
 
 namespace gui {
 namespace widgets {
 namespace timeline {
 
   class DrawStrategy;
+  class TimelineViewWindow;
 
   /**
    * Base class for timeline entities.
@@ -49,52 +51,33 @@ namespace timeline {
   class Entity {
   protected:
 
-    /**
-     * Constructor
-     */
     Entity(boost::shared_ptr<timeline::DrawStrategy> drawStrategy);
+
+    virtual ~Entity();
 
   public:
 
-    /**
-     * Gets the beginning of this entity's duration.
-     */
     virtual gavl_time_t
     getBegin () const = 0;
-
     
-    boost::shared_ptr<timeline::DrawStrategy>
-    getDrawStrategy () const;
+    virtual void
+    draw(Cairo::RefPtr<Cairo::Context> cairo,
+      TimelineViewWindow* const window) const;
 
-    /**
-     * Gets the enabled property of this entity. 
-     */
     bool
     getEnabled () const;
 
-    /**
-     * Gets the end of this entity's duration.
-     */
     virtual gavl_time_t
     getEnd () const = 0;
 
-    /**
-     * Gets the name of this entity.
-     */
     virtual std::string
     getName () const = 0;
 
-    /**
-     * Sets the enabled property of this entity.
-     */
     void
     setEnabled(bool selected);
 
   private:
 
-    /**
-     * True when this entity is enabled.
-     */
     bool enabled;
 
     boost::shared_ptr<timeline::DrawStrategy> drawStrategy;
