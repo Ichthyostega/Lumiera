@@ -84,32 +84,13 @@ namespace time {
       typedef _Iter iterator;
       iterator getSupportedFormats()  const;
       
-      virtual TimeValue gridAlign (TimeValue const& raw)   =0;
-      virtual long      gridPoint (TimeValue const& raw)   =0;
+      virtual TimeValue gridAlign (TimeValue const& raw)  const   =0;
+      virtual long      gridPoint (TimeValue const& raw)  const   =0;
+      virtual TimeValue timeOf    (long gridPoint)        const   =0;
       
     };
   
   
-  /** 
-   * smart reference
-   * for accessing an existing quantiser 
-   */
-  class QuantiserRef
-    {
-      size_t hashID_;
-      
-    public:
-      QuantiserRef (Quantiser const&);
-      
-      // using standard copy;
-      
-      
-      Quantiser const&
-      operator-> ()
-        {
-          UNIMPLEMENTED ("how to manage and address the existing quantisers");
-        }
-    };
   
   
   
@@ -133,8 +114,9 @@ namespace time {
       FixedFrameQuantiser (Duration const& frame_duration,     TimeValue referencePoint  =TimeValue(0));
       
       
-      TimeValue gridAlign (TimeValue const&);
-      long      gridPoint (TimeValue const&);
+      TimeValue gridAlign (TimeValue const&)  const;
+      long      gridPoint (TimeValue const&)  const;
+      TimeValue timeOf    (long gridPoint)    const;
     };
   
   

@@ -49,24 +49,50 @@ namespace time {
     {
       framecnt.setValueRaw(quantiser.gridPoint (rawTime));
     }
+    
+    /** calculate the time point denoted by this frame count */
+    TimeValue 
+    Frames::evaluate (FrameNr const& framecnt, QuantiserRef quantiser)
+    {
+      return quantiser->timeOf (framecnt);
+    }
+
   }
   
   
   /** */
+  QuantiserRef::QuantiserRef (Quantiser const&)
+    : hashID_(123) /////////////////////////////////////////////////TODO
+    { }
+  
+  
+  /** */
+  FrameNr::FrameNr (QuTime const& quantisedTime)
+    : TCode(quantisedTime)
+    , CountVal()
+    {
+      quantisedTime.castInto (*this);
+    }
+  
+
+  /** */
   SmpteTC::SmpteTC (QuTime const& quantisedTime)
-    : tpoint_(quantisedTime)           /////////////////////////////TODO eternal bullshit
+    : TCode(quantisedTime)
+//  : tpoint_(quantisedTime)           /////////////////////////////TODO eternal bullshit
     { }
   
   
   /** */
   HmsTC::HmsTC (QuTime const& quantisedTime)
-    : tpoint_(quantisedTime)           /////////////////////////////TODO bullshit
+    : TCode(quantisedTime)
+//  : tpoint_(quantisedTime)           /////////////////////////////TODO bullshit
     { }
   
   
   /** */
   Secs::Secs (QuTime const& quantisedTime)
-    : sec_(TimeVar(quantisedTime) / GAVL_TIME_SCALE)   /////////////TODO bullshit
+    : TCode(quantisedTime)
+//  : sec_(TimeVar(quantisedTime) / GAVL_TIME_SCALE)   /////////////TODO bullshit
     { }
   
   

@@ -273,7 +273,7 @@ namespace time {
   /* == predefined Digxel configurations == */
   typedef Digxel< int, digxel::SexaFormatter> SexaDigit;  ///< for displaying time components (sexagesimal)
   typedef Digxel<uint, digxel::HexaFormatter> HexaDigit;  ///< for displaying a hex byte
-  typedef Digxel<long, digxel::CountFormatter> CountVal;   ///< for displaying a hex byte
+  typedef Digxel<long, digxel::CountFormatter> CountVal;  ///< for displaying a hex byte
   
   
 }} // lib::time

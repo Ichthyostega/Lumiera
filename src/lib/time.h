@@ -117,6 +117,15 @@ gavl_time_t
 lumiera_quantise_time (gavl_time_t time, gavl_time_t origin, gavl_time_t grid);
 
 /**
+ * Calculate time of a grid point (frame start)
+ * @param nr index number of the grid point (0 is at origin)
+ * @param grid spacing of the grid intervals, measured in GAVL_TIME_SCALE
+ * @return time point (frame start) on the Lumiera internal time scale
+ */
+gavl_time_t
+lumiera_time_of_gridpoint (long nr, gavl_time_t origin, gavl_time_t grid);
+
+/**
  * Builds a time value by summing up the given components.
  */
 gavl_time_t

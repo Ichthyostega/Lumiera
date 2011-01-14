@@ -118,6 +118,13 @@ lumiera_quantise_time (gavl_time_t time, gavl_time_t origin, gavl_time_t grid)
   return alignedTime;
 }
 
+gavl_time_t
+lumiera_time_of_gridpoint (long nr, gavl_time_t origin, gavl_time_t grid)
+{
+  gavl_time_t offset = nr * grid;    
+  return origin + offset;
+}
+
 
 gavl_time_t
 lumiera_build_time(long millis, uint secs, uint mins, uint hours)

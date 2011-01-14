@@ -50,7 +50,6 @@ namespace time {
    */
   class TCode
     {
-      QuantiserRef qID_;
       
     public:
       virtual ~TCode();
@@ -67,6 +66,9 @@ namespace time {
       virtual string show()     const   =0;
       virtual Literal tcID()    const   =0;
       virtual TimeValue value() const   =0;
+      
+    protected:
+      QuantiserRef qID_;
     };
   
   
@@ -81,24 +83,19 @@ namespace time {
    */
   class FrameNr
     : public TCode
-    , CountVal
+    , public CountVal
     {
       
-      string show()     const { return lexical_cast<string>(nr_)+"fr"; }
+      string show()     const { return string(show())+"fr"; }
       Literal tcID()    const { return "Frame-count"; } 
-      TimeValue value() const { return Time(FACTOR_TODO * nr_); }
+      TimeValue value() const { return Format::evaluate (*this, qID_); }
       
     public:
       typedef format::Frames Format;
       
-      FrameNr (QuTime const& quantisedTime)
-        : TCode(quantisedTime)
-        , CountVal()
-        {
-          quantisedTime.castInto (*this);
-        }
+      FrameNr (QuTime const& quantisedTime);
       
-      operator long()   const { return nr_; }  
+      // CountVal implicitly convertible to long
     };
   
   

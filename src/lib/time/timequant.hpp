@@ -70,7 +70,8 @@ namespace time {
   
   
   /* == implementation == */
-    
+  
+  inline
   QuTime::operator QuantiserRef()  const
   {
     ASSERT (quantiser_);
@@ -78,7 +79,7 @@ namespace time {
   }
 
   template<class FMT>
-  bool
+  inline bool
   QuTime::supports()  const
   {
     return false;   ////////////////TODO;
@@ -86,7 +87,7 @@ namespace time {
   
   
   template<class FMT>
-  typename format::Traits<FMT>::TimeCode
+  inline typename format::Traits<FMT>::TimeCode
   QuTime::formatAs()  const
   {
     typedef typename format::Traits<FMT>::TimeCode TC; 
@@ -95,12 +96,12 @@ namespace time {
   
   
   template<class TC>
-  void
+  inline void
   QuTime::castInto (TC& timecode)  const
   {
     typedef typename TC::Format Format;
     
-    Format::rebuild (timecode, *quantiser_);
+    Format::rebuild (timecode, *quantiser_, TimeValue(*this));
   }
   
   

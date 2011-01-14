@@ -92,7 +92,7 @@ namespace time {
    * @see #lumiera_quantise_time
    */
   TimeValue
-  FixedFrameQuantiser::gridAlign (TimeValue const& rawTime)
+  FixedFrameQuantiser::gridAlign (TimeValue const& rawTime)  const
   {
     return TimeValue (lumiera_quantise_time (_raw(rawTime), _raw(origin_), _raw(raster_)));
   }
@@ -107,11 +107,23 @@ namespace time {
    * @see #lumiera_quantise_frames
    */
   long
-  FixedFrameQuantiser::gridPoint (TimeValue const& rawTime)
+  FixedFrameQuantiser::gridPoint (TimeValue const& rawTime)  const
   {
     return lumiera_quantise_frames (_raw(rawTime), _raw(origin_), _raw(raster_));
   }
-
+  
+  
+  /** calculate time value of a grid interval (frame) start point
+   * @return time point measured in Lumiera internal time 
+   * @warning returned time values are limited by the
+   *      valid range of lumiera::Time
+   */
+  TimeValue
+  FixedFrameQuantiser::timeOf (long gridPoint)  const
+  {
+    return TimeValue (lumiera_time_of_gridpoint (gridPoint, _raw(origin_), _raw(raster_)));
+  }
+  
   
   
   

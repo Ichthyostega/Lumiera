@@ -44,6 +44,25 @@ namespace time {
   
   class Quantiser; // API for grid aligning 
   
+  /** 
+   * smart reference for accessing an existing quantiser 
+   */
+  class QuantiserRef
+    {
+      size_t hashID_;
+      
+    public:
+      QuantiserRef (Quantiser const&);
+      
+      // using standard copy;
+      
+      
+      const Quantiser *
+      operator-> ()
+        {
+          UNIMPLEMENTED ("how to manage and address the existing quantisers");
+        }
+    };
   
   
   /**
@@ -74,10 +93,11 @@ namespace time {
      * these frame counts. As with any timecode, the
      * underlying framerate/quantisation remains implicit.
      */
-    class Frames
-      : public Format
+    struct Frames
+      : Format
       {
-        static void rebuild (FrameNr&, Quantiser const&, TimeValue const&);
+        static void       rebuild (FrameNr&, Quantiser const&, TimeValue const&);
+        static TimeValue evaluate (FrameNr const&, QuantiserRef);
       };
     
     
@@ -87,10 +107,11 @@ namespace time {
      * by specifying time as hour-minute-second plus the
      * frame number within the actual second.
      */
-    class Smpte
-      : public Format
+    struct Smpte
+      : Format
       {
-        static void rebuild (SmpteTC&, Quantiser const&);
+        static void       rebuild (SmpteTC&, Quantiser const&);
+        static TimeValue evaluate (SmpteTC const&, QuantiserRef);
       };
     
     
@@ -101,10 +122,11 @@ namespace time {
      * entity in time. HMS-Timecode is similar to SMPTE, but uses a
      * floating point milliseconds value instead of the frame count
      */
-    class Hms
-      : public Format
+    struct Hms
+      : Format
       {
-        static void rebuild (HmsTC&, Quantiser const&);
+        static void       rebuild (HmsTC&, Quantiser const&);
+        static TimeValue evaluate (HmsTC const&, QuantiserRef);
       };
     
     
@@ -117,10 +139,11 @@ namespace time {
      * @note Seconds is implemented as rational number and thus uses
      *       decimal format, not the usual sexagesimal time format
      */
-    class Seconds
-      : public Format
+    struct Seconds
+      : Format
       {
-        static void rebuild (Secs&, Quantiser const&);
+        static void       rebuild (Secs&, Quantiser const&);
+        static TimeValue evaluate (Secs const&, QuantiserRef);
       };
     
     
