@@ -20,10 +20,6 @@
 
 * *****************************************************/
 
-#include <gdkmm/drawable.h>
-#include <gdkmm/general.h>
-#include <cairomm/cairomm.h>
-
 #include "gui/gtk-lumiera.hpp"
 #include "gui/output/xvdisplayer.hpp"
 #include "gui/output/gdkdisplayer.hpp"
