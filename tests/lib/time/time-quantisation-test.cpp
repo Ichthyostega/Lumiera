@@ -90,7 +90,7 @@ namespace test{
       void
       check_theFullStory (TimeValue org)
         {
-          FixedFrameQuantiser fixQ(25);
+          PQuant fixQ (new FixedFrameQuantiser(25));
           QuTime qVal (org, fixQ);
           
           CHECK ( qVal.supports<format::Frames>());

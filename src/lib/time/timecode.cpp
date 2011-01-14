@@ -45,25 +45,20 @@ namespace time {
      *  by quantising the given time value 
      */
     void
-    Frames::rebuild (FrameNr& framecnt, Quantiser const& quantiser, TimeValue const& rawTime)
+    Frames::rebuild (FrameNr& framecnt, QuantR quantiser, TimeValue const& rawTime)
     {
       framecnt.setValueRaw(quantiser.gridPoint (rawTime));
     }
     
     /** calculate the time point denoted by this frame count */
     TimeValue 
-    Frames::evaluate (FrameNr const& framecnt, QuantiserRef quantiser)
+    Frames::evaluate (FrameNr const& framecnt, QuantR quantiser)
     {
-      return quantiser->timeOf (framecnt);
+      return quantiser.timeOf (framecnt);
     }
 
   }
   
-  
-  /** */
-  QuantiserRef::QuantiserRef (Quantiser const&)
-    : hashID_(123) /////////////////////////////////////////////////TODO
-    { }
   
   
   /** */

@@ -56,9 +56,9 @@ namespace time {
   
   
   /** */
-  QuTime::QuTime (TimeValue raw, Quantiser const& quantisation_to_use)
+  QuTime::QuTime (TimeValue raw, PQuant quantisation_to_use)
     : Time(raw)
-    , quantiser_(&quantisation_to_use)
+    , quantiser_(quantisation_to_use)
     { }
   
   

@@ -27,6 +27,7 @@
 #include "lib/time/timevalue.hpp"
 
 //#include <boost/operators.hpp>
+#include <tr1/memory>
 #include <string>
 
 
@@ -42,27 +43,10 @@ namespace time {
   class Secs;
   
   
-  class Quantiser; // API for grid aligning 
+  class Quantiser; // API for grid aligning
+  typedef Quantiser const& QuantR;
+  typedef std::tr1::shared_ptr<const Quantiser> PQuant;
   
-  /** 
-   * smart reference for accessing an existing quantiser 
-   */
-  class QuantiserRef
-    {
-      size_t hashID_;
-      
-    public:
-      QuantiserRef (Quantiser const&);
-      
-      // using standard copy;
-      
-      
-      const Quantiser *
-      operator-> ()
-        {
-          UNIMPLEMENTED ("how to manage and address the existing quantisers");
-        }
-    };
   
   
   /**
@@ -96,8 +80,8 @@ namespace time {
     struct Frames
       : Format
       {
-        static void       rebuild (FrameNr&, Quantiser const&, TimeValue const&);
-        static TimeValue evaluate (FrameNr const&, QuantiserRef);
+        static void       rebuild (FrameNr&, QuantR, TimeValue const&);
+        static TimeValue evaluate (FrameNr const&, QuantR);
       };
     
     
@@ -110,8 +94,8 @@ namespace time {
     struct Smpte
       : Format
       {
-        static void       rebuild (SmpteTC&, Quantiser const&);
-        static TimeValue evaluate (SmpteTC const&, QuantiserRef);
+        static void       rebuild (SmpteTC&, QuantR);
+        static TimeValue evaluate (SmpteTC const&, QuantR);
       };
     
     
@@ -125,8 +109,8 @@ namespace time {
     struct Hms
       : Format
       {
-        static void       rebuild (HmsTC&, Quantiser const&);
-        static TimeValue evaluate (HmsTC const&, QuantiserRef);
+        static void       rebuild (HmsTC&, QuantR);
+        static TimeValue evaluate (HmsTC const&, QuantR);
       };
     
     
@@ -142,8 +126,8 @@ namespace time {
     struct Seconds
       : Format
       {
-        static void       rebuild (Secs&, Quantiser const&);
-        static TimeValue evaluate (Secs const&, QuantiserRef);
+        static void       rebuild (Secs&, QuantR);
+        static TimeValue evaluate (Secs const&, QuantR);
       };
     
     

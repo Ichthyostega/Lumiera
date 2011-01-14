@@ -47,13 +47,13 @@ namespace time {
   class QuTime
     : public Time
     {
-      const Quantiser *quantiser_;
+      PQuant quantiser_;
       
     public:
       QuTime (TimeValue raw, Symbol gridID);
-      QuTime (TimeValue raw, Quantiser const& quantisation_to_use);
+      QuTime (TimeValue raw, PQuant quantisation_to_use);
       
-      operator QuantiserRef()  const;
+      operator PQuant()  const;
           
       template<class FMT>
       bool supports()  const;
@@ -72,10 +72,10 @@ namespace time {
   /* == implementation == */
   
   inline
-  QuTime::operator QuantiserRef()  const
+  QuTime::operator PQuant()  const
   {
     ASSERT (quantiser_);
-    return QuantiserRef(*quantiser_);
+    return quantiser_;
   }
 
   template<class FMT>

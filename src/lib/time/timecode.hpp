@@ -59,8 +59,8 @@ namespace time {
       Time   getTime()   const { return Time(value()); }
       
     protected:
-      TCode (QuantiserRef const& qID)
-        : qID_(qID)
+      TCode (PQuant const& quant)
+        : quantiser_(quant)
         { }
       
       virtual string show()     const   =0;
@@ -68,7 +68,7 @@ namespace time {
       virtual TimeValue value() const   =0;
       
     protected:
-      QuantiserRef qID_;
+      PQuant quantiser_;
     };
   
   
@@ -88,7 +88,7 @@ namespace time {
       
       string show()     const { return string(show())+"fr"; }
       Literal tcID()    const { return "Frame-count"; } 
-      TimeValue value() const { return Format::evaluate (*this, qID_); }
+      TimeValue value() const { return Format::evaluate (*this, *quantiser_); }
       
     public:
       typedef format::Frames Format;
