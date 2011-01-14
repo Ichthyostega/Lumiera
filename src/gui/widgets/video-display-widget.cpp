@@ -22,7 +22,7 @@
 
 #include <gdkmm/drawable.h>
 #include <gdkmm/general.h>
-#include <cairomm-1.0/cairomm/cairomm.h>
+#include <cairomm/cairomm.h>
 
 #include "gui/gtk-lumiera.hpp"
 #include "gui/output/xvdisplayer.hpp"

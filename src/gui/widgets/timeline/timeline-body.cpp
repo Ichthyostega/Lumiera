@@ -20,7 +20,7 @@
 
 * *****************************************************/
 
-#include <cairomm-1.0/cairomm/cairomm.h>
+#include <cairomm/cairomm.h>
 #include <boost/foreach.hpp>
 
 #include "timeline-body.hpp"
