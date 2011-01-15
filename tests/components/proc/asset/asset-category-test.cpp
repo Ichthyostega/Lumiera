@@ -25,6 +25,7 @@
 #include "lib/util.hpp"
 
 #include "proc/asset/category.hpp"
+#include "proc/asset/asset-format.hpp"
 
 #include <boost/format.hpp>
 #include <iostream>

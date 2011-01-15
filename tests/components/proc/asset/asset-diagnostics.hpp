@@ -50,42 +50,42 @@ using std::string;
 using std::cout;
 
 
-namespace asset
-  {
- 
+namespace asset {
+  
   inline void
   dump (PcAsset& aa)
-    {
-      if (!aa)
-        cout << "Asset(NULL)\n";
-      else
-        {
-          format fmt("%s %|50T.| id=%s  adr=%p smart-ptr=%p use-count=%u");
-          cout << fmt % str(aa) % aa->getID() % aa.get() % &aa % (aa.use_count() - 1) << "\n";
-    }   }
- 
+  {
+    if (!aa)
+      cout << "Asset(NULL)\n";
+    else
+      {
+        format fmt("%s %|50T.| id=%s  adr=%p smart-ptr=%p use-count=%u");
+        cout << fmt % str(aa) % aa->getID() % aa.get() % &aa % (aa.use_count() - 1) << "\n";
+  }   }
+  
+  
   inline void
   dumpAssetManager ()
-    {
-      list<PcAsset> assets (AssetManager::instance().listContent());
-      cout << "----all-registered-Assets----\n";
-      for_each (assets, bind (&dump, _1));
-    }
+  {
+    list<PcAsset> assets (AssetManager::instance().listContent());
+    cout << "----all-registered-Assets----\n";
+    for_each (assets, bind (&dump, _1));
+  }
   
   
   template<class CHI, class PAR>
   inline bool
   dependencyCheck (P<CHI> child, P<PAR> parent)
-    {
-      return (child == parent)
-          || (0 < child->getParents().size()
-             && (parent == child->getParents()[0])
-             && (contains (parent->getDependant(), child)))
-          ;
-    }
-
-    
-    
-
+  {
+    return (child == parent)
+        || (0 < child->getParents().size()
+           && (parent == child->getParents()[0])
+           && (contains (parent->getDependant(), child)))
+        ;
+  }
+  
+  
+  
+  
 } // namespace asset
 #endif

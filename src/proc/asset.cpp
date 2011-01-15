@@ -23,6 +23,7 @@
 
 #include "proc/asset.hpp"
 #include "proc/assetmanager.hpp"
+#include "proc/asset/asset-format.hpp"
 #include "lib/util-foreach.hpp"
 #include "lib/util.hpp"
 
