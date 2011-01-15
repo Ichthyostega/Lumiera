@@ -26,40 +26,21 @@
 
 #include "proc/asset/meta.hpp"
 #include "proc/asset/meta/time-grid.hpp"
+#include "proc/asset/asset-format.hpp"
 #include "lib/time/timevalue.hpp"
-//#include "proc/asset/entry-id.hpp"
-//#include "lib/p.hpp"
-//#include "proc/assetmanager.hpp"
-//#include "proc/asset/inventory.hpp"
-//#include "proc/mobject/session/clip.hpp"
-//#include "proc/mobject/session/track.hpp"
-//#include "lib/meta/trait-special.hpp"
-//#include "lib/util-foreach.hpp"
-//#include "lib/symbol.hpp"
+#include "lib/util.hpp"
 
-//#include <tr1/unordered_map>
 #include <boost/rational.hpp>
-//#include <iostream>
-//#include <string>
+#include <iostream>
 
-//using lib::test::showSizeof;
-//using lib::test::randStr;
-//using util::isSameObject;
-//using util::and_all;
-//using util::for_each;
-//using util::isnil;
 using boost::rational_cast;
 using lib::test::randStr;
-//using lib::Literal;
-//using lib::Symbol;
-//using lumiera::P;
-//using std::string;
-//using std::cout;
-//using std::endl;
+using std::cout;
+using std::endl;
 
 
 
-namespace asset {
+namespace asset{
 namespace meta {
 namespace test {
   
@@ -82,8 +63,6 @@ namespace test {
   /***************************************************************************
    * @test build some simple time grids and verify their behaviour
    *       for quantising (grid aligning) time values.
-   * 
-   * @todo WIP-WIP-WIP                                       ////////////////////TICKET #736
    * 
    * @see asset::meta::TimeGrid
    * @see time-quantisation-test.cpp usage context
@@ -114,6 +93,7 @@ namespace test {
           
           PGrid myGrid = spec.commit();
           CHECK (myGrid);
+          CHECK (myGrid->ident.name == myGrID.getSym());
           
            // now verify the grid
           //  by performing some conversions...
@@ -133,9 +113,14 @@ namespace test {
       void
       createGrid_simplified()
         {
+          PGrid simplePALGrid = TimeGrid::build ("", FrameRate::PAL);
+          CHECK (simplePALGrid);
+          CHECK (!util::isnil (simplePALGrid->ident.name));   // note: name-ID filled in automatically
+          cout << "simple PAL Grid: " << simplePALGrid->ident << endl;
+          
+          CHECK (Time(2) == simplePALGrid->timeOf(50));
+          CHECK (Time(2) == simplePALGrid->timeOf(FSecs(2)));
         }
-      
-      
     };
   
   

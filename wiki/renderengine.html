@@ -2745,10 +2745,10 @@ For the case here in question this seems to be the ''resource allocation is cons
 And, last but not least, doing large scale allocations is the job of the backend. Exceptions being long-lived objects, like the session or the sequences, which are created once and don't bear the danger of causing memory pressure. Besides, the ProcLayer code shouldn't issue &quot;new&quot; and &quot;delete&quot; when it comes in hand, rather it should use some centralized [[Factories]] for all allocation and freeing, so we can redirect these calls down to the backend, which may use pooling or special placement allocators or the like. The rationale is, for modern hardware/architectures, care has to be taken with heap allocations, esp. with many small objects and irregular usage patterns.
 </pre>
 </div>
-<div title="MetaAsset" modifier="Ichthyostega" modified="201012302032" created="201012290320" tags="def" changecount="7">
-<pre>This category is comprised of the various aspects of the way the application controls and manages its own behaviour. They are more related to the way the application behaves, as opposed to the way the edited data is structured and organised.
-* StreamType
-* ScaleGrid
+<div title="MetaAsset" modifier="Ichthyostega" modified="201101151026" created="201012290320" tags="def" changecount="9">
+<pre>This category is comprised of the various aspects of the way the application controls and manages its own behaviour. They are more related to the way the application behaves, as opposed to the way the edited data is structured and organised (which is the realm of [[structural assets|StructAsset]]
+* StreamType &amp;rarr; a type system for describing and relating media data streams
+* ScaleGrid &amp;rarr; to manage time scales and frame alignment
 
 !accessing meta assets
 It turns out that all meta assets follow a distinct usage pattern: //they aren't built as individual entities.// Either, they are introduced into the system as part of a larger scale configuration activity, or they are //derived from category.// The latter fits in with a prototype-like approach; initially, the individual entry just serves to keep track of a categorisation, while at some point, such a link into a describing category may evolve into a local differentiation of some settings.
@@ -2762,7 +2762,7 @@ These observation leads to a design relying on a self referential structure: eac
 
 !!!mutating meta assets
 Meta assets are ''immutable'' -- but they can be //superseded.//
-For each meta asset instance, initially a //builder// is created for setting up the properties; when done, the builder will &quot;drop off&quot; the new meta asset instance. The same procedure is used augmenting or superseding an existing element.
+For each meta asset instance, initially a //builder// is created for setting up the properties; when done, the builder will &quot;drop off&quot; the new meta asset instance. The same procedure is used for augmenting or superseding an existing element.
 </pre>
 </div>
 <div title="Model" modifier="Ichthyostega" modified="201003210021" created="201003210020" tags="overview" changecount="2">
@@ -6746,7 +6746,7 @@ Question is: how fine grained and configurable needs this to be?
 
 </pre>
 </div>
-<div title="TimecodeFormat" modifier="Ichthyostega" modified="201101142138" created="201101100308" tags="Player spec discuss draft" changecount="16">
+<div title="TimecodeFormat" modifier="Ichthyostega" modified="201101151404" created="201101100308" tags="Player spec discuss draft" changecount="17">
 <pre>The handling of [[Timecode]] is closely related to [[time representation and quantisation|TimeQuant]]. In fact, these two topics blend into one another. Time will be quantised into a //grid,// but this grid only makes sense when linked to a externally relevant meaning and representation, which is the Timecode. But a timecode value also denotes a specific point in time -- performing operations on a timecode is equivalent to manipulating a quantised time value.
 
 !Problem of dependencies
@@ -6772,7 +6772,7 @@ And last but not least, it is possible to get a new ~TimeValue, reflecting the c
 * @@color:green;✔@@ find out about the connection to the MetaAsset &amp;rarr; [[Advice]]
 * @@color:green;✔@@ determine the primitives which need to be on the //effective quantiser API.//
 * find out how a format can address the individual components it's comprised of
-* decide how a concrete TC value can refer to his quantiser
+* @@color:green;✔@@ decide how a concrete TC value can refer to his quantiser &amp;rarr; always using smart-ptr
 * maybe coin a //value handle// -- to tie the three required parts together
 </pre>
 </div>

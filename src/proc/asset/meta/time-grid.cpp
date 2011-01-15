@@ -112,8 +112,7 @@ namespace meta {
     if (predecessor_)
       throw error::Invalid("compound and variable time grids are a planned feature"
                           , error::LUMIERA_ERROR_UNIMPLEMENTED);
-    if (!fps_)
-      throw error::Config ("attempt to build a TimeGrid with 0 frames per second");
+    ENSURE (fps_, "infinite grid was not properly detected by FrameRate ctor");
     
     if (isnil (id_))
       {
