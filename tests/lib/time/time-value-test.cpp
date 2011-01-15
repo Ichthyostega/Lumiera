@@ -230,6 +230,8 @@ namespace test{
           // chaining and copy construction
           Offset off9 (off5 + Offset(four));
           CHECK (9 == off9);
+          // simple linear combinations
+          CHECK (7 == -2*off9 + off5*5);
         }
       
       

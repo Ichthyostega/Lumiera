@@ -148,7 +148,7 @@ namespace time {
       // Supporting multiplication with integral factor
       TimeVar& operator*= (int fact)           { t_ *= fact;  return *this; }
       
-      // Supporting flip sign
+      // Supporting sign flip
       TimeVar  operator-  ()         const     { return TimeVar(*this)*=-1; }
        
       // baseclass TimeValue is already totally_ordered 
@@ -185,15 +185,31 @@ namespace time {
         {
           return TimeValue(std::llabs (t_));
         }
-      
-      Offset
-      operator+ (Offset const& toChain)  const
-        {
-          TimeVar distance(*this);
-          distance += toChain;
-          return Offset(distance);
-        }
     };
+  
+  //-- support linear offset chaining ---------------
+  
+  inline Offset
+  operator+ (Offset const& start, Offset const& toChain)
+  {
+    TimeVar distance(start);
+    distance += toChain;
+    return Offset(distance);
+  }
+  
+  inline Offset
+  operator* (int factor, Offset const& o)
+  {
+    TimeVar distance(o);
+    distance *= factor;
+    return Offset(distance);
+  }
+  
+  inline Offset
+  operator* (Offset const& distance, int factor)
+  {
+    return factor*distance;
+  }
   
   
   
