@@ -123,7 +123,7 @@ namespace test{
       void
       checkMultipleGrids (TimeValue org)
         {
-          TimeGrid::build("my_alternate_grid", FSecs(30000,1001));
+          TimeGrid::build("my_alternate_grid", FrameRate::NTSC);
           
           QuTime palVal (org, "my_simple_grid");
           QuTime ntscVal (org, "my_alternate_grid");

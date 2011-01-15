@@ -25,8 +25,9 @@
 #define LIB_TIME_QUANTISER_H
 
 #include "lib/error.hpp"
-#include "lib/time/timevalue.hpp"
+#include "lib/time/grid.hpp"
 #include "lib/time/formats.hpp"
+#include "lib/time/timevalue.hpp"
 #include "lib/iter-adapter.hpp"
 
 //#include <boost/operators.hpp>
@@ -69,14 +70,13 @@ namespace time {
    * @todo WIP-WIP-WIP
    */
   class Quantiser
+    : public Grid
     {
       typedef std::vector<Format*>         _FormatTable;
       typedef _FormatTable::const_iterator _SrcIter;
       typedef lib::PtrDerefIter<_SrcIter>  _Iter;
       
     public:
-      virtual ~Quantiser();  ///< this is an ABC
-      
       
       template<class FMT>
       bool supports()  const;
@@ -84,10 +84,12 @@ namespace time {
       typedef _Iter iterator;
       iterator getSupportedFormats()  const;
       
+      
+      //------Grid-API----------------------------------------------
       virtual TimeValue gridAlign (TimeValue const& raw)  const   =0;
       virtual long      gridPoint (TimeValue const& raw)  const   =0;
       virtual TimeValue timeOf    (long gridPoint)        const   =0;
-      
+      virtual TimeValue timeOf    (FSecs, int =0)         const   =0;
     };
   
   
@@ -117,6 +119,7 @@ namespace time {
       TimeValue gridAlign (TimeValue const&)  const;
       long      gridPoint (TimeValue const&)  const;
       TimeValue timeOf    (long gridPoint)    const;
+      TimeValue timeOf    (FSecs, int =0)     const;
     };
   
   

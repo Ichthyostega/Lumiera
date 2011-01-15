@@ -46,7 +46,7 @@ namespace time {
   
   
   
-  Quantiser::~Quantiser() { } // hint to emit the VTable here...
+  Grid::~Grid() { } // hint to emit the VTable here...
   
   
   /** */
@@ -122,6 +122,23 @@ namespace time {
   FixedFrameQuantiser::timeOf (long gridPoint)  const
   {
     return TimeValue (lumiera_time_of_gridpoint (gridPoint, _raw(origin_), _raw(raster_)));
+  }
+  
+  
+  /** calculate time coordinates of a time spec relative to this quantised time scale
+   * @param gridTime seconds relative to the origin of this scale
+   * @param gridOffset additional offset in grid intervals (frames)
+   * @return time point measured in Lumiera internal time 
+   * @warning returned time values are limited by the
+   *      valid range of lumiera::Time
+   */
+  TimeValue
+  FixedFrameQuantiser::timeOf (FSecs gridTime, int gridOffset)  const
+  {
+    Time gt(gridTime);
+    TimeVar timePoint = gt + origin_;
+    timePoint += gridOffset * raster_;
+    return timePoint;
   }
   
   

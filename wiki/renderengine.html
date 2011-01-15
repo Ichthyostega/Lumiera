@@ -6746,7 +6746,7 @@ Question is: how fine grained and configurable needs this to be?
 
 </pre>
 </div>
-<div title="TimecodeFormat" modifier="Ichthyostega" modified="201101131510" created="201101100308" tags="Player spec discuss draft" changecount="15">
+<div title="TimecodeFormat" modifier="Ichthyostega" modified="201101142138" created="201101100308" tags="Player spec discuss draft" changecount="16">
 <pre>The handling of [[Timecode]] is closely related to [[time representation and quantisation|TimeQuant]]. In fact, these two topics blend into one another. Time will be quantised into a //grid,// but this grid only makes sense when linked to a externally relevant meaning and representation, which is the Timecode. But a timecode value also denotes a specific point in time -- performing operations on a timecode is equivalent to manipulating a quantised time value.
 
 !Problem of dependencies
@@ -6770,7 +6770,7 @@ And last but not least, it is possible to get a new ~TimeValue, reflecting the c
 
 !!{{red{WIP 1/11}}}design tasks
 * @@color:green;✔@@ find out about the connection to the MetaAsset &amp;rarr; [[Advice]]
-* determine the primitives which need to be on the //real quantiser API.//
+* @@color:green;✔@@ determine the primitives which need to be on the //effective quantiser API.//
 * find out how a format can address the individual components it's comprised of
 * decide how a concrete TC value can refer to his quantiser
 * maybe coin a //value handle// -- to tie the three required parts together

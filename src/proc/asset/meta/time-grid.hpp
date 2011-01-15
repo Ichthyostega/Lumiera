@@ -48,6 +48,7 @@
 #define ASSET_META_TIME_GRID_H
 
 #include "proc/asset/meta.hpp"
+#include "lib/time/grid.hpp"
 #include "lib/time/timevalue.hpp"
 #include "lib/symbol.hpp"
 
@@ -59,6 +60,7 @@ namespace meta {
   using lib::Symbol;
   using lib::time::Time;
   using lib::time::TimeValue;
+  using lib::time::FrameRate;
   using lib::time::FSecs;
   
   
@@ -73,15 +75,20 @@ namespace meta {
    */ 
   class TimeGrid
     : public Meta
+    , public lib::time::Grid
     {
       
     public:
+      //--------Grid-API------------------------------------
+      TimeValue gridAlign (TimeValue const& raw)  const   =0;
+      long      gridPoint (TimeValue const& raw)  const   =0;
+      TimeValue timeOf    (long gridPoint)        const   =0;
+      TimeValue timeOf    (FSecs, int =0)         const   =0;
       
-      // TODO define the TimeGrid API here
       
       /* === shortcut builder functions === */
-      static PGrid build (Symbol gridID, FSecs frames_per_second);
-      static PGrid build (Symbol gridID, FSecs frames_per_second, Time origin);
+      static PGrid build (Symbol gridID, FrameRate frames_per_second);
+      static PGrid build (Symbol gridID, FrameRate frames_per_second, Time origin);
       
     protected:
       TimeGrid (EntryID<TimeGrid> const&);
@@ -94,7 +101,7 @@ namespace meta {
   template<>
   struct Builder<TimeGrid>
     {
-      FSecs   fps_;
+      FrameRate fps_;
       Time origin_;
       
       /** when building a compound or variable grid,

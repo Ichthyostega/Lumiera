@@ -24,7 +24,7 @@
 #include "proc/asset/meta/time-grid.hpp"
 #include "proc/asset/entry-id.hpp"
 #include "proc/assetmanager.hpp"
-//#include "lib/time/quantiser.hpp"
+#include "lib/time/quantiser.hpp"
 #include "lib/time/timevalue.hpp"
 #include "lib/time/display.hpp"
 //#include "lib/util.hpp"
@@ -60,6 +60,7 @@ namespace meta {
   using lib::time::TimeSpan;
   using lib::time::Duration;
   using lib::time::Offset;
+  using lib::time::FSecs;
   
   /** 
    * TimeGrid implementation: a trivial time grid,
@@ -69,14 +70,24 @@ namespace meta {
   class SimpleTimeGrid
     : public TimeGrid
     {
-      TimeSpan timeBase_;
+      lib::time::FixedFrameQuantiser frameGrid_;
       
-      // TODO implement the TimeGrid API here
+      /* == grid API forwarded to embedded quantiser == */
+      TimeValue gridAlign (TimeValue const& rawTime)          const { return frameGrid_.gridAlign (rawTime); }
+      long      gridPoint (TimeValue const& rawTime)          const { return frameGrid_.gridPoint (rawTime); }
+      TimeValue timeOf    (long gridPoint)                    const { return frameGrid_.timeOf (gridPoint);  }
+      TimeValue timeOf    (FSecs gridTime, int gridOffset =0) const { return frameGrid_.timeOf (gridTime,gridOffset); }
+      
       
     public:
-      SimpleTimeGrid (Time start, Duration gridSpacing, EntryID<TimeGrid> const& name)
+      SimpleTimeGrid (Time start, Duration frameDuration, EntryID<TimeGrid> const& name)
         : TimeGrid (name)
-        , timeBase_(start,gridSpacing)
+        , frameGrid_(frameDuration,start)
+        { }
+      
+      SimpleTimeGrid (Time start, FrameRate frames_per_second, EntryID<TimeGrid> const& name)
+        : TimeGrid (name)
+        , frameGrid_(frames_per_second,start)
         { }
     };
   
@@ -103,12 +114,10 @@ namespace meta {
     if (!fps_)
       throw error::Config ("attempt to build a TimeGrid with 0 frames per second");
     
-    Time spacing = 1 / fps_;  // seconds per frame
-    
     format gridIdFormat("grid_%f_%s");
     string name = str(gridIdFormat % fps_ % origin_);
     EntryID<TimeGrid> nameID (name);
-    TimeGrid& newGrid (*new SimpleTimeGrid(origin_, Offset(spacing), nameID));
+    TimeGrid& newGrid (*new SimpleTimeGrid(origin_, fps_, nameID));
     
     return AssetManager::instance().wrap (newGrid);
   }
@@ -117,16 +126,20 @@ namespace meta {
   /* === TimeGrid shortcut builder functions === */
   
   PGrid
-  TimeGrid::build (Symbol gridID, FSecs frames_per_second)
+  TimeGrid::build (Symbol gridID, FrameRate frames_per_second)
   {
     return build (gridID,frames_per_second, Time(0));
   }
   
   
   PGrid
-  TimeGrid::build (Symbol gridID, FSecs frames_per_second, Time origin)
+  TimeGrid::build (Symbol gridID, FrameRate frames_per_second, Time origin)
   {
-    UNIMPLEMENTED ("build a trivial time grid");
+    Builder<TimeGrid> spec;
+    spec.fps_ = frames_per_second;
+    spec.origin_ = origin;
+    
+    return spec.commit();
   }
   
   

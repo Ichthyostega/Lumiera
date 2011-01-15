@@ -100,7 +100,7 @@ namespace time {
   
   /** predefined constant for PAL framerate */
   const FrameRate FrameRate::PAL  (25);
-  const FrameRate FrameRate::NTSC (3000,1001);
+  const FrameRate FrameRate::NTSC (30000,1001);
   
   
   /** @return time span of one frame of this rate,

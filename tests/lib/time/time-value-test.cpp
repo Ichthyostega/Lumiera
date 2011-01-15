@@ -261,7 +261,7 @@ namespace test{
           CHECK (Time(2) == unit);              // duration of 50 frames at 25fps is... (guess what)
           
           CHECK (FrameRate::PAL.duration() == Time(FSecs(1,25)));
-          CHECK (FrameRate::NTSC.duration() == Time(FSecs(1001,3000)));
+          CHECK (FrameRate::NTSC.duration() == Time(FSecs(1001,30000)));
           cout << "NTSC-Framerate = " << FrameRate::NTSC.asDouble() << endl;
           
           CHECK (zero == Duration::NIL);
