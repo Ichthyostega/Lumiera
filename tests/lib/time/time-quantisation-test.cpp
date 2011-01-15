@@ -82,7 +82,7 @@ namespace test{
           FrameNr count(qVal);                      // materialise this quantised time into..
           int n = count;                            // frame count, accessible as plain number
           
-          CHECK (Time(FSecs(n-1, 25)) < org);       // verify quantisation: the original time
+          CHECK (Time(FSecs(n-1, 25)) <= org);      // verify quantisation: the original time
           CHECK (org < Time(FSecs(n+1, 25)));       // is properly bracketed by (n-1, n+2)
         }
       

@@ -120,7 +120,7 @@ namespace meta {
        */
       Builder(string const& nameID  ="")
         : id_(nameID)
-        , fps_(0)
+        , fps_(1)
         , origin_(TimeValue(0))
         , predecessor_()
         { }

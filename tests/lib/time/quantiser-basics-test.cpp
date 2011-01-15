@@ -40,7 +40,7 @@ namespace test{
   namespace {
     
     const uint MAX_FRAMES = 25*500;
-    const uint MAX_DIRT   = 50;
+    const uint DIRT_GRAIN = 50;
     
     const FSecs F25(1,25); // duration of one PAL frame 
   }
@@ -82,7 +82,7 @@ namespace test{
           FixedFrameQuantiser fixQ(25);
           
           uint frames = (rand() % MAX_FRAMES);
-          FSecs dirt  = (F25 / (rand() % MAX_DIRT));
+          FSecs dirt  = (F25 / (rand() % DIRT_GRAIN));
           
           Time rawTime = dirt + frames*F25;
           

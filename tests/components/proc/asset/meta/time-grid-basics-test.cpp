@@ -26,6 +26,7 @@
 
 #include "proc/asset/meta.hpp"
 #include "proc/asset/meta/time-grid.hpp"
+#include "lib/time/timevalue.hpp"
 //#include "proc/asset/entry-id.hpp"
 //#include "lib/p.hpp"
 //#include "proc/assetmanager.hpp"
@@ -37,6 +38,7 @@
 //#include "lib/symbol.hpp"
 
 //#include <tr1/unordered_map>
+#include <boost/rational.hpp>
 //#include <iostream>
 //#include <string>
 
@@ -46,6 +48,7 @@
 //using util::and_all;
 //using util::for_each;
 //using util::isnil;
+using boost::rational_cast;
 using lib::test::randStr;
 //using lib::Literal;
 //using lib::Symbol;
@@ -60,14 +63,18 @@ namespace asset {
 namespace meta {
 namespace test {
   
+  using namespace lib::time;
+  
   typedef Builder<TimeGrid> GridBuilder;
   typedef EntryID<TimeGrid> GridID;
   
   namespace { // Test definitions...
     
-    Time testOrigin (12,23);
-    FrameRate testFps (5,4);
+    const Time testOrigin (12,34);
+    const FrameRate testFps (5,6);
     
+    const uint MAX_FRAMES = 1000;
+    const uint DIRT_GRAIN = 50;
   }
   
   
@@ -98,17 +105,28 @@ namespace test {
           GridID myGrID (randStr(8));
           GridBuilder spec = asset::Meta::create (myGrID);
           
-          CHECK (!spec.fps_);
-          CHECK (spec.origin_ == Time(0));
+          CHECK ( spec.fps_    == 1);
+          CHECK ( spec.origin_ == Time(0));
           CHECK (!spec.predecessor_);
           
-          spec.fps_ = testFps;
+          spec.fps_    = testFps;
           spec.origin_ = testOrigin;
           
           PGrid myGrid = spec.commit();
           CHECK (myGrid);
           
-          UNIMPLEMENTED ("the basic Grid API, so we can actually check anything");
+           // now verify the grid
+          //  by performing some conversions...
+          int randomFrame = (rand() % MAX_FRAMES);
+          
+          Time point (myGrid->timeOf (randomFrame));
+          CHECK (point == testOrigin + randomFrame * testFps.duration());
+          
+          uint fract = rand() % DIRT_GRAIN;
+          FSecs dirt = rational_cast<FSecs> (1 / testFps / fract);
+          
+          Time dirty(point + Time(dirt));
+          CHECK (point == testOrigin + myGrid->gridAlign(dirty));
         }
       
       
