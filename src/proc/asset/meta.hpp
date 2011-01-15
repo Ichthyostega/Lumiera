@@ -89,7 +89,7 @@ namespace asset {
     class Descriptor
       {
       public:
-        virtual ~Descriptor();  ///< this is an ABC
+        virtual ~Descriptor();  ///< this is an Interface
       };
       
       /**
@@ -122,7 +122,7 @@ namespace asset {
       
       virtual const ID<Meta>& getID()  const    ///< @return ID of kind Meta 
         { 
-          return static_cast<const ID<Meta>& > (Asset::getID()); 
+          return static_cast<const ID<Meta>& > (Asset::getID());
         }
       
     protected:

@@ -24,7 +24,6 @@
 #include "proc/assetmanager.hpp"
 #include "proc/asset/meta.hpp"
 #include "lib/util.hpp"
-#include "include/logging.h"
 
 
 namespace asset {
@@ -50,14 +49,15 @@ namespace asset {
   
   /** Generic factory method for Metadata Asset instances.
    *  @param  EntryID specifying the type and a human readable name-ID
-   *  @return an Meta smart ptr linked to the internally registered smart ptr
-   *          created as a side effect of calling the concrete Meta subclass ctor.
+   *  @return an meta::Builder struct with the metadata parameters. After configuring
+   *          and tweaking those parameters, the builder's \c commit() function
+   *          will create a new (immutable) meta asset.
    */
   template<class MA>
   meta::Builder<MA>
-  MetaFactory::operator () (EntryID<MA> elementIdentity)
+  MetaFactory::operator() (EntryID<MA> elementIdentity)
   {
-    UNIMPLEMENTED ("Meta-Factory");
+    return meta::Builder<MA> (elementIdentity.getSym());
   }
   
   
@@ -66,14 +66,15 @@ namespace asset {
    *          to be augmented and further specialised. Can indeed
    *          be an existing asset::Meta instance
    *  @param  EntryID specifying the type and a human readable name-ID
-   *  @return an Meta smart ptr linked to the internally registered smart ptr
-   *          created as a side effect of calling the concrete Meta subclass ctor.
+   *  @return an meta::Builder struct with the metadata parameters. After configuring
+   *          and tweaking those parameters, the builder's \c commit() function
+   *          will create a new (immutable) meta asset.
    */
   template<class MA>
   meta::Builder<MA>
   MetaFactory::operator() (Descriptor const& prototype, EntryID<MA> elementIdentity)
   {
-    UNIMPLEMENTED ("Meta-Factory");
+    UNIMPLEMENTED ("Meta-Factory: extend or supersede existing meta asset");       ////////////////////TICKET #746
   }
   
   

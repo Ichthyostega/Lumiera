@@ -27,12 +27,13 @@
 #include "lib/time/quantiser.hpp"
 #include "lib/time/timevalue.hpp"
 #include "lib/time/display.hpp"
-//#include "lib/util.hpp"
+#include "lib/util.hpp"
 //#include "include/logging.h"
 
 #include <boost/format.hpp>
 #include <string>
 
+using util::isnil;
 using boost::format;
 using boost::str;
 using std::string;
@@ -114,9 +115,12 @@ namespace meta {
     if (!fps_)
       throw error::Config ("attempt to build a TimeGrid with 0 frames per second");
     
-    format gridIdFormat("grid_%f_%s");
-    string name = str(gridIdFormat % fps_ % origin_);
-    EntryID<TimeGrid> nameID (name);
+    if (isnil (id_))
+      {
+        format gridIdFormat("grid_%f_%s");
+        id_ = str(gridIdFormat % fps_ % origin_);
+      }
+    EntryID<TimeGrid> nameID (id_);
     TimeGrid& newGrid (*new SimpleTimeGrid(origin_, fps_, nameID));
     
     return AssetManager::instance().wrap (newGrid);
@@ -135,7 +139,8 @@ namespace meta {
   PGrid
   TimeGrid::build (Symbol gridID, FrameRate frames_per_second, Time origin)
   {
-    Builder<TimeGrid> spec;
+    string name(gridID);
+    Builder<TimeGrid> spec(name);
     spec.fps_ = frames_per_second;
     spec.origin_ = origin;
     

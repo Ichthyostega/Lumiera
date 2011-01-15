@@ -64,6 +64,10 @@ namespace asset{
   class Timeline;
   class Sequence;
   
+  namespace meta {
+    class TimeGrid;
+  }
+  
   
   namespace idi  {
     
@@ -78,7 +82,7 @@ namespace asset{
       {
         static Symbol namePrefix();
         static Symbol catFolder();
-        static Symbol idSymbol();
+        static Symbol idSymbol();   ///< used as type predicate symbol
       };
     
     
@@ -130,6 +134,12 @@ namespace asset{
         static Symbol namePrefix() { return "seq";      }
         static Symbol catFolder()  { return "sequences";}
         static Symbol idSymbol()   { return "sequence"; }
+      };
+    template<> struct StructTraits<meta::TimeGrid>
+      {
+        static Symbol namePrefix() { return "grid";     }
+        static Symbol catFolder()  { return "time-scales";}
+        static Symbol idSymbol()   { return "timeGrid"; }
       };
     
     

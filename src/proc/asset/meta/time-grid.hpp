@@ -101,6 +101,8 @@ namespace meta {
   template<>
   struct Builder<TimeGrid>
     {
+      string id_;
+      
       FrameRate fps_;
       Time origin_;
       
@@ -116,8 +118,9 @@ namespace meta {
        * You need at least to set the framerate,
        * in order to create a usable TimeGrid
        */
-      Builder()
-        : fps_(0)
+      Builder(string const& nameID  ="")
+        : id_(nameID)
+        , fps_(0)
         , origin_(TimeValue(0))
         , predecessor_()
         { }
