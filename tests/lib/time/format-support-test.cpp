@@ -24,22 +24,12 @@
 #include "lib/test/run.hpp"
 #include "lib/time/formats.hpp"
 
-//#include <iostream>
-//#include <cstdlib>
-
-//using std::rand;
-//using std::cout;
-//using std::endl;
-
 
 namespace lib {
 namespace time {
 namespace format{
 namespace test {
   
-  namespace {
-    
-  }
   
   
   /********************************************************
@@ -54,8 +44,8 @@ namespace test {
       run (Arg) 
         {
           SupportStandardTimecode just_fine;
-          Supported just_smpte = Supported::formats<Types<Smpte> >();
-          Supported just_simple = Supported::formats<Types<Frames,Seconds> >();
+          Supported just_smpte  = Supported::formats< Types<Smpte> >();
+          Supported just_simple = Supported::formats< Types<Frames,Seconds> >();
           
           Supported& support1 (just_fine);
           Supported& support2 (just_smpte);

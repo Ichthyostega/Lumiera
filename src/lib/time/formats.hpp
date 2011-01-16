@@ -28,10 +28,10 @@
 #include "lib/meta/no-instance.hpp"
 #include "lib/meta/typelist.hpp"
 #include "lib/meta/generator.hpp"
+#include "lib/typed-counter.hpp"
 
-//#include <boost/operators.hpp>
 #include <tr1/memory>
-#include <string>
+#include <bitset>
 
 
 namespace lib {
@@ -150,10 +150,14 @@ namespace time {
     
     
     
+    /* == Descriptor to define Support for specific formats == */
+    
     using lumiera::typelist::Types;
-  
+    using lumiera::typelist::Node;
+    using lumiera::typelist::NullType;
+    
     /**
-     * Denote support for a specific (timecode) format.
+     * Descriptor to denote support for a specific (timecode) format.
      * This helper can be used to configure a selection of specific
      * timecode formats to be or not to be supported by some facility.
      * Formats are described by the format descriptor types defined in
@@ -161,25 +165,66 @@ namespace time {
      * establishes an numeric ID at runtime and uses a bitset to keep
      * track of the support for a given format.
      * 
-     * @todo WIP-WIP-WIP
+     * @note preconfigured limit #MAXID on the absolute number of
+     * different Format types; maybe needs to be increased accordingly.
+     * @warning the actual numeric IDs might vary on each run
+     * @see TypedContext
      */
     class Supported
       {
-      public:
-        template<typename TY>
-        static Supported
-        formats();
+        enum { MAXID = 8 }; 
+        
+        std::bitset<MAXID> flags_;
         
         template<class F>
+        size_t
+        typeID()
+          {
+            return TypedContext<Supported>::ID<F>::get();
+          }
+        
+        template<class F, class FS>
+        Supported
+        define(Node<F,FS>) ///< @internal set the flag for one Format in the typelist
+          {
+            flags_.set (typeID<F>());
+            return define(FS());
+          }
+        Supported define(NullType) { return *this;} ///< recursion end
+        
+        Supported() { } ///< @note use #formats to set up a new descriptor
+        
+        
+      public:
+        /** build a new Descriptor to denote support for all the Formats,
+         *  @param TY typelist holding all the Format types to support
+         */
+        template<typename TY>
+        static Supported
+        formats()
+          {
+            typedef typename TY::List SupportedFormats;
+            return Supported().define(SupportedFormats());
+          }
+        
+        /** check if a specific Format is supported */
+        template<class F>
         bool
-        check();
+        check()
+          {
+            return flags_[typeID<F>()];
+          }
       };
     
+    /**
+     * predefined standard configuration:
+     * Descriptor for supporting all the classical timecode formats
+     */
     struct SupportStandardTimecode
       : Supported
       {
         SupportStandardTimecode()
-          : Supported(formats<Types<Hms,Smpte,Frames,Seconds> >())
+          : Supported(formats< Types<Hms,Smpte,Frames,Seconds> >())
           { }
       };
     

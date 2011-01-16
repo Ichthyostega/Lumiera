@@ -668,6 +668,11 @@ return: 0
 END
 
 
+TEST "Defining Suppport for specific timecode formats" FormatSupport_test  <<END
+return: 0
+END
+
+
 PLANNED "Time formats and timecodes" TimeFormats_test  <<END
 return: 0
 END
