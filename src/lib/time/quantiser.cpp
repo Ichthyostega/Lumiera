@@ -25,6 +25,7 @@
 #include "lib/time/timevalue.hpp"
 #include "lib/time/timequant.hpp"
 #include "lib/time.h"
+#include "lib/advice.hpp"
 
 #include <boost/rational.hpp>
 
@@ -40,7 +41,16 @@ namespace time {
   
   namespace { // implementation helpers...
     
-    ///////////TODO superfluous??
+    PQuant
+    retrieveQuantiser (Symbol gridID)
+    {
+      advice::Request<PQuant> query(gridID);
+      PQuant grid_found = query.getAdvice();
+      if (!grid_found)
+        throw error::Logic ("unable to fetch the quantisation grid -- is it already defined?"
+                           , LUMIERA_ERROR_UNKNOWN_GRID);
+      return grid_found;
+    }
     
   }//(End) implementation helpers
   
@@ -49,13 +59,25 @@ namespace time {
   Grid::~Grid() { } // hint to emit the VTable here...
   
   
-  /** */
+  /** 
+   * build a quantised time value, referring the time grid by-name.
+   * This is the preferred standard way of establishing a quantisation,
+   * but it requires an existing time scale defined in the Lumiera Session,
+   * as TimeGrid (meta asset). Usually, such a time scale gets built based
+   * on the format and parameters of an output bus.
+   */
   QuTime::QuTime (TimeValue raw, Symbol gridID)
-    : Time(raw)          /////////////////////////////////////////////////TODO fetch quantiser
+    : Time(raw)
+    , quantiser_(retrieveQuantiser (gridID))
     { }
   
   
-  /** */
+  /**
+   * build a quantised time value by explicitly specifying a
+   * grid alignment facility and without any hidden reference
+   * to the Lumiera session. This is mainly intended for
+   * debugging and unit testing.
+   */
   QuTime::QuTime (TimeValue raw, PQuant quantisation_to_use)
     : Time(raw)
     , quantiser_(quantisation_to_use)

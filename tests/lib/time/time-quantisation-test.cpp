@@ -140,13 +140,12 @@ namespace test{
       void
       checkGridLateBinding (TimeValue org)
         {
-          QuTime funny (org, "special_funny_grid");      // refer a not yet existing grid
-          CHECK (org == funny);                          // no problem, unless we request quantisation
-          
-          VERIFY_ERROR (UNKNOWN_GRID, funny.formatAs<format::Frames>() );
+          // refer to a grid not yet defined
+          VERIFY_ERROR (UNKNOWN_GRID, QuTime wired(org, "special_funny_grid"));
           
           TimeGrid::build("special_funny_grid", 1);      // provide the grid's definition (1 frame per second)
           
+          QuTime funny (org, "special_funny_grid");      // now OK, grid is known
           int cnt = funny.formatAs<format::Frames>();
                                                          // and now performing quantisation is OK 
           SmpteTC smpte (funny);                         // also converting into SMPTE (which implies frame quantisation)

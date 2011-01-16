@@ -106,13 +106,13 @@ namespace time {
   
   
   /**
-   * Simple stand-alone Quantiser implementation for debugging and test.
-   * This is a self-contained quantiser implementation without any implicit
-   * referral to the Lumiera session. It is mainly intended for simplified unit testing.
-   * @warning real GUI and Proc-Layer code should always prefer to build a real quantiser,
-   * which referres some TimeGrid definition within the session. Basically, the overall
-   * purpose of the time-quantisation framework is to enforce such a link to a specific
-   * time and quantisation scale and to prevent "wild and uncoordinated" rounding attempts.
+   * Simple stand-alone Quantiser implementation based on a constant sized gird.
+   * This is a self-contained quantiser implementation without any implicit referral
+   * to the Lumiera session. As such it is suited for simplified unit testing.
+   * @warning real GUI and Proc-Layer code should always fetch a quantiser from the
+   * Session, referring to a pre defined TimeGrid. Basically, the overall purpose of
+   * the time-quantisation framework is to enforce such a link to a distinct time scale
+   * and quantisation, so to prevent "wild and uncoordinated" rounding attempts.
    */
   class FixedFrameQuantiser
     : public Quantiser

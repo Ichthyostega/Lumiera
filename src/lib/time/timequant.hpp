@@ -40,9 +40,19 @@ namespace time {
   
   
   /**
-   * fixed format time specification.
+   * grid aligned time specification, referring to a specific scale.
+   * A quantised time value allows to access the time specification
+   * as numeric value in one of the supported timecode formats, and
+   * relative to the defined time scale. Usually this time scale
+   * exists already in the Lumiera session and is referred simply
+   * by symbolic ID, it will be fetched on demand through the
+   * \link advice.hpp advice system.\endlink
    * 
-   * @todo WIP-WIP-WIP
+   * By creating a QuTime value, the relation to such a predefined
+   * time scale is made explicit. This doesn't change the internal
+   * time value, but the actual creation of a timecode formatted
+   * value (#formatAs) usually implies to quantise or grid align
+   * the time to the frame grid specific to this time scale.  
    */
   class QuTime
     : public Time
