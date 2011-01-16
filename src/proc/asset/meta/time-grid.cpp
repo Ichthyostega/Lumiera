@@ -74,8 +74,8 @@ namespace meta {
       lib::time::FixedFrameQuantiser frameGrid_;
       
       /* == grid API forwarded to embedded quantiser == */
-      TimeValue gridAlign (TimeValue const& rawTime)          const { return frameGrid_.gridAlign (rawTime); }
       long      gridPoint (TimeValue const& rawTime)          const { return frameGrid_.gridPoint (rawTime); }
+      TimeValue gridAlign (TimeValue const& rawTime)          const { return frameGrid_.gridAlign (rawTime); }
       TimeValue timeOf    (long gridPoint)                    const { return frameGrid_.timeOf (gridPoint);  }
       TimeValue timeOf    (FSecs gridTime, int gridOffset =0) const { return frameGrid_.timeOf (gridTime,gridOffset); }
       

@@ -36,8 +36,7 @@ namespace lib {
 namespace time {
   
   
-  Format::~Format() { }  // emit VTable here....
-  TCode::~TCode()   { }
+  TCode::~TCode()   { }  // emit VTable here....
   
   namespace format {
     

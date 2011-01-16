@@ -25,6 +25,9 @@
 #define LIB_TIME_FORMATS_H
 
 #include "lib/time/timevalue.hpp"
+#include "lib/meta/no-instance.hpp"
+#include "lib/meta/typelist.hpp"
+#include "lib/meta/generator.hpp"
 
 //#include <boost/operators.hpp>
 #include <tr1/memory>
@@ -48,26 +51,10 @@ namespace time {
   typedef std::tr1::shared_ptr<const Quantiser> PQuant;
   
   
-  
-  /**
-   * descriptor for a time representation format (ABC).
-   * A time format describes how to specify time; it allows
-   * to format a time value and to parse a textual representation.
-   * @note while Format is an generic descriptor, the actual
-   *       TCode (timecode) values are time values, which \em
-   *       use a specific format, given as template parameter
-   * 
-   * @todo WIP-WIP-WIP
-   */
-  class Format
-    {
-      
-    public:
-      virtual ~Format();
-    };
-  
-  
   namespace format {
+    
+    using lib::meta::NoInstance; // the following types are for metaprogramming only...
+    
     
     /** 
      * Frame count as timecode format.
@@ -78,7 +65,7 @@ namespace time {
      * underlying framerate/quantisation remains implicit.
      */
     struct Frames
-      : Format
+      : NoInstance<Frames>
       {
         static void       rebuild (FrameNr&, QuantR, TimeValue const&);
         static TimeValue evaluate (FrameNr const&, QuantR);
@@ -92,7 +79,7 @@ namespace time {
      * frame number within the actual second.
      */
     struct Smpte
-      : Format
+      : NoInstance<Smpte>
       {
         static void       rebuild (SmpteTC&, QuantR);
         static TimeValue evaluate (SmpteTC const&, QuantR);
@@ -107,7 +94,7 @@ namespace time {
      * floating point milliseconds value instead of the frame count
      */
     struct Hms
-      : Format
+      : NoInstance<Hms>
       {
         static void       rebuild (HmsTC&, QuantR);
         static TimeValue evaluate (HmsTC const&, QuantR);
@@ -124,7 +111,7 @@ namespace time {
      *       decimal format, not the usual sexagesimal time format
      */
     struct Seconds
-      : Format
+      : NoInstance<Seconds>
       {
         static void       rebuild (Secs&, QuantR);
         static TimeValue evaluate (Secs const&, QuantR);
@@ -161,6 +148,40 @@ namespace time {
         typedef Secs TimeCode;
       };
     
+    
+    
+    using lumiera::typelist::Types;
+  
+    /**
+     * Denote support for a specific (timecode) format.
+     * This helper can be used to configure a selection of specific
+     * timecode formats to be or not to be supported by some facility.
+     * Formats are described by the format descriptor types defined in
+     * this header (or elsewhere for additional formats). This helper
+     * establishes an numeric ID at runtime and uses a bitset to keep
+     * track of the support for a given format.
+     * 
+     * @todo WIP-WIP-WIP
+     */
+    class Supported
+      {
+      public:
+        template<typename TY>
+        static Supported
+        formats();
+        
+        template<class F>
+        bool
+        check();
+      };
+    
+    struct SupportStandardTimecode
+      : Supported
+      {
+        SupportStandardTimecode()
+          : Supported(formats<Types<Hms,Smpte,Frames,Seconds> >())
+          { }
+      };
     
     
 }}} // lib::time::format

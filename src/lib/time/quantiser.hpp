@@ -66,28 +66,29 @@ namespace time {
   
   /**
    * Facility to create grid-aligned time values.
+   * Effectively, a quantiser exposes the value Grid API, but
+   * additionally also manages a set of supported (display) formats or
+   * "time code" formats. Plus there is an static API to fetch a suitable
+   * quantiser instance by-name; actually this utilises a hidden link to
+   * the Lumiera session. Time quantisation and timecode handling explicitly
+   * relies on this Quantiser interface.
    * 
    * @todo WIP-WIP-WIP
    */
   class Quantiser
     : public Grid
     {
-      typedef std::vector<Format*>         _FormatTable;
-      typedef _FormatTable::const_iterator _SrcIter;
-      typedef lib::PtrDerefIter<_SrcIter>  _Iter;
       
     public:
       
       template<class FMT>
       bool supports()  const;
       
-      typedef _Iter iterator;
-      iterator getSupportedFormats()  const;
       
       
       //------Grid-API----------------------------------------------
-      virtual TimeValue gridAlign (TimeValue const& raw)  const   =0;
       virtual long      gridPoint (TimeValue const& raw)  const   =0;
+      virtual TimeValue gridAlign (TimeValue const& raw)  const   =0;
       virtual TimeValue timeOf    (long gridPoint)        const   =0;
       virtual TimeValue timeOf    (FSecs, int =0)         const   =0;
     };
@@ -116,8 +117,8 @@ namespace time {
       FixedFrameQuantiser (Duration const& frame_duration,     TimeValue referencePoint  =TimeValue(0));
       
       
-      TimeValue gridAlign (TimeValue const&)  const;
       long      gridPoint (TimeValue const&)  const;
+      TimeValue gridAlign (TimeValue const&)  const;
       TimeValue timeOf    (long gridPoint)    const;
       TimeValue timeOf    (FSecs, int =0)     const;
     };

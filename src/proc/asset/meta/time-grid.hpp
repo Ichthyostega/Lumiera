@@ -80,8 +80,8 @@ namespace meta {
       
     public:
       //--------Grid-API------------------------------------
-      TimeValue gridAlign (TimeValue const& raw)  const   =0;
       long      gridPoint (TimeValue const& raw)  const   =0;
+      TimeValue gridAlign (TimeValue const& raw)  const   =0;
       TimeValue timeOf    (long gridPoint)        const   =0;
       TimeValue timeOf    (FSecs, int =0)         const   =0;
       
