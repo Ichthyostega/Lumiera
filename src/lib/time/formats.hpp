@@ -178,7 +178,7 @@ namespace time {
         
         template<class F>
         size_t
-        typeID()
+        typeID()  const
           {
             return TypedContext<Supported>::ID<F>::get();
           }
@@ -210,7 +210,7 @@ namespace time {
         /** check if a specific Format is supported */
         template<class F>
         bool
-        check()
+        check()  const
           {
             return flags_[typeID<F>()];
           }

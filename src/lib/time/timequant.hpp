@@ -82,7 +82,7 @@ namespace time {
   inline bool
   QuTime::supports()  const
   {
-    return false;   ////////////////TODO;
+    return quantiser_->supports<FMT>();
   }
   
   
@@ -100,6 +100,7 @@ namespace time {
   QuTime::castInto (TC& timecode)  const
   {
     typedef typename TC::Format Format;
+    REQUIRE (supports<Format>());
     
     Format::rebuild (timecode, *quantiser_, TimeValue(*this));
   }

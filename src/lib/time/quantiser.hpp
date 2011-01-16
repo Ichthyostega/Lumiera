@@ -78,12 +78,20 @@ namespace time {
   class Quantiser
     : public Grid
     {
+    protected:
+      format::Supported supportedFormats_;
+      
+      Quantiser()
+        : supportedFormats_(format::SupportStandardTimecode())
+        { }
       
     public:
-      
       template<class FMT>
-      bool supports()  const;
-      
+      bool
+      supports()  const
+        {
+          return supportedFormats_.check<FMT>(); 
+        }
       
       
       //------Grid-API----------------------------------------------
@@ -116,11 +124,11 @@ namespace time {
       FixedFrameQuantiser (FrameRate const& frames_per_second, TimeValue referencePoint  =TimeValue(0));
       FixedFrameQuantiser (Duration const& frame_duration,     TimeValue referencePoint  =TimeValue(0));
       
-      
       long      gridPoint (TimeValue const&)  const;
       TimeValue gridAlign (TimeValue const&)  const;
       TimeValue timeOf    (long gridPoint)    const;
       TimeValue timeOf    (FSecs, int =0)     const;
+      
     };
   
   
