@@ -172,7 +172,7 @@ namespace time {
     struct CountFormatter
       : PrintfFormatter<long, 20>
       {
-        CountFormatter() : PrintfFormatter<long,20>("%04l") { }
+        CountFormatter() : PrintfFormatter<long,20>("%04ld") { }
       };
     
   } //(End) digxel configuration namespace

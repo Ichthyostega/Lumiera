@@ -68,6 +68,7 @@ namespace test{
           verifyConfiguration<SexaDigit      > (-5);
           verifyConfiguration<HexaDigit      > (0xc);
           verifyConfiguration<HexaDigit      > (0x6f);
+          verifyConfiguration<CountVal       > (-1234567890);
         } 
       
       

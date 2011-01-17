@@ -22,6 +22,7 @@
 
 
 #include "lib/test/run.hpp"
+//#include "lib/test/test-helper.hpp"
 #include "lib/time/timecode.hpp"
 #include "lib/util.hpp"
 
@@ -43,9 +44,10 @@ namespace test{
   
   /********************************************************
    * @test verify handling of grid aligned timecode values.
-   *       - creating timecode values
-   *       - some conversions
-   *       - formatting
+   *       - full cycle from parsing to formatting
+   *       - mutating the components of timecode
+   *       - some formatting corner cases
+   *       - formatting in various formats
    */
   class TimeFormats_test : public Test
     {
@@ -56,29 +58,55 @@ namespace test{
           
           TimeValue ref (refval);
           
-          checkBasics (ref);
-          checkComparisons (ref);
-          checkComponentAccess();
+          checkTimecodeUsageCycle (ref);
+          checkFrames ();
+          checkSeconds ();
+          checkHms ();
+          checkSmpte();
+          checkDropFrame();
         } 
       
       
       void
-      checkBasics (TimeValue ref)
+      checkTimecodeUsageCycle (TimeValue ref)
         {
+          UNIMPLEMENTED ("full usage cycle for a timecode value");
         }
       
       
       void
-      checkComparisons (TimeValue ref)
+      checkFrames ()
         {
+          UNIMPLEMENTED ("verify frame count time format");
         }
       
       
       void
-      checkComponentAccess()
+      checkSeconds ()
         {
+          UNIMPLEMENTED ("verify seconds as timecode format");
         }
       
+      
+      void
+      checkHms ()
+        {
+          UNIMPLEMENTED ("verify hour-minutes-seconds-millis timecode");
+        }
+      
+      
+      void
+      checkSmpte ()
+        {
+          UNIMPLEMENTED ("verify SMPTE timecode format");
+        }
+      
+      
+      void
+      checkDropFrame ()
+        {
+          UNIMPLEMENTED ("verify especially SMPTE-drop-frame timecode");
+        }
     };
   
   

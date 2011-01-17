@@ -31,12 +31,12 @@
 #include <boost/lexical_cast.hpp>
 #include <boost/algorithm/string/join.hpp>
 #include <iostream>
-//#include <cstdlib>
+#include <cstdlib>
 
 using boost::lexical_cast;
 using util::isnil;
 using util::contains;
-//using std::rand;
+using std::rand;
 using std::cout;
 using std::endl;
 
@@ -52,23 +52,36 @@ namespace test{
   
   /********************************************************
    * @test verify handling of quantised time values.
-   *       - creating times and time intervals
-   *       - comparisons
-   *       - time arithmetics
+   *       - the simple usage, just referring to an 
+   *         predefined grid by name
+   *       - explicitly defining an quantiser
+   *       - converting these quantised values into
+   *         various timecode formats
+   *       - error detection
    */
   class TimeQuantisation_test : public Test
     {
+      int
+      random_or_get (Arg arg)
+        {
+          if (isnil(arg))
+            return 1 + (rand() % 10000);
+          else
+            return lexical_cast<int> (arg[1]);
+        }
+      
+      
+      
       virtual void
       run (Arg arg) 
         {
-          long refval= isnil(arg)?  1 : lexical_cast<long> (arg[1]);
-          
-          TimeValue ref (refval);
+          Time ref (random_or_get(arg));
           CHECK (Time(0) < ref);
           
           checkSimpleUsage (ref);
           check_theFullStory (ref);
           checkMultipleGrids (ref);
+          checkGridBinding (ref);
         } 
       
       
@@ -133,12 +146,12 @@ namespace test{
           
           FrameNr palNr (palVal);
           FrameNr ntscNr(ntscVal);
-          CHECK (palNr < ntscNr);
+          CHECK (palNr <= ntscNr);
         }
       
       
       void
-      checkGridLateBinding (TimeValue org)
+      checkGridBinding (TimeValue org)
         {
           // refer to a grid not yet defined
           VERIFY_ERROR (UNKNOWN_GRID, QuTime wired(org, "special_funny_grid"));

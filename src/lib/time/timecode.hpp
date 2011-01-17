@@ -86,7 +86,7 @@ namespace time {
     , public CountVal
     {
       
-      string show()     const { return string(show())+"fr"; }
+      string show()     const { return string(CountVal::show())+"fr"; }
       Literal tcID()    const { return "Frame-count"; } 
       TimeValue value() const { return Format::evaluate (*this, *quantiser_); }
       
