@@ -73,10 +73,9 @@ namespace time {
    * the Lumiera session. Time quantisation and timecode handling explicitly
    * relies on this Quantiser interface.
    * 
-   * @todo WIP-WIP-WIP
    */
   class Quantiser
-    : public Grid
+    : public virtual Grid
     {
     protected:
       format::Supported supportedFormats_;

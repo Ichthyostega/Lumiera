@@ -27,12 +27,14 @@
 #include "lib/time/quantiser.hpp"
 #include "lib/time/timevalue.hpp"
 #include "lib/time/display.hpp"
+#include "lib/advice.hpp"
 #include "lib/util.hpp"
 //#include "include/logging.h"
 
 #include <boost/format.hpp>
 #include <string>
 
+using util::cStr;
 using util::isnil;
 using boost::format;
 using boost::str;
@@ -44,10 +46,6 @@ namespace meta {
   
   namespace error = lumiera::error;
   
-  namespace {
-    
-    // Implementation details (still required???)
-  }
   
  
   /** */
@@ -63,32 +61,58 @@ namespace meta {
   using lib::time::Offset;
   using lib::time::FSecs;
   
+  using lib::time::PQuant;
+  using lib::time::Quantiser;
+  using lib::time::FixedFrameQuantiser;
+  using std::tr1::dynamic_pointer_cast;
+  
+  namespace advice = lib::advice;
+  
+  namespace {
+    
+    /** @internal helper to retrieve the smart-ptr
+     * from the AssetManager, then attach a further
+     * smart-ptr-to-Quantiser to that, which then can be
+     * published via the \link advice.hpp "advice system"\endlink
+     */
+    inline PGrid
+    publishWrapped (TimeGrid& newGrid)
+    {
+    PGrid gridImplementation = AssetManager::instance().wrap (newGrid);
+    PQuant quantiser (dynamic_pointer_cast<const Quantiser>(gridImplementation));
+    Literal bindingID (cStr(newGrid.ident.name));
+    
+    advice::Provision<PQuant>(bindingID).setAdvice(quantiser);
+    return gridImplementation;
+    }
+    
+
+  }
+  
   /** 
    * TimeGrid implementation: a trivial time grid,
    * starting at a given point in time and using a
-   * constant grid spacing
+   * constant grid spacing.
+   * 
+   * @note The actual implementation is mixed in,
+   * together with the Quantiser API; the intended use
+   * of this implementation is to publish it via the advice
+   * framework, when building and registering the meta asset. 
    */
   class SimpleTimeGrid
     : public TimeGrid
+    , public FixedFrameQuantiser
     {
-      lib::time::FixedFrameQuantiser frameGrid_;
-      
-      /* == grid API forwarded to embedded quantiser == */
-      long      gridPoint (TimeValue const& rawTime)          const { return frameGrid_.gridPoint (rawTime); }
-      TimeValue gridAlign (TimeValue const& rawTime)          const { return frameGrid_.gridAlign (rawTime); }
-      TimeValue timeOf    (long gridPoint)                    const { return frameGrid_.timeOf (gridPoint);  }
-      TimeValue timeOf    (FSecs gridTime, int gridOffset =0) const { return frameGrid_.timeOf (gridTime,gridOffset); }
-      
       
     public:
       SimpleTimeGrid (Time start, Duration frameDuration, EntryID<TimeGrid> const& name)
         : TimeGrid (name)
-        , frameGrid_(frameDuration,start)
+        , FixedFrameQuantiser(frameDuration,start)
         { }
       
       SimpleTimeGrid (Time start, FrameRate frames_per_second, EntryID<TimeGrid> const& name)
         : TimeGrid (name)
-        , frameGrid_(frames_per_second,start)
+        , FixedFrameQuantiser(frames_per_second,start)
         { }
     };
   
@@ -104,7 +128,7 @@ namespace meta {
    *         might raise further exception when asset registration fails.
    * @todo currently (12/2010) the AssetManager is unable to detect duplicate assets.
    *       Later on the intention is that in such cases, instead of creating a new grid
-   *       we'll silently return the already registered exisiting and equivalent grid.
+   *       we'll silently return the already registered existing and equivalent grid.
    */
   P<TimeGrid>
   Builder<TimeGrid>::commit()
@@ -116,13 +140,12 @@ namespace meta {
     
     if (isnil (id_))
       {
-        format gridIdFormat("grid_%f_%s");
-        id_ = str(gridIdFormat % fps_ % origin_);
+        format gridIdFormat("grid(%f_%d)");
+        id_ = str(gridIdFormat % fps_ % _raw(origin_));
       }
     EntryID<TimeGrid> nameID (id_);
-    TimeGrid& newGrid (*new SimpleTimeGrid(origin_, fps_, nameID));
     
-    return AssetManager::instance().wrap (newGrid);
+    return publishWrapped (*new SimpleTimeGrid(origin_, fps_, nameID));
   }
   
   

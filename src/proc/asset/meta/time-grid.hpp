@@ -69,23 +69,21 @@ namespace meta {
   
   
   /**
-   * Interface: a grid and scale for time quantisation.
-   * This meta-Asset describes a coordinate system or
-   * reference scale for quantised time values.
+   * Interface: a grid and scale definition for time quantisation.
+   * This meta-Asset describes a coordinate system or reference scale
+   * for quantised time values. Especially it allows to define an actual
+   * implementation, which can then implicitly be used by lib::time::QuTime
+   * and for conversions into timecode.
+   * @note for this to work, the actual implementation classes returned
+   *       by the builder or the static #build function additionally expose
+   *       an implementation of the lib::time::Quantiser API
    */ 
   class TimeGrid
     : public Meta
-    , public lib::time::Grid
+    , public virtual lib::time::Grid
     {
       
     public:
-      //--------Grid-API------------------------------------
-      long      gridPoint (TimeValue const& raw)  const   =0;
-      TimeValue gridAlign (TimeValue const& raw)  const   =0;
-      TimeValue timeOf    (long gridPoint)        const   =0;
-      TimeValue timeOf    (FSecs, int =0)         const   =0;
-      
-      
       /* === shortcut builder functions === */
       static PGrid build (Symbol gridID, FrameRate frames_per_second);
       static PGrid build (Symbol gridID, FrameRate frames_per_second, Time origin);

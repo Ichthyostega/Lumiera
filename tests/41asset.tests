@@ -71,6 +71,6 @@ END
 
 
 TEST "Simple TimeGrid" TimeGridBasics_test <<END
-out-lit: simple PAL Grid: (STRUCT/time-scales:lumi.grid_25_1_0:00:00.000 v1)
+out-lit: simple PAL Grid: (STRUCT/time-scales:lumi.grid(25_1_0) v1)
 return: 0
 END
