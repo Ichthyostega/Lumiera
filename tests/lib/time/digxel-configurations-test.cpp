@@ -69,7 +69,27 @@ namespace test{
           verifyConfiguration<HexaDigit      > (0xc);
           verifyConfiguration<HexaDigit      > (0x6f);
           verifyConfiguration<CountVal       > (-1234567890);
-        } 
+          
+          verifySignum();
+        }
+      
+      
+      void
+      verifySignum()
+        {
+          Signum sig;
+          CHECK (1 == sig);
+          
+          sig = 123;
+          CHECK (1 == sig);
+          sig = -sig;
+          CHECK (-1 == sig);
+          sig = -98;
+          CHECK (-1 == sig);
+          CHECK (sig.show() == string("-"));
+          sig *= -1;
+          CHECK (sig.show() == string("-"));
+        }
       
       
       template<class DIX, typename VAL>

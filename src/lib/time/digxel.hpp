@@ -175,6 +175,14 @@ namespace time {
         CountFormatter() : PrintfFormatter<long,20>("%04ld") { }
       };
     
+      
+    struct SignFormatter
+      {
+        void clear()          {  }
+        size_t maxlen() const { return 1; }        
+        CBuf show (int val)   { return val<0? "-":" "; }
+      };
+    
   } //(End) digxel configuration namespace
   
   
@@ -273,7 +281,25 @@ namespace time {
   /* == predefined Digxel configurations == */
   typedef Digxel< int, digxel::SexaFormatter> SexaDigit;  ///< for displaying time components (sexagesimal)
   typedef Digxel<uint, digxel::HexaFormatter> HexaDigit;  ///< for displaying a hex byte
-  typedef Digxel<long, digxel::CountFormatter> CountVal;  ///< for displaying a hex byte
+  typedef Digxel<long, digxel::CountFormatter> CountVal;  ///< for displaying a counter
+  
+  
+  /** special Digxel to show a sign.
+   * @note values limited to +1 and -1 */
+  struct Signum
+    : Digxel<int,digxel::SignFormatter>
+    {
+      Signum() { setValueRaw(1); }
+      
+      void
+      operator= (int n)
+        {
+          int newSign = 0 > mutator(n)? -1:+1;
+          this->setValueRaw (newSign);
+        }
+      
+      friend int operator*= (Signum s, int c) { s = c*s; return s; }
+    };
   
   
 }} // lib::time
