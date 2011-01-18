@@ -81,7 +81,7 @@ namespace time {
     struct Smpte
       : NoInstance<Smpte>
       {
-        static void       rebuild (SmpteTC&, QuantR);
+        static void       rebuild (SmpteTC&, QuantR, TimeValue const&);
         static TimeValue evaluate (SmpteTC const&, QuantR);
       };
     
@@ -96,7 +96,7 @@ namespace time {
     struct Hms
       : NoInstance<Hms>
       {
-        static void       rebuild (HmsTC&, QuantR);
+        static void       rebuild (HmsTC&, QuantR, TimeValue const&);
         static TimeValue evaluate (HmsTC const&, QuantR);
       };
     
@@ -113,7 +113,7 @@ namespace time {
     struct Seconds
       : NoInstance<Seconds>
       {
-        static void       rebuild (Secs&, QuantR);
+        static void       rebuild (Secs&, QuantR, TimeValue const&);
         static TimeValue evaluate (Secs const&, QuantR);
       };
     

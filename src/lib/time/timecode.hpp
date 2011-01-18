@@ -30,7 +30,7 @@
 #include "lib/symbol.hpp"
 
 //#include <iostream>
-//#include <boost/operators.hpp>
+#include <boost/operators.hpp>
 #include <boost/lexical_cast.hpp> ///////////////TODO
 #include <string>
 
@@ -105,22 +105,28 @@ namespace time {
    */
   class SmpteTC
     : public TCode
+    , boost::unit_steppable<SmpteTC>
     {
-      TimeVar tpoint_;
-        
-      virtual string show()     const { return string(tpoint_); }
+      
+      virtual string show()     const ;
       virtual Literal tcID()    const { return "SMPTE"; }
-      virtual TimeValue value() const { return tpoint_; }
+      virtual TimeValue value() const { return Format::evaluate (*this, *quantiser_); }
       
     public:
       typedef format::Smpte Format;
       
       SmpteTC (QuTime const& quantisedTime);
       
-      int getSecs   () const; 
-      int getMins   () const; 
-      int getHours  () const; 
-      int getFrames () const;
+      void rebuild()  const;
+      
+      Digxel<int> hours;
+      SexaDigit   mins;
+      SexaDigit   secs;
+      SexaDigit   frames;
+      Signum      sgn;
+      
+      SmpteTC& operator++();
+      SmpteTC& operator--();
     };
   
   

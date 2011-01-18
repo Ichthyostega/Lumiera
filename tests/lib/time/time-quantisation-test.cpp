@@ -162,8 +162,8 @@ namespace test{
           int cnt = funny.formatAs<format::Frames>();
                                                          // and now performing quantisation is OK 
           SmpteTC smpte (funny);                         // also converting into SMPTE (which implies frame quantisation)
-          CHECK (0 == smpte.getFrames());                // we have 1fps, thus the frame part is always zero!
-          CHECK (cnt % 60 == smpte.getSecs());           // and the seconds part will be in sync with the frame count
+          CHECK (0 == smpte.frames);                     // we have 1fps, thus the frame part is always zero!
+          CHECK (cnt % 60 == smpte.secs);                // and the seconds part will be in sync with the frame count
         }
     };
   

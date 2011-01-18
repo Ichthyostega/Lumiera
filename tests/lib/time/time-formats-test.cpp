@@ -23,24 +23,28 @@
 
 #include "lib/test/run.hpp"
 //#include "lib/test/test-helper.hpp"
+#include "proc/asset/meta/time-grid.hpp"
+#include "lib/time/timequant.hpp"
 #include "lib/time/timecode.hpp"
+#include "lib/time/display.hpp"
 #include "lib/util.hpp"
 
 #include <boost/lexical_cast.hpp>
-//#include <iostream>
+#include <iostream>
 //#include <cstdlib>
 
 using boost::lexical_cast;
 using util::isnil;
 //using std::rand;
-//using std::cout;
-//using std::endl;
+using std::cout;
+using std::endl;
 
 
 namespace lib {
 namespace time{
 namespace test{
   
+  using asset::meta::TimeGrid;
   
   /********************************************************
    * @test verify handling of grid aligned timecode values.
@@ -52,27 +56,32 @@ namespace test{
   class TimeFormats_test : public Test
     {
       virtual void
-      run (Arg arg) 
+      run (Arg) 
         {
-          long refval= isnil(arg)?  1 : lexical_cast<long> (arg[1]);
+          TimeGrid::build("pal0", FrameRate::PAL);
           
-          TimeValue ref (refval);
-          
-          checkTimecodeUsageCycle (ref);
-          checkFrames ();
-          checkSeconds ();
-          checkHms ();
+//        checkTimecodeUsageCycle ();
+//        checkFrames ();
+//        checkSeconds ();
+//        checkHms ();
           checkSmpte();
-          checkDropFrame();
+//        checkDropFrame();
         } 
       
       
       void
-      checkTimecodeUsageCycle (TimeValue ref)
+      checkTimecodeUsageCycle ()
         {
           UNIMPLEMENTED ("full usage cycle for a timecode value");
         }
       
+      
+      template<class TC>
+      void
+      showTimeCode (TC timecode)
+        {
+          cout << timecode.describe()<<"=\""<<timecode<<"\" time = "<< timecode.getTime() << endl; 
+        }
       
       void
       checkFrames ()
@@ -98,7 +107,44 @@ namespace test{
       void
       checkSmpte ()
         {
-          UNIMPLEMENTED ("verify SMPTE timecode format");
+          Time raw(0.5,23,42,5);
+          QuTime t1 (raw, "pal0");
+          SmpteTC smpte(t1);
+          
+          showTimeCode(smpte);
+          CHECK ("5:42:23:13" == string(smpte));
+          CHECK (raw + Time(0.02,0) == smpte.getTime());
+          CHECK (13 == smpte.frames);
+          CHECK (23 == smpte.secs);
+          CHECK (42 == smpte.mins);
+          CHECK ( 5 == smpte.hours);
+          CHECK ( 1 == smpte.sgn);
+          CHECK ("SMPTE" == smpte.describe());
+          
+          ++smpte;
+          CHECK ("5:42:23:14" == string(smpte));
+          smpte.frames += 12;
+          CHECK ("5:42:24:01" == string(smpte));
+          smpte.secs = -120;
+          CHECK ("5:40:00:01" == string(smpte));
+          CHECK (smpte.mins-- == 40);
+          CHECK (--smpte.mins == 38);
+          CHECK ("5:38:00:01" == string(smpte));
+          Time tx = smpte.getTime();
+          smpte.hours -= 6;
+          CHECK ("-0:21:59:24"== string(smpte));
+          CHECK (tx - Time(6*60*60) == smpte.getTime());
+          CHECK (-1 == smpte.sgn);
+          smpte.sgn += 123;
+          CHECK ("0:21:59:24"== string(smpte));
+          
+          smpte.secs.setValueRaw(61);
+          CHECK (smpte.secs == 61);
+          CHECK (smpte.getTime() == Time(24.0/25,01,22));
+          CHECK (smpte.secs == 61);
+          smpte.hours += 0;
+          CHECK (smpte.secs ==  1);
+          CHECK (smpte.mins == 22);
         }
       
       

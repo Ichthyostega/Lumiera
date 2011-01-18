@@ -27,8 +27,10 @@
 #include "lib/time/timequant.hpp"
 #include "lib/time/formats.hpp"
 #include "lib/time.h"
+#include "lib/util.hpp"
 
 
+using util::unConst;
 using std::string;
 
 
@@ -56,6 +58,25 @@ namespace time {
       return quantiser.timeOf (framecnt);
     }
 
+    
+    /** build up a frame count
+     *  by quantising the given time value 
+     */
+    void
+    Smpte::rebuild (SmpteTC& tc, QuantR quantiser, TimeValue const& rawTime)
+    {
+//    framecnt.setValueRaw(quantiser.gridPoint (rawTime));
+      UNIMPLEMENTED("build smpte components from raw time");
+    }
+    
+    /** calculate the time point denoted by this frame count */
+    TimeValue 
+    Smpte::evaluate (SmpteTC const& tc, QuantR quantiser)
+    {
+//    return quantiser.timeOf (framecnt);
+      UNIMPLEMENTED("calculate time from smpte");
+    }
+
   }
   
   
@@ -72,7 +93,6 @@ namespace time {
   /** */
   SmpteTC::SmpteTC (QuTime const& quantisedTime)
     : TCode(quantisedTime)
-//  : tpoint_(quantisedTime)           /////////////////////////////TODO eternal bullshit
     { }
   
   
@@ -91,32 +111,41 @@ namespace time {
   
   
   
-  /** */
-  int
-  SmpteTC::getSecs() const
+  void
+  SmpteTC::rebuild()  const
   {
-    return lumiera_time_seconds (tpoint_);
+    TimeValue point = Format::evaluate(*this, *quantiser_);
+    Format::rebuild(unConst(*this), *quantiser_, point);
   }
   
-  /** */
-  int
-  SmpteTC::getMins() const 
+  
+  string
+  SmpteTC::show()  const
   {
-    return lumiera_time_minutes (tpoint_);
+    rebuild();
+    string tc;
+           tc.reserve(15);
+           tc += sgn.show();
+           tc += hours.show();
+           tc += ':';
+           tc += mins.show();
+           tc += ':';
+           tc += secs.show();
+           tc += ':';
+           tc += frames.show();
+    return tc;
   }
   
-  /** */
-  int
-  SmpteTC::getHours() const 
+  SmpteTC&
+  SmpteTC::operator++ ()
   {
-    return lumiera_time_hours (tpoint_);
+    UNIMPLEMENTED ("SMPTE unit increment");
   }
   
-  /** */
-  int
-  SmpteTC::getFrames() const
+  SmpteTC&
+  SmpteTC::operator-- ()
   {
-    UNIMPLEMENTED ("Frame-Quantisation");
+    UNIMPLEMENTED ("SMPTE unit decrement");
   }
   
   /** */

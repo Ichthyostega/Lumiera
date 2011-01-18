@@ -144,9 +144,9 @@ namespace time {
     
     template<>
     struct Formatter<int>
-      : PrintfFormatter<int, 6>
+      : PrintfFormatter<int, 9>
       {
-        Formatter() : PrintfFormatter<int,6>("%3d") { }
+        Formatter() : PrintfFormatter<int,9>("%3d") { }
       };
     
     template<>
@@ -270,6 +270,14 @@ namespace time {
         }
       
       
+      
+      //---Supporting-increments--------------
+      Digxel& operator+=  (NUM inc)  { value_ += inc; return *this; }
+      Digxel& operator-=  (NUM dec)  { value_ -= dec; return *this; }
+      Digxel& operator++  ()         { value_ += 1;   return *this; }
+      Digxel& operator--  ()         { value_ -= 1;   return *this; }
+      NUM     operator++  (int)      { NUM p(value_++); return p; }
+      NUM     operator--  (int)      { NUM p(value_--); return p; }
       
       //---Supporting-totally_ordered---------
       bool operator<  (Digxel const& o)  const { return value_ <  NUM(o); }
