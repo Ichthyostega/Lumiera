@@ -89,7 +89,7 @@ namespace proc {
     { }
     
     
-    const LumieraDisplayFrame
+    LumieraDisplayFrame
     DummyImageGenerator::next()
     {
       
@@ -156,7 +156,7 @@ namespace proc {
     }
     
     
-    const LumieraDisplayFrame
+    LumieraDisplayFrame
     DummyImageGenerator::current()
     {
       if (!current_) return outFrame_A_;

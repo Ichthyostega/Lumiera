@@ -69,11 +69,11 @@ namespace proc {
          *  occupy the alternate buffer.
          *  @return the buffer containing the new frame
          */
-        const LumieraDisplayFrame next();
+        LumieraDisplayFrame next();
         
         /** just re-return a pointer to the current frame
          *  without generating any new image data */
-        const LumieraDisplayFrame current();
+        LumieraDisplayFrame current();
       
         
       private:
