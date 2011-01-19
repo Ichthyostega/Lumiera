@@ -1,8 +1,8 @@
 /*
-  time.c  -  Utilities for handling time
+  Time  -  Utilities for handling time
 
   Copyright (C)         Lumiera.org
-    2008,               Christian Thaeter <ct@pipapo.org>
+    2011,               Christian Thaeter <ct@pipapo.org>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -137,26 +137,105 @@ lumiera_build_time(long millis, uint secs, uint mins, uint hours)
   return time;
 }
 
+gavl_time_t
+lumiera_build_time_fps (float fps, uint frames, uint secs, uint mins, uint hours)
+{
+  gavl_time_t time = frames * (1000.0 / fps)
+                   + 1000 * secs
+                   + 1000 * 60 * mins
+                   + 1000 * 60 * 60 * hours;
+  time *= GAVL_TIME_SCALE_MS;
+  return time;
+}
+
+gavl_time_t
+lumiera_build_time_ntsc_drop (uint frames, uint secs, uint mins, uint hours)
+{
+  int total_mins = 60 * hours + mins;
+  int total_frames  = 108000 * hours
+                    + 1800 * mins
+                    + 30 * secs
+                    + frames
+                    - 2 * (total_mins - total_mins / 10);
+  
+  return (total_frames / 29.97f) * 1000 * GAVL_TIME_SCALE_MS;
+}
+
 int
-lumiera_time_hours(gavl_time_t time)
+lumiera_time_hours (gavl_time_t time)
 {
   return time / GAVL_TIME_SCALE_MS / 1000 / 60 / 60;
 }
 
 int
-lumiera_time_minutes(gavl_time_t time)
+lumiera_time_minutes (gavl_time_t time)
 {
   return (time / GAVL_TIME_SCALE_MS / 1000 / 60) % 60;
 }
 
 int
-lumiera_time_seconds(gavl_time_t time)
+lumiera_time_seconds (gavl_time_t time)
 {
   return (time / GAVL_TIME_SCALE_MS / 1000) % 60;
 }
 
 int
-lumiera_time_millis(gavl_time_t time)
+lumiera_time_millis (gavl_time_t time)
 {
   return (time / GAVL_TIME_SCALE_MS) % 1000;
 }
+
+int
+lumiera_time_frames (gavl_time_t time, float fps)
+{
+  return (fps * (lumiera_time_millis(time))) / 1000;
+}
+
+int
+lumiera_time_frame_count (gavl_time_t time, float fps)
+{
+  REQUIRE (fps > 0);
+  
+  return roundf((time / GAVL_TIME_SCALE_MS / 1000.0f) * fps);
+}
+
+/**
+ * This function is used in the NTSC drop-frame functions to avoid code
+ * repetition.
+ * @return the frame number for given time
+ */
+static int
+ntsc_drop_get_frame_number (gavl_time_t time)
+{
+  int frame = lumiera_time_frame_count (time, NTSC_DROP_FRAME_FPS);
+  
+  int d = frame / 17982; // 17982 = 600 * 29.97
+  int m = frame % 17982; // 17982 = 600 * 29.97
+  
+  return frame + 18*d + 2*((m - 2) / 1798); // 1798 = 60 * 29.97
+}
+
+int
+lumiera_time_ntsc_drop_frames (gavl_time_t time)
+{
+  return ntsc_drop_get_frame_number(time) % 30;
+}
+
+int
+lumiera_time_ntsc_drop_seconds (gavl_time_t time)
+{
+  return ntsc_drop_get_frame_number(time) / 30 % 60;
+}
+
+int
+lumiera_time_ntsc_drop_minutes (gavl_time_t time)
+{
+  return ntsc_drop_get_frame_number(time) / 30 / 60 % 60;
+}
+
+int
+lumiera_time_ntsc_drop_hours (gavl_time_t time)
+{
+  return ntsc_drop_get_frame_number(time) / 30 / 60 / 60 % 24;
+}
+

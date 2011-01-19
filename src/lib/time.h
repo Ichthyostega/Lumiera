@@ -84,6 +84,8 @@ lumiera_frame_duration (lib::time::FrameRate const& fps);
 extern "C" {    /* ===================== C interface ======================== */
 #endif
 
+#define NTSC_DROP_FRAME_FPS 29.97
+/* TODO: replace this by lib/time/FrameRate::NTSC */
 
 /**
  * Formats a time value in H:MM:SS.mmm format into a temporary buffer.
@@ -127,29 +129,87 @@ lumiera_time_of_gridpoint (long nr, gavl_time_t origin, gavl_time_t grid);
 
 /**
  * Builds a time value by summing up the given components.
+ * @param millis number of milliseconds
+ * @param secs number of seconds
+ * @param mins number of minutes
+ * @param hours number of hours
  */
 gavl_time_t
 lumiera_build_time (long millis, uint secs, uint mins, uint hours);
 
 /**
- * Extract the hour part of given time.
+ * Builds a time value by summing up the given components.
+ * @todo replace float framerates by lib::time::FrameRate
  */
-int lumiera_time_hours(gavl_time_t time);
+gavl_time_t
+lumiera_build_time_fps (float fps, uint frames, uint secs, uint mins, uint hours);
 
 /**
- * Extract the minute part of given time.
+ * Builds a time value by summing up the given components.
+ * The components are interpreted as a NTSC drop-frame timecode.
+ * @warning take care not to specify time codes that are illegal NTSC drop-frame times.
  */
-int lumiera_time_minutes(gavl_time_t time);
+gavl_time_t
+lumiera_build_time_ntsc_drop (uint frames, uint secs, uint mins, uint hours);
+
+
+/** Extract the hour part of given time. */
+int
+lumiera_time_hours (gavl_time_t time);
+
+
+/** Extract the minute part of given time. */
+int
+lumiera_time_minutes (gavl_time_t time);
+
+
+/** Extract the seconds part of given time. */
+int
+lumiera_time_seconds (gavl_time_t time);
+
+
+/** Extract the milliseconds part of given time. */
+int
+lumiera_time_millis (gavl_time_t time);
 
 /**
- * Extract the seconds part of given time.
+ * Extract the frame part of given time, using the given fps.
+ * @param fps frame rate
+ * @todo use the rational lib::time::FrameRate instead of a float
  */
-int lumiera_time_seconds(gavl_time_t time);
+int
+lumiera_time_frames (gavl_time_t time, float fps);
 
 /**
- * Extract the milliseconds part of given time.
+ * Extract the frame count for the given time, using the given fps.
+ * @todo use the rational lib::time::FrameRate instead of a float
  */
-int lumiera_time_millis(gavl_time_t time);
+int
+lumiera_time_frame_count (gavl_time_t time, float fps);
+
+/**
+ * Extract the frame part of given time, using NTSC drop-frame timecode.
+ */
+int
+lumiera_time_ntsc_drop_frames (gavl_time_t time);
+
+/**
+ * Extract the second part of given time, using NTSC drop-frame timecode.
+ */
+int
+lumiera_time_ntsc_drop_seconds (gavl_time_t time);
+
+/**
+ * Extract the minute part of given time, using NTSC drop-frame timecode.
+ */
+int
+lumiera_time_ntsc_drop_minutes (gavl_time_t time);
+
+/**
+ * Extract the hour part of given time, using NTSC drop-frame timecode.
+ */
+int
+lumiera_time_ntsc_drop_hours (gavl_time_t time);
 
 
 
@@ -157,3 +217,4 @@ int lumiera_time_millis(gavl_time_t time);
 }//extern "C"
 #endif
 #endif
+
