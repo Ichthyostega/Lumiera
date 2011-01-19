@@ -272,12 +272,12 @@ namespace time {
       
       
       //---Supporting-increments--------------
-      Digxel& operator+=  (NUM inc)  { value_ += inc; return *this; }
-      Digxel& operator-=  (NUM dec)  { value_ -= dec; return *this; }
-      Digxel& operator++  ()         { value_ += 1;   return *this; }
-      Digxel& operator--  ()         { value_ -= 1;   return *this; }
-      NUM     operator++  (int)      { NUM p(value_++); return p; }
-      NUM     operator--  (int)      { NUM p(value_--); return p; }
+      Digxel& operator+=  (NUM inc)  { *this = value_ + inc; return *this; }
+      Digxel& operator-=  (NUM dec)  { *this = value_ - dec; return *this; }
+      Digxel& operator++  ()         { *this = value_ + 1;   return *this; }
+      Digxel& operator--  ()         { *this = value_ - 1;   return *this; }
+      NUM     operator++  (int)      { NUM p(value_); *this =p+1; return p;}
+      NUM     operator--  (int)      { NUM p(value_); *this =p-1; return p;}
       
       //---Supporting-totally_ordered---------
       bool operator<  (Digxel const& o)  const { return value_ <  NUM(o); }

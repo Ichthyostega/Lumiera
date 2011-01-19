@@ -63,6 +63,9 @@ namespace test{
       }
     
     
+    
+    /* === special Digxel configuration for this test === */
+    
     double sum(0),
       checksum(0);
     
@@ -73,8 +76,15 @@ namespace test{
       return val;
     }
     
+    double preval(0), newval(0);
     
-    /* === special Digxel configuration for this test === */
+    double
+    protocollingMutator (double val)
+    {
+      preval = newval;
+      newval = val;
+      return val;
+    }
     
     double
     limitingMutator (double value2set)
@@ -107,6 +117,7 @@ namespace test{
    *       - build a Digxel
    *       - set a value
    *       - retrieve formatted display
+   *       - verify comparisons and increments
    *       - performing side-effects from the setter-functor
    *       - formatted value caching
    */
@@ -118,6 +129,7 @@ namespace test{
           checkSimpleUsage ();
           checkMutation ();
           verifyMutatorInfluence ();
+          verifyAssignMutatingOperators ();
           verifyComparisons ();
           checkCopy ();
           checkDisplayOverrun ();
@@ -192,6 +204,43 @@ namespace test{
         }
       
       
+      /** @test verify the self-assigning increment/decrement operators. 
+       *  @note especially these need to invoke the mutator function,
+       *        much like a direct assignment. We use a special mutator
+       *        to protocol the previous / new value.
+       */
+      void
+      verifyAssignMutatingOperators ()
+        {
+          TestDigxel digi;
+          digi.mutator = protocollingMutator;
+          
+          digi = 12.3;
+          CHECK ( 0.0 == preval && 12.3 == newval);
+          digi += 10;
+          CHECK (12.3 == preval && 22.3 == newval);
+          digi -= 5;
+          CHECK (22.3 == preval && 17.3 == newval);
+          ++digi;
+          CHECK (17.3 == preval && 18.3 == newval);
+          digi++;
+          CHECK (18.3 == preval && 19.3 == newval);
+          --digi;
+          CHECK (19.3 == preval && 18.3 == newval);
+          digi--;
+          CHECK (18.3 == preval && 17.3 == newval);
+          
+          double val = ++digi;
+          CHECK (18.3 == digi && 18.3 == val);
+          val = digi++;
+          CHECK (19.3 == digi && 18.3 == val);
+          val = --digi;
+          CHECK (18.3 == digi && 18.3 == val);
+          val = digi--;
+          CHECK (17.3 == digi && 18.3 == val);
+        }
+      
+      
       void
       verifyComparisons ()
         {
@@ -257,11 +306,11 @@ namespace test{
       
       /** @test verify caching of formatted values.
        *  Digxel avoids reformatting unchanged values;
-       *  to verify the effectivity of this measure, we
-       *  take some timings.
+       *  to verify the effectivity of this measure,
+       *  we'll take some timings.
        *  @warning the results of such tests could be unreliable,
        *  but in this case here I saw a significant difference,
-       *  with values of 0.5sec / 0.8sec  */
+       *  with values of about 0.5sec / 0.7sec  */
       void
       verifyDisplayCaching ()
         {

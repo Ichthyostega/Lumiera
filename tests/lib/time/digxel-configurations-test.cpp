@@ -56,6 +56,7 @@ namespace test{
    *       - hex byte Digxel
    *       - ...more to come
    * @todo cover any newly added Digxel configurations.
+   * @see Digxel_test
    */
   class DigxelConfigurations_test : public Test
     {
