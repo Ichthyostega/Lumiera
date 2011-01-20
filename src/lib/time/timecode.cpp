@@ -30,8 +30,9 @@
 #include "lib/util.hpp"
 
 
-using util::unConst;
 using std::string;
+using util::unConst;
+using util::IDiv;
 
 
 namespace lib {
@@ -88,27 +89,32 @@ namespace time {
     wrapFrames  (SmpteTC& thisTC, int rawFrames)
     {
       int fps = 25; ////////////////////////////////TODO outch
-      thisTC.secs += rawFrames / fps;
-      return rawFrames % fps;
-                  //////////////////////////////////TODO need floorwrap-util
+      IDiv<int> scaleRelation(rawFrames, fps);
+      thisTC.secs += scaleRelation.quot;
+      return scaleRelation.rem;
     }
     
     int
     wrapSeconds (SmpteTC& thisTC, int rawSecs)
     {
-        
+      IDiv<int> scaleRelation(rawSecs, 60);
+      thisTC.mins += scaleRelation.quot;
+      return scaleRelation.rem;
     }
     
     int
     wrapMinutes (SmpteTC& thisTC, int rawMins)
     {
-        
+      IDiv<int> scaleRelation(rawMins, 60);
+      thisTC.hours += scaleRelation.quot;
+      return scaleRelation.rem;
     }
     
     int
     wrapHours   (SmpteTC& thisTC, int rawHours)
     {
-        
+      thisTC.sgn = rawHours;
+      return rawHours;
     }
     
     
