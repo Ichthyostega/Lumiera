@@ -22,17 +22,20 @@
 
 
 #include "lib/test/run.hpp"
+#include "lib/test/test-helper.hpp"
 #include "lib/util.hpp"
 
 #include <cmath>
-//#include <vector>
 #include <iostream>
 #include <boost/format.hpp>
+#include <boost/lexical_cast.hpp>
 
 using ::Test;
 using std::cout;
-//using std::rand;
+using std::endl;
 using boost::format;
+using boost::lexical_cast;
+using lib::test::showType;
 
 
 namespace util {
@@ -40,51 +43,18 @@ namespace test {
   
   
   
-  namespace{ // Test data and operations
-    
-    div_t
-    floorwrap (int num, int den)
-    {
-      div_t res = div (num,den);
-      if (0 > (num^den) && res.rem)
-        { // wrap similar to floor()
-          --res.quot;
-          res.rem = den - (-res.rem);
-        }
-      return res;
-    }
-    
-
-    void
-    showWrap (int val, int scale)
-      {
-        div_t wrap = floorwrap(val,scale);
-        cout << format ("% 3d /% 1d =% 1d  %% =% d     floor=% 4.1f  wrap = (%2d,%2d) \n")
-                         % val % scale % (val/scale) 
-                                       % (val%scale) % floor(double(val)/scale)
-                                                                   % wrap.quot % wrap.rem; 
-      }
-    
-  
-    
-  } // (End) test data and operations
   
   
-  
-  /**********************************************************************
-   * @test Evaluate a custom built integer floor function.
-   *       This function is crucial for Lumiera's rule of quantisation
-   *       of time values into frame intervals. This rule requires time
-   *       points to be rounded towards the next lower frame border always,
-   *       irrespective of the relation to the actual time origin.
-   *       Contrast this to the built-in integer division operator, which
-   *       truncates towards zero.
-   * 
-   * @note if invoked with an non empty parameter, this test performs
-   *       some interesting timing comparisons, which initially were
-   *       used to tweak the implementation a bit.
+  /***************************************************************************
+   * @test Verify a custom built integer scale division and wrapping function.
+   *       This function is relevant for decimating values into a given scale,
+   *       like splitting time measurements in hours, minutes, seconds etc.
+   *       Basically, in Lumiera the quantisation into a scale is always
+   *       done with the same orientation, irrespective of the zero point
+   *       on the given scale. Contrast this to the built-in integer
+   *       division and modulo operators working symmetrical to zero.
    * @see util.hpp
-   * @see QuantiserBasics_test
+   * @see TimeFormats_test
    */
   class UtilFloorwrap_test : public Test
     {
@@ -92,34 +62,36 @@ namespace test {
       virtual void
       run (Arg arg)
         {
-          showWrap ( 12,4);
-          showWrap ( 11,4);
-          showWrap ( 10,4);
-          showWrap (  9,4);
-          showWrap (  8,4);
-          showWrap (  7,4);
-          showWrap (  6,4);
-          showWrap (  5,4);
-          showWrap (  4,4);
-          showWrap (  3,4);
-          showWrap (  2,4);
-          showWrap (  1,4);
-          showWrap (  0,4);
-          showWrap (- 1,4);
-          showWrap (- 2,4);
-          showWrap (- 3,4);
-          showWrap (- 4,4);
-          showWrap (- 5,4);
-          showWrap (- 6,4);
-          showWrap (- 7,4);
-          showWrap (- 8,4);
-          showWrap (- 9,4);
-          showWrap (-10,4);
-          showWrap (-11,4);
-          showWrap (-12,4);
+          int range =  0 < arg.size()? lexical_cast<int> (arg[0]) : 12;
+          int scale =  1 < arg.size()? lexical_cast<int> (arg[1]) :  4;
+          
+          checkWrap       (range,  scale);
+          checkWrap       (range, -scale);
+          checkWrap<long> (range,  scale);
+          checkWrap<long> (range, -scale);
         }
       
       
+      template<typename I>
+      void
+      checkWrap (I range, I scale)
+        {
+          cout << "--------"<< showType<I>()
+               << "--------"<< range<<"/"<<scale<<endl;
+          for (I i=range; i >=-range; --i)
+            showWrap (i, scale);
+        }
+      
+      template<typename I>
+      void
+      showWrap (I val, I scale)
+        {
+          IDiv<I> wrap = floorwrap(val,scale);
+          cout << format ("% 3d /% 1d =% 1d  %% =% d     floor=% 4.1f  wrap = (%2d,%2d)\n")
+                           % val % scale % (val/scale) 
+                                         % (val%scale) % floor(double(val)/scale)
+                                                                     % wrap.quot % wrap.rem;
+        }
     };
   
   

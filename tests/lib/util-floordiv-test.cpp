@@ -174,15 +174,13 @@ namespace test {
        * a precision beyond the 16 digits provided by double.
        * Besides that, we can conclude that the additional tests and
        * adjustment of the custom floordiv only creates a slight overhead
-       * compared to the built-in integer div function. The comparison
-       * with the \c floordiv<int> instantiation is largely moot, because
-       * this internally calls \c fdiv on values promoted to long. Another
-       * oddity in the same category is the slightly better performance
-       * of long over int64_t. Also, the alternative formulation of
-       * the function, which uses the \c fdiv() function also to divide
-       * the positive results, performs only slightly worse. So this
-       * actual implementation was chosen mainly because it seems
-       * to state its intent more clearly in code.  
+       * compared to the built-in integer div function. An oddity to note
+       * is the slightly better performance of long over int64_t. Also,
+       * the alternative formulation of the function, which uses the
+       * \c fdiv() function also to divide the positive results,
+       * performs only slightly worse. So this implementation
+       * was chosen mainly because it seems to state its
+       * intent more clearly in code.  
        */
       void
       runPerformanceTest ()
