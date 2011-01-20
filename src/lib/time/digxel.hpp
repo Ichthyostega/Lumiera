@@ -255,6 +255,7 @@ namespace time {
       void
       operator= (NUM n)
         {
+          if (n == value_) return;
           NUM changedValue = mutator(n);
           this->setValueRaw (changedValue);
         }

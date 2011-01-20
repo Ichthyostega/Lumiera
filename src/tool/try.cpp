@@ -17,6 +17,7 @@
 // 1/10  - can we determine at compile time the presence of a certain function (for duck-typing)?
 // 4/10  - pretty printing STL containers with python enabled GDB?
 // 1/11  - exploring numeric limits
+// 1/11  - integer floor and wrap operation(s)
 
 
 //#include <nobug.h>
@@ -38,31 +39,24 @@ using std::string;
 using std::cout;
 using std::endl;
 
-long
-floordiv (long num, long den)
-  {
-    if (0 < (num^den))
-      return num/den;
-    else
-      {
-        ldiv_t res = ldiv(num,den);
-        return (res.rem)? res.quot-1 
-                        : res.quot;
-      }
-  }
-
-long
-floordiv2 (long num, long den)
-  {
-    ldiv_t res = ldiv(num,den);
-    return (0 >= res.quot && res.rem)? res.quot-1
-                                     : res.quot;
-  }
+div_t
+floorwrap (int num, int den)
+{
+  div_t res = div (num,den);
+  if (0 > (num^den) && res.rem)
+    { // wrap similar to floor()
+      --res.quot;
+      res.rem = den - (-res.rem);
+    }
+  return res;
+}
 
 void
 checkDiv(int lhs, int rhs)
   {
-    cout << format ("%f / %f = %f  \tfloor=%f  floordiv=%f \n") % lhs % rhs % (lhs / rhs) % floor(double(lhs)/rhs) % floordiv2(lhs,rhs); 
+    div_t wrap = floorwrap(lhs,rhs);
+    cout << format ("%2d / %2d = %2d %% = % d \tfloor=%6.2f  wrap = (%2d, %2d) \n")
+                   % lhs % rhs % (lhs/rhs) % (lhs%rhs) % floor(double(lhs)/rhs) % wrap.quot % wrap.rem; 
   }
 
 int 
@@ -86,17 +80,6 @@ main (int, char**)
     checkDiv (1,-4);
     checkDiv (-1,4);
     checkDiv (-1,-4);
-    
-    
-    
-    int64_t muks = std::numeric_limits<int64_t>::max();
-    muks /= 30;
-    double murks(muks);
-    
-    cout << format("%f // %f || %g \n") % muks % murks % std::numeric_limits<double>::epsilon();
-    
-    int64_t glucks = murks;
-    cout << glucks <<endl;
     
     cout << "\n.gulp.\n";
     

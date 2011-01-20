@@ -59,8 +59,9 @@ namespace time {
     }
 
     
-    /** build up a frame count
-     *  by quantising the given time value 
+    /** build up a SMPTE timecode
+     *  by quantising the given time value and then splitting it
+     *  into hours, minutes, seconds and frame offset 
      */
     void
     Smpte::rebuild (SmpteTC& tc, QuantR quantiser, TimeValue const& rawTime)
@@ -69,7 +70,8 @@ namespace time {
       UNIMPLEMENTED("build smpte components from raw time");
     }
     
-    /** calculate the time point denoted by this frame count */
+    /** calculate the time point denoted by this SMPTE timecode,
+     *  by summing up the timecode's components */
     TimeValue 
     Smpte::evaluate (SmpteTC const& tc, QuantR quantiser)
     {
@@ -79,6 +81,38 @@ namespace time {
 
   }
   
+  namespace { // Timecode implementation details
+    
+    
+    int
+    wrapFrames  (SmpteTC& thisTC, int rawFrames)
+    {
+      int fps = 25; ////////////////////////////////TODO outch
+      thisTC.secs += rawFrames / fps;
+      return rawFrames % fps;
+                  //////////////////////////////////TODO need floorwrap-util
+    }
+    
+    int
+    wrapSeconds (SmpteTC& thisTC, int rawSecs)
+    {
+        
+    }
+    
+    int
+    wrapMinutes (SmpteTC& thisTC, int rawMins)
+    {
+        
+    }
+    
+    int
+    wrapHours   (SmpteTC& thisTC, int rawHours)
+    {
+        
+    }
+    
+    
+  }//(End)implementation details
   
   
   /** */

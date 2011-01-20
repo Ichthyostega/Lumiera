@@ -85,7 +85,7 @@ extern "C" {    /* ===================== C interface ======================== */
 #endif
 
 #define NTSC_DROP_FRAME_FPS 29.97
-/* TODO: replace this by lib/time/FrameRate::NTSC */
+/* TODO: replace this by lib::time::FrameRate::NTSC */
 
 /**
  * Formats a time value in H:MM:SS.mmm format into a temporary buffer.
