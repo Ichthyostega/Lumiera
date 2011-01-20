@@ -190,6 +190,8 @@ namespace test{
           digi.mutator = limitingMutator;
           CHECK (12.3 == digi);
           digi = 12.3;
+          CHECK (12.3 == digi);    // triggered on real change only
+          digi = 12.2;
           CHECK (1 == digi);
           
           digi = 0.5;
