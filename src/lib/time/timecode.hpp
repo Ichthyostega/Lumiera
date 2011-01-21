@@ -107,6 +107,7 @@ namespace time {
     : public TCode
     , boost::unit_steppable<SmpteTC>
     {
+      uint effectiveFramerate_;
       
       virtual string show()     const ;
       virtual Literal tcID()    const { return "SMPTE"; }
@@ -118,6 +119,7 @@ namespace time {
       SmpteTC (QuTime const& quantisedTime);
       
       void rebuild()  const;
+      uint getFps()   const;
       
       Digxel<int> hours;
       SexaDigit   mins;

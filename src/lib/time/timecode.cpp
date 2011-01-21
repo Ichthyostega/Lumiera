@@ -29,10 +29,12 @@
 #include "lib/time.h"
 #include "lib/util.hpp"
 
+#include <tr1/functional>
 
 using std::string;
 using util::unConst;
-using util::IDiv;
+using std::tr1::bind;
+using std::tr1::placeholders::_1;
 
 
 namespace lib {
@@ -62,13 +64,13 @@ namespace time {
     
     /** build up a SMPTE timecode
      *  by quantising the given time value and then splitting it
-     *  into hours, minutes, seconds and frame offset 
+     *  into hours, minutes, seconds and frame offset.
      */
     void
     Smpte::rebuild (SmpteTC& tc, QuantR quantiser, TimeValue const& rawTime)
     {
-//    framecnt.setValueRaw(quantiser.gridPoint (rawTime));
-      UNIMPLEMENTED("build smpte components from raw time");
+      tc.frames = quantiser.gridPoint (rawTime);
+      // will automatically wrap over to the secs, minutes and hour fields
     }
     
     /** calculate the time point denoted by this SMPTE timecode,
@@ -76,20 +78,48 @@ namespace time {
     TimeValue 
     Smpte::evaluate (SmpteTC const& tc, QuantR quantiser)
     {
-//    return quantiser.timeOf (framecnt);
-      UNIMPLEMENTED("calculate time from smpte");
+      uint frameRate = tc.getFps();
+      long gridPoint = tc.frames
+                     + tc.secs   * frameRate
+                     + tc.mins   * frameRate * 60 
+                     + tc.hours  * frameRate * 60 * 60;
+      return quantiser.timeOf (gridPoint);
+    }
+    
+    /** yield the Framerate in effect at that point.
+     *  Especially Timecode in SMPTE format exposes a "frames" field
+     *  to contain the remainder of frames in addition to the h:m:s value.
+     *  Obviously this value has to be kept below the number of frames for
+     *  a full second and wrap around accordingly.
+     * @note SMPTE format assumes this framerate to be constant. Actually,
+     *       in this implementation the value returned here neither needs
+     *       to be constant (independent of the given rawTime), nor does
+     *       it need to be the actual framerate used by the quantiser.
+     *       Especially in case of NTSC drop-frame, the timecode
+     *       uses 30fps here, while the quantisation uses 29.97
+     * @todo this design just doesn't feel quite right... 
+     */ 
+    uint
+    Smpte::getFramerate (QuantR quantiser_, TimeValue const& rawTime)
+    {
+      long refCnt = quantiser_.gridPoint(rawTime);
+      long newCnt = quantiser_.gridPoint(Time(0.5,1) + rawTime);
+      long effectiveFrames = newCnt - refCnt;
+      ENSURE (1000 > effectiveFrames);
+      ENSURE (0 < effectiveFrames);
+      return uint(effectiveFrames);
     }
 
   }
   
   namespace { // Timecode implementation details
     
+    typedef util::IDiv<int> Div;
     
     int
     wrapFrames  (SmpteTC& thisTC, int rawFrames)
     {
-      int fps = 25; ////////////////////////////////TODO outch
-      IDiv<int> scaleRelation(rawFrames, fps);
+      Div scaleRelation(rawFrames, thisTC.getFps());
       thisTC.secs += scaleRelation.quot;
       return scaleRelation.rem;
     }
@@ -97,7 +127,7 @@ namespace time {
     int
     wrapSeconds (SmpteTC& thisTC, int rawSecs)
     {
-      IDiv<int> scaleRelation(rawSecs, 60);
+      Div scaleRelation(rawSecs, 60);
       thisTC.mins += scaleRelation.quot;
       return scaleRelation.rem;
     }
@@ -105,7 +135,7 @@ namespace time {
     int
     wrapMinutes (SmpteTC& thisTC, int rawMins)
     {
-      IDiv<int> scaleRelation(rawMins, 60);
+      Div scaleRelation(rawMins, 60);
       thisTC.hours += scaleRelation.quot;
       return scaleRelation.rem;
     }
@@ -133,7 +163,16 @@ namespace time {
   /** */
   SmpteTC::SmpteTC (QuTime const& quantisedTime)
     : TCode(quantisedTime)
-    { }
+    , effectiveFramerate_(Format::getFramerate (*quantiser_, quantisedTime))
+    {
+      // Functors to normalise raw component values
+      hours.mutator  = bind (wrapHours,   *this, _1 );
+      mins.mutator   = bind (wrapMinutes, *this, _1 );
+      secs.mutator   = bind (wrapSeconds, *this, _1 );
+      frames.mutator = bind (wrapFrames,  *this, _1 );
+      
+      quantisedTime.castInto (*this);
+    }
   
   
   /** */
@@ -154,8 +193,15 @@ namespace time {
   void
   SmpteTC::rebuild()  const
   {
-    TimeValue point = Format::evaluate(*this, *quantiser_);
-    Format::rebuild(unConst(*this), *quantiser_, point);
+    TimeValue point = Format::evaluate (*this, *quantiser_);
+    Format::rebuild (unConst(*this), *quantiser_, point);
+  }
+  
+  
+  uint
+  SmpteTC::getFps()  const
+  {
+    return effectiveFramerate_;    //////////////////////////////////TODO better design. Shouldn't Format::getFramerate(QuantR, TimeValue) be moved here?
   }
   
   
@@ -179,13 +225,15 @@ namespace time {
   SmpteTC&
   SmpteTC::operator++ ()
   {
-    UNIMPLEMENTED ("SMPTE unit increment");
+    ++frames;
+    return *this;
   }
   
   SmpteTC&
   SmpteTC::operator-- ()
   {
-    UNIMPLEMENTED ("SMPTE unit decrement");
+    --frames;
+    return *this;
   }
   
   /** */
