@@ -85,9 +85,9 @@ namespace test{
           CHECK (1 == sig);
           sig = -sig;
           CHECK (-1 == sig);
-          sig = -98;
-          CHECK (-1 == sig);
-          CHECK (sig.show() == string("-"));
+          sig += 98;
+          CHECK (+1 == sig);
+          CHECK (sig.show() == string(" "));
           sig *= -1;
           CHECK (sig.show() == string("-"));
         }

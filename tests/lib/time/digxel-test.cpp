@@ -312,7 +312,7 @@ namespace test{
        *  we'll take some timings.
        *  @warning the results of such tests could be unreliable,
        *  but in this case here I saw a significant difference,
-       *  with values of about 0.5sec / 0.7sec  */
+       *  with values of about 0.1sec / 0.7sec  */
       void
       verifyDisplayCaching ()
         {

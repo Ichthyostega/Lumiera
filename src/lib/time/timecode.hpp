@@ -120,8 +120,10 @@ namespace time {
       SmpteTC (SmpteTC const&);
       SmpteTC& operator= (SmpteTC const&);
       
-      void rebuild()  const;
       uint getFps()   const;
+      
+      void clear();
+      void rebuild();
       
       HourDigit hours;
       SexaDigit mins;

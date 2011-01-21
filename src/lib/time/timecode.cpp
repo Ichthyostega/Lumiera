@@ -34,6 +34,7 @@
 using std::string;
 using util::unConst;
 using util::isSameObject;
+using util::floorwrap;
 
 
 namespace lib {
@@ -68,6 +69,7 @@ namespace time {
     void
     Smpte::rebuild (SmpteTC& tc, QuantR quantiser, TimeValue const& rawTime)
     {
+      tc.clear();
       tc.frames = quantiser.gridPoint (rawTime);
       // will automatically wrap over to the secs, minutes and hour fields
     }
@@ -82,7 +84,7 @@ namespace time {
                      + tc.secs   * frameRate
                      + tc.mins   * frameRate * 60 
                      + tc.hours  * frameRate * 60 * 60;
-      return quantiser.timeOf (gridPoint);
+      return quantiser.timeOf (tc.sgn * gridPoint);
     }
     
     /** yield the Framerate in effect at that point.
@@ -108,8 +110,72 @@ namespace time {
       ENSURE (0 < effectiveFrames);
       return uint(effectiveFrames);
     }
-
+    
+    
+    /** handle the limits of SMPTE timecode range.
+     *  This is an extension and configuration point to control how
+     *  to handle values beyond the official SMPTE timecode range of
+     *  0:0:0:0 to 23:59:59:##. When this strategy function is invoked,
+     *  the frames, seconds and minutes fields have already been processed
+     *  under the assumption the overall value stays in range. After returning
+     *  from this strategy function, the rawHours value will be returned to be
+     *  stored into the hours field without any further adjustments. 
+     * @note currently the range is extended "naturally" (i.e. mathematically).
+     *       The representation is flipped around the zero point and the value
+     *       of the hours is just allowed to increase beyond 23
+     * @todo If necessary, this extension point should be converted into a
+     *       configurable strategy. Possible variations
+     *       - clip values beyond the boundaries
+     *       - wrap around from 23:59:59:## to 0:0:0:0
+     *       - just make the hour negative, but continue with the same
+     *         orientation (0:0:0:0 - 1sec = -1:59:59:0)
+     */
+    void
+    Smpte::rangeLimitStrategy (SmpteTC& tc, int& rawHours)
+    {
+      if ((rawHours^tc.sgn) >= 0) return;
+      
+      tc.sgn = rawHours; // transfer sign into the sign field
+      rawHours = abs(rawHours);
+      
+      REQUIRE (0 <= tc.frames && uint(tc.frames) < tc.getFps());
+      REQUIRE (0 <= tc.secs   && tc.secs   < 60 );
+      REQUIRE (0 <= tc.mins   && tc.mins   < 60 );
+      
+        // sign flip was detected:
+       //  switch orientation of all timecode fields
+      //   i.e. -h + (m+s+f) becomes - (h+m+s+f)
+      uint fr   (tc.getFps() - tc.frames);
+      uint secs (60 - tc.secs);
+      uint mins (60 - tc.mins);
+      
+      ASSERT (fr <= tc.getFps());
+      ASSERT (0 < secs);
+      if (fr < tc.getFps())
+        --secs;
+      else
+        fr = 0;
+      
+      ASSERT (secs <= 60);
+      ASSERT (0 < mins);
+      if (secs < 60)
+        --mins;
+      else
+        secs = 0;
+      
+      ASSERT (mins <= 60);
+      ASSERT (0 < rawHours);
+      if (mins < 60)
+        --rawHours;
+      else
+          mins = 0;
+      
+      tc.frames.setValueRaw (fr);
+      tc.secs.setValueRaw (secs);
+      tc.mins.setValueRaw (mins);
+    }
   }
+  
   
   namespace { // Timecode implementation details
     
@@ -118,7 +184,7 @@ namespace time {
     int
     wrapFrames  (SmpteTC* thisTC, int rawFrames)
     {
-      Div scaleRelation(rawFrames, thisTC->getFps());
+      Div scaleRelation = floorwrap<int> (rawFrames, thisTC->getFps());
       thisTC->secs += scaleRelation.quot;
       return scaleRelation.rem;
     }
@@ -126,7 +192,7 @@ namespace time {
     int
     wrapSeconds (SmpteTC* thisTC, int rawSecs)
     {
-      Div scaleRelation(rawSecs, 60);
+      Div scaleRelation = floorwrap (rawSecs, 60);
       thisTC->mins += scaleRelation.quot;
       return scaleRelation.rem;
     }
@@ -134,7 +200,7 @@ namespace time {
     int
     wrapMinutes (SmpteTC* thisTC, int rawMins)
     {
-      Div scaleRelation(rawMins, 60);
+      Div scaleRelation = floorwrap (rawMins, 60);
       thisTC->hours += scaleRelation.quot;
       return scaleRelation.rem;
     }
@@ -142,7 +208,7 @@ namespace time {
     int
     wrapHours   (SmpteTC* thisTC, int rawHours)
     {
-      thisTC->sgn = rawHours;
+      format::Smpte::rangeLimitStrategy (*thisTC, rawHours);
       return rawHours;
     }
     
@@ -229,10 +295,21 @@ namespace time {
   
   
   void
-  SmpteTC::rebuild()  const
+  SmpteTC::clear()
+  {
+    frames.setValueRaw(0);
+    secs.setValueRaw  (0);
+    mins.setValueRaw  (0);
+    hours.setValueRaw (0);
+    sgn.setValueRaw  (+1);
+  }
+  
+  
+  void
+  SmpteTC::rebuild()
   {
     TimeValue point = Format::evaluate (*this, *quantiser_);
-    Format::rebuild (unConst(*this), *quantiser_, point);
+    Format::rebuild (*this, *quantiser_, point);
   }
   
   

@@ -84,6 +84,7 @@ namespace time {
         static void       rebuild (SmpteTC&, QuantR, TimeValue const&);
         static TimeValue evaluate (SmpteTC const&, QuantR);
         static uint  getFramerate (QuantR, TimeValue const&);
+        static void rangeLimitStrategy (SmpteTC&, int& rawHours);
       };
     
     

@@ -674,7 +674,8 @@ return: 0
 END
 
 
-PLANNED "Time formats and timecodes" TimeFormats_test  <<END
+TEST "Time formats and timecodes" TimeFormats_test  <<END
+out-lit: SMPTE="  5:42:23:13" time = 5:42:23.520
 return: 0
 END
 

@@ -114,7 +114,7 @@ namespace test{
           
           showTimeCode(smpte);
           CHECK ("  5:42:23:13" == string(smpte));
-          CHECK (raw - Time(35,0) == smpte.getTime());
+          CHECK (raw - Time(35,0) == smpte.getTime());    // quantisation to next lower frame
           CHECK (13 == smpte.frames);
           CHECK (23 == smpte.secs);
           CHECK (42 == smpte.mins);
@@ -131,20 +131,22 @@ namespace test{
           CHECK (smpte.mins-- == 40);
           CHECK (--smpte.mins == 38);
           CHECK ("  5:38:00:01" == string(smpte));
+          
+          // extension beyond origin to negative values
           Time tx = smpte.getTime();
           smpte.hours -= 6;
-          CHECK ("- 0:21:59:24"== string(smpte));
-          CHECK (tx - Time(6*60*60) == smpte.getTime());
+          CHECK ("- 0:21:59:24"== string(smpte));         // representation is symmetrical to origin
+          CHECK (tx - Time(6*60*60) == smpte.getTime());  // Continuous time axis
           CHECK (-1 == smpte.sgn);
-          smpte.sgn += 123;
+          smpte.sgn += 123;                               // just flip the sign
           CHECK ("  0:21:59:24"== string(smpte));
           
-          smpte.secs.setValueRaw(61);
+          smpte.secs.setValueRaw(61);                     // set "wrong" value, bypassing normalisation
           CHECK (smpte.secs == 61);
           CHECK (smpte.getTime() == Time(1000*24/25, 01, 22));
-          CHECK (smpte.secs == 61);
+          CHECK (smpte.secs == 61);                       // calculated value is correct, but doesn't change state
           CHECK ("  0:21:61:24"== string(smpte));
-          smpte.rebuild();
+          smpte.rebuild();                                // but rebuilding the value includes normalisation
           CHECK (smpte.secs ==  1);
           CHECK (smpte.mins == 22);
           CHECK ("  0:22:01:24"== string(smpte));

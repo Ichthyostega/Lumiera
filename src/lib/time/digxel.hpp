@@ -302,19 +302,29 @@ namespace time {
   
   /** special Digxel to show a sign.
    * @note values limited to +1 and -1 */
-  struct Signum
-    : Digxel<int,digxel::SignFormatter>
+  class Signum
+    : public Digxel<int,digxel::SignFormatter>
     {
-      Signum() { setValueRaw(1); }
+      static int
+      just_the_sign (int val)
+        {
+          return val<0? -1:+1;
+        } 
+      
+    public:
+      Signum()
+        {
+          setValueRaw(1);
+          mutator = just_the_sign;
+        }
       
       void
       operator= (int n)
         {
-          int newSign = 0 > mutator(n)? -1:+1;
-          this->setValueRaw (newSign);
+          this->setValueRaw (mutator(n));
         }
       
-      friend int operator*= (Signum s, int c) { s = c*s; return s; }
+      friend int operator*= (Signum& s, int c) { s = c*s; return s; }
     };
   
   
