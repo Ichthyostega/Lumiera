@@ -175,6 +175,12 @@ namespace time {
         CountFormatter() : PrintfFormatter<long,20>("%04ld") { }
       };
     
+    struct HourFormatter
+      : PrintfFormatter<int, 9>
+      {
+        HourFormatter() : PrintfFormatter<int,9>("%2d") { }
+      };
+    
       
     struct SignFormatter
       {
@@ -290,6 +296,7 @@ namespace time {
   /* == predefined Digxel configurations == */
   typedef Digxel< int, digxel::SexaFormatter> SexaDigit;  ///< for displaying time components (sexagesimal)
   typedef Digxel<uint, digxel::HexaFormatter> HexaDigit;  ///< for displaying a hex byte
+  typedef Digxel< int, digxel::HourFormatter> HourDigit;  ///< for displaying hours in H:M.S
   typedef Digxel<long, digxel::CountFormatter> CountVal;  ///< for displaying a counter
   
   

@@ -33,8 +33,7 @@
 
 using std::string;
 using util::unConst;
-using std::tr1::bind;
-using std::tr1::placeholders::_1;
+using util::isSameObject;
 
 
 namespace lib {
@@ -117,36 +116,50 @@ namespace time {
     typedef util::IDiv<int> Div;
     
     int
-    wrapFrames  (SmpteTC& thisTC, int rawFrames)
+    wrapFrames  (SmpteTC* thisTC, int rawFrames)
     {
-      Div scaleRelation(rawFrames, thisTC.getFps());
-      thisTC.secs += scaleRelation.quot;
+      Div scaleRelation(rawFrames, thisTC->getFps());
+      thisTC->secs += scaleRelation.quot;
       return scaleRelation.rem;
     }
     
     int
-    wrapSeconds (SmpteTC& thisTC, int rawSecs)
+    wrapSeconds (SmpteTC* thisTC, int rawSecs)
     {
       Div scaleRelation(rawSecs, 60);
-      thisTC.mins += scaleRelation.quot;
+      thisTC->mins += scaleRelation.quot;
       return scaleRelation.rem;
     }
     
     int
-    wrapMinutes (SmpteTC& thisTC, int rawMins)
+    wrapMinutes (SmpteTC* thisTC, int rawMins)
     {
       Div scaleRelation(rawMins, 60);
-      thisTC.hours += scaleRelation.quot;
+      thisTC->hours += scaleRelation.quot;
       return scaleRelation.rem;
     }
     
     int
-    wrapHours   (SmpteTC& thisTC, int rawHours)
+    wrapHours   (SmpteTC* thisTC, int rawHours)
     {
-      thisTC.sgn = rawHours;
+      thisTC->sgn = rawHours;
       return rawHours;
     }
     
+    
+    using std::tr1::bind;
+    using std::tr1::placeholders::_1;
+    
+    /** bind the individual Digxel mutation functors
+     *  to normalise raw component values */
+    inline void
+    setupComponentNormalisation (SmpteTC * thisTC)
+    {
+      thisTC->hours.mutator  = bind (wrapHours,   thisTC, _1 );
+      thisTC->mins.mutator   = bind (wrapMinutes, thisTC, _1 );
+      thisTC->secs.mutator   = bind (wrapSeconds, thisTC, _1 );
+      thisTC->frames.mutator = bind (wrapFrames,  thisTC, _1 );
+    }
     
   }//(End)implementation details
   
@@ -165,13 +178,38 @@ namespace time {
     : TCode(quantisedTime)
     , effectiveFramerate_(Format::getFramerate (*quantiser_, quantisedTime))
     {
-      // Functors to normalise raw component values
-      hours.mutator  = bind (wrapHours,   *this, _1 );
-      mins.mutator   = bind (wrapMinutes, *this, _1 );
-      secs.mutator   = bind (wrapSeconds, *this, _1 );
-      frames.mutator = bind (wrapFrames,  *this, _1 );
-      
+      setupComponentNormalisation (this);
       quantisedTime.castInto (*this);
+    }
+  
+  
+  SmpteTC::SmpteTC (SmpteTC const& o)
+    : TCode(o)
+    , effectiveFramerate_(o.effectiveFramerate_)
+    {
+      setupComponentNormalisation (this);
+      sgn    = o.sgn;
+      hours  = o.hours;
+      mins   = o.mins;
+      secs   = o.secs;
+      frames = o.frames;
+    }
+  
+  
+  SmpteTC&
+  SmpteTC::operator= (SmpteTC const& o)
+    {
+      if (!isSameObject (*this, o))
+        {
+          TCode::operator= (o);
+          effectiveFramerate_ = o.effectiveFramerate_;
+          sgn    = o.sgn;
+          hours  = o.hours;
+          mins   = o.mins;
+          secs   = o.secs;
+          frames = o.frames;
+        }
+      return *this;
     }
   
   
@@ -208,7 +246,6 @@ namespace time {
   string
   SmpteTC::show()  const
   {
-    rebuild();
     string tc;
            tc.reserve(15);
            tc += sgn.show();

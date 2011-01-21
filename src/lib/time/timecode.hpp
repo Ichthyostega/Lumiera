@@ -117,15 +117,17 @@ namespace time {
       typedef format::Smpte Format;
       
       SmpteTC (QuTime const& quantisedTime);
+      SmpteTC (SmpteTC const&);
+      SmpteTC& operator= (SmpteTC const&);
       
       void rebuild()  const;
       uint getFps()   const;
       
-      Digxel<int> hours;
-      SexaDigit   mins;
-      SexaDigit   secs;
-      SexaDigit   frames;
-      Signum      sgn;
+      HourDigit hours;
+      SexaDigit mins;
+      SexaDigit secs;
+      SexaDigit frames;
+      Signum    sgn;
       
       SmpteTC& operator++();
       SmpteTC& operator--();

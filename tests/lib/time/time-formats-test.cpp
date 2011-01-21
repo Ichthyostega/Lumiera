@@ -66,6 +66,7 @@ namespace test{
 //        checkHms ();
           checkSmpte();
 //        checkDropFrame();
+//        checkCopyAssignments();
         } 
       
       
@@ -107,13 +108,13 @@ namespace test{
       void
       checkSmpte ()
         {
-          Time raw(0.5,23,42,5);
+          Time raw(555,23,42,5);
           QuTime t1 (raw, "pal0");
           SmpteTC smpte(t1);
           
           showTimeCode(smpte);
-          CHECK ("5:42:23:13" == string(smpte));
-          CHECK (raw + Time(0.02,0) == smpte.getTime());
+          CHECK ("  5:42:23:13" == string(smpte));
+          CHECK (raw - Time(35,0) == smpte.getTime());
           CHECK (13 == smpte.frames);
           CHECK (23 == smpte.secs);
           CHECK (42 == smpte.mins);
@@ -122,29 +123,31 @@ namespace test{
           CHECK ("SMPTE" == smpte.describe());
           
           ++smpte;
-          CHECK ("5:42:23:14" == string(smpte));
+          CHECK ("  5:42:23:14" == string(smpte));
           smpte.frames += 12;
-          CHECK ("5:42:24:01" == string(smpte));
+          CHECK ("  5:42:24:01" == string(smpte));
           smpte.secs = -120;
-          CHECK ("5:40:00:01" == string(smpte));
+          CHECK ("  5:40:00:01" == string(smpte));
           CHECK (smpte.mins-- == 40);
           CHECK (--smpte.mins == 38);
-          CHECK ("5:38:00:01" == string(smpte));
+          CHECK ("  5:38:00:01" == string(smpte));
           Time tx = smpte.getTime();
           smpte.hours -= 6;
-          CHECK ("-0:21:59:24"== string(smpte));
+          CHECK ("- 0:21:59:24"== string(smpte));
           CHECK (tx - Time(6*60*60) == smpte.getTime());
           CHECK (-1 == smpte.sgn);
           smpte.sgn += 123;
-          CHECK ("0:21:59:24"== string(smpte));
+          CHECK ("  0:21:59:24"== string(smpte));
           
           smpte.secs.setValueRaw(61);
           CHECK (smpte.secs == 61);
-          CHECK (smpte.getTime() == Time(24.0/25,01,22));
+          CHECK (smpte.getTime() == Time(1000*24/25, 01, 22));
           CHECK (smpte.secs == 61);
-          smpte.hours += 0;
+          CHECK ("  0:21:61:24"== string(smpte));
+          smpte.rebuild();
           CHECK (smpte.secs ==  1);
           CHECK (smpte.mins == 22);
+          CHECK ("  0:22:01:24"== string(smpte));
         }
       
       
@@ -152,6 +155,13 @@ namespace test{
       checkDropFrame ()
         {
           UNIMPLEMENTED ("verify especially SMPTE-drop-frame timecode");
+        }
+      
+      
+      void
+      checkCopyAssignments ()
+        {
+          UNIMPLEMENTED ("verify Timecode values can be copied and assigned properly");
         }
     };
   
