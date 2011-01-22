@@ -6746,7 +6746,7 @@ Question is: how fine grained and configurable needs this to be?
 
 </pre>
 </div>
-<div title="TimecodeFormat" modifier="Ichthyostega" modified="201101211920" created="201101100308" tags="Player spec discuss draft" changecount="24">
+<div title="TimecodeFormat" modifier="Ichthyostega" modified="201101220135" created="201101100308" tags="Player spec discuss draft" changecount="25">
 <pre>The handling of [[Timecode]] is closely related to [[time representation and quantisation|TimeQuant]]. In fact, these two topics blend into one another. Time will be quantised into a //grid,// but this grid only makes sense when linked to a externally relevant meaning and representation, which is the Timecode. But a timecode value also denotes a specific point in time -- performing operations on a timecode is equivalent to manipulating a quantised time value.
 
 !Problem of dependencies
@@ -6791,6 +6791,8 @@ But because for Lumiera the SMPTE format is just a presentation rule applied to 
 # by a representation symmetrical to the zero point (0:0:0:0 - 1sec = -0:0:1:0) -- but beware: //the underlying frame quantisation won't flip//
 Because this decision is considered arbitrary and any reasoning will be context dependant, the decision is to provide a hook for a //strategy// --
 Currently (1/11), the strategy is implemented according to (1) and (4) above, leaving the actual configuration of a strategy for later.
+!!{{red{WIP 1/11}}}BUG
+Implementation of this strategy is still broken: it doesn't work properly when actually the change passing over the zero point happens by propagation from lower digits. Because then -- given the way the mutators are implemented -- the //new value of the wrapping digit hasn't been stored.// It seems the only sensible solution is to change the definition of the functors, so that any value will be changed by side-effect
 </pre>
 </div>
 <div title="Timeline" modifier="Ichthyostega" modified="201011220126" created="200706250721" tags="def" changecount="21">

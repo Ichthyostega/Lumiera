@@ -273,6 +273,7 @@ namespace time {
       /** convenience start for time calculations */
       TimeVar operator+ (TimeValue const& tval)  const { return TimeVar(*this) + tval; }
       TimeVar operator- (TimeValue const& tval)  const { return TimeVar(*this) - tval; }
+      TimeVar operator- ()                       const { return -TimeVar(*this); }
     };
   
   

@@ -339,14 +339,14 @@ namespace time {
   SmpteTC&
   SmpteTC::operator++ ()
   {
-    ++frames;
+    frames += sgn;
     return *this;
   }
   
   SmpteTC&
   SmpteTC::operator-- ()
   {
-    --frames;
+    frames -= sgn;
     return *this;
   }
   

@@ -190,6 +190,7 @@ namespace test{
           CHECK (th+th == t1);
           CHECK (t1-th == th);
           CHECK (((t1-th)*=2) == t1);
+          CHECK (th-th == Time(0));
           
           // that was indeed a temporary and didn't affect the originals
           CHECK (t1 == TimeValue(GAVL_TIME_SCALE));
