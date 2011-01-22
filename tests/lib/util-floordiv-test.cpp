@@ -32,6 +32,7 @@
 using ::Test;
 using std::cout;
 using std::rand;
+using util::isnil;
 using boost::format;
 
 
@@ -110,7 +111,7 @@ namespace test {
         {
           verifyBehaviour ();
           
-          if (arg.size())
+          if (!isnil (arg))
             runPerformanceTest();
         }
       

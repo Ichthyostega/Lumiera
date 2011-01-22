@@ -33,6 +33,7 @@
 
 using lumiera::error::LUMIERA_ERROR_ASSERTION;
 using util::isSameObject;
+using util::isnil;
 using std::rand;
 using std::cout;
 using std::endl;
@@ -137,16 +138,18 @@ namespace test{
   class Digxel_test : public Test
     {
       virtual void
-      run (Arg) 
+      run (Arg arg) 
         {
-          checkSimpleUsage ();
+          checkSimpleUsage();
           checkMutation ();
-          verifyMutatorInfluence ();
-          verifyAssignMutatingOperators ();
-          verifyComparisons ();
+          verifyMutatorInfluence();
+          verifyAssignMutatingOperators();
+          verifyComparisons();
           checkCopy ();
-          checkDisplayOverrun ();
-          verifyDisplayCaching ();
+          checkDisplayOverrun();
+          
+          if (!isnil (arg))
+            timingMeasurements();
         } 
       
       
@@ -319,15 +322,17 @@ namespace test{
         }
       
       
-      /** @test verify caching of formatted values.
-       *  Digxel avoids reformatting unchanged values;
-       *  to verify the effectivity of this measure,
-       *  we'll take some timings.
-       *  @warning the results of such tests could be unreliable,
-       *  but in this case here I saw a significant difference,
-       *  with values of about 10ns / 45ns  */
+      /** @test perform several timing measurements and 
+       *  especially verify the effect of caching formatted values.
+       *  Digxel avoids reformatting unchanged values; besides that
+       *  it is possible to install a "mutator" functor for invoking
+       *  all kinds of special behaviour on value changes. Of course
+       *  doing so comes with a (considerable) price tag....
+       * @note the measurement especially show the effects of
+       *  locality, which can vary largely over several runs.
+       */
       void
-      verifyDisplayCaching ()
+      timingMeasurements ()
         {
           TestDigxel digi;
           digi = 1;
@@ -335,7 +340,7 @@ namespace test{
           clock_t start(0), stop(0);
           boost::format resultDisplay("timings(%s)%|36T.|%4.0fns\n");
           
-#define   START_TIMINGS start=clock();          
+#define   START_TIMINGS start=clock();
 #define   DISPLAY_TIMINGS(ID)\
           stop = clock();     \
           uint ID = stop-start;\
