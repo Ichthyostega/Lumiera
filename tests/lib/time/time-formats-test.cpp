@@ -142,7 +142,7 @@ namespace test{
           CHECK (--smpte.mins == 38);
           CHECK ("  5:38:00:01" == string(smpte));
           
-          Time tx = smpte.getTime();
+          TimeVar tx = smpte.getTime();
           CHECK (tx == Time(0,0,38,5) + Time(FSecs(1,25)));
           
           // Extended SMPTE: extension of the axis beyond origin towards negative values
@@ -157,7 +157,7 @@ namespace test{
           tx = smpte.getTime();
           ++smpte.frames;                                 // now *increasing* the frame value
           CHECK ("- 0:22:00:00"== string(smpte));         // means decreasing the resulting time
-          CHECK (tx - Time(1000/25,0,0,0) == smpte.getTime());
+          CHECK (smpte.getTime() == tx - Time(1000/25,0,0,0));
           ++smpte;                                        // but the orientation of the increment on the *whole* TC values is unaltered
           CHECK ("- 0:21:59:24"== string(smpte));         // so this actually *advanced* time by one frame 
           CHECK (tx == smpte.getTime());
@@ -204,7 +204,7 @@ namespace test{
           CHECK (tx == smpte.getTime());                  // applying invertOrientation() doesn't change the value
           
           smpte.frames.setValueRaw(-1);
-          tx = tx - Time(FSecs(2,25));
+          tx -= Time(FSecs(2,25));
           CHECK (tx == smpte.getTime());
           CHECK ("  1:00:00:-1"== string(smpte));
           smpte.invertOrientation();                      // invoking on positive should create double negated representation

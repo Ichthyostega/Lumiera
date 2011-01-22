@@ -59,6 +59,7 @@ namespace meta {
   
   using lib::Symbol;
   using lib::time::Time;
+  using lib::time::TimeVar;
   using lib::time::TimeValue;
   using lib::time::FrameRate;
   using lib::time::FSecs;
@@ -102,7 +103,7 @@ namespace meta {
       string id_;
       
       FrameRate fps_;
-      Time origin_;
+      TimeVar origin_;
       
       /** when building a compound or variable grid,
        *  the predecessor is the grid active \em before

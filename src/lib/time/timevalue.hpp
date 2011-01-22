@@ -169,7 +169,14 @@ namespace time {
   class Offset
     : public TimeValue
     {
-        
+    protected:
+      Offset&
+      operator= (Offset const& o) ///< derived classes allow mutation
+        {
+          TimeValue::operator= (o);
+          return *this;
+        }
+
     public:
       explicit 
       Offset (TimeValue const& distance)
@@ -246,6 +253,9 @@ namespace time {
   class Time
     : public TimeValue
     {
+      /// direct assignment prohibited
+      Time& operator= (Time const);
+      
     public:
       static const Time MAX ; 
       static const Time MIN ;
@@ -291,6 +301,9 @@ namespace time {
   class Duration
     : public Offset
     {
+      /// direct assignment prohibited
+      Duration& operator= (Duration const&);
+      
     public:
       Duration (Offset const& distance)
         : Offset(distance.abs())
