@@ -113,6 +113,7 @@ namespace time {
       virtual Literal tcID()    const { return "SMPTE"; }
       virtual TimeValue value() const { return Format::evaluate (*this, *quantiser_); }
       
+      
     public:
       typedef format::Smpte Format;
       
@@ -124,6 +125,8 @@ namespace time {
       
       void clear();
       void rebuild();
+      void invertOrientation();
+
       
       HourDigit hours;
       SexaDigit mins;

@@ -71,7 +71,7 @@ namespace time {
     {
       tc.clear();
       tc.frames = quantiser.gridPoint (rawTime);
-      // will automatically wrap over to the secs, minutes and hour fields
+      // will automatically wrap over to the seconds, minutes and hour fields
     }
     
     /** calculate the time point denoted by this SMPTE timecode,
@@ -79,7 +79,7 @@ namespace time {
     TimeValue 
     Smpte::evaluate (SmpteTC const& tc, QuantR quantiser)
     {
-      uint frameRate = tc.getFps();
+      long frameRate = tc.getFps();
       long gridPoint = tc.frames
                      + tc.secs   * frameRate
                      + tc.mins   * frameRate * 60 
@@ -131,49 +131,10 @@ namespace time {
      *         orientation (0:0:0:0 - 1sec = -1:59:59:0)
      */
     void
-    Smpte::rangeLimitStrategy (SmpteTC& tc, int hours)
+    Smpte::rangeLimitStrategy (SmpteTC& tc)
     {
-      if (hours >= 0) return; // no need to flip representation
-      
-      tc.sgn *= hours; // transfer sign into the sign field
-      hours = abs(hours);
-      
-      REQUIRE (0 <= tc.frames && uint(tc.frames) < tc.getFps());
-      REQUIRE (0 <= tc.secs   && tc.secs   < 60 );
-      REQUIRE (0 <= tc.mins   && tc.mins   < 60 );
-      
-        // sign flip was detected:
-       //  switch orientation of all timecode fields
-      //   i.e. -h + (m+s+f) becomes - (h+m+s+f)
-      uint fr   (tc.getFps() - tc.frames);
-      uint secs (60 - tc.secs);
-      uint mins (60 - tc.mins);
-      
-      ASSERT (fr <= tc.getFps());
-      ASSERT (0 < secs);
-      if (fr < tc.getFps())
-        --secs;
-      else
-        fr = 0;
-      
-      ASSERT (secs <= 60);
-      ASSERT (0 < mins);
-      if (secs < 60)
-        --mins;
-      else
-        secs = 0;
-      
-      ASSERT (mins <= 60);
-      ASSERT (0 < hours);
-      if (mins < 60)
-        --hours;
-      else
-          mins = 0;
-      
-      tc.frames.setValueRaw (fr);
-      tc.secs.setValueRaw  (secs);
-      tc.mins.setValueRaw  (mins);
-      tc.hours.setValueRaw (hours);
+      if (tc.hours < 0)
+        tc.invertOrientation();
     }
   }
   
@@ -210,7 +171,7 @@ namespace time {
     wrapHours   (SmpteTC* thisTC, int rawHours)
     {
       thisTC->hours.setValueRaw (rawHours);
-      format::Smpte::rangeLimitStrategy (*thisTC, rawHours);
+      format::Smpte::rangeLimitStrategy (*thisTC);
     }
     
     
@@ -311,6 +272,38 @@ namespace time {
   {
     TimeValue point = Format::evaluate (*this, *quantiser_);
     Format::rebuild (*this, *quantiser_, point);
+  }
+  
+  
+  /** flip the orientation of min, sec, and frames.
+   *  Besides changing the sign, this will flip the
+   *  meaning of the component fields, which by
+   *  definition are always oriented towards zero.
+   *  
+   *  Normalised value fields are defined positive,
+   *  with automatic overflow to next higher field.
+   *  This might cause the hours to become negative.
+   *  When invoked in this case, the meaning changes
+   *  from -h + (m+s+f) to -(h+m+s+f)
+   */
+  void
+  SmpteTC::invertOrientation()
+  {
+    int fr (getFps()); 
+    int f (fr - frames); // revert orientation
+    int s (60 - secs);  //  of the components
+    int m (60 - mins); //   
+    int h = -hours;   //  assumed to be negative
+    sgn *= -1;       //   flip sign field
+    
+    if (f < fr) --s; else f -= fr;
+    if (s < 60) --m; else s -= 60;
+    if (m < 60) --h; else m -= 60;
+    
+    hours.setValueRaw(h);
+    mins   = m;  // invoking setters
+    secs   = s; //  ensures normalisation 
+    frames = f;
   }
   
   
