@@ -105,6 +105,16 @@ namespace test{
         }
       
       
+      /** @test detailed coverage of SMPTE timecode representation.
+       *        Using a scale grid with PAL framerate; this test doesn't
+       *        cover the handling of drop-frame timecode.
+       *        - creating a timecode representation causes frame quantisation
+       *        - the components of SMPTE timecode can be accessed and manipulated
+       *        - timecode can be incremented/decremented as a whole
+       *        - we allow extension of the scale towards negative values
+       *        - for these, the representation is flipped and the negative
+       *          orientation only indicated through the sign field.
+       */
       void
       checkSmpte ()
         {
@@ -114,7 +124,7 @@ namespace test{
           
           showTimeCode(smpte);
           CHECK ("  5:42:23:13" == string(smpte));
-          CHECK (raw - Time(35,0) == smpte.getTime());    // quantisation to next lower frame
+          CHECK (raw - Time(35,0) == smpte.getTime());    // timecode value got quantised towards next lower frame
           CHECK (13 == smpte.frames);
           CHECK (23 == smpte.secs);
           CHECK (42 == smpte.mins);
@@ -132,8 +142,10 @@ namespace test{
           CHECK (--smpte.mins == 38);
           CHECK ("  5:38:00:01" == string(smpte));
           
-          // extension beyond origin to negative values
           Time tx = smpte.getTime();
+          CHECK (tx == Time(0,0,38,5) + Time(FSecs(1,25)));
+          
+          // Extended SMPTE: extension of the axis beyond origin towards negative values
           smpte.hours -= 6;
           CHECK ("- 0:21:59:24"== string(smpte));         // representation is symmetrical to origin
           CHECK (tx - Time(6*60*60) == smpte.getTime());  // Continuous time axis
@@ -159,7 +171,7 @@ namespace test{
           smpte.secs -= 2*60*60;                          // and again...
           CHECK (tx == smpte.getTime());
           CHECK ("- 0:21:59:24"== string(smpte));
-
+          
           smpte.sgn += 123;                               // just flip the sign
           CHECK ("  0:21:59:24"== string(smpte));
           CHECK (tx == -smpte.getTime());
@@ -174,6 +186,30 @@ namespace test{
           CHECK (smpte.secs ==  1);
           CHECK (smpte.mins == 22);
           CHECK ("  0:22:01:24"== string(smpte));
+          
+          smpte.frames.setValueRaw (25);
+          CHECK ("  0:22:01:25"== string(smpte));
+          smpte.hours = -1;                               // flipped representation handles denormalised values properly
+          CHECK ("- 0:37:58:00"== string(smpte));
+          
+          smpte.mins.setValueRaw (59);
+          smpte.secs.setValueRaw (61);
+          smpte.frames.setValueRaw(-26);                  // provoke multiple over/underflows...
+          smpte.hours.setValueRaw (-2);
+          CHECK ("--2:59:61:-26"==string(smpte));
+          tx = smpte.getTime();
+          CHECK (tx == -1*(Time(0,61,59) - Time(0,0,0,2) - Time(FSecs(26,25))));
+          smpte.invertOrientation();
+          CHECK ("  1:00:00:01"== string(smpte));
+          CHECK (tx == smpte.getTime());                  // applying invertOrientation() doesn't change the value
+          
+          smpte.frames.setValueRaw(-1);
+          tx = tx - Time(FSecs(2,25));
+          CHECK (tx == smpte.getTime());
+          CHECK ("  1:00:00:-1"== string(smpte));
+          smpte.invertOrientation();                      // invoking on positive should create double negated representation
+          CHECK ("--1:00:00:01"== string(smpte));         // and here especially also causes a series of overflows
+          CHECK (tx == smpte.getTime());                  // but without affecting the overall value
         }
       
       
