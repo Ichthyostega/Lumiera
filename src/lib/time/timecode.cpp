@@ -221,10 +221,10 @@ namespace time {
     inline void
     setupComponentNormalisation (SmpteTC * thisTC)
     {
-      thisTC->hours.mutator  = bind (wrapHours,   thisTC, _1 );
-      thisTC->mins.mutator   = bind (wrapMinutes, thisTC, _1 );
-      thisTC->secs.mutator   = bind (wrapSeconds, thisTC, _1 );
-      thisTC->frames.mutator = bind (wrapFrames,  thisTC, _1 );
+//    thisTC->hours.mutator  = bind (wrapHours,   thisTC, _1 );
+//    thisTC->mins.mutator   = bind (wrapMinutes, thisTC, _1 );
+//    thisTC->secs.mutator   = bind (wrapSeconds, thisTC, _1 );
+//    thisTC->frames.mutator = bind (wrapFrames,  thisTC, _1 );
     }
     
   }//(End)implementation details

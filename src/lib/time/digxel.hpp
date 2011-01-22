@@ -195,6 +195,11 @@ namespace time {
   
   
   
+  using std::tr1::bind;
+  using std::tr1::function;
+  using std::tr1::placeholders::_1;
+  
+  
   /**
    * A number element for building structured numeric displays.
    * The purpose is to represent parts of a numeric format, like
@@ -224,23 +229,35 @@ namespace time {
       FMT buffer_;
       NUM value_;
       
-      static NUM use_newValue_as_is (NUM n) { return n; }
-      typedef std::tr1::function<NUM(NUM)> _Mutator;
+      typedef Digxel<NUM,FMT>      _Digxel;
+      typedef function<void(NUM)> _Mutator;
       
+      
+      _Mutator mutator; ///< Functor for setting a new digxel value
+
     public:
-      /** a functor to be applied on any new digxel value.
+      /** install an external functor to be applied on any new digxel value.
        * This allows individual instances to limit the possible digxel values,
        * or to update an compound value (e.g. a time comprised of hour, minute
-       * and second digxel elements). By default, new values can be set without
-       * any restrictions or side effects.
+       * and second digxel elements). The installed functor needs to accept
+       * a "this" pointer and actually perform any desired state change
+       * as sideeffect. The default is to accept any value as-is.
+       * @warning using a mutator creates significant overhead;
+       *          measurements indicate a factor of 4
+       * @see Digxel_test
        */
-      _Mutator mutator;
+      template<typename FUN, class THIS>
+      void
+      installMutator (FUN mutate, THIS& self)
+        {
+          mutator = bind (mutate, &self, _1 );
+        }
       
       
       Digxel ()
         : buffer_()
         , value_ ()
-        , mutator(use_newValue_as_is)
+        , mutator()
         { }
       
       // using the standard copy operations
@@ -262,8 +279,10 @@ namespace time {
       operator= (NUM n)
         {
           if (n == value_) return;
-          NUM changedValue = mutator(n);
-          this->setValueRaw (changedValue);
+          if (mutator)
+            mutator (n);
+          else
+            setValueRaw (n);
         }
       
       void
@@ -305,24 +324,22 @@ namespace time {
   class Signum
     : public Digxel<int,digxel::SignFormatter>
     {
-      static int
-      just_the_sign (int val)
+      typedef Digxel<int, digxel::SignFormatter> _Par;
+      
+      void
+      storeSign (int val)
         {
-          return val<0? -1:+1;
+          setValueRaw (val<0? -1:+1);
         } 
       
     public:
       Signum()
         {
           setValueRaw(1);
-          mutator = just_the_sign;
+          installMutator (&Signum::storeSign, *this);
         }
       
-      void
-      operator= (int n)
-        {
-          this->setValueRaw (mutator(n));
-        }
+      using _Par::operator=;
       
       friend int operator*= (Signum& s, int c) { s = c*s; return s; }
     };

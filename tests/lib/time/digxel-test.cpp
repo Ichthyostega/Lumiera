@@ -27,8 +27,9 @@
 #include "lib/time/digxel.hpp"
 #include "lib/util.hpp"
 
-#include <iostream>
 #include <cstdlib>
+#include <iostream>
+#include <boost/format.hpp>
 
 using lumiera::error::LUMIERA_ERROR_ASSERTION;
 using util::isSameObject;
@@ -66,35 +67,6 @@ namespace test{
     
     /* === special Digxel configuration for this test === */
     
-    double sum(0),
-      checksum(0);
-    
-    double
-    sideeffectSum (double val)
-    {
-      sum += val;
-      return val;
-    }
-    
-    double preval(0), newval(0);
-    
-    double
-    protocollingMutator (double val)
-    {
-      preval = newval;
-      newval = val;
-      return val;
-    }
-    
-    double
-    limitingMutator (double value2set)
-    {
-      return (+1 < value2set) ? 1.0
-           : (-1 > value2set) ? -1.0
-                              : value2set;
-    }
-    
-    
     struct VerySpecialFormat
       : digxel::PrintfFormatter<double, 11>
       {
@@ -102,6 +74,47 @@ namespace test{
       };
     
     typedef Digxel<double, VerySpecialFormat> TestDigxel;
+    
+    
+    double sum(0),
+      checksum(0);
+    
+    void
+    sideeffectSum (TestDigxel* digxel, double val)
+    {
+      sum += val;
+      digxel->setValueRaw (val);
+    }
+    
+    double preval(0), newval(0);
+    
+    void
+    protocollingMutator (TestDigxel* digxel, double val)
+    {
+      preval = newval;
+      newval = val;
+      digxel->setValueRaw (val);
+    }
+    
+    void
+    limitingMutator (TestDigxel* digxel, double value2set)
+    {
+      digxel->setValueRaw ((+1 < value2set) ? +1.0
+                        :  (-1 > value2set) ? -1.0
+                               : value2set);
+    }
+    
+    void
+    trivialMutator (TestDigxel* digxel, double value2set)
+    {
+      digxel->setValueRaw (value2set);
+    }
+    
+    void
+    emptyMutator (TestDigxel*, double)
+    {
+      /* do nothing */
+    }
     
   }//(End)Test setup
   
@@ -158,7 +171,7 @@ namespace test{
           TestDigxel digi;
           
           // configure what the Digxel does on "mutation"
-          digi.mutator = sideeffectSum;
+          digi.installMutator (sideeffectSum, digi);
           
           CHECK (0 == digi);
           sum = checksum = 0;
@@ -187,7 +200,7 @@ namespace test{
           CHECK (12.3 == digi);
           
           // a special mutator to limit the value
-          digi.mutator = limitingMutator;
+          digi.installMutator (limitingMutator, digi);
           CHECK (12.3 == digi);
           digi = 12.3;
           CHECK (12.3 == digi);    // triggered on real change only
@@ -215,7 +228,7 @@ namespace test{
       verifyAssignMutatingOperators ()
         {
           TestDigxel digi;
-          digi.mutator = protocollingMutator;
+          digi.installMutator (protocollingMutator, digi);
           
           digi = 12.3;
           CHECK ( 0.0 == preval && 12.3 == newval);
@@ -312,7 +325,7 @@ namespace test{
        *  we'll take some timings.
        *  @warning the results of such tests could be unreliable,
        *  but in this case here I saw a significant difference,
-       *  with values of about 0.1sec / 0.7sec  */
+       *  with values of about 10ns / 45ns  */
       void
       verifyDisplayCaching ()
         {
@@ -320,26 +333,69 @@ namespace test{
           digi = 1;
           
           clock_t start(0), stop(0);
-          start = clock();
+          boost::format resultDisplay("timings(%s)%|36T.|%4.0fns\n");
+          
+#define   START_TIMINGS start=clock();          
+#define   DISPLAY_TIMINGS(ID)\
+          stop = clock();     \
+          uint ID = stop-start;\
+          cout << resultDisplay % STRINGIFY (ID) % (double(ID)/CLOCKS_PER_SEC/TIMING_CNT*1e9) ;
+          
+          
+          START_TIMINGS
+          for (uint i=0; i < TIMING_CNT; ++i)
+            {
+              isOdd (i);
+            }
+          DISPLAY_TIMINGS (empty_loop)
+          
+          
+          START_TIMINGS
           for (uint i=0; i < TIMING_CNT; ++i)
             {
               digi = 1;
               isOdd (i);
             }
-          stop = clock();
-          uint without_reformatting = stop - start;
+          DISPLAY_TIMINGS (without_reformatting)
           
           
-          start = clock();
+          START_TIMINGS
           for (uint i=0; i < TIMING_CNT; ++i)
             {
               digi = isOdd (i);
             }
-          stop = clock();
-          uint with_reformatting = stop - start;
+          DISPLAY_TIMINGS (with_reformatting)
           
-          cout << "without reformatting = "<< double(without_reformatting)/CLOCKS_PER_SEC <<"sec"<< endl;
-          cout << "with reformatting    = "<< double(with_reformatting   )/CLOCKS_PER_SEC <<"sec"<< endl;
+          
+          digi.installMutator (emptyMutator, digi);
+          
+          START_TIMINGS
+          for (uint i=0; i < TIMING_CNT; ++i)
+            {
+              digi = isOdd (i);
+            }
+          DISPLAY_TIMINGS (with_empty_mutator)
+          
+          
+          digi.installMutator (trivialMutator, digi);
+          
+          START_TIMINGS
+          for (uint i=0; i < TIMING_CNT; ++i)
+            {
+              digi = isOdd (i);
+            }
+          DISPLAY_TIMINGS (with_trivial_mutator)
+          
+          
+          digi.installMutator (&TestDigxel::setValueRaw, digi);
+          
+          START_TIMINGS
+          for (uint i=0; i < TIMING_CNT; ++i)
+            {
+              digi = isOdd (i);
+            }
+          DISPLAY_TIMINGS (with_memfun_mutator)
+          
           
           CHECK (without_reformatting < with_reformatting);
         }
