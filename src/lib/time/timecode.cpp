@@ -116,27 +116,27 @@ namespace time {
      *  This is an extension and configuration point to control how
      *  to handle values beyond the official SMPTE timecode range of
      *  0:0:0:0 to 23:59:59:##. When this strategy function is invoked,
-     *  the frames, seconds and minutes fields have already been processed
-     *  under the assumption the overall value stays in range. After returning
-     *  from this strategy function, the rawHours value will be returned to be
-     *  stored into the hours field without any further adjustments. 
+     *  the frames, seconds, minutes and hours fields have already been processed
+     *  and stored into the component digxels, under the assumption the overall
+     *  value stays in range. 
      * @note currently the range is extended "naturally" (i.e. mathematically).
      *       The representation is flipped around the zero point and the value
      *       of the hours is just allowed to increase beyond 23
      * @todo If necessary, this extension point should be converted into a
      *       configurable strategy. Possible variations
      *       - clip values beyond the boundaries
+     *       - throw an exception on illegal values
      *       - wrap around from 23:59:59:## to 0:0:0:0
      *       - just make the hour negative, but continue with the same
      *         orientation (0:0:0:0 - 1sec = -1:59:59:0)
      */
     void
-    Smpte::rangeLimitStrategy (SmpteTC& tc, int& rawHours)
+    Smpte::rangeLimitStrategy (SmpteTC& tc, int hours)
     {
-      if ((rawHours^tc.sgn) >= 0) return;
+      if (hours >= 0) return; // no need to flip representation
       
-      tc.sgn = rawHours; // transfer sign into the sign field
-      rawHours = abs(rawHours);
+      tc.sgn *= hours; // transfer sign into the sign field
+      hours = abs(hours);
       
       REQUIRE (0 <= tc.frames && uint(tc.frames) < tc.getFps());
       REQUIRE (0 <= tc.secs   && tc.secs   < 60 );
@@ -164,15 +164,16 @@ namespace time {
         secs = 0;
       
       ASSERT (mins <= 60);
-      ASSERT (0 < rawHours);
+      ASSERT (0 < hours);
       if (mins < 60)
-        --rawHours;
+        --hours;
       else
           mins = 0;
       
       tc.frames.setValueRaw (fr);
-      tc.secs.setValueRaw (secs);
-      tc.mins.setValueRaw (mins);
+      tc.secs.setValueRaw  (secs);
+      tc.mins.setValueRaw  (mins);
+      tc.hours.setValueRaw (hours);
     }
   }
   
@@ -181,35 +182,35 @@ namespace time {
     
     typedef util::IDiv<int> Div;
     
-    int
+    void
     wrapFrames  (SmpteTC* thisTC, int rawFrames)
     {
       Div scaleRelation = floorwrap<int> (rawFrames, thisTC->getFps());
+      thisTC->frames.setValueRaw (scaleRelation.rem);
       thisTC->secs += scaleRelation.quot;
-      return scaleRelation.rem;
     }
     
-    int
+    void
     wrapSeconds (SmpteTC* thisTC, int rawSecs)
     {
       Div scaleRelation = floorwrap (rawSecs, 60);
+      thisTC->secs.setValueRaw (scaleRelation.rem);
       thisTC->mins += scaleRelation.quot;
-      return scaleRelation.rem;
     }
     
-    int
+    void
     wrapMinutes (SmpteTC* thisTC, int rawMins)
     {
       Div scaleRelation = floorwrap (rawMins, 60);
+      thisTC->mins.setValueRaw (scaleRelation.rem);
       thisTC->hours += scaleRelation.quot;
-      return scaleRelation.rem;
     }
     
-    int
+    void
     wrapHours   (SmpteTC* thisTC, int rawHours)
     {
+      thisTC->hours.setValueRaw (rawHours);
       format::Smpte::rangeLimitStrategy (*thisTC, rawHours);
-      return rawHours;
     }
     
     
@@ -219,12 +220,12 @@ namespace time {
     /** bind the individual Digxel mutation functors
      *  to normalise raw component values */
     inline void
-    setupComponentNormalisation (SmpteTC * thisTC)
+    setupComponentNormalisation (SmpteTC& thisTC)
     {
-//    thisTC->hours.mutator  = bind (wrapHours,   thisTC, _1 );
-//    thisTC->mins.mutator   = bind (wrapMinutes, thisTC, _1 );
-//    thisTC->secs.mutator   = bind (wrapSeconds, thisTC, _1 );
-//    thisTC->frames.mutator = bind (wrapFrames,  thisTC, _1 );
+      thisTC.hours.installMutator (wrapHours,   thisTC);
+      thisTC.mins.installMutator  (wrapMinutes, thisTC);
+      thisTC.secs.installMutator  (wrapSeconds, thisTC);
+      thisTC.frames.installMutator(wrapFrames,  thisTC);
     }
     
   }//(End)implementation details
@@ -244,7 +245,7 @@ namespace time {
     : TCode(quantisedTime)
     , effectiveFramerate_(Format::getFramerate (*quantiser_, quantisedTime))
     {
-      setupComponentNormalisation (this);
+      setupComponentNormalisation (*this);
       quantisedTime.castInto (*this);
     }
   
@@ -253,7 +254,7 @@ namespace time {
     : TCode(o)
     , effectiveFramerate_(o.effectiveFramerate_)
     {
-      setupComponentNormalisation (this);
+      setupComponentNormalisation (*this);
       sgn    = o.sgn;
       hours  = o.hours;
       mins   = o.mins;

@@ -151,7 +151,7 @@ namespace test{
           CHECK (tx == smpte.getTime());
           CHECK (tx <  Time(0));
           
-          smpte.mins -= 2*60;                             // now lets flip it again...
+          smpte.mins -= 2*60;                             // now lets flip the representation again...
           CHECK ("  1:38:00:01"== string(smpte));
           CHECK (+1 == smpte.sgn);
           CHECK (smpte.getTime() > 0);
