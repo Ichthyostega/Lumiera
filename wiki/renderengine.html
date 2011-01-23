@@ -6618,7 +6618,78 @@ Thus no server and no network connection is needed. Simply open the file in your
  * see [[Homepage|http://tiddlywiki.com]], [[Wiki-Markup|http://tiddlywiki.org/wiki/TiddlyWiki_Markup]]
 </pre>
 </div>
-<div title="TimeQuant" modifier="Ichthyostega" modified="201101100251" created="201012181753" tags="Concepts Player spec discuss draft" changecount="49">
+<div title="TimeMutation" modifier="Ichthyostega" modified="201101232133" created="201101231344" tags="spec discuss draft" changecount="20">
+<pre>Simple time points are just like values and thus easy to change. The difficulties arise when time values are to be //quantised to an existing time grid.// The first noticeable point to note is that now the effect can be decoupled from the cause. Small changes below the threshold might be accumulated, and a tiny change might trigger a jump to the next grid point. While this might be annoying, the yet more complex questions arise when we acknowledge that the change itself might be related to a time grid.
+
+The problem with modification of quantised values highlights an inner contradiction or conflicting goals within the design
+* the whole system should fit in naturally and just feel like using raw time values
+* quantisation should be added dynamically and //late// -- like a view
+* there should be a guidance towards the intended proper use
+
+!!!general assumptions in Lumiera
+At this point, we should recall some general assumptions within Lumiera
+* there are no hard-coded defaults regarding the specific nature of the manipulated objects (format, number of channels)
+* there is not &quot;the&quot; timeline, but we have multiple timelines
+* sequences might be nesetd and thus be brought into a different context
+* framerate is a property of the stream type of a channel; it depends on the output. Ther is no global format or framerate.
+
+!Usage situations
+The complexity arises from the mixture of several concerns, which often blend into a single usage situation.
+;Time span is an object prototype
+:Within the context of an NLE, a time interval located at a given time point can be considered as the least common denominator of all entities to be manipulated by the user. //Manipulating// such objects is the whole point of using such an application.
+:* an object or boundary point can be //dragged//
+:* we want to //nudge// by defined amounts
+:* we want to put it &quot;somewhere&quot;
+;dragging
+:as far as the GUI is concerned, dragging some element creates an //offset in display coordinates.//
+:Now the task is to tranform this into a change on the object, which typically is grid-aligned
+;nudging
+:the primary interaction in this case just sends an numeric offset of ±N steps
+:but the further processing might involve a global or maybe even local //nudge amount.//
+:the recieving object is typically grid-aligned, thus nudge-grid and object-grid need to cascade, i.e. be applied in sequence
+;placing
+:an object or boundary point gets relocated to some predefined time position, which in turn can be quantised (grid aligned).
+:now either we treat this target position as a value, to be applied, possibly with re-quantisation
+:or we might treat it as a //source for time values// -- in which case the object just gets attached and consumes time coordinates produced elsewhere.
+
+Considering the analysis this far, there seems to be a common denominator in all these operations: chaining of multiple grids.
+A mutation or an increment gets applied to a grid-aligned variable, which then (maybe after transformation into a different scale) in turn is used again as a mutation to be applied to another grid-aligned variable. Now, because at this point we don't need to solve the whole bunch of wide scale design problems, it is sufficient to extract the following operations
+::value &amp;rArr; value
+::value &amp;rArr; quantised
+::increment &amp;rArr; quantised
+
+This results in the following combinations to be implemented:
+|  !mutation|!receiver ||!result |
+| ~TimeValue|Time || -- |
+|~|Duration || -- |
+|~|~TimeSpan ||set start |
+|~|quantised ||set raw value |
+| Offset|Time ||offset the value |
+|~|Duration ||adjust by offset |
+|~|~TimeSpan ||adjust start/length |
+|~|quantised ||adjust raw value |
+| ~QuTime|any raw ||treat as raw |
+|~|~QuTime ||materialise, then set raw |
+| increment|~QuTime ||snap to grid point |
+As rationale, consider the following
+* immutable values are bliss. 
+* by materialising a quantised change prior to applying it, we get the &quot;chaining effect&quot;
+
+----------
+!!! solutions ideas{{red{WIP 12/10}}}
+* time values are immutable (as far as possible)
+* only allow to assign a completely new setting
+* only accept raw time values for redefining a quantised interval
+* only accept an abstract //modification object.//
+
+!!!usage considerations
+Question is: how fine grained and configurable needs this to be?
+* for example, when moving a clip taken from 50fps media, the new position might be quantised to the 50fps grid established by the media, while the target timeline runs with 25fps, allowing for finer adjustments based on the intermediate frames present in the source material.
+* likely we need a &quot;nudge by unit(s)&quot;
+
+</pre>
+</div>
+<div title="TimeQuant" modifier="Ichthyostega" modified="201101232031" created="201012181753" tags="Concepts Player spec img discuss draft" changecount="50">
 <pre>The term &amp;raquo;Time&amp;laquo; spans a variety of vastly different entities. Within a NLE we get to deal with various //flavours of time values.//
 ;continuous time
 :without any additional assumptions, ''points in time'' can be specified with arbitrary precision.
@@ -6680,7 +6751,7 @@ At the level of individual timecode formats, we're lacking a common denominator;
 &amp;rarr; Quantiser [[implementation details|QuantiserImpl]]
 </pre>
 </div>
-<div title="TimeUsage" modifier="Ichthyostega" modified="201101100253" created="201012230204" tags="design discuss" changecount="16">
+<div title="TimeUsage" modifier="Ichthyostega" modified="201101231331" created="201012230204" tags="design discuss" changecount="22">
 <pre>the following collection of usage situations helps to shape the details of the time values and time quantisation design. &amp;rarr; see also  [[time quantisation|TimeQuant]]
 
 ;time position of an object
@@ -6694,15 +6765,15 @@ At the level of individual timecode formats, we're lacking a common denominator;
 ;moving and resizing an object
 :this can in itself be done in two different ways, and each of them can be applied in a quantised flavour
 :which sums up to 8 possible combinations, considering that position and length are 2 degrees of freedom.
-:* a variable can be /changed/ by an offset
-:* a variable can be /defined/ to a new value
+:* a variable can be //changed// by an offset
+:* a variable can be //defined// to a new value
 :another (hidden) degree of freedom lies in how to apply an quantised offset to an unquantised value (and reversed)
 :because this operation might be done both in the quantised or non-quantised domain, and also the result might be (un)quantised
 ;updating the playback position
-:this can be seen as a practical application of the above; basically we can choose to show the wall clock time or we can advance the playback position in frame increments, thus denoting the frame currently in display. These distinctions may look mood for video, but are relevant for precise audio editing, especially when combined with loop playback (recall that audio is processed block wise, but the individual sample frames and thus the possible loop positions are way finer than the processing block size)
+:this can be seen as a practical application of the above; basically we can choose to show the wall clock time or we can advance the playback position in frame increments, thus denoting the frame currently in display. For video, these distinctions may look moot, but they are indeed relevant for precise audio editing, especially when combined with loop playback (recall that audio is processed block wise, but the individual sample frames and thus the possible loop positions are way finer than the processing block size)
 ;displaying time intervals
 :for display, time intervals get //re-quantised// into display array coordinates.
-:While evidently the display coordinates are themselves quantised and we obviously don't want to cancel out the effect of an quantisation of the values or intervals to be displayed (which means, we get two quantisations chained up after each other), there remains the question if the display array coordinates should be aligned to the grid of the //elements to be displayed,// and especially if the allowed zoom factors should be limited. This decision isn't an easy one, as it has an immediate and tangible effect on what can be showed, how reversible and reproducible a view is and (note) on the actual values which can be set and changed through the GUI.
+:While evidently the display coordinates are themselves quantised and we obviously don't want to cancel out the effect of an quantisation of the values or intervals to be displayed (which means, we get two quantisations chained up after each other), there remains the question if the display array coordinates should be aligned to the grid of the //elements to be displayed,// and especially if the allowed zoom factors should be limited. This decision isn't an easy one, as it has an immediate and tangible effect on what can be showed, how reversible and reproducible a view is and (especially note this!) on the actual values which can be set and changed through the GUI.
 ;time value arithmetic
 :Client code as well as the internal implementation of time handling needs to do arithmetic operations with time values. Time values are additive and totally ordered. Distance, as calculated by subtraction, can be made into a metric. Another and quite different question is to what extent a quantised variant of this arithmetics is required.
 ;relative placement
@@ -6724,26 +6795,10 @@ The ''problem with playback position'' is -- that it's an attempt to conceptuali
 Note that the ''display window might be treated as just an independent instance of quantisation''. This is similar to the approach taken above for modifying quantised time span values. We should provide a special kind of time grid, the display coordinates. The origin of these is always defined to the left (lower) side of the interval to be displayed, and they are gauged in screen units (pixels or similar, as used by the GUI toolkit set). The rest is handled by the general quantisation mechanisms. The problem of aligning the display should be transformed into a general facility to align grids, and solved for the general case. Doing so solves the remaining problems with quantised value changes and with ''specifying relative placements'' as well: If we choose to represent them as quantised values, we might (or might not) also choose to apply this //grid-alignment function.//
 
 !substantial problems to be solved
-* how to align multiple grids
-* how to integrate modifications of quantised values.
-* how to isolate the Time/Quantisation part from the grid MetaAsset in the session
+* how to [[align multiple grids|TimeGridAlignment]]
+* how to integrate [[modifications of quantised values|TimeMutation]].
+* how to isolate the Time/Quantisation part from the grid MetaAsset in the session &amp;rarr; we use the [[Advice]] system
 * how to design the relation of Timecode, Timecode formatting and Quantisation &amp;rarr; [[more here|TimecodeFormat]]
-
-The problem with modification of quantised values highlights an inner contratiction or conflicting goals
-* the whole system should fit in naturally and just feel like using raw time values
-* quantisation should be added //late// -- like a view
-* there should be a guidance towards the intended proper use
-
-!!! possible solutions{{red{WIP 12/10}}}
-* only allow to assign a completely new setting
-* only accept raw time values for redefining a quantised interval
-* only accept an abstract //modification object.//
-
-!!!usage considerations
-Question is: how fine grained and configurable needs this to be?
-* for example, when moving a clip taken from 50fps media, the new position might be quantised to the 50fps grid established by the media, while the target timeline runs with 25fps, allowing for finer adjustments based on the intermediate frames present in the source material.
-* likely we need a &quot;nudge by unit(s)&quot;
-
 </pre>
 </div>
 <div title="TimecodeFormat" modifier="Ichthyostega" modified="201101220135" created="201101100308" tags="Player spec discuss draft" changecount="25">
