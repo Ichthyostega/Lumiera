@@ -109,7 +109,7 @@ namespace time {
    * @note supports scaling by a factor,
    *       which \em deliberately is chosen 
    *       as int, not gavl_time_t, because the
-   *       multiplying times is meaningless.
+   *       multiplying of times is meaningless.
    */
   class TimeVar
     : public TimeValue
@@ -170,8 +170,11 @@ namespace time {
     : public TimeValue
     {
     protected:
+      /** generally immutable,
+       *  but derived classes allow some limited mutation
+       *  through special API calls */
       Offset&
-      operator= (Offset const& o) ///< derived classes allow mutation
+      operator= (Offset const& o) 
         {
           TimeValue::operator= (o);
           return *this;
