@@ -337,14 +337,14 @@ def defineBuildTargets(env, artifacts):
     
     
     
-    lApp  = env.SharedLibrary('$LIBDIR/lumieracommon',  srcSubtree(env,'$SRCDIR/common'))
-    lBack = env.SharedLibrary('$LIBDIR/lumierabackend', srcSubtree(env,'$SRCDIR/backend'))
-    lProc = env.SharedLibrary('$LIBDIR/lumieraproc',    srcSubtree(env,'$SRCDIR/proc'))
-    lLib  = env.SharedLibrary('$LIBDIR/lumiera',        srcSubtree(env,'$SRCDIR/lib'))
+    lLib  = env.LumieraLibrary('$LIBDIR/lumiera',        srcSubtree(env,'$SRCDIR/lib'))
+    lApp  = env.LumieraLibrary('$LIBDIR/lumieracommon',  srcSubtree(env,'$SRCDIR/common'), LIBS=lLib)
+    lBack = env.LumieraLibrary('$LIBDIR/lumierabackend', srcSubtree(env,'$SRCDIR/backend'))
+    lProc = env.LumieraLibrary('$LIBDIR/lumieraproc',    srcSubtree(env,'$SRCDIR/proc'))
     
     core = lLib+lApp+lBack+lProc
     
-    artifacts['lumiera'] = env.Program('$BINDIR/lumiera', ['$SRCDIR/lumiera/main.cpp'], LIBS=core)
+    artifacts['lumiera'] = env.LumieraExe('$BINDIR/lumiera', ['$SRCDIR/lumiera/main.cpp'], LIBS=core)
     artifacts['corelib'] = lLib+lApp
     artifacts['support'] = lLib
     

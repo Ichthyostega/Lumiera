@@ -35,7 +35,7 @@ def testExecutable(env,tree, exeName=None, obj=None):
         obj = srcSubtree(env,tree, isShared=False) # use all sourcefiles found in subtree
     if not exeName:
         exeName = 'test-%s' % tree
-    return env.Program('#$BINDIR/'+exeName, obj + core)
+    return env.LumieraExe('#$BINDIR/'+exeName, obj + core)
 
 
 def testCollection(env,dir):
@@ -44,7 +44,7 @@ def testCollection(env,dir):
     """
     srcpatt = ['test-*.c']
     exeName = lambda p: path.basename(path.splitext(p)[0])
-    buildIt = lambda p: env.Program("#$BINDIR/"+exeName(p), [p] + core)
+    buildIt = lambda p: env.LumieraExe("#$BINDIR/"+exeName(p), [p] + core)
     return [buildIt(f) for f in scanSubtree(dir,srcpatt)] 
 
 
@@ -67,7 +67,7 @@ artifacts['testsuite'] = ts = ( [ testExecutable(env, dir) for dir in ['bugs'] ]
 
 
 # for creating a Valgrind-Suppression file
-vgsuppr = env.Program('#$BINDIR/vgsuppression','tool/vgsuppression.c', LIBS=core)   ## for suppressing false valgrind alarms
+vgsuppr = env.LumieraExe('#$BINDIR/vgsuppression','tool/vgsuppression.c', LIBS=core)   ## for suppressing false valgrind alarms
 artifacts['tools'] += [vgsuppr]
 Depends(ts,vgsuppr)
 

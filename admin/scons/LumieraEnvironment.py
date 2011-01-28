@@ -27,6 +27,7 @@ import SCons.SConf
 from SCons.Environment import Environment
 
 from Buildhelper import *
+from os import path
 
 
 
@@ -79,6 +80,51 @@ class LumieraEnvironment(Environment):
         if alias:
             self.libInfo[alias] = libInfo
         return libInfo
+    
+    
+    def LumieraLibrary (self, *args,**kw):
+        """ add some tweaks missing in SCons 1.0
+            like proper handling for SONAME
+        """
+        print "hurgha"
+        if 'soname' in kw:
+            soname = self.subst(kw['soname'])
+        else:
+            if len(args) > 0:
+                pathname = args[0]
+            elif 'target' in kw:
+                pathname = kw['target']
+            else:
+                raise SyntaxError("Library builder requires target spec. Arguments: %s %s" % (args,kw))
+            print "SharedLib: path=%s" % pathname
+            (dirprefix, libname) = path.split(pathname)
+            if not libname:
+                raise ValueError("Library name missing. Only got a directory: "+pathname)
+            libname = "${SHLIBPREFIX}%s$SHLIBSUFFIX" % libname
+            print "name = "+libname
+            soname = self.subst(libname)
+            print "konstruierter name "+soname
+            
+        assert soname
+        subEnv = self.Clone()
+        subEnv.Append(LINKFLAGS = "-Wl,-soname="+soname )
+        
+        libBuilder = self.get_builder('SharedLibrary')
+        print "libBuilder=%s" % libBuilder
+        print "args = %s, kw = %s" % (args,kw)
+        return libBuilder(subEnv, *args,**kw);
+    
+    
+    def LumieraExe (self, *args,**kw):
+        """ add handling for rpath with $ORIGIN
+        """
+        print "progrom"
+        
+        subEnv = self.Clone()
+        subEnv.Append( LINKFLAGS = "-Wl,-rpath=\\$$ORIGIN/$LIBDIR,--enable-new-dtags" )
+        
+        programBuilder = self.get_builder('Program')
+        return programBuilder (subEnv, *args,**kw);
 
 
 
