@@ -22,12 +22,14 @@
 #####################################################################
 
 
+import os
+from os import path
+
 import SCons
 import SCons.SConf
 from SCons.Environment import Environment
 
 from Buildhelper import *
-from os import path
 
 
 
@@ -82,10 +84,29 @@ class LumieraEnvironment(Environment):
         return libInfo
     
     
-    def LumieraLibrary (self, *args,**kw):
-        """ augments the built-in SharedLibrary() builder to add 
-            some tweaks missing in SCons 1.0, like setting a SONAME proper
-            instead of just passing the relative pathname to the linker
+    def SymLink(self, target, source, linktext=None):
+        """ use python to create a symlink
+        """
+        def makeLink(target,source,env):
+            if linktext:
+                dest = linktext
+            else:
+                dest = str(source[0])
+            link = str(target[0])
+            os.symlink(dest, link)
+        def reportLink(target,source,env):
+            dest = str(source[0])
+            link = str(target[0])
+            return "Install link %s -> %s" % (link,dest)
+        
+        action = Action(makeLink,reportLink)
+        self.Command (target,source, action)
+    
+    
+    def defineSoname (self, *args,**kw):
+        """ internal helper to extract or guess
+            a suitable library SONAME, either using an
+            explicit spec, falling back on the lib filename
         """
         if 'soname' in kw:
             soname = self.subst(kw['soname'])  # explicitely defined by user
@@ -102,12 +123,29 @@ class LumieraEnvironment(Environment):
             
             libname = "${SHLIBPREFIX}%s$SHLIBSUFFIX" % libname
             soname = self.subst(libname)       # else: use the library filename as DT_SONAME
-            
         assert soname
+        return soname
+    
+    
+    def LumieraLibrary (self, *args,**kw):
+        """ augments the built-in SharedLibrary() builder to add 
+            some tweaks missing in SCons 1.0, like setting a SONAME proper
+            instead of just passing the relative pathname to the linker
+        """
         subEnv = self.Clone()
-        subEnv.Append(LINKFLAGS = "-Wl,-soname="+soname )
+        subEnv.Append(LINKFLAGS = "-Wl,-soname="+self.defineSoname(*args,**kw))
         
         libBuilder = self.get_builder('SharedLibrary')
+        return libBuilder(subEnv, *args,**kw); # invoke the predefined builder on the augmented environment
+    
+    
+    def LumieraPlugin (self, *args,**kw):
+        """ builds a shared library, autmented by some defaults for lumiera plugins.
+        """
+        subEnv = self.Clone()
+        subEnv.Append(LINKFLAGS = "-Wl,-soname="+self.defineSoname(*args,**kw))
+        
+        libBuilder = self.get_builder('LoadableModule')
         return libBuilder(subEnv, *args,**kw); # invoke the predefined builder on the augmented environment
     
     

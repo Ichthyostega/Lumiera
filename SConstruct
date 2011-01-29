@@ -336,9 +336,9 @@ def defineBuildTargets(env, artifacts):
     
     core = lLib+lApp+lBack+lProc
     
-    artifacts['lumiera'] = env.LumieraExe('$TARDIR/lumiera', ['$SRCDIR/lumiera/main.cpp'], LIBS=core)
-    artifacts['corelib'] = lLib+lApp
+    artifacts['corelib'] = core
     artifacts['support'] = lLib
+    artifacts['lumiera'] = env.LumieraExe('$TARDIR/lumiera', ['$SRCDIR/lumiera/main.cpp'], LIBS=core)
     
     # building Lumiera Plugins
     envPlu = env.Clone()
@@ -351,6 +351,7 @@ def defineBuildTargets(env, artifacts):
     artifacts['icons']   = ( [env.IconRender(f) for f in scanSubtree(vector_icon_dir,      ['*.svg'])]
                            + [env.IconCopy(f)   for f in scanSubtree(prerendered_icon_dir, ['*.png'])]
                            )
+    ##TODO make that into a resource builder
     
     # the Lumiera GTK GUI
     envGtk = env.Clone()
@@ -363,6 +364,7 @@ def defineBuildTargets(env, artifacts):
                        + env.Install('$TARDIR', env.Glob('$SRCDIR/gui/*.rc'))
                        + artifacts['icons']
                        )
+    artifacts['guimodule'] = guimodule ###TODO better organisation of GUI components
 
     # call subdir SConscript(s) for independent components
     SConscript(dirs=[SRCDIR+'/tool'], exports='env        artifacts core')
@@ -376,10 +378,10 @@ def definePostBuildTargets(env, artifacts):
     """
     ib = env.Alias('install-bin', '$DESTDIR/bin')
     il = env.Alias('install-lib', '$DESTDIR/lib')
-    env.Alias('install', [ib, il])
+    id = env.Alias('install-dat', '$DESTDIR/share')
+    env.Alias('install', [ib, il, id])
     
     build = env.Alias('build', artifacts['lumiera']+artifacts['gui']+artifacts['plugins']+artifacts['tools'])
-    allbu = env.Alias('allbuild', build+artifacts['testsuite'])
     env.Default('build')
     # additional files to be cleaned when cleaning 'build'
     env.Clean ('build', [ 'scache.conf', '.sconf_temp', '.sconsign.dblite', 'config.log' ])
@@ -388,17 +390,27 @@ def definePostBuildTargets(env, artifacts):
     doxydoc = artifacts['doxydoc'] = env.Doxygen('doc/devel/Doxyfile')
     env.Alias ('doc', doxydoc)
     env.Clean ('doc', doxydoc + ['doc/devel/,doxylog','doc/devel/warnings.txt'])
+    
+    allbu = env.Alias('allbuild', build+artifacts['testsuite']+doxydoc)
 
 
 def defineInstallTargets(env, artifacts):
-    """ define some artifacts to be installed into target locations.
+    """ define artifacts to be installed into target locations.
     """
-    env.Install(dir = '$DESTDIR/bin', source=artifacts['lumiera'])
-    env.Install(dir = '$DESTDIR/lib', source=artifacts['corelib'])
-    env.Install(dir = '$DESTDIR/lib', source=artifacts['plugins'])
-    env.Install(dir = '$DESTDIR/bin', source=artifacts['tools'])
+    binDir = '$DESTDIR/bin/'
+    lumDir = '$DESTDIR/lib/lumiera/'
+    modDir = '$DESTDIR/lib/lumiera/$MODULES/'
+    shaDir = '$DESTDIR/share/lumiera/'
+    env.Install(dir = modDir, source=artifacts['corelib'])
+    env.Install(dir = modDir, source=artifacts['plugins'])
+    env.Install(dir = modDir, source=artifacts['guimodule'])
+    lumi = env.Install(dir = lumDir, source=artifacts['lumiera'])
+    tool = env.Install(dir = lumDir, source=artifacts['tools'])
+    print "Aufruf LINK DESTDIR=" + env.get('DESTDIR')
+    env.SymLink(binDir+"lumiera",lumi,"../lib/lumiera/lumiera")
     
-    env.Install(dir = '$DESTDIR/share/doc/lumiera$VERSION/devel', source=artifacts['doxydoc'])
+    env.Install(dir = shaDir, source="data/config/dummy_lumiera.ini") ### TODO should become a resource builder
+#   env.Install(dir = '$DESTDIR/share/doc/lumiera$VERSION/devel', source=artifacts['doxydoc'])
 
 #####################################################################
 

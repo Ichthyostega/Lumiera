@@ -151,10 +151,10 @@ def createPlugins(env, dir):
     """ investigate the given source directory to identify all contained source trees.
         @return: a list of build nodes defining a plugin for each of these source trees.
     """
-    return [env.LoadableModule( '#$TARDIR/$MODULES/%s' % getDirname(tree) 
-                              , srcSubtree(env, tree)
-                              , SHLIBPREFIX='', SHLIBSUFFIX='.lum'
-                              )
+    return [env.LumieraPlugin( '#$TARDIR/$MODULES/%s' % getDirname(tree) 
+                             , srcSubtree(env, tree)
+                             , SHLIBPREFIX='', SHLIBSUFFIX='.lum'
+                             )
             for tree in findSrcTrees(dir)
            ]
 
