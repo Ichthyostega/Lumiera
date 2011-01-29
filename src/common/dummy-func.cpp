@@ -15,7 +15,7 @@
 
 namespace lumiera {
 
-  const char * const GUI_MODULE_NAME = ".libs/gtk_gui.lum";
+  const char * const GUI_MODULE_NAME = "modules/gtk_gui.lum";
   
   typedef void (*VoidFunc)(void);
   

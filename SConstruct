@@ -26,9 +26,9 @@
 OPTIONSCACHEFILE = 'optcache' 
 CUSTOPTIONSFILE  = 'custom-options'
 SRCDIR           = 'src'
-BINDIR           = 'bin'
-LIBDIR           = '.libs'
-PLUGDIR          = '.libs'
+TARDIR           = 'target'
+LIBDIR           = 'modules'
+PLUGDIR          = 'modules'
 TESTDIR          = 'tests'
 ICONDIR          = 'icons'
 VERSION          = '0.1+pre.01'
@@ -76,7 +76,7 @@ def setupBasicEnvironment():
     env.Append ( SHCCCOM=' -std=gnu99') # workaround for a bug: CCCOM currently doesn't honour CFLAGS, only CCFLAGS 
     env.Replace( VERSION=VERSION
                , SRCDIR=SRCDIR
-               , BINDIR=BINDIR
+               , TARDIR=TARDIR
                , LIBDIR=LIBDIR
                , PLUGDIR=PLUGDIR
                , ICONDIR=ICONDIR
@@ -96,8 +96,8 @@ def setupBasicEnvironment():
     appendVal(env,'DEBUG',    'CCFLAGS',   val=' -ggdb')
     
     # setup search path for Lumiera plugins
-    appendCppDefine(env,'PKGLIBDIR','LUMIERA_PLUGIN_PATH=\\"$PKGLIBDIR/:./.libs\\"'
-                                   ,'LUMIERA_PLUGIN_PATH=\\"$DESTDIR/lib/lumiera/:./.libs\\"') 
+    appendCppDefine(env,'PKGLIBDIR','LUMIERA_PLUGIN_PATH=\\"$PKGLIBDIR/:./modules\\"'
+                                   ,'LUMIERA_PLUGIN_PATH=\\"$DESTDIR/lib/lumiera/:./modules\\"') 
     appendCppDefine(env,'PKGDATADIR','LUMIERA_CONFIG_PATH=\\"$PKGLIBDIR/:.\\"'
                                     ,'LUMIERA_CONFIG_PATH=\\"$DESTDIR/share/lumiera/:.\\"') 
     
@@ -344,7 +344,7 @@ def defineBuildTargets(env, artifacts):
     
     core = lLib+lApp+lBack+lProc
     
-    artifacts['lumiera'] = env.LumieraExe('$BINDIR/lumiera', ['$SRCDIR/lumiera/main.cpp'], LIBS=core)
+    artifacts['lumiera'] = env.LumieraExe('$TARDIR/lumiera', ['$SRCDIR/lumiera/main.cpp'], LIBS=core)
     artifacts['corelib'] = lLib+lApp
     artifacts['support'] = lLib
     
@@ -368,7 +368,7 @@ def defineBuildTargets(env, artifacts):
     objgui  = srcSubtree(envGtk,'$SRCDIR/gui')
     guimodule = envGtk.LoadableModule('$LIBDIR/gtk_gui', objgui, SHLIBPREFIX='', SHLIBSUFFIX='.lum')
     artifacts['gui'] = ( guimodule
-                       + env.Install('$BINDIR', env.Glob('$SRCDIR/gui/*.rc'))
+                       + env.Install('$TARDIR', env.Glob('$SRCDIR/gui/*.rc'))
                        + artifacts['icons']
                        )
 

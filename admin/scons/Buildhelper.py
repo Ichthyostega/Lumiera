@@ -203,11 +203,11 @@ def RegisterIcon_Builder(env):
     """
     
     import render_icon as renderer  # load Joel's python script for invoking the rsvg-convert (SVG render)
-    renderer.rsvgPath = env.subst("$BINDIR/rsvg-convert")
+    renderer.rsvgPath = env.subst("$TARDIR/rsvg-convert")
     
     def invokeRenderer(target, source, env):
         source = str(source[0])
-        targetdir = env.subst("$BINDIR")
+        targetdir = env.subst("$TARDIR")
         renderer.main([source,targetdir])
         return 0
         
@@ -216,12 +216,12 @@ def RegisterIcon_Builder(env):
         source = str(source[0])
         targetdir = os.path.basename(str(target[0]))
         targetfiles = renderer.getTargetNames(source)    # parse SVG
-        return (["$BINDIR/%s" % name for name in targetfiles], source)
+        return (["$TARDIR/%s" % name for name in targetfiles], source)
     
     def IconCopy(env, source):
          """Copy icon to corresponding icon dir. """
          subdir = getDirname(source)
-         return env.Install("$BINDIR/%s" % subdir, source)
+         return env.Install("$TARDIR/%s" % subdir, source)
     
      
     buildIcon = env.Builder( action = Action(invokeRenderer, "rendering Icon: $SOURCE --> $TARGETS")

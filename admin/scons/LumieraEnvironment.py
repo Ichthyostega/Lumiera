@@ -83,12 +83,12 @@ class LumieraEnvironment(Environment):
     
     
     def LumieraLibrary (self, *args,**kw):
-        """ add some tweaks missing in SCons 1.0
-            like proper handling for SONAME
+        """ augments the built-in SharedLibrary() builder to add 
+            some tweaks missing in SCons 1.0, like setting a SONAME proper
+            instead of just passing the relative pathname to the linker
         """
-        print "hurgha"
         if 'soname' in kw:
-            soname = self.subst(kw['soname'])
+            soname = self.subst(kw['soname'])  # explicitely defined by user
         else:
             if len(args) > 0:
                 pathname = args[0]
@@ -96,30 +96,28 @@ class LumieraEnvironment(Environment):
                 pathname = kw['target']
             else:
                 raise SyntaxError("Library builder requires target spec. Arguments: %s %s" % (args,kw))
-            print "SharedLib: path=%s" % pathname
             (dirprefix, libname) = path.split(pathname)
             if not libname:
                 raise ValueError("Library name missing. Only got a directory: "+pathname)
+            
             libname = "${SHLIBPREFIX}%s$SHLIBSUFFIX" % libname
-            print "name = "+libname
-            soname = self.subst(libname)
-            print "konstruierter name "+soname
+            soname = self.subst(libname)       # else: use the library filename as DT_SONAME
             
         assert soname
         subEnv = self.Clone()
         subEnv.Append(LINKFLAGS = "-Wl,-soname="+soname )
         
         libBuilder = self.get_builder('SharedLibrary')
-        print "libBuilder=%s" % libBuilder
-        print "args = %s, kw = %s" % (args,kw)
-        return libBuilder(subEnv, *args,**kw);
+        return libBuilder(subEnv, *args,**kw); # invoke the predefined builder on the augmented environment
     
     
     def LumieraExe (self, *args,**kw):
-        """ add handling for rpath with $ORIGIN
+        """ augments the built-in Program() builder to add a fixed rpath based on $ORIGIN
+            That is: after searching LD_LIBRARY_PATH, but before the standard linker search,
+            the directory relative to the position of the executable ($ORIGIN) is searched.
+            This search path is active not only for the executable, but for all libraries
+            it is linked with
         """
-        print "progrom"
-        
         subEnv = self.Clone()
         subEnv.Append( LINKFLAGS = "-Wl,-rpath=\\$$ORIGIN/$LIBDIR,--enable-new-dtags" )
         
