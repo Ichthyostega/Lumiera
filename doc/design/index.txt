@@ -32,8 +32,6 @@ The Processing layer (or proc) is where the elements from the Session are assemb
 ==== link:backend/index.html[The Backend]
 
 The backend uses the Low-level model. It allows the rendering and makes a heavy use of the Input/Output System to the screen or to external monitors.
-//link:workflow/index.html[The Workflow]
-
 Extra components
 ----------------
 
