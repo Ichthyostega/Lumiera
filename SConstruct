@@ -80,6 +80,7 @@ def setupBasicEnvironment():
                , LIBDIR=LIBDIR
                , MODULES=MODULES
                , ICONDIR=ICONDIR
+               , DESTDIR=env.subst('$INSTALLDIR/$PREFIX')
                , CPPPATH=["#"+SRCDIR]   # used to find includes, "#" means always absolute to build-root
                , CPPDEFINES=['-DLUMIERA_VERSION='+VERSION ]     # note: it's a list to append further defines
                , CCFLAGS='-Wall -Wextra '
@@ -164,9 +165,10 @@ def defineCmdlineVariables():
 #       ,BoolVariable('OPENGL', 'Include support for OpenGL preview rendering', False)
 #       ,EnumVariable('DIST_TARGET', 'Build target architecture', 'auto', 
 #                   allowed_values=('auto', 'i386', 'i686', 'x86_64' ), ignorecase=2)
-        ,PathVariable('DESTDIR', 'Installation dir prefix', '/usr/local')
-        ,PathVariable('PKGLIBDIR', 'Installation dir for plugins, defaults to DESTDIR/lib/lumiera', '',PathVariable.PathAccept)
-        ,PathVariable('PKGDATADIR', 'Installation dir for default config, usually DESTDIR/share/lumiera', '',PathVariable.PathAccept)
+        ,PathVariable('PREFIX', 'Installation dir prefix', 'usr/local', PathVariable.PathAccept)
+        ,PathVariable('INSTALLDIR', 'Root output directory for install. Final installation will happen in INSTALLDIR/PREFIX/... ', '/', PathVariable.PathIsDir)
+        ,PathVariable('PKGLIBDIR', 'Installation dir for plugins, defaults to PREFIX/lib/lumiera/modules', '',PathVariable.PathAccept)
+        ,PathVariable('PKGDATADIR', 'Installation dir for default config, usually PREFIX/share/lumiera', '',PathVariable.PathAccept)
         ,PathVariable('SRCTAR', 'Create source tarball prior to compiling', '..', PathVariable.PathAccept)
         ,PathVariable('DOCTAR', 'Create tarball with developer documentation', '..', PathVariable.PathAccept)
      )
