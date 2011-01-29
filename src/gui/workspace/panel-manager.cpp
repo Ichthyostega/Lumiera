@@ -1,28 +1,28 @@
 /*
   panel-manager.cpp  -  Definition of the panel manager object
- 
+
   Copyright (C)         Lumiera.org
     2008,               Joel Holdsworth <joel@airwebreathe.org.uk>
- 
+
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of the
-  License, or (at your option) any later version.
- 
+  published by the Free Software Foundation; either version 2 of
+  the License, or (at your option) any later version.
+
   This program is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
- 
+
   You should have received a copy of the GNU General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- 
+
 * *****************************************************/
 
 #include "panel-manager.hpp"
 
-#include "../panels/resources-panel.hpp"
+#include "../panels/assets-panel.hpp"
 #include "../panels/viewer-panel.hpp"
 #include "../panels/timeline-panel.hpp"
 
@@ -39,7 +39,7 @@ const PanelManager::PanelDescription
   PanelManager::panelDescriptionList[] = {
   PanelManager::Panel<TimelinePanel>(),
   PanelManager::Panel<ViewerPanel>(),
-  PanelManager::Panel<ResourcesPanel>()
+  PanelManager::Panel<AssetsPanel>()
   };
   
 unsigned short PanelManager::panelID = 0;
@@ -219,15 +219,15 @@ PanelManager::get_panel_title(int index)
 void
 PanelManager::create_panels()
 {
-  panels::Panel* resourcesPanel =
-    create_panel_by_name("ResourcesPanel");
+  panels::Panel* assetsPanel =
+    create_panel_by_name("AssetsPanel");
   panels::Panel* viewerPanel = 
     create_panel_by_name("ViewerPanel");
   panels::Panel* timelinePanel = 
     create_panel_by_name("TimelinePanel");
     
   gdl_dock_add_item(dock,
-    resourcesPanel->get_dock_item(), GDL_DOCK_LEFT);
+    assetsPanel->get_dock_item(), GDL_DOCK_LEFT);
   gdl_dock_add_item(dock,
     timelinePanel->get_dock_item(), GDL_DOCK_BOTTOM);
   gdl_dock_add_item(dock,

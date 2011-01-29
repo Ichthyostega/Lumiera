@@ -1077,6 +1077,26 @@ Please note the shortcomings and logical contradictions in the solution currentl
 * The current design rather places the implementation according to the roles of the involved entities, which causes some ping-pong on the implementation level. Especially the ScopeLocator singleton can be accessed multiple times. This is the usual clarity vs. performance tradeoff. Scope resolution is assumed rather to be //not performance critical.//
 </pre>
 </div>
+<div title="BuildFixture" modifier="Ichthyostega" modified="201011290504" created="201011282003" tags="Builder spec operational" changecount="32">
+<pre>//Building the fixture is actually at the core of the [[builder's operation|Builder]]//
+{{red{WIP as of 11/10}}} &amp;rarr; see also the [[planning page|PlanningBuildFixture]]
+
+;Resolving the DAG[&gt;img[Steps towards creating a Segmentation|draw/SegmentationSteps1.png]]
+Because of the possibility of binding a Sequence multiple times, and maybe even nested as virtual clip, the [[high-level model|HighLevelModel]] actually constitutes a DAG, not a tree. This leds to quite some tricky problems, which we try to resolve by //rectifying the DAG into N virtual trees.// (&amp;rarr; BindingScopeProblem)
+
+Relying on this transformation, each Timeline spans a sub-tree virtually separated from all other timelines; the BuildProcess is driven by [[visiting|VisitorUse]] all the //tangible// objects within this subtree. In the example shown to the right, Sequence-β is both bound as VirtualClip into Sequence-α, as well as bound independently as top-level sequence into Timeline-2. Thus it will be visited twice, but the QueryFocus mechanism ensures that each visitation »sees« the proper context.
+
+;Explicit Placements
+Each tangible object placement (relevant for rendering), which is encountered during that visitation, gets //resolved// into an [[explicit placement|ExplicitPlacement]]. If we see [[Placement]] as a positioning within a multi dimensional configuration space, then the resolution into an explicit placement is like the creation of an ''orthogonal base'': Within the explicit placement, each LocatingPin corresponds exactly to one degree of freedom and can be considered independently from all other locating pins. This resolution step removes any fancy dynamic behaviour and all scoping and indirect references. Indeed, an explicit placement is a mere //value object;// it isn't part of the session core (PlacementIndex), isn't typed and can't be referred indirectly.
+
+;Segmentation of Time axis
+This simple and explicit positioning thus allows to arrange all objects as time intervals on a single axis. Any change and especially any overlap is likely to create a different wiring configuration. Thus, for each such configuration change, we fork off a new //segment// and //copy over// all partially touched placements. The resulting seamless sequence of non-overlapping time intervals provides the backbone of the datastructure called [[Fixture]].
+
+;Building the Network
+From this backbone, the actual [[building mechanism|BuilderMechanics]] proceeds as a ongoing visitation and resolution, resulting in the gowth of a network of [[render nodes|ProcNode]] starting out from the source reading nodes and proceeding up through the local pipes, the transitions and the global pipes. When this build process is exhausted, besides the actual network, the result is a //residuum of nodes not connected any further.// Any of these [[exit nodes|ExitNode]] can be associated to a ~Pipe-ID in the high-level model. Within each segment, there should be one exit node per pipe-ID at max. These are the [[model ports|ModelPort]] resulting from the build process, keyed by their corresponding ~Pipe-ID.
+&amp;rarr; see [[Structure of the Fixture|Fixture]]
+</pre>
+</div>
 <div title="BuildProcess" modifier="Ichthyostega" modified="200906071813" created="200706190658" tags="Builder operational img" changecount="30">
 <pre>All decisions on //how // the RenderProcess has to be carried out are concentrated in this rather complicated Builder Subsystem. The benefit of this approach is, besides decoupling of subsystems, to keep the actual performance-intensive video processing code as simple and transparent as possible. The price, in terms of increased complexity &amp;mdash; to pay in the Builder &amp;mdash; can be handled by making the Build Process generic to a large degree. Using a Design By Contract approach we can decompose the various decisions into small decision modules without having to trace the actual workings of the Build Process as a whole.
 
@@ -1708,8 +1728,12 @@ To make the intended use of the classes more clear, consider the following two e
 <pre>a special ProcNode which is used to pull the finished output of one Render Pipeline (Tree or Graph). This term is already used in the Cinelerra2 codebase. I am unsure at the moment if it is a distinct subclass or rahter a specially configured ProcNode (a general design rule tells us to err in favour of the latter if in doubt).
 </pre>
 </div>
-<div title="ExplicitPlacement" modifier="MichaelPloujnikov" modified="200706271458" created="200706220304" tags="def" changecount="2">
-<pre>A special kind (subclass) of [[Placement]]. As such it is always linked to a //Subject//, i.e. a MObject. In addition to the properties of a (unspecific) Placement, the ExplicitPlacement specifies a absolute time and track position for locating the Subject
+<div title="ExplicitPlacement" modifier="Ichthyostega" modified="201012122052" created="200706220304" tags="def" changecount="6">
+<pre>A special kind (subclass) of [[Placement]]. As such it is always linked to a //Subject//, i.e. a MObject. But contrary to the (standard) placements, which may exhibit all kinds of fancy dynamic and scope dependent behaviour, within an explicit placement all properties are resolved and materialised. While the (standard) placement may contain an arbitrary list of LocatingPin objects, the resolution into an explicit placement performs a kind of »orthogonalisation«: each remaining LocatingPin defines exactly one degree of freedom independent of all others. Most notably, the explicit placement always specifies a absolute time and [[output designation|OutputDesignation]] for for locating the Subject. Explicit placements are ''immutable''.
+
+!!Implementation considerations
+Explicit placements are just created and never mutated, but copying and storage might become a problem.
+It would thus be desirable to have a fixed-sized allocation, able to hold the placement body as well as the (fixed) locating pins inline.
 </pre>
 </div>
 <div title="Factories" modifier="Ichthyostega" modified="201003160211" created="200708100401" tags="impl discuss excludeMissing rewrite" changecount="24">
@@ -1766,19 +1790,34 @@ Some further details
 * a special case of this factory use is the [[Singleton]] factory, which is used a lot within the Proy-Layer code
 </pre>
 </div>
-<div title="Fixture" modifier="Ichthyostega" modified="201007160052" created="200706220324" tags="def" changecount="10">
-<pre>a specially configured sequence list
+<div title="Fixture" modifier="Ichthyostega" modified="201012092320" created="200706220324" tags="def spec Builder Model" changecount="44">
+<pre>a specially configured view -- joining together high-level and low-level model
 * all MObjects have their position, length and configuration set up ready for rendering.
 * any nested sequences (or other kinds of indirections) have been resolved.
-* every MObject is associated with an ExplicitPlacement, which declares a fixed position (Time, [[Pipe-ID|OutputDesignation]])
-* these ~ExplicitPlacements are contained in a ordered List, sometimes denoted as the //effective timeline.//
-* besides, there is a collection of all effective, possibly externally visible [[model ports|ModelPort]]
+* every MObject is attached by an ExplicitPlacement, which declares a fixed position (Time, [[Pipe|OutputDesignation]])
+* these ~ExplicitPlacements are contained immediately within the Fixture, ordered by time
+* besides, there is a collection of all effective, possibly externally visible [[model ports|ModelPortRegistry]]
 
-As the builder and thus render engine //only consults the fixture,// while all editing operations finally propagate to the fixture as well, we get an isolation layer between the high level part of the Proc layer (editing, object manipulation) and the render engine. Creating the Fixture can be seen as a preprocessing step to simplify the build process. For this reason, the process of [[(re)building the fixture|PlanningBuildFixture]] has been designed together with the [[Builder]]
+As the builder and thus render engine //only consults the fixture,// while all editing operations finally propagate to the fixture as well, we get an isolation layer between the high level part of the Proc layer (editing, object manipulation) and the render engine. [[Creating the Fixture|BuildFixture]] is an important sideeffect of running the [[Builder]] when createing the [[render engine network|LowLevelModel]].
 
 !{{red{WIP}}} Structure of the fixture
-The fixture is like a grid, where one dimension is given by the [[model ports|ModelPort]], and the other dimension extends in time. The time axis is grouped in segments of constant structure.
-A problem yet to be solved is how the fixture relates to the mulitude of top-level timelines, without generating a too fine grained segmentation.
+[&lt;img[Structure of the Fixture|draw/Fixture1.png]]
+
+The fixture is like a grid, where one dimension is given by the [[model ports|ModelPortRegistry]], and the other dimension extends in time. Within the time dimension there is a grouping into [[segments|Segmentation]] of constant structure.
+
+;Model Ports
+:The model ports share a single uniform and global name space: actually they're keyed by ~Pipe-ID
+:Model ports are derived as a result of the build process, as the //residuum// of all nodes not connected any further
+:Each port belongs to a specific Timeline and is associated with the [[Segmentation]] of that timeline.
+
+;Segmentation
+:The segmentation partitiones the time axis of a single timeline into segments of constant (wiring) configuration
+:Together, the segments form a seamless sequence of time intervals. They contain a copy of each (explicit) placement of a visible object touching that time interval. Besides that, segments are the top level grouping device of the render engine node graph; they are always built and discarded at once.
+:Segments may be //hot swapped// into an ongoing render.
+
+;Exit Nodes
+:Each segment holds an ExitNode for each relevant ModelPort of the corresponding timeline.
+:Thus the exit nodes are keyed by ~Pipe-ID as well (and consequently have a distinct [[stream type|StreamType]]) -- each model port coresponds to {{{&lt;number_of_segments&gt;}}} separate exit nodes, but of course an exit node may be //mute.//
 </pre>
 </div>
 <div title="ForwardIterator" modifier="Ichthyostega" modified="200912190027" created="200910312114" tags="Concepts def spec" changecount="17">
@@ -2042,7 +2081,7 @@ Besides routing to a global pipe, wiring plugs can also connect to the source po
 Finally, this example shows an ''automation'' data set controlling some parameter of an effect contained in one of the global pipes. From the effect's POV, the automation is simply a ParamProvider, i.e a function yielding a scalar value over time. The automation data set may be implemented as a bézier curve, or by a mathematical function (e.g. sine or fractal pseudo random) or by some captured and interpolated data values. Interestingly, in this example the automation data set has been placed relatively to the meta clip (albeit on another track), thus it will follow and adjust when the latter is moved.
 </pre>
 </div>
-<div title="ImplementationDetails" modifier="Ichthyostega" modified="201011190301" created="200708080322" tags="overview" changecount="39">
+<div title="ImplementationDetails" modifier="Ichthyostega" modified="201012192119" created="200708080322" tags="overview" changecount="41">
 <pre>This wiki page is the entry point to detail notes covering some technical decisions, details and problems encountered in the course of the implementation of the Lumiera Renderengine, the Builder and the related parts.
 
 * [[Packages, Interfaces and Namespaces|InterfaceNamespaces]]
@@ -2071,6 +2110,10 @@ Finally, this example shows an ''automation'' data set controlling some paramete
 * shaping the GUI/~Proc-Interface, based on MObjectRef and the [[Command frontend|CommandHandling]]
 * defining PlacementScope in order to allow for [[discovering session contents|Query]]
 * working out a [[Wiring concept|Wiring]] and the foundations of OutputManagement
+* shaping the foundations of the [[player subsystem|Player]]
+* detail considerations regarding [[time and time quantisation|TimeQuant]]
+* designing how to [[build|BuildFixture]] the [[Fixture]] (...{{red{WIP}}}...)
+
 </pre>
 </div>
 <div title="ImplementationGuidelines" modifier="Ichthyostega" modified="201011190306" created="200711210531" tags="Concepts design discuss" changecount="17">
@@ -2784,12 +2827,41 @@ These are used as token for dealing with other objects and have no identity of t
 
 </pre>
 </div>
-<div title="ModelPort" modifier="Ichthyostega" created="201011100234" tags="def" changecount="1">
-<pre>Any point where output possibly might be produced. Model port entities are located within the [[Fixture]] &amp;mdash; model port as a concept spans the high-level and low-level view. A model port can be associated both to a pipe in the HighLevelModel and denote a specific ExitNode in the render nodes network.
+<div title="ModelPort" modifier="Ichthyostega" modified="201012112233" created="201011100234" tags="def spec" changecount="8">
+<pre>Any point where output possibly might be produced. Model port entities are located within the [[Fixture]] &amp;mdash; model port as a concept spans the high-level and low-level view. A model port can be associated both to a pipe in the HighLevelModel but at the same time denotes a set of corresponding [[exit nodes|ExitNode]] within the [[segments|Segmentation]] of the render nodes network.
 
-A model port is rather derived than configured; it emerges when a pipe [[claims|WiringClaim]] an output desitnation and some other entity actually uses this designation as a target, either directly or indirecly. This match of provision and usage is detected during the build process and produces an entry in the fixture's model port table. These model ports in the fixture are keyed by ~Pipe-ID, thus each model port has an associated StreamType.
+A model port is rather derived than configured; it emerges when a pipe [[claims|WiringClaim]] an output destination and some other entity actually uses this designation as a target, either directly or indirectly. This match of provision and usage is detected during the build process and produces an entry in the fixture's model port table. These model ports in the fixture are keyed by ~Pipe-ID, thus each model port has an associated StreamType.
 
-Model ports are the effective, resulting ouputs of each timeline; additional ports result from [[connecting a viewer|ViewerPlayConnection]]. Any render or display process happens at a model port.
+Model ports are the effective, resulting outputs of each timeline; additional ports result from [[connecting a viewer|ViewerPlayConnection]]. Any render or display process happens at a model port.
+
+!formal specification
+Model port is a //conceptual entity,// denoting the possibility to pull generated data of a distinct (stream)type from a specific bus within the model -- any possible output produced or provided by Lumiera is bound to appear at a model port. The namespace of model ports is global, each being associated with a ~Pipe-ID.
+
+Model ports are represented by small non-copyable descriptor objects with distinct identity, which are owned and managed by the [[Fixture]]. Clients are bound to resolve a model port on each usage, as configuration changes within the model might cause ports to appear and decease. To stress this usage pattern, actually {{{ModelPort}}} instances are small copyable value objects (smart handles), which can be used to access data within an opaque registry. Each model port belongs to a specific Timeline and is aware of this association, as is the timeline, allowing to get the collection of all ports of a given timeline. Besides, within the Fixture each model port refers to a specific [[segmentation of the time axis|Segmentation]] (relevant for this special timeline actually). Thus, with the help of this segmentation, a model port can yield an ExitNode to pull frames for a given time.
+
+</pre>
+</div>
+<div title="ModelPortRegistry" modifier="Ichthyostega" modified="201012112230" created="201012030314" tags="Model impl" changecount="3">
+<pre>Model ports are conceptual entities, denoting the points where output might possibly be produced &amp;rarr; see [[definition|ModelPort]].
+But there is an actual representation, a collection of small descriptor objects managed by the Fixture and organised within the model port table datastructure. Because model ports are discovered during the build process, we need the ability to (re)build this table dynamically, finally swapping in the modified configuration with a transactional switch. Only the builder is allowed to perform such mutations, while for client code model ports are immutable.
+
+!supported operations
+* get the model port by ~Pipe-ID
+* a collection of model ports per timeline
+* sub-grouping by media kind, possibly even by StreamType
+* possibility to enumerate model ports in distinct //order,// defined within the timeline
+* with the additional possibility to filter by media kind or suitable stream type.
+* a way to express the fact of //not having a model port.//
+
+!!!mutating and rebuilding
+Model ports are added once and never changed. The corresponding timeline and pipe is known at setup time, but the overall number of model ports is determined only as a result of completing the build process. At that point, the newly built configuration is swapped in transactionally to become the current configuration.
+
+!Implementation considerations
+The transactional switch creates a clear partitioning in the lifespan of the model port table. //Before// that point, entries are just added, but not accessed in any way. //After// that point, no further mutation occurs, but lookup is frequent and happens in a variety of different configurations and transient orderings.
+
+This observation leads to the idea of using //model port references// as frontend to provide all kinds of access, searching and reordering. These encapsulate the actual access by silently assuming reference to &quot;the&quot; global current model port configuration. This way the actual model port descriptors could be bulk allocated in a similar manner as the processing nodes and wiring descriptors. Access to stale model ports could be detected by the port references, allowing also for a {{{bool}}} checkable &quot;has no port&quot; information.
+
+A model port registry, maintained by the builder, is responsible for storing the discovered model ports within a model port table, which is then swapped in after completing the build process. The {{{builder::ModelPortRegistry}}} acts as management interface, while client code accesses just the {{{ModelPort}}} frontend. A link to the actual registry instance is hooked into that frontend when bringing up the builder subsystem.
 </pre>
 </div>
 <div title="ModelRootMO" modifier="Ichthyostega" modified="200912110245" created="200912080307" tags="def" changecount="5">
@@ -3902,6 +3974,33 @@ We need a way of addressing existing [[pipes|Pipe]]. Besides, as the Pipes and T
 &lt;&lt;tasksum end&gt;&gt;
 </pre>
 </div>
+<div title="PlayProcess" modifier="Ichthyostega" modified="201012181732" created="201012181714" tags="def spec Player" changecount="2">
+<pre>With //play process//&amp;nbsp; we denote an ongoing effort to calculate a stream of frames for playback or rendering.
+The play process is an conceptual entity linking together several activities in the [[Backend]] and the RenderEngine. Creating a play process is the central service provided by the [[player subsystem|Player]]: it maintains a registration entry for the process to keep track of associated entities, resources allocated and calls dispatched as a consequence, and it wires and exposes a PlayController to serve as an interface and information hub.
+
+''Note'': the player is in no way engaged in any of the actual calculation and management tasks necessary to make this stream of calculations happen. The play process code contained within the player subsystem is largely comprised of organisational concerns and not especially performance critical.
+* the [[Backend]] is responsible for scheduling and dispatching the calculations
+* the RenderEngine has the ability to cary out individual frame calculations
+* the OutputSlot exposed by the [[output manager|OutputManagement]] is responsible for accepting timed frame delivery</pre>
+</div>
+<div title="Player" modifier="Ichthyostega" modified="201012181726" created="201012181700" tags="def overview" changecount="8">
+<pre>Within Lumiera, &amp;raquo;Player&amp;laquo; denotes the [[Subsystem]] responsible for organising and tracking //ongoing playback and render processes.// &amp;rarr; [[PlayProcess]]
+The player subsystem does not perform or even manage any render operations, nor does it handle the outputs directly.
+Yet it adresses some central concerns:
+
+;uniformity
+:all playback and render processes are on equal footing, handled in a similar way.
+;integration
+:the player cares for the necessary integration with the other subsystems
+:it consults the OutputManagement, retrieves the necessary informations from the [[Session]] and coordinates [[Backend]] calls.
+;time quantisation
+:the player translates continuous time values into discrete frame counts.
+:to perform this [[quantisation|TimeQuant]], the help of the session for building a TimeGrid for each output channel is required.
+
+!{{red{WIP 12/10}}} under construction
+The player subsystem is currently about to be designed and built up; some time ago, __Joel Holdsworth__ and __Ichthyo__ did a design study with a PlayerDummy, which is currently hooked up with the TransportControl in the Lumiera GUI.
+</pre>
+</div>
 <div title="PlayerDummy" modifier="Ichthyostega" modified="200906071810" created="200901300209" tags="GuiIntegration operational img" changecount="17">
 <pre>__Joelholdsworth__ and __Ichthyo__ created this player mockup in 1/2009 to find out about the implementation details regarding integration and colaboration between the layers. There is no working render engine yet, thus we use a ~DummyImageGenerator for creating faked yuv frames to display. Within the GUI, there is a ~PlaybackController hooked up with the transport controls on the timeline pane.
 # first everything was contained within ~PlaybackController, which spawns a thread for periodically creating those dummy frames
@@ -4609,6 +4708,44 @@ ScopePath represents an ''effective scoping location'' within the model &amp;mda
 We need to detect attaching and detaching of
 * root &amp;harr; BindingMO
 * root &amp;harr; [[Track]]
+</pre>
+</div>
+<div title="Segmentation" modifier="Ichthyostega" modified="201012122202" created="201012121901" tags="def spec Builder" changecount="24">
+<pre>//Segmentation of timeline// denotes a data structure and a step in the BuildProcess.
+When [[building the fixture|BuildFixture]], ~MObjects -- as handled by their Placements -- are grouped below each timeline using them; Placements are then to be resolved into [[explicit Placements|ExplicitPlacement]], resulting in a single well defined time interval for each object. This allows to cut this effective timeline into slices of constant wiring structure, which are represented through the ''Segmentation Datastructure'', a time axis with segments holding object placements and [[exit nodes|ExitNode]]. &amp;nbsp;&amp;rarr; see [[structure of the Fixture|Fixture]]
+* for each Timeline we get a Segmentation
+** which in turn is a list of non-overlapping segments
+*** each holding
+**** an ExplicitPlacement for each covered object
+**** an ExitNode for each ModelPort of the corresponding timeline
+
+!Storage considerations
+;(1) build process
+:&amp;rarr; a tree walk yields the placements per timeline, which then get //resolved//
+:&amp;rarr; after //sorting,// the segmentation can be established, thereby copying placements spanning multiple segments
+:&amp;rarr; only //after running the complete build process for each segment,// the list of model ports and exit nodes can be established
+;(2) commit stage
+: -- after the build process(es) are completed, the new fixture gets ''committed'', thus becoming the officially valid state to be rendered. As render processes might be going on in parallel, some kind of locking or barrier is required. It seems advisable to make the change into a single atomic hot-swap. Meaning we'd get a single access point to be protected. But there is another twist: We need to find out which render processes to cancel an restart, to pick up the changes introduced by this build process, which might include adding and deleting of timelines as a whole, and any changes to the segmentation grid. Because of the highly dynamic nature of the placements, on the other hand it isn't viable to expect the high-level model to provide this information. Thus we need to find out about a ''change coverage'' at this point. We might expand on that idea to //prune any new segments which aren't changed.// This way, only a write barrier would be necessary on switching the actually changed segments, and any render processes touching these would be //tainted.// Old allocations could be released after all tainted processes are known to be terminated.
+;(3) rendering use
+:Each play/render process employs a ''frame dispatch step'' to get the right exit node for pulling a given frame. From there on, the process proceeds into the [[processing nodes|ProcNodes]], interleaved with backend/scheduler actions due to splitting into individually scheduled jobs. The storage of these processing nodes and accompanying wiring descriptors is hooked up behind the individual segments, by sharing a common {{{AllocationCluster}}}. Yet the calculation of individual frames also depends on ''parameters'' and especially ''automation'' connected with objects in the high-level model. It is likely that there might be some sharing, as the intention was to allow ''live changes'' to automated values. &lt;br/&gt;{{red{WIP 12/2010}}} details need to be worked out. &amp;rarr; [[parameter wiring concept|Wiring]]
+!!!observations
+* Storage and initialisation for explicit placements is an issue. We should strive at making that inline as much as possible.
+* the overall segmentation emerges from a sorting of time points, which are start points of explicit placements
+* after the segmentation has been built, the usage pattern changes entirely into a lookup of segment by time
+* the individual segments act as umbrella for a lot of further objects hooked up behind.
+* we need the ability to exchange or swap-in whole segments
+* each segment controls an AllocationCluster
+* we need to track processes for tainting
+* access happens per ModelPort
+
+!!!conclusions
+The Fixture is mostly comprised of the Segementation datastructure, but some other facilities are involved too
+# at top level, we need somehow to organise access per groups of model ports, actually grouped by timeline
+# during the build process, there is a collection of placements; this can be discarded afterwards
+# the backbone of the segmentation is closely linked to an ordering by time. Initially it should support sorting, access by time interval search later on.
+# discarding a segment (or failing to do so) has an high impact on the whole application. We should employ a reliable mechanism for that.
+# the frame dispatch and the tracking of processes can be combined; data duplication is a virtue when it comes to parallel processes
+# the process of comparing and tainting is broken out into a separate data structure to be used just once
 </pre>
 </div>
 <div title="Sequence" modifier="Ichthyostega" modified="201010180156" created="201001252327" tags="def" changecount="17">
@@ -6387,6 +6524,128 @@ function addKeyDownHandlers(e)
 Thus no server and no network connection is needed. Simply open the file in your browser and save changes locally. As the [[Proc-Layer wiki|ProcLayer and Engine]] HTML is located in the Lumiera source tree, all changes will be managed and distributed via GIT. While doing so, you sometimes will have to merge conflicing changes manually in the HTML source.
  * see GettingStarted
  * see [[Homepage|http://tiddlywiki.com]], [[Wiki-Markup|http://tiddlywiki.org/wiki/TiddlyWiki_Markup]]
+</pre>
+</div>
+<div title="TimeQuant" modifier="Ichthyostega" modified="201012230154" created="201012181753" tags="Concepts Player spec discuss draft" changecount="45">
+<pre>The term &amp;raquo;Time&amp;laquo; spans a variety of vastly different entities. Within a NLE we get to deal with various //flavours of time values.//
+;continuous time
+:without any additional assumptions, ''points in time'' can be specified with arbitrary precision.
+:the time values are just numbers; the point of reference and the meaning is implicit.
+:within Lumiera, time is encoded as integral number of //micro ticks,// practically continuous
+;duration
+:a range of time, a ''distance'' on the time axis, measured with the same arbitrary precision as time points.
+:distances and durations can be determined by //subtracting// two time points, consequently they are //signed numbers.//
+:a duration always abstracts from the time //when// this duration or distance happens, the relation to any time scale remains implicit
+;offset
+:offsetting a time or a duration is an operation (not an entity): it means changing the denoted time point or duration.
+:the //target// of an offset operation is a time or duration, while it's //argument// is a distance (synonymous to duration).
+:Time values are //immutable,// like numbers. Only a ''time variable'' can be changed. Durations to the contrary can be mutable or  const.
+;time span
+:contrary to a mere duration, a ''time interval'' or time span is actually //anchored// at a specific point in time.
+:it can be seen as a //special kind of duration,// which explicitly states the information //when// this time span takes place.
+
+;internal time
+:While the basic continuous time values don't imply any provision regarding the time scale and origin to be used, actually, within the implementation of the application, the meaning of time values is uniform and free of contradictions. Thus effectively there is an ''implementation time scale'' -- but its scope of validity is //strictly limited to the implementation level of a single application instance.// It is never exposed and never persisted. It might not be reproducible over multiple instantiations of the application. The implementation reserves the right to recalibrate this internal scale. Later, when Lumiera gains the capability to run within a network of render nodes, these instance connections will include a negotiation about the internal time scale, which remains completely opaque to the outer world. This explains, why {{{lumiera::Time}}} instances lack the ability to show their time value beyond debugging purposes. This is to avoid confusion and to stress their opaque nature.
+;wall clock and system time
+:The core property of any external real world time is that it is //running// -- we have to synchronise to an external time source.
+:This implies the presence of a //running synchronisation process,// with the authority to adjust the time base;
+:contrast this to the internal time, which is static and unconnected -- 
+;quantised time
+:The ''act of quantisation'' transforms a continuous property into a ''discrete'' structure. Prominent examples can be found in the domain of micro physics and with digital information processing. In a broader sense, any measurement or //quantification// also encompasses a quantisation. Regarding time and time measurement, quantisation means alignment to a predefined ''time grid''. Quantisation necessarily is an //irreversible process// -- possible additional informations get discarded.
+:Note that quantisation introduces an ''time origin'' and a ''reference scale''
+;frame count
+:within the context of film and media editing, the specification of a ''frame number'' is an especially important instance of quantisation.
+:all the properties of quantisation apply indeed to this special case: it is a time measurement or specification, where the values are aligned to a grid, and there is a reference time point where the counting starts (origin) and a reference scale (frames per second). Handling of quantised time values in Lumiera is defined such as to ensure the presence of all those bits of information. Without such precautions, operating with bare frame numbers leads itself to all kinds of confusions, mismatches, quantisation errors and unnecessary limitations of functionality.
+;timecode
+:Quantisation also is the foundation of all kinds of formalised time specifications
+:actually even a frame count is some kind of (informal) timecode -- other timecodes employ a standardised format.
+://every// presentation of time values and every persistent storage and exchange of such values is based on time codes.
+:but quantisation and time code aren't identical: a given quantised time value typically can be cast into multiple timecode formats.
+
+!Patterns for handling quantised time
+When it comes to actually handling quantised time values, several patterns are conceivable for dealing with the quantisation operation and representing quantised data. As guideline for judging these patterns, the general properties of time quantisation, as detailed above, should be taken into account. Quantising a time value means both //discarding information,// while at the same time //adding information// pertaining the assumptions of the context.
+
+__casual handling__: this is rather an frequently encountered ''anti pattern''. When reading such code, most striking is the sense of general unawareness of the problem, which is then &quot;discovered&quot; on a per case base, which leads to numerous repetitions of the same basic undertakings, but done with individual treatment of each instance (not so much copy-n-paste). Typical code smells:
+* the rounding, modulo and subtract-base operations pertinent with scale handling are seemingly inserted as bugfix
+* local code path forks to circumvent or compensate for otherwise hard wired calculations based on specific ways to invoke a function
+* playing strikingly clever tricks or employing heuristics to &quot;figure out&quot; the missing scale information from accessible context after the fact
+* advertising support for some of the conceivable cases as special feature, or adding it as plugin or extension module with limited scope
+* linking parts of the necessary additional information to completely unrelated other structures, thus causing code tangling and scattering
+* result or behaviour of calculations depends on the way things are set up in a seemingly contingent way, forcing users to stick to very specific procedures and ordered steps.
+[&gt;img[Time and Time Quantisation in Lumiera|uml/fig142725.png]]
+__static typing__: an analysis of the cases to be expected establishes common patterns and some base cases, which are then represented by distinct types with well established conversions. This can be combined with generic programming for the common parts. Close to the data input, a factory establishes these statically typed values.
+
+__tagged values__: quantised values are explicitly created out of continuous values by a quantiser entity. These quantised data values contain a copy of the original data, adjusted to be exactly aligned with respect to the underlying time grid. In addition, they carry a tag or ID to denote the respective scale, grid or timecode system. This tag can be used later on to assess compatibility or to recast values into another timecode system.
+
+__delayed quantisation__: with this approach, the information loss is delayed as long as possible. Quantised time values are rather treated as promise for quantisation, while the actual time data remains unaltered. Additionally, they carry a tag, or even a direct link to the responsible quantiser instance. Effectively, these are specialised time values, instances of a sub-concept, able to stand-in for general time values, but exposing additional accessors to get a quantised value.
+
+!!!discussion
+For Lumiera, the static typing approach is of limited value -- it excels when values belonging to different scales are actually treated differently. There are such cases, but rather on the data handling level, e.g. sound samples are always handled block wise. But regarding time values, the unifying aspect is more important, which leads to prefering a dynamic (run time typed) approach, while //erasing// the special differences most of the time. Yet the dynamic and open nature of the Lumiera high-level model favours the delayed quantisation pattern; the same values may require different quantisation depending on the larger model context an object is encountered in. This solution might be to general and heavy weight at times though. Thus, for important special cases, the accessors should return tagged values, preferably even with differing static type. Time codes can be integrated this way, but most notably the ''frame numbers'' used for addressing throughout the backend, can be implemented as such specifically typed tagged values; the tag here denotes the quantiser and thus the underlying grid -- it should be implemented as hash-ID for smooth integration with code written in plain C.
+&amp;rarr; more on [[usage situations|TimeUsage]]
+</pre>
+</div>
+<div title="TimeUsage" modifier="Ichthyostega" modified="201012260235" created="201012230204" tags="design discuss" changecount="15">
+<pre>the following collection of usage situations helps to shape the details of the time values and time quantisation design. &amp;rarr; see also  [[time quantisation|TimeQuant]]
+
+;time position of an object
+:indeed the term &quot;time position&quot; encompasses two quite different questions
+:* a time or timing specification within the object
+:* determining the time point in reference to an existing scale
+;time and length of an object
+:basically the same situation, but length could be treated in two ways for quantisation
+:* having a precise specification and then quantise the start and endpoint
+:* quantise the start position and then establish an (independently quantised length)
+;moving and resizing an object
+:this can in itself be done in two different ways, and each of them can be applied in a quantised flavour
+:which sums up to 8 possible combinations, considering that position and length are 2 degrees of freedom.
+:* a variable can be /changed/ by an offset
+:* a variable can be /defined/ to a new value
+:another (hidden) degree of freedom lies in how to apply an quantised offset to an unquantised value (and reversed)
+:because this operation might be done both in the quantised or non-quantised domain, and also the result might be (un)quantised
+;updating the playback position
+:this can be seen as a practical application of the above; basically we can choose to show the wall clock time or we can advance the playback position in frame increments, thus denoting the frame currently in display. These distinctions may look mood for video, but are relevant for precise audio editing, especially when combined with loop playback (recall that audio is processed block wise, but the individual sample frames and thus the possible loop positions are way finer than the processing block size)
+;displaying time intervals
+:for display, time intervals get //re-quantised// into display array coordinates.
+:While evidently the display coordinates are themselves quantised and we obviously don't want to cancel out the effect of an quantisation of the values or intervals to be displayed (which means, we get two quantisations chained up after each other), there remains the question if the display array coordinates should be aligned to the grid of the //elements to be displayed,// and especially if the allowed zoom factors should be limited. This decision isn't an easy one, as it has an immediate and tangible effect on what can be showed, how reversible and reproducible a view is and (note) on the actual values which can be set and changed through the GUI.
+;time value arithmetic
+:Client code as well as the internal implementation of time handling needs to do arithmetic operations with time values. Time values are additive and totally ordered. Distance, as calculated by subtraction, can be made into a metric. Another and quite different question is to what extent a quantised variant of this arithmetics is required.
+;relative placement
+:because of the divergence between quantised and unquantised values, the question arises, if placement relative to another object refers to the raw position or the already quantised position. Basically all the variations discussed for //time and length of an object// also do apply here.
+
+!notable issues
+''Direct quantisation of length is not possible''. This is due to the non-linear nature of all but the most trivial time grids: Already such a simple addition like a start offset destroys linearity, and this still the more is true within a compound grid where the grid spacing changes at some point. Thus, the length has to be re-established at the target position of an time interval after each change involving quantisation. Regarding the //strategy// to apply when re-establishing the length, it seems more appropriate to treat the object as an entity which is moved, which means to do quantisation in two steps, first the position, then the endpoint (the second option in the description above). But it seems advisable not to hard wire that strategy -- better put it into the quantiser.
+
+We should note, that the problems regarding quantised durations also carry over to //offsets:// it is difficult to ''define the semantics of a quantised offset''. Seemingly the only viable approach is to have a //intended offset,// and then to apply a re-quantisation to the target after applying the (raw) offset.
+
+''When to materialise a quantisation''. Because of the basic intention to retain information, we delay actually applying the quantisation to the stored values as much as possible. But not materialising immediately at quantisation has the downside of possibly accumulating off-grid values without that being evident. Most notably, if we apply the raw offsets produced by GUI interactions, the object's positions and lengthes are bound to accumulate spurious information never intended by the user.
+
+Thus, an especially important instance of that problem is ''how to deal with updates in a quantised environment''. If we handle quantisation stictly as a view employed on output, we run into the problems with accumulating spurious information. On the other hand, allowing for quantised changes inevitably pulls in all the complexity of mixing quantised and non-quantised values. It would be desirable somehow to move these distinctions out of the scope of this design and offload them onto the client (code using these time classes).
+
+Another closely related problem is ''when to allow mutations'', if at all. We can't completely do away with mutations, simply because we don't have a pure functional language at our disposal. The whole concept of //reference semantics// doesn't play so well with immutable objects. The Lumiera high-level (session) model certainly relies on objects intended to be //manipulated.// Thus we need a re-settable length field in {{{MObject}}} and we need a time variable for position calculations. Yet we could make any //derived objects// into immutable descriptor records, which certainly helps with parallelism.
+
+The ''problem with playback position'' is -- that it's an attempt to conceptualise a non-existing entity. There is no such thing like &quot;the&quot; playback position. Yet most applications I'm aware off employ this concept. Likely they got trapped by the metaphor of the tape head, again. We should do away with that. On playback, we should show a //projection of wall-clock time onto the expected playback range// -- not more, not less. It should be acknowledged that there is //no direct link to the ongoing playback processes,// besides the fact that they're assumed to sync to wall-clock time as well. Recall, typically there are multiple playback processes going on in compound, and each might run on a different update rate. If we really want a //visual out-of-sync indicator,// we should treat that as a separate reporting facility and display it apart of the playback cursor.
+
+Note that the ''display window might be treated as just an independent instance of quantisation''. This is similar to the approach taken above for modifying quantised time span values. We should provide a special kind of time grid, the display coordinates. The origin of these is always defined to the left (lower) side of the interval to be displayed, and they are gauged in screen units (pixels or similar, as used by the GUI toolkit set). The rest is handled by the general quantisation mechanisms. The problem of aligning the display should be transformed into a general facility to align grids, and solved for the general case. Doing so solves the remaining problems with quantised value changes and with ''specifying relative placements'' as well: If we choose to represent them as quantised values, we might (or might not) also choose to apply this //grid-alignment function.//
+
+!substantial problems to be solved
+* how to align multiple grids
+* how to integrate modifications of quantised values.
+
+The problem with modification of quantised values highlights an inner contratiction or conflicting goals
+* the whole system should fit in naturally and just feel like using raw time values
+* quantisation should be added //late// -- like a view
+* there should be a guidance towards the intended proper use
+
+!!! possible solutions{{red{WIP 12/10}}}
+* only allow to assign a completely new setting
+* only accept raw time values for redefining a quantised interval
+* only accept an abstract //modification object.//
+
+!!!usage considerations
+Question is: how fine grained and configurable needs this to be?
+* for example, when moving a clip taken from 50fps media, the new position might be quantised to the 50fps grid established by the media, while the target timeline runs with 25fps, allowing for finer adjustments based on the intermediate frames present in the source material.
+* likely we need a &quot;nudge by unit(s)&quot;
+
 </pre>
 </div>
 <div title="Timeline" modifier="Ichthyostega" modified="201011220126" created="200706250721" tags="def" changecount="21">

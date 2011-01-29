@@ -35,7 +35,7 @@ liblumiera_la_LIBADD =	 					\
 liblumiera_la_SOURCES =					\
 	$(liblumiera_la_srcdir)/advice/advice.cpp	\
 	$(liblumiera_la_srcdir)/advice/binding.cpp	\
-	$(liblumiera_la_srcdir)/allocationcluster.cpp	\
+	$(liblumiera_la_srcdir)/allocation-cluster.cpp	\
 	$(liblumiera_la_srcdir)/cmdline.cpp		\
 	$(liblumiera_la_srcdir)/condition.c		\
 	$(liblumiera_la_srcdir)/error.c			\
@@ -44,7 +44,6 @@ liblumiera_la_SOURCES =					\
 	$(liblumiera_la_srcdir)/lockerror.c		\
 	$(liblumiera_la_srcdir)/logging.cpp		\
 	$(liblumiera_la_srcdir)/luid.c			\
-	$(liblumiera_la_srcdir)/lumitime.cpp		\
 	$(liblumiera_la_srcdir)/mpool.c			\
 	$(liblumiera_la_srcdir)/mrucache.c		\
 	$(liblumiera_la_srcdir)/mutex.c			\
@@ -61,6 +60,8 @@ liblumiera_la_SOURCES =					\
 	$(liblumiera_la_srcdir)/test/test-helper.cpp	\
 	$(liblumiera_la_srcdir)/test/testoption.cpp	\
 	$(liblumiera_la_srcdir)/time.c			\
+	$(liblumiera_la_srcdir)/time/lumitime.cpp	\
+	$(liblumiera_la_srcdir)/time/quantiser.cpp	\
 	$(liblumiera_la_srcdir)/tmpbuf.c		\
 	$(liblumiera_la_srcdir)/util.cpp
 
@@ -69,8 +70,8 @@ noinst_HEADERS +=						\
 	$(liblumiera_la_srcdir)/advice.hpp			\
 	$(liblumiera_la_srcdir)/advice/binding.hpp		\
 	$(liblumiera_la_srcdir)/advice/index.hpp		\
-	$(liblumiera_la_srcdir)/allocationcluster.hpp		\
-	$(liblumiera_la_srcdir)/allocationcluster.hpp		\
+	$(liblumiera_la_srcdir)/allocation-cluster.hpp		\
+	$(liblumiera_la_srcdir)/allocation-cluster.hpp		\
 	$(liblumiera_la_srcdir)/condition.h			\
 	$(liblumiera_la_srcdir)/error.h				\
 	$(liblumiera_la_srcdir)/error.hpp			\
@@ -103,9 +104,9 @@ noinst_HEADERS +=						\
 	$(liblumiera_la_srcdir)/scoped-holder.hpp		\
 	$(liblumiera_la_srcdir)/singleton-subclass.hpp		\
 	$(liblumiera_la_srcdir)/singleton.hpp			\
-	$(liblumiera_la_srcdir)/singletonfactory.hpp		\
-	$(liblumiera_la_srcdir)/singletonpolicies.hpp		\
-	$(liblumiera_la_srcdir)/singletonpreconfigure.hpp	\
+	$(liblumiera_la_srcdir)/singleton-factory.hpp		\
+	$(liblumiera_la_srcdir)/singleton-policies.hpp		\
+	$(liblumiera_la_srcdir)/singleton-preconfigure.hpp	\
 	$(liblumiera_la_srcdir)/sync-classlock.hpp		\
 	$(liblumiera_la_srcdir)/sync.hpp			\
 	$(liblumiera_la_srcdir)/sync.hpp			\

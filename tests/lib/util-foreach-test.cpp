@@ -1,23 +1,23 @@
 /*
   UtilForeach(Test)  -  helpers for doing something for each element
- 
+
   Copyright (C)         Lumiera.org
     2009,               Hermann Vosseler <Ichthyostega@web.de>
- 
+
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of the
-  License, or (at your option) any later version.
- 
+  published by the Free Software Foundation; either version 2 of
+  the License, or (at your option) any later version.
+
   This program is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
- 
+
   You should have received a copy of the GNU General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- 
+
 * *****************************************************/
 
 
@@ -150,13 +150,13 @@ namespace test {
           check_existence_quant (container);
           check_existence_quant (iterator);
           
-          ASSERT (int(NUM_ELMS) ==container[0]);
+          CHECK (int(NUM_ELMS) ==container[0]);
           
           check_ref_argument_bind (container);
-          ASSERT (int(NUM_ELMS) ==container[0]);
+          CHECK (int(NUM_ELMS) ==container[0]);
           
           check_ref_argument_bind (iterator);
-          ASSERT (60+int(NUM_ELMS) ==container[0]);
+          CHECK (60+int(NUM_ELMS) ==container[0]);
           // changes got propagated through the iterator
           
           check_wrapped_container_passing(container);
@@ -354,10 +354,10 @@ namespace test {
           
           for_each (coll, var(sum) += _1_ );
           
-          ASSERT (sum == (NUM_ELMS+1) * NUM_ELMS/2);
+          CHECK (sum == (NUM_ELMS+1) * NUM_ELMS/2);
           
-          ASSERT (!and_all  (coll, _1_ - 1 ));
-          ASSERT ( has_any  (coll, _1_ + 1 ));
+          CHECK (!and_all  (coll, _1_ - 1 ));
+          CHECK ( has_any  (coll, _1_ + 1 ));
         }
       
       
@@ -369,12 +369,12 @@ namespace test {
         {
           ANNOUNCE (check_existence_quant);
           
-          ASSERT ( and_all (coll, 0 < _1_ ));
-          ASSERT (!and_all (coll, 1 < _1_ ));
+          CHECK ( and_all (coll, 0 < _1_ ));
+          CHECK (!and_all (coll, 1 < _1_ ));
           
-          ASSERT ( has_any (coll, 0 < _1_ ));
-          ASSERT ( has_any (coll, _1_ >= NUM_ELMS ));
-          ASSERT (!has_any (coll, _1_ >  NUM_ELMS ));
+          CHECK ( has_any (coll, 0 < _1_ ));
+          CHECK ( has_any (coll, _1_ >= NUM_ELMS ));
+          CHECK (!has_any (coll, _1_ >  NUM_ELMS ));
         }
       
       
@@ -443,7 +443,7 @@ namespace test {
           
           SHOW_CONTAINER
           // indeed got modifications into the original container!
-          ASSERT (0 == counter);
+          CHECK (0 == counter);
           
           // passing anonymous temporary
           for_each (buildTestNumberz(NUM_ELMS), _1_ = var(counter)-- );
@@ -455,8 +455,8 @@ namespace test {
           
           // both didn't influence the original container
           SHOW_CONTAINER
-          ASSERT (-2*int(NUM_ELMS)   == counter);
-          ASSERT (bySmartPtr->back() == counter+1);
+          CHECK (-2*int(NUM_ELMS)   == counter);
+          CHECK (bySmartPtr->back() == counter+1);
           
           // passing by pointer is also possible
           const VecI * const passByConstPointer (&coll);

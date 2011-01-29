@@ -1,0 +1,64 @@
+GDB Python pretty printers
+==========================
+
+Since some time, GDB supports Python written extension modules, especially
+for pretty printing of data structures. A selection of pre-defined pretty printers
+for STL containers is part of the standard distribution. The graphical debugger frontend
+provided by the Eclipse CDT automatically uses this debugger provided presentation
+to show the value of variables in the detail pane of the variables view, while the
+individual variable entries always show the expandable structure view.
+
+Installation notes
+------------------
+
+This feature requires an python enabled GDB (>6.8.50). Debian/Lenny isn't enough,
+but compiling the GDB package from Debian/Squeeze (GDB-7.1) is straightforward.
+Moreover, you need to check out and install the python pretty-printers and 
+you need to activate them through your +~/.gdbinit+
+
+[source,python]
+----
+#
+# .gdbinit : GDB Config file
+#
+# 3/2010 - Ichthyo: add python pretty printers for STL
+
+python
+import sys
+sys.path.insert(0, '/opt/gdb/stlPrettyPrinter')
+from libstdcxx.v6.printers import register_libstdcxx_printers
+register_libstdcxx_printers (None)
+end
+----
+For more informations link:http://sourceware.org/gdb/wiki/STLSupport[see here..]
+
+.Hello World
+[source,C]
+----
+#include <iostream>
+#include <string>
+#include <vector>
+
+using std::string;
+using std::cout;
+using std::endl;
+
+
+int 
+main (int, char**)
+  {
+    std::string str = "hullo wöld";
+    std::vector<int> vec (1000);
+    
+    for (uint i = 0; i < vec.size(); ++i)
+        vec[i] = i;
+    
+    cout << str <<  "\n.gulp.\n";
+    return 0;
+  }
+----
+When selecting the string or the vector in the Eclipse variables view
+(or when issuing "print str" at the GDB prompt), the GDB python pretty-printer
+should be activated.
+
+

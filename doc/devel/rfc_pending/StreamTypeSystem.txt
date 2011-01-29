@@ -10,8 +10,7 @@
 Stream Type System
 ------------------
 Especially in the Proc-Layer, we need a framework to deal with different
-"kinds" of media streams.
- +
+"kinds" of media streams. +
 This is the foundation to be able to define what can be connected and to
 separate out generic parts and isolate specific parts.
 
@@ -69,7 +68,7 @@ or selection regarding each of these levels.
    conversions. Examples for Prototypes are: stereoscopic (3D) video versus the
    common flat video lacking depth information, spatial audio systems
    (Ambisonics, Wave Field Synthesis), panorama simulating sound systems (5.1,
-   7.1,...), stereophonic and monaural audio.
+   7.1,...), binaural, stereophonic and monaural audio.
  * Besides the distinction by prototypes, there are the various *media
    implementation types*. This classification is not necessarily hierarchically
    related to the prototype classification, while in practice commonly there

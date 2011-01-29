@@ -1,23 +1,23 @@
 /*
   TestHelper(Test)  -  validate the unittest support functions
- 
+
   Copyright (C)         Lumiera.org
     2009,               Hermann Vosseler <Ichthyostega@web.de>
- 
+
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of the
-  License, or (at your option) any later version.
- 
+  published by the Free Software Foundation; either version 2 of
+  the License, or (at your option) any later version.
+
   This program is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
- 
+
   You should have received a copy of the GNU General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- 
+
 * *****************************************************/
 
 
@@ -92,9 +92,9 @@ namespace test{
           Wrmpf3 rmpf3;
           Murpf murpf;
           
-          ASSERT (1 == sizeof (rmpf1));
-          ASSERT (2 == sizeof (rmpf2));
-          ASSERT (3 == sizeof (rmpf3));
+          CHECK (1 == sizeof (rmpf1));
+          CHECK (2 == sizeof (rmpf2));
+          CHECK (3 == sizeof (rmpf3));
           
           cout << showSizeof((size_t)42, "theUniverse") << endl;
           cout << showSizeof<char>("just a char")       << endl;
@@ -116,7 +116,7 @@ namespace test{
       checkGarbageStr()
         {
           string garN = randStr(0);
-          ASSERT (0 == garN.size());
+          CHECK (0 == garN.size());
           
           typedef function<bool(string::value_type)> ChPredicate;
           ChPredicate is_OK (is_lower() || is_digit());

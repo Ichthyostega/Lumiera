@@ -1,23 +1,23 @@
 /*
   FunctionClosure(Test)  -  appending, mixing and filtering typelists
- 
+
   Copyright (C)         Lumiera.org
     2009,               Hermann Vosseler <Ichthyostega@web.de>
- 
+
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of the
-  License, or (at your option) any later version.
- 
+  published by the Free Software Foundation; either version 2 of
+  the License, or (at your option) any later version.
+
   This program is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
- 
+
   You should have received a copy of the GNU General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- 
+
 * *****************************************************/
 
 
@@ -133,8 +133,8 @@ namespace test    {
           DISPLAY (List1);
           DISPLAY (List2);
           ;
-          ASSERT (6 == (getNumberz<1,2,3> (Num<1>(), Num<2>(), Num<3>())));
-          ASSERT (6 == (getNumberz<1,1,1> (Num<1>(), Num<1>(2), Num<1>(3))));
+          CHECK (6 == (getNumberz<1,2,3> (Num<1>(), Num<2>(), Num<3>())));
+          CHECK (6 == (getNumberz<1,1,1> (Num<1>(), Num<1>(2), Num<1>(3))));
         }
       
       
@@ -153,7 +153,7 @@ namespace test    {
           
           NewSig& fun =  getNumberz<1,5,9>;                    //...which is compatible to an existing real function signature!
           
-          ASSERT (1+5+9 == fun(Num<1>(), Num<5>(), Num<9>()));
+          CHECK (1+5+9 == fun(Num<1>(), Num<5>(), Num<9>()));
         }
       
       
@@ -171,20 +171,20 @@ namespace test    {
           DUMPVAL (tup2);
           DUMPVAL (tup3);
           
-          ASSERT (-1       == Apply<0>::invoke<int> (fun0, tup0) );
-          ASSERT (11       == Apply<1>::invoke<int> (fun1, tup1) );
-          ASSERT (11+12    == Apply<2>::invoke<int> (fun2, tup2) );
-          ASSERT (11+12+13 == Apply<3>::invoke<int> (fun3, tup3) );
+          CHECK (-1       == Apply<0>::invoke<int> (fun0, tup0) );
+          CHECK (11       == Apply<1>::invoke<int> (fun1, tup1) );
+          CHECK (11+12    == Apply<2>::invoke<int> (fun2, tup2) );
+          CHECK (11+12+13 == Apply<3>::invoke<int> (fun3, tup3) );
           
-          ASSERT (-1       == TupleApplicator<int()>            (tup0) (fun0) );
-          ASSERT (11       == TupleApplicator<int(int)>         (tup1) (fun1) );
-          ASSERT (11+12    == TupleApplicator<int(int,int)>     (tup2) (fun2) );
-          ASSERT (11+12+13 == TupleApplicator<int(int,int,int)> (tup3) (fun3) );
+          CHECK (-1       == TupleApplicator<int()>            (tup0) (fun0) );
+          CHECK (11       == TupleApplicator<int(int)>         (tup1) (fun1) );
+          CHECK (11+12    == TupleApplicator<int(int,int)>     (tup2) (fun2) );
+          CHECK (11+12+13 == TupleApplicator<int(int,int,int)> (tup3) (fun3) );
           
-          ASSERT (-1       == apply(fun0, tup0) );
-          ASSERT (11       == apply(fun1, tup1) );
-          ASSERT (11+12    == apply(fun2, tup2) );
-          ASSERT (11+12+13 == apply(fun3, tup3) );
+          CHECK (-1       == apply(fun0, tup0) );
+          CHECK (11       == apply(fun1, tup1) );
+          CHECK (11+12    == apply(fun2, tup2) );
+          CHECK (11+12+13 == apply(fun3, tup3) );
         
         }
       
@@ -201,20 +201,20 @@ namespace test    {
           function<int(int,int)>     functor2 (fun2);
           function<int(int,int,int)> functor3 (fun3);
           
-          ASSERT (-1       == Apply<0>::invoke<int> (functor0, tup0) );
-          ASSERT (11       == Apply<1>::invoke<int> (functor1, tup1) );
-          ASSERT (11+12    == Apply<2>::invoke<int> (functor2, tup2) );
-          ASSERT (11+12+13 == Apply<3>::invoke<int> (functor3, tup3) );
+          CHECK (-1       == Apply<0>::invoke<int> (functor0, tup0) );
+          CHECK (11       == Apply<1>::invoke<int> (functor1, tup1) );
+          CHECK (11+12    == Apply<2>::invoke<int> (functor2, tup2) );
+          CHECK (11+12+13 == Apply<3>::invoke<int> (functor3, tup3) );
           
-          ASSERT (-1       == TupleApplicator<int()>            (tup0) (functor0) );
-          ASSERT (11       == TupleApplicator<int(int)>         (tup1) (functor1) );
-          ASSERT (11+12    == TupleApplicator<int(int,int)>     (tup2) (functor2) );
-          ASSERT (11+12+13 == TupleApplicator<int(int,int,int)> (tup3) (functor3) );
+          CHECK (-1       == TupleApplicator<int()>            (tup0) (functor0) );
+          CHECK (11       == TupleApplicator<int(int)>         (tup1) (functor1) );
+          CHECK (11+12    == TupleApplicator<int(int,int)>     (tup2) (functor2) );
+          CHECK (11+12+13 == TupleApplicator<int(int,int,int)> (tup3) (functor3) );
           
-          ASSERT (-1       == apply(functor0, tup0) );
-          ASSERT (11       == apply(functor1, tup1) );
-          ASSERT (11+12    == apply(functor2, tup2) );
-          ASSERT (11+12+13 == apply(functor3, tup3) );
+          CHECK (-1       == apply(functor0, tup0) );
+          CHECK (11       == apply(functor1, tup1) );
+          CHECK (11+12    == apply(functor2, tup2) );
+          CHECK (11+12+13 == apply(functor3, tup3) );
           
         }
       
@@ -236,20 +236,20 @@ namespace test    {
           BoundFun functor2 = Apply<2>::bind<BoundFun> (fun2, tup3);
           BoundFun functor3 = Apply<3>::bind<BoundFun> (fun3, tup3);
           
-          ASSERT (-1       == functor0() );
-          ASSERT (11       == functor1() );
-          ASSERT (11+12    == functor2() );
-          ASSERT (11+12+13 == functor3() );
+          CHECK (-1       == functor0() );
+          CHECK (11       == functor1() );
+          CHECK (11+12    == functor2() );
+          CHECK (11+12+13 == functor3() );
           
           functor0 = TupleApplicator<int()>            (tup0).bind (fun0);
           functor1 = TupleApplicator<int(int)>         (tup1).bind (fun1);
           functor2 = TupleApplicator<int(int,int)>     (tup2).bind (fun2);
           functor3 = TupleApplicator<int(int,int,int)> (tup3).bind (fun3);
           
-          ASSERT (-1       == functor0() );
-          ASSERT (11       == functor1() );
-          ASSERT (11+12    == functor2() );
-          ASSERT (11+12+13 == functor3() );
+          CHECK (-1       == functor0() );
+          CHECK (11       == functor1() );
+          CHECK (11+12    == functor2() );
+          CHECK (11+12+13 == functor3() );
           
         }
       
@@ -273,20 +273,20 @@ namespace test    {
           BoundFun functor2 = Apply<2>::bind<BoundFun> (unbound_functor2, tup3);
           BoundFun functor3 = Apply<3>::bind<BoundFun> (unbound_functor3, tup3);
           
-          ASSERT (-1       == functor0() );
-          ASSERT (11       == functor1() );
-          ASSERT (11+12    == functor2() );
-          ASSERT (11+12+13 == functor3() );
+          CHECK (-1       == functor0() );
+          CHECK (11       == functor1() );
+          CHECK (11+12    == functor2() );
+          CHECK (11+12+13 == functor3() );
           
           functor0 = TupleApplicator<int()>            (tup0).bind (unbound_functor0);
           functor1 = TupleApplicator<int(int)>         (tup1).bind (unbound_functor1);
           functor2 = TupleApplicator<int(int,int)>     (tup2).bind (unbound_functor2);
           functor3 = TupleApplicator<int(int,int,int)> (tup3).bind (unbound_functor3);
           
-          ASSERT (-1       == functor0() );
-          ASSERT (11       == functor1() );
-          ASSERT (11+12    == functor2() );
-          ASSERT (11+12+13 == functor3() );
+          CHECK (-1       == functor0() );
+          CHECK (11       == functor1() );
+          CHECK (11+12    == functor2() );
+          CHECK (11+12+13 == functor3() );
           
         }
       
@@ -304,10 +304,10 @@ namespace test    {
           FunctionClosure<int(int,int)>     clo2 (fun2,tup2);
           FunctionClosure<int(int,int,int)> clo3 (fun3,tup3);
           
-          ASSERT (-1       == clo0() );
-          ASSERT (11       == clo1() );
-          ASSERT (11+12    == clo2() );
-          ASSERT (11+12+13 == clo3() );
+          CHECK (-1       == clo0() );
+          CHECK (11       == clo1() );
+          CHECK (11+12    == clo2() );
+          CHECK (11+12+13 == clo3() );
           
           function<int()>            unbound_functor0 (fun0);
           function<int(int)>         unbound_functor1 (fun1);
@@ -319,20 +319,20 @@ namespace test    {
           clo2 = FunctionClosure<int(int,int)>     (unbound_functor2,tup2);
           clo3 = FunctionClosure<int(int,int,int)> (unbound_functor3,tup3);
           
-          ASSERT (-1       == clo0() );
-          ASSERT (11       == clo1() );
-          ASSERT (11+12    == clo2() );
-          ASSERT (11+12+13 == clo3() );
+          CHECK (-1       == clo0() );
+          CHECK (11       == clo1() );
+          CHECK (11+12    == clo2() );
+          CHECK (11+12+13 == clo3() );
           
-          ASSERT (-1       == closure(fun0,tup0) () );
-          ASSERT (11       == closure(fun1,tup1) () );
-          ASSERT (11+12    == closure(fun2,tup2) () );
-          ASSERT (11+12+13 == closure(fun3,tup3) () );
+          CHECK (-1       == closure(fun0,tup0) () );
+          CHECK (11       == closure(fun1,tup1) () );
+          CHECK (11+12    == closure(fun2,tup2) () );
+          CHECK (11+12+13 == closure(fun3,tup3) () );
           
-          ASSERT (-1       == closure(unbound_functor0,tup0) () );
-          ASSERT (11       == closure(unbound_functor1,tup1) () );
-          ASSERT (11+12    == closure(unbound_functor2,tup2) () );
-          ASSERT (11+12+13 == closure(unbound_functor3,tup3) () );
+          CHECK (-1       == closure(unbound_functor0,tup0) () );
+          CHECK (11       == closure(unbound_functor1,tup1) () );
+          CHECK (11+12    == closure(unbound_functor2,tup2) () );
+          CHECK (11+12+13 == closure(unbound_functor3,tup3) () );
           
           
           // finally combine all techniques....
@@ -342,7 +342,7 @@ namespace test    {
           
           FunctionClosure<NumberzSig> numClo (getNumberz<5,6,7>, numberzTup );
           
-          ASSERT (22+33+44 == numClo() );
+          CHECK (22+33+44 == numClo() );
         }
     };
   

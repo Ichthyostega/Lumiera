@@ -1,23 +1,23 @@
 /*
   timeline-track.hpp  -  Declaration of the timeline group track object
- 
+
   Copyright (C)         Lumiera.org
     2008,               Joel Holdsworth <joel@airwebreathe.org.uk>
- 
+
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of the
-  License, or (at your option) any later version.
- 
+  published by the Free Software Foundation; either version 2 of
+  the License, or (at your option) any later version.
+
   This program is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
- 
+
   You should have received a copy of the GNU General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- 
+
 */
 /** @file widgets/timeline/timeline-track.hpp
  ** This file contains the definition of timeline track object
@@ -141,6 +141,8 @@ private:
 private:
 
   //----- Event Handlers -----//
+  void on_enable();
+  void on_lock();
   void on_set_name();
   
   /**
@@ -158,11 +160,16 @@ protected:
 private:
 
   /**
+   * True if this track is enabled.
+   */
+  bool enabled;
+
+  /**
    * This bool is true if this branch is expanded. false if it is
    * collapsed.
    **/
   bool expanded;
-  
+
   /**
    * This enum specifies which direction the expand/collapse animation
    * is moving - if any.
@@ -186,6 +193,11 @@ private:
    * An internal timer used for the expand/collapse animation.
    **/
   boost::scoped_ptr<Glib::Timer> expand_timer;
+
+  /**
+   * True if this track is locked.
+   */
+  bool locked;
 
   //----- Header Widgets ------//
   

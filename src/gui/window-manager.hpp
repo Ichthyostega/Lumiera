@@ -1,29 +1,31 @@
 /*
   window-manager.hpp  -  Defines the global UI Manager class
- 
+
   Copyright (C)         Lumiera.org
     2008,               Joel Holdsworth <joel@airwebreathe.org.uk>
- 
+
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of the
-  License, or (at your option) any later version.
- 
+  published by the Free Software Foundation; either version 2 of
+  the License, or (at your option) any later version.
+
   This program is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
- 
+
   You should have received a copy of the GNU General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- 
+
 */
 /** @file window-manager.hpp
  ** This file contains the defintion of global UI Manager class.
  ** @see window-manager.cpp
  ** @see gtk-lumiera.hpp
  */
+
+#include <cairomm/cairomm.h>
 
 #include "gtk-lumiera.hpp"
 //#include "workspace/workspace-window.hpp"
@@ -81,9 +83,9 @@ public:
    * @param blue The fallback blue intensity.
    * @return The loaded colour.
    **/
-  static GdkColor read_style_colour_property(
-    Gtk::Widget &widget, const gchar *property_name,
-    guint16 red, guint16 green, guint16 blue);
+  static Cairo::RefPtr<Cairo::SolidPattern>
+  read_style_colour_property (Gtk::Widget &widget, const gchar *property_name,
+                              guint16 red, guint16 green, guint16 blue);
 
 private:
 
@@ -93,6 +95,15 @@ private:
   bool on_window_closed(GdkEventAny* event);
     
 private:
+
+  /**
+   * On creating and closing of any window, handle enabling or disabling of the
+   * Window/Close Window menu option.
+   *
+   * It should be enabled when there is more than one window and disabled
+   * otherwise.
+   **/
+  void update_close_window_in_menus();
 
   /**
    * Registers the custom icon sizes.

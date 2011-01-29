@@ -1,23 +1,23 @@
 /*
   BUILDERTOOL.hpp  -  Interface, (visiting) tool for processing MObjects
- 
+
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
- 
+
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of the
-  License, or (at your option) any later version.
- 
+  published by the Free Software Foundation; either version 2 of
+  the License, or (at your option) any later version.
+
   This program is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
- 
+
   You should have received a copy of the GNU General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- 
+
 */
 
 /** @file buildertool.hpp
@@ -62,7 +62,7 @@
 
 
 namespace mobject {
-
+  
   class Buildable;
   
   namespace builder {
@@ -105,7 +105,7 @@ namespace mobject {
      *       as we simply store a pointer within the BuilderTool instance.
      */
     class BuilderTool
-      : public lumiera::visitor::Tool<void, InvokeCatchAllFunction> 
+      : public lumiera::visitor::Tool<void, InvokeCatchAllFunction>
       {
         lumiera::WrapperPtr currentWrapper_;
         
@@ -172,7 +172,9 @@ namespace mobject {
       
     using lumiera::typelist::Types;  // convenience for the users of "Applicable"
   
-  } // namespace mobject::builder
+  }// namespace mobject::builder
+  
+  
   
   
   
@@ -185,8 +187,15 @@ namespace mobject {
   
   
   
-  namespace builder { // to be found by ADL
+  namespace builder {
     
+    /** to be picked up by ADL: redirect tool invocation for double dispatch.
+     *  The purpose of this function is to apply a visitor, while the actual target
+     *  is managed by a generic wrapper (smart-ptr). This template function serves
+     *  to generate forwarding functions, which pass on the \c apply() call to the
+     *  actual embedded target, while passing on the fully wrapped object for later
+     *  referral and usage too.
+     */
     template<typename WRA>
     inline Buildable::ReturnType
     apply (BuilderTool& tool, WRA& wrappedTargetObj)
@@ -195,8 +204,7 @@ namespace mobject {
       wrappedTargetObj->apply (tool);   // dispatch to suitable treat() function
       tool.forgetWrapper();
     }
-    
-  } // namespace mobject::builder
   
-} // namespace mobject
+  
+}} // namespace mobject::builder
 #endif

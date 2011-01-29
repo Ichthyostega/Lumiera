@@ -1,23 +1,23 @@
 /*
   CustomSharedPtr(Test)  -  ref counting, equality and comparisons
- 
+
   Copyright (C)         Lumiera.org
     2008-2010,          Hermann Vosseler <Ichthyostega@web.de>
- 
+
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of the
-  License, or (at your option) any later version.
- 
+  published by the Free Software Foundation; either version 2 of
+  the License, or (at your option) any later version.
+
   This program is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
- 
+
   You should have received a copy of the GNU General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- 
+
 * *****************************************************/
 
 
@@ -42,7 +42,7 @@ namespace test{
   using lumiera::error::LUMIERA_ERROR_ASSERTION;
   
   
-  struct X 
+  struct X
     : boost::totally_ordered<X>
     {
       long x_;
@@ -73,7 +73,7 @@ namespace test{
   class CustomSharedPtr_test : public Test
     {
       virtual void
-      run (Arg) 
+      run (Arg)
         {
           check_refcounting ();
           check_shared_ownership ();
@@ -87,29 +87,29 @@ namespace test{
       check_refcounting ()
         {
           P<X> p1 (new X(7));
-          ASSERT (p1);
-          ASSERT (1 == p1.use_count());
-          ASSERT (7 == p1->x_);
+          CHECK (p1);
+          CHECK (1 == p1.use_count());
+          CHECK (7 == p1->x_);
           
             {
               P<X> p2 (new X(9));
-              ASSERT (1 == p2.use_count());
+              CHECK (1 == p2.use_count());
               
               p2.swap (p1);
-              ASSERT (1 == p1.use_count());
-              ASSERT (1 == p2.use_count());
+              CHECK (1 == p1.use_count());
+              CHECK (1 == p2.use_count());
               
               p2 = p1;
-              ASSERT (2 == p1.use_count());
-              ASSERT (2 == p2.use_count());
+              CHECK (2 == p1.use_count());
+              CHECK (2 == p2.use_count());
             }
-            
-          ASSERT (1 == p1.use_count());
-          ASSERT (9 == p1->x_);
+          
+          CHECK (1 == p1.use_count());
+          CHECK (9 == p1->x_);
           
           p1.reset();
-          ASSERT (0 == p1.use_count());
-          ASSERT (!p1);
+          CHECK (0 == p1.use_count());
+          CHECK (!p1);
         }
       
       
@@ -118,53 +118,53 @@ namespace test{
       check_shared_ownership ()
         {
           std::auto_ptr<X> au (new X(22));
-          ASSERT (au.get());
+          CHECK (au.get());
           
           P<X> pX (au);
-          ASSERT (!au.get());
-          ASSERT (pX);
-          ASSERT (1 == pX.use_count());
-          ASSERT (22 == pX->x_);
+          CHECK (!au.get());
+          CHECK (pX);
+          CHECK (1 == pX.use_count());
+          CHECK (22 == pX->x_);
           
           weak_ptr<X> wX (pX);
-          ASSERT (wX.lock());
-          ASSERT (1 == pX.use_count());
+          CHECK (wX.lock());
+          CHECK (1 == pX.use_count());
           
           shared_ptr<X> sp1 (wX);
-          shared_ptr<X> sp2 (pX); 
+          shared_ptr<X> sp2 (pX);
           shared_ptr<X> sp3; sp3 = pX;
           
-          ASSERT (22 == sp3->x_);
-          ASSERT (4 == pX.use_count());
-          ASSERT (*pX  == *sp1);
-          ASSERT (*sp1 == *sp2);
-          ASSERT (*sp2 == *sp3);
+          CHECK (22 == sp3->x_);
+          CHECK (4 == pX.use_count());
+          CHECK (*pX  == *sp1);
+          CHECK (*sp1 == *sp2);
+          CHECK (*sp2 == *sp3);
           
           P<X> pX2;
           pX2.swap(pX);
-          ASSERT (!pX);
-          ASSERT (0 == pX.use_count());
-          ASSERT (4 == pX2.use_count());
+          CHECK (!pX);
+          CHECK (0 == pX.use_count());
+          CHECK (4 == pX2.use_count());
           
           P<X, P<X> > pXX (pX2);  // a different type, but compatible pointers
           pX2 = pX;
-          ASSERT (!pX2);
-          ASSERT (0 == pX2.use_count());
-          ASSERT (4 == pXX.use_count());
+          CHECK (!pX2);
+          CHECK (0 == pX2.use_count());
+          CHECK (4 == pXX.use_count());
           
           sp3 = sp2 = sp1 = pX;
-          ASSERT (22 == pXX->x_);
-          ASSERT (1 == pXX.use_count());
-          ASSERT (!sp1);
-          ASSERT (!sp2);
-          ASSERT (!sp3);
+          CHECK (22 == pXX->x_);
+          CHECK (1 == pXX.use_count());
+          CHECK (!sp1);
+          CHECK (!sp2);
+          CHECK (!sp3);
           
-          ASSERT (22 == wX.lock()->x_);
-          ASSERT (1 == pXX.use_count());
+          CHECK (22 == wX.lock()->x_);
+          CHECK (1 == pXX.use_count());
           
           pXX.reset();
-          ASSERT (!pXX);
-          ASSERT (!wX.lock());
+          CHECK (!pXX);
+          CHECK (!wX.lock());
         }
       
       
@@ -180,32 +180,32 @@ namespace test{
           P<X,string> pLoL;           // Base: std::string
           P<string> pLoLoL;           // Base: shared_ptr<string>
           
-          ASSERT (INSTANCEOF (shared_ptr<X>, &pX));
+          CHECK (INSTANCEOF (shared_ptr<X>, &pX));
           
-          ASSERT ( INSTANCEOF (shared_ptr<XX>, &pX1));
-//        ASSERT (!INSTANCEOF (shared_ptr<X>,  &pX1));     // doesn't compile (no RTTI) -- that's correct
-//        ASSERT (!INSTANCEOF (P<X>,           &pX1));     // similar, type mismatch detected by compiler
+          CHECK ( INSTANCEOF (shared_ptr<XX>, &pX1));
+//        CHECK (!INSTANCEOF (shared_ptr<X>,  &pX1));      // doesn't compile (no RTTI) -- that's correct
+//        CHECK (!INSTANCEOF (P<X>,           &pX1));      // similar, type mismatch detected by compiler
           
-          ASSERT ( INSTANCEOF (shared_ptr<X>,  &pX2));
-//        ASSERT (!INSTANCEOF (shared_ptr<XX>, &pX2));
-          ASSERT ( INSTANCEOF (P<X>,           &pX2));
+          CHECK ( INSTANCEOF (shared_ptr<X>,  &pX2));
+//        CHECK (!INSTANCEOF (shared_ptr<XX>, &pX2));
+          CHECK ( INSTANCEOF (P<X>,           &pX2));
           
-          ASSERT ( INSTANCEOF (shared_ptr<X>,  &pX3));
-//        ASSERT (!INSTANCEOF (shared_ptr<XX>, &pX3));
-//        ASSERT (!INSTANCEOF (P<X>,           &pX3));
+          CHECK ( INSTANCEOF (shared_ptr<X>,  &pX3));
+//        CHECK (!INSTANCEOF (shared_ptr<XX>, &pX3));
+//        CHECK (!INSTANCEOF (P<X>,           &pX3));
           
-          ASSERT ( INSTANCEOF (shared_ptr<long>, &pLo));
-//        ASSERT (!INSTANCEOF (shared_ptr<X>,    &pLo));
-//        ASSERT (!INSTANCEOF (P<X>,             &pLo));
+          CHECK ( INSTANCEOF (shared_ptr<long>, &pLo));
+//        CHECK (!INSTANCEOF (shared_ptr<X>,    &pLo));
+//        CHECK (!INSTANCEOF (P<X>,             &pLo));
           
-//        ASSERT (!INSTANCEOF (shared_ptr<long>, &pLoL));
-//        ASSERT (!INSTANCEOF (shared_ptr<X>,    &pLoL));
-//        ASSERT (!INSTANCEOF (P<X>,             &pLoL));
-          ASSERT ( INSTANCEOF (string,           &pLoL));
+//        CHECK (!INSTANCEOF (shared_ptr<long>, &pLoL));
+//        CHECK (!INSTANCEOF (shared_ptr<X>,    &pLoL));
+//        CHECK (!INSTANCEOF (P<X>,             &pLoL));
+          CHECK ( INSTANCEOF (string,           &pLoL));
           
-          ASSERT ( INSTANCEOF (shared_ptr<string>, &pLoLoL));
-//        ASSERT (!INSTANCEOF (string,             &pLoLoL));
-//        ASSERT (!INSTANCEOF (shared_ptr<X>,      &pLoLoL));
+          CHECK ( INSTANCEOF (shared_ptr<string>, &pLoLoL));
+//        CHECK (!INSTANCEOF (string,             &pLoLoL));
+//        CHECK (!INSTANCEOF (shared_ptr<X>,      &pLoLoL));
           
           pX = pX1;   // OK: pointee subtype...
           pX = pX2;   // invokes shared_ptr<X>::operator= (shared_ptr<X> const&)
@@ -213,22 +213,22 @@ namespace test{
 //        pX = pLo;   // similar, but long*   not assignable to X*
 //        pX = pLoL;  // similar, but string* not assignable to X*
 //        pX = pLoLoL;   // same...
-                        //  you won't be able to do much with the "LoLo"-Types, 
+                        //  you won't be able to do much with the "LoLo"-Types,
                        //   as their types and pointee types's relations don't match
           
           pX.reset (new XX(5));
-          ASSERT (5 == *pX);      // implicit conversion from X to long
+          CHECK (5 == *pX);       // implicit conversion from X to long
           
           pX2 = pX;               // works, because both are implemented in terms of shared_ptr<X>
-          ASSERT (5 == pX2->x_); 
-          ASSERT (6 == pX2->xx_); // using the XX interface (performing dynamic downcast)
+          CHECK (5 == pX2->x_);
+          CHECK (6 == pX2->xx_);  // using the XX interface (performing dynamic downcast)
           
           pX3.reset (new X(7));   // again works because implemented in terms of shared_ptr<X>
           pX2 = pX3;              // same
-          ASSERT (pX2);           // both contain indeed a valid pointer....
-          ASSERT (pX3);
-          ASSERT (! pX2.get());        // but dynamic cast to XX at access fails
-          ASSERT (! pX3.get());
+          CHECK (pX2);            // both contain indeed a valid pointer....
+          CHECK (pX3);
+          CHECK (! pX2.get());    // but dynamic cast to XX at access fails
+          CHECK (! pX3.get());
         }
       
       
@@ -247,53 +247,53 @@ namespace test{
           pX3 = pXX;
           pX4.reset(new X(*pXX));
           
-          ASSERT ( (pX1 == pX1));    // reflexivity
-          ASSERT (!(pX1 != pX1));
-          ASSERT (!(pX1 <  pX1));
-          ASSERT (!(pX1 >  pX1));
-          ASSERT ( (pX1 <= pX1));
-          ASSERT ( (pX1 >= pX1));
+          CHECK ( (pX1 == pX1));    // reflexivity
+          CHECK (!(pX1 != pX1));
+          CHECK (!(pX1 <  pX1));
+          CHECK (!(pX1 >  pX1));
+          CHECK ( (pX1 <= pX1));
+          CHECK ( (pX1 >= pX1));
           
-          ASSERT (!(pX1 == pX2));    // compare to same ptr type with larger pointee of subtype
-          ASSERT ( (pX1 != pX2));
-          ASSERT ( (pX1 <  pX2));
-          ASSERT (!(pX1 >  pX2));
-          ASSERT ( (pX1 <= pX2));
-          ASSERT (!(pX1 >= pX2));
+          CHECK (!(pX1 == pX2));    // compare to same ptr type with larger pointee of subtype
+          CHECK ( (pX1 != pX2));
+          CHECK ( (pX1 <  pX2));
+          CHECK (!(pX1 >  pX2));
+          CHECK ( (pX1 <= pX2));
+          CHECK (!(pX1 >= pX2));
           
-          ASSERT (!(pX2 == pXX));    // compare to ptr subtype with larger pointee of same subtype
-          ASSERT ( (pX2 != pXX));
-          ASSERT ( (pX2 <  pXX));
-          ASSERT (!(pX2 >  pXX));
-          ASSERT ( (pX2 <= pXX));
-          ASSERT (!(pX2 >= pXX));
+          CHECK (!(pX2 == pXX));    // compare to ptr subtype with larger pointee of same subtype
+          CHECK ( (pX2 != pXX));
+          CHECK ( (pX2 <  pXX));
+          CHECK (!(pX2 >  pXX));
+          CHECK ( (pX2 <= pXX));
+          CHECK (!(pX2 >= pXX));
           
-          ASSERT (!(pX1 == pXX));    // transitively compare to ptr subtype with larger pointee of subtype
-          ASSERT ( (pX1 != pXX));
-          ASSERT ( (pX1 <  pXX));
-          ASSERT (!(pX1 >  pXX));
-          ASSERT ( (pX1 <= pXX));
-          ASSERT (!(pX1 >= pXX));
+          CHECK (!(pX1 == pXX));    // transitively compare to ptr subtype with larger pointee of subtype
+          CHECK ( (pX1 != pXX));
+          CHECK ( (pX1 <  pXX));
+          CHECK (!(pX1 >  pXX));
+          CHECK ( (pX1 <= pXX));
+          CHECK (!(pX1 >= pXX));
           
-          ASSERT ( (pX3 == pXX));    // compare ptr to subtype ptr both referring to same pointee
-          ASSERT (!(pX3 != pXX));
-          ASSERT (!(pX3 <  pXX));
-          ASSERT (!(pX3 >  pXX));
-          ASSERT ( (pX3 <= pXX));
-          ASSERT ( (pX3 >= pXX));
+          CHECK ( (pX3 == pXX));    // compare ptr to subtype ptr both referring to same pointee
+          CHECK (!(pX3 != pXX));
+          CHECK (!(pX3 <  pXX));
+          CHECK (!(pX3 >  pXX));
+          CHECK ( (pX3 <= pXX));
+          CHECK ( (pX3 >= pXX));
           
-          ASSERT ( (pX4 == pXX));    // compare ptr to subtype ptr both referring to different but equal pointees
-          ASSERT (!(pX4 != pXX));
-          ASSERT (!(pX4 <  pXX));
-          ASSERT (!(pX4 >  pXX));
-          ASSERT ( (pX4 <= pXX));
-          ASSERT ( (pX4 >= pXX));
+          CHECK ( (pX4 == pXX));    // compare ptr to subtype ptr both referring to different but equal pointees
+          CHECK (!(pX4 != pXX));
+          CHECK (!(pX4 <  pXX));
+          CHECK (!(pX4 >  pXX));
+          CHECK ( (pX4 <= pXX));
+          CHECK ( (pX4 >= pXX));
           
-          ASSERT (!(pXX == pX5));    // compare subtype ptr to empty ptr: "unequal but not orderable"
-          ASSERT ( (pXX != pX5));
+          CHECK (!(pXX == pX5));    // compare subtype ptr to empty ptr: "unequal but not orderable"
+          CHECK ( (pXX != pX5));
           
-          ASSERT ( (pX5 == pX6));    // compare two empty ptrs: "equal, equivalent but not orderable"
-          ASSERT (!(pX5 != pX6));
+          CHECK ( (pX5 == pX6));    // compare two empty ptrs: "equal, equivalent but not orderable"
+          CHECK (!(pX5 != pX6));
           
           // order relations on NIL pointers disallowed
           

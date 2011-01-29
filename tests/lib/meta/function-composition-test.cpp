@@ -1,23 +1,23 @@
 /*
   FunctionComposition(Test)  -  functional composition and partial application
- 
+
   Copyright (C)         Lumiera.org
     2009,               Hermann Vosseler <Ichthyostega@web.de>
- 
+
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of the
-  License, or (at your option) any later version.
- 
+  published by the Free Software Foundation; either version 2 of
+  the License, or (at your option) any later version.
+
   This program is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
- 
+
   You should have received a copy of the GNU General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- 
+
 * *****************************************************/
 
 
@@ -41,83 +41,83 @@ namespace test    {
   using func::BindToArgument;
   
   
-      namespace { // test functions
-        
-        Num<1> _1_;                     
-        Num<2> _2_;                     
-        Num<3> _3_;                     
-        Num<4> _4_;                     
-        Num<5> _5_;                     
-        Num<6> _6_;                     
-        Num<7> _7_;                     
-        Num<8> _8_;                     
-        Num<9> _9_;                     
-        
-        /** "Function-1" will be used at the front side, accepting a tuple of values */
-        template<uint i>
-        Num<i> 
-        fun11 ( Num<i>   val1
-              )
-          {
-            return val1;
-          }
-        
-        template<uint i, uint ii>
-        Num<i> 
-        fun12 ( Num<i>   val1
-              , Num<ii>  val2
-              )
-          {
-            val1.o_ += val2.o_;
-            return val1;
-          }
-        
-        template<uint i, uint ii, uint iii>
-        Num<i> 
-        fun13 ( Num<i>   val1
-              , Num<ii>  val2
-              , Num<iii> val3
-              )
-          {
-            val1.o_ += val2.o_ + val3.o_;
-            return val1;
-          }
-        
-        template<uint i, uint ii, uint iii, uint iv>
-        Num<i> 
-        fun14 ( Num<i>   val1
-              , Num<ii>  val2
-              , Num<iii> val3
-              , Num<iv>  val4
-              )
-          {
-            val1.o_ += val2.o_ + val3.o_ + val4.o_;
-            return val1;
-          }
-        
-        template<uint i, uint ii, uint iii, uint iv, uint v>
-        Num<i> 
-        fun15 ( Num<i>   val1
-              , Num<ii>  val2
-              , Num<iii> val3
-              , Num<iv>  val4
-              , Num<v>   val5
-              )
-          {
-            val1.o_ += val2.o_ + val3.o_ + val4.o_ + val5.o_;
-            return val1;
-          }
-        
-        
-        /** "Function-2" can be chained behind fun1 */
-        template<class II>
-        int
-        fun2 (II val)
-          {
-            return val.o_;
-          }
-        
-      } // (End) test data
+  namespace { // test functions
+    
+    Num<1> _1_;
+    Num<2> _2_;
+    Num<3> _3_;
+    Num<4> _4_;
+    Num<5> _5_;
+    Num<6> _6_;
+    Num<7> _7_;
+    Num<8> _8_;
+    Num<9> _9_;
+    
+    /** "Function-1" will be used at the front side, accepting a tuple of values */
+    template<uint i>
+    Num<i>
+    fun11 ( Num<i>   val1
+          )
+      {
+        return val1;
+      }
+    
+    template<uint i, uint ii>
+    Num<i>
+    fun12 ( Num<i>   val1
+          , Num<ii>  val2
+          )
+      {
+        val1.o_ += val2.o_;
+        return val1;
+      }
+    
+    template<uint i, uint ii, uint iii>
+    Num<i>
+    fun13 ( Num<i>   val1
+          , Num<ii>  val2
+          , Num<iii> val3
+          )
+      {
+        val1.o_ += val2.o_ + val3.o_;
+        return val1;
+      }
+    
+    template<uint i, uint ii, uint iii, uint iv>
+    Num<i>
+    fun14 ( Num<i>   val1
+          , Num<ii>  val2
+          , Num<iii> val3
+          , Num<iv>  val4
+          )
+      {
+        val1.o_ += val2.o_ + val3.o_ + val4.o_;
+        return val1;
+      }
+    
+    template<uint i, uint ii, uint iii, uint iv, uint v>
+    Num<i>
+    fun15 ( Num<i>   val1
+          , Num<ii>  val2
+          , Num<iii> val3
+          , Num<iv>  val4
+          , Num<v>   val5
+          )
+      {
+        val1.o_ += val2.o_ + val3.o_ + val4.o_ + val5.o_;
+        return val1;
+      }
+    
+    
+    /** "Function-2" can be chained behind fun1 */
+    template<class II>
+    int
+    fun2 (II val)
+      {
+        return val.o_;
+      }
+    
+  } // (End) test data
   
   
   
@@ -133,7 +133,7 @@ namespace test    {
   class FunctionComposition_test : public Test
     {
       virtual void
-      run (Arg) 
+      run (Arg)
         {
           check_diagnostics ();
           check_partialApplication ();
@@ -149,18 +149,18 @@ namespace test    {
       void
       check_diagnostics ()
         {
-          ASSERT (6 == (fun13<1,2,3> (_1_, _2_, _3_)).o_ );
-          ASSERT (6 == (fun13<1,1,1> (Num<1>(3), Num<1>(2), Num<1>(1))).o_ );
+          CHECK (6 == (fun13<1,2,3> (_1_, _2_, _3_)).o_ );
+          CHECK (6 == (fun13<1,1,1> (Num<1>(3), Num<1>(2), Num<1>(1))).o_ );
           
-          ASSERT ( 1 == fun2 (fun11<1> (_1_)) );
-          ASSERT ( 3 == fun2 (fun12<1,2> (_1_, _2_)) );
-          ASSERT ( 6 == fun2 (fun13<1,2,3> (_1_, _2_, _3_)) );
-          ASSERT (10 == fun2 (fun14<1,2,3,4> (_1_, _2_, _3_, _4_)) );
-          ASSERT (15 == fun2 (fun15<1,2,3,4,5> (_1_, _2_, _3_, _4_, _5_)) );
+          CHECK ( 1 == fun2 (fun11<1> (_1_)) );
+          CHECK ( 3 == fun2 (fun12<1,2> (_1_, _2_)) );
+          CHECK ( 6 == fun2 (fun13<1,2,3> (_1_, _2_, _3_)) );
+          CHECK (10 == fun2 (fun14<1,2,3,4> (_1_, _2_, _3_, _4_)) );
+          CHECK (15 == fun2 (fun15<1,2,3,4,5> (_1_, _2_, _3_, _4_, _5_)) );
           
-          ASSERT ( 9 == fun2 (fun13<2,3,4> (_2_, _3_, _4_)) );
-          ASSERT (18 == fun2 (fun13<5,6,7> (_5_, _6_, _7_)) );
-          ASSERT (24 == fun2 (fun13<9,8,7> (_9_, _8_, _7_)) );
+          CHECK ( 9 == fun2 (fun13<2,3,4> (_2_, _3_, _4_)) );
+          CHECK (18 == fun2 (fun13<5,6,7> (_5_, _6_, _7_)) );
+          CHECK (24 == fun2 (fun13<9,8,7> (_9_, _8_, _7_)) );
         }
       
       
@@ -195,7 +195,7 @@ namespace test    {
           
           int res = 0;
           res = fun_23 (_2_,_3_).o_;                                 // and invoke the resulting functor ("closure"), providing the remaining arguments
-          ASSERT (23 == res);
+          CHECK (23 == res);
           
           
           
@@ -210,7 +210,7 @@ namespace test    {
                                   );
           res = 0;
           res = fun_23 (_2_,_3_).o_;                                 // and invoke the resulting functor....
-          ASSERT (23 == res);
+          CHECK (23 == res);
           
           
           
@@ -224,7 +224,7 @@ namespace test    {
                                                                      // "bindFront" will close the parameters starting from left....
           res = 0;
           res = fun_23 (_2_,_3_).o_;                                 // invoke the resulting functor...
-          ASSERT (23 == res);
+          CHECK (23 == res);
           
           
           
@@ -237,7 +237,7 @@ namespace test    {
           
           res = 0;
           res = fun_23 (_2_,_3_).o_;                                 // invoke the resulting functor...
-          ASSERT (23 == res);
+          CHECK (23 == res);
           
           
           
@@ -245,34 +245,34 @@ namespace test    {
           function<Sig123> func123 (f);                              // alternatively do it with an tr1::function object
           fun_23 = func::applyFirst (func123, Num<1>(19));
           res = fun_23 (_2_,_3_).o_;
-          ASSERT (24 == res);
+          CHECK (24 == res);
           
           typedef function<Num<1>(Num<1>, Num<2>)> F12;
           F12 fun_12 = func::applyLast(f, Num<3>(20));               // close the *last* argument of a function
           res = fun_12 (_1_,_2_).o_;
-          ASSERT (23 == res);
+          CHECK (23 == res);
           
           fun_12 = func::applyLast(func123, Num<3>(21));             // alternatively use a function object
           res = fun_12 (_1_,_2_).o_;
-          ASSERT (24 == res);
+          CHECK (24 == res);
           
-          Sig123 *fP = &f;                                           // a function pointer works too 
+          Sig123 *fP = &f;                                           // a function pointer works too
           fun_12 = func::applyLast( fP, Num<3>(22));
           res = fun_12 (_1_,_2_).o_;
-          ASSERT (25 == res);
+          CHECK (25 == res);
                                                                      // cover more cases....
           
-          ASSERT (1         == (func::applyLast (fun11<1>        , _1_) ( )              ).o_);
-          ASSERT (1+3       == (func::applyLast (fun12<1,3>      , _3_) (_1_)            ).o_);
-          ASSERT (1+3+5     == (func::applyLast (fun13<1,3,5>    , _5_) (_1_,_3_)        ).o_);
-          ASSERT (1+3+5+7   == (func::applyLast (fun14<1,3,5,7>  , _7_) (_1_,_3_,_5_)    ).o_);
-          ASSERT (1+3+5+7+9 == (func::applyLast (fun15<1,3,5,7,9>, _9_) (_1_,_3_,_5_,_7_)).o_);
+          CHECK (1         == (func::applyLast (fun11<1>        , _1_ ) ( )              ).o_);
+          CHECK (1+3       == (func::applyLast (fun12<1,3>      , _3_ ) (_1_)            ).o_);
+          CHECK (1+3+5     == (func::applyLast (fun13<1,3,5>    , _5_ ) (_1_,_3_)        ).o_);
+          CHECK (1+3+5+7   == (func::applyLast (fun14<1,3,5,7>  , _7_ ) (_1_,_3_,_5_)    ).o_);
+          CHECK (1+3+5+7+9 == (func::applyLast (fun15<1,3,5,7,9>, _9_ ) (_1_,_3_,_5_,_7_)).o_);
           
-          ASSERT (9+8+7+6+5 == (func::applyFirst(fun15<9,8,7,6,5>, _9_) (_8_,_7_,_6_,_5_)).o_);
-          ASSERT (  8+7+6+5 == (func::applyFirst(  fun14<8,7,6,5>, _8_)     (_7_,_6_,_5_)).o_);
-          ASSERT (    7+6+5 == (func::applyFirst(    fun13<7,6,5>, _7_)         (_6_,_5_)).o_);
-          ASSERT (      6+5 == (func::applyFirst(      fun12<6,5>, _6_)             (_5_)).o_);
-          ASSERT (        5 == (func::applyFirst(        fun11<5>, _5_)               ( )).o_);
+          CHECK (9+8+7+6+5 == (func::applyFirst(fun15<9,8,7,6,5>, _9_ ) (_8_,_7_,_6_,_5_)).o_);
+          CHECK (  8+7+6+5 == (func::applyFirst(  fun14<8,7,6,5>, _8_ )     (_7_,_6_,_5_)).o_);
+          CHECK (    7+6+5 == (func::applyFirst(    fun13<7,6,5>, _7_ )         (_6_,_5_)).o_);
+          CHECK (      6+5 == (func::applyFirst(      fun12<6,5>, _6_ )             (_5_)).o_);
+          CHECK (        5 == (func::applyFirst(        fun11<5>, _5_ )               ( )).o_);
           
           
           
@@ -283,13 +283,13 @@ namespace test    {
           typedef Types<Num<3>,Num<2>,Num<1> > Args2Close;                   // Tuple type to hold the 3 argument values used for the closure
           
           // Close the trailing 3 arguments of the 5-argument function...
-          function<Sig54> fun_54 = PApply<Sig54321, Args2Close>::bindBack(fun15<5,4,3,2,1>, 
+          function<Sig54> fun_54 = PApply<Sig54321, Args2Close>::bindBack(fun15<5,4,3,2,1>,
                                                                           tuple::make(_3_,_2_,_1_)
                                                                          );
           
           // apply the remaining argument values
           Num<5> resN5 = fun_54 (_5_,_4_);
-          ASSERT (5+4+3+2+1 == resN5.o_);
+          CHECK (5+4+3+2+1 == resN5.o_);
         }
       
       
@@ -312,18 +312,18 @@ namespace test    {
           Sig14& f4 = fun14<1,2,3,4>;
           Sig15& f5 = fun15<1,2,3,4,5>;
           
-          ASSERT (1         == func::chained(f1, ff) (_1_)                 );
-          ASSERT (1+2       == func::chained(f2, ff) (_1_,_2_)             );
-          ASSERT (1+2+3     == func::chained(f3, ff) (_1_,_2_,_3_)         );
-          ASSERT (1+2+3+4   == func::chained(f4, ff) (_1_,_2_,_3_,_4_)     );
-          ASSERT (1+2+3+4+5 == func::chained(f5, ff) (_1_,_2_,_3_,_4_,_5_) );
+          CHECK (1         == func::chained(f1, ff) (_1_)                 );
+          CHECK (1+2       == func::chained(f2, ff) (_1_,_2_)             );
+          CHECK (1+2+3     == func::chained(f3, ff) (_1_,_2_,_3_)         );
+          CHECK (1+2+3+4   == func::chained(f4, ff) (_1_,_2_,_3_,_4_)     );
+          CHECK (1+2+3+4+5 == func::chained(f5, ff) (_1_,_2_,_3_,_4_,_5_) );
           
           
           function<Sig15> f5_fun = f5;     // also works with function objects...
           function<Sig2>  ff_fun = ff;
-          ASSERT (1+2+3+4+5 == func::chained(f5_fun, ff    ) (_1_,_2_,_3_,_4_,_5_) );
-          ASSERT (1+2+3+4+5 == func::chained(f5,     ff_fun) (_1_,_2_,_3_,_4_,_5_) );
-          ASSERT (1+2+3+4+5 == func::chained(f5_fun, ff_fun) (_1_,_2_,_3_,_4_,_5_) );
+          CHECK (1+2+3+4+5 == func::chained(f5_fun, ff    ) (_1_,_2_,_3_,_4_,_5_) );
+          CHECK (1+2+3+4+5 == func::chained(f5,     ff_fun) (_1_,_2_,_3_,_4_,_5_) );
+          CHECK (1+2+3+4+5 == func::chained(f5_fun, ff_fun) (_1_,_2_,_3_,_4_,_5_) );
         }
       
       
@@ -351,17 +351,17 @@ namespace test    {
           function<SigR4> f_bound_4 = BindToArgument<Sig15,char,3>::reduced (f, argT);
           function<SigR5> f_bound_5 = BindToArgument<Sig15,char,4>::reduced (f, argT);
           
-          ASSERT (55+2+3+4+5 == f_bound_1 (    _2_,_3_,_4_,_5_) );
-          ASSERT (1+55+3+4+5 == f_bound_2 (_1_,    _3_,_4_,_5_) );
-          ASSERT (1+2+55+4+5 == f_bound_3 (_1_,_2_,    _4_,_5_) );
-          ASSERT (1+2+3+55+5 == f_bound_4 (_1_,_2_,_3_,    _5_) );
-          ASSERT (1+2+3+4+55 == f_bound_5 (_1_,_2_,_3_,_4_    ) );
+          CHECK (55+2+3+4+5 == f_bound_1 (    _2_,_3_,_4_,_5_) );
+          CHECK (1+55+3+4+5 == f_bound_2 (_1_,    _3_,_4_,_5_) );
+          CHECK (1+2+55+4+5 == f_bound_3 (_1_,_2_,    _4_,_5_) );
+          CHECK (1+2+3+55+5 == f_bound_4 (_1_,_2_,_3_,    _5_) );
+          CHECK (1+2+3+4+55 == f_bound_5 (_1_,_2_,_3_,_4_    ) );
           
           
           // degenerate case: specify wrong argument position (behind end of argument list)
           // causes the argument to be simply ignored and no binding to happen
           function<Sig15> f_bound_X = BindToArgument<Sig15,char,5>::reduced (f, argT);
-          ASSERT (1+2+3+4+5  == f_bound_X (_1_,_2_,_3_,_4_,_5_) );
+          CHECK (1+2+3+4+5  == f_bound_X (_1_,_2_,_3_,_4_,_5_) );
           
           
           /* check the convenient function-style API */
@@ -369,14 +369,14 @@ namespace test    {
           using std::tr1::bind;
           
           f_bound_5 = bindLast (f, bind(f5, Num<5>(99)));
-          ASSERT (1+2+3+4+99 == f_bound_5 (_1_,_2_,_3_,_4_   ) );
+          CHECK (1+2+3+4+99 == f_bound_5 (_1_,_2_,_3_,_4_   ) );
           
           f_bound_5 = bindLast (f, bind(&f5, Num<5>(99)));        // can bind function pointer
-          ASSERT (1+2+3+4+99 == f_bound_5 (_1_,_2_,_3_,_4_   ) );
+          CHECK (1+2+3+4+99 == f_bound_5 (_1_,_2_,_3_,_4_   ) );
           
           function<Sig15> asFunctor(f);
           f_bound_5 = bindLast (asFunctor, bind(f5, Num<5>(88))); // use functor instead of direct ref
-          ASSERT (1+2+3+4+88 == f_bound_5 (_1_,_2_,_3_,_4_   ) );
+          CHECK (1+2+3+4+88 == f_bound_5 (_1_,_2_,_3_,_4_   ) );
         }
       
     };

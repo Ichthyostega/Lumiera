@@ -1,23 +1,23 @@
 /*
   timeline-ruler.cpp  -  Implementation of the time ruler widget
- 
+
   Copyright (C)         Lumiera.org
     2008,               Joel Holdsworth <joel@airwebreathe.org.uk>
- 
+
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of the
-  License, or (at your option) any later version.
- 
+  published by the Free Software Foundation; either version 2 of
+  the License, or (at your option) any later version.
+
   This program is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
- 
+
   You should have received a copy of the GNU General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- 
+
 * *****************************************************/
 
 #include <cairomm-1.0/cairomm/cairomm.h>
@@ -25,6 +25,7 @@
 #include "timeline-ruler.hpp"
 #include "../timeline-widget.hpp"
 #include "../../window-manager.hpp"
+#include "../../util/cairo-util.hpp"
 
 extern "C" {
 #include "../../../lib/time.h"
@@ -38,6 +39,8 @@ using namespace gui;
 using namespace gui::widgets;
 using namespace gui::widgets::timeline;
 using namespace lumiera;
+
+using gui::util::CairoUtil;
 
 namespace gui {
 namespace widgets {
@@ -445,15 +448,11 @@ TimelineRuler::draw_playback_period(Cairo::RefPtr<Cairo::Context> cr,
     }
 
   // Fill
-  cr->set_source_rgba(
-    (float)playbackPeriodArrowColour.red / 0xFFFF,
-    (float)playbackPeriodArrowColour.green / 0xFFFF,
-    (float)playbackPeriodArrowColour.blue / 0xFFFF,
-    playbackPeriodArrowAlpha);
+  cr->set_source (CairoUtil::pattern_set_alpha (playbackPeriodArrowColour, playbackPeriodArrowAlpha));
   cr->fill_preserve();
   
   // Stroke
-  gdk_cairo_set_source_color(cr->cobj(), &playbackPeriodArrowColour);
+  cr->set_source(playbackPeriodArrowColour);
   cr->set_line_width(1);
   cr->stroke();
 }
@@ -481,15 +480,11 @@ TimelineRuler::draw_playback_point(Cairo::RefPtr<Cairo::Context> cr,
   cr->close_path();  
     
   // Fill
-  cr->set_source_rgba(
-    (float)playbackPointColour.red / 0xFFFF,
-    (float)playbackPointColour.green / 0xFFFF,
-    (float)playbackPointColour.blue / 0xFFFF,
-    playbackPointAlpha);
+  cr->set_source (CairoUtil::pattern_set_alpha (playbackPeriodArrowColour, playbackPeriodArrowAlpha));
   cr->fill_preserve();
   
   // Stroke
-  gdk_cairo_set_source_color(cr->cobj(), &playbackPointColour);
+  cr->set_source(playbackPointColour);
   cr->set_line_width(1);
   cr->stroke();
 }

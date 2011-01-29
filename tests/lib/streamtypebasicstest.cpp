@@ -1,23 +1,23 @@
 /*
   StreamTypeBasics(Test)  -  check the fundamentals of stream type information
- 
+
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
- 
+
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of the
-  License, or (at your option) any later version.
- 
+  published by the Free Software Foundation; either version 2 of
+  the License, or (at your option) any later version.
+
   This program is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
- 
+
   You should have received a copy of the GNU General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- 
+
 * *****************************************************/
 
 
@@ -70,7 +70,7 @@ namespace lumiera {
             UNIMPLEMENTED ("at least preliminary implementation of the MediaImplLib interface for lib GAVL");
             
             TODO ("how to do a simple consistency check on the returned ImplFacade? can we re-create the GAVL frame type?");
-            ASSERT (GAVL==iTy.libraryID);
+            CHECK (GAVL==iTy.libraryID);
             return iTy;
           }
         
@@ -78,11 +78,11 @@ namespace lumiera {
         basicImplTypeProperties (ImplType refType)
           {
             ImplType iTy2 = test_createImplType ();
-            ASSERT (iTy2==refType);
-            ASSERT (refType==iTy2);
+            CHECK (iTy2==refType);
+            CHECK (refType==iTy2);
             TODO ("add equality comparable concept to the ImplType class");
             
-            ASSERT (StreamType::VIDEO==refType.getKind());
+            CHECK (StreamType::VIDEO==refType.getKind());
             UNIMPLEMENTED ("get a lib descriptor"); 
             UNIMPLEMENTED ("check the lib of the type"); 
             UNIMPLEMENTED ("compare two types"); 
@@ -97,18 +97,18 @@ namespace lumiera {
         void
         basicStreamTypeProperties (SType type, ImplType iTy)
           {
-            ASSERT (type.implType);
-            ASSERT (iTy==(*type.implType));  /////////////TODO: really by ptr???
-            ASSERT (&iTy==type.implType);   // actually using the same object (in the registry)
+            CHECK (type.implType);
+            CHECK (iTy==(*type.implType));  /////////////TODO: really by ptr???
+            CHECK (&iTy==type.implType);   // actually using the same object (in the registry)
             
-            ASSERT (!isnil (type.prototype.id));
-            ASSERT (StreamType::VIDEO==type.prototype.kind);
-            ASSERT (StreamType::VIDEO==type.implType->getKind());
+            CHECK (!isnil (type.prototype.id));
+            CHECK (StreamType::VIDEO==type.prototype.kind);
+            CHECK (StreamType::VIDEO==type.implType->getKind());
             
-            ASSERT (type.implType->canConvert(iTy));  // of course... they are actually the same
-            ASSERT (iTy.canConvert(type));           // because it's based on the same impl type
+            CHECK (type.implType->canConvert(iTy));  // of course... they are actually the same
+            CHECK (iTy.canConvert(type));           // because it's based on the same impl type
             
-            ASSERT (StreamType::RAW==type.intentionTag);
+            CHECK (StreamType::RAW==type.intentionTag);
           }
       };
     

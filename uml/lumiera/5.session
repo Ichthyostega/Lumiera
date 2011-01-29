@@ -1,11 +1,11 @@
-window_sizes 1324 1020 270 1044 872 71
+window_sizes 1615 1020 270 1335 872 71
 diagrams
   classdiagram_ref 136453 // Session backbone
     631 352 100 4 0 0
-  active  objectdiagram_ref 138885 // ModelAssetRelations
+  objectdiagram_ref 138885 // ModelAssetRelations
     730 488 100 4 0 0
-  classdiagram_ref 128133 // Session structure
-    835 697 100 4 0 0
+  active  classdiagram_ref 142725 // Time flavours
+    595 629 100 4 0 0
 end
 show_stereotypes
 selected 
@@ -31,18 +31,13 @@ open
   class_ref 152453 // PlacementRef
   classrelation_ref 178437 // <realization>
   class_ref 153733 // QueryFocusStack
-  classview_ref 128261 // Builder Workings
+  expansionregion_ref 128133 // establish partitioning
   usecaseview_ref 128261 // config examples
   classview_ref 128133 // Engine Workings
-  class_ref 164485 // Request
-  class_ref 164613 // Provision
-  class_ref 166021 // ActiveProvision
-  class_ref 164741 // Binding
-  class_ref 166277 // Index
-  class_ref 145285 // MediaKind
-  
-  package_ref 131077 // ConfigQuery
-  class_ref 152965 // Handle
+  classdiagram_ref 142725 // Time flavours
+  class_ref 134917 // Time
+  class_ref 169221 // TimeGrid
+  classview_ref 128645 // Service Components
   classview_ref 128266 // SmartPointers
 end
 end

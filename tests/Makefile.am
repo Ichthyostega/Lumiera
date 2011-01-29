@@ -49,6 +49,11 @@ test_safeclib_SOURCES = $(tests_srcdir)/library/test-safeclib.c
 test_safeclib_CPPFLAGS = $(AM_CPPFLAGS) -std=gnu99 -Wall -Werror
 test_safeclib_LDADD = $(LUMIERA_LIBS) liblumiera.la
 
+check_PROGRAMS += test-time
+test_time_SOURCES = $(tests_srcdir)/library/test-time.c
+test_time_CPPFLAGS = $(AM_CPPFLAGS) -std=gnu99 -Wall -Werror
+test_time_LDADD = $(LUMIERA_LIBS) liblumiera.la
+
 check_PROGRAMS += test-luid
 test_luid_SOURCES = $(tests_srcdir)/library/test-luid.c
 test_luid_CPPFLAGS = $(AM_CPPFLAGS) -std=gnu99 -Wall -Werror

@@ -1,23 +1,23 @@
 /*
   timeline-track.cpp  -  Implementation of the timeline track object
- 
+
   Copyright (C)         Lumiera.org
     2008,               Joel Holdsworth <joel@airwebreathe.org.uk>
- 
+
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of the
-  License, or (at your option) any later version.
- 
+  published by the Free Software Foundation; either version 2 of
+  the License, or (at your option) any later version.
+
   This program is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
- 
+
   You should have received a copy of the GNU General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- 
+
 * *****************************************************/
 
 #include "timeline-track.hpp"
@@ -40,8 +40,10 @@ Track::Track(TimelineWidget &timeline_widget,
   shared_ptr<model::Track> track) :
   timelineWidget(timeline_widget),
   model_track(track),
+  enabled(true),
   expanded(true),
   expandDirection(None),
+  locked(false),
   headerWidget(*this),
   enableButton(Gtk::StockID("track_enabled"), WindowManager::MenuIconSize),
   lockButton(Gtk::StockID("track_unlocked"), WindowManager::MenuIconSize)
@@ -51,8 +53,8 @@ Track::Track(TimelineWidget &timeline_widget,
   titleMenuButton.set_relief(RELIEF_HALF);
   titleMenuButton.unset_flags(CAN_FOCUS);
     
-  buttonBar.append(enableButton);
-  buttonBar.append(lockButton);
+  buttonBar.append(enableButton, mem_fun(this, &Track::on_enable));
+  buttonBar.append(lockButton, mem_fun(this, &Track::on_lock));
   
   headerWidget.set_child_widget(headerBox);
 
@@ -71,6 +73,10 @@ Track::Track(TimelineWidget &timeline_widget,
     
   update_name();
   
+  // Setup tooltips
+  enableButton.set_tooltip_text(_("Disable track"));
+  lockButton.set_tooltip_text(_("Lock track"));
+
   // Setup the context menu
   Menu::MenuList& context_list = contextMenu.items();
   //context_list.push_back( Menu_Helpers::MenuElem(_("_Add Track"),
@@ -224,6 +230,38 @@ Track::update_name()
 {
   REQUIRE(model_track);
   titleMenuButton.set_label(model_track->get_name());
+}
+
+void
+Track::on_enable()
+{
+  enabled = !enabled;
+  if (enabled)
+    {
+      enableButton.set_stock_id(Gtk::StockID("track_enabled"), WindowManager::MenuIconSize);
+      enableButton.set_tooltip_text(_("Disable track"));
+    }
+  else
+    {
+      enableButton.set_stock_id(Gtk::StockID("track_disabled"), WindowManager::MenuIconSize);
+      enableButton.set_tooltip_text(_("Enable track"));
+    }
+}
+
+void
+Track::on_lock()
+{
+  locked = !locked;
+  if (locked)
+    {
+      lockButton.set_stock_id(Gtk::StockID("track_locked"), WindowManager::MenuIconSize);
+      lockButton.set_tooltip_text(_("Unlock track"));
+    }
+  else
+    {
+      lockButton.set_stock_id(Gtk::StockID("track_unlocked"), WindowManager::MenuIconSize);
+      lockButton.set_tooltip_text(_("Lock track"));
+    }
 }
 
 void

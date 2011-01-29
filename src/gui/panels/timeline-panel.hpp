@@ -1,23 +1,23 @@
 /*
   timeline-panel.hpp  -  Definition of the timeline panel            
- 
+
   Copyright (C)         Lumiera.org
     2008,               Joel Holdsworth <joel@airwebreathe.org.uk>
- 
+
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of the
-  License, or (at your option) any later version.
- 
+  published by the Free Software Foundation; either version 2 of
+  the License, or (at your option) any later version.
+
   This program is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
- 
+
   You should have received a copy of the GNU General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- 
+
 */
 /** @file timeline-panel.hpp
  ** This file contains the definition of the timeline panel
@@ -27,6 +27,7 @@
 #define TIMELINE_PANEL_HPP
 
 #include "panel.hpp"
+#include "../widgets/timecode-widget.hpp"
 #include "../widgets/timeline-widget.hpp"
 
 using namespace gui::widgets;
@@ -168,8 +169,7 @@ private:
     timelineStates;
   
   // Toolbar Widgets
-  Gtk::Label timeIndicator;
-  Gtk::Button timeIndicatorButton;
+  TimeCode timeCode;
   
   MiniButton previousButton;
   MiniButton rewindButton;
@@ -181,12 +181,12 @@ private:
   MiniToggleButton arrowTool;
   MiniToggleButton iBeamTool;
   
-  Gtk::SeparatorToolItem seperator1;
+  Gtk::SeparatorToolItem separator1;
   
   MiniButton zoomIn;
   MiniButton zoomOut;
   
-  Gtk::SeparatorToolItem seperator2;
+  Gtk::SeparatorToolItem separator2;
     
   // Internals
   bool updatingToolbar;

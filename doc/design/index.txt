@@ -1,6 +1,6 @@
 == Lumiera Design Documents
 
-The goal of Lumiera is to provide a professionnal tool for video editing on GNU/Linux systems.
+The goal of Lumiera is to provide a professional tool for video editing on GNU/Linux systems.
 The vision of the development team defines a modern design for the core of a Non-Linear Editing software.
 One of the key aspect of Lumiera is the strong separation between the user interface and the processing core.
 Lumiera as a software will come along with a GTK GUI but that does not make this exclusive, any other GUI could be written as well as scripts to drive the core.
@@ -20,7 +20,7 @@ They can be categorized into three main categories plus extra components :
 ==== link:gui/index.html[Graphical User Interface]
 
 User interfaces are basically handled like plugins, consequently it is possible to interface with Lumiera through scripts. It is also possible to create specialized GUIs.
-The interface is the closest component to the user, it is purely visual. There the user manipulates, organizes, loads, configures all sorts of datas, especially MObjects (media objects) and Assets. These elements are contained within a structure called the Session.
+The interface is the closest component to the user, it is purely visual. There the user manipulates, organizes, loads, configures all sorts of data, especially MObjects (media objects) and Assets. These elements are contained within a structure called the Session.
 
 ==== The Processing Layer
 

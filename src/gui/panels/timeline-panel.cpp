@@ -1,23 +1,23 @@
 /*
   timeline-panel.cpp  -  Implementation of the timeline panel
- 
+
   Copyright (C)         Lumiera.org
     2008,               Joel Holdsworth <joel@airwebreathe.org.uk>
- 
+
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of the
-  License, or (at your option) any later version.
- 
+  published by the Free Software Foundation; either version 2 of
+  the License, or (at your option) any later version.
+
   This program is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
- 
+
   You should have received a copy of the GNU General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- 
+
 * *****************************************************/
 
 #include <boost/foreach.hpp>
@@ -49,8 +49,7 @@ const int TimelinePanel::ZoomToolSteps = 2; // 2 seems comfortable
 TimelinePanel::TimelinePanel(workspace::PanelManager &panel_manager,
     GdlDockItem *dock_item) :
   Panel(panel_manager, dock_item, get_title(), get_stock_id()),
-  timeIndicator(),
-  timeIndicatorButton(),
+  timeCode("sequence_clock", "timecode_widget", true),
   previousButton(Stock::MEDIA_PREVIOUS),
   rewindButton(Stock::MEDIA_REWIND),
   playPauseButton(Stock::MEDIA_PLAY),
@@ -62,7 +61,7 @@ TimelinePanel::TimelinePanel(workspace::PanelManager &panel_manager,
   zoomIn(Stock::ZOOM_IN),
   zoomOut(Stock::ZOOM_OUT),
   updatingToolbar(false),
-  currentTool(timeline::IBeam)
+  currentTool(timeline::Arrow)
 {
   // Hook up notifications
   get_project().get_sequences().signal_changed().connect(mem_fun(this,
@@ -82,11 +81,7 @@ TimelinePanel::TimelinePanel(workspace::PanelManager &panel_manager,
   panelBar.pack_start(sequenceChooser, PACK_SHRINK);
 
   // Setup the toolbar
-  timeIndicatorButton.add(timeIndicator);
-  timeIndicatorButton.set_relief(Gtk::RELIEF_NONE);
-  timeIndicatorButton.set_focus_on_click(false);
-  
-  toolbar.append(timeIndicatorButton);
+  toolbar.append(timeCode);
   
   toolbar.append(previousButton);
   toolbar.append(rewindButton);
@@ -97,14 +92,14 @@ TimelinePanel::TimelinePanel(workspace::PanelManager &panel_manager,
   toolbar.append(forwardButton);
   toolbar.append(nextButton);
   
-  toolbar.append(seperator1);
+  toolbar.append(separator1);
   
   toolbar.append(arrowTool,
     mem_fun(this, &TimelinePanel::on_arrow_tool));
   toolbar.append(iBeamTool,
     mem_fun(this, &TimelinePanel::on_ibeam_tool));
     
-  toolbar.append(seperator2);
+  toolbar.append(separator2);
   
   toolbar.append(zoomIn, mem_fun(this, &TimelinePanel::on_zoom_in));
   toolbar.append(zoomOut, mem_fun(this, &TimelinePanel::on_zoom_out));
@@ -114,7 +109,6 @@ TimelinePanel::TimelinePanel(workspace::PanelManager &panel_manager,
 
   // Setup tooltips
   sequenceChooser     .set_tooltip_text(_("Change sequence"));
-  timeIndicatorButton .set_tooltip_text(_("Go to time code"));
 
   previousButton  .set_tooltip_text(_("To beginning"));
   rewindButton    .set_tooltip_text(_("Rewind"));
@@ -374,7 +368,7 @@ TimelinePanel::set_tool(timeline::ToolType tool)
 void
 TimelinePanel::show_time(gavl_time_t time)
 {
-  timeIndicator.set_text(lumiera_tmpbuf_print_time(time));
+  // timeIndicator.set_text(lumiera_tmpbuf_print_time(time));
 }
 
 bool

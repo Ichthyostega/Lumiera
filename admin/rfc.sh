@@ -4,7 +4,7 @@ shopt -s extglob
 
 function usage()
 {
-    less -F <<"EOF"
+    less <<"EOF"
 Script to maintain Lumiera RFC's
 
 usage:
@@ -22,6 +22,7 @@ commands (with <mandatory> and [optional] parameters):
  show <rfcs> [regex]    - Read RFC's (matching 'regex')
  create <title>         - Create a new RFC
  edit <rfc> [chapter]   - Edit RFC at chapter
+ asciidoc <rfc>         - pass the rfc.txt to 'asciidoc' command
  comment <rfc>          - Add a new comment to a RFC
  draft <rfc>            - Change RFC to Draft state
  final <rfc>            - Change RFC to Final state
@@ -237,7 +238,7 @@ function edit()
 {
     # filename lineoffset chapter
     EDITOR="${EDITOR:-$(git config --get core.editor)}"
-    EDITOR="${EDITOR:-VISUAL}"
+    EDITOR="${EDITOR:-$VISUAL}"
 
     local file="$1"
     local line=0
@@ -368,6 +369,12 @@ edit)
     if [[ "$name" ]]; then
         edit "${name}" 2 "$2"
         git add "$name"
+    fi
+    ;;
+asciidoc)
+    name=$(unique_name "$1")
+    if [[ "$name" ]]; then
+        asciidoc "${name}"
     fi
     ;;
 draft)

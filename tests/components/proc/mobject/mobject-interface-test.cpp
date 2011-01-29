@@ -1,23 +1,23 @@
 /*
   MObjectInterface(Test)  -  covers behaviour common to all MObjects
- 
+
   Copyright (C)         Lumiera.org
     2010,               Hermann Vosseler <Ichthyostega@web.de>
- 
+
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of the
-  License, or (at your option) any later version.
- 
+  published by the Free Software Foundation; either version 2 of
+  the License, or (at your option) any later version.
+
   This program is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
- 
+
   You should have received a copy of the GNU General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- 
+
 * *****************************************************/
 
 
@@ -93,11 +93,11 @@ namespace test    {
           PDummy testDummy1(*new DummyMO);
           PDummy testDummy2(*new TestSubMO1);
           
-          ASSERT (testClip1->isValid());
-          ASSERT (testClip2->isValid());
-          ASSERT (testLabel1->isValid());
-          ASSERT (testDummy1->isValid());
-          ASSERT (testDummy2->isValid());
+          CHECK (testClip1->isValid());
+          CHECK (testClip2->isValid());
+          CHECK (testLabel1->isValid());
+          CHECK (testDummy1->isValid());
+          CHECK (testDummy2->isValid());
           
           Time lenC1 = testClip1->getLength();
           Time lenC2 = testClip2->getLength();

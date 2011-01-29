@@ -1,30 +1,30 @@
 /*
   TypeTuple(Test)  -  checking type tuples and records based on them
- 
+
   Copyright (C)         Lumiera.org
     2009,               Hermann Vosseler <Ichthyostega@web.de>
- 
+
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of the
-  License, or (at your option) any later version.
- 
+  published by the Free Software Foundation; either version 2 of
+  the License, or (at your option) any later version.
+
   This program is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
- 
+
   You should have received a copy of the GNU General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- 
+
 * *****************************************************/
 
 
 /** @file type-tuple-test.cpp
  ** Interplay of typelists, type tuples and simple record
  ** data types build on top of them.
- **
+ ** 
  ** @see lumiera::typelist::Tuple
  ** @see tuple.hpp
  ** @see function-closure.hpp
@@ -48,31 +48,31 @@ using std::endl;
 namespace lumiera {
 namespace typelist{
 namespace test {
-      
-      
-      
-      namespace { // test data
-        
-        
-        typedef Types< Num<1>
-                     , Num<3>
-                     , Num<5>
-                     >          Types1;
-        typedef Types< Num<2>
-                     , Num<4>
-                     >          Types2;
-        typedef Types< Num<7> > Types3;
-        
-        
-        
-      } // (End) test data
+  
+  
+  
+  namespace { // test data
+    
+    
+    typedef Types< Num<1>
+                 , Num<3>
+                 , Num<5>
+                 >          Types1;
+    typedef Types< Num<2>
+                 , Num<4>
+                 >          Types2;
+    typedef Types< Num<7> > Types3;
+    
+    
+    
+  } // (End) test data
   
   
   
   
   /*************************************************************************
-   * @test Cover various aspects of the type tuple. 
-   *       Check the metaprogramming behaviour... 
+   * @test Cover various aspects of the type tuple.
+   *       Check the metaprogramming behaviour...
    *       - build a tuple type from an existing typelist
    *       - create sub tuple types and types with shifted parameters
    *       Additionally, check the behaviour when creating tuple instances
@@ -83,12 +83,12 @@ namespace test {
    *       - creating tuples partially from an existing sub-argument tuple
    *       - copy and copy construct
    *       - access the "head" and access values by numeric index
-   *       - create a tuple with shifted values 
+   *       - create a tuple with shifted values
    */
   class TypeTuple_test : public Test
     {
       virtual void
-      run (Arg) 
+      run (Arg)
         {
           check_diagnostics();
           check_tuple_from_Typelist();
@@ -152,35 +152,35 @@ namespace test {
           typedef Tuple<Types<> > NulT;     // plain-flat empty Tuple
           typedef Tuple<NullType> NulL;     // list-style empty Tuple
           
-          ASSERT (            is_Tuple<T1>::value);
-          ASSERT (       is_TuplePlain<T1>::value);
-          ASSERT (!   is_TupleListType<T1>::value);
-          ASSERT (!       is_NullTuple<T1>::value);
+          CHECK (            is_Tuple<T1>::value);
+          CHECK (       is_TuplePlain<T1>::value);
+          CHECK (!   is_TupleListType<T1>::value);
+          CHECK (!       is_NullTuple<T1>::value);
           
-          ASSERT (          is_Tuple<T_L1>::value);
-          ASSERT (!    is_TuplePlain<T_L1>::value);
-          ASSERT (  is_TupleListType<T_L1>::value);
-          ASSERT (!     is_NullTuple<T_L1>::value);
+          CHECK (          is_Tuple<T_L1>::value);
+          CHECK (!    is_TuplePlain<T_L1>::value);
+          CHECK (  is_TupleListType<T_L1>::value);
+          CHECK (!     is_NullTuple<T_L1>::value);
           
-          ASSERT (          is_Tuple<NulT>::value);
-          ASSERT (     is_TuplePlain<NulT>::value);
-          ASSERT (! is_TupleListType<NulT>::value);
-          ASSERT (      is_NullTuple<NulT>::value);
+          CHECK (          is_Tuple<NulT>::value);
+          CHECK (     is_TuplePlain<NulT>::value);
+          CHECK (! is_TupleListType<NulT>::value);
+          CHECK (      is_NullTuple<NulT>::value);
           
-          ASSERT (          is_Tuple<NulL>::value);
-          ASSERT (!    is_TuplePlain<NulL>::value);
-          ASSERT (  is_TupleListType<NulL>::value);
-          ASSERT (      is_NullTuple<NulL>::value);
+          CHECK (          is_Tuple<NulL>::value);
+          CHECK (!    is_TuplePlain<NulL>::value);
+          CHECK (  is_TupleListType<NulL>::value);
+          CHECK (      is_NullTuple<NulL>::value);
           
-          ASSERT (!        is_Tuple<Type1>::value);
-          ASSERT (!   is_TuplePlain<Type1>::value);
-          ASSERT (!is_TupleListType<Type1>::value);
-          ASSERT (!    is_NullTuple<Type1>::value);
+          CHECK (!        is_Tuple<Type1>::value);
+          CHECK (!   is_TuplePlain<Type1>::value);
+          CHECK (!is_TupleListType<Type1>::value);
+          CHECK (!    is_NullTuple<Type1>::value);
           
-          ASSERT (!        is_Tuple<Types1::List>::value);
-          ASSERT (!   is_TuplePlain<Types1::List>::value);
-          ASSERT (!is_TupleListType<Types1::List>::value);
-          ASSERT (!    is_NullTuple<Types1::List>::value);
+          CHECK (!        is_Tuple<Types1::List>::value);
+          CHECK (!   is_TuplePlain<Types1::List>::value);
+          CHECK (!is_TupleListType<Types1::List>::value);
+          CHECK (!    is_NullTuple<Types1::List>::value);
           
         }
       
@@ -210,7 +210,7 @@ namespace test {
           typedef Tuple<NullType> NulL;        // list-style empty Tuple
           
           DISPLAY (T2::Type);                  // irrespective of the flavour,
-          DISPLAY (T2::TailType);              // a basic set of typedefs is 
+          DISPLAY (T2::TailType);              // a basic set of typedefs is
           DISPLAY (T2::TupleType);             // always available
           DISPLAY (T2::ThisType);
           DISPLAY (T2::Tail);
@@ -249,11 +249,11 @@ namespace test {
           typedef Tuple<L3>::Type Ty3;
           typedef Tuple<Ty3>      T3;
           
-          typedef Shifted<Ty3,0>::Type Ty_0;  DISPLAY (Ty_0);
-          typedef Shifted<Ty3,1>::Type Ty_1;  DISPLAY (Ty_1);
-          typedef Shifted<Ty3,2>::Type Ty_2;  DISPLAY (Ty_2);
-          typedef Shifted<Ty3,3>::Type Ty_3;  DISPLAY (Ty_3);
-          typedef Shifted<Ty3,4>::Type Ty_4;  DISPLAY (Ty_4);
+          typedef Shifted<Ty3,0>::Type Ty_0;     DISPLAY (Ty_0);
+          typedef Shifted<Ty3,1>::Type Ty_1;     DISPLAY (Ty_1);
+          typedef Shifted<Ty3,2>::Type Ty_2;     DISPLAY (Ty_2);
+          typedef Shifted<Ty3,3>::Type Ty_3;     DISPLAY (Ty_3);
+          typedef Shifted<Ty3,4>::Type Ty_4;     DISPLAY (Ty_4);
           
           typedef T3::ShiftedTuple<0>::Type T_0; DISPLAY (T_0);
           typedef T3::ShiftedTuple<1>::Type T_1; DISPLAY (T_1);
@@ -360,7 +360,7 @@ namespace test {
                    b_35   = tuple::BuildTuple<T1357T,T35T,4>::create(sub35);
           DUMPVAL (b_35);
           
-          // use an argument tuple beyond the last argument of the target tuple... 
+          // use an argument tuple beyond the last argument of the target tuple...
           typedef  Tuple<Types<Num<7>,Num<8> > >  T78T;
           T78T     sub78 (Num<7>(77),Num<8>(88));
           DUMPVAL (sub78);

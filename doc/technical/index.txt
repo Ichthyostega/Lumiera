@@ -1,39 +1,33 @@
-////
-Technote Documentation
-======================
+Technical Documentation
+=======================
 
- * link:http://www.lumiera.org/doxy/[Doxygen generated documentation]
- * link:gui/index.html[GUI-Layer]
- * link:proc/index.html[Proc-Layer]
- * link:backend/index.html[Backend]
- * link:build/index.html[Buildsystem]
-
-
-[icon="warning.png"]
-WARNING: Website under construction
-////
-== Technical Documentation
 
 This documentation section contains technical documentation about Lumiera.
 To get an overview of all the internals and components, you might want to read
 link:innerCore/the_inner_core.html[Lumiera the Inner Core]
 
-=== Three Layers
+== Three Layers
 The technical documentation is split in three parts, one for each of the three main layers of Lumiera.
 You may want to read the link:../design/index.html[Design Documents] first to get an overview of all the components.
 
-* link:gui/index.html[*Graphical User Interface*] : Documents about the default GTK GUI that comes with Lumiera.
+* link:gui/index.html[*Graphical User Interface*] : Documents related to the GTK based Lumiera GUI
   
-* link:proc/index.html[*Processing layer*]
+* link:proc/index.html[*Processing layer*] : Documents regarding Session, models and the engine structure
 
-* link:backend/index.html[*Backend system*]
+* link:backend/index.html[*Backend system*] : Documents about the data and processing backend
 
-=== Tools
+
+== Tools
+
 .Development
 * link:http://www.lumiera.org/doxy/[*Doxygen generated documentation*] : Complete reference for the code of Lumiera.
 
 .Building
 * link:build/index.html[*Buildsystem*] : Installation & compilation tools, dependencies and packaging.
+
+.HOWTO
+* link:howto/index.html[*Developer HOWTOs*] : Collection of instructions, recipes, hints and similar
+  materials intended for developers
 
 
 [icon="warning.png"]

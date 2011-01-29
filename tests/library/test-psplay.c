@@ -6,8 +6,8 @@
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of the
-  License, or (at your option) any later version.
+  published by the Free Software Foundation; either version 2 of
+  the License, or (at your option) any later version.
 
   This program is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -241,22 +241,22 @@ TEST ("insert_find")
 
   //TestItem f = (TestItem) psplay_find (&splay_tree, "baz", 100);
   TestItem f = (TestItem) psplay_find (&splay_tree, "baz", 100);
-  ENSURE (f);
+  CHECK (f);
   printf ("found %p (%.4s)\n", &f->node, f->key);
   psplay_dump (&splay_tree, stdout);
 
   f = (TestItem) psplay_find (&splay_tree, "test", 100);
-  ENSURE (f);
+  CHECK (f);
   printf ("found %p (%.4s)\n", &f->node, f->key);
   psplay_dump (&splay_tree, stdout);
 
   f = (TestItem) psplay_find (&splay_tree, "test", 100);
-  ENSURE (f);
+  CHECK (f);
   printf ("found %p (%.4s)\n", &f->node, f->key);
   psplay_dump (&splay_tree, stdout);
 
   f = (TestItem) psplay_find (&splay_tree, "foo", 100);
-  ENSURE (f);
+  CHECK (f);
   printf ("found %p (%.4s)\n", &f->node, f->key);
   psplay_dump (&splay_tree, stdout);
 

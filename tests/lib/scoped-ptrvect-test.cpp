@@ -1,23 +1,23 @@
 /*
   ScopedPtrVect(Test)  -  holding and owning a collection of noncopyable objects
- 
+
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
- 
+
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of the
-  License, or (at your option) any later version.
- 
+  published by the Free Software Foundation; either version 2 of
+  the License, or (at your option) any later version.
+
   This program is distributed in the hope that it will be useful,
   but WITHOUT ANY WARRANTY; without even the implied warranty of
   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
   GNU General Public License for more details.
- 
+
   You should have received a copy of the GNU General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- 
+
 * *****************************************************/
 
 
@@ -61,25 +61,25 @@ namespace test{
       void
       simpleUsage()
         {
-          ASSERT (0==checksum);
+          CHECK (0==checksum);
           {
             VectD holder;
-            ASSERT (isnil (holder));
-            ASSERT (0==checksum);
+            CHECK (isnil (holder));
+            CHECK (0==checksum);
             
             Dummy* ptr = new Dummy();
             Dummy& ref = holder.manage (ptr);
-            ASSERT (!isnil (holder));
-            ASSERT (0!=checksum);
-            ASSERT (&ref==ptr);
+            CHECK (!isnil (holder));
+            CHECK (0!=checksum);
+            CHECK (&ref==ptr);
             
             holder.manage (new Dummy);
             holder.manage (new Dummy);
-            ASSERT (3 == holder.size());
+            CHECK (3 == holder.size());
             
             holder.clear();
-            ASSERT (0==checksum);
-            ASSERT (isnil (holder));
+            CHECK (0==checksum);
+            CHECK (isnil (holder));
             
             holder.manage (new Dummy);
             holder.manage (new Dummy);
@@ -90,17 +90,17 @@ namespace test{
             holder.manage (new Dummy);
             holder.manage (new Dummy);
             holder.manage (new Dummy);
-            ASSERT (9 == holder.size());
-            ASSERT (0!=checksum);
+            CHECK (9 == holder.size());
+            CHECK (0!=checksum);
           }
-          ASSERT (0==checksum);
+          CHECK (0==checksum);
         }
       
       
       void
       iterating()
         {
-          ASSERT (0==checksum);
+          CHECK (0==checksum);
           {
             VectD holder;
             for (int i=0; i<16; ++i)
@@ -110,7 +110,7 @@ namespace test{
             VectD::iterator ii = holder.begin();
             while (ii)
               {
-                ASSERT (check == ii->getVal());
+                CHECK (check == ii->getVal());
                 ++check;
                 ++ii;
               }
@@ -121,26 +121,26 @@ namespace test{
             VectD::const_iterator cii = holder.begin();
             while (cii)
               {
-                ASSERT (check == cii->getVal());
+                CHECK (check == cii->getVal());
                 ++check;
                 ++cii;
               }
             
             
             // Verify correct behaviour of iteration end
-            ASSERT (! (holder.end()));
-            ASSERT (isnil (holder.end()));
+            CHECK (! (holder.end()));
+            CHECK (isnil (holder.end()));
             
             VERIFY_ERROR (ITER_EXHAUST, *holder.end() );
             VERIFY_ERROR (ITER_EXHAUST, ++holder.end() );
             
-            ASSERT (ii == holder.end());
-            ASSERT (cii == holder.end());
+            CHECK (ii == holder.end());
+            CHECK (cii == holder.end());
             VERIFY_ERROR (ITER_EXHAUST, ++ii );
             VERIFY_ERROR (ITER_EXHAUST, ++cii );
             
           }
-          ASSERT (0==checksum);
+          CHECK (0==checksum);
         }
       
     };
