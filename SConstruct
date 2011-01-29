@@ -169,8 +169,6 @@ def defineCmdlineVariables():
         ,PathVariable('INSTALLDIR', 'Root output directory for install. Final installation will happen in INSTALLDIR/PREFIX/... ', '/', PathVariable.PathIsDir)
         ,PathVariable('PKGLIBDIR', 'Installation dir for plugins, defaults to PREFIX/lib/lumiera/modules', '',PathVariable.PathAccept)
         ,PathVariable('PKGDATADIR', 'Installation dir for default config, usually PREFIX/share/lumiera', '',PathVariable.PathAccept)
-        ,PathVariable('SRCTAR', 'Create source tarball prior to compiling', '..', PathVariable.PathAccept)
-        ,PathVariable('DOCTAR', 'Create tarball with developer documentation', '..', PathVariable.PathAccept)
      )
     
     return vars
@@ -314,15 +312,7 @@ def definePackagingTargets(env, artifacts):
     """ build operations and targets to be done /before/ compiling.
         things like creating a source tarball or preparing a version header.
     """
-    t = Tarball(env,location='$SRCTAR',dirs='$SRCDIR')
-    artifacts['src.tar'] = t
-    env.Alias('src.tar', t)
-    env.Alias('tar', t)
-    
-    t =  Tarball(env,location='$DOCTAR',suffix='-doc',dirs='admin doc wiki uml tests')
-    artifacts['doc.tar'] = t
-    env.Alias('doc.tar', t)
-    env.Alias('tar', t)
+    pass
 
 
 
