@@ -41,6 +41,7 @@ class LumieraEnvironment(Environment):
     def __init__(self,*args,**kw):
         Environment.__init__ (self,*args,**kw)
         self.libInfo = {}
+        RegisterIcon_Builder(self)
     
     def Configure (self, *args, **kw):
         kw['env'] = self
@@ -183,4 +184,43 @@ class LumieraConfigContext(ConfigBase):
         # self.Message(self,"Checking for library configuration: %s " % libID)
         return self.env.addLibInfo (libID, minVersion, alias)
 
+
+
+###### Lumiera custom tools and builders ########################
+
+
+def RegisterIcon_Builder(env):
+    """ Registers Custom Builders for generating and installing Icons.
+        Additionally you need to build the tool (rsvg-convert.c)
+        used to generate png from the svg source using librsvg. 
+    """
+    
+    import render_icon as renderer  # load Joel's python script for invoking the rsvg-convert (SVG render)
+    renderer.rsvgPath = env.subst("$TARDIR/rsvg-convert")
+    
+    def invokeRenderer(target, source, env):
+        source = str(source[0])
+        targetdir = env.subst("$TARDIR")
+        renderer.main([source,targetdir])
+        return 0
+        
+    def createIconTargets(target,source,env):
+        """ parse the SVG to get the target file names """
+        source = str(source[0])
+        targetdir = os.path.basename(str(target[0]))
+        targetfiles = renderer.getTargetNames(source)    # parse SVG
+        return (["$TARDIR/%s" % name for name in targetfiles], source)
+    
+    def IconCopy(env, source):
+         """Copy icon to corresponding icon dir. """
+         subdir = getDirname(source)
+         return env.Install("$TARDIR/%s" % subdir, source)
+    
+     
+    buildIcon = env.Builder( action = Action(invokeRenderer, "rendering Icon: $SOURCE --> $TARGETS")
+                           , single_source = True
+                           , emitter = createIconTargets 
+                           )
+    env.Append(BUILDERS = {'IconRender' : buildIcon})    
+    env.AddMethod(IconCopy)
 

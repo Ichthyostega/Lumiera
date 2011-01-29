@@ -86,7 +86,6 @@ def setupBasicEnvironment():
                , CCFLAGS='-Wall -Wextra '
                , CFLAGS='-std=gnu99' 
                )
-    RegisterIcon_Builder(env)
     handleNoBugSwitches(env)
     
     env.Append(CPPDEFINES = '_GNU_SOURCE')
