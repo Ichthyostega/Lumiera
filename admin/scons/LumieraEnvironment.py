@@ -119,7 +119,7 @@ class LumieraEnvironment(Environment):
             it is linked with
         """
         subEnv = self.Clone()
-        subEnv.Append( LINKFLAGS = "-Wl,-rpath=\\$$ORIGIN/$LIBDIR,--enable-new-dtags" )
+        subEnv.Append( LINKFLAGS = "-Wl,-rpath=\\$$ORIGIN/$MODULES,--enable-new-dtags" )
         
         programBuilder = self.get_builder('Program')
         return programBuilder (subEnv, *args,**kw);

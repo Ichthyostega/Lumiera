@@ -27,8 +27,8 @@ OPTIONSCACHEFILE = 'optcache'
 CUSTOPTIONSFILE  = 'custom-options'
 SRCDIR           = 'src'
 TARDIR           = 'target'
-LIBDIR           = 'modules'
-PLUGDIR          = 'modules'
+LIBDIR           = 'target/modules'
+MODULES          = 'modules'
 TESTDIR          = 'tests'
 ICONDIR          = 'icons'
 VERSION          = '0.1+pre.01'
@@ -78,7 +78,7 @@ def setupBasicEnvironment():
                , SRCDIR=SRCDIR
                , TARDIR=TARDIR
                , LIBDIR=LIBDIR
-               , PLUGDIR=PLUGDIR
+               , MODULES=MODULES
                , ICONDIR=ICONDIR
                , CPPPATH=["#"+SRCDIR]   # used to find includes, "#" means always absolute to build-root
                , CPPDEFINES=['-DLUMIERA_VERSION='+VERSION ]     # note: it's a list to append further defines
@@ -96,8 +96,8 @@ def setupBasicEnvironment():
     appendVal(env,'DEBUG',    'CCFLAGS',   val=' -ggdb')
     
     # setup search path for Lumiera plugins
-    appendCppDefine(env,'PKGLIBDIR','LUMIERA_PLUGIN_PATH=\\"$PKGLIBDIR/:./modules\\"'
-                                   ,'LUMIERA_PLUGIN_PATH=\\"$DESTDIR/lib/lumiera/:./modules\\"') 
+    appendCppDefine(env,'PKGLIBDIR','LUMIERA_PLUGIN_PATH=\\"$PKGLIBDIR/:./$MODULES\\"'
+                                   ,'LUMIERA_PLUGIN_PATH=\\"$DESTDIR/lib/lumiera/:./$MODULES\\"') 
     appendCppDefine(env,'PKGDATADIR','LUMIERA_CONFIG_PATH=\\"$PKGLIBDIR/:.\\"'
                                     ,'LUMIERA_CONFIG_PATH=\\"$DESTDIR/share/lumiera/:.\\"') 
     
