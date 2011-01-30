@@ -46,7 +46,7 @@ class LumieraEnvironment(Environment):
         self.Tool("BuilderDoxygen")
         self.Tool("ToolDistCC")
         self.Tool("ToolCCache")
-        RegisterIcon_Builder(self)
+        register_LumieraResourceBuilder(self)
         register_LumieraCustomBuilders(self)
     
     def Configure (self, *args, **kw):
@@ -89,25 +89,6 @@ class LumieraEnvironment(Environment):
         if alias:
             self.libInfo[alias] = libInfo
         return libInfo
-    
-    
-    def SymLink(self, target, source, linktext=None):
-        """ use python to create a symlink
-        """
-        def makeLink(target,source,env):
-            if linktext:
-                dest = linktext
-            else:
-                dest = str(source[0])
-            link = str(target[0])
-            os.symlink(dest, link)
-        def reportLink(target,source,env):
-            dest = str(source[0])
-            link = str(target[0])
-            return "Install link %s -> %s" % (link,dest)
-        
-        action = Action(makeLink,reportLink)
-        self.Command (target,source, action)
 
 
 
@@ -136,7 +117,7 @@ class LumieraConfigContext(ConfigBase):
 ####### Lumiera custom tools and builders #####################################
 
 
-def RegisterIcon_Builder(env):
+def register_LumieraResourceBuilder(env):
     """ Registers Custom Builders for generating and installing Icons.
         Additionally you need to build the tool (rsvg-convert.c)
         used to generate png from the svg source using librsvg. 
@@ -147,21 +128,39 @@ def RegisterIcon_Builder(env):
     
     def invokeRenderer(target, source, env):
         source = str(source[0])
-        targetdir = env.subst("$TARGDIR")
+        targetdir = env.subst(env.path.buildIcon)
+        if targetdir.startswith('#'): targetdir = targetdir[1:]
         renderer.main([source,targetdir])
         return 0
         
     def createIconTargets(target,source,env):
         """ parse the SVG to get the target file names """
         source = str(source[0])
-        targetdir = os.path.basename(str(target[0]))
+        targetdir = env.path.buildIcon
         targetfiles = renderer.getTargetNames(source)    # parse SVG
-        return (["$TARGDIR/%s" % name for name in targetfiles], source)
+        return ([targetdir+name for name in targetfiles], source)
     
-    def IconCopy(env, source):
-         """Copy icon to corresponding icon dir. """
-         subdir = getDirname(source)
-         return env.Install("$TARGDIR/%s" % subdir, source)
+    def IconResource(env, source):
+         """Copy icon pixmap to corresponding icon dir. """
+         subdir = getDirname(str(source))
+         toBuild = env.path.buildIcon+subdir
+         toInstall = env.path.installIcon+subdir
+         env.Install (toInstall, source)
+         return env.Install(toBuild, source)
+    
+    def GuiResource(env, source):
+         subdir = getDirname(str(source))
+         toBuild = env.path.buildUIRes+subdir
+         toInstall = env.path.installUIRes+subdir
+         env.Install (toInstall, source)
+         return env.Install(toBuild, source)
+    
+    def ConfigData(env, source):
+         subdir = getDirname(str(source), env.path.srcConf) # removes source location path prefix
+         toBuild = env.path.buildConf+subdir
+         toInstall = env.path.installConf+subdir
+         env.Install (toInstall, source)
+         return env.Install(toBuild, source)
     
     
     buildIcon = env.Builder( action = Action(invokeRenderer, "rendering Icon: $SOURCE --> $TARGETS")
@@ -169,7 +168,9 @@ def RegisterIcon_Builder(env):
                            , emitter = createIconTargets
                            )
     env.Append(BUILDERS = {'IconRender' : buildIcon})
-    env.AddMethod(IconCopy)
+    env.AddMethod(IconResource)
+    env.AddMethod(GuiResource)
+    env.AddMethod(ConfigData)
 
 
 
@@ -191,9 +192,9 @@ class WrappedStandardExeBuilder(SCons.Util.Proxy):
             Automatically define installation targets for build results.
             @note only returning the build targets, not the install targets 
         """
-        customisedEnv = self.getCustomEnvironment(env, target=target, **kw)       # defined in subclasses
+        customisedEnv = self.getCustomEnvironment(env, target=target, **kw)    # defined in subclasses
         buildTarget   = self.buildLocation(customisedEnv, target)
-        buildTarget   = self.invokeOriginalBuilder (customisedEnv, buildTarget, source, **kw)
+        buildTarget   = self.invokeOriginalBuilder(customisedEnv, buildTarget, source, **kw)
         self.installTarget(customisedEnv, buildTarget, **kw) 
         return buildTarget 
     
@@ -297,6 +298,9 @@ class LumieraPluginBuilder(LumieraModuleBuilder):
 
 
 
+
+
+
 def register_LumieraCustomBuilders (lumiEnv):
     """ install the customised builder versions tightly integrated with our buildsystem.
         Especially, these builders automatically add the build and installation locations
@@ -311,3 +315,27 @@ def register_LumieraCustomBuilders (lumiEnv):
     lumiEnv['BUILDERS']['SharedLibrary']  = libraryBuilder
     lumiEnv['BUILDERS']['LoadableModule'] = smoduleBuilder
     lumiEnv['BUILDERS']['LumieraPlugin']  = lpluginBuilder
+    
+    
+    def SymLink(env, target, source, linktext=None):
+        """ use python to create a symlink
+        """
+        def makeLink(target,source,env):
+            if linktext:
+                dest = linktext
+            else:
+                dest = str(source[0])
+            link = str(target[0])
+            os.symlink(dest, link)
+        
+        if linktext: srcSpec=linktext
+        else:        srcSpec='$SOURCE'
+        action = Action(makeLink, "Install link:  $TARGET -> "+srcSpec)
+        env.Command (target,source, action)
+    
+    # adding SymLink direclty as method on the environment object
+    # Probably that should better be a real builder, but I couldn't figure out
+    # how to get the linktext through literally, which is necessary for relative links.
+    # Judging from the sourcecode of SCons.Builder.BuilderBase, there seems to be no way
+    # to set the executor_kw, which are passed through to the action object.
+    lumiEnv.AddMethod(SymLink)

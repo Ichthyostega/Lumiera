@@ -22,34 +22,38 @@
 #####################################################################
 
 
+# NOTE: scons -h for help.
+# Read more about the SCons build system at: http://www.scons.org
+# Basically, this script just /defines/ the components and how they
+# fit together. SCons will derive the necessary build steps.
+
+
 #-----------------------------------Configuration
 TARGDIR      = 'target'
 VERSION      = '0.1+pre.01'
-TOOLDIR      = './admin/scons'
+TOOLDIR      = './admin/scons'    # SCons plugins
 SCRIPTDIR    = './admin'
 OPTCACHE     = 'optcache' 
 CUSTOPTFILE  = 'custom-options'
 
+# these are accessible via env.path.xxxx
 srcIcon      = 'icons'
 srcConf      = 'data/config'
 buildExe     = '#$TARGDIR'
 buildLib     = '#$TARGDIR/modules'
 buildPlug    = '#$TARGDIR/modules'
 buildIcon    = '#$TARGDIR/icons'
+buildUIRes   = '#$TARGDIR/'
 buildConf    = '#$TARGDIR/config'
 installExe   = '#$DESTDIR/lib/lumiera'
 installLib   = '#$DESTDIR/lib/lumiera/modules'
 installPlug  = '#$DESTDIR/lib/lumiera/modules'
 installIcon  = '#$DESTDIR/share/lumiera/icons'
-installConf  = '#$DESTDIR/share/lumiera/config'
+installUIRes = '#$DESTDIR/share/lumiera/'
+installConf  = '#$DESTDIR/lib/lumiera/config'
 
 localDefinitions = locals()
 #-----------------------------------Configuration
-
-# NOTE: scons -h for help.
-# Read more about the SCons build system at: http://www.scons.org
-# Basically, this script just /defines/ the components and how they
-# fit together. SCons will derive the necessary build steps.
 
 
 
@@ -76,7 +80,7 @@ def setupBasicEnvironment(localDefinitions):
     vars = defineCmdlineVariables() 
     env = LumieraEnvironment(variables=vars
                             ,toolpath = [TOOLDIR]
-                            ,pathConfig = extract_localPathDefs(localDefinitions)
+                            ,pathConfig = extract_localPathDefs(localDefinitions) # e.g. buildExe -> env.path.buildExe
                             ,TARGDIR  = TARGDIR
                             ,DESTDIR = '$INSTALLDIR/$PREFIX'
                             ,VERSION = VERSION
@@ -239,10 +243,10 @@ def configurePlatform(env):
         conf.env.mergeConf('nobugmt')
     
     if not conf.CheckCXXHeader('tr1/memory'):
-        problems.append('We rely on the std::tr1 proposed standard extension for shared_ptr.')
+        problems.append('We rely on the std::tr1 standard C++ extension for shared_ptr.')
     
     if not conf.CheckCXXHeader('boost/config.hpp'):
-        problems.append('We need the C++ boost-lib.')
+        problems.append('We need the C++ boost-libraries.')
     else:
         if not conf.CheckCXXHeader('boost/shared_ptr.hpp'):
             problems.append('We need boost::shared_ptr (shared_ptr.hpp).')
@@ -264,16 +268,16 @@ def configurePlatform(env):
         conf.env.mergeConf('gavl')
     
     if not conf.CheckPkgConfig('gtkmm-2.4', 2.8):
-        problems.append('Unable to configure GTK--, exiting.')
+        problems.append('Unable to configure GTK--')
         
     if not conf.CheckPkgConfig('glibmm-2.4', '2.16'):
-        problems.append('Unable to configure Lib glib--, exiting.')
+        problems.append('Unable to configure Lib glib--')
     
     if not conf.CheckPkgConfig('gthread-2.0', '2.12.4'):
         problems.append('Need gthread support lib for glib-- based thread handling.')
     
     if not conf.CheckPkgConfig('cairomm-1.0', 0.6):
-        problems.append('Unable to configure Cairo--, exiting.')
+        problems.append('Unable to configure Cairo--')
     
     verGDL = '2.27.1'
     if not conf.CheckPkgConfig('gdl-lum', verGDL, alias='gdl'):
@@ -309,7 +313,7 @@ def configurePlatform(env):
 
 
 
-def definePackagingTargets(env, artifacts):
+def defineSetupTargets(env, artifacts):
     """ build operations and targets to be done /before/ compiling.
         things like creating a source tarball or preparing a version header.
     """
@@ -339,20 +343,19 @@ def defineBuildTargets(env, artifacts):
     
     artifacts['corelib'] = core
     artifacts['support'] = lLib
-    artifacts['lumiera'] = env.Program('lumiera', ['src/lumiera/main.cpp'], LIBS=core, install=True)
+    artifacts['lumiera'] = ( env.Program('lumiera', ['src/lumiera/main.cpp'], LIBS=core, install=True)
+                           + env.ConfigData(env.path.srcConf+'dummy_lumiera.ini')
+                           )
     
     # building Lumiera Plugins
-    envPlu = env.Clone()
-    envPlu.Append(CPPDEFINES='LUMIERA_PLUGIN')
     artifacts['plugins'] = [] # currently none 
     
     # render and install Icons
     vector_icon_dir      = env.path.srcIcon+'svg'
     prerendered_icon_dir = env.path.srcIcon+'prerendered'
-    artifacts['icons']   = ( [env.IconRender(f) for f in scanSubtree(vector_icon_dir,      ['*.svg'])]
-                           + [env.IconCopy(f)   for f in scanSubtree(prerendered_icon_dir, ['*.png'])]
+    artifacts['icons']   = ( [env.IconRender(f)   for f in scanSubtree(vector_icon_dir,      ['*.svg'])]
+                           + [env.IconResource(f) for f in scanSubtree(prerendered_icon_dir, ['*.png'])]
                            )
-    ##TODO make that into a resource builder
     
     # the Lumiera GTK GUI
     envGtk = env.Clone()
@@ -362,14 +365,13 @@ def defineBuildTargets(env, artifacts):
     objgui  = srcSubtree(envGtk,'src/gui')
     guimodule = envGtk.LumieraPlugin('gtk_gui', objgui, install=True)
     artifacts['gui'] = ( guimodule
-                       + env.Install('$TARGDIR', env.Glob('src/gui/*.rc'))
+                       + [env.GuiResource(f) for f in env.Glob('src/gui/*.rc')]
                        + artifacts['icons']
                        )
-    artifacts['guimodule'] = guimodule ###TODO better organisation of GUI components
-
+    
     # call subdir SConscript(s) for independent components
-    SConscript(dirs=['src/tool'], exports='env        artifacts core')
-    SConscript(dirs=['tests'],    exports='env envPlu artifacts core')
+    SConscript(dirs=['src/tool'], exports='env artifacts core')
+    SConscript(dirs=['tests'],    exports='env artifacts core')
 
 
 
@@ -377,8 +379,11 @@ def definePostBuildTargets(env, artifacts):
     """ define further actions after the core build (e.g. Documentaion).
         define alias targets to trigger the installing.
     """
-    build = env.Alias('build', artifacts['lumiera']+artifacts['gui']+artifacts['plugins']+artifacts['tools'])
-    env.Default('build')
+    build = env.Alias('build', ( artifacts['lumiera']
+                               + artifacts['plugins']
+                               + artifacts['tools']
+                               + artifacts['gui']
+                               ))
     # additional files to be cleaned when cleaning 'build'
     env.Clean ('build', [ 'scache.conf', '.sconf_temp', '.sconsign.dblite', 'config.log' ])
     env.Clean ('build', [ 'src/pre.gch' ])
@@ -387,7 +392,9 @@ def definePostBuildTargets(env, artifacts):
     env.Alias ('doc', doxydoc)
     env.Clean ('doc', doxydoc + ['doc/devel/,doxylog','doc/devel/warnings.txt'])
     
-    allbu = env.Alias('all', build+artifacts['testsuite']+doxydoc)
+    env.Alias ('all', build+artifacts['testsuite']+doxydoc)
+    env.Default('build')
+    # SCons default target
 
 
 def defineInstallTargets(env, artifacts):
@@ -396,8 +403,6 @@ def defineInstallTargets(env, artifacts):
                for all executables automatically. see LumieraEnvironment.py
     """
     env.SymLink('$DESTDIR/bin/lumiera',env.path.installExe+'lumiera','../lib/lumiera/lumiera')
-    
-    env.Install(dir = env.path.installConf, source=env.path.srcConf+'dummy_lumiera.ini') ### TODO should become a resource builder
 #   env.Install(dir = '$DESTDIR/share/doc/lumiera$VERSION/devel', source=artifacts['doxydoc'])
     
     env.Alias('install', '$DESTDIR')
@@ -424,7 +429,7 @@ artifacts = {}
 # 'plugins'     : plugin shared lib
 # 'tools'       : small tool applications (e.g mpegtoc)
 
-definePackagingTargets(env, artifacts)
+defineSetupTargets(env, artifacts)
 defineBuildTargets(env, artifacts)
 definePostBuildTargets(env, artifacts)
 defineInstallTargets(env, artifacts)

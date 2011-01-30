@@ -99,7 +99,7 @@ def findSrcTrees(location, patterns=SRCPATTERNS):
         After having initially expanded the given location with #globRootdirs, each
         directory is examined depth first, until encountering a directory containing
         source files, which then yields a result. Especially, this can be used to traverse
-        an organisational directory structure and find out all possible source trees of
+        an organisational directory structure and find out all possible source trees
         to be built into packages, plugins, individual tool executables etc.
         @return: the relative path names of all source root dirs found (generator function).
     """
@@ -138,12 +138,19 @@ def filterNodes(nlist, removeName=None):
 
 
 
-def getDirname(dir):
-    """ extract directory name without leading path """
+def getDirname(dir, basePrefix=None):
+    """ extract directory name without leading path,
+        or without the explicitly given basePrefix
+    """
     dir = os.path.realpath(dir)
     if not os.path.isdir(dir):
         dir,_ = os.path.split(dir)
-    _, name = os.path.split(dir)
+    if basePrefix:
+        basePrefix = os.path.realpath(basePrefix)
+        if str(dir).startswith(basePrefix):
+           name = str(dir)[len(basePrefix):]
+    else:
+        _, name = os.path.split(dir)
     return name
 
 

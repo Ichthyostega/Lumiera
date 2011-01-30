@@ -12,13 +12,11 @@ from Buildhelper import scanSubtree
 from Buildhelper import globRootdirs
 from Buildhelper import createPlugins
 
-Import('env','envPlu','artifacts','core')
+Import('env','artifacts','core')
 
 # temp fix to add test.h  -- wouldn't it be better to put this header be into src/lib ?  
 env = env.Clone()
 env.Append(CPPPATH='#/.')  # add Rootdir to Includepath, so test/test.h is found
-envPlu = envPlu.Clone()
-envPlu.Append(CPPPATH='#/.')
 # temp fix------------- 
 
 def testExecutable(env,tree, exeName=None, obj=None):
@@ -59,7 +57,7 @@ moduledirs = globRootdirs('*')
 
 artifacts['testsuite'] = ts = ( [ testExecutable(env, dir) for dir in ['bugs'] ]                # was: ['lib','components'] 
                               + [ testCollection(env, dir) for dir in moduledirs if not dir in specials]
-                              + createPlugins(envPlu, 'plugin')
+                              + createPlugins(env, 'plugin')
                               + env.File(glob('*.tests'))     # depending on the test definition files for test.sh
                               )
 
