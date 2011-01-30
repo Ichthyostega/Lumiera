@@ -43,7 +43,7 @@ class LumieraEnvironment(Environment):
         self.path = Record (pathConfig)
         self.libInfo = {}
         self.Tool("BuilderGCH")
-        self.Tool("BuilderDoxygen")  
+        self.Tool("BuilderDoxygen")
         self.Tool("ToolDistCC")
         self.Tool("ToolCCache")
         RegisterIcon_Builder(self)
@@ -108,7 +108,6 @@ class LumieraEnvironment(Environment):
         
         action = Action(makeLink,reportLink)
         self.Command (target,source, action)
-    
 
 
 
@@ -133,7 +132,8 @@ class LumieraConfigContext(ConfigBase):
 
 
 
-###### Lumiera custom tools and builders ########################
+###############################################################################
+####### Lumiera custom tools and builders #####################################
 
 
 def RegisterIcon_Builder(env):
@@ -163,12 +163,12 @@ def RegisterIcon_Builder(env):
          subdir = getDirname(source)
          return env.Install("$TARGDIR/%s" % subdir, source)
     
-     
+    
     buildIcon = env.Builder( action = Action(invokeRenderer, "rendering Icon: $SOURCE --> $TARGETS")
                            , single_source = True
-                           , emitter = createIconTargets 
+                           , emitter = createIconTargets
                            )
-    env.Append(BUILDERS = {'IconRender' : buildIcon})    
+    env.Append(BUILDERS = {'IconRender' : buildIcon})
     env.AddMethod(IconCopy)
 
 
@@ -190,7 +190,31 @@ class WrappedStandardExeBuilder(SCons.Util.Proxy):
             and then pass on the call to the wrapped original builder
         """
         customisedEnv = self.getCustomEnvironment(env, target=target, **kw)       # defined in subclasses
-        return self.get().__call__ (customisedEnv, target, source, **kw)
+        buildTarget   = self.buildLocation(customisedEnv, target)
+        buildTarget   = self.invokeOriginalBuilder (customisedEnv, buildTarget, source, **kw) 
+        return buildTarget + self.installTarget(customisedEnv, buildTarget, **kw)
+    
+    
+    def invokeOriginalBuilder(self, env, target, source, **kw):
+        return self.get().__call__ (env, target, source, **kw)
+    
+    def buildLocation(self, env, target):
+        """ prefix project output directory """
+        prefix = self.getBuildDestination(env)
+        return list(prefix+str(name) for name in target)
+    
+    def installTarget(self, env, buildTarget, **kw):
+        """ create an additional installation target
+            for the generated executable artifact
+        """
+        indeedInstall = lambda p: p and p.get('install')
+        
+        if indeedInstall(kw):
+            return env.Install (dir = self.getInstallDestination(env), source=buildTarget)
+        else:
+            return []
+
+
 
 
 class LumieraExeBuilder(WrappedStandardExeBuilder):
@@ -207,6 +231,11 @@ class LumieraExeBuilder(WrappedStandardExeBuilder):
         custEnv = lumiEnv.Clone()
         custEnv.Append( LINKFLAGS = "-Wl,-rpath=\\$$ORIGIN/$MODULES,--enable-new-dtags" )
         return custEnv
+    
+    def getBuildDestination(self, lumiEnv):   return lumiEnv.path.buildExe
+    def getInstallDestination(self, lumiEnv): return lumiEnv.path.installExe
+        
+
 
 
 class LumieraModuleBuilder(WrappedStandardExeBuilder):
@@ -218,6 +247,9 @@ class LumieraModuleBuilder(WrappedStandardExeBuilder):
         custEnv = lumiEnv.Clone()
         custEnv.Append(LINKFLAGS = "-Wl,-soname="+self.defineSoname(target,**kw))
         return custEnv
+    
+    def getBuildDestination(self, lumiEnv):   return lumiEnv.path.buildLib
+    def getInstallDestination(self, lumiEnv): return lumiEnv.path.installLib
     
     
     def defineSoname (self, target, **kw):
@@ -246,21 +278,33 @@ class LumieraModuleBuilder(WrappedStandardExeBuilder):
         return soname
 
 
+
+class LumieraPluginBuilder(LumieraModuleBuilder):
+    
+    def getCustomEnvironment(self, lumiEnv, target, **kw):
+        """ in addition to the ModuleBuilder, define the Lumiera plugin suffix
+        """
+        custEnv = LumieraModuleBuilder.getCustomEnvironment(self, lumiEnv, target, **kw)
+        custEnv.Append (CPPDEFINES='LUMIERA_PLUGIN')
+        custEnv.Replace(SHLIBPREFIX='', SHLIBSUFFIX='.lum')
+        return custEnv
+    
+    def getBuildDestination(self, lumiEnv):   return lumiEnv.path.buildPlug
+    def getInstallDestination(self, lumiEnv): return lumiEnv.path.installPlug
+
+
+
 def register_LumieraCustomBuilders (lumiEnv):
     """ install the customised builder versions tightly integrated with our buildsystem.
         Especially, these builders automatically add the build and installation locations
         and set the RPATH and SONAME in a way to allow a relocatable Lumiera directory structure
     """
-    programBuilder = lumiEnv['BUILDERS']['Program']
-    libraryBuilder = lumiEnv['BUILDERS']['SharedLibrary']
-    smoduleBuilder = lumiEnv['BUILDERS']['LoadableModule']
+    programBuilder = LumieraExeBuilder    (lumiEnv['BUILDERS']['Program'])
+    libraryBuilder = LumieraModuleBuilder (lumiEnv['BUILDERS']['SharedLibrary'])
+    smoduleBuilder = LumieraModuleBuilder (lumiEnv['BUILDERS']['LoadableModule'])
+    lpluginBuilder = LumieraPluginBuilder (lumiEnv['BUILDERS']['LoadableModule'])
     
-    programBuilder = LumieraExeBuilder    (programBuilder)
-    libraryBuilder = LumieraModuleBuilder (libraryBuilder)
-    smoduleBuilder = LumieraModuleBuilder (smoduleBuilder)
-    lpluginBuilder = LumieraModuleBuilder (smoduleBuilder)
-    
-    lumiEnv['BUILDERS']['Program']        = programBuilder    lumiEnv['BUILDERS']['SharedLibrary']  = libraryBuilder    lumiEnv['BUILDERS']['LoadableModule'] = smoduleBuilder
+    lumiEnv['BUILDERS']['Program']        = programBuilder
+    lumiEnv['BUILDERS']['SharedLibrary']  = libraryBuilder
+    lumiEnv['BUILDERS']['LoadableModule'] = smoduleBuilder
     lumiEnv['BUILDERS']['LumieraPlugin']  = lpluginBuilder
-
-    

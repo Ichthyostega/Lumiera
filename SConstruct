@@ -38,10 +38,12 @@ LIBDIR           = 'target/modules'
 #######
 buildExe     = '#$TARGDIR'
 buildLib     = '#$TARGDIR/modules'
+buildPlug    = '#$TARGDIR/modules'
 buildIcon    = '#$TARGDIR/icons'
 buildConf    = '#$TARGDIR/config'
 installExe   = '#$DESTDIR/lib/lumiera'
 installLib   = '#$DESTDIR/lib/lumiera/modules'
+installPlug  = '#$DESTDIR/lib/lumiera/modules'
 installIcon  = '#$DESTDIR/share/lumiera/icons'
 installConf  = '#$DESTDIR/share/lumiera/config'
 
@@ -338,16 +340,16 @@ def defineBuildTargets(env, artifacts):
     
     
     
-    lLib  = env.SharedLibrary('$LIBDIR/lumiera',        srcSubtree(env,'$SRCDIR/lib'))
-    lApp  = env.SharedLibrary('$LIBDIR/lumieracommon',  srcSubtree(env,'$SRCDIR/common'), LIBS=lLib)
-    lBack = env.SharedLibrary('$LIBDIR/lumierabackend', srcSubtree(env,'$SRCDIR/backend'))
-    lProc = env.SharedLibrary('$LIBDIR/lumieraproc',    srcSubtree(env,'$SRCDIR/proc'))
+    lLib  = env.SharedLibrary('lumiera',        srcSubtree(env,'$SRCDIR/lib'),    install=True)
+    lApp  = env.SharedLibrary('lumieracommon',  srcSubtree(env,'$SRCDIR/common'), install=True, LIBS=lLib)
+    lBack = env.SharedLibrary('lumierabackend', srcSubtree(env,'$SRCDIR/backend'),install=True)
+    lProc = env.SharedLibrary('lumieraproc',    srcSubtree(env,'$SRCDIR/proc'),   install=True)
     
     core = lLib+lApp+lBack+lProc
     
     artifacts['corelib'] = core
     artifacts['support'] = lLib
-    artifacts['lumiera'] = env.Program('$TARGDIR/lumiera', ['$SRCDIR/lumiera/main.cpp'], LIBS=core)
+    artifacts['lumiera'] = env.Program('lumiera', ['$SRCDIR/lumiera/main.cpp'], LIBS=core, install=True)
     
     # building Lumiera Plugins
     envPlu = env.Clone()
@@ -365,10 +367,10 @@ def defineBuildTargets(env, artifacts):
     # the Lumiera GTK GUI
     envGtk = env.Clone()
     envGtk.mergeConf(['gtkmm-2.4','gthread-2.0','cairomm-1.0','gdl','xv','xext','sm'])
-    envGtk.Append(CPPDEFINES='LUMIERA_PLUGIN', LIBS=core)
+    envGtk.Append(LIBS=core)
     
     objgui  = srcSubtree(envGtk,'$SRCDIR/gui')
-    guimodule = envGtk.LumieraPlugin('$LIBDIR/gtk_gui', objgui, SHLIBPREFIX='', SHLIBSUFFIX='.lum')
+    guimodule = envGtk.LumieraPlugin('gtk_gui', objgui, install=True)
     artifacts['gui'] = ( guimodule
                        + env.Install('$TARGDIR', env.Glob('$SRCDIR/gui/*.rc'))
                        + artifacts['icons']
@@ -404,20 +406,13 @@ def definePostBuildTargets(env, artifacts):
 
 
 def defineInstallTargets(env, artifacts):
-    """ define artifacts to be installed into target locations.
+    """ define additional artifacts to be installed into target locations.
+        @note: we use customised SCons builders defining install targets 
+               for all executables automatically. see LumieraEnvironment.py
     """
-    binDir = '$DESTDIR/bin/'
-    lumDir = '$DESTDIR/lib/lumiera/'
-    modDir = '$DESTDIR/lib/lumiera/$MODULES/'
-    shaDir = '$DESTDIR/share/lumiera/'
-    env.Install(dir = modDir, source=artifacts['corelib'])
-    env.Install(dir = modDir, source=artifacts['plugins'])
-    env.Install(dir = modDir, source=artifacts['guimodule'])
-    lumi = env.Install(dir = lumDir, source=artifacts['lumiera'])
-    tool = env.Install(dir = lumDir, source=artifacts['tools'])
-    env.SymLink(binDir+"lumiera",lumi,"../lib/lumiera/lumiera")
+    env.SymLink('$DESTDIR/bin/lumiera',env.path.installExe+'lumiera',"../lib/lumiera/lumiera")
     
-    env.Install(dir = shaDir, source="data/config/dummy_lumiera.ini") ### TODO should become a resource builder
+    env.Install(dir = env.path.installConf, source="data/config/dummy_lumiera.ini") ### TODO should become a resource builder
 #   env.Install(dir = '$DESTDIR/share/doc/lumiera$VERSION/devel', source=artifacts['doxydoc'])
 
 #####################################################################
