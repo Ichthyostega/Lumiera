@@ -23,17 +23,29 @@
 
 
 #-----------------------------------Configuration
-OPTIONSCACHEFILE = 'optcache' 
-CUSTOPTIONSFILE  = 'custom-options'
+TARGDIR      = 'target'
+VERSION      = '0.1+pre.01'
+TOOLDIR      = './admin/scons'
+SCRIPTDIR    = './admin'
+OPTCACHE     = 'optcache' 
+CUSTOPTFILE  = 'custom-options'
+#######
 SRCDIR           = 'src'
-TARDIR           = 'target'
-LIBDIR           = 'target/modules'
-MODULES          = 'modules'
 TESTDIR          = 'tests'
 ICONDIR          = 'icons'
-VERSION          = '0.1+pre.01'
-TOOLDIR          = './admin/scons'
-SCRIPTDIR        = './admin'
+MODULES          = 'modules'
+LIBDIR           = 'target/modules'
+#######
+buildExe     = '#$TARGDIR'
+buildLib     = '#$TARGDIR/modules'
+buildIcon    = '#$TARGDIR/icons'
+buildConf    = '#$TARGDIR/config'
+installExe   = '#$DESTDIR/lib/lumiera'
+installLib   = '#$DESTDIR/lib/lumiera/modules'
+installIcon  = '#$DESTDIR/share/lumiera/icons'
+installConf  = '#$DESTDIR/share/lumiera/config'
+
+localDefinitions = locals()
 #-----------------------------------Configuration
 
 # NOTE: scons -h for help.
@@ -55,10 +67,10 @@ from LumieraEnvironment import *
 
 #####################################################################
 
-def setupBasicEnvironment():
+def setupBasicEnvironment(localDefinitions):
     """ define cmdline options, build type decisions
     """
-    EnsurePythonVersion(2,3)
+    EnsurePythonVersion(2,4)
     EnsureSConsVersion(1,0)
     
     Decider('MD5-timestamp') # detect changed files by timestamp, then do a MD5
@@ -66,21 +78,19 @@ def setupBasicEnvironment():
     vars = defineCmdlineVariables() 
     env = LumieraEnvironment(variables=vars
                             ,toolpath = [TOOLDIR]
-                            ,tools = ["default", "BuilderGCH", "BuilderDoxygen"]  
-                            ) 
-    env.Tool("ToolDistCC")
-    env.Tool("ToolCCache")
+                            ,pathConfig = extract_localPathDefs(localDefinitions)
+                            ,TARGDIR  = TARGDIR
+                            ,DESTDIR = '$INSTALLDIR/$PREFIX'
+                            ,VERSION = VERSION
+                            )
     handleVerboseMessages(env)
     
     env.Append ( CCCOM=' -std=gnu99') 
     env.Append ( SHCCCOM=' -std=gnu99') # workaround for a bug: CCCOM currently doesn't honour CFLAGS, only CCFLAGS 
-    env.Replace( VERSION=VERSION
-               , SRCDIR=SRCDIR
-               , TARDIR=TARDIR
+    env.Replace( SRCDIR=SRCDIR
                , LIBDIR=LIBDIR
                , MODULES=MODULES
                , ICONDIR=ICONDIR
-               , DESTDIR=env.subst('$INSTALLDIR/$PREFIX')
                , CPPPATH=["#"+SRCDIR]   # used to find includes, "#" means always absolute to build-root
                , CPPDEFINES=['-DLUMIERA_VERSION='+VERSION ]     # note: it's a list to append further defines
                , CCFLAGS='-Wall -Wextra '
@@ -102,7 +112,7 @@ def setupBasicEnvironment():
                                     ,'LUMIERA_CONFIG_PATH=\\"$DESTDIR/share/lumiera/:.\\"') 
     
     prepareOptionsHelp(vars,env)
-    vars.Save(OPTIONSCACHEFILE, env)
+    vars.Save(OPTCACHE, env)
     return env
 
 def appendCppDefine(env,var,cppVar, elseVal=''):
@@ -148,7 +158,7 @@ def defineCmdlineVariables():
         you may define custom variable settings in a separate file. 
         Commandline will override both.
     """
-    vars = Variables([OPTIONSCACHEFILE, CUSTOPTIONSFILE])
+    vars = Variables([OPTCACHE, CUSTOPTFILE])
     vars.AddVariables(
          ('ARCHFLAGS', 'Set architecture-specific compilation flags (passed literally to gcc)','')
         ,('CC', 'Set the C compiler to use.', 'gcc')
@@ -311,7 +321,7 @@ def definePackagingTargets(env, artifacts):
     """ build operations and targets to be done /before/ compiling.
         things like creating a source tarball or preparing a version header.
     """
-    pass
+    pass    ## currently none
 
 
 
@@ -337,7 +347,7 @@ def defineBuildTargets(env, artifacts):
     
     artifacts['corelib'] = core
     artifacts['support'] = lLib
-    artifacts['lumiera'] = env.LumieraExe('$TARDIR/lumiera', ['$SRCDIR/lumiera/main.cpp'], LIBS=core)
+    artifacts['lumiera'] = env.LumieraExe('$TARGDIR/lumiera', ['$SRCDIR/lumiera/main.cpp'], LIBS=core)
     
     # building Lumiera Plugins
     envPlu = env.Clone()
@@ -360,7 +370,7 @@ def defineBuildTargets(env, artifacts):
     objgui  = srcSubtree(envGtk,'$SRCDIR/gui')
     guimodule = envGtk.LoadableModule('$LIBDIR/gtk_gui', objgui, SHLIBPREFIX='', SHLIBSUFFIX='.lum')
     artifacts['gui'] = ( guimodule
-                       + env.Install('$TARDIR', env.Glob('$SRCDIR/gui/*.rc'))
+                       + env.Install('$TARGDIR', env.Glob('$SRCDIR/gui/*.rc'))
                        + artifacts['icons']
                        )
     artifacts['guimodule'] = guimodule ###TODO better organisation of GUI components
@@ -405,7 +415,6 @@ def defineInstallTargets(env, artifacts):
     env.Install(dir = modDir, source=artifacts['guimodule'])
     lumi = env.Install(dir = lumDir, source=artifacts['lumiera'])
     tool = env.Install(dir = lumDir, source=artifacts['tools'])
-    print "Aufruf LINK DESTDIR=" + env.get('DESTDIR')
     env.SymLink(binDir+"lumiera",lumi,"../lib/lumiera/lumiera")
     
     env.Install(dir = shaDir, source="data/config/dummy_lumiera.ini") ### TODO should become a resource builder
@@ -419,8 +428,7 @@ def defineInstallTargets(env, artifacts):
 
 ### === MAIN === ####################################################
 
-
-env = setupBasicEnvironment()
+env = setupBasicEnvironment(localDefinitions)
 
 if not (isCleanupOperation(env) or isHelpRequest()):
     env = configurePlatform(env)

@@ -38,9 +38,14 @@ class LumieraEnvironment(Environment):
         This allows us to carry structured config data without
         using global vars. Idea inspired by Ardour. 
     """
-    def __init__(self,*args,**kw):
-        Environment.__init__ (self,*args,**kw)
+    def __init__(self, pathConfig, **kw):
+        Environment.__init__ (self,**kw)
+        self.path = Record (pathConfig)
         self.libInfo = {}
+        self.Tool("BuilderGCH")
+        self.Tool("BuilderDoxygen")  
+        self.Tool("ToolDistCC")
+        self.Tool("ToolCCache")
         RegisterIcon_Builder(self)
     
     def Configure (self, *args, **kw):
@@ -77,7 +82,7 @@ class LumieraEnvironment(Environment):
             print "Problems configuring the Library %s (>= %s)" % (libID,minVersion)
             return False
         
-        self.libInfo[libID] = libInfo = LumieraEnvironment()
+        self.libInfo[libID] = libInfo = Environment()
         libInfo["ENV"]["PKG_CONFIG_PATH"] = os.environ.get("PKG_CONFIG_PATH")
         libInfo.ParseConfig ('pkg-config --cflags --libs '+ libID )
         if alias:
@@ -196,11 +201,11 @@ def RegisterIcon_Builder(env):
     """
     
     import render_icon as renderer  # load Joel's python script for invoking the rsvg-convert (SVG render)
-    renderer.rsvgPath = env.subst("$TARDIR/rsvg-convert")
+    renderer.rsvgPath = env.subst("$TARGDIR/rsvg-convert")
     
     def invokeRenderer(target, source, env):
         source = str(source[0])
-        targetdir = env.subst("$TARDIR")
+        targetdir = env.subst("$TARGDIR")
         renderer.main([source,targetdir])
         return 0
         
@@ -209,12 +214,12 @@ def RegisterIcon_Builder(env):
         source = str(source[0])
         targetdir = os.path.basename(str(target[0]))
         targetfiles = renderer.getTargetNames(source)    # parse SVG
-        return (["$TARDIR/%s" % name for name in targetfiles], source)
+        return (["$TARGDIR/%s" % name for name in targetfiles], source)
     
     def IconCopy(env, source):
          """Copy icon to corresponding icon dir. """
          subdir = getDirname(source)
-         return env.Install("$TARDIR/%s" % subdir, source)
+         return env.Install("$TARGDIR/%s" % subdir, source)
     
      
     buildIcon = env.Builder( action = Action(invokeRenderer, "rendering Icon: $SOURCE --> $TARGETS")

@@ -28,6 +28,7 @@ import fnmatch
 import re
 import tarfile
 
+from SCons import Util
 from SCons.Action import Action
 
 
@@ -151,7 +152,7 @@ def createPlugins(env, dir):
     """ investigate the given source directory to identify all contained source trees.
         @return: a list of build nodes defining a plugin for each of these source trees.
     """
-    return [env.LumieraPlugin( '#$TARDIR/$MODULES/%s' % getDirname(tree) 
+    return [env.LumieraPlugin( '#$TARGDIR/$MODULES/%s' % getDirname(tree) 
                              , srcSubtree(env, tree)
                              , SHLIBPREFIX='', SHLIBSUFFIX='.lum'
                              )
@@ -196,38 +197,39 @@ def checkCommandOption(env, optID, val=None, cmdName=None):
 
 
 
-def RegisterIcon_Builder(env):
-    """ Registers Custom Builders for generating and installing Icons.
-        Additionally you need to build the tool (rsvg-convert.c)
-        used to generate png from the svg source using librsvg. 
-    """
-    
-    import render_icon as renderer  # load Joel's python script for invoking the rsvg-convert (SVG render)
-    renderer.rsvgPath = env.subst("$TARDIR/rsvg-convert")
-    
-    def invokeRenderer(target, source, env):
-        source = str(source[0])
-        targetdir = env.subst("$TARDIR")
-        renderer.main([source,targetdir])
-        return 0
-        
-    def createIconTargets(target,source,env):
-        """ parse the SVG to get the target file names """
-        source = str(source[0])
-        targetdir = os.path.basename(str(target[0]))
-        targetfiles = renderer.getTargetNames(source)    # parse SVG
-        return (["$TARDIR/%s" % name for name in targetfiles], source)
-    
-    def IconCopy(env, source):
-         """Copy icon to corresponding icon dir. """
-         subdir = getDirname(source)
-         return env.Install("$TARDIR/%s" % subdir, source)
-    
-     
-    buildIcon = env.Builder( action = Action(invokeRenderer, "rendering Icon: $SOURCE --> $TARGETS")
-                           , single_source = True
-                           , emitter = createIconTargets 
-                           )
-    env.Append(BUILDERS = {'IconRender' : buildIcon})    
-    env.AddMethod(IconCopy)
 
+class Record(dict):
+    """ a set of properties with map style access.
+        Record is a dictionary, but the elements can be accessed
+        conveniently as if they where object fields
+    """
+    def __init__(self, defaults=None, **props):
+        if defaults:
+            defaults.update(props)
+            props = defaults
+        dict.__init__(self,props)
+        
+    def __getattr__(self,key):
+        if key=='__get__' or key=='__set__':
+            raise AttributeError
+        return self.setdefault(key)
+    
+    def __setattr__(self,key,val):
+        self[key] = val
+
+
+def extract_localPathDefs (localDefs):
+    """ extracts the directory configuration values.
+        For sake of simplicity, paths and directories are defined
+        immediately as global variables in the SConstruct. This helper
+        extracts from the given dict the variables matching some magical
+        pattern and returns them wrapped into a Record for convenient access
+    """
+    def relevantPathDefs (mapping):
+        for (k,v) in mapping.items():
+            if k.startswith('build') or k.startswith('install') and Util.is_String(v):
+                v = v.strip()
+                if not v.endswith('/'): v += '/'
+                yield (k,v)
+                
+    return dict(relevantPathDefs(localDefs))
