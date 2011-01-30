@@ -109,65 +109,6 @@ class LumieraEnvironment(Environment):
         action = Action(makeLink,reportLink)
         self.Command (target,source, action)
     
-    
-    def defineSoname (self, *args,**kw):
-        """ internal helper to extract or guess
-            a suitable library SONAME, either using an
-            explicit spec, falling back on the lib filename
-        """
-        if 'soname' in kw:
-            soname = self.subst(kw['soname'])  # explicitely defined by user
-        else:
-            if len(args) > 0:
-                pathname = args[0]
-            elif 'target' in kw:
-                pathname = kw['target']
-            else:
-                raise SyntaxError("Library builder requires target spec. Arguments: %s %s" % (args,kw))
-            (dirprefix, libname) = path.split(pathname)
-            if not libname:
-                raise ValueError("Library name missing. Only got a directory: "+pathname)
-            
-            libname = "${SHLIBPREFIX}%s$SHLIBSUFFIX" % libname
-            soname = self.subst(libname)       # else: use the library filename as DT_SONAME
-        assert soname
-        return soname
-    
-    
-    def LumieraLibrary (self, *args,**kw):
-        """ augments the built-in SharedLibrary() builder to add 
-            some tweaks missing in SCons 1.0, like setting a SONAME proper
-            instead of just passing the relative pathname to the linker
-        """
-        subEnv = self.Clone()
-        subEnv.Append(LINKFLAGS = "-Wl,-soname="+self.defineSoname(*args,**kw))
-        
-        libBuilder = self.get_builder('SharedLibrary')
-        return libBuilder(subEnv, *args,**kw); # invoke the predefined builder on the augmented environment
-    
-    
-    def LumieraPlugin (self, *args,**kw):
-        """ builds a shared library, autmented by some defaults for lumiera plugins.
-        """
-        subEnv = self.Clone()
-        subEnv.Append(LINKFLAGS = "-Wl,-soname="+self.defineSoname(*args,**kw))
-        
-        libBuilder = self.get_builder('LoadableModule')
-        return libBuilder(subEnv, *args,**kw); # invoke the predefined builder on the augmented environment
-    
-    
-    def LumieraExe (self, *args,**kw):
-        """ augments the built-in Program() builder to add a fixed rpath based on $ORIGIN
-            That is: after searching LD_LIBRARY_PATH, but before the standard linker search,
-            the directory relative to the position of the executable ($ORIGIN) is searched.
-            This search path is active not only for the executable, but for all libraries
-            it is linked with
-        """
-        subEnv = self.Clone()
-        subEnv.Append( LINKFLAGS = "-Wl,-rpath=\\$$ORIGIN/$MODULES,--enable-new-dtags" )
-        
-        programBuilder = self.get_builder('Program')
-        return programBuilder (subEnv, *args,**kw);
 
 
 
@@ -317,7 +258,9 @@ def register_LumieraCustomBuilders (lumiEnv):
     programBuilder = LumieraExeBuilder    (programBuilder)
     libraryBuilder = LumieraModuleBuilder (libraryBuilder)
     smoduleBuilder = LumieraModuleBuilder (smoduleBuilder)
+    lpluginBuilder = LumieraModuleBuilder (smoduleBuilder)
     
     lumiEnv['BUILDERS']['Program']        = programBuilder    lumiEnv['BUILDERS']['SharedLibrary']  = libraryBuilder    lumiEnv['BUILDERS']['LoadableModule'] = smoduleBuilder
+    lumiEnv['BUILDERS']['LumieraPlugin']  = lpluginBuilder
 
     

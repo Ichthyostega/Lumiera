@@ -338,16 +338,16 @@ def defineBuildTargets(env, artifacts):
     
     
     
-    lLib  = env.LumieraLibrary('$LIBDIR/lumiera',        srcSubtree(env,'$SRCDIR/lib'))
-    lApp  = env.LumieraLibrary('$LIBDIR/lumieracommon',  srcSubtree(env,'$SRCDIR/common'), LIBS=lLib)
-    lBack = env.LumieraLibrary('$LIBDIR/lumierabackend', srcSubtree(env,'$SRCDIR/backend'))
-    lProc = env.LumieraLibrary('$LIBDIR/lumieraproc',    srcSubtree(env,'$SRCDIR/proc'))
+    lLib  = env.SharedLibrary('$LIBDIR/lumiera',        srcSubtree(env,'$SRCDIR/lib'))
+    lApp  = env.SharedLibrary('$LIBDIR/lumieracommon',  srcSubtree(env,'$SRCDIR/common'), LIBS=lLib)
+    lBack = env.SharedLibrary('$LIBDIR/lumierabackend', srcSubtree(env,'$SRCDIR/backend'))
+    lProc = env.SharedLibrary('$LIBDIR/lumieraproc',    srcSubtree(env,'$SRCDIR/proc'))
     
     core = lLib+lApp+lBack+lProc
     
     artifacts['corelib'] = core
     artifacts['support'] = lLib
-    artifacts['lumiera'] = env.LumieraExe('$TARGDIR/lumiera', ['$SRCDIR/lumiera/main.cpp'], LIBS=core)
+    artifacts['lumiera'] = env.Program('$TARGDIR/lumiera', ['$SRCDIR/lumiera/main.cpp'], LIBS=core)
     
     # building Lumiera Plugins
     envPlu = env.Clone()
@@ -368,7 +368,7 @@ def defineBuildTargets(env, artifacts):
     envGtk.Append(CPPDEFINES='LUMIERA_PLUGIN', LIBS=core)
     
     objgui  = srcSubtree(envGtk,'$SRCDIR/gui')
-    guimodule = envGtk.LoadableModule('$LIBDIR/gtk_gui', objgui, SHLIBPREFIX='', SHLIBSUFFIX='.lum')
+    guimodule = envGtk.LumieraPlugin('$LIBDIR/gtk_gui', objgui, SHLIBPREFIX='', SHLIBSUFFIX='.lum')
     artifacts['gui'] = ( guimodule
                        + env.Install('$TARGDIR', env.Glob('$SRCDIR/gui/*.rc'))
                        + artifacts['icons']
@@ -441,8 +441,6 @@ artifacts = {}
 # 'gui'         : the GTK UI (plugin)
 # 'plugins'     : plugin shared lib
 # 'tools'       : small tool applications (e.g mpegtoc)
-# 'src,tar'     : source tree as tarball (without doc)
-# 'doc.tar'     : uml model, wiki, dev docu (no src)
 
 definePackagingTargets(env, artifacts)
 defineBuildTargets(env, artifacts)
