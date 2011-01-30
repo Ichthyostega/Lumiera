@@ -23,8 +23,8 @@ envPlu.Append(CPPPATH='#/.')
 
 def testExecutable(env,tree, exeName=None, obj=None):
     """ declare all targets needed to create a standalone
-        Test executable of the given Sub-tree. Note that
-        each subdir is built in its own Environment.
+        Test executable of the given Sub-tree.
+        @note this tree uses separate Environment/Includepath
     """
     env = env.Clone()
     env.Append(CPPPATH=tree) # add Subdir to Includepath 

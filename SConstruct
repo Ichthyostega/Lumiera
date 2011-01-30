@@ -377,11 +377,6 @@ def definePostBuildTargets(env, artifacts):
     """ define further actions after the core build (e.g. Documentaion).
         define alias targets to trigger the installing.
     """
-    ib = env.Alias('install-bin', '$DESTDIR/bin')
-    il = env.Alias('install-lib', '$DESTDIR/lib')
-    id = env.Alias('install-dat', '$DESTDIR/share')
-    env.Alias('install', [ib, il, id])
-    
     build = env.Alias('build', artifacts['lumiera']+artifacts['gui']+artifacts['plugins']+artifacts['tools'])
     env.Default('build')
     # additional files to be cleaned when cleaning 'build'
@@ -404,6 +399,8 @@ def defineInstallTargets(env, artifacts):
     
     env.Install(dir = env.path.installConf, source=env.path.srcConf+'dummy_lumiera.ini') ### TODO should become a resource builder
 #   env.Install(dir = '$DESTDIR/share/doc/lumiera$VERSION/devel', source=artifacts['doxydoc'])
+    
+    env.Alias('install', '$DESTDIR')
 
 #####################################################################
 

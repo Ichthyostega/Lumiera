@@ -187,12 +187,15 @@ class WrappedStandardExeBuilder(SCons.Util.Proxy):
     def __call__(self, env, target=None, source=None, **kw):
         """ when the builder gets invoked from the SConscript...
             create a clone environment for specific configuration
-            and then pass on the call to the wrapped original builder
+            and then pass on the call to the wrapped original builder.
+            Automatically define installation targets for build results.
+            @note only returning the build targets, not the install targets 
         """
         customisedEnv = self.getCustomEnvironment(env, target=target, **kw)       # defined in subclasses
         buildTarget   = self.buildLocation(customisedEnv, target)
-        buildTarget   = self.invokeOriginalBuilder (customisedEnv, buildTarget, source, **kw) 
-        return buildTarget + self.installTarget(customisedEnv, buildTarget, **kw)
+        buildTarget   = self.invokeOriginalBuilder (customisedEnv, buildTarget, source, **kw)
+        self.installTarget(customisedEnv, buildTarget, **kw) 
+        return buildTarget 
     
     
     def invokeOriginalBuilder(self, env, target, source, **kw):
