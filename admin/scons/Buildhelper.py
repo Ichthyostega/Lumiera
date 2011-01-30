@@ -227,7 +227,7 @@ def extract_localPathDefs (localDefs):
     """
     def relevantPathDefs (mapping):
         for (k,v) in mapping.items():
-            if k.startswith('build') or k.startswith('install') and Util.is_String(v):
+            if (k.startswith('src') or k.startswith('build') or k.startswith('install')) and Util.is_String(v):
                 v = v.strip()
                 if not v.endswith('/'): v += '/'
                 yield (k,v)

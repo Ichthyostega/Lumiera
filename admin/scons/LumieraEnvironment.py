@@ -229,7 +229,7 @@ class LumieraExeBuilder(WrappedStandardExeBuilder):
                    which results in LD_LIBRARY_PATH being searched *before* the RPATH
         """
         custEnv = lumiEnv.Clone()
-        custEnv.Append( LINKFLAGS = "-Wl,-rpath=\\$$ORIGIN/$MODULES,--enable-new-dtags" )
+        custEnv.Append( LINKFLAGS = "-Wl,-rpath=\\$$ORIGIN/modules,--enable-new-dtags" )
         return custEnv
     
     def getBuildDestination(self, lumiEnv):   return lumiEnv.path.buildExe

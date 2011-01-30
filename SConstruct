@@ -29,13 +29,9 @@ TOOLDIR      = './admin/scons'
 SCRIPTDIR    = './admin'
 OPTCACHE     = 'optcache' 
 CUSTOPTFILE  = 'custom-options'
-#######
-SRCDIR           = 'src'
-TESTDIR          = 'tests'
-ICONDIR          = 'icons'
-MODULES          = 'modules'
-LIBDIR           = 'target/modules'
-#######
+
+srcIcon      = 'icons'
+srcConf      = 'data/config'
 buildExe     = '#$TARGDIR'
 buildLib     = '#$TARGDIR/modules'
 buildPlug    = '#$TARGDIR/modules'
@@ -89,11 +85,7 @@ def setupBasicEnvironment(localDefinitions):
     
     env.Append ( CCCOM=' -std=gnu99') 
     env.Append ( SHCCCOM=' -std=gnu99') # workaround for a bug: CCCOM currently doesn't honour CFLAGS, only CCFLAGS 
-    env.Replace( SRCDIR=SRCDIR
-               , LIBDIR=LIBDIR
-               , MODULES=MODULES
-               , ICONDIR=ICONDIR
-               , CPPPATH=["#"+SRCDIR]   # used to find includes, "#" means always absolute to build-root
+    env.Replace( CPPPATH   =["#src"]    # used to find includes, "#" means always absolute to build-root
                , CPPDEFINES=['-DLUMIERA_VERSION='+VERSION ]     # note: it's a list to append further defines
                , CCFLAGS='-Wall -Wextra '
                , CFLAGS='-std=gnu99' 
@@ -108,8 +100,8 @@ def setupBasicEnvironment(localDefinitions):
     appendVal(env,'DEBUG',    'CCFLAGS',   val=' -ggdb')
     
     # setup search path for Lumiera plugins
-    appendCppDefine(env,'PKGLIBDIR','LUMIERA_PLUGIN_PATH=\\"$PKGLIBDIR/:./$MODULES\\"'
-                                   ,'LUMIERA_PLUGIN_PATH=\\"$DESTDIR/lib/lumiera/:./$MODULES\\"') 
+    appendCppDefine(env,'PKGLIBDIR','LUMIERA_PLUGIN_PATH=\\"$PKGLIBDIR/:./modules\\"'
+                                   ,'LUMIERA_PLUGIN_PATH=\\"$DESTDIR/lib/lumiera/:./modules\\"') 
     appendCppDefine(env,'PKGDATADIR','LUMIERA_CONFIG_PATH=\\"$PKGLIBDIR/:.\\"'
                                     ,'LUMIERA_CONFIG_PATH=\\"$DESTDIR/share/lumiera/:.\\"') 
     
@@ -198,10 +190,8 @@ Special Targets:
      testcode: additionally compile the Testsuite
      check   : build and run the Testsuite
      doc     : generate documentation (Doxygen)
+     all     : build and testcode and doc
      install : install created artifacts at PREFIX
-     src.tar : create source tarball
-     doc.tar : create developer doc tarball
-     tar     : create all tarballs
 
 Configuration Options:
 """
@@ -334,22 +324,22 @@ def defineBuildTargets(env, artifacts):
     """
     
     # use PCH to speed up building // disabled for now due to strange failures
-#   env['GCH'] = ( env.PrecompiledHeader('$SRCDIR/pre.hpp')
-#                + env.PrecompiledHeader('$SRCDIR/pre_a.hpp')
+#   env['GCH'] = ( env.PrecompiledHeader('src/pre.hpp')
+#                + env.PrecompiledHeader('src/pre_a.hpp')
 #                )
     
     
     
-    lLib  = env.SharedLibrary('lumiera',        srcSubtree(env,'$SRCDIR/lib'),    install=True)
-    lApp  = env.SharedLibrary('lumieracommon',  srcSubtree(env,'$SRCDIR/common'), install=True, LIBS=lLib)
-    lBack = env.SharedLibrary('lumierabackend', srcSubtree(env,'$SRCDIR/backend'),install=True)
-    lProc = env.SharedLibrary('lumieraproc',    srcSubtree(env,'$SRCDIR/proc'),   install=True)
+    lLib  = env.SharedLibrary('lumiera',        srcSubtree(env,'src/lib'),    install=True)
+    lApp  = env.SharedLibrary('lumieracommon',  srcSubtree(env,'src/common'), install=True, LIBS=lLib)
+    lBack = env.SharedLibrary('lumierabackend', srcSubtree(env,'src/backend'),install=True)
+    lProc = env.SharedLibrary('lumieraproc',    srcSubtree(env,'src/proc'),   install=True)
     
     core = lLib+lApp+lBack+lProc
     
     artifacts['corelib'] = core
     artifacts['support'] = lLib
-    artifacts['lumiera'] = env.Program('lumiera', ['$SRCDIR/lumiera/main.cpp'], LIBS=core, install=True)
+    artifacts['lumiera'] = env.Program('lumiera', ['src/lumiera/main.cpp'], LIBS=core, install=True)
     
     # building Lumiera Plugins
     envPlu = env.Clone()
@@ -357,8 +347,8 @@ def defineBuildTargets(env, artifacts):
     artifacts['plugins'] = [] # currently none 
     
     # render and install Icons
-    vector_icon_dir      = env.subst('$ICONDIR/svg')
-    prerendered_icon_dir = env.subst('$ICONDIR/prerendered')
+    vector_icon_dir      = env.path.srcIcon+'svg'
+    prerendered_icon_dir = env.path.srcIcon+'prerendered'
     artifacts['icons']   = ( [env.IconRender(f) for f in scanSubtree(vector_icon_dir,      ['*.svg'])]
                            + [env.IconCopy(f)   for f in scanSubtree(prerendered_icon_dir, ['*.png'])]
                            )
@@ -369,17 +359,17 @@ def defineBuildTargets(env, artifacts):
     envGtk.mergeConf(['gtkmm-2.4','gthread-2.0','cairomm-1.0','gdl','xv','xext','sm'])
     envGtk.Append(LIBS=core)
     
-    objgui  = srcSubtree(envGtk,'$SRCDIR/gui')
+    objgui  = srcSubtree(envGtk,'src/gui')
     guimodule = envGtk.LumieraPlugin('gtk_gui', objgui, install=True)
     artifacts['gui'] = ( guimodule
-                       + env.Install('$TARGDIR', env.Glob('$SRCDIR/gui/*.rc'))
+                       + env.Install('$TARGDIR', env.Glob('src/gui/*.rc'))
                        + artifacts['icons']
                        )
     artifacts['guimodule'] = guimodule ###TODO better organisation of GUI components
 
     # call subdir SConscript(s) for independent components
-    SConscript(dirs=[SRCDIR+'/tool'], exports='env        artifacts core')
-    SConscript(dirs=[TESTDIR],        exports='env envPlu artifacts core')
+    SConscript(dirs=['src/tool'], exports='env        artifacts core')
+    SConscript(dirs=['tests'],    exports='env envPlu artifacts core')
 
 
 
@@ -396,13 +386,13 @@ def definePostBuildTargets(env, artifacts):
     env.Default('build')
     # additional files to be cleaned when cleaning 'build'
     env.Clean ('build', [ 'scache.conf', '.sconf_temp', '.sconsign.dblite', 'config.log' ])
-    env.Clean ('build', [ '$SRCDIR/pre.gch' ])
+    env.Clean ('build', [ 'src/pre.gch' ])
     
     doxydoc = artifacts['doxydoc'] = env.Doxygen('doc/devel/Doxyfile')
     env.Alias ('doc', doxydoc)
     env.Clean ('doc', doxydoc + ['doc/devel/,doxylog','doc/devel/warnings.txt'])
     
-    allbu = env.Alias('allbuild', build+artifacts['testsuite']+doxydoc)
+    allbu = env.Alias('all', build+artifacts['testsuite']+doxydoc)
 
 
 def defineInstallTargets(env, artifacts):
@@ -410,9 +400,9 @@ def defineInstallTargets(env, artifacts):
         @note: we use customised SCons builders defining install targets 
                for all executables automatically. see LumieraEnvironment.py
     """
-    env.SymLink('$DESTDIR/bin/lumiera',env.path.installExe+'lumiera',"../lib/lumiera/lumiera")
+    env.SymLink('$DESTDIR/bin/lumiera',env.path.installExe+'lumiera','../lib/lumiera/lumiera')
     
-    env.Install(dir = env.path.installConf, source="data/config/dummy_lumiera.ini") ### TODO should become a resource builder
+    env.Install(dir = env.path.installConf, source=env.path.srcConf+'dummy_lumiera.ini') ### TODO should become a resource builder
 #   env.Install(dir = '$DESTDIR/share/doc/lumiera$VERSION/devel', source=artifacts['doxydoc'])
 
 #####################################################################
