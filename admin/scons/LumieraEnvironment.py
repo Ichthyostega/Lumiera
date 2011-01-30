@@ -47,6 +47,7 @@ class LumieraEnvironment(Environment):
         self.Tool("ToolDistCC")
         self.Tool("ToolCCache")
         RegisterIcon_Builder(self)
+        register_LumieraCustomBuilders(self)
     
     def Configure (self, *args, **kw):
         kw['env'] = self
@@ -229,3 +230,94 @@ def RegisterIcon_Builder(env):
     env.Append(BUILDERS = {'IconRender' : buildIcon})    
     env.AddMethod(IconCopy)
 
+
+
+
+class WrappedStandardExeBuilder(SCons.Util.Proxy):
+    """ Helper to add customisations and default configurations to SCons standard builders.
+        The original builder object is wrapped and most calls are simply forwarded to this
+        wrapped object by Python magic. But some calls are intecepted in order to inject
+        suitalbe default configuration based on the project setup.
+    """
+    
+    def __init__(self, originalBuilder):
+        SCons.Util.Proxy.__init__ (self, originalBuilder)
+    
+    def __call__(self, env, target=None, source=None, **kw):
+        """ when the builder gets invoked from the SConscript...
+            create a clone environment for specific configuration
+            and then pass on the call to the wrapped original builder
+        """
+        customisedEnv = self.getCustomEnvironment(env, target=target, **kw)       # defined in subclasses
+        return self.get().__call__ (customisedEnv, target, source, **kw)
+
+
+class LumieraExeBuilder(WrappedStandardExeBuilder):
+    
+    def getCustomEnvironment(self, lumiEnv, **kw):
+        """ augments the built-in Program() builder to add a fixed rpath based on $ORIGIN
+            That is: after searching LD_LIBRARY_PATH, but before the standard linker search,
+            the directory relative to the position of the executable ($ORIGIN) is searched.
+            This search path is active not only for the executable, but for all libraries
+            it is linked with.
+            @note: enabling the new ELF dynamic tags. This causes a DT_RUNPATH to be set,
+                   which results in LD_LIBRARY_PATH being searched *before* the RPATH
+        """
+        custEnv = lumiEnv.Clone()
+        custEnv.Append( LINKFLAGS = "-Wl,-rpath=\\$$ORIGIN/$MODULES,--enable-new-dtags" )
+        return custEnv
+
+
+class LumieraModuleBuilder(WrappedStandardExeBuilder):
+    
+    def getCustomEnvironment(self, lumiEnv, target, **kw):
+        """ augments the built-in SharedLibrary() builder to add  some tweaks missing in SCons 1.0,
+            like setting a SONAME proper instead of just passing the relative pathname to the linker
+        """
+        custEnv = lumiEnv.Clone()
+        custEnv.Append(LINKFLAGS = "-Wl,-soname="+self.defineSoname(target,**kw))
+        return custEnv
+    
+    
+    def defineSoname (self, target, **kw):
+        """ internal helper to extract or guess
+            a suitable library SONAME, either using an
+            explicit spec, falling back on the lib filename
+        """
+        if 'soname' in kw:
+            soname = self.subst(kw['soname'])  # explicitely defined by user
+        else:                                  # else: use the library filename as DT_SONAME
+            if SCons.Util.is_String(target):
+                pathname = target.strip()
+            elif 1 == len(target):
+                pathname = str(target[0]).strip()
+            else:
+                raise SyntaxError("Lumiera Library builder requires exactly one target spec. Found target="+str(target))
+            
+            assert pathname
+            (dirprefix, libname) = path.split(pathname)
+            if not libname:
+                raise ValueError("Library name missing. Only got a directory: "+pathname)
+            
+            soname = "${SHLIBPREFIX}%s$SHLIBSUFFIX" % libname
+        
+        assert soname
+        return soname
+
+
+def register_LumieraCustomBuilders (lumiEnv):
+    """ install the customised builder versions tightly integrated with our buildsystem.
+        Especially, these builders automatically add the build and installation locations
+        and set the RPATH and SONAME in a way to allow a relocatable Lumiera directory structure
+    """
+    programBuilder = lumiEnv['BUILDERS']['Program']
+    libraryBuilder = lumiEnv['BUILDERS']['SharedLibrary']
+    smoduleBuilder = lumiEnv['BUILDERS']['LoadableModule']
+    
+    programBuilder = LumieraExeBuilder    (programBuilder)
+    libraryBuilder = LumieraModuleBuilder (libraryBuilder)
+    smoduleBuilder = LumieraModuleBuilder (smoduleBuilder)
+    
+    lumiEnv['BUILDERS']['Program']        = programBuilder    lumiEnv['BUILDERS']['SharedLibrary']  = libraryBuilder    lumiEnv['BUILDERS']['LoadableModule'] = smoduleBuilder
+
+    
