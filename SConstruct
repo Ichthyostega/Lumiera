@@ -104,8 +104,8 @@ def setupBasicEnvironment(localDefinitions):
     appendVal(env,'DEBUG',    'CCFLAGS',   val=' -ggdb')
     
     # setup search path for Lumiera plugins
-    appendCppDefine(env,'PKGLIBDIR','LUMIERA_PLUGIN_PATH=\\"$PKGLIBDIR/:./modules\\"'
-                                   ,'LUMIERA_PLUGIN_PATH=\\"$DESTDIR/lib/lumiera/:./modules\\"') 
+    appendCppDefine(env,'PKGLIBDIR','LUMIERA_PLUGIN_PATH=\\"$PKGLIBDIR/:ORIGIN/modules\\"'
+                                   ,'LUMIERA_PLUGIN_PATH=\\"ORIGIN/modules\\"') 
     appendCppDefine(env,'PKGDATADIR','LUMIERA_CONFIG_PATH=\\"$PKGLIBDIR/:.\\"'
                                     ,'LUMIERA_CONFIG_PATH=\\"$DESTDIR/share/lumiera/:.\\"') 
     
@@ -248,10 +248,14 @@ def configurePlatform(env):
     if not conf.CheckCXXHeader('boost/config.hpp'):
         problems.append('We need the C++ boost-libraries.')
     else:
-        if not conf.CheckCXXHeader('boost/shared_ptr.hpp'):
-            problems.append('We need boost::shared_ptr (shared_ptr.hpp).')
+        if not conf.CheckCXXHeader('boost/scoped_ptr.hpp'):
+            problems.append('We need boost::scoped_ptr (scoped_ptr.hpp).')
+        if not conf.CheckCXXHeader('boost/format.hpp'):
+            problems.append('We need boost::format (header).')
         if not conf.CheckLibWithHeader('boost_program_options-mt','boost/program_options.hpp','C++'):
             problems.append('We need boost::program_options (including binary lib for linking).')
+        if not conf.CheckLibWithHeader('boost_filesystem-mt','boost/filesystem.hpp','C++'):
+            problems.append('We need the boost::filesystem (including binary lib for linking).')
         if not conf.CheckLibWithHeader('boost_regex-mt','boost/regex.hpp','C++'):
             problems.append('We need the boost regular expression lib (incl. binary lib for linking).')
     
