@@ -30,7 +30,7 @@
 
 #-----------------------------------Configuration
 TARGDIR      = 'target'
-VERSION      = '0.1+pre.01'
+VERSION      = '0.pre.01'
 TOOLDIR      = './admin/scons'    # SCons plugins
 SCRIPTDIR    = './admin'
 OPTCACHE     = 'optcache' 

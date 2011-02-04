@@ -1,44 +1,73 @@
-====================================
 Lumiera -- the video NLE for Linux
 ====================================
 
- Lumiera is a nonlinear video editing and compositing tool. 
- It understands some of the common multimedia formats
- (quicktime, avi, ogg) and audio/video compression
- codecs (divx, xvid, mpeg1/2/4, ...)
- .
- It features non-destructive editing, compositing tools,
- a selection of effects plugins, processing in RGB, YUV
- and RGB-float colormodels and the ability to mix media
- with differing sizes and framerates.
+*************************************************************
+Lumiera is a nonlinear video editing and compositing tool. 
+It understands some of the common multimedia formats
+(quicktime, avi, ogg) and audio/video compression
+codecs (divx, xvid, mpeg1/2/4, ...)
 
-For more information about Lumiera visit http://lumiera.org/
-For more information about Cinelerra visit http://cinelerra.org/
+It features non-destructive editing, compositing tools,
+a selection of effects plugins, processing in RGB, YUV
+and RGB-float colormodels and the ability to mix media
+with differing sizes and framerates.
 
+More Informations at http://lumiera.org/[Lumiera.org]
+****************************************************************
 
-----------------------------
-"Lumiera" prototype code
-----------------------------
+Lumiera pre-Alpha Versions
+--------------------------
 
-**This source tree doesn't yet contain a working video editing application**
-Rather, it contains the initial framework and core modules of the lower and
-middle layer of the envisioned new Application "Lumiera".
+**This source tree doesn't yet contain a working video editing application** +
+Rather, it contains the framework and technology core of the envisioned Application ``Lumiera''.
 
-As of 7/2007, we start here with some backend and render engine modules
+As of _7/2007_::
+we start here with the backend and render engine modules
 together with some unit tests. You should find a wiki with detailed
 design considerations and developer documentation and a UML model
 (usable with BOUML 2.29) in the sibling directories.
 
-As of 2/2008 the project has been separated completely from his ancestor "Cinelerra"
+As of _2/2008_::
+the project has been separated completely from his ancestor ``Cinelerra''
 The Community, which is largely identical to the Cinelerra-CV community, choose the
-new project name "Lumiera". The basic project infrastructure is up and running,
+new project name ``Lumiera''. The basic project infrastructure is up and running,
 and work on the new codebase is going on continuosely. We can show nothing but
-a running test suite for now. 
+a running test suite for some time to come. 
 
+As of _1/2011_::
+the project has created and documented a fairly consistent design,
+partially already coded up -- starting from the technical foundations and working up.
+The code base is approaching 100k LOC. Roughly half of this is testcode.
+The Application can be installed and started to bring up an GTK GUI outline,
+but the GUI is very preliminary and not connected to core functionality.
+The video processing pipeline is still not complete.
+
+See the http://issues.lumiera.org/roadmap[Project roadmap]
 
 
 Build Requirements
 ------------------
 
-*to be written*
+For building Lumiera, you'll need:
+
+ - GNU C/C++ compiler (Version > 4.3)
+ - Git Version management system
+ - http://www.boost.org/[Boost libraries]
+ - http://gmerlin.sourceforge.net/[GAVL library]
+ - http://lumiera.org/nobug_manual.html[NoBug library]
+ - GTK\--
+ - Cairo and Glade libraries
+ - X libraries
+ - http://scons.org[SCons] or Autotools build system
+
+See the online documentation at http://lumiera.org/Lumiera/NewbiesTutorials
+or the local Copy of this page in the file INSTALL
+
+
+Debian Package
+--------------
+[verse]
+Hermann Vosseler (aka Ichthyo) maintains a *Debian* packaging of the source tree,
+which can be pulled from +git://git.lumiera.org/lumiera/debian+
+It can be built by +git-buildpackage+
 
