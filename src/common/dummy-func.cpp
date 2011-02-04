@@ -5,10 +5,6 @@
 
 
 
-#ifndef LUMIERA_PLUGIN_PATH
-#error please define the plugin search path as -DLUMIERA_PLUGIN_PATH, e.g. as $INSTALL_PREFIX/lib/lumiera
-#endif
-
 
 #include "common/dummy-func.hpp"
 
@@ -35,19 +31,22 @@ namespace lumiera {
   using boost::regex_search;
   using boost::sregex_iterator;
   
+  typedef smatch::value_type const& SubMatch;
+  
+  
+  
   namespace fsys = boost::filesystem;
   namespace opt = boost::program_options;
-
+  
+  
   namespace { // Implementation helpers
     
     const size_t STRING_MAX_RELEVANT = 1000;
     
-    const char * const BOOTSTRAP_INI = "$ORIGIN/setup.ini";
-    const char * const GUI_MODULE_TO_LOAD = "gtk_gui.lum";
+    const char * const BOOTSTRAP_INI = "$ORIGIN/config/setup.ini";
     const char * const GET_PATH_TO_EXECUTABLE = "/proc/self/exe";
     
-    regex EXTRACT_RELATIVE_PATHSPEC ("\\$?ORIGIN/([^:]+)");
-    regex EXTRACT_PATHSPEC ("(\\$?ORIGIN)?([^:]+)");
+    regex EXTRACT_PATHSPEC ("(\\$?ORIGIN/)?([^:]+)");
     
     
     /** the real application would throw a custom exception... */
@@ -66,7 +65,7 @@ namespace lumiera {
     catchMyself ()
     {
       static string buff(STRING_MAX_RELEVANT+1, '\0' );
-      if (!buff.size())
+      if (!buff[0])
         {
           ssize_t chars_read = readlink (GET_PATH_TO_EXECUTABLE, &buff[0], STRING_MAX_RELEVANT);
           
@@ -79,20 +78,16 @@ namespace lumiera {
     }
     
     
-    /** extract from the PLUGIN_PATH a path specification
-     *  given relative to the location of the executable,
-     *  as denoted by the 'ORIGIN' token
-     */
-    string
-    getRelativeModuleLocation()
-    {
-      smatch match;
-      if (regex_search (string(LUMIERA_PLUGIN_PATH), match, EXTRACT_RELATIVE_PATHSPEC))
-        return (match[1]);
-      else
-        dieHard ("no valid module loading location relative to executable defined in LUMIERA_PLUGIN_PATH");
-    }
     
+    /**
+     * Helper: Access a path Specification as a sequence of filesystem Paths.
+     * This iterator class dissects a ':'-separated path list. The individual
+     * components may use the symbol \c $ORIGIN to denote the directory holding
+     * the current executable. After resolving this symbol, a valid absolute or
+     * relative filesystem path should result, which must not denote an existing
+     * file (directory is OK).
+     * @note #fetch picks the current component and advances the iteration. 
+     */
     class SearchPathSplitter
       : boost::noncopyable
       {
@@ -100,25 +95,26 @@ namespace lumiera {
                         end_;
         
       public:
-        SearchPathSplitter (string searchPath)
+        SearchPathSplitter (string const& searchPath)
           : pos_(searchPath.begin(),searchPath.end(), EXTRACT_PATHSPEC)
           , end_()
           { }
         
         bool
-        hasNext()
+        isValid()  const
           {
             return pos_ != end_;
           }
         
         string
-        next()
+        fetch ()
           {
-            ++pos_;
-            if (!hasNext())
+            if (!isValid())
               dieHard ("Search path exhausted.");
             
-            return resolveRelative();
+            string currentPathElement = resolveRelative();
+            ++pos_;
+            return currentPathElement;
           }
         
       private:
@@ -133,7 +129,7 @@ namespace lumiera {
               return getFullPath();
           }
         
-        smatch::value_type found(int group=0) { return (*pos_)[group]; }
+        SubMatch found(int group=0) { return (*pos_)[group]; }
         
         bool containsORIGINToken() { return found(1).matched; }
         string getRelativePath()  { return found(2);  }
@@ -146,13 +142,13 @@ namespace lumiera {
             fsys::path modPathName (exePathName.remove_leaf() / getRelativePath());
             
             if (fsys::exists(modPathName) && !fsys::is_directory (modPathName))
-              dieHard ("Error in search path: component"+modPathName.string()+"is not an existing directory");
+              dieHard ("Error in search path: component \""+modPathName.string()+"\" is not a directory");
             
-            return modPathName.string();
+            return modPathName.directory_string();
           }
       };
     
-  
+    
     /** helper to establish the location to search for loadable modules.
      *  This is a simple demonstration of the basic technique used in the
      *  real application source to establish a plugin search path, based
@@ -174,22 +170,26 @@ namespace lumiera {
             }
           
           // try / continue search path
-          if (searchLocation.hasNext())
-            modulePathName = fsys::path() / searchLocation.next() / moduleName;
+          if (searchLocation.isValid())
+            modulePathName = fsys::path() / searchLocation.fetch() / moduleName;
           else
             dieHard ("Module \""+moduleName+"\" not found"
                      + (searchPath.empty()? ".":" in search path: "+searchPath));
-        }
-    }
+    }   }
     
     
     
+    /**
+     * Encapsulate an INI-style configuration file.
+     * The acceptable settings are defined in the ctor.
+     * Implementation based on boost::program_options
+     */
     class Config
       : boost::noncopyable
       {
         opt::options_description syntax;
         opt::variables_map settings;
-
+        
       public:
         Config (string bootstrapIni)
           : syntax("Lumiera installation and platform configuration")
@@ -203,8 +203,8 @@ namespace lumiera {
                                              "May us $ORIGIN to refer to the EXE location")
               ;
             
-            ifstream configIn (resolveModulePath (bootstrapIni).c_str());
-
+            ifstream configIn (resolve(bootstrapIni).c_str());
+            
             
             opt::parsed_options parsed = 
               opt::parse_config_file (configIn, syntax);
@@ -217,6 +217,15 @@ namespace lumiera {
         operator[] (const string key)  const
           {
             return settings[key].as<string>();
+          }
+        
+      private:
+        string
+        resolve (fsys::path iniSpec)
+          {
+            string file = iniSpec.leaf();
+            string searchpath = iniSpec.branch_path().string();
+            return resolveModulePath (file, searchpath);
           }
       };
     
@@ -233,7 +242,7 @@ namespace lumiera {
   {
     Config appConfig(BOOTSTRAP_INI);
     string guiModule = appConfig["BuildsystemDemo.gui"];
-    string moduleSearch = appConfig["BuildsystemDemo.modulepath"];                             
+    string moduleSearch = appConfig["BuildsystemDemo.modulepath"];
     string moduleLocation = resolveModulePath (guiModule, moduleSearch);
     
     void* handle = dlopen (moduleLocation.c_str(), RTLD_LAZY|RTLD_LOCAL);

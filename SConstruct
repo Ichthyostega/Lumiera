@@ -348,6 +348,7 @@ def defineBuildTargets(env, artifacts):
     artifacts['corelib'] = core
     artifacts['support'] = lLib
     artifacts['lumiera'] = ( env.Program('lumiera', ['src/lumiera/main.cpp'], LIBS=core, install=True)
+                           + env.ConfigData(env.path.srcConf+'setup.ini')
                            + env.ConfigData(env.path.srcConf+'dummy_lumiera.ini')
                            )
     
