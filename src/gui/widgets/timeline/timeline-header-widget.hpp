@@ -38,7 +38,7 @@ class Track;
 /**
  * TimelineHeaderWidget is the base implementation of all header widgets
  * and acts as a containers for the header controls.
- **/
+ */
 class TimelineHeaderWidget : public Gtk::Container
 {
 public:
@@ -46,7 +46,7 @@ public:
    * Constructor
    * @param timeline_track The timeline track that owns this header
    * widget
-   **/
+   */
   TimelineHeaderWidget(timeline::Track &timeline_track);
   
   void set_child_widget(Widget& child);
@@ -103,24 +103,24 @@ private:
 
   /**
    * Applies a given function to all the widgets in the container.
-   **/
+   */
   void forall_vfunc(gboolean include_internals, GtkCallback callback,
     gpointer callback_data);
 
   /**
    * A notification of when a widget is added to this container.
-   **/
+   */
   void on_add(Gtk::Widget* child);
   
   /**
    * A notification of when a widget is removed to this container.
-   **/
+   */
   void on_remove(Gtk::Widget* child);
   
   /**
    * An implementation of the a container function that specifies the
    * types of child widget that this widget will accept.
-   **/
+   */
   GtkType child_type_vfunc() const;
 
   /**
@@ -137,19 +137,19 @@ private:
 
   /**
    * A reference to the timeline track that owns this widget.
-   **/
+   */
   timeline::Track &track;
 
   /**
    * The widget placed inside this container.
    * @remarks This value is set to NULL if the container is empty
-   **/
+   */
   Gtk::Widget* widget;
   
   /**
    * This value is true if the mouse hovering over the expander.
    * @remarks This value is updated by on_motion_notify_event
-   **/
+   */
   bool hoveringExpander;
   
   /**
@@ -157,12 +157,12 @@ private:
    * expander.
    * @remarks This value is updated by on_button_press_event and
    * on_button_release_event
-   **/
+   */
   bool clickedExpander;
   
   /**
    * The widget's window object. 
-   **/
+   */
   Glib::RefPtr<Gdk::Window> gdkWindow;
   
   //----- Style Values -----//
@@ -170,13 +170,13 @@ private:
   /**
    * The style value which indicates the amount of padding around each
    * header pixels.
-   **/
+   */
   int margin;
   
   /**
    * The style value which indicates the size to draw the expand button
    * in pixels.
-   **/
+   */
   int expand_button_size;
 };
 

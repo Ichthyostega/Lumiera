@@ -29,24 +29,38 @@
 #define CLIP_TRACK_HPP
 
 #include "track.hpp"
+#include "lib/observable-list.hpp"
 
 namespace gui {
 namespace model {
-  
-class Clip;
-  
-class ClipTrack : public Track
-{
-public:
-  ClipTrack();
-  
-  std::string print_track();
-  
-private:
-  
-  std::vector<Clip*> clips;
-  
-};
+
+  class Clip;
+
+  class ClipTrack : public Track
+  {
+  public:
+    /**
+     * Constructor
+     */
+    ClipTrack();
+
+    /**
+     * Gets a string representation of the track that is suitable for debugging
+     */
+    std::string
+    print_track();
+
+    /**
+     * Gets the list of clips associated with this track.
+     */
+    lumiera::observable_list< boost::shared_ptr<Clip> >&
+    getClipList(void);
+
+  private:
+
+    lumiera::observable_list< boost::shared_ptr<Clip> > clips;
+
+  };
 
 }   // namespace timeline
 }   // namespace gui

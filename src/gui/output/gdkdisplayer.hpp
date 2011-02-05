@@ -43,7 +43,7 @@ namespace output {
 /**
  * GdkDisplayer is a class which is responsible for rendering a video
  * image via GDK.
- **/
+ */
 class GdkDisplayer : public Displayer
 {
 public:
@@ -56,7 +56,7 @@ public:
    * must be greater than zero.
    * @param[in] height The height of the video image in pixels. This
    * value must be greater than zero.
-   **/
+   */
   GdkDisplayer( Gtk::Widget *drawing_area, int width, int height );
 
   /**
@@ -79,7 +79,7 @@ private:
   /**
    * The widget that video will be drawn into.
    * @remarks This value must be a valid pointer.
-   **/
+   */
   Gtk::Widget *drawingArea;
 };
 

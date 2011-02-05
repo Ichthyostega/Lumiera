@@ -49,7 +49,7 @@ namespace output {
 /**
  * XvDisplayer is a class which is responsible for rendering  a video
  * image via XVideo.
- **/
+ */
 class XvDisplayer : public Displayer
 {
 public:
@@ -61,12 +61,12 @@ public:
    * must be greater than zero.
    * @param height The height of the video image in pixels. This value
    * must be greater than zero.
-   **/
+   */
   XvDisplayer( Gtk::Widget *drawing_area, int width, int height );
   
   /**
    * Destructor
-   **/
+   */
   ~XvDisplayer();
 
   /**
@@ -89,45 +89,45 @@ private:
    * port.
    * @remarks This value is false until the constructor has finished
    * successfully.
-   **/
+   */
   bool gotPort;
   
   /**
    * The current port being used.
    * @remarks This value is meaninless unless gotPort is true.
-   **/
+   */
   unsigned int grabbedPort;
   
   /**
    * The widget that video will be drawn into.
    * @remarks This value must be a valid pointer.
-   **/
+   */
   Gtk::Widget *drawingArea;
   
   /**
    * The display that video will be drawn into.
-   **/
+   */
   Display *display;
   
   /**
    * The X11 window that video will be drawn into.
-   **/
+   */
   Window window;
   
   /**
    * The graphics context which will be used when rednering video.
-   **/
+   */
   GC gc;
   
   /**
    * The shared memory image object which video will be written into.
-   **/
+   */
   XvImage *xvImage;
   
   /**
    * Info about the shared memory segment.
    * @remarks shmInfo.shmaddr is set to NULL, when the SHM is detached.
-   **/
+   */
   XShmSegmentInfo shmInfo;
 };
 

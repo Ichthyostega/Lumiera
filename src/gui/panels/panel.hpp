@@ -53,7 +53,7 @@ protected:
    * @param dock_item The GdlDockItem that will host this panel.
    * @param long_name This title of the panel
    * @param stock_id The stock_id of this panel.
-   **/
+   */
   Panel(workspace::PanelManager &panel_manager,
     GdlDockItem *dock_item, const gchar* long_name,
     const gchar *stock_id);
@@ -61,7 +61,7 @@ protected:
 public:
   /**
    * Destructor
-   **/
+   */
   ~Panel();
 
   /**
@@ -73,7 +73,7 @@ public:
    * Shows or hides the panel.
    * @param show A value of true will show the panel, false will hide
    * it.
-   **/
+   */
   void show(bool show = true);
   
   /**
@@ -83,53 +83,53 @@ public:
   
   /**
    * Iconifys the panel.
-   **/
+   */
   void iconify();
   
   /**
    * Returns true if the panel is currently iconified.
-   **/
+   */
   bool is_iconified() const;
   
   /**
    * Locks or unlocks the panel.
    * @param show A value of true will lock the panel, false will unlock
    * it.
-   **/
+   */
   void lock(bool show = true);
   
   /**
    * Returns true if the panel is currently locked.
-   **/
+   */
   bool is_locked() const;
   
   /**
    * Returns a reference to the owner panel manager object.
-   **/
+   */
   workspace::PanelManager& get_panel_manager();
   
 public:
 
   /**
    * A signal that fires when the dock item is hidden.
-   **/
+   */
   sigc::signal<void>& signal_hide_panel();
   
 protected:
 
   /**
    * Returns a reference to the owner workspace window object.
-   **/
+   */
   workspace::WorkspaceWindow& get_workspace_window();
 
   /**
    * Returns a reference to the project 
-   **/
+   */
   model::Project& get_project();
   
   /**
    * Returns a reference to the controller
-   **/
+   */
   controller::Controller& get_controller();
   
 private:
@@ -137,35 +137,35 @@ private:
   /**
    * An event handler for when dockItem is hidden.
    * @param func_data A pointer to the panel that owns dock_item
-   **/
+   */
   static void on_item_hidden(GdlDockItem*, Panel *panel);
 
 protected:
 
   /**
    * The owner panel manager object.
-   **/
+   */
   workspace::PanelManager &panelManager;
 
   /**
    * The owner dock item widget that will host the widgets in this
    * panel.
-   **/
+   */
   GdlDockItem* dockItem;
   
   /**
    * A signal that fires when the dock item is hidden.
-   **/
+   */
   sigc::signal<void> hidePanelSignal;
 
   /**
    * The id of the hide panel handler.
-   **/  
+   */
   gulong hide_panel_handler_id;
   
   /**
    * The panel bar to attach to the panel grip.
-   **/
+   */
   widgets::PanelBar panelBar;
 };
 

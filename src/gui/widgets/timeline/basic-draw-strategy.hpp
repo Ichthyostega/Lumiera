@@ -1,8 +1,8 @@
 /*
-  timeline-clip.cpp  -  Implementation of the timeline clip object
+  basic-draw-strategy.hpp  -  Declaration of a basic draw strategy
 
   Copyright (C)         Lumiera.org
-    2008,               Joel Holdsworth <joel@airwebreathe.org.uk>
+    2010,               Stefan Kangas <skangas@skangas.se
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -19,55 +19,32 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 * *****************************************************/
+/** @file basic-draw-strategy.hpp
+ ** Declares the Timeline Entity draw strategy class.
+ */
 
-#include "timeline-clip.hpp"
+#ifndef TIMELINE_BASIC_DRAW_STRATEGY_HPP
+#define TIMELINE_BASIC_DRAW_STRATEGY_HPP
+
+#include "draw-strategy.hpp"
 
 namespace gui {
 namespace widgets {
 namespace timeline {
 
-  Clip::Clip(boost::shared_ptr<model::Clip> clip,
-             boost::shared_ptr<timeline::DrawStrategy> drawStrategy)
-    : Entity(drawStrategy),
-      modelClip(clip),
-      selected(false)
+  class BasicDrawStrategy : public DrawStrategy
   {
-    REQUIRE(modelClip);
+  public:
 
-    // TODO: Connect signals
-    //modelClip->signalNameChanged().connect(mem_fun(this,
-    //  &Clip::onNameChanged);
-  }
+    BasicDrawStrategy();
 
-  gavl_time_t
-  Clip::getBegin () const
-  {
-    REQUIRE (modelClip);
-    return modelClip->getBegin();
-  }
-
-  gavl_time_t
-  Clip::getEnd () const
-  {
-    REQUIRE (modelClip);
-    return modelClip->getEnd();
-  }
-
-  std::string
-  Clip::getName () const
-  {
-    REQUIRE (modelClip);
-    return modelClip->getName();
-  }
-
-  void
-  Clip::setSelected(bool selected)
-  {
-    this->selected = selected;
-  }
-
+    void draw(const Entity &entity,
+      Cairo::RefPtr<Cairo::Context> cr,
+      TimelineViewWindow* const window) const;
+  };
 
 }   // namespace timeline
 }   // namespace widgets
 }   // namespace gui
 
+#endif // TIMELINE_BASIC_DRAW_STRATEGY_HPP

@@ -38,20 +38,20 @@ public:
    * Contructor.
    * @param panel_manager The owner panel manager widget.
    * @param dock_item The GdlDockItem that will host this panel.
-   **/
+   */
   AssetsPanel(workspace::PanelManager &panel_manager,
     GdlDockItem *dock_item);
   
   /**
    * Get the title of the panel.
    * @return Returns a pointer to the string title of the panel.
-   **/
+   */
   static const char* get_title();
 
   /**
    * Get the stock id for this type panel.
    * @return Returns a pointer to the string stock id of the panel.
-   **/
+   */
   static const gchar* get_stock_id();
 
 protected:

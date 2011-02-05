@@ -82,33 +82,33 @@ public:
 
   /**
    * Returns the name of the application 
-   **/
+   */
   static const Glib::ustring get_app_title();
 
   /**
    * Returns the version number of the application 
-   **/
+   */
   static const Glib::ustring get_app_version();
 
   /**
    * Returns the copyright of the application
-   **/
+   */
   static const Glib::ustring get_app_copyright();
 
   /**
    * Returns the website of the application
-   **/
+   */
   static const Glib::ustring get_app_website();
 
   /**
    * Returns tn alphabetical list of the application's authors
-   **/
+   */
   static const std::vector<Glib::ustring> get_app_authors();
   
 protected:
   /**
    * The application window manager object
-   **/
+   */
   WindowManager windowManager;
 };
 

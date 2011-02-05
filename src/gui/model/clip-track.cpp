@@ -22,22 +22,39 @@
 
 #include "clip-track.hpp"
 
+#include "clip.hpp"
+
+#include <boost/shared_ptr.hpp>
+
 namespace gui {
 namespace model {
-  
-ClipTrack::ClipTrack()
-{
-}
 
-std::string
-ClipTrack::print_track()
-{
-  std::ostringstream os;
-  
-  os << "ClipTrack\t\"" << get_name() << "\"";
-  
-  return os.str();
-}
+  ClipTrack::ClipTrack()
+  {
+    // TEST CODE: add a clip to the track
+
+    boost::shared_ptr<model::Clip> modelClip(new model::Clip());
+    modelClip->setName("Clip Name");
+    clips.push_back(modelClip);
+
+    // END TEST CODE
+  }
+
+  std::string
+  ClipTrack::print_track()
+  {
+    std::ostringstream os;
+
+    os << "ClipTrack\t\"" << get_name() << "\"";
+
+    return os.str();
+  }
+
+  lumiera::observable_list< boost::shared_ptr<Clip> >&
+  ClipTrack::getClipList()
+  {
+    return clips;
+  }
 
 }   // namespace model
 }   // namespace gui

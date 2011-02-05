@@ -41,7 +41,7 @@ namespace timeline {
  * TimelineState is a container for the state data for TimelineWidget.
  * @remarks TimelineState s can be swapped out so that TimelineWidget
  * can flip between different views.
- **/
+ */
 class TimelineState
 {
 public:
@@ -50,7 +50,7 @@ public:
    * Constructor
    * @param source_sequence The sequence on which the TimelineWidget
    * will operate when this TimelineState is attached.
-   **/
+   */
   TimelineState(boost::shared_ptr<model::Sequence> source_sequence);
   
 public:
@@ -58,13 +58,13 @@ public:
   /**
    * Gets the sequence that is attached to this timeline state object.
    * @return Returns a shared_ptr to the sequence object.
-   **/
+   */
   boost::shared_ptr<model::Sequence> get_sequence() const;
 
   /**
    * Gets a reference to the timeline view window object.
    * @return Returns the timeline view window object.
-   **/
+   */
   timeline::TimelineViewWindow& get_view_window();
   
   /**
@@ -120,13 +120,13 @@ public:
   
   /**
    * A signal to notify when the selected period has changed.
-   **/
+   */
   sigc::signal<void> selection_changed_signal() const; 
   
   /**
    * A signal to notify when the playback point or playback periods have
    * changed.
-   **/
+   */
   sigc::signal<void> playback_changed_signal() const; 
   
 private:
@@ -136,53 +136,53 @@ private:
    * represent.
    * @remarks This pointer is set by the constructor and is constant, so
    * will not change in value during the lifetime of the class.
-   **/
+   */
   boost::shared_ptr<model::Sequence> sequence;
   
   // View State
   /**
    * The ViewWindow for the TimelineWidget display with.
-   **/
+   */
   timeline::TimelineViewWindow viewWindow;
   
   // Selection State
   
   /**
    * The start time of the selection period.
-   **/
+   */
   lumiera::Time selectionStart;
   
   /**
    * The end time of the selection period.
-   **/
+   */
   lumiera::Time selectionEnd;
   
   /**
    * The start time of the playback period.
-   **/
+   */
   lumiera::Time playbackPeriodStart;
   
   /**
    * The end time of the playback period.
-   **/
+   */
   lumiera::Time playbackPeriodEnd;
   
   /**
    * The time of the playback point.
-   **/
+   */
   lumiera::Time playbackPoint;
   
   // Signals
   
   /**
    * A signal to notify when the selected period has changed.
-   **/
+   */
   sigc::signal<void> selectionChangedSignal;
   
   /**
    * A signal to notify when the playback point or playback periods have
    * changed.
-   **/
+   */
   sigc::signal<void> playbackChangedSignal;
 };
 

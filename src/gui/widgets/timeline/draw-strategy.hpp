@@ -1,8 +1,8 @@
 /*
-  timeline-clip.cpp  -  Implementation of the timeline clip object
+  draw-strategy.hpp  -  Definition the timeline draw strategy interface
 
   Copyright (C)         Lumiera.org
-    2008,               Joel Holdsworth <joel@airwebreathe.org.uk>
+    2010,               Stefan Kangas <skangas@skangas.se
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -19,55 +19,40 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 * *****************************************************/
+/** @file draw-strategy.hpp
+ ** Declares the timeline entity drawing strategy interface.
+ */
 
-#include "timeline-clip.hpp"
+#ifndef TIMELINE_DRAW_STRATEGY_HPP
+#define TIMELINE_DRAW_STRATEGY_HPP
+
+#include "timeline-entity.hpp"
+#include "timeline-view-window.hpp"
 
 namespace gui {
 namespace widgets {
 namespace timeline {
 
-  Clip::Clip(boost::shared_ptr<model::Clip> clip,
-             boost::shared_ptr<timeline::DrawStrategy> drawStrategy)
-    : Entity(drawStrategy),
-      modelClip(clip),
-      selected(false)
+  /**
+   * An interface for drawing strategies for timeline entities.
+   */
+  class DrawStrategy
   {
-    REQUIRE(modelClip);
+  protected:
 
-    // TODO: Connect signals
-    //modelClip->signalNameChanged().connect(mem_fun(this,
-    //  &Clip::onNameChanged);
-  }
+    DrawStrategy() {  }
 
-  gavl_time_t
-  Clip::getBegin () const
-  {
-    REQUIRE (modelClip);
-    return modelClip->getBegin();
-  }
+    virtual ~DrawStrategy() {  }
 
-  gavl_time_t
-  Clip::getEnd () const
-  {
-    REQUIRE (modelClip);
-    return modelClip->getEnd();
-  }
+  public:
 
-  std::string
-  Clip::getName () const
-  {
-    REQUIRE (modelClip);
-    return modelClip->getName();
-  }
-
-  void
-  Clip::setSelected(bool selected)
-  {
-    this->selected = selected;
-  }
-
+    virtual void draw(const Entity &entity,
+      Cairo::RefPtr<Cairo::Context> cr,
+      TimelineViewWindow* const window) const = 0;
+  };
 
 }   // namespace timeline
 }   // namespace widgets
 }   // namespace gui
 
+#endif // TIMELINE_DRAW_STRATEGY_HPP

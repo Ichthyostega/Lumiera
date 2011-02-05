@@ -49,13 +49,13 @@ namespace workspace {
 
 /**
  * The centralised manager of all lumiera-gui's windows.
- **/
+ */
 class WindowManager : private boost::noncopyable
 {
 public:
   /**
    * Initializes the window manager object
-   **/
+   */
   void init();
   
   /**
@@ -63,7 +63,7 @@ public:
    * controller
    * @param source_project The project to connect the window to.
    * @param source_controller The controller to connect the window to.
-   **/
+   */
   void new_window(gui::model::Project &source_project,
     gui::controller::Controller &source_controller);
 
@@ -71,7 +71,7 @@ public:
    * Sets the theme of the lumiera-gui's.
    * @param path This string must specify a path where a GTK stylesheet
    * will be found.
-   **/
+   */
   bool set_theme(Glib::ustring path);
 
   /**
@@ -82,7 +82,7 @@ public:
    * @param green The fallback green intensity.
    * @param blue The fallback blue intensity.
    * @return The loaded colour.
-   **/
+   */
   static Cairo::RefPtr<Cairo::SolidPattern>
   read_style_colour_property (Gtk::Widget &widget, const gchar *property_name,
                               guint16 red, guint16 green, guint16 blue);
@@ -91,7 +91,7 @@ private:
 
   /**
    * An event handler for when a window has been closed.
-   **/
+   */
   bool on_window_closed(GdkEventAny* event);
     
 private:
@@ -102,18 +102,18 @@ private:
    *
    * It should be enabled when there is more than one window and disabled
    * otherwise.
-   **/
+   */
   void update_close_window_in_menus();
 
   /**
    * Registers the custom icon sizes.
-   **/
+   */
   static void register_app_icon_sizes();
 
   /**
    * Registers application stock items: icons and
    * labels associated with IDs
-   **/
+   */
   static void register_stock_items();
 
   /**
@@ -124,7 +124,7 @@ private:
    * @param label The user readable icon name for this icon.
    * @return Returns true if the icon was successfully loaded, returns
    * false otherwise.
-   **/
+   */
   static bool add_stock_icon_set(
     const Glib::RefPtr<Gtk::IconFactory>& factory,
     const Glib::ustring& icon_name,
@@ -140,7 +140,7 @@ private:
    * @param wildcard This value is set to true if this icon is
    * wildcarded.
    * @return Returns true if the icon was loaded successfully.
-   **/
+   */
   static bool add_stock_icon(Gtk::IconSet &icon_set,
     const Glib::ustring& icon_name, Gtk::IconSize size, bool wildcard);
 
@@ -152,7 +152,7 @@ private:
    * @param wildcard This value is set to true if this icon is
    * wildcarded.
    * @return Returns true if the icon was loaded successfully.
-   **/
+   */
   static bool add_theme_icon_source(Gtk::IconSet &icon_set,
     const Glib::ustring& icon_name, Gtk::IconSize size, bool wildcard);
   
@@ -165,7 +165,7 @@ private:
    * @param wildcard This value is set to true if this icon is
    * wildcarded.
    * @return Returns true if the icon was loaded successfully.
-   **/
+   */
   static bool add_non_theme_icon_source(Gtk::IconSet &icon_set,
     const Glib::ustring& base_dir, const Glib::ustring& icon_name,
     Gtk::IconSize size, bool wildcard);
@@ -178,7 +178,7 @@ private:
    * @param wildcard This value is set to true if this icon is
    * wildcarded.
    * @return Returns true if the icon was loaded successfully.
-   **/
+   */
   static bool add_stock_icon_from_path(Glib::ustring path,
     Gtk::IconSet &icon_set, Gtk::IconSize size, bool wildcard);
     
@@ -192,14 +192,14 @@ public:
    * The registered icon size for giant 48x48 px icons.
    * @remarks This value is set to BuiltinIconSize::ICON_SIZE_INVALID
    * until register_giant_icon_size is called.
-   **/
+   */
   static Gtk::IconSize GiantIconSize;
   
   /**
    * The registered icon size for giant 16x16 px icons.
    * @remarks This value is set to BuiltinIconSize::ICON_SIZE_INVALID
    * until register_app_icon_sizes is called.
-   **/
+   */
   static Gtk::IconSize MenuIconSize;
 };
 

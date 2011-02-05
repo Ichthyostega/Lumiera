@@ -33,7 +33,7 @@ namespace widgets {
 
 /**
  * A button that display a menu when clicked on.
- **/
+ */
 class MenuButton : public Gtk::ToggleButton
 {
 public:
@@ -44,7 +44,7 @@ public:
    * such as a Gtk::Pixmap or Gtk::Box. If you just wish to add a
    * Gtk::Label, you may want to use the
    * Gtk::MenuButton(const Glib::ustring& label) ctor directly instead.
-   **/
+   */
   MenuButton();
 
   /**
@@ -52,7 +52,7 @@ public:
    * item. 
    * @remarks Stock ids have identifiers like Gtk::Stock::OK and
    * Gtk::Stock::APPLY.
-   **/
+   */
   MenuButton(const Gtk::StockID& stock_id);
   
   /**
@@ -60,7 +60,7 @@ public:
    * @remarks Create a button with the given label inside. You won't be
    * able to add a widget in this button since it already has a
    * Gtk::Label in it
-   **/
+   */
   MenuButton(const Glib::ustring& label, bool mnemonic=false);
   
   /**
@@ -68,29 +68,29 @@ public:
    * on.
    * @return Returns a reference to the menu that will be clicked on.
    * This reference can be used to populate the menu with items.
-   **/
+   */
   Gtk::Menu& get_menu();
   
   /**
    * Pops up the menu.
-   **/
+   */
   void popup();
 
 protected:
 
   /**
    * An internal method which sets up the button at creat time.
-   **/
+   */
   void setup_button();
 
   /**
    * An event handler for when the button is pressed.
-   **/
+   */
   void on_pressed();
   
   /**
    * An event handler for when the menu is closed.
-   **/
+   */
   void on_menu_deactivated();
 
 private:
@@ -104,35 +104,35 @@ private:
    * coordinates.
    * @param push_in This value is set to true if the menu should be
    * pushed in if it collides with the edge of the screen.
-   **/
+   */
   void on_menu_position(int& x, int& y, bool& push_in);
 
 private:
 
   /**
    * The hBox for the layout of image, caption and arrow.
-   **/
+   */
   Gtk::HBox hBox;
   
   /**
    * The image that will optionally display an icon.
-   **/
+   */
   Gtk::Image image;
   
   /**
    * The caption text label to show on the button.
-   **/
+   */
   Gtk::Label caption;
   
   /**
    * The arrow widget that will be displayed to hint the user that this
    * button is a drop-down.
-   **/
+   */
   Gtk::Arrow arrow;
 
   /**
    * The internal menu object which is the popup menu of this widget.
-   **/
+   */
   Gtk::Menu menu;
 
 };

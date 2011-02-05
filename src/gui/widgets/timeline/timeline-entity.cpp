@@ -1,8 +1,8 @@
 /*
-  timeline-clip.cpp  -  Implementation of the timeline clip object
+  timeline-entity.cpp  -  Implementation of the timeline entity object
 
   Copyright (C)         Lumiera.org
-    2008,               Joel Holdsworth <joel@airwebreathe.org.uk>
+    2010,               Stefan Kangas <skangas@skangas.se
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -20,53 +20,47 @@
 
 * *****************************************************/
 
-#include "timeline-clip.hpp"
+#include "timeline-entity.hpp"
+
+#include "draw-strategy.hpp"
+
+#include "gui/gtk-lumiera.hpp"
+#include "include/logging.h"
 
 namespace gui {
 namespace widgets {
 namespace timeline {
 
-  Clip::Clip(boost::shared_ptr<model::Clip> clip,
-             boost::shared_ptr<timeline::DrawStrategy> drawStrategy)
-    : Entity(drawStrategy),
-      modelClip(clip),
-      selected(false)
-  {
-    REQUIRE(modelClip);
+  Entity::Entity(boost::shared_ptr<timeline::DrawStrategy> drawStrategy)
+    : enabled(true),
+      drawStrategy(drawStrategy)
+  {  }
 
-    // TODO: Connect signals
-    //modelClip->signalNameChanged().connect(mem_fun(this,
-    //  &Clip::onNameChanged);
+  Entity::~Entity()
+  {  }
+  
+  void
+  Entity::draw(Cairo::RefPtr<Cairo::Context> cr,
+    TimelineViewWindow* const window) const
+  {
+    REQUIRE (cr);
+    REQUIRE (window);
+
+    drawStrategy->draw(*this, cr, window);
   }
 
-  gavl_time_t
-  Clip::getBegin () const
+  bool
+  Entity::getEnabled () const
   {
-    REQUIRE (modelClip);
-    return modelClip->getBegin();
-  }
-
-  gavl_time_t
-  Clip::getEnd () const
-  {
-    REQUIRE (modelClip);
-    return modelClip->getEnd();
-  }
-
-  std::string
-  Clip::getName () const
-  {
-    REQUIRE (modelClip);
-    return modelClip->getName();
+    return enabled;
   }
 
   void
-  Clip::setSelected(bool selected)
+  Entity::setEnabled (bool enabled)
   {
-    this->selected = selected;
+    this->enabled = enabled;
   }
-
-
+  
 }   // namespace timeline
 }   // namespace widgets
 }   // namespace gui

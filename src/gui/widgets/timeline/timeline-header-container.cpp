@@ -425,12 +425,12 @@ TimelineHeaderContainer::layout_headers()
 
 shared_ptr<timeline::Track>
 TimelineHeaderContainer::lookup_timeline_track(
-  shared_ptr<model::Track> model_track)
+  shared_ptr<model::Track> modelTrack)
 {
-  REQUIRE(model_track != NULL);
+  REQUIRE(modelTrack != NULL);
   
   shared_ptr<timeline::Track> timeline_track =
-    timelineWidget.lookup_timeline_track(model_track);
+    timelineWidget.lookup_timeline_track(modelTrack);
   ENSURE(timeline_track);
   
   return timeline_track;

@@ -33,26 +33,26 @@ namespace widgets {
 
 /**
  * A modified toolbar widget for use in dialogs.
- **/
+ */
 class ButtonBar : public Gtk::Box
 {
 public:
   /**
    * Constructor
-   **/
+   */
   ButtonBar();
   
   /**
    * Append a widget to the button bar.
    * @param widget The button to append.
-   **/
+   */
   void append(Widget &widget);
 
   /**
    * Append a button to the button bar, and connect a click event.
    * @param button The button to append.
    * @param clicked_slot The slot to connect.
-   **/
+   */
   template<class T> void append(MiniWrapper<T>& button,
     const sigc::slot<void>& clicked_slot)
   {

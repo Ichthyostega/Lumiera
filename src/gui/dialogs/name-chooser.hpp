@@ -45,7 +45,7 @@ public:
    * @param title The string for the title of this dialog.
    * @param default_name The name that will be shown by default in the
    * edit box of the dialog.
-   **/
+   */
   NameChooser(Gtk::Window &parent, const Glib::ustring title,
     const Glib::ustring default_name);
   
@@ -53,7 +53,7 @@ public:
    * Gets the current name of the chosen in the dialog.
    * @return Returns the name currently typed into the edit box of the
    * dialog.
-   **/
+   */
   const Glib::ustring get_name() const;
 
 private:
