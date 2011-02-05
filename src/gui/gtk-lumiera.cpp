@@ -96,7 +96,7 @@ GtkLumiera::get_app_title()
 const Glib::ustring
 GtkLumiera::get_app_version()
 {
-  return "0.1-dev";
+  return "0.pre.01";
 }
 
 const Glib::ustring GtkLumiera::get_app_copyright()

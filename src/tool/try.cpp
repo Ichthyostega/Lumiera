@@ -18,70 +18,57 @@
 // 4/10  - pretty printing STL containers with python enabled GDB?
 // 1/11  - exploring numeric limits
 // 1/11  - integer floor and wrap operation(s)
+// 1/11  - how to fetch the path of the own executable -- at least under Linux?
 
 
-//#include <nobug.h>
+#include <nobug.h>
 
 
 #include <iostream>
-//#include <typeinfo>
 #include <string>
-//#include <cstdlib>
-#include <limits>
-#include <cmath>
 
-#include <boost/format.hpp>
+extern "C" {
+#include <unistd.h>
+}
+//#include "lib/error.hpp"
+//#include "lib/symbol.hpp"
 
 
-using boost::format;
-//using std::rand;
 using std::string;
 using std::cout;
 using std::endl;
+//using lib::Literal;
+//using lib::STRING_MAX_RELEVANT;
+const size_t STRING_MAX_RELEVANT = 1000;
 
-div_t
-floorwrap (int num, int den)
+//namespace error = lumiera::error;
+
+//Literal GET_PATH_TO_EXECUTABLE ("/proc/self/exe");
+const char * const GET_PATH_TO_EXECUTABLE ("/proc/self/exe");
+
+string
+catchMyself ()
 {
-  div_t res = div (num,den);
-  if (0 > (num^den) && res.rem)
-    { // wrap similar to floor()
-      --res.quot;
-      res.rem = den - (-res.rem);
-    }
-  return res;
+  string buff(STRING_MAX_RELEVANT+1, '\0' );
+  ssize_t chars_read = readlink (GET_PATH_TO_EXECUTABLE, &buff[0], STRING_MAX_RELEVANT);
+  
+  if (0 > chars_read || chars_read == ssize_t(STRING_MAX_RELEVANT))
+//  throw error::Fatal ("unable to discover path of running executable")
+    throw string("unable to discover path of running executable");
+  
+  buff.resize(chars_read);
+  return buff;
 }
 
-void
-checkDiv(int lhs, int rhs)
-  {
-    div_t wrap = floorwrap(lhs,rhs);
-    cout << format ("%2d / %2d = %2d %% = % d \tfloor=%6.2f  wrap = (%2d, %2d) \n")
-                   % lhs % rhs % (lhs/rhs) % (lhs%rhs) % floor(double(lhs)/rhs) % wrap.quot % wrap.rem; 
-  }
 
 int 
-main (int, char**)
+main (int, char**) //(int argc, char* argv[])
   {
     
-//  NOBUG_INIT;
+    NOBUG_INIT;
     
-    checkDiv (8,4);
-    checkDiv (9,4);
-    checkDiv (-8,4);
-    checkDiv (-9,4);
-    checkDiv (8,-4);
-    checkDiv (9,-4);
-    checkDiv (-8,-4);
-    checkDiv (-9,-4);
-
-    checkDiv (0,4);
-    checkDiv (0,-4);
-    checkDiv (1,4);
-    checkDiv (1,-4);
-    checkDiv (-1,4);
-    checkDiv (-1,-4);
-    
-    cout << "\n.gulp.\n";
+    cout << "\n\nwho am I? :" << catchMyself();
+    cout <<  "\n.gulp.\n";
     
     return 0;
   }

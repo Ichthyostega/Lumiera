@@ -12,19 +12,17 @@ from Buildhelper import scanSubtree
 from Buildhelper import globRootdirs
 from Buildhelper import createPlugins
 
-Import('env','envPlu','artifacts','core')
+Import('env','artifacts','core')
 
 # temp fix to add test.h  -- wouldn't it be better to put this header be into src/lib ?  
 env = env.Clone()
 env.Append(CPPPATH='#/.')  # add Rootdir to Includepath, so test/test.h is found
-envPlu = envPlu.Clone()
-envPlu.Append(CPPPATH='#/.')
 # temp fix------------- 
 
 def testExecutable(env,tree, exeName=None, obj=None):
     """ declare all targets needed to create a standalone
-        Test executable of the given Sub-tree. Note that
-        each subdir is built in its own Environment.
+        Test executable of the given Sub-tree.
+        @note this tree uses separate Environment/Includepath
     """
     env = env.Clone()
     env.Append(CPPPATH=tree) # add Subdir to Includepath 
@@ -35,7 +33,7 @@ def testExecutable(env,tree, exeName=None, obj=None):
         obj = srcSubtree(env,tree, isShared=False) # use all sourcefiles found in subtree
     if not exeName:
         exeName = 'test-%s' % tree
-    return env.Program('#$BINDIR/'+exeName, obj + core)
+    return env.Program(exeName, obj + core)
 
 
 def testCollection(env,dir):
@@ -44,7 +42,7 @@ def testCollection(env,dir):
     """
     srcpatt = ['test-*.c']
     exeName = lambda p: path.basename(path.splitext(p)[0])
-    buildIt = lambda p: env.Program("#$BINDIR/"+exeName(p), [p] + core)
+    buildIt = lambda p: env.Program(exeName(p), [p] + core)
     return [buildIt(f) for f in scanSubtree(dir,srcpatt)] 
 
 
@@ -59,7 +57,7 @@ moduledirs = globRootdirs('*')
 
 artifacts['testsuite'] = ts = ( [ testExecutable(env, dir) for dir in ['lib','components'] ]
                               + [ testCollection(env, dir) for dir in moduledirs if not dir in specials]
-                              + createPlugins(envPlu, 'plugin')
+                              + createPlugins(env, 'plugin')
                               + env.File(glob('*.tests'))     # depending on the test definition files for test.sh
                               )
 
@@ -67,7 +65,7 @@ artifacts['testsuite'] = ts = ( [ testExecutable(env, dir) for dir in ['lib','co
 
 
 # for creating a Valgrind-Suppression file
-vgsuppr = env.Program('#$BINDIR/vgsuppression','tool/vgsuppression.c', LIBS=core)   ## for suppressing false valgrind alarms
+vgsuppr = env.Program('vgsuppression','tool/vgsuppression.c', LIBS=core)   ## for suppressing false valgrind alarms
 artifacts['tools'] += [vgsuppr]
 Depends(ts,vgsuppr)
 
@@ -103,10 +101,10 @@ if testsuites:
 testEnv['ENV']['TEST_CONF'] = env.File("test.conf").abspath
 
 
-testDir = env.Dir('#$BINDIR')
+testDir = env.Dir('#$TARGDIR')
 runTest = env.File("test.sh").abspath
 
-runTs = testEnv.Command('#$BINDIR/,testlog', ts, runTest,  chdir=testDir)
+runTs = testEnv.Command('#$TARGDIR/,testlog', ts, runTest,  chdir=testDir)
 
 
 
