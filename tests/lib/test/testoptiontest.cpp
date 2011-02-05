@@ -26,12 +26,11 @@
 #include "lib/test/testoption.hpp"
 #include "lib/util.hpp"
 
-using util::Cmdline;
+using lib::Cmdline;
 using util::isnil;
 using std::endl;
 
-namespace test
-  {
+namespace test {
   
   /****************************************************************
    * invokes the TestOption parser for various example commandlines
@@ -76,10 +75,10 @@ namespace test
       void groupFilter2()   { doIt (" --group TestGroupID SingleTestID "); }
       void additionalCmd()  { doIt (" --group TestGroupID SingleTestID spam eggs"); }
       void additionalCmd2() { doIt ("\t\tSingleTestID spam --group TestGroupID    \t --eggs"); }
-
+      
     };
   
-    LAUNCHER (TestOption_test, "function common");    
-    
+  LAUNCHER (TestOption_test, "function common");    
+  
+  
 } // namespace test
-

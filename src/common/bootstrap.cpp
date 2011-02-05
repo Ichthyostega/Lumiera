@@ -6,6 +6,7 @@
 
 
 
+#include "lib/error.hpp"
 #include "common/bootstrap.hpp"
 
 extern "C" {

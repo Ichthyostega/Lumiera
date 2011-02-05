@@ -69,7 +69,7 @@ namespace test  {
       const uint DELAY_FOR_FLOUNDERING_THRAD_ms = 20;
       
       /** dummy options just to be ignored */
-      util::Cmdline dummyArgs ("");
+      lib::Cmdline dummyArgs ("");
       lumiera::Option dummyOpt (dummyArgs);
       
       /** marker for simulated failure exceptions */

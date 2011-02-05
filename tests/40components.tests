@@ -590,6 +590,21 @@ return: 0
 END
 
 
+TEST "Search path walking" SearchPathSplitter_test <<END
+out-lit: ➢➢a
+out-lit: ➢➢a
+out-lit: ➢➢a
+out-lit: ➢➢b
+out-lit: ➢➢a
+out-lit: ➢➢b
+out-lit: ➢➢c
+out: ➢➢.d.
+out-lit: ➢➢ e f
+out-lit: ➢➢/usr/bin
+out-lit: ➢➢/usr/lib
+END
+
+
 TEST "Singleton_test" Singleton_test 23 <<END
 out: testing TargetObj\(23\) as Singleton\(statically allocated\)
 out: ctor TargetObj\(23\) successful

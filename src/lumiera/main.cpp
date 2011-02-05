@@ -34,7 +34,7 @@
 #include "proc/facade.hpp"
 #include "gui/guifacade.hpp"
 
-using util::Cmdline;
+using lib::Cmdline;
 using lumiera::Subsys;
 using lumiera::AppState;
 using lumiera::ON_GLOBAL_INIT;

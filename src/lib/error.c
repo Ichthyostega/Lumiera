@@ -33,7 +33,7 @@
   predefined errors
 */
 LUMIERA_ERROR_DEFINE (ERRNO, "errno");
-LUMIERA_ERROR_DEFINE (EERROR, "could not initialize error system");
+LUMIERA_ERROR_DEFINE (EERROR, "could not initialise error system");
 LUMIERA_ERROR_DEFINE (UNKNOWN, "unknown error");
 
 
@@ -78,7 +78,7 @@ lumiera_error_get (void)
   LumieraErrorcontext self = pthread_getspecific (lumiera_error_tls);
   if (!self)
     {
-      /* malloc() and not lumiera_malloc() here because nothing else might be initialized when calling this */
+      /* malloc() and not lumiera_malloc() here because nothing else might be initialised when calling this */
       self = malloc (sizeof *self);
       if (!self)
         LUMIERA_DIE (EERROR);

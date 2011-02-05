@@ -33,7 +33,7 @@ typedef boost::program_options::variables_map VarMap;
 
 namespace op = boost::program_options;
 
-using util::VectS;
+using lib::VectS;
 using util::cStr;
 
 
@@ -50,7 +50,7 @@ namespace lumiera {
    *  \endcode
    *  @todo describe the actual options
    */
-  Option::Option (util::Cmdline& cmdline)
+  Option::Option (lib::Cmdline& cmdline)
     : syntax("Lumiera, the non linear video editor. Supported parameters"),
       parameters()
     {

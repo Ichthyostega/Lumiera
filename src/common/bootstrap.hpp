@@ -7,8 +7,6 @@
 #ifndef COMMON_DUMMY_FUNC_H
 #define COMMON_DUMMY_FUNC_H
 
-#include "include/nobugcfg.h"
-
 #include <string>
 
 

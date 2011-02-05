@@ -34,6 +34,7 @@ extern "C" {
 #include "common/plugin.h"
 }
 
+#include "lib/symbol.hpp"
 #include "lib/util.hpp"
 #include "include/configfacade.hpp" //////////TODO: temp hack to force configfacade.o to be linked in
 
@@ -59,6 +60,7 @@ namespace lumiera {
     
     LifecycleHook schedule_ (ON_BASIC_INIT, &createAppStateInstance);         
     
+    lib::Literal GET_PATH_TO_EXECUTABLE ("/proc/self/exe");
   }
   
   

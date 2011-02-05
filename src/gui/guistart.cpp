@@ -3,8 +3,8 @@
 
   Copyright (C)         Lumiera.org
     2007-2008,          Joel Holdsworth <joel@airwebreathe.org.uk>
-    2009,               Christian Thaeter <ct@pipapo.org>
-                        Hermann Vosseler <Ichthyostega@web.de>
+    2009,               Hermann Vosseler <Ichthyostega@web.de>
+                        Christian Thaeter <ct@pipapo.org>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as

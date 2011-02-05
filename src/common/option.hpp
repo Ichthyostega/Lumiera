@@ -37,13 +37,13 @@ namespace lumiera {
   
   using std::string;
   using std::ostream;
-  using util::VectS;
+  using lib::VectS;
   
 
   
   /**
-   * Support for selecting and configuring testcases
-   * via commandline arguments. A preconfigured wrapper
+   * Frontend for handling the Lumiera application
+   * commandline arguments. A preconfigured wrapper
    * around boost::program_options, with the ability
    * to tolerate unknown options. The commandline
    * to be parsed is taken wrapped into a Cmdline
@@ -54,7 +54,7 @@ namespace lumiera {
   class Option : private boost::noncopyable
     {
     public:
-      Option (util::Cmdline& cmdline);
+      Option (lib::Cmdline& cmdline);
       
       const string getSessName();
       const VectS  getScripts();

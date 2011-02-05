@@ -40,11 +40,12 @@ using boost::regex;
 using boost::smatch;
 using boost::regex_search;
 
+using util::noneg;
 
 
 #include <iostream>
 
-namespace util {
+namespace lib {
   
   
   /** create as a tokenised <i>copy</i> of the current commandline.
@@ -88,4 +89,4 @@ namespace util {
   
   
   
-} // namespace util
+} // namespace lib
