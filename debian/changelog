@@ -2,5 +2,5 @@ lumiera (0.pre.01-1) unstable; urgency=low
 
   * Initial Debian packaging of an pre Alpha internal development version
 
- -- Ichthyostega <deb@ichthyostega.de>  Tue, 11 Jan 2011 23:55:12 +0100
+ -- Hermann Vosseler <deb@ichthyostega.de>  Tue, 11 Jan 2011 23:55:12 +0100
 

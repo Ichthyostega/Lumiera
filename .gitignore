@@ -7,6 +7,7 @@
 *.gch
 ,valgrind.log*
 *.pyc
+Proto.??
 optcache
 Makefile.in
 build/*

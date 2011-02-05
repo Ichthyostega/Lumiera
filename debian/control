@@ -1,7 +1,7 @@
 Source: lumiera
-Section: video
+Section: graphics
 Priority: extra
-Maintainer: Ichthyostega <deb@ichthyostega.de>
+Maintainer: Hermann Vosseler <deb@ichthyostega.de>
 Build-Depends: debhelper (>= 7), cdbs (>= 0.4.73), scons (>= 1), pkg-config, asciidoc, libboost-dev (>= 1.34), libboost-program-options-dev  (>= 1.34), libboost-filesystem-dev  (>= 1.34), libboost-regex-dev  (>= 1.34), nobug-dev (>= 201008.1), libgavl-dev (>= 1), libgtkmm-2.4-dev (>= 1:2.8), libglibmm-2.4-dev (>= 2.16), libglib2.0-dev (>= 2.16), libglade2-dev (>= 2.6.2), libgdl-1-dev (>= 2.27.1) | libgdl-lum-dev (>= 2.27.1), libcairomm-1.0-dev (>= 1.6), librsvg2-dev (>=2.18.1), libxv-dev (>= 2:1.0), libxext-dev, libx11-dev
 Standards-Version: 3.8.0
 Vcs-Git: git://git.lumiera.org/LUMIERA
@@ -11,10 +11,10 @@ Homepage: http://Lumiera.org
 Package: lumiera
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
-Description: Lumiera is a nonlinear video editing and compositing tool. 
- It understands some of the common multimedia formats
- (quicktime, avi, ogg) and audio/video compression
- codecs (divx, xvid, mpeg1/2/4, ...)
+Description: nonlinear video editing and compositing tool. 
+ The Application allows to edit footabe based on the common
+ multimedia formats (quicktime, avi, ogg) and audio/video
+ compression codecs (divx, xvid, mpeg1/2/4, ...)
  .
  Lumiera features non-destructive editing, compositing tools,
  a selection of effects plugins, processing in RGB, YUV and
