@@ -1,17 +1,22 @@
 This package was debianized by Ichthyostega <deb@ichthyostega.de> on
 Tue, 11 Jan 2011 23:55:12 +0100.
 
-It was downloaded from <url://example.com>
+The current Debian maintainer is Ichthyostega <deb@ichthyostega.de>
+
+It can be downloaded from git://git.lumiera.org/LUMIERA
 
 Upstream Author(s):
 
-    <put author's name and email here>
-    <likewise for another author>
+    Joel Holdsworth joel@airwebreathe.org.uk
+    Christian Thäter ct@pipapo.org
+    Hermann Voßeler Ichthyostega@web.de
+    Stefan Kangas, Anton Yakovlev, Simeon Völkel
 
 Copyright:
 
-    <Copyright (C) YYYY Name OfAuthor>
-    <likewise for another author>
+    Copyright (C) 2008 Joel Holdsworth
+    Copyright (C) 2008 Christian Thäter
+    Copyright (C) 2008 Hermann Voßeler
 
 License:
 
@@ -35,6 +40,3 @@ Public License can be found in `/usr/share/common-licenses/GPL'.
 The Debian packaging is (C) 2011, Ichthyostega <deb@ichthyostega.de> and
 is licensed under the GPL, see above.
 
-
-# Please also look if there are files or directories which have a
-# different copyright/license attached and list them here.

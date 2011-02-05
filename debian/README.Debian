@@ -1,6 +1,13 @@
-lumiera for Debian
+Lumiera for Debian
 ------------------
 
-<possible notes regarding this package - if none, delete this file>
+This is a preview of the Debian packaging for Lumiera.
+As of 2011, Lumiera is in early development and not usable yet.
+
+The Debian packaging will be maintained by the Lumiera core developer team --
+Indeed, Debian/stable is defined as reference system for Lumiera development.
+When requiring additional libraries not found in Debian/stable, the Lumiera team
+will provide backports or custom debian packages -- stay tuned.
 
  -- Ichthyostega <deb@ichthyostega.de>  Tue, 11 Jan 2011 23:55:12 +0100
+
