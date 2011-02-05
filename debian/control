@@ -2,7 +2,7 @@ Source: lumiera
 Section: video
 Priority: extra
 Maintainer: Ichthyostega <deb@ichthyostega.de>
-Build-Depends: cdbs, debhelper (>= 7), scons (>= 1), pkg-config, asciidoc, libboost-dev (>= 1.34), libboost-program-options-dev  (>= 1.34), libboost-filesystem-dev  (>= 1.34), libboost-regex-dev  (>= 1.34), nobug-dev (>= 201008.1), libgavl-dev (>= 1), libgtkmm-2.4-dev (>= 1:2.8), libglibmm-2.4-dev (>= 2.16), libglib2.0-dev (>= 2.16), libglade2-dev (>= 2.6.2), libgdl-1-dev (>= 2.27.1) | libgdl-lum-dev (>= 2.27.1), libcairomm-1.0-dev (>= 1.6), librsvg2-dev (>=2.18.1), libxv-dev (>= 2:1.0), libxext-dev, libx11-dev
+Build-Depends: debhelper (>= 7), cdbs (>= 0.4.73), scons (>= 1), pkg-config, asciidoc, libboost-dev (>= 1.34), libboost-program-options-dev  (>= 1.34), libboost-filesystem-dev  (>= 1.34), libboost-regex-dev  (>= 1.34), nobug-dev (>= 201008.1), libgavl-dev (>= 1), libgtkmm-2.4-dev (>= 1:2.8), libglibmm-2.4-dev (>= 2.16), libglib2.0-dev (>= 2.16), libglade2-dev (>= 2.6.2), libgdl-1-dev (>= 2.27.1) | libgdl-lum-dev (>= 2.27.1), libcairomm-1.0-dev (>= 1.6), librsvg2-dev (>=2.18.1), libxv-dev (>= 2:1.0), libxext-dev, libx11-dev
 Standards-Version: 3.8.0
 Vcs-Git: git://git.lumiera.org/LUMIERA
 Vcs-Browser: http://git.lumiera.org/gitweb?p=lumiera;a=shortlog;h=refs/heads/debian

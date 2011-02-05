@@ -1,7 +1,20 @@
 #!/usr/bin/make -f
 
 include /usr/share/cdbs/1/rules/debhelper.mk
-include /usr/share/cdbs/1/class/makefile.mk
+include /usr/share/cdbs/1/class/scons.mk
+
+# Core options for Lumiera
+DEB_SCONS_OPTIONS = \
+    BUILDLEVEL=ALPHA \
+    DEBUG=True       \
+    OPTIMIZE=False   \
+    VALGRIND=False   \ 
+    PREFIX=usr       
+    
+DEB_SCONS_INSTALL_OPTIONS = \
+    INSTALLDIR=debian/lumiera
+
+DEB_SCONS_CHECK_TARGET = check
 
 
-# Add here any variable or target overrides you need.
+
