@@ -3,7 +3,7 @@
 
   Copyright (C)         Lumiera.org
     2007-2008,          Joel Holdsworth <joel@airwebreathe.org.uk>
-                        Christian Thaeter <ct@pipapo.org>
+    2009,               Christian Thaeter <ct@pipapo.org>
                         Hermann Vosseler <Ichthyostega@web.de>
 
   This program is free software; you can redistribute it and/or
@@ -199,7 +199,7 @@ extern "C" { /* ================== define an lumieraorg_Gui instance ===========
                                                              return
                                                                "Copyright (C)       Lumiera.org\n"
                                                                "2007-2008,          Joel Holdsworth <joel@airwebreathe.org.uk>\n"
-                                                               "                    Christian Thaeter <ct@pipapo.org>\n"
+                                                               "2009,               Christian Thaeter <ct@pipapo.org>\n"
                                                                "                    Hermann Vosseler <Ichthyostega@web.de>";
                                                            }
                                                         )

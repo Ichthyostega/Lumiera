@@ -1,5 +1,5 @@
 /*
-  video-display-widget.hpp  -  Declaration of the video viewer widget
+  VIDEO-DISPLAY-WIDGET.hpp  -  GUI widget for displaying video
 
   Copyright (C)         Lumiera.org
     2008,               Joel Holdsworth <joel@airwebreathe.org.uk>
@@ -19,9 +19,12 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 */
+
+
 /** @file video-display-widget.hpp
  ** This file contains the definition of video viewer widget
  */
+
 
 #ifndef VIDEO_DISPLAY_WIDGET_HPP
 #define VIDEO_DISPLAY_WIDGET_HPP
@@ -34,31 +37,31 @@ using namespace gui::output;
 
 namespace gui {
 namespace widgets {
-
-class VideoDisplayWidget : public Gtk::DrawingArea
-{
-public:
-  VideoDisplayWidget();
-
-  ~VideoDisplayWidget();
   
-  Displayer* get_displayer() const;
-
-  /* ===== Overrides ===== */
-private:
-  virtual void on_realize();
-
-  /* ===== Internals ===== */
-private:
-  static Displayer*
-    createDisplayer( Gtk::Widget *drawingArea, int width, int height );
-
-private:
-
-  Displayer *displayer;
-};
-
-}   // namespace widgets
-}   // namespace gui
-
+  class VideoDisplayWidget
+    : public Gtk::DrawingArea
+    {
+    public:
+      VideoDisplayWidget();
+      
+     ~VideoDisplayWidget();
+      
+      Displayer* get_displayer() const;
+      
+      /* ===== Overrides ===== */
+    private:
+      virtual void on_realize();
+      
+      /* ===== Internals ===== */
+    private:
+      static Displayer*
+      createDisplayer( Gtk::Widget *drawingArea, int width, int height );
+      
+    private:
+      
+      Displayer *displayer;
+    };
+  
+  
+}}   // namespace gui::widgets
 #endif // VIDEO_DISPLAY_WIDGET_HPP

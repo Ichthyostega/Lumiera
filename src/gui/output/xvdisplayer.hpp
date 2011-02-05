@@ -21,12 +21,18 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 */
+
+
 /** @file xvdisplayer.hpp
  ** This file contains the definition of XvDisplayer, the XVideo
  ** video output implementation
  ** @see xvdisplayer.cpp
  ** @see displayer.hpp
  */
+
+
+#ifndef GUI_OUTPUT_XVDISPLAYER_H
+#define GUI_OUTPUT_XVDISPLAYER_H
 
 #include <X11/Xlib.h>
 #include <sys/ipc.h>
@@ -36,8 +42,6 @@
 
 #include "displayer.hpp"
 
-#ifndef XVDISPLAYER_HPP
-#define XVDISPLAYER_HPP
 
 namespace Gtk {
   class Widget;
@@ -50,88 +54,86 @@ namespace output {
  * XvDisplayer is a class which is responsible for rendering  a video
  * image via XVideo.
  */
-class XvDisplayer : public Displayer
-{
-public:
-  /**
-   * Constructor
-   * @param drawing_area The widget into which the video image will be
-   * drawn. This value must not be NULL.
-   * @param width The width of the video image in pixels. This value
-   * must be greater than zero.
-   * @param height The height of the video image in pixels. This value
-   * must be greater than zero.
-   */
-  XvDisplayer( Gtk::Widget *drawing_area, int width, int height );
+class XvDisplayer 
+  : public Displayer
+  {
+  public:
+    /**
+     * Constructor
+     * @param drawing_area The widget into which the video image will be
+     * drawn. This value must not be NULL.
+     * @param width The width of the video image in pixels. This value
+     * must be greater than zero.
+     * @param height The height of the video image in pixels. This value
+     * must be greater than zero.
+     */
+    XvDisplayer( Gtk::Widget *drawing_area, int width, int height );
+    
+    
+   ~XvDisplayer();
+    
+    /**
+     * Put an image of a given width and height with the expected input
+     * format (as indicated by the format method).
+     * @param[in] image The video image array to draw.
+     */
+    void put( const void* image );
+    
+    /** 
+     * Indicates if this object can be used to render images on the
+     * running system.
+     */
+    bool usable();
+    
+  private:
+    
+    /**
+     * Specifies whether the object is currently attached to an XVideo
+     * port.
+     * @remarks This value is false until the constructor has finished
+     * successfully.
+     */
+    bool gotPort;
+    
+    /**
+     * The current port being used.
+     * @remarks This value is meaningless unless gotPort is true.
+     */
+    unsigned int grabbedPort;
+    
+    /**
+     * The widget that video will be drawn into.
+     * @remarks This value must be a valid pointer.
+     */
+    Gtk::Widget *drawingArea;
+    
+    /**
+     * The display that video will be drawn into.
+     */
+    Display *display;
+    
+    /**
+     * The X11 window that video will be drawn into.
+     */
+    Window window;
+    
+    /**
+     * The graphics context which will be used when rendering video.
+     */
+    GC gc;
+    
+    /**
+     * The shared memory image object which video will be written into.
+     */
+    XvImage *xvImage;
+    
+    /**
+     * Info about the shared memory segment.
+     * @remarks shmInfo.shmaddr is set to NULL, when the SHM is detached.
+     */
+    XShmSegmentInfo shmInfo;
+  };
   
-  /**
-   * Destructor
-   */
-  ~XvDisplayer();
-
-  /**
-   * Put an image of a given width and height with the expected input
-   * format (as indicated by the format method).
-   * @param[in] image The video image array to draw.
-   */
-  void put( const void* image );
-
-  /** 
-   * Indicates if this object can be used to render images on the
-   * running system.
-   */
-  bool usable();
-
-private:
-
-  /**
-   * Specifies whether the object is currently attached to an XVideo
-   * port.
-   * @remarks This value is false until the constructor has finished
-   * successfully.
-   */
-  bool gotPort;
   
-  /**
-   * The current port being used.
-   * @remarks This value is meaninless unless gotPort is true.
-   */
-  unsigned int grabbedPort;
-  
-  /**
-   * The widget that video will be drawn into.
-   * @remarks This value must be a valid pointer.
-   */
-  Gtk::Widget *drawingArea;
-  
-  /**
-   * The display that video will be drawn into.
-   */
-  Display *display;
-  
-  /**
-   * The X11 window that video will be drawn into.
-   */
-  Window window;
-  
-  /**
-   * The graphics context which will be used when rednering video.
-   */
-  GC gc;
-  
-  /**
-   * The shared memory image object which video will be written into.
-   */
-  XvImage *xvImage;
-  
-  /**
-   * Info about the shared memory segment.
-   * @remarks shmInfo.shmaddr is set to NULL, when the SHM is detached.
-   */
-  XShmSegmentInfo shmInfo;
-};
-
-}   // namespace output
-}   // namespace gui
-
+}}   // namespace gui::output
 #endif // XVDISPLAYER_HPP
