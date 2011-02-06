@@ -26,23 +26,20 @@
 #include "lib/symbol.hpp"
 
 
+/** how to retrieve the absolute path of the currently running executable
+ *  on a Linux system: read the link provided by the kernel through /proc
+ */
+#define GET_PATH_TO_EXECUTABLE "/proc/self/exe"
+
+
+
 namespace lib {
   
-  
   LUMIERA_ERROR_DEFINE (FILE_NOT_DIRECTORY, "path element points at a file instead of a directory");
-
   
-  
-  namespace {
-    
-    Literal GET_PATH_TO_EXECUTABLE ("/proc/self/exe");
-  }
-    
   
   
   regex SearchPathSplitter::EXTRACT_PATHSPEC ("(\\$?ORIGIN/)?([^:]+)");
-  
-  
   
   
   /** @internal helper to figure out the installation directory,

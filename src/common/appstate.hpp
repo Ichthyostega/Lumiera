@@ -21,7 +21,7 @@
 */
 
 /** @file appstate.hpp
- ** Registering and managing some application-global services.
+ ** Registering and managing primary application-global services.
  ** This can be considered the "main" object of the Lumiera application
  ** Besides encapsulating the logic for starting up the fundamental parts
  ** of the application, there is a mechanism for registering \em subsystems
@@ -30,6 +30,7 @@
  ** callbacks) and provides the top-level catch-all error handling.
  **
  ** @see LifecycleHook
+ ** @see BasicSetup
  ** @see Subsys
  ** @see main.cpp
  ** @see logging.h
@@ -42,6 +43,7 @@
 #include "lib/symbol.hpp"
 #include "common/option.hpp"
 #include "common/subsys.hpp"
+#include "common/basic-setup.hpp"
 
 #include <boost/noncopyable.hpp>
 #include <boost/scoped_ptr.hpp>
@@ -60,6 +62,7 @@ namespace lumiera {
   
   
   /**
+   * The Lumiera Application state and basic initialisation.
    * Singleton to hold global flags directing the overall application behaviour,
    * for triggering lifecycle events and performing early initialisation tasks.
    * AppState services are available already from static initialisation code.
@@ -122,6 +125,8 @@ namespace lumiera {
     
     private:
       typedef scoped_ptr<SubsystemRunner>   PSub;
+      
+      BasicSetup setup_;
       
       PSub  subsystems_;
       

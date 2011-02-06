@@ -41,6 +41,9 @@ extern "C" {
 using util::cStr;
 
 
+#define LOCATION_OF_BOOTSTRAP_INI  "$ORIGIN/config/setup.ini" 
+
+
 
 namespace lumiera {
   
@@ -60,7 +63,6 @@ namespace lumiera {
     
     LifecycleHook schedule_ (ON_BASIC_INIT, &createAppStateInstance);         
     
-    lib::Literal GET_PATH_TO_EXECUTABLE ("/proc/self/exe");
   }
   
   
@@ -77,7 +79,8 @@ namespace lumiera {
    *  client codes POV it just behaves like intended). 
    */
   AppState::AppState()
-    : subsystems_(0)
+    : setup_(LOCATION_OF_BOOTSTRAP_INI)
+    , subsystems_(0)
     , emergency_(false)
     , core_up_ (false)
   { }
@@ -102,8 +105,8 @@ namespace lumiera {
   
   
 #define _THROW_IF \
-  if (lumiera_error_peek()) \
-    throw error::Fatal (lumiera_error());
+  maybeThrow<error::Fatal> ("internal failure while initialising the "\
+                            "Lumiera application framework");
   
   
   

@@ -30,21 +30,19 @@
 extern "C" {
 #include <unistd.h>
 }
-//#include "lib/error.hpp"
-//#include "lib/symbol.hpp"
+#include "lib/error.hpp"
+#include "lib/symbol.hpp"
 
 
 using std::string;
 using std::cout;
 using std::endl;
-//using lib::Literal;
-//using lib::STRING_MAX_RELEVANT;
-const size_t STRING_MAX_RELEVANT = 1000;
+using lib::Literal;
+using lib::STRING_MAX_RELEVANT;
 
-//namespace error = lumiera::error;
+namespace error = lumiera::error;
 
-//Literal GET_PATH_TO_EXECUTABLE ("/proc/self/exe");
-const char * const GET_PATH_TO_EXECUTABLE ("/proc/self/exe");
+Literal GET_PATH_TO_EXECUTABLE ("/proc/self/exe");
 
 string
 catchMyself ()
@@ -53,8 +51,7 @@ catchMyself ()
   ssize_t chars_read = readlink (GET_PATH_TO_EXECUTABLE, &buff[0], STRING_MAX_RELEVANT);
   
   if (0 > chars_read || chars_read == ssize_t(STRING_MAX_RELEVANT))
-//  throw error::Fatal ("unable to discover path of running executable")
-    throw string("unable to discover path of running executable");
+    throw error::Fatal ("unable to discover path of running executable");
   
   buff.resize(chars_read);
   return buff;

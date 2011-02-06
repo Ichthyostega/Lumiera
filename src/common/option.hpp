@@ -51,7 +51,8 @@ namespace lumiera {
    * vector will contain only the remaining
    * unrecognised parts.
    */
-  class Option : private boost::noncopyable
+  class Option
+    : boost::noncopyable
     {
     public:
       Option (lib::Cmdline& cmdline);

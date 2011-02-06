@@ -25,7 +25,6 @@
 #include "lib/test/test-helper.hpp"
 
 #include "lib/searchpath.hpp"
-#include "common/appstate.hpp"
 
 #include <iostream>
 
