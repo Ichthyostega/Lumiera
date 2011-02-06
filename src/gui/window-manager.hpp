@@ -1,5 +1,5 @@
 /*
-  window-manager.hpp  -  Defines the global UI Manager class
+  WINDOW-MANAGER.hpp  -  Global UI Manager class
 
   Copyright (C)         Lumiera.org
     2008,               Joel Holdsworth <joel@airwebreathe.org.uk>
@@ -19,19 +19,30 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 */
+
+
 /** @file window-manager.hpp
- ** This file contains the defintion of global UI Manager class.
- ** @see window-manager.cpp
+ ** Manager for all application windows and resources.
+ ** This file defines the global UI Manager class. The central WindowManager
+ ** instance is owned by the GtkLumiera object and initialised in GTK-main.
+ ** The WindowManager has the ability to create new windows integrated with
+ ** the application framework, to provide Icons and other resources and
+ ** to set and access a general UI theme. 
+ ** 
  ** @see gtk-lumiera.hpp
  */
 
-#include <cairomm/cairomm.h>
-
-#include "gtk-lumiera.hpp"
-//#include "workspace/workspace-window.hpp"
 
 #ifndef WINDOW_MANAGER_HPP
 #define WINDOW_MANAGER_HPP
+
+#include "gui/gtk-base.hpp"
+
+#include <boost/noncopyable.hpp>
+#include <boost/shared_ptr.hpp>
+#include <cairomm/cairomm.h>
+
+
 
 namespace gui {
 
@@ -50,11 +61,13 @@ namespace workspace {
 /**
  * The centralised manager of all lumiera-gui's windows.
  */
-class WindowManager : private boost::noncopyable
+class WindowManager 
+  : boost::noncopyable
 {
 public:
   /**
-   * Initializes the window manager object
+   * Initialise the window manager on application start.
+   * Register the icon configuration and sizes.
    */
   void init();
   
@@ -104,17 +117,16 @@ private:
    * otherwise.
    */
   void update_close_window_in_menus();
-
-  /**
-   * Registers the custom icon sizes.
-   */
-  static void register_app_icon_sizes();
+  
+  
+  /** Registers the custom icon sizes. */
+  void register_app_icon_sizes();
 
   /**
    * Registers application stock items: icons and
    * labels associated with IDs
    */
-  static void register_stock_items();
+  void register_stock_items();
 
   /**
    * Adds an icon (in different sizes) to the icon factory.
@@ -125,7 +137,7 @@ private:
    * @return Returns true if the icon was successfully loaded, returns
    * false otherwise.
    */
-  static bool add_stock_icon_set(
+  bool add_stock_icon_set(
     const Glib::RefPtr<Gtk::IconFactory>& factory,
     const Glib::ustring& icon_name,
     const Glib::ustring& id,
@@ -141,7 +153,7 @@ private:
    * wildcarded.
    * @return Returns true if the icon was loaded successfully.
    */
-  static bool add_stock_icon(Gtk::IconSet &icon_set,
+  bool add_stock_icon(Gtk::IconSet &icon_set,
     const Glib::ustring& icon_name, Gtk::IconSize size, bool wildcard);
 
   /**
@@ -153,7 +165,7 @@ private:
    * wildcarded.
    * @return Returns true if the icon was loaded successfully.
    */
-  static bool add_theme_icon_source(Gtk::IconSet &icon_set,
+  bool add_theme_icon_source(Gtk::IconSet &icon_set,
     const Glib::ustring& icon_name, Gtk::IconSize size, bool wildcard);
   
   /**
@@ -166,7 +178,7 @@ private:
    * wildcarded.
    * @return Returns true if the icon was loaded successfully.
    */
-  static bool add_non_theme_icon_source(Gtk::IconSet &icon_set,
+  bool add_non_theme_icon_source(Gtk::IconSet &icon_set,
     const Glib::ustring& base_dir, const Glib::ustring& icon_name,
     Gtk::IconSize size, bool wildcard);
 
@@ -179,7 +191,7 @@ private:
    * wildcarded.
    * @return Returns true if the icon was loaded successfully.
    */
-  static bool add_stock_icon_from_path(Glib::ustring path,
+  bool add_stock_icon_from_path(Glib::ustring path,
     Gtk::IconSet &icon_set, Gtk::IconSize size, bool wildcard);
     
 private:
@@ -203,6 +215,7 @@ public:
   static Gtk::IconSize MenuIconSize;
 };
 
-}   // namespace gui
 
-#endif // WINDOW_MANAGER_HPP
+
+}// namespace gui
+#endif

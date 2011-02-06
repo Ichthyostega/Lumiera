@@ -25,11 +25,15 @@
  ** are also track parents. This class wraps proc layer data
  */
 
+#ifndef PARENT_TRACK_HPP
+#define PARENT_TRACK_HPP
+
 #include "track.hpp"
 #include "lib/observable-list.hpp"
 
-#ifndef PARENT_TRACK_HPP
-#define PARENT_TRACK_HPP
+#include <boost/shared_ptr.hpp>
+#include <boost/enable_shared_from_this.hpp>
+
 
 namespace gui {
 namespace model {

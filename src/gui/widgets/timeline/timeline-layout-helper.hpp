@@ -30,6 +30,8 @@
 #include "gui/gtk-lumiera.hpp"
 #include "lib/tree.hpp"
 
+#include <boost/optional.hpp>
+
 namespace gui {
 
 namespace model {

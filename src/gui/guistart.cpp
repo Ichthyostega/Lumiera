@@ -110,7 +110,8 @@ namespace gui {
                 int argc =0;
                 char *argv[] = {};                     // dummy command line for GTK
                 
-                gui::application().main(argc, argv);   // execute the GTK Event Loop
+                // execute the GTK Event Loop____________
+                GtkLumiera::application().main(argc, argv);
                 
                 if (!lumiera_error_peek())
                     return;                            // all went well, normal shutdown

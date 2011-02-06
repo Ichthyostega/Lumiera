@@ -29,6 +29,8 @@
 #include "gui/gtk-lumiera.hpp"
 #include "timeline-tool.hpp"
 
+#include <boost/scoped_ptr.hpp>
+
 namespace gui {
 
 namespace model {

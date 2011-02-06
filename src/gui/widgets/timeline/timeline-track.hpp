@@ -19,21 +19,28 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 */
+
+
 /** @file widgets/timeline/timeline-track.hpp
  ** This file contains the definition of timeline track object
  */
+
+
+#ifndef TIMELINE_TRACK_HPP
+#define TIMELINE_TRACK_HPP
+
 
 #include "gui/gtk-lumiera.hpp"
 #include "gui/model/track.hpp"
 #include "gui/widgets/menu-button.hpp"
 #include "gui/widgets/mini-button.hpp"
 #include "gui/widgets/button-bar.hpp"
-#include "timeline-clip.hpp"
-#include "timeline-header-container.hpp"
-#include "timeline-header-widget.hpp"
+#include "gui/widgets/timeline/timeline-clip.hpp"
+#include "gui/widgets/timeline/timeline-header-container.hpp"
+#include "gui/widgets/timeline/timeline-header-widget.hpp"
 
-#ifndef TIMELINE_TRACK_HPP
-#define TIMELINE_TRACK_HPP
+#include <boost/scoped_ptr.hpp>
+
 
 namespace gui {
 namespace widgets { 

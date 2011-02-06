@@ -334,7 +334,7 @@ Actions::on_menu_track_add()
 void
 Actions::on_menu_window_new_window()
 {
-  application().get_window_manager().new_window(
+  GtkLumiera::application().windowManager().new_window(
     workspaceWindow.get_project(),
     workspaceWindow.get_controller()); 
 }

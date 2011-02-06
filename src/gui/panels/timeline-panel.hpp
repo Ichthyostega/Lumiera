@@ -19,9 +19,12 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 */
+
+
 /** @file timeline-panel.hpp
  ** This file contains the definition of the timeline panel
  */
+
 
 #ifndef TIMELINE_PANEL_HPP
 #define TIMELINE_PANEL_HPP
@@ -30,7 +33,11 @@
 #include "gui/widgets/timecode-widget.hpp"
 #include "gui/widgets/timeline-widget.hpp"
 
+#include <boost/scoped_ptr.hpp>
+#include <boost/weak_ptr.hpp>
+
 using namespace gui::widgets;
+
 
 namespace gui {
 

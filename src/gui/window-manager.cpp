@@ -1,5 +1,5 @@
 /*
-  window-manager.cpp  -  Defines the global UI Manager class
+  WindowManager  -  Global UI Manager class
 
   Copyright (C)         Lumiera.org
     2008,               Joel Holdsworth <joel@airwebreathe.org.uk>
@@ -20,9 +20,10 @@
 
 * *****************************************************/
 
-#include "window-manager.hpp"
-#include "include/logging.h"
-#include "workspace/workspace-window.hpp"
+
+#include "gui/window-manager.hpp"
+#include "gui/gtk-lumiera.hpp"
+#include "gui/workspace/workspace-window.hpp"
 
 using namespace Gtk;
 using namespace Glib;
