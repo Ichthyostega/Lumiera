@@ -50,7 +50,7 @@ Project::get_sequences()
 }
 
 void
-Project::add_new_sequence(Glib::ustring name)
+Project::add_new_sequence(uString name)
 {
   shared_ptr<Sequence> sequence(new Sequence());
   sequence->set_name(name);

@@ -152,7 +152,7 @@ private:
     /**
      * The column to use as the label for the combo box widget items.
      */
-    Gtk::TreeModelColumn< Glib::ustring > nameColumn;
+    Gtk::TreeModelColumn< uString > nameColumn;
   };
 
 private:

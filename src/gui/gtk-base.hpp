@@ -69,6 +69,10 @@
 
 /** Lumiera GTK GUI implementation root. */
 namespace gui {
+  
+  typedef Glib::ustring uString;
+  typedef const uString cuString;
+  
 
   /** Dialog box classes. */
   namespace dialogs {}

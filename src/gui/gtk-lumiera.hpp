@@ -61,20 +61,18 @@ class GtkLumiera
     
     WindowManager& windowManager();
     
-    static Glib::ustring get_home_data_path();
-    
     
     /** the name of the application */
-    static const Glib::ustring get_app_title();
+    static cuString getAppTitle();
     
-    static const Glib::ustring get_app_version();
+    static cuString getAppVersion();
     
-    static const Glib::ustring get_app_copyright();
+    static cuString getCopyright();
     
-    static const Glib::ustring get_app_website();
+    static cuString getLumieraWebsite();
     
     /** alphabetical list of the application's authors */
-    static const std::vector<Glib::ustring> get_app_authors();
+    static const std::vector<uString> getLumieraAuthors();
     
   };
 

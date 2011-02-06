@@ -26,7 +26,7 @@
 #ifndef MENU_BUTTON_HPP
 #define MENU_BUTTON_HPP
 
-#include <gtkmm.h>
+#include "gui/gtk-base.hpp"
 
 namespace gui {
 namespace widgets {
@@ -43,7 +43,7 @@ public:
    * @remarks With an empty button, you can Gtk::Button::add() a widget
    * such as a Gtk::Pixmap or Gtk::Box. If you just wish to add a
    * Gtk::Label, you may want to use the
-   * Gtk::MenuButton(const Glib::ustring& label) ctor directly instead.
+   * Gtk::MenuButton(cuString& label) ctor directly instead.
    */
   MenuButton();
 
@@ -61,7 +61,7 @@ public:
    * able to add a widget in this button since it already has a
    * Gtk::Label in it
    */
-  MenuButton(const Glib::ustring& label, bool mnemonic=false);
+  MenuButton(cuString& label, bool mnemonic=false);
   
   /**
    * Gets the menu which will be displayed when the button is clicked
