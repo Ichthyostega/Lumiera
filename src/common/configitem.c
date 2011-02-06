@@ -109,8 +109,8 @@ lumiera_configitem_new (const char* line)
 
   lumiera_configitem_parse (&tmp, line);
 
-  LumieraConfigitem self = tmp.vtable && tmp.vtable->new
-    ? tmp.vtable->new (&tmp)
+  LumieraConfigitem self = tmp.vtable && tmp.vtable->newitem
+    ? tmp.vtable->newitem (&tmp)
     : lumiera_configitem_move (lumiera_malloc (sizeof (*self)), &tmp);
 
   return self;

@@ -48,23 +48,23 @@ namespace lumiera {
   
   /*********************************************************************
    * C++ wrapper for convenient access to the Lumiera config system.
+   * 
+   * @warning Config system not fully implemented yet. Thus for now
+   *          this facade is wired with the setup.ini and will just
+   *          fetch the values from there.
    */
-  struct Config
+  class Config
     {
-      
+    public:
       static const string get (string const& key);
-      
       
       static lib::Singleton<Config> instance;
       
+      
     private:
       Config();
-      ~Config();
-      
+     ~Config();
       friend class lib::singleton::StaticCreate<Config>;
-      
-      //////////////////TODO: define startup/shutdown and loading of the config interface
-      
     };
   
   

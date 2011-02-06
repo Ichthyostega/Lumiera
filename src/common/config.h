@@ -94,11 +94,8 @@ typedef lumiera_config* LumieraConfig;
   LUMIERA_CONFIG_TYPE(bool, int)
 
 
-//  * does only initialize the variables, so that they get valid values, but does not allocate them as they will be allocated before as they are singleton.
-//  * lumiera_config_init (const char* searchpath) searchpath is a builtin-default, can be changed via configure and can be appended and overridden by using a flag, e.g. {{{ --config-path-append="" }}} or {{{ --config-path="" }}}
-
 /**
- * Initialize the configuration subsystem.
+ * Initialise the configuration subsystem.
  * @param path search path for config files.
  * Must be called only once
  */
@@ -106,7 +103,6 @@ int
 lumiera_config_init (const char* path);
 
 
-//  * frees all space allocated by the ConfigLoader.
 
 /**
  * Destroys the configuration subsystem.

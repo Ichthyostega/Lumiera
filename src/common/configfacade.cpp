@@ -25,19 +25,8 @@
 #include "include/lifecycle.h"
 #include "include/configfacade.hpp"
 
-extern "C" { // TODO: can't include "lumiera/config.h" from C++ code, because it uses an identifier "new" 
-  
-  /** Initialise the configuration subsystem.
-   *  Must be called exactly once prior to any use 
-   *  @param path search path for config files.
-   */
-  int lumiera_config_init (const char* path);
-  
-  /** Destroys the configuration subsystem.
-   *  Subsequent calls are no-op. */
-  void
-  lumiera_config_destroy ();
-
+extern "C" { 
+  #include "common/config.h"
 }
 
 #ifndef LUMIERA_CONFIG_PATH
