@@ -185,6 +185,8 @@ class WrappedStandardExeBuilder(SCons.Util.Proxy):
     def __init__(self, originalBuilder):
         SCons.Util.Proxy.__init__ (self, originalBuilder)
     
+    def __nonzero__(self): return True
+    
     def __call__(self, env, target=None, source=None, **kw):
         """ when the builder gets invoked from the SConscript...
             create a clone environment for specific configuration

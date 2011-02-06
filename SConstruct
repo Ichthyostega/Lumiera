@@ -90,7 +90,7 @@ def setupBasicEnvironment(localDefinitions):
     env.Append ( CCCOM=' -std=gnu99') 
     env.Append ( SHCCCOM=' -std=gnu99') # workaround for a bug: CCCOM currently doesn't honour CFLAGS, only CCFLAGS 
     env.Replace( CPPPATH   =["#src"]    # used to find includes, "#" means always absolute to build-root
-               , CPPDEFINES=['-DLUMIERA_VERSION='+VERSION ]     # note: it's a list to append further defines
+               , CPPDEFINES=['LUMIERA_VERSION='+VERSION ]    # note: it's a list to append further defines
                , CCFLAGS='-Wall -Wextra '
                , CFLAGS='-std=gnu99' 
                )
@@ -367,7 +367,7 @@ def defineBuildTargets(env, artifacts):
     envGtk.mergeConf(['gtkmm-2.4','gthread-2.0','cairomm-1.0','gdl','xv','xext','sm'])
     envGtk.Append(LIBS=core)
     
-    objgui  = srcSubtree(envGtk,'src/gui')
+    objgui  = srcSubtree(envGtk,'src/gui', appendCPP='LUMIERA_PLUGIN')
     guimodule = envGtk.LumieraPlugin('gtk_gui', objgui, install=True)
     artifacts['gui'] = ( guimodule
                        + [env.GuiResource(f) for f in env.Glob('src/gui/*.rc')]
