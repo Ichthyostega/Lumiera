@@ -90,6 +90,10 @@ namespace lumiera {
       void init (lumiera::Option& options);
       
       
+      /** access basic application setup values (from \c setup.ini) */
+      string fetchSetupValue (lib::Literal key);
+      
+      
       /** building on the state determined by #evaluate, decide if the given Subsys
        *  needs to be pulled up and, if necessary, register the Subsys and its
        *  prerequisites to be maintained throughout the application's lifetime. */

@@ -74,11 +74,17 @@ namespace lumiera {
     , settings()
     {
       syntax.add_options()
-        ("BuildsystemDemo.gui",        opt::value<string>(),
-                                       "name of the Lumiera GUI plugin to load")
-        ("BuildsystemDemo.modulepath", opt::value<string>(),
-                                       "search path for loadable modules. "
-                                       "May us $ORIGIN to refer to the EXE location")
+        ("Lumiera.gui",        opt::value<string>(),
+                               "name of the Lumiera GUI plugin to load")
+        ("Lumiera.modulepath", opt::value<string>(),
+                               "search path for loadable modules. "
+                               "May us $ORIGIN to refer to the EXE location")
+        ("Lumiera.configpath", opt::value<string>(),
+                               "search path for extended configuration. "
+                               "Extended Config system not yet implemented "
+                               "Ignored as of 2/2011")
+        ("Lumiera.version",    opt::value<string>(),
+                               "Application version string")
         ;
       
       ifstream configIn (resolve(bootstrapIni).c_str());

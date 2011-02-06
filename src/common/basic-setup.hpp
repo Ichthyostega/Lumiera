@@ -25,6 +25,8 @@
 #define COMMON_BASIC_SETUP_H
 
 #include "lib/error.hpp"
+#include "lib/symbol.hpp"
+#include "lib/util.hpp"
 
 #include <boost/program_options.hpp>
 #include <boost/noncopyable.hpp>
@@ -68,19 +70,27 @@ namespace lumiera {
       BasicSetup (string bootstrapIni);
       
       string
-      operator[] (string const& key)  const
+      operator[] (lib::Literal key)  const
         {
-          return settings[key].as<string>();
+          return get (key).as<string>();
         }
       
       opt::variable_value const&
-      get (string const& key)
+      get (lib::Literal key)  const
         {
-          return settings[key];
+          string keyID (key);
+          __ensure_hasKey(keyID);
+          return settings[keyID];
         }
       
       
     private:
+      void
+      __ensure_hasKey (string const& key)  const
+        {
+          if (!util::contains (settings, key))
+            throw error::Logic ("Key \""+key+"\" not found in setup.ini");
+        }
     };
  
   

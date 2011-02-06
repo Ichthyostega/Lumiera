@@ -13,7 +13,7 @@ return: 0
 END
 
 
-PLANNED "basic application state" Appconfig_test <<END
+TEST "basic application state" Appconfig_test <<END
 return: 0
 END
 
