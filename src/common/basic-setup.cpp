@@ -83,15 +83,27 @@ namespace lumiera {
                                "search path for extended configuration. "
                                "Extended Config system not yet implemented "
                                "Ignored as of 2/2011")
+        ("Lumiera.title",      opt::value<string>(),
+                               "title of the Lumiera Application, e.g. for windows")
         ("Lumiera.version",    opt::value<string>(),
                                "Application version string")
+        ("Lumiera.website",    opt::value<string>(),
+                               "URL of the Lumiera website")
+        ("Lumiera.authors",    opt::value<string>(),
+                               "names of Lumiera authors, for 'about' dialog. Separated by '|'")
+
+        ("Gui.stylesheet",     opt::value<string>(),
+                               "name of the GTK stylesheet to use. Will be searched in resource path")
+        ("Gui.iconpath",       opt::value<string>(),
+                               "search path for icons")
+        ("Gui.resourcepath",   opt::value<string>(),
+                               "general search path for UI resources")
         ;
       
       ifstream configIn (resolve(bootstrapIni).c_str());
       
       
-      opt::parsed_options parsed = 
-        opt::parse_config_file (configIn, syntax);
+      opt::parsed_options parsed = opt::parse_config_file (configIn, syntax);
       
       opt::store (parsed, settings);
       opt::notify(settings);   

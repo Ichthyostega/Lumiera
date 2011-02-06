@@ -27,7 +27,6 @@
 #include "lib/error.hpp"
 #include "lib/bool-checkable.hpp"
 
-#include <boost/program_options.hpp>
 #include <boost/noncopyable.hpp>
 #include <boost/filesystem.hpp>
 #include <boost/regex.hpp>
@@ -88,7 +87,7 @@ namespace lib {
         }
       
       string
-      fetch ()
+      next ()
         {
           if (!isValid())
             throw error::Logic ("Search path exhausted."
@@ -133,11 +132,13 @@ namespace lib {
   
   
   
-  /** helper to establish the location to search for loadable modules.
-   *  This is a simple demonstration of the basic technique used in the
-   *  real application source to establish a plugin search path, based
-   *  on the actual executable position plus compiled in and configured
-   *  relative and absolute path specifications.
+  /** helper to establish the location to search for loadable modules,
+   *  configuration files, icons and further resources. After first trying
+   *  the moduleName directly, the given search path is walked using the
+   *  SearchPathSplitter, until encountering an existing file with the
+   *  given name.
+   *  @return the absolute pathname of the module file found
+   *  @throws error::Config when the resolution fails  
    */
   string resolveModulePath (string moduleName, string searchPath = "");
   

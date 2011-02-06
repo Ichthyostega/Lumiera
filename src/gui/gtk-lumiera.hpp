@@ -19,10 +19,32 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 */
+
+
 /** @file gtk-lumiera.hpp
- ** This file contains application wide global definitions
- ** user actions.
- ** @see gtk-lumiera.cpp
+ ** The main application object.
+ ** Invoking the GtkLumiera::main() function brings up the GUI; this
+ ** function will block in the GTK event thread until the Application gets
+ ** closed by user interaction or by triggering a shutdown via the GuiNotificationFacade.
+ ** GtkLumiera is a singleton and owns the central WindowManager instance used for
+ ** opening all windows and registering and loading icons and resources.
+ ** 
+ ** \par configuration and resource search
+ ** The GUI object retrieves the necessary configuration values from lumiera::Config,
+ ** the config facade in the application core. Currently as of 2/2011 these values are
+ ** loaded from setup.ini, because the full-blown config system is not yet implemented.
+ ** Amongst others, this configuration defines a <i>search path</i> for icons and a
+ ** separate search path for resources. These path specs may use the token \c $ORIGIN
+ ** to refer to the installation directory of the currently executing program.
+ ** This allows for a relocatable Lumiera installation bundle.
+ ** 
+ ** @see guistart.cpp the plugin to pull up this GUI
+ ** @see gui::GuiFacade access point for starting the GUI
+ ** @see gui::GuiNotification interface for communication with the gui from the lower layers
+ ** @see lumiera::Config
+ ** @see lumiera::BasicSetup definition of the acceptable configuration values
+ ** @see lumiera::AppState general Lumiera application main
+ ** 
  */
 
 #ifndef GUI_GTK_LUMIERA_H

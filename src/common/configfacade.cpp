@@ -132,7 +132,7 @@ extern "C" { /* ==== implementation C interface for accessing setup.ini ======= 
         // fetch plugin search path from setup.ini and expand any $ORIGIN token 
         SearchPathSplitter pathElement(Config::get (KEY_PLUGIN_PATH));
         while (pathElement)
-          pathSpec += pathElement.fetch() +":";
+          pathSpec += pathElement.next() +":";
       }
     
     return cStr(pathSpec);

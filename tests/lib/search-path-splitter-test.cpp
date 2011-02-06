@@ -66,7 +66,7 @@ namespace test {
           walk ("/usr/bin:/usr/lib");
           
           SearchPathSplitter sp("");
-          VERIFY_ERROR (ITER_EXHAUST, sp.fetch() );
+          VERIFY_ERROR (ITER_EXHAUST, sp.next() );
         }
       
       void
@@ -74,7 +74,7 @@ namespace test {
         {
           SearchPathSplitter path(spec);
           while (path)
-            cout << "➢➢" << path.fetch() << endl;
+            cout << "➢➢" << path.next() << endl;
         }
       
       
@@ -86,9 +86,9 @@ namespace test {
           string expected = (exePath.remove_leaf() / "modules").string();
           
           SearchPathSplitter sp("xyz:$ORIGIN/modules:abc");
-          CHECK ("xyz" == sp.fetch());
-          CHECK (sp.fetch() == expected);
-          CHECK ("abc" == sp.fetch());
+          CHECK ("xyz" == sp.next());
+          CHECK (sp.next() == expected);
+          CHECK ("abc" == sp.next());
           CHECK (!sp.isValid());
         }
     };

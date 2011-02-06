@@ -27,21 +27,45 @@
 #include "gui/controller/controller.hpp"
 #include "gui/model/project.hpp"
 #include "lib/singleton.hpp"
+#include "lib/symbol.hpp"
 
+#include "include/config-facade.h"
 
-using namespace Gtk;
-using namespace Glib;
-using namespace gui;
-using namespace gui::workspace;
-using namespace gui::model;
-using namespace gui::controller;
-using namespace std;
+#include <boost/algorithm/string/classification.hpp>
+#include <boost/algorithm/string/split.hpp>
+#include <vector>
 
 namespace gui {
 
+using namespace Gtk;
+using namespace Glib;
+using namespace gui::model;
+using namespace gui::workspace;
+using namespace gui::controller;
+  
+using boost::algorithm::is_any_of;
+using boost::algorithm::split;
+
+using lumiera::Config;
+using lib::Literal;
+
+typedef std::vector<uString> UVector;
+
+
+
 namespace {
+  
   /** storage for the Main Application object */
   lib::Singleton<GtkLumiera> theApplicationInstance;
+  
+  Literal KEY_TITLE      = "Lumiera.title";
+  Literal KEY_VERSION    = "Lumiera.version";
+  Literal KEY_WEBSITE    = "Lumiera.website";
+  Literal KEY_AUTHORS    = "Lumiera.authors";
+  
+  Literal KEY_STYLESHEET = "Gui.stylesheet";
+  Literal KEY_UIRES_PATH = "Gui.resourcepath";
+  Literal KEY_ICON_PATH  = "Gui.iconpath";
 }
 
 
@@ -62,17 +86,19 @@ GtkLumiera::main (int argc, char *argv[])
 
   Main kit(argc, argv);
   
-  Glib::set_application_name (get_app_title());
+  Glib::set_application_name (getAppTitle());
 
   Project project;
   Controller controller(project);
 
-  windowManagerInstance_.init();
-  windowManagerInstance_.set_theme ("lumiera_ui.rc");
-  windowManagerInstance_.new_window (project, controller);
-
-  kit.run();
+  windowManagerInstance_.init (Config::get (KEY_ICON_PATH), Config::get (KEY_UIRES_PATH));
+  windowManagerInstance_.setTheme (Config::get (KEY_STYLESHEET));
+  
+  
+  windowManagerInstance_.newWindow (project, controller);
+  kit.run(); // GTK event loop
 }
+
 
 WindowManager&
 GtkLumiera::windowManager()
@@ -80,50 +106,43 @@ GtkLumiera::windowManager()
   return windowManagerInstance_;
 }
 
-Glib::ustring
-GtkLumiera::get_home_data_path()
+
+cuString
+GtkLumiera::getAppTitle()
 {
-  const ustring app_name("lumiera");
-  const ustring path(Glib::get_home_dir());
-  return ustring::compose("%1/.%2", path, app_name);
+  return Config::get (KEY_TITLE);
 }
 
-const Glib::ustring
-GtkLumiera::get_app_title()
+
+cuString
+GtkLumiera::getAppVersion()
 {
-  return "Lumiera";
+  return Config::get (KEY_VERSION);
 }
 
-const Glib::ustring
-GtkLumiera::get_app_version()
+
+cuString
+GtkLumiera::getCopyright()
 {
-  return "0.pre.01";
+  return _("© 2012 The Lumiera Team");
 }
 
-const Glib::ustring GtkLumiera::get_app_copyright()
+
+cuString
+GtkLumiera::getLumieraWebsite()
 {
-  return _("© 2008 The Lumiera Team");
+  return Config::get (KEY_WEBSITE);
 }
 
-const Glib::ustring GtkLumiera::get_app_website()
-{
-  return "http://www.lumiera.org";
-}
 
-const std::vector<Glib::ustring>
-GtkLumiera::get_app_authors()
+const UVector
+GtkLumiera::getLumieraAuthors()
 {
-  const gchar* app_authors[] = {
-    "Joel Holdsworth",
-    "Christian Thaeter",
-    "Hermann Vosseler",
-    "[Other Authors Here]"};
+  string authors = Config::get (KEY_AUTHORS);
+  UVector authorsList;
   
-  const int count = sizeof(app_authors) / sizeof(gchar*);
-  std::vector<Glib::ustring> list(count);
-  for(int i = 0; i < count; i++)
-    list[i] = app_authors[i];
-  return list;
+  split (authorsList, authors, is_any_of (",|"));
+  return authorsList;
 }
 
 

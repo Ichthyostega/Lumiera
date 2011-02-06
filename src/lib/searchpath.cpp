@@ -80,7 +80,7 @@ namespace lib {
         
         // try / continue search path
         if (searchLocation.isValid())
-          modulePathName = fsys::path() / searchLocation.fetch() / moduleName;
+          modulePathName = fsys::path() / searchLocation.next() / moduleName;
         else
           throw error::Config ("Module \""+moduleName+"\" not found"
                               + (searchPath.empty()? ".":" in search path: "+searchPath));
