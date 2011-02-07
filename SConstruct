@@ -410,6 +410,7 @@ def defineInstallTargets(env, artifacts):
     env.SymLink('$DESTDIR/bin/lumiera',env.path.installExe+'lumiera','../lib/lumiera/lumiera')
 #   env.Install(dir = '$DESTDIR/share/doc/lumiera$VERSION/devel', source=artifacts['doxydoc'])
     
+    env.Alias('install', artifacts['gui'])
     env.Alias('install', '$DESTDIR')
 
 #####################################################################

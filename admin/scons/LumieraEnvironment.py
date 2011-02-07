@@ -138,7 +138,17 @@ def register_LumieraResourceBuilder(env):
         source = str(source[0])
         targetdir = env.path.buildIcon
         targetfiles = renderer.getTargetNames(source)    # parse SVG
-        return ([targetdir+name for name in targetfiles], source)
+        
+        # additionally create an installation task for each Icon to be generated
+        installLocation = env.path.installIcon
+        generateTargets = []
+        for icon in targetfiles:
+            icon = targetdir+icon
+            subdir = getDirname(str(icon))
+            env.Install (installLocation+subdir, icon)
+            generateTargets.append(icon) 
+        
+        return (generateTargets, source)
     
     def IconResource(env, source):
          """Copy icon pixmap to corresponding icon dir. """
