@@ -1,7 +1,22 @@
 Design Process
 ==============
 
-*TODO* describe how the design process works and what we denote by *RfC*
+How it Works
+------------
+
+* Every proposal starts out as _*Idea*_, allowing other people to review and comment on it, while still working out details.
+* When the _Idea_ is in a proper shape and worked out in most details it becomes a _*Draft*_. This _Draft_ need to be carefully reviewed, commented, perhaps corrected and rated by the other Developers.
+* We decide on some proposals to talk about that another time, these get a _*Parked*_ state.
+* At some point we may decide that a _Draft_ becomes a _*Final*_. Usually, this happens in our link:MonthlyMeetings[]. _Final_ Documents will be imported into the git repository (currently to the tiddlywiki).
+* Sometimes proposals will become dropped for some reason, this is indicated by changing their state to _*Dropped*_, they still stay in the system for further reference.
+
+Generally you should refrain from editing someone others proposals (except for typo and gramatic fixes) when this is not acknowleded with the original author. Rather only add comments to the pages and end them with  `@SIG@` to make it easier to find out who is the contact person for some note.
+
+.Add a new Proposal:
+. Check if there is no similar proprosal below! If yes, contact it's author and contribute to that one.
+. Think of a good/descriptive *WikiName* for the Proposal. It will be used to create a RfC subpage.
+. Read the instructions and add your proposed text.
+
 
  * link:rfc[RfC accepted]
  * link:rfc_pending[RfC pending]
