@@ -1,5 +1,6 @@
 Building Lumiera from source
 ============================
+
 Currently, after building the application, you can try out the Lumiera GUI
 and you can run the test suite.
 
