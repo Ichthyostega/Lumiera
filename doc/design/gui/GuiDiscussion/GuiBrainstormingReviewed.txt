@@ -5,7 +5,7 @@ GUI Brainstorming Reviewed
 
 State of the GUI
 ----------------
-image::{l}/media/img/design.gui/screenshot090124-resources.jpg
+image:{l}/media/img/design.gui/screenshot090124-resources.jpg[Screenshot 090124]
 
 Updated 18/01/09
 
