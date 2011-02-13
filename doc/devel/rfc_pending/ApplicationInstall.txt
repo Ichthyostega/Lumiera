@@ -26,9 +26,8 @@ Description
 //description: add a detailed description:
 Lumiera is planned to become a large professional application bundle, relying
 on several external resources for proper operation. An installed Lumiera
-application will be more like Gimp, Blender, Ardour, OpenOffice or Eclipse,
-not like bash, autotools, emcas or [add your favourite hacker tool here].
-This is a question of professionalism.
+application will be more like Gimp, Blender, OpenOffice or Eclipse,
+not like bash, autotools or emcas.
 
 Besides that, it can be expected that Lumiera frequently will be used in a
 project or studio like setup, where the application isn't installed, but just
@@ -36,48 +35,103 @@ unZIPped / unTARed and used as-is. Thus, it should be sufficient to unpack
 the application bundle and point it to the session file and maybe the
 media storage.
 
-This RfC can be seen as an commitment to an professional approach and a
-clarification: Traditionally, the Unix community hailed a lot of _black magic_
-practices like compiling in installation paths, macro magic, relying on 
-very specific and un-obvious behaviour of some build script, configuration
-via environment variables and the like. These practices turned out to be
-not so helpful and are known to lead to maintenance problems.
-
 The Eclipse platform can serve as a model for the setup of an modern
-application: It can be just unpacked, and when looking into the folder
-structure, the meaning of the parts is obvious, and the basic bootstrap
-is controlled by two short text based INI files. While Lumiera presumably
-won't get _that_ heavyweight and is clearly not intended to become a
-general business application platform like OSGi -- the underlying
-principles can serve as a point of reference for modern
+application of that style: It can be just unpacked, and when looking
+into the folder structure, the meaning of the parts is obvious, and the
+basic bootstrap is controlled by two short text based INI files.
+While Lumiera presumably won't get _that_ heavyweight and is clearly
+not intended to become a general business application platform like OSGi --
+the underlying principles can serve as a point of reference for modern
 development standards.
+
+This leads to the following conclusions:
+
+- we need to define a standard folder layout for the bundle
+- the application must not rely on any compiled-in absolute paths
+- the executable should fetch the directly accompanying shared modules
+- all other lib dependencies should be handled by the system mechanisms
+- the bootstrap configuration likewise must not be compiled-in
+- this configuration must be human readable and clearly exhibit its purpose
+- the same system must be able to adapt to a FSH conforming installation layout
 
 Judging from our current planning and the existing codebase, Lumiera
 is on a good way in that direction, yet some cleanup needs to be done,
-especially removing some convenience shortcuts from the early days of
-development and catching up with the repair of some sloppiness here
-and there.
+especially removing convenience shortcuts from the early days of development
+and catching up with the repair of some traits of sloppyness here and there.
+
+Library resolution
+~~~~~~~~~~~~~~~~~~
+In former days, it was common habit to compile-in a hard wired absolute
++RPATH+. This can be considered obsolete practice; for example, the Debian
+policy forbids doing so. This is the result from numerous maintainability
+problems in the past. On the other hand, the GNU linker and other modern
+linkers support a relative resolution of shared modules directly accompanying
+an specific executable. The Debian policy allows this, if and only if these
+shared modules are installed with the same binary package and only used by
+this specific executable(s). Together, this is exactly what we need to
+solve our requirement.
+
+Thus, the build process enables the new-style DT-tags in the Elf binary
+and sets the +DT_RUNPATH+ with an value relative to +$ORIGIN+, which resolves
+to the path of the currently executing binary. Moreover, it is _sufficient_
+to set this on the initial executable _only,_ because this creates a common
+searchpath for all lib resolution events in the scope of that loaded executable.
+Besides that, we need to care that our private libraries have a unique +SONAME+,
+in this case all starting with the prefix +liblumiera*+. Note moreover that this
+new-style +DT_RUNPATH+ indeed _can_ be overridden by an +LD_LIBRARY_PATH+ in the
+environment, should there be the need for very special experiments.
+
+Bootstrap location
+~~~~~~~~~~~~~~~~~~
+Thus, a single relative library folder becomes the only hard wired start
+configuration. In our case, the folder +$ORIGIN/modules+ was chosen. The
+root of the package then holds all the binaries depending on these common
+internal libraries, that is the +lumiera+ executable and any accompanying
+special tools. As usual with such large application bundles, these get
+only _symlinked_ into the +/usr/bin+ folder on installation.
+
+For sake of clarity, after starting the executable, the _same location_
+is used to load the bootstrap configuration. This configuration in turn
+defines all further locations like the extended configuration, project
+templates, plugin search path, the GUI module to load, the search path
+for icons and GUI resources, project templates and similar basics.
+
+Relative paths and the location of the executable
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+According to the general requirements outlined above, most paths should
+be given in a relative fashion. Unfortunately there is no portable solution
+for self-discovering the currently running executable. But at least there
+is a solution for all current major platforms. Under Linux, this information
+can be retrieved from the kernel through the +/proc+ filesystem.
+
+Again for sake of clarity, the same token +$ORIGIN+ was chosen to denote
+this executable location (note: this is _not_ the current working directory).
+Moreover, due to the folder layout detailed above, this coincides with the
+root of the application bundle, thus making for a self-explanatory convention.
+Besides +$ORIGIN+, these search paths later on likely will contain locations
+below the user's home directory, e.g. +~/.lumiera/themes+
+
 
 Tasks
 ~~~~~
 // List what needs to be done to implement this Proposal:
 * identify what impedes such a modern setup procedure ([green]#✔ done#)
 * rectify the folder structure created in the build target 
-  directory [,yellow]#WIP#
+  directory ([green]#✔ done#)
 * build the executables in a way to allow relative resolution of the
-  internal shared modules [,red]#TODO#
+  internal shared modules ([green]#✔ done#)
 * replace the compiled-in path definitions for plugin loading by a
-  configurable bootstrap [,red]#TODO#
-* add an working library implementation for a config loader [,red]#TODO#
-* add a mechanism for establishing the path of the current execubable.
-  This is _non-portable_ [,red]#TODO#
+  configurable bootstrap ([green]#✔#)
+* add an working library implementation for a config loader ([green]#✔ done#)
+* add a mechanism for establishing the path of the current execubable. +
+  This is _non-portable_ ([green]#✔ done#)
 * wire the prepared API in the GUI to use this working config loader
-  for resolving GUI resources [,red]#TODO#
+  for resolving GUI resources ([green]#✔ done#)
 * try to extract the path search code from the existing config loader,
-  or build a new solution based on stanard libraries [,red]#TODO#
-* introduce a output root directory into the buildsystem to allow
-  for building packages [,red]#TODO#
-* define a _Debian packaging_ as proof-of-concept [,red]#TODO#
+  or build a new solution based on standard libraries ([green]#✔ done#)
+* introduce an output root directory into the buildsystem, allowing
+  for package builds ([green]#✔#)
+* define a _Debian packaging_ as proof-of-concept ([green]#✔ done#)
 
 
 Discussion
@@ -93,22 +147,53 @@ Pros
 
 Cons
 ^^^^
-* breaks with some beloved habits of the Unix community
 * requires work
-* raises the bar on the implementation side
+* raises the bar at the implementation side
 * requires an bootstrap sequence to be explicitly performed
   on application startup
+* breaks with some beloved habits of the Unix community
 
 
 Alternatives
 ^^^^^^^^^^^^
 //alternatives: explain alternatives and tell why they are not viable:
+I can think of two alternatives
+
+. dealing with all those problems _later_
+. not making an concept, rather sticking to UNIX habits
+
+The first alternative is indeed worth considering, because we're settling
+some things to be really implemented way later, which bears some dangers.
+But, on the other hand, it is a common practice known from extreme programming
+to deliver early and regularly, which effectively means to set up the deploy
+path of an application really early in the development cycle. The rationale
+is that -- according to general experience -- the deployment always turns
+up some very specific problems and constraints, which can be a serious
+threat when discovered late in the development process.
+
+The second alternative isn't really applicable IMHO. The original UNIX philosophy
+breeds on an academic setup and really excels with small nifty commandline utils
+combined by pipes, each specialised to do a single thing very well. These utils
+are more like the objects within our implementation. The concept of large
+application software bundles and desktop software was always a bit alien within
+the classic UNIX environment. 
 
 
 
 Rationale
 ---------
 //rationale: Give a concise summary why it should be done *this* way:
+
+This RfC can be seen as an commitment to an professional approach and as
+clarification: Traditionally, the Unix community hailed a lot of _black magic_
+practices like compiled-in installation paths, macro magic, +sed+ and +awk+
+trickery, inline code compiled on-the-fly, relying on very specific and
+un-obvious behaviour of some build script, configuration via environment
+variables and a lot of similar idioms. These practices might be adequate
+in a quickly moving Research & Development setup, but turned out to be
+not so helpful when it comes to industrial strength development,
+as they are known to lead to maintenance problems.
+
 
 
 
