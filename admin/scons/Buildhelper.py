@@ -207,7 +207,7 @@ def checkCommandOption(env, optID, val=None, cmdName=None):
 
 
 class Record(dict):
-    """ a set of properties with map style access.
+    """ a set of properties with record style access.
         Record is a dictionary, but the elements can be accessed
         conveniently as if they where object fields
     """

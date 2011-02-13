@@ -132,7 +132,9 @@ TEST (ntsc_drop_frame)
   CHECK (lumiera_time_ntsc_drop_frames (t)                 == 15);
   CHECK (lumiera_time_frame_count (t, NTSC_DROP_FRAME_FPS) == 423191);  
 
-  // Make sure we get back the same times.  These tests are perhaps overly exhaustive.
+  // Cover the whole value range;
+  // Manually construct a drop-frame timecode
+  // Make sure our library function returns the same times.
   int min;
   int sec;
   int frame;
