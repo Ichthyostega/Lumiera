@@ -134,7 +134,7 @@ or similar. If any if this libs are not listed, investigate why before continuin
 
 
 Building Lumiera
-~~~~~~~~~~~~~~~~
+----------------
 
 Lumiera has two maintained (and equivalent) build systems: *scons* and
 *autotools*. You can pick the one you feel more comfortable with.
