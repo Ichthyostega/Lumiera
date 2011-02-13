@@ -15,7 +15,8 @@ return: 0
 END
 
 TEST "plugin unloading" plugin_unload <<END
-out: plugin unload: \(nil\)
+out: plugin discovered before unload: 0x..
+out: plugin discovered after unload: \(nil\)
 return: 0
 END
 
