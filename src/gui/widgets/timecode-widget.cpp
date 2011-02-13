@@ -31,7 +31,7 @@
 #include <sigc++/bind.h>
 
 #include "timecode-widget.hpp"
-#include "../util/convert.hpp"
+#include "gui/util/convert.hpp"
 
 using namespace sigc;
 using namespace Gtk;

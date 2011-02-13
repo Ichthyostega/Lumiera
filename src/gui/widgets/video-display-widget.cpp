@@ -24,10 +24,9 @@
 #include <gdkmm/general.h>
 #include <cairomm-1.0/cairomm/cairomm.h>
 
-#include "../gtk-lumiera.hpp"
-
-#include "../output/xvdisplayer.hpp"
-#include "../output/gdkdisplayer.hpp"
+#include "gui/gtk-lumiera.hpp"
+#include "gui/output/xvdisplayer.hpp"
+#include "gui/output/gdkdisplayer.hpp"
 
 #include "video-display-widget.hpp"
 

@@ -29,7 +29,7 @@
 #include <gtkmm.h>
 
 #include "panel.hpp"
-#include "../widgets/video-display-widget.hpp"
+#include "gui/widgets/video-display-widget.hpp"
 
 namespace gui {
 namespace panels {

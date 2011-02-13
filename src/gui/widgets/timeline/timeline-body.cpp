@@ -24,9 +24,9 @@
 #include <boost/foreach.hpp>
 
 #include "timeline-body.hpp"
-#include "../timeline-widget.hpp"
-#include "../../window-manager.hpp"
-#include "../../util/cairo-util.hpp"
+#include "gui/widgets/timeline-widget.hpp"
+#include "gui/window-manager.hpp"
+#include "gui/util/cairo-util.hpp"
 
 #include "timeline-arrow-tool.hpp"
 #include "timeline-ibeam-tool.hpp"

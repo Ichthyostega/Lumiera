@@ -20,7 +20,7 @@
 
 * *****************************************************/
 
-#include "../gtk-lumiera.hpp"
+#include "gui/gtk-lumiera.hpp"
 
 #include "render.hpp"
 #include "dialog.hpp"

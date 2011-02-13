@@ -27,7 +27,7 @@
 #ifndef PREFERENCES_DIALOG_HPP
 #define PREFERENCES_DIALOG_HPP
 
-#include "../gtk-lumiera.hpp"
+#include "gui/gtk-lumiera.hpp"
 
 namespace gui {
 namespace dialogs {

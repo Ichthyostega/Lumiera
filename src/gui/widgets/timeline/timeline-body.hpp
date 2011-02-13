@@ -26,7 +26,7 @@
 #ifndef TIMELINE_BODY_HPP
 #define TIMELINE_BODY_HPP
 
-#include "../../gtk-lumiera.hpp"
+#include "gui/gtk-lumiera.hpp"
 #include "timeline-tool.hpp"
 
 namespace gui {

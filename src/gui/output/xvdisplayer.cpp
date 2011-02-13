@@ -22,7 +22,7 @@
 
 * *****************************************************/
 
-#include "../gtk-lumiera.hpp"
+#include "gui/gtk-lumiera.hpp"
 
 #include <gdk/gdkx.h>
 

@@ -27,7 +27,7 @@
 #ifndef TIMELINE_RULER_HPP
 #define TIMELINE_RULER_HPP
 
-#include "../../gtk-lumiera.hpp"
+#include "gui/gtk-lumiera.hpp"
 
 namespace gui {
 namespace widgets {

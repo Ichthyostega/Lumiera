@@ -27,18 +27,22 @@
  ** doesn't deal with alignment issues and is <b>not threadsafe</b>. 
  ** 
  ** Values can be stored using \c operator= . In order to access the value
- ** stored in lumiera::Variant, you additionally need to define a "functor" 
- ** <ul><li>with a typedef "Ret" for the return type</li>
- **     <li>providing a <tt>static Ret access(ELM&)</tt> function
- **         for each of the types used in the Variant</li>
- ** </ul>
+ ** stored in lib::Variant, you additionally need to define a "functor" 
+ ** - with a typedef "Ret" for the return type
+ ** - providing a \code static Ret access(ELM&) \endcode function
+ **   for each of the types used in the Variant</li>
  ** 
+ ** @todo the instance handling for the accessor seems somewhat
+ **       misaligned: why do we create another accessor as static var
+ **       within the access() function?? Why not putting that into the
+ **       Holder::Storage instance created by the client code?
+ ** @todo write an unit test   ///////////////////////////////////////TICKET #141
  ** @see wrapperptr.hpp usage example
  */
 
 
-#ifndef LUMIERA_VARIANT_H
-#define LUMIERA_VARIANT_H
+#ifndef LIB_VARIANT_H
+#define LIB_VARIANT_H
 
 
 #include "lib/meta/typelist-util.hpp"
@@ -48,7 +52,7 @@
 
 
 
-namespace lumiera {
+namespace lib {
   
   namespace variant {
     
@@ -100,13 +104,13 @@ namespace lumiera {
             put (T const& toStore)
               {
                 BASE::deleteCurrent(); // remove old content, if any
-                
+                                      //
                 T& storedObj = *new(BASE::buffer_) T (toStore);
                 BASE::which_ = idx; //    remember the actual type selected
                 return storedObj;
               }
             
-            using BASE::put;
+            using BASE::put;    //        inherited alternate put() for other types T
           };
         
         typedef InstantiateWithIndex< TYPES
@@ -122,9 +126,9 @@ namespace lumiera {
         struct CaseSelect
           {
             typedef typename FUNCTOR::Ret Ret;
-            typedef Ret (*Func)(Buffer&);
+            typedef Ret (Func)(Buffer&);
             
-            Func table_[TYPECNT];
+            Func* table_[TYPECNT];
             
             CaseSelect ()
               {
@@ -146,11 +150,16 @@ namespace lumiera {
                 if (TYPECNT <= storage.which_)
                   return FUNCTOR::ifEmpty ();
                 else
-                  return (*table_[storage.which_]) (storage);
+                  {
+                    Func& access = *table_[storage.which_];
+                    return access (storage);
+                  }
               }
           };
         
         
+        /** initialise the dispatcher (trampoline)
+         *  for the case of accessing type T */
         template< class T, class BASE, uint i >
         struct CasePrepare
           : BASE
@@ -161,7 +170,14 @@ namespace lumiera {
               }
           };
         
-          
+        
+        /** access the variant's inline buffer,
+         *  using the configured access functor.
+         * @note the actual accessor instance
+         *       is created on demand (static)
+         * @todo shouldn't this rather be located within
+         *       the Holder::Storage created by clients??
+         */
         template<class FUNCTOR>
         static typename FUNCTOR::Ret
         access (Buffer& buf)
@@ -205,7 +221,7 @@ namespace lumiera {
   
   
   
-  /** 
+  /**
    * A variant wrapper (typesafe union) capable of holding a value of any
    * of a bounded collection of types. The value is stored in a local buffer
    * directly within the object and may be accessed by a typesafe visitation.
@@ -273,5 +289,5 @@ namespace lumiera {
         }
     };
   
-} // namespace lumiera 
+} // namespace lib 
 #endif

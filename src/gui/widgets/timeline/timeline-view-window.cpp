@@ -21,7 +21,7 @@
 * *****************************************************/
 
 #include "timeline-view-window.hpp"
-#include "../timeline-widget.hpp"
+#include "gui/widgets/timeline-widget.hpp"
 
 using namespace Gtk;
 using namespace gui::widgets;

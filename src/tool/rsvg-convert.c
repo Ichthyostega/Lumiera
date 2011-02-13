@@ -37,8 +37,8 @@
 #include <string.h>
 #include <locale.h>
 
-#include <librsvg-2/librsvg/rsvg.h>
-#include <librsvg-2/librsvg/rsvg-cairo.h>
+#include <librsvg/rsvg.h>
+#include <librsvg/rsvg-cairo.h>
 
 #ifdef CAIRO_HAS_PS_SURFACE
 #include <cairo-ps.h>

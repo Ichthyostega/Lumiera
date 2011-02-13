@@ -36,33 +36,48 @@ extern "C" {
 namespace lib {
 namespace time {
   
-  using lumiera::Time;
-  
   
   /**
-   * fixed format time specification.
-   * 
-   * @todo WIP-WIP-WIP
+   * basic constant internal time value.
+   * These time values provide the implementation base
+   * for all further time types. They can be created by
+   * wrapping up a raw micro tick value (gavl_time_t),
+   * are totally ordered, but besides that,
+   * they are opaque and non-mutable.
+   * @note clients should prefer to use Time instances,
+   *       which explicitly denote an Lumiera internal
+   *       time value and are easier to use.
+   * @see TimeVar when full arithmetics are required 
    */
   class TimeValue
-    : boost::totally_ordered<Time,
-      boost::totally_ordered<Time, gavl_time_t> >
+    : boost::totally_ordered<TimeValue,
+      boost::totally_ordered<TimeValue, gavl_time_t> >
     {
     protected:
+      /** the raw (internal) time value
+       *  used to implement the time types */
       gavl_time_t t_;
       
-    public:
-      static const Time MAX ; 
-      static const Time MIN ;
       
+      /** Assigning of time values is not allowed,
+       *  but derived classed might allow that */
+      TimeValue&
+      operator= (TimeValue const& o)
+        {
+          t_ = o.t_;
+          return *this;
+        }
+      
+    public:
       explicit 
       TimeValue (gavl_time_t val=0)
         : t_(val)
         { }
       
-      // using standard copy operations
-      
-      operator gavl_time_t ()  const { return t_; }
+      /** copy initialisation allowed */
+      TimeValue (TimeValue const& o)
+        : t_(o.t_)
+        { }
       
       // Supporting totally_ordered
       friend bool operator<  (TimeValue const& t1, TimeValue const& t2)  { return t1.t_ <  t2.t_; }
@@ -73,48 +88,74 @@ namespace time {
     };
   
   
+  
+  /** a mutable time value,
+   *  behaving like a plain number,
+   *  allowing copy and re-accessing
+   */
   class TimeVar
     : public TimeValue
-    , boost::additive<TimeVar>
+    , boost::additive<TimeVar,
+      boost::additive<TimeVar, TimeValue,
+      boost::multipliable<TimeVar, int>
+      > >
     {
-        
+      
     public:
-      TimeVar (TimeValue time)
+      TimeVar (TimeValue time = TimeValue())
         : TimeValue(time)
         { }
       
+      // Allowing copy and assignment
+      TimeVar (TimeVar const& o)
+        : TimeValue(o)
+        { }
+      
+      TimeVar&
+      operator= (TimeValue const& o)
+        {
+          t_ = TimeVar(o);
+          return *this;
+        }
+      
+      
+      // Supporting mixing with plain long int arithmetics
+      operator gavl_time_t ()  const { return t_; }
       
       // Supporting additive
       TimeVar& operator+= (TimeVar const& tx)  { t_ += tx.t_; return *this; }
       TimeVar& operator-= (TimeVar const& tx)  { t_ -= tx.t_; return *this; }
       
       // Supporting multiplication with integral factor
-      TimeVar& operator*= (int64_t fact)       { t_ *= fact;  return *this; }
+      TimeVar& operator*= (int fact)           { t_ *= fact;  return *this; }
        
       // baseclass TimeValue is already totally_ordered 
     };
   
   
-  class Offset;  
+  class Offset;
     
   /**
    * Lumiera's internal time value datatype
    */
-//class Time
-//  : public TimeValue
-//  {
-//  public:
-//    explicit 
-//    Time (TimeValue val=0)
-//      : TimeValue(val)
-//      { }
-//    
-//    Time ( long millis
-//         , uint secs 
-//         , uint mins =0
-//         , uint hours=0
-//         );
-//  };
+  class Time
+    : public TimeValue
+    {
+    public:
+      static const Time MAX ; 
+      static const Time MIN ;
+      
+      explicit 
+      Time (TimeValue val= TimeValue(0))
+        : TimeValue(val)
+        { }
+      
+      Time ( long millis
+           , uint secs 
+           , uint mins =0
+           , uint hours=0
+           );
+    };
   
   
   class Offset
@@ -123,18 +164,21 @@ namespace time {
         
     public:
       explicit 
-      Offset (TimeValue distance)
+      Offset (TimeValue const& distance)
         : TimeValue(distance)
         { }
     };
-      
-  inline Offset
-  operator- (Time const& end, Time const& start)
-  {
+  
+
+//////////////////////////////////////////////////////////////TODO this seems rather like a bad idea,
+//                                                                 because it opens a lot of implicit conversions which we don't want!
+//inline Offset
+//operator- (TimeValue const& end, TimeValue const& start)
+//{
 //  TimeVar distance(end);
 //  distance -= start;
 //  return Offset(distance);
-  }
+//}
     
   typedef const Offset TimeDistance;
   

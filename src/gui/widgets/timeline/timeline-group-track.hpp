@@ -27,7 +27,7 @@
 #define TIMELINE_GROUP_TRACK_HPP
 
 #include "timeline-track.hpp"
-#include "../../model/group-track.hpp"
+#include "gui/model/group-track.hpp"
 
 namespace gui {
 namespace widgets {

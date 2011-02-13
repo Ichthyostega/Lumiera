@@ -25,8 +25,8 @@
 
 #include "timeline-header-container.hpp"
 #include "timeline-track.hpp"
-#include "../timeline-widget.hpp"
-#include "../../util/rectangle.hpp"
+#include "gui/widgets/timeline-widget.hpp"
+#include "gui/util/rectangle.hpp"
 
 using namespace Gtk;
 using namespace std;

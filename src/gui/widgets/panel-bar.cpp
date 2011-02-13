@@ -21,10 +21,10 @@
 * *****************************************************/
 
 #include "panel-bar.hpp"
-#include "../workspace/workspace-window.hpp"
-#include "../workspace/panel-manager.hpp"
-#include "../panels/panel.hpp"
-#include "../util/rectangle.hpp"
+#include "gui/workspace/workspace-window.hpp"
+#include "gui/workspace/panel-manager.hpp"
+#include "gui/panels/panel.hpp"
+#include "gui/util/rectangle.hpp"
 
 #include <nobug.h>
 #include <algorithm>

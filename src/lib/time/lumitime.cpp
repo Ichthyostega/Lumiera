@@ -34,6 +34,16 @@ extern "C" {
 using std::string;
 
 
+namespace lib {
+namespace time {
+  
+  const Time Time::MAX ( TimeValue (+std::numeric_limits<gavl_time_t>::max()) );
+  const Time Time::MIN ( TimeValue (-std::numeric_limits<gavl_time_t>::max()) );
+  
+  
+}} // namespace lib::Time
+
+///////////////////////////////////////////////////////////////////////////TODO leftover of the existing/initial lumitime-Implementation
 namespace lumiera {
   
   

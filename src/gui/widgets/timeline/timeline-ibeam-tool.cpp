@@ -21,7 +21,7 @@
 * *****************************************************/
 
 #include "timeline-ibeam-tool.hpp"
-#include "../timeline-widget.hpp"
+#include "gui/widgets/timeline-widget.hpp"
 
 using namespace boost;
 using namespace gui::widgets;

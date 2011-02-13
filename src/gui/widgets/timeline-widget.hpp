@@ -37,7 +37,7 @@
 #include "timeline/timeline-clip-track.hpp"
 #include "timeline/timeline-layout-helper.hpp"
 
-#include "../model/sequence.hpp"
+#include "gui/model/sequence.hpp"
 
 namespace gui {
 namespace widgets {

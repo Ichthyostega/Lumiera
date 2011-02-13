@@ -27,8 +27,8 @@
 #ifndef TIMELINE_LAYOUT_HELPER_HPP
 #define TIMELINE_LAYOUT_HELPER_HPP
 
-#include "../../gtk-lumiera.hpp"
-#include "../../../lib/tree.hpp"
+#include "gui/gtk-lumiera.hpp"
+#include "lib/tree.hpp"
 
 namespace gui {
 
