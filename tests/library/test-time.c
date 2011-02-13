@@ -117,7 +117,7 @@ TEST (ntsc_drop_frame)
 
   t = lumiera_build_time_ntsc_drop (FRAMES, SECONDS, MINUTES, HOURS);
 
-  CHECK (lumiera_time_millis (t)             == 487);
+  CHECK (lumiera_time_millis (t)             == 486);
   CHECK (lumiera_time_seconds (t)            == SECONDS);
   CHECK (lumiera_time_minutes (t)            == MINUTES);
   CHECK (lumiera_time_hours (t)              == HOURS);
