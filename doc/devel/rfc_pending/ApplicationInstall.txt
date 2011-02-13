@@ -5,7 +5,7 @@ ApplicationInstall
 
 [grid="all"]
 `------------`-----------------------
-*State*         _Idea_
+*State*         _Draft_
 *Date*          _Di 11 Jan 2011 17:00:55 CET_
 *Proposed by*   Ichthyostega <prg@ichthyostega.de>
 -------------------------------------
@@ -175,8 +175,8 @@ The second alternative isn't really applicable IMHO. The original UNIX philosoph
 breeds on an academic setup and really excels with small nifty commandline utils
 combined by pipes, each specialised to do a single thing very well. These utils
 are more like the objects within our implementation. The concept of large
-application software bundles and desktop software was always a bit alien within
-the classic UNIX environment. 
+application software bundles and desktop software was always a bit alien
+within the classic UNIX environment. 
 
 
 
@@ -208,6 +208,18 @@ as they are known to lead to maintenance problems.
 Comments
 --------
 //comments: append below
+
+.State -> Draft
+There is now a complete implementation of this concept on my ``proc'' branch. +
+Moreover, I was able to define an initial Debian packaging for Lumiera on top
+of that implementation.
+
+During that work, I had opportunity to visit various areas of the existing codebase,
+which reminded me of several small issues, which seem to become unhealthy when lying
+around unfixed for such a long time. Probably I'll start a clean-up initiative and
+try to bring these points to discussion separately.
+
+   So 13 Feb 2011 20:04:00 CET Ichthyostega <prg@ichthyostega.de>
 
 
 //endof_comments:
