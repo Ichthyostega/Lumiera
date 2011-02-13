@@ -10,7 +10,7 @@ GUI concepts and -features and proposals.
   *  link:Proposal.RichardSpindler.html[Richard Spindler]
   *  link:Workspaces.html[about Workspace organsiation]
   *  link:scrolling.html[about scrolling..]
-  *  link:MenuAndShortcuts.html[Ideas for menues and shortcuts]
+  *  link:MenuAndShortcuts.html[Ideas for menus and shortcuts]
 - link:TimelineDiscussion.html[Conclusions by Joel Holdsworth]
 
 [icon="warning.png"]

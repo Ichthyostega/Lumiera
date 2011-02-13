@@ -1,0 +1,26 @@
+Contributing to Lumiera
+=======================
+
+Nothing is easier, follow the
+http://www.kernel.org/pub/software/scm/git/docs/gittutorial.html[the basic
+instructions], notably the following parts:
+
+------------------------------------------------------------
+$ git config --global user.name "Your Name Comes Here"
+$ git config --global user.email you@yourdomain.example.com
+------------------------------------------------------------
+
+Then you are ready to go, you can edit and commit the lumiera code locally in
+your cloned repository. Please do small commits which fix/improve only one
+single thing and use meaningful commit messages.
+
+Check that you didn't break anything, by running the testsuite (see above)
+
+Finally you can push your changes to the lumiera server to the 'mob' repository:
+
+------------------------------------------------------------
+$ git push git://git.lumiera.org/lumiera/mob master:refs/heads/YOURNAME 
+------------------------------------------------------------
+
+This creates a new branch 'YOURNAME' on the mob repository. Then you notify the
+other devs on the mailinglist and they may merge your code into the mainline.
