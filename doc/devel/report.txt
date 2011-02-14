@@ -17,7 +17,7 @@ Statistics and Reports
 ++++++++++++++++++++++++++++++++++++++
 
 ''''
-^Statistics generated automatically by *Ohloh* based on Git master^
+^Statistics generated automatically by *Ohloh* based on Git master.^
 
 
 Tickets
@@ -26,9 +26,9 @@ Tickets
  * link:http://issues.lumiera.org/report/14[recently changed tickets]
  * link:http://issues.lumiera.org/report/8[core tickets in work]
  * link:http://issues.lumiera.org/report/5[stalled tickets]
- * link:http://issues.lumiera.org/report/15[non-codin small tasks]
+ * link:http://issues.lumiera.org/report/15[non-coding small task]
 
-See the link:http://issues.lumiera.org/report[Trac overview for more ticket reports]
+See the link:http://issues.lumiera.org/report[Trac overview] for more ticket reports.
 
 [icon="warning.png"]
 WARNING: Website under construction
