@@ -39,7 +39,7 @@ namespace lib {
   
   
   
-  regex SearchPathSplitter::EXTRACT_PATHSPEC ("(\\$?ORIGIN/)?([^:]+)");
+  regex SearchPathSplitter::EXTRACT_PATHSPEC ("(\\$?ORIGIN/?)?([^:]*)");
   
   
   /** @internal helper to figure out the installation directory,
