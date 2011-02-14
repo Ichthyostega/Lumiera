@@ -53,15 +53,17 @@ namespace lib {
   /** retrieve the location of the executable */
   string findExePath();
   
+  /** replace $ORIGIN tokens in the given string
+   *  @return copy with expansions applied */
+  string replaceTokens (string const& src);
+  
   
   /**
    * Helper: Access a path Specification as a sequence of filesystem Paths.
    * This iterator class dissects a ':'-separated path list. The individual
    * components may use the symbol \c $ORIGIN to denote the directory holding
-   * the current executable. After resolving this symbol, a valid absolute or
-   * relative filesystem path should result, which must not denote an existing
-   * file (directory is OK).
-   * @note #fetch picks the current component and advances the iteration. 
+   * the current executable.
+   * @note #next picks the current component and advances the iteration. 
    */
   class SearchPathSplitter
     : public BoolCheckable<SearchPathSplitter
@@ -71,11 +73,11 @@ namespace lib {
       sregex_iterator pos_,
                       end_;
       
-      static regex EXTRACT_PATHSPEC;
+      static const regex EXTRACT_PATHSPEC;
       
     public:
       SearchPathSplitter (string const& searchPath)
-        : pathSpec_(searchPath)
+        : pathSpec_(replaceTokens (searchPath))
         , pos_(pathSpec_.begin(),pathSpec_.end(), EXTRACT_PATHSPEC)
         , end_()
         { }
@@ -93,40 +95,9 @@ namespace lib {
             throw error::Logic ("Search path exhausted."
                                ,LUMIERA_ERROR_ITER_EXHAUST);
           
-          string currentPathElement = resolveRelative();
+          string currentPathElement = pos_->str();
           ++pos_;
           return currentPathElement;
-        }
-      
-    private:
-      /** maybe resolve a path spec given relative to
-       *  the current Executable location ($ORIGIN) */
-      string
-      resolveRelative ()
-        {
-          if (containsORIGINToken())
-            return asAbsolutePath();
-          else
-            return getFullPath();
-        }
-      
-      SubMatch found(int group=0) { return (*pos_)[group]; }
-      
-      bool containsORIGINToken() { return found(1).matched; }
-      string getRelativePath()  { return found(2);  }
-      string getFullPath()     { return found(); }
-      
-      string
-      asAbsolutePath()
-        {
-          fsys::path exePathName (findExePath());
-          fsys::path modPathName (exePathName.remove_leaf() / getRelativePath());
-          
-          if (fsys::exists(modPathName) && !fsys::is_directory (modPathName))
-            throw error::Invalid ("Error in search path: component \""+modPathName.string()+"\" is not a directory"
-                                 ,LUMIERA_ERROR_FILE_NOT_DIRECTORY);
-          
-          return modPathName.directory_string();
         }
     };
   

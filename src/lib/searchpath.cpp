@@ -39,7 +39,7 @@ namespace lib {
   
   
   
-  regex SearchPathSplitter::EXTRACT_PATHSPEC ("(\\$?ORIGIN/?)?([^:]*)");
+  const regex SearchPathSplitter::EXTRACT_PATHSPEC   ("[^:]+");
   
   
   /** @internal helper to figure out the installation directory,
@@ -60,6 +60,22 @@ namespace lib {
       }
     return buff;
   }
+  
+  
+  /** @internal helper to replace all $ORIGIN prefixes in a given string
+   *   by the directory holding the current executable
+   *  @note also picks ORIGIN, $ORIGIN/, ORIGIN/ 
+   */
+  string
+  replaceTokens (string const& src)
+  {
+    static const regex PICK_ORIGIN_TOKEN ("\\$?ORIGIN/?");
+    static const string expandedOriginDir  
+      = fsys::path (findExePath()).remove_leaf().directory_string();
+    
+    return boost::regex_replace(src, PICK_ORIGIN_TOKEN, expandedOriginDir);
+  }
+  
   
   
   
@@ -85,7 +101,7 @@ namespace lib {
           throw error::Config ("Module \""+moduleName+"\" not found"
                               + (searchPath.empty()? ".":" in search path: "+searchPath));
   }   }
-
+  
   
   
 } // namespace lib
