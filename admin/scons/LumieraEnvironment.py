@@ -165,10 +165,27 @@ def register_LumieraResourceBuilder(env):
          env.Install (toInstall, source)
          return env.Install(toBuild, source)
     
-    def ConfigData(env, source):
+    def ConfigData(env, source, targetDir=None):
+         """ install (copy) configuration- and metadata.
+             target dir is either the install location configured (in SConstruct),
+             or an explicitly given absolute or relative path segment, which might refer
+             to the location of the executable through the $ORIGIN token
+         """   
          subdir = getDirname(str(source), env.path.srcConf) # removes source location path prefix
-         toBuild = env.path.buildConf+subdir
-         toInstall = env.path.installConf+subdir
+         if targetDir:
+             if path.isabs(targetDir):
+                 toBuild = toInstall = path.join(targetDir,subdir)
+             else:
+                 if targetDir.startswith('$ORIGIN'):
+                     targetDir = targetDir[len('$ORIGIN'):]
+                     toBuild = path.join(env.path.buildExe, targetDir, subdir)
+                     toInstall = path.join(env.path.installExe, targetDir, subdir)
+                 else:
+                     toBuild = path.join(env.path.buildConf, targetDir, subdir)
+                     toInstall = path.join(env.path.installConf, targetDir, subdir)
+         else:
+             toBuild = path.join(env.path.buildConf,subdir)
+             toInstall = path.join(env.path.installConf,subdir)
          env.Install (toInstall, source)
          return env.Install(toBuild, source)
     

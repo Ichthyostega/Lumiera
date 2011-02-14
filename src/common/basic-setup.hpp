@@ -33,6 +33,11 @@
 #include <string>
 
 
+/** "bootstrapIni" : the basic setup configuration to load */
+#define LUMIERA_LOCATION_OF_BOOTSTRAP_INI  "$ORIGIN/setup.ini" 
+
+
+
 namespace lumiera {
   
   using std::string;

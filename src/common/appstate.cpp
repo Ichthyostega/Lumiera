@@ -42,8 +42,6 @@ using util::cStr;
 using lib::Literal;
 
 
-#define LOCATION_OF_BOOTSTRAP_INI  "$ORIGIN/config/setup.ini" 
-
 
 
 namespace lumiera {
@@ -80,7 +78,7 @@ namespace lumiera {
    *  client codes POV it just behaves like intended). 
    */
   AppState::AppState()
-    : setup_(LOCATION_OF_BOOTSTRAP_INI)
+    : setup_(LUMIERA_LOCATION_OF_BOOTSTRAP_INI)
     , subsystems_(0)
     , emergency_(false)
     , core_up_ (false)
