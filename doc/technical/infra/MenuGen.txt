@@ -1,0 +1,35 @@
+Website Navigation Generator
+============================
+:Author: Hermann Voßeler
+:Date: 2/2011
+
+
+Notes regarding the +menugen.py+ -- written 2/2011 during our attempt
+to get the new Lumiera website online finally.
+
+Known issues
+------------
+
+* for sake of simplicity, there is _one_ generated container HTML element
+  per menu entry. In case this entry is a submenu, the +<ul>+-element is
+  used, _not_ the preceeding headline +<li>+ -- this is due to the fact
+  that this submenu entry is going to be collapsed eventually, but has
+  the side-effect of highlighting _only_ that submenu block, _not_ the
+  preceeding headline.
+* the acceptable DSL syntax needs to be documented manually; there is
+  no way to generate this information. Doing so would require to add
+  specific information methods into Placement subclasses, and it would
+  result in duplicated information between the regular expressions
+  and the informations returned by such information methods.
+  This was deemed dangerous.
+* the +__repr__+ of the Placement subclasses is not an _representation_
+  but rather a +__str__+ -- but unfortunately the debugger in PyDev
+  invokes +__repr__+
+* the startdir for automatic discovery is an global variable and indeed
+  is used in several un-obvious places and contexts
+* when through the use of redirection, the same file is encountered
+  multiple times during discovery, it is treated repeatedly, each times
+  associated with another node, because, on discovery, the node-ID is
+  generated as +parentPath/fileID+, to avoid mixing up similarily named
+  files in different directories. (The NodeIndex allows to retrieve
+  a node just by its bare ID, without path anyway)
