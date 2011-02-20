@@ -1,51 +1,67 @@
-== Lumiera Design Documents
+Lumiera Design Documents
+========================
 
-The goal of Lumiera is to provide a professionnal tool for video editing on GNU/Linux systems.
-The vision of the development team defines a modern design for the core of a Non-Linear Editing software.
-One of the key aspect of Lumiera is the strong separation between the user interface and the processing core.
-Lumiera as a software will come along with a GTK GUI but that does not make this exclusive, any other GUI could be written as well as scripts to drive the core.
-This is made possible by the above-mentioned quality of Lumiera being considered as two strictly separate parts.
-Lumiera as a processing core will be able to do anything possibly conceivable, therefore it may be used to do any task on video (and audio?), even unrelated to video editing.
+The goal of Lumiera is to provide a professional tool for video editing on
+GNU/Linux systems.  The vision of the development team defines a modern design
+for the core of a Non-Linear Editing software.  One of the key aspect of Lumiera
+is the strong separation between the user interface and the processing core.
+Lumiera as a software will come along with a GTK GUI but that does not make this
+exclusive, any other GUI could be written as well as scripts to drive the core.
+This is made possible by the above-mentioned quality of Lumiera being considered
+as two strictly separate parts.  Lumiera as a processing core will be able to do
+anything possibly conceivable, therefore it may be used to do any task on video
+(and audio?), even unrelated to video editing.
 
 .Workflow
 ****
 The word Workflow is used to name the way tasks can be achieved in an application. Any operation in Lumiera must be possible in the most suitable and stringent fashion. The Workflow is closely related to how flexible the GUI is but also the concern of deeper and more technical parts of the application.
 ****
-=== Overview
 
-The internal structure of Lumiera is divided in numerous subsystems.
-This overview will try to go through the elements from the highest to the lowest piece of the structure.
-They can be categorized into three main categories plus extra components :
+Overview
+--------
 
-==== link:gui/index.html[Graphical User Interface]
+The internal structure of Lumiera is divided in numerous subsystems.  This
+overview will try to go through the elements from the highest to the lowest
+piece of the structure.  They can be categorized into three main categories plus
+extra components :
 
-User interfaces are basically handled like plugins, consequently it is possible to interface with Lumiera through scripts. It is also possible to create specialized GUIs.
-The interface is the closest component to the user, it is purely visual. There the user manipulates, organizes, loads, configures all sorts of datas, especially MObjects (media objects) and Assets. These elements are contained within a structure called the Session.
+link:gui/index.html[Graphical User Interface]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-==== The Processing Layer
+User interfaces are basically handled like plugins, consequently it is possible
+to interface with Lumiera through scripts. It is also possible to create
+specialized GUIs.  The interface is the closest component to the user, it is
+purely visual. There the user manipulates, organizes, loads, configures all
+sorts of datas, especially MObjects (media objects) and Assets. These elements
+are contained within a structure called the Session.
 
-The Processing layer (or proc) is where the elements from the Session are assembled to form a network of nodes, to be sent to the Backend. The lowest data structure is called the Low-level model. +
+The Processing Layer
+~~~~~~~~~~~~~~~~~~~~
+
+The Processing layer (or proc) is where the elements from the Session are
+assembled to form a network of nodes, to be sent to the backend. The lowest data
+structure is called the Low-level model. +
 
  * link:model/index.html[Model] +
  * link:engine/index.html[Engine]
 
-==== link:backend/index.html[The Backend]
+link:backend/index.html[The Backend]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The backend uses the Low-level model. It allows the rendering and makes a heavy use of the Input/Output System to the screen or to external monitors.
+The backend uses the Low-level model. It allows the rendering and makes a heavy
+use of the Input/Output System to the screen or to external monitors.
 
 Extra components
 ----------------
 
-
 link:application/index.html[The Application]
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The application controls the initialization and shutdown procedures as well as loading external elements like plugins that are widely used.
+The application controls the initialization and shutdown procedures as well as
+loading external elements like plugins that are widely used.
 
 link:plugins/index.html[Plugins]
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-They are key elements in Lumiera since the application relies heavily on this concept of modules. For example, the GUI of Lumiera is a plugin.
-
-
-
+Plugins are key elements in Lumiera since the application relies heavily on this
+concept of modules. For example, the GUI of Lumiera is a plugin.

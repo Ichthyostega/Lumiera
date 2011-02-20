@@ -1,7 +1,7 @@
-Lumiera Buildsystem
-===================
+Lumiera build system
+====================
 
-As work progresses, we will add more information on the build system.
+As work progresses, we will add more information on the Lumiera build system.
 
 build -- continuous integration -- packaging
 
@@ -9,7 +9,7 @@ build -- continuous integration -- packaging
 * Autotools
 * Dependencies
 * link:BuildDroneDraft.html[»Builddrone« concept from 2008]
-* packaging: Debian RPM
-* Lumiera Debian depot
+* Packaging: Debian RPM
+* Lumiera debian depot
 
 
