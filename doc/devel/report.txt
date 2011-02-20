@@ -29,7 +29,3 @@ Tickets
  * link:http://issues.lumiera.org/report/15[non-coding small task]
 
 See the link:http://issues.lumiera.org/report[Trac overview] for more ticket reports.
-
-[icon="warning.png"]
-WARNING: Website under construction
-

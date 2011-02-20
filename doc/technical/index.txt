@@ -28,9 +28,3 @@ You may want to read the link:../design/index.html[Design Documents] first to ge
 .HOWTO
 * link:howto/index.html[*Developer HOWTOs*] : Collection of instructions, recipes, hints and similar
   materials intended for developers
-
-
-[icon="warning.png"]
-WARNING: Website under construction
-
-

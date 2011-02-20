@@ -1,7 +1,5 @@
 Lumiera Design: Plugin system
 =============================
 
-
-[icon="warning.png"]
-WARNING: Website under construction
+Eventually, this will have design documentation for the Plugin system.
 

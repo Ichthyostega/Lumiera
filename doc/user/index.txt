@@ -1,13 +1,8 @@
 User Documentation
 ==================
 
-'to be written...'
-
- * link:manual.html[We need to write a user manual....]
+ * link:manual.html[User Manual]    _(planned)_
  * The following document might become an introductory overview: +
    link:outerSpace/lumiera_from_outer_space.html[Lumiera (as seen) from Outer Space]
  * link:outerSpace/Glossary.html[Glossary of common terms]
-
-[icon="warning.png"]
-WARNING: Website under construction
 

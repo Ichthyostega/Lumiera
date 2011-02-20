@@ -21,8 +21,3 @@ Generally you should refrain from editing someone others proposals (except for t
  * link:rfc[RfC accepted]
  * link:rfc_pending[RfC pending]
  * link:rfc_dropped[RfC dropped]
-
-
-[icon="warning.png"]
-WARNING: Website under construction
-

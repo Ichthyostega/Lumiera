@@ -13,6 +13,4 @@ GUI concepts and -features and proposals.
   *  link:MenuAndShortcuts.html[Ideas for menus and shortcuts]
 - link:TimelineDiscussion.html[Conclusions by Joel Holdsworth]
 
-[icon="warning.png"]
-WARNING: Website under construction
 

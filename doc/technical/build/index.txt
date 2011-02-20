@@ -1,6 +1,8 @@
 Lumiera Buildsystem
 ===================
 
+As work progresses, we will add more information on the build system.
+
 build -- continuous integration -- packaging
 
 * SCons
@@ -8,8 +10,6 @@ build -- continuous integration -- packaging
 * Dependencies
 * link:BuildDroneDraft.html[»Builddrone« concept from 2008]
 * packaging: Debian RPM
-* Lumiera debian depot
+* Lumiera Debian depot
 
-[icon="warning.png"]
-WARNING: Website under construction
 

@@ -1,7 +1,5 @@
 Technical Documentation: GUI
 ============================
 
-
-[icon="warning.png"]
-WARNING: Website under construction
+Eventually, this will have technical documentation for the GUI.
 
