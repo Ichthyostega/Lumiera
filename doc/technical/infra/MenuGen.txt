@@ -33,3 +33,11 @@ Known issues
   generated as +parentPath/fileID+, to avoid mixing up similarily named
   files in different directories. (The NodeIndex allows to retrieve
   a node just by its bare ID, without path anyway)
+* no escaping: currently any variable text is written to the generated 
+  HTML without any sanitising or escaping. This might be a security issue
+* the method Node.matches() is implemented sloppily: it uses just a mutual
+  postfix match, while actually it should line up full path components and
+  check equality on components, starting from the path end. This cheesy
+  implementation can yield surprising side-effects: e.g. an not-yet attached
+  node +'end'+ could match a new menu page +'documentation/backend'+
+
