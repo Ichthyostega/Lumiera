@@ -195,7 +195,8 @@ supported placement directives
   enable(False)           off|disable|deactivate               make node passive; any children/parents added later are ignored
   enable([True])          on|active|activate                   make node active again (this is the default)
   detach()                detach                               cut away any parents and children, disable the node
-  discover(includes=...)  include <token>[,<token>]            instead of current dir, navigate to the _relative path_ 
+  discover(srcdirs=...)   include dir <token>[,<token>]        instead of current dir, retrieve children from other dirs (relative) 
+  discover(includes=...)  include <token>[,<token>]            explicitly use the listed elements as children 
   discover(excludes=...)  exclude <token>[,<token>]            after discovering, filter names matching the <token> (without extension)
 --------------------------------------------------------------------------------------------------------------------
 
