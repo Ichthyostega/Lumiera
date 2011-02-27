@@ -101,4 +101,4 @@ framerate" and a fixed resolution in pixels. But we certainly can do better.
   -- Ichthyostega 18:09:50
 
 
-Back to link:Lumiera/DesignProcess[]
+Back to link:/documentation/devel/rfc.html[Lumiera Design Process overview]

@@ -53,4 +53,4 @@ repos to push relevant things, be careful not to push cruft or tags (which tags
 shall be present here is not yet resolved -> no tags for now)
  -- link:ct[] [[DateTime(2008-04-08T21:48:51Z)]]
 
-Back to link:Lumiera/DesignProcess[]
+Back to link:/documentation/devel/rfc.html[Lumiera Design Process overview]

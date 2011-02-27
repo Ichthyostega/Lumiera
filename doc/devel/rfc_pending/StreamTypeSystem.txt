@@ -231,4 +231,4 @@ frameinfo* get_frame(unsigned num)+ where +struct frameinfo+ (not yet defined)
 is something like +{ void* data; size_t size; struct metadata* meta; ...}+
  -- link:ct[] 2008-10-06
 
-Back to link:Lumiera/DesignProcess[]
+Back to link:/documentation/devel/rfc.html[Lumiera Design Process overview]

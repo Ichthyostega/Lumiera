@@ -139,4 +139,4 @@ make no guarantee about backwards compatibility. When we spot someone using
 this interfaces we ''will break'' his plugin ''intentionally''!
  -- link:ct[] [[DateTime(2008-10-24T03:43:43Z)]]
 
-Back to link:Lumiera/DesignProcess[]
+Back to link:/documentation/devel/rfc.html[Lumiera Design Process overview]

@@ -142,4 +142,4 @@ Conclusion
 Lua is '''accepted''' as the required scripting language by October.2008 dev
 meeting.
 
-Back to link:Lumiera/DesignProcess[]
+Back to link:/documentation/devel/rfc.html[Lumiera Design Process overview]

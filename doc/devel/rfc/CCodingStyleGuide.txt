@@ -212,4 +212,4 @@ point", i.e. every point in the sytem, that can be extended by plugins.
   -- 217.110.94.1 [[DateTime(2007-07-10T17:23:33Z)]]
 
 ''''
-Back to link:Lumiera/DesignProcess[]
+Back to link:/documentation/devel/rfc.html[Lumiera Design Process overview]

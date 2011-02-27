@@ -170,5 +170,6 @@ after a talk on irc, we decided to do it this way, further work will be
 documented in the repository (tiddlywiki/source)
  -- link:ct[] [[DateTime(2007-07-11T13:10:07Z)]]
 
+
 ''''
-Back to link:Lumiera/DesignProcess[]
+Back to link:/documentation/devel/rfc.html[Lumiera Design Process overview]

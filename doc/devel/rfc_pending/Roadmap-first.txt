@@ -203,4 +203,4 @@ with other media related projects), than this shouldn't be a barrier.
   -- link:Ichthyostega[] 2009-02-01
 
 
-Back to link:Lumiera/DesignProcess[]
+Back to link:/documentation/devel/rfc.html[Lumiera Design Process overview]

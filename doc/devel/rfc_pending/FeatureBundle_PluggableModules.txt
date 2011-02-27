@@ -186,4 +186,4 @@ link:Plugin/Interface[] system self-describing this will also be used to
 bootstrap a session on itself (by the serializer which is tightly integrated)
   -- link:ct[] [[DateTime(2008-09-04T09:28:37Z)]] 2008-09-04 09:28:37
 
-Back to link:Lumiera/DesignProcess[]
+Back to link:/documentation/devel/rfc.html[Lumiera Design Process overview]

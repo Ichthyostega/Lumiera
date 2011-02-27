@@ -134,4 +134,4 @@ Comments
 --------
 
 
-Back to link:Lumiera/DesignProcess[]
+Back to link:/documentation/devel/rfc.html[Lumiera Design Process overview]

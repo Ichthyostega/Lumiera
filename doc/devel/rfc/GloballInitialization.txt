@@ -185,4 +185,4 @@ on such an init, but i would add one if really needed.
   basically agreed on it iirc.
   -- link:ct[] [[DateTime(2008-07-26T09:08:11Z)]]
 
-Back to link:Lumiera/DesignProcess[]
+Back to link:/documentation/devel/rfc.html[Lumiera Design Process overview]

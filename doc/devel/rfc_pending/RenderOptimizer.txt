@@ -86,4 +86,4 @@ The good news is, that:
  the matrix can be transformed from e.g. RGB to YUV, so these filters can
  always work in both colorspaces directly
 
-Back to link:Lumiera/DesignProcess[]
+Back to link:/documentation/devel/rfc.html[Lumiera Design Process overview]

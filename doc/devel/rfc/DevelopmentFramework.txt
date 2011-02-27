@@ -128,4 +128,4 @@ We have now a \'compatibility wiki\', finalized this proposal
  -- link:ct[] [[DateTime(2008-03-26T13:43:26Z)]]
 
 ''''
-Back to link:Lumiera/DesignProcess[]
+Back to link:/documentation/devel/rfc.html[Lumiera Design Process overview]
