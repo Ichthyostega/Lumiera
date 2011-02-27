@@ -1,0 +1,171 @@
+GUI Brainstorming Proposal
+==========================
+:Author: Francisco G. Rodriguez
+:Date: 07.05.2008
+
+
+This are some of my ideas for the interface of Lumiera. Some of this ideas are
+just things I saw in the GUI brainstorm and my intent is to bring them together.
+I will be adding images and more ideas, but I need some feedback because maybe
+this gui is only good at the work I'm used to. If you find this is no good for
+you, please write me telling me why so I can think a better way to do it.
+
+
+General
+-------
+
+* The GUI must be configurable. A lot of different tasks can be done using a
+  NLE, and we cannot make all of them accesible at the same time. This means allow
+  changing keybindings, windows/tiles positions, and colors. Just like ct wrote,
+  saving them in the project file, etc.
+* If we use a custom api for the gui, we should allow themes(or changing colors
+  from a preferences dialog), and if we use gtk or qt, each user could use the
+  program with his custom theme. (Done)
+* We could provide presets for keybindings/UI copying the behaviour of others
+  programs. For example make it behave like cinelerra 2.0.
+* If we use tiles and multiple windows, we should allow these to be created
+  while using the program, like blender. Each tile should have a little icon to
+  allow changing the module the tile is showing, and clicking on a border would
+  allow to divide/merge.
+* All icon shortcuts, and toolbars can be hidden alowing a workflow using keybindings.
+
+The Gui has to be divided into indepent parts or modules that will communicate
+each other. Each module can be developed separately, making easy correct bugs,
+and add new functions. Of course this modules I am talking about, are not the
+modules described in the architecture overview. This is the gui, which is an
+abstraction of the real program.
+
+image::{imgg}/Alcarinque.proposal.png[Alcarinque's GUI proposal]
+
+Here I made a sample of the architecture of the UI. Please don't take this too
+seriously, it is just a draft so you can understand the workflow. I haven't
+thought how this will communicate with the proc layer or backend.
+
+
+Modules
+-------
+
+* Main Menu
+  
+  - It doesn't have to be a menu.
+  - Contains a a way to manage proyects, render as movie, setup the preferences,
+    customize the UI, manage the others modules, and capture a footage.
+
+* Node Compositor
+
+  - This is a new feature that I think is very important because it allows a lot
+    of new special effects.
+  - Also it will bring a lot user contribution with the sharing of _node presets_.
+
+    . Just think of this... I have a footage of a kid playing with some red stick.
+    . I add this as an _In_ node. Then connect its output to a _Glow_ node.
+      Also connect the output of the _In_ node to a _RGB Curves_ node which I use 
+      to filter a certain tone of red. The output to the curves is sent to the
+      alpha input of the glow node. The output of glow is sent to an _Out_ node.
+    . I save this node layout as a preset, a file called `lightsaber.np`. I go
+      to the Lumiera's site and share it so everyone can use it, improve it.
+
+  - Lumiera would just provide basic but poweful nodes, which would be useful
+    to construct very complex effects.
+  - There are audio and video nodes some of them can interact. See below.
+  - Nodes could be gruped and used as another node. A group of nodes is a
+    _Node layout_. When created, it appears in a tab in the media library.
+    Each node layout has one or more _In_ and _Out_ nodes, that let it
+    communicate with the others objects.
+    
+    . The In node brings an input from a file and converts it into an audio/video stream.
+    . The Out node transforms a stream into an image drawable into the ``canvas''.
+      It has options like transform(position, scale, rotation) and opacity. Also
+      it saves a In/Out positions, relative to the internal node layout time. This
+      is to be able to have multiple instances of the same node layout but showing
+      different parts of the stream.
+      
+      - Transform trayectory is shown in the interactive interface of the visor. Of course if the strip/node layout is selected.
+      - Opacity keys and level is shown above the strip(like cinelerra).
+      - If it is an audio out node, the variables are volumes for each channel.
+  - Each node has some parameters, these are keyable. When selecting a node,
+    curves for each parameter are shown in the node options module.
+  - Nodes should be easily programmed, and adding them should not require
+    recompilation of the whole program. Maybe there will be an exception to
+    this for the In/out nodes, etc.
+  - Nodes can also generate, for example a FractalExplorer node, a waveform
+    node (to convert audio to video), oscilators, noise, etc. For example, we
+    could drive a brightness/contrast node with a one dimension noise generator,
+    to obtain an scene with lightnings or broken lamps like “doom”
+    
+* Sound
+* Media Library:
+
+  - It can be tabbed or grupped to make organization easier.
+  - When selecting files, the images sequences like `image0000.jpg`,
+    `image0001.jpg`, `image0002.jpg`, etc should show like +image[0-3000].jpg+.
+  - It should display the properties of the media, like resolution, fps,
+    bitrate, etc. Maybe in each clip or in a container.
+  - Be able to select for a list or a thumbnail or waveform preview.
+  - In each clip there is a preview button.
+  - Maybe add an option to “make a new clip from this clip” to change things
+    like fps, size, codec, etc. Just a wrapper for ffmpeg or something.
+  - You can drop the clip in the node compositor as _In_ node, or in the
+    timeline as a stripe. Doing the latter, will create a node group with the name
+    of the clip, that will have an “In” node(pointing to the file) connected to an
+    _Out_ so that the file is seen by the timeline.
+  - When we import a clip it should create a proxy. We don't use the original
+    clip anymore until render.
+
+* Timeline
+
+  - Should provide a palette with tools like knife, in/out points, etc that can
+    be hidden. This could be achieved using a ``no header'' option like... again...
+    blender. I'm open to new ideas about this
+  - Scaling the clips vertically could be a good idea, especcially when working
+    with too many tracks. Using an amplifier tool could do the magic.
+  - Should allow tabbing, to have more than a timeline at in a project. We can
+    create a +{scene-1, scene-2, scene-3}+ timelines and then mix them in a
+    fourth timeline called ``film'' as if they were simple strips...
+
+* Viewport
+
+  - The viewport should be interactive. Maybe a key toggle to allow panning and
+    zooming. Clicking on it should make the clicked clip to transform. Being able
+    to keys in the current keyframe to things like rotation, translation, and
+    scale. Maybe opacity with the mouse wheel.
+  - Clicking on the clip the first time, will add a transform node before its
+    out node. This transform node, has as input a time curve node, which will
+    be keyframmed.
+  - Should allow seeing the result of the current timeline, or a custom media
+    library element.
+  - Should allow setting In/out points to allow inserting in the timeline.
+  - Transform trayectory is shown in the interactive interface of the visor.
+    Of course if the strip/node layout is selected.
+
+* Palette
+
+  - For custom common tasks, like Maya's toolbar.
+
+* Effects and Transitions
+
+  - A section where we can drag and drop nodes and transitions to the node
+    compositor/timeline
+  - Transitions can be added in both, timeline and node editor. I'm open to
+    new ideas about this
+  - Droping a node on a stripe would add it before its out node, Using the
+    nodes, default connections. This way the program can be used as a normal
+    NLE or a compositor in a seamless way.
+
+* Options
+
+  - Shows the options for the current node layout the one selected in current
+    timeline. What happens when we have two timelines modules showing different
+    timelines? Each options modules has a bar to select what timeline is using.
+    I don't understand why someone would want two timelines modules running
+    different timelines, maybe when selecting in one module the others could
+    switch inmmediatly, but maybe it is useful in some case.
+  - It would be divided into three parts.
+  
+    . A list of nodes into the node layout
+    . The options of the selected node in the list.
+    . A curve timeline. A list for of the node parameters and curves for it.
+      Just like Blender's IPO curves.
+
+
+
