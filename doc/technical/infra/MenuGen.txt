@@ -1,7 +1,7 @@
 Website Navigation Generator
 ============================
-:author: Hermann Voßeler
-:revdate: 2/2011
+:Author: Hermann Voßeler
+:Date: 2/2011
 
 
 This page contains documentation and notes regarding the +menugen.py+ --

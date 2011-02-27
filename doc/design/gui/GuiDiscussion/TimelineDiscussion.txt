@@ -1,7 +1,7 @@
 Timeline: Discussion
 ====================
-:author: Joel Holdsworth
-:revdate: Fall 2008
+:Author: Joel Holdsworth
+:Date: Fall 2008
 
 This is Joel Holdsworth's attempt to amalgamate all the ideas from all the brainstorming to one consistent idea that makes sense, can be implemented, and seems like it would be nice to use. Comments are welcome.
 
