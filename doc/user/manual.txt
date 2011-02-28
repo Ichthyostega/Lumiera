@@ -1,9 +1,8 @@
 Lumiera User Manual
 ===================
 
-'to be written...'
- 
+The plan is to create the users manual later in a colaborative
+fashion, similar to what turned out so effective for Cinelerra.
 
-[icon="warning.png"]
-WARNING: Website under construction
+This work is postponed until the software is actually working.
 

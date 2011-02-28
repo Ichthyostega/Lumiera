@@ -12,6 +12,4 @@ The Lumiera application uses two quite different sources for configuration
 
 -> see also the link:{ldoc}/technical/backend/ConfigLoader.html[Config Loader brainstorming from 2008] (implementation details)
 
-[icon="warning.png"]
-WARNING: Website under construction
 

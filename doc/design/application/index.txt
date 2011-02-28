@@ -5,6 +5,4 @@ Design Documents: Application Framework
  * link:plugin_loader.html[Plugin Loader]
  * link:SubsystemLifecycle.html[Application Subsystems and Lifecycle]
 
-[icon="warning.png"]
-WARNING: Website under construction
 

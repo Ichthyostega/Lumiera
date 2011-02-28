@@ -1,6 +1,8 @@
 Developer HOWTOs
 ================
 
+//MENU: title Dev HOWTOs
+
 
 This section contains a loose collection of instructions, recipes, tutorials and
 similar usefull pieces of information targeted at Lumiera developers. See also
@@ -10,9 +12,3 @@ similar usefull pieces of information targeted at Lumiera developers. See also
 
 == Notepad
 - link:DebugGdbPretty.html[Python pretty printers for GDB]
-
-
-[icon="warning.png"]
-WARNING: Website under construction
-
-

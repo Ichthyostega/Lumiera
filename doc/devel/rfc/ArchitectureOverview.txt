@@ -12,9 +12,10 @@ Architecure Overview
 --------------------
 This proposal intends to capture envisioned Architecture of the Application.
 
-See the SVG drawing
-http://www.lumiera.org/gitweb?p=LUMIERA;a=blob_plain;f=doc/devel/draw/Lumi.Archi
-ecture-1.svg;hb=HEAD[Overview of Lumiera Architecture)] maintained in GIT
+image:{ldoc}/devel/draw/rendered/Lumi.Architecture-1.png[Overview of Lumiera Architecture]
+
+^The SVG source of this drawing is 
+link:http://www.lumiera.org/gitweb?p=LUMIERA;a=blob_plain;f=doc/devel/draw/Lumi.Architecture-1.svg;hb=HEAD[maintained in GIT]^ 
 
 
 Description
@@ -38,10 +39,11 @@ Description
 Comments
 --------
 
- * Alcarinque made http://telniratha.atspace.com/ui_architecture.jpg[some
-   drafts]  for the ui. Here is the
-   http://telniratha.atspace.com/ui_architecture.odg[oodraw document]. This is
-   not a technical draft at all, it is just an idea.
+ * Alcarinque made link:/documentation/design/gui/GuiDiscussion/Proposal.Alcarinque.html[some
+   design drafts] for the UI. Here is the 
+   link:/documentation/design/gui/GuiDiscussion/Proposal.Alcarinque.svg[SVG source] (converted
+   from OODraw by Ichthyo 2011). This is not a technical draft at all, it is just
+   an idea.
 
  * Wouldn't the Config Rules (embedded Prolog) also interact with the High
    Level Model? Or would that be expanding its scope too much? I imagine
@@ -75,4 +77,4 @@ maintained in future.
 
 
 
-Back to link:Lumiera/DesignProcess[]
+Back to link:/documentation/devel/rfc.html[Lumiera Design Process overview]

@@ -1,6 +1,7 @@
 Timeline: Discussion
 ====================
-:author: Joel Holdsworth
+:Author: Joel Holdsworth
+:Date: Fall 2008
 
 This is Joel Holdsworth's attempt to amalgamate all the ideas from all the brainstorming to one consistent idea that makes sense, can be implemented, and seems like it would be nice to use. Comments are welcome.
 
@@ -410,3 +411,10 @@ apply to "all applicable" is not actually a problem. Again, in the rare cases
 where more is needed, the user is free to split off a channel as a separate
 clip.
 
+.historical Note by Ichthyo (2/2011)
+This page sumarises the state of the GUI Discussion in early 2009 +
+Since end of 2009, Gui development is mostly stalled (Joel left the project
+due to other obligations). Meanwhile we had a bit of discussion here and there,
+and personally I got a somewhat clearer understanding of what the Model in
+Proc-Layer can / will provide. But basically that's along the lines of what
+I wrote in my last comment at the bottom of this page

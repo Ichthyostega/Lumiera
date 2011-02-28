@@ -16,8 +16,3 @@ integral, so its rather treated separately of individual GUI features.
 .*TODO* more contributions please... ;-)
 We had several additional discussions and contributions on the mailinglist,
 several people did even concept drawings. Collect these and add them here
-
-
-[icon="warning.png"]
-WARNING: Website under construction
-

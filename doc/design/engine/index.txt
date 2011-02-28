@@ -1,7 +1,5 @@
 Design Documents: Renderengine
 ==============================
 
-
-[icon="warning.png"]
-WARNING: Website under construction
+Eventually, this will have design documentation for the Engine.
 

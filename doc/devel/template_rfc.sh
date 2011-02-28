@@ -73,4 +73,7 @@ Comments
 
 
 //endof_comments:
+
+''''
+Back to link:/documentation/devel/rfc.html[Lumiera Design Process overview]
 EOF

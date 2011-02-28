@@ -4,15 +4,14 @@ GUI Design and Feature Discussion
 In the early stages of the project, there was a lot of debate regarding
 GUI concepts and -features and proposals.
 
-- link:GuiBrainstormingReviewed.html[GUI Brainstorming page]  'TODO: explain whats this all about'
+- link:GuiBrainstormingReviewed.html[GUI Brainstorming page]  '[red]#TODO#: explain whats this all about'
 - several Proposals
   *  link:Proposal.AkhiL.html[AkhIL]
+  *  link:Proposal.Alcarinque.html[Alcarinque]
   *  link:Proposal.RichardSpindler.html[Richard Spindler]
   *  link:Workspaces.html[about Workspace organsiation]
   *  link:scrolling.html[about scrolling..]
   *  link:MenuAndShortcuts.html[Ideas for menus and shortcuts]
 - link:TimelineDiscussion.html[Conclusions by Joel Holdsworth]
 
-[icon="warning.png"]
-WARNING: Website under construction
 

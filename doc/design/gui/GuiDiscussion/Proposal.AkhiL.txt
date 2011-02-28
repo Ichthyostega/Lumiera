@@ -1,7 +1,7 @@
 GUI Brainstorming Proposal
 ==========================
 :Author: IL'dar AKHmetgaleev (»AkhIL«)
-Date: 2008-30-03
+:Date: 2008-30-03
 
 
 Wiring nodes within the timeline

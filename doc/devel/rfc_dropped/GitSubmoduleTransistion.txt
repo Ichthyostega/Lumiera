@@ -84,4 +84,4 @@ We concluded that that submodules are not yet needed with exception for the
 ./doc folder. Parked for now.
  -- ct 2008-07-26 09:09:57
 
-Back to link:Lumiera/DesignProcess[]
+Back to link:/documentation/devel/rfc.html[Lumiera Design Process overview]

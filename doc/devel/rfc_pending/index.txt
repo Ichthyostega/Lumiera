@@ -1,0 +1,21 @@
+Design Proposals in discussion
+==============================
+
+//Menu: label pending
+//Menu: sort children
+
+-> read link:../rfc.html[more about Lumiera RfC] and the Design Process
+
+The RfC entries listed here where proposed but not finally decided or agreed on --
+
+* entries in the _*Idea*_ stage are yet to be worked out in detail. Usually they
+  just sit there and only receive occasional discussions, until the original author
+  considers them mature and puts them on agenda on some developers meeting.
+* entries in the _*Draft*_ stage are basically ready for discussion or decision;
+  but sometimes they are kept _on hold_ -- maybe there is something controversial
+  or some details need to be investigated further.
+* sometimes we just decide to postpone the discussion -> see
+  link:../rfc_dropped/index.html[dropped and parked entries]
+
+
+

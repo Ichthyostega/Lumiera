@@ -291,4 +291,4 @@ credit roll for each episode. Add in stopmotion, and 3D model animations with
 vocal commentaries. Gather together separate items from "outworkers". Tree
 (@)SIG(@)
 
-Back to link:Lumiera/DesignProcess[]
+Back to link:/documentation/devel/rfc.html[Lumiera Design Process overview]

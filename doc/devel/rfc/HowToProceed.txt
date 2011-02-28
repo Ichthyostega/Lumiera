@@ -53,4 +53,4 @@ Comments
 * Accepted, deployed, done ... Final
  -- link:ct[] [[DateTime(2007-06-27T16:13:25Z)]]
 
-Back to link:Lumiera/DesignProcess[]
+Back to link:/documentation/devel/rfc.html[Lumiera Design Process overview]

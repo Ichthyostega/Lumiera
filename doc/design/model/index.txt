@@ -3,7 +3,3 @@ Design Documents: Model
 
  * two models: high-level and low-level
  * RfC: link:{rfc}/../rfc_pending/ProcHighLevelModel.html[high-level model basics]
-
-[icon="warning.png"]
-WARNING: Website under construction
-

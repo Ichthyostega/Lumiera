@@ -97,4 +97,4 @@ most any style. The only thing I really dislike is using tabs (with the
 exeption of database DDLs and CSound files, where tab are actually helpful) :)
 
 ''''
-Back to link:Lumiera/DesignProcess[]
+Back to link:/documentation/devel/rfc.html[Lumiera Design Process overview]

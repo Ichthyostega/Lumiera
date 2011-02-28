@@ -138,4 +138,4 @@ Conclusion
   added on demand. When doing so, we need to add thorough test coverage for
   time calculations too.
 
-Back to link:Lumiera/DesignProcess[]
+Back to link:/documentation/devel/rfc.html[Lumiera Design Process overview]

@@ -1,8 +1,5 @@
 == Documentation
 
-[icon="warning.png"]
-WARNING: Website under construction
-
 This documentation section contains documentation for both users and developers.
 
 === User

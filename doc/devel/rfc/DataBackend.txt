@@ -72,4 +72,4 @@ Developement takes place in the repo now
  -- link:ct[] [[DateTime(2007-06-27T16:14:56Z)]]
 
 ''''
-Back to link:Lumiera/DesignProcess[]
+Back to link:/documentation/devel/rfc.html[Lumiera Design Process overview]

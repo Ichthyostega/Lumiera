@@ -118,4 +118,4 @@ Comments
   in the git repository (and we already started to define things there) see
   ./admin/treeinfo.sh  -- link:ct[] [[DateTime(2007-06-27T16:01:52Z)]]
 
-Back to link:Lumiera/DesignProcess[]
+Back to link:/documentation/devel/rfc.html[Lumiera Design Process overview]
