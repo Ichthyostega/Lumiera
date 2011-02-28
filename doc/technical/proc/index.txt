@@ -1,5 +1,28 @@
 Technical Documentation: Proc-Layer
 ===================================
 
-Eventually, this will have technical documentation for the Proc-Layer.
+Eventually, this section will hold technical documentation for the Proc-Layer.
+
+Proc-Layer TiddlyWiki
+---------------------
+Hermann Voßeler, core developer of the Proc-Layer uses an separate embedded wiki
+for his day-to-day design sketches, notes and also for the more persistent planning.
+This *TiddlyWiki* is a nifty JavaScript wiki embedded in a single HTML page; as such
+it lives right within the source tree, where it can be worked on alongside with the
+code. Besides the actual planning and descriptions, this wiki also links to the
+UML diagrams created with *BOUML* during the ongoing planning and design.
+
+This setup started as a temporary solution -- but as uWiki is not expected to come
+to life soon, the current website can't serve as replacement for a real wiki, an
+we'll stick to that situation for the time being. As the content in the TiddlyWiki
+becomes more mature and stable, it will be moved over into this section here.
+
+While additions to the TiddlyWiki generally propagate to Lumiera/Master through
+the normal merges, we've put up a rsynced version of the TiddlyWiki online for
+direct access (of course read-only).
+
+-> access the Proy-Layer link:http://lumiera.org/wiki/renderengine.html[TiddlyWiki online here]
+
+
+
 
