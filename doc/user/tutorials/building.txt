@@ -21,7 +21,6 @@ libraries to link against. Usually, these packages are named `-devel` or `-dev`
 
 On Hardy you need also:
 
- * libglade2-dev
  * libgtkmm-2.4-dev
  * libxv-dev
 
@@ -31,7 +30,7 @@ with:
 ------------------------------------------------------------
 sudo apt-get install build-essential autoconf git-core libboost-dev \
 libboost-program-options-dev libboost-regex-dev libgavl-dev libgdl-1-dev \
-libglade2-dev libgtkmm-2.4-dev librsvg2-dev libtool libxv-dev scons valgrind
+libgtkmm-2.4-dev librsvg2-dev libtool libxv-dev scons valgrind
 ------------------------------------------------------------
 
 Build directory

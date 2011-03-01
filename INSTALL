@@ -22,7 +22,6 @@ You need to have:
 
 For Ubuntu Hardy also:
 
-  * libglade2-dev
   * libgdl-1-dev
   * libgtkmm-2.4-dev
   * libxv-dev
