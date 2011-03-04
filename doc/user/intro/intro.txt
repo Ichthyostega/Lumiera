@@ -1,6 +1,7 @@
 Lumiera (as seen) from Outer Space
 ==================================
-Christian Thäter <ct@pipapo.org>
+:Author: Christian Thäter ct@pipapo.org
+:Date: Summer 2010
 
 
 [abstract]

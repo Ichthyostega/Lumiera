@@ -6,8 +6,8 @@ Various details, documentation and other pieces of information regarding
 the infrastructure of the Lumiera project. This includes the infrastructure
 used for building and maintaining documentation and website.
 
- * see link::../build/index.html[separate page for the Buildsystem]
- * generating the link::MenuGen.html[navigation menu] for the website
+ * see link:../build/index.html[separate page for the Buildsystem]
+ * generating the link:MenuGen.html[navigation menu] for the website
 
 
 

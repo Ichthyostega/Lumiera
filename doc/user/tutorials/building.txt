@@ -193,3 +193,12 @@ cd bin
 You should see something like (screenshot from 1/2009):
 
 image:/media/img/design.gui/screenshot090124-resources.jpg[]
+
+
+What's next?
+------------
+If you're a coder, maybe you've found something to improve...? +
+Contributing to Lumiera is made easy, thanks to *Git*
+
+-> Tutorial link:contributing.html[Contributing to Lumiera coding]
+
