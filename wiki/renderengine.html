@@ -6618,8 +6618,8 @@ Thus no server and no network connection is needed. Simply open the file in your
  * see [[Homepage|http://tiddlywiki.com]], [[Wiki-Markup|http://tiddlywiki.org/wiki/TiddlyWiki_Markup]]
 </pre>
 </div>
-<div title="TimeMutation" modifier="Ichthyostega" modified="201101232133" created="201101231344" tags="spec discuss draft" changecount="20">
-<pre>Simple time points are just like values and thus easy to change. The difficulties arise when time values are to be //quantised to an existing time grid.// The first noticeable point to note is that now the effect can be decoupled from the cause. Small changes below the threshold might be accumulated, and a tiny change might trigger a jump to the next grid point. While this might be annoying, the yet more complex questions arise when we acknowledge that the change itself might be related to a time grid.
+<div title="TimeMutation" modifier="Ichthyostega" modified="201103070149" created="201101231344" tags="spec discuss draft" changecount="26">
+<pre>Simple time points are just like values and thus easy to change. The difficulties arise when time values are to be //quantised to an existing time grid.// The first relevant point to note is that for quantised time values, the effect of a change can be disproportional to the cause. Small changes below the threshold might be accumulated, and a tiny change might trigger a jump to the next grid point. While this might be annoying, the yet more complex questions arise when we acknowledge that the amount of the change itself might be related to a time grid.
 
 The problem with modification of quantised values highlights an inner contradiction or conflicting goals within the design
 * the whole system should fit in naturally and just feel like using raw time values
@@ -6631,7 +6631,7 @@ At this point, we should recall some general assumptions within Lumiera
 * there are no hard-coded defaults regarding the specific nature of the manipulated objects (format, number of channels)
 * there is not &quot;the&quot; timeline, but we have multiple timelines
 * sequences might be nesetd and thus be brought into a different context
-* framerate is a property of the stream type of a channel; it depends on the output. Ther is no global format or framerate.
+* framerate is a property of the stream type of a channel; it depends on the output. There is no global format or framerate.
 
 !Usage situations
 The complexity arises from the mixture of several concerns, which often blend into a single usage situation.
@@ -6680,7 +6680,10 @@ As rationale, consider the following
 * time values are immutable (as far as possible)
 * only allow to assign a completely new setting
 * only accept raw time values for redefining a quantised interval
-* only accept an abstract //modification object.//
+* only accept an abstract //modification object.// &amp;rarr;{{red{No! any kind of abstraction requires an indirection}}}
+
+{{red{Question 3/11}}} -- can we avoid accepting mutations for Time (and thus only mutate ~TimeSpan)?
+Rationale: allowing mutations for Time bears the danger of making ~TimeVar obsolete
 
 !!!usage considerations
 Question is: how fine grained and configurable needs this to be?
