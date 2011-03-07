@@ -217,8 +217,8 @@ def generate(env):
         'Doxygen': doxyfile_builder,
     })
     
-    env.AppendUnique(
-        DOXYGEN = 'doxygen',
+    env.Replace(
+        DOXYGEN = 'doxygen'
     )
 
 

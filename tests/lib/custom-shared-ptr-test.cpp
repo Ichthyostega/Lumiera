@@ -2,7 +2,7 @@
   CustomSharedPtr(Test)  -  ref counting, equality and comparisons
 
   Copyright (C)         Lumiera.org
-    2008-2010,          Hermann Vosseler <Ichthyostega@web.de>
+    2008, 2010,         Hermann Vosseler <Ichthyostega@web.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as

@@ -5,7 +5,7 @@ diagrams
   objectdiagram_ref 138885 // ModelAssetRelations
     730 488 100 4 0 0
   active  classdiagram_ref 142725 // Time flavours
-    595 629 100 4 0 0
+    595 646 100 4 0 0
 end
 show_stereotypes
 selected 

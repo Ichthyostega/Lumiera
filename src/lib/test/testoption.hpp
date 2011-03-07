@@ -53,7 +53,7 @@ namespace test {
   class TestOption : private boost::noncopyable
     {
     public:
-      TestOption (util::Cmdline& cmdline);
+      TestOption (lib::Cmdline& cmdline);
       const string getTestgroup ();
       const string getTestID ();
       bool getDescribe ();

@@ -1,5 +1,5 @@
 /*
-  window-manager.cpp  -  Defines the global UI Manager class
+  WindowManager  -  Global UI Manager class
 
   Copyright (C)         Lumiera.org
     2008,               Joel Holdsworth <joel@airwebreathe.org.uk>
@@ -20,9 +20,16 @@
 
 * *****************************************************/
 
-#include "window-manager.hpp"
-#include "include/logging.h"
-#include "workspace/workspace-window.hpp"
+
+#include "gui/window-manager.hpp"
+#include "gui/gtk-lumiera.hpp"
+#include "gui/workspace/workspace-window.hpp"
+#include "lib/searchpath.hpp"
+#include "lib/util.hpp"
+
+#include <boost/filesystem.hpp>
+
+using util::cStr;
 
 using namespace Gtk;
 using namespace Glib;
@@ -30,21 +37,37 @@ using namespace boost;
 using namespace std;
 using namespace gui::workspace;
 
+namespace fsys = boost::filesystem;
+
+
 namespace gui {
   
 IconSize WindowManager::GiantIconSize = ICON_SIZE_INVALID;
 IconSize WindowManager::MenuIconSize = ICON_SIZE_INVALID;
 
+
 void
-WindowManager::init()
+WindowManager::init (string const& iconPath, string const& resourcePath)
 {
+  this->iconSearchPath_ = iconPath;
+  this->resourceSerachPath_ = resourcePath;
+  
   register_app_icon_sizes();  
   register_stock_items();
 }
 
+
 void
-WindowManager::new_window(gui::model::Project &source_project,
-  gui::controller::Controller &source_controller)
+WindowManager::setTheme (string const& stylesheetName)
+{
+  gtk_rc_parse (cStr(lib::resolveModulePath (stylesheetName, resourceSerachPath_)));
+  gtk_rc_reset_styles (gtk_settings_get_default());
+}
+
+
+void
+WindowManager::newWindow (gui::model::Project& source_project,
+                          gui::controller::Controller &source_controller)
 { 
   shared_ptr<WorkspaceWindow> window(
     new WorkspaceWindow(source_project, source_controller));
@@ -60,25 +83,9 @@ WindowManager::new_window(gui::model::Project &source_project,
   update_close_window_in_menus();
 }
 
-bool
-WindowManager::set_theme(Glib::ustring path)
-{
-  if(access(path.c_str(), R_OK))
-    {
-      // gdk defines 'ERROR' need to prefix it with 'NOBUG_' here
-      NOBUG_ERROR(gui, "WindowManger: Unable to load rc file \"%s\"",
-        path.c_str());
-      return false;        
-    }
-  
-  gtk_rc_parse(path.c_str());
-  gtk_rc_reset_styles (gtk_settings_get_default());
-
-  return true;
-}
 
 bool
-WindowManager::on_window_closed(GdkEventAny* event)
+WindowManager::on_window_closed (GdkEventAny* event)
 { 
   REQUIRE(event);
   REQUIRE(event->window);
@@ -86,7 +93,7 @@ WindowManager::on_window_closed(GdkEventAny* event)
   list< shared_ptr<WorkspaceWindow> >::iterator iterator = 
     windowList.begin();
   
-  while(iterator != windowList.end())
+  while (iterator != windowList.end())
     {
       shared_ptr<WorkspaceWindow> workspace_window(*iterator);
       REQUIRE(workspace_window);
@@ -102,7 +109,7 @@ WindowManager::on_window_closed(GdkEventAny* event)
         iterator++;
     }
     
-  if(windowList.empty())
+  if (windowList.empty())
     {
       // All windows have been closed - we should exit
       Main *main = Main::instance();
@@ -115,6 +122,7 @@ WindowManager::on_window_closed(GdkEventAny* event)
   // Unless this is false, the window won't close
   return false;
 }
+
 
 void
 WindowManager::update_close_window_in_menus()
@@ -134,10 +142,11 @@ WindowManager::update_close_window_in_menus()
     }
 }
 
+
 Cairo::RefPtr<Cairo::SolidPattern>
-WindowManager::read_style_colour_property (
-  Gtk::Widget &widget, const gchar *property_name,
-  guint16 red, guint16 green, guint16 blue)
+WindowManager::read_style_colour_property (Gtk::Widget& widget,
+                                           const gchar *property_name,
+                                           guint16 red, guint16 green, guint16 blue)
 {
   REQUIRE (property_name);
 
@@ -163,6 +172,7 @@ WindowManager::read_style_colour_property (
   return pattern;
 }
 
+
 void
 WindowManager::register_app_icon_sizes()
 {
@@ -172,34 +182,35 @@ WindowManager::register_app_icon_sizes()
     MenuIconSize = IconSize::register_new ("menu", 16, 16);
 }
 
+
 void
 WindowManager::register_stock_items()
 {
   Glib::RefPtr<IconFactory> factory = IconFactory::create();
   
-  add_stock_icon_set(factory, "panel-assets", "panel_assets", _("_Assets"));
-  add_stock_icon_set(factory, "panel-timeline", "panel_timeline", _("_Timeline"));
-  add_stock_icon_set(factory, "panel-viewer", "panel_viewer", _("_Viewer"));
+  add_stock_icon_set(factory, "panel-assets",   "panel_assets",  _("_Assets"));
+  add_stock_icon_set(factory, "panel-timeline", "panel_timeline",_("_Timeline"));
+  add_stock_icon_set(factory, "panel-viewer",   "panel_viewer",  _("_Viewer"));
   
-  add_stock_icon_set(factory, "window-new", "new_window", _("New _Window"));
+  add_stock_icon_set(factory, "window-new",     "new_window",    _("New _Window"));
   
-  add_stock_icon_set(factory, "tool-arrow", "tool_arrow", _("_Arrow"));
-  add_stock_icon_set(factory, "tool-i-beam", "tool_i_beam", _("_I-Beam"));
+  add_stock_icon_set(factory, "tool-arrow",     "tool_arrow",    _("_Arrow"));
+  add_stock_icon_set(factory, "tool-i-beam",    "tool_i_beam",   _("_I-Beam"));
   
-  add_stock_icon_set(factory, "track-disabled", "track_disabled", _("Track Disabled"));
-  add_stock_icon_set(factory, "track-enabled", "track_enabled", _("Track Enabled"));
-  add_stock_icon_set(factory, "track-locked", "track_locked", _("Track Locked"));
-  add_stock_icon_set(factory, "track-unlocked", "track_unlocked", _("Track Unlocked")); 
+  add_stock_icon_set(factory, "track-disabled", "track_disabled",_("Track Disabled"));
+  add_stock_icon_set(factory, "track-enabled",  "track_enabled", _("Track Enabled"));
+  add_stock_icon_set(factory, "track-locked",   "track_locked",  _("Track Locked"));
+  add_stock_icon_set(factory, "track-unlocked", "track_unlocked",_("Track Unlocked")); 
 
   factory->add_default(); //Add factory to list of factories.
 }
 
+
 bool
-WindowManager::add_stock_icon_set(
-  const Glib::RefPtr<IconFactory>& factory,
-  const Glib::ustring& icon_name,
-  const Glib::ustring& id,
-  const Glib::ustring& label)
+WindowManager::add_stock_icon_set (Glib::RefPtr<IconFactory> const& factory,
+                                   cuString& icon_name,
+                                   cuString& id,
+                                   cuString& label)
 {
   Gtk::IconSet icon_set;
   
@@ -220,7 +231,7 @@ WindowManager::add_stock_icon_set(
   if(no_icons)
     {
       // No icons were loaded
-      ERROR(gui, "Unable to load icon \"%s\"", icon_name.c_str());
+      ERROR (gui, "Unable to load icon '%s'", cStr(icon_name));
       return false;
     }
   
@@ -231,31 +242,36 @@ WindowManager::add_stock_icon_set(
   return true;
 }
 
+
 bool
-WindowManager::add_stock_icon(Gtk::IconSet &icon_set,
-  const Glib::ustring& icon_name, Gtk::IconSize size, bool wildcard)
+WindowManager::add_stock_icon (Gtk::IconSet &icon_set,
+                               cuString& icon_name,
+                               Gtk::IconSize size,
+                               bool wildcard)
 { 
   // Try the icon theme  
   if(add_theme_icon_source(icon_set, icon_name, size, wildcard))
     return true;
-    
-  // Try the ~/.lumiera/icons folder
-  if(add_non_theme_icon_source(icon_set, ustring::compose("%1/%2",
-    GtkLumiera::get_home_data_path(), ustring("icons")),
-    icon_name, size, wildcard))
-    return true;
   
-  // Try the local directory
-  if(add_non_theme_icon_source(
-    icon_set, get_current_dir(), icon_name, size, wildcard))
-    return true;
-    
-  return false;
+  // Try to resolve the icon via the configured search path
+  lib::SearchPathSplitter iconLocations (iconSearchPath_);
+  while (iconLocations)
+    if (add_non_theme_icon_source (icon_set
+                                  ,iconLocations.next()
+                                  ,icon_name
+                                  ,size
+                                  ,wildcard))
+      return true;
+  
+  return false; // icon not found
 }
 
+
 bool
-WindowManager::add_theme_icon_source(Gtk::IconSet &icon_set,
-  const Glib::ustring& icon_name, Gtk::IconSize size, bool wildcard)
+WindowManager::add_theme_icon_source (Gtk::IconSet &icon_set,
+                                      cuString& icon_name,
+                                      Gtk::IconSize size,
+                                      bool wildcard)
 {
   // Get the size
   int width = 0, height = 0;
@@ -268,22 +284,19 @@ WindowManager::add_theme_icon_source(Gtk::IconSet &icon_set,
   REQUIRE(theme);
   
   TODO ("find out how IconInfo could be made const. For example, GTKmm 2.10.10 is missing the const on operator bool() in iconinfo.h");
-  IconInfo info = theme->lookup_icon(icon_name, width,
-    (IconLookupFlags)0);
-  if(info)
-    {
-      const ustring path(info.get_filename());
-      if(add_stock_icon_from_path(path, icon_set, size, wildcard))
-        return true;
-    }
-    
-  return false;
+  IconInfo info = theme->lookup_icon(icon_name, width, (IconLookupFlags)0);
+  
+  if (!info) return false; // unable to resolve Icon
+
+  cuString path(info.get_filename());
+  return add_stock_icon_from_path(path, icon_set, size, wildcard);
 }
 
+
 bool
-WindowManager::add_non_theme_icon_source(Gtk::IconSet &icon_set,
-  const Glib::ustring& base_dir, const Glib::ustring& icon_name,
-  Gtk::IconSize size, bool wildcard)
+WindowManager::add_non_theme_icon_source (Gtk::IconSet &icon_set,
+                                          cuString& base_dir, cuString& icon_name,
+                                          Gtk::IconSize size, bool wildcard)
 {
   // Get the size
   int width = 0, height = 0;
@@ -292,33 +305,37 @@ WindowManager::add_non_theme_icon_source(Gtk::IconSet &icon_set,
   REQUIRE(width > 0);
   
   // Try to load the icon
-  const ustring path(ustring::compose("%1/%2x%3/%4.png",
+  cuString path(ustring::compose("%1/%2x%3/%4.png",
     base_dir, width, height, icon_name)); 
   return add_stock_icon_from_path(path, icon_set, size, wildcard);
 }
 
+
 bool
-WindowManager::add_stock_icon_from_path(Glib::ustring path,
-  Gtk::IconSet &icon_set, Gtk::IconSize size, bool wildcard)
+WindowManager::add_stock_icon_from_path (string path,
+                                         Gtk::IconSet &icon_set,
+                                         Gtk::IconSize size,
+                                         bool wildcard)
 {
-  Gtk::IconSource source;
+  if (!fsys::exists (path)) return false;
   
-  try
-    {      
-      // This throws an exception if the file is not found:
+  try {      
+      Gtk::IconSource source;
       source.set_pixbuf(Gdk::Pixbuf::create_from_file(path));
+      source.set_size_wildcarded(wildcard);
+      source.set_size(size);
+      
+      icon_set.add_source(source);
+      
+      return true;
     }
-  catch(const Glib::Exception& ex)
+  
+  catch(Glib::Exception const& ex)
     {
+      WARN (gui, "Failure when accessing icon '%s'. Problem: %s", cStr(path), cStr(ex.what()));
       return false;
     }
-  
-  source.set_size(size);
-  source.set_size_wildcarded(wildcard);
-
-  icon_set.add_source(source);
-  
-  return true;
 }
+
 
 }   // namespace gui

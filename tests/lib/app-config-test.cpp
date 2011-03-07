@@ -23,37 +23,40 @@
 
 
 #include "lib/test/run.hpp"
+#include "include/config-facade.h"
+#include "lib/symbol.hpp"
 #include "lib/util.hpp"
 
-#include "common/appstate.hpp"
-
+using lib::Literal;
+using util::isnil;
 
 
 
 namespace lumiera {
-  namespace test {
-    
+namespace test {
   
-    class Appconfig_test : public Test
-      {
-        virtual void run (Arg arg)
-          {
-            testAccess("version");
-            UNIMPLEMENTED ("reorganise config access for C++");
-          }
-        
-        /** @test accessing a value from lumiera::AppState */
-        void testAccess (const string& key)
+  
+  class Appconfig_test : public Test
+    {
+      virtual void
+      run (Arg)
         {
-//        string ver = lumiera::AppState::get(key);
-//        CHECK ( !util::isnil(ver));
+          fetchSetupValue();
         }
-      };
-    
-      LAUNCHER (Appconfig_test, "function common");
-
       
-  } // namespace test
-    
-} // namespace util
+      
+      /** @test accessing a value from setup.ini */
+      void fetchSetupValue ()
+      {
+        Literal key("Lumiera.version");
+        string ver = Config::get(key);
+        CHECK (!isnil(ver));
+      }
+    };
+  
+  
+  LAUNCHER (Appconfig_test, "function common");
+  
+  
+}} // namespace util::test
 

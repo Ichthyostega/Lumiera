@@ -22,19 +22,24 @@
 
 
 #include "lib/test/run.hpp"
+#include "lib/test/test-helper.hpp"
 #include "lib/time/timevalue.hpp"
+#include "lib/time/display.hpp"
 #include "lib/util.hpp"
 
 #include <boost/lexical_cast.hpp>
-//#include <iostream>
+#include <iostream>
 //#include <cstdlib>
+#include <string>
 
 using boost::lexical_cast;
 using util::isnil;
 //using std::rand;
-//using std::cout;
-//using std::endl;
+using std::cout;
+using std::endl;
+using std::string;
 
+using lumiera::error::LUMIERA_ERROR_BOTTOM_VALUE;
 
 namespace lib {
 namespace time{
@@ -53,7 +58,7 @@ namespace test{
       random_or_get (Arg arg)
         {
           if (isnil(arg))
-            return (rand() % 10000);
+            return 1 + (rand() % 10000);
           else
             return lexical_cast<gavl_time_t> (arg[1]);
         }
@@ -66,8 +71,11 @@ namespace test{
           
           checkBasicTimeValues (ref);
           checkMutableTime (ref);
-          checkComparisons (ref);
-          checkComponentAccess();
+          checkTimeConveniance (ref);
+          verify_invalidFramerateProtection();
+          createOffsets (ref);
+          buildDuration (ref);
+          buildTimeSpan (ref);
         } 
       
       
@@ -106,6 +114,11 @@ namespace test{
         }
       
       
+      /** @test time variables can be used for the typical calculations,
+       *        like summing and subtracting values, as well as multiplication
+       *        with a scale factor. Additionally, the raw time value is
+       *        accessible by conversion.
+       */
       void
       checkMutableTime (TimeValue org)
         {
@@ -134,20 +147,165 @@ namespace test{
           gavl_time_t raw (var);
           CHECK (raw == org);
           CHECK (raw >  org - two);
+          
+          // unary minus will flip around origin
+          CHECK (zero == -var + var);
+          CHECK (zero != -var);
+          CHECK (var  == org);  // unaltered
+        }
+      
+      
+      /** @test additional convenience shortcuts supported
+       *        especially by the canonical Time values.
+       */
+      void
+      checkTimeConveniance (TimeValue org)
+        {
+          Time o1(org);
+          TimeVar v(org);
+          Time o2(v);
+          CHECK (o1 == o2);
+          CHECK (o1 == org);
+          
+          // integer interpreted as second
+          Time t1(1);
+          CHECK (t1 == TimeValue(GAVL_TIME_SCALE));
+          
+          // create from fractional seconds
+          FSecs halve(1,2);
+          CHECK (0.5 == boost::rational_cast<double> (halve));
+          Time th(halve);
+          CHECK (th == TimeValue(GAVL_TIME_SCALE/2));
+          
+          Time tx1(500,0);
+          CHECK (tx1 == th);
+          Time tx2(1,2);
+          CHECK (tx2 == TimeValue(2.001*GAVL_TIME_SCALE));
+          Time tx3(1,1,1,1);
+          CHECK (tx3 == TimeValue(GAVL_TIME_SCALE*(0.001 + 1 + 60 + 60*60)));
+          
+          CHECK ("1:01:01.001" == string(tx3));
+          
+          // create time variable on the fly....
+          CHECK (th+th == t1);
+          CHECK (t1-th == th);
+          CHECK (((t1-th)*=2) == t1);
+          CHECK (th-th == Time(0));
+          
+          // that was indeed a temporary and didn't affect the originals
+          CHECK (t1 == TimeValue(GAVL_TIME_SCALE));
+          CHECK (th == TimeValue(GAVL_TIME_SCALE/2));
         }
       
       
       void
-      checkComparisons (TimeValue org)
+      verify_invalidFramerateProtection()
         {
+          VERIFY_ERROR (BOTTOM_VALUE, FrameRate infinite(0) );
+          VERIFY_ERROR (BOTTOM_VALUE, FrameRate infinite(0,123) );
+          
+          CHECK (isnil (Duration (0, FrameRate::PAL)));
+          CHECK (isnil (Duration (0, FrameRate(123))));
         }
       
       
       void
-      checkComponentAccess()
+      createOffsets (TimeValue org)
         {
+          TimeValue four(4);
+          TimeValue five(5);
+          
+          Offset off5 (five);
+          CHECK (0 < off5);
+          
+          TimeVar point(org);
+          point += off5;
+          CHECK (org < point);
+          
+          Offset reverse(point,org);
+          CHECK (reverse < off5);
+          CHECK (reverse.abs() == off5);
+          
+          CHECK (0 == off5 + reverse);
+          
+          // chaining and copy construction
+          Offset off9 (off5 + Offset(four));
+          CHECK (9 == off9);
+          // simple linear combinations
+          CHECK (7 == -2*off9 + off5*5);
         }
       
+      
+      void
+      buildDuration (TimeValue org)
+        {
+          TimeValue zero;
+          TimeVar point(org);
+          point += TimeValue(5);
+          CHECK (org < point);
+          
+          Offset backwards(point,org);
+          CHECK (backwards < zero);
+          
+          Duration distance(backwards);
+          CHECK (distance > zero);
+          CHECK (distance == backwards.abs());
+          
+          Duration len1(Time(23,4,5,6));
+          CHECK (len1 == Time(FSecs(23,1000)) + Time(4 + 5*60 + 6*3600));
+          
+          Duration len2(Time(-10)); // negative specs...
+          CHECK (len2 == Time(10));//
+          CHECK (len2 > zero);    //   will be taken absolute
+          
+          Duration unit(50, FrameRate::PAL);
+          CHECK (Time(2) == unit);              // duration of 50 frames at 25fps is... (guess what)
+          
+          CHECK (FrameRate::PAL.duration() == Time(FSecs(1,25)));
+          CHECK (FrameRate::NTSC.duration() == Time(FSecs(1001,30000)));
+          cout << "NTSC-Framerate = " << FrameRate::NTSC.asDouble() << endl;
+          
+          CHECK (zero == Duration::NIL);
+          CHECK (isnil (Duration::NIL));
+          
+          // assign to variable for calculations
+          point = backwards;
+          point *= 2;
+          CHECK (point < zero);
+          CHECK (point < backwards);
+          
+          CHECK (distance + point < zero);      // using the duration as offset
+          CHECK (distance == backwards.abs()); //  while this didn't alter the duration as such
+        }
+      
+      
+      void
+      buildTimeSpan (TimeValue org)
+        {
+          TimeValue zero;
+          TimeValue five(5);
+          
+          TimeSpan interval (Time(org), Duration(Offset (org,five)));
+          
+          // the time span behaves like a time
+          CHECK (org == interval);
+          CHECK (string(Time(org)) == string(interval));
+          
+          // can get the length by direct conversion
+          Duration theLength(interval);
+          CHECK (theLength == Offset(org,five).abs());
+          
+          Time endpoint = interval.end();
+          TimeSpan successor (endpoint, Duration(Time(2)));
+          
+          CHECK (Offset(interval,endpoint) == Offset(org,five).abs());
+          CHECK (Offset(endpoint,successor.end()) == Duration(successor));
+          
+          cout <<   "Interval-1: " << interval 
+               << "  Interval-2: " << successor 
+               << "  End point: "  << successor.end()
+               << endl; 
+        }
     };
   
   

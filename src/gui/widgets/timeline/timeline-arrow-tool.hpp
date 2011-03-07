@@ -27,52 +27,63 @@
 #define TIMELINE_ARROW_TOOL_HPP
 
 #include <gtkmm.h>
+
 #include "timeline-tool.hpp"
+
+#include "gui/widgets/timeline-widget.hpp"
+#include "timeline-body.hpp"
+#include "timeline-track.hpp"
 
 namespace gui {
 namespace widgets {
 namespace timeline {
 
-/**
- * A helper class to implement the timeline i-beam tool
- */
-class ArrowTool : public Tool
-{
-public:
   /**
-   * Constructor
-   * @param timeline_body The owner timeline body object
+   * A helper class to implement the timeline arrow tool
    */
-  ArrowTool(TimelineBody &timeline_body);
+  class ArrowTool : public Tool
+  {
+  public:
+    /**
+     * Constructor
+     * @param timelineBody The owner timeline body object
+     */
+    ArrowTool(TimelineBody &timelineBody);
 
-  /**
-   * Gets the type of tool represented by this class
-   */
-  ToolType get_type() const;
+    /**
+     * Gets the type of tool represented by this class
+     */
+    ToolType get_type() const;
   
-protected:
+  protected:
 
-  /**
-   * Gets the cursor to display for this tool at this moment.
-   */
-  Gdk::Cursor get_cursor() const;
+    /**
+     * Gets the cursor to display for this tool at this moment.
+     */
+    Gdk::Cursor get_cursor() const;
   
-protected:
-  /**
-   * The event handler for button press events.
-   */
-  void on_button_press_event(GdkEventButton* event);
+    /**
+     * The event handler for button press events.
+     */
+    void on_button_press_event(GdkEventButton* event);
   
-  /**
-   * The event handler for button release events.
-   */
-  void on_button_release_event(GdkEventButton* event);
+    /**
+     * The event handler for button release events.
+     */
+    void on_button_release_event(GdkEventButton* event);
   
-  /**
-   * The event handler for mouse move events.
-   */
-  void on_motion_notify_event(GdkEventMotion *event);
-};
+    /**
+     * The event handler for mouse move events.
+     */
+    void on_motion_notify_event(GdkEventMotion *event);
+
+  private:
+
+    boost::shared_ptr<timeline::Track>
+    getHoveringTrack ();
+
+    bool selectionRectangleActive;
+  };
 
 }   // namespace timeline
 }   // namespace widgets

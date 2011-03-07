@@ -34,10 +34,13 @@ extern "C" {
 #include "common/plugin.h"
 }
 
+#include "lib/symbol.hpp"
 #include "lib/util.hpp"
-#include "include/configfacade.hpp" //////////TODO: temp hack to force configfacade.o to be linked in
+
 
 using util::cStr;
+using lib::Literal;
+
 
 
 
@@ -75,7 +78,8 @@ namespace lumiera {
    *  client codes POV it just behaves like intended). 
    */
   AppState::AppState()
-    : subsystems_(0)
+    : setup_(LUMIERA_LOCATION_OF_BOOTSTRAP_INI)
+    , subsystems_(0)
     , emergency_(false)
     , core_up_ (false)
   { }
@@ -93,6 +97,13 @@ namespace lumiera {
   
   
   
+  string
+  AppState::fetchSetupValue (Literal key)
+  {
+    return setup_.get(key).as<string>();
+  }
+
+  
   
   
   
@@ -100,8 +111,8 @@ namespace lumiera {
   
   
 #define _THROW_IF \
-  if (lumiera_error_peek()) \
-    throw error::Fatal (lumiera_error());
+  maybeThrow<error::Fatal> ("internal failure while initialising the "\
+                            "Lumiera application framework");
   
   
   
@@ -185,8 +196,6 @@ namespace lumiera {
   ExitCode
   AppState::abort (lumiera::Error& problem)
   {
-    
-    INFO (common, "Address of Config Facade = %p", &lumiera::Config::instance());   //////////TODO: a temp hack to force configfacade.cpp to be linked into lumiera exe. 
     
     ERROR (common, "Aborting Lumiera after unhandled error: %s", cStr(problem.what()));
     

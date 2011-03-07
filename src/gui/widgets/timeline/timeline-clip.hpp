@@ -22,12 +22,13 @@
 /** @file widgets/timeline/timeline-clip.hpp
  ** This file contains the definition of timeline clip object
  */
- 
 
 #include "gui/gtk-lumiera.hpp"
 #include "gui/model/clip.hpp"
-#include "timeline-view-window.hpp"
 #include "include/logging.h"
+
+#include "draw-strategy.hpp"
+#include "timeline-entity.hpp"
 
 #ifndef TIMELINE_CLIP_HPP
 #define TIMELINE_CLIP_HPP
@@ -36,18 +37,36 @@ namespace gui {
 namespace widgets {
 namespace timeline {
 
-class Clip : public model::Clip
-{
-public:
-  Clip(boost::shared_ptr<model::Clip> clip);
+  class Clip : public Entity
+  {
+  public:
+    Clip(boost::shared_ptr<model::Clip> clip,
+         boost::shared_ptr<timeline::DrawStrategy> drawStrategy);
 
-  void draw_clip(Cairo::RefPtr<Cairo::Context> cairo,
-    TimelineViewWindow* const window) const;
+    gavl_time_t
+    getBegin () const;
 
-private:
+    gavl_time_t
+    getEnd () const;
 
-  boost::shared_ptr<model::Clip> model_clip;
-};
+    std::string
+    getName () const;
+
+    /**
+     * Sets the selected status of the clip.
+     */
+    void
+    setSelected (bool state);
+
+  private:
+
+    boost::shared_ptr<model::Clip> modelClip;
+
+    /**
+     * True when this clip is selected in the GUI.
+     */
+    bool selected;
+  };
 
 }   // namespace timeline
 }   // namespace widgets

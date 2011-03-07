@@ -1,0 +1,173 @@
+/*
+  TimeGrid  -  reference scale for quantised time
+
+  Copyright (C)         Lumiera.org
+    2010,               Hermann Vosseler <Ichthyostega@web.de>
+
+  This program is free software; you can redistribute it and/or
+  modify it under the terms of the GNU General Public License as
+  published by the Free Software Foundation; either version 2 of
+  the License, or (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with this program; if not, write to the Free Software
+  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+
+* *****************************************************/
+
+
+#include "proc/asset/meta/time-grid.hpp"
+#include "proc/asset/entry-id.hpp"
+#include "proc/assetmanager.hpp"
+#include "lib/time/quantiser.hpp"
+#include "lib/time/timevalue.hpp"
+#include "lib/time/display.hpp"
+#include "lib/advice.hpp"
+#include "lib/util.hpp"
+//#include "include/logging.h"
+
+#include <boost/format.hpp>
+#include <string>
+
+using util::cStr;
+using util::isnil;
+using boost::format;
+using boost::str;
+using std::string;
+
+
+namespace asset {
+namespace meta {
+  
+  namespace error = lumiera::error;
+  
+  
+ 
+  /** */
+  TimeGrid::TimeGrid (EntryID<TimeGrid> const& nameID)
+    : Meta (nameID.getIdent())
+    { }
+  
+  
+  using lib::time::Time;
+  using lib::time::TimeValue;
+  using lib::time::TimeSpan;
+  using lib::time::Duration;
+  using lib::time::Offset;
+  using lib::time::FSecs;
+  
+  using lib::time::PQuant;
+  using lib::time::Quantiser;
+  using lib::time::FixedFrameQuantiser;
+  using std::tr1::dynamic_pointer_cast;
+  
+  namespace advice = lib::advice;
+  
+  namespace {
+    
+    /** @internal helper to retrieve the smart-ptr
+     * from the AssetManager, then attach a further
+     * smart-ptr-to-Quantiser to that, which then can be
+     * published via the \link advice.hpp "advice system"\endlink
+     */
+    inline PGrid
+    publishWrapped (TimeGrid& newGrid)
+    {
+    PGrid gridImplementation = AssetManager::instance().wrap (newGrid);
+    PQuant quantiser (dynamic_pointer_cast<const Quantiser>(gridImplementation));
+    Literal bindingID (cStr(newGrid.ident.name));
+    
+    advice::Provision<PQuant>(bindingID).setAdvice(quantiser);
+    return gridImplementation;
+    }
+    
+
+  }
+  
+  /** 
+   * TimeGrid implementation: a trivial time grid,
+   * starting at a given point in time and using a
+   * constant grid spacing.
+   * 
+   * @note The actual implementation is mixed in,
+   * together with the Quantiser API; the intended use
+   * of this implementation is to publish it via the advice
+   * framework, when building and registering the meta asset. 
+   */
+  class SimpleTimeGrid
+    : public TimeGrid
+    , public FixedFrameQuantiser
+    {
+      
+    public:
+      SimpleTimeGrid (Time start, Duration frameDuration, EntryID<TimeGrid> const& name)
+        : TimeGrid (name)
+        , FixedFrameQuantiser(frameDuration,start)
+        { }
+      
+      SimpleTimeGrid (Time start, FrameRate frames_per_second, EntryID<TimeGrid> const& name)
+        : TimeGrid (name)
+        , FixedFrameQuantiser(frames_per_second,start)
+        { }
+    };
+  
+    
+  
+  /** Setup of a TimeGrid: validate the settings configured into this builder instance,
+   *  then decide on the implementation strategy for the time grid. Convert the given
+   *  frames per second into an appropriate gridSpacing time and build a suitable
+   *  name-ID to denote the TimeGrid-meta-Asset to be built. 
+   * @return shared_ptr holding onto the new asset::Meta, which has already been
+   *         registered with the AssetManager.
+   * @throw  error::Config in case of invalid frames-per-second. The AssetManager
+   *         might raise further exception when asset registration fails.
+   * @todo currently (12/2010) the AssetManager is unable to detect duplicate assets.
+   *       Later on the intention is that in such cases, instead of creating a new grid
+   *       we'll silently return the already registered existing and equivalent grid.
+   */
+  P<TimeGrid>
+  Builder<TimeGrid>::commit()
+  {
+    if (predecessor_)
+      throw error::Invalid("compound and variable time grids are a planned feature"
+                          , error::LUMIERA_ERROR_UNIMPLEMENTED);
+    ENSURE (fps_, "infinite grid was not properly detected by FrameRate ctor");
+    
+    if (isnil (id_))
+      {
+        format gridIdFormat("grid(%f_%d)");
+        id_ = str(gridIdFormat % fps_ % _raw(origin_));
+      }
+    EntryID<TimeGrid> nameID (id_);
+    
+    return publishWrapped (*new SimpleTimeGrid(origin_, fps_, nameID));
+  }
+  
+  
+  /* === TimeGrid shortcut builder functions === */
+  
+  PGrid
+  TimeGrid::build (Symbol gridID, FrameRate frames_per_second)
+  {
+    return build (gridID,frames_per_second, Time(0));
+  }
+  
+  
+  PGrid
+  TimeGrid::build (Symbol gridID, FrameRate frames_per_second, Time origin)
+  {
+    string name(gridID);
+    Builder<TimeGrid> spec(name);
+    spec.fps_ = frames_per_second;
+    spec.origin_ = origin;
+    
+    return spec.commit();
+  }
+  
+  
+}} // namespace asset::meta

@@ -2,7 +2,7 @@
   THREADWRAPPER.hpp  -  thin convenience wrapper for starting lumiera threads
 
   Copyright (C)         Lumiera.org
-    2008 - 2010         Hermann Vosseler <Ichthyostega@web.de>
+    2008, 2010          Hermann Vosseler <Ichthyostega@web.de>
                         Christian Thaeter <ct@pipapo.org>
 
   This program is free software; you can redistribute it and/or

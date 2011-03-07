@@ -20,16 +20,15 @@
 
 * *****************************************************/
 
-#include <cairomm-1.0/cairomm/cairomm.h>
+#include <cairomm/cairomm.h>
 
 #include "timeline-ruler.hpp"
 #include "gui/widgets/timeline-widget.hpp"
 #include "gui/window-manager.hpp"
 #include "gui/util/cairo-util.hpp"
 
-extern "C" {
 #include "lib/time.h"
-}
+
 
 using namespace Gtk;
 using namespace Cairo;

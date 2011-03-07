@@ -22,13 +22,27 @@
 
 
 /** @file typed-counter.hpp
- ** Creating sets of type-based contexts.
+ ** Creating series of type-based contexts.
  ** The idea is to get a "slot" for any given type, so we can build
- ** tables or families of implementations based on these types. Currently,
- ** the slot allocation is based on static variables and thus is global.
- ** This leads to a waste of slots, as the various clients of this service
- ** typically will utilise different sets of types.
- ** @todo WIP WIP... this is the first, preliminary version of a facility,
+ ** tables or families of implementations based on these types. Each of
+ ** those "slots" can be addressed by a distinct (compile time) type, but
+ ** at the same time holds a numeric ID (runtime assigned on demand). This
+ ** setup allows to bridge between metaprogramming and (runtime) dispatcher tables.
+ ** 
+ ** Each such series of type-id-slots is associated to a distinct usage context.
+ ** Those usage contexts are discerned by the template parameter \c XY. Each of
+ ** these usage contexts uses a separate numbering scheme on his own, i.e. every
+ ** new type encountered at runtime gets the next higher ID number (slot).
+ ** @warning the actual ID numbers depend on the sequence of first encountering
+ **          a given type. If this sequence isn't reproducible between runs, then
+ **          also the generated type-IDs aren't reproducible. Thus its advisable
+ **          \em not to rely on any specific numeric value here, but always just
+ **          access the service through the type slots.
+ ** @note Locking is based on a class lock per usage context, but a lock needs
+ **       only be acquired to allocate a new ID number (double checked locking).
+ **       Thus lock contention is considered not to be a problem, yet we need
+ **       actually to verify this by real measurements (as of 2011)
+ ** @todo 2010 ... this is the first, preliminary version of a facility,
  **       which is expected to get quite important for custom allocation management.
  ** 
  ** @see typed-counter-test.cpp

@@ -112,6 +112,9 @@ gtk_gui_la_SOURCES =								\
 	$(lumigui_srcdir)/widgets/timecode-widget.hpp				\
 	$(lumigui_srcdir)/widgets/timeline-widget.cpp				\
 	$(lumigui_srcdir)/widgets/timeline-widget.hpp				\
+	$(lumigui_srcdir)/widgets/timeline/basic-draw-strategy.cpp		\
+	$(lumigui_srcdir)/widgets/timeline/basic-draw-strategy.hpp		\
+	$(lumigui_srcdir)/widgets/timeline/draw-strategy.hpp		\
 	$(lumigui_srcdir)/widgets/timeline/timeline-arrow-tool.cpp		\
 	$(lumigui_srcdir)/widgets/timeline/timeline-arrow-tool.hpp		\
 	$(lumigui_srcdir)/widgets/timeline/timeline-body.cpp			\
@@ -120,6 +123,8 @@ gtk_gui_la_SOURCES =								\
 	$(lumigui_srcdir)/widgets/timeline/timeline-clip-track.hpp		\
 	$(lumigui_srcdir)/widgets/timeline/timeline-clip.cpp			\
 	$(lumigui_srcdir)/widgets/timeline/timeline-clip.hpp			\
+	$(lumigui_srcdir)/widgets/timeline/timeline-entity.cpp			\
+	$(lumigui_srcdir)/widgets/timeline/timeline-entity.hpp			\
 	$(lumigui_srcdir)/widgets/timeline/timeline-group-track.cpp		\
 	$(lumigui_srcdir)/widgets/timeline/timeline-group-track.hpp		\
 	$(lumigui_srcdir)/widgets/timeline/timeline-header-container.cpp	\

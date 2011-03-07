@@ -90,7 +90,7 @@ struct lumiera_configitem_vtable;
 
 struct lumiera_configitem_vtable
 {
-  LumieraConfigitem (*new)(LumieraConfigitem);
+  LumieraConfigitem (*newitem)(LumieraConfigitem);
   LumieraConfigitem (*destroy)(LumieraConfigitem);
 };
 

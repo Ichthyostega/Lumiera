@@ -21,8 +21,8 @@
 */
 
 
-#ifndef UTIL_CMDLINE_H
-#define UTIL_CMDLINE_H
+#ifndef LIB_CMDLINE_H
+#define LIB_CMDLINE_H
 
 #include <vector>
 #include <string>
@@ -30,7 +30,7 @@
 
 
 
-namespace util {
+namespace lib {
   
   using std::string;
   using std::vector;
@@ -66,5 +66,5 @@ namespace util {
    
    
    
-} // namespace util
+} // namespace lib
 #endif

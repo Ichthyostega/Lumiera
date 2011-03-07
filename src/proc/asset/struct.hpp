@@ -118,7 +118,6 @@ namespace asset {
       
     protected:
       Struct (const Asset::Ident& idi) : Asset(idi) {}
-      friend class StructFactory;
     };
     
     

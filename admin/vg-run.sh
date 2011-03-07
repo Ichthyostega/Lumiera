@@ -12,6 +12,7 @@
 #
 LOGFILE=,valgrind.log
 SUPPRESS=vgsuppression
+MODULEDIR=modules
 VALGRINDFLAGS=${VALGRINDFLAGS:---leak-check=yes --show-reachable=yes --demangle=yes}
 
 EXECUTABLE=$1
@@ -23,6 +24,9 @@ fi
 
 PATHPREFIX=${EXECUTABLE%/*}
 SUPPRESS="$PATHPREFIX/$SUPPRESS"
+
+# need to set a library search path, because valgrind doesn't handle DT_RUNPATH and $ORIGIN properly
+export LD_LIBRARY_PATH=$PATHPREFIX/$MODULEDIR:$LD_LIBRARY_PATH
 
 if [[ -x $SUPPRESS ]]; then
 	if [[ $SUPPRESS -nt $SUPPRESS.supp ]]; then
@@ -36,6 +40,7 @@ if [[ -x $SUPPRESS ]]; then
 else
 	echo 'no suppression.'
 fi
+
 
 echo "running......$@"
         

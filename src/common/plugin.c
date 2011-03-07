@@ -19,6 +19,13 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
+
+/** @file plugin.c 
+ ** Plugin loader implementation.
+ */
+
+
+
 #include "include/logging.h"
 #include "lib/safeclib.h"
 #include "lib/tmpbuf.h"
@@ -26,6 +33,7 @@
 #include "lib/recmutex.h"
 #include "lib/error.h"
 
+#include "include/config-facade.h"
 #include "common/interfaceregistry.h"
 #include "common/config.h"
 #include "common/plugin.h"
@@ -34,23 +42,15 @@
 
 #include <nobug.h>
 
-#ifndef LUMIERA_PLUGIN_PATH
-#error please define the plugin search path as -DLUMIERA_PLUGIN_PATH, e.g. as $INSTALL_PREFIX/lib/lumiera
-#endif
 
-/**
- * @file
- * Plugin loader.
- */
 
-/* just some declarations */
 extern PSplay lumiera_pluginregistry;
 static char* init_exts_globs (void);
 
-/* TODO default plugin path should be set by the build system */
+
 
 /* errors */
-LUMIERA_ERROR_DEFINE(PLUGIN_INIT, "Initialization error");
+LUMIERA_ERROR_DEFINE(PLUGIN_INIT, "Initialisation error");
 LUMIERA_ERROR_DEFINE(PLUGIN_OPEN, "Could not open plugin");
 LUMIERA_ERROR_DEFINE(PLUGIN_WTF, "Not a Lumiera plugin");
 LUMIERA_ERROR_DEFINE(PLUGIN_REGISTER, "Could not register plugin");
@@ -61,7 +61,7 @@ LUMIERA_ERROR_DEFINE(PLUGIN_VERSION, "Plugin Version unsupported");
 /**
  * Supported (and planned) plugin types and their file extensions
  * This maps filename extensions to implementations (of the respective _load_NAME and _unload_NAME functions)
- * So far we only support platform dynamic libraries, later we may add plugins implemented in lua
+ * So far we only support platform dynamic libraries, later we may add plugins implemented in Lua
  * and c source modules which get compiled on the fly.
  */
 #define LUMIERA_PLUGIN_TYPES                    \
@@ -115,7 +115,8 @@ struct lumiera_plugin_struct
   /* time when the refcounter dropped to 0 last time */
   time_t last;
 
-  /* when loading plugins en masse we do not want to fail completely if one doesnt cooperate, instead we record local errors here */
+  /** bulk loading plugins must not fail entirely, just because one
+   *  plugin doesn't comply. Thus we're recording local errors here */
   lumiera_err error;
 
   /* the 'plugin' interface itself */
@@ -198,9 +199,12 @@ lumiera_plugin_discover (LumieraPlugin (*callback_load)(const char* plugin),
   REQUIRE (callback_load);
   REQUIRE (callback_register);
 
-  lumiera_config_setdefault ("plugin.path ="LUMIERA_PLUGIN_PATH);
+  // Note: because the full-blown Config system isn't implemented yet,
+  //       as a temporary solution we fetch this basic configuration
+  //       from the setup.ini used to bootstrap the application
+  lumiera_config_setdefault (lumiera_get_plugin_path_default());
 
-  /* construct glob trail {.so,.c,.foo} ... */
+  /* construct glob trail {.so,.lum,.lua} ... */
   static char* exts_globs = NULL;
   if (!exts_globs)
     exts_globs = init_exts_globs ();
@@ -375,7 +379,7 @@ static char* init_exts_globs (void)
       ++itr;
     }
   exts_globs[exts_sz-2] = '}';
-  TRACE (pluginloader_dbg, "initialized extension glob to '%s'", exts_globs);
+  TRACE (pluginloader_dbg, "initialised extension glob to '%s'", exts_globs);
   return exts_globs;
 }
 

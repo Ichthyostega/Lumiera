@@ -20,11 +20,14 @@
 
 */
 
-/** @file configfacade.hpp
+/** @file configfacade.h
  ** The lumiera::Config wrapper class addresses two issues.
  ** First, it registers startup and shutdown hooks to bring up the config system
  ** as early as possible. Later, on application main initialisation, the global
  ** config interface is opened and wrapped for convenient access from C++ code.
+ ** 
+ ** @todo there ought to be an external Interface for the Config subsystem.
+ **       But the full-blown Config system isn't implemented yet anyway
  **
  ** @see config.h
  ** @see lumiera::AppState
@@ -36,7 +39,13 @@
 #define INTERFACE_CONFIGFACADE_H
 
 
+
+
+
+#ifdef __cplusplus  /* ============== C++ Interface ================= */
+
 #include "lib/singleton.hpp"
+#include "lib/symbol.hpp"
 
 #include <string>
 
@@ -48,26 +57,42 @@ namespace lumiera {
   
   /*********************************************************************
    * C++ wrapper for convenient access to the Lumiera config system.
+   * 
+   * @warning Config system not fully implemented yet. Thus for now
+   *          this facade is wired with the setup.ini and will just
+   *          fetch the values from there.
    */
-  struct Config
+  class Config
     {
-      
-      static const string get (string const& key);
-      
+    public:
+      static string get (lib::Literal key);
       
       static lib::Singleton<Config> instance;
       
+      
     private:
       Config();
-      ~Config();
-      
+     ~Config();
       friend class lib::singleton::StaticCreate<Config>;
-      
-      //////////////////TODO: define startup/shutdown and loading of the config interface
-      
     };
   
   
   
 } // namespace lumiera
+
+
+
+#else /* =========================== C Interface ====================== */
+
+
+/** retrieve the default plugin search path from the
+ *  basic applications setup.ini
+ *  @return a fully expanded string suitable to be fed
+ *          to the lumiera_config_setdefault function
+ *  @see lumiera_plugin_discover
+ */
+const char* lumiera_get_plugin_path_default ();
+
+
+#endif
 #endif

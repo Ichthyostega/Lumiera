@@ -32,12 +32,12 @@ namespace dialogs {
 
 /**
  * The space in pixels to pad the border of Lumiera dialog boxes.
- **/
+ */
 static const int BorderPadding = 8;
 
 /**
  * The spacing for VBoxes and HBoxes in Lumiera dialogs.
- **/
+ */
 static const int BoxSpacing = 6;
 
 }   // namespace dialogs

@@ -465,7 +465,7 @@ TEST (plugin_discover)
 
   if (lumiera_plugin_discover (lumiera_plugin_load, lumiera_plugin_register))
     {
-      LumieraPlugin p = lumiera_plugin_lookup (".libs/examplepluginc.lum");
+      LumieraPlugin p = lumiera_plugin_lookup ("modules/examplepluginc.lum");
       printf ("found plugin: %s\n", lumiera_plugin_name (p));
       lumiera_plugin_discover (lumiera_plugin_load, lumiera_plugin_register);
     }
@@ -482,9 +482,14 @@ TEST (plugin_unload)
   lumiera_interfaceregistry_init ();
 
   lumiera_plugin_discover (lumiera_plugin_load, lumiera_plugin_register);
-  lumiera_plugin_unload (lumiera_plugin_lookup (".libs/examplepluginc.so"));
-  LumieraPlugin p = lumiera_plugin_lookup (".libs/examplepluginc.so");
-  printf ("plugin unload: %p\n", p);
+  LumieraPlugin p = lumiera_plugin_lookup ("modules/examplepluginc.lum");
+  printf ("plugin discovered before unload: %p\n", p);
+  CHECK (p, "prerequisite: need to load examplepluginc.lum");
+
+  lumiera_plugin_unload (lumiera_plugin_lookup ("modules/examplepluginc.lum"));
+  p = lumiera_plugin_lookup ("examplepluginc.lum");
+  printf ("plugin discovered after unload: %p\n", p);
+  CHECK (!p, "failed to unload plugin.");
 
   lumiera_interfaceregistry_destroy ();
   lumiera_config_destroy ();
