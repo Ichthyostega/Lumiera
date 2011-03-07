@@ -78,7 +78,7 @@ mkdir build
 cd build
 ../configure
 make
-make install
+sudo make install
 ------------------------------------------------------------
 
 Installing GDL
@@ -89,8 +89,11 @@ but we contributed some improvements, which are only available in the very
 recent development versions of GDL. Thus, for now we created a special package,
 which doesn't interfere with an existing (older) installation of GDL.
 
-Ubuntu 9.04 note: intltool-update is not patched, you must add
-/usr/share/intltool-debian/ to get the gdl-package to configure correctly (JSC).
+Ubuntu 9.04 note::
+  intltool-update is not patched, you must add +/usr/share/intltool-debian/+
+  to get the gdl-package to configure correctly (JSC).
+Ubuntu 10.10 note::
+  you need to install the +intltool+ package from the standard ubuntu repository
 
 ------------------------------------------------------------
 git clone git://git.lumiera.org/gdl-package
