@@ -23,6 +23,7 @@
 
 #include "proc/asset.hpp"
 #include "proc/assetmanager.hpp"
+#include "proc/asset/asset-format.hpp"
 #include "lib/util-foreach.hpp"
 #include "lib/util.hpp"
 
@@ -59,7 +60,7 @@ namespace asset {
   /** Asset is a Interface class; usually, objects of 
    *  concrete subclasses are created via specialised Factories
    */
-  Asset::Asset (const Ident& idi) 
+  Asset::Asset (Ident const& idi) 
     : ident(idi)
     , id(AssetManager::reg (this, idi))
     , enabled(true)

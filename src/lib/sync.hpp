@@ -23,10 +23,11 @@
 
 /** @file sync.hpp
  ** Object Monitor based synchronisation.
- ** Actually, everything is implemented by delegating the raw locking/sync calls
- ** to the Lumiera backend. The purpose is to support and automate the most common
- ** use cases in a way which fits better with scoping and encapsulation; especially
- ** we build upon the monitor object pattern.
+ ** The actual locking, signalling and waiting is implemented by delegating to the
+ ** raw pthreads locking/sync calls. Rather, the purpose of the Sync baseclass is
+ ** to support locking based on the <b>object monitor pattern</b>. This pattern
+ ** describes a way of dealing with synchronisation known to play well with
+ ** scoping, encapsulation and responsibility for a single purpose.
  ** 
  ** A class becomes \em lockable by inheriting from lib::Sync with the appropriate
  ** parametrisation. This causes any instance to inherit a monitor member (object),
@@ -68,21 +69,15 @@
 
 #include "lib/error.hpp"
 #include "lib/util.hpp"
-#include "lib/diagnostic-context.hpp"
 
 extern "C" {
-#include "lib/mutex.h"
-#include "lib/recmutex.h"
-#include "lib/condition.h"
-#include "lib/reccondition.h"
+#include "lib/lockerror.h"
 }
 
-#include <boost/noncopyable.hpp>
 #include <pthread.h>
 #include <cerrno>
 #include <ctime>
 
-using boost::noncopyable;
 
 
 namespace lib {
@@ -91,177 +86,116 @@ namespace lib {
   namespace sync {
     
     
-    namespace { // implementation shortcuts...
-      
-      inline DiagnosticContext& 
-      _accessContext()
-        {
-          return DiagnosticContext::access();
-        }
-    }
     
     
+    /* ========== adaptation layer for accessing backend/system level code ============== */
     
-    /* ========== adaptation layer for accessing the backend code ============== */
-    
-    struct Wrapped_LumieraExcMutex
+    struct Wrapped_ExclusiveMutex
       {
-        lumiera_mutex self_;
+        pthread_mutex_t mutex_;
         
       protected:
-        Wrapped_LumieraExcMutex()
-          {                                                                         //TODO: currently passing no lineno/function info, put planning to use the DiagnosticContext to provide something in place of that later...
-            lumiera_mutex_init (&self_, "Obj.Monitor ExclMutex", &NOBUG_FLAG(sync), NOBUG_CONTEXT_NOFUNC);
-          }
-       ~Wrapped_LumieraExcMutex()
+        Wrapped_ExclusiveMutex()
           {
-            lumiera_mutex_destroy (&self_, &NOBUG_FLAG(sync), NOBUG_CONTEXT);
+            pthread_mutex_init (&mutex_, NULL);
           }
+       ~Wrapped_ExclusiveMutex()
+          {
+            if (pthread_mutex_destroy (&mutex_))
+              ERROR (sync, "Failure destroying mutex.");
+          }               // shouldn't happen in a correct program
         
-        bool
+        void
         lock()
           {
-            return !!lumiera_mutex_lock (&self_, &NOBUG_FLAG(sync), _accessContext(), NOBUG_CONTEXT_NOFUNC);
-          }
+            if (pthread_mutex_lock (&mutex_))
+              throw lumiera::error::Fatal ("Mutex acquire failed");
+          }               // shouldn't happen in a correct program
         
         void
         unlock()
           {
-            lumiera_mutex_unlock (&self_, &NOBUG_FLAG(sync), _accessContext(), NOBUG_CONTEXT_NOFUNC);
-          }
+            if (pthread_mutex_unlock (&mutex_))
+              ERROR (sync, "Failure unlocking mutex.");
+          }               // shouldn't happen in a correct program
       };
     
     
-    struct Wrapped_LumieraRecMutex
+    
+    struct Wrapped_RecursiveMutex
       {
-        lumiera_recmutex self_;
+        pthread_mutex_t mutex_;
         
       protected:
-        Wrapped_LumieraRecMutex()
+        Wrapped_RecursiveMutex();
+       ~Wrapped_RecursiveMutex()
           {
-            lumiera_recmutex_init (&self_, "Obj.Monitor RecMutex", &NOBUG_FLAG(sync), NOBUG_CONTEXT_NOFUNC);
-          }
-       ~Wrapped_LumieraRecMutex()
-          {
-            lumiera_recmutex_destroy (&self_, &NOBUG_FLAG(sync), NOBUG_CONTEXT);
-          }
+            if (pthread_mutex_destroy (&mutex_))
+              ERROR (sync, "Failure destroying (rec)mutex.");
+          }               // shouldn't happen in a correct program
         
-        bool
+        void
         lock()
           {
-            return !!lumiera_recmutex_lock (&self_, &NOBUG_FLAG(sync), _accessContext(), NOBUG_CONTEXT_NOFUNC);
-          }
+            if (pthread_mutex_lock (&mutex_))
+              throw lumiera::error::Fatal ("(rec)Mutex acquire failed");
+          }               // shouldn't happen in a correct program
         
         void
         unlock()
           {
-            lumiera_recmutex_unlock (&self_, &NOBUG_FLAG(sync), _accessContext(), NOBUG_CONTEXT_NOFUNC);
-          }
+            if (pthread_mutex_unlock (&mutex_))
+              ERROR (sync, "Failure unlocking (rec)mutex.");
+          }               // shouldn't happen in a correct program
       };
     
     
-    struct Wrapped_LumieraExcCond
+    template<class MTX>
+    struct Wrapped_Condition
+      : MTX
       {
-        lumiera_condition self_;
+         pthread_cond_t cond_;
         
       protected:
-        Wrapped_LumieraExcCond()
+        Wrapped_Condition()
           {
-            lumiera_condition_init (&self_, "Obj.Monitor ExclCondition", &NOBUG_FLAG(sync), NOBUG_CONTEXT_NOFUNC);
+            pthread_cond_init (&cond_, NULL);
           }
-       ~Wrapped_LumieraExcCond()
+       ~Wrapped_Condition()
           {
-            lumiera_condition_destroy (&self_, &NOBUG_FLAG(sync), NOBUG_CONTEXT);
-          }
-        
-        bool
-        lock()
-          {
-            return !!lumiera_condition_lock (&self_, &NOBUG_FLAG(sync), _accessContext(), NOBUG_CONTEXT_NOFUNC);
-          }
-        
-        void
-        unlock()
-          {
-            lumiera_condition_unlock (&self_, &NOBUG_FLAG(sync), _accessContext(), NOBUG_CONTEXT_NOFUNC);
-          }
+            if (pthread_cond_destroy (&cond_))
+              ERROR (sync, "Failure destroying condition variable.");
+          }               // shouldn't happen in a correct program
         
         bool
         wait()
           {
-            return !!lumiera_condition_wait (&self_, &NOBUG_FLAG(sync), _accessContext(), NOBUG_CONTEXT_NOFUNC);
+            int err;
+            do { err = pthread_cond_wait (&this->cond_, &this->mutex_);
+            } while(err == EINTR);
+            
+            if (err) lumiera_lockerror_set (err, &NOBUG_FLAG(sync), NOBUG_CONTEXT_NOFUNC);
+            return !err; 
           }
         
         bool
         timedwait (const struct timespec* timeout)
           {
-            return !!lumiera_condition_timedwait (&self_, timeout, &NOBUG_FLAG(sync), _accessContext(), NOBUG_CONTEXT_NOFUNC);
+            int err;
+            do { err = pthread_cond_timedwait (&this->cond_, &this->mutex_, timeout);
+            } while(err == EINTR);
+              
+            if (err) lumiera_lockerror_set (err, &NOBUG_FLAG(sync), NOBUG_CONTEXT_NOFUNC);
+            return !err;
           }
         
-        void
-        signal()
-          {
-            lumiera_condition_signal (&self_, &NOBUG_FLAG(sync), NOBUG_CONTEXT_NOFUNC);
-          }
         
-        void
-        broadcast()
-          {
-            lumiera_condition_broadcast (&self_, &NOBUG_FLAG(sync), NOBUG_CONTEXT_NOFUNC);
-          }
+        void signal()    { pthread_cond_signal (&cond_); }
+        void broadcast() { pthread_cond_broadcast (&cond_); }
       };
     
     
-    struct Wrapped_LumieraRecCond
-      {
-        lumiera_reccondition self_;
-        
-      protected:
-        Wrapped_LumieraRecCond()
-          { 
-            lumiera_reccondition_init (&self_, "Obj.Monitor RecCondition", &NOBUG_FLAG(sync), NOBUG_CONTEXT_NOFUNC);
-          }
-       ~Wrapped_LumieraRecCond()
-          {
-            lumiera_reccondition_destroy (&self_, &NOBUG_FLAG(sync), NOBUG_CONTEXT);
-          }
-        
-        bool
-        lock()
-          {
-            return !!lumiera_reccondition_lock (&self_, &NOBUG_FLAG(sync), _accessContext(), NOBUG_CONTEXT_NOFUNC);
-          }
-        
-        void
-        unlock ()
-          {
-            lumiera_reccondition_unlock (&self_, &NOBUG_FLAG(sync), _accessContext(), NOBUG_CONTEXT_NOFUNC);
-          }
-        
-        bool
-        wait()
-          {
-            return !!lumiera_reccondition_wait (&self_, &NOBUG_FLAG(sync), _accessContext(), NOBUG_CONTEXT_NOFUNC);
-          }
-        
-        bool
-        timedwait (const struct timespec* timeout)
-          {
-            return !!lumiera_reccondition_timedwait (&self_, timeout, &NOBUG_FLAG(sync), _accessContext(), NOBUG_CONTEXT_NOFUNC);
-          }
-        
-        void
-        signal()
-          {
-            lumiera_reccondition_signal (&self_, &NOBUG_FLAG(sync), NOBUG_CONTEXT_NOFUNC);
-          }
-        
-        void
-        broadcast()
-          {
-            lumiera_reccondition_broadcast (&self_, &NOBUG_FLAG(sync), NOBUG_CONTEXT_NOFUNC);
-          }
-      };
+    
     
     
     
@@ -296,20 +230,20 @@ namespace lib {
     class Timeout;
     
     
-    template<class CDX>
+    template<class MTX>
     class Condition
-      : public Mutex<CDX>
+      : public Mutex<Wrapped_Condition<MTX> >
       {
-        typedef Mutex<CDX> _PM;
+        typedef Wrapped_Condition<MTX> Cond;
         
       public:
         void
         signal (bool wakeAll=false)
           {
             if (wakeAll)
-              CDX::broadcast ();
+              Cond::broadcast ();
             else
-              CDX::signal ();
+              Cond::signal ();
           }
         
         
@@ -320,12 +254,12 @@ namespace lib {
             bool ok = true;
             while (ok && !predicate())
               if (waitEndTime)
-                ok = CDX::timedwait (&waitEndTime);
+                ok = Cond::timedwait (&waitEndTime);
               else
-                ok = CDX::wait ();
+                ok = Cond::wait ();
             
             if (!ok && lumiera_error_expect(LUMIERA_ERROR_LOCK_TIMEOUT)) return false;
-            lumiera::throwOnError();   // any other error thows
+            lumiera::throwOnError();     // any other error throws
             
             return true;
           }
@@ -435,10 +369,10 @@ namespace lib {
         bool isTimedWait()              {return (timeout_);}
       };
     
-    typedef Mutex<Wrapped_LumieraExcMutex> NonrecursiveLock_NoWait;
-    typedef Mutex<Wrapped_LumieraRecMutex> RecursiveLock_NoWait;
-    typedef Condition<Wrapped_LumieraExcCond>  NonrecursiveLock_Waitable;
-    typedef Condition<Wrapped_LumieraRecCond>  RecursiveLock_Waitable;
+    typedef Mutex<Wrapped_ExclusiveMutex> NonrecursiveLock_NoWait;
+    typedef Mutex<Wrapped_RecursiveMutex> RecursiveLock_NoWait;
+    typedef Condition<Wrapped_ExclusiveMutex>  NonrecursiveLock_Waitable;
+    typedef Condition<Wrapped_RecursiveMutex>  RecursiveLock_Waitable;
     
     
   } // namespace sync (helpers and building blocks)
@@ -488,7 +422,6 @@ namespace lib {
       
     public:
       class Lock
-        : DiagnosticContext
         {
           Monitor& mon_;
           

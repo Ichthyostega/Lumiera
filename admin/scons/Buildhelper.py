@@ -28,6 +28,7 @@ import fnmatch
 import re
 import tarfile
 
+from SCons import Util
 from SCons.Action import Action
 
 
@@ -48,11 +49,12 @@ def isHelpRequest():
 
 
 
-def srcSubtree(env,tree,isShared=True,builder=None, **args):
+def srcSubtree(env,tree,isShared=True,builder=None,appendCPP=None, **args):
     """ convenience wrapper: scans the given subtree, which is
         relative to the current SConscript, find all source files and
         declare them as Static or SharedObjects for compilation
     """
+    if appendCPP: env.Append(CPPDEFINES=appendCPP)
     root = env.subst(tree)  # expand Construction Vars
     if not builder:
         if isShared:
@@ -98,7 +100,7 @@ def findSrcTrees(location, patterns=SRCPATTERNS):
         After having initially expanded the given location with #globRootdirs, each
         directory is examined depth first, until encountering a directory containing
         source files, which then yields a result. Especially, this can be used to traverse
-        an organisational directory structure and find out all possible source trees of
+        an organisational directory structure and find out all possible source trees
         to be built into packages, plugins, individual tool executables etc.
         @return: the relative path names of all source root dirs found (generator function).
     """
@@ -137,24 +139,31 @@ def filterNodes(nlist, removeName=None):
 
 
 
-def getDirname(dir):
-    """ extract directory name without leading path """
+def getDirname(dir, basePrefix=None):
+    """ extract directory name without leading path,
+        or without the explicitly given basePrefix
+    """
     dir = os.path.realpath(dir)
     if not os.path.isdir(dir):
         dir,_ = os.path.split(dir)
-    _, name = os.path.split(dir)
+    if basePrefix:
+        basePrefix = os.path.realpath(basePrefix)
+        if str(dir).startswith(basePrefix):
+           name = str(dir)[len(basePrefix):]
+    else:
+        _, name = os.path.split(dir)
     return name
 
 
 
-def createPlugins(env, dir):
+def createPlugins(env, dir, **kw):
     """ investigate the given source directory to identify all contained source trees.
         @return: a list of build nodes defining a plugin for each of these source trees.
     """
-    return [env.LoadableModule( '#$PLUGDIR/%s' % getDirname(tree) 
-                              , srcSubtree(env, tree)
-                              , SHLIBPREFIX='', SHLIBSUFFIX='.lum'
-                              )
+    return [env.LumieraPlugin( getDirname(tree) 
+                             , srcSubtree(env, tree, appendCPP='LUMIERA_PLUGIN')
+                             , **kw
+                             )
             for tree in findSrcTrees(dir)
            ]
 
@@ -196,114 +205,39 @@ def checkCommandOption(env, optID, val=None, cmdName=None):
 
 
 
-def RegisterIcon_Builder(env):
-    """ Registers Custom Builders for generating and installing Icons.
-        Additionally you need to build the tool (rsvg-convert.c)
-        used to generate png from the svg source using librsvg. 
+
+class Record(dict):
+    """ a set of properties with record style access.
+        Record is a dictionary, but the elements can be accessed
+        conveniently as if they where object fields
     """
-    
-    import render_icon as renderer  # load Joel's python script for invoking the rsvg-convert (SVG render)
-    renderer.rsvgPath = env.subst("$BINDIR/rsvg-convert")
-    
-    def invokeRenderer(target, source, env):
-        source = str(source[0])
-        targetdir = env.subst("$BINDIR")
-        renderer.main([source,targetdir])
-        return 0
+    def __init__(self, defaults=None, **props):
+        if defaults:
+            defaults.update(props)
+            props = defaults
+        dict.__init__(self,props)
         
-    def createIconTargets(target,source,env):
-        """ parse the SVG to get the target file names """
-        source = str(source[0])
-        targetdir = os.path.basename(str(target[0]))
-        targetfiles = renderer.getTargetNames(source)    # parse SVG
-        return (["$BINDIR/%s" % name for name in targetfiles], source)
+    def __getattr__(self,key):
+        if key=='__get__' or key=='__set__':
+            raise AttributeError
+        return self.setdefault(key)
     
-    def IconCopy(env, source):
-         """Copy icon to corresponding icon dir. """
-         subdir = getDirname(source)
-         return env.Install("$BINDIR/%s" % subdir, source)
-    
-     
-    buildIcon = env.Builder( action = Action(invokeRenderer, "rendering Icon: $SOURCE --> $TARGETS")
-                           , single_source = True
-                           , emitter = createIconTargets 
-                           )
-    env.Append(BUILDERS = {'IconRender' : buildIcon})    
-    env.AddMethod(IconCopy)
+    def __setattr__(self,key,val):
+        self[key] = val
 
 
-
-def Tarball(env,location,dirs,suffix=''):
-    """ Custom Command: create Tarball of some subdirs
-        location: where to create the tar (may optionally include filename.tar.gz)
-        suffix: (optional) suffix to include in the tar name
-        dirs: directories to include in the tar
-        
-        This is a bit of a hack, because we want to be able to include arbitrary directories,
-        without creating new dependencies on those dirs. Esp. we want to tar the source tree
-        prior to compiling. Solution is 
-         - use the Command-Builder, but pass all target specifications as custom build vars
-         - create a pseudo-target located in the parent directory (not built by default)
+def extract_localPathDefs (localDefs):
+    """ extracts the directory configuration values.
+        For sake of simplicity, paths and directories are defined
+        immediately as global variables in the SConstruct. This helper
+        extracts from the given dict the variables matching some magical
+        pattern and returns them wrapped into a Record for convenient access
     """
-    targetID    = '../extern-tar%s' % suffix
-    versionID   = env['VERSION']
-    defaultName = 'lumiera%s_%s' % (suffix, versionID)
-    nameprefix  = 'lumiera-%s/' %  (versionID)
-    location    = env.subst(location)
-    dirs        = env.subst(dirs)
-    return env.Command(targetID,None, createTarball, 
-                       location=location, defaultName=defaultName, dirs=dirs, nameprefix=nameprefix)
-
-
-def createTarball(target,source,env):
-    """ helper, builds the tar using the python2.3 tarfile lib.
-        This allows us to prefix all paths, thus moving the tree
-        into a virtual subdirectory containing the Version number,
-        as needed by common packaging systems.
-    """
-    name = getTarName( location = env['location']
-                     , defaultName = env['defaultName'])
-    targetspec = env['dirs']
-    nameprefix = env['nameprefix'] or ''
-    print 'Running: tar -czf %s %s ...' % (name,targetspec)
-    if os.path.isfile(name):
-        os.remove(name)
-    tar = tarfile.open(name,'w:gz')
-    for name in targetspec.split():
-        tar.add(name,nameprefix+name)
-    tar.close()
-#
-# old version using shell command:
-#
-#    cmd = 'tar -czf %s %s' % (name,targetspec)
-#    print 'running ', cmd, ' ... '
-#    pipe = os.popen (cmd)
-#    return pipe.close ()
-
-
-
-
-def getTarName(location, defaultName):
-    """ create a suitable name for the tarball.
-        - if location contains a name (*.tar.gz) then use this
-        - otherwise append the defaultName to the specified dir
-    """
-    spec = os.path.abspath(location)
-    (head,tail) = os.path.split(spec)
-    if not os.path.isdir(head):
-        print 'Target dir "%s" for Tar doesn\'t exist.' % head
-        Exit(1)
-    mat = re.match(r'([\w\.\-\+:\~]+)\.((tar)|(tar\.gz)|(tgz))', tail)
-    if mat:
-        name = mat.group(1)
-        ext  = '.'+mat.group(2)
-    else:
-        ext = '.tar.gz'
-        if os.path.isdir(spec):
-            head = spec
-            name = defaultName
-        else:
-            name = tail
-    return os.path.join(head,name+ext)
-            
-
+    def relevantPathDefs (mapping):
+        for (k,v) in mapping.items():
+            if (k.startswith('src') or k.startswith('build') or k.startswith('install')) and Util.is_String(v):
+                v = v.strip()
+                if not v.endswith('/'): v += '/'
+                yield (k,v)
+                
+    return dict(relevantPathDefs(localDefs))

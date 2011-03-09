@@ -160,8 +160,8 @@ TimelineHeaderWidget::on_expose_event(GdkEventExpose *event)
   REQUIRE(style);
   REQUIRE(gdkWindow);
   
-  shared_ptr<model::Track> model_track = track.get_model_track();
-  REQUIRE(model_track);
+  shared_ptr<model::Track> modelTrack = track.getModelTrack();
+  REQUIRE(modelTrack);
     
   // Get the header box  
   const Gdk::Rectangle allocation = get_allocation();
@@ -181,7 +181,7 @@ TimelineHeaderWidget::on_expose_event(GdkEventExpose *event)
   else if(hoveringExpander)
     state_type = STATE_PRELIGHT;
   
-  if(!model_track->get_child_tracks().empty())
+  if(!modelTrack->get_child_tracks().empty())
     style->paint_expander (gdkWindow,
       state_type, 
       box, *this, "",

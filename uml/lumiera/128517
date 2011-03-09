@@ -1,6 +1,6 @@
 format 58
 "CommonLib" // CommonLib
-  revision 22
+  revision 24
   modified_by 5 "hiv"
   // class settings
   //class diagram settings
@@ -870,21 +870,21 @@ ${inlines}
       idl_decl ""
       explicit_switch_type ""
       
-      classrelation 206341 // <generalisation>
-	relation 195461 ---|>
+      classrelation 210693 // <generalisation>
+	relation 199813 ---|>
 	  a public
 	    cpp default "${type}"
-	    classrelation_ref 206341 // <generalisation>
-	  b parent class_ref 168837 // Duration
+	    classrelation_ref 210693 // <generalisation>
+	  b parent class_ref 134917 // Time
       end
 
-      classrelation 206469 // start (<unidirectional association>)
-	relation 195589 --->
-	  a role_name "start" protected
+      classrelation 210821 // dur_ (<unidirectional association>)
+	relation 199941 --->
+	  a role_name "dur_" multiplicity "1" protected
 	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
 "
-	    classrelation_ref 206469 // start (<unidirectional association>)
-	  b parent class_ref 134917 // Time
+	    classrelation_ref 210821 // dur_ (<unidirectional association>)
+	  b parent class_ref 168837 // Duration
       end
     end
 
@@ -916,12 +916,12 @@ ${inlines}
       idl_decl ""
       explicit_switch_type ""
       
-      classrelation 206213 // <generalisation>
-	relation 195333 ---|>
+      classrelation 210437 // <generalisation>
+	relation 199557 ---|>
 	  a public
 	    cpp default "${type}"
-	    classrelation_ref 206213 // <generalisation>
-	  b parent class_ref 168709 // TimeValue
+	    classrelation_ref 210437 // <generalisation>
+	  b parent class_ref 172165 // Offset
       end
     end
 
@@ -956,14 +956,23 @@ ${inlines}
 	  b parent class_ref 134917 // Time
       end
 
-      classrelation 208901 // <unidirectional association>
-	relation 198021 --->
+      classrelation 212613 // <unidirectional association>
+	relation 201733 --->
+	  a role_name "" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
+"
+	    classrelation_ref 212613 // <unidirectional association>
+	  b parent class_ref 170885 // FrameNr
+      end
+
+      classrelation 212741 // <unidirectional association>
+	relation 201861 --->
 	  stereotype "yield"
 	  a role_name "" protected
 	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
 "
-	    classrelation_ref 208901 // <unidirectional association>
-	  b parent class_ref 170629 // TCode
+	    classrelation_ref 212741 // <unidirectional association>
+	  b parent class_ref 172677 // SmpteTC
       end
     end
 
@@ -1034,6 +1043,14 @@ ${inlines}
 	python_decl ""
 	idl_decl ""
       end
+
+      classrelation 210949 // <generalisation>
+	relation 200069 ---|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 210949 // <generalisation>
+	  b parent class_ref 137093 // Meta
+      end
     end
 
     class 170373 "TimeVar"
@@ -1091,9 +1108,6 @@ ${inlines}
 
     class 170629 "TCode"
       visibility package 
-      nformals 1
-      formal name "F" type "class" explicit_default_value ""
-        explicit_extends ""
       cpp_decl "${comment}${template}class ${name}${inherit}
   {
 ${members}  };
@@ -1113,13 +1127,6 @@ ${inlines}
 	  b parent class_ref 170629 // TCode
       end
 
-      classrelation 208773 // <dependency>
-	relation 197893 -_->
-	  a default
-	    cpp default "#include in source"
-	    classrelation_ref 208773 // <dependency>
-	  b parent class_ref 170757 // Format
-      end
     end
 
     class 170757 "Format"
@@ -1139,9 +1146,6 @@ ${inlines}
 
     class 170885 "FrameNr"
       visibility package 
-      nactuals 1
-      actual class class_ref 170629 // TCode
-        rank 0 explicit_value ""
       cpp_decl "${comment}${template}class ${name}${inherit}
   {
 ${members}  };
@@ -1182,6 +1186,140 @@ ${inlines}
 	    classrelation_ref 209285 // <generalisation>
 	  b parent class_ref 169221 // TimeGrid
       end
+    end
+
+    class 172165 "Offset"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 210565 // <generalisation>
+	relation 199685 ---|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 210565 // <generalisation>
+	  b parent class_ref 168709 // TimeValue
+      end
+    end
+
+    class 172293 "Frames"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 211077 // <generalisation>
+	relation 200197 ---|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 211077 // <generalisation>
+	  b parent class_ref 170757 // Format
+      end
+    end
+
+    class 172421 "Smpte"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 211205 // <generalisation>
+	relation 200325 ---|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 211205 // <generalisation>
+	  b parent class_ref 170757 // Format
+      end
+    end
+
+    class 172549 "Hms"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 211333 // <generalisation>
+	relation 200453 ---|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 211333 // <generalisation>
+	  b parent class_ref 170757 // Format
+      end
+    end
+
+    class 172677 "SmpteTC"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 211461 // <generalisation>
+	relation 200581 ---|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 211461 // <generalisation>
+	  b parent class_ref 170629 // TCode
+      end
+
+      classrelation 212869 // parts (<directional composition>)
+	relation 201989 *-->
+	  a role_name "parts" multiplicity "4" protected
+	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	    classrelation_ref 212869 // parts (<directional composition>)
+	  b parent class_ref 173829 // Digxel
+      end
+    end
+
+    class 173829 "Digxel"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
     end
   end
 

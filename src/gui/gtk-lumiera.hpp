@@ -1,5 +1,5 @@
 /*
-  gtk-lumiera.hpp  -  Application wide global definitions
+  GTK-LUMIERA.hpp  -  The Lumiera GUI Application Object
 
   Copyright (C)         Lumiera.org
     2008,               Joel Holdsworth <joel@airwebreathe.org.uk>
@@ -19,143 +19,84 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 */
+
+
 /** @file gtk-lumiera.hpp
- ** This file contains application wide global definitions
- ** user actions.
- ** @see gtk-lumiera.cpp
+ ** The main application object.
+ ** Invoking the GtkLumiera::main() function brings up the GUI; this
+ ** function will block in the GTK event thread until the Application gets
+ ** closed by user interaction or by triggering a shutdown via the GuiNotificationFacade.
+ ** GtkLumiera is a singleton and owns the central WindowManager instance used for
+ ** opening all windows and registering and loading icons and resources.
+ ** 
+ ** \par configuration and resource search
+ ** The GUI object retrieves the necessary configuration values from lumiera::Config,
+ ** the config facade in the application core. Currently as of 2/2011 these values are
+ ** loaded from setup.ini, because the full-blown config system is not yet implemented.
+ ** Amongst others, this configuration defines a <i>search path</i> for icons and a
+ ** separate search path for resources. These path specs may use the token \c $ORIGIN
+ ** to refer to the installation directory of the currently executing program.
+ ** This allows for a relocatable Lumiera installation bundle.
+ ** 
+ ** @see guistart.cpp the plugin to pull up this GUI
+ ** @see gui::GuiFacade access point for starting the GUI
+ ** @see gui::GuiNotification interface for communication with the gui from the lower layers
+ ** @see lumiera::Config
+ ** @see lumiera::BasicSetup definition of the acceptable configuration values
+ ** @see lumiera::AppState general Lumiera application main
+ ** 
  */
 
-#ifndef GTK_LUMIERA_HPP
-#define GTK_LUMIERA_HPP
+#ifndef GUI_GTK_LUMIERA_H
+#define GUI_GTK_LUMIERA_H
 
-#include <locale>
-#include <gtkmm.h>
-#include <nobug.h>               // need to include this after gtkmm.h, because types.h from GTK tries to shaddow the ERROR macro from windows, which kills NoBug's ERROR macro
+
+#include "gui/gtk-base.hpp"
+#include "gui/window-manager.hpp"
+
+#include <boost/noncopyable.hpp>
 #include <vector>
-#include <boost/utility.hpp>
-#include <boost/optional.hpp>
-#include <boost/shared_ptr.hpp>
-#include <boost/weak_ptr.hpp>
-#include <boost/scoped_ptr.hpp>
-#include <boost/enable_shared_from_this.hpp>
-#include "lib/util.hpp"
-#include "lib/lumitime.hpp"
 
-#include "window-manager.hpp"
 
-extern "C" {
-#include <gavl/gavltime.h>
-}
-
-//NOBUG_DECLARE_FLAG(gui);
-
-#ifdef ENABLE_NLS
-#  include <libintl.h>
-#  define _(String) gettext (String)
-#  define gettext_noop(String) String
-#  define N_(String) gettext_noop (String)
-#else
-#  define _(String) (String)
-#  define N_(String) String
-#  define textdomain(Domain)
-#  define bindtextdomain(Package, Directory)
-#endif
-
-/**
- * Lumiera GTK GUI implementation root.
- */
 namespace gui {
-  
-/* ===== The Application Class ===== */
+
+
+/* ====== The Application Class ====== */
 
 /**
  *  The main application class.
  */
-class GtkLumiera : private boost::noncopyable
-{
-public:
-  void main(int argc, char *argv[]);
-  
-  WindowManager& get_window_manager();
-  
-  static Glib::ustring get_home_data_path();
+class GtkLumiera
+  : boost::noncopyable
+  {
+    /** Central application window manager instance */
+    WindowManager windowManagerInstance_;
+    
+    
+  public:
+    /** access the the global application object */
+    static GtkLumiera& application();
+    
+    
+    
+    void main(int argc, char *argv[]);
+    
+    WindowManager& windowManager();
+    
+    
+    /** the name of the application */
+    static cuString getAppTitle();
+    
+    static cuString getAppVersion();
+    
+    static cuString getCopyright();
+    
+    static cuString getLumieraWebsite();
+    
+    /** alphabetical list of the application's authors */
+    static const std::vector<uString> getLumieraAuthors();
+    
+  };
 
-  /**
-   * Returns the name of the application 
-   **/
-  static const Glib::ustring get_app_title();
-
-  /**
-   * Returns the version number of the application 
-   **/
-  static const Glib::ustring get_app_version();
-
-  /**
-   * Returns the copyright of the application
-   **/
-  static const Glib::ustring get_app_copyright();
-
-  /**
-   * Returns the website of the application
-   **/
-  static const Glib::ustring get_app_website();
-
-  /**
-   * Returns tn alphabetical list of the application's authors
-   **/
-  static const std::vector<Glib::ustring> get_app_authors();
-  
-protected:
-  /**
-   * The application window manager object
-   **/
-  WindowManager windowManager;
-};
-
-/**
- *  Returns a reference to the global application object
- */
-GtkLumiera& application();
-
-/* ===== Namespace Definitions ===== */
-
-/**
- * The namespace of all dialog box classes.
- */
-namespace dialogs {}
-
-/**
- * The namespace of data model classes.
- */
-namespace model {}
-
-/**
- * The namespace of all video output implementations.
- */
-namespace output {}
-
-/**
- * The namespace of all docking panel classes.
- */
-namespace panels {}
-
-/**
- * The namespace of all Lumiera custom widgets.
- */
-namespace widgets {}
-
-/**
- * The namespace of the workspace window, and it's helper classes.
- */
-namespace workspace {}
-
-/**
- * The namespace of utility functions and classes.
- */
-namespace util {}
-
-}   // namespace gui
-
-#endif // GTK_LUMIERA_HPP
-
-
+}// namespace gui
+#endif

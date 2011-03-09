@@ -33,6 +33,8 @@ namespace model {
 const list< shared_ptr<Track> > Track::NoChildren;
 
 Track::Track()
+  : enabled(true),
+    locked(false)
 {
 
 }
@@ -43,10 +45,36 @@ Track::get_child_tracks() const
   return Track::NoChildren;
 }
 
+bool
+Track::getEnabled() const
+{
+  return enabled;
+}
+
+bool
+Track::getLocked() const
+{
+  return locked;
+}
+
 const string
 Track::get_name() const
 {
   return name;
+}
+
+void
+Track::setEnabled(bool enabled)
+{
+  this->enabled = enabled;
+  enabledChangedSignal.emit(enabled);
+}
+
+void
+Track::setLocked(bool locked)
+{
+  this->locked = locked;
+  lockedChangedSignal.emit(locked);
 }
 
 void
@@ -75,8 +103,20 @@ Track::find_descendant_track_parent(
   return shared_ptr<ParentTrack>();
 }
 
+sigc::signal<void, bool>
+Track::signalEnabledChanged() const
+{
+  return enabledChangedSignal;
+}
+
+sigc::signal<void, bool>
+Track::signalLockedChanged() const
+{
+  return lockedChangedSignal;
+}
+
 sigc::signal<void, std::string>
-Track::signal_name_changed() const
+Track::signalNameChanged() const
 {
   return nameChangedSignal;
 }

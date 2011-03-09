@@ -39,7 +39,7 @@ using lumiera::ON_GLOBAL_SHUTDOWN;
  */
 int main (int argc, const char* argv[])
 {
-  util::Cmdline args (argc,argv);
+  lib::Cmdline args (argc,argv);
   test::TestOption optparser (args);
   test::Suite suite (optparser.getTestgroup());
   LifecycleHook::trigger (ON_GLOBAL_INIT);

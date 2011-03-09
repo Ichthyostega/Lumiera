@@ -232,7 +232,7 @@ namespace test {
   void
   Suite::describe ()
   {
-    util::Cmdline noCmdline("");
+    lib::Cmdline noCmdline("");
     PTestMap tests = testcases.getGroup(groupID_);
     ASSERT (tests);
     

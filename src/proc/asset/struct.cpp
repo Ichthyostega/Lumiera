@@ -45,7 +45,7 @@ using util::contains;
 
 namespace asset {
   
-  /****** NOTE: not really implemented yet. What follows is partially a hack to build simple tests *******/
+  /****** NOTE: not fully implemented yet. What follows is partially a hack to build simple tests *******/
   
   
   
@@ -163,10 +163,8 @@ namespace asset {
    /* explicit instantiations of the factory methods */
    /**************************************************/
 
-#include "proc/asset/struct.hpp"
-#include "proc/asset/struct-scheme.hpp"
-#include "proc/asset/procpatt.hpp"
 #include "proc/asset/pipe.hpp"
+#include "proc/asset/procpatt.hpp"
 #include "proc/asset/timeline.hpp"
 #include "proc/asset/sequence.hpp"
 

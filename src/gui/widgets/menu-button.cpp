@@ -57,7 +57,7 @@ MenuButton::MenuButton(const StockID& stock_id) :
   setup_button();
 }  
 
-MenuButton::MenuButton(const Glib::ustring& label, bool mnemonic) :
+MenuButton::MenuButton(cuString& label, bool mnemonic) :
   ToggleButton(),
   caption(label, mnemonic),
   arrow(arrowType, shadowType)

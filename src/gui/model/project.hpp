@@ -43,7 +43,7 @@ public:
   lumiera::observable_list< boost::shared_ptr<Sequence> >&
     get_sequences();
   
-  void add_new_sequence(Glib::ustring name);
+  void add_new_sequence(uString name);
   
 private:
 

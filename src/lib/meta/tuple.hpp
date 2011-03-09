@@ -302,7 +302,7 @@ namespace typelist{
     template<typename T1>
     inline
     Tuple< Types<T1> >
-    make ( T1 a1 =T1()
+    make ( T1 a1
          )
     {
       return Tuple<Types<T1> > (a1);
@@ -314,8 +314,8 @@ namespace typelist{
             >
     inline
     Tuple< Types<T1,T2> >
-    make ( T1 a1 =T1()
-         , T2 a2 =T2()
+    make ( T1 a1
+         , T2 a2
          )
     {
       return Tuple<Types<T1,T2> > (a1,a2);
@@ -328,9 +328,9 @@ namespace typelist{
             >
     inline
     Tuple< Types<T1,T2,T3> >
-    make ( T1 a1 =T1()
-         , T2 a2 =T2()
-         , T3 a3 =T3()
+    make ( T1 a1
+         , T2 a2
+         , T3 a3
          )
     {
       return Tuple<Types<T1,T2,T3> > (a1,a2,a3);
@@ -344,10 +344,10 @@ namespace typelist{
             >
     inline
     Tuple< Types<T1,T2,T3,T4> >
-    make ( T1 a1 =T1()
-         , T2 a2 =T2()
-         , T3 a3 =T3()
-         , T4 a4 =T4()
+    make ( T1 a1
+         , T2 a2
+         , T3 a3
+         , T4 a4
          )
     {
       return Tuple<Types<T1,T2,T3,T4> > (a1,a2,a3,a4);
@@ -362,11 +362,11 @@ namespace typelist{
             >
     inline
     Tuple< Types<T1,T2,T3,T4,T5> >
-    make ( T1 a1 =T1()
-         , T2 a2 =T2()
-         , T3 a3 =T3()
-         , T4 a4 =T4()
-         , T5 a5 =T5()
+    make ( T1 a1
+         , T2 a2
+         , T3 a3
+         , T4 a4
+         , T5 a5
          )
     {
       return Tuple<Types<T1,T2,T3,T4,T5> > (a1,a2,a3,a4,a5);
@@ -382,12 +382,12 @@ namespace typelist{
             >
     inline
     Tuple< Types<T1,T2,T3,T4,T5,T6> >
-    make ( T1 a1 =T1()
-         , T2 a2 =T2()
-         , T3 a3 =T3()
-         , T4 a4 =T4()
-         , T5 a5 =T5()
-         , T6 a6 =T6()
+    make ( T1 a1
+         , T2 a2
+         , T3 a3
+         , T4 a4
+         , T5 a5
+         , T6 a6
          )
     {
       return Tuple<Types<T1,T2,T3,T4,T5,T6> > (a1,a2,a3,a4,a5,a6);
@@ -404,13 +404,13 @@ namespace typelist{
             >
     inline
     Tuple< Types<T1,T2,T3,T4,T5,T6,T7> >
-    make ( T1 a1 =T1()
-         , T2 a2 =T2()
-         , T3 a3 =T3()
-         , T4 a4 =T4()
-         , T5 a5 =T5()
-         , T6 a6 =T6()
-         , T7 a7 =T7()
+    make ( T1 a1
+         , T2 a2
+         , T3 a3
+         , T4 a4
+         , T5 a5
+         , T6 a6
+         , T7 a7
          )
     {
       return Tuple<Types<T1,T2,T3,T4,T5,T6,T7> > (a1,a2,a3,a4,a5,a6,a7);
@@ -428,14 +428,14 @@ namespace typelist{
             >
     inline
     Tuple< Types<T1,T2,T3,T4,T5,T6,T7,T8> >
-    make ( T1 a1 =T1()
-         , T2 a2 =T2()
-         , T3 a3 =T3()
-         , T4 a4 =T4()
-         , T5 a5 =T5()
-         , T6 a6 =T6()
-         , T7 a7 =T7()
-         , T8 a8 =T8()
+    make ( T1 a1
+         , T2 a2
+         , T3 a3
+         , T4 a4
+         , T5 a5
+         , T6 a6
+         , T7 a7
+         , T8 a8
          )
     {
       return Tuple<Types<T1,T2,T3,T4,T5,T6,T7,T8> > (a1,a2,a3,a4,a5,a6,a7,a8);
@@ -454,15 +454,15 @@ namespace typelist{
             >
     inline
     Tuple< Types<T1,T2,T3,T4,T5,T6,T7,T8,T9> >
-    make ( T1 a1 =T1()
-         , T2 a2 =T2()
-         , T3 a3 =T3()
-         , T4 a4 =T4()
-         , T5 a5 =T5()
-         , T6 a6 =T6()
-         , T7 a7 =T7()
-         , T8 a8 =T8()
-         , T9 a9 =T9()
+    make ( T1 a1
+         , T2 a2
+         , T3 a3
+         , T4 a4
+         , T5 a5
+         , T6 a6
+         , T7 a7
+         , T8 a8
+         , T9 a9
          )
     {
       return Tuple<Types<T1,T2,T3,T4,T5,T6,T7,T8,T9> > (a1,a2,a3,a4,a5,a6,a7,a8,a9);
@@ -664,12 +664,12 @@ namespace typelist{
   
   /**
    * Decorating a tuple type with auxiliary data access operations.
-   * This helper template builds up a subclass of the given BASE type
+   * This helper template builds up a subclass of the given TUP (base) type
    * (which is assumed to be a Tuple or at least need to be copy constructible
    * from \c Tuple<TYPES> ). The purpose is to use the Tuple as storage, but
    * to add a layer of access functions, which in turn might rely on the exact
    * type of the individual elements within the Tuple. To achieve this, for each
-   * type within the Tuple, the BASE type is decorated with an instance of the
+   * type within the Tuple, the TUP type is decorated with an instance of the
    * template passed in as template template parameter _X_. Each of these
    * decorating instances is provided with a index allowing to access "his"
    * specific element within the underlying tuple.
@@ -678,7 +678,7 @@ namespace typelist{
    * parameter. Typically, operations on _X_ will be defined in a recursive fashion,
    * calling down into this templated base class. To support this, an instantiation
    * of _X_ with the empty type sequence is generated for detecting recursion end
-   * (built as innermost decorator, i.e. immediate subclass of BASE) 
+   * (built as innermost decorator, i.e. immediate subclass of TUP) 
    */
   template
     < typename TYPES                                ///< Type sequence to use within the Accessor (usually the Tuple Types)

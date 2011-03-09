@@ -24,34 +24,84 @@
 #include "proc/assetmanager.hpp"
 #include "proc/asset/meta.hpp"
 #include "lib/util.hpp"
-#include "include/logging.h"
 
 
-namespace asset
-  {
+namespace asset {
+  
+  using meta::Descriptor;
   
   namespace // Implementation details
   {
     /** helper: .....*/
-  } 
-
-
+  }
   
-  MetaFactory Meta::create;  ///< storage for the static MetaFactory instance
-  
-  
-  
-  /** Factory method for Metadata Asset instances. ....
-   *  @todo actually define
-   *  @return an Meta smart ptr linked to the internally registered smart ptr
-   *          created as a side effect of calling the concrete Meta subclass ctor.
-   */
-  MetaFactory::PType 
-  MetaFactory::operator() (Asset::Ident& key) ////TODO
-  {
-    UNIMPLEMENTED ("Meta-Factory");
+  namespace meta {
+    
+    Descriptor::~Descriptor() { } // emit VTable here...
+    
   }
   
   
+  /**storage for the static MetaFactory instance */
+  MetaFactory Meta::create;
+  
+  
+  
+  /** Generic factory method for Metadata Asset instances.
+   *  @param  EntryID specifying the type and a human readable name-ID
+   *  @return an meta::Builder struct with the metadata parameters. After configuring
+   *          and tweaking those parameters, the builder's \c commit() function
+   *          will create a new (immutable) meta asset.
+   */
+  template<class MA>
+  meta::Builder<MA>
+  MetaFactory::operator() (EntryID<MA> elementIdentity)
+  {
+    return meta::Builder<MA> (elementIdentity.getSym());
+  }
+  
+  
+  /** Generic factory method for specialising Metadata.
+   *  @param  prototype Descriptor of a special kind of metadata,
+   *          to be augmented and further specialised. Can indeed
+   *          be an existing asset::Meta instance
+   *  @param  EntryID specifying the type and a human readable name-ID
+   *  @return an meta::Builder struct with the metadata parameters. After configuring
+   *          and tweaking those parameters, the builder's \c commit() function
+   *          will create a new (immutable) meta asset.
+   */
+  template<class MA>
+  meta::Builder<MA>
+  MetaFactory::operator() (Descriptor const& prototype, EntryID<MA> elementIdentity)
+  {
+    UNIMPLEMENTED ("Meta-Factory: extend or supersede existing meta asset");       ////////////////////TICKET #746
+  }
+  
+  
+  
+} // namespace asset
+
+
+
+
+   /**************************************************/
+   /* explicit instantiations of the factory methods */
+   /**************************************************/
+
+#include "proc/asset/meta/time-grid.hpp"
+//#include "proc/asset/procpatt.hpp"
+//#include "proc/asset/timeline.hpp"
+//#include "proc/asset/sequence.hpp"
+
+
+namespace asset {
+  
+  using meta::Descriptor;
+  using meta::Builder;
+  using meta::TimeGrid;
+  
+  template Builder<TimeGrid>  MetaFactory::operator() (EntryID<TimeGrid>);
+  
+  template Builder<TimeGrid>  MetaFactory::operator() (Descriptor const&, EntryID<TimeGrid>);
   
 } // namespace asset

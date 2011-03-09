@@ -25,11 +25,15 @@
  ** are also track parents. This class wraps proc layer data
  */
 
+#ifndef PARENT_TRACK_HPP
+#define PARENT_TRACK_HPP
+
 #include "track.hpp"
 #include "lib/observable-list.hpp"
 
-#ifndef PARENT_TRACK_HPP
-#define PARENT_TRACK_HPP
+#include <boost/shared_ptr.hpp>
+#include <boost/enable_shared_from_this.hpp>
+
 
 namespace gui {
 namespace model {
@@ -37,7 +41,7 @@ namespace model {
 /**
  * ParentTrack is the abstract base class of all tracks that can parent
  * children.
- **/
+ */
 class ParentTrack :
   public Track,
   public boost::enable_shared_from_this<ParentTrack>
@@ -45,20 +49,20 @@ class ParentTrack :
 protected:
   /**
    * Constructor
-   **/
+   */
   ParentTrack();
 
 public: 
 
   /**
    * Gets a read-only reference to the the list of child tracks.
-   **/
+   */
   const std::list< boost::shared_ptr<Track> >&
     get_child_tracks() const;
 
   /**
    * Gets read-write access to the list of child tracks.
-   **/
+   */
   lumiera::observable_list< boost::shared_ptr<Track> >&
     get_child_track_list();
 
@@ -66,7 +70,7 @@ public:
    * Returns true if this track can own any child tracks.
    * @return Returns true because all classed derrived from ParentTrack
    * can.
-   **/
+   */
   bool can_host_children() const;
   
   /**
@@ -74,7 +78,7 @@ public:
    * track.
    * @param The model track to try and remove.
    * @return Returns true if the track was successfully removed.
-   **/
+   */
   bool remove_descendant_track(const boost::shared_ptr<Track> track);
   
   /**
@@ -83,14 +87,14 @@ public:
    * @param child The child track to find the parent of.
    * @return Returns the parent track if one was found, or an empty
    * shared_ptr if none was found.
-   **/
+   */
   boost::shared_ptr<ParentTrack>
     find_descendant_track_parent(boost::shared_ptr<Track> child);
 
 protected:
   /**
    * The internal list of child tracks of this parent.
-   **/
+   */
   lumiera::observable_list< boost::shared_ptr<Track> > tracks;
 };
 

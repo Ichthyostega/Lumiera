@@ -35,7 +35,7 @@ GroupTrack::GroupTrack(TimelineWidget &timeline_widget,
   shared_ptr<model::GroupTrack> track) :
   Track(timeline_widget, track)
 { 
-  REQUIRE(track);
+  REQUIRE (track);
   
   // Receive notifications of changes to the tracks
   track->get_child_track_list().signal_changed().connect(

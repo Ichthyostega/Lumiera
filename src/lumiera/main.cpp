@@ -2,7 +2,7 @@
   main.cpp  -  start the Lumiera Application
 
   Copyright (C)         Lumiera.org
-    2007-2009,          Joel Holdsworth <joel@airwebreathe.org.uk>
+    2007,2011,          Joel Holdsworth <joel@airwebreathe.org.uk>
                         Christian Thaeter <ct@pipapo.org>
                         Hermann Vosseler <Ichthyostega@web.de>
 
@@ -34,7 +34,7 @@
 #include "proc/facade.hpp"
 #include "gui/guifacade.hpp"
 
-using util::Cmdline;
+using lib::Cmdline;
 using lumiera::Subsys;
 using lumiera::AppState;
 using lumiera::ON_GLOBAL_INIT;

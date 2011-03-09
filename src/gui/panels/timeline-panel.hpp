@@ -19,9 +19,12 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 */
+
+
 /** @file timeline-panel.hpp
  ** This file contains the definition of the timeline panel
  */
+
 
 #ifndef TIMELINE_PANEL_HPP
 #define TIMELINE_PANEL_HPP
@@ -30,7 +33,11 @@
 #include "gui/widgets/timecode-widget.hpp"
 #include "gui/widgets/timeline-widget.hpp"
 
+#include <boost/scoped_ptr.hpp>
+#include <boost/weak_ptr.hpp>
+
 using namespace gui::widgets;
+
 
 namespace gui {
 
@@ -51,25 +58,25 @@ public:
    * Constructor.
    * @param panel_manager The owner panel manager widget.
    * @param dock_item The GdlDockItem that will host this panel.
-   **/
+   */
   TimelinePanel(workspace::PanelManager &panel_manager,
     GdlDockItem *dock_item);
 
   /**
    * Destructor 
-   **/
+   */
   ~TimelinePanel();
   
   /**
    * Get the title of the panel.
    * @return Returns a pointer to the string title of the panel.
-   **/
+   */
   static const char* get_title();
   
   /**
    * Get the stock id for this type panel.
    * @return Returns a pointer to the string stock id of the panel.
-   **/
+   */
   static const gchar* get_stock_id();
 
 private:
@@ -91,13 +98,13 @@ private:
   
   /**
    * An event handler for when the list of sequences changes.
-   **/
+   */
   void on_sequence_list_changed();
   
   /**
    * An event handler for when a new sequence is chosen in the
    * sequenceChooser.
-   **/
+   */
   void on_sequence_chosen();
   
 private:
@@ -125,27 +132,27 @@ private:
 
   /**
    * The definition of the sequence chooser combo box columns
-   **/
+   */
   class SequenceChooserColumns : public Gtk::TreeModel::ColumnRecord
   {
   public:
     /**
      * Constructor
-     **/
+     */
     SequenceChooserColumns()
       { add(nameColumn); add(sequenceColumn);  }
 
     /**
      * An invisible column which will be used to identify the sequence
      * of a row.
-     **/
+     */
     Gtk::TreeModelColumn< boost::weak_ptr<model::Sequence> >
       sequenceColumn;
       
     /**
      * The column to use as the label for the combo box widget items.
-     **/
-    Gtk::TreeModelColumn< Glib::ustring > nameColumn;
+     */
+    Gtk::TreeModelColumn< uString > nameColumn;
   };
 
 private:

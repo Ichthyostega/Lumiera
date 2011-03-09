@@ -13,17 +13,14 @@ need:
  * http://gmerlin.sourceforge.net/[GAVL library]
  * *NoBug* (see below)
 
+The GUI depends on:
+
+ * http://www.gtkmm.org/en/[gtkmm]
+ * http://cgit.freedesktop.org/xorg/lib/libXv[libXv]
+
 TIP: Generally speaking, when you want to build software, you need the
 _development_ version of the packages, containing the headers and pre-built
 libraries to link against. Usually, these packages are named `-devel` or `-dev`
-
-.Notes for Ubuntu:
-
-On Hardy you need also:
-
- * libglade2-dev
- * libgtkmm-2.4-dev
- * libxv-dev
 
 For most Debian based systems, e.g. Ubuntu, you can install these dependencies
 with:
@@ -31,8 +28,10 @@ with:
 ------------------------------------------------------------
 sudo apt-get install build-essential autoconf git-core libboost-dev \
 libboost-program-options-dev libboost-regex-dev libgavl-dev libgdl-1-dev \
-libglade2-dev libgtkmm-2.4-dev librsvg2-dev libtool libxv-dev scons valgrind
+libgtkmm-2.4-dev librsvg2-dev libtool libxv-dev scons valgrind
 ------------------------------------------------------------
+
+Optionally, you may also want to install the *gtk2-engines* package.
 
 Build directory
 ---------------
@@ -139,14 +138,11 @@ or similar. If any if this libs are not listed, investigate why before continuin
 Building Lumiera
 ----------------
 
-Lumiera has two maintained (and equivalent) build systems: *scons* and
-*autotools*. You can pick the one you feel more comfortable with.
-
-When trying to build a development version of Lumiera, it might well be that at
-times one of the builds doesn't work temporarily. It is always a good idea to
-check the current build stats from our *builddrone*, which automatically builds
-the latest version from master repository. + Please have a look at this
-http://lumiera.org/builddrone/table.html[current build stats]-page.
+Up to now, Lumiera has had two maintained (and equivalent) build systems: *scons* and
+*autotools*. (Note 3/2011: Right now, the autotools build is broken. It is always a good
+idea to check the current build stats from our *builddrone*, which automatically builds
+the latest version from master repository. Please have a look at this
+http://lumiera.org/builddrone/table.html[current build stats]-page.)
 
 Next, after having built and installed the prerequisite libraries, go into the
 _workspace directory_ to retrieve the Lumiera source code and build it.
@@ -163,7 +159,7 @@ scons
 -----------------
 +
    
- * alternatively, if you prefer building with *autotools*:
+ * alternatively, if you prefer building with *autotools* _(not working currently 3/11)_:
 +
 -----------------
 git clone git://git.lumiera.org/LUMIERA

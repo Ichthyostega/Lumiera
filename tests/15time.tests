@@ -1,6 +1,12 @@
 TESTING "Time conversion" ./test-time
 
 TEST "basic functionality" basic <<END
-err: ECHO: .*: 00:00:00.000
-err: ECHO: .*: 03:55:20.700
+err: ECHO: .*: 0:00:00.000
+err: ECHO: .*: 3:55:20.700
+END
+
+TEST "frame rate dependent calculations" fps <<END
+END
+
+TEST "ntsc drop-frame calculations" ntsc_drop_frame << END
 END

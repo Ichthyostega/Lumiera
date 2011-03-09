@@ -52,7 +52,7 @@ namespace asset {
       IDErr (const char* eID, format fmt) 
         : lumiera::error::Invalid(fmt.str(),eID) {}
     };
-
+  
   
    // ------pre-defined-common-error-cases---------------
   //
@@ -88,8 +88,8 @@ namespace asset {
   AssetManager::AssetManager ()
     : registry (Singleton<asset::DB>() ())
   { }
-
-
+  
+  
   
   /** provide the unique ID for given Asset::Ident tuple */
   ID<Asset> 
@@ -117,7 +117,7 @@ namespace asset {
     DB::Lock guard(&registry);
     TODO ("handle duplicate Registrations");
     P<KIND> smart_ptr (obj, &destroy);
-
+    
     registry.put (asset_id, smart_ptr);
     return asset_id;
   }
@@ -155,9 +155,9 @@ namespace asset {
     return static_pointer_cast<KIND,Asset>
             (instance().registry.get (asset.id));
   }
-
-
-
+  
+  
+  
   /**
    * @return true if the given id is registered in the internal asset DB
    */
@@ -167,10 +167,10 @@ namespace asset {
     return ( registry.get (ID<Asset>(id)) );
   }       // query most general Asset ID-kind and use implicit 
          //  conversion from smart-ptr to bool (test if empty)
-
-
+  
+  
   /**
-   * @return true if the given id is registered with the given Category  
+   * @return true if the given id is registered with the given Category
    */
   bool
   AssetManager::known (IDA id, const Category& cat)
@@ -178,23 +178,23 @@ namespace asset {
     PAsset pA = registry.get (id);
     return ( pA && pA->ident.category.isWithin(cat));
   }
-
+  
   
   namespace { // details implementing AssetManager::remove
-  
+    
     void 
     recursive_call (AssetManager* instance, PAsset& pA)
     { 
       instance->remove (pA->getID());
     }
-  
+    
     function<void(PAsset&)> 
-    detach_child_recursively ()  ///< @return a functor recursively invoking remove(child)  
+    detach_child_recursively ()  ///< @return a functor recursively invoking remove(child)
     {
       return bind( &recursive_call, &AssetManager::instance(), _1 );
     }
   }
-
+  
   /**
    * remove the given asset from the internal DB
    * <i>together with all its dependents</i> 
@@ -203,11 +203,11 @@ namespace asset {
   AssetManager::remove (IDA id)  
   {
     PAsset asset = getAsset (id);
-    for_each (asset->dependants, detach_child_recursively());             ///// 
+    for_each (asset->dependants, detach_child_recursively());
     asset->unlink();
     registry.del(id);
   }
-
+  
   
   
   list<PcAsset> 
@@ -218,7 +218,7 @@ namespace asset {
     res.sort();
     return res;
   }
-
+  
   
 } // namespace asset
 
@@ -229,15 +229,16 @@ namespace asset {
    /* explicit template instantiations for various Asset Kinds */
    /************************************************************/
 
-#include "proc/asset/media.hpp"  
-#include "proc/asset/clip.hpp"  
-#include "proc/asset/proc.hpp"  
-#include "proc/asset/struct.hpp"  
-#include "proc/asset/pipe.hpp"  
-#include "proc/asset/meta.hpp"  
-#include "proc/asset/procpatt.hpp"  
-#include "proc/asset/timeline.hpp"  
-#include "proc/asset/sequence.hpp"  
+#include "proc/asset/media.hpp"
+#include "proc/asset/clip.hpp"
+#include "proc/asset/proc.hpp"
+#include "proc/asset/struct.hpp"
+#include "proc/asset/pipe.hpp"
+#include "proc/asset/meta.hpp"
+#include "proc/asset/procpatt.hpp"
+#include "proc/asset/timeline.hpp"
+#include "proc/asset/sequence.hpp"
+#include "proc/asset/meta/time-grid.hpp"
 
 
 namespace asset {
@@ -259,6 +260,9 @@ namespace asset {
   template P<ProcPatt> AssetManager::wrap (const ProcPatt& asset);
   template P<Timeline> AssetManager::wrap (const Timeline& asset);
   template P<Sequence> AssetManager::wrap (const Sequence& asset);
+  
+  using meta::TimeGrid;
+  template P<TimeGrid> AssetManager::wrap (const TimeGrid& asset);
   
   
 } // namespace asset

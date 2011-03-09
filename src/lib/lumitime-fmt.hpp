@@ -45,12 +45,10 @@
 #define LUMIERA_LUMITIME_FMT_H
 
 #include "lib/lumitime.hpp"
-
-extern "C" {
 #include "lib/time.h"
-}
 
 #include <iostream>
+
 
 namespace lumiera {
 

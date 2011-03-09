@@ -10,7 +10,7 @@
 optcache
 Makefile.in
 build/*
-bin/*
+target/*
 autom4te.cache/*
 scripts/*
 configure
@@ -18,6 +18,7 @@ config.log
 aclocal.m4
 autom4te.cache
 semantic.cache
-tests/,*
 wiki/backups/*
+doc/devel/draw/*.png
+doc/devel/uml/fig128309.png
 m4/*

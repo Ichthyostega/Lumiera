@@ -1,5 +1,5 @@
 /*
-  Cmdlinewrapper(Test)  -  build vector of tokens from cmdline, various conversions
+  CmdlineWrapper(Test)  -  build vector of tokens from cmdline, various conversions
 
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
@@ -27,21 +27,26 @@
 
 #include <iostream>
 #include <sstream>
+#include <string>
 
 #include <boost/lambda/lambda.hpp>
 
+using util::for_each;
+using std::string;
 using std::cout;
+using std::endl;
 
 
 
-namespace util {
-namespace test {
+namespace lib {
+namespace test{
+  
   using boost::lambda::_1;
   using boost::lambda::var;
   
   
   
-  /** @test for util::Cmdline, wrapping various example cmdlines */
+  /** @test for lib::Cmdline, wrapping various example cmdlines */
   class CmdlineWrapper_test : public Test
     {
       void
@@ -61,12 +66,12 @@ namespace test {
       void
       testLine (const string cmdline)
         {
-          cout << "wrapping cmdline:" << cmdline << "..." << "\n";
+          cout << "wrapping cmdline:" << cmdline << "..." << endl;
           
           int i=0;
           Cmdline theCmdline (cmdline);
           for_each(theCmdline, (cout << var(i)++ << "|" <<  _1 << "|\n"));
-          cout << "-->" << theCmdline << "\n";
+          cout << "-->" << theCmdline << endl;
           
           // consistency checks
           std::ostringstream output;
@@ -88,12 +93,11 @@ namespace test {
         {
           const char* fakeArg[3] = {"CMD", "one ", "two"};
           Cmdline theCmdline(3, fakeArg);
-          cout << "Standard Cmdlineformat:" << theCmdline << "\n";
+          cout << "Standard Cmdlineformat:" << theCmdline << endl;
         }
     };
   
   LAUNCHER (CmdlineWrapper_test, "unit common");
   
   
-}} // namespace util::test
-
+}} // namespace lib::test

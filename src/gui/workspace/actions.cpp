@@ -58,13 +58,13 @@ Actions::populate_main_actions(Glib::RefPtr<Gtk::UIManager> uiManager)
   
   // File menu
   actionGroup->add(Action::create("FileMenu", _("_File")));
-  actionGroup->add(Action::create("FileNewProject", Stock::NEW, _("_New Project...")),
+  actionGroup->add(Action::create("FileNewProject",   Stock::NEW, _("_New Project...")),
     mem_fun(*this, &Actions::on_menu_file_new_project));
-  actionGroup->add(Action::create("FileOpenProject", Stock::OPEN, _("_Open Project...")),
+  actionGroup->add(Action::create("FileOpenProject",  Stock::OPEN, _("_Open Project...")),
     mem_fun(*this, &Actions::on_menu_file_open_project));
-  actionGroup->add(Action::create("FileSaveProject", Stock::SAVE, _("_Save Project")),
+  actionGroup->add(Action::create("FileSaveProject",  Stock::SAVE, _("_Save Project")),
     mem_fun(*this, &Actions::on_menu_others));
-  actionGroup->add(Action::create("FileSaveProjectAs", Stock::SAVE_AS, _("_Save Project As...")),
+  actionGroup->add(Action::create("FileSaveProjectAs",Stock::SAVE_AS, _("_Save Project As...")),
     mem_fun(*this, &Actions::on_menu_others));
   actionGroup->add(Action::create("FileRender", _("_Render...")),
     AccelKey("<shift>R"),
@@ -78,11 +78,11 @@ Actions::populate_main_actions(Glib::RefPtr<Gtk::UIManager> uiManager)
     mem_fun(*this, &Actions::on_menu_others));
   actionGroup->add(Action::create("EditRedo", Stock::REDO),
     mem_fun(*this, &Actions::on_menu_others));
-  actionGroup->add(Action::create("EditCut", Stock::CUT),
+  actionGroup->add(Action::create("EditCut",  Stock::CUT),
     mem_fun(*this, &Actions::on_menu_others));
   actionGroup->add(Action::create("EditCopy", Stock::COPY),
     mem_fun(*this, &Actions::on_menu_others));
-  actionGroup->add(Action::create("EditPaste", Stock::PASTE),
+  actionGroup->add(Action::create("EditPaste",Stock::PASTE),
     mem_fun(*this, &Actions::on_menu_others));
   actionGroup->add(Action::create("EditPreferences", Stock::PREFERENCES),
     mem_fun(*this, &Actions::on_menu_edit_preferences));
@@ -136,7 +136,7 @@ Actions::populate_main_actions(Glib::RefPtr<Gtk::UIManager> uiManager)
   uiManager->insert_action_group(actionGroup);
   
   //----- Create the UI layout -----//
-  Glib::ustring ui_info = 
+  uString ui_info = 
       "<ui>"
       "  <menubar name='MenuBar'>"
       "    <menu action='FileMenu'>"
@@ -216,7 +216,7 @@ Actions::populate_show_panel_actions(Glib::RefPtr<Gtk::UIManager> uiManager)
   for(int i = 0; i < count; i++)
     {
       const gchar *stock_id = PanelManager::get_panel_stock_id(i);
-      const ustring name = ustring::compose("Panel%1", i);
+      cuString name = ustring::compose("Panel%1", i);
       actionGroup->add(Action::create(name, StockID(stock_id)),
         bind(mem_fun(*this, &Actions::on_menu_show_panel), i));
     }
@@ -225,7 +225,7 @@ Actions::populate_show_panel_actions(Glib::RefPtr<Gtk::UIManager> uiManager)
   
   for(int i = 0; i < count; i++)
     {
-      const ustring name = ustring::compose("Panel%1", i);
+      cuString name = ustring::compose("Panel%1", i);
       uiManager->add_ui(uiManager->new_merge_id(),
         "/MenuBar/WindowMenu/WindowShowPanel", name, name);
     }
@@ -334,7 +334,7 @@ Actions::on_menu_track_add()
 void
 Actions::on_menu_window_new_window()
 {
-  application().get_window_manager().new_window(
+  GtkLumiera::application().windowManager().newWindow (
     workspaceWindow.get_project(),
     workspaceWindow.get_controller()); 
 }
@@ -360,12 +360,11 @@ Actions::on_menu_help_about()
   // Configure the about dialog
   AboutDialog dialog;
   
-  //dialog.set_program_name(AppTitle);
-  dialog.set_version(GtkLumiera::get_app_version());
-  //dialog.set_version(AppState::get("version"));
-  dialog.set_copyright(GtkLumiera::get_app_copyright());
-  dialog.set_website(GtkLumiera::get_app_website());
-  dialog.set_authors(GtkLumiera::get_app_authors());
+  dialog.set_program_name(GtkLumiera::getAppTitle());
+  dialog.set_version(GtkLumiera::getAppVersion());
+  dialog.set_copyright(GtkLumiera::getCopyright());
+  dialog.set_website(GtkLumiera::getLumieraWebsite());
+  dialog.set_authors(GtkLumiera::getLumieraAuthors());
 
   dialog.set_transient_for(workspaceWindow);
   

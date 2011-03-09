@@ -19,20 +19,28 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 */
+
+
 /** @file widgets/timeline/timeline-track.hpp
  ** This file contains the definition of timeline track object
  */
+
+
+#ifndef TIMELINE_TRACK_HPP
+#define TIMELINE_TRACK_HPP
+
 
 #include "gui/gtk-lumiera.hpp"
 #include "gui/model/track.hpp"
 #include "gui/widgets/menu-button.hpp"
 #include "gui/widgets/mini-button.hpp"
 #include "gui/widgets/button-bar.hpp"
-#include "timeline-header-container.hpp"
-#include "timeline-header-widget.hpp"
+#include "gui/widgets/timeline/timeline-clip.hpp"
+#include "gui/widgets/timeline/timeline-header-container.hpp"
+#include "gui/widgets/timeline/timeline-header-widget.hpp"
 
-#ifndef TIMELINE_TRACK_HPP
-#define TIMELINE_TRACK_HPP
+#include <boost/scoped_ptr.hpp>
+
 
 namespace gui {
 namespace widgets { 
@@ -44,7 +52,7 @@ class TimelineViewWindow;
  * Timeline tracks are created by the timeline widget to correspond to
  * model tracks. Timeline tracks are used to store UI specific state
  * data.
- **/
+ */
 class Track : public sigc::trackable
 {
 public:
@@ -53,7 +61,7 @@ public:
    * An enum used by the branch expand/collapse animation.
    * ExpandDirection represents whether the branch us being expanded or
    * collapsed, or neither.
-   **/ 
+   */
   enum ExpandDirection
   {
     None,
@@ -61,19 +69,26 @@ public:
     Collapse
   };
   
-public:
+  /**
+   * Constructor
+   */
   Track(TimelineWidget &timeline_widget,
     boost::shared_ptr<model::Track> track);
    
   /**
    * Destructor
-   **/
+   */
   ~Track();
   
   Gtk::Widget& get_header_widget();
   
-  boost::shared_ptr<model::Track> get_model_track() const;
+  boost::shared_ptr<model::Track>
+  getModelTrack() const;
   
+  /**
+   * Return the visual height of the track in pixels.
+   * @return The visual height of the track in pixels.
+   */
   int get_height() const;
   
   /**
@@ -81,14 +96,14 @@ public:
    * @return Returns true if the branch is expanded, false if it's
    * collapsed.
    * @see expand_collapse
-   **/
+   */
   bool get_expanded() const;
   
   /**
    * Expands or collapses this branch.
    * @param direction Specifies whether this branch should be expanded
    * or collapse. direction must not equal None
-   **/
+   */
   void expand_collapse(ExpandDirection direction);
   
   /**
@@ -100,74 +115,104 @@ public:
    * (and animating). When the branch is not animating this value has
    * an indeterminate value.
    * @see tick_expand_animation
-   **/
+   */
   float get_expand_animation_state() const;
-  
+
   /**
    * Gets whether the branch is animation.
    * @return Returns true if the branch is animating, false if not.
-   **/
+   */
   bool is_expand_animating() const;
-  
+
   /**
    * When this track is being animated, tick_expand_animation must be
    * called repeatedly to cause the animation to progress.
-   **/ 
+   */
   void tick_expand_animation();
-  
+
   /**
    * Calculates the expander style, given the animation state.
-   **/
+   */
   Gtk::ExpanderStyle get_expander_style() const;
-  
+
+  /**
+   *
+   */
   void show_header_context_menu(guint button, guint32 time);
 
+  /**
+   * Draw the track
+   */
   virtual void draw_track(Cairo::RefPtr<Cairo::Context> cairo,
     TimelineViewWindow* const window)
     const = 0;
-    
-public:
-  //----- Constants -----//
-  
+
+  /**
+   * Gets the clip that is occupying the given time.
+   * The default implementation simply returns an empty pointer.
+   * @param the given time
+   */
+  virtual boost::shared_ptr<timeline::Clip>
+  getClipAt(lumiera::Time position) const;
+
+private:
+
   /**
    * Specifies the period of the expand animation in seconds.
-   **/
+   */
   static const float ExpandAnimationPeriod;
 
-private:
-  //----- Internals -----//
-  void update_name();
-  
-private:
+  /**
+   * Event handler for when the enabled status changes.
+   */
+  void onEnabledChanged(bool);
 
-  //----- Event Handlers -----//
-  void on_enable();
-  void on_lock();
+  /**
+   * Event handler for when the track name changes.
+   */
+  void onNameChanged(std::string);
+
+  /**
+   * Event handler for when the user requested to remove the track.
+   */
+  void on_remove_track();
+
+  /**
+   * Event handler for when the locked status changes.
+   */
+  void onLockedChanged(bool);
+
+  /**
+   * Event handler for when the user requested a name change.
+   */
   void on_set_name();
   
   /**
-   * Event handler for when the track name changes
-   **/
-  void on_name_changed(std::string);
+   * Event handler for when the user pressed the Enable button.
+   */
+  void onToggleEnabled();
 
-  void on_remove_track();
-  
+  /**
+   * Event handler for when the user pressed the Lock button.
+   */
+  void onToggleLocked();
+
+  void updateEnableButton();
+
+  void updateLockButton();
+
+  void updateName();
+
 protected:
 
   TimelineWidget &timelineWidget;
-  boost::shared_ptr<model::Track> model_track;
+  boost::shared_ptr<model::Track> modelTrack;
 
 private:
-
-  /**
-   * True if this track is enabled.
-   */
-  bool enabled;
-
   /**
    * This bool is true if this branch is expanded. false if it is
    * collapsed.
-   **/
+   */
   bool expanded;
 
   /**
@@ -175,7 +220,7 @@ private:
    * is moving - if any.
    * @remarks If no animation is occuring, expandDirection is set to
    * None.
-   **/
+   */
   ExpandDirection expandDirection;
   
   /**
@@ -186,18 +231,13 @@ private:
    * 0.0 when the branch is fully collapsed (and animating). When the
    * branch is not animating this value has an indeterminate value.
    * @see tick_expand_animation
-   **/
+   */
   double expandAnimationState;
   
   /**
    * An internal timer used for the expand/collapse animation.
-   **/
-  boost::scoped_ptr<Glib::Timer> expand_timer;
-
-  /**
-   * True if this track is locked.
    */
-  bool locked;
+  boost::scoped_ptr<Glib::Timer> expand_timer;
 
   //----- Header Widgets ------//
   

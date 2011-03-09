@@ -21,7 +21,7 @@
 
 */
 /** @file timeline-layout-helper.cpp
- ** This file contains the definition of the layout helpeer class
+ ** This file contains the definition of the layout helper class
  */
 
 #ifndef TIMELINE_LAYOUT_HELPER_HPP
@@ -29,6 +29,8 @@
 
 #include "gui/gtk-lumiera.hpp"
 #include "lib/tree.hpp"
+
+#include <boost/optional.hpp>
 
 namespace gui {
 
@@ -56,7 +58,7 @@ class TimelineLayoutHelper : public boost::noncopyable
 public:
   /**
    * Definition of the layout track tree type.
-   **/
+   */
   typedef lumiera::tree< boost::shared_ptr<model::Track> > TrackTree;
   
 public:
@@ -64,7 +66,7 @@ public:
    * Constructor.
    * @param owner The timeline widget which is the owner of this helper
    * class.
-   **/
+   */
   TimelineLayoutHelper(TimelineWidget &owner);
   
   /**
@@ -73,19 +75,19 @@ public:
    * @remarks The current layout tree will be deleted and replaced with
    * the clone.
    * @see add_branch
-   **/
+   */
   void clone_tree_from_sequence();
   
   /**
    * Gets a reference to the helper's layout tree.
    * @return Returns a reference to the helper's layout tree.
-   **/
+   */
   TrackTree& get_layout_tree();
   
   /**
    * Recalculates the track layout from layoutTree.
    * @see layout_headers_recursive
-   **/
+   */
   void update_layout();
   
   /**
@@ -97,7 +99,7 @@ public:
    * @remarks This function is only usable after update_layout() has
    * been called on a valid tree of tracks.
    * @see update_layout()
-   **/
+   */
   boost::optional<Gdk::Rectangle> get_track_header_rect(
     boost::weak_ptr<timeline::Track> track);
   
@@ -111,7 +113,7 @@ public:
    * usable after update_layout() has been called on a valid tree of
    * tracks.
    * @see update_layout()
-   **/
+   */
   boost::shared_ptr<timeline::Track> header_from_point(
     Gdk::Point point);
   
@@ -125,31 +127,31 @@ public:
    * usable after update_layout() has been called on a valid tree of
    * tracks.
    * @see update_layout()
-   **/
+   */
   boost::shared_ptr<timeline::Track> track_from_y(int y);
   
   /**
    * Begins to drag the track under mouse_point, if there is one.
    * @param mouse_point The mouse point to begin dragging from, measured
    * in pixels from the top left of the header container widget.
-   **/
+   */
   boost::shared_ptr<timeline::Track>
     begin_dragging_track(const Gdk::Point &mouse_point);
   
   /**
    * Drops the dragging track.
    * @param apply true if the model tree should be modified.
-   **/
+   */
   void end_dragging_track(bool apply);
 
   /**
    * Returns true if a track is being dragged.
-   **/
+   */
   bool is_dragging_track() const;
   
   /**
    * Gets the iterator of the layout tree node that is being dragged.
-   **/ 
+   */
   TrackTree::pre_order_iterator get_dragging_track_iter() const;
   
   /**
@@ -160,7 +162,7 @@ public:
    * @remarks drag_to_point may only be called after
    * begin_dragging_track and before end_dragging_point have been
    * called.
-   **/
+   */
   void drag_to_point(const Gdk::Point &mouse_point);
   
   /**
@@ -168,23 +170,23 @@ public:
    * @remarks This function is only on returns a valid value fter
    * update_layout() has been called on a valid tree of tracks.
    * @see update_layout()
-   **/
+   */
   int get_total_height() const;
   
   /**
    * Returns true if the layout is currently animating.
-   **/
+   */
   bool is_animating() const;
 
   /**
    * A utility function which finds the iterator of a track in the
    * layout tree.
-   * @param model_track The model track to look for.
+   * @param modelTrack The model track to look for.
    * @return Returns the model iterator of layoutTree.end() if no
    * iterator was found.
-   **/
+   */
   TrackTree::pre_order_iterator iterator_from_track(
-    boost::shared_ptr<model::Track> model_track);
+    boost::shared_ptr<model::Track> modelTrack);
   
   /**
    * A function that recursively calculates the visible height of a
@@ -192,7 +194,7 @@ public:
    * @param parent_iterator The parent of the branch to measure. This
    * node and all the child nodes will be included in the measurement.
    * @return Returns the height of the branch in pixels.
-   **/
+   */
   int measure_branch_height(TrackTree::iterator_base parent_iterator);
 
 protected:
@@ -200,50 +202,50 @@ protected:
   /**
    * An enum to specify the relationship between a tree node, and
    * another node which is going to be inserted adjacent.
-   **/
+   */
   enum TreeRelation
   {
     /**
      * No relation
-     **/
+     */
     None,
     
     /**
      * The node will be inserted immediately before this one.
-     **/
+     */
     Before,
     
     /**
      * The node will be inserted immediately after this one.
-     **/
+     */
     After,
     
     /**
      * The node will be inserted as the first child of this one.
-     **/
+     */
     FirstChild,
     
     /**
      * The node will be inserted as the last child of this one.
-     **/
+     */
     LastChild
   };
   
   /**
    * A structure used to specify where a track will be dropped when
    * dragging ends.
-   **/
+   */
   struct DropPoint
   {
     /**
      * Specifies the target node onto which the dragging track will be
      * dropped.
-     **/
+     */
     TrackTree::pre_order_iterator target;
     
     /**
      * The where to drop the dragging track in relation to target.
-     **/
+     */
     TreeRelation relation;
   };
 
@@ -258,7 +260,7 @@ protected:
    * @param[in] parent A pointer to the model track whose children
    * will be added to the layout tree branch.
    * @see clone_tree_from_sequence()
-   **/
+   */
   void add_branch(TrackTree::iterator_base parent_iterator, 
     boost::shared_ptr<model::Track> parent);
   
@@ -280,7 +282,7 @@ protected:
    * false if any of them are collapsed.
    * @return Returns the height of the branch in pixels.
    * @see update_layout()
-   **/
+   */
   int layout_headers_recursive(
     TrackTree::iterator_base parent_iterator, const int branch_offset,
     const int header_width, const int indent_width, const int depth,
@@ -290,23 +292,23 @@ protected:
    * A helper function which calls lookup_timeline_track within the
    * parent timeline widget, but also applies lots of data consistency
    * checks in the process.
-   * @param model_track The model track to look up in the parent widget.
+   * @param modelTrack The model track to look up in the parent widget.
    * @return Returns the track found, or returns NULL if no matching
    * track was found.
    * @remarks If the return value is going to be NULL, an ENSURE will
    * fail.
-   **/
+   */
   boost::shared_ptr<timeline::Track> lookup_timeline_track(
-    boost::shared_ptr<model::Track> model_track);
+    boost::shared_ptr<model::Track> modelTrack);
   
   /**
    * A helper function which kicks off the animation timer.
-   **/
+   */
   void begin_animation();
   
   /**
    * The animation timer tick callback.
-   **/
+   */
   bool on_animation_tick();
 
   /**
@@ -318,7 +320,7 @@ protected:
    * point is hovering over it, and if it is, it works out what part of
    * the header, and therefore what drop location the user us gesturally
    * pointing to.
-   **/
+   */
   TimelineLayoutHelper::DropPoint
   attempt_drop(TrackTree::pre_order_iterator target,
     const Gdk::Point &point);
@@ -327,31 +329,31 @@ protected:
    * Drops the dragging track to a new location in the layout tree as
    * specified by drop.
    * @param[in] drop The point in the tree to drop onto.
-   **/
+   */
   void apply_drop_to_layout_tree(const DropPoint &drop);
 
   /**
    * Drops the dragging track to a new location in the model tree as
    * specified by drop.
    * @param[in] drop The point in the tree to drop onto.
-   **/
-  void apply_drop_to_model_tree(const DropPoint &drop);
+   */
+  void apply_drop_to_modelTree(const DropPoint &drop);
   
   /**
    * Helper to get the sequence object from the state.
    * @return Returns a shared pointer to the sequence.
-   **/  
+   */
   boost::shared_ptr<model::Sequence> get_sequence() const;
 
 protected:
   /**
    * The owner timeline widget as provided to the constructor.
-   **/
+   */
   TimelineWidget &timelineWidget;
   
   /**
    * The layout tree.
-   **/
+   */
   TrackTree layoutTree;
   
   /**
@@ -360,7 +362,7 @@ protected:
    * need to be perpetually recalculated. This cache is regenerated by
    * the update_layout method.
    * @see update_layout()
-   **/
+   */
   std::map<boost::weak_ptr<timeline::Track>, Gdk::Rectangle>
     headerBoxes;
   
@@ -368,7 +370,7 @@ protected:
    * The total height of the track tree layout in pixels. This value
    * is only valid after layout_headers has been called.
    * @see update_layout()
-   **/
+   */
   int totalHeight;
   
   /**
@@ -376,13 +378,13 @@ protected:
    * dragged.
    * @remarks draggingTrackIter.node is set to NULL when no drag is
    * taking place.
-   **/
+   */
   TrackTree::pre_order_iterator draggingTrackIter;
   
   /**
    * The offset of the mouse relative to the top-left corner of the
    * dragging track.
-   **/
+   */
   Gdk::Point dragStartOffset;
   
   /**
@@ -390,26 +392,26 @@ protected:
    * top left of the whole layout.
    * @remarks This value is changed by begin_dragging_track and
    * drag_to_point
-   **/
+   */
   Gdk::Point dragPoint;
   
   /**
    * The total height of the dragging branch in pixels.
    * @remarks This value is updated by begin_dragging_track
-   **/
+   */
   int dragBranchHeight;
   
   /**
    * The tree point the the user is currently hovering on.
    * @remarks This value is updated by drag_to_point.
-   **/
+   */
   DropPoint dropPoint;
   
   /**
    * The connection to the animation timer.
    * @see begin_animation()
    * @see on_animation_tick()
-   **/
+   */
   sigc::connection animationTimer;
   
   /**
@@ -417,7 +419,7 @@ protected:
    * @remarks This value is recalculated by update_layout()
    * @see update_layout()
    * @see on_animation_tick()
-   **/
+   */
   bool animating;
 };
 

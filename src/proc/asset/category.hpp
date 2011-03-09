@@ -27,7 +27,6 @@
 #include "lib/symbol.hpp"
 
 #include <string>
-#include <iostream>
 #include <boost/functional/hash.hpp>
 
 
@@ -100,12 +99,6 @@ namespace asset {
       
     };
   
-  
-  inline ostream&
-  operator<< (ostream& os, Category const& cat)
-    {
-      return os << string(cat); 
-    }
   
   inline size_t
   hash_value (Category const& cat)

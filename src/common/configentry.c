@@ -59,7 +59,7 @@ lumiera_configentry_destroy (LumieraConfigitem self)
 
 struct lumiera_configitem_vtable lumiera_configentry_funcs =
   {
-    .new = lumiera_configentry_new,
+    .newitem = lumiera_configentry_new,
     .destroy = lumiera_configentry_destroy
   };
 

@@ -31,6 +31,31 @@ inkscapePath = "/usr/bin/inkscape"
 rsvgPath = "./rsvg-convert"
 artworkLayerPrefix = "artwork:"
 
+#
+# 2/2011 some notes by Ichthyo
+# The purpose of this python script is
+# - to parse a SVG
+# - to invoke Inkscape to render this SVG into a raster image (icon)
+# 
+# For the actual call into Incscape we rely on an executable 'rsvg-convert',
+# which is built during the Lumiera build process.
+# 
+# Judging from the code and the actual SVGs, this seems to work as follows:
+# The SVG contains a design to be rendered into raster images of various sizes.
+# These sizes are determined by special rectangles, which act as bounding box and
+# are placed on a special 'plate' layer, which is a child layer of the main
+# 'artwork:' layer. The grid of the SVG is setup such as to result in pixel sizes
+# suitable for icon generation. The actual size of the generated icons are then
+# parsed from the height and width attributes of the mentioned bounding box
+# rectangles.
+# 
+# The parser seems to be rather simplistic; the sizes and positions need to be
+# integral numbers. In one instance we had a float number in the y coordinate,
+# which resulted in an invalid, zero sized output icon
+#
+#
+
+
 def createDirectory( name ):
   try:
     if os.path.isfile(name):

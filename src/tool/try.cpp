@@ -16,49 +16,56 @@
 // 12/9  - tracking down a strange "warning: type qualifiers ignored on function return type"
 // 1/10  - can we determine at compile time the presence of a certain function (for duck-typing)?
 // 4/10  - pretty printing STL containers with python enabled GDB?
+// 1/11  - exploring numeric limits
+// 1/11  - integer floor and wrap operation(s)
+// 1/11  - how to fetch the path of the own executable -- at least under Linux?
 
 
-//#include <nobug.h>
-//#define LUMIERA_LOGGING_CXX
-//#include "include/logging.h"
-//#include "include/nobugcfg.h"
+#include <nobug.h>
 
 
 #include <iostream>
-//#include <typeinfo>
 #include <string>
-#include <vector>
-#include <cstdlib>
-#include <cstdio>
+
+extern "C" {
+#include <unistd.h>
+}
+#include "lib/error.hpp"
+#include "lib/symbol.hpp"
 
 
-//using std::rand;
 using std::string;
 using std::cout;
 using std::endl;
+using lib::Literal;
+using lib::STRING_MAX_RELEVANT;
+
+namespace error = lumiera::error;
+
+Literal GET_PATH_TO_EXECUTABLE ("/proc/self/exe");
+
+string
+catchMyself ()
+{
+  string buff(STRING_MAX_RELEVANT+1, '\0' );
+  ssize_t chars_read = readlink (GET_PATH_TO_EXECUTABLE, &buff[0], STRING_MAX_RELEVANT);
+  
+  if (0 > chars_read || chars_read == ssize_t(STRING_MAX_RELEVANT))
+    throw error::Fatal ("unable to discover path of running executable");
+  
+  buff.resize(chars_read);
+  return buff;
+}
 
 
 int 
-main (int, char**)
+main (int, char**) //(int argc, char* argv[])
   {
     
-//  NOBUG_INIT;
+    NOBUG_INIT;
     
-    std::string str = "hullo wöld";
-    std::vector<int> vec (1000);
-    
-    for (uint i = 0; i < vec.size(); ++i)
-        vec[i] = i;
-    
-    cout << str <<  "\n.gulp.\n";
-    
-    // Note: when selecting the string or the vector in the Eclipse variables view
-    //       (or when issuing "print str" at the GDB prompt), the GDB python pretty-printer
-    //       should be activated. Requires an python enabled GDB (>6.8.50). Debian/Lenny isn't enough,
-    //       but compiling the GDB package from Debian/Squeeze (GDB-7.1) is straightforward.
-    //       Moreover, you need to check out and install the python pretty-printers and 
-    //       you need to activate them through your ~/.gdbinit
-    //       see http://sourceware.org/gdb/wiki/STLSupport
+    cout << "\n\nwho am I? :" << catchMyself();
+    cout <<  "\n.gulp.\n";
     
     return 0;
   }

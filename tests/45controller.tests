@@ -12,33 +12,33 @@ out: Command-State. arguments=unbound, ·noUNDO·.
 out: capture state...
 out: Command-State. arguments=Closure\(\), ·noUNDO·.
 out: Command-State. arguments=Closure\(.\), ·noUNDO·.
-out: Command-State. arguments=Closure\(.,00:..:....00\), ·noUNDO·.
-out: Command-State. arguments=Closure\(00:..:....00,glorious,..\), <mem: destruction>.
+out: Command-State. arguments=Closure\(.,0:..:....00\), ·noUNDO·.
+out: Command-State. arguments=Closure\(0:..:....00,glorious,..\), <mem: destruction>.
 out: would be serialised.....Command-State. arguments=Closure\(\), ·noUNDO·.
 out: would be serialised.....Command-State. arguments=Closure\(.\), ·noUNDO·.
-out: would be serialised.....Command-State. arguments=Closure\(.,00:..:....00\), ·noUNDO·.
-out: would be serialised.....Command-State. arguments=Closure\(00:..:....00,glorious,..\), <mem: destruction>.
+out: would be serialised.....Command-State. arguments=Closure\(.,0:..:....00\), ·noUNDO·.
+out: would be serialised.....Command-State. arguments=Closure\(0:..:....00,glorious,..\), <mem: destruction>.
 out: sizeof\( .+control1.ArgumentHolder.+ \) = .+
-out: Command-State. arguments=Closure\(00:..:....00,Lumiera rocks,..\), ·noUNDO·.
+out: Command-State. arguments=Closure\(0:..:....00,Lumiera rocks,..\), ·noUNDO·.
 out: capture state...
 out: captured state: START...Lumiera rocks
-out: Command-State. arguments=Closure\(00:..:....00,Lumiera rocks,..\), <mem: START...Lumiera rocks>.
+out: Command-State. arguments=Closure\(0:..:....00,Lumiera rocks,..\), <mem: START...Lumiera rocks>.
 out: invoke operation...
-out: START...doIt\( Time=00:..:....00 "Lumiera rocks" rand=.. \)
+out: START...doIt\( Time=0:..:....00 "Lumiera rocks" rand=.. \)
 out: undo... memento=START...Lumiera rocks
-out: START...doIt\( Time=00:..:....00 "Lumiera rocks" rand=.. \)undoIt\(time=00:..:....00\)----memento-:START...Lumiera rocks
+out: START...doIt\( Time=0:..:....00 "Lumiera rocks" rand=.. \)undoIt\(time=0:..:....00\)----memento-:START...Lumiera rocks
 out: capture state...
-out: modified: Command-State. arguments=Closure\(00:00:00.123,unbelievable,..\), <mem: START...doIt\( Time=00:..:....00 "Lumiera rocks" rand=.. \)undoIt\(time=00:..:....00\)----memento-:START...Lumiera rocksLumiera rocks>.
-out: copied  : Command-State. arguments=Closure\(00:..:....00,Lumiera rocks,..\), <mem: START...Lumiera rocks>.
-out: undo... memento=START...doIt\( Time=00:..:....00 "Lumiera rocks" rand=.. \)undoIt\(time=00:..:....00\)----memento-:START...Lumiera rocksLumiera rocks
-out: RESET...undoIt\(time=00:..:....00\)----memento-:START...doIt\( Time=00:..:....00 "Lumiera rocks" rand=.. \)undoIt\(time=00:..:....00\)----memento-:START...Lumiera rocksLumiera rocks
+out: modified: Command-State. arguments=Closure\(0:00:00.123,unbelievable,..\), <mem: START...doIt\( Time=0:..:....00 "Lumiera rocks" rand=.. \)undoIt\(time=0:..:....00\)----memento-:START...Lumiera rocksLumiera rocks>.
+out: copied  : Command-State. arguments=Closure\(0:..:....00,Lumiera rocks,..\), <mem: START...Lumiera rocks>.
+out: undo... memento=START...doIt\( Time=0:..:....00 "Lumiera rocks" rand=.. \)undoIt\(time=0:..:....00\)----memento-:START...Lumiera rocksLumiera rocks
+out: RESET...undoIt\(time=0:..:....00\)----memento-:START...doIt\( Time=0:..:....00 "Lumiera rocks" rand=.. \)undoIt\(time=0:..:....00\)----memento-:START...Lumiera rocksLumiera rocks
 END
 
 
 TEST "build argument accepting function" ArgumentTupleAccept_test <<END
 out: sizeof\( .+control.+TestClass.+ \) =   1
 out: sizeof\( .+control.+TestClass.+lumiera.Time.+ \) =  (12|16)
-out: 00:..:..\.000
+out: 0:..:..\.000
 return: 0
 END
 

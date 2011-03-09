@@ -27,24 +27,19 @@
 #include "include/logging.h"
 
 #include <boost/regex.hpp>
-#include <boost/algorithm/string/split.hpp>
 #include <boost/algorithm/string/join.hpp>
-#include <boost/algorithm/string/classification.hpp>
-
-using boost::algorithm::split;
-using boost::algorithm::join;
-using boost::algorithm::is_any_of;
-using boost::algorithm::token_compress_on;
 
 using boost::regex;
 using boost::smatch;
 using boost::regex_search;
+using boost::algorithm::join;
 
+using util::noneg;
 
 
 #include <iostream>
 
-namespace util {
+namespace lib {
   
   
   /** create as a tokenised <i>copy</i> of the current commandline.
@@ -88,4 +83,4 @@ namespace util {
   
   
   
-} // namespace util
+} // namespace lib

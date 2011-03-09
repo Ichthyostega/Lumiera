@@ -84,7 +84,7 @@ namespace asset {
       
     protected:
       Pipe (Asset::Ident const&, string const& streamID, PProcPatt& wiring, string shortName ="", string longName ="") ;
-      friend class StructFactory;
+//    friend class StructFactory;
       friend class StructFactoryImpl;
       
     public:

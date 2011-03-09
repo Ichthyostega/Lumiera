@@ -33,10 +33,9 @@ typedef boost::program_options::variables_map VarMap;
 
 namespace op = boost::program_options;
 
-using util::VectS;
+using lib::VectS;
 
-namespace test
-  {
+namespace test {
   
   
   /** set up an options parser to use the current commandline.
@@ -47,7 +46,7 @@ namespace test
    *  --describe
    *  \endcode
    */
-  TestOption::TestOption (util::Cmdline& cmdline)
+  TestOption::TestOption (lib::Cmdline& cmdline)
     : syntax("Run a collection of test cases. Supported parameters"),
       parameters()
     {
@@ -89,37 +88,37 @@ namespace test
    */
   const string 
   TestOption::getTestgroup ()
-    {
-      ASSERT (parameters.count ("group"));
-      return parameters["group"].as<string>();
-    }
+  {
+    ASSERT (parameters.count ("group"));
+    return parameters["group"].as<string>();
+  }
   
   /** @return ID of a single test to run, empty string if not specified
    */
   const string
   TestOption::getTestID ()
-    {
-      if (parameters.count ("id") &&
-          parameters["id"].as<VectS>().size() > 0)
-        return parameters["id"].as<VectS>()[0];
-      else
-        return string ();
-    }
+  {
+    if (parameters.count ("id") &&
+        parameters["id"].as<VectS>().size() > 0)
+      return parameters["id"].as<VectS>()[0];
+    else
+      return string ();
+  }
   
   /** @return \c true if --describe switch was given */
   bool 
   TestOption::getDescribe ()
-    {
-      return parameters["describe"].as<bool>();
-    }
+  {
+    return parameters["describe"].as<bool>();
+  }
   
   
 
   ostream& 
   operator<< (ostream& os, const TestOption& to)
-    {
-      return os << to.syntax;
-    }
+  {
+    return os << to.syntax;
+  }
 
   
   

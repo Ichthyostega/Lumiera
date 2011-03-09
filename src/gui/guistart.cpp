@@ -3,8 +3,8 @@
 
   Copyright (C)         Lumiera.org
     2007-2008,          Joel Holdsworth <joel@airwebreathe.org.uk>
+    2009,               Hermann Vosseler <Ichthyostega@web.de>
                         Christian Thaeter <ct@pipapo.org>
-                        Hermann Vosseler <Ichthyostega@web.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -110,7 +110,8 @@ namespace gui {
                 int argc =0;
                 char *argv[] = {};                     // dummy command line for GTK
                 
-                gui::application().main(argc, argv);   // execute the GTK Event Loop
+                // execute the GTK Event Loop____________
+                GtkLumiera::application().main(argc, argv);
                 
                 if (!lumiera_error_peek())
                     return;                            // all went well, normal shutdown
@@ -199,7 +200,7 @@ extern "C" { /* ================== define an lumieraorg_Gui instance ===========
                                                              return
                                                                "Copyright (C)       Lumiera.org\n"
                                                                "2007-2008,          Joel Holdsworth <joel@airwebreathe.org.uk>\n"
-                                                               "                    Christian Thaeter <ct@pipapo.org>\n"
+                                                               "2009,               Christian Thaeter <ct@pipapo.org>\n"
                                                                "                    Hermann Vosseler <Ichthyostega@web.de>";
                                                            }
                                                         )

@@ -29,6 +29,8 @@
 #include "gui/gtk-lumiera.hpp"
 #include "timeline-tool.hpp"
 
+#include <boost/scoped_ptr.hpp>
+
 namespace gui {
 
 namespace model {
@@ -65,16 +67,21 @@ public:
    */
   ~TimelineBody();
   
+  TimelineWidget&
+  getTimelineWidget () const;
+
   /**
    * Returns the type of the currently selected timeline tool.
    */
-  ToolType get_tool() const;
+  ToolType
+  get_tool() const;
   
   /**
    * Selects a tool of a specified type.
    * @param tool_type The type of tool to set.
    */
-  void set_tool(ToolType tool_type);
+  void
+  set_tool(ToolType tool_type);
   
   /* ===== Events ===== */
 protected:
@@ -114,7 +121,7 @@ protected:
   /**
    * The event handler for when the TimelineWidget's state object is
    * replaced.
-   **/
+   */
   void on_state_changed();
   
   /* ===== Internals ===== */
@@ -152,7 +159,7 @@ private:
    * A helper function to get the view window
    * @remarks This function must not be called unless the TimlineWidget
    * has a valid state.
-   **/
+   */
   TimelineViewWindow& view_window() const;
    
   /**

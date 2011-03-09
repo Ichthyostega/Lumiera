@@ -30,8 +30,8 @@ using namespace Glib;
 namespace gui {
 namespace dialogs {
 
-NameChooser::NameChooser(Window &parent, const Glib::ustring title,
-    const Glib::ustring default_name) :
+NameChooser::NameChooser(Window &parent, cuString title,
+    cuString default_name) :
   Dialog::Dialog(title, parent, true),
   caption(_("Name:"))
 {
@@ -60,7 +60,7 @@ NameChooser::NameChooser(Window &parent, const Glib::ustring title,
   show_all_children();
 }
 
-const Glib::ustring NameChooser::get_name() const
+cuString NameChooser::get_name() const
 {
   return name.get_text();
 }

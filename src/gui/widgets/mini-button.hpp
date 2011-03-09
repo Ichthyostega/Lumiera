@@ -33,7 +33,7 @@ namespace widgets {
 
 /**
  * A wrapper for ToolButton-like Button widgets
- **/
+ */
 template<class T>
 class MiniWrapper : public T
 {
@@ -46,7 +46,7 @@ public:
    * @param icon_size The size of the image to show.
    * @remarks Stock ids have identifiers like Gtk::Stock::OK and
    * Gtk::Stock::APPLY.
-   **/
+   */
   MiniWrapper(const Gtk::StockID& stock_id,
     const Gtk::IconSize icon_size = Gtk::ICON_SIZE_LARGE_TOOLBAR) :
     image(stock_id, icon_size)
@@ -60,7 +60,7 @@ public:
    * Sets a new image from a stock-id for this button.
    * @param stock_id The stock_id of the image.
    * @param icon_size The size of the image to show.
-   **/
+   */
   void set_stock_id(const Gtk::StockID& stock_id,
     const Gtk::IconSize icon_size = Gtk::ICON_SIZE_LARGE_TOOLBAR)
   {
@@ -71,18 +71,18 @@ private:
   
   /**
    * The image widget for the button.
-   **/
+   */
   Gtk::Image image;
 };
 
 /**
  * A ToolButton-like widget
- **/
+ */
 typedef MiniWrapper<Gtk::Button> MiniButton;
 
 /**
  * A ToggleToolButton-like widget
- **/
+ */
 typedef MiniWrapper<Gtk::ToggleButton> MiniToggleButton;
 
 } // gui

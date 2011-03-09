@@ -33,7 +33,7 @@
 #include <iostream>
 
 using lumiera::Query;
-using util::Cmdline;
+using lib::Cmdline;
 using util::isnil;
 using util::contains;
 using util::for_each;
