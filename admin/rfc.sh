@@ -358,7 +358,7 @@ create)
           -f "./doc/devel/rfc_dropped/${name}.txt" ]]; then
         echo "$name.txt exists already"
     else
-        source ./doc/devel/template_rfc.sh >"./doc/devel/rfc_pending/${name}.txt"
+        source ./doc/devel/template/new_rfc.sh >"./doc/devel/rfc_pending/${name}.txt"
         edit "./doc/devel/rfc_pending/${name}.txt" 2 abstract
         git add "./doc/devel/rfc_pending/${name}.txt"
         process "./doc/devel/rfc_pending/${name}.txt"

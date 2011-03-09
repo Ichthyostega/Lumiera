@@ -77,7 +77,7 @@ mkdir build
 cd build
 ../configure
 make
-make install
+sudo make install
 ------------------------------------------------------------
 
 Installing GDL
@@ -88,8 +88,11 @@ but we contributed some improvements, which are only available in the very
 recent development versions of GDL. Thus, for now we created a special package,
 which doesn't interfere with an existing (older) installation of GDL.
 
-Ubuntu 9.04 note: intltool-update is not patched, you must add
-/usr/share/intltool-debian/ to get the gdl-package to configure correctly (JSC).
+Ubuntu 9.04 note::
+  intltool-update is not patched, you must add +/usr/share/intltool-debian/+
+  to get the gdl-package to configure correctly (JSC).
+Ubuntu 10.10 note::
+  you need to install the +intltool+ package from the standard ubuntu repository
 
 ------------------------------------------------------------
 git clone git://git.lumiera.org/gdl-package
@@ -135,14 +138,11 @@ or similar. If any if this libs are not listed, investigate why before continuin
 Building Lumiera
 ----------------
 
-Lumiera has two maintained (and equivalent) build systems: *scons* and
-*autotools*. You can pick the one you feel more comfortable with.
-
-When trying to build a development version of Lumiera, it might well be that at
-times one of the builds doesn't work temporarily. It is always a good idea to
-check the current build stats from our *builddrone*, which automatically builds
-the latest version from master repository. + Please have a look at this
-http://lumiera.org/builddrone/table.html[current build stats]-page.
+Up to now, Lumiera has had two maintained (and equivalent) build systems: *scons* and
+*autotools*. (Note 3/2011: Right now, the autotools build is broken. It is always a good
+idea to check the current build stats from our *builddrone*, which automatically builds
+the latest version from master repository. Please have a look at this
+http://lumiera.org/builddrone/table.html[current build stats]-page.)
 
 Next, after having built and installed the prerequisite libraries, go into the
 _workspace directory_ to retrieve the Lumiera source code and build it.
@@ -159,7 +159,7 @@ scons
 -----------------
 +
    
- * alternatively, if you prefer building with *autotools*:
+ * alternatively, if you prefer building with *autotools* _(not working currently 3/11)_:
 +
 -----------------
 git clone git://git.lumiera.org/LUMIERA
@@ -192,3 +192,12 @@ cd bin
 You should see something like (screenshot from 1/2009):
 
 image:/media/img/design.gui/screenshot090124-resources.jpg[]
+
+
+What's next?
+------------
+If you're a coder, maybe you've found something to improve...? +
+Contributing to Lumiera is made easy, thanks to *Git*
+
+-> Tutorial link:contributing.html[Contributing to Lumiera coding]
+

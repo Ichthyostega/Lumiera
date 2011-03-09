@@ -1,12 +1,13 @@
 Lumiera: The Inner Core
 =======================
 
+
 [abstract]
 ******************************************************************************
-The Lumiera Developers have a vision about a modern core for a NLE. Here are
-some of the design decisions and rationales in a rather sketchy way explained.
-New Developers may find this Document useful to get an idea about how the
-different components work together.
+The Lumiera Developers have a distinct vision about the core of a modern NLE. 
+This document outlines some of the basic technical concepts and highlights
+the fundamental design decisions. New Developers may find this Document useful
+to get an idea about how the different components work together.
 ******************************************************************************
 
 

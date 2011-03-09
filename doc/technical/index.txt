@@ -1,10 +1,16 @@
 Technical Documentation
 =======================
 
+// Menu :  prepend child backend
+// Menu :  prepend child proc
+// Menu :  prepend child gui
+// Menu :  prepend child howto
+// Menu :  prepend child overview
+
 
 This documentation section contains technical documentation about Lumiera. To
-get an overview of all the internals and components, you might want to read
-link:innerCore/the_inner_core.html[Lumiera the Inner Core]
+get an *overview* of all the internals and components, you might want to read
+link:overview.html[Lumiera the Inner Core]
 
 == Three Layers
 
