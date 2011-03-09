@@ -4,64 +4,79 @@ shopt -s extglob
 
 function usage()
 {
-    less <<"EOF"
-Script to maintain Lumiera RFC's
+    less -F <<"EOF"
+Lumiera RFC maintenance script
+==============================
 
-usage:
+// Note: the source of this documentation is maintained
+//       directly admin/rfc.sh in its usage() function
+//       edit it only there and then regenerate
+//       doc/devel/technical/infra/ with:
+//       ./admin/rfc.sh help >doc/technical/infra/rfcsh.txt
+
+Usage
+-----
+
  ./admin/rfc.sh <command> [options]
 
-options:
- title                  - Quoted string used as RFC title
- rfc                    - Name of the RFC, smart matched, unique
- rfcs                   - Name of the RFC, smart matched, multiple
- regex                  - Regex matched against the content of a RFC
- chapter                - Heading of a section
+Commands (with <mandatory> and [optional] parameters)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-commands (with <mandatory> and [optional] parameters):
- find <rfcs> [regex]    - List all matching RFC's (matching 'regex')
- show <rfcs> [regex]    - Read RFC's (matching 'regex')
- create <title>         - Create a new RFC
- edit <rfc> [chapter]   - Edit RFC at chapter
- asciidoc <rfc>         - pass the rfc.txt to 'asciidoc' command
- comment <rfc>          - Add a new comment to a RFC
- draft <rfc>            - Change RFC to Draft state
- final <rfc>            - Change RFC to Final state
- park <rfc>             - Change RFC to Parked state
- drop <rfc>             - Change RFC to Dropped state
- supersede <rfc> <new>  - Supersede RFC with a new RFC
- discard <rfc>          - Delete an RFC
- help                   - Show this help
- process                - Do automatic maintenance work
- wrap <rfcs>            - canonical reformatting
+ find <rfcs> [regex]::    List all matching RFC's (matching `regex`)
+ show <rfcs> [regex]::    Read RFC's (matching `regex`)
+ create <title>::         Create a new RFC
+ edit <rfc> [chapter]::   Edit RFC at chapter
+ asciidoc <rfc>::         pass the rfc.txt to `asciidoc` command
+ comment <rfc>::          Add a new comment to a RFC
+ draft <rfc>::            Change RFC to Draft state
+ final <rfc>::            Change RFC to Final state
+ park <rfc>::             Change RFC to Parked state
+ drop <rfc>::             Change RFC to Dropped state
+ supersede <rfc> <new>::  Supersede RFC with a new RFC
+ discard <rfc>::          Delete an RFC
+ help::                   Show this help
+ process::                Do automatic maintenance work
+ wrap <rfcs>::            canonical reformatting
 
-Smart matching:
- RFC names don't need to be given exactly, they use a globbing pattern.
- This is:
-  - case insensitive
-  - whitespaces are ignored
-  - '*' stands for any number of parameters
-  - '?' is any single character
-  - when starting with '/' they are matched against the begin of the name
-  - some regex operators work too
- 'find' and 'show' can operate on many matches so the given rfc name doesn't
- need to be unique. The other commands will complain when the RFC name given
- doesn't resolve to one unique RFC.
+Option types
+~~~~~~~~~~~~
 
-Notes:
- When less presents multiple files one can go forth and back with the ':n'
- and ':p' commands.
+ title::                Quoted string used as RFC title
+ rfc::                  Name of the RFC, smart matched, unique
+ rfcs::                 Name of the RFC, smart matched, multiple
+ regex::                Regex matched against the content of a RFC
+ chapter::              Heading of a section
 
- The tile for 'create' should be a normal document title. Possibly quoted
- since it may contain spaces and not too long. The filename is this title
- in CamelCase with all spaces and special characters removed.
 
- Chapter machching single lines containing this word, special asciidoc
- comments in the form '//word:.*' and asciidoc block attributes '[word.*]'
- on a single line. When a chapter pattern is not unique, the last one is
- picked.
+Smart matching
+--------------
 
- rfc.sh executes git add/rm/mv commands, but never commits. One should do a
- commit as soon he finished editing.
+RFC names don't need to be given exactly, they use a globbing pattern.
+This is:
+ - case insensitive
+ - whitespaces are ignored
+ - `*` stands for any number of parameters
+ - `?` is any single character
+ - when starting with `/` they are matched against the begin of the name
+ - some regex operators work too
+`find` and `show` can operate on many matches so the given rfc name doesn't
+need to be unique. The other commands will complain when the RFC name given
+doesn't resolve to one unique RFC.
+
+When `less` presents multiple files one can go forth and back with the `:n`
+and `:p` commands.
+
+The tile for `create` should be a normal document title. Possibly quoted
+since it may contain spaces and not too long. The filename is this title
+in CamelCase with all spaces and special characters removed.
+
+Chapter machching single lines containing this word, special asciidoc
+comments in the form `//word:.*` and asciidoc block attributes `[word.*]`
+on a single line. When a chapter pattern is not unique, the last one is
+picked.
+
+rfc.sh executes git add/rm/mv commands, but never commits. One should do a
+commit as soon he finished editing.
 
 EOF
 }

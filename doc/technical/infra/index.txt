@@ -8,6 +8,6 @@ used for building and maintaining documentation and website.
 
  * see link:../build/index.html[separate page for the Buildsystem]
  * generating the link:MenuGen.html[navigation menu] for the website
-
+ * how to use the link:rfcsh.html[rfc.sh] script for maintaining RFC's
 
 
