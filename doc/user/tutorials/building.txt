@@ -189,9 +189,9 @@ cd bin
 ./lumiera
 -------------------
 
-You should see something like (screenshot from 1/2009):
+You should see something like:
 
-image:/media/img/design.gui/screenshot090124-resources.jpg[]
+image:{l}/images/lumiera_gui_small.png[Current Lumiera GUI Screenshot]
 
 
 What's next?
