@@ -1,0 +1,88 @@
+building from source -- the Debian Way
+======================================
+:Author: Ichthyostega
+:Date: 3/2011
+
+When you're using a Debian-based system (e.g. Ubuntu), instead of compiling
+Lumiera from source in the classical (hard) way, you might prefer building
+from the Debian source package.
+
+Why -- what are the benefits?
+
+ * rely on the Debian/Ubuntu package manager for sorting out the library
+   and build dependencies
+ * install Lumiera as a first-class package, like all the other software
+   you're using regularily. This way, the package manager ``knows'' about
+   the library dependencies and can't mix up things due to a system upgrade.
+
+Under some circumstances, these very benefits might be a drawback, though.
+Sometimes you don't want to install; or you might have a version of Lumiera
+installed, but want to try out a (maybe newer / development) version...
+
+No problem -- basically it's allways possible to run Lumiera _without installation._
+It is deliberately made such as to find its components actively, within the standard
+directory structure created by the buildsystem. While, thus, Lumiera can be just
+run directly from such a folder tree, the software still relies on some other
+libraries, which somehow need to be installed on your system.
+
+
+anatomy of a debian source package
+----------------------------------
+
+NOTE: to be written.... give a short summary of the parts making up such a package
+
+
+building from source package
+----------------------------
+Generally speaking, operations which _modify_ the installation/configuration of your
+linux system require root permissions. To the contrary, just _building_ a package 
+should _not_ be done as root.
+
+. add a suitable source line to your *Apt configuration* ('/etc/apt/sources.lst')
++
+----
+deb-src http://lumiera.org/debian/ lenny experimental
+----
+. get all the *build dependencies*
++
+----
+sudo apt-get build-dep nobug-dev
+sudo apt-get build-dep libgdl-lum-dev
+sudo apt-get build-dep lumiera
+----
+. *build* using the source package.
++
+----
+apt-get source --compile nobug-dev
+----
+
+  * After building went through without error, it might happen that you're be
+    prompted for signing with your GPG key. But because you're not going to upload
+    the created binary packages anywhere, this step can be considered optional.
+
+  * installing the created package.
++
+Finally, you'll find several new +*.deb+ packages in the directory where you started
+the build. You need to _install_ these packages then using the basic debian package
+manager 'dpkg'
++
+----
+sudo dpkg -i libnobug2_201008.1-1_i386.deb nobug-dev_201008.1-1_i386.deb
+----
++
+of course, the package names, versions and architecture will vary, depending on your
+situation.
+
+  * repeat those steps to work your way up to the +lumiera+ package; build and install
+    Nobug, build and install libgdl-lum and finally build and install Lumiera
+
+. clean up.
++
+You can delete the source tree used for compiling. If you never intend to
+re-install the package, you could also delete the created package and source packge
+components after installing it. But especially when trying out development versions
+it might be a good idea to file those packages somewhere, as we're not keeping _every_
+package in the online Lumiera debian depot. While every package could be reproduced
+exactly with a bit of Git knowledge, just keeping the +*.deb+ might be more convenient.
+
+
