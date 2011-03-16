@@ -1,4 +1,11 @@
-lumiera (0.pre.01-1) unstable; urgency=low
+lumiera (0.pre.01-2) Lenny; urgency=low
+
+  * [4369790] Bugfix: compilation problems on 32bit
+  * [c354c66] enable the use of pristine-tar
+
+ -- Hermann Vosseler <deb@ichthyostega.de>  Wed, 16 Mar 2011 03:53:12 +0100
+
+lumiera (0.pre.01-1) Lenny; urgency=low
 
   * Initial Debian packaging of an pre Alpha internal development version
 
