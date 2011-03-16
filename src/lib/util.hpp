@@ -59,7 +59,16 @@ namespace util {
   
   /** helper to treat int or long division uniformly */
   template<typename I>
-  struct IDiv;
+  struct IDiv
+    {
+      I quot;
+      I rem;
+      
+      IDiv (I num, I den)
+        : quot(num/den)
+        , rem(num - quot*den)
+        { }
+    };
   
   template<>
   struct IDiv<int>
