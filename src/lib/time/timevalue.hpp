@@ -256,6 +256,9 @@ namespace time {
       /// direct assignment prohibited
       Time& operator= (Time const);
       
+      /// suppress possible direct conversions
+      Time(int);
+      
     public:
       static const Time MAX ; 
       static const Time MIN ;
@@ -269,6 +272,7 @@ namespace time {
         : TimeValue(calcResult)
         { }
       
+      explicit
       Time (FSecs const& fractionalSeconds);
       
       Time ( long millis
@@ -312,6 +316,11 @@ namespace time {
       explicit
       Duration (Time const& timeSpec)
         : Offset(Offset(timeSpec).abs())
+        { }
+      
+      explicit
+      Duration (FSecs const& timeSpan_in_secs)
+        : Offset(Offset(Time(timeSpan_in_secs)).abs())
         { }
       
       Duration (TimeSpan const& interval);

@@ -511,12 +511,12 @@ TimelineRuler::calculate_major_spacing() const
       15l * GAVL_TIME_SCALE,
       30l * GAVL_TIME_SCALE,
       60l * GAVL_TIME_SCALE,
-      2l * 60l * GAVL_TIME_SCALE, 
-      5l * 60l * GAVL_TIME_SCALE,
-      10l * 60l * GAVL_TIME_SCALE,
-      15l * 60l * GAVL_TIME_SCALE,
-      30l * 60l * GAVL_TIME_SCALE,
-      60l * 60l * GAVL_TIME_SCALE
+      2ll  * 60ll * GAVL_TIME_SCALE, 
+      5ll  * 60ll * GAVL_TIME_SCALE,
+      10ll * 60ll * GAVL_TIME_SCALE,
+      15ll * 60ll * GAVL_TIME_SCALE,
+      30ll * 60ll * GAVL_TIME_SCALE,
+      60ll * 60ll * GAVL_TIME_SCALE
     };     
   
   for(i = 0; i < sizeof(major_spacings) / sizeof(gavl_time_t); i++)

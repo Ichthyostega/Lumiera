@@ -72,6 +72,7 @@
 #include <boost/lexical_cast.hpp>
 #include <tr1/functional>
 #include <string>
+#include <cstdio>
 #include <cmath>
 
 using std::string;
@@ -126,7 +127,7 @@ namespace time {
               {
                 size_t space = std::snprintf (printbuffer_, bufsiz, formatSpec_, val);
                 REQUIRE (space < bufsiz, "Digxel value exceeded available buffer size. "
-                                         "For showing %s, %lu+1 chars instead of just %lu+1 would be required."
+                                         "For showing %s, %zu+1 chars instead of just %zu+1 would be required."
                                        , cStr(lexical_cast<string>(val)), space, len);               ///////////TICKET #197
               }
             ENSURE (!empty());
