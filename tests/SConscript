@@ -59,6 +59,7 @@ artifacts['testsuite'] = ts = ( [ testExecutable(env, dir) for dir in ['lib','co
                               + [ testCollection(env, dir) for dir in moduledirs if not dir in specials]
                               + createPlugins(env, 'plugin')
                               + env.File(glob('*.tests'))     # depending on the test definition files for test.sh
+                              + artifacts['config']
                               )
 
 

@@ -85,7 +85,7 @@ namespace test {
           GridBuilder spec = asset::Meta::create (myGrID);
           
           CHECK ( spec.fps_    == 1);
-          CHECK ( spec.origin_ == Time(0));
+          CHECK ( spec.origin_ == TimeValue(0));
           CHECK (!spec.predecessor_);
           
           spec.fps_    = testFps;
@@ -118,8 +118,8 @@ namespace test {
           CHECK (!util::isnil (simplePALGrid->ident.name));   // note: name-ID filled in automatically
           cout << "simple PAL Grid: " << simplePALGrid->ident << endl;
           
-          CHECK (Time(2) == simplePALGrid->timeOf(50));
-          CHECK (Time(2) == simplePALGrid->timeOf(FSecs(2)));
+          CHECK (Time(0,2) == simplePALGrid->timeOf(50));
+          CHECK (Time(0,2) == simplePALGrid->timeOf(FSecs(2)));
         }
     };
   

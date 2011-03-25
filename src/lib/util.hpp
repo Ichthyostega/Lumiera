@@ -88,6 +88,15 @@ namespace util {
         { }
     };
   
+  template<>
+  struct IDiv<long long>
+    : lldiv_t
+    {
+      IDiv<long long> (long long num, long long den)
+        : lldiv_t(lldiv (num,den))
+        { }
+    };
+  
   
   /** floor function for integer arithmetics.
    *  Unlike the built-in integer division, this function

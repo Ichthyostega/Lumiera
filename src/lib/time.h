@@ -103,7 +103,7 @@ lumiera_tmpbuf_print_time (gavl_time_t time);
  * @return number of the grid interval containing the given time.
  * @warning the resulting value is limited to (Time::Min, Time::MAX) 
  */
-long
+int64_t
 lumiera_quantise_frames (gavl_time_t time, gavl_time_t origin, gavl_time_t grid);
 
 /**

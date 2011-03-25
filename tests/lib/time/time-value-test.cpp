@@ -167,8 +167,8 @@ namespace test{
           CHECK (o1 == o2);
           CHECK (o1 == org);
           
-          // integer interpreted as second
-          Time t1(1);
+          // time in seconds
+          Time t1(FSecs(1));
           CHECK (t1 == TimeValue(GAVL_TIME_SCALE));
           
           // create from fractional seconds
@@ -190,7 +190,7 @@ namespace test{
           CHECK (th+th == t1);
           CHECK (t1-th == th);
           CHECK (((t1-th)*=2) == t1);
-          CHECK (th-th == Time(0));
+          CHECK (th-th == TimeValue(0));
           
           // that was indeed a temporary and didn't affect the originals
           CHECK (t1 == TimeValue(GAVL_TIME_SCALE));
@@ -252,14 +252,14 @@ namespace test{
           CHECK (distance == backwards.abs());
           
           Duration len1(Time(23,4,5,6));
-          CHECK (len1 == Time(FSecs(23,1000)) + Time(4 + 5*60 + 6*3600));
+          CHECK (len1 == Time(FSecs(23,1000)) + Time(0, 4 + 5*60 + 6*3600));
           
-          Duration len2(Time(-10)); // negative specs...
-          CHECK (len2 == Time(10));//
-          CHECK (len2 > zero);    //   will be taken absolute
+          Duration len2(Time(FSecs(-10))); // negative specs...
+          CHECK (len2 == Time(FSecs(10)));//
+          CHECK (len2 > zero);           //   will be taken absolute
           
           Duration unit(50, FrameRate::PAL);
-          CHECK (Time(2) == unit);              // duration of 50 frames at 25fps is... (guess what)
+          CHECK (Time(0,2,0,0) == unit);       // duration of 50 frames at 25fps is... (guess what)
           
           CHECK (FrameRate::PAL.duration() == Time(FSecs(1,25)));
           CHECK (FrameRate::NTSC.duration() == Time(FSecs(1001,30000)));
@@ -296,7 +296,7 @@ namespace test{
           CHECK (theLength == Offset(org,five).abs());
           
           Time endpoint = interval.end();
-          TimeSpan successor (endpoint, Duration(Time(2)));
+          TimeSpan successor (endpoint, Duration(Time(0,2,0,0)));
           
           CHECK (Offset(interval,endpoint) == Offset(org,five).abs());
           CHECK (Offset(endpoint,successor.end()) == Duration(successor));
