@@ -8,7 +8,6 @@ Lumiera Debian Package and Depot maintainance
 This Debian-Depot is part of the Lumiera build infrastructure.
 It is managed automatically, based on the link:http://mirrorer.alioth.debian.org/[reprepro] tool by Bernhard Link
 
-WARNING: Page under construction
 
 The Lumiera debian package
 --------------------------
@@ -73,7 +72,20 @@ added automatically to the pool directory and all the indices, directories and G
 signatures are created and updated automatically. Previous versions of the same
 package are purged, when not needed by any existing package anymore
 
-NOTE: *todo* show an configuraion example and list the most common handling commands
+everyday usage
+~~~~~~~~~~~~~~
+
+import a package::
+  +reprepro -V -C experimental include lenny lumiera_0.pre.01-1+maverick_i386.changes+
++
+this adds the given binary lumiera package, together with all sources and the original
+tarball to the 'lenny' repository, into the 'experimental' section
+
+dump out an entire repository::
+  +reprepro -V export lenny+
++
+this will __re__generate all of the indices, signatures and metadata of the 'lenny' repository
+
 
 Configuration
 ~~~~~~~~~~~~~
@@ -88,11 +100,29 @@ want to create _yet another not so useful Git repository..._)
  * primary link:http://git.lumiera.org/gitweb?p=lumiera/debian;a=blob;f=conf/distributions;hb=refs/heads/depot[configuration]
  * Logfile of imports: link:http://git.lumiera.org/gitweb?p=lumiera/debian;a=blob;f=log/lenny.log;hb=refs/heads/depot[for Lenny]
 
+[NOTE]
+.some special details to note in our setup
+=======================================================================================================================
+- each block in the 'distributions' file defines a repository for a ``distribution'' (e.g. Lenny, Lucid, Maverick).
+  Within such a repo, there are sections named 'Components'. 
+- The _override_ files mentioned in the configuration allow to overwrite / replace arbitrary fields in the metadata of
+  all packages added to that distribution.
+- In this setup, we enabled the 'tracking' function: thereby reprepro will keep track of the dependencies between 
+  binary packages, signatures, debianisation patches and original upstream tarballs. Never packages overwirte older
+  ones -- _at any time there is at most one version of a package in the repository._ Parts not referred to anymore
+  are automatically discareded. In our configuration, they are moved into the 'morguedir'
+- Please make sure the *gpg signing key* is in proper order, because it protects against evil spirited manipulations.
+
+=======================================================================================================================
+
+
 current setup 3/2011
 ^^^^^^^^^^^^^^^^^^^^
 While later we want to automate most of this packaging business, currently it's done semi-manual.
 Mostly, Ichthyo builds the packages on his local PC (or a VM) and then adds/imports them to the
 'reprepro' -- changes are then propagated to lumiera.org via rsync; as kind of a backup, the
-index files are also pushed to Git.
-
+index files are also pushed to link:http://git.lumiera.org/gitweb?p=lumiera/debian;a=shortlog;h=refs/heads/depot[Git].
+----
+rsync -rclvz --progress --partial --delete /local/filesys/path/to/Lumirep/depot/ ichthyo@www.lumiera.org:/var/local/www_debian
+----
 

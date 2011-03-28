@@ -19,17 +19,11 @@ Under some circumstances, these very benefits might be a drawback, though.
 Sometimes you don't want to install; or you might have a version of Lumiera
 installed, but want to try out a (maybe newer / development) version...
 
-No problem -- basically it's allways possible to run Lumiera _without installation._
+No problem -- basically it's always possible to run Lumiera _without installation._
 It is deliberately made such as to find its components actively, within the standard
 directory structure created by the buildsystem. While, thus, Lumiera can be just
 run directly from such a folder tree, the software still relies on some other
 libraries, which somehow need to be installed on your system.
-
-
-anatomy of a debian source package
-----------------------------------
-
-NOTE: to be written.... give a short summary of the parts making up such a package
 
 
 building from source package
@@ -74,15 +68,131 @@ of course, the package names, versions and architecture will vary, depending on 
 situation.
 
   * repeat those steps to work your way up to the +lumiera+ package; build and install
-    Nobug, build and install libgdl-lum and finally build and install Lumiera
+    Nobug, maybe build and install libgdl-lum and finally build and install Lumiera
 
 . clean up.
 +
 You can delete the source tree used for compiling. If you never intend to
-re-install the package, you could also delete the created package and source packge
+re-install the package, you could also delete the created package and source package
 components after installing it. But especially when trying out development versions
 it might be a good idea to file those packages somewhere, as we're not keeping _every_
 package in the online Lumiera debian depot. While every package could be reproduced
 exactly with a bit of Git knowledge, just keeping the +*.deb+ might be more convenient.
+
+
+Required and recommended Debian packages
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+What follows is a note about configuration for advanced users. You can safely skip and
+ignore this section if in doubt.
+
+The Debian package manager stores for each package not only the required prerequisites,
+but also some additional _recommended_ packages: Software likely to make using the given
+package more convenient or improve the usage in some way. In addition, it also stores
+a list of _suggested_ additional things to try. Now, since some time, the 'Apt' package
+management tool by default automatically installs also the _recommended_ software, not
+only the bare required prerequisites.
+
+While this is certainly fine for users not into the details of package management, it
+has the downside of installing sometimes _a lot_ of additional software no one asked
+about. Plus, all these installed packages are upgraded from time to time. An impressive
+example of this kind of _bloat_ is the *asciidoc* package, which recommends to install
+dockbook, an complete XML toolchain plus a TeX distribution, giving you an average of
+additional 500MB to download and install.
+
+Of course, this behaviour can be changed. Just add the following line to your Apt configuration
+----
+APT::Install-Recommends "false";
+----
+^_Disclaimer:_ please be sure you understand the consequences...^
+
+
+''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+What follows are some more in-depth explanations and background informations
+
+
+anatomy of a debian source package
+----------------------------------
+
+Debian source packages provide a standardised way of compiling software. These
+packages are not intended to be _installed_ on your system; rather you just download
+them and use them to build the software.
+
+Each Debian source package is based on an original _upstream_ tarball. In addition to
+this '\*.orig.tar.gz', there is a '\*.diff.gz' which contains all the _modifications_
+done to the original upstream sources in order to compile it with Debian. Especially,
+this so called ``debianisation patch'' adds a 'debian/' subdirectory to the source tree,
+which then holds all the control files used by Debian package management. Finally, the
+third part of each Debian source package is a _manifest_ file ('*.dsc'), which states
+that this is a Debian package and contains the primary control informations, the
+name and version number. Of course, these three files are named with a common name
+prefix, which matches the 'official' package name and version.
+
+Quite frequently, a given source package generates several binary packages, e.g. the
+main program, maybe a library and a documentation bundle. Because of this, often the
+source package is named slightly different then the binary package, which can be a
+problem sometimes. If in doubt, use the link:http://packages.debian.org[Debian package
+search] or the link:http://packages.ubuntu.com[equivalent for Ubuntu] to locate packages,
+versions, even individual files, or to get at the bug tracker for a package.
+
+interesting files in the debian subdirectory
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Most of the files in that subdirectory are relevant only for the people maintaining
+the package. With the exception of the following:
+
+- the 'debian/control' file defines the properties and *metadata* of the package. Here you'll
+  find the definition of the prerequisites, the name of the packager, the explanatory text.
+- the top entry in the 'debian/changelog' defines the *actual package name and version*
+- the actual build process is conducted by invoking several pre defined targets in the
+  'debian/rules' *makefile*. But modern debian packages often make use of the ``common
+  debian build system'' -- basically a set of macros allowing to write these 'rules'
+  in a very short and concise fashion
+
+
+commands for handling source packages
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+For all package building tasks, you can use an arbitrary directory of your choice.
+It is recommended to build with normal user permissions (not as root).
+
+- 'apt-get source' PACKAGENAME downloads the three parts of the source package. You may
+  use both the name of a binary or the source package in this command. After downloading,
+  the original tarball is extracted and the debianisation patch is applied. That is,
+  the tree is ready for building
+- 'apt-get source \--compile' PACKAGENAME does even more: it starts off the build
+  of a binary package after downloading and preparing the sources...
+- 'dpkg-source -x' SRCPACKAGE.dsc just extracts a source package and applies the diff
+- 'sudo apt-get buld-dep' PACKAGENAME fetches and installs all the prerequisites
+  necessary for building the denoted package. (however, it does _not_ download the
+  source package itself)
+- 'sudo dpkg -i' BIN-PACKAGE.deb finally installs the result of your building efforts.
+  Note, if several packages depend on each other, you need to give them all as list 
+  in a single command invocation.
+
+After having prepared the sources thusly, you need to step into the root of the
+source tree, if you want to build the whole package, or even want to tweak and
+modify parts.
+
+- 'dpkg-checkbuilddeps' checks that all the requirements of the package are satisfied.
+  It just prints out what is missing; this is especially useful if the fully automated
+  install did not work entirely, so you have to fix / reinstall parts manually
+- 'dpkg-buildpackage -rfakeroot' starts the full build. This includes re-generating
+  the source package (and especially the diff). If you only want to build the binary
+  package, you can skip the diff- / source-package generation with '-b'
+
+prerequisites for building
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+For performing any compiling and packaging tasks, you need some additional software,
+which by default isn't installed on a desktop system -- most notably the GNU C compiler.
+On any Debian based system, you get these basic tooling by
+----
+sudo apt-get install build-essential
+----
+
+library development packages
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+When building software linked against some library, we need additional 'header files'
+provided together with the library. Conventionally, these headers are packaged separately
+from the library and shipped as a package with a name like 'LIBNAME-dev'. You can safely
+__de__install these development packages when done with building.
+
 
 
