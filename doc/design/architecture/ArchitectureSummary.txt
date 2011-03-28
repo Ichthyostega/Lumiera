@@ -1,0 +1,34 @@
+Lumiera Architecture: Executive Summary
+=======================================
+:Author:	Hermann Voßeler
+:Email:	<Ichthyostega@web.de>
+:Date:      Sept 2010
+
+.Three Layers
+Besides the (obvious) separation in GUI frontend and render engine, editing core and application logic
+are treated separately. Besides enforcing clearly defined interfaces, the ability for script driven
+``headless'' operation and extensibility by plug-ins are deeply rooted in the overall design.
+
+.Strong Separation
+High-level and low-level realm remain cleanly separated, relying on a compiler-like translation mechanism.
+This way, each part can be optimised for its purpose. The GUI exposes a feature-rich session model close
+to the problem domain, while the engine operates on a performance optimised render nodes graph.
+
+.Scheduling Micro Operations
+High performance calculations in the engine are organised as micro tasks to be scheduled,
+allowing for adaptation to current and future hardware, expected to operate increasingly parallelised.
+
+.Intelligent IO
+The engine is backed by an sophisticated frame cache and self adjusting I/O manager for maximising throughput
+and bandwidth use.
+
+.Stream Type System
+Instead of relying on a single media framework, data streams are abstracted and classified, allowing to
+handle most wiring, detection of possible connections and conversion automatically.
+
+.Rules Based Configuration
+Rather than driven by hard wired default behaviour or tedious manual operation, control flow is guided by
+a set of rules shaped configuration, which scales better to large and complicated projects. Queries are
+issued at decision points, allowing to build up a work environment customised and tailored for the needs
+of specific projects.
+

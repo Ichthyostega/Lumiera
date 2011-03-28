@@ -1,6 +1,15 @@
 Lumiera Design Documents
 ========================
 
+// Menu :  prepend child design/backend
+// Menu :  prepend child engine
+// Menu :  prepend child model
+// Menu :  prepend child design/gui
+// Menu :  prepend child architecture
+
+// Menu :  append child plugins
+// Menu :  append child workflow
+
 The goal of Lumiera is to provide a professional tool for video editing on
 GNU/Linux systems.  The vision of the development team defines a modern design
 for the core of a Non-Linear Editing software.  One of the key aspect of Lumiera
