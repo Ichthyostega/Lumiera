@@ -119,7 +119,7 @@ Processing of Video (and audio) data can be generalized as graph processing
 (more precisely ``directed acyclic graphs''). Data flows on the edges of these
 graphs and is processed in the nodes.
 
-image:lumiera_big_graph.svg[Example for a graph]
+image:{imgd}/lumiera_big_graph.png[Example for a graph]
 
 When we look at this model we discover that we only need to build
 xref:builder[->] such graphs, the nodes themselves can be seen as black boxes
@@ -162,7 +162,7 @@ The visible Universe
 
 Now its time to take a look at the prelimary Lumiera GUI:
 
-image:lumiera_screenshot.png[Screenshot of Lumiera]
+image:{l}/images/lumiera_gui_small.png[Current Lumiera GUI Screenshot]
 
 The GUI is a plugin by itself and only one way to work Lumiera, it will become
 possible to create special-purpose GUIs or control Lumiera in different ways,
@@ -178,6 +178,7 @@ xref:screenconcept[->] to adapt to different workplaces and workflows.
 
 Viewer
 ~~~~~~
+[red]#to be written#
 
 // only one viewer type used for everything
 // how is audio integrated in the viewer
@@ -194,21 +195,20 @@ Viewer
 Transport Controls
 ~~~~~~~~~~~~~~~~~~
 
-// current gui is not final (transport controls attached to the timeline)
-// It is not finally decided where transport controls will be integrated
-// possibly as its own gui element
+The layout in current gui is rather preliminary -- it is not finally decided
+where transport controls will be integrated; possibly as its own gui element
 
-// This are devices either controlled by widgets or by some input device (midi
-// etc) so their gui may look differently.
-// Either way they connect to a Play Controler xref.. in the core which
-// manages playing and cursor positioning.
+This are devices either controlled by widgets or by some input device
+(MIDI, control surface, etc) so their gui may look differently.
+Either way they connect to a Play Controler xref.. in the core which
+manages playing and cursor positioning.
 
-// thus there will be some gui facility to attach Transport controls to Play
-// Controllers. Transport controls are ganged when they attach to the same
-// Play Controler.
+thus there will be some gui facility to attach Transport controls to Play
+Controllers. Transport controls are ganged when they attach to the same
+Play Controler.
 
-// just playing some footage for preview creates a simple internal timeline,
-// no magic here.
+just playing some footage for preview creates a simple internal timeline,
+no magic here.
 
 // TODO: bit unrelated, think about how ganging controls in general should
 // work, also for faders, masks and so on
@@ -220,12 +220,13 @@ Transport Controls
 Timeline View
 ~~~~~~~~~~~~~
 
-// hierarchical tracks, not just a stack
+hierarchical tracks, not just a list
 
-// Format Independent Timeline, one can put anything on the timeline.
-// the busses constrain what kind of data is pulled out and in turn the
-// builder creates a processing graph which does the necessary conversions and
-// stuff.
+Format Independent Timeline, one can put anything on the timeline.
+the busses constrain what kind of data is pulled out and in turn the
+builder creates a processing graph which does the necessary conversions and
+stuff.
+
 // Q: how to handle interaction, for example when some conversion can only be
 //    done in a lossy way and some conversion node may or may not be inserted
 //    (i mean gui wise)?
@@ -241,19 +242,23 @@ Timeline View
 //                  a special case of a selection.
 
 
-// Busses
-// ~~~~~~
-// How will the gui define busses?
+Busses
+~~~~~~
+The GUI provides a separate _bus view_, showing the master busses (subgroups)
+in a manner similar to an audio mixing desk. Any bus is just a means to collect
+and sum up the output of a specific kind of media (video, audio, number of channels),
+produced by various processing elements and other busses. Conceptionally, these global
+busses are considered a part of the timeline
 
 
 Asset View
 ~~~~~~~~~~
 
-// Manages all assets available in one project.
-//  * source media/footage/soundfiles
-//  * prepared clips, known subprojects
-//  * all available effects and transitions
-//  * internal artefacts like sequences and automation data sets
+Manages all assets available in one project.
+  * source media/footage/soundfiles
+  * prepared clips, known subprojects
+  * all available effects and transitions
+  * internal artefacts like sequences and automation data sets
 
 // First this will be simply implemented showing data loaded into the session
 // and all available plugins/effects
@@ -272,18 +277,23 @@ Asset View
 // the contents of a clip bin can be played like a storyboard
 
 
+''''''''
+
 
 Dark Matter
 -----------
 
-// coarse overview about things the user does not see but have some contact
-// with, details later...
+[red]#to be written#
+coarse overview about things the user does not see but have some contact
+with, details later...
 
-Now lets take a look under the hood. Lumiera
+
+Now lets take a look under the hood.
 
 
 Session storage
 ~~~~~~~~~~~~~~~
+[red]#to be written#
 
 // not generateable data
 
@@ -314,15 +324,19 @@ output destination, layering, fade control, audio pan,...
 
 Rendering Engine
 ~~~~~~~~~~~~~~~~
-// rendering
+[red]#to be written#
+rendering...
 
 [[builder]]
+[red]#to be written#
 
-// rules system
-
+rules system
+[red]#to be written#
 
 I/O Subsystem
 ~~~~~~~~~~~~~
+[red]#to be written#
+
 // file handling
 //  vault, work, cache
 //  repositories
@@ -331,12 +345,16 @@ I/O Subsystem
 
 Configuration
 ~~~~~~~~~~~~~
+[red]#to be written#
+
 // configuration system
 // serves defaults, actual data are stored in the session
 
 
 Plugins/Interfaces
 ~~~~~~~~~~~~~~~~~~
+[red]#to be written#
+
 // explain whats it is
 // portability
 // versioning
@@ -345,6 +363,7 @@ Plugins/Interfaces
 
 Rendering Video
 ---------------
+[red]#to be written#
 
 // describe the flow of data to render a frame
 
@@ -354,6 +373,7 @@ Rendering Video
 
 Pulling a Frame
 ~~~~~~~~~~~~~~~
+[red]#to be written#
 
 // special cases,
 // case studies,
@@ -372,45 +392,19 @@ Pulling a Frame
 
 // show some case-studies that someone gets a feel how plugins work
 
-[[pluginstack]]
-
-//Audio
 
 
+[red]#TODO# Consider integrating the following things into the document above
 
-
-// TODO Following things need to be integrated into the document above
-
-
-* [[plugins]]
-* [[timeline]]
-* [[demultiplexer]]
-* [[multiplexer]]
-* [[encoder]]
-* [[pull]]
-bus defines rendering format
-* [[caching]]
-* [[profiling]]
-* [[rendernode]]
-* [[frameserver]]
-* [[screenconcept]]
-* [[busses]]
-
-// gui/screen concepts
-//  perspectives
-
-// Automation
-
-
-
-
-// 3 layered model
-
-
-such as that we only need to pull exactly what we need,
-posibly down to the pixel, this also allows efficient caching xref:caching[->]
-for intermediate data, to be reused later.
-
+* plugins
+* timeline
+* pull
+* bus defines rendering format
+* caching
+* frameserver
+* screenconcept / perspectives
+* automation
+* 3 layered model
 
 
 

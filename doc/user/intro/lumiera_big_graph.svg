@@ -33,20 +33,21 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1.0518407"
-     inkscape:cx="564.81009"
-     inkscape:cy="277.96054"
+     inkscape:zoom="1.4875274"
+     inkscape:cx="444.97376"
+     inkscape:cy="280.84291"
      inkscape:document-units="px"
-     inkscape:current-layer="layer2"
+     inkscape:current-layer="layer4"
      showgrid="true"
-     inkscape:window-width="1274"
-     inkscape:window-height="774"
+     inkscape:window-width="1668"
+     inkscape:window-height="1020"
      inkscape:window-x="0"
      inkscape:window-y="0"
      inkscape:window-maximized="0"
      inkscape:snap-to-guides="false"
      inkscape:snap-grids="true"
-     inkscape:snap-global="true">
+     inkscape:snap-global="true"
+     gridtolerance="5">
     <inkscape:grid
        type="xygrid"
        id="grid2854"
@@ -63,8 +64,36 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title>Lumiera Data Flow Overview</dc:title>
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/by-sa/3.0/" />
+        <dc:date>Summer 2010</dc:date>
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>Christian Thäter</dc:title>
+          </cc:Agent>
+        </dc:creator>
+        <dc:publisher>
+          <cc:Agent>
+            <dc:title>Lumiera.org</dc:title>
+          </cc:Agent>
+        </dc:publisher>
       </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/by-sa/3.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Notice" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#Attribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+        <cc:requires
+           rdf:resource="http://creativecommons.org/ns#ShareAlike" />
+      </cc:License>
     </rdf:RDF>
   </metadata>
   <g
@@ -130,10 +159,10 @@
        x="279.23798"
        y="309.81433" />
     <rect
-       style="fill:#ffffff;stroke:#b3b3b3;stroke-width:1;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+       style="fill:#ffffff;stroke:#b3b3b3;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
        id="rect4737"
        width="110"
-       height="80"
+       height="94.736069"
        x="230"
        y="354.40942" />
     <rect
@@ -158,19 +187,16 @@
      style="display:inline">
     <path
        style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 502,426.40942 40,0"
+       d="M 500,424.40942 L 540,424.40942"
        id="path3467" />
     <path
-       style="fill:none;stroke:#b3b3b3;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 502,456.40942 40,0"
-       id="path3471" />
-    <path
        style="fill:none;stroke:#ff0000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       d="m 502,486.40942 38.57143,-0.51948"
-       id="path3473" />
+       d="M 500,464.40942 L 540,464.40942"
+       id="path3473"
+       sodipodi:nodetypes="cc" />
     <path
-       style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:2, 2;stroke-dashoffset:0"
-       d="m 502,441.40942 40,0"
+       style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:2, 2;stroke-dashoffset:1;stroke-opacity:1"
+       d="M 500,444.40942 L 540,444.40942"
        id="path3475" />
     <path
        style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:2, 2;stroke-dashoffset:0"
@@ -272,6 +298,11 @@
        d="M 365,74.580418 L 474.92023,194.40942"
        id="path2552"
        sodipodi:nodetypes="cc" />
+    <path
+       id="path3336"
+       d="M 345,336.82264 L 475,289.40942 L 475,194.40942"
+       style="fill:none;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:2, 2;stroke-dashoffset:0"
+       sodipodi:nodetypes="ccc" />
   </g>
   <g
      inkscape:label="Elements"
@@ -668,10 +699,10 @@
     <g
        style="display:inline"
        id="g3629-3"
-       transform="translate(15,140)">
+       transform="translate(15,149.9825)">
       <path
          transform="translate(0,527.95272)"
-         d="m 265,284.40942 a 15,5 0 1 1 -30,0 15,5 0 1 1 30,0 z"
+         d="M 265,284.40942 A 15,5 0 1 1 235,284.40942 A 15,5 0 1 1 265,284.40942 z"
          sodipodi:ry="5"
          sodipodi:rx="15"
          sodipodi:cy="284.40942"
@@ -681,7 +712,7 @@
          sodipodi:type="arc" />
       <path
          transform="translate(0,527.95272)"
-         d="m 265,279.40942 a 15,5 0 1 1 -30,0 15,5 0 1 1 30,0 z"
+         d="M 265,279.40942 A 15,5 0 1 1 235,279.40942 A 15,5 0 1 1 265,279.40942 z"
          sodipodi:ry="5"
          sodipodi:rx="15"
          sodipodi:cy="279.40942"
@@ -691,7 +722,7 @@
          sodipodi:type="arc" />
       <path
          transform="translate(0,527.95272)"
-         d="m 265,274.40942 a 15,5 0 1 1 -30,0 15,5 0 1 1 30,0 z"
+         d="M 265,274.40942 A 15,5 0 1 1 235,274.40942 A 15,5 0 1 1 265,274.40942 z"
          sodipodi:ry="5"
          sodipodi:rx="15"
          sodipodi:cy="274.40942"
@@ -701,7 +732,7 @@
          sodipodi:type="arc" />
       <path
          transform="translate(0,527.95272)"
-         d="m 265,269.40942 a 15,5 0 1 1 -30,0 15,5 0 1 1 30,0 z"
+         d="M 265,269.40942 A 15,5 0 1 1 235,269.40942 A 15,5 0 1 1 265,269.40942 z"
          sodipodi:ry="5"
          sodipodi:rx="15"
          sodipodi:cy="269.40942"
@@ -892,10 +923,10 @@
     <g
        style="display:inline"
        id="g3629-3-2"
-       transform="translate(70,140)">
+       transform="translate(70,149.9825)">
       <path
          transform="translate(0,527.95272)"
-         d="m 265,284.40942 a 15,5 0 1 1 -30,0 15,5 0 1 1 30,0 z"
+         d="M 265,284.40942 A 15,5 0 1 1 235,284.40942 A 15,5 0 1 1 265,284.40942 z"
          sodipodi:ry="5"
          sodipodi:rx="15"
          sodipodi:cy="284.40942"
@@ -905,7 +936,7 @@
          sodipodi:type="arc" />
       <path
          transform="translate(0,527.95272)"
-         d="m 265,279.40942 a 15,5 0 1 1 -30,0 15,5 0 1 1 30,0 z"
+         d="M 265,279.40942 A 15,5 0 1 1 235,279.40942 A 15,5 0 1 1 265,279.40942 z"
          sodipodi:ry="5"
          sodipodi:rx="15"
          sodipodi:cy="279.40942"
@@ -915,7 +946,7 @@
          sodipodi:type="arc" />
       <path
          transform="translate(0,527.95272)"
-         d="m 265,274.40942 a 15,5 0 1 1 -30,0 15,5 0 1 1 30,0 z"
+         d="M 265,274.40942 A 15,5 0 1 1 235,274.40942 A 15,5 0 1 1 265,274.40942 z"
          sodipodi:ry="5"
          sodipodi:rx="15"
          sodipodi:cy="274.40942"
@@ -925,7 +956,7 @@
          sodipodi:type="arc" />
       <path
          transform="translate(0,527.95272)"
-         d="m 265,269.40942 a 15,5 0 1 1 -30,0 15,5 0 1 1 30,0 z"
+         d="M 265,269.40942 A 15,5 0 1 1 235,269.40942 A 15,5 0 1 1 265,269.40942 z"
          sodipodi:ry="5"
          sodipodi:rx="15"
          sodipodi:cy="269.40942"
@@ -1108,12 +1139,12 @@
     <text
        xml:space="preserve"
        style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial;-inkscape-font-specification:Arial"
-       x="285"
+       x="296.88394"
        y="319.40942"
        id="text3434"><tspan
          sodipodi:role="line"
          id="tspan3436"
-         x="285"
+         x="296.88394"
          y="319.40942">Busses</tspan></text>
     <text
        xml:space="preserve"
@@ -1128,73 +1159,74 @@
     <text
        xml:space="preserve"
        style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial;-inkscape-font-specification:Arial"
-       x="374"
+       x="383.98251"
        y="364.40942"
        id="text3430-0"><tspan
          sodipodi:role="line"
          id="tspan3432-2"
-         x="374"
+         x="383.98251"
+         y="364.40942">Viewer</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial;-inkscape-font-specification:Arial;text-anchor:start;text-align:start;writing-mode:lr;line-height:90%"
+       x="460"
+       y="174.40942"
+       id="text3434-2"
+       sodipodi:linespacing="90%"><tspan
+         sodipodi:role="line"
+         id="tspan2554">Switch-</tspan><tspan
+         sodipodi:role="line"
+         id="tspan2556">board</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial;-inkscape-font-specification:Arial"
+       x="550"
+       y="304.40942"
+       id="text4506"><tspan
+         sodipodi:role="line"
+         id="tspan4508"
+         x="550"
+         y="304.40942">Data on Disk</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial;-inkscape-font-specification:Arial"
+       x="550"
+       y="364.40942"
+       id="text4510"><tspan
+         sodipodi:role="line"
+         id="tspan4512"
+         x="550"
          y="364.40942">Viewer</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial;-inkscape-font-specification:Arial"
-       x="460"
-       y="174.40942"
-       id="text3434-2"><tspan
-         sodipodi:role="line"
-         id="tspan3436-9"
-         x="460"
-         y="174.40942">Busses</tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial;-inkscape-font-specification:Arial"
-       x="548.41583"
-       y="296.5054"
-       id="text4506"><tspan
-         sodipodi:role="line"
-         id="tspan4508"
-         x="548.41583"
-         y="296.5054">Data on Disk</tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial;-inkscape-font-specification:Arial"
-       x="550.85516"
-       y="348.0954"
-       id="text4510"><tspan
-         sodipodi:role="line"
-         id="tspan4512"
-         x="550.85516"
-         y="348.0954">Viewer</tspan></text>
-    <text
-       xml:space="preserve"
-       style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial;-inkscape-font-specification:Arial"
-       x="545.9765"
-       y="397.85779"
+       x="545"
+       y="399.40942"
        id="text4514"><tspan
          sodipodi:role="line"
          id="tspan4516"
-         x="545.9765"
-         y="397.85779">Node/Plugin</tspan></text>
+         x="545"
+         y="399.40942">Node/Plugin</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial;-inkscape-font-specification:Arial"
-       x="549.39154"
-       y="426.15408"
+       x="545"
+       y="424.40942"
        id="text4518"><tspan
          sodipodi:role="line"
          id="tspan4520"
-         x="549.39154"
-         y="426.15408">Build Connection between Nodes</tspan></text>
+         x="545"
+         y="424.40942">Build Connection between Nodes</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial;-inkscape-font-specification:Arial"
-       x="549.39154"
-       y="442.74155"
+       x="545"
+       y="444.40942"
        id="text4522"><tspan
          sodipodi:role="line"
          id="tspan4524"
-         x="549.39154"
-         y="442.74155">Temporary Connection between node</tspan></text>
+         x="545"
+         y="444.40942">Temporary Connection between node</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial;-inkscape-font-specification:Arial"
@@ -1208,12 +1240,21 @@
     <text
        xml:space="preserve"
        style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial;-inkscape-font-specification:Arial"
-       x="255"
+       x="290"
        y="109.40942"
        id="text4711"><tspan
          sodipodi:role="line"
          id="tspan4713"
-         x="255"
+         x="290"
          y="109.40942">Preprocessing</tspan></text>
+    <text
+       id="text3328"
+       y="464.40942"
+       x="545"
+       style="font-size:10px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Arial;-inkscape-font-specification:Arial;text-anchor:start;text-align:start;writing-mode:lr;line-height:125%"
+       xml:space="preserve"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan3332">External Connection</tspan></text>
   </g>
 </svg>

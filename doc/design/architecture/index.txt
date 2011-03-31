@@ -1,0 +1,13 @@
+Design Documents: Lumiera Architecture
+======================================
+
+This section will feature some rather high-level considerations regarding
+the architecture of the application.
+
+.Executive Summary
+See link:ArchitectureSummary.html[here] for a short summary of the core architecture
+ideas of the envisioned Lumiera Application.
+
+
+  
+
