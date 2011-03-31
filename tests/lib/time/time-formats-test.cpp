@@ -148,7 +148,7 @@ namespace test{
           // Extended SMPTE: extension of the axis beyond origin towards negative values
           smpte.hours -= 6;
           CHECK ("- 0:21:59:24"== string(smpte));         // representation is symmetrical to origin
-          CHECK (tx - Time(6*60*60) == smpte.getTime());  // Continuous time axis
+          CHECK (tx - Time(0,0,0,6) == smpte.getTime());  // Continuous time axis
           
           CHECK (-1 == smpte.sgn);                        // Note: for these negative (extended) SMPTE...
           CHECK (smpte.mins > 0);                         // ...the representation is really flipped around zero
@@ -161,13 +161,13 @@ namespace test{
           ++smpte;                                        // but the orientation of the increment on the *whole* TC values is unaltered
           CHECK ("- 0:21:59:24"== string(smpte));         // so this actually *advanced* time by one frame 
           CHECK (tx == smpte.getTime());
-          CHECK (tx <  Time(0));
+          CHECK (tx <  TimeValue(0));
           
           smpte.mins -= 2*60;                             // now lets flip the representation again...
           CHECK ("  1:38:00:01"== string(smpte));
           CHECK (+1 == smpte.sgn);
           CHECK (smpte.getTime() > 0);
-          CHECK (tx + Time(2*60*60) == smpte.getTime());
+          CHECK (tx + Time(0,0,0,2) == smpte.getTime());
           smpte.secs -= 2*60*60;                          // and again...
           CHECK (tx == smpte.getTime());
           CHECK ("- 0:21:59:24"== string(smpte));

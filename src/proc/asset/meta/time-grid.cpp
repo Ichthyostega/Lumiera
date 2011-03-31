@@ -154,7 +154,7 @@ namespace meta {
   PGrid
   TimeGrid::build (Symbol gridID, FrameRate frames_per_second)
   {
-    return build (gridID,frames_per_second, Time(0));
+    return build (gridID,frames_per_second, Time(0,0));
   }
   
   

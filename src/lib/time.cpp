@@ -96,7 +96,7 @@ lumiera_frame_duration (FrameRate const& fps)
 
 namespace { // implementation helper
   
-  inline long
+  inline long long
   calculate_quantisation (gavl_time_t time, gavl_time_t origin, gavl_time_t grid)
   {
     time -= origin;
@@ -105,9 +105,11 @@ namespace { // implementation helper
 }
 
 
-long
+int64_t
 lumiera_quantise_frames (gavl_time_t time, gavl_time_t origin, gavl_time_t grid)
 {
+  ENSURE (sizeof(int64_t) <= sizeof(long long));
+  
   return calculate_quantisation (time, origin, grid);
 }
 

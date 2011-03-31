@@ -100,7 +100,7 @@ out: TestSubMO1\(ID= [0-9]{3}\)
 out: TestSubMO2\(ID= [0-9]{3}\)
 out: TestSubMO21\(ID= [0-9]{3}\)
 out: specialAPI()
-out: pID\(\w{8,16}\)
+out: pID\(\w{6,16}\)
 END
 
 
