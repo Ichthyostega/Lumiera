@@ -74,6 +74,9 @@
 #include <string>
 #include <cmath>
 
+#include <cstdio>
+#include <cstdarg>
+
 using std::string;
 
 
