@@ -2,15 +2,26 @@ Building Lumiera from source
 ============================
 
 Currently, after building the application, you can try out the Lumiera GUI
-and you can run the test suite.
+and you can run the test suite. This tutorial details the basic procedure
+to compile Lumiera on a Linux (or comparable) system. We'll assume that
+the reader has acquired basic _commandline survival skills_ and is able
+to figure out the usage of the Git version management system from the
+documentation (but we'll mention each actually required command
+explicitly)
 
-For building Lumiera, besides the GNU C/C++ compiler (Version 4.X), you will
-need:
+NOTE: just compiling Lumieara on a _Debian-based_ system (e.g. Ubuntu)
+      is much simpler using the Debian source package. See the separate
+      link:DebianBuilding.html[tutorial page] for this (or the general
+      link:/debian/[instructions for installing on Debian/Ubuntu]).
+      The purpose of this tutorial here is to show you the elementary
+      and generic steps to compile Lumiera from source.
 
- * http://git-scm.com/[git]
- * http://www.gnu.org/software/libtool/[libtool]
- * http://www.boost.org/[Boost libraries]
- * http://gmerlin.sourceforge.net/[GAVL library]
+For building Lumiera, besides the GNU C/C++ compiler (Version 4.X), you will need:
+
+ * link:http://git-scm.com/[Git VCS]
+ * link:http://www.scons.org/[SCons build system]
+ * link:http://www.boost.org/[Boost libraries]
+ * link:http://gmerlin.sourceforge.net/[GAVL library]
  * *NoBug* (see below)
 
 The GUI depends on:
@@ -22,16 +33,16 @@ TIP: Generally speaking, when you want to build software, you need the
 _development_ version of the packages, containing the headers and pre-built
 libraries to link against. Usually, these packages are named `-devel` or `-dev`
 
-For most Debian based systems, e.g. Ubuntu, you can install these dependencies
-with:
+For Debian based systems, e.g. Ubuntu, you can install these dependencies with:
 
-------------------------------------------------------------
-sudo apt-get install build-essential autoconf git-core libboost-dev \
-libboost-program-options-dev libboost-regex-dev libgavl-dev libgdl-1-dev \
-libgtkmm-2.4-dev librsvg2-dev libtool libxv-dev scons valgrind
-------------------------------------------------------------
+-------------------------------------------------------------------------------------
+sudo apt-get install build-essential autoconf scons valgrind libtool git-core \
+libboost-dev libboost-program-options-dev libboost-regex-dev libboost-filesystem-dev \
+libgavl-dev libgdl-1-dev libgtkmm-2.4-dev librsvg2-dev libxv-dev
+-------------------------------------------------------------------------------------
 
 Optionally, you may also want to install the *gtk2-engines* package.
+
 
 Build directory
 ---------------
@@ -85,8 +96,9 @@ Installing GDL
 
 The *GNOME Docking library* is generally available through your package manager,
 but we contributed some improvements, which are only available in the very
-recent development versions of GDL. Thus, for now we created a special package,
-which doesn't interfere with an existing (older) installation of GDL.
+recent development versions of GDL. If your distribution provides a GDL >= 2.27,
+you're fine. Otherwise we've created a special package, which doesn't interfere
+with an existing (older) installation of GDL.
 
 Ubuntu 9.04 note::
   intltool-update is not patched, you must add +/usr/share/intltool-debian/+
@@ -121,7 +133,7 @@ variable.
 Either way, check that all libraries are accessible and OK:
 
 ------------------------------------------------------------
-sudo ldconfig -v | grep 'gdl-lum\|nobug'
+sudo ldconfig -v | grep 'nobug'
 ------------------------------------------------------------
 
 and you should get a list of the libraries, part of which should look like this:
@@ -132,7 +144,9 @@ and you should get a list of the libraries, part of which should look like this:
         libgdl-lum.so.0 -> /usr/local/lib/libgdl-lum.so.0.0.0
 ------------------------------------------------------------
 
-or similar. If any if this libs are not listed, investigate why before continuing. 
+or similar. The same holds true for 'libgdl-lum.so.0' if you needed to build it
+explicitly for your system. If any if these libraries are not listed,
+investigate why before continuing. 
 
 
 Building Lumiera
@@ -175,19 +189,13 @@ maybe build and run the test suite by issuing `scons check` or `make check`
 
 This will take some time.
 
-NOTE: you can not _install_ Lumiera currently. Do not try it, it will not work.
-Just run it from the build directory.
+NOTE: you do not need to _install_ Lumiera. It will find its required files
+relative to the generated directory structure, which is freely relocatable
+as a whole. Just invoke the +target/lumiera+ executable. The current
+working directory is not relevant.
 
 After the build has finished successfully, you should be able to start Lumiera.
 Currently, this will bring up the GUI, without any further functionality
-
- * for autotools build: issue `./lumiera` (from within the `build` subdirectory)
- * for scons build:
-+
--------------------
-cd bin
-./lumiera
--------------------
 
 You should see something like:
 
