@@ -4,6 +4,8 @@ Lumiera Architecture: Executive Summary
 :Email:	<Ichthyostega@web.de>
 :Date:      Sept 2010
 
+//Menu: label Summary
+
 .Three Layers
 Besides the (obvious) separation in GUI frontend and render engine, editing core and application logic
 are treated separately. Besides enforcing clearly defined interfaces, the ability for script driven
