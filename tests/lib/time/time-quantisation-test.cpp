@@ -75,8 +75,8 @@ namespace test{
       virtual void
       run (Arg arg) 
         {
-          Time ref (random_or_get(arg));
-          CHECK (Time(0) < ref);
+          Time ref (0,random_or_get(arg),0,0);
+          CHECK (TimeValue(0) < ref);
           
           checkSimpleUsage (ref);
           check_theFullStory (ref);
