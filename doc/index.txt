@@ -1,14 +1,14 @@
-== Documentation
+= Documentation =
 
 This documentation section contains documentation for both users and developers.
 
-=== User
+== User ==
 
 The user manual containing the full reference for using Lumiera :
 
  * link:user/manual.html[User Manual]  _(planned)_
 
-=== Developer
+== Developer ==
 Informations about the structure of Lumiera, they give an overview on the main components of the application :
 
  * link:design/index.html[Design Documents]
@@ -17,7 +17,11 @@ Programming-oriented details about the functional layers of Lumiera as well as a
 
  * link:technical/index.html[Technical Documents]
 
-=== Presentation documents
-Documents that you can use as you wish to present or promote Lumiera :
 
- * link:/media/index.html[Whitepapers and Presentations]
+== Media and Presentations ==
+
+This section holds documents and materials used to present and promote Lumiera,
+articles, summaries and whitepapers
+ -> link:/media/index.html[Index]
+
+
