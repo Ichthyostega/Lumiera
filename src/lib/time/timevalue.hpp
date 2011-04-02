@@ -240,18 +240,15 @@ namespace time {
    * 
    * Lumiera Time provides some limited capabilities for
    * direct manipulation; Time values can be created directly
-   * from \c (h,m,s,ms) specification and there is an string
-   * representation intended for internal use (reporting and
-   * debugging). Any real output, formatting and persistent
+   * from \c (ms,sec,min,hour) specification and there is an
+   * string representation intended for internal use (reporting
+   * and debugging). Any real output, formatting and persistent
    * storage should be based on the (quantised) timecode
    * formats though, which can be generated from time values.
    * 
-   * Non constant Time objects can receive an encapsulated
-   * \em mutation message, which is also the basis for
-   * changing time spans, durations and for re-aligning
-   * quantised values to some other grid.
-   * 
-   * @todo define these mutations
+   * Similar to TimeValue, also Time objects are considered
+   * immutable values. As convenience shortcut, some operators
+   * are provided, creating a TimVar for further calculations.
    */
   class Time
     : public TimeValue
@@ -300,10 +297,8 @@ namespace time {
   /**
    * Duration is the internal Lumiera time metric.
    * It is an absolute (positive) value, but can be
-   * promoted from an offset. Similar to Time,
-   * Duration can receive mutation messages.
-   * 
-   * @todo define these mutations
+   * promoted from an offset. Like plain TimeValue,
+   * Duration is an immutable value.
    */
   class Duration
     : public Offset
@@ -342,8 +337,13 @@ namespace time {
    * to fully specify the temporal properties of an
    * object within the model.
    * 
-   * Similar to Time and Duration, a TimeSpan may
-   * also receive an (opaque) mutation message.
+   * As an exception to the generally immutable Time
+   * entities, a non constant TimeSpan may receive
+   * \em mutation messages, both for the start point
+   * and the duration. This allows for changing
+   * position and length of objects in the timeline.
+   * 
+   * @todo define these mutations
    */
   class TimeSpan
     : public Time
@@ -351,16 +351,27 @@ namespace time {
       Duration dur_;
       
     public:
-      TimeSpan(Time start, Duration length)
+      TimeSpan(TimeValue start, Duration length)
         : Time(start)
         , dur_(length)
         { }
-                                                ///////////TODO creating timespans needs to be more convenient....
+      
+      TimeSpan(TimeValue start, FSecs(duration_in_secs))
+        : Time(start)
+        , dur_(duration_in_secs)
+        { }
+      
       
       Duration
       duration()  const 
         {
           return dur_;
+        }
+      
+      Time
+      start()  const
+        {
+          return *this;
         }
       
       Time
