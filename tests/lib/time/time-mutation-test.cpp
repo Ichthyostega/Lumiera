@@ -25,6 +25,7 @@
 #include "lib/test/test-helper.hpp"
 #include "lib/time/timevalue.hpp"
 #include "lib/time/timequant.hpp"
+#include "proc/asset/meta/time-grid.hpp"
 //#include "lib/time/display.hpp"
 #include "lib/util.hpp"
 
@@ -45,6 +46,8 @@ using std::string;
 namespace lib {
 namespace time{
 namespace test{
+  
+  using asset::meta::TimeGrid;
   
   namespace {
     inline string
@@ -76,6 +79,19 @@ namespace test{
             return lexical_cast<gavl_time_t> (arg);
         }
       
+      struct TestValues
+        {
+          TimeVar var;
+          TimeSpan span;
+          QuTime quant;
+          
+          TestValues (TimeValue o)
+            : var(o)
+            , span(o, Offset(o))
+            , quant(o, "test_grid")
+            { }
+        };
+      
       
       virtual void
       run (Arg arg) 
@@ -83,8 +99,10 @@ namespace test{
           TimeValue o (random_or_get (pop(arg)));
           TimeValue c (random_or_get (pop(arg)));
           
-          PQuant fixQ (new FixedFrameQuantiser(FrameRate::PAL));
-          QuTime qVal (o, fixQ);
+          // using a 25fps-grid, but with an time origin offset by 1/50sec
+          TimeGrid::build("test_grid", FrameRate::PAL, Time(FSecs(1,50)));
+          
+          QuTime qVal (o, "test_grid");
           FrameNr count(qVal);
           
           mutate_by_Value (o, c);
@@ -97,24 +115,28 @@ namespace test{
       void
       mutate_by_Value(TimeValue o, TimeValue change)
         {
+          TestValues t(o);
         }
       
       
       void
       mutate_by_Offset (TimeValue o, Offset change)
         {
+          TestValues t(o);
         }
       
       
       void
       mutate_quantised (TimeValue o, QuTime change)
         {
+          TestValues t(o);
         }
       
       
       void
       mutate_by_Increment (TimeValue o, int change)
         {
+          TestValues t(o);
         }
     };
   
