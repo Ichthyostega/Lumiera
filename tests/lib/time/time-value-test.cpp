@@ -29,12 +29,10 @@
 
 #include <boost/lexical_cast.hpp>
 #include <iostream>
-//#include <cstdlib>
 #include <string>
 
 using boost::lexical_cast;
 using util::isnil;
-//using std::rand;
 using std::cout;
 using std::endl;
 using std::string;
@@ -312,10 +310,10 @@ namespace test{
       void
       compareTimeSpan (TimeValue org)
         {
-          TimeSpan span1 (Time(org), Duration(Time(org)));
-          TimeSpan span2 (Time(org), Offset(org, TimeValue(0)));
-          TimeSpan span3 (Time(org), FSecs(5,2));
-          TimeSpan span4 (Time(org), FSecs(5,-2));
+          TimeSpan span1 (Time(org), Time(org)+Time(org));            // using the distance between start and end point
+          TimeSpan span2 (Time(org), Offset(org, TimeValue(0)));      // note: the offset is taken absolute, as Duration
+          TimeSpan span3 (Time(org), FSecs(5,2));                     // Duration given explicitly, in seconds
+          TimeSpan span4 (Time(org), FSecs(5,-2));                    // again: the Duration is taken absolute
           
           CHECK (span1 == span2);
           CHECK (span2 == span1);
@@ -368,19 +366,19 @@ namespace test{
           CHECK (span3 > span3y);
           CHECK (span3.duration() > span3y.duration());
           CHECK (span3.start() == span3y.start());
-          CHECK (span3.end()   == span3y.end());
+          CHECK (span3.end()    > span3y.end());
           CHECK (Time(span3)   == Time(span3y));
           
           CHECK (span3 < span3z);
           CHECK (span3.duration() > span3z.duration());
           CHECK (span3.start() < span3z.start());
-          CHECK (span3.end()   < span3z.end());
+          CHECK (span3.end()  != span3z.end());        // it's shorter, and org can be random, so that's all we know
           CHECK (Time(span3)   < Time(span3z));
           
           CHECK (span3y < span3z);
           CHECK (span3y.duration() == span3z.duration());
           CHECK (span3y.start() < span3z.start());
-          CHECK (span3.end()   < span3z.end());
+          CHECK (span3y.end()  < span3z.end());
           CHECK (Time(span3)  < Time(span3z));
         }
     };

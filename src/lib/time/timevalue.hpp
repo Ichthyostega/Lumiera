@@ -312,7 +312,7 @@ namespace time {
         { }
       
       explicit
-      Duration (Time const& timeSpec)
+      Duration (TimeValue const& timeSpec)
         : Offset(Offset(timeSpec).abs())
         { }
       
@@ -347,16 +347,27 @@ namespace time {
    */
   class TimeSpan
     : public Time
+    , boost::totally_ordered<TimeSpan>
     {
       Duration dur_;
       
     public:
-      TimeSpan(TimeValue start, Duration length)
+      TimeSpan(TimeValue const& start, Duration const& length)
         : Time(start)
         , dur_(length)
         { }
       
-      TimeSpan(TimeValue start, FSecs(duration_in_secs))
+      TimeSpan(TimeValue const& start, Offset const& reference_distance)
+        : Time(start)
+        , dur_(reference_distance)
+        { }
+      
+      TimeSpan(TimeValue const& start, TimeValue const& end)
+        : Time(start)
+        , dur_(Offset(start,end))
+        { }
+      
+      TimeSpan(TimeValue const& start, FSecs(duration_in_secs))
         : Time(start)
         , dur_(duration_in_secs)
         { }
@@ -380,6 +391,11 @@ namespace time {
           TimeVar startPoint (*this);
           return (startPoint + dur_);
         }
+      
+      /// Supporting extended total order, based on start and interval length
+      friend bool operator== (TimeSpan const& t1, TimeSpan const& t2)  { return t1.t_==t2.t_ && t1.dur_==t2.dur_; }
+      friend bool operator<  (TimeSpan const& t1, TimeSpan const& t2)  { return t1.t_< t2.t_ ||
+                                                                               (t1.t_==t2.t_ && t1.dur_< t2.dur_);}
     };
   
   
