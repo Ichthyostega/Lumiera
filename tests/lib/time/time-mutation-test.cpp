@@ -82,11 +82,13 @@ namespace test{
       struct TestValues
         {
           TimeVar var;
+          Duration dur;
           TimeSpan span;
           QuTime quant;
           
           TestValues (TimeValue o)
             : var(o)
+            , dur(o)
             , span(o, Offset(o))
             , quant(o, "test_grid")
             { }

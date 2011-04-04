@@ -75,6 +75,10 @@ namespace time {
       template<class TC>
       void
       castInto (TC& timecode)  const;
+      
+      /** receive change message, which
+          might cause re-quantisation */
+      void accept (Mutation const&);
     };
   
   

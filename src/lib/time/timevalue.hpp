@@ -293,12 +293,14 @@ namespace time {
   
   
   class TimeSpan;
+  class Mutation;
   
   /**
    * Duration is the internal Lumiera time metric.
    * It is an absolute (positive) value, but can be
-   * promoted from an offset. Like plain TimeValue,
-   * Duration is an immutable value.
+   * promoted from an offset. While Duration generally
+   * is treated as immutable value, there is the 
+   * possibility to send a \em Mutation message.
    */
   class Duration
     : public Offset
@@ -325,6 +327,8 @@ namespace time {
       Duration (ulong count, FrameRate const& fps);
       
       static const Duration NIL;
+      
+      void accept (Mutation const&);
     };
   
   
@@ -391,6 +395,10 @@ namespace time {
           TimeVar startPoint (*this);
           return (startPoint + dur_);
         }
+      
+      /** may change start / duration */
+      void accept (Mutation const&);
+      
       
       /// Supporting extended total order, based on start and interval length
       friend bool operator== (TimeSpan const& t1, TimeSpan const& t2)  { return t1.t_==t2.t_ && t1.dur_==t2.dur_; }
