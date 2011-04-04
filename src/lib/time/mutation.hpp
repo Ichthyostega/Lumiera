@@ -53,6 +53,7 @@
 #ifndef LIB_TIME_MUTATION_H
 #define LIB_TIME_MUTATION_H
 
+#include "lib/error.hpp"
 #include "lib/time/timevalue.hpp"
 //#include "lib/symbol.hpp"
 
@@ -67,6 +68,8 @@ namespace time {
   
 //using std::string;
 //using lib::Literal;
+  
+  LUMIERA_ERROR_DECLARE (INVALID_MUTATION); ///< Changing a time value in this way was not designated
   
   class QuTime;
   
@@ -91,6 +94,9 @@ namespace time {
       static void changeTime (Time);
       static void changeDuration (Duration);
       static void nudge (int adjustment);
+      
+    protected:
+      static void imposeChange (TimeValue&, TimeValue);
     };
   
   

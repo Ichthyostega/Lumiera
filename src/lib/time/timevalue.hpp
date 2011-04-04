@@ -74,6 +74,9 @@ namespace time {
           return *this;
         }
       
+      /** some subclasses may receive modification messages */
+      friend class Mutation;
+      
     public:
       /** explicit limit of allowed time range */
       static gavl_time_t limited (gavl_time_t raw);
