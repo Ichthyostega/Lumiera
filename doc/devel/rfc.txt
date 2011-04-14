@@ -2,6 +2,7 @@ Design Process
 ==============
 
 //Menu:   include rfc
+//Menu:   include rfc_parked
 //Menu:   include rfc_pending
 //Menu:   include rfc_dropped
 
