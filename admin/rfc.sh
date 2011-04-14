@@ -227,41 +227,29 @@ function process_file()
 {
     local file="$1"
     local path="${1%/*}"
+    local basename="${1##*/}"
+    local destpath="$path"
     local state=$(grep '^\*State\* *' "$file")
 
     case "$state" in
     *Final*)
-        if [[ "$path" != "./doc/devel/rfc" ]]; then
-            git mv "$file" "./doc/devel/rfc"
-        else
-            git add "$file"
-        fi
+        destpath="./doc/devel/rfc"
         ;;
     *Idea*|*Draft*)
-        if [[ "$path" != "./doc/devel/rfc_pending" ]]; then
-            git mv "$file" "./doc/devel/rfc_pending"
-        else
-            git add "$file"
-        fi
+        destpath="./doc/devel/rfc_pending"
         ;;
     *Parked*)
-        if [[ "$path" != "./doc/devel/rfc_parked" ]]; then
-            git mv "$file" "./doc/devel/rfc_parked"
-        else
-            git add "$file"
-        fi
+        destpath="./doc/devel/rfc_parked"
         ;;
     *Dropped*)
-        if [[ "$path" != "./doc/devel/rfc_dropped" ]]; then
-            git mv "$file" "./doc/devel/rfc_dropped"
-        else
-            git add "$file"
-        fi
-        ;;
-    *)
-        git add "$file"
+        destpath="./doc/devel/rfc_dropped"
         ;;
     esac
+
+    if [[ "$path" != "$destpath" ]]; then
+        git mv "$file" "$destpath"
+    fi
+    git add "$destpath/$basename"
 }
 
 
