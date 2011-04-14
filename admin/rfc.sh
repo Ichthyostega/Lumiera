@@ -223,7 +223,7 @@ function find_chapter()
 
 
 
-function process()
+function process_file()
 {
     local file="$1"
     local path="${1%/*}"
@@ -233,17 +233,26 @@ function process()
     *Final*)
         if [[ "$path" != "./doc/devel/rfc" ]]; then
             git mv "$file" "./doc/devel/rfc"
+        else
+            git add "$file"
         fi
         ;;
     *Idea*|*Draft*)
         if [[ "$path" != "./doc/devel/rfc_pending" ]]; then
             git mv "$file" "./doc/devel/rfc_pending"
+        else
+            git add "$file"
         fi
         ;;
     *Parked*|*Dropped*)
         if [[ "$path" != "./doc/devel/rfc_dropped" ]]; then
             git mv "$file" "./doc/devel/rfc_dropped"
+        else
+            git add "$file"
         fi
+        ;;
+    *)
+        git add "$file"
         ;;
     esac
 }
@@ -334,7 +343,7 @@ function change_state()
     local comment=".State -> $state$nl//add reason$nl    $(date +%c) $(git config --get user.name) <$(git config --get user.email)>$nl"
     edit_state "$name" "$state" "$comment"
     edit "$name" -4 "endof_comments"
-    process "$name"
+    process_file "$name"
 }
 
 
@@ -347,7 +356,7 @@ process)
     for file in $(find ./doc/devel/rfc* -name '*.txt');
     do
         echo "process $file"
-        process "$file"
+        process_file "$file"
     done
     :
     ;;
@@ -375,15 +384,14 @@ create)
     else
         source ./doc/devel/template/new_rfc.sh >"./doc/devel/rfc_pending/${name}.txt"
         edit "./doc/devel/rfc_pending/${name}.txt" 2 abstract
-        git add "./doc/devel/rfc_pending/${name}.txt"
-        process "./doc/devel/rfc_pending/${name}.txt"
+        process_file "./doc/devel/rfc_pending/${name}.txt"
     fi
     ;;
 edit)
     name=$(unique_name "$1")
     if [[ "$name" ]]; then
         edit "${name}" 2 "$2"
-        git add "$name"
+        process_file "$name"
     fi
     ;;
 asciidoc)
@@ -396,21 +404,18 @@ draft)
     name=$(unique_name "$1")
     if [[ "$name" ]]; then
         change_state "$name" Draft
-        git add "$name"
     fi
     ;;
 park)
     name=$(unique_name "$1")
     if [[ "$name" ]]; then
         change_state "$name" Parked
-        git add "$name"
     fi
     ;;
 final)
     name=$(unique_name "$1")
     if [[ "$name" ]]; then
         change_state "$name" Final
-        git add "$name"
     fi
     ;;
 supersede)
@@ -420,21 +425,19 @@ supersede)
     newname="${newname%.txt}"
     if [[ "$name" && "$newname" ]]; then
         change_state "$name" "Superseded by $newname"
-        git add "$name"
     fi
     ;;
 drop)
     name=$(unique_name "$1")
     if [[ "$name" ]]; then
         change_state "$name" Dropped
-        git add "$name"
     fi
     ;;
 comment)
     name=$(unique_name "$1")
     if [[ "$name" ]]; then
         add_comment "${name}"
-        git add "$name"
+        process_file "$name"
     fi
     ;;
 discard)
@@ -446,6 +449,7 @@ discard)
 wrap)
     find_rfc "$1" | while read file; do
         smart_wrap "$file" 80
+        process_file "$file"
     done
     ;;
 smart_wrap)
