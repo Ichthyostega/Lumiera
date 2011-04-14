@@ -53,12 +53,14 @@ Smart matching
 
 RFC names don't need to be given exactly, they use a globbing pattern.
 This is:
- - case insensitive
- - whitespaces are ignored
- - `*` stands for any number of parameters
- - `?` is any single character
- - when starting with `/` they are matched against the begin of the name
- - some regex operators work too
+
+ * case insensitive
+ * whitespaces are ignored
+ * `*` stands for any number of parameters
+ * `?` is any single character
+ * when starting with `/` they are matched against the begin of the name
+ * some regex operators work too
+
 `find` and `show` can operate on many matches so the given rfc name doesn't
 need to be unique. The other commands will complain when the RFC name given
 doesn't resolve to one unique RFC.
