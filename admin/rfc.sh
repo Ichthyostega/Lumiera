@@ -244,7 +244,14 @@ function process_file()
             git add "$file"
         fi
         ;;
-    *Parked*|*Dropped*)
+    *Parked*)
+        if [[ "$path" != "./doc/devel/rfc_parked" ]]; then
+            git mv "$file" "./doc/devel/rfc_parked"
+        else
+            git add "$file"
+        fi
+        ;;
+    *Dropped*)
         if [[ "$path" != "./doc/devel/rfc_dropped" ]]; then
             git mv "$file" "./doc/devel/rfc_dropped"
         else
