@@ -1,6 +1,6 @@
 [grid="all"]
 `------------`-----------------------
-*State*         _Idea_
+*State*         _Parked_
 *Date*          _2008-10-31_
 *Proposed by*   link:Ichthyostega[]
 -------------------------------------
@@ -290,5 +290,16 @@ collage of iconic scenes from archived and collected footage. Update intro and
 credit roll for each episode. Add in stopmotion, and 3D model animations with
 vocal commentaries. Gather together separate items from "outworkers". Tree
 (@)SIG(@)
+
+
+Parked
+~~~~~~
+We have to revisit this, possibly someone (or a group) who wants to work on 
+the workflow. For now its parked until revisited.
+
+    Do 14 Apr 2011 03:06:42 CEST Christian Thaeter
+
+
+
 
 Back to link:/documentation/devel/rfc.html[Lumiera Design Process overview]

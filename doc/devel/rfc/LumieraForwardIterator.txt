@@ -3,7 +3,7 @@ Design Process: Lumiera Forward Iterator
 
 [grid="all"]
 `------------`-----------------------
-*State*         _Idea_
+*State*         _Final_
 *Date*          _2009-11-01_
 *Proposed by*   link:Ichthyostega[]
 -------------------------------------
@@ -133,6 +133,13 @@ compromising the clean APIs.
 
 Comments
 --------
+
+
+Final
+~~~~~
+Accepted on developer meeting
+
+    Do 14 Apr 2011 02:52:30 CEST Christian Thaeter
 
 
 Back to link:/documentation/devel/rfc.html[Lumiera Design Process overview]

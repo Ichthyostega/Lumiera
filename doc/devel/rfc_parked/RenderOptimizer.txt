@@ -1,6 +1,6 @@
 [grid="all"]
 `------------`-----------------------
-*State*         _Idea_
+*State*         _Parked_
 *Date*          _2007-06-07_
 *Proposed by*   link:ct[]
 -------------------------------------
@@ -85,5 +85,16 @@ The good news is, that:
  vectors (new_color = matrix * old_color), 
  the matrix can be transformed from e.g. RGB to YUV, so these filters can
  always work in both colorspaces directly
+
+
+Parked
+~~~~~~
+Generally this is accepted but needs some more polishing when we go over it.
+
+    Do 14 Apr 2011 03:06:42 CEST Christian Thaeter
+
+
+
+
 
 Back to link:/documentation/devel/rfc.html[Lumiera Design Process overview]

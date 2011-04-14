@@ -231,4 +231,13 @@ frameinfo* get_frame(unsigned num)+ where +struct frameinfo+ (not yet defined)
 is something like +{ void* data; size_t size; struct metadata* meta; ...}+
  -- link:ct[] 2008-10-06
 
+Needs Work
+~~~~~~~~~~
+There are a lot details to be worked out for an actual implementation but we
+agreed that we want this concept as proposed here.
+
+   Do 14 Apr 2011 03:06:42 CEST Christian Thaeter
+
+
+
 Back to link:/documentation/devel/rfc.html[Lumiera Design Process overview]

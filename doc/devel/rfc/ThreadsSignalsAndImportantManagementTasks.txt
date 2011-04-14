@@ -5,7 +5,7 @@ Threads, Signals and important management tasks
 
 [grid="all"]
 `------------`-----------------------
-*State*         _Idea_
+*State*         _Final_
 *Date*          _Sat Jul 24 21:59:02 2010_
 *Proposed by*   Christian Thaeter <ct@pipapo.org>
 -------------------------------------
@@ -29,7 +29,7 @@ having one dedicated signal handling thread. Moreover it makes sense that the
 initial thread does this signal handling.
 
 For Lumiera I propose to follow this practice and extend it a little by
-dedicating the initial thread to some management tasks. These are:
+dedicate a thread to some management tasks. These are:
  * signal handling, see below.
  * resource management (resource-collector), waiting on a condition variable or
    message queue to execute actions.
@@ -154,6 +154,11 @@ and to point out which details are not yet covered.
 Comments
 --------
 //comments: append below
+
+.State -> Final
+ichthyo wants this to be a dedicated thread (own subsystem) instead running in
+the initial thread. Fixed this in the proposal above, this makes this accepted. 
+    Do 14 Apr 2011 03:40:41 CEST Christian Thaeter <ct@pipapo.org>
 
 
 //endof_comments:

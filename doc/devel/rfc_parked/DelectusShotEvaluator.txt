@@ -1,6 +1,6 @@
 [grid="all"]
 `------------`-----------------------
-*State*         _Idea_
+*State*         _Parked_
 *Date*          _2008-09-21_
 *Proposed by*   link:nasa[]
 -------------------------------------
@@ -384,5 +384,14 @@ identical) evaluator. link:SoundMiner[] looks interesting, but like you say
 very expensive. I'm a sound guy, so I feel your pain...
 
 - link:NicholasSA[] 2009-01-04
+
+
+Parked
+~~~~~~
+
+Decided on Developer meeting, until someone wants to investigate this further.
+
+    Do 14 Apr 2011 02:52:30 CEST Christian Thaeter
+
 
 Back to link:/documentation/devel/rfc.html[Lumiera Design Process overview]

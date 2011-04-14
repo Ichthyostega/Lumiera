@@ -1,6 +1,6 @@
 [grid="all"]
 `------------`-----------------------
-*State*         _Idea_
+*State*         _Parked_
 *Date*          _2008-03-06_
 *Proposed by*   link:Ichthyostega[]
 -------------------------------------
@@ -62,7 +62,7 @@ the invocation interface
 this is intended to be a rather simple "call-style" interface, without much
 possibilites to influence the way things are happening. You pull a node and
 will find the results in a provided buffer or the cache, but you can't even
-change the frame data type type of the result. Besides the node invocation, 
+change the frame data type type of the result. Besides the node invocation,
 functions for collecting statistics will be accessible here too (Probably these
 functions will be ''implemented'' in a classic-OO fashion by virtual functions,
 but that's another story)
@@ -117,5 +117,12 @@ for details
 Comments
 --------
 
+
+Parked
+~~~~~~
+We park this until we have time to revisit the details. It is accepted that we
+need to design this interfaces.
+
+    Do 14 Apr 2011 03:06:42 CEST Christian Thaeter
 
 Back to link:/documentation/devel/rfc.html[Lumiera Design Process overview]

@@ -1,6 +1,6 @@
 [grid="all"]
 `------------`-----------------------
-*State*         _Draft_
+*State*         _Final_
 *Date*          _2008-08-16_
 *Proposed by*   link:Ichthyostega[]
 -------------------------------------
@@ -238,6 +238,14 @@ approach.
 
 Comments
 --------
+
+
+Final
+~~~~~
+Description of the Lumiera high level model as is.
+
+    Do 14 Apr 2011 03:06:42 CEST Christian Thaeter
+
 
 
 Back to link:/documentation/devel/rfc.html[Lumiera Design Process overview]
