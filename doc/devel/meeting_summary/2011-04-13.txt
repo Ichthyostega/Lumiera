@@ -1,0 +1,750 @@
+2011-04-13 Lumiera Developers Meeting
+=====================================
+:Author: Ichthyostega
+:Date: 2011-4-14
+
+April 13, 2011 on #lumiera 20:00 - 23:47 UTC +
+
+__Participants__
+
+ * cehteh
+ * ichthyo
+ * fsiddi
+ * skangas
+
+_Protocol written by Ichthyo_
+
+
+.organisational
+- IRC meeting summaries will be moved into the main Git tree, below 'doc/devel'
+- mostly shortened and tidied IRC logs, plus summary of conclusions \+ decisions
+- ``winter quarterly coding news'': this time just paste _Ichthyo's_ contribution into the website
+- the next ``coding news'' probably in May?
+
+
+New Website Page Layout
+-----------------------
+Summary what is discussed
+
+_cehteh_ points out that...
+
+_joelholdsworth_ adds....
+
+
+Conclusion
+~~~~~~~~~~
+
+ * do this
+ * do that
+
+
+
+Recurring Topics
+----------------
+Discussion of open link:/documentation/devel/rfc.html[design process] drafts.
+
+
+Prop1
+~~~~~
+link:/documentation/devel/rfc_pending/SomeProposal[descriptive name]
+Summary what issues are discussed
+..Details..
+
+Conclusion:: drop it
+
+
+
+Next meeting
+------------
+
+The next meeting will be at Wednesday May 11, 20:00 UTC
+
+
+''''
+
+
+.-- Discussion of details --
+[caption="☉Transcript☉ "]
+----------------------------
+[2011-04-13 22:48:05] <fsiddi> there are still some layout issues
+[2011-04-13 22:48:13] <fsiddi> i'm working on them
+[2011-04-13 22:48:45] <cehteh> that comes with the point about upgrading the webserver ...
+[2011-04-13 22:49:00] <cehteh> does newer asciidoc improve this soemhow already?
+[2011-04-13 22:49:05] <fsiddi> no
+[2011-04-13 22:49:13] <fsiddi> so there is no need on my side to upgrade
+[2011-04-13 22:49:24] <cehteh> good to know
+[2011-04-13 22:49:37] <cehteh> i had the impression it may make your life easier
+[2011-04-13 22:50:02] <cehteh> for the nobug documentation upgrading fixed a lot of bugs 
+[2011-04-13 22:50:32] <fsiddi> anyway if you'll find the time to upgrade, it will be good maybe for other things
+[2011-04-13 22:49:18] <cehteh> ok
+...
+[2011-04-13 22:51:42] <fsiddi> the vertical navigation template
+[2011-04-13 22:51:53] <fsiddi> i read ichthyo notes
+[2011-04-13 22:52:32] <fsiddi> and i'm not sure about this horizontal space concept
+[2011-04-13 22:52:45] <fsiddi> could you clarify, please?
+[2011-04-13 22:53:09] <ichthyo> todays, the screens can get pretty wide
+[2011-04-13 22:53:24] <ichthyo> so there is a huge amount of horizontal space
+[2011-04-13 22:53:39] <ichthyo> while most documents are rater organised vertically (for good reasons)
+[2011-04-13 22:53:45] <cehteh> 23" 16:9 with 2048x1152 in front of me
+[2011-04-13 22:56:19] <cehteh> http://www.spiegel.de/ looks already ugly on my 12" laptop by default
+[2011-04-13 22:54:01] <ichthyo> e.g. if I enlarge my browser here to full screen
+[2011-04-13 22:54:13] <ichthyo> the current layout just covers less then half the space
+[2011-04-13 22:54:13] <cehteh> is it possibly to flow text in 2 columns on wide screens?
+[2011-04-13 22:54:35] <ichthyo> cehteh: thats rather tricky and involved
+[2011-04-13 22:54:41] <fsiddi> exactly
+[2011-04-13 22:54:51] <ichthyo> guess that won't work without entering more java script coding
+[2011-04-13 22:54:53] <fsiddi> it is possible, but very tough
+[2011-04-13 22:55:01] <cehteh> well i dislike pages which dont use most of the screen and leave it empty
+[2011-04-13 22:55:03] <fsiddi> CSS3 can do it almost on its own
+[2011-04-13 22:55:22] <fsiddi> but it's not cross browser yet
+....
+[2011-04-13 22:55:35] <ichthyo> so my idea was just to let us discuss how we could use that additional space, when its available
+[2011-04-13 22:55:42] <cehteh> if the screen is wide enough they should make 'some' use of it .. maybe just using biggier fonts
+[2011-04-13 22:55:43] <ichthyo> and if that is feasible
+[2011-04-13 22:56:08] <ichthyo> I mean, just lets discuss open ended
+[2011-04-13 22:56:25] <ichthyo> what possibilities do we see for that?
+[2011-04-13 22:56:46] <ichthyo> using 2 columns would be one possibility, but that is tough and demading to get to work properly
+[2011-04-13 22:57:02] <fsiddi> there are basically 2 ways
+[2011-04-13 22:57:18] <fsiddi> 1 is to use liquid layout
+[2011-04-13 22:57:49] <ichthyo> liquit layout means, that the content area just expands, right?
+[2011-04-13 22:57:56] <fsiddi> like wikipedia yes
+[2011-04-13 22:58:14] <cehteh> http://slashdot.org/ scales reasonable well with different screen sizes
+[2011-04-13 22:58:52] <ichthyo> wikipedia is also an interesting example, because they use lots of floating block content
+[2011-04-13 22:58:57] <ichthyo> tables, images, additional infos
+[2011-04-13 22:59:20] <fsiddi> yes the mediawiki software is very powerful
+[2011-04-13 22:59:38] <fsiddi> another *very* well done documentation is http://developer.apple.com/library/mac/navigation/
+[2011-04-13 22:59:52] <fsiddi> (from a design point of view)
+[2011-04-13 22:59:54] <fsiddi> :)
+[2011-04-13 23:00:01] * cehteh likes (or rather demands) that browser zoom (ctrl-+) works well on the lumiera page
+...
+[2011-04-13 23:05:14] <fsiddi> ok, so apart from that, the discussion is liquid vs not liquid
+[2011-04-13 23:05:31] <ichthyo> and also what possibilities there are
+[2011-04-13 23:05:43] <fsiddi> ichthyo: what do you mean?
+[2011-04-13 23:05:56] <ichthyo> e.g. just expanding the content area
+[2011-04-13 23:06:04] <ichthyo> or also using a script to increase the font
+[2011-04-13 23:06:13] <ichthyo> or using floating blocks in the sidebar
+[2011-04-13 23:06:38] <ichthyo> (asciidoc has several elements which could float into the sidebar)
+[2011-04-13 23:07:09] <ichthyo> and if we know that the site layout supports that, then we'll likely make use of that
+                                when writing documentation
+[2011-04-13 23:07:10] <cehteh> when you have a page with a lot (many sideful) of content then a side menu
+                               (also footer/header) must be floating or can be left out
+[2011-04-13 23:07:31] <cehteh> there is no point in having a side-menu only visible for 3% of the content
+[2011-04-13 23:07:45] <ichthyo> ah yes, thats another point, i.e. how to treat the vertical scrolling
+[2011-04-13 23:08:07] <ichthyo> it is possible e.g. to have the scrollbars on the content area
+[2011-04-13 23:08:08] <cehteh> imo we need 2 classes of pages .. small ones and huge ones
+[2011-04-13 23:08:22] <cehteh> scrollbars inside are inconvinient
+[2011-04-13 23:08:18] <fsiddi> http://wiki.blender.org/index.php/Doc:Manual
+[2011-04-13 23:08:37] <fsiddi> it has scrolling sidebar
+[2011-04-13 23:09:08] <cehteh> but with js again
+[2011-04-13 23:09:19] <cehteh> i seen that as CSS only solution i think
+[2011-04-13 23:09:37] <cehteh> otherwise yes, thats an option ..
+[2011-04-13 23:10:02] <ichthyo> cehteh: yes, you can get that just with CSS
+[2011-04-13 23:10:23] <fsiddi> actually you need js to trigger the class to make it floating
+
+[2011-04-13 23:10:27] <cehteh> back to my statement, do you agree that we need this 2 kinds of classes?
+[2011-04-13 23:10:36] <fsiddi> i don't think so
+[2011-04-13 23:10:42] * ichthyo neither
+[2011-04-13 23:10:56] <fsiddi> cehteh, i think it will overcomplicate the backend
+[2011-04-13 23:11:03] <ichthyo> because I guess 90% of the documentation pages will get into the "large, much content" category
+[2011-04-13 23:11:05] <cehteh> really?
+[2011-04-13 23:11:12] <cehteh> yes
+[2011-04-13 23:11:19] <ichthyo> so we *do* have two templates already
+[2011-04-13 23:11:22] <fsiddi> i think it's better to keep it flexible
+[2011-04-13 23:11:26] <cehteh> and does this documentation need a sidebar?
+[2011-04-13 23:11:26] <fsiddi> yes
+[2011-04-13 23:11:35] <fsiddi> we use 2 templates
+[2011-04-13 23:12:16] <ichthyo> one is the "top level", with the horizontal menu
+[2011-04-13 23:12:24] <cehteh> this boils down to one for the general pages and one for documentation
+[2011-04-13 23:12:25] <ichthyo> and the second one is the documentation template, right
+[2011-04-13 23:12:44] <ichthyo> while those "general" pages are a handful
+[2011-04-13 23:12:45] <fsiddi> yes
+[2011-04-13 23:12:55] <cehteh> yes
+[2011-04-13 23:12:56] <ichthyo> while the documentation pages will go into the hundred and more
+[2011-04-13 23:14:08] <ichthyo> so I draw the conclusion, that the documentation pages are optimised for much content
+[2011-04-13 23:14:19] <fsiddi> yes
+[2011-04-13 23:13:30] <cehteh> ok .. settled
+... 
+[2011-04-13 23:13:54] <fsiddi> i propose to keep the layout not liquid also in that pages
+[2011-04-13 23:14:35] <fsiddi> if you prefer i can make them larger
+[2011-04-13 23:14:49] <fsiddi> but for the moment i'd like to keep the same width
+[2011-04-13 23:14:48] <ichthyo> what are the problems you see with a liquid layout?
+[2011-04-13 23:15:08] <fsiddi> mostly a readability issue
+[2011-04-13 23:15:29] <fsiddi> if a page is too large, it's unreadable
+[2011-04-13 23:15:39] <ichthyo> well, I second that statement
+[2011-04-13 23:15:53] <ichthyo> if a page goes over a certain amount of characters per line
+[2011-04-13 23:16:10] <fsiddi> ichthyo: that's what i mean
+[2011-04-13 23:15:53] <cehteh> can you scale the font on huge screens with css?
+[2011-04-13 23:16:10] <ichthyo> cehteh: not in css2
+[2011-04-13 23:16:15] <cehteh> ok
+[2011-04-13 23:16:24] <ichthyo> java script would work
+[2011-04-13 23:16:42] <cehteh> i opt for a reasonable big max size as already proposed
+[2011-04-13 23:16:47] <ichthyo> well, but if we manage to limit those number of characters per line
+[2011-04-13 23:16:55] <fsiddi> i can implement that
+[2011-04-13 23:16:58] <cehteh> but dont make this too small
+[2011-04-13 23:17:05] <ichthyo> then liquid layout might be more reasonable
+[2011-04-13 23:17:33] <fsiddi> ok
+
+[2011-04-13 23:17:36] <ichthyo> I am not 100% sure, but I recall having seen a layout, just based on CSS,
+                                which achieved exactly that,
+[2011-04-13 23:18:03] <ichthyo> i.e. limiting the maximum width, but allowing some liquid expansion below that
+[2011-04-13 23:17:55] <fsiddi> i'm not sure that just CSS is possible
+[2011-04-13 23:18:20] <ichthyo> If I recall right, it used several nested containers
+[2011-04-13 23:18:17] <cehteh> wtf is liquid?
+[2011-04-13 23:18:23] * cehteh is no web developer
+[2011-04-13 23:18:27] <cehteh> free floating text?
+[2011-04-13 23:18:32] <ichthyo> cehteh: liquid means, that the sizes adjust
+[2011-04-13 23:18:55] <cehteh> boxes where the content is rendered?
+[2011-04-13 23:18:36] <fsiddi> sorry guys
+[2011-04-13 23:18:42] <fsiddi> let me clarify
+[2011-04-13 23:18:51] <fsiddi> I thought you were familiar with the term
+[2011-04-13 23:18:55] <ichthyo> I am
+[2011-04-13 23:19:03] <cehteh> yes i am the web noob here
+[2011-04-13 23:19:20] <ichthyo> ... while I did quite a lot in the past, but mostly web applications, shops and the like
+[2011-04-13 23:19:37] <cehteh> cant you just give a max-width=200em for a container for example?
+[2011-04-13 23:19:47] <fsiddi> yes
+[2011-04-13 23:19:53] <fsiddi> it is possible
+[2011-04-13 23:19:59] <ichthyo> and then you set an "overflow mode"
+[2011-04-13 23:20:14] <cehteh> and whats overflow mode?
+[2011-04-13 23:20:28] <ichthyo> overflow mode is: adjust, clip, scrollbars
+[2011-04-13 23:20:17] <ichthyo> and if I recall correct, then the trick was to put a second container in that, with witdh 100%
+[2011-04-13 23:20:54] <fsiddi> i think we can set this
+[2011-04-13 23:21:03] <fsiddi> i'll investigate the possibilities we mentioned
+[2011-04-13 23:21:08] <fsiddi> and make a report in 1 week
+[2011-04-13 23:21:35] <ichthyo> fsiddi: that would be cool
+[2011-04-13 23:21:52] <ichthyo> I'll too try to dig in my old notes, maybe I'll find the example I have in mind
+
+[2011-04-13 23:21:41] <fsiddi> now i'l like to mention the 2nd and final point
+[2011-04-13 23:22:52] <fsiddi> my 2nd point is: navigation
+[2011-04-13 23:23:33] <fsiddi> can somebody help me with reimplementing the original nav system
+[2011-04-13 23:23:50] <cehteh> the menu?
+[2011-04-13 23:23:56] <ichthyo> yes, of course
+[2011-04-13 23:23:58] <fsiddi> that reads the url and opens up the tree at the right point
+[2011-04-13 23:24:07] <fsiddi> that's pretty important
+[2011-04-13 23:24:26] <fsiddi> after that works, it'll be just fixes in the layout
+[2011-04-13 23:24:45] <ichthyo> of course I'll help, just I don't know the new menu system so well
+[2011-04-13 23:24:54] <ichthyo> so we'll should just pair up on that
+[2011-04-13 23:25:06] <fsiddi> cool
+[2011-04-13 23:25:29] <ichthyo> maybe we should just set up a separate meeting here on IRC, where we can discuss that?
+[2011-04-13 23:25:41] <ichthyo> (you and me, that is)
+[2011-04-13 23:25:44] <fsiddi> so will you have time to work on it next week?
+[2011-04-13 23:26:45] <fsiddi> i'll poke you after my report on the 1st point then
+
+[2011-04-13 23:28:23] <ichthyo> well I'd like to bring up the question regarding color
+[2011-04-13 23:28:36] <ichthyo> and I'll ask especially you, fsiddi 
+[2011-04-13 23:28:44] <ichthyo> you know, colours are a matter of taste
+[2011-04-13 23:29:15] <ichthyo> thus I'd say, as you did the general layout, you have an important say in that
+[2011-04-13 23:28:59] <fsiddi> ah yes colors
+[2011-04-13 23:29:11] <fsiddi> i try to keep it neutral
+[2011-04-13 23:29:25] <ichthyo> you you would popose to stick to just gray shades?
+[2011-04-13 23:29:34] <ichthyo> what is with the links?
+[2011-04-13 23:29:39] <ichthyo> currently they are slate blue
+[2011-04-13 23:29:45] <cehteh> thats ok for me
+[2011-04-13 23:29:47] <fsiddi> i still have to work in them
+[2011-04-13 23:29:55] <fsiddi> yes I did not color the links
+[2011-04-13 23:30:13] <ichthyo> generally speaking, we should always try to limit the number of colours in a layout, IMHO
+[2011-04-13 23:30:18] <cehteh> i dont think we shall use any fancy colors and maybe/if required then we add colors as markup
+[2011-04-13 23:30:29] <ichthyo> but we could think of one or two "leading colours"
+[2011-04-13 23:30:35] <fsiddi> i want to
+[2011-04-13 23:30:43] <fsiddi> but did not put them in the css yet
+[2011-04-13 23:30:53] <fsiddi> i'll do that soon
+[2011-04-13 23:31:38] <fsiddi> so this is also for review soon :)
+[2011-04-13 23:32:07] <cehteh> but colors are fixable and we dont have an official lumiera color (do we need one?)
+[2011-04-13 23:32:22] <ichthyo> well... we could think about that
+[2011-04-13 23:32:19] <fsiddi> i'll try to make up one
+[2011-04-13 23:32:28] <cehteh> dunno :)
+[2011-04-13 23:32:37] <ichthyo> according to my experience
+[2011-04-13 23:32:47] <ichthyo> it helps a lot when you set a clear style guide early
+[2011-04-13 23:33:41] <ichthyo> ok
+[2011-04-13 23:33:51] <ichthyo> so what was the conclusion regarding the scrollbars?
+[2011-04-13 23:34:19] <ichthyo> do we want scrollbars on the content area, or do we want the header, footer just to scroll away
+[2011-04-13 23:34:33] <ichthyo> and do we want the navigation block fixed (relative to the screen)
+[2011-04-13 23:34:42] <ichthyo> or let it scroll away too?
+[2011-04-13 23:35:59] <cehteh> for general content, have it fixed, for documentation scroll it away?
+[2011-04-13 23:36:10] <ichthyo> the simplest solution is  just to leave evertything scroll away of course
+[2011-04-13 23:36:27] <cehteh> documentation pages need to be able to navigate within this documentation
+[2011-04-13 23:36:45] <cehteh> next/previous/top and maybe few related pages
+[2011-04-13 23:36:58] <cehteh> and back to home/home of documentation
+[2011-04-13 23:37:06] <cehteh> but not more i think
+[2011-04-13 23:37:21] <ichthyo> thats the point, it can get cluttered
+[2011-04-13 23:37:52] <cehteh> yes, leave only the minimal necessary things
+[2011-04-13 23:38:08] <ichthyo> well... *if* we want to keep the navigation (vertical menu) fixed, there are some problems
+[2011-04-13 23:38:12] <cehteh> at least the documentation should be readable on a small device, webpad, netbook even smartphone
+[2011-04-13 23:38:46] <ichthyo> namely: what to do on unexpectedly small pages, and what to do when the menu tree itself
+                                gets very large, so it doesn't fit on one page, even in half collapsed state, that is
+[2011-04-13 23:39:29] <cehteh> you cant fix/address everything
+[2011-04-13 23:39:42] <ichthyo> of course, but how to degrade then
+[2011-04-13 23:39:49] <ichthyo> allow a scrollbar to appear?
+[2011-04-13 23:39:51] <cehteh> there should be some safety marigin but otherwise just the browsers default fallbacks shall apply
+[2011-04-13 23:40:45] <cehteh> in the worst case then the defaults are the best, the user is used how his device handles this
+[2011-04-13 23:40:57] <ichthyo> good point
+[2011-04-13 23:41:00] <fsiddi> right now the tree expands, scrollbars automatically appear
+[2011-04-13 23:41:20] <ichthyo> ok
+[2011-04-13 23:41:47] <fsiddi> and atm i would not consider portable devices for accessing the documentation
+[2011-04-13 23:43:59] <fsiddi> anyway, i am about to leave for tonight
+[2011-04-13 23:44:08] <ichthyo> ok
+[2011-04-13 23:44:19] <ichthyo> I think we're through with the web page design questions for now
+[2011-04-13 23:44:26] <fsiddi> good
+[2011-04-13 23:44:33] <ichthyo> :)
+
+[2011-04-13 23:45:32] <skangas> Hi.
+[2011-04-13 23:45:40] <ichthyo> Hello skangas !
+[2011-04-13 23:47:53] <skangas> I will actually just pop in to say hi this time.
+[2011-04-13 23:48:18] <ichthyo> skangas: how's life? had a busy time?
+[2011-04-13 23:48:24] <skangas> I have late nights and early mornings at the moment, so I need my sleep. ;-)
+[2011-04-13 23:48:33] <ichthyo> ;-)
+[2011-04-13 23:48:42] <skangas> ichthyo, Yeah, I am quite busy for the rest of this semester.
+[2011-04-13 23:49:06] <skangas> I am hoping things will change once summer comes. They usually do.
+[2011-04-13 23:49:42] <ichthyo> hopefully you've got interesting things to learn and program right now...
+[2011-04-13 23:49:46] <skangas> And, I decided not to apply for GSoC, so I know there will be time. :-)
+[2011-04-13 23:50:09] <cehteh> Lumiera Summer of Code :P
+[2011-04-13 23:50:12] <skangas> Yeah, it is basically math and compilers currently. And even a bit of Prolog.
+[2011-04-13 23:50:18] <ichthyo> LuSoC
+[2011-04-13 23:50:19] <cehteh> cool :)
+[2011-04-13 23:50:43] <ichthyo> heh, I really enjoyed that compiler building lections
+[2011-04-13 23:50:46] <cehteh> http://dtai.cs.kuleuven.be/problog/index.html  stomped on that recently .. would be fun to play with it
+[2011-04-13 23:51:35] <cehteh> http://www.dcc.fc.up.pt/~vsc/Yap/clpbn/ is also cool .. unfortunally i think development stalled a bit
+[2011-04-13 23:51:40] <skangas> cehteh: This looks like (from skimming) exactly like the mathematical models I have been playing around with all day in school.
+
+[2011-04-13 23:51:46] <cehteh> uhm ok lets go on with the metting
+[2011-04-13 23:52:21] <ichthyo> two further topics, related:
+[2011-04-13 23:52:25] <ichthyo> the "impressum"
+[2011-04-13 23:52:27] <ichthyo> the license
+[2011-04-13 23:52:46] <cehteh> ah yes, i seen you added serveral licenses .. 
+[2011-04-13 23:53:08] <cehteh> we should make more clear which license lumiera is under
+[2011-04-13 23:53:25] <cehteh> only one 'license' page .. with gplv2
+[2011-04-13 23:53:50] <cehteh> and then  'other licenses' pages and explain where they are used
+[2011-04-13 23:52:56] <ichthyo> for the impressum, as said
+[2011-04-13 23:53:08] <ichthyo> I volunteer to put my name in there
+[2011-04-13 23:53:25] <ichthyo> so we sort-of share the consequences
+[2011-04-13 23:54   ] <cehteh> for the impressum .. fine if you do, if you want you can add me too
+[2011-04-13 23:54   ] <cehteh> and we have to figure out where to place the impressum .. iirc it must be on the homepage
+[2011-04-13 23:54   ] <cehteh> but it doesnt need to be in the menu
+[2011-04-13 23:55   ] <cehteh> just a very tiny links in the footer is enough
+
+
+[2011-04-13 23:54:14] <skangas> For the record, I agree with what ichthyo said in his first e-mail.
+[2011-04-13 23:54:55] <skangas> That "dual licensing under GPL and something comparable" is the best choice.
+[2011-04-13 23:55:03] <skangas> Probably CC-BY-SA.
+[2011-04-13 23:55:10] <ichthyo> my thinking too
+[2011-04-13 23:56:05] <ichthyo> that is, for the web content, and the documentation
+[2011-04-13 23:57:00] <ichthyo> cehteh: would that be ok for you too?
+[2011-04-13 23:59:29] <cehteh> [23:58] <cehteh> mhm?
+[2011-04-13 23:59:31] <cehteh> .. any answers beyond that?
+[2011-04-13 23:59:55] <ichthyo> seems we had a short split or so
+[2011-04-14 00:00:07] <ichthyo> skangas and myself just talked about licenses
+[2011-04-14 00:00:09] <cehteh> i got completely disconnected
+[2011-04-14 00:00:41] <ichthyo> [23:57]	<ichthyo>	cehteh: would that be ok for you too?
+[2011-04-14 00:01:29] <cehteh> CC-BY-SA  means?
+[2011-04-14 00:01:47] <ichthyo> Creative commons 3.0 attribution share alike
+[2011-04-14 00:02:39] <ichthyo> cehteh: CC-BY-SA is considered "equivalent in spirit" with the GPL
+[2011-04-14 00:01:50] <cehteh> copyleft .. attribution .. share-alike?
+[2011-04-14 00:02:25] <cehteh> this dualcicensing would be ok for me .. but a note
+[2011-04-14 00:02:48] <cehteh> how about putting the documentation under a non-commercial license?
+[2011-04-14 00:03:03] <ichthyo> that would throw us out of debian main
+[2011-04-14 00:03:13] <cehteh> that is no one can use the lumiera docs for release printed docs and make profit from it
+[2011-04-14 00:03:14] <ichthyo> debian considers such a license "non-free"
+[2011-04-14 00:03:49] <ichthyo> well, I am not so much concerened about that
+[2011-04-14 00:04:03] <ichthyo> because, the docs still remain available
+[2011-04-14 00:04:16] <ichthyo> and if someone really goes through all the pain of creating printed stuff
+[2011-04-14 00:04:31] <ichthyo> and does it well, then he deserves to make profit from that, IMHO
+[2011-04-14 00:04:25] <cehteh> but i dislike the idea that someone makes profit with no work and no giving back
+[2011-04-14 00:04:48] <ichthyo> I am sure that *does require* substantial amount of work
+[2011-04-14 00:05:03] <ichthyo> if that person wants any chance to sell something
+[2011-04-14 00:05:23] <ichthyo> just print a crappy web dump won't make anyone sell much copies, IMHO
+[2011-04-14 00:04:59] <cehteh> then its ok for me
+[2011-04-14 00:05:33] <cehteh> but i've seen publisher which just took the free docs do *little* editing and formating
+                               and sell it for a lot money
+[2011-04-14 00:05:53] <ichthyo> and, will he make substantial turnover with that?
+[2011-04-14 00:06:15] <skangas> Yeah, I think the point here is that poor quality high prices do not sell.
+[2011-04-14 00:06:16] <cehteh> btw GPL only would prevent that too .. the publisher has to release his tex,
+                                m$ -word or whatever sources then
+[2011-04-14 00:06:36] <cehteh> does -sa prevent that too?
+[2011-04-14 00:06:36] <ichthyo> making modifications available under the same conditions, yes.
+[2011-04-14 00:06:46] <cehteh> besides, he needs to point out *within* that printed docs, that the license is free
+[2011-04-14 00:07:44] <cehteh> but possibly some people get upset when they contribute a lot and someone else makes the profit
+[2011-04-14 00:07:44] <skangas> I do not see how it would damage our goals.
+[2011-04-14 00:08:06] <skangas> It would be more in the spirit of not allowing the free-loaders easy access.
+[2011-04-14 00:08:20] <cehteh> well as i saied, that was just a note/idea .. i am fine with the dual-licensing
+[2011-04-14 00:08:39] <ichthyo> well... here is the standard argument: if someone creates additional value on top of what
+                                we provide, i.e. make a quality print, process orders, ship the copies,
+                                then fine for me, if he/she makes turnover with that
+[2011-04-14 00:09:01] <cehteh> yes
+[2011-04-14 00:09:08] <skangas> I do not care much for that argument.
+[2011-04-14 00:09:16] <skangas> For me, it is more about getting into Debian main.
+[2011-04-14 00:09:59] <skangas> And the fact that I do not care if some marginal publisher makes a bit of money off
+                                of the Lumiera documentation.
+[2011-04-14 00:09:10] <ichthyo> the online docs will always be more acurate, more up-to-date
+[2011-04-14 00:09:13] <skangas> Not even if a big one does it; that would only mean more attention to the project.
+[2011-04-14 00:09:32] <cehteh> i would like this if we even can point to him and announce that as the offical lumiera book
+[2011-04-14 00:10:10] <cehteh> but there are so much publishers which just try to make money without being really involved
+[2011-04-14 00:10:31] <skangas> cehteh, Yes, even publishers which only print Wikipedia articles.
+[2011-04-14 00:10:46] <ichthyo> and btw, what is more realistic, given that lumiera becomes a real, professional app,
+                                then maybe someone will provide lectures and training
+                                and that is much more apt to create a good turnover and benefit
+[2011-04-14 00:11:14] <cehteh> ichthyo: lectures and training involves work .. thats ok
+[2011-04-14 00:11:42] <cehteh> anyeays ... dual license gpl and cc-by-sa
+[2011-04-14 00:11:46] <cehteh> ok for me
+[2011-04-14 00:11:55] <ichthyo> fine, seems case is settled
+[2011-04-14 00:12:04] <cehteh> eh which gpl ? gpl2+ .. same as lumiera 
+[2011-04-14 00:12:08] <ichthyo> yes
+[2011-04-14 00:12:15] <ichthyo> thats important
+[2011-04-14 00:12:32] <cehteh> and we may bump lumiera to gplv3 when we release it (and we know all its dependencies)
+[2011-04-14 00:12:39] <ichthyo> so you can move code / doc in both directions without problems
+[2011-04-14 00:12:42] <skangas> GPLv2+ not GPLv2, right?
+[2011-04-14 00:12:48] <cehteh> skangas: yes
+[2011-04-14 00:12:51] <skangas> OK. Great.
+[2011-04-14 00:13:14] <cehteh> we only use gplv2 now because we dont want to rule out to use external libs which may be v2 only
+[2011-04-14 00:13:25] <ichthyo> and a rather firm promise to bump it to gpl3 when this works and we're approaching a release
+[2011-04-14 00:13:40] <cehteh> or gplv4 :P
+[2011-04-14 00:13:47] <ichthyo> yay!
+[2011-04-14 00:13:51] <cehteh> btw duke nukem is delayed
+[2011-04-14 00:14:02] <ichthyo> ouch, I'm surprised
+
+[2011-04-14 00:14:41] <cehteh> ok lets summarise:
+[2011-04-14 00:14:47] <cehteh> ichthyo: you add the impressum
+[2011-04-14 00:14:51] <ichthyo> ok
+[2011-04-14 00:15:00] <ichthyo> I clarify the actual licenses we use
+[2011-04-14 00:15:07] <cehteh> yes
+[2011-04-14 00:15:34] <cehteh> currently its not easily visible which license lumiera falls under
+[2011-04-14 00:16:05] <ichthyo> well, it's in the first senctence, and even in bold font
+[2011-04-14 00:16:10] <ichthyo> http://lumiera.org/project/legal/legal.html
+[2011-04-14 00:16:40] <cehteh> yes but imo there should be only one License menu point, pointing to the gplv2 and our rationale document
+[2011-04-14 00:16:56] <skangas> ichthyo, Error on that page Webiste -> Website
+[2011-04-14 00:17:09] <cehteh> and then maybe other sub items exactly stating "other licenses" or "license for the documentation" 
+[2011-04-14 00:17:09] <skangas> I really need to sleep now... Good night!
+[2011-04-14 00:17:09] <ichthyo> thanks, noted
+[2011-04-14 00:17:45] <ichthyo> skangas: good night, sleep well!
+[2011-04-14 00:18:03] <cehteh> if i click on license for some project i dont want to read much there should be just "this is licensed under foolicense" as first prominent sentence
+[2011-04-14 00:18:08] <cehteh> n8 skangas 
+[2011-04-14 00:18:57] <ichthyo> ok
+[2011-04-14 00:18:58] <cehteh> for me now when i seen the 'license' menu after you added it, it unfolded to a list of licenses ..
+[2011-04-14 00:19:15] <cehteh> me alreadly thought "wtf" ... guess what some outsider will think :)
+[2011-04-14 00:19:45] <ichthyo> :)
+
+[2011-04-14 00:20:03] <ichthyo> anyway, I think there are still some minor points left to discuss for this meeting
+[2011-04-14 00:20:14] <cehteh> yes .. next one:
+[2011-04-14 00:20:30] <cehteh>  - Trac spam, solved, whats left to do (delete unused accounts)
+[2011-04-14 00:21:00] <cehteh> you told me that its easily to delete the unused accounts ..
+                               but from some i know that they are real users
+[2011-04-14 00:21:20] <ichthyo> well.. it is easy to tell those apart
+[2011-04-14 00:21:23] <cehteh> i tihnk we should notify this at least on the ml
+[2011-04-14 00:21:32] <ichthyo> just need to improve the SQL a bit
+[2011-04-14 00:21:55] <ichthyo> the trick is: those "old" inactive accounts are by definition older than
+                               the spam accounts we delete
+[2011-04-14 00:21:45] <cehteh> how about creating a category 'people' on trac
+[2011-04-14 00:22:03] <cehteh> where everyone who is new is instructed to fill a first ticket .. 
+[2011-04-14 00:22:29] <cehteh> puts a bit burden on the people, not really a good idea
+[2011-04-14 00:22:46] <cehteh> but anyways meanwhile there are a lot more spam accounts, we should regulary wipe them
+[2011-04-14 00:22:58] <ichthyo> yes, so for now I'd just run that SQL once a month manually
+[2011-04-14 00:23:34] <cehteh> prolly you should do that weekly :P
+[2011-04-14 00:23:38] <ichthyo> after some months, if we see it works well always, we can do a little shell script
+                                to issue that SQL
+[2011-04-14 00:23:42] <cehteh> crontab ftw
+[2011-04-14 00:23:50] <ichthyo> or so, weekly, no prob
+[2011-04-14 00:24:02] <cehteh> you stay tuned and care for that?
+[2011-04-14 00:24:17] <ichthyo> yes, for the next time, and sometime in summer we make a cronjob
+[2011-04-14 00:25:28] <cehteh> eh just logged in. .. prolly 80% are spam meanwhile
+[2011-04-14 00:25:32] <ichthyo> hehe
+
+[2011-04-14 00:25:59] <cehteh> ok next point:
+[2011-04-14 00:26:07] <cehteh>  - Webserver update to squeeze (new asciidoc, keep ichthyos hand
+[2011-04-14 00:26:07] <cehteh>    installed trac)
+[2011-04-14 00:26:07] <cehteh>  - Do we want to bump our 'reference' distribution to squeeze too?
+[2011-04-14 00:26:19] <cehteh> ... webserver .. as soon as possible, but no urge
+[2011-04-14 00:26:34] <cehteh> reference .. i just wanted to bring this up, imo there is no need
+[2011-04-14 00:26:46] <ichthyo> personally, I will upgrade soon, next 2 weeks hopefully
+[2011-04-14 00:27:13] <cehteh> yes i am on squeeze and even with backports already
+[2011-04-14 00:27:29] <cehteh> so its prolly even better to have the reference on the devel server a bit behind
+[2011-04-14 00:27:28] <ichthyo> I would propose to bump the "reference" the moment when we actually upgrade the
+                                devserver + builddrone
+[2011-04-14 00:27:51] <cehteh> well the devserver will be upgraded when we bump the reference
+[2011-04-14 00:28:10] <cehteh> builddrone will be upgraded sometime next but thats not related to the reference
+[2011-04-14 00:28:12] <ichthyo> but for now there is no problem also supporting lenny, but with the note that we'll
+                                drop that support once we run into serious problems
+[2011-04-14 00:28:22] <cehteh> yes
+[2011-04-14 00:28:30] <cehteh> iirc that would be the reason to bump it
+[2011-04-14 00:29:05] <ichthyo> well, IMHO, when we both are on squeeze, then effectively the reference is bumped :-P
+[2011-04-14 00:29:40] <cehteh> nah .. the reference is about what builddrone reports to us too
+[2011-04-14 00:29:15] <cehteh> i'd stay with lenny as long as we can so .. or maybe if the next stable gets froozen
+                               then we can go to squeeze
+[2011-04-14 00:29:51] <cehteh> and what skangas and other gui coders need also
+[2011-04-14 00:30:15] <cehteh> i expect that gavl and gui dependencies will be a cause for a bump
+
+[2011-04-14 00:32:50] <cehteh> summarize: bump it someday .. as need arises?
+[2011-04-14 00:33:26] <cehteh> or even better. .. no decision yet .. we'll see when its time
+
+[2011-04-14 00:33:40] <cehteh> ok next point:
+[2011-04-14 00:34:57] <cehteh>  - Go over pending RFC's (quick, not in detail this time)
+[2011-04-14 00:35:11] <cehteh> should become regular on each meeting
+
+[2011-04-14 00:48:25] <cehteh> http://lumiera.org/documentation/devel/rfc_pending/ApplicationInstall.html
+[2011-04-14 00:48:40] <ichthyo> maybe only pick out some interestin ones or some which are quick to decide
+[2011-04-14 00:49:06] <cehteh> well i want to go over all pending .. then we can put notes there "boring for the next meeting"
+[2011-04-14 00:49:24] <cehteh> and next time we pcik only the interesting ones
+[2011-04-14 00:49:33] <ichthyo> ok
+[2011-04-14 00:49:42] <cehteh> for example this application install .. is boring .. you did a lot work, imo you can finalize it
+[2011-04-14 00:50:04] <cehteh> (i dint read it in detail now)
+[2011-04-14 00:50:25] <cehteh> maybe we want another state "accepted" ..
+[2011-04-14 00:50:44] <cehteh> that is the interesting things which we know we will not drop but which are not finalized yet
+[2011-04-14 00:53:02] <cehteh> adding that to rfc.sh would be trivial
+[2011-04-14 00:53:25] <ichthyo> I think, the existing states are enough
+[2011-04-14 00:53:26] <cehteh> yeah .. i think we dont need to 'finalize' and decide finally now
+[2011-04-14 00:53:44] <ichthyo> either really discuss something and then decide, or just leave it in draft
+[2011-04-14 00:53:50] <cehteh> well i just started alphabetically 
+[2011-04-14 00:54:05] <ichthyo> lets just postpone the application install and leave it in draft!
+[2011-04-14 00:54:29] <cehteh> the application install came first... we need it, you did it well .. it could be 'finalized' or rather that would be some 'acceepted' candidate .. 
+
+[2011-04-14 00:54:24] <ichthyo> Delectus?
+[2011-04-14 00:54:40] <cehteh> delectus can be parked until someone else comes up with it
+[2011-04-14 00:54:48] <cehteh> (btw i can do this right here and commit it)
+[2011-04-14 00:54:51] <ichthyo> yes, so thats an decision, lets park it
+[2011-04-14 00:54:57] <ichthyo> please do
+
+[2011-04-14 00:55:42] <ichthyo> question: do the parked onees also go into a different directory?
+[2011-04-14 00:55:49] <ichthyo> I'm asking because of the menu
+[2011-04-14 00:56:04] <cehteh> iirc not .. but i can do that
+[2011-04-14 00:56:13] <cehteh> (adding to rfc.sh)
+[2011-04-14 00:56:17] <cehteh> let me look
+[2011-04-14 00:56:46] <cehteh> no ... i make a rfc_parked/ dir
+[2011-04-14 00:57:05] <ichthyo> ok that would be nice
+[2011-04-14 00:57:34] <cehteh> ok noted
+
+[2011-04-14 00:57:34] <ichthyo> next one
+[2011-04-14 00:57:47] <ichthyo> http://lumiera.org/documentation/devel/rfc_pending/DesignParamAutomation.html
+[2011-04-14 00:57:55] <cehteh> keep pending?
+[2011-04-14 00:57:57] <ichthyo> well, its Idea, I have to expand on that
+[2011-04-14 00:57:57] <ichthyo> yes
+[2011-04-14 00:58:01] <ichthyo> please keep pending
+
+[2011-04-14 00:58:11] <cehteh> Design Process : Clip Cataloging System
+[2011-04-14 00:58:16] <cehteh> park
+[2011-04-14 00:58:20] <ichthyo> park
+
+[2011-04-14 00:58:31] <ichthyo> LumieraForwardIterator
+[2011-04-14 00:58:37] <cehteh> Design Process: Lumiera Forward Iterator
+[2011-04-14 00:58:39] <cehteh> pending
+
+[2011-04-14 00:58:48] <ichthyo> well, this is entirely an C++ topic
+[2011-04-14 00:58:58] <ichthyo> I for my part vote for accepting it now
+[2011-04-14 00:59:11] <ichthyo> I use this concept now since almost a year and it worked out well
+[2011-04-14 00:59:25] <cehteh> yeah i think its more a trac ticket than a rfc
+[2011-04-14 00:59:55] <ichthyo> well, it *is* something which would need discussion if there where more than one C++ developer
+[2011-04-14 01:00:14] <cehteh> but if it works for you, i put it on 'maybe finalize' .. means i read through it and finalize it
+                               when i have no objections
+[2011-04-14 01:00:24] <ichthyo> yes, agreed
+
+[2011-04-14 01:00:45] <cehteh> Design the Render Nodes interface
+[2011-04-14 01:01:04] <cehteh> thats definitely pending .. needs discussion
+[2011-04-14 01:01:33] <ichthyo> yes
+[2011-04-14 01:01:54] <cehteh> maybe we park it to get rid of it for now since this is months ahead?
+[2011-04-14 01:02:28] <ichthyo> we could even drop it, but parking is ok
+[2011-04-14 01:02:44] <ichthyo> that RfC basically sais: PLING PLING PLING, we need to discuss that
+[2011-04-14 01:02:53] <cehteh> well, I wont drop it, its a nice place to document the intention about the design
+[2011-04-14 01:03:10] <ichthyo> ok, so lets park it
+
+[2011-04-14 01:03:13] <cehteh> Developer Documentation Structure
+[2011-04-14 01:03:23] <cehteh> i check that, bring it up to date and finalize it?
+[2011-04-14 01:03:36] <ichthyo> i have some objections agains that, see my comment
+[2011-04-14 01:04:00] <ichthyo> I think, the current structure is better than what that RfC proposes
+[2011-04-14 01:04:05] <cehteh> yes .. thats what i meant with bring it up to date
+[2011-04-14 01:04:39] <cehteh> i can keep it pending .. and then we can finalize it when you agree
+[2011-04-14 01:04:49] <ichthyo> ok, so you will update it?
+[2011-04-14 01:05:32] <cehteh> yes .. maybe not for next time but i put it on todo
+
+[2011-04-14 01:05:35] <cehteh> http://lumiera.org/documentation/devel/rfc_pending/EngineInterfaceOverview.html
+[2011-04-14 01:05:50] <cehteh> pending .. there is lot to do?
+[2011-04-14 01:06:02] <ichthyo> sort of
+[2011-04-14 01:06:10] <ichthyo> basically that is a high level outline
+[2011-04-14 01:06:19] <cehteh> this is a rather big thing maybe we drop it in favor of smaller rfc's
+[2011-04-14 01:06:23] <ichthyo> it doesn't contain details
+[2011-04-14 01:06:27] <cehteh> but for now leave it pending
+[2011-04-14 01:06:45] <ichthyo> at the time I wrote that, you said it looks okish for you
+[2011-04-14 01:06:58] <cehteh> yes .. quite possible
+[2011-04-14 01:06:55] <ichthyo> this one would be really important to discuss soon
+[2011-04-14 01:07:11] <cehteh> i need to catch up first ..duh
+[2011-04-14 01:07:23] <ichthyo> note: it doesnt go into details, just sets a very high level outline how the overall process works
+[2011-04-14 01:07:39] <ichthyo> I think *that one* is really needed to be accepted/ reworked soon
+[2011-04-14 01:07:43] <cehteh> yes .. lets talk next meeting about that (or some time else)
+[2011-04-14 01:07:57] <ichthyo> ok
+[2011-04-14 01:08:05] <cehteh> so pending for now
+
+[2011-04-14 01:08:11] <ichthyo> FeatureBundle
+[2011-04-14 01:08:14] <ichthyo> park
+[2011-04-14 01:08:26] <cehteh> park
+[2011-04-14 01:08:26] <ichthyo> very important, but far future
+[2011-04-14 01:08:33] <cehteh> yes
+
+[2011-04-14 01:08:39] <ichthyo> MarbleMode
+[2011-04-14 01:08:51] <ichthyo> this is also a high level one
+[2011-04-14 01:08:57] <ichthyo> I am much in favour of that
+[2011-04-14 01:09:09] <ichthyo> but its really kind of conceptual
+[2011-04-14 01:09:20] <cehteh> me too ... but its too early to finalize it or?
+[2011-04-14 01:09:52] <cehteh> that would be a 'accepted' candidate too :)
+[2011-04-14 01:09:55] <ichthyo> well, I would accept it...
+[2011-04-14 01:10:23] <ichthyo> but I wrote it so you (and others) also think that over
+[2011-04-14 01:10:27] <cehteh> i think 'final' should somethnig which wont be changed or discussed anymore unless we see problems
+[2011-04-14 01:10:40] <cehteh> thats why i am thinking we may need an 'accepted' state
+[2011-04-14 01:11:07] <cehteh> and this marble mode certainly needs a lot more discussion and work to be final
+[2011-04-14 01:11:51] <ichthyo> mhm, but that RfC just proposes to go for that direction, not how to do all the details
+[2011-04-14 01:11:58] <cehteh> or we just finalize it as 'concept' we want no matter how we implement it finally
+[2011-04-14 01:12:05] <cehteh> yes ok then
+[2011-04-14 01:12:10] <ichthyo> yes, ok then
+
+[2011-04-14 01:12:49] <cehteh> http://lumiera.org/documentation/devel/rfc_pending/NormalizedDeviceCoordinates.html
+[2011-04-14 01:12:54] <cehteh> very rough
+[2011-04-14 01:13:17] <cehteh> makes a lot of sense .. but unfinished, pending or park?
+[2011-04-14 01:13:37] <ichthyo> I'd say park
+[2011-04-14 01:13:51] <ichthyo> (I am also much in favour of that one)
+[2011-04-14 01:13:42] <cehteh> ok
+
+[2011-04-14 01:14:16] <ichthyo> ProcHighLevel
+[2011-04-14 01:14:24] <cehteh> thats rather final now?
+[2011-04-14 01:14:26] <ichthyo> my vote goes for accept
+[2011-04-14 01:14:35] <cehteh> is it up to date?
+[2011-04-14 01:14:41] <ichthyo> no significant addition since almost two years
+[2011-04-14 01:14:46] <ichthyo> yes, its up to date
+[2011-04-14 01:14:52] <cehteh> ok final
+[2011-04-14 01:15:37] <ichthyo> and, btw, I know that you also supported many of those ideas
+
+[2011-04-14 01:15:39] <cehteh> placement .. 
+[2011-04-14 01:15:48] <ichthyo> I think same for that
+[2011-04-14 01:15:57] <cehteh> up to date?
+[2011-04-14 01:16:00] <ichthyo> if you don't have a problem with it, I vote for accept
+[2011-04-14 01:16:28] <ichthyo> yes, as far as I can see, its up to date
+[2011-04-14 01:16:32] <cehteh> yes for me the question is only if you need to refine some final things before accepting it
+[2011-04-14 01:17:06] <cehteh> ok accept
+
+[2011-04-14 01:17:18] <cehteh> http://lumiera.org/documentation/devel/rfc_pending/RenderOptimizer.html
+[2011-04-14 01:17:19] <cehteh> park
+[2011-04-14 01:17:32] <ichthyo> accept for me
+[2011-04-14 01:17:56] <ichthyo> that is so much our common understanding meanwhile
+[2011-04-14 01:18:02] <ichthyo> so, maybe just polish a bit
+[2011-04-14 01:18:18] <cehteh> yes park because it needs some polishing before final
+[2011-04-14 01:18:24] <ichthyo> (remove the "pro and con") and then we could accept it right away
+[2011-04-14 01:18:28] <cehteh> i can put a note that its basically accepted 
+[2011-04-14 01:18:38] <cehteh> parking isnt neccessary bad :P
+
+[2011-04-14 01:18:46] <ichthyo> ResourceManagement
+[2011-04-14 01:18:49] <cehteh> (well again that would be a 'accept' candidate)
+[2011-04-14 01:18:53] <ichthyo> needs some more work
+[2011-04-14 01:19:01] <cehteh> that are 2 things .. yes
+[2011-04-14 01:19:10] <cehteh> profiling and budgeting .. 
+[2011-04-14 01:19:21] <cehteh> i think i will implement them and then see how it works
+[2011-04-14 01:19:40] <cehteh> (unless someone else shows better alternatives)
+[2011-04-14 01:19:47] <ichthyo> if you change that and e.g. remove the code sample and make it really short and high level,
+                                then we could accept it as a concept; but the implementation details need certainly more work
+[2011-04-14 01:20:17] <cehteh> hey that code is the code i lost with the hdd crash .. i am happy that i put it there
+[2011-04-14 01:20:27] <cehteh> yes it was a very rough idea
+[2011-04-14 01:20:37] <cehteh> and not on schedule to implemented soon
+[2011-04-14 01:20:45] <cehteh> i just sketched some code down
+[2011-04-14 01:21:04] <cehteh> so pending or park?
+[2011-04-14 01:21:08] <ichthyo> as said, would it be ok for you to remove that sketch and just leave it on that level of the
+                                first sentences, because then we could accept it right away
+[2011-04-14 01:21:45] <cehteh> ok pending for now .. i dont want to work on this currently .. other things are more important
+[2011-04-14 01:21:47] <ichthyo> we both pretty much agree that we *want* some kind of budget managing and resource usage
+
+[2011-04-14 01:22:41] <cehteh> http://lumiera.org/documentation/devel/rfc_pending/Roadmap-first.html
+[2011-04-14 01:22:45] <cehteh> final?
+[2011-04-14 01:22:51] <ichthyo> oops! my fault
+[2011-04-14 01:22:55] <cehteh> anything not up to date?
+[2011-04-14 01:23:00] <ichthyo> that *was* accepted long ago
+[2011-04-14 01:23:13] <cehteh> haha ok
+[2011-04-14 01:23:47] <ichthyo> we discussed and accepted that 2009, judging from the comments
+
+[2011-04-14 01:23:49] <cehteh> http://lumiera.org/documentation/devel/rfc_pending/StreamTypeSystem.html
+[2011-04-14 01:24:06] <ichthyo> very important for me -- my vote is for accept
+[2011-04-14 01:24:16] <cehteh> we had some discussion how to maintain metadata .. 
+[2011-04-14 01:24:40] <cehteh> i vote for accept too but this metadata (which may decribe the type) needs work
+[2011-04-14 01:24:49] <ichthyo> well, this one is really a heavyweight conceptual RfC
+[2011-04-14 01:25:00] <ichthyo> it is not about *how* to maintain metadata
+[2011-04-14 01:25:05] <cehteh> yes
+[2011-04-14 01:25:08] <cehteh> so accept
+[2011-04-14 01:25:18] <ichthyo> but it really contains far reaching decisions
+[2011-04-14 01:25:27] <ichthyo> and terminology
+[2011-04-14 01:25:51] <ichthyo> please see, I would be glad if there was some discussion about that
+[2011-04-14 01:26:36] <ichthyo> but well, at the moment I am the only one thinking into more details of this whole topic
+[2011-04-14 01:26:24] <cehteh> shall i leave it pending just to nag us?
+[2011-04-14 01:26:50] <ichthyo> yes, leave it pending
+[2011-04-14 01:27:10] <cehteh> i was thinking too about this .. but not consistently ... 
+[2011-04-14 01:27:24] <ichthyo> as said, I vote for accept, but I would really ask you to think it over
+[2011-04-14 01:27:38] <cehteh> i think that needs some time to settle to the right point [tm]
+[2011-04-14 01:27:43] <ichthyo> I'm not right away implementing it, but the implementation is rather trivial
+[2011-04-14 01:27:48] <ichthyo> so leave it pending
+
+[2011-04-14 01:28:00] <cehteh> http://lumiera.org/documentation/devel/rfc_pending/ThreadsSignalsAndImportantManagementTasks.html
+[2011-04-14 01:28:33] <cehteh> we need to work together to implement this on the main .. but generally i think this can be
+                               accepted with some refinements
+[2011-04-14 01:28:14] <ichthyo> some time ago, we had a short discussion about that
+[2011-04-14 01:28:55] <ichthyo> The bottom line was: I am in favour of that, but I rather would like not to build it
+                                directly into that main thread, but have a dedicated thread for it
+                                and at that time you said, that would not be a fundamental problem
+[2011-04-14 01:29:30] <cehteh> i wonder why not the main thread .. but its ok for me
+[2011-04-14 01:29:53] <ichthyo> my argument is keeping the code simple and dedicated to one purpose
+[2011-04-14 01:30:05] <cehteh> the main thread is a kindof 'service thread' right?
+[2011-04-14 01:30:09] <ichthyo> the main thread's purpose is to wake up and shut down the system
+[2011-04-14 01:30:25] <ichthyo> and I'd prefer to let him do only that and nothing else
+[2011-04-14 01:30:26] <cehteh> i dont want the cinelerra fail .. opening a thread for every purpose
+[2011-04-14 01:30:58] <ichthyo> generally yes, but for the more fine grained things we have the scheduler
+[2011-04-14 01:31:08] <cehteh> well ok .. from my pov the main thread is more than just that but a general sheepheard
+[2011-04-14 01:31:39] <cehteh> not only starting and shutdown but also control the direction
+[2011-04-14 01:32:08] <cehteh> but really this isnt much a difference, if you want an extra thread then let it be so
+[2011-04-14 01:32:46] <ichthyo> I see the code complexity. It would just look okish for me if we split it into these two
+[2011-04-14 01:33:26] <cehteh> there is not much complexity, the main thread waits currently .. 
+[2011-04-14 01:34:02] <cehteh> and it can get woken by signals or condvar (convars return when a signal arrives)
+[2011-04-14 01:34:29] <cehteh> actually having an extra thread wont make the code simpler because then the main thread
+                               needs to be rigged to ignore the signals. All other threads are created by us and can
+                               implicitly be rigged in this way
+[2011-04-14 01:34:53] <ichthyo> main thread handles that already, if I recall correct
+[2011-04-14 01:35:05] <ichthyo> because it loops on the condition and goes to sleep again
+[2011-04-14 01:35:29] <cehteh> yes but you didnt add any sigmask handling / signal blocking right?
+[2011-04-14 01:35:44] <ichthyo> ah I see, thats still todo
+[2011-04-14 01:35:51] <cehteh> anyways .. i accept it .. implementation pending
+[2011-04-14 01:37:38] <cehteh> signal handling becomes a 'subsystem' then ... :)
+[2011-04-14 01:37:46] <ichthyo> yes, thats what I mean
+
+[2011-04-14 01:36:50] <cehteh> http://lumiera.org/documentation/devel/rfc_pending/TimelineSequenceOutput.html
+[2011-04-14 01:36:52] <cehteh> final?
+[2011-04-14 01:37:00] <ichthyo> definitively final
+[2011-04-14 01:38:08] <ichthyo> TimelineSequence: the key point is: we have multiple timelines
+[2011-04-14 01:38:28] <ichthyo> and a sequence can be used in multiple timelines
+[2011-04-14 01:38:36] <cehteh> yes .. ok for me i think
+[2011-04-14 01:38:37] <ichthyo> I think we pretty much agree on that
+
+[2011-04-14 01:39:01] <cehteh> http://lumiera.org/documentation/devel/rfc_pending/UseCases.html
+[2011-04-14 01:39:08] <cehteh> nobody cares :P
+[2011-04-14 01:39:20] <ichthyo> nobody cares
+[2011-04-14 01:39:34] <cehteh> that means parked? or drop?
+[2011-04-14 01:39:35] <ichthyo> park it, until we have someone working on the workflow
+
+[2011-04-14 01:40:01] <cehteh> http://lumiera.org/documentation/devel/rfc_pending/VersionNumberScheme.html
+[2011-04-14 01:40:10] <cehteh> accept (after you explained it to me .. )
+[2011-04-14 01:40:35] <ichthyo> :-D
+[2011-04-14 01:40:14] <ichthyo> accept
+
+[2011-04-14 01:40:41] <cehteh> http://lumiera.org/documentation/devel/rfc_pending/WebsiteNavigation.html
+[2011-04-14 01:40:50] <cehteh> is that final? 
+[2011-04-14 01:40:55] <cehteh> (up to date)
+[2011-04-14 01:41:15] <cehteh> do others need to discuss this .. fsiddi?
+[2011-04-14 01:41:27] <ichthyo> there is one point: the tagging of pages
+[2011-04-14 01:41:37] <ichthyo> if we remove that, the rest is implemented right now
+[2011-04-14 01:42:08] <cehteh> leave it pending and when you meet with fsiidi next time you discuss and fix this?
+[2011-04-14 01:42:18] <ichthyo> ok
+
+[2011-04-14 01:47:47] <ichthyo> so meeting is finished now, officially...
+[2011-04-14 01:47:59] <cehteh> n8 :)
+[2011-04-14 01:48:10] <cehteh> well i work a bit .. night owl mode :P
+[2011-04-14 01:48:11] <ichthyo> next meeting on 11.5.2011
+[2011-04-14 01:48:42] <ichthyo> btw, I'm quite sure I skip LAC this time
+[2011-04-14 01:48:52] <cehteh> me too
+[2011-04-14 01:48:58] <ichthyo> just overall too much to do right now
+[2011-04-14 01:49:15] <cehteh> no lumiera at lac
+[2011-04-14 01:49:33] <ichthyo> but I'd be quite interested to come to that FSCONS conference skangas told us about
+[2011-04-14 01:49:38] <ichthyo> in october or so
+[2011-04-14 01:49:57] <cehteh> lets see .. time & money
+[2011-04-14 01:51:12] <ichthyo> ok, going off now
+[2011-04-14 01:51:15] * cehteh goes hunting some food
+[2011-04-14 01:51:19] <ichthyo> (and hopefully going to bed soon)
+[2011-04-14 01:51:21] <cehteh> see you
+[2011-04-14 01:51:24] <ichthyo> see you!
+----------------------------
+

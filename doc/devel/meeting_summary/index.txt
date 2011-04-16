@@ -12,6 +12,25 @@ Anyone interested in Lumiera development is also encouraged to read mailing list
 archives and other documentation.
 
 
+
+
+13 Apr 2011
+-----------
+
+Topics
+~~~~~~
+ * boilerplate (protocol, what's left from last meeting)
+ * Go through Ideas and Drafts in design process
+   - processing node interface
+   - Placement concept 
+
+Summary
+^^^^^^^
+ * link:2011-04-13.html[Summary (written by Hermann Voßeler)]
+
+
+
+
 9 Mar 2011
 ----------
 
