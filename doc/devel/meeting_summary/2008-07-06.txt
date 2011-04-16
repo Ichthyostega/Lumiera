@@ -1,0 +1,94 @@
+2008-07-06 Lumiera Developers Meeting
+=====================================
+:Author: Teld
+:Date: 2008-08-10
+
+Participants
+------------
+ * ichthyo
+ * cehteh
+ * jilt
+ * dmj726
+ * Teld
+ * \_nasa_
+ * alcarinque_
+ * MNO
+ * Wescotte
+ * weatherhead
+
+
+Boilerplate
+-----------
+
+Organization of this meeting
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ * dmj726 intends to write the protocol
+ * ichtyo is chairman
+ * there is no agenda, so this is a freeform meeting
+
+Leftovers from last meeting
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+There are no leftovers
+
+
+Introduction of Lumiera
+-----------------------
+Because there are quite some new participants, an introduction of the project Lumiera is given
+
+There are 3 core devs:
+
+ * ichthyo: proc layer, render graph, in the middle, C++, he maintains scons
+ * cehteh: backend serving data (from filesystem and so on), manages threads, using C, Posix System programming, maintains autotools and git
+ * joelholdsworth: GUI in C++/Gtkm
+Other people involved:
+
+ * rcbarnes: ui designer and coder
+ * raffa: web content
+ * Simav: gives a hand when and where he can
+ * Teld: web infrastructure
+The foundations of the design are already done but a lot of detail needs to be worked out. cehteh and ichtyo provide a non exhaustive list.
+
+cehteh:
+
+ * improvement of the testsuite (simple Bash)
+ * start of a worker thread manager (Posix knowledge required)
+ * start of the scheduler (some Posix, good C coding)
+ * runtime profiler (little but advanced Posix realtime programming job)
+ * review of code and documentation
+ * system administration
+ * setup of a build/test environment on the server
+ * setup and maintain postfix/dovecot by a mail administrator
+ichtyo:
+
+ * asset management (keeping track of all media files, captures, clips, scenes)
+ * session loading saving and the issues of compound documents
+ * session structure related issues to be able to Import/Export/Connect via e.g. OSC (Open Sound Control) or JACK
+ * flesh out the more high level "edit operations" and the interface to UNDO
+ * Prolog integration after the first integration round has been reached. The Prolog interpreter will do some of the more advanced configuration (example: if effect XYZ is used, then deinterlace beforehand).
+ * integration with some sort of production support software (like Celtx)
+cehteh emphasizes that Lumiera is an open project, so anybody can jump in where he sees fit as long as he communicates and acknowledges with the persons involved. ichtyo points out that the plugin structure is very important: anything that is not legally completely clean (proprietary), should be factored out into a sister project and be loaded as plugin.
+
+
+Issues and questions that come up
+---------------------------------
+ * handling of config errors.
+When the configuration has a syntax error, in 90% of the cases there will be no possibility to do anything sane. Therefore, the config system will be built to log a warning and the user code does not need to care. The user just gets an alert and the application continues to work.
+
+ * scripting language.
+There will be a scripting interface. ichtyo does not want scripts everywhere, only at well defined interfaces. That implies also that scripts cannot just do anything, only that what is permitted in a controlled way. The meeting agrees on that. cehteh wants one default language and proposes Lua: light, simple.
+
+Other members suggestions: Python, Ruby, Scheme. However, Python and Ruby are very slow. Scheme has many variants.
+
+ * editing on small devices (eeePC)
+Problem: video editors GUIs are some of the most elaborate and complicated GUIs. However, basic functions consist of only a few buttons. Proxy editing could be a solution. It is decided that it is not a primary goal now. First the basics have to be implemented.
+
+ * uWiki.
+uWiki is the glue between a markup driver (Asciidoc) and revision control (git). Haserl with Bash is used now. Haserl appears to have problems with conditional includes. Its limits have been reached while prototyping. Lua could very well be a valid replacement. It will be investigated. PHP is rejected because it is not stable and suffers from serious security problems.
+
+ * \'musical\' timeline in bars and beats
+The questions of syncing and linking things together are already on the core agenda: the so-called placement concept. Discussion is still going on, especially with the GUI developer joelholdsworth. See for detailed information: http://www.pipapo.org/pipawiki/Lumiera/DesignProcess/ProcPlacementMetaphor[]
+
+
+Next meeting
+------------
+The next meeting will be held Thursday, 7 August 19:00 UCT.

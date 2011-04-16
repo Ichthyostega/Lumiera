@@ -1,0 +1,244 @@
+2008-05-08  Lumiera Developers Meeting
+======================================
+:Author: cehteh
+:Date: 2008-05-15
+
+__Participants__
+
+ * cehteh
+ * joelholdsworth
+ * ichthyo
+ * raffa
+ * Wes``Lappy
+ * gmerlin
+
+
+Boilerplate
+-----------
+
+Organization of this meeting
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ * cehteh writes the protocol
+
+
+Webpage-Infrastructure, Maintenance
+-----------------------------------
+
+Cehteh put this on topic because it's really urgent to bring up some
+infrastructure to manage the information we produce.
+
+The Lumiera pages on pipapo.org were always meant as intermediary
+solution. Pipapo.org gets much spam on the moinmoin wiki and cehteh
+expresses that he wants to move pipapo.org to a new infrastructure
+based on asciidoc and git he created
+(see http://git.pipapo.org/uWiki.html[]). This system is barely useable
+and needs lots of work to be completed. It would be nice to use it for
+Lumiera too, if the others agree. Maintaining and extending
+(scripting) needs someone who knows shell scripting and doesn't need
+to be done by the core devs freeing their resources to work on
+Lumiera. Cehteh expresses that none of the people who proposed to
+help before showed up yet. WesLappy tells he might help (addendum not
+this week, because he is busy).
+
+Next there was a suggestion by cehteh to convert the tiddlywikis to
+asciidoc. Ichthyo expresses that he likes the tiddlywikis, Joel
+mentions that they feel a little odd. Generally we all agree that
+they have some problems in sense of workflow and merging.
+
+Ichthyo makes the suggestion to keep the tiddlywikis as scrapbook and
+build up \'official' documentation based on their content in
+whatever-we-use-then (asciidoc) documentation system. All agree on
+this approach.
+
+Back to the new wiki, cehteh suggests to make stricter access rules to
+prevent spam: "There will be a group of \'Validated' people which
+following rules: only Validated people can edit general content and
+\'Validated' people can add new people to \'Validated' themselves". That
+means that we can have a lightweight self-administrating
+authentication where new people have to be introduced by someone who
+is already there.
+
+Ichthyo suggests to send a reply to Serge G. who send an introduction
+to the cinelerra mailing list expressing that he would like to help.
+
+Raffa will take care of content/design as much her time/knowledge permits.
+
+
+Conclusion
+~~~~~~~~~~
+
+ * We really need someone to help with the webpage scripting.
+ * Documentation needs to be well organized and moved over.
+ * Content of the pipapo.org moinmoin wiki should be moved over.
+ * The new website should be well organized with a nice looking frontpage
+ * All other documentation should be below that
+
+
+
+Whats pending in link:DesignProcess[]
+-------------------------------------
+
+
+MistakestoAvoid
+~~~~~~~~~~~~~~~
+http://www.pipapo.org/pipawiki/Lumiera/DesignProcess/MistakestoAvoid[]
+
+rick_777 wrote a "MistakestoAvoid" page which explains some possible
+gotchas. We basically agree with most points there while we already
+decided to address some things differently than he suggested. One
+noteable difference is that we do not intent to provide a windows
+version of Lumiera, which was explained in serveral places. Cehteh
+added some comments to the page explaining some things.
+
+
+nothing more to discuss in \'Ideas', we go over to \'Drafts'
+
+
+ArchitectureOverview
+~~~~~~~~~~~~~~~~~~~~
+http://www.pipapo.org/pipawiki/Lumiera/DesignProcess/ArchitectureOverview[]
+
+Cehteh suggests to put that drawing under version control, as .fig.
+Ichthyo explains that it is already a .SVG and that he does not like
+.fig.
+
+Conclusion: We agree to keep it as .SVG, add it to the repository and
+improve/complete it.
+
+
+GitSubmoduleTransistion
+~~~~~~~~~~~~~~~~~~~~~~~
+http://www.pipapo.org/pipawiki/Lumiera/DesignProcess/GitSubmoduleTransistion[]
+
+Another suggestion made by cehteh is to make managing of subprojects
+within the sourcetree easier. Joel and ichthyo oppose that it is not
+really needed now and needs more understanding of git. Ichthyo
+suggests that the documentation might be separated into its own git,
+he further explains that the things are not settled yet and we don't
+know if we will some rearrangements and movements of files between
+modules.
+
+Conclusion: We transform the documentation to a submodule and see how
+it works. Other things will be decided much later.
+
+
+
+
+GlobalInitialization
+~~~~~~~~~~~~~~~~~~~~
+http://www.pipapo.org/pipawiki/Lumiera/DesignProcess/GlobalInitialization[]
+
+This topic is discussed and agreed on the link:DesignProcess[] page already.
+
+Conclusion: finalize it
+
+
+MasterRepositorySetup
+~~~~~~~~~~~~~~~~~~~~~
+http://www.pipapo.org/pipawiki/Lumiera/DesignProcess/MasterRepositorySetup[]
+
+Setting up an master repository was decided on the last meeting.
+cehteh now set one up which also does some automatic, but intended
+fragile merging from subsystem maintainer branches.
+ 1. it updates automatically for the maintainers repo for conflict
+    free fast-forwards
+ 2. it can always be overridden with explicit pushes
+
+The others agree on the setup.
+
+Ichthyo stresses that maintainers shall watch that their \'master'
+branch should compile cleanly and pass the testsuite always, test
+which are not operational should be tagged as PLANNED. We all
+agree, while cehteh's master is currently in a broken state (note:
+fixed now).
+
+Then a short discussion about building and synchronizing the docs
+follows. Problem is that docs build in maintainer branches are
+different for each branch, rsyncing them up to the server will always
+change a lot of things. We agree that the \'official' docs shall be
+build from the LUMIERA/master repository, preferably on the \'devel'
+vserver which has to be set up.
+
+Conclusions: Make this final, setup build environment in the devel
+server and build docs there.
+
+
+
+NoBugFlags
+~~~~~~~~~~
+http://www.pipapo.org/pipawiki/Lumiera/DesignProcess/NoBugFlags[]
+
+Defining a debugging control hierarchy. This is work in progress and
+cehteh explains that he works it out and deploys it, this depends on
+the link:GlobalInitialization[] decided earlier.
+
+Conclusion: accepted, finish and finalize it.
+
+
+
+Further Technical Discussion
+----------------------------
+
+Ichthyo asks how the GUI will be pulled up. Since he didn't attend IRC
+discussions recently he has no information yet whats going on. We
+explain him that we already made some discussions. Integrate the GUI
+into the build system probably linked as library, nothing finally
+decided yet. Communication will go over the plugin/interface facility
+(Plain C API). This things should be worked out and documented in
+link:DesignProcess[].
+
+Cehteh made a small tool `./admin/headercheck` which will gradually
+extended to proof that headers are sufficiently selfstanding.
+
+
+
+Progress
+--------
+
+Cehteh finished low level file handling and working in mmaping and
+frameprovider next. When thats finished, the finalization of the
+Plugin loader and interface definition things is the most urgent thing.
+
+Ichthyo works on the builder internals and next on some sort of
+"connection manager".
+
+Joel goes on with GUI programming and integrating it into the source
+tree next.
+
+Gmerlin and cehteh discuss about how to handle the index files which
+avdecoder uses internally. cehteh would like to manage them in the
+Lumiera backend to, because filehandles are a precious resource.
+Gmerlin explains that this index files are just loaded and kept in
+memory. So this poses no problem for filehandle exhaustion. We will
+discuss this further via email.
+
+Cehteh suggests that we should think about some kind of
+preferences/registry sometime next to store default configs.
+
+Following a discussion about how messages are passed between GUI and
+core. Generally we will use the interfaces defined by the plugin
+system. Gmerlin says that he uses message queues in \'gmerlin', Joel
+requests that a lot of things should be done synchronous and he wants
+to avoid message queues. Cehteh suggests to use use the scheduler for
+GUI things too. For the parts where the GUI interacts with the high
+level proc model ichthyo and joel agree on working something
+(synchronous) out. Ichthyo stresses that the edit core is not
+threadsafe by design and relies on the backends scheduler.
+The underlying builder might sometimes to expensive for synchronous
+calls (ichthyo plans a rule system there) this needs to be worked out.
+
+Ichthyo explains that the builder needs to detect cycles and check if
+the high level model is translateable into the low level model (in
+case plugins git removed and so on). Parts in the render graph which
+are not \'doable' should be flagged as erroneous but not dropped since
+one doesn't want to loose project information when loading a project
+on a machine with different installed plugins. In any case it should be
+possible that the GUI gets immediate synchronous feedback for such
+things.
+
+
+
+Next Meeting
+------------
+
+Next meeting is on 5th June 21:00 UTC

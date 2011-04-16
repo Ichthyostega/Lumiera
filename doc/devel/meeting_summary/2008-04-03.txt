@@ -1,0 +1,290 @@
+2008-04-03 Lumiera Developers Meeting
+=====================================
+:Author: Sami Kallinen
+:Date: 2008-04-09
+
+__Participants__
+
+ * cehteh
+ * gmerlin
+ * hermanr
+ * ichthyo
+ * joelholdsworth
+ * johncoswell
+ * rgareus
+ * sakalli
+
+
+Boilerplate
+-----------
+
+Organization of this meeting
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ * sakalli writes the protocol, ichthyo will help reviewing it
+
+
+Recurring Topics
+~~~~~~~~~~~~~~~~
+We concluded there are no leftovers and currently no Drafts from the design process to discuss
+
+
+Call for volunteers
+-------------------
+(which tasks are to do, how can we interest people...?)
+
+There was a sense that there are people willing to help but they might need direction or cannot do actual coding. But there is also a lot of tasks that could be done by beginners and non-programmers. These tasks are important and if someone who is not a programmer is willing to take them on that leaves more time for the programmers. Examples of such tasks:
+
+ * Protocol writing
+ * maintaining to do lists and isolating tasks
+ * constant code and documentation review
+ * unit/functional testing
+ * header file "task force" - some fundamentals discussed by the developers on libopenvideo should find their way into basic .h files
+ * installing and maintaining project tracking and automated builds/tests on the server
+
+See http://www.lumiera.org/wiki/todo.html#Tasks[]
+
+It was also noted that at current phase some basic development is still needed before we can accommodate a large number of coders doing small tasks and for now we need some subsystem owners. For GUI for example.
+
+To make it easier for "beginners" to get aquainted with the program it was decided that one *official Lumiera GIT repository* should be established.
+
+
+
+Project announcements/registration
+----------------------------------
+(freshmeat, gnu, etc...) any takers?
+
+The discussion was about advertising the project on various sites. There were some concerns raised that it is too early to do too much publicity at the moment. That the right time should be shortly before the first public release. But there is also some value in registering to the project in planning/alpha stage to interest people such as prospective coders. It was noted that the http://www.linux.com/feature/126441[article on linux.com] resulted in a lot of people contacting ichthyo and cehteh. http://plot.bek.no/pipermail/piksel/2008-January/003328.html["I believe in Cinelerra"] by Leo Germani also generated a lot of traffic by developers. Some level of presence on mailing lists would be good although not too much just enough to indicate the project is going on.
+
+Conclusion: volunteer needed to coordinate publicity (not overly urgent, but helpful)
+
+
+
+Informal talk about the GUI
+---------------------------
+
+Firstly, as SimAV was not able to be present during the meeting a proposal by him was relayed by Ichthyo: GUI and backend should be completely separated and communicate via pipes. It was agreed that the GUI should be detached but some higher level message protocol rather than bare pipes should be used. Some comments:
+
+ * cehteh standalone gui is a nice to have, but implementation details have to be worked out
+ * gmerlin Video playback can be separated in a separate X connection
+ * cehteh suggests to start with an conventional, attached gui and just keep it in mind to make it detachable later
+ * rgareus IMHO you want to share memory for the video-frame buffer beween the player and backend - with pipes you'll go the video-jack way.
+
+joelholdsworth is a new developer in the group and had showed interest in developing the GUI. he stated that he is interested in seeing a GUI that uses popular toolkits and that plays by the standards to create a consistent UI with the rest of the free desktop. For this reason he was advocating using  GTKmm. There was no direct objections to GTKmm. Generally, there seems some preference for GTK. (Note this doesn't mean GNOME). Cehteh advocates the idea to use Lua-gtk, i.e. writing the GUI in a clean and lightweight scripting language.
+
+Cario was suggested to be used for implementing the canvas in the timeline view. 
+
+The gui should provide a skeleton. Timeline and canvas should be controllable and extensible by plugins. Tracks can be nested. Use tiling windows and dockeable views and tools palettes. For example some configuration within session/renderpipeline may cause some pluggable elements to be added to the gui. A fader or a toggle/icon and so forth. Some plugins might render additional output (e.g. in previews). A video track renders thumbnails, automation curves on top.
+
+Workflow is another important aspect to take into account in the design. A lot of information needs to come from editors and users in the design process. Different thoughts about the workflow:
+
+ * Should not make a predefined workflow. Just produce a tool that can be adapted to different workflows. It can be predefined, but should not be fixed.
+ * We dont have the resources to develop a "workflow" in the formal manner, we will go the "propose and comment" route.
+ * We should take the best ideas from popular competing products such as Final Cut Pro, AVID, Premiere plus After Effects.
+
+Customisation is deemed important. Some points brought up in the discussion:
+
+ * sakalli: would be great if we could provide a fcp configuration and a avid configuration besides the default configuration as well. That could lure a lot of users quickly. On the other side, too much flexibility can be be a problem as well. 
+ * cehteh: yes .. but such things are prolly costly to setup .. we need volunteers for anything optional
+ * Customization should be possible without recompile, but not too cheap.
+ * There should be a working skeleton or some fixed anchor but gui operations should be bound to a scripting language to achieve customization.
+ * The whole gui in a script with some performance critical widgets coded in C/C++
+ * Some parts should just be customizable, other parts should be kept fixed.
+ * cehteh suggested to start out by making a \'high level' description with no language/toolkit in mind .. what widgets do we need etc and after that to work on the skeleton mockup.
+ * cehteh / hermanr: Lumiera should allow to choose theme independently from desktop .. because what you have as your desktop-theme doesn't suit for video editing in many cases ... see ardour
+
+ichthyo brings up the role of customization for the middle layer and gives an overview of his plans for the new participants.
+He had good experiences with a rule based aproach in various projects. He wants to embed a Prolog interpreter that can answer to "configuration queries".  There is a "builder" component in the middle layer to derive the render nodes graph based on a "high level model", which is visible to the user (in the GUI) and based on these configuration queries.
+
+Rationale for using prolog is: The rules are very readable because they rather represent facts and relations, not the way "how dings are done" but the way "how things are related". Example: how to configure some effects when the footage is interlaced. Additionally, we want to have some global swithces, which could control these rules, like "I want maximum quality", or "I want as much as possible set up automatically". The prolog rules are stored in the session and can be editd by advanced users. Of course, there is a set of basic rules. This aspect of customisation isn't exactly a GUI issue but it would have consequences for the GUI.
+
+some discussion:
+
+ * joelholdsworth: so we just need a way of exposing properties. This is reasonably straightforward when all you want is value, colour, string etc.
+ * rules within the middle layer/session could bind to some properties exposed in the GUI
+ * gmerlin joelholdsworth: Agree, but point out that this can become difficult
+ * cehteh joelholdsworth: skeleton and plugins who attach into some gui areas, so you can add custom widgets
+ * ichthyo: also the ability to attach "tags" to various objects, so the rules can bind on those tags
+ * cehteh: maybe a standard set of widgets, not really completely custom ones (gmerlin agrees)
+ * joelholdsworth: probably you need to be able to do both well
+ * joelholdsworth in many apps the value/colour/string set works perfectly well, but in luminierra the controls will likely need to be much richer
+
+Some brainstorming points about usability:
+
+ * We need a realy good bezier widget for all sorts of curves.
+ * Faders that can be grabbed everywhere are nice like  like ardours and Blender faders. Or others which have no big knob 
+ * The controls in blender's node view would be a good modal to copy (not advocating GL UI, just using widgets and concepts).
+
+One extra point:
+
+ * we have agreed to make all of the big interfaces between the layers as plain C interfaces, because this is the most widely supported common denominator.
+
+
+GUI CONCLUSION
+~~~~~~~~~~~~~~
+
+ * joelholdsworth is now the official GUI maintainer for Lumiera!
+ * sakalli, hermanr, ichthyo announced interest in contributing to discussions about GUI, workflows and usability. gmerlin noted that he knows some gtk secrets and is willing to help out here too.
+
+
+
+Froscon application
+-------------------
+http://www.froscon.org/[Froscon] is a small nice german open source exhibition that is very very technical oriented. Cehteh will be there as well as Ichthyo. Question is wether we should have a booth, perhaps together with some other interested media projects. Could ask Richard and the ffmpeg/mplayer people. End of call for papers is in june.
+
+We made no decision about official presence but most likely there will be a developer meeting if nothing else.
+
+
+
+Timecode metadata discussion
+----------------------------
+This Discussion started out on the libopenvideo list: The question was wether we agree on one uniform format solution from decoder up to app level regarding timecode. And what this format would be: arithmetic or struct type. Regarding metadata (including type of timecode) the question is if we should work out a rather fixed data format, or go the route towards rather open description records.
+
+Conclusion: Gmerlin does it the way it fits best for within the decoder, and Lumiera uses a more uniform time format for representing timecode in the higher app layers. Conversion functions will be concentrated in a library. Regarding metadata we will investigate further.
+
+_A (shortended) digest of the timecode and metadata discussion is attached below_
+
+
+Next meeting
+------------
+
+The next meeting will be at thuesday 8th may 21:00GMT
+
+
+''''
+
+.Timecode discussion
+----
+12:51 cehteh gmerlin: did you read my last mail about generalization of metadata?
+12:51 cehteh key/value pairs
+12:51 gmerlin not sure about that
+12:51 cehteh i am pretty sure that i want that in lumiera
+12:52 cehteh if gavl does that for us it would be even better
+12:52 gmerlin first of all 2 different things:
+12:52 gmerlin 1. arithmetic <-> struct
+12:53 gmerlin 2. Generic <-> format specific
+12:53 cehteh arithmetic for sure
+12:53 gmerlin On the decoder API side, I want to export ideally only one type 
+12:54 gmerlin No no SMPTEXXX and ISO999908098
+12:54 cehteh will that be attached to the frames in a intrusive way?
+12:54 cehteh i rather leave the attaching up to the application
+12:54 gmerlin intrusive?
+12:55 cehteh struct frame { uint64_t timecode; }   vs...
+12:55 cehteh struct frame { struct metadata* something; }
+12:55 cehteh or even vs something done at a api level 
+12:56 gmerlin struct lumiera_video_frame { gavl_video_frame_t * f; uint64_t timecode};
+12:56 gmerlin Or add timecodes to gavl_video_frame_t
+12:57 cehteh struct lumiera_video_frame { gavl_video_frame_t * f; struct metadata* timecode_n_stuff; }
+12:57 ichthyo so I support a  struct metadata*
+12:58 cehteh ichthyo: timecodes might not be regular .. they should be optional, but anyways they dont cost when using an arithmetic type
+12:58 cehteh i mean thats the purpose of timecodes .. to tag every frame and dont make assumptions that your footage is perfect
+12:58 ichthyo but a struct metadata* would rather mean to keep it out of basic GAVL and have a libmetadata -- which may be integrated with GAVL -- right?
+12:59 cehteh someome may have stolen a frame :P
+12:59 cehteh thats gmerlins decision ... 
+12:59 gmerlin I'm against gavl integration of metadata
+12:59 gmerlin gavl has a clear scope: Number crunching
+01:00 cehteh gmerlin: you somehow have to pass it from the decoder to the application
+01:01 cehteh i would prefer to introduce some sidechannel 
+01:01 gmerlin Yes, gmerlin_avdecoder will provide a separate function for getting the next timecode
+01:01 gmerlin bgav_get_next_timecode()
+01:01 cehteh gavl_get_frame (gavl_frame* place the frame here, metadata* place metadata there)
+01:01 gmerlin or: bgav_timecode_from_pts()
+01:03 gmerlin Some higher MXF profiles allow changing timecode parameneters in one stream
+01:06 gmerlin It's sometimes impossible to separate demuxers and codecs
+01:06 gmerlin better have them together in one lib
+01:06 cehteh actually i would like to cache gavls internal states into the backend
+01:08 gmerlin Ok, so timecodes are YYYYMMDDHHMMSSFF as int64_t
+01:08 cehteh the indexing is something i prolly have some words about 
+01:09 cehteh timecodes are uint64_t as microseconds
+01:09 cehteh well for lumiera :-P
+01:10 cehteh YYYYMMDDHHMMSSFF as int64_t   isnt that much better than a struct :P
+01:11 ichthyo now, IMHO its mostly up to gmerlin to decide how it fits into GAVL
+01:11 cehteh ack
+01:11 gmerlin Not gavl
+01:11 ichthyo gmerlin?
+01:11 gmerlin gmerlin avdecoder yes.
+01:11 cehteh in lumiera we will use usecs
+01:11 ichthyo yes
+01:12 ichthyo we will have a conversion function somewhere
+01:12 gmerlin And will it include a calendar date?
+01:12 cehteh doing it only once (avdecoder->usec) makes some sense
+01:12 gmerlin usecs since when?
+01:12 ichthyo either, we get directly usecs from avdecoder, if this fits in for gmerlin,
+01:12 ichthyo or we'll get the format which works best for him and we do the conversion ourselves
+01:12 cehteh defined elsewhere
+01:12 cehteh reel-start or absolute time or whatever
+01:13 ichthyo also, what sort of timecode this was based on (drop frame or not)
+01:13 cehteh gmerlin: thats a important point .. just uint64_t does not suffice
+01:13 cehteh it needs a tag describing what kind of timecode was used
+01:14 cehteh no matter how you encode it 
+01:14 cehteh and iirc there are quite some timecodes
+01:14 ichthyo because in this respect richard was right: we need to be able to reprocuce any value 1:1 
+01:14 cehteh yep
+01:15 cehteh further i want to be able to convert between any kind of timecode in a fingersnip
+01:15 gmerlin ichthyo: and that's impossible with usecs
+01:15 cehteh gmerlin: its not
+01:15 ichthyo with usecs alone: agreed
+01:16 ichthyo with usecs + metadata it should be possible
+01:16 ichthyo modulo some extreme cases (high speed cams, weeks of footage....)
+01:16 cehteh yes .. you need framerate and other infos depending on the metadata
+01:17 cehteh you need to be careful to do the math right so that inverse functions dont drift
+01:17 gmerlin I'll export something lossless, which repduces MXF, DV and Quicktime timecodes losslessly
+01:17 gmerlin You can then do what you want with them :)
+01:17 cehteh thats why i would like to do it at only *one* place/library .. because its delicate and bugs are easier to spot/fix there
+01:18 ichthyo and then there is some api to get at the additional metadata
+01:18 cehteh yeah
+01:18 ichthyo and beyond that: lets devise a libmetadata
+01:18 cehteh just shove the data over .. YYYYMMDDHHMMSSFF as int64_t would be ok
+01:18 gmerlin Ok.
+01:18 cehteh we make a libmetadata (as part of our support lib)
+01:19 cehteh somewhat independent so that it can be spun out
+----
+
+
+.about Metadata
+----
+01:19 cehteh gmerlin: well .. how bout other metadata
+01:19 cehteh your decoder needs to pass that too 
+01:20 gmerlin like?
+01:20 gmerlin Author, Artist title...
+01:20 cehteh some cameras encode shutter speed, focus, gain control, colour balance
+01:20 cehteh and other things
+01:20 gmerlin Hmmm
+01:20 gmerlin I think MXF exports some of these
+01:21 ichthyo wav files can have additional chunks; whats with flac?
+01:21 gmerlin flac has vorbis metadata
+01:21 ichthyo important for the more modern sound formats
+01:21 cehteh dunno .. just thinkin about pro codecs and raw film metadata
+01:21 ichthyo just wanting to point out: things to come here, 
+01:22 ichthyo e.g for sound: what stream is what channel
+01:22 gmerlin Channel locations are handles by gavl
+01:22 gmerlin If you have a multichannel stream
+01:22 cehteh well .. note that there is per-asset metadata you want to pass .. and per frame metadata
+01:22 cehteh maybe even some more undiscovered cases :)
+01:23 cehteh did someone say this is easy??
+01:23 sakalli did any of you watch the video regarding red workflow that i sent to the mailing list? redcode raw holds everyting, asa, wb, etc...  hope lumiera will be able to facilitate that as well.
+01:23 ichthyo at some point I want to be able to support ambisonics
+01:24 ichthyo and maybe some day there will be wave field sysnthesis in more broad use
+01:24 cehteh the codec in the back needs to pass us these things else we cantb handle it
+01:24 gmerlin well, the easiest would be to extend bgav_metadata_t
+01:24 ichthyo rationale is: just be open
+01:24 cehteh gmerlin: maybe we need to investigate this things more, nothing needs to be decided now
+01:24 ichthyo ack
+01:25 cehteh see my key/value metadata proposal .. at some point maybe you make a complete sidechannel just for metadata
+01:25 cehteh decoder stuffs that in on demand and it is passed along with its own api like the bgav_timecode_from_pts()
+01:26 cehteh that way you dont need to touch it more than necessary
+01:26 gmerlin shouldn't that key/value stuff be unified with plugin parameters?
+01:27 cehteh for lumiera, maybe, maybe not
+01:27 ichthyo you mean: you have a common api for describing "values" ?
+01:27 cehteh some plugin parameters are determined by math functions
+01:27 gmerlin You have a key, a type and a value
+01:27 cehteh maybe for caching them
+01:27 cehteh the api might be unified .. but the storage not
+01:28 gmerlin why?
+01:28 ichthyo because any block of data could be in the metadata
+01:28 cehteh metadata which belongs to the frame coming from the decoder is const
+01:28 cehteh plugin parameters are volatile
+
+01:33 gmerlin One other point (but too late for it now) are audio timecodes. I'll adress that on libopenvideo
+01:33 cehteh we will write a little more sophisticated timecode library 
+01:34 cehteh gmerlin: that should be unified :)
+----

@@ -1,0 +1,74 @@
+2008-09-03 Lumiera Developers Meeting
+=====================================
+:Author: Joel Holdsworth
+:Date: 2008-09-05
+
+Participants
+------------
+ * ichthyo
+ * cehteh
+ * joelholdsworth
+ * Plouj
+ * thorwil
+ * wildhostile
+
+
+Boilerplate
+-----------
+
+Organization of this meeting
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ * joel
+ * ichtyo is chairman
+ * there is no agenda, so this is a freeform meeting
+
+Leftovers from last meeting
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+There are no leftovers
+
+
+Mailing Lists
+-------------
+ * any improvements should be reported to cehteh
+ * need volunteers to be moderators. The only volunteers are cehteh and joelholdsworh_
+ * moderating the ML might not be that big a job - we might not get that much spam
+ * it's preferable to allow people to post to the mailing list even if they're not subscribed
+ * cehteh eventually wants the mailing list to interact with uwiki.
+
+Plugin Interfaces
+-----------------
+ * all plugin interaction, including manifest queries will happen through the system of interfaces
+ * this includes enumerating structured data within the plugins. It might sometimes be desirable to store this in a text file, but in this case still the list will be exported through the interfaces. If this were not the case, it would not be possible to make plugins which are wrappers of LADSPA plugins for example.
+ * For a lumiera plugin there is only one entry point, thats an interface itself which bootstraps all the other interfaces in that plugin.
+
+Lib Dependancy Problems
+-----------------------
+ * we've agreed to stick to one compatibility level: Debian/Lenny for perhaps up to 3 years from now
+ * others will be supported - RedHat etc.
+
+Builds and Buildbot
+-------------------
+ * ichthyo asks for help setting up a test/build server
+ * We now have build scripts based on scons and autotools.
+ * All current build systems have different problems.
+ * ichthyo will take care of the Debian packages for Lumiera and NoBug
+
+Website Transition Plan
+-----------------------
+ * There's lots of work to do on the website - transitioning etc. that the core developers don't want to get bogged down with. We need a web developer to volunteer.
+ * All the website stuff is stored in git, and works through Asciidoc, which is not difficult to learn.
+
+Logo Design
+-----------
+ * Postponed for the next meeting when joelholdsworth is around.
+
+Next meeting
+------------
+The next meeting will be held Thursday, 2 oct 21:00 utc.
+
+
+Comment
+~~~~~~~
+re "ichthyo asks for help setting up a test/build server" for "Debian"
+
+see "Build Server" at http://www.pipapo.org/pipawiki/Lumiera/GuiBrainstorming?action=edit&editor=gui[]

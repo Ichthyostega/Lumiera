@@ -1,0 +1,118 @@
+2009-09-09 Lumiera Developers Meeting
+=====================================
+Raffaella_Traniello_and_Hermann_Voßeler <prg@ichthyostega.de>
+
+Sep 9, 2009 on +#lumiera+ +
+^20:00 - 22:30 UTC^
+
+.Participants
+- cehteh
+- ichthyo
+- joelholdsworth
+- andrewjames
+- daniieel
+- hermanr
+- liveD
+- raffa
+- SimAV
+
+
+
+Point 1: FrOSCon
+----------------
+
+Our participation to the conference was a success. We met other video
+developers and people interested in Lumiera.
+It has been a meeting opportunity for the community, it produced good and
+reusable propaganda material (about 100 flyers distributed).
+This success wouldn't be possible without a lot of people helping. +
+So lets say: *Thank you all*!
+
+We plan to be there again next year with another Lumiera meeting (possibly
+all the 3 core devs present). _Ichthyo_ consideres to do a dedicate talk
+(in German).
+
+Participation as a group to other possible events has been considered for +
+(in order of interest):
+LAC, Piksel, OVC, Piksel Summer camp, Linuxtag, FSCONS.
+
+To improve visibility _liveD_ proposes to extend the project also on the
+new social network like facebook. +
+The proposal is discussed but doesn't find supporters.
+
+
+Point 2: Funding
+----------------
+
+Preparing for FrOSCon had some costs, paid by the people working in
+Lumiera. Ideally, _cehteh_ says, people working on Lumiera should not have
+to pay for working on it, no matter who pays.
+He proposes to make a project partnership with FFIS (a German non-profit
+organisation for founding free software).
+That means we could officially collect donations through FFIS (people
+donate to FFIS, to free software in general or specifically to Lumiera).
+That could work out well for specific scopes, like covering travel,
+lodging and diet for developer gatherings or for exhibition material and
+server.
+
+The proposal is accepted. _Cehteh_ will contact FFIS to propose them a partnership.
+If later on there will be funding for development (not just covering expenses)
+that would require a different approach and special communication with the
+community.
+
+_daniieel_ proposes to put a price to each request in "buglist". +
+The proposal is discussed and dismissed.
+
+
+Point 3: Website
+----------------
+
+The news in the homepage makes the project look alive. But this is not
+enough to communicate the state of the Lumiera development. Two 
+solutions are proposed:
+
+* The website needs to be reorganized and made accessible. andrewjames
+  volunteers to work on it.
+* Quarterly development news will be published in the devel section of the
+  website. The devs will post drafts to the mailing list and encourage the
+  other devs to add their informations. Then someone shall aggregate this
+  and make a news webpage. That creates a new task: help collecting the
+  news and write them together.
+
+The devs will communicate their achievements more often in small steps
+to the mailing list
+
+_raffa_ proposes monthly news on the homepage with more broad topics
+(development, community, openvideo). +
+The proposal gets no interest.
+
+
+Point 4: Ticket Query clean-up
+------------------------------
+
+Trac allows for creation of custom ticket queries. We've accumulated quite some
+custom reports, and _cehteh_ asks if some of them can be dropped (Ticket #225).
+_Ichthyo_ points out that he uses some reports frequently, and considers some
+others nice-to-have. Finally it turns out that only Report #5 isn't used by
+anyone and can be dropped.
+
+_Cehteh_ points out that the http://issues.lumiera.org/tags[TracTags] macro
+is a convenient feature -- for example it allows to tag tickets by required skill.
+
+
+Point 5: Coding
+---------------
+
+_Cehteh_ finished a first stable NoBug release and intends to give uWiki a boost
+in the next weeks. _Ichthyo_ worked on a command frontend usable at the GUI/Proc
+interface; in the next time, there will be some integration work to be done
+together with _Joelholdsworth_ to get the GUI and high-level model connected.
+
+A short discussion about the relevance of uWiki for Lumiera follows. Indeed,
+it takes away some developer power, and _Joelholdsworth_ is concerned about that,
+as the project is a bit underpowered generally. _Cehteh_ on the contrary considers
+building a suitable (distributed) infrastructure as an important part of the
+project.
+
+
+

@@ -1,0 +1,285 @@
+Past Meetings
+=============
+
+//Menu: sort children descending
+
+Not all meetings gets summarized on this page. For example, there are no meeting
+summaries at all available for 2010. This only means that there were not enough
+things that needed deciding/documenting during these meetings to warrant someone
+spending time on the task of writing a summary.
+
+Anyone interested in Lumiera development is also encouraged to read mailing list
+archives and other documentation.
+
+
+9 Mar 2011
+----------
+
+Topics
+~~~~~~
+ * The New Website
+ * IRC Logs
+ * VoIP discussions over Mumble?
+ * Version numbering
+
+Summary
+^^^^^^^
+ * link:2011-03-09.html[Summary (written by Stefan Kangas)]
+
+
+.informal meetings, no summaries
+********
+In 2010, the monthly meetings where rather informal gatherings,
+without any relevant decisions beyond the organisation of conference activities.
+During that time, usually the two remaining Lumiera core developers where alternatively
+either prevented by real-life obligations, or otherwise just in ``deep coding mode''
+********
+
+
+9 Sep 2009
+----------
+
+Topics
+~~~~~~
+ * FrOSCon
+ * Funding
+ * Website
+ * Ticket Query Clean-up
+ * Coding
+
+Summary
+^^^^^^^
+ * link:2009-09-09.html[Summary (written by raffa and Ichthyo)]
+
+14 Jan 2009
+-----------
+
+Topics
+~~~~~~
+ * organisational (protocol, agenda, leftovers?)
+ * Logo Contest results, elaborating the winner concept
+ * Forming a Workflow group
+ * Set up a Trac for issue tracking
+ * Getting the \'non-coders' community to help
+ * Possible GUI-Integration: Display a frame?
+
+Summary
+^^^^^^^
+ * link:2009-01-14.html[Summary (written by raffa)]
+
+
+
+
+10 Dec 2008
+-----------
+
+Topics
+~~~~~~
+ * organisational (protocol, agenda, leftovers?)
+ * Logo Contest progress, discussion about how to do the pre selection
+ * rename "EDL" into "Sequence"
+ * link:DesignProcess/TimelineSequenceOutput[Project, Timeline(s), Sequence(s) and Output]
+ * GUI/Proc Interface and collaboration
+ * Threading questions regarding gtk-main and main()
+
+Summary
+^^^^^^^
+ * link:2008-12-10.html[Summary (written by Teld)]
+
+
+
+
+12 Nov 2008
+-----------
+
+Topics
+~~~~~~
+ * organisational (protocol, agenda, leftovers?)
+ * Logo Contest progress
+ * uWiki Progress
+ * Builddrone, any helpers?
+ * Platform and lib dependency status
+ * Discussion about foreseeable problems with Gui Plugins
+ * Include dir and namespaces
+ * build system, plugin tree
+
+Summary
+^^^^^^^
+_(missing)_
+
+
+
+10 Oct 2008
+-----------
+
+Topics
+~~~~~~
+ * organisational (protocol, agenda...)
+ * Lumiera Logo
+ * Design Process: Go through Ideas and Drafts
+   - Mistakes to avoid
+   - Tag clouds
+   - Lumiera Architecture
+   - EDLs as meta-clips
+   - Builder
+   - Lua scripting language
+   - Time handling
+   - Interface naming
+ * Config System (1st version landed)
+ * Use of Namespaces
+ * Interface Definition Language
+
+Summary
+^^^^^^^
+ * link:2008-10-10.html[Summary (written by Ichthyo)]
+
+
+
+
+4 Sep 2008
+----------
+
+Topics
+~~~~~~
+ * boilerplate (protocol, agenda, ...)
+ * Plugin Descriptors
+ * Mailinglist, setup, administration
+ * Lumiera-work Mailinglist (for TODOs)
+ * About Website transition plan
+
+Summary
+^^^^^^^
+_(missing)_
+
+
+
+
+7 Aug 2008
+----------
+
+Topics
+~~~~~~
+ * Go through Ideas and Drafts in design process
+ * Config System (in the works)
+ * Scripting language plans
+ * GUI brainstorming page
+
+Summary
+^^^^^^^
+_(missing)_
+
+
+
+
+6 Jul 2008
+----------
+
+Topics
+~~~~~~
+ * boilerplate (protocol, what's left from last meeting)
+ * Introduction of Lumiera
+ * handling of config errors. 
+ * scripting language. 
+ * editing on small devices (eeePC) 
+ * uWiki. 
+ * 'musical' timeline in bars and beats
+
+Summary
+^^^^^^^
+ * link:2008-07-06.html[Summary (written by Teld)]
+
+
+
+
+6 Jun 2008
+----------
+
+Topics
+~~~~~~
+ * boilerplate (protocol, what's left from last meeting)
+ * Go through Ideas and Drafts in design process
+   - processing node interface
+   - Placement concept 
+
+Summary
+^^^^^^^
+ * link:2008-06-06.html[Summary (written by ichthyo)]
+
+
+
+
+8 May 2008
+----------
+
+Topics
+~~~~~~
+ * boilerplate (protocol, what's left from last meeting)
+ * Go through Ideas and Drafts in design process
+ * Website infrastructure
+
+Summary
+^^^^^^^
+ * link:2008-05-08.html[Summary (written by cehteh)]
+
+
+
+
+3 Apr 2008
+----------
+
+Topics
+~~~~~~
+ * boilerplate (protocol, what's left from last meeting)
+ * Go through Ideas and Drafts in design process
+ * Call for volunteers (which tasks are to do, how can we interest people) for wiki/todo.html
+ * Project announcements/registration (freshmeat, gnu, etc...) any takers?
+ * Informal talk about the GUI (We have some people who want to contribute now, what's going on, how can they start)
+ * froscon application (linux multimedia booth?)
+ * timecode-metadata discussion: convert to arithmetic time type early or late?
+
+Summary
+^^^^^^^
+ * link:2008-04-03.html[Summary (written by sakalli)]
+
+
+
+
+6 Mar 2008
+----------
+
+Topics
+~~~~~~
+ * boilerplate (protocol, whats left from last meeting, next meeting)
+ * Go through Ideas and Drafts in design process
+ * "Call for design" for some features relevant for the whole Application:
+   - parameters and automation
+   - render node interface
+   - handling of compound sessions
+   - session storage interface in general
+ * Project name
+ * Project Server, setup, organization, administration
+ * GPL3 pros cons, license rationale
+
+Summary
+^^^^^^^
+ * link:2008-03-06.html[Summary (written by cehteh)]
+
+
+
+
+1 Feb 2008
+----------
+
+Topics
+~~~~~~
+ * Who will write the protocol below
+ * Discuss the open points in link:Lumiera/DesignProcess[] do we need this formalism?
+ * Who works on what, what are the short term goals, what tasks are open
+ * State of the new-name search for the was-intended-as-cinelerra-3 project (no name discussion, just how we will progress!)
+ * Introduce the development model
+ * How to handle the regular meetings in future (day, time, where to put summaries)
+
+Summary
+^^^^^^^
+ * link:2008-02-01.html[Summary (written by Ichthyo)]
+
