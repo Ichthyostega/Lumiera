@@ -13,16 +13,16 @@ The only way to defeat "featuritis" is to build upon a coherent design --
  +
 which in turn relies upon a more or less explicit understanding what the
 application should be like, and the way the prospective user is thought to work
-with the program. Today, a generally accepted ''method'' for building up such
-an understanding is to do a ''use case analysis.'' Such a formal analysis would
+with the program. Today, a generally accepted 'method' for building up such
+an understanding is to do a *use case analysis*. Such a formal analysis would
 require to identify all usage scenarios with the involved actors and parts of
 the system, and then to refine them in detail and break them down into distinct
 use cases. Here, I'll try a rather informal variant of such an analysis. I'll
 restrain myself to describing the most important usage situations.
 
-''please participate in the discussion. It well may be that everything detailed
-  here is self-evident, but I doubt so. At least the grouping and the omissions
-  reflect sort-of a focus of the project''
+'please participate in the discussion. It well may be that everything detailed
+ here is self-evident, but I doubt so. At least the grouping and the omissions
+ kind-of reflect a certain focus of the project'
 
 
 Describing basic Lumiera usage situations
@@ -57,7 +57,7 @@ You build up a simple linear cut sequence. Either by
    of) unwanted parts
  - playing source media and spilling over (insert, overwrite) some parts into
    the final assembly
- - dragging over pre-organised clips from clip folders to build up the
+ - dragging over the pre-organised clips from clip folders to build up the
    assembly.
 
 Sound is either used immediately as-is (the soundtrack attached to the media),
@@ -71,16 +71,16 @@ Scenario (3) : Augmenting an assembly
 
 Without the intention to rework it from scratch, an already existing simple
 assembly is augmented, beautified and polished, maybe to conform with
-professional standards. This includes the "rescue" of a somewhat questionable
+professional standards. This includes the ``rescue'' of a somewhat questionable
 assembly by repairing localized technical problems, but also shortening and
 re-arranging, and in extreme cases even changing the narrative structure. A
 distinctive property of this usage scenario is that work happens rather in the
-context of ''tasks'' (passes) -- not so much isolated operations:
+context of 'tasks' (passes) -- not so much isolated operations:
 
  - the task may be to get the rhythm or overall tempo right, and thus you go
    over the sequence and do trim, roll, shuffle or slide edits.
- - you may want to "fold-out" parts of the sound, thus interweaving o-sound and
-   music
+ - you may want to ``fold-out'' parts of the sound, thus interweaving o-sound
+   and music
  - there may be a sound overdubbing and replacing pass
  - you may want to walk certain automation curves and adjust levels (sound
    volume or tone, fade, brightness/contrast/colour)
@@ -91,7 +91,7 @@ context of ''tasks'' (passes) -- not so much isolated operations:
 Scenario (4) : Compositional work
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Here I define ''compositional work'' as a situation where you deal with
+Here I define *compositional work* as a situation where you deal with
 multiple more or less independent sequences going on in parallel, similar to a
 musical score. Frequently, we encounter compositional parts embedded in a
 otherwise linear work, and often those parts evolve when Scenario (3) is driven
@@ -102,29 +102,29 @@ to the extreme.
  - a movie with a complex narrative structure may induce compositional work on
    a very large scale (and existing applications frequently fall short on
    supporting such)
- - compositing often leads to compositional work. Special FX, masked objects
+ - _compositing_ often leads to compositional work. Special FX, masked objects
    being arranged, artificial elements to be integrated.
- - similarly any collage like or heavily layered arrangements lead themselves
+ - similarly any collage-like or heavily layered arrangements lead themselves
    to requiring compositional work.
 
 The common distinctive property of all those situations is: objects are
 embedded into a primary context and have to obey the rules of this context, and
 at the same time have a close correlation to other objects which are embedded
-in a completely different ("orthogonal") context. (To give a catchy example:
+in a completely different (``orthogonal'') context. (To give a catchy example:
 assume, a CG monster has to be integrated. Besides the masked monster object,
 you have several colouring and blurring layers at completely different levels
 in the layering order, and at the same time you have correlated sound objects,
-which need to be integrated into the general soundscape. And now your primary
+which need to be integrated into the general sound-scape. And now your primary
 job is to get the movement and timings of the monster right in relation to the
 primary timing grid established by the existing edit)
 
 The working style and thus the tool support necessary for compositional work is
-completely different to Scenario (3). After an innitial buildup (which often is
+completely different to Scenario (3). After an initial build-up (which often is
 very systematic), the working profile can be characterized by tweaks to various
 parameters to be done in-sync at widely separated sites within the session,
-together with repeated cycles of "do it", "assess the result", "undo all and do
-some small detail differently". Typically there is the need for much navigation
-(contrast this to Scenario (3) where you work in "passes")
+together with repeated cycles of ``do it'', ``assess the result'', ``undo all and
+do some small detail differently''. Typically there is the need for much navigation
+(contrast this to Scenario (3) where you work in _tasks_ or _passes_)
 
 
 Scenario (5) : Working with Sound
@@ -150,7 +150,7 @@ operations:
 While clearly some of those tasks are always better done within a dedicated
 application, the ability to carry out this work partially within the main
 session and even while the basic edit is still in flux -- may open new artistic
-possiblilities.
+possibilities.
 
 
 Scenario (6) : Large Projects
@@ -158,7 +158,7 @@ Scenario (6) : Large Projects
 
 At first sight, the operations and the work to be done in large projects is the
 same as in small ones. But large projects tend to create sort of an additional
-"layer" on top of the usage scenarios described thus far, which will "kick in"
+``layer'' on top of the usage scenarios described thus far, which will ``kick in''
 at various places.
 
  - work may be divided upon several editors, working on separate parts
@@ -169,8 +169,9 @@ at various places.
    a certain transition (template), the way fade-outs are done, a certain
    colour profile. Possibly, this stuff needs to be adjusted all over the
    project.
- - there will be a general (large scale) timing grid and probably there is the
-   need to navigate to the different parts of the whole project.
+ - there will be a general (large scale) timing grid with distinct ``check points''
+   and probably there is the need to navigate to the different parts of the
+   whole project.
  - there may be the necessity to build several versions of the same project in
    parallel (e.g. a short version and a extended director's cut)
  - you may have to care for such nasty and tedious things as keeping sub-titles
@@ -187,7 +188,7 @@ Several people work on a project.
  - A longer sequence might be split up into parts, each one edited by another
    person. The parts will be collected and assembled by the chief editor. Edits
    to the parts will still be possible, but a system of permissions allows to
-   lock down access to the material.
+   lock down access to parts of the edit, so to prevent unexpected interferences.
  - Arrangements based on the same resources can be branched, tagged and merged.
  - Edits are logged with usernames
  - Markers can be shown/hidden on a per creator base.
@@ -201,12 +202,12 @@ Several people work on a project.
 Scenario (8) : Script driven
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-The application is started ''headless'' (without GUI) and controlled via an
+The application is started ``headless'' (without GUI) and controlled via an
 API. Either an existing session is loaded, or a new session is created and
 populated. Then, some operations have to be done in a systematic manner,
 requiring a way to address parts of the session both unambiguously and in a way
 easy to access and control from a programming environment (you can't just
-''see'' the right clip, it needs to be tagged). Finally, there might be an
+``see'' the right clip, it needs to be tagged). Finally, there might be an
 export or render step. A variation of this scenario is the automatic extraction
 of some informations from an existing project.
 
@@ -218,26 +219,26 @@ Discussion
 * describing such scenarios, even if hypothetical, create an anchor or point of
   referral for feature/GUI design work to be done in detail
 * relating features to working situations helps to see what is really important
-  and what is rather of technical merrit
+  and what is rather of technical merit
 * compiling and discussing this list helps shaping the character of the
   application as a whole
 * the above compilation relates individual features to a general production
   process.
-* the goal of this compilation is to be ''fairly complete''
+* the goal of this compilation is to be _fairly complete_
 
 
 .Cons
 * any of those descriptions is artificial
 * sometimes it is better to develop an application technology driven,
   especially when it is technologically challenging to get it to work properly.
-* having such a large-scale vision may frighten people away which otherwise
+* having such a large-scale vision may freak away people which otherwise
   might jump in and implement some crazy but valuable new feature
-* the listed usage scenarios intend to be ''fairly complete,'' which can be a
+* the listed usage scenarios intend to be _fairly complete_, which can be a
   limitation or even self-deception. Better have an open ended list.
 * the above compilation seems quite conventional and explicitly leaves out some
   scenarios
   - networked, distributed scenarios, compound applications
-  - television, life video, !VeeJay-ing
+  - television, life video, VeeJay-ing
   - cartoons, animations, game design
 
 
@@ -247,11 +248,11 @@ Discussion
 * just start out with one scenario directly at hand (e.g. the simple assembly)
   and not worrying about the rest
 * rather then defining those scenarios (which are necessarily hypothetical),
-  rather stick to the operation level. E.g. a use case would be rather "trim a
-  clip"
+  rather stick to the operation level. E.g. a use case would be rather
+  on the level of ``triming a clip''
 * doing a complete state-of-the art UML use case analysis.
 * after having created the foundation, rather stick to an XP approach, i.e.
-  implement, integrate and release small "usage stories"
+  implement, integrate and release small ``usage stories''
 
 
 
@@ -281,15 +282,19 @@ circumstances of production change quite dramatically.
 
 Comments
 --------
+//comments: append below
 
-Template e.g. for regular TV series
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
+.Template e.g. for regular TV series
 Constraints to fit all contents within fixed timeline, cover topic, select
 collage of iconic scenes from archived and collected footage. Update intro and
 credit roll for each episode. Add in stopmotion, and 3D model animations with
-vocal commentaries. Gather together separate items from "outworkers". Tree
-(@)SIG(@)
+vocal commentaries. Gather together separate items from "outworkers".
+
+Tree:: '2008-12-27 08:36:36'
+
+
+//endof_comments:
+
 
 
 Parked

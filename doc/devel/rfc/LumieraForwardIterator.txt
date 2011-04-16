@@ -94,7 +94,8 @@ relies on that interface for discovering session contents. Besides that, we
 need more implementation experience.
 
 Some existing iterators or collection-style interfaces should be retro-fitted.
-See http://issues.lumiera.org/ticket/349[Ticket #349]. + Moreover, we need to
+See http://issues.lumiera.org/ticket/349[Ticket #349]. +
+Moreover, we need to 
 gain experience about mapping this concept down into a flat C-style API.
 
 
@@ -133,6 +134,23 @@ compromising the clean APIs.
 
 Comments
 --------
+//comments: append below
+
+Now in use since more then a year, without turning up any serious problems.
+The only _minor concern_ I can see is that this concept, as such, doesn't solve
+the problem with exposing implementation details of the underlying container on the API.
+Similar to STL Iterators, the actual implementation representation is only disguised
+behind a 'typedef'. But, generally speaking, this is an inevitable consequence of the
+``zero overhead'' abstraction. For the cases when an indirection (via VTable) is feasible,
+I've created the 'IterSource' template, which sticks to this Lumiera Forward Iterator
+concept, but provides an opaque frontend, allowing to decouple completely from the
+actual implementation. Besides that, over time I've written several standard adapters
+for the most common STL containers, plus Map, key and value extractors.
+
+Ichthyostega:: 'Sa 16 Apr 2011 00:20:13 CEST' 
+
+
+//endof_comments:
 
 
 Final

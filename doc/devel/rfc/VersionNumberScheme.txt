@@ -153,7 +153,8 @@ Comments
 //comments: append below
 
 .State -> Final
-common practice
+considered common practice
+
     Do 14 Apr 2011 03:46:07 CEST Christian Thaeter <ct@pipapo.org>
 
 
