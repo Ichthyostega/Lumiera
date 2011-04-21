@@ -27,7 +27,7 @@
 #include "lib/util.hpp"
 #include "lib/util-foreach.hpp"
 
-#include "lib/opaque-holder.hpp"
+#include "lib/polymorphic-value.hpp"
 //#include "lib/bool-checkable.hpp"
 
 #include <iostream>
@@ -41,11 +41,12 @@ namespace test{
   using ::Test;
 //  using util::isnil;
   using util::for_each;
+  using util::unConst;
   using util::isSameObject;
 //  using lumiera::error::LUMIERA_ERROR_INVALID;
   using lumiera::error::LUMIERA_ERROR_ASSERTION;
   
-  using std::vector;
+//  using std::vector;
 //  using std::cout;
 //  using std::endl;
   
@@ -62,15 +63,16 @@ namespace test{
         virtual long& localSum() =0;
         
         bool
-        operator== (Interface const& o)
+        operator== (Interface const& o)  const
           {
-            return localSum() == o.localSum();
+            return unConst(this)->localSum()
+                == unConst(o).localSum();
           }
       };
     
     
     const uint MAX_RAND = 1000;
-    const uint MAX_SIZ  = sizeof(long[111]);
+    const uint MAX_SIZ  = sizeof(long[113]);  /////////////////////TODO: using just 111 causes SEGV ---> suspect the HandlingAdapter mixin to require additional storage
     
     long _checkSum = 0;
     long _callSum  = 0;
@@ -109,7 +111,7 @@ namespace test{
         long&
         localSum()
           {
-            return localData[ii-1];
+            return localData_[ii-1];
           }
         
         void
@@ -130,7 +132,7 @@ namespace test{
   }
   
   typedef PolymorphicValue<Interface, MAX_SIZ> PolyVal;
-  typedef vector<PolyVal> TestList;
+  typedef std::vector<PolyVal> TestList;
   
   
   
@@ -154,7 +156,7 @@ namespace test{
             TestList objs = createOpaqueValues ();
             for_each (objs, operate);
           }
-          CHECK (0 == _checksum); // all dead
+          CHECK (0 == _checkSum); // all dead
           
           verifyOverrunProtection();
         }
@@ -180,7 +182,8 @@ namespace test{
           CHECK (elm == myLocalVal);
           
           long prevSum = _callSum;
-          long randVal = myLocalVal.apiFunc();
+          Interface& subject = myLocalVal;
+          long randVal = subject.apiFunc();
           CHECK (prevSum + randVal == _callSum);
           CHECK (elm != myLocalVal);
           
