@@ -505,6 +505,11 @@ out: can_IterForEach<CustomForwardIter>	 : Yes
 END
 
 
+TEST "Polymorphic value objects" PolymorphicValue_test  <<END
+return: 0
+END
+
+
 PLANNED "RefArray_test" RefArray_test  <<END
 return: 0
 END

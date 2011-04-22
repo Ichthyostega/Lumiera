@@ -84,26 +84,42 @@ namespace test{
       {
         long localData_[ii];
         
+       ~Imp()
+          {
+            mark (-1 * localSum());
+            CHECK (0 == localSum());
+          }
+        
         Imp()
           {
             REQUIRE (0 < ii);
             localSum() = 0;
-            note(ii);
+            mark(ii);
             ++ _created;
           }
         
-       ~Imp()
+        Imp (Imp const& o)
           {
-            note (-1 * localSum());
-            CHECK (0 == localSum());
+            ++ _created;
+            copyData (o);
+            _checkSum  += localSum();
+          }// adjust, because we've gotten two identical instances
+        
+        Imp&
+        operator= (Imp const& o)
+          {
+            _checkSum  -= localSum();
+            copyData (o);
+            _checkSum  += localSum();
+            return *this;
           }
         
-        
-        long
+      private:
+        virtual long
         apiFunc()
           {
             long rr = ii * (rand() % MAX_RAND);
-            note (rr);
+            mark (rr);
             _callSum += rr;
             return rr;
           }
@@ -115,10 +131,17 @@ namespace test{
           }
         
         void
-        note (long markerValue)
+        mark (long markerValue)
           {
             localSum() += markerValue;
             _checkSum  += markerValue;
+          }
+        
+        void
+        copyData (Imp const& o)
+          {
+            for (uint i=0; i<ii; ++i)
+              localData_[i] = o.localData_[i];
           }
       };
     
@@ -153,6 +176,8 @@ namespace test{
           _created  = 0;
           
           {
+            verifyBasics();
+            
             TestList objs = createOpaqueValues ();
             for_each (objs, operate);
           }
@@ -192,6 +217,23 @@ namespace test{
           CHECK (!isSameObject (elm, myLocalVal));
           
           CHECK (sizeof(myLocalVal) <= MAX_SIZ + _ALIGN_);
+        }
+      
+      
+      void
+      verifyBasics()
+        {
+          long prevSum = _checkSum;
+          uint prevCnt = _created;
+          
+          PolyVal val = PolyVal::build<Imp<111> >();
+          CHECK (prevSum+111 == _checkSum);            // We got one primary ctor call
+          CHECK (prevCnt+1   <= _created);             // Note: usually, the compiler optimises
+          CHECK (prevCnt+2   >= _created);             //       and skips the spurious copy-operation
+          CHECK (sizeof(PolyVal) > sizeof(Imp<111>));
+          Interface& embedded = val;
+          CHECK (isSameObject(embedded,val));
+          CHECK (INSTANCEOF(Imp<111>, &embedded));
         }
       
       
