@@ -4,10 +4,9 @@ shopt -s extglob
 
 function usage()
 {
-    less -F <<"EOF"
+    grep -v '^// ' <<"EOF" | less -F
 Lumiera RFC maintenance script
 ==============================
-
 // Note: the source of this documentation is maintained
 //       directly admin/rfc.sh in its usage() function
 //       edit it only there and then regenerate
