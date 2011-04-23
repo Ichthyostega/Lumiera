@@ -216,7 +216,7 @@ namespace test{
           CHECK (elm == myLocalVal);
           CHECK (!isSameObject (elm, myLocalVal));
           
-          CHECK (sizeof(myLocalVal) <= MAX_SIZ + _ALIGN_);
+          CHECK (sizeof(myLocalVal) <= MAX_SIZ + polyvalue::Trait<Interface>::ADMIN_OVERHEAD + _ALIGN_);
         }
       
       
