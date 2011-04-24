@@ -94,6 +94,43 @@
  **   Indeed, as we're just using a different meaning of the VTable, only a
  **   single indirection (virtual function call) is required at runtime in
  **   this case to invoke the copy ctor or assignment operator.
+ ** Thus, in this latter (optimal) case, the fact that PolymorphicValue allows
+ ** to conceal the actual implementation type comes with zero runtime overhead,
+ ** compared with direct usage of a family of polymorphic types (with VTable).
+ ** 
+ ** \par using polymorphic value objects
+ ** 
+ ** To start with, we need a situation where polymorphic treatment and type erasure
+ ** might be applicable. That is, we use a public API, and only that, in any client
+ ** code, while the concrete implementation is completely self contained. Thus, in
+ ** the intended use, the concrete implementation objects can be assembled once,
+ ** typically in a factory, and after that, no further knowledge of the actual
+ ** implementation type is required. All further use can be coded against
+ ** the exposed public API.
+ ** 
+ ** Given such a situation, it might be desirable to conceal the whereabouts of
+ ** the implementation completely from the clients employing the generated objects.
+ ** For example, the actual implementation might rely on a complicated subsystem
+ ** with many compilation dependencies, and we don't want to expose all those
+ ** details on the public API.
+ ** 
+ ** Now, to employ PolymorphicValue in such a situation, on the usage side (header):
+ ** - expose the public API, but not the implementation type of the objects
+ ** - define an instantiation of PolymorphicValue with this API
+ ** - be sure to define a hard wired size limit not to be exceeded by the
+ **   actual implementation objects (PolymorphicValue's ctor has an assertion
+ **   to verify this constraint)
+ ** - provide some kind of factory for the clients to get the actual polymorphic
+ **   value instances. Clients may then freely move and copy those objects, but
+ **   do not need to know anything about the actual implementation object layout
+ **   (it could be figured out using RTTI though)
+ ** 
+ ** On the implementation side (separate compilation unit)
+ ** - include the definition of the PolymorphicValue instantiation (of course)
+ ** - define the implementation types to inherit from the public API
+ ** - implement the mentioned factory function, based on the static build
+ **   PolymorphicValue#build functions, using the actual implementation type
+ **   as parameter. 
  ** 
  ** @see polymorphic-value-test.cpp
  ** @see opaque-holder.hpp other similar opaque inline buffer templates
@@ -107,22 +144,14 @@
 
 #include "lib/error.hpp"
 #include "lib/meta/duck-detector.hpp"
-//#include "lib/bool-checkable.hpp"
-//#include "lib/access-casted.hpp"
-//#include "lib/util.hpp"
 
-//#include <boost/noncopyable.hpp>
 #include <boost/utility/enable_if.hpp>
 
 
 namespace lib {
   
-//  using lumiera::error::LUMIERA_ERROR_WRONG_TYPE;
-//  using util::isSameObject;
-//  using util::unConst;
   
-  
-  namespace polyvalue { // implementation helpers...
+  namespace polyvalue { // implementation details...
     
     using boost::enable_if;
     using lumiera::Yes_t;
@@ -130,8 +159,23 @@ namespace lib {
     
     struct EmptyBase{ };
     
-    template<class IFA
-            ,class BA = EmptyBase
+    /**
+     * Interface for active support of copy operations
+     * by the embedded client objects. When inserted into the
+     * inheritance chain \em above the concrete implementation objects,
+     * PolymorphicValue is able to perform copy operations trivially and
+     * without any \c dynamic_cast and other run time overhead besides a
+     * simple indirection through the VTable. To enable this support, the
+     * implementation objects should inherit from \c CopySupport<Interface>
+     * (where \c Interface would be the public API for all these embedded
+     * implementation objects).
+     * Alternatively, it's also possible to place this CopySupport API as parent
+     * to the public API (it might even be completely absent, but then you'd need
+     * to provide an explicit specialisation of the Traits template to tell
+     * PolymorphicValue how to access the copy support functions.)
+     */
+    template<class IFA         ///< the common public interface of all embedded objects
+            ,class BA = IFA    ///< direct baseclass to use for this copy support API
             >
     class CopySupport
       : public BA
@@ -144,7 +188,10 @@ namespace lib {
     
     
     
-    
+    /** 
+     * helper to detect presence of a function
+     * to support clone operations
+     */
     template<typename T>
     class exposes_copySupportFunctions
       {
@@ -157,23 +204,38 @@ namespace lib {
       };
     
     
+    /** 
+     * traits template to deal with
+     * different ways to support copy operations.
+     * Default is no support by the API and implementation types.
+     * In this case, the CopySupport interface is mixed in at the
+     * level of the concrete implementation class and later on
+     * accessed through an \c dynamic_cast
+     */
     template <class TY, class YES = void> 
     struct Trait
       {
-        typedef CopySupport<TY> CopyAPI;
+        typedef CopySupport<TY,EmptyBase> CopyAPI;
         enum{   ADMIN_OVERHEAD = 2 * sizeof(void*) };
         
         static CopyAPI&
         accessCopyHandlingInterface (TY& bufferContents)
           {
             REQUIRE (INSTANCEOF (CopyAPI, &bufferContents));
-            return dynamic_cast<CopyAPI&> (bufferContents); 
+            return dynamic_cast<CopyAPI&> (bufferContents);
           }
         
         typedef CopyAPI AdapterAttachment;
       };
     
     
+    /**
+     * Special case when the embedded types support copying
+     * on the API level, e.g. there is a sub-API exposing a \c cloneInto
+     * function. In this case, the actual implementation classes can be
+     * instantiated as-is and the copy operations can be accessed by a
+     * simple \c static_cast without runtime overhead.
+     */
     template <class TY>
     struct Trait<TY, typename enable_if< exposes_copySupportFunctions<TY> >::type>
       {
@@ -185,13 +247,13 @@ namespace lib {
         accessCopyHandlingInterface (IFA& bufferContents)
           {
             REQUIRE (INSTANCEOF (CopyAPI, &bufferContents));
-            return static_cast<CopyAPI&> (bufferContents); 
+            return static_cast<CopyAPI&> (bufferContents);
           }
         
         typedef EmptyBase AdapterAttachment;
       };
     
-  }
+  }//(End)implementation details
   
   
   
@@ -205,7 +267,7 @@ namespace lib {
    * interface. The actual implementation object might be placed into the
    * buffer through a builder function; later, this buffer may be copied
    * and passed on without knowing the actual contained type.
-   *  
+   * 
    * For using PolymorphicValue, several \b assumptions need to be fulfilled
    * - any instance placed into OpaqueHolder is below the specified maximum size
    * - the caller cares for thread safety. No concurrent get calls while in mutation!
@@ -227,57 +289,73 @@ namespace lib {
         siz = storage + _Traits::ADMIN_OVERHEAD 
       };
       
+      
+      /* === embedded object in buffer === */
+      
+      /** Storage for embedded objects */
       mutable char buf_[siz];
       
-      template<class IMP>
-      IMP&
-      access()  const
+      IFA&
+      accessEmbedded()  const
         {
-          return reinterpret_cast<IMP&> (buf_);
+          return reinterpret_cast<IFA&> (buf_);
         }
       
       void
-      destroy()
+      destroyEmbedded()
         {
-          access<IFA>().~IFA();
+          accessEmbedded().~IFA();
         }
       
-//        REQUIRE (siz >= sizeof(IMP));
       
       template<class IMP>
       PolymorphicValue (IMP*)
         {
+          REQUIRE (siz >= sizeof(IMP));
           new(&buf_) IMP();
         }
       
       template<class IMP, typename A1>
       PolymorphicValue (IMP*, A1& a1)
         {
+          REQUIRE (siz >= sizeof(IMP));
           new(&buf_) IMP (a1);
         }
       
       template<class IMP, typename A1, typename A2>
       PolymorphicValue (IMP*, A1& a1, A2& a2)
         {
+          REQUIRE (siz >= sizeof(IMP));
           new(&buf_) IMP (a1,a2);
         }
       
       template<class IMP, typename A1, typename A2, typename A3>
       PolymorphicValue (IMP*, A1& a1, A2& a2, A3& a3)
         {
+          REQUIRE (siz >= sizeof(IMP));
           new(&buf_) IMP (a1,a2,a3);
         }
       
       
+      /**
+       * Implementation Helper: supporting copy operations.
+       * Actually instances of this Adapter template are placed
+       * into the internal buffer, such that they both inherit
+       * from the desired implementation type and the copy 
+       * support interface. The implementation of the
+       * concrete copy operations is provided here
+       * forwarding to the copy operations
+       * of the implementation object. 
+       */
       template<class IMP>
       class Adapter
         : public IMP
-        , public _Traits::AdapterAttachment
+        , public _Traits::AdapterAttachment  // mix-in, might be empty
         {
           virtual void
           cloneInto (void* targetBuffer)  const
             {
-              new(targetBuffer) Adapter(*this);
+              new(targetBuffer) Adapter(*this); // forward to copy ctor
             }
           
           virtual void
@@ -285,11 +363,11 @@ namespace lib {
             {
               REQUIRE (INSTANCEOF (Adapter, &targetBase));
               Adapter& target = static_cast<Adapter&> (targetBase);
-              target = (*this);
+              target = (*this);                 // forward to assignment operator
             }
           
-        public:
-          /* using default copy and assignment */
+        public: /* == forwarding ctor to implementation type == */
+          
           Adapter() : IMP() { }
           
           template<typename A1>
@@ -300,31 +378,40 @@ namespace lib {
           
           template<typename A1, typename A2, typename A3>
           Adapter (A1& a1, A2& a2, A3& a3) : IMP(a1,a2,a3) { }
+          
+          /* using default copy and assignment */
         };
       
       
       _CopyHandlingAdapter&
       accessHandlingInterface ()  const
         {
-          IFA& bufferContents = access<IFA>();
-          _CopyHandlingAdapter& hap = _Traits::accessCopyHandlingInterface (bufferContents);
-          return hap;                                                                   ////TODO cleanup unnecessary temporary
+          IFA& bufferContents = accessEmbedded();
+          return _Traits::accessCopyHandlingInterface (bufferContents);
         }
       
       
-    public:
-      operator IFA& ()
+    public: /* === PolymorphicValue public API === */
+      
+      typedef IFA Interface;
+      
+      operator Interface& ()
         {
-          return access<IFA>();
+          return accessEmbedded();
         }
-      operator IFA const& ()  const
+      operator Interface const& ()  const
         {
-          return access<IFA>();
+          return accessEmbedded();
+        }
+      Interface*
+      operator-> ()  const
+        {
+          return &( accessEmbedded() );
         }
       
      ~PolymorphicValue()
         {
-          destroy();
+          destroyEmbedded();
         }
       
       PolymorphicValue (PolymorphicValue const& o)
@@ -335,9 +422,11 @@ namespace lib {
       PolymorphicValue&
       operator= (PolymorphicValue const& o)
         {
-          o.accessHandlingInterface().copyInto (this->access<IFA>());
+          o.accessHandlingInterface().copyInto (this->accessEmbedded());
           return *this;
         }
+      
+      /* === static factory functions === */
       
       template<class IMP>
       static PolymorphicValue
@@ -371,10 +460,13 @@ namespace lib {
           return PolymorphicValue (type_to_build_in_buffer, a1,a2,a3);
         }
       
+      
+      /* === support Equality by forwarding to embedded === */
+      
       friend bool
       operator== (PolymorphicValue const& v1, PolymorphicValue const& v2)
       {
-        return v1.access<IFA>() == v2.access<IFA>();
+        return v1.accessEmbedded() == v2.accessEmbedded();
       }
       friend bool
       operator!= (PolymorphicValue const& v1, PolymorphicValue const& v2)

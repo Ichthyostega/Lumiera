@@ -24,14 +24,10 @@
 
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
-#include "lib/util.hpp"
 #include "lib/util-foreach.hpp"
 
 #include "lib/polymorphic-value.hpp"
-//#include "lib/bool-checkable.hpp"
 
-#include <iostream>
-//#include <cstdlib>
 #include <vector>
 
 
@@ -39,16 +35,11 @@ namespace lib {
 namespace test{
   
   using ::Test;
-//  using util::isnil;
   using util::for_each;
   using util::unConst;
   using util::isSameObject;
-//  using lumiera::error::LUMIERA_ERROR_INVALID;
   using lumiera::error::LUMIERA_ERROR_ASSERTION;
   
-//  using std::vector;
-//  using std::cout;
-//  using std::endl;
   
   namespace { // test dummy hierarchy
              //  Note: largely varying space requirements
@@ -72,15 +63,23 @@ namespace test{
     
     
     const uint MAX_RAND = 1000;
-    const uint MAX_SIZ  = sizeof(long[113]);  /////////////////////TODO: using just 111 causes SEGV ---> suspect the HandlingAdapter mixin to require additional storage
+    const uint MAX_ELM  = 111;
+    const uint MAX_SIZ  = sizeof(long[MAX_ELM]);
     
+    /* Checksums to verify proper ctor-dtor calls and copy operations */
     long _checkSum = 0;
     long _callSum  = 0;
     uint _created  = 0;
     
     
-    template<uint ii>
-    struct Imp : Interface
+    /**
+     * Template to generate concrete implementation classes.
+     * @note the generated classes vary largely in size, and
+     *       moreover the actual place to store the checksum
+     *       also depends on that size parameter.
+     */
+    template<uint ii, class BASE=Interface>
+    struct Imp : BASE
       {
         long localData_[ii];
         
@@ -159,6 +158,7 @@ namespace test{
   
   
   
+  
   /**********************************************************************************
    *  @test build a bunch of PolymorphicValue objects. Handle them like copyable
    *        value objects, without knowing the exact implementation type; moreover
@@ -175,9 +175,9 @@ namespace test{
           _callSum  = 0;
           _created  = 0;
           
+          verifyBasics();
+          
           {
-            verifyBasics();
-            
             TestList objs = createOpaqueValues ();
             for_each (objs, operate);
           }
@@ -207,8 +207,7 @@ namespace test{
           CHECK (elm == myLocalVal);
           
           long prevSum = _callSum;
-          Interface& subject = myLocalVal;
-          long randVal = subject.apiFunc();
+          long randVal = myLocalVal->apiFunc();
           CHECK (prevSum + randVal == _callSum);
           CHECK (elm != myLocalVal);
           
@@ -223,25 +222,59 @@ namespace test{
       void
       verifyBasics()
         {
+          typedef Imp<MAX_ELM> MaximumSizedImp;
+          
+          // Standard case: no copy support by client objects
+          verifyCreation_and_Copy<PolyVal, MaximumSizedImp>();
+          
+          // Special case: client objects expose extension point for copy support
+          typedef polyvalue::CopySupport<Interface> CopySupportAPI;                    // Copy support API declared as sub-interface
+          typedef Imp<MAX_ELM,CopySupportAPI> CopySupportingImp;                       // insert this sub-interface between public API and Implementation
+          typedef PolymorphicValue<Interface, MAX_SIZ, CopySupportAPI> OptimalPolyVal; // Make the Holder use this special attachment point
+          CHECK (sizeof(OptimalPolyVal) < sizeof(PolyVal));                            // results in smaller Holder and less implementation overhead
+          
+          verifyCreation_and_Copy<OptimalPolyVal, CopySupportingImp>();
+        }
+      
+      
+      template<class PV,class IMP>
+      void
+      verifyCreation_and_Copy()
+        {
+          typedef PV Holder;
+          typedef IMP ImpType;
+          typedef typename PV::Interface Api;
+          
           long prevSum = _checkSum;
           uint prevCnt = _created;
           
-          PolyVal val = PolyVal::build<Imp<111> >();
+          Holder val = Holder::template build<ImpType>();
           CHECK (prevSum+111 == _checkSum);            // We got one primary ctor call
           CHECK (prevCnt+1   <= _created);             // Note: usually, the compiler optimises
           CHECK (prevCnt+2   >= _created);             //       and skips the spurious copy-operation
-          CHECK (sizeof(PolyVal) > sizeof(Imp<111>));
-          Interface& embedded = val;
+          CHECK (sizeof(Holder) >= sizeof(ImpType));
+          Api& embedded = val;
           CHECK (isSameObject(embedded,val));
-          CHECK (INSTANCEOF(Imp<111>, &embedded));
+          CHECK (INSTANCEOF(ImpType, &embedded));
+          
+          prevCnt = _created;
+          Holder val2(val);       // invoke copy ctor without knowing the implementation type
+          embedded.apiFunc();
+          CHECK (val != val2);    // invoking the API function had an sideeffect on the state
+          val = val2;             // assignment of copy back to the original...
+          CHECK (val == val2);    // cancels the side effect
+          
+          CHECK (prevCnt+1 == _created); // one new embedded instance was created by copy ctor
         }
       
       
       void
       verifyOverrunProtection()
         {
+          typedef Imp<MAX_ELM+1> OversizedImp;
+          CHECK (MAX_SIZ < sizeof(OversizedImp));
 #if false ///////////////////////////////////////////////////////////////////////////////////////////////TICKET #537 : restore throwing ASSERT
-          VERIFY_ERROR (ASSERTION, PolyVal::build<Imp<112> >() );
+          VERIFY_ERROR (ASSERTION, PolyVal::build<OversizedImp>() );
 #endif    ///////////////////////////////////////////////////////////////////////////////////////////////TICKET #537 : restore throwing ASSERT
         }
     };
