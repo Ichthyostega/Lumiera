@@ -108,7 +108,7 @@ namespace time {
       static EncapsulatedMutation nudge (int adjustment);
       
     protected:
-      static void imposeChange (TimeValue&, TimeValue);
+      static void imposeChange (TimeValue&, TimeValue const&);
     };
   
   

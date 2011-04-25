@@ -25,6 +25,7 @@
 #include "lib/test/test-helper.hpp"
 #include "lib/time/timevalue.hpp"
 #include "lib/time/timequant.hpp"
+#include "lib/time/mutation.hpp"
 #include "proc/asset/meta/time-grid.hpp"
 //#include "lib/time/display.hpp"
 #include "lib/util.hpp"
@@ -107,7 +108,7 @@ namespace test{
           QuTime qVal (o, "test_grid");
           FrameNr count(qVal);
           
-          mutate_by_Value (o, c);
+          mutate_by_Value (o, Time(c));
           mutate_by_Offset (o, Offset(c));
           mutate_quantised (o, qVal);
           mutate_by_Increment(o, count);
@@ -115,9 +116,43 @@ namespace test{
       
       
       void
-      mutate_by_Value(TimeValue o, TimeValue change)
+      mutate_by_Value(TimeValue original, Time newStart)
         {
-          TestValues t(o);
+          TestValues t(original);
+          
+          CHECK (t.span.start() == original);
+          t.span.accept (Mutation::changeTime (newStart));
+          CHECK (t.span.start() != original);
+          CHECK (t.span.start() == newStart);
+          
+          // instead of invoking directly, we can store and copy mutation messages 
+          EncapsulatedMutation change_back(Mutation::changeTime (Time(original)));
+          t.span.accept (change_back);
+          CHECK (t.span.start() == original);
+          
+          CHECK (t.quant == original);
+          t.quant.accept (Mutation::changeTime (newStart));
+          CHECK (t.quant != original);
+          CHECK (t.quant == newStart);
+          
+          // Durations have no start time...
+          VERIFY_ERROR (INVALID_MUTATION, t.dur.accept(change_back));
+          VERIFY_ERROR (INVALID_MUTATION, t.span.duration().accept(change_back));
+          
+          CHECK (t.dur == original);
+          t.dur.accept (Mutation::changeDuration (Duration(2*t.var)));
+          CHECK (t.dur != original);
+          CHECK (t.dur == t.var*2);
+          
+          CHECK (t.span.start() == original);
+          CHECK (t.span.duration() == original);
+          t.span.accept (Mutation::changeDuration(Duration(3*t.var)));
+          CHECK (t.span.duration() != original);
+          CHECK (t.span.duration() == t.var*3);  // affects the duration,
+          CHECK (t.span.start() == original);   //  while the start time remains unaltered
+          
+          // can't change the 'duration' of a quantised time point...
+          VERIFY_ERROR (INVALID_MUTATION, t.quant.accept(Mutation::changeDuration (Duration(t.var))));
         }
       
       

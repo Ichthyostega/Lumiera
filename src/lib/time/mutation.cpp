@@ -53,7 +53,7 @@ namespace time {
    *  value stored in each time entity
    */
   void
-  Mutation::imposeChange (TimeValue& target, TimeValue valueToSet)
+  Mutation::imposeChange (TimeValue& target, TimeValue const& valueToSet)
   {
     target = valueToSet; 
   }
