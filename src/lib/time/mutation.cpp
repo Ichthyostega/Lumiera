@@ -104,7 +104,7 @@ namespace time {
   
   /** 
    * concrete time value mutation:
-   * impose fixed new start time.
+   * set a new overall duration for an extended timespan.
    */
   class SetNewDuration
     : public ClonableMutation
@@ -143,6 +143,46 @@ namespace time {
     };
   
   
+  /** 
+   * concrete time value mutation:
+   * adjust the given time entity by an offset amount.
+   */
+  class ImposeOffsetMutation
+    : public ClonableMutation
+    {
+      Offset adjustment_;
+      
+      virtual void
+      change (Duration& target) const
+        {
+          imposeChange (target, TimeVar(target)+=adjustment_);
+        }
+      
+      
+      virtual void
+      change (TimeSpan& target) const
+        {
+          imposeChange (target, TimeVar(target)+=adjustment_);
+        }
+      
+      
+      /** @note the re-quantisation happens automatically
+       *  when the (changed) QuTime is materialised */
+      virtual void
+      change (QuTime& target)   const
+        {
+          imposeChange (target, TimeVar(target)+=adjustment_);
+        }
+      
+      
+    public:
+      explicit
+      ImposeOffsetMutation (Offset adj)
+        : adjustment_(adj)
+        { }
+    };
+  
+  
   
   /** Convenience factory to yield a simple Mutation changing the absolute start time.
    *  This whole procedure might look quite inefficient, but actually most of the
@@ -167,6 +207,17 @@ namespace time {
   Mutation::changeDuration (Duration changedDur)
   {
     return EncapsulatedMutation::build<SetNewDuration> (changedDur);
+  }
+  
+  
+  /** Convenience factory: simple Mutation to adjust the duration or length of a timespan
+   * @throw error::Logic when attempting to change the "duration" of a quantised time point
+   * @return EncapsulatedMutation, carrying the new duration value to impose
+   */
+  EncapsulatedMutation
+  Mutation::adjust (Offset change)
+  {
+    return EncapsulatedMutation::build<ImposeOffsetMutation> (change);
   }
   
   

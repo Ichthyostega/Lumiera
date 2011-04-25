@@ -157,9 +157,30 @@ namespace test{
       
       
       void
-      mutate_by_Offset (TimeValue o, Offset change)
+      mutate_by_Offset (TimeValue original, Offset change)
         {
-          TestValues t(o);
+          TestValues t(original);
+          TimeValue& should_be(t.var+=change); // use as ref for verification
+          
+          CHECK (t.span == original);
+          CHECK (t.span != should_be);
+          t.span.accept (Mutation::adjust (change));
+          CHECK (t.span == should_be);
+          
+          t.dur.accept (Mutation::adjust (change));
+          CHECK (t.dur  == should_be);
+          
+          t.quant.accept (Mutation::adjust (change));
+          CHECK (t.quant == should_be);
+          
+          // adjustment is cumulative
+          EncapsulatedMutation back_off = Mutation::adjust (-change);
+          t.span.accept (back_off);
+          CHECK (t.span == original);
+          t.span.accept (back_off);
+          t.span.accept (back_off);
+          t.span.accept (back_off);
+          CHECK (t.span == Time(original) - 3*change);
         }
       
       

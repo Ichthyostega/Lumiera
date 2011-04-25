@@ -198,6 +198,9 @@ namespace time {
         {
           return TimeValue(std::llabs (t_));
         }
+      
+      // Supporting sign flip
+      Offset operator- ()  const;
     };
   
   //-- support linear offset chaining ---------------
@@ -224,6 +227,11 @@ namespace time {
     return factor*distance;
   }
   
+  inline Offset
+  Offset::operator- ()  const
+  {
+    return -1 * (*this); 
+  }
   
   
   

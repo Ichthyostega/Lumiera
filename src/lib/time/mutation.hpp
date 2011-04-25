@@ -105,6 +105,7 @@ namespace time {
       
       static EncapsulatedMutation changeTime (Time);
       static EncapsulatedMutation changeDuration (Duration);
+      static EncapsulatedMutation adjust (Offset);
       static EncapsulatedMutation nudge (int adjustment);
       
     protected:

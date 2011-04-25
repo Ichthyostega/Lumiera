@@ -48,7 +48,7 @@
  ** and can be another already existing asset::Meta (inheriting from meta::Descriptor)
  ** Generally this yields a Builder object, which can be used for outfitting the new
  ** or changed metadata entry, finally \em committing this builder to yield a new
- ** asset::Meta (which, in case of a mutation, might superseede an existin one).
+ ** asset::Meta (which, in case of a mutation, might supersede an existing one).
  ** 
  ** @see asset.hpp explanation of assets in general
  ** @see MetaFactory creating concrete asset::Meta instances
@@ -120,7 +120,8 @@ namespace asset {
     public:
       static MetaFactory create;
       
-      virtual const ID<Meta>& getID()  const    ///< @return ID of kind Meta 
+      /** @return ID of kind Meta */
+      virtual const ID<Meta>& getID()  const 
         { 
           return static_cast<const ID<Meta>& > (Asset::getID());
         }
