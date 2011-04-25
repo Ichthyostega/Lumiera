@@ -55,6 +55,7 @@
 
 #include "lib/error.hpp"
 #include "lib/time/timevalue.hpp"
+#include "lib/polymorphic-value.hpp"
 //#include "lib/symbol.hpp"
 
 #include <boost/noncopyable.hpp>
@@ -72,6 +73,18 @@ namespace time {
   LUMIERA_ERROR_DECLARE (INVALID_MUTATION); ///< Changing a time value in this way was not designated
   
   class QuTime;
+  class Mutation;
+  
+  
+  /* The following typedefs allow to hand out
+   * "unspecific" mutation value objects from 
+   * factory functions, without disclosing any
+   * implementation details here in this header.
+   */
+  enum{ MUTATION_IMPL_SIZE = sizeof(TimeValue) };
+  
+  typedef lib::polyvalue::CloneValueSupport<Mutation> ClonableMutation;
+  typedef lib::PolymorphicValue<Mutation, MUTATION_IMPL_SIZE, ClonableMutation> EncapsulatedMutation;
   
   /**
    * Interface: an opaque change imposed onto some time value.
@@ -80,7 +93,6 @@ namespace time {
    * @todo WIP-WIP-WIP
    */
   class Mutation
-    : boost::noncopyable
     {
     public:
       virtual ~Mutation();
@@ -91,9 +103,9 @@ namespace time {
       
       /* === convenience shortcuts for simple cases === */
       
-      static void changeTime (Time);
-      static void changeDuration (Duration);
-      static void nudge (int adjustment);
+      static EncapsulatedMutation changeTime (Time);
+      static EncapsulatedMutation changeDuration (Duration);
+      static EncapsulatedMutation nudge (int adjustment);
       
     protected:
       static void imposeChange (TimeValue&, TimeValue);

@@ -380,6 +380,12 @@ namespace time {
         { }
       
       
+      Duration&
+      duration() 
+        {
+          return dur_;
+        }
+      
       Duration
       duration()  const 
         {

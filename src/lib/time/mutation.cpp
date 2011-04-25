@@ -65,8 +65,8 @@ namespace time {
    * concrete time value mutation:
    * impose fixed new start time.
    */
-  class SetNewStartTime
-    : public Mutation
+  class SetNewStartTimeMutation
+    : public ClonableMutation
     {
       TimeValue newTime_;
       
@@ -96,29 +96,81 @@ namespace time {
       
     public:
       explicit
-      SetNewStartTime (TimeValue t)
+      SetNewStartTimeMutation (TimeValue t)
         : newTime_(t)
         { }
     };
   
   
+  /** 
+   * concrete time value mutation:
+   * impose fixed new start time.
+   */
+  class SetNewDuration
+    : public ClonableMutation
+    {
+      Duration changedDuration_;
+      
+      virtual void
+      change (Duration& target)  const
+        {
+          imposeChange (target, changedDuration_);
+        }
+      
+      
+      virtual void
+      change (TimeSpan& target)  const
+        {
+          imposeChange (target.duration(), changedDuration_);
+        }
+      
+      
+      /** @note the re-quantisation happens automatically
+       *  when the (changed) QuTime is materialised */
+      virtual void
+      change (QuTime&)    const
+        {
+          throw error::Logic ("mutating the duration of a (quantised) time point doesn't make sense"
+                             , LUMIERA_ERROR_INVALID_MUTATION);
+        }
+      
+      
+    public:
+      explicit
+      SetNewDuration (Duration dur)
+        : changedDuration_(dur)
+        { }
+    };
   
-  /** */
-  void
+  
+  
+  /** Convenience factory to yield a simple Mutation changing the absolute start time.
+   *  This whole procedure might look quite inefficient, but actually most of the
+   *  abstractions are removed at runtime, leaving only a single indirection 
+   *  through the VTable of the Mutation Interface.
+   * @throw  error::Logic when attempting to change the (non existent) start time of a Duration
+   * @return EncapsulatedMutation, which is an "polymorphic value object",
+   *         actually carrying an embedded Mutation subclass with the new start time
+   */
+  EncapsulatedMutation
   Mutation::changeTime (Time newStartTime)
   {
-    UNIMPLEMENTED ("perform a trivial mutation to set a new fixed time value");
+    return EncapsulatedMutation::build<SetNewStartTimeMutation> (newStartTime);
   }
   
   
-  void
-  Mutation::changeDuration (Duration)
+  /** Convenience factory: simple Mutation to adjust the duration or length of a timespan
+   * @throw error::Logic when attempting to change the "duration" of a quantised time point
+   * @return EncapsulatedMutation, carrying the new duration value to impose
+   */
+  EncapsulatedMutation
+  Mutation::changeDuration (Duration changedDur)
   {
-    UNIMPLEMENTED ("perform a trivial mutation to set a new Duration");
+    return EncapsulatedMutation::build<SetNewDuration> (changedDur);
   }
   
   
-  void
+  EncapsulatedMutation
   Mutation::nudge (int adjustment)
   {
     UNIMPLEMENTED ("Nudge by a predefined nudge amount");
