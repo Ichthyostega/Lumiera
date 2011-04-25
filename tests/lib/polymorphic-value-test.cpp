@@ -184,6 +184,7 @@ namespace test{
           CHECK (0 == _checkSum); // all dead
           
           verifyOverrunProtection();
+          verifyCopySupportDetectionMetafunctions();
         }
       
       
@@ -277,6 +278,30 @@ namespace test{
           VERIFY_ERROR (ASSERTION, PolyVal::build<OversizedImp>() );
 #endif    ///////////////////////////////////////////////////////////////////////////////////////////////TICKET #537 : restore throwing ASSERT
         }
+      
+      
+      /** @Test internally, PolymorphicValue uses some metafunctions
+       * to pick a suitable code path, based on the presence of helper functions
+       * on the API of the embedded objects. Default is no support by these objects,
+       * which then requires to use a more expensive implementation. Sometimes it's
+       * desirable to support \em cloning only (copy ctor), but no assignment after
+       * the fact. In this special case, a support API with only a \cloneInto member
+       * can be implemented, causing the PolymorphicValue container to raise an 
+       * exception in case the copy operator is invoked.
+       */
+      void
+      verifyCopySupportDetectionMetafunctions()
+        {
+          typedef polyvalue::CopySupport<Interface> CopySupportAPI;
+          typedef polyvalue::CloneValueSupport<Interface> CloneOnlyAPI;
+          
+          CHECK ( !polyvalue::exposes_CloneFunction<Interface>::value );
+          CHECK (  polyvalue::exposes_CloneFunction<CopySupportAPI>::value );
+          CHECK (  polyvalue::exposes_CloneFunction<CloneOnlyAPI>::value );
+          
+          CHECK (  polyvalue::allow_Clone_but_no_Copy<CloneOnlyAPI>::value );
+          CHECK ( !polyvalue::allow_Clone_but_no_Copy<CopySupportAPI>::value );
+       }
     };
   
   

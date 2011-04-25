@@ -153,6 +153,7 @@ namespace lib {
   
   namespace polyvalue { // implementation details...
     
+    namespace error = lumiera::error;
     using boost::enable_if;
     using lumiera::Yes_t;
     using lumiera::No_t;
@@ -186,6 +187,21 @@ namespace lib {
         virtual void copyInto  (IFA& targetBase)     const   =0;
       };
     
+    /**
+     * A variation for limited copy support.
+     * Sometimes, only cloning (copy construction) of value objects is allowed,
+     * but not assignment of new values to existing objects. In this case, the
+     * concrete values can inherit from this variant of the support API.
+     */
+    template<class BA>         ///< direct baseclass to use for this clone support API
+    class CloneValueSupport
+      : public BA
+      {
+      public:
+        virtual ~CloneValueSupport() { };
+        virtual void cloneInto (void* targetBuffer)  const   =0;
+      };
+    
     
     
     /** 
@@ -193,7 +209,7 @@ namespace lib {
      * to support clone operations
      */
     template<typename T>
-    class exposes_copySupportFunctions
+    class exposes_CloneFunction
       {
         
         META_DETECT_FUNCTION(void, cloneInto, (void*) const);
@@ -203,8 +219,58 @@ namespace lib {
             };
       };
     
+    /**
+     * helper to detect if the API supports only
+     * copy construction, but no assignment
+     */
+    template<typename T>
+    class allow_Clone_but_no_Copy
+      {
+        META_DETECT_MEMBER(copyInto);
+        
+      public:
+        enum{ value = exposes_CloneFunction<T>::value
+                 && ! HasMember_copyInto<T>::value
+            };
+      };
     
-    /** 
+    /**
+     * Policy class for invoking the assignment operator.
+     * By default the embedded payload objects are assumed
+     * to be freely assignable
+     */
+    template<class API, class YES =void>
+    struct AssignmentPolicy
+      {
+        template<class IMP>
+        static void 
+        assignEmbedded(IMP& dest,IMP const& src)
+          {
+            dest = src;
+          }
+      };
+    
+    /**
+     * special case when the embedded payload objects permit
+     * copy construction, but no assignment to existing instances.
+     * Instead of invoking the assignment operator (which typically
+     * isn't defined at all in such cases), a misguided assignment
+     * to the container will raise an exception
+     */
+    template<class API>
+    struct AssignmentPolicy<API, typename enable_if< allow_Clone_but_no_Copy<API> >::type>
+      {
+        template<class IMP>
+        static void 
+        assignEmbedded(IMP&,IMP const&)
+          {
+            throw error::Logic("attempt to overwrite unmodifiable value");
+          }
+      };
+    
+    
+    
+    /**
      * traits template to deal with
      * different ways to support copy operations.
      * Default is no support by the API and implementation types.
@@ -226,6 +292,7 @@ namespace lib {
           }
         
         typedef CopyAPI AdapterAttachment;
+        typedef AssignmentPolicy<CopyAPI> Assignment;
       };
     
     
@@ -237,7 +304,7 @@ namespace lib {
      * simple \c static_cast without runtime overhead.
      */
     template <class TY>
-    struct Trait<TY, typename enable_if< exposes_copySupportFunctions<TY> >::type>
+    struct Trait<TY, typename enable_if< exposes_CloneFunction<TY> >::type>
       {
         typedef TY CopyAPI;
         enum{   ADMIN_OVERHEAD = 1 * sizeof(void*) };
@@ -251,9 +318,14 @@ namespace lib {
           }
         
         typedef EmptyBase AdapterAttachment;
+        typedef AssignmentPolicy<CopyAPI> Assignment;
       };
     
   }//(End)implementation details
+  
+  
+  
+  
   
   
   
@@ -285,6 +357,7 @@ namespace lib {
       
       typedef polyvalue::Trait<CPY>     _Traits;
       typedef typename _Traits::CopyAPI _CopyHandlingAdapter;
+      typedef typename _Traits::Assignment _AssignmentPolicy;
       enum{ 
         siz = storage + _Traits::ADMIN_OVERHEAD 
       };
@@ -363,8 +436,8 @@ namespace lib {
             {
               REQUIRE (INSTANCEOF (Adapter, &targetBase));
               Adapter& target = static_cast<Adapter&> (targetBase);
-              target = (*this);                 // forward to assignment operator
-            }
+              _AssignmentPolicy::assignEmbedded(target,*this);
+            }                                   // forward to assignment operator 
           
         public: /* == forwarding ctor to implementation type == */
           
