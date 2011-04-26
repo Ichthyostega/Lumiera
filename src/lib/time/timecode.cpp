@@ -51,7 +51,7 @@ namespace time {
     void
     Frames::rebuild (FrameNr& framecnt, QuantR quantiser, TimeValue const& rawTime)
     {
-      framecnt.setValueRaw(quantiser.gridPoint (rawTime));
+      framecnt.setValueRaw (quantiser.gridPoint (rawTime));
     }
     
     /** calculate the time point denoted by this frame count */

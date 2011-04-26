@@ -101,6 +101,7 @@ namespace test{
         {
           TimeValue o (random_or_get (pop(arg)));
           TimeValue c (random_or_get (pop(arg)));
+          CHECK (o != c, "unsuitable testdata");
           
           // using a 25fps-grid, but with an time origin offset by 1/50sec
           TimeGrid::build("test_grid", FrameRate::PAL, Time(FSecs(1,50)));
@@ -185,16 +186,81 @@ namespace test{
       
       
       void
-      mutate_quantised (TimeValue o, QuTime change)
+      mutate_quantised (TimeValue original, QuTime change)
         {
-          TestValues t(o);
+          TestValues t(original);
+          t.var = change;
+          CHECK (Time(change) == t.var); // the underlying raw time value
+          
+          CHECK (t.span == original);
+          t.span.accept (Mutation::materialise (change));
+          CHECK (t.span != original);
+          CHECK (t.span != t.var);    // really materialised (grid-aligned)
+          
+          // simulate what happened by explicit operations...
+          Secs seconds  = change.formatAs<format::Seconds>();
+          Time materialised = seconds.getTime();
+          CHECK (t.span == materialised);
+          
+          CHECK (t.span.duration() == original); // not affected by mutation as usual
+          VERIFY_ERROR (INVALID_MUTATION, t.dur.accept (Mutation::materialise (change)));
+                                               //   not surprising, a time point has no duration!!
+          
+          CHECK (t.quant == original);
+          t.quant.accept (Mutation::materialise (change));
+          CHECK (t.quant != original);
+          CHECK (t.quant == materialised);
+          // but note, here we checked the underlying raw value.
+          // because t.quant is itself quantised, this might
+          // result in a second, chained quantisation finally
+          
+          // Here accidentally both the change and t.quant use the same grid.
+          // For a more contrived example, we try to use a different grid...
+          TimeGrid::build("special_funny_grid", 1);      // (1 frame per second, no offset)
+          QuTime funny (original, "special_funny_grid");
+          funny.accept (Mutation::materialise (change));
+          CHECK (funny == t.quant);                      // leading to the same raw value this far
+          
+          Time doublyQuantised = Secs(funny).getTime();
+          CHECK (doublyQuantised != materialised);
         }
       
       
       void
-      mutate_by_Increment (TimeValue o, int change)
+      mutate_by_Increment (TimeValue original, int change)
         {
-          TestValues t(o);
+          TestValues t(original);
+          
+          // without any additional specification,
+          // the nudge-Mutation uses a 'natural grid'
+          t.span.accept (Mutation::nudge (change));
+          t.dur.accept (Mutation::nudge (change));
+          
+          t.var += Time(FSecs(change));      // natural grid is in seconds
+          CHECK (t.span.start() == t.var);
+          CHECK (t.dur          == t.var);
+          
+          // any other grid can be specified explicitly
+          t.dur.accept (Mutation::nudge (change, "test_grid"));
+          CHECK (t.dur != t.var);
+          CHECK (t.dur == t.var + change * FrameRate::PAL.duration());
+          // ....this time the change was measured in grid units,
+          // taken relative to the origin of the specified grid
+          PGrid testGrid = TimeGrid::retrieve("test_grid");
+          Offset distance (testGrid->timeOf(0), testGrid->timeOf(change));
+          CHECK (distance == change * FrameRate::PAL.duration());
+          CHECK (Time(t.dur) - t.var == distance);
+          
+          
+          
+          // To the contrary, *quantised* values behave quite differently...
+          long frameNr = t.quant.formatAs<format::Frames>();
+          
+          t.quant.accept (Mutation::nudge (change));
+          CHECK (t.quant != original);
+          long frameNr_after = t.quant.formatAs<format::Frames>();
+          CHECK (frameNr_after != frameNr + change);
+          // i.e., use the quantised time's own grid
         }
     };
   

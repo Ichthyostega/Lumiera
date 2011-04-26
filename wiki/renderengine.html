@@ -4193,18 +4193,18 @@ Viewed as a micro program, the processing patterns are ''weak typed'' &amp;mdash
 <pre>a given Render Engine configuration is a list of Processors. Each Processor in turn contains a Graph of ProcNode.s to do the acutal data processing. In order to cary out any calculations, the Processor needs to be called with a StateProxy containing the state information for this RenderProcess
 </pre>
 </div>
-<div title="QuantiserImpl" modifier="Ichthyostega" modified="201101081815" created="201101061212" tags="impl spec" changecount="21">
+<div title="QuantiserImpl" modifier="Ichthyostega" modified="201104252333" created="201101061212" tags="impl spec" changecount="24">
 <pre>The Quantiser implementation works by determining the grid interval containing a given raw time.
 These grid intervals are denoted by ordinal numbers (frame numbers), with interval #0 starting at the grid's origin and negative ordinals allowed.
 
 !frame quantisation convention
-Within Lumiera, there is a fixed convention how these frame intervals are to be defined (&amp;rArr; [[time handling RfC|http://staging.lumiera.org/documentation/devel/rfc/TimeHandling.html]])
+Within Lumiera, there is a fixed convention how these frame intervals are to be defined (&amp;rArr; [[time handling RfC|http://lumiera.org/documentation/devel/rfc/TimeHandling.html]])
 [img[Lumiera's frame quantisation convention|draw/FramePositions1.png]]
 Especially, this convention is agnostic of the actual zero-point of the scale and allows direct length calculations and seamless sequences of intervals.
 The //nominal coordinate// of an interval is also the starting point -- for automation keys frames we'll utilise special provisions.
 
 !range limitation problems
-because times are represented as 64bit integers, the time points addressable within a given scale grid can be limited, compared with time points addressable through raw (internal) time values. As an extreme example, consider a time scale with origin at Time::MIN -- such a scale is unable to represent any of the original scale's value above zero, because the resulting coordinates would exceed the range of the 64bit integer. Did I mention that 64bit micro ticks can represent about 300000 years?
+because times are represented as 64bit integers, the time points addressable within a given scale grid can be limited, compared with time points addressable through raw (internal) time values. As an extreme example, consider a time scale with origin at {{{Time::MAX}}} -- such a scale is unable to represent any of the original scale's value above zero, because the resulting coordinates would exceed the range of the 64bit integer. Did I mention that 64bit micro ticks can represent about 300000 years?
 
 Now the actual problem is that using 64bit integers already means pushing to the limit. There is no easy escape hatch, like using a larger scale data type for intermediaries -- it //is// the largest built-in type. Basically we're touching the topic of ''safe integer arithmetics'' here, which is frequently discussed as a security concern. The situation is as follows:
 * every programmer promises &quot;I'll do the checks when necessary&quot; -- just to forget doing so in practice then.
@@ -6618,7 +6618,7 @@ Thus no server and no network connection is needed. Simply open the file in your
  * see [[Homepage|http://tiddlywiki.com]], [[Wiki-Markup|http://tiddlywiki.org/wiki/TiddlyWiki_Markup]]
 </pre>
 </div>
-<div title="TimeMutation" modifier="Ichthyostega" modified="201104250335" created="201101231344" tags="spec discuss draft" changecount="34">
+<div title="TimeMutation" modifier="Ichthyostega" modified="201104252343" created="201101231344" tags="spec discuss draft" changecount="38">
 <pre>Simple time points are just like values and thus easy to change. The difficulties arise when time values are to be //quantised to an existing time grid.// The first relevant point to note is that for quantised time values, the effect of a change can be disproportional to the cause. Small changes below the threshold might be accumulated, and a tiny change might trigger a jump to the next grid point. While this might be annoying, the yet more complex questions arise when we acknowledge that the amount of the change itself might be related to a time grid.
 
 The problem with modification of quantised values highlights an inner contradiction or conflicting goals within the design
@@ -6661,18 +6661,18 @@ A mutation or an increment gets applied to a grid-aligned variable, which then (
 This results in the following combinations to be implemented:
 |  !mutation|!receiver ||!result |
 | ~TimeValue|Time || -- |
-|~|Duration || -- |
+|~|Duration || ↯ |
 |~|~TimeSpan ||set start |
 |~|quantised ||set raw value |
 | Duration|~TimeSpan ||set length |
 |~|Duration  ||set length |
-|~|quantised || -- |
+|~|quantised || ↯ |
 | Offset|Time || -- |
 |~|Duration ||adjust length |
 |~|~TimeSpan ||adjust start |
 |~|quantised ||adjust raw value |
-| ~QuTime|any raw ||treat as raw ~TimeValue |
-|~|~QuTime ||materialise, then set raw |
+| ~QuTime|any raw ||materialise, then set raw |
+|~|~QuTime ||same &amp;rarr; chanined |
 | increment|~QuTime ||snap to grid point |
 As rationale, consider the following
 * immutable values are bliss. 
@@ -6764,7 +6764,7 @@ At the level of individual timecode formats, we're lacking a common denominator;
 &amp;rarr; Quantiser [[implementation details|QuantiserImpl]]
 </pre>
 </div>
-<div title="TimeUsage" modifier="Ichthyostega" modified="201101231331" created="201012230204" tags="design discuss" changecount="22">
+<div title="TimeUsage" modifier="Ichthyostega" modified="201104260244" created="201012230204" tags="design discuss" changecount="25">
 <pre>the following collection of usage situations helps to shape the details of the time values and time quantisation design. &amp;rarr; see also  [[time quantisation|TimeQuant]]
 
 ;time position of an object
@@ -6801,11 +6801,14 @@ We should note, that the problems regarding quantised durations also carry over 
 
 Thus, an especially important instance of that problem is ''how to deal with updates in a quantised environment''. If we handle quantisation stictly as a view employed on output, we run into the problems with accumulating spurious information. On the other hand, allowing for quantised changes inevitably pulls in all the complexity of mixing quantised and non-quantised values. It would be desirable somehow to move these distinctions out of the scope of this design and offload them onto the client (code using these time classes).
 
-Another closely related problem is ''when to allow mutations'', if at all. We can't completely do away with mutations, simply because we don't have a pure functional language at our disposal. The whole concept of //reference semantics// doesn't play so well with immutable objects. The Lumiera high-level (session) model certainly relies on objects intended to be //manipulated.// Thus we need a re-settable length field in {{{MObject}}} and we need a time variable for position calculations. Yet we could make any //derived objects// into immutable descriptor records, which certainly helps with parallelism.
+Another closely related problem is ''when to allow [[mutations|TimeMutation]]'', if at all. We can't completely do away with mutations, simply because we don't have a pure functional language at our disposal. The whole concept of //reference semantics// doesn't play so well with immutable objects. The Lumiera high-level (session) model certainly relies on objects intended to be //manipulated.// Thus we need a re-settable length field in {{{MObject}}} and we need a time variable for position calculations. Yet we could make any //derived objects// into immutable descriptor records, which certainly helps with parallelism.
 
-The ''problem with playback position'' is -- that it's an attempt to conceptualise a non-existing entity. There is no such thing like &quot;the&quot; playback position. Yet most applications I'm aware off employ this concept. Likely they got trapped by the metaphor of the tape head, again. We should do away with that. On playback, we should show a //projection of wall-clock time onto the expected playback range// -- not more, not less. It should be acknowledged that there is //no direct link to the ongoing playback processes,// besides the fact that they're assumed to sync to wall-clock time as well. Recall, typically there are multiple playback processes going on in compound, and each might run on a different update rate. If we really want a //visual out-of-sync indicator,// we should treat that as a separate reporting facility and display it apart of the playback cursor.
+The ''problem with playback position'' is -- that indeed it's an attempt to conceptualise a non-existing entity. There is no such thing like &quot;the&quot; playback position. Yet most applications I'm aware off //do// employ this concept. Likely they got trapped by the metaphor of the tape head, again. We should do away with that. On playback, we should show a //projection of wall-clock time onto the expected playback range// -- not more, not less. It should be acknowledged that there is //no direct link to the ongoing playback processes,// besides the fact that they're assumed to sync to wall-clock time as well. Recall, typically there are multiple playback processes going on in compound, and each might run on a different update rate. If we really want a //visual out-of-sync indicator,// we should treat that as a separate reporting facility and display it apart of the playback cursor.
 
 Note that the ''display window might be treated as just an independent instance of quantisation''. This is similar to the approach taken above for modifying quantised time span values. We should provide a special kind of time grid, the display coordinates. The origin of these is always defined to the left (lower) side of the interval to be displayed, and they are gauged in screen units (pixels or similar, as used by the GUI toolkit set). The rest is handled by the general quantisation mechanisms. The problem of aligning the display should be transformed into a general facility to align grids, and solved for the general case. Doing so solves the remaining problems with quantised value changes and with ''specifying relative placements'' as well: If we choose to represent them as quantised values, we might (or might not) also choose to apply this //grid-alignment function.//
+
+!the complete time value usage cycle
+The way this time value and quantisation handling is designed in Lumiera creates a typical usage path, which actually is a one-way route. We might start out with a textual representation according to a specific ''timecode'' format. This timecode string may be parsed, and typically it will be ''materialised'', by invoking the {{{value()}}}-function. This brings us (back) to the very origin, which is a raw timevalue (''internal time'' value). Now, this time value might be manipulated, compared to other values, combined into a ''time span'' (time point and duration -- the most basic notion of an //object// to be manipulated in the Session). Anyway, at some point these time values need to be related to some ''time scale'' again, leading to ''quantised'' time values, which -- finally -- can be cast into a timecode format for external representation again, thus closing the circle.
 
 !substantial problems to be solved
 * how to [[align multiple grids|TimeGridAlignment]]
@@ -6814,7 +6817,7 @@ Note that the ''display window might be treated as just an independent instance 
 * how to design the relation of Timecode, Timecode formatting and Quantisation &amp;rarr; [[more here|TimecodeFormat]]
 </pre>
 </div>
-<div title="TimecodeFormat" modifier="Ichthyostega" modified="201101220135" created="201101100308" tags="Player spec discuss draft" changecount="25">
+<div title="TimecodeFormat" modifier="Ichthyostega" modified="201104260233" created="201101100308" tags="Player spec discuss draft" changecount="26">
 <pre>The handling of [[Timecode]] is closely related to [[time representation and quantisation|TimeQuant]]. In fact, these two topics blend into one another. Time will be quantised into a //grid,// but this grid only makes sense when linked to a externally relevant meaning and representation, which is the Timecode. But a timecode value also denotes a specific point in time -- performing operations on a timecode is equivalent to manipulating a quantised time value.
 
 !Problem of dependencies
@@ -6860,7 +6863,7 @@ But because for Lumiera the SMPTE format is just a presentation rule applied to 
 Because this decision is considered arbitrary and any reasoning will be context dependant, the decision is to provide a hook for a //strategy// --
 Currently (1/11), the strategy is implemented according to (1) and (4) above, leaving the actual configuration of a strategy for later.
 !!{{red{WIP 1/11}}}BUG
-Implementation of this strategy is still broken: it doesn't work properly when actually the change passing over the zero point happens by propagation from lower digits. Because then -- given the way the mutators are implemented -- the //new value of the wrapping digit hasn't been stored.// It seems the only sensible solution is to change the definition of the functors, so that any value will be changed by side-effect
+Implementation of this strategy is still broken: it doesn't work properly when actually the change passing over the zero point happens by propagation from lower digits. Because then -- given the way the mutators are implemented -- the //new value of the wrapping digit hasn't been stored.// It seems the only sensible solution is to change the definition of the functors, so that any value will be changed by side-effect {{red{Question 4/11 -- isn't this done and fixed by now??}}}
 </pre>
 </div>
 <div title="Timeline" modifier="Ichthyostega" modified="201011220126" created="200706250721" tags="def" changecount="21">

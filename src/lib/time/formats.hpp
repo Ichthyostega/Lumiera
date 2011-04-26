@@ -192,7 +192,7 @@ namespace time {
             flags_.set (typeID<F>());
             return define(FS());
           }
-        Supported define(NullType) { return *this;} ///< recursion end
+        Supported define(NullType) { return *this;} ///< @internal recursion end
         
         Supported() { } ///< @note use #formats to set up a new descriptor
         
