@@ -92,6 +92,8 @@ namespace time {
           return supportedFormats_.check<FMT>(); 
         }
       
+      static PQuant retrieve (Symbol gridID);
+      
       
       //------Grid-API----------------------------------------------
       virtual long      gridPoint (TimeValue const& raw)  const   =0;

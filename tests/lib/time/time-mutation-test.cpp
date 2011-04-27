@@ -246,10 +246,10 @@ namespace test{
           CHECK (t.dur == t.var + change * FrameRate::PAL.duration());
           // ....this time the change was measured in grid units,
           // taken relative to the origin of the specified grid
-          PGrid testGrid = TimeGrid::retrieve("test_grid");
+          PQuant testGrid = Quantiser::retrieve("test_grid");
           Offset distance (testGrid->timeOf(0), testGrid->timeOf(change));
           CHECK (distance == change * FrameRate::PAL.duration());
-          CHECK (Time(t.dur) - t.var == distance);
+          CHECK (t.dur - t.var == distance);
           
           
           

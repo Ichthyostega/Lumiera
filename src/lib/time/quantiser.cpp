@@ -101,6 +101,17 @@ namespace time {
   
   
   
+  /** Access an existing grid definition or quantiser, known by the given symbolic ID.
+   *  Typically this fetches a meta::TimeGrid (asset) from the session.
+   * @throw error::Logic if the given gridID wasn't registered
+   * @return smart-ptr to the quantiser instance */
+  PQuant
+  Quantiser::retrieve (Symbol gridID)
+  {
+    return retrieveQuantiser (gridID);
+  }
+  
+  
   /** alignment to a simple fixed size grid.
    *  The actual calculation first determines the number
    *  of the grid interval containing the given rawTime,

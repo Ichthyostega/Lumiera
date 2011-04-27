@@ -24,6 +24,7 @@
 #include "lib/error.hpp"
 #include "lib/time/timevalue.hpp"
 #include "lib/time/timequant.hpp"
+#include "lib/time/timecode.hpp"
 #include "lib/time/mutation.hpp"
 //#include "lib/time.h"
 //#include "lib/util.hpp"
@@ -183,6 +184,23 @@ namespace time {
     };
   
   
+  /** 
+   * concrete time value mutation:
+   * make the grid aligned time value explicit,
+   * and impose the resulting value to the given
+   * time points (or start points).
+   */
+  class MaterialiseIntoTarget
+    : public SetNewStartTimeMutation
+    {
+    public:
+      explicit
+      MaterialiseIntoTarget (QuTime const& quant)
+        : SetNewStartTimeMutation (Secs(quant).getTime())
+        { }
+    };
+  
+  
   
   /** Convenience factory to yield a simple Mutation changing the absolute start time.
    *  This whole procedure might look quite inefficient, but actually most of the
@@ -221,8 +239,52 @@ namespace time {
   }
   
   
+  /** Convenience factory: materialise the given quantised time into an explicit fixed
+   *  internal time value, according to the underlying time grid; impose the resulting
+   *  value then as new time point or start point to the target
+   * @note same as materialising and then invoking #changeTime
+   */
+  EncapsulatedMutation
+  Mutation::materialise (QuTime const& gridAlignedTime)
+  {
+    return EncapsulatedMutation::build<MaterialiseIntoTarget> (gridAlignedTime);
+  }
+  
+  
+  /** build a time mutation to \em nudge the target time value by an offset,
+   *  defined as number of steps on an implicit nudge grid. If the target is an
+   *  continuous (not quantised) time value or duration, an internal 'default nudge grid'
+   *  will be used to calculate the offset value. Typically, this grid counts in seconds.
+   *  To the contrary, when the target is a quantised value, it will be aligned to the
+   *  grid point relative to the current value's next grid point, measured in number
+   *  of steps. This includes \em materialising the internal to the exact grid
+   *  position. If especially the adjustment is zero, the internal value will
+   *  be changed to literally equal the current value's next grid point.
+   */
   EncapsulatedMutation
   Mutation::nudge (int adjustment)
+  {
+    UNIMPLEMENTED ("Nudge by a predefined nudge amount");
+  }
+  
+  
+  /** build a time mutation to \em nudge the target time value; the nudge time grid
+   *  is specified explicitly here, instead of using a global or 'natural' nudge grid.
+   *  In case the target itself is a quantised time value, a chaining of the two
+   *  grids will happen: first, the nudge grid is used to get an offset value,
+   *  according to the number of steps, then this offset is applied to the
+   *  raw value underlying the quantised target. If this resulting target
+   *  value later will be cast into any kind of time code or materialised
+   *  otherwise, the quantised value's own grid will apply as well,
+   *  resulting in the net result of two quantisation operations
+   *  being applied in sequence.  
+   * @param adjustment number of grid steps to apply as offset
+   * @param gridID symbolic name used to register or define a
+   *        suitable nudge grid, typically somewhere globally
+   *        in the session (as meta asset)
+   */
+  EncapsulatedMutation
+  Mutation::nudge (int adjustment, Symbol gridID)
   {
     UNIMPLEMENTED ("Nudge by a predefined nudge amount");
   }

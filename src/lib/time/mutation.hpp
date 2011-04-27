@@ -56,7 +56,7 @@
 #include "lib/error.hpp"
 #include "lib/time/timevalue.hpp"
 #include "lib/polymorphic-value.hpp"
-//#include "lib/symbol.hpp"
+#include "lib/symbol.hpp"
 
 #include <boost/noncopyable.hpp>
 //#include <iostream>
@@ -67,6 +67,7 @@
 namespace lib {
 namespace time {
   
+  using lib::Symbol;
 //using std::string;
 //using lib::Literal;
   
@@ -106,7 +107,9 @@ namespace time {
       static EncapsulatedMutation changeTime (Time);
       static EncapsulatedMutation changeDuration (Duration);
       static EncapsulatedMutation adjust (Offset);
+      static EncapsulatedMutation materialise (QuTime const&);
       static EncapsulatedMutation nudge (int adjustment);
+      static EncapsulatedMutation nudge (int adjustment, Symbol gridID);
       
     protected:
       static void imposeChange (TimeValue&, TimeValue const&);
