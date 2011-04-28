@@ -27,13 +27,14 @@
 #include "lib/time/timecode.hpp"
 #include "lib/time/mutation.hpp"
 //#include "lib/time.h"
-//#include "lib/util.hpp"
+#include "lib/util.hpp"
 
 //#include <tr1/functional>
 
 //using std::string;
 //using util::unConst;
 //using util::floorwrap;
+using util::isnil;
 
 namespace error = lumiera::error;
 
@@ -201,6 +202,84 @@ namespace time {
     };
   
   
+  /** 
+   * concrete time value mutation:
+   * nudge target value by the given number of 'steps',
+   * relative to either the given grid.
+   */
+  class NudgeMutation
+    : public ImposeOffsetMutation
+    {
+      
+      static Offset
+      materialiseGridPoint (Symbol gridID, int steps)
+        {
+          REQUIRE (!isnil (gridID));
+          PQuant grid = Quantiser::retrieve(gridID);
+          return Offset(grid->timeOf(0), grid->timeOf(steps));
+        }
+      
+    public:
+      NudgeMutation (int relativeSteps, Symbol gridID)
+        : ImposeOffsetMutation(materialiseGridPoint (gridID,relativeSteps))
+        { }
+    };
+  
+  
+  /** 
+   * concrete time value mutation:
+   * nudge based on a implicit grid, which is
+   * either a quantised target value's own grid,
+   * or a \em natural grid.
+   * @note currently the natural grid is hard wired,
+   *       just interpreting the step parameter as
+   *       offset in seconds.
+   */
+  class NaturalNudgeMutation
+    : public ClonableMutation
+    {
+      int steps_;
+      
+      virtual void
+      change (Duration& target) const
+        {
+          imposeChange (target, TimeVar(target)+=Time(FSecs(steps_)));
+        }
+      
+      
+      virtual void
+      change (TimeSpan& target) const
+        {
+          imposeChange (target, TimeVar(target)+=Time(FSecs(steps_)));
+        }
+      
+      
+      /** Special treatment: use the quantised time's own grid;
+       *  retrieve the corresponding grid point, offset it by the step-parameter,
+       *  then retrieve the corresponding time from the quantised time's
+       *  underlying quantiser (grid).
+       * @note when the #steps_ parameter is zero, what happens here effectively
+       *       is the materialisation of the quantised target time, i.e. making
+       *       the quantisation explicit and storing the resulting value. */
+      virtual void
+      change (QuTime& target)   const
+        {
+          long gridPoint = FrameNr(target)+steps_;
+          imposeChange (target, PQuant(target)->timeOf(gridPoint));
+        }
+      
+   
+    public:
+      explicit
+      NaturalNudgeMutation (int relativeSteps)
+        : steps_(relativeSteps)
+        { }
+    };
+  
+  
+  
+  
+  
   
   /** Convenience factory to yield a simple Mutation changing the absolute start time.
    *  This whole procedure might look quite inefficient, but actually most of the
@@ -257,14 +336,14 @@ namespace time {
    *  will be used to calculate the offset value. Typically, this grid counts in seconds.
    *  To the contrary, when the target is a quantised value, it will be aligned to the
    *  grid point relative to the current value's next grid point, measured in number
-   *  of steps. This includes \em materialising the internal to the exact grid
+   *  of steps. This includes \em materialising the internal time to the exact grid
    *  position. If especially the adjustment is zero, the internal value will
    *  be changed to literally equal the current value's next grid point.
    */
   EncapsulatedMutation
   Mutation::nudge (int adjustment)
   {
-    UNIMPLEMENTED ("Nudge by a predefined nudge amount");
+    return EncapsulatedMutation::build<NaturalNudgeMutation> (adjustment);
   }
   
   
@@ -286,7 +365,7 @@ namespace time {
   EncapsulatedMutation
   Mutation::nudge (int adjustment, Symbol gridID)
   {
-    UNIMPLEMENTED ("Nudge by a predefined nudge amount");
+    return EncapsulatedMutation::build<NudgeMutation> (adjustment, gridID);
   }
   
   
