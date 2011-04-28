@@ -39,22 +39,23 @@ noinst_LTLIBRARIES += liblumiprocasset.la
 liblumiprocasset_la_CFLAGS = $(AM_CFLAGS) $(LUMIERA_PROC_CFLAGS) -std=gnu99 -Wall -Wextra -Werror
 liblumiprocasset_la_CXXFLAGS = $(AM_CXXFLAGS) $(LUMIERA_PROC_CFLAGS) -Wall -Wextra
 
-liblumiprocasset_la_SOURCES =				\
-	$(liblumiprocasset_la_srcdir)/category.cpp	\
-	$(liblumiprocasset_la_srcdir)/clip.cpp		\
-	$(liblumiprocasset_la_srcdir)/codec.cpp		\
-	$(liblumiprocasset_la_srcdir)/compoundmedia.cpp	\
-	$(liblumiprocasset_la_srcdir)/effect.cpp	\
-	$(liblumiprocasset_la_srcdir)/media.cpp		\
-	$(liblumiprocasset_la_srcdir)/meta.cpp		\
-	$(liblumiprocasset_la_srcdir)/pipe.cpp		\
-	$(liblumiprocasset_la_srcdir)/preview.cpp	\
-	$(liblumiprocasset_la_srcdir)/proc.cpp		\
-	$(liblumiprocasset_la_srcdir)/procpatt.cpp	\
-	$(liblumiprocasset_la_srcdir)/sequence.cpp	\
-	$(liblumiprocasset_la_srcdir)/struct.cpp	\
-	$(liblumiprocasset_la_srcdir)/timeline.cpp	\
-	$(liblumiprocasset_la_srcdir)/typed-lookup.cpp	\
+liblumiprocasset_la_SOURCES =					\
+	$(liblumiprocasset_la_srcdir)/category.cpp		\
+	$(liblumiprocasset_la_srcdir)/clip.cpp			\
+	$(liblumiprocasset_la_srcdir)/codec.cpp			\
+	$(liblumiprocasset_la_srcdir)/compoundmedia.cpp		\
+	$(liblumiprocasset_la_srcdir)/effect.cpp		\
+	$(liblumiprocasset_la_srcdir)/media.cpp			\
+	$(liblumiprocasset_la_srcdir)/meta.cpp			\
+	$(liblumiprocasset_la_srcdir)/meta/time-grid.cpp	\
+	$(liblumiprocasset_la_srcdir)/pipe.cpp			\
+	$(liblumiprocasset_la_srcdir)/preview.cpp		\
+	$(liblumiprocasset_la_srcdir)/proc.cpp			\
+	$(liblumiprocasset_la_srcdir)/procpatt.cpp		\
+	$(liblumiprocasset_la_srcdir)/sequence.cpp		\
+	$(liblumiprocasset_la_srcdir)/struct.cpp		\
+	$(liblumiprocasset_la_srcdir)/timeline.cpp		\
+	$(liblumiprocasset_la_srcdir)/typed-lookup.cpp		\
 	$(liblumiprocasset_la_srcdir)/unknown.cpp
 
 
@@ -199,6 +200,7 @@ noinst_HEADERS +=									\
 	$(liblumiproc_la_srcdir)/asset/effect.hpp					\
 	$(liblumiproc_la_srcdir)/asset/media.hpp					\
 	$(liblumiproc_la_srcdir)/asset/meta.hpp						\
+	$(liblumiproc_la_srcdir)/asset/meta/time-grid.hpp				\
 	$(liblumiproc_la_srcdir)/asset/pipe.hpp						\
 	$(liblumiproc_la_srcdir)/asset/preview.hpp					\
 	$(liblumiproc_la_srcdir)/asset/proc.hpp						\

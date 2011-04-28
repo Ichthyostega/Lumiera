@@ -54,8 +54,10 @@ liblumiera_la_SOURCES =					\
 	$(liblumiera_la_srcdir)/recmutex.c		\
 	$(liblumiera_la_srcdir)/rwlock.c		\
 	$(liblumiera_la_srcdir)/safeclib.c		\
+	$(liblumiera_la_srcdir)/searchpath.cpp		\
 	$(liblumiera_la_srcdir)/streamtype.cpp		\
 	$(liblumiera_la_srcdir)/symbol-impl.cpp		\
+	$(liblumiera_la_srcdir)/sync.cpp		\
 	$(liblumiera_la_srcdir)/test/suite.cpp		\
 	$(liblumiera_la_srcdir)/test/test-helper.cpp	\
 	$(liblumiera_la_srcdir)/test/testoption.cpp	\
@@ -88,14 +90,11 @@ noinst_HEADERS +=						\
 	$(liblumiera_la_srcdir)/meta/typelist.hpp		\
 	$(liblumiera_la_srcdir)/mpool.h				\
 	$(liblumiera_la_srcdir)/mrucache.h			\
-	$(liblumiera_la_srcdir)/mrucache.h			\
 	$(liblumiera_la_srcdir)/mutex.h				\
 	$(liblumiera_la_srcdir)/nobug-init.hpp			\
 	$(liblumiera_la_srcdir)/observable-list.hpp		\
 	$(liblumiera_la_srcdir)/p.hpp				\
 	$(liblumiera_la_srcdir)/ppmpl.h				\
-	$(liblumiera_la_srcdir)/ppmpl.h				\
-	$(liblumiera_la_srcdir)/psplay.h			\
 	$(liblumiera_la_srcdir)/psplay.h			\
 	$(liblumiera_la_srcdir)/query.hpp			\
 	$(liblumiera_la_srcdir)/reccondition.h			\
@@ -103,13 +102,13 @@ noinst_HEADERS +=						\
 	$(liblumiera_la_srcdir)/rwlock.h			\
 	$(liblumiera_la_srcdir)/safeclib.h			\
 	$(liblumiera_la_srcdir)/scoped-holder.hpp		\
-	$(liblumiera_la_srcdir)/singleton-subclass.hpp		\
-	$(liblumiera_la_srcdir)/singleton.hpp			\
+	$(liblumiera_la_srcdir)/searchpath.hpp			\
 	$(liblumiera_la_srcdir)/singleton-factory.hpp		\
 	$(liblumiera_la_srcdir)/singleton-policies.hpp		\
 	$(liblumiera_la_srcdir)/singleton-preconfigure.hpp	\
+	$(liblumiera_la_srcdir)/singleton-subclass.hpp		\
+	$(liblumiera_la_srcdir)/singleton.hpp			\
 	$(liblumiera_la_srcdir)/sync-classlock.hpp		\
-	$(liblumiera_la_srcdir)/sync.hpp			\
 	$(liblumiera_la_srcdir)/sync.hpp			\
 	$(liblumiera_la_srcdir)/test/mockinjector.hpp		\
 	$(liblumiera_la_srcdir)/test/run.hpp			\
@@ -117,11 +116,9 @@ noinst_HEADERS +=						\
 	$(liblumiera_la_srcdir)/test/test-helper.hpp		\
 	$(liblumiera_la_srcdir)/test/testoption.hpp		\
 	$(liblumiera_la_srcdir)/time.h				\
-	$(liblumiera_la_srcdir)/time.h				\
 	$(liblumiera_la_srcdir)/tmpbuf.h			\
 	$(liblumiera_la_srcdir)/tree.hpp			\
 	$(liblumiera_la_srcdir)/util.hpp			\
 	$(liblumiera_la_srcdir)/visitor-dispatcher.hpp		\
 	$(liblumiera_la_srcdir)/visitor-policies.hpp		\
 	$(liblumiera_la_srcdir)/visitor.hpp
-
