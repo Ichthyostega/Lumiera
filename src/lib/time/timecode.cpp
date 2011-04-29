@@ -131,7 +131,7 @@ namespace time {
      *         orientation (0:0:0:0 - 1sec = -1:59:59:0)
      */
     void
-    Smpte::rangeLimitStrategy (SmpteTC& tc)
+    Smpte::applyRangeLimitStrategy (SmpteTC& tc)
     {
       if (tc.hours < 0)
         tc.invertOrientation();
@@ -171,7 +171,7 @@ namespace time {
     wrapHours   (SmpteTC* thisTC, int rawHours)
     {
       thisTC->hours.setValueRaw (rawHours);
-      format::Smpte::rangeLimitStrategy (*thisTC);
+      format::Smpte::applyRangeLimitStrategy (*thisTC);
     }
     
     

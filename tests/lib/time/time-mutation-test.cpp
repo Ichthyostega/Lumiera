@@ -216,7 +216,7 @@ namespace test{
           
           // Here accidentally both the change and t.quant use the same grid.
           // For a more contrived example, we try to use a different grid...
-          TimeGrid::build("special_funny_grid", 1);      // (1 frame per second, no offset)
+          TimeGrid::build("special_funny_grid", 1, Time(0,-10)); // (1 frame per second, zero point at -10s)
           QuTime funny (original, "special_funny_grid");
           funny.accept (Mutation::materialise (change));
           CHECK (funny == t.quant);                      // leading to the same raw value this far

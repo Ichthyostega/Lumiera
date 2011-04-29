@@ -101,7 +101,29 @@ namespace time {
   
   
   /**
+   * Classical Timecode value reminiscent to SMPTE format.
+   * After quantisation, the resulting (materialised) time value is
+   * decimated into a hours, a minutes, a seconds part and the remainder
+   * is cast into a frame number relative to the seconds. Consequently,
+   * a SmpteTC representation is always linked implicitly to a specific framerate.
    * 
+   * \par range extensions
+   * Historically, SMPTE timecode format was focused mainly on how to encode a
+   * unique timestamp in a way allowing to 'piggyback' these timestamps into an
+   * existing (analogue) media data format. As a side effect, quite tight limits
+   * had to be imposed on the possible component values in such a fixed-length format.
+   * This whole concern is completely beyond the scope of a typical computer based video
+   * implementation; thus we can consider ways to extend the value range to be represented
+   * in this SMPTE-like timecode format:
+   * - we can allow time values below the zero point
+   * - we can allow time values beyond 24 hours.
+   * Several different schemes how to do this extensions could be devised (and in addition,
+   * we could also wrap around the hours field, jumping from 23:59:59:## to 0:0:0:0).
+   * Currently, we implement an extension, where the timecode representation is symmetrical
+   * to the zero point and the hours field is just extended beyond 23 hours. To give an
+   * example: \c 0:0:0:0 minus 1 frame yields \c -0:0:0:1
+   * 
+   * @todo the range extension scheme could be a configurable strategy
    */
   class SmpteTC
     : public TCode
@@ -141,7 +163,7 @@ namespace time {
   
   
   /**
-   * 
+   * @warning missing implementation
    */
   class HmsTC
     : public TCode
@@ -166,7 +188,7 @@ namespace time {
   
   
   /**
-   * 
+   * @warning partially missing implementation
    */
   class Secs
     : public TCode

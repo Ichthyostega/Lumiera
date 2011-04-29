@@ -74,6 +74,9 @@ namespace test{
       checkTimecodeUsageCycle ()
         {
           UNIMPLEMENTED ("full usage cycle for a timecode value");
+          
+          /////////TODO: parse-funktion, wie?
+          /////////TODO: vieleicht doch irgendwo eine Funktion zum Materialisieren?
         }
       
       
