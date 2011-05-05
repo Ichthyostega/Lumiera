@@ -160,7 +160,7 @@ namespace time {
    *      range when converting back into a TimeValue.
    * @see #lumiera_quantise_frames
    */
-  long
+  int64_t
   FixedFrameQuantiser::gridPoint (TimeValue const& rawTime)  const
   {
     return lumiera_quantise_frames (_raw(rawTime), _raw(origin_), _raw(raster_));
@@ -173,7 +173,7 @@ namespace time {
    *      valid range of lumiera::Time
    */
   TimeValue
-  FixedFrameQuantiser::timeOf (long gridPoint)  const
+  FixedFrameQuantiser::timeOf (int64_t gridPoint)  const
   {
     return TimeValue (lumiera_time_of_gridpoint (gridPoint, _raw(origin_), _raw(raster_)));
   }
