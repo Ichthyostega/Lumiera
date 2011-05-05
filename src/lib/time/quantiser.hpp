@@ -93,6 +93,7 @@ namespace time {
         }
       
       static PQuant retrieve (Symbol gridID);
+      TimeValue materialise  (TimeValue const& raw)       const;
       
       
       //------Grid-API----------------------------------------------

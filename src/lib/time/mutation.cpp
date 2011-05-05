@@ -197,7 +197,7 @@ namespace time {
     public:
       explicit
       MaterialiseIntoTarget (QuTime const& quant)
-        : SetNewStartTimeMutation (Secs(quant).getTime())
+        : SetNewStartTimeMutation (PQuant(quant)->materialise(quant))
         { }
     };
   
@@ -264,8 +264,10 @@ namespace time {
       virtual void
       change (QuTime& target)   const
         {
-          long gridPoint = FrameNr(target)+steps_;
-          imposeChange (target, PQuant(target)->timeOf(gridPoint));
+          PQuant const& grid (target);
+          int64_t originalGridPoint = grid->gridPoint(target);
+          int64_t adjustedGridPoint = originalGridPoint + steps_;
+          imposeChange (target, grid->timeOf (adjustedGridPoint));
         }
       
    
