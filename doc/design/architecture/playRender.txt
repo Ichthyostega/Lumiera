@@ -1,0 +1,132 @@
+Design: Playback and Render Control
+===================================
+:Author: Ichthyostega
+:Date: 5/2011
+
+//MENU: label Player subsystem
+
+**************************************************************************************
+This part of the architecture is concened with how to initiate, coordinate and control
+the calculation processes necessary to generate visible / audible data from our source
+media. This design is _not so much_ concerned with the actual calculations; indeed it
+takes on an ``bird eye's view'', treating the actual render engine mostly just as an
+opaque entity providing some service.
+**************************************************************************************
+
+Collecting initial drafts
+-------------------------
+
+Over time, several design sketches emerged already, as an offspring of other
+discussions and brainstorming.
+
+ * the link:/documentation/devel/rfc_pending/EngineInterfaceOverview.html[Engine Interface draft]
+   contains some fundamental terms and definitions.
+ * discussions regarding time values and timecode handling shed some light onto the requirements
+   to be fulfilled by a player subsystem
+   
+   - link:http://article.gmane.org/gmane.comp.video.lumiera.general/2116[Timecode Widget and Framerates]
+   - link:http://article.gmane.org/gmane.comp.video.lumiera.general/2109[Time, Time-spans, Quatisation and Timecode]
+   - link:http://lumiera.org/wiki/renderengine.html#TimeQuant[Definition of Time entities] from the implementation
+     notes in the TiddlyWiki
+
+
+As a start, quoting here from one of my responses in the above mentioned mailinglist threads:
+
+---------
+maybe I should have clarified the term "player subsystem".
+That name is certainly shaped by "programmer think"  ;-) 
+
+The full, complete and precise name would be something along
+the lines of "render- and playback-process coordination subsystem".
+Now, we need to shorten that into a single word. The more obvious
+abbreviation (just by the importance) would be "Render", but that
+would be strikingly misleading, because everyone would take that
+to be the render engine. Which leaves us with "Player". A second
+consideration shows us that the structure of that subsystem will
+be very close to the structure of any software player. This second
+consideration supports that chosen name to be even better then "Render",
+because "Player" is aligned with the actual nature of that subsystem.
+
+To expand on that structure, we need to think which powers are at
+work and should be balanced. Here "powers" means powerful influences.
+First of all, there is the spirit of modern software development, which
+makes us think in terms of well-defined services, which are to be delivered
+at a point-of-service, which is an interface (not necessarily the user
+interface, but in most cases just an access point used by other internal
+facilities). The next influential power is multiplicity, combined with
+differentiation in detail. Then last but not least we have time-bound delivery.
+Add to this the general requirement of keeping matters under control, which
+is vital in a larger system with complex interactions.
+
+After realising these powers, for an experienced developer several building
+blocks almost immediately fall into place, that is within the inner vision:
+
+We get instances of a "play/render-me"-service. At the front-end of each of
+those instances, there will be a play-controller, which is a "state machine".
+It provides states and transitions of the kind "play", "pause", "ffwd", "step",
+etc., and can be hooked up with a play-control GUI widget (or something simpler
+in case of a render process, which is free wheeling).
+
+Each play-controller in turn gets associated with several play/render-processes,
+one for each independent media stream (channel) to be produced. Of course,
+each such process is a compound of entries in a registration table, which serve
+the purpose of tying several other services together, which we initiate and use
+in order to make that render process happen. Most notably, we'll use the
+services of the actual engine, which provides us with kind of a "calculation
+stream" service, which is capable of delivering a sequence of calculated
+data frames in a timely fashion.
+
+
+And now the point which is important for our discussion here: When a client
+requests such an instance of the player service, we build up these parts
+providing that service, which cascades down to the individual elements.
+At that point, we need to pull and combine two informations:
+- the "what" to render: this information stems from the session/model.
+- the "how" to render: this information is guided by the output configuration.
+
+
+Quantisation is a kind of rounding. This is a dangerous and nasty operation.
+
+<irony> the so called "ordinary" people have a completely misguided notion
+and a bizarre inclination for rounding. In the pitifully shaded state of their
+minds they link it to some kind of cleanliness </irony>
+
+Rounding and quantisation are dangerous, because they kill information content.
+Thus there are three fundamental guidelines when it comes to rounding
+(1) don't do it
+(2) do it at most once
+(3) do it as late as possible
+
+These may guide the process of finding the right place for the Quantiser(s) to
+apply. We need some information flows to be joined in order to be able to do
+the quantisation, which leaves us with just a few possible junction points
+where to place quantisation: The backend, the GUI, the player, the session.
+
+- putting it into the backend seems to be the most reasonable at first sight:
+  We can "do away" with nasty things soon, especially if they are "technically",
+  "get a clean state soon" -- and hasn't frame quantisation something to do
+  with media data, which is handled in the backend?
+  Well, actually, all of those are pitfalls to trap the unwary. About
+  cleanliness, well (sigh). Doing rounding soon will leave us with a huge
+  amount of degraded information flows throughout the whole system; thus the
+  general rule to do it as late as possible. Uncrippled information is
+  enablement. And last but not least: the frame quantisation is connected
+  to the /output/ format -- and the backend is likely within the whole
+  application the subsytem most remote and unaware of output requirements.
+- rounding/quantising in the GUI is extremely common; unfortunately there
+  seems to be not a single argument supporting that habit. Most of all,
+  it violates the subsidiarity principle.
+
+Which leaves us with the player and the session. Both positions could
+arguably be supported. I come to prefering the player mostly out of
+gut feeling. In any case there seems to be a remaining tension.
+
+But on a second thought and more careful consideration, the "frame rounding"
+can be decomposed in the way I proposed: into the /act of quantisation/
+and the /frame grid/. Basically its the session which has the ability
+to form the frame grid, but it is lacking crutial information (about
+the output). This leads to the proposed approach of a collaboration,
+which seems to resolve that tension (at least when considering it
+now, from birds eyes view)
+---------
+
