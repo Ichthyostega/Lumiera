@@ -16,7 +16,7 @@ opaque entity providing some service.
 Collecting initial drafts
 -------------------------
 
-Over time, several design sketches emerged already, as an offspring of other
+At start of 2011, several design sketches emerged already, as an offspring of other
 discussions and brainstorming.
 
  * the link:/documentation/devel/rfc_pending/EngineInterfaceOverview.html[Engine Interface draft]
@@ -26,37 +26,66 @@ discussions and brainstorming.
    
    - link:http://article.gmane.org/gmane.comp.video.lumiera.general/2116[Timecode Widget and Framerates]
    - link:http://article.gmane.org/gmane.comp.video.lumiera.general/2109[Time, Time-spans, Quatisation and Timecode]
-   - link:http://lumiera.org/wiki/renderengine.html#TimeQuant[Definition of Time entities] from the implementation
-     notes in the TiddlyWiki
+   - link:http://lumiera.org/wiki/renderengine.html#TimeQuant[Definition of Time entities]
+     from the implementation notes in the TiddlyWiki
 
 
-As a start, quoting here from one of my responses in the above mentioned mailinglist threads:
+Reasoning about the Player Subsystem's structure
+------------------------------------------------
 
----------
-maybe I should have clarified the term "player subsystem".
-That name is certainly shaped by "programmer think"  ;-) 
-
+At first sight, the name ``Player'' might be surprising. 
 The full, complete and precise name would be something along
-the lines of "render- and playback-process coordination subsystem".
+the lines of ``_render- and playback-process coordination subsystem_''.
 Now, we need to shorten that into a single word. The more obvious
-abbreviation (just by the importance) would be "Render", but that
+abbreviation (just by the importance) would be _Render_, but that
 would be strikingly misleading, because everyone would take that
-to be the render engine. Which leaves us with "Player". A second
+to be the render engine. Which leaves us with _Player_. A second
 consideration shows us that the structure of that subsystem will
-be very close to the structure of any software player. This second
-consideration supports that chosen name to be even better then "Render",
-because "Player" is aligned with the actual nature of that subsystem.
+be very close to the structure of any software player -- the chosen term
+turns out to be well aligned with the actual nature of that subsystem.
 
-To expand on that structure, we need to think which powers are at
-work and should be balanced. Here "powers" means powerful influences.
-First of all, there is the spirit of modern software development, which
-makes us think in terms of well-defined services, which are to be delivered
-at a point-of-service, which is an interface (not necessarily the user
-interface, but in most cases just an access point used by other internal
-facilities). The next influential power is multiplicity, combined with
-differentiation in detail. Then last but not least we have time-bound delivery.
-Add to this the general requirement of keeping matters under control, which
-is vital in a larger system with complex interactions.
+Influences and Requirements
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+In accordance with the spirit of modern software development, the analysis
+starts by determining which would be the _Service_ to be provided by such
+a player. Consideration of the use cases highlights the fundamental forces
+to be _multiplicity_, combined with _differentiation in detail_, all under
+the government of _time-bound delivery_, combined with _live reconfiguration_.
+
+The basic service turns out to be *performance of a preconfigured object model*.
+This performance is *time based*. Multiple usage instances of this service can
+be expected to coexist, each of which can be broken down into a set of *elementary
+streams to be delivered synchronously*. The delivery mode can be *reconfigured
+on-the-fly*.
+
+Modes of operation
+^^^^^^^^^^^^^^^^^^
+Delivery can be either _free-wheeling_, so to cover a predefined time interval
+with fixed quality calculations (final render), and it can be _throttled_ for using
+excess computation power (background rendering). Or -- alternatively -- delivery can
+be _time-bound_ (for classical playback), following the projection of wall clock time
+onto a predefined timeline interval (the so called ``playhead'' or ``playback cursor''
+proceeding along a timeline).
+
+Reconfiguration
+^^^^^^^^^^^^^^^
+Some of these operation modes need to be prepared to an unpredictable live reconfiguration,
+driven by user interactions:
+
+- any part of background rendering can be invalidated and restarted, while other parts
+  should be re-integrated, possibly with adjusted position
+- the linearly proceeding playback can at any time be
+
+  * paused
+  * reversed in direction
+  * playback speed adjusted
+
+- the playback can be looped, with _unlimited_ adjustments of the loop boundaries any time.
+
+
+Resulting Structure
+~~~~~~~~~~~~~~~~~~~
 
 After realising these powers, for an experienced developer several building
 blocks almost immediately fall into place, that is within the inner vision:
@@ -93,9 +122,10 @@ minds they link it to some kind of cleanliness </irony>
 
 Rounding and quantisation are dangerous, because they kill information content.
 Thus there are three fundamental guidelines when it comes to rounding
-(1) don't do it
-(2) do it at most once
-(3) do it as late as possible
+
+. don't do it
+. do it at most once
+. do it as late as possible
 
 These may guide the process of finding the right place for the Quantiser(s) to
 apply. We need some information flows to be joined in order to be able to do
@@ -128,5 +158,5 @@ to form the frame grid, but it is lacking crutial information (about
 the output). This leads to the proposed approach of a collaboration,
 which seems to resolve that tension (at least when considering it
 now, from birds eyes view)
----------
+
 
