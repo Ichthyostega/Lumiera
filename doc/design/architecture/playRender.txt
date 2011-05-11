@@ -53,7 +53,7 @@ a player. Consideration of the use cases highlights the fundamental forces
 to be _multiplicity_, combined with _differentiation in detail_, all under
 the government of _time-bound delivery_, combined with _live reconfiguration_.
 
-The basic service turns out to be *performance of a preconfigured object model*.
+The basic service turns out to be the *performing of a preconfigured object model*.
 This performance is *time based*. Multiple usage instances of this service can
 be expected to coexist, each of which can be broken down into a set of *elementary
 streams to be delivered synchronously*. The delivery mode can be *reconfigured
@@ -84,43 +84,74 @@ driven by user interactions:
 - the playback can be looped, with _unlimited_ adjustments of the loop boundaries any time.
 
 
-Resulting Structure
-~~~~~~~~~~~~~~~~~~~
 
-After realising these powers, for an experienced developer several building
-blocks almost immediately fall into place, that is within the inner vision:
+Conclusions for the Design
+~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-We get instances of a "play/render-me"-service. At the front-end of each of
-those instances, there will be a play-controller, which is a "state machine".
-It provides states and transitions of the kind "play", "pause", "ffwd", "step",
-etc., and can be hooked up with a play-control GUI widget (or something simpler
-in case of a render process, which is free wheeling).
+Based on these observations, the following design looks pretty much obvious:
 
-Each play-controller in turn gets associated with several play/render-processes,
-one for each independent media stream (channel) to be produced. Of course,
-each such process is a compound of entries in a registration table, which serve
-the purpose of tying several other services together, which we initiate and use
-in order to make that render process happen. Most notably, we'll use the
-services of the actual engine, which provides us with kind of a "calculation
-stream" service, which is capable of delivering a sequence of calculated
+Overall, the player subsystem can be described as ``play/render-this''-service.
+Given an suitable (high-level) object, the Player has the ability to ``perform''
+(play or render) it.
+
+- the standard case is _playing a timeline_.
+- it's conceivable to allow playing a selection of other objects,
+  like e.g. directly playing a clip or even media asset. In these cases,
+  its the player's job to prepare the necessary scaffolding on the fly.
+
+Yet each such performance of an object is a _stateful instance_, a player application:
+On application of the player service, the client gets a front-end handle, a *play-controller*,
+which is a _state machine_. It provides states and transitions of the kind 'play', 'pause', 'ffwd',
+'rew', 'goto', 'step', 'scrub' and similar.  Moreover it maintains (or connects to) a distinct
+playback location, and it can be hooked up with a play-control GUI widget
+(or something simpler in case of a render process, which is free wheeling).
+
+Each play-controller in turn gets associated with several *play/render-processes*,
+one for each independent media stream (channel) to be produced. Of course this
+isn't an operating system process; rather, ach such process is a compound of entries
+in a registration table, which serve the purpose of tying several other services together,
+which we initiate and use in order to make that render process happen.
+Most notably, we'll use the services of the actual engine, which provides us with kind of
+a *calculation stream service*: the ability to deliver a sequence of calculated
 data frames in a timely fashion.
 
+When a client requests such an instance of the player service, we build up these
+parts providing that service, which cascades down to the individual elements.
+At that point, we need to pull and combine two kinds of informations:
 
-And now the point which is important for our discussion here: When a client
-requests such an instance of the player service, we build up these parts
-providing that service, which cascades down to the individual elements.
-At that point, we need to pull and combine two informations:
-- the "what" to render: this information stems from the session/model.
-- the "how" to render: this information is guided by the output configuration.
+- the ``what'' to render: this information stems from the session/model.
+- the ``how'' to render: this information is guided by the derived output configuration.
 
+Viewer and Output connection
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Creating a player instance binds together three partners: a _timeline_, a _viewer_
+and _the engine_. While the timeline provides the content to play, the _viewer connection_
+is crutial for working out the actual output sink(s) and thus the output format to use.
+Thus, a viewer connection is prerequisite for creating a player instance.
 
-Quantisation is a kind of rounding. This is a dangerous and nasty operation.
+Viewer connections exist as associations in the session/model -- as entities separate
+from the player. Usually, a timeline has (at least) one viewer connection. But in case
+such a connection is (still) missing, building a player instance recurs to the session
+to get a suitable viewer _allocated_. The viewer connection can't be broken during the
+lifetime of that player instance (or putting it the other way: breaking that viewer
+connection, e.g. by forcing a different connection or by shutting down the viewer,
+immediately terminates the player. This detaching works synchroneously, i.e. it
+blocks untlil all the allocated _output slots_ could be released.
 
-<irony> the so called "ordinary" people have a completely misguided notion
-and a bizarre inclination for rounding. In the pitifully shaded state of their
-minds they link it to some kind of cleanliness </irony>
+Live switching
+^^^^^^^^^^^^^^
+While the viewer connection can be treated as fixed during the lifespan of a player
+instance, several life switching and reconfiguration operations might happen anytime:
+The _model port_ (place where data is retrieved from calculation), the output characteristics
+(framerate, direction) and the delivery goals (playback position, loop playing, scrubbing)
+all may be changed during playback -- we need a way for the player to ``cancel'' and
+reconfigure the backend services.
 
-Rounding and quantisation are dangerous, because they kill information content.
+Frame quantisation
+^^^^^^^^^^^^^^^^^^
+Quantisation is a kind of rounding; like any kind of rounding, quantisation is
+a dangerous operation because it kills information content.
+
 Thus there are three fundamental guidelines when it comes to rounding
 
 . don't do it
@@ -133,30 +164,28 @@ the quantisation, which leaves us with just a few possible junction points
 where to place quantisation: The backend, the GUI, the player, the session.
 
 - putting it into the backend seems to be the most reasonable at first sight:
-  We can "do away" with nasty things soon, especially if they are "technically",
-  "get a clean state soon" -- and hasn't frame quantisation something to do
+  We can ``do away'' with nasty things soon, especially if they are technicallities,
+  ``get a clean state soon'' -- and hasn't frame quantisation something to do
   with media data, which is handled in the backend?
-  Well, actually, all of those are pitfalls to trap the unwary. About
-  cleanliness, well (sigh). Doing rounding soon will leave us with a huge
-  amount of degraded information flows throughout the whole system; thus the
-  general rule to do it as late as possible. Uncrippled information is
-  enablement. And last but not least: the frame quantisation is connected
-  to the /output/ format -- and the backend is likely within the whole
-  application the subsytem most remote and unaware of output requirements.
-- rounding/quantising in the GUI is extremely common; unfortunately there
-  seems to be not a single argument supporting that habit. Most of all,
-  it violates the subsidiarity principle.
++  
+Well, actually, all of those are pitfalls to trap the unwary. About
+cleanliness, well (sigh). Doing rounding soon will leave us with a huge
+amount of degraded information flows throughout the whole system; thus the
+general rule to do it as late as possible. Uncrippled information is
+enablement. And last but not least: the frame quantisation is connected
+to the _output_ format -- and the backend is likely within the whole
+application the subsytem most remote and unaware of output requirements.
+
+- rounding/quantising in the GUI is extremely common within media applications;
+  unfortunately there seems to be not a single rational argument supporting that habit.
+  Most of all, it violates the subsidiarity principle.
 
 Which leaves us with the player and the session. Both positions could
-arguably be supported. I come to prefering the player mostly out of
-gut feeling. In any case there seems to be a remaining tension.
-
-But on a second thought and more careful consideration, the "frame rounding"
-can be decomposed in the way I proposed: into the /act of quantisation/
-and the /frame grid/. Basically its the session which has the ability
-to form the frame grid, but it is lacking crutial information (about
-the output). This leads to the proposed approach of a collaboration,
-which seems to resolve that tension (at least when considering it
-now, from birds eyes view)
-
+arguably be supported. Here, a more careful consideration shows, that
+the ``act of frame rounding'' can be decomposed: into the _act of quantisation_
+and the _frame grid:. Basically its the session which has the ability
+to form the *frame grid*, but it is lacking crutial information about
+the output. Only when connecting both -- which is the essence of the
+player -- frame quantisation can actually be performed. Thus, the
+player is the natural location to perform that quantisation operation.
 
