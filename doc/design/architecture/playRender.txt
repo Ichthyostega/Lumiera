@@ -40,23 +40,23 @@ Now, we need to shorten that into a single word. The more obvious
 abbreviation (just by the importance) would be _Render_, but that
 would be strikingly misleading, because everyone would take that
 to be the render engine. Which leaves us with _Player_. A second
-consideration shows us that the structure of that subsystem will
-be very close to the structure of any software player -- the chosen term
-turns out to be well aligned with the actual nature of that subsystem.
+consideration highlights similarities with the structure of a
+typical software player -- the chosen term turns out to be well
+aligned with the actual nature of that subsystem.
 
 Influences and Requirements
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 In accordance with the spirit of modern software development, the analysis
 starts by determining which would be the _Service_ to be provided by such
-a player. Consideration of the use cases highlights the fundamental forces
+a player. Consideration of the use cases determines the fundamental forces
 to be _multiplicity_, combined with _differentiation in detail_, all under
 the government of _time-bound delivery_, combined with _live reconfiguration_.
 
 The basic service turns out to be the *performing of a preconfigured object model*.
 This performance is *time based*. Multiple usage instances of this service can
 be expected to coexist, each of which can be broken down into a set of *elementary
-streams to be delivered synchronously*. The delivery mode can be *reconfigured
+streams to be delivered in sync*. The parameters of delivery can be *reconfigured
 on-the-fly*.
 
 Modes of operation
