@@ -79,11 +79,11 @@ namespace time {
     TimeValue 
     Smpte::evaluate (SmpteTC const& tc, QuantR quantiser)
     {
-      long frameRate = tc.getFps();
-      long gridPoint = tc.frames
-                     + tc.secs   * frameRate
-                     + tc.mins   * frameRate * 60 
-                     + tc.hours  * frameRate * 60 * 60;
+      uint frameRate = tc.getFps();
+      int64_t gridPoint(tc.frames);
+      gridPoint += int64_t(tc.secs)  * frameRate;
+      gridPoint += int64_t(tc.mins)  * frameRate * 60;
+      gridPoint += int64_t(tc.hours) * frameRate * 60 * 60;
       return quantiser.timeOf (tc.sgn * gridPoint);
     }
     
@@ -103,9 +103,9 @@ namespace time {
     uint
     Smpte::getFramerate (QuantR quantiser_, TimeValue const& rawTime)
     {
-      long refCnt = quantiser_.gridPoint(rawTime);
-      long newCnt = quantiser_.gridPoint(Time(0.5,1) + rawTime);
-      long effectiveFrames = newCnt - refCnt;
+      int64_t refCnt = quantiser_.gridPoint(rawTime);
+      int64_t newCnt = quantiser_.gridPoint(Time(0,1) + rawTime);
+      int64_t effectiveFrames = newCnt - refCnt;
       ENSURE (1000 > effectiveFrames);
       ENSURE (0 < effectiveFrames);
       return uint(effectiveFrames);
