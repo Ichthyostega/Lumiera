@@ -6764,7 +6764,7 @@ At the level of individual timecode formats, we're lacking a common denominator;
 &amp;rarr; Quantiser [[implementation details|QuantiserImpl]]
 </pre>
 </div>
-<div title="TimeUsage" modifier="Ichthyostega" modified="201104260244" created="201012230204" tags="design discuss" changecount="25">
+<div title="TimeUsage" modifier="Ichthyostega" modified="201105122348" created="201012230204" tags="design discuss" changecount="27">
 <pre>the following collection of usage situations helps to shape the details of the time values and time quantisation design. &amp;rarr; see also  [[time quantisation|TimeQuant]]
 
 ;time position of an object
@@ -6808,7 +6808,7 @@ The ''problem with playback position'' is -- that indeed it's an attempt to conc
 Note that the ''display window might be treated as just an independent instance of quantisation''. This is similar to the approach taken above for modifying quantised time span values. We should provide a special kind of time grid, the display coordinates. The origin of these is always defined to the left (lower) side of the interval to be displayed, and they are gauged in screen units (pixels or similar, as used by the GUI toolkit set). The rest is handled by the general quantisation mechanisms. The problem of aligning the display should be transformed into a general facility to align grids, and solved for the general case. Doing so solves the remaining problems with quantised value changes and with ''specifying relative placements'' as well: If we choose to represent them as quantised values, we might (or might not) also choose to apply this //grid-alignment function.//
 
 !the complete time value usage cycle
-The way this time value and quantisation handling is designed in Lumiera creates a typical usage path, which actually is a one-way route. We might start out with a textual representation according to a specific ''timecode'' format. This timecode string may be parsed, and typically it will be ''materialised'', by invoking the {{{value()}}}-function. This brings us (back) to the very origin, which is a raw timevalue (''internal time'' value). Now, this time value might be manipulated, compared to other values, combined into a ''time span'' (time point and duration -- the most basic notion of an //object// to be manipulated in the Session). Anyway, at some point these time values need to be related to some ''time scale'' again, leading to ''quantised'' time values, which -- finally -- can be cast into a timecode format for external representation again, thus closing the circle.
+The way time value and quantisation handling is designed in Lumiera creates a typical usage path, which actually is a one-way route. We might start out with a textual representation according to a specific ''timecode'' format. Assumed we know the implicit underlying ''time grid'' (coordinate system, framerate), this timecode string may be parsed. This brings us (back) to the very origin, which is a raw ~TimeValue (''internal time'' value). Now, this time value might be manipulated, compared to other values, combined into a ''time span'' (time point and duration -- the most basic notion of an //object// to be manipulated in the Session). Anyway, at some point these time values need to be related to some ''time scale'' again, leading to ''quantised'' time values, which -- finally -- can be cast into a timecode format for external representation again, thus closing the circle.
 
 !substantial problems to be solved
 * how to [[align multiple grids|TimeGridAlignment]]
@@ -7092,14 +7092,14 @@ For now, as of 6/10, we use specialised QueryResolver instances explicitly and d
 &amp;rarr; QueryRegistration
 </pre>
 </div>
-<div title="ViewerPlayConnection" modifier="Ichthyostega" modified="201011100202" created="201007110305" tags="Model Player spec draft" changecount="6">
+<div title="ViewerPlayConnection" modifier="Ichthyostega" modified="201105110009" created="201007110305" tags="Model Player spec draft" changecount="7">
 <pre>for showing output, three entities are involved
 * the [[Timeline]] holds the relevant part of the model, which gets rendered for playback
 * by connecting to a viewer component, an actual output target is established
 * the playback process itself is coordinated by a PlayController, which in turn creates a PlayProcess
 
 !the viewer connection
-A viewer element gets connected to a given timeline either by directly attaching it, or by //allocating an available free viewer.// Anyway, as a model element, the viewer is just like another set of global pipes cascaded behind the global pipes present in the timeline. The number and kind of pipes provided is a configurable property of the viewer element &amp;mdash; more specifically: the viewer's SwitchBoard. Thus, connecting a viewer activates the same internal logic employed when connecting a sequence into a timeline or meta-clip: a default channel association is established, which can be overridden persistently (&amp;rarr; OutputMapping). Each of the viewer's pipes in turn gets connected to a system output through an OutputManager slot &amp;mdash; again an output mapping step.
+A viewer element gets connected to a given timeline either by directly attaching it, or by //allocating an available free viewer.// Anyway, as a model element, the viewer is just like another set of global pipes chained up after the global pipes present in the timeline. The number and kind of pipes provided is a configurable property of the viewer element &amp;mdash; more specifically: the viewer's SwitchBoard. Thus, connecting a viewer activates the same internal logic employed when connecting a sequence into a timeline or meta-clip: a default channel association is established, which can be overridden persistently (&amp;rarr; OutputMapping). Each of the viewer's pipes in turn gets connected to a system output through an OutputManager slot &amp;mdash; again an output mapping step.
 </pre>
 </div>
 <div title="VirtualClip" modifier="Ichthyostega" modified="201011220152" created="200804110321" tags="def Model" changecount="17">

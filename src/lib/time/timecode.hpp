@@ -45,7 +45,7 @@ namespace time {
   
   /**
    * Interface: fixed format timecode specification.
-   * @see time::Format
+   * @see time::format
    * @todo WIP-WIP-WIP
    */
   class TCode
@@ -76,18 +76,25 @@ namespace time {
   
   /**
    * A frame counting timecode value.
-   * This is an hard-coded representation of
-   * TCode<format::Frames>, with additional convenience
-   * constructors and conversions, which basically make
-   * FrameNr values interchangeable with integral numbers. 
+   * This is the hard-coded standard representation of
+   * format::Frames, and is defined such as to make FrameNr
+   * values interchangeable with integral numbers.
+   * Like any concrete TCode subclass, it can be created
+   * based on a QuTime value. This way, not only the (raw) TimeValue
+   * is provided, but also the (frame)-Grid to base the frame count on.
+   * But contrary to a QuTime value, a FrameNr value is \em materialised
+   * (rounded) into a definite integral number, stripping the excess
+   * precision contained in the original (raw) TimeValue.
+   * As framecount values are implemented as single display field for an
+   * integral value (time::Digxel), they allow for simple presentation. 
    */
   class FrameNr
     : public TCode
     , public CountVal
     {
       
-      string show()     const { return string(CountVal::show())+"fr"; }
-      Literal tcID()    const { return "Frame-count"; } 
+      string show()     const { return string(CountVal::show())+"#"; }
+      Literal tcID()    const { return "Framecount"; } 
       TimeValue value() const { return Format::evaluate (*this, *quantiser_); }
       
     public:

@@ -23,6 +23,7 @@
 
 #include "lib/query.hpp"
 #include "lib/util.hpp"
+#include "lib/symbol.hpp"
 #include "include/logging.h"
 
 #include <boost/algorithm/string.hpp>
@@ -74,7 +75,7 @@ namespace lumiera {
       
       map<Symbol, regex> regexTable;
       
-      Symbol matchArgument = "\\(\\s*([\\w_\\.\\-]+)\\s*\\),?\\s*"; 
+      Literal matchArgument = "\\(\\s*([\\w_\\.\\-]+)\\s*\\),?\\s*"; 
       regex findPredicate (string("(\\w+)")+matchArgument);
       
       inline regex&

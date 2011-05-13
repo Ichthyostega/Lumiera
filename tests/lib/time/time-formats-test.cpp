@@ -97,7 +97,7 @@ namespace test{
       void
       checkSeconds ()
         {
-          UNIMPLEMENTED ("verify seconds as timecode format");
+          UNIMPLEMENTED ("verify fractional seconds as timecode format");
         }
       
       

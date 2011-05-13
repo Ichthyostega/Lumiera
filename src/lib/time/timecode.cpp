@@ -30,12 +30,19 @@
 #include "lib/util.hpp"
 
 #include <tr1/functional>
+#include <boost/regex.hpp>
+#include <boost/lexical_cast.hpp>
 
 using std::string;
 using util::unConst;
 using util::isSameObject;
 using util::floorwrap;
+using boost::regex;
+using boost::smatch;
+using boost::regex_search;
+using boost::lexical_cast;
 
+namespace error = lumiera::error;
 
 namespace lib {
 namespace time {
@@ -43,7 +50,101 @@ namespace time {
   
   TCode::~TCode()   { }  // emit VTable here....
   
-  namespace format {
+  
+  namespace format {  /* ================= Timecode implementation details ======== */ 
+    
+    LUMIERA_ERROR_DEFINE (INVALID_TIMECODE, "timecode format error, illegal value encountered");
+    
+    
+    /** try to parse a frame number specification
+     * @param frameNumber string containing an integral number with trailing '#'
+     * @param frameGrid   coordinate system (and thus framerate) to use for the conversion
+     * @return (opaque internal) lumiera time value of the given frame's start position
+     * @throw error::Invalid in case of parsing failure
+     * @note the string may contain any additional content, as long as a
+     *       regular-expression search is able to pick out a suitable value
+     */
+    TimeValue
+    Frames::parse (string const& frameNumber, QuantR frameGrid)
+    {
+      static regex frameNr_parser  ("(-?\\d+)#"); 
+      smatch match;
+      if (regex_search (frameNumber, match, frameNr_parser))
+        return frameGrid.timeOf (lexical_cast<int64_t> (match[1]));
+      else
+        throw error::Invalid ("unable to parse framecount \""+frameNumber+"\""
+                             , LUMIERA_ERROR_INVALID_TIMECODE);
+    }
+    
+    
+    TimeValue
+    Smpte::parse (string const&, QuantR)
+    {
+      UNIMPLEMENTED("parsing SMPTE timecode");
+    }
+    
+    
+    TimeValue
+    Hms::parse (string const&, QuantR)
+    {
+      UNIMPLEMENTED("parse a hours:mins:secs time specification");
+    }
+    
+    
+    /** try to parse a time specification in seconds or fractional seconds.
+     * The value is interpreted relative to the origin of a the given time grid
+     * This parser recognises full seconds, fractional seconds and both together.
+     * In any case, the actual number is required to end with a trailing \c 'sec'
+     * @par Example specifications
+\verbatim
+       12sec       -->  12     * GAVL_TIME_SCALE
+       -4sec       --> -4      * GAVL_TIME_SCALE
+       5/4sec      -->  1.25   * GAVL_TIME_SCALE
+       -5/25sec    --> -0.2    * GAVL_TIME_SCALE
+       1+1/2sec    -->  1.5    * GAVL_TIME_SCALE
+       1-1/25sec   -->  0.96   * GAVL_TIME_SCALE
+       -12-1/4sec  --> -11.75  * GAVL_TIME_SCALE
+\endverbatim
+     * @param seconds string containing a time spec in seconds
+     * @param grid coordinate system the parsed value is based on
+     * @return the corresponding (opaque internal) lumiera time value
+     * @throw error::Invalid in case of parsing failure
+     * @note the string may contain any additional content, as long as a
+     *       regular-expression search is able to pick out a suitable value
+     */
+    TimeValue
+    Seconds::parse (string const& seconds, QuantR grid)
+    {
+      static regex fracSecs_parser ("(-?\\d+)(?:([\\-\\+]\\d+)?/(\\d+))?sec"); 
+      
+      #define SUB_EXPR(N) lexical_cast<long> (match[N])
+      smatch match;
+      if (regex_search (seconds, match, fracSecs_parser))
+        if (match[2].matched)
+          {
+            // complete spec with all parts
+            FSecs fractionalPart (SUB_EXPR(2), SUB_EXPR(3));
+            long fullSeconds (SUB_EXPR(1));
+            return grid.timeOf (fullSeconds + fractionalPart);
+          }
+        else
+        if (match[3].matched)
+          {
+            // only a fractional part was given
+            return grid.timeOf (FSecs (SUB_EXPR(1), SUB_EXPR(3)));
+          }
+        else
+          {
+            // just simple non-fractional seconds
+            return grid.timeOf (FSecs (SUB_EXPR(1)));
+          }
+      else
+        throw error::Invalid ("unable to parse \""+seconds+"\" as (fractional)seconds"
+                             , LUMIERA_ERROR_INVALID_TIMECODE);
+    }
+    
+    
+    
     
     /** build up a frame count
      *  by quantising the given time value 
