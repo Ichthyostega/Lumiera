@@ -704,6 +704,10 @@ return: 0
 END
 
 
+PLANNED "Parsing time values" TimeParsing_test  <<END
+END
+
+
 TEST "Symbol_test" Symbol_test  <<END
 out: one
 out: sizeof.+lib.Literal.+  =   (4|8)

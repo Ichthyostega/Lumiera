@@ -58,7 +58,7 @@ namespace time {
              , uint hours
              )
     : TimeValue(lumiera_build_time (millis,secs,mins,hours))
-  { }
+    { }
   
   
   /** convenience constructor to build an Time value
