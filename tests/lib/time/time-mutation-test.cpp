@@ -27,22 +27,18 @@
 #include "lib/time/timequant.hpp"
 #include "lib/time/mutation.hpp"
 #include "proc/asset/meta/time-grid.hpp"
-//#include "lib/time/display.hpp"
 #include "lib/util.hpp"
 
 #include <boost/lexical_cast.hpp>
 #include <iostream>
-//#include <cstdlib>
 #include <string>
 
 using boost::lexical_cast;
 using util::isnil;
-//using std::rand;
 using std::cout;
 using std::endl;
 using std::string;
 
-//using lumiera::error::LUMIERA_ERROR_BOTTOM_VALUE;
 
 namespace lib {
 namespace time{
@@ -62,6 +58,8 @@ namespace test{
   }
   
   
+  
+  
   /****************************************************************
    * @test cover all basic cases for mutating a time specification.
    *       - change to a given value
@@ -75,7 +73,7 @@ namespace test{
       random_or_get (string arg)
         {
           if (isnil(arg))
-            return 1 + (rand() % 10000);
+            return gavl_time_t (1 + (rand() % 100000)) * GAVL_TIME_SCALE;
           else
             return lexical_cast<gavl_time_t> (arg);
         }
@@ -106,12 +104,12 @@ namespace test{
           // using a 25fps-grid, but with an time origin offset by 1/50sec
           TimeGrid::build("test_grid", FrameRate::PAL, Time(FSecs(1,50)));
           
-          QuTime qVal (o, "test_grid");
-          FrameNr count(qVal);
+          QuTime qChange (c, "test_grid");
+          FrameNr count(qChange);
           
           mutate_by_Value (o, Time(c));
           mutate_by_Offset (o, Offset(c));
-          mutate_quantised (o, qVal);
+          mutate_quantised (o, qChange);
           mutate_by_Increment(o, count);
         } 
       
@@ -126,7 +124,7 @@ namespace test{
           CHECK (t.span.start() != original);
           CHECK (t.span.start() == newStart);
           
-          // instead of invoking directly, we can store and copy mutation messages 
+          // instead of invoking directly, we can store and copy mutation messages
           EncapsulatedMutation change_back(Mutation::changeTime (Time(original)));
           t.span.accept (change_back);
           CHECK (t.span.start() == original);
@@ -199,7 +197,8 @@ namespace test{
           
           // simulate what happened by explicit operations...
           Secs seconds  = change.formatAs<format::Seconds>();
-          Time materialised = seconds.getTime();
+          PQuant quantiser(change);
+          Time materialised (quantiser->materialise(change));
           CHECK (t.span == materialised);
           
           CHECK (t.span.duration() == original); // not affected by mutation as usual
@@ -221,7 +220,7 @@ namespace test{
           funny.accept (Mutation::materialise (change));
           CHECK (funny == t.quant);                      // leading to the same raw value this far
           
-          Time doublyQuantised = Secs(funny).getTime();
+          Time doublyQuantised (PQuant(funny)->materialise(funny));
           CHECK (doublyQuantised != materialised);
         }
       
@@ -259,8 +258,8 @@ namespace test{
           t.quant.accept (Mutation::nudge (change));
           CHECK (t.quant != original);
           long frameNr_after = t.quant.formatAs<format::Frames>();
-          CHECK (frameNr_after != frameNr + change);
-          // i.e., use the quantised time's own grid
+          CHECK (frameNr_after == frameNr + change);
+          //i.e. the quantised time's own grid is used
         }
     };
   
