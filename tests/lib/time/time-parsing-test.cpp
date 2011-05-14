@@ -25,23 +25,12 @@
 #include "lib/test/test-helper.hpp"
 #include "proc/asset/meta/time-grid.hpp"
 #include "lib/time/quantiser.hpp"
-//#include "lib/time/timequant.hpp"
 #include "lib/time/timecode.hpp"
-//#include "lib/time/display.hpp"
 #include "lib/symbol.hpp"
 #include "lib/util.hpp"
 
-//#include <boost/lexical_cast.hpp>
-//#include <iostream>
-//#include <cstdlib>
-
-//using boost::lexical_cast;
-//using util::isnil;
 using lib::Symbol;
 using util::cStr;
-//using std::rand;
-//using std::cout;
-//using std::endl;
 
 
 namespace lib {
@@ -50,6 +39,7 @@ namespace test{
   
   using asset::meta::TimeGrid;
   using format::LUMIERA_ERROR_INVALID_TIMECODE;
+  
   
   namespace { // Helper for writing test cases
     
@@ -111,15 +101,23 @@ namespace test{
       virtual void
       run (Arg) 
         {
-          TimeGrid::build("pal0",  FrameRate::PAL);
-          TimeGrid::build("pal10", FrameRate::PAL, Time(0,10));
+          defineTestTimeGrids();
           
           parseFrames();
           parseFractionalSeconds();
+/////////////////////////////////////////////TODO
 //        parseHms();
 //        parseSmpte();
 //        parseDropFrame();
         } 
+      
+      
+      void
+      defineTestTimeGrids()
+        {
+          TimeGrid::build(DEFAULT_GRID, FrameRate::PAL);
+          TimeGrid::build(OFFSET_GRID,  FrameRate::PAL, Time(0,10));
+        }
       
       
       void
@@ -141,16 +139,50 @@ namespace test{
           
           Parsing<format::Frames> ("xxx25#xxx")       .should_yield (1);
           Parsing<format::Frames> ("12 25#")          .should_yield (1);
-          Parsing<format::Frames> ("12 25#  33#")     .should_yield (1);
+          Parsing<format::Frames> ("12 25#  33#")     .should_yield (1);                // note pitfall: the first valid number is used
           Parsing<format::Frames> ("12\n 25# \n 33#") .should_yield (1);
-          Parsing<format::Frames> ("12.25#")          .should_yield (1);
+          Parsing<format::Frames> ("12.25#")          .should_fail();                   // rejected because of leading dot (ambiguity)
         }
       
       
       void
       parseFractionalSeconds ()
         {
-          UNIMPLEMENTED ("verify reading fractional seconds as timecode format");
+          Parsing<format::Seconds> ("0sec")           .should_yield (0);
+          Parsing<format::Seconds> ("1sec")           .should_yield (1);
+          Parsing<format::Seconds> ("10sec")          .should_yield (10);
+          Parsing<format::Seconds> ("100sec")         .should_yield (100);
+          Parsing<format::Seconds> ("-10sec")         .should_yield (-10);
+          Parsing<format::Seconds> ("-0sec")          .should_yield (0);
+          
+          Parsing<format::Seconds> ("1/2sec")         .should_yield (Time(500,0)     );
+          Parsing<format::Seconds> ("1/25sec")        .should_yield (Time( 40,0)     );
+          Parsing<format::Seconds> ("1/250sec")       .should_yield (Time(  4,0)     ); // no quantisation involved in parsing 
+          Parsing<format::Seconds> ("1/250sec", OFFSET_GRID).should_yield (Time(4,10)); // ...but the origin of the grid is used
+          
+          Parsing<format::Seconds> ("10/2sec")        .should_yield (5);
+          Parsing<format::Seconds> ("1000/200sec")    .should_yield (5);
+          Parsing<format::Seconds> ("-10/2sec")       .should_yield (-5);
+          Parsing<format::Seconds> ("10/-2sec")       .should_fail();                   // only leading sign allowed (ambiguity)
+          
+          Parsing<format::Seconds> ("1+1/2sec")       .should_yield (Time(500,1)     );
+          Parsing<format::Seconds> ("1-1/2sec")       .should_yield (Time(500,0)     );
+          Parsing<format::Seconds> ("-1-1/2sec")      .should_yield (-Time(500,1)    );
+          Parsing<format::Seconds> ("-1+1/2sec")      .should_yield (-Time(500,0)    );
+          Parsing<format::Seconds> ("-1+1/-2sec")     .should_fail();
+          
+          Parsing<format::Seconds> ("-12+24690/12345sec", OFFSET_GRID).should_yield(0); // origin=+10sec -12sec + 2/1sec == 0
+          
+          Parsing<format::Seconds> ("1")              .should_fail();
+          Parsing<format::Seconds> ("1 sec")          .should_fail();
+          Parsing<format::Seconds> ("--1sec")         .should_fail();
+          Parsing<format::Seconds> ("/-1sec")         .should_fail();
+          Parsing<format::Seconds> ("1.2sec")         .should_fail();
+          Parsing<format::Seconds> ("1/.2sec")        .should_fail();
+          Parsing<format::Seconds> ("1 + 2 / 4 sec")  .should_fail();
+          Parsing<format::Seconds> ("1 + 2 / 4sec")   .should_yield(4);                 // note pitfall: leading garbage not considered
+          Parsing<format::Seconds> ("xxx4secxxxx")    .should_yield(4);
+          Parsing<format::Seconds> ("x1# 8/2sec 2sec").should_yield(4);                 // note pitfall: first valid number used
         }
       
       

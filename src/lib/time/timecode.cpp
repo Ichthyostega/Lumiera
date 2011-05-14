@@ -67,7 +67,7 @@ namespace time {
     TimeValue
     Frames::parse (string const& frameNumber, QuantR frameGrid)
     {
-      static regex frameNr_parser  ("(-?\\d+)#"); 
+      static regex frameNr_parser  ("(?<![\\.\\-\\d])(-?\\d+)#");   // no leading [.-\d],  number+'#'
       smatch match;
       if (regex_search (frameNumber, match, frameNr_parser))
         return frameGrid.timeOf (lexical_cast<int64_t> (match[1]));
@@ -115,7 +115,8 @@ namespace time {
     TimeValue
     Seconds::parse (string const& seconds, QuantR grid)
     {
-      static regex fracSecs_parser ("(-?\\d+)(?:([\\-\\+]\\d+)?/(\\d+))?sec"); 
+      static regex fracSecs_parser ("(?<![\\./\\-\\d])(-?\\d+)(?:([\\-\\+]\\d+)?/(\\d+))?sec");
+                                  //__no leading[./-\d] number    [+-]  number '/' number 'sec'   
       
       #define SUB_EXPR(N) lexical_cast<long> (match[N])
       smatch match;

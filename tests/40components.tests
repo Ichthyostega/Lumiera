@@ -704,7 +704,7 @@ return: 0
 END
 
 
-PLANNED "Parsing time values" TimeParsing_test  <<END
+TEST "Parsing time values" TimeParsing_test  <<END
 END
 
 
