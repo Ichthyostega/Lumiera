@@ -699,6 +699,9 @@ END
 
 
 TEST "Time formats and timecodes" TimeFormats_test  <<END
+out: Framecount=".+#" time = .+:..:..
+out: SMPTE=".+:..:..:.." time = .+:..:..
+out-lit: ----SMPTE-----
 out-lit: SMPTE="  5:42:23:13" time = 5:42:23.520
 return: 0
 END

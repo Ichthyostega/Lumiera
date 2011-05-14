@@ -102,7 +102,8 @@ namespace time {
       
       FrameNr (QuTime const& quantisedTime);
       
-      // CountVal implicitly convertible to long
+      using TCode::operator string;
+     // CountVal implicitly convertible to long
     };
   
   
