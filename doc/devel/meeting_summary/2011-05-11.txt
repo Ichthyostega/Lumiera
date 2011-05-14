@@ -1,0 +1,938 @@
+2011-05-11 Lumiera Developers Meeting
+=====================================
+:Author: Ichthyostega
+:Date: 2012-05-15
+
+May 11, 2011 on #lumiera 20:00 - 23:23 UTC +
+
+__Participants__
+
+ * cehteh
+ * ichthyo
+ 
+_Transcript prepared by Ichthyo_
+
+
+
+Render Engine Interface
+-----------------------
+_Ichthyo_ had prepared a new
+link:/documentation/devel/rfc_pending/EngineInterfaceSpec.html[RfC]
+about the actual interface between the
+link:/documentation/design/architecture/playRender.html[Player subsystem]
+and the Renderengine/Scheduler.
+The following discussion turned into considering several detaled and technical
+topics regarding the Jobs to be scheduled, how to create and attach new jobs,
+handle memory etc.
+
+Conclusion
+~~~~~~~~~~
+_Ichthyo_ will take on responsibility for that interface and care to translate
+the calls into actual Jobs to be handed to the Scheduler. The Scheduler interface
+itself will remain rather low-level and straight forward. The _callback_ facilities
+described in the mentioned RfC need to be implemented explicitly on top of this
+Scheduler interface. Ichthyo will care for that, and the integration with the
+Fixture datastructure.
+
+Next meeting
+------------
+
+The next meeting will be as usual, at Wednesday June 8, 20:00 UTC
+
+
+''''
+
+
+.-- Discussion of details --
+[caption="☉Transcript☉ "]
+----------------------------
+[2011-05-11 21:08:43] [INFO] Now logging to <file:///Lager/heim/profi/fox/chatzilla/logs/kornbluth.freenode.net/channels/%23lumiera.2011-05-11.log>.
+[2011-05-11 21:08:43] [INFO] Channel view for ``#lumiera'' opened.
+[2011-05-11 21:08:43] === 7 unknown connection(s)
+[2011-05-11 21:08:43] =-= User mode for ichthyo is now +i
+[2011-05-11 21:08:44] *NickServ* This nickname is registered. Please choose a different nickname, or identify via /msg NickServ identify <password>.
+[2011-05-11 21:08:47] *NickServ* You are now identified for ichthyo.
+[2011-05-11 21:08:50] -->| YOU (ichthyo) have joined #lumiera
+[2011-05-11 21:08:50] =-= Topic for #lumiera is ``Lumiera, the new emerging NLE for GNU/Linux | http://www.lumiera.org | Become a develper NOW''
+[2011-05-11 21:08:50] =-= Topic for #lumiera was set by hermanr on Sa 12 Sep 2009 21:08:01 CEST
+[2011-05-11 21:09:01] <ichthyo> Hello folks
+[2011-05-11 21:09:24] <ichthyo> dev meeting in 1 hour?
+[2011-05-11 21:11:26] <ichthyo> anyway... finished my RfC
+[2011-05-11 21:11:42] <ichthyo> http://lumiera.org/documentation/devel/rfc_pending/EngineInterfaceSpec.html
+[2011-05-11 21:12:01] <ichthyo> I'll be away shortly, but back in time for 20:00 UTC
+[2011-05-11 21:12:30] [INFO] You are now marked as away (evening stroll). Click the nickname button or use the |/back| command to return from being away.
+[2011-05-11 21:32:11] -->| hermanr (~herman@cinelerra.org) has joined #lumiera
+[2011-05-11 21:46:18] <hermanr> Meeting in 15?
+[2011-05-11 21:46:24] <Velmont> 14
+[2011-05-11 21:46:30] <hermanr> :-)
+[2011-05-11 21:47:36] <SimAV> 12!
+[2011-05-11 21:49:37] <SvenL-> Hi hermanr, ichthyo, Velmont and SimAV !
+[2011-05-11 21:49:43] <Velmont> hey SvenL-!
+[2011-05-11 21:49:59] <hermanr> Good evening, SvenL-!
+[2011-05-11 21:50:11] <cehteh> 10
+[2011-05-11 21:50:31] <SimAV> 9
+[2011-05-11 21:50:58] * hermanr is just lurking, out of curiosity
+[2011-05-11 21:51:17] * SimAV is busy, as always
+[2011-05-11 21:52:35] * SvenL- is hungry
+[2011-05-11 21:55:24] <Velmont> http://google.com -- and the sprite: http://www.google.no/logos/2011/graham11-hp-sprite.png  -- nice work!
+[2011-05-11 21:57:54] <SvenL-> It's not a gif, png don't move, not Flash, what is it ? I wondered about that when I first saw it...
+[2011-05-11 21:58:00] <SvenL-> HTML5 ?
+[2011-05-11 21:59:05] <hermanr> SvenL-: There are animated PNGs, yes.  It's a more capable standard than animated GIFs, but not as widely supported.
+[2011-05-11 21:59:19] <cehteh> javascript :P
+[2011-05-11 21:59:22] <SvenL-> Oh ?! Okay
+[2011-05-11 21:59:24] * ichthyo back
+[2011-05-11 21:59:28] [INFO] You are no longer marked as away.
+[2011-05-11 21:59:32] <ichthyo> Hi all
+[2011-05-11 21:59:34] <hermanr> Yeah, prolly JavaScript.
+[2011-05-11 21:59:45] <hermanr> 'evening, ichthyo
+[2011-05-11 21:59:50] <hermanr> -1 minute
+[2011-05-11 21:59:51] <ichthyo> 'evening hermanr 
+[2011-05-11 21:59:55] <SvenL-> Forgot to mention it
+[2011-05-11 22:00:03] <ichthyo> how embarrasing
+[2011-05-11 22:00:08] <ichthyo> dong dong
+[2011-05-11 22:00:10] <SvenL-> Reminds me of Pina, the new Wenders' movie. Anybody saw it ?
+[2011-05-11 22:00:34] <cehteh> wb ichthyo 
+[2011-05-11 22:00:36] <Velmont> SvenL-: I gave you the answer, the sprite. :-)
+[2011-05-11 22:01:05] <Velmont> It is javascript who does the moving etc, yes. So CSS+Javascript mostly. :-)
+[2011-05-11 22:01:32] <SvenL-> Of course, JavaScript, okay
+[2011-05-11 22:01:48] <Velmont> But very cool, very fast.
+[2011-05-11 22:02:01] <Velmont> Worked on my lowfi computer quick as a fox :]
+[2011-05-11 22:02:15] <cehteh> well its not big 
+[2011-05-11 22:02:24] <cehteh> try that with a fullscreen movie :P
+[2011-05-11 22:02:43] <cehteh> and i bet it break on almost any non-mainstream browser
+[2011-05-11 22:02:48] <Velmont> Yesyes, -- but I mean, if they'd done it using a flash embed, it wouldn't have been as nice.
+[2011-05-11 22:03:13] <cehteh> well .. html5 would be the best way :)
+[2011-05-11 22:03:28] <Velmont> Nah, html5 video would also be slower.
+[2011-05-11 22:03:31] <Velmont> Not so graceful ;]
+[2011-05-11 22:03:41] <cehteh> and fallback to anim gif
+[2011-05-11 22:03:58] <Velmont> This start in an instant. --A video would be much more heavy
+[2011-05-11 22:04:08] <cehteh> didnt worked for me at a first try because i have js turned off for google
+[2011-05-11 22:04:57] <cehteh> ok ... lets start the devel meeting
+[2011-05-11 22:05:28] <cehteh> ichthyo: anything else than your engine interface proposal?
+[2011-05-11 22:05:57] <ichthyo> maybe fsiddi shows up?
+[2011-05-11 22:06:04] -->| daylife (~daylife@5350C42D.cm-6-1d.dynamic.ziggo.nl) has joined #lumiera
+[2011-05-11 22:06:15] <cehteh> dunno, if yes then we can talk about something there
+[2011-05-11 22:06:18] <cehteh> hey daylife 
+[2011-05-11 22:06:26] <ichthyo> hi daylife 
+[2011-05-11 22:06:43] <cehteh> btw www.pipapo.org is back, using the lumiera web infrastructure as well :)
+[2011-05-11 22:06:45] <SvenL-> Didn't have the time to read your new pages, ichthyo
+[2011-05-11 22:06:46] <ichthyo> well... he wrote some days ago that he is busy, but will continue with the new layout
+[2011-05-11 22:06:52] <daylife> hello guys
+[2011-05-11 22:07:00] * ichthyo also promised to do something for the template
+[2011-05-11 22:07:03] <cehteh> i talked with him a few words past days ...
+[2011-05-11 22:07:10] <ichthyo> and didn't get around to that yet
+[2011-05-11 22:07:12] <ichthyo> ah
+[2011-05-11 22:07:31] <cehteh> also xsinick wants to help the project, dunno when he will be back here (non programmer)
+[2011-05-11 22:07:55] <cehteh> http://radar.oreilly.com/2011/05/process-kills-developer-passion.html  << grin
+[2011-05-11 22:08:43] <ichthyo> well... we could discuss about process, if you prefer that
+[2011-05-11 22:08:46] <ichthyo> :-P
+[2011-05-11 22:08:54] <cehteh> ichthyo: how do we want to proceed with the engine interface, discuss it point by point or only a overview and edit comments in the rfc?
+[2011-05-11 22:09:08] <ichthyo> well I thought rather the latter
+[2011-05-11 22:09:12] <ichthyo> its a rough draft
+[2011-05-11 22:10:12] <cehteh> nah i think we are fine with process .. including your coding standards pushing, my reluctance in some detail,  .. my formalism and your pushbacks there :)
+[2011-05-11 22:10:13] <SvenL-> Reading the first lines is enough to remind me of the basic concepts down here in the low-level model haha
+[2011-05-11 22:10:52] <cehteh> well generally i agree with your proposal (i'm just reading it) with some refinements/ideas i want to add
+[2011-05-11 22:10:53] <ichthyo> :)
+[2011-05-11 22:10:58] <ichthyo> ok
+[2011-05-11 22:11:08] <ichthyo> and while we at it
+[2011-05-11 22:11:27] <ichthyo> last time we went through the RfCs, and there is another Rfc, which is closely related
+[2011-05-11 22:11:31] <ichthyo> but more high-level
+[2011-05-11 22:11:38] <ichthyo> http://lumiera.org/documentation/devel/rfc_pending/EngineInterfaceOverview.html
+[2011-05-11 22:11:59] <cehteh> yes but you are right that we need to go into details soon
+[2011-05-11 22:12:48] <ichthyo> well, probably the most important new view angle is that I looked on all those 'play mode changes'
+[2011-05-11 22:12:51] <cehteh> QoS: do we want constants there or could you think about a 'functor' which reacts more dynamic?
+[2011-05-11 22:13:02] <ichthyo> of course
+[2011-05-11 22:13:20] <cehteh> well your proposal sounded like constants (to be defined)
+[2011-05-11 22:13:35] <ichthyo> yes, its constants, but it seems natural to extend that
+[2011-05-11 22:13:47] <cehteh> i think about a functor or even a trait-class where you can query things
+[2011-05-11 22:14:19] <cehteh> this class can then react more dynamic 
+[2011-05-11 22:14:22] <ichthyo> ok, yes, so that you could e.g. combine several independent degrees of freedom
+[2011-05-11 22:14:31] <cehteh> yes
+[2011-05-11 22:16:02] <cehteh> then we can ask precisely "shall we render this frame now?"  .. instead generally "do we render frames under timing pressure?"
+[2011-05-11 22:16:47] <cehteh> and of course also other questions, accuracy, syncronization and so on
+[2011-05-11 22:18:17] <cehteh> the other thing is about sequences ... the backend delivers only single frames, you set up relations (this frame comes after that frame)
+[2011-05-11 22:18:44] <cehteh> i would like if we can put prefetching and driving sequences into the player/scheduler and not in the backend at all
+[2011-05-11 22:18:56] <ichthyo> yeah... I figured that there is some discrepancy
+[2011-05-11 22:19:33] <cehteh> well for me there is no much difference, i am already optimizing for sequences of course but there is no need to pass that explicitly
+[2011-05-11 22:19:33] <ichthyo> so somehow we'd fine a way to come from such sequences down to the individual frames which can be deliverd
+[2011-05-11 22:19:46] <ichthyo> find*
+[2011-05-11 22:20:22] <ichthyo> yet there is one nasty problem
+[2011-05-11 22:20:40] <cehteh> my thinking is that every frame gets a 'job' ... all managed by player/scheduler and this jobs become canceled if not actual anymore
+[2011-05-11 22:20:42] <ichthyo> all those changes I'm writing about here are more or less connected to such a sequence a s awhole
+[2011-05-11 22:20:54] <ichthyo> yes, that was the general idea
+[2011-05-11 22:20:59] <ichthyo> each frame is a job
+[2011-05-11 22:21:08] <ichthyo> maybe even parts of a frame
+[2011-05-11 22:21:14] <ichthyo> e.g. fetching data
+[2011-05-11 22:22:02] <cehteh> a 'job' .. or more precicely a 'frame-render-job' can have some state, like references to related (following) jobs or so on
+[2011-05-11 22:22:12] <ichthyo> ah ok
+[2011-05-11 22:22:15] <cehteh> i am not sure yet if we want to put that there or in the player
+[2011-05-11 22:22:22] <ichthyo> so we could traverse that like a data structure
+[2011-05-11 22:22:27] <cehteh> yes
+[2011-05-11 22:22:30] <ichthyo> yes both would be possible
+[2011-05-11 22:22:49] <ichthyo> e.g think about the following scenario:
+[2011-05-11 22:23:04] <cehteh> maybe even the player is better but that makes the player a little more complex as it doesnt just need to shoot and forget but also care for a lot (potentially aborted) jobs
+[2011-05-11 22:23:06] <ichthyo> we're in the middle of playing, and now we want to switch to double speed playback
+[2011-05-11 22:23:39] <cehteh> yes then the player cancels every other frame job and changes its timebase 
+[2011-05-11 22:23:56] <cehteh> or instead canceling it could put them on a lower priority
+[2011-05-11 22:24:01] <ichthyo> that means, the player/scheduler/whatever needs to find out a point in time, *when* this switch can be performed
+[2011-05-11 22:24:07] <cehteh> (bacground/caching)
+[2011-05-11 22:24:13] <ichthyo> and then cancle all existing jobs after that point and reschedule new jobs
+[2011-05-11 22:24:14] |<-- SimAV has left kornbluth.freenode.net (Quit: signal_entry: got SIGSEGV)
+[2011-05-11 22:24:20] <cehteh> yes
+[2011-05-11 22:24:40] <cehteh> so that means the player might get considerably more heavy with all this bookkeeping
+[2011-05-11 22:24:40] <ichthyo> note I thought it helps if we don't guarantee immediate reaction
+[2011-05-11 22:25:00] <ichthyo> for the user it doesn't count if the speedup happens 100ms later
+[2011-05-11 22:25:13] <cehteh> 100ms yes ... thats noticeable
+[2011-05-11 22:25:22] <ichthyo> ok, 50ms or so
+[2011-05-11 22:25:45] <daylife> 30 ms is noticable
+[2011-05-11 22:25:48] <cehteh> well it can almost instantly switch .. this jobs are 'free wheeling' as you saied
+[2011-05-11 22:25:56] <ichthyo> anyway, such a change of playback might require some preparation, i.e. fetch other raw data
+[2011-05-11 22:26:15] <cehteh> yes
+[2011-05-11 22:26:40] <ichthyo> so we might trade a (tiny) delay against a smooth continuation without jerk
+[2011-05-11 22:26:41] <cehteh> there should be a fast-path for time and priority rescheduling
+[2011-05-11 22:27:33] <cehteh> fast path == explcit interface for only that purpose
+[2011-05-11 22:27:36] <daylife> I'm not sure what you're discussing exactly, but one of the things that bothers me most about the Lightworks beta is the noticable lag when navigating the timeline, playing, etc, in contrast to Avid, which immediately, no delay whatsoever, responds to any user action
+[2011-05-11 22:27:57] <cehteh> daylife: haha :P .. 
+[2011-05-11 22:28:16] <cehteh> dinosaurs have a lot inertia :)
+[2011-05-11 22:28:31] <ichthyo> :-D
+[2011-05-11 22:28:33] <cehteh> well yes thats related to what we discuss ...
+[2011-05-11 22:29:01] <cehteh> user actions should give *instant* feedback .. even if this feedback is only fake feedback in corner cases
+[2011-05-11 22:29:21] * ichthyo nods
+[2011-05-11 22:29:22] <daylife> editing is on that part a bit like playing piano. if there were any delay, no matter how short, between pressing a key and hearing a note, it would be very irritating
+[2011-05-11 22:29:32] <cehteh> exacty
+[2011-05-11 22:29:39] <hermanr> Indeed
+[2011-05-11 22:29:53] <cehteh> well .. except you play pipe organ :P
+[2011-05-11 22:30:01] <daylife> :D
+[2011-05-11 22:30:01] <ichthyo> hah
+[2011-05-11 22:30:32] <ichthyo> thats the reason why today the organ players largely prefer mechanical action
+[2011-05-11 22:30:46] <cehteh> anyways .. you press a key and you hear that note (which might be syntezized, instead the real pipe if not deliverable)
+[2011-05-11 22:30:51] <ichthyo> because then you can at least feel when the valve in the air channel opens
+[2011-05-11 22:31:24] <cehteh> and i bet even avid sometimes can not deliver
+[2011-05-11 22:31:26] <ichthyo> thats an example for such a 'fake' feedback
+[2011-05-11 22:31:32] <ichthyo> anyway
+[2011-05-11 22:31:32] <cehteh> yes
+[2011-05-11 22:31:44] <ichthyo> so we might consider what is possible for us in that area
+[2011-05-11 22:31:54] <ichthyo> reduced latency, that is
+[2011-05-11 22:32:37] <cehteh> ichthyo: so an explicit interface for rescheduling jobs (without changing other parameters) is possiblee and required
+[2011-05-11 22:33:02] <cehteh> but caveat .. maybe we need to reschedule dependent jobs too
+[2011-05-11 22:33:24] <ichthyo> yeah... likely
+[2011-05-11 22:33:38] <cehteh> so far you wanted to provide jobs in a conflictless nondeadlocking way
+[2011-05-11 22:33:56] <ichthyo> at least on some level, yes
+[2011-05-11 22:34:08] <cehteh> but for rescheduling that means likely that dependency information needs to be passed and maintained in the scheduler as well
+[2011-05-11 22:34:12] <ichthyo> that doesn't need to be immediately the level within the scheduler
+[2011-05-11 22:34:29] <cehteh> well it would be much easier if it is
+[2011-05-11 22:35:09] <ichthyo> well... thus the idea to allow for a (small) tolerance interval
+[2011-05-11 22:35:14] <cehteh> then rescheduling automatically walks all dependencies, reschedules them too and by that it can already see if we can met timing constraints
+[2011-05-11 22:35:27] <ichthyo> i.e. the scheduler can take his time to find out *when* he is able to perform the change
+[2011-05-11 22:35:58] <cehteh> i think thats not explicitly needed
+[2011-05-11 22:36:37] <cehteh> the 'reschedule' can answer if rescheduling is possible
+[2011-05-11 22:37:07] <cehteh> so you just iterate over all frame-job to be rescheduled from shortest to longest time 
+[2011-05-11 22:37:36] <cehteh> the most urgend reschedules may return "hey this job is already running, cant reschedule"
+[2011-05-11 22:37:49] <cehteh> or even "already done, nothing to do"
+[2011-05-11 22:38:03] <cehteh> to "sorry, cant do that dave"
+[2011-05-11 22:38:15] <cehteh> to "ok rescheduling acknowledged"
+[2011-05-11 22:38:32] <cehteh> any other returns possible? i think thats all
+[2011-05-11 22:39:39] <ichthyo> ok, but now, just by doing that walk, we've found out a time point when the change will happen
+[2011-05-11 22:40:33] <ichthyo> and that would be the information interesting for the layers above
+[2011-05-11 22:40:56] <ichthyo> e.g. to change the animation speed of the cursor, or whatever
+[2011-05-11 22:41:22] <ichthyo> or more concrete
+[2011-05-11 22:41:23] <cehteh> so .. rescheduling is fast and synchronous
+[2011-05-11 22:41:40] <cehteh> if you want async rescheduling you make that a job by itself
+[2011-05-11 22:42:04] <ichthyo> or more concrete... when we do an 'abort'
+[2011-05-11 22:42:12] <ichthyo> e.g. because the user changed the model
+[2011-05-11 22:42:24] <ichthyo> then I'm sure I need that asynchroneous feedback
+[2011-05-11 22:42:41] <cehteh> so for the player it might reschedule the next 500ms worth of frames synchronously and any later frames (background rendering) asynchronously
+[2011-05-11 22:43:14] <ichthyo> ...i.e. that other part doesn't have a timer or scheduler on its own, but rather relies on that callback
+[2011-05-11 22:43:19] <cehteh> we never abort 'running' jobs .. only waiting or scheduled jobs
+[2011-05-11 22:43:28] <ichthyo> of course
+[2011-05-11 22:43:48] <ichthyo> but we can (and need) to 'abort' whole calculation streams
+[2011-05-11 22:43:49] <cehteh> this aborts are not the fast-path rescheduling, prolly fast to but another interface
+[2011-05-11 22:43:57] <ichthyo> yeah
+[2011-05-11 22:44:09] <cehteh> thats a method on the job in OO speak
+[2011-05-11 22:44:18] <cehteh> aborting is really fast
+[2011-05-11 22:44:28] <cehteh> because it only sets a flag in the job
+[2011-05-11 22:44:29] <ichthyo> and, as said, in that case I'd need such a callback to happen *when* the abort is done
+[2011-05-11 22:45:01] <ichthyo> because only then can I release the nodes and other wiring tied to the old state prior to the change
+[2011-05-11 22:45:01] <cehteh> the job stays in the scheduler (or wait list) and if it becomes disposed when it would be schedules
+[2011-05-11 22:45:06] <ichthyo> thats just an example
+[2011-05-11 22:45:27] <cehteh> do you really need that feedback?
+[2011-05-11 22:45:47] <cehteh> how about 'abort' gives instant feedback ..
+[2011-05-11 22:45:49] <ichthyo> not 100% sure, but I rather think yes
+[2011-05-11 22:45:53] <cehteh> or even 'never fails'
+[2011-05-11 22:46:09] <cehteh> just abort a job and consider it dead from your point of view
+[2011-05-11 22:46:14] <ichthyo> note: the point is: in that other part triggering the 'abort'
+[2011-05-11 22:46:23] <ichthyo> there is no timer or scheduler running
+[2011-05-11 22:46:44] <ichthyo> so it doesn't help to know *when* the abort is executed
+[2011-05-11 22:47:03] <ichthyo> but I need to be notified *after* it has happened
+[2011-05-11 22:47:09] <cehteh> jobs are self containing, any resources they need are attached to the job, they should not reference any volatile data up in proc
+[2011-05-11 22:47:39] <ichthyo> directly, yes of course
+[2011-05-11 22:47:47] <ichthyo> but indirectly thats impossible
+[2011-05-11 22:47:58] <cehteh> yes so thats the question .. you just call 'job_abort()' which returns immediately and the job can be considered aborted from your pow
+[2011-05-11 22:48:36] <ichthyo> well.. I'd prefer to get an async callback, *after* the abort has really happened
+[2011-05-11 22:48:44] <cehteh> well can do that
+[2011-05-11 22:48:52] <ichthyo> i.e. schedule a callback job?
+[2011-05-11 22:48:56] <cehteh> (but why?)
+[2011-05-11 22:49:24] <cehteh> each job has a 'job-function' callback .. that can be anything
+[2011-05-11 22:49:46] <cehteh> when you abort a job you can dispose the intended function by a abort callback
+[2011-05-11 22:49:49] <ichthyo> in that concrete example, quite simply, because the higher layers can do some stuff only after the jobs are gone
+[2011-05-11 22:49:57] <ichthyo> e.g. close the session
+[2011-05-11 22:50:03] <cehteh> really?
+[2011-05-11 22:50:25] <ichthyo> well... I can't just blow away a session which is still used by ongoing jobs
+[2011-05-11 22:50:30] <cehteh> i was thinking about this beeing very separate
+[2011-05-11 22:50:31] <ichthyo> indirectly of course
+[2011-05-11 22:50:42] <cehteh> yes i thought so
+[2011-05-11 22:51:04] <cehteh> jobs have no backpointers to the session
+[2011-05-11 22:51:05] <ichthyo> of course I don't mutate the data which is referred by the jobs
+[2011-05-11 22:51:38] <cehteh> then you can just close the session .. if that syncronizes on some resources still in use by jobs (but managed elsewhere) the close will block
+[2011-05-11 22:51:42] <ichthyo> ah good point
+[2011-05-11 22:52:09] <cehteh> nah not only reference data i am really thinking that jobs have absolutely no references into the session
+[2011-05-11 22:52:18] <cehteh> they have references into the backend data
+[2011-05-11 22:52:23] <cehteh> but these are managed there 
+[2011-05-11 22:52:37] <cehteh> while closing a session doesnt require to shutdown the backend
+[2011-05-11 22:53:01] <ichthyo> well, so to clarify that: there *is* some kind of back reference for sure. Just it isn't direct
+[2011-05-11 22:53:11] <cehteh> which one? 
+[2011-05-11 22:53:12] <ichthyo> see: a job references an exit node
+[2011-05-11 22:53:33] <cehteh> mhm
+[2011-05-11 22:53:35] <ichthyo> and it references an output slot
+[2011-05-11 22:53:38] <cehteh> really? 
+[2011-05-11 22:53:47] <cehteh> how about a functor there
+[2011-05-11 22:53:50] <ichthyo> both are things which are somehow allocated from the session
+[2011-05-11 22:53:55] <cehteh> jobs references a continutation job
+[2011-05-11 22:54:16] <cehteh> which is an abstraction of the exit node 
+[2011-05-11 22:54:36] <cehteh> well anyways .. the callback *is* trivially possible
+[2011-05-11 22:54:48] <cehteh> but do not expect that i want to do rescheduling for aborting jobs
+[2011-05-11 22:55:30] <ichthyo> well... as said: jobs can't be aborted
+[2011-05-11 22:55:38] <ichthyo> but whole calculation streams can
+[2011-05-11 22:55:42] <cehteh> if you place a job to be executed in 1hour and then abort this job, this abort callback might be called not earlier than in one hour (or if your really want we can add a time-limit there for rescheduling)
+[2011-05-11 22:56:04] <cehteh> from the scheduler pow every single job can be aborted
+[2011-05-11 22:56:23] <ichthyo> yes, but only if it hasn't started running
+[2011-05-11 22:56:31] <cehteh> makes no sense to implement this otherwise and there will be other maintenance jobs as well
+[2011-05-11 22:56:38] <cehteh> yes
+[2011-05-11 22:57:34] <ichthyo> so this callback job would not be scheduled to that time of the original job (1 hour in the future) but to that point when the scheduler can guarantee that non of the old jobs will become active anymore
+[2011-05-11 22:57:45] <cehteh> well even a running job can be aborted from the interface view, it still continues running but the results will be discarded and it will call the callback
+[2011-05-11 22:57:54] <ichthyo> because then I can dispose the data, change connections, deregister output slots and so on
+[2011-05-11 22:58:57] <cehteh> rescheduling has some cost, not much but its usualy more efficent not to reschedule something you want to remove from a priority queue
+[2011-05-11 22:59:09] <ichthyo> yeah, of course
+[2011-05-11 22:59:13] <cehteh> eventually it will become the head of the queue and then you drop it
+[2011-05-11 22:59:20] <ichthyo> exactly
+[2011-05-11 22:59:32] <cehteh> thats the way i want to implement it
+[2011-05-11 22:59:55] <ichthyo> all I want for this respect is a guarantee that the working function of that job can't get active anymore
+[2011-05-11 22:59:55] <cehteh> if you want to reschedule a aborted job i can add a flag or a time parameter to that interface 
+[2011-05-11 23:00:10] <cehteh> get? executed?
+[2011-05-11 23:00:41] <cehteh> job_abort() can return "job already running" or "aborted"  .. .both in instant
+[2011-05-11 23:00:41] <ichthyo> do you see my point?
+[2011-05-11 23:00:46] <cehteh> yes i see your point
+[2011-05-11 23:00:55] <cehteh> adding that callback functionality
+[2011-05-11 23:01:16] <cehteh> well the only case is "job already running" .. 
+[2011-05-11 23:01:33] <ichthyo> it doesn't help me to know *now* that 3 frames into the future will still be calculated and delivered, but starting with the 4.th frame, the abort will be in effect
+[2011-05-11 23:01:44] <ichthyo> this information doesn't help me *now*
+[2011-05-11 23:01:48] <cehteh> yes
+[2011-05-11 23:02:09] <ichthyo> because, until these 3 frames are delivered, I can't deregister the "output slot"
+[2011-05-11 23:02:17] <ichthyo> e.g. disconect an audio client from Jack server
+[2011-05-11 23:02:57] <cehteh> RAII :P .. garbage collecton would be better in this case
+[2011-05-11 23:03:07] <ichthyo> not the slightest
+[2011-05-11 23:03:25] <cehteh> well yes but in a different way
+[2011-05-11 23:04:00] <cehteh> anyways ok for me i add the callback
+[2011-05-11 23:04:10] <ichthyo> and deregistering an external connection has nothing to do with how the resources are tracked.
+[2011-05-11 23:04:22] <ichthyo> rather I need to know *when* its safe to do so
+[2011-05-11 23:04:26] -->| fsiddi (~fsiddi@host38-107-dynamic.21-79-r.retail.telecomitalia.it) has joined #lumiera
+[2011-05-11 23:04:27] <cehteh> question is: do you want to reschedule aborts explicitly or shall that part of the abort interface?
+[2011-05-11 23:04:46] <ichthyo> hello fsiddi !
+[2011-05-11 23:04:49] <fsiddi> hello everyone
+[2011-05-11 23:04:52] <fsiddi> sorry for being late
+[2011-05-11 23:04:56] <cehteh> job_abort(job); job_reschedule(job, NOW);
+[2011-05-11 23:04:58] <ichthyo> no prob
+[2011-05-11 23:05:27] <cehteh> looks cleaner to me than making the abort interface heavier
+[2011-05-11 23:05:44] <ichthyo> fsiddi: my apologies... I din't find time yet to look into that CSS stuff I proposed
+[2011-05-11 23:05:50] <cehteh> hi fsiddi 
+[2011-05-11 23:05:53] <ichthyo> and promised to do
+[2011-05-11 23:06:04] <fsiddi> ichthyo: np. Live's being a mess for me in the last wweks
+[2011-05-11 23:06:10] <ichthyo> :-/
+[2011-05-11 23:06:24] <ichthyo> hopefully not too bad...
+[2011-05-11 23:07:08] <fsiddi> nono not bad
+[2011-05-11 23:07:14] <fsiddi> hei cehteh 
+[2011-05-11 23:07:44] <fsiddi> I also did not manage to carry on the work. But I'm starting to get past some other jobs i had to do
+[2011-05-11 23:07:52] <fsiddi> I really would like to finish it quickly
+[2011-05-11 23:07:56] <ichthyo> cehteh: actually I'd put an adaptation layer in between. When viewed from the player (or the session for that), I only want an high-level 'abort' operation. Like I proposed in my RfC. I didn't expect to talk directly to the scheduler or any part of the engine
+[2011-05-11 23:08:18] <cehteh> well i am thinking in low level terms (as usual)
+[2011-05-11 23:08:31] <ichthyo> so at the interface of the scheduler, that can be implemented so that it fits in best there
+[2011-05-11 23:09:09] <cehteh> i write some low-level notes for the interface (nothing concrete)
+[2011-05-11 23:09:22] <ichthyo> this approach with the async callback was intended for that high-level interface; just out of practical considerations
+[2011-05-11 23:09:43] <ichthyo> I don't think it's a good idea when the clients using that high-level engine interface have to run a timer themselves
+[2011-05-11 23:09:50] <ichthyo> just to find out when it is safe to proceed
+[2011-05-11 23:09:58] <ichthyo> Just as a striking example
+[2011-05-11 23:10:13] <ichthyo> think about the occasional crashes with the dummy player currently in the GUI
+[2011-05-11 23:10:24] <ichthyo> that is exactly due to a lack of such a callback
+[2011-05-11 23:10:26] <cehteh> yes while i was thinking we can decouple this completely, but maybe not
+[2011-05-11 23:10:41] <ichthyo> the GUI closes the window. The only thing I can do is to block that closing
+[2011-05-11 23:10:57] <ichthyo> but without external help, I don't know how long to block
+[2011-05-11 23:11:33] <ichthyo> and I we don't block, then the last frame gets disposed into an output buffer which is already gone, deregistered from XV and whatsoever
+[2011-05-11 23:11:45] <ichthyo> not ever, but sometimes
+[2011-05-11 23:12:18] <cehteh> well i was thinking that the scheduler and backend only operate on their own data and you can just drop that on the floor from player and proc (and gui)
+[2011-05-11 23:12:37] <cehteh> that means currently the player presents some buffers and the mockup player renders there
+[2011-05-11 23:13:02] <cehteh> this renders into the gui provied buffer which the gui may release too early right?
+[2011-05-11 23:13:34] <cehteh> but if this buffer is provided by the backend and the gui just closes down, not displaying it anymore then nothing happens, the backend knows how to manage resources
+[2011-05-11 23:14:29] <ichthyo> well... true, but a general mismatch
+[2011-05-11 23:14:34] <ichthyo> usually it works the other way round
+[2011-05-11 23:14:43] <cehteh> well thinking futher, referencing an exit node is kindof violating the idea that proc is stateless :P
+[2011-05-11 23:14:49] <ichthyo> I don't know how it's for ALSA, but also for jack it works the other way round
+[2011-05-11 23:15:01] <ichthyo> all those systems assume that you have a thread running just to serve them
+[2011-05-11 23:15:06] <cehteh> yes
+[2011-05-11 23:15:13] <ichthyo> and require you to set up buffers to place things into
+[2011-05-11 23:15:24] <ichthyo> Jack is even more rigourous
+[2011-05-11 23:15:32] <cehteh> yes i see now
+[2011-05-11 23:15:54] <ichthyo> so thats an important general mismatch we should come up with a nice solution maybe
+[2011-05-11 23:16:13] <cehteh> but well i still wonder if we may put such a callback even more into the backend "resource released" ...
+[2011-05-11 23:16:16] <ichthyo> of course it would be great, if the backend just delivers in time, right into the buffer for output
+[2011-05-11 23:16:18] <cehteh> mhm maybe not
+[2011-05-11 23:16:39] <ichthyo> so that we don't need another buffering and copy over step on the output side
+[2011-05-11 23:16:48] <cehteh> has pros and cons .. not all resources have jobs associated
+[2011-05-11 23:16:52] <ichthyo> ok, but maybe a short intermission
+[2011-05-11 23:17:06] <cehteh> but still in real the jack buffers will come from the backend
+[2011-05-11 23:17:10] <ichthyo> fsiddi: you see, we started to engage into a low level discussion
+[2011-05-11 23:17:13] <cehteh> so the backend can send a notify
+[2011-05-11 23:17:20] <fsiddi> :)
+[2011-05-11 23:17:24] <ichthyo> fsiddi: is there anything we might discuss regarding the gui right now
+[2011-05-11 23:17:33] <ichthyo> or need to discuss?
+[2011-05-11 23:17:35] <fsiddi> no not really
+[2011-05-11 23:17:39] <fsiddi> you can go on
+[2011-05-11 23:17:43] <ichthyo> same for me
+[2011-05-11 23:17:44] <fsiddi> i just wanted to be present
+[2011-05-11 23:18:20] <ichthyo> I just promised to look into that CSS stuff too, because of that question how to make a flexible layout with limitations
+[2011-05-11 23:18:25] <ichthyo> as we discussed last time
+[2011-05-11 23:18:37] <ichthyo> I still have that on my TODO
+[2011-05-11 23:21:03] <ichthyo> ok, so we'll just continue with our thrilling discussion...
+[2011-05-11 23:21:23] <ichthyo> cehteh: AFAIK, the jack buffers come from the jack server
+[2011-05-11 23:21:25] <fsiddi> yes yes go on with it!
+[2011-05-11 23:21:31] <cehteh> whats a good name for a enum value when the constraints are not met? 'invalidated'
+[2011-05-11 23:21:44] <ichthyo> and not from the backend
+[2011-05-11 23:21:49] <cehteh> ichthyo: the backend can still manage that
+[2011-05-11 23:22:02] <ichthyo> same for any gui widgets to display video
+[2011-05-11 23:22:06] <cehteh> yes
+[2011-05-11 23:22:44] <ichthyo> so why should the backend try to manage buffers, which are actually managed by an other (external) system?
+[2011-05-11 23:22:47] <cehteh> generally i want it the other way around that the backend allocates/mmaps buffers, but i know that there are a lot things which do it the other way around
+[2011-05-11 23:22:57] <ichthyo> yes
+[2011-05-11 23:23:02] <cehteh> that means we can do 2 things: copying into the destination buffer
+[2011-05-11 23:23:11] <cehteh> or manage this destination buffers as well
+[2011-05-11 23:24:08] <ichthyo> or (3rd option): let the last calculation step work into those external destination buffers
+[2011-05-11 23:24:35] <cehteh> thats case 2 .. when we manage them, then we calculate there with our normal toolchain
+[2011-05-11 23:25:03] <ichthyo> not quite; we use them, but we don't manage them
+[2011-05-11 23:25:27] <cehteh> proc just asks for a buffer and doesnt need to care from where it comes (RAM, Graphics card, audio server ...)
+[2011-05-11 23:26:08] <ichthyo> and thats not all
+[2011-05-11 23:26:11] <cehteh> if we dont manage them but only 'use' then then we get some more code paths for every different kind of buffer
+[2011-05-11 23:26:14] <ichthyo> there are similar problems
+[2011-05-11 23:26:26] <ichthyo> e.g. jack doesn't run in our threading sytem
+[2011-05-11 23:26:30] <cehteh> yes
+[2011-05-11 23:26:34] <cehteh> shared memory
+[2011-05-11 23:27:04] <ichthyo> so the question is: can we even be so precise? we don't have low-latency permissions, as the jack server has
+[2011-05-11 23:27:27] <ichthyo> so that means some additional buffering or copying anyway
+[2011-05-11 23:27:31] <cehteh> we manage buffers provided by jack
+[2011-05-11 23:27:49] <cehteh> if we cant render in time, we cant copy in time for sure
+[2011-05-11 23:27:55] <ichthyo> ah... if you call that 'managing' then yes
+[2011-05-11 23:28:00] <cehteh> err other way around
+[2011-05-11 23:28:04] <cehteh> yes
+[2011-05-11 23:28:33] <cehteh> so we have different memory backend, first our own mmaped persistent file storage
+[2011-05-11 23:28:37] <ichthyo> nah: 'managing' means owning, allocating, deallocating
+[2011-05-11 23:28:46] <cehteh> then later maybe memory on the gpu
+[2011-05-11 23:29:12] <cehteh> well we ask jack for memory and we tell jack when we dont need it anymore
+[2011-05-11 23:29:33] <cehteh> and i think i can do that better in the backend just like any other memory resource
+[2011-05-11 23:29:40] <ichthyo> but actually I don't see why we should
+[2011-05-11 23:29:49] <ichthyo> why can't we just cooperate with these services?
+[2011-05-11 23:29:56] <ichthyo> as everyone else does too?
+[2011-05-11 23:30:01] <cehteh> i call that cooperation?
+[2011-05-11 23:30:41] <ichthyo> I don't see why the backend needs to pseudo-manage things which are just out of the scope, and actually owned and managed by someone else?
+[2011-05-11 23:30:49] <cehteh> the question is only if every single thing does this ad-hoc .. aka the gui cares for video buffers, the audio player cares for sound buffers, proc cares for rendering buffers and so on
+[2011-05-11 23:31:02] <cehteh> or we have one backend which cares about all buffers
+[2011-05-11 23:31:17] <cehteh> the coding effort is almost the same
+[2011-05-11 23:31:46] <cehteh> but we get one 'memory' service which can deliver different classes of memory (and later easily adaptable/extendable to new technologies)
+[2011-05-11 23:32:01] <ichthyo> I'd rather doubt that. In all those cases, we're using already existing libraries and solutions. and we're rather integrating with them
+[2011-05-11 23:32:23] <cehteh> yes so there is no much effort doing so .. 
+[2011-05-11 23:32:54] <ichthyo> that extends even more to the media libs, we're intend to use
+[2011-05-11 23:32:55] <cehteh> but since the backend always knows what memory is in use it can do a clean shutdown
+[2011-05-11 23:33:18] <cehteh> without all this callbacks and asyncronous messages
+[2011-05-11 23:33:34] <ichthyo> not really
+[2011-05-11 23:33:49] <ichthyo> if we use external services, we're bout to the terms of these
+[2011-05-11 23:33:56] <ichthyo> same for external libraries
+[2011-05-11 23:34:14] <cehteh> yes
+[2011-05-11 23:34:14] <ichthyo> I think its the fundamental wrong approach to try to build up such a huge centralism
+[2011-05-11 23:34:30] <cehteh> it isnt huge in any way
+[2011-05-11 23:34:33] <ichthyo> and trying to pseudo-manage things which we don't own
+[2011-05-11 23:34:43] <ichthyo> instead of just cooperating, as eveyone else does
+[2011-05-11 23:35:04] <ichthyo> if we have a nice and blastingly fast mmaped file read and buffer handling for it than fine
+[2011-05-11 23:35:06] <cehteh> imo this is cooperating .. but well we are not there yet
+[2011-05-11 23:35:41] <ichthyo> then I'd use that exactly for those sevices, which *we* write, provide and manage
+[2011-05-11 23:36:08] <cehteh> possibly we just do it as you saying, and we may implement it in the way as i think later (and then try out and compare) .. or stay with your way
+[2011-05-11 23:37:29] <ichthyo> maybe yes... probably I'd concentrate first on that core part which we provide, becasue I'd guess it is the most important one
+[2011-05-11 23:37:44] <ichthyo> i.e. reading those source media files and the like
+[2011-05-11 23:37:46] <cehteh> well i have some reasons to do it in my way .. for example if you connect the viewer somewhere in the graph, then it would be nice if it can transparently use memory on the graphics card instead copying over
+[2011-05-11 23:38:10] <cehteh> or think about render nodes and network transparency later
+[2011-05-11 23:38:48] <cehteh> but this is future and i think it is not a fundamental design decision can can be incrementally added when it makes sense and turns out to work well
+[2011-05-11 23:39:07] <cehteh> first i am going for the mmaped file access and nothing else
+[2011-05-11 23:39:07] <ichthyo> yes, probably better approaching it that way
+[2011-05-11 23:39:21] <ichthyo> indeed, I think that is the most important thing
+[2011-05-11 23:39:35] <cehteh> but this doesnt mean we shall not try it :)
+[2011-05-11 23:40:09] <cehteh> so whats a good enum name for a job which we cant do in time?
+[2011-05-11 23:40:20] <cehteh> invalidated, expired? .. (it isnt expired yet)
+[2011-05-11 23:40:41] <cehteh> rejected?
+[2011-05-11 23:41:07] <ichthyo> missed?
+[2011-05-11 23:41:15] <ichthyo> floundered?
+[2011-05-11 23:41:43] <ichthyo> lapsed?
+[2011-05-11 23:42:42] <cehteh> http://pastebin.com/w7Rk8UXx
+[2011-05-11 23:42:44] <cehteh> my notes :P
+[2011-05-11 23:43:32] <cehteh> ah 'scheduled' state of course
+[2011-05-11 23:43:55] <cehteh> well this isnt final .. there are some overlaps its more just to write down what we need
+[2011-05-11 23:44:32] <ichthyo> sounds good
+[2011-05-11 23:44:34] <ichthyo> question
+[2011-05-11 23:44:48] <cehteh> so about QoS.. i am thinking about not caring at all for it
+[2011-05-11 23:44:51] <ichthyo> do our jobs have some mechanism to 'yield' or wait or similar?
+[2011-05-11 23:45:10] <ichthyo> i.e. go in a wait state (and make room for other jobs to be scheduled meanwhile)?
+[2011-05-11 23:45:14] <cehteh> then you put that into the job function, when it becomes running (and can do an early abort there)
+[2011-05-11 23:45:25] <cehteh> yes
+[2011-05-11 23:45:34] <cehteh> waiting on other jobs
+[2011-05-11 23:45:43] <ichthyo> ah ok
+[2011-05-11 23:45:49] <cehteh> i am thinking if i make a generic waiting or only on jobs 
+[2011-05-11 23:45:54] <ichthyo> so you call into a funciton on the lumiera scheduler
+[2011-05-11 23:45:55] <cehteh> i think only on jobs is good
+[2011-05-11 23:46:06] <ichthyo> which blocks and reschedules other jobs meanwhile?
+[2011-05-11 23:46:23] <cehteh> a running job?
+[2011-05-11 23:46:34] <ichthyo> just brainstorming
+[2011-05-11 23:46:45] <ichthyo> both is thinkable
+[2011-05-11 23:46:56] <ichthyo> also it would be thinkable that we disallow any waits
+[2011-05-11 23:47:03] <cehteh> nope i do not want that, rather split the jobs up into small pieces 
+[2011-05-11 23:47:13] <ichthyo> and just say, then the job function has to terminate and another job has to pick up 
+[2011-05-11 23:47:27] <cehteh> yes thats possible
+[2011-05-11 23:48:00] <cehteh> but when a job runs it runs until its done (which might be a errorneous/abort on its own) 
+[2011-05-11 23:48:20] <cehteh> after running a job wont become rescheduled
+[2011-05-11 23:48:39] <ichthyo> yes
+[2011-05-11 23:48:49] <cehteh> if it turns out we need a yield i could implement it .. but not prematurely
+[2011-05-11 23:48:53] <ichthyo> you know the model Erlang uses for this?
+[2011-05-11 23:48:59] <cehteh> yes
+[2011-05-11 23:49:06] <ichthyo> thats kind of a middle ground
+[2011-05-11 23:49:14] <ichthyo> doesn't allow arbitrary blocking
+[2011-05-11 23:49:24] <ichthyo> but can block waiting on the next message
+[2011-05-11 23:49:44] <ichthyo> but likely for our purposes we don't even need that
+[2011-05-11 23:50:16] <cehteh> yes and thats not domain of the scheduler
+[2011-05-11 23:50:32] <cehteh> jobs can block anyways 
+[2011-05-11 23:50:40] <cehteh> in running state
+[2011-05-11 23:50:53] <cehteh> no need to put them on a wit queue or whatever
+[2011-05-11 23:51:18] <ichthyo> ok
+[2011-05-11 23:51:31] <ichthyo> but of course the goal is to write them such that they don't block
+[2011-05-11 23:51:39] <cehteh> yes
+[2011-05-11 23:52:11] <cehteh> and the only thing worthwile to wait for in a special wait state is for some other job
+[2011-05-11 23:52:26] <ichthyo> btw... how does the scheduler detect that? am I right that this rather works indirectly?
+[2011-05-11 23:52:28] <ichthyo> i.e.
+[2011-05-11 23:52:38] <cehteh> the next question is .. do we release this waiting jobs by some signal or by a job termination?
+[2011-05-11 23:52:41] <ichthyo> through the thread pooö
+[2011-05-11 23:52:54] <ichthyo> pool
+[2011-05-11 23:52:59] <ichthyo> good question
+[2011-05-11 23:53:14] <cehteh> first can be more efficent and will be more complex
+[2011-05-11 23:53:30] <cehteh> so for first i opt for the later, there is prolly anyways something to do
+[2011-05-11 23:54:02] <ichthyo> how does this 'waiting' actually work?
+[2011-05-11 23:54:16] <ichthyo> does the jobfunction call into some API of the scheduler?
+[2011-05-11 23:54:21] <cehteh> i make a explicit waiting container (llist) jobs waiting sit there and are not scheduled
+[2011-05-11 23:54:47] <cehteh> (or maybe that uses a priority queue to, to detect expired jobs)
+[2011-05-11 23:55:02] <cehteh> the sheduler wraps the jobfunction
+[2011-05-11 23:55:10] <ichthyo> ok
+[2011-05-11 23:55:29] <ichthyo> so that means, he gets control only when the jobfunction exits
+[2011-05-11 23:55:32] <cehteh> later, when needed we can add explicit calls .. and signaling over the threads condvar
+[2011-05-11 23:55:34] <ichthyo> is that correct=
+[2011-05-11 23:55:37] <ichthyo> ?
+[2011-05-11 23:55:51] <cehteh> for simplicity and a first implementation yes i think that suffices
+[2011-05-11 23:55:59] * ichthyo thinks the same
+[2011-05-11 23:56:18] <cehteh> btw you certainly will have some fun when a job throws 
+[2011-05-11 23:56:25] <ichthyo> haha
+[2011-05-11 23:57:00] <ichthyo> well.. I think that pretty much figures for anyone used to such systems
+[2011-05-11 23:57:02] <cehteh> make a c++ wraper .. catch the exception .. store it in the job structure, job done with error
+[2011-05-11 23:57:06] <ichthyo> exactly
+[2011-05-11 23:57:42] <ichthyo> thats valid even for 'regular' theads
+[2011-05-11 23:57:46] <cehteh> yes
+[2011-05-11 23:58:08] <ichthyo> its rarely a good idea letting an exception leak out of any such parallel runing system in an uncontrolled manner
+[2011-05-11 23:58:12] <cehteh> jobs are thread .. just without that overhead in creation and finer timing and priority control
+[2011-05-11 23:59:32] <cehteh> can you think about any case where a job must wait on something else than another job?
+[2011-05-12 00:00:00] <cehteh> or simplified .. can you think about any resource which can not be turned into a job
+[2011-05-12 00:00:47] <ichthyo> I'd say its the other way round. We define our 'jobs' to have that properties
+[2011-05-12 00:00:59] <cehteh> ok
+[2011-05-12 00:01:01] <cehteh> same here
+[2011-05-12 00:01:02] <ichthyo> so that defines what can be done in a job an what can't
+[2011-05-12 00:01:27] <ichthyo> but, answering to your question, I think we can cover all the cases usually encountered when rendering
+[2011-05-12 00:01:37] <cehteh> so now we talked about the scheduler interface .. which isnt really the engine interface .. BUT: the job structure needs to carry all resources involved around
+[2011-05-12 00:02:34] <cehteh> think abut the W there are more interfaces involved
+[2011-05-12 00:02:43] <ichthyo> ok... that brings up another closely related question
+[2011-05-12 00:02:59] <ichthyo> the engine interface needs something like these calculation streams
+[2011-05-12 00:02:59] <cehteh> first, asking the backend for a frame 
+[2011-05-12 00:03:19] <ichthyo> that means, that  the individual job needs to cary a marker, so it can be associated to a specific stream
+[2011-05-12 00:03:58] <cehteh> i add at least one generic void* to the job where you can put any data along 
+[2011-05-12 00:04:12] <cehteh> type safety on the level above please :P
+[2011-05-12 00:05:20] <ichthyo> I'm fine with that
+[2011-05-12 00:05:27] <cehteh> (caveat about the lifetime and ownership of this void*)
+[2011-05-12 00:05:52] <cehteh> if the job owns it then we need also a cleanup hook there
+[2011-05-12 00:06:17] <ichthyo> of course that means that this void* e.g. points back to, lets say an CalculationStream object
+[2011-05-12 00:06:26] <cehteh> yes
+[2011-05-12 00:06:33] <ichthyo> and then yes, we get again at the same situation discussed above
+[2011-05-12 00:06:52] <ichthyo> regarding a cleanup hook
+[2011-05-12 00:06:57] <cehteh> well i add the cleanup hook but make it optional (helps me and you just leave it NULL)
+[2011-05-12 00:07:02] <ichthyo> thats fine
+[2011-05-12 00:07:11] <ichthyo> regarding a cleanup hook ... I would be careful
+[2011-05-12 00:07:13] <ichthyo> because
+[2011-05-12 00:07:25] <ichthyo> we don't know in what thread a job is executed exactly, right?
+[2011-05-12 00:07:26] <cehteh> yes i know :)
+[2011-05-12 00:07:51] <cehteh> well prolly we can pin that down or make this thread-agnostic
+[2011-05-12 00:08:01] <ichthyo> so I rather do not want to start with reference counts or similar (or worse) from within that cleanup hook
+[2011-05-12 00:08:10] <cehteh> nah certainly not
+[2011-05-12 00:08:18] <cehteh> this cleanup hook should be short and precise
+[2011-05-12 00:09:01] <ichthyo> so again: I its possible to find out when the whole calculation stream is done
+[2011-05-12 00:09:02] <cehteh> ah another point against yield() .. forgotten to say .. 
+[2011-05-12 00:09:10] <cehteh> jobs should not migrate between thread
+[2011-05-12 00:09:15] <ichthyo> than we don't need to care for resource management on the level of individual jobs
+[2011-05-12 00:09:27] <ichthyo> yes, good point
+[2011-05-12 00:09:55] <cehteh> so KISS
+[2011-05-12 00:10:05] <ichthyo> yes
+[2011-05-12 00:10:11] <cehteh> a job is the smallest entity for scheduling
+[2011-05-12 00:10:25] <cehteh> (the only entity)
+[2011-05-12 00:10:44] <cehteh> next would be a interface how to setup a job... possibly in multiple stages
+[2011-05-12 00:11:59] <cehteh> job_new(); job_wait_for(another_job); job_data()=some_calculation_stream;   
+[2011-05-12 00:12:06] <cehteh> job_arm()
+[2011-05-12 00:12:14] <cehteh> something like that
+[2011-05-12 00:12:38] <ichthyo> sounds ok
+[2011-05-12 00:12:53] <cehteh> well .. now i think it becomes clear that 'jobs' are our message passing interface between proc and backend
+[2011-05-12 00:13:15] <cehteh> you dont ask the backend directly for a frame you schedule a job delivering a frame
+[2011-05-12 00:13:29] <cehteh> the backend schedules a job rendering a frame if its not cached
+[2011-05-12 00:13:35] <ichthyo> yes, my thinking too
+[2011-05-12 00:14:50] <cehteh> so 'job' is a baseclass .. but there can be highlevel subclasses  cache_fetch_job  and render_frame_job
+[2011-05-12 00:15:04] <ichthyo> really?
+[2011-05-12 00:15:11] <cehteh> i wonder .. makes sense or?
+[2011-05-12 00:15:22] <cehteh> (even implemnting them in C :P)
+[2011-05-12 00:15:38] <ichthyo> *could* be done, but somehow goes against that simplicity
+[2011-05-12 00:15:53] <cehteh> i mean each of this class shares a lot, how abortion is handled and more 
+[2011-05-12 00:16:43] <cehteh> ok on the low level you can always put a job together with all the little details needed and then arm it
+[2011-05-12 00:17:03] <ichthyo> not only on the low level. That would also be the correct OO aproach
+[2011-05-12 00:17:14] <ichthyo> "prefer composition over inheritance"
+[2011-05-12 00:17:35] <cehteh> i expect that we have maybe half a dozen classes of jobs
+[2011-05-12 00:17:43] <cehteh> yes
+[2011-05-12 00:17:53] <ichthyo> because, if you have a care_fetch_job, etc etc, you end up switching on types
+[2011-05-12 00:18:13] <cehteh> ok .. leave it simple
+[2011-05-12 00:18:27] <ichthyo> better investigate data at the start, and then assemble a job which can just run as-is
+[2011-05-12 00:19:01] <cehteh> ok
+[2011-05-12 00:20:00] <ichthyo> to expand on that
+[2011-05-12 00:20:11] <ichthyo> when we create a 'calculation stream'
+[2011-05-12 00:20:18] <ichthyo> we get the following informations:
+[2011-05-12 00:20:30] <ichthyo> - the timings (frame duration, stepping)
+[2011-05-12 00:20:36] <ichthyo> - the exit node to use
+[2011-05-12 00:20:42] <cehteh> i wonder if i have to care anything about a caclulation stream .. thats purely a player/render thing
+[2011-05-12 00:21:15] <ichthyo> *If* your realm just starts at the scheduler, then the answer is "no"
+[2011-05-12 00:21:22] <ichthyo> then you don't have to care for that
+[2011-05-12 00:21:42] <ichthyo> that means, I would implement that engine interface, kindof like a facade
+[2011-05-12 00:21:43] <cehteh> except i would prolly take some hints for optimization
+[2011-05-12 00:22:17] <cehteh> so you can add at least add flags like ONESHOT, FORWARD, BACKWARD, RANDOM
+[2011-05-12 00:22:19] <ichthyo> taking that approach would mean that I would also have to set up the times for the jobs, right?
+[2011-05-12 00:22:48] <cehteh> we once talked about that we want a timer facility (outside of player)
+[2011-05-12 00:23:04] <ichthyo> yes, thats the next sub-topic I wanted to discuss
+[2011-05-12 00:23:16] <cehteh> and a 3rd prio queue in the scheduler which is short and hard(er) realtime
+[2011-05-12 00:23:21] <ichthyo> because e.g. we need such for animating the GUI
+[2011-05-12 00:23:28] <ichthyo> i.e. show the playback position
+[2011-05-12 00:23:29] <cehteh> but only the player knows the times
+[2011-05-12 00:24:18] <cehteh> this 'timer' possibly wont be singleton too .. you can play unrelated things in parallel
+[2011-05-12 00:24:51] <ichthyo> well... I'd rather expect that to be quite similar to the jobs
+[2011-05-12 00:25:26] <cehteh> well i wonder if the normal jobs become bit more heavyweight
+[2011-05-12 00:25:40] <cehteh> and the high prio queue gets its own interface 
+[2011-05-12 00:26:00] <cehteh> no full blown jobs, no waiting (inter-jobs)
+[2011-05-12 00:26:10] <ichthyo> what do you think to add to the normal jobs, beyond what we just discussed?
+[2011-05-12 00:26:15] <ichthyo> ah maybe the dependencies
+[2011-05-12 00:26:23] <ichthyo> but besides that?
+[2011-05-12 00:26:30] <cehteh> just deliver function calls as precice as possible with hard constraints
+[2011-05-12 00:26:55] <cehteh> dunno .. lets see could use the same job structure, or a special one
+[2011-05-12 00:27:00] <ichthyo> ok
+[2011-05-12 00:27:02] <cehteh> no aborting there too
+[2011-05-12 00:27:23] <ichthyo> but maybe lets first finish the question above
+[2011-05-12 00:27:39] <ichthyo> where starts the part which you care for?
+[2011-05-12 00:27:52] <cehteh> struct tinyjob { time when; void (*function)(void* data); void* data;}
+[2011-05-12 00:27:59] <ichthyo> did I understand you correct, that you rather don't want to care for the calculation streams
+[2011-05-12 00:28:07] <ichthyo> the callbacks and this stuff?
+[2011-05-12 00:28:31] <cehteh> yes i think you can abstract them better, you have knowledge about the session and user interaction
+[2011-05-12 00:28:37] <ichthyo> (I have no problem taking that responsibility, and implement it on top of the bare jobs)
+[2011-05-12 00:28:50] <ichthyo> ok
+[2011-05-12 00:29:03] <cehteh> so there will be the full blown jobs 
+[2011-05-12 00:29:27] <cehteh> which can record dependencies on other jobs, have their state, a jobfunction 
+[2011-05-12 00:29:38] <ichthyo> so that means, that I will also care for setting up the render nodes/invocation, before packaging that into a job function, right?
+[2011-05-12 00:29:55] <cehteh> (and scheduling times, possibly a job can be in both queues!)
+[2011-05-12 00:29:57] <ichthyo> which would make sense, because I also implemented the render nodes themselves
+[2011-05-12 00:30:02] <cehteh> yes
+[2011-05-12 00:30:26] <cehteh> possibly this setting up is a job on its own
+[2011-05-12 00:30:26] <daylife> i'm going to sleep. g'night everybody
+[2011-05-12 00:30:31] <cehteh> n8 daylife :)
+[2011-05-12 00:30:32] <ichthyo> and we've discussed that topic already several times. This invocation will have kind-of two stages
+[2011-05-12 00:30:38] <ichthyo> good night daylife !
+[2011-05-12 00:30:40] <cehteh> or even more
+[2011-05-12 00:30:43] |<-- daylife has left kornbluth.freenode.net (Quit: gotta go)
+[2011-05-12 00:30:43] <ichthyo> yes
+[2011-05-12 00:31:08] <ichthyo> I mean, the first stage is just finding out the dependencies, other constraints etc and it ends with having created a suitable job
+[2011-05-12 00:31:19] <cehteh> yes
+[2011-05-12 00:31:22] <ichthyo> ok
+[2011-05-12 00:31:42] <cehteh> you can do things syncronously if you know that they are very fast in all cases
+[2011-05-12 00:31:54] <cehteh> or async with jobs if thats not known
+[2011-05-12 00:32:33] <ichthyo> and, besides, there is also the possibility to use a job as a "continuation" (or functor)
+[2011-05-12 00:32:43] <cehteh> yes absolutely
+[2011-05-12 00:32:55] <skangas> Hello!
+[2011-05-12 00:33:02] <cehteh> prefetching would be also a job btw
+[2011-05-12 00:33:08] <ichthyo> Hello skangas !
+[2011-05-12 00:33:11] <cehteh> hi skangas 
+[2011-05-12 00:33:16] <ichthyo> is that good morning or good night?
+[2011-05-12 00:33:30] <ichthyo> ;-)
+[2011-05-12 00:33:33] <skangas> Good night :-)
+[2011-05-12 00:33:41] <skangas> But now I am here finally at least.
+[2011-05-12 00:34:00] <cehteh> the exact setup for scheduling will likely become little more complicated 
+[2011-05-12 00:34:46] <cehteh> you dont just set a time when to render but timespans and priorities, possibly twice for each queue
+[2011-05-12 00:35:33] <cehteh> at least my plan is that a job can be in the background render queue and in the high prio queue (we should give this a better name) at once
+[2011-05-12 00:36:52] <cehteh> this interface needs to be discussed ... but for now it suffices that we know its there
+[2011-05-12 00:37:08] <cehteh> (also a reason to make the tinyjobs which are much simpler)
+[2011-05-12 00:38:44] <ichthyo> skangas: how's life? everything ok-ish for you?
+[2011-05-12 00:41:34] <ichthyo> cehteh: how would you deal with that 'animating' of the gui during playback?
+[2011-05-12 00:41:49] <ichthyo> that is, updating the time, moving the playhead cursor etc.
+[2011-05-12 00:42:02] <ichthyo> could that be a job too?
+[2011-05-12 00:42:21] <cehteh> for blinking cursors? :)
+[2011-05-12 00:42:31] <ichthyo> ;-)
+[2011-05-12 00:42:38] <cehteh> well summarize:
+[2011-05-12 00:43:08] <cehteh> we use the 'normal' queues for rendering .. there are job dependencies which eventually yield in a frame rendered
+[2011-05-12 00:44:08] <cehteh> the actualy 'playout' whatever that means is done by the realtime tinyjobs from a special time-syncronized queue
+[2011-05-12 00:44:32] <cehteh> this is continutation based
+[2011-05-12 00:45:09] <cehteh> the last thing in the normal queues is setup this playout (if still in time) 
+[2011-05-12 00:45:43] <cehteh> blinking the gui doesnt need to be hard realtime it could be set up there too .. or can you inject gui messages from other threads?
+[2011-05-12 00:46:05] <cehteh> we wanted a short queue between gui and proc right?
+[2011-05-12 00:46:18] <ichthyo> thats something different IMHO
+[2011-05-12 00:46:22] <ichthyo> it is GUI -> proc
+[2011-05-12 00:46:28] <cehteh> ah not bidir?
+[2011-05-12 00:46:32] <cehteh> (2 queues)
+[2011-05-12 00:46:45] <ichthyo> well, didn't think about that yet
+[2011-05-12 00:46:49] <ichthyo> see
+[2011-05-12 00:46:56] <ichthyo> in GTK, you invoke so called "signals"
+[2011-05-12 00:47:22] <ichthyo> which are functors. And they are wired such that the actual function is then dispatched from the event thread
+[2011-05-12 00:47:32] <cehteh> yes but you can also integrate some custom queue which generates signals i guess
+[2011-05-12 00:47:57] <cehteh> in some or another way
+[2011-05-12 00:48:02] <ichthyo> you can create that signals from any thread
+[2011-05-12 00:48:18] <ichthyo> GTK cares to execute them through his event mechanism
+[2011-05-12 00:48:44] <cehteh> this signals can carry some payload (rendered thumbnail?)
+[2011-05-12 00:48:56] <ichthyo> they are function objects
+[2011-05-12 00:49:02] <ichthyo> so they can do anything they want
+[2011-05-12 00:49:32] <ichthyo> typically you bind a method from some existing object
+[2011-05-12 00:50:35] <ichthyo> thus
+[2011-05-12 00:50:50] <cehteh> so we may add a notification layer there to give it the right distance for abstraction .. and the gui can maybe subscribe to certain notification as well as things which are queried by the gui are send back there
+[2011-05-12 00:51:02] <ichthyo> for our problem that means that there will be some signal(s) to update the timecode
+[2011-05-12 00:51:07] <ichthyo> yes, my thinking too
+[2011-05-12 00:51:23] <ichthyo> there is already even an interface called "GuiNotificationFacade"
+[2011-05-12 00:51:30] <ichthyo> its defined through the interface system
+[2011-05-12 00:51:41] <ichthyo> just Joel didn't get around filling it with life
+[2011-05-12 00:51:44] |<-- andrewjames has left kornbluth.freenode.net (Ping timeout: 258 seconds)
+[2011-05-12 00:51:49] <cehteh> so you just hook that into the jobs you (the player) creates
+[2011-05-12 00:51:51] <ichthyo> that was shortly before he left
+[2011-05-12 00:51:54] <ichthyo> yes
+[2011-05-12 00:52:02] <ichthyo> point is: it won't block
+[2011-05-12 00:52:11] <ichthyo> but it /has/ some overhead for sure
+[2011-05-12 00:52:31] <ichthyo> (so nothing for a realy realtime constrained dispatch)
+[2011-05-12 00:53:05] <ichthyo> e.g. ther will be heap allocations involed, somewhere within the framework, and so on
+[2011-05-12 00:53:11] <cehteh> well if we miss a deadline we miss it, there is no time machine or other magic build in
+[2011-05-12 00:53:37] <ichthyo> well ok
+[2011-05-12 00:53:41] <cehteh> and the gui doesnt run in realtime
+[2011-05-12 00:53:45] <cehteh> the sound does
+[2011-05-12 00:53:58] <ichthyo> I was just concerned if that time queue has tight constraints
+[2011-05-12 00:54:01] <cehteh> and maybe the video player (just blitting rendered frames) does
+[2011-05-12 00:54:28] <ichthyo> ...then I rather would put these GUI update actions into a normal foreground job queue
+[2011-05-12 00:54:32] <cehteh> there is nothing we can do than reducing the load
+[2011-05-12 00:54:38] <cehteh> yes 
+[2011-05-12 00:54:49] <cehteh> i wont put these into the time queue
+[2011-05-12 00:55:17] <cehteh> by definition you can never bink the cursor too early :)
+[2011-05-12 00:56:13] <cehteh> and anything not sound and video playback, just gui update related can be lets say 50ms off time
+[2011-05-12 00:56:24] <ichthyo> yeah
+[2011-05-12 00:56:41] <cehteh> for sure it would be a bit pita when automation curves lag noticeable
+[2011-05-12 00:56:55] <ichthyo> so it could even be enqueued with a lower priority than frame calculations scheduled for the same time
+[2011-05-12 00:57:05] <cehteh> but if we cant render them in time then we cant do that, nothing we can fix there than reducing the load somehow
+[2011-05-12 00:57:49] <cehteh> (besides automation curves might be rendered by the gui alone, no need for backend and proc)
+[2011-05-12 00:58:09] <ichthyo> yeah
+[2011-05-12 00:58:28] <ichthyo> well... cinelerra e.g. scrolls the whole timeline pane keeping the cursor in the middle
+[2011-05-12 00:58:36] <cehteh> there are no much things which are time constraind in the gui but not video or sound
+[2011-05-12 00:58:37] <ichthyo> this is nice for the handling
+[2011-05-12 00:58:46] <cehteh> and depend on backend/proc
+[2011-05-12 00:59:16] <ichthyo> anyway... that means that there might be thumbnails to process, and I take it that we handle that somehow through our engine as well, just with lower priority
+[2011-05-12 00:59:23] <cehteh> yes that costs a lot performance there .. 
+[2011-05-12 01:00:01] <ichthyo> as a *user* I really don't know what to prefer
+[2011-05-12 01:00:10] <cehteh> btw if frames or thumbnails have higher priority might be a feature of 'perspectives'
+[2011-05-12 01:00:24] <ichthyo> an application which burns quite some resources, but gets me a steady updating display
+[2011-05-12 01:00:44] <ichthyo> or an application which freezes every 10 seconds when the cursor hits the right window border
+[2011-05-12 01:00:54] <cehteh> haha
+[2011-05-12 01:00:56] <ichthyo> (e.g. ardour has this behaviour)
+[2011-05-12 01:00:59] <cehteh> neither is good
+[2011-05-12 01:02:03] <ichthyo> probably the best solution (also the rather expensive to implement) is to make that GUI update in several stages, and each with a different priority
+[2011-05-12 01:02:18] <cehteh> i dont think so
+[2011-05-12 01:02:22] <ichthyo> e.g. a wireframe has high priority, thumbnails and waveforms have low priority
+[2011-05-12 01:02:36] <cehteh> because if you cant do it in time, you cant do it in time :P 
+[2011-05-12 01:03:29] <cehteh> well the timeline can be rendere into an extra canvas .. then displaying it with scrolling is certainly more efficent than redraw it completely 60 times a second
+[2011-05-12 01:03:37] <ichthyo> well... you could skip the thumbnails, yet still have an animated cursor and running timecode
+[2011-05-12 01:04:15] <cehteh> yes but you dont need to care in the gui .. you just send the jobs with configured piority and deadline and render when the data arrives
+[2011-05-12 01:04:29] <ichthyo> yeah, thats what I mean
+[2011-05-12 01:04:30] <cehteh> if it couldnt be rendered then there are no thumbails
+[2011-05-12 01:04:47] <cehteh> ah ok i took that for granted
+[2011-05-12 01:05:01] <ichthyo> I too take that for granted, but actually
+[2011-05-12 01:05:10] <ichthyo> it doesn't seem to be obvious for many people
+[2011-05-12 01:05:18] <ichthyo> e.g. Joel resisted to that idea
+[2011-05-12 01:05:33] <ichthyo> and if you look into the ardour sourcecode, they didn't get it right either
+[2011-05-12 01:06:00] <cehteh> heh 
+[2011-05-12 01:06:06] <cehteh> i am not gui programmer
+[2011-05-12 01:06:53] <cehteh> but if, i would make a timeline in a canvas (or even multiple layers, automation on top) and render that in background even with some safe areas around wich are not visible
+[2011-05-12 01:07:09] <cehteh> then scolling in is just a fast hardware operation
+[2011-05-12 01:07:36] <ichthyo> exactly, thats the way I think we should do it
+[2011-05-12 01:07:51] <cehteh> well i was already suprised that no one pre-renders menus when the mouse is hovering over them and when the user clicks displaying them in instant
+[2011-05-12 01:07:52] <ichthyo> ok... the key point is to do that rendering asynchroneously
+[2011-05-12 01:08:05] <cehteh> thats how i would do it
+[2011-05-12 01:08:47] <ichthyo> makes many GUI programmers feel queasy
+[2011-05-12 01:08:58] <cehteh> hey we all like snappy guis
+[2011-05-12 01:09:48] <ichthyo> actually, I must say it's kind of embarrasing when we consider the level of functionality provided by many GUI toolkits even today
+[2011-05-12 01:10:30] <ichthyo> basically the technology from 20 years ago
+[2011-05-12 01:10:35] <cehteh> yes
+[2011-05-12 01:10:53] <cehteh> and even with wayland and all new things it not going to change that fundamentals
+[2011-05-12 01:11:02] <ichthyo> yes, indeed
+[2011-05-12 01:11:20] <ichthyo> that is just an attempt to make that old model running faster, by offloading to the hardware
+[2011-05-12 01:12:03] <cehteh> i would like a compositor on the toolkit level ... not as window server
+[2011-05-12 01:13:01] <ichthyo> anyway
+[2011-05-12 01:13:02] <cehteh> every little widget state is some canvas somewhere which i can update async (playing video on a button?) and then the whole gui is composited in a final step with all building blocks
+[2011-05-12 01:13:14] <cehteh> instead re-rendered as whole
+[2011-05-12 01:13:14] <ichthyo> yes
+[2011-05-12 01:13:19] <ichthyo> and even more
+[2011-05-12 01:13:28] <ichthyo> the parts should be composed in a functional way
+[2011-05-12 01:13:47] <ichthyo> and the toolkit would then invoke that functors in the right order and async
+[2011-05-12 01:13:53] <cehteh> yep
+[2011-05-12 01:14:07] <cehteh> ok .. anyways something else for today?
+[2011-05-12 01:14:21] <ichthyo> seems we're through with that discussion
+[2011-05-12 01:14:39] <ichthyo> let's call it a day (or a night)
+[2011-05-12 01:14:46] <cehteh> the 'actual' interfaces how the backend queries a frame from proc and how proc asks the backend for a frame .. do we need to work this out?
+[2011-05-12 01:14:51] <cehteh> not today
+[2011-05-12 01:15:26] <cehteh> but i think about not working it offically out at all in a big way, this interfaces prolly just happen and can be improved in small details 
+[2011-05-12 01:16:10] <ichthyo> in the (half finished) code in the ProcNode, I used placeholder / facade interfaces
+[2011-05-12 01:16:21] <ichthyo> that is enough to set up the backbone
+[2011-05-12 01:16:52] <ichthyo> that is, for node -> backend (to get a frame)
+[2011-05-12 01:17:12] <cehteh> ah ok
+[2011-05-12 01:17:18] <ichthyo> the other one will turn out, when I care for wiring up such a job, as we discussed today
+[2011-05-12 01:17:31] <ichthyo> that is engine/player -> proc
+[2011-05-12 01:17:43] <cehteh> well i wonder if we have to pass timing information there ?
+[2011-05-12 01:17:48] <cehteh> well see that next 
+[2011-05-12 01:17:50] <ichthyo> "node invocation interface"
+[2011-05-12 01:18:22] <ichthyo> well, personally I think I'll first concentrate on the player, to get a rough outline there
+[2011-05-12 01:18:36] <cehteh> yes that will show us the requirements
+[2011-05-12 01:18:43] <ichthyo> and from there to this engine interface we discussed today
+[2011-05-12 01:19:01] <cehteh> which is more a concept than a interface :P
+[2011-05-12 01:19:15] <ichthyo> and if I recall right, you were rather engaged into the framecache / frame database 
+[2011-05-12 01:20:10] <cehteh> the general interface is simple (in my head) .. but there are some dirty corners to worked out
+[2011-05-12 01:20:33] <ichthyo> for creating jobs, and the scheduler?
+[2011-05-12 01:20:42] <ichthyo> or do you mean the framecache?
+[2011-05-12 01:20:48] <cehteh> if proc asks the backend for a frame, the backend may ask proc for rendering it .. and this going pingpoing with all dependenices
+[2011-05-12 01:21:32] <cehteh> but the inital query must provide enough information to construct all of the rest which involves setting up jobs which need deadlines and priorities
+[2011-05-12 01:22:05] <cehteh> or we may rething this somehow
+[2011-05-12 01:22:17] <cehteh> doing the ping-pong more in the higher levels
+[2011-05-12 01:22:26] <cehteh> (no W then)
+[2011-05-12 01:22:56] <ichthyo> well... still a W, but between two function levels a bit higher then
+[2011-05-12 01:22:59] <cehteh> asking the cache if it has a frame, if not then the initiator is responsible for setting up the rendering job
+[2011-05-12 01:23:08] <cehteh> might become a M then :)
+[2011-05-12 01:23:15] <ichthyo> yes, kindof that
+[2011-05-12 01:23:56] <cehteh> well this needs some careful thinkin thats an important design decision we can not easily revert
+[2011-05-12 01:26:00] <ichthyo> well... until now I've kept that decision rather flexible. That is, in the part I wrote in the nodes
+[2011-05-12 01:26:40] <cehteh> for now .. eventually this becomes nailed down
+[2011-05-12 01:26:44] <ichthyo> yes
+[2011-05-12 01:27:35] <ichthyo> you recall, there was the controversy if we should split and schedule every calculation step, even if it doesn't include fetching some aditional data
+[2011-05-12 01:28:43] <cehteh> huh? ... well it wasnt about the fetching it was about finer granulared planning for rendering
+[2011-05-12 01:28:55] <ichthyo> yes
+[2011-05-12 01:29:00] <cehteh> note that when you render too early the caches cool down
+[2011-05-12 01:29:15] <cehteh> (or fetch too early)
+[2011-05-12 01:29:59] <cehteh> so i was about discovery before fetching, and fetching in time, and then rendering
+[2011-05-12 01:30:12] <cehteh> and possibly add some more steps as need arises
+[2011-05-12 01:30:27] <ichthyo> yes... that was kind of the middle ground we agreed on
+[2011-05-12 01:31:10] <ichthyo> I retained the possibility to decide if and where a chain of calculations for a single frame should be split and scheduled as separate jobs
+[2011-05-12 01:31:24] <cehteh> ah 
+[2011-05-12 01:31:37] <cehteh> now i understand .. hehe processing chain is a single job :)
+[2011-05-12 01:31:46] <ichthyo> yes
+[2011-05-12 01:32:01] <cehteh> well dunno if that scales badly
+[2011-05-12 01:32:03] <ichthyo> and of course this requires a discovery step beforehand
+[2011-05-12 01:32:11] <cehteh> imagine you can run every other frame on another core
+[2011-05-12 01:32:27] <ichthyo> so thats kind of the point where we both agree
+[2011-05-12 01:32:46] <cehteh> and you dont want to move data between cores if avoidable
+[2011-05-12 01:33:34] <cehteh> can you do that with your processing chain? split them up into jobs rendering every other frame 
+[2011-05-12 01:34:01] <cehteh> or well ... 
+[2011-05-12 01:34:11] <ichthyo> oops, no, I think we misunderstand
+[2011-05-12 01:34:15] <cehteh> run only the heavy lifting in single jobs
+[2011-05-12 01:34:25] <cehteh> but the processing chain is one job
+[2011-05-12 01:34:26] <ichthyo> I don't talk about 'calculation streams'
+[2011-05-12 01:34:38] <ichthyo> I allways assume that 1 frame is one job
+[2011-05-12 01:34:40] <ichthyo> at least
+[2011-05-12 01:34:42] <cehteh> ah ok
+[2011-05-12 01:34:53] <cehteh> well refine 'rendering one frame is one job'
+[2011-05-12 01:35:02] <ichthyo> the controversy was to what extend a single frame should be split into multiple jobs
+[2011-05-12 01:35:10] <cehteh> i dont care if discovery over a sequence is one job for multiple frames 
+[2011-05-12 01:36:02] <cehteh> you mean its dependencies?
+[2011-05-12 01:36:41] <cehteh> ah .. now i get it caclulation streams are vertical not horizontal :P
+[2011-05-12 01:36:54] <ichthyo> at that point (more than a year ago), you insisted that every calculation be done in a separate job, and I didn't agree to that
+[2011-05-12 01:37:00] <cehteh> yes
+[2011-05-12 01:37:08] <ichthyo> that is, even if its just the application of yet another effect to the same frame
+[2011-05-12 01:37:09] <cehteh> i think we can try out and see
+[2011-05-12 01:37:16] <ichthyo> yes, that was the conclusion
+[2011-05-12 01:37:17] <cehteh> yes 
+[2011-05-12 01:37:37] <ichthyo> while it is pretty much clear that the fetching of data should be a separate job
+[2011-05-12 01:37:45] <ichthyo> i.e. the IO wait
+[2011-05-12 01:37:50] <cehteh> heh i assumed you meant horizonal rendering .. frames in sequenve with caclulation stream
+[2011-05-12 01:38:08] <ichthyo> yes, thats what I mean
+[2011-05-12 01:38:11] <cehteh> now i see you mean going down the render graoh
+[2011-05-12 01:38:12] <ichthyo> but a calculation stream
+[2011-05-12 01:38:26] <ichthyo> is then split into jobs, at least one job per frame
+[2011-05-12 01:38:37] <cehteh> yes ok
+[2011-05-12 01:38:49] <cehteh> lets see ...
+[2011-05-12 01:39:12] <cehteh> prolly scales well this way, but we may need refinements for branches in the graph
+[2011-05-12 01:39:18] |<-- hermanr has left kornbluth.freenode.net (Quit: hermanr)
+[2011-05-12 01:39:22] <ichthyo> yeah
+[2011-05-12 01:39:41] <ichthyo> especially for those cases, which combine several frames (e.g. time average, motion tracking)
+[2011-05-12 01:39:58] <cehteh> with just one job per single render operation i wanted to avoid this special cases .. this then just becomes jobs waiting on other jobs
+[2011-05-12 01:40:44] <ichthyo> well... the way I approach it for the ProcNode code also avoids special cases
+[2011-05-12 01:40:54] <ichthyo> but requires the builder to set up things appropriately
+[2011-05-12 01:41:12] <cehteh> of course if you make a vertical computation stream then you have less overhead than splitting this up into many small jobs
+[2011-05-12 01:41:15] <ichthyo> hehe.... and the builder isn't written yet :-P
+[2011-05-12 01:41:33] <cehteh> but i think compared to the heavy lifting in the effects this overhead will be neglectibe
+[2011-05-12 01:42:30] <cehteh> and this caclulation streams shouldnt become too long as they bind resources
+[2011-05-12 01:42:49] <ichthyo> you mean, "horizontally"?
+[2011-05-12 01:42:57] <cehteh> nope vertically
+[2011-05-12 01:43:21] <cehteh> btw i forgot something for the job_*() interface
+[2011-05-12 01:43:25] <ichthyo> ok, than that would be rather chained nodes in the graph
+[2011-05-12 01:43:35] <cehteh> resource transfer .. we talked about that
+[2011-05-12 01:43:36] <ichthyo> calculation stream = sequence of frames
+[2011-05-12 01:43:46] <cehteh> waiting for resources not jobs
+[2011-05-12 01:44:26] <ichthyo> yes, of course .... I took that for granted
+[2011-05-12 01:44:44] <ichthyo> otherwise it wouldn't make sense to have a separate job for fetching input data
+[2011-05-12 01:45:09] <cehteh> well you remember the that writing has to be committed .. and then i wanted a short circuit to transfer a resource to another receiver than giving it back to the backend
+[2011-05-12 01:45:47] <cehteh> i still dont get your calculation stream
+[2011-05-12 01:46:10] <cehteh> when thats a sequence of frames and a single job then you cant calculate frames in parallel
+[2011-05-12 01:46:21] <ichthyo> no, it isn't a single job
+[2011-05-12 01:46:25] <cehteh> ah ok
+[2011-05-12 01:46:37] <ichthyo> look at it from the viewangle of the player
+[2011-05-12 01:46:52] <ichthyo> a calculation stream eventually produces a data stream (channel)
+[2011-05-12 01:46:58] <ichthyo> that is the idea
+[2011-05-12 01:47:31] <cehteh> if you want to accumulate render jobs then i strongly opt for doing this vertically (if ever)
+[2011-05-12 01:47:40] <cehteh> never horizontally
+[2011-05-12 01:47:43] <ichthyo> yes
+[2011-05-12 01:48:00] <cehteh> ok then we are fine .. no matter how you name it :P
+[2011-05-12 01:48:11] <ichthyo> with the exception you just mentioned: planning further jobs could be done in a sway for a segment of time
+[2011-05-12 01:48:44] <cehteh> yes but with a limit .. not a full sequence from the session
+[2011-05-12 01:48:49] <ichthyo> e.g. the 2* 25 jobs for the next second
+[2011-05-12 01:49:03] <ichthyo> (2 per frame, one for the resourece, one for the calculation)
+[2011-05-12 01:49:08] <ichthyo> in a typical standard case
+[2011-05-12 01:49:28] <ichthyo> and then add a followup job to schedule the next jobs for the next second
+[2011-05-12 01:49:40] <ichthyo> just as an example
+[2011-05-12 01:49:52] <cehteh> lets say dont run discovery for more than 20 frames .. and dont fetch more than 5 frames and render every single frame
+[2011-05-12 01:50:07] <cehteh> even if the span between cuts is longer
+[2011-05-12 01:50:13] <ichthyo> yes
+[2011-05-12 01:50:22] <cehteh> this values of course may be configureable
+[2011-05-12 01:50:26] <ichthyo> and its clear that the actual numbers are for optimisation
+[2011-05-12 01:50:28] <ichthyo> yes
+[2011-05-12 01:50:39] <ichthyo> ok
+[2011-05-12 01:50:44] <ichthyo> lets call it a night!
+[2011-05-12 01:50:48] <cehteh> feierabend :P
+[2011-05-12 01:50:50] <cehteh> n8
+[2011-05-12 01:50:54] <ichthyo> n8
+[2011-05-12 01:50:58] <cehteh> well i play abit around
+[2011-05-12 01:51:13] [QUIT] Disconnected from irc://kornbluth.freenode.net/ (irc://kornbluth.freenode.net/). [[Reconnect][Reconnect to kornbluth.freenode.net][reconnect]]
+----------------------------
+
+

@@ -121,6 +121,10 @@ and partially passed on as parameter to the individual node invocations.
 For example, the engine might decide to switch down to proxy media, while
 actually the node network will perform the actual switch and reconfiguration.
 
+The quality of service could be implemented as a strategy, to be consulted at
+various decision points. The above cases would then be just some preconfigured
+default strategies.
+
 Reconfiguration and abort
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 There needs to be a separate ``control channel'' to cause various reconfigurations
@@ -211,6 +215,17 @@ and break it down into tangible functionality on the implementation level.
 Comments
 --------
 //comments: append below
+
+Discussed in the May developers meeting. Seems to be basically acceptable.
+_Cehteh_ proposed some small adjustments:
+
+- making the _QualityOfService_ rather a strategy to be queried
+- treating the rescheduling a bit separate from the other changes, because
+  that is very common and needs to be performant.
+- introducing a separate scheduler/queue for time scheduled tasks, like
+  with rater soft realtime requirements
+
+    So 15 Mai 2011 00:55:24 CEST Ichthyostega <prg@ichthyostega.de>
 
 
 //endof_comments:

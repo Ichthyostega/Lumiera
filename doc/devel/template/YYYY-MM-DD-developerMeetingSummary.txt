@@ -11,7 +11,7 @@ __Participants__
  * ichthyo
  * ...
  
-_Protocol written by XXXXX_
+_Summary written by XXXXX_
 
 
 

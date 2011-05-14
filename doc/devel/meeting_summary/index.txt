@@ -14,38 +14,34 @@ archives and other documentation.
 
 
 
+11 May 2011
+-----------
+
+Topics
+~~~~~~
+ * detailed technical discussion about the Render Engine Interface
+
+Summary
+^^^^^^^
+ * link:2011-05-11.html[IRC Transcript (prepared by Ichthyo)]
+
+
+
+
 13 Apr 2011
 -----------
 
 Topics
 ~~~~~~
  * New Website Page Layout
-   - liquid layout? 
-   - vertical scrolling?
-   - colour scheme?
-   - Webserver upgrade?
++
+liquid layout -- scrolling -- colours
+
  * Website licensing and legal questions
  * Trac spam
  * Go through Ideas and Drafts in design process
-   - Application Install
-   - Delectus Shot Evaluator
-   - Clip Cataloging System
-   - Design Param Automation
-   - Lumiera Forward Iterator -> *accepted*
-   - Design the Render Nodes interface
-   - Developer Documentation Structure
-   - Engine Interface Overview
-   - Feature Bundle
-   - Marble Mode
-   - Normalized Device Coordinates
-   - Proc High Level Model -> *accepted*
-   - Placement concept -> *accepted*
-   - Render Optimizer, Resource Management and Profiling
-   - Stream Type System
-   - Threads Signal handling
-   - Session structure -- Timelines, Sequences, Output -> *accepted*
-   - Use Cases
-   - Version Number Scheme -> *accepted*
++
+accepted: ForwardIterator, HighLevelModel, Placement concept, Session structure
 
 Summary
 ^^^^^^^
