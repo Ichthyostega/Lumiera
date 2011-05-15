@@ -28,6 +28,7 @@ liblumieracommon_la_LIBADD =		\
 
 liblumieracommon_la_SOURCES =						\
 	$(liblumieracommon_la_srcdir)/appstate.cpp			\
+	$(liblumieracommon_la_srcdir)/basic-setup.cpp			\
 	$(liblumieracommon_la_srcdir)/config.c				\
 	$(liblumieracommon_la_srcdir)/config_interface.c		\
 	$(liblumieracommon_la_srcdir)/config_lookup.c			\
@@ -51,6 +52,7 @@ liblumieracommon_la_SOURCES =						\
 
 noinst_HEADERS +=							\
 	$(liblumieracommon_la_srcdir)/appstate.hpp			\
+	$(liblumieracommon_la_srcdir)/basic-setup.hpp			\
 	$(liblumieracommon_la_srcdir)/config.h				\
 	$(liblumieracommon_la_srcdir)/config_interface.h		\
 	$(liblumieracommon_la_srcdir)/config_lookup.h			\
