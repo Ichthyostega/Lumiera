@@ -28,7 +28,6 @@
 #include "lib/meta/duck-detector.hpp"
 #include "lib/util-foreach.hpp"
 #include "lib/itertools.hpp"
-#include "lib/lumitime.hpp"
 
 /////////////////////////////////////////////////////////////TODO draft
 #include <boost/type_traits/is_convertible.hpp>
@@ -45,7 +44,6 @@ namespace lib {
 namespace meta{
 namespace test{
   
-  using lumiera::Time;
   using mobject::session::Effect;
   using mobject::session::ScopeQuery;
   

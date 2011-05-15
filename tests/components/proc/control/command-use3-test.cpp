@@ -24,7 +24,6 @@
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
 #include "proc/control/command-def.hpp"
-//#include "lib/lumitime.hpp"
 #include "lib/util.hpp"
 
 #include "proc/control/test-dummy-commands.hpp"
@@ -43,7 +42,6 @@ namespace test    {
 
 //  using boost::format;
 //  using boost::str;
-  //using lumiera::Time;
   //using util::contains;
 //  using std::tr1::function;
 //  using std::tr1::bind;

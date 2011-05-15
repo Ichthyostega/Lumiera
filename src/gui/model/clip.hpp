@@ -26,14 +26,14 @@
 #include <string>
 #include "gui/gtk-lumiera.hpp"
 
-#include "lib/lumitime.hpp"
+//#include "lib/lumitime.hpp"//////////////////////////////TODO
 
 // TODO: Remove once we get real measure of duration.
 //       This is here *only* for purposes of testing the GUI.
-extern "C" {
-#include <stdint.h>
-#include <gavl/gavltime.h>
-}
+//extern "C" {
+//#include <stdint.h>
+//#include <gavl/gavltime.h>
+//}
 
 using Cairo::Pattern;
 

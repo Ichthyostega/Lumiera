@@ -22,7 +22,6 @@
 
 
 #include "lib/test/run.hpp"
-#include "lib/lumitime.hpp"
 #include "proc/asset/media.hpp"
 #include "proc/mobject/mobject.hpp"
 #include "proc/mobject/mobject-ref.hpp"
@@ -67,7 +66,6 @@ namespace test    {
   }
   
   
-  using lumiera::Time;
   using session::Clip;
   using session::PMedia;
   

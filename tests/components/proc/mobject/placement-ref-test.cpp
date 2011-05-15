@@ -29,13 +29,11 @@
 #include "proc/mobject/session/session-service-mock-index.hpp"
 #include "proc/mobject/explicitplacement.hpp"
 #include "proc/mobject/test-dummy-mobject.hpp"
-#include "lib/lumitime.hpp"
 #include "lib/util.hpp"
 
 #include <iostream>
 
 using util::isSameObject;
-using lumiera::Time;
 using std::string;
 using std::cout;
 using std::endl;

@@ -27,7 +27,6 @@
 //#include "proc/assetmanager.hpp"          //////??
 //#include "proc/asset/timeline.hpp"
 #include "proc/asset/sequence.hpp"
-//#include "lib/lumitime.hpp"
 #include "lib/util-foreach.hpp"
 #include "proc/mobject/session/testclip.hpp"
 #include "proc/mobject/mobject-ref.hpp"
@@ -59,7 +58,6 @@ namespace test    {
   using asset::PSequence;
   using asset::Sequence;
   
-//  using lumiera::Time;
   using lumiera::Query;
   
   typedef MORef<session::Clip> RClip;

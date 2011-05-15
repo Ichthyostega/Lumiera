@@ -26,7 +26,6 @@
 
 
 #include "lib/symbol.hpp"
-#include "lib/lumitime.hpp"
 
 #include <typeinfo>
 #include <string>
@@ -38,7 +37,6 @@ namespace lib {
 namespace test{
   
   using lib::Literal;
-  using lumiera::Time;
   using std::string;
   using std::rand;
   

@@ -23,12 +23,10 @@
 
 #include "lib/test/run.hpp"
 #include "proc/control/command-def.hpp"
-#include "lib/lumitime.hpp"
 #include "lib/p.hpp"
 
 #include <cstdlib>
 
-using lumiera::Time;
 using std::rand;
 
 

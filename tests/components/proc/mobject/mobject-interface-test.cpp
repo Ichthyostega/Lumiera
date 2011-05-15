@@ -22,7 +22,6 @@
 
 
 #include "lib/test/run.hpp"
-#include "lib/lumitime.hpp"
 #include "lib/symbol.hpp"
 
 #include "proc/asset/media.hpp"
@@ -53,7 +52,6 @@ namespace test    {
   using lib::Symbol;
   
   
-  using lumiera::Time;
 //  using session::Clip;
 //  using session::PMedia;
   

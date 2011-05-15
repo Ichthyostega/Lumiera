@@ -30,7 +30,6 @@
 #include "proc/asset/timeline.hpp"
 #include "proc/asset/sequence.hpp"
 #include "proc/asset/pipe.hpp"
-#include "lib/lumitime.hpp"
 #include "lib/query.hpp"
 #include "lib/util.hpp"
 
@@ -56,7 +55,6 @@ namespace test    {
   using asset::Pipe;
   
   using lumiera::Query;
-  using lumiera::Time;
   
   
   /********************************************************************************

@@ -33,9 +33,7 @@
 #include <gtkmm/label.h>
 #include <gtkmm/frame.h>
 
-#include "lib/lumitime.hpp"
 
-using lumiera::Time;
 
 namespace gui {
 namespace widgets {
