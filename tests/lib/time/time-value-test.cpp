@@ -29,12 +29,10 @@
 
 #include <boost/lexical_cast.hpp>
 #include <iostream>
-//#include <cstdlib>
 #include <string>
 
 using boost::lexical_cast;
 using util::isnil;
-//using std::rand;
 using std::cout;
 using std::endl;
 using std::string;
@@ -71,11 +69,12 @@ namespace test{
           
           checkBasicTimeValues (ref);
           checkMutableTime (ref);
-          checkTimeConveniance (ref);
+          checkTimeConvenience (ref);
           verify_invalidFramerateProtection();
           createOffsets (ref);
           buildDuration (ref);
           buildTimeSpan (ref);
+          compareTimeSpan (ref);
         } 
       
       
@@ -159,7 +158,7 @@ namespace test{
        *        especially by the canonical Time values.
        */
       void
-      checkTimeConveniance (TimeValue org)
+      checkTimeConvenience (TimeValue org)
         {
           Time o1(org);
           TimeVar v(org);
@@ -296,15 +295,91 @@ namespace test{
           CHECK (theLength == Offset(org,five).abs());
           
           Time endpoint = interval.end();
-          TimeSpan successor (endpoint, Duration(Time(0,2,0,0)));
+          TimeSpan successor (endpoint, FSecs(2));
           
           CHECK (Offset(interval,endpoint) == Offset(org,five).abs());
           CHECK (Offset(endpoint,successor.end()) == Duration(successor));
           
-          cout <<   "Interval-1: " << interval 
-               << "  Interval-2: " << successor 
+          cout <<   "Interval-1: " << interval
+               << "  Interval-2: " << successor
                << "  End point: "  << successor.end()
-               << endl; 
+               << endl;
+        }          
+      
+      
+      void
+      compareTimeSpan (TimeValue org)
+        {
+          TimeSpan span1 (Time(org), Time(org)+Time(org));            // using the distance between start and end point
+          TimeSpan span2 (Time(org), Offset(org, TimeValue(0)));      // note: the offset is taken absolute, as Duration
+          TimeSpan span3 (Time(org), FSecs(5,2));                     // Duration given explicitly, in seconds
+          TimeSpan span4 (Time(org), FSecs(5,-2));                    // again: the Duration is taken absolute
+          
+          CHECK (span1 == span2);
+          CHECK (span2 == span1);
+          CHECK (span3 == span4);
+          CHECK (span4 == span3);
+          
+          CHECK (span1 != span3);
+          CHECK (span3 != span1);
+          CHECK (span1 != span4);
+          CHECK (span4 != span1);
+          CHECK (span2 != span3);
+          CHECK (span3 != span2);
+          CHECK (span2 != span4);
+          CHECK (span4 != span2);
+          
+          // especially note that creating a TimeSpan
+          // based on offset will take the offset absolute
+          CHECK (span1.end() == span2.end());
+          CHECK (span3.end() == span4.end());
+          
+          // Verify the extended order on time intervals
+          TimeSpan span1x (Time(org)+Time(org), Duration(Time(org))); // starting later than span1
+          TimeSpan span3y (Time(org), FSecs(2));                      // shorter than span3
+          TimeSpan span3z (Time(org)+Time(org), FSecs(2));            // starting later and shorter than span3
+          
+          CHECK (span1 != span1x);
+          CHECK (span3 != span3y);
+          CHECK (span3 != span3z);
+          
+          CHECK (  span1 <  span1x);
+          CHECK (  span1 <= span1x);
+          CHECK (!(span1 >  span1x));
+          CHECK (!(span1 >= span1x));
+          
+          CHECK (  span3 >  span3y);
+          CHECK (  span3 >= span3y);
+          CHECK (!(span3 <  span3y));
+          CHECK (!(span3 <= span3y));
+          
+          CHECK (  span3 < span3z);    // Note: the start point takes precedence on comparison
+          CHECK ( span3y < span3z);
+          
+          // Verify this order is really different
+          // than the basic ordering of time values
+          CHECK (span1 < span1x);
+          CHECK (span1.duration() == span1x.duration());
+          CHECK (span1.start() < span1x.start());
+          CHECK (span1.end()   < span1x.end());
+          
+          CHECK (span3 > span3y);
+          CHECK (span3.duration() > span3y.duration());
+          CHECK (span3.start() == span3y.start());
+          CHECK (span3.end()    > span3y.end());
+          CHECK (Time(span3)   == Time(span3y));
+          
+          CHECK (span3 < span3z);
+          CHECK (span3.duration() > span3z.duration());
+          CHECK (span3.start() < span3z.start());
+          CHECK (span3.end()  != span3z.end());        // it's shorter, and org can be random, so that's all we know
+          CHECK (Time(span3)   < Time(span3z));
+          
+          CHECK (span3y < span3z);
+          CHECK (span3y.duration() == span3z.duration());
+          CHECK (span3y.start() < span3z.start());
+          CHECK (span3y.end()  < span3z.end());
+          CHECK (Time(span3)  < Time(span3z));
         }
     };
   

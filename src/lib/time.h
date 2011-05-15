@@ -70,6 +70,16 @@ lumiera_rational_to_time (lib::time::FSecs const& fractionalSeconds);
 
 
 /**
+ * Converts a frame count into Lumiera's internal time scale.
+ * based on a framerate given as rational number (e.g. NTSC)
+ * @note handles only positive frame counts and assumes the
+ *       origin to be at zero.
+ */
+gavl_time_t
+lumiera_framecount_to_time (uint64_t frameCount, lib::time::FrameRate const& fps);
+
+
+/**
  * Calculates the duration of one frame in Lumiera time units.
  * @param framerate underlying framerate as rational number
  * @throw error::Logic on zero framerate
@@ -125,7 +135,7 @@ lumiera_quantise_time (gavl_time_t time, gavl_time_t origin, gavl_time_t grid);
  * @return time point (frame start) on the Lumiera internal time scale
  */
 gavl_time_t
-lumiera_time_of_gridpoint (long nr, gavl_time_t origin, gavl_time_t grid);
+lumiera_time_of_gridpoint (int64_t nr, gavl_time_t origin, gavl_time_t grid);
 
 /**
  * Builds a time value by summing up the given components.
@@ -140,6 +150,11 @@ lumiera_build_time (long millis, uint secs, uint mins, uint hours);
 /**
  * Builds a time value by summing up the given components.
  * @todo replace float framerates by lib::time::FrameRate
+ * @deprecated this function doesn't fit in the general time handling concept.
+ *             SMPTE is a timecode format, and should be distinguished from a
+ *             raw time value. For any timecode format, we always require an explicit
+ *             'time grid' (coordinate system), which also defines a zero point.
+ *             Usually, this time grid is managed and provided by the session
  */
 gavl_time_t
 lumiera_build_time_fps (float fps, uint frames, uint secs, uint mins, uint hours);
@@ -183,6 +198,9 @@ lumiera_time_frames (gavl_time_t time, float fps);
 /**
  * Extract the frame count for the given time, using the given fps.
  * @todo use the rational lib::time::FrameRate instead of a float
+ * @deprecated should be moved down into the implementation;
+ *             this function doesn't fit into the general time handling,
+ *             because it doesn't link to a time grid (coordinate system)
  */
 int
 lumiera_time_frame_count (gavl_time_t time, float fps);

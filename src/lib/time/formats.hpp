@@ -31,6 +31,7 @@
 #include "lib/typed-counter.hpp"
 
 #include <tr1/memory>
+#include <string>
 #include <bitset>
 
 
@@ -53,6 +54,9 @@ namespace time {
   
   namespace format {
     
+    LUMIERA_ERROR_DECLARE (INVALID_TIMECODE); ///< timecode format error, illegal value encountered.
+    
+    using std::string;
     using lib::meta::NoInstance; // the following types are for metaprogramming only...
     
     
@@ -67,6 +71,7 @@ namespace time {
     struct Frames
       : NoInstance<Frames>
       {
+        static TimeValue    parse (string const&, QuantR);
         static void       rebuild (FrameNr&, QuantR, TimeValue const&);
         static TimeValue evaluate (FrameNr const&, QuantR);
       };
@@ -81,10 +86,11 @@ namespace time {
     struct Smpte
       : NoInstance<Smpte>
       {
+        static TimeValue    parse (string const&, QuantR);
         static void       rebuild (SmpteTC&, QuantR, TimeValue const&);
         static TimeValue evaluate (SmpteTC const&, QuantR);
         static uint  getFramerate (QuantR, TimeValue const&);
-        static void rangeLimitStrategy (SmpteTC&);
+        static void applyRangeLimitStrategy (SmpteTC&);
       };
     
     
@@ -98,6 +104,7 @@ namespace time {
     struct Hms
       : NoInstance<Hms>
       {
+        static TimeValue    parse (string const&, QuantR);
         static void       rebuild (HmsTC&, QuantR, TimeValue const&);
         static TimeValue evaluate (HmsTC const&, QuantR);
       };
@@ -115,6 +122,7 @@ namespace time {
     struct Seconds
       : NoInstance<Seconds>
       {
+        static TimeValue    parse (string const&, QuantR);
         static void       rebuild (Secs&, QuantR, TimeValue const&);
         static TimeValue evaluate (Secs const&, QuantR);
       };
@@ -192,7 +200,7 @@ namespace time {
             flags_.set (typeID<F>());
             return define(FS());
           }
-        Supported define(NullType) { return *this;} ///< recursion end
+        Supported define(NullType) { return *this;} ///< @internal recursion end
         
         Supported() { } ///< @note use #formats to set up a new descriptor
         

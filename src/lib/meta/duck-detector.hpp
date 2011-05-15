@@ -60,9 +60,25 @@
  **   specific function signature and then try to assign the named member. This allows even
  **   to determine if a member function of a type in question has the desired signature.
  ** 
- ** All these detection building blocks are written such as to provide a bool member \v ::value,
+ ** All these detection building blocks are written such as to provide a bool member \c ::value,
  ** which is in accordance to the conventions of boost metaprogramming. I.e. you can immediately
- ** use them within boost::enable_if
+ ** use them within \c boost::enable_if
+ ** 
+ ** \par some pitfalls to consider
+ ** 
+ ** @warning The generated metafunctions all yield the \c false value by default.
+ **          Effectively this means that an error in the test expression might go unnoticed;
+ **          you'd be better off explicitly checking the detection result by an unit test.
+ ** 
+ ** There are several typical problems to care about
+ ** - a member can be both a variable or a function of that name
+ ** - function signatures need to match precisely, including const modifiers
+ ** - the generated metafunction (template) uses a type parameter 'TY', which could
+ **   shadow or conflict with an type parameter in the enclosing scope
+ ** - the member and function checks rely on member pointers, which generally rely on
+ **   the explicit static type. These checks don't see any inherited members / functions.
+ ** - obviously, all those checks are never able to detect anything depending on runtime
+ **   types or RTTI
  ** 
  ** @see util-foreach.hpp usage example
  ** @see duck-detector-test.cpp

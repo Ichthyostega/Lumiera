@@ -26,16 +26,19 @@
 #include "proc/asset/meta/time-grid.hpp"
 #include "lib/time/timequant.hpp"
 #include "lib/time/timecode.hpp"
+#include "lib/time/mutation.hpp"
 #include "lib/time/display.hpp"
 #include "lib/util.hpp"
 
 #include <boost/lexical_cast.hpp>
 #include <iostream>
-//#include <cstdlib>
+#include <string>
+#include <cstdlib>
 
 using boost::lexical_cast;
 using util::isnil;
-//using std::rand;
+using std::rand;
+using std::string;
 using std::cout;
 using std::endl;
 
@@ -45,6 +48,24 @@ namespace time{
 namespace test{
   
   using asset::meta::TimeGrid;
+  using format::Frames;
+  using format::Smpte;
+  
+  namespace{
+    const int MAX_FRAME = 265*24*60*60*25;
+    
+    string
+    generateRandomFrameNr()
+    {
+      uint frameNr(0);
+      while (!frameNr)
+        frameNr = rand() % (2*MAX_FRAME) - MAX_FRAME;
+      
+      return lexical_cast<string>(frameNr)+"#";
+    }
+  }
+  
+  
   
   /********************************************************
    * @test verify handling of grid aligned timecode values.
@@ -60,7 +81,7 @@ namespace test{
         {
           TimeGrid::build("pal0", FrameRate::PAL);
           
-//        checkTimecodeUsageCycle ();
+          checkTimecodeUsageCycle ();
 //        checkFrames ();
 //        checkSeconds ();
 //        checkHms ();
@@ -70,10 +91,54 @@ namespace test{
         } 
       
       
+      /** @test demonstrate a full usage cycle of timecode and time values.
+       *        Starting with a textual representation according to a specific timecode format,
+       *        and based on the knowledge of the implicit underlying time grid (coordinate system,
+       *        here with origin=0 and framerate=25fps), this timecode string may be parsed.
+       *        This brings us (back) to the very origin, which is a raw TimeValue (internal time).
+       *        Now, this time value might be manipulated, compared to other values etc.
+       *        Anyway, at some point these time values need to be related to some time scale again,
+       *        leading to quantised time values, which — finally — can be cast into a timecode format
+       *        for external representation again, thus closing the circle.
+       */
       void
       checkTimecodeUsageCycle ()
         {
-          UNIMPLEMENTED ("full usage cycle for a timecode value");
+          string quellCode = generateRandomFrameNr();
+          PQuant refScale  = Quantiser::retrieve("pal0");
+          
+          // get internal (raw) time value
+          TimeValue t1 = format::Frames::parse(quellCode, *refScale);
+          ENSURE (0 != t1);
+          
+          // manipulating
+          TimeVar v1(t1);
+          v1 += Time(FSecs(6,5));
+          CHECK (t1 < v1);
+          
+          // quantising into an external grid
+          QuTime q1 (t1, "pal0");
+          CHECK (q1 == t1);
+          
+          // further mutations (here nudge by +5 grid steps)
+          QuTime q2 = q1;
+          q2.accept (Mutation::nudge(+5));
+          CHECK (q1 < q2);
+          
+          // converting (back) into a timecode format
+          FrameNr frames1(q1);
+          FrameNr frames2(q2);
+          CHECK (5 == frames2 - frames1);
+          
+          q2.accept (Mutation::changeTime(v1));
+          CHECK (30 == q2.formatAs<Frames>() - frames1);
+          
+          CHECK (quellCode == string(frames1));
+          CHECK (quellCode != string(frames2));
+          
+          showTimeCode (frames1);
+          showTimeCode (frames2);
+          showTimeCode (q2.formatAs<Smpte>());
         }
       
       
@@ -94,7 +159,7 @@ namespace test{
       void
       checkSeconds ()
         {
-          UNIMPLEMENTED ("verify seconds as timecode format");
+          UNIMPLEMENTED ("verify fractional seconds as timecode format");
         }
       
       
@@ -122,6 +187,7 @@ namespace test{
           QuTime t1 (raw, "pal0");
           SmpteTC smpte(t1);
           
+          cout << "----SMPTE-----" << endl;
           showTimeCode(smpte);
           CHECK ("  5:42:23:13" == string(smpte));
           CHECK (raw - Time(35,0) == smpte.getTime());    // timecode value got quantised towards next lower frame

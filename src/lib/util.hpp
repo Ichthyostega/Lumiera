@@ -315,7 +315,7 @@ namespace util {
    *  will start with an alphanumeric character.
    * 
    * @par Example Conversions
-\verbatim 
+\verbatim
    "Word"                             --> 'Word'
    "a Sentence"                       --> 'a_Sentence'
    "trailing Withespace  \t \n"       --> 'trailing_Withespace'

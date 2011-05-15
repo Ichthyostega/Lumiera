@@ -81,6 +81,14 @@ lumiera_rational_to_time (FSecs const& fractionalSeconds)
   return rational_cast<gavl_time_t> (GAVL_TIME_SCALE * fractionalSeconds);
 }
 
+gavl_time_t
+lumiera_framecount_to_time (uint64_t frameCount, FrameRate const& fps)
+{
+  // convert to 64bit
+  boost::rational<uint64_t> framerate (fps.numerator(), fps.denominator());
+  
+  return rational_cast<gavl_time_t> (GAVL_TIME_SCALE * frameCount / framerate);
+}
 
 gavl_time_t
 lumiera_frame_duration (FrameRate const& fps)
@@ -122,7 +130,7 @@ lumiera_quantise_time (gavl_time_t time, gavl_time_t origin, gavl_time_t grid)
 }
 
 gavl_time_t
-lumiera_time_of_gridpoint (long nr, gavl_time_t origin, gavl_time_t grid)
+lumiera_time_of_gridpoint (int64_t nr, gavl_time_t origin, gavl_time_t grid)
 {
   gavl_time_t offset = nr * grid;    
   return origin + offset;
@@ -154,14 +162,14 @@ lumiera_build_time_fps (float fps, uint frames, uint secs, uint mins, uint hours
 gavl_time_t
 lumiera_build_time_ntsc_drop (uint frames, uint secs, uint mins, uint hours)
 {
-  int total_mins = 60 * hours + mins;
-  int total_frames  = 108000 * hours
-                    + 1800 * mins
-                    + 30 * secs
-                    + frames
-                    - 2 * (total_mins - total_mins / 10);
+  uint64_t total_mins = 60 * hours + mins;
+  uint64_t total_frames  = 108000 * hours
+                         + 1800 * mins
+                         + 30 * secs
+                         + frames
+                         - 2 * (total_mins - total_mins / 10);
   
-  return (total_frames / 29.97f) * 1000 * GAVL_TIME_SCALE_MS;
+  return lumiera_framecount_to_time (total_frames, FrameRate::NTSC);
 }
 
 int
