@@ -66,7 +66,7 @@ the not-so large displays.
 using a »liquid layout«?
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
-.-- liquid <--> not liquid --
+.-- liquid ⟺ not liquid --
 [caption="☉Transcript☉ "]
 ----------------------------
 [2011-04-13 23:05:14] <fsiddi> ok, so apart from that, the discussion is liquid vs not liquid
