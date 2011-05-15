@@ -35,30 +35,34 @@ using std::cout;
 using std::endl;
 
 
-#include "lib/lumitime.hpp"
-#include "lib/lumitime-fmt.hpp"
+#include "lib/time/timevalue.hpp"
+#include "lib/time/diagnostics.hpp"
 
 
 
-namespace lumiera{
-namespace test   {
+namespace lib {
+namespace test{
+  
+  using time::Time;
+  using time::TimeVar;
+  using time::FSecs;
   
   
   /********************************************
-   * @test sanity of the C++ time wrapper.
+   * @test sanity check of basic Time handling.
    */
   class LumiTime_test : public Test
     {
       virtual void
       run (Arg arg) 
         {
-          long refval= isnil(arg)?  1 : lexical_cast<long> (arg[1]);
+          FSecs refval = isnil(arg)?  1 : lexical_cast<long> (arg[1]);
           
-          Time ref (refval);
+          Time org(refval);
           
-          checkBasics (ref);
-          checkComparisons (ref);
-          checkComponentAccess();
+          checkBasics (org);
+          checkComparisons (org);
+          checkComponentDiagnostics();
         } 
       
       
@@ -66,18 +70,18 @@ namespace test   {
       checkBasics (Time const& ref)
         {
           Time zero;
-          Time one (1);
+          Time two (FSecs(2));
           Time max (Time::MAX);
           Time min (Time::MIN);
           
-          Time val (ref);
+          TimeVar var (ref);
           
-          val += Time(2);
-          val *= 2;
-          CHECK (zero == (val - 2*(ref + Time(2))) );
+          var += two;
+          var *= 2;
+          CHECK (zero == (var - 2*(ref + two)) );
           
-          val = ref;
-          CHECK (zero == (val - ref));
+          var = ref;
+          CHECK (zero == (var - ref));
         }
       
       
@@ -88,27 +92,27 @@ namespace test   {
           Time max (Time::MAX);
           Time min (Time::MIN);
           
-          CHECK (zero == Time(0));
+          CHECK (zero == Time());
           CHECK (min < zero);
           CHECK (max > zero);
           
-          Time val (ref);
-          CHECK ( (val == ref) );
-          CHECK (!(val != ref) );
-          CHECK ( (val >= ref) );
-          CHECK ( (val <= ref) );
-          CHECK (!(val <  ref) );
-          CHECK (!(val >  ref) );
+          TimeVar var (ref);
+          CHECK ( (var == ref) );
+          CHECK (!(var != ref) );
+          CHECK ( (var >= ref) );
+          CHECK ( (var <= ref) );
+          CHECK (!(var <  ref) );
+          CHECK (!(var >  ref) );
           
-          val += Time(2);
-          CHECK (!(val == ref) );
-          CHECK ( (val != ref) );
-          CHECK ( (val >= ref) );
-          CHECK (!(val <= ref) );
-          CHECK (!(val <  ref) );
-          CHECK ( (val >  ref) );
+          var += Time(FSecs(2));
+          CHECK (!(var == ref) );
+          CHECK ( (var != ref) );
+          CHECK ( (var >= ref) );
+          CHECK (!(var <= ref) );
+          CHECK (!(var <  ref) );
+          CHECK ( (var >  ref) );
           
-          gavl_time_t gat(val);
+          gavl_time_t gat(var);
           CHECK (!(gat == ref) );
           CHECK ( (gat != ref) );
           CHECK ( (gat >= ref) );
@@ -116,17 +120,17 @@ namespace test   {
           CHECK (!(gat <  ref) );
           CHECK ( (gat >  ref) );
           
-          CHECK ( (val == gat) );
-          CHECK (!(val != gat) );
-          CHECK ( (val >= gat) );
-          CHECK ( (val <= gat) );
-          CHECK (!(val <  gat) );
-          CHECK (!(val >  gat) );
+          CHECK ( (var == gat) );
+          CHECK (!(var != gat) );
+          CHECK ( (var >= gat) );
+          CHECK ( (var <= gat) );
+          CHECK (!(var <  gat) );
+          CHECK (!(var >  gat) );
         }
       
       
       void
-      checkComponentAccess()
+      checkComponentDiagnostics()
         {
           int millis = rand() % 1000;
           int secs   = rand() % 60;
@@ -134,34 +138,34 @@ namespace test   {
           int hours  = rand() % 100;
           
           Time time(millis,secs,mins,hours);
-          CHECK (millis == time.getMillis());
-          CHECK (secs   == time.getSecs());
-          CHECK (mins   == time.getMins());
-          CHECK (hours  == time.getHours());
+          CHECK (Time()  < time);
+          CHECK (millis == getMillis(time));
+          CHECK (secs   == getSecs  (time));
+          CHECK (mins   == getMins  (time));
+          CHECK (hours  == getHours (time));
           cout << time << endl;
           
           Time t2(2008,0);
           cout << t2 << endl;
-          CHECK ( 8 == t2.getMillis());
-          CHECK ( 2 == t2.getSecs());
-          CHECK ( 0 == t2.getMins());
-          CHECK ( 0 == t2.getHours());
+          CHECK ( 8 == getMillis(t2));
+          CHECK ( 2 == getSecs  (t2));
+          CHECK ( 0 == getMins  (t2));
+          CHECK ( 0 == getHours (t2));
           
           Time t3(2008,88);
           cout << t3 << endl;
-          CHECK ( 8 == t3.getMillis());
-          CHECK (30 == t3.getSecs());
-          CHECK ( 1 == t3.getMins());
-          CHECK ( 0 == t3.getHours());
+          CHECK ( 8 == getMillis(t3));
+          CHECK (30 == getSecs  (t3));
+          CHECK ( 1 == getMins  (t3));
+          CHECK ( 0 == getHours (t3));
           
           Time t4(2008,118,58);
           cout << t4 << endl;
-          CHECK ( 8 == t4.getMillis());
-          CHECK ( 0 == t4.getSecs());
-          CHECK ( 0 == t4.getMins());
-          CHECK ( 1 == t4.getHours());
+          CHECK ( 8 == getMillis(t4));
+          CHECK ( 0 == getSecs  (t4));
+          CHECK ( 0 == getMins  (t4));
+          CHECK ( 1 == getHours (t4));
         }
-      
     };
   
   
@@ -170,4 +174,4 @@ namespace test   {
   
   
   
-}} // namespace lumiera::test
+}} // namespace lib::test
