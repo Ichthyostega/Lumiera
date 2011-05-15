@@ -1,56 +1,63 @@
 [grid="all"]
 `------------`-----------------------
-*State*         _Idea_
+*State*         _Final_
 *Date*          _2008-11-03_
 *Proposed by*   link:Ichthyostega[]
 -------------------------------------
 
 
+.Summary
+****************************************************************************
+The Session or Project contains multiple top-level *Timeline* elements.
+These provide an (output)configuration and global busses, while the actual
+content _and the tree of tracks_ is contained in *Sequences*.
+These can also be used as *meta clips* and thus nested arbitrarily.
+****************************************************************************
+
 Relation of Project, Timeline(s), Sequence(s) and Output generation
 -------------------------------------------------------------------
 
 In the course of our discussions it meanwhile became clear, that Lumiera will
-show multiple ''timeline-like'' views within one project. Similarly it's clear
-now that we will support [wiki:self:../EDLsAreMetaClips nested Sequences as
-meta-clips]. The purpose of this entry is to try to settle on some definitions
+show multiple _timeline-like_ views within one project. Similarly it's clear
+now that we will support link:EDLsAreMetaClips.html[nested Sequences as meta-clips].
+The purpose of this entry is to try to settle on some definitions
 and clarify the relationships between these concepts.
-
 
 
 Definitions
 ~~~~~~~~~~~
- Project:: the top-level context in which all edit work is done over an
+Project:: the top-level context in which all edit work is done over an
  extended period of time. The Project can be saved and re-opened. It is
  comprised of  the collection of all things the user is working on, it contains
  all informations, assets, state and objects to be edited.
 
- Session:: the current in-memory representation of the Project when opened
+Session:: the current in-memory representation of the Project when opened
  within an instance of Lumiera. This is an implementation-internal term. For
  the GUI and the users POV we should always prefer the term "Project" for the
  general concept.
 
- Timeline:: the top level element within the Project. It is visible within a
- ''timeline view'' in the GUI and represents the effective (resulting)
+Timeline:: the top level element within the Project. It is visible within a
+ _timeline view_ in the GUI and represents the effective (resulting)
  arrangement of media objects, resolved to a finite time axis, to be rendered
  for output or viewed in a Monitor (viewer window). Timeline(s) are top-level
  and may not be further combined. A timeline is comprised of:
    * a time axis in abolute time (WIP: not clear if this is an entity or just a
      conceptual definition)
-   * a ''!PlayController''
-   * a list of global ''Pipes'' representing the possible outputs (master
+   * a _PlayController_
+   * a list of global _Pipes_ representing the possible outputs (master
      busses)
-   * exactly one top-level ''Sequence,'' which in turn may contain further
+   * exactly one top-level _Sequence_, which in turn may contain further
      nested Sequences
 
- Timeline View:: a view in the GUI featuring a given timeline. There might be
+Timeline View:: a view in the GUI featuring a given timeline. There might be
  multiple views of the same timeline, all sharing the same !PlayController. A
- proposed extension is the ability to ''focus'' a timeline view to a
+ proposed extension is the ability to _focus_ a timeline view to a
  sub-Sequence contained within the top-level sequence of the underlying
  Timeline. (Intended for editing meta-clips)
 
- Sequence:: A collection of ''MObjects'' placed onto a tree of tracks. (this
- entity was former named ''EDL'' -- an alternative name would be
- ''Arrangement'' ). By means of this placement, the objects could be anchored
+Sequence:: A collection of _MObjects_ placed onto a tree of tracks. (this
+ entity was former named _EDL_ -- an alternative name would be
+ _Arrangement_ ). By means of this placement, the objects could be anchored
  relative to each other, relative to external objects, absolute in time.
  Placement and routing information can be inherited down the track tree, and
  missing information is filled in by configuration rules. This way, a sequence
@@ -60,26 +67,26 @@ Definitions
  just a single root track and sends directly to the master busses of the
  timeline.
 
- Pipe:: the conceptual building block of the high-level model. It can be
- thought of as simple linear processing chain. A stream can be ''sent to'' a
- pipe, in which case it will be mixed in at the input, and you can ''plug'' the
+Pipe:: the conceptual building block of the high-level model. It can be
+ thought of as simple linear processing chain. A stream can be _sent to_ a
+ pipe, in which case it will be mixed in at the input, and you can _plug_ the
  output of a pipe to another destination. Further, effects or processors can be
  attached to the pipe. Besides the global pipes (busses) in each Timeline, each
  clip automatically creates N pipes (one for each distinct content stream, i.e.
  normally N=2, namely video and audio)
 
- link:PlayController[]:: coordinating playback, cueing and rewinding of a
- ''!PlayheadCursor'' (or multiple in case there are multiple views and or
+PlayController:: coordinating playback, cueing and rewinding of a
+ _PlayheadCursor_ (or multiple in case there are multiple views and or
  monitors), and at the same time directing a render process to deliver the
  media data needed for playback. Actually, the implementation of the
- !PlayController(s) is assumed to live in the backend.
+ PlayController(s) is assumed to live in the backend.
 
- link:RenderTask[]:: basically a !PlayController, but collecting output
+RenderTask:: basically a !PlayController, but collecting output
  directly, without moving a !PlayheadCursor (maybe a progress indicator) and
  not operating in a timed fashion, but freewheeling or in background mode
 
- Monitor:: a viewer window to be attached to a timeline. When attached, a
- monitor reflects the state of the timeline's !PlayController, and it attaches
+Monitor/Viewer:: a viewer window to be attached to a timeline. When attached, a
+ monitor reflects the state of the timeline's PlayController, and it attaches
  to the timeline's global pipes by stream-type match, showing video as monitor
  image and sending audio to the system audio port (Alsa or Jack). Possible
  extensions are for a monitor to be able to attach to probe points within the
@@ -91,7 +98,7 @@ Definitions
 Relations
 ~~~~~~~~~
 
-image:images/fig132741.png[Relation of Project Timeline Sequence Output]
+image:{imgd}/ProjectTimelineSequenceUML.png[UML: Relation of Project, Timeline, Sequence and Output]
 
 
 
@@ -99,7 +106,7 @@ image:images/fig132741.png[Relation of Project Timeline Sequence Output]
 * this UML shows the relation of concepts, not so much their implementation
 * within one Project, we may have multiple independent timelines and at the
   same time we may have multiple views of the same timeline.
-* all playhead displays within different views linked to the ''same''
+* all playhead displays within different views linked to the _same_
   underlying timeline are effectively linked together, as are all GUI widgets
   representing the same !PlayController owned by a single timeline.
 * I am proposing to do it this way per default, because it seems to be a best
@@ -108,7 +115,7 @@ image:images/fig132741.png[Relation of Project Timeline Sequence Output]
 * the timeline view is modeled to be a sub-concept of "timeline" and thus can
   stand-in. Thus, to start with, for the GUI it doesn't make any difference if
   it talks to a timeline view or a timeline.
-* each timeline ''refers'' to a (top-level) sequence. I.e. the sequences
+* each timeline _refers_ to a (top-level) sequence. I.e. the sequences
   themselves are owned by the project, and theoretically it's possible to refer
   to the same sequence from multiple timelines directly and indirectly.
 * besides, it's also possible to create multiple independent timelines -— in
@@ -116,11 +123,11 @@ image:images/fig132741.png[Relation of Project Timeline Sequence Output]
   configuration gives the ability to play the same arrangement in parallel with
   multiple independent play controllers (and thus independent playhead
   positions)
-* to complement this possibilities, I'd propose to give the ''timeline view''
+* to complement this possibilities, I'd propose to give the _timeline view_
   the possibility to be focussed (re-linked) to a sub-sequence. This way, it
   would stay connected to the main play control, but at the same time show a
-  sub-sequence ''in the way it will be treated as embedded within the top-level
-  sequence.'' This would be the default operation mode when a meta-clip is
+  sub-sequence _in the way it will be treated as embedded within the top-level
+  sequence._ This would be the default operation mode when a meta-clip is
   opened (and showed in a separate tab with such a linked timeline view). The
   reason for this proposed handling is again to give the user the least
   surprising behaviour. Because, when -— on the contrary -— the
@@ -129,8 +136,8 @@ image:images/fig132741.png[Relation of Project Timeline Sequence Output]
   reserved for advanced use, e.g. when multiple editors cooperate on a single
   project and a sequence has to be prepared in isolation prior to being
   integrated in the global sequence (featuring the whole movie).
-* one rather unconventional feature to be noted is that the ''tracks'' are
-  within the ''sequences'' and not on the level of the global busses as in most
+* one rather unconventional feature to be noted is that the _tracks_ are
+  within the _sequences_ and not on the level of the global busses as in most
   other video and audio editors. The rationale is that this allows for fully
   exploiting the tree-structure, even when working with large and compound
   projects, it allows for sequences being local clusters of objects including
@@ -141,10 +148,10 @@ image:images/fig132741.png[Relation of Project Timeline Sequence Output]
 
 Tasks
 ^^^^^
- * Interfaces on the link:GUI/Proc[] level need to be fully specified.
+ * Interfaces on the GUI and Proc level need to be fully specified.
    Especially, "Timeline" is now promoted to be a new top-level entity within
    the Session
- * communication between the !PlayController(s) and the GUI need to be worked
+ * communication between the PlayController(s) and the GUI need to be worked
    out
  * the stream type system, which is needed to make this default connection
    scheme work, currently is just planned and drafted. Doing a exemplaric
@@ -265,6 +272,10 @@ GUI handling could make use of expanded view features like ;
   with - a sort of google earth feature for global sized projects.
 
 Tree 2008-12-19 22:58:30
+
+Final
+~~~~~
+    Do 14 Apr 2011 03:06:42 CEST Christian Thaeter
 
 
 Back to link:/documentation/devel/rfc.html[Lumiera Design Process overview]

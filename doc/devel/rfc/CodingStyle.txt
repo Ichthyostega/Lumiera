@@ -52,30 +52,14 @@ Tasks
 * footers (or headers) to configure common editors to use this style by default
 
 
-Pros
-^^^^
-
-
-Cons
-^^^^
-
-
-Alternatives
-^^^^^^^^^^^^
-
-
-
-
-Rationale
-~~~~~~~~~
-
 
 
 
 Conclusion
 ----------
 we agreed on GNU style
- -- link:ct[] [[DateTime(2007-07-03T04:04:22Z)]]
+
+CT:: '2007-07-03 04:04'
 
 
 
@@ -88,6 +72,8 @@ think all other reasons will lead us to nowhere!
 Although I'm used to a BSD/KNF-like coding style I will try the GNU one. After
 all, the wikipedia page mentions no disadvantages of that style :)
 
+MichaelPloujnikov:: '2007-06-27 17:17'
+
 
 I just proposed K&R because it is widely accepted. Personally, I was never very
 fond of K&R style, I always prefered putting opening braces to the left. I
@@ -95,6 +81,9 @@ never used GNU style until now, but it looks somewhat apealing to me. (btw,
 ECLIPSE comes with presets for all this styles :-P ). Anyhow, I can adapt to
 most any style. The only thing I really dislike is using tabs (with the
 exeption of database DDLs and CSound files, where tab are actually helpful) :)
+
+Ichthyo:: '2007-06-27 20:55'
+
 
 ''''
 Back to link:/documentation/devel/rfc.html[Lumiera Design Process overview]

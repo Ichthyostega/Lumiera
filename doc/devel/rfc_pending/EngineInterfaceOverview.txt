@@ -1,6 +1,12 @@
+Engine Interface Overview
+=========================
+:Date: 2010
+
+// please don't remove the //word: comments
+
 [grid="all"]
 `------------`-----------------------
-*State*         _Idea_
+*State*         _Draft_
 *Date*          _2010-04-16_
 *Proposed by*   link:Ichthyostega[]
 -------------------------------------
@@ -8,11 +14,14 @@
 
 Overview Engine Interface(s)
 ----------------------------
+
+********************************************************************************
 At the Engine Interfaces, Lumiera's Backend and Session get connected and work
 together to produce rendered output. This design proposal intends to give an
 overview of the connection points and facilities involved, to define some terms
 and concepts and to provide a foundation for discussion and working out the
 APIs in detail.
+********************************************************************************
 
 
 
@@ -26,8 +35,7 @@ Participants
  *Scheduler*:: cares for calculations actually to happen, in the right order
   and just in time, if at all
  *Node*:: abstraction of an processing unit, supports planning by the
-  dispatcher, +
-          allows to pull data, thereby driving the actual calculation.
+  dispatcher, allows to pull data, thereby driving the actual calculation.
 
 Render Process
 ~~~~~~~~~~~~~~
@@ -62,7 +70,7 @@ identifier and _channel selector_.
    
  timings::
    a definition to translate global model time units in real clock time,
-   including _alignment_ to an external time grid.
+   including _alignment_ to an external _time grid_.
    
  model port::
    a point in the (high level) model where output can be produced. +
@@ -166,7 +174,7 @@ prerequisites)
 Node Invocation API
 ~~~~~~~~~~~~~~~~~~~
 As nodes are stateless, they need to be embedded into an invocation context in
-order to be of any use. + The node invocation has two distinct stages and thus
+order to be of any use. The node invocation has two distinct stages and thus
 the invocation API can be partitioned in two groups
 
 Planning
@@ -175,8 +183,8 @@ During the planning phase, the dispatcher retrieves various informations
 necessary to _schedule_ the following pull call. These informations include
 
  * reproducible invocation identifier, usable to label frames for caching
- * opaque source identifier (owned by the backed) when this node represents a
-   source
+ * opaque source identifier (owned by the backed) in case this node
+   represents a source
  * prerequisite nodes
  * index (channel) of the prerequisite's output to be fed as input buffer(s)
  * number and size of the output buffers required
@@ -201,11 +209,13 @@ Node pull
 Tasks
 ~~~~~
  * find out if we need to support variable framerate
- * find out about the exact handling of multichannel data streams
- * design a buffer descriptor
- * design a buffer designation scheme
- * expand on the node identification scheme
- * clarify how control data frames can be addressed
+   ([green]#->  yes, implementation deferred#)
+ * find out about the exact handling of multichannel data streams ([green]#✔ done#)
+ * design and prototypical implementation of frame quantisation ([green]#✔ done#)
+ * design a buffer descriptor [red]#TODO#
+ * design a buffer designation scheme [red]#TODO#
+ * expand on the node identification scheme [red]#TODO#
+ * clarify how control data frames can be addressed [red]#TODO#
 
 
 Discussion
@@ -229,17 +239,28 @@ Rationale
 
 
 
+//Conclusion
+//----------
+//conclusion: When approbate (this proposal becomes a Final)
+//            write some conclusions about its process:
+
+
+
 
 Comments
 --------
+//comments: append below
 
-////////////////////
+.State -> Draft
+Requirements and details of the design are sufficiently clear meanwhile.
+Ther seems to be not much room for alternative approaches, given our
+general planning for the application
 
-Conclusion
-~~~~~~~~~~
-* *accepted* / *dropped* by MMMMMM.YYYY developer meeting.
-
-////////////////////
+    Mi 11 Mai 2011 19:27:12 CEST Ichthyostega <prg@ichthyostega.de>
 
 
+//endof_comments:
+
+''''
 Back to link:/documentation/devel/rfc.html[Lumiera Design Process overview]
+

@@ -4,10 +4,9 @@ shopt -s extglob
 
 function usage()
 {
-    less -F <<"EOF"
+    grep -v '^// ' <<"EOF" | less -F
 Lumiera RFC maintenance script
 ==============================
-
 // Note: the source of this documentation is maintained
 //       directly admin/rfc.sh in its usage() function
 //       edit it only there and then regenerate
@@ -53,12 +52,14 @@ Smart matching
 
 RFC names don't need to be given exactly, they use a globbing pattern.
 This is:
- - case insensitive
- - whitespaces are ignored
- - `*` stands for any number of parameters
- - `?` is any single character
- - when starting with `/` they are matched against the begin of the name
- - some regex operators work too
+
+ * case insensitive
+ * whitespaces are ignored
+ * `*` stands for any number of parameters
+ * `?` is any single character
+ * when starting with `/` they are matched against the begin of the name
+ * some regex operators work too
+
 `find` and `show` can operate on many matches so the given rfc name doesn't
 need to be unique. The other commands will complain when the RFC name given
 doesn't resolve to one unique RFC.
@@ -223,29 +224,33 @@ function find_chapter()
 
 
 
-function process()
+function process_file()
 {
     local file="$1"
     local path="${1%/*}"
+    local basename="${1##*/}"
+    local destpath="$path"
     local state=$(grep '^\*State\* *' "$file")
 
     case "$state" in
     *Final*)
-        if [[ "$path" != "./doc/devel/rfc" ]]; then
-            git mv "$file" "./doc/devel/rfc"
-        fi
+        destpath="./doc/devel/rfc"
         ;;
     *Idea*|*Draft*)
-        if [[ "$path" != "./doc/devel/rfc_pending" ]]; then
-            git mv "$file" "./doc/devel/rfc_pending"
-        fi
+        destpath="./doc/devel/rfc_pending"
         ;;
-    *Parked*|*Dropped*)
-        if [[ "$path" != "./doc/devel/rfc_dropped" ]]; then
-            git mv "$file" "./doc/devel/rfc_dropped"
-        fi
+    *Parked*)
+        destpath="./doc/devel/rfc_parked"
+        ;;
+    *Dropped*)
+        destpath="./doc/devel/rfc_dropped"
         ;;
     esac
+
+    if [[ "$path" != "$destpath" ]]; then
+        git mv "$file" "$destpath"
+    fi
+    git add "$destpath/$basename"
 }
 
 
@@ -334,7 +339,7 @@ function change_state()
     local comment=".State -> $state$nl//add reason$nl    $(date +%c) $(git config --get user.name) <$(git config --get user.email)>$nl"
     edit_state "$name" "$state" "$comment"
     edit "$name" -4 "endof_comments"
-    process "$name"
+    process_file "$name"
 }
 
 
@@ -347,7 +352,7 @@ process)
     for file in $(find ./doc/devel/rfc* -name '*.txt');
     do
         echo "process $file"
-        process "$file"
+        process_file "$file"
     done
     :
     ;;
@@ -375,15 +380,14 @@ create)
     else
         source ./doc/devel/template/new_rfc.sh >"./doc/devel/rfc_pending/${name}.txt"
         edit "./doc/devel/rfc_pending/${name}.txt" 2 abstract
-        git add "./doc/devel/rfc_pending/${name}.txt"
-        process "./doc/devel/rfc_pending/${name}.txt"
+        process_file "./doc/devel/rfc_pending/${name}.txt"
     fi
     ;;
 edit)
     name=$(unique_name "$1")
     if [[ "$name" ]]; then
         edit "${name}" 2 "$2"
-        git add "$name"
+        process_file "$name"
     fi
     ;;
 asciidoc)
@@ -396,21 +400,18 @@ draft)
     name=$(unique_name "$1")
     if [[ "$name" ]]; then
         change_state "$name" Draft
-        git add "$name"
     fi
     ;;
 park)
     name=$(unique_name "$1")
     if [[ "$name" ]]; then
         change_state "$name" Parked
-        git add "$name"
     fi
     ;;
 final)
     name=$(unique_name "$1")
     if [[ "$name" ]]; then
         change_state "$name" Final
-        git add "$name"
     fi
     ;;
 supersede)
@@ -420,21 +421,19 @@ supersede)
     newname="${newname%.txt}"
     if [[ "$name" && "$newname" ]]; then
         change_state "$name" "Superseded by $newname"
-        git add "$name"
     fi
     ;;
 drop)
     name=$(unique_name "$1")
     if [[ "$name" ]]; then
         change_state "$name" Dropped
-        git add "$name"
     fi
     ;;
 comment)
     name=$(unique_name "$1")
     if [[ "$name" ]]; then
         add_comment "${name}"
-        git add "$name"
+        process_file "$name"
     fi
     ;;
 discard)
@@ -446,6 +445,7 @@ discard)
 wrap)
     find_rfc "$1" | while read file; do
         smart_wrap "$file" 80
+        process_file "$file"
     done
     ;;
 smart_wrap)

@@ -2,6 +2,7 @@ Design Process
 ==============
 
 //Menu:   include rfc
+//Menu:   include rfc_parked
 //Menu:   include rfc_pending
 //Menu:   include rfc_dropped
 
@@ -9,7 +10,7 @@ Design Process
 
 How it Works
 ------------
-Design Process entries (RfC) can be created by anyone.
+Design Process entries (Request for Comment) can be created by anyone.
 Each entry goes through several stages until it's accepted (or rejected).
 All our RfC entries are filed here, either in the  link:rfc/index.html[RfC accepted] section,
 or as link:rfc_pending/index.html[pending RfC] or as link:rfc_dropped/index.html[RfC dropped].
@@ -37,6 +38,6 @@ Handling of RfC entries in practice
 .Adding a new Proposal:
 . Check if there is no similar proposal below! If yes, contact it's author and contribute to that one.
 . Think of a good/descriptive _Name-ID_ for the Proposal. It will be used to create a RfC sub-page, so no embedded spaces please.
-. [red,yellow]#!TODO!# _please describe how to use the +rfc.sh+ here_.
+. Use the './admin/rfc.sh' helper script to maintain the RFC's. Check out its link:../technical/infra/rfcsh.html[documentation].
 
 

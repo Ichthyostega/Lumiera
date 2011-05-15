@@ -1,6 +1,6 @@
 [grid="all"]
 `------------`-----------------------
-*State*         _Idea_
+*State*         _Final_
 *Date*          _2008-10-10_
 *Proposed by*   link:Ichthyostega[]
 -------------------------------------
@@ -132,6 +132,16 @@ should actively support both working styles.
 
 Comments
 --------
+
+Final
+~~~~~
+
+Everyone likes this and we want to have this. But this is rather a concept
+which needs a lot more discussion for the implementation. Further details may
+follow where these thingsare worked out.
+
+    Do 14 Apr 2011 03:06:42 CEST Christian Thaeter
+
 
 
 Back to link:/documentation/devel/rfc.html[Lumiera Design Process overview]

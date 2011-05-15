@@ -1,0 +1,72 @@
+2008-12-10 Lumiera Developers Meeting
+=====================================
+:Author: Teld
+:Date: 2009-01-12
+
+Dec 10, 2008 on #lumiera 20:15 - 00:45 UTC +
+
+__Participants__
+
+ * cehteh
+ * ichthyo
+ * joelholdsworth
+ * Teld
+ * tchy
+ * Divinespectrum
+ * raffa
+ * kirk
+ * Victorsigma
+ * pedro
+ * thorwil
+ 
+
+The Lumiera Logo
+----------------
+
+The logo contest is a great success: http://www.pipapo.org/pipawiki/Lumiera/Logos[105 entries]. Everyone agrees that a preselection has to be made. Every attendee will have a look at the entries and selects 5 for the preselection list. Finally, 21 logos are selected. Together with a nice collage they are http://www.pipapo.org/pipawiki/Lumiera/Logos/Selection[presented] so that anyone online can vote for his/her favorite one. Voting will be possible from 20 december until 31 december at midnight. 
+
+
+Recurring Topics
+----------------
+Discussion of open http://www.pipapo.org/pipawiki/Lumiera/DesignProcess[design process] drafts.
+
+
+EDL vs Sequence
+~~~~~~~~~~~~~~~
+There has been a long discussion on the ML about the term EDL. In the end almost agreed or was at least ok with the Sequence instead of EDL. The Sequence will be the building block and is a collection of media objects and a tree of tracks. A discussion about the UML showed in [wiki:self:../DesignProcess/TimelineSequenceOutput Project, Timeline(s), Sequence(s) and Output] and the relation of Timeline and Sequence follows.
+
+__Conclusion__: the name Sequence will be used instead of EDL
+
+
+Interfaces between layers
+~~~~~~~~~~~~~~~~~~~~~~~~~
+Ichtyo explains that the idea is that between layers only the C Language interfaces of the interface system are used. Wrappers have been made so that a convenient C++ interface is available.
+
+
+Threads
+~~~~~~~
+The UI will mostly run on a single thread, i.e. gtk_main will run in this GUI thread and when it terminates, the GUI is "done" and signals back that it is done. Cehteh points out that really hard working threads should be managed by the scheduler in the backend. All agree that we should avoid thread cancellation
+
+
+
+General Topics
+--------------
+
+
+Video format
+~~~~~~~~~~~~
+Kirk asks to what video format footage has to be converted so that it can be used in Lumiera. Ichtyo and cehteh point out that Lumiera will not be nailed down to one single format. A small number of formats that permit precise editing will be supported. Other formats may be available through plugins. The working horse is gmerlin, especially libgavl. Essentially Lumiera will try to figure out a conversion path in a lossless way.
+
+
+Knowledge base
+~~~~~~~~~~~~~~
+Kirk has already collected lots of information on video formats, conversion from one into the other, formats supported out of the box by Quicktime, Windows Media Player and so on. The developers agree that this is much needed. Kirk proposes to help in this area.
+
+
+
+Next meeting
+------------
+
+The next meeting will be at Wednesday 14 jan 21:00 UTC
+
+

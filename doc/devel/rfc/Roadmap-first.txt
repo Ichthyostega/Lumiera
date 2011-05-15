@@ -1,6 +1,6 @@
 [grid="all"]
 `------------`-----------------------
-*State*         _Idea_
+*State*         _Final_
 *Date*          _2009-01-30_
 *Proposed by*   link:Ichthyostega[]
 -------------------------------------

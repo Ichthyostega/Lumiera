@@ -1,6 +1,6 @@
 [grid="all"]
 `------------`-----------------------
-*State*         _Idea_
+*State*         _Final_
 *Date*          _2008-03-06_
 *Proposed by*   link:Ichthyostega[]
 -------------------------------------
@@ -226,6 +226,12 @@ This feature/capability is likely to stamp the Lumiera project as a flagship
 benchmark in more ways than one, for some time.
 
  . --link:Tree[][[DateTime(2008-08-23T12:54:00NZ)]].
+
+
+Final
+~~~~~
+    Do 14 Apr 2011 03:06:42 CEST Christian Thaeter
+
 
 
 Back to link:/documentation/devel/rfc.html[Lumiera Design Process overview]

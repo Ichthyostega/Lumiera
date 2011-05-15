@@ -5,7 +5,7 @@ VersionNumberScheme
 
 [grid="all"]
 `------------`-----------------------
-*State*         _Idea_
+*State*         _Final_
 *Date*          _Mi 09 Mär 2011 02:00:41 CET_
 *Proposed by*   Ichthyostega <prg@ichthyostega.de>
 -------------------------------------
@@ -151,6 +151,11 @@ when to use what version number.
 Comments
 --------
 //comments: append below
+
+.State -> Final
+considered common practice
+
+    Do 14 Apr 2011 03:46:07 CEST Christian Thaeter <ct@pipapo.org>
 
 
 //endof_comments:

@@ -1,6 +1,6 @@
 [grid="all"]
 `------------`-----------------------
-*State*         _Idea_
+*State*         _Parked_
 *Date*          _2009-01-14_
 *Proposed by*   link:ct[]
 -------------------------------------
@@ -99,6 +99,14 @@ thought. Up to now, rather the standard way of thinkin was to use a "project
 framerate" and a fixed resolution in pixels. But we certainly can do better.
 
   -- Ichthyostega 18:09:50
+
+
+Parked
+~~~~~~
+deferred for later, generally accepted.
+
+    Do 14 Apr 2011 03:06:42 CEST Christian Thaeter
+
 
 
 Back to link:/documentation/devel/rfc.html[Lumiera Design Process overview]

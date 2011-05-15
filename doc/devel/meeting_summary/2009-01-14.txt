@@ -1,0 +1,122 @@
+2009-01-14 Lumiera Developers Meeting
+=====================================
+:Author: Raffaella_Traniello_and_Goibhniu
+:Date: 2009-02-25
+
+Jan 14, 2009 on #lumiera starting 20:00 UTC
+
+
+__Participants__
+
+ * cehteh
+ * ichthyo
+ * joelholdsworth
+ * raffa
+ * goibhniu
+ * Teld
+ * nikola_
+ * thorwil
+ * SimAV
+ * raevol
+
+
+The Lumiera Logo - Workflow and GUI
+-----------------------------------
+Everyone is pretty happy with the results of the logo contest. The logo still needs some refinements, especially:
+
+ * the font
+ * angle of view
+ * single logo or multiple logos based on a theme (dynamic logo)
+Logo work discussion has started on Mailing list but it is dying out.
+
+Workflow and GUI discussion has already started on Mailing list. Keeping it effective and useful demands core devs time and energy.
+
+
+Conclusion
+~~~~~~~~~~
+Two groups are created, each of these have someone responsible to bring them forward.
+
+The group nudger is some director/moderator who keeps it going and nudges the people constantly, leading the discussion, not making the decisions alone. This 'supervisor' doesn't need to be someone to do the work of that group, but someone who can spend some efforts and time to coordinate it.
+
+Work discussion will proceed on the Mailing List but following the directions stated during the IRC meetings. +
+Messages will have [ARTWORK] or [LOGO] or [WORKFLOW] in the subject. [[BR]] Groups can schedule IRC meetings separated from the monthly meetings that are meant for general organization.
+
+
+Group 1 [WORKFLOW]
+^^^^^^^^^^^^^^^^^^
+ . director/supervisor: nikola_ (Nikola Duper)
+Unlike other software where the GUI dictates the capabilities of the backend, Lumiera is being built from the bottom up to the GUI. So the foundations are built first to make the things accessible independently to the layout. +
+The GUI layout is determined by the people who code it. This workflow group will be counsellor for the coding devs.[[BR]] The core dev responsible for the GUI is joelholdsworth (Joel Holdsworth).[[BR]] One of the group goals is to make the dev point of view dialogate with the editor point of view.
+
+The group studies how a professional editor uses a NLE, defines the key-features and the main qualities (rock solid, simple, support for the main video formats, usable,...), define the static mainstream functionality as opposed to optional experimental ideas and funny widgets, discuss implementability in Lumiera with the devs. +
+It discuss about UI design, to ease the pro workflow, to improve usability for amateurs and discoverability for newcomers. [[BR]] It thinks about ergonomics.
+
+
+Group 2 [ARTWORK]
+^^^^^^^^^^^^^^^^^
+ . director/supervisor: raffa (Raffaella Traniello)
+The group discuss about logo, themes, the look and feel...
+
+
+Getting the 'non-coders' community to help
+------------------------------------------
+goibhniu proposes an issue tracker.
+
+The documentation needs love: it's currently horribly scattered all around. +
+All the content needs to be converted to asciidoc and to the git repo at lumiera.org.[[BR]] Waiting for uWiki, the site will be in asciidoc+git [[BR]] The site needs a structure or other means to increase discoverability of all our information[[BR]] goibhniu proposes organizing a "sprint" to help get people involved and set a date for it (documentation migration/organisation)
+
+
+Conclusion
+~~~~~~~~~~
+ * goibhniu volunteers to set up Trac.
+ * raevol volunteers to maintain it.
+ * The link:AsciiDoc[] Day idea will be discussed at the next meeting.
+
+Possible GUI-Integration: Display a frame?
+------------------------------------------
+There was some discussion about the need for a component which does the timing and communicates with the scheduler and where it should sit in the stack. 
+For example: a render controler would be `for (frame i=0; i < end; ++i){pull_frame_without_timing_constraints(i);}` and a player would be the same with timing constraints and possibly lower quality. The GUI just has to remember that a play button is pushed, and that a certain instance of the play control is associated with a certain playback task in the backend. It was decided that this doesn't need to be resolved at the moment and requires further discussion and planning. It was felt that device dependnet things shouldn't be in the backend since it may one day run remotely as a frame server. It may need to sit between the gui and the backend. It was noted that the backend will run on constraints rather than ticks. For now the focus is on getting a single frame into the gui and there will be time to flesh out final interfaces later.                                                                                                  
+
+The devs agreed to meet up on Saturday to get the latest version up and running.
+
+http://www.lumiera.org/gitweb?p=lumiera/ct;a=blob;f=src/common/guifacade.cpp;h=7f781845ad79b4a3e2cd820b96b87f5e702a80d3;hb=8e89506d289f3986af133493a40e3705b7919c87#l64[]                                                                                                                                                   
+(The thread shall be forked from within the GUI code not from the facade)                                                                                    
+This was discussed and ichthyo has already pushed a new cleaned up state and resolved most of the dependency problems with the liblumiera. It raised the question: do we prefer a UI facade to a GUI facade or do we want an extra script facade someday?                                                                 
+
+It was discussed whether joelholdsworth should wait for cehteh to make a playback interface or use a dummy one for now. Cehteh wasn't ready to commit to a final interface yet but felt it was important to acknowledge the type of bidirectional interface that would be required. Icythyo has been using the link:GuiNotification[] as a dummy to implement an interface and get things working with loading the GUI plugin. Joelholdsworth already has displayer code which uses XVideo and falls back to GDK. It tells the buffer the address instead of being integrated with gavl, so cehteh will be able to hand it the address when ready. At the moment the buffers contain RGB (not gavl frames or anything). For the simple test joelholdsworth will need a buffer with RGB data and some metadata which cehteh and joelholdsworth planned to flesh out in the near future.
+
+
+# Errors, Assertions, Checks, Dev- and Release-Builds
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+A new Nobug is nearly ready with new documentation (cehteh). The error handler has been improved, as announced on the ML. Cehteh emphasised the importance of using nobug everywhere and not `#if DEBUG`:
+
+DEBUG is not a standard C/C++/buildsystem defined macro when it works its just coincidence but NDEBUG is standard. Neither does such code use nobug facilities nor respect nobug build levels.
+
+in new nobug you can do:
+  NOBUG_IF_ALPHA(
+ alpha code here
+  )
+it's the same for BETA RELEASE and there's a NOT variant for each but even then that should be avoided and higher level nobug facilities should be used instead.
+(http://www.lumiera.org/nobug.html)[]
+
+beta and release builds shall be possible with nobug soon .. waiting for metta to integrate the new test.sh
+test.sh with regex is awesome because you can test output which contains no exact things like addresses, version numbers, times
+and running the testsuite under valgrind works properly now
+
+
+Workflow/Interface
+~~~~~~~~~~~~~~~~~~
+Ichthyo expressed the importance of not having dedicated kinds of tracks, but to be able to use any track for anything (audio, video etc.). This will require more work in the proc layer. Tracks are also not just layered but are trees which can fold. Any clip can contain N streams of various kinds. When a clip contains video and audio streams it still occupies just one track and the system automatically connects the audio to an audio bus etc. but the user is free to split off the audio as an independent clip and treat it separately from the video. The plan is to have various kinds of links between clips. This basic idea will need further refinement and consideration by the workflow team (Nikola et. al.) e.g. the user will need some way to direct the sound to a different bus even though it may be in a compound clip. By default all the video should be layered in the order of the tracks and a user should be able to say "don't mix the audio from track 4 and its child tracks directly to master but route it to the music subgroup". This is where the tree of tracks plays an important role because each track with its children forms a group.
+There was further discussion on the general aims, objectives and focus of Lumiera and the reasoning behind them. Integration with control surfaces, jog wheels, sliders etc. should also be considered for the workflow. Nikola expressed the importance of stability and a simple and clean UI.
+
+
+
+Next meeting
+------------
+Usually meetings are the second Wednesday each month on #lumiera at Freenode. The next meeting will be on Feb 11 - 20:00 UTC
+
+
+Core dev's IRC meetings
+~~~~~~~~~~~~~~~~~~~~~~~
+cehteh proposes a recurrent core dev meeting, more frequent than the monthly meeting since there is the a lot of stuff ahead that needs communication.
+

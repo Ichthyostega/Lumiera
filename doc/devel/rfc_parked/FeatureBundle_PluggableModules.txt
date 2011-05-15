@@ -1,6 +1,6 @@
 [grid="all"]
 `------------`-----------------------
-*State*         _Idea_
+*State*         _Parked_
 *Date*          _2008-09-03_
 *Proposed by*   link:Ichthyostega[]
 -------------------------------------
@@ -185,5 +185,11 @@ instead reiventing another system for storing metadata. My Idea is to make the
 link:Plugin/Interface[] system self-describing this will also be used to
 bootstrap a session on itself (by the serializer which is tightly integrated)
   -- link:ct[] [[DateTime(2008-09-04T09:28:37Z)]] 2008-09-04 09:28:37
+
+Parked
+~~~~~~
+Needs to ne reviewed some time later.
+
+    Do 14 Apr 2011 03:06:42 CEST Christian Thaeter
 
 Back to link:/documentation/devel/rfc.html[Lumiera Design Process overview]

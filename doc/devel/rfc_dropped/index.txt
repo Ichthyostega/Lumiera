@@ -9,10 +9,3 @@ Design Proposals not accepted
 The RfC entries listed here where discussed, but then concluded not to be applicable
 for some reason. Either the discussion turned up a completely different solution, or
 maybe they got just superseded by changing circumstances.
-
-Besides that, sometimes we find an entry impossible to care for and discuss in detail
-currently, because we know to be occupied with other stuff. In that case, we put that
-entry ``on hold'' (state _*Parked*_). Currently (as of 2/2011) these entries show
-up in this category here too.
-
-

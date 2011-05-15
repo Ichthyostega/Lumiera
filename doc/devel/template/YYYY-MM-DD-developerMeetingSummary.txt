@@ -11,13 +11,13 @@ __Participants__
  * ichthyo
  * ...
  
-_Protocol written by XXXXX_
+_Summary written by XXXXX_
 
 
 
 Recurring Topics
 ----------------
-Discussion of open http://www.pipapo.org/pipawiki/Lumiera/DesignProcess[design process] drafts.
+Discussion of open link:/documentation/devel/rfc.html[design process] drafts.
 
 
 Prop1

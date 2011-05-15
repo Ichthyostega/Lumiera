@@ -1,0 +1,19 @@
+Parked Design Proposals
+=======================
+
+//Menu: label parked
+//Menu: sort children
+
+-> read link:../rfc.html[more about Lumiera RfC] and the Design Process
+
+The RfC entries listed here where proposed but not finally decided or agreed on;
+moreover parked RfC's are put here until someone has time to review and improve
+them further towards an final decision.
+
+Labelling a RfC as _parked_ doesn't entail any pre-judgment -- it just might be
+beyond our current working focus, or we're lacking the resources to care for this
+topic right now.
+
+
+
+
