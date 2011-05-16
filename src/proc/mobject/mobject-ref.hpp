@@ -147,7 +147,7 @@ namespace mobject {
       /** resolves the referred placement to an 
        *  ExplicitPlacement and returns the found start time
        */
-      lumiera::Time const&
+      lib::time::Time const&
       getStartTime()
         {
           return pRef_.resolve().time;

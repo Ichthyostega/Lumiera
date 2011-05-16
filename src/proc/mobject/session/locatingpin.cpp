@@ -189,7 +189,7 @@ namespace session {
   
   
   RelativeLocation& 
-  LocatingPin::operator() (PlaRef& refObj, Time offset)
+  LocatingPin::operator() (PlaRef& refObj, Offset const& offset)
   {
     return static_cast<RelativeLocation&> 
               (addChain (new RelativeLocation (refObj, offset)));

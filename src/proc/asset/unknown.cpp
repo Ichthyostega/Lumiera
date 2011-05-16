@@ -38,7 +38,7 @@ namespace asset {
    *  on using the Unknown::getOrg() function.
    *  @note we don't depend on the refered media...
    */
-  Unknown::Unknown (const Asset::Ident& idi, string name, Time length)
+  Unknown::Unknown (const Asset::Ident& idi, string name, Duration length)
     : Media (idi, name, length)
   {
     TODO ("implement some sensible behaviour for the »unknown media« placeholder...");

@@ -32,7 +32,7 @@ namespace session {
    *  will be set to 0 
    */
   Track::Track (TrackID const& trackID)
-    : start_(0)
+    : start_(Time::ZERO)                     //////////////////////////////////TODO something more inspired please
     , id_(trackID)
   {
     throwIfInvalid();

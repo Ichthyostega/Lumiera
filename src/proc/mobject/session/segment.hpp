@@ -28,6 +28,7 @@
 
 #include "proc/common.hpp"
 #include "proc/mobject/explicitplacement.hpp"
+#include "lib/time/timevalue.hpp"
 
 
 using std::list;
@@ -46,12 +47,10 @@ namespace mobject {
     class Segment
       {
       protected:
-        typedef lumiera::Time Time;
+        typedef lib::time::TimeSpan Span;
 
         /** begin of this timeline segment. */
-        Time start;
-        /** duration (span) of this timeline segment. */
-        Time length;
+        Span span_;
 
         /** relevant MObjects comprising this segment. */
         list<ExplicitPlacement> elements;

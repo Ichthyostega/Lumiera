@@ -28,6 +28,7 @@
 #include "proc/asset/unknown.hpp"
 #include "proc/mobject/session/clip.hpp"
 #include "proc/mobject/session/mobjectfactory.hpp"
+#include "lib/time/timevalue.hpp"
 #include "lib/util.hpp"
 #include "include/logging.h"
 
@@ -36,6 +37,8 @@
 
 
 using util::isnil;
+using lib::time::FSecs;
+using lib::time::Duration;
 
 using boost::format;
 using boost::regex;
@@ -44,11 +47,10 @@ using boost::regex_search;
 using std::tr1::dynamic_pointer_cast;
 
 
-namespace asset
-  {
+namespace asset {
   
-  namespace // Implementation details
-  {
+  namespace { // Implementation details
+    
     /** helper: extract a name token out of a given path/filename
      *  @return sanitised token based on the name (minus extension),
      *          empty string if not the common filename pattern.
@@ -116,7 +118,7 @@ namespace asset
   }
   
   
-  lumiera::Time
+  Duration
   Media::getLength()  const
   {
      return len_;
@@ -157,7 +159,7 @@ namespace asset
         if (isnil (key.name)) key.name=extractName(file);
         TODO ("file exists?");
         TODO ("extract media file properties");
-        Time length(25);
+        Duration length(FSecs(5));
         TODO ("detecting and wiring multichannel compound media!");
         pM = new Media (key,file,length); 
       }

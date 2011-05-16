@@ -48,6 +48,7 @@
 
 
 #include "proc/common.hpp"
+#include "lib/time/timevalue.hpp"
 
 #include <utility>
 #include <tr1/memory>
@@ -96,7 +97,9 @@ namespace mobject {
     class LocatingPin
       {
       protected:
-        typedef lumiera::Time Time;
+        typedef lib::time::Time Time;
+        typedef lib::time::TimeVar TimeVar;
+        typedef lib::time::Offset Offset;
         typedef Time* Track; //TODO dummy declaration; we don't use Tracks as first-class entity any longer
         typedef std::tr1::shared_ptr<asset::Pipe> Pipe;
         typedef std::pair<Time,Pipe> SolutionData;  //TICKET #100 (ichthyo considers better passing of solution by subclass)
@@ -119,7 +122,7 @@ namespace mobject {
         /* Factory functions for adding LocatingPins */
         
         FixedLocation&    operator() (Time start, Track track=0);
-        RelativeLocation& operator() (PlacementRef<MObject>& refObj, Time offset=Time(0));   //////////TODO: warning, just a dummy placeholder for now!!
+        RelativeLocation& operator() (PlacementRef<MObject>& refObj, Offset const& offset=Offset(Time::ZERO));   //////////TODO: warning, just a dummy placeholder for now!!
         
         LocatingPin (const LocatingPin&);
         LocatingPin& operator= (const LocatingPin&);
@@ -145,8 +148,8 @@ protected:
          */  
         struct LocatingSolution
           {
-            Time minTime;
-            Time maxTime;
+            TimeVar minTime;
+            TimeVar maxTime;
             Track minTrack; // TODO don't use Tracks
             Track maxTrack;
             bool impo;
