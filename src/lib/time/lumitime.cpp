@@ -39,6 +39,7 @@ namespace time {
   /** @note the allowed time range is explicitly limited to help overflow protection */
   const Time Time::MAX ( TimeValue::buildRaw_(+std::numeric_limits<gavl_time_t>::max() / 30) );
   const Time Time::MIN ( TimeValue::buildRaw_(-_raw(Time::MAX)                             ) );
+  const Time Time::ZERO;
   
   
   /** convenience constructor to build an

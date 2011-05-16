@@ -273,6 +273,7 @@ namespace time {
     public:
       static const Time MAX ; 
       static const Time MIN ;
+      static const Time ZERO;
       
       explicit 
       Time (TimeValue const& val =TimeValue(0))
