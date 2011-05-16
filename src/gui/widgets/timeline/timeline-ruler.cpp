@@ -1,5 +1,5 @@
 /*
-  timeline-ruler.cpp  -  Implementation of the time ruler widget
+  TimelineRuler  -  Implementation of the time ruler widget
 
   Copyright (C)         Lumiera.org
     2008,               Joel Holdsworth <joel@airwebreathe.org.uk>
@@ -20,51 +20,52 @@
 
 * *****************************************************/
 
-#include <cairomm/cairomm.h>
 
-#include "timeline-ruler.hpp"
+#include "gui/widgets/timeline/timeline-ruler.hpp"
 #include "gui/widgets/timeline-widget.hpp"
 #include "gui/window-manager.hpp"
 #include "gui/util/cairo-util.hpp"
-
+#include "lib/time/timevalue.hpp"
 #include "lib/time.h"
 
+#include <cairomm/cairomm.h>
 
 using namespace Gtk;
 using namespace Cairo;
-using namespace std;
-using namespace boost;
 using namespace gui;
 using namespace gui::widgets;
 using namespace gui::widgets::timeline;
-using namespace lumiera;
 
+using boost::shared_ptr;           ////////////////////TICKET #796
 using gui::util::CairoUtil;
+using lib::time::Time;
+using lib::time::TimeVar;
+
 
 namespace gui {
 namespace widgets {
 namespace timeline {
 
-TimelineRuler::TimelineRuler(
-  gui::widgets::TimelineWidget &timeline_widget) :
-  Glib::ObjectBase("TimelineRuler"),
-  isDragging(false),
-  pinnedDragTime(0),
-  mouseChevronOffset(0),
-  annotationHorzMargin(0),
-  annotationVertMargin(0),
-  majorTickHeight(0),
-  minorLongTickHeight(0),
-  minorShortTickHeight(0),
-  minDivisionWidth(100),
-  mouseChevronSize(5),
-  selectionChevronSize(5),
-  playbackPointAlpha(0.5f),
-  playbackPointSize(12),
-  playbackPeriodArrowAlpha(0.5f),
-  playbackPeriodArrowSize(10),
-  playbackPeriodArrowStemSize(3),
-  timelineWidget(timeline_widget)
+
+TimelineRuler::TimelineRuler (TimelineWidget &timeline_widget)
+  : Glib::ObjectBase("TimelineRuler")
+  , isDragging(false)
+  , pinnedDragTime(Time::ZERO)
+  , mouseChevronOffset(0)
+  , annotationHorzMargin(0)
+  , annotationVertMargin(0)
+  , majorTickHeight(0)
+  , minorLongTickHeight(0)
+  , minorShortTickHeight(0)
+  , minDivisionWidth(100)
+  , mouseChevronSize(5)
+  , selectionChevronSize(5)
+  , playbackPointAlpha(0.5f)
+  , playbackPointSize(12)
+  , playbackPeriodArrowAlpha(0.5f)
+  , playbackPeriodArrowSize(10)
+  , playbackPeriodArrowStemSize(3)
+  , timelineWidget(timeline_widget)
 {
   // Connect up some events
   timeline_widget.state_changed_signal().connect(
@@ -238,11 +239,16 @@ TimelineRuler::set_leading_x(const int x)
   
   if(state)
     {
-      const Time time = view_window().x_to_time(x);
-      if(time > pinnedDragTime)
-        state->set_playback_period(pinnedDragTime, time);
-      else
-        state->set_playback_period(time, pinnedDragTime);
+      TimeVar newStartPoint (view_window().x_to_time(x));
+      Offset selectionLength (pinnedDragTime, newStartPoint);
+      
+      if (newStartPoint > pinnedDragTime)
+        newStartPoint=pinnedDragTime; // use the smaller one as selection start
+      
+      state->setPlaybackPeriod (Mutation::changeTime(newStartPoint)      );
+      state->setPlaybackPeriod (Mutation::changeDuration(selectionLength));
+                                   //////////////////////////////////////////////////////TICKET #797 : this is cheesy. Should provide a single Mutation to change all at once
+                                                                     ////////////////////TODO        : code duplication with timeline-ibeam-tool 205      
    }
 }
 
@@ -255,7 +261,7 @@ TimelineRuler::draw_ruler(Cairo::RefPtr<Cairo::Context> cr,
   REQUIRE(ruler_rect.get_height() > 0);
   
   const TimelineViewWindow &window = view_window();
-  const gavl_time_t left_offset = window.get_time_offset();
+  const gavl_time_t left_offset = _raw(window.get_time_offset());
   const int64_t time_scale = window.get_time_scale();
   
   // Preparation steps
@@ -301,7 +307,7 @@ TimelineRuler::draw_ruler(Cairo::RefPtr<Cairo::Context> cr,
           cr->stroke();
           
           // Draw the text
-          pango_layout->set_text(lumiera_tmpbuf_print_time(time_offset));
+          pango_layout->set_text(lumiera_tmpbuf_print_time(time_offset));           ///////////////TICKET #750 : should delegate to a Timecode format here
           cr->move_to(annotationHorzMargin + x, annotationVertMargin);
           pango_layout->add_to_cairo_context(cr);
           cr->fill();
@@ -364,7 +370,7 @@ TimelineRuler::draw_selection(Cairo::RefPtr<Cairo::Context> cr,
   Gdk::Cairo::set_source_color(cr, style->get_fg(STATE_NORMAL));
   
   // Draw the selection start chevron
-  const int a = window.time_to_x(state->get_selection_start()) + 1;
+  const int a = 1 + window.time_to_x(state->getSelectionStart());
   if(a >= 0 && a < ruler_rect.get_width())
     {
       cr->move_to(a, ruler_rect.get_height());
@@ -374,7 +380,7 @@ TimelineRuler::draw_selection(Cairo::RefPtr<Cairo::Context> cr,
     }
   
   // Draw the selection end chevron
-  const int b = window.time_to_x(state->get_selection_end());
+  const int b = window.time_to_x(state->getSelectionEnd());
   if(b >= 0 && b < ruler_rect.get_width())
     {
       cr->move_to(b, ruler_rect.get_height());
@@ -399,22 +405,18 @@ TimelineRuler::draw_playback_period(Cairo::RefPtr<Cairo::Context> cr,
   // Calculate coordinates
   const float halfSize = playbackPeriodArrowSize / 2;
   
-  const float a = window.time_to_x(
-    state->get_playback_period_start()) + 1 + 0.5f;
+  const float a = 1.5f + window.time_to_x(state->getPlaybackPeriodStart());
+                                    
   const float b = a + halfSize;
-  const float d = window.time_to_x(
-    state->get_playback_period_end()) + 0.5f;
+  const float d = 0.5f + window.time_to_x(state->getPlaybackPeriodEnd());
+                             
   const float c = d - halfSize;
   
-  const float e = ruler_rect.get_height() - playbackPeriodArrowSize
-     - 0.5f;
-  const float f = e + (playbackPeriodArrowSize -
-    playbackPeriodArrowStemSize) / 2;
-  const float g = ruler_rect.get_height() - playbackPeriodArrowSize / 2
-    - 0.5f;
+  const float e = ruler_rect.get_height() - playbackPeriodArrowSize - 0.5f;
+  const float f = e + (playbackPeriodArrowSize - playbackPeriodArrowStemSize) / 2;
+  const float g = ruler_rect.get_height() - playbackPeriodArrowSize / 2  - 0.5f;
   const float i = ruler_rect.get_height() - 0.5f;
-  const float h = i - (playbackPeriodArrowSize -
-    playbackPeriodArrowStemSize) / 2;
+  const float h = i - (playbackPeriodArrowSize - playbackPeriodArrowStemSize) / 2;
 
   // Contruct the path
   if(d - a >= playbackPeriodArrowSize)
@@ -466,11 +468,10 @@ TimelineRuler::draw_playback_point(Cairo::RefPtr<Cairo::Context> cr,
   
   shared_ptr<TimelineState> state = timelineWidget.get_state();
   REQUIRE(state);
-  const TimelineViewWindow &window = state->get_view_window();
+  if (!state->isPlaying()) return;
   
-  const gavl_time_t point = state->get_playback_point();
-  if(point == (gavl_time_t)GAVL_TIME_UNDEFINED)
-    return;
+  TimelineViewWindow const& window = state->get_view_window();
+  Time point = state->getPlaybackPoint();
   const int x = window.time_to_x(point);
     
   cr->move_to(x + 0.5, ruler_rect.get_height());

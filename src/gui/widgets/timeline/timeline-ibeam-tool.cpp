@@ -20,12 +20,16 @@
 
 * *****************************************************/
 
-#include "timeline-ibeam-tool.hpp"
+#include "gui/widgets/timeline/timeline-ibeam-tool.hpp"
 #include "gui/widgets/timeline-widget.hpp"
+#include "lib/time/mutation.hpp"
 
-using namespace boost;
+#include <boost/shared_ptr.hpp>
+
 using namespace gui::widgets;
-using namespace lumiera;
+
+using lib::time::Mutation;
+using boost::shared_ptr;        /////////////////////////TICKET #796
 
 namespace gui {
 namespace widgets {
@@ -42,7 +46,7 @@ const int IBeamTool::ScrollSlideEventInterval = 40;
 IBeamTool::IBeamTool(TimelineBody &timeline_body) :
   Tool(timeline_body),
   dragType(None),
-  pinnedDragTime(0),
+  pinnedDragTime(),
   scrollSlideRate(0)
 {
 
@@ -103,20 +107,22 @@ IBeamTool::on_button_press_event(GdkEventButton* event)
         {
           // User began to drag the start of the selection
           dragType = GrabStart;
-          pinnedDragTime = state->get_selection_end();
+          pinnedDragTime = state->getSelectionEnd();
         }
       else if(is_mouse_in_end_drag_zone())
         {
           // User began to drag the end of the selection
           dragType = GrabEnd;
-          pinnedDragTime = state->get_selection_start();
+          pinnedDragTime = state->getSelectionStart();
         }
       else
         {
           // User began the drag in clear space, begin a Select drag
           dragType = Selection;
           pinnedDragTime = time;
-          state->set_selection(time, time);
+          state->setSelection (Mutation::changeTime(time));
+          state->setSelection (Mutation::changeDuration(Duration::NIL));
+                               //////////////////////////////////////////////////////TICKET #797 : this is cheesy. Should provide a single Mutation to change all
         }
     }
 }
@@ -188,11 +194,15 @@ IBeamTool::set_leading_x(const int x)
   shared_ptr<TimelineState> state = get_state();
 
   const bool set_playback_period = dragType == Selection;
-  const Time time = state->get_view_window().x_to_time(x);
-  if(time > pinnedDragTime)
-    state->set_selection(pinnedDragTime, time, set_playback_period);
-  else
-    state->set_selection(time, pinnedDragTime, set_playback_period);
+  TimeVar newStartPoint (state->get_view_window().x_to_time(x));
+  Offset selectionLength (pinnedDragTime, newStartPoint);
+  
+  if (newStartPoint > pinnedDragTime)
+    newStartPoint=pinnedDragTime; // use the smaller one as selection start
+  
+  state->setSelection (Mutation::changeTime(newStartPoint)      , set_playback_period);
+  state->setSelection (Mutation::changeDuration(selectionLength), set_playback_period);
+                               //////////////////////////////////////////////////////TICKET #797 : this is cheesy. Should provide a single Mutation to change all at once
 }
 
 void
@@ -217,7 +227,7 @@ bool
 IBeamTool::is_mouse_in_start_drag_zone() const
 {    
   const int start_x = view_window().time_to_x(
-    get_state()->get_selection_start());
+    get_state()->getSelectionStart());
     
   return (mousePoint.get_x() <= start_x &&
     mousePoint.get_x() > start_x - DragZoneWidth);
@@ -227,7 +237,7 @@ bool
 IBeamTool::is_mouse_in_end_drag_zone() const
 {     
   const int end_x = view_window().time_to_x(
-    get_state()->get_selection_end());
+    get_state()->getSelectionEnd());
     
   return (mousePoint.get_x() >= end_x &&
     mousePoint.get_x() < end_x + DragZoneWidth);

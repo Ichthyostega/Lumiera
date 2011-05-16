@@ -19,32 +19,32 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 * *****************************************************/
+
 /** @file basic-draw-strategy.hpp
  ** Declares the Timeline Entity draw strategy class.
  */
 
-#ifndef TIMELINE_BASIC_DRAW_STRATEGY_HPP
-#define TIMELINE_BASIC_DRAW_STRATEGY_HPP
+#ifndef WIDGETS_TIMELINE_BASIC_DRAW_STRATEGY_H
+#define WIDGETS_TIMELINE_BASIC_DRAW_STRATEGY_H
 
-#include "draw-strategy.hpp"
+#include "gui/widgets/timeline/draw-strategy.hpp"
 
 namespace gui {
 namespace widgets {
 namespace timeline {
 
-  class BasicDrawStrategy : public DrawStrategy
-  {
-  public:
+  class BasicDrawStrategy
+    : public DrawStrategy
+    {
+    public:
+  
+      BasicDrawStrategy() { };
+  
+      void
+      draw (const Entity &entity,
+            Cairo::RefPtr<Cairo::Context> cr,
+            TimelineViewWindow* const window) const;
+    };
 
-    BasicDrawStrategy();
-
-    void draw(const Entity &entity,
-      Cairo::RefPtr<Cairo::Context> cr,
-      TimelineViewWindow* const window) const;
-  };
-
-}   // namespace timeline
-}   // namespace widgets
-}   // namespace gui
-
+}}}    // namespace gui::widgets::timeline
 #endif // TIMELINE_BASIC_DRAW_STRATEGY_HPP

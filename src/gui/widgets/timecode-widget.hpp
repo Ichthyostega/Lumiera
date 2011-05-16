@@ -25,6 +25,9 @@
 #ifndef TIMECODE_WIDGET_HPP
 #define TIMECODE_WIDGET_HPP
 
+#include "gui/gtk-base.hpp"
+#include "lib/time/timevalue.hpp"
+
 #include <string>
 
 #include <gtkmm/box.h>
@@ -37,6 +40,11 @@
 
 namespace gui {
 namespace widgets {
+
+using lib::time::Time;
+using lib::time::TimeVar;
+using lib::time::TimeValue;
+
 
 class TimeCode : public Gtk::HBox
 {
@@ -61,8 +69,8 @@ public:
 
   std::string name() const { return _name; }
 
-  Time current_time(Time position = Time(0)) const;
-  Time current_duration(Time position = Time(0)) const;
+  Time current_time(Time position = Time::ZERO) const;
+  Time current_duration(Time position = Time::ZERO) const;
 
   sigc::signal<void> ValueChanged;
   sigc::signal<void> ChangeAborted;
@@ -129,7 +137,7 @@ private:
   Gtk::EventBox  clock_base;
   Gtk::Frame     clock_frame;
 
-  Time last_when;
+  TimeVar last_when;
   bool last_pdelta;
   bool last_sdelta;
 
@@ -164,7 +172,7 @@ private:
   void set_minsec(Time, bool);
   void set_frames(Time, bool);
 
-  int get_frames(Field, Time pos = Time(0), int dir=1);
+  int get_frames(Field, Time pos = Time::ZERO, int dir=1);
   
   void smpte_sanitize_display();
   Time smpte_time_from_display() const;

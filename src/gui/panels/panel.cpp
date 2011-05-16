@@ -26,7 +26,7 @@
 #include "gui/workspace/panel-manager.hpp"
 #include "gui/workspace/workspace-window.hpp"
 
-#include "panel.hpp"
+#include "gui/panels/panel.hpp"
 
 using namespace Gtk;
 

@@ -20,12 +20,10 @@
 
 * *****************************************************/
 
-#include "timeline-entity.hpp"
-
-#include "draw-strategy.hpp"
 
 #include "gui/gtk-lumiera.hpp"
-#include "include/logging.h"
+#include "gui/widgets/timeline/timeline-entity.hpp"
+#include "gui/widgets/timeline/draw-strategy.hpp"
 
 namespace gui {
 namespace widgets {

@@ -19,20 +19,25 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 */
+
 /** @file timeline-ibeam-tool.hpp
  ** This file contains the definition of ibeam tool class
  ** tool objects
  */
 
-#ifndef TIMELINE_IBEAM_TOOL_HPP
-#define TIMELINE_IBEAM_TOOL_HPP
+#ifndef WIDGETS_TIMELINE_IBEAM_TOOL_H
+#define WIDGETS_TIMELINE_IBEAM_TOOL_H
+
+#include "gui/widgets/timeline/timeline-tool.hpp"
+#include "lib/time/timevalue.hpp"
 
 #include <gtkmm.h>
-#include "timeline-tool.hpp"
 
 namespace gui {
 namespace widgets {
 namespace timeline {
+
+using lib::time::TimeVar;
 
 /**
  * A helper class to implement the timeline i-beam tool
@@ -164,7 +169,7 @@ private:
    * the mouse, the other is pinned. pinnedDragTime specifies the time
    * of that point.
    */
-  lumiera::Time pinnedDragTime;
+  TimeVar pinnedDragTime;
   
   /**
    * This connection is used to represent the timer which causes scroll

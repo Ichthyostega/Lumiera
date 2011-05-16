@@ -23,29 +23,37 @@
  ** This file contains the definition of timeline widget
  */
 
+
 #ifndef TIMELINE_WIDGET_HPP
 #define TIMELINE_WIDGET_HPP
 
-#include "timeline/timeline-state.hpp"
-#include "timeline/timeline-header-container.hpp"
-#include "timeline/timeline-body.hpp"
-#include "timeline/timeline-ruler.hpp"
-#include "timeline/timeline-tool.hpp"
-#include "timeline/timeline-arrow-tool.hpp"
-#include "timeline/timeline-ibeam-tool.hpp"
-#include "timeline/timeline-group-track.hpp"
-#include "timeline/timeline-clip-track.hpp"
-#include "timeline/timeline-layout-helper.hpp"
+#include "gui/widgets/timeline/timeline-state.hpp"
+#include "gui/widgets/timeline/timeline-header-container.hpp"
+#include "gui/widgets/timeline/timeline-body.hpp"
+#include "gui/widgets/timeline/timeline-ruler.hpp"
+#include "gui/widgets/timeline/timeline-tool.hpp"
+#include "gui/widgets/timeline/timeline-arrow-tool.hpp"
+#include "gui/widgets/timeline/timeline-ibeam-tool.hpp"
+#include "gui/widgets/timeline/timeline-group-track.hpp"
+#include "gui/widgets/timeline/timeline-clip-track.hpp"
+#include "gui/widgets/timeline/timeline-layout-helper.hpp"
 
 #include "gui/model/sequence.hpp"
 
+#include "lib/time/timevalue.hpp"
+
+
 namespace gui {
 namespace widgets {
+
+using lib::time::Time;
+
   
 /**
  * The namespace of all timeline widget helper classes.
  */
 namespace timeline {}
+
 
 /**
  * The timeline widget class.
@@ -107,7 +115,7 @@ public:
   
 public:
   /* ===== Signals ===== */
-  sigc::signal<void, lumiera::Time> mouse_hover_signal() const;
+  sigc::signal<void, lib::time::Time> mouse_hover_signal() const;
   
   sigc::signal<void> playback_period_drag_released_signal() const;
   
@@ -265,7 +273,7 @@ protected:
   Gtk::VScrollbar verticalScroll;
   
   // Signals
-  sigc::signal<void, lumiera::Time> mouseHoverSignal;
+  sigc::signal<void, Time> mouseHoverSignal;
   sigc::signal<void> playbackPeriodDragReleasedSignal;
   sigc::signal<void, boost::shared_ptr<timeline::Track> >
     hoveringTrackChangedSignal;

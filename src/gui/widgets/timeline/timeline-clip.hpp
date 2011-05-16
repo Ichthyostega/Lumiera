@@ -19,57 +19,57 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 */
+
 /** @file widgets/timeline/timeline-clip.hpp
  ** This file contains the definition of timeline clip object
  */
 
+#ifndef WIDGETS_TIMELINE_CLIP_H
+#define WIDGETS_TIMELINE_CLIP_H
+
 #include "gui/gtk-lumiera.hpp"
 #include "gui/model/clip.hpp"
 #include "include/logging.h"
+#include "lib/time/timevalue.hpp"
 
-#include "draw-strategy.hpp"
-#include "timeline-entity.hpp"
+#include "gui/widgets/timeline/draw-strategy.hpp"
+#include "gui/widgets/timeline/timeline-entity.hpp"
 
-#ifndef TIMELINE_CLIP_HPP
-#define TIMELINE_CLIP_HPP
+#include <string>
+
 
 namespace gui {
 namespace widgets {
 namespace timeline {
+  
+  using std::string;
+  using lib::time::Time;
 
+  
   class Clip : public Entity
-  {
-  public:
-    Clip(boost::shared_ptr<model::Clip> clip,
-         boost::shared_ptr<timeline::DrawStrategy> drawStrategy);
-
-    gavl_time_t
-    getBegin () const;
-
-    gavl_time_t
-    getEnd () const;
-
-    std::string
-    getName () const;
-
-    /**
-     * Sets the selected status of the clip.
-     */
-    void
-    setSelected (bool state);
-
-  private:
-
-    boost::shared_ptr<model::Clip> modelClip;
-
-    /**
-     * True when this clip is selected in the GUI.
-     */
-    bool selected;
-  };
-
-}   // namespace timeline
-}   // namespace widgets
-}   // namespace gui
-
+    {
+    public:
+      Clip (boost::shared_ptr<model::Clip> clip,
+            boost::shared_ptr<timeline::DrawStrategy> drawStrategy);
+      
+      
+      Time getBegin()  const;
+      Time getEnd()    const;
+      string getName() const;
+      
+      /** Sets the selected status of the clip. */
+      void setSelected (bool);
+  
+    private:
+  
+      boost::shared_ptr<model::Clip> modelClip;          ////////////////////////TICKET #796 : should use std::tr1
+  
+      /**
+       * True when this clip is selected in the GUI.
+       */
+      bool selected;
+    };
+  
+  
+}}}    // namespace gui::widgets::timeline
 #endif // TIMELINE_CLIP_HPP

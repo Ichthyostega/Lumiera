@@ -28,18 +28,22 @@
 #ifndef TIMELINE_CLIP_TRACK_HPP
 #define TIMELINE_CLIP_TRACK_HPP
 
-#include <vector>
-
-#include "basic-draw-strategy.hpp"
-#include "timeline-track.hpp"
+#include "gui/widgets/timeline/basic-draw-strategy.hpp"
+#include "gui/widgets/timeline/timeline-track.hpp"
 #include "gui/model/clip-track.hpp"
+#include "lib/time/timevalue.hpp"
+
+#include <vector>
 
 namespace gui {
 namespace widgets {
 namespace timeline {
-
+  
+  using lib::time::Time;
+  
   class Clip;
   class TimelineViewWindow;
+  
   
   class ClipTrack : public timeline::Track
   {
@@ -63,7 +67,7 @@ namespace timeline {
      * @param the given time
      */
     boost::shared_ptr<timeline::Clip>
-    getClipAt(lumiera::Time position) const;
+    getClipAt(Time position) const;
 
   private:
 

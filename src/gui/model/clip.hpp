@@ -19,109 +19,87 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 */
+
 /** @file model/clip.hpp
- ** This file contains the definition of the Clip object
+ ** This file defines a Proxy Clip object to base the GUI implementation on.
+ ** Later this Clip object will be connected to the underlying model in Proc-Layer.
  */
 
-#include <string>
+#ifndef GUI_MODEL_CLIP_H
+#define GUI_MODEL_CLIP_H
+
 #include "gui/gtk-lumiera.hpp"
+#include "lib/time/timevalue.hpp"
 
-//#include "lib/lumitime.hpp"//////////////////////////////TODO
+#include <string>
 
-// TODO: Remove once we get real measure of duration.
-//       This is here *only* for purposes of testing the GUI.
-//extern "C" {
-//#include <stdint.h>
-//#include <gavl/gavltime.h>
-//}
-
-using Cairo::Pattern;
-
-#ifndef CLIP_HPP
-#define CLIP_HPP
 
 namespace gui {
 namespace model {
-
+  
+  using std::string;
+  using lib::time::Time;
+  using lib::time::TimeSpan;
+  using lib::time::Duration;
+  using Cairo::Pattern;
+  
+  
   class Clip
-  {
-  public:
-    /**
-     * Constructor
-     */
-    Clip();
+    {
+      TimeSpan timeCoord_;
+      string name_;
+  
+      /** fires when the name changes. */
+      sigc::signal<void, string> nameChangedSignal_;
+      
+      
+    public:
+        
+      Clip();
+  
+      Time getBegin()  const { return timeCoord_.start();}
+      Time getEnd()    const { return timeCoord_.end();  }
+  
+      string const& getName() const { return name_; }
+      
+      
+      /**
+       * Check whether or not the clip will be playing during the given time.
+       */
+      bool
+      isPlayingAt (Time const& position) const
+        {
+          return timeCoord_.contains (position);
+        }
 
-    /**
-     * Gets the begin time of this clip.
-     */
-    gavl_time_t
-    getBegin() const;
-
-    /**
-     * Gets the end time of this clip.
-     */
-    gavl_time_t
-    getEnd() const;
-
-    /**
-     * Gets the name of this clip.
-     */
-    const std::string
-    getName() const;
-
-    /**
-     * Check whether or not the clip will be playing during the given time.
-     */
-    bool
-    isPlayingAt(lumiera::Time position) const;
-
-    /**
-     * Sets the begin time of this clip.
-     * @param[in] begin The new begin time to set this clip to.
-     */
-    void
-    setBegin(gavl_time_t begin);
-
-    /**
-     * Sets the end time of this clip.
-     * @param[in] end The new end time to set this clip to.
-     */
-    void
-    setEnd(gavl_time_t end);
-
-    /**
-     * Sets the name of this clip.
-     * @param[in] name The new name to set this clip to.
-     */
-    void
-    setName(const std::string &name);
-
-    /**
-     * A signal which fires when the name changes.
-     * @return Returns the signal. The signal sends the new name for the clip.
-     */
-    sigc::signal<void, std::string>
-    signalNameChanged() const;
-
-  private:
-
-    /**
-     * The name of this clip.
-     */
-    std::string name;
-
-    /**
-     * A signal which fires when the name changes.
-     */
-    sigc::signal<void, std::string> nameChangedSignal;
-
-    // TODO: Use a good measure of duration, probably TimeSpan.
-    //       These are here *only* for purposes of testing the GUI.
-    gavl_time_t begin;
-    gavl_time_t end;
-  };
-
-}   // namespace model
-}   // namespace gui
-
+  
+      /**
+       * Sets the begin time of this clip.
+       * @param[in] begin The new begin time to set this clip to.
+       */
+      void setBegin (Time);
+  
+      /**
+       * Sets the end time of this clip.
+       * @param[in] end The new end time to set this clip to.
+       */
+      void setDuration (Duration);
+  
+      /**
+       * Sets the name of this clip.
+       * @param[in] name The new name to set this clip to.
+       */
+      void setName (string const&);
+  
+      /**
+       * A signal which fires when the name changes.
+       * @return Returns the signal. The signal sends the new name for the clip.
+       */
+      sigc::signal<void, std::string>
+      signalNameChanged() const;
+  
+    };
+  
+  
+}}   // namespace gui::model
 #endif // CLIP_HPP
