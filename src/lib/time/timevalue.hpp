@@ -409,8 +409,14 @@ namespace time {
       Time
       end()  const
         {
-          TimeVar startPoint (*this);
-          return (startPoint + dur_);
+          return TimeVar(*this) += dur_;
+        }
+      
+      bool
+      contains (TimeValue const& tp)  const
+        {
+          return *this <= tp
+              && tp < end();
         }
       
       /** may change start / duration */

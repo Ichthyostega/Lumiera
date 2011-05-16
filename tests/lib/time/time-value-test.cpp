@@ -75,6 +75,7 @@ namespace test{
           buildDuration (ref);
           buildTimeSpan (ref);
           compareTimeSpan (ref);
+          relateTimeIntervals (ref);
         } 
       
       
@@ -380,6 +381,30 @@ namespace test{
           CHECK (span3y.start() < span3z.start());
           CHECK (span3y.end()  < span3z.end());
           CHECK (Time(span3)  < Time(span3z));
+        }
+      
+      
+      void
+      relateTimeIntervals (TimeValue org)
+        {
+          TimeSpan span1 (org,                FSecs(2));
+          TimeSpan span2 (org+Time(FSecs(1)), FSecs(2));
+          
+          TimeVar probe(org);
+          CHECK ( span1.contains(probe));
+          CHECK (!span2.contains(probe));
+          
+          probe = span2;
+          CHECK ( span1.contains(probe));
+          CHECK ( span2.contains(probe));
+          
+          probe = span1.end();
+          CHECK (!span1.contains(probe));              // Note: end is always exclusive
+          CHECK ( span2.contains(probe));
+          
+          probe = span2.end();
+          CHECK (!span1.contains(probe));
+          CHECK (!span2.contains(probe));
         }
     };
   
