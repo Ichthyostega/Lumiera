@@ -33,10 +33,16 @@
 #include "proc/mobject/explicitplacement.hpp"
 #include "proc/mobject/test-dummy-mobject.hpp"
 #include "lib/test/test-helper.hpp"
+#include "lib/time/timevalue.hpp"
+#include "lib/util.hpp"
 
 #include <iostream>
 
 using lib::test::showSizeof;
+using lib::time::Duration;
+using lib::time::FSecs;
+using lib::time::Time;
+using util::isnil;
 using std::string;
 using std::cout;
 using std::endl;
@@ -101,8 +107,8 @@ namespace test    {
           PMObj  testClip2 = asset::Media::create("test-2", asset::VIDEO)->createClip();
           
           // set up a tie to fixed start positions (i.e. "properties of placement")
-          testClip1.chain(Time(10));
-          testClip2.chain(Time(20));
+          testClip1.chain (Time(FSecs(10)));
+          testClip2.chain (Time(FSecs(20)));
           
           CHECK (testClip1->isValid());
           CHECK (testClip2->isValid());
@@ -188,13 +194,13 @@ namespace test    {
 //        cout << rMO->operator string() << endl;          /////////////////////TICKET #428
           PMedia media = rMO->getMedia();
           cout << str(media) << endl;                      /////////////////////TICKET #520
-          Time mediaLength = media->getLength();
-          CHECK (Time(0) < mediaLength);
+          Duration mediaLength = media->getLength();
+          CHECK (!isnil (mediaLength));
           CHECK (rMO->isValid());
           
           // access the Placement-API
           CHECK (checkUseCount(rMO, 1));           // now rMO shares ownership with the Placement --> use-count += 1
-          CHECK (Time(0) < rMO.getStartTime());   // (internally, this resolves to an ExplicitPlacement)  /////////TICKET #332
+          CHECK (Time::ZERO < rMO.getStartTime()); // (internally, this resolves to an ExplicitPlacement)  /////////TICKET #332
           CHECK ( rMO.isCompatible<MObject>());
           CHECK ( rMO.isCompatible<Clip>());
           CHECK (!rMO.isCompatible<TestSubMO1>());

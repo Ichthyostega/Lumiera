@@ -26,6 +26,7 @@
 #include "proc/mobject/session/scope-query.hpp"
 #include "proc/mobject/session/effect.hpp"
 #include "lib/meta/duck-detector.hpp"
+#include "lib/time/timevalue.hpp"
 #include "lib/util-foreach.hpp"
 #include "lib/itertools.hpp"
 
@@ -46,6 +47,7 @@ namespace test{
   
   using mobject::session::Effect;
   using mobject::session::ScopeQuery;
+  typedef lib::time::TimeVar Time;
   
   using std::cout;
   using std::endl;

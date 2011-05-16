@@ -25,6 +25,7 @@
 #include "lib/test/run.hpp"
 #include "lib/util.hpp"
 
+#include "lib/time/timevalue.hpp"
 #include "proc/assetmanager.hpp"
 #include "proc/asset/media.hpp"
 #include "proc/mobject/session/clip.hpp"
@@ -61,7 +62,7 @@ namespace asset {
             PM cm = cc->getMedia();
             
             CHECK (cm);
-            CHECK (Time(0) < cc->getLength());
+            CHECK (!isnil (cc->getLength()));
             CHECK (cm->ident.category.hasKind (VIDEO));
             CHECK (cm->getFilename() == mm->getFilename());
 TODO ("implement Processing Pattern!!!");   

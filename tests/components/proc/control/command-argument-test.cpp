@@ -25,7 +25,7 @@
 #include "lib/test/test-helper.hpp"
 #include "proc/control/command-argument-holder.hpp"
 #include "lib/scoped-ptrvect.hpp"
-#include "lib/lumitime-fmt.hpp"
+#include "lib/time/diagnostics.hpp"
 #include "lib/meta/tuple.hpp"
 #include "lib/util-foreach.hpp"
 #include "lib/util.hpp"
@@ -39,7 +39,9 @@
 
 using util::isnil;
 using util::for_each;
-using lumiera::Time;
+using lib::time::Time;
+using lib::time::TimeVar;
+using lib::time::TimeValue;
 using boost::format;
 using std::string;
 using std::ostream;
@@ -123,7 +125,7 @@ namespace test    {
     /* === functions to implement test-"operation" & UNDO === */
 
     void
-    doIt (Tracker<Time> time, Tracker<string> str, int rand)
+    doIt (Tracker<TimeVar> time, Tracker<string> str, int rand)
       {
         static format fmt ("doIt( Time=%s \"%s\" rand=%2d )");
         cout << "invoke operation..." << endl;
@@ -131,14 +133,14 @@ namespace test    {
       }
 
     Tracker<string>
-    captureState (Tracker<Time>, Tracker<string> xstr, int)
+    captureState (Tracker<TimeVar>, Tracker<string> xstr, int)
       {
         cout << "capture state..." << endl;
         return protocol.str() + *xstr;
       }
 
     void
-    undoIt (Tracker<Time> time, Tracker<string>, int, Tracker<string> memento)
+    undoIt (Tracker<TimeVar> time, Tracker<string>, int, Tracker<string> memento)
       {
         cout << "undo... memento=" << memento << endl;
         protocol << "undoIt(time="<<time<<")----memento-:"<< *memento;
@@ -189,7 +191,7 @@ namespace test    {
       run (Arg)
         {
           ArgTuples testTuples;
-          Tracker<Time>::instanceCnt = 0;
+          Tracker<TimeVar>::instanceCnt = 0;
           Tracker<string>::instanceCnt = 0;
 
           createTuples (testTuples);
@@ -200,12 +202,12 @@ namespace test    {
           simulateCmdLifecycle();
 
           // verify all dtors properly called...
-          CHECK (0 == Tracker<Time>::instanceCnt);
+          CHECK (0 == Tracker<TimeVar>::instanceCnt);
           CHECK (0 == Tracker<string>::instanceCnt);
         }
 
 
-      typedef Tracker<Time> TTime;
+      typedef Tracker<TimeVar> TTime;
       typedef Tracker<string> Tstr;
 
 
@@ -215,10 +217,10 @@ namespace test    {
       void
       createTuples (ArgTuples& tup)
         {
-          typedef ArgumentHolder<void(),         bool>  A1;
-          typedef ArgumentHolder<void(int),      void*> A2;
-          typedef ArgumentHolder<void(int,Time), int>   A3;
-          typedef ArgumentHolder<void(int,Time), Sint5> A4;
+          typedef ArgumentHolder<void(),            bool>  A1;
+          typedef ArgumentHolder<void(int),         void*> A2;
+          typedef ArgumentHolder<void(int,TimeVar), int>   A3;
+          typedef ArgumentHolder<void(int,TimeVar), Sint5> A4;
 
           typedef ArgumentHolder<void(TTime,Tstr,int), Tstr>  A5;
 
@@ -239,8 +241,8 @@ namespace test    {
 
           arg1->storeTuple (tuple::makeNullTuple());
           arg2->storeTuple (tuple::make (rand() % 10));
-          arg3->storeTuple (tuple::make (rand() % 10, randTime()));
-          arg4->storeTuple (tuple::make (rand() % 10, randTime()));
+          arg3->storeTuple (tuple::make (rand() % 10, TimeVar(randTime())));
+          arg4->storeTuple (tuple::make (rand() % 10, TimeVar(randTime())));
 
           arg5->storeTuple (tuple::make (TTime (randTime()), Tstr("glorious"), rand() % 25));
 
@@ -321,7 +323,7 @@ namespace test    {
       void
       simulateCmdLifecycle()
         {
-          typedef void SIG_do(Tracker<Time>, Tracker<string>, int);
+          typedef void SIG_do(Tracker<TimeVar>, Tracker<string>, int);
           typedef ArgumentHolder<SIG_do, Tracker<string> >   Args;
           typedef MementoTie<SIG_do, Tracker<string> >  MemHolder;
 
@@ -375,7 +377,7 @@ namespace test    {
           protocol << "RESET...";
 
           args.storeTuple (
-            tuple::make (TTime(Time(123456)), Tstr("unbelievable"), rand() %100));
+            tuple::make (TTime(TimeValue(123456)), Tstr("unbelievable"), rand() %100));
           cout << "modified: " << args     << endl;
           cout << "copied  : " << argsCopy << endl;    // holds still the old params & memento
 

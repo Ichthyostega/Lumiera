@@ -387,8 +387,10 @@ namespace test{
       void
       relateTimeIntervals (TimeValue org)
         {
-          TimeSpan span1 (org,                FSecs(2));
-          TimeSpan span2 (org+Time(FSecs(1)), FSecs(2));
+          Time oneSec(FSecs(1));
+          
+          TimeSpan span1 (org,          FSecs(2));
+          TimeSpan span2 (oneSec + org, FSecs(2));
           
           TimeVar probe(org);
           CHECK ( span1.contains(probe));
