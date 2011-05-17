@@ -25,78 +25,69 @@
 #include "backend/mediaaccessmock.hpp"
 
 #include "lib/test/run.hpp"
-//#include "lib/util.hpp"
+#include "lib/time/diagnostics.hpp"
+#include "lib/symbol.hpp"
 
-//#include <boost/format.hpp>
 #include <iostream>
 
-//using boost::format;
-//using util::isnil;
+using lib::Literal;
 using std::string;
 using std::cout;
 
 
-namespace backend_interface
-  {
-  namespace test
+namespace backend {
+namespace test {
+  
+  
+  
+  
+  
+  /********************************************************************************
+   * @test inject a Mock object replacing the backend_interface::MediaAccessFacade.
+   *       Verify if the Mock object behaves as expected when calling the Facade.
+   */
+  class MediaAccessMock_test : public Test
     {
-    
-    
-
-    
-    
-    /********************************************************************************
-     * @test inject a Mock object replacing the backend_interface::MediaAccessFacade.
-     *       Verify if the Mock object behaves as expected when calling the Facade.
-     */
-    class MediaAccessMock_test : public Test
-      {
-        typedef MediaAccessFacade MAF;
-        
-        virtual void run(Arg) 
-          {
-            MAF::instance.injectSubclass (new MediaAccessMock);
-            
-            queryScenario ("test-1");
-            queryScenario ("test-2");
-            
-            MAF::instance.injectSubclass (0);
-          }
-
-        
-        /** perform the test: query for an (alledged) file
-         *  and retrieve the mock answer. 
-         */
-        void queryScenario (string filename)
-          {
-            MAF& maf (MAF::instance());
-            MAF::FileHandle fhandle = maf.queryFile (filename.c_str());
-            if (!fhandle)
-              cout << "File \""<<filename<<"\" not accessible\n";
-            else
-              {
-                cout << "accessing \""<<filename<<"\" ...\n";
-                for (int i=0; true; ++i)
-                  {
-                    ChanDesc chan = maf.queryChannel (fhandle, i);
-                    if (!chan.handle) break;
-                    
-                    cout << " Channel-" << i
-                         << ": nameID=" << chan.chanID
-                         << " codecID=" << chan.codecID
-                         << "\n";
-          }   }   }
-        
-        
-      };
-    
+      typedef MediaAccessFacade MAF;
       
-    
-    /** Register this test class... */
-    LAUNCHER (MediaAccessMock_test, "unit operate");
-    
-    
-    
-  } // namespace test
-
-} // namespace backend_interface
+      virtual void run(Arg) 
+        {
+          MAF::instance.injectSubclass (new MediaAccessMock);
+          
+          queryScenario ("test-1");
+          queryScenario ("test-2");
+          
+          MAF::instance.injectSubclass (0);
+        }
+      
+      
+      /** perform the test: query for an (alleged) file
+       *  and retrieve the mock answer. 
+       */
+      void queryScenario (string const& filename)
+        {
+          MAF& maf (MAF::instance());
+          MediaDesc& mhandle = maf.queryFile (filename);
+          cout << "accessing \""<<filename<<"\" (dur="<<mhandle.length<<")...\n";
+          for (int i=0; true; ++i)
+            {
+              ChanDesc chan = maf.queryChannel (mhandle, i);
+              if (!chan.handle) break;
+              
+              cout << " Channel-" << i
+                   << ": nameID=" << chan.chanID
+                   << " codecID=" << chan.codecID
+                   << "\n";
+        }   }
+      
+      
+    };
+  
+  
+  
+  /** Register this test class... */
+  LAUNCHER (MediaAccessMock_test, "unit operate");
+  
+  
+  
+}} // namespace backend::test

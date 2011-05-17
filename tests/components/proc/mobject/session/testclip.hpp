@@ -78,7 +78,7 @@ namespace test    {
   
   
   /* == some test data to check == */
-  extern const lib::time::Time LENGTH_TestClip;
+  extern const lib::time::Duration LENGTH_TestClip;
   
   
 }}} // namespace mobject::session::test

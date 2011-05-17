@@ -34,15 +34,21 @@
 
 
 #include "backend/mediaaccessmock.hpp"
+#include "proc/mobject/session/testclip.hpp"
 
 #include "lib/util.hpp"
 #include "lib/util-foreach.hpp"
+#include "lib/time/mutation.hpp"
+#include "lib/symbol.hpp"
 
 #include <iostream>
 #include <vector>
 #include <map>
 
 using lumiera::error::Invalid;
+using lib::time::Mutation;
+using lib::time::Duration;
+using lib::Literal;
 using util::for_each;
 using util::isnil;
 using std::cout;
@@ -51,41 +57,62 @@ using std::vector;
 using std::map;
 
 
-namespace backend_interface {
+namespace backend {
 namespace test {
   
-  typedef MediaAccessFacade::FileHandle FileHandle;
   typedef MediaAccessFacade::ChanHandle ChanHandle;
   
   
   namespace { // implementation details
-      
-    typedef vector<ChanDesc> Response;
+    
+    struct Response
+      {
+        MediaDesc        globalDesc;
+        vector<ChanDesc> channels;
+        
+        Response&
+        globalLength (Duration length)
+          {
+            globalDesc.length.accept (Mutation::changeDuration(length));
+            return *this;
+          }
+        
+        Response&
+        channel (Literal name, Literal id)
+          {
+            channels.push_back (ChanDesc (name, id, genH()));
+            return *this;
+          }
+        
+      private:
+        static int _i_;
+        ChanHandle genH()
+          {
+            return reinterpret_cast<ChanHandle> (++_i_);
+          }
+      };
+    int Response::_i_(0);
     const ChanDesc NULLResponse;
+    using mobject::session::test::LENGTH_TestClip;
+    
     
     struct TestCases : map<string,Response>
       {
         TestCases ()
           {
-            // ------------------------------------------------------------------TESTCASES
-            (*this)["test-1"].push_back (ChanDesc ("video","ID", genH()));
+            // ----------------------------------------------------------------------TESTCASES
+            (*this)["test-1"].globalLength(LENGTH_TestClip).channel("video","ID");
             
-            (*this)["test-2"].push_back (ChanDesc ("video","H264", genH()));
-            (*this)["test-2"].push_back (ChanDesc ("audio-L","PCM", genH()));
-            (*this)["test-2"].push_back (ChanDesc ("audio-R","PCM", genH()));
-            // ------------------------------------------------------------------TESTCASES
+            (*this)["test-2"].globalLength(LENGTH_TestClip).channel("video","H264")
+                                                           .channel("audio-L","PCM")
+                                                           .channel("audio-R","PCM");
+            // ----------------------------------------------------------------------TESTCASES
           }
         
         bool known (string key)
           {
             const_iterator i = find (key);
             return (i != end());
-          }
-      private:
-        int _i_;
-        ChanHandle genH()
-          {
-            return reinterpret_cast<ChanHandle> (++_i_);
           }
       };
       
@@ -95,28 +122,32 @@ namespace test {
   } // (end) implementation namespace
   
   
-  FileHandle
-  MediaAccessMock::queryFile (const char* name)  throw(Invalid)
+  
+  MediaDesc&
+  MediaAccessMock::queryFile (string const& name)  const
   {
-  if (isnil (name))
-    throw Invalid ("empty filename passed to MediaAccessFacade.");
+    if (isnil (name))
+      throw Invalid ("empty filename passed to MediaAccessFacade.");
   
     if (!testCases.known(name))
-      return 0;
-    else
-      return reinterpret_cast<void*> (&testCases[name]);
+      throw Invalid ("unable to use media file \""+name+"\"."
+                     "Hint: you're using a test-mock file access, "
+                     "which responds only to some magical names.");
+    
+    return testCases[name].globalDesc;
   }
+  
   
   ChanDesc
-  MediaAccessMock::queryChannel (FileHandle h, uint chanNo)  throw()
+  MediaAccessMock::queryChannel (MediaDesc& h, uint chanNo)  const
   {
-    const Response* res (reinterpret_cast<Response*> (h));
+    Response const& res (*reinterpret_cast<Response*> (&h));
     
-    if (!res || res->size() <= chanNo) 
+    if (res.channels.size() <= chanNo) 
       return NULLResponse;
     else
-      return (*res)[chanNo];
+      return res.channels[chanNo];
   }
   
   
-}} // namespace backend_interface::test
+}} // namespace backend::test

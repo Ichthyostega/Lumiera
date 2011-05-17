@@ -30,7 +30,7 @@
 
 
 
-namespace backend_interface {
+namespace backend {
 namespace test {
   
   /**
@@ -39,11 +39,10 @@ namespace test {
    */
   class MediaAccessMock : public MediaAccessFacade
     {
-    public:
-      FileHandle queryFile (const char* name)  throw(lumiera::error::Invalid);
-      ChanDesc queryChannel (FileHandle, uint chanNo)  throw();
+      MediaDesc& queryFile (string const& name)        const;
+      ChanDesc queryChannel (MediaDesc&, uint chanNo)  const;
     };
   
   
-}} // namespace backend_interface::test
+}} // namespace backend::test
 #endif

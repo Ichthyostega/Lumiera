@@ -28,30 +28,26 @@
 using util::isnil;
 using lumiera::error::Invalid;
 
-namespace backend_interface
-  {
+namespace backend {
   
   /** storage for the SingletonFactory 
    *  (actually a lumiera::test::MockInjector) */
   Singleton<MediaAccessFacade> MediaAccessFacade::instance;
 
   
-  typedef MediaAccessFacade::FileHandle FileHandle;
-  typedef MediaAccessFacade::ChanHandle ChanHandle;
   
-  FileHandle 
-  MediaAccessFacade::queryFile (const char* name)  throw(Invalid)
+  MediaDesc& 
+  MediaAccessFacade::queryFile (string const& name)  const
   {
     if (isnil (name))
       throw Invalid ("empty filename passed to MediaAccessFacade.");
     
     UNIMPLEMENTED ("delegate to backend: query accessability of file");
-    return 0;
   }
   
   
   ChanDesc 
-  MediaAccessFacade::queryChannel (FileHandle fhandle, uint chanNo)  throw()
+  MediaAccessFacade::queryChannel (MediaDesc& mHandle, uint chanNo)  const
   {
     UNIMPLEMENTED ("delegate to backend: query channel information");
     ChanDesc nix;
@@ -60,4 +56,4 @@ namespace backend_interface
 
 
 
-} // namespace backend_interface
+} // namespace backend

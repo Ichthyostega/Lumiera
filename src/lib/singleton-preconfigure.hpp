@@ -71,7 +71,7 @@ namespace lib {
   } // namespace test
 }  // namespace lumiera
 
-namespace backend_interface {
+namespace backend {
   class MediaAccessFacade;
   using lib::Singleton;
   
@@ -97,8 +97,8 @@ namespace lib {
   
   
   template<>
-  class Singleton<backend_interface::MediaAccessFacade>
-    : public MockInjector<backend_interface::MediaAccessFacade>
+  class Singleton<backend::MediaAccessFacade>
+    : public MockInjector<backend::MediaAccessFacade>
     { };
 
 } // namespace lib

@@ -34,9 +34,10 @@ namespace session {
 namespace test    {
   
   using lib::time::Time;
+  using lib::time::Duration;
   typedef shared_ptr<asset::Media> PM;
   typedef backend_interface::MediaAccessFacade MAF;
-  using backend_interface::test::MediaAccessMock;
+  using backend::test::MediaAccessMock;
   using asset::VIDEO;
   
   
@@ -86,7 +87,7 @@ namespace test    {
   
   /* == define some data for verification in unit tests == */
   
-  const Time LENGTH_TestClip(0,25,0,0);   //////TODO hard wired as of (1/10). See MediaFactory::operator()  in media.cpp
+  const Duration LENGTH_TestClip(Time(0,25,0,0));   //////TODO hard wired as of (1/10). See MediaFactory::operator()  in media.cpp / mediaaccessmock.cpp
   
   
 }}} // namespace mobject::session::test
