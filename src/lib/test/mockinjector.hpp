@@ -27,8 +27,11 @@
 
 
 #include "lib/singleton-factory.hpp"
+#include "lib/meta/duck-detector.hpp"
 
 #include <boost/scoped_ptr.hpp>
+#include <boost/noncopyable.hpp>
+#include <boost/utility/enable_if.hpp>
 
 
 namespace lib {
@@ -82,6 +85,89 @@ namespace test{
       MockInjector<SI>& operator= (const MockInjector<SI>& other)
         {
           return SingletonFactory<SI>::operator= (other);
+        }
+    };
+  
+  
+  
+  /** 
+   * Details of creating and accessing mock instances,
+   * especially for services implemented as Singleton.
+   */
+  namespace mock {
+    
+    using boost::enable_if;
+    using lumiera::Yes_t;
+    using lumiera::No_t;
+    
+    /** 
+     * A Metafunction to find out, if a type in question
+     * is used as Singleton and especially has been configured
+     * to inject Mock implementations defined as Subclasses. 
+     */
+    template<class MOCK>
+    class is_Singleton_with_MockInjector
+      {
+        META_DETECT_NESTED  (ServiceInterface);
+        META_DETECT_FUNCTION(void, injectSubclass, (TY*) const);
+        
+        typedef typename MOCK::ServiceInterface ServiceInterface;
+        
+      public:
+        typedef lib::SingletonFactory<ServiceInterface> SingletonFactory;
+        
+        enum{ value = HasNested_ServiceInterface<MOCK>::value
+                   && HasFunSig_injectSubclass<SingletonFactory>::value
+            };
+      };
+    
+    
+    /**
+     * Policy-Trait: How to access and inject
+     * a mock service implementation? 
+     */
+    template<class MOCK, class YES =void>
+    struct AccessPoint;
+      
+    template<class MOCK>
+    struct AccessPoint<MOCK, typename enable_if< is_Singleton_with_MockInjector<MOCK> >::type>
+      {
+        typedef typename is_Singleton_with_MockInjector<MOCK>::SingletonFactory ServiceAccessPoint;
+        
+        void
+        activateMock()
+          {
+            ServiceAccessPoint().injectSubclass (new MOCK());
+          }
+        void
+        deactivateMock()
+          {
+            ServiceAccessPoint().injectSubclass (0);
+          }
+      };
+  }//(End) details of injecting the mock implementation
+  
+  
+  
+  
+  /**
+   * Scoped object for installing/deinstalling a mocked service automatically.
+   * Placing a suitably specialised instance of this template into a local scope
+   * will inject the corresponding mock installation and remove it when the
+   * control flow leaves this scope.
+   */
+  template<class SI>
+  struct Use4Test
+    : boost::noncopyable
+    {
+      Use4Test()
+        {
+          mock::AccessPoint<SI>::activateMock();
+        }
+      
+     ~Use4Test()
+        {
+          mock::AccessPoint<SI>::deactivateMock();
         }
     };
   
