@@ -147,7 +147,7 @@ namespace mobject {
       /** resolves the referred placement to an 
        *  ExplicitPlacement and returns the found start time
        */
-      lib::time::Time const&
+      lib::time::Time
       getStartTime()
         {
           return pRef_.resolve().time;

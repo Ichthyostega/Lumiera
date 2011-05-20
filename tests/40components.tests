@@ -52,7 +52,7 @@ out-lit: Binding[advice.type.n3lib6advice4test12_GLOBAL__N_111DummyAdviceE/0(), 
 out-lit: b0==Binding[]
 out-lit: b1==Binding[cat1/0(), cat2/0()]
 out-lit: b2==Binding[cat1/0(), cat2/0()]
-out-lit: b2==Binding[advice.type.n7lumiera4TimeE/0(), cat1/0(), cat2/0(), cat3/1(zzz)]
+out-lit: b2==Binding[advice.type.n3lib4time4TimeE/0(), cat1/0(), cat2/0(), cat3/1(zzz)]
 return: 0
 END
 
