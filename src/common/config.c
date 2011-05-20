@@ -141,7 +141,7 @@ lumiera_config_destroy ()
       lumiera_global_config = NULL;
     }
   else
-    WARN (config_dbg, "Tried to destroy non initialized config subsystem");
+    WARN (config_dbg, "Config system not initialised or already destroyed");
 }
 
 
