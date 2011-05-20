@@ -29,6 +29,7 @@
 #include "proc/asset/media.hpp"
 #include "proc/mobject/session/clip.hpp"
 #include "proc/mobject/test-dummy-mobject.hpp"
+#include "backend/media-access-mock.hpp"
 #include "lib/util.hpp"
 
 #include <iostream>
@@ -45,6 +46,7 @@ namespace test    {
       
       using session::Clip;
       using session::AbstractMO;
+      using lib::test::Use4Test;
       using namespace mobject::test;
       
       
@@ -106,9 +108,12 @@ namespace test    {
        */
       class BuilderTool_test : public Test
         {
-          virtual void run(Arg) 
+          virtual void
+          run(Arg)
             {
-                          
+              Use4Test<backend::test::MediaAccessMock> within_this_scope;
+              
+              
               TestTool t1;
               BuilderTool& tool = t1;
                                 

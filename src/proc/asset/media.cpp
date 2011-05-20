@@ -165,7 +165,7 @@ namespace asset {
         if (isnil (key.name)) key.name=extractName(file);
         
         MediaAccessFacade& maf = MediaAccessFacade::instance();
-        MediaDesc& handle = maf.queryFile(file);
+        MediaDesc& handle = maf.queryFile(key.name);
         Duration length = handle.length;
         
         TODO ("detecting and wiring multichannel compound media!");

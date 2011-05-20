@@ -29,7 +29,9 @@
 #include "proc/asset/proc.hpp"
 
 #include "proc/asset/asset-diagnostics.hpp"
+#include "backend/media-access-mock.hpp"
 
+using lib::test::Use4Test;
 using util::isnil;
 using std::string;
 
@@ -57,19 +59,22 @@ namespace asset {
       {
         virtual void run(Arg) 
           {
-            Asset::Ident key1("Au-1", Category(AUDIO), "ichthyo", 5);
+            Use4Test<backend::test::MediaAccessMock> within_this_scope;
+            
+            
+            Asset::Ident key1("test-1", Category(AUDIO), "ichthyo", 5);
             PAsset mm1 = asset::Media::create(key1, "Name-1");
             
-            Asset::Ident key2("Au-1", Category(AUDIO), "ichthyo", 7);
+            Asset::Ident key2("test-1", Category(AUDIO), "ichthyo", 7);
             PAsset mm2 = asset::Media::create(key2, "Name-2");
             
-            Asset::Ident key3("Au-2", Category(AUDIO), "ichthyo", 5);
+            Asset::Ident key3("test-2", Category(AUDIO), "ichthyo", 5);
             PAsset mm3 = asset::Media::create(key3, "Name-3");
             
-            Asset::Ident key4("Au-2", Category(AUDIO), "stega", 5);
+            Asset::Ident key4("test-2", Category(AUDIO), "stega", 5);
             PAsset mm4 = asset::Media::create(key4, "Name-4");
             
-            Asset::Ident key5("Au-1", Category(VIDEO), "ichthyo", 5);
+            Asset::Ident key5("test-1", Category(VIDEO), "ichthyo", 5);
             PAsset mm5 = asset::Media::create(key5, "Name-5");
             
             

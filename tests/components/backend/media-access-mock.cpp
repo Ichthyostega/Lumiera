@@ -106,6 +106,11 @@ namespace test {
             (*this)["test-2"].globalLength(LENGTH_TestClip).channel("video","H264")
                                                            .channel("audio-L","PCM")
                                                            .channel("audio-R","PCM");
+            (*this)["test-3"].globalLength(LENGTH_TestClip).channel("audio","PCM");
+            (*this)["test-4"].globalLength(LENGTH_TestClip).channel("audio-W","PCM")
+                                                           .channel("audio-X","PCM")
+                                                           .channel("audio-Y","PCM")
+                                                           .channel("audio-Z","PCM");
             // ----------------------------------------------------------------------TESTCASES
           }
         

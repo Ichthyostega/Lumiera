@@ -35,10 +35,12 @@
 //#include "proc/mobject/session/clip.hpp"
 //#include "proc/mobject/explicitplacement.hpp"
 #include "proc/mobject/test-dummy-mobject.hpp"
+#include "backend/media-access-mock.hpp"
 //#include "lib/test/test-helper.hpp"
 #include "lib/time/timevalue.hpp"
 
 #include <iostream>
+
 
 
 
@@ -51,6 +53,7 @@ namespace test    {
   using std::endl;
   
   using lib::Symbol;
+  using lib::test::Use4Test;
   using lib::time::Duration;
   using lib::time::FSecs;
   using lib::time::Time;
@@ -80,6 +83,9 @@ namespace test    {
       virtual void
       run (Arg) 
         {
+          Use4Test<backend::test::MediaAccessMock> within_this_scope;
+          
+          
           PMO  testClip1 = asset::Media::create("test-1", asset::VIDEO)->createClip();
           PMO  testClip2 = asset::Media::create("test-2", asset::VIDEO)->createClip();
           

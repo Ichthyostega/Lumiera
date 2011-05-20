@@ -23,6 +23,7 @@
 
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
+#include "backend/media-access-mock.hpp"
 #include "proc/mobject/test-dummy-mobject.hpp"
 #include "proc/mobject/session/clip.hpp"
 #include "proc/mobject/placement.hpp"
@@ -34,6 +35,7 @@
 #include <iostream>
 
 using lib::HashIndexed;
+using lib::test::Use4Test;
 
 using std::tr1::shared_ptr;
 using std::string;
@@ -65,6 +67,9 @@ namespace test    {
       virtual void
       run (Arg) 
         {
+          Use4Test<backend::test::MediaAccessMock> within_this_scope;
+          
+          
           typedef Placement<MObject>                    PMObj;
           typedef TestPlacement<>                       PDummy;
           typedef TestPlacement<TestSubMO1>             PSub1;

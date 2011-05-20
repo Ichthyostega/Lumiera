@@ -30,7 +30,9 @@
 #include "proc/asset/media.hpp"
 #include "proc/mobject/session/clip.hpp"
 #include "proc/asset/asset-diagnostics.hpp"
+#include "backend/media-access-mock.hpp"
 
+using lib::test::Use4Test;
 using util::contains;
 using util::isnil;
 using std::string;
@@ -56,6 +58,8 @@ namespace asset {
             
         virtual void run (Arg) 
           {
+            Use4Test<backend::test::MediaAccessMock> within_this_scope;
+            
             
             PM mm = asset::Media::create("test-1", VIDEO);
             PC cc = mm->createClip();
