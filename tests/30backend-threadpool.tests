@@ -39,7 +39,7 @@ END
 TEST "joinable thread" joinable-thread <<END
 END
 
-TEST "sync joinable" sync-joinable <<END
+PLANNED "sync joinable" sync-joinable <<END
 END
 
 PLANNED "error cleared on join"
