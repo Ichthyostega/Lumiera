@@ -1,5 +1,5 @@
 /*
-  MediaAccessMock.hpp  -  a test (stub) target object for testing the factories
+  MediaAccessMock  -  a test (stub) target object for testing the factories
 
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
@@ -33,7 +33,7 @@
  */
 
 
-#include "backend/mediaaccessmock.hpp"
+#include "backend/media-access-mock.hpp"
 #include "proc/mobject/session/testclip.hpp"
 
 #include "lib/util.hpp"

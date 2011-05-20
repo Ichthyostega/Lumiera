@@ -1,5 +1,5 @@
 /*
-  MEDIAACCESSFACADE.hpp  -  functions for querying media file and channels.
+  MEDIA-ACCESS-FACADE.hpp  -  functions for querying media file and channels.
 
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
@@ -21,8 +21,8 @@
 */
 
 
-#ifndef BACKEND_INTERFACE_MEDIAACCESSFACADE_H
-#define BACKEND_INTERFACE_MEDIAACCESSFACADE_H
+#ifndef BACKEND_INTERFACE_MEDIA_ACCESS_FACADE_H
+#define BACKEND_INTERFACE_MEDIA_ACCESS_FACADE_H
 
 
 #include "lib/error.hpp"

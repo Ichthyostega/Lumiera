@@ -29,7 +29,7 @@
 #include "proc/asset/unknown.hpp"
 #include "proc/mobject/session/clip.hpp"
 #include "proc/mobject/session/mobjectfactory.hpp"
-#include "backend/mediaaccessfacade.hpp"
+#include "backend/media-access-facade.hpp"
 #include "lib/time/timevalue.hpp"
 #include "lib/util.hpp"
 #include "include/logging.h"

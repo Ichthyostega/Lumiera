@@ -44,7 +44,7 @@
 #ifndef LIB_SINGLETON_PRECONFIGURE_H
 #define LIB_SINGLETON_PRECONFIGURE_H
 
-#include "lib/test/mockinjector.hpp"
+#include "lib/test/mock-injector.hpp"
 
 
 namespace lib {

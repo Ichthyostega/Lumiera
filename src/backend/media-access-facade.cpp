@@ -21,7 +21,7 @@
 * *****************************************************/
 
 
-#include "backend/mediaaccessfacade.hpp"
+#include "backend/media-access-facade.hpp"
 
 #include "lib/util.hpp"
 

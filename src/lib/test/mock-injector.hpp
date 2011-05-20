@@ -1,5 +1,5 @@
 /*
-  MOCKINJECTOR.hpp  -  replacement singleton factory for injecting Test-Mock objects
+  MOCK-INJECTOR.hpp  -  replacement singleton factory for injecting Test-Mock objects
 
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
@@ -20,7 +20,7 @@
 
 */
 
-/** @file mockinjector.hpp
+/** @file mock-injector.hpp
  ** Support for unit-testing with a mock implementation of some singleton service.
  ** Using a Singleton to access a global service (instead of using a dependency injection
  ** framework) has the downside of making unit-tests hard to write. When the code to be
@@ -56,8 +56,8 @@
  */
 
 
-#ifndef LUMIERA_TEST_MOCKINJECTOR_H
-#define LUMIERA_TEST_MOCKINJECTOR_H
+#ifndef LUMIERA_TEST_MOCK_INJECTOR_H
+#define LUMIERA_TEST_MOCK_INJECTOR_H
 
 
 #include "lib/singleton-factory.hpp"

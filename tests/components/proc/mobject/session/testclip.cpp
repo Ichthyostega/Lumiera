@@ -22,8 +22,8 @@
 
 
 #include "proc/mobject/session/testclip.hpp"
-#include "backend/mediaaccessfacade.hpp"
-#include "backend/mediaaccessmock.hpp"
+#include "backend/media-access-facade.hpp"
+#include "backend/media-access-mock.hpp"
 #include "proc/asset/media.hpp"
 #include "proc/asset/clip.hpp"
 #include "lib/singleton.hpp"

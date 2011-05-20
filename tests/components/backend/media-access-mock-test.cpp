@@ -21,8 +21,8 @@
 * *****************************************************/
 
 
-#include "backend/mediaaccessfacade.hpp"
-#include "backend/mediaaccessmock.hpp"
+#include "backend/media-access-facade.hpp"
+#include "backend/media-access-mock.hpp"
 
 #include "lib/test/run.hpp"
 #include "lib/time/diagnostics.hpp"
