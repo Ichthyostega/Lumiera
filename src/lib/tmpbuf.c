@@ -29,18 +29,17 @@
 #include <nobug.h>
 
 
+/*!! WARNING
+ *!!
+ *!! this is the restored old version from  bc989dab7a97fc69c (July 2010)
+ *!! (the improved version is still buggy as of 5/2011)
+ */
+
 struct lumiera_tmpbuf_struct
 {
-  /* tiny buffers are not aligned, anything which is smaller than sizeof(void*) */
-  char tiny_buffers[LUMIERA_TMPBUF_NUM*(sizeof(void*)-1)];
-  unsigned tiny_idx;
-  /* first 16 static LUMIERA_TMPBUF_SMALL byte arrays */
-  char small_buffers[LUMIERA_TMPBUF_NUM][LUMIERA_TMPBUF_SMALL];
-  unsigned small_idx;
-  /* next 16 dynamic arrays for biggier buffers */
-  void* big_buffers[LUMIERA_TMPBUF_NUM];
-  size_t big_sizes[LUMIERA_TMPBUF_NUM];
-  unsigned big_idx;
+  void* buffers[64];
+  size_t sizes[64];
+  unsigned idx;
 };
 
 static pthread_once_t lumiera_tmpbuf_tls_once = PTHREAD_ONCE_INIT;
@@ -74,7 +73,7 @@ lumiera_tmpbuf_freeall (void)
     {
       pthread_setspecific (lumiera_tmpbuf_tls_key, NULL);
       for (int idx = 0; idx < LUMIERA_TMPBUF_NUM; ++idx)
-        lumiera_free (buf->big_buffers[idx]);
+        lumiera_free (buf->buffers[idx]);
       lumiera_free (buf);
     }
 }
@@ -90,28 +89,15 @@ lumiera_tmpbuf_provide (size_t size)
     pthread_setspecific (lumiera_tmpbuf_tls_key,
                          buf = lumiera_calloc (1, sizeof (struct lumiera_tmpbuf_struct)));
 
-  if (size < sizeof(void*))
-    {
-      buf->tiny_idx = (buf->tiny_idx + size) & ~(LUMIERA_TMPBUF_NUM*sizeof(void*)-1);
-      return &buf->tiny_buffers[buf->tiny_idx-size];
-    }
-  else if (size <= LUMIERA_TMPBUF_SMALL)
-    {
-      buf->small_idx = (buf->small_idx + 1) % LUMIERA_TMPBUF_NUM;
-      return buf->small_buffers[buf->small_idx];
-    }
-  else
-    {
-      buf->big_idx = (buf->big_idx + 1) & ~(LUMIERA_TMPBUF_NUM-1);
+  buf->idx = (buf->idx + 1) & 0x3f;
 
-      if (buf->big_sizes[buf->big_idx] < size || buf->big_sizes[buf->big_idx] > 8*size)
-        {
-          lumiera_free (buf->big_buffers[buf->big_idx]);
-          buf->big_sizes[buf->big_idx] = (size + LUMIERA_TMPBUF_SMALL-1) & ~(LUMIERA_TMPBUF_SMALL-1);
-          buf->big_buffers[buf->big_idx] = lumiera_malloc (buf->big_sizes[buf->big_idx]);
-        }
-      return buf->big_buffers[buf->big_idx];
+  if (buf->sizes[buf->idx] < size || buf->sizes[buf->idx] > 8*size)
+    {
+      lumiera_free (buf->buffers[buf->idx]);
+      buf->sizes[buf->idx] = (size+4*sizeof(long)) & ~(4*sizeof(long)-1);
+      buf->buffers[buf->idx] = lumiera_malloc (buf->sizes[buf->idx]);
     }
+  return buf->buffers[buf->idx];
 }
 
 
