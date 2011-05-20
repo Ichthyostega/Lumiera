@@ -30,6 +30,7 @@
 
 #include <iostream>
 
+using lib::test::Use4Test;
 using lib::Literal;
 using std::string;
 using std::cout;
@@ -52,12 +53,10 @@ namespace test {
       
       virtual void run(Arg) 
         {
-          MAF::instance.injectSubclass (new MediaAccessMock);
+          Use4Test<MediaAccessMock> within_this_scope;
           
           queryScenario ("test-1");
           queryScenario ("test-2");
-          
-          MAF::instance.injectSubclass (0);
         }
       
       

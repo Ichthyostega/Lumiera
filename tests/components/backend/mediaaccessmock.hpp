@@ -41,6 +41,9 @@ namespace test {
     {
       MediaDesc& queryFile (string const& name)        const;
       ChanDesc queryChannel (MediaDesc&, uint chanNo)  const;
+      
+    public:
+      typedef MediaAccessFacade ServiceInterface;
     };
   
   
