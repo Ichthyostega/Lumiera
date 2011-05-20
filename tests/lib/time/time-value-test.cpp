@@ -74,7 +74,7 @@ namespace test{
           createOffsets (ref);
           buildDuration (ref);
           buildTimeSpan (ref);
-          compareTimeSpan (ref);
+          compareTimeSpan (Time(ref));
           relateTimeIntervals (ref);
         } 
       
@@ -309,12 +309,12 @@ namespace test{
       
       
       void
-      compareTimeSpan (TimeValue org)
+      compareTimeSpan (Time const& org)
         {
-          TimeSpan span1 (Time(org), Time(org)+Time(org));            // using the distance between start and end point
-          TimeSpan span2 (Time(org), Offset(org, TimeValue(0)));      // note: the offset is taken absolute, as Duration
-          TimeSpan span3 (Time(org), FSecs(5,2));                     // Duration given explicitly, in seconds
-          TimeSpan span4 (Time(org), FSecs(5,-2));                    // again: the Duration is taken absolute
+          TimeSpan span1 (org, org+org);                  // using the distance between start and end point
+          TimeSpan span2 (org, Offset(org, Time::ZERO));  // note: the offset is taken absolute, as Duration
+          TimeSpan span3 (org, FSecs(5,2));               // Duration given explicitly, in seconds
+          TimeSpan span4 (org, FSecs(5,-2));              // again: the Duration is taken absolute
           
           CHECK (span1 == span2);
           CHECK (span2 == span1);
@@ -336,9 +336,9 @@ namespace test{
           CHECK (span3.end() == span4.end());
           
           // Verify the extended order on time intervals
-          TimeSpan span1x (Time(org)+Time(org), Duration(Time(org))); // starting later than span1
-          TimeSpan span3y (Time(org), FSecs(2));                      // shorter than span3
-          TimeSpan span3z (Time(org)+Time(org), FSecs(2));            // starting later and shorter than span3
+          TimeSpan span1x (org+org, Duration(org));       // starting later than span1
+          TimeSpan span3y (org,     FSecs(2));            // shorter than span3
+          TimeSpan span3z (org+org, FSecs(2));            // starting later and shorter than span3
           
           CHECK (span1 != span1x);
           CHECK (span3 != span3y);

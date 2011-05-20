@@ -37,11 +37,10 @@
 #include "proc/mobject/session/testclip.hpp"
 
 #include "lib/util.hpp"
-#include "lib/util-foreach.hpp"
+#include "lib/singleton.hpp"
 #include "lib/time/mutation.hpp"
 #include "lib/symbol.hpp"
 
-#include <iostream>
 #include <vector>
 #include <map>
 
@@ -49,9 +48,7 @@ using lumiera::error::Invalid;
 using lib::time::Mutation;
 using lib::time::Duration;
 using lib::Literal;
-using util::for_each;
 using util::isnil;
-using std::cout;
 using std::string;
 using std::vector;
 using std::map;
@@ -122,7 +119,7 @@ namespace test {
       };
       
       // instantiate TestCasses table
-      TestCases testCases;
+      lib::Singleton<TestCases> testCases;
       
   } // (end) implementation namespace
   
@@ -134,12 +131,12 @@ namespace test {
     if (isnil (name))
       throw Invalid ("empty filename passed to MediaAccessFacade.");
   
-    if (!testCases.known(name))
+    if (!testCases().known(name))
       throw Invalid ("unable to use media file \""+name+"\"."
                      "Hint: you're using a test-mock file access, "
                      "which responds only to some magical names.");
     
-    return testCases[name].globalDesc;
+    return testCases()[name].globalDesc;
   }
   
   
