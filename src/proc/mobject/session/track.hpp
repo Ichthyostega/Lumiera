@@ -26,6 +26,7 @@
 
 #include "proc/mobject/session/meta.hpp"
 #include "proc/asset/entry-id.hpp"
+#include "lib/time/timevalue.hpp"
 
 
 
@@ -33,6 +34,7 @@ namespace mobject {
 namespace session {     //////////////////////////////////////////////////////TICKET #637
     
     using lumiera::P;
+    using lib::time::Time;
     
     class Track;
     
@@ -52,6 +54,9 @@ namespace session {
     using asset::TrackID;
     
   
+                        //////////////////////////////////////////////////////TICKET #646
+                        //////////////////////////////////////////////////////TICKET #715
+    
     /**
      * A Track is grouping device within the Session.
      * The corresponding Placement by which this Track object is referred
@@ -73,7 +78,7 @@ namespace session {
      */
     class Track : public Meta
       {
-        Time start_;
+        Time start_;    /////////////////////////////////TODO: this doesn't belong here. The start position is governed by the Placement!!!
         TrackID id_;
         
       

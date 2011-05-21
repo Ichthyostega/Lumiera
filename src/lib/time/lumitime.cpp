@@ -21,7 +21,6 @@
 * *****************************************************/
 
 
-#include "lib/lumitime.hpp"
 #include "lib/time/timevalue.hpp"
 #include "lib/time.h"
 
@@ -40,6 +39,7 @@ namespace time {
   /** @note the allowed time range is explicitly limited to help overflow protection */
   const Time Time::MAX ( TimeValue::buildRaw_(+std::numeric_limits<gavl_time_t>::max() / 30) );
   const Time Time::MIN ( TimeValue::buildRaw_(-_raw(Time::MAX)                             ) );
+  const Time Time::ZERO;
   
   
   /** convenience constructor to build an
@@ -58,7 +58,7 @@ namespace time {
              , uint hours
              )
     : TimeValue(lumiera_build_time (millis,secs,mins,hours))
-  { }
+    { }
   
   
   /** convenience constructor to build an Time value
@@ -131,62 +131,3 @@ namespace time {
   
   
 }} // namespace lib::Time
-
-///////////////////////////////////////////////////////////////////////////TODO leftover of the existing/initial lumitime-Implementation
-namespace lumiera {
-  
-  
-  const Time Time::MAX ( +std::numeric_limits<int64_t>::max() );
-  const Time Time::MIN ( -std::numeric_limits<int64_t>::max() );
-  
-  
-  
-  Time::Time ( long millis
-             , uint secs 
-             , uint mins
-             , uint hours
-             )
-    : t_(lumiera_build_time (millis,secs,mins,hours))
-  { }
-  
-  int
-  Time::getMillis() const
-  {
-    return lumiera_time_millis(t_);
-  }
-  
-  
-  int
-  Time::getSecs()   const
-  {
-    return lumiera_time_seconds(t_);
-  }
-  
-  
-  int
-  Time::getMins()   const
-  {
-    return lumiera_time_minutes(t_);
-  }
-  
-  
-  int
-  Time::getHours()  const
-  {
-    return lumiera_time_hours(t_);
-  }
-  
-  int
-  Time::getFrames()  const
-  {
-    // TODO
-    return 0;
-  }
-  
-  
-  Time::operator string()  const
-  {
-    return string (lumiera_tmpbuf_print_time (t_));
-  }
-  
-} // namespace lumiera

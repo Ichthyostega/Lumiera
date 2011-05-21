@@ -57,8 +57,8 @@ namespace timeline {
     REQUIRE (window);
 
     // Draw a rectangle to let us know it works? :-)
-    cairo->rectangle(window->time_to_x(0), 1,
-      window->time_to_x(500000) - window->time_to_x(0),
+    cairo->rectangle(window->time_to_x(Time::ZERO), 1,
+      window->time_to_x(Time(500,0)) - window->time_to_x(Time::ZERO),
       get_height() - 2);
 
     cairo->set_source_rgb(0.5, 0.5, 0.5);
@@ -77,13 +77,13 @@ namespace timeline {
   }
 
   boost::shared_ptr<timeline::Clip>
-  ClipTrack::getClipAt(lumiera::Time position) const
+  ClipTrack::getClipAt(Time position) const
   {
     std::pair<shared_ptr<model::Clip>, shared_ptr<timeline::Clip> >
       pair; 
     BOOST_FOREACH (pair, clipMap)
       {
-        if (pair.first->isPlayingAt(position))
+        if (pair.first->isPlayingAt (position))
           return pair.second;
       }
 

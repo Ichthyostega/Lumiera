@@ -26,10 +26,15 @@
 
 #include "proc/common.hpp"
 #include "proc/state.hpp"
+#include "lib/time/timevalue.hpp"
 
 
 
 namespace engine {
+  
+  using lib::time::TimeSpan;
+  using lib::time::FSecs;
+  using lib::time::Time;
   
   class ExitNode;
   
@@ -41,11 +46,15 @@ namespace engine {
     protected:
       ExitNode * output;
       
-      /** begin of the timerange covered by this RenderGraph */
-      lumiera::Time start;
+      /** timerange covered by this RenderGraph */
+      TimeSpan segment_;
       
-      /**end (exclusive) of the timerange  */
-      lumiera::Time end;
+    public:
+      RenderGraph()
+        : segment_(Time::ZERO, FSecs(5))
+        {
+          UNIMPLEMENTED ("anything regarding the Fixture datastructure");
+        }
       
     };
   

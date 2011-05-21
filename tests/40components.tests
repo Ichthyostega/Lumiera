@@ -52,7 +52,7 @@ out-lit: Binding[advice.type.n3lib6advice4test12_GLOBAL__N_111DummyAdviceE/0(), 
 out-lit: b0==Binding[]
 out-lit: b1==Binding[cat1/0(), cat2/0()]
 out-lit: b2==Binding[cat1/0(), cat2/0()]
-out-lit: b2==Binding[advice.type.n7lumiera4TimeE/0(), cat1/0(), cat2/0(), cat3/1(zzz)]
+out-lit: b2==Binding[advice.type.n3lib4time4TimeE/0(), cat1/0(), cat2/0(), cat3/1(zzz)]
 return: 0
 END
 
@@ -505,6 +505,11 @@ out: can_IterForEach<CustomForwardIter>	 : Yes
 END
 
 
+TEST "Polymorphic value objects" PolymorphicValue_test  <<END
+return: 0
+END
+
+
 PLANNED "RefArray_test" RefArray_test  <<END
 return: 0
 END
@@ -678,6 +683,11 @@ return: 0
 END
 
 
+TEST "Changing time specifications" TimeMutation_test  <<END
+return: 0
+END
+
+
 TEST "Quantiser API basics" QuantiserBasics_test  <<END
 return: 0
 END
@@ -689,8 +699,15 @@ END
 
 
 TEST "Time formats and timecodes" TimeFormats_test  <<END
+out: Framecount=".+#" time = .+:..:..
+out: SMPTE=".+:..:..:.." time = .+:..:..
+out-lit: ----SMPTE-----
 out-lit: SMPTE="  5:42:23:13" time = 5:42:23.520
 return: 0
+END
+
+
+TEST "Parsing time values" TimeParsing_test  <<END
 END
 
 

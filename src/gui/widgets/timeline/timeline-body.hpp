@@ -19,15 +19,17 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
 */
+
 /** @file timeline-body.hpp
  ** This file contains the definition of timeline body widget
  */
 
-#ifndef TIMELINE_BODY_HPP
-#define TIMELINE_BODY_HPP
+#ifndef WIDGETS_TIMELINE_BODY_H
+#define WIDGETS_TIMELINE_BODY_H
 
 #include "gui/gtk-lumiera.hpp"
-#include "timeline-tool.hpp"
+#include "gui/widgets/timeline/timeline-tool.hpp"
+#include "lib/time/timevalue.hpp"
 
 #include <boost/scoped_ptr.hpp>
 
@@ -43,8 +45,12 @@ class TimelineWidget;
 
 namespace timeline {
 
+using lib::time::TimeVar;
+
+
 class Track;
 class TimelineViewWindow;
+
 
 /**
  * Implementation of the timeline body subwidget. This widget is
@@ -186,7 +192,7 @@ private:
   
   // Scroll State
   DragType dragType;
-  gavl_time_t beginShiftTimeOffset;
+  TimeVar beginShiftTimeOffset;
   int beginShiftVerticalOffset; 
 
   // Style properties

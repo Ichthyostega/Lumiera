@@ -25,6 +25,11 @@
 #include "proc/assetmanager.hpp"
 #include "proc/asset/media.hpp"
 #include "proc/asset/clip.hpp"
+#include "lib/time/mutation.hpp"
+#include "lib/util.hpp"
+
+using lib::time::Mutation;
+using util::isnil;
 
 namespace mobject {
 namespace session {
@@ -33,9 +38,8 @@ namespace session {
    *  Initially, this clip will cover the whole source media length.
    */
   Clip::Clip (const asset::Clip& clipDef, const Media& mediaDef)
-    : start_(0),
-      mediaDef_(mediaDef),
-      clipDef_(clipDef)
+    : mediaDef_(mediaDef)
+    , clipDef_(clipDef)
   {
     setupLength();
     throwIfInvalid();
@@ -50,7 +54,7 @@ namespace session {
   Clip::isValid ()  const
   {
     TODO ("check consistency of clip length def, implies accessing the underlying media def");
-    return length_ > Time(0);
+    return !isnil(length_);
   }
   
   
@@ -58,7 +62,7 @@ namespace session {
   Clip::setupLength()
   {
     TODO ("really calculate the length of a clip and set length field");
-    this->length_ = mediaDef_.getLength();
+    this->length_.accept (Mutation::changeDuration(mediaDef_.getLength()));
   }
   
   

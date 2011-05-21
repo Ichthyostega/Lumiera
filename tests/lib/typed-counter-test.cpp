@@ -50,8 +50,9 @@
 #include "lib/sync.hpp"
 
 #include <tr1/functional>
-#include <vector>
 #include <cstdlib>
+#include <vector>
+#include <time.h>
 
 
 namespace lib {
@@ -347,7 +348,7 @@ namespace test{
       void 
       tortureTest () 
         {
-          std::srand (time (NULL));
+          std::srand (::time (NULL));
           sum_TypedCounter_ = 0;
           sum_internal_     = 0;
           

@@ -70,6 +70,16 @@ lumiera_rational_to_time (lib::time::FSecs const& fractionalSeconds);
 
 
 /**
+ * Converts a frame count into Lumiera's internal time scale.
+ * based on a framerate given as rational number (e.g. NTSC)
+ * @note handles only positive frame counts and assumes the
+ *       origin to be at zero.
+ */
+gavl_time_t
+lumiera_framecount_to_time (uint64_t frameCount, lib::time::FrameRate const& fps);
+
+
+/**
  * Calculates the duration of one frame in Lumiera time units.
  * @param framerate underlying framerate as rational number
  * @throw error::Logic on zero framerate
@@ -84,8 +94,6 @@ lumiera_frame_duration (lib::time::FrameRate const& fps);
 extern "C" {    /* ===================== C interface ======================== */
 #endif
 
-#define NTSC_DROP_FRAME_FPS 29.97
-/* TODO: replace this by lib::time::FrameRate::NTSC */
 
 /**
  * Formats a time value in H:MM:SS.mmm format into a temporary buffer.
@@ -106,6 +114,9 @@ lumiera_tmpbuf_print_time (gavl_time_t time);
 int64_t
 lumiera_quantise_frames (gavl_time_t time, gavl_time_t origin, gavl_time_t grid);
 
+int64_t
+lumiera_quantise_frames_fps (gavl_time_t time, gavl_time_t origin, uint framerate);
+
 /**
  * Similar to #lumiera_quantise_frames, but returns a grid aligned \em time value
  * @return time of start of the grid interval containing the given time, 
@@ -125,10 +136,10 @@ lumiera_quantise_time (gavl_time_t time, gavl_time_t origin, gavl_time_t grid);
  * @return time point (frame start) on the Lumiera internal time scale
  */
 gavl_time_t
-lumiera_time_of_gridpoint (long nr, gavl_time_t origin, gavl_time_t grid);
+lumiera_time_of_gridpoint (int64_t nr, gavl_time_t origin, gavl_time_t grid);
 
 /**
- * Builds a time value by summing up the given components.
+ * Build a time value by summing up the given components.
  * @param millis number of milliseconds
  * @param secs number of seconds
  * @param mins number of minutes
@@ -139,10 +150,14 @@ lumiera_build_time (long millis, uint secs, uint mins, uint hours);
 
 /**
  * Builds a time value by summing up the given components.
- * @todo replace float framerates by lib::time::FrameRate
+ * @param fps framerate (frames per second)
+ * @param frames number of additional frames
+ * @param secs number of seconds
+ * @param mins number of minutes
+ * @param hours number of hours
  */
 gavl_time_t
-lumiera_build_time_fps (float fps, uint frames, uint secs, uint mins, uint hours);
+lumiera_build_time_fps (uint fps, uint frames, uint secs, uint mins, uint hours);
 
 /**
  * Builds a time value by summing up the given components.
@@ -173,19 +188,11 @@ int
 lumiera_time_millis (gavl_time_t time);
 
 /**
- * Extract the frame part of given time, using the given fps.
- * @param fps frame rate
- * @todo use the rational lib::time::FrameRate instead of a float
+ * Extract the remaining frame part of given time.
+ * @param fps frame rate (frames per second)
  */
 int
-lumiera_time_frames (gavl_time_t time, float fps);
-
-/**
- * Extract the frame count for the given time, using the given fps.
- * @todo use the rational lib::time::FrameRate instead of a float
- */
-int
-lumiera_time_frame_count (gavl_time_t time, float fps);
+lumiera_time_frames (gavl_time_t time, uint fps);
 
 /**
  * Extract the frame part of given time, using NTSC drop-frame timecode.

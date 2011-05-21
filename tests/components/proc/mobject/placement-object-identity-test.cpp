@@ -22,7 +22,6 @@
 
 
 #include "lib/test/run.hpp"
-#include "lib/lumitime.hpp"
 #include "proc/asset/media.hpp"
 #include "proc/mobject/mobject.hpp"
 #include "proc/mobject/mobject-ref.hpp"
@@ -32,6 +31,7 @@
 #include "proc/mobject/session/session-service-mock-index.hpp"
 #include "proc/mobject/session/clip.hpp"
 #include "proc/mobject/explicitplacement.hpp"
+#include "lib/time/timevalue.hpp"
 //#include "proc/mobject/test-dummy-mobject.hpp"
 //#include "lib/test/test-helper.hpp"
 
@@ -45,7 +45,6 @@
 namespace mobject {
 namespace test    {
   
-  using lumiera::Time;
   using session::Clip;
   
   using session::SessionServiceMockIndex;  
@@ -81,8 +80,8 @@ namespace test    {
           PMObj  pClip2 = asset::Media::create("test-2", asset::VIDEO)->createClip();
           
           // set up a tie to fixed start positions
-          pClip1.chain(Time(10));
-          pClip2.chain(Time(20));
+          pClip1.chain (lib::time::Time(0,10));
+          pClip2.chain (lib::time::Time(0,20));
           
           CHECK (pClip1->isValid());
           CHECK (pClip2->isValid());

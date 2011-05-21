@@ -20,47 +20,48 @@
 
 * *****************************************************/
 
-#include <boost/foreach.hpp>
 
 #include "gui/gtk-lumiera.hpp"
-#include "timeline-panel.hpp"
+#include "gui/panels/timeline-panel.hpp"
 
 #include "gui/workspace/workspace-window.hpp"
 #include "gui/model/project.hpp"
 #include "gui/controller/controller.hpp"
+#include "lib/util.hpp"
 
-#include "lib/time.h"
-
+#include <boost/foreach.hpp>
 
 using namespace Gtk;
 using namespace sigc;
-using namespace std;
-using namespace boost;
-using namespace util;
 using namespace gui::widgets;
 using namespace gui::model;
+
+using boost::shared_ptr;  ///////////////////////////////TICKET #796
+using boost::weak_ptr;    ///////////////////////////////TICKET #796
+using util::contains;
 
 namespace gui {
 namespace panels {
   
 const int TimelinePanel::ZoomToolSteps = 2; // 2 seems comfortable
 
-TimelinePanel::TimelinePanel(workspace::PanelManager &panel_manager,
-    GdlDockItem *dock_item) :
-  Panel(panel_manager, dock_item, get_title(), get_stock_id()),
-  timeCode("sequence_clock", "timecode_widget", true),
-  previousButton(Stock::MEDIA_PREVIOUS),
-  rewindButton(Stock::MEDIA_REWIND),
-  playPauseButton(Stock::MEDIA_PLAY),
-  stopButton(Stock::MEDIA_STOP),
-  forwardButton(Stock::MEDIA_FORWARD),
-  nextButton(Stock::MEDIA_NEXT),
-  arrowTool(Gtk::StockID("tool_arrow")),
-  iBeamTool(Gtk::StockID("tool_i_beam")),
-  zoomIn(Stock::ZOOM_IN),
-  zoomOut(Stock::ZOOM_OUT),
-  updatingToolbar(false),
-  currentTool(timeline::Arrow)
+
+TimelinePanel::TimelinePanel (workspace::PanelManager &panel_manager,
+                              GdlDockItem *dock_item) 
+  : Panel(panel_manager, dock_item, get_title(), get_stock_id())
+  , timeCode("sequence_clock", "timecode_widget", true)
+  , previousButton(Stock::MEDIA_PREVIOUS)
+  , rewindButton(Stock::MEDIA_REWIND)
+  , playPauseButton(Stock::MEDIA_PLAY)
+  , stopButton(Stock::MEDIA_STOP)
+  , forwardButton(Stock::MEDIA_FORWARD)
+  , nextButton(Stock::MEDIA_NEXT)
+  , arrowTool(Gtk::StockID("tool_arrow"))
+  , iBeamTool(Gtk::StockID("tool_i_beam"))
+  , zoomIn(Stock::ZOOM_IN)
+  , zoomOut(Stock::ZOOM_OUT)
+  , updatingToolbar(false)
+  , currentTool(timeline::Arrow)
 {
   // Hook up notifications
   get_project().get_sequences().signal_changed().connect(mem_fun(this,
@@ -123,7 +124,7 @@ TimelinePanel::TimelinePanel(workspace::PanelManager &panel_manager,
   zoomOut         .set_tooltip_text(_("Zoom out"));
 
   // Setup the timeline widget
-  shared_ptr<Sequence> sequence
+  shared_ptr<Sequence> sequence          ///////////////////////////////TICKET #796
     = *get_project().get_sequences().begin();  
   timelineWidget.reset(new TimelineWidget(load_state(sequence)));
   pack_start(*timelineWidget, PACK_EXPAND_WIDGET);
@@ -132,13 +133,9 @@ TimelinePanel::TimelinePanel(workspace::PanelManager &panel_manager,
   update_sequence_chooser();
   update_tool_buttons();
   update_zoom_buttons();
-  show_time(0);
+  show_time (Time::ZERO);
 }
 
-TimelinePanel::~TimelinePanel()
-{
-
-}
 
 const char*
 TimelinePanel::get_title()
@@ -203,9 +200,9 @@ TimelinePanel::on_zoom_out()
 }
 
 void
-TimelinePanel::on_mouse_hover(gavl_time_t time)
+TimelinePanel::on_mouse_hover(Time)
 {
-  (void)time;
+  /* do nothing */
 }
 
 void
@@ -216,8 +213,8 @@ TimelinePanel::on_playback_period_drag_released()
   
   REQUIRE(timelineWidget);
     
-  timelineWidget->get_state()->set_playback_point(
-    timelineWidget->get_state()->get_playback_period_start());
+  timelineWidget->get_state()->setPlaybackPoint(
+    timelineWidget->get_state()->getPlaybackPeriodStart());
   //----- END TEST CODE
   
   play();
@@ -365,27 +362,17 @@ TimelinePanel::set_tool(timeline::ToolType tool)
 }
 
 void
-TimelinePanel::show_time(gavl_time_t time)
+TimelinePanel::show_time(Time time)
 {
-  // timeIndicator.set_text(lumiera_tmpbuf_print_time(time));
+  ////////////TODO integrate the Timecode Widget  
+  
+  // timeIndicator.set_text(string(time));
 }
 
 bool
 TimelinePanel::on_frame()
 {
-  // TEST CODE!  
-  /*const gavl_time_t point = timelineWidget.get_playback_point()
-    + GAVL_TIME_SCALE / 25;
-  if(point < timelineWidget.get_playback_period_end())
-    {
-      show_time(point);
-      timelineWidget.set_playback_point(point);
-      
-      
-    }
-  else
-    on_stop();*/
-    
+  /////////TODO what happens here??
   return true;
 }
 
@@ -407,5 +394,4 @@ TimelinePanel::load_state(weak_ptr<Sequence> sequence)
   return shared_ptr< timeline::TimelineState >();
 }
 
-}   // namespace panels
-}   // namespace gui
+}}   // namespace gui::panels

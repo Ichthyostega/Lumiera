@@ -27,7 +27,6 @@
 #include "proc/assetmanager.hpp"          //////??
 #include "proc/asset/timeline.hpp"
 #include "proc/asset/sequence.hpp"
-#include "lib/lumitime.hpp"
 #include "lib/util.hpp"
 
 #include <iostream>
@@ -47,7 +46,6 @@ namespace test    {
   using asset::PTimeline;
   using asset::PSequence;
   
-  using lumiera::Time;
   
   
   /*******************************************************************************

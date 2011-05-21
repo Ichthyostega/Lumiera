@@ -22,12 +22,15 @@
 
 
 #include "pre.hpp"
+#include "lib/error.hpp"
 #include "proc/assetmanager.hpp"
 #include "proc/asset/media.hpp"
 #include "proc/asset/clip.hpp"
 #include "proc/asset/unknown.hpp"
 #include "proc/mobject/session/clip.hpp"
 #include "proc/mobject/session/mobjectfactory.hpp"
+#include "backend/media-access-facade.hpp"
+#include "lib/time/timevalue.hpp"
 #include "lib/util.hpp"
 #include "include/logging.h"
 
@@ -36,6 +39,10 @@
 
 
 using util::isnil;
+using lib::time::FSecs;
+using lib::time::Duration;
+using backend_interface::MediaDesc;
+using backend_interface::MediaAccessFacade;
 
 using boost::format;
 using boost::regex;
@@ -43,12 +50,12 @@ using boost::smatch;
 using boost::regex_search;
 using std::tr1::dynamic_pointer_cast;
 
+namespace error = lumiera::error;
 
-namespace asset
-  {
+namespace asset {
   
-  namespace // Implementation details
-  {
+  namespace { // Implementation details
+    
     /** helper: extract a name token out of a given path/filename
      *  @return sanitised token based on the name (minus extension),
      *          empty string if not the common filename pattern.
@@ -116,7 +123,7 @@ namespace asset
   }
   
   
-  lumiera::Time
+  Duration
   Media::getLength()  const
   {
      return len_;
@@ -132,6 +139,7 @@ namespace asset
    *  either a asset::Media object or an "Unknown" placeholder will be provided. If
    *  the given Category already contains an "Unkown", we just get the
    *  corresponding smart-ptr. Otherwise a new asset::Unknown is created.
+   *  @throw  error::Invalid when media file is inaccessible or inappropriate
    *  @return an Media smart ptr linked to the internally registered smart ptr
    *          created as a side effect of calling the concrete Media subclass ctor.
    */
@@ -155,9 +163,11 @@ namespace asset
     else
       {
         if (isnil (key.name)) key.name=extractName(file);
-        TODO ("file exists?");
-        TODO ("extract media file properties");
-        Time length(25);
+        
+        MediaAccessFacade& maf = MediaAccessFacade::instance();
+        MediaDesc& handle = maf.queryFile(key.name);
+        Duration length = handle.length;
+        
         TODO ("detecting and wiring multichannel compound media!");
         pM = new Media (key,file,length); 
       }

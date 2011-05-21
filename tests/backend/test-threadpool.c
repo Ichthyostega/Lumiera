@@ -349,7 +349,7 @@ TEST (sync-joinable)
   lumiera_thread_sync_other (master);
   value = 7732;
 
-  lumiera_thread_join (master);
+  lumiera_thread_join (master);                                         //////////////////////////////TICKET #803  deadlock here
   CHECK (value == 42*2-13, "result is not 42*2-12=71, but %d", value);
 
   lumiera_threadpool_destroy ();

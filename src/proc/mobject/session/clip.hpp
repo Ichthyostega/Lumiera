@@ -25,6 +25,7 @@
 #define MOBJECT_SESSION_CLIP_H
 
 #include "proc/mobject/session/abstractmo.hpp"
+#include "lib/time/timevalue.hpp"
 
 
 namespace asset {
@@ -36,6 +37,8 @@ namespace mobject {
 namespace session {
   
   using asset::Media;
+  using lib::time::TimeVar;
+  
   typedef P<Media> PMedia;
   typedef P<asset::Clip> PClipAsset;
   
@@ -67,7 +70,7 @@ namespace session {
       
     protected:
       /** start position in source */
-      Time start_;
+      TimeVar start_;
       
       /** @todo using a mere ref here is against the scheme and only
           done as temporal solution, until we work out how to handle

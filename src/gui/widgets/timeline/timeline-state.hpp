@@ -26,7 +26,10 @@
 #ifndef TIMELINE_STATE_HPP
 #define TIMELINE_STATE_HPP
 
-#include "timeline-view-window.hpp"
+#include "gui/widgets/timeline/timeline-view-window.hpp"
+#include "lib/time/mutation.hpp"
+
+#include <boost/shared_ptr.hpp>  /////////////////////////TICKET #796
 
 namespace gui {
   
@@ -36,6 +39,8 @@ class Sequence;
   
 namespace widgets { 
 namespace timeline {
+  
+using lib::time::Mutation;
 
 /**
  * TimelineState is a container for the state data for TimelineWidget.
@@ -67,56 +72,37 @@ public:
    */
   timeline::TimelineViewWindow& get_view_window();
   
-  /**
-   * Gets the time at which the selection begins.
-   */
-  lumiera::Time get_selection_start() const;
   
-  /**
-   * Gets the time at which the selection begins.
-   */
-  lumiera::Time get_selection_end() const;
+  Time getSelectionStart()      const { return selection_.start();}
+  Time getSelectionEnd()        const { return selection_.end();  }
+  Time getPlaybackPeriodStart() const { return selection_.start();}
+  Time getPlaybackPeriodEnd()   const { return selection_.end();  }
+  
+  Time getPlaybackPoint()       const { return playbackPoint_; }
+  
+  /** is there currently any ongoing playback process?
+   *  Otherwise the #getPlaybackPoint is meaningless */
+  bool isPlaying() const { return isPlayback_; }
+  
   
   /**
    * Sets the period of the selection.
-   * @param start The start time.
-   * @param end The end time.
-   * @param reset_playback_period Specifies whether to set the playback
-   * period to the same as this new selection.
+   * @param resetPlaybackPeriod Specifies whether to set the
+   *        playback period to the same as this new selection.
    */
-  void set_selection(lumiera::Time start, lumiera::Time end,
-    bool reset_playback_period = true);
+  void setSelection(Mutation const& change,
+                    bool resetPlaybackPeriod = true);
+  
+  void setPlaybackPeriod(Mutation const& change);
   
   /**
-   * Gets the time at which the playback period begins.
+   * Sets the time which is currently being played back.
+   * @param point The time index being played.
+   * @todo do we ever get the situation that we don't have such a position?
+   * @todo very likely to be handled differently, once
+   *       the GUI is really connected to the Player
    */
-  lumiera::Time get_playback_period_start() const;
-  
-  /**
-   * Gets the time at which the playback period ends.
-   */
-  lumiera::Time get_playback_period_end() const;
-  
-  /**
-   * Sets the playback period.
-   * @param start The start time.
-   * @param end The end time.
-   */
-  void set_playback_period(lumiera::Time start, lumiera::Time end);
-  
-  /**
-   * Sets the time which is currenty being played back.
-   * @param point The time index being played. This value may be
-   * GAVL_TIME_UNDEFINED, if there is no playback point.
-   */
-  void set_playback_point(lumiera::Time point);
-  
-  /**
-   * Gets the current playback point.
-   * @return The time index of the playback point. This value may be
-   * GAVL_TIME_UNDEFINED, if there is no playback point.
-   */
-  lumiera::Time get_playback_point() const;
+  void setPlaybackPoint(Time newPos);
   
   /**
    * A signal to notify when the selected period has changed.
@@ -132,8 +118,7 @@ public:
 private:
 
   /**
-   * A pointer to the sequence object which this timeline_widget will
-   * represent.
+   * A pointer to the sequence object which this timeline_widget will represent.
    * @remarks This pointer is set by the constructor and is constant, so
    * will not change in value during the lifetime of the class.
    */
@@ -147,30 +132,20 @@ private:
   
   // Selection State
   
-  /**
-   * The start time of the selection period.
-   */
-  lumiera::Time selectionStart;
+  /** currently selected time period. */
+  TimeSpan selection_;
   
-  /**
-   * The end time of the selection period.
-   */
-  lumiera::Time selectionEnd;
+  /** current playback period. */
+  TimeSpan playbackPeriod_;
   
-  /**
-   * The start time of the playback period.
+  /** current playback position.
+   * @todo very likely to be handled differently
+   *       when actually integrated with the Player
    */
-  lumiera::Time playbackPeriodStart;
+  TimeVar playbackPoint_;
   
-  /**
-   * The end time of the playback period.
-   */
-  lumiera::Time playbackPeriodEnd;
+  bool isPlayback_;
   
-  /**
-   * The time of the playback point.
-   */
-  lumiera::Time playbackPoint;
   
   // Signals
   

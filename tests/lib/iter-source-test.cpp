@@ -24,7 +24,7 @@
 
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
-#include "lib/lumitime-fmt.hpp"
+#include "lib/time/diagnostics.hpp"
 #include "lib/util.hpp"
 
 #include "lib/iter-source.hpp"
@@ -44,9 +44,9 @@ namespace lib {
 namespace test{
   
   using ::Test;
-  using lumiera::Time;
   using boost::lexical_cast;
   using boost::noncopyable;
+  using lib::time::TimeVar;
   using lib::test::randStr;
   using lib::test::randTime;
   using util::isnil;
@@ -153,10 +153,10 @@ namespace test{
       typedef IterSource<int>::iterator IntIter;
       typedef IterSource<CStr>::iterator StrIter;
       typedef IterSource<string>::iterator StringIter;
-      typedef IterSource<Time>::iterator TimeIter;
+      typedef IterSource<TimeVar>::iterator TimeIter;
       
-      typedef std::map<string,Time>                TreeMap;
-      typedef std::tr1::unordered_map<string,Time> HashMap;
+      typedef std::map<string,TimeVar>                TreeMap;
+      typedef std::tr1::unordered_map<string,TimeVar> HashMap;
       
       typedef std::multimap<int,int>               TreeMultimap;
       typedef std::tr1::unordered_multimap<int,int>HashMultimap;

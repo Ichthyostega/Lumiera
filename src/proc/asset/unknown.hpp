@@ -25,13 +25,16 @@
 #define ASSET_UNKNOWN_H
 
 #include "proc/asset/media.hpp"
+#include "lib/time/timevalue.hpp"
 
 
 
 namespace asset {
   
+  using lib::time::FSecs;
+  using lib::time::Duration;
   
-  const lumiera::Time DUMMY_TIME (25); ///< @todo solve config management
+  const Duration DUMMY_TIME (FSecs(5)); ///< @todo solve config management
   
   /**
    * Placeholder Asset for unknown or unavailable media source.
@@ -42,7 +45,7 @@ namespace asset {
   class Unknown : public Media
     {
     protected:
-      Unknown (const Asset::Ident& idi, string name="", Time length=DUMMY_TIME);
+      Unknown (const Asset::Ident& idi, string name="", Duration length=DUMMY_TIME);
       friend class MediaFactory;
       
     public:

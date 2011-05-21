@@ -69,6 +69,7 @@
 
 #include "pre.hpp"
 #include "lib/hash-indexed.hpp"
+#include "lib/time/timevalue.hpp"
 #include "proc/mobject/session/locatingpin.hpp"
 
 #include "proc/asset/pipe.hpp"   //////////////TICKET #109 : get rid of this
@@ -123,7 +124,7 @@ namespace mobject {
       typedef HashIndexed<Placement<MObject>, lib::hash::LuidH> HashInd;
       typedef shared_ptr<MObject> _SmartPtr;
       typedef void (*Deleter)(MObject*);
-      typedef lumiera::Time Time;
+      typedef lib::time::Time Time;
       typedef asset::shared_ptr<asset::Pipe> Pipe;   ////TICKET #109 : get rid of this
       
       

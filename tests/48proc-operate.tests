@@ -2,13 +2,13 @@ TESTING "Proc Layer combined operations Test Suite" ./test-components --group=op
 
 
 
-TEST "MediaAccessMock_test" MediaAccessMock_test <<END
-out: accessing "test-1" ...
-out:  Channel-0: nameID=video codecID=ID
-out: accessing "test-2" ...
-out:  Channel-0: nameID=video codecID=H264
-out:  Channel-1: nameID=audio-L codecID=PCM
-out:  Channel-2: nameID=audio-R codecID=PCM
+TEST "Mock media access" MediaAccessMock_test <<END
+out-lit: accessing "test-1" (dur=0:00:25.000)...
+out-lit:  Channel-0: nameID=video codecID=ID
+out-lit: accessing "test-2" (dur=0:00:25.000)...
+out-lit:  Channel-0: nameID=video codecID=H264
+out-lit:  Channel-1: nameID=audio-L codecID=PCM
+out-lit:  Channel-2: nameID=audio-R codecID=PCM
 END
 
 

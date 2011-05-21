@@ -61,7 +61,6 @@
 
 //#include "pre.hpp"
 #include "lib/handle.hpp"
-#include "lib/lumitime.hpp"
 #include "proc/mobject/placement.hpp"
 #include "proc/mobject/placement-ref.hpp"
 #include "proc/mobject/session/session-service-mutate.hpp"
@@ -148,7 +147,7 @@ namespace mobject {
       /** resolves the referred placement to an 
        *  ExplicitPlacement and returns the found start time
        */
-      lumiera::Time const&
+      lib::time::Time
       getStartTime()
         {
           return pRef_.resolve().time;

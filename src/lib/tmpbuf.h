@@ -29,10 +29,13 @@
  * Round robin temporary buffers.
  * This provides some buffers per thread which are round-robin recycled with each use.
  * The idea is to have fast buffers for temporal data without need for explicit heap management.
+ * 
+ * @warning this is the restored old version from  bc989dab7a97fc69c (July 2010)
+ *         (the improved version is still buggy as of 5/2011)
  */
 
 
-/* following 2 values must be exponent of 2 */
+/* following value must be exponent of 2 */
 /**
  * Number of buffers in the ring
  * This also defines how many concurent buffers can be in use in one thread (including nested calls)
@@ -40,12 +43,6 @@
  */
 #define LUMIERA_TMPBUF_NUM 16
 
-/**
- * Size of a small block
- * tmpbuf's knows small and big blocks, anything bigger than LUMIERA_TMPBUF_SMALL will be
- * allocated dynamically as 'big' buffer while for anything smaller static buffers are allocated.
- */
-#define LUMIERA_TMPBUF_SMALL 256
 
 
 /**

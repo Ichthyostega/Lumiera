@@ -54,7 +54,7 @@ namespace session {
       
     public:
       
-      Time&
+      Duration&
       getLength()
         {
           return length_; 

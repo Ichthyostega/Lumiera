@@ -29,9 +29,10 @@
 #ifndef TIMELINE_PANEL_HPP
 #define TIMELINE_PANEL_HPP
 
-#include "panel.hpp"
+#include "gui/panels/panel.hpp"
 #include "gui/widgets/timecode-widget.hpp"
 #include "gui/widgets/timeline-widget.hpp"
+#include "lib/time/timevalue.hpp"
 
 #include <boost/scoped_ptr.hpp>
 #include <boost/weak_ptr.hpp>
@@ -47,6 +48,9 @@ class Sequence;
   
 namespace panels {
 
+using lib::time::Time;
+
+
 /**
  * The definition of the timeline panel class, which holds timeline
  * widgets.
@@ -55,17 +59,12 @@ class TimelinePanel : public Panel
 {
 public:
   /**
-   * Constructor.
    * @param panel_manager The owner panel manager widget.
    * @param dock_item The GdlDockItem that will host this panel.
    */
   TimelinePanel(workspace::PanelManager &panel_manager,
-    GdlDockItem *dock_item);
+                GdlDockItem *dock_item);
 
-  /**
-   * Destructor 
-   */
-  ~TimelinePanel();
   
   /**
    * Get the title of the panel.
@@ -93,7 +92,7 @@ private:
   
   void on_time_pressed();
     
-  void on_mouse_hover(gavl_time_t time);
+  void on_mouse_hover(Time);
   void on_playback_period_drag_released();
   
   /**
@@ -121,12 +120,12 @@ private:
   
   bool is_playing();
   
-  void set_tool(gui::widgets::timeline::ToolType tool);
+  void set_tool (gui::widgets::timeline::ToolType tool);
   
-  void show_time(gavl_time_t time);
+  void show_time (Time);
     
-  boost::shared_ptr<widgets::timeline::TimelineState> load_state(
-    boost::weak_ptr<model::Sequence> sequence);
+  boost::shared_ptr<widgets::timeline::TimelineState>                 ///////////////////////////////TICKET #796
+  load_state (boost::weak_ptr<model::Sequence> sequence);
   
 private:
 
@@ -172,7 +171,7 @@ private:
   boost::scoped_ptr<TimelineWidget> timelineWidget;
   
   std::map< boost::weak_ptr<model::Sequence>,
-    boost::shared_ptr<widgets::timeline::TimelineState> >
+    boost::shared_ptr<widgets::timeline::TimelineState> >          ///////////////////////////////TICKET #796
     timelineStates;
   
   // Toolbar Widgets

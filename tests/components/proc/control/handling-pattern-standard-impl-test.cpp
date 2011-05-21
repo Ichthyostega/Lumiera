@@ -36,7 +36,6 @@
 #include "proc/control/command-impl.hpp"
 #include "proc/control/command-registry.hpp"
 //#include "proc/control/command-def.hpp"
-//#include "lib/lumitime.hpp"
 //#include "lib/symbol.hpp"
 //#include "lib/util.hpp"
 
@@ -56,7 +55,6 @@ namespace test    {
 
 //  using boost::format;
 //  using boost::str;
-  //using lumiera::Time;
   //using util::contains;
   using std::tr1::function;
 //  using std::tr1::bind;

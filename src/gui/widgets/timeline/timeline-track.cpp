@@ -26,9 +26,10 @@
 #include "gui/dialogs/name-chooser.hpp"
 #include "include/logging.h"
 
-using namespace boost;
 using namespace Gtk;
 using namespace sigc;
+
+using boost::shared_ptr;                     //////////////////////////////TICKET #796 : should use std::tr1
 
 namespace gui {
 namespace widgets {
@@ -120,8 +121,8 @@ Track::get_expanded() const
   return expanded;
 }
 
-boost::shared_ptr<timeline::Clip>
-Track::getClipAt(lumiera::Time) const
+shared_ptr<timeline::Clip>
+Track::getClipAt(Time) const
 {
   // Default implementation returns empty pointer
   return boost::shared_ptr<timeline::Clip>();

@@ -27,12 +27,13 @@
 #include "proc/mobject/session/testclip.hpp"
 #include "proc/mobject/placement.hpp"
 #include "proc/mobject/explicitplacement.hpp"
-#include "lib/util.hpp"
 #include "proc/mobject/session/mobjectfactory.hpp"   ////TODO: avoidable?
+#include "lib/time/timevalue.hpp"
+#include "lib/util.hpp"
 
 #include <iostream>
 
-using lumiera::Time;
+using lib::time::Time;
 using util::contains;
 using std::string;
 using std::cout;
@@ -72,16 +73,16 @@ namespace test    {
           
           // using the Placement interface
           // TODO: how to handle insufficiently determinated Placement? Throw?
-          FixedLocation & fixloc = pc.chain(Time(1)); // TODO: the track??
+          FixedLocation & fixloc = pc.chain (Time(0,1)); // TODO: the track??
           ExplicitPlacement expla = pc.resolve();
-          CHECK (expla.time == Time(1));
+          CHECK (expla.time == Time(0,1));
           CHECK (!expla.chain.isOverdetermined());
 //            CHECK (*expla == *pc);  ////////////////////////////////////////////TICKET #511 define equivalence of locating chains and solutions
           
           // now overconstraining with another Placement
-          pc.chain(Time(2));
+          pc.chain (Time(0,2));
           ExplicitPlacement expla2 = pc.resolve();
-          CHECK (expla2.time == Time(2)); // the latest addition wins
+          CHECK (expla2.time == Time(0,2)); // the latest addition wins
           CHECK (expla2.chain.isOverdetermined());
         }
     };

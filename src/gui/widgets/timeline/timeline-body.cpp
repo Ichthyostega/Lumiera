@@ -43,15 +43,15 @@ namespace gui {
 namespace widgets {
 namespace timeline {
 
-TimelineBody::TimelineBody(TimelineWidget &timelineWidget) :
-    Glib::ObjectBase("TimelineBody"),
-    tool(NULL),
-    mouseDownX(0),
-    mouseDownY(0),
-    dragType(None),
-    beginShiftTimeOffset(0),
-    selectionAlpha(0.5),
-    timelineWidget(timelineWidget)
+TimelineBody::TimelineBody (TimelineWidget &timelineWidget)
+  : Glib::ObjectBase("TimelineBody")
+  , tool(NULL)
+  , mouseDownX(0)
+  , mouseDownY(0)
+  , dragType(None)
+  , beginShiftTimeOffset()
+  , selectionAlpha(0.5)
+  , timelineWidget(timelineWidget)
 {      
   // Connect up some events
   timelineWidget.state_changed_signal().connect(
@@ -264,10 +264,11 @@ TimelineBody::on_motion_notify_event(GdkEventMotion *event)
           {
             TimelineViewWindow &window = view_window();
             
+                                   /////////////////////////////TICKET# 795 : don't reach in from outside and manipulate internals of the timeline view!
+                                   /////////////////////////////            : either encapsulate this entirely here, or leave it to the timeline view!            
             const int64_t scale = window.get_time_scale();
-            Time offset(beginShiftTimeOffset +
-              (int64_t)(mouseDownX - event->x) * scale);
-            window.set_time_offset(offset);
+            window.set_time_offset(beginShiftTimeOffset
+                                 + TimeValue(scale * (mouseDownX - event->x)));
             
             set_vertical_offset((int)(mouseDownY - event->y) +
               beginShiftVerticalOffset);
@@ -388,9 +389,9 @@ TimelineBody::draw_selection(Cairo::RefPtr<Cairo::Context> cr)
   shared_ptr<TimelineState> state = timelineWidget.get_state();
   REQUIRE(state);
   
-  const TimelineViewWindow &window = state->get_view_window();
-  const int start_x = window.time_to_x(state->get_selection_start());
-  const int end_x = window.time_to_x(state->get_selection_end());
+  TimelineViewWindow const& window = state->get_view_window();
+  const int start_x = window.time_to_x(state->getSelectionStart());
+  const int end_x   = window.time_to_x(state->getSelectionEnd());
   
   // Draw the cover
   if(end_x > 0 && start_x < allocation.get_width())
@@ -431,12 +432,10 @@ TimelineBody::draw_playback_point(Cairo::RefPtr<Cairo::Context> cr)
   shared_ptr<TimelineState> state = timelineWidget.get_state();
   if(state)
     {
-      const Allocation allocation = get_allocation();
-        
-      const gavl_time_t point = state->get_playback_point();
-      if(point == (gavl_time_t)GAVL_TIME_UNDEFINED)
-        return;
+      if (!state->isPlaying()) return;
       
+      const Allocation allocation = get_allocation();
+      Time point = state->getPlaybackPoint();
       const int x = view_window().time_to_x(point);
         
       // Set source

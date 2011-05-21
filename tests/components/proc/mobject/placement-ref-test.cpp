@@ -29,13 +29,12 @@
 #include "proc/mobject/session/session-service-mock-index.hpp"
 #include "proc/mobject/explicitplacement.hpp"
 #include "proc/mobject/test-dummy-mobject.hpp"
-#include "lib/lumitime.hpp"
+#include "lib/time/timevalue.hpp"
 #include "lib/util.hpp"
 
 #include <iostream>
 
 using util::isSameObject;
-using lumiera::Time;
 using std::string;
 using std::cout;
 using std::endl;
@@ -71,7 +70,9 @@ namespace test    {
         {
           PSub testPlacement1(*new TestSubMO21);
           PSub testPlacement2(*new TestSubMO21);
-          testPlacement2.chain(Time(2));     // define start time of Placement-2 to be at t=2
+          
+          lib::time::Time twoSec(0,2);
+          testPlacement2.chain (twoSec);     // define start time of Placement-2 to be at t=2sec
           
           // Prepare an (test)Index backing the PlacementRefs
           PPIdx index = SessionServiceMockIndex::install();
@@ -115,7 +116,7 @@ namespace test    {
           CHECK (2 == ref1.use_count());
           CHECK (2 == ref2.use_count());
           ExplicitPlacement exPla = refX.resolve();
-          CHECK (exPla.time == Time(2));           // indeed get back the time we set on p2 above
+          CHECK (exPla.time == twoSec);            // indeed get back the time we set on p2 above
           CHECK (3 == ref2.use_count());           // exPla shares ownership with p2
           
           CHECK (index->contains(ref1));           // ref can stand-in for a placement-ID
@@ -153,9 +154,9 @@ namespace test    {
           CHECK (ref2 != refX);
           
           // resolution is indeed "live", we see changes to the referred placement
-          CHECK (refX.resolve().time == Time::MIN);
+          CHECK (refX.resolve().time == lib::time::Time::MIN);
           p1.chain = p2.chain;                     // do a change on the placement within index....
-          CHECK (refX.resolve().time == Time(2));  // now we get the time tie we originally set on p2
+          CHECK (refX.resolve().time == twoSec);   // now we get the time tie we originally set on p2
           
           CHECK (p1.getID() != p2.getID());        // but the instance identities are still unaltered
           CHECK (2 == ref1.use_count());

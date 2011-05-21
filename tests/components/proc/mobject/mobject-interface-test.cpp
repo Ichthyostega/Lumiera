@@ -22,7 +22,6 @@
 
 
 #include "lib/test/run.hpp"
-#include "lib/lumitime.hpp"
 #include "lib/symbol.hpp"
 
 #include "proc/asset/media.hpp"
@@ -36,9 +35,12 @@
 //#include "proc/mobject/session/clip.hpp"
 //#include "proc/mobject/explicitplacement.hpp"
 #include "proc/mobject/test-dummy-mobject.hpp"
+#include "backend/media-access-mock.hpp"
 //#include "lib/test/test-helper.hpp"
+#include "lib/time/timevalue.hpp"
 
 #include <iostream>
+
 
 
 
@@ -51,9 +53,12 @@ namespace test    {
   using std::endl;
   
   using lib::Symbol;
+  using lib::test::Use4Test;
+  using lib::time::Duration;
+  using lib::time::FSecs;
+  using lib::time::Time;
   
   
-  using lumiera::Time;
 //  using session::Clip;
 //  using session::PMedia;
   
@@ -78,17 +83,20 @@ namespace test    {
       virtual void
       run (Arg) 
         {
+          Use4Test<backend::test::MediaAccessMock> within_this_scope;
+          
+          
           PMO  testClip1 = asset::Media::create("test-1", asset::VIDEO)->createClip();
           PMO  testClip2 = asset::Media::create("test-2", asset::VIDEO)->createClip();
           
           // set up a tie to fixed start positions (i.e. "properties of placement")
-          testClip1.chain(Time(10));
-          testClip2.chain(Time(20));
+          testClip1.chain(Time(FSecs(10)));
+          testClip2.chain(Time(FSecs(20)));
           
           Symbol labelType ("dummyLabel");
           PMO testLabel1 = MObject::create (labelType);
           
-          testLabel1.chain(Time(30));
+          testLabel1.chain(Time(FSecs(30)));
           
           PDummy testDummy1(*new DummyMO);
           PDummy testDummy2(*new TestSubMO1);
@@ -99,9 +107,9 @@ namespace test    {
           CHECK (testDummy1->isValid());
           CHECK (testDummy2->isValid());
           
-          Time lenC1 = testClip1->getLength();
-          Time lenC2 = testClip2->getLength();
-          Time lenL1 = testLabel1->getLength();
+          Duration lenC1 = testClip1->getLength();
+          Duration lenC2 = testClip2->getLength();
+          Duration lenL1 = testLabel1->getLength();
           
           cout << testClip1->shortID() << endl;
           cout << testClip2->shortID() << endl;

@@ -284,11 +284,11 @@ def configurePlatform(env):
         problems.append('Unable to configure Cairo--')
     
     verGDL = '2.27.1'
-    if not conf.CheckPkgConfig('gdl-lum', verGDL, alias='gdl'):
-        print 'Custom package "gdl-lum" not found. Trying official GDL release >=%s...' % verGDL
-        if not conf.CheckPkgConfig('gdl-1.0', verGDL, alias='gdl'):
-            problems.append('GNOME Docking Library not found. We either need a very recent GDL '
-                            'version (>=%s), or the custom package "gdl-lum".' % verGDL)
+    if not conf.CheckPkgConfig('gdl-1.0', verGDL, alias='gdl'):
+        print 'No sufficiently recent (>=%s) version of GDL found. Maybe use custom package gdl-lum?' % verGDL
+        if not conf.CheckPkgConfig('gdl-lum', verGDL, alias='gdl'):
+            problems.append('GNOME Docking Library not found. We either need a sufficiently recent GDL '
+                            'version (>=%s), or the custom package "gdl-lum" from Lumiera.org.' % verGDL)
     
     if not conf.CheckPkgConfig('librsvg-2.0', '2.18.1'):
         problems.append('Need rsvg Library for rendering icons.')

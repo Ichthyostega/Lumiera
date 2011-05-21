@@ -52,7 +52,7 @@ namespace test{
     class Victim
       : public Sync<RecursiveLock_NoWait>
       {
-        volatile long cnt_[NUM_COUNTERS];
+        volatile uint cnt_[NUM_COUNTERS];
         volatile uint step_;         ///< @note stored as instance variable
         
         void

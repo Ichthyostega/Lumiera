@@ -31,28 +31,29 @@ namespace gui {
 namespace widgets {
 namespace timeline {
 
-TimelineViewWindow::TimelineViewWindow(
-  Time offset, int64_t scale) :
-  timeOffset(offset),
-  timeScale(scale)
+
+
+TimelineViewWindow::TimelineViewWindow (Offset offset, int64_t scale)
+  : timeOffset(offset)
+  , timeScale(scale)
 {
 }
 
-Time
-TimelineViewWindow::get_time_offset() const
+Offset
+TimelineViewWindow::get_time_offset() const      /////////////////////TODO: this function shouldn't be accessible from outside
 {
-  return timeOffset;
+  return Offset (timeOffset);
 }
 
 void
-TimelineViewWindow::set_time_offset(Time offset)
+TimelineViewWindow::set_time_offset(TimeValue const& offset) /////////TODO: this function shouldn't be accessible from outside
 {
   timeOffset = offset;
   changedSignal.emit();
 }
 
 int64_t
-TimelineViewWindow::get_time_scale() const
+TimelineViewWindow::get_time_scale() const       /////////////////////TODO: this function shouldn't be accessible from outside
 {
   return timeScale;
 }
@@ -81,8 +82,9 @@ TimelineViewWindow::zoom_view(int point, int zoom_size)
     new_time_scale = TimelineWidget::MaxScale;
   
   // The view must be shifted so that the zoom is centred on the cursor
-  set_time_offset(Time((gavl_time_t)get_time_offset() +
-    (timeScale - new_time_scale) * point));
+  TimeVar newStartPoint = get_time_offset();
+  newStartPoint += TimeValue(point * (timeScale - new_time_scale));
+  set_time_offset(newStartPoint);
     
   // Apply the new scale
   set_time_scale(new_time_scale);
@@ -91,20 +93,20 @@ TimelineViewWindow::zoom_view(int point, int zoom_size)
 void
 TimelineViewWindow::shift_view(int view_width, int shift_size)
 {
-  set_time_offset(Time((gavl_time_t)get_time_offset() +
-    shift_size * timeScale * view_width / 256));
+  set_time_offset(timeOffset + TimeValue(timeScale * shift_size * view_width / 256));
 }
 
 int
-TimelineViewWindow::time_to_x(gavl_time_t time) const
+TimelineViewWindow::time_to_x(TimeValue const& time) const
 {
-  return (int)((time - timeOffset) / timeScale);
+  return int(_raw(time - timeOffset) / timeScale); //////TODO protect against values out-of range
 }
 
 Time
 TimelineViewWindow::x_to_time(int x) const
 {
-  return Time((gavl_time_t)((int64_t)x * timeScale + timeOffset));
+  TimeValue time_in_view (timeScale * x);
+  return timeOffset + time_in_view;
 }
 
 sigc::signal<void>

@@ -20,11 +20,15 @@
 
 * *****************************************************/
 
-#include "timeline-arrow-tool.hpp"
+
+#include "gui/widgets/timeline/timeline-arrow-tool.hpp"
 
 namespace gui {
 namespace widgets {
 namespace timeline {
+  
+  using lib::time::Time;
+  
 
   ArrowTool::ArrowTool(TimelineBody &timelineBody) :
     Tool(timelineBody)
@@ -53,8 +57,8 @@ namespace timeline {
     // Convert the mouse click position to a Time
     boost::shared_ptr<TimelineState> state = timelineBody.getTimelineWidget().get_state();
     REQUIRE(state);
-    const TimelineViewWindow &window = state->get_view_window();
-    lumiera::Time tpoint = window.x_to_time(mousePoint.get_x());
+    TimelineViewWindow const& window = state->get_view_window();
+    Time tpoint = window.x_to_time(mousePoint.get_x());
 
     // Get the clip, if any
     boost::shared_ptr<timeline::Track> track = getHoveringTrack();

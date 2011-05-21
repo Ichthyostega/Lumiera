@@ -59,9 +59,6 @@ protected:
     const gchar *stock_id);
 
 public:
-  /**
-   * Destructor
-   */
   ~Panel();
 
   /**

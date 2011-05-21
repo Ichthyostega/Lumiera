@@ -1,5 +1,5 @@
 /*
-  MEDIAACCESSMOCK.hpp  -  a test (stub) target object for testing the factories
+  MEDIA-ACCESS-MOCK.hpp  -  a test (stub) target object for testing the factories
 
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
@@ -21,16 +21,17 @@
 */
 
 
-#ifndef BACKEND_TEST_MEDIAACCESSMOCK_H
-#define BACKEND_TEST_MEDIAACCESSMOCK_H
+#ifndef BACKEND_TEST_MEDIA_ACCESS_MOCK_H
+#define BACKEND_TEST_MEDIA_ACCESS_MOCK_H
 
 
-#include "backend/mediaaccessfacade.hpp"
+#include "backend/media-access-facade.hpp"
+#include "lib/test/mock-injector.hpp"
 
 
 
 
-namespace backend_interface {
+namespace backend {
 namespace test {
   
   /**
@@ -39,11 +40,13 @@ namespace test {
    */
   class MediaAccessMock : public MediaAccessFacade
     {
+      MediaDesc& queryFile (string const& name)        const;
+      ChanDesc queryChannel (MediaDesc&, uint chanNo)  const;
+      
     public:
-      FileHandle queryFile (const char* name)  throw(lumiera::error::Invalid);
-      ChanDesc queryChannel (FileHandle, uint chanNo)  throw();
+      typedef MediaAccessFacade ServiceInterface;
     };
   
   
-}} // namespace backend_interface::test
+}} // namespace backend::test
 #endif

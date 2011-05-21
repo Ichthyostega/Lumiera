@@ -26,7 +26,7 @@
 
 
 #include "proc/mobject/session/clip.hpp"
-#include "lib/lumitime.hpp"
+#include "lib/time/timevalue.hpp"
 
 
 
@@ -78,7 +78,7 @@ namespace test    {
   
   
   /* == some test data to check == */
-  extern const lumiera::Time LENGTH_TestClip;
+  extern const lib::time::Duration LENGTH_TestClip;
   
   
 }}} // namespace mobject::session::test

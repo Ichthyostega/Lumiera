@@ -130,7 +130,7 @@ namespace asset {
    * - asset::Media representing mediafiles
    * - asset::Proc representing media data processing components (e.g. Effects)
    * - asset::Struct representing structural components used in the session (e.g. Tracks)
-   * - asset::Meta representing meta objects created while editing (e.g. Automation)
+   * - asset::Meta representing metadata, parametrisation, customisation.
    *  
    * And of course there are various concrete Asset subclasses, like asset::Clip,
    * asset::Effect, asset::Codec, asset::Track, asset::Dataset.

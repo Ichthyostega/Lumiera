@@ -28,6 +28,7 @@
 #define TIMELINE_RULER_HPP
 
 #include "gui/gtk-lumiera.hpp"
+#include "lib/time/timevalue.hpp"
 
 namespace gui {
 namespace widgets {
@@ -198,7 +199,7 @@ private:
    * the mouse, the other is pinned. pinnedDragTime specifies the time
    * of that point.
    */
-  lumiera::Time pinnedDragTime;
+  lib::time::TimeVar pinnedDragTime;
   
   // Indicated values
   /**

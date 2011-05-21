@@ -1,5 +1,5 @@
 /*
-  MEDIAACCESSFACADE.hpp  -  functions for querying media file and channels.
+  MEDIA-ACCESS-FACADE.hpp  -  functions for querying media file and channels.
 
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
@@ -21,17 +21,24 @@
 */
 
 
-#ifndef BACKEND_INTERFACE_MEDIAACCESSFACADE_H
-#define BACKEND_INTERFACE_MEDIAACCESSFACADE_H
+#ifndef BACKEND_INTERFACE_MEDIA_ACCESS_FACADE_H
+#define BACKEND_INTERFACE_MEDIA_ACCESS_FACADE_H
 
 
-#include "lib/singleton.hpp"
 #include "lib/error.hpp"
+#include "lib/singleton.hpp"
+#include "lib/time/timevalue.hpp"
+
+#include <string>
 
 
 
-namespace backend_interface {
+namespace backend {
   
+  using lib::time::Duration;
+  using std::string;
+  
+  struct MediaDesc;
   struct ChanDesc;
   
   
@@ -42,24 +49,26 @@ namespace backend_interface {
    * Implementation delegating to the actual backend functions.
    * 
    * convention: data passed by pointer is owned by the originator;
-   * it should be copied if needed byond the control flow 
+   * it should be copied if needed beyond the control flow 
    * of the invoked function. 
    */
-  struct MediaAccessFacade
+  class MediaAccessFacade
     {
-      typedef void* FileHandle;
+    public:
       typedef void* ChanHandle;
       
       static Singleton<MediaAccessFacade> instance;
       
       /** request for testing the denoted files accessibility 
        *  @param name path and filename of the media file.
-       *  @throw invalid when passing empty filename
+       *  @throw error::Invalid when passing empty filename,
+       *          or in case the media file is inaccessible 
+       *          or otherwise inappropriate. 
        *  @return opaque handle usable for querying channel
        *          information from this file, NULL if the
        *          file is not accessible.
        */
-      virtual FileHandle queryFile (const char* name)  throw(lumiera::error::Invalid);
+      virtual MediaDesc& queryFile (string const& name)  const;
       
       /** request for information about the n-th channel 
        *  of the file referred by FileHandle.
@@ -67,12 +76,31 @@ namespace backend_interface {
        *          the file doesn't contain this much channels.
        *  @todo   throw or return NULL-ChanDesc if Filehandle is invalid?
        */  
-      virtual ChanDesc queryChannel (FileHandle, uint chanNo)  throw(); 
+      virtual ChanDesc queryChannel (MediaDesc&, uint chanNo)  const;
       
       virtual ~MediaAccessFacade () {}
     };
   
-
+  
+  /** 
+   * Descriptor holding the global informations,
+   * needed for further handling this media within Lumiera.
+   */
+  struct MediaDesc
+    {
+      /** effectively usable duration.
+       *  A clip created from this media will have this
+       *  maximum duration. We expect to get media stream data
+       *  from all channels within this limit. 
+       */ 
+      Duration length;
+      
+      MediaDesc() : length(Duration::NIL) { }
+    };
+  
+  
+  
+  
   /** 
    * Description of one channel found in a
    * media file; result of querying the channel.
@@ -105,8 +133,15 @@ namespace backend_interface {
           handle(h)
         { }
     };
-    
   
+} // namespace backend
+
+
+namespace backend_interface {
+  
+  using backend::MediaAccessFacade;
+  using backend::MediaDesc;
+  using backend::ChanDesc;
   
 } // namespace backend_interface
 #endif

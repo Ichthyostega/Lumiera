@@ -39,6 +39,7 @@
 
 #include "proc/asset.hpp"
 #include "lib/factory.hpp"
+#include "lib/time/timevalue.hpp"
 #include "proc/mobject/mobject.hpp"
 #include "proc/mobject/session/clip.hpp"
 
@@ -52,7 +53,7 @@ namespace asset {
   class ProcPatt;
   
   using lumiera::P;
-  using lumiera::Time;
+  using lib::time::Duration;
   
   
   template<>
@@ -71,7 +72,7 @@ namespace asset {
   class Media : public Asset
     {
       string filename_;
-      const Time len_;
+      const Duration len_;
       
     public:
       typedef P<Media> PMedia;
@@ -105,11 +106,11 @@ namespace asset {
       PClipMO createClip ();
       
       /** @return the overall length of the media represented by this asset */ 
-      virtual Time getLength ()  const;
+      virtual Duration getLength ()  const;
       
       
     protected:
-      Media (const Asset::Ident& idi, const string& file, Time length) 
+      Media (const Asset::Ident& idi, const string& file, Duration length) 
         : Asset(idi), filename_(file), len_(length) {}
       friend class MediaFactory;
       

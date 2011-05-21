@@ -24,10 +24,12 @@
 #include "lib/test/run.hpp"
 #include "proc/asset/testasset.hpp"
 #include "proc/asset/asset-diagnostics.hpp"
+#include "backend/media-access-mock.hpp"
 #include "proc/asset/media.hpp"
 #include "proc/asset/clip.hpp"
 #include "lib/util.hpp"
 
+using lib::test::Use4Test;
 using util::contains;
 using util::isnil;
 
@@ -186,11 +188,13 @@ namespace test {
         /** @test each real world asset subclass has to care
          *        for registering and deregistering any additional
          *        dependencies. Here we collect some more prominent
-         *        examples (and hopfully don't fail to cover any
+         *        examples (and hopefully don't fail to cover any
          *        important special cases...)
          */
         void checkRealAssetDependencyRegistration ()
           {
+            Use4Test<backend::test::MediaAccessMock> within_this_scope;
+            
             // -----Media and Clip--------------------------------
             typedef P<Media> PM;
             typedef P<Clip>  PC;
