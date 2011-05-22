@@ -1,5 +1,6 @@
 Design Documents: Renderengine
 ==============================
 
-Eventually, this will have design documentation for the Engine.
+This section contains design documents regarding the overall workings of the Render Engine,
+and the handling of output generation and output connections.
 

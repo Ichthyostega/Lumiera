@@ -1,6 +1,7 @@
 Lumiera (as seen) from Outer Space
 ==================================
 :Author: Christian Thäter ct@pipapo.org
+:Author: Hermann Voßeler Ichthyostega@web.de
 :Date: Summer 2010
 
 
@@ -18,13 +19,10 @@ they get to work with. It is aimed for workflow designers any anyone who wants
 to know how the program works in general.
 ******************************************************************************
 
-
-About this Document
--------------------
-
 // all things starting with '//' are asciidoc comments and drafts/notes while
 // working on this document
 
+.About this Document
 This document is meant to be read electronically, it contains a lot
 hyper-links between explanations denoted by an arrow ->. Lumiera is still in
 development, we describe here planned features without explicitly tagging them;
@@ -38,8 +36,13 @@ Vision
 
 // objective and goals of the project
 
-Lumiera claims to be `professional', this is quite a vague term and needs
-some explanation what it means to us:
+Lumiera claims to be a _professional non-linear video editor_. To start with, we should
+point out that ``professional'' does not necessarily mean ``commercial'' or ``industrial''.
+It's more of an attitude or mindset -- doing work seriously, and to be subject to any
+kind of wider goal, demand, or purpose. When it comes to editing film, this might be
+artistry, a narration or meaning to convey, a political message or something to show
+to your audience. Anyhow, for the tools, the editing software used to this end,
+we can identify several properties and requirements, to be labeled ``professional'':
 
  Reliability::
         Whatever happens, your work must be safe, protected against software
@@ -47,34 +50,34 @@ some explanation what it means to us:
         never crash, in practice even crashes or power outages should not
         result in lost work.
 
- Productivity::
+ Quality::
+        If you work with high quality, cinema grade digital video material you
+        want to be sure that you can deliver crisp quality without compromise,
+        throughout the whole workflow to your final product. All rendering
+        must be reproducible to the bit.
+
+ Performance and Productivity::
         Professionals want to get things done, in time, but optionally with control
         over every aspect. Balancing these goals should be the central concern for 
         workflow design and usability.
 
- Quality::
-        If you work with high quality, cinema grade digital video material you
-        want to be sure that you can deliver this crisp quality without
-        compromise throughout you workflow to your final product. All rendering
-        must be reproducible to the bit.
-
- Scalability::
+ Scalability and Adaptability::
         Projects and budgets differ, hardware advances, Lumiera must scale
         in different dimensions and use the available resources as best as it
-        can. From small Laptops to multicore Computers and Renderfarms.
+        can. From small Laptops to multi core computers and Renderfarms.
 
- Future Proofness::
+ Durability::
         Soft and Hardware advances at a fast pace. We must not lock into the
         current state of technology but being flexible to extend the System
         without breaking compatibility. Projects you create nowadays with
         Lumiera should be usable in foreseeable future, at least there needs
         to be a guaranteed upgrade path.
-<
+
 
 Fundamental Forces
 ------------------
 
-// the basic ideas which drive the lumiera design
+// the basic ideas which drive the Lumiera design
 
 The Lumiera design is guided by a small number of basic principles. Keeping
 these in mind will help to understand how actually more interesting things can
