@@ -1632,6 +1632,26 @@ The main tool used to implement this separation is the [[Builder Pattern|http://
 Another pertinent theme is to make the basic building blocks simpler, while on the other hand gaining much more flexibility for combining these building blocks. For example we try to unfold any &quot;internal-multi&quot; effects into separate instances (e.g. the possibility of having an arbitrary number of single masks at any point of the pipeline instead of having one special masking facility encompassing multiple sub-masks. Similarly, we treat the Objects in the Session in a more uniform manner and gain the possibility to [[place|Placement]] them in various ways.
 </pre>
 </div>
+<div title="DesignPlayerSubsystem" modifier="Ichthyostega" modified="201105220332" created="201105220216" tags="Player design draft" changecount="5">
+<pre>//Currently (5/2011) this page is used to collect and build up a coherent design for the player subsystem of Lumiera..//
+
+!Starting point
+The idea is to start out with the design of the PlayerDummy and to //transform//&amp;nbsp; it into the full player subsystem.
+* the ~DisplayService in that dummy player design moves down into Proc-Layer and becomes the OutputManager
+* likewise, the ~DisplayerSlot is transformed into the interface OutputSlot, with various implementations to be registered with the OutputManager
+* the core idea of having a play controler act as the frontend and handle to an PlayProcess is retained.
+
+!!Stages of transition
+Reworking the dummy player into the PlayerSubsystem is a larger undertaking, and best broken up into several //stages.//
+# just moving the existing entities into the final location (typically down in the layer hierarchy)
+# introduce a GeneratorMO and a GeneratorNode, while providing a shortcut to get the GeneratorNode without requiring the (not yet implemented) Builder.
+# rework the ~ProcessImpl and the ~TickService to become the CalculationStream and use the real Engine Interface, but still with an mock implementation hooked up behind
+# extend and elaborate the handling of output, build the foundation of the real OutputManager
+# switch to the real Scheduler and Engine implementation
+
+!!Idea
+Introduce a new kind of MObject, a GeneratorMO, to represent what the current dummy player does: generate some kind of test data. As a first step, we might retro-fit the existing dummy player to this structure, and then expand it to have a minimal render engine setup for tests and diagnostics. That is, there will be some kind of GeneratorNode to produce test data.</pre>
+</div>
 <div title="DisplayFacade" modifier="Ichthyostega" modified="200904302316" created="200902080703" tags="spec" changecount="2">
 <pre>LayerSeparationInterface provided by the GUI.
 Access point especially for the playback. A render- or playback process uses the DisplayFacade to push media data up to the GUI for display within a viewer widget of full-screen display. This can be thought off as a callback mechanism. In order to use the DisplayFacade, client code needs a DisplayerSlot (handle), which needs to be set up by the UI first and will be provided when starting the render or playback process.
@@ -3177,7 +3197,7 @@ While actually data frames are //pulled,// on a conceptual level data is assumed
 As both of these specifications are given by [[Pipe]]-~IDs, the actual designation information may be reduced. Much can be infered from the circumstances, because any pipe includes a StreamType, and an output designation for an incompatible stream type (e.g. and audio output when the pipe currently in question deals with video) is irrelevant.
 </pre>
 </div>
-<div title="OutputManagement" modifier="Ichthyostega" modified="201011072240" created="201007090155" tags="Model Rendering Player spec draft" changecount="18">
+<div title="OutputManagement" modifier="Ichthyostega" modified="201105220022" created="201007090155" tags="Model Rendering Player spec draft" changecount="19">
 <pre>//writing down some thoughts//
 
 * ruled out the system outputs as OutputDesignation.
@@ -3193,7 +3213,7 @@ From the implementation side, the only interesting exit nodes are the ones to be
 * __playback__ always happens at a viewer element
 
 !Attaching and mapping of exit nodes
-[[Output designations|OutputDesignation]] are created by using a [[Pipe]]-ID and &amp;mdash; at the same time &amp;mdash; by some object //claiming to root this pipe.// The applicability of this pattern is figured out dynamically while building the render network, resulting in a collection of model ports as part of the current [[Fixture]]. A RenderProcess can be started to pull from these active exit points of a given timeline. Besides, when the timeline enclosing these model ports is [[connected to a viewer|ViewerPlayConnection]], an [[output network|OutputNetwork]] //is built to allow hooking exit points to the viewer component.// Both cases encompass a mapping of exit nodes to actual output channels. Usually, this mapping relies on relative addressing of the output sinks, starting connections at the &quot;first of each kind&quot;.
+[[Output designations|OutputDesignation]] are created by using a [[Pipe]]-ID and &amp;mdash; at the same time &amp;mdash; by some object //claiming to root this pipe.// The applicability of this pattern is figured out dynamically while building the render network, resulting in a collection of model ports as part of the current [[Fixture]]. A RenderProcess can be started to pull from these active exit points of a given timeline. Besides, when the timeline enclosing these model ports is [[connected to a viewer|ViewerPlayConnection]], an [[output network|OutputNetwork]] //is built to allow hooking exit points to the viewer component.// Both cases encompass a mapping of exit nodes to actual output channels. Usually, this mapping relies on relative addressing of the output sinks, starting to allocate connections with the &quot;first of each kind&quot;.
 
 We should note that in both cases this mapping operation is controlled and driven by the output side of the connection: A viewer has fixed output capabilities, and rendering targets a specific container format, again with fixed and pre-settled channel configuration (when configurting a render process, it might be necessary to account for //possible kinds of output streams,// so to provide a sensible pre-selection of possible output container formats for the user to select from). Thus, as a starting point, we'll create a default configured mapping, assigning channels in order. This mapping then should be exposed to modification and tweaking by the user. For rendering, this is part of the render options dialog, while in case of a viwer connection, a switch board is created to allow modifying the default mapping.
 
@@ -4103,7 +4123,7 @@ The play process is an conceptual entity linking together several activities in 
 * the RenderEngine has the ability to cary out individual frame calculations
 * the OutputSlot exposed by the [[output manager|OutputManagement]] is responsible for accepting timed frame delivery</pre>
 </div>
-<div title="Player" modifier="Ichthyostega" modified="201012181726" created="201012181700" tags="def overview" changecount="8">
+<div title="Player" modifier="Ichthyostega" modified="201105220214" created="201012181700" tags="def overview" changecount="9">
 <pre>Within Lumiera, &amp;raquo;Player&amp;laquo; denotes the [[Subsystem]] responsible for organising and tracking //ongoing playback and render processes.// &amp;rarr; [[PlayProcess]]
 The player subsystem does not perform or even manage any render operations, nor does it handle the outputs directly.
 Yet it adresses some central concerns:
@@ -4117,8 +4137,8 @@ Yet it adresses some central concerns:
 :the player translates continuous time values into discrete frame counts.
 :to perform this [[quantisation|TimeQuant]], the help of the session for building a TimeGrid for each output channel is required.
 
-!{{red{WIP 12/10}}} under construction
-The player subsystem is currently about to be designed and built up; some time ago, __Joel Holdsworth__ and __Ichthyo__ did a design study with a PlayerDummy, which is currently hooked up with the TransportControl in the Lumiera GUI.
+!{{red{WIP 5/2011}}} under construction
+The player subsystem is currently about to be designed and built up; some time ago, __Joel Holdsworth__ and __Ichthyo__ did a design study with a PlayerDummy, which is currently hooked up with the TransportControl in the Lumiera GUI. Starting from these experiences, and the general requirements of an NLE, the [[design of the Player subsystem|DesignPlayerSubsystem]] is being worked out.
 </pre>
 </div>
 <div title="PlayerDummy" modifier="Ichthyostega" modified="200906071810" created="200901300209" tags="GuiIntegration operational img" changecount="17">
