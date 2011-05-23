@@ -1,8 +1,8 @@
 /*
-  RENDERENGINE.hpp  -  a complete network of processing nodes usable for rendering
+  SCHEDULER-FRONTEND.hpp  -  access point to the scheduler within the renderengine
 
   Copyright (C)         Lumiera.org
-    2008,               Hermann Vosseler <Ichthyostega@web.de>
+    2011,               Hermann Vosseler <Ichthyostega@web.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -21,17 +21,15 @@
 */
 
 
-#ifndef ENGINE_RENDERENGINE_H
-#define ENGINE_RENDERENGINE_H
-
-#include <list>
-
-#include "proc/engine/rendergraph.hpp"
+#ifndef BACKEND_ENGINE_SCHEDULER_FRONTEND_H
+#define BACKEND_ENGINE_SCHEDULER_FRONTEND_H
 
 
-using std::list;
+
+//using std::list;
 
 
+namespace backend{
 namespace engine {
   
   
@@ -42,7 +40,7 @@ namespace engine {
    * render operations are mostly implemented by the backend
    * ////////TODO WIP as of 12/2010
    */
-  class RenderEngine : public RenderGraph
+  class SchedulerFrontend
     {
     public:
        ///// TODO: find out about the public operations
@@ -50,9 +48,8 @@ namespace engine {
        //       but is a subsystem separate of the sesison.
       
     private:
-      list<RenderGraph> renderSegments;
       
     };
 
-} // namespace engine
+}} // namespace backend::engine
 #endif

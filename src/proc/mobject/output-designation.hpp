@@ -46,7 +46,7 @@ namespace mobject {
   /**
    * Descriptor to denote the desired target of produced media data.
    * OutputDesignation is always an internal and relative specification
-   * and boils down to referring an asset::Pipe by ID. In order to get
+   * and boils down to referring an asset::Pipe by ID. In order to become
    * actually effective, some object within the model additionally
    * needs to \em claim this pipe-ID, meaning that this object
    * states to root and represent this pipe. When the builder
@@ -54,7 +54,7 @@ namespace mobject {
    * an actual stream connection will be wired in the
    * processing node network.
    * 
-   * @todo couldn't the inline buffer be "downgraded" to InPlaceBuffer ??
+   * @todo couldn't the inline buffer be "downgraded" to InPlaceBuffer or PolymorphicValue??
    *       Seemingly we never-ever need to re-discover the erased type of the embedded spec.
    *       Thus for this to work, we'd just need to add an "empty" spec       ///////////////////TICKET #723
    */

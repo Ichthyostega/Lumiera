@@ -1,8 +1,8 @@
 /*
-  TIMELINE.hpp  -  independent top-level element of the Session
+  VIEWER.hpp  -  asset corresponding to a viewer element in the GUI
 
   Copyright (C)         Lumiera.org
-    2009,               Hermann Vosseler <Ichthyostega@web.de>
+    2011,               Hermann Vosseler <Ichthyostega@web.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -21,25 +21,8 @@
 */
 
 
-/** @file timeline.hpp
- ** Top level structural element within the session.
- ** Each Lumiera session may contain multiple top level timeline containers,
- ** which at the same time act as structural asset and as part of the public
- ** session API exposed to clients for discovering the session contents.
- ** Actually, Timelines are facade objects, delegating the implementation to
- ** the BindingMO, the Axis and the Sequences/Tracks. 
- ** 
- ** Contrary to usual habits in video/sound editing software, in Lumiera the
- ** tracks are \em not part of the timeline, but rather attached directly to
- ** the sequence container. To be usable, a timeline needs a binding to refer
- ** to such a sequence, but this sequence may be bound into multiple timelines
- ** or even virtual clips simultaneously. 
- ** 
- ** Like every structural asset, the creation of timelines happens automatically
- ** on referral; Timelines can be queried from the StructFactory, providing additional
- ** requested capabilities. Commonly clients will retrieve a given timeline by query
- ** on the name-ID of the timeline: \c Struct::retrieve(Query<Timeline>("id(theName)."))
- ** Additionally, the binding to a specific sequence may be established alongside:
+/** @file viewer.hpp
+ ** structural element within the session.
  ** \c "timeline(theTimelineName),bindSequence(theTimelineName,sequenceID)." 
  ** 
  ** @see Session
@@ -49,8 +32,8 @@
  */
 
 
-#ifndef ASSET_TIMELINE_H
-#define ASSET_TIMELINE_H
+#ifndef ASSET_VIEWER_H
+#define ASSET_VIEWER_H
 
 #include "proc/asset/struct.hpp"
 //#include "proc/mobject/mobject.hpp"

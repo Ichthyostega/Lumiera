@@ -1,8 +1,8 @@
 /*
-  RenderGraph  -  render network corresponding to one segment of the timeline
+  Dispatcher  -  translating calculation streams into frame jobs
 
   Copyright (C)         Lumiera.org
-    2008,               Hermann Vosseler <Ichthyostega@web.de>
+    2011,               Hermann Vosseler <Ichthyostega@web.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -21,15 +21,10 @@
 * *****************************************************/
 
 
-#include "proc/engine/rendergraph.hpp"
-#include "lib/frameid.hpp"
-#include "proc/state.hpp"
+#include "proc/engine/dispatcher.hpp"
+//#include "lib/frameid.hpp"
+//#include "proc/state.hpp"
 
-namespace lumiera {
-  
-  /** storage for the unique node-ID counter */
-  ulong NodeID::currID (0);
-}
 
 
 namespace engine {

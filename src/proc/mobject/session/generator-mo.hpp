@@ -1,8 +1,8 @@
 /*
-  CLIP.hpp  -  a Media Clip
+  GENERATOR-MO.hpp  -  a (Test)data generator
 
   Copyright (C)         Lumiera.org
-    2008,               Hermann Vosseler <Ichthyostega@web.de>
+    2011,               Hermann Vosseler <Ichthyostega@web.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -21,8 +21,8 @@
 */
 
 
-#ifndef MOBJECT_SESSION_CLIP_H
-#define MOBJECT_SESSION_CLIP_H
+#ifndef MOBJECT_SESSION_GENERATOR_MO_H
+#define MOBJECT_SESSION_GENERATOR_MO_H
 
 #include "proc/mobject/session/abstractmo.hpp"
 #include "lib/time/timevalue.hpp"
@@ -44,24 +44,15 @@ namespace session {
   
   
   /**
-   * A user visible/editable Clip is a reference to a contiguous
-   * sequence of media data loaded as Asset into the current Session.
-   * As such, it is a virtual (non destructive) cut or edit of the 
-   * source material and can be placed into the Session to be rendered
-   * into the output. The actual media type of a clip will be derived
-   * at runtime by resolving this reference to the underlying Asset.
-   * 
-   * @todo define how to denote Time positions /lengths. This is tricky,
-   * because it depends on the actual media type, and we want to encapsulate
-   * all these details as much as possible.
+   * A lksjaf
    */
-  class Clip
+  class GeneratorMO
     : public AbstractMO
     {
       string
       initShortID()  const
         {
-          return buildShortID("Clip");
+          return buildShortID("Generator");
         }
       
       void setupLength();
@@ -79,24 +70,14 @@ namespace session {
           account when breaking circular references.
        */
       
-      const Media & mediaDef_;
-      const asset::Clip & clipDef_;
       
-      Clip (const asset::Clip&, const Media&);
+      GeneratorMO ();
       friend class MObjectFactory;
       
       
     public:
       bool isValid()  const;
       
-      /** access the underlying media asset */
-      PMedia getMedia ()  const;
-      
-      /** locate the corresponding asset
-       *  representing this clip or the whole
-       *  compound in case of a multichannel clip
-       */ 
-      PClipAsset findClipAsset ()  const;
       
       DEFINE_PROCESSABLE_BY (builder::BuilderTool);
       

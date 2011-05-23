@@ -1632,25 +1632,35 @@ The main tool used to implement this separation is the [[Builder Pattern|http://
 Another pertinent theme is to make the basic building blocks simpler, while on the other hand gaining much more flexibility for combining these building blocks. For example we try to unfold any &quot;internal-multi&quot; effects into separate instances (e.g. the possibility of having an arbitrary number of single masks at any point of the pipeline instead of having one special masking facility encompassing multiple sub-masks. Similarly, we treat the Objects in the Session in a more uniform manner and gain the possibility to [[place|Placement]] them in various ways.
 </pre>
 </div>
-<div title="DesignPlayerSubsystem" modifier="Ichthyostega" modified="201105220332" created="201105220216" tags="Player design draft" changecount="5">
+<div title="DesignPlayerSubsystem" modifier="Ichthyostega" modified="201105230122" created="201105220216" tags="Player design draft" changecount="12">
 <pre>//Currently (5/2011) this page is used to collect and build up a coherent design for the player subsystem of Lumiera..//
 
 !Starting point
-The idea is to start out with the design of the PlayerDummy and to //transform//&amp;nbsp; it into the full player subsystem.
+The intention is to start out with the design of the PlayerDummy and to //transform//&amp;nbsp; it into the full player subsystem.
 * the ~DisplayService in that dummy player design moves down into Proc-Layer and becomes the OutputManager
 * likewise, the ~DisplayerSlot is transformed into the interface OutputSlot, with various implementations to be registered with the OutputManager
 * the core idea of having a play controler act as the frontend and handle to an PlayProcess is retained.
 
+!!Idea
+Introduce a new kind of MObject, a GeneratorMO, to represent what the current dummy player does: generate some kind of test data. As a first step, we might retro-fit the existing dummy player to this structure, and then expand it to have a minimal render engine setup for tests and diagnostics. That is, there will be some kind of GeneratorNode to produce test data.
+
 !!Stages of transition
-Reworking the dummy player into the PlayerSubsystem is a larger undertaking, and best broken up into several //stages.//
+Reworking the dummy player into the [[Player subsystem|PlayService]] is a larger undertaking, and best broken up into several //stages.//
 # just moving the existing entities into the final location (typically down in the layer hierarchy)
 # introduce a GeneratorMO and a GeneratorNode, while providing a shortcut to get the GeneratorNode without requiring the (not yet implemented) Builder.
 # rework the ~ProcessImpl and the ~TickService to become the CalculationStream and use the real Engine Interface, but still with an mock implementation hooked up behind
 # extend and elaborate the handling of output, build the foundation of the real OutputManager
 # switch to the real Scheduler and Engine implementation
 
-!!Idea
-Introduce a new kind of MObject, a GeneratorMO, to represent what the current dummy player does: generate some kind of test data. As a first step, we might retro-fit the existing dummy player to this structure, and then expand it to have a minimal render engine setup for tests and diagnostics. That is, there will be some kind of GeneratorNode to produce test data.</pre>
+!!!!new entities to build {{red{#805}}}
+* the ~DisplayService needs to be generalised into an OutputManager interface
+* we need to introduce a new kind of StructAsset, the ViewerAsset.
+* then, of course, the PlayService interface needs to be created
+* as a temporary soltion, a ''~DummyPlayConnection'' will be created hard-wired, within the ~DummyPlayer service. This dumy container is a test setup, explicitly creating a OutputManager implementation, a GeneratorMO, a GeneratorNode (thus omitting the not-yet-implemented Builder) and the corresponding ModelPort. This way, the ~DummyPlayer service can be changed to use the real PlayService for creating the dummy generated output data. It will then pass back the resulting PlayController to the existing GUI setup.
+
+The Method of pushing frames to the Viewer widget is changed fundamentally during that transition: while previously, in the PlayerDummy design study, the GUI opened a Display-façade interface -- now rather the GUI has to register an OutputSlot implementation with the global OutputManager. Such a registration requires an explicit deregistration on shutdown, and this can be made to block, until no further data will be delivered. Using this approach tries to circumvent the problems with occasional crashes on shutdown, due to dispatching frame output signals in the event thread while already in shutdown.
+
+</pre>
 </div>
 <div title="DisplayFacade" modifier="Ichthyostega" modified="200904302316" created="200902080703" tags="spec" changecount="2">
 <pre>LayerSeparationInterface provided by the GUI.
@@ -1711,6 +1721,15 @@ The effect asset (which is a [[processing asset|ProcAsset]]) provides an unified
 When building the low-level model, the actual processing code is resolved and a processing function is installed into the processing node representing the effect. This step includes checking of actual [[media type information|StreamType]], which may result in selecting a specifically tailored implementation function. The parameter wiring on the other hand is //shared// between the effect ~MObject, the corresponding GUI module and all low-level processing nodes. Actually, parameters are more of a reference than actually being values: they provide a {{{getValue()}}} function, which also works with automation. This way, any parameter or automation changes are reflected immediately into the produced output.
 
 Initially, only the parameter (descriptors) are present on the effect ~MObject, while the actual [[parameter providers|ParamProvider]] are created or wired (by the ConManager) on demand.
+</pre>
+</div>
+<div title="EngineFaçade" modifier="Ichthyostega" modified="201105222330" created="201105222328" tags="Rendering overview spec" changecount="2">
+<pre>The primary interface used by the upper application layers to interact with the render engine, to create and manage ongoing [[calculation streams|CalculationStream]].
+
+Below this facade, there is a thin adaptadion and forwarding layer, mainly talking to
+* the individual CalculationStream elements created for each PlayProcess.
+* the FrameDispatcher, which translates such streams into a series of RenderJob entries
+* the [[Scheduler]], which is responsible to perform these jobs in a timely fashion
 </pre>
 </div>
 <div title="EntryID" modifier="Ichthyostega" modified="201012300036" created="201012300026" tags="def Types" changecount="5">
@@ -1854,19 +1873,19 @@ The fixture is like a grid, where one dimension is given by the [[model ports|Mo
 :Thus the exit nodes are keyed by ~Pipe-ID as well (and consequently have a distinct [[stream type|StreamType]]) -- each model port coresponds to {{{&lt;number_of_segments&gt;}}} separate exit nodes, but of course an exit node may be //mute.//
 </pre>
 </div>
-<div title="FixtureDatastructure" modifier="Ichthyostega" modified="201012162342" created="201012162304" tags="spec Builder" changecount="6">
+<div title="FixtureDatastructure" modifier="Ichthyostega" modified="201105222242" created="201012162304" tags="spec Builder" changecount="9">
 <pre>Generally speaking, the [[here|Fixture]] comprised of a ModelPortRegistry and a set of [[segmentations|Segmentation]] per Timeline.
-This page focusses on the actual datastructure and usage details on that level. See also &amp;rarr; [[storage|FixtureStorage]] considerations.
+This page focusses on the actual data structure and usage details on that level. See also &amp;rarr; [[storage|FixtureStorage]] considerations.
 
 !transactional switch
-A key point to note is the fact that the fixture is frequently [[re-built||BuildFixture]] by the [[Builder]], while render processes may be going in in parallel. Thus, when a build process is finished, a transactional ''commit'' happens to ''hot swap'' the new parts of the model. This is complemented by a cleanup of tainted render processes; finally, storage can be relaimed.
+A key point to note is the fact that the fixture is frequently [[re-built||BuildFixture]] by the [[Builder]], while render processes may be going on in parallel. Thus, when a build process is finished, a transactional ''commit'' happens to ''hot swap'' the new parts of the model. This is complemented by a clean-up of tainted render processes; finally, storage can be reclaimed.
 
 To support this usage pattern, the Fixture implementation makes use of the [[PImpl pattern|http://c2.com/cgi/wiki?PimplIdiom]]
 
 !Collecting usage scenarios {{red{WIP 12/10}}}
 * ModelPort access
 ** get the model port for a given ~Pipe-ID
-** ennumerate the model ports for a Timeline
+** enumerate the model ports for a Timeline
 * rendering frame dispatch
 ** get or create the frame dispatcher table
 ** dispatch a single frame to yield the corresponding ExitNode
@@ -1875,16 +1894,16 @@ To support this usage pattern, the Fixture implementation makes use of the [[PIm
 ** create a new segmentation
 ** establish what segments actually need to be rebuilt
 ** dispatch a newly built segment into the transaction
-** schedule superseded segments and tainted process for cleanup
+** schedule superseded segments and tainted process for clean-up
 ** commit a transaction
  
 
 !Conclusions about the structure {{red{WIP 12/10}}}
 * the ~PImpl needs to be a single (language) pointer. This necessitates having a monolithic Fixture implementation holder
-* moreover, this necessitates a tight integration up to implementation level, both with the cleanup and the render processes themselves
+* moreover, this necessitates a tight integration down to implementation level, both with the clean-up and the render processes themselves
 </pre>
 </div>
-<div title="FixtureStorage" modifier="Ichthyostega" modified="201012162324" created="201012140231" tags="Builder impl operational draft" changecount="30">
+<div title="FixtureStorage" modifier="Ichthyostega" modified="201105222258" created="201012140231" tags="Builder impl operational draft" changecount="33">
 <pre>The Fixture &amp;rarr; [[data structure|FixtureDatastructure]] acts as umbrella to hook up the elements of the render engine's processing nodes network (LowLevelModel).
 Each segment within the [[Segmentation]] of any timeline serves as ''extent'' or unit of memory management: it is built up completely during the corresponding build process and becomes immutable thereafter, finally to be discarded as a whole when superseded by a modified version of that segment (new build process) -- but only after all related render processes are known to be terminated.
 
@@ -1922,7 +1941,7 @@ But the primary question here is to judge the impact of such an implementation. 
 
 !!!identifying tainted and disposable segments
 Above estimation hints at the necessity of frequently finding some 30 to 100 segments to be disposed, out of thousands, assumed the original reason for triggering the build process was a typically local change in the high-level model. We can only discard when all related processes are finished, but there is a larger number of segments as candidate for eviction. These candidates are rather easy to pinpoint -- they will be uncovered during a linear comparison pass prior to commiting the changed Fixture. Usually, the number of candidates will be low (localised changes), but global manipulations might invalidate thousands of segments.
-* if we frequently pick the segments actually to disposed, there is the danger of performance degeneration when the number if segments is high
+* if we frequently pick the segments actually to be disposed, there is the danger of performance degeneration when the number of segments is high
 * the other question is if we can afford just to keep all of those candidates around, as all of them are bound to get discardable eventually
 * and of course there is also the question how to detect //when// they're due.
 
@@ -1935,7 +1954,7 @@ Above estimation hints at the necessity of frequently finding some 30 to 100 seg
 //currently {{red{12/10}}} I tend to prefer Model B...// while the priority queue remains to be investigated in more detail for organising the actual build process.
 But actually I'm struck here, because of the yet limited knowledge about those render processes....
 * how do we //join// an aborted/changed rendering process to his successor, without creating a jerk in the output?
-* is it even possible to continue a process when parts of the covered timerange is affected by a build?
+* is it even possible to continue a process when parts of the covered timerange are affected by a build?
 If the latter question is answered with &quot;No!&quot;, then the problem gets simple in solution, but maybe memory consuming: In that case, //all//&amp;nbsp; processes linked to a timeline gets affected and thus tainted; we'd just dump them onto a pile and delay releasing all of the superseeded segments until all of them are known to be terminated.
 </pre>
 </div>
@@ -1975,6 +1994,9 @@ Additionally, they may be used for resource management purposes by embedding a r
 #* one audio Dataframe contains a block of raw audio samples
 #* one OpenGL Dataframe could contain raw texture data (but I am lacking expertise for this topic)
 </pre>
+</div>
+<div title="FrameDispatcher" modifier="Ichthyostega" modified="201105222346" created="201105222330" tags="def Rendering" changecount="2">
+<pre>An implementation facility within the RenderEngine, responsible for translating a logical CalculationStream (corresponding to a PlayProcess) into a sequence of individual RenderJob entries, which can then be handed over to the [[Scheduler]]. Performing this operation involves a special application of [[time quantisation|TimeQuant]]: after establishing a suitable starting point, a typically contiguous series of frame numbers need to be generated, together with the time coordinates for each of those frames</pre>
 </div>
 <div title="FullScreenPlugin" modifier="CehTeh" modified="200706110313" created="200607241016" tags="systemConfig lewcidExtension" server.type="file" server.host="file:///home/ct/.homepage/home.html" server.page.revision="200706110313">
 <pre>/***
@@ -2967,12 +2989,12 @@ These are used as token for dealing with other objects and have no identity of t
 
 </pre>
 </div>
-<div title="ModelPort" modifier="Ichthyostega" modified="201012112233" created="201011100234" tags="def spec" changecount="8">
+<div title="ModelPort" modifier="Ichthyostega" modified="201105222218" created="201011100234" tags="def spec Model" changecount="11">
 <pre>Any point where output possibly might be produced. Model port entities are located within the [[Fixture]] &amp;mdash; model port as a concept spans the high-level and low-level view. A model port can be associated both to a pipe in the HighLevelModel but at the same time denotes a set of corresponding [[exit nodes|ExitNode]] within the [[segments|Segmentation]] of the render nodes network.
 
-A model port is rather derived than configured; it emerges when a pipe [[claims|WiringClaim]] an output destination and some other entity actually uses this designation as a target, either directly or indirectly. This match of provision and usage is detected during the build process and produces an entry in the fixture's model port table. These model ports in the fixture are keyed by ~Pipe-ID, thus each model port has an associated StreamType.
+A model port is rather derived than configured; it emerges when a pipe [[claims|WiringClaim]] an output destination, while some other entity at the same time actually //uses this designation as a target,// either directly or indirectly. This match of provision and usage is detected during the build process and produces an entry in the fixture's model port table. These model ports in the fixture are keyed by ~Pipe-ID, thus each model port has an associated StreamType.
 
-Model ports are the effective, resulting outputs of each timeline; additional ports result from [[connecting a viewer|ViewerPlayConnection]]. Any render or display process happens at a model port.
+Model ports are the effective, resulting outputs of each timeline; additional ports result from [[connecting a viewer|ViewConnection]]. Any render or display process happens at a model port.
 
 !formal specification
 Model port is a //conceptual entity,// denoting the possibility to pull generated data of a distinct (stream)type from a specific bus within the model -- any possible output produced or provided by Lumiera is bound to appear at a model port. The namespace of model ports is global, each being associated with a ~Pipe-ID.
@@ -3224,7 +3246,7 @@ Any external output sink is managed as a [[slot|DisplayerSlot]] in the ~OutputMa
 &amp;rarr; see also the PlayerDummy
 </pre>
 </div>
-<div title="OutputMapping" modifier="Ichthyostega" modified="201011270311" created="201011080238" tags="Model spec draft" changecount="23">
+<div title="OutputMapping" modifier="Ichthyostega" modified="201105221814" created="201011080238" tags="Model spec draft" changecount="25">
 <pre>An output mapping serves to //resolve//&amp;nbsp; [[output designations|OutputDesignation]].
 
 !Mapping situations
@@ -3235,8 +3257,8 @@ Any external output sink is managed as a [[slot|DisplayerSlot]] in the ~OutputMa
 :any Timeline produces a number of [[model ports|ModelPort]]. On the other hand, any viewer exposes a small number of output designations, representing the image and sound output(s).
 :Thus, in this case we resolve similar to a bus connection, possibly overridden by already pre-existing or predefined connections.
 ;switch board
-:a viewer might receive multiple outputs and overlays, necessitating a user operated control to select what's actually to displayed
-:Thus, in this case we need a backwards resolution at the lower end of the output network, to connect to the model port as defined by the switchboard
+:a viewer might receive multiple outputs and overlays, necessitating a user operated control to select what's actually to be displayed
+:Thus, in this case we need a backwards resolution at the lower end of the output network, to connect to the model port as defined by this viewer SwitchBoard
 ;global pipes or virtual media
 :when binding a Sequence as Timeline or VirtualClip, a mapping from output designations used within the Sequence to virtual channels or global pipes is required
 :Thus, in this case we need to associate output designations with ~Pipe-IDs encountered in the context according to some rules &amp;mdash; again maybe overridden by pre-existing connections
@@ -4114,14 +4136,37 @@ We need a way of addressing existing [[pipes|Pipe]]. Besides, as the Pipes and T
 &lt;&lt;tasksum end&gt;&gt;
 </pre>
 </div>
-<div title="PlayProcess" modifier="Ichthyostega" modified="201012181732" created="201012181714" tags="def spec Player" changecount="2">
+<div title="PlayProcess" modifier="Ichthyostega" modified="201105222321" created="201012181714" tags="def spec Player" changecount="5">
 <pre>With //play process//&amp;nbsp; we denote an ongoing effort to calculate a stream of frames for playback or rendering.
-The play process is an conceptual entity linking together several activities in the [[Backend]] and the RenderEngine. Creating a play process is the central service provided by the [[player subsystem|Player]]: it maintains a registration entry for the process to keep track of associated entities, resources allocated and calls dispatched as a consequence, and it wires and exposes a PlayController to serve as an interface and information hub.
+The play process is an conceptual entity linking together several activities in the [[Backend]] and the RenderEngine. Creating a play process is the central service provided by the [[player subsystem|Player]]: it maintains a registration entry for the process to keep track of associated entities, resources allocated and calls [[dispatched|FrameDispatcher]] as a consequence, and it wires and exposes a PlayController to serve as an interface and information hub.
 
-''Note'': the player is in no way engaged in any of the actual calculation and management tasks necessary to make this stream of calculations happen. The play process code contained within the player subsystem is largely comprised of organisational concerns and not especially performance critical.
-* the [[Backend]] is responsible for scheduling and dispatching the calculations
+''Note'': the player is in no way engaged in any of the actual calculation and management tasks necessary to make this [[stream of calculations|CalculationStream]] happen. The play process code contained within the player subsystem is largely comprised of organisational concerns and not especially performance critical.
+* the [[Backend]] is responsible for scheduling and [[dispatching|Dispatcher]] the CalculationStream
 * the RenderEngine has the ability to cary out individual frame calculations
 * the OutputSlot exposed by the [[output manager|OutputManagement]] is responsible for accepting timed frame delivery</pre>
+</div>
+<div title="PlayService" modifier="Ichthyostega" modified="201105221918" created="201105221900" tags="Player spec draft" changecount="9">
+<pre>The [[Player]] is an independent [[Subsystem]] within Lumiera, located at Proc-Layer level. A more precise term would be &quot;rendering and playback coordination subsystem&quot;. It provides the capability to generate media data, based on a high-level model object, and send this generated data to an OutputDesignation, creating an continuous and timing controlled output stream. Clients may utilise these functionality through the ''play service'' interface.
+
+!provided services
+* creating a PlayProcess
+* managing existing play processes
+* convenience short-cuts for //performing//&amp;nbsp; several kinds of high-level model objects
+
+!creating a play process
+This is the core service provided by the player subsystem. The purpose is to create a collaboration between several entities, creating media output
+;data producers
+:a set of ModelPort elements to ''pull'' for generating output. They can either be handed in direcly, or resolved from a set of OutputDesignation elements
+;data sinks
+:to be able to create output, the PlayProcess needs to cooperate with OutputSlot.s
+:physical outputs are never handled directly, rather, the playback or rendering needs an OutputManager to resolve the output designations into output slots
+;controller
+:when provided with these two prerequisites, the play service is able to build a PlayProcess.
+:for clients, this process can be accessed and maintained through a PlayController, which acts as (copyable) handle and front-end.
+;engine
+:the actual processing is done by the RenderEngine, which in itself is a compound of several services within [[Backend]] and Proc-Layer
+:any details of this processing remain opaque for the clients; even the player subsystem just accesses the EngineFaçade
+</pre>
 </div>
 <div title="Player" modifier="Ichthyostega" modified="201105220214" created="201012181700" tags="def overview" changecount="9">
 <pre>Within Lumiera, &amp;raquo;Player&amp;laquo; denotes the [[Subsystem]] responsible for organising and tracking //ongoing playback and render processes.// &amp;rarr; [[PlayProcess]]
@@ -4722,9 +4767,10 @@ The link between ~MObject and Asset should be {{{const}}}, so the clip can't cha
 At first sight the link between asset and clip-MO is a simple logical relation between entities, but it is not strictly 1:1 because typical media are [[multichannel|MultichannelMedia]]. Even if the media is compound, there is //only one asset::Clip//, because in the logical view we have only one &quot;clip-thing&quot;. On the other hand, in the session, we have a compound clip ~MObject comprised of several elementary clip objects, each of which will refer to its own sub-media (channel) within the compound media (and don't forget, this structure can be tree-like)
 {{red{open question:}}} do the clip-MO's of the individual channels refer directly to asset::Media? does this mean the relation is different from the top level, where we have a relation to a asset::Clip??</pre>
 </div>
-<div title="RenderEngine" modifier="Ichthyostega" modified="200802031835" created="200802031820" tags="def" changecount="2">
+<div title="RenderEngine" modifier="Ichthyostega" modified="201105222323" created="200802031820" tags="def" changecount="3">
 <pre>Conceptually, the Render Engine is the core of the application. But &amp;mdash; surprisingly &amp;mdash; we don't even have a distinct »~RenderEngine« component in our design. Rather, the engine is formed by the cooperation of several components spread over two layers (Backend and Proc-Layer): The [[Builder]] creates a network of [[render nodes|ProcNode]], which is used by the Backend to pull individual Frames.
 &amp;rarr; OverviewRenderEngine
+&amp;rarr; EngineFaçade 
 </pre>
 </div>
 <div title="RenderEntities" modifier="Ichthyostega" modified="200906071810" created="200706190715" tags="Rendering classes img" changecount="10">
@@ -4910,7 +4956,7 @@ We need to detect attaching and detaching of
 * root &amp;harr; [[Track]]
 </pre>
 </div>
-<div title="Segmentation" modifier="Ichthyostega" modified="201012140222" created="201012121901" tags="def spec Builder" changecount="27">
+<div title="Segmentation" modifier="Ichthyostega" modified="201105222236" created="201012121901" tags="def spec Builder" changecount="28">
 <pre>//Segmentation of timeline// denotes a data structure and a step in the BuildProcess.
 When [[building the fixture|BuildFixture]], ~MObjects -- as handled by their Placements -- are grouped below each timeline using them; Placements are then to be resolved into [[explicit Placements|ExplicitPlacement]], resulting in a single well defined time interval for each object. This allows to cut this effective timeline into slices of constant wiring structure, which are represented through the ''Segmentation Datastructure'', a time axis with segments holding object placements and [[exit nodes|ExitNode]]. &amp;nbsp;&amp;rarr; see [[structure of the Fixture|Fixture]]
 * for each Timeline we get a Segmentation
@@ -4940,7 +4986,7 @@ When [[building the fixture|BuildFixture]], ~MObjects -- as handled by their Pla
 
 !!!conclusions
 The Fixture is mostly comprised of the Segementation datastructure, but some other facilities are involved too
-# at top level, access is structured by groups of model ports, actually grouped by timeline. This first access level handled by the Fixture
+# at top level, access is structured by groups of model ports, actually grouped by timeline. This first access level is handled by the Fixture
 # during the build process, there is a collection of placements; this can be discarded afterwards
 # the backbone of the segmentation is closely linked to an ordering by time. Initially it should support sorting, access by time interval search later on.
 # discarding a segment (or failing to do so) has an high impact on the whole application. We should employ a reliable mechanism for that.
@@ -5724,6 +5770,14 @@ h1,h2,h3,h4,h5,h6 {
 }
 /*}}}*/
 </pre>
+</div>
+<div title="SwitchBoard" modifier="Ichthyostega" modified="201105221902" created="201105221831" tags="def SessionLogic Player" changecount="2">
+<pre>Viewers for displaying output are connected to the timelines or other elements to be displayed through a ViewConnection. This creates an additional mapping step (&amp;rarr; BindingMO), similar to the attachment of a sequence or virtual clip to the [[global busses|GlobalBus]]. Yet the viewers don't provide such an elaborate mixing desk like view as the timelines -- rather there is only a simplified version of the global busses, exposed to the user as ''switch board''.
+
+The corresponding GUI control will allow to choose among possible data sources (esp. ProbePoint) for any given StreamType (more precisely, for every //prototype,// e.g. image, sound). Moreover, there are some (limited) overlay capabilities (split image, mix sound). By default, this additional control will likely be hidden, as there is a default 1:1 association between the master busses of the timeline and the usable output destinations.
+
+!Model and Interfaces
+Regarding the internal wiring of components, the Viewer with a switch board behaves similar as a timeline: At the output side, there are a small number of standard OutputDesignation elements for the selection of primary kinds of media handled within this session (typically Video and Audio). But contrary to a timeline, a Viewer element also exposes an OutputManager interface, which is backed by a specific OutputMapping element, which internally connects to the main OutputManager for the whole Application. This way, a Viewer has the capability to get a PlayController</pre>
 </div>
 <div title="TabTimeline" modifier="Ichthyostega" modified="200806030148" created="200706191949" changecount="4">
 <pre>&lt;&lt;timeline better:true maxDays:55 maxEntries:45&gt;&gt;</pre>
@@ -6874,7 +6928,7 @@ At the level of individual timecode formats, we're lacking a common denominator;
 &amp;rarr; Quantiser [[implementation details|QuantiserImpl]]
 </pre>
 </div>
-<div title="TimeUsage" modifier="Ichthyostega" modified="201105122348" created="201012230204" tags="design discuss" changecount="27">
+<div title="TimeUsage" modifier="Ichthyostega" modified="201105222341" created="201012230204" tags="design discuss" changecount="30">
 <pre>the following collection of usage situations helps to shape the details of the time values and time quantisation design. &amp;rarr; see also  [[time quantisation|TimeQuant]]
 
 ;time position of an object
@@ -6894,6 +6948,8 @@ At the level of individual timecode formats, we're lacking a common denominator;
 :because this operation might be done both in the quantised or non-quantised domain, and also the result might be (un)quantised
 ;updating the playback position
 :this can be seen as a practical application of the above; basically we can choose to show the wall clock time or we can advance the playback position in frame increments, thus denoting the frame currently in display. For video, these distinctions may look moot, but they are indeed relevant for precise audio editing, especially when combined with loop playback (recall that audio is processed block wise, but the individual sample frames and thus the possible loop positions are way finer than the processing block size)
+;dispatching individual frames for calculation
+:when a [[render or playback process|PlayProcess]] is created, at some point we need to translate this logical unit (&quot;calculation stream&quot;) into individual frame job entries. This requires to break continuous time into individual frames, and then ennumerating these frames.
 ;displaying time intervals
 :for display, time intervals get //re-quantised// into display array coordinates.
 :While evidently the display coordinates are themselves quantised and we obviously don't want to cancel out the effect of an quantisation of the values or intervals to be displayed (which means, we get two quantisations chained up after each other), there remains the question if the display array coordinates should be aligned to the grid of the //elements to be displayed,// and especially if the allowed zoom factors should be limited. This decision isn't an easy one, as it has an immediate and tangible effect on what can be showed, how reversible and reproducible a view is and (especially note this!) on the actual values which can be set and changed through the GUI.
@@ -6914,6 +6970,8 @@ Thus, an especially important instance of that problem is ''how to deal with upd
 Another closely related problem is ''when to allow [[mutations|TimeMutation]]'', if at all. We can't completely do away with mutations, simply because we don't have a pure functional language at our disposal. The whole concept of //reference semantics// doesn't play so well with immutable objects. The Lumiera high-level (session) model certainly relies on objects intended to be //manipulated.// Thus we need a re-settable length field in {{{MObject}}} and we need a time variable for position calculations. Yet we could make any //derived objects// into immutable descriptor records, which certainly helps with parallelism.
 
 The ''problem with playback position'' is -- that indeed it's an attempt to conceptualise a non-existing entity. There is no such thing like &quot;the&quot; playback position. Yet most applications I'm aware off //do// employ this concept. Likely they got trapped by the metaphor of the tape head, again. We should do away with that. On playback, we should show a //projection of wall-clock time onto the expected playback range// -- not more, not less. It should be acknowledged that there is //no direct link to the ongoing playback processes,// besides the fact that they're assumed to sync to wall-clock time as well. Recall, typically there are multiple playback processes going on in compound, and each might run on a different update rate. If we really want a //visual out-of-sync indicator,// we should treat that as a separate reporting facility and display it apart of the playback cursor.
+
+An interesting point to note for the ''frame dispatch step'' is the fact, that in this case quantised values and quantisation are approached in the reverse direction, compared with the other uses. Here, after establishing a start point on the time scale, we proceed with ennumerating distinct frames and later on need to access the corresponding raw time, especially to find out about the [[timeline segment|Segmentation]] to address, or for retrieving parameter automation. &amp;rarr; FrameDispatcher.
 
 Note that the ''display window might be treated as just an independent instance of quantisation''. This is similar to the approach taken above for modifying quantised time span values. We should provide a special kind of time grid, the display coordinates. The origin of these is always defined to the left (lower) side of the interval to be displayed, and they are gauged in screen units (pixels or similar, as used by the GUI toolkit set). The rest is handled by the general quantisation mechanisms. The problem of aligning the display should be transformed into a general facility to align grids, and solved for the general case. Doing so solves the remaining problems with quantised value changes and with ''specifying relative placements'' as well: If we choose to represent them as quantised values, we might (or might not) also choose to apply this //grid-alignment function.//
 
@@ -6976,12 +7034,13 @@ Currently (1/11), the strategy is implemented according to (1) and (4) above, le
 Implementation of this strategy is still broken: it doesn't work properly when actually the change passing over the zero point happens by propagation from lower digits. Because then -- given the way the mutators are implemented -- the //new value of the wrapping digit hasn't been stored.// It seems the only sensible solution is to change the definition of the functors, so that any value will be changed by side-effect {{red{Question 4/11 -- isn't this done and fixed by now??}}}
 </pre>
 </div>
-<div title="Timeline" modifier="Ichthyostega" modified="201011220126" created="200706250721" tags="def" changecount="21">
+<div title="Timeline" modifier="Ichthyostega" modified="201105221835" created="200706250721" tags="def" changecount="22">
 <pre>Timeline is the top level element within the [[Session (Project)|Session]]. It is visible within a //timeline view// in the GUI and represents the effective (resulting) arrangement of media objects, to be rendered for output or viewed in a Monitor (viewer window). A timeline is comprised of:
 * a time axis in abolute time ({{red{WIP 1/10}}}: not clear if this is an entity or just a conceptual definition) 
-* a PlayControler ({{red{WIP Summer 2010: see discussion on ML. It seems rather that the controller will be attached}}})
 * a list of [[global Pipes|GlobalPipe]] representing the possible outputs (master busses)
 * //exactly one// top-level [[Sequence]], which in turn may contain further nested Sequences.
+* when used for Playback, a ViewConnection is necessary, allowing to get or connect to a PlayController
+
 Please note especially that following this design //a timeline doesn't define tracks.// [[Tracks form a Tree|Track]] and are part of the individual sequences, together with the media objects placed to these tracks. Thus sequences are independent entities which may exist stand-alone within the model, while a timeline is //always bound to hold a sequence.// &amp;rarr; see ModelDependencies
 [&gt;img[Fundamental object relations used in the session|uml/fig136453.png]]
 
@@ -7202,14 +7261,29 @@ For now, as of 6/10, we use specialised QueryResolver instances explicitly and d
 &amp;rarr; QueryRegistration
 </pre>
 </div>
-<div title="ViewerPlayConnection" modifier="Ichthyostega" modified="201105110009" created="201007110305" tags="Model Player spec draft" changecount="7">
+<div title="ViewConnection" modifier="Ichthyostega" modified="201105221902" created="201105221854" tags="def Model SessionLogic" changecount="4">
+<pre>For any kind of playback to happen, timeline elements (or similar model objects) need to be attached to a Viewer element through a special kind of [[binding|BindingMO]], called a ''view connection''. In the most general case, this creates an additional OutputMapping (and in the typical standard case, this boils down to a 1:1 association, sending the master bus of each media kind to the standard OutputDesignation for that kind).
+
+Establishing a ~ViewConnection is prerequisite for creating or attaching an PlayController through the PlayService. Multiple &quot;play control&quot; GUI elements can be associated with such a play controller, causing them to work as being linked together: if you e.g. push &quot;play&quot; on one of them, the button states of all linked GUI controls will reflect the state change of the underlying play controller.
+
+View connections are part of the model and thus persistent. They can be created explicitly, or just derived by //allocating a viewer.// And a new view connection can push aside (and thus &quot;break&quot;) an existing one from another timeline or model element. When a view connection is //broken,// any associated PlayProcess needs to be terminated (this is a blocking operation). Thus, at any time, there can be only one active view connection to a given viewer; here &quot;active&quot; means, that a PlayController has been hooked up, and the connection is ready for playback or rendering. But on the other hand, nothing prevents a timeline (or similar model object) to maintain multiple view connections -- consequently the actual playback position behaves as if associated with the view connection.
+</pre>
+</div>
+<div title="ViewerAsset" modifier="Ichthyostega" created="201105230116" tags="Model spec" changecount="1">
+<pre>A [[structural Asset|StructAsset]] corresponding to a Viewer element in the GUI.
+
+These Viewer (or Monitor) elements play an enabling role for any output generation. In order to [[initiate playback|PlayService]], we need a fulle resolved OutputDesignation, which typcially can be achieved by creating a ViewConnection, i.e. connecting a timeline or similarily suitable model element to such a viewer. Actually, this connection is modelled by attaching to a BindingMO which is linked to a ViewerAsset. This way, the model tracks and persists the available viewer windows and the current connection situation.
+
+When the GUI is outfitted, based on the current Session or HighLevelModel, it is expected to retrieve the viewer assets and for each of them, after installing the necessary widgetes, registers an OutputSlot with the global OutputManager.</pre>
+</div>
+<div title="ViewerPlayConnection" modifier="Ichthyostega" modified="201105221838" created="201007110305" tags="Model Player spec draft" changecount="8">
 <pre>for showing output, three entities are involved
 * the [[Timeline]] holds the relevant part of the model, which gets rendered for playback
 * by connecting to a viewer component, an actual output target is established
 * the playback process itself is coordinated by a PlayController, which in turn creates a PlayProcess
 
 !the viewer connection
-A viewer element gets connected to a given timeline either by directly attaching it, or by //allocating an available free viewer.// Anyway, as a model element, the viewer is just like another set of global pipes chained up after the global pipes present in the timeline. The number and kind of pipes provided is a configurable property of the viewer element &amp;mdash; more specifically: the viewer's SwitchBoard. Thus, connecting a viewer activates the same internal logic employed when connecting a sequence into a timeline or meta-clip: a default channel association is established, which can be overridden persistently (&amp;rarr; OutputMapping). Each of the viewer's pipes in turn gets connected to a system output through an OutputManager slot &amp;mdash; again an output mapping step.
+A viewer element gets connected to a given timeline either by directly attaching it, or by //allocating an available free viewer.// Anyway, as a model element, the viewer is just like another set of global pipes chained up after the global pipes present in the timeline. Connecting a timeline to a viewer creates a ViewConnection, which is a special [[binding|BindingMO]]. The number and kind of pipes provided is a configurable property of the viewer element &amp;mdash; more specifically: the viewer's SwitchBoard. Thus, connecting a viewer activates the same internal logic employed when connecting a sequence into a timeline or meta-clip: a default channel association is established, which can be overridden persistently (&amp;rarr; OutputMapping). Each of the viewer's pipes in turn gets connected to a system output through an OutputManager slot &amp;mdash; again an output mapping step.
 </pre>
 </div>
 <div title="VirtualClip" modifier="Ichthyostega" modified="201011220152" created="200804110321" tags="def Model" changecount="17">

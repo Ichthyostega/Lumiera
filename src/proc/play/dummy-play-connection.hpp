@@ -1,5 +1,5 @@
 /*
-  PLAY-CONTROLLER.hpp  -  frontend handle to control an play process
+  DUMMY-PLAY-CONNECTION.hpp  -  simplified test setup for playback
 
   Copyright (C)         Lumiera.org
     2011,               Hermann Vosseler <Ichthyostega@web.de>
@@ -20,23 +20,24 @@
 
 */
 
-/** @file play-controller.hpp
+/** @file dummy-play-connection.hpp
+ ** to \em provide this service, not to access it.
  **
  ** @see lumiera::DummyPlayer
  ** @see gui::PlaybackController usage example 
  */
 
 
-#ifndef PROC_PLAY_PLAY_CONTROLLER_H
-#define PROC_PLAY_PLAY_CONTROLLER_H
+#ifndef PROC_PLAY_DUMMY_PLAY_CONNECTION_H
+#define PROC_PLAY_DUMMY_PLAY_CONNECTION_H
 
 
-#include "proc/play/play-service.hpp"
+//#include "include/dummy-player-facade.h"
 //#include "include/display-facade.h"
 //#include "common/instancehandle.hpp"
 //#include "lib/singleton-ref.hpp"
-
-#include <boost/noncopyable.hpp>
+//
+//#include <boost/noncopyable.hpp>
 //#include <boost/scoped_ptr.hpp>
 //#include <string>
 
@@ -44,21 +45,20 @@
 namespace proc {
   namespace play {
   
-    using std::string;
+//    using std::string;
+//    using lumiera::Subsys;
+//    using lumiera::Display;
+//    using lumiera::DummyPlayer;
+    
     
     
     /********************************************************************
      */
-    class PlayController
+    class DummyPlayConnection
       : boost::noncopyable
       {
         
-      public:
-        
-      private:
       };
-    
-    
     
     
     

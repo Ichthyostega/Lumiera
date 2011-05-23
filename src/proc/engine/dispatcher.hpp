@@ -1,8 +1,8 @@
 /*
-  RENDERGRAPH.hpp  -  render network corresponding to one segment of the timeline
+  DISPATCHER.hpp  -  translating calculation streams into frame jobs
 
   Copyright (C)         Lumiera.org
-    2008,               Hermann Vosseler <Ichthyostega@web.de>
+    2011,               Hermann Vosseler <Ichthyostega@web.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -21,8 +21,8 @@
 */
 
 
-#ifndef ENGINE_RENDERGRAPH_H
-#define ENGINE_RENDERGRAPH_H
+#ifndef PROC_ENGINE_DISPATCHER_H
+#define PROC_ENGINE_DISPATCHER_H
 
 #include "proc/common.hpp"
 #include "proc/state.hpp"
@@ -32,28 +32,26 @@
 
 namespace engine {
   
-  using lib::time::TimeSpan;
-  using lib::time::FSecs;
-  using lib::time::Time;
-  
-  class ExitNode;
+//  using lib::time::TimeSpan;
+//  using lib::time::FSecs;
+//  using lib::time::Time;
+//  
+//  class ExitNode;
   
   /**
-   * @todo likely to be reworked into the engine backbone  /////////////TODO WIP as of 12/2010
+   * @todo
    */
-  class RenderGraph
+  class Dispatcher
     {
     protected:
-      ExitNode * output;
-      
       /** timerange covered by this RenderGraph */
       TimeSpan segment_;
       
     public:
-      RenderGraph()
+      Dispatcher()
         : segment_(Time::ZERO, FSecs(5))
         {
-          UNIMPLEMENTED ("anything regarding the Fixture datastructure");
+          UNIMPLEMENTED ("anything regarding the Engine backbone");
         }
       
     };

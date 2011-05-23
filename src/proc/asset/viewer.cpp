@@ -1,8 +1,8 @@
 /*
-  Timeline  -  independent top-level element of the Session
+  Viewer  -  asset corresponding to a viewer element in the GUI
 
   Copyright (C)         Lumiera.org
-    2009,               Hermann Vosseler <Ichthyostega@web.de>
+    2011,               Hermann Vosseler <Ichthyostega@web.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -21,17 +21,17 @@
 * *****************************************************/
 
 
-#include "proc/asset/timeline.hpp"
+#include "proc/asset/viewer.hpp"
 //#include "proc/mobject/session/track.hpp"
 //#include "proc/mobject/placement.hpp"
 //#include "proc/mobject/session/mobjectfactory.hpp"
-#include "proc/mobject/session/binding.hpp"
-#include "proc/assetmanager.hpp"
+//#include "proc/mobject/session/binding.hpp"
+//#include "proc/assetmanager.hpp"
 
 
 namespace asset {
   
-  using lib::AutoRegistered;
+//  using lib::AutoRegistered;
   
   
   
