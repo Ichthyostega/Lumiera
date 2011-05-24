@@ -7269,10 +7269,10 @@ Establishing a ~ViewConnection is prerequisite for creating or attaching an Play
 View connections are part of the model and thus persistent. They can be created explicitly, or just derived by //allocating a viewer.// And a new view connection can push aside (and thus &quot;break&quot;) an existing one from another timeline or model element. When a view connection is //broken,// any associated PlayProcess needs to be terminated (this is a blocking operation). Thus, at any time, there can be only one active view connection to a given viewer; here &quot;active&quot; means, that a PlayController has been hooked up, and the connection is ready for playback or rendering. But on the other hand, nothing prevents a timeline (or similar model object) to maintain multiple view connections -- consequently the actual playback position behaves as if associated with the view connection.
 </pre>
 </div>
-<div title="ViewerAsset" modifier="Ichthyostega" created="201105230116" tags="Model spec" changecount="1">
+<div title="ViewerAsset" modifier="Ichthyostega" modified="201105232228" created="201105230116" tags="Model spec" changecount="2">
 <pre>A [[structural Asset|StructAsset]] corresponding to a Viewer element in the GUI.
 
-These Viewer (or Monitor) elements play an enabling role for any output generation. In order to [[initiate playback|PlayService]], we need a fulle resolved OutputDesignation, which typcially can be achieved by creating a ViewConnection, i.e. connecting a timeline or similarily suitable model element to such a viewer. Actually, this connection is modelled by attaching to a BindingMO which is linked to a ViewerAsset. This way, the model tracks and persists the available viewer windows and the current connection situation.
+These Viewer (or Monitor) elements play an enabling role for any output generation. In order to [[initiate playback|PlayService]], we need a fully resolved OutputDesignation, which typcially can be achieved by creating a ViewConnection, i.e. connecting a timeline or similarily suitable model element to such a viewer. Actually, this connection is modelled by attaching to a BindingMO which is linked to a ViewerAsset. This way, the model tracks and persists the available viewer windows and the current connection situation.
 
 When the GUI is outfitted, based on the current Session or HighLevelModel, it is expected to retrieve the viewer assets and for each of them, after installing the necessary widgetes, registers an OutputSlot with the global OutputManager.</pre>
 </div>

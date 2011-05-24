@@ -37,15 +37,15 @@
 using lib::Cmdline;
 using lumiera::Subsys;
 using lumiera::AppState;
-using lumiera::ON_GLOBAL_INIT;
 
 namespace {
   Subsys& engine  = backend::EngineFacade::getDescriptor();
   Subsys& netNode = backend::NetNodeFacade::getDescriptor();
   Subsys& script  = backend::ScriptRunnerFacade::getDescriptor();
-  Subsys& player  = lumiera::DummyPlayer::getDescriptor();
+  Subsys& player  = lumiera::DummyPlayer::getDescriptor();        ///////TODO: just a dummy, until we're able to render
   Subsys& builder = proc::Facade::getBuilderDescriptor();
   Subsys& session = proc::Facade::getSessionDescriptor();
+  Subsys& playOut = proc::Facade::getPlayOutDescriptor();
   Subsys& lumigui = gui::GuiFacade::getDescriptor();
 }
 
@@ -66,13 +66,17 @@ main (int argc, const char* argv[])
       session.depends (builder);
       netNode.depends (session);
       netNode.depends (engine);
+      playOut.depends (engine);
+      playOut.depends (session);
 //    lumigui.depends (session);   //////TODO commented out in order to be able to start up a dummy GuiStarterPlugin
 //    lumigui.depends (engine);
+      player.depends (playOut);    //////TODO dummy player, until we're able to render
       lumigui.depends (player);
       script.depends (session);
       script.depends (engine);
       
       application.maybeStart (session);
+      application.maybeStart (playOut);
       application.maybeStart (netNode);
       application.maybeStart (lumigui);
       application.maybeStart (script);

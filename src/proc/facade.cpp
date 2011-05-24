@@ -103,9 +103,53 @@ namespace proc {
         }
     };
   
+  
+  
+  class PlayOutSubsysDescriptor
+    : public Subsys
+    {
+      operator string ()  const { return "PlayOut"; }
+      
+      /** determine, if any output system is required to start up explicitly.
+       *  Moreover, extract configuration variations for specific kinds of output
+       * @return true if any output system is required to start stand-alone.
+       *         otherwise, the player and a default configured output connection
+       *         is pulled up only when required by another subsystem (e.g. GUI)
+       * @todo   actually define cmdline options and parse/decide here! 
+       */
+      bool 
+      shouldStart (lumiera::Option&)
+        {
+          TODO ("extract options about specific output systems to be brought up");
+          return false;
+        }
+      
+      bool
+      start (lumiera::Option&, Subsys::SigTerm termination)
+        {
+          UNIMPLEMENTED ("bring up and configure the output connections and the player");
+          return false;
+        }
+      
+      void
+      triggerShutdown ()  throw()
+        {
+          UNIMPLEMENTED ("initiate playback/render halt and disconnect output");
+        }
+      
+      bool 
+      checkRunningState ()  throw()
+        {
+          //Lock guard (*this);
+          TODO ("implement detecting running state");
+          return false;
+        }
+    };
+  
   namespace {
     lib::Singleton<BuilderSubsysDescriptor> theBuilderDescriptor;   
     lib::Singleton<SessionSubsysDescriptor> theSessionDescriptor;
+    lib::Singleton<PlayOutSubsysDescriptor> thePlayOutDescriptor;
   }
   
   
@@ -124,6 +168,14 @@ namespace proc {
   Facade::getSessionDescriptor()
   {
     return theSessionDescriptor();
+  }
+  
+  
+  /** @internal intended for use by main(). */
+  Subsys&
+  Facade::getPlayOutDescriptor()
+  {
+    return thePlayOutDescriptor();
   }
 
 
