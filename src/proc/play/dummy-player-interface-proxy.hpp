@@ -53,8 +53,8 @@ namespace lumiera {
   namespace facade {
     
     typedef lumiera::InstanceHandle< LUMIERA_INTERFACE_INAME(lumieraorg_DummyPlayer, 0)
-                                     , proc::play::DummyPlayer
-                                     > IHandle_DummyPlayer;
+                                   , proc::play::DummyPlayer
+                                   > IHandle_DummyPlayer;
     
     
     template<>

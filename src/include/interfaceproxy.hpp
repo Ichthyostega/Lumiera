@@ -33,7 +33,7 @@
  ** Typically there is another subclass of the Facade interfaces sitting "on the other side"
  ** of the interface barrier and actually implementing the functionality. The template
  ** facade::Accessor can be thought of as a factory creating such a proxy instance of the
- ** facade interface for the client code to use. Typically, in instance of the \em factory
+ ** facade interface for the client code to use. Typically, an instance of the \em factory
  ** is embedded (as a static functor member object) right within the otherwise abstract 
  ** facade interface, this way allowing the client code to write e.g. \c XYZInterface::facade()
  ** to yield a reference to a proxy object implementing \c XYZInterface.

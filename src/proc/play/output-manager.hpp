@@ -36,12 +36,15 @@
 #include <boost/noncopyable.hpp>
 //#include <string>
 //#include <vector>
+#include <tr1/memory>
 
 
+namespace proc {
 namespace play {
   
 //using std::string;
 //using std::vector;
+  using std::tr1::shared_ptr;
   
   
   
@@ -77,8 +80,9 @@ namespace play {
     public:
       OutputManager() {}
     };
-    
+  
+  typedef shared_ptr<OutputManager> POutputManager;
   
   
-} // namespace play
+}} // namespace proc::play
 #endif
