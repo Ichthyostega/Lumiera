@@ -92,9 +92,22 @@ namespace lumiera {
           {
           public:
             void play(bool);          ///< play/pause toggle
+            void scrub(bool);         ///< scrubbing playback
             void adjustSpeed(double); ///< playback speed control
-            void go(lib::time::Time); 
-            /////////////////////////////TODO how to modify the Loop range, the playback mode, scrubbing?
+            void go(lib::time::Time); ///< skip to the given point in time
+            
+            void controlPlayhead (lib::time::TimeControl & ctrl);
+            void controlDuration (lib::time::TimeControl & ctrl);
+            void controlLooping  (lib::time::TimeControl & ctrl);
+            
+            void useProxyMedia (bool);
+            void setQuality (uint);
+            
+            bool is_playing()   const;
+            bool is_scrubbing() const;
+            double getSpeed()   const;
+            uint getQuality()   const;
+            bool usesProxy()    const;
           };
         
         
