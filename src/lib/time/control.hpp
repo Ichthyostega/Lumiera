@@ -40,6 +40,17 @@
  ** of time-like entities -- be it the running time display in a GUI widget, a ruler marker
  ** which can be dragged, a modifiable selection or the animated playhead cursor.
  ** 
+ ** \par implementation notes
+ ** - the validity of a given combination of change and target is checked immediately,
+ **   when connecting to the target. Depending on the situation, the actual changes later
+ **   are subject to specific treatment (e.g. frame quantisation)
+ ** - by default time::Control is <b>not threadsafe</b>. But, as each change is basically
+ **   processed within its own call context (function invocation), parallelism is only
+ **   a concern with respect to the value finally visible within the target.
+ ** - the change notification is processed right away, after applying the change to the
+ **   target; in all cases, the effective change value is what will be propagated, \em not
+ **   the content of the target after applying the change
+ ** 
  ** @todo WIP-WIP-WIP
  **
  */

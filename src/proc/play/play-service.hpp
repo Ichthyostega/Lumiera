@@ -33,6 +33,7 @@
 
 
 #include "lib/error.hpp"
+#include "include/play-facade.h"
 
 #include <boost/noncopyable.hpp>
 //#include <boost/scoped_ptr.hpp>
