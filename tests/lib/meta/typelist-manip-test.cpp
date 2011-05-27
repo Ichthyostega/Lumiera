@@ -139,8 +139,8 @@ namespace test {
               CHECK (6 == e1);
               CHECK (7 == e2);
               
-              CHECK ((is_sameType<NullType, E3>::value));
-              CHECK ((is_sameType<NullType, Nil>::value));
+              CHECK ((is_sameType<NullType, E3>        ::value));
+              CHECK ((is_sameType<NullType, Nil>       ::value));
               CHECK ((is_sameType<NullType, Irrelevant>::value));
             }
           

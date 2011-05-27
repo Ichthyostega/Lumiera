@@ -70,7 +70,8 @@ namespace test {
           {
             T1 param1;
             T2 param2;
-            return str(formatted % param1 % param2
+            return str(formatted % uint(param1)
+                                 % uint(param2)
                                  % BASE::visitAll());
           }
       };
