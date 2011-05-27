@@ -24,7 +24,7 @@
 #ifndef ENGINE_MASK_H
 #define ENGINE_MASK_H
 
-#include "proc/engine/trafo.hpp"
+#include "proc/engine/procnode.hpp"
 
 
 
@@ -32,7 +32,7 @@ namespace engine
   {
 
 
-  class Mask : public Trafo
+  class Mask : public ProcNode
     {};
 
 
