@@ -6782,7 +6782,7 @@ Thus no server and no network connection is needed. Simply open the file in your
  * see [[Homepage|http://tiddlywiki.com]], [[Wiki-Markup|http://tiddlywiki.org/wiki/TiddlyWiki_Markup]]
 </pre>
 </div>
-<div title="TimeMutation" modifier="Ichthyostega" modified="201105250040" created="201101231344" tags="spec discuss draft" changecount="41">
+<div title="TimeMutation" modifier="Ichthyostega" modified="201105261700" created="201101231344" tags="spec discuss draft" changecount="42">
 <pre>Simple time points are just like values and thus easy to change. The difficulties arise when time values are to be //quantised to an existing time grid.// The first relevant point to note is that for quantised time values, the effect of a change can be disproportional to the cause. Small changes below the threshold might be accumulated, and a tiny change might trigger a jump to the next grid point. While this might be annoying, the yet more complex questions arise when we acknowledge that the amount of the change itself might be related to a time grid.
 
 The problem with modification of quantised values highlights an inner contradiction or conflicting goals within the design
@@ -6866,7 +6866,7 @@ The special focus of this problem seems to lead itself to a __visitor pattern__ 
 Thus the possibly mutalble time entities get an {{{accept(time::Mutation&amp;)}}} function, which is defined to reflect back into the (virtual) visitation functions of the Mutation Interface. Additionally, we provide some static convenience shortcuts right in the Mutation interface, performing the trivial mutations.
 
 !!!life value changes and monitoring
-Based on this time::Mutation design, we provide a specialised element for dealing with //running time values:// When attached to a target time entity, a &quot;life&quot; connection is established. From then on, continuous changes and mutations can be fed to the target by invoking a functor interface. Besides, a change notification signal (callback) can be installed, which will be invoked on each change. This element is the foundation for implementing all kinds of running time display widgets, spin buttons, timeline selections, playheads, loop playback and similar.
+Based on this time::Mutation design, we provide a specialised element for dealing with //running time values:// When attached to a target time entity, a &quot;life&quot; connection is established. From then on, continuous changes and mutations can be fed to the target by invoking a functor interface. Besides, a change notification signal (callback) can be installed, which will be invoked on each change. This {{{time::Control}}} element is the foundation for implementing all kinds of running time display widgets, spin buttons, timeline selections, playheads, loop playback and similar.
 </pre>
 </div>
 <div title="TimeQuant" modifier="Ichthyostega" modified="201101232031" created="201012181753" tags="Concepts Player spec img discuss draft" changecount="50">

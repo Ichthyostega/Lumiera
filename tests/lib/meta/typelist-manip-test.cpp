@@ -90,7 +90,7 @@ namespace test {
        *         using a "predicate template" (metafunction)
        *       - building combinations and permutations
        */
-      class TypeListManipl_test : public Test
+      class TypeListManip_test : public Test
         {
           virtual void
           run (Arg) 
@@ -352,7 +352,7 @@ namespace test {
       
       
       /** Register this test class... */
-      LAUNCHER (TypeListManipl_test, "unit common");
+      LAUNCHER (TypeListManip_test, "unit common");
       
       
       

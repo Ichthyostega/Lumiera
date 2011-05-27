@@ -25,13 +25,15 @@
  ** a Printer template usable for debugging the structure of a typelist built
  ** upon some simple debugging-style types. Examples being a Num<int> template,
  ** or the Flag type. A Printer type generated from this template provides
- ** a static \c print() function returning a string visualising the structure
- ** of the typelist provided as parameter to the Printer template.
- **
+ ** a static \c print() function. The string returned from this function
+ ** visualises the structure of the typelist provided as parameter
+ ** to the Printer template.
+ ** 
  ** @see typelist-manip-test.cpp
  ** @see config-flags-test.cpp
  **
  */
+
 #ifndef META_TYPELIST_DIAGNOSTICS_H
 #define META_TYPELIST_DIAGNOSTICS_H
 

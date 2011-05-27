@@ -27,6 +27,7 @@
 #include "lib/time/timequant.hpp"
 #include "lib/time/mutation.hpp"
 #include "proc/asset/meta/time-grid.hpp"
+#include "lib/meta/typelist.hpp"
 #include "lib/util.hpp"
 
 #include <boost/lexical_cast.hpp>
@@ -45,6 +46,8 @@ namespace time{
 namespace test{
   
   using asset::meta::TimeGrid;
+  using lumiera::typelist::Types;
+  using lumiera::typelist::InstantiateForEach;
   
   namespace {
     inline string
@@ -112,7 +115,7 @@ namespace test{
           FrameNr count(qChange);
           
           verifyBasics();
-          runningMutations();
+          verifyMatrix_of_MutationCases();
         } 
       
       
@@ -121,10 +124,24 @@ namespace test{
         {
         }
       
+      template<class TAR>
+      struct TestCase4Target
+        {
+          void
+          performTestCases()
+            {
+              
+            }
+        };
+      
       
       void
-      runningMutations ()
+      verifyMatrix_of_MutationCases ()
         {
+          typedef Types<Duration,TimeSpan,QuTime> KindsOfTarget;
+          typedef InstantiateForEach<KindsOfTarget::List, TestCase4Target> TestMatrix;
+          
+          TestMatrix().performTestCases();
         }
     };
   

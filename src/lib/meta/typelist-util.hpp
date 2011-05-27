@@ -21,6 +21,34 @@
 */
 
 
+/** @file typelist-util.hpp
+ ** Metaprogramming: Helpers for manipulating lists-of-types. 
+ ** Sometimes, we use metaprogramming to generate a variation of concrete
+ ** implementations by combining some basic building blocks. Typically, there
+ ** is a number of similar, but not suitably related types involved. We want to
+ ** process those types using a common scheme, without being forced to squeeze
+ ** all those types into a artificial inheritance relationship. Now, generating
+ ** some kind of common factory or adapter, while mixing in pieces of code tailored
+ ** specifically to the individual types, allows still to build a common processing
+ ** in such situations.
+ ** 
+ ** The facilities in this header provide the basics of simple functional list
+ ** processing (mostly with tail recursion). Usually, there is one template parameter
+ ** TYPES, which accepts a \em Type-list. The result of the processing step is then
+ ** accessible as an embedded typedef named \c List . Here, all of the 'processing'
+ ** to calculate this result is performed by the compiler, as a side-effect of
+ ** figuring out the resulting concrete type. At run time, in the generated
+ ** code, typically the resulting classes are empty, maybe just
+ ** exposing a specifically built-up function. 
+ ** 
+ ** @see generator.hpp
+ ** @see typelist-manip-test.cpp
+ ** @see TimeControl_test usage example
+ ** @see typelist.hpp
+ ** 
+ */
+
+
 #ifndef LUMIERA_META_TYPELIST_UTIL_H
 #define LUMIERA_META_TYPELIST_UTIL_H
 
@@ -34,6 +62,7 @@ namespace typelist{
     
     /**
      * Metafunction counting the number of Types in the collection
+     * @return an embedded constant \c value holding the result
      */
     template<class TYPES>
     struct count;
@@ -80,6 +109,7 @@ namespace typelist{
                                                          > List; };
     
     
+    /** conditional node: skip an element based on evaluating a predicate */
     template<bool, class T, class TAIL>
     struct CondNode                        { typedef TAIL  Next; };
     
@@ -202,7 +232,7 @@ namespace typelist{
         typedef T                              Head;  ///< first element
         typedef Node<T,NullType>               First; ///< a list containing the first element
         typedef TYPES                          Tail;  ///< remainder of the list starting with the second elm.
-        typedef typename SplitLast<List>::List Prefix;///< all of the list, up to but extcluding the last element
+        typedef typename SplitLast<List>::List Prefix;///< all of the list, up to but excluding the last element
         typedef typename SplitLast<List>::Type End;   ///< the last element
         typedef Node<End,NullType>             Last;  ///< a list containing the last element
       };
@@ -245,6 +275,12 @@ namespace typelist{
     
     
     
+    /**
+     * build a list-of lists, where each element of the first arg list
+     * gets in turn prepended to all elements of the second arg list.
+     * Can be used to build all possible combinations from two
+     * sources, i.e. the Cartesian product.
+     */
     template<class TY1,class TY2>
     struct Distribute                      { typedef typename PrefixAll<TY1,TY2>::List  List; };
     
@@ -261,24 +297,32 @@ namespace typelist{
     
     
     
-    /** use a permutation generator
-     *  for creating a list of all possible combinations
+    /** 
+     * build all possible combinations, based on a enumeration of the basic cases.
+     * For each of the types in the argument list, an "enumeration generator" template is invoked,
+     * yielding a list of the possible base cases. These base cases are then combined with all the
+     * combinations of the rest, yielding all ordered combinations of all cases. Here, "ordered"
+     * means that the base cases of the n-th element will appear in the n-th position of the
+     * resulting lists,
+     * 
+     * For the typical example, the "base cases" are {flag(on), flag(off)}, so we get a
+     * list-of-lists, featuring all possibilities to combine these distinct toggles. 
      */
     template< class X
-            , template<class> class _PERMU_>
-    struct Combine                         { typedef typename Distribute< typename _PERMU_<X>::List
+            , template<class> class _ENUM_>
+    struct Combine                         { typedef typename Distribute< typename _ENUM_<X>::List
                                                                         , Node<NullType,NullType>
                                                                         >::List  List; };
-    template< template<class> class _PERMU_>
-    struct Combine<NullType, _PERMU_ >     { typedef Node<NullType,NullType>     List; };
+    template< template<class> class _ENUM_>
+    struct Combine<NullType, _ENUM_ >      { typedef NodeNull                    List; };
     
     template< class TY, class TYPES
-            , template<class> class _PERMU_>
-    struct Combine<Node<TY,TYPES>,_PERMU_> { typedef typename Distribute< typename _PERMU_<TY>::List
-                                                                        , typename Combine<TYPES,_PERMU_>::List
+            , template<class> class _ENUM_>
+    struct Combine<Node<TY,TYPES>,_ENUM_>  { typedef typename Distribute< typename _ENUM_<TY>::List
+                                                                        , typename Combine<TYPES,_ENUM_>::List
                                                                         >::List  List; };
     
-    /** permutation generator for the Combine metafunction,
+    /** enumeration generator for the Combine metafunction,
      *  yielding an "on" and "off" case
      */
     template<class F>
