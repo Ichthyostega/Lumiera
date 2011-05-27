@@ -27,7 +27,7 @@
 #include "lib/time/timequant.hpp"
 #include "lib/time/mutation.hpp"
 #include "proc/asset/meta/time-grid.hpp"
-#include "lib/meta/typelist.hpp"
+#include "lib/meta/generator-combinations.hpp"
 #include "lib/util.hpp"
 
 #include <boost/lexical_cast.hpp>
@@ -47,7 +47,7 @@ namespace test{
   
   using asset::meta::TimeGrid;
   using lumiera::typelist::Types;
-  using lumiera::typelist::InstantiateForEach;
+  using lumiera::typelist::InstantiateChainedCombinations;
   
   namespace {
     inline string
@@ -58,6 +58,24 @@ namespace test{
       arg.erase (arg.begin());
       return entry;
     }
+    
+    
+    template<class TAR, class SRC, class BASE>
+    struct TestCase
+      : BASE
+      {
+        void
+        performTestCases()
+          {
+            
+          }
+      };
+    
+    struct IterationEnd
+      {
+        void performTestCases() { }
+      };
+    
   }
   
   
@@ -124,22 +142,17 @@ namespace test{
         {
         }
       
-      template<class TAR>
-      struct TestCase4Target
-        {
-          void
-          performTestCases()
-            {
-              
-            }
-        };
       
       
       void
       verifyMatrix_of_MutationCases ()
         {
           typedef Types<Duration,TimeSpan,QuTime> KindsOfTarget;
-          typedef InstantiateForEach<KindsOfTarget::List, TestCase4Target> TestMatrix;
+          typedef Types<Time,Duration,TimeSpan,QuTime> KindsOfSource;
+          typedef InstantiateChainedCombinations< KindsOfTarget
+                                                , KindsOfSource
+                                                , TestCase
+                                                , IterationEnd > TestMatrix;
           
           TestMatrix().performTestCases();
         }

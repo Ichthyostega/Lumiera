@@ -37,33 +37,31 @@
 //#include "common/instancehandle.hpp"
 //#include "lib/singleton-ref.hpp"
 //
-//#include <boost/noncopyable.hpp>
+#include <boost/noncopyable.hpp>
 //#include <boost/scoped_ptr.hpp>
 //#include <string>
 
 
 namespace proc {
-  namespace play {
-  
+namespace play {
+
 //    using std::string;
 //    using lumiera::Subsys;
 //    using lumiera::Display;
 //    using lumiera::DummyPlayer;
-    
-    
-    
-    /********************************************************************
-     */
-    class DummyPlayConnection
-      : boost::noncopyable
-      {
-        
-      };
-    
-    
-    
-    
-  } // namespace play
-
-} // namespace proc
+  
+  
+  
+  /********************************************************************
+   */
+  class DummyPlayConnection
+    : boost::noncopyable
+    {
+      
+    };
+  
+  
+  
+  
+}} // namespace proc::play
 #endif

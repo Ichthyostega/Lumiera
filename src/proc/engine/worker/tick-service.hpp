@@ -46,82 +46,80 @@
 
 
 namespace proc {
-  namespace play {
+namespace node {
 
-    using std::tr1::function;
-    
-    
-    
-    /************************************************************
-     * Tick generating service for a periodic callback,
-     * with adjustable frequency. Quick'n dirty implementation!
-     */
-    class TickService
-      : backend::ThreadJoinable
-      {
-        typedef function<void(void)> Tick;
-        volatile uint timespan_;
-        
-        /** poll interval for new settings in wait state */
-        static const uint POLL_TIMEOUT = 1000;
-        
-      public:
-        TickService (Tick callback)
-          : ThreadJoinable("Tick generator (dummy)"
-                          , bind (&TickService::timerLoop, this, callback)
-                          )
-          { 
-            INFO (proc, "TickService started.");
-          }
-        
-       ~TickService ()
-          {
-            timespan_ = 0;
-            this->join();
-            usleep (200000);    // additional delay allowing GTK to dispatch the last output
-            
-            INFO (proc, "TickService shutdown.");
-          }
-        
-        
-        /** set the periodic timer to run with a given frequency,
-         *  starting \em now. Well, not actually now, but at the next
-         *  opportunity. It should be \em now, but this implementation
-         *  is sloppy! setting fps==0 halts (pauses) the timer.
-         */
-        void activate (uint fps)
-          {
-            REQUIRE (  0==fps 
-                    ||(   1000000/fps < std::numeric_limits<uint>::max() 
-                       && 1000000/fps > POLL_TIMEOUT));
-            if (fps)
-              timespan_ = 1000000/fps; // microseconds per tick
-            else
-              timespan_ = POLL_TIMEOUT;
-          }
-        
-        
-      private:
-        void timerLoop(Tick periodicFun)
-          {
-            timespan_ = POLL_TIMEOUT;
-            while (0 < timespan_)
-              {
-                if (timespan_ > POLL_TIMEOUT)
-                  periodicFun();
-                
-                usleep (timespan_);
-              }
-            TRACE (proc_dbg, "Tick Thread timer loop exiting..."); 
-          }
+  using std::tr1::function;
   
-      };
-    
-    
-    
-    
-  } // namespace play
+  
+  
+  /************************************************************
+   * Tick generating service for a periodic callback,
+   * with adjustable frequency. Quick'n dirty implementation!
+   */
+  class TickService
+    : backend::ThreadJoinable
+    {
+      typedef function<void(void)> Tick;
+      volatile uint timespan_;
+      
+      /** poll interval for new settings in wait state */
+      static const uint POLL_TIMEOUT = 1000;
+      
+    public:
+      TickService (Tick callback)
+        : ThreadJoinable("Tick generator (dummy)"
+                        , bind (&TickService::timerLoop, this, callback)
+                        )
+        { 
+          INFO (proc, "TickService started.");
+        }
+      
+     ~TickService ()
+        {
+          timespan_ = 0;
+          this->join();
+          usleep (200000);    // additional delay allowing GTK to dispatch the last output
+          
+          INFO (proc, "TickService shutdown.");
+        }
+      
+      
+      /** set the periodic timer to run with a given frequency,
+       *  starting \em now. Well, not actually now, but at the next
+       *  opportunity. It should be \em now, but this implementation
+       *  is sloppy! setting fps==0 halts (pauses) the timer.
+       */
+      void activate (uint fps)
+        {
+          REQUIRE (  0==fps 
+                  ||(   1000000/fps < std::numeric_limits<uint>::max() 
+                     && 1000000/fps > POLL_TIMEOUT));
+          if (fps)
+            timespan_ = 1000000/fps; // microseconds per tick
+          else
+            timespan_ = POLL_TIMEOUT;
+        }
+      
+      
+    private:
+      void timerLoop(Tick periodicFun)
+        {
+          timespan_ = POLL_TIMEOUT;
+          while (0 < timespan_)
+            {
+              if (timespan_ > POLL_TIMEOUT)
+                periodicFun();
+              
+              usleep (timespan_);
+            }
+          TRACE (proc_dbg, "Tick Thread timer loop exiting..."); 
+        }
 
-} // namespace proc
-#endif // PROC_PLAY_TICKSERVICE_H
+    };
+  
+  
+  
+  
+}} // namespace proc::node
+#endif
 

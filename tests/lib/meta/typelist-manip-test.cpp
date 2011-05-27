@@ -131,17 +131,17 @@ namespace test {
               Pick<List2,1>::Type e1;
               Pick<List2,2>::Type e2;
               
-              Pick<List2,3>::Type E3;
-              Pick<NullType,23>::Type Nil;
-              Pick<void*,456>::Type Irrelevant;
+              typedef Pick<List2,3>::Type     E3;
+              typedef Pick<NullType,23>::Type Nil;
+              typedef Pick<void*,456>::Type   Irrelevant;
               
               CHECK (5 == e0);
               CHECK (6 == e1);
               CHECK (7 == e2);
               
-              CHECK (is_sameType<NullType, E3>::value);
-              CHECK (is_sameType<NullType, Nil>::value);
-              CHECK (is_sameType<NullType, Irrelevant>::value);
+              CHECK ((is_sameType<NullType, E3>::value));
+              CHECK ((is_sameType<NullType, Nil>::value));
+              CHECK ((is_sameType<NullType, Irrelevant>::value));
             }
           
           

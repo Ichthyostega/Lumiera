@@ -32,75 +32,32 @@
 
 
 
-namespace proc  {
-  namespace play{
-  
-    using std::string;
-    using lumiera::Subsys;
-    using std::auto_ptr;
-    using boost::scoped_ptr;
-    using std::tr1::bind;
-    
-    
-    namespace { // hidden local details of the service implementation....
-    
-      /** details of how the DummyPlayer service can be started
-       *  and used as independent "subsystem" within main()  */
-      class DummyPlayerSubsysDescriptor
-        : public Subsys
-        {
-          operator string ()  const { return "Dummy-Player"; }
-          
-          
-          bool 
-          shouldStart (lumiera::Option&)
-            {
-              return false; // for now the DummyPlayerService only comes "up" as dependency,
-            }              //  but doesn't start as a subsystem on it's own.
-          
-          bool
-          start (lumiera::Option&, Subsys::SigTerm terminationHandle)
-            {
-              ASSERT (!thePlayer_);
-              
-              thePlayer_.reset (new DummyPlayerService (terminationHandle));
-              return true;
-            }
-          
-          /** manages the actual (single) instance of the player service impl */
-          scoped_ptr<DummyPlayerService> thePlayer_;
-          
-          
-          void
-          triggerShutdown ()  throw()
-            {
-              thePlayer_.reset(0);
-              // note: shutdown of the DummyPlayerService instance may block
-             //        for a short period, until termination of all tick services
-            }
-          
-          bool 
-          checkRunningState ()  throw()
-            {
-              return (thePlayer_);
-            }
-        };
-      
-      lib::Singleton<DummyPlayerSubsysDescriptor> theDummyPlayerDescriptor;
-      
-      
-      
-      
-      
-      /* ================== define an lumieraorg_DummyPlayer instance ======================= */
-      
-      
-    } // (End) hidden service impl details
-    
-    
-    
-    
-    /** */
+namespace proc {
+namespace play {
+
+//using std::string;
+//using lumiera::Subsys;
+//using std::auto_ptr;
+//using boost::scoped_ptr;
+//using std::tr1::bind;
   
   
+  namespace { // hidden local details of the service implementation....
+  
+    
+    
+    
+    
+    
+    /* ================== define an lumieraorg_DummyPlayer instance ======================= */
+    
+    
+  } // (End) hidden service impl details
+  
+  
+  
+  
+  /** */
+
+
 }} // namespace proc::play

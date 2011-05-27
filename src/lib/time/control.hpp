@@ -79,7 +79,6 @@ namespace time {
   
 //LUMIERA_ERROR_DECLARE (INVALID_MUTATION); ///< Changing a time value in this way was not designated
   
-  typedef function<void(TI)> timeSignal;
   
   /**
    * Interface: controller-element for retrieving and
@@ -91,10 +90,12 @@ namespace time {
    */
   template<class TI>
   class Control
-    : Mutation
-    , timeSignal
+    : public Mutation
+    , public function<void(TI)>
     {
     public:
+      typedef function<void(TI)> timeSignal;
+      
       /** install a callback functor to be invoked
        *  to notify for any changes to the observed
        *  time entity */

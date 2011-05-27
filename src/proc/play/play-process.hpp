@@ -36,41 +36,39 @@
 //#include "common/instancehandle.hpp"
 //#include "lib/singleton-ref.hpp"
 //
-//#include <boost/noncopyable.hpp>
+#include <boost/noncopyable.hpp>
 //#include <boost/scoped_ptr.hpp>
 //#include <string>
 
 
 namespace proc {
-  namespace play {
-  
+namespace play {
+
 //    using std::string;
 //    using lumiera::Subsys;
 //    using lumiera::Display;
 //    using lumiera::DummyPlayer;
-    
-    
-    
-    /******************************************************
-     * Actual implementation of the DummyPlayer service.
-     * Creating an instance of this class automatically
-     * registers the interface lumieraorg_DummyPlayer with
-     * the Lumiera Interface/Plugin system and creates
-     * a forwarding proxy within the application core to
-     * route calls through this interface.
-     */
-    class PlayerProcess
-      : boost::noncopyable
-      {
-        
-      public:
-        
-      };
-    
-    
-    
-    
-  } // namespace play
-
-} // namespace proc
+  
+  
+  
+  /******************************************************
+   * Actual implementation of the DummyPlayer service.
+   * Creating an instance of this class automatically
+   * registers the interface lumieraorg_DummyPlayer with
+   * the Lumiera Interface/Plugin system and creates
+   * a forwarding proxy within the application core to
+   * route calls through this interface.
+   */
+  class PlayerProcess
+    : boost::noncopyable
+    {
+      
+    public:
+      
+    };
+  
+  
+  
+  
+}} // namespace proc::play
 #endif

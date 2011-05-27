@@ -21,10 +21,11 @@
 * *****************************************************/
 
 
-#include "play/output-manager.hpp"
+#include "proc/play/output-manager.hpp"
 
 
 
+namespace proc {
 namespace play {
   
   
@@ -40,4 +41,4 @@ namespace play {
   
   
   
-} // namespace play
+}} // namespace proc::play

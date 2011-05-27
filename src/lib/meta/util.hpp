@@ -44,13 +44,13 @@ namespace lumiera {
      * @warning identical, not sub-type!
      */
     template<typename T1, typename T2>
-    class is_sameType
+    struct is_sameType
       {
         static const bool value = false;
       };
     
     template<typename T>
-    class is_sameType<T,T>
+    struct is_sameType<T,T>
       {
         static const bool value = true;
       };

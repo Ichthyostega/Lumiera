@@ -48,6 +48,7 @@
 using ::test::Test;
 using std::string;
 using std::cout;
+using std::endl;
 
 
 namespace lumiera {

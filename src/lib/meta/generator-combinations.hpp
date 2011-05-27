@@ -47,7 +47,7 @@ namespace typelist{
   
   
   template<class TYPES_1, class TYPES_2>
-  class CartesianProduct
+  struct CartesianProduct
     : Distribute< typename TYPES_1::List
                 , typename TYPES_2::List
                 >
@@ -60,8 +60,8 @@ namespace typelist{
     {
       template<class SUBLIST, class BASE>
       struct SingleCaseInstantiation
-        : _X_< Pick<SUBLIST,0>::Type
-             , Pick<SUBLIST,1>::Type
+        : _X_< typename Pick<SUBLIST,0>::Type
+             , typename Pick<SUBLIST,1>::Type
              , BASE
              >
         { };
@@ -88,8 +88,8 @@ namespace typelist{
     , template<class,class,class> class _X_  ///< template with two arg types and a base type
     , class BASE = NullType
     >
-  class InstantiateChainedCombinations
-    : InstantiateChained< CartesianProduct<TYPES_1,TYPES_2>::List
+  struct InstantiateChainedCombinations
+    : InstantiateChained< typename CartesianProduct<TYPES_1,TYPES_2>::List
                         , PickParametersFromSublist<_X_>::template SingleCaseInstantiation
                         , BASE
                         >

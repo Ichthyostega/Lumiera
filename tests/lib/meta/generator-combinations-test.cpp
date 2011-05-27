@@ -54,7 +54,7 @@ namespace test {
     
     using boost::str;
     using boost::format;
-    format fmt ("-<%u%u>%s");
+    format formatted ("-<%u%u>%s");
     
     /**
      * A Test-Template to be instantiated
@@ -63,17 +63,19 @@ namespace test {
      */
     template<class T1, class T2, class BASE>
     struct TestCase
+      : BASE
       {
         static string
         visitAll()
           {
             T1 param1;
             T2 param2;
-            return str(fmt % param1 % param2
-                           % BASE::visitAll());
+            return str(formatted % param1 % param2
+                                 % BASE::visitAll());
           }
       };
     
+    template<>
     struct TestCase<void,void,NullType>
       {
         static string

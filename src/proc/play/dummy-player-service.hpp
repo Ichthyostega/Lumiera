@@ -52,6 +52,11 @@
 
 
 namespace proc {
+  namespace node {
+    class DummyImageGenerator;
+    class TickService;
+  }
+  
   namespace play {
   
     using std::string;
@@ -59,9 +64,9 @@ namespace proc {
     using lumiera::Display;
     using lumiera::DummyPlayer;
     
+    using proc::node::DummyImageGenerator;
+    using proc::node::TickService;
     
-    class DummyImageGenerator;
-    class TickService;
     
     
     /********************************************************************

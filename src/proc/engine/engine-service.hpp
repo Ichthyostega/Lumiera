@@ -37,7 +37,7 @@
 //#include "common/instancehandle.hpp"
 //#include "lib/singleton-ref.hpp"
 //
-//#include <boost/noncopyable.hpp>
+#include <boost/noncopyable.hpp>
 //#include <boost/scoped_ptr.hpp>
 //#include <string>
 
@@ -66,31 +66,23 @@ namespace play {
     : boost::noncopyable
     {
       
-      string error_;
-      Subsys::SigTerm notifyTermination_;
+//   string error_;
+//   Subsys::SigTerm notifyTermination_;
       
       
       /* === Interface Lifecycle === */
       
-      typedef lumiera::InstanceHandle< LUMIERA_INTERFACE_INAME(lumieraorg_DummyPlayer, 0)
-                                     , DummyPlayer
-                                     > ServiceInstanceHandle;
+//    typedef lumiera::InstanceHandle< LUMIERA_INTERFACE_INAME(lumieraorg_DummyPlayer, 0)
+//                                   , DummyPlayer
+//                                   > ServiceInstanceHandle;
       
-      lib::SingletonRef<DummyPlayerService> implInstance_;
-      ServiceInstanceHandle serviceInstance_;
+//    lib::SingletonRef<DummyPlayerService> implInstance_;
+//    ServiceInstanceHandle serviceInstance_;
       
     public:
-      DummyPlayerService(Subsys::SigTerm terminationHandle);
+      EngineService();    /////TODO (Subsys::SigTerm terminationHandle);
       
-     ~DummyPlayerService() { notifyTermination_(&error_); }
-      
-      
-      
-      /** conceptually, this serves as implementation
-       *  of the DummyPlayer#start() function. But because
-       *  this function sits \em behind the interface, it
-       *  just returns an impl pointer.  */
-      ProcessImpl* start (LumieraDisplaySlot viewerHandle);
+     ~EngineService() { } /////TODO notifyTermination_(&error_); }
       
     };
   

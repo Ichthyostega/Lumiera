@@ -41,37 +41,35 @@
 
 
 namespace proc {
-  namespace play {
+namespace play {
+
+  using std::string;
+//using lumiera::Subsys;
+//using lumiera::Display;
+//using lumiera::DummyPlayer;
   
-    using std::string;
-    using lumiera::Subsys;
-    using lumiera::Display;
-    using lumiera::DummyPlayer;
-    
-    
+  
 //  class DummyImageGenerator;
 //  class TickService;
-    
-    
-    
-    /******************************************************
-     * Interface: Player subsystem.
-     */
-    class PlayService
-      : boost::noncopyable
-      {
-        
-      public:
-        PlayService(Subsys::SigTerm terminationHandle);
-        
-       ~PlayService() { notifyTermination_(&error_); }
-        
-      };
-    
-    
-    
-    
-  } // namespace play
-
-} // namespace proc
+  
+  
+  
+  /******************************************************
+   * Interface: Player subsystem.
+   */
+  class PlayService
+    : boost::noncopyable
+    {
+      
+    public:
+      PlayService();   /////TODO Subsys::SigTerm terminationHandle);
+      
+     ~PlayService() { }/////TODO notifyTermination_(&error_); }
+      
+    };
+  
+  
+  
+  
+}} // namespace proc::play
 #endif

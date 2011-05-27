@@ -82,45 +82,43 @@
 
 
 namespace lumiera {
-  namespace facade {
-  
-    /** error-ID for accessing a (currently) closed facade */
-    LUMIERA_ERROR_DECLARE(FACADE_LIFECYCLE);  
+namespace facade {
 
+  /** error-ID for accessing a (currently) closed facade */
+  LUMIERA_ERROR_DECLARE(FACADE_LIFECYCLE);  
+
+
+  /*********************************************************************
+   * 
+   */
+  template<class FA>
+  class Accessor
+    {
+    protected:
+      static FA* implProxy_;
+      
+      
+    public:
+      FA&
+      operator() ()
+        {
+          if (implProxy_)
+            return *implProxy_;
+          else
+            throw error::State("Facade interface currently closed.");
+        }
+    };
   
-    /*********************************************************************
-     * 
-     */
-    template<class FA>
-    class Accessor
-      {
-      protected:
-        static FA* implProxy_;
-        
-        
-      public:
-        FA&
-        operator() ()
-          {
-            if (implProxy_)
-              return *implProxy_;
-            else
-              throw error::State("Facade interface currently closed.");
-          }
-      };
-    
-    template<class IHA>
-    void openProxy (IHA const&);
-    
-    template<class IHA>
-    void closeProxy ();
-    
-    template<class IHA>
-    class Proxy;
-    
-    
-  } // namespace facade
+  template<class IHA>
+  void openProxy (IHA const&);
   
-} // namespace lumiera
+  template<class IHA>
+  void closeProxy ();
+  
+  template<class IHA>
+  class Proxy;
+  
+  
+}} // namespace lumiera::facade
 
 #endif

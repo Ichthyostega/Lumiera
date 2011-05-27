@@ -32,14 +32,16 @@
 //#include "include/interfaceproxy.hpp"
 #include "lib/handle.hpp"
 #include "lib/iter-source.hpp"
+#include "lib/time/control.hpp"
 #include "lib/time/timevalue.hpp"
+#include "include/interfaceproxy.hpp"
 #include "proc/mobject/model-port.hpp"
 #include "proc/mobject/output-designation.hpp"
 #include "proc/mobject/session/clip.hpp"
 #include "proc/mobject/session/track.hpp"
 #include "proc/play/output-manager.hpp"
-#include "asset/timeline.hpp"
-#include "asset/viewer.hpp"
+#include "proc/asset/timeline.hpp"
+#include "proc/asset/viewer.hpp"
 
 
 
@@ -51,6 +53,8 @@ namespace proc   {
 
 
 namespace lumiera {
+  
+  namespace time = lib::time;
     
     
     /******************************************************************
@@ -71,7 +75,7 @@ namespace lumiera {
       public:
         
         /** get an implementation instance of this service */
-        static lumiera::facade::Accessor<DummyPlayer> facade;
+        static lumiera::facade::Accessor<Play> facade;
         
         
         /**
@@ -96,9 +100,9 @@ namespace lumiera {
             void adjustSpeed(double); ///< playback speed control
             void go(lib::time::Time); ///< skip to the given point in time
             
-            void controlPlayhead (lib::time::TimeControl & ctrl);
-            void controlDuration (lib::time::TimeControl & ctrl);
-            void controlLooping  (lib::time::TimeControl & ctrl);
+            void controlPlayhead (time::Control<time::Time>     & ctrl);
+            void controlDuration (time::Control<time::Duration> & ctrl);
+            void controlLooping  (time::Control<time::TimeSpan> & ctrl);
             
             void useProxyMedia (bool);
             void setQuality (uint);
@@ -131,7 +135,7 @@ namespace lumiera {
         Controller perform(Clip);
         
       protected:
-        virtual ~Player();
+        virtual ~Play();
       };
     
     
