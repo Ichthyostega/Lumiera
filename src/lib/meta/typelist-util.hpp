@@ -97,6 +97,26 @@ namespace typelist{
       };
     
     
+    /** pick the n-th element from a typelist */
+    template<class TYPES, uint i>
+    struct Pick
+      {
+        typedef NullType Type;  
+      };
+    template<class TY, class TYPES>
+    struct Pick<Node<TY,TYPES>, 0>
+      {
+        typedef TY Type;  
+      };
+    template<class TY, class TYPES, uint i>
+    struct Pick<Node<TY,TYPES>, i>
+      {
+        typedef typename Pick<TYPES, i-1>::Type Type;  
+      };
+    
+    
+    
+    
     /** apply a transformation (template) to each type in the list */
     template<class TY, template<class> class _TRANS_>
     struct Apply                           { typedef TY List; };

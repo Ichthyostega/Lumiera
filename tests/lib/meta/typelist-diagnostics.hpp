@@ -200,10 +200,10 @@ namespace typelist{
     
     
 #define DISPLAY(NAME)  \
-        cout << STRINGIFY(NAME) << "\t:" << showType<NAME>() << "\n";
+        cout << STRINGIFY(NAME) << "\t:" << showType<NAME>() << endl;
     
 #define DUMPVAL(NAME)  \
-        cout << STRINGIFY(NAME) << "\t:" << showDump (NAME) << "\n";
+        cout << STRINGIFY(NAME) << "\t:" << showDump (NAME) << endl;
     
     
     

@@ -25,7 +25,7 @@
  ** Metaprogramming facilities to generate combination cases.
  ** Similar to the plain typelist-based generators, a custom supplied
  ** template will be instantiated with combinations of the parameter types
- ** and then  mixed into the resulting type
+ ** and then mixed into the resulting type
  ** 
  ** @see generator-combinations-test.cpp
  ** @see generator.hpp
@@ -54,40 +54,35 @@ namespace typelist{
     { };
   
   
-  template<class SUBLIST>
-  struct PickFirst;
-  
-  template<class TY, class TAIL>
-  struct PickFirst<Node<TY,TAIL> >
-    {
-      typedef TY Type;  
-    };
-  
-  
-  template<class SUBLIST>
-  struct PickSecond;
-  
-  template<class TY, class TAIL>
-  struct PickSecond<Node<TY,TAIL> >
-    {
-      typedef typename PickFirst<TAIL>::Type Type;  
-    };
-  
-  
   
   template< template<class,class,class> class _X_>
   struct PickParametersFromSublist
     {
       template<class SUBLIST, class BASE>
-      struct CaseInstantiation
-        : _X_< PickFirst<SUBLIST>::Type
-             , PickSecond<SUBLIST>::Type
+      struct SingleCaseInstantiation
+        : _X_< Pick<SUBLIST,0>::Type
+             , Pick<SUBLIST,1>::Type
              , BASE
              >
         { };
     };
   
   
+  /**
+   * Build a Case matrix.
+   * The given parameter template _X_
+   * will be instantiated for each possible combination
+   * of the elements from both parameter type-lists.
+   * All these instantiations will be chained up
+   * into a linear inheritance chain rooted
+   * at the BASE type.
+   * @note the custom-supplied template _X_ needs to take a 3rd parameter,
+   *       and inherit from this parameter, in order to form that chain.
+   *       Typically you'll define some (static) functions within that
+   *       template, which then forward the call to the given BASE
+   *       (and of course, that BASE then needs to define this
+   *       function as well). 
+   */
   template
     < class TYPES_1, class TYPES_2           ///< the two type collections to pick combinations from
     , template<class,class,class> class _X_  ///< template with two arg types and a base type
@@ -95,7 +90,7 @@ namespace typelist{
     >
   class InstantiateChainedCombinations
     : InstantiateChained< CartesianProduct<TYPES_1,TYPES_2>::List
-                        , PickParametersFromSublist<_X_>::template CaseInstantiation
+                        , PickParametersFromSublist<_X_>::template SingleCaseInstantiation
                         , BASE
                         >
     { };

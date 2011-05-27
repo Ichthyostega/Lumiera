@@ -1104,6 +1104,11 @@ return: 0
 END
 
 
+TEST "Typelist combinations generator" GeneratorCombinations_test <<END
+return: 0
+END
+
+
 TEST "TypedAllocationManager" TypedAllocationManager_test <<END
 return: 0
 END
