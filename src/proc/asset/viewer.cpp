@@ -36,33 +36,31 @@ namespace asset {
   
   
   /** @todo anything significant to do here??? */
-  Timeline::Timeline (const Asset::Ident& idi, RBinding const& sequenceBinding)
+  Viewer::Viewer (const Asset::Ident& idi)
     : Struct (idi)
-    , boundSequence_(sequenceBinding)
   {
-    REQUIRE (boundSequence_);
+    UNIMPLEMENTED ("anything regarding Viewer Assets");
   }
   
   
-  PTimeline
-  Timeline::create (Asset::Ident const& idi, RBinding const& sequenceBinding)
-  {
-    REQUIRE (getRegistry, "can't create a Timeline prior to session initialisation");
-    
-    PTimeline newElement (AssetManager::instance().wrap (*new Timeline(idi, sequenceBinding)));
-    getRegistry().append (newElement);
-    
-    ENSURE (newElement);
-    ENSURE (getRegistry().isRegistered (*newElement));
-    return newElement;
-  }
+//PViewer
+//Viewer::create (Asset::Ident const& idi)
+//{
+//  REQUIRE (getRegistry, "can't create a Timeline prior to session initialisation");
+//  
+//  PTimeline newElement (AssetManager::instance().wrap (*new Viewer(idi)));
+//  getRegistry().append (newElement);
+//  
+//  ENSURE (newElement);
+//  ENSURE (getRegistry().isRegistered (*newElement));
+//  return newElement;
+//}
   
   
   void
-  Timeline::unlink ()
+  Viewer::unlink ()
   {
-    AutoRegistered<Timeline>::detach();
-    boundSequence_.purge();
+//  AutoRegistered<Timeline>::detach();
     Struct::unlink();
   }
   

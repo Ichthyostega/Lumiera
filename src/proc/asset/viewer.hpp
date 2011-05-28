@@ -22,11 +22,23 @@
 
 
 /** @file viewer.hpp
- ** structural element within the session.
- ** \c "timeline(theTimelineName),bindSequence(theTimelineName,sequenceID)." 
+ ** structural element corresponding to a viewer in the GUI.
+ ** This Asset marks an attachment point, allowing other (output producing) 
+ ** elements to be connected to ("viewer attachment"). The typical standard case
+ ** is a Timeline: It features a set of global pipes (busses), which collect all
+ ** produced data. Yet without an explicit output connection, this data can't be
+ ** generated, because in Lumiera, actual output is always retrieved ("pulled")
+ ** starting from an output sink. Thus, in order to \em perform (play, render)
+ ** the timeline, an "view connection" needs to be established: this connection
+ ** is represented by an session::BindingMO, linking the Timeline to an
+ ** asset::Viewer. Consequently, the same output mapping and translation
+ ** mechanism used for Sequence-Timeline- (and VirtualClip-)Bindings
+ ** is employed in this situation to figure out the real output port.
+ ** 
+ ** @todo WIP-WIP-WIP as of 5/11
  ** 
  ** @see Session
- ** @see Sequence
+ ** @see Timeline
  ** @see StructFactory
  **
  */
@@ -61,27 +73,24 @@ namespace session {
 namespace asset {
   
   
-//  using lumiera::P;
-  class Timeline;
-  typedef lumiera::P<Timeline> PTimeline;
+  using lumiera::P;
+  class Viewer;
+  typedef lumiera::P<Viewer> PViewer;
   
   
   /**
    * TODO type comment
    */
-  class Timeline
+  class Viewer
     : public Struct
-    , public lib::AutoRegistered<Timeline>
+//  , public lib::AutoRegistered<Viewer>
     {
-      typedef mobject::session::RBinding RBinding;
       
-      RBinding boundSequence_;
-      
-      Timeline (Ident const&, RBinding const&);
+      Viewer (Ident const&); /////TODO ctor params????
       
     public:
       /** create and register a new Timeline instance */
-      static PTimeline create (Asset::Ident const& idi, RBinding const& sequenceBinding);
+//    static PTimeline create (Asset::Ident const& idi, RBinding const& sequenceBinding);
       
     protected:
       virtual void unlink ();

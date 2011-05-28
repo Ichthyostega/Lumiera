@@ -5579,13 +5579,14 @@ Instead, we should try to just connect the various subsystems via Interfaces and
 * to shield the rendering code of all complexities of thread communication and synchronization, we use the StateProxy
 </pre>
 </div>
-<div title="StructAsset" modifier="Ichthyostega" modified="201011060513" created="200709221353" tags="def classes img" changecount="20">
+<div title="StructAsset" modifier="Ichthyostega" modified="201105280022" created="200709221353" tags="def classes img" changecount="22">
 <pre>Structural Assets are intended mainly for internal use, but the user should be able to see and query them. They are not &quot;loaded&quot; or &quot;created&quot; directly, rather they //leap into existence // by creating or extending some other structures in the session, hence the name. Some of the structural Asset parametrisation can be modified to exert control on some aspects of the Proc Layer's (default) behaviour.
 * [[Processing Patterns|ProcPatt]] encode information how to set up some parts of the render network to be created automatically: for example, when building a clip, we use the processing pattern how to decode and pre-process the actual media data.
 * [[Tracks|Track]] are one of the dimensions used for organizing the session data. They serve as an Anchor to attach parametrisation of output pipe, overlay mode etc. By [[placing|Placement]] to a track, a media object inherits placement properties from this track.
 * [[Pipes|Pipe]] form &amp;mdash; at least as visible to the user &amp;mdash; the basic building block of the render network, because the latter appears to be a collection of interconnected processing pipelines. (this is the //outward view; // in fact the render network consists of [[nodes|ProcNode]] and is [[built|Builder]] from the Pipes, clips, effects...)[&gt;img[Asset Classess|uml/fig131205.png]]
 * [[Sequence]] assets act as a façade to the fundamental compound building blocks within the model, a sequence being a collection of clips placed onto a tree of tracks. Sequences, as well as the top-level tracks enclosed will be created automatically on demand. Of course you may create them deliberately. Without binding it to a timeline or meta-clip, a sequence remains invisible.
-* [[Timeline]] assets are the top level structures to access the model; similar to the sequences, they act as façade to relevant parts of the model (BindingMO) and will be created on demand, alongside with a new session if necessary, bound to the new timeline. Likewise, they can be referred by their name-ID 
+* [[Timeline]] assets are the top level structures to access the model; similar to the sequences, they act as façade to relevant parts of the model (BindingMO) and will be created on demand, alongside with a new session if necessary, bound to the new timeline. Likewise, they can be referred by their name-ID
+* [[Viewer|ViewerAsset]] assets correspond to the available viewer elements in the GUI. By [[connecting to a viewer|ViewConnection]], session elements derive a concrete (physical) output and gain the ability to be [[played|PlayService]].
 
 
 

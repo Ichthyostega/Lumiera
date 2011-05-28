@@ -1,6 +1,6 @@
 format 58
 "Asset" // ProcessingLayer::Asset
-  revision 22
+  revision 23
   modified_by 5 "hiv"
   // class settings
   //class diagram settings
@@ -769,6 +769,28 @@ ${inlines}
 	  a public
 	    cpp default "${type}"
 	    classrelation_ref 195845 // <generalisation>
+	  b parent class_ref 136965 // Struct
+      end
+    end
+
+    class 174981 "Viewer"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit}
+  {
+${members}  };
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      
+      classrelation 214277 // <generalisation>
+	relation 203141 ---|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 214277 // <generalisation>
 	  b parent class_ref 136965 // Struct
       end
     end
