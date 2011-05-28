@@ -91,15 +91,18 @@ namespace time {
   template<class TI>
   class Control
     : public Mutation
-    , public function<void(TI)>
     {
     public:
-      typedef function<void(TI)> timeSignal;
+      typedef function<void(TI const&)> TimeSignal;
+      
+      void operator() (TI const&);
+      void operator() (Offset const&);
+      void operator() (uint);
       
       /** install a callback functor to be invoked
        *  to notify for any changes to the observed
        *  time entity */
-      void connectChangeNotification (timeSignal);
+      void connectChangeNotification (TimeSignal const&);
       
       /** disconnect from observed entity and
        *  cease any change notification */

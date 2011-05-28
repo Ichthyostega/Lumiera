@@ -25,15 +25,17 @@
 #include "lib/test/test-helper.hpp"
 #include "lib/time/timevalue.hpp"
 #include "lib/time/timequant.hpp"
-#include "lib/time/mutation.hpp"
+#include "lib/time/control.hpp"
 #include "proc/asset/meta/time-grid.hpp"
 #include "lib/meta/generator-combinations.hpp"
+#include "lib/scoped-holder.hpp"
 #include "lib/util.hpp"
 
 #include <boost/lexical_cast.hpp>
 #include <iostream>
 #include <string>
 
+using lib::test::showType;
 using boost::lexical_cast;
 using util::isnil;
 using std::cout;
@@ -45,9 +47,13 @@ namespace lib {
 namespace time{
 namespace test{
   
+  namespace error = lumiera::error;
+  
+  using lib::ScopedHolder;
   using asset::meta::TimeGrid;
   using lumiera::typelist::Types;
   using lumiera::typelist::InstantiateChainedCombinations;
+  using error::LUMIERA_ERROR_UNCONNECTED;
   
   namespace {
     inline string
@@ -60,20 +66,52 @@ namespace test{
     }
     
     
+    /**
+     * Mock object to receive change notifications.
+     * A copy of the most recently received value
+     * is memorised within an embedded buffer,
+     * to be verified by the actual tests.
+     */
+    template<class TI>
+    class TestListener
+      : boost::noncopyable
+      {
+        ScopedHolder<TI> received_;
+        
+      public:
+        void
+        operator() (TI const& changeValue)
+          {
+            received_.clear();
+            received_.create (changeValue);
+          }
+        
+        TI&
+        reveivedValue()
+          {
+            return *received_;
+          }
+      };
+    
+    
+    
     template<class TAR, class SRC, class BASE>
     struct TestCase
       : BASE
       {
         void
-        performTestCases()
+        performTestCases(TimeValue const& o, TimeValue const& c)
           {
-            
+            cout << "Test-Case. Target=" << showType<TAR>() 
+                 <<" <--feed--- "        << showType<SRC>() 
+                 <<endl;
+            BASE::performTestCases(o,c);
           }
       };
     
     struct IterationEnd
       {
-        void performTestCases() { }
+        void performTestCases(TimeValue const&, TimeValue const&) { }
       };
     
   }
@@ -103,21 +141,6 @@ namespace test{
             return lexical_cast<gavl_time_t> (arg);
         }
       
-      struct TestValues
-        {
-          TimeVar var;
-          Duration dur;
-          TimeSpan span;
-          QuTime quant;
-          
-          TestValues (TimeValue o)
-            : var(o)
-            , dur(o)
-            , span(o, Offset(o))
-            , quant(o, "test_grid")
-            { }
-        };
-      
       
       virtual void
       run (Arg arg) 
@@ -133,19 +156,38 @@ namespace test{
           FrameNr count(qChange);
           
           verifyBasics();
-          verifyMatrix_of_MutationCases();
+          verifyMatrix_of_MutationCases(o,c);
         } 
       
       
       void
       verifyBasics()
         {
+          TimeSpan target(Time(0,10), FSecs(5));
+          
+          Control<Time> controller;
+          TestListener<Time> follower;
+          
+          VERIFY_ERROR (UNCONNECTED, controller(Time::ZERO) );
+          
+          target.accept (controller);
+          CHECK (Time(0,10) == target);
+          controller (Time(FSecs(21,5)));
+          CHECK (Time(500,10) == target);
+          
+          CHECK (follower.reveivedValue() == Time::ZERO);
+          controller.connectChangeNotification (follower);
+          CHECK (follower.reveivedValue() == Time(500,10));
+          
+          controller (Offset(-Time(500,1)));
+          CHECK (Time(0,10) == target);
+          CHECK (Time(0,10) == follower.reveivedValue());
         }
       
       
       
       void
-      verifyMatrix_of_MutationCases ()
+      verifyMatrix_of_MutationCases (TimeValue const& o, TimeValue const& c)
         {
           typedef Types<Duration,TimeSpan,QuTime> KindsOfTarget;
           typedef Types<Time,Duration,TimeSpan,QuTime> KindsOfSource;
@@ -154,7 +196,7 @@ namespace test{
                                                 , TestCase
                                                 , IterationEnd > TestMatrix;
           
-          TestMatrix().performTestCases();
+          TestMatrix().performTestCases(o,c);
         }
     };
   
