@@ -59,6 +59,7 @@
 #define LIB_TIME_CONTROL_H
 
 #include "lib/error.hpp"
+#include "lib/meta/util.hpp"
 #include "lib/time/mutation.hpp"
 #include "lib/time/timevalue.hpp"
 //#include "lib/symbol.hpp"
@@ -66,6 +67,7 @@
 //#include <boost/noncopyable.hpp>
 //#include <iostream>
 //#include <boost/operators.hpp>
+#include <boost/utility/enable_if.hpp>
 #include <tr1/functional>
 #include <vector>
 //#include <string>
@@ -83,6 +85,9 @@ namespace time {
   
   namespace mutation {
     
+    using boost::enable_if;
+    using boost::disable_if;
+    using lumiera::typelist::is_sameType;
     using std::tr1::placeholders::_1;
     using std::tr1::function;
     using std::tr1::bind;
@@ -109,6 +114,9 @@ namespace time {
         static TI imposeValueChange(TimeValue& target, TI const&);
         static TI imposeOffset (TimeValue& target, Offset const&);
         static TI imposeNudge (TimeValue& target, int);
+        
+        static TI changeDuration (Duration& target, TI const&);
+//      static TI nudgeDuration (Duration& target, int);
         
         template<class SRC, class TAR>
         struct MutationPolicy;
@@ -157,10 +165,88 @@ namespace time {
       return TI (Mutation::imposeChange (target, TimeVar(target)+Time(FSecs(off_by_steps))));
     }
     
+    // special cases...
+    template<class TI>
+    TI
+    Mutator<TI>::changeDuration (Duration&, TI const&)
+    {
+      return TI (Time::ZERO);
+    }
+    template<>
+    Duration
+    Mutator<Duration>::changeDuration (Duration& target, Duration const& changedDur)
+    {
+      return Duration (Mutation::imposeChange (target,changedDur));
+    }
+    template<>
+    TimeSpan
+    Mutator<TimeSpan>::changeDuration (Duration& target, TimeSpan const& timeSpan_to_impose)
+    {
+      return TimeSpan (timeSpan_to_impose.start()
+                      ,Duration(Mutation::imposeChange (target,timeSpan_to_impose.duration()))
+                      );
+    }
+    
+    template<>
+    TimeSpan
+    Mutator<TimeSpan>::imposeValueChange (TimeValue& target, TimeSpan const& newVal)
+    {
+      Mutation::imposeChange (target,newVal);
+      return newVal;
+    }
+    template<>
+    TimeSpan
+    Mutator<TimeSpan>::imposeOffset (TimeValue& target, Offset const& off)
+    {
+      return TimeSpan (Mutation::imposeChange (target, TimeVar(target)+off), Duration::ZERO);
+    }
+    template<>
+    TimeSpan
+    Mutator<TimeSpan>::imposeNudge (TimeValue& target, int off_by_steps)
+    {
+      return TimeSpan (Mutation::imposeChange (target, TimeVar(target)+Time(FSecs(off_by_steps))), Duration::ZERO);
+    }
+    
+
+#ifdef LIB_TIME_TIMEQUQNT_H
+    template<>
+    QuTime
+    Mutator<QuTime>::changeDuration (Duration&, QuTime const& irrelevantChange)
+    {
+      return QuTime (Time::ZERO, PQuant(irrelevantChange));
+    }
+    template<>
+    QuTime
+    Mutator<QuTime>::imposeValueChange (TimeValue& target, QuTime const& grid_aligned_Value_to_set)
+    {
+      PQuant quantiser (grid_aligned_Value_to_set);
+      TimeValue appliedChange = quantiser->materialise(grid_aligned_Value_to_set);
+      Mutation::imposeChange (target, appliedChange);
+      return QuTime (target, quantiser);
+    }
+    template<>
+    QuTime
+    Mutator<QuTime>::imposeOffset (TimeValue&, Offset const&)
+    {
+      throw error::Logic ("can't deliver result of the change as grid-aligned time, "
+                          "because it's not evident which concrete grid to use"
+                         ,LUMIERA_ERROR_UNKNOWN_GRID);                        //////////////////TODO: we could pick up a "default grid" from session?
+    }
+    template<>
+    QuTime
+    Mutator<QuTime>::imposeNudge (TimeValue&, int)
+    {
+      throw error::Logic ("can't deliver result of the change as grid-aligned time, "
+                          "because it's not evident which concrete grid to use"
+                         ,LUMIERA_ERROR_UNKNOWN_GRID);
+    }
+#endif //(End)quantisation special case    
+    
+    
     
     template<class TI>
     template<class TAR>
-    struct Mutator<TI>::MutationPolicy<TI, TAR>
+    struct Mutator<TI>::MutationPolicy<typename disable_if< is_sameType<TAR,Duration>, TI>::type, TAR>
       {
         static function<TI(TI const&)>
         buildChangeHandler (TAR& target)
@@ -190,6 +276,46 @@ namespace time {
             return bind (Mutator<TI>::imposeNudge, ref(target), _1 );
           }
       };
+    
+    
+    //special cases for changing Durations....
+
+    template<class TI>
+    template<class TAR>
+    struct Mutator<TI>::MutationPolicy<typename enable_if< is_sameType<TAR,Duration>, TI>::type, TAR>
+      {
+        static function<TI(TI const&)>
+        buildChangeHandler (Duration& target)
+          {
+            return bind (Mutator<TI>::changeDuration, ref(target), _1 );
+          }
+      };
+    
+    //    
+//    template<class TI>
+//    template<class TAR>
+//    struct Mutator<TI>::MutationPolicy<TI, TAR>
+//      {
+//        static function<TimeValue(TimeValue const&)>
+//        buildChangeHandler (Duration& target)
+//          {
+//            return bind (Mutator<TI>::changeDuration, ref(target), _1 );
+//          }
+//      };
+    
+//    template<class TI>
+//    template<>
+//    struct Mutator<TI>::MutationPolicy<int, Duration>
+//      {
+//        static function<TI(int)>
+//        buildChangeHandler (Duration& target)
+//          {
+//            return bind (Mutator<TI>::nudgeDuration, ref(target), _1 );
+//          }
+//      };
+    
+    
+    
     
     
     template<class TI>

@@ -34,6 +34,7 @@
 #include <boost/lexical_cast.hpp>
 #include <iostream>
 #include <string>
+#include <limits>
 
 using lib::test::showType;
 using boost::lexical_cast;
@@ -95,28 +96,6 @@ namespace test{
             return *received_;
           }
       };
-    
-    
-    
-    template<class TAR, class SRC, class BASE>
-    struct TestCase
-      : BASE
-      {
-        void
-        performTestCases(TimeValue const& o, TimeValue const& c)
-          {
-            cout << "Test-Case. Target=" << showType<TAR>() 
-                 <<" <--feed--- "        << showType<SRC>() 
-                 <<endl;
-            BASE::performTestCases(o,c);
-          }
-      };
-    
-    struct IterationEnd
-      {
-        void performTestCases(TimeValue const&, TimeValue const&) { }
-      };
-    
   }
   
   
@@ -150,10 +129,13 @@ namespace test{
         {
           TimeValue o (random_or_get (pop(arg)));
           TimeValue c (random_or_get (pop(arg)));
-          CHECK (o != c, "unsuitable testdata");
+          CHECK (c!=Time::ZERO && o != c, "unsuitable testdata");
           
-          // using a 25fps-grid, but with an time origin offset by 1/50sec
+          // 25fps-grid, but with an time origin offset by 1/50sec
           TimeGrid::build("test_grid", FrameRate::PAL, Time(FSecs(1,50)));
+          
+          // disjoint NTSC-framerate grid for grid aligned changes
+          TimeGrid::build("test_grid_NTSC", FrameRate::NTSC);
           
           QuTime qChange (c, "test_grid");
           FrameNr count(qChange);
@@ -188,20 +170,197 @@ namespace test{
         }
       
       
-      
-      void
-      verifyMatrix_of_MutationCases (TimeValue const& o, TimeValue const& c)
-        {
-          typedef Types<Duration,TimeSpan,QuTime> KindsOfTarget;
-          typedef Types<Time,Duration,TimeSpan,QuTime> KindsOfSource;
-          typedef InstantiateChainedCombinations< KindsOfTarget
-                                                , KindsOfSource
-                                                , TestCase
-                                                , IterationEnd > TestMatrix;
-          
-          TestMatrix().performTestCases(o,c);
-        }
+      void verifyMatrix_of_MutationCases (TimeValue const& o, TimeValue const& c);
     };
+  
+  
+  namespace { // Implementation: Matrix of individual test combinations
+    
+    template<class TAR>
+    struct TestTarget
+      {
+        static TAR
+        build (TimeValue const& org)
+          {
+            return TAR(org);
+          }
+      };
+    
+    template<>
+    struct TestTarget<TimeSpan>
+      {
+        static TimeSpan
+        build (TimeValue const& org)
+          {
+            return TimeSpan (org, FSecs(3,2));
+          }
+      };
+    
+    template<>
+    struct TestTarget<QuTime>
+      {
+        static QuTime
+        build (TimeValue const& org)
+          {
+            return QuTime (org, "test_grid");
+          }
+      };
+   
+    
+    template<class SRC>
+    struct TestChange
+      {
+        static SRC
+        prepareChangeValue (TimeValue const& c)
+        {
+          return SRC(c);
+        }
+      };
+    
+    template<>
+    struct TestChange<TimeSpan>
+      {
+        static TimeSpan
+        prepareChangeValue (TimeValue const& c)
+        {
+          return TimeSpan (c, Duration(c));
+        }
+      };
+    
+    template<>
+    struct TestChange<QuTime>
+      {
+        static QuTime
+        prepareChangeValue (TimeValue const& c)
+        {
+          return QuTime (c, "test_grid_NTSC");
+        }
+      };
+    
+    
+    
+    template<class TAR, class SRC>
+    void
+    verify_wasChanged (TAR const& target, TimeValue const& org, SRC const& change)
+    {
+      CHECK (target != org);
+      CHECK (target == change);
+    }
+    
+    template<class SRC>
+    void
+    verify_wasChanged (Duration const& target, TimeValue const& org, SRC const&)
+    {
+      CHECK (target == org, "Logic error: Duration was changed by time value");
+    }
+    void
+    verify_wasChanged (Duration const& target, TimeValue const& org, Duration const& otherDuration)
+    {
+      CHECK (target != org);
+      CHECK (target == otherDuration);
+    }
+    void
+    verify_wasChanged (Duration const& target, TimeValue const& org, TimeSpan const& span)
+    {
+      CHECK (target != org);
+      CHECK (target == span.duration());
+    }
+    
+    
+    
+    template<class TAR>
+    void
+    verify_wasOffset (TAR const&, TimeValue const&, Offset const&)//(TAR const& target, TimeValue const& o, Offset const& offset)
+    {
+      
+    }
+    
+    template<class TAR>
+    void
+    verify_zeroAlligned (TAR const&, TAR const&)//(TAR const& target, TAR const& oldState)
+    {
+      
+    }
+    
+    template<class TAR>
+    void
+    verify_nudged (TAR const&, TAR const&, int64_t)//(TAR const& target, TAR const& oldState, int64_t offsetSteps)
+    {
+      
+    }
+    
+    
+    
+    
+    template<class TAR, class SRC, class BASE>
+    struct TestCase
+      : BASE
+      {
+        void
+        performTestCases(TimeValue const& o, TimeValue const& c)
+          {
+            cout << "Test-Case. Target=" << showType<TAR>() 
+                 <<" <--feed--- "        << showType<SRC>() 
+                 <<endl;
+            
+            Control<SRC> controller;
+            
+            TAR target = TestTarget<TAR>::build(o);
+            target.accept (controller);
+            
+            SRC change = TestChange<SRC>::prepareChangeValue(c);
+            controller (change);
+            verify_wasChanged (target, o, change);
+            
+            Offset offset(c);
+            controller (offset);
+            verify_wasOffset (target, o, offset);
+            
+            TAR oldState(target);
+            controller (0);
+            verify_zeroAlligned(target, oldState);
+            
+            controller (+1);
+            verify_nudged (target, oldState, +1);
+            
+            controller (-2);
+            verify_nudged (target, oldState, -1);
+            
+            int maxInt = std::numeric_limits<int>::max();
+            int minInt = std::numeric_limits<int>::min();
+            
+            controller (maxInt);
+            verify_nudged (target, oldState, -1LL + maxInt);
+            
+            controller (minInt);
+            verify_nudged (target, oldState, -1LL + maxInt+minInt);
+            
+            
+            // tail recursion: further test combinations....
+            BASE::performTestCases(o,c);
+          }
+      };
+    
+    struct IterationEnd
+      {
+        void performTestCases(TimeValue const&, TimeValue const&) { }
+      };
+    
+  }//(End)Implementation Test-case matrix
+  
+  
+  void
+  TimeControl_test::verifyMatrix_of_MutationCases (TimeValue const& o, TimeValue const& c)
+  {
+    typedef Types<Duration,TimeSpan,QuTime> KindsOfTarget;
+    typedef Types<Time,Duration,TimeSpan,QuTime> KindsOfSource;
+    typedef InstantiateChainedCombinations< KindsOfTarget
+                                          , KindsOfSource
+                                          , TestCase
+                                          , IterationEnd > TestMatrix;
+    
+    TestMatrix().performTestCases(o,c);
+  }
   
   
   /** Register this test class... */
