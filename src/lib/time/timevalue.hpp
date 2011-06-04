@@ -193,6 +193,8 @@ namespace time {
         : TimeValue(TimeVar(target) -= origin)
         { }
       
+      static const Offset ZERO;
+      
       TimeValue
       abs()  const
         {

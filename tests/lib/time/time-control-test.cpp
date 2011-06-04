@@ -80,6 +80,8 @@ namespace test{
         ScopedHolder<TI> received_;
         
       public:
+        TestListener() { received_.create (Time::ZERO); }
+        
         void
         operator() (TI const& changeValue)  const
           {
@@ -173,7 +175,7 @@ namespace test{
           
           target.accept (controller);
           CHECK (Time(0,10) == target);
-          controller (Time(FSecs(21,5)));
+          controller (Time(FSecs(21,2)));
           CHECK (Time(500,10) == target);
           
           CHECK (follower.reveivedValue() == Time::ZERO);
@@ -181,8 +183,8 @@ namespace test{
           CHECK (follower.reveivedValue() == Time(500,10));
           
           controller (Offset(-Time(500,1)));
-          CHECK (Time(0,10) == target);
-          CHECK (Time(0,10) == follower.reveivedValue());
+          CHECK (Time(0,9) == target);
+          CHECK (Time(0,9) == follower.reveivedValue());
         }
       
       

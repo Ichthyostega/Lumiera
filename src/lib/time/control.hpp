@@ -342,6 +342,11 @@ namespace time {
   void
   Control<TI>::connectChangeNotification (SIG const& toNotify)
   {
+    if (this->offset_)
+      { // we're already connected: thus propagate current value
+        TI currentValue = this->offset_(Offset::ZERO);
+        toNotify (currentValue);
+      }
     notifyListeners_.attach (toNotify);
   }
   

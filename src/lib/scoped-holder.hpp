@@ -187,6 +187,7 @@ namespace lib {
         {
           if (created_)
             get()->~TY();
+          created_ = false;
         }
       
       

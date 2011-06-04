@@ -41,6 +41,9 @@ namespace time {
   const Time Time::MIN ( TimeValue::buildRaw_(-_raw(Time::MAX)                             ) );
   const Time Time::ZERO;
   
+  const Offset Offset::ZERO (Time::ZERO);
+  
+  
   
   /** convenience constructor to build an
    *  internal Lumiera Time value from the usual parts
