@@ -297,7 +297,7 @@ namespace test{
       : BASE
       {
         void
-        performTestCases(TimeValue const& o, TimeValue const& c)
+        performTestCases(TimeValue const& org, TimeValue const& c)
           {
             cout << "Test-Case. Target=" << showType<TAR>() 
                  <<" <--feed--- "        << showType<SRC>() 
@@ -305,16 +305,16 @@ namespace test{
             
             Control<SRC> controller;
             
-            TAR target = TestTarget<TAR>::build(o);
+            TAR target = TestTarget<TAR>::build(org);
             target.accept (controller);
             
             SRC change = TestChange<SRC>::prepareChangeValue(c);
             controller (change);
-            verify_wasChanged (target, o, change);
+            verify_wasChanged (target, org, change);
             
             Offset offset(c);
             controller (offset);
-            verify_wasOffset (target, o, offset);
+            verify_wasOffset (target, org, offset);
             
             TAR oldState(target);
             controller (0);
@@ -337,7 +337,7 @@ namespace test{
             
             
             // tail recursion: further test combinations....
-            BASE::performTestCases(o,c);
+            BASE::performTestCases(org,c);
           }
       };
     

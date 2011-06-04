@@ -162,7 +162,7 @@ namespace time {
     TI
     Mutator<TI>::imposeNudge (TimeValue& target, int off_by_steps)
     {
-      return TI (Mutation::imposeChange (target, TimeVar(target)+Time(FSecs(off_by_steps))));
+      return TI (Mutation::imposeChange (target, TimeVar(target)+Time(FSecs(off_by_steps))));     //////////////////TICKET #810
     }
     
     // special cases...
@@ -226,19 +226,19 @@ namespace time {
     }
     template<>
     QuTime
-    Mutator<QuTime>::imposeOffset (TimeValue&, Offset const&)
+    Mutator<QuTime>::imposeOffset (TimeValue& target, Offset const& off)
     {
-      throw error::Logic ("can't deliver result of the change as grid-aligned time, "
-                          "because it's not evident which concrete grid to use"
-                         ,LUMIERA_ERROR_UNKNOWN_GRID);                        //////////////////TODO: we could pick up a "default grid" from session?
+      return QuTime (Mutation::imposeChange (target, TimeVar(target)+off)
+                    ,getDefaultGridFallback()                                                     //////////////////TICKET #810
+                    );
     }
     template<>
     QuTime
-    Mutator<QuTime>::imposeNudge (TimeValue&, int)
+    Mutator<QuTime>::imposeNudge (TimeValue& target, int off_by_steps)
     {
-      throw error::Logic ("can't deliver result of the change as grid-aligned time, "
-                          "because it's not evident which concrete grid to use"
-                         ,LUMIERA_ERROR_UNKNOWN_GRID);
+      return QuTime (Mutation::imposeChange (target, TimeVar(target)+Time(FSecs(off_by_steps)))
+                    ,getDefaultGridFallback()                                                     //////////////////TICKET #810
+                    );
     }
 #endif //(End)quantisation special case    
     

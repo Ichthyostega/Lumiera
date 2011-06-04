@@ -51,8 +51,17 @@ namespace time {
                            , LUMIERA_ERROR_UNKNOWN_GRID);
       return grid_found;
     }
-    
   }//(End) implementation helpers
+  
+  
+  PQuant
+  getDefaultGridFallback()
+  {
+    static PQuant globalDefaultGrid (new FixedFrameQuantiser(1));
+    return globalDefaultGrid;                                                    ///////////////////////TICKET #810
+  };
+  
+  
   
   
   

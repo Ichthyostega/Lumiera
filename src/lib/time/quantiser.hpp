@@ -64,6 +64,17 @@ namespace time {
   }
   
   
+  
+  /** @todo placeholder for accessing
+   *        a current or default session grid.
+   *        To be implemented later.
+   */
+  PQuant getDefaultGridFallback();                                        ///////////////////////TICKET #810
+  
+  
+  
+  
+  
   /**
    * Facility to create grid-aligned time values.
    * Effectively, a quantiser exposes the value Grid API, but
