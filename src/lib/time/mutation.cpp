@@ -54,10 +54,10 @@ namespace time {
    *  and thus is allowed to influence the basic
    *  value stored in each time entity
    */
-  void
+  TimeValue&
   Mutation::imposeChange (TimeValue& target, TimeValue const& valueToSet)
   {
-    target = valueToSet; 
+    return target = valueToSet; 
   }
   
   

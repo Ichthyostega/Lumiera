@@ -45,11 +45,11 @@
 
 
 
-namespace proc   {
-  namespace play {
-    
-    class PlayProcess;
-} }
+namespace proc {
+namespace play {
+  
+  class PlayProcess;
+}}
 
 
 namespace lumiera {

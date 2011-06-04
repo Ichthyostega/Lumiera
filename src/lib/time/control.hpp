@@ -60,12 +60,14 @@
 
 #include "lib/error.hpp"
 #include "lib/time/mutation.hpp"
+#include "lib/time/timevalue.hpp"
 //#include "lib/symbol.hpp"
 
 //#include <boost/noncopyable.hpp>
 //#include <iostream>
 //#include <boost/operators.hpp>
 #include <tr1/functional>
+#include <vector>
 //#include <string>
 
 
@@ -75,13 +77,192 @@ namespace time {
 //using lib::Symbol;
 //using std::string;
 //using lib::Literal;
-  using std::tr1::function;
+  
   
 //LUMIERA_ERROR_DECLARE (INVALID_MUTATION); ///< Changing a time value in this way was not designated
   
+  namespace mutation {
+    
+    using std::tr1::placeholders::_1;
+    using std::tr1::function;
+    using std::tr1::bind;
+    using std::tr1::ref;
+    
+    
+    
+    /**
+     * Implementation building block: impose changes to a Time element.
+     * The Mutator supports attaching a target time entity (through
+     * the Mutation interface), which then will be subject to any
+     * received value changes, offsets and grid nudging.
+     * 
+     * @todo WIP-WIP-WIP
+     */
+    template<class TI>
+    class Mutator
+      : public Mutation
+      {
+        typedef function<TI(TI const&)>     ValueSetter;
+        typedef function<TI(Offset const&)> Ofsetter;
+        typedef function<TI(int)>           Nudger;
+        
+        static TI imposeValueChange(TimeValue& target, TI const&);
+        static TI imposeOffset (TimeValue& target, Offset const&);
+        static TI imposeNudge (TimeValue& target, int);
+        
+        template<class SRC, class TAR>
+        struct MutationPolicy;
+
+      protected:
+        mutable ValueSetter setVal_;
+        mutable Ofsetter    offset_;
+        mutable Nudger      nudge_;
+        
+        void
+        ensure_isArmed()
+          {
+            if (!setVal_)
+              throw error::State("feeding time/value change "
+                                 "while not (yet) connected to any target to change"
+                                ,error::LUMIERA_ERROR_UNCONNECTED);
+          }
+        
+      public:
+        // using default construction and copy
+        
+        template<class TAR>
+        void bind_to (TAR& target)  const;
+        
+        void unbind();
+        
+      };
+    
+    
+    template<class TI>
+    TI
+    Mutator<TI>::imposeValueChange (TimeValue& target, TI const& newVal)
+    {
+      return TI (Mutation::imposeChange (target,newVal));
+    }
+    template<class TI>
+    TI
+    Mutator<TI>::imposeOffset (TimeValue& target, Offset const& off)
+    {
+      return TI (Mutation::imposeChange (target, TimeVar(target)+off));
+    }
+    template<class TI>
+    TI
+    Mutator<TI>::imposeNudge (TimeValue& target, int off_by_steps)
+    {
+      return TI (Mutation::imposeChange (target, TimeVar(target)+Time(FSecs(off_by_steps))));
+    }
+    
+    
+    template<class TI>
+    template<class TAR>
+    struct Mutator<TI>::MutationPolicy<TI, TAR>
+      {
+        static function<TI(TI const&)>
+        buildChangeHandler (TAR& target)
+          {
+            return bind (Mutator<TI>::imposeValueChange, ref(target), _1 );
+          }
+      };
+    
+    template<class TI>
+    template<class TAR>
+    struct Mutator<TI>::MutationPolicy<Offset, TAR>
+      {
+        static function<TI(Offset const&)>
+        buildChangeHandler (TAR& target)
+          {
+            return bind (Mutator<TI>::imposeOffset, ref(target), _1 );
+          }
+      };
+    
+    template<class TI>
+    template<class TAR>
+    struct Mutator<TI>::MutationPolicy<int, TAR>
+      {
+        static function<TI(int)>
+        buildChangeHandler (TAR& target)
+          {
+            return bind (Mutator<TI>::imposeNudge, ref(target), _1 );
+          }
+      };
+    
+    
+    template<class TI>
+    template<class TAR>
+    void
+    Mutator<TI>::bind_to (TAR& target)  const
+    {
+      setVal_ = MutationPolicy<TI,TAR>    ::buildChangeHandler (target);
+      offset_ = MutationPolicy<Offset,TAR>::buildChangeHandler (target);
+      nudge_  = MutationPolicy<int,TAR>   ::buildChangeHandler (target);
+    }
+    
+    template<class TI>
+    void
+    Mutator<TI>::unbind()
+    {
+      setVal_ = ValueSetter();
+      offset_ = Ofsetter();
+      nudge_  = Nudger();
+    }
+    
+    
+    
+    /**
+     * Implementation building block: propagate changes to listeners.
+     * The Propagator manages a set of callback signals, allowing to
+     * propagate notifications for changed Time values.
+     * 
+     * @todo WIP-WIP-WIP
+     */
+    template<class TI>
+    class Propagator
+      {
+        typedef function<void(TI const&)> ChangeSignal;
+        typedef std::vector<ChangeSignal> ListenerList;
+        
+        ListenerList listeners_;
+        
+      public:
+        /** install notification receiver */
+        template<class SIG>
+        void
+        attach (SIG const& toNotify)
+          {
+            ChangeSignal newListener (ref(toNotify));
+            listeners_.push_back (newListener);
+          }
+        
+        /** disconnect any observers */
+        void
+        disconnnect()
+          {
+            listeners_.clear();
+          }
+        
+        /** publish a change */
+        TI
+        operator() (TI const& changedVal)  const
+          {
+            typedef typename ListenerList::const_iterator Iter;
+            Iter p = listeners_.begin();
+            Iter e = listeners_.end();
+            
+            for ( ; p!=e; ++p )
+              (*p) (changedVal);
+            return changedVal;
+          }
+      };
+  }
+  
   
   /**
-   * Interface: controller-element for retrieving and
+   * Frontend/Interface: controller-element for retrieving and
    * changing running time values
    * 
    * @see time::Mutation
@@ -90,28 +271,100 @@ namespace time {
    */
   template<class TI>
   class Control
-    : public Mutation
+    : public mutation::Mutator<TI>
     {
-    public:
-      typedef function<void(TI const&)> TimeSignal;
+      mutation::Propagator<TI> notifyListeners_;
       
+      virtual void change (Duration&)  const;
+      virtual void change (TimeSpan&)  const;
+      virtual void change (QuTime&)    const;
+        
+    public:
       void operator() (TI const&);
       void operator() (Offset const&);
-      void operator() (uint);
+      void operator() (int);
       
-      /** install a callback functor to be invoked
-       *  to notify for any changes to the observed
-       *  time entity */
-      void connectChangeNotification (TimeSignal const&);
+      
+      /** install a callback functor to be invoked as notification
+       *  for any changes imposed onto the observed time entity.
+       *  @param toNotify object with \c operator()(TI const&) */
+      template<class SIG>
+      void connectChangeNotification (SIG const& toNotify);
       
       /** disconnect from observed entity and
        *  cease any change notification */
       void disconnnect();
-      
     };
   
   
   
+  
+  /* === implementation === */
+  
+  template<class TI>
+  void
+  Control<TI>::operator () (TI const& newValue)
+  {
+    this->ensure_isArmed();
+    notifyListeners_(
+        this->setVal_(newValue));
+  }
+  
+  template<class TI>
+  void
+  Control<TI>::operator () (Offset const& adjustment)
+  {
+    this->ensure_isArmed();
+    notifyListeners_(
+        this->offset_(adjustment));
+  }
+  
+  template<class TI>
+  void
+  Control<TI>::operator () (int offset_by_steps)
+  {
+    this->ensure_isArmed();
+    notifyListeners_(
+        this->nudge_(offset_by_steps));
+  }
+  
+  
+  template<class TI>
+  void
+  Control<TI>::disconnnect()
+  {
+    notifyListeners_.disconnect();
+    this->unbind();
+  }
+  
+  template<class TI>
+  template<class SIG>
+  void
+  Control<TI>::connectChangeNotification (SIG const& toNotify)
+  {
+    notifyListeners_.attach (toNotify);
+  }
+  
+  template<class TI>
+  void
+  Control<TI>::change (Duration& targetDuration)  const
+  {
+    this->bind_to (targetDuration);
+  }
+  
+  template<class TI>
+  void
+  Control<TI>::change (TimeSpan& targetInterval)  const
+  {
+    this->bind_to (targetInterval);
+  }
+  
+  template<class TI>
+  void
+  Control<TI>::change (QuTime& targetQuTime)  const
+  {
+    this->bind_to (targetQuTime);
+  }
   
 }} // lib::time
 #endif

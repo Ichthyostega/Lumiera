@@ -76,11 +76,12 @@ namespace test{
     class TestListener
       : boost::noncopyable
       {
+        mutable
         ScopedHolder<TI> received_;
         
       public:
         void
-        operator() (TI const& changeValue)
+        operator() (TI const& changeValue)  const
           {
             received_.clear();
             received_.create (changeValue);

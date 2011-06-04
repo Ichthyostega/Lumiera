@@ -22,6 +22,7 @@
 
 
 /** @file function-erasure.hpp
+ ** Generic holder for functor objects, concealing the concrete function type.
  ** When working with generic function objects and function pointers typed to
  ** arbitrary signatures, often there is the necessity to hold onto such a functor
  ** while hiding the actual signature behind an common interface ("type erasure").

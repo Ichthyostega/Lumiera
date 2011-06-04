@@ -112,7 +112,7 @@ namespace time {
       static EncapsulatedMutation nudge (int adjustment, Symbol gridID);
       
     protected:
-      static void imposeChange (TimeValue&, TimeValue const&);
+      static TimeValue& imposeChange (TimeValue&, TimeValue const&);
     };
   
   
