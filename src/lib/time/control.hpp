@@ -94,6 +94,9 @@ namespace time {
     using std::tr1::ref;
     
     
+    template<class TI>
+    struct Mutabor;
+    
     
     /**
      * Implementation building block: impose changes to a Time element.
@@ -120,6 +123,8 @@ namespace time {
         
         template<class SRC, class TAR>
         struct MutationPolicy;
+        
+        friend class Mutabor<TI>;
 
       protected:
         mutable ValueSetter setVal_;
@@ -145,7 +150,75 @@ namespace time {
         
       };
     
+    template<class TI>
+    struct Mutabor
+      {
+        
+        static void
+        imposeChange (TimeValue& target, TI const& newVal)
+          {
+            Mutator<TI>::imposeChange (target,newVal);
+          }
+      };
     
+    template<class TI, class TAR>
+    struct Builder
+      {
+        
+        static TI
+        buildChangedValue (TAR& target, TI const&)
+          {
+            return TI(target);
+          }
+      };
+    template<class TAR>
+    struct Builder<TimeSpan, TAR>
+      {
+        static TimeSpan
+        buildChangedValue (TAR& target, TimeSpan const& newVal)
+          {
+            return TimeSpan (target, newVal.duration());
+          }
+      };
+#ifdef LIB_TIME_TIMEQUQNT_H
+    template<class TAR>
+    struct Builder<QuTime, TAR>
+      {
+        static QuTime
+        buildChangedValue (TAR& target, QuTime const&)
+          {
+            return QuTime (target
+                          ,getDefaultGridFallback()                                                     //////////////////TICKET #810
+                          );
+          }
+      };
+#endif
+    
+    template<class TI, class TAR>
+    struct Adap
+      : Mutabor<TI>
+      , Builder<TI,TAR>
+      {
+        
+        static TI
+        imposeValueChange (TAR& target, TI const& newVal)
+          {
+            imposeChange (target,newVal);
+            return buildChangedValue(target,newVal);
+          }
+      };
+    
+    template<class TI, class SRC, class TAR>
+    struct Policy
+      {
+        static function<TI(TI const&)>
+        buildChangeHandler (TAR& target)
+          {
+            return bind (Adap<TI,TAR>::imposeValueChange, ref(target), _1 );
+          }
+      };
+    
+      
     template<class TI>
     TI
     Mutator<TI>::imposeValueChange (TimeValue& target, TI const& newVal)
@@ -243,10 +316,36 @@ namespace time {
 #endif //(End)quantisation special case    
     
     
+    namespace { // metaprogramming helpers to pick the suitable Instantiation...
+      
+      template<class T>
+      struct isDuration
+        {
+          static const bool value = is_sameType<T,Duration>::value;
+        };
+      template<class T>
+      struct isTimeSpan
+        {
+          static const bool value = is_sameType<T,TimeSpan>::value;
+        };
+      template<class T>
+      struct isQuTime
+        {
+          static const bool value = is_sameType<T,QuTime>::value;
+        };
+      
+      template<class T>
+      struct isSpecialCase
+        {
+          static const bool value = isDuration<T>::value;
+        };
+      
+    }
     
     template<class TI>
     template<class TAR>
-    struct Mutator<TI>::MutationPolicy<typename disable_if< is_sameType<TAR,Duration>, TI>::type, TAR>
+    struct Mutator<TI>::MutationPolicy<                  typename disable_if< isSpecialCase<TAR>, 
+                                       TI>::type, TAR>
       {
         static function<TI(TI const&)>
         buildChangeHandler (TAR& target)
@@ -282,7 +381,8 @@ namespace time {
 
     template<class TI>
     template<class TAR>
-    struct Mutator<TI>::MutationPolicy<typename enable_if< is_sameType<TAR,Duration>, TI>::type, TAR>
+    struct Mutator<TI>::MutationPolicy<                  typename enable_if< isDuration<TAR>, 
+                                       TI>::type, TAR>
       {
         static function<TI(TI const&)>
         buildChangeHandler (Duration& target)
@@ -323,7 +423,7 @@ namespace time {
     void
     Mutator<TI>::bind_to (TAR& target)  const
     {
-      setVal_ = MutationPolicy<TI,TAR>    ::buildChangeHandler (target);
+      setVal_ = Policy<TI,TI,TAR>::buildChangeHandler(target); //MutationPolicy<TI,TAR>    ::buildChangeHandler (target);
       offset_ = MutationPolicy<Offset,TAR>::buildChangeHandler (target);
       nudge_  = MutationPolicy<int,TAR>   ::buildChangeHandler (target);
     }
