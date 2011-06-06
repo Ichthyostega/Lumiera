@@ -48,17 +48,6 @@ namespace time {
   Mutation::~Mutation()   { }  // emit VTable here....
   
   
-  /** @internal actually force a change
-   *  into a target time entity to mutate.
-   *  Mutation is declared fried to TimeValue
-   *  and thus is allowed to influence the basic
-   *  value stored in each time entity
-   */
-  TimeValue&
-  Mutation::imposeChange (TimeValue& target, TimeValue const& valueToSet)
-  {
-    return target = valueToSet; 
-  }
   
   
   
@@ -157,14 +146,14 @@ namespace time {
       virtual void
       change (Duration& target) const
         {
-          imposeChange (target, TimeVar(target)+=adjustment_);
+          imposeChange (target, adjustment_);
         }
       
       
       virtual void
       change (TimeSpan& target) const
         {
-          imposeChange (target, TimeVar(target)+=adjustment_);
+          imposeChange (target, adjustment_);
         }
       
       
@@ -173,7 +162,7 @@ namespace time {
       virtual void
       change (QuTime& target)   const
         {
-          imposeChange (target, TimeVar(target)+=adjustment_);
+          imposeChange (target, adjustment_);
         }
       
       
@@ -205,7 +194,7 @@ namespace time {
   /** 
    * concrete time value mutation:
    * nudge target value by the given number of 'steps',
-   * relative to either the given grid.
+   * relative to the given grid.
    */
   class NudgeMutation
     : public ImposeOffsetMutation
@@ -234,6 +223,8 @@ namespace time {
    * @note currently the natural grid is hard wired,
    *       just interpreting the step parameter as
    *       offset in seconds.
+   * @see mutation#imposeChange (TimeValue, int)
+   * @see mutation#imposeChange (QuTime, int)
    */
   class NaturalNudgeMutation
     : public ClonableMutation
@@ -243,31 +234,22 @@ namespace time {
       virtual void
       change (Duration& target) const
         {
-          imposeChange (target, TimeVar(target)+=Time(FSecs(steps_)));
+          imposeChange (target, steps_);
         }
       
       
       virtual void
       change (TimeSpan& target) const
         {
-          imposeChange (target, TimeVar(target)+=Time(FSecs(steps_)));
+          imposeChange (target, steps_);
         }
       
       
-      /** Special treatment: use the quantised time's own grid;
-       *  retrieve the corresponding grid point, offset it by the step-parameter,
-       *  then retrieve the corresponding time from the quantised time's
-       *  underlying quantiser (grid).
-       * @note when the #steps_ parameter is zero, what happens here effectively
-       *       is the materialisation of the quantised target time, i.e. making
-       *       the quantisation explicit and storing the resulting value. */
+      /** @note special treatment: use the quantised time's own grid */
       virtual void
       change (QuTime& target)   const
         {
-          PQuant const& grid (target);
-          int64_t originalGridPoint = grid->gridPoint(target);
-          int64_t adjustedGridPoint = originalGridPoint + steps_;
-          imposeChange (target, grid->timeOf (adjustedGridPoint));
+          imposeChange (target, steps_);
         }
       
    

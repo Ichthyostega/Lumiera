@@ -161,12 +161,13 @@ namespace time {
           }
       };
     
+    
     template<class TI, class TAR>
     struct Builder
       {
         
         static TI
-        buildChangedValue (TAR& target, TI const&)
+        buildChangedValue (TAR& target)
           {
             return TI(target);
           }
@@ -175,9 +176,18 @@ namespace time {
     struct Builder<TimeSpan, TAR>
       {
         static TimeSpan
-        buildChangedValue (TAR& target, TimeSpan const& newVal)
+        buildChangedValue (TAR& target)
           {
-            return TimeSpan (target, newVal.duration());
+            return TimeSpan (target, Duration::ZERO);  /////////////TODO how to feed the "new value" duration????
+          }
+      };
+    template<>
+    struct Builder<TimeSpan, TimeSpan>
+      {
+        static TimeSpan
+        buildChangedValue (TimeSpan& target)
+          {
+            return target;
           }
       };
 #ifdef LIB_TIME_TIMEQUQNT_H
@@ -185,18 +195,27 @@ namespace time {
     struct Builder<QuTime, TAR>
       {
         static QuTime
-        buildChangedValue (TAR& target, QuTime const&)
+        buildChangedValue (TAR& target)
           {
             return QuTime (target
                           ,getDefaultGridFallback()                                                     //////////////////TICKET #810
                           );
           }
       };
+    template<>
+    struct Builder<QuTime, QuTime>
+      {
+        static QuTime
+        buildChangedValue (QuTime& target)
+          {
+            return target;
+          }
+      };
 #endif
     
     template<class TI, class TAR>
     struct Adap
-      : Mutabor<TI>
+      : Mutator<TI>
       , Builder<TI,TAR>
       {
         
@@ -204,17 +223,54 @@ namespace time {
         imposeValueChange (TAR& target, TI const& newVal)
           {
             imposeChange (target,newVal);
-            return buildChangedValue(target,newVal);
+            return buildChangedValue(target);
+          }
+        
+        static TI
+        imposeOffset (TAR& target, Offset const& off)
+          {
+            imposeChange (target,off);
+            return buildChangedValue(target);
+          }
+        
+        static TI
+        imposeNudge (TAR& target, int off_by_steps)
+          {
+            imposeChange (target,off_by_steps);
+            return buildChangedValue(target);
           }
       };
     
     template<class TI, class SRC, class TAR>
-    struct Policy
+    struct Policy;
+    
+    template<class TI, class TAR>
+    struct Policy<TI,TI,TAR>
       {
         static function<TI(TI const&)>
         buildChangeHandler (TAR& target)
           {
             return bind (Adap<TI,TAR>::imposeValueChange, ref(target), _1 );
+          }
+      };
+    
+    template<class TI, class TAR>
+    struct Policy<TI,Offset,TAR>
+      {
+        static function<TI(Offset const&)>
+        buildChangeHandler (TAR& target)
+          {
+            return bind (Adap<TI,TAR>::imposeOffset, ref(target), _1 );
+          }
+      };
+    
+    template<class TI, class TAR>
+    struct Policy<TI,int,TAR>
+      {
+        static function<TI(int)>
+        buildChangeHandler (TAR& target)
+          {
+            return bind (Adap<TI,TAR>::imposeNudge, ref(target), _1 );
           }
       };
     
@@ -423,9 +479,9 @@ namespace time {
     void
     Mutator<TI>::bind_to (TAR& target)  const
     {
-      setVal_ = Policy<TI,TI,TAR>::buildChangeHandler(target); //MutationPolicy<TI,TAR>    ::buildChangeHandler (target);
-      offset_ = MutationPolicy<Offset,TAR>::buildChangeHandler (target);
-      nudge_  = MutationPolicy<int,TAR>   ::buildChangeHandler (target);
+      setVal_ = Policy<TI,TI,TAR>    ::buildChangeHandler (target);
+      offset_ = Policy<TI,Offset,TAR>::buildChangeHandler (target);
+      nudge_  = Policy<TI,int,TAR>   ::buildChangeHandler (target);
     }
     
     template<class TI>
