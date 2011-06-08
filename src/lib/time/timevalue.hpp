@@ -317,24 +317,24 @@ namespace time {
    * possibility to send a \em Mutation message.
    */
   class Duration
-    : public Offset
+    : public TimeValue
     {
       /// direct assignment prohibited
       Duration& operator= (Duration const&);
       
     public:
       Duration (Offset const& distance)
-        : Offset(distance.abs())
+        : TimeValue(distance.abs())
         { }
       
       explicit
       Duration (TimeValue const& timeSpec)
-        : Offset(Offset(timeSpec).abs())
+        : TimeValue(Offset(timeSpec).abs())
         { }
       
       explicit
       Duration (FSecs const& timeSpan_in_secs)
-        : Offset(Offset(Time(timeSpan_in_secs)).abs())
+        : TimeValue(Offset(Time(timeSpan_in_secs)).abs())
         { }
       
       Duration (TimeSpan const& interval);
@@ -343,7 +343,37 @@ namespace time {
       static const Duration NIL;
       
       void accept (Mutation const&);
+      
+      /// Supporting backwards use as offset
+      Offset operator- ()  const;
+      
     };
+    
+  //-- support using a Duration to build offsets ---------------
+  
+  inline Duration
+  operator+ (Duration const& base, Duration const& toAdd)
+  {
+    return Offset(base) + Offset(toAdd);
+  }
+  
+  inline Offset
+  operator* (int factor, Duration const& dur)
+  {
+    return factor * Offset(dur);
+  }
+  
+  inline Offset
+  operator* (Duration const& dur, int factor)
+  {
+    return factor*dur;
+  }
+  
+  inline Offset
+  Duration::operator- ()  const
+  {
+    return -1 * (*this); 
+  }
   
   
   
@@ -495,7 +525,7 @@ namespace time {
   
   inline
   Duration::Duration (TimeSpan const& interval)
-    : Offset(interval.duration())
+    : TimeValue(interval.duration())
     { }
   
   inline

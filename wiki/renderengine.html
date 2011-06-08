@@ -6870,23 +6870,28 @@ Thus the possibly mutalble time entities get an {{{accept(time::Mutation&amp;)}}
 Based on this time::Mutation design, we provide a specialised element for dealing with //running time values:// When attached to a target time entity, a &quot;life&quot; connection is established. From then on, continuous changes and mutations can be fed to the target by invoking a functor interface. Besides, a change notification signal (callback) can be installed, which will be invoked on each change. This {{{time::Control}}} element is the foundation for implementing all kinds of running time display widgets, spin buttons, timeline selections, playheads, loop playback and similar.
 </pre>
 </div>
-<div title="TimeQuant" modifier="Ichthyostega" modified="201101232031" created="201012181753" tags="Concepts Player spec img discuss draft" changecount="50">
+<div title="TimeQuant" modifier="Ichthyostega" modified="201106080000" created="201012181753" tags="Concepts Player spec img discuss draft" changecount="52">
 <pre>The term &amp;raquo;Time&amp;laquo; spans a variety of vastly different entities. Within a NLE we get to deal with various //flavours of time values.//
 ;continuous time
 :without any additional assumptions, ''points in time'' can be specified with arbitrary precision.
 :the time values are just numbers; the point of reference and the meaning is implicit.
 :within Lumiera, time is encoded as integral number of //micro ticks,// practically continuous
-;duration
+;time distance
 :a range of time, a ''distance'' on the time axis, measured with the same arbitrary precision as time points.
-:distances and durations can be determined by //subtracting// two time points, consequently they are //signed numbers.//
-:a duration always abstracts from the time //when// this duration or distance happens, the relation to any time scale remains implicit
+:distances can be determined by //subtracting// two time points, consequently they are //signed numbers.//
 ;offset
-:offsetting a time or a duration is an operation (not an entity): it means changing the denoted time point or duration.
-:the //target// of an offset operation is a time or duration, while it's //argument// is a distance (synonymous to duration).
-:Time values are //immutable,// like numbers. Only a ''time variable'' can be changed. Durations to the contrary can be mutable or  const.
+:a distance can be used to adjust (offset) a time or a duration: this means applying a relative change.
+:the //target// of an offset operation is a time or duration, while it's //argument// is a distance (synonymous to offset).
+;duration
+:the length of a time range yields a ''time metric''.
+:the duration can be defined as the //absolute value//&amp;nbsp; of the offset between start and endpoint of the time range.
+:a duration always abstracts from the time //when// this duration or distance happens, the relation to any time scale remains implicit
 ;time span
 :contrary to a mere duration, a ''time interval'' or time span is actually //anchored// at a specific point in time.
 :it can be seen as a //special kind of duration,// which explicitly states the information //when// this time span takes place.
+;changing time
+:Time values are //immutable,// like numbers. Only a ''time variable'' can be changed.
+:yet some of the special time entities can recieve [[mutation messages|TimeMutation]], allowing e.g. for adjustments to a time interval selection from the GUI
 
 ;internal time
 :While the basic continuous time values don't imply any provision regarding the time scale and origin to be used, actually, within the implementation of the application, the meaning of time values is uniform and free of contradictions. Thus effectively there is an ''implementation time scale'' -- but its scope of validity is //strictly limited to the implementation level of a single application instance.// It is never exposed and never persisted. It might not be reproducible over multiple instantiations of the application. The implementation reserves the right to recalibrate this internal scale. Later, when Lumiera gains the capability to run within a network of render nodes, these instance connections will include a negotiation about the internal time scale, which remains completely opaque to the outer world. This explains, why {{{lumiera::Time}}} instances lack the ability to show their time value beyond debugging purposes. This is to avoid confusion and to stress their opaque nature.

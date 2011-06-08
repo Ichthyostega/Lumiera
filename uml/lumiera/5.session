@@ -42,7 +42,10 @@ open
   package_ref 128389 // RenderEngine
   classdiagram_ref 142725 // Time flavours
   class_ref 134917 // Time
+  class_ref 168837 // Duration
   class_ref 169221 // TimeGrid
+  class_ref 170373 // TimeVar
+  class_ref 170501 // QuTimeSpan
   classview_ref 128645 // Service Components
   classview_ref 128266 // SmartPointers
 end

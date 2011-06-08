@@ -178,7 +178,7 @@ namespace time {
         static TimeSpan
         buildChangedValue (TAR& target)
           {
-            return TimeSpan (target, Duration::ZERO);  /////////////TODO how to feed the "new value" duration????
+            return TimeSpan (target, Duration::NIL);  /////////////TODO how to feed the "new value" duration????
           }
       };
     template<>
@@ -327,13 +327,13 @@ namespace time {
     TimeSpan
     Mutator<TimeSpan>::imposeOffset (TimeValue& target, Offset const& off)
     {
-      return TimeSpan (Mutation::imposeChange (target, TimeVar(target)+off), Duration::ZERO);
+      return TimeSpan (Mutation::imposeChange (target, TimeVar(target)+off), Duration::NIL);
     }
     template<>
     TimeSpan
     Mutator<TimeSpan>::imposeNudge (TimeValue& target, int off_by_steps)
     {
-      return TimeSpan (Mutation::imposeChange (target, TimeVar(target)+Time(FSecs(off_by_steps))), Duration::ZERO);
+      return TimeSpan (Mutation::imposeChange (target, TimeVar(target)+Time(FSecs(off_by_steps))), Duration::NIL);
     }
     
 

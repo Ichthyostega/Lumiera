@@ -1,6 +1,6 @@
 format 58
 "CommonLib" // CommonLib
-  revision 24
+  revision 25
   modified_by 5 "hiv"
   // class settings
   //class diagram settings
@@ -916,12 +916,12 @@ ${inlines}
       idl_decl ""
       explicit_switch_type ""
       
-      classrelation 210437 // <generalisation>
-	relation 199557 ---|>
+      classrelation 215429 // <generalisation>
+	relation 204293 ---|>
 	  a public
 	    cpp default "${type}"
-	    classrelation_ref 210437 // <generalisation>
-	  b parent class_ref 172165 // Offset
+	    classrelation_ref 215429 // <generalisation>
+	  b parent class_ref 168709 // TimeValue
       end
     end
 
@@ -1074,14 +1074,6 @@ ${inlines}
 	  b parent class_ref 168709 // TimeValue
       end
 
-      classrelation 208389 // val (<unidirectional association>)
-	relation 197509 --->
-	  a role_name "val" multiplicity "1" protected
-	    cpp default "    ${comment}${static}${mutable}${volatile}${const}${type}* ${name}${value};
-"
-	    classrelation_ref 208389 // val (<unidirectional association>)
-	  b multiplicity "*" parent class_ref 134917 // Time
-      end
     end
 
     class 170501 "QuTimeSpan"
@@ -1126,7 +1118,6 @@ ${inlines}
 	    classrelation_ref 208645 // <dependency>
 	  b parent class_ref 170629 // TCode
       end
-
     end
 
     class 170757 "Format"

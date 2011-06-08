@@ -121,12 +121,12 @@ namespace time {
   
   /** duration of the given number of frames */
   Duration::Duration (ulong count, FrameRate const& fps)
-    : Offset(TimeValue (count? lumiera_frame_duration (fps/count) : _raw(Duration::NIL)))
+    : TimeValue (count? lumiera_frame_duration (fps/count) : _raw(Duration::NIL))
     { }
   
   
   /** constant to indicate "no duration" */
-  const Duration Duration::NIL = Offset(TimeValue(0));
+  const Duration Duration::NIL (Time::ZERO);
   
   
   

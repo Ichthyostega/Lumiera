@@ -200,7 +200,7 @@ namespace time {
   {
     Time gt(gridTime);
     TimeVar timePoint = gt + origin_;
-    timePoint += gridOffset * raster_;
+    timePoint += gridOffset * Offset(raster_);
     return timePoint;
   }
   
