@@ -260,10 +260,17 @@ namespace test{
       CHECK (target == otherDuration);
     }
     void
-    verify_wasChanged (Duration const& target, TimeValue const& org, TimeSpan const& span)
+    verify_wasChanged (Duration const& target, TimeValue const& org, TimeSpan const& span_as_change)
     {
       CHECK (target != org);
-      CHECK (target == span.duration());
+      CHECK (target == span_as_change.duration());
+    }
+    void
+    verify_wasChanged (TimeSpan const& target, TimeValue const& org, Duration const& changedDur)
+    {
+      CHECK (target == org, "Logic error: Duration was used as start point of the target TimeSpan");
+      CHECK (target.duration() != Time(FSecs(3,2)), "length of the timespan should have been changed");
+      CHECK (target.duration() == changedDur);
     }
     
     

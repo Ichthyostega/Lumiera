@@ -162,12 +162,53 @@ namespace time {
       };
     
     
+    
+    namespace { // metaprogramming helpers to pick the suitable Instantiation...
+      
+      template<class T>
+      struct isDurationZ
+        {
+          static const bool value = is_sameType<T,Duration>::value;
+        };
+      template<class T>
+      struct isTimeSpanZ
+        {
+          static const bool value = is_sameType<T,TimeSpan>::value;
+        };
+      template<class T>
+      struct isQuTime
+        {
+          static const bool value = is_sameType<T,QuTime>::value;
+        };
+      
+      template<class T>
+      struct isSpecialCase
+        {
+          static const bool value = isDurationZ<T>::value;
+        };
+      
+      template<class T>
+      inline bool
+      isDuration()
+        {
+          return is_sameType<T,Duration>::value;
+        }
+      
+      template<class T>
+      inline bool
+      isTimeSpan()
+        {
+          return is_sameType<T,TimeSpan>::value;
+        }
+    }
+    
+    
     template<class TI, class TAR>
     struct Builder
       {
         
         static TI
-        buildChangedValue (TAR& target)
+        buildChangedValue (TAR const& target)
           {
             return TI(target);
           }
@@ -176,9 +217,18 @@ namespace time {
     struct Builder<TimeSpan, TAR>
       {
         static TimeSpan
-        buildChangedValue (TAR& target)
+        buildChangedValue (TAR const& target)
           {
             return TimeSpan (target, Duration::NIL);  /////////////TODO how to feed the "new value" duration????
+          }
+      };
+    template<>
+    struct Builder<TimeSpan, Duration>
+      {
+        static TimeSpan
+        buildChangedValue (Duration const& targetDuration)
+          {
+            return TimeSpan (Time::ZERO, targetDuration);
           }
       };
     template<>
@@ -219,41 +269,112 @@ namespace time {
       , Builder<TI,TAR>
       {
         
+        template<class SRC>
         static TI
-        imposeValueChange (TAR& target, TI const& newVal)
+        processValueChange (TAR& target, SRC const& change)
           {
-            imposeChange (target,newVal);
+            imposeChange (target,change);
             return buildChangedValue(target);
           }
         
         static TI
-        imposeOffset (TAR& target, Offset const& off)
+        useLengthAsChange (TAR& target, TimeSpan const& change)
           {
-            imposeChange (target,off);
-            return buildChangedValue(target);
+            return processValueChange(target, change.duration());
           }
         
         static TI
-        imposeNudge (TAR& target, int off_by_steps)
+        mutateLength (TimeSpan& target, Duration const& change)
           {
-            imposeChange (target,off_by_steps);
+            Mutator<TimeSpan>::imposeChange (target.duration(), change);
+            return Builder<TI,TimeSpan>::buildChangedValue(target);
+          }
+        
+        static TimeSpan
+        mutateTimeSpan (TimeSpan& target, TimeSpan const& change)
+          {
+            Mutator<TimeSpan>::imposeChange (target.duration(), change.duration());
+            Mutator<TimeSpan>::imposeChange (target,change.start());
+            return Builder<TimeSpan,TimeSpan>::buildChangedValue(target);
+          }
+        
+        static TI
+        dontChange (TAR& target)
+          {
+            // note: not touching the target
             return buildChangedValue(target);
           }
       };
+    
+    
     
     template<class TI, class SRC, class TAR>
-    struct Policy;
-    
-    template<class TI, class TAR>
-    struct Policy<TI,TI,TAR>
+    struct Policy
       {
-        static function<TI(TI const&)>
+        static function<TI(SRC const&)>
         buildChangeHandler (TAR& target)
           {
-            return bind (Adap<TI,TAR>::imposeValueChange, ref(target), _1 );
+            return bind (Adap<TI,TAR>::template processValueChange<SRC>, ref(target), _1 );
           }
       };
     
+    
+    // special treatment of Durations as target...
+    
+    template<class TI, class SRC>
+    struct Policy<TI,SRC,Duration>
+      {
+        static function<TI(SRC const&)>
+        buildChangeHandler (Duration& target)
+          {
+            return bind (Adap<TI,Duration>::dontChange, ref(target) );
+          }
+      };
+    
+    template<class TI>
+    struct Policy<TI,Duration,Duration>
+      {
+        static function<TI(Duration const&)>
+        buildChangeHandler (Duration& target)
+          {
+            return bind (Adap<TI,Duration>::template processValueChange<Duration>, ref(target), _1 );
+          }
+      };
+    
+    template<class TI>
+    struct Policy<TI,TimeSpan,Duration>
+      {
+        static function<TI(TimeSpan const&)>
+        buildChangeHandler (Duration& target)
+          {
+            return bind (Adap<TI,Duration>::useLengthAsChange, ref(target), _1 );
+          }
+      };
+    
+    // special treatment for TimeSpan values...
+    
+    template<class TI>
+    struct Policy<TI,Duration,TimeSpan>
+      {
+        static function<TI(Duration const&)>
+        buildChangeHandler (TimeSpan& target)
+          {
+            return bind (Adap<TI,TimeSpan>::mutateLength, ref(target), _1 );
+          }
+      };
+    
+    template<>
+    struct Policy<TimeSpan,TimeSpan,TimeSpan>
+      {
+        static function<TimeSpan(TimeSpan const&)>
+        buildChangeHandler (TimeSpan& target)
+          {
+            return bind (Adap<TimeSpan,TimeSpan>::mutateTimeSpan, ref(target), _1 );
+          }
+      };
+    
+    
+/*    
     template<class TI, class TAR>
     struct Policy<TI,Offset,TAR>
       {
@@ -273,7 +394,7 @@ namespace time {
             return bind (Adap<TI,TAR>::imposeNudge, ref(target), _1 );
           }
       };
-    
+*/    
       
     template<class TI>
     TI
@@ -371,33 +492,6 @@ namespace time {
     }
 #endif //(End)quantisation special case    
     
-    
-    namespace { // metaprogramming helpers to pick the suitable Instantiation...
-      
-      template<class T>
-      struct isDuration
-        {
-          static const bool value = is_sameType<T,Duration>::value;
-        };
-      template<class T>
-      struct isTimeSpan
-        {
-          static const bool value = is_sameType<T,TimeSpan>::value;
-        };
-      template<class T>
-      struct isQuTime
-        {
-          static const bool value = is_sameType<T,QuTime>::value;
-        };
-      
-      template<class T>
-      struct isSpecialCase
-        {
-          static const bool value = isDuration<T>::value;
-        };
-      
-    }
-    
     template<class TI>
     template<class TAR>
     struct Mutator<TI>::MutationPolicy<                  typename disable_if< isSpecialCase<TAR>, 
@@ -437,7 +531,7 @@ namespace time {
 
     template<class TI>
     template<class TAR>
-    struct Mutator<TI>::MutationPolicy<                  typename enable_if< isDuration<TAR>, 
+    struct Mutator<TI>::MutationPolicy<                  typename enable_if< isDurationZ<TAR>, 
                                        TI>::type, TAR>
       {
         static function<TI(TI const&)>
