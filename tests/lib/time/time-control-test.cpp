@@ -81,7 +81,15 @@ namespace test{
         ScopedHolder<TI> received_;
         
       public:
-        TestListener() { received_.create (Time::ZERO); }
+        TestListener()
+          { 
+            received_.create (Time::ZERO); 
+          }
+        
+        TestListener(TI const& initialValue)
+          { 
+            received_.create (initialValue);
+          }
         
         void
         operator() (TI const& changeValue)  const
@@ -90,8 +98,8 @@ namespace test{
             received_.create (changeValue);
           }
         
-        TI&
-        reveivedValue()
+        TI const&
+        receivedValue()  const
           {
             return *received_;
           }
@@ -160,13 +168,13 @@ namespace test{
           controller (Time(FSecs(21,2)));
           CHECK (Time(500,10) == target);
           
-          CHECK (follower.reveivedValue() == Time::ZERO);
+          CHECK (follower.receivedValue() == Time::ZERO);
           controller.connectChangeNotification (follower);
-          CHECK (follower.reveivedValue() == Time(500,10));
+          CHECK (follower.receivedValue() == Time(500,10));
           
           controller (Offset(-Time(500,1)));
           CHECK (Time(0,9) == target);
-          CHECK (Time(0,9) == follower.reveivedValue());
+          CHECK (Time(0,9) == follower.receivedValue());
         }
       
       
@@ -241,7 +249,7 @@ namespace test{
     
     template<class TAR, class SRC>
     void
-    verify_wasChanged (TAR const& target, TimeValue const& org, SRC const& change)
+    ____verify_wasChanged (TAR const& target, TimeValue const& org, SRC const& change)
     {
       CHECK (target != org);
       CHECK (target == change);
@@ -249,24 +257,24 @@ namespace test{
     
     template<class SRC>
     void
-    verify_wasChanged (Duration const& target, TimeValue const& org, SRC const&)
+    ____verify_wasChanged (Duration const& target, TimeValue const& org, SRC const&)
     {
       CHECK (target == org, "Logic error: Duration was changed by time value");
     }
     void
-    verify_wasChanged (Duration const& target, TimeValue const& org, Duration const& otherDuration)
+    ____verify_wasChanged (Duration const& target, TimeValue const& org, Duration const& otherDuration)
     {
       CHECK (target != org);
       CHECK (target == otherDuration);
     }
     void
-    verify_wasChanged (Duration const& target, TimeValue const& org, TimeSpan const& span_as_change)
+    ____verify_wasChanged (Duration const& target, TimeValue const& org, TimeSpan const& span_as_change)
     {
       CHECK (target != org);
       CHECK (target == span_as_change.duration());
     }
     void
-    verify_wasChanged (TimeSpan const& target, TimeValue const& org, Duration const& changedDur)
+    ____verify_wasChanged (TimeSpan const& target, TimeValue const& org, Duration const& changedDur)
     {
       CHECK (target == org, "Logic error: Duration was used as start point of the target TimeSpan");
       CHECK (target.duration() != Time(FSecs(3,2)), "length of the timespan should have been changed");
@@ -277,23 +285,54 @@ namespace test{
     
     template<class TAR>
     void
-    verify_wasOffset (TAR const&, TimeValue const&, Offset const&)//(TAR const& target, TimeValue const& o, Offset const& offset)
+    ____verify_wasOffset (TAR const& target, TAR const& refState, Offset const& offset)
     {
-      
+      CHECK (target != refState);
+      CHECK (target == Time(refState)+offset);
     }
     
     template<class TAR>
     void
-    verify_zeroAlligned (TAR const&, TAR const&)//(TAR const& target, TAR const& oldState)
+    ____verify_wasOffsetBack (TAR const& target, TAR const& refState)
     {
-      
+      CHECK (target == refState);
     }
+    
     
     template<class TAR>
     void
-    verify_nudged (TAR const&, TAR const&, int64_t)//(TAR const& target, TAR const& oldState, int64_t offsetSteps)
+    ____verify_nudged (TAR const& target, TAR const& refState, int64_t offsetSteps)
     {
-      
+      CHECK (target != refState);
+      CHECK (target == Time(refState)+Time(FSecs(offsetSteps)));
+    }
+    template<>
+    void
+    ____verify_nudged (QuTime const& target, QuTime const& refState, int64_t offsetSteps)
+    {
+      CHECK (target != refState);
+      PQuant quantiser(target);
+      CHECK (target == Time(quantiser->materialise(refState))
+                     + offsetSteps * FrameRate::NTSC.duration());
+    }
+    
+    
+    template<class TAR, class SRC>
+    void
+    ____verify_notification (TAR const& target, TestListener<SRC> const& follower)
+    {
+      CHECK (target == follower.receivedValue());
+    }
+    void
+    ____verify_notification (TimeSpan const& targetTimeSpan, TestListener<Duration> const& follower)
+    {
+      CHECK (follower.receivedValue() == targetTimeSpan.duration());
+    }
+    void
+    ____verify_notification (Duration const& targetDuration, TestListener<TimeSpan> const& follower)
+    {
+      CHECK (Time::ZERO     == follower.receivedValue());
+      CHECK (targetDuration == follower.receivedValue().duration());
     }
     
     
@@ -313,34 +352,47 @@ namespace test{
             Control<SRC> controller;
             
             TAR target = TestTarget<TAR>::build(org);
+            SRC change = TestChange<SRC>::prepareChangeValue(c);
+            TestListener<SRC> follower(change);
+            
+            controller.connectChangeNotification(follower);
             target.accept (controller);
             
-            SRC change = TestChange<SRC>::prepareChangeValue(c);
             controller (change);
-            verify_wasChanged (target, org, change);
+            ____verify_wasChanged (target, org, change);
+            ____verify_notification(target,follower);
+            
+            TAR refState(target);
             
             Offset offset(c);
             controller (offset);
-            verify_wasOffset (target, org, offset);
+            ____verify_wasOffset (target, refState, offset);
+            controller (-offset);
+            ____verify_wasOffsetBack (target, refState);
+            ____verify_notification(target,follower);
             
-            TAR oldState(target);
             controller (0);
-            verify_zeroAlligned(target, oldState);
+            ____verify_nudged (target, refState, 0);
+            ____verify_notification(target,follower);
             
             controller (+1);
-            verify_nudged (target, oldState, +1);
+            ____verify_nudged (target, refState, +1);
+            ____verify_notification(target,follower);
             
             controller (-2);
-            verify_nudged (target, oldState, -1);
+            ____verify_nudged (target, refState, -1);
+            ____verify_notification(target,follower);
             
             int maxInt = std::numeric_limits<int>::max();
             int minInt = std::numeric_limits<int>::min();
             
             controller (maxInt);
-            verify_nudged (target, oldState, -1LL + maxInt);
+            ____verify_nudged (target, refState, -1LL + maxInt);
+            ____verify_notification(target,follower);
             
             controller (minInt);
-            verify_nudged (target, oldState, -1LL + maxInt+minInt);
+            ____verify_nudged (target, refState, -1LL + maxInt+minInt);
+            ____verify_notification(target,follower);
             
             
             // tail recursion: further test combinations....
