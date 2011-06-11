@@ -28,6 +28,7 @@
 #include "lib/time/control.hpp"
 #include "proc/asset/meta/time-grid.hpp"
 #include "lib/meta/generator-combinations.hpp"
+#include "lib/meta/util.hpp"
 #include "lib/scoped-holder.hpp"
 #include "lib/util.hpp"
 
@@ -181,6 +182,36 @@ namespace test{
   
   namespace { // Implementation: Matrix of individual test combinations
     
+    using lumiera::typelist::is_sameType;
+    
+    template<class T>
+    inline bool
+    isDuration()
+      {
+        return is_sameType<T,Duration>::value;
+      }
+    
+    template<class T>
+    inline bool
+    isQuTime()
+      {
+        return is_sameType<T,QuTime>::value;
+      }
+    
+    template<class T>
+    inline TimeValue
+    materialise (T const&)
+      {
+        NOTREACHED ("only grid aligned values can be materialised");
+      }
+    inline TimeValue
+    materialise (QuTime const& alignedTime)
+      {
+        PQuant grid(alignedTime);
+        return grid->materialise (alignedTime);
+      }
+    
+    
     template<class TAR>
     struct TestTarget
       {
@@ -248,16 +279,23 @@ namespace test{
     void
     ____verify_wasChanged (TAR const& target, TimeValue const& org, SRC const& change)
     {
-      CHECK (target != org);
-      CHECK (target == change);
+      if (isDuration<TAR>())
+        {
+          CHECK (target == org, "Logic error: Duration was changed by time value");
+        }
+      else
+      if (isQuTime<SRC>())
+        {
+          CHECK (target != org);
+          CHECK (target == materialise(change));
+        }
+      else
+        {
+          CHECK (target != org);
+          CHECK (target == change);
+        }
     }
     
-    template<class SRC>
-    void
-    ____verify_wasChanged (Duration const& target, TimeValue const& org, SRC const&)
-    {
-      CHECK (target == org, "Logic error: Duration was changed by time value");
-    }
     void
     ____verify_wasChanged (Duration const& target, TimeValue const& org, Duration const& otherDuration)
     {
@@ -308,8 +346,8 @@ namespace test{
     ____verify_nudged (QuTime const& target, QuTime const& refState, int64_t offsetSteps)
     {
       CHECK (target != refState  || !offsetSteps);
-      PQuant quantiser(target);
-      CHECK (target == Time(quantiser->materialise(refState))
+      PQuant grid(target);
+      CHECK (target == Time (grid->materialise(refState))
                      + Offset(offsetSteps, FrameRate::PAL));
     }
     
@@ -318,12 +356,29 @@ namespace test{
     void
     ____verify_notification (TAR const& target, TestListener<SRC> const& follower)
     {
-      CHECK (target == follower.receivedValue());
+      if (isDuration<SRC>())
+        {
+          CHECK (Duration::NIL == follower.receivedValue());
+        }
+      else
+      if (isQuTime<TAR>())
+        {
+          CHECK (materialise (target) == follower.receivedValue());
+        }
+      else
+        {
+          CHECK (target == follower.receivedValue());
+        }
     }
     void
     ____verify_notification (TimeSpan const& targetTimeSpan, TestListener<Duration> const& follower)
     {
       CHECK (follower.receivedValue() == targetTimeSpan.duration());
+    }
+    void
+    ____verify_notification (Duration const& target, TestListener<Duration> const& follower)
+    {
+      CHECK (target == follower.receivedValue());
     }
     void
     ____verify_notification (Duration const& targetDuration, TestListener<TimeSpan> const& follower)
