@@ -321,8 +321,19 @@ namespace time {
     
     // special treatment of Durations as target...
     
+    namespace {
+      template<class T>
+      struct canMutateDuration
+        {
+          static const bool value = is_sameType<T,Duration>::value
+                               ||   is_sameType<T,Offset>::value
+                               ||   is_sameType<T,int>::value;
+        };
+    }
+    
     template<class TI, class SRC>
-    struct Policy<TI,SRC,Duration>
+    struct Policy<TI,SRC,                  typename disable_if< canMutateDuration<SRC>, 
+                         Duration>::type>
       {
         static function<TI(SRC const&)>
         buildChangeHandler (Duration& target)
@@ -331,15 +342,15 @@ namespace time {
           }
       };
     
-    template<class TI>
-    struct Policy<TI,Duration,Duration>
-      {
-        static function<TI(Duration const&)>
-        buildChangeHandler (Duration& target)
-          {
-            return bind (Adap<TI,Duration>::template processValueChange<Duration>, ref(target), _1 );
-          }
-      };
+//  template<class TI>
+//  struct Policy<TI,Duration,Duration>
+//    {
+//      static function<TI(Duration const&)>
+//      buildChangeHandler (Duration& target)
+//        {
+//          return bind (Adap<TI,Duration>::template processValueChange<Duration>, ref(target), _1 );
+//        }
+//    };
     
     template<class TI>
     struct Policy<TI,TimeSpan,Duration>
@@ -573,9 +584,9 @@ namespace time {
     void
     Mutator<TI>::bind_to (TAR& target)  const
     {
-      setVal_ = Policy<TI,TI,TAR>    ::buildChangeHandler (target);
+      setVal_ = Policy<TI,TI,    TAR>::buildChangeHandler (target);
       offset_ = Policy<TI,Offset,TAR>::buildChangeHandler (target);
-      nudge_  = Policy<TI,int,TAR>   ::buildChangeHandler (target);
+      nudge_  = Policy<TI,int,   TAR>::buildChangeHandler (target);
     }
     
     template<class TI>

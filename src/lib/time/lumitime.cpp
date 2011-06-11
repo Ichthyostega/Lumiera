@@ -119,9 +119,16 @@ namespace time {
   }
   
   
-  /** duration of the given number of frames */
-  Duration::Duration (ulong count, FrameRate const& fps)
-    : TimeValue (count? lumiera_frame_duration (fps/count) : _raw(Duration::NIL))
+  /** offset by the given number of frames. */
+  Offset::Offset (int64_t count, FrameRate const& fps)
+    : TimeValue (count?  (count<0? -1:+1) * lumiera_framecount_to_time (::abs(count), fps)
+                      : _raw(Duration::NIL))
+    { }
+  
+  /** duration of the given number of frames.
+   * @note always positive; count used absolute */
+  Duration::Duration (int64_t count, FrameRate const& fps)
+    : TimeValue (count? lumiera_framecount_to_time (abs(count), fps) : _raw(Duration::NIL))
     { }
   
   

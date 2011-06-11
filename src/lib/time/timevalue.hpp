@@ -42,6 +42,11 @@ namespace time {
   
   namespace error = lumiera::error;
   
+  // forwards...
+  class FrameRate;
+  class TimeSpan;
+  class Mutation;
+  
   
   /**
    * basic constant internal time value.
@@ -193,7 +198,10 @@ namespace time {
         : TimeValue(TimeVar(target) -= origin)
         { }
       
+      Offset (int64_t count, FrameRate const& fps);
+      
       static const Offset ZERO;
+      
       
       TimeValue
       abs()  const
@@ -243,7 +251,6 @@ namespace time {
    * @warning do not mix up gavl_time_t and FSecs */
   typedef boost::rational<long> FSecs;
   
-  class FrameRate;
   
   /**
    * Lumiera's internal time value datatype.
@@ -306,8 +313,6 @@ namespace time {
   
   
   
-  class TimeSpan;
-  class Mutation;
   
   /**
    * Duration is the internal Lumiera time metric.
@@ -338,7 +343,7 @@ namespace time {
         { }
       
       Duration (TimeSpan const& interval);
-      Duration (ulong count, FrameRate const& fps);
+      Duration (int64_t count, FrameRate const& fps);
       
       static const Duration NIL;
       

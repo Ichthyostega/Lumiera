@@ -140,13 +140,10 @@ namespace test{
           CHECK (c!=Time::ZERO && o != c, "unsuitable testdata");
           
           // 25fps-grid, but with an time origin offset by 1/50sec
-          TimeGrid::build("test_grid", FrameRate::PAL, Time(FSecs(1,50)));
+          TimeGrid::build("test_grid_PAL", FrameRate::PAL, Time(FSecs(1,50)));
           
           // disjoint NTSC-framerate grid for grid aligned changes
           TimeGrid::build("test_grid_NTSC", FrameRate::NTSC);
-          
-          QuTime qChange (c, "test_grid");
-          FrameNr count(qChange);
           
           verifyBasics();
           verifyMatrix_of_MutationCases(o,c);
@@ -210,7 +207,7 @@ namespace test{
         static QuTime
         build (TimeValue const& org)
           {
-            return QuTime (org, "test_grid");
+            return QuTime (org, "test_grid_PAL");
           }
       };
    
@@ -303,17 +300,17 @@ namespace test{
     void
     ____verify_nudged (TAR const& target, TAR const& refState, int64_t offsetSteps)
     {
-      CHECK (target != refState);
+      CHECK (target != refState  || !offsetSteps);
       CHECK (target == Time(refState)+Time(FSecs(offsetSteps)));
     }
     template<>
     void
     ____verify_nudged (QuTime const& target, QuTime const& refState, int64_t offsetSteps)
     {
-      CHECK (target != refState);
+      CHECK (target != refState  || !offsetSteps);
       PQuant quantiser(target);
       CHECK (target == Time(quantiser->materialise(refState))
-                     + offsetSteps * FrameRate::NTSC.duration());
+                     + Offset(offsetSteps, FrameRate::PAL));
     }
     
     
