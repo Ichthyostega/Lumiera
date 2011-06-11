@@ -200,13 +200,27 @@ namespace time {
         {
           return is_sameType<T,TimeSpan>::value;
         }
+      
+      template<class T>
+      inline T const&
+      maybeMaterialise (T const& non_grid_aligned_TimeValue)
+      {
+        return non_grid_aligned_TimeValue;
+      }
+#ifdef LIB_TIME_TIMEQUQNT_H
+      inline QuTime
+      maybeMaterialise (QuTime const& alignedTime)
+      {
+        PQuant const& grid(alignedTime);
+        return QuTime(grid->materialise(alignedTime), grid);
+      }
+#endif
     }
     
     
     template<class TI, class TAR>
     struct Builder
       {
-        
         static TI
         buildChangedValue (TAR const& target)
           {
@@ -235,7 +249,7 @@ namespace time {
     struct Builder<TimeSpan, TimeSpan>
       {
         static TimeSpan
-        buildChangedValue (TimeSpan& target)
+        buildChangedValue (TimeSpan const& target)
           {
             return target;
           }
@@ -245,7 +259,7 @@ namespace time {
     struct Builder<QuTime, TAR>
       {
         static QuTime
-        buildChangedValue (TAR& target)
+        buildChangedValue (TAR const& target)
           {
             return QuTime (target
                           ,getDefaultGridFallback()                                                     //////////////////TICKET #810
@@ -256,7 +270,7 @@ namespace time {
     struct Builder<QuTime, QuTime>
       {
         static QuTime
-        buildChangedValue (QuTime& target)
+        buildChangedValue (QuTime const& target)
           {
             return target;
           }
@@ -273,8 +287,8 @@ namespace time {
         static TI
         processValueChange (TAR& target, SRC const& change)
           {
-            imposeChange (target,change);
-            return buildChangedValue(target);
+            imposeChange (target, maybeMaterialise(change));
+            return buildChangedValue (maybeMaterialise(target));
           }
         
         static TI
@@ -329,6 +343,14 @@ namespace time {
                                ||   is_sameType<T,Offset>::value
                                ||   is_sameType<T,int>::value;
         };
+      
+      template<class T>
+      struct canReceiveDuration
+        {
+          static const bool value = is_sameType<T,Duration>::value
+                               ||   is_sameType<T,TimeSpan>::value;
+        };
+      
     }
     
     template<class TI, class SRC>
@@ -339,6 +361,23 @@ namespace time {
         buildChangeHandler (Duration& target)
           {
             return bind (Adap<TI,Duration>::dontChange, ref(target) );
+          }
+      };
+    
+    template<class TAR>
+    struct Policy<Duration,                typename disable_if< canReceiveDuration<TAR>, 
+                     Duration>::type, TAR>
+      {
+        static function<Duration(Duration const&)>
+        buildChangeHandler (TAR&)
+          {
+            return bind ( ignore_change_and_return_Zero );
+          }
+        
+        static Duration
+        ignore_change_and_return_Zero()
+          {
+            return Duration::NIL;
           }
       };
     

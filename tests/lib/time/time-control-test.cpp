@@ -200,9 +200,9 @@ namespace test{
     
     template<class T>
     inline TimeValue
-    materialise (T const&)
+    materialise (T const& someTime)
       {
-        NOTREACHED ("only grid aligned values can be materialised");
+        return someTime;
       }
     inline TimeValue
     materialise (QuTime const& alignedTime)
@@ -284,6 +284,11 @@ namespace test{
           CHECK (target == org, "Logic error: Duration was changed by time value");
         }
       else
+      if (isDuration<SRC>())
+        {
+          CHECK (target == org, "Logic error: Duration used to change time value");
+        }
+      else
       if (isQuTime<SRC>())
         {
           CHECK (target != org);
@@ -346,8 +351,7 @@ namespace test{
     ____verify_nudged (QuTime const& target, QuTime const& refState, int64_t offsetSteps)
     {
       CHECK (target != refState  || !offsetSteps);
-      PQuant grid(target);
-      CHECK (target == Time (grid->materialise(refState))
+      CHECK (target == Time (materialise(refState))
                      + Offset(offsetSteps, FrameRate::PAL));
     }
     
@@ -358,7 +362,8 @@ namespace test{
     {
       if (isDuration<SRC>())
         {
-          CHECK (Duration::NIL == follower.receivedValue());
+          CHECK (materialise(target) == follower.receivedValue()
+                 ||    Duration::NIL == follower.receivedValue() );
         }
       else
       if (isQuTime<TAR>())
