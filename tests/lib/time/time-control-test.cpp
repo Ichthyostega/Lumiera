@@ -26,10 +26,11 @@
 #include "lib/time/timevalue.hpp"
 #include "lib/time/timequant.hpp"
 #include "lib/time/control.hpp"
-#include "proc/asset/meta/time-grid.hpp"
+
 #include "lib/meta/generator-combinations.hpp"
-#include "lib/meta/util.hpp"
+#include "proc/asset/meta/time-grid.hpp"
 #include "lib/scoped-holder.hpp"
+#include "lib/meta/util.hpp"
 #include "lib/util.hpp"
 
 #include <boost/lexical_cast.hpp>
@@ -57,7 +58,10 @@ namespace test{
   using lumiera::typelist::InstantiateChainedCombinations;
   using error::LUMIERA_ERROR_UNCONNECTED;
   
-  namespace {
+  
+  
+  namespace { // Test setup and helpers....
+    
     inline string
     pop (Arg arg)
     {
@@ -105,21 +109,25 @@ namespace test{
             return *received_;
           }
       };
-  }
+      
+  }//(End)Test helpers
   
   
   
   
-  /****************************************************************
-   * @test use the time::Control to push a sequence of modifications
-   *       to various time entities; in all cases, a suitable change
-   *       should be imposed to the target and then a notification signal
+  /***********************************************************************
+   * @test use the time::Control to push a sequence of modifications to
+   *       various time entities; in all cases, a suitable change should
+   *       be imposed to the target and then a notification signal
    *       should be invoked.
-   * @todo cover the cases.....
-   *       - change to a given value
-   *       - change by an offset
-   *       - change using a grid value
-   *       - apply an (grid) increment
+   *       
+   *       After covering a simple basic case, this test uses
+   *       template metaprogramming techniques to build a matrix of all
+   *       possible type combinations and then performs a standard test
+   *       sequence for each of these type combinations. Within this
+   *       test sequence, verification functions are invoked, which
+   *       are defined with specialisations to adapt for the various
+   *       types to be covered.
    */
   class TimeControl_test : public Test
     {
@@ -176,6 +184,11 @@ namespace test{
         }
       
       
+      /** @test cover all possible combinations of input change values
+       *        and target time value entities to be handled by time::Control.
+       *        Each of these cases executes a standard test sequence, which is
+       *        defined in TestCase#performTestSequence
+       */
       void verifyMatrix_of_MutationCases (TimeValue const& o, TimeValue const& c);
     };
   
@@ -241,7 +254,7 @@ namespace test{
             return QuTime (org, "test_grid_PAL");
           }
       };
-   
+    
     
     template<class SRC>
     struct TestChange
@@ -395,17 +408,21 @@ namespace test{
     
     
     
-    template<class TAR, class SRC, class BASE>
+    template< class TAR     ///< type of the target time value entity to receive changes
+            , class SRC     ///< type of the time value to be imposed as change
+            , class BASE
+            >
     struct TestCase
       : BASE
       {
         void
-        performTestCases(TimeValue const& org, TimeValue const& c)
+        performTestSequence(TimeValue const& org, TimeValue const& c)
           {
             cout << "Test-Case. Target=" << showType<TAR>() 
-                 <<" <--feed--- "        << showType<SRC>() 
-                 <<endl;
+                 << "\t <--feed--- "     << showType<SRC>() 
+                 << endl;
             
+            // test subject
             Control<SRC> controller;
             
             TAR target = TestTarget<TAR>::build(org);
@@ -453,30 +470,33 @@ namespace test{
             
             
             // tail recursion: further test combinations....
-            BASE::performTestCases(org,c);
+            BASE::performTestSequence(org,c);
           }
       };
     
     struct IterationEnd
       {
-        void performTestCases(TimeValue const&, TimeValue const&) { }
+        void performTestSequence(TimeValue const&, TimeValue const&) { }
       };
     
   }//(End)Implementation Test-case matrix
   
   
   void
-  TimeControl_test::verifyMatrix_of_MutationCases (TimeValue const& o, TimeValue const& c)
+  TimeControl_test::verifyMatrix_of_MutationCases (TimeValue const& origVal, TimeValue const& change)
   {
-    typedef Types<Duration,TimeSpan,QuTime> KindsOfTarget;
-    typedef Types<Time,Duration,TimeSpan,QuTime> KindsOfSource;
+    typedef Types<Duration,TimeSpan,QuTime>                KindsOfTarget;  // time entities to receive value changes
+    typedef Types<TimeValue,Time,Duration,TimeSpan,QuTime> KindsOfSource;  // time entities to be used as change values
     typedef InstantiateChainedCombinations< KindsOfTarget
                                           , KindsOfSource
-                                          , TestCase
+                                          , TestCase                       // template to be instantiated for each type
                                           , IterationEnd > TestMatrix;
     
-    TestMatrix().performTestCases(o,c);
+    TestMatrix().performTestSequence(origVal, change);
   }
+  
+  
+  
   
   
   /** Register this test class... */

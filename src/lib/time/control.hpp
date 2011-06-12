@@ -40,6 +40,46 @@
  ** of time-like entities -- be it the running time display in a GUI widget, a ruler marker
  ** which can be dragged, a modifiable selection or the animated playhead cursor.
  ** 
+ ** \par usage scenarios
+ ** The time::Control element provides mediating functionality, but doesn't assume or provide
+ ** anything special regarding the usage pattern or the lifecycle, beyond the ability to
+ ** attach listeners, attach to a (different) target and to detach from all connections.
+ ** Especially, no assumptions are made about which side is the server or the client
+ ** and who owns the time::Control element.
+ ** 
+ ** Thus an interface might accept a time::Control element \em reference (e.g. the
+ ** lumiera::Play::Controller uses this pattern) -- meaning that the client owns the
+ ** Control element and might attach listeners, while the implementation (server side)
+ ** will attach the Control to mutate an time value entity otherwise not disclosed
+ ** (e.g. the playhead position of the playback process). Of course, in this case
+ ** the client is responsible for keeping the Control element and all listeners
+ ** alive, and to invoke Control#disconnect prior to destroying the element.
+ ** 
+ ** Of course, the reversed usage situation would be possible as well: an interface
+ ** exposing a time::Control, thus allowing to attach target and listeners, while the
+ ** actual changes will originate somewhere within the service implementation.
+ ** 
+ ** Another usage pattern would be to expose a time::Control \c const&, allowing only to
+ ** impose changes, but not to change the target or listener attachments. To the contrary,
+ ** when exposing only a time::Mutation \c const& through an interface allows only to
+ ** attach new target elements, but not to change listeners or feed any value changes.
+ ** 
+ ** Using time::Control as an implementation building block and just exposing the
+ ** change (function) operators or the listener attachment through an forwarding sub
+ ** interface is another option.
+ ** 
+ ** @note time::Control is default constructible and freely copyable.
+ ** 
+ ** 
+ ** \par changing quantised (grid aligned) time entities
+ ** 
+ ** The time::Control element includes the functionality to handle grid aligned time values,
+ ** both as target and as change/notification value. This ability is compiled in conditionally,
+ ** as including mutation.hpp causes several additional includes, which isn't desirable when
+ ** it comes just to changing plain time values. Thus, to get these additional specialisations,
+ ** the LIB_TIME_TIMEQUQNT_H header guard needs to be defined, which happens automatically
+ ** if lib/time/mutation.hpp is included prior to lib/time/control.hpp.
+ ** 
  ** \par implementation notes
  ** - the validity of a given combination of change and target is checked immediately,
  **   when connecting to the target. Depending on the situation, the actual changes later
@@ -48,406 +88,42 @@
  **   processed within its own call context (function invocation), parallelism is only
  **   a concern with respect to the value finally visible within the target.
  ** - the change notification is processed right away, after applying the change to the
- **   target; in all cases, the effective change value is what will be propagated, \em not
- **   the content of the target after applying the change
+ **   target; of course there is a race between applying the value and building the
+ **   response value passed on as notification. In all cases, the effective change
+ **   notification value is built from the state of the target after applying
+ **   the change, which might or might not reflect the change value passed in.
  ** 
- ** @todo WIP-WIP-WIP
+ ** @todo include support for QuTimeSpan values                               ////////////////////TICKET #760
  **
  */
 
 #ifndef LIB_TIME_CONTROL_H
 #define LIB_TIME_CONTROL_H
 
-#include "lib/error.hpp"
-#include "lib/meta/util.hpp"
 #include "lib/time/mutation.hpp"
 #include "lib/time/timevalue.hpp"
+#include "lib/time/control-impl.hpp"
 
-#include <boost/utility/enable_if.hpp>
-#include <tr1/functional>
-#include <vector>
 
 
 namespace lib {
 namespace time {
   
-  namespace mutation {
-    
-    using boost::enable_if;
-    using boost::disable_if;
-    using lumiera::typelist::is_sameType;
-    using std::tr1::placeholders::_1;
-    using std::tr1::function;
-    using std::tr1::bind;
-    using std::tr1::ref;
-    
-    
-    
-    /**
-     * Implementation building block: impose changes to a Time element.
-     * The purpose of the Mutator is to attach a target time entity,
-     * which then will be subject to any received value changes,
-     * offsets and grid nudging. The actual attachment is to be
-     * performed in a subclass, by using the Mutation interface.
-     * When attaching to a target, the Mutator will be outfitted 
-     * with a set of suitable functors, incorporating the specific
-     * behaviour for the concrete combination of input changes
-     * ("source values") and target object type. This works by
-     * binding to the appropriate implementation functionality,
-     * guided by a templated policy class. After installing
-     * these functors, these decisions remains opaque and
-     * encapsulated within the functor objects, so the
-     * mutator object doesn't need to carry this 
-     * type information on the interface
-     */
-    template<class TI>
-    class Mutator
-      : public Mutation
-      {
-        typedef function<TI(TI const&)>     ValueSetter;
-        typedef function<TI(Offset const&)> Ofsetter;
-        typedef function<TI(int)>           Nudger;
-        
-      protected:
-        mutable ValueSetter setVal_;
-        mutable Ofsetter    offset_;
-        mutable Nudger      nudge_;
-        
-        void
-        ensure_isArmed()
-          {
-            if (!setVal_)
-              throw error::State("feeding time/value change "
-                                 "while not (yet) connected to any target to change"
-                                ,error::LUMIERA_ERROR_UNCONNECTED);
-          }
-        
-        
-        template<class TAR>
-        void bind_to (TAR& target)  const;
-        
-        void unbind();
-        
-        // using default construction and copy
-      };
-    
-    
-    
-    /**
-     * Implementation building block: propagate changes to listeners.
-     * The Propagator manages a set of callback signals, allowing to
-     * propagate notifications for changed Time values.
-     * 
-     * There are no specific requirements on the acceptable listeners,
-     * besides exposing a function-call operator to feed the changed
-     * time value to. Both Mutator and Propagator employ one primary
-     * template parameter, which is the type of the time values
-     * to be fed in and propagated. 
-     */
-    template<class TI>
-    class Propagator
-      {
-        typedef function<void(TI const&)> ChangeSignal;
-        typedef std::vector<ChangeSignal> ListenerList;
-        
-        ListenerList listeners_;
-        
-      public:
-        /** install notification receiver */
-        template<class SIG>
-        void
-        attach (SIG const& toNotify)
-          {
-            ChangeSignal newListener (ref(toNotify));
-            listeners_.push_back (newListener);
-          }
-        
-        /** disconnect any observers */
-        void
-        disconnnect()
-          {
-            listeners_.clear();
-          }
-        
-        /** publish a change */
-        TI
-        operator() (TI const& changedVal)  const
-          {
-            typedef typename ListenerList::const_iterator Iter;
-            Iter p = listeners_.begin();
-            Iter e = listeners_.end();
-            
-            for ( ; p!=e; ++p )
-              (*p) (changedVal);
-            return changedVal;
-          }
-      };
-    
-    
-    
-    namespace { // metaprogramming helpers to pick suitable implementation branch...
-      
-      template<class T>
-      inline bool
-      isDuration()
-      {
-        return is_sameType<T,Duration>::value;
-      }
-      
-      template<class T>
-      inline bool
-      isTimeSpan()
-      {
-        return is_sameType<T,TimeSpan>::value;
-      }
-      
-      template<class T>
-      inline T const&
-      maybeMaterialise (T const& non_grid_aligned_TimeValue)
-      {
-        return non_grid_aligned_TimeValue;
-      }
-      
-#ifdef LIB_TIME_TIMEQUQNT_H
-      inline QuTime
-      maybeMaterialise (QuTime const& alignedTime)
-      {
-        PQuant const& grid(alignedTime);
-        return QuTime(grid->materialise(alignedTime), grid);
-      }
-#endif
-    }
-    
-    
-    template<class TI, class TAR>
-    struct Builder
-      {
-        static TI
-        buildChangedValue (TAR const& target)
-          {
-            return TI(target);
-          }
-      };
-    template<class TAR>
-    struct Builder<TimeSpan, TAR>
-      {
-        static TimeSpan
-        buildChangedValue (TAR const& target)
-          {
-            return TimeSpan (target, Duration::NIL);
-          }
-      };
-    template<>
-    struct Builder<TimeSpan, Duration>
-      {
-        static TimeSpan
-        buildChangedValue (Duration const& targetDuration)
-          {
-            return TimeSpan (Time::ZERO, targetDuration);
-          }
-      };
-    template<>
-    struct Builder<TimeSpan, TimeSpan>
-      {
-        static TimeSpan
-        buildChangedValue (TimeSpan const& target)
-          {
-            return target;
-          }
-      };
-#ifdef LIB_TIME_TIMEQUQNT_H
-    template<class TAR>
-    struct Builder<QuTime, TAR>
-      {
-        static QuTime
-        buildChangedValue (TAR const& target)
-          {
-            return QuTime (target
-                          ,getDefaultGridFallback()                                                     //////////////////TICKET #810
-                          );
-          }
-      };
-    template<>
-    struct Builder<QuTime, QuTime>
-      {
-        static QuTime
-        buildChangedValue (QuTime const& target)
-          {
-            return target;
-          }
-      };
-#endif
-    
-    template<class TI, class TAR>
-    struct Link
-      : Mutator<TI>
-      , Builder<TI,TAR>
-      {
-        
-        template<class SRC>
-        static TI
-        processValueChange (TAR& target, SRC const& change)
-          {
-            imposeChange (target, maybeMaterialise(change));
-            return buildChangedValue (maybeMaterialise(target));
-          }
-        
-        static TI
-        useLengthAsChange (TAR& target, TimeSpan const& change)
-          {
-            return processValueChange(target, change.duration());
-          }
-        
-        static TI
-        mutateLength (TimeSpan& target, Duration const& change)
-          {
-            Mutator<TimeSpan>::imposeChange (target.duration(), change);
-            return Builder<TI,TimeSpan>::buildChangedValue(target);
-          }
-        
-        static TimeSpan
-        mutateTimeSpan (TimeSpan& target, TimeSpan const& change)
-          {
-            Mutator<TimeSpan>::imposeChange (target.duration(), change.duration());
-            Mutator<TimeSpan>::imposeChange (target,change.start());
-            return Builder<TimeSpan,TimeSpan>::buildChangedValue(target);
-          }
-        
-        static TI
-        dontChange (TAR& target)
-          {
-            // note: not touching the target
-            return buildChangedValue(target);
-          }
-      };
-    
-    
-    
-    template<class TI, class SRC, class TAR>
-    struct Policy
-      {
-        static function<TI(SRC const&)>
-        buildChangeHandler (TAR& target)
-          {
-            return bind (Link<TI,TAR>::template processValueChange<SRC>, ref(target), _1 );
-          }
-      };
-    
-    
-    // special treatment of Durations as target...
-    
-    namespace {
-      template<class T>
-      struct canMutateDuration
-        {
-          static const bool value = is_sameType<T,Duration>::value
-                               ||   is_sameType<T,Offset>::value
-                               ||   is_sameType<T,int>::value;
-        };
-      
-      template<class T>
-      struct canReceiveDuration
-        {
-          static const bool value = is_sameType<T,Duration>::value
-                               ||   is_sameType<T,TimeSpan>::value;
-        };
-    }
-    
-    
-    template<class TI, class SRC>
-    struct Policy<TI,SRC,                  typename disable_if< canMutateDuration<SRC>, 
-                         Duration>::type>
-      {
-        static function<TI(SRC const&)>
-        buildChangeHandler (Duration& target)
-          {
-            return bind (Link<TI,Duration>::dontChange, ref(target) );
-          }
-      };
-    
-    template<class TAR>
-    struct Policy<Duration,                typename disable_if< canReceiveDuration<TAR>, 
-                     Duration>::type, TAR>
-      {
-        static function<Duration(Duration const&)>
-        buildChangeHandler (TAR&)
-          {
-            return bind ( ignore_change_and_return_Zero );
-          }
-        
-        static Duration
-        ignore_change_and_return_Zero()
-          {
-            return Duration::NIL;
-          }
-      };
-    
-    template<class TI>
-    struct Policy<TI,TimeSpan,Duration>
-      {
-        static function<TI(TimeSpan const&)>
-        buildChangeHandler (Duration& target)
-          {
-            return bind (Link<TI,Duration>::useLengthAsChange, ref(target), _1 );
-          }
-      };
-    
-    // special treatment for TimeSpan values...
-    
-    template<class TI>
-    struct Policy<TI,Duration,TimeSpan>
-      {
-        static function<TI(Duration const&)>
-        buildChangeHandler (TimeSpan& target)
-          {
-            return bind (Link<TI,TimeSpan>::mutateLength, ref(target), _1 );
-          }
-      };
-    
-    template<>
-    struct Policy<TimeSpan,TimeSpan,TimeSpan>
-      {
-        static function<TimeSpan(TimeSpan const&)>
-        buildChangeHandler (TimeSpan& target)
-          {
-            return bind (Link<TimeSpan,TimeSpan>::mutateTimeSpan, ref(target), _1 );
-          }
-      };
-    
-    
-    
-    
-    
-    
-    template<class TI>
-    template<class TAR>
-    void
-    Mutator<TI>::bind_to (TAR& target)  const
-    {
-      setVal_ = Policy<TI,TI,    TAR>::buildChangeHandler (target);
-      offset_ = Policy<TI,Offset,TAR>::buildChangeHandler (target);
-      nudge_  = Policy<TI,int,   TAR>::buildChangeHandler (target);
-    }
-    
-    template<class TI>
-    void
-    Mutator<TI>::unbind()
-    {
-      setVal_ = ValueSetter();
-      offset_ = Ofsetter();
-      nudge_  = Nudger();
-    }
-    
-  }
   
   
   /**
    * Frontend/Interface: controller-element to retrieve
-   * and change running time values
+   * and change running time values. time::Control is
+   * a mediator element, which can be attached to some
+   * time value entities as \em mutation, and at the
+   * same time allows to register listeners. When
+   * configured this way, \em changes may be fed
+   * to the function operator(s). These changes
+   * will be imposed to the connected target
+   * and the result propagated to the listeners.
    * 
    * @see time::Mutation
    * @see time::TimeSpan#accept(Mutation const&)
-   * @todo WIP-WIP-WIP
    */
   template<class TI>
   class Control
@@ -460,9 +136,9 @@ namespace time {
       virtual void change (QuTime&)    const;
         
     public:
-      void operator() (TI const&);
-      void operator() (Offset const&);
-      void operator() (int);
+      void operator() (TI const&)      const;
+      void operator() (Offset const&)  const;
+      void operator() (int)            const;
       
       
       /** install a callback functor to be invoked as notification
@@ -481,27 +157,47 @@ namespace time {
   
   /* === forward to implementation === */
   
+  /** impose a new value to the connected target.
+   *  If applicable, the target will afterwards reflect
+   *  that change, and listeners will be notified, passing
+   *  the target's new state.
+   * @throw error::State if not connected to a target
+   * @note the actual change in the target also depends
+   *       on the concrete target type and the type of
+   *       the change. By default, the time value is
+   *       changed; this may include grid alignment.
+   */
   template<class TI>
   void
-  Control<TI>::operator () (TI const& newValue)
+  Control<TI>::operator () (TI const& newValue)  const
   {
     this->ensure_isArmed();
     notifyListeners_(
         this->setVal_(newValue));
   }
   
+  /** impose an offset to the connected target.
+   *  If applicable, the target will be adjusted by the
+   *  time offset, and listeners will be notified.
+   * @throw error::State if not connected to a target
+   */
   template<class TI>
   void
-  Control<TI>::operator () (Offset const& adjustment)
+  Control<TI>::operator () (Offset const& adjustment)  const
   {
     this->ensure_isArmed();
     notifyListeners_(
         this->offset_(adjustment));
   }
   
+  /** nudge the connected target by the given offset steps,
+   *  using either the target's own grid (when quantised),
+   *  or a 'natural' nudge grid
+   * @throw error::State if not connected to a target
+   */
   template<class TI>
   void
-  Control<TI>::operator () (int offset_by_steps)
+  Control<TI>::operator () (int offset_by_steps)  const
   {
     this->ensure_isArmed();
     notifyListeners_(
@@ -529,6 +225,9 @@ namespace time {
       }
     notifyListeners_.attach (toNotify);
   }
+  
+  
+  /* ==== Implementation of the Mutation interface ==== */
   
   template<class TI>
   void

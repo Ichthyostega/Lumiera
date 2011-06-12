@@ -688,7 +688,22 @@ return: 0
 END
 
 
-PLANNED "Life changing time specifications with feedback" TimeControl_test  <<END
+TEST "Life changing time specifications with feedback" TimeControl_test  <<END
+out: Test-Case. Target=.+time.Duration.	 <--feed--- .+time.TimeValue.$
+out: Test-Case. Target=.+time.Duration.	 <--feed--- .+time.Time.$
+out: Test-Case. Target=.+time.Duration.	 <--feed--- .+time.Duration.$
+out: Test-Case. Target=.+time.Duration.	 <--feed--- .+time.TimeSpan.$
+out: Test-Case. Target=.+time.Duration.	 <--feed--- .+time.QuTime.$
+out: Test-Case. Target=.+time.TimeSpan.	 <--feed--- .+time.TimeValue.$
+out: Test-Case. Target=.+time.TimeSpan.	 <--feed--- .+time.Time.$
+out: Test-Case. Target=.+time.TimeSpan.	 <--feed--- .+time.Duration.$
+out: Test-Case. Target=.+time.TimeSpan.	 <--feed--- .+time.TimeSpan.$
+out: Test-Case. Target=.+time.TimeSpan.	 <--feed--- .+time.QuTime.$
+out: Test-Case. Target=.+time.QuTime.	 <--feed--- .+time.TimeValue.$
+out: Test-Case. Target=.+time.QuTime.	 <--feed--- .+time.Time.$
+out: Test-Case. Target=.+time.QuTime.	 <--feed--- .+time.Duration.$
+out: Test-Case. Target=.+time.QuTime.	 <--feed--- .+time.TimeSpan.$
+out: Test-Case. Target=.+time.QuTime.	 <--feed--- .+time.QuTime.$
 return: 0
 END
 
