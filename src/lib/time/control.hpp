@@ -62,26 +62,14 @@
 #include "lib/meta/util.hpp"
 #include "lib/time/mutation.hpp"
 #include "lib/time/timevalue.hpp"
-//#include "lib/symbol.hpp"
 
-//#include <boost/noncopyable.hpp>
-//#include <iostream>
-//#include <boost/operators.hpp>
 #include <boost/utility/enable_if.hpp>
 #include <tr1/functional>
 #include <vector>
-//#include <string>
 
 
 namespace lib {
 namespace time {
-  
-//using lib::Symbol;
-//using std::string;
-//using lib::Literal;
-  
-  
-//LUMIERA_ERROR_DECLARE (INVALID_MUTATION); ///< Changing a time value in this way was not designated
   
   namespace mutation {
     
@@ -94,17 +82,23 @@ namespace time {
     using std::tr1::ref;
     
     
-    template<class TI>
-    struct Mutabor;
-    
     
     /**
      * Implementation building block: impose changes to a Time element.
-     * The Mutator supports attaching a target time entity (through
-     * the Mutation interface), which then will be subject to any
-     * received value changes, offsets and grid nudging.
-     * 
-     * @todo WIP-WIP-WIP
+     * The purpose of the Mutator is to attach a target time entity,
+     * which then will be subject to any received value changes,
+     * offsets and grid nudging. The actual attachment is to be
+     * performed in a subclass, by using the Mutation interface.
+     * When attaching to a target, the Mutator will be outfitted 
+     * with a set of suitable functors, incorporating the specific
+     * behaviour for the concrete combination of input changes
+     * ("source values") and target object type. This works by
+     * binding to the appropriate implementation functionality,
+     * guided by a templated policy class. After installing
+     * these functors, these decisions remains opaque and
+     * encapsulated within the functor objects, so the
+     * mutator object doesn't need to carry this 
+     * type information on the interface
      */
     template<class TI>
     class Mutator
@@ -114,18 +108,6 @@ namespace time {
         typedef function<TI(Offset const&)> Ofsetter;
         typedef function<TI(int)>           Nudger;
         
-        static TI imposeValueChange(TimeValue& target, TI const&);
-        static TI imposeOffset (TimeValue& target, Offset const&);
-        static TI imposeNudge (TimeValue& target, int);
-        
-        static TI changeDuration (Duration& target, TI const&);
-//      static TI nudgeDuration (Duration& target, int);
-        
-        template<class SRC, class TAR>
-        struct MutationPolicy;
-        
-        friend class Mutabor<TI>;
-
       protected:
         mutable ValueSetter setVal_;
         mutable Ofsetter    offset_;
@@ -140,66 +122,84 @@ namespace time {
                                 ,error::LUMIERA_ERROR_UNCONNECTED);
           }
         
-      public:
-        // using default construction and copy
         
         template<class TAR>
         void bind_to (TAR& target)  const;
         
         void unbind();
         
+        // using default construction and copy
       };
     
+    
+    
+    /**
+     * Implementation building block: propagate changes to listeners.
+     * The Propagator manages a set of callback signals, allowing to
+     * propagate notifications for changed Time values.
+     * 
+     * There are no specific requirements on the acceptable listeners,
+     * besides exposing a function-call operator to feed the changed
+     * time value to. Both Mutator and Propagator employ one primary
+     * template parameter, which is the type of the time values
+     * to be fed in and propagated. 
+     */
     template<class TI>
-    struct Mutabor
+    class Propagator
       {
+        typedef function<void(TI const&)> ChangeSignal;
+        typedef std::vector<ChangeSignal> ListenerList;
         
-        static void
-        imposeChange (TimeValue& target, TI const& newVal)
+        ListenerList listeners_;
+        
+      public:
+        /** install notification receiver */
+        template<class SIG>
+        void
+        attach (SIG const& toNotify)
           {
-            Mutator<TI>::imposeChange (target,newVal);
+            ChangeSignal newListener (ref(toNotify));
+            listeners_.push_back (newListener);
+          }
+        
+        /** disconnect any observers */
+        void
+        disconnnect()
+          {
+            listeners_.clear();
+          }
+        
+        /** publish a change */
+        TI
+        operator() (TI const& changedVal)  const
+          {
+            typedef typename ListenerList::const_iterator Iter;
+            Iter p = listeners_.begin();
+            Iter e = listeners_.end();
+            
+            for ( ; p!=e; ++p )
+              (*p) (changedVal);
+            return changedVal;
           }
       };
     
     
     
-    namespace { // metaprogramming helpers to pick the suitable Instantiation...
-      
-      template<class T>
-      struct isDurationZ
-        {
-          static const bool value = is_sameType<T,Duration>::value;
-        };
-      template<class T>
-      struct isTimeSpanZ
-        {
-          static const bool value = is_sameType<T,TimeSpan>::value;
-        };
-      template<class T>
-      struct isQuTime
-        {
-          static const bool value = is_sameType<T,QuTime>::value;
-        };
-      
-      template<class T>
-      struct isSpecialCase
-        {
-          static const bool value = isDurationZ<T>::value;
-        };
+    namespace { // metaprogramming helpers to pick suitable implementation branch...
       
       template<class T>
       inline bool
       isDuration()
-        {
-          return is_sameType<T,Duration>::value;
-        }
+      {
+        return is_sameType<T,Duration>::value;
+      }
       
       template<class T>
       inline bool
       isTimeSpan()
-        {
-          return is_sameType<T,TimeSpan>::value;
-        }
+      {
+        return is_sameType<T,TimeSpan>::value;
+      }
       
       template<class T>
       inline T const&
@@ -207,6 +207,7 @@ namespace time {
       {
         return non_grid_aligned_TimeValue;
       }
+      
 #ifdef LIB_TIME_TIMEQUQNT_H
       inline QuTime
       maybeMaterialise (QuTime const& alignedTime)
@@ -233,7 +234,7 @@ namespace time {
         static TimeSpan
         buildChangedValue (TAR const& target)
           {
-            return TimeSpan (target, Duration::NIL);  /////////////TODO how to feed the "new value" duration????
+            return TimeSpan (target, Duration::NIL);
           }
       };
     template<>
@@ -278,7 +279,7 @@ namespace time {
 #endif
     
     template<class TI, class TAR>
-    struct Adap
+    struct Link
       : Mutator<TI>
       , Builder<TI,TAR>
       {
@@ -328,7 +329,7 @@ namespace time {
         static function<TI(SRC const&)>
         buildChangeHandler (TAR& target)
           {
-            return bind (Adap<TI,TAR>::template processValueChange<SRC>, ref(target), _1 );
+            return bind (Link<TI,TAR>::template processValueChange<SRC>, ref(target), _1 );
           }
       };
     
@@ -350,8 +351,8 @@ namespace time {
           static const bool value = is_sameType<T,Duration>::value
                                ||   is_sameType<T,TimeSpan>::value;
         };
-      
     }
+    
     
     template<class TI, class SRC>
     struct Policy<TI,SRC,                  typename disable_if< canMutateDuration<SRC>, 
@@ -360,7 +361,7 @@ namespace time {
         static function<TI(SRC const&)>
         buildChangeHandler (Duration& target)
           {
-            return bind (Adap<TI,Duration>::dontChange, ref(target) );
+            return bind (Link<TI,Duration>::dontChange, ref(target) );
           }
       };
     
@@ -381,23 +382,13 @@ namespace time {
           }
       };
     
-//  template<class TI>
-//  struct Policy<TI,Duration,Duration>
-//    {
-//      static function<TI(Duration const&)>
-//      buildChangeHandler (Duration& target)
-//        {
-//          return bind (Adap<TI,Duration>::template processValueChange<Duration>, ref(target), _1 );
-//        }
-//    };
-    
     template<class TI>
     struct Policy<TI,TimeSpan,Duration>
       {
         static function<TI(TimeSpan const&)>
         buildChangeHandler (Duration& target)
           {
-            return bind (Adap<TI,Duration>::useLengthAsChange, ref(target), _1 );
+            return bind (Link<TI,Duration>::useLengthAsChange, ref(target), _1 );
           }
       };
     
@@ -409,7 +400,7 @@ namespace time {
         static function<TI(Duration const&)>
         buildChangeHandler (TimeSpan& target)
           {
-            return bind (Adap<TI,TimeSpan>::mutateLength, ref(target), _1 );
+            return bind (Link<TI,TimeSpan>::mutateLength, ref(target), _1 );
           }
       };
     
@@ -419,200 +410,10 @@ namespace time {
         static function<TimeSpan(TimeSpan const&)>
         buildChangeHandler (TimeSpan& target)
           {
-            return bind (Adap<TimeSpan,TimeSpan>::mutateTimeSpan, ref(target), _1 );
+            return bind (Link<TimeSpan,TimeSpan>::mutateTimeSpan, ref(target), _1 );
           }
       };
     
-    
-/*    
-    template<class TI, class TAR>
-    struct Policy<TI,Offset,TAR>
-      {
-        static function<TI(Offset const&)>
-        buildChangeHandler (TAR& target)
-          {
-            return bind (Adap<TI,TAR>::imposeOffset, ref(target), _1 );
-          }
-      };
-    
-    template<class TI, class TAR>
-    struct Policy<TI,int,TAR>
-      {
-        static function<TI(int)>
-        buildChangeHandler (TAR& target)
-          {
-            return bind (Adap<TI,TAR>::imposeNudge, ref(target), _1 );
-          }
-      };
-*/    
-      
-    template<class TI>
-    TI
-    Mutator<TI>::imposeValueChange (TimeValue& target, TI const& newVal)
-    {
-      return TI (Mutation::imposeChange (target,newVal));
-    }
-    template<class TI>
-    TI
-    Mutator<TI>::imposeOffset (TimeValue& target, Offset const& off)
-    {
-      return TI (Mutation::imposeChange (target, TimeVar(target)+off));
-    }
-    template<class TI>
-    TI
-    Mutator<TI>::imposeNudge (TimeValue& target, int off_by_steps)
-    {
-      return TI (Mutation::imposeChange (target, TimeVar(target)+Time(FSecs(off_by_steps))));     //////////////////TICKET #810
-    }
-    
-    // special cases...
-    template<class TI>
-    TI
-    Mutator<TI>::changeDuration (Duration&, TI const&)
-    {
-      return TI (Time::ZERO);
-    }
-    template<>
-    Duration
-    Mutator<Duration>::changeDuration (Duration& target, Duration const& changedDur)
-    {
-      return Duration (Mutation::imposeChange (target,changedDur));
-    }
-    template<>
-    TimeSpan
-    Mutator<TimeSpan>::changeDuration (Duration& target, TimeSpan const& timeSpan_to_impose)
-    {
-      return TimeSpan (timeSpan_to_impose.start()
-                      ,Duration(Mutation::imposeChange (target,timeSpan_to_impose.duration()))
-                      );
-    }
-    
-    template<>
-    TimeSpan
-    Mutator<TimeSpan>::imposeValueChange (TimeValue& target, TimeSpan const& newVal)
-    {
-      Mutation::imposeChange (target,newVal);
-      return newVal;
-    }
-    template<>
-    TimeSpan
-    Mutator<TimeSpan>::imposeOffset (TimeValue& target, Offset const& off)
-    {
-      return TimeSpan (Mutation::imposeChange (target, TimeVar(target)+off), Duration::NIL);
-    }
-    template<>
-    TimeSpan
-    Mutator<TimeSpan>::imposeNudge (TimeValue& target, int off_by_steps)
-    {
-      return TimeSpan (Mutation::imposeChange (target, TimeVar(target)+Time(FSecs(off_by_steps))), Duration::NIL);
-    }
-    
-
-#ifdef LIB_TIME_TIMEQUQNT_H
-    template<>
-    QuTime
-    Mutator<QuTime>::changeDuration (Duration&, QuTime const& irrelevantChange)
-    {
-      return QuTime (Time::ZERO, PQuant(irrelevantChange));
-    }
-    template<>
-    QuTime
-    Mutator<QuTime>::imposeValueChange (TimeValue& target, QuTime const& grid_aligned_Value_to_set)
-    {
-      PQuant quantiser (grid_aligned_Value_to_set);
-      TimeValue appliedChange = quantiser->materialise(grid_aligned_Value_to_set);
-      Mutation::imposeChange (target, appliedChange);
-      return QuTime (target, quantiser);
-    }
-    template<>
-    QuTime
-    Mutator<QuTime>::imposeOffset (TimeValue& target, Offset const& off)
-    {
-      return QuTime (Mutation::imposeChange (target, TimeVar(target)+off)
-                    ,getDefaultGridFallback()                                                     //////////////////TICKET #810
-                    );
-    }
-    template<>
-    QuTime
-    Mutator<QuTime>::imposeNudge (TimeValue& target, int off_by_steps)
-    {
-      return QuTime (Mutation::imposeChange (target, TimeVar(target)+Time(FSecs(off_by_steps)))
-                    ,getDefaultGridFallback()                                                     //////////////////TICKET #810
-                    );
-    }
-#endif //(End)quantisation special case    
-    
-    template<class TI>
-    template<class TAR>
-    struct Mutator<TI>::MutationPolicy<                  typename disable_if< isSpecialCase<TAR>, 
-                                       TI>::type, TAR>
-      {
-        static function<TI(TI const&)>
-        buildChangeHandler (TAR& target)
-          {
-            return bind (Mutator<TI>::imposeValueChange, ref(target), _1 );
-          }
-      };
-    
-    template<class TI>
-    template<class TAR>
-    struct Mutator<TI>::MutationPolicy<Offset, TAR>
-      {
-        static function<TI(Offset const&)>
-        buildChangeHandler (TAR& target)
-          {
-            return bind (Mutator<TI>::imposeOffset, ref(target), _1 );
-          }
-      };
-    
-    template<class TI>
-    template<class TAR>
-    struct Mutator<TI>::MutationPolicy<int, TAR>
-      {
-        static function<TI(int)>
-        buildChangeHandler (TAR& target)
-          {
-            return bind (Mutator<TI>::imposeNudge, ref(target), _1 );
-          }
-      };
-    
-    
-    //special cases for changing Durations....
-
-    template<class TI>
-    template<class TAR>
-    struct Mutator<TI>::MutationPolicy<                  typename enable_if< isDurationZ<TAR>, 
-                                       TI>::type, TAR>
-      {
-        static function<TI(TI const&)>
-        buildChangeHandler (Duration& target)
-          {
-            return bind (Mutator<TI>::changeDuration, ref(target), _1 );
-          }
-      };
-    
-    //    
-//    template<class TI>
-//    template<class TAR>
-//    struct Mutator<TI>::MutationPolicy<TI, TAR>
-//      {
-//        static function<TimeValue(TimeValue const&)>
-//        buildChangeHandler (Duration& target)
-//          {
-//            return bind (Mutator<TI>::changeDuration, ref(target), _1 );
-//          }
-//      };
-    
-//    template<class TI>
-//    template<>
-//    struct Mutator<TI>::MutationPolicy<int, Duration>
-//      {
-//        static function<TI(int)>
-//        buildChangeHandler (Duration& target)
-//          {
-//            return bind (Mutator<TI>::nudgeDuration, ref(target), _1 );
-//          }
-//      };
     
     
     
@@ -637,59 +438,12 @@ namespace time {
       nudge_  = Nudger();
     }
     
-    
-    
-    /**
-     * Implementation building block: propagate changes to listeners.
-     * The Propagator manages a set of callback signals, allowing to
-     * propagate notifications for changed Time values.
-     * 
-     * @todo WIP-WIP-WIP
-     */
-    template<class TI>
-    class Propagator
-      {
-        typedef function<void(TI const&)> ChangeSignal;
-        typedef std::vector<ChangeSignal> ListenerList;
-        
-        ListenerList listeners_;
-        
-      public:
-        /** install notification receiver */
-        template<class SIG>
-        void
-        attach (SIG const& toNotify)
-          {
-            ChangeSignal newListener (ref(toNotify));
-            listeners_.push_back (newListener);
-          }
-        
-        /** disconnect any observers */
-        void
-        disconnnect()
-          {
-            listeners_.clear();
-          }
-        
-        /** publish a change */
-        TI
-        operator() (TI const& changedVal)  const
-          {
-            typedef typename ListenerList::const_iterator Iter;
-            Iter p = listeners_.begin();
-            Iter e = listeners_.end();
-            
-            for ( ; p!=e; ++p )
-              (*p) (changedVal);
-            return changedVal;
-          }
-      };
   }
   
   
   /**
-   * Frontend/Interface: controller-element for retrieving and
-   * changing running time values
+   * Frontend/Interface: controller-element to retrieve
+   * and change running time values
    * 
    * @see time::Mutation
    * @see time::TimeSpan#accept(Mutation const&)
@@ -725,7 +479,7 @@ namespace time {
   
   
   
-  /* === implementation === */
+  /* === forward to implementation === */
   
   template<class TI>
   void
