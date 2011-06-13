@@ -57,14 +57,15 @@ namespace proc {
       
       
       /** provide a descriptor for lumiera::AppState,
-       *  wired accordingly to allow main to load and
-       *  save an existing session. */
+       *  wired accordingly to allow main to bring up
+       *  a editing session, possibly by loading an
+       *  existing session from storage. */
       static lumiera::Subsys& getSessionDescriptor();
       
       
       /** provide a descriptor for lumiera::AppState,
        *  wired accordingly to allow main to bring up
-       *  the render, playback coordination and 
+       *  the render / playback coordination and 
        *  output management subsystem. */
       static lumiera::Subsys& getPlayOutDescriptor();
       

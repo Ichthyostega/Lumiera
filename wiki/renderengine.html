@@ -1632,7 +1632,7 @@ The main tool used to implement this separation is the [[Builder Pattern|http://
 Another pertinent theme is to make the basic building blocks simpler, while on the other hand gaining much more flexibility for combining these building blocks. For example we try to unfold any &quot;internal-multi&quot; effects into separate instances (e.g. the possibility of having an arbitrary number of single masks at any point of the pipeline instead of having one special masking facility encompassing multiple sub-masks. Similarly, we treat the Objects in the Session in a more uniform manner and gain the possibility to [[place|Placement]] them in various ways.
 </pre>
 </div>
-<div title="DesignPlayerSubsystem" modifier="Ichthyostega" modified="201105230122" created="201105220216" tags="Player design draft" changecount="12">
+<div title="DesignPlayerSubsystem" modifier="Ichthyostega" modified="201106122319" created="201105220216" tags="Player design draft" changecount="13">
 <pre>//Currently (5/2011) this page is used to collect and build up a coherent design for the player subsystem of Lumiera..//
 
 !Starting point
@@ -1658,7 +1658,7 @@ Reworking the dummy player into the [[Player subsystem|PlayService]] is a larger
 * then, of course, the PlayService interface needs to be created
 * as a temporary soltion, a ''~DummyPlayConnection'' will be created hard-wired, within the ~DummyPlayer service. This dumy container is a test setup, explicitly creating a OutputManager implementation, a GeneratorMO, a GeneratorNode (thus omitting the not-yet-implemented Builder) and the corresponding ModelPort. This way, the ~DummyPlayer service can be changed to use the real PlayService for creating the dummy generated output data. It will then pass back the resulting PlayController to the existing GUI setup.
 
-The Method of pushing frames to the Viewer widget is changed fundamentally during that transition: while previously, in the PlayerDummy design study, the GUI opened a Display-façade interface -- now rather the GUI has to register an OutputSlot implementation with the global OutputManager. Such a registration requires an explicit deregistration on shutdown, and this can be made to block, until no further data will be delivered. Using this approach tries to circumvent the problems with occasional crashes on shutdown, due to dispatching frame output signals in the event thread while already in shutdown.
+The Method of pushing frames to the Viewer widget is changed fundamentally during that transition: while previously, in the PlayerDummy design study, the GUI opened a Display-façade interface -- now rather the GUI has to register an OutputSlot implementation with the global OutputManager. Such a registration requires an explicit deregistration on shutdown, and this can be made to block, until no further data will be delivered. Using this approach we hope to circumvent problems with occasional crashes on closing the application, due to dispatching frame output signals in the event thread while shutdown is already in progress.
 
 </pre>
 </div>
@@ -3219,14 +3219,15 @@ While actually data frames are //pulled,// on a conceptual level data is assumed
 As both of these specifications are given by [[Pipe]]-~IDs, the actual designation information may be reduced. Much can be infered from the circumstances, because any pipe includes a StreamType, and an output designation for an incompatible stream type (e.g. and audio output when the pipe currently in question deals with video) is irrelevant.
 </pre>
 </div>
-<div title="OutputManagement" modifier="Ichthyostega" modified="201105220022" created="201007090155" tags="Model Rendering Player spec draft" changecount="19">
+<div title="OutputManagement" modifier="Ichthyostega" modified="201106130008" created="201007090155" tags="Model Rendering Player spec draft" changecount="21">
 <pre>//writing down some thoughts//
 
 * ruled out the system outputs as OutputDesignation.
 * thus, any designation is a [[Pipe]]-ID.
 * consequently, it is not obviously clear if such an designation is the final exit point
-* please note the [[Engine interface proposal|http://lumiera.org/Lumiera/DesignProcess/EngineInterfaceOverview.html]]
+* please note the [[Engine interface proposal|http://lumiera.org/documentation/devel/rfc_pending/EngineInterfaceOverview.html]]
 * this introduces the notion of a ModelPort: //a point in the (high level) model where output can be produced//
+* thus obviously we need an OutputManager element to track the association of OutputDesignation to OutputSlot
 
 Do we get a single [[Fixture]] &amp;mdash; guess yes
 
@@ -3242,9 +3243,19 @@ We should note that in both cases this mapping operation is controlled and drive
 !Connection to external outputs
 External output destinations are never addressed directly from within the model. This is an design decision. Rather, model parts connect to an OutputDesignation, and these in turn may be  [[connected to a viewer element|ViewerPlayConnection]]. At this point, related to the viewer element, there is a mapping to external destination(s): for images, a viewer typically has an implicit, natural destination (read, there is a corresponding viewer window or widget), while for sound we use an mapping rule, which could be overridden locally in the viewer.
 
-Any external output sink is managed as a [[slot|DisplayerSlot]] in the ~OutputManager. Such a slot can be opened and allocated for a playback process, which allows the latter to push calculated data frames to the output. Depending on the kind of output, there might be various, often tight requirements on the timed delivery of output data, but any details are abstracted away &amp;mdash; any slot implementation provides a way to handle timeouts gracefully, e.g. by just showing the last video frame delivered, or by looping and fading sound
+Any external output sink is managed as a [[slot|DisplayerSlot]] in the ~OutputManager. Such a slot can be opened and allocated for a playback process, which allows the latter to push calculated data frames to the output. Depending on the kind of output, there might be various, often tight requirements on the timed delivery of output data, but any details are abstracted away &amp;mdash; any slot implementation provides a way to handle time-outs gracefully, e.g. by just showing the last video frame delivered, or by looping and fading sound
 &amp;rarr; see also the PlayerDummy
+
+!the global output manager
+While mostly the model just denotes the destination for output as OutputDesignation, at some point we need to map these abstract designations to real output capabilities. This OutputManager interface exposes mapping and the ability to control and manage it. Several elements within the application, most notably the [[viewers|ViewerAsset]], provide an implementation of this interface -- yet there is one primary implementation, the ''global output manager''. It can be accessed through the {{{Output}}} façade interface and is the final authority when it comes to allocating an mapping of real output possibilities.
 </pre>
+</div>
+<div title="OutputManager" modifier="Ichthyostega" modified="201106130000" created="201106122359" tags="Player Model def" changecount="2">
+<pre>The term &amp;raquo;''Output Manager''&amp;laquo; might deonte two things: first, there is an {{{proc::play::OutputManager}}} interface, which can be exposed by several components within the application, most notably the [[viewer elements|ViewerAsset]]. And then, there is &quot;the&quot; global OutputManager, which finally tracks all registered OutputSlot elements and thus is the gatekeeper for any output leaving the application.
+
+&amp;rarr; see [[output management overview|OutputManagement]]
+&amp;rarr; see OutputSlot
+&amp;rarr; see ViewerPlayConnection</pre>
 </div>
 <div title="OutputMapping" modifier="Ichthyostega" modified="201105221814" created="201011080238" tags="Model spec draft" changecount="25">
 <pre>An output mapping serves to //resolve//&amp;nbsp; [[output designations|OutputDesignation]].
@@ -7285,14 +7296,14 @@ These Viewer (or Monitor) elements play an enabling role for any output generati
 
 When the GUI is outfitted, based on the current Session or HighLevelModel, it is expected to retrieve the viewer assets and for each of them, after installing the necessary widgetes, registers an OutputSlot with the global OutputManager.</pre>
 </div>
-<div title="ViewerPlayConnection" modifier="Ichthyostega" modified="201105221838" created="201007110305" tags="Model Player spec draft" changecount="8">
+<div title="ViewerPlayConnection" modifier="Ichthyostega" modified="201106122343" created="201007110305" tags="Model Player spec draft" changecount="10">
 <pre>for showing output, three entities are involved
 * the [[Timeline]] holds the relevant part of the model, which gets rendered for playback
-* by connecting to a viewer component, an actual output target is established
+* by connecting to a viewer component (&amp;rarr; ViewConnection), an actual output target is established
 * the playback process itself is coordinated by a PlayController, which in turn creates a PlayProcess
 
 !the viewer connection
-A viewer element gets connected to a given timeline either by directly attaching it, or by //allocating an available free viewer.// Anyway, as a model element, the viewer is just like another set of global pipes chained up after the global pipes present in the timeline. Connecting a timeline to a viewer creates a ViewConnection, which is a special [[binding|BindingMO]]. The number and kind of pipes provided is a configurable property of the viewer element &amp;mdash; more specifically: the viewer's SwitchBoard. Thus, connecting a viewer activates the same internal logic employed when connecting a sequence into a timeline or meta-clip: a default channel association is established, which can be overridden persistently (&amp;rarr; OutputMapping). Each of the viewer's pipes in turn gets connected to a system output through an OutputManager slot &amp;mdash; again an output mapping step.
+A viewer element gets connected to a given timeline either by directly attaching it, or by //allocating an available free viewer.// Anyway, as a model element, the viewer is just like another set of global pipes chained up after the global pipes present in the timeline. Connecting a timeline to a viewer creates a ViewConnection, which is a special [[binding|BindingMO]]. The number and kind of pipes provided is a configurable property of the viewer element &amp;mdash; more specifically: the viewer's SwitchBoard. Thus, connecting a viewer activates the same internal logic employed when connecting a sequence into a timeline or meta-clip: a default channel association is established, which can be overridden persistently (&amp;rarr; OutputMapping). Each of the viewer's pipes in turn gets connected to a system output through an OutputSlot registered with the OutputManager &amp;mdash; again an output mapping step.
 </pre>
 </div>
 <div title="VirtualClip" modifier="Ichthyostega" modified="201011220152" created="200804110321" tags="def Model" changecount="17">

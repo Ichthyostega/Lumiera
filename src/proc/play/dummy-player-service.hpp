@@ -72,7 +72,7 @@ namespace proc {
     /********************************************************************
      * Actual implementation of a single (dummy) playback process.
      * The DummyPlayerService (see below) maintains a collection of such
-     * actively running playback processes, while the client code gets 
+     * actively running playback processes, while the client code gets
      * DummyPlayer::Process handles to track any ongoing use. Users of
      * the plain C interface get a direct bare pointer to the respective
      * ProcessImpl instance and have to manage the lifecycle manually.

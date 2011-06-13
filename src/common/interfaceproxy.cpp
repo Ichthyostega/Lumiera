@@ -32,7 +32,7 @@ namespace lumiera{
 namespace facade {
   
   
-  LUMIERA_ERROR_DEFINE (FACADE_LIFECYCLE, "facade interface currently not accessible");
+  LUMIERA_ERROR_DEFINE (FACADE_LIFECYCLE, "facade is closed; service currently not accessible");
   
   
   /**

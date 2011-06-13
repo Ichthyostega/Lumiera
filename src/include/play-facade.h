@@ -115,15 +115,16 @@ namespace lumiera {
           };
         
         
-        typedef lib::IterSource<mobject::ModelPort> ModelPorts;
-        typedef lib::IterSource<mobject::OutputDesignation> Pipes;
+        typedef lib::IterSource<mobject::ModelPort>&    ModelPorts;
+        typedef lib::IterSource<mobject::OutputDesignation>& Pipes;
         typedef proc::play::POutputManager Output;
         typedef mobject::session::PClipMO Clip;
-        typedef mobject::PTrack Track;
+        typedef mobject::PTrack  Track;
         typedef asset::PTimeline Timeline;
         typedef asset::PViewer Viewer;
-          
-        /** create a new playback process outputting to the given viewer/display */
+        
+        /** core operation: create a new playback process
+         *  outputting to the given viewer/display  */
         virtual Controller connect(ModelPorts, Output)      =0;
         
         

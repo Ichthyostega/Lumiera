@@ -32,6 +32,16 @@
 
 
 
+namespace lumiera {
+  
+  
+  Play::~Play() { } // emit VTables here...
+  
+  
+  
+}//(End) namespace lumiera
+
+
 namespace proc {
 namespace play {
 
@@ -55,9 +65,37 @@ namespace play {
   } // (End) hidden service impl details
   
   
+  using lumiera::Play;
   
   
-  /** */
+  /** bring up the global render- and playback service.
+   *  This service allows to create individual PlayProcess instances
+   *  to \em perform a timeline or similar model object, creating
+   *  rendered data for output. Client code is assumed to access
+   *  this service through the lumiera::Play facade. 
+   */
+  PlayService::PlayService()   /////TODO Subsys::SigTerm terminationHandle);
+    : facadeAccess_(*this, "Player")
+    { }
+  
+  
+  
+  /**
+   * @note this is the core operation of the play and render service
+   * 
+   * Invoking this function investigates the given exit nodes of the
+   * render nodes network and retrieves actual output destinations
+   * through the given OutputManager. The goal is to configure an 
+   * PlayProcess, based on the renderengine and the collection of
+   * OutputSlot instances retrieved for each of the given exit nodes.
+   * Running this PlayProcess will activate the render engine to deliver
+   * calculated media data to the outputs. 
+   */
+  Play::Controller
+  PlayService::connect(ModelPorts dataGenerators, Output outputDestinations)
+  {
+    UNIMPLEMENTED ("build a PlayProcess");
+  }
 
 
 }} // namespace proc::play
