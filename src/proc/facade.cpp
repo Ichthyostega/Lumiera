@@ -23,6 +23,7 @@
 
 #include "proc/facade.hpp"
 #include "lib/singleton.hpp"
+#include "proc/play/output-director.hpp"
 
 #include <string>
 
@@ -77,7 +78,7 @@ namespace proc {
       bool 
       shouldStart (lumiera::Option&)
         {
-          TODO ("determine, if an existing Session schould be loaded");
+          TODO ("determine, if an existing Session should be loaded");
           return false;
         }
       
@@ -127,22 +128,24 @@ namespace proc {
       bool
       start (lumiera::Option&, Subsys::SigTerm termination)
         {
-          UNIMPLEMENTED ("bring up and configure the output connections and the player");
-          return false;
+          this->completedSignal_ = termination;
+          return play::OutputDirector::instance().connectUp();
         }
+      
+      SigTerm completedSignal_;
+      
       
       void
       triggerShutdown ()  throw()
         {
-          UNIMPLEMENTED ("initiate playback/render halt and disconnect output");
+          play::OutputDirector::instance().triggerDisconnect (completedSignal_);
         }
+      
       
       bool 
       checkRunningState ()  throw()
         {
-          //Lock guard (*this);
-          TODO ("implement detecting running state");
-          return false;
+          return play::OutputDirector::instance().isOperational();
         }
     };
   

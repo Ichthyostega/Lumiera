@@ -58,11 +58,10 @@ namespace lib {
   
   
   /**
-   * Result value and status of some operation.
-   * It can be created for passing a result produced
-   * by the operation, or the failure to do so. The value
-   * can be retrieved by implicit or explicit conversion.
-   * @throws on any attempt to access the value in case of failure
+   * Optional Result value or status of some operation.
+   * It can be created for passing a result produced by the operation, or the 
+   * failure to do so. The value can be retrieved by implicit or explicit conversion.
+   * @throw error::State on any attempt to access the value in case of failure
    * @warning this class has a lot of implicit conversions;
    *          care should be taken when defining functions
    *          to take Result instances as parameter....

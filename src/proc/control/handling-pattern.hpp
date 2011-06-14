@@ -67,6 +67,7 @@ namespace control {
    * It is returned when invoking a HandlingPattern
    * and can be used to check for success and/or re-throw
    * any Exception encountered during the command execution.
+   * @todo couldn't that be replaced by a lib::Result<void> instance??
    */
   class ExecResult
     : public lib::BoolCheckable<ExecResult>
