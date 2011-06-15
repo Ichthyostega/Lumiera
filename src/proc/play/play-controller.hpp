@@ -21,6 +21,7 @@
 */
 
 /** @file play-controller.hpp
+ ** Functionality for driving and controlling an ongoing playback or render.
  **
  ** @see lumiera::DummyPlayer
  ** @see gui::PlaybackController usage example 
@@ -42,28 +43,28 @@
 
 
 namespace proc {
-  namespace play {
-  
-    using std::string;
-    
-    
-    /********************************************************************
-     */
-    class PlayController
-      : boost::noncopyable
-      {
-        
-      public:
-        
-      private:
-      };
-    
-    
-    
-    
-    
-    
-  } // namespace play
+namespace play {
 
-} // namespace proc
+  using std::string;
+  
+  
+  /********************************************************************
+   * TODO do we still need that??????
+   * Isn't lumiera::Play::Controller already sufficient?
+   */
+  class PlayController
+    : boost::noncopyable
+    {
+      
+    public:
+      
+    private:
+    };
+  
+  
+  
+  
+  
+  
+}} // namespace proc::play
 #endif

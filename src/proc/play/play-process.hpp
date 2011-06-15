@@ -52,14 +52,22 @@ namespace play {
   
   
   /******************************************************
-   * Actual implementation of the DummyPlayer service.
-   * Creating an instance of this class automatically
-   * registers the interface lumieraorg_DummyPlayer with
-   * the Lumiera Interface/Plugin system and creates
-   * a forwarding proxy within the application core to
-   * route calls through this interface.
+   * Playback/Render process within the Lumiera Player.
+   * This is a top-level implementation entity, created
+   * by the PlayService when \em performing a timeline
+   * or similar model object. A PlayProcess doesn't
+   * perform calculations; rather it serves to group
+   * all the handles, registrations, calculation contexts
+   * and similar entries necessary to make the calculations
+   * happen within the renderengine and to send the generated
+   * data to an output sink.
+   * 
+   * @note PlayProcess entities are never directly visible.
+   *       Client code handles and controls these processes
+   *       through a lumiera::Play::Controller returned
+   *       from the PlayService.
    */
-  class PlayerProcess
+  class PlayProcess
     : boost::noncopyable
     {
       

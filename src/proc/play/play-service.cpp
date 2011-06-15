@@ -22,7 +22,8 @@
 
 
 #include "proc/play/play-service.hpp"
-#include "lib/singleton.hpp"
+#include "proc/play/play-process.hpp"
+#include "lib/scoped-ptrvect.hpp" 
 
 
 #include <string>
@@ -50,6 +51,8 @@ namespace play {
 //using std::auto_ptr;
 //using boost::scoped_ptr;
 //using std::tr1::bind;
+  using lib::Sync;
+  using lib::RecursiveLock_NoWait;
   
   
   namespace { // hidden local details of the service implementation....
@@ -65,7 +68,22 @@ namespace play {
   } // (End) hidden service impl details
   
   
+  class ProcessTable
+    : public Sync<RecursiveLock_NoWait>
+    {
+      typedef lib::ScopedPtrVect<PlayProcess> ProcTable;
+      
+      ProcTable processes_;
+      
+    public:
+      
+    };
+  
+  
   using lumiera::Play;
+  
+  
+  PlayService::~PlayService() { }
   
   
   /** bring up the global render- and playback service.
@@ -76,6 +94,7 @@ namespace play {
    */
   PlayService::PlayService()   /////TODO Subsys::SigTerm terminationHandle);
     : facadeAccess_(*this, "Player")
+    , pTable_(new ProcessTable)
     { }
   
   
@@ -96,6 +115,64 @@ namespace play {
   {
     UNIMPLEMENTED ("build a PlayProcess");
   }
+  
 
 
 }} // namespace proc::play
+
+
+namespace lumiera {
+  
+  /* ==== convenience shortcuts for creating a PlayProcess ==== */
+  
+  /**
+   * 
+   */
+  Play::Controller
+  Play::perform(Pipes, Output)
+  {
+    UNIMPLEMENTED ("build PlayProcess based on a set of pipes");
+  }
+  
+  
+  /**
+   * 
+   */
+  Play::Controller
+  Play::perform(Timeline)
+  {
+    UNIMPLEMENTED ("build PlayProcess for a Timeline");
+  }
+  
+  
+  /**
+   * 
+   */
+  Play::Controller
+  Play::perform(Viewer)
+  {
+    UNIMPLEMENTED ("build PlayProcess directly for a Viwer element");
+  }
+  
+  
+  /**
+   * 
+   */
+  Play::Controller
+  Play::perform(Track)
+  {
+    UNIMPLEMENTED ("build PlayProcess for a single Track");
+  }
+  
+  
+  /**
+   * 
+   */
+  Play::Controller
+  Play::perform(Clip)
+  {
+    UNIMPLEMENTED ("build virtual Timeline and PlayProcess to show a single Clip");
+  }
+  
+  
+}

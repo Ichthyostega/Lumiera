@@ -37,7 +37,7 @@
 #include "common/interface-facade-link.hpp"
 
 #include <boost/noncopyable.hpp>
-//#include <boost/scoped_ptr.hpp>
+#include <boost/scoped_ptr.hpp>
 //#include <string>
 
 
@@ -49,21 +49,36 @@ namespace play {
 //using lumiera::Subsys;
 //using lumiera::Display;
 //using lumiera::DummyPlayer;
+  using boost::scoped_ptr;
   
   
 //  class DummyImageGenerator;
 //  class TickService;
+  class ProcessTable;
   
   
   
   /******************************************************
-   * Interface: Player subsystem.
+   * Implementation access point: Player subsystem.
+   * The PlayService is the primary way for clients to
+   * get into using Lumiera's Play/Output Subsystem.
+   * It allows to \em perform a timeline or model object.
+   * Behind the scenes, this will create and outfit a
+   * PlayProcess, which is accessible through the
+   * Play::Controller returned as frontend/handle.
+   * 
+   * @internal the PlayService is instantiated and owned
+   * by the OutputDirector, which acts as a central hub
+   * for the Player subsystem. Clients should always
+   * access this functionality through the
+   * lumiera::Play facade interface. 
    */
   class PlayService
     : public lumiera::Play
     , boost::noncopyable
     {
       InterfaceFacadeLink<lumiera::Play> facadeAccess_;
+      scoped_ptr<ProcessTable>           pTable_;
       
       
       /** Implementation: build a PlayProcess */
@@ -73,7 +88,7 @@ namespace play {
     public:
       PlayService();   /////TODO Subsys::SigTerm terminationHandle);
       
-     ~PlayService() { }/////TODO notifyTermination_(&error_); }
+     ~PlayService();    /////TODO notifyTermination_(&error_); }
       
     };
   
