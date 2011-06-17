@@ -34,6 +34,8 @@ extern "C" {
 
 namespace mobject {
   
+  namespace mp = lumiera::typelist;
+  
   class MObject;
   
   template<class MX>
@@ -99,8 +101,8 @@ namespace mobject {
       
     private:
       enum {
-        SPEC_SIZ = lumiera::typelist::maxSize<
-                       lumiera::typelist::Types<PID,lumiera_uid,uint>::List>::value 
+        SPEC_SIZ = mp::maxSize<
+                       mp::Types< PID, lumiera_uid, uint>::List>::value 
       };
       typedef lib::OpaqueHolder<TargetSpec, SPEC_SIZ> SpecBuff;
       
