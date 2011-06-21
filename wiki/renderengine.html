@@ -1774,8 +1774,10 @@ To make the intended use of the classes more clear, consider the following two e
 * a video clip placed relatively, with an attached HUE effect &amp;rarr;[[Example2]]
 </pre>
 </div>
-<div title="ExitNode" modifier="Ichthyostega" created="200706220322" tags="def" changecount="1">
+<div title="ExitNode" modifier="Ichthyostega" modified="201106210120" created="200706220322" tags="def" changecount="3">
 <pre>a special ProcNode which is used to pull the finished output of one Render Pipeline (Tree or Graph). This term is already used in the Cinelerra2 codebase. I am unsure at the moment if it is a distinct subclass or rahter a specially configured ProcNode (a general design rule tells us to err in favour of the latter if in doubt).
+
+The render nodes network is always buils separate for each [[timeline segment|Segmentation]], which is //constant in wiring configuration.// Thus, while exit node(s) are per segment, the corresponding exit nodes of consecutive segments together belong to a ModelPort, which in turn corresponds to a global pipe (master bus not connected any further). These relations guide the possible configuration for an exit node: It may still provide multiple channels -- but all those channels are bound to belong to a single logical stream -- same StreamPrototype, always handled as bundle, connected and routed in one step. For example, when there is an 5.1 Audio master bus with a single fader, then &quot;5.1 Audio&quot; would be a prototype and these 6 channels will always be handled together; in such a case it makes perfectly sense to access these 6 audio channels through a single exit node, which is keyed (identified) by the same [[Pipe]]-ID as the corresponding ModelPort and the corresponding global pipe (&quot;5.1 Audio master bus&quot;)
 </pre>
 </div>
 <div title="ExplicitPlacement" modifier="Ichthyostega" modified="201012122052" created="200706220304" tags="def" changecount="6">
@@ -3219,7 +3221,7 @@ While actually data frames are //pulled,// on a conceptual level data is assumed
 As both of these specifications are given by [[Pipe]]-~IDs, the actual designation information may be reduced. Much can be infered from the circumstances, because any pipe includes a StreamType, and an output designation for an incompatible stream type is irrelevant. (e.g. and audio output when the pipe currently in question deals with video)
 </pre>
 </div>
-<div title="OutputManagement" modifier="Ichthyostega" modified="201106180118" created="201007090155" tags="Model Rendering Player spec draft" changecount="25">
+<div title="OutputManagement" modifier="Ichthyostega" modified="201106210136" created="201007090155" tags="Model Rendering Player spec draft" changecount="31">
 <pre>//writing down some thoughts//
 
 * ruled out the system outputs as OutputDesignation.
@@ -3236,7 +3238,7 @@ From the implementation side, the only interesting exit nodes are the ones to be
 * __playback__ always happens at a viewer element
 
 !Attaching and mapping of exit nodes
-[[Output designations|OutputDesignation]] are created using a [[Pipe]]-ID and &amp;mdash; they become real by some object //claiming to root this pipe.// The applicability of this pattern is figured out dynamically while building the render network, resulting in a collection of model ports as part of the current [[Fixture]]. A RenderProcess can be started to pull from these active exit points of a given timeline. Besides, when the timeline enclosing these model ports is [[connected to a viewer|ViewerPlayConnection]], an [[output network|OutputNetwork]] //is built to allow hooking exit points to the viewer component.// Both cases encompass a mapping of exit nodes to actual output channels. Usually, this mapping relies on relative addressing of the output sinks, starting to allocate connections with the &quot;first of each kind&quot;.
+[[Output designations|OutputDesignation]] are created using a [[Pipe]]-ID and &amp;mdash; they become real by some object //claiming to root this pipe.// The applicability of this pattern is figured out dynamically while building the render network, resulting in a collection of [[model ports|ModelPort]] as part of the current [[Fixture]]. A RenderProcess can be started to pull from these active exit points of a given timeline. Besides, when the timeline enclosing these model ports is [[connected to a viewer|ViewerPlayConnection]], an [[output network|OutputNetwork]] //is built to allow hooking exit points to the viewer component.// Both cases encompass a mapping of exit nodes to actual output channels. Usually, this mapping relies on relative addressing of the output sinks, starting to allocate connections with the &quot;first of each kind&quot;.
 
 We should note that in both cases this [[mapping operation|OutputMapping]] is controlled and driven by the output side of the connection: A viewer has fixed output capabilities, and rendering targets a specific container format, again with fixed and pre-settled channel configuration (when configurting a render process, it might be necessary to account for //possible kinds of output streams,// so to provide a sensible pre-selection of possible output container formats for the user to select from). Thus, as a starting point, we'll create a default configured mapping, assigning channels in order. This mapping then should be exposed to modification and tweaking by the user. For rendering, this is part of the render options dialog, while in case of a viwer connection, a switch board is created to allow modifying the default mapping.
 
@@ -3244,20 +3246,30 @@ We should note that in both cases this [[mapping operation|OutputMapping]] is co
 External output destinations are never addressed directly from within the model. This is an design decision. Rather, model parts connect to an OutputDesignation, and these in turn may be  [[connected to a viewer element|ViewerPlayConnection]]. At this point, related to the viewer element, there is a mapping to external destination(s): for images, a viewer typically has an implicit, natural destination (read, there is a corresponding viewer window or widget), while for sound we use an mapping rule, which could be overridden locally in the viewer.
 
 Any external output sink is managed as a [[slot|DisplayerSlot]] in the ~OutputManager. Such a slot can be opened and allocated for a playback process, which allows the latter to push calculated data frames to the output. Depending on the kind of output, there might be various, often tight requirements on the timed delivery of output data, but any details are abstracted away &amp;mdash; any slot implementation provides a way to handle time-outs gracefully, e.g. by just showing the last video frame delivered, or by looping and fading sound
+&amp;rarr; the OutputManager interface describes handling this mapping association
 &amp;rarr; see also the PlayService
 
 !the global output manager
-While mostly the model just denotes the destination for output as OutputDesignation, at some point we need to map these abstract designations to real output capabilities. This OutputManager interface exposes mapping and the ability to control and manage it. Several elements within the application, most notably the [[viewers|ViewerAsset]], provide an implementation of this interface -- yet there is one primary implementation, the ''global output manager'', known as OutputDirector. It can be accessed through the {{{Output}}} façade interface and is the final authority when it comes to allocating an mapping of real output possibilities. The OutputDirector tracks all the OutputSlot elements currently installed and available for output.
+While within the model routing is done mostly just by referring to an OutputDesignation, at some point we need to map these abstract designations to real output capabilities. This OutputManager interface exposes mapping and the ability to control and manage it. Several elements within the application, most notably the [[viewers|ViewerAsset]], provide an implementation of this interface -- yet there is one primary implementation, the ''global output manager'', known as OutputDirector. It can be accessed through the {{{Output}}} façade interface and is the final authority when it comes to allocating an mapping of real output possibilities. The OutputDirector tracks all the OutputSlot elements currently installed and available for output.
 
-The relation between the central OutputDirector and the peripheral OutputManger implementations is hierarchical. Because outpust slots are usually registered at some peripheral output manager implementation, a direct mapping from OutputDesignation (i.e. global pipe) to these slots is created foremost at that peripheral level. {{red{Question: is it possible to retrieve a slot from another peripheral node?}}}
+The relation between the central OutputDirector and the peripheral OutputManager implementations is hierarchical. Because output slots are usually registered rather at some peripheral output manager implementation, a direct mapping from OutputDesignation (i.e. global pipe) to these slots is created foremost at that peripheral level. Resolving a global pipe into an output slot is the core concern of any OutputManager implementation. Thus, when there is a locally preconfigured mapping, like e.g. for a viewer's video master pipe to the output slot installed by the corresponding GUI viewer element, then this mapping will picked up foremost to resolve the video master output.
+
+For a viewer widget in the GUI this yields exactly the expeted behaviour, but in other cases, e.g. for sound output, we need more general, more globally scoped output slots. In these cases, when a local mapping is absent, the query for output resolution is passed on up to the  OutputDirector, drawing on the collection of globally available output slots for that specific kind of media.
+{{red{Question: is it possible to retrieve a slot from another peripheral node?}}}
 </pre>
 </div>
-<div title="OutputManager" modifier="Ichthyostega" modified="201106162346" created="201106122359" tags="Player Model def" changecount="3">
-<pre>The term &amp;raquo;''Output Manager''&amp;laquo; might denote two things: first, there is an {{{proc::play::OutputManager}}} interface, which can be exposed by several components within the application, most notably the [[viewer elements|ViewerAsset]]. And then, there is &quot;the&quot; global output manager, which finally tracks all registered OutputSlot elements and thus is the gatekeeper for any output leaving the application.
+<div title="OutputManager" modifier="Ichthyostega" modified="201106210222" created="201106122359" tags="Player Model def" changecount="6">
+<pre>The term &amp;raquo;''Output Manager''&amp;laquo; might denote two things: first, there is an {{{proc::play::OutputManager}}} interface, which can be exposed by several components within the application, most notably the [[viewer elements|ViewerAsset]]. And then, there is &quot;the&quot; global output manager, the OutputDirector, which finally tracks all registered OutputSlot elements and thus is the gatekeeper for any output leaving the application.
 
 &amp;rarr; see [[output management overview|OutputManagement]]
 &amp;rarr; see OutputSlot
-&amp;rarr; see ViewerPlayConnection</pre>
+&amp;rarr; see ViewerPlayConnection
+
+!Role of an output manager
+The output manager interface describes an entity handling two distinct concerns, tied together within a local //scope.//
+* a ''mapping'' to resolve a ModelPort (given as ~Pipe-ID) into an OutputSlot (or several in case of multichannel media)
+* the ''registration'' and management of possible output slots, thereby creating a preferred local mapping for future connections
+</pre>
 </div>
 <div title="OutputMapping" modifier="Ichthyostega" modified="201106180044" created="201011080238" tags="Model spec draft" changecount="29">
 <pre>An output mapping serves to //resolve//&amp;nbsp; [[output designations|OutputDesignation]].
@@ -5427,7 +5439,7 @@ if (oldText.indexOf(&quot;SplashScreen&quot;)==-1)
 * besides, between different stream //implementation types,// there can be a ''rendering'' (lossy conversion) &amp;mdash; or no conversion at all.
 </pre>
 </div>
-<div title="StreamPrototype" modifier="Ichthyostega" modified="200809120021" created="200808152042" tags="def spec" changecount="10">
+<div title="StreamPrototype" modifier="Ichthyostega" modified="201106210145" created="200808152042" tags="def spec" changecount="11">
 <pre>The stream Prototype is part of the specification of a media stream's type. It is a semantic (or problem domain oriented) concept and should be distinguished from the actual implementation type of the media stream. The latter is provided by an [[library implementation|StreamTypeImplFacade]]. While there are some common predefined prototypes, mostly, they are defined within the concrete [[Session]] according to the user's needs. 
 
 Prototypes form an open (extensible) collection, though each prototype belongs to a specific media kind ({{{VIDEO, IMAGE, AUDIO, MIDI,...}}}).
@@ -5440,7 +5452,7 @@ Consequently, as we can't get away with an fixed Enum of all stream prototypes, 
 * we can determine if another prototype is //convertible//
 
 !!Examples
-NTSC and PAL video, video versus digitized film, HD video versus SD video, 3D versus flat video, cinemascope versus 4:3, stereophonic versus monaural, periphonic versus panoramic sound, Ambisonics versus 5.1, dolby versus linear PCM...
+In practice, several things might be considered &quot;quite different&quot; and thus be distinguished by protorype: NTSC and PAL video, video versus digitized film, HD video versus SD video, 3D versus flat video, cinemascope versus 4:3, stereophonic versus monaural, periphonic versus panoramic sound, Ambisonics versus 5.1, dolby versus linear PCM...
 </pre>
 </div>
 <div title="StreamType" modifier="Ichthyostega" modified="201011071741" created="200808060244" tags="spec draft" changecount="21">

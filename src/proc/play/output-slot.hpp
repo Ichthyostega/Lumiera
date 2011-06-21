@@ -39,6 +39,7 @@
 #include "lib/error.hpp"
 #include "lib/handle.hpp"
 #include "lib/time/timevalue.hpp"
+#include "proc/engine/buffhandle.hpp"
 //#include "lib/sync.hpp"
 
 #include <boost/noncopyable.hpp>
@@ -50,14 +51,16 @@
 
 namespace proc {
 namespace play {
-  
+
+  using ::engine::BuffHandle;
 //using std::string;
+
 //using std::vector;
 //using std::tr1::shared_ptr;
 //using boost::scoped_ptr;
   
   
-  
+  /** established output channel */
   class Connection;
   
   class BufferHandoverSink
@@ -65,7 +68,7 @@ namespace play {
     {
       
     public:
-      void emit(Time);
+      void emit(Time, BuffHandle);
     };
   
   

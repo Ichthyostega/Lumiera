@@ -115,8 +115,8 @@ namespace lumiera {
           };
         
         
-        typedef lib::IterSource<mobject::ModelPort>&    ModelPorts;
-        typedef lib::IterSource<mobject::OutputDesignation>& Pipes;
+        typedef lib::IterSource<mobject::ModelPort>::iterator    ModelPorts;
+        typedef lib::IterSource<mobject::OutputDesignation>::iterator Pipes;
         typedef proc::play::POutputManager Output;
         typedef mobject::session::PClipMO Clip;
         typedef mobject::PTrack  Track;

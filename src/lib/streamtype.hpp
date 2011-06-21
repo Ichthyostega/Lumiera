@@ -110,7 +110,12 @@ namespace lumiera {
       
       class TypeTag ; 
       
-      /** placeholder definition for the contents of a data buffer */
+      /** 
+       * placeholder type for the contents of a data buffer.
+       * The actual buffer will always be provided by a 
+       * library implementation; throughout the engine,
+       * it's just hidden behind a DataBuffer pointer.
+       */
       struct DataBuffer { };
       
       
