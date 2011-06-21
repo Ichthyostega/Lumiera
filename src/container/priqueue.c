@@ -33,6 +33,7 @@ PriQueue
 priqueue_init (PriQueue self,
                size_t element_size,
                priqueue_cmp_fn cmpfn,
+               priqueue_copy_fn copyfn,
                priqueue_resize_fn resizefn)
 {
   NOBUG_INIT_FLAG (priqueue);
@@ -47,6 +48,10 @@ priqueue_init (PriQueue self,
       self->element_size = element_size;
       self->used = self->high_water = self->low_water = 0;
       self->cmpfn = cmpfn;
+
+      if (!copyfn)
+        copyfn = memcpy;
+      self->copyfn = copyfn;
 
       if (!resizefn)
         resizefn = priqueue_clib_resize;
@@ -177,11 +182,11 @@ pq_up (PriQueue self, void* tmp)
 
   while (p && self->cmpfn (tmp, pq_index(self, p-1)) < 0)
     {
-      memcpy (pq_index (self, i-1), pq_index (self, p-1), self->element_size);
+      self->copyfn (pq_index (self, i-1), pq_index (self, p-1), self->element_size);
       i=p; p=i/2;
     }
 
-  memcpy (pq_index (self, i-1), tmp, self->element_size);
+  self->copyfn (pq_index (self, i-1), tmp, self->element_size);
 }
 
 
@@ -222,10 +227,10 @@ pq_down (PriQueue self, void* tmp)
       if (self->cmpfn (tmp, pq_index(self, n-1)) < 0)
         break;
 
-      memcpy (pq_index (self, i-1), pq_index (self, n-1), self->element_size);
+      self->copyfn (pq_index (self, i-1), pq_index (self, n-1), self->element_size);
       i = n;
     }
-  memcpy (pq_index (self, i-1), tmp, self->element_size);
+  self->copyfn (pq_index (self, i-1), tmp, self->element_size);
 }
 
 
@@ -257,7 +262,7 @@ priqueue_remove (PriQueue self)
 
 
 
-#if 0  /* testing */
+#ifdef PRIQUEUE_TEST  /* testing */
 
 #include <stdio.h>
 
@@ -303,10 +308,11 @@ int main()
   r = priqueue_init (&pq,
                      sizeof (int),
                      cmpintptr,
+                     NULL,
                      NULL);
   ENSURE (r==&pq);
 
-#if 0
+#if 1
   data = 10;
   r = priqueue_insert (&pq, &data);
   ENSURE (r==&pq);

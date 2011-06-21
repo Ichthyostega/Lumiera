@@ -42,6 +42,9 @@ typedef priqueue* PriQueue;
 /* function to compare 2 keys, mandatory */
 typedef int (*priqueue_cmp_fn)(void*, void*);
 
+/* function to copy elements, optional. Has the same prototype as memcpy which is used by default */
+typedef void *(*priqueue_copy_fn)(void *dest, const void *src, size_t n);
+
 /* called when used hits the high or low water marks and initially by priqueue_init() (with queue==NULL)
    or at priqueue_destroy (with queue != NULL, used elements == 0),
    optional.
@@ -64,6 +67,7 @@ struct priqueue_struct
   unsigned low_water;                           // size for shrinking the queue
 
   priqueue_cmp_fn cmpfn;
+  priqueue_copy_fn copyfn;
 
   priqueue_resize_fn resizefn;
 };
@@ -77,6 +81,7 @@ PriQueue
 priqueue_init (PriQueue self,
                size_t element_size,
                priqueue_cmp_fn cmpfn,
+               priqueue_copy_fn copyfn,
                priqueue_resize_fn resizefn);
 
 
