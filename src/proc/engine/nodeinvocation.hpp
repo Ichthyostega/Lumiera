@@ -172,6 +172,7 @@ namespace engine {
     };
     
     
+                                                                                                    ////////////TICKET #249  this strategy should better be hidden within the BuffHanle ctor (and type-erased after creation)
     struct AllocBufferFromParent  ///< using the parent StateAdapter for buffer allocations
       : Invocation
       {

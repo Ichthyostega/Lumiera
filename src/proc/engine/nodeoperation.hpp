@@ -245,7 +245,7 @@ namespace config {
   
   template<class NEXT>
   struct ReleaseBuffers : NEXT                     /////////////////TODO: couldn't this be done automatically by BuffTab's dtor??
-    {                                             /////////////////       this would require BuffHandle to be a smart ref....
+    {                                             /////////////////       this would require BuffHandle to be a smart ref....     --> ///TICKET #249
       BuffHandle 
       step (Invocation& ivo)
         {

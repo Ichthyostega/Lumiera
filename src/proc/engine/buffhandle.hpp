@@ -52,6 +52,9 @@ namespace engine {
   /**
    * Handle for a buffer for processing data, abstracting away the actual implementation.
    * The real buffer pointer can be retrieved by dereferencing this smart-handle class.
+   * 
+   * @todo as of 6/2011 it isn't clear how buffer handles are actually created
+   *       and how the lifecycle (and memory) management works
    */
   struct BuffHandle
     : lib::BoolCheckable<BuffHandle>
@@ -78,15 +81,24 @@ namespace engine {
         }
       
       
-      //////////////////////TODO: the whole logic how to create a BuffHandle needs to be solved in a more clever way. --> Ticket 249
+      //////////////////////TODO: the whole logic how to create a BuffHandle needs to be solved in a more clever way. --> TICKET #249
       BuffHandle()
         : pBuffer_(0),
           sourceID_(0)
         { }
       
+      /** 
+       * @deprecated placeholder implementation
+       * @todo rework the Lifecycle handling of buffers  //////////TICKET #249
+       */
+      BuffHandle(PBuff existingBuffer)
+        : pBuffer_(existingBuffer)
+        , sourceID_(0)
+        { }
+      
     private:
       PBuff pBuffer_; 
-      long sourceID_;
+      long sourceID_;   ////TICKET #249 this is a placeholder for a "type-like information", to be used for lifecycle management and sanity checks....
     };
   
   

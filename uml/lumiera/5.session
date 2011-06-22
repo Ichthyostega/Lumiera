@@ -4,12 +4,10 @@ diagrams
     631 352 100 4 0 0
   objectdiagram_ref 138885 // ModelAssetRelations
     730 488 100 4 0 0
-  classdiagram_ref 142725 // Time flavours
-    595 646 100 4 0 0
-  classdiagram_ref 131205 // Struct-Asset Relations
-    530 608 100 4 0 0
-  active  classdiagram_ref 130309 // Asset Kinds
-    855 805 100 4 0 0
+  classdiagram_ref 143877 // Player Entities
+    663 648 100 4 0 0
+  active  objectdiagram_ref 144005 // Play Process Structure
+    562 424 100 4 0 0
 end
 show_stereotypes
 selected 
@@ -17,36 +15,13 @@ selected
 open
   
   package_ref 128005 // design
-  class_ref 160389 // VirtualMedia
-  class_ref 136837 // Proc
-  class_ref 152197 // Sequence
-  class_ref 160901 // Timeline
-  class_ref 174981 // Viewer
-  class_ref 139269 // DoRecurse
-  class_ref 162821 // TypedID::Link
   classview_ref 128389 // Controller Workings
-  class_ref 139653 // Session
-  class_ref 145541 // Timeline
-  class_ref 128133 // Seq
-  class_ref 160517 // Root
-  class_ref 128389 // Track
-  class_ref 152325 // Binding
-  class_ref 129797 // ExplicitPlacement
-  class_ref 129029 // Effect
-  class_ref 139909 // LocatingPin
-  class_ref 152453 // PlacementRef
-  classrelation_ref 178437 // <realization>
+  classview_ref 136837 // PlayOut
   class_ref 153733 // QueryFocusStack
   usecaseview_ref 128261 // config examples
   
   package_ref 128389 // RenderEngine
-  classdiagram_ref 142725 // Time flavours
-  class_ref 134917 // Time
-  class_ref 168837 // Duration
-  class_ref 169221 // TimeGrid
-  class_ref 170373 // TimeVar
-  class_ref 170501 // QuTimeSpan
-  classview_ref 128645 // Service Components
-  classview_ref 128266 // SmartPointers
+  
+  package_ref 129157 // BackendLayer
 end
 end

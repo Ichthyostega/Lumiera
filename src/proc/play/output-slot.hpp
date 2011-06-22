@@ -40,6 +40,7 @@
 #include "lib/handle.hpp"
 #include "lib/time/timevalue.hpp"
 #include "proc/engine/buffhandle.hpp"
+#include "lib/iter-source.hpp"
 //#include "lib/sync.hpp"
 
 #include <boost/noncopyable.hpp>
@@ -53,6 +54,7 @@ namespace proc {
 namespace play {
 
   using ::engine::BuffHandle;
+  using lib::time::Time;
 //using std::string;
 
 //using std::vector;
@@ -93,6 +95,27 @@ namespace play {
     {
     public:
       virtual ~OutputSlot();
+      
+      typedef lib::IterSource<BufferHandoverSink>::iterator Opened_BufferHandoverSinks;
+      typedef lib::IterSource<SharedBufferSink>::iterator   Opened_SharedBufferSinks;
+      
+      template<class SINK>
+      struct Allocation
+        {
+          typedef typename lib::IterSource<SINK>::iterator OpenedSinks;
+          
+          OpenedSinks getOpenedSinks();
+          
+          bool isActive();
+          
+          /////TODO add here the getters for timing constraints
+        };
+      
+      
+      bool isFree()  const;
+      
+      Allocation<BufferHandoverSink>
+      allocate();
       
     private:
       

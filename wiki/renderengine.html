@@ -3037,7 +3037,7 @@ __Note__: nothing within the PlacementIndex requires the root object to be of a 
 
 </pre>
 </div>
-<div title="MultichannelMedia" modifier="Ichthyostega" modified="201003140238" created="200709200255" tags="design img" changecount="12">
+<div title="MultichannelMedia" modifier="Ichthyostega" modified="201106212255" created="200709200255" tags="design img" changecount="14">
 <pre>Based on practical experiences, Ichthyo tends to consider Multichannel Media as the base case, while counting media files providing just one single media stream as exotic corner cases. This may seem counter intuitive at first sight; you should think of  it as an attempt to avoid right from start some of the common shortcomings found in many video editors, especially
 * having to deal with keeping a &quot;link&quot; between audio and video clips
 * silly limitations on the supported audio setups (e.g. &quot;sound is mono, stereo or Dolby-5.1&quot;)
@@ -3070,6 +3070,12 @@ While the general approach and reasoning remains valid, a lot of the details loo
 * while the asset related parts remain as specified, we get a distinct ChannelConfig asset instead of the clip asset (which seems to be redundant)
 * either the ~ClipMO referres this ChannelConfig asset &amp;mdash; or in case of the VirtualClip a BindingMO takes this role. Clip Asset and MO could be joined into a single entity
 * as the BindingMO is also used to implement the top-level timelines, the treatment of global and local pipes is united
+* every pipe (bus) should be able to carry multiple channels, //but with the limitation to only a single media StreamType//
+* this &quot;multichannel-of-same-kind&quot; capability carries over to the ModelPort entries and even the OutputSlot elements
+* only when allocating / &quot;opening&quot; an OutputSlot, we get multiple handles for plain single channels.
+* this can be considered the breaking point, where we enter the realm of the render engine. Here, indeed, only single channels are processed
+
+
 </pre>
 </div>
 <div title="NodeConfiguration" modifier="Ichthyostega" modified="200909041807" created="200909041806" tags="spec Builder Rendering" changecount="2">
@@ -3258,7 +3264,7 @@ For a viewer widget in the GUI this yields exactly the expeted behaviour, but in
 {{red{Question: is it possible to retrieve a slot from another peripheral node?}}}
 </pre>
 </div>
-<div title="OutputManager" modifier="Ichthyostega" modified="201106210222" created="201106122359" tags="Player Model def" changecount="6">
+<div title="OutputManager" modifier="Ichthyostega" modified="201106212317" created="201106122359" tags="Player Model def" changecount="7">
 <pre>The term &amp;raquo;''Output Manager''&amp;laquo; might denote two things: first, there is an {{{proc::play::OutputManager}}} interface, which can be exposed by several components within the application, most notably the [[viewer elements|ViewerAsset]]. And then, there is &quot;the&quot; global output manager, the OutputDirector, which finally tracks all registered OutputSlot elements and thus is the gatekeeper for any output leaving the application.
 
 &amp;rarr; see [[output management overview|OutputManagement]]
@@ -3267,8 +3273,12 @@ For a viewer widget in the GUI this yields exactly the expeted behaviour, but in
 
 !Role of an output manager
 The output manager interface describes an entity handling two distinct concerns, tied together within a local //scope.//
-* a ''mapping'' to resolve a ModelPort (given as ~Pipe-ID) into an OutputSlot (or several in case of multichannel media)
+* a ''mapping'' to resolve a ModelPort (given as ~Pipe-ID) into an OutputSlot
 * the ''registration'' and management of possible output slots, thereby creating a preferred local mapping for future connections
+
+Note that an OutputSlot acts as a unit for registration and also for allocating / &quot;opening&quot; an output, while generally there might still be multiple physical outputs grouped into a single slot. This is relevant especially for sound output. A single slot is just the ability to allocate output ports up to a given limit (e.g. 2 for a stereo device, or 6 for a 5.1 device). These multiple channels are allways connected following a natural channel ordering. Thus the mapping is a simple 1:1 association from pipe to slot, assuming that the media types are compatible (and this has been checked already on a higher level).
+
+The //registration//&amp;nbsp; of an output slot installs a functor or association rule, which later on allows to claim and connect up to a preconfigured number of channels. This allocation or usage of a slot is exclusive (i.e. only a single client at a time can allocate a slot, even if not using all the possible channels). Each output manager instance may or may not be configured with a //fall-back rule:// when no association or mapping can be established locally, the connection request might be passed down to the global OutputDirector. Again, we can expect this to be the standard behaviour for sound, while video likely will rather be handled locally, e.g. within a GUI widget (but we're not bound to configure it exactly this way)
 </pre>
 </div>
 <div title="OutputMapping" modifier="Ichthyostega" modified="201106180044" created="201011080238" tags="Model spec draft" changecount="29">
@@ -3303,12 +3313,12 @@ Thus the mapping is a copyable value object, based on a associative array. It ma
 First and foremost, mapping can be seen as a //functional abstraction.// As it's used at implementation level, encapsulation of detail types in't the primary concern, so it's a candidate for generic programming: For each of those use cases outlined above, a distinct mapping type is created by instantiating the {{{OutputMapping&lt;DEF&gt;}}} template with a specifically tailored definition context ({{{DEF}}}), which takes on the role of a strategy. Individual instances of this concrete mapping type may be default created and copied freely. This instantiation process includes picking up the concrete result type and building a functor object for resolving on the fly. Thus, in the way typical for generic programming, the more involved special details are moved out of sight, while being still in scope for the purpose of inlining. But there //is// a concern better to be encapsulated and concealed at the usage site, namely accessing the rules system. Thus mapping leads itself to the frequently used implementation pattern where there is a generic frontend as header, calling into opaque functions embedded within a separate compilation unit.
 </pre>
 </div>
-<div title="OutputSlot" modifier="Ichthyostega" modified="201106180039" created="201106162339" tags="def Concepts Player spec" changecount="7">
+<div title="OutputSlot" modifier="Ichthyostega" modified="201106212331" created="201106162339" tags="def Concepts Player spec" changecount="8">
 <pre>Within the Lumiera player and output subsystem, actually sending data to an external output requires to allocate an ''output slot''
 This is the central metaphor for the organisation of actual (system level) outputs; using this concept allows to separate and abstract the data calculation and the organisation of playback and rendering from the specifics of the actual output sink. Actual output possibilities can be added and removed dynamically from various components (backend, GUI), all using the same resolution and mapping mechanisms (&amp;rarr; OutputManagement)
 
 !Properties of an output slot
-Each OutputSlot is an unique and distinguishable entity. It corresponds explicitly to an external output, output file or similar capability accepting media content. First off, an output slot needs to be provided, configured and registered, using an implementation for the kind of media data to be output (sound, video) and the special circumstances of the output capability (render a file, display video in a GUI widget, send video to a full screen display, establish a Jack port, just use some kind of &quot;sound out&quot;). In some cases, this explicit registration may be extened to a //factory for additional output slots// -- to be used on demand. An output slot is always limited to a single kind of media, and to a single connection unit, but this connection may still be comprised of multiple channels (stereoscopic video, multichannel sound).
+Each OutputSlot is an unique and distinguishable entity. It corresponds explicitly to an external output, or a group of such outputs (e.g. left and right soundcard output channels), or an output file or similar capability accepting media content. First off, an output slot needs to be provided, configured and registered, using an implementation for the kind of media data to be output (sound, video) and the special circumstances of the output capability (render a file, display video in a GUI widget, send video to a full screen display, establish a Jack port, just use some kind of &quot;sound out&quot;). An output slot is always limited to a single kind of media, and to a single connection unit, but this connection may still be comprised of multiple channels (stereoscopic video, multichannel sound).
 
 In order to be usable as //output sink,// an output slot needs to be //allocated,// i.e. tied to and locked for a specific client. At any time, there may be only a single client using a given output slot this way. To stress this point: output slots don't provide any kind of inherent mixing capability; any adaptation, mixing, overlaying and sharing needs to be done within the nodes network producing the output data fed to the slot. (yet some special kinds of external output capabilities -- e.g. the Jack audio connection system -- may still provide additional mixing capabilities, but that's beyond the scope of the Lumiera application)
 
@@ -3327,6 +3337,9 @@ Besides the sink handles, allocation of an output slot defines some timing const
 The assumption is for the client to have elaborate timing capabilities at his disposal. More specifically, the client is a job running within the engine scheduler and thus can be configured to run within certain limits. Thus the client is able to provide a //current nominal time// -- which is suitably close to the actual wall clock time. The output slot implementation can be written such as to work out from this time specification if the call is timely or overdue -- and react accordingly.
 
 {{red{TODO 6/11}}}in this spec, both data exchange models exhibit a weakness regarding the releasing of buffers. At which time is it safe to release a buffer, when the handover didn't happen? Do we need an explicit callback, and how could this callback be triggered? This is similar to the problem of closing a network connection, i.e. the problem is generally unsolvable, but can be handled pragmatically within certain limits.
+
+!!!Lifecycle and storage
+The concrete OutputSlot implementation is owned and managed by the facility actually providing this output possibility. For example, the GUI provides viewer widgets, while some sound output backend provides sound ports. This implementation object is required to stay alive as long as it's registered with some OutputManager. It needs to be deregistered explicitly prior to destruction -- and this deregistration may block until all clients using this slot are terminated. Beyond that, an output slot implementation is expected to handle all kinds of failures gracefully -- preferrably just emitting a signal (callback functor).
 
 </pre>
 </div>
@@ -4188,14 +4201,21 @@ We need a way of addressing existing [[pipes|Pipe]]. Besides, as the Pipes and T
 &lt;&lt;tasksum end&gt;&gt;
 </pre>
 </div>
-<div title="PlayProcess" modifier="Ichthyostega" modified="201105222321" created="201012181714" tags="def spec Player" changecount="5">
+<div title="PlayProcess" modifier="Ichthyostega" modified="201106220026" created="201012181714" tags="def spec Player img" changecount="10">
 <pre>With //play process//&amp;nbsp; we denote an ongoing effort to calculate a stream of frames for playback or rendering.
 The play process is an conceptual entity linking together several activities in the [[Backend]] and the RenderEngine. Creating a play process is the central service provided by the [[player subsystem|Player]]: it maintains a registration entry for the process to keep track of associated entities, resources allocated and calls [[dispatched|FrameDispatcher]] as a consequence, and it wires and exposes a PlayController to serve as an interface and information hub.
 
 ''Note'': the player is in no way engaged in any of the actual calculation and management tasks necessary to make this [[stream of calculations|CalculationStream]] happen. The play process code contained within the player subsystem is largely comprised of organisational concerns and not especially performance critical.
 * the [[Backend]] is responsible for scheduling and [[dispatching|Dispatcher]] the CalculationStream
 * the RenderEngine has the ability to cary out individual frame calculations
-* the OutputSlot exposed by the [[output manager|OutputManagement]] is responsible for accepting timed frame delivery</pre>
+* the OutputSlot exposed by the [[output manager|OutputManagement]] is responsible for accepting timed frame delivery
+
+[&gt;img[Anatomy of a Play Process|uml/fig144005.png]]
+!Anatomy of a Play Process
+The Controller is exposed to the client and acts as frontend handle, while the play process body groups and manages all the various parts cooperating to generate output. For each of the participating global pipes we get a feed to drive that pipeline to deliver media of a specific kind.
+
+Right within the play process, there is a separation into two realms, relying on different programming paradigms. Obviously the play controller is a state machine, and similarily the body object (play process) has a distinct operation state. Moreover, the individual objects hooked up at any given instance is a stateful variable. To the contrary, when we enter the realm of actual processing, operations are carried out in parallel, relying on stateless descriptor objects, hooked up into individual calculation jobs, to be scheduled as non-blocking units of operation. For each series of consecutive frames to be calculated, there is a descriptor object, the CalculationStream, which also links to a specificaly tailored dispatcher table, allowing to schedule the individual frame jobs. Whenever the controller determines a change in the playback plan (speed change, skip, scrubbing, looping, ...), a new CalculationStream is created, while the existing one is just used to mark any not-yet processed job as superseded.
+</pre>
 </div>
 <div title="PlayService" modifier="Ichthyostega" modified="201105221918" created="201105221900" tags="Player spec draft" changecount="9">
 <pre>The [[Player]] is an independent [[Subsystem]] within Lumiera, located at Proc-Layer level. A more precise term would be &quot;rendering and playback coordination subsystem&quot;. It provides the capability to generate media data, based on a high-level model object, and send this generated data to an OutputDesignation, creating an continuous and timing controlled output stream. Clients may utilise these functionality through the ''play service'' interface.
