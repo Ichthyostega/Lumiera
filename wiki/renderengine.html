@@ -3313,7 +3313,7 @@ Thus the mapping is a copyable value object, based on a associative array. It ma
 First and foremost, mapping can be seen as a //functional abstraction.// As it's used at implementation level, encapsulation of detail types in't the primary concern, so it's a candidate for generic programming: For each of those use cases outlined above, a distinct mapping type is created by instantiating the {{{OutputMapping&lt;DEF&gt;}}} template with a specifically tailored definition context ({{{DEF}}}), which takes on the role of a strategy. Individual instances of this concrete mapping type may be default created and copied freely. This instantiation process includes picking up the concrete result type and building a functor object for resolving on the fly. Thus, in the way typical for generic programming, the more involved special details are moved out of sight, while being still in scope for the purpose of inlining. But there //is// a concern better to be encapsulated and concealed at the usage site, namely accessing the rules system. Thus mapping leads itself to the frequently used implementation pattern where there is a generic frontend as header, calling into opaque functions embedded within a separate compilation unit.
 </pre>
 </div>
-<div title="OutputSlot" modifier="Ichthyostega" modified="201106212331" created="201106162339" tags="def Concepts Player spec" changecount="8">
+<div title="OutputSlot" modifier="Ichthyostega" modified="201106230057" created="201106162339" tags="def Concepts Player spec" changecount="10">
 <pre>Within the Lumiera player and output subsystem, actually sending data to an external output requires to allocate an ''output slot''
 This is the central metaphor for the organisation of actual (system level) outputs; using this concept allows to separate and abstract the data calculation and the organisation of playback and rendering from the specifics of the actual output sink. Actual output possibilities can be added and removed dynamically from various components (backend, GUI), all using the same resolution and mapping mechanisms (&amp;rarr; OutputManagement)
 
@@ -3340,6 +3340,13 @@ The assumption is for the client to have elaborate timing capabilities at his di
 
 !!!Lifecycle and storage
 The concrete OutputSlot implementation is owned and managed by the facility actually providing this output possibility. For example, the GUI provides viewer widgets, while some sound output backend provides sound ports. This implementation object is required to stay alive as long as it's registered with some OutputManager. It needs to be deregistered explicitly prior to destruction -- and this deregistration may block until all clients using this slot are terminated. Beyond that, an output slot implementation is expected to handle all kinds of failures gracefully -- preferrably just emitting a signal (callback functor).
+
+-----
+!Implementation / design problems
+How to handle the selection of those two data exchange models!
+-- Problem is, typically this choice isn't up to the client; rather, the concrete OutputSlot implementation dictates what model to use. Yet I wanted to handle these through //generic programming// -- because they can't be subsumed under a single interface without distorting the usage or the structure.
+
+Thus: Client gets an {{{OutputSlot&amp;}}}, without knowing the exact implementation type &amp;rArr; how can the client pick up the right strategy, note, at //compile time!//
 
 </pre>
 </div>
@@ -4201,7 +4208,7 @@ We need a way of addressing existing [[pipes|Pipe]]. Besides, as the Pipes and T
 &lt;&lt;tasksum end&gt;&gt;
 </pre>
 </div>
-<div title="PlayProcess" modifier="Ichthyostega" modified="201106220026" created="201012181714" tags="def spec Player img" changecount="10">
+<div title="PlayProcess" modifier="Ichthyostega" modified="201106231449" created="201012181714" tags="def spec Player img" changecount="12">
 <pre>With //play process//&amp;nbsp; we denote an ongoing effort to calculate a stream of frames for playback or rendering.
 The play process is an conceptual entity linking together several activities in the [[Backend]] and the RenderEngine. Creating a play process is the central service provided by the [[player subsystem|Player]]: it maintains a registration entry for the process to keep track of associated entities, resources allocated and calls [[dispatched|FrameDispatcher]] as a consequence, and it wires and exposes a PlayController to serve as an interface and information hub.
 
@@ -4214,7 +4221,7 @@ The play process is an conceptual entity linking together several activities in 
 !Anatomy of a Play Process
 The Controller is exposed to the client and acts as frontend handle, while the play process body groups and manages all the various parts cooperating to generate output. For each of the participating global pipes we get a feed to drive that pipeline to deliver media of a specific kind.
 
-Right within the play process, there is a separation into two realms, relying on different programming paradigms. Obviously the play controller is a state machine, and similarily the body object (play process) has a distinct operation state. Moreover, the individual objects hooked up at any given instance is a stateful variable. To the contrary, when we enter the realm of actual processing, operations are carried out in parallel, relying on stateless descriptor objects, hooked up into individual calculation jobs, to be scheduled as non-blocking units of operation. For each series of consecutive frames to be calculated, there is a descriptor object, the CalculationStream, which also links to a specificaly tailored dispatcher table, allowing to schedule the individual frame jobs. Whenever the controller determines a change in the playback plan (speed change, skip, scrubbing, looping, ...), a new CalculationStream is created, while the existing one is just used to mark any not-yet processed job as superseded.
+Right within the play process, there is a separation into two realms, relying on different programming paradigms. Obviously the play controller is a state machine, and similarily the body object (play process) has a distinct operation state. Moreover, the current collection of individual objects hooked up at any given instance is a stateful variable. To the contrary, when we enter the realm of actual processing, operations are carried out in parallel, relying on stateless descriptor objects, wired into individual calculation jobs, to be scheduled as non-blocking units of operation. For each series of consecutive frames to be calculated, there is a descriptor object, the CalculationStream, which also links to a specificaly tailored dispatcher table, allowing to schedule the individual frame jobs. Whenever the controller determines a change in the playback plan (speed change, skip, scrubbing, looping, ...), a new CalculationStream is created, while the existing one is just used to mark any not-yet processed job as superseded.
 </pre>
 </div>
 <div title="PlayService" modifier="Ichthyostega" modified="201105221918" created="201105221900" tags="Player spec draft" changecount="9">

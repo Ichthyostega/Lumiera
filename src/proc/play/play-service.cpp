@@ -23,12 +23,13 @@
 
 #include "proc/play/play-service.hpp"
 #include "proc/play/play-process.hpp"
-#include "lib/scoped-ptrvect.hpp" 
+#include "lib/itertools.hpp"
 
 
 #include <string>
 //#include <memory>
-//#include <tr1/functional>
+#include <tr1/functional>
+#include <tr1/memory>
 //#include <boost/scoped_ptr.hpp>
 
 
@@ -53,6 +54,10 @@ namespace play {
 //using std::tr1::bind;
   using lib::Sync;
   using lib::RecursiveLock_NoWait;
+  using lib::filterIterator;
+  using std::tr1::weak_ptr;
+  using std::tr1::bind;
+  using std::tr1::placeholders::_1;
   
   
   namespace { // hidden local details of the service implementation....
@@ -62,8 +67,6 @@ namespace play {
     
     
     
-    /* ================== define an lumieraorg_DummyPlayer instance ======================= */
-    
     
   } // (End) hidden service impl details
   
@@ -71,12 +74,29 @@ namespace play {
   class ProcessTable
     : public Sync<RecursiveLock_NoWait>
     {
-      typedef lib::ScopedPtrVect<PlayProcess> ProcTable;
+      typedef std::vector<weak_ptr<PlayProcess> > ProcTable;
       
       ProcTable processes_;
       
     public:
       
+      lumiera::Play::Controller
+      establishProcess (PlayProcess* newProcess)
+        {
+          lumiera::Play::Controller frontend;
+          
+          frontend.activate (newProcess, bind (&ProcessTable::endProcess, this, _1 ));
+          processes_.push_back (frontend);
+          return frontend;
+        }
+      
+    private:
+      void
+      endProcess (PlayProcess* dyingProcess)
+        {
+          delete dyingProcess;
+          UNIMPLEMENTED ("process deregistration");   /// note the process might not be registered at all
+        }
     };
   
   
@@ -114,6 +134,9 @@ namespace play {
   PlayService::connect(ModelPorts dataGenerators, Output outputDestinations)
   {
     UNIMPLEMENTED ("build a PlayProcess");
+    pTable_->establishProcess(
+                 new PlayProcess (filterIterator (dataGenerators,
+                                                  resolve(outputDestinations))));
   }
   
 

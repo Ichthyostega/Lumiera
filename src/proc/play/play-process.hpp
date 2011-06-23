@@ -21,7 +21,27 @@
 */
 
 /** @file play-process.hpp
- *  
+ ** Organisational unit of an ongoing render- or playback process.
+ ** A process object doesn't perform any work in itself, rather it's
+ ** an entry in the process table maintained within the PlayService.
+ ** This table entry is used to keep track of the individual data feeds,
+ ** each corresponding to one of the global pipes to be "performed" in order
+ ** to generate output data. Usually, these global pipes all belong to a given
+ ** Timeline (but other setups are possible as well).
+ ** 
+ ** Each of these Feed objects comprising a play process is in turn responsible
+ ** for getting one or multiple CalculationStream entities configured and operative
+ ** within the actual render engine. Each of these calculation streams corresponds
+ ** to a running series of calculations for consecutive frames, to be delivered
+ ** in a time-bound fashion from the render engine into an OutputSlot, allocated
+ ** for rendering this specific feed.
+ ** 
+ ** A PlayProcess isn't exposed directly to client code -- it's the body object,
+ ** while a Play::Controller handle is returned to the client (PImpl pattern).
+ ** Using this controller frontend, clients are allowed to control and change
+ ** the playback or rendering state and goals, which then causes the PlayProcess
+ ** to reconfigure the ongoing or planned calculations.
+ ** 
  ** @see lumiera::DummyPlayer
  ** @see gui::PlaybackController usage example 
  */
@@ -31,6 +51,7 @@
 #define PROC_PLAY_PLAY_PROCESS_H
 
 
+#include "lib/error.hpp"
 //#include "include/dummy-player-facade.h"
 //#include "include/display-facade.h"
 //#include "common/instancehandle.hpp"
@@ -49,7 +70,20 @@ namespace play {
 //    using lumiera::Display;
 //    using lumiera::DummyPlayer;
   
+  namespace error = lumiera::error;
   
+  
+  /**
+   * Rendering data feed, corresponding to a single
+   * global pipe and to be delivered into a single OutputSlot.
+   * A feed may still be comprised of multiple channels, but is
+   * bound to operate on a single type of media data only.
+   */
+  class Feed
+    : boost::noncopyable
+    {
+      
+    };
   
   /******************************************************
    * Playback/Render process within the Lumiera Player.
@@ -72,7 +106,14 @@ namespace play {
     {
       
     public:
-      
+      template<class CONS>
+      PlayProcess (CONS pipeConnections)
+        {
+          if (isnil (pipeConnections))
+            throw error::State ("creating a PlayProcess without any usable output connections");
+          
+          UNIMPLEMENTED ("iterate over the connections and allocate/establish each of them, creating and storing Feed objects");
+        }
     };
   
   
