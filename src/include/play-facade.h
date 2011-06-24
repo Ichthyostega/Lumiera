@@ -112,6 +112,8 @@ namespace lumiera {
             double getSpeed()   const;
             uint getQuality()   const;
             bool usesProxy()    const;
+            
+            operator std::tr1::weak_ptr<proc::play::PlayProcess>();
           };
         
         

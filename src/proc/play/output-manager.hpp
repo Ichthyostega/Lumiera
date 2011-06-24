@@ -33,6 +33,7 @@
 
 #include "lib/error.hpp"
 #include "proc/play/output-slot.hpp"
+#include "proc/mobject/model-port.hpp"
 
 #include <boost/noncopyable.hpp>
 //#include <string>
@@ -46,6 +47,10 @@ namespace play {
 //using std::string;
 //using std::vector;
   using std::tr1::shared_ptr;
+  
+  
+  LUMIERA_ERROR_DECLARE(CANT_PLAY); ///< unable to build playback or render process for this configuration
+
   
   
   
@@ -62,7 +67,10 @@ namespace play {
     : boost::noncopyable
     {
     public:
-      OutputManager() {}
+      virtual ~OutputManager() { }
+      
+      
+      virtual OutputSlot& getOutputFor (mobject::ModelPort port)  =0; 
     };
   
   typedef shared_ptr<OutputManager> POutputManager;

@@ -24,6 +24,7 @@
 #include "proc/play/play-service.hpp"
 #include "proc/play/play-process.hpp"
 #include "lib/itertools.hpp"
+#include "lib/util.hpp"
 
 
 #include <string>
@@ -54,10 +55,15 @@ namespace play {
 //using std::tr1::bind;
   using lib::Sync;
   using lib::RecursiveLock_NoWait;
-  using lib::filterIterator;
+  using lib::transformIterator;
   using std::tr1::weak_ptr;
   using std::tr1::bind;
+  using std::tr1::function;
   using std::tr1::placeholders::_1;
+  using util::remove_if;
+  using mobject::ModelPort;
+  
+  typedef proc::play::POutputManager POutputManager;
   
   
   namespace { // hidden local details of the service implementation....
@@ -74,7 +80,8 @@ namespace play {
   class ProcessTable
     : public Sync<RecursiveLock_NoWait>
     {
-      typedef std::vector<weak_ptr<PlayProcess> > ProcTable;
+      typedef weak_ptr<PlayProcess> Entry;
+      typedef std::vector<Entry> ProcTable;
       
       ProcTable processes_;
       
@@ -85,6 +92,7 @@ namespace play {
         {
           lumiera::Play::Controller frontend;
           
+          Lock sync(this);
           frontend.activate (newProcess, bind (&ProcessTable::endProcess, this, _1 ));
           processes_.push_back (frontend);
           return frontend;
@@ -95,7 +103,15 @@ namespace play {
       endProcess (PlayProcess* dyingProcess)
         {
           delete dyingProcess;
-          UNIMPLEMENTED ("process deregistration");   /// note the process might not be registered at all
+          
+          Lock sync(this);
+          remove_if (processes_, isDead);
+        }
+      
+      static bool
+      isDead (Entry const& e)
+        {
+          return e.expired();
         }
     };
   
@@ -112,11 +128,37 @@ namespace play {
    *  rendered data for output. Client code is assumed to access
    *  this service through the lumiera::Play facade. 
    */
-  PlayService::PlayService()   /////TODO Subsys::SigTerm terminationHandle);
+  PlayService::PlayService()
     : facadeAccess_(*this, "Player")
     , pTable_(new ProcessTable)
     { }
   
+  
+  
+  namespace { // details...
+    
+    OutputSlot&
+    resolveOutputConnection (ModelPort port, POutputManager outputResolver)
+    {
+      REQUIRE (outputResolver);
+      OutputSlot& slot = outputResolver->getOutputFor (port);
+      if (!slot.isFree())
+        throw error::State("unable to acquire a suitable output slot"   /////////////////////TICKET #197 #816
+                          , LUMIERA_ERROR_CANT_PLAY);
+    }
+    
+    /** try to establish an output slot for the given 
+     *  global bus or data production exit point.
+     * @param outputResolver a facility able to resolve to
+     *        a concrete output slot within the actual context 
+     * @throw error::State when resolution fails 
+     */
+    function<OutputSlot&(ModelPort)>
+    resolve (POutputManager outputResolver)
+    {
+      return bind (resolveOutputConnection, _1, outputResolver);
+    }
+  }
   
   
   /**
@@ -133,12 +175,15 @@ namespace play {
   Play::Controller
   PlayService::connect(ModelPorts dataGenerators, Output outputDestinations)
   {
-    UNIMPLEMENTED ("build a PlayProcess");
-    pTable_->establishProcess(
-                 new PlayProcess (filterIterator (dataGenerators,
-                                                  resolve(outputDestinations))));
+    return pTable_->establishProcess(
+                 new PlayProcess (transformIterator (dataGenerators,
+                                                     resolve(outputDestinations))));
   }
+
   
+  
+  LUMIERA_ERROR_DEFINE (CANT_PLAY, "unable to build playback or render process for this configuration");
+ 
 
 
 }} // namespace proc::play

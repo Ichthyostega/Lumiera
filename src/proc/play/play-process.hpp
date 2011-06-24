@@ -56,6 +56,8 @@
 //#include "include/display-facade.h"
 //#include "common/instancehandle.hpp"
 //#include "lib/singleton-ref.hpp"
+#include "proc/play/output-manager.hpp"
+#include "lib/util.hpp"
 //
 #include <boost/noncopyable.hpp>
 //#include <boost/scoped_ptr.hpp>
@@ -69,6 +71,7 @@ namespace play {
 //    using lumiera::Subsys;
 //    using lumiera::Display;
 //    using lumiera::DummyPlayer;
+  using util::isnil;
   
   namespace error = lumiera::error;
   
@@ -110,7 +113,8 @@ namespace play {
       PlayProcess (CONS pipeConnections)
         {
           if (isnil (pipeConnections))
-            throw error::State ("creating a PlayProcess without any usable output connections");
+            throw error::State ("creating a PlayProcess without any usable output connections"
+                               , LUMIERA_ERROR_CANT_PLAY);
           
           UNIMPLEMENTED ("iterate over the connections and allocate/establish each of them, creating and storing Feed objects");
         }
