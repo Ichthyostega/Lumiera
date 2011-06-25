@@ -56,12 +56,15 @@
 //#include "include/display-facade.h"
 //#include "common/instancehandle.hpp"
 //#include "lib/singleton-ref.hpp"
+#include "proc/mobject/model-port.hpp"
 #include "proc/play/output-manager.hpp"
+#include "lib/iter-source.hpp"
 #include "lib/util.hpp"
 //
 #include <boost/noncopyable.hpp>
 //#include <boost/scoped_ptr.hpp>
 //#include <string>
+#include <vector>
 
 
 namespace proc {
@@ -72,6 +75,10 @@ namespace play {
 //    using lumiera::Display;
 //    using lumiera::DummyPlayer;
   using util::isnil;
+  using mobject::ModelPort;
+  
+  typedef proc::play::POutputManager POutputManager;
+  typedef lib::IterSource<ModelPort>::iterator ModelPorts;
   
   namespace error = lumiera::error;
   
@@ -83,10 +90,14 @@ namespace play {
    * bound to operate on a single type of media data only.
    */
   class Feed
-    : boost::noncopyable
     {
       
+    public:
+      typedef lib::IterSource<Feed>::iterator Connections;
+      
+      Feed (ModelPort, OutputSlot&);
     };
+    
   
   /******************************************************
    * Playback/Render process within the Lumiera Player.
@@ -107,17 +118,13 @@ namespace play {
   class PlayProcess
     : boost::noncopyable
     {
+      std::vector<Feed> outputFeeds_;
+      
+      PlayProcess (Feed::Connections pipeConnections);
       
     public:
-      template<class CONS>
-      PlayProcess (CONS pipeConnections)
-        {
-          if (isnil (pipeConnections))
-            throw error::State ("creating a PlayProcess without any usable output connections"
-                               , LUMIERA_ERROR_CANT_PLAY);
-          
-          UNIMPLEMENTED ("iterate over the connections and allocate/establish each of them, creating and storing Feed objects");
-        }
+      static PlayProcess*
+      initiate (ModelPorts dataGenerators, POutputManager outputDestinations);
     };
   
   

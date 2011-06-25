@@ -40,8 +40,16 @@ namespace play {
   
   
   
-  /**  */
-  
+  /** whether this output slot is occupied
+   * @return true if currently unconnected and
+   *         able to connect and handle output data 
+   */
+  bool
+  OutputSlot::isFree()  const
+  {
+    UNIMPLEMENTED ("connection state");
+  }
+      
   
   
   

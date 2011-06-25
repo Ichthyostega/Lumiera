@@ -49,6 +49,7 @@ namespace lumiera {
   using lib::time::Time;
   using lib::time::Duration;
   using lib::time::TimeSpan;
+  using proc::play::PlayProcess;
   
   
   
@@ -187,6 +188,15 @@ namespace lumiera {
   Play::Controller::usesProxy()    const
   {
     UNIMPLEMENTED ("determine if the current render/playback uses proxy media");
+  }
+  
+  
+  /** @internal expose a weak reference to this handle object.
+   *  Used by the ProcessTable to keep a link to all processes,
+   *  without influencing their reference count */
+  Play::Controller::operator weak_ptr<PlayProcess>()  const
+  {
+    return weak_ptr<PlayProcess> (this->smPtr_);
   }
 
   

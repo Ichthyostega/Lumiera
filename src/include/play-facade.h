@@ -55,6 +55,8 @@ namespace play {
 namespace lumiera {
   
   namespace time = lib::time;
+  
+  using std::tr1::weak_ptr;
     
     
     /******************************************************************
@@ -113,7 +115,7 @@ namespace lumiera {
             uint getQuality()   const;
             bool usesProxy()    const;
             
-            operator std::tr1::weak_ptr<proc::play::PlayProcess>();
+            operator weak_ptr<proc::play::PlayProcess>()  const;
           };
         
         

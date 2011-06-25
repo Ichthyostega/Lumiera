@@ -23,13 +23,12 @@
 
 #include "proc/play/play-service.hpp"
 #include "proc/play/play-process.hpp"
-#include "lib/itertools.hpp"
 #include "lib/util.hpp"
 
 
 #include <string>
 //#include <memory>
-#include <tr1/functional>
+//#include <tr1/functional>
 #include <tr1/memory>
 //#include <boost/scoped_ptr.hpp>
 
@@ -55,15 +54,11 @@ namespace play {
 //using std::tr1::bind;
   using lib::Sync;
   using lib::RecursiveLock_NoWait;
-  using lib::transformIterator;
   using std::tr1::weak_ptr;
   using std::tr1::bind;
-  using std::tr1::function;
+//using std::tr1::function;
   using std::tr1::placeholders::_1;
   using util::remove_if;
-  using mobject::ModelPort;
-  
-  typedef proc::play::POutputManager POutputManager;
   
   
   namespace { // hidden local details of the service implementation....
@@ -135,30 +130,6 @@ namespace play {
   
   
   
-  namespace { // details...
-    
-    OutputSlot&
-    resolveOutputConnection (ModelPort port, POutputManager outputResolver)
-    {
-      REQUIRE (outputResolver);
-      OutputSlot& slot = outputResolver->getOutputFor (port);
-      if (!slot.isFree())
-        throw error::State("unable to acquire a suitable output slot"   /////////////////////TICKET #197 #816
-                          , LUMIERA_ERROR_CANT_PLAY);
-    }
-    
-    /** try to establish an output slot for the given 
-     *  global bus or data production exit point.
-     * @param outputResolver a facility able to resolve to
-     *        a concrete output slot within the actual context 
-     * @throw error::State when resolution fails 
-     */
-    function<OutputSlot&(ModelPort)>
-    resolve (POutputManager outputResolver)
-    {
-      return bind (resolveOutputConnection, _1, outputResolver);
-    }
-  }
   
   
   /**
@@ -173,11 +144,10 @@ namespace play {
    * calculated media data to the outputs. 
    */
   Play::Controller
-  PlayService::connect(ModelPorts dataGenerators, Output outputDestinations)
+  PlayService::connect (ModelPorts dataGenerators, Output outputDestinations)
   {
     return pTable_->establishProcess(
-                 new PlayProcess (transformIterator (dataGenerators,
-                                                     resolve(outputDestinations))));
+            PlayProcess::initiate(dataGenerators, outputDestinations));
   }
 
   
