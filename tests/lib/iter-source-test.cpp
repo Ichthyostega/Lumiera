@@ -168,6 +168,7 @@ namespace test{
           if (0 < arg.size()) NUM_ELMS = lexical_cast<uint> (arg[0]);
           
           verify_simpleIters();
+          verify_transformIter();
           
           verify_MapWrappers<TreeMap>();
           verify_MapWrappers<HashMap>();
@@ -200,6 +201,28 @@ namespace test{
           CHECK (!iii);
           CHECK (!isi);
           CHECK (!cii);
+        }
+      
+      
+      void
+      verify_transformIter()
+        {
+          WrappedList customList(NUM_ELMS);
+          WrappedList::iterator sourceValues = customList.begin(); 
+          
+          TimeIter tIt (transform (sourceValues, makeTime));
+          CHECK (!isnil (tIt));
+          pullOut (tIt);
+          CHECK (!tIt);
+        }
+      
+      /** transformation function, to be applied for each element:
+       *  just build a time value, using the input as 1/4 seconds
+       */
+      static TimeVar
+      makeTime (int input_sec)
+        {
+          return time::Time (time::FSecs (input_sec, 4));
         }
       
       
@@ -280,7 +303,6 @@ namespace test{
           CHECK (vals);
           pullOut (vals); // should produce anything between 1 and 100 entries
           CHECK (!vals);
-          
         }
     };
   

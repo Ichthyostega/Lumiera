@@ -46,8 +46,7 @@ namespace play {
     using std::tr1::bind;
     using std::tr1::function;
     using std::tr1::placeholders::_1;
-    using lib::transformIterator;
-    using lib::wrapIter;
+    using lib::transform;
     
     
     Feed
@@ -74,15 +73,6 @@ namespace play {
     resolve (POutputManager outputResolver)
     {
       return bind (resolveOutputConnection, _1, outputResolver);
-    }
-    
-    
-    
-    Feed::Connections
-    transform (ModelPorts dataGenerators, ConnectFunction outputResolution)
-    {
-      return wrapIter(
-             transformIterator (dataGenerators, outputResolution));
     }
     
   } // (End) hidden service impl details
