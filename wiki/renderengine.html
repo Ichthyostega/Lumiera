@@ -3313,7 +3313,7 @@ Thus the mapping is a copyable value object, based on a associative array. It ma
 First and foremost, mapping can be seen as a //functional abstraction.// As it's used at implementation level, encapsulation of detail types in't the primary concern, so it's a candidate for generic programming: For each of those use cases outlined above, a distinct mapping type is created by instantiating the {{{OutputMapping&lt;DEF&gt;}}} template with a specifically tailored definition context ({{{DEF}}}), which takes on the role of a strategy. Individual instances of this concrete mapping type may be default created and copied freely. This instantiation process includes picking up the concrete result type and building a functor object for resolving on the fly. Thus, in the way typical for generic programming, the more involved special details are moved out of sight, while being still in scope for the purpose of inlining. But there //is// a concern better to be encapsulated and concealed at the usage site, namely accessing the rules system. Thus mapping leads itself to the frequently used implementation pattern where there is a generic frontend as header, calling into opaque functions embedded within a separate compilation unit.
 </pre>
 </div>
-<div title="OutputSlot" modifier="Ichthyostega" modified="201106230057" created="201106162339" tags="def Concepts Player spec" changecount="10">
+<div title="OutputSlot" modifier="Ichthyostega" modified="201106270108" created="201106162339" tags="def Concepts Player spec" changecount="14">
 <pre>Within the Lumiera player and output subsystem, actually sending data to an external output requires to allocate an ''output slot''
 This is the central metaphor for the organisation of actual (system level) outputs; using this concept allows to separate and abstract the data calculation and the organisation of playback and rendering from the specifics of the actual output sink. Actual output possibilities can be added and removed dynamically from various components (backend, GUI), all using the same resolution and mapping mechanisms (&amp;rarr; OutputManagement)
 
@@ -3344,10 +3344,20 @@ The concrete OutputSlot implementation is owned and managed by the facility actu
 -----
 !Implementation / design problems
 How to handle the selection of those two data exchange models!
--- Problem is, typically this choice isn't up to the client; rather, the concrete OutputSlot implementation dictates what model to use. Yet I wanted to handle these through //generic programming// -- because they can't be subsumed under a single interface without distorting the usage or the structure.
+-- Problem is, typically this choice isn't up to the client; rather, the concrete OutputSlot implementation dictates what model to use. But, as it stands, the client needs to cooperate and behave differently to a certain degree. Unless we manage to factor out an common denominator of both models.
 
-Thus: Client gets an {{{OutputSlot&amp;}}}, without knowing the exact implementation type &amp;rArr; how can the client pick up the right strategy, note, at //compile time!//
+Thus: Client gets an {{{OutputSlot&amp;}}}, without knowing the exact implementation type &amp;rArr; how can the client pick up the right strategy?
+Solving this problem through //generic programming// -- i.e coding both cases effectively different, but similar -- would require to provide both implementation options already at //compile time!//
 
+{{red{currently}}} I see two possible, yet quite different approaches...
+;generic
+:when creating individual jobs, we utilise a //factory optained from the output slot.//
+;unified
+:extend and adapt the protocol such to make both models similar; concentrate all differences //within a separate buffer provider.//
+!!!!discussion
+the generic approach looks as it's becoming rather convoluted in practice. We'd need to hand over additional parameters to the factory, which passes them through to the actual job implementation created. And there would be a coupling between slot and job (the slot is aware it's going to be used by a job, and even provides the implementation). Obviously, a benefit is that the actual code path executed within the job is without indirections, and all written down in a single location. Another benefit is the possibility to extend this approach to cover further buffer handling models -- it doesn't pose any requirements on the structure of the buffer handling.
+If we accept to retrieve the buffer(s) via an indirection, which we kind of do anyway //within the render node implementation// -- the unified model looks more like a clean solution. It's more like doing away with some local optimisations possible if we handle the models explicitly, so it's not much of a loss, given that the majority of the processing time will be spent within the inner pixel calulation loops for frame processing anyway. When following this approach, the buffer provider becomes a third, independent partner, and the slot cooperates tightly with this buffer provider, while the client (processing node) still just talks to the slot. Basically, this unified solution is like extending the shared buffer model to both cases.
+&amp;rArr; conclusion: go for the unified approach!
 </pre>
 </div>
 <div title="Overview" modifier="Ichthyostega" modified="200906071810" created="200706190300" tags="overview img" changecount="13">
