@@ -65,16 +65,17 @@ namespace play {
   /** established output channel */
   class Connection;
   
-  class BufferHandoverSink
-    : public lib::Handle<Connection>
+  class BufferProvider
     {
       
     public:
-      void emit(Time, BuffHandle);
+      ~BufferProvider() { }
+      
+      BuffHandle lockBufferFor(Time);
     };
   
   
-  class SharedBufferSink
+  class DataSink
     : public lib::Handle<Connection>
     {
       
@@ -96,14 +97,10 @@ namespace play {
     public:
       virtual ~OutputSlot();
       
-      typedef lib::IterSource<BufferHandoverSink>::iterator Opened_BufferHandoverSinks;
-      typedef lib::IterSource<SharedBufferSink>::iterator   Opened_SharedBufferSinks;
+      typedef lib::IterSource<DataSink>::iterator OpenedSinks;
       
-      template<class SINK>
       struct Allocation
         {
-          typedef typename lib::IterSource<SINK>::iterator OpenedSinks;
-          
           OpenedSinks getOpenedSinks();
           
           bool isActive();
@@ -114,7 +111,7 @@ namespace play {
       
       bool isFree()  const;
       
-      Allocation<BufferHandoverSink>
+      Allocation
       allocate();
       
     private:
