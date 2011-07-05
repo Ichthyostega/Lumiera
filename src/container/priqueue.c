@@ -294,10 +294,12 @@ cmpintptr (void* a, void* b)
   return *(int*)a - *(int*)b;
 }
 
+NOBUG_DEFINE_FLAG (priqueue_test);
 
 int main()
 {
   NOBUG_INIT;
+  NOBUG_INIT_FLAG (priqueue_test);
 
   priqueue pq;
 
@@ -316,14 +318,14 @@ int main()
   data = 10;
   r = priqueue_insert (&pq, &data);
   ENSURE (r==&pq);
-  ECHO("inserted %d", data);
+  TRACE (priqueue_test, "inserted %d", data);
 #endif
 
 #if 0
   data = 5;
   r = priqueue_insert (&pq, &data);
   ENSURE (r==&pq);
-  ECHO("inserted %d", data);
+  TRACE (priqueue_test, "inserted %d", data);
 #endif
 
 
@@ -331,36 +333,35 @@ int main()
   data = 15;
   r = priqueue_insert (&pq, &data);
   ENSURE (r==&pq);
-  ECHO("inserted %d", data);
+  TRACE (priqueue_test, "inserted %d", data);
 
   data = 20;
   r = priqueue_insert (&pq, &data);
   ENSURE (r==&pq);
-  ECHO("inserted %d", data);
+  TRACE (priqueue_test, "inserted %d", data);
 #endif
 
 
 
 
 #if 1
-  for (int i = 0; i < 100000; ++i)
+  for (int i = 0; i < 1000000; ++i)
     {
       data = i;
       r = priqueue_insert (&pq, &data);
       ENSURE (r==&pq);
-      ECHO("inserted %d", data);
+      TRACE (priqueue_test, "inserted %d", data);
     }
 
 #endif
 
 #if 1
-  for (int i = 0; i < 100000; ++i)
+  for (int i = 0; i < 1000000; ++i)
     {
-      ECHO("PRE %d", i);
-      data = rand()%100000;
+      data = rand()%1000000;
       r = priqueue_insert (&pq, &data);
       ENSURE (r==&pq);
-      ECHO("inserted %d", data);
+      TRACE (priqueue_test, "inserted %d", data);
     }
 #endif
 
@@ -370,10 +371,9 @@ int main()
 #if 1
   for (int i = 0; pq.used; ++i)
     {
-      ECHO ("TOP: %d", *(int*)priqueue_peek (&pq));
+      TRACE (priqueue_test, "TOP: %d", *(int*)priqueue_peek (&pq));
       r = priqueue_remove (&pq);
       ENSURE (r==&pq);
-      ECHO("poped");
     }
 #endif
 
