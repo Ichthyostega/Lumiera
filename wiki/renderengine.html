@@ -3313,7 +3313,7 @@ Thus the mapping is a copyable value object, based on a associative array. It ma
 First and foremost, mapping can be seen as a //functional abstraction.// As it's used at implementation level, encapsulation of detail types in't the primary concern, so it's a candidate for generic programming: For each of those use cases outlined above, a distinct mapping type is created by instantiating the {{{OutputMapping&lt;DEF&gt;}}} template with a specifically tailored definition context ({{{DEF}}}), which takes on the role of a strategy. Individual instances of this concrete mapping type may be default created and copied freely. This instantiation process includes picking up the concrete result type and building a functor object for resolving on the fly. Thus, in the way typical for generic programming, the more involved special details are moved out of sight, while being still in scope for the purpose of inlining. But there //is// a concern better to be encapsulated and concealed at the usage site, namely accessing the rules system. Thus mapping leads itself to the frequently used implementation pattern where there is a generic frontend as header, calling into opaque functions embedded within a separate compilation unit.
 </pre>
 </div>
-<div title="OutputSlot" modifier="Ichthyostega" modified="201107042247" created="201106162339" tags="def Concepts Player spec" changecount="18">
+<div title="OutputSlot" modifier="Ichthyostega" modified="201107080131" created="201106162339" tags="def Concepts Player spec" changecount="23">
 <pre>Within the Lumiera player and output subsystem, actually sending data to an external output requires to allocate an ''output slot''
 This is the central metaphor for the organisation of actual (system level) outputs; using this concept allows to separate and abstract the data calculation and the organisation of playback and rendering from the specifics of the actual output sink. Actual output possibilities can be added and removed dynamically from various components (backend, GUI), all using the same resolution and mapping mechanisms (&amp;rarr; OutputManagement)
 
@@ -3334,12 +3334,13 @@ Data is handed over by the client invoking an {{{emit(time,...)}}} function on t
 !!!timing expectations
 Besides the sink handles, allocation of an output slot defines some timing constraints, which are binding for the client. These timings are detailed and explicit, including a grid of deadlines for each frame to deliver, plus a fixed //latency.// Within this context, &amp;raquo;latency&amp;laquo; means the requirement to be ahead of the nominal time by a certain amount, to compensate for the processing time necessary to propagate the media to the physical output pin. The output slot implementation itself is bound by external constraints to deliver data at a fixed framerate and aligned to an externally defined timing grid, plus the data needs to be handed over ahead of these time points by an time amount given by the latency. Depending on the data exchange model, there is an additional time window limiting the buffer management.
 
-The assumption is for the client to have elaborate timing capabilities at his disposal. More specifically, the client is a job running within the engine scheduler and thus can be configured to run within certain limits. Thus the client is able to provide a //current nominal time// -- which is suitably close to the actual wall clock time. The output slot implementation can be written such as to work out from this time specification if the call is timely or overdue -- and react accordingly.
+The assumption is for the client to have elaborate timing capabilities at his disposal. More specifically, the client is a job running within the engine scheduler and thus can be configured to run //after// another job has finished, and to run within certain time limits. Thus the client is able to provide a //current nominal time// -- which is suitably close to the actual wall clock time. The output slot implementation can be written such as to work out from this time specification if the call is timely or overdue -- and react accordingly.
 
 {{red{TODO 6/11}}}in this spec, both data exchange models exhibit a weakness regarding the releasing of buffers. At which time is it safe to release a buffer, when the handover didn't happen? Do we need an explicit callback, and how could this callback be triggered? This is similar to the problem of closing a network connection, i.e. the problem is generally unsolvable, but can be handled pragmatically within certain limits.
 
 !!!Lifecycle and storage
 The concrete OutputSlot implementation is owned and managed by the facility actually providing this output possibility. For example, the GUI provides viewer widgets, while some sound output backend provides sound ports. This implementation object is required to stay alive as long as it's registered with some OutputManager. It needs to be deregistered explicitly prior to destruction -- and this deregistration may block until all clients using this slot are terminated. Beyond that, an output slot implementation is expected to handle all kinds of failures gracefully -- preferrably just emitting a signal (callback functor).
+{{red{TODO 7/11: Deregistration is an unsolved problem....}}}
 
 -----
 !Implementation / design problems
@@ -3351,20 +3352,38 @@ Solving this problem through //generic programming// -- i.e coding both cases ef
 
 {{red{currently}}} I see two possible, yet quite different approaches...
 ;generic
-:when creating individual jobs, we utilise a //factory optained from the output slot.//
+:when creating individual jobs, we utilise a //factory obtained from the output slot.//
 ;unified
 :extend and adapt the protocol such to make both models similar; concentrate all differences //within a separate buffer provider.//
 !!!discussion
 the generic approach looks as it's becoming rather convoluted in practice. We'd need to hand over additional parameters to the factory, which passes them through to the actual job implementation created. And there would be a coupling between slot and job (the slot is aware it's going to be used by a job, and even provides the implementation). Obviously, a benefit is that the actual code path executed within the job is without indirections, and all written down in a single location. Another benefit is the possibility to extend this approach to cover further buffer handling models -- it doesn't pose any requirements on the structure of the buffer handling.
-If we accept to retrieve the buffer(s) via an indirection, which we kind of do anyway //within the render node implementation// -- the unified model looks more like a clean solution. It's more like doing away with some local optimisations possible if we handle the models explicitly, so it's not much of a loss, given that the majority of the processing time will be spent within the inner pixel calulation loops for frame processing anyway. When following this approach, the buffer provider becomes a third, independent partner, and the slot cooperates tightly with this buffer provider, while the client (processing node) still just talks to the slot. Basically, this unified solution is like extending the shared buffer model to both cases.
+If we accept to retrieve the buffer(s) via an indirection, which we kind of do anyway //within the render node implementation// -- the unified model looks more like a clean solution. It's more like doing away with some local optimisations possible if we handle the models explicitly, so it's not much of a loss, given that the majority of the processing time will be spent within the inner pixel calculation loops for frame processing anyway. When following this approach, the buffer provider becomes a third, independent partner, and the slot cooperates tightly with this buffer provider, while the client (processing node) still just talks to the slot. Basically, this unified solution is like extending the shared buffer model to both cases.
 &amp;rArr; conclusion: go for the unified approach!
 
 !!!unified data exchange cycle
 The nominal time of a frame to be delivered is used as an ID throughout that cycle
 # within a defined time window prior to delivery, the client can retrieve the buffer from the ''buffer provider''.
-# the client has to ''emit'' within a (short) time window pior to deadline
+# the client has to ''emit'' within a (short) time window prior to deadline
 # now the slot gets exclusive access to the buffer for output, signalling the buffer release to the buffer provider when done.
-</pre>
+
+!!!lapses
+This data exchange protocol operates on a rather low level; there is only limited protection against timing glitches
+|  !step|!problem ||!consequences | !protection |
+| (1)|out of time window ||interference with previous/later use of the buffer | prevent in scheduler! |
+|~|does not happen ||harmless as such | emit ignored |
+|~|buffer unavailable ||inhibits further operation | ↯ |
+| (2)|out of time window ||harmless as such | emit ignored |
+|~|out of order ||allowed, unless out of time | -- |
+|~|does not happen ||frame treated as glitch | -- |
+|~|buffer unallocated ||frame treated as glitch | emit ignored |
+| (3)|emit missing ||frame treated as glitch | -- |
+|~|fail to release buffer ||unable to use buffer further | mark unavailable |
+|~|buffer unavailable ||serious malfunction of playback | request playback stop |
+
+Thus there are two serious problem situations
+* allocating the buffer out of time window bears the danger of output data corruption; but the general assumption is for the scheduler to ensure each job start time remains within the defined window and all prerequisite jobs have terminated successfully. To handle clean-up, we additionally need special jobs running always, in order, and be notified of prerequisite failures.
+* failure to release a buffer timely blocks any further use of that buffer, any further jobs in need of that buffer will die immediately. This situation can only be caused by a serious problem //within the slot, related to the output mechanism.// Thus there should be some kind of trigger (e.g. when this happens 2 times consecutively) to request aborting the playback or render as a whole.
+&amp;rarr; SchedulerRequirements</pre>
 </div>
 <div title="Overview" modifier="Ichthyostega" modified="200906071810" created="200706190300" tags="overview img" changecount="13">
 <pre>The Lumiera Processing Layer is comprised of various subsystems and can be separated into a low-level and a high-level part. At the low-level end is the [[Render Engine|OverviewRenderEngine]] which basically is a network of render nodes cooperating closely with the Backend Layer in order to carry out the actual playback and media transforming calculations. Whereas on the high-level side we find several different [[Media Objects|MObjects]] that can be placed into the session, edited and manipulated. This is complemented by the [[Asset Management|Asset]], which is the &quot;bookkeeping view&quot; of all the different &quot;things&quot; within each [[Session|SessionOverview]].
@@ -4998,6 +5017,17 @@ Later on we expect a distinct __query subsystem__ to emerge, presumably embeddin
 <pre>A scale grid controls the way of measuring and aligining a quantity the application has to deal with. The most prominent example is the way to handle time in fixed atomic chunks (''frames'') addressed through a fixed format (''timecode''): while internally the application uses time values of sufficiently fine grained resolution, the acutally visible timing coordinates of objects within the session are ''quantised'' to some predefined and fixed time grid.
 
 &amp;rarr; QuantiserImpl</pre>
+</div>
+<div title="SchedulerRequirements" modifier="Ichthyostega" created="201107080145" tags="Rendering spec draft discuss" changecount="1">
+<pre>The Scheduler is responsible for geting the individual render jobs to run. The basic idea is that individual render jobs //should never block// -- and thus the calculation of a single frame might be split into several jobs, including resource fetching. This, together with the data exchange protocol defined for the OutputSlot, and the requirements of storage management (especially releasing of superseded render nodes), leads to certain requirements to be ensured by the scheduler:
+;ordering of jobs
+:the scheduler has to ensure all prerequisites of a given job are met
+;job time window
+:when it's not possible to run a job within the defined target time window, it must be marked as failure
+;failure propagation
+:when a job fails, either due to an job internal error, or by timing glitch, any dependent jobs need to receive that failure state
+;guaranteed execution
+:some jobs are marked as &quot;ensure run&quot;. These need to run reliable, even when prerequisite jobs fail -- and this failure state needs to be propagated</pre>
 </div>
 <div title="ScopeLocator" modifier="Ichthyostega" modified="200911202035" created="200911192145" tags="def SessionLogic" changecount="10">
 <pre>A link to relate a compound of [[nested placement scopes|PlacementScope]] to the //current// session and the //current//&amp;nbsp; [[focus for querying|QueryFocus]] and exploring the structure. ScopeLocator is a singleton service, allowing to ''explore'' a [[Placement]] as a scope, i.e. discover any other placements within this scope, and allowing to locate the position of this scope by navigating up the ScopePath finally to reach the root scope of the HighLevelModel.
