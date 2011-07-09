@@ -64,6 +64,12 @@ namespace engine {
       
     public:
       virtual ~BufferProvider();  ///< this is an interface
+      
+      ///////TODO: is there any generic way to obtain a BufferDescriptor; then we should expose it here...
+      
+      virtual BuffHandle lockBufferFor (BufferDescriptor const&)  =0;
+      virtual void releaseBuffer (BuffHandle const&)              =0;  ////////TODO not quite sure what information to pass here
+      
     };
   
   

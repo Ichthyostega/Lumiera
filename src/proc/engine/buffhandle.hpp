@@ -110,7 +110,7 @@ namespace engine {
   /**
    * Buffer Type information.
    * Given a BufferDescriptor, it is possible to allocate a buffer
-   * of suitable size and type by using BufferProvider::allocateBuffer().
+   * of suitable size and type by using BufferProvider::lockBuffer().
    */
   struct BufferDescriptor
     {

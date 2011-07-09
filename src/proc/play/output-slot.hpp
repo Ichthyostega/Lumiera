@@ -28,7 +28,7 @@
  ** possibilities can be added and removed dynamically from various components (backend, GUI),
  ** all using the same resolution and mapping mechanisms 
  **
- ** @see output-test-slot.hpp  ////TODO
+ ** @see diagnostic-output-slot.hpp  ////TODO
  */
 
 
@@ -54,6 +54,7 @@ namespace proc {
 namespace play {
 
   using ::engine::BuffHandle;
+  using ::engine::BufferProvider;
   using lib::time::Time;
 //using std::string;
 
@@ -65,14 +66,6 @@ namespace play {
   /** established output channel */
   class Connection;
   
-  class BufferProvider
-    {
-      
-    public:
-      ~BufferProvider() { }
-      
-      BuffHandle lockBufferFor(Time);
-    };
   
   
   class DataSink
