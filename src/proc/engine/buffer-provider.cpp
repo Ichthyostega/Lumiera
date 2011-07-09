@@ -1,5 +1,5 @@
 /*
-  BuffHandle  -  Buffer handling support for the render engine
+  BufferProvider  -  Abstraction for Buffer management during playback/render
 
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
@@ -21,11 +21,14 @@
 * *****************************************************/
 
 
-#include "proc/engine/buffhandle.hpp"
+#include "proc/engine/buffer-provider.hpp"
 
 namespace engine {
 
 
+  BufferProvider::~BufferProvider() { }
+  
+  
   /**  */
 
 

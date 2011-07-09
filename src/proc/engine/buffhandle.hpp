@@ -24,12 +24,17 @@
  ** Various bits needed to support the buffer management within the render nodes.
  ** When pulling data from predecessor nodes and calculating new data, each render node
  ** needs several input and output buffers. These may be allocated and provided by several
- ** different "buffer providers" (for example the frame cache). For accessing those buffers,
- ** the node needs to keep a table of buffer pointers, and for releasing the buffers later
- ** on, we need some handles. The usage pattern of those buffer pointer tables is stack-like,
- ** thus it makes sense to utilise a single large buffer pointer array per pull() calldown
- ** sequence and dynamically claim small chunks for each node.
- **
+ ** different "buffer providers" (for example the frame cache). Typically, the real buffers
+ ** will be passed as parameters to the actual job instance when scheduled, drawing on the
+ ** results of prerequisite jobs. Yet the actual job implementation remains agnostic with
+ ** respect to the way actual buffers are provided; the invocation just pushes BuffHandle
+ ** objects around. The actual render function gets an array of C-pointers to the actual
+ ** buffers, and for accessing those buffers, the node needs to keep a table of buffer
+ ** pointers, and for releasing the buffers later on, we utilise the buffer handles.
+ ** The usage pattern of those buffer pointer tables is stack-like, thus the actual
+ ** implementation utilises a single large buffer pointer array per pull() call
+ ** sequence and dynamically claims small chunks for each node.
+ ** 
  ** @see nodewiring-def.hpp
  ** @see nodeoperation.hpp
  ** @see bufftable.hpp       storage for the buffer table
@@ -105,11 +110,11 @@ namespace engine {
   /**
    * Buffer Type information.
    * Given a BufferDescriptor, it is possible to allocate a buffer
-   * of suitable size and type by using State::allocateBuffer().
+   * of suitable size and type by using BufferProvider::allocateBuffer().
    */
   struct BufferDescriptor
     {
-      lumiera::StreamType& sType_;
+      long typeToken_; 
     };
   
   
