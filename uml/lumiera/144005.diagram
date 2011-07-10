@@ -12,10 +12,10 @@ end
 classinstancecanvas 128389 classinstance_ref 146053 // 
   xyz 171 240 2000
 end
-classinstancecanvas 128517 classinstance_ref 146181 // video
+classinstancecanvas 128517 classinstance_ref 146181 // video-L
   xyz 233 194 2000 color lightgreen
 end
-classinstancecanvas 128645 classinstance_ref 146309 // video
+classinstancecanvas 128645 classinstance_ref 146309 // video-R
   xyz 233 216 2000 color lightgreen
 end
 classinstancecanvas 128773 classinstance_ref 146437 // sound-W
@@ -24,11 +24,8 @@ end
 classinstancecanvas 128901 classinstance_ref 146565 // sound-X
   xyz 233 291 2000 color lightgreen
 end
-classinstancecanvas 129029 classinstance_ref 146693 // sound-Z
+classinstancecanvas 129029 classinstance_ref 146693 // sound-Y
   xyz 233 313 2000 color lightgreen
-end
-classinstancecanvas 129157 classinstance_ref 146693 // sound-Z
-  xyz 233 335 2000 color lightgreen
 end
 classinstancecanvas 132101 classinstance_ref 146821 // 
   xyz 420 269 2000 color lightblue
@@ -45,6 +42,9 @@ classinstancecanvas 132613 classinstance_ref 147077 //
 end
 classinstancecanvas 132741 classinstance_ref 147205 // 
   xyz 233 46 2000
+end
+classinstancecanvas 132869 classinstance_ref 148357 // sound-Z
+  xyz 233 335 2000 color lightgreen
 end
 objectlinkcanvas 129285 norel
   geometry VH
@@ -81,14 +81,14 @@ objectlinkcanvas 130949 norel
   from ref 128389 z 1999 to point 194 321
   line 131077 z 1999 to ref 129029
   no_role_a no_role_b
-objectlinkcanvas 131205 norel
-  geometry VH
-  from ref 128389 z 1999 to point 194 343
-  line 131333 z 1999 to ref 129157
-  no_role_a no_role_b
 objectlinkcanvas 131845 norel
   geometry VH
   from ref 128005 z 1999 to point 68 150
   line 131973 z 1999 to ref 128133
+  no_role_a no_role_b
+objectlinkcanvas 132997 norel
+  geometry VHr
+  from ref 132869 z 1999 to point 194 343
+  line 133253 z 1999 to ref 128389
   no_role_a no_role_b
 end

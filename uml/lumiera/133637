@@ -1,6 +1,6 @@
 format 58
 "Play" // ProcessingLayer::Play
-  revision 1
+  revision 2
   modified_by 5 "hiv"
   // class settings
   //class diagram settings
@@ -273,7 +273,7 @@ ${inlines}
         end
     end
 
-    classinstance 146181 "video"
+    classinstance 146181 "video-L"
       type class_ref 176901 // CalcStream
       attributes
         end
@@ -281,7 +281,7 @@ ${inlines}
         end
     end
 
-    classinstance 146309 "video"
+    classinstance 146309 "video-R"
       type class_ref 176901 // CalcStream
       attributes
         end
@@ -305,7 +305,15 @@ ${inlines}
         end
     end
 
-    classinstance 146693 "sound-Z"
+    classinstance 146693 "sound-Y"
+      type class_ref 176901 // CalcStream
+      attributes
+        end
+      relations
+        end
+    end
+
+    classinstance 148357 "sound-Z"
       type class_ref 176901 // CalcStream
       attributes
         end
