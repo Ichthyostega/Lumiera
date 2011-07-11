@@ -66,6 +66,7 @@ namespace play {
   /** established output channel */
   class Connection;
   
+  typedef int64_t FrameNr;
   
   
   class DataSink
@@ -73,7 +74,7 @@ namespace play {
     {
       
     public:
-      void emit(Time);
+      void emit(FrameNr);
     };
   
   
@@ -106,6 +107,13 @@ namespace play {
       
       Allocation
       allocate();
+      
+    protected:
+      friend class DataSink;
+      
+      virtual void lock     (FrameNr, uint channel)   =0;
+      virtual void transfer (FrameNr, uint channel)   =0;
+      virtual void pushout  (FrameNr, uint channel)   =0;
       
     private:
       

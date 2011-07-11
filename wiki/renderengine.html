@@ -3324,7 +3324,7 @@ Thus the mapping is a copyable value object, based on a associative array. It ma
 First and foremost, mapping can be seen as a //functional abstraction.// As it's used at implementation level, encapsulation of detail types in't the primary concern, so it's a candidate for generic programming: For each of those use cases outlined above, a distinct mapping type is created by instantiating the {{{OutputMapping&lt;DEF&gt;}}} template with a specifically tailored definition context ({{{DEF}}}), which takes on the role of a strategy. Individual instances of this concrete mapping type may be default created and copied freely. This instantiation process includes picking up the concrete result type and building a functor object for resolving on the fly. Thus, in the way typical for generic programming, the more involved special details are moved out of sight, while being still in scope for the purpose of inlining. But there //is// a concern better to be encapsulated and concealed at the usage site, namely accessing the rules system. Thus mapping leads itself to the frequently used implementation pattern where there is a generic frontend as header, calling into opaque functions embedded within a separate compilation unit.
 </pre>
 </div>
-<div title="OutputSlot" modifier="Ichthyostega" modified="201107082305" created="201106162339" tags="def Concepts Player spec" changecount="24">
+<div title="OutputSlot" modifier="Ichthyostega" modified="201107102318" created="201106162339" tags="def Concepts Player spec" changecount="26">
 <pre>Within the Lumiera player and output subsystem, actually sending data to an external output requires to allocate an ''output slot''
 This is the central metaphor for the organisation of actual (system level) outputs; using this concept allows to separate and abstract the data calculation and the organisation of playback and rendering from the specifics of the actual output sink. Actual output possibilities can be added and removed dynamically from various components (backend, GUI), all using the same resolution and mapping mechanisms (&amp;rarr; OutputManagement)
 
@@ -3393,8 +3393,37 @@ This data exchange protocol operates on a rather low level; there is only limite
 
 Thus there are two serious problem situations
 * allocating the buffer out of time window bears the danger of output data corruption; but the general assumption is for the scheduler to ensure each job start time remains within the defined window and all prerequisite jobs have terminated successfully. To handle clean-up, we additionally need special jobs running always, in order, and be notified of prerequisite failures.
-* failure to release a buffer timely blocks any further use of that buffer, any further jobs in need of that buffer will die immediately. This situation can only be caused by a serious problem //within the slot, related to the output mechanism.// Thus there should be some kind of trigger (e.g. when this happens 2 times consecutively) to request aborting the playback or render as a whole.
-&amp;rarr; SchedulerRequirements</pre>
+* failure to release a buffer in a timely fashion blocks any further use of that buffer, any further jobs in need of that buffer will die immediately. This situation can only be caused by a serious problem //within the slot, related to the output mechanism.// Thus there should be some kind of trigger (e.g. when this happens 2 times consecutively) to request aborting the playback or render as a whole.
+&amp;rarr; SchedulerRequirements
+&amp;rarr; OutputSlotImpl</pre>
+</div>
+<div title="OutputSlotImpl" modifier="Ichthyostega" modified="201107110047" created="201107102343" tags="spec operational" changecount="25">
+<pre>OutputSlot is an abstraction, allowing unified treatment of various physical output connections from within the render jobs. The actual output slot is a subclass object, created and managed from the &quot;driver code&quot; for a specific output connection. Moreover, each output slot is outfitted with a concrete BufferProvider to reflect the actual buffer handling policy applicable for this specific output connection. Some output connections might e.g. require delivery of the media data into a buffer residing on external hardware, while others work just fine when pointed to some arbitrary memory block holding generated data.
+
+!operation steps
+[&gt;img[Sequenz of output data exchange steps|uml/fig145157.png]]The OutputSlot class defines some standard operations as protected virtual functions. These represent the actual steps in the data exchange protocol corresponding to this output slot.
+;lock()
+:claims the specified buffer for exclusive use.
+:Client may now dispose output data
+;transfer()
+:transfers control from the client to the actual output connection for feeding data.
+:Triggered by the client invoking {{{emit()}}}
+;pushout()
+:request the actual implementation to push the data to output.
+:Usually invoked from the {{{transfer()}}} implementation, alternatively from a separate thread.
+
+
+!buffer states
+While the BufferProvider abstracts away the actual access to the output buffers and just hands out a ''buffer handle'', the client (here the concrete output slot) is allowed to associate and maintain a ''state flag'' with each buffer. The general assumption is that writing this state flag is atomic, and that other facilities will care for the necessary memory barriers (that is: the output slot and the buffer provider will just access this state flag without much ado). The generic part of the output slot implementation utilises this buffer state flag to implement a state machine, which -- together with the timing constraints established with the [[help of the scheduler|SchedulerRequirements]] -- ensures sane access to the buffer without collisions.
+|        !state||&gt;| !lock()   |&gt;| !transfer() |&gt;| !pushout() |
+|     {{{NIL}}}||↯| ·        |↯|             | ↯ |          |
+|    {{{FREE}}}||✔|↷ locked  |✔|· (ignore)  | · | ·         |
+|  {{{LOCKED}}}||↯|↷ emitted |✔|↷ emitted   | · |↷ free    |
+| {{{EMITTED}}}||↯|↷ blocked |↯|↷ blocked   | · |↷ free    |
+| {{{BLOCKED}}}||↯| ✗        |↯| ✗          | ∅ |↷ free    |
+where · means no operation, ✔ marks the standard cases (OK response to caller), ↯ will throw and thus kill the calling job, ∅ will treat this frame as //glitch,// ✗ will request playback stop.
+The rationale is for all states out-of-order to transition into the {{{BLOCKED}}}-state eventually, which, when hit by the next operation, will request playback stop.
+</pre>
 </div>
 <div title="Overview" modifier="Ichthyostega" modified="200906071810" created="200706190300" tags="overview img" changecount="13">
 <pre>The Lumiera Processing Layer is comprised of various subsystems and can be separated into a low-level and a high-level part. At the low-level end is the [[Render Engine|OverviewRenderEngine]] which basically is a network of render nodes cooperating closely with the Backend Layer in order to carry out the actual playback and media transforming calculations. Whereas on the high-level side we find several different [[Media Objects|MObjects]] that can be placed into the session, edited and manipulated. This is complemented by the [[Asset Management|Asset]], which is the &quot;bookkeeping view&quot; of all the different &quot;things&quot; within each [[Session|SessionOverview]].

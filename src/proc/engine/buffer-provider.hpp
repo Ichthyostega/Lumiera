@@ -51,6 +51,14 @@
 namespace engine {
   
   
+  enum BufferState
+    { NIL,
+      FREE,
+      LOCKED,
+      EMITTED,
+      BLOCKED
+    };
+  
   
   /**
    * Handle for a buffer for processing data, abstracting away the actual implementation.
