@@ -12,12 +12,12 @@ envSvg.mergeConf(['librsvg-2.0'])
 envSvg.Append(LIBS=support_lib)
 
 
-luidgen =    env.Program('luidgen', 'luidgen.c', LIBS=support_lib, install=True) ## for generating Lumiera-UIDs
+luidgen =    env.Program('luidgen', ['luidgen.c'] + support_lib, install=True)   ## for generating Lumiera-UIDs
 rsvg    = envSvg.Program('rsvg-convert','rsvg-convert.c')                        ## for rendering SVG icons (uses librsvg) 
 
 # build additional test and administrative tools....
 artifacts['tools'] = [ env.Program('hello-world','hello.c', install=True)      #### hello world (checks C build)      
-                     + env.Program('try', 'try.cpp', LIBS=support_lib)         #### to try out some feature...
+                     + env.Program('try', ['try.cpp'] + support_lib)           #### to try out some feature...
                      + luidgen
                      + rsvg
                      ]
