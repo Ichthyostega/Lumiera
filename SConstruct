@@ -352,7 +352,7 @@ def defineBuildTargets(env, artifacts):
     artifacts['config']  = ( env.ConfigData(env.path.srcConf+'setup.ini', targetDir='$ORIGIN')
                            + env.ConfigData(env.path.srcConf+'dummy_lumiera.ini')
                            )
-    artifacts['lumiera'] = ( env.Program('lumiera', ['src/lumiera/main.cpp'], LIBS=core, install=True)
+    artifacts['lumiera'] = ( env.Program('lumiera', ['src/lumiera/main.cpp'] + core, install=True)
                            + artifacts['config']
                            )
     
