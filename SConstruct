@@ -254,8 +254,10 @@ def configurePlatform(env):
             problems.append('We need boost::format (header).')
         if not conf.CheckLibWithHeader('boost_program_options-mt','boost/program_options.hpp','C++'):
             problems.append('We need boost::program_options (including binary lib for linking).')
+        if not conf.CheckLibWithHeader('boost_system-mt','boost/system/error_code.hpp','C++'):
+            problems.append('We need the boost::system support library (including binary lib).')
         if not conf.CheckLibWithHeader('boost_filesystem-mt','boost/filesystem.hpp','C++'):
-            problems.append('We need the boost::filesystem (including binary lib for linking).')
+            problems.append('We need the boost::filesystem lib (including binary lib for linking).')
         if not conf.CheckLibWithHeader('boost_regex-mt','boost/regex.hpp','C++'):
             problems.append('We need the boost regular expression lib (incl. binary lib for linking).')
     
