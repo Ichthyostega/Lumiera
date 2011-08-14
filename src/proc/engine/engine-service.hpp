@@ -21,10 +21,14 @@
 */
 
 /** @file engine-service.hpp
- ** A public service provided by
- **
- ** @see lumiera::DummyPlayer
- ** @see gui::PlaybackController usage example 
+ ** Access point for the (core) calculation service of the render engine.
+ ** This public service is provided by the Proc-Layer, but actually implemented
+ ** using backend services (especially the scheduler). The central concept provided
+ ** through this facade interface is that of a <i>calculation stream</i>. On the
+ ** implementation side, these get translated into a series of jobs invoking
+ ** render nodes, to be invoked through the scheduler in the backend layer. 
+ ** 
+ ** @see proc::play::PlayerService
  */
 
 
@@ -34,6 +38,7 @@
 
 //#include "include/dummy-player-facade.h"
 //#include "include/display-facade.h"
+#include "proc/engine/calc-stream.hpp"
 //#include "common/instancehandle.hpp"
 //#include "lib/singleton-ref.hpp"
 //
@@ -55,12 +60,14 @@ namespace play {
   
   
   /******************************************************
-   * Actual implementation of the DummyPlayer service.
-   * Creating an instance of this class automatically
-   * registers the interface lumieraorg_DummyPlayer with
-   * the Lumiera Interface/Plugin system and creates
-   * a forwarding proxy within the application core to
-   * route calls through this interface.
+   * A service to schedule series of calculations,
+   * delivering the rendered data into an external output
+   * sink in a timely fashion. Actually the CalculationStream
+   * instances provided through this (facade) interface are
+   * backed by jobs executed through the scheduler in the
+   * backend layer. The implementation of this service
+   * cares to create the right job entries in the correct
+   * order and to enqueue these into the scheduler.
    */
   class EngineService
     : boost::noncopyable
@@ -83,6 +90,9 @@ namespace play {
       EngineService();    /////TODO (Subsys::SigTerm terminationHandle);
       
      ~EngineService() { } /////TODO notifyTermination_(&error_); }
+      
+      CalcStream
+      
       
     };
   

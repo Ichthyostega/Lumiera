@@ -29,6 +29,10 @@
 #include "lib/time/timevalue.hpp"
 
 
+/////////////////////////////TODO 7/11 this is a piece of debris, left over from the first attempt to complete the render nodes network.
+/////////////////////////////TODO Meanwhile the intention is to treat the render nodes network more like a data structure,
+/////////////////////////////TODO consequently this will become some kind of root or anchor point for this network
+
 
 namespace engine {
   

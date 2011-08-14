@@ -1785,10 +1785,10 @@ To make the intended use of the classes more clear, consider the following two e
 * a video clip placed relatively, with an attached HUE effect &amp;rarr;[[Example2]]
 </pre>
 </div>
-<div title="ExitNode" modifier="Ichthyostega" modified="201106210120" created="200706220322" tags="def" changecount="3">
+<div title="ExitNode" modifier="Ichthyostega" modified="201108140105" created="200706220322" tags="def" changecount="4">
 <pre>a special ProcNode which is used to pull the finished output of one Render Pipeline (Tree or Graph). This term is already used in the Cinelerra2 codebase. I am unsure at the moment if it is a distinct subclass or rahter a specially configured ProcNode (a general design rule tells us to err in favour of the latter if in doubt).
 
-The render nodes network is always buils separate for each [[timeline segment|Segmentation]], which is //constant in wiring configuration.// Thus, while exit node(s) are per segment, the corresponding exit nodes of consecutive segments together belong to a ModelPort, which in turn corresponds to a global pipe (master bus not connected any further). These relations guide the possible configuration for an exit node: It may still provide multiple channels -- but all those channels are bound to belong to a single logical stream -- same StreamPrototype, always handled as bundle, connected and routed in one step. For example, when there is an 5.1 Audio master bus with a single fader, then &quot;5.1 Audio&quot; would be a prototype and these 6 channels will always be handled together; in such a case it makes perfectly sense to access these 6 audio channels through a single exit node, which is keyed (identified) by the same [[Pipe]]-ID as the corresponding ModelPort and the corresponding global pipe (&quot;5.1 Audio master bus&quot;)
+The render nodes network is always built separate for each [[timeline segment|Segmentation]], which is //constant in wiring configuration.// Thus, while exit node(s) are per segment, the corresponding exit nodes of consecutive segments together belong to a ModelPort, which in turn corresponds to a global pipe (master bus not connected any further). These relations guide the possible configuration for an exit node: It may still provide multiple channels -- but all those channels are bound to belong to a single logical stream -- same StreamPrototype, always handled as bundle, connected and routed in one step. For example, when there is an 5.1 Audio master bus with a single fader, then &quot;5.1 Audio&quot; would be a prototype and these 6 channels will always be handled together; in such a case it makes perfectly sense to access these 6 audio channels through a single exit node, which is keyed (identified) by the same [[Pipe]]-ID as the corresponding ModelPort and the corresponding global pipe (&quot;5.1 Audio master bus&quot;)
 </pre>
 </div>
 <div title="ExplicitPlacement" modifier="Ichthyostega" modified="201012122052" created="200706220304" tags="def" changecount="6">
@@ -3397,7 +3397,7 @@ Thus there are two serious problem situations
 &amp;rarr; SchedulerRequirements
 &amp;rarr; OutputSlotImpl</pre>
 </div>
-<div title="OutputSlotImpl" modifier="Ichthyostega" modified="201107110047" created="201107102343" tags="spec operational" changecount="25">
+<div title="OutputSlotImpl" modifier="Ichthyostega" modified="201108112339" created="201107102343" tags="spec operational" changecount="26">
 <pre>OutputSlot is an abstraction, allowing unified treatment of various physical output connections from within the render jobs. The actual output slot is a subclass object, created and managed from the &quot;driver code&quot; for a specific output connection. Moreover, each output slot is outfitted with a concrete BufferProvider to reflect the actual buffer handling policy applicable for this specific output connection. Some output connections might e.g. require delivery of the media data into a buffer residing on external hardware, while others work just fine when pointed to some arbitrary memory block holding generated data.
 
 !operation steps
@@ -3414,7 +3414,7 @@ Thus there are two serious problem situations
 
 
 !buffer states
-While the BufferProvider abstracts away the actual access to the output buffers and just hands out a ''buffer handle'', the client (here the concrete output slot) is allowed to associate and maintain a ''state flag'' with each buffer. The general assumption is that writing this state flag is atomic, and that other facilities will care for the necessary memory barriers (that is: the output slot and the buffer provider will just access this state flag without much ado). The generic part of the output slot implementation utilises this buffer state flag to implement a state machine, which -- together with the timing constraints established with the [[help of the scheduler|SchedulerRequirements]] -- ensures sane access to the buffer without collisions.
+While the BufferProvider abstracts away the actual access to the output buffers and just hands out a ''buffer handle'', the server side (here the concrete output slot) is allowed to associate and maintain a ''state flag'' with each buffer. The general assumption is that writing this state flag is atomic, and that other facilities will care for the necessary memory barriers (that is: the output slot and the buffer provider will just access this state flag without much ado). The generic part of the output slot implementation utilises this buffer state flag to implement a state machine, which -- together with the timing constraints established with the [[help of the scheduler|SchedulerRequirements]] -- ensures sane access to the buffer without collisions.
 |        !state||&gt;| !lock()   |&gt;| !transfer() |&gt;| !pushout() |
 |     {{{NIL}}}||↯| ·        |↯|             | ↯ |          |
 |    {{{FREE}}}||✔|↷ locked  |✔|· (ignore)  | · | ·         |
