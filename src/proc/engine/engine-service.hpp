@@ -36,24 +36,33 @@
 #define PROC_ENGINE_ENGINE_SERVICE_H
 
 
+#include "lib/error.hpp"
 //#include "include/dummy-player-facade.h"
 //#include "include/display-facade.h"
 #include "proc/engine/calc-stream.hpp"
+#include "proc/mobject/model-port.hpp"
+#include "proc/play/timings.hpp"
+#include "proc/play/output-slot.hpp"
 //#include "common/instancehandle.hpp"
 //#include "lib/singleton-ref.hpp"
+#include "lib/polymorphic-value.hpp"
 //
 #include <boost/noncopyable.hpp>
 //#include <boost/scoped_ptr.hpp>
 //#include <string>
 
 
-namespace proc {
-namespace play {
+namespace proc  {
+namespace engine{
 
 //    using std::string;
 //    using lumiera::Subsys;
 //    using lumiera::Display;
 //    using lumiera::DummyPlayer;
+  using mobject::ModelPort;
+  using proc::play::Timings;
+  
+  typedef proc::play::OutputSlot::Allocation OutputConnection;
   
   
   
@@ -86,19 +95,61 @@ namespace play {
 //    lib::SingletonRef<DummyPlayerService> implInstance_;
 //    ServiceInstanceHandle serviceInstance_;
       
+      /* The following typedefs allow to hand out predefined
+       * Quality-of-Service strategy definitions as value objects,
+       * without disclosing implementation details here in this header.
+       */
+      enum{ QoS_IMPL_SIZE = sizeof(size_t) };  /////////////////////////////////////////TODO is this correct??
+      
+      
     public:
+      /*************************************************************
+       * Quality-of-Service definition for an Render Engine usage.
+       * This strategy defines how to decide between conflicting goals like
+       * - timely delivery
+       * - image quality
+       * - niceness and resource usage
+       */
+      class Quality
+        {
+          public:
+            virtual ~Quality();  ///< this is an Interface
+        };
+      
+      
+//      typedef lib::polyvalue::CloneValueSupport<Quality> _ClonableQoS_Strategy;
+      typedef lib::PolymorphicValue<Quality, QoS_IMPL_SIZE> QoS_Definition;
+      
+      static QoS_Definition  QoS_DEFAULT;
+      static QoS_Definition  QoS_BACKGROUND;
+      static QoS_Definition  QoS_SYNC_PRIORITY;
+      static QoS_Definition  QoS_PERFECT_RESULT;
+      static QoS_Definition  QoS_COMPROMISE;
+      
+      
+      
       EngineService();    /////TODO (Subsys::SigTerm terminationHandle);
       
      ~EngineService() { } /////TODO notifyTermination_(&error_); }
       
       CalcStream
+      calculate(ModelPort mPort,
+                Timings nominalTimings,
+                OutputConnection output,
+                Quality serviceQuality =QoS_DEFAULT);
       
+      CalcStream
+      calculateBackground(ModelPort mPort,
+                          Timings nominalTimings,
+                          Quality serviceQuality =QoS_BACKGROUND);
       
     };
   
   
   
   
-} // namespace play
+  
+  
+} // namespace engine
 } // namespace proc
 #endif

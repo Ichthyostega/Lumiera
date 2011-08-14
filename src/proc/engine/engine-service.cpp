@@ -40,14 +40,93 @@ namespace engine{
 //    using std::tr1::bind;
     
     
-    namespace { // hidden local details of the service implementation....
+  namespace { // hidden local details of the service implementation....
+    
+  } // (End) hidden service impl details
+    
+    
+  
+    
+  /** */  
+  EngineService::EngineService()
+    { }
       
-    } // (End) hidden service impl details
-    
-    
-    
-    
-    /** */  
+      
+  
+  /** */
+  CalcStream
+  EngineService::calculate(ModelPort mPort,
+                           Timings nominalTimings,
+                           OutputConnection output,
+                           Quality serviceQuality)
+  {
+    UNIMPLEMENTED ("build a standard calculation stream");
+  }
+  
+  
+  
+  /** */
+  CalcStream
+  EngineService::calculateBackground(ModelPort mPort,
+                                     Timings nominalTimings,
+                                     Quality serviceQuality)
+  {
+    UNIMPLEMENTED ("build a calculation stream for background rendering");
+  }
+  
+  
+  
+  /* ===== Quality-of-Service ===== */
+  
+  
+  EngineService::Quality::~Quality() { } // emit vtables here...
+  
+  enum CalcType {
+    PLAYBACK,
+    RENDER,
+    BACKGROUND
+  };
+  
+  
+  class DefaultQoS
+    : public EngineService::Quality
+    {
+      CalcType type_;
+      
+    public:
+      DefaultQoS (CalcType type)
+        : type_(type)
+        { }
+    };
+  
+  class PriorityQoS
+    : public DefaultQoS
+    {
+      CalcType type_;
+      
+    public:
+      PriorityQoS ()
+        : DefaultQoS(PLAYBACK)
+        { }
+    };
+  
+  class Compromise
+    : public DefaultQoS
+    {
+      
+    public:
+      Compromise (CalcType type)
+        : DefaultQoS(type)
+        { }
+    };
+  
+  
+  EngineService::QoS_Definition  EngineService::QoS_DEFAULT         = QoS_Definition::build<DefaultQoS> (PLAYBACK);
+  EngineService::QoS_Definition  EngineService::QoS_BACKGROUND      = QoS_Definition::build<DefaultQoS> (BACKGROUND);
+  EngineService::QoS_Definition  EngineService::QoS_COMPROMISE      = QoS_Definition::build<Compromise> (PLAYBACK); 
+  EngineService::QoS_Definition  EngineService::QoS_PERFECT_RESULT  = QoS_Definition::build<DefaultQoS> (RENDER);
+  EngineService::QoS_Definition  EngineService::QoS_SYNC_PRIORITY   = QoS_Definition::build<PriorityQoS>();
+  
   
   
 }} // namespace proc::engine

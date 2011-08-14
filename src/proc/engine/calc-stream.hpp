@@ -26,6 +26,7 @@
 #define PROC_ENGINE_CALC_STREAM_H
 
 
+#include "lib/error.hpp"
 //#include "include/dummy-player-facade.h"
 //#include "include/display-facade.h"
 //#include "common/instancehandle.hpp"
@@ -36,8 +37,8 @@
 //#include <string>
 
 
-namespace proc {
-namespace play {
+namespace proc  {
+namespace engine{
 
 //    using std::string;
 //    using lumiera::Subsys;
@@ -77,7 +78,9 @@ namespace play {
       
     public:
       CalcStream (CalcStream const& o)
-        { }
+        { 
+          UNIMPLEMENTED("build a calculation stream");
+        }
       
      ~CalcStream() { }
       
@@ -86,6 +89,6 @@ namespace play {
   
   
   
-} // namespace play
+} // namespace engine
 } // namespace proc
 #endif

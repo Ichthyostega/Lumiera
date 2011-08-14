@@ -1643,7 +1643,7 @@ The main tool used to implement this separation is the [[Builder Pattern|http://
 Another pertinent theme is to make the basic building blocks simpler, while on the other hand gaining much more flexibility for combining these building blocks. For example we try to unfold any &quot;internal-multi&quot; effects into separate instances (e.g. the possibility of having an arbitrary number of single masks at any point of the pipeline instead of having one special masking facility encompassing multiple sub-masks. Similarly, we treat the Objects in the Session in a more uniform manner and gain the possibility to [[place|Placement]] them in various ways.
 </pre>
 </div>
-<div title="DesignPlayerSubsystem" modifier="Ichthyostega" modified="201106122319" created="201105220216" tags="Player design draft" changecount="13">
+<div title="DesignPlayerSubsystem" modifier="Ichthyostega" modified="201108141649" created="201105220216" tags="Player design draft" changecount="14">
 <pre>//Currently (5/2011) this page is used to collect and build up a coherent design for the player subsystem of Lumiera..//
 
 !Starting point
@@ -1659,7 +1659,7 @@ Introduce a new kind of MObject, a GeneratorMO, to represent what the current du
 Reworking the dummy player into the [[Player subsystem|PlayService]] is a larger undertaking, and best broken up into several //stages.//
 # just moving the existing entities into the final location (typically down in the layer hierarchy)
 # introduce a GeneratorMO and a GeneratorNode, while providing a shortcut to get the GeneratorNode without requiring the (not yet implemented) Builder.
-# rework the ~ProcessImpl and the ~TickService to become the CalculationStream and use the real Engine Interface, but still with an mock implementation hooked up behind
+# rework the ~ProcessImpl and the ~TickService to become the [[calculation stream|CalcStream]] and use the real Engine Interface, but still with an mock implementation hooked up behind
 # extend and elaborate the handling of output, build the foundation of the real OutputManager
 # switch to the real Scheduler and Engine implementation
 
@@ -1734,11 +1734,11 @@ When building the low-level model, the actual processing code is resolved and a 
 Initially, only the parameter (descriptors) are present on the effect ~MObject, while the actual [[parameter providers|ParamProvider]] are created or wired (by the ConManager) on demand.
 </pre>
 </div>
-<div title="EngineFaçade" modifier="Ichthyostega" modified="201105222330" created="201105222328" tags="Rendering overview spec" changecount="2">
-<pre>The primary interface used by the upper application layers to interact with the render engine, to create and manage ongoing [[calculation streams|CalculationStream]].
+<div title="EngineFaçade" modifier="Ichthyostega" modified="201108141650" created="201105222328" tags="Rendering overview spec" changecount="5">
+<pre>The primary interface used by the upper application layers to interact with the render engine, to create and manage ongoing [[calculation streams|CalcStream]].
 
 Below this facade, there is a thin adaptadion and forwarding layer, mainly talking to
-* the individual CalculationStream elements created for each PlayProcess.
+* the individual [[Calculation Streams|CalcStream]] created for each PlayProcess.
 * the FrameDispatcher, which translates such streams into a series of RenderJob entries
 * the [[Scheduler]], which is responsible to perform these jobs in a timely fashion
 </pre>
@@ -1916,25 +1916,25 @@ To support this usage pattern, the Fixture implementation makes use of the [[PIm
 * moreover, this necessitates a tight integration down to implementation level, both with the clean-up and the render processes themselves
 </pre>
 </div>
-<div title="FixtureStorage" modifier="Ichthyostega" modified="201105222258" created="201012140231" tags="Builder impl operational draft" changecount="33">
+<div title="FixtureStorage" modifier="Ichthyostega" modified="201108141647" created="201012140231" tags="Builder impl operational draft" changecount="34">
 <pre>The Fixture &amp;rarr; [[data structure|FixtureDatastructure]] acts as umbrella to hook up the elements of the render engine's processing nodes network (LowLevelModel).
-Each segment within the [[Segmentation]] of any timeline serves as ''extent'' or unit of memory management: it is built up completely during the corresponding build process and becomes immutable thereafter, finally to be discarded as a whole when superseded by a modified version of that segment (new build process) -- but only after all related render processes are known to be terminated.
+Each segment within the [[Segmentation]] of any timeline serves as ''extent'' or unit of memory management: it is built up completely during the corresponding build process and becomes immutable thereafter, finally to be discarded as a whole when superseded by a modified version of that segment (new build process) -- but only after all related render processes (&amp;rarr; CalcStream) are known to be terminated.
 
 Each segment owns an AllocationCluster, which in turn manages all the numerous small-sized objects comprising the render network implementing this segment -- thus the central question is when to //release the segment.//
-* for one, we easily detect the point when a segment is swapped out of the segmentation; at this point we also have to detect the //tainted render processes.//
-* but those render processes terminate asynchronously, and that forces us to do some kind of registration and deregistration.
+* for one, we easily detect the point when a segment is swapped out of the segmentation; at this point we also have to detect the //tainted calculation streams.//
+* but those render processes (calc streams) terminate asynchronously, and that forces us to do some kind of registration and deregistration.
 
 !!question: is ref-counting acceptable here?
 //Not sure yet.// Of course it would be the simplest approach. KISS.
-Basically the concern is that each new render process had to access the shared counts of all segments it touches.
+Basically the concern is that each new CalcStream had to access the shared counts of all segments it touches.
 
 ''Note'': {{{shared_ptr}}} is known to be implemented by a lock-free algorithm (yes it is, at least since boost 1.33. Don't believe what numerous FUD spreaders have written). Thus lock contention isn't a problem, but at least a memory barrier is involved (and if I&amp;nbsp;judge GCC's internal documentation right, currently their barriers extend to //all// globally visible variables)
 
 !!question: alternatives?
-There are. As the builder is known to be run again and again, no one forces us to deallocate as soon as we could. That's the classical argument exploited by any garbage collector too. Thus we could just note the fact that a render process had terminated and evaluate all those noted results on later occasion.
+There are. As the builder is known to be run again and again, no one forces us to deallocate as soon as we could. That's the classical argument exploited by any garbage collector too. Thus we could just note the fact that a calculation stream is done and re-evaluate all those noted results on later occasion.
 
 !!exploiting the frame-dispatch step
-Irrespective of the decision in favour or against ref-counting, it seems reasonable to make use of the //frame dispatch step,// which is necessary anyway. The idea is to give each render process a //copy//&amp;nbsp; of an dispatcher table object -- basically just a list of time breaking points and a pointer to the relevant exit node. If we keep track of those dispatcher tables, add a back-link to identify the process and require the process in turn to deregister, we get a tracking of tainted processes for free.
+Irrespective of the decision in favour or against ref-counting, it seems reasonable to make use of the //frame dispatch step,// which is necessary anyway. The idea is to give each render process / a //copy//&amp;nbsp; of an dispatcher table object -- basically just a list of time breaking points and a pointer to the relevant exit node. If we keep track of those dispatcher tables, add a back-link to identify the process and require the process in turn to deregister, we get a tracking of tainted processes for free.
 
 !!assessment {{red{WIP 12/10}}}
 But the primary question here is to judge the impact of such an implementation. What would be the costs?
@@ -2008,8 +2008,8 @@ Additionally, they may be used for resource management purposes by embedding a r
 #* one OpenGL Dataframe could contain raw texture data (but I am lacking expertise for this topic)
 </pre>
 </div>
-<div title="FrameDispatcher" modifier="Ichthyostega" modified="201105222346" created="201105222330" tags="def Rendering" changecount="2">
-<pre>An implementation facility within the RenderEngine, responsible for translating a logical CalculationStream (corresponding to a PlayProcess) into a sequence of individual RenderJob entries, which can then be handed over to the [[Scheduler]]. Performing this operation involves a special application of [[time quantisation|TimeQuant]]: after establishing a suitable starting point, a typically contiguous series of frame numbers need to be generated, together with the time coordinates for each of those frames</pre>
+<div title="FrameDispatcher" modifier="Ichthyostega" modified="201108141651" created="201105222330" tags="def Rendering" changecount="3">
+<pre>An implementation facility within the RenderEngine, responsible for translating a logical [[calculation stream|CalcStream]] (corresponding to a PlayProcess) into a sequence of individual RenderJob entries, which can then be handed over to the [[Scheduler]]. Performing this operation involves a special application of [[time quantisation|TimeQuant]]: after establishing a suitable starting point, a typically contiguous series of frame numbers need to be generated, together with the time coordinates for each of those frames</pre>
 </div>
 <div title="FullScreenPlugin" modifier="CehTeh" modified="200706110313" created="200607241016" tags="systemConfig lewcidExtension" server.type="file" server.host="file:///home/ct/.homepage/home.html" server.page.revision="200706110313">
 <pre>/***
@@ -4283,12 +4283,12 @@ We need a way of addressing existing [[pipes|Pipe]]. Besides, as the Pipes and T
 &lt;&lt;tasksum end&gt;&gt;
 </pre>
 </div>
-<div title="PlayProcess" modifier="Ichthyostega" modified="201106231449" created="201012181714" tags="def spec Player img" changecount="12">
+<div title="PlayProcess" modifier="Ichthyostega" modified="201108141652" created="201012181714" tags="def spec Player img" changecount="14">
 <pre>With //play process//&amp;nbsp; we denote an ongoing effort to calculate a stream of frames for playback or rendering.
 The play process is an conceptual entity linking together several activities in the [[Backend]] and the RenderEngine. Creating a play process is the central service provided by the [[player subsystem|Player]]: it maintains a registration entry for the process to keep track of associated entities, resources allocated and calls [[dispatched|FrameDispatcher]] as a consequence, and it wires and exposes a PlayController to serve as an interface and information hub.
 
-''Note'': the player is in no way engaged in any of the actual calculation and management tasks necessary to make this [[stream of calculations|CalculationStream]] happen. The play process code contained within the player subsystem is largely comprised of organisational concerns and not especially performance critical.
-* the [[Backend]] is responsible for scheduling and [[dispatching|Dispatcher]] the CalculationStream
+''Note'': the player is in no way engaged in any of the actual calculation and management tasks necessary to make this [[stream of calculations|CalcStream]] happen. The play process code contained within the player subsystem is largely comprised of organisational concerns and not especially performance critical.
+* the [[Backend]] is responsible for scheduling and [[dispatching|Dispatcher]] the [[calculation stream|CalcStream]]
 * the RenderEngine has the ability to cary out individual frame calculations
 * the OutputSlot exposed by the [[output manager|OutputManagement]] is responsible for accepting timed frame delivery
 
@@ -4296,7 +4296,7 @@ The play process is an conceptual entity linking together several activities in 
 !Anatomy of a Play Process
 The Controller is exposed to the client and acts as frontend handle, while the play process body groups and manages all the various parts cooperating to generate output. For each of the participating global pipes we get a feed to drive that pipeline to deliver media of a specific kind.
 
-Right within the play process, there is a separation into two realms, relying on different programming paradigms. Obviously the play controller is a state machine, and similarily the body object (play process) has a distinct operation state. Moreover, the current collection of individual objects hooked up at any given instance is a stateful variable. To the contrary, when we enter the realm of actual processing, operations are carried out in parallel, relying on stateless descriptor objects, wired into individual calculation jobs, to be scheduled as non-blocking units of operation. For each series of consecutive frames to be calculated, there is a descriptor object, the CalculationStream, which also links to a specificaly tailored dispatcher table, allowing to schedule the individual frame jobs. Whenever the controller determines a change in the playback plan (speed change, skip, scrubbing, looping, ...), a new CalculationStream is created, while the existing one is just used to mark any not-yet processed job as superseded.
+Right within the play process, there is a separation into two realms, relying on different programming paradigms. Obviously the play controller is a state machine, and similarily the body object (play process) has a distinct operation state. Moreover, the current collection of individual objects hooked up at any given instance is a stateful variable. To the contrary, when we enter the realm of actual processing, operations are carried out in parallel, relying on stateless descriptor objects, wired into individual calculation jobs, to be scheduled as non-blocking units of operation. For each series of consecutive frames to be calculated, there is a descriptor object, the CalcStream, which also links to a specificaly tailored dispatcher table, allowing to schedule the individual frame jobs. Whenever the controller determines a change in the playback plan (speed change, skip, scrubbing, looping, ...), a new CalcStream is created, while the existing one is just used to mark any not-yet processed job as superseded.
 </pre>
 </div>
 <div title="PlayService" modifier="Ichthyostega" modified="201105221918" created="201105221900" tags="Player spec draft" changecount="9">
