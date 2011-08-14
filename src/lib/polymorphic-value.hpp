@@ -389,21 +389,21 @@ namespace lib {
         }
       
       template<class IMP, typename A1>
-      PolymorphicValue (IMP*, A1& a1)
+      PolymorphicValue (IMP*, A1 a1)
         {
           REQUIRE (siz >= sizeof(IMP));
           new(&buf_) IMP (a1);
         }
       
       template<class IMP, typename A1, typename A2>
-      PolymorphicValue (IMP*, A1& a1, A2& a2)
+      PolymorphicValue (IMP*, A1 a1, A2 a2)
         {
           REQUIRE (siz >= sizeof(IMP));
           new(&buf_) IMP (a1,a2);
         }
       
       template<class IMP, typename A1, typename A2, typename A3>
-      PolymorphicValue (IMP*, A1& a1, A2& a2, A3& a3)
+      PolymorphicValue (IMP*, A1 a1, A2 a2, A3 a3)
         {
           REQUIRE (siz >= sizeof(IMP));
           new(&buf_) IMP (a1,a2,a3);
@@ -444,13 +444,13 @@ namespace lib {
           Adapter() : IMP() { }
           
           template<typename A1>
-          Adapter (A1& a1) : IMP(a1) { }
+          Adapter (A1 a1) : IMP(a1) { }
           
           template<typename A1, typename A2>
-          Adapter (A1& a1, A2& a2) : IMP(a1,a2) { }
+          Adapter (A1 a1, A2 a2) : IMP(a1,a2) { }
           
           template<typename A1, typename A2, typename A3>
-          Adapter (A1& a1, A2& a2, A3& a3) : IMP(a1,a2,a3) { }
+          Adapter (A1 a1, A2 a2, A3 a3) : IMP(a1,a2,a3) { }
           
           /* using default copy and assignment */
         };
@@ -505,31 +505,31 @@ namespace lib {
       static PolymorphicValue
       build ()
         {
-          Adapter<IMP>* type_to_build_in_buffer;
+          Adapter<IMP>* type_to_build_in_buffer(0);
           return PolymorphicValue (type_to_build_in_buffer);
         }
       
       template<class IMP, typename A1>
       static PolymorphicValue
-      build (A1& a1)
+      build (A1 a1)
         {
-          Adapter<IMP>* type_to_build_in_buffer;
+          Adapter<IMP>* type_to_build_in_buffer(0);
           return PolymorphicValue (type_to_build_in_buffer, a1);
         }
       
       template<class IMP, typename A1, typename A2>
       static PolymorphicValue
-      build (A1& a1, A2& a2)
+      build (A1 a1, A2 a2)
         {
-          Adapter<IMP>* type_to_build_in_buffer;
+          Adapter<IMP>* type_to_build_in_buffer(0);
           return PolymorphicValue (type_to_build_in_buffer, a1,a2);
         }
       
       template<class IMP, typename A1, typename A2, typename A3>
       static PolymorphicValue
-      build (A1& a1, A2& a2, A3& a3)
+      build (A1 a1, A2 a2, A3 a3)
         {
-          Adapter<IMP>* type_to_build_in_buffer;
+          Adapter<IMP>* type_to_build_in_buffer(0);
           return PolymorphicValue (type_to_build_in_buffer, a1,a2,a3);
         }
       
