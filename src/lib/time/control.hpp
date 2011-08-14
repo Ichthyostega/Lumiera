@@ -94,6 +94,8 @@
  **   the change, which might or might not reflect the change value passed in.
  ** 
  ** @todo include support for QuTimeSpan values                               ////////////////////TICKET #760
+ ** 
+ ** @see TimeControl_test
  **
  */
 

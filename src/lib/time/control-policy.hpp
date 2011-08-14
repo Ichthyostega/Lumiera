@@ -234,7 +234,7 @@ namespace mutation {
    */
   template<class TI, class TAR>
   struct Link
-    : Mutator<TI>
+    : Mutation
     , Builder<TI,TAR>
     {
       
@@ -255,15 +255,15 @@ namespace mutation {
       static TI
       mutateLength (TimeSpan& target, Duration const& change)
         {
-          Mutator<TimeSpan>::imposeChange (target.duration(), change);
+          imposeChange (target.duration(), change);
           return Builder<TI,TimeSpan>::buildChangedValue(target);
         }
       
       static TimeSpan
       mutateTimeSpan (TimeSpan& target, TimeSpan const& change)
         {
-          Mutator<TimeSpan>::imposeChange (target.duration(), change.duration());
-          Mutator<TimeSpan>::imposeChange (target,change.start());
+          imposeChange (target.duration(), change.duration());
+          imposeChange (target,change.start());
           return Builder<TimeSpan,TimeSpan>::buildChangedValue(target);
         }
       
