@@ -1,0 +1,7 @@
+TESTING "Component Test Suite: Player and Output" ./test-components --group=player
+
+
+
+PLANNED "Output Slot Protocol" OutputSlotProtocol_test <<END
+return: 0
+END

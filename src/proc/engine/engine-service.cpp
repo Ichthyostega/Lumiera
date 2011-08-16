@@ -38,20 +38,24 @@ namespace engine{
 //    using std::auto_ptr;
 //    using boost::scoped_ptr;
 //    using std::tr1::bind;
-    
-    
+  
+  
   namespace { // hidden local details of the service implementation....
     
   } // (End) hidden service impl details
-    
-    
   
-    
+  
+  
+  /** storage for the EngineService interface object */
+  lib::Singleton<EngineService> EngineService::instance;
+  
+  
+  
   /** */  
   EngineService::EngineService()
     { }
-      
-      
+  
+  
   
   /** */
   CalcStream

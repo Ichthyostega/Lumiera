@@ -7,6 +7,14 @@ return: 0
 END
 
 
+PLANNED "Engine Interface basics" EngineInterface_test <<END
+END
+
+
+PLANNED "Engine calculation streams" CalcStream_test <<END
+END
+
+
 PLANNED "Proc Node basics" NodeBasic_test <<END
 END
 

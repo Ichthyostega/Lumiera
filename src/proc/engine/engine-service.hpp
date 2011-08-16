@@ -22,12 +22,24 @@
 
 /** @file engine-service.hpp
  ** Access point for the (core) calculation service of the render engine.
- ** This public service is provided by the Proc-Layer, but actually implemented
- ** using backend services (especially the scheduler). The central concept provided
- ** through this facade interface is that of a <i>calculation stream</i>. On the
- ** implementation side, these get translated into a series of jobs invoking
- ** render nodes, to be invoked through the scheduler in the backend layer. 
+ ** This Proc-Layer internal service is provided for use by the Player subsystem.
+ ** The actual implementation is forwarded to backend services (especially the scheduler).
+ ** The EngineService singleton has no state beyond the jobs currently managed by the
+ ** scheduler; when the latter isn't available, any invocation will throw.
  ** 
+ ** The central concept provided through this facade interface is the <i>calculation stream</i>.
+ ** This represents a series of calculations, expected to happen in a timely fashion and in order
+ ** to deliver a frame data stream onto an opened output connection. On the implementation side,
+ ** a calculation stream will be translated into a series of jobs invoking render nodes,
+ ** to be executed through the scheduler in the backend layer.
+ ** 
+ ** While the individual CalcStram is simple, linear and unmodifiable, any CalcStream may be
+ ** \em superseded by a new definition. In this case, the engine will care for a seamless
+ ** switch and continuation; under the hood, there is a mechanism to discard resources
+ ** tied to the original CalcStream, once the switch to the new definition is complete.
+ ** 
+ ** @see EngineInterface_test
+ ** @see CalcStream_test
  ** @see proc::play::PlayerService
  */
 
@@ -46,6 +58,7 @@
 //#include "common/instancehandle.hpp"
 //#include "lib/singleton-ref.hpp"
 #include "lib/polymorphic-value.hpp"
+#include "lib/singleton.hpp"
 //
 #include <boost/noncopyable.hpp>
 //#include <boost/scoped_ptr.hpp>
@@ -82,18 +95,6 @@ namespace engine{
     : boost::noncopyable
     {
       
-//   string error_;
-//   Subsys::SigTerm notifyTermination_;
-      
-      
-      /* === Interface Lifecycle === */
-      
-//    typedef lumiera::InstanceHandle< LUMIERA_INTERFACE_INAME(lumieraorg_DummyPlayer, 0)
-//                                   , DummyPlayer
-//                                   > ServiceInstanceHandle;
-      
-//    lib::SingletonRef<DummyPlayerService> implInstance_;
-//    ServiceInstanceHandle serviceInstance_;
       
       /* The following typedefs allow to hand out predefined
        * Quality-of-Service strategy definitions as value objects,
@@ -117,8 +118,8 @@ namespace engine{
         };
       
       
-//      typedef lib::polyvalue::CloneValueSupport<Quality> _ClonableQoS_Strategy;
-      typedef lib::PolymorphicValue<Quality, QoS_IMPL_SIZE> QoS_Definition;
+      typedef lib::polyvalue::CloneValueSupport<Quality> _Clonable_QoS_Strategy;
+      typedef lib::PolymorphicValue<Quality, QoS_IMPL_SIZE, _Clonable_QoS_Strategy> QoS_Definition;
       
       static QoS_Definition  QoS_DEFAULT;
       static QoS_Definition  QoS_BACKGROUND;
@@ -127,10 +128,15 @@ namespace engine{
       static QoS_Definition  QoS_COMPROMISE;
       
       
+      /** access point to the Engine Interface.
+       * @internal this is an facade interface for internal use
+       *           by the player. Client code should use the Player.
+       */
+      static lib::Singleton<EngineService> instance;
       
-      EngineService();    /////TODO (Subsys::SigTerm terminationHandle);
       
-     ~EngineService() { } /////TODO notifyTermination_(&error_); }
+      EngineService();
+     ~EngineService() { }
       
       CalcStream
       calculate(ModelPort mPort,
@@ -143,6 +149,12 @@ namespace engine{
                           Timings nominalTimings,
                           Quality serviceQuality =QoS_BACKGROUND);
       
+      
+    protected:
+      void activateTracing();
+      void disableTracing(); ///< EX_FREE
+      
+      friend class EngineDiagnostics;
     };
   
   
