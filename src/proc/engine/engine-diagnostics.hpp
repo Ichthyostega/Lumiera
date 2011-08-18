@@ -43,7 +43,7 @@
 //#include "include/display-facade.h"
 //#include "proc/engine/calc-stream.hpp"
 //#include "proc/mobject/model-port.hpp"
-//#include "proc/play/timings.hpp"
+#include "proc/play/timings.hpp"
 //#include "proc/play/output-slot.hpp"
 //#include "common/instancehandle.hpp"
 //#include "lib/singleton-ref.hpp"
@@ -62,6 +62,7 @@ namespace engine{
 //    using lumiera::Subsys;
 //    using lumiera::Display;
 //    using lumiera::DummyPlayer;
+  using proc::play::Timings;
   
   
   
@@ -92,6 +93,13 @@ namespace engine{
         {
           TODO ("detach tracing connector");
           engine_.disableTracing();
+        }
+      
+      /** */
+      bool
+      has_scheduled_jobs_for (Timings const& timings)
+        {
+          UNIMPLEMENTED ("Engine Diagnostics: query scheduled jobs");
         }
     };
   

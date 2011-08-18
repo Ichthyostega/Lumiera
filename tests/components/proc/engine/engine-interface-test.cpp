@@ -27,6 +27,7 @@
 #include "proc/engine/calc-stream.hpp"
 #include "proc/engine/engine-service.hpp"
 #include "proc/engine/engine-diagnostics.hpp"
+#include "proc/play/output-slot.hpp"
 #include "proc/play/diagnostic-output-slot.hpp"
 #include "proc/mobject/model-port.hpp"
 #include "proc/asset/pipe.hpp"
@@ -47,8 +48,11 @@ namespace test  {
   using asset::Pipe;
   using asset::PPipe;
   using mobject::ModelPort;
+  using proc::play::OutputSlot;
+  using proc::play::DiagnosticOutputSlot;
   
   typedef asset::ID<Pipe> PID;
+  typedef OutputSlot::Allocation Allocation;
 
   
   namespace { // test fixture...
@@ -84,7 +88,7 @@ namespace test  {
           
           EngineService& engine = EngineService::instance();
           EngineDiagnostics monitor(engine);
-
+          
           PID pipe = Pipe::query("id(dummy)");
           ModelPort port(pipe);
           

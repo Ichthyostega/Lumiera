@@ -62,6 +62,14 @@ namespace play {
     : public OutputSlot
     {
     public:
+      /** build a new Diagnostic Output Slot instance,
+       *  discard the existing one. Use the static query API
+       *  for investigating collected data. */
+      static OutputSlot&
+      build()
+        {
+          UNIMPLEMENTED ("Diagnostic Output Slot instance");
+        }
       
     private:
       

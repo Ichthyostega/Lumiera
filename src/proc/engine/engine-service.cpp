@@ -106,8 +106,7 @@ namespace engine{
   class PriorityQoS
     : public DefaultQoS
     {
-      CalcType type_;
-      
+    
     public:
       PriorityQoS ()
         : DefaultQoS(PLAYBACK)
