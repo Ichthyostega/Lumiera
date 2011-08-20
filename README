@@ -42,7 +42,7 @@ The Application can be installed and started to bring up an GTK GUI outline,
 but the GUI is very preliminary and not connected to core functionality.
 The video processing pipeline is still not complete.
 
-See the http://issues.lumiera.org/roadmap[Project roadmap]
+See http://issues.lumiera.org/roadmap[Project roadmap]
 
 
 Build Requirements
