@@ -63,11 +63,11 @@ main (int argc, const char* argv[])
       lumiera::Option options (args);
       application.init (options);
       
-      session.depends (builder);
+//    session.depends (builder);
       netNode.depends (session);
       netNode.depends (engine);
-      playOut.depends (engine);
-      playOut.depends (session);
+//    playOut.depends (engine);
+//    playOut.depends (session);
 //    lumigui.depends (session);   //////TODO commented out in order to be able to start up a dummy GuiStarterPlugin
 //    lumigui.depends (engine);
       player.depends (playOut);    //////TODO dummy player, until we're able to render
