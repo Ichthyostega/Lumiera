@@ -76,11 +76,11 @@ namespace lumiera {
 extern "C" { /* ==== implementation C interface for lifecycle hooks ======= */
   
   
-  extern const char * lumiera_ON_BASIC_INIT       = lumiera::ON_BASIC_INIT;
-  extern const char * lumiera_ON_GLOBAL_INIT      = lumiera::ON_GLOBAL_INIT;
-  extern const char * lumiera_ON_GLOBAL_SHUTDOWN  = lumiera::ON_GLOBAL_SHUTDOWN;
+  const char * lumiera_ON_BASIC_INIT       = lumiera::ON_BASIC_INIT;
+  const char * lumiera_ON_GLOBAL_INIT      = lumiera::ON_GLOBAL_INIT;
+  const char * lumiera_ON_GLOBAL_SHUTDOWN  = lumiera::ON_GLOBAL_SHUTDOWN;
   
-  extern const char * lumiera_ON_EMERGENCY        = lumiera::ON_EMERGENCY;
+  const char * lumiera_ON_EMERGENCY        = lumiera::ON_EMERGENCY;
   
   
   
