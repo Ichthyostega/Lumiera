@@ -59,6 +59,8 @@ namespace mobject {
    * @todo couldn't the inline buffer be "downgraded" to InPlaceBuffer or PolymorphicValue??
    *       Seemingly we never-ever need to re-discover the erased type of the embedded spec.
    *       Thus for this to work, we'd just need to add an "empty" spec       ///////////////////TICKET #723
+   * 
+   * @see OutputMapping_test
    */
   class OutputDesignation
     {

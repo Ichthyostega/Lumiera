@@ -1077,11 +1077,44 @@ Please note the shortcomings and logical contradictions in the solution currentl
 * The current design rather places the implementation according to the roles of the involved entities, which causes some ping-pong on the implementation level. Especially the ScopeLocator singleton can be accessed multiple times. This is the usual clarity vs. performance tradeoff. Scope resolution is assumed rather to be //not performance critical.//
 </pre>
 </div>
-<div title="BufferProvider" modifier="Ichthyostega" modified="201107090002" created="201107082330" tags="Rendering spec draft" changecount="5">
-<pre>It turns out that --  throughout the render engine implementation -- we never need direct access to the buffers holding media data. Buffers are just some entity to be //managed,// i.e. &quot;allocated&quot;, &quot;locked&quot; and &quot;released&quot;; the //actual meaning of these operations can be left to the implementation.// The code within the render engine just pushes around ''buffer handles'', which act as a front-end, being created by and linked to a buffer provider implementation. There is no need to manage the lifecycle of buffers automatically, because the use of buffers is embedded into the render calculation cycle, which follows a rather strict protocol anyway. Relying on the [[capabilities of the scheduler|SchedulerRequirements]], the sequence of individual jobs in the engine ensures...
+<div title="BuffHandle" modifier="Ichthyostega" modified="201109032244" created="201109021617" tags="Rendering spec draft" changecount="6">
+<pre>All rendering, transformations and output of media data requires using ''data buffers'' -- but the actual layout and handling of these buffers is closely related to the actual implementation of these operations. As we're relying heavily on external libraries and plug-ins for performing these, there is no hope getting away with just one single {{{Buffer}}} data type definition. Thus, we need to confine ourselves to a common denominator of basic operations regarding data buffers and abstract the access to these operations through a BufferProvider entity. Beyond these basic operations, mostly we just need to assure that //a buffer exists as an distinguishable element// -- which in practice boils down to pushing around {{{void*}}} variables. 
+
+Obviously, overloading a pointer with semantic meaning isn't exactly a brilliant idea -- and the usual answer is to embed this pointer into a smart handle, which also yields the nice side-effect of explaining this design to the reader. Thus a buffer handle
+* can only be obtained from a BufferProvider
+* can be used to identify a buffer
+* can be dereferenced
+* can be copied 
+
+!design quest: buffer type information
+To perform anything useful with such a buffer handle, the client code needs some additional information, which can be generalised into a //type information:// Either, the client needs to know the size and kind of data to expect in the buffer, maybe just assume to get a specific buffer with suitably dimensions, or the client needs to know which buffer provider to contact for any management operations on that buffer (handle). And, at some point there needs to be a mechanism to verify the validity of a handle. But all of this doesn't mean that it's necessary to encode or embedd this information directly into the handle -- it might also be stored into a registration table (which has the downside of creating contention), or it might just be attached implicitly to the invocation context.
+
+Just linking this type information to the context is certainly the most elegant solution, but also by far the most difficult to achieve -- not to mention the implicit dependency on a very specific invocation situation. So for now (9/2011) it seems best to stick to the simple and explicit implementation, just keeping that structural optimisation in mind. And the link to this buffer type information should be made explicit within the definition anyway, even if we choose to employ another design tradeoff later.
+* thus the conclusion is: we introduce a ''descriptor object'', which will be stored within the handle
+* each BufferProvider exposes a ''descriptor prototype''; it can be specialised and used by to organise implementation details
+
+
+!sanity checks
+there are only limited sanity checks, and they can be expected to be optimised away for production builds.
+Basically the client is responsible for sane buffer access.
+</pre>
+</div>
+<div title="BufferProvider" modifier="Ichthyostega" modified="201109031555" created="201107082330" tags="Rendering spec draft" changecount="11">
+<pre>It turns out that --  throughout the render engine implementation -- we never need direct access to the buffers holding media data. Buffers are just some entity to be //managed,// i.e. &quot;allocated&quot;, &quot;locked&quot; and &quot;released&quot;; the //actual meaning of these operations can be left to the implementation.// The code within the render engine just pushes around ''smart-prt like handles''. These [[buffer handles|BuffHandle]] act as a front-end, being created by and linked to a buffer provider implementation. There is no need to manage the lifecycle of buffers automatically, because the use of buffers is embedded into the render calculation cycle, which follows a rather strict protocol anyway. Relying on the [[capabilities of the scheduler|SchedulerRequirements]], the sequence of individual jobs in the engine ensures...
 * that the availability of a buffer was ensured prior to planning a job (&quot;buffer allocation&quot;)
 * that a buffer handle was obtained (&quot;locked&quot;) prior to any operation requiring a buffer
 * that buffers are marked as free (&quot;released&quot;) after doing the actual calculations.
+
+!operations
+While BufferProvider is an interface meant to be backed by various different kinds of buffer and memory management approaches, there is a common set of operations to be supported by any of them
+;announcing
+:client code may announce beforehand that it expects to get a certain amount of buffers. Usually this causes some allocations (or similar mechanisms to ensure the avialability) to happen right away; the BufferProvider will then return the actual number of buffers guraanteed to be available. This announcing step is optional an can happen anytime before or even after using the buffers and it can be repeated with different values to adjust to changing requirements. (Currently 9/2011 this is meant to be global for the whole BufferProvider, but it might happen that we need to break that down to individual clients)
+;locking
+:this operation actually makes a buffer available for a specific client and returns a [[buffer handle|BuffHandle]]. The corresponding buffer is marked as used and can't be locked again until released. If necessary, the BufferProvider might at that point allocate memory to accomodate (especially when the buffers weren't announced beforehand). The locking might fail and raise an exception. To support additional sanity checks, the client may provide a token-ID with the lock-operation. This token may be retrieved later and it may be used to ensure the buffer is actually locked for //this token.//
+;attaching
+:optionally the client may attach an object to a locked buffer. This object is placement-constructed into the buffer and will be automatically destroyed when releasing the buffer. Alternatively, the client may provide a pair of constructor- / destructor-functors, which will be invoked in a similar manner. This allows e.g. to install descriptor structures within the buffer, as required by an external library.
+;releasing
+:buffers need to be released explicitly by the client code. This renders the corresponding BuffHandle invalid, (optionally) invokes a destructor function of an attached object and maybe reclaims the buffer memory
 
 __see also__
 &amp;rarr; OutputSlot relying on a buffer provider to deal with frame output buffers
@@ -1853,8 +1886,9 @@ Some further details
 * a special case of this factory use is the [[Singleton]] factory, which is used a lot within the Proy-Layer code
 </pre>
 </div>
-<div title="Fixture" modifier="Ichthyostega" modified="201012162259" created="200706220324" tags="def spec Builder Model" changecount="47">
-<pre>a specially configured view -- joining together high-level and low-level model
+<div title="Fixture" modifier="Ichthyostega" modified="201109031601" created="200706220324" tags="def spec Builder Model" changecount="48">
+<pre>a specially configured view -- joining together high-level and low-level model.
+The Fixture acts as //isolation layer// between the two models, and as //backbone to attach the render nodes.//
 * all MObjects have their position, length and configuration set up ready for rendering.
 * any nested sequences (or other kinds of indirections) have been resolved.
 * every MObject is attached by an ExplicitPlacement, which declares a fixed position (Time, [[Pipe|OutputDesignation]])
@@ -1886,8 +1920,8 @@ The fixture is like a grid, where one dimension is given by the [[model ports|Mo
 :Thus the exit nodes are keyed by ~Pipe-ID as well (and consequently have a distinct [[stream type|StreamType]]) -- each model port coresponds to {{{&lt;number_of_segments&gt;}}} separate exit nodes, but of course an exit node may be //mute.//
 </pre>
 </div>
-<div title="FixtureDatastructure" modifier="Ichthyostega" modified="201105222242" created="201012162304" tags="spec Builder" changecount="9">
-<pre>Generally speaking, the [[here|Fixture]] comprised of a ModelPortRegistry and a set of [[segmentations|Segmentation]] per Timeline.
+<div title="FixtureDatastructure" modifier="Ichthyostega" modified="201109031600" created="201012162304" tags="spec Builder" changecount="11">
+<pre>Generally speaking, the datastructure to implement the ''Fixture'' (&amp;rarr; see a more general description [[here|Fixture]]) is comprised of a ModelPortRegistry and a set of [[segmentations|Segmentation]] per Timeline.
 This page focusses on the actual data structure and usage details on that level. See also &amp;rarr; [[storage|FixtureStorage]] considerations.
 
 !transactional switch
@@ -3238,7 +3272,7 @@ While actually data frames are //pulled,// on a conceptual level data is assumed
 As both of these specifications are given by [[Pipe]]-~IDs, the actual designation information may be reduced. Much can be infered from the circumstances, because any pipe includes a StreamType, and an output designation for an incompatible stream type is irrelevant. (e.g. and audio output when the pipe currently in question deals with video)
 </pre>
 </div>
-<div title="OutputManagement" modifier="Ichthyostega" modified="201106210136" created="201007090155" tags="Model Rendering Player spec draft" changecount="31">
+<div title="OutputManagement" modifier="Ichthyostega" modified="201108251240" created="201007090155" tags="Model Rendering Player spec draft" changecount="37">
 <pre>//writing down some thoughts//
 
 * ruled out the system outputs as OutputDesignation.
@@ -3255,19 +3289,19 @@ From the implementation side, the only interesting exit nodes are the ones to be
 * __playback__ always happens at a viewer element
 
 !Attaching and mapping of exit nodes
-[[Output designations|OutputDesignation]] are created using a [[Pipe]]-ID and &amp;mdash; they become real by some object //claiming to root this pipe.// The applicability of this pattern is figured out dynamically while building the render network, resulting in a collection of [[model ports|ModelPort]] as part of the current [[Fixture]]. A RenderProcess can be started to pull from these active exit points of a given timeline. Besides, when the timeline enclosing these model ports is [[connected to a viewer|ViewerPlayConnection]], an [[output network|OutputNetwork]] //is built to allow hooking exit points to the viewer component.// Both cases encompass a mapping of exit nodes to actual output channels. Usually, this mapping relies on relative addressing of the output sinks, starting to allocate connections with the &quot;first of each kind&quot;.
+Initially, [[Output designations|OutputDesignation]] are typically just local or relative references to another OutputDesignation; yet after some resolution steps, we'll arrive at an OutputDesignation //defined absolute.// Basically, these are equivalent to a [[Pipe]]-ID choosen as target for the connection and -- they become //real//&amp;nbsp; by some object //claiming to root this pipe.// The applicability of this pattern is figured out dynamically while building the render network, resulting in a collection of [[model ports|ModelPort]] as part of the current [[Fixture]]. A RenderProcess can be started to pull from these -- and only from these -- active exit points of the model. Besides, when the timeline enclosing these model ports is [[connected to a viewer|ViewerPlayConnection]], an [[output network|OutputNetwork]] //is built to allow hooking exit points to the viewer component.// Both cases encompass a mapping of exit nodes to actual output channels. Usually, this mapping just relies on relative addressing of the output sinks, starting to allocate connections with the //first of each kind// (e.g. &quot;connect to the first usable audio output destination&quot;).
 
-We should note that in both cases this [[mapping operation|OutputMapping]] is controlled and driven by the output side of the connection: A viewer has fixed output capabilities, and rendering targets a specific container format, again with fixed and pre-settled channel configuration (when configurting a render process, it might be necessary to account for //possible kinds of output streams,// so to provide a sensible pre-selection of possible output container formats for the user to select from). Thus, as a starting point, we'll create a default configured mapping, assigning channels in order. This mapping then should be exposed to modification and tweaking by the user. For rendering, this is part of the render options dialog, while in case of a viwer connection, a switch board is created to allow modifying the default mapping.
+We should note that in both cases this [[mapping operation|OutputMapping]] is controlled and driven and constrained by the output side of the connection: A viewer has fixed output capabilities, and rendering targets a specific container format -- again with fixed and pre-settled channel configuration ({{red{TODO 9/11}}} when configurting a render process, it might be necessary to pre-compute the //possible kinds of output streams,// so to provide a sensible pre-selection of possible output container formats for the user to select from). Thus, as a starting point, we'll create a default configured mapping, assigning channels in order. This mapping then should be exposed to modification and tweaking by the user. For rendering, this is part of the render options dialog, while in case of a viwer connection, a switch board is created to allow modifying the default mapping.
 
 !Connection to external outputs
-External output destinations are never addressed directly from within the model. This is an design decision. Rather, model parts connect to an OutputDesignation, and these in turn may be  [[connected to a viewer element|ViewerPlayConnection]]. At this point, related to the viewer element, there is a mapping to external destination(s): for images, a viewer typically has an implicit, natural destination (read, there is a corresponding viewer window or widget), while for sound we use an mapping rule, which could be overridden locally in the viewer.
+External output destinations are never addressed directly from within the model. This is an design decision. Rather, model parts connect to an OutputDesignation, and these in turn may be  [[connected to a viewer element|ViewerPlayConnection]]. At this point, related to the viewer element, there is a mapping to external destination(s): for images, a viewer typically has an implicit, natural destination (read: actually there is a corresponding viewer window or widget), while for sound we use an mapping rule, which could be overridden locally in the viewer.
 
 Any external output sink is managed as a [[slot|DisplayerSlot]] in the ~OutputManager. Such a slot can be opened and allocated for a playback process, which allows the latter to push calculated data frames to the output. Depending on the kind of output, there might be various, often tight requirements on the timed delivery of output data, but any details are abstracted away &amp;mdash; any slot implementation provides a way to handle time-outs gracefully, e.g. by just showing the last video frame delivered, or by looping and fading sound
 &amp;rarr; the OutputManager interface describes handling this mapping association
 &amp;rarr; see also the PlayService
 
 !the global output manager
-While within the model routing is done mostly just by referring to an OutputDesignation, at some point we need to map these abstract designations to real output capabilities. This OutputManager interface exposes mapping and the ability to control and manage it. Several elements within the application, most notably the [[viewers|ViewerAsset]], provide an implementation of this interface -- yet there is one primary implementation, the ''global output manager'', known as OutputDirector. It can be accessed through the {{{Output}}} façade interface and is the final authority when it comes to allocating an mapping of real output possibilities. The OutputDirector tracks all the OutputSlot elements currently installed and available for output.
+While within the model routing is done mostly just by referring to an OutputDesignation, at some point we need to map these abstract designations to real output capabilities. This OutputManager interface exposes these mappings and allows to control and manage them. Several elements within the application, most notably the [[viewers|ViewerAsset]], provide an implementation of this interface -- yet there is one primary implementation, the ''global output manager'', known as OutputDirector. It can be accessed through the {{{Output}}} façade interface and is the final authority when it comes to allocating an mapping of real output possibilities. The OutputDirector tracks all the OutputSlot elements currently installed and available for output.
 
 The relation between the central OutputDirector and the peripheral OutputManager implementations is hierarchical. Because output slots are usually registered rather at some peripheral output manager implementation, a direct mapping from OutputDesignation (i.e. global pipe) to these slots is created foremost at that peripheral level. Resolving a global pipe into an output slot is the core concern of any OutputManager implementation. Thus, when there is a locally preconfigured mapping, like e.g. for a viewer's video master pipe to the output slot installed by the corresponding GUI viewer element, then this mapping will picked up foremost to resolve the video master output.
 
@@ -3324,7 +3358,7 @@ Thus the mapping is a copyable value object, based on a associative array. It ma
 First and foremost, mapping can be seen as a //functional abstraction.// As it's used at implementation level, encapsulation of detail types in't the primary concern, so it's a candidate for generic programming: For each of those use cases outlined above, a distinct mapping type is created by instantiating the {{{OutputMapping&lt;DEF&gt;}}} template with a specifically tailored definition context ({{{DEF}}}), which takes on the role of a strategy. Individual instances of this concrete mapping type may be default created and copied freely. This instantiation process includes picking up the concrete result type and building a functor object for resolving on the fly. Thus, in the way typical for generic programming, the more involved special details are moved out of sight, while being still in scope for the purpose of inlining. But there //is// a concern better to be encapsulated and concealed at the usage site, namely accessing the rules system. Thus mapping leads itself to the frequently used implementation pattern where there is a generic frontend as header, calling into opaque functions embedded within a separate compilation unit.
 </pre>
 </div>
-<div title="OutputSlot" modifier="Ichthyostega" modified="201107102318" created="201106162339" tags="def Concepts Player spec" changecount="26">
+<div title="OutputSlot" modifier="Ichthyostega" modified="201109021531" created="201106162339" tags="def Concepts Player spec" changecount="27">
 <pre>Within the Lumiera player and output subsystem, actually sending data to an external output requires to allocate an ''output slot''
 This is the central metaphor for the organisation of actual (system level) outputs; using this concept allows to separate and abstract the data calculation and the organisation of playback and rendering from the specifics of the actual output sink. Actual output possibilities can be added and removed dynamically from various components (backend, GUI), all using the same resolution and mapping mechanisms (&amp;rarr; OutputManagement)
 
@@ -3372,7 +3406,7 @@ If we accept to retrieve the buffer(s) via an indirection, which we kind of do a
 &amp;rArr; conclusion: go for the unified approach!
 
 !!!unified data exchange cycle
-The nominal time of a frame to be delivered is used as an ID throughout that cycle
+The planned delivery time of a frame is used as an ID throughout that cycle
 # within a defined time window prior to delivery, the client can ''allocate and retrieve the buffer'' from the BufferProvider.
 # the client has to ''emit'' within a (short) time window prior to deadline
 # now the slot gets exclusive access to the buffer for output, signalling the buffer release to the buffer provider when done.

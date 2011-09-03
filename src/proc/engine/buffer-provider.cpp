@@ -24,12 +24,45 @@
 #include "proc/engine/buffer-provider.hpp"
 
 namespace engine {
+  
+  
+  namespace { // impl. details and definitions
+    
+    const uint DEFAULT_DESCRIPTOR = 0;
+  }
 
 
   BufferProvider::~BufferProvider() { }
   
   
-  /**  */
+  /** @internal verify the given descriptor.
+   *  @return true if it corresponds to a buffer
+   *          currently locked and usable by client code
+   */
+  bool
+  BufferProvider::checkValidity (BufferDescriptor const&)
+  {
+    UNIMPLEMENTED ("BufferProvider basic and default implementation");
+  }
+  
+  
+  BufferDescriptor
+  BufferProvider::getDefaultDescriptor()
+  {
+    return BufferDescriptor (*this, DEFAULT_DESCRIPTOR);
+  }
+      
+      
+  
+  
+  /* === BufferDescriptor and BuffHandle === */
+  
+  bool
+  BufferDescriptor::checkValidity()
+  {
+    return provider_.checkValidity(*this);
+  }
+  
 
 
 } // namespace engine

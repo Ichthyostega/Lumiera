@@ -24,7 +24,7 @@
  ** Abstraction to represent buffer management and lifecycle within the render engine.
  ** It turns out that --  throughout the render engine implementation -- we never need
  ** direct access to the buffers holding media data. Buffers are just some entity to be \em managed,
- ** i.e. "allocated", "locked" and "released"; the actual meaning of these operations is an implementatino detail.
+ ** i.e. "allocated", "locked" and "released"; the actual meaning of these operations is an implementation detail.
  ** The code within the render engine just pushes around BufferHandle objects, which act as a front-end,
  ** being created by and linked to a BufferProvider implementation. There is no need to manage the lifecycle
  ** of buffers automatically, because the use of buffers is embedded into the render calculation cycle,
@@ -73,10 +73,18 @@ namespace engine {
     public:
       virtual ~BufferProvider();  ///< this is an interface
       
-      ///////TODO: is there any generic way to obtain a BufferDescriptor; then we should expose it here...
       
       virtual BuffHandle lockBufferFor (BufferDescriptor const&)  =0;
-      virtual void releaseBuffer (BuffHandle const&)              =0;  ////////TODO not quite sure what information to pass here
+      virtual void releaseBuffer (BuffHandle const&)              =0;
+      
+      
+      /** describe the kind of buffer managed by this provider */
+      BufferDescriptor getDefaultDescriptor();
+      
+      
+      /* === API for BuffHandle internal access === */
+      
+      bool checkValidity (BufferDescriptor const&);
       
     };
   

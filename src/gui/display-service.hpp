@@ -50,6 +50,7 @@
 #include "common/instancehandle.hpp"
 #include "lib/singleton-ref.hpp"
 #include "lib/scoped-ptrvect.hpp"
+#include "include/logging.h"
 
 #include <glibmm.h>
 #include <sigc++/sigc++.h>

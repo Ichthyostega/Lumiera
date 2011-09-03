@@ -52,70 +52,36 @@
 
 namespace engine {
   
+  class BufferProvider;
+  
   
   
   /**
-   * Handle for a buffer for processing data, abstracting away the actual implementation.
-   * The real buffer pointer can be retrieved by dereferencing this smart-handle class.
+   * An opaque descriptor to identify the type and further properties of a data buffer.
+   * For each kind of buffer, there is somewhere a BufferProvider responsible for the
+   * actual storage management. This provider may "lock" a buffer for actual use,
+   * returning a BuffHandle.
    * 
-   * @todo as of 6/2011 it isn't clear how buffer handles are actually created
-   *       and how the lifecycle (and memory) management works
+   * @todo try to move that definition into buffer-provider.hpp   ////////////////////////////////////TICKET #249
    */
-  struct BuffHandle
-    : lib::BoolCheckable<BuffHandle>
+  class BufferDescriptor
     {
-      typedef lumiera::StreamType::ImplFacade::DataBuffer Buff;
-      typedef Buff* PBuff;
+      BufferProvider* provider_;
+      uint64_t subClassification_;
       
-      PBuff 
-      operator->()  const 
-        { 
-          return pBuffer_; 
-        }
-      Buff&
-      operator* ()  const
-        {
-          ENSURE (pBuffer_);
-          return *pBuffer_;
-        }
+      BufferDescriptor(BufferProvider& manager, uint64_t detail)
+        : provider_(&manager)
+        , subClassification_(detail)
+      { }
       
-      bool
-      isValid()  const
-        {
-          return pBuffer_;
-        }
+      friend class BufferProvider;
       
+    public:
+      // using standard copy operations
       
-      //////////////////////TODO: the whole logic how to create a BuffHandle needs to be solved in a more clever way. --> TICKET #249
-      BuffHandle()
-        : pBuffer_(0),
-          sourceID_(0)
-        { }
-      
-      /** 
-       * @deprecated placeholder implementation
-       * @todo rework the Lifecycle handling of buffers  //////////TICKET #249
-       */
-      BuffHandle(PBuff existingBuffer)
-        : pBuffer_(existingBuffer)
-        , sourceID_(0)
-        { }
-      
-    private:
-      PBuff pBuffer_; 
-      long sourceID_;   ////TICKET #249 this is a placeholder for a "type-like information", to be used for lifecycle management and sanity checks....
+      bool checkValidity();
     };
   
-  
-  /**
-   * Buffer Type information.
-   * Given a BufferDescriptor, it is possible to allocate a buffer
-   * of suitable size and type by using BufferProvider::lockBuffer().
-   */
-  struct BufferDescriptor
-    {
-      long typeToken_; 
-    };
   
   
   class ProcNode;
@@ -132,6 +98,54 @@ namespace engine {
       PNode dataSrc;    ///< the ProcNode to pull this input from
       uint srcChannel; ///<  output channel to use on the predecessor node
     };
+  
+  
+  
+  
+  
+  /**
+   * Handle for a buffer for processing data, abstracting away the actual implementation.
+   * The real buffer pointer can be retrieved by dereferencing this smart-handle class.
+   * 
+   * @todo as of 6/2011 it isn't clear how buffer handles are actually created
+   *       and how the lifecycle (and memory) management works                  //////////////////////TICKET #249 rework BuffHandle creation and usage
+   */
+  class BuffHandle
+    : public lib::BoolCheckable<BuffHandle>
+    {
+      typedef lumiera::StreamType::ImplFacade::DataBuffer Buff;
+      
+      BufferDescriptor descriptor_;
+      Buff* pBuffer_; 
+      
+      
+    public:
+      /** @internal a buffer handle may be obtained by "locking"
+       *  a buffer from the corresponding BufferProvider */
+      BuffHandle(BufferDescriptor const& typeInfo, Buff* storage = 0)
+        : descriptor_(typeInfo)
+        , pBuffer_(storage)
+        { }
+      
+      // using standard copy operations
+      
+      
+      Buff&
+      operator* ()  const
+        {
+          ENSURE (pBuffer_);
+          return *pBuffer_;
+        }
+      
+      bool
+      isValid()  const
+        {
+          return bool(pBuffer_)
+              && descriptor_.checkValidity();
+        }
+      
+    };
+  
   
   
   
