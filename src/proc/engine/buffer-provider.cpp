@@ -58,9 +58,9 @@ namespace engine {
   /* === BufferDescriptor and BuffHandle === */
   
   bool
-  BufferDescriptor::checkValidity()
+  BufferDescriptor::checkValidity()  const
   {
-    return provider_.checkValidity(*this);
+    return provider_->checkValidity(*this);
   }
   
 

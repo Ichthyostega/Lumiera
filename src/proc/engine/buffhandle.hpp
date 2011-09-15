@@ -79,7 +79,7 @@ namespace engine {
     public:
       // using standard copy operations
       
-      bool checkValidity();
+      bool checkValidity()  const;
     };
   
   
@@ -88,9 +88,9 @@ namespace engine {
   typedef ProcNode* PNode;
   
   
-  struct ChannelDescriptor  ///////TODO collapse this with BufferDescriptor?
+  struct ChannelDescriptor  ///////TODO really need to define that here? it is needed for node wiring only
     {
-      BufferDescriptor bufferType;
+      const lumiera::StreamType * bufferType;                /////////////////////////////////////////TICKET #828
     };
   
   struct InChanDescriptor : ChannelDescriptor
@@ -120,9 +120,11 @@ namespace engine {
       
       
     public:
+      typedef Buff* PBuff;
+      
       /** @internal a buffer handle may be obtained by "locking"
        *  a buffer from the corresponding BufferProvider */
-      BuffHandle(BufferDescriptor const& typeInfo, Buff* storage = 0)
+      BuffHandle(BufferDescriptor const& typeInfo, PBuff storage = 0)
         : descriptor_(typeInfo)
         , pBuffer_(storage)
         { }

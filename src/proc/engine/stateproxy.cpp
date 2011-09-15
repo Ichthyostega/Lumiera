@@ -38,7 +38,7 @@ namespace engine {
   
   /** @internal */
   BuffHandle
-  StateProxy::allocateBuffer (BufferDescriptor const&)
+  StateProxy::allocateBuffer (const lumiera::StreamType*)
   {
     UNIMPLEMENTED ("allocate a suitable buffer to hold a frame of the denoted type");
   }

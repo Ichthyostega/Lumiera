@@ -1099,7 +1099,29 @@ there are only limited sanity checks, and they can be expected to be optimised a
 Basically the client is responsible for sane buffer access.
 </pre>
 </div>
-<div title="BufferProvider" modifier="Ichthyostega" modified="201109031555" created="201107082330" tags="Rendering spec draft" changecount="11">
+<div title="BufferManagement" modifier="Ichthyostega" modified="201109151442" created="201109151420" tags="Rendering Player spec draft" changecount="9">
+<pre>Buffers are used to hold the media data for processing and output. Within the Lumiera RenderEngine and [[Player]] subsystem, we use some common concepts to handle the access and allocation of working buffers. Yet this doesn't imply having only one central authority in charge of every buffer -- such an approach wouldn't be possible (due to collaboration with external systems) and wouldn't be desirable either. Rather, there are some common basic usage //patterns// -- and there are some core interfaces used throughout the organisation of the rendering process.
+
+Mostly, the //client code,// i.e. code in need of using buffers, can access some BufferProvider, thereby delegating the actual buffer management. This binds the client to adhere to kind of a //buffer access protocol,// comprised of the ''announcing'', ''locking'', optionally ''attaching'' and finally the ''releasing'' steps. Here, the actual buffer management within the provider is a question of implementation and will be configured during build-up of the scope in question.
+
+!usage situations
+;rendering
+:any calculations and transformations of media data typically require an input- and output buffer. To a large extent, these operations will be performed by specialised libraries, resulting in a call to some plain-C function receiving pointers to the required working buffers. Our invocation code has the liability to prepare and provide those pointers, relying on a BufferProvider in turn.
+;output
+:most any of the existing libraries for handling external output require the client to adhere to some specific protocol. Often, this involves some kind of callback invoked at the external library's discretion, thus forcing our engine to prepare data within an intermediary buffer. Alternatively, the output system might provide some mechanism to gain limited direct access to the output buffers, and such an access can again be exposed to our internal client code through the BufferProvider abstraction.
+
+!primary implementations
+;memory pool
+:in all those situations, where we just need a working buffer for some time, we can rely on our internal custom memory allocator.
+:{{red{~Not-Yet-Implemented as of 9/11}}} -- as a fallback we just rely on heap allocations through the language runtime
+;frame cache
+:whenever a calculated result may be of further interest beyond the immediate need triggering the calculation, it might be eligible for caching.
+:The Lumiera ''frame cache'' is a special BufferProvider, maintaining a larger pool of buffers which can be pinned and kept around for some time,
+:accomodating limited resources and current demand for fresh result buffers.
+
+</pre>
+</div>
+<div title="BufferProvider" modifier="Ichthyostega" modified="201109151410" created="201107082330" tags="Rendering spec draft" changecount="12">
 <pre>It turns out that --  throughout the render engine implementation -- we never need direct access to the buffers holding media data. Buffers are just some entity to be //managed,// i.e. &quot;allocated&quot;, &quot;locked&quot; and &quot;released&quot;; the //actual meaning of these operations can be left to the implementation.// The code within the render engine just pushes around ''smart-prt like handles''. These [[buffer handles|BuffHandle]] act as a front-end, being created by and linked to a buffer provider implementation. There is no need to manage the lifecycle of buffers automatically, because the use of buffers is embedded into the render calculation cycle, which follows a rather strict protocol anyway. Relying on the [[capabilities of the scheduler|SchedulerRequirements]], the sequence of individual jobs in the engine ensures...
 * that the availability of a buffer was ensured prior to planning a job (&quot;buffer allocation&quot;)
 * that a buffer handle was obtained (&quot;locked&quot;) prior to any operation requiring a buffer
@@ -1118,6 +1140,7 @@ While BufferProvider is an interface meant to be backed by various different kin
 
 __see also__
 &amp;rarr; OutputSlot relying on a buffer provider to deal with frame output buffers
+&amp;rarr; more about BufferManagement within the RenderEngine and [[Player]] subsystem
 &amp;rarr; RenderMechanics for details on the buffer management within the node invocation for a single render step
 </pre>
 </div>
@@ -3143,16 +3166,27 @@ While the general approach and reasoning remains valid, a lot of the details loo
 In the most general case the render network may be just a DAG (not just a tree). Especially, multiple exit points may lead down to the same node, and following each of this possible paths the node may be at a different depth on each. This rules out a simple counter starting from the exit level, leaving us with the possibility of either employing a rather convoluted addressing scheme or using arbitrary ID numbers.{{red{...which is what we do for now}}}
 </pre>
 </div>
-<div title="NodeOperationProtocol" modifier="Ichthyostega" modified="200909031217" created="200806010251" tags="Rendering operational" changecount="16">
-<pre>The [[nodes|ProcNode]] are wired to form a &quot;Directed Acyclic Graph&quot;; each node knows its predecessor(s), but not its successor(s).  The RenderProcess is organized according to the ''pull principle'', thus we find an operation {{{pull()}}} at the core of this process. There is no such thing as an &quot;engine object&quot; calling nodes iteratively or table driven, rather, the nodes themselves issue recursive calls to their predecessor(s). For this to work, we need the nodes to adhere to a specific protocol:
-# Node is pulled, with a StateProxy object as parameter (encapsulating the access to the frames or buffers)
-# Node may now access current parameter values, using the state accessible via the StateProxy
-# using it's //input-output and wiring descriptor,// the Node creates a StateAdapter wrapping the StateProxy for allocating buffers and accessing the required input
-# StateAdapter might first try to get the output frames from the Cache in the Backend. In case of failure, a {{{process()}}} call is prepared by generating {{{pull()}}} call(s) for the input
-# as late as possible, typically on return, these recursive pull-calls have allocated a buffer containing the input data.
-# when input is ready prior to the {{{process()}}} call, output buffers will be allocated, either from the cache, or (if not caching) from the &quot;parent&quot; StateAdapter up the callstack.
-# after all buffers are available, the StateAdapter issues the {{{process()}}} call back to the originating node, which now may dereference the frame pointers and do its calculations
-# finally, when the {{{pull()}}} call returns, &quot;parent&quot; state originating the pull holds onto the buffers containing the calculated output result.
+<div title="NodeOperationProtocol" modifier="Ichthyostega" modified="201109151517" created="200806010251" tags="Rendering operational" changecount="24">
+<pre>The [[nodes|ProcNode]] are wired to form a &quot;Directed Acyclic Graph&quot;; each node knows its predecessor(s), but not its successor(s).  The RenderProcess is organized according to the ''pull principle'', thus we find an operation {{{pull()}}} at the core of this process. Meaning that there isn't an central entity invoking nodes consecutively. Rather, the nodes themselves contain the detailed knowledg regarding prerequisites, so the calculation plan is worked out recursively. Yet there are some prerequisite resources to be made available for any calculation to happen. Thus the actual calculation is broken down into atomic chunks of work, resulting in a 2-phase invocation whenever &quot;pulling&quot; a node. For this to work, we need the nodes to adhere to a specific protocol:
+;planning phase
+:when a node invocation is foreseeable to be required for getting a specific frame for a specific nominal and actual time, the engine has to find out the actual operations to happen
+:# the planning is initiated by issuing an &quot;get me output&quot; request, finally resulting in a JobTicket
+:# recursively, the node propagates &quot;get me output&quot; requests for its prerequisites
+:# after retrieving the planning information for these prerequisites, the node encodes specifics of the actual invocation situation into a closure called StateAdapter &lt;br/&gt;{{red{TODO: why not just labeling this &amp;raquo;~StateClosure&amp;laquo;?}}}
+:# finally, all this information is packaged into a JobTicket representing the planning results.
+;pull phase
+:now the actual node invocation is embedded within a job, activated through the scheduler to deliver //just in time.//
+:# Node is pulled, with a StateProxy object as parameter (encapsulating BufferProvider for access to the required frames or buffers)
+:# Node may now retrieve current parameter values, using the state accessible via the StateProxy
+:# to prepare for the actual {{{process()}}} call, the node now has to retrieve the input prerequisites
+:#* when the planning phase determined availability from the cache, then just these cached buffer(s) are now retrieved, dereferencing a BuffHandle
+:#* alternatively the planning might have arranged for some other kind of input to be provided through a prerequisite Job. Again, the corresponding BuffHandle can now be dereferenced
+:#* Nodes may be planned to have a nested structure, thus directly invoking {{{pull()}}} call(s) to prerequisite nodes without further scheduling
+:# when input is ready prior to the {{{process()}}} call, output buffers will be allocated by locking the output [[buffer handles|BuffHandle]] prepared during the planning phase
+:# since all buffers and prerequistes are available, the Node may now prepare a frame pointer array and finally invoke the external {{{process()}}} to kick off the actual calculations
+:# finally, when the {{{pull()}}} call returns, &quot;parent&quot; state originating the pull holds onto the buffers containing the calculated output result.
+{{red{WIP as of 9/11  -- many details here are still to be worked out and might change as we go}}}
+
 some points to note:
 * the WiringDescriptor is {{{const}}} and precalculated while building (remember another thread may call in parallel)
 * when a node is &quot;inplace-capable&quot;, input and output buffer may actually point to the same location
@@ -3469,7 +3503,7 @@ There is rather strong separation between these two levels, and &amp;mdash; &lt;
 [img[Block Diagram|uml/fig128005.png]]
 </pre>
 </div>
-<div title="OverviewRenderEngine" modifier="Ichthyostega" modified="200906071810" created="200706190647" tags="Rendering overview img" changecount="20">
+<div title="OverviewRenderEngine" modifier="Ichthyostega" modified="201109151519" created="200706190647" tags="Rendering overview img" changecount="21">
 <pre>Render Engine, [[Builder]] and [[Controller]] are closely related Subsystems. Actually, the [[Builder]] //creates// a newly configured Render Engine //for every// RenderProcess. Before doing so, it queries from the Session (or, to be more precise, from the [[Fixture]] within the current Session) all necessary Media Object Placement information. The [[Builder]] then derives from this information the actual assembly of [[Processing Nodes|ProcNode]] comprising the Render Engine. Thus:
  * the source of the build process is a sequence of absolute (explicit) [[Placements|Placement]] called the [[Playlist]]
  * the [[build process|BuildProcess]] is driven, configured and controlled by the [[Controller]] subsystem component. It encompasses the actual playback configuration and State of the System.
@@ -3477,6 +3511,7 @@ There is rather strong separation between these two levels, and &amp;mdash; &lt;
 
 see also: RenderEntities, [[two Examples (Object diagrams)|Examples]] 
 
+{{red{TODO: adjust terminology in this drawing: &quot;Playlist&quot; &amp;rarr; &quot;Fixture&quot; and &quot;Graph&quot; &amp;rarr; &quot;Segment&quot;}}}
 [img[Overview: Components of the Renderengine|uml/fig128261.png]]
 </pre>
 </div>
@@ -4961,23 +4996,26 @@ At first sight the link between asset and clip-MO is a simple logical relation b
 &amp;rarr; EngineFaçade 
 </pre>
 </div>
-<div title="RenderEntities" modifier="Ichthyostega" modified="200906071810" created="200706190715" tags="Rendering classes img" changecount="10">
+<div title="RenderEntities" modifier="Ichthyostega" modified="201109112229" created="200706190715" tags="Rendering classes img" changecount="13">
 <pre>The [[Render Engine|Rendering]] only carries out the low-level and performance critical tasks. All configuration and decision concerns are to be handled by [[Builder]] and [[Controller]]. While the actual connection of the Render Nodes can be highly complex, basically each Segment of the Timeline with uniform characteristics is handled by one Processor, which is a graph of [[Processing Nodes|ProcNode]] discharging into a ExitNode. The Render Engine Components as such are //stateless// themselves; for the actual calculations they are combined with a StateProxy object generated by and connected internally to the [[Controller]], while at the same time holding the Data Buffers (Frames) for the actual calculations.
 
+{{red{Warning: obsolete as of 9/11}}}
+Currently the Render/Playback is beeing targetted for implementation; almost everything in this diagram will be implemented in a slightly differently way....
 [img[Entities comprising the Render Engine|uml/fig128389.png]]
 </pre>
 </div>
-<div title="RenderImplDetails" modifier="Ichthyostega" modified="201107082336" created="200806220211" tags="Rendering impl img" changecount="23">
+<div title="RenderImplDetails" modifier="Ichthyostega" modified="201109151533" created="200806220211" tags="Rendering impl img" changecount="29">
 <pre>Below are some notes regarding details of the actual implementation of the render process and processing node operation. In the description of the [[render node operation protocol|NodeOperationProtocol]] and the [[mechanics of the render process|RenderMechanics]], these details were left out deliberately.
+{{red{WIP as of 9/11 -- need to mention the planning phase more explicitly}}}
 
 !Layered structure of State
 State can be seen as structured like an onion. All the [[StateAdapter]]s in one call stack are supposed to be within one layer: they all know of a &quot;current state&quot;, which in turn is a StateProxy (and thus may refer yet to another state, maybe accros the network or in the backend or whatever). The actual {{{process()}}} function &quot;within&quot; the individual nodes just sees a single StateAdapter and thus can be thought to be a layer below.
 
 !Buffer identification
-For the purpose of node operation, Buffers are identified by a //Buffer-handle,// which contains both the actual buffer pointer and an internal indes and classification of the source providing the buffer; the latter information is used for deallocation. Especially for calling the {{{process()}}} function (which is supposed to be plain C) the respective StateAdapter provides an array containing just the output and input buffer pointers
+For the purpose of node operation, Buffers are identified by a [[buffer-handle|BuffHandle]], which contains both the actual buffer pointer and an internal indes and classification of the source providing the buffer; the latter information is used for deallocation. Especially for calling the {{{process()}}} function (which is supposed to be plain C) the node invocation needs to prepare and provide an array containing just the output and input buffer pointers. Typically, this //frame pointer array//&amp;nbsp; is allocated on the call stack.
 
 !Problem of multi-channel nodes
-Some data processors simply require to work on multiple channels simultanously, while others work just on a single channel and will be replicated by the builder for each channel invoved. Thus, we are struck with the nasty situation that the node graph may go through some nodes spanning the chain of several channels. Now the decision is //not to care for this complexity within a single chain calculating a single channel.// We rely solely on the cache to avoid duplicated calculations. When a given node happens to produce multiple output buffers, we are bound to allocate them for the purpose of this nodes {{{process()}}} call, but we just &quot;let go&quot; the buffers not needed immediately for the channel acutally to be processed. For this to work, it is supposed that the builder has wired in a caching, and that the cache will hit when we touch the same node again for the other channels.
+Some data processors simply require to work on multiple channels simultanously, while others work just on a single channel and will be replicated by the builder for each channel invoved. Thus, we are struck with the nasty situation that the node graph may go through some nodes spanning the chain of several channels. Now the decision is //not to care for this complexity within a single chain calculating a single channel.// We rely solely on the cache to avoid duplicated calculations. When a given node happens to produce multiple output buffers, we are bound to allocate them for the purpose of this node's {{{process()}}} call, but afterwards we'r just &quot;letting go&quot;, releasing the buffers not needed immediately for the channel acutally to be processed. For this to work, it is supposed that the builder has wired in a caching, and that the cache will hit when we touch the same node again for the other channels.
 
 Closely related to this is the problem how to number and identify nodes and thus to be able to find calculated frames in cache (&amp;rarr; [[here|NodeFrameNumbering]])
 
@@ -4990,23 +5028,24 @@ Every node is actually decomposed into three parts
 Thus, the outer container can be changed polymorphically to support the different kinds of nodes (large-scale view). The actual wiring of the nodes is contained in the WiringDescriptor, including the {{{process()}}} function pointer. Additionally, this WiringDescriptor knows the actual type of the operation Strategy, and this actual type has been chosen by the builder such as to select details of the desired operation of this node, for example caching / no caching or maybe ~OpenGL rendering or the special case of a node pulling directly from a source reader. Most of this configuration is done by selecting the right template specialisation within the builder; thus in the critical path most of the calls can be inlined
 
 !!!! composing the actual operation Strategy
-As shown in the class diagram to the right, the actual implementation is assembled by chaining together the various policy classes governing parts of the node operation, like Caching, in-Place calculation capability, etc. (&amp;rarr; see [[here|WiringDescriptor]] for details). The rationale is that the variable part of the Invocation data is allocated at runtime directly on the stack, while a precisely tailored call sequence for &quot;calculating the predecessor nodes&quot; can be defined out of a bunch of simple building blocks. This helps avoiding &quot;spaghetti code&quot;, which would be especially dangerous because of the large number of different execution paths to get right. Additionally, a nice side effect of this implementation technique is that a good deal of the implementation is eligible to inlining.
-We //do employ//&amp;nbsp; some virtual calls for the buffer management in order to avoid coupling the policy classes to the actual number of in/out buffers. (As of 6/2008, this is mainly a precaution to be able to control the number of generated template instances. If we ever get in the region of several hundred individual specialisations, we'd need to separate out the allocation of the &quot;buffer table&quot; into a hand-made stack-like buffer allocated from the heap.)
+As shown in the class diagram to the right, the actual implementation is assembled by chaining together the various policy classes governing parts of the node operation, like Caching, in-Place calculation capability, etc. (&amp;rarr; see [[here|WiringDescriptor]] for details). The rationale is that the variable part of the Invocation data is allocated at runtime directly on the stack, while a precisely tailored call sequence for &quot;calculating the predecessor nodes&quot; can be defined out of a bunch of simple building blocks. This helps avoiding &quot;spaghetti code&quot;, which would be especially dangerous and difficult to get right because of the large number of different execution paths. Additionally, a nice side effect of this implementation technique is that a good deal of the implementation is eligible to inlining.
+We //do employ//&amp;nbsp; some virtual calls for the buffer management in order to avoid coupling the policy classes to the actual number of in/out buffers. (As of 6/2008, this is mainly a precaution to be able to control the number of generated template instances. If we ever get in the region of several hundred individual specialisations, we'd need to separate out further variable parts to be invoked through virtual functions.)
 
 !Rules for buffer allocation and freeing
 * only output buffers are allocated. It is //never necessary//&amp;nbsp; to allocate input buffers!
 * buffers are to be allocated as late as possible, typically just before invoking {{{process()}}}
-* buffers are allways allocated by calling to the preceeding StateAdapter in the callstack (&quot;parent stae&quot;), because of the possibility of writing the result to cache.
-* {{{pull()}}} returns a handle for the single output requested by this call. Using this ID, the caller may retrieve the actual buffer holding the result from the &quot;current state&quot; StateProxy.
-* any other buffers filled with results in the course of the same {{{process()}}} call can be released immediately before returning from the {{{pull()}}}
-* similar, and input buffers are to be released immediately after the {{{process()}}} call, but before returing from this {{{pull()}}}
-* buffers are allways released by calling to the &quot;current state&quot; (which is a StateProxy), providing the buffer-ID to be released
+* buffers are allways allocated by activating a [[buffer handle|BuffHandle]], preconfigured already during the planning phase
+* {{{pull()}}} returns a handle at least for the single output requested by this call, allowing the caller to retrieve the result data
+* any other buffers filled with results during the same {{{process()}}} call can be released immediately before returning from {{{pull()}}}
+* similar, any input buffers are to be released immediately after the {{{process()}}} call, but before returing from this {{{pull()}}}
+* while any handle contains the necessary information for releasing or &quot;committing&quot; this buffer, this has to be triggered explicitly.
 
 @@clear(right):display(block):@@
 </pre>
 </div>
-<div title="RenderMechanics" modifier="Ichthyostega" modified="200906071809" created="200806030230" tags="Rendering operational impl img" changecount="28">
+<div title="RenderMechanics" modifier="Ichthyostega" modified="201109151533" created="200806030230" tags="Rendering operational impl img" changecount="29">
 <pre>While the render process, with respect to the dependencies, the builder and the processing function is sufficiently characterized by referring to the ''pull principle'' and by defining a [[protocol|NodeOperationProtocol]] each node has to adhere to &amp;mdash; for actually get it coded we have to care for some important details, especially //how to manage the buffers.// It may well be that the length of the code path necessary to invoke the individual processing functions is finally not so important, compared with the time spent at the inner pixel loop within these functions. But my guess is (as of 5/08), that the overall number of data moving and copying operations //will be//&amp;nbsp; of importance.
+{{red{WIP as of 9/11 -- need to mention the planning phase more explicitly}}}
 
 !requirements
 * operations should be &quot;in place&quot; as much as possible
@@ -5568,8 +5607,8 @@ if (oldText.indexOf(&quot;SplashScreen&quot;)==-1)
 }
 //}}}</pre>
 </div>
-<div title="StateAdapter" modifier="Ichthyostega" modified="200807132344" created="200806261912" tags="Rendering impl def" changecount="10">
-<pre>A small (in terms of storage) and specifically configured StateProxy object which is created on the stack for each individual {{{pull()}}} call. It is part of the invocation state of such a call and participates in the buffer management. Thus, in a calldown sequence of {{{pull()}}} calls we get a corresponding sequence of &quot;parent&quot; states. At each level, the &amp;rarr; WiringDescriptor of the respective node defines a Strategy how the call is passed on.</pre>
+<div title="StateAdapter" modifier="Ichthyostega" modified="201109151535" created="200806261912" tags="Rendering impl def" changecount="11">
+<pre>A small (in terms of storage) and specifically configured StateProxy object which is created on the stack {{red{Really on the stack? 9/11}}} for each individual {{{pull()}}} call. It is part of the invocation state of such a call and participates in the buffer management. Thus, in a calldown sequence of {{{pull()}}} calls we get a corresponding sequence of &quot;parent&quot; states. At each level, the &amp;rarr; WiringDescriptor of the respective node defines a Strategy how the call is passed on.</pre>
 </div>
 <div title="StateProxy" modifier="Ichthyostega" modified="201107082334" created="200706220352" tags="def" changecount="5">
 <pre>An Object representing a //Render Process// and containing associated state information.

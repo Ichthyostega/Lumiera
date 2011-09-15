@@ -180,7 +180,7 @@ namespace engine {
           : Invocation(sta, w, outCh) {}
         
         virtual BuffHandle
-        allocateBuffer (BufferDescriptor const& bd) { return parent_.allocateBuffer(bd); }          ////////////TODO: actually implement the "allocate from parent" logic!
+        allocateBuffer (const lumiera::StreamType* ty) { return parent_.allocateBuffer(ty); }          ////////////TODO: actually implement the "allocate from parent" logic!
       };
     
     struct AllocBufferFromCache   ///< using the global current State, which will delegate to Cache
@@ -190,7 +190,7 @@ namespace engine {
           : Invocation(sta, w, outCh) {}
         
         virtual BuffHandle
-        allocateBuffer (BufferDescriptor const& bd) { return current_.allocateBuffer(bd); }
+        allocateBuffer (const lumiera::StreamType* ty) { return current_.allocateBuffer(ty); }
       };
     
   

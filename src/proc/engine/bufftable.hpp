@@ -48,6 +48,10 @@ namespace engine {
      * data buffers. The tables are supposed to be implemented as bare "C" arrays,
      * thus the array of real buffer pointers can be fed directly to the
      * processing function of the respective node.
+     * 
+     * @todo this whole design is a first attempt and rather clumsy. It should be reworked
+     *       to use a single contiguous memory area and just layer the object structure on top
+     *       (by using placement new). Yet the idea of an stack-like organisation should be retained
      */
   struct BuffTable
     {
@@ -64,7 +68,21 @@ namespace engine {
   
   class BuffTableStorage
     {
-      vector<BuffHandle>        hTab_;
+      /////////////////////////////////////////////////////////////////////////TICKET #826  need to be reworked entirely
+      /** just a placeholder to decouple the existing code
+       *  from the reworked BuffHandle logic. The existing
+       *  code in turn will be reworked rather fundamentally
+       */
+      struct BuffHaXXXX
+        : BuffHandle
+        {
+          BuffHaXXXX() : BuffHandle(just_satisfy_the_compiler()) { /* wont work ever */ }
+          static BufferDescriptor const& 
+          just_satisfy_the_compiler() { }
+        };
+        
+                                           ////////////////////////////////////TICKET #825  should be backed by mpool and integrated with node invocation
+      vector<BuffHaXXXX>        hTab_;
       vector<BuffHandle::PBuff> pTab_;
       size_t level_;
       
@@ -139,7 +157,7 @@ namespace engine {
         {
           const uint nrO(wd.nrO);
           
-          // Setup the public visible table locations
+          // Setup the publicly visible table locations
           this->outHandle = &tab_.first[ 0 ];
           this->inHandle  = &tab_.first[nrO];
           this->outBuff   = &tab_.second[ 0 ];
