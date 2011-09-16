@@ -2,6 +2,11 @@ TESTING "Component Test Suite: Render Engine parts" ./test-components --group=en
 
 
 
+PLANNED "BufferProviderProtocol_test" Buffer provider diagnostics <<END
+return: 0
+END
+
+
 PLANNED "BuffTable_test" BuffTable_test <<END
 return: 0
 END
