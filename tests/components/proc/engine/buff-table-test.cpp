@@ -25,7 +25,7 @@
 #include "lib/error.hpp"
 
 #include "proc/engine/procnode.hpp"
-#include "proc/engine/bufftable.hpp"
+#include "proc/engine/bufftable-obsolete.hpp"
 #include "lib/ref-array.hpp"
 
 #include <boost/scoped_ptr.hpp>
@@ -137,7 +137,7 @@ namespace test  {
       virtual void run(Arg) 
         {
            counter = 0;
-           std::srand (time (NULL));
+           std::srand (std::time (NULL));
            
            // allocate storage block to be used chunk wise
            pStorage.reset (new BuffTableStorage (TABLE_SIZ));
