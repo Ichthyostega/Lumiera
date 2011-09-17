@@ -40,7 +40,7 @@ namespace engine {
    *          currently locked and usable by client code
    */
   bool
-  BufferProvider::checkValidity (BufferDescriptor const&)
+  BufferProvider::verifyValidity (BufferDescriptor const&)
   {
     UNIMPLEMENTED ("BufferProvider basic and default implementation");
   }
@@ -58,9 +58,9 @@ namespace engine {
   /* === BufferDescriptor and BuffHandle === */
   
   bool
-  BufferDescriptor::checkValidity()  const
+  BufferDescriptor::verifyValidity()  const
   {
-    return provider_->checkValidity(*this);
+    return provider_->verifyValidity(*this);
   }
   
 

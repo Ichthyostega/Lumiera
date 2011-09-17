@@ -79,12 +79,12 @@ namespace engine {
       
       
       /** describe the kind of buffer managed by this provider */
-      BufferDescriptor getDefaultDescriptor();
+      BufferDescriptor getDefaultDescriptor();                //////////////TODO really? there is no sensible "default"
       
       
       /* === API for BuffHandle internal access === */
       
-      bool checkValidity (BufferDescriptor const&);
+      bool verifyValidity (BufferDescriptor const&);
       
     };
   

@@ -79,7 +79,7 @@ namespace engine {
     public:
       // using standard copy operations
       
-      bool checkValidity()  const;
+      bool verifyValidity()  const;
     };
   
   
@@ -143,7 +143,7 @@ namespace engine {
       isValid()  const
         {
           return bool(pBuffer_)
-              && descriptor_.checkValidity();
+              && descriptor_.verifyValidity();
         }
       
     };

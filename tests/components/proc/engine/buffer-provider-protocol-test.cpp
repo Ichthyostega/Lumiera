@@ -24,10 +24,11 @@
 #include "lib/error.hpp"
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
-//#include "lib/util.hpp"
+#include "lib/util-foreach.hpp"
 //#include "proc/play/diagnostic-output-slot.hpp"
 #include "proc/engine/diagnostic-buffer-provider.hpp"
 #include "proc/engine/buffhandle.hpp"
+#include "proc/engine/bufftable.hpp"
 
 //#include <boost/format.hpp>
 //#include <iostream>
@@ -35,6 +36,7 @@
 //using boost::format;
 //using std::string;
 //using std::cout;
+using util::for_each;
 
 
 namespace engine{
@@ -47,6 +49,9 @@ namespace test  {
   
   
   namespace { // Test fixture
+    
+    const uint TEST_SIZE = 1024*1024;
+    const uint TEST_ELMS = 20;
     
   }
   
@@ -64,6 +69,7 @@ namespace test  {
       run (Arg) 
         {
           UNIMPLEMENTED ("build a diagnostic buffer provider and perform a full lifecycle");
+          verifySimpleUsage();
           verifyStandardCase();
         }
       
@@ -108,6 +114,36 @@ namespace test  {
           // will be preconfigured, depending on the usage context
           BufferProvider& provider = DiagnosticBufferProvider::build();
 #if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #829
+          
+          BufferDescriptor desc1 = provider.getDescriptor<TestFrame>();
+          BufferDescriptor desc2 = provider.getDescriptorFor(TEST_SIZE);
+          CHECK (desc1.verifyValidity());
+          CHECK (desc2.verifyValidity());
+          
+          size_t num1 = provider.announce(TEST_ELMS, desc1);
+          size_t num2 = provider.announce(TEST_ELMS, desc2);
+          CHECK (num1 == TEST_ELMS);
+          CHECK (0 < num2 && num2 <=TEST_ELMS);
+          
+          const size_t STORAGE_SIZE = BuffTable::Storage<2*TEST_ELMS>::size; 
+          char storage[STORAGE_SIZE];
+          BuffTable& tab = BuffTable::prepare(storage, STORAGE_SIZE);
+          
+          for (uint i=0; i < num1; ++i )
+            {
+              tab.attachBuffer (provider.lockBufferFor (desc1));
+            }
+          for (uint i=0; i < num1; ++i )
+            {
+              tab.attachBuffer (provider.lockBufferFor (desc2));
+            }
+          
+          for_each (tab.buffers(), do_some_calculations);
+          
+          tab.releaseBuffers();
+          
+          DiagnosticBufferProvider checker = DiagnosticBufferProvider::access(provider);
+          CHECK (checker.all_buffers_released());
 #endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #829
         }
     };
