@@ -1144,6 +1144,20 @@ __see also__
 &amp;rarr; RenderMechanics for details on the buffer management within the node invocation for a single render step
 </pre>
 </div>
+<div title="BufferTable" modifier="Ichthyostega" created="201109172253" tags="def spec Rendering draft" changecount="1">
+<pre>The invocation of individual [[render nodes|ProcNode]] uses an ''buffer table'' internal helper data structure to encapsulate technical details of the allocation, use, re-use and feeing of data buffers for the media calculations. Here, the management of the physical data buffers is delegated through a BufferProvider, which typically is implemented relying on the ''frame cache'' in the backend. Yet some partially quite involved technical details need to be settled for each invocation: We need input buffers, maybe provided as external input, while in other cases to be filled by a recursive call. We need storage to prepare the (possibly automated) parameters, and finally we need a set of output buffers. All of these buffers and parameters need to be rearranged for invoking the (external) processing function, followed by releasing the input buffers and commiting the output buffers to be used as result.
+
+Because there are several flavours of node wiring, the building blocks comprising such a node invocation will be combined depending on the circumstances. Performing all these various steps is indeed the core concern of the render node -- with the help of BufferTable to deal with the repetitive, tedious and technical details.
+
+!requirements
+The layout of the buffer table will be planned beforehand for each invocation, allongside with planning the individual invocation jobs for the scheduler. At that point, a generic JobTicket for the whole timeline segment is available, describing the necessary operations in an abstract way, as determined by the preceeding planning phase. Jobs are prepared chunk wise, some time in advance (but not all jobs of at once). Jobs will be executed concurrently. Thus, buffer tables need to be created repeatedly and placed into a memory block accessed and owned exclusively by the individual job.
+* within the buffer table, we need an working area for the output handles, the input handles and the parameter descriptors
+* actually, these can be seen as pools holding handle objects which might even be re-used, especially for a chain of effects calculated in-place.
+* each of these pools is characterised by a common //buffer type,// represented as buffer descriptor
+* we need some way to integrate with the StateProxy, because some of the buffers need to be marked especially, e.g. as result
+* there should be convenience functions to release all pending buffers, forwarding the release operation to the individual handles
+</pre>
+</div>
 <div title="BuildFixture" modifier="Ichthyostega" modified="201011290504" created="201011282003" tags="Builder spec operational" changecount="32">
 <pre>//Building the fixture is actually at the core of the [[builder's operation|Builder]]//
 {{red{WIP as of 11/10}}} &amp;rarr; see also the [[planning page|PlanningBuildFixture]]
@@ -3166,7 +3180,7 @@ While the general approach and reasoning remains valid, a lot of the details loo
 In the most general case the render network may be just a DAG (not just a tree). Especially, multiple exit points may lead down to the same node, and following each of this possible paths the node may be at a different depth on each. This rules out a simple counter starting from the exit level, leaving us with the possibility of either employing a rather convoluted addressing scheme or using arbitrary ID numbers.{{red{...which is what we do for now}}}
 </pre>
 </div>
-<div title="NodeOperationProtocol" modifier="Ichthyostega" modified="201109151517" created="200806010251" tags="Rendering operational" changecount="24">
+<div title="NodeOperationProtocol" modifier="Ichthyostega" modified="201109172254" created="200806010251" tags="Rendering operational" changecount="25">
 <pre>The [[nodes|ProcNode]] are wired to form a &quot;Directed Acyclic Graph&quot;; each node knows its predecessor(s), but not its successor(s).  The RenderProcess is organized according to the ''pull principle'', thus we find an operation {{{pull()}}} at the core of this process. Meaning that there isn't an central entity invoking nodes consecutively. Rather, the nodes themselves contain the detailed knowledg regarding prerequisites, so the calculation plan is worked out recursively. Yet there are some prerequisite resources to be made available for any calculation to happen. Thus the actual calculation is broken down into atomic chunks of work, resulting in a 2-phase invocation whenever &quot;pulling&quot; a node. For this to work, we need the nodes to adhere to a specific protocol:
 ;planning phase
 :when a node invocation is foreseeable to be required for getting a specific frame for a specific nominal and actual time, the engine has to find out the actual operations to happen
@@ -3192,6 +3206,7 @@ some points to note:
 * when a node is &quot;inplace-capable&quot;, input and output buffer may actually point to the same location
 * but there is no guarantee for this to happen, because the cache may be involved (and we can't overwrite the contents of a cache frame)
 * generally, a node may have N inputs and M output frames, which are expected to be processed in a single call
+* some of the technical details of buffer management are encapsulated within the BufferTable of each invocation
 
 &amp;rarr; the [[&quot;mechanics&quot; of the render process|RenderMechanics]]
 &amp;rarr; more fine grained [[implementation details|RenderImplDetails]]
@@ -5043,7 +5058,7 @@ We //do employ//&amp;nbsp; some virtual calls for the buffer management in order
 @@clear(right):display(block):@@
 </pre>
 </div>
-<div title="RenderMechanics" modifier="Ichthyostega" modified="201109151533" created="200806030230" tags="Rendering operational impl img" changecount="29">
+<div title="RenderMechanics" modifier="Ichthyostega" modified="201109172221" created="200806030230" tags="Rendering operational impl img" changecount="32">
 <pre>While the render process, with respect to the dependencies, the builder and the processing function is sufficiently characterized by referring to the ''pull principle'' and by defining a [[protocol|NodeOperationProtocol]] each node has to adhere to &amp;mdash; for actually get it coded we have to care for some important details, especially //how to manage the buffers.// It may well be that the length of the code path necessary to invoke the individual processing functions is finally not so important, compared with the time spent at the inner pixel loop within these functions. But my guess is (as of 5/08), that the overall number of data moving and copying operations //will be//&amp;nbsp; of importance.
 {{red{WIP as of 9/11 -- need to mention the planning phase more explicitly}}}
 
@@ -5059,6 +5074,8 @@ On the other hand, the processing function within the individual node needs to b
 Not everything can be preconfigured though. The pull principle opens the possibility for the node to decide on a per call base what predecessor(s) to pull (if any). This decision may rely on automation parameters, which thus need to be accessible prior to requesting the buffer(s). Additionally, in a later version we plan to have the node network calculate some control values for adjusting the cache and backend timings &amp;mdash; and of course at some point we'll want to utilize the GPU, resulting in the need to feed data from our processing buffers into some texture representation.
 
 !buffer management
+{{red{NOTE 9/11: the following is partially obsolete and needs to be rewritten}}} &amp;rarr; see the BufferTable for details regarding new buffer management...
+
 Besides the StateProxy representing the actual render process and holding a couple of buffer (refs), we employ a lightweight adapter object in between. It is used //for a single {{{pull()}}}-call// &amp;mdash; mapping the actual buffers to the input and output port numbers of the processing node and for dealing with the cache calls. While the StateProxy manages a pool of frame buffers, this interspersed adapter allows us to either use a buffer retrieved from the cache as an input, possibly use a new buffer located within the cache as output, or (in case no caching happens) to just use the same buffer as input and output for &quot;in-place&quot;-processing. The idea is that most of the configuration of this adapter object is prepared in the wiring step while building the node network.
 
 The usage patern of the buffers can be stack-like when processing nodes require multiple input buffers. In the standard case, which also is the simplest case, a pair of buffers (or a single buffer for &quot;in-place&quot; capable nodes) suffices to calculate a whole chain of nodes. But &amp;mdash; as the recursive descent means depth-first processing &amp;mdash; in case multiple input buffers are needed, we may encounter a situation where some of these input buffers already contain processed data, while we have to descend into yet another predecessor node chain to pull the data for the remaining buffers. Care has to be taken //to allocate the buffers as late as possible,// otherwise we could end up holding onto a buffer almost for each node in the network. Effectively this translates into the rule to allocate output buffers only after all input buffers are ready and filled with data; thus we shouldn't allocate buffers when //entering// the recursive call to the predecessor(s), rather we have to wait until we are about to return from the downcall chain.

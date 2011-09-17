@@ -127,19 +127,14 @@ namespace test  {
           
           const size_t STORAGE_SIZE = BuffTable::Storage<2*TEST_ELMS>::size; 
           char storage[STORAGE_SIZE];
-          BuffTable& tab = BuffTable::prepare(storage, STORAGE_SIZE);
+          BuffTable& tab =
+              BuffTable::prepare(STORAGE_SIZE, storage)
+                        .prepare(num1, desc1)
+                        .prepare(num2, desc2)
+                        .build(); 
           
-          for (uint i=0; i < num1; ++i )
-            {
-              tab.attachBuffer (provider.lockBufferFor (desc1));
-            }
-          for (uint i=0; i < num1; ++i )
-            {
-              tab.attachBuffer (provider.lockBufferFor (desc2));
-            }
-          
+          tab.lockBuffers();
           for_each (tab.buffers(), do_some_calculations);
-          
           tab.releaseBuffers();
           
           DiagnosticBufferProvider checker = DiagnosticBufferProvider::access(provider);
