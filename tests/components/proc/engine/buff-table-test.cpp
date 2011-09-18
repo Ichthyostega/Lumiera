@@ -81,6 +81,7 @@ namespace test  {
     
     
     
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #833
     void*
     detect_start_level (BuffTableStorage& sto)
     {
@@ -116,6 +117,7 @@ namespace test  {
           && (not_within(b.inHandle,  b.outBuff, &b.inBuff[num.nrO]))
            ;
     }
+#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #833
   } // (End) internal defs
   
   
@@ -142,7 +144,9 @@ namespace test  {
            // allocate storage block to be used chunk wise
            pStorage.reset (new BuffTableStorage (TABLE_SIZ));
            
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #833
            invocation (0, detect_start_level(*pStorage));
+#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #833
            
            pStorage.reset(0);  // dtor throws assertion error if corrupted
            
@@ -161,12 +165,14 @@ namespace test  {
             return; // end recursion
           
           ++counter;
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #833
           BuffTableChunk thisChunk (numbers, *pStorage);
           CHECK (consistencyCheck (thisChunk, numbers, lastLevel));
           
           uint nrBranches ( 1 + (rand() % WIDTH_MAX));
           while (nrBranches--)
             invocation (consumed, first_behind (thisChunk,numbers.getNrI()));
+#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #833
         }
     };
   
