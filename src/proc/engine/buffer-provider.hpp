@@ -77,6 +77,9 @@ namespace engine {
       virtual BuffHandle lockBufferFor (BufferDescriptor const&)  =0;
       virtual void releaseBuffer (BuffHandle const&)              =0;
       
+      template<typename BU>
+      BuffHandle lockBufferFor ();
+      
       
       /** describe the kind of buffer managed by this provider */
       BufferDescriptor getDefaultDescriptor();                //////////////TODO really? there is no sensible "default"
@@ -87,7 +90,25 @@ namespace engine {
       bool verifyValidity (BufferDescriptor const&);
       
     };
+    
+    
+    
+    
+  /* === Implementation === */
   
+  /** convenience shortcut:
+   *  prepare and claim ("lock") a buffer suitable
+   *  to hold an object of the given type.
+   * @return a handle embedding a suitably configured
+   *         buffer descriptor. The corresponding buffer
+   *         has been allocated and marked for exclusive use
+   */
+  template<typename BU>
+  BuffHandle
+  BufferProvider::lockBufferFor()
+  {
+    UNIMPLEMENTED ("convenience shortcut to announce and lock for a specific object type");
+  }
   
   
 } // namespace engine

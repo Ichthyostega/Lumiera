@@ -26,6 +26,7 @@
 #include "lib/test/test-helper.hpp"
 #include "lib/util-foreach.hpp"
 //#include "proc/play/diagnostic-output-slot.hpp"
+#include "proc/engine/testframe.hpp"
 #include "proc/engine/diagnostic-buffer-provider.hpp"
 #include "proc/engine/buffhandle.hpp"
 #include "proc/engine/bufftable.hpp"
@@ -77,7 +78,6 @@ namespace test  {
       void
       verifySimpleUsage()
         {
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #829
           // Create Test fixture.
           // In real usage, a suitable memory/frame/buffer provider
           // will be preconfigured, depending on the usage context
@@ -88,6 +88,7 @@ namespace test  {
           CHECK (sizeof(TestFrame) <= buff.size());
           buff.create<TestFrame>() = testData(0);
           
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #829
           TestFrame* storage = *buff;
           CHECK (testData(0) == *storage);
           

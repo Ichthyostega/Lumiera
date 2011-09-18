@@ -132,6 +132,10 @@ namespace engine {
       // using standard copy operations
       
       
+      template<typename BU>
+      BU& create();
+      
+      
       Buff&
       operator* ()  const
         {
@@ -146,8 +150,29 @@ namespace engine {
               && descriptor_.verifyValidity();
         }
       
+      size_t
+      size()  const
+        {
+          UNIMPLEMENTED ("forward to the buffer provider for storage size diagnostics");
+        }
+      
     };
   
+  
+  /* === Implementation details === */
+  
+  /** convenience shortcut: place and maintain an object within the buffer.
+   *  This operation performs the necessary steps to attach an object;
+   *  if the buffer isn't locked yet, it will do so. Moreover, the created
+   *  object will be owned by the buffer management facilities, i.e. the
+   *  destructor is registered as cleanup function.   
+   */
+  template<typename BU>
+  BU&
+  BuffHandle::create()
+  {
+    UNIMPLEMENTED ("convenience shortcut to attach/place an object in one sway");
+  }
   
   
   
