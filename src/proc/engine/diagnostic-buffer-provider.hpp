@@ -47,6 +47,23 @@ namespace engine {
   class DiagnosticBufferProvider
     : public BufferProvider
     {
+      
+      
+      /* === BufferProvider Implementation === */
+      
+      virtual BuffHandle
+      lockBufferFor (BufferDescriptor const& descriptor)
+        {
+          UNIMPLEMENTED ("lock buffer for exclusive use");
+        }
+      
+      virtual void
+      releaseBuffer (BuffHandle const& handle)
+        {
+          UNIMPLEMENTED ("release a buffer and invalidate the handle");
+        }
+      
+      
     public:
       /** build a new Diagnostic Buffer Provider instance,
        *  discard the existing one. Use the static query API
@@ -56,6 +73,60 @@ namespace engine {
         {
           UNIMPLEMENTED ("Diagnostic Buffer Provider instance");
         }
+      
+      
+      /** access the diagnostic API of the buffer provider
+       * @throw error::Invalid if the given provider doesn't allow
+       *        for diagnostic access or wasn't registered beforehand.
+       */
+      static DiagnosticBufferProvider&
+      access (BufferProvider const& provider)
+        {
+          UNIMPLEMENTED ("access existing instance linked to the given provider");
+        }
+      
+      
+      
+      
+      /* === diagnostic API === */
+      
+      bool
+      buffer_was_used (uint bufferID)
+        {
+          UNIMPLEMENTED ("check usage flag of a specific buffer");
+        }
+      
+      
+      bool
+      buffer_was_closed (uint bufferID)
+        {
+          UNIMPLEMENTED ("check closed-flag of a specific buffer");
+        }
+      
+      
+      template<typename BU>
+      bool
+      object_was_attached (uint bufferID)
+        {
+          UNIMPLEMENTED ("verify object attachment status of a specific buffer");
+        }
+      
+      
+      template<typename BU>
+      bool
+      object_was_destroyed (uint bufferID)
+        {
+          UNIMPLEMENTED ("verify object attachment status of a specific buffer");
+        }
+      
+      
+      void*
+      accessStorage (uint bufferID)
+        {
+          
+        }
+      
+      
       
     private:
       

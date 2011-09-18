@@ -63,6 +63,13 @@ namespace engine {
     return provider_->verifyValidity(*this);
   }
   
+  
+  void
+  BuffHandle::release()
+  {
+    UNIMPLEMENTED ("forward buffer release call to buffer provider");
+  }
+  
 
 
 } // namespace engine

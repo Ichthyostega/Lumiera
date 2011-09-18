@@ -88,22 +88,20 @@ namespace test  {
           CHECK (sizeof(TestFrame) <= buff.size());
           buff.create<TestFrame>() = testData(0);
           
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #829
-          TestFrame* storage = *buff;
-          CHECK (testData(0) == *storage);
+          TestFrame& storage = buff.accessAs<TestFrame>();
+          CHECK (testData(0) == storage);
           
           buff.release();
           CHECK (!buff.isValid());
-          VERIFY_ERROR (LIFECYCLE, *buff );
+          VERIFY_ERROR (LIFECYCLE, buff.accessAs<TestFrame>() );
           
-          DiagnosticBufferProvider checker = DiagnosticBufferProvider::access(provider);
+          DiagnosticBufferProvider& checker = DiagnosticBufferProvider::access(provider);
           CHECK (checker.buffer_was_used (0));
           CHECK (checker.buffer_was_closed (0));
-          CHECK (checker.object_was_attached<TestFrame> ());
-          CHECK (checker.object_was_destroyed<TestFrame> ());
+          CHECK (checker.object_was_attached<TestFrame> (0));
+          CHECK (checker.object_was_destroyed<TestFrame> (0));
           
           CHECK (testData(0) == checker.accessStorage (0));
-#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #829
         }
       
       

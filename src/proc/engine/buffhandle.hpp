@@ -132,8 +132,15 @@ namespace engine {
       // using standard copy operations
       
       
+      
+      void release();
+      
+      
       template<typename BU>
       BU& create();
+      
+      template<typename BU>
+      BU& accessAs();
       
       
       Buff&
@@ -172,6 +179,18 @@ namespace engine {
   BuffHandle::create()
   {
     UNIMPLEMENTED ("convenience shortcut to attach/place an object in one sway");
+  }
+  
+  
+  /** convenience shortcuts: access the buffer contents in a typesafe fashion.
+   *  This is equivalent to a plain dereferentiation with additional metadata check
+   * @throw error::Logic in case of type mismatch \c LUMIERA_ERROR_WRONG_TYPE
+   */
+  template<typename BU>
+  BU&
+  BuffHandle::accessAs()
+  {
+    UNIMPLEMENTED ("convenience shortcut to access buffer contents typesafe");
   }
   
   

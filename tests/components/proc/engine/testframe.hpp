@@ -55,6 +55,24 @@ namespace test   {
     {
       
     public:
+      
+      bool
+      operator== (void* memLocation)
+        {
+          UNIMPLEMENTED ("verify contents of an arbitrary memory location");
+        }
+      
+      friend bool
+      operator== (TestFrame const& f1, TestFrame const& f2)
+        {
+          UNIMPLEMENTED ("equality of test data frames");
+        }
+      
+      friend bool
+      operator!= (TestFrame const& f1, TestFrame const& f2)
+        {
+          return !(f1 == f2);
+        }
     };
   
   
