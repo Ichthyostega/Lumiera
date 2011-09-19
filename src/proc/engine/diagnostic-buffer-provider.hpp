@@ -31,12 +31,17 @@
 
 
 #include "lib/error.hpp"
+#include "lib/singleton.hpp"
+#include "lib/util.hpp"
 #include "proc/engine/buffer-provider.hpp"
 
+#include <boost/scoped_ptr.hpp>
 #include <boost/noncopyable.hpp>
 
 
 namespace engine {
+  
+  namespace error = lumiera::error;
   
   
   /********************************************************************
@@ -45,34 +50,29 @@ namespace engine {
    * @todo write type comment
    */
   class DiagnosticBufferProvider
-    : public BufferProvider
+    : boost::noncopyable
     {
       
+      /**
+       * simple BufferProvider implementation
+       * with additional allocation tracking
+       */
+      class HeapMemProvider;
       
-      /* === BufferProvider Implementation === */
       
-      virtual BuffHandle
-      lockBufferFor (BufferDescriptor const& descriptor)
-        {
-          UNIMPLEMENTED ("lock buffer for exclusive use");
-        }
+      boost::scoped_ptr<HeapMemProvider>              pImpl_;
+      static lib::Singleton<DiagnosticBufferProvider> diagnostics;
       
-      virtual void
-      releaseBuffer (BuffHandle const& handle)
-        {
-          UNIMPLEMENTED ("release a buffer and invalidate the handle");
-        }
+      
+      HeapMemProvider& reset();
+      bool isCurrent (BufferProvider const&);
       
       
     public:
       /** build a new Diagnostic Buffer Provider instance,
        *  discard the existing one. Use the static query API
        *  for investigating collected data. */
-      static BufferProvider&
-      build()
-        {
-          UNIMPLEMENTED ("Diagnostic Buffer Provider instance");
-        }
+      static BufferProvider& build();
       
       
       /** access the diagnostic API of the buffer provider
@@ -80,33 +80,21 @@ namespace engine {
        *        for diagnostic access or wasn't registered beforehand.
        */
       static DiagnosticBufferProvider&
-      access (BufferProvider const& provider)
-        {
-          UNIMPLEMENTED ("access existing instance linked to the given provider");
-        }
+      access (BufferProvider const&);
       
       
       
       
       /* === diagnostic API === */
       
-      bool
-      buffer_was_used (uint bufferID)
-        {
-          UNIMPLEMENTED ("check usage flag of a specific buffer");
-        }
-      
-      
-      bool
-      buffer_was_closed (uint bufferID)
-        {
-          UNIMPLEMENTED ("check closed-flag of a specific buffer");
-        }
+      bool buffer_was_used (uint bufferID)  const;
+      bool buffer_was_closed (uint bufferID)  const;
+      void* accessStorage (uint bufferID)  const;
       
       
       template<typename BU>
       bool
-      object_was_attached (uint bufferID)
+      object_was_attached (uint bufferID)  const
         {
           UNIMPLEMENTED ("verify object attachment status of a specific buffer");
         }
@@ -114,16 +102,9 @@ namespace engine {
       
       template<typename BU>
       bool
-      object_was_destroyed (uint bufferID)
+      object_was_destroyed (uint bufferID)  const
         {
           UNIMPLEMENTED ("verify object attachment status of a specific buffer");
-        }
-      
-      
-      void*
-      accessStorage (uint bufferID)
-        {
-          
         }
       
       
