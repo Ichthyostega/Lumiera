@@ -80,7 +80,7 @@ namespace engine {
        *        for diagnostic access or wasn't registered beforehand.
        */
       static DiagnosticBufferProvider&
-      access (BufferProvider const&);
+      access (BufferProvider const& );
       
       
       
@@ -89,7 +89,7 @@ namespace engine {
       
       bool buffer_was_used (uint bufferID)  const;
       bool buffer_was_closed (uint bufferID)  const;
-      void* accessStorage (uint bufferID)  const;
+      void* accessMemory (uint bufferID)  const;
       
       
       template<typename BU>

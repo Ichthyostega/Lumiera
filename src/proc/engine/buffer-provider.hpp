@@ -61,8 +61,11 @@ namespace engine {
   
   
   /**
-   * Handle for a buffer for processing data, abstracting away the actual implementation.
-   * The real buffer pointer can be retrieved by dereferencing this smart-handle class.
+   * Interface: a facility providing and managing working buffers for media calculations.
+   * The pointer to actual buffer storage can be retrieved by
+   * - optionally announcing the required buffer(s) beforehand
+   * - "locking" a buffer to yield a buffer handle
+   * - dereferencing this smart-handle class
    * 
    * @todo as of 6/2011 buffer management within the engine is still a bit vague
    */
@@ -82,7 +85,11 @@ namespace engine {
       
       
       /** describe the kind of buffer managed by this provider */
-      BufferDescriptor getDefaultDescriptor();                //////////////TODO really? there is no sensible "default"
+      BufferDescriptor getDescriptorFor(size_t storageSize=0);
+      
+      template<typename BU>
+      BufferDescriptor getDescriptor();
+
       
       
       /* === API for BuffHandle internal access === */
@@ -108,6 +115,14 @@ namespace engine {
   BufferProvider::lockBufferFor()
   {
     UNIMPLEMENTED ("convenience shortcut to announce and lock for a specific object type");
+  }
+  
+  
+  template<typename BU>
+  BufferDescriptor
+  BufferProvider::getDescriptor()
+  {
+    UNIMPLEMENTED ("build descriptor for automatically placing an object instance into the buffer");
   }
   
   

@@ -63,28 +63,25 @@ namespace engine {
         {
           return was_locked_;
         }
+      
+      bool
+      was_closed()  const
+        {
+          return was_locked_;
+        }
+      
+      void*
+      accessMemory()  const
+        {
+          return storage_.get();
+        }
     };
   
     
     
   namespace { // Details of allocation and accounting
-
-    using lumiera::typelist::FunctionSignature;
-    using std::tr1::placeholders::_1;
-    using std::tr1::function;
-    using std::tr1::bind;
     
-    /**
-     * type rebinding template for issuing flexible queries
-     * and forwarding them to the individual block entries
-     */
-    template<typename FUN>
-    struct _Query
-      {
-        typedef typename FunctionSignature<FUN>::Ret Result;
-      };
-    
-    function<bool(Block&)> QUERY_was_used = bind (&Block::was_used, _1 );
+    const uint MAX_BUFFERS = 50;
   
   } // (END) Details of allocation and accounting
   
@@ -119,21 +116,27 @@ namespace engine {
       
       virtual ~HeapMemProvider()
         {
-          INFO (proc_mem, "discarding %uz diagnostic buffer entries", HeapMemProvider::size());
+          INFO (proc_mem, "discarding %zu diagnostic buffer entries", HeapMemProvider::size());
         }
       
-      template<typename FUN>
-      typename _Query<FUN>::Result
-      accessStats (uint bufferID, FUN queryFunction)
-        {
-          queryFunction (access_or_create (bufferID));
-        }
-      
-    private:
       Block&
       access_or_create (uint bufferID)
         {
-          UNIMPLEMENTED ("either get existing block or create new entries to fit");
+          while (!withinStorageSize (bufferID))
+            manage (new Block);
+          
+          ENSURE (withinStorageSize (bufferID));
+          return (*this)[bufferID];
+        }
+      
+    private:
+      bool
+      withinStorageSize (uint bufferID)  const
+        {
+          if (bufferID >= MAX_BUFFERS)
+            throw error::Fatal ("hardwired internal limit for test buffers exceeded");
+          
+          return bufferID < size();
         }
     };
   
@@ -181,21 +184,21 @@ namespace engine {
   bool
   DiagnosticBufferProvider::buffer_was_used (uint bufferID)  const
     {
-      pImpl_->accessStats (bufferID, QUERY_was_used);
+      return pImpl_->access_or_create(bufferID).was_used();
     }
   
   
   bool
   DiagnosticBufferProvider::buffer_was_closed (uint bufferID)  const
     {
-      UNIMPLEMENTED ("check closed-flag of a specific buffer");
+      return pImpl_->access_or_create(bufferID).was_closed();
     }
   
   
   void*
-  DiagnosticBufferProvider::accessStorage (uint bufferID)  const
+  DiagnosticBufferProvider::accessMemory (uint bufferID)  const
     {
-      
+      return pImpl_->access_or_create(bufferID).accessMemory();
     }
   
 

@@ -29,6 +29,46 @@ namespace engine {
   namespace { // impl. details and definitions
     
     const uint DEFAULT_DESCRIPTOR = 0;
+    
+    typedef uint64_t LocalKey;
+    typedef size_t HashVal;
+    
+    const LocalKey UNSPECIFIC = 0;
+    
+    struct TypeHandler
+      {
+        typedef void (*Ctor) (void*);
+        typedef void (*Dtor) (void*);
+        
+        Ctor createAttached;
+        Dtor destroyAttached;
+        
+        TypeHandler()
+          : createAttached (0)
+          , destroyAttached (0)
+          { }
+        
+        template<class X>
+        TypeHandler()
+          : createAttached (0)    /////////TODO: how to attach the ctor function??? mabye better use a class with virtual functions?
+          , destroyAttached (0)
+          { }
+      };
+    
+    const TypeHandler RAW_BUFFER;
+    
+    
+    class Metadata
+      {
+      public:
+        static HashVal
+        key ( size_t storageSize
+            , TypeHandler instanceFunc =RAW_BUFFER
+            , LocalKey specifics =UNSPECIFIC)
+        {
+          UNIMPLEMENTED ("combine the distinguishing properties into a single hash");
+        }
+      };
   }
 
 
@@ -47,9 +87,9 @@ namespace engine {
   
   
   BufferDescriptor
-  BufferProvider::getDefaultDescriptor()
+  BufferProvider::getDescriptorFor (size_t storageSize)
   {
-    return BufferDescriptor (*this, DEFAULT_DESCRIPTOR);
+    return BufferDescriptor (*this, Metadata::key (storageSize));
   }
       
       

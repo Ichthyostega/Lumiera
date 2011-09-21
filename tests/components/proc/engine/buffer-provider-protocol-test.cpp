@@ -101,7 +101,7 @@ namespace test  {
           CHECK (checker.object_was_attached<TestFrame> (0));
           CHECK (checker.object_was_destroyed<TestFrame> (0));
           
-          CHECK (testData(0) == checker.accessStorage (0));
+          CHECK (testData(0) == checker.accessMemory (0));
         }
       
       
@@ -112,10 +112,10 @@ namespace test  {
           // In real usage, a suitable memory/frame/buffer provider
           // will be preconfigured, depending on the usage context
           BufferProvider& provider = DiagnosticBufferProvider::build();
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #829
           
           BufferDescriptor desc1 = provider.getDescriptor<TestFrame>();
           BufferDescriptor desc2 = provider.getDescriptorFor(TEST_SIZE);
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #829
           CHECK (desc1.verifyValidity());
           CHECK (desc2.verifyValidity());
           
