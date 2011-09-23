@@ -34,7 +34,11 @@ namespace engine {
     
   }
 
-
+  
+  BufferProvider::BufferProvider (Literal implementationID)
+    : meta_(new Metadata (implementationID))
+    { }
+  
   BufferProvider::~BufferProvider() { }
   
   
@@ -52,7 +56,7 @@ namespace engine {
   BufferDescriptor
   BufferProvider::getDescriptorFor (size_t storageSize)
   {
-    return BufferDescriptor (*this, Metadata::key (storageSize));
+    return BufferDescriptor (*this, meta_->key (storageSize));
   }
       
       

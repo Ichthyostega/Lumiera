@@ -111,8 +111,8 @@ namespace engine {
       
     public:
       HeapMemProvider()
-        {
-        }
+        : BufferProvider ("Diagnostic_HeapAllocated")
+        { }
       
       virtual ~HeapMemProvider()
         {

@@ -55,15 +55,26 @@
 
 
 #include "lib/error.hpp"
+#include "lib/symbol.hpp"
 
 //#include <boost/noncopyable.hpp>
 
 
 namespace engine {
   
+  using lib::Literal;
+  
   
   typedef uint64_t LocalKey;
   typedef size_t HashVal;
+  
+  enum BufferState
+    { NIL,
+      FREE,
+      LOCKED,
+      EMITTED,
+      BLOCKED
+    };
   
   const LocalKey UNSPECIFIC = 0;
   
@@ -93,7 +104,17 @@ namespace engine {
   class Metadata
     {
     public:
-      static HashVal
+      struct Entry
+        {
+          BufferState state ()  const;
+          Entry& mark (BufferState newState);
+        };
+      
+      
+      Metadata (Literal implementationID)
+        { }
+      
+      HashVal
       key ( size_t storageSize
           , TypeHandler instanceFunc =RAW_BUFFER
           , LocalKey specifics =UNSPECIFIC)
@@ -101,24 +122,14 @@ namespace engine {
           UNIMPLEMENTED ("combine the distinguishing properties into a single hash");
         }
       
-      static Metadata&
+      Entry&
       get (HashVal key)
         {
           UNIMPLEMENTED ("access, possibly create metadata records");
         }
       
-      BufferState
-      state ()  const
-        {
-          UNIMPLEMENTED ("buffer state accounting");
-        }
-      
-      Metadata&
-      mark (BufferState newState)
-        {
-          UNIMPLEMENTED ("buffer state transitions");
-          return *this;
-        }
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #834
+#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #834
     };
     
     
@@ -127,6 +138,18 @@ namespace engine {
   /* === Implementation === */
   
   /** */
+  BufferState
+  Metadata::Entry::state ()  const
+    {
+      UNIMPLEMENTED ("buffer state accounting");
+    }
+  
+  Metadata::Entry&
+  Metadata::Entry::mark (BufferState newState)
+    {
+      UNIMPLEMENTED ("buffer state transitions");
+      return *this;
+    }
   
   
   

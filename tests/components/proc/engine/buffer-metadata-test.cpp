@@ -34,6 +34,7 @@
 //#include "proc/engine/bufftable.hpp"
 
 //#include <boost/format.hpp>
+#include <boost/scoped_ptr.hpp>
 #include <cstdlib>
 //#include <iostream>
 
@@ -41,6 +42,7 @@
 //using std::string;
 //using std::cout;
 //using util::for_each;
+using boost::scoped_ptr;
 using util::isnil;
 using util::isSameObject;
 
@@ -48,6 +50,7 @@ using util::isSameObject;
 namespace engine{
 namespace test  {
   
+
 //  using lib::AllocationCluster;
 //  using mobject::session::PEffect;
 //  using ::engine::BuffHandle;
@@ -59,21 +62,13 @@ namespace test  {
     
     const size_t TEST_MAX_SIZE = 1024 * 1024;
     
-    const size_t SIZE_A = 1 + rand() % TEST_MAX_SIZE 
-    const size_t SIZE_B = 1 + rand() % TEST_MAX_SIZE 
+    const size_t SIZE_A = 1 + rand() % TEST_MAX_SIZE;
+    const size_t SIZE_B = 1 + rand() % TEST_MAX_SIZE;
     
     const HashVal JUST_SOMETHING = 123;
 //  const uint TEST_SIZE = 1024*1024;
 //  const uint TEST_ELMS = 20;
       
-    bool
-    ensure_proper_fixture() 
-    {
-      return (SIZE_A != SIZE_B)
-          && (JUST_SOMETHING != Metadata::key(SIZE_A))
-          && (JUST_SOMETHING != Metadata::key(SIZE_B))
-          ;
-    }
     
   }
   
@@ -85,6 +80,9 @@ namespace test  {
    */
   class BufferMetadata_test : public Test
     {
+      /** common Metadata table to be tested */
+      scoped_ptr<Metadata> meta_;
+    
       virtual void
       run (Arg) 
         {
@@ -95,37 +93,50 @@ namespace test  {
         }
       
       
+      bool
+      ensure_proper_fixture() 
+      {
+        if (!meta_)
+          meta_.reset(new Metadata("BufferMetadata_test"));
+        
+        return (SIZE_A != SIZE_B)
+            && (JUST_SOMETHING != meta_->key(SIZE_A))
+            && (JUST_SOMETHING != meta_->key(SIZE_B))
+            ;
+      }
+      
+      
       void
       verifyBasicProperties()
         {
-          HashVal key = Metadata::key(SIZE_A);
+          HashVal key = meta_->key(SIZE_A);
           CHECK (key);
           
-          HashVal key1 = Metadata::key(SIZE_A);
-          HashVal key2 = Metadata::key(SIZE_B);
+          HashVal key1 = meta_->key(SIZE_A);
+          HashVal key2 = meta_->key(SIZE_B);
           CHECK (key1);
           CHECK (key2);
           CHECK (key == key1);
           CHECK (key != key2);
           
-          VERIFY_ERROR (INVALID, Metadata::get(0))
-          VERIFY_ERROR (INVALID, Metadata::get(JUST_SOMETHING));
-          CHECK ( & Metadata::get(key));
-          CHECK ( & Metadata::get(key1));
-          CHECK ( & Metadata::get(key2));
+          VERIFY_ERROR (INVALID, meta_->get(0))
+          VERIFY_ERROR (INVALID, meta_->get(JUST_SOMETHING));
+          CHECK ( & meta_->get(key));
+          CHECK ( & meta_->get(key1));
+          CHECK ( & meta_->get(key2));
           
-          CHECK ( isSameObject (Metadata::get(key), Metadata::get(key)));
-          CHECK ( isSameObject (Metadata::get(key), Metadata::get(key1)));
-          CHECK (!isSameObject (Metadata::get(key), Metadata::get(key2)));
+          CHECK ( isSameObject (meta_->get(key), meta_->get(key)));
+          CHECK ( isSameObject (meta_->get(key), meta_->get(key1)));
+          CHECK (!isSameObject (meta_->get(key), meta_->get(key2)));
           
-          Metadata& m1 = Metadata::get(key);
+          Metadata::Entry& m1 = meta_->get(key);
           CHECK (NIL == m1.state());
           
           VERIFY_ERROR (LIFECYCLE, m1.mark(EMITTED) );
           
           m1.mark (LOCKED);
           CHECK (LOCKED == m1.state());
-          CHECK (LOCKED == Metadata::get(key1).state());
+          CHECK (LOCKED == meta_->get(key1).state());
         }
       
       

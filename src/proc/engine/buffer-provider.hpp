@@ -43,21 +43,20 @@
 
 
 #include "lib/error.hpp"
+#include "lib/symbol.hpp"
 #include "proc/engine/buffhandle.hpp"
 
 #include <boost/noncopyable.hpp>
+#include <boost/scoped_ptr.hpp>
 
 
 namespace engine {
   
+  using boost::scoped_ptr;
+  using lib::Literal;
   
-  enum BufferState
-    { NIL,
-      FREE,
-      LOCKED,
-      EMITTED,
-      BLOCKED
-    };
+  
+  class Metadata;
   
   
   /**
@@ -72,6 +71,10 @@ namespace engine {
   class BufferProvider
     : boost::noncopyable
     {
+      scoped_ptr<Metadata> meta_;
+      
+    protected:
+      BufferProvider (Literal implementationID);
       
     public:
       virtual ~BufferProvider();  ///< this is an interface
