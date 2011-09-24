@@ -66,6 +66,7 @@ namespace test  {
     const size_t SIZE_B = 1 + rand() % TEST_MAX_SIZE;
     
     const HashVal JUST_SOMETHING = 123;
+    const void* const  SOME_POINTER = &JUST_SOMETHING;
 //  const uint TEST_SIZE = 1024*1024;
 //  const uint TEST_ELMS = 20;
       
@@ -131,12 +132,31 @@ namespace test  {
           
           Metadata::Entry& m1 = meta_->get(key);
           CHECK (NIL == m1.state());
+          CHECK (!meta_->isLocked(key));
           
           VERIFY_ERROR (LIFECYCLE, m1.mark(EMITTED) );
+          VERIFY_ERROR (LIFECYCLE, m1.mark(LOCKED)  );
           
-          m1.mark (LOCKED);
-          CHECK (LOCKED == m1.state());
-          CHECK (LOCKED == meta_->get(key1).state());
+          Metadata::Entry& m2 = m1.markLocked (SOME_POINTER);
+          CHECK (!isSameObject (m1,m2));
+          CHECK (NIL    == m1.state());
+          CHECK (LOCKED == m2.state());
+          
+          HashVal keyX = meta_->key(key1, SOME_POINTER);
+          CHECK (meta_->isLocked(keyX));
+          CHECK (keyX != key1);
+          CHECK (keyX);
+          
+          CHECK ( isSameObject (m1, meta_->get(key)));
+          CHECK ( isSameObject (m1, meta_->get(key1))); 
+          CHECK ( isSameObject (m2, meta_->get(keyX)));
+          CHECK ( key1 == m2.parentKey());
+          
+          m2.mark(FREE);              // Warning: don't use the m2 reference anymore! 
+          CHECK (!meta_->isLocked(keyX));
+          CHECK (!meta_->isKnown(keyX));
+          CHECK ( meta_->isKnown(key1));
+          VERIFY_ERROR (INVALID, meta_->get(keyX));
         }
       
       

@@ -2,16 +2,16 @@ TESTING "Component Test Suite: Render Engine parts" ./test-components --group=en
 
 
 
-PLANNED "BufferProviderProtocol_test" Buffer provider diagnostics <<END
+PLANNED "Buffer provider diagnostics" BufferProviderProtocol_test <<END
 return: 0
 END
 
 
-PLANNED "BufferMetadata_test" buffer metadata and state transitions <<END
+PLANNED "buffer metadata and state transitions" BufferMetadata_test <<END
 END
 
 
-PLANNED "BuffTable_tsst" buffer table <<END
+PLANNED "buffer table" BuffTable_test <<END
 return: 0
 END
 

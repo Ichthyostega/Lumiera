@@ -106,8 +106,10 @@ namespace engine {
     public:
       struct Entry
         {
-          BufferState state ()  const;
+          BufferState state()  const;
+          HashVal parentKey()  const;
           Entry& mark (BufferState newState);
+          Entry& markLocked (const void* buffer);
         };
       
       
@@ -122,10 +124,40 @@ namespace engine {
           UNIMPLEMENTED ("combine the distinguishing properties into a single hash");
         }
       
+      HashVal
+      key (HashVal parentKey, TypeHandler instanceFunc)
+        {
+          UNIMPLEMENTED ("create sub-type key");
+        }
+      
+      HashVal
+      key (HashVal parentKey, LocalKey specifics)
+        {
+          UNIMPLEMENTED ("create sub-type key");
+        }
+      
+      HashVal
+      key (HashVal parentKey, const void* concreteBuffer)
+        {
+          UNIMPLEMENTED ("create sub-object key for concrete buffer");
+        }
+      
       Entry&
       get (HashVal key)
         {
           UNIMPLEMENTED ("access, possibly create metadata records");
+        }
+      
+      bool
+      isKnown (HashVal key)  const
+        {
+          UNIMPLEMENTED ("diagnostics: known record?");
+        }
+      
+      bool
+      isLocked (HashVal key)  const
+        {
+          UNIMPLEMENTED ("diagnostics: actually locked buffer instance record?");
         }
       
 #if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #834
@@ -144,6 +176,13 @@ namespace engine {
       UNIMPLEMENTED ("buffer state accounting");
     }
   
+  /** */
+  HashVal
+  Metadata::Entry::parentKey ()  const
+    {
+      UNIMPLEMENTED ("retrieve the sparent (object or type) key");
+    }
+  
   Metadata::Entry&
   Metadata::Entry::mark (BufferState newState)
     {
@@ -151,6 +190,12 @@ namespace engine {
       return *this;
     }
   
+  Metadata::Entry&
+  Metadata::Entry::markLocked (const void* buffer)
+    {
+      UNIMPLEMENTED ("transition to locked state");
+      return *this;
+    }
   
   
   
