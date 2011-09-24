@@ -1077,8 +1077,8 @@ Please note the shortcomings and logical contradictions in the solution currentl
 * The current design rather places the implementation according to the roles of the involved entities, which causes some ping-pong on the implementation level. Especially the ScopeLocator singleton can be accessed multiple times. This is the usual clarity vs. performance tradeoff. Scope resolution is assumed rather to be //not performance critical.//
 </pre>
 </div>
-<div title="BuffHandle" modifier="Ichthyostega" modified="201109032244" created="201109021617" tags="Rendering spec draft" changecount="6">
-<pre>All rendering, transformations and output of media data requires using ''data buffers'' -- but the actual layout and handling of these buffers is closely related to the actual implementation of these operations. As we're relying heavily on external libraries and plug-ins for performing these, there is no hope getting away with just one single {{{Buffer}}} data type definition. Thus, we need to confine ourselves to a common denominator of basic operations regarding data buffers and abstract the access to these operations through a BufferProvider entity. Beyond these basic operations, mostly we just need to assure that //a buffer exists as an distinguishable element// -- which in practice boils down to pushing around {{{void*}}} variables. 
+<div title="BuffHandle" modifier="Ichthyostega" modified="201109232348" created="201109021617" tags="Rendering spec draft" changecount="8">
+<pre>All rendering, transformations and output of media data requires using ''data buffers'' -- but the actual layout and handling of these buffers is closely related to the actual implementation of these operations. As we're relying heavily on external libraries and plug-ins for performing these operations, there is no hope getting away with just one single {{{Buffer}}} data type definition. Thus, we need to confine ourselves to a common denominator of basic operations regarding data buffers and abstract the access to these operations through a BufferProvider entity. Beyond these basic operations, mostly we just need to assure that //a buffer exists as an distinguishable element// -- which in practice boils down to pushing around {{{void*}}} variables. 
 
 Obviously, overloading a pointer with semantic meaning isn't exactly a brilliant idea -- and the usual answer is to embed this pointer into a smart handle, which also yields the nice side-effect of explaining this design to the reader. Thus a buffer handle
 * can only be obtained from a BufferProvider
@@ -1091,7 +1091,7 @@ To perform anything useful with such a buffer handle, the client code needs some
 
 Just linking this type information to the context is certainly the most elegant solution, but also by far the most difficult to achieve -- not to mention the implicit dependency on a very specific invocation situation. So for now (9/2011) it seems best to stick to the simple and explicit implementation, just keeping that structural optimisation in mind. And the link to this buffer type information should be made explicit within the definition anyway, even if we choose to employ another design tradeoff later.
 * thus the conclusion is: we introduce a ''descriptor object'', which will be stored within the handle
-* each BufferProvider exposes a ''descriptor prototype''; it can be specialised and used by to organise implementation details
+* each BufferProvider exposes a ''descriptor prototype''; it can be specialised and used by to [[organise implementation details|BufferMetadata]]
 
 
 !sanity checks
@@ -1099,7 +1099,7 @@ there are only limited sanity checks, and they can be expected to be optimised a
 Basically the client is responsible for sane buffer access.
 </pre>
 </div>
-<div title="BufferManagement" modifier="Ichthyostega" modified="201109151442" created="201109151420" tags="Rendering Player spec draft" changecount="9">
+<div title="BufferManagement" modifier="Ichthyostega" modified="201109232234" created="201109151420" tags="Rendering Player spec draft" changecount="10">
 <pre>Buffers are used to hold the media data for processing and output. Within the Lumiera RenderEngine and [[Player]] subsystem, we use some common concepts to handle the access and allocation of working buffers. Yet this doesn't imply having only one central authority in charge of every buffer -- such an approach wouldn't be possible (due to collaboration with external systems) and wouldn't be desirable either. Rather, there are some common basic usage //patterns// -- and there are some core interfaces used throughout the organisation of the rendering process.
 
 Mostly, the //client code,// i.e. code in need of using buffers, can access some BufferProvider, thereby delegating the actual buffer management. This binds the client to adhere to kind of a //buffer access protocol,// comprised of the ''announcing'', ''locking'', optionally ''attaching'' and finally the ''releasing'' steps. Here, the actual buffer management within the provider is a question of implementation and will be configured during build-up of the scope in question.
@@ -1115,13 +1115,25 @@ Mostly, the //client code,// i.e. code in need of using buffers, can access some
 :in all those situations, where we just need a working buffer for some time, we can rely on our internal custom memory allocator.
 :{{red{~Not-Yet-Implemented as of 9/11}}} -- as a fallback we just rely on heap allocations through the language runtime
 ;frame cache
-:whenever a calculated result may be of further interest beyond the immediate need triggering the calculation, it might be eligible for caching.
+:whenever a calculated result may be of further interest, beyond the immediate need triggering the calculation, it might be eligible for caching.
 :The Lumiera ''frame cache'' is a special BufferProvider, maintaining a larger pool of buffers which can be pinned and kept around for some time,
 :accomodating limited resources and current demand for fresh result buffers.
 
 </pre>
 </div>
-<div title="BufferProvider" modifier="Ichthyostega" modified="201109162209" created="201107082330" tags="Rendering spec draft" changecount="13">
+<div title="BufferMetadata" modifier="Ichthyostega" modified="201109240026" created="201109240004" tags="spec Rendering draft" changecount="6">
+<pre>the generic BufferProvider implementation exposes a service to attach and maintain additional metadata with individual buffers. Using this service is not mandatory -- a concrete buffer provider implementation may chose to maintain more specific metadata right on the implementation level, especially if more elaborate management is necessary within the implementation anyway (e.g. the frame index). We can expect most buffer provider implementations to utilise at least the generic buffer type id service though.
+
+!buffer types and descriptors
+Client code accesses buffer through [[smart buffer handles|BuffHandle]], including some kind of buffer type information, encoded into a type ID within the ''buffer descriptor''. These descriptors are used like prototypes, relating the type-~IDs hierarchically. Obviously, the most fundamental distinction is the BufferProvider in charge for that specific buffer. Below that, the next mandatory level of distinction is the ''buffer size''. In some cases, additional distinctions can be necessary. Each BufferProvider exposes a service to yield unique type ~IDs governed by such a hierarchical scheme.
+
+!state and metadata for individual buffers
+Beyond that, it can be necessary to associate at least a state flag with //individual buffers.// Doing so requires the buffer to be in //locked state,// otherwise it wouldn't be distinguishable as an separate entity (a client is able to access the buffer memory address only after &quot;locking&quot; this buffer). Especially when using a buffer provider in conjunction with an OutputSlot, these states and transitions are crucial for performing an orderly handover of generated data from the producer (render engine) to the consumer (external output sink).
+
+__Note__: while the API to access this service is uniform, conceptually there is a difference between just using the (shared) type information and associating individual metadata, like the buffer state. Type-~IDs, once allocated, will never be discarded (within the lifetime of an Lumiera application instance -- buffer associations aren't persistent). To the contrary, individual metadata //will be discarded,// when releasing the corresponding buffer. According to the ''prototype pattern'', individual metadata is treated as a one-way-off specialisation.
+</pre>
+</div>
+<div title="BufferProvider" modifier="Ichthyostega" modified="201109232347" created="201107082330" tags="Rendering spec draft" changecount="20">
 <pre>It turns out that --  throughout the render engine implementation -- we never need direct access to the buffers holding media data. Buffers are just some entity to be //managed,// i.e. &quot;allocated&quot;, &quot;locked&quot; and &quot;released&quot;; the //actual meaning of these operations can be left to the implementation.// The code within the render engine just pushes around ''smart-prt like handles''. These [[buffer handles|BuffHandle]] act as a front-end, being created by and linked to a buffer provider implementation. There is no need to manage the lifecycle of buffers automatically, because the use of buffers is embedded into the render calculation cycle, which follows a rather strict protocol anyway. Relying on the [[capabilities of the scheduler|SchedulerRequirements]], the sequence of individual jobs in the engine ensures...
 * that the availability of a buffer was ensured prior to planning a job (&quot;buffer allocation&quot;)
 * that a buffer handle was obtained (&quot;locked&quot;) prior to any operation requiring a buffer
@@ -1130,13 +1142,17 @@ Mostly, the //client code,// i.e. code in need of using buffers, can access some
 !operations
 While BufferProvider is an interface meant to be backed by various different kinds of buffer and memory management approaches, there is a common set of operations to be supported by any of them
 ;announcing
-:client code may announce beforehand that it expects to get a certain amount of buffers. Usually this causes some allocations (or similar mechanisms to ensure the avialability) to happen right away; the BufferProvider will then return the actual number of buffers guraanteed to be available. This announcing step is optional an can happen anytime before or even after using the buffers and it can be repeated with different values to adjust to changing requirements. (Currently 9/2011 this is meant to be global for the whole BufferProvider, but it might happen that we need to break that down to individual clients)
+:client code may announce beforehand that it expects to get a certain amount of buffers. Usually this causes some allocations to happen right away, or it might trigger similar mechanisms to ensure availability; the BufferProvider will then return the actual number of buffers guaranteed to be available. This announcing step is optional an can happen any time before or even after using the buffers and it can be repeated with different values to adjust to changing requirements. (Currently 9/2011 this is meant to be global for the whole BufferProvider, but it might happen that we need to break that down to individual clients)
 ;locking
-:this operation actually makes a buffer available for a specific client and returns a [[buffer handle|BuffHandle]]. The corresponding buffer is marked as used and can't be locked again until released. If necessary, at that point the BufferProvider might allocate memory to accomodate (especially when the buffers weren't announced beforehand). The locking may fail and raise an exception. You may expect failure to be unlikely when buffers have been //anounced beforehand.// To support additional sanity checks, the client may provide a token-ID with the lock-operation. This token may be retrieved later and it may be used to ensure the buffer is actually locked for //this token.//
+:this operation actually makes a buffer available for a specific client and returns a [[buffer handle|BuffHandle]]. The corresponding buffer is marked as used and can't be locked again unless released. If necessary, at that point the BufferProvider might allocate memory to accommodate (especially when the buffers weren't announced beforehand). The locking may fail and raise an exception. You may expect failure to be unlikely when buffers have been //announced beforehand.// To support additional sanity checks, the client may provide a token-ID with the lock-operation. This token may be retrieved later and it may be used to ensure the buffer is actually locked for //this token.//
 ;attaching
-:optionally the client may attach an object to a locked buffer. This object is placement-constructed into the buffer and will be automatically destroyed when releasing the buffer. Alternatively, the client may provide a pair of constructor- / destructor-functors, which will be invoked in a similar manner. This allows e.g. to install descriptor structures within the buffer, as required by an external library.
+:optionally the client may attach an object to a locked buffer. This object is placement-constructed into the buffer and will be destroyed automatically when releasing the buffer. Alternatively, the client may provide a pair of constructor- / destructor-functors, to be invoked in a similar way. This allows e.g. to install descriptor structures within the buffer, as required by an external library.
 ;releasing
 :buffers need to be released explicitly by the client code. This renders the corresponding BuffHandle invalid, (optionally) invokes a destructor function of an attached object and maybe reclaims the buffer memory
+
+!!type metadata service
+In addition to the basic operations, clients may associate BufferMetadata with individual buffers;
+in the basic form, this means just maintaining a type tag describing the kind of buffer, while optionally this service might be extended to e.g. associating a state flag.
 
 __see also__
 &amp;rarr; OutputSlot relying on a buffer provider to deal with frame output buffers
@@ -3480,8 +3496,8 @@ Thus there are two serious problem situations
 &amp;rarr; SchedulerRequirements
 &amp;rarr; OutputSlotImpl</pre>
 </div>
-<div title="OutputSlotImpl" modifier="Ichthyostega" modified="201108112339" created="201107102343" tags="spec operational" changecount="26">
-<pre>OutputSlot is an abstraction, allowing unified treatment of various physical output connections from within the render jobs. The actual output slot is a subclass object, created and managed from the &quot;driver code&quot; for a specific output connection. Moreover, each output slot is outfitted with a concrete BufferProvider to reflect the actual buffer handling policy applicable for this specific output connection. Some output connections might e.g. require delivery of the media data into a buffer residing on external hardware, while others work just fine when pointed to some arbitrary memory block holding generated data.
+<div title="OutputSlotImpl" modifier="Ichthyostega" modified="201109232235" created="201107102343" tags="spec operational" changecount="27">
+<pre>OutputSlot is an abstraction, allowing unified treatment of various physical output connections from within the render jobs. The actual output slot is a subclass object, created and managed from the &quot;driver code&quot; for a specific output connection. Moreover, each output slot will be outfitted with a concrete BufferProvider to reflect the actual buffer handling policy applicable for this specific output connection. Some output connections might e.g. require delivery of the media data into a buffer residing on external hardware, while others work just fine when pointed to some arbitrary memory block holding generated data.
 
 !operation steps
 [&gt;img[Sequenz of output data exchange steps|uml/fig145157.png]]The OutputSlot class defines some standard operations as protected virtual functions. These represent the actual steps in the data exchange protocol corresponding to this output slot.
