@@ -37,7 +37,7 @@
 #define LUMIERA_META_GENERATOR_COMBINATIONS_H
 
 #include "lib/meta/typelist.hpp"
-#include "lib/meta/typelist-util.hpp"
+#include "lib/meta/typelist-manip.hpp"
 #include "lib/meta/generator.hpp"
 
 

@@ -26,7 +26,7 @@
 #include "proc/engine/nodeoperation.hpp"
 #include "proc/engine/nodewiring-config.hpp"
 
-#include "lib/meta/typelist-util.hpp"
+#include "lib/meta/typelist-manip.hpp"
 
 
 namespace engine {

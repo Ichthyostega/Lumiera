@@ -40,7 +40,7 @@
 
 #include "lib/test/run.hpp"
 #include "lib/meta/generator.hpp"
-#include "lib/meta/typelist-util.hpp"
+#include "lib/meta/typelist-manip.hpp"
 #include "meta/typelist-diagnostics.hpp"
 
 #include <iostream>

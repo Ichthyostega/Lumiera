@@ -47,14 +47,11 @@
 #define CONTROL_COMMAND_SIGNATURE_H
 
 //#include "pre.hpp"
-//#include "lib/symbol.hpp"
 #include "lib/meta/function.hpp"
 #include "lib/meta/typelist.hpp"
-#include "lib/meta/typelist-util.hpp"
+#include "lib/meta/typelist-manip.hpp"
 #include "lib/meta/typeseq-util.hpp"
-//#include "lib/meta/tuple.hpp"
 
-//#include <tr1/memory>
 #include <tr1/functional>
 
 

@@ -38,7 +38,7 @@
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
 #include "lib/meta/typelist.hpp"
-#include "lib/meta/typelist-util.hpp"
+#include "lib/meta/typelist-manip.hpp"
 #include "lib/meta/function.hpp"
 #include "lib/meta/function-closure.hpp"
 #include "meta/typelist-diagnostics.hpp"

@@ -45,7 +45,7 @@
 #define LIB_VARIANT_H
 
 
-#include "lib/meta/typelist-util.hpp"
+#include "lib/meta/typelist-manip.hpp"
 #include "lib/meta/generator.hpp"
 
 #include <boost/noncopyable.hpp>
