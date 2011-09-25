@@ -1,5 +1,5 @@
 /*
-  TYPELIST-UTIL.hpp  -  Utils for working with lists-of-types
+  TYPELIST-MANIP.hpp  -  Utils for working with lists-of-types
 
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>
@@ -21,8 +21,8 @@
 */
 
 
-/** @file typelist-util.hpp
- ** Metaprogramming: Helpers for manipulating lists-of-types. 
+/** @file typelist-manip.hpp
+ ** Metaprogramming: Helpers for manipulating lists-of-types.
  ** Sometimes, we use metaprogramming to generate a variation of concrete
  ** implementations by combining some basic building blocks. Typically, there
  ** is a number of similar, but not suitably related types involved. We want to
@@ -49,52 +49,15 @@
  */
 
 
-#ifndef LUMIERA_META_TYPELIST_UTIL_H
-#define LUMIERA_META_TYPELIST_UTIL_H
+#ifndef LUMIERA_META_TYPELIST_MANIP_H
+#define LUMIERA_META_TYPELIST_MANIP_H
 
 
-  
+
 #include "lib/meta/typelist.hpp"
 
 namespace lumiera {
 namespace typelist{
-    
-    
-    /**
-     * Metafunction counting the number of Types in the collection
-     * @return an embedded constant \c value holding the result
-     */
-    template<class TYPES>
-    struct count;
-    template<>
-    struct count<NullType>
-      {
-        enum{ value = 0 };
-      };
-    template<class TY, class TYPES>
-    struct count<Node<TY,TYPES> >
-      {
-        enum{ value = 1 + count<TYPES>::value };
-      };
-    
-    /**
-     * Metafunction " max( sizeof(T) ) for T in TYPES "
-     */
-    template<class TYPES>
-    struct maxSize;
-    template<>
-    struct maxSize<NullType>
-      {
-        enum{ value = 0 };
-      };
-    template<class TY, class TYPES>
-    struct maxSize<Node<TY,TYPES> >
-      {
-        enum{ thisval = sizeof(TY)
-            , nextval = maxSize<TYPES>::value
-            , value   = nextval > thisval?  nextval:thisval
-            };
-      };
     
     
     /** pick the n-th element from a typelist */
@@ -111,7 +74,7 @@ namespace typelist{
     template<class TY, class TYPES, uint i>
     struct Pick<Node<TY,TYPES>, i>
       {
-        typedef typename Pick<TYPES, i-1>::Type Type;  
+        typedef typename Pick<TYPES, i-1>::Type Type;
       };
     
     
@@ -240,7 +203,7 @@ namespace typelist{
     
     /**
      * Allows to access various parts of a given typelist:
-     * Start and End, Prefix and Tail..
+     * Start and End, Prefix and Tail...
      */
     template<class TYPES>
     struct Dissect;
@@ -356,7 +319,7 @@ namespace typelist{
     template<class FLAGS>
     struct CombineFlags
       { 
-        typedef typename Combine<FLAGS, FlagOnOff>::List  List; 
+        typedef typename Combine<FLAGS, FlagOnOff>::List  List;
       };
     
     

@@ -49,6 +49,7 @@
 //#include "pre.hpp"
 #include "lib/error.hpp"
 #include "lib/meta/generator.hpp"
+#include "lib/meta/typelist-util.hpp"
 #include "lib/format.hpp"
 //#include "lib/typed-counter.hpp"
 #include "include/logging.h"
@@ -63,31 +64,11 @@
 namespace lib {
   
 //  using std::tr1::shared_ptr;
-  using lumiera::typelist::InstantiateForEach;
   using lumiera::typelist::Types;
+  using lumiera::typelist::IsInList;
+  using lumiera::typelist::InstantiateForEach;
   
   namespace {
-    using lumiera::typelist::Node;
-    using lumiera::typelist::NullType;
-    
-    template<typename TYPES, typename TY>
-    struct IsInList
-      {
-        enum{ value = false };
-      };
-    
-    template<typename TY, typename TYPES>
-    struct IsInList<Node<TY,TYPES>, TY>
-      {
-        enum{ value = true };
-      };
-    
-    template<typename XX, typename TYPES, typename TY>
-    struct IsInList<Node<XX,TYPES>, TY>
-      {
-        enum{ value = IsInList<TYPES,TY>::value };
-      };
-    
   }
   
   
@@ -141,9 +122,9 @@ namespace lib {
       ___assertSupportedType()
         {
           typedef typename TYPES::List PreconfiguredTypes;
-          typedef IsInList<PreconfiguredTypes,XX> IsPreconfiguredType;
+          typedef IsInList<XX, PreconfiguredTypes> IsSupportedType;
           
-          BOOST_STATIC_ASSERT (IsPreconfiguredType::value);
+          BOOST_STATIC_ASSERT (IsSupportedType::value);
         }
      
         

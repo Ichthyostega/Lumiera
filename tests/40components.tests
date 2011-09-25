@@ -801,6 +801,11 @@ return: 0
 END
 
 
+TEST "simple typelist utils" TypeListUtil_test <<END
+return: 0
+END
+
+
 TEST "TypeListGenerator_test" TypeListGenerator_test <<END
 out: ctor DoIt<Block<13> >
 out: ctor DoIt<Block< 8> >
