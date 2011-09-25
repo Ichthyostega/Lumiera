@@ -76,8 +76,9 @@ lumiera_threadpool_destroy(void)
     {
       LUMIERA_CONDITION_SECTION (cond_sync, &threadpool.pool[i].sync)
         {
-          TODO ("check threads deadlines, kill them when they are stalled");
-          TODO ("for threads without deadline use a timeout from config system, 500ms or so by default");
+          //////////////////////////////////////////TICKET #843 check threads deadlines, kill them when they are stalled"
+          //////////////////////////////////////////TICKET #843 for threads without deadline use a timeout from config system, 500ms or so by default
+
           LUMIERA_CONDITION_WAIT(llist_is_empty (&threadpool.pool[i].working_list));
         }
     }
@@ -136,7 +137,9 @@ lumiera_threadpool_acquire_thread (enum lumiera_thread_class kind,
               llist_insert_head (&threadpool.pool[kind].working_list, &ret->node);
 
               ENSURE (ret, "did not create a valid thread");
-              TODO ("no error handing, let the resourcecollector do it, no need when returning the thread");
+                //////////////////////////////////////////////////////////////////////TICKET #844 no error must be pending here
+                //////////////////////////////////////////////////////////////////////TICKET #844 let the resourcecollector do it, no need when returning the thread
+                
               LUMIERA_CONDITION_WAIT (!llist_is_empty (&threadpool.pool[kind].idle_list));
             }
           // use an existing thread, pick the first one

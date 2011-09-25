@@ -1,5 +1,5 @@
 /*
-  config_lookup.h  -  Lookup functions for the config subsystem
+  CONFIG-LOOKUP.h  -  Lookup functions for the config subsystem
 
   Copyright (C)         Lumiera.org
     2008,               Christian Thaeter <ct@pipapo.org>

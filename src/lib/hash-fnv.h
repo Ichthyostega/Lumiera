@@ -1,5 +1,5 @@
 /*
- hash_fnv.c     - FNV hash functions
+ HASH-FNV.h     - FNV hash functions
 
  Copyright (C)
    2010, 2011,                  Christian Thaeter <ct@pipapo.org>

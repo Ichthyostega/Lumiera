@@ -120,7 +120,7 @@ thread_loop (void* thread)
 
       INFO (threads, "Thread Shutdown");
     }
-  TODO ("no error must be pending here, else do app shutdown");
+  //////////////////////////////////////////////////////////////////////TICKET #844 no error must be pending here, else do app shutdown
   return 0;
 }
 
@@ -322,7 +322,7 @@ lumiera_thread_sync (void)
   self->state = LUMIERA_THREADSTATE_SYNCING;
   lumiera_condition_signal (&self->signal, &NOBUG_FLAG(threads), NOBUG_CONTEXT);
 
-  TODO("error handing, maybe timed mutex (using the threads heartbeat timeout, shortly before timeout)");
+  //////////////////////////////////////////TICKET #843 error handing, maybe timed mutex (using the threads heartbeat timeout, shortly before timeout)
 
   while (self->state == LUMIERA_THREADSTATE_SYNCING) {
     lumiera_condition_wait (&self->signal, &NOBUG_FLAG(threads), self->rh, NOBUG_CONTEXT);

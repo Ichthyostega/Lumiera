@@ -210,7 +210,7 @@ namespace session {
   
   SessManagerImpl::~SessManagerImpl ()
   {
-    TODO ("verify sane lifecycle");
+                               //////////////////////////////////////// TICKET #845 verify sane session manager lifecycle here
     Session::initFlag = false;
   }
   

@@ -20,6 +20,13 @@
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 */
 
+
+/** @file configitem.c
+ ** create a configitem out of a single line.
+ **
+ */
+
+
 #include "include/logging.h"
 #include "lib/llist.h"
 #include "lib/safeclib.h"
@@ -42,12 +49,6 @@ static LumieraConfigitem parse_configentry (LumieraConfigitem self, char* itr);
 #include <ctype.h>
 #include <stdint.h>
 
-
-/**
- * @file
- * create a configitem out of a single line.
- *
- */
 
 
 LumieraConfigitem
@@ -176,11 +177,11 @@ lumiera_configitem_parse (LumieraConfigitem self, const char* line)
   lumiera_free (self->line);
   self->line = lumiera_strndup (line, SIZE_MAX);
 
-  FIXME ("MOCKUP START");
+  /////////////////////////TODO do a real startup here
 
   char* itr = self->line;
 
-  /* skip leading whitespaces */
+  /* skip leading whitespace */
   while (*itr && isspace (*itr))
     itr++;
 
@@ -215,7 +216,7 @@ parse_directive (LumieraConfigitem self, char* itr)
   /* itr points now to @ */
   self->key = itr;
 
-  /* check whether there are illegal whitespaces after @ */
+  /* check whether there are illegal whitespace after @ */
   itr++;
   if (*itr && !isspace(*itr))
     {
@@ -224,7 +225,7 @@ parse_directive (LumieraConfigitem self, char* itr)
 
       itr += self->key_size;
 
-      /* we need a key with a length greather than zero and */
+      /* we need a key with a length greater than zero and */
       /* either end of line or whitespace after key */
 
       if ( self->key_size && ( !*itr || (*itr && isspace(*itr)) ))
