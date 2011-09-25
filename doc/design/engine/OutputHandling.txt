@@ -1,0 +1,15 @@
+Design: Output Handling
+=======================
+:Date: June 2011
+:Author: Ichthyostega
+
+//Menu: label Output handling
+
+Some ideas....
+
+- abstract away the actual technology used for output
+- have generic *output designations* and translate them into an *output slot*
+- the OutputSlot interface can be designed to match the requirements of the Engine
+- assume a mechanism to handle timeouts, glitches and skips within each concrete OutputSlot implementation
+
+
