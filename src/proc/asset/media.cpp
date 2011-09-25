@@ -149,7 +149,7 @@ namespace asset {
     asset::Media* pM (0);
     AssetManager& aMang = AssetManager::instance();
     
-    TODO ("check and fix Category if necessary");
+    //////////////////////////////////////////////////////////TICKET #841 check and fix Category if necessary
     
     if (isnil (file))
       {
@@ -168,7 +168,7 @@ namespace asset {
         MediaDesc& handle = maf.queryFile(key.name);
         Duration length = handle.length;
         
-        TODO ("detecting and wiring multichannel compound media!");
+        //////////////////////////////////////////////////////////TICKET #841 detecting and wiring multichannel compound media
         pM = new Media (key,file,length); 
       }
     ASSERT (pM);

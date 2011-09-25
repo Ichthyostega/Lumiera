@@ -39,7 +39,7 @@ slightly modified and adapted to C99; no copyright applies:
 */
 
 
-#include "hash_fnv.h"
+#include "lib/hash-fnv.h"
 
 #include <nobug.h>
 

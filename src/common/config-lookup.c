@@ -23,7 +23,7 @@
 #include "lib/safeclib.h"
 #include "lib/tmpbuf.h"
 
-#include "common/config_lookup.h"
+#include "common/config-lookup.h"
 #include "common/config.h"
 
 /* we only use one fatal error for now, when allocation in the config system fail, something else is pretty wrong */
@@ -76,7 +76,8 @@ lumiera_config_lookup_insert (LumieraConfigLookup self, LumieraConfigitem item)
   REQUIRE (item->key);
   REQUIRE (item->key_size);
 
-  FIXME ("implement section prefix/suffix for the key");
+  ////////////////////////////////////////TICKET #839 implement section prefix/suffix for the key"
+  
   const char* key = lumiera_tmpbuf_strcat3 (NULL, 0, item->key, item->key_size, NULL, 0);
 
   LumieraConfigLookupentry entry = (LumieraConfigLookupentry)psplay_find (&self->tree, key, 100);
@@ -101,7 +102,9 @@ lumiera_config_lookup_insert_default (LumieraConfigLookup self, LumieraConfigite
   LumieraConfigLookupentry entry = (LumieraConfigLookupentry)psplay_find (&self->tree, key, 100);
   if (!entry)
     entry = (LumieraConfigLookupentry)psplay_insert (&self->tree, &lumiera_config_lookupentry_new (key)->node, 100);
-  TODO ("else check that no 'default' item already exists, that is, the tail element's parent points to the 'defaults' in config");
+  
+   ////////////////////////////////////////TICKET #839 check that no 'default' item already exists when inserting a default
+   ////////////////////////////////////////TICKET #839 ...that is, the tail element's parent points to the 'defaults' in config
 
   llist_insert_tail (&entry->configitems, &item->lookup);
   return entry;

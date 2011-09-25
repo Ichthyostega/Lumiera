@@ -111,11 +111,11 @@ namespace asset {
   {
     AssetManager& _aMang (AssetManager::instance());
     DB& registry (_aMang.registry);
-    TODO ("check validity of Ident Category");
+    //////////////////////////////////////////////////////////TICKET #840 check validity of Ident Category
     ID<KIND> asset_id (getID (idi));
     
     DB::Lock guard(&registry);
-    TODO ("handle duplicate Registrations");
+    //////////////////////////////////////////////////////////TICKET #840 handle duplicate Registrations
     P<KIND> smart_ptr (obj, &destroy);
     
     registry.put (asset_id, smart_ptr);

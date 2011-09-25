@@ -165,6 +165,7 @@ namespace test {
     {
       try 
         {
+          INFO (test, "++------------------- invoking TEST: %s", showType(theTest).c());
           theTest.run (cmdline);
           return Suite::TEST_OK;
         }
