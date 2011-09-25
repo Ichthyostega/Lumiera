@@ -104,8 +104,11 @@ namespace engine {
   class Metadata
     {
     public:
-      struct Entry
+      class Entry
         {
+          
+        
+        public:
           BufferState state()  const;
           HashVal parentKey()  const;
           Entry& mark (BufferState newState);

@@ -24,9 +24,9 @@
 /** @file result.hpp
  ** Intermediary value object to represent the result of an operation.
  ** This operation might have produced a value result or failed with an exception.
- ** Typically, the Result token used \em inline -- immediately either invoking one
- ** of the member function or employing the built-in result type conversion. It
- ** will be copyable iff the result value is copyable. There is an implicit
+ ** Typically, the Result token is used \em inline -- immediately either invoking
+ ** one of the member function or employing the built-in result type conversion.
+ ** It will be copyable iff the result value is copyable. There is an implicit
  ** valid or failure state, which can be tested. Any attempt to get the value
  ** of an invalid result token will cause in an exception to be thrown.
  ** 

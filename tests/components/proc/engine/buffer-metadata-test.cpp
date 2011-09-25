@@ -87,10 +87,10 @@ namespace test  {
       virtual void
       run (Arg) 
         {
-          UNIMPLEMENTED ("cover all metadata properties");
           CHECK (ensure_proper_fixture());
           verifyBasicProperties();
           verifyStandardCase();
+          UNIMPLEMENTED ("cover all metadata properties");
         }
       
       

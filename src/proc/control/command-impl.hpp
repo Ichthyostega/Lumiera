@@ -57,7 +57,6 @@
 
 namespace control {
   
-  using lib::TypedAllocationManager;
   using std::tr1::function;
   using std::tr1::shared_ptr;
   
