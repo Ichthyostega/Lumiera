@@ -51,11 +51,9 @@
 #include "lib/meta/generator.hpp"
 #include "lib/meta/typelist-util.hpp"
 #include "lib/format.hpp"
-//#include "lib/typed-counter.hpp"
+#include "lib/typed-counter.hpp"
 #include "include/logging.h"
 
-
-//#include <tr1/memory>
 #include <boost/static_assert.hpp>
 #include <memory>
 
@@ -63,23 +61,70 @@
 
 namespace lib {
   
-//  using std::tr1::shared_ptr;
   using lumiera::typelist::Types;
   using lumiera::typelist::IsInList;
   using lumiera::typelist::InstantiateForEach;
   
-  namespace {
-  }
   
   
+  /* === Policies for simple custom allocator  === */
+  
+  /**
+   * Policy: use just plain heap allocations
+   */
   template<typename TY>
   class CustomAllocator
     : public std::allocator<TY>
+    { };
+  
+  
+  /**
+   * Policy: maintain explicit per type instance count
+   * @note this imposes additional locking
+   */
+  struct UseInstantiationCounting
     {
+      template<class XX>
+      size_t
+      allocationCount()  const
+        {
+          return allocCnt_.get<XX>();
+        }
       
+      template<class XX>
+      void
+      incrementCount()
+        {
+          allocCnt_.inc<XX>();
+        }
+      
+      template<class XX>
+      void
+      decrementCount()
+        {
+          allocCnt_.dec<XX>();
+        }
+      
+    private:
+      lib::TypedCounter allocCnt_;
     };
   
+  /**
+   * Policy: no additional instantiation accounting
+   */
+  struct NoInstantiationCount
+    {
+      template<class XX>  size_t allocationCount()  const { return 0; }
+      template<class XX>  void    incrementCount()  { /* NOP */ }
+      template<class XX>  void    decrementCount()  { /* NOP */ }
+    };
     
+  
+  
+  
+  
+  
+  /* === Allocator frontend === */
   
   /**
    * Frontend for explicit allocations, using a custom allocator.
@@ -90,13 +135,16 @@ namespace lib {
    * 
    * @todo currently (as of 8/09) the low-level pooled allocator
    *       isn't implemented; instead we do just heap allocations.
-   *       see Ticket #835
+   *       ////////////////////////////////////////////////////////////////////////////////////////////Ticket #835
    */
-  template<typename TYPES>
+  template<typename TYPES
+          ,class COUNTER = NoInstantiationCount       ///< Policy: support instance accounting?
+          >
   class SimpleAllocator
-    : InstantiateForEach< typename TYPES::List     // for each of those types...         
-                        , CustomAllocator         //  ...mix in the custom allocator 
+    : InstantiateForEach< typename TYPES::List     // for each of those types...
+                        , CustomAllocator         //  ...mix in the custom allocator
                         >
+    , COUNTER
     {
       
       /** forward plain memory allocation */
@@ -105,7 +153,9 @@ namespace lib {
       allocateSlot ()
         {
           TRACE (memory, "allocate %s", util::tyStr<XX>().c_str());
-          return CustomAllocator<XX>::allocate (1);
+          XX * newStorage = CustomAllocator<XX>::allocate (1);
+          COUNTER::template incrementCount<XX>();
+          return newStorage;
         }
       
       template<class XX>
@@ -114,6 +164,7 @@ namespace lib {
         {
           TRACE (memory, "release %s", util::tyStr<XX>().c_str());
           CustomAllocator<XX>::deallocate (entry, 1);
+          COUNTER::template decrementCount<XX>();
         }
       
       
@@ -126,8 +177,8 @@ namespace lib {
           
           BOOST_STATIC_ASSERT (IsSupportedType::value);
         }
-     
-        
+      
+      
       
       
       public: /* ==== build objects with managed allocation ==== */
@@ -234,10 +285,18 @@ namespace lib {
           releaseSlot<XX> (entry);
         }
       
+      
+      /** diagnostics */
+      template<class XX>
+      size_t
+      numSlots()  const
+        {
+          return COUNTER::template allocationCount<XX>();
+        }
     };
   
   
   
-
+  
 } // namespace lib
 #endif

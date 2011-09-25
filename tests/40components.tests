@@ -1141,7 +1141,7 @@ return: 0
 END
 
 
-PLANNED "custom allocator(I)" SimpleAllocator_test <<END
+TEST "custom allocator(I)" SimpleAllocator_test <<END
 return: 0
 END
 

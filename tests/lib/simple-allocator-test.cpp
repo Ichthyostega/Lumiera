@@ -25,8 +25,6 @@
 #include "lib/simple-allocator.hpp"
 #include "lib/util.hpp"
 
-
-//#include <tr1/memory>
 #include <cstdlib>
 #include <string>
 
@@ -36,7 +34,6 @@ namespace test{
   
   
   using util::isSameObject;
-//  using std::tr1::shared_ptr;
   using std::string;
   using std::rand;
   
@@ -62,6 +59,13 @@ namespace test{
               checksum_ += (crap_[i] = rand() % 128);
           }
         
+        DummyObj (DummyObj const& o)
+          {
+            REQUIRE (siz);
+            for (uint i=0; i<siz; ++i)
+              checksum_ += (crap_[i] = o.crap_[i]);
+          }
+        
        ~DummyObj()
           {
             for (uint i=0; i<siz; ++i)
@@ -69,7 +73,8 @@ namespace test{
           }
       };
     
-    typedef SimpleAllocator<Types<DummyObj<1>,DummyObj<23>,string> > TestAllocator;
+    typedef Types<DummyObj<1>,DummyObj<23>,string> SupportedTypes;
+    typedef SimpleAllocator<SupportedTypes, UseInstantiationCounting> TestAllocator;
   }
   
   
@@ -148,6 +153,9 @@ namespace test{
           allocator.destroy (pDxx);
           allocator.destroy (pSxx);
           
+          CHECK (0 == allocator.numSlots<DummyObj<1> >());
+          CHECK (0 == allocator.numSlots<DummyObj<23> >());
+          CHECK (0 == allocator.numSlots<string>());
           CHECK (0 == checksum_);
         }
     };
