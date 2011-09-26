@@ -64,6 +64,9 @@ namespace engine {
   
   using lib::Literal;
   
+  namespace error = lumiera::error;
+//using error::LUMIERA_ERROR_INVALID;
+
   
   typedef uint64_t LocalKey;
   typedef size_t HashVal;
@@ -93,7 +96,7 @@ namespace engine {
       
       template<class X>
       TypeHandler()
-        : createAttached (0)    /////////TODO: how to attach the ctor function??? mabye better use a class with virtual functions?
+        : createAttached (0)    /////////TODO: how to attach the ctor function??? Maybe better use a class with virtual functions?
         , destroyAttached (0)
         { }
     };
@@ -106,13 +109,18 @@ namespace engine {
     public:
       class Entry
         {
+          HashVal parent_;
           
-        
+        protected:
+          Entry (HashVal parent) : parent_(parent) { }
+         ~Entry ()                                 { }
+          
         public:
-          BufferState state()  const;
-          HashVal parentKey()  const;
-          Entry& mark (BufferState newState);
-          Entry& markLocked (const void* buffer);
+          HashVal parentKey()  const { return parent_;}
+          
+          virtual BufferState state()  const              =0;
+          virtual Entry& mark (BufferState newState)      =0;
+          virtual Entry& markLocked (const void* buffer)  =0;
         };
       
       
@@ -172,18 +180,103 @@ namespace engine {
     
   /* === Implementation === */
   
+  namespace {
+
+    using error::LUMIERA_ERROR_LIFECYCLE;
+    using error::LUMIERA_ERROR_BOTTOM_VALUE;
+    
+    
+    class TypeEntry
+      : public Metadata::Entry
+      {
+        virtual BufferState
+        state()  const
+          {
+            return NIL;
+          }
+        
+        virtual Entry&
+        mark (BufferState newState)
+          {
+            if (newState != NIL)
+              throw error::Logic ("This metadata entry is still abstract. "
+                                  "The only possible state transition is to markLocked (buffer)."
+                                 , LUMIERA_ERROR_LIFECYCLE
+                                 );
+            return *this;
+          }
+        
+        virtual Entry&
+        markLocked (const void* buffer)
+          {
+            UNIMPLEMENTED ("how to invoke the allocator. We need to allocate a BufferEntry here");
+          }
+      };
+    
+    
+    class BufferEntry
+      : public Metadata::Entry
+      {
+        BufferState state_;
+        const void* buffer_;
+        
+        virtual BufferState
+        state()  const
+          {
+            return state_;
+          }
+        
+        virtual Entry&
+        markLocked (const void* buffer)
+          {
+            if (!buffer)
+              throw error::Fatal ("Attempt to lock for a NULL buffer. Allocation floundered?"
+                                 , LUMIERA_ERROR_BOTTOM_VALUE);
+            if (this->buffer_)
+              throw error::Logic ("Attempt to lock a slot for a new buffer, "
+                                  "while actually the old buffer is still locked."
+                                 , LUMIERA_ERROR_LIFECYCLE );
+            this->buffer_ = buffer;
+            state_ = LOCKED;
+          }
+        
+        virtual Entry&
+        mark (BufferState newState)
+          {
+            switch (this->state_)
+              {
+              case NIL:
+                throw error::Fatal ("Concrete buffer entry with state==NIL encountered."
+                                    "State transition logic broken (programming error)");
+              case FREE:
+                throw error::Logic ("Need a new buffer pointer in order to lock an entry."
+                                   , LUMIERA_ERROR_LIFECYCLE );
+              case LOCKED:
+                if (newState == EMITTED) break; // allow transition
+                
+              case EMITTED:
+                if (newState == BLOCKED) break; // allow transition
+                
+              case BLOCKED:
+                if (newState == FREE)           // note fall through for LOCKED and EMITTED too 
+                  {
+                    buffer_ = 0;
+                    break; // allow transition
+                  }
+              default:
+                throw error::Fatal ("Invalid buffer state encountered.");
+              }
+            state_ = newState;
+            return *this;
+          }
+      };
+  }
+  
   /** */
   BufferState
   Metadata::Entry::state ()  const
     {
       UNIMPLEMENTED ("buffer state accounting");
-    }
-  
-  /** */
-  HashVal
-  Metadata::Entry::parentKey ()  const
-    {
-      UNIMPLEMENTED ("retrieve the sparent (object or type) key");
     }
   
   Metadata::Entry&
