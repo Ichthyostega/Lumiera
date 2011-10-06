@@ -31,8 +31,6 @@ namespace gui {
 namespace widgets {
 namespace timeline {
 
-
-
 TimelineViewWindow::TimelineViewWindow (Offset offset, int64_t scale)
   : timeOffset(offset)
   , timeScale(scale)
@@ -66,21 +64,21 @@ TimelineViewWindow::set_time_scale(int64_t scale)
 }
 
 void
-TimelineViewWindow::zoom_view(int point, int zoom_size)
-{ 
-  int64_t new_time_scale = (double)timeScale * pow(1.25, -zoom_size);
-  
+TimelineViewWindow::zoom_view(int point, int64_t zoom_scale)
+{
+  int64_t new_time_scale = zoom_scale;
+
   // Limit zooming in too close
   if(new_time_scale < 1) new_time_scale = 1;
-  
-  // Nudge zoom problems caused by integer rounding
+
+ /* Not sure if this is still needed. MRF
+  *  // Nudge zoom problems caused by integer rounding
   if(new_time_scale == timeScale && zoom_size < 0)
     new_time_scale++;
-    
-  // Limit zooming out too far
-  if(new_time_scale > TimelineWidget::MaxScale)
-    new_time_scale = TimelineWidget::MaxScale;
+  */
   
+  // Limit to Min and Max scale code moved to timeline-zoom-scale.cpp
+
   // The view must be shifted so that the zoom is centred on the cursor
   TimeVar newStartPoint = get_time_offset();
   newStartPoint += TimeValue(point * (timeScale - new_time_scale));

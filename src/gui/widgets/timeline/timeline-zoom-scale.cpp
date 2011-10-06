@@ -32,6 +32,15 @@ class TimelineWidget;
 
 namespace timeline {
 
+/**
+ * TODO: The initial adjustment value needs to
+ * match what the TimelineViewWindow's actual timeScale
+ * Value is. TimelineViewWindow::get_time_scale() is
+ * currently a public method, but will soon be private.
+ * Maybe TimelineViewWindow can have a zoom_adjustment
+ * that gets passed to this widget's Constructor?
+ */
+
 TimelineZoomScale::TimelineZoomScale()
   : HBox()
   , adjustment(0.5, 0.0, 1.0, 0.000001)

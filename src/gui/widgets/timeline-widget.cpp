@@ -129,13 +129,13 @@ TimelineWidget::set_state(shared_ptr<timeline::TimelineState> new_state)
 }
 
 void
-TimelineWidget::zoom_view(int zoom_size)
+TimelineWidget::zoom_view(int64_t zoom_scale)
 {
   if(state)
-    {
-      const int view_width = body->get_allocation().get_width();
-      state->get_view_window().zoom_view(view_width / 2, zoom_size);
-    }
+  {
+    const int view_width = body->get_allocation().get_width();
+    state->get_view_window().zoom_view(view_width / 2, zoom_scale);
+  }
 }
 
 ToolType

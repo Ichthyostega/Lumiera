@@ -60,6 +60,7 @@ TimelinePanel::TimelinePanel (workspace::PanelManager &panel_manager,
   , iBeamTool(Gtk::StockID("tool_i_beam"))
   , zoomIn(Stock::ZOOM_IN)
   , zoomOut(Stock::ZOOM_OUT)
+  , zoomScale()
   , updatingToolbar(false)
   , currentTool(timeline::Arrow)
 {
@@ -101,9 +102,10 @@ TimelinePanel::TimelinePanel (workspace::PanelManager &panel_manager,
     
   toolbar.append(separator2);
   
-  toolbar.append(zoomIn, mem_fun(this, &TimelinePanel::on_zoom_in));
-  toolbar.append(zoomOut, mem_fun(this, &TimelinePanel::on_zoom_out));
-   
+  toolbar.append(zoomScale);
+  zoomScale.signal_zoom().
+    connect(mem_fun(this,&TimelinePanel::on_zoom));
+
   toolbar.show_all();
   panelBar.pack_start(toolbar, PACK_SHRINK);
 
@@ -181,6 +183,14 @@ void
 TimelinePanel::on_ibeam_tool()
 {  
   set_tool(timeline::IBeam);
+}
+
+void
+TimelinePanel::on_zoom(int64_t zoom_scale)
+{
+  REQUIRE(timelineWidget);
+  timelineWidget->zoom_view(zoom_scale);
+  update_zoom_buttons();
 }
 
 void

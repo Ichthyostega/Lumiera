@@ -101,7 +101,7 @@ public:
    * @param zoom_size The number of steps to zoom by. The scale factor
    * is 1.25^(-zoom_size).
    */
-  void zoom_view(int point, int zoom_size);
+  void zoom_view(int point, int64_t zoom_size);
   
   /**
    * Scrolls the view horizontally as a proportion of the view area.
