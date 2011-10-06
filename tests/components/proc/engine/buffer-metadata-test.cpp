@@ -137,7 +137,7 @@ namespace test  {
           VERIFY_ERROR (LIFECYCLE, m1.mark(EMITTED) );
           VERIFY_ERROR (LIFECYCLE, m1.mark(LOCKED)  );
           
-          Metadata::Entry& m2 = m1.markLocked (SOME_POINTER);
+          Metadata::Entry& m2 = meta_->markLocked (key, SOME_POINTER);
           CHECK (!isSameObject (m1,m2));
           CHECK (NIL    == m1.state());
           CHECK (LOCKED == m2.state());

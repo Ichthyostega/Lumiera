@@ -120,7 +120,6 @@ namespace engine {
           
           virtual BufferState state()  const              =0;
           virtual Entry& mark (BufferState newState)      =0;
-          virtual Entry& markLocked (const void* buffer)  =0;
         };
       
       
@@ -158,6 +157,9 @@ namespace engine {
         {
           UNIMPLEMENTED ("access, possibly create metadata records");
         }
+      
+      Entry&
+      markLocked (HashVal parentKey, const void* buffer);
       
       bool
       isKnown (HashVal key)  const
@@ -206,11 +208,6 @@ namespace engine {
             return *this;
           }
         
-        virtual Entry&
-        markLocked (const void* buffer)
-          {
-            UNIMPLEMENTED ("how to invoke the allocator. We need to allocate a BufferEntry here");
-          }
       };
     
     
@@ -229,15 +226,6 @@ namespace engine {
         virtual Entry&
         markLocked (const void* buffer)
           {
-            if (!buffer)
-              throw error::Fatal ("Attempt to lock for a NULL buffer. Allocation floundered?"
-                                 , LUMIERA_ERROR_BOTTOM_VALUE);
-            if (this->buffer_)
-              throw error::Logic ("Attempt to lock a slot for a new buffer, "
-                                  "while actually the old buffer is still locked."
-                                 , LUMIERA_ERROR_LIFECYCLE );
-            this->buffer_ = buffer;
-            state_ = LOCKED;
           }
         
         virtual Entry&
@@ -287,10 +275,20 @@ namespace engine {
     }
   
   Metadata::Entry&
-  Metadata::Entry::markLocked (const void* buffer)
+  Metadata::markLocked (HashVal parentKey, const void* buffer)
     {
       UNIMPLEMENTED ("transition to locked state");
-      return *this;
+      if (!buffer)
+        throw error::Fatal ("Attempt to lock for a NULL buffer. Allocation floundered?"
+                           , LUMIERA_ERROR_BOTTOM_VALUE);
+      
+      HashVal newKey = this->key (parentKey, buffer);
+      if (isLocked(newKey))
+        throw error::Logic ("Attempt to lock a slot for a new buffer, "
+                            "while actually the old buffer is still locked."
+                           , LUMIERA_ERROR_LIFECYCLE );
+      
+      return this->get(newKey);
     }
   
   
