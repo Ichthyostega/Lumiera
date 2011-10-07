@@ -98,10 +98,10 @@ public:
   /**
    * Zooms the view in or out as by a number of steps while keeping a 
    * given point on the timeline still.
-   * @param zoom_size The number of steps to zoom by. The scale factor
-   * is 1.25^(-zoom_size).
+   * @param new_time_scale The number of steps to zoom by. The scale factor
+   * is 1.25^(-new_time_scale).
    */
-  void zoom_view(int point, int64_t zoom_size);
+  void zoom_view(int point, int64_t new_time_scale);
   
   /**
    * Scrolls the view horizontally as a proportion of the view area.

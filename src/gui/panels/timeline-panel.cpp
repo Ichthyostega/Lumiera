@@ -124,6 +124,7 @@ TimelinePanel::TimelinePanel (workspace::PanelManager &panel_manager,
 
   zoomIn          .set_tooltip_text(_("Zoom in"));
   zoomOut         .set_tooltip_text(_("Zoom out"));
+  zoomScale       .set_tooltip_text(_("Adjust timeline zoom scale"));
 
   // Setup the timeline widget
   shared_ptr<Sequence> sequence          ///////////////////////////////TICKET #796

@@ -33,12 +33,27 @@ class TimelineWidget;
 namespace timeline {
 
 /**
- * TODO: The initial adjustment value needs to
+ * @todo The initial adjustment value needs to
  * match what the TimelineViewWindow's actual timeScale
  * Value is. TimelineViewWindow::get_time_scale() is
  * currently a public method, but will soon be private.
  * Maybe TimelineViewWindow can have a zoom_adjustment
  * that gets passed to this widget's Constructor?
+ * 
+ * @todo actually there is a more involved problem.
+ * The TimelineWidget maintains a TimelineState, which in turn
+ * owns the TimelineViewWindow. Now, the problem is: when we
+ * switch to another Sequence (View), then this TimelineState
+ * gets switched too, causing also a entirely different TimelineViewWindow
+ * to become effective. Thus
+ * - how can we managed to be notified from that switch?
+ * - problem is: TimelineZoomScale widget is owned by the TimelinePannel.
+ *   Likewise, TimelineWidget is owned by the TimelinePannel. But the
+ *   state handling/switching logic is embedded within TimelineWidget
+ * - and finally: how can we translate the actual scale (in time units),
+ *   as maintained within TimelineViewWindow, back into the adjustment
+ *   used here (which uses a relative scale 0...1.0 ) 
+ * 
  */
 
 TimelineZoomScale::TimelineZoomScale()

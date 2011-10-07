@@ -264,7 +264,7 @@ TimelineBody::on_motion_notify_event(GdkEventMotion *event)
           {
             TimelineViewWindow &window = view_window();
             
-                                   /////////////////////////////TICKET# 795 : don't reach in from outside and manipulate internals of the timeline view!
+                                   /////////////////////////////TICKET #795 : don't reach in from outside and manipulate internals of the timeline view!
                                    /////////////////////////////            : either encapsulate this entirely here, or leave it to the timeline view!            
             const int64_t scale = window.get_time_scale();
             window.set_time_offset(beginShiftTimeOffset

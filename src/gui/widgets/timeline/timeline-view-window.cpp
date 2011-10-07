@@ -38,20 +38,20 @@ TimelineViewWindow::TimelineViewWindow (Offset offset, int64_t scale)
 }
 
 Offset
-TimelineViewWindow::get_time_offset() const      /////////////////////TODO: this function shouldn't be accessible from outside
+TimelineViewWindow::get_time_offset() const      /////////////////////TICKET #795: this function shouldn't be accessible from outside
 {
   return Offset (timeOffset);
 }
 
 void
-TimelineViewWindow::set_time_offset(TimeValue const& offset) /////////TODO: this function shouldn't be accessible from outside
+TimelineViewWindow::set_time_offset(TimeValue const& offset) /////////TICKET #795: this function shouldn't be accessible from outside
 {
   timeOffset = offset;
   changedSignal.emit();
 }
 
 int64_t
-TimelineViewWindow::get_time_scale() const       /////////////////////TODO: this function shouldn't be accessible from outside
+TimelineViewWindow::get_time_scale() const       /////////////////////TICKET #795: this function shouldn't be accessible from outside
 {
   return timeScale;
 }
@@ -64,20 +64,10 @@ TimelineViewWindow::set_time_scale(int64_t scale)
 }
 
 void
-TimelineViewWindow::zoom_view(int point, int64_t zoom_scale)
+TimelineViewWindow::zoom_view(int point, int64_t new_time_scale)
 {
-  int64_t new_time_scale = zoom_scale;
-
   // Limit zooming in too close
   if(new_time_scale < 1) new_time_scale = 1;
-
- /* Not sure if this is still needed. MRF
-  *  // Nudge zoom problems caused by integer rounding
-  if(new_time_scale == timeScale && zoom_size < 0)
-    new_time_scale++;
-  */
-  
-  // Limit to Min and Max scale code moved to timeline-zoom-scale.cpp
 
   // The view must be shifted so that the zoom is centred on the cursor
   TimeVar newStartPoint = get_time_offset();
