@@ -141,6 +141,7 @@ namespace test  {
           CHECK (!isSameObject (m1,m2));
           CHECK (NIL    == m1.state());
           CHECK (LOCKED == m2.state());
+          CHECK (SOME_POINTER == m2.access());
           
           HashVal keyX = meta_->key(key1, SOME_POINTER);
           CHECK (meta_->isLocked(keyX));
@@ -152,11 +153,28 @@ namespace test  {
           CHECK ( isSameObject (m2, meta_->get(keyX)));
           CHECK ( key1 == m2.parentKey());
           
-          m2.mark(FREE);              // Warning: don't use the m2 reference anymore! 
+          // now able to do state transitions
+          CHECK (LOCKED == m2.state());
+          m2.mark(EMITTED);
+          CHECK (EMITTED == m2.state());
+          CHECK (SOME_POINTER == m2.access());
+          CHECK ( meta_->isLocked(keyX));
+          CHECK ( meta_->isKnown(keyX));
+          
+          // but the FREE state is a dead end
+          m2.mark(FREE); 
+          CHECK (!meta_->isLocked(keyX));
+          CHECK ( meta_->isKnown(keyX));
+          CHECK ( meta_->isKnown(key1));
+          VERIFY_ERROR (LIFECYCLE, m2.access());
+          VERIFY_ERROR (LIFECYCLE, m2.mark(LOCKED));
+          CHECK ( isSameObject (m2, meta_->get(keyX))); // still accessible
+          
+          meta_->release(keyX);
           CHECK (!meta_->isLocked(keyX));
           CHECK (!meta_->isKnown(keyX));
           CHECK ( meta_->isKnown(key1));
-          VERIFY_ERROR (INVALID, meta_->get(keyX));
+          VERIFY_ERROR (INVALID, meta_->get(keyX)); // now unaccessible
         }
       
       

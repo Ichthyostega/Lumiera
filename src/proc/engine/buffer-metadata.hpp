@@ -57,7 +57,7 @@
 #include "lib/error.hpp"
 #include "lib/symbol.hpp"
 
-//#include <boost/noncopyable.hpp>
+#include <boost/noncopyable.hpp>
 
 
 namespace engine {
@@ -65,8 +65,7 @@ namespace engine {
   using lib::Literal;
   
   namespace error = lumiera::error;
-//using error::LUMIERA_ERROR_INVALID;
-
+  
   
   typedef uint64_t LocalKey;
   typedef size_t HashVal;
@@ -105,6 +104,7 @@ namespace engine {
   
   
   class Metadata
+    : boost::noncopyable
     {
     public:
       class Entry
@@ -119,6 +119,7 @@ namespace engine {
           HashVal parentKey()  const { return parent_;}
           
           virtual BufferState state()  const              =0;
+          virtual const void* access() const              =0;
           virtual Entry& mark (BufferState newState)      =0;
         };
       
@@ -158,9 +159,6 @@ namespace engine {
           UNIMPLEMENTED ("access, possibly create metadata records");
         }
       
-      Entry&
-      markLocked (HashVal parentKey, const void* buffer);
-      
       bool
       isKnown (HashVal key)  const
         {
@@ -173,8 +171,12 @@ namespace engine {
           UNIMPLEMENTED ("diagnostics: actually locked buffer instance record?");
         }
       
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #834
-#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #834
+      
+      /* == memory management == */
+      
+      Entry& markLocked (HashVal parentKey, const void* buffer);
+      void release (HashVal key);
+      
     };
     
     
@@ -183,7 +185,7 @@ namespace engine {
   /* === Implementation === */
   
   namespace {
-
+    
     using error::LUMIERA_ERROR_LIFECYCLE;
     using error::LUMIERA_ERROR_BOTTOM_VALUE;
     
@@ -195,6 +197,16 @@ namespace engine {
         state()  const
           {
             return NIL;
+          }
+        
+        virtual const void*
+        access()  const
+          {
+            throw error::Logic ("This metadata entry is still abstract. "
+                                "It can't be associated with a concrete buffer. "
+                                "You need to invoke markLocked (buffer)."
+                               , LUMIERA_ERROR_LIFECYCLE
+                               );
           }
         
         virtual Entry&
@@ -220,12 +232,18 @@ namespace engine {
         virtual BufferState
         state()  const
           {
+            __must_not_be_NIL();
             return state_;
           }
         
-        virtual Entry&
-        markLocked (const void* buffer)
+        virtual const void*
+        access()  const
           {
+            __must_not_be_NIL();
+            __must_not_be_FREE();
+            
+            ENSURE (buffer_);
+            return buffer_;
           }
         
         virtual Entry&
@@ -233,12 +251,9 @@ namespace engine {
           {
             switch (this->state_)
               {
-              case NIL:
-                throw error::Fatal ("Concrete buffer entry with state==NIL encountered."
-                                    "State transition logic broken (programming error)");
-              case FREE:
-                throw error::Logic ("Need a new buffer pointer in order to lock an entry."
-                                   , LUMIERA_ERROR_LIFECYCLE );
+              case NIL:  __must_not_be_NIL();
+              case FREE: __must_not_be_FREE();
+                
               case LOCKED:
                 if (newState == EMITTED) break; // allow transition
                 
@@ -246,7 +261,7 @@ namespace engine {
                 if (newState == BLOCKED) break; // allow transition
                 
               case BLOCKED:
-                if (newState == FREE)           // note fall through for LOCKED and EMITTED too 
+                if (newState == FREE)           // note fall through for LOCKED and EMITTED too
                   {
                     buffer_ = 0;
                     break; // allow transition
@@ -257,39 +272,54 @@ namespace engine {
             state_ = newState;
             return *this;
           }
+        
+        
+        void
+        __must_not_be_NIL()  const
+          {
+            if (NIL == state_)
+              throw error::Fatal ("Concrete buffer entry with state==NIL encountered."
+                                  "State transition logic broken (programming error)");
+          }
+        
+        void
+        __must_not_be_FREE()  const
+          {
+            if (FREE == state_)
+                throw error::Logic ("Buffer is inaccessible (marked as free). "
+                                    "Need a new buffer pointer in order to lock an entry. "
+                                    "You should invoke markLocked(buffer) prior to access."
+                                   , LUMIERA_ERROR_LIFECYCLE );
+          }
       };
   }
   
+  
+  
+  
   /** */
-  BufferState
-  Metadata::Entry::state ()  const
-    {
-      UNIMPLEMENTED ("buffer state accounting");
-    }
-  
-  Metadata::Entry&
-  Metadata::Entry::mark (BufferState newState)
-    {
-      UNIMPLEMENTED ("buffer state transitions");
-      return *this;
-    }
-  
   Metadata::Entry&
   Metadata::markLocked (HashVal parentKey, const void* buffer)
-    {
-      UNIMPLEMENTED ("transition to locked state");
-      if (!buffer)
-        throw error::Fatal ("Attempt to lock for a NULL buffer. Allocation floundered?"
-                           , LUMIERA_ERROR_BOTTOM_VALUE);
-      
-      HashVal newKey = this->key (parentKey, buffer);
-      if (isLocked(newKey))
-        throw error::Logic ("Attempt to lock a slot for a new buffer, "
-                            "while actually the old buffer is still locked."
-                           , LUMIERA_ERROR_LIFECYCLE );
-      
-      return this->get(newKey);
-    }
+  {
+    UNIMPLEMENTED ("transition to locked state");
+    if (!buffer)
+      throw error::Fatal ("Attempt to lock for a NULL buffer. Allocation floundered?"
+                         , LUMIERA_ERROR_BOTTOM_VALUE);
+    
+    HashVal newKey = this->key (parentKey, buffer);
+    if (isLocked(newKey))
+      throw error::Logic ("Attempt to lock a slot for a new buffer, "
+                          "while actually the old buffer is still locked."
+                         , LUMIERA_ERROR_LIFECYCLE );
+    
+    return this->get(newKey);
+  }
+  
+  void
+  Metadata::release (HashVal key)
+  {
+    UNIMPLEMENTED ("metadata memory management");
+  }
   
   
   
