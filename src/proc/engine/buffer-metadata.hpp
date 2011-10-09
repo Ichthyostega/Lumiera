@@ -57,6 +57,7 @@
 #include "lib/error.hpp"
 #include "lib/symbol.hpp"
 
+#include <boost/functional/hash.hpp>
 #include <boost/noncopyable.hpp>
 
 
@@ -67,7 +68,6 @@ namespace engine {
   namespace error = lumiera::error;
   
   
-  typedef uint64_t LocalKey;
   typedef size_t HashVal;
   
   enum BufferState
@@ -79,8 +79,27 @@ namespace engine {
     };
   
   
+  /**
+   * an opaque ID to be used by the BufferProvider implementation.
+   * Typically this will be used, to set apart some pre-registered
+   * kinds of buffers. It is treated as being part of the buffer type.
+   * LocalKey objects may be copied but not re-assigned or changed.
+   */
+  class LocalKey
+    {
+      uint64_t privateID_;
+      
+      /** assignment prohibited */
+      LocalKey& operator= (LocalKey const&);
+      
+    public:
+      LocalKey (uint64_t opaqueValue=0)
+        : privateID_(opaqueValue)
+        { }
+      
+      operator uint64_t()  const { return privateID_; }
+    };
   
-  const LocalKey UNSPECIFIC = 0;
   
   struct TypeHandler
     {
@@ -102,7 +121,11 @@ namespace engine {
         { }
     };
   
-  const TypeHandler RAW_BUFFER;
+  namespace { // internal constants to mark the default case
+    
+    const LocalKey UNSPECIFIC;
+    const TypeHandler RAW_BUFFER;
+  }
 
 
     /* === Implementation === */
@@ -112,6 +135,14 @@ namespace engine {
     using error::LUMIERA_ERROR_LIFECYCLE;
     using error::LUMIERA_ERROR_BOTTOM_VALUE;
     
+    namespace { // details of hash calculation
+        template<typename VAL>
+        HashVal
+        chainedHash(HashVal accumulatedHash, VAL changedValue)
+        {
+          UNIMPLEMENTED ("calculate a new hash value, based on parent hash");
+        }
+    }
     
     class Key
       {
@@ -122,22 +153,62 @@ namespace engine {
         TypeHandler instanceFunc_;
         LocalKey specifics_;
         
+        
       public:
+        /** build a standard basic key describing a kind of Buffer. 
+         * @param familyID basic hash seed value to distinguish
+         *                 families of buffer types managed by
+         *                 different BufferProvider instances
+         * @param storageSize fundamental info: buffer size
+         */
         Key (HashVal familyID, size_t storageSize)
-          : parent_(0)
+          : parent_(chainedHash (familyID, storageSize))
           , hashID_(familyID)
           , storageSize_(storageSize)
           , instanceFunc_(RAW_BUFFER)
           , specifics_(UNSPECIFIC)
           { }
         
-        Key (Key const& parent) 
+        // standard copy operations permitted
+        
+        /** create a derived buffer type description.
+         *  Using a different storage size than the parent type,
+         *  all else remaining the same
+         */
+        Key (Key const& parent, size_t differingStorageSize) 
           : parent_(parent.hashID_)
-          , hashID_(0)
-          , storageSize_(parent.storageSize_)
+          , hashID_(chainedHash (parent_, differingStorageSize))
+          , storageSize_(differingStorageSize)  // differing from parent
           , instanceFunc_(parent.instanceFunc_)
           , specifics_(parent.specifics_)
           { }
+        
+        
+        /** create a derived buffer type description.
+         *  Using different ctor and dtor functions,
+         *  all else remaining the same as with parent
+         */
+        Key (Key const& parent, TypeHandler differingTypeHandlerFunctions) 
+          : parent_(parent.hashID_)
+          , hashID_(chainedHash (parent_, differingTypeHandlerFunctions))
+          , storageSize_(parent.storageSize_)
+          , instanceFunc_(differingTypeHandlerFunctions)  // differing from parent
+          , specifics_(parent.specifics_)
+          { }
+        
+        
+        /** create a derived buffer type description.
+         *  Using a different private ID than the parent type,
+         *  all else remaining the same
+         */
+        Key (Key const& parent, LocalKey anotherTypeSpecificInternalID) 
+          : parent_(parent.hashID_)
+          , hashID_(chainedHash (parent_, anotherTypeSpecificInternalID))
+          , storageSize_(parent.storageSize_)
+          , instanceFunc_(parent.instanceFunc_)
+          , specifics_(anotherTypeSpecificInternalID)  // differing from parent
+          { }
+        
         
         HashVal parentKey()  const { return parent_;}
         operator HashVal()   const { return hashID_;}
