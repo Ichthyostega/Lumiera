@@ -219,18 +219,26 @@ TimelineRuler::on_size_allocate(Gtk::Allocation& allocation)
 }
 
 void
-TimelineRuler::on_state_changed()
+TimelineRuler::on_state_changed (shared_ptr<TimelineState> newState)
 {
-  if(timelineWidget.get_state())
-    {
-      // Connect up some events
-      view_window().changed_signal().connect(
-        sigc::mem_fun(this, &TimelineRuler::on_update_view) );
-    }
-    
+  REQUIRE (newState);
+  timelineState = newState;
+  
+  propagateStateChange();
+}
+
+void
+TimelineRuler::propagateStateChange()
+{
+  // Connect up some events
+  view_window().changed_signal().connect(
+    sigc::mem_fun(this, &TimelineRuler::on_update_view) );
+  
   // Redraw
   on_update_view();
 }
+
+
 
 void
 TimelineRuler::set_leading_x(const int x)

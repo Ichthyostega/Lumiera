@@ -125,7 +125,7 @@ TimelineWidget::set_state(shared_ptr<timeline::TimelineState> new_state)
   update_tracks();
   
   // Send the state changed signal
-  stateChangedSignal.emit();
+  stateChangedSignal.emit (state);
 }
 
 void
@@ -178,7 +178,7 @@ TimelineWidget::hovering_track_changed_signal() const
   return hoveringTrackChangedSignal;
 }
 
-sigc::signal<void>
+TimelineWidget::TimelineStateChangeSignal
 TimelineWidget::state_changed_signal() const
 {
   return stateChangedSignal;

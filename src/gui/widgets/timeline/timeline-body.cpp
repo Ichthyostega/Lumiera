@@ -39,6 +39,8 @@ using namespace lumiera;
 
 using gui::util::CairoUtil;
 
+using boost::shared_ptr;           ////////////////////TICKET #796
+
 namespace gui {
 namespace widgets {
 namespace timeline {
@@ -61,7 +63,7 @@ TimelineBody::TimelineBody (TimelineWidget &timelineWidget)
   register_styles();
   
   // Reset the state
-  on_state_changed();
+  propagateStateChange();
 }
 
 TimelineBody::~TimelineBody()
@@ -294,9 +296,16 @@ TimelineBody::on_motion_notify_event(GdkEventMotion *event)
 }
 
 void
-TimelineBody::on_state_changed()
+TimelineBody::on_state_changed (shared_ptr<TimelineState> newState)
 {
-  if(timelineWidget.get_state())
+  REQUIRE (newState);
+  timelineState = newState;
+}
+
+void
+TimelineBody::propagateStateChange()
+{
+  if (timelineState)
     {
       // Connect up some events
       view_window().changed_signal().connect(

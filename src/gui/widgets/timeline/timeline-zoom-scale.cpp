@@ -91,6 +91,19 @@ TimelineZoomScale::TimelineZoomScale()
 }
 
 void
+TimelineZoomScale::wireTimelineState (TimelineWidget::TimelineStateChangeSignal stateChangeSignal)
+{
+  stateChangeSignal.connect (sigc::mem_fun(this, &TimelineZoomScale::on_timeline_state_changed));
+}
+
+void
+TimelineZoomScale::on_timeline_state_changed (boost::shared_ptr<TimelineState> newState)
+{
+  REQUIRE (newState);
+  UNIMPLEMENTED ("react on the timeline state change");
+}
+
+void
 TimelineZoomScale::on_zoom_in_clicked()
 {
   double newValue = adjustment.get_value() - button_step_size;

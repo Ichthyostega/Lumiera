@@ -125,10 +125,9 @@ protected:
   bool on_motion_notify_event(GdkEventMotion *event);
   
   /**
-   * The event handler for when the TimelineWidget's state object is
-   * replaced.
+   * The event handler for when the TimelineWidget's state is switched.
    */
-  void on_state_changed();
+  void on_state_changed (boost::shared_ptr<TimelineState> newState);
   
   /* ===== Internals ===== */
 private:
@@ -160,6 +159,9 @@ private:
   int get_vertical_offset() const;
   
   void set_vertical_offset(int offset);
+  
+  /** adjust to the new timeline state */
+  void propagateStateChange();
   
   /**
    * A helper function to get the view window
@@ -202,6 +204,8 @@ private:
   Cairo::RefPtr<Cairo::SolidPattern> playbackPointColour;
   
   gui::widgets::TimelineWidget &timelineWidget;
+  boost::shared_ptr<TimelineState> timelineState;      ////////////////////TICKET #796 : should use std::tr1::shared_ptr
+  
 
   friend class Tool;
   friend class ArrowTool;

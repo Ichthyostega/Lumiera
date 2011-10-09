@@ -137,10 +137,8 @@ TimelinePanel::TimelinePanel (workspace::PanelManager &panel_manager,
   // TimelineWidget is now initialized, lets set it in the zoomScale
   // and wire it with the timeline state changed signal
   zoomScale.set_view_window(timelineWidget->get_state()->get_view_window());
- /* This doesn't work
-  timelineWidget->signal_state_changed().
-      connect(sigc::mem_fun(zoomScale, &TimelineZoomScale::on_timeline_state_changed));
-  */
+  zoomScale.wireTimelineState (timelineWidget->state_changed_signal());
+  
 
   // Set the initial UI state
   update_sequence_chooser();
