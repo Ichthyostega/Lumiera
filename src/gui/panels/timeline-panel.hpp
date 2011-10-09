@@ -174,7 +174,7 @@ private:
   boost::scoped_ptr<TimelineWidget> timelineWidget;
   
   std::map< boost::weak_ptr<model::Sequence>,
-    boost::shared_ptr<widgets::timeline::TimelineState> >          ///////////////////////////////TICKET #796
+    boost::shared_ptr<widgets::timeline::TimelineState> >          ///////////////////////////////TICKET #796 : should use std::tr1::shared_ptr
     timelineStates;
   
   // Toolbar Widgets

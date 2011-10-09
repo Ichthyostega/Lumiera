@@ -91,8 +91,10 @@ TimelineZoomScale::TimelineZoomScale()
 }
 
 void
-TimelineZoomScale::wireTimelineState (TimelineWidget::TimelineStateChangeSignal stateChangeSignal)
+TimelineZoomScale::wireTimelineState (boost::shared_ptr<TimelineState> currentState,
+                                      TimelineWidget::TimelineStateChangeSignal stateChangeSignal)
 {
+  on_timeline_state_changed (currentState);
   stateChangeSignal.connect (sigc::mem_fun(this, &TimelineZoomScale::on_timeline_state_changed));
 }
 
@@ -100,7 +102,9 @@ void
 TimelineZoomScale::on_timeline_state_changed (boost::shared_ptr<TimelineState> newState)
 {
   REQUIRE (newState);
-  UNIMPLEMENTED ("react on the timeline state change");
+  timelineState = newState;
+  
+  UNIMPLEMENTED ("react on the timeline state change");  ///////////////////////////TODO
 }
 
 void
@@ -129,11 +133,14 @@ TimelineZoomScale::signal_zoom()
   return zoomSignal;
 }
 
-void
-TimelineZoomScale::set_view_window(TimelineViewWindow &view_window)
+TimelineViewWindow&
+TimelineZoomScale::getViewWindow()
 {
-  timelineViewWindow =& view_window;
+  REQUIRE (timelineState, "lifecycle error");
+  return timelineState->get_view_window();
 }
+
+
 int64_t
 TimelineZoomScale::calculate_zoom_scale()
 {

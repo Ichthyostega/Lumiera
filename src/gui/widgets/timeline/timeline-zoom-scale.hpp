@@ -29,6 +29,7 @@
 #include "gui/gtk-lumiera.hpp"
 #include "gui/widgets/mini-button.hpp"
 #include "gui/widgets/timeline-widget.hpp"
+#include "gui/widgets/timeline/timeline-state.hpp"
 #include "gui/widgets/timeline/timeline-view-window.hpp"
 
 #include <boost/shared_ptr.hpp>
@@ -54,8 +55,8 @@ public:
    */
   sigc::signal<void, int64_t> signal_zoom();
 
-  void set_view_window(TimelineViewWindow &view_window);
-  void wireTimelineState (TimelineWidget::TimelineStateChangeSignal);
+  void wireTimelineState (boost::shared_ptr<TimelineState> currentState,
+                          TimelineWidget::TimelineStateChangeSignal);
 
 private:
   /* Event Handlers */
@@ -83,6 +84,9 @@ private:
    */
   void on_zoom();
 
+  /** access current timeline state */
+  TimelineViewWindow& getViewWindow();
+
   /**
    * Calculate a Zoom Scale value based on
    * the adjustment's current value
@@ -96,14 +100,14 @@ private:
   MiniButton zoomIn;
   MiniButton zoomOut;
 
-protected:
+private:
   /* Signals */
   sigc::signal<void, int64_t> zoomSignal;
 
   const double smoothing_factor;
   const double button_step_size;
 
-  TimelineViewWindow *timelineViewWindow;
+  boost::shared_ptr<TimelineState> timelineState;
 };
 
 } // namespace gui

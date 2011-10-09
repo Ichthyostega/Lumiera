@@ -112,7 +112,7 @@ TimelinePanel::TimelinePanel (workspace::PanelManager &panel_manager,
   panelBar.pack_start(toolbar, PACK_SHRINK);
 
   // Setup tooltips
-  sequenceChooser     .set_tooltip_text(_("Change sequence"));
+  sequenceChooser .set_tooltip_text(_("Change sequence"));
 
   previousButton  .set_tooltip_text(_("To beginning"));
   rewindButton    .set_tooltip_text(_("Rewind"));
@@ -129,15 +129,15 @@ TimelinePanel::TimelinePanel (workspace::PanelManager &panel_manager,
   zoomScale       .set_tooltip_text(_("Adjust timeline zoom scale"));
 
   // Setup the timeline widget
-  shared_ptr<Sequence> sequence          ///////////////////////////////TICKET #796
+  shared_ptr<Sequence> sequence          ///////////////////////////////TICKET #796 : should use std::tr1::shared_ptr instead of boost
     = *get_project().get_sequences().begin();  
   timelineWidget.reset(new TimelineWidget(load_state(sequence)));
   pack_start(*timelineWidget, PACK_EXPAND_WIDGET);
 
-  // TimelineWidget is now initialized, lets set it in the zoomScale
-  // and wire it with the timeline state changed signal
-  zoomScale.set_view_window(timelineWidget->get_state()->get_view_window());
-  zoomScale.wireTimelineState (timelineWidget->state_changed_signal());
+  // since TimelineWidget is now initialised,
+  // wire the zoom slider to react on timeline state changes
+  zoomScale.wireTimelineState (timelineWidget->get_state(),
+                               timelineWidget->state_changed_signal());
   
 
   // Set the initial UI state
