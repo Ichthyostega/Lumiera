@@ -23,6 +23,7 @@
 
 #include "gui/gtk-lumiera.hpp"
 #include "gui/panels/timeline-panel.hpp"
+#include "gui/widgets/timeline/timeline-zoom-scale.hpp"
 
 #include "gui/workspace/workspace-window.hpp"
 #include "gui/model/project.hpp"
@@ -34,6 +35,7 @@
 using namespace Gtk;
 using namespace sigc;
 using namespace gui::widgets;
+using namespace gui::widgets::timeline;
 using namespace gui::model;
 
 using boost::shared_ptr;  ///////////////////////////////TICKET #796
@@ -131,14 +133,21 @@ TimelinePanel::TimelinePanel (workspace::PanelManager &panel_manager,
     = *get_project().get_sequences().begin();  
   timelineWidget.reset(new TimelineWidget(load_state(sequence)));
   pack_start(*timelineWidget, PACK_EXPAND_WIDGET);
-  
+
+  // TimelineWidget is now initialized, lets set it in the zoomScale
+  // and wire it with the timeline state changed signal
+  zoomScale.set_view_window(timelineWidget->get_state()->get_view_window());
+ /* This doesn't work
+  timelineWidget->signal_state_changed().
+      connect(sigc::mem_fun(zoomScale, &TimelineZoomScale::on_timeline_state_changed));
+  */
+
   // Set the initial UI state
   update_sequence_chooser();
   update_tool_buttons();
   update_zoom_buttons();
   show_time (Time::ZERO);
 }
-
 
 const char*
 TimelinePanel::get_title()

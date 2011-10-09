@@ -116,6 +116,11 @@ TimelineZoomScale::signal_zoom()
   return zoomSignal;
 }
 
+void
+TimelineZoomScale::set_view_window(TimelineViewWindow &view_window)
+{
+  timelineViewWindow =& view_window;
+}
 int64_t
 TimelineZoomScale::calculate_zoom_scale()
 {

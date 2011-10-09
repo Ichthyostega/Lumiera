@@ -28,6 +28,7 @@
 
 #include "gui/gtk-lumiera.hpp"
 #include "gui/widgets/mini-button.hpp"
+#include "gui/widgets/timeline/timeline-view-window.hpp"
 
 using namespace Gtk;
 using namespace gui::widgets;
@@ -49,6 +50,8 @@ public:
    * @return the zoomSignal
    */
   sigc::signal<void, int64_t> signal_zoom();
+
+  void set_view_window(TimelineViewWindow &view_window);
 
 private:
   /* Event Handlers */
@@ -90,6 +93,8 @@ protected:
 
   const double smoothing_factor;
   const double button_step_size;
+
+  TimelineViewWindow *timelineViewWindow;
 };
 
 } // namespace gui
