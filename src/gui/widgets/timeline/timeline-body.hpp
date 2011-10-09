@@ -68,10 +68,7 @@ public:
    */
   TimelineBody(gui::widgets::TimelineWidget &timeline_widget);
   
-  /**
-   * Destructor
-   */
-  ~TimelineBody();
+  virtual ~TimelineBody();
   
   TimelineWidget&
   getTimelineWidget () const;
@@ -131,6 +128,12 @@ protected:
   
   /* ===== Internals ===== */
 private:
+  /**
+   * Access the current timeline view window
+   * @warning must not be called unless the TimlineWidget
+   *          has a valid state.
+   */
+  TimelineViewWindow& viewWindow() const;
 
   /**
    * Draws the timeline tracks.
@@ -162,14 +165,7 @@ private:
   
   /** adjust to the new timeline state */
   void propagateStateChange();
-  
-  /**
-   * A helper function to get the view window
-   * @remarks This function must not be called unless the TimlineWidget
-   * has a valid state.
-   */
-  TimelineViewWindow& view_window() const;
-   
+
   /**
    * Registers all the styles that this class will respond to.
    */

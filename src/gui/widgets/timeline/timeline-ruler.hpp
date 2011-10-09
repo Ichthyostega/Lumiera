@@ -176,9 +176,9 @@ private:
   gavl_time_t calculate_major_spacing() const;
   
   /**
-   * A helper function to get the view window
+   * Access current timeline view window
    */
-  TimelineViewWindow& view_window() const;
+  TimelineViewWindow& viewWindow() const;
 
   /**
    * Registers all the styles that this class will respond to.
