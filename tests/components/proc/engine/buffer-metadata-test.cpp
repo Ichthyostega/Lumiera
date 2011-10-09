@@ -110,11 +110,11 @@ namespace test  {
       void
       verifyBasicProperties()
         {
-          HashVal key = meta_->key(SIZE_A);
+          Metadata::Key key = meta_->key(SIZE_A);
           CHECK (key);
           
-          HashVal key1 = meta_->key(SIZE_A);
-          HashVal key2 = meta_->key(SIZE_B);
+          Metadata::Key key1 = meta_->key(SIZE_A);
+          Metadata::Key key2 = meta_->key(SIZE_B);
           CHECK (key1);
           CHECK (key2);
           CHECK (key == key1);

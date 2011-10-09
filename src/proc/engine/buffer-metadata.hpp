@@ -78,6 +78,8 @@ namespace engine {
       BLOCKED
     };
   
+  
+  
   const LocalKey UNSPECIFIC = 0;
   
   struct TypeHandler
@@ -101,134 +103,54 @@ namespace engine {
     };
   
   const TypeHandler RAW_BUFFER;
+
+
+    /* === Implementation === */
   
-  
-  class Metadata
-    : boost::noncopyable
-    {
-    public:
-      class Entry
-        {
-          HashVal parent_;
-          
-        protected:
-          Entry (HashVal parent) : parent_(parent) { }
-         ~Entry ()                                 { }
-          
-        public:
-          HashVal parentKey()  const { return parent_;}
-          
-          virtual BufferState state()  const              =0;
-          virtual const void* access() const              =0;
-          virtual Entry& mark (BufferState newState)      =0;
-        };
-      
-      
-      Metadata (Literal implementationID)
-        { }
-      
-      HashVal
-      key ( size_t storageSize
-          , TypeHandler instanceFunc =RAW_BUFFER
-          , LocalKey specifics =UNSPECIFIC)
-        {
-          UNIMPLEMENTED ("combine the distinguishing properties into a single hash");
-        }
-      
-      HashVal
-      key (HashVal parentKey, TypeHandler instanceFunc)
-        {
-          UNIMPLEMENTED ("create sub-type key");
-        }
-      
-      HashVal
-      key (HashVal parentKey, LocalKey specifics)
-        {
-          UNIMPLEMENTED ("create sub-type key");
-        }
-      
-      HashVal
-      key (HashVal parentKey, const void* concreteBuffer)
-        {
-          UNIMPLEMENTED ("create sub-object key for concrete buffer");
-        }
-      
-      Entry&
-      get (HashVal key)
-        {
-          UNIMPLEMENTED ("access, possibly create metadata records");
-        }
-      
-      bool
-      isKnown (HashVal key)  const
-        {
-          UNIMPLEMENTED ("diagnostics: known record?");
-        }
-      
-      bool
-      isLocked (HashVal key)  const
-        {
-          UNIMPLEMENTED ("diagnostics: actually locked buffer instance record?");
-        }
-      
-      
-      /* == memory management == */
-      
-      Entry& markLocked (HashVal parentKey, const void* buffer);
-      void release (HashVal key);
-      
-    };
-    
-    
-    
-    
-  /* === Implementation === */
-  
-  namespace {
+  namespace metadata {
     
     using error::LUMIERA_ERROR_LIFECYCLE;
     using error::LUMIERA_ERROR_BOTTOM_VALUE;
     
     
-    class TypeEntry
-      : public Metadata::Entry
+    class Key
       {
-        virtual BufferState
-        state()  const
-          {
-            return NIL;
-          }
+        HashVal parent_;
+        HashVal hashID_;
         
-        virtual const void*
-        access()  const
-          {
-            throw error::Logic ("This metadata entry is still abstract. "
-                                "It can't be associated with a concrete buffer. "
-                                "You need to invoke markLocked (buffer)."
-                               , LUMIERA_ERROR_LIFECYCLE
-                               );
-          }
+        size_t storageSize_;
+        TypeHandler instanceFunc_;
+        LocalKey specifics_;
         
-        virtual Entry&
-        mark (BufferState newState)
-          {
-            if (newState != NIL)
-              throw error::Logic ("This metadata entry is still abstract. "
-                                  "The only possible state transition is to markLocked (buffer)."
-                                 , LUMIERA_ERROR_LIFECYCLE
-                                 );
-            return *this;
-          }
+      public:
+        Key (HashVal familyID, size_t storageSize)
+          : parent_(0)
+          , hashID_(familyID)
+          , storageSize_(storageSize)
+          , instanceFunc_(RAW_BUFFER)
+          , specifics_(UNSPECIFIC)
+          { }
         
+        Key (Key const& parent) 
+          : parent_(parent.hashID_)
+          , hashID_(0)
+          , storageSize_(parent.storageSize_)
+          , instanceFunc_(parent.instanceFunc_)
+          , specifics_(parent.specifics_)
+          { }
+        
+        HashVal parentKey()  const { return parent_;}
+        operator HashVal()   const { return hashID_;}
       };
     
     
-    class BufferEntry
-      : public Metadata::Entry
+    class Entry
+      : public Key
       {
         BufferState state_;
         const void* buffer_;
         
+      public:
         virtual BufferState
         state()  const
           {
@@ -297,6 +219,84 @@ namespace engine {
   
   
   
+  
+  class Metadata
+    : boost::noncopyable
+    {
+    public:
+      
+      typedef metadata::Key Key;
+      typedef metadata::Entry Entry;
+      
+      
+      Metadata (Literal implementationID)
+        { }
+      
+      Key
+      key ( size_t storageSize
+          , TypeHandler instanceFunc =RAW_BUFFER
+          , LocalKey specifics =UNSPECIFIC)
+        {
+          UNIMPLEMENTED ("combine the distinguishing properties into a single hash");
+        }
+      
+      Key
+      key (HashVal parentKey, TypeHandler instanceFunc)
+        {
+          UNIMPLEMENTED ("create sub-type key");
+        }
+      
+      Key
+      key (HashVal parentKey, LocalKey specifics)
+        {
+          UNIMPLEMENTED ("create sub-type key");
+        }
+      
+      Key
+      key (HashVal parentKey, const void* concreteBuffer)
+        {
+          UNIMPLEMENTED ("create sub-object key for concrete buffer");
+        }
+      
+      Key const&
+      get (HashVal hashID)
+        {
+          UNIMPLEMENTED ("access the plain key entry");
+        }
+      
+      Entry&
+      get (Key key)
+        {
+          UNIMPLEMENTED ("access, possibly create metadata records");
+        }
+      
+      bool
+      isKnown (HashVal key)  const
+        {
+          UNIMPLEMENTED ("diagnostics: known record?");
+        }
+      
+      bool
+      isLocked (HashVal key)  const
+        {
+          UNIMPLEMENTED ("diagnostics: actually locked buffer instance record?");
+        }
+      
+      
+      /* == memory management == */
+      
+      Entry& markLocked (HashVal parentKey, const void* buffer);
+      void release (HashVal key);
+      
+    };
+    
+    
+    
+    
+  
+  
+  
+  
   /** */
   Metadata::Entry&
   Metadata::markLocked (HashVal parentKey, const void* buffer)
@@ -304,13 +304,13 @@ namespace engine {
     UNIMPLEMENTED ("transition to locked state");
     if (!buffer)
       throw error::Fatal ("Attempt to lock for a NULL buffer. Allocation floundered?"
-                         , LUMIERA_ERROR_BOTTOM_VALUE);
+                         , error::LUMIERA_ERROR_BOTTOM_VALUE);
     
-    HashVal newKey = this->key (parentKey, buffer);
+    Key newKey = this->key (parentKey, buffer);
     if (isLocked(newKey))
       throw error::Logic ("Attempt to lock a slot for a new buffer, "
                           "while actually the old buffer is still locked."
-                         , LUMIERA_ERROR_LIFECYCLE );
+                         , error::LUMIERA_ERROR_LIFECYCLE );
     
     return this->get(newKey);
   }
