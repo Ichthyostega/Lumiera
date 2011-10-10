@@ -62,7 +62,8 @@ private:
   /* Event Handlers */
   
   /**
-   * 
+   * Update the slider position when the timeline state
+   * is changed.
    */
   void on_timeline_state_changed (boost::shared_ptr<TimelineState> newState);         ////////////////////TICKET #796 : should use std::tr1::shared_ptr
 
