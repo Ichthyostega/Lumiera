@@ -104,7 +104,13 @@ TimelineZoomScale::on_timeline_state_changed (boost::shared_ptr<TimelineState> n
   REQUIRE (newState);
   timelineState = newState;
   
-  UNIMPLEMENTED ("react on the timeline state change");  ///////////////////////////TODO
+  int64_t current_scale =
+      timelineState->get_view_window().get_time_scale();
+
+  double new_relative_scale =
+      (double) current_scale / (double) TimelineWidget::MaxScale;
+
+  adjustment.set_value(new_relative_scale);
 }
 
 void
