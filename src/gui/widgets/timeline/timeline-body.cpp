@@ -306,15 +306,7 @@ TimelineBody::on_state_changed (shared_ptr<TimelineState> newState)
 {
   REQUIRE (newState);
   timelineState = newState;
-  if(timelineState)
-    {
-      // Connect up some events
-      viewWindow().changed_signal().connect(
-        sigc::mem_fun(this, &TimelineBody::on_update_view) );
-    }
-
-  // Redraw
-  queue_draw();
+  propagateStateChange();
 }
 
 void
