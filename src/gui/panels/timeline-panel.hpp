@@ -89,7 +89,7 @@ private:
   void on_arrow_tool();
   void on_ibeam_tool();
   
-  void on_zoom(int64_t zoom_size);
+  void on_zoom(double time_scale_ratio);
   void on_zoom_in();
   void on_zoom_out();
   

@@ -98,7 +98,7 @@ public:
    * @param zoom_size The number of steps to zoom by. The scale factor
    * is 1.25^(-zoom_size).
    */
-  void zoom_view(int64_t zoom_scale);
+  void zoom_view(double timescale_ratio);
   
   /**
    * Gets the type of the tool currently active.

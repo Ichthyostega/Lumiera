@@ -28,6 +28,7 @@
 #include "gui/workspace/workspace-window.hpp"
 #include "gui/model/project.hpp"
 #include "gui/controller/controller.hpp"
+
 #include "lib/util.hpp"
 
 #include <boost/foreach.hpp>
@@ -139,7 +140,6 @@ TimelinePanel::TimelinePanel (workspace::PanelManager &panel_manager,
   zoomScale.wireTimelineState (timelineWidget->get_state(),
                                timelineWidget->state_changed_signal());
   
-
   // Set the initial UI state
   update_sequence_chooser();
   update_tool_buttons();
@@ -194,11 +194,10 @@ TimelinePanel::on_ibeam_tool()
 }
 
 void
-TimelinePanel::on_zoom(int64_t zoom_scale)
+TimelinePanel::on_zoom(double time_scale_ratio)
 {
   REQUIRE(timelineWidget);
-  timelineWidget->zoom_view(zoom_scale);
-  update_zoom_buttons();
+  timelineWidget->zoom_view(time_scale_ratio);
 }
 
 void
@@ -254,18 +253,19 @@ TimelinePanel::on_sequence_chosen()
     {
       weak_ptr<Sequence> sequence_ptr = 
         (*iter)[sequenceChooserColumns.sequenceColumn];
+
       shared_ptr<Sequence> sequence(sequence_ptr.lock());
+
       if(sequence)
         {
           shared_ptr<timeline::TimelineState> old_state(
             timelineWidget->get_state());
           REQUIRE(old_state);
-            
           if(sequence != old_state->get_sequence())
             timelineWidget->set_state(load_state(sequence));
         }
     }
-    
+
   update_zoom_buttons();
 }
 
@@ -397,9 +397,10 @@ TimelinePanel::on_frame()
 shared_ptr<timeline::TimelineState>
 TimelinePanel::load_state(weak_ptr<Sequence> sequence)
 {
+  /* state exists */
   if(contains(timelineStates, sequence))
-    return timelineStates[sequence];
-  
+      return timelineStates[sequence];
+
   shared_ptr<Sequence> shared_sequence = sequence.lock();
   if(shared_sequence)
     {

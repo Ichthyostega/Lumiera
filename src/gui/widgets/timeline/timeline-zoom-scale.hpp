@@ -53,7 +53,7 @@ public:
    * Accessor method to the zoomSignal
    * @return the zoomSignal
    */
-  sigc::signal<void, int64_t> signal_zoom();
+  sigc::signal<void, double> signal_zoom();
 
   void wireTimelineState (boost::shared_ptr<TimelineState> currentState,
                           TimelineWidget::TimelineStateChangeSignal);
@@ -88,13 +88,6 @@ private:
   /** access current timeline state */
   TimelineViewWindow& getViewWindow();
 
-  /**
-   * Calculate a Zoom Scale value based on
-   * the adjustment's current value
-   * @return The Zoom Scale value
-   */
-  int64_t calculate_zoom_scale();
-
   /* Widgets */
   Gtk::Adjustment adjustment;
   Gtk::HScale slider;
@@ -103,9 +96,8 @@ private:
 
 private:
   /* Signals */
-  sigc::signal<void, int64_t> zoomSignal;
+  sigc::signal<void, double> zoomSignal;
 
-  const double smoothing_factor;
   const double button_step_size;
 
   boost::shared_ptr<TimelineState> timelineState;

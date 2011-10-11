@@ -62,7 +62,6 @@ TimelineZoomScale::TimelineZoomScale()
   , slider()
   , zoomIn(Stock::ZOOM_IN)
   , zoomOut(Stock::ZOOM_OUT)
-  , smoothing_factor(9.0)
   , button_step_size(0.03)
 {
   /* Setup the Slider Control */
@@ -105,10 +104,15 @@ TimelineZoomScale::on_timeline_state_changed (boost::shared_ptr<TimelineState> n
   timelineState = newState;
   
   int64_t current_scale =
-      timelineState->get_view_window().get_time_scale();
+      getViewWindow().get_time_scale();
 
-  double new_relative_scale =
+  double linear_scale =
       (double) current_scale / (double) TimelineWidget::MaxScale;
+
+  /* We have to Revese the Smoothing */
+  TODO("Find a central place for ZoomSmoothingFactor Variable. right now it is 9.0");
+  double new_relative_scale =
+      pow(linear_scale,(1.0/9.0));
 
   adjustment.set_value(new_relative_scale);
 }
@@ -130,10 +134,10 @@ TimelineZoomScale::on_zoom_out_clicked()
 void
 TimelineZoomScale::on_zoom()
 {
-  zoomSignal.emit(calculate_zoom_scale()) ;
+  zoomSignal.emit(adjustment.get_value()) ;
 }
 
-sigc::signal<void, int64_t>
+sigc::signal<void, double>
 TimelineZoomScale::signal_zoom()
 {
   return zoomSignal;
@@ -144,25 +148,6 @@ TimelineZoomScale::getViewWindow()
 {
   REQUIRE (timelineState, "lifecycle error");
   return timelineState->get_view_window();
-}
-
-
-int64_t
-TimelineZoomScale::calculate_zoom_scale()
-{
-  int64_t zoom_scale = 0;
-
-  double smoothed = pow(adjustment.get_value(), smoothing_factor);
-  zoom_scale = (int64_t)( smoothed * (double)TimelineWidget::MaxScale);
-
-  /* Prevent Zooming in To Close and Far */
-  if(zoom_scale < 1)
-    zoom_scale = 1;
-
-  if(zoom_scale > TimelineWidget::MaxScale)
-    zoom_scale = TimelineWidget::MaxScale;
-
-  return zoom_scale;
 }
 
 } // namespace gui

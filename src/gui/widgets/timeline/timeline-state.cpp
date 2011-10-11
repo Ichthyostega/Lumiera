@@ -51,12 +51,11 @@ TimelineState::TimelineState (boost::shared_ptr<model::Sequence> source_sequence
   REQUIRE(sequence);
   
   ////////////////////////////////////////////////////////////TICKET #798: how to handle GUI default state
-  
-  viewWindow.set_time_scale(GAVL_TIME_SCALE / 200);
-  
+  viewWindow.set_time_scale(21000000);
+
   setSelection (Mutation::changeTime (Time(FSecs(2))));
   setSelection (Mutation::changeDuration(Duration(FSecs(2))));
-                               //////////////////////////////////////////////////////TICKET #797 : this is cheesy. Should provide a single Mutation to change all
+  //////////////////////////////////////////////////////TICKET #797 : this is cheesy. Should provide a single Mutation to change all
 }
 
 boost::shared_ptr<model::Sequence>
