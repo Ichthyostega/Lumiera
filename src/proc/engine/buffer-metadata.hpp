@@ -57,6 +57,7 @@
 #include "lib/error.hpp"
 #include "lib/symbol.hpp"
 
+#include <tr1/functional>
 #include <boost/functional/hash.hpp>
 #include <boost/noncopyable.hpp>
 
@@ -64,6 +65,7 @@
 namespace engine {
   
   using lib::Literal;
+  using std::tr1::function;
   
   namespace error = lumiera::error;
   
@@ -98,27 +100,57 @@ namespace engine {
         { }
       
       operator uint64_t()  const { return privateID_; }
+      
+      friend size_t
+      hash_value (LocalKey const& lkey)
+      {
+        boost::hash<uint64_t> hashFunction;
+        return hashFunction(lkey.privateID_);
+      }
     };
   
+  template<class X>
+  void
+  buildIntoBuffer (void* storageBuffer)
+  {
+    new(storageBuffer) X();
+  }
+  
+  template<class X>
+  void
+  destroyInBuffer (void* storageBuffer)
+  {
+    X* embedded = static_cast<X*> (storageBuffer);
+    embedded->~X();
+  }
   
   struct TypeHandler
     {
-      typedef void (*Ctor) (void*);
-      typedef void (*Dtor) (void*);
+      typedef function<void(void*)> Ctor;
+      typedef function<void(void*)> Dtor;
       
       Ctor createAttached;
       Dtor destroyAttached;
       
       TypeHandler()
-        : createAttached (0)
-        , destroyAttached (0)
+        : createAttached()
+        , destroyAttached()
         { }
       
       template<class X>
       TypeHandler()
-        : createAttached (0)    /////////TODO: how to attach the ctor function??? Maybe better use a class with virtual functions?
-        , destroyAttached (0)
+        : createAttached (buildIntoBuffer<X>)
+        , destroyAttached (destroyInBuffer<X>)
         { }
+      
+      friend size_t
+      hash_value (TypeHandler handler)
+      {
+        boost::hash<Ctor> ctorHash;
+//      return boost::hash_combine(ctorHash(handler.createAttached), handler.destroyAttached.);
+        ////////////////TODO how to calculate the hash of an function object
+        return 0;
+      }
     };
   
   namespace { // internal constants to mark the default case
@@ -140,7 +172,8 @@ namespace engine {
         HashVal
         chainedHash(HashVal accumulatedHash, VAL changedValue)
         {
-          UNIMPLEMENTED ("calculate a new hash value, based on parent hash");
+          boost::hash_combine (accumulatedHash, changedValue);
+          return accumulatedHash;
         }
     }
     
