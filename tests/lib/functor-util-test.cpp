@@ -157,6 +157,7 @@ namespace test {
           CHECK (h2 == h22);
           
           f1 = f2;
+          h1 = calculateHash (f1);
           CHECK (h1 == h2);
           CHECK (h1 != h0);
           

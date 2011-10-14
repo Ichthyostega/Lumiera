@@ -38,6 +38,7 @@
 #define FUNCTOR_UTIL_H_
 
 #include <tr1/functional>
+#include <boost/functional/hash.hpp>
 
 
 
@@ -89,7 +90,7 @@ namespace util { ////////////TODO: refactor namespace. But probably not directly
   
   /** convenience shortcut to call two functors in sequence. 
    *  @return a Dispatch functor object which incorporates the
-   *          functors as copy and on invocation calls the first 
+   *          functors as copy and on invocation calls the first
    *          function and then returns the result of the second */
   template<typename SIG>
   Dispatch<SIG>
@@ -102,6 +103,9 @@ namespace util { ////////////TODO: refactor namespace. But probably not directly
   
   
   namespace { // hiding some nasty details...
+    
+    using lib::HashVal;
+    using boost::hash_combine;
   
     /**
      * This Class is used to bypass the access protection
@@ -139,6 +143,16 @@ namespace util { ////////////TODO: refactor namespace. But probably not directly
                 && (f1._M_functor._M_unused._M_const_object ==
                     f2._M_functor._M_unused._M_const_object );
           }                      // note: we don't cover any member pointer offset
+        
+        friend HashVal
+        hash_value (HijackedFunction const& fun)
+          {
+            HashVal hash(0);
+            hash_combine (hash, fun.invoker_);
+            hash_combine (hash, fun._M_manager);
+            hash_combine (hash, fun._M_functor._M_unused._M_const_object);
+            return hash;        // note: member pointer offset part uncovered
+          }
       };
     
   }
@@ -187,18 +201,41 @@ namespace util { ////////////TODO: refactor namespace. But probably not directly
   }
   
   
+  /** workaround to calculate a hash value for a given function object. 
+   * @note use with caution. This implementation relies on internal details
+   *       of boost/function; it can be expected to be rather conservative,
+   *       i.e. yielding different hash values for objects, which actually
+   *       are semantically equivalent.
+   * @warning especially function objects bound to member functions aren't
+   *       fully supported. It \em may happen that we miss differences on the
+   *       offset part and only hash the "this" pointer on some platform.
+   */
+  template<typename SIG>
+  inline HashVal
+  rawHashValue (function<SIG> const& fun)
+  {
+    typedef HijackedFunction const& Hij;
+    
+    return hash_value (reinterpret_cast<Hij> (fun));
+  }
+  
 } // namespace util
 
 namespace std {
 namespace tr1 {
   
+  /** inject into std::tr1 to be picked up by ADL:
+   * @return hash value of given functor
+   * @note   use with caution. Hash is calculated
+   *         relying on undocumented boost internals.
+   */
   template<typename SIG>
-  inline size_t
+  inline lib::HashVal
   hash_value (function<SIG> const& fun)
   {
-    UNIMPLEMENTED ("hijack the function object and derive some hash value");
+    return util::rawHashValue (fun);
   }
-      
+  
 }}
 
 #endif /*UTIL_HPP_*/
