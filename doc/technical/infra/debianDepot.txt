@@ -25,7 +25,7 @@ To (re)build the debian package
 . +git clone git:/git.lumiera.org/lumiera/debian+
 . +mkdir pack.deb+
 . +cd debian+
-. +git-buildpackage --git-upstream-branch=+_RELEASE-TAG_
+. +git-buildpackage --git-upstream-branch=+ _RELEASE-TAG_
 
 -- here _RELEASE-TAG_ denotes the point in the Git history, which should become
 the reference source and be packaged into the *.orig.tar.gz. Usually, it's just
