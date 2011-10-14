@@ -38,11 +38,14 @@
 #define FUNCTOR_UTIL_H_
 
 #include <tr1/functional>
-#include <cstring>
 
 
 
-namespace util { ////////////TODO: refactor it. But probably not directly into namespace lib. Needs some more consideration though
+namespace lib {
+  typedef size_t HashVal;
+}
+
+namespace util { ////////////TODO: refactor namespace. But probably not directly into namespace lib. Needs some more consideration though
   
   using std::tr1::function;
   using std::tr1::bind;
@@ -101,7 +104,7 @@ namespace util { ////////////TODO: refactor it. But probably not directly into n
   namespace { // hiding some nasty details...
   
     /**
-     * This Class is used to surpass the access protection
+     * This Class is used to bypass the access protection
      * and break into the tr1::function implementation.
      * Thus we can implement a raw comparison function,
      * as a replacement for the missing functor comparison
@@ -185,5 +188,17 @@ namespace util { ////////////TODO: refactor it. But probably not directly into n
   
   
 } // namespace util
+
+namespace std {
+namespace tr1 {
+  
+  template<typename SIG>
+  inline size_t
+  hash_value (function<SIG> const& fun)
+  {
+    UNIMPLEMENTED ("hijack the function object and derive some hash value");
+  }
+      
+}}
 
 #endif /*UTIL_HPP_*/
