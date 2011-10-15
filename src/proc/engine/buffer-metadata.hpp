@@ -56,6 +56,7 @@
 
 #include "lib/error.hpp"
 #include "lib/symbol.hpp"
+#include "lib/functor-util.hpp"
 
 #include <tr1/functional>
 #include <boost/functional/hash.hpp>
@@ -64,13 +65,13 @@
 
 namespace engine {
   
+  using lib::HashVal;
   using lib::Literal;
   using std::tr1::function;
   
   namespace error = lumiera::error;
   
   
-  typedef size_t HashVal;
   
   enum BufferState
     { NIL,
@@ -126,11 +127,10 @@ namespace engine {
   
   struct TypeHandler
     {
-      typedef function<void(void*)> Ctor;
-      typedef function<void(void*)> Dtor;
+      typedef function<void(void*)> DoInBuffer;
       
-      Ctor createAttached;
-      Dtor destroyAttached;
+      DoInBuffer createAttached;
+      DoInBuffer destroyAttached;
       
       TypeHandler()
         : createAttached()
@@ -138,18 +138,28 @@ namespace engine {
         { }
       
       template<class X>
-      TypeHandler()
+      TypeHandler(const X*)
         : createAttached (buildIntoBuffer<X>)
         , destroyAttached (destroyInBuffer<X>)
         { }
       
-      friend size_t
-      hash_value (TypeHandler handler)
+      bool
+      isValid()  const
+        {
+          return bool(createAttached)
+              && bool(destroyAttached);
+        }
+      
+      friend HashVal
+      hash_value (TypeHandler const& handler)
       {
-        boost::hash<Ctor> ctorHash;
-//      return boost::hash_combine(ctorHash(handler.createAttached), handler.destroyAttached.);
-        ////////////////TODO how to calculate the hash of an function object
-        return 0;
+        HashVal hash(0);
+        if (handler.isValid())
+          {
+            boost::hash_combine(hash, handler.createAttached);
+            boost::hash_combine(hash, handler.destroyAttached);
+          }
+        return hash;
       }
     };
   
@@ -182,6 +192,7 @@ namespace engine {
         HashVal parent_;
         HashVal hashID_;
         
+      protected:
         size_t storageSize_;
         TypeHandler instanceFunc_;
         LocalKey specifics_;
@@ -195,8 +206,8 @@ namespace engine {
          * @param storageSize fundamental info: buffer size
          */
         Key (HashVal familyID, size_t storageSize)
-          : parent_(chainedHash (familyID, storageSize))
-          , hashID_(familyID)
+          : parent_(familyID)
+          , hashID_(chainedHash (familyID, storageSize))
           , storageSize_(storageSize)
           , instanceFunc_(RAW_BUFFER)
           , specifics_(UNSPECIFIC)
@@ -402,7 +413,7 @@ namespace engine {
   
   
   /** */
-  Metadata::Entry&
+  inline Metadata::Entry&
   Metadata::markLocked (HashVal parentKey, const void* buffer)
   {
     UNIMPLEMENTED ("transition to locked state");
@@ -419,7 +430,7 @@ namespace engine {
     return this->get(newKey);
   }
   
-  void
+  inline void
   Metadata::release (HashVal key)
   {
     UNIMPLEMENTED ("metadata memory management");

@@ -96,15 +96,15 @@ namespace test  {
       
       bool
       ensure_proper_fixture() 
-      {
-        if (!meta_)
-          meta_.reset(new Metadata("BufferMetadata_test"));
-        
-        return (SIZE_A != SIZE_B)
-            && (JUST_SOMETHING != meta_->key(SIZE_A))
-            && (JUST_SOMETHING != meta_->key(SIZE_B))
-            ;
-      }
+        {
+          if (!meta_)
+            meta_.reset(new Metadata("BufferMetadata_test"));
+          
+          return (SIZE_A != SIZE_B)
+              && (JUST_SOMETHING != meta_->key(SIZE_A))
+              && (JUST_SOMETHING != meta_->key(SIZE_B))
+              ;
+        }
       
       
       void
