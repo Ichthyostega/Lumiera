@@ -24,26 +24,13 @@
 #include "lib/error.hpp"
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
-//#include "lib/util-foreach.hpp"
-#include "lib/util.hpp"
-//#include "proc/play/diagnostic-output-slot.hpp"
-//#include "proc/engine/testframe.hpp"
-//#include "proc/engine/diagnostic-buffer-provider.hpp"
 #include "proc/engine/buffer-metadata.hpp"
-//#include "proc/engine/buffhandle.hpp"
-//#include "proc/engine/bufftable.hpp"
 
-//#include <boost/format.hpp>
 #include <boost/scoped_ptr.hpp>
 #include <cstdlib>
 #include <cstring>
 #include <limits>
-//#include <iostream>
 
-//using boost::format;
-//using std::string;
-//using std::cout;
-//using util::for_each;
 using boost::scoped_ptr;
 using util::isnil;
 using util::isSameObject;
@@ -53,10 +40,7 @@ namespace engine{
 namespace metadata{
 namespace test  {
   
-
-//  using lib::AllocationCluster;
-//  using mobject::session::PEffect;
-//  using ::engine::BuffHandle;
+  
   using lumiera::error::LUMIERA_ERROR_INVALID;
   using lumiera::error::LUMIERA_ERROR_LIFECYCLE;
   
@@ -68,13 +52,8 @@ namespace test  {
     const size_t SIZE_A = 1 + rand() % TEST_MAX_SIZE;
     const size_t SIZE_B = 1 + rand() % TEST_MAX_SIZE;
     
-//  const size_t CHAR_MAX = 1;//std::numeric_limits<char>::max();
-//  const HashVal JUST_SOMETHING = 123;
-//  const void* const  SOME_POINTER = &JUST_SOMETHING;
-//  const uint TEST_SIZE = 1024*1024;
-//  const uint TEST_ELMS = 20;
     
-    /** 
+    /**
      * Test Mock to verify the attachment of objects to the buffer.
      * An instance of this class overwrites the occupied storage
      * with an ascending sequence of numbers on construction,
@@ -131,11 +110,48 @@ namespace test  {
             
             return true;
           }
-        
       };
     
     
-  }
+    /**
+     * Helper to investigate the settings stored in Metadata Key elements.
+     * Since these are protected, we use an derived class as adapter
+     */
+    struct KeyTypeSpecialisationDiagnostics
+      : Key
+      {
+        size_t const& investigateSize()         const { return this->storageSize_; }
+        TypeHandler const& investigateHandler() const { return this->instanceFunc_; }
+        LocalKey const& investigateSpecifics()  const { return this->specifics_; }
+        
+        KeyTypeSpecialisationDiagnostics (Key const& toInvestigate)
+          : Key(toInvestigate)
+          { }
+      };
+    
+    
+    inline size_t
+    verifySize (Key const& subject)
+    {
+      return KeyTypeSpecialisationDiagnostics(subject).investigateSize();
+    }
+    
+    inline const TypeHandler
+    verifyHandler (Key const& subject)
+    {
+      return KeyTypeSpecialisationDiagnostics(subject).investigateHandler();
+    }
+    
+    inline const LocalKey
+    verifySpecifics (Key const& subject)
+    {
+      return KeyTypeSpecialisationDiagnostics(subject).investigateSpecifics();
+    }
+    
+  }//(End) Test helpers
+  
+  
+  
   
   
   /***********************************************************************
@@ -148,7 +164,7 @@ namespace test  {
    *       - the actual BufferProvider instance-ID is the top level
    *       - second level is the size of the buffer required
    *       - optionally, custom ctor/dtor functions can be registered
-   *       - and, also optionally, the implementation might attach an type-ID
+   *       - also optionally, implementation might attach an private-ID
    */
   class BufferMetadataKey_test : public Test
     {
@@ -237,7 +253,7 @@ namespace test  {
       verifyTypeSpecialisation()
         {
           HashVal family(123);
-          Key kb (family, SIZE_A);
+          Key kb (family, SIZE_A);       // "root" key
           
           typedef PlacedNumbers<45> Marker;
           TypeHandler placeMarker = TypeHandler::create<Marker>();
@@ -246,11 +262,11 @@ namespace test  {
           LocalKey opaque1 (rand() % 1000);
           LocalKey opaque2 (1000 + rand() % 1000);
           
-          Key k_siz (kb, SIZE_B);
-          Key k_han0(kb, noHandler);
-          Key k_han1(kb, placeMarker);
-          Key k_loc1(kb, opaque1);
-          Key k_loc2(kb, opaque2);
+          Key k_siz (kb, SIZE_B);        // sub-key to "root": use a different buffer size
+          Key k_han0(kb, noHandler);     // sub-key to "root": use a locally defined type functor
+          Key k_han1(kb, placeMarker);   // sub-key to "root": use yet another type functor
+          Key k_loc1(kb, opaque1);       // sub-key to "root": attach an private opaque ID
+          Key k_loc2(kb, opaque2);       // sub-key to "root": attach another opaque ID
           
           CHECK (kb     != k_siz );
           CHECK (kb     != k_han0);
@@ -284,7 +300,6 @@ namespace test  {
           CHECK (HashVal(k_han1) != HashVal(k_loc2));
           CHECK (HashVal(k_loc1) != HashVal(k_loc2));
           
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #834
           CHECK (SIZE_A == verifySize(kb    ));
           CHECK (SIZE_B == verifySize(k_siz ));
           CHECK (SIZE_A == verifySize(k_han0));
@@ -292,12 +307,12 @@ namespace test  {
           CHECK (SIZE_A == verifySize(k_loc1));
           CHECK (SIZE_A == verifySize(k_loc2));
           
-          CHECK (noHandler   == verifyHandler(kb    ));
-          CHECK (noHandler   == verifyHandler(k_siz ));
+          CHECK (RAW_BUFFER  == verifyHandler(kb    ));
+          CHECK (RAW_BUFFER  == verifyHandler(k_siz ));
           CHECK (noHandler   == verifyHandler(k_han0));
           CHECK (placeMarker == verifyHandler(k_han1));
-          CHECK (noHandler   == verifyHandler(k_loc1));
-          CHECK (noHandler   == verifyHandler(k_loc2));
+          CHECK (RAW_BUFFER  == verifyHandler(k_loc1));
+          CHECK (RAW_BUFFER  == verifyHandler(k_loc2));
           
           CHECK (UNSPECIFIC == verifySpecifics(kb    ));
           CHECK (UNSPECIFIC == verifySpecifics(k_siz ));
@@ -305,17 +320,16 @@ namespace test  {
           CHECK (UNSPECIFIC == verifySpecifics(k_han1));
           CHECK (opaque1    == verifySpecifics(k_loc1));
           CHECK (opaque2    == verifySpecifics(k_loc2));
-#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #834
+          
           
           // Verify 2nd level specialisation (some examples)
-          Key k_han1_siz (k_han1, SIZE_B);
-          Key k_siz_han1 (k_siz,  placeMarker);
+          Key k_han1_siz (k_han1, SIZE_B);           // sub-key deriving from k_han1, but differing buffer size 
+          Key k_siz_han1 (k_siz,  placeMarker);      // sub-key deriving from k_siz, but using another type functor
           
           // Verify some 3rd level specialisations
           Key k_han1_siz_loc2 (k_han1_siz, opaque2);
           Key k_loc2_han1_siz (Key(k_loc2,placeMarker), SIZE_B);
           
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #834
           CHECK (SIZE_B == verifySize(k_han1_siz     ));
           CHECK (SIZE_B == verifySize(k_siz_han1     ));
           CHECK (SIZE_B == verifySize(k_han1_siz_loc2));
@@ -328,9 +342,8 @@ namespace test  {
           
           CHECK (UNSPECIFIC  == verifySpecifics(k_han1_siz     ));
           CHECK (UNSPECIFIC  == verifySpecifics(k_siz_han1     ));
-          CHECK (placeMarker == verifySpecifics(k_han1_siz_loc2));
-          CHECK (placeMarker == verifySpecifics(k_loc2_han1_siz));
-#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #834
+          CHECK (opaque2     == verifySpecifics(k_han1_siz_loc2));
+          CHECK (opaque2     == verifySpecifics(k_loc2_han1_siz));
           
           // for equality, also the order of specialisation matters
           CHECK (k_han1_siz      != k_siz_han1     );
@@ -339,7 +352,7 @@ namespace test  {
           CHECK (HashVal(k_han1_siz     ) != HashVal(k_siz_han1     ));
           CHECK (HashVal(k_han1_siz_loc2) != HashVal(k_loc2_han1_siz));
           
-          // yet it *is* equality
+          // yet this *is* an semantic equality test
           Key k_again (Key(k_han1,SIZE_B), opaque2);
           CHECK (k_again == k_han1_siz_loc2);
           CHECK (HashVal(k_again) == HashVal(k_han1_siz_loc2));

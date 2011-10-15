@@ -208,7 +208,22 @@ namespace engine {
           }
         return hash;
       }
+      
+      friend bool
+      operator== (TypeHandler const& left, TypeHandler const& right)
+      {
+        return (!left.isValid() && !right.isValid())
+            || (  util::rawComparison(left.createAttached, right.createAttached)
+               && util::rawComparison(left.destroyAttached, right.destroyAttached)
+               );
+      }
+      friend bool
+      operator!= (TypeHandler const& left, TypeHandler const& right)
+      {
+        return !(left == right);       
+      }
     };
+  
   
   namespace { // internal constants to mark the default case
     
