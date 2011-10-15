@@ -226,7 +226,7 @@ namespace test  {
           CHECK (0 != hash_value(attachPattern));
           
           CHECK (Pattern::verifyCleared (buff));
-          attachPattern.createAttached (buff);          // invoke the ctor-functor to place an instance of PlacedNumbers
+          attachPattern.createAttached  (buff);         // invoke the ctor-functor to place an instance of PlacedNumbers
           CHECK (Pattern::verifyFilled  (buff));
           attachPattern.destroyAttached (buff);         // invoke the dtor-functor to clear the attached instance
           CHECK (Pattern::verifyCleared (buff));
@@ -239,8 +239,145 @@ namespace test  {
           HashVal family(123);
           Key kb (family, SIZE_A);
           
+          typedef PlacedNumbers<45> Marker;
+          TypeHandler placeMarker = TypeHandler::create<Marker>();
           TypeHandler noHandler;
           
+          LocalKey opaque1 (rand() % 1000);
+          LocalKey opaque2 (1000 + rand() % 1000);
+          
+          Key k_siz (kb, SIZE_B);
+          Key k_han0(kb, noHandler);
+          Key k_han1(kb, placeMarker);
+          Key k_loc1(kb, opaque1);
+          Key k_loc2(kb, opaque2);
+          
+          CHECK (kb     != k_siz );
+          CHECK (kb     != k_han0);
+          CHECK (kb     != k_han1);
+          CHECK (kb     != k_loc1);
+          CHECK (kb     != k_loc2);
+          CHECK (k_siz  != k_han0);
+          CHECK (k_siz  != k_han1);
+          CHECK (k_siz  != k_loc1);
+          CHECK (k_siz  != k_loc2);
+          CHECK (k_han0 != k_han1);
+          CHECK (k_han0 != k_loc1);
+          CHECK (k_han0 != k_loc2);
+          CHECK (k_han1 != k_loc1);
+          CHECK (k_han1 != k_loc2);
+          CHECK (k_loc1 != k_loc2);
+          
+          CHECK (HashVal(kb    ) != HashVal(k_siz ));
+          CHECK (HashVal(kb    ) != HashVal(k_han0));
+          CHECK (HashVal(kb    ) != HashVal(k_han1));
+          CHECK (HashVal(kb    ) != HashVal(k_loc1));
+          CHECK (HashVal(kb    ) != HashVal(k_loc2));
+          CHECK (HashVal(k_siz ) != HashVal(k_han0));
+          CHECK (HashVal(k_siz ) != HashVal(k_han1));
+          CHECK (HashVal(k_siz ) != HashVal(k_loc1));
+          CHECK (HashVal(k_siz ) != HashVal(k_loc2));
+          CHECK (HashVal(k_han0) != HashVal(k_han1));
+          CHECK (HashVal(k_han0) != HashVal(k_loc1));
+          CHECK (HashVal(k_han0) != HashVal(k_loc2));
+          CHECK (HashVal(k_han1) != HashVal(k_loc1));
+          CHECK (HashVal(k_han1) != HashVal(k_loc2));
+          CHECK (HashVal(k_loc1) != HashVal(k_loc2));
+          
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #834
+          CHECK (SIZE_A == verifySize(kb    ));
+          CHECK (SIZE_B == verifySize(k_siz ));
+          CHECK (SIZE_A == verifySize(k_han0));
+          CHECK (SIZE_A == verifySize(k_han1));
+          CHECK (SIZE_A == verifySize(k_loc1));
+          CHECK (SIZE_A == verifySize(k_loc2));
+          
+          CHECK (noHandler   == verifyHandler(kb    ));
+          CHECK (noHandler   == verifyHandler(k_siz ));
+          CHECK (noHandler   == verifyHandler(k_han0));
+          CHECK (placeMarker == verifyHandler(k_han1));
+          CHECK (noHandler   == verifyHandler(k_loc1));
+          CHECK (noHandler   == verifyHandler(k_loc2));
+          
+          CHECK (UNSPECIFIC == verifySpecifics(kb    ));
+          CHECK (UNSPECIFIC == verifySpecifics(k_siz ));
+          CHECK (UNSPECIFIC == verifySpecifics(k_han0));
+          CHECK (UNSPECIFIC == verifySpecifics(k_han1));
+          CHECK (opaque1    == verifySpecifics(k_loc1));
+          CHECK (opaque2    == verifySpecifics(k_loc2));
+#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #834
+          
+          // Verify 2nd level specialisation (some examples)
+          Key k_han1_siz (k_han1, SIZE_B);
+          Key k_siz_han1 (k_siz,  placeMarker);
+          
+          // Verify some 3rd level specialisations
+          Key k_han1_siz_loc2 (k_han1_siz, opaque2);
+          Key k_loc2_han1_siz (Key(k_loc2,placeMarker), SIZE_B);
+          
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #834
+          CHECK (SIZE_B == verifySize(k_han1_siz     ));
+          CHECK (SIZE_B == verifySize(k_siz_han1     ));
+          CHECK (SIZE_B == verifySize(k_han1_siz_loc2));
+          CHECK (SIZE_B == verifySize(k_loc2_han1_siz));
+          
+          CHECK (placeMarker == verifyHandler(k_han1_siz     ));
+          CHECK (placeMarker == verifyHandler(k_siz_han1     ));
+          CHECK (placeMarker == verifyHandler(k_han1_siz_loc2));
+          CHECK (placeMarker == verifyHandler(k_loc2_han1_siz));
+          
+          CHECK (UNSPECIFIC  == verifySpecifics(k_han1_siz     ));
+          CHECK (UNSPECIFIC  == verifySpecifics(k_siz_han1     ));
+          CHECK (placeMarker == verifySpecifics(k_han1_siz_loc2));
+          CHECK (placeMarker == verifySpecifics(k_loc2_han1_siz));
+#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #834
+          
+          // for equality, also the order of specialisation matters
+          CHECK (k_han1_siz      != k_siz_han1     );
+          CHECK (k_han1_siz_loc2 != k_loc2_han1_siz);
+          
+          CHECK (HashVal(k_han1_siz     ) != HashVal(k_siz_han1     ));
+          CHECK (HashVal(k_han1_siz_loc2) != HashVal(k_loc2_han1_siz));
+          
+          // yet it *is* equality
+          Key k_again (Key(k_han1,SIZE_B), opaque2);
+          CHECK (k_again == k_han1_siz_loc2);
+          CHECK (HashVal(k_again) == HashVal(k_han1_siz_loc2));
+          
+          // pick just some combinations for cross verification...
+          CHECK (kb     != k_han1_siz     );
+          CHECK (kb     != k_siz_han1     );
+          CHECK (kb     != k_han1_siz_loc2);
+          CHECK (kb     != k_loc2_han1_siz);
+          CHECK (k_han1 != k_han1_siz     );
+          CHECK (k_han1 != k_siz_han1     );
+          CHECK (k_han1 != k_han1_siz_loc2);
+          CHECK (k_han1 != k_loc2_han1_siz);
+          CHECK (k_siz  != k_han1_siz     );
+          CHECK (k_siz  != k_siz_han1     );
+          CHECK (k_siz  != k_han1_siz_loc2);
+          CHECK (k_siz  != k_loc2_han1_siz);
+          CHECK (k_loc2 != k_han1_siz     );
+          CHECK (k_loc2 != k_siz_han1     );
+          CHECK (k_loc2 != k_han1_siz_loc2);
+          CHECK (k_loc2 != k_loc2_han1_siz);
+          
+          CHECK (HashVal(kb    ) != HashVal(k_han1_siz     ));
+          CHECK (HashVal(kb    ) != HashVal(k_siz_han1     ));
+          CHECK (HashVal(kb    ) != HashVal(k_han1_siz_loc2));
+          CHECK (HashVal(kb    ) != HashVal(k_loc2_han1_siz));
+          CHECK (HashVal(k_han1) != HashVal(k_han1_siz     ));
+          CHECK (HashVal(k_han1) != HashVal(k_siz_han1     ));
+          CHECK (HashVal(k_han1) != HashVal(k_han1_siz_loc2));
+          CHECK (HashVal(k_han1) != HashVal(k_loc2_han1_siz));
+          CHECK (HashVal(k_siz ) != HashVal(k_han1_siz     ));
+          CHECK (HashVal(k_siz ) != HashVal(k_siz_han1     ));
+          CHECK (HashVal(k_siz ) != HashVal(k_han1_siz_loc2));
+          CHECK (HashVal(k_siz ) != HashVal(k_loc2_han1_siz));
+          CHECK (HashVal(k_loc2) != HashVal(k_han1_siz     ));
+          CHECK (HashVal(k_loc2) != HashVal(k_siz_han1     ));
+          CHECK (HashVal(k_loc2) != HashVal(k_han1_siz_loc2));
+          CHECK (HashVal(k_loc2) != HashVal(k_loc2_han1_siz));
         }
     };
   
