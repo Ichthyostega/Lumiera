@@ -36,6 +36,8 @@
 //#include <boost/format.hpp>
 #include <boost/scoped_ptr.hpp>
 #include <cstdlib>
+#include <cstring>
+#include <limits>
 //#include <iostream>
 
 //using boost::format;
@@ -66,11 +68,72 @@ namespace test  {
     const size_t SIZE_A = 1 + rand() % TEST_MAX_SIZE;
     const size_t SIZE_B = 1 + rand() % TEST_MAX_SIZE;
     
-    const HashVal JUST_SOMETHING = 123;
-    const void* const  SOME_POINTER = &JUST_SOMETHING;
+//  const size_t CHAR_MAX = 1;//std::numeric_limits<char>::max();
+//  const HashVal JUST_SOMETHING = 123;
+//  const void* const  SOME_POINTER = &JUST_SOMETHING;
 //  const uint TEST_SIZE = 1024*1024;
 //  const uint TEST_ELMS = 20;
-      
+    
+    /** 
+     * Test Mock to verify the attachment of objects to the buffer.
+     * An instance of this class overwrites the occupied storage
+     * with an ascending sequence of numbers on construction,
+     * and clears the memory area on destruction.
+     * 
+     * This allows to verify that an instance of this class
+     * has actually been placed into the buffer, and will be
+     * cleaned up properly
+     */
+    template<size_t siz>
+    struct PlacedNumbers
+      {
+        typedef char Pattern[siz];
+        
+        Pattern pattern_;
+        
+        PlacedNumbers()
+          {
+            for (size_t i=0; i<siz; ++i)
+              pattern_[i] = i % CHAR_MAX;
+          }
+        
+       ~PlacedNumbers()
+          {
+            for (size_t i=0; i<siz; ++i)
+              pattern_[i] = 0;
+          }
+        
+        
+        /* === diagnostics === */
+        
+        static bool
+        verifyFilled (const void* buff)
+          {
+            REQUIRE (buff);
+            const Pattern& patt = *reinterpret_cast<const Pattern*> (buff);
+            
+            for (size_t i=0; i<siz; ++i)
+              if (patt[i] != char(i % CHAR_MAX))
+                return false;
+            
+            return true;
+          }
+        
+        static bool
+        verifyCleared (const void* buff)
+          {
+            REQUIRE (buff);
+            const Pattern& patt = *reinterpret_cast<const Pattern*> (buff);
+            
+            for (size_t i=0; i<siz; ++i)
+              if (patt[i])
+                return false;
+            
+            return true;
+          }
+        
+      };
+    
     
   }
   
@@ -96,6 +159,7 @@ namespace test  {
           CHECK (ensure_proper_fixture());
           buildSimpleKeys();
           verifyChainedHashes();
+          verifyTypeHandler<500>();
           verifyTypeSpecialisation();
         }
       
@@ -147,6 +211,37 @@ namespace test  {
         }
       
       
+      template<size_t SIZ>
+      void
+      verifyTypeHandler()
+        {
+          char buff[SIZ];
+          memset (buff, '\0', SIZ);
+          
+          typedef PlacedNumbers<SIZ> Pattern;
+          
+          TypeHandler attachPattern = TypeHandler::create<Pattern>();
+          
+          CHECK (attachPattern.isValid());
+          CHECK (0 != hash_value(attachPattern));
+          
+          CHECK (Pattern::verifyCleared (buff));
+          attachPattern.createAttached (buff);          // invoke the ctor-functor to place an instance of PlacedNumbers
+          CHECK (Pattern::verifyFilled  (buff));
+          attachPattern.destroyAttached (buff);         // invoke the dtor-functor to clear the attached instance
+          CHECK (Pattern::verifyCleared (buff));
+        }
+      
+      
+      void
+      verifyTypeSpecialisation()
+        {
+          HashVal family(123);
+          Key kb (family, SIZE_A);
+          
+          TypeHandler noHandler;
+          
+        }
     };
   
   
