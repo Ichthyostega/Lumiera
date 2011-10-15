@@ -83,7 +83,7 @@ namespace test  {
     {
       /** common Metadata table to be tested */
       scoped_ptr<Metadata> meta_;
-    
+      
       virtual void
       run (Arg) 
         {
@@ -110,6 +110,7 @@ namespace test  {
       void
       verifyBasicProperties()
         {
+          // retrieve some type keys
           Metadata::Key key = meta_->key(SIZE_A);
           CHECK (key);
           
@@ -120,7 +121,8 @@ namespace test  {
           CHECK (key == key1);
           CHECK (key != key2);
           
-          VERIFY_ERROR (INVALID, meta_->get(0))
+          // access metadata entries
+          VERIFY_ERROR (INVALID, meta_->get(0));
           VERIFY_ERROR (INVALID, meta_->get(JUST_SOMETHING));
           CHECK ( & meta_->get(key));
           CHECK ( & meta_->get(key1));
@@ -130,6 +132,7 @@ namespace test  {
           CHECK ( isSameObject (meta_->get(key), meta_->get(key1)));
           CHECK (!isSameObject (meta_->get(key), meta_->get(key2)));
           
+          // entries retrieved this far are inactive (type only) entries
           Metadata::Entry& m1 = meta_->get(key);
           CHECK (NIL == m1.state());
           CHECK (!meta_->isLocked(key));
@@ -137,12 +140,14 @@ namespace test  {
           VERIFY_ERROR (LIFECYCLE, m1.mark(EMITTED) );
           VERIFY_ERROR (LIFECYCLE, m1.mark(LOCKED)  );
           
+          // now create an active (buffer) entry
           Metadata::Entry& m2 = meta_->markLocked (key, SOME_POINTER);
           CHECK (!isSameObject (m1,m2));
           CHECK (NIL    == m1.state());
           CHECK (LOCKED == m2.state());
-          CHECK (SOME_POINTER == m2.access());
+          CHECK (SOME_POINTER == m2.access()); // buffer pointer associated
           
+          // entries are unique and identifiable
           HashVal keyX = meta_->key(key1, SOME_POINTER);
           CHECK (meta_->isLocked(keyX));
           CHECK (keyX != key1);
@@ -170,6 +175,7 @@ namespace test  {
           VERIFY_ERROR (LIFECYCLE, m2.mark(LOCKED));
           CHECK ( isSameObject (m2, meta_->get(keyX))); // still accessible
           
+          // release buffer...
           meta_->release(keyX);
           CHECK (!meta_->isLocked(keyX));
           CHECK (!meta_->isKnown(keyX));

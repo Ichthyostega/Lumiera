@@ -73,6 +73,11 @@ namespace engine {
   
   namespace error = lumiera::error;
   
+  namespace metadata {
+    class Key;
+    class Entry;
+  }
+  
   
   
   enum BufferState
@@ -94,9 +99,6 @@ namespace engine {
     {
       uint64_t privateID_;
       
-      /** assignment prohibited */
-      LocalKey& operator= (LocalKey const&);
-      
     public:
       LocalKey (uint64_t opaqueValue=0)
         : privateID_(opaqueValue)
@@ -110,6 +112,17 @@ namespace engine {
         boost::hash<uint64_t> hashFunction;
         return hashFunction(lkey.privateID_);
       }
+      
+    private:
+      /** assignment usually prohibited */
+      LocalKey& operator= (LocalKey const& o)
+        {
+          privateID_ = o.privateID_;
+          return *this;
+        }
+      
+      /** but Key assignments are acceptable */
+      friend class metadata::Key;
     };
   
   
@@ -229,6 +242,18 @@ namespace engine {
     
     const LocalKey UNSPECIFIC;
     const TypeHandler RAW_BUFFER;
+    
+    inline bool
+    nontrivial (TypeHandler const& toVerify)
+    {
+      return RAW_BUFFER != toVerify;
+    }
+    
+    inline bool
+    nontrivial (LocalKey const& toVerify)
+    {
+      return UNSPECIFIC != toVerify;
+    }
   }
   
   
@@ -295,7 +320,7 @@ namespace engine {
          *  Using different ctor and dtor functions,
          *  all else remaining the same as with parent
          */
-        Key (Key const& parent, TypeHandler differingTypeHandlerFunctions) 
+        Key (Key const& parent, TypeHandler const& differingTypeHandlerFunctions) 
           : parent_(parent.hashID_)
           , hashID_(chainedHash (parent_, differingTypeHandlerFunctions))
           , storageSize_(parent.storageSize_)
@@ -401,33 +426,71 @@ namespace engine {
   class Metadata
     : boost::noncopyable
     {
+      Literal id_;
+      HashVal family_;
+      
     public:
       
       typedef metadata::Key Key;
       typedef metadata::Entry Entry;
       
-      
+      /** establish a metadata registry.
+       *  Such will maintain a family of buffer type entries
+       *  and provide a service for storing and retrieving metadata
+       *  for concrete buffer entries associated with these types.
+       * @param implementationID to distinguish families
+       *        of type keys belonging to different registries.
+       */
       Metadata (Literal implementationID)
+        : id_(implementationID)
+        , family_(hash_value(id_))
         { }
       
+      /** combine the distinguishing properties
+       *  into a single type key, which will be known/remembered
+       *  from that point on. Properties are combined according to
+       *  a fixed type specialisation order, with the buffer size
+       *  forming the base level, possible TypeHandler functors the
+       *  second level, and implementation defined LocalKey entries
+       *  the third level. All these levels describe abstract type
+       *  keys, not entries for concrete buffers. The latter are
+       *  always created as children of a known type key.  
+       */
       Key
       key ( size_t storageSize
           , TypeHandler instanceFunc =RAW_BUFFER
           , LocalKey specifics =UNSPECIFIC)
         {
-          UNIMPLEMENTED ("combine the distinguishing properties into a single hash");
+          REQUIRE (storageSize);
+          Key typeKey = trackKey (family_, storageSize);
+          
+          if (nontrivial(instanceFunc))
+            {
+              typeKey = trackKey (typeKey, instanceFunc);
+            }
+          
+          if (nontrivial(specifics))
+            {
+              typeKey = trackKey (typeKey, specifics);
+            }
+          
+          return typeKey;
         }
       
+      /** create a sub-type, using a different type/handler functor */
       Key
-      key (HashVal parentKey, TypeHandler instanceFunc)
+      key (HashVal parentKey, TypeHandler const& instanceFunc)
         {
-          UNIMPLEMENTED ("create sub-type key");
+          Key parentEntry (get (parentKey));
+          return trackKey (parentEntry, instanceFunc);
         }
       
+      /** create a sub-type, using a different private-ID (implementation defined) */
       Key
       key (HashVal parentKey, LocalKey specifics)
         {
-          UNIMPLEMENTED ("create sub-type key");
+          Key parentEntry (get (parentKey));
+          return trackKey (parentEntry, specifics);
         }
       
       Key
@@ -466,6 +529,24 @@ namespace engine {
       Entry& markLocked (HashVal parentKey, const void* buffer);
       void release (HashVal key);
       
+    private:
+            
+      template<typename PAR, typename DEF>
+      Key
+      trackKey (PAR parent, DEF specialisation)
+        {
+          Key newKey (parent,specialisation);
+          maybeStore (newKey);
+          return newKey;
+        }
+      
+      void
+      maybeStore (Key const& key)
+        {
+          if (isKnown (key)) return;
+          UNIMPLEMENTED ("registry for type keys");
+        }
+
     };
     
     
