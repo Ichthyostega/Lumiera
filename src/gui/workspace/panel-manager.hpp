@@ -30,7 +30,7 @@
 
 #include "gui/panels/panel.hpp"
 
-#include <gdl/gdl.h>
+#include <gdlmm.h>
 #include <typeinfo>
 
 
@@ -70,13 +70,13 @@ public:
    * Gets a pointer to the dock object.
    * @remarks Note that this must not be called before setup_dock.
    */
-  GdlDock* get_dock() const;
+  GdlDock* get_dock();
   
   /**
    * Gets a pointer to the dock bar.
    * @remarks Note that this must not be called before setup_dock.
    */
-  GdlDockBar* get_dock_bar() const;
+  GdlDockBar* get_dock_bar();
   
   /**
    * Returns a reference to the owner workspace window.
@@ -204,19 +204,19 @@ private:
    * The pointer to GDL dock widget.
    * @remarks This value is NULL until setup_dock has been called.
    */
-  GdlDock *dock;
-  
+  Gdl::Dock dock;
+
   /**
    * The pointer to GDL dock bar widget.
    * @remarks This value is NULL until setup_dock has been called.
    */
-  GdlDockBar *dockBar;
+  Gdl::DockBar dockBar;
   
   /**
    * The pointer to GDL dock layout object.
    * @remarks This value is NULL until setup_dock has been called.
    */
-  GdlDockLayout *dockLayout;
+  Glib::RefPtr<Gdl::DockLayout> dockLayout;
 
   /**
    * Pointers to the 4 root place holders.

@@ -88,7 +88,7 @@ void
 GtkLumiera::main (int argc, char *argv[])
 {
   Glib::thread_init();
-
+  Gdl::init();
   Main kit(argc, argv);
   
   Glib::set_application_name (getAppTitle());

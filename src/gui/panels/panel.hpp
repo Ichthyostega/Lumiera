@@ -31,6 +31,7 @@
 #include "gui/gtk-lumiera.hpp"
 #include "gui/widgets/panel-bar.hpp"
 
+#include <gdlmm.h>
 #include <gdl/gdl-dock-item.h>
 
 namespace gui {

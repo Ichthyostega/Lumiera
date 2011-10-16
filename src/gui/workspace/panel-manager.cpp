@@ -46,23 +46,16 @@ unsigned short PanelManager::panelID = 0;
 
 PanelManager::PanelManager(WorkspaceWindow &workspace_window) :
   workspaceWindow(workspace_window),
-  dock(NULL),
-  dockBar(NULL),
-  dockLayout(NULL)
+  dock(),
+  dockBar(dock),
+  dockLayout()
 {
+  dockLayout = Gdl::DockLayout::create(dock);
   memset(&dockPlaceholders, 0, sizeof(dockPlaceholders)); 
 }
 
 PanelManager::~PanelManager()
 {
-  if(dock)
-    g_object_unref(dock);
-    
-  if(dockBar)
-    g_object_unref(dockBar);
-    
-  if(dockLayout)
-    g_object_unref(dockLayout);
   
   for(int i = 0; i < 4; i++)
     if(dockPlaceholders[i])
@@ -74,28 +67,17 @@ PanelManager::~PanelManager()
 void
 PanelManager::setup_dock()
 {
-  REQUIRE(dock == NULL);
-  dock = GDL_DOCK(gdl_dock_new());
-  ENSURE(dock);
-  
-  REQUIRE(dockBar == NULL);
-  dockBar = GDL_DOCK_BAR(gdl_dock_bar_new(dock));
-  ENSURE(dockBar);
-  
-  REQUIRE(dockLayout == NULL);
-  dockLayout = GDL_DOCK_LAYOUT(gdl_dock_layout_new(dock));
-  ENSURE(dockLayout);
-  
+
   REQUIRE(dockPlaceholders[0] == NULL && dockPlaceholders[1] == NULL &&
     dockPlaceholders[2] == NULL && dockPlaceholders[3] == NULL);
   dockPlaceholders[0] = GDL_DOCK_PLACEHOLDER(gdl_dock_placeholder_new(
-    "ph1", GDL_DOCK_OBJECT(dock), GDL_DOCK_TOP, FALSE));
+    "ph1", GDL_DOCK_OBJECT(dock.gobj()), GDL_DOCK_TOP, FALSE));
   dockPlaceholders[1] = GDL_DOCK_PLACEHOLDER(gdl_dock_placeholder_new(
-    "ph2", GDL_DOCK_OBJECT(dock), GDL_DOCK_BOTTOM, FALSE));
+    "ph2", GDL_DOCK_OBJECT(dock.gobj()), GDL_DOCK_BOTTOM, FALSE));
   dockPlaceholders[2] = GDL_DOCK_PLACEHOLDER(gdl_dock_placeholder_new(
-    "ph3", GDL_DOCK_OBJECT(dock), GDL_DOCK_LEFT, FALSE));
+    "ph3", GDL_DOCK_OBJECT(dock.gobj()), GDL_DOCK_LEFT, FALSE));
   dockPlaceholders[3] = GDL_DOCK_PLACEHOLDER(gdl_dock_placeholder_new(
-    "ph4", GDL_DOCK_OBJECT(dock), GDL_DOCK_RIGHT, FALSE));
+    "ph4", GDL_DOCK_OBJECT(dock.gobj()), GDL_DOCK_RIGHT, FALSE));
   ENSURE(dockPlaceholders[0] && dockPlaceholders[1] &&
     dockPlaceholders[2] && dockPlaceholders[3]);
   
@@ -103,17 +85,15 @@ PanelManager::setup_dock()
 }
 
 GdlDock*
-PanelManager::get_dock() const
+PanelManager::get_dock()
 {
-  ENSURE(dock);
-  return dock;
+  return dock.gobj();
 }
 
 GdlDockBar*
-PanelManager::get_dock_bar() const
+PanelManager::get_dock_bar()
 {
-  ENSURE(dockBar);
-  return dockBar;
+  return dockBar.gobj();
 }
 
 WorkspaceWindow&
@@ -146,7 +126,8 @@ PanelManager::show_panel(const int description_index)
   panels::Panel *new_panel = create_panel_by_index(description_index);
   
   // Dock the item
-  gdl_dock_add_item(dock, new_panel->get_dock_item(),
+  TODO("Port to Gdlmm.");
+  gdl_dock_add_item(dock.gobj(), new_panel->get_dock_item(),
     GDL_DOCK_FLOATING);
 }
 
@@ -226,11 +207,11 @@ PanelManager::create_panels()
   panels::Panel* timelinePanel = 
     create_panel_by_name("TimelinePanel");
     
-  gdl_dock_add_item(dock,
+  gdl_dock_add_item(dock.gobj(),
     assetsPanel->get_dock_item(), GDL_DOCK_LEFT);
-  gdl_dock_add_item(dock,
+  gdl_dock_add_item(dock.gobj(),
     timelinePanel->get_dock_item(), GDL_DOCK_BOTTOM);
-  gdl_dock_add_item(dock,
+  gdl_dock_add_item(dock.gobj(),
     viewerPanel->get_dock_item(), GDL_DOCK_RIGHT);
 }
 
