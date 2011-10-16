@@ -84,16 +84,16 @@ PanelManager::setup_dock()
   create_panels();
 }
 
-GdlDock*
+Gdl::Dock&
 PanelManager::get_dock()
 {
-  return dock.gobj();
+  return dock;
 }
 
-GdlDockBar*
+Gdl::DockBar&
 PanelManager::get_dock_bar()
 {
-  return dockBar.gobj();
+  return dockBar;
 }
 
 WorkspaceWindow&
@@ -115,9 +115,10 @@ PanelManager::show_panel(const int description_index)
           if(!panel->is_shown())
             panel->show();
           
-          GdlDockItem *dock_item = panel->get_dock_item();
-          ENSURE(dock_item);
-          gdl_dock_object_present(GDL_DOCK_OBJECT(dock_item), NULL);
+          Gdl::DockItem &dock_item = panel->get_dock_item();
+         // ENSURE(dock_item);
+          dock_item.present(dock);
+         // gdl_dock_object_present(GDL_DOCK_OBJECT(dock_item.gobj()), NULL);
           return;
         }
     }
@@ -126,9 +127,7 @@ PanelManager::show_panel(const int description_index)
   panels::Panel *new_panel = create_panel_by_index(description_index);
   
   // Dock the item
-  TODO("Port to Gdlmm.");
-  gdl_dock_add_item(dock.gobj(), new_panel->get_dock_item(),
-    GDL_DOCK_FLOATING);
+  dock.add_item(new_panel->get_dock_item(), Gdl::DOCK_FLOATING);
 }
 
 void PanelManager::switch_panel(panels::Panel &old_panel,
@@ -138,26 +137,27 @@ void PanelManager::switch_panel(panels::Panel &old_panel,
     description_index < get_panel_description_count());
   
   // Get the dock item
-  GdlDockItem *dock_item = old_panel.get_dock_item();
-  g_object_ref(dock_item);
+  Gdl::DockItem &dock_item = old_panel.get_dock_item();
    
   // Release the old panel
   remove_panel(&old_panel);
   
   // Create the new panel
   create_panel_by_index(description_index, dock_item);
-  g_object_unref(dock_item);
+
 }
 
 void
 PanelManager::split_panel(panels::Panel &panel,
   Gtk::Orientation split_direction)
 {
+  TODO("Port to Gdlmm");
   // Create the new panel
   const int index = get_panel_type(&panel);
   panels::Panel *new_panel = create_panel_by_index(index);
   
   // Dock the panel
+ // Gdl::DockPlacement placement = Gdl::DOCK_NONE;
   GdlDockPlacement placement = GDL_DOCK_NONE;
   switch(split_direction)
     {
@@ -172,9 +172,9 @@ PanelManager::split_panel(panels::Panel &panel,
       return;
       break;
     }
-    
-  gdl_dock_object_dock(GDL_DOCK_OBJECT(panel.get_dock_item()),
-    GDL_DOCK_OBJECT(new_panel->get_dock_item()), placement, NULL);
+
+  gdl_dock_object_dock(GDL_DOCK_OBJECT(panel.get_dock_item().gobj()),
+  GDL_DOCK_OBJECT(new_panel->get_dock_item().gobj()), placement, NULL);
 }
 
 int
@@ -206,13 +206,11 @@ PanelManager::create_panels()
     create_panel_by_name("ViewerPanel");
   panels::Panel* timelinePanel = 
     create_panel_by_name("TimelinePanel");
-    
-  gdl_dock_add_item(dock.gobj(),
-    assetsPanel->get_dock_item(), GDL_DOCK_LEFT);
-  gdl_dock_add_item(dock.gobj(),
-    timelinePanel->get_dock_item(), GDL_DOCK_BOTTOM);
-  gdl_dock_add_item(dock.gobj(),
-    viewerPanel->get_dock_item(), GDL_DOCK_RIGHT);
+
+  dock.add_item(assetsPanel->get_dock_item(),Gdl::DOCK_LEFT);
+  dock.add_item(timelinePanel->get_dock_item(),Gdl::DOCK_BOTTOM);
+  dock.add_item(viewerPanel->get_dock_item(),Gdl::DOCK_RIGHT);
+
 }
 
 int
@@ -242,15 +240,12 @@ PanelManager::create_panel_by_index(const int index)
   snprintf(name, sizeof(name), "%X", panelID++);
   
   // Create a dock item
-  GdlDockItem *dock_item = GDL_DOCK_ITEM(
-    gdl_dock_item_new(name, "", GDL_DOCK_ITEM_BEH_NORMAL));
-    
-  return create_panel_by_index(index, dock_item);
+  return create_panel_by_index(index, *new Gdl::DockItem(name,"",Gdl::DOCK_ITEM_BEH_NORMAL));
 }
 
 panels::Panel*
 PanelManager::create_panel_by_index(
-  const int index, GdlDockItem *dock_item)
+  const int index, Gdl::DockItem &dock_item)
 {
   // Create the panel object
   panels::Panel *panel = 

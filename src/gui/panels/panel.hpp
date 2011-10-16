@@ -57,7 +57,7 @@ protected:
    * @param stock_id The stock_id of this panel.
    */
   Panel(workspace::PanelManager &panel_manager,
-    GdlDockItem *dock_item, const gchar* long_name,
+    Gdl::DockItem &dock_item, const gchar* long_name,
     const gchar *stock_id);
 
 public:
@@ -66,7 +66,7 @@ public:
   /**
    * Returns a pointer to the underlying GdlDockItem structure
    */
-  GdlDockItem* get_dock_item() const;
+  Gdl::DockItem& get_dock_item();
 
   /**
    * Shows or hides the panel.
@@ -150,7 +150,7 @@ protected:
    * The owner dock item widget that will host the widgets in this
    * panel.
    */
-  GdlDockItem* dockItem;
+  Gdl::DockItem &dockItem;
   
   /**
    * A signal that fires when the dock item is hidden.

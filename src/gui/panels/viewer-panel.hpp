@@ -45,7 +45,7 @@ public:
    * @param dock_item The GdlDockItem that will host this panel.
    */
   ViewerPanel(workspace::PanelManager &panel_manager,
-    GdlDockItem *dock_item);
+    Gdl::DockItem &dock_item);
   
   /**
    * Get the title of the panel.

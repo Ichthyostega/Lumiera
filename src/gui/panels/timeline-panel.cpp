@@ -48,9 +48,8 @@ namespace panels {
   
 const int TimelinePanel::ZoomToolSteps = 2; // 2 seems comfortable
 
-
 TimelinePanel::TimelinePanel (workspace::PanelManager &panel_manager,
-                              GdlDockItem *dock_item) 
+                              Gdl::DockItem &dock_item)
   : Panel(panel_manager, dock_item, get_title(), get_stock_id())
   , timeCode("sequence_clock", "timecode_widget", true)
   , previousButton(Stock::MEDIA_PREVIOUS)
