@@ -50,7 +50,13 @@ PanelManager::PanelManager(WorkspaceWindow &workspace_window) :
   dockBar(dock),
   dockLayout()
 {
+  /* Create the DockLayout */
   dockLayout = Gdl::DockLayout::create(dock);
+
+  /* Setup the Switcher Style */
+  Glib::RefPtr<Gdl::DockMaster> dock_master = dock.property_master();
+  dock_master->property_switcher_style() = Gdl::SWITCHER_STYLE_ICON;
+
   memset(&dockPlaceholders, 0, sizeof(dockPlaceholders)); 
 }
 
@@ -118,7 +124,6 @@ PanelManager::show_panel(const int description_index)
           Gdl::DockItem &dock_item = panel->get_dock_item();
          // ENSURE(dock_item);
           dock_item.present(dock);
-         // gdl_dock_object_present(GDL_DOCK_OBJECT(dock_item.gobj()), NULL);
           return;
         }
     }
@@ -144,37 +149,36 @@ void PanelManager::switch_panel(panels::Panel &old_panel,
   
   // Create the new panel
   create_panel_by_index(description_index, dock_item);
-
 }
 
 void
 PanelManager::split_panel(panels::Panel &panel,
   Gtk::Orientation split_direction)
 {
-  TODO("Port to Gdlmm");
+
   // Create the new panel
   const int index = get_panel_type(&panel);
   panels::Panel *new_panel = create_panel_by_index(index);
   
   // Dock the panel
- // Gdl::DockPlacement placement = Gdl::DOCK_NONE;
-  GdlDockPlacement placement = GDL_DOCK_NONE;
+  Gdl::DockPlacement placement = Gdl::DOCK_NONE;
   switch(split_direction)
     {
     case ORIENTATION_HORIZONTAL:
-      placement = GDL_DOCK_RIGHT;
+      placement = Gdl::DOCK_RIGHT;
       break;
     case ORIENTATION_VERTICAL:
-      placement = GDL_DOCK_BOTTOM;
+      placement = Gdl::DOCK_BOTTOM;
       break;
     default:
-      ERROR(gui, "Unrecognisized split_direction: %d", split_direction);
+      ERROR(gui, "Unrecognisized split_direction: %d",
+          split_direction);
       return;
       break;
     }
 
-  gdl_dock_object_dock(GDL_DOCK_OBJECT(panel.get_dock_item().gobj()),
-  GDL_DOCK_OBJECT(new_panel->get_dock_item().gobj()), placement, NULL);
+    panel.get_dock_item().dock(
+        new_panel->get_dock_item(),placement);
 }
 
 int

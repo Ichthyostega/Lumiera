@@ -47,42 +47,36 @@ Panel::Panel(workspace::PanelManager &panel_manager,
   val.set(long_name);
   g_object_set_property (G_OBJECT (dockItem.gobj()), "long-name", val.gobj());
   
-  // Set the grip handle
+  /* Set the grip handle */
+  FIXME("Implement interpanel docking. Try using the dockItem.signal_dock(). Signal Handler will switch the grip depending on dock position. For iconify and interpanel docking, it needs to be a plain label");
+  /* @todo This code causes a crash on panel iconify and interpanel docking */
   GdlDockItemGrip *grip = GDL_DOCK_ITEM_GRIP(
     gdl_dock_item_get_grip(dockItem.gobj()));
   gdl_dock_item_grip_show_handle(grip);
   gdl_dock_item_grip_set_label(grip, ((Widget&)panelBar).gobj());
-    
-  // Set up the panel body
-  gtk_container_add (GTK_CONTAINER(dockItem.gobj()), GTK_WIDGET(gobj()));
-  
-  gtk_widget_show (GTK_WIDGET(dockItem.gobj()));
-  
-  // Connect the signals
-	hide_panel_handler_id = g_signal_connect (GTK_OBJECT(dockItem.gobj()),
-	  "hide",	G_CALLBACK(on_item_hidden), this);
+  /* End FIXME */
+
+  /* Set up the panel body */
+  // Add this panel's container to the DockItem
+  dockItem.add((Gtk::Widget&)*this);
+
+  /* Connect the signals */
+  dockItem.signal_hide().connect(
+      sigc::mem_fun(*this, &Panel::on_item_hidden));
+
+  dockItem.show();
 }
 
 Panel::~Panel()
 {
-  TODO("Fix for Gdlmm");
-  //REQUIRE(dockItem != NULL);
-
-  // Detach the panel bar
+  /* Detach the panel bar */
   GdlDockItemGrip *grip = GDL_DOCK_ITEM_GRIP(
     gdl_dock_item_get_grip(dockItem.gobj()));
   gtk_container_remove (GTK_CONTAINER(grip),
     ((Widget&)panelBar).gobj());
-    
-  gtk_container_remove (GTK_CONTAINER(dockItem.gobj()), GTK_WIDGET(gobj()));
-    
-  // Detach the signals
-  g_signal_handler_disconnect(
-    GTK_OBJECT(dockItem.gobj()), hide_panel_handler_id);
 
-  // Unref the dock item
-  // g_object_unref(dockItem);
-  // dockItem = NULL;
+  /* Remove this panel's container from the DockItem */
+  dockItem.remove((Gtk::Widget&)*this);
 }
 
 Gdl::DockItem&
@@ -162,17 +156,16 @@ Panel::get_controller()
   return panelManager.get_workspace_window().get_controller();
 }
 
-sigc::signal<void>&
+sigc::signal<void>
 Panel::signal_hide_panel()
 {
   return hidePanelSignal;
 }
 
 void
-Panel::on_item_hidden(GdlDockItem*, Panel *panel)
+Panel::on_item_hidden()
 {
-  REQUIRE(panel);
-  panel->hidePanelSignal();
+  hidePanelSignal.emit();
 }
 
 }   // namespace panels

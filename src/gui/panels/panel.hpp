@@ -135,9 +135,8 @@ private:
 
   /**
    * An event handler for when dockItem is hidden.
-   * @param func_data A pointer to the panel that owns dock_item
    */
-  static void on_item_hidden(GdlDockItem*, Panel *panel);
+  void on_item_hidden();
 
 protected:
 
