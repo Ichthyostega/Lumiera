@@ -50,7 +50,7 @@ PanelBar::PanelBar(panels::Panel &owner_panel, const gchar *stock_id) :
   panelButton.unset_flags(CAN_FOCUS);
   panelButton.show();
   pack_start(panelButton, PACK_SHRINK);
-  
+
   setup_panel_button();
 }
 
@@ -93,12 +93,14 @@ PanelBar::setup_panel_button()
 void
 PanelBar::on_realize()
 {
+  FIXME("Somehow the Gdk window causes lumiera to crash when docking to CENTER or iconifying a panel");
   set_flags(Gtk::NO_WINDOW);
-  
+
   // Call base class:
   Gtk::Container::on_realize();
   
   // Create the GdkWindow:
+
   GdkWindowAttr attributes;
   memset(&attributes, 0, sizeof(attributes));
 
@@ -124,6 +126,7 @@ PanelBar::on_realize()
   unset_flags(Gtk::NO_WINDOW);
   
   unset_bg(STATE_NORMAL);
+
 }
 
 void

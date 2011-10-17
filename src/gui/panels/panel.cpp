@@ -48,8 +48,6 @@ Panel::Panel(workspace::PanelManager &panel_manager,
   g_object_set_property (G_OBJECT (dockItem.gobj()), "long-name", val.gobj());
   
   /* Set the grip handle */
-  FIXME("Implement interpanel docking. Try using the dockItem.signal_dock(). Signal Handler will switch the grip depending on dock position. For iconify and interpanel docking, it needs to be a plain label");
-  /* @todo This code causes a crash on panel iconify and interpanel docking */
   GdlDockItemGrip *grip = GDL_DOCK_ITEM_GRIP(
     gdl_dock_item_get_grip(dockItem.gobj()));
   gdl_dock_item_grip_show_handle(grip);
@@ -103,24 +101,24 @@ Panel::is_shown() const
 void
 Panel::iconify()
 {
-  // //REQUIRE(dockItem != NULL);
-  // gdl_dock_item_iconify_item(dockItem);
   dockItem.iconify_item();
 }
 
 bool
 Panel::is_iconified() const
 {
- // REQUIRE(dockItem);
-  TODO("Port to Gdlmm");
-  return GDL_DOCK_ITEM_ICONIFIED(dockItem.gobj());
+  /** Gdlmm as of v1.30.0 does not have
+   * a facility for checking the whether
+   * a dock item is iconified or not
+   */
+  GdlDockItem *item = dockItem.gobj();
+  REQUIRE(item != NULL);
+  return GDL_DOCK_ITEM_ICONIFIED (item);
 }
 
 void
 Panel::lock(bool lock)
 {
- // //REQUIRE(dockItem != NULL);
-
   if(lock) dockItem.lock();
   else dockItem.unlock();
 }
@@ -156,7 +154,7 @@ Panel::get_controller()
   return panelManager.get_workspace_window().get_controller();
 }
 
-sigc::signal<void>
+sigc::signal<void>&
 Panel::signal_hide_panel()
 {
   return hidePanelSignal;

@@ -73,7 +73,6 @@ PanelManager::~PanelManager()
 void
 PanelManager::setup_dock()
 {
-
   REQUIRE(dockPlaceholders[0] == NULL && dockPlaceholders[1] == NULL &&
     dockPlaceholders[2] == NULL && dockPlaceholders[3] == NULL);
   dockPlaceholders[0] = GDL_DOCK_PLACEHOLDER(gdl_dock_placeholder_new(
@@ -258,8 +257,8 @@ PanelManager::create_panel_by_index(
   panel->show_all();
   
   // Connect event handlers
-  panel->signal_hide_panel().connect(bind(
-    mem_fun(*this, &PanelManager::on_panel_shown), panel));
+  panel->signal_hide_panel().connect(sigc::bind(
+    sigc::mem_fun(*this, &PanelManager::on_panel_shown), panel));
   
   // Add the panel to the list
   panels.push_back(panel);
