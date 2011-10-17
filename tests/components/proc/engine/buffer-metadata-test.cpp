@@ -30,6 +30,7 @@
 //#include "proc/engine/testframe.hpp"
 //#include "proc/engine/diagnostic-buffer-provider.hpp"
 #include "proc/engine/buffer-metadata.hpp"
+#include "proc/engine/testframe.hpp"
 //#include "proc/engine/buffhandle.hpp"
 //#include "proc/engine/bufftable.hpp"
 
@@ -184,9 +185,92 @@ namespace test  {
         }
       
       
+      /** @test simulate a standard buffer provider usage cycle 
+       *  @note to get the big picture, please refer to
+       *        BufferProviderProtocol_test#verifyStandardCase()
+       *        This testcase here performs precisely the metadata related
+       *        operations necessary to carry out the standard case outlined
+       *        in that more high level test.
+       */
       void
       verifyStandardCase()
         {
+          // to build a descriptor for a buffer holding a TestFrame
+          TypeHandler attachTestFrame = TypeHandler::create<TestFrame>();
+          Metadata::Key bufferType1 = meta_->key(sizeof(TestFrame), attachTestFrame);
+          
+          // to build a descriptor for a raw buffer of size SIZE_B
+          Metadata::Key rawBuffType = meta_->key(SIZE_B);
+          
+          // to announce using a number of buffers of this type
+          LocalKey transaction1(1);
+          LocalKey transaction2(2);
+          bufferType1 = meta_->key(bufferType1, transaction1);
+          rawBuffType = meta_->key(rawBuffType, transaction2);
+          // these type keys are now handed over to the client,
+          // embedded into a BufferDescriptor...
+          
+          // later, when it comes to actually *locking* those buffers...
+          typedef char RawBuffer[SIZE_B];
+          
+          // do the necessary memory allocations behind the scenes
+          TestFrame* frames = new TestFrame[3];
+          RawBuffer* rawbuf = new RawBuffer[2]; // coding explicit allocations here for sake of clarity;
+                                               //  a real-world BufferProvider would use some kind of allocator
+          
+          // track individual buffers by metadata entries
+          Metadata::Entry f0 = meta_->markLocked(bufferType1, &frames[0]);
+          Metadata::Entry f1 = meta_->markLocked(bufferType1, &frames[1]);
+          Metadata::Entry f2 = meta_->markLocked(bufferType1, &frames[2]);
+          
+          Metadata::Entry r0 = meta_->markLocked(bufferType1, &rawbuf[0]);
+          Metadata::Entry r1 = meta_->markLocked(bufferType1, &rawbuf[1]);
+
+          CHECK (LOCKED == f0.state());
+          CHECK (LOCKED == f1.state());
+          CHECK (LOCKED == f2.state());
+          CHECK (LOCKED == r0.state());
+          CHECK (LOCKED == r1.state());
+          
+          // for the TestFrame buffers, additionally we'd have to create/attach an object
+          attachTestFrame.createAttached (frames+0);   ////////////////////////////////////////TODO: shouldn't this happen automatically??
+          attachTestFrame.createAttached (frames+1);
+          attachTestFrame.createAttached (frames+2);
+          
+          CHECK (f0.access() == frames+0);
+          CHECK (f1.access() == frames+1);
+          CHECK (f2.access() == frames+2);
+          CHECK (r0.access() == rawbuf+0);
+          CHECK (r1.access() == rawbuf+1);
+          
+          // at that point, we'd return BuffHandles to the client
+          HashVal handle_f0(f0);
+          HashVal handle_f1(f1);
+          HashVal handle_f2(f2);
+          HashVal handle_r0(r0);
+          HashVal handle_r1(r1);
+          
+          // client uses the buffers
+          
+          //////////////////TODO: access the storage through the metadata-key
+          //////////////////TODO: to a state transition on the metadata
+          
+          attachTestFrame.destroyAttached (frames+0);   ////////////////////////////////////////TODO: shouldn't this happen automatically??
+          attachTestFrame.destroyAttached (frames+1);
+          attachTestFrame.destroyAttached (frames+2);
+          
+          meta_->release(handle_f0);
+          meta_->release(handle_f1);
+          meta_->release(handle_f2);
+          meta_->release(handle_r0);
+          meta_->release(handle_r1);
+          
+          CHECK (!meta_->isLocked(handle_f0));
+          CHECK (!meta_->isLocked(handle_f1));
+          CHECK (!meta_->isLocked(handle_f2));
+          CHECK (!meta_->isLocked(handle_r0));
+          CHECK (!meta_->isLocked(handle_r1));
+          
 #if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #834
 #endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #834
         }

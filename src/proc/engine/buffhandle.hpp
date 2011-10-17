@@ -61,6 +61,9 @@ namespace engine {
    * For each kind of buffer, there is somewhere a BufferProvider responsible for the
    * actual storage management. This provider may "lock" a buffer for actual use,
    * returning a BuffHandle.
+   * @note this descriptor and especially the #subClassification_ is really owned
+   *       by the BufferProvider, which may use (and even change) the opaque contents
+   *       to organise the internal buffer management.
    * 
    * @todo try to move that definition into buffer-provider.hpp   ////////////////////////////////////TICKET #249
    */

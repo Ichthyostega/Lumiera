@@ -479,22 +479,20 @@ namespace engine {
       
       /** create a sub-type, using a different type/handler functor */
       Key
-      key (HashVal parentKey, TypeHandler const& instanceFunc)
+      key (Key const& parentKey, TypeHandler const& instanceFunc)
         {
-          Key parentEntry (get (parentKey));
-          return trackKey (parentEntry, instanceFunc);
+          return trackKey (parentKey, instanceFunc);
         }
       
       /** create a sub-type, using a different private-ID (implementation defined) */
       Key
-      key (HashVal parentKey, LocalKey specifics)
+      key (Key const& parentKey, LocalKey specifics)
         {
-          Key parentEntry (get (parentKey));
-          return trackKey (parentEntry, specifics);
+          return trackKey (parentKey, specifics);
         }
       
       Key
-      key (HashVal parentKey, const void* concreteBuffer)
+      key (Key const& parentKey, const void* concreteBuffer)
         {
           UNIMPLEMENTED ("create sub-object key for concrete buffer");
         }
@@ -526,7 +524,7 @@ namespace engine {
       
       /* == memory management == */
       
-      Entry& markLocked (HashVal parentKey, const void* buffer);
+      Entry& markLocked (Key const& parentKey, const void* buffer);
       void release (HashVal key);
       
     private:
@@ -558,7 +556,7 @@ namespace engine {
   
   /** */
   inline Metadata::Entry&
-  Metadata::markLocked (HashVal parentKey, const void* buffer)
+  Metadata::markLocked (Key const& parentKey, const void* buffer)
   {
     UNIMPLEMENTED ("transition to locked state");
     if (!buffer)

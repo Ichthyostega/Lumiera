@@ -113,7 +113,7 @@ namespace test  {
           // will be preconfigured, depending on the usage context
           BufferProvider& provider = DiagnosticBufferProvider::build();
           
-          BufferDescriptor desc1 = provider.getDescriptor<TestFrame>();
+          BufferDescriptor desc1 = provider.getDescriptor<TestFrame>();   // note: implies also sizeof(TestFrame)
           BufferDescriptor desc2 = provider.getDescriptorFor(TEST_SIZE);
 #if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #829
           CHECK (desc1.verifyValidity());

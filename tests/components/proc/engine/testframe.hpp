@@ -77,13 +77,13 @@ namespace test   {
   
   
   
-  TestFrame
+  inline TestFrame
   testData (uint seqNr)
   {
     UNIMPLEMENTED ("build, memorise and expose test data frames on demand");
   }
   
-  TestFrame
+  inline TestFrame
   testData (uint chanNr, uint seqNr)
   {
     UNIMPLEMENTED ("build, memorise and expose test data frames on demand (multi-channel)");
