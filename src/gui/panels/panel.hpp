@@ -155,11 +155,6 @@ protected:
    * A signal that fires when the dock item is hidden.
    */
   sigc::signal<void> hidePanelSignal;
-
-  /**
-   * The id of the hide panel handler.
-   */
-  gulong hide_panel_handler_id;
   
   /**
    * The panel bar to attach to the panel grip.

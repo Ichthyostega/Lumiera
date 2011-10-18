@@ -38,7 +38,6 @@ Panel::Panel(workspace::PanelManager &panel_manager,
     const gchar *stock_id) :
   panelManager(panel_manager),
   dockItem(dock_item),
-  hide_panel_handler_id(0),
   panelBar(*this, stock_id)
 {
   // Set dockItems long-name property
@@ -52,7 +51,7 @@ Panel::Panel(workspace::PanelManager &panel_manager,
     gdl_dock_item_get_grip(dockItem.gobj()));
   gdl_dock_item_grip_show_handle(grip);
   gdl_dock_item_grip_set_label(grip, ((Widget&)panelBar).gobj());
-  /* End FIXME */
+  //gdl_dock_item_grip_set_cursor_type(grip, GDK_LEFT_PTR);
 
   /* Set up the panel body */
   // Add this panel's container to the DockItem
