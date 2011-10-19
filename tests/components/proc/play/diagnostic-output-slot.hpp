@@ -33,6 +33,8 @@
 
 #include "lib/error.hpp"
 #include "proc/play/output-slot.hpp"
+#include "lib/iter-source.hpp"  ////////////TODO really going down that path...?
+#include "proc/engine/testframe.hpp"
 //#include "lib/sync.hpp"
 
 //#include <boost/noncopyable.hpp>
@@ -46,6 +48,7 @@ namespace proc {
 namespace play {
 
 //using std::string;
+  using ::engine::test::TestFrame;
 
 //using std::vector;
 //using std::tr1::shared_ptr;
@@ -70,6 +73,65 @@ namespace play {
         {
           UNIMPLEMENTED ("Diagnostic Output Slot instance");
         }
+      
+      static DiagnosticOutputSlot&
+      access (OutputSlot& to_investigate)
+        {
+          UNIMPLEMENTED ("access the diagnostics data for the given OutputSlot instance");
+        }
+      
+      
+      /* === diagnostics API === */
+      
+      /**
+       * diagnostic facility to verify
+       * test data frames written to this
+       * Test/Dummy "output"
+       */
+      struct OutputStreamProtocol
+        : lib::IterSource<TestFrame> 
+        {
+          /////////////TODO: implement the extension points required to drive an IterSource
+        };
+        
+      typedef OutputStreamProtocol::iterator OutFrames;
+      
+      
+      OutFrames
+      getChannel (uint channel)
+        {
+          UNIMPLEMENTED ("access output stream tracing entry");
+        }
+      
+      
+      bool
+      buffer_was_used (uint channel, FrameNr frame)
+        {
+          UNIMPLEMENTED ("determine if the denoted buffer was indeed used");
+        }
+      
+      
+      bool
+      buffer_unused   (uint channel, FrameNr frame)
+        {
+          UNIMPLEMENTED ("determine if the specified buffer was never touched/locked for use");
+        }
+      
+      
+      bool
+      buffer_was_closed (uint channel, FrameNr frame)
+        {
+          UNIMPLEMENTED ("determine if the specified buffer was indeed closed properly");
+        }
+      
+      
+      bool
+      emitted (uint channel, FrameNr frame)
+        {
+          UNIMPLEMENTED ("determine if the specivied buffer was indeed handed over for emitting output");
+        }
+      
+      
       
     private:
       

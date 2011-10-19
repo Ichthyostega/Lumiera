@@ -80,6 +80,8 @@ namespace engine {
       virtual ~BufferProvider();  ///< this is an interface
       
       
+      virtual uint announce (uint count, BufferDescriptor const&) =0;
+      
       virtual BuffHandle lockBufferFor (BufferDescriptor const&)  =0;
       virtual void releaseBuffer (BuffHandle const&)              =0;
       

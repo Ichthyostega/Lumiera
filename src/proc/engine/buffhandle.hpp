@@ -185,7 +185,7 @@ namespace engine {
   }
   
   
-  /** convenience shortcuts: access the buffer contents in a typesafe fashion.
+  /** convenience shortcut: access the buffer contents in a typesafe fashion.
    *  This is equivalent to a plain dereferentiation with additional metadata check
    * @throw error::Logic in case of type mismatch \c LUMIERA_ERROR_WRONG_TYPE
    */

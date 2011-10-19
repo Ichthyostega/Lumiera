@@ -68,6 +68,11 @@ namespace engine {
       bool isCurrent (BufferProvider const&);
       
       
+      DiagnosticBufferProvider();
+     ~DiagnosticBufferProvider();
+     
+      friend class lib::singleton::StaticCreate<DiagnosticBufferProvider>;
+     
     public:
       /** build a new Diagnostic Buffer Provider instance,
        *  discard the existing one. Use the static query API
@@ -88,8 +93,9 @@ namespace engine {
       /* === diagnostic API === */
       
       bool buffer_was_used (uint bufferID)  const;
-      bool buffer_was_closed (uint bufferID)  const;
-      void* accessMemory (uint bufferID)  const;
+      bool buffer_was_closed (uint bufferID) const;
+      void* accessMemory (uint bufferID)   const;
+      bool all_buffers_released()          const;
       
       
       template<typename BU>

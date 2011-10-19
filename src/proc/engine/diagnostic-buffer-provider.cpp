@@ -97,6 +97,14 @@ namespace engine {
     : public BufferProvider
     , public ScopedPtrVect<Block>
     {
+      
+      virtual uint
+      announce (uint count, BufferDescriptor const& type)
+        {
+          UNIMPLEMENTED ("pre-register storage for buffers of a specific kind");   
+        }
+
+      
       virtual BuffHandle
       lockBufferFor (BufferDescriptor const& descriptor)
         {
@@ -140,6 +148,13 @@ namespace engine {
         }
     };
   
+  
+
+  DiagnosticBufferProvider::DiagnosticBufferProvider()
+    : pImpl_() //////////TODO create PImpl here
+    { }
+  
+  DiagnosticBufferProvider::~DiagnosticBufferProvider() { }
   
   
   BufferProvider&

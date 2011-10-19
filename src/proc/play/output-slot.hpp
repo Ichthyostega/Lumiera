@@ -75,6 +75,7 @@ namespace play {
     {
       
     public:
+      BuffHandle lockBufferFor(FrameNr);
       void emit(FrameNr);
     };
   

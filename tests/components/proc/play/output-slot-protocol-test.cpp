@@ -25,6 +25,7 @@
 //#include "lib/util.hpp"
 #include "proc/play/diagnostic-output-slot.hpp"
 #include "proc/engine/buffhandle.hpp"
+#include "proc/engine/testframe.hpp"
 
 //#include <boost/format.hpp>
 //#include <iostream>
@@ -41,6 +42,8 @@ namespace test  {
 //  using lib::AllocationCluster;
 //  using mobject::session::PEffect;
   using ::engine::BuffHandle;
+  using ::engine::test::testData;
+  using ::engine::test::TestFrame;
   
   
   namespace { // Test fixture
@@ -77,7 +80,7 @@ namespace test  {
           
           // Client claims the OutputSlot
           // and opens it for exclusive use.
-          Allocation alloc = oSlot.allocate();
+          OutputSlot::Allocation alloc = oSlot.allocate();
           
           // Now the client is able to prepare
           // "calculation streams" for the individual
@@ -95,13 +98,13 @@ namespace test  {
           buff10.create<TestFrame>();
           
           // rendering process calculates content....
-          buff00.access<TestFrame>() = testData[0,0];
+          buff00.accessAs<TestFrame>() = testData(0,0);
           
           // while further frames might be processed in parallel
           BuffHandle buff11 = sink2.lockBufferFor (++frameNr);
           buff11.create<TestFrame>();
-          buff11.access<TestFrame>() = testData[1,1];
-          buff10.access<TestFrame>() = testData[1,0];
+          buff11.accessAs<TestFrame>() = testData(1,1);
+          buff10.accessAs<TestFrame>() = testData(1,0);
           
           // Now it's time to emit the output
           sink2.emit (frameNr-1);
@@ -110,7 +113,7 @@ namespace test  {
           // that's all for the client
           
           // Verify sane operation....
-          DiagnosticOutputSlot checker = DiagnosticOutputSlot::access(oSlot);
+          DiagnosticOutputSlot& checker = DiagnosticOutputSlot::access(oSlot);
           CHECK (checker.buffer_was_used (0,0));
           CHECK (checker.buffer_unused   (0,1));
           CHECK (checker.buffer_was_used (1,0));
@@ -129,12 +132,12 @@ namespace test  {
           DiagnosticOutputSlot::OutFrames stream1 = checker.getChannel(1);
           
           CHECK ( stream0);
-          CHECK (*stream0++ == testData[0,0]);
+          CHECK (*stream0++ == testData(0,0));
           CHECK (!stream0);
           
           CHECK ( stream1);
-          CHECK (*stream1++ == testData[1,0]);
-          CHECK (*stream1++ == testData[1,1]);
+          CHECK (*stream1++ == testData(1,0));
+          CHECK (*stream1++ == testData(1,1));
           CHECK (!stream1);
 #endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #819
         }

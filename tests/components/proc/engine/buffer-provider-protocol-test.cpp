@@ -54,6 +54,13 @@ namespace test  {
     const uint TEST_SIZE = 1024*1024;
     const uint TEST_ELMS = 20;
     
+    
+    void
+    do_some_calculations (BuffHandle const& buffer)
+    {
+      UNIMPLEMENTED ("some verifiable test/dummy buffer accessing operations");
+    }
+    
   }
   
   
@@ -108,6 +115,7 @@ namespace test  {
       void
       verifyStandardCase()
         {
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #829
           // Create Test fixture.
           // In real usage, a suitable memory/frame/buffer provider
           // will be preconfigured, depending on the usage context
@@ -115,12 +123,11 @@ namespace test  {
           
           BufferDescriptor desc1 = provider.getDescriptor<TestFrame>();   // note: implies also sizeof(TestFrame)
           BufferDescriptor desc2 = provider.getDescriptorFor(TEST_SIZE);
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #829
           CHECK (desc1.verifyValidity());
           CHECK (desc2.verifyValidity());
           
-          size_t num1 = provider.announce(TEST_ELMS, desc1);
-          size_t num2 = provider.announce(TEST_ELMS, desc2);
+          uint num1 = provider.announce(TEST_ELMS, desc1);
+          uint num2 = provider.announce(TEST_ELMS, desc2);
           CHECK (num1 == TEST_ELMS);
           CHECK (0 < num2 && num2 <=TEST_ELMS);
           
@@ -128,15 +135,15 @@ namespace test  {
           char storage[STORAGE_SIZE];
           BuffTable& tab =
               BuffTable::prepare(STORAGE_SIZE, storage)
-                        .prepare(num1, desc1)
-                        .prepare(num2, desc2)
+                        .announce(num1, desc1)
+                        .announce(num2, desc2)
                         .build(); 
           
           tab.lockBuffers();
           for_each (tab.buffers(), do_some_calculations);
           tab.releaseBuffers();
           
-          DiagnosticBufferProvider checker = DiagnosticBufferProvider::access(provider);
+          DiagnosticBufferProvider& checker = DiagnosticBufferProvider::access(provider);
           CHECK (checker.all_buffers_released());
 #endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #829
         }
