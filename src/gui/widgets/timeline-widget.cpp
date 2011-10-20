@@ -41,7 +41,7 @@ const int TimelineWidget::TrackPadding = 1;
 const int TimelineWidget::HeaderWidth = 150;
 const int TimelineWidget::HeaderIndentWidth = 10;
 const double TimelineWidget::ZoomIncrement = 1.25;
-const int64_t TimelineWidget::MaxScale = 30000000;
+const int64_t TimelineWidget::MaxScale = 30000000; // 30 Million
 
 TimelineWidget::TimelineWidget(
   boost::shared_ptr<timeline::TimelineState> source_state) :
@@ -102,6 +102,7 @@ TimelineWidget::get_state()
 void
 TimelineWidget::set_state(shared_ptr<timeline::TimelineState> new_state)
 { 
+
   state = new_state;
   
   // Clear the track tree
@@ -125,17 +126,17 @@ TimelineWidget::set_state(shared_ptr<timeline::TimelineState> new_state)
   update_tracks();
   
   // Send the state changed signal
-  stateChangedSignal.emit();
+  stateChangedSignal.emit (state);
 }
 
 void
-TimelineWidget::zoom_view(int zoom_size)
+TimelineWidget::zoom_view(double timescale_ratio)
 {
   if(state)
-    {
-      const int view_width = body->get_allocation().get_width();
-      state->get_view_window().zoom_view(view_width / 2, zoom_size);
-    }
+  {
+    const int view_width = body->get_allocation().get_width();
+    state->get_view_window().zoom_view(view_width / 2, timescale_ratio);
+  }
 }
 
 ToolType
@@ -178,7 +179,7 @@ TimelineWidget::hovering_track_changed_signal() const
   return hoveringTrackChangedSignal;
 }
 
-sigc::signal<void>
+TimelineWidget::TimelineStateChangeSignal
 TimelineWidget::state_changed_signal() const
 {
   return stateChangedSignal;
@@ -212,10 +213,12 @@ TimelineWidget::on_view_window_changed()
   if(state)
     { 
       timeline::TimelineViewWindow &window = state->get_view_window();
+
       const int view_width = body->get_allocation().get_width();
-      
+
       horizontalAdjustment.set_page_size(
         window.get_time_scale() * view_width);
+
       horizontalAdjustment.set_value(_raw(window.get_time_offset()));
     }
 }

@@ -19,52 +19,55 @@
 // 1/11  - exploring numeric limits
 // 1/11  - integer floor and wrap operation(s)
 // 1/11  - how to fetch the path of the own executable -- at least under Linux?
-
-
-#include <nobug.h>
+// 10/11 - simple demo using a pointer and a struct
 
 
 #include <iostream>
-#include <string>
 
-extern "C" {
-#include <unistd.h>
-}
-#include "lib/error.hpp"
-#include "lib/symbol.hpp"
-
-
-using std::string;
 using std::cout;
-using std::endl;
-using lib::Literal;
-using lib::STRING_MAX_RELEVANT;
 
-namespace error = lumiera::error;
 
-Literal GET_PATH_TO_EXECUTABLE ("/proc/self/exe");
 
-string
-catchMyself ()
-{
-  string buff(STRING_MAX_RELEVANT+1, '\0' );
-  ssize_t chars_read = readlink (GET_PATH_TO_EXECUTABLE, &buff[0], STRING_MAX_RELEVANT);
-  
-  if (0 > chars_read || chars_read == ssize_t(STRING_MAX_RELEVANT))
-    throw error::Fatal ("unable to discover path of running executable");
-  
-  buff.resize(chars_read);
-  return buff;
-}
+/**
+ * custom datastructure
+ * holding a constant char array with "hey"
+ */
+struct MyStruct
+  {
+    char data_[3];
+    const int length_;
+    
+    MyStruct()
+      : length_(3)
+      { 
+        const char *tmp = "hey";
+        for (int i=0; i<length_; ++i)
+          data_[i] = *(tmp+i);
+      }
+  };
+
+
+// define a global variable holding a MyStruct
+MyStruct theStruct;
+
+
+
+void
+printMyStruct(MyStruct* myPointer)
+  {
+    for (int i=0; i < myPointer->length_; ++i)
+      cout << myPointer->data_[i];
+    
+    cout << "\n";
+  }
+
 
 
 int 
 main (int, char**) //(int argc, char* argv[])
   {
+    printMyStruct (&theStruct);
     
-    NOBUG_INIT;
-    
-    cout << "\n\nwho am I? :" << catchMyself();
     cout <<  "\n.gulp.\n";
     
     return 0;

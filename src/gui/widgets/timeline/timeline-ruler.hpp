@@ -29,6 +29,7 @@
 
 #include "gui/gtk-lumiera.hpp"
 #include "lib/time/timevalue.hpp"
+#include "gui/widgets/timeline/timeline-state.hpp"
 
 namespace gui {
 namespace widgets {
@@ -108,10 +109,9 @@ private:
   void on_size_allocate(Gtk::Allocation& allocation);
   
   /**
-   * The event handler for when the TimelineWidget's state object is
-   * replaced.
+   * The event handler for when the TimelineWidget's state is switched.
    */
-  void on_state_changed();
+  void on_state_changed (boost::shared_ptr<TimelineState> newState);         ////////////////////TICKET #796 : should use std::tr1::shared_ptr
   
 private:
   /* ===== Internal Methods ===== */
@@ -161,7 +161,13 @@ private:
    */
   void draw_playback_point(Cairo::RefPtr<Cairo::Context> cr,
     const Gdk::Rectangle ruler_rect);
-
+  
+  /**
+   * After notification of a timeline state switch
+   * do any local adjustments to adapt to the new state 
+   */
+  void propagateStateChange();
+  
   /**
    * Given the current zoom, this function calculates the preiod
    * between major graduations on the ruler scale.
@@ -170,9 +176,9 @@ private:
   gavl_time_t calculate_major_spacing() const;
   
   /**
-   * A helper function to get the view window
+   * Access current timeline view window
    */
-  TimelineViewWindow& view_window() const;
+  TimelineViewWindow& viewWindow() const;
 
   /**
    * Registers all the styles that this class will respond to.
@@ -232,6 +238,11 @@ private:
    * The owner widget
    */
   gui::widgets::TimelineWidget &timelineWidget;
+  
+  /**
+   * the currently active timeline state object 
+   */
+  boost::shared_ptr<TimelineState> timelineState;      ////////////////////TICKET #796 : should use std::tr1::shared_ptr
   
   /**
    * The caches image of the ruler, over which the chevrons etc. will

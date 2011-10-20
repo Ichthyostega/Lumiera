@@ -32,6 +32,8 @@
 #include "gui/panels/panel.hpp"
 #include "gui/widgets/timecode-widget.hpp"
 #include "gui/widgets/timeline-widget.hpp"
+#include "gui/widgets/timeline/timeline-zoom-scale.hpp"
+
 #include "lib/time/timevalue.hpp"
 
 #include <boost/scoped_ptr.hpp>
@@ -87,6 +89,7 @@ private:
   void on_arrow_tool();
   void on_ibeam_tool();
   
+  void on_zoom(double time_scale_ratio);
   void on_zoom_in();
   void on_zoom_out();
   
@@ -171,7 +174,7 @@ private:
   boost::scoped_ptr<TimelineWidget> timelineWidget;
   
   std::map< boost::weak_ptr<model::Sequence>,
-    boost::shared_ptr<widgets::timeline::TimelineState> >          ///////////////////////////////TICKET #796
+    boost::shared_ptr<widgets::timeline::TimelineState> >          ///////////////////////////////TICKET #796 : should use std::tr1::shared_ptr
     timelineStates;
   
   // Toolbar Widgets
@@ -191,6 +194,7 @@ private:
   
   MiniButton zoomIn;
   MiniButton zoomOut;
+  gui::widgets::timeline::TimelineZoomScale zoomScale;
   
   Gtk::SeparatorToolItem separator2;
     

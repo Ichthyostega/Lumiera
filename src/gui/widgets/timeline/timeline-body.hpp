@@ -68,10 +68,7 @@ public:
    */
   TimelineBody(gui::widgets::TimelineWidget &timeline_widget);
   
-  /**
-   * Destructor
-   */
-  ~TimelineBody();
+  virtual ~TimelineBody();
   
   TimelineWidget&
   getTimelineWidget () const;
@@ -125,13 +122,18 @@ protected:
   bool on_motion_notify_event(GdkEventMotion *event);
   
   /**
-   * The event handler for when the TimelineWidget's state object is
-   * replaced.
+   * The event handler for when the TimelineWidget's state is switched.
    */
-  void on_state_changed();
+  void on_state_changed (boost::shared_ptr<TimelineState> newState);
   
   /* ===== Internals ===== */
 private:
+  /**
+   * Access the current timeline view window
+   * @warning must not be called unless the TimlineWidget
+   *          has a valid state.
+   */
+  TimelineViewWindow& viewWindow() const;
 
   /**
    * Draws the timeline tracks.
@@ -161,13 +163,9 @@ private:
   
   void set_vertical_offset(int offset);
   
-  /**
-   * A helper function to get the view window
-   * @remarks This function must not be called unless the TimlineWidget
-   * has a valid state.
-   */
-  TimelineViewWindow& view_window() const;
-   
+  /** adjust to the new timeline state */
+  void propagateStateChange();
+
   /**
    * Registers all the styles that this class will respond to.
    */
@@ -202,6 +200,8 @@ private:
   Cairo::RefPtr<Cairo::SolidPattern> playbackPointColour;
   
   gui::widgets::TimelineWidget &timelineWidget;
+  boost::shared_ptr<TimelineState> timelineState;      ////////////////////TICKET #796 : should use std::tr1::shared_ptr
+  
 
   friend class Tool;
   friend class ArrowTool;

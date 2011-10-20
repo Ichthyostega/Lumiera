@@ -31,29 +31,29 @@ namespace gui {
 namespace widgets {
 namespace timeline {
 
-
-
 TimelineViewWindow::TimelineViewWindow (Offset offset, int64_t scale)
   : timeOffset(offset)
   , timeScale(scale)
 {
+  TODO("Create a function to limit timescale between 1 and MaxScale");
+  TODO("TICKET #795 Some functions need to be private");
 }
 
 Offset
-TimelineViewWindow::get_time_offset() const      /////////////////////TODO: this function shouldn't be accessible from outside
+TimelineViewWindow::get_time_offset() const      /////////////////////TICKET #795: this function shouldn't be accessible from outside
 {
   return Offset (timeOffset);
 }
 
 void
-TimelineViewWindow::set_time_offset(TimeValue const& offset) /////////TODO: this function shouldn't be accessible from outside
+TimelineViewWindow::set_time_offset(TimeValue const& offset) /////////TICKET #795: this function shouldn't be accessible from outside
 {
   timeOffset = offset;
   changedSignal.emit();
 }
 
 int64_t
-TimelineViewWindow::get_time_scale() const       /////////////////////TODO: this function shouldn't be accessible from outside
+TimelineViewWindow::get_time_scale() const       /////////////////////TICKET #795: this function shouldn't be accessible from outside
 {
   return timeScale;
 }
@@ -66,21 +66,39 @@ TimelineViewWindow::set_time_scale(int64_t scale)
 }
 
 void
-TimelineViewWindow::zoom_view(int point, int zoom_size)
-{ 
-  int64_t new_time_scale = (double)timeScale * pow(1.25, -zoom_size);
-  
-  // Limit zooming in too close
-  if(new_time_scale < 1) new_time_scale = 1;
-  
-  // Nudge zoom problems caused by integer rounding
-  if(new_time_scale == timeScale && zoom_size < 0)
-    new_time_scale++;
-    
-  // Limit zooming out too far
+TimelineViewWindow::set_time_scale(double ratio)
+{
+  int64_t max = TimelineWidget::MaxScale;
+  int64_t min = 1;
+
+  if(ratio <= 0.0)
+    {
+      set_time_scale((int64_t)min);
+      return;
+    }
+
+  if(ratio > 1.0)
+    {
+      ratio = 1.0;
+    }
+
+   set_time_scale((int64_t)(ratio * max));
+}
+
+void
+TimelineViewWindow::zoom_view(int point, double time_scale_ratio)
+{
+  TODO("Find a Central place for a Zoom Smoothing Factor Variable. Right now it is hard coded at 9.0");
+  int64_t new_time_scale =
+      (int64_t)( pow(time_scale_ratio, 9.0) * (double)TimelineWidget::MaxScale);
+
+  /* Prevent Zooming in To Close and Far */
+  if(new_time_scale < 1)
+    new_time_scale = 1;
+
   if(new_time_scale > TimelineWidget::MaxScale)
     new_time_scale = TimelineWidget::MaxScale;
-  
+
   // The view must be shifted so that the zoom is centred on the cursor
   TimeVar newStartPoint = get_time_offset();
   newStartPoint += TimeValue(point * (timeScale - new_time_scale));
