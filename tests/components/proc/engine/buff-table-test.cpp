@@ -30,7 +30,6 @@
 
 #include <boost/scoped_ptr.hpp>
 #include <iostream>
-#include <ctime>
 
 using test::Test;
 using std::cout;
@@ -139,7 +138,6 @@ namespace test  {
       virtual void run(Arg) 
         {
            counter = 0;
-           std::srand (std::time (NULL));
            
            // allocate storage block to be used chunk wise
            pStorage.reset (new BuffTableStorage (TABLE_SIZ));

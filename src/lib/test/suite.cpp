@@ -37,6 +37,8 @@
 #include <memory>
 #include <vector>
 #include <map>
+#include <cstdlib>
+#include <ctime>
 
 
 namespace test {
@@ -140,6 +142,9 @@ namespace test {
   {
     REQUIRE( !isnil(groupID) );
     TRACE(test, "Test-Suite( groupID=%s )\n", groupID.c_str () );
+    
+    // Seed random number generator
+    std::srand (std::time (NULL));
     
     if (!testcases.getGroup(groupID))
       throw lumiera::error::Invalid ("empty testsuite");
