@@ -56,7 +56,7 @@
 #include "proc/state.hpp"
 #include "proc/engine/procnode.hpp"
 #include "proc/engine/buffhandle.hpp"
-#include "proc/engine/bufftable.hpp"
+#include "proc/engine/bufftable-obsolete.hpp"
 
 
 
@@ -172,6 +172,7 @@ namespace engine {
     };
     
     
+                                                                                                    ////////////TICKET #249  this strategy should better be hidden within the BuffHandle ctor (and type-erased after creation)
     struct AllocBufferFromParent  ///< using the parent StateAdapter for buffer allocations
       : Invocation
       {
@@ -179,7 +180,7 @@ namespace engine {
           : Invocation(sta, w, outCh) {}
         
         virtual BuffHandle
-        allocateBuffer (BufferDescriptor const& bd) { return parent_.allocateBuffer(bd); }          ////////////TODO: actually implement the "allocate from parent" logic!
+        allocateBuffer (const lumiera::StreamType* ty) { return parent_.allocateBuffer(ty); }          ////////////TODO: actually implement the "allocate from parent" logic!
       };
     
     struct AllocBufferFromCache   ///< using the global current State, which will delegate to Cache
@@ -189,7 +190,7 @@ namespace engine {
           : Invocation(sta, w, outCh) {}
         
         virtual BuffHandle
-        allocateBuffer (BufferDescriptor const& bd) { return current_.allocateBuffer(bd); }
+        allocateBuffer (const lumiera::StreamType* ty) { return current_.allocateBuffer(ty); }
       };
     
   

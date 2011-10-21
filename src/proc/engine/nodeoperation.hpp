@@ -60,7 +60,7 @@
 #include "proc/state.hpp"
 #include "proc/engine/procnode.hpp"
 #include "proc/engine/buffhandle.hpp"
-#include "proc/engine/bufftable.hpp"
+#include "proc/engine/bufftable-obsolete.hpp"
 #include "proc/engine/nodeinvocation.hpp"
 
 #include "lib/meta/util.hpp"
@@ -245,7 +245,7 @@ namespace config {
   
   template<class NEXT>
   struct ReleaseBuffers : NEXT                     /////////////////TODO: couldn't this be done automatically by BuffTab's dtor??
-    {                                             /////////////////       this would require BuffHandle to be a smart ref....
+    {                                             /////////////////       this would require BuffHandle to be a smart ref....     --> ///TICKET #249
       BuffHandle 
       step (Invocation& ivo)
         {

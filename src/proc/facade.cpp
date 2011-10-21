@@ -23,6 +23,7 @@
 
 #include "proc/facade.hpp"
 #include "lib/singleton.hpp"
+#include "proc/play/output-director.hpp"
 
 #include <string>
 
@@ -77,7 +78,7 @@ namespace proc {
       bool 
       shouldStart (lumiera::Option&)
         {
-          TODO ("determine, if an existing Session schould be loaded");
+          TODO ("determine, if an existing Session should be loaded");
           return false;
         }
       
@@ -103,9 +104,55 @@ namespace proc {
         }
     };
   
+  
+  
+  class PlayOutSubsysDescriptor
+    : public Subsys
+    {
+      operator string ()  const { return "PlayOut"; }
+      
+      /** determine, if any output system is required to start up explicitly.
+       *  Moreover, extract configuration variations for specific kinds of output
+       * @return true if any output system is required to start stand-alone.
+       *         otherwise, the player and a default configured output connection
+       *         is pulled up only when required by another subsystem (e.g. GUI)
+       * @todo   actually define cmdline options and parse/decide here! 
+       */
+      bool 
+      shouldStart (lumiera::Option&)
+        {
+          TODO ("extract options about specific output systems to be brought up");
+          return false;
+        }
+      
+      bool
+      start (lumiera::Option&, Subsys::SigTerm termination)
+        {
+          this->completedSignal_ = termination;
+          return play::OutputDirector::instance().connectUp();
+        }
+      
+      SigTerm completedSignal_;
+      
+      
+      void
+      triggerShutdown ()  throw()
+        {
+          play::OutputDirector::instance().triggerDisconnect (completedSignal_);
+        }
+      
+      
+      bool 
+      checkRunningState ()  throw()
+        {
+          return play::OutputDirector::instance().isOperational();
+        }
+    };
+  
   namespace {
     lib::Singleton<BuilderSubsysDescriptor> theBuilderDescriptor;   
     lib::Singleton<SessionSubsysDescriptor> theSessionDescriptor;
+    lib::Singleton<PlayOutSubsysDescriptor> thePlayOutDescriptor;
   }
   
   
@@ -124,6 +171,14 @@ namespace proc {
   Facade::getSessionDescriptor()
   {
     return theSessionDescriptor();
+  }
+  
+  
+  /** @internal intended for use by main(). */
+  Subsys&
+  Facade::getPlayOutDescriptor()
+  {
+    return thePlayOutDescriptor();
   }
 
 

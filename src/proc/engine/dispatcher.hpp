@@ -1,8 +1,8 @@
 /*
-  PROJECTOR.hpp  -  video ProcNode for scaling and translating image data
+  DISPATCHER.hpp  -  translating calculation streams into frame jobs
 
   Copyright (C)         Lumiera.org
-    2008,               Hermann Vosseler <Ichthyostega@web.de>
+    2011,               Hermann Vosseler <Ichthyostega@web.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -21,26 +21,42 @@
 */
 
 
-#ifndef ENGINE_PROJECTOR_H
-#define ENGINE_PROJECTOR_H
+#ifndef PROC_ENGINE_DISPATCHER_H
+#define PROC_ENGINE_DISPATCHER_H
 
-#include "proc/engine/trafo.hpp"
-
-
-
-namespace engine
-  {
+#include "proc/common.hpp"
+#include "proc/state.hpp"
+#include "lib/time/timevalue.hpp"
 
 
+
+namespace engine {
+  
+  using lib::time::TimeSpan;
+  using lib::time::FSecs;
+  using lib::time::Time;
+//  
+//  class ExitNode;
+  
   /**
-   * Special video processing node used to scale and translate image data.
+   * @todo
    */
-  class Projector : public Trafo
+  class Dispatcher
     {
-      ////////////TODO adapt ctor
+    protected:
+      /** timerange covered by this RenderGraph */
+      TimeSpan segment_;
+      
+    public:
+      Dispatcher()
+        : segment_(Time::ZERO, FSecs(5))
+        {
+          UNIMPLEMENTED ("anything regarding the Engine backbone");
+        }
+      
     };
-
-
-
+  
+  
+  
 } // namespace engine
 #endif

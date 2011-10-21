@@ -1,8 +1,8 @@
 /*
-  Projector  -  video ProcNode for scaling and translating image data
+  JackOutput  -  Jack audio connection client
 
   Copyright (C)         Lumiera.org
-    2008,               Hermann Vosseler <Ichthyostega@web.de>
+    2011,               Hermann Vosseler <Ichthyostega@web.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -21,14 +21,11 @@
 * *****************************************************/
 
 
-#include "proc/engine/projector.hpp"
-
-namespace engine
-  {
-
-  /** */
-
-
-
-
-} // namespace engine
+#include "proc/play/sound/jack-output.hpp"
+  
+namespace proc {
+namespace play {
+namespace sound {
+  
+  
+}}} // namespace proc::play::sound

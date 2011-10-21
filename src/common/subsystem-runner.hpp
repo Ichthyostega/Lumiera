@@ -173,7 +173,7 @@ namespace lumiera {
           if (!and_all (susy->getPrerequisites(), isRunning() ))
             {
               susy->triggerShutdown();
-              throw error::Logic("Unable to start all prerequisites of Subsystem "+string(*susy));
+              throw error::State("Unable to start all prerequisites of Subsystem "+string(*susy));
         }   }
       
       void

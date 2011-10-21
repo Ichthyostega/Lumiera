@@ -244,7 +244,7 @@ namespace test    {
           arg3->storeTuple (tuple::make (rand() % 10, TimeVar(randTime())));
           arg4->storeTuple (tuple::make (rand() % 10, TimeVar(randTime())));
 
-          arg5->storeTuple (tuple::make (TTime (randTime()), Tstr("glorious"), rand() % 25));
+          arg5->storeTuple (tuple::make (TTime (randTime()), Tstr("glorious"), 10 + rand() % 90));
 
           CHECK (!arg5->canUndo());
 

@@ -24,9 +24,9 @@
 /** @file result.hpp
  ** Intermediary value object to represent the result of an operation.
  ** This operation might have produced a value result or failed with an exception.
- ** Typically, the Result token used \em inline -- immediately either invoking one
- ** of the member function or employing the built-in result type conversion. It
- ** will be copyable iff the result value is copyable. There is an implicit
+ ** Typically, the Result token is used \em inline -- immediately either invoking
+ ** one of the member function or employing the built-in result type conversion.
+ ** It will be copyable iff the result value is copyable. There is an implicit
  ** valid or failure state, which can be tested. Any attempt to get the value
  ** of an invalid result token will cause in an exception to be thrown.
  ** 
@@ -58,11 +58,10 @@ namespace lib {
   
   
   /**
-   * Result value and status of some operation.
-   * It can be created for passing a result produced
-   * by the operation, or the failure to do so. The value
-   * can be retrieved by implicit or explicit conversion.
-   * @throws on any attempt to access the value in case of failure
+   * Optional Result value or status of some operation.
+   * It can be created for passing a result produced by the operation, or the 
+   * failure to do so. The value can be retrieved by implicit or explicit conversion.
+   * @throw error::State on any attempt to access the value in case of failure
    * @warning this class has a lot of implicit conversions;
    *          care should be taken when defining functions
    *          to take Result instances as parameter....

@@ -67,7 +67,7 @@
 #include "lib/bool-checkable.hpp"
 #include "lib/meta/function.hpp"
 #include "lib/meta/typelist.hpp"
-#include "lib/meta/typelist-util.hpp"
+#include "lib/meta/typelist-manip.hpp"
 #include "lib/meta/tuple.hpp"
 #include "lib/util.hpp"
 

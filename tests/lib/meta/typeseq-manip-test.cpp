@@ -39,7 +39,7 @@
 
 #include "lib/test/run.hpp"
 #include "lib/meta/typeseq-util.hpp"
-#include "lib/meta/typelist-util.hpp"
+#include "lib/meta/typelist-manip.hpp"
 #include "meta/typelist-diagnostics.hpp"
 
 #include <boost/format.hpp>
@@ -48,6 +48,7 @@
 using ::test::Test;
 using std::string;
 using std::cout;
+using std::endl;
 
 
 namespace lumiera {

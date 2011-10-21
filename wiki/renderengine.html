@@ -1077,6 +1077,103 @@ Please note the shortcomings and logical contradictions in the solution currentl
 * The current design rather places the implementation according to the roles of the involved entities, which causes some ping-pong on the implementation level. Especially the ScopeLocator singleton can be accessed multiple times. This is the usual clarity vs. performance tradeoff. Scope resolution is assumed rather to be //not performance critical.//
 </pre>
 </div>
+<div title="BuffHandle" modifier="Ichthyostega" modified="201109232348" created="201109021617" tags="Rendering spec draft" changecount="8">
+<pre>All rendering, transformations and output of media data requires using ''data buffers'' -- but the actual layout and handling of these buffers is closely related to the actual implementation of these operations. As we're relying heavily on external libraries and plug-ins for performing these operations, there is no hope getting away with just one single {{{Buffer}}} data type definition. Thus, we need to confine ourselves to a common denominator of basic operations regarding data buffers and abstract the access to these operations through a BufferProvider entity. Beyond these basic operations, mostly we just need to assure that //a buffer exists as an distinguishable element// -- which in practice boils down to pushing around {{{void*}}} variables. 
+
+Obviously, overloading a pointer with semantic meaning isn't exactly a brilliant idea -- and the usual answer is to embed this pointer into a smart handle, which also yields the nice side-effect of explaining this design to the reader. Thus a buffer handle
+* can only be obtained from a BufferProvider
+* can be used to identify a buffer
+* can be dereferenced
+* can be copied 
+
+!design quest: buffer type information
+To perform anything useful with such a buffer handle, the client code needs some additional information, which can be generalised into a //type information:// Either, the client needs to know the size and kind of data to expect in the buffer, maybe just assume to get a specific buffer with suitably dimensions, or the client needs to know which buffer provider to contact for any management operations on that buffer (handle). And, at some point there needs to be a mechanism to verify the validity of a handle. But all of this doesn't mean that it's necessary to encode or embedd this information directly into the handle -- it might also be stored into a registration table (which has the downside of creating contention), or it might just be attached implicitly to the invocation context.
+
+Just linking this type information to the context is certainly the most elegant solution, but also by far the most difficult to achieve -- not to mention the implicit dependency on a very specific invocation situation. So for now (9/2011) it seems best to stick to the simple and explicit implementation, just keeping that structural optimisation in mind. And the link to this buffer type information should be made explicit within the definition anyway, even if we choose to employ another design tradeoff later.
+* thus the conclusion is: we introduce a ''descriptor object'', which will be stored within the handle
+* each BufferProvider exposes a ''descriptor prototype''; it can be specialised and used by to [[organise implementation details|BufferMetadata]]
+
+
+!sanity checks
+there are only limited sanity checks, and they can be expected to be optimised away for production builds.
+Basically the client is responsible for sane buffer access.
+</pre>
+</div>
+<div title="BufferManagement" modifier="Ichthyostega" modified="201109232234" created="201109151420" tags="Rendering Player spec draft" changecount="10">
+<pre>Buffers are used to hold the media data for processing and output. Within the Lumiera RenderEngine and [[Player]] subsystem, we use some common concepts to handle the access and allocation of working buffers. Yet this doesn't imply having only one central authority in charge of every buffer -- such an approach wouldn't be possible (due to collaboration with external systems) and wouldn't be desirable either. Rather, there are some common basic usage //patterns// -- and there are some core interfaces used throughout the organisation of the rendering process.
+
+Mostly, the //client code,// i.e. code in need of using buffers, can access some BufferProvider, thereby delegating the actual buffer management. This binds the client to adhere to kind of a //buffer access protocol,// comprised of the ''announcing'', ''locking'', optionally ''attaching'' and finally the ''releasing'' steps. Here, the actual buffer management within the provider is a question of implementation and will be configured during build-up of the scope in question.
+
+!usage situations
+;rendering
+:any calculations and transformations of media data typically require an input- and output buffer. To a large extent, these operations will be performed by specialised libraries, resulting in a call to some plain-C function receiving pointers to the required working buffers. Our invocation code has the liability to prepare and provide those pointers, relying on a BufferProvider in turn.
+;output
+:most any of the existing libraries for handling external output require the client to adhere to some specific protocol. Often, this involves some kind of callback invoked at the external library's discretion, thus forcing our engine to prepare data within an intermediary buffer. Alternatively, the output system might provide some mechanism to gain limited direct access to the output buffers, and such an access can again be exposed to our internal client code through the BufferProvider abstraction.
+
+!primary implementations
+;memory pool
+:in all those situations, where we just need a working buffer for some time, we can rely on our internal custom memory allocator.
+:{{red{~Not-Yet-Implemented as of 9/11}}} -- as a fallback we just rely on heap allocations through the language runtime
+;frame cache
+:whenever a calculated result may be of further interest, beyond the immediate need triggering the calculation, it might be eligible for caching.
+:The Lumiera ''frame cache'' is a special BufferProvider, maintaining a larger pool of buffers which can be pinned and kept around for some time,
+:accomodating limited resources and current demand for fresh result buffers.
+
+</pre>
+</div>
+<div title="BufferMetadata" modifier="Ichthyostega" modified="201109240026" created="201109240004" tags="spec Rendering draft" changecount="6">
+<pre>the generic BufferProvider implementation exposes a service to attach and maintain additional metadata with individual buffers. Using this service is not mandatory -- a concrete buffer provider implementation may chose to maintain more specific metadata right on the implementation level, especially if more elaborate management is necessary within the implementation anyway (e.g. the frame index). We can expect most buffer provider implementations to utilise at least the generic buffer type id service though.
+
+!buffer types and descriptors
+Client code accesses buffer through [[smart buffer handles|BuffHandle]], including some kind of buffer type information, encoded into a type ID within the ''buffer descriptor''. These descriptors are used like prototypes, relating the type-~IDs hierarchically. Obviously, the most fundamental distinction is the BufferProvider in charge for that specific buffer. Below that, the next mandatory level of distinction is the ''buffer size''. In some cases, additional distinctions can be necessary. Each BufferProvider exposes a service to yield unique type ~IDs governed by such a hierarchical scheme.
+
+!state and metadata for individual buffers
+Beyond that, it can be necessary to associate at least a state flag with //individual buffers.// Doing so requires the buffer to be in //locked state,// otherwise it wouldn't be distinguishable as an separate entity (a client is able to access the buffer memory address only after &quot;locking&quot; this buffer). Especially when using a buffer provider in conjunction with an OutputSlot, these states and transitions are crucial for performing an orderly handover of generated data from the producer (render engine) to the consumer (external output sink).
+
+__Note__: while the API to access this service is uniform, conceptually there is a difference between just using the (shared) type information and associating individual metadata, like the buffer state. Type-~IDs, once allocated, will never be discarded (within the lifetime of an Lumiera application instance -- buffer associations aren't persistent). To the contrary, individual metadata //will be discarded,// when releasing the corresponding buffer. According to the ''prototype pattern'', individual metadata is treated as a one-way-off specialisation.
+</pre>
+</div>
+<div title="BufferProvider" modifier="Ichthyostega" modified="201109232347" created="201107082330" tags="Rendering spec draft" changecount="20">
+<pre>It turns out that --  throughout the render engine implementation -- we never need direct access to the buffers holding media data. Buffers are just some entity to be //managed,// i.e. &quot;allocated&quot;, &quot;locked&quot; and &quot;released&quot;; the //actual meaning of these operations can be left to the implementation.// The code within the render engine just pushes around ''smart-prt like handles''. These [[buffer handles|BuffHandle]] act as a front-end, being created by and linked to a buffer provider implementation. There is no need to manage the lifecycle of buffers automatically, because the use of buffers is embedded into the render calculation cycle, which follows a rather strict protocol anyway. Relying on the [[capabilities of the scheduler|SchedulerRequirements]], the sequence of individual jobs in the engine ensures...
+* that the availability of a buffer was ensured prior to planning a job (&quot;buffer allocation&quot;)
+* that a buffer handle was obtained (&quot;locked&quot;) prior to any operation requiring a buffer
+* that buffers are marked as free (&quot;released&quot;) after doing the actual calculations.
+
+!operations
+While BufferProvider is an interface meant to be backed by various different kinds of buffer and memory management approaches, there is a common set of operations to be supported by any of them
+;announcing
+:client code may announce beforehand that it expects to get a certain amount of buffers. Usually this causes some allocations to happen right away, or it might trigger similar mechanisms to ensure availability; the BufferProvider will then return the actual number of buffers guaranteed to be available. This announcing step is optional an can happen any time before or even after using the buffers and it can be repeated with different values to adjust to changing requirements. (Currently 9/2011 this is meant to be global for the whole BufferProvider, but it might happen that we need to break that down to individual clients)
+;locking
+:this operation actually makes a buffer available for a specific client and returns a [[buffer handle|BuffHandle]]. The corresponding buffer is marked as used and can't be locked again unless released. If necessary, at that point the BufferProvider might allocate memory to accommodate (especially when the buffers weren't announced beforehand). The locking may fail and raise an exception. You may expect failure to be unlikely when buffers have been //announced beforehand.// To support additional sanity checks, the client may provide a token-ID with the lock-operation. This token may be retrieved later and it may be used to ensure the buffer is actually locked for //this token.//
+;attaching
+:optionally the client may attach an object to a locked buffer. This object is placement-constructed into the buffer and will be destroyed automatically when releasing the buffer. Alternatively, the client may provide a pair of constructor- / destructor-functors, to be invoked in a similar way. This allows e.g. to install descriptor structures within the buffer, as required by an external library.
+;releasing
+:buffers need to be released explicitly by the client code. This renders the corresponding BuffHandle invalid, (optionally) invokes a destructor function of an attached object and maybe reclaims the buffer memory
+
+!!type metadata service
+In addition to the basic operations, clients may associate BufferMetadata with individual buffers;
+in the basic form, this means just maintaining a type tag describing the kind of buffer, while optionally this service might be extended to e.g. associating a state flag.
+
+__see also__
+&amp;rarr; OutputSlot relying on a buffer provider to deal with frame output buffers
+&amp;rarr; more about BufferManagement within the RenderEngine and [[Player]] subsystem
+&amp;rarr; RenderMechanics for details on the buffer management within the node invocation for a single render step
+</pre>
+</div>
+<div title="BufferTable" modifier="Ichthyostega" created="201109172253" tags="def spec Rendering draft" changecount="1">
+<pre>The invocation of individual [[render nodes|ProcNode]] uses an ''buffer table'' internal helper data structure to encapsulate technical details of the allocation, use, re-use and feeing of data buffers for the media calculations. Here, the management of the physical data buffers is delegated through a BufferProvider, which typically is implemented relying on the ''frame cache'' in the backend. Yet some partially quite involved technical details need to be settled for each invocation: We need input buffers, maybe provided as external input, while in other cases to be filled by a recursive call. We need storage to prepare the (possibly automated) parameters, and finally we need a set of output buffers. All of these buffers and parameters need to be rearranged for invoking the (external) processing function, followed by releasing the input buffers and commiting the output buffers to be used as result.
+
+Because there are several flavours of node wiring, the building blocks comprising such a node invocation will be combined depending on the circumstances. Performing all these various steps is indeed the core concern of the render node -- with the help of BufferTable to deal with the repetitive, tedious and technical details.
+
+!requirements
+The layout of the buffer table will be planned beforehand for each invocation, allongside with planning the individual invocation jobs for the scheduler. At that point, a generic JobTicket for the whole timeline segment is available, describing the necessary operations in an abstract way, as determined by the preceeding planning phase. Jobs are prepared chunk wise, some time in advance (but not all jobs of at once). Jobs will be executed concurrently. Thus, buffer tables need to be created repeatedly and placed into a memory block accessed and owned exclusively by the individual job.
+* within the buffer table, we need an working area for the output handles, the input handles and the parameter descriptors
+* actually, these can be seen as pools holding handle objects which might even be re-used, especially for a chain of effects calculated in-place.
+* each of these pools is characterised by a common //buffer type,// represented as buffer descriptor
+* we need some way to integrate with the StateProxy, because some of the buffers need to be marked especially, e.g. as result
+* there should be convenience functions to release all pending buffers, forwarding the release operation to the individual handles
+</pre>
+</div>
 <div title="BuildFixture" modifier="Ichthyostega" modified="201011290504" created="201011282003" tags="Builder spec operational" changecount="32">
 <pre>//Building the fixture is actually at the core of the [[builder's operation|Builder]]//
 {{red{WIP as of 11/10}}} &amp;rarr; see also the [[planning page|PlanningBuildFixture]]
@@ -1632,6 +1729,36 @@ The main tool used to implement this separation is the [[Builder Pattern|http://
 Another pertinent theme is to make the basic building blocks simpler, while on the other hand gaining much more flexibility for combining these building blocks. For example we try to unfold any &quot;internal-multi&quot; effects into separate instances (e.g. the possibility of having an arbitrary number of single masks at any point of the pipeline instead of having one special masking facility encompassing multiple sub-masks. Similarly, we treat the Objects in the Session in a more uniform manner and gain the possibility to [[place|Placement]] them in various ways.
 </pre>
 </div>
+<div title="DesignPlayerSubsystem" modifier="Ichthyostega" modified="201108141649" created="201105220216" tags="Player design draft" changecount="14">
+<pre>//Currently (5/2011) this page is used to collect and build up a coherent design for the player subsystem of Lumiera..//
+
+!Starting point
+The intention is to start out with the design of the PlayerDummy and to //transform//&amp;nbsp; it into the full player subsystem.
+* the ~DisplayService in that dummy player design moves down into Proc-Layer and becomes the OutputManager
+* likewise, the ~DisplayerSlot is transformed into the interface OutputSlot, with various implementations to be registered with the OutputManager
+* the core idea of having a play controler act as the frontend and handle to an PlayProcess is retained.
+
+!!Idea
+Introduce a new kind of MObject, a GeneratorMO, to represent what the current dummy player does: generate some kind of test data. As a first step, we might retro-fit the existing dummy player to this structure, and then expand it to have a minimal render engine setup for tests and diagnostics. That is, there will be some kind of GeneratorNode to produce test data.
+
+!!Stages of transition
+Reworking the dummy player into the [[Player subsystem|PlayService]] is a larger undertaking, and best broken up into several //stages.//
+# just moving the existing entities into the final location (typically down in the layer hierarchy)
+# introduce a GeneratorMO and a GeneratorNode, while providing a shortcut to get the GeneratorNode without requiring the (not yet implemented) Builder.
+# rework the ~ProcessImpl and the ~TickService to become the [[calculation stream|CalcStream]] and use the real Engine Interface, but still with an mock implementation hooked up behind
+# extend and elaborate the handling of output, build the foundation of the real OutputManager
+# switch to the real Scheduler and Engine implementation
+
+!!!!new entities to build {{red{#805}}}
+* the ~DisplayService needs to be generalised into an OutputManager interface
+* we need to introduce a new kind of StructAsset, the ViewerAsset.
+* then, of course, the PlayService interface needs to be created
+* as a temporary soltion, a ''~DummyPlayConnection'' will be created hard-wired, within the ~DummyPlayer service. This dumy container is a test setup, explicitly creating a OutputManager implementation, a GeneratorMO, a GeneratorNode (thus omitting the not-yet-implemented Builder) and the corresponding ModelPort. This way, the ~DummyPlayer service can be changed to use the real PlayService for creating the dummy generated output data. It will then pass back the resulting PlayController to the existing GUI setup.
+
+The Method of pushing frames to the Viewer widget is changed fundamentally during that transition: while previously, in the PlayerDummy design study, the GUI opened a Display-façade interface -- now rather the GUI has to register an OutputSlot implementation with the global OutputManager. Such a registration requires an explicit deregistration on shutdown, and this can be made to block, until no further data will be delivered. Using this approach we hope to circumvent problems with occasional crashes on closing the application, due to dispatching frame output signals in the event thread while shutdown is already in progress.
+
+</pre>
+</div>
 <div title="DisplayFacade" modifier="Ichthyostega" modified="200904302316" created="200902080703" tags="spec" changecount="2">
 <pre>LayerSeparationInterface provided by the GUI.
 Access point especially for the playback. A render- or playback process uses the DisplayFacade to push media data up to the GUI for display within a viewer widget of full-screen display. This can be thought off as a callback mechanism. In order to use the DisplayFacade, client code needs a DisplayerSlot (handle), which needs to be set up by the UI first and will be provided when starting the render or playback process.
@@ -1693,6 +1820,15 @@ When building the low-level model, the actual processing code is resolved and a 
 Initially, only the parameter (descriptors) are present on the effect ~MObject, while the actual [[parameter providers|ParamProvider]] are created or wired (by the ConManager) on demand.
 </pre>
 </div>
+<div title="EngineFaçade" modifier="Ichthyostega" modified="201108141650" created="201105222328" tags="Rendering overview spec" changecount="5">
+<pre>The primary interface used by the upper application layers to interact with the render engine, to create and manage ongoing [[calculation streams|CalcStream]].
+
+Below this facade, there is a thin adaptadion and forwarding layer, mainly talking to
+* the individual [[Calculation Streams|CalcStream]] created for each PlayProcess.
+* the FrameDispatcher, which translates such streams into a series of RenderJob entries
+* the [[Scheduler]], which is responsible to perform these jobs in a timely fashion
+</pre>
+</div>
 <div title="EntryID" modifier="Ichthyostega" modified="201012300036" created="201012300026" tags="def Types" changecount="5">
 <pre>A general identification scheme, ombining a human readable symbolic name, unique within a //specifically typed context,// and machine readable hash ID (LUID). ~Entry-IDs allow for asset-like position accounting and for type safe binding between configuration rules and model obects. They allow for creating an entry with symbolic id and distinct type, combined with an derived hash value, without the overhead in storage and instance management imposed by using a full-fledged Asset.
                                                                                       
@@ -1735,8 +1871,10 @@ To make the intended use of the classes more clear, consider the following two e
 * a video clip placed relatively, with an attached HUE effect &amp;rarr;[[Example2]]
 </pre>
 </div>
-<div title="ExitNode" modifier="Ichthyostega" created="200706220322" tags="def" changecount="1">
+<div title="ExitNode" modifier="Ichthyostega" modified="201108140105" created="200706220322" tags="def" changecount="4">
 <pre>a special ProcNode which is used to pull the finished output of one Render Pipeline (Tree or Graph). This term is already used in the Cinelerra2 codebase. I am unsure at the moment if it is a distinct subclass or rahter a specially configured ProcNode (a general design rule tells us to err in favour of the latter if in doubt).
+
+The render nodes network is always built separate for each [[timeline segment|Segmentation]], which is //constant in wiring configuration.// Thus, while exit node(s) are per segment, the corresponding exit nodes of consecutive segments together belong to a ModelPort, which in turn corresponds to a global pipe (master bus not connected any further). These relations guide the possible configuration for an exit node: It may still provide multiple channels -- but all those channels are bound to belong to a single logical stream -- same StreamPrototype, always handled as bundle, connected and routed in one step. For example, when there is an 5.1 Audio master bus with a single fader, then &quot;5.1 Audio&quot; would be a prototype and these 6 channels will always be handled together; in such a case it makes perfectly sense to access these 6 audio channels through a single exit node, which is keyed (identified) by the same [[Pipe]]-ID as the corresponding ModelPort and the corresponding global pipe (&quot;5.1 Audio master bus&quot;)
 </pre>
 </div>
 <div title="ExplicitPlacement" modifier="Ichthyostega" modified="201012122052" created="200706220304" tags="def" changecount="6">
@@ -1801,8 +1939,9 @@ Some further details
 * a special case of this factory use is the [[Singleton]] factory, which is used a lot within the Proy-Layer code
 </pre>
 </div>
-<div title="Fixture" modifier="Ichthyostega" modified="201012162259" created="200706220324" tags="def spec Builder Model" changecount="47">
-<pre>a specially configured view -- joining together high-level and low-level model
+<div title="Fixture" modifier="Ichthyostega" modified="201109031601" created="200706220324" tags="def spec Builder Model" changecount="48">
+<pre>a specially configured view -- joining together high-level and low-level model.
+The Fixture acts as //isolation layer// between the two models, and as //backbone to attach the render nodes.//
 * all MObjects have their position, length and configuration set up ready for rendering.
 * any nested sequences (or other kinds of indirections) have been resolved.
 * every MObject is attached by an ExplicitPlacement, which declares a fixed position (Time, [[Pipe|OutputDesignation]])
@@ -1834,19 +1973,19 @@ The fixture is like a grid, where one dimension is given by the [[model ports|Mo
 :Thus the exit nodes are keyed by ~Pipe-ID as well (and consequently have a distinct [[stream type|StreamType]]) -- each model port coresponds to {{{&lt;number_of_segments&gt;}}} separate exit nodes, but of course an exit node may be //mute.//
 </pre>
 </div>
-<div title="FixtureDatastructure" modifier="Ichthyostega" modified="201012162342" created="201012162304" tags="spec Builder" changecount="6">
-<pre>Generally speaking, the [[here|Fixture]] comprised of a ModelPortRegistry and a set of [[segmentations|Segmentation]] per Timeline.
-This page focusses on the actual datastructure and usage details on that level. See also &amp;rarr; [[storage|FixtureStorage]] considerations.
+<div title="FixtureDatastructure" modifier="Ichthyostega" modified="201109031600" created="201012162304" tags="spec Builder" changecount="11">
+<pre>Generally speaking, the datastructure to implement the ''Fixture'' (&amp;rarr; see a more general description [[here|Fixture]]) is comprised of a ModelPortRegistry and a set of [[segmentations|Segmentation]] per Timeline.
+This page focusses on the actual data structure and usage details on that level. See also &amp;rarr; [[storage|FixtureStorage]] considerations.
 
 !transactional switch
-A key point to note is the fact that the fixture is frequently [[re-built||BuildFixture]] by the [[Builder]], while render processes may be going in in parallel. Thus, when a build process is finished, a transactional ''commit'' happens to ''hot swap'' the new parts of the model. This is complemented by a cleanup of tainted render processes; finally, storage can be relaimed.
+A key point to note is the fact that the fixture is frequently [[re-built||BuildFixture]] by the [[Builder]], while render processes may be going on in parallel. Thus, when a build process is finished, a transactional ''commit'' happens to ''hot swap'' the new parts of the model. This is complemented by a clean-up of tainted render processes; finally, storage can be reclaimed.
 
 To support this usage pattern, the Fixture implementation makes use of the [[PImpl pattern|http://c2.com/cgi/wiki?PimplIdiom]]
 
 !Collecting usage scenarios {{red{WIP 12/10}}}
 * ModelPort access
 ** get the model port for a given ~Pipe-ID
-** ennumerate the model ports for a Timeline
+** enumerate the model ports for a Timeline
 * rendering frame dispatch
 ** get or create the frame dispatcher table
 ** dispatch a single frame to yield the corresponding ExitNode
@@ -1855,34 +1994,34 @@ To support this usage pattern, the Fixture implementation makes use of the [[PIm
 ** create a new segmentation
 ** establish what segments actually need to be rebuilt
 ** dispatch a newly built segment into the transaction
-** schedule superseded segments and tainted process for cleanup
+** schedule superseded segments and tainted process for clean-up
 ** commit a transaction
  
 
 !Conclusions about the structure {{red{WIP 12/10}}}
 * the ~PImpl needs to be a single (language) pointer. This necessitates having a monolithic Fixture implementation holder
-* moreover, this necessitates a tight integration up to implementation level, both with the cleanup and the render processes themselves
+* moreover, this necessitates a tight integration down to implementation level, both with the clean-up and the render processes themselves
 </pre>
 </div>
-<div title="FixtureStorage" modifier="Ichthyostega" modified="201012162324" created="201012140231" tags="Builder impl operational draft" changecount="30">
+<div title="FixtureStorage" modifier="Ichthyostega" modified="201108142259" created="201012140231" tags="Builder impl operational draft" changecount="35">
 <pre>The Fixture &amp;rarr; [[data structure|FixtureDatastructure]] acts as umbrella to hook up the elements of the render engine's processing nodes network (LowLevelModel).
-Each segment within the [[Segmentation]] of any timeline serves as ''extent'' or unit of memory management: it is built up completely during the corresponding build process and becomes immutable thereafter, finally to be discarded as a whole when superseded by a modified version of that segment (new build process) -- but only after all related render processes are known to be terminated.
+Each segment within the [[Segmentation]] of any timeline serves as ''extent'' or unit of memory management: it is built up completely during the corresponding build process and becomes immutable thereafter, finally to be discarded as a whole when superseded by a modified version of that segment (new build process) -- but only after all related render processes (&amp;rarr; CalcStream) are known to be terminated.
 
 Each segment owns an AllocationCluster, which in turn manages all the numerous small-sized objects comprising the render network implementing this segment -- thus the central question is when to //release the segment.//
-* for one, we easily detect the point when a segment is swapped out of the segmentation; at this point we also have to detect the //tainted render processes.//
-* but those render processes terminate asynchronously, and that forces us to do some kind of registration and deregistration.
+* for one, we easily detect the point when a segment is swapped out of the segmentation; at this point we also have to detect the //tainted calculation streams.//
+* but those render processes (calc streams) terminate asynchronously, and that forces us to do some kind of registration and deregistration.
 
 !!question: is ref-counting acceptable here?
 //Not sure yet.// Of course it would be the simplest approach. KISS.
-Basically the concern is that each new render process had to access the shared counts of all segments it touches.
+Basically the concern is that each new CalcStream had to access the shared counts of all segments it touches.
 
 ''Note'': {{{shared_ptr}}} is known to be implemented by a lock-free algorithm (yes it is, at least since boost 1.33. Don't believe what numerous FUD spreaders have written). Thus lock contention isn't a problem, but at least a memory barrier is involved (and if I&amp;nbsp;judge GCC's internal documentation right, currently their barriers extend to //all// globally visible variables)
 
 !!question: alternatives?
-There are. As the builder is known to be run again and again, no one forces us to deallocate as soon as we could. That's the classical argument exploited by any garbage collector too. Thus we could just note the fact that a render process had terminated and evaluate all those noted results on later occasion.
+There are. As the builder is known to be run again and again, no one forces us to deallocate as soon as we could. That's the classical argument exploited by any garbage collector too. Thus we could just note the fact that a calculation stream is done and re-evaluate all those noted results on later occasion.
 
 !!exploiting the frame-dispatch step
-Irrespective of the decision in favour or against ref-counting, it seems reasonable to make use of the //frame dispatch step,// which is necessary anyway. The idea is to give each render process a //copy//&amp;nbsp; of an dispatcher table object -- basically just a list of time breaking points and a pointer to the relevant exit node. If we keep track of those dispatcher tables, add a back-link to identify the process and require the process in turn to deregister, we get a tracking of tainted processes for free.
+Irrespective of the decision in favour or against ref-counting, it seems reasonable to make use of the //frame dispatch step,// which is necessary anyway. The idea is to give each render process (maybe even each CalcStram)  a //copy//&amp;nbsp; of an dispatcher table object -- basically just a list of time breaking points and a pointer to the relevant exit node. If we keep track of those dispatcher tables, add a back-link to identify the process and require the process in turn to deregister, we get a tracking of tainted processes for free.
 
 !!assessment {{red{WIP 12/10}}}
 But the primary question here is to judge the impact of such an implementation. What would be the costs?
@@ -1902,7 +2041,7 @@ But the primary question here is to judge the impact of such an implementation. 
 
 !!!identifying tainted and disposable segments
 Above estimation hints at the necessity of frequently finding some 30 to 100 segments to be disposed, out of thousands, assumed the original reason for triggering the build process was a typically local change in the high-level model. We can only discard when all related processes are finished, but there is a larger number of segments as candidate for eviction. These candidates are rather easy to pinpoint -- they will be uncovered during a linear comparison pass prior to commiting the changed Fixture. Usually, the number of candidates will be low (localised changes), but global manipulations might invalidate thousands of segments.
-* if we frequently pick the segments actually to disposed, there is the danger of performance degeneration when the number if segments is high
+* if we frequently pick the segments actually to be disposed, there is the danger of performance degeneration when the number of segments is high
 * the other question is if we can afford just to keep all of those candidates around, as all of them are bound to get discardable eventually
 * and of course there is also the question how to detect //when// they're due.
 
@@ -1915,7 +2054,7 @@ Above estimation hints at the necessity of frequently finding some 30 to 100 seg
 //currently {{red{12/10}}} I tend to prefer Model B...// while the priority queue remains to be investigated in more detail for organising the actual build process.
 But actually I'm struck here, because of the yet limited knowledge about those render processes....
 * how do we //join// an aborted/changed rendering process to his successor, without creating a jerk in the output?
-* is it even possible to continue a process when parts of the covered timerange is affected by a build?
+* is it even possible to continue a process when parts of the covered timerange are affected by a build?
 If the latter question is answered with &quot;No!&quot;, then the problem gets simple in solution, but maybe memory consuming: In that case, //all//&amp;nbsp; processes linked to a timeline gets affected and thus tainted; we'd just dump them onto a pile and delay releasing all of the superseeded segments until all of them are known to be terminated.
 </pre>
 </div>
@@ -1955,6 +2094,9 @@ Additionally, they may be used for resource management purposes by embedding a r
 #* one audio Dataframe contains a block of raw audio samples
 #* one OpenGL Dataframe could contain raw texture data (but I am lacking expertise for this topic)
 </pre>
+</div>
+<div title="FrameDispatcher" modifier="Ichthyostega" modified="201108141651" created="201105222330" tags="def Rendering" changecount="3">
+<pre>An implementation facility within the RenderEngine, responsible for translating a logical [[calculation stream|CalcStream]] (corresponding to a PlayProcess) into a sequence of individual RenderJob entries, which can then be handed over to the [[Scheduler]]. Performing this operation involves a special application of [[time quantisation|TimeQuant]]: after establishing a suitable starting point, a typically contiguous series of frame numbers need to be generated, together with the time coordinates for each of those frames</pre>
 </div>
 <div title="FullScreenPlugin" modifier="CehTeh" modified="200706110313" created="200607241016" tags="systemConfig lewcidExtension" server.type="file" server.host="file:///home/ct/.homepage/home.html" server.page.revision="200706110313">
 <pre>/***
@@ -2947,12 +3089,12 @@ These are used as token for dealing with other objects and have no identity of t
 
 </pre>
 </div>
-<div title="ModelPort" modifier="Ichthyostega" modified="201012112233" created="201011100234" tags="def spec" changecount="8">
+<div title="ModelPort" modifier="Ichthyostega" modified="201105222218" created="201011100234" tags="def spec Model" changecount="11">
 <pre>Any point where output possibly might be produced. Model port entities are located within the [[Fixture]] &amp;mdash; model port as a concept spans the high-level and low-level view. A model port can be associated both to a pipe in the HighLevelModel but at the same time denotes a set of corresponding [[exit nodes|ExitNode]] within the [[segments|Segmentation]] of the render nodes network.
 
-A model port is rather derived than configured; it emerges when a pipe [[claims|WiringClaim]] an output destination and some other entity actually uses this designation as a target, either directly or indirectly. This match of provision and usage is detected during the build process and produces an entry in the fixture's model port table. These model ports in the fixture are keyed by ~Pipe-ID, thus each model port has an associated StreamType.
+A model port is rather derived than configured; it emerges when a pipe [[claims|WiringClaim]] an output destination, while some other entity at the same time actually //uses this designation as a target,// either directly or indirectly. This match of provision and usage is detected during the build process and produces an entry in the fixture's model port table. These model ports in the fixture are keyed by ~Pipe-ID, thus each model port has an associated StreamType.
 
-Model ports are the effective, resulting outputs of each timeline; additional ports result from [[connecting a viewer|ViewerPlayConnection]]. Any render or display process happens at a model port.
+Model ports are the effective, resulting outputs of each timeline; additional ports result from [[connecting a viewer|ViewConnection]]. Any render or display process happens at a model port.
 
 !formal specification
 Model port is a //conceptual entity,// denoting the possibility to pull generated data of a distinct (stream)type from a specific bus within the model -- any possible output produced or provided by Lumiera is bound to appear at a model port. The namespace of model ports is global, each being associated with a ~Pipe-ID.
@@ -2993,7 +3135,7 @@ __Note__: nothing within the PlacementIndex requires the root object to be of a 
 
 </pre>
 </div>
-<div title="MultichannelMedia" modifier="Ichthyostega" modified="201003140238" created="200709200255" tags="design img" changecount="12">
+<div title="MultichannelMedia" modifier="Ichthyostega" modified="201106212255" created="200709200255" tags="design img" changecount="14">
 <pre>Based on practical experiences, Ichthyo tends to consider Multichannel Media as the base case, while counting media files providing just one single media stream as exotic corner cases. This may seem counter intuitive at first sight; you should think of  it as an attempt to avoid right from start some of the common shortcomings found in many video editors, especially
 * having to deal with keeping a &quot;link&quot; between audio and video clips
 * silly limitations on the supported audio setups (e.g. &quot;sound is mono, stereo or Dolby-5.1&quot;)
@@ -3026,6 +3168,12 @@ While the general approach and reasoning remains valid, a lot of the details loo
 * while the asset related parts remain as specified, we get a distinct ChannelConfig asset instead of the clip asset (which seems to be redundant)
 * either the ~ClipMO referres this ChannelConfig asset &amp;mdash; or in case of the VirtualClip a BindingMO takes this role. Clip Asset and MO could be joined into a single entity
 * as the BindingMO is also used to implement the top-level timelines, the treatment of global and local pipes is united
+* every pipe (bus) should be able to carry multiple channels, //but with the limitation to only a single media StreamType//
+* this &quot;multichannel-of-same-kind&quot; capability carries over to the ModelPort entries and even the OutputSlot elements
+* only when allocating / &quot;opening&quot; an OutputSlot, we get multiple handles for plain single channels.
+* this can be considered the breaking point, where we enter the realm of the render engine. Here, indeed, only single channels are processed
+
+
 </pre>
 </div>
 <div title="NodeConfiguration" modifier="Ichthyostega" modified="200909041807" created="200909041806" tags="spec Builder Rendering" changecount="2">
@@ -3048,21 +3196,33 @@ While the general approach and reasoning remains valid, a lot of the details loo
 In the most general case the render network may be just a DAG (not just a tree). Especially, multiple exit points may lead down to the same node, and following each of this possible paths the node may be at a different depth on each. This rules out a simple counter starting from the exit level, leaving us with the possibility of either employing a rather convoluted addressing scheme or using arbitrary ID numbers.{{red{...which is what we do for now}}}
 </pre>
 </div>
-<div title="NodeOperationProtocol" modifier="Ichthyostega" modified="200909031217" created="200806010251" tags="Rendering operational" changecount="16">
-<pre>The [[nodes|ProcNode]] are wired to form a &quot;Directed Acyclic Graph&quot;; each node knows its predecessor(s), but not its successor(s).  The RenderProcess is organized according to the ''pull principle'', thus we find an operation {{{pull()}}} at the core of this process. There is no such thing as an &quot;engine object&quot; calling nodes iteratively or table driven, rather, the nodes themselves issue recursive calls to their predecessor(s). For this to work, we need the nodes to adhere to a specific protocol:
-# Node is pulled, with a StateProxy object as parameter (encapsulating the access to the frames or buffers)
-# Node may now access current parameter values, using the state accessible via the StateProxy
-# using it's //input-output and wiring descriptor,// the Node creates a StateAdapter wrapping the StateProxy for allocating buffers and accessing the required input
-# StateAdapter might first try to get the output frames from the Cache in the Backend. In case of failure, a {{{process()}}} call is prepared by generating {{{pull()}}} call(s) for the input
-# as late as possible, typically on return, these recursive pull-calls have allocated a buffer containing the input data.
-# when input is ready prior to the {{{process()}}} call, output buffers will be allocated, either from the cache, or (if not caching) from the &quot;parent&quot; StateAdapter up the callstack.
-# after all buffers are available, the StateAdapter issues the {{{process()}}} call back to the originating node, which now may dereference the frame pointers and do its calculations
-# finally, when the {{{pull()}}} call returns, &quot;parent&quot; state originating the pull holds onto the buffers containing the calculated output result.
+<div title="NodeOperationProtocol" modifier="Ichthyostega" modified="201109172254" created="200806010251" tags="Rendering operational" changecount="25">
+<pre>The [[nodes|ProcNode]] are wired to form a &quot;Directed Acyclic Graph&quot;; each node knows its predecessor(s), but not its successor(s).  The RenderProcess is organized according to the ''pull principle'', thus we find an operation {{{pull()}}} at the core of this process. Meaning that there isn't an central entity invoking nodes consecutively. Rather, the nodes themselves contain the detailed knowledg regarding prerequisites, so the calculation plan is worked out recursively. Yet there are some prerequisite resources to be made available for any calculation to happen. Thus the actual calculation is broken down into atomic chunks of work, resulting in a 2-phase invocation whenever &quot;pulling&quot; a node. For this to work, we need the nodes to adhere to a specific protocol:
+;planning phase
+:when a node invocation is foreseeable to be required for getting a specific frame for a specific nominal and actual time, the engine has to find out the actual operations to happen
+:# the planning is initiated by issuing an &quot;get me output&quot; request, finally resulting in a JobTicket
+:# recursively, the node propagates &quot;get me output&quot; requests for its prerequisites
+:# after retrieving the planning information for these prerequisites, the node encodes specifics of the actual invocation situation into a closure called StateAdapter &lt;br/&gt;{{red{TODO: why not just labeling this &amp;raquo;~StateClosure&amp;laquo;?}}}
+:# finally, all this information is packaged into a JobTicket representing the planning results.
+;pull phase
+:now the actual node invocation is embedded within a job, activated through the scheduler to deliver //just in time.//
+:# Node is pulled, with a StateProxy object as parameter (encapsulating BufferProvider for access to the required frames or buffers)
+:# Node may now retrieve current parameter values, using the state accessible via the StateProxy
+:# to prepare for the actual {{{process()}}} call, the node now has to retrieve the input prerequisites
+:#* when the planning phase determined availability from the cache, then just these cached buffer(s) are now retrieved, dereferencing a BuffHandle
+:#* alternatively the planning might have arranged for some other kind of input to be provided through a prerequisite Job. Again, the corresponding BuffHandle can now be dereferenced
+:#* Nodes may be planned to have a nested structure, thus directly invoking {{{pull()}}} call(s) to prerequisite nodes without further scheduling
+:# when input is ready prior to the {{{process()}}} call, output buffers will be allocated by locking the output [[buffer handles|BuffHandle]] prepared during the planning phase
+:# since all buffers and prerequistes are available, the Node may now prepare a frame pointer array and finally invoke the external {{{process()}}} to kick off the actual calculations
+:# finally, when the {{{pull()}}} call returns, &quot;parent&quot; state originating the pull holds onto the buffers containing the calculated output result.
+{{red{WIP as of 9/11  -- many details here are still to be worked out and might change as we go}}}
+
 some points to note:
 * the WiringDescriptor is {{{const}}} and precalculated while building (remember another thread may call in parallel)
 * when a node is &quot;inplace-capable&quot;, input and output buffer may actually point to the same location
 * but there is no guarantee for this to happen, because the cache may be involved (and we can't overwrite the contents of a cache frame)
 * generally, a node may have N inputs and M output frames, which are expected to be processed in a single call
+* some of the technical details of buffer management are encapsulated within the BufferTable of each invocation
 
 &amp;rarr; the [[&quot;mechanics&quot; of the render process|RenderMechanics]]
 &amp;rarr; more fine grained [[implementation details|RenderImplDetails]]
@@ -3117,7 +3277,7 @@ The operation point is provided by the current BuilderMould and used by the [[pr
 This is possible because the operation point has been provided (by the mould) with informations about the media stream type to be wired, which, together with information accessible at the [[render node interface|ProcNode]] and from the [[referred processing assets|ProcAsset]], with the help of the [[connection manager|ConManager]] allows to figure out what's possible and how to do the desired connections. Additionally, in the course of deciding about possible connections, the PathManager is consulted to guide strategic decisions regarding the [[render node configuration|NodeConfiguration]], possible type conversions and the rendering technology to employ.
 </pre>
 </div>
-<div title="OutputDesignation" modifier="Ichthyostega" modified="201011190258" created="201006220126" tags="Model draft design discuss" changecount="50">
+<div title="OutputDesignation" modifier="Ichthyostega" modified="201106162303" created="201006220126" tags="Model draft design discuss" changecount="59">
 <pre>An ever recurring problem in the design of Luimiera's ~Proc-Layer is how to refer to output destinations, and how to organise them.
 Wiring the flexible interconnections between the [[pipes|Pipe]] should take into account both the StreamType and the specific usage context ([[scope|PlacementScope]]) -- and the challenge is to avoid hard-linking of connections and tangling with the specifics of the target to be addressed and connected. This page, started __6/2010__ by collecting observations to work out the relations, arrives at defining a //key abstraction// of output management.
 
@@ -3141,21 +3301,21 @@ Wiring the flexible interconnections between the [[pipes|Pipe]] should take into
 * //indirect// means to derive the destination transitively (looking at the destination's output designation and so on)
 * //relative// in this context means that we refer to &quot;the N^^th^^ of this kind&quot; (e.g. the second video out)
 * we need to attach some metadata with an output; especially we need an associated StreamType
-* output designation is structured into several //levels://
+* the referral to an output designation can be observed on and is structured into several //levels://
 ** within the body of the model, mostly we address output destinations relatively
 ** at some point, we'll address a //subgroup// within the global pipes, which acts like a summation sink
-** there might be //master pipes//
-** finally, there is the hardware output or the distinct channel within the rendered result &amp;mdash; never to be referred explicitly
+** there might be //master pipe(s),// collecting the output of various subgroups
+** finally, there is the hardware output or the distinct channel within the rendered result &amp;mdash; never to be referenced explicitly
 !!!relation to Pipes
 in almost every case mentioned above, the output designation is identical with the starting point of a [[Pipe]]. This might be a global pipe or a ClipSourcePort. Thus it sounds reasonable to use pipe-~IDs directly as output designation. Pipes, as an accountable entity (=asset) just //leap into existence by being referred.// On the other hand, the //actual//&amp;nbsp; pipe is a semantic concept, a specific structural arrangement of objects. Basically it means that some object acts as attachment point and thereby //claims//&amp;nbsp; to be the entrance side of a pipe, while other processor objects chain up in sequence.
 !!!system outputs
-System level output connections seem to be an exception to the above rule. There is no pipe at an external port, and these externally visible connection points can appear and disappear, driven by external conditions. But the question is if system outputs shall be directly addressable at all as output designation? Generally speaking, Lumiera is not intended to be a system wide connection manager or a real time performance software. Thus it's advisable to refrain from direct referrals to system level connections from within the model. Rather, there should be a separate OutputManagement to handle external outputs and displays, both in windows or full screen. So these external outputs become rather a matter of application configuration &amp;mdash; and for all the other purposes we're free to ''use pipe-~IDs as output designation''.
+System level output connections seem to be an exception to the above rule. There is no pipe at an external port, and these externally visible connection points can appear and disappear, driven by external conditions. Yet the question is if system outputs shall be directly addressable at all as output designation? Generally speaking, Lumiera is not intended to be a system wide connection manager or a real time performance software. Thus it's advisable to refrain from direct referrals to system level connections from within the model. Rather, there should be a separate OutputManagement to handle external outputs and displays, both in windows or full screen. So these external outputs become rather a matter of application configuration &amp;mdash; and for all the other purposes we're free to ''use pipe-~IDs as output designation''.
 !!!consequences of mentioning an output designation
 The immediate consequence is that a [[Pipe]] with the given ID exists as an accountable entity. Only if &amp;mdash; additionally &amp;mdash; a suitable object within the model //claims to root this pipe,//  a connection to this designation is wired, using an appropriate [[processing pattern|ProcPatt]]. A further consequence then is for the mentioned output designation to become a possible candidate for a ModelPort, an exit node of the built render nodes network. By default, only those designations without further outgoing connections actually become active model ports (but an existing and wired pipe exit node can be promoted to a model port explicitly).
 &amp;rarr; OutputManagement
 
 !!Challenge: mapping of output designations
-An entire sequence can be embedded within another sequence as a VirtualClip. While for a simple clip there is a Clip-~MObject placed into the model, holding an reference to a media asset, in case of a virtual clip an BindingMO takes on the role of the clip object. Note that BindingMO also acts as [[Timeline]] implementation &amp;mdash; indeed the same sequence might be bound simultaneously as a timeline and into a virtual clip. This flexibility creates a special twist, as the contents of this sequence have no way of finding out if they're used as timeline or embedded virtual clip. So parts of this sequence might mention a OutputDesignation which, when using the sequence as virtual clip, needs to be translated into a virtual media channel, which can be treated in the same fashion as any channel (video, audio,...) found within real media. Especially, a new output designation has to be derived in a sensible way, which largely depends on how the original output designation has been specified.
+An entire sequence can be embedded within another sequence as a VirtualClip. While for a simple clip there is a Clip-~MObject placed into the model, holding an reference to a media asset, in case of a virtual clip an BindingMO takes on the role of the clip object. Note that, within another context, BindingMO also acts as [[Timeline]] implementation &amp;mdash; indeed even the same sequence might be bound simultaneously as a timeline and into a virtual clip. This flexibility creates a special twist, as the contents of this sequence have no way of finding out if they're used as timeline or embedded virtual clip. So parts of this sequence might mention a OutputDesignation which, when using the sequence as virtual clip, needs to be translated into a virtual media channel, which can be treated in the same manner like any channel (video, audio,...) found within real media. Especially, a new output designation has to be derived in a sensible way, which largely depends on how the original output designation has been specified.
 &amp;rarr; see OutputMapping regarding details and implementation of this mapping mechanism
 
 
@@ -3163,7 +3323,7 @@ An entire sequence can be embedded within another sequence as a VirtualClip. Whi
 
 !Output designation definition
 OutputDesignation is a handle, denoting a target [[Pipe]] to connect.
-It exposes a function to resolve to a Pipe, and to retrieve the StreamType of that resolved output. It can be ''defined'' either explicitly by ~Pipe-ID, or by an indirect or relative specification. The later cases are resolved on demand only (which may be later and might change the meaning depending on the context). It's done this way intentionally to gain flexibility and avoid hard wiring (=explicit ~Pipe-ID)
+It exposes a function to resolve to a Pipe, and to retrieve the StreamType of that resolved output. It can be ''defined'' either explicitly by ~Pipe-ID, or by an indirect or relative specification. The later cases are resolved on demand only (which may be later and might even change the meaning, depending on the context). It's done this way intentionally to gain flexibility and avoid hard wiring (=explicit ~Pipe-ID)
 
 !!!Implementation notes
 Thus the output designation needs to be a copyable value object, but opaque beyond that. Mandated by the various ways to specify an output designation, a hidden state arises regarding the partial resolution. The implementation solves that dilemma by relying on the [[State|http://en.wikipedia.org/wiki/State_pattern]] pattern in combination with an opaque in-place buffer.
@@ -3174,17 +3334,18 @@ While actually data frames are //pulled,// on a conceptual level data is assumed
 * first of all, we need to know //what to route// -- kind of the traits of the data. This is given by the //current pipe.//
 * then we'll need to determine an output designation //suitable for this data.// This is given by a &quot;Plug&quot; (WiringRequest) in the placement, and may be derived.
 * finally, this output designation will be //resolved// -- at least partially, resulting in a target pipe to be used for the wiring
-As both of these specifications are given by [[Pipe]]-~IDs, the actual designation information may be reduced. Much can be infered from the circumstances, because any pipe includes a StreamType, and an output designation for an incompatible stream type (e.g. and audio output when the pipe currently in question deals with video) is irrelevant.
+As both of these specifications are given by [[Pipe]]-~IDs, the actual designation information may be reduced. Much can be infered from the circumstances, because any pipe includes a StreamType, and an output designation for an incompatible stream type is irrelevant. (e.g. and audio output when the pipe currently in question deals with video)
 </pre>
 </div>
-<div title="OutputManagement" modifier="Ichthyostega" modified="201011072240" created="201007090155" tags="Model Rendering Player spec draft" changecount="18">
+<div title="OutputManagement" modifier="Ichthyostega" modified="201108251240" created="201007090155" tags="Model Rendering Player spec draft" changecount="37">
 <pre>//writing down some thoughts//
 
 * ruled out the system outputs as OutputDesignation.
 * thus, any designation is a [[Pipe]]-ID.
 * consequently, it is not obviously clear if such an designation is the final exit point
-* please note the [[Engine interface proposal|http://lumiera.org/Lumiera/DesignProcess/EngineInterfaceOverview.html]]
+* please note the [[Engine interface proposal|http://lumiera.org/documentation/devel/rfc_pending/EngineInterfaceOverview.html]]
 * this introduces the notion of a ModelPort: //a point in the (high level) model where output can be produced//
+* thus obviously we need an OutputManager element to track the association of OutputDesignation to OutputSlot
 
 Do we get a single [[Fixture]] &amp;mdash; guess yes
 
@@ -3193,30 +3354,56 @@ From the implementation side, the only interesting exit nodes are the ones to be
 * __playback__ always happens at a viewer element
 
 !Attaching and mapping of exit nodes
-[[Output designations|OutputDesignation]] are created by using a [[Pipe]]-ID and &amp;mdash; at the same time &amp;mdash; by some object //claiming to root this pipe.// The applicability of this pattern is figured out dynamically while building the render network, resulting in a collection of model ports as part of the current [[Fixture]]. A RenderProcess can be started to pull from these active exit points of a given timeline. Besides, when the timeline enclosing these model ports is [[connected to a viewer|ViewerPlayConnection]], an [[output network|OutputNetwork]] //is built to allow hooking exit points to the viewer component.// Both cases encompass a mapping of exit nodes to actual output channels. Usually, this mapping relies on relative addressing of the output sinks, starting connections at the &quot;first of each kind&quot;.
+Initially, [[Output designations|OutputDesignation]] are typically just local or relative references to another OutputDesignation; yet after some resolution steps, we'll arrive at an OutputDesignation //defined absolute.// Basically, these are equivalent to a [[Pipe]]-ID choosen as target for the connection and -- they become //real//&amp;nbsp; by some object //claiming to root this pipe.// The applicability of this pattern is figured out dynamically while building the render network, resulting in a collection of [[model ports|ModelPort]] as part of the current [[Fixture]]. A RenderProcess can be started to pull from these -- and only from these -- active exit points of the model. Besides, when the timeline enclosing these model ports is [[connected to a viewer|ViewerPlayConnection]], an [[output network|OutputNetwork]] //is built to allow hooking exit points to the viewer component.// Both cases encompass a mapping of exit nodes to actual output channels. Usually, this mapping just relies on relative addressing of the output sinks, starting to allocate connections with the //first of each kind// (e.g. &quot;connect to the first usable audio output destination&quot;).
 
-We should note that in both cases this mapping operation is controlled and driven by the output side of the connection: A viewer has fixed output capabilities, and rendering targets a specific container format, again with fixed and pre-settled channel configuration (when configurting a render process, it might be necessary to account for //possible kinds of output streams,// so to provide a sensible pre-selection of possible output container formats for the user to select from). Thus, as a starting point, we'll create a default configured mapping, assigning channels in order. This mapping then should be exposed to modification and tweaking by the user. For rendering, this is part of the render options dialog, while in case of a viwer connection, a switch board is created to allow modifying the default mapping.
+We should note that in both cases this [[mapping operation|OutputMapping]] is controlled and driven and constrained by the output side of the connection: A viewer has fixed output capabilities, and rendering targets a specific container format -- again with fixed and pre-settled channel configuration ({{red{TODO 9/11}}} when configurting a render process, it might be necessary to pre-compute the //possible kinds of output streams,// so to provide a sensible pre-selection of possible output container formats for the user to select from). Thus, as a starting point, we'll create a default configured mapping, assigning channels in order. This mapping then should be exposed to modification and tweaking by the user. For rendering, this is part of the render options dialog, while in case of a viwer connection, a switch board is created to allow modifying the default mapping.
 
 !Connection to external outputs
-External output destinations are never addressed directly from within the model. This is an design decision. Rather, model parts connect to an OutputDesignation, and these in turn may be  [[connected to a viewer element|ViewerPlayConnection]]. At this point, related to the viewer element, there is a mapping to external destination(s): for images, a viewer typically has an implicit, natural destination (read, there is a corresponding viewer window or widget), while for sound we use an mapping rule, which could be overridden locally in the viewer.
+External output destinations are never addressed directly from within the model. This is an design decision. Rather, model parts connect to an OutputDesignation, and these in turn may be  [[connected to a viewer element|ViewerPlayConnection]]. At this point, related to the viewer element, there is a mapping to external destination(s): for images, a viewer typically has an implicit, natural destination (read: actually there is a corresponding viewer window or widget), while for sound we use an mapping rule, which could be overridden locally in the viewer.
 
-Any external output sink is managed as a [[slot|DisplayerSlot]] in the ~OutputManager. Such a slot can be opened and allocated for a playback process, which allows the latter to push calculated data frames to the output. Depending on the kind of output, there might be various, often tight requirements on the timed delivery of output data, but any details are abstracted away &amp;mdash; any slot implementation provides a way to handle timeouts gracefully, e.g. by just showing the last video frame delivered, or by looping and fading sound
-&amp;rarr; see also the PlayerDummy
+Any external output sink is managed as a [[slot|DisplayerSlot]] in the ~OutputManager. Such a slot can be opened and allocated for a playback process, which allows the latter to push calculated data frames to the output. Depending on the kind of output, there might be various, often tight requirements on the timed delivery of output data, but any details are abstracted away &amp;mdash; any slot implementation provides a way to handle time-outs gracefully, e.g. by just showing the last video frame delivered, or by looping and fading sound
+&amp;rarr; the OutputManager interface describes handling this mapping association
+&amp;rarr; see also the PlayService
+
+!the global output manager
+While within the model routing is done mostly just by referring to an OutputDesignation, at some point we need to map these abstract designations to real output capabilities. This OutputManager interface exposes these mappings and allows to control and manage them. Several elements within the application, most notably the [[viewers|ViewerAsset]], provide an implementation of this interface -- yet there is one primary implementation, the ''global output manager'', known as OutputDirector. It can be accessed through the {{{Output}}} façade interface and is the final authority when it comes to allocating an mapping of real output possibilities. The OutputDirector tracks all the OutputSlot elements currently installed and available for output.
+
+The relation between the central OutputDirector and the peripheral OutputManager implementations is hierarchical. Because output slots are usually registered rather at some peripheral output manager implementation, a direct mapping from OutputDesignation (i.e. global pipe) to these slots is created foremost at that peripheral level. Resolving a global pipe into an output slot is the core concern of any OutputManager implementation. Thus, when there is a locally preconfigured mapping, like e.g. for a viewer's video master pipe to the output slot installed by the corresponding GUI viewer element, then this mapping will picked up foremost to resolve the video master output.
+
+For a viewer widget in the GUI this yields exactly the expeted behaviour, but in other cases, e.g. for sound output, we need more general, more globally scoped output slots. In these cases, when a local mapping is absent, the query for output resolution is passed on up to the  OutputDirector, drawing on the collection of globally available output slots for that specific kind of media.
+{{red{Question: is it possible to retrieve a slot from another peripheral node?}}}
 </pre>
 </div>
-<div title="OutputMapping" modifier="Ichthyostega" modified="201011270311" created="201011080238" tags="Model spec draft" changecount="23">
+<div title="OutputManager" modifier="Ichthyostega" modified="201106212317" created="201106122359" tags="Player Model def" changecount="7">
+<pre>The term &amp;raquo;''Output Manager''&amp;laquo; might denote two things: first, there is an {{{proc::play::OutputManager}}} interface, which can be exposed by several components within the application, most notably the [[viewer elements|ViewerAsset]]. And then, there is &quot;the&quot; global output manager, the OutputDirector, which finally tracks all registered OutputSlot elements and thus is the gatekeeper for any output leaving the application.
+
+&amp;rarr; see [[output management overview|OutputManagement]]
+&amp;rarr; see OutputSlot
+&amp;rarr; see ViewerPlayConnection
+
+!Role of an output manager
+The output manager interface describes an entity handling two distinct concerns, tied together within a local //scope.//
+* a ''mapping'' to resolve a ModelPort (given as ~Pipe-ID) into an OutputSlot
+* the ''registration'' and management of possible output slots, thereby creating a preferred local mapping for future connections
+
+Note that an OutputSlot acts as a unit for registration and also for allocating / &quot;opening&quot; an output, while generally there might still be multiple physical outputs grouped into a single slot. This is relevant especially for sound output. A single slot is just the ability to allocate output ports up to a given limit (e.g. 2 for a stereo device, or 6 for a 5.1 device). These multiple channels are allways connected following a natural channel ordering. Thus the mapping is a simple 1:1 association from pipe to slot, assuming that the media types are compatible (and this has been checked already on a higher level).
+
+The //registration//&amp;nbsp; of an output slot installs a functor or association rule, which later on allows to claim and connect up to a preconfigured number of channels. This allocation or usage of a slot is exclusive (i.e. only a single client at a time can allocate a slot, even if not using all the possible channels). Each output manager instance may or may not be configured with a //fall-back rule:// when no association or mapping can be established locally, the connection request might be passed down to the global OutputDirector. Again, we can expect this to be the standard behaviour for sound, while video likely will rather be handled locally, e.g. within a GUI widget (but we're not bound to configure it exactly this way)
+</pre>
+</div>
+<div title="OutputMapping" modifier="Ichthyostega" modified="201106180044" created="201011080238" tags="Model spec draft" changecount="29">
 <pre>An output mapping serves to //resolve//&amp;nbsp; [[output designations|OutputDesignation]].
 
 !Mapping situations
 ;external outputs
 :external outputs aren't addressed directly. Rather we set up a default (channel) mapping, which then can be overridden by local rules.
-:Thus, in this case we query with an internal OutputDesignation as parameter and expect an OutputManager //slot//
+:Thus, in this case we query with an internal OutputDesignation as parameter and expect an OutputSlot
 ;viewer connections
 :any Timeline produces a number of [[model ports|ModelPort]]. On the other hand, any viewer exposes a small number of output designations, representing the image and sound output(s).
 :Thus, in this case we resolve similar to a bus connection, possibly overridden by already pre-existing or predefined connections.
 ;switch board
-:a viewer might receive multiple outputs and overlays, necessitating a user operated control to select what's actually to displayed
-:Thus, in this case we need a backwards resolution at the lower end of the output network, to connect to the model port as defined by the switchboard
+:a viewer might receive multiple outputs and overlays, necessitating a user operated control to select what's actually to be displayed
+:Thus, in this case we need a backwards resolution at the lower end of the output network, to connect to the model port as defined by this viewer SwitchBoard
 ;global pipes or virtual media
 :when binding a Sequence as Timeline or VirtualClip, a mapping from output designations used within the Sequence to virtual channels or global pipes is required
 :Thus, in this case we need to associate output designations with ~Pipe-IDs encountered in the context according to some rules &amp;mdash; again maybe overridden by pre-existing connections
@@ -3231,9 +3418,110 @@ All these mapping steps are listed here, because they exhibit a common pattern.
 * there is an //unconnected//&amp;nbsp; state.
 
 !Implementation notes
-Thus the mapping is a copyable value object, based on a associative array. It may be attached to a model object and persisted alongside. The mapping is assumed to run a defaults query when necessary. To allow for that, it should be configured with a query template (string). Frequently, special //default pipe// markers will be used at places, where no distinct pipe-ID is explicitly specified. Besides that, invocations might supply additional predicates (e.g. {{{ord(2)}}} to denote &quot;the second stream of this kind&quot;) to hint the defaults resolution. Moreover, the mapping needs a way to retrieve the set of possible results, allowing to filter the results of the rules based default. Mappings might be defined explicitly. Instead of storing a //bottom value,// an {{{isDefined()}}} predicate might be preferable.
+Thus the mapping is a copyable value object, based on a associative array. It may be attached to a model object and persisted alongside. The mapping is assumed to run a defaults query when necessary. To allow for that, it should be configured with a query template (string). Frequently, special //default pipe// markers will be used at places where no distinct pipe-ID is specified explicitly. Besides that, invocations might supply additional predicates (e.g. {{{ord(2)}}} to point at &quot;the second stream of this kind&quot;) thereby hinting the defaults resolution. Moreover, the mapping needs a way to retrieve the set of possible results, allowing to filter the results of the rules based default. Mappings might be defined explicitly. Instead of storing a //bottom value,// an {{{isDefined()}}} predicate might be preferable.
 
 First and foremost, mapping can be seen as a //functional abstraction.// As it's used at implementation level, encapsulation of detail types in't the primary concern, so it's a candidate for generic programming: For each of those use cases outlined above, a distinct mapping type is created by instantiating the {{{OutputMapping&lt;DEF&gt;}}} template with a specifically tailored definition context ({{{DEF}}}), which takes on the role of a strategy. Individual instances of this concrete mapping type may be default created and copied freely. This instantiation process includes picking up the concrete result type and building a functor object for resolving on the fly. Thus, in the way typical for generic programming, the more involved special details are moved out of sight, while being still in scope for the purpose of inlining. But there //is// a concern better to be encapsulated and concealed at the usage site, namely accessing the rules system. Thus mapping leads itself to the frequently used implementation pattern where there is a generic frontend as header, calling into opaque functions embedded within a separate compilation unit.
+</pre>
+</div>
+<div title="OutputSlot" modifier="Ichthyostega" modified="201109021531" created="201106162339" tags="def Concepts Player spec" changecount="27">
+<pre>Within the Lumiera player and output subsystem, actually sending data to an external output requires to allocate an ''output slot''
+This is the central metaphor for the organisation of actual (system level) outputs; using this concept allows to separate and abstract the data calculation and the organisation of playback and rendering from the specifics of the actual output sink. Actual output possibilities can be added and removed dynamically from various components (backend, GUI), all using the same resolution and mapping mechanisms (&amp;rarr; OutputManagement)
+
+!Properties of an output slot
+Each OutputSlot is an unique and distinguishable entity. It corresponds explicitly to an external output, or a group of such outputs (e.g. left and right soundcard output channels), or an output file or similar capability accepting media content. First off, an output slot needs to be provided, configured and registered, using an implementation for the kind of media data to be output (sound, video) and the special circumstances of the output capability (render a file, display video in a GUI widget, send video to a full screen display, establish a Jack port, just use some kind of &quot;sound out&quot;). An output slot is always limited to a single kind of media, and to a single connection unit, but this connection may still be comprised of multiple channels (stereoscopic video, multichannel sound).
+
+In order to be usable as //output sink,// an output slot needs to be //allocated,// i.e. tied to and locked for a specific client. At any time, there may be only a single client using a given output slot this way. To stress this point: output slots don't provide any kind of inherent mixing capability; any adaptation, mixing, overlaying and sharing needs to be done within the nodes network producing the output data fed to the slot. (yet some special kinds of external output capabilities -- e.g. the Jack audio connection system -- may still provide additional mixing capabilities, but that's beyond the scope of the Lumiera application)
+
+Once allocated, the output slot returns a set of concrete ''sink handles'' (one for each physical channel expecting data). The calculating process feeds its results into those handles. Size and other characteristics of the data frames is assumed to be suitable, which typically won't be verified at that level anymore (but the sink handle provides a hook for assertions). Besides that, the allocation of an output slot reveals detailed ''timing expectations''. The client is required to comply to these timings when ''emitting'' data -- he's even required to provide a //current time specification,// alongside with the data. Yet the output slot has the ability to handle timing failures gracefully; the concrete output slot implementation is expected to provide some kind of de-click or de-flicker facility, which kicks in automatically when a timing failure is detected.
+
+!!!data exchange models
+Data is handed over by the client invoking an {{{emit(time,...)}}} function on the sink handle. Theoretically there are two different models how this data hand-over might be performed. This corresponds to the fact, that in some cases our own code manages the output and the buffers, while in other situations we intend to use existing library solutions or even external server applications to handle output
+;buffer handover model
+:the client owns the data buffer and cares for allocation and de-allocation. The {{{emit()}}}-call just propagates a pointer to the buffer holding the data ready for output. The output slot implementation in turn has the liability to copy or otherwise use this data within a given time limit.
+;shared buffer model
+:here the output mechanism owns the buffer. Within a certain time window prior to the expected time of the {{{emit()}}}-call, the client may obtain this buffer (pointer) to fill in the data. The slot implementation won't touch this buffer until the {{{emit()}}} handover, which in this case just provides the time and states that the client is done with that buffer. If the data emitting handshake doesn't happen at all, it counts as late and superseded by the next handshake.
+
+!!!timing expectations
+Besides the sink handles, allocation of an output slot defines some timing constraints, which are binding for the client. These timings are detailed and explicit, including a grid of deadlines for each frame to deliver, plus a fixed //latency.// Within this context, &amp;raquo;latency&amp;laquo; means the requirement to be ahead of the nominal time by a certain amount, to compensate for the processing time necessary to propagate the media to the physical output pin. The output slot implementation itself is bound by external constraints to deliver data at a fixed framerate and aligned to an externally defined timing grid, plus the data needs to be handed over ahead of these time points by an time amount given by the latency. Depending on the data exchange model, there is an additional time window limiting the buffer management.
+
+The assumption is for the client to have elaborate timing capabilities at his disposal. More specifically, the client is a job running within the engine scheduler and thus can be configured to run //after// another job has finished, and to run within certain time limits. Thus the client is able to provide a //current nominal time// -- which is suitably close to the actual wall clock time. The output slot implementation can be written such as to work out from this time specification if the call is timely or overdue -- and react accordingly.
+
+{{red{TODO 6/11}}}in this spec, both data exchange models exhibit a weakness regarding the releasing of buffers. At which time is it safe to release a buffer, when the handover didn't happen? Do we need an explicit callback, and how could this callback be triggered? This is similar to the problem of closing a network connection, i.e. the problem is generally unsolvable, but can be handled pragmatically within certain limits.
+
+!!!Lifecycle and storage
+The concrete OutputSlot implementation is owned and managed by the facility actually providing this output possibility. For example, the GUI provides viewer widgets, while some sound output backend provides sound ports. This implementation object is required to stay alive as long as it's registered with some OutputManager. It needs to be deregistered explicitly prior to destruction -- and this deregistration may block until all clients using this slot are terminated. Beyond that, an output slot implementation is expected to handle all kinds of failures gracefully -- preferrably just emitting a signal (callback functor).
+{{red{TODO 7/11: Deregistration is an unsolved problem....}}}
+
+-----
+!Implementation / design problems
+How to handle the selection of those two data exchange models!
+-- Problem is, typically this choice isn't up to the client; rather, the concrete OutputSlot implementation dictates what model to use. But, as it stands, the client needs to cooperate and behave differently to a certain degree. Unless we manage to factor out an common denominator of both models.
+
+Thus: Client gets an {{{OutputSlot&amp;}}}, without knowing the exact implementation type &amp;rArr; how can the client pick up the right strategy?
+Solving this problem through //generic programming// -- i.e coding both cases effectively different, but similar -- would require to provide both implementation options already at //compile time!//
+
+{{red{currently}}} I see two possible, yet quite different approaches...
+;generic
+:when creating individual jobs, we utilise a //factory obtained from the output slot.//
+;unified
+:extend and adapt the protocol such to make both models similar; concentrate all differences //within a separate buffer provider.//
+!!!discussion
+the generic approach looks as it's becoming rather convoluted in practice. We'd need to hand over additional parameters to the factory, which passes them through to the actual job implementation created. And there would be a coupling between slot and job (the slot is aware it's going to be used by a job, and even provides the implementation). Obviously, a benefit is that the actual code path executed within the job is without indirections, and all written down in a single location. Another benefit is the possibility to extend this approach to cover further buffer handling models -- it doesn't pose any requirements on the structure of the buffer handling.
+If we accept to retrieve the buffer(s) via an indirection, which we kind of do anyway //within the render node implementation// -- the unified model looks more like a clean solution. It's more like doing away with some local optimisations possible if we handle the models explicitly, so it's not much of a loss, given that the majority of the processing time will be spent within the inner pixel calculation loops for frame processing anyway. When following this approach, the BufferProvider becomes a third, independent partner, and the slot cooperates tightly with this buffer provider, while the client (processing node) still just talks to the slot. Basically, this unified solution is like extending the shared buffer model to both cases.
+&amp;rArr; conclusion: go for the unified approach!
+
+!!!unified data exchange cycle
+The planned delivery time of a frame is used as an ID throughout that cycle
+# within a defined time window prior to delivery, the client can ''allocate and retrieve the buffer'' from the BufferProvider.
+# the client has to ''emit'' within a (short) time window prior to deadline
+# now the slot gets exclusive access to the buffer for output, signalling the buffer release to the buffer provider when done.
+
+!!!lapses
+This data exchange protocol operates on a rather low level; there is only limited protection against timing glitches
+|  !step|!problem ||!consequences | !protection |
+| (1)|out of time window ||interference with previous/later use of the buffer | prevent in scheduler! |
+|~|does not happen ||harmless as such | emit ignored |
+|~|buffer unavailable ||inhibits further operation | ↯ |
+| (2)|out of time window ||harmless as such | emit ignored |
+|~|out of order ||allowed, unless out of time | -- |
+|~|does not happen ||frame treated as glitch | -- |
+|~|buffer unallocated ||frame treated as glitch | emit ignored |
+| (3)|emit missing ||frame treated as glitch | -- |
+|~|fail to release buffer ||unable to use buffer further | mark unavailable |
+|~|buffer unavailable ||serious malfunction of playback | request playback stop |
+
+Thus there are two serious problem situations
+* allocating the buffer out of time window bears the danger of output data corruption; but the general assumption is for the scheduler to ensure each job start time remains within the defined window and all prerequisite jobs have terminated successfully. To handle clean-up, we additionally need special jobs running always, in order, and be notified of prerequisite failures.
+* failure to release a buffer in a timely fashion blocks any further use of that buffer, any further jobs in need of that buffer will die immediately. This situation can only be caused by a serious problem //within the slot, related to the output mechanism.// Thus there should be some kind of trigger (e.g. when this happens 2 times consecutively) to request aborting the playback or render as a whole.
+&amp;rarr; SchedulerRequirements
+&amp;rarr; OutputSlotImpl</pre>
+</div>
+<div title="OutputSlotImpl" modifier="Ichthyostega" modified="201109232235" created="201107102343" tags="spec operational" changecount="27">
+<pre>OutputSlot is an abstraction, allowing unified treatment of various physical output connections from within the render jobs. The actual output slot is a subclass object, created and managed from the &quot;driver code&quot; for a specific output connection. Moreover, each output slot will be outfitted with a concrete BufferProvider to reflect the actual buffer handling policy applicable for this specific output connection. Some output connections might e.g. require delivery of the media data into a buffer residing on external hardware, while others work just fine when pointed to some arbitrary memory block holding generated data.
+
+!operation steps
+[&gt;img[Sequenz of output data exchange steps|uml/fig145157.png]]The OutputSlot class defines some standard operations as protected virtual functions. These represent the actual steps in the data exchange protocol corresponding to this output slot.
+;lock()
+:claims the specified buffer for exclusive use.
+:Client may now dispose output data
+;transfer()
+:transfers control from the client to the actual output connection for feeding data.
+:Triggered by the client invoking {{{emit()}}}
+;pushout()
+:request the actual implementation to push the data to output.
+:Usually invoked from the {{{transfer()}}} implementation, alternatively from a separate thread.
+
+
+!buffer states
+While the BufferProvider abstracts away the actual access to the output buffers and just hands out a ''buffer handle'', the server side (here the concrete output slot) is allowed to associate and maintain a ''state flag'' with each buffer. The general assumption is that writing this state flag is atomic, and that other facilities will care for the necessary memory barriers (that is: the output slot and the buffer provider will just access this state flag without much ado). The generic part of the output slot implementation utilises this buffer state flag to implement a state machine, which -- together with the timing constraints established with the [[help of the scheduler|SchedulerRequirements]] -- ensures sane access to the buffer without collisions.
+|        !state||&gt;| !lock()   |&gt;| !transfer() |&gt;| !pushout() |
+|     {{{NIL}}}||↯| ·        |↯|             | ↯ |          |
+|    {{{FREE}}}||✔|↷ locked  |✔|· (ignore)  | · | ·         |
+|  {{{LOCKED}}}||↯|↷ emitted |✔|↷ emitted   | · |↷ free    |
+| {{{EMITTED}}}||↯|↷ blocked |↯|↷ blocked   | · |↷ free    |
+| {{{BLOCKED}}}||↯| ✗        |↯| ✗          | ∅ |↷ free    |
+where · means no operation, ✔ marks the standard cases (OK response to caller), ↯ will throw and thus kill the calling job, ∅ will treat this frame as //glitch,// ✗ will request playback stop.
+The rationale is for all states out-of-order to transition into the {{{BLOCKED}}}-state eventually, which, when hit by the next operation, will request playback stop.
 </pre>
 </div>
 <div title="Overview" modifier="Ichthyostega" modified="200906071810" created="200706190300" tags="overview img" changecount="13">
@@ -3246,7 +3534,7 @@ There is rather strong separation between these two levels, and &amp;mdash; &lt;
 [img[Block Diagram|uml/fig128005.png]]
 </pre>
 </div>
-<div title="OverviewRenderEngine" modifier="Ichthyostega" modified="200906071810" created="200706190647" tags="Rendering overview img" changecount="20">
+<div title="OverviewRenderEngine" modifier="Ichthyostega" modified="201109151519" created="200706190647" tags="Rendering overview img" changecount="21">
 <pre>Render Engine, [[Builder]] and [[Controller]] are closely related Subsystems. Actually, the [[Builder]] //creates// a newly configured Render Engine //for every// RenderProcess. Before doing so, it queries from the Session (or, to be more precise, from the [[Fixture]] within the current Session) all necessary Media Object Placement information. The [[Builder]] then derives from this information the actual assembly of [[Processing Nodes|ProcNode]] comprising the Render Engine. Thus:
  * the source of the build process is a sequence of absolute (explicit) [[Placements|Placement]] called the [[Playlist]]
  * the [[build process|BuildProcess]] is driven, configured and controlled by the [[Controller]] subsystem component. It encompasses the actual playback configuration and State of the System.
@@ -3254,6 +3542,7 @@ There is rather strong separation between these two levels, and &amp;mdash; &lt;
 
 see also: RenderEntities, [[two Examples (Object diagrams)|Examples]] 
 
+{{red{TODO: adjust terminology in this drawing: &quot;Playlist&quot; &amp;rarr; &quot;Fixture&quot; and &quot;Graph&quot; &amp;rarr; &quot;Segment&quot;}}}
 [img[Overview: Components of the Renderengine|uml/fig128261.png]]
 </pre>
 </div>
@@ -4094,17 +4383,47 @@ We need a way of addressing existing [[pipes|Pipe]]. Besides, as the Pipes and T
 &lt;&lt;tasksum end&gt;&gt;
 </pre>
 </div>
-<div title="PlayProcess" modifier="Ichthyostega" modified="201012181732" created="201012181714" tags="def spec Player" changecount="2">
+<div title="PlayProcess" modifier="Ichthyostega" modified="201108141652" created="201012181714" tags="def spec Player img" changecount="14">
 <pre>With //play process//&amp;nbsp; we denote an ongoing effort to calculate a stream of frames for playback or rendering.
-The play process is an conceptual entity linking together several activities in the [[Backend]] and the RenderEngine. Creating a play process is the central service provided by the [[player subsystem|Player]]: it maintains a registration entry for the process to keep track of associated entities, resources allocated and calls dispatched as a consequence, and it wires and exposes a PlayController to serve as an interface and information hub.
+The play process is an conceptual entity linking together several activities in the [[Backend]] and the RenderEngine. Creating a play process is the central service provided by the [[player subsystem|Player]]: it maintains a registration entry for the process to keep track of associated entities, resources allocated and calls [[dispatched|FrameDispatcher]] as a consequence, and it wires and exposes a PlayController to serve as an interface and information hub.
 
-''Note'': the player is in no way engaged in any of the actual calculation and management tasks necessary to make this stream of calculations happen. The play process code contained within the player subsystem is largely comprised of organisational concerns and not especially performance critical.
-* the [[Backend]] is responsible for scheduling and dispatching the calculations
+''Note'': the player is in no way engaged in any of the actual calculation and management tasks necessary to make this [[stream of calculations|CalcStream]] happen. The play process code contained within the player subsystem is largely comprised of organisational concerns and not especially performance critical.
+* the [[Backend]] is responsible for scheduling and [[dispatching|Dispatcher]] the [[calculation stream|CalcStream]]
 * the RenderEngine has the ability to cary out individual frame calculations
-* the OutputSlot exposed by the [[output manager|OutputManagement]] is responsible for accepting timed frame delivery</pre>
+* the OutputSlot exposed by the [[output manager|OutputManagement]] is responsible for accepting timed frame delivery
+
+[&gt;img[Anatomy of a Play Process|uml/fig144005.png]]
+!Anatomy of a Play Process
+The Controller is exposed to the client and acts as frontend handle, while the play process body groups and manages all the various parts cooperating to generate output. For each of the participating global pipes we get a feed to drive that pipeline to deliver media of a specific kind.
+
+Right within the play process, there is a separation into two realms, relying on different programming paradigms. Obviously the play controller is a state machine, and similarily the body object (play process) has a distinct operation state. Moreover, the current collection of individual objects hooked up at any given instance is a stateful variable. To the contrary, when we enter the realm of actual processing, operations are carried out in parallel, relying on stateless descriptor objects, wired into individual calculation jobs, to be scheduled as non-blocking units of operation. For each series of consecutive frames to be calculated, there is a descriptor object, the CalcStream, which also links to a specificaly tailored dispatcher table, allowing to schedule the individual frame jobs. Whenever the controller determines a change in the playback plan (speed change, skip, scrubbing, looping, ...), a new CalcStream is created, while the existing one is just used to mark any not-yet processed job as superseded.
+</pre>
 </div>
-<div title="Player" modifier="Ichthyostega" modified="201012181726" created="201012181700" tags="def overview" changecount="8">
-<pre>Within Lumiera, &amp;raquo;Player&amp;laquo; denotes the [[Subsystem]] responsible for organising and tracking //ongoing playback and render processes.// &amp;rarr; [[PlayProcess]]
+<div title="PlayService" modifier="Ichthyostega" modified="201105221918" created="201105221900" tags="Player spec draft" changecount="9">
+<pre>The [[Player]] is an independent [[Subsystem]] within Lumiera, located at Proc-Layer level. A more precise term would be &quot;rendering and playback coordination subsystem&quot;. It provides the capability to generate media data, based on a high-level model object, and send this generated data to an OutputDesignation, creating an continuous and timing controlled output stream. Clients may utilise these functionality through the ''play service'' interface.
+
+!provided services
+* creating a PlayProcess
+* managing existing play processes
+* convenience short-cuts for //performing//&amp;nbsp; several kinds of high-level model objects
+
+!creating a play process
+This is the core service provided by the player subsystem. The purpose is to create a collaboration between several entities, creating media output
+;data producers
+:a set of ModelPort elements to ''pull'' for generating output. They can either be handed in direcly, or resolved from a set of OutputDesignation elements
+;data sinks
+:to be able to create output, the PlayProcess needs to cooperate with OutputSlot.s
+:physical outputs are never handled directly, rather, the playback or rendering needs an OutputManager to resolve the output designations into output slots
+;controller
+:when provided with these two prerequisites, the play service is able to build a PlayProcess.
+:for clients, this process can be accessed and maintained through a PlayController, which acts as (copyable) handle and front-end.
+;engine
+:the actual processing is done by the RenderEngine, which in itself is a compound of several services within [[Backend]] and Proc-Layer
+:any details of this processing remain opaque for the clients; even the player subsystem just accesses the EngineFaçade
+</pre>
+</div>
+<div title="Player" modifier="Ichthyostega" modified="201106131443" created="201012181700" tags="def overview" changecount="10">
+<pre>Within Lumiera, &amp;raquo;Player&amp;laquo; is the name for a [[Subsystem]] responsible for organising and tracking //ongoing playback and render processes.// &amp;rarr; [[PlayProcess]]
 The player subsystem does not perform or even manage any render operations, nor does it handle the outputs directly.
 Yet it adresses some central concerns:
 
@@ -4117,8 +4436,8 @@ Yet it adresses some central concerns:
 :the player translates continuous time values into discrete frame counts.
 :to perform this [[quantisation|TimeQuant]], the help of the session for building a TimeGrid for each output channel is required.
 
-!{{red{WIP 12/10}}} under construction
-The player subsystem is currently about to be designed and built up; some time ago, __Joel Holdsworth__ and __Ichthyo__ did a design study with a PlayerDummy, which is currently hooked up with the TransportControl in the Lumiera GUI.
+!{{red{WIP 5/2011}}} under construction
+The player subsystem is currently about to be designed and built up; some time ago, __Joel Holdsworth__ and __Ichthyo__ did a design study with a PlayerDummy, which is currently hooked up with the TransportControl in the Lumiera GUI. Starting from these experiences, and the general requirements of an NLE, the [[design of the Player subsystem|DesignPlayerSubsystem]] is being worked out.
 </pre>
 </div>
 <div title="PlayerDummy" modifier="Ichthyostega" modified="200906071810" created="200901300209" tags="GuiIntegration operational img" changecount="17">
@@ -4702,28 +5021,32 @@ The link between ~MObject and Asset should be {{{const}}}, so the clip can't cha
 At first sight the link between asset and clip-MO is a simple logical relation between entities, but it is not strictly 1:1 because typical media are [[multichannel|MultichannelMedia]]. Even if the media is compound, there is //only one asset::Clip//, because in the logical view we have only one &quot;clip-thing&quot;. On the other hand, in the session, we have a compound clip ~MObject comprised of several elementary clip objects, each of which will refer to its own sub-media (channel) within the compound media (and don't forget, this structure can be tree-like)
 {{red{open question:}}} do the clip-MO's of the individual channels refer directly to asset::Media? does this mean the relation is different from the top level, where we have a relation to a asset::Clip??</pre>
 </div>
-<div title="RenderEngine" modifier="Ichthyostega" modified="200802031835" created="200802031820" tags="def" changecount="2">
+<div title="RenderEngine" modifier="Ichthyostega" modified="201105222323" created="200802031820" tags="def" changecount="3">
 <pre>Conceptually, the Render Engine is the core of the application. But &amp;mdash; surprisingly &amp;mdash; we don't even have a distinct »~RenderEngine« component in our design. Rather, the engine is formed by the cooperation of several components spread over two layers (Backend and Proc-Layer): The [[Builder]] creates a network of [[render nodes|ProcNode]], which is used by the Backend to pull individual Frames.
 &amp;rarr; OverviewRenderEngine
+&amp;rarr; EngineFaçade 
 </pre>
 </div>
-<div title="RenderEntities" modifier="Ichthyostega" modified="200906071810" created="200706190715" tags="Rendering classes img" changecount="10">
+<div title="RenderEntities" modifier="Ichthyostega" modified="201109112229" created="200706190715" tags="Rendering classes img" changecount="13">
 <pre>The [[Render Engine|Rendering]] only carries out the low-level and performance critical tasks. All configuration and decision concerns are to be handled by [[Builder]] and [[Controller]]. While the actual connection of the Render Nodes can be highly complex, basically each Segment of the Timeline with uniform characteristics is handled by one Processor, which is a graph of [[Processing Nodes|ProcNode]] discharging into a ExitNode. The Render Engine Components as such are //stateless// themselves; for the actual calculations they are combined with a StateProxy object generated by and connected internally to the [[Controller]], while at the same time holding the Data Buffers (Frames) for the actual calculations.
 
+{{red{Warning: obsolete as of 9/11}}}
+Currently the Render/Playback is beeing targetted for implementation; almost everything in this diagram will be implemented in a slightly differently way....
 [img[Entities comprising the Render Engine|uml/fig128389.png]]
 </pre>
 </div>
-<div title="RenderImplDetails" modifier="Ichthyostega" modified="200810140245" created="200806220211" tags="Rendering impl img" changecount="22">
+<div title="RenderImplDetails" modifier="Ichthyostega" modified="201109151533" created="200806220211" tags="Rendering impl img" changecount="29">
 <pre>Below are some notes regarding details of the actual implementation of the render process and processing node operation. In the description of the [[render node operation protocol|NodeOperationProtocol]] and the [[mechanics of the render process|RenderMechanics]], these details were left out deliberately.
+{{red{WIP as of 9/11 -- need to mention the planning phase more explicitly}}}
 
 !Layered structure of State
 State can be seen as structured like an onion. All the [[StateAdapter]]s in one call stack are supposed to be within one layer: they all know of a &quot;current state&quot;, which in turn is a StateProxy (and thus may refer yet to another state, maybe accros the network or in the backend or whatever). The actual {{{process()}}} function &quot;within&quot; the individual nodes just sees a single StateAdapter and thus can be thought to be a layer below.
 
 !Buffer identification
-For the purpose of node operation, Buffers are identified by a //Buffer-handle,// which contains both the actual buffer pointer and an internal indes and classification of the source providing the buffer; the latter information is used for deallocation. Especially for calling the {{{process()}}} function (which is supposed to be plain C) the respective StateAdapter provides an array containing just the output and input buffer pointers
+For the purpose of node operation, Buffers are identified by a [[buffer-handle|BuffHandle]], which contains both the actual buffer pointer and an internal indes and classification of the source providing the buffer; the latter information is used for deallocation. Especially for calling the {{{process()}}} function (which is supposed to be plain C) the node invocation needs to prepare and provide an array containing just the output and input buffer pointers. Typically, this //frame pointer array//&amp;nbsp; is allocated on the call stack.
 
 !Problem of multi-channel nodes
-Some data processors simply require to work on multiple channels simultanously, while others work just on a single channel and will be replicated by the builder for each channel invoved. Thus, we are struck with the nasty situation that the node graph may go through some nodes spanning the chain of several channels. Now the decision is //not to care for this complexity within a single chain calculating a single channel.// We rely solely on the cache to avoid duplicated calculations. When a given node happens to produce multiple output buffers, we are bound to allocate them for the purpose of this nodes {{{process()}}} call, but we just &quot;let go&quot; the buffers not needed immediately for the channel acutally to be processed. For this to work, it is supposed that the builder has wired in a caching, and that the cache will hit when we touch the same node again for the other channels.
+Some data processors simply require to work on multiple channels simultanously, while others work just on a single channel and will be replicated by the builder for each channel invoved. Thus, we are struck with the nasty situation that the node graph may go through some nodes spanning the chain of several channels. Now the decision is //not to care for this complexity within a single chain calculating a single channel.// We rely solely on the cache to avoid duplicated calculations. When a given node happens to produce multiple output buffers, we are bound to allocate them for the purpose of this node's {{{process()}}} call, but afterwards we'r just &quot;letting go&quot;, releasing the buffers not needed immediately for the channel acutally to be processed. For this to work, it is supposed that the builder has wired in a caching, and that the cache will hit when we touch the same node again for the other channels.
 
 Closely related to this is the problem how to number and identify nodes and thus to be able to find calculated frames in cache (&amp;rarr; [[here|NodeFrameNumbering]])
 
@@ -4736,23 +5059,24 @@ Every node is actually decomposed into three parts
 Thus, the outer container can be changed polymorphically to support the different kinds of nodes (large-scale view). The actual wiring of the nodes is contained in the WiringDescriptor, including the {{{process()}}} function pointer. Additionally, this WiringDescriptor knows the actual type of the operation Strategy, and this actual type has been chosen by the builder such as to select details of the desired operation of this node, for example caching / no caching or maybe ~OpenGL rendering or the special case of a node pulling directly from a source reader. Most of this configuration is done by selecting the right template specialisation within the builder; thus in the critical path most of the calls can be inlined
 
 !!!! composing the actual operation Strategy
-As shown in the class diagram to the right, the actual implementation is assembled by chaining together the various policy classes governing parts of the node operation, like Caching, in-Place calculation capability, etc. (&amp;rarr; see [[here|WiringDescriptor]] for details). The rationale is that the variable part of the Invocation data is allocated at runtime directly on the stack, while a precisely tailored call sequence for &quot;calculating the predecessor nodes&quot; can be defined out of a bunch of simple building blocks. This helps avoiding &quot;spaghetti code&quot;, which would be especially dangerous because of the large number of different execution paths to get right. Additionally, a nice side effect of this implementation technique is that a good deal of the implementation is eligible to inlining.
-We //do employ//&amp;nbsp; some virtual calls for the buffer management in order to avoid coupling the policy classes to the actual number of in/out buffers. (As of 6/2008, this is mainly a precaution to be able to control the number of generated template instances. If we ever get in the region of several hundred individual specialisations, we'd need to separate out the allocation of the &quot;buffer table&quot; into a hand-made stack-like buffer allocated from the heap.)
+As shown in the class diagram to the right, the actual implementation is assembled by chaining together the various policy classes governing parts of the node operation, like Caching, in-Place calculation capability, etc. (&amp;rarr; see [[here|WiringDescriptor]] for details). The rationale is that the variable part of the Invocation data is allocated at runtime directly on the stack, while a precisely tailored call sequence for &quot;calculating the predecessor nodes&quot; can be defined out of a bunch of simple building blocks. This helps avoiding &quot;spaghetti code&quot;, which would be especially dangerous and difficult to get right because of the large number of different execution paths. Additionally, a nice side effect of this implementation technique is that a good deal of the implementation is eligible to inlining.
+We //do employ//&amp;nbsp; some virtual calls for the buffer management in order to avoid coupling the policy classes to the actual number of in/out buffers. (As of 6/2008, this is mainly a precaution to be able to control the number of generated template instances. If we ever get in the region of several hundred individual specialisations, we'd need to separate out further variable parts to be invoked through virtual functions.)
 
 !Rules for buffer allocation and freeing
 * only output buffers are allocated. It is //never necessary//&amp;nbsp; to allocate input buffers!
 * buffers are to be allocated as late as possible, typically just before invoking {{{process()}}}
-* buffers are allways allocated by calling to the preceeding StateAdapter in the callstack (&quot;parent stae&quot;), because of the possibility of writing the result to cache.
-* {{{pull()}}} returns a handle for the single output requested by this call. Using this ID, the caller may retrieve the actual buffer holding the result from the &quot;current state&quot; StaeProxy.
-* any other buffers filled with results in the course of the same {{{process()}}} call can be released immediately before returning from the {{{pull()}}}
-* similar, and input buffers are to be released immediately after the {{{process()}}} call, but before returing from this {{{pull()}}}
-* buffers are allways released by calling to the &quot;current state&quot; (which is a StateProxy), providing the buffer-ID to be released
+* buffers are allways allocated by activating a [[buffer handle|BuffHandle]], preconfigured already during the planning phase
+* {{{pull()}}} returns a handle at least for the single output requested by this call, allowing the caller to retrieve the result data
+* any other buffers filled with results during the same {{{process()}}} call can be released immediately before returning from {{{pull()}}}
+* similar, any input buffers are to be released immediately after the {{{process()}}} call, but before returing from this {{{pull()}}}
+* while any handle contains the necessary information for releasing or &quot;committing&quot; this buffer, this has to be triggered explicitly.
 
 @@clear(right):display(block):@@
 </pre>
 </div>
-<div title="RenderMechanics" modifier="Ichthyostega" modified="200906071809" created="200806030230" tags="Rendering operational impl img" changecount="28">
+<div title="RenderMechanics" modifier="Ichthyostega" modified="201109172221" created="200806030230" tags="Rendering operational impl img" changecount="32">
 <pre>While the render process, with respect to the dependencies, the builder and the processing function is sufficiently characterized by referring to the ''pull principle'' and by defining a [[protocol|NodeOperationProtocol]] each node has to adhere to &amp;mdash; for actually get it coded we have to care for some important details, especially //how to manage the buffers.// It may well be that the length of the code path necessary to invoke the individual processing functions is finally not so important, compared with the time spent at the inner pixel loop within these functions. But my guess is (as of 5/08), that the overall number of data moving and copying operations //will be//&amp;nbsp; of importance.
+{{red{WIP as of 9/11 -- need to mention the planning phase more explicitly}}}
 
 !requirements
 * operations should be &quot;in place&quot; as much as possible
@@ -4766,6 +5090,8 @@ On the other hand, the processing function within the individual node needs to b
 Not everything can be preconfigured though. The pull principle opens the possibility for the node to decide on a per call base what predecessor(s) to pull (if any). This decision may rely on automation parameters, which thus need to be accessible prior to requesting the buffer(s). Additionally, in a later version we plan to have the node network calculate some control values for adjusting the cache and backend timings &amp;mdash; and of course at some point we'll want to utilize the GPU, resulting in the need to feed data from our processing buffers into some texture representation.
 
 !buffer management
+{{red{NOTE 9/11: the following is partially obsolete and needs to be rewritten}}} &amp;rarr; see the BufferTable for details regarding new buffer management...
+
 Besides the StateProxy representing the actual render process and holding a couple of buffer (refs), we employ a lightweight adapter object in between. It is used //for a single {{{pull()}}}-call// &amp;mdash; mapping the actual buffers to the input and output port numbers of the processing node and for dealing with the cache calls. While the StateProxy manages a pool of frame buffers, this interspersed adapter allows us to either use a buffer retrieved from the cache as an input, possibly use a new buffer located within the cache as output, or (in case no caching happens) to just use the same buffer as input and output for &quot;in-place&quot;-processing. The idea is that most of the configuration of this adapter object is prepared in the wiring step while building the node network.
 
 The usage patern of the buffers can be stack-like when processing nodes require multiple input buffers. In the standard case, which also is the simplest case, a pair of buffers (or a single buffer for &quot;in-place&quot; capable nodes) suffices to calculate a whole chain of nodes. But &amp;mdash; as the recursive descent means depth-first processing &amp;mdash; in case multiple input buffers are needed, we may encounter a situation where some of these input buffers already contain processed data, while we have to descend into yet another predecessor node chain to pull the data for the remaining buffers. Care has to be taken //to allocate the buffers as late as possible,// otherwise we could end up holding onto a buffer almost for each node in the network. Effectively this translates into the rule to allocate output buffers only after all input buffers are ready and filled with data; thus we shouldn't allocate buffers when //entering// the recursive call to the predecessor(s), rather we have to wait until we are about to return from the downcall chain.
@@ -4838,6 +5164,17 @@ Later on we expect a distinct __query subsystem__ to emerge, presumably embeddin
 
 &amp;rarr; QuantiserImpl</pre>
 </div>
+<div title="SchedulerRequirements" modifier="Ichthyostega" created="201107080145" tags="Rendering spec draft discuss" changecount="1">
+<pre>The Scheduler is responsible for geting the individual render jobs to run. The basic idea is that individual render jobs //should never block// -- and thus the calculation of a single frame might be split into several jobs, including resource fetching. This, together with the data exchange protocol defined for the OutputSlot, and the requirements of storage management (especially releasing of superseded render nodes), leads to certain requirements to be ensured by the scheduler:
+;ordering of jobs
+:the scheduler has to ensure all prerequisites of a given job are met
+;job time window
+:when it's not possible to run a job within the defined target time window, it must be marked as failure
+;failure propagation
+:when a job fails, either due to an job internal error, or by timing glitch, any dependent jobs need to receive that failure state
+;guaranteed execution
+:some jobs are marked as &quot;ensure run&quot;. These need to run reliable, even when prerequisite jobs fail -- and this failure state needs to be propagated</pre>
+</div>
 <div title="ScopeLocator" modifier="Ichthyostega" modified="200911202035" created="200911192145" tags="def SessionLogic" changecount="10">
 <pre>A link to relate a compound of [[nested placement scopes|PlacementScope]] to the //current// session and the //current//&amp;nbsp; [[focus for querying|QueryFocus]] and exploring the structure. ScopeLocator is a singleton service, allowing to ''explore'' a [[Placement]] as a scope, i.e. discover any other placements within this scope, and allowing to locate the position of this scope by navigating up the ScopePath finally to reach the root scope of the HighLevelModel.
 
@@ -4890,7 +5227,7 @@ We need to detect attaching and detaching of
 * root &amp;harr; [[Track]]
 </pre>
 </div>
-<div title="Segmentation" modifier="Ichthyostega" modified="201012140222" created="201012121901" tags="def spec Builder" changecount="27">
+<div title="Segmentation" modifier="Ichthyostega" modified="201105222236" created="201012121901" tags="def spec Builder" changecount="28">
 <pre>//Segmentation of timeline// denotes a data structure and a step in the BuildProcess.
 When [[building the fixture|BuildFixture]], ~MObjects -- as handled by their Placements -- are grouped below each timeline using them; Placements are then to be resolved into [[explicit Placements|ExplicitPlacement]], resulting in a single well defined time interval for each object. This allows to cut this effective timeline into slices of constant wiring structure, which are represented through the ''Segmentation Datastructure'', a time axis with segments holding object placements and [[exit nodes|ExitNode]]. &amp;nbsp;&amp;rarr; see [[structure of the Fixture|Fixture]]
 * for each Timeline we get a Segmentation
@@ -4920,7 +5257,7 @@ When [[building the fixture|BuildFixture]], ~MObjects -- as handled by their Pla
 
 !!!conclusions
 The Fixture is mostly comprised of the Segementation datastructure, but some other facilities are involved too
-# at top level, access is structured by groups of model ports, actually grouped by timeline. This first access level handled by the Fixture
+# at top level, access is structured by groups of model ports, actually grouped by timeline. This first access level is handled by the Fixture
 # during the build process, there is a collection of placements; this can be discarded afterwards
 # the backbone of the segmentation is closely linked to an ordering by time. Initially it should support sorting, access by time interval search later on.
 # discarding a segment (or failing to do so) has an high impact on the whole application. We should employ a reliable mechanism for that.
@@ -5303,14 +5640,14 @@ if (oldText.indexOf(&quot;SplashScreen&quot;)==-1)
 }
 //}}}</pre>
 </div>
-<div title="StateAdapter" modifier="Ichthyostega" modified="200807132344" created="200806261912" tags="Rendering impl def" changecount="10">
-<pre>A small (in terms of storage) and specifically configured StateProxy object which is created on the stack for each individual {{{pull()}}} call. It is part of the invocation state of such a call and participates in the buffer management. Thus, in a calldown sequence of {{{pull()}}} calls we get a corresponding sequence of &quot;parent&quot; states. At each level, the &amp;rarr; WiringDescriptor of the respective node defines a Strategy how the call is passed on.</pre>
+<div title="StateAdapter" modifier="Ichthyostega" modified="201109151535" created="200806261912" tags="Rendering impl def" changecount="11">
+<pre>A small (in terms of storage) and specifically configured StateProxy object which is created on the stack {{red{Really on the stack? 9/11}}} for each individual {{{pull()}}} call. It is part of the invocation state of such a call and participates in the buffer management. Thus, in a calldown sequence of {{{pull()}}} calls we get a corresponding sequence of &quot;parent&quot; states. At each level, the &amp;rarr; WiringDescriptor of the respective node defines a Strategy how the call is passed on.</pre>
 </div>
-<div title="StateProxy" modifier="Ichthyostega" modified="200806010404" created="200706220352" tags="def" changecount="4">
+<div title="StateProxy" modifier="Ichthyostega" modified="201107082334" created="200706220352" tags="def" changecount="5">
 <pre>An Object representing a //Render Process// and containing associated state information.
-* it is created in the Controller subsystem while initiating the BuildProcess
+* it is created in the Player subsystem while initiating the RenderProcess
 * it is passed on to the generated Render Engine, which in turn passes it down to the individual Processors
-* moreover, it contains methods to communicate with other state relevant parts of the system, thereby shielding the rendering code from any complexities of Thread communication if necessary. (thus the name Proxy)
+* moreover, it contains methods to communicate with other state relevant parts of the system, thereby shielding the rendering code from any complexities of state synchronisation and management if necessary. (thus the name Proxy)
 * in a future version, it may also encapsulate the communication in a distributed render farm
 </pre>
 </div>
@@ -5321,7 +5658,7 @@ if (oldText.indexOf(&quot;SplashScreen&quot;)==-1)
 * besides, between different stream //implementation types,// there can be a ''rendering'' (lossy conversion) &amp;mdash; or no conversion at all.
 </pre>
 </div>
-<div title="StreamPrototype" modifier="Ichthyostega" modified="200809120021" created="200808152042" tags="def spec" changecount="10">
+<div title="StreamPrototype" modifier="Ichthyostega" modified="201106210145" created="200808152042" tags="def spec" changecount="11">
 <pre>The stream Prototype is part of the specification of a media stream's type. It is a semantic (or problem domain oriented) concept and should be distinguished from the actual implementation type of the media stream. The latter is provided by an [[library implementation|StreamTypeImplFacade]]. While there are some common predefined prototypes, mostly, they are defined within the concrete [[Session]] according to the user's needs. 
 
 Prototypes form an open (extensible) collection, though each prototype belongs to a specific media kind ({{{VIDEO, IMAGE, AUDIO, MIDI,...}}}).
@@ -5334,7 +5671,7 @@ Consequently, as we can't get away with an fixed Enum of all stream prototypes, 
 * we can determine if another prototype is //convertible//
 
 !!Examples
-NTSC and PAL video, video versus digitized film, HD video versus SD video, 3D versus flat video, cinemascope versus 4:3, stereophonic versus monaural, periphonic versus panoramic sound, Ambisonics versus 5.1, dolby versus linear PCM...
+In practice, several things might be considered &quot;quite different&quot; and thus be distinguished by protorype: NTSC and PAL video, video versus digitized film, HD video versus SD video, 3D versus flat video, cinemascope versus 4:3, stereophonic versus monaural, periphonic versus panoramic sound, Ambisonics versus 5.1, dolby versus linear PCM...
 </pre>
 </div>
 <div title="StreamType" modifier="Ichthyostega" modified="201011071741" created="200808060244" tags="spec draft" changecount="21">
@@ -5513,13 +5850,14 @@ Instead, we should try to just connect the various subsystems via Interfaces and
 * to shield the rendering code of all complexities of thread communication and synchronization, we use the StateProxy
 </pre>
 </div>
-<div title="StructAsset" modifier="Ichthyostega" modified="201011060513" created="200709221353" tags="def classes img" changecount="20">
+<div title="StructAsset" modifier="Ichthyostega" modified="201105280022" created="200709221353" tags="def classes img" changecount="22">
 <pre>Structural Assets are intended mainly for internal use, but the user should be able to see and query them. They are not &quot;loaded&quot; or &quot;created&quot; directly, rather they //leap into existence // by creating or extending some other structures in the session, hence the name. Some of the structural Asset parametrisation can be modified to exert control on some aspects of the Proc Layer's (default) behaviour.
 * [[Processing Patterns|ProcPatt]] encode information how to set up some parts of the render network to be created automatically: for example, when building a clip, we use the processing pattern how to decode and pre-process the actual media data.
 * [[Tracks|Track]] are one of the dimensions used for organizing the session data. They serve as an Anchor to attach parametrisation of output pipe, overlay mode etc. By [[placing|Placement]] to a track, a media object inherits placement properties from this track.
 * [[Pipes|Pipe]] form &amp;mdash; at least as visible to the user &amp;mdash; the basic building block of the render network, because the latter appears to be a collection of interconnected processing pipelines. (this is the //outward view; // in fact the render network consists of [[nodes|ProcNode]] and is [[built|Builder]] from the Pipes, clips, effects...)[&gt;img[Asset Classess|uml/fig131205.png]]
 * [[Sequence]] assets act as a façade to the fundamental compound building blocks within the model, a sequence being a collection of clips placed onto a tree of tracks. Sequences, as well as the top-level tracks enclosed will be created automatically on demand. Of course you may create them deliberately. Without binding it to a timeline or meta-clip, a sequence remains invisible.
-* [[Timeline]] assets are the top level structures to access the model; similar to the sequences, they act as façade to relevant parts of the model (BindingMO) and will be created on demand, alongside with a new session if necessary, bound to the new timeline. Likewise, they can be referred by their name-ID 
+* [[Timeline]] assets are the top level structures to access the model; similar to the sequences, they act as façade to relevant parts of the model (BindingMO) and will be created on demand, alongside with a new session if necessary, bound to the new timeline. Likewise, they can be referred by their name-ID
+* [[Viewer|ViewerAsset]] assets correspond to the available viewer elements in the GUI. By [[connecting to a viewer|ViewConnection]], session elements derive a concrete (physical) output and gain the ability to be [[played|PlayService]].
 
 
 
@@ -5704,6 +6042,14 @@ h1,h2,h3,h4,h5,h6 {
 }
 /*}}}*/
 </pre>
+</div>
+<div title="SwitchBoard" modifier="Ichthyostega" modified="201105221902" created="201105221831" tags="def SessionLogic Player" changecount="2">
+<pre>Viewers for displaying output are connected to the timelines or other elements to be displayed through a ViewConnection. This creates an additional mapping step (&amp;rarr; BindingMO), similar to the attachment of a sequence or virtual clip to the [[global busses|GlobalBus]]. Yet the viewers don't provide such an elaborate mixing desk like view as the timelines -- rather there is only a simplified version of the global busses, exposed to the user as ''switch board''.
+
+The corresponding GUI control will allow to choose among possible data sources (esp. ProbePoint) for any given StreamType (more precisely, for every //prototype,// e.g. image, sound). Moreover, there are some (limited) overlay capabilities (split image, mix sound). By default, this additional control will likely be hidden, as there is a default 1:1 association between the master busses of the timeline and the usable output destinations.
+
+!Model and Interfaces
+Regarding the internal wiring of components, the Viewer with a switch board behaves similar as a timeline: At the output side, there are a small number of standard OutputDesignation elements for the selection of primary kinds of media handled within this session (typically Video and Audio). But contrary to a timeline, a Viewer element also exposes an OutputManager interface, which is backed by a specific OutputMapping element, which internally connects to the main OutputManager for the whole Application. This way, a Viewer has the capability to get a PlayController</pre>
 </div>
 <div title="TabTimeline" modifier="Ichthyostega" modified="200806030148" created="200706191949" changecount="4">
 <pre>&lt;&lt;timeline better:true maxDays:55 maxEntries:45&gt;&gt;</pre>
@@ -6708,7 +7054,7 @@ Thus no server and no network connection is needed. Simply open the file in your
  * see [[Homepage|http://tiddlywiki.com]], [[Wiki-Markup|http://tiddlywiki.org/wiki/TiddlyWiki_Markup]]
 </pre>
 </div>
-<div title="TimeMutation" modifier="Ichthyostega" modified="201104252343" created="201101231344" tags="spec discuss draft" changecount="38">
+<div title="TimeMutation" modifier="Ichthyostega" modified="201105261700" created="201101231344" tags="spec discuss draft" changecount="42">
 <pre>Simple time points are just like values and thus easy to change. The difficulties arise when time values are to be //quantised to an existing time grid.// The first relevant point to note is that for quantised time values, the effect of a change can be disproportional to the cause. Small changes below the threshold might be accumulated, and a tiny change might trigger a jump to the next grid point. While this might be annoying, the yet more complex questions arise when we acknowledge that the amount of the change itself might be related to a time grid.
 
 The problem with modification of quantised values highlights an inner contradiction or conflicting goals within the design
@@ -6769,46 +7115,54 @@ As rationale, consider the following
 * by materialising a quantised change prior to applying it, we get the &quot;chaining effect&quot;
 
 ----------
-!!! solutions ideas{{red{WIP 12/10}}}
+this leads to the following solutions approach
 * time values are immutable (as far as possible)
-* only allow to assign a completely new setting
-* only accept raw time values for redefining a quantised interval
-* only accept an abstract //modification object.// &amp;rarr;{{red{No! any kind of abstraction requires an indirection}}}
+* for simple time calculations the ~TimeVar is sufficient
+* but we allow to fed an abstract //modification object.//
+* ''nudge by unit(s)'' is subsumed here as a special case
 
-{{red{Question 3/11}}} -- can we avoid accepting mutations for Time (and thus only mutate ~TimeSpan)?
+As the actual change logic to apply depends both on the target value and the kind of the change, we end up with //double dispatch.//
+
+ -- can we avoid accepting mutations for Time (and thus only mutate ~TimeSpan)?
 Rationale: allowing mutations for Time bears the danger of making ~TimeVar obsolete
 * //4/11 yes, implementing it now this way....//
 * we have ~TimeVar, so the only thing that //needs// to be mutable is a whole object &amp;rArr; ~TimeSpan
 * err, because MObject will include a Duration separate from the start time in the Placement, Duration needs to be mutable too
 
 !!!usage considerations
-Question is: how fine grained and configurable needs this to be?
-* for example, when moving a clip taken from 50fps media, the new position might be quantised to the 50fps grid established by the media, while the target timeline runs with 25fps, allowing for finer adjustments based on the intermediate frames present in the source material.
-* likely we need a &quot;nudge by unit(s)&quot;
+{{red{Question 5/11}}} when moving a clip taken from 50fps media, the new position might be quantised to the 50fps grid established by the media, while the target timeline runs with 25fps, allowing for finer adjustments based on the intermediate frames present in the source material.
 
-!!! design draft
+!!!design draft
 The special focus of this problem seems to lead itself to a __visitor pattern__ based implementation. Because the basic hierarchy of applicable types is fixed, but the behaviour is open ended (and not yet fully determined). A conventional implementation would scatter this behaviour over all the time entities, thus making it hard to understand and reason about. The classical ~GoF cyclic visitor solution to the contrary allows us to arrange closely related behaviour into thematically grouped visitor classes. As a plus, the concrete action can be bound dynamically, allowing for more flexibility when it comes to dealing with the intricate situations when a quantised time span (= a clip) recieves a quantised mutation (= is re-alligend to a possibly different frame grid)
 
 Thus the possibly mutalble time entities get an {{{accept(time::Mutation&amp;)}}} function, which is defined to reflect back into the (virtual) visitation functions of the Mutation Interface. Additionally, we provide some static convenience shortcuts right in the Mutation interface, performing the trivial mutations.
+
+!!!life value changes and monitoring
+Based on this time::Mutation design, we provide a specialised element for dealing with //running time values:// When attached to a target time entity, a &quot;life&quot; connection is established. From then on, continuous changes and mutations can be fed to the target by invoking a functor interface. Besides, a change notification signal (callback) can be installed, which will be invoked on each change. This {{{time::Control}}} element is the foundation for implementing all kinds of running time display widgets, spin buttons, timeline selections, playheads, loop playback and similar.
 </pre>
 </div>
-<div title="TimeQuant" modifier="Ichthyostega" modified="201101232031" created="201012181753" tags="Concepts Player spec img discuss draft" changecount="50">
+<div title="TimeQuant" modifier="Ichthyostega" modified="201106080000" created="201012181753" tags="Concepts Player spec img discuss draft" changecount="52">
 <pre>The term &amp;raquo;Time&amp;laquo; spans a variety of vastly different entities. Within a NLE we get to deal with various //flavours of time values.//
 ;continuous time
 :without any additional assumptions, ''points in time'' can be specified with arbitrary precision.
 :the time values are just numbers; the point of reference and the meaning is implicit.
 :within Lumiera, time is encoded as integral number of //micro ticks,// practically continuous
-;duration
+;time distance
 :a range of time, a ''distance'' on the time axis, measured with the same arbitrary precision as time points.
-:distances and durations can be determined by //subtracting// two time points, consequently they are //signed numbers.//
-:a duration always abstracts from the time //when// this duration or distance happens, the relation to any time scale remains implicit
+:distances can be determined by //subtracting// two time points, consequently they are //signed numbers.//
 ;offset
-:offsetting a time or a duration is an operation (not an entity): it means changing the denoted time point or duration.
-:the //target// of an offset operation is a time or duration, while it's //argument// is a distance (synonymous to duration).
-:Time values are //immutable,// like numbers. Only a ''time variable'' can be changed. Durations to the contrary can be mutable or  const.
+:a distance can be used to adjust (offset) a time or a duration: this means applying a relative change.
+:the //target// of an offset operation is a time or duration, while it's //argument// is a distance (synonymous to offset).
+;duration
+:the length of a time range yields a ''time metric''.
+:the duration can be defined as the //absolute value//&amp;nbsp; of the offset between start and endpoint of the time range.
+:a duration always abstracts from the time //when// this duration or distance happens, the relation to any time scale remains implicit
 ;time span
 :contrary to a mere duration, a ''time interval'' or time span is actually //anchored// at a specific point in time.
 :it can be seen as a //special kind of duration,// which explicitly states the information //when// this time span takes place.
+;changing time
+:Time values are //immutable,// like numbers. Only a ''time variable'' can be changed.
+:yet some of the special time entities can recieve [[mutation messages|TimeMutation]], allowing e.g. for adjustments to a time interval selection from the GUI
 
 ;internal time
 :While the basic continuous time values don't imply any provision regarding the time scale and origin to be used, actually, within the implementation of the application, the meaning of time values is uniform and free of contradictions. Thus effectively there is an ''implementation time scale'' -- but its scope of validity is //strictly limited to the implementation level of a single application instance.// It is never exposed and never persisted. It might not be reproducible over multiple instantiations of the application. The implementation reserves the right to recalibrate this internal scale. Later, when Lumiera gains the capability to run within a network of render nodes, these instance connections will include a negotiation about the internal time scale, which remains completely opaque to the outer world. This explains, why {{{lumiera::Time}}} instances lack the ability to show their time value beyond debugging purposes. This is to avoid confusion and to stress their opaque nature.
@@ -6854,7 +7208,7 @@ At the level of individual timecode formats, we're lacking a common denominator;
 &amp;rarr; Quantiser [[implementation details|QuantiserImpl]]
 </pre>
 </div>
-<div title="TimeUsage" modifier="Ichthyostega" modified="201105122348" created="201012230204" tags="design discuss" changecount="27">
+<div title="TimeUsage" modifier="Ichthyostega" modified="201105222341" created="201012230204" tags="design discuss" changecount="30">
 <pre>the following collection of usage situations helps to shape the details of the time values and time quantisation design. &amp;rarr; see also  [[time quantisation|TimeQuant]]
 
 ;time position of an object
@@ -6874,6 +7228,8 @@ At the level of individual timecode formats, we're lacking a common denominator;
 :because this operation might be done both in the quantised or non-quantised domain, and also the result might be (un)quantised
 ;updating the playback position
 :this can be seen as a practical application of the above; basically we can choose to show the wall clock time or we can advance the playback position in frame increments, thus denoting the frame currently in display. For video, these distinctions may look moot, but they are indeed relevant for precise audio editing, especially when combined with loop playback (recall that audio is processed block wise, but the individual sample frames and thus the possible loop positions are way finer than the processing block size)
+;dispatching individual frames for calculation
+:when a [[render or playback process|PlayProcess]] is created, at some point we need to translate this logical unit (&quot;calculation stream&quot;) into individual frame job entries. This requires to break continuous time into individual frames, and then ennumerating these frames.
 ;displaying time intervals
 :for display, time intervals get //re-quantised// into display array coordinates.
 :While evidently the display coordinates are themselves quantised and we obviously don't want to cancel out the effect of an quantisation of the values or intervals to be displayed (which means, we get two quantisations chained up after each other), there remains the question if the display array coordinates should be aligned to the grid of the //elements to be displayed,// and especially if the allowed zoom factors should be limited. This decision isn't an easy one, as it has an immediate and tangible effect on what can be showed, how reversible and reproducible a view is and (especially note this!) on the actual values which can be set and changed through the GUI.
@@ -6894,6 +7250,8 @@ Thus, an especially important instance of that problem is ''how to deal with upd
 Another closely related problem is ''when to allow [[mutations|TimeMutation]]'', if at all. We can't completely do away with mutations, simply because we don't have a pure functional language at our disposal. The whole concept of //reference semantics// doesn't play so well with immutable objects. The Lumiera high-level (session) model certainly relies on objects intended to be //manipulated.// Thus we need a re-settable length field in {{{MObject}}} and we need a time variable for position calculations. Yet we could make any //derived objects// into immutable descriptor records, which certainly helps with parallelism.
 
 The ''problem with playback position'' is -- that indeed it's an attempt to conceptualise a non-existing entity. There is no such thing like &quot;the&quot; playback position. Yet most applications I'm aware off //do// employ this concept. Likely they got trapped by the metaphor of the tape head, again. We should do away with that. On playback, we should show a //projection of wall-clock time onto the expected playback range// -- not more, not less. It should be acknowledged that there is //no direct link to the ongoing playback processes,// besides the fact that they're assumed to sync to wall-clock time as well. Recall, typically there are multiple playback processes going on in compound, and each might run on a different update rate. If we really want a //visual out-of-sync indicator,// we should treat that as a separate reporting facility and display it apart of the playback cursor.
+
+An interesting point to note for the ''frame dispatch step'' is the fact, that in this case quantised values and quantisation are approached in the reverse direction, compared with the other uses. Here, after establishing a start point on the time scale, we proceed with ennumerating distinct frames and later on need to access the corresponding raw time, especially to find out about the [[timeline segment|Segmentation]] to address, or for retrieving parameter automation. &amp;rarr; FrameDispatcher.
 
 Note that the ''display window might be treated as just an independent instance of quantisation''. This is similar to the approach taken above for modifying quantised time span values. We should provide a special kind of time grid, the display coordinates. The origin of these is always defined to the left (lower) side of the interval to be displayed, and they are gauged in screen units (pixels or similar, as used by the GUI toolkit set). The rest is handled by the general quantisation mechanisms. The problem of aligning the display should be transformed into a general facility to align grids, and solved for the general case. Doing so solves the remaining problems with quantised value changes and with ''specifying relative placements'' as well: If we choose to represent them as quantised values, we might (or might not) also choose to apply this //grid-alignment function.//
 
@@ -6956,12 +7314,13 @@ Currently (1/11), the strategy is implemented according to (1) and (4) above, le
 Implementation of this strategy is still broken: it doesn't work properly when actually the change passing over the zero point happens by propagation from lower digits. Because then -- given the way the mutators are implemented -- the //new value of the wrapping digit hasn't been stored.// It seems the only sensible solution is to change the definition of the functors, so that any value will be changed by side-effect {{red{Question 4/11 -- isn't this done and fixed by now??}}}
 </pre>
 </div>
-<div title="Timeline" modifier="Ichthyostega" modified="201011220126" created="200706250721" tags="def" changecount="21">
+<div title="Timeline" modifier="Ichthyostega" modified="201105221835" created="200706250721" tags="def" changecount="22">
 <pre>Timeline is the top level element within the [[Session (Project)|Session]]. It is visible within a //timeline view// in the GUI and represents the effective (resulting) arrangement of media objects, to be rendered for output or viewed in a Monitor (viewer window). A timeline is comprised of:
 * a time axis in abolute time ({{red{WIP 1/10}}}: not clear if this is an entity or just a conceptual definition) 
-* a PlayControler ({{red{WIP Summer 2010: see discussion on ML. It seems rather that the controller will be attached}}})
 * a list of [[global Pipes|GlobalPipe]] representing the possible outputs (master busses)
 * //exactly one// top-level [[Sequence]], which in turn may contain further nested Sequences.
+* when used for Playback, a ViewConnection is necessary, allowing to get or connect to a PlayController
+
 Please note especially that following this design //a timeline doesn't define tracks.// [[Tracks form a Tree|Track]] and are part of the individual sequences, together with the media objects placed to these tracks. Thus sequences are independent entities which may exist stand-alone within the model, while a timeline is //always bound to hold a sequence.// &amp;rarr; see ModelDependencies
 [&gt;img[Fundamental object relations used in the session|uml/fig136453.png]]
 
@@ -7182,14 +7541,29 @@ For now, as of 6/10, we use specialised QueryResolver instances explicitly and d
 &amp;rarr; QueryRegistration
 </pre>
 </div>
-<div title="ViewerPlayConnection" modifier="Ichthyostega" modified="201105110009" created="201007110305" tags="Model Player spec draft" changecount="7">
+<div title="ViewConnection" modifier="Ichthyostega" modified="201105221902" created="201105221854" tags="def Model SessionLogic" changecount="4">
+<pre>For any kind of playback to happen, timeline elements (or similar model objects) need to be attached to a Viewer element through a special kind of [[binding|BindingMO]], called a ''view connection''. In the most general case, this creates an additional OutputMapping (and in the typical standard case, this boils down to a 1:1 association, sending the master bus of each media kind to the standard OutputDesignation for that kind).
+
+Establishing a ~ViewConnection is prerequisite for creating or attaching an PlayController through the PlayService. Multiple &quot;play control&quot; GUI elements can be associated with such a play controller, causing them to work as being linked together: if you e.g. push &quot;play&quot; on one of them, the button states of all linked GUI controls will reflect the state change of the underlying play controller.
+
+View connections are part of the model and thus persistent. They can be created explicitly, or just derived by //allocating a viewer.// And a new view connection can push aside (and thus &quot;break&quot;) an existing one from another timeline or model element. When a view connection is //broken,// any associated PlayProcess needs to be terminated (this is a blocking operation). Thus, at any time, there can be only one active view connection to a given viewer; here &quot;active&quot; means, that a PlayController has been hooked up, and the connection is ready for playback or rendering. But on the other hand, nothing prevents a timeline (or similar model object) to maintain multiple view connections -- consequently the actual playback position behaves as if associated with the view connection.
+</pre>
+</div>
+<div title="ViewerAsset" modifier="Ichthyostega" modified="201105232228" created="201105230116" tags="Model spec" changecount="2">
+<pre>A [[structural Asset|StructAsset]] corresponding to a Viewer element in the GUI.
+
+These Viewer (or Monitor) elements play an enabling role for any output generation. In order to [[initiate playback|PlayService]], we need a fully resolved OutputDesignation, which typcially can be achieved by creating a ViewConnection, i.e. connecting a timeline or similarily suitable model element to such a viewer. Actually, this connection is modelled by attaching to a BindingMO which is linked to a ViewerAsset. This way, the model tracks and persists the available viewer windows and the current connection situation.
+
+When the GUI is outfitted, based on the current Session or HighLevelModel, it is expected to retrieve the viewer assets and for each of them, after installing the necessary widgetes, registers an OutputSlot with the global OutputManager.</pre>
+</div>
+<div title="ViewerPlayConnection" modifier="Ichthyostega" modified="201106122343" created="201007110305" tags="Model Player spec draft" changecount="10">
 <pre>for showing output, three entities are involved
 * the [[Timeline]] holds the relevant part of the model, which gets rendered for playback
-* by connecting to a viewer component, an actual output target is established
+* by connecting to a viewer component (&amp;rarr; ViewConnection), an actual output target is established
 * the playback process itself is coordinated by a PlayController, which in turn creates a PlayProcess
 
 !the viewer connection
-A viewer element gets connected to a given timeline either by directly attaching it, or by //allocating an available free viewer.// Anyway, as a model element, the viewer is just like another set of global pipes chained up after the global pipes present in the timeline. The number and kind of pipes provided is a configurable property of the viewer element &amp;mdash; more specifically: the viewer's SwitchBoard. Thus, connecting a viewer activates the same internal logic employed when connecting a sequence into a timeline or meta-clip: a default channel association is established, which can be overridden persistently (&amp;rarr; OutputMapping). Each of the viewer's pipes in turn gets connected to a system output through an OutputManager slot &amp;mdash; again an output mapping step.
+A viewer element gets connected to a given timeline either by directly attaching it, or by //allocating an available free viewer.// Anyway, as a model element, the viewer is just like another set of global pipes chained up after the global pipes present in the timeline. Connecting a timeline to a viewer creates a ViewConnection, which is a special [[binding|BindingMO]]. The number and kind of pipes provided is a configurable property of the viewer element &amp;mdash; more specifically: the viewer's SwitchBoard. Thus, connecting a viewer activates the same internal logic employed when connecting a sequence into a timeline or meta-clip: a default channel association is established, which can be overridden persistently (&amp;rarr; OutputMapping). Each of the viewer's pipes in turn gets connected to a system output through an OutputSlot registered with the OutputManager &amp;mdash; again an output mapping step.
 </pre>
 </div>
 <div title="VirtualClip" modifier="Ichthyostega" modified="201011220152" created="200804110321" tags="def Model" changecount="17">

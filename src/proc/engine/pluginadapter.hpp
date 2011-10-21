@@ -24,7 +24,7 @@
 #ifndef ENGINE_PLUGINADAPTER_H
 #define ENGINE_PLUGINADAPTER_H
 
-#include "proc/engine/trafo.hpp"
+#include "proc/engine/procnode.hpp"
 
 
 
@@ -37,7 +37,7 @@ namespace engine
    * Effects processors are typically defined in a separate library and
    * will be loaded at runtime using Lumiera's plugin interface.
    */
-  class PluginAdapter : public Trafo
+  class PluginAdapter : public ProcNode
     {
       /////////////
     };

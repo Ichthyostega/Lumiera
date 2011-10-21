@@ -48,6 +48,7 @@
 #include "lib/hash-indexed.hpp"
 #include "lib/util.hpp"
 
+#include <boost/functional/hash.hpp>
 #include <boost/operators.hpp>
 #include <iostream>
 #include <string>

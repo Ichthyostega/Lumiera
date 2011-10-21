@@ -103,7 +103,7 @@ public:
    *       the GUI is really connected to the Player
    */
   void setPlaybackPoint(Time newPos);
-  
+
   /**
    * A signal to notify when the selected period has changed.
    */
@@ -143,9 +143,8 @@ private:
    *       when actually integrated with the Player
    */
   TimeVar playbackPoint_;
-  
+
   bool isPlayback_;
-  
   
   // Signals
   

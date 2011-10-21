@@ -34,6 +34,7 @@
  ** e.g. throwing an exception instead of creating a NULL value. 
  ** 
  ** @see lumiera::WrapperPtr usage example to access a variant record
+ ** @see lib::InPlaceAnyHolder usage example to access a subclass in embedded storage
  ** 
  */
 

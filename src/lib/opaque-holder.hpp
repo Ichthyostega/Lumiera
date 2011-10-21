@@ -219,7 +219,7 @@ namespace lib {
           char content_[siz];
           void* ptr() { return &content_; }
           
-          virtual ~Buffer() {}
+          virtual ~Buffer() {}           ///< this is an ABC with VTable
           virtual bool  isValid()  const =0;
           virtual bool  empty()    const =0;
           virtual BaseP getBase()  const =0;

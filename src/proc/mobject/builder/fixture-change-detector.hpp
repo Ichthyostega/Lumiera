@@ -30,7 +30,7 @@
  **   and specific segments of the fixture.
  ** Together, these allow to identify those ongoing processes which need to be cancelled
  ** or restarted, because their results might be tainted by the changes induced by the
- ** build process. Typically, these detection process runs just before commiting the
+ ** build process. Typically, these detection process runs just before committing the
  ** newly built fixture datastructure.
  ** 
  ** @todo WIP-WIP-WIP as of 12/2010

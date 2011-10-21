@@ -38,6 +38,24 @@ namespace lumiera {
     
   namespace typelist {
     
+    /** Compile-time Type equality:
+     *  Simple Trait template to pick up types considered
+     *  \em identical by the compiler.
+     * @warning identical, not sub-type!
+     */
+    template<typename T1, typename T2>
+    struct is_sameType
+      {
+        static const bool value = false;
+      };
+    
+    template<typename T>
+    struct is_sameType<T,T>
+      {
+        static const bool value = true;
+      };
+    
+    
     /** semi-automatic detection if an instantiation is possible.
      *  Requires help by the template to be tested, which needs to define
      *  a typedef member \c is_defined. The embedded metafunction Test can be used

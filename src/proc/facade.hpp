@@ -44,6 +44,8 @@ namespace proc {
    * @todo this is a dummy placeholder as of 1/2009. Currently, there
    *       is only implementation-level code within the Proc-Layer and
    *       the interfaces need to be worked out.
+   * @note at least the Play/Output subsystem slowly turns into
+   *       something real, as of 6/2011
    * 
    */
   struct Facade
@@ -55,9 +57,17 @@ namespace proc {
       
       
       /** provide a descriptor for lumiera::AppState,
-       *  wired accordingly to allow main to load and
-       *  save an existing session. */
+       *  wired accordingly to allow main to bring up
+       *  a editing session, possibly by loading an
+       *  existing session from storage. */
       static lumiera::Subsys& getSessionDescriptor();
+      
+      
+      /** provide a descriptor for lumiera::AppState,
+       *  wired accordingly to allow main to bring up
+       *  the render / playback coordination and 
+       *  output management subsystem. */
+      static lumiera::Subsys& getPlayOutDescriptor();
       
       
       //////////////////TODO: define the global access interfaces for the Proc-Layer

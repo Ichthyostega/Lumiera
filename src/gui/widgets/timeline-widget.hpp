@@ -98,7 +98,7 @@ public:
    * @param zoom_size The number of steps to zoom by. The scale factor
    * is 1.25^(-zoom_size).
    */
-  void zoom_view(int zoom_size);
+  void zoom_view(double timescale_ratio);
   
   /**
    * Gets the type of the tool currently active.
@@ -115,14 +115,16 @@ public:
   
 public:
   /* ===== Signals ===== */
+  typedef sigc::signal<void, boost::shared_ptr<timeline::TimelineState> > TimelineStateChangeSignal;
+  typedef sigc::signal<void, boost::shared_ptr<timeline::Track> > HoveringTrackChangedSignal;
+  
   sigc::signal<void, lib::time::Time> mouse_hover_signal() const;
   
   sigc::signal<void> playback_period_drag_released_signal() const;
   
-  sigc::signal<void, boost::shared_ptr<timeline::Track> >
-    hovering_track_changed_signal() const;
+  HoveringTrackChangedSignal hovering_track_changed_signal() const;
     
-  sigc::signal<void> state_changed_signal() const;
+  TimelineStateChangeSignal state_changed_signal() const;
   
   /* ===== Events ===== */
 protected:
@@ -275,9 +277,8 @@ protected:
   // Signals
   sigc::signal<void, Time> mouseHoverSignal;
   sigc::signal<void> playbackPeriodDragReleasedSignal;
-  sigc::signal<void, boost::shared_ptr<timeline::Track> >
-    hoveringTrackChangedSignal;
-  sigc::signal<void> stateChangedSignal;
+  HoveringTrackChangedSignal hoveringTrackChangedSignal;
+  TimelineStateChangeSignal stateChangedSignal;
     
   bool update_tracks_frozen;
    

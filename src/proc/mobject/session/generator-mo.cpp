@@ -1,8 +1,8 @@
 /*
-  Trafo  -  transforming processing Node 
+  GeneratorMO  -  a (Test)data generator
 
   Copyright (C)         Lumiera.org
-    2008,               Hermann Vosseler <Ichthyostega@web.de>
+    2011,               Hermann Vosseler <Ichthyostega@web.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -21,13 +21,25 @@
 * *****************************************************/
 
 
-#include "proc/engine/trafo.hpp"
+#include "proc/mobject/session/generator-mo.hpp"
+//#include "proc/assetmanager.hpp"
+//#include "proc/asset/media.hpp"
+//#include "proc/asset/clip.hpp"
+//#include "lib/time/mutation.hpp"
+//#include "lib/util.hpp"
 
-namespace engine
-  {
+//using lib::time::Mutation;
+//using util::isnil;
 
-  /** */
+namespace mobject {
+namespace session {
 
+  /** new clip-MO linked with the given asset::Clip.
+   *  Initially, this clip will cover the whole source media length.
+   */
+  
+  
+  
+  
+}} // namespace mobject::session
 
-
-} // namespace engine

@@ -1,0 +1,94 @@
+format 58
+
+classinstancecanvas 128005 classinstance_ref 145669 // 
+  xyz 41 85 2000
+end
+classinstancecanvas 128133 classinstance_ref 145797 // 
+  xyz 105 142 2000
+end
+classinstancecanvas 128261 classinstance_ref 145925 // 
+  xyz 171 173 2000
+end
+classinstancecanvas 128389 classinstance_ref 146053 // 
+  xyz 171 240 2000
+end
+classinstancecanvas 128517 classinstance_ref 146181 // video-L
+  xyz 233 194 2000 color lightgreen
+end
+classinstancecanvas 128645 classinstance_ref 146309 // video-R
+  xyz 233 216 2000 color lightgreen
+end
+classinstancecanvas 128773 classinstance_ref 146437 // sound-W
+  xyz 233 269 2000 color lightgreen
+end
+classinstancecanvas 128901 classinstance_ref 146565 // sound-X
+  xyz 233 291 2000 color lightgreen
+end
+classinstancecanvas 129029 classinstance_ref 146693 // sound-Y
+  xyz 233 313 2000 color lightgreen
+end
+classinstancecanvas 132101 classinstance_ref 146821 // 
+  xyz 420 269 2000 color lightblue
+end
+classinstancecanvas 132229 classinstance_ref 146949 // 
+  xyz 420 194 2000 color lightblue
+end
+note 132357 "stateless (functional)"
+  xyzwh 348 140 2000 124 35
+note 132485 "stateful"
+  color verylightorange  xyzwh 131 85 2000 72 36
+classinstancecanvas 132613 classinstance_ref 147077 // 
+  xyz 233 23 2000
+end
+classinstancecanvas 132741 classinstance_ref 147205 // 
+  xyz 233 46 2000
+end
+classinstancecanvas 132869 classinstance_ref 148357 // sound-Z
+  xyz 233 335 2000 color lightgreen
+end
+objectlinkcanvas 129285 norel
+  geometry VH
+  from ref 128133 z 1999 to point 139 181
+  line 129413 z 1999 to ref 128261
+  no_role_a no_role_b
+objectlinkcanvas 129541 norel
+  geometry VH
+  from ref 128133 z 1999 to point 139 248
+  line 129797 z 1999 to ref 128389
+  no_role_a no_role_b
+objectlinkcanvas 129925 norel
+  geometry VH
+  from ref 128261 z 1999 to point 194 202
+  line 130053 z 1999 to ref 128517
+  no_role_a no_role_b
+objectlinkcanvas 130181 norel
+  geometry VH
+  from ref 128261 z 1999 to point 194 224
+  line 130309 z 1999 to ref 128645
+  no_role_a no_role_b
+objectlinkcanvas 130437 norel
+  geometry VH
+  from ref 128389 z 1999 to point 194 277
+  line 130565 z 1999 to ref 128773
+  no_role_a no_role_b
+objectlinkcanvas 130693 norel
+  geometry VH
+  from ref 128389 z 1999 to point 194 299
+  line 130821 z 1999 to ref 128901
+  no_role_a no_role_b
+objectlinkcanvas 130949 norel
+  geometry VH
+  from ref 128389 z 1999 to point 194 321
+  line 131077 z 1999 to ref 129029
+  no_role_a no_role_b
+objectlinkcanvas 131845 norel
+  geometry VH
+  from ref 128005 z 1999 to point 68 150
+  line 131973 z 1999 to ref 128133
+  no_role_a no_role_b
+objectlinkcanvas 132997 norel
+  geometry VHr
+  from ref 132869 z 1999 to point 194 343
+  line 133253 z 1999 to ref 128389
+  no_role_a no_role_b
+end

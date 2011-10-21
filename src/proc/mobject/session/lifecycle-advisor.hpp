@@ -31,7 +31,7 @@
  ** here; any implementation is delegated to the relevant session facilities.
  ** 
  ** The idea of a LifecycleAdvisor is inspired by GUI frameworks, especially 
- ** Spring RichClient. Typically, such frameworks provides a means for flexible
+ ** Spring RichClient. Typically, such frameworks provide a means for flexible
  ** configuration of the application lifecycle. Configurability isn't the primary
  ** goal here, as there  is only one Lumiera application and the session lifecycle
  ** can be considered fixed, with the exception of some extension points, which are
@@ -64,7 +64,7 @@ namespace session {
   
   
   /**
-   * Skeleton operations conducting the session lifecycle sequences.
+   * Skeleton of operations conducting the session lifecycle sequences.
    * Any details of the operations are delegated to the current session
    * and associated services.
    * @warning this object is assumed to be used as a single instance

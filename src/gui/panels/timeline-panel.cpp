@@ -23,10 +23,12 @@
 
 #include "gui/gtk-lumiera.hpp"
 #include "gui/panels/timeline-panel.hpp"
+#include "gui/widgets/timeline/timeline-zoom-scale.hpp"
 
 #include "gui/workspace/workspace-window.hpp"
 #include "gui/model/project.hpp"
 #include "gui/controller/controller.hpp"
+
 #include "lib/util.hpp"
 
 #include <boost/foreach.hpp>
@@ -34,6 +36,7 @@
 using namespace Gtk;
 using namespace sigc;
 using namespace gui::widgets;
+using namespace gui::widgets::timeline;
 using namespace gui::model;
 
 using boost::shared_ptr;  ///////////////////////////////TICKET #796
@@ -60,6 +63,7 @@ TimelinePanel::TimelinePanel (workspace::PanelManager &panel_manager,
   , iBeamTool(Gtk::StockID("tool_i_beam"))
   , zoomIn(Stock::ZOOM_IN)
   , zoomOut(Stock::ZOOM_OUT)
+  , zoomScale()
   , updatingToolbar(false)
   , currentTool(timeline::Arrow)
 {
@@ -101,14 +105,15 @@ TimelinePanel::TimelinePanel (workspace::PanelManager &panel_manager,
     
   toolbar.append(separator2);
   
-  toolbar.append(zoomIn, mem_fun(this, &TimelinePanel::on_zoom_in));
-  toolbar.append(zoomOut, mem_fun(this, &TimelinePanel::on_zoom_out));
-   
+  toolbar.append(zoomScale);
+  zoomScale.signal_zoom().
+    connect(mem_fun(this,&TimelinePanel::on_zoom));
+
   toolbar.show_all();
   panelBar.pack_start(toolbar, PACK_SHRINK);
 
   // Setup tooltips
-  sequenceChooser     .set_tooltip_text(_("Change sequence"));
+  sequenceChooser .set_tooltip_text(_("Change sequence"));
 
   previousButton  .set_tooltip_text(_("To beginning"));
   rewindButton    .set_tooltip_text(_("Rewind"));
@@ -122,12 +127,18 @@ TimelinePanel::TimelinePanel (workspace::PanelManager &panel_manager,
 
   zoomIn          .set_tooltip_text(_("Zoom in"));
   zoomOut         .set_tooltip_text(_("Zoom out"));
+  zoomScale       .set_tooltip_text(_("Adjust timeline zoom scale"));
 
   // Setup the timeline widget
-  shared_ptr<Sequence> sequence          ///////////////////////////////TICKET #796
+  shared_ptr<Sequence> sequence          ///////////////////////////////TICKET #796 : should use std::tr1::shared_ptr instead of boost
     = *get_project().get_sequences().begin();  
   timelineWidget.reset(new TimelineWidget(load_state(sequence)));
   pack_start(*timelineWidget, PACK_EXPAND_WIDGET);
+
+  // since TimelineWidget is now initialised,
+  // wire the zoom slider to react on timeline state changes
+  zoomScale.wireTimelineState (timelineWidget->get_state(),
+                               timelineWidget->state_changed_signal());
   
   // Set the initial UI state
   update_sequence_chooser();
@@ -135,7 +146,6 @@ TimelinePanel::TimelinePanel (workspace::PanelManager &panel_manager,
   update_zoom_buttons();
   show_time (Time::ZERO);
 }
-
 
 const char*
 TimelinePanel::get_title()
@@ -181,6 +191,13 @@ void
 TimelinePanel::on_ibeam_tool()
 {  
   set_tool(timeline::IBeam);
+}
+
+void
+TimelinePanel::on_zoom(double time_scale_ratio)
+{
+  REQUIRE(timelineWidget);
+  timelineWidget->zoom_view(time_scale_ratio);
 }
 
 void
@@ -236,18 +253,19 @@ TimelinePanel::on_sequence_chosen()
     {
       weak_ptr<Sequence> sequence_ptr = 
         (*iter)[sequenceChooserColumns.sequenceColumn];
+
       shared_ptr<Sequence> sequence(sequence_ptr.lock());
+
       if(sequence)
         {
           shared_ptr<timeline::TimelineState> old_state(
             timelineWidget->get_state());
           REQUIRE(old_state);
-            
           if(sequence != old_state->get_sequence())
             timelineWidget->set_state(load_state(sequence));
         }
     }
-    
+
   update_zoom_buttons();
 }
 
@@ -379,9 +397,10 @@ TimelinePanel::on_frame()
 shared_ptr<timeline::TimelineState>
 TimelinePanel::load_state(weak_ptr<Sequence> sequence)
 {
+  /* state exists */
   if(contains(timelineStates, sequence))
-    return timelineStates[sequence];
-  
+      return timelineStates[sequence];
+
   shared_ptr<Sequence> shared_sequence = sequence.lock();
   if(shared_sequence)
     {

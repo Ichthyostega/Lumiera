@@ -54,7 +54,6 @@
 
 namespace control {
   
-  using lib::TypedAllocationManager;
   using lib::InPlaceBuffer;
   using std::string;
   

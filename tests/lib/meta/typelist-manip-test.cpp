@@ -40,15 +40,14 @@
 
 #include "lib/test/run.hpp"
 #include "lib/meta/generator.hpp"
-#include "lib/meta/typelist-util.hpp"
+#include "lib/meta/typelist-manip.hpp"
 #include "meta/typelist-diagnostics.hpp"
 
-#include <boost/format.hpp>
 #include <iostream>
 
 using ::test::Test;
-using std::string;
 using std::cout;
+using std::endl;
 
 
 namespace lumiera {
@@ -90,12 +89,13 @@ namespace test {
        *         using a "predicate template" (metafunction)
        *       - building combinations and permutations
        */
-      class TypeListManipl_test : public Test
+      class TypeListManip_test : public Test
         {
           virtual void
           run (Arg) 
             {
               check_diagnostics ();
+              check_pick_elm ();
               check_apply  ();
               check_filter ();
               check_append ();
@@ -113,7 +113,7 @@ namespace test {
             {
               // Explanation: the DISPLAY macro results in the following definition....
               typedef InstantiateChained<List1::List, Printer, NullP >  Contents_List1;
-              cout << "List1" << "\t:" << Contents_List1::print() << "\n";
+              cout << "List1" << "\t:" << Contents_List1::print() << endl;
               
               // That is: we instantiate the "Printer" template for each of the types in List1,
               // forming an inheritance chain. I.e. the defined Type "Contents_List1" inherits
@@ -121,6 +121,27 @@ namespace test {
               // The print() function is defined to create a string showing each.
               
               DISPLAY (List2);
+            }
+          
+          
+          void
+          check_pick_elm ()
+            {
+              Pick<List2,0>::Type e0;
+              Pick<List2,1>::Type e1;
+              Pick<List2,2>::Type e2;
+              
+              typedef Pick<List2,3>::Type     E3;
+              typedef Pick<NullType,23>::Type Nil;
+              typedef Pick<void*,456>::Type   Irrelevant;
+              
+              CHECK (5 == e0);
+              CHECK (6 == e1);
+              CHECK (7 == e2);
+              
+              CHECK ((is_sameType<NullType, E3>        ::value));
+              CHECK ((is_sameType<NullType, Nil>       ::value));
+              CHECK ((is_sameType<NullType, Irrelevant>::value));
             }
           
           
@@ -352,7 +373,7 @@ namespace test {
       
       
       /** Register this test class... */
-      LAUNCHER (TypeListManipl_test, "unit common");
+      LAUNCHER (TypeListManip_test, "unit common");
       
       
       

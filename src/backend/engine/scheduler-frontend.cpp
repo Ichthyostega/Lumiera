@@ -1,8 +1,8 @@
 /*
-  BuffHandle  -  Buffer handling support for the render engine
+  SchedulerFrontend  -  access point to the scheduler within the renderengine
 
   Copyright (C)         Lumiera.org
-    2008,               Hermann Vosseler <Ichthyostega@web.de>
+    2011,               Hermann Vosseler <Ichthyostega@web.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -21,12 +21,14 @@
 * *****************************************************/
 
 
-#include "proc/engine/buffhandle.hpp"
+#include "backend/engine/scheduler-frontend.hpp"
 
+namespace backend{
 namespace engine {
-
-
-  /**  */
-
-
-} // namespace engine
+  
+  
+  /** */
+  
+  
+  
+}} // namespace backend::engine

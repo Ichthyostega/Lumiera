@@ -122,6 +122,7 @@ namespace lumiera {
     LUMIERA_ERROR_DECLARE (ASSERTION);    ///< assertion failure
     
     /* generic error situations */
+    LUMIERA_ERROR_DECLARE (LIFECYCLE);    ///< Lifecycle assumptions violated
     LUMIERA_ERROR_DECLARE (WRONG_TYPE);   ///< runtime type mismatch
     LUMIERA_ERROR_DECLARE (ITER_EXHAUST); ///< end of sequence reached
     LUMIERA_ERROR_DECLARE (BOTTOM_VALUE); ///< invalid or NIL value

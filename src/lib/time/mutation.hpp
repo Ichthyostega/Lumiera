@@ -112,7 +112,10 @@ namespace time {
       static EncapsulatedMutation nudge (int adjustment, Symbol gridID);
       
     protected:
-      static void imposeChange (TimeValue&, TimeValue const&);
+      static TimeValue& imposeChange (TimeValue&, TimeValue const&);
+      static TimeValue& imposeChange (TimeValue&, Offset const&);
+      static TimeValue& imposeChange (TimeValue&, int);
+      static TimeValue& imposeChange (QuTime&, int);
     };
   
   
@@ -123,6 +126,54 @@ namespace time {
   
 #ifdef LIB_TIME_TIMEQUQNT_H
   inline void QuTime::accept   (Mutation const& muta) { muta.change (*this); }
+#endif
+  
+  
+  
+  /* === implementing the actual changes === */
+  
+  /** @internal actually force a change into a target time entity to mutate.
+   *  Mutation is declared fried to TimeValue and thus is allowed to influence
+   *  the basic value stored in each time entity
+   */
+  inline TimeValue&
+  Mutation::imposeChange (TimeValue& target, TimeValue const& valueToSet)
+  {
+    return target = valueToSet; 
+  }
+  
+  /** @internal variation to mutate a target time value by applying an offset */
+  inline TimeValue&
+  Mutation::imposeChange (TimeValue& target, Offset const& offset)
+  {
+    return imposeChange (target, TimeVar(target) += offset); 
+  }
+  
+  /** @internal nudge a target time value by a step wise offset.
+   *  The standard case uses a fixed offset of 1 second per step                  //////////////////TICKET #810
+   */
+  inline TimeValue&
+  Mutation::imposeChange (TimeValue& target, int steps)
+  {
+    return imposeChange (target, TimeVar(target) += Time(FSecs(steps)));
+  }
+  
+#ifdef LIB_TIME_TIMEQUQNT_H
+  /** @internal Special treatment for quantised target values:
+   *  use the quantised time's own grid; retrieve the corresponding grid point,
+   *  offset it by the step-parameter, then retrieve the corresponding time from
+   *  the quantised time's underlying quantiser (grid) and impose that as change.
+   * @note when the #steps parameter is zero, what happens here effectively
+   *       is the materialisation of the quantised target time, i.e. making
+   *       the quantisation explicit and storing the resulting value. */
+  inline TimeValue&
+  Mutation::imposeChange (QuTime& target, int steps)
+  {
+    PQuant const& grid (target);
+    int64_t originalGridPoint = grid->gridPoint(target);
+    int64_t adjustedGridPoint = originalGridPoint + steps;
+    return imposeChange (target, grid->timeOf (adjustedGridPoint));
+  }
 #endif
   
   

@@ -63,8 +63,8 @@
 
 
 
-#ifndef CONTROL_TYPED_ALLOCATION_MANAGER_H
-#define CONTROL_TYPED_ALLOCATION_MANAGER_H
+#ifndef LIB_TYPED_ALLOCATION_MANAGER_H
+#define LIB_TYPED_ALLOCATION_MANAGER_H
 
 //#include "pre.hpp"
 #include "lib/error.hpp"

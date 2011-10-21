@@ -35,8 +35,8 @@
  */
 
 
-#ifndef PROC_PLAY_DUMMY_IMAGE_GENERATOR_H
-#define PROC_PLAY_DUMMY_IMAGE_GENERATOR_H
+#ifndef PROC_NODE_DUMMY_IMAGE_GENERATOR_H
+#define PROC_NODE_DUMMY_IMAGE_GENERATOR_H
 
 
 #include "lib/error.hpp"
@@ -44,47 +44,45 @@
 
 
 namespace proc {
-  namespace play {
+namespace node {
+
+      
+  class DummyImageGenerator
+    {
+      
+      unsigned char buf_[320 * 240 * 3];         ///< working buffer for next frame
+      
+      unsigned char outFrame_A_[320 * 240 * 4];  ///< output frame 1
+      unsigned char outFrame_B_[320 * 240 * 4];  ///< output frame 2
+
+      uint current_;
+      uint frame_;
+      uint fps_;
+      
+      
+    public:
+      DummyImageGenerator(uint fps);
+      
+     ~DummyImageGenerator() { }
+    
+      /** generate the next frame and 
+       *  occupy the alternate buffer.
+       *  @return the buffer containing the new frame
+       */
+      LumieraDisplayFrame next();
+      
+      /** just re-return a pointer to the current frame
+       *  without generating any new image data */
+      LumieraDisplayFrame current();
+    
+      
+    private:
+      
+    };
   
-        
-    class DummyImageGenerator
-      {
-        
-        unsigned char buf_[320 * 240 * 3];         ///< working buffer for next frame
-        
-        unsigned char outFrame_A_[320 * 240 * 4];  ///< output frame 1
-        unsigned char outFrame_B_[320 * 240 * 4];  ///< output frame 2
-
-        uint current_;
-        uint frame_;
-        uint fps_;
-        
-        
-      public:
-        DummyImageGenerator(uint fps);
-        
-       ~DummyImageGenerator() { }
-      
-        /** generate the next frame and 
-         *  occupy the alternate buffer.
-         *  @return the buffer containing the new frame
-         */
-        LumieraDisplayFrame next();
-        
-        /** just re-return a pointer to the current frame
-         *  without generating any new image data */
-        LumieraDisplayFrame current();
-      
-        
-      private:
-        
-      };
-    
-    
-    
-    
-  } // namespace play
-
-} // namespace proc
-#endif // PROC_PLAY_DUMMY_IMAGE_GENERATOR_H
+  
+  
+  
+}} // namespace proc::node
+#endif
 

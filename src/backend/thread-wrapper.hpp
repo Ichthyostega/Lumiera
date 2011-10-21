@@ -200,7 +200,7 @@ namespace backend {
     
     
     /** Synchronisation barrier. In the function executing in this thread
-     *  needs to be a corresponding Thread::sync() call. Blocking until
+     *  needs to be a corresponding Thread::syncPoint() call. Blocking until
      *  both the caller and the thread have reached the barrier.
      */
     void
