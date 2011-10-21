@@ -1,0 +1,111 @@
+Hash functions (C++)
+====================
+
+_This page is for collecting know-how related to hash functions and hash tables._
+
+The original STL was lacking proper support for hashtables, hash based associative arrays
+and hash calculation in general. To quite some developers, hash tables feel like some kind
+of _impure_ data structure -- unfortunately the properties of modern CPUs turned the balance
+significantly in favour of hash tables due to memory locality. Pointer based datastructures
+can't be considered especially _performant_ as they were in the good old times.
+
+The tr1 extension and the new C++11 standard amended the problem by defining a framework
+for hash functions and hash tables. When sticking to some rules, custom written hash functions
+can be picked up automatically by the standard library and -containers.
+
+Standard Hash Definitions
+-------------------------
+
+Hash values::
+  hash values are unsigned integral numbers of type 'size_t'
++
+Basically this means that the range of hash values roughly matches the memory address space.
+But it also means that this range is _platform dependant_ (32 or 64bit) and -- given the usual
+hash calculation based on modulus (wrap around) -- that generated hash values are nonportable.
+
+Hash function::
+  a hash function calculates a hash value for objects of its argument type. Thus, for every
+  supported type, there is a dedicated hash function. Quite some hash functions are generated
+  from function templates though.
+
+Hash functor::
+  a function object able to calculate hash values when invoked. The standard library and the
+  corresponding boost libraries accept functors of type 'hash<TY>' to calculate hash values
+  for objects or values of type 'TY'
+
+Hash based containers::
+  While the standard Set and Map types (including the Multiset and Multimap) are based on
+  balanced binary trees, the new C\+\+11 standard includes hash based variants (with name
+  prefix +unordered_+). These hashtable based containers require a +hash<KEY>+ functor
+  to be able to derive the hash value of any encountered key value. Hash functors may
+  be provided as additional type parameter to the container; if omitted, the compiler
+  tries to find a (maybe custom defined) hash functor by *ADL* (see below)
+
+
+C++11 versus Boost
+~~~~~~~~~~~~~~~~~~
+The Boost library *functional-hash* provided the foundation for the definition now accepted
+into the new C++ standard. Yet the boost library provides some additional facilities not
+part of the standard. Thus we're bound to choose
+
+* either including +<tr1/functional>+ and +using std::tr1::hash+
+* or including +<boost/functional-hash>+ and +using boost::hash+
+
+The boost version additionally provides pre defined hash functors for STL containers holding
+custom types -- and it provides an easy to use extension mechanism for writing hash functions
+for custom types. Effectively this means that, assuming usage of the boost-include, the actual
+implementation and the way it is picked up is _different but compatible_ to the standard way.
+
+Boost: hashing custom types
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+The extension mechanism used by the boost version is best explained by looking
+at the code
+
+.boost/functional/hash/extensions.hpp
+[source,C]
+----
+    template <class T> struct hash
+        : std::unary_function<T, std::size_t>
+    {
+        std::size_t operator()(T const& val) const
+        {
+            return hash_value(val);
+        }
+    }
+----
+So this templated standard implementation just _invokes an unqualified function_
+with the name +hash_value(val)+ -- when instantiating this template for your custom
+class or type, the compiler will search this function not only in the current scope,
+but also in the namespace defining your custom type +T+ (this mechanism is known as
+``**A**rgument **D**ependant **L**ookup''). Meaning that all we'd need to do is to define a
+free function or friend function named +hash_value+ alongside with our custom data types (classes).
+
+To further facilitate providing custom hash functions, boost defines a function
++boost::hash_combine(size_t seed, size_t hashValue)+, allowing to _chain up_ the
+calculated hash values of the parts forming a composite data structure.
+
+- see Lumiera's link:http://git.lumiera.org/gitweb?p=LUMIERA;a=blob;f=src/proc/asset/category.hpp;h=b7c8df2f2ce69b0ccf89439954de8346fe8d9276;hb=master#l104[asset::Category]
+  for a simple usage example
+- our link:http://git.lumiera.org/gitweb?p=LUMIERA;a=blob;f=src/lib/symbol-impl.cpp;h=9e09b4254ac57baefeb0a0c06ccd423318e923c1;hb=master#l67[lib::Symbol datatype]
+  uses the standard implementation of a string hash function combining the individual
+  character's hashes.
+
+
+
+LUID values
+-----------
+Lumiera's uniform identifier values shouldn't be confused with regular hash values.
+The purpose of LUID values is to use just plain random numbers as ID values. But, because
+of using such a incredibly large number space (128bit), we can just assume any collision
+between such random LUID to be so unlikely as to reasonably ignore this possibility
+altogether. Let's say, the collision of random LUID values won't ever happen, same as
+the meltdown of an atomic power plant, which, as we all know, won't ever happen either.
+
+Relation to hash values
+~~~~~~~~~~~~~~~~~~~~~~~
+When objects incorporate sich an unique LUID, this provides for a prime candidate to
+derive hash values as a side-effect of that design: Since incorporating an LUID typically
+means that this object has an _distinguishable identity_, all objects with the same LUID
+should be considered _equivalent_ and thus hash to the same value. Consequently we can just
+use a +size_t+ prefix of the LUID bitstring as hash value, without any further calculations.
+

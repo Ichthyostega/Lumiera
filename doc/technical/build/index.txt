@@ -3,13 +3,15 @@ Lumiera build system
 
 As work progresses, we will add more information on the Lumiera build system.
 
+//Menu: label Build System
+
 build -- continuous integration -- packaging
 
 * SCons
 * Autotools
 * Dependencies
 * link:BuildDroneDraft.html[»Builddrone« concept from 2008]
-* Packaging: Debian RPM
-* Lumiera debian depot
+* Packaging: link:LumieraDebianPackage.html[Debian] RPM
+* Lumiera link:../infra/debianDepot.html/[debian depot]
 
 

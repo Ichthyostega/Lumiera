@@ -25,7 +25,7 @@ To (re)build the debian package
 . +git clone git:/git.lumiera.org/lumiera/debian+
 . +mkdir pack.deb+
 . +cd debian+
-. +git-buildpackage --git-upstream-branch=+_RELEASE-TAG_
+. +git-buildpackage --git-upstream-branch=+ _RELEASE-TAG_
 
 -- here _RELEASE-TAG_ denotes the point in the Git history, which should become
 the reference source and be packaged into the *.orig.tar.gz. Usually, it's just
@@ -76,15 +76,15 @@ everyday usage
 ~~~~~~~~~~~~~~
 
 import a package::
-  +reprepro -V -C experimental include lenny lumiera_0.pre.01-1+maverick_i386.changes+
+  +reprepro -V -C experimental include squeeze lumiera_0.pre.01-1+squeeze_i386.changes+
 +
 this adds the given binary lumiera package, together with all sources and the original
-tarball to the 'lenny' repository, into the 'experimental' section
+tarball to the 'squeeze' repository, into the 'experimental' section
 
 dump out an entire repository::
-  +reprepro -V export lenny+
+  +reprepro -V export squeeze+
 +
-this will __re__generate all of the indices, signatures and metadata of the 'lenny' repository
+this will __re__generate all of the indices, signatures and metadata of the 'squeeze' repository
 
 
 Configuration
@@ -98,12 +98,12 @@ I choose this layout because of the marginal relevance of this depot management;
 want to create _yet another not so useful Git repository..._)
 
  * primary link:http://git.lumiera.org/gitweb?p=lumiera/debian;a=blob;f=conf/distributions;hb=refs/heads/depot[configuration]
- * Logfile of imports: link:http://git.lumiera.org/gitweb?p=lumiera/debian;a=blob;f=log/lenny.log;hb=refs/heads/depot[for Lenny]
+ * Logfile of imports: link:http://git.lumiera.org/gitweb?p=lumiera/debian;a=blob;f=log/squeeze.log;hb=refs/heads/depot[for Debian/Squeeze]
 
 [NOTE]
 .some special details to note in our setup
 =======================================================================================================================
-- each block in the 'distributions' file defines a repository for a ``distribution'' (e.g. Lenny, Lucid, Maverick).
+- each block in the 'distributions' file defines a repository for a ``distribution'' (e.g. Squeeze, Lucid, Maverick).
   Within such a repo, there are sections named 'Components'. 
 - The _override_ files mentioned in the configuration allow to overwrite / replace arbitrary fields in the metadata of
   all packages added to that distribution.

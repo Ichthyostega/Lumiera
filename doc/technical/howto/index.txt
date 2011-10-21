@@ -12,3 +12,5 @@ similar usefull pieces of information targeted at Lumiera developers. See also
 
 == Notepad
 - link:DebugGdbPretty.html[Python pretty printers for GDB]
+- link:HashFunctions.html[Notes regarding standard hash functions]
+
