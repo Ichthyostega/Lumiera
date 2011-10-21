@@ -38,7 +38,9 @@ namespace model {
  * ParentTrack is the abstract base class of all tracks that can parent
  * children.
  */
-class ParentTrack : public Track
+class ParentTrack :
+  public Track,
+  public std::tr1::enable_shared_from_this<ParentTrack>
 {
 protected:
   /**
@@ -84,10 +86,6 @@ public:
    */
   std::tr1::shared_ptr<ParentTrack>
     find_descendant_track_parent(std::tr1::shared_ptr<Track> child);
-
-private:
-
-  std::tr1::shared_ptr<ParentTrack> shared_from_this();
 
 protected:
   /**

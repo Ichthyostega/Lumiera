@@ -72,6 +72,7 @@ std::tr1::shared_ptr<ParentTrack>
 ParentTrack::find_descendant_track_parent(
   std::tr1::shared_ptr<Track> child)
 { 
+
   REQUIRE(child != NULL);
   BOOST_FOREACH(std::tr1::shared_ptr<Track> track, tracks)
     {
@@ -85,12 +86,6 @@ ParentTrack::find_descendant_track_parent(
     }
   
   return std::tr1::shared_ptr<ParentTrack>();
-}
-
-std::tr1::shared_ptr<ParentTrack>
-ParentTrack::shared_from_this()
-{
-  return std::tr1::shared_ptr<ParentTrack>(this);
 }
 
 }   // namespace model
