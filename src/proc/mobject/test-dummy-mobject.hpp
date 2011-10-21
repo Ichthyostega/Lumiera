@@ -90,7 +90,7 @@ namespace test    {
       string
       display(Symbol name)  const
         {
-          static format fmt("%s(ID=%4d)");
+          static format fmt("%s(ID=%03d)");
           return boost::str(fmt % name % this->id_);
         }
     };
