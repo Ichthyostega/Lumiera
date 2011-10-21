@@ -20,8 +20,8 @@
 
 * *****************************************************/
 
-#include "gui/widgets/timeline/timeline-zoom-scale.hpp"
 #include "gui/widgets/timeline-widget.hpp"
+#include "gui/widgets/timeline/timeline-zoom-scale.hpp"
 
 using namespace Gtk;
 
@@ -90,7 +90,7 @@ TimelineZoomScale::TimelineZoomScale()
 }
 
 void
-TimelineZoomScale::wireTimelineState (boost::shared_ptr<TimelineState> currentState,
+TimelineZoomScale::wireTimelineState (std::tr1::shared_ptr<TimelineState> currentState,
                                       TimelineWidget::TimelineStateChangeSignal stateChangeSignal)
 {
   on_timeline_state_changed (currentState);
@@ -98,7 +98,7 @@ TimelineZoomScale::wireTimelineState (boost::shared_ptr<TimelineState> currentSt
 }
 
 void
-TimelineZoomScale::on_timeline_state_changed (boost::shared_ptr<TimelineState> newState)
+TimelineZoomScale::on_timeline_state_changed (std::tr1::shared_ptr<TimelineState> newState)
 {
   REQUIRE (newState);
   timelineState = newState;

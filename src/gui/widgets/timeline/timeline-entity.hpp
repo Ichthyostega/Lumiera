@@ -31,8 +31,9 @@
 #include "lib/time/timevalue.hpp"
 
 #include <string>
+#include <tr1/memory>
 #include <cairomm/cairomm.h>
-#include <boost/shared_ptr.hpp>        //////////////////////TICKET #796
+
 
 namespace gui {
 namespace widgets {
@@ -51,7 +52,7 @@ namespace timeline {
   class Entity {
   protected:
 
-    Entity(boost::shared_ptr<timeline::DrawStrategy> drawStrategy);
+    Entity(std::tr1::shared_ptr<timeline::DrawStrategy> drawStrategy);
 
     virtual ~Entity();
 
@@ -81,7 +82,7 @@ namespace timeline {
 
     bool enabled;
 
-    boost::shared_ptr<timeline::DrawStrategy> drawStrategy;
+    std::tr1::shared_ptr<timeline::DrawStrategy> drawStrategy;
   };
 
 }   // namespace timeline

@@ -29,7 +29,7 @@
 using namespace Gtk;
 using namespace sigc;
 
-using boost::shared_ptr;                     //////////////////////////////TICKET #796 : should use std::tr1
+using std::tr1::shared_ptr;
 
 namespace gui {
 namespace widgets {
@@ -125,7 +125,7 @@ shared_ptr<timeline::Clip>
 Track::getClipAt(Time) const
 {
   // Default implementation returns empty pointer
-  return boost::shared_ptr<timeline::Clip>();
+  return std::tr1::shared_ptr<timeline::Clip>();
 }
 
 void
@@ -272,7 +272,7 @@ void
 Track::on_remove_track()
 {
   REQUIRE(modelTrack);
-  boost::shared_ptr<TimelineState> state = timelineWidget.get_state();
+  std::tr1::shared_ptr<TimelineState> state = timelineWidget.get_state();
   REQUIRE(state);
   
   state->get_sequence()->remove_descendant_track(modelTrack);

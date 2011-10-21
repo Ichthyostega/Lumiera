@@ -34,12 +34,10 @@
 
 using namespace Gtk;
 using namespace std;
-using namespace boost;
 using namespace lumiera;
 
 using gui::util::CairoUtil;
-
-using boost::shared_ptr;           ////////////////////TICKET #796
+using std::tr1::shared_ptr;
 
 namespace gui {
 namespace widgets {
@@ -351,7 +349,7 @@ TimelineBody::draw_tracks(Cairo::RefPtr<Cairo::Context> cr)
       const shared_ptr<timeline::Track> timeline_track =
         timelineWidget.lookup_timeline_track(*iterator);
         
-      optional<Gdk::Rectangle> rect =
+      boost::optional<Gdk::Rectangle> rect =
         layout_helper.get_track_header_rect(timeline_track);
       
       // Is this track visible?

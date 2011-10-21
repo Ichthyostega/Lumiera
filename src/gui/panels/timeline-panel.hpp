@@ -36,11 +36,7 @@
 
 #include "lib/time/timevalue.hpp"
 
-#include <boost/scoped_ptr.hpp>
-#include <boost/weak_ptr.hpp>
-
 using namespace gui::widgets;
-
 
 namespace gui {
 
@@ -127,8 +123,8 @@ private:
   
   void show_time (Time);
     
-  boost::shared_ptr<widgets::timeline::TimelineState>                 ///////////////////////////////TICKET #796
-  load_state (boost::weak_ptr<model::Sequence> sequence);
+  std::tr1::shared_ptr<widgets::timeline::TimelineState>
+  load_state (std::tr1::weak_ptr<model::Sequence> sequence);
   
 private:
 
@@ -148,7 +144,7 @@ private:
      * An invisible column which will be used to identify the sequence
      * of a row.
      */
-    Gtk::TreeModelColumn< boost::weak_ptr<model::Sequence> >
+    Gtk::TreeModelColumn< std::tr1::weak_ptr<model::Sequence> >
       sequenceColumn;
       
     /**
@@ -172,9 +168,9 @@ private:
   
   // Body Widgets
   boost::scoped_ptr<TimelineWidget> timelineWidget;
-  
-  std::map< boost::weak_ptr<model::Sequence>,
-    boost::shared_ptr<widgets::timeline::TimelineState> >          ///////////////////////////////TICKET #796 : should use std::tr1::shared_ptr
+
+  std::map< std::tr1::weak_ptr<model::Sequence>,
+    std::tr1::shared_ptr<widgets::timeline::TimelineState> >
     timelineStates;
   
   // Toolbar Widgets

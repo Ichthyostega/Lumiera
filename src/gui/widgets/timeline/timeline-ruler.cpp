@@ -36,7 +36,7 @@ using namespace gui;
 using namespace gui::widgets;
 using namespace gui::widgets::timeline;
 
-using boost::shared_ptr;           ////////////////////TICKET #796
+using std::tr1::shared_ptr;           ////////////////////TICKET #796
 using gui::util::CairoUtil;
 using lib::time::Time;
 using lib::time::TimeVar;

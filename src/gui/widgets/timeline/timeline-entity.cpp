@@ -29,7 +29,7 @@ namespace gui {
 namespace widgets {
 namespace timeline {
 
-  Entity::Entity(boost::shared_ptr<timeline::DrawStrategy> drawStrategy)
+  Entity::Entity(std::tr1::shared_ptr<timeline::DrawStrategy> drawStrategy)
     : enabled(true),
       drawStrategy(drawStrategy)
   {  }

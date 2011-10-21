@@ -27,7 +27,8 @@
 
 using namespace Gtk;
 using namespace std;
-using namespace boost;
+using namespace std::tr1;
+
 using namespace util;
 using namespace gui::widgets::timeline;
 
@@ -44,7 +45,7 @@ const double TimelineWidget::ZoomIncrement = 1.25;
 const int64_t TimelineWidget::MaxScale = 30000000; // 30 Million
 
 TimelineWidget::TimelineWidget(
-  boost::shared_ptr<timeline::TimelineState> source_state) :
+  std::tr1::shared_ptr<timeline::TimelineState> source_state) :
   Table(2, 2),
   layoutHelper(*this),
   headerContainer(NULL),
@@ -93,7 +94,7 @@ TimelineWidget::~TimelineWidget()
 
 /* ===== Data Access ===== */
 
-boost::shared_ptr<timeline::TimelineState>
+shared_ptr<timeline::TimelineState>
 TimelineWidget::get_state()
 {
   return state;
@@ -334,8 +335,8 @@ TimelineWidget::create_timeline_track_from_modelTrack(
 void
 TimelineWidget::remove_orphaned_tracks()
 {
-  std::map<boost::shared_ptr<model::Track>,
-    boost::shared_ptr<timeline::Track> >
+  std::map<shared_ptr<model::Track>,
+    shared_ptr<timeline::Track> >
     orphan_track_map(trackMap);
   
   // Remove all tracks which are still present in the sequence
@@ -356,9 +357,9 @@ TimelineWidget::remove_orphaned_tracks()
 
 void
 TimelineWidget::search_orphaned_tracks_in_branch(
-    boost::shared_ptr<model::Track> modelTrack,
-    std::map<boost::shared_ptr<model::Track>,
-    boost::shared_ptr<timeline::Track> > &orphan_track_map)
+    shared_ptr<model::Track> modelTrack,
+    std::map<shared_ptr<model::Track>,
+    shared_ptr<timeline::Track> > &orphan_track_map)
 {
   REQUIRE(modelTrack);
   
@@ -480,7 +481,7 @@ TimelineWidget::on_motion_in_body_notify_event(GdkEventMotion *event)
   return true;
 }
 
-boost::shared_ptr<model::Sequence>
+shared_ptr<model::Sequence>
 TimelineWidget::sequence() const
 {
   if(!state)

@@ -24,7 +24,7 @@
 #include "parent-track.hpp"
 #include <boost/foreach.hpp>
 
-using namespace boost;
+using namespace std::tr1;
 using namespace std;
 
 namespace gui {
@@ -39,7 +39,7 @@ Track::Track()
 
 }
 
-const std::list< boost::shared_ptr<Track> >&
+const std::list< shared_ptr<Track> >&
 Track::get_child_tracks() const
 {
   return Track::NoChildren;
@@ -96,9 +96,9 @@ Track::print_branch()
   return print_branch_recursive(0);
 }
 
-boost::shared_ptr<ParentTrack>
+shared_ptr<ParentTrack>
 Track::find_descendant_track_parent(
-  boost::shared_ptr<Track> /*child*/)
+  shared_ptr<Track> /*child*/)
 { 
   return shared_ptr<ParentTrack>();
 }

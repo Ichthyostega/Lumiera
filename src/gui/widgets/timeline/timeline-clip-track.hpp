@@ -52,7 +52,7 @@ namespace timeline {
      * Constructor.
      */
     ClipTrack(TimelineWidget &timelineWidget,
-              boost::shared_ptr<model::ClipTrack> track);
+              std::tr1::shared_ptr<model::ClipTrack> track);
   
     /**
      * Draw the track in the timeline.
@@ -66,7 +66,7 @@ namespace timeline {
      * pointer.
      * @param the given time
      */
-    boost::shared_ptr<timeline::Clip>
+    std::tr1::shared_ptr<timeline::Clip>
     getClipAt(Time position) const;
 
   private:
@@ -80,7 +80,7 @@ namespace timeline {
     /**
      * Gets the modelTrack as a ClipTrack.
      */
-    boost::shared_ptr<model::ClipTrack>
+    std::tr1::shared_ptr<model::ClipTrack>
     getModelTrack ();
 
     /**
@@ -107,8 +107,8 @@ namespace timeline {
      * The clipMap maps model clips to timeline widget clips which are responsible for the
      * UI representation of a clip.
      */
-    std::map<boost::shared_ptr<model::Clip>,
-             boost::shared_ptr<timeline::Clip> >
+    std::map<std::tr1::shared_ptr<model::Clip>,
+             std::tr1::shared_ptr<timeline::Clip> >
       clipMap;
   };
 

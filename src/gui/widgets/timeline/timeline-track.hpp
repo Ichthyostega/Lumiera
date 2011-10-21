@@ -76,7 +76,7 @@ public:
    * Constructor
    */
   Track(TimelineWidget &timeline_widget,
-    boost::shared_ptr<model::Track> track);
+    std::tr1::shared_ptr<model::Track> track);
    
   /**
    * Destructor
@@ -85,7 +85,7 @@ public:
   
   Gtk::Widget& get_header_widget();
   
-  boost::shared_ptr<model::Track>                                //////////////////////////////TICKET #796 : should use std::tr1
+  std::tr1::shared_ptr<model::Track>                                //////////////////////////////TICKET #796 : should use std::tr1
   getModelTrack() const;
   
   /**
@@ -155,7 +155,7 @@ public:
    * The default implementation simply returns an empty pointer.
    * @param the given time
    */
-  virtual boost::shared_ptr<timeline::Clip>                      //////////////////////////////TICKET #796 : should use std::tr1
+  virtual std::tr1::shared_ptr<timeline::Clip>                      //////////////////////////////TICKET #796 : should use std::tr1
   getClipAt (Time position) const;
 
 private:
@@ -209,7 +209,7 @@ private:
 protected:
 
   TimelineWidget &timelineWidget;
-  boost::shared_ptr<model::Track> modelTrack;
+  std::tr1::shared_ptr<model::Track> modelTrack;
 
 private:
   /**

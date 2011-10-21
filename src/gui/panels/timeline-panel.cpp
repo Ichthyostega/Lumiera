@@ -39,8 +39,8 @@ using namespace gui::widgets;
 using namespace gui::widgets::timeline;
 using namespace gui::model;
 
-using boost::shared_ptr;  ///////////////////////////////TICKET #796
-using boost::weak_ptr;    ///////////////////////////////TICKET #796
+using std::tr1::shared_ptr;
+using std::tr1::weak_ptr;
 using util::contains;
 
 namespace gui {

@@ -59,7 +59,7 @@ public:
   /**
    * Definition of the layout track tree type.
    */
-  typedef lumiera::tree< boost::shared_ptr<model::Track> > TrackTree;
+  typedef lumiera::tree< std::tr1::shared_ptr<model::Track> > TrackTree;
   
 public:
   /**
@@ -101,7 +101,7 @@ public:
    * @see update_layout()
    */
   boost::optional<Gdk::Rectangle> get_track_header_rect(
-    boost::weak_ptr<timeline::Track> track);
+    std::tr1::weak_ptr<timeline::Track> track);
   
   /**
    * Searches for a header which has the specified point inside of it.
@@ -114,7 +114,7 @@ public:
    * tracks.
    * @see update_layout()
    */
-  boost::shared_ptr<timeline::Track> header_from_point(
+  std::tr1::shared_ptr<timeline::Track> header_from_point(
     Gdk::Point point);
   
   /**
@@ -128,14 +128,14 @@ public:
    * tracks.
    * @see update_layout()
    */
-  boost::shared_ptr<timeline::Track> track_from_y(int y);
+  std::tr1::shared_ptr<timeline::Track> track_from_y(int y);
   
   /**
    * Begins to drag the track under mouse_point, if there is one.
    * @param mouse_point The mouse point to begin dragging from, measured
    * in pixels from the top left of the header container widget.
    */
-  boost::shared_ptr<timeline::Track>
+  std::tr1::shared_ptr<timeline::Track>
     begin_dragging_track(const Gdk::Point &mouse_point);
   
   /**
@@ -186,7 +186,7 @@ public:
    * iterator was found.
    */
   TrackTree::pre_order_iterator iterator_from_track(
-    boost::shared_ptr<model::Track> modelTrack);
+    std::tr1::shared_ptr<model::Track> modelTrack);
   
   /**
    * A function that recursively calculates the visible height of a
@@ -262,7 +262,7 @@ protected:
    * @see clone_tree_from_sequence()
    */
   void add_branch(TrackTree::iterator_base parent_iterator, 
-    boost::shared_ptr<model::Track> parent);
+    std::tr1::shared_ptr<model::Track> parent);
   
   /**
    * Recursively calculates the boxes for a given branch in the timeline
@@ -298,8 +298,8 @@ protected:
    * @remarks If the return value is going to be NULL, an ENSURE will
    * fail.
    */
-  boost::shared_ptr<timeline::Track> lookup_timeline_track(
-    boost::shared_ptr<model::Track> modelTrack);
+  std::tr1::shared_ptr<timeline::Track> lookup_timeline_track(
+    std::tr1::shared_ptr<model::Track> modelTrack);
   
   /**
    * A helper function which kicks off the animation timer.
@@ -343,7 +343,7 @@ protected:
    * Helper to get the sequence object from the state.
    * @return Returns a shared pointer to the sequence.
    */
-  boost::shared_ptr<model::Sequence> get_sequence() const;
+  std::tr1::shared_ptr<model::Sequence> get_sequence() const;
 
 protected:
   /**
@@ -363,7 +363,7 @@ protected:
    * the update_layout method.
    * @see update_layout()
    */
-  std::map<boost::weak_ptr<timeline::Track>, Gdk::Rectangle>
+  std::map<std::tr1::weak_ptr<timeline::Track>, Gdk::Rectangle>
     headerBoxes;
   
   /**

@@ -140,7 +140,7 @@ private:
   void on_scroll();
   
   void on_hovering_track_changed(
-    boost::shared_ptr<timeline::Track> hovering_track);
+    std::tr1::shared_ptr<timeline::Track> hovering_track);
     
 private:
   /* ===== Internal Event Handlers ===== */
@@ -169,7 +169,7 @@ private:
    * @param offset The vertical offset of the headers in pixels.
    */
   void draw_header_decoration(
-    boost::shared_ptr<model::Track> modelTrack,
+    std::tr1::shared_ptr<model::Track> modelTrack,
     const Gdk::Rectangle &clip_rect);
   
   /**
@@ -182,8 +182,8 @@ private:
    * @remarks If the return value is going to be NULL, an ENSURE will
    * fail.
    */
-  boost::shared_ptr<timeline::Track> lookup_timeline_track(
-    boost::shared_ptr<model::Track> modelTrack);
+  std::tr1::shared_ptr<timeline::Track> lookup_timeline_track(
+    std::tr1::shared_ptr<model::Track> modelTrack);
     
   void begin_drag();
   
@@ -248,7 +248,7 @@ private:
   int scrollSlideRate;
     
   //----- User Interaction State -----//  
-  boost::shared_ptr<timeline::Track> hoveringTrack;
+  std::tr1::shared_ptr<timeline::Track> hoveringTrack;
 
   Gdk::Point mousePoint;
   

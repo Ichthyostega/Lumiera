@@ -53,12 +53,12 @@ namespace model {
     /**
      * Gets the list of clips associated with this track.
      */
-    lumiera::observable_list< boost::shared_ptr<Clip> >&
+    lumiera::observable_list< std::tr1::shared_ptr<Clip> >&
     getClipList(void);
 
   private:
 
-    lumiera::observable_list< boost::shared_ptr<Clip> > clips;
+    lumiera::observable_list< std::tr1::shared_ptr<Clip> > clips;
 
   };
 

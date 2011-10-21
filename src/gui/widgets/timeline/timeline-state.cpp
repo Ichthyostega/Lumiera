@@ -36,11 +36,11 @@ using lib::time::FSecs;
 using lib::time::Offset;
 using lib::time::Duration;
 using lib::time::Mutation;
-using boost::shared_ptr;     /////////////////////////TICKET #796
+using std::tr1::shared_ptr;
 
 
 
-TimelineState::TimelineState (boost::shared_ptr<model::Sequence> source_sequence)
+TimelineState::TimelineState (std::tr1::shared_ptr<model::Sequence> source_sequence)
   : sequence(source_sequence)
   , viewWindow(Offset(Time::ZERO), 1)
   , selection_(Time::ZERO, Duration::NIL)
@@ -60,7 +60,7 @@ TimelineState::TimelineState (boost::shared_ptr<model::Sequence> source_sequence
   //////////////////////////////////////////////////////TICKET #797 : this is cheesy. Should provide a single Mutation to change all
 }
 
-boost::shared_ptr<model::Sequence>
+std::tr1::shared_ptr<model::Sequence>
 TimelineState::get_sequence() const
 {
   return sequence;

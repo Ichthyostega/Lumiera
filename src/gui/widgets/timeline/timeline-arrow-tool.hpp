@@ -81,7 +81,7 @@ namespace timeline {
 
   private:
 
-    boost::shared_ptr<timeline::Track>
+    std::tr1::shared_ptr<timeline::Track>
     getHoveringTrack ();
 
     bool selectionRectangleActive;

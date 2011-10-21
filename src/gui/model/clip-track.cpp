@@ -24,7 +24,7 @@
 
 #include "clip.hpp"
 
-#include <boost/shared_ptr.hpp>
+using namespace std::tr1;
 
 namespace gui {
 namespace model {
@@ -33,7 +33,7 @@ namespace model {
   {
     // TEST CODE: add a clip to the track
 
-    boost::shared_ptr<model::Clip> modelClip(new model::Clip());
+    shared_ptr<model::Clip> modelClip(new model::Clip());
     modelClip->setName("Clip Name");
     clips.push_back(modelClip);
 
@@ -50,7 +50,7 @@ namespace model {
     return os.str();
   }
 
-  lumiera::observable_list< boost::shared_ptr<Clip> >&
+  lumiera::observable_list< shared_ptr<Clip> >&
   ClipTrack::getClipList()
   {
     return clips;

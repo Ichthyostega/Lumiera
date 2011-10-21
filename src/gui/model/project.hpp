@@ -40,14 +40,14 @@ public:
   
   ~Project();
     
-  lumiera::observable_list< boost::shared_ptr<Sequence> >&
+  lumiera::observable_list< std::tr1::shared_ptr<Sequence> >&
     get_sequences();
   
   void add_new_sequence(uString name);
   
 private:
 
-  lumiera::observable_list< boost::shared_ptr<Sequence> > sequences;
+  lumiera::observable_list< std::tr1::shared_ptr<Sequence> > sequences;
 };
 
 }   // namespace model

@@ -56,7 +56,7 @@ public:
    * @param source_sequence The sequence on which the TimelineWidget
    * will operate when this TimelineState is attached.
    */
-  TimelineState(boost::shared_ptr<model::Sequence> source_sequence);
+  TimelineState(std::tr1::shared_ptr<model::Sequence> source_sequence);
   
 public:
 
@@ -64,7 +64,7 @@ public:
    * Gets the sequence that is attached to this timeline state object.
    * @return Returns a shared_ptr to the sequence object.
    */
-  boost::shared_ptr<model::Sequence> get_sequence() const;
+  std::tr1::shared_ptr<model::Sequence> get_sequence() const;
 
   /**
    * Gets a reference to the timeline view window object.
@@ -122,7 +122,7 @@ private:
    * @remarks This pointer is set by the constructor and is constant, so
    * will not change in value during the lifetime of the class.
    */
-  boost::shared_ptr<model::Sequence> sequence;
+  std::tr1::shared_ptr<model::Sequence> sequence;
   
   // View State
   /**

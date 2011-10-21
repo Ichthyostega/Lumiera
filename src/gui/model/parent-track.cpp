@@ -24,6 +24,7 @@
 #include <boost/foreach.hpp>
 
 using namespace boost;
+using std::tr1::shared_ptr;
 
 namespace gui {
 namespace model {
@@ -32,13 +33,13 @@ ParentTrack::ParentTrack()
 {
 }
 
-const std::list< boost::shared_ptr<Track> >&
+const std::list< std::tr1::shared_ptr<Track> >&
 ParentTrack::get_child_tracks() const
 {
   return tracks.get_list();
 }
 
-lumiera::observable_list< boost::shared_ptr<Track> >&
+lumiera::observable_list< std::tr1::shared_ptr<Track> >&
 ParentTrack::get_child_track_list()
 {
   return tracks;
@@ -52,11 +53,11 @@ ParentTrack::can_host_children() const
 
 bool
 ParentTrack::remove_descendant_track(
-  const boost::shared_ptr<Track> track)
+  const std::tr1::shared_ptr<Track> track)
 {
   REQUIRE(track);
   
-  boost::shared_ptr<ParentTrack> parent = 
+  std::tr1::shared_ptr<ParentTrack> parent =
     find_descendant_track_parent(track);
   if(parent)
     {
@@ -67,23 +68,29 @@ ParentTrack::remove_descendant_track(
   return false;
 }
 
-boost::shared_ptr<ParentTrack>
+std::tr1::shared_ptr<ParentTrack>
 ParentTrack::find_descendant_track_parent(
-  boost::shared_ptr<Track> child)
+  std::tr1::shared_ptr<Track> child)
 { 
   REQUIRE(child != NULL);
-  BOOST_FOREACH(shared_ptr<Track> track, tracks)
+  BOOST_FOREACH(std::tr1::shared_ptr<Track> track, tracks)
     {
       if(track == child)
         return shared_from_this();
-    
-      shared_ptr<ParentTrack> result =
+
+      std::tr1::shared_ptr<ParentTrack> result =
         track->find_descendant_track_parent(child);
       if(result)
         return result;
     }
   
-  return shared_ptr<ParentTrack>();
+  return std::tr1::shared_ptr<ParentTrack>();
+}
+
+std::tr1::shared_ptr<ParentTrack>
+ParentTrack::shared_from_this()
+{
+  return std::tr1::shared_ptr<ParentTrack>(this);
 }
 
 }   // namespace model

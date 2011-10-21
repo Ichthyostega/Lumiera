@@ -29,10 +29,6 @@
 #include "gui/gtk-lumiera.hpp"
 #include "gui/widgets/mini-button.hpp"
 #include "gui/widgets/timeline-widget.hpp"
-#include "gui/widgets/timeline/timeline-state.hpp"
-#include "gui/widgets/timeline/timeline-view-window.hpp"
-
-#include <boost/shared_ptr.hpp>
 
 using namespace Gtk;
 using namespace gui::widgets;
@@ -55,7 +51,7 @@ public:
    */
   sigc::signal<void, double> signal_zoom();
 
-  void wireTimelineState (boost::shared_ptr<TimelineState> currentState,
+  void wireTimelineState (std::tr1::shared_ptr<TimelineState> currentState,
                           TimelineWidget::TimelineStateChangeSignal);
 
 private:
@@ -65,7 +61,7 @@ private:
    * Update the slider position when the timeline state
    * is changed.
    */
-  void on_timeline_state_changed (boost::shared_ptr<TimelineState> newState);         ////////////////////TICKET #796 : should use std::tr1::shared_ptr
+  void on_timeline_state_changed (std::tr1::shared_ptr<TimelineState> newState);         ////////////////////TICKET #796 : should use std::tr1::shared_ptr
 
   /**
    * Event handler for when the zoomIn Button
@@ -100,7 +96,7 @@ private:
 
   const double button_step_size;
 
-  boost::shared_ptr<TimelineState> timelineState;
+  std::tr1::shared_ptr<TimelineState> timelineState;
 };
 
 } // namespace gui

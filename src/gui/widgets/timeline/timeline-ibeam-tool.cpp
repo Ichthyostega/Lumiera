@@ -29,7 +29,7 @@
 using namespace gui::widgets;
 
 using lib::time::Mutation;
-using boost::shared_ptr;        /////////////////////////TICKET #796
+using std::tr1::shared_ptr;
 
 namespace gui {
 namespace widgets {

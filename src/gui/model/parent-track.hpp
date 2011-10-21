@@ -31,10 +31,6 @@
 #include "track.hpp"
 #include "lib/observable-list.hpp"
 
-#include <boost/shared_ptr.hpp>
-#include <boost/enable_shared_from_this.hpp>
-
-
 namespace gui {
 namespace model {
 
@@ -42,9 +38,7 @@ namespace model {
  * ParentTrack is the abstract base class of all tracks that can parent
  * children.
  */
-class ParentTrack :
-  public Track,
-  public boost::enable_shared_from_this<ParentTrack>
+class ParentTrack : public Track
 {
 protected:
   /**
@@ -57,13 +51,13 @@ public:
   /**
    * Gets a read-only reference to the the list of child tracks.
    */
-  const std::list< boost::shared_ptr<Track> >&
+  const std::list< std::tr1::shared_ptr<Track> >&
     get_child_tracks() const;
 
   /**
    * Gets read-write access to the list of child tracks.
    */
-  lumiera::observable_list< boost::shared_ptr<Track> >&
+  lumiera::observable_list< std::tr1::shared_ptr<Track> >&
     get_child_track_list();
 
   /**
@@ -79,7 +73,7 @@ public:
    * @param The model track to try and remove.
    * @return Returns true if the track was successfully removed.
    */
-  bool remove_descendant_track(const boost::shared_ptr<Track> track);
+  bool remove_descendant_track(const std::tr1::shared_ptr<Track> track);
   
   /**
    * A utility function that attempts to find the parent of a track by
@@ -88,14 +82,18 @@ public:
    * @return Returns the parent track if one was found, or an empty
    * shared_ptr if none was found.
    */
-  boost::shared_ptr<ParentTrack>
-    find_descendant_track_parent(boost::shared_ptr<Track> child);
+  std::tr1::shared_ptr<ParentTrack>
+    find_descendant_track_parent(std::tr1::shared_ptr<Track> child);
+
+private:
+
+  std::tr1::shared_ptr<ParentTrack> shared_from_this();
 
 protected:
   /**
    * The internal list of child tracks of this parent.
    */
-  lumiera::observable_list< boost::shared_ptr<Track> > tracks;
+  lumiera::observable_list< std::tr1::shared_ptr<Track> > tracks;
 };
 
 }   // namespace model
