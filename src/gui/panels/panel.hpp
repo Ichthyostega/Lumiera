@@ -27,10 +27,11 @@
 #ifndef PANEL_HPP
 #define PANEL_HPP
 
-#include <gdl/gdl-dock-item.h>
 
 #include "gui/gtk-lumiera.hpp"
 #include "gui/widgets/panel-bar.hpp"
+
+#include <gdl/gdl-dock-item.h>
 
 namespace gui {
 
