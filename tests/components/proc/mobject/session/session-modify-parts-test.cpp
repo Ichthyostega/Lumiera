@@ -34,11 +34,10 @@
 #include "lib/query.hpp"
 
 #include <tr1/functional>
-#include <boost/ref.hpp>
 #include <iostream>
 #include <set>
 
-using boost::ref;
+using std::tr1::ref;
 using std::tr1::placeholders::_1;
 using util::isSameObject;
 using util::and_all;

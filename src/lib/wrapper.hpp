@@ -64,7 +64,7 @@ namespace wrapper {
   
   
   /** 
-   * Extension to boost::reference_wrapper: 
+   * Extension to std::reference_wrapper: 
    * Allows additionally to re-bind to another reference,
    * almost like a pointer. Helpful for building templates.
    * @warning potentially dangerous 
@@ -128,7 +128,7 @@ namespace wrapper {
    * A copyable, assignable value object, not managing ownership.
    * It can be default constructed and \c bool evaluated to detect
    * an empty holder. The value is retrieved pointer-like, by
-   * explicit dereferentiation. (Contrast this to boost::ref,
+   * explicit dereferentiation. (Contrast this to std::ref,
    * where the original reference is retrieved by conversion)
    * 
    * The purpose of this template is to be able to remember
