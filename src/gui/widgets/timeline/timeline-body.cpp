@@ -82,6 +82,12 @@ TimelineBody::getTimelineWidget () const
   return timelineWidget;
 }
 
+TimeSpan
+TimelineBody::get_selection()
+{
+  return timelineWidget.get_state()->get_selection();
+}
+
 ToolType
 TimelineBody::get_tool() const
 {

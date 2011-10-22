@@ -24,8 +24,6 @@
 #include "gui/widgets/timeline-widget.hpp"
 #include "lib/time/mutation.hpp"
 
-#include <boost/shared_ptr.hpp>
-
 using namespace gui::widgets;
 
 using lib::time::Mutation;
@@ -45,12 +43,11 @@ const int IBeamTool::ScrollSlideEventInterval = 40;
 
 IBeamTool::IBeamTool(TimelineBody &timeline_body) :
   Tool(timeline_body),
+  selectionControl(),
   dragType(None),
   pinnedDragTime(),
   scrollSlideRate(0)
-{
-
-}
+{ }
 
 IBeamTool::~IBeamTool()
 {

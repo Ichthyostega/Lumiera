@@ -46,6 +46,7 @@ class TimelineWidget;
 namespace timeline {
 
 using lib::time::TimeVar;
+using lib::time::TimeSpan;
 
 
 class Track;
@@ -72,6 +73,9 @@ public:
   
   TimelineWidget&
   getTimelineWidget () const;
+
+  TimeSpan
+  get_selection();
 
   /**
    * Returns the type of the currently selected timeline tool.

@@ -62,7 +62,7 @@ TimelineWidget::TimelineWidget(shared_ptr<timeline::TimelineState> source_state)
   ENSURE(headerContainer != NULL);
   ruler = manage(new TimelineRuler(*this));
   ENSURE(ruler != NULL);
-    
+
   horizontalAdjustment.signal_value_changed().connect( sigc::mem_fun(
     this, &TimelineWidget::on_scroll) );
   verticalAdjustment.signal_value_changed().connect( sigc::mem_fun(
@@ -71,7 +71,7 @@ TimelineWidget::TimelineWidget(shared_ptr<timeline::TimelineState> source_state)
     this, &TimelineWidget::on_motion_in_body_notify_event) );
     
   update_tracks();
-  
+
   attach(*body, 1, 2, 1, 2, FILL|EXPAND, FILL|EXPAND);
   attach(*ruler, 1, 2, 0, 1, FILL|EXPAND, SHRINK);
   attach(*headerContainer, 0, 1, 1, 2, SHRINK, FILL|EXPAND);

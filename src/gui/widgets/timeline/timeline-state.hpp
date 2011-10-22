@@ -70,7 +70,7 @@ public:
    */
   timeline::TimelineViewWindow& get_view_window();
   
-  
+  TimeSpan get_selection()      const { return selection_; }
   Time getSelectionStart()      const { return selection_.start();}
   Time getSelectionEnd()        const { return selection_.end();  }
   Time getPlaybackPeriodStart() const { return selection_.start();}
