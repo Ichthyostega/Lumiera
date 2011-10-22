@@ -36,9 +36,15 @@
 
 #include "lib/time/timevalue.hpp"
 
+#include <tr1/memory>
+
 using namespace gui::widgets;
 
 namespace gui {
+  
+using std::tr1::shared_ptr;
+using std::tr1::weak_ptr;
+
 
 namespace model {
 class Sequence;
@@ -47,6 +53,7 @@ class Sequence;
 namespace panels {
 
 using lib::time::Time;
+
 
 
 /**
@@ -123,8 +130,8 @@ private:
   
   void show_time (Time);
     
-  std::tr1::shared_ptr<widgets::timeline::TimelineState>
-  load_state (std::tr1::weak_ptr<model::Sequence> sequence);
+  shared_ptr<widgets::timeline::TimelineState>
+  load_state (weak_ptr<model::Sequence> sequence);
   
 private:
 
@@ -144,7 +151,7 @@ private:
      * An invisible column which will be used to identify the sequence
      * of a row.
      */
-    Gtk::TreeModelColumn< std::tr1::weak_ptr<model::Sequence> >
+    Gtk::TreeModelColumn< weak_ptr<model::Sequence> >
       sequenceColumn;
       
     /**
@@ -169,8 +176,9 @@ private:
   // Body Widgets
   boost::scoped_ptr<TimelineWidget> timelineWidget;
 
-  std::map< std::tr1::weak_ptr<model::Sequence>,
-    std::tr1::shared_ptr<widgets::timeline::TimelineState> >
+  std::map< weak_ptr<model::Sequence>
+          , shared_ptr<widgets::timeline::TimelineState>
+          > 
     timelineStates;
   
   // Toolbar Widgets

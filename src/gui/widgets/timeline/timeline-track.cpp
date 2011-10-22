@@ -125,7 +125,7 @@ shared_ptr<timeline::Clip>
 Track::getClipAt(Time) const
 {
   // Default implementation returns empty pointer
-  return std::tr1::shared_ptr<timeline::Clip>();
+  return shared_ptr<timeline::Clip>();
 }
 
 void
@@ -272,7 +272,7 @@ void
 Track::on_remove_track()
 {
   REQUIRE(modelTrack);
-  std::tr1::shared_ptr<TimelineState> state = timelineWidget.get_state();
+  shared_ptr<TimelineState> state = timelineWidget.get_state();
   REQUIRE(state);
   
   state->get_sequence()->remove_descendant_track(modelTrack);

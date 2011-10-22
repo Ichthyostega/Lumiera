@@ -90,7 +90,7 @@ TimelineZoomScale::TimelineZoomScale()
 }
 
 void
-TimelineZoomScale::wireTimelineState (std::tr1::shared_ptr<TimelineState> currentState,
+TimelineZoomScale::wireTimelineState (shared_ptr<TimelineState> currentState,
                                       TimelineWidget::TimelineStateChangeSignal stateChangeSignal)
 {
   on_timeline_state_changed (currentState);
@@ -98,7 +98,7 @@ TimelineZoomScale::wireTimelineState (std::tr1::shared_ptr<TimelineState> curren
 }
 
 void
-TimelineZoomScale::on_timeline_state_changed (std::tr1::shared_ptr<TimelineState> newState)
+TimelineZoomScale::on_timeline_state_changed (shared_ptr<TimelineState> newState)
 {
   REQUIRE (newState);
   timelineState = newState;

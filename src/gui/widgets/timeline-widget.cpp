@@ -44,18 +44,17 @@ const int TimelineWidget::HeaderIndentWidth = 10;
 const double TimelineWidget::ZoomIncrement = 1.25;
 const int64_t TimelineWidget::MaxScale = 30000000; // 30 Million
 
-TimelineWidget::TimelineWidget(
-  std::tr1::shared_ptr<timeline::TimelineState> source_state) :
-  Table(2, 2),
-  layoutHelper(*this),
-  headerContainer(NULL),
-  body(NULL),
-  ruler(NULL),
-  horizontalAdjustment(0, 0, 0),
-  verticalAdjustment(0, 0, 0),
-  horizontalScroll(horizontalAdjustment),
-  verticalScroll(verticalAdjustment),
-  update_tracks_frozen(false)
+TimelineWidget::TimelineWidget(shared_ptr<timeline::TimelineState> source_state)
+  : Table(2, 2)
+  , layoutHelper(*this)
+  , headerContainer(NULL)
+  , body(NULL)
+  , ruler(NULL)
+  , horizontalAdjustment(0, 0, 0)
+  , verticalAdjustment(0, 0, 0)
+  , horizontalScroll(horizontalAdjustment)
+  , verticalScroll(verticalAdjustment)
+  , update_tracks_frozen(false)
 {
   body = manage(new TimelineBody(*this));
   ENSURE(body != NULL);

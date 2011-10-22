@@ -130,8 +130,7 @@ TimelinePanel::TimelinePanel (workspace::PanelManager &panel_manager,
   zoomScale       .set_tooltip_text(_("Adjust timeline zoom scale"));
 
   // Setup the timeline widget
-  shared_ptr<Sequence> sequence          ///////////////////////////////TICKET #796 : should use std::tr1::shared_ptr instead of boost
-    = *get_project().get_sequences().begin();  
+  shared_ptr<Sequence> sequence = *(get_project().get_sequences().begin());
   timelineWidget.reset(new TimelineWidget(load_state(sequence)));
   pack_start(*timelineWidget, PACK_EXPAND_WIDGET);
 

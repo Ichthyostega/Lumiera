@@ -111,7 +111,7 @@ private:
   /**
    * The event handler for when the TimelineWidget's state is switched.
    */
-  void on_state_changed (std::tr1::shared_ptr<TimelineState> newState);         ////////////////////TICKET #796 : should use std::tr1::shared_ptr
+  void on_state_changed (shared_ptr<TimelineState> newState);
   
 private:
   /* ===== Internal Methods ===== */
@@ -242,7 +242,7 @@ private:
   /**
    * the currently active timeline state object 
    */
-  std::tr1::shared_ptr<TimelineState> timelineState;
+  shared_ptr<TimelineState> timelineState;
   
   /**
    * The caches image of the ruler, over which the chevrons etc. will

@@ -35,9 +35,10 @@ const list< shared_ptr<Track> > Track::NoChildren;
 Track::Track()
   : enabled(true),
     locked(false)
-{
+{ }
 
-}
+Track::~Track() { }
+
 
 const std::list< shared_ptr<Track> >&
 Track::get_child_tracks() const

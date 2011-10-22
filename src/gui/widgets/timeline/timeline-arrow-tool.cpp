@@ -55,17 +55,17 @@ namespace timeline {
     Tool::on_button_press_event(event);
 
     // Convert the mouse click position to a Time
-    std::tr1::shared_ptr<TimelineState> state = timelineBody.getTimelineWidget().get_state();
+    shared_ptr<TimelineState> state = timelineBody.getTimelineWidget().get_state();
     REQUIRE(state);
     TimelineViewWindow const& window = state->get_view_window();
     Time tpoint = window.x_to_time(mousePoint.get_x());
 
     // Get the clip, if any
-    std::tr1::shared_ptr<timeline::Track> track = getHoveringTrack();
-    std::tr1::shared_ptr<Clip> clip = track->getClipAt(tpoint);
+    shared_ptr<timeline::Track> track = getHoveringTrack();
+    shared_ptr<Clip> clip = track->getClipAt(tpoint);
 
     // Nothing to do if there is no clip
-    if (clip == std::tr1::shared_ptr<Clip>())
+    if (!clip)
       return;
 
     clip->setSelected(true);
@@ -77,8 +77,7 @@ namespace timeline {
     REQUIRE (event != NULL);
     Tool::on_button_release_event(event);
 
-    std::tr1::shared_ptr<timeline::Track> track =
-      getHoveringTrack();
+    shared_ptr<timeline::Track> track = getHoveringTrack();
   }
 
   void
@@ -92,10 +91,10 @@ namespace timeline {
       return;
   }
 
-  std::tr1::shared_ptr<timeline::Track>
+  shared_ptr<timeline::Track>
   ArrowTool::getHoveringTrack ()
   {
-    std::tr1::shared_ptr<timeline::Track> track(
+    shared_ptr<timeline::Track> track(
       timelineBody.getTimelineWidget().get_hovering_track());
     return track;
   }

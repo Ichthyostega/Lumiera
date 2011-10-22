@@ -40,6 +40,7 @@ namespace widgets {
 namespace timeline {
   
   using lib::time::Time;
+  using std::tr1::shared_ptr;
   
   
   class DrawStrategy;
@@ -52,7 +53,7 @@ namespace timeline {
   class Entity {
   protected:
 
-    Entity(std::tr1::shared_ptr<timeline::DrawStrategy> drawStrategy);
+    Entity (shared_ptr<timeline::DrawStrategy> drawStrategy);
 
     virtual ~Entity();
 
@@ -82,7 +83,7 @@ namespace timeline {
 
     bool enabled;
 
-    std::tr1::shared_ptr<timeline::DrawStrategy> drawStrategy;
+    shared_ptr<timeline::DrawStrategy> drawStrategy;
   };
 
 }   // namespace timeline

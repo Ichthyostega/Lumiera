@@ -46,6 +46,7 @@
 namespace gui {
   
 using std::string;
+using std::tr1::shared_ptr;
 
 
 namespace model      { class Project; }
@@ -194,7 +195,7 @@ private:
 
 private:
   
-  std::list< std::tr1::shared_ptr<workspace::WorkspaceWindow> > windowList;
+  std::list<shared_ptr<workspace::WorkspaceWindow> > windowList;
     
 public:
 

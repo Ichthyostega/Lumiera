@@ -49,8 +49,8 @@ namespace timeline {
   class Clip : public Entity
     {
     public:
-      Clip (std::tr1::shared_ptr<model::Clip> clip,
-            std::tr1::shared_ptr<timeline::DrawStrategy> drawStrategy);
+      Clip (shared_ptr<model::Clip> clip,
+            shared_ptr<timeline::DrawStrategy> drawStrategy);
       
       
       Time getBegin()  const;
@@ -62,7 +62,7 @@ namespace timeline {
   
     private:
   
-      std::tr1::shared_ptr<model::Clip> modelClip;
+      shared_ptr<model::Clip> modelClip;
   
       /**
        * True when this clip is selected in the GUI.

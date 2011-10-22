@@ -342,12 +342,9 @@ TimelineHeaderContainer::on_scroll()
 }
 
 void
-TimelineHeaderContainer::on_hovering_track_changed(
-  std::tr1::shared_ptr<timeline::Track> hovering_track)
+TimelineHeaderContainer::on_hovering_track_changed( shared_ptr<timeline::Track>)
 {
-  (void)hovering_track;
-  
-
+  /* do nothing */
 }
 
 bool

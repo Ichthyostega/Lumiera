@@ -22,9 +22,9 @@
 
 #include <boost/foreach.hpp>
 
-#include "timeline-clip.hpp"
-#include "timeline-clip-track.hpp"
-#include "timeline-view-window.hpp"
+#include "gui/widgets/timeline/timeline-clip.hpp"
+#include "gui/widgets/timeline/timeline-clip-track.hpp"
+#include "gui/widgets/timeline/timeline-view-window.hpp"
 
 using namespace Gtk;
 
@@ -76,7 +76,7 @@ namespace timeline {
       }
   }
 
-  std::tr1::shared_ptr<timeline::Clip>
+  shared_ptr<timeline::Clip>
   ClipTrack::getClipAt(Time position) const
   {
     std::pair<shared_ptr<model::Clip>, shared_ptr<timeline::Clip> >
@@ -88,7 +88,7 @@ namespace timeline {
       }
 
     // Nothing found
-    return std::tr1::shared_ptr<timeline::Clip>();
+    return shared_ptr<timeline::Clip>();
   }
 
   //// private methods
@@ -98,7 +98,7 @@ namespace timeline {
   {
     // Share the draw strategy between all objects
     TODO("Use factory/builder to create Timline Clips");
-    static std::tr1::shared_ptr<timeline::DrawStrategy> drawStrategy(new BasicDrawStrategy());
+    static shared_ptr<timeline::DrawStrategy> drawStrategy(new BasicDrawStrategy());
     BOOST_FOREACH (shared_ptr<model::Clip> modelClip, getModelTrack()->getClipList())
       {
         // Is a timeline UI clip present in the map already?

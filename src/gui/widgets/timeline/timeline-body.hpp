@@ -124,7 +124,7 @@ protected:
   /**
    * The event handler for when the TimelineWidget's state is switched.
    */
-  void on_state_changed (std::tr1::shared_ptr<TimelineState> newState);
+  void on_state_changed (shared_ptr<TimelineState> newState);
   
   /* ===== Internals ===== */
 private:
@@ -142,8 +142,8 @@ private:
   void draw_tracks(Cairo::RefPtr<Cairo::Context> cr);
   
   void draw_track(Cairo::RefPtr<Cairo::Context> cr,
-    std::tr1::shared_ptr<timeline::Track> timeline_track,
-    const int view_width) const;
+                  shared_ptr<timeline::Track> timeline_track,
+                  const int view_width) const;
   
   /**
    * Draws the selected timeline period.
@@ -200,7 +200,7 @@ private:
   Cairo::RefPtr<Cairo::SolidPattern> playbackPointColour;
   
   gui::widgets::TimelineWidget &timelineWidget;
-  std::tr1::shared_ptr<TimelineState> timelineState;
+  shared_ptr<TimelineState> timelineState;
   
 
   friend class Tool;

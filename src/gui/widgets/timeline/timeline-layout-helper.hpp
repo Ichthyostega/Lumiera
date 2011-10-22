@@ -114,8 +114,7 @@ public:
    * tracks.
    * @see update_layout()
    */
-  std::tr1::shared_ptr<timeline::Track> header_from_point(
-    Gdk::Point point);
+  shared_ptr<timeline::Track> header_from_point (Gdk::Point point);
   
   /**
    * Searches for a tack which has the specified y-offset inside of it.
@@ -128,15 +127,15 @@ public:
    * tracks.
    * @see update_layout()
    */
-  std::tr1::shared_ptr<timeline::Track> track_from_y(int y);
+  shared_ptr<timeline::Track> track_from_y (int y);
   
   /**
    * Begins to drag the track under mouse_point, if there is one.
    * @param mouse_point The mouse point to begin dragging from, measured
    * in pixels from the top left of the header container widget.
    */
-  std::tr1::shared_ptr<timeline::Track>
-    begin_dragging_track(const Gdk::Point &mouse_point);
+  shared_ptr<timeline::Track>
+  begin_dragging_track (Gdk::Point const& mouse_point);
   
   /**
    * Drops the dragging track.
@@ -185,8 +184,8 @@ public:
    * @return Returns the model iterator of layoutTree.end() if no
    * iterator was found.
    */
-  TrackTree::pre_order_iterator iterator_from_track(
-    std::tr1::shared_ptr<model::Track> modelTrack);
+  TrackTree::pre_order_iterator
+  iterator_from_track (shared_ptr<model::Track> modelTrack);
   
   /**
    * A function that recursively calculates the visible height of a
@@ -262,7 +261,7 @@ protected:
    * @see clone_tree_from_sequence()
    */
   void add_branch(TrackTree::iterator_base parent_iterator, 
-    std::tr1::shared_ptr<model::Track> parent);
+                  shared_ptr<model::Track> parent);
   
   /**
    * Recursively calculates the boxes for a given branch in the timeline
@@ -298,8 +297,8 @@ protected:
    * @remarks If the return value is going to be NULL, an ENSURE will
    * fail.
    */
-  std::tr1::shared_ptr<timeline::Track> lookup_timeline_track(
-    std::tr1::shared_ptr<model::Track> modelTrack);
+  shared_ptr<timeline::Track>
+  lookup_timeline_track(shared_ptr<model::Track> modelTrack);
   
   /**
    * A helper function which kicks off the animation timer.
@@ -343,7 +342,8 @@ protected:
    * Helper to get the sequence object from the state.
    * @return Returns a shared pointer to the sequence.
    */
-  std::tr1::shared_ptr<model::Sequence> get_sequence() const;
+  shared_ptr<model::Sequence>
+  get_sequence() const;
 
 protected:
   /**

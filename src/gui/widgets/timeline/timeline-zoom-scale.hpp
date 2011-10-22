@@ -51,7 +51,7 @@ public:
    */
   sigc::signal<void, double> signal_zoom();
 
-  void wireTimelineState (std::tr1::shared_ptr<TimelineState> currentState,
+  void wireTimelineState (shared_ptr<TimelineState> currentState,
                           TimelineWidget::TimelineStateChangeSignal);
 
 private:
@@ -61,7 +61,7 @@ private:
    * Update the slider position when the timeline state
    * is changed.
    */
-  void on_timeline_state_changed (std::tr1::shared_ptr<TimelineState> newState);         ////////////////////TICKET #796 : should use std::tr1::shared_ptr
+  void on_timeline_state_changed (shared_ptr<TimelineState> newState);
 
   /**
    * Event handler for when the zoomIn Button
@@ -96,7 +96,7 @@ private:
 
   const double button_step_size;
 
-  std::tr1::shared_ptr<TimelineState> timelineState;
+  shared_ptr<TimelineState> timelineState;
 };
 
 } // namespace gui

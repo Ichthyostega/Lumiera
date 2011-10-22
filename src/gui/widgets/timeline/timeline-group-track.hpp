@@ -26,7 +26,7 @@
 #ifndef TIMELINE_GROUP_TRACK_HPP
 #define TIMELINE_GROUP_TRACK_HPP
 
-#include "timeline-track.hpp"
+#include "gui/widgets/timeline/timeline-track.hpp"
 #include "gui/model/group-track.hpp"
 
 namespace gui {
@@ -36,19 +36,16 @@ namespace timeline {
 class GroupTrack : public timeline::Track
 {
 public:
-  GroupTrack(TimelineWidget &timeline_widget,
-    std::tr1::shared_ptr<model::GroupTrack> track);
+  GroupTrack (TimelineWidget &timeline_widget,
+              shared_ptr<model::GroupTrack> track);
   
-  void draw_track(Cairo::RefPtr<Cairo::Context> cairo,
-    TimelineViewWindow* constwindow)
-    const;
+  void draw_track (Cairo::RefPtr<Cairo::Context> cairo,
+                   TimelineViewWindow* constwindow)  const;
     
 protected:
   void on_child_list_changed();
 };
 
-}   // namespace timeline
-}   // namespace widgets
-}   // namespace gui
 
+}}}   // namespace gui::widgets::timeline
 #endif // TIMELINE_GROUP_TRACK_HPP

@@ -112,8 +112,8 @@ TimelineLayoutHelper::header_from_point(Gdk::Point point)
   return shared_ptr<timeline::Track>();
 }
 
-std::tr1::shared_ptr<timeline::Track>
-TimelineLayoutHelper::track_from_y(int y)
+shared_ptr<timeline::Track>
+TimelineLayoutHelper::track_from_y (int y)
 {
   // Apply the scroll offset
   y += timelineWidget.get_y_scroll_offset();
@@ -299,8 +299,7 @@ TimelineLayoutHelper::is_animating() const
 }
 
 TimelineLayoutHelper::TrackTree::pre_order_iterator
-TimelineLayoutHelper::iterator_from_track(
-  std::tr1::shared_ptr<model::Track> modelTrack)
+TimelineLayoutHelper::iterator_from_track(shared_ptr<model::Track> modelTrack)
 {
   REQUIRE(modelTrack);
   
@@ -666,7 +665,7 @@ TimelineLayoutHelper::apply_drop_to_modelTree(
   timelineWidget.thaw_update_tracks();
 }
 
-std::tr1::shared_ptr<model::Sequence>
+shared_ptr<model::Sequence>
 TimelineLayoutHelper::get_sequence() const
 {
   REQUIRE(timelineWidget.state);
