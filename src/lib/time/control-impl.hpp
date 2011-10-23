@@ -151,7 +151,7 @@ namespace mutation {
       
       /** disconnect any observers */
       void
-      disconnnect()
+      disconnect()
         {
           listeners_.clear();
         }
