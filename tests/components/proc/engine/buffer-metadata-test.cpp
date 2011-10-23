@@ -133,7 +133,7 @@ namespace test  {
           CHECK ( isSameObject (meta_->get(key), meta_->get(key1)));
           CHECK (!isSameObject (meta_->get(key), meta_->get(key2)));
           
-          // entries retrieved this far are inactive (type only) entries
+          // entries retrieved thus far were inactive (type only) entries
           Metadata::Entry& m1 = meta_->get(key);
           CHECK (NIL == m1.state());
           CHECK (!meta_->isLocked(key));
@@ -234,7 +234,7 @@ namespace test  {
           
           // for the TestFrame buffers, additionally we'd have to create/attach an object
           attachTestFrame.createAttached (frames+0);   ////////////////////////////////////////TODO: shouldn't this happen automatically??
-          attachTestFrame.createAttached (frames+1);
+          attachTestFrame.createAttached (frames+1);                 //////////////////////////TODO: answer: yes. Metadata is exactly the entity which has all necessary information
           attachTestFrame.createAttached (frames+2);
           
           CHECK (f0.access() == frames+0);

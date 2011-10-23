@@ -77,6 +77,7 @@ namespace engine {
     class Key;
     class Entry;
   }
+  class Metadata;
   
   
   
@@ -275,6 +276,12 @@ namespace engine {
         }
     }
     
+    /**
+     * Description of a Buffer-"type".
+     * Key elements will be used to generate hash IDs,
+     * to be embedded into a BufferDescriptor.
+     * Keys are chained hierarchically.
+     */
     class Key
       {
         HashVal parent_;
@@ -347,21 +354,46 @@ namespace engine {
       };
     
     
+    /**
+     * A complete metadata Entry, based on a Key.
+     * This special Key element usually describes an actual Buffer.
+     * Entries are to be managed in a hashtable, which is "the metadata table".
+     * As a special case, an entry without a concrete buffer storage pointer
+     * can be created. This corresponds to a (plain) key and describes just
+     * a buffer type. Such type-only entries are fixed to the NIL state.
+     * All other entries allow for state transitions.
+     * 
+     * The "metadata table" with its entries is maintained by an engine::Metadata
+     * instance. For the latter, Entry serves as representation and access point
+     * to the individual metadata; this includes using the TypeHandler for
+     * building and destroying buffer structures.
+     */
     class Entry
       : public Key
       {
         BufferState state_;
         const void* buffer_;
         
+      protected:
+        Entry (Key const& parent, const void* bufferPtr =0)
+          : Key(parent)
+          , state_(bufferPtr? LOCKED:NIL)
+          , buffer_(bufferPtr)
+          { }
+        
+        /// Metadata is allowed to create 
+        friend class engine::Metadata;
+        
+        // standard copy operations permitted
+        
       public:
-        virtual BufferState
+        BufferState
         state()  const
           {
-            __must_not_be_NIL();
             return state_;
           }
         
-        virtual const void*
+        const void*
         access()  const
           {
             __must_not_be_NIL();
@@ -371,7 +403,7 @@ namespace engine {
             return buffer_;
           }
         
-        virtual Entry&
+        Entry&
         mark (BufferState newState)
           {
             __must_not_be_NIL();
@@ -391,6 +423,7 @@ namespace engine {
           }
         
         
+      private:
         void
         __must_not_be_NIL()  const
           {
@@ -409,7 +442,7 @@ namespace engine {
                                    , LUMIERA_ERROR_LIFECYCLE );
           }
       };
-  }
+  }//namespace metadata
   
   
   
@@ -451,7 +484,7 @@ namespace engine {
       Key
       key ( size_t storageSize
           , TypeHandler instanceFunc =RAW_BUFFER
-          , LocalKey specifics =UNSPECIFIC)
+          , LocalKey specifics       =UNSPECIFIC)
         {
           REQUIRE (storageSize);
           Key typeKey = trackKey (family_, storageSize);
@@ -489,16 +522,14 @@ namespace engine {
           UNIMPLEMENTED ("create sub-object key for concrete buffer");
         }
       
-      Key const&
+      Entry&
       get (HashVal hashID)
         {
-          UNIMPLEMENTED ("access the plain key entry");
-        }
-      
-      Entry&
-      get (Key key)
-        {
           UNIMPLEMENTED ("access, possibly create metadata records");
+          ////////////////////////////////////////////////////////////////TODO: how can we 'possibly create' without knowing the buffer pointer??
+          
+          ////////////////////////////////////////////////////////////////TODO: thus, this should only access existing buffer (not type) entries
+          ////////////////////////////////////////////////////////////////TODO:  ==> contradiction: Entry is subclass of Key. What's the point of this lookup?
         }
       
       bool
