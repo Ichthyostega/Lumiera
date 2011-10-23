@@ -49,7 +49,8 @@ IBeamTool::IBeamTool(TimelineBody &timeline_body) :
   scrollSlideRate(0)
 {
   // Connect the timlinebody selection to the selectionControl
-  this->get_state()->setSelection (selectionControl, false);
+  // TODO: Create a virtual initialize function in the base class
+  get_state()->set_selection_control(selectionControl);
 }
 
 IBeamTool::~IBeamTool()

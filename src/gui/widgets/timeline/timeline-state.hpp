@@ -28,6 +28,7 @@
 
 #include "gui/widgets/timeline/timeline-view-window.hpp"
 #include "lib/time/mutation.hpp"
+#include "lib/time/control.hpp"
 
 
 namespace gui {
@@ -38,8 +39,41 @@ class Sequence;
   
 namespace widgets { 
 namespace timeline {
-  
+
+using lib::time::Control;
 using lib::time::Mutation;
+
+typedef Control<TimeSpan> SelectionControl;
+
+/**
+ * SelectionListener is a template class which emits a signal when
+ * the value is changed by it's associated time::Control object.
+ */
+template<class TI>
+class SelectionListener
+  : boost::noncopyable
+  {
+    sigc::signal<void> valueChangedSignal;
+  public:
+    SelectionListener()
+      {
+
+      }
+
+
+    void
+    operator() (TI const& changeValue)  const
+      {
+        valueChangedSignal.emit();
+      }
+
+
+    void connect (const sigc::slot<void> &connection)
+      {
+        valueChangedSignal.connect (connection);
+      }
+
+  };
 
 /**
  * TimelineState is a container for the state data for TimelineWidget.
@@ -70,7 +104,11 @@ public:
    */
   timeline::TimelineViewWindow& get_view_window();
   
-  TimeSpan get_selection()      const { return selection_; }
+  TimeSpan& get_selection()           { return selection_; }
+
+  SelectionListener<TimeSpan>&
+  get_selection_listener()            { return selectionListener; }
+
   Time getSelectionStart()      const { return selection_.start();}
   Time getSelectionEnd()        const { return selection_.end();  }
   Time getPlaybackPeriodStart() const { return selection_.start();}
@@ -83,6 +121,7 @@ public:
    *  Otherwise the #getPlaybackPoint is meaningless */
   bool isPlaying() const { return isPlayback_; }
   
+  void set_selection_control (SelectionControl &control);
   
   /**
    * Sets the period of the selection.
@@ -113,6 +152,15 @@ public:
    * changed.
    */
   sigc::signal<void> playback_changed_signal() const; 
+
+private:
+
+  /* ========= Event Handlers ========== */
+
+  /**
+   * Event handler for when the selection is changed
+   */
+  void on_selection_changed();
   
 private:
 
@@ -134,6 +182,9 @@ private:
   /** currently selected time period. */
   TimeSpan selection_;
   
+  /** listens for a selection change */
+  SelectionListener<TimeSpan> selectionListener;
+
   /** current playback period. */
   TimeSpan playbackPeriod_;
   
