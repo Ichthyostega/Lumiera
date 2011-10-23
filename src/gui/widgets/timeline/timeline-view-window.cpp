@@ -88,9 +88,10 @@ TimelineViewWindow::set_time_scale(double ratio)
 void
 TimelineViewWindow::zoom_view(int point, double time_scale_ratio)
 {
-  TODO("Find a Central place for a Zoom Smoothing Factor Variable. Right now it is hard coded at 9.0");
+  // Apply the smoothing factor
   int64_t new_time_scale =
-      (int64_t)( pow(time_scale_ratio, 9.0) * (double)TimelineWidget::MaxScale);
+      (int64_t)( pow(time_scale_ratio, TimelineWidget::ZoomSmoothing) *
+          (double)TimelineWidget::MaxScale);
 
   /* Prevent Zooming in To Close and Far */
   if(new_time_scale < 1)

@@ -113,7 +113,7 @@ TimelineZoomScale::on_timeline_state_changed (shared_ptr<TimelineState> newState
 
   /* We have to Revese the Smoothing */
   double new_relative_scale =
-      pow(linear_scale,(1.0/9.0));
+      pow(linear_scale,(1.0 / TimelineWidget::ZoomSmoothing));
 
   adjustment.set_value(new_relative_scale);
 }

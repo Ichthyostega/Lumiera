@@ -334,19 +334,9 @@ TimelinePanel::update_tool_buttons()
 void
 TimelinePanel::update_zoom_buttons()
 {
-  REQUIRE(timelineWidget);
-
-  int64_t current_scale =
-        timelineWidget->get_state()->get_view_window().get_time_scale();
-
-  double linear_scale =
-      (double) current_scale / (double) TimelineWidget::MaxScale;
-
-  /* We have to Revese the Smoothing */
-  double new_relative_scale =
-      pow(linear_scale,(1.0/9.0));
-
-  timelineWidget->zoom_view (new_relative_scale);
+/* This function is no longer needed
+ * TODO: Let the ZoomScaleWidget perform
+ * the update on its own */
 }
 
 void

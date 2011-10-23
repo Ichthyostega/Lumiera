@@ -41,7 +41,8 @@ namespace widgets {
 const int TimelineWidget::TrackPadding = 1;
 const int TimelineWidget::HeaderWidth = 150;
 const int TimelineWidget::HeaderIndentWidth = 10;
-const double TimelineWidget::ZoomIncrement = 1.25;
+const double TimelineWidget::ZoomIncrement = 1.25; // Not currently used
+const double TimelineWidget::ZoomSmoothing = 9.0;
 const int64_t TimelineWidget::MaxScale = 30000000; // 30 Million
 
 TimelineWidget::TimelineWidget(shared_ptr<timeline::TimelineState> source_state)
