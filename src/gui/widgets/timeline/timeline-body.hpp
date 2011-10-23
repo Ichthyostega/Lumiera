@@ -88,7 +88,7 @@ public:
    * @param tool_type The type of tool to set.
    */
   void
-  set_tool(ToolType tool_type);
+  set_tool(ToolType tool_type, bool force=false);
   
   /* ===== Events ===== */
 protected:
