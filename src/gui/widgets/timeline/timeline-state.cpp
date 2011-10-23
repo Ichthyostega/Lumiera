@@ -51,7 +51,10 @@ TimelineState::TimelineState (shared_ptr<model::Sequence> source_sequence)
   , isPlayback_(false)
 {
   REQUIRE(sequence);
-  
+
+  // Initialize the listener
+  selectionListener (TimeSpan (Time::ZERO, Duration::NIL));
+
   ////////////////////////////////////////////////////////////TICKET #798: how to handle GUI default state
   const int64_t DEFAULT_TIMELINE_SCALE =21000000;
   
@@ -123,7 +126,7 @@ TimelineState::playback_changed_signal() const
 }
 
 void
-TimelineState::on_selection_changed()
+TimelineState::on_selection_changed (TimeSpan selection)
 {
   selectionChangedSignal.emit();
 }

@@ -49,8 +49,7 @@ IBeamTool::IBeamTool(TimelineBody &timeline_body) :
   scrollSlideRate(0)
 {
   // Connect the timlinebody selection to the selectionControl
-  // TODO: Create a virtual initialize function in the base class
-  get_state()->set_selection_control(selectionControl);
+  get_state()->set_selection_control (selectionControl);
 }
 
 IBeamTool::~IBeamTool()
@@ -122,8 +121,7 @@ IBeamTool::on_button_press_event(GdkEventButton* event)
           // User began the drag in clear space, begin a Select drag
           dragType = Selection;
           pinnedDragTime = time;
-          selectionControl (TimeSpan(time, Duration::NIL));  //TODO: TimelineState Needs a listener for selection changes
-          state->selection_changed_signal().emit();
+          selectionControl (TimeSpan(time, Duration::NIL));
         }
     }
 }
@@ -194,16 +192,17 @@ IBeamTool::set_leading_x(const int x)
 {
   shared_ptr<TimelineState> state = get_state();
 
-  const bool set_playback_period = dragType == Selection;
+  // The line below needs handled differently now;
+  //
+  //const bool set_playback_period = dragType == Selection;
+
   TimeVar newStartPoint (state->get_view_window().x_to_time(x));
   Offset selectionLength (pinnedDragTime, newStartPoint);
 
   if (newStartPoint > pinnedDragTime)
     newStartPoint=pinnedDragTime; // use the smaller one as selection start
 
-  //TODO: TimelineState Needs a listener for selection changes
   selectionControl (TimeSpan (newStartPoint, Duration(selectionLength)));
-  state->selection_changed_signal().emit();
 }
 
 void

@@ -48,27 +48,29 @@ typedef Control<TimeSpan> SelectionControl;
 /**
  * SelectionListener is a template class which emits a signal when
  * the value is changed by it's associated time::Control object.
+ * SelectionListener wraps a sigc::signal that emits every time
+ * the selection is changed
  */
+
 template<class TI>
 class SelectionListener
   : boost::noncopyable
   {
-    sigc::signal<void> valueChangedSignal;
+    sigc::signal<void, TI> valueChangedSignal;
   public:
     SelectionListener()
       {
 
       }
 
-
     void
     operator() (TI const& changeValue)  const
       {
-        valueChangedSignal.emit();
+        valueChangedSignal.emit(changeValue);
       }
 
 
-    void connect (const sigc::slot<void> &connection)
+    void connect (const sigc::slot<void, TI> &connection)
       {
         valueChangedSignal.connect (connection);
       }
@@ -160,7 +162,7 @@ private:
   /**
    * Event handler for when the selection is changed
    */
-  void on_selection_changed();
+  void on_selection_changed (TimeSpan selection);
   
 private:
 
