@@ -49,7 +49,9 @@ typedef Control<TimeSpan> SelectionControl;
  * SelectionListener is a template class which emits a signal when
  * the value is changed by it's associated time::Control object.
  * SelectionListener wraps a sigc::signal that emits every time
- * the selection is changed
+ * the selection is changed by the time::Control object.
+ * SelectionListener does NOT emit the signal if a change to the
+ * selection is made outside of the Control/Listener partnership.
  */
 
 template<class TI>
@@ -66,7 +68,7 @@ class SelectionListener
     void
     operator() (TI const& changeValue)  const
       {
-        valueChangedSignal.emit(changeValue);
+        valueChangedSignal.emit (changeValue);
       }
 
 

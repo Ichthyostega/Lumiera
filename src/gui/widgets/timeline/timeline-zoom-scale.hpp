@@ -51,6 +51,8 @@ public:
    */
   sigc::signal<void, double> signal_zoom();
 
+  void set_value(double val) { adjustment.set_value(val); }
+
   void wireTimelineState (shared_ptr<TimelineState> currentState,
                           TimelineWidget::TimelineStateChangeSignal);
 

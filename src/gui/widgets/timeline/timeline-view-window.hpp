@@ -138,6 +138,13 @@ public:
 
 private:
   TimeVar timeOffset;
+
+  /**
+   * The scale of the Timline Body.
+   * @remarks This value represents the time span that is visible in
+   * the TimelineBodyWidget. Smaller numbers here will "zoom in"
+   * while larger numbers will "zoom out"
+   */
   int64_t timeScale;
   
   sigc::signal<void> changedSignal;

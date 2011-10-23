@@ -138,12 +138,13 @@ TimelinePanel::TimelinePanel (workspace::PanelManager &panel_manager,
   // wire the zoom slider to react on timeline state changes
   zoomScale.wireTimelineState (timelineWidget->get_state(),
                                timelineWidget->state_changed_signal());
-  
+
   // Set the initial UI state
   update_sequence_chooser();
   update_tool_buttons();
   update_zoom_buttons();
   show_time (Time::ZERO);
+  std::cout << timelineWidget->get_state()->get_view_window().get_time_scale() << "\n";
 }
 
 const char*
@@ -335,17 +336,17 @@ TimelinePanel::update_zoom_buttons()
 {
   REQUIRE(timelineWidget);
 
-  const shared_ptr<timeline::TimelineState> state =
-    timelineWidget->get_state();
-  if(state)
-    {
-      timeline::TimelineViewWindow &viewWindow = 
-        state->get_view_window();
-      
-      zoomIn.set_sensitive(viewWindow.get_time_scale() != 1);
-      zoomOut.set_sensitive(viewWindow.get_time_scale()
-        != TimelineWidget::MaxScale);
-    }
+  int64_t current_scale =
+        timelineWidget->get_state()->get_view_window().get_time_scale();
+
+  double linear_scale =
+      (double) current_scale / (double) TimelineWidget::MaxScale;
+
+  /* We have to Revese the Smoothing */
+  double new_relative_scale =
+      pow(linear_scale,(1.0/9.0));
+
+  timelineWidget->zoom_view (new_relative_scale);
 }
 
 void

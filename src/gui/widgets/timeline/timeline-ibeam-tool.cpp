@@ -180,8 +180,8 @@ IBeamTool::on_motion_notify_event(GdkEventMotion *event)
 bool
 IBeamTool::on_scroll_slide_timer()
 {
-  const Gdk::Rectangle body_rect(get_body_rectangle());     
-  view_window().shift_view(body_rect.get_width(), scrollSlideRate);
+  const Gdk::Rectangle body_rect (get_body_rectangle());
+  view_window().shift_view (body_rect.get_width(), scrollSlideRate);
     
   // Return true to keep the timer going
   return true;

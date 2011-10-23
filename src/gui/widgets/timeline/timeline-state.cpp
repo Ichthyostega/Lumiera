@@ -52,19 +52,18 @@ TimelineState::TimelineState (shared_ptr<model::Sequence> source_sequence)
 {
   REQUIRE(sequence);
 
-  // Initialize the listener
+  // Initialize the selection listener
   selectionListener (TimeSpan (Time::ZERO, Duration::NIL));
-
-  ////////////////////////////////////////////////////////////TICKET #798: how to handle GUI default state
-  const int64_t DEFAULT_TIMELINE_SCALE =21000000;
-  
-  viewWindow.set_time_scale(DEFAULT_TIMELINE_SCALE);
-
   selectionListener.connect(
       mem_fun(*this, &TimelineState::on_selection_changed));
 
+  ////////////////////////////////////////////////////////////TICKET #798: how to handle GUI default state
+  const int64_t DEFAULT_TIMELINE_SCALE =6400;
+  
+  viewWindow.set_time_scale(DEFAULT_TIMELINE_SCALE);
+
   setSelection (Mutation::changeTime (Time(FSecs(2))));
-  setSelection (Mutation::changeDuration(Duration(FSecs(2))));
+  setSelection (Mutation::changeDuration (Duration(FSecs(2))));
   //////////////////////////////////////////////////////TICKET #797 : this is cheesy. Should provide a single Mutation to change all
 }
 
