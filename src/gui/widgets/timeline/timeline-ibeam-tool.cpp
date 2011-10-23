@@ -121,14 +121,8 @@ IBeamTool::on_button_press_event(GdkEventButton* event)
           // User began the drag in clear space, begin a Select drag
           dragType = Selection;
           pinnedDragTime = time;
-          selectionControl (TimeSpan(time, Duration::NIL));
+          selectionControl (TimeSpan(time, Duration::NIL));  //TODO: TimelineState Needs a listener for selection changes
           state->selection_changed_signal().emit();
-          std::cout << "\n" << std::string(time) << "\n";
-          std::cout << std::string(state->get_selection().start()) << "\n\n";
-
-          //state->setSelection (Mutation::changeTime (time));
-          //state->setSelection (Mutation::changeDuration (Duration::NIL));
-                               ////////////"//////////////////////////////////////////TICKET #797 : this is cheesy. Should provide a single Mutation to change all
         }
     }
 }
@@ -206,11 +200,9 @@ IBeamTool::set_leading_x(const int x)
   if (newStartPoint > pinnedDragTime)
     newStartPoint=pinnedDragTime; // use the smaller one as selection start
 
- // selectionControl (TimeSpan(newStartPoint, Duration(selectionLength)));
-
-  //state->setSelection (Mutation::changeTime(newStartPoint)      , set_playback_period);
- // state->setSelection (Mutation::changeDuration(selectionLength), set_playback_period);
-                               //////////////////////////////////////////////////////TICKET #797 : this is cheesy. Should provide a single Mutation to change all at once
+  //TODO: TimelineState Needs a listener for selection changes
+  selectionControl (TimeSpan (newStartPoint, Duration(selectionLength)));
+  state->selection_changed_signal().emit();
 }
 
 void
