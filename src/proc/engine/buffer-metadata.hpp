@@ -374,28 +374,20 @@ namespace engine {
         virtual Entry&
         mark (BufferState newState)
           {
-            switch (this->state_)
+            __must_not_be_NIL();
+            __must_not_be_FREE();
+            
+            if ( (state_ == LOCKED  && newState == EMITTED)
+               ||(state_ == EMITTED && newState == BLOCKED)
+               ||(state_ == BLOCKED && newState == FREE))
               {
-              case NIL:  __must_not_be_NIL();
-              case FREE: __must_not_be_FREE();
-                
-              case LOCKED:
-                if (newState == EMITTED) break; // allow transition
-                
-              case EMITTED:
-                if (newState == BLOCKED) break; // allow transition
-                
-              case BLOCKED:
-                if (newState == FREE)           // note fall through for LOCKED and EMITTED too
-                  {
-                    buffer_ = 0;
-                    break; // allow transition
-                  }
-              default:
-                throw error::Fatal ("Invalid buffer state encountered.");
+                // allowed transition
+                if (newState == FREE) buffer_ = 0;
+                state_ = newState;
+                return *this;
               }
-            state_ = newState;
-            return *this;
+            
+            throw error::Fatal ("Invalid buffer state encountered.");
           }
         
         
