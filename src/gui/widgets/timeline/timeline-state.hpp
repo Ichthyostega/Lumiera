@@ -78,6 +78,7 @@ public:
   
   Time getPlaybackPoint()       const { return playbackPoint_; }
   
+  
   /** is there currently any ongoing playback process?
    *  Otherwise the #getPlaybackPoint is meaningless */
   bool isPlaying() const { return isPlayback_; }

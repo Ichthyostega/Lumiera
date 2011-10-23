@@ -49,11 +49,12 @@ IBeamTool::IBeamTool(TimelineBody &timeline_body) :
   scrollSlideRate(0)
 {
   // Connect the timlinebody selection to the selectionControl
-  this->get_state()->get_selection().accept(selectionControl);
+  this->get_state()->setSelection (selectionControl, false);
 }
 
 IBeamTool::~IBeamTool()
 {
+  selectionControl.disconnect();
   end_scroll_slide();
 }
 
