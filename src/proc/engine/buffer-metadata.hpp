@@ -516,32 +516,77 @@ namespace engine {
           return trackKey (parentKey, specifics);
         }
       
-      Key
+      /** shortcut to access the Key part of a (probably new) Entry
+       *  describing a concrete buffer at the given address
+       * @note might create/register a new Entry as a side-effect 
+       */ 
+      Key const&
       key (Key const& parentKey, const void* concreteBuffer)
         {
-          UNIMPLEMENTED ("create sub-object key for concrete buffer");
+          return get (parentKey,concreteBuffer);
         }
       
+      /** core operation to access or create a concrete buffer metadata entry.
+       *  The hashID of the entry in question is built, based on the parentKey,
+       *  which denotes a buffer type, and the concrete buffer address. If yet
+       *  unknown, a new concrete buffer metadata Entry is created and initialised
+       *  to LOCKED state. Otherwise just the existing Entry is fetched.
+       * @param parentKey a key describing the \em type of the buffer
+       * @param concreteBuffer storage pointer, must not be NULL
+       * @param onlyNew disallows fetching an existing entry
+       * @throw error::Logic when #onlyNew is set, but an equivalent entry
+       *        was registered previously. This indicates a serious error
+       *        in buffer lifecycle management.
+       * @return reference to the entry stored in the metadata table.
+       * @warning the exposed reference might become invalid when the
+       *        buffer is released or re-used later.
+       */
+      Entry&
+      get (Key const& parentKey, const void* concreteBuffer, bool onlyNew =false)
+        {
+          Entry newEntry(parentKey, concreteBuffer);
+          Entry* existing = table_.fetch (newEntry);
+          if (existing && onlyNew)
+            throw error::Logic ("Attempt to lock a slot for a new buffer, "
+                                "while actually the old buffer is still locked."
+                               , error::LUMIERA_ERROR_LIFECYCLE );
+          
+          if (!existing)
+            return table_.store (newEntry);
+          else
+            return *existing;
+        }
+      
+      /** access the metadata record registered with the given hash key.
+       *  This might be a pseudo entry in case of a Key describing a buffer type.
+       *  Otherwise, the entry associated with a concrete buffer pointer is returned
+       *  by reference, an can be modified (e.g. state change) 
+       * @param hashID which can be calculated from the Key
+       * @throw error::Invalid when there is no such entry
+       * @note use #isKnown to check existence
+       */
       Entry&
       get (HashVal hashID)
         {
-          UNIMPLEMENTED ("access, possibly create metadata records");
-          ////////////////////////////////////////////////////////////////TODO: how can we 'possibly create' without knowing the buffer pointer??
+          Entry* entry = table_.fetch (hashID);
+          if (!entry)
+            throw error::Invalid ("Attempt to access an unknown buffer metadata entry");
           
-          ////////////////////////////////////////////////////////////////TODO: thus, this should only access existing buffer (not type) entries
-          ////////////////////////////////////////////////////////////////TODO:  ==> contradiction: Entry is subclass of Key. What's the point of this lookup?
+          return *entry;
         }
       
       bool
       isKnown (HashVal key)  const
         {
-          UNIMPLEMENTED ("diagnostics: known record?");
+          return bool(table_.fetch (key));
         }
       
       bool
       isLocked (HashVal key)  const
         {
-          UNIMPLEMENTED ("diagnostics: actually locked buffer instance record?");
+          Entry* entry = table_.fetch (key);
+          return entry
+              && entry->isLocked();
         }
       
       
@@ -565,7 +610,7 @@ namespace engine {
       maybeStore (Key const& key)
         {
           if (isKnown (key)) return;
-          UNIMPLEMENTED ("registry for type keys");
+          table_.store (Entry (key, NULL));
         }
 
     };
@@ -581,24 +626,23 @@ namespace engine {
   inline Metadata::Entry&
   Metadata::markLocked (Key const& parentKey, const void* buffer)
   {
-    UNIMPLEMENTED ("transition to locked state");
     if (!buffer)
       throw error::Fatal ("Attempt to lock for a NULL buffer. Allocation floundered?"
                          , error::LUMIERA_ERROR_BOTTOM_VALUE);
     
-    Key newKey = this->key (parentKey, buffer);
-    if (isLocked(newKey))
-      throw error::Logic ("Attempt to lock a slot for a new buffer, "
-                          "while actually the old buffer is still locked."
-                         , error::LUMIERA_ERROR_LIFECYCLE );
-    
-    return this->get(newKey);
+    return this->get (parentKey, buffer, true); // force creation of a new entry
   }
   
   inline void
   Metadata::release (HashVal key)
   {
-    UNIMPLEMENTED ("metadata memory management");
+    Entry* entry = table_.fetch (key);
+    if (!entry) return;
+    if (entry && (FREE != entry->state()))
+      throw error::Logic ("Attempt to release a buffer still in use"
+                         , error::LUMIERA_ERROR_LIFECYCLE);
+    
+    table_.remove (key);
   }
   
   
