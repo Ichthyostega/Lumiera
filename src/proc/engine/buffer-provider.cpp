@@ -36,7 +36,7 @@ namespace engine {
 
   
   BufferProvider::BufferProvider (Literal implementationID)
-    : meta_(new Metadata (implementationID))
+    : meta_(new BufferMetadata (implementationID))
     { }
   
   BufferProvider::~BufferProvider() { }

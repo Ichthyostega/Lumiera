@@ -83,7 +83,7 @@ namespace test  {
   class BufferMetadata_test : public Test
     {
       /** common Metadata table to be tested */
-      scoped_ptr<Metadata> meta_;
+      scoped_ptr<BufferMetadata> meta_;
       
       virtual void
       run (Arg) 
@@ -99,7 +99,7 @@ namespace test  {
       ensure_proper_fixture() 
         {
           if (!meta_)
-            meta_.reset(new Metadata("BufferMetadata_test"));
+            meta_.reset(new BufferMetadata("BufferMetadata_test"));
           
           return (SIZE_A != SIZE_B)
               && (JUST_SOMETHING != meta_->key(SIZE_A))
@@ -112,11 +112,11 @@ namespace test  {
       verifyBasicProperties()
         {
           // retrieve some type keys
-          Metadata::Key key = meta_->key(SIZE_A);
+          metadata::Key key = meta_->key(SIZE_A);
           CHECK (key);
           
-          Metadata::Key key1 = meta_->key(SIZE_A);
-          Metadata::Key key2 = meta_->key(SIZE_B);
+          metadata::Key key1 = meta_->key(SIZE_A);
+          metadata::Key key2 = meta_->key(SIZE_B);
           CHECK (key1);
           CHECK (key2);
           CHECK (key == key1);
@@ -134,7 +134,7 @@ namespace test  {
           CHECK (!isSameObject (meta_->get(key), meta_->get(key2)));
           
           // entries retrieved thus far were inactive (type only) entries
-          Metadata::Entry& m1 = meta_->get(key);
+          metadata::Entry& m1 = meta_->get(key);
           CHECK (NIL == m1.state());
           CHECK (!meta_->isLocked(key));
           
@@ -142,7 +142,7 @@ namespace test  {
           VERIFY_ERROR (LIFECYCLE, m1.mark(LOCKED)  );
           
           // now create an active (buffer) entry
-          Metadata::Entry& m2 = meta_->markLocked (key, SOME_POINTER);
+          metadata::Entry& m2 = meta_->markLocked (key, SOME_POINTER);
           CHECK (!isSameObject (m1,m2));
           CHECK (NIL    == m1.state());
           CHECK (LOCKED == m2.state());
@@ -197,10 +197,10 @@ namespace test  {
         {
           // to build a descriptor for a buffer holding a TestFrame
           TypeHandler attachTestFrame = TypeHandler::create<TestFrame>();
-          Metadata::Key bufferType1 = meta_->key(sizeof(TestFrame), attachTestFrame);
+          metadata::Key bufferType1 = meta_->key(sizeof(TestFrame), attachTestFrame);
           
           // to build a descriptor for a raw buffer of size SIZE_B
-          Metadata::Key rawBuffType = meta_->key(SIZE_B);
+          metadata::Key rawBuffType = meta_->key(SIZE_B);
           
           // to announce using a number of buffers of this type
           LocalKey transaction1(1);
@@ -219,12 +219,12 @@ namespace test  {
                                                //  a real-world BufferProvider would use some kind of allocator
           
           // track individual buffers by metadata entries
-          Metadata::Entry f0 = meta_->markLocked(bufferType1, &frames[0]);
-          Metadata::Entry f1 = meta_->markLocked(bufferType1, &frames[1]);
-          Metadata::Entry f2 = meta_->markLocked(bufferType1, &frames[2]);
+          metadata::Entry f0 = meta_->markLocked(bufferType1, &frames[0]);
+          metadata::Entry f1 = meta_->markLocked(bufferType1, &frames[1]);
+          metadata::Entry f2 = meta_->markLocked(bufferType1, &frames[2]);
           
-          Metadata::Entry r0 = meta_->markLocked(bufferType1, &rawbuf[0]);
-          Metadata::Entry r1 = meta_->markLocked(bufferType1, &rawbuf[1]);
+          metadata::Entry r0 = meta_->markLocked(bufferType1, &rawbuf[0]);
+          metadata::Entry r1 = meta_->markLocked(bufferType1, &rawbuf[1]);
 
           CHECK (LOCKED == f0.state());
           CHECK (LOCKED == f1.state());

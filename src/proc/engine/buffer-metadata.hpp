@@ -77,7 +77,7 @@ namespace engine {
     class Key;
     class Entry;
   }
-  class Metadata;
+  class BufferMetadata;
   
   
   
@@ -363,7 +363,7 @@ namespace engine {
      * a buffer type. Such type-only entries are fixed to the NIL state.
      * All other entries allow for state transitions.
      * 
-     * The "metadata table" with its entries is maintained by an engine::Metadata
+     * The "metadata table" with its entries is maintained by an engine::BufferMetadata
      * instance. For the latter, Entry serves as representation and access point
      * to the individual metadata; this includes using the TypeHandler for
      * building and destroying buffer structures.
@@ -381,8 +381,8 @@ namespace engine {
           , buffer_(bufferPtr)
           { }
         
-        /// Metadata is allowed to create 
-        friend class engine::Metadata;
+        /// BufferMetadata is allowed to create 
+        friend class engine::BufferMetadata;
         
         // standard copy operations permitted
         
@@ -507,7 +507,7 @@ namespace engine {
   
   
   
-  class Metadata
+  class BufferMetadata
     : boost::noncopyable
     {
       Literal id_;
@@ -527,7 +527,7 @@ namespace engine {
        * @param implementationID to distinguish families
        *        of type keys belonging to different registries.
        */
-      Metadata (Literal implementationID)
+      BufferMetadata (Literal implementationID)
         : id_(implementationID)
         , family_(hash_value(id_))
         { }
@@ -690,8 +690,8 @@ namespace engine {
   
   
   /** */
-  inline Metadata::Entry&
-  Metadata::markLocked (Key const& parentKey, const void* buffer)
+  inline BufferMetadata::Entry&
+  BufferMetadata::markLocked (Key const& parentKey, const void* buffer)
   {
     if (!buffer)
       throw error::Fatal ("Attempt to lock for a NULL buffer. Allocation floundered?"
@@ -701,7 +701,7 @@ namespace engine {
   }
   
   inline void
-  Metadata::release (HashVal key)
+  BufferMetadata::release (HashVal key)
   {
     Entry* entry = table_.fetch (key);
     if (!entry) return;

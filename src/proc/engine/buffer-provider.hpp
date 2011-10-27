@@ -56,7 +56,7 @@ namespace engine {
   using lib::Literal;
   
   
-  class Metadata;
+  class BufferMetadata;
   
   
   /**
@@ -71,7 +71,7 @@ namespace engine {
   class BufferProvider
     : boost::noncopyable
     {
-      scoped_ptr<Metadata> meta_;
+      scoped_ptr<BufferMetadata> meta_;
       
     protected:
       BufferProvider (Literal implementationID);
