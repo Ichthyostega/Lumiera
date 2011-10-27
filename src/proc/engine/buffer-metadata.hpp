@@ -387,6 +387,39 @@ namespace engine {
         // standard copy operations permitted
         
       public:
+        /** is this Entry currently associated to a
+         *  concrete buffer? Is this buffer in use? */ 
+        bool
+        isLocked()  const
+          {
+            ASSERT (NIL != state_ && FREE != state_);
+            return bool(buffer_);
+          }
+        
+        /** is this Entry just an (abstract) placeholder for a type?
+         * @return false if it's a real entry corresponding to a concrete buffer
+         */ 
+        bool
+        isTypeKey()  const
+          {
+            return !bool(buffer_);
+          }
+        
+        /** @note hiding the base implementation to support storing
+         *  and lookup of individual entries in a hashtable */
+        operator HashVal()  const
+          {
+            return isTypeKey()? Key::operator HashVal()
+                              : chainedHash (parentKey(), buffer_);
+          }
+        
+        HashVal
+        parentKey()  const
+          {
+            return isTypeKey()? Key::parentKey()
+                              : Key::operator HashVal();
+          }
+        
         BufferState
         state()  const
           {
@@ -442,6 +475,32 @@ namespace engine {
                                    , LUMIERA_ERROR_LIFECYCLE );
           }
       };
+    
+    
+    /**
+     * (Hash)Table to store and manage buffer metadata
+     */
+    class Table
+      {
+      public:
+        Entry*
+        fetch (HashVal hashID)  const
+          {
+            UNIMPLEMENTED ("fetch metadata record by ID");
+          }
+          
+        Entry&
+        store (Entry const& newEntry)
+          {
+            UNIMPLEMENTED ("store new metadata record");
+          }
+        
+        void
+        remove (HashVal hashID)
+          {
+            UNIMPLEMENTED ("delete metadata record");
+          }
+      };
   }//namespace metadata
   
   
@@ -453,6 +512,8 @@ namespace engine {
     {
       Literal id_;
       HashVal family_;
+      
+      metadata::Table table_;
       
     public:
       
@@ -533,10 +594,12 @@ namespace engine {
        *  to LOCKED state. Otherwise just the existing Entry is fetched.
        * @param parentKey a key describing the \em type of the buffer
        * @param concreteBuffer storage pointer, must not be NULL
-       * @param onlyNew disallows fetching an existing entry
+       * @param onlyNew disallow fetching an existing entry
        * @throw error::Logic when #onlyNew is set, but an equivalent entry
        *        was registered previously. This indicates a serious error
        *        in buffer lifecycle management.
+       * @throw error::Invalid when invoked with NULL buffer. Use the #key
+       *        functions instead to register and track type keys.
        * @return reference to the entry stored in the metadata table.
        * @warning the exposed reference might become invalid when the
        *        buffer is released or re-used later.
@@ -544,6 +607,10 @@ namespace engine {
       Entry&
       get (Key const& parentKey, const void* concreteBuffer, bool onlyNew =false)
         {
+          if (!concreteBuffer)
+            throw error::Invalid ("Attempt to lock a slot for a NULL buffer"
+                                 , error::LUMIERA_ERROR_BOTTOM_VALUE);
+          
           Entry newEntry(parentKey, concreteBuffer);
           Entry* existing = table_.fetch (newEntry);
           if (existing && onlyNew)
