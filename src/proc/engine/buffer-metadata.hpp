@@ -57,8 +57,11 @@
 #include "lib/error.hpp"
 #include "lib/symbol.hpp"
 #include "lib/functor-util.hpp"
+#include "lib/util-foreach.hpp"
+#include "include/logging.h"
 
 #include <tr1/functional>
+#include <tr1/unordered_map>
 #include <boost/functional/hash.hpp>
 #include <boost/noncopyable.hpp>
 
@@ -67,6 +70,7 @@ namespace engine {
   
   using lib::HashVal;
   using lib::Literal;
+  using util::for_each; 
   using std::tr1::bind;
   using std::tr1::function;
   using std::tr1::placeholders::_1;
@@ -392,7 +396,7 @@ namespace engine {
         bool
         isLocked()  const
           {
-            ASSERT (NIL != state_ && FREE != state_);
+            ASSERT (!buffer_ || (NIL != state_ && FREE != state_));
             return bool(buffer_);
           }
         
@@ -461,8 +465,9 @@ namespace engine {
         __must_not_be_NIL()  const
           {
             if (NIL == state_)
-              throw error::Fatal ("Concrete buffer entry with state==NIL encountered."
-                                  "State transition logic broken (programming error)");
+              throw error::Fatal ("Buffer metadata entry with state==NIL encountered."
+                                  "State transition logic broken (programming error)"
+                                 , LUMIERA_ERROR_LIFECYCLE);
           }
         
         void
@@ -478,29 +483,103 @@ namespace engine {
     
     
     /**
-     * (Hash)Table to store and manage buffer metadata
+     * (Hash)Table to store and manage buffer metadata.
+     * Buffer metadata entries are comprised of a Key part and an extended
+     * Entry, holding the actual management and housekeeping metadata. The
+     * Keys are organised hierarchically and denote the "kind" of buffer.
+     * The hash values for lookup are based on the key part, chained with
+     * the actual memory location of the concrete buffer corresponding
+     * to the metadata entry to be retrieved.
      */
     class Table
       {
+        typedef std::tr1::unordered_map<HashVal,Entry> MetadataStore;
+        
+        MetadataStore entries_;
+
       public:
+       ~Table() { verify_all_buffers_freed(); }
+        
+        /** fetch metadata record, if any
+         * @param hashID for the Key part of the metadata entry
+         * @return pointer to the entry in the table or NULL
+         */
         Entry*
+        fetch (HashVal hashID)
+          {
+            MetadataStore::iterator pos = entries_.find (hashID);
+            if (pos != entries_.end())
+              return &(pos->second);
+            else
+              return NULL;
+          }
+        
+        const Entry*
         fetch (HashVal hashID)  const
           {
-            UNIMPLEMENTED ("fetch metadata record by ID");
+            MetadataStore::const_iterator pos = entries_.find (hashID);
+            if (pos != entries_.end())
+              return &(pos->second);
+            else
+              return NULL;
           }
-          
+        
+        /** store a copy of the given new metadata entry.
+         *  The hash key for lookup is retrieved from the given Entry, by conversion to HashVal.
+         *  Consequently, this will be the hashID of the parent Key (type), when the entry holds
+         *  a NULL buffer (i.e a "pseudo entry"). Otherwise, it will be this parent Key hash,
+         *  extended by hashing the actual buffer address.
+         * @return reference to relevant entry for this Key. This might be a copy
+         *         of the new entry, or an already existing entry with the same Key
+         */
         Entry&
         store (Entry const& newEntry)
           {
-            UNIMPLEMENTED ("store new metadata record");
+            using std::make_pair;
+            REQUIRE (!fetch (newEntry), "duplicate buffer metadata entry");
+            MetadataStore::iterator pos = entries_.insert (make_pair (HashVal(newEntry), newEntry))
+                                                  .first;
+            
+            ENSURE (pos != entries_.end());
+            return pos->second;
           }
         
         void
         remove (HashVal hashID)
           {
-            UNIMPLEMENTED ("delete metadata record");
+            uint cnt = entries_.erase (hashID);
+            ENSURE (cnt, "entry to remove didn't exist");
+          }
+        
+      private:
+        void
+        verify_all_buffers_freed()
+          try
+            {
+              for_each (entries_, verify_is_free);
+            }
+          catch (std::exception& problem)
+            {
+              const char* errID = lumiera_error();
+              const char* operation = "Shutdown of BufferProvider metadata store";
+              WARN (engine, "%s failed: %s", operation, problem.what());
+              TRACE (debugging, "Error flag was: %s", errID);
+            }
+          catch (...)
+            {
+              const char* errID = lumiera_error();
+              const char* operation = "Shutdown of BufferProvider metadata store";
+              ERROR (engine, "%s failed with unknown exception; error flag is: %s", operation, errID);
+            }
+          
+        static void
+        verify_is_free (std::pair<HashVal, Entry> const& e)
+          {
+            WARN_IF (e.second.isLocked(), engine,
+                     "Buffer still in use while shutting down BufferProvider? ");
           }
       };
+    
   }//namespace metadata
   
   
@@ -651,7 +730,7 @@ namespace engine {
       bool
       isLocked (HashVal key)  const
         {
-          Entry* entry = table_.fetch (key);
+          const Entry* entry = table_.fetch (key);
           return entry
               && entry->isLocked();
         }
