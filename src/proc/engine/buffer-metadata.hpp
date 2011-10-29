@@ -353,6 +353,25 @@ namespace engine {
           { }
         
         
+        /** build derived Key for a concrete buffer Entry
+         * @param parent type key to subsume this buffer
+         * @param bufferAddr pointer to the concrete buffer
+         * @return Child key with hashID based on the buffer address.
+         *         For NULL buffer a copy of the parent is returned.
+         */
+        static Key
+        forEntry (Key const& parent, const void* bufferAddr)
+          {
+            Key newKey(parent);
+            if (bufferAddr)
+              {
+                newKey.parent_ = HashVal(parent);
+                newKey.hashID_ = chainedHash(parent, bufferAddr);
+              }
+            return newKey; 
+          }
+        
+        
         HashVal parentKey()  const { return parent_;}
         operator HashVal()   const { return hashID_;}
       };
@@ -380,7 +399,7 @@ namespace engine {
         
       protected:
         Entry (Key const& parent, const void* bufferPtr =0)
-          : Key(parent)
+          : Key (Key::forEntry (parent, bufferPtr))
           , state_(bufferPtr? LOCKED:NIL)
           , buffer_(bufferPtr)
           { }
@@ -409,20 +428,6 @@ namespace engine {
             return !bool(buffer_);
           }
         
-        /** @note hiding the base implementation to support storing
-         *  and lookup of individual entries in a hashtable */
-        operator HashVal()  const
-          {
-            return isTypeKey()? Key::operator HashVal()
-                              : chainedHash (parentKey(), buffer_);
-          }
-        
-        HashVal
-        parentKey()  const
-          {
-            return isTypeKey()? Key::parentKey()
-                              : Key::operator HashVal();
-          }
         
         BufferState
         state()  const
