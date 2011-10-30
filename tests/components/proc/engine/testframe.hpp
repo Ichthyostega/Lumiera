@@ -28,6 +28,8 @@
 //#include "lib/time/timevalue.hpp"
 
 //#include <string>
+#include <cstdlib>
+#include <stdint.h>
 
 
 //using std::tr1::shared_ptr;
@@ -53,60 +55,52 @@ namespace test   {
    */
   class TestFrame
     {
+      enum StageOfLife {
+          CREATED, EMITTED, DISCARDED
+        };
+      
+      static const size_t BUFFSIZ = 1024;
+      
+      uint64_t discriminator_;
+      StageOfLife stage_;
+      
+      char data_[BUFFSIZ];
       
     public:
+     ~TestFrame();
+      TestFrame (uint seq=0, uint family=0);
+      TestFrame (TestFrame const&);
+      TestFrame& operator= (TestFrame const&);
       
       /** Helper to verify a given memory location holds
        *  an active TestFrame instance (created, not yet destroyed)
        * @return true if the TestFrame datastructure is intact and
        *         marked as still alive.
        */
-      static bool
-      isAlive (void* memLocation)
-        {
-          UNIMPLEMENTED ("access memory as TestFrame and check internal accounting");
-        }
+      static bool isAlive (void* memLocation);
       
       /** Helper to verify a given memory location holds
        *  an already destroyed TestFrame instance */
-      static bool
-      isDead (void* memLocation)
-        {
-          UNIMPLEMENTED ("access memory as TestFrame and verify dtor invocation");
-        }
+      static bool isDead (void* memLocation);
       
-      bool
-      operator== (void* memLocation)
-        {
-          UNIMPLEMENTED ("verify contents of an arbitrary memory location");
-        }
+      bool isAlive() const;
+      bool isDead()  const;
+      bool isSane()  const;
       
-      friend bool
-      operator== (TestFrame const& f1, TestFrame const& f2)
-        {
-          UNIMPLEMENTED ("equality of test data frames");
-        }
+      bool operator== (void* memLocation) const;
       
-      friend bool
-      operator!= (TestFrame const& f1, TestFrame const& f2)
-        {
-          return !(f1 == f2);
-        }
+      friend bool operator== (TestFrame const& f1, TestFrame const& f2) { return  f1.contentEquals(f2); }
+      friend bool operator!= (TestFrame const& f1, TestFrame const& f2) { return !f1.contentEquals(f2); }
+      
+    private:
+      bool contentEquals (TestFrame const& o)  const;
     };
   
   
   
-  inline TestFrame
-  testData (uint seqNr)
-  {
-    UNIMPLEMENTED ("build, memorise and expose test data frames on demand");
-  }
+  TestFrame testData (uint seqNr);
   
-  inline TestFrame
-  testData (uint chanNr, uint seqNr)
-  {
-    UNIMPLEMENTED ("build, memorise and expose test data frames on demand (multi-channel)");
-  }
+  TestFrame testData (uint chanNr, uint seqNr);
   
   
   
