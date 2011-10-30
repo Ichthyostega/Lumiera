@@ -452,7 +452,9 @@ namespace engine {
             __must_not_be_FREE();
             
             if ( (state_ == LOCKED  && newState == EMITTED)
+               ||(state_ == LOCKED  && newState == FREE)
                ||(state_ == EMITTED && newState == BLOCKED)
+               ||(state_ == EMITTED && newState == FREE)
                ||(state_ == BLOCKED && newState == FREE))
               {
                 // allowed transition

@@ -91,7 +91,6 @@ namespace test  {
           CHECK (ensure_proper_fixture());
           verifyBasicProperties();
           verifyStandardCase();
-          UNIMPLEMENTED ("cover all metadata properties");
         }
       
       
@@ -219,12 +218,12 @@ namespace test  {
                                                //  a real-world BufferProvider would use some kind of allocator
           
           // track individual buffers by metadata entries
-          metadata::Entry f0 = meta_->markLocked(bufferType1, &frames[0]);
-          metadata::Entry f1 = meta_->markLocked(bufferType1, &frames[1]);
-          metadata::Entry f2 = meta_->markLocked(bufferType1, &frames[2]);
+          metadata::Entry& f0 = meta_->markLocked(bufferType1, &frames[0]);
+          metadata::Entry& f1 = meta_->markLocked(bufferType1, &frames[1]);
+          metadata::Entry& f2 = meta_->markLocked(bufferType1, &frames[2]);
           
-          metadata::Entry r0 = meta_->markLocked(bufferType1, &rawbuf[0]);
-          metadata::Entry r1 = meta_->markLocked(bufferType1, &rawbuf[1]);
+          metadata::Entry& r0 = meta_->markLocked(rawBuffType, &rawbuf[0]);
+          metadata::Entry& r1 = meta_->markLocked(rawBuffType, &rawbuf[1]);
 
           CHECK (LOCKED == f0.state());
           CHECK (LOCKED == f1.state());
@@ -254,6 +253,11 @@ namespace test  {
           
           //////////////////TODO: access the storage through the metadata-key
           //////////////////TODO: to a state transition on the metadata
+          f0.mark(FREE);
+          f1.mark(FREE);
+          f2.mark(FREE);
+          r0.mark(FREE);
+          r1.mark(FREE);
           
           attachTestFrame.destroyAttached (frames+0);   ////////////////////////////////////////TODO: shouldn't this happen automatically??
           attachTestFrame.destroyAttached (frames+1);
@@ -264,6 +268,10 @@ namespace test  {
           meta_->release(handle_f2);
           meta_->release(handle_r0);
           meta_->release(handle_r1);
+          
+          // manual cleanup of test allocations
+          delete[] frames;
+          delete[] rawbuf;
           
           CHECK (!meta_->isLocked(handle_f0));
           CHECK (!meta_->isLocked(handle_f1));
