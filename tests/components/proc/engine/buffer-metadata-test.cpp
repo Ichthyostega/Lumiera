@@ -37,13 +37,16 @@
 //#include <boost/format.hpp>
 #include <boost/scoped_ptr.hpp>
 #include <cstdlib>
+#include <cstring>
 //#include <iostream>
 
 //using boost::format;
 //using std::string;
 //using std::cout;
 //using util::for_each;
+using std::strncpy;
 using boost::scoped_ptr;
+using lib::test::randStr;
 using util::isnil;
 using util::isSameObject;
 
@@ -66,13 +69,24 @@ namespace test  {
     const size_t SIZE_A = 1 + rand() % TEST_MAX_SIZE;
     const size_t SIZE_B = 1 + rand() % TEST_MAX_SIZE;
     
-    const HashVal JUST_SOMETHING = 123;
-    const void* const  SOME_POINTER = &JUST_SOMETHING;
+    HashVal JUST_SOMETHING = 123;
+    void* const  SOME_POINTER = &JUST_SOMETHING;
 //  const uint TEST_SIZE = 1024*1024;
 //  const uint TEST_ELMS = 20;
-      
     
-  }
+    
+    template<typename TY>
+    TY&
+    accessAs (metadata::Entry& entry)
+    {
+      TY* ptr = reinterpret_cast<TY*> (entry.access());
+      ASSERT (ptr);
+      return *ptr;
+    }
+  }//(End) Test fixture and helpers
+  
+  
+  
   
   
   /*******************************************************************
@@ -231,16 +245,17 @@ namespace test  {
           CHECK (LOCKED == r0.state());
           CHECK (LOCKED == r1.state());
           
-          // for the TestFrame buffers, additionally we'd have to create/attach an object
-          attachTestFrame.createAttached (frames+0);   ////////////////////////////////////////TODO: shouldn't this happen automatically??
-          attachTestFrame.createAttached (frames+1);                 //////////////////////////TODO: answer: yes. Metadata is exactly the entity which has all necessary information
-          attachTestFrame.createAttached (frames+2);
           
           CHECK (f0.access() == frames+0);
           CHECK (f1.access() == frames+1);
           CHECK (f2.access() == frames+2);
           CHECK (r0.access() == rawbuf+0);
           CHECK (r1.access() == rawbuf+1);
+          
+          TestFrame defaultFrame;
+          CHECK (defaultFrame == f0.access());
+          CHECK (defaultFrame == f1.access());
+          CHECK (defaultFrame == f2.access());
           
           // at that point, we'd return BuffHandles to the client
           HashVal handle_f0(f0);
@@ -249,25 +264,41 @@ namespace test  {
           HashVal handle_r0(r0);
           HashVal handle_r1(r1);
           
-          // client uses the buffers
+          // client uses the buffers---------------------(Start)
+          accessAs<TestFrame> (f0) = testData(1);
+          accessAs<TestFrame> (f1) = testData(2);
+          accessAs<TestFrame> (f2) = testData(3);
           
-          //////////////////TODO: access the storage through the metadata-key
-          //////////////////TODO: to a state transition on the metadata
-          f0.mark(FREE);
+          CHECK (TestFrame::isAlive (f0.access()));
+          CHECK (TestFrame::isAlive (f1.access()));
+          CHECK (TestFrame::isAlive (f2.access()));
+          
+          strncpy (& accessAs<char> (r0), randStr(SIZE_B - 1).c_str(), SIZE_B);
+          strncpy (& accessAs<char> (r1), randStr(SIZE_B - 1).c_str(), SIZE_B);
+          
+          // client might trigger some state transitions
+          f0.mark(EMITTED);
+          f1.mark(EMITTED);
+          f1.mark(BLOCKED);
+          // client uses the buffers---------------------(End)
+          
+          
+          f0.mark(FREE);    // note: this implicitly invoked the embedded dtor
           f1.mark(FREE);
           f2.mark(FREE);
           r0.mark(FREE);
           r1.mark(FREE);
           
-          attachTestFrame.destroyAttached (frames+0);   ////////////////////////////////////////TODO: shouldn't this happen automatically??
-          attachTestFrame.destroyAttached (frames+1);
-          attachTestFrame.destroyAttached (frames+2);
           
           meta_->release(handle_f0);
           meta_->release(handle_f1);
           meta_->release(handle_f2);
           meta_->release(handle_r0);
           meta_->release(handle_r1);
+          
+          CHECK (TestFrame::isDead (&frames[0]));
+          CHECK (TestFrame::isDead (&frames[1]));
+          CHECK (TestFrame::isDead (&frames[2]));
           
           // manual cleanup of test allocations
           delete[] frames;

@@ -56,6 +56,25 @@ namespace test   {
       
     public:
       
+      /** Helper to verify a given memory location holds
+       *  an active TestFrame instance (created, not yet destroyed)
+       * @return true if the TestFrame datastructure is intact and
+       *         marked as still alive.
+       */
+      static bool
+      isAlive (void* memLocation)
+        {
+          UNIMPLEMENTED ("access memory as TestFrame and check internal accounting");
+        }
+      
+      /** Helper to verify a given memory location holds
+       *  an already destroyed TestFrame instance */
+      static bool
+      isDead (void* memLocation)
+        {
+          UNIMPLEMENTED ("access memory as TestFrame and verify dtor invocation");
+        }
+      
       bool
       operator== (void* memLocation)
         {

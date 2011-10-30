@@ -395,10 +395,10 @@ namespace engine {
       : public Key
       {
         BufferState state_;
-        const void* buffer_;
+        void*       buffer_;
         
       protected:
-        Entry (Key const& parent, const void* bufferPtr =0)
+        Entry (Key const& parent, void* bufferPtr =0)
           : Key (Key::forEntry (parent, bufferPtr))
           , state_(bufferPtr? LOCKED:NIL)
           , buffer_(bufferPtr)
@@ -435,8 +435,8 @@ namespace engine {
             return state_;
           }
         
-        const void*
-        access()  const
+        void*
+        access()
           {
             __must_not_be_NIL();
             __must_not_be_FREE();
@@ -458,7 +458,8 @@ namespace engine {
                ||(state_ == BLOCKED && newState == FREE))
               {
                 // allowed transition
-                if (newState == FREE) buffer_ = 0;
+                if (newState == FREE)
+                  invokeEmbeddedDtor_and_clear();
                 state_ = newState;
                 return *this;
               }
@@ -466,6 +467,29 @@ namespace engine {
             throw error::Fatal ("Invalid buffer state encountered.");
           }
         
+      protected:
+        /** @internal maybe invoke a registered TypeHandler's
+         * constructor function, which typically builds some
+         * content object into the buffer by placement new. */
+        void
+        invokeEmbeddedCtor()
+          {
+            REQUIRE (buffer_);
+            if (nontrivial (instanceFunc_))
+              instanceFunc_.createAttached (buffer_);
+          }
+        
+        /** @internal maybe invoke a registered TypeHandler's
+         * destructor function, which typically clears up some
+         * content object living within the buffer */
+        void
+        invokeEmbeddedDtor_and_clear()
+          {
+            REQUIRE (buffer_);
+            if (nontrivial (instanceFunc_))
+              instanceFunc_.destroyAttached (buffer_);
+            buffer_ = 0;
+          }
         
       private:
         void
@@ -668,9 +692,9 @@ namespace engine {
        * @note might create/register a new Entry as a side-effect 
        */ 
       Key const&
-      key (Key const& parentKey, const void* concreteBuffer)
+      key (Key const& parentKey, void* concreteBuffer)
         {
-          return get (parentKey,concreteBuffer);
+          return lock (parentKey,concreteBuffer);
         }
       
       /** core operation to access or create a concrete buffer metadata entry.
@@ -678,6 +702,11 @@ namespace engine {
        *  which denotes a buffer type, and the concrete buffer address. If yet
        *  unknown, a new concrete buffer metadata Entry is created and initialised
        *  to LOCKED state. Otherwise just the existing Entry is fetched.
+       * @note  this function really \em activates the buffer.
+       *        In case the type (Key) involves a TypeHandler (functor),
+       *        its constructor function will be invoked, if actually a new
+       *        entry gets created. Typically this mechanism will be used
+       *        to placement-create an object into the buffer.
        * @param parentKey a key describing the \em type of the buffer
        * @param concreteBuffer storage pointer, must not be NULL
        * @param onlyNew disallow fetching an existing entry
@@ -691,7 +720,7 @@ namespace engine {
        *        buffer is released or re-used later.
        */
       Entry&
-      get (Key const& parentKey, const void* concreteBuffer, bool onlyNew =false)
+      lock (Key const& parentKey, void* concreteBuffer, bool onlyNew =false)
         {
           if (!concreteBuffer)
             throw error::Invalid ("Attempt to lock a slot for a NULL buffer"
@@ -705,7 +734,7 @@ namespace engine {
                                , error::LUMIERA_ERROR_LIFECYCLE );
           
           if (!existing)
-            return table_.store (newEntry);
+            return store_and_lock (newEntry); // actual creation
           else
             return *existing;
         }
@@ -743,10 +772,45 @@ namespace engine {
         }
       
       
-      /* == memory management == */
       
-      Entry& markLocked (Key const& parentKey, const void* buffer);
-      void release (HashVal key);
+      /* == memory management operations == */
+      
+      /** combine the type (Key) with a concrete buffer,
+       *  thereby marking this buffer as locked. Store a concrete
+       *  metadata Entry to account for this fact. This might include
+       *  invoking a constructor function, in case the type (Key)
+       *  defines a (nontrivial) TypeHandler.
+       * @throw error::Fatal when locking a NULL buffer
+       * @throw exceptions which might be raised by a TypeHandler's
+       *        constructor function. In this case, the Entry remains
+       *        created, but is marked as FREE
+       */
+      Entry&
+      markLocked (Key const& parentKey, void* buffer)
+        {
+          if (!buffer)
+            throw error::Fatal ("Attempt to lock for a NULL buffer. Allocation floundered?"
+                               , error::LUMIERA_ERROR_BOTTOM_VALUE);
+          
+          return this->lock(parentKey, buffer, true); // force creation of a new entry
+        }
+      
+      /** purge the bare metadata Entry from the metadata tables.
+       * @throw error::Logic if the entry isn't marked FREE already
+       */
+      void
+      release (HashVal key)
+        {
+          Entry* entry = table_.fetch (key);
+          if (!entry) return;
+          if (entry && (FREE != entry->state()))
+            throw error::Logic ("Attempt to release a buffer still in use"
+                               , error::LUMIERA_ERROR_LIFECYCLE);
+          
+          table_.remove (key);
+        }
+      
+      
       
     private:
             
@@ -765,38 +829,26 @@ namespace engine {
           if (isKnown (key)) return;
           table_.store (Entry (key, NULL));
         }
+      
+      Entry&
+      store_and_lock (Entry const& metadata)
+        {
+          Entry& newEntry = table_.store (metadata);
+          try
+            {
+              newEntry.invokeEmbeddedCtor();  
+            }
+          catch(...)
+            {
+              newEntry.mark(FREE);
+              throw;
+            }
+          return newEntry;
+        }
 
     };
-    
-    
-    
-    
   
   
-  
-  
-  /** */
-  inline BufferMetadata::Entry&
-  BufferMetadata::markLocked (Key const& parentKey, const void* buffer)
-  {
-    if (!buffer)
-      throw error::Fatal ("Attempt to lock for a NULL buffer. Allocation floundered?"
-                         , error::LUMIERA_ERROR_BOTTOM_VALUE);
-    
-    return this->get (parentKey, buffer, true); // force creation of a new entry
-  }
-  
-  inline void
-  BufferMetadata::release (HashVal key)
-  {
-    Entry* entry = table_.fetch (key);
-    if (!entry) return;
-    if (entry && (FREE != entry->state()))
-      throw error::Logic ("Attempt to release a buffer still in use"
-                         , error::LUMIERA_ERROR_LIFECYCLE);
-    
-    table_.remove (key);
-  }
   
   
   
