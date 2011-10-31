@@ -24,16 +24,13 @@
 #include "lib/test/run.hpp"
 #include "proc/engine/testframe.hpp"
 
-//#include <iostream>
-#include <boost/scoped_ptr.hpp>
 #include <cstdlib>
 #include <limits.h>
+#include <boost/scoped_ptr.hpp>
 
 using test::Test;
-//using std::cout;
 using std::rand;
 using boost::scoped_ptr;
-//using std::memset;
 
 
 namespace engine{
@@ -52,7 +49,6 @@ namespace test  {
       while (count--)
         accessor[offset+count] = rand() % CHAR_MAX;
     }
-        
   } // (End) internal defs
   
   
@@ -153,7 +149,7 @@ namespace test  {
           for (uint nr=1; nr<NUM_FRAMES; ++nr)
             for (uint i=0; i<CHAN_COUNT; ++i)
               {
-                prevFrames[i].swap (thisFrames[i]);
+                thisFrames[i].swap (prevFrames[i]);
                 thisFrames[i].reset (new TestFrame(nr, i));
                 CHECK (thisFrames[i]->isSane());
                 CHECK (prevFrames[i]->isSane());
@@ -161,12 +157,12 @@ namespace test  {
                 
                 CHECK (*thisFrames[i] != *prevFrames[i]);        // differs from predecessor in the same channel
                 
-                for (uint j=0; j<CHAN_COUNT; ++j)
-                  if (j!=i)
-                    {
-                      CHECK (*thisFrames[i] != *thisFrames[j]);  // differs from frames in other channels at this point
-                      CHECK (*thisFrames[i] != *prevFrames[j]);  // differs cross wise from predecessors in other channels
-        }     }     }
+                for (uint j=0; j<i; ++j)
+                  {
+                    ENSURE (j!=i);
+                    CHECK (*thisFrames[i] != *thisFrames[j]);  // differs from frames in other channels at this point
+                    CHECK (*thisFrames[i] != *prevFrames[j], "nr=%d, i=%d, j=%d", nr, i,j); ///////FIXME getting matches here  // differs cross wise from predecessors in other channels
+        }     }   }
     };
   
   

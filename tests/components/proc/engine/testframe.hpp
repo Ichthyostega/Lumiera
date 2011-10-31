@@ -49,7 +49,14 @@ namespace test   {
    * Placeholder functions are provided for assignment (simulating the actual
    * calculations); additional diagnostic functions allow to verify the
    * performed operations after-the fact
-   *  
+   * 
+   * Each TestFrame is automatically filled with pseudo random data;
+   * multiple frames are arranged in sequences and channels, causing the random data
+   * to be reproducible yet different in each frame. The lifecycle of each TestFrame
+   * is tracked and marked in an embedded state field. Moreover, the contents of
+   * the data block can be verified, because the sequence of bytes is reproducible,
+   * based on the channel and sequence number of the test frame.
+   * 
    * @todo WIP-WIP-WIP 9/11
    * 
    */
@@ -94,13 +101,29 @@ namespace test   {
       
     private:
       bool contentEquals (TestFrame const& o)  const;
+      bool verifyData()    const;
+      char generate (char) const;
+      
+      void buildData ();
     };
   
   
   
-  TestFrame testData (uint seqNr);
+  /** Helper to access a specific frame of test data at a fixed memory location.
+   *  The series of test frames is generated on demand, but remains in memory thereafter,
+   *  similar to real data accessible from some kind of source stream. Each of these generated
+   *  test frames filled with different yet reproducible pseudo random data.
+   *  Client code is free to access and corrupt this data.
+   */
+  TestFrame& testData (uint seqNr);
   
-  TestFrame testData (uint chanNr, uint seqNr);
+  TestFrame& testData (uint chanNr, uint seqNr);
+  
+  
+  /** discards all the TestFrame instances and
+   *  initialises an empty table of test frames */
+  void resetTestFrames();
+
   
   
   

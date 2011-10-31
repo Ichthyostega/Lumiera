@@ -24,9 +24,14 @@
 #include "proc/engine/testframe.hpp"
 #include "lib/error.hpp"
 
+#include <boost/scoped_ptr.hpp>
+
+#include <limits.h>
 #include <cstring>
+#include <vector>
 
 using std::memcpy;
+using std::vector;
 
 namespace engine {
 namespace test   {
@@ -36,16 +41,141 @@ namespace test   {
   
   namespace { // hidden local support facilities....
     
+    /** @internal helper for generating unique test frames.
+     * The "discriminator" is used as a stepping size when
+     * filling the test frame data buffers. It is generated
+     * to be different on adjacent frames of the same series,
+     * as well as to differ to all near by neighbouring channels.
+     * @param seq the sequence number of the frame within the channel
+     * @param family the channel this frame belongs to
+     */
+    uint64_t
+    generateDiscriminator(uint seq, uint family)
+    {
+      // random offset, but fixed per executable run
+      static uint base(10 + rand() % 90);
+      
+      // use the family as stepping
+      return (seq+1) * (base+family);
+    }
+    
+    
+    TestFrame&
+    accessAsTestFrame (void* memoryLocation)
+    {
+      REQUIRE (memoryLocation);
+      return *reinterpret_cast<TestFrame*> (memoryLocation);
+    }
+    
+    
+    /**
+     * @internal table to hold test data frames.
+     * These frames are built on demand, but retained thereafter.
+     * Some tests might rely on the actual memory locations, using the
+     * test frames to simulate a real input frame data stream.
+     * @param CHA the maximum number of channels to expect
+     * @param FRA the maximum number of frames to expect per channel 
+     * @warning choose the maximum number parameters wisely.
+     *          We're allocating memory to hold a table of test frames
+     *          e.g. sizeof(TestFrame) * 20channels * 100frames ≈ 2 MiB
+     *          The table uses vectors, and thus will grow on demand,
+     *          but this might cause existing frames to be relocated in memory;
+     *          some tests might rely on fixed memory locations. Just be cautious!
+     */
+    template<uint CHA, uint FRA>
+    struct TestFrameTable
+      : vector<vector<TestFrame> >
+      {
+        typedef vector<vector<TestFrame> > VECT;
+        
+        TestFrameTable()
+          : VECT(CHA)
+          {
+            for (uint i=0; i<CHA; ++i)
+              at(i).reserve(FRA);
+          }
+        
+        TestFrame&
+        getFrame (uint seqNr, uint chanNr=0)
+          {
+            if (chanNr >= this->size())
+              {
+                WARN (test, "Growing table of test frames to %d channels, "
+                            "which is > the default (%d)", chanNr, CHA);
+                resize(chanNr+1);
+              }
+            ENSURE (chanNr < this->size());
+            vector<TestFrame>& channel = at(chanNr);
+            
+            if (seqNr >= channel.size())
+              {
+                WARN_IF (seqNr >= FRA, test,
+                         "Growing channel #%d of test frames to %d elements, "
+                            "which is > the default (%d)", chanNr, seqNr, FRA);
+                for (uint i=channel.size(); i<=seqNr; ++i)
+                  channel.push_back (TestFrame (seqNr,chanNr));
+              }
+            ENSURE (seqNr < channel.size());
+            
+            return channel[seqNr];
+          }
+      };
+    
+    const uint INITIAL_CHAN = 20;
+    const uint INITIAL_FRAMES = 100;
+    
+    typedef TestFrameTable<INITIAL_CHAN,INITIAL_FRAMES> TestFrames;
+    
+    boost::scoped_ptr<TestFrames> testFrames;
+    
+    TestFrame&
+    accessTestFrame (uint seqNr, uint chanNr)
+    {
+      if (!testFrames) testFrames.reset (new TestFrames);
+      
+      return testFrames->getFrame(seqNr,chanNr);
+    }
+    
   } // (End) hidden impl details
   
   
-  TestFrame::~TestFrame() { }  // emit VTables here....
+  
+  
+  TestFrame&
+  testData (uint seqNr)
+  {
+    return accessTestFrame (seqNr, 0);
+  }
+  
+  TestFrame&
+  testData (uint chanNr, uint seqNr)
+  {
+    return accessTestFrame (seqNr,chanNr);
+  }
+  
+  void
+  resetTestFrames()
+  {
+    testFrames.reset(0);
+  }
+  
+  
+  
+  
+  
+  TestFrame::~TestFrame()
+    {
+      stage_ = DISCARDED;
+    }
   
   
   TestFrame::TestFrame(uint seq, uint family)
-    : discriminator_()
+    : discriminator_(generateDiscriminator(seq,family))
     , stage_(CREATED)
-    { }
+    {
+      ASSERT (0 < discriminator_);
+      buildData();
+    }
   
   
   TestFrame::TestFrame (TestFrame const& o)
@@ -71,70 +201,90 @@ namespace test   {
   
   
   
-  /** whether this output slot is occupied
-   * @return true if currently unconnected and
-   *         able to connect and handle output data 
+  /** @note performing an unchecked conversion of the given
+   *        memory location to be accessed as TestFrame.
+   *        The sanity of the data found at that location
+   *        is checked as well, not only the lifecycle flag.
    */
   bool
   TestFrame::isAlive (void* memLocation)
   {
-    UNIMPLEMENTED ("access memory as TestFrame and check internal accounting");
+    TestFrame& candidate (accessAsTestFrame (memLocation));
+    return candidate.isSane()
+        && candidate.isAlive();
   }
   
-  /** Helper to verify a given memory location holds
-   *  an already destroyed TestFrame instance */
   bool
   TestFrame::isDead (void* memLocation)
   {
-    UNIMPLEMENTED ("access memory as TestFrame and verify dtor invocation");
+    TestFrame& candidate (accessAsTestFrame (memLocation));
+    return candidate.isSane()
+        && candidate.isDead();
   }
   
   bool
   TestFrame::operator== (void* memLocation)  const
   {
-    UNIMPLEMENTED ("verify contents of an arbitrary memory location");
+    TestFrame& candidate (accessAsTestFrame (memLocation));
+    return candidate.isSane()
+        && candidate == *this;
   }
   
   bool
   TestFrame::contentEquals (TestFrame const& o)  const
   {
-    UNIMPLEMENTED ("equality of test data frames");
+    for (uint i=0; i<BUFFSIZ; ++i)
+      if (data_[i] != o.data_[i])
+        return false;
+    return true;
   }
+  
+  bool
+  TestFrame::verifyData()  const
+  {
+    char c(0);
+    for (uint i=0; i<BUFFSIZ; ++i)
+      if (data_[i] != (c=generate(c)))
+        return false;
+    return true;
+  }
+  
+  void
+  TestFrame::buildData()
+  {
+    char c(0);
+    for (uint i=0; i<BUFFSIZ; ++i)
+      data_[i] = (c=generate(c));
+  }
+  
+  char
+  TestFrame::generate (char prev)  const
+  {
+    return (discriminator_ + prev) % CHAR_MAX;
+  }
+  
   
   bool
   TestFrame::isAlive() const
   {
-    UNIMPLEMENTED ("sanity & lifecycle");
+    return (CREATED == stage_)
+        || (EMITTED == stage_);
   }
   
   bool
   TestFrame::isDead()  const
   {
-    UNIMPLEMENTED ("sanity & lifecycle");
+    return (DISCARDED == stage_);
   }
   
   bool
   TestFrame::isSane()  const
   {
-    UNIMPLEMENTED ("sanity & lifecycle");
+    return ( (CREATED == stage_)
+           ||(EMITTED == stage_)
+           ||(DISCARDED == stage_))
+        && verifyData();
   }
-  
-
-  
-  
-  
-  TestFrame
-  testData (uint seqNr)
-  {
-    UNIMPLEMENTED ("build, memorise and expose test data frames on demand");
-  }
-  
-  TestFrame
-  testData (uint chanNr, uint seqNr)
-  {
-    UNIMPLEMENTED ("build, memorise and expose test data frames on demand (multi-channel)");
-  }
-
   
   
   
