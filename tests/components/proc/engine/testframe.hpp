@@ -25,22 +25,13 @@
 #define PROC_ENGINE_TESTFRAME_H
 
 
-//#include "lib/time/timevalue.hpp"
-
-//#include <string>
 #include <cstdlib>
 #include <stdint.h>
-
-
-//using std::tr1::shared_ptr;
-//using std::string;
 
 
 namespace engine {
 namespace test   {
   
-  
-//class TestPlacement;
   
   /**
    * Mock data frame for simulated rendering.
@@ -52,12 +43,13 @@ namespace test   {
    * 
    * Each TestFrame is automatically filled with pseudo random data;
    * multiple frames are arranged in sequences and channels, causing the random data
-   * to be reproducible yet different in each frame. The lifecycle of each TestFrame
-   * is tracked and marked in an embedded state field. Moreover, the contents of
-   * the data block can be verified, because the sequence of bytes is reproducible,
+   * to be reproducible yet different within each frame. TestFrame's lifecycle is
+   * tracked and marked in an embedded state field. Moreover, the contents of the
+   * data block can be verified, because the sequence of bytes is reproducible,
    * based on the channel and sequence number of the test frame.
    * 
-   * @todo WIP-WIP-WIP 9/11
+   * @see TestFrame_test
+   * @see OutputSlotProtocol_test
    * 
    */
   class TestFrame
@@ -68,7 +60,7 @@ namespace test   {
       
       static const size_t BUFFSIZ = 1024;
       
-      uint64_t discriminator_;
+      uint64_t distinction_;
       StageOfLife stage_;
       
       char data_[BUFFSIZ];
@@ -79,7 +71,7 @@ namespace test   {
       TestFrame (TestFrame const&);
       TestFrame& operator= (TestFrame const&);
       
-      /** Helper to verify a given memory location holds
+      /** Helper to verify that a given memory location holds
        *  an active TestFrame instance (created, not yet destroyed)
        * @return true if the TestFrame datastructure is intact and
        *         marked as still alive.
@@ -101,9 +93,7 @@ namespace test   {
       
     private:
       bool contentEquals (TestFrame const& o)  const;
-      bool verifyData()    const;
-      char generate (char) const;
-      
+      bool verifyData()  const;
       void buildData ();
     };
   
@@ -124,11 +114,6 @@ namespace test   {
    *  initialises an empty table of test frames */
   void resetTestFrames();
 
-  
-  
-  
-  /* == some test data to check == */
-  // extern const lib::time::Duration LENGTH_TestClip;
   
   
 }} // namespace engine::test

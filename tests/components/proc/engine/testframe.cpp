@@ -24,17 +24,22 @@
 #include "proc/engine/testframe.hpp"
 #include "lib/error.hpp"
 
+#include <boost/random/linear_congruential.hpp>
 #include <boost/scoped_ptr.hpp>
 
 #include <limits.h>
 #include <cstring>
 #include <vector>
 
-using std::memcpy;
-using std::vector;
+
 
 namespace engine {
 namespace test   {
+  
+  using std::vector;
+  using std::memcpy;
+  
+  typedef boost::rand48 PseudoRandom;
   
   
   namespace error = lumiera::error;
@@ -42,7 +47,7 @@ namespace test   {
   namespace { // hidden local support facilities....
     
     /** @internal helper for generating unique test frames.
-     * The "discriminator" is used as a stepping size when
+     * This "discriminator" is used as a random seed when
      * filling the test frame data buffers. It is generated
      * to be different on adjacent frames of the same series,
      * as well as to differ to all near by neighbouring channels.
@@ -50,10 +55,10 @@ namespace test   {
      * @param family the channel this frame belongs to
      */
     uint64_t
-    generateDiscriminator(uint seq, uint family)
+    generateDistinction(uint seq, uint family)
     {
       // random offset, but fixed per executable run
-      static uint base(10 + rand() % 90);
+      static uint base(10 + rand() % 990);
       
       // use the family as stepping
       return (seq+1) * (base+family);
@@ -128,6 +133,7 @@ namespace test   {
     
     boost::scoped_ptr<TestFrames> testFrames;
     
+    
     TestFrame&
     accessTestFrame (uint seqNr, uint chanNr)
     {
@@ -162,6 +168,7 @@ namespace test   {
   
   
   
+  /* ===== TestFrame class ===== */
   
   TestFrame::~TestFrame()
     {
@@ -170,16 +177,16 @@ namespace test   {
   
   
   TestFrame::TestFrame(uint seq, uint family)
-    : discriminator_(generateDiscriminator(seq,family))
+    : distinction_(generateDistinction (seq,family))
     , stage_(CREATED)
     {
-      ASSERT (0 < discriminator_);
+      ASSERT (0 < distinction_);
       buildData();
     }
   
   
   TestFrame::TestFrame (TestFrame const& o)
-    : discriminator_(o.discriminator_)
+    : distinction_(o.distinction_)
     , stage_(CREATED)
     {
       memcpy (data_, o.data_, BUFFSIZ);
@@ -192,7 +199,7 @@ namespace test   {
         throw new error::Logic ("target TestFrame is already dead");
       if (this != &o)
         {
-          discriminator_ = o.discriminator_;
+          distinction_ = o.distinction_;
           stage_ = CREATED;
           memcpy (data_, o.data_, BUFFSIZ);
         }
@@ -242,9 +249,9 @@ namespace test   {
   bool
   TestFrame::verifyData()  const
   {
-    char c(0);
+    PseudoRandom gen(distinction_);
     for (uint i=0; i<BUFFSIZ; ++i)
-      if (data_[i] != (c=generate(c)))
+      if (data_[i] != (gen() % CHAR_MAX))
         return false;
     return true;
   }
@@ -252,15 +259,9 @@ namespace test   {
   void
   TestFrame::buildData()
   {
-    char c(0);
+    PseudoRandom gen(distinction_);
     for (uint i=0; i<BUFFSIZ; ++i)
-      data_[i] = (c=generate(c));
-  }
-  
-  char
-  TestFrame::generate (char prev)  const
-  {
-    return (discriminator_ + prev) % CHAR_MAX;
+      data_[i] = (gen() % CHAR_MAX);
   }
   
   

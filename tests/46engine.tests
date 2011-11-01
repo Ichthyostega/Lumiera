@@ -2,7 +2,7 @@ TESTING "Component Test Suite: Render Engine parts" ./test-components --group=en
 
 
 
-PLANNED "Test support: dummy frames" TestFrame_test <<END
+TEST "Test support: dummy frames" TestFrame_test <<END
 return: 0
 END
 
