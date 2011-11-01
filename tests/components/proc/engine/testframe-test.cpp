@@ -23,6 +23,7 @@
 
 #include "lib/test/run.hpp"
 #include "proc/engine/testframe.hpp"
+#include "lib/util.hpp"
 
 #include <cstdlib>
 #include <limits.h>
@@ -30,12 +31,13 @@
 
 using test::Test;
 using std::rand;
+using util::isSameObject;
 using boost::scoped_ptr;
 
 
 namespace engine{
 namespace test  {
-
+  
   namespace { // used internally
     
     const uint CHAN_COUNT = 30;     // independent families of test frames to generate
@@ -76,6 +78,7 @@ namespace test  {
           verifyBasicProperties();
           verifyFrameLifecycle();
           verifyFrameSeries();
+          useFrameTable();
         }
       
       
@@ -155,14 +158,45 @@ namespace test  {
                 CHECK (prevFrames[i]->isSane());
                 CHECK (prevFrames[i]->isAlive());
                 
-                CHECK (*thisFrames[i] != *prevFrames[i]);        // differs from predecessor in the same channel
+                CHECK (*thisFrames[i] != *prevFrames[i]);      // differs from predecessor within the same channel
                 
                 for (uint j=0; j<i; ++j)
                   {
                     ENSURE (j!=i);
                     CHECK (*thisFrames[i] != *thisFrames[j]);  // differs from frames in other channels at this point
-                    CHECK (*thisFrames[i] != *prevFrames[j], "nr=%d, i=%d, j=%d", nr, i,j); ///////FIXME getting matches here  // differs cross wise from predecessors in other channels
+                    CHECK (*thisFrames[i] != *prevFrames[j]);  // differs cross wise from predecessors in other channels
         }     }   }
+      
+      
+      /** @test the table of test frames
+       *        computed on demand */
+      void
+      useFrameTable()
+        {
+          TestFrame& frX = testData(3,50);
+          TestFrame& frY = testData(3,25);
+          TestFrame& frZ = testData(3,50);
+          
+          CHECK (frX.isSane());
+          CHECK (frY.isSane());
+          CHECK (frZ.isSane());
+          
+          CHECK (frX != frY);
+          CHECK (frX == frZ);
+          CHECK (frY != frZ);
+          
+          CHECK (isSameObject (frX, frZ));
+          
+          corruptMemory(&frZ,40,20);
+          CHECK (!frX.isSane());
+          CHECK (!testData(3,50).isSane());
+          CHECK ( testData(3,51).isSane());
+          CHECK ( testData(3,49).isSane());
+          
+          resetTestFrames();
+          
+          CHECK ( testData(3,50).isSane());
+        }
     };
   
   

@@ -118,7 +118,7 @@ namespace test   {
                          "Growing channel #%d of test frames to %d elements, "
                             "which is > the default (%d)", chanNr, seqNr, FRA);
                 for (uint i=channel.size(); i<=seqNr; ++i)
-                  channel.push_back (TestFrame (seqNr,chanNr));
+                  channel.push_back (TestFrame (i,chanNr));
               }
             ENSURE (seqNr < channel.size());
             
