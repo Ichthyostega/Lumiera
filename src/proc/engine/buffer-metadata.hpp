@@ -31,7 +31,7 @@
  ** - that overall storage size available within the buffer
  ** - a pair of custom \em creator and \em destructor functions to use together with this buffer
  ** - an additional client key to distinguish otherwise otherwise identical client requests
- ** These three distinctions are applied in sequence, thus forming a tree with 3 levels.
+ ** These three distinctions are applied in sequence, thus forming a type tree with 3 levels.
  ** Only the first distinguishing level (the size) is mandatory. The others are provided,
  ** because some of the foreseeable buffer providers allow to re-access the data placed
  ** into the buffer, by assigning an internally managed ID to the buffer. The most
@@ -85,13 +85,20 @@ namespace engine {
   
   
   
+  
+  /**
+   * Buffer states
+   * usable within BufferProvider
+   * and stored within the metadata
+   */
   enum BufferState
-    { NIL,
-      FREE,
-      LOCKED,
-      EMITTED,
-      BLOCKED
+    { NIL,        ///< abstract entry, not yet allocated
+      FREE,       ///< allocated buffer, no longer in use
+      LOCKED,     ///< allocated buffer actively in use
+      EMITTED,    ///< allocated buffer, returned from client
+      BLOCKED     ///< allocated buffer blocked by protocol failure
     };
+  
   
   
   /**
@@ -131,7 +138,7 @@ namespace engine {
     };
   
   
-  namespace { // Helpers for construction within the buffer...
+  namespace { // (optional) helpers to build an object embedded within the buffer...
     
     template<class X>
     inline void
@@ -155,6 +162,7 @@ namespace engine {
       embedded->~X();
     }
   }//(End)placement-new helpers
+  
   
   
   /**
@@ -263,7 +271,7 @@ namespace engine {
   
   
   
-  /* === Implementation === */
+  /* === Metadata Implementation === */
   
   namespace metadata {
     
@@ -279,6 +287,7 @@ namespace engine {
           return accumulatedHash;
         }
     }
+    
     
     /**
      * Description of a Buffer-"type".
@@ -372,6 +381,12 @@ namespace engine {
           }
         
         
+        LocalKey const&
+        localKey()  const
+          {
+            return specifics_;
+          }
+        
         HashVal parentKey()  const { return parent_;}
         operator HashVal()   const { return hashID_;}
       };
@@ -425,7 +440,7 @@ namespace engine {
         bool
         isTypeKey()  const
           {
-            return !bool(buffer_);
+            return NIL == state_ && !buffer_;
           }
         
         
@@ -445,13 +460,15 @@ namespace engine {
             return buffer_;
           }
         
+        /** Buffer state machine */
         Entry&
         mark (BufferState newState)
           {
             __must_not_be_NIL();
-            __must_not_be_FREE();
             
-            if ( (state_ == LOCKED  && newState == EMITTED)
+            if ( (state_ == FREE    && newState == LOCKED)
+               ||(state_ == LOCKED  && newState == EMITTED)
+               ||(state_ == LOCKED  && newState == BLOCKED)
                ||(state_ == LOCKED  && newState == FREE)
                ||(state_ == EMITTED && newState == BLOCKED)
                ||(state_ == EMITTED && newState == FREE)
@@ -460,12 +477,23 @@ namespace engine {
                 // allowed transition
                 if (newState == FREE)
                   invokeEmbeddedDtor_and_clear();
+                if (newState == LOCKED)
+                  invokeEmbeddedCtor();
                 state_ = newState;
                 return *this;
               }
             
-            throw error::Fatal ("Invalid buffer state encountered.");
+            throw error::Fatal ("Invalid buffer state transition.");
           }
+        
+        Entry&
+        lock (void* newBuffer)
+          {
+            __must_be_FREE();
+            buffer_ = newBuffer;
+            return mark (LOCKED);
+          }
+        
         
       protected:
         /** @internal maybe invoke a registered TypeHandler's
@@ -474,7 +502,7 @@ namespace engine {
         void
         invokeEmbeddedCtor()
           {
-            REQUIRE (buffer_);
+            __buffer_required();
             if (nontrivial (instanceFunc_))
               instanceFunc_.createAttached (buffer_);
           }
@@ -485,7 +513,7 @@ namespace engine {
         void
         invokeEmbeddedDtor_and_clear()
           {
-            REQUIRE (buffer_);
+            __buffer_required();
             if (nontrivial (instanceFunc_))
               instanceFunc_.destroyAttached (buffer_);
             buffer_ = 0;
@@ -510,9 +538,27 @@ namespace engine {
                                     "You should invoke markLocked(buffer) prior to access."
                                    , LUMIERA_ERROR_LIFECYCLE );
           }
+        
+        void
+        __must_be_FREE()  const
+          {
+            if (FREE != state_)
+                throw error::Logic ("Buffer already in use"
+                                   , LUMIERA_ERROR_LIFECYCLE );
+            REQUIRE (!buffer_, "Buffer marked as free, "
+                               "but buffer pointer is set.");
+          }
+        
+        void
+        __buffer_required()  const
+          {
+            if (!buffer_)
+                throw error::Fatal ("Need concrete buffer for any further operations");
+          }
       };
     
     
+      
     /**
      * (Hash)Table to store and manage buffer metadata.
      * Buffer metadata entries are comprised of a Key part and an extended
@@ -617,6 +663,21 @@ namespace engine {
   
   
   
+  /* ===== Buffer Metadata Frontend ===== */
+  
+  /**
+   * Registry for managing buffer metadata.
+   * This is an implementation level service,
+   * used by the standard BufferProvider implementation.
+   * Each metadata registry (instance) defines and maintains
+   * a family of "buffer types"; beyond the buffer storage size,
+   * the concrete meaning of those types is tied to the corresponding
+   * BufferProvider implementation and remains opaque. These types are
+   * represented as hierarchically linked hash keys. The implementation
+   * may bind a TypeHandler to a specific type, allowing automatic invocation
+   * of a "constructor" and "destructor" function on each buffer of this type,
+   * when \em locking or \em freeing the corresponding buffer.
+   */
   class BufferMetadata
     : boost::noncopyable
     {
@@ -625,8 +686,8 @@ namespace engine {
       
       metadata::Table table_;
       
-    public:
       
+    public:
       typedef metadata::Key Key;
       typedef metadata::Entry Entry;
       
@@ -634,8 +695,8 @@ namespace engine {
        *  Such will maintain a family of buffer type entries
        *  and provide a service for storing and retrieving metadata
        *  for concrete buffer entries associated with these types.
-       * @param implementationID to distinguish families
-       *        of type keys belonging to different registries.
+       * @param implementationID to distinguish families of
+       *        type keys belonging to different registries.
        */
       BufferMetadata (Literal implementationID)
         : id_(implementationID)
@@ -661,14 +722,10 @@ namespace engine {
           Key typeKey = trackKey (family_, storageSize);
           
           if (nontrivial(instanceFunc))
-            {
               typeKey = trackKey (typeKey, instanceFunc);
-            }
           
           if (nontrivial(specifics))
-            {
               typeKey = trackKey (typeKey, specifics);
-            }
           
           return typeKey;
         }
@@ -680,7 +737,8 @@ namespace engine {
           return trackKey (parentKey, instanceFunc);
         }
       
-      /** create a sub-type, using a different private-ID (implementation defined) */
+      /** create a sub-type,
+       *  using a different private-ID (implementation defined) */
       Key
       key (Key const& parentKey, LocalKey specifics)
         {
@@ -694,7 +752,11 @@ namespace engine {
       Key const&
       key (Key const& parentKey, void* concreteBuffer)
         {
-          return lock (parentKey,concreteBuffer);
+          Key derivedKey = Key::forEntry (parentKey, concreteBuffer);
+          Entry* existing = table_.fetch (derivedKey);
+          
+          return existing? *existing
+                         : markLocked (parentKey,concreteBuffer);
         }
       
       /** core operation to access or create a concrete buffer metadata entry.
@@ -728,15 +790,19 @@ namespace engine {
           
           Entry newEntry(parentKey, concreteBuffer);
           Entry* existing = table_.fetch (newEntry);
+          
           if (existing && onlyNew)
             throw error::Logic ("Attempt to lock a slot for a new buffer, "
-                                "while actually the old buffer is still locked."
+                                "while actually the old buffer is still locked"
+                               , error::LUMIERA_ERROR_LIFECYCLE );
+          if (existing && existing->isLocked())
+            throw error::Logic ("Attempt to re-lock a buffer still in use"
                                , error::LUMIERA_ERROR_LIFECYCLE );
           
           if (!existing)
             return store_and_lock (newEntry); // actual creation
           else
-            return *existing;
+            return existing->lock (concreteBuffer);
         }
       
       /** access the metadata record registered with the given hash key.
@@ -812,7 +878,7 @@ namespace engine {
       
       
       
-    private:
+    private: 
             
       template<typename PAR, typename DEF>
       Key
@@ -836,7 +902,9 @@ namespace engine {
           Entry& newEntry = table_.store (metadata);
           try
             {
-              newEntry.invokeEmbeddedCtor();  
+              newEntry.invokeEmbeddedCtor();
+              ENSURE (LOCKED == newEntry.state());
+              ENSURE (newEntry.access());
             }
           catch(...)
             {
@@ -845,7 +913,6 @@ namespace engine {
             }
           return newEntry;
         }
-
     };
   
   

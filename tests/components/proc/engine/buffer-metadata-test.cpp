@@ -24,40 +24,25 @@
 #include "lib/error.hpp"
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
-//#include "lib/util-foreach.hpp"
 #include "lib/util.hpp"
-//#include "proc/play/diagnostic-output-slot.hpp"
-//#include "proc/engine/testframe.hpp"
-//#include "proc/engine/diagnostic-buffer-provider.hpp"
 #include "proc/engine/buffer-metadata.hpp"
 #include "proc/engine/testframe.hpp"
-//#include "proc/engine/buffhandle.hpp"
-//#include "proc/engine/bufftable.hpp"
 
-//#include <boost/format.hpp>
 #include <boost/scoped_ptr.hpp>
 #include <cstdlib>
 #include <cstring>
-//#include <iostream>
 
-//using boost::format;
-//using std::string;
-//using std::cout;
-//using util::for_each;
 using std::strncpy;
 using boost::scoped_ptr;
 using lib::test::randStr;
-using util::isnil;
 using util::isSameObject;
+using util::isnil;
 
 
 namespace engine{
 namespace test  {
   
-
-//  using lib::AllocationCluster;
-//  using mobject::session::PEffect;
-//  using ::engine::BuffHandle;
+  using lumiera::error::LUMIERA_ERROR_FATAL;
   using lumiera::error::LUMIERA_ERROR_INVALID;
   using lumiera::error::LUMIERA_ERROR_LIFECYCLE;
   
@@ -71,8 +56,6 @@ namespace test  {
     
     HashVal JUST_SOMETHING = 123;
     void* const  SOME_POINTER = &JUST_SOMETHING;
-//  const uint TEST_SIZE = 1024*1024;
-//  const uint TEST_ELMS = 20;
     
     
     template<typename TY>
@@ -84,6 +67,7 @@ namespace test  {
       return *ptr;
     }
   }//(End) Test fixture and helpers
+  
   
   
   
@@ -105,6 +89,7 @@ namespace test  {
           CHECK (ensure_proper_fixture());
           verifyBasicProperties();
           verifyStandardCase();
+          verifyStateMachine();
         }
       
       
@@ -151,8 +136,8 @@ namespace test  {
           CHECK (NIL == m1.state());
           CHECK (!meta_->isLocked(key));
           
-          VERIFY_ERROR (LIFECYCLE, m1.mark(EMITTED) );
-          VERIFY_ERROR (LIFECYCLE, m1.mark(LOCKED)  );
+          VERIFY_ERROR (LIFECYCLE, m1.mark(EMITTED));
+          VERIFY_ERROR (LIFECYCLE, m1.mark(FREE)   );
           
           // now create an active (buffer) entry
           metadata::Entry& m2 = meta_->markLocked (key, SOME_POINTER);
@@ -186,7 +171,7 @@ namespace test  {
           CHECK ( meta_->isKnown(keyX));
           CHECK ( meta_->isKnown(key1));
           VERIFY_ERROR (LIFECYCLE, m2.access());
-          VERIFY_ERROR (LIFECYCLE, m2.mark(LOCKED));
+          VERIFY_ERROR (FATAL, m2.mark(LOCKED));         // buffer missing
           CHECK ( isSameObject (m2, meta_->get(keyX))); // still accessible
           
           // release buffer...
@@ -202,8 +187,8 @@ namespace test  {
        *  @note to get the big picture, please refer to
        *        BufferProviderProtocol_test#verifyStandardCase()
        *        This testcase here performs precisely the metadata related
-       *        operations necessary to carry out the standard case outlined
-       *        in that more high level test.
+       *        operations necessary to carry out the standard case
+       *        outlined on a higher level in the mentioned test.
        */
       void
       verifyStandardCase()
@@ -238,12 +223,18 @@ namespace test  {
           
           metadata::Entry& r0 = meta_->markLocked(rawBuffType, &rawbuf[0]);
           metadata::Entry& r1 = meta_->markLocked(rawBuffType, &rawbuf[1]);
-
+          
           CHECK (LOCKED == f0.state());
           CHECK (LOCKED == f1.state());
           CHECK (LOCKED == f2.state());
           CHECK (LOCKED == r0.state());
           CHECK (LOCKED == r1.state());
+          
+          CHECK (transaction1 == f0.localKey());
+          CHECK (transaction1 == f1.localKey());
+          CHECK (transaction1 == f2.localKey());
+          CHECK (transaction2 == r0.localKey());
+          CHECK (transaction2 == r1.localKey());
           
           
           CHECK (f0.access() == frames+0);
@@ -269,6 +260,10 @@ namespace test  {
           accessAs<TestFrame> (f1) = testData(2);
           accessAs<TestFrame> (f2) = testData(3);
           
+          CHECK (testData(1) == frames[0]);
+          CHECK (testData(2) == frames[1]);
+          CHECK (testData(3) == frames[2]);
+          
           CHECK (TestFrame::isAlive (f0.access()));
           CHECK (TestFrame::isAlive (f1.access()));
           CHECK (TestFrame::isAlive (f2.access()));
@@ -283,7 +278,7 @@ namespace test  {
           // client uses the buffers---------------------(End)
           
           
-          f0.mark(FREE);    // note: this implicitly invoked the embedded dtor
+          f0.mark(FREE);    // note: implicitly invoking the embedded dtor
           f1.mark(FREE);
           f2.mark(FREE);
           r0.mark(FREE);
@@ -296,7 +291,7 @@ namespace test  {
           meta_->release(handle_r0);
           meta_->release(handle_r1);
           
-          CHECK (TestFrame::isDead (&frames[0]));
+          CHECK (TestFrame::isDead (&frames[0]));  // was destroyed implicitly
           CHECK (TestFrame::isDead (&frames[1]));
           CHECK (TestFrame::isDead (&frames[2]));
           
@@ -309,9 +304,93 @@ namespace test  {
           CHECK (!meta_->isLocked(handle_f2));
           CHECK (!meta_->isLocked(handle_r0));
           CHECK (!meta_->isLocked(handle_r1));
+        }
+      
+      
+      void
+      verifyStateMachine()
+        {
+          // start with building a type key....
+          metadata::Key key = meta_->key(SIZE_A);
+          CHECK (NIL == meta_->get(key).state());
+          CHECK (meta_->get(key).isTypeKey());
+          CHECK (!meta_->isLocked(key));
           
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #834
-#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #834
+          VERIFY_ERROR (LIFECYCLE, meta_->get(key).mark(LOCKED) );
+          VERIFY_ERROR (LIFECYCLE, meta_->get(key).mark(EMITTED));
+          VERIFY_ERROR (LIFECYCLE, meta_->get(key).mark(BLOCKED));
+          VERIFY_ERROR (LIFECYCLE, meta_->get(key).mark(FREE) );
+          VERIFY_ERROR (LIFECYCLE, meta_->get(key).mark(NIL) );
+          
+          // now build a concrete buffer entry
+          metadata::Entry& entry = meta_->markLocked(key, SOME_POINTER);
+          CHECK (LOCKED == entry.state());
+          CHECK (!entry.isTypeKey());
+          
+          CHECK (SOME_POINTER == entry.access());
+          
+          VERIFY_ERROR (FATAL, entry.mark(LOCKED) );  // invalid state transition
+          VERIFY_ERROR (FATAL, entry.mark(NIL) );
+          
+          entry.mark (EMITTED);                       // valid transition
+          CHECK (EMITTED == entry.state());
+          CHECK (entry.isLocked());
+          
+          VERIFY_ERROR (FATAL, entry.mark(LOCKED) );
+          VERIFY_ERROR (FATAL, entry.mark(EMITTED));
+          VERIFY_ERROR (FATAL, entry.mark(NIL) );
+          CHECK (EMITTED == entry.state());
+          
+          entry.mark (FREE);
+          CHECK (FREE == entry.state());
+          CHECK (!entry.isLocked());
+          CHECK (!entry.isTypeKey());
+          
+          VERIFY_ERROR (LIFECYCLE, entry.access() );
+          VERIFY_ERROR (FATAL, entry.mark(LOCKED) );
+          VERIFY_ERROR (FATAL, entry.mark(EMITTED));
+          VERIFY_ERROR (FATAL, entry.mark(BLOCKED));
+          VERIFY_ERROR (FATAL, entry.mark(FREE) );
+          VERIFY_ERROR (FATAL, entry.mark(NIL) );
+          
+          // re-use buffer slot, start new lifecycle
+          void* OTHER_LOCATION = this;
+          entry.lock (OTHER_LOCATION);
+          CHECK (LOCKED == entry.state());
+          CHECK (entry.isLocked());
+          
+          VERIFY_ERROR (LIFECYCLE, entry.lock(SOME_POINTER));
+          
+          entry.mark (BLOCKED);                      // go directly to the blocked state
+          CHECK (BLOCKED == entry.state());
+          VERIFY_ERROR (FATAL, entry.mark(LOCKED)  );
+          VERIFY_ERROR (FATAL, entry.mark(EMITTED) );
+          VERIFY_ERROR (FATAL, entry.mark(BLOCKED) );
+          VERIFY_ERROR (FATAL, entry.mark(NIL) );
+          
+          CHECK (OTHER_LOCATION == entry.access());
+          
+          entry.mark (FREE);
+          CHECK (!entry.isLocked());
+          VERIFY_ERROR (LIFECYCLE, entry.access() );
+          
+          meta_->lock(key, SOME_POINTER);
+          CHECK (entry.isLocked());
+          
+          entry.mark (EMITTED);
+          entry.mark (BLOCKED);
+          CHECK (BLOCKED == entry.state());
+          CHECK (SOME_POINTER == entry.access());
+          
+          // can't discard metadata, need to free first
+          VERIFY_ERROR (LIFECYCLE, meta_->release(entry) );
+          CHECK (meta_->isKnown(entry));
+          CHECK (entry.isLocked());
+          
+          entry.mark (FREE);
+          meta_->release(entry);
+          CHECK (!meta_->isKnown(entry));
+          CHECK ( meta_->isKnown(key));
         }
     };
   
