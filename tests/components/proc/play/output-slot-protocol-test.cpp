@@ -71,7 +71,6 @@ namespace test  {
       void
       verifyStandardCase()
         {
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #819
           // Create Test fixture.
           // In real usage, the OutputSlot will be preconfigured
           // (Media format, number of channels, physical connections)
@@ -80,7 +79,7 @@ namespace test  {
           
           // Client claims the OutputSlot
           // and opens it for exclusive use.
-          OutputSlot::Allocation alloc = oSlot.allocate();
+          OutputSlot::Allocation& alloc = oSlot.allocate();
           
           // Now the client is able to prepare
           // "calculation streams" for the individual
@@ -139,6 +138,7 @@ namespace test  {
           CHECK (*stream1++ == testData(1,0));
           CHECK (*stream1++ == testData(1,1));
           CHECK (!stream1);
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #819
 #endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #819
         }
     };

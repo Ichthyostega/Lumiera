@@ -45,10 +45,10 @@
 //#include "lib/sync.hpp"
 
 #include <boost/noncopyable.hpp>
+#include <boost/scoped_ptr.hpp>
 //#include <string>
 //#include <vector>
 //#include <tr1/memory>
-//#include <boost/scoped_ptr.hpp>
 
 
 namespace proc {
@@ -61,11 +61,15 @@ namespace play {
 
 //using std::vector;
 //using std::tr1::shared_ptr;
-//using boost::scoped_ptr;
+  using boost::scoped_ptr;
   
   
   /** established output channel */
   class Connection;
+  
+  /** Table to maintain connection state */
+  class ConnectionState;
+  
   
   typedef int64_t FrameNr;
   
@@ -90,25 +94,29 @@ namespace play {
   class OutputSlot
     : boost::noncopyable
     {
+      scoped_ptr<ConnectionState> state_;
+      
+      
     public:
       virtual ~OutputSlot();
       
       typedef lib::IterSource<DataSink>::iterator OpenedSinks;
       
-      struct Allocation
+      class Allocation
         {
-          OpenedSinks getOpenedSinks();
-          
-          bool isActive();
+        public:
+          virtual OpenedSinks getOpenedSinks()  =0;
+          virtual bool isActive()               =0;
           
           /////TODO add here the getters for timing constraints
+        protected:
+         ~Allocation();
         };
       
       
       bool isFree()  const;
       
-      Allocation
-      allocate();
+      Allocation& allocate();
       
     protected:
       friend class DataSink;

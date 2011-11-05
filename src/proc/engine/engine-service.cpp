@@ -61,7 +61,7 @@ namespace engine{
   CalcStream
   EngineService::calculate(ModelPort mPort,
                            Timings nominalTimings,
-                           OutputConnection output,
+                           OutputConnection& output,
                            Quality serviceQuality)
   {
     UNIMPLEMENTED ("build a standard calculation stream");

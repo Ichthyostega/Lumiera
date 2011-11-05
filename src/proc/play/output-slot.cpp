@@ -21,12 +21,19 @@
 * *****************************************************/
 
 
+#include "lib/error.hpp"
 #include "proc/play/output-slot.hpp"
 
+#include <boost/noncopyable.hpp>
+#include <vector>
 
 
 namespace proc {
 namespace play {
+  
+  using std::vector;
+  
+  namespace error = lumiera::error;
   
   
   
@@ -35,8 +42,55 @@ namespace play {
   } // (End) hidden service impl details
   
   
+  class Connection
+    {
+    public:
+    };
+  
+  
+  class ConnectionState
+    : public OutputSlot::Allocation
+    , public vector<Connection>
+    , boost::noncopyable
+    {
+
+      typedef OutputSlot::OpenedSinks OpenedSinks;
+      
+      
+    private: /* == Allocation Interface == */
+      OpenedSinks
+      getOpenedSinks()
+        {
+          UNIMPLEMENTED ("yield all opened channels");
+        }
+      
+      bool
+      isActive()
+        {
+          return 0 < size();
+        }
+      
+      
+    public:
+      ConnectionState()
+        {
+          UNIMPLEMENTED ("immediately build up the necessary number of connections");
+        }
+
+     virtual
+    ~ConnectionState()
+        {
+          UNIMPLEMENTED ("shut down all connections");
+        }
+    };
+  
+  
   
   OutputSlot::~OutputSlot() { }  // emit VTables here....
+  
+  OutputSlot::Allocation::~Allocation() { }
+  
+  
   
   
   
@@ -47,9 +101,22 @@ namespace play {
   bool
   OutputSlot::isFree()  const
   {
-    UNIMPLEMENTED ("connection state");
+    return ! this->state_;
   }
-      
+  
+  
+  /** */
+  OutputSlot::Allocation&
+  OutputSlot::allocate()
+  {
+    if (!isFree())
+      throw error::Logic ("Attempt to open/allocate an OutputSlot already in use.");
+    
+    UNIMPLEMENTED ("internal interface to determine the number of channel-connections");
+    
+    this->state_.reset(new ConnectionState());
+    return *state_;
+  }
   
   
   
