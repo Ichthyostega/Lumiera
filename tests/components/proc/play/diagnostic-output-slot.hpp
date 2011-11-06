@@ -105,28 +105,28 @@ namespace play {
       
       
       bool
-      buffer_was_used (uint channel, FrameNr frame)
+      buffer_was_used (uint channel, FrameID frame)
         {
           UNIMPLEMENTED ("determine if the denoted buffer was indeed used");
         }
       
       
       bool
-      buffer_unused   (uint channel, FrameNr frame)
+      buffer_unused   (uint channel, FrameID frame)
         {
           UNIMPLEMENTED ("determine if the specified buffer was never touched/locked for use");
         }
       
       
       bool
-      buffer_was_closed (uint channel, FrameNr frame)
+      buffer_was_closed (uint channel, FrameID frame)
         {
           UNIMPLEMENTED ("determine if the specified buffer was indeed closed properly");
         }
       
       
       bool
-      emitted (uint channel, FrameNr frame)
+      emitted (uint channel, FrameID frame)
         {
           UNIMPLEMENTED ("determine if the specivied buffer was indeed handed over for emitting output");
         }

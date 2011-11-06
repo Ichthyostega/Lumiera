@@ -23,6 +23,7 @@
 
 #include "lib/error.hpp"
 #include "proc/play/output-slot.hpp"
+#include "proc/play/output-slot-connection.hpp"
 
 #include <boost/noncopyable.hpp>
 #include <vector>
@@ -42,47 +43,7 @@ namespace play {
   } // (End) hidden service impl details
   
   
-  class Connection
-    {
-    public:
-    };
   
-  
-  class ConnectionState
-    : public OutputSlot::Allocation
-    , public vector<Connection>
-    , boost::noncopyable
-    {
-
-      typedef OutputSlot::OpenedSinks OpenedSinks;
-      
-      
-    private: /* == Allocation Interface == */
-      OpenedSinks
-      getOpenedSinks()
-        {
-          UNIMPLEMENTED ("yield all opened channels");
-        }
-      
-      bool
-      isActive()
-        {
-          return 0 < size();
-        }
-      
-      
-    public:
-      ConnectionState()
-        {
-          UNIMPLEMENTED ("immediately build up the necessary number of connections");
-        }
-
-     virtual
-    ~ConnectionState()
-        {
-          UNIMPLEMENTED ("shut down all connections");
-        }
-    };
   
   
   
@@ -114,9 +75,18 @@ namespace play {
     
     UNIMPLEMENTED ("internal interface to determine the number of channel-connections");
     
-    this->state_.reset(new ConnectionState());
+    state_.reset (this->buildState());
     return *state_;
   }
+  
+  
+  void
+  OutputSlot::disconnect()
+  {
+    if (!isFree())
+      state_.reset(0);    
+  }
+
   
   
   

@@ -38,7 +38,7 @@
 
 #include "lib/error.hpp"
 #include "lib/handle.hpp"
-#include "lib/time/timevalue.hpp"
+//#include "lib/time/timevalue.hpp"
 #include "proc/engine/buffer-provider.hpp"
 #include "proc/play/timings.hpp"
 #include "lib/iter-source.hpp"
@@ -56,7 +56,7 @@ namespace play {
 
   using ::engine::BuffHandle;
   using ::engine::BufferProvider;
-  using lib::time::Time;
+//using lib::time::Time;
 //using std::string;
 
 //using std::vector;
@@ -64,25 +64,10 @@ namespace play {
   using boost::scoped_ptr;
   
   
-  /** established output channel */
-  class Connection;
   
-  /** Table to maintain connection state */
-  class ConnectionState;
+  class DataSink;
   
-  
-  typedef int64_t FrameNr;
-  
-  
-  class DataSink
-    : public lib::Handle<Connection>
-    {
-      
-    public:
-      BuffHandle lockBufferFor(FrameNr);
-      void emit(FrameNr);
-    };
-  
+  typedef int64_t FrameID;
   
   
   
@@ -94,7 +79,15 @@ namespace play {
   class OutputSlot
     : boost::noncopyable
     {
+      
+    protected:
+      
+      /** Table to maintain connection state */
+      class ConnectionState;
+      
       scoped_ptr<ConnectionState> state_;
+      
+      virtual ConnectionState* buildState() =0;
       
       
     public:
@@ -113,21 +106,36 @@ namespace play {
          ~Allocation();
         };
       
+      /** established output channel */
+      class Connection;
       
+      
+      /** can this OutputSlot be allocated? */
       bool isFree()  const;
       
+      /** claim this slot for exclusive use */
       Allocation& allocate();
       
-    protected:
-      friend class DataSink;
-      
-      virtual void lock     (FrameNr, uint channel)   =0;
-      virtual void transfer (FrameNr, uint channel)   =0;
-      virtual void pushout  (FrameNr, uint channel)   =0;
+      /** disconnect from this OutputSlot
+       * @warning may block until DataSinks are gone */
+      void disconnect();
       
     private:
       
     };
+  
+  
+  
+  class DataSink
+    : public lib::Handle<OutputSlot::Connection>
+    {
+      
+    public:
+      BuffHandle lockBufferFor(FrameID);
+      void emit(FrameID);
+    };
+  
+  
   
   
   
