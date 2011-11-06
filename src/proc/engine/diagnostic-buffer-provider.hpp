@@ -21,7 +21,7 @@
 */
 
 /** @file diagnostic-buffer-provider.hpp
- ** An facility for writing unit-tests targetting the BufferProvider interface.
+ ** An facility for writing unit-tests targeting the BufferProvider interface.
  **
  ** @see buffer-provider-protocol-test.cpp
  */
@@ -44,6 +44,13 @@ namespace engine {
   namespace error = lumiera::error;
   
   
+  /**
+   * simple BufferProvider implementation
+   * with additional allocation tracking
+   */
+  class TrackingHeapBlockProvider;
+  
+  
   /********************************************************************
    * Helper for unit tests: Buffer provider reference implementation.
    * 
@@ -53,18 +60,11 @@ namespace engine {
     : boost::noncopyable
     {
       
-      /**
-       * simple BufferProvider implementation
-       * with additional allocation tracking
-       */
-      class HeapMemProvider;
-      
-      
-      boost::scoped_ptr<HeapMemProvider>              pImpl_;
+      boost::scoped_ptr<TrackingHeapBlockProvider>    pImpl_;
       static lib::Singleton<DiagnosticBufferProvider> diagnostics;
       
       
-      HeapMemProvider& reset();
+      TrackingHeapBlockProvider& reset();
       bool isCurrent (BufferProvider const&);
       
       

@@ -73,7 +73,26 @@ namespace play {
   
   
   
-  /** established output channel */
+  /** @internal represents the \em active
+   *   point in each of the per-channel connections
+   *   used when this OutputSlot is operational.
+   *   
+   * \par OutputSlot Core API
+   *   
+   * Actually, this extension point towards the implementation
+   * of the actual output handling carries the core API of OutputSlot.
+   * Thus, the task of actually implementing an OutputSlot boils down
+   * to implementing this interface and providing a ConnectionState.
+   * - \c lock() announces this FrameID and the corresponding buffer
+   *   to be in exclusive use by the client from now on
+   * - \c transfer() ends the client sided processing and initiates
+   *   the outputting of the data found in the corresponding buffer.
+   * - \c pushout() actually pushes the denoted buffer to the output.
+   *   Typically, \c pushout() is called from the \c transfer()
+   *   implementation; yet it may as well be called from a separate
+   *   service thread or some kind of callback.
+   * @note the meaning of FrameID is implementation defined.
+   */
   class OutputSlot::Connection
     {
     public:
@@ -86,7 +105,13 @@ namespace play {
       
       
   
-  
+  /** 
+   * Extension point for Implementation.
+   * The ConnectionState is where the concrete output
+   * handling implementation is expected to reside.
+   * OutputSlot is a frontend and accesses
+   * ConnectionState in the way of a PImpl.
+   */
   class OutputSlot::ConnectionState
     : public OutputSlot::Allocation
     , boost::noncopyable
@@ -96,12 +121,28 @@ namespace play {
     };
   
   
+  /** 
+   * Base class for the typical implementation approach.
+   * Using this class is \em not mandatory. But obviously,
+   * we'd get to manage a selection of Connection objects
+   * representing the "active points" in several media channels
+   * connected through this OutputSlot. These Connection subclasses
+   * are what is referenced by the DataSink smart-ptrs handed out
+   * to the client code. As ConnectionState implements the Allocation
+   * API, it has the liability to create these DataSink smart-ptrs,
+   * which means to wire them appropriately and also provide an
+   * deleter function (here #shutdownConnection) to be invoked
+   * when the last copy of the smart-handle goes out of scope.
+   * 
+   * The typical standard/base implementation provided here
+   * manages a collection of active Connection subclass objects.
+   */
   template<class CON>
   class ConnectionStateManager
     : public OutputSlot::ConnectionState
     , public vector<CON>
     {
-
+      
       typedef OutputSlot::OpenedSinks OpenedSinks;
       
       
@@ -126,7 +167,7 @@ namespace play {
         {
           UNIMPLEMENTED ("immediately build up the necessary number of connections");
         }
-
+     
      virtual
     ~ConnectionStateManager()
         {
