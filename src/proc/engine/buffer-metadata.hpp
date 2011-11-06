@@ -635,19 +635,7 @@ namespace engine {
             {
               for_each (entries_, verify_is_free);
             }
-          catch (std::exception& problem)
-            {
-              const char* errID = lumiera_error();
-              const char* operation = "Shutdown of BufferProvider metadata store";
-              WARN (engine, "%s failed: %s", operation, problem.what());
-              TRACE (debugging, "Error flag was: %s", errID);
-            }
-          catch (...)
-            {
-              const char* errID = lumiera_error();
-              const char* operation = "Shutdown of BufferProvider metadata store";
-              ERROR (engine, "%s failed with unknown exception; error flag is: %s", operation, errID);
-            }
+          ERROR_LOG_AND_IGNORE (engine,"Shutdown of BufferProvider metadata store")
           
         static void
         verify_is_free (std::pair<HashVal, Entry> const& e)

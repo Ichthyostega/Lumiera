@@ -90,6 +90,9 @@ NOBUG_CPP_DEFINE_FLAG_PARENT    (   fileheader_dbg,             backend_dbg);
 /** base of debug logging for the proc layer */
 NOBUG_CPP_DEFINE_FLAG_PARENT    (  proc_dbg,                    debugging);
 NOBUG_CPP_DEFINE_FLAG_PARENT    (   command_dbg,                proc_dbg);
+NOBUG_CPP_DEFINE_FLAG_PARENT    (   session_dbg,                proc_dbg);
+NOBUG_CPP_DEFINE_FLAG_PARENT    (   player_dbg,                 proc_dbg);
+NOBUG_CPP_DEFINE_FLAG_PARENT    (   engine_dbg,                 proc_dbg);
 /** base of debug logging for the gui */
 NOBUG_CPP_DEFINE_FLAG_PARENT    (  gui_dbg,                     debugging);
 /** base if debug logging for the support library */
