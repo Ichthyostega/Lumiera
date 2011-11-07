@@ -181,7 +181,7 @@ namespace play {
       
     private: // Implementation details
       
-      DataSink
+      static DataSink
       connectOutputSink (CON& connection)
         {
           DataSink newSink;
@@ -189,9 +189,10 @@ namespace play {
           return newSink;
         }
       
-      void
-      shutdownConnection (CON* toClose)
+      static void
+      shutdownConnection (void* toClose)
         {
+          ///////////////////////////////////////////////////////////TODO problem: is it possible to pass the concrete type????
           UNIMPLEMENTED ("how to mark a connection as closed");
         }
     };
