@@ -83,6 +83,7 @@ namespace engine {
       virtual uint announce (uint count, BufferDescriptor const&) =0;
       
       virtual BuffHandle lockBufferFor (BufferDescriptor const&)  =0;
+      virtual void mark_emitted  (BuffHandle const&)              =0;
       virtual void releaseBuffer (BuffHandle const&)              =0;
       
       template<typename BU>

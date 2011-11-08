@@ -106,9 +106,9 @@ namespace test  {
           buff10.accessAs<TestFrame>() = testData(1,0);
           
           // Now it's time to emit the output
-          sink2.emit (frameNr-1);
-          sink2.emit (frameNr  );
-          sink1.emit (frameNr-1);
+          sink2.emit (frameNr-1, buff10);
+          sink2.emit (frameNr  , buff11);
+          sink1.emit (frameNr-1, buff00);
           // that's all for the client
           
           // Verify sane operation....

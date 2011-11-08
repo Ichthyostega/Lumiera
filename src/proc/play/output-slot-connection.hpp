@@ -59,7 +59,7 @@
 namespace proc {
 namespace play {
 
-//using ::engine::BuffHandle;
+  using ::engine::BuffHandle;
 //using ::engine::BufferProvider;
 //using lib::time::Time;
 //using std::string;
@@ -98,9 +98,12 @@ namespace play {
     public:
       virtual ~Connection();
       
-      virtual void lock     (FrameID)   =0;
-      virtual void transfer (FrameID)   =0;
-      virtual void pushout  (FrameID)   =0;
+      virtual BuffHandle claimBufferFor(FrameID)  =0;
+      virtual bool isTimely (FrameID, TimeValue)  =0;
+      virtual void transfer (BuffHandle const&)   =0;
+      virtual void pushout  (BuffHandle const&)   =0;
+      virtual void discard  (BuffHandle const&)   =0;
+      virtual void shutDown ()                    =0;
     };
       
       
@@ -164,19 +167,24 @@ namespace play {
       
     public:
       ConnectionStateManager()
-        {
-          UNIMPLEMENTED ("immediately build up the necessary number of connections");
-        }
-     
-     virtual
-    ~ConnectionStateManager()
-        {
-          UNIMPLEMENTED ("shut down all connections");
-        }
+        { }
       
       virtual
-      CON
-      buildConnection()  =0;
+     ~ConnectionStateManager()
+        { }
+      
+      
+      void
+      init (uint numChannels)
+        {
+          for (uint i=0; i<numChannels; ++i)
+            push_back(buildConnection());
+        }
+      
+      
+      /** factory function to build the actual
+       *  connection handling objects per channel */
+      virtual CON buildConnection()  =0;
       
       
     private: // Implementation details
@@ -190,10 +198,10 @@ namespace play {
         }
       
       static void
-      shutdownConnection (void* toClose)
+      shutdownConnection (OutputSlot::Connection* toClose)
         {
-          ///////////////////////////////////////////////////////////TODO problem: is it possible to pass the concrete type????
-          UNIMPLEMENTED ("how to mark a connection as closed");
+          REQUIRE (toClose);
+          toClose->shutDown();
         }
     };
   

@@ -117,6 +117,7 @@ namespace engine {
       
       virtual uint announce (uint count, BufferDescriptor const& type);
       virtual BuffHandle lockBufferFor (BufferDescriptor const& descriptor);
+      virtual void mark_emitted  (BuffHandle const& handle);
       virtual void releaseBuffer (BuffHandle const& handle);
       
     public:

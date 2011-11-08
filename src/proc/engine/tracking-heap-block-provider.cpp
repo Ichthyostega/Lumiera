@@ -79,9 +79,16 @@ namespace engine {
   
   
   void
+  TrackingHeapBlockProvider::mark_emitted (BuffHandle const& handle)
+  {
+    UNIMPLEMENTED ("commit a buffer to the protocol section");
+  }
+  
+  
+  void
   TrackingHeapBlockProvider::releaseBuffer (BuffHandle const& handle)
   {
-    UNIMPLEMENTED ("release a buffer and invalidate the handle");
+    UNIMPLEMENTED ("mark a buffer as officially discarded");
   }
   
   

@@ -38,7 +38,7 @@
 
 #include "lib/error.hpp"
 #include "lib/handle.hpp"
-//#include "lib/time/timevalue.hpp"
+#include "lib/time/timevalue.hpp"
 #include "proc/engine/buffer-provider.hpp"
 #include "proc/play/timings.hpp"
 #include "lib/iter-source.hpp"
@@ -56,7 +56,7 @@ namespace play {
 
   using ::engine::BuffHandle;
   using ::engine::BufferProvider;
-//using lib::time::Time;
+  using lib::time::TimeValue;
 //using std::string;
 
 //using std::vector;
@@ -132,7 +132,7 @@ namespace play {
       
     public:
       BuffHandle lockBufferFor(FrameID);
-      void emit(FrameID);
+      void emit(FrameID, BuffHandle const&, TimeValue currentTime = Time::MAX);    ///////////////TICKET #855 
     };
   
   

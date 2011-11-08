@@ -51,6 +51,8 @@ namespace play {
   
   OutputSlot::Allocation::~Allocation() { }
   
+  OutputSlot::Connection::~Connection() { }
+  
   
   
   
@@ -86,6 +88,28 @@ namespace play {
     if (!isFree())
       state_.reset(0);    
   }
+  
+  
+  
+  /* === DataSink frontend === */
+  
+  BuffHandle
+  DataSink::lockBufferFor(FrameID frameNr)
+  {
+    return impl().claimBufferFor(frameNr);
+  }
+  
+  
+  void
+  DataSink::emit (FrameID frameNr, BuffHandle const& data2emit, TimeValue currentTime)
+  {
+    OutputSlot::Connection& connection = impl();
+    if (connection.isTimely(frameNr,currentTime))
+      connection.transfer(data2emit);
+    else
+      connection.discard(data2emit);
+  }
+  
 
   
   

@@ -72,25 +72,47 @@ namespace play {
       
       /* === Connection API === */
       
-      void
-      lock (FrameID)
+      BuffHandle
+      claimBufferFor(FrameID frameNr) 
         {
           buffProvider_->lockBufferFor (bufferType_);
-          /////////////////////////////////////////////////TODO: should return that
+        }
+      
+      
+      bool
+      isTimely (FrameID frameNr, TimeValue currentTime)
+        {
+          if (Time::MAX == currentTime)
+            return true;
+          
+          UNIMPLEMENTED ("find out about timings");
+          return false;
         }
       
       void
-      transfer (FrameID frameNr)
+      transfer (BuffHandle const& filledBuffer)
         {
-          pushout (frameNr);
+          pushout (filledBuffer);
         }
       
       void
-      pushout (FrameID)
+      pushout (BuffHandle const& data4output)
         {
-          UNIMPLEMENTED ("simulate output");
+          buffProvider_->mark_emitted  (data4output);
+          buffProvider_->releaseBuffer (data4output);
         }
       
+      void
+      discard (BuffHandle const& superseededData)
+        {
+          buffProvider_->releaseBuffer (superseededData);
+        }
+      
+      void
+      shutDown ()
+        {
+          buffProvider_.reset();
+        }
       
     public:
       TrackingInMemoryBlockSequence()
@@ -117,6 +139,12 @@ namespace play {
         {
           return TrackingInMemoryBlockSequence();
         }
+      
+    public:
+      SimulatedOutputSequences (uint numChannels)
+        {
+          init (numChannels);
+        }
     };
   
     
@@ -131,11 +159,14 @@ namespace play {
   class DiagnosticOutputSlot
     : public OutputSlot
     {
+      
+      static const uint MAX_CHANNELS = 5;
+        
       /* === hook into the OutputSlot frontend === */
       ConnectionState*
       buildState()
         {
-          return new SimulatedOutputSequences();
+          return new SimulatedOutputSequences(MAX_CHANNELS);
         }
         
       
