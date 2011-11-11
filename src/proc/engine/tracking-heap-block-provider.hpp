@@ -46,6 +46,7 @@
 #include "lib/error.hpp"
 #include "proc/engine/buffer-provider.hpp"
 #include "lib/scoped-ptrvect.hpp"
+#include "lib/access-casted.hpp"
 
 #include <boost/scoped_ptr.hpp>
 #include <boost/scoped_array.hpp>
@@ -115,6 +116,10 @@ namespace engine {
     , public lib::ScopedPtrVect<diagn::Block>
     {
       
+    public:
+      /* === BufferProvider interface === */
+      
+      using BufferProvider::lockBufferFor;
       virtual uint announce (uint count, BufferDescriptor const& type);
       virtual BuffHandle lockBufferFor (BufferDescriptor const& descriptor);
       virtual void mark_emitted  (BuffHandle const& handle);
@@ -126,10 +131,38 @@ namespace engine {
       
       diagn::Block& access_or_create (uint bufferID);
       
+      template<typename TY>
+      TY&  accessAs (uint bufferID);
+      
     private:
       bool withinStorageSize (uint bufferID)  const;
     };
   
+  
+  
+  /** convenience shortcut: access the buffer with the given number,
+   *  then try to convert the raw memory to the templated type.
+   * @throw error::Invalid if the required fame number is beyond
+   *        the number of buffers marked as "emitted"
+   * @throw error::Fatal if conversion is not possible or the
+   *        conversion path chosen doesn't work (which might
+   *        be due to RTTI indicating an incompatible type).
+   */
+  template<typename TY>
+  TY&
+  TrackingHeapBlockProvider::accessAs (uint bufferID)
+  {
+    if (!withinStorageSize (bufferID))
+      throw error::Invalid ("Buffer with the given ID not yet emitted");
+    
+    diagn::Block& memoryBlock = access_or_create (bufferID);
+    TY* converted = util::AccessCasted<TY*>::access (memoryBlock.accessMemory());
+    
+    if (!converted)
+      throw error::Fatal ("unable to access the target location with the required conversion");
+    else
+      return *converted;
+  }
   
   
   

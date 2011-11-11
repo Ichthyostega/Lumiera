@@ -73,7 +73,8 @@ namespace test  {
     bool
     verifyUsedBlock (uint nr, diagn::Block& memoryBlock) 
     {
-      return memoryBlock.was_closed()
+      return memoryBlock.was_used()
+          && memoryBlock.was_closed()
           && has_expectedContent (nr, memoryBlock);
     }
   }
@@ -91,7 +92,6 @@ namespace test  {
       virtual void
       run (Arg) 
         {
-          UNIMPLEMENTED ("verify test helper");
           simpleExample();
           verifyStandardCase();
           verifyTestProtocol();
@@ -114,9 +114,6 @@ namespace test  {
           provider.releaseBuffer(testBuff);
           
           diagn::Block& block0 = provider.access_or_create(0);
-          CHECK (block0.was_used());
-          CHECK (block0.was_closed());
-          
           CHECK (testData(dataID) == block0.accessMemory());
         }
       
@@ -161,11 +158,11 @@ namespace test  {
           
           CHECK (5 == provider.size());
           
-          provider.access<uint>(0) = 20;
-          provider.access<uint>(1) = 21;
-          provider.access<uint>(2) = 22;
-          provider.access<uint>(3) = 23;
-          provider.access<uint>(4) = 24;
+          provider.accessAs<uint>(0) = 20;
+          provider.accessAs<uint>(1) = 21;
+          provider.accessAs<uint>(2) = 22;
+          provider.accessAs<uint>(3) = 23;
+          provider.accessAs<uint>(4) = 24;
           
           bu1.accessAs<uint>() = 1;
           bu2.accessAs<uint>() = 2;
@@ -173,11 +170,11 @@ namespace test  {
           bu4.accessAs<uint>() = 4;
           bu5.accessAs<uint>() = 5;
           
-          CHECK (20 == provider.access<uint>(0));
-          CHECK (21 == provider.access<uint>(1));
-          CHECK (22 == provider.access<uint>(2));
-          CHECK (23 == provider.access<uint>(3));
-          CHECK (24 == provider.access<uint>(4));
+          CHECK (20 == provider.accessAs<uint>(0));
+          CHECK (21 == provider.accessAs<uint>(1));
+          CHECK (22 == provider.accessAs<uint>(2));
+          CHECK (23 == provider.accessAs<uint>(3));
+          CHECK (24 == provider.accessAs<uint>(4));
           
           provider.mark_emitted (bu3);
           provider.mark_emitted (bu1);
@@ -185,11 +182,11 @@ namespace test  {
           provider.mark_emitted (bu4);
           provider.mark_emitted (bu2);
           
-          CHECK (3 == provider.access<uint>(0));
-          CHECK (1 == provider.access<uint>(1));
-          CHECK (5 == provider.access<uint>(2));
-          CHECK (4 == provider.access<uint>(3));
-          CHECK (2 == provider.access<uint>(4));
+          CHECK (3 == provider.accessAs<uint>(0));
+          CHECK (1 == provider.accessAs<uint>(1));
+          CHECK (5 == provider.accessAs<uint>(2));
+          CHECK (4 == provider.accessAs<uint>(3));
+          CHECK (2 == provider.accessAs<uint>(4));
         }
     };
   

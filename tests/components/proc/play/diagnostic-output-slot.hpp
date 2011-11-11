@@ -66,7 +66,7 @@ namespace play {
     : public OutputSlot::Connection
     {
       
-      shared_ptr<BufferProvider> buffProvider_;
+      shared_ptr<TrackingHeapBlockProvider> buffProvider_;
       BufferDescriptor bufferType_;
       
       
