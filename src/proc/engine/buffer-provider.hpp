@@ -45,6 +45,7 @@
 #include "lib/error.hpp"
 #include "lib/symbol.hpp"
 #include "proc/engine/buffhandle.hpp"
+#include "proc/engine/type-handler.hpp"
 
 #include <boost/noncopyable.hpp>
 #include <boost/scoped_ptr.hpp>
@@ -92,6 +93,7 @@ namespace engine {
       
       /** describe the kind of buffer managed by this provider */
       BufferDescriptor getDescriptorFor(size_t storageSize=0);
+      BufferDescriptor getDescriptorFor(size_t storageSize, TypeHandler specialTreatment);
       
       template<typename BU>
       BufferDescriptor getDescriptor();
@@ -120,15 +122,20 @@ namespace engine {
   BuffHandle
   BufferProvider::lockBufferFor()
   {
-    UNIMPLEMENTED ("convenience shortcut to announce and lock for a specific object type");
+    BufferDescriptor buffer_to_attach_object = getDescriptor<BU>();
+    return lockBufferFor (buffer_to_attach_object);
   }
   
   
+  /** define a "buffer type" for automatically creating
+   *  an instance of the template type embedded into the buffer
+   *  and destroying that embedded object when releasing the buffer.
+   */
   template<typename BU>
   BufferDescriptor
   BufferProvider::getDescriptor()
   {
-    UNIMPLEMENTED ("build descriptor for automatically placing an object instance into the buffer");
+    return getDescriptorFor (sizeof(BU), TypeHandler::create<BU>());
   }
   
   

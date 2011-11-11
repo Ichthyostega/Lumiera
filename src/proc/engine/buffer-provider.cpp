@@ -58,8 +58,15 @@ namespace engine {
   {
     return BufferDescriptor (*this, meta_->key (storageSize));
   }
-      
-      
+  
+  
+  BufferDescriptor
+  BufferProvider::getDescriptorFor(size_t storageSize, TypeHandler specialTreatment)
+  {
+    return BufferDescriptor (*this, meta_->key (storageSize, specialTreatment));
+  }
+  
+  
   
   
   /* === BufferDescriptor and BuffHandle === */

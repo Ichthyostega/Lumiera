@@ -56,13 +56,11 @@
 
 #include "lib/error.hpp"
 #include "lib/symbol.hpp"
-#include "lib/functor-util.hpp"
 #include "lib/util-foreach.hpp"
 #include "include/logging.h"
+#include "proc/engine/type-handler.hpp"
 
-#include <tr1/functional>
 #include <tr1/unordered_map>
-#include <boost/functional/hash.hpp>
 #include <boost/noncopyable.hpp>
 
 
@@ -71,9 +69,6 @@ namespace engine {
   using lib::HashVal;
   using lib::Literal;
   using util::for_each; 
-  using std::tr1::bind;
-  using std::tr1::function;
-  using std::tr1::placeholders::_1;
   
   namespace error = lumiera::error;
   
@@ -138,117 +133,6 @@ namespace engine {
     };
   
   
-  namespace { // (optional) helpers to build an object embedded within the buffer...
-    
-    template<class X>
-    inline void
-    buildIntoBuffer (void* storageBuffer)
-    {
-      new(storageBuffer) X();
-    }
-    
-    template<class X, typename A1>
-    inline void
-    buildIntoBuffer_A1 (void* storageBuffer, A1 arg1)
-    {
-      new(storageBuffer) X(arg1);
-    }
-    
-    template<class X>
-    inline void
-    destroyInBuffer (void* storageBuffer)
-    {
-      X* embedded = static_cast<X*> (storageBuffer);
-      embedded->~X();
-    }
-  }//(End)placement-new helpers
-  
-  
-  
-  /**
-   * A pair of functors to maintain a datastructure within the buffer.
-   * TypeHandler describes how to outfit the buffer in a specific way.
-   * When defined, the buffer will be prepared when locking and cleanup
-   * will be invoked automatically when releasing. Especially, this
-   * can be used to \em attach an object to the buffer (placement-new) 
-   */
-  struct TypeHandler
-    {
-      typedef function<void(void*)> DoInBuffer;
-      
-      DoInBuffer createAttached;
-      DoInBuffer destroyAttached;
-      
-      /** build an invalid NIL TypeHandler */
-      TypeHandler()
-        : createAttached()
-        , destroyAttached()
-        { }
-      
-      /** build a TypeHandler
-       *  binding to arbitrary constructor and destructor functions.
-       *  On invocation, these functions get a void* to the buffer.
-       * @note the functor objects created from these operations
-       *       might be shared for handling multiple buffers.
-       *       Be careful with any state or arguments.
-       */
-      template<typename CTOR, typename DTOR>
-      TypeHandler(CTOR ctor, DTOR dtor)
-        : createAttached (ctor)
-        , destroyAttached (dtor)
-        { }
-      
-      /** builder function defining a TypeHandler
-       *  to place a default-constructed object
-       *  into the buffer. */
-      template<class X>
-      static TypeHandler
-      create ()
-        {
-          return TypeHandler (buildIntoBuffer<X>, destroyInBuffer<X>);
-        }
-      
-      template<class X, typename A1>
-      static TypeHandler
-      create (A1 a1)
-        {
-          return TypeHandler ( bind (buildIntoBuffer_A1<X,A1>, _1, a1)
-                             , destroyInBuffer<X>);
-        }
-      
-      bool
-      isValid()  const
-        {
-          return bool(createAttached)
-              && bool(destroyAttached);
-        }
-      
-      friend HashVal
-      hash_value (TypeHandler const& handler)
-      {
-        HashVal hash(0);
-        if (handler.isValid())
-          {
-            boost::hash_combine(hash, handler.createAttached);
-            boost::hash_combine(hash, handler.destroyAttached);
-          }
-        return hash;
-      }
-      
-      friend bool
-      operator== (TypeHandler const& left, TypeHandler const& right)
-      {
-        return (!left.isValid() && !right.isValid())
-            || (  util::rawComparison(left.createAttached, right.createAttached)
-               && util::rawComparison(left.destroyAttached, right.destroyAttached)
-               );
-      }
-      friend bool
-      operator!= (TypeHandler const& left, TypeHandler const& right)
-      {
-        return !(left == right);       
-      }
-    };
   
   
   namespace { // internal constants to mark the default case
