@@ -7,6 +7,11 @@ return: 0
 END
 
 
+TEST "Test support: dummy buffer provider" TrackingHeapBlockProvider_test <<END
+return: 0
+END
+
+
 PLANNED "Buffer provider diagnostics" BufferProviderProtocol_test <<END
 return: 0
 END

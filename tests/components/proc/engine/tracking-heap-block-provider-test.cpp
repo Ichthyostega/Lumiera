@@ -1,0 +1,202 @@
+/*u4
+  TrackingHeapBlockProvider(Test)  -  verify a support facility for diagnostic/test purposes
+
+  Copyright (C)         Lumiera.org
+    2011,               Hermann Vosseler <Ichthyostega@web.de>
+
+  This program is free software; you can redistribute it and/or
+  modify it under the terms of the GNU General Public License as
+  published by the Free Software Foundation; either version 2 of
+  the License, or (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with this program; if not, write to the Free Software
+  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+
+* *****************************************************/
+
+
+#include "lib/error.hpp"
+#include "lib/test/run.hpp"
+//#include "lib/test/test-helper.hpp"
+//#include "lib/util-foreach.hpp"
+//#include "proc/play/diagnostic-output-slot.hpp"
+#include "proc/engine/tracking-heap-block-provider.hpp"
+#include "proc/engine/testframe.hpp"
+//#include "proc/engine/diagnostic-buffer-provider.hpp"
+#include "proc/engine/buffhandle.hpp"
+//#include "proc/engine/bufftable.hpp"
+
+//#include <boost/format.hpp>
+//#include <iostream>
+#include <vector>
+#include <cstdlib>
+
+//using boost::format;
+//using std::string;
+//using std::cout;
+using std::rand;
+//using util::for_each;
+
+
+namespace engine{
+namespace test  {
+  
+//  using lib::AllocationCluster;
+//  using mobject::session::PEffect;
+//  using ::engine::BuffHandle;
+//  using lumiera::error::LUMIERA_ERROR_LIFECYCLE;
+  
+  
+  namespace { // Test fixture
+    
+    const size_t TEST_ELM_SIZE = sizeof(uint);
+    const uint   MAX_ELMS = 50;
+    
+    std::vector<uint> testNumbers(MAX_ELMS);
+    
+    
+    bool 
+    has_expectedContent (uint nr, diagn::Block& memoryBlock) 
+    {
+      void* mem = memoryBlock.accessMemory();
+      uint data = *static_cast<uint*> (mem);
+      
+      return data == testNumbers[nr];
+    }
+    
+    bool
+    verifyUsedBlock (uint nr, diagn::Block& memoryBlock) 
+    {
+      return memoryBlock.was_closed()
+          && has_expectedContent (nr, memoryBlock);
+    }
+  }
+  
+  
+  /**********************************************************************
+   * @test verify a test support facility, used to write mock components
+   *       to test the lumiera engine. The TrackingHeapBlockProvider is a
+   *       braindead implementation of the BufferProvider interface: it just
+   *       claims new heap blocks and never de-allocates them, allowing other
+   *       test and mock objects to verify allocated buffers after the fact.
+   */
+  class TrackingHeapBlockProvider_test : public Test
+    {
+      virtual void
+      run (Arg) 
+        {
+          UNIMPLEMENTED ("verify test helper");
+          simpleExample();
+          verifyStandardCase();
+          verifyTestProtocol();
+        }
+      
+      
+      void
+      simpleExample()
+        {
+          TrackingHeapBlockProvider provider;
+          
+          BuffHandle testBuff = provider.lockBufferFor<TestFrame>();
+          CHECK (testBuff);
+          CHECK (testBuff.accessAs<TestFrame>().isSane());
+          
+          uint dataID = 1 + rand() % 29;
+          testBuff.accessAs<TestFrame>() = testData(dataID);
+          
+          provider.mark_emitted (testBuff);
+          provider.releaseBuffer(testBuff);
+          
+          diagn::Block& block0 = provider.access_or_create(0);
+          CHECK (block0.was_used());
+          CHECK (block0.was_closed());
+          
+          CHECK (testData(dataID) == block0.accessMemory());
+        }
+      
+      
+      void
+      verifyStandardCase()
+        {
+          TrackingHeapBlockProvider provider;
+          
+          BufferDescriptor buffType = provider.getDescriptorFor(TEST_ELM_SIZE);
+          uint numElms = provider.announce(MAX_ELMS, buffType);
+          CHECK (0 < numElms);
+          CHECK (numElms <= MAX_ELMS);
+          
+          for (uint i=0; i<numElms; ++i)
+            {
+              BuffHandle buff = provider.lockBufferFor(buffType);
+              buff.accessAs<uint>() = testNumbers[i] = rand() % 100000;
+              provider.mark_emitted (buff);
+              provider.releaseBuffer(buff);
+            }
+          
+          for (uint nr=0; nr<numElms; ++nr)
+            {
+              CHECK (verifyUsedBlock (nr, provider.access_or_create(nr)));
+            }
+        }
+      
+      
+      void
+      verifyTestProtocol()
+        {
+          TrackingHeapBlockProvider provider;
+          
+          BufferDescriptor buffType = provider.getDescriptorFor(TEST_ELM_SIZE);
+          
+          BuffHandle bu1 = provider.lockBufferFor(buffType);
+          BuffHandle bu2 = provider.lockBufferFor(buffType);
+          BuffHandle bu3 = provider.lockBufferFor(buffType);
+          BuffHandle bu4 = provider.lockBufferFor(buffType);
+          BuffHandle bu5 = provider.lockBufferFor(buffType);
+          
+          CHECK (5 == provider.size());
+          
+          provider.access<uint>(0) = 20;
+          provider.access<uint>(1) = 21;
+          provider.access<uint>(2) = 22;
+          provider.access<uint>(3) = 23;
+          provider.access<uint>(4) = 24;
+          
+          bu1.accessAs<uint>() = 1;
+          bu2.accessAs<uint>() = 2;
+          bu3.accessAs<uint>() = 3;
+          bu4.accessAs<uint>() = 4;
+          bu5.accessAs<uint>() = 5;
+          
+          CHECK (20 == provider.access<uint>(0));
+          CHECK (21 == provider.access<uint>(1));
+          CHECK (22 == provider.access<uint>(2));
+          CHECK (23 == provider.access<uint>(3));
+          CHECK (24 == provider.access<uint>(4));
+          
+          provider.mark_emitted (bu3);
+          provider.mark_emitted (bu1);
+          provider.mark_emitted (bu5);
+          provider.mark_emitted (bu4);
+          provider.mark_emitted (bu2);
+          
+          CHECK (3 == provider.access<uint>(0));
+          CHECK (1 == provider.access<uint>(1));
+          CHECK (5 == provider.access<uint>(2));
+          CHECK (4 == provider.access<uint>(3));
+          CHECK (2 == provider.access<uint>(4));
+        }
+    };
+  
+  
+  /** Register this test class... */
+  LAUNCHER (TrackingHeapBlockProvider_test, "unit player");
+  
+  
+  
+}} // namespace engine::test

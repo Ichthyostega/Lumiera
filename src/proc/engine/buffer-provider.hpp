@@ -95,7 +95,7 @@ namespace engine {
       
       template<typename BU>
       BufferDescriptor getDescriptor();
-
+      
       
       
       /* === API for BuffHandle internal access === */
