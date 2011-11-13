@@ -23,7 +23,9 @@
 
 #include "proc/engine/buffer-provider.hpp"
 #include "proc/engine/buffer-metadata.hpp"
+#include "lib/util.hpp"
 
+using util::isSameObject;
 
 namespace engine {
   
@@ -65,6 +67,27 @@ namespace engine {
   {
     return BufferDescriptor (*this, meta_->key (storageSize, specialTreatment));
   }
+  
+  
+  BuffHandle
+  BufferProvider::buildHandle (BufferDescriptor const& type, void* storage)
+  {
+    REQUIRE (was_created_by_this_provider (type));
+    
+    HashVal typeID (type.subClassification_);
+    metadata::Key& typeKey = meta_->get (typeID);
+    metadata::Entry& entry = meta_->markLocked(typeKey, newBlock);
+    
+    return BuffHandle (BufferDescriptor(*this, entry), newBlock);
+  }
+  
+  
+  bool
+  was_created_by_this_provider (BufferDescriptor const& descr)  const
+  {
+    return isSameObject (this, descr.provider_);
+  }
+    
   
   
   

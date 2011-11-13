@@ -48,6 +48,7 @@
 #include "lib/scoped-ptrvect.hpp"
 #include "lib/access-casted.hpp"
 
+#include <tr1/unordered_map>
 #include <boost/scoped_ptr.hpp>
 #include <boost/scoped_array.hpp>
 
@@ -100,7 +101,12 @@ namespace engine {
             return storage_.get();
           }
       };
+      
+    class BlockPool;
+    
+    typedef std::tr1::unordered_map<HashVal,BlockPool> PoolTable;
   }
+  
   
   /**
    * simple BufferProvider implementation with additional allocation tracking.
@@ -115,13 +121,14 @@ namespace engine {
     : public BufferProvider
     , public lib::ScopedPtrVect<diagn::Block>
     {
+      diagn::PoolTable pool_;
       
     public:
       /* === BufferProvider interface === */
       
       using BufferProvider::lockBufferFor;
       virtual uint announce (uint count, BufferDescriptor const& type);
-      virtual BuffHandle lockBufferFor (BufferDescriptor const& descriptor);
+      virtual BuffHandle lockBufferFor (BufferDescriptor const& type);
       virtual void mark_emitted  (BuffHandle const& handle);
       virtual void releaseBuffer (BuffHandle const& handle);
       

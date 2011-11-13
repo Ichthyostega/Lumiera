@@ -104,6 +104,10 @@ namespace engine {
       
       bool verifyValidity (BufferDescriptor const&);
       
+    protected:
+      BuffHandle buildHandle (BufferDescriptor const& type, void* storage);
+      
+      bool was_created_by_this_provider (BufferDescriptor const&)  const;
     };
     
     
