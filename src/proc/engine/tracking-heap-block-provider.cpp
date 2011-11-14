@@ -35,7 +35,6 @@
 
 using util::for_each;
 using std::vector;
-using std::auto_ptr;
 using lib::ScopedHolder;
 
 
@@ -106,15 +105,15 @@ namespace engine {
           }
         
         
-        auto_ptr<Block>
+        Block*
         transferResponsibility (Block* allocatedBlock)
           {
-            auto_ptr<Block> extracted;
+            Block* extracted;
             PoolVec& vec = *blockList_;
             PoolVec::iterator pos = find (vec.begin(),vec.end(), allocatedBlock);
             if (pos != vec.end())
               {
-                extracted.reset (allocatedBlock);
+                extracted = *pos;
                 vec.erase(pos);
               }
             return extracted;
@@ -179,24 +178,29 @@ namespace engine {
   BuffHandle
   TrackingHeapBlockProvider::lockBufferFor (BufferDescriptor const& type)
   {
-    UNIMPLEMENTED ("lock buffer for exclusive use");
     diagn::BlockPool& blocks = getBlockPoolFor (type);
     diagn::Block* newBlock = blocks.createBlock();
-    return buildHandle (type, newBlock);
+    return buildHandle (type, newBlock->accessMemory(), newBlock);
   }
   
   
   void
   TrackingHeapBlockProvider::mark_emitted (BuffHandle const& handle)
   {
-    UNIMPLEMENTED ("commit a buffer to the protocol section");
+    //TODO mark metadata
+    diagn::Block* block4buffer = locateBlock (handle);
+    diagn::BlockPool& pool = getBlockPoolFor (handle);
+    this->manage (pool.transferResponsibility (block4buffer));
   }
   
   
+  /** mark a buffer as officially discarded */
   void
   TrackingHeapBlockProvider::releaseBuffer (BuffHandle const& handle)
   {
-    UNIMPLEMENTED ("mark a buffer as officially discarded");
+    //TODO mark metadata
+    diagn::Block* block4buffer = locateBlock (handle);
+    block4buffer->markReleased();
   }
   
   
@@ -220,6 +224,12 @@ namespace engine {
       throw error::Fatal ("hardwired internal limit for test buffers exceeded");
     
     return bufferID < this->size();
+  }
+  
+  diagn::BlockPool&
+  TrackingHeapBlockProvider::getBlockPoolFor (BufferDescriptor const& type)
+  {
+    UNIMPLEMENTED ("access correct block pool, based on metadata");
   }
   
   

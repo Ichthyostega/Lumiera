@@ -143,6 +143,7 @@ namespace engine {
       
     private:
       bool withinStorageSize (uint bufferID)  const;
+      diagn::BlockPool& getBlockPoolFor (BufferDescriptor const&);      
     };
   
   

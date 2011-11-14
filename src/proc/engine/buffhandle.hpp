@@ -52,6 +52,8 @@
 
 namespace engine {
   
+  typedef size_t HashVal;           ////////////TICKET #722
+  
   class BufferProvider;
   
   
@@ -70,7 +72,7 @@ namespace engine {
   class BufferDescriptor
     {
       BufferProvider* provider_;
-      uint64_t subClassification_;
+      HashVal subClassification_;
       
       BufferDescriptor(BufferProvider& manager, uint64_t detail)
         : provider_(&manager)
@@ -83,6 +85,8 @@ namespace engine {
       // using standard copy operations
       
       bool verifyValidity()  const;
+      
+      operator HashVal()  const { return subClassification_; }
     };
   
   
@@ -136,6 +140,7 @@ namespace engine {
       
       
       
+      void emit();
       void release();
       
       

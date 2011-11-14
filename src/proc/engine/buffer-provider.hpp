@@ -46,6 +46,7 @@
 #include "lib/symbol.hpp"
 #include "proc/engine/buffhandle.hpp"
 #include "proc/engine/type-handler.hpp"
+#include "proc/engine/buffer-local-key.hpp"
 
 #include <boost/noncopyable.hpp>
 #include <boost/scoped_ptr.hpp>
@@ -58,6 +59,9 @@ namespace engine {
   
   
   class BufferMetadata;
+  
+  
+  LUMIERA_ERROR_DECLARE (BUFFER_MANAGEMENT); ///< Problem providing working buffers
   
   
   /**
@@ -74,18 +78,27 @@ namespace engine {
     {
       scoped_ptr<BufferMetadata> meta_;
       
-    protected:
+      
+    protected: /* === for Implementation by concrete providers === */
+      
       BufferProvider (Literal implementationID);
       
+      virtual uint prepareBuffers (uint count, HashVal typeID)    =0;
+      
+      virtual BuffHandle provideLockedBuffer  (HashVal typeID)    =0;
+      virtual void mark_emitted (HashVal typeID, LocalKey const&) =0;
+      virtual void detachBuffer (HashVal typeID, LocalKey const&) =0;
+      
+      
     public:
-      virtual ~BufferProvider();  ///< this is an interface
+      virtual ~BufferProvider();  ///< this is an ABC
       
       
-      virtual uint announce (uint count, BufferDescriptor const&) =0;
+      uint announce (uint count, BufferDescriptor const&);
       
-      virtual BuffHandle lockBufferFor (BufferDescriptor const&)  =0;
-      virtual void mark_emitted  (BuffHandle const&)              =0;
-      virtual void releaseBuffer (BuffHandle const&)              =0;
+      BuffHandle lockBuffer (BufferDescriptor const&);
+      void       emitBuffer (BuffHandle const&);
+      void    releaseBuffer (BuffHandle const&);
       
       template<typename BU>
       BuffHandle lockBufferFor ();
@@ -105,7 +118,7 @@ namespace engine {
       bool verifyValidity (BufferDescriptor const&);
       
     protected:
-      BuffHandle buildHandle (BufferDescriptor const& type, void* storage);
+      BuffHandle buildHandle (HashVal typeID, void* storage, LocalKey const&);
       
       bool was_created_by_this_provider (BufferDescriptor const&)  const;
     };
@@ -126,8 +139,8 @@ namespace engine {
   BuffHandle
   BufferProvider::lockBufferFor()
   {
-    BufferDescriptor buffer_to_attach_object = getDescriptor<BU>();
-    return lockBufferFor (buffer_to_attach_object);
+    BufferDescriptor attach_object_automatically = getDescriptor<BU>();
+    return lockBuffer (attach_object_automatically);
   }
   
   

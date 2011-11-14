@@ -59,6 +59,7 @@
 #include "lib/util-foreach.hpp"
 #include "include/logging.h"
 #include "proc/engine/type-handler.hpp"
+#include "proc/engine/buffer-local-key.hpp"
 
 #include <tr1/unordered_map>
 #include <boost/noncopyable.hpp>
@@ -95,42 +96,6 @@ namespace engine {
     };
   
   
-  
-  /**
-   * an opaque ID to be used by the BufferProvider implementation.
-   * Typically this will be used, to set apart some pre-registered
-   * kinds of buffers. It is treated as being part of the buffer type.
-   * LocalKey objects may be copied but not re-assigned or changed.
-   */
-  class LocalKey
-    {
-      uint64_t privateID_;
-      
-    public:
-      LocalKey (uint64_t opaqueValue=0)
-        : privateID_(opaqueValue)
-        { }
-      
-      operator uint64_t()  const { return privateID_; }
-      
-      friend size_t
-      hash_value (LocalKey const& lkey)
-      {
-        boost::hash<uint64_t> hashFunction;
-        return hashFunction(lkey.privateID_);
-      }
-      
-    private:
-      /** assignment usually prohibited */
-      LocalKey& operator= (LocalKey const& o)
-        {
-          privateID_ = o.privateID_;
-          return *this;
-        }
-      
-      /** but Key assignments are acceptable */
-      friend class metadata::Key;
-    };
   
   
   
@@ -253,14 +218,20 @@ namespace engine {
          *         For NULL buffer a copy of the parent is returned.
          */
         static Key
-        forEntry (Key const& parent, const void* bufferAddr)
+        forEntry (Key const& parent, const void* bufferAddr, LocalKey const& implID =UNSPECIFIC)
           {
             Key newKey(parent);
             if (bufferAddr)
               {
                 newKey.parent_ = HashVal(parent);
                 newKey.hashID_ = chainedHash(parent, bufferAddr);
-              }
+                if (nontrivial(implID))
+                  {
+                    REQUIRE (!newKey.specifics_.isDefined(),
+                             "Implementation defined local key should not be overridden. "
+                             "Underlying buffer type already defines a nontrivial LocalKey");
+                    newKey.specifics_ = implID;
+              }   }
             return newKey; 
           }
         
@@ -297,8 +268,8 @@ namespace engine {
         void*       buffer_;
         
       protected:
-        Entry (Key const& parent, void* bufferPtr =0)
-          : Key (Key::forEntry (parent, bufferPtr))
+        Entry (Key const& parent, void* bufferPtr =0, LocalKey const& implID =UNSPECIFIC)
+          : Key (Key::forEntry (parent, bufferPtr, implID))
           , state_(bufferPtr? LOCKED:NIL)
           , buffer_(bufferPtr)
           { }
@@ -654,7 +625,10 @@ namespace engine {
        *        buffer is released or re-used later.
        */
       Entry&
-      lock (Key const& parentKey, void* concreteBuffer, bool onlyNew =false)
+      lock (Key const& parentKey
+           ,void* concreteBuffer
+           ,LocalKey const& implID
+           ,bool onlyNew =false)
         {
           if (!concreteBuffer)
             throw error::Invalid ("Attempt to lock a slot for a NULL buffer"
@@ -724,13 +698,13 @@ namespace engine {
        *        created, but is marked as FREE
        */
       Entry&
-      markLocked (Key const& parentKey, void* buffer)
+      markLocked (Key const& parentKey, void* buffer, LocalKey const& implID)
         {
           if (!buffer)
             throw error::Fatal ("Attempt to lock for a NULL buffer. Allocation floundered?"
                                , error::LUMIERA_ERROR_BOTTOM_VALUE);
           
-          return this->lock(parentKey, buffer, true); // force creation of a new entry
+          return this->lock(parentKey, buffer, implID, true); // force creation of a new entry
         }
       
       /** purge the bare metadata Entry from the metadata tables.
