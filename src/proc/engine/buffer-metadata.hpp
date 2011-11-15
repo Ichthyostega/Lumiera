@@ -593,13 +593,13 @@ namespace engine {
        * @note might create/register a new Entry as a side-effect 
        */ 
       Key const&
-      key (Key const& parentKey, void* concreteBuffer)
+      key (Key const& parentKey, void* concreteBuffer, LocalKey const& implID =UNSPECIFIC)
         {
           Key derivedKey = Key::forEntry (parentKey, concreteBuffer);
           Entry* existing = table_.fetch (derivedKey);
           
           return existing? *existing
-                         : markLocked (parentKey,concreteBuffer);
+                         : markLocked (parentKey,concreteBuffer,implID);
         }
       
       /** core operation to access or create a concrete buffer metadata entry.
@@ -627,14 +627,14 @@ namespace engine {
       Entry&
       lock (Key const& parentKey
            ,void* concreteBuffer
-           ,LocalKey const& implID
+           ,LocalKey const& implID =UNSPECIFIC
            ,bool onlyNew =false)
         {
           if (!concreteBuffer)
             throw error::Invalid ("Attempt to lock a slot for a NULL buffer"
                                  , error::LUMIERA_ERROR_BOTTOM_VALUE);
           
-          Entry newEntry(parentKey, concreteBuffer);
+          Entry newEntry(parentKey, concreteBuffer, implID);
           Entry* existing = table_.fetch (newEntry);
           
           if (existing && onlyNew)
@@ -698,7 +698,7 @@ namespace engine {
        *        created, but is marked as FREE
        */
       Entry&
-      markLocked (Key const& parentKey, void* buffer, LocalKey const& implID)
+      markLocked (Key const& parentKey, void* buffer, LocalKey const& implID =UNSPECIFIC)
         {
           if (!buffer)
             throw error::Fatal ("Attempt to lock for a NULL buffer. Allocation floundered?"

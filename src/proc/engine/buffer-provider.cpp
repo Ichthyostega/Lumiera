@@ -21,6 +21,7 @@
 * *****************************************************/
 
 
+#include "lib/error.hpp"
 #include "proc/engine/buffer-provider.hpp"
 #include "proc/engine/buffer-metadata.hpp"
 #include "lib/util.hpp"
@@ -76,9 +77,9 @@ namespace engine {
   BufferProvider::buildHandle (HashVal typeID, void* storage, LocalKey const& implID)
   {
     metadata::Key& typeKey = meta_->get (typeID);
-    metadata::Entry& entry = meta_->markLocked(typeKey, newBlock, implID);
+    metadata::Entry& entry = meta_->markLocked(typeKey, storage, implID);
     
-    return BuffHandle (BufferDescriptor(*this, entry), newBlock);
+    return BuffHandle (BufferDescriptor(*this, entry), storage);
   }
   
   
@@ -139,9 +140,11 @@ namespace engine {
    *        An emitted buffer should not be modified anymore. 
    */
   void
-  BufferProvider::emitBuffer (BuffHandle const&)
+  BufferProvider::emitBuffer (BuffHandle const& handle)
   {
-    
+    metadata::Entry& metaEntry = meta_->get (handle.entryID());
+    mark_emitted (metaEntry.parentKey(), metaEntry.localKey());
+    metaEntry.mark(EMITTED);
   }
   
   
@@ -154,10 +157,13 @@ namespace engine {
    * @note EX_FREE
    */
   void
-  BufferProvider::releaseBuffer (BuffHandle const&)
-  {
-    
+  BufferProvider::releaseBuffer (BuffHandle const& handle)
+  try {
+    metadata::Entry& metaEntry = meta_->get (handle.entryID());
+    detachBuffer (metaEntry.parentKey(), metaEntry.localKey());
+    metaEntry.mark(FREE);
   }
+  ERROR_LOG_AND_IGNORE (engine, "releasing a buffer from BufferProvider")
   
   
   bool

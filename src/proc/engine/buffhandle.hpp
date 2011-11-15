@@ -74,7 +74,7 @@ namespace engine {
       BufferProvider* provider_;
       HashVal subClassification_;
       
-      BufferDescriptor(BufferProvider& manager, uint64_t detail)
+      BufferDescriptor(BufferProvider& manager, HashVal detail)
         : provider_(&manager)
         , subClassification_(detail)
       { }
@@ -131,9 +131,9 @@ namespace engine {
       
       /** @internal a buffer handle may be obtained by "locking"
        *  a buffer from the corresponding BufferProvider */
-      BuffHandle(BufferDescriptor const& typeInfo, PBuff storage = 0)
+      BuffHandle(BufferDescriptor const& typeInfo, void* storage = 0)
         : descriptor_(typeInfo)
-        , pBuffer_(storage)
+        , pBuffer_(static_cast<PBuff>(storage))
         { }
       
       // using standard copy operations
@@ -151,6 +151,8 @@ namespace engine {
       BU& accessAs();
       
       
+      //////////////////////////////////////////TICKET #249 this operator looks obsolete. The Buff type is a placeholder type,
+      //////////////////////////////////////////TODO         it should never be accessed directly from within Lumiera engine code
       Buff&
       operator* ()  const
         {
@@ -163,6 +165,12 @@ namespace engine {
         {
           return bool(pBuffer_)
               && descriptor_.verifyValidity();
+        }
+      
+      HashVal
+      entryID()  const
+        {
+          return descriptor_;
         }
       
       size_t

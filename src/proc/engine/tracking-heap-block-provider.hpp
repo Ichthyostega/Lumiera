@@ -60,6 +60,7 @@ namespace engine {
   
   namespace diagn {
     
+    using boost::scoped_ptr;
     using boost::scoped_array;
 
     
@@ -100,6 +101,12 @@ namespace engine {
           {
             return storage_.get();
           }
+        
+        void
+        markReleased()
+          {
+            UNIMPLEMENTED ("diagn::Block accounting functionality");
+          }
       };
       
     class BlockPool;
@@ -121,16 +128,15 @@ namespace engine {
     : public BufferProvider
     , public lib::ScopedPtrVect<diagn::Block>
     {
-      diagn::PoolTable pool_;
+      scoped_ptr<diagn::PoolTable> pool_;
       
     public:
       /* === BufferProvider interface === */
       
-      using BufferProvider::lockBufferFor;
-      virtual uint announce (uint count, BufferDescriptor const& type);
-      virtual BuffHandle lockBufferFor (BufferDescriptor const& type);
-      virtual void mark_emitted  (BuffHandle const& handle);
-      virtual void releaseBuffer (BuffHandle const& handle);
+      virtual uint prepareBuffers (uint count, HashVal typeID);
+      virtual BuffHandle provideLockedBuffer  (HashVal typeID);
+      virtual void mark_emitted (HashVal entryID, LocalKey const&);
+      virtual void detachBuffer (HashVal entryID, LocalKey const&);
       
     public:
       TrackingHeapBlockProvider();
@@ -143,7 +149,8 @@ namespace engine {
       
     private:
       bool withinStorageSize (uint bufferID)  const;
-      diagn::BlockPool& getBlockPoolFor (BufferDescriptor const&);      
+      diagn::BlockPool& getBlockPoolFor (HashVal typeID);
+      diagn::Block* locateBlock (HashVal typeID, void*);
     };
   
   

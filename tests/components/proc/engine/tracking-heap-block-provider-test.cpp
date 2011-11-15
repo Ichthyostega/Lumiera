@@ -110,7 +110,7 @@ namespace test  {
           uint dataID = 1 + rand() % 29;
           testBuff.accessAs<TestFrame>() = testData(dataID);
           
-          provider.mark_emitted (testBuff);
+          provider.emitBuffer   (testBuff);
           provider.releaseBuffer(testBuff);
           
           diagn::Block& block0 = provider.access_or_create(0);
@@ -130,9 +130,9 @@ namespace test  {
           
           for (uint i=0; i<numElms; ++i)
             {
-              BuffHandle buff = provider.lockBufferFor(buffType);
+              BuffHandle buff = provider.lockBuffer(buffType);
               buff.accessAs<uint>() = testNumbers[i] = rand() % 100000;
-              provider.mark_emitted (buff);
+              provider.emitBuffer   (buff);
               provider.releaseBuffer(buff);
             }
           
@@ -150,11 +150,11 @@ namespace test  {
           
           BufferDescriptor buffType = provider.getDescriptorFor(TEST_ELM_SIZE);
           
-          BuffHandle bu1 = provider.lockBufferFor(buffType);
-          BuffHandle bu2 = provider.lockBufferFor(buffType);
-          BuffHandle bu3 = provider.lockBufferFor(buffType);
-          BuffHandle bu4 = provider.lockBufferFor(buffType);
-          BuffHandle bu5 = provider.lockBufferFor(buffType);
+          BuffHandle bu1 = provider.lockBuffer (buffType);
+          BuffHandle bu2 = provider.lockBuffer (buffType);
+          BuffHandle bu3 = provider.lockBuffer (buffType);
+          BuffHandle bu4 = provider.lockBuffer (buffType);
+          BuffHandle bu5 = provider.lockBuffer (buffType);
           
           CHECK (5 == provider.size());
           
@@ -176,11 +176,11 @@ namespace test  {
           CHECK (23 == provider.accessAs<uint>(3));
           CHECK (24 == provider.accessAs<uint>(4));
           
-          provider.mark_emitted (bu3);
-          provider.mark_emitted (bu1);
-          provider.mark_emitted (bu5);
-          provider.mark_emitted (bu4);
-          provider.mark_emitted (bu2);
+          provider.emitBuffer (bu3);
+          provider.emitBuffer (bu1);
+          provider.emitBuffer (bu5);
+          provider.emitBuffer (bu4);
+          provider.emitBuffer (bu2);
           
           CHECK (3 == provider.accessAs<uint>(0));
           CHECK (1 == provider.accessAs<uint>(1));

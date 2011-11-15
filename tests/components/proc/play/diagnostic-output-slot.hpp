@@ -75,7 +75,7 @@ namespace play {
       BuffHandle
       claimBufferFor(FrameID frameNr) 
         {
-          buffProvider_->lockBufferFor (bufferType_);
+          return buffProvider_->lockBuffer (bufferType_);
         }
       
       
@@ -98,8 +98,8 @@ namespace play {
       void
       pushout (BuffHandle const& data4output)
         {
-          buffProvider_->mark_emitted  (data4output);
-          buffProvider_->releaseBuffer (data4output);
+          buffProvider_->emitBuffer   (data4output);
+          buffProvider_->releaseBuffer(data4output);
         }
       
       void

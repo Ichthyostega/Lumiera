@@ -41,6 +41,8 @@ using lib::ScopedHolder;
 
 namespace engine {
   
+  namespace error = lumiera::error;
+  
   namespace diagn {
     
     typedef vector<Block*> PoolVec;
@@ -72,7 +74,7 @@ namespace engine {
         initialise (size_t blockSize)
           {
             blockList_.create();
-            memBlockSize_(blockSize);
+            memBlockSize_ = blockSize;
           }
          // standard copy operations are valid, but will
         //  raise an runtime error, once BlockPool is initialised.
@@ -157,7 +159,7 @@ namespace engine {
    */
   TrackingHeapBlockProvider::TrackingHeapBlockProvider()
     : BufferProvider ("Diagnostic_HeapAllocated")
-    , pool_()
+    , pool_(new diagn::PoolTable)
     { }
   
   TrackingHeapBlockProvider::~TrackingHeapBlockProvider()
@@ -169,37 +171,39 @@ namespace engine {
   /* ==== Implementation of the BufferProvider interface ==== */
   
   uint
-  TrackingHeapBlockProvider::announce (uint count, BufferDescriptor const& type)
+  TrackingHeapBlockProvider::prepareBuffers(uint, lib::HashVal)
   {
     UNIMPLEMENTED ("pre-register storage for buffers of a specific kind");   
   }
 
   
   BuffHandle
-  TrackingHeapBlockProvider::lockBufferFor (BufferDescriptor const& type)
+  TrackingHeapBlockProvider::provideLockedBuffer(HashVal typeID)
   {
-    diagn::BlockPool& blocks = getBlockPoolFor (type);
-    diagn::Block* newBlock = blocks.createBlock();
-    return buildHandle (type, newBlock->accessMemory(), newBlock);
+    diagn::BlockPool& blocks = getBlockPoolFor (typeID);
+    diagn::Block& newBlock = blocks.createBlock();
+    return buildHandle (typeID, newBlock.accessMemory(), &newBlock);
   }
   
   
   void
-  TrackingHeapBlockProvider::mark_emitted (BuffHandle const& handle)
+  TrackingHeapBlockProvider::mark_emitted (HashVal typeID, LocalKey const& implID)
   {
-    //TODO mark metadata
-    diagn::Block* block4buffer = locateBlock (handle);
-    diagn::BlockPool& pool = getBlockPoolFor (handle);
+    diagn::Block* block4buffer = locateBlock (typeID, implID);
+    if (!block4buffer)
+      throw error::Logic ("Attempt to emit a buffer not known to this BufferProvider"
+                         , LUMIERA_ERROR_BUFFER_MANAGEMENT);
+    diagn::BlockPool& pool = getBlockPoolFor (typeID);
     this->manage (pool.transferResponsibility (block4buffer));
   }
   
   
   /** mark a buffer as officially discarded */
   void
-  TrackingHeapBlockProvider::releaseBuffer (BuffHandle const& handle)
+  TrackingHeapBlockProvider::detachBuffer (HashVal typeID, LocalKey const& implID)
   {
-    //TODO mark metadata
-    diagn::Block* block4buffer = locateBlock (handle);
+    diagn::Block* block4buffer = locateBlock (typeID, implID);
+    REQUIRE (block4buffer, "releasing a buffer not allocated through this provider");
     block4buffer->markReleased();
   }
   
@@ -227,8 +231,17 @@ namespace engine {
   }
   
   diagn::BlockPool&
-  TrackingHeapBlockProvider::getBlockPoolFor (BufferDescriptor const& type)
+  TrackingHeapBlockProvider::getBlockPoolFor (HashVal typeID)
   {
+    UNIMPLEMENTED ("access correct block pool, based on metadata");
+  }
+  
+  diagn::Block*
+  TrackingHeapBlockProvider::locateBlock (HashVal typeID, void* storage)
+  {
+    diagn::BlockPool& pool = getBlockPoolFor (typeID);
+    ////TODO: step 1: try to access from pool
+    ////TODO: step 2: otherwise search already emitted blocks
     UNIMPLEMENTED ("access correct block pool, based on metadata");
   }
   
