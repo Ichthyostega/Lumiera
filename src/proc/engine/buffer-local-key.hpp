@@ -54,23 +54,62 @@ namespace engine {
    */
   class LocalKey
     {
-      uint64_t privateID_;
+      union OpaqueData
+        {
+          uint64_t _as_number;
+          void*    _as_pointer;
+        };
+      
+      OpaqueData privateID_;
       
     public:
+      explicit
       LocalKey (uint64_t opaqueValue=0)
-        : privateID_(opaqueValue)
-        { }
+        { 
+          privateID_._as_number = opaqueValue;
+        }
       
-      operator uint64_t()  const { return privateID_; }
+      LocalKey (void* impl_related_ptr)
+        { 
+          privateID_._as_number  = 0;          
+          privateID_._as_pointer = impl_related_ptr;
+        }
       
-      bool isDefined()     const { return bool(privateID_); }
+      
+      operator uint64_t()  const
+        {
+          return privateID_._as_number;
+        }
+      
+      operator void*()  const
+        {
+          return privateID_._as_pointer;
+        }
+      
+      bool
+      isDefined()  const
+        {
+          return bool(privateID_._as_number); 
+        }
       
       friend size_t
       hash_value (LocalKey const& lkey)
       {
         boost::hash<uint64_t> hashFunction;
-        return hashFunction(lkey.privateID_);
+        return hashFunction(lkey.privateID_._as_number);
       }
+      
+      friend bool
+      operator== (LocalKey const& left, LocalKey const& right)
+      {
+        return uint64_t(left) == uint64_t(right);
+      }
+      friend bool
+      operator!= (LocalKey const& left, LocalKey const& right)
+      {
+        return uint64_t(left) != uint64_t(right);
+      }
+      
       
     private:
       /** assignment usually prohibited */
