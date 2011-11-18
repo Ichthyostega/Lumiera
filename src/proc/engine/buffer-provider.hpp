@@ -118,6 +118,7 @@ namespace engine {
       bool verifyValidity (BufferDescriptor const&);
       
     protected:
+      size_t getBufferSize (HashVal typeID)  const;
       BuffHandle buildHandle (HashVal typeID, void* storage, LocalKey const&);
       
       bool was_created_by_this_provider (BufferDescriptor const&)  const;

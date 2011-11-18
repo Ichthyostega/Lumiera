@@ -236,11 +236,8 @@ namespace engine {
           }
         
         
-        LocalKey const&
-        localKey()  const
-          {
-            return specifics_;
-          }
+        LocalKey const& localKey() const { return specifics_;}
+        size_t storageSize() const { return storageSize_; }
         
         HashVal parentKey()  const { return parent_;}
         operator HashVal()   const { return hashID_;}

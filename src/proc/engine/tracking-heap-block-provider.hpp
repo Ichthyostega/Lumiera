@@ -57,6 +57,7 @@ namespace engine {
   
   namespace error = lumiera::error;
   
+  using lib::ScopedPtrVect;
   
   namespace diagn {
     
@@ -72,15 +73,14 @@ namespace engine {
     class Block
       : boost::noncopyable
       {
-        size_t size_;
         scoped_array<char> storage_;
         
         bool was_locked_;
         
       public:
-        Block()
-          : size_(0)
-          , storage_()
+        explicit
+        Block(size_t bufferSize)
+          : storage_(new char[bufferSize])
           , was_locked_(false)
           { }
         
@@ -126,9 +126,9 @@ namespace engine {
    */
   class TrackingHeapBlockProvider
     : public BufferProvider
-    , public lib::ScopedPtrVect<diagn::Block>
     {
       scoped_ptr<diagn::PoolTable> pool_;
+      ScopedPtrVect<diagn::Block> outSeq_; 
       
     public:
       /* === BufferProvider interface === */
@@ -142,15 +142,18 @@ namespace engine {
       TrackingHeapBlockProvider();
       virtual ~TrackingHeapBlockProvider();
       
+      size_t emittedCnt()  const;
+      
       diagn::Block& access_or_create (uint bufferID);
       
       template<typename TY>
       TY&  accessAs (uint bufferID);
       
     private:
-      bool withinStorageSize (uint bufferID)  const;
+      bool withinOutputSequence (uint bufferID)  const;
       diagn::BlockPool& getBlockPoolFor (HashVal typeID);
       diagn::Block* locateBlock (HashVal typeID, void*);
+      diagn::Block* searchInOutSeqeuence (void* storage);      
     };
   
   
@@ -167,7 +170,7 @@ namespace engine {
   TY&
   TrackingHeapBlockProvider::accessAs (uint bufferID)
   {
-    if (!withinStorageSize (bufferID))
+    if (!withinOutputSequence (bufferID))
       throw error::Invalid ("Buffer with the given ID not yet emitted");
     
     diagn::Block& memoryBlock = access_or_create (bufferID);

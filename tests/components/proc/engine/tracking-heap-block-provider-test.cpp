@@ -156,7 +156,7 @@ namespace test  {
           BuffHandle bu4 = provider.lockBuffer (buffType);
           BuffHandle bu5 = provider.lockBuffer (buffType);
           
-          CHECK (5 == provider.size());
+          CHECK (5 == provider.emittedCnt());
           
           provider.accessAs<uint>(0) = 20;
           provider.accessAs<uint>(1) = 21;

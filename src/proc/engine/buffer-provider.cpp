@@ -73,6 +73,14 @@ namespace engine {
   }
   
   
+  size_t
+  BufferProvider::getBufferSize (HashVal typeID)  const
+  {
+    metadata::Key& typeKey = meta_->get (typeID);
+    return typeKey.storageSize();
+  }
+  
+  
   BuffHandle
   BufferProvider::buildHandle (HashVal typeID, void* storage, LocalKey const& implID)
   {

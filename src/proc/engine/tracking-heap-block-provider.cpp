@@ -24,6 +24,7 @@
 #include "lib/error.hpp"
 #include "include/logging.h"
 //#include "lib/meta/function.hpp"
+#include "lib/bool-checkable.hpp"
 //#include "lib/scoped-ptrvect.hpp"
 #include "lib/scoped-holder.hpp"
 #include "lib/util-foreach.hpp"
@@ -31,6 +32,7 @@
 #include "proc/engine/tracking-heap-block-provider.hpp"
 
 #include <boost/noncopyable.hpp>
+#include <algorithm>
 #include <vector>
 
 using util::for_each;
@@ -60,6 +62,7 @@ namespace engine {
      * later investigation and diagnostics.
      */
     class BlockPool
+      : public lib::BoolCheckable<BlockPool>
       {
         size_t memBlockSize_;
         PoolHolder blockList_;
@@ -93,7 +96,7 @@ namespace engine {
             Block* newBlock(0);
             try
               {
-                newBlock = new Block();  ////////////////////////////TODO pass size as ctor param  
+                newBlock = new Block(memBlockSize_);  
                 blockList_->push_back (newBlock);
               }
             catch(...)
@@ -108,11 +111,18 @@ namespace engine {
         
         
         Block*
+        find (void* bufferStorage)
+          {
+            UNIMPLEMENTED ("find a block based on storage location");
+          }
+        
+        
+        Block*
         transferResponsibility (Block* allocatedBlock)
           {
             Block* extracted;
             PoolVec& vec = *blockList_;
-            PoolVec::iterator pos = find (vec.begin(),vec.end(), allocatedBlock);
+            PoolVec::iterator pos = std::find (vec.begin(),vec.end(), allocatedBlock);
             if (pos != vec.end())
               {
                 extracted = *pos;
@@ -126,6 +136,12 @@ namespace engine {
         size()  const
           {
             return blockList_->size();
+          }
+        
+        bool
+        isValid()  const
+          {
+            return blockList_;
           }
         
       private:
@@ -160,11 +176,12 @@ namespace engine {
   TrackingHeapBlockProvider::TrackingHeapBlockProvider()
     : BufferProvider ("Diagnostic_HeapAllocated")
     , pool_(new diagn::PoolTable)
+    , outSeq_()
     { }
   
   TrackingHeapBlockProvider::~TrackingHeapBlockProvider()
     {
-      INFO (proc_mem, "discarding %zu diagnostic buffer entries", TrackingHeapBlockProvider::size());
+      INFO (proc_mem, "discarding %zu diagnostic buffer entries", outSeq_.size());
     }
   
   
@@ -194,7 +211,7 @@ namespace engine {
       throw error::Logic ("Attempt to emit a buffer not known to this BufferProvider"
                          , LUMIERA_ERROR_BUFFER_MANAGEMENT);
     diagn::BlockPool& pool = getBlockPoolFor (typeID);
-    this->manage (pool.transferResponsibility (block4buffer));
+    outSeq_.manage (pool.transferResponsibility (block4buffer));
   }
   
   
@@ -211,38 +228,53 @@ namespace engine {
   
   /* ==== Implementation details ==== */
   
+  size_t
+  TrackingHeapBlockProvider::emittedCnt()  const
+  {
+    return outSeq_.size();
+  }
+
   diagn::Block&
   TrackingHeapBlockProvider::access_or_create (uint bufferID)
   {
-    while (!withinStorageSize (bufferID))
-      this->manage (new diagn::Block);
+    while (!withinOutputSequence (bufferID))
+      outSeq_.manage (new diagn::Block(0));   /////////TICKET #856 really need a better way of returning a fallback
     
-    ENSURE (withinStorageSize (bufferID));
-    return (*this)[bufferID];
+    ENSURE (withinOutputSequence (bufferID));
+    return outSeq_[bufferID];
   }
   
   bool
-  TrackingHeapBlockProvider::withinStorageSize (uint bufferID)  const
+  TrackingHeapBlockProvider::withinOutputSequence (uint bufferID)  const
   {
     if (bufferID >= MAX_BUFFERS)
       throw error::Fatal ("hardwired internal limit for test buffers exceeded");
     
-    return bufferID < this->size();
+    return bufferID < outSeq_.size();
   }
   
   diagn::BlockPool&
   TrackingHeapBlockProvider::getBlockPoolFor (HashVal typeID)
   {
-    UNIMPLEMENTED ("access correct block pool, based on metadata");
+    diagn::BlockPool& pool = (*pool_)[typeID];
+    if (!pool)
+        pool.initialise(getBufferSize(typeID));
+    return pool;
   }
   
   diagn::Block*
   TrackingHeapBlockProvider::locateBlock (HashVal typeID, void* storage)
   {
     diagn::BlockPool& pool = getBlockPoolFor (typeID);
-    ////TODO: step 1: try to access from pool
-    ////TODO: step 2: otherwise search already emitted blocks
-    UNIMPLEMENTED ("access correct block pool, based on metadata");
+    diagn::Block* block4buffer = pool.find (storage);
+    return block4buffer? block4buffer
+                       : searchInOutSeqeuence (storage);
+  }
+  
+  diagn::Block*
+  TrackingHeapBlockProvider::searchInOutSeqeuence (void* storage)
+  {
+    UNIMPLEMENTED ("find block by storage location");
   }
   
   
