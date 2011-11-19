@@ -408,7 +408,7 @@ namespace lib {
       typedef typename RemovePtr<TY>::Type ValueType;
       
       template<class T2>
-      struct SimilarIter
+      struct SimilarIter  ///< rebind to a similarly structured Iterator with value type T2
         {
           typedef Iter<T2,CON> Type;
         };
@@ -445,7 +445,12 @@ namespace lib {
     public:
       typedef typename IT::value_type           pointer;
       typedef typename RemovePtr<pointer>::Type value_type;
-      typedef value_type&                       reference; 
+      typedef value_type&                       reference;
+      
+      // for use with STL algorithms
+      typedef void difference_type;
+      typedef std::forward_iterator_tag iterator_category;
+      
       
       // the purpose of the following typedefs is to ease building a correct "const iterator"
       
@@ -462,6 +467,7 @@ namespace lib {
       /** PtrDerefIter is always created 
        *  by wrapping an existing iterator.
        */
+      explicit
       PtrDerefIter (IT srcIter)
         : i_(srcIter)
         { }
@@ -485,7 +491,29 @@ namespace lib {
       operator= (PtrDerefIter<WrappedIterType> const& ref)
         {
           i_ = reinterpret_cast<IT const&> (ref.getBase());
+          return *this;
         }
+      
+      
+      /** explicit builder to allow creating a const variant from the basic srcIter type. 
+       *  Again, the reason necessitating this "backdoor" is that we want to swallow one level
+       *  of indirection. Generally speaking \code const T ** \endcode is not the same as
+       *  \code T * const * \endcode, but in our specific case the API ensures that a
+       *  PtrDerefIter<WrappedConstIterType> only exposes const elements. 
+       */
+      static PtrDerefIter
+      build_by_cast (WrappedIterType const& srcIter)
+        {
+          return PtrDerefIter (reinterpret_cast<IT const&> (srcIter));
+        }
+      
+      static PtrDerefIter
+      nil()
+        {
+          return PtrDerefIter (IT());
+        }
+      
+      
       
       
       

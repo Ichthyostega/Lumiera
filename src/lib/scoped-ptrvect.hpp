@@ -48,8 +48,10 @@
 #include "include/logging.h"
 #include "lib/iter-adapter.hpp"
 #include "lib/error.hpp"
+#include "lib/util.hpp"
 
 #include <vector>
+#include <algorithm>
 #include <boost/noncopyable.hpp>
 
 
@@ -155,9 +157,9 @@ namespace lib {
       typedef ConstIterType const_iterator;
       
       iterator       begin()        { return       iterator (allPtrs()); }
-      const_iterator begin()  const { return const_iterator (allPtrs()); }
+      const_iterator begin()  const { return const_iterator::build_by_cast (allPtrs()); }
       iterator       end()          { return       iterator ( RIter() ); }
-      const_iterator end()    const { return const_iterator (RcIter() ); }
+      const_iterator end()    const { return const_iterator::nil();      }
       
       
       
@@ -187,6 +189,12 @@ namespace lib {
       allPtrs ()
         {
           return RIter (_Vec::begin(), _Vec::end());
+        }
+      RIter
+      allPtrs ()  const
+        {
+          _Vec& elements = util::unConst(*this);
+          return RIter (elements.begin(), elements.end());
         }
     };
   
