@@ -25,19 +25,25 @@
 #include "include/logging.h"
 //#include "lib/meta/function.hpp"
 #include "lib/bool-checkable.hpp"
-//#include "lib/scoped-ptrvect.hpp"
+#include "lib/scoped-ptrvect.hpp"
 #include "lib/scoped-holder.hpp"
 #include "lib/util-foreach.hpp"
 
 #include "proc/engine/tracking-heap-block-provider.hpp"
 
 #include <boost/noncopyable.hpp>
+#include <tr1/functional>
 #include <algorithm>
 #include <vector>
 
-using util::for_each;
+//using util::for_each;
+using util::and_all;
 using std::vector;
 using lib::ScopedHolder;
+using lib::ScopedPtrVect;
+using std::tr1::function;
+using std::tr1::bind;
+using std::tr1::placeholders::_1;
 
 
 
@@ -45,9 +51,46 @@ namespace engine {
   
   namespace error = lumiera::error;
   
+  
+  namespace { // implementation helpers... 
+    
+    using diagn::Block;
+    
+    /** helper to find Block entries
+     *  based on the storage used by the buffer,
+     *  which is maintained by this Block entry */
+    inline bool
+    identifyBlock (Block const& inQuestion, void* storage)
+    {
+      return inQuestion.accessMemory() == storage;
+    }
+    
+    /** build a searching predicate */
+    inline function<bool(Block const&)>
+    search_for_block_using_this_storage (void* storage)
+    {
+      return bind (identifyBlock, _1, storage);
+    }
+    
+    template<class VEC>
+    inline Block*
+    pick_Block_by_storage (VEC& vec, void* bufferLocation)
+    {
+      typename VEC::iterator pos
+        = std::find_if (vec.begin(),vec.end()
+                       ,search_for_block_using_this_storage(bufferLocation));
+      if (pos!=vec.end())
+        return &(*pos);
+      else
+        return NULL;
+    }
+  }
+  
+  
+  
   namespace diagn {
     
-    typedef vector<Block*> PoolVec;
+    typedef ScopedPtrVect<Block>  PoolVec;
     typedef ScopedHolder<PoolVec> PoolHolder;
     
     /**
@@ -83,52 +126,31 @@ namespace engine {
         //  raise an runtime error, once BlockPool is initialised.
         
        ~BlockPool()
-          try {
-            if (blockList_)
-              for_each (*blockList_, discardBuffer);
-            }
-          ERROR_LOG_AND_IGNORE (test, "Shutdown of diagnostic BufferProvider allocation pool");
+         {
+           if (!verify_all_children_closed())
+             ERROR (test, "Block actively in use while shutting down BufferProvider "
+               "allocation pool. This might lead to Segfault and memory leaks.");
+         }
         
-          
+        
         Block&
         createBlock()
           {
-            Block* newBlock(0);
-            try
-              {
-                newBlock = new Block(memBlockSize_);  
-                blockList_->push_back (newBlock);
-              }
-            catch(...)
-              {
-                if (newBlock)
-                  delete newBlock;
-                throw;
-              }
-            ENSURE (newBlock);
-            return *newBlock;
+            return blockList_->manage (new Block(memBlockSize_));
           }
         
         
         Block*
-        find (void* bufferStorage)
+        find (void* bufferLocation)
           {
-            UNIMPLEMENTED ("find a block based on storage location");
+            return pick_Block_by_storage (*blockList_, bufferLocation);            
           }
         
         
         Block*
         transferResponsibility (Block* allocatedBlock)
           {
-            Block* extracted;
-            PoolVec& vec = *blockList_;
-            PoolVec::iterator pos = std::find (vec.begin(),vec.end(), allocatedBlock);
-            if (pos != vec.end())
-              {
-                extracted = *pos;
-                vec.erase(pos);
-              }
-            return extracted;
+            return blockList_->detach (allocatedBlock);
           }
         
         
@@ -145,16 +167,23 @@ namespace engine {
           }
         
       private:
-          static void
-          discardBuffer (Block* block)
+          bool
+          verify_all_children_closed()
             {
-              if (!block) return;
-              
-              if (block->was_used() && !block->was_closed())
-                ERROR (test, "Block actively in use while shutting down BufferProvider "
-                             "allocation pool. This might lead to Segfault and memory leaks.");
-              
-              delete block;
+            try {
+                if (blockList_)
+                  return and_all (*blockList_, is_in_sane_state);
+                }
+              ERROR_LOG_AND_IGNORE (test, "State verification of diagnostic BufferProvider allocation pool");
+              return true;
+            }
+          
+          
+          static bool
+          is_in_sane_state (Block const& block)
+            {
+              return !block.was_used()
+                  ||  block.was_closed();
             }
       };
 
@@ -272,9 +301,9 @@ namespace engine {
   }
   
   diagn::Block*
-  TrackingHeapBlockProvider::searchInOutSeqeuence (void* storage)
+  TrackingHeapBlockProvider::searchInOutSeqeuence (void* bufferLocation)
   {
-    UNIMPLEMENTED ("find block by storage location");
+    return pick_Block_by_storage (outSeq_, bufferLocation);            
   }
   
   
