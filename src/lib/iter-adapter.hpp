@@ -22,13 +22,14 @@
 
 /** @file iter-adapter.hpp
  ** Helper template(s) for creating <b>lumiera forward iterators</b>.
+ ** These are the foundation to build up iterator like types from scratch.
  ** Usually, these templates will be created and provided by a custom
  ** container type and accessed by the client through a typedef name
  ** "iterator" (similar to the usage within the STL). For more advanced
  ** usage, the providing container might want to subclass these iterators,
  ** e.g. to provide an additional, specialised API.
  ** 
- ** Depending on the concrete situation, there are several flavours
+ ** Depending on the concrete situation, several flavours are provided:
  ** - the IterAdapter retains an active callback connection to the
  **   controlling container, thus allowing arbitrary complex behaviour.
  ** - the RangeIter allows just to expose a range of elements defined
@@ -36,21 +37,32 @@
  ** - often, objects are managed internally by pointers, while allowing
  **   the clients to use direct references; to support this usage scenario,
  **   PtrDerefIter wraps an existing iterator, while dereferencing any value
- **   automatically on access.  
+ **   automatically on access.
+ ** 
+ ** There are many further ways of yielding a Lumiera forward iterator.
+ ** For example, lib::IterSource builds a "iterable" source of data elements,
+ ** while hiding the actual container or generator implementation behind a
+ ** vtable call. Besides, there are adapters for the most common usages
+ ** with STL containers, and such iterators can also be combined and
+ ** extended with the help of itertools.hpp
+ ** 
+ ** Basically every class in compliance with our specific iterator concept
+ ** can be used as a building block in this framework.
  ** 
  ** 
  ** \par Lumiera forward iterator concept
  ** 
  ** Similar to the STL, instead of using a common "Iterator" base class,
- ** instead we define a common set of functions and behaviour which can
+ ** we rather define a common set of functions and behaviour which can
  ** be expected from any such iterator. These rules are similar to STL's
  ** "forward iterator", with the addition of an bool check to detect
- ** iteration end. The latter s inspired by the \c hasNext() function
+ ** iteration end. The latter is inspired by the \c hasNext() function
  ** found in many current languages supporting iterators. In a similar
  ** vein (inspired from functional programming), we deliberately don't
  ** support the various extended iterator concepts from STL and boost
- ** (random access iterators, output iterators and the like). According
- ** to this concept, <i>an iterator is a promise for pulling values,</i>
+ ** (random access iterators, output iterators, arithmetics, difference
+ ** between iterators and the like). According to this concept,
+ ** <i>an iterator is a promise for pulling values,</i>
  ** and nothing beyond that.
  ** 
  ** - Any Lumiera forward iterator can be in a "exhausted" (invalid) state,
@@ -58,7 +70,7 @@
  **   created by the default ctor is always fixed to that state. This
  **   state is final and can't be reset, meaning that any iterator is
  **   a disposable one-way-off object.
- ** - iterators are copyable and comparable
+ ** - iterators are copyable and equality comparable
  ** - when an iterator is \em not in the exhausted state, it may be
  **   \em dereferenced to yield the "current" value.
  ** - moreover, iterators may be incremented until exhaustion.
