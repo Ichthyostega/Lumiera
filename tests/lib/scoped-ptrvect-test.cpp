@@ -43,7 +43,9 @@ namespace test{
   
   /********************************************************************
    *  @test ScopedPtrVect manages the lifecycle of a number of objects.
-   *  @todo implement detaching of objects
+   *        The API is similar to a vector and allows for element access
+   *        and iteration. Individual elements can be detached and thus
+   *        removed from the responsibility of the container.
    */
   class ScopedPtrVect_test : public Test
     {
@@ -53,7 +55,7 @@ namespace test{
         {
           simpleUsage();
           iterating();
-//        detaching();
+          detaching();
         }
       
       
@@ -91,7 +93,7 @@ namespace test{
             holder.manage (new Dummy);
             holder.manage (new Dummy);
             CHECK (9 == holder.size());
-            CHECK (0!=checksum);
+            CHECK (0 < checksum);
           }
           CHECK (0==checksum);
         }
@@ -143,7 +145,45 @@ namespace test{
           CHECK (0==checksum);
         }
       
+      
+      void
+      detaching()
+        {
+          int id2, id3;
+          Dummy* extracted(0);
+          CHECK (0==checksum);
+          {
+            VectD holder;
+            CHECK (0 == checksum);
+            CHECK (isnil (holder));
+            
+            holder.manage (new Dummy);
+            holder.manage (new Dummy);
+            holder.manage (new Dummy);
+            holder.manage (new Dummy);
+            holder.manage (new Dummy);
+            CHECK (5 == holder.size());
+            CHECK (0 < checksum);
+            
+            id2 = holder[2].getVal();
+            id3 = holder[3].getVal();
+            
+            extracted = holder.detach(& holder[2]);
+            CHECK (id2 == extracted->getVal());
+            CHECK (id3 == holder[2].getVal());
+            CHECK (4 == holder.size());
+          }
+          CHECK (0 < checksum);     // not all dummies are dead
+          CHECK (id2 == checksum); //  #2 is alive!
+          
+          extracted->setVal(id2+id3);
+          CHECK (id2+id3 == checksum);
+          
+          delete extracted;
+          CHECK (0 == checksum);
+        }
     };
+  
   
   LAUNCHER (ScopedPtrVect_test, "unit common");
   

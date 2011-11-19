@@ -134,6 +134,7 @@ namespace lib {
        *         Otherwise, NULL will be returned and the
        *         collection of managed objects remains unaltered
        * @note EX_STRONG
+       * @todo TICKET #856 better return a Maybe<T&> instead of a pointer?
        */
       T*
       detach (void* objAddress)
@@ -177,8 +178,8 @@ namespace lib {
       typedef ConstIterType const_iterator;
       
       iterator       begin()        { return       iterator (allPtrs()); }
-      const_iterator begin()  const { return const_iterator::build_by_cast (allPtrs()); }
       iterator       end()          { return       iterator ( RIter() ); }
+      const_iterator begin()  const { return const_iterator::build_by_cast (allPtrs()); }
       const_iterator end()    const { return const_iterator::nil();      }
       
       
