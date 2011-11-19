@@ -125,22 +125,42 @@ namespace lib {
         }   }
       
       
+      /** withdraw responsibility for a specific object.
+       *  This object will be removed form this collection
+       *  and returned as-is; it won't be deleted when the
+       *  ScopedPtrVect goes out of scope.
+       * @param obj address of the object in question.
+       * @return pointer to the object, if found.
+       *         Otherwise, NULL will be returned and the
+       *         collection of managed objects remains unaltered
+       * @note EX_STRONG
+       */
+      T*
+      detach (void* objAddress)
+        {
+          T* extracted = static_cast<T*> (objAddress);
+          VIter pos = std::find (_Vec::begin(),_Vec::end(), extracted);
+          if (pos != _Vec::end() && bool(*pos))
+            {
+              extracted = *pos;
+              _Vec::erase(pos);  // EX_STRONG
+              return extracted;
+            }
+          return NULL;
+        }
+      
+      
       void
       clear()
         { 
           VIter e = _Vec::end();
           for (VIter i = _Vec::begin(); i!=e; ++i)
-            {
-              if (*i)
-                try
-                  {
-                    delete *i;
-                    *i = 0;
-                  }
-                catch(std::exception& ex)
-                  {
-                    WARN (library, "Problem while deallocating ScopedPtrVect: %s", ex.what());
-            }     }
+            if (*i)
+              try {
+                  delete *i;
+                  *i = 0;
+                }
+              ERROR_LOG_AND_IGNORE (library, "Clean-up of ScopedPtrVect");
           _Vec::clear();
         }
       
