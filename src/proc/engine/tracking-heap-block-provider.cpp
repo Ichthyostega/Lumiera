@@ -107,12 +107,14 @@ namespace engine {
     class BlockPool
       : public lib::BoolCheckable<BlockPool>
       {
+        uint maxAllocCount_;
         size_t memBlockSize_;
         PoolHolder blockList_;
         
       public:
         BlockPool()
-          : memBlockSize_(0)
+          : maxAllocCount_(0) // unlimited by default
+          , memBlockSize_(0)
           , blockList_()
           { }
         
@@ -127,10 +129,24 @@ namespace engine {
         
        ~BlockPool()
          {
-           if (!verify_all_children_closed())
+           if (!verify_all_children_idle())
              ERROR (test, "Block actively in use while shutting down BufferProvider "
                "allocation pool. This might lead to Segfault and memory leaks.");
          }
+        
+        
+        uint 
+        prepare_for (uint number_of_expected_buffers)
+          {
+            if (maxAllocCount_ && 
+                maxAllocCount_ < blockList_->size() + number_of_expected_buffers)
+              {
+                ASSERT (maxAllocCount_ >= blockList_->size());
+                return maxAllocCount_ - blockList_->size();
+              }
+            // currently no hard limit imposed
+            return number_of_expected_buffers;
+          }
         
         
         Block&
@@ -168,7 +184,7 @@ namespace engine {
         
       private:
           bool
-          verify_all_children_closed()
+          verify_all_children_idle()
             {
             try {
                 if (blockList_)
@@ -217,9 +233,10 @@ namespace engine {
   /* ==== Implementation of the BufferProvider interface ==== */
   
   uint
-  TrackingHeapBlockProvider::prepareBuffers(uint, lib::HashVal)
+  TrackingHeapBlockProvider::prepareBuffers(uint requestedAmount, HashVal typeID)
   {
-    UNIMPLEMENTED ("pre-register storage for buffers of a specific kind");   
+    diagn::BlockPool& responsiblePool = getBlockPoolFor (typeID);
+    return responsiblePool.prepare_for (requestedAmount);
   }
 
   

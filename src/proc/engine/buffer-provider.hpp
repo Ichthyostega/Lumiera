@@ -22,7 +22,7 @@
 
 /** @file buffer-provider.hpp
  ** Abstraction to represent buffer management and lifecycle within the render engine.
- ** It turns out that --  throughout the render engine implementation -- we never need
+ ** It turns out that -- throughout the render engine implementation -- we never need
  ** direct access to the buffers holding media data. Buffers are just some entity to be \em managed,
  ** i.e. "allocated", "locked" and "released"; the actual meaning of these operations is an implementation detail.
  ** The code within the render engine just pushes around BufferHandle objects, which act as a front-end,
@@ -71,7 +71,10 @@ namespace engine {
    * - "locking" a buffer to yield a buffer handle
    * - dereferencing this smart-handle class
    * 
+   * @warning all of BufferProvider is assumed to run within a threadsafe environment.
+   * 
    * @todo as of 6/2011 buffer management within the engine is still a bit vague
+   * @todo as of 11/11 thread safety within the engine remains to be clarified
    */
   class BufferProvider
     : boost::noncopyable

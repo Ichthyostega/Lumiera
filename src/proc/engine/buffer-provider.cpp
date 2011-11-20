@@ -39,8 +39,12 @@ namespace engine {
   
   LUMIERA_ERROR_DEFINE (BUFFER_MANAGEMENT, "Problem providing working buffers");
   
-
   
+  /** build a new provider instance, managing a family of buffers.
+   *  The metadata of these buffers is organised hierarchically based on
+   *  chained hash values, using the #implementationID as a seed.
+   * @param implementationID symbolic ID setting these family of buffers apart.
+   */
   BufferProvider::BufferProvider (Literal implementationID)
     : meta_(new BufferMetadata (implementationID))
     { }
@@ -53,9 +57,9 @@ namespace engine {
    *          currently locked and usable by client code
    */
   bool
-  BufferProvider::verifyValidity (BufferDescriptor const&)
+  BufferProvider::verifyValidity (BufferDescriptor const& bufferID)
   {
-    UNIMPLEMENTED ("BufferProvider basic and default implementation");
+    return meta_->isLocked (bufferID);
   }
   
   
@@ -81,6 +85,12 @@ namespace engine {
   }
   
   
+  /** callback from implementation to build and enrol a BufferHandle,
+   * to be returned to the client as result of the #lockBuffer call.
+   * Performs the necessary metadata state transition leading from an
+   * abstract buffer type to a metadata::Entry corresponding to an
+   * actual buffer, which is locked for exclusive use by one client. 
+   */ 
   BuffHandle
   BufferProvider::buildHandle (HashVal typeID, void* storage, LocalKey const& implID)
   {
@@ -177,7 +187,7 @@ namespace engine {
   bool
   BufferProvider::was_created_by_this_provider (BufferDescriptor const& descr)  const
   {
-    return isSameObject (this, descr.provider_);
+    return isSameObject (*this, *descr.provider_);
   }
     
   
@@ -194,18 +204,20 @@ namespace engine {
   
   
   void
-  BuffHandle::emit()
+  BufferDescriptor::emit (BuffHandle const& handle)  const
   {
-    UNIMPLEMENTED ("forward buffer emit call to buffer provider");
+    REQUIRE (verifyValidity());
+    provider_->emitBuffer(handle);
   }
   
   
   void
-  BuffHandle::release()
+  BufferDescriptor::release (BuffHandle const& handle)  const
   {
-    UNIMPLEMENTED ("forward buffer release call to buffer provider");
+    REQUIRE (verifyValidity());
+    provider_->releaseBuffer(handle);
   }
   
-
-
+  
+  
 } // namespace engine

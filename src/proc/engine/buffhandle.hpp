@@ -54,6 +54,7 @@ namespace engine {
   
   typedef size_t HashVal;           ////////////TICKET #722
   
+  class BuffHandle;
   class BufferProvider;
   
   
@@ -85,6 +86,9 @@ namespace engine {
       // using standard copy operations
       
       bool verifyValidity()  const;
+      
+      void emit   (BuffHandle const&)  const;
+      void release (BuffHandle const&)  const;
       
       operator HashVal()  const { return subClassification_; }
     };
@@ -140,8 +144,18 @@ namespace engine {
       
       
       
-      void emit();
-      void release();
+      void
+      emit()
+        {
+          REQUIRE (pBuffer_);
+          descriptor_.emit (*this);
+        }
+      
+      void release()
+        {
+          REQUIRE (pBuffer_);
+          descriptor_.release (*this);
+        }
       
       
       template<typename BU>
