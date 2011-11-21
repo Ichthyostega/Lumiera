@@ -154,8 +154,13 @@ namespace engine {
       
       void release()
         {
-          REQUIRE (pBuffer_);
-          descriptor_.release (*this);
+          if (pBuffer_)
+            {
+              REQUIRE (isValid());
+              descriptor_.release (*this);
+              pBuffer_ = 0;
+            }
+          ENSURE (!isValid());
         }
       
       

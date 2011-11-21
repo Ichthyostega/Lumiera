@@ -23,34 +23,19 @@
 
 #include "lib/error.hpp"
 #include "lib/test/run.hpp"
-//#include "lib/test/test-helper.hpp"
-//#include "lib/util-foreach.hpp"
-//#include "proc/play/diagnostic-output-slot.hpp"
 #include "proc/engine/tracking-heap-block-provider.hpp"
 #include "proc/engine/testframe.hpp"
-//#include "proc/engine/diagnostic-buffer-provider.hpp"
 #include "proc/engine/buffhandle.hpp"
-//#include "proc/engine/bufftable.hpp"
 
-//#include <boost/format.hpp>
-//#include <iostream>
-#include <vector>
 #include <cstdlib>
+#include <vector>
 
-//using boost::format;
-//using std::string;
-//using std::cout;
 using std::rand;
-//using util::for_each;
 
 
 namespace engine{
 namespace test  {
   
-//  using lib::AllocationCluster;
-//  using mobject::session::PEffect;
-//  using ::engine::BuffHandle;
-//  using lumiera::error::LUMIERA_ERROR_LIFECYCLE;
   
   
   namespace { // Test fixture
@@ -62,7 +47,7 @@ namespace test  {
     
     
     bool 
-    has_expectedContent (uint nr, diagn::Block& memoryBlock) 
+    has_expectedContent (uint nr, diagn::Block& memoryBlock)
     {
       void* mem = memoryBlock.accessMemory();
       uint data = *static_cast<uint*> (mem);
@@ -71,7 +56,7 @@ namespace test  {
     }
     
     bool
-    verifyUsedBlock (uint nr, diagn::Block& memoryBlock) 
+    verifyUsedBlock (uint nr, diagn::Block& memoryBlock)
     {
       return memoryBlock.was_used()
           && memoryBlock.was_closed()
@@ -113,7 +98,7 @@ namespace test  {
           provider.emitBuffer   (testBuff);
           provider.releaseBuffer(testBuff);
           
-          diagn::Block& block0 = provider.access_or_create(0);
+          diagn::Block& block0 = provider.access_emitted(0);
           CHECK (testData(dataID) == block0.accessMemory());
         }
       
@@ -138,7 +123,7 @@ namespace test  {
           
           for (uint nr=0; nr<numElms; ++nr)
             {
-              CHECK (verifyUsedBlock (nr, provider.access_or_create(nr)));
+              CHECK (verifyUsedBlock (nr, provider.access_emitted(nr)));
             }
         }
       
@@ -156,37 +141,75 @@ namespace test  {
           BuffHandle bu4 = provider.lockBuffer (buffType);
           BuffHandle bu5 = provider.lockBuffer (buffType);
           
-          CHECK (5 == provider.emittedCnt());
+          // buffers are locked, 
+          // but still within the per-type allocation pool
+          // while the output sequence is still empty
+          CHECK (!provider.access_emitted(0).was_used());
+          CHECK (!provider.access_emitted(1).was_used());
+          CHECK (!provider.access_emitted(2).was_used());
+          CHECK (!provider.access_emitted(3).was_used());
+          CHECK (!provider.access_emitted(4).was_used());
           
-          provider.accessAs<uint>(0) = 20;
-          provider.accessAs<uint>(1) = 21;
-          provider.accessAs<uint>(2) = 22;
-          provider.accessAs<uint>(3) = 23;
-          provider.accessAs<uint>(4) = 24;
-          
+          // can use the buffers for real
           bu1.accessAs<uint>() = 1;
           bu2.accessAs<uint>() = 2;
           bu3.accessAs<uint>() = 3;
           bu4.accessAs<uint>() = 4;
           bu5.accessAs<uint>() = 5;
           
-          CHECK (20 == provider.accessAs<uint>(0));
-          CHECK (21 == provider.accessAs<uint>(1));
-          CHECK (22 == provider.accessAs<uint>(2));
-          CHECK (23 == provider.accessAs<uint>(3));
-          CHECK (24 == provider.accessAs<uint>(4));
+          CHECK (0 == provider.emittedCnt());
           
+          // now emit buffers in shuffled order
           provider.emitBuffer (bu3);
           provider.emitBuffer (bu1);
           provider.emitBuffer (bu5);
           provider.emitBuffer (bu4);
           provider.emitBuffer (bu2);
           
+          CHECK (5 == provider.emittedCnt());
+          
           CHECK (3 == provider.accessAs<uint>(0));
           CHECK (1 == provider.accessAs<uint>(1));
           CHECK (5 == provider.accessAs<uint>(2));
           CHECK (4 == provider.accessAs<uint>(3));
           CHECK (2 == provider.accessAs<uint>(4));
+          
+          CHECK ( provider.access_emitted(0).was_used());
+          CHECK ( provider.access_emitted(1).was_used());
+          CHECK ( provider.access_emitted(2).was_used());
+          CHECK ( provider.access_emitted(3).was_used());
+          CHECK ( provider.access_emitted(4).was_used());
+          
+          CHECK (!provider.access_emitted(0).was_closed());
+          CHECK (!provider.access_emitted(1).was_closed());
+          CHECK (!provider.access_emitted(2).was_closed());
+          CHECK (!provider.access_emitted(3).was_closed());
+          CHECK (!provider.access_emitted(4).was_closed());
+          
+          bu5.release();
+          CHECK (!provider.access_emitted(0).was_closed());
+          CHECK (!provider.access_emitted(1).was_closed());
+          CHECK ( provider.access_emitted(2).was_closed());
+          CHECK (!provider.access_emitted(3).was_closed());
+          CHECK (!provider.access_emitted(4).was_closed());
+          
+          bu2.release();
+          bu2.release();
+          bu5.release();
+          CHECK (!provider.access_emitted(0).was_closed());
+          CHECK (!provider.access_emitted(1).was_closed());
+          CHECK ( provider.access_emitted(2).was_closed());
+          CHECK (!provider.access_emitted(3).was_closed());
+          CHECK ( provider.access_emitted(4).was_closed());
+          
+          CHECK (!bu2);
+          CHECK (bu3);
+          
+          bu1.release();
+          bu3.release();
+          bu4.release();
+          
+          CHECK (5 == provider.emittedCnt());
         }
     };
   

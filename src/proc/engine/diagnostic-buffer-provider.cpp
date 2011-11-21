@@ -103,21 +103,21 @@ namespace engine {
   bool
   DiagnosticBufferProvider::buffer_was_used (uint bufferID)  const
     {
-      return pImpl_->access_or_create(bufferID).was_used();
+      return pImpl_->access_emitted(bufferID).was_used();
     }
   
   
   bool
   DiagnosticBufferProvider::buffer_was_closed (uint bufferID)  const
     {
-      return pImpl_->access_or_create(bufferID).was_closed();
+      return pImpl_->access_emitted(bufferID).was_closed();
     }
   
   
   void*
   DiagnosticBufferProvider::accessMemory (uint bufferID)  const
     {
-      return pImpl_->access_or_create(bufferID).accessMemory();
+      return pImpl_->access_emitted(bufferID).accessMemory();
     }
   
 

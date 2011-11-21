@@ -32,7 +32,6 @@
 #include "proc/engine/tracking-heap-block-provider.hpp"
 
 #include <boost/noncopyable.hpp>
-#include <tr1/functional>
 #include <algorithm>
 #include <vector>
 
@@ -41,9 +40,6 @@ using util::and_all;
 using std::vector;
 using lib::ScopedHolder;
 using lib::ScopedPtrVect;
-using std::tr1::function;
-using std::tr1::bind;
-using std::tr1::placeholders::_1;
 
 
 
@@ -57,12 +53,11 @@ namespace engine {
     using diagn::Block;
     
     /** helper to find Block entries
-     *  based on the storage used by the buffer,
-     *  which is maintained by this Block entry */
+     *  based on their raw memory address */
     inline bool
     identifyBlock (Block const& inQuestion, void* storage)
     {
-      return inQuestion.accessMemory() == storage;
+      return storage == &inQuestion;
     }
     
     /** build a searching predicate */
@@ -74,11 +69,11 @@ namespace engine {
     
     template<class VEC>
     inline Block*
-    pick_Block_by_storage (VEC& vec, void* bufferLocation)
+    pick_Block_by_storage (VEC& vec, void* blockLocation)
     {
       typename VEC::iterator pos
         = std::find_if (vec.begin(),vec.end()
-                       ,search_for_block_using_this_storage(bufferLocation));
+                       ,search_for_block_using_this_storage(blockLocation));
       if (pos!=vec.end())
         return &(*pos);
       else
@@ -157,9 +152,9 @@ namespace engine {
         
         
         Block*
-        find (void* bufferLocation)
+        find (void* blockLocation)
           {
-            return pick_Block_by_storage (*blockList_, bufferLocation);            
+            return pick_Block_by_storage (*blockList_, blockLocation);            
           }
         
         
@@ -210,6 +205,8 @@ namespace engine {
   namespace { // Details of allocation and accounting
     
     const uint MAX_BUFFERS = 50;
+    
+    diagn::Block emptyPlaceholder(0);
   
   } // (END) Details of allocation and accounting
   
@@ -281,13 +278,12 @@ namespace engine {
   }
 
   diagn::Block&
-  TrackingHeapBlockProvider::access_or_create (uint bufferID)
+  TrackingHeapBlockProvider::access_emitted (uint bufferID)
   {
-    while (!withinOutputSequence (bufferID))
-      outSeq_.manage (new diagn::Block(0));   /////////TICKET #856 really need a better way of returning a fallback
-    
-    ENSURE (withinOutputSequence (bufferID));
-    return outSeq_[bufferID];
+    if (!withinOutputSequence (bufferID))
+      return emptyPlaceholder;
+    else
+      return outSeq_[bufferID];
   }
   
   bool
@@ -318,9 +314,9 @@ namespace engine {
   }
   
   diagn::Block*
-  TrackingHeapBlockProvider::searchInOutSeqeuence (void* bufferLocation)
+  TrackingHeapBlockProvider::searchInOutSeqeuence (void* blockLocation)
   {
-    return pick_Block_by_storage (outSeq_, bufferLocation);            
+    return pick_Block_by_storage (outSeq_, blockLocation);            
   }
   
   

@@ -144,7 +144,7 @@ namespace engine {
       
       size_t emittedCnt()  const;
       
-      diagn::Block& access_or_create (uint bufferID);
+      diagn::Block& access_emitted (uint bufferID);
       
       template<typename TY>
       TY&  accessAs (uint bufferID);
@@ -173,7 +173,7 @@ namespace engine {
     if (!withinOutputSequence (bufferID))
       throw error::Invalid ("Buffer with the given ID not yet emitted");
     
-    diagn::Block& memoryBlock = access_or_create (bufferID);
+    diagn::Block& memoryBlock = access_emitted (bufferID);
     TY* converted = reinterpret_cast<TY*> (memoryBlock.accessMemory());
     
     REQUIRE (converted);
