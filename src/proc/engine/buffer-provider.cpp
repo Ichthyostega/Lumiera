@@ -203,6 +203,13 @@ namespace engine {
   }
   
   
+  size_t
+  BufferDescriptor::determineBufferSize() const
+  {
+    return provider_->getBufferSize (*this);
+  }
+  
+  
   void
   BufferDescriptor::emit (BuffHandle const& handle)  const
   {

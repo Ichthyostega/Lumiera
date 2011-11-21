@@ -46,7 +46,6 @@
 #include "lib/error.hpp"
 #include "proc/engine/buffer-provider.hpp"
 #include "lib/scoped-ptrvect.hpp"
-#include "lib/access-casted.hpp"
 
 #include <tr1/unordered_map>
 #include <boost/scoped_ptr.hpp>
@@ -75,37 +74,38 @@ namespace engine {
       {
         scoped_array<char> storage_;
         
-        bool was_locked_;
+        bool was_released_;
         
       public:
         explicit
         Block(size_t bufferSize)
-          : storage_(new char[bufferSize])
-          , was_locked_(false)
+          : storage_(bufferSize? new char[bufferSize] : NULL)
+          , was_released_(false)
           { }
         
         bool
         was_used()  const
           {
-            return was_locked_;
+            return bool(storage_);
           }
         
         bool
         was_closed()  const
           {
-            return was_locked_;
+            return was_released_;
           }
         
         void*
         accessMemory()  const
           {
+            REQUIRE (storage_, "Block was never prepared for use");
             return storage_.get();
           }
         
         void
         markReleased()
           {
-            UNIMPLEMENTED ("diagn::Block accounting functionality");
+            was_released_ = true;
           }
       };
       
@@ -174,12 +174,10 @@ namespace engine {
       throw error::Invalid ("Buffer with the given ID not yet emitted");
     
     diagn::Block& memoryBlock = access_or_create (bufferID);
-    TY* converted = util::AccessCasted<TY*>::access (memoryBlock.accessMemory());
+    TY* converted = reinterpret_cast<TY*> (memoryBlock.accessMemory());
     
-    if (!converted)
-      throw error::Fatal ("unable to access the target location with the required conversion");
-    else
-      return *converted;
+    REQUIRE (converted);
+    return *converted;
   }
   
   

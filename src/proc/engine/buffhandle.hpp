@@ -86,6 +86,7 @@ namespace engine {
       // using standard copy operations
       
       bool verifyValidity()  const;
+      size_t determineBufferSize() const;
       
       void emit   (BuffHandle const&)  const;
       void release (BuffHandle const&)  const;
@@ -190,7 +191,7 @@ namespace engine {
       size_t
       size()  const
         {
-          UNIMPLEMENTED ("forward to the buffer provider for storage size diagnostics");
+          return descriptor_.determineBufferSize();
         }
       
     };
@@ -212,15 +213,17 @@ namespace engine {
   }
   
   
-  /** convenience shortcut: access the buffer contents in a typesafe fashion.
-   *  This is equivalent to a plain dereferentiation with additional metadata check
-   * @throw error::Logic in case of type mismatch \c LUMIERA_ERROR_WRONG_TYPE
+  /** convenience shortcut: access the buffer contents casted to a specific type.
+   * @warning this is a \em blind cast, there is no type safety.
+   * @note clients can utilise the metadata::LocalKey to keep track of some
+   *       specific property of the buffer, like e.g. the type of object.
    */
   template<typename BU>
   BU&
   BuffHandle::accessAs()
   {
-    UNIMPLEMENTED ("convenience shortcut to access buffer contents typesafe");
+    REQUIRE (pBuffer_);
+    return *reinterpret_cast<BU*> (pBuffer_);
   }
   
   
