@@ -1,5 +1,5 @@
 /*
-  OutputProbe  -  tool to investigate external output connections
+  ALSA.h  -  sound output backend using the Advanced Linux Sound Architecture
 
   Copyright (C)         Lumiera.org
     2011,               Odin Omdal Hørthe <odin.omdal@gmail.com>
@@ -18,36 +18,37 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
-* *****************************************************/
+*/
+
+/** @file alsa.h
+ ** Interfacing to ALSA sound output.
+ ** 
+ ** @todo for now this header defines some functions used for experimentation with ALSA 
+ **
+ ** @see output-slot.hpp
+ */
 
 
-#include "alsa.h"
-
-#include <unistd.h>
-#include <stdint.h>
-#include <stdio.h>
+#ifndef TOOL_ALSA_H
+#define TOOL_ALSA_H
 
 
-#define SAMPLE_RATE 44100
+#include <stdlib.h>
 
-int16_t quiet[SAMPLE_RATE], noisy[SAMPLE_RATE];
 
-void main () {
 
-    for (int i=0; i<SAMPLE_RATE; i++)
-    {
-        quiet[i] = 0;
-        noisy[i] = i%30000;
-    }
-    audio_start(44100, 2);
+size_t audio_offset();
 
-    for (int i=0; i<10; i++)
-    {
-        audio_write(noisy, SAMPLE_RATE);
-        printf("=================================\n");
-        audio_write(quiet, SAMPLE_RATE);
-        printf("\n");
-    }
 
-    audio_stop();
-}
+void audio_init();
+
+
+size_t audio_write(const void* data, size_t amount);
+
+
+void audio_start(unsigned int rate, unsigned int channel_count);
+
+
+void audio_stop();
+
+#endif // TOOL_ALSA_H

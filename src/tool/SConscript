@@ -10,12 +10,19 @@ envSvg = env.Clone()
 envSvg.mergeConf(['librsvg-2.0'])
 envSvg.Append(LIBS=support_lib)
 
+envSnd = env.Clone()
+envSnd.mergeConf(['alsa'])
+
+
+outputProbe = envSnd.Program('lumiera-output-probe'
+                            , ['main.c', 'alsa.c'] + core, install=True)         ## Odin's ALSA experiments
 
 luidgen =    env.Program('luidgen', ['luidgen.c'] + support_lib, install=True)   ## for generating Lumiera-UIDs
 rsvg    = envSvg.Program('rsvg-convert','rsvg-convert.c')                        ## for rendering SVG icons (uses librsvg) 
 
 # build additional test and administrative tools....
 tools = [ env.Program('hello-world','hello.c', install=True)                   #### hello world (checks C build)      
+        + outputProbe                                                          #### for output connection tests
         + luidgen
         + rsvg
         ]
