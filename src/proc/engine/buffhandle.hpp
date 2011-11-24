@@ -52,6 +52,9 @@
 
 namespace engine {
   
+  namespace error = lumiera::error;
+  using error::LUMIERA_ERROR_LIFECYCLE;
+  
   typedef size_t HashVal;           ////////////TICKET #722
   
   class BuffHandle;
@@ -227,7 +230,9 @@ namespace engine {
   BU&
   BuffHandle::accessAs()
   {
-    REQUIRE (pBuffer_);
+    if (!pBuffer_)
+      throw error::Logic ("buffer not (yet) locked for access by clients"
+                         , LUMIERA_ERROR_LIFECYCLE);
     return *reinterpret_cast<BU*> (pBuffer_);
   }
   

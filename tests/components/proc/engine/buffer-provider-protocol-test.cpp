@@ -76,7 +76,6 @@ namespace test  {
       virtual void
       run (Arg) 
         {
-          UNIMPLEMENTED ("build a diagnostic buffer provider and perform a full lifecycle");
           verifySimpleUsage();
           verifyStandardCase();
         }
@@ -93,10 +92,10 @@ namespace test  {
           BuffHandle buff = provider.lockBufferFor<TestFrame>();
           CHECK (buff.isValid());
           CHECK (sizeof(TestFrame) <= buff.size());
-          buff.create<TestFrame>() = testData(0);
+          buff.accessAs<TestFrame>() = testData(0);
           
-          TestFrame& storage = buff.accessAs<TestFrame>();
-          CHECK (testData(0) == storage);
+          TestFrame& content = buff.accessAs<TestFrame>();
+          CHECK (testData(0) == content);
           
           buff.release();
           CHECK (!buff.isValid());
