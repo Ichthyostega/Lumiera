@@ -21,9 +21,9 @@
 */
 
 /** @file buffhandle.hpp
- ** Various bits needed to support the buffer management within the render nodes.
+ ** A front-end to support the buffer management within the render nodes.
  ** When pulling data from predecessor nodes and calculating new data, each render node
- ** needs several input and output buffers. These may be allocated and provided by several
+ ** needs several input and output buffers. These may be allocated and provided by various
  ** different "buffer providers" (for example the frame cache). Typically, the real buffers
  ** will be passed as parameters to the actual job instance when scheduled, drawing on the
  ** results of prerequisite jobs. Yet the actual job implementation remains agnostic with
@@ -31,12 +31,18 @@
  ** objects around. The actual render function gets an array of C-pointers to the actual
  ** buffers, and for accessing those buffers, the node needs to keep a table of buffer
  ** pointers, and for releasing the buffers later on, we utilise the buffer handles.
- ** The usage pattern of those buffer pointer tables is stack-like, thus the actual
- ** implementation utilises a single large buffer pointer array per pull() call
- ** sequence and dynamically claims small chunks for each node.
  ** 
- ** @see nodewiring-def.hpp
- ** @see nodeoperation.hpp
+ ** These buffer handles are based on a buffer descriptor record, which is opaque as far
+ ** as the client is concerned. BufferDescriptor acts as a representation of the type or
+ ** kind of buffer. The only way to obtain such a BufferDescriptor is from a concrete
+ ** BufferProvider implementation. A back-link to this owning and managing provider is
+ ** embedded into the BufferDescriptor, allowing to retrieve an buffer handle, corresponding
+ ** to an actual buffer provided and managed behind the scenes. There is no automatic
+ ** resource management; clients are responsible to invoke BuffHandle#release when done.
+ ** 
+ ** @see BufferProvider
+ ** @see BufferProviderProtocol_test usage demonstration
+ ** @see OutputSlot
  ** @see bufftable.hpp       storage for the buffer table
  ** @see engine::RenderInvocation
  */
@@ -96,24 +102,6 @@ namespace engine {
       
       operator HashVal()  const { return subClassification_; }
     };
-  
-  
-  
-  class ProcNode;
-  typedef ProcNode* PNode;
-  
-  
-  struct ChannelDescriptor  ///////TODO really need to define that here? it is needed for node wiring only
-    {
-      const lumiera::StreamType * bufferType;                /////////////////////////////////////////TICKET #828
-    };
-  
-  struct InChanDescriptor : ChannelDescriptor
-    {
-      PNode dataSrc;    ///< the ProcNode to pull this input from
-      uint srcChannel; ///<  output channel to use on the predecessor node
-    };
-  
   
   
   
