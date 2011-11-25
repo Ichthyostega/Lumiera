@@ -28,7 +28,7 @@
 //#include "proc/play/diagnostic-output-slot.hpp"
 #include "proc/engine/testframe.hpp"
 #include "proc/engine/diagnostic-buffer-provider.hpp"
-#include "proc/engine/buffhandle.hpp"
+#include "proc/engine/buffhandle-attach.hpp"
 #include "proc/engine/bufftable.hpp"
 
 //#include <boost/format.hpp>

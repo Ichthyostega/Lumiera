@@ -106,6 +106,11 @@ namespace engine {
       template<typename BU>
       BuffHandle lockBufferFor ();
       
+      /** allow for attaching and owing an object within an already created buffer */
+      void attachTypeHandler (BuffHandle const& target, BufferDescriptor const& reference);
+      
+      void emergencyCleanup (BuffHandle const& target, bool invokeDtor =false);
+      
       
       /** describe the kind of buffer managed by this provider */
       BufferDescriptor getDescriptorFor(size_t storageSize=0);
@@ -118,8 +123,8 @@ namespace engine {
       
       /* === API for BuffHandle internal access === */
       
-      bool verifyValidity (BufferDescriptor const&);
-      size_t getBufferSize (HashVal typeID)  const;
+      bool verifyValidity (BufferDescriptor const&)  const;
+      size_t getBufferSize (HashVal typeID)          const;
       
     protected:
       BuffHandle buildHandle (HashVal typeID, void* storage, LocalKey const&);

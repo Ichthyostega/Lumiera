@@ -174,39 +174,14 @@ namespace engine {
           return descriptor_.determineBufferSize();
         }
       
+    private:
+      template<typename BU>
+      void takeOwnershipFor();
+      void takeOwnershipFor(BufferDescriptor const& type);
+      
+      void emergencyCleanup();
     };
   
-  
-  /* === Implementation details === */
-  
-  /** convenience shortcut: place and maintain an object within the buffer.
-   *  This operation performs the necessary steps to attach an object;
-   *  if the buffer isn't locked yet, it will do so. Moreover, the created
-   *  object will be owned by the buffer management facilities, i.e. the
-   *  destructor is registered as cleanup function.   
-   */
-  template<typename BU>
-  BU&
-  BuffHandle::create()
-  {
-    UNIMPLEMENTED ("convenience shortcut to attach/place an object in one sway");
-  }
-  
-  
-  /** convenience shortcut: access the buffer contents casted to a specific type.
-   * @warning this is a \em blind cast, there is no type safety.
-   * @note clients can utilise the metadata::LocalKey to keep track of some
-   *       specific property of the buffer, like e.g. the type of object.
-   */
-  template<typename BU>
-  BU&
-  BuffHandle::accessAs()
-  {
-    if (!pBuffer_)
-      throw error::Logic ("buffer not (yet) locked for access by clients"
-                         , LUMIERA_ERROR_LIFECYCLE);
-    return *reinterpret_cast<BU*> (pBuffer_);
-  }
   
   
   

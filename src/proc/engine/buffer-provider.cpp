@@ -57,7 +57,7 @@ namespace engine {
    *          currently locked and usable by client code
    */
   bool
-  BufferProvider::verifyValidity (BufferDescriptor const& bufferID)
+  BufferProvider::verifyValidity (BufferDescriptor const& bufferID)  const
   {
     return meta_->isLocked (bufferID);
   }
@@ -184,6 +184,39 @@ namespace engine {
   ERROR_LOG_AND_IGNORE (engine, "releasing a buffer from BufferProvider")
   
   
+  
+  /** @warning this operation locally modifies the metadata entry of a single buffer
+   *           to attach a TypeHandler taking ownership of an object embedded within the buffer.
+   *           The client is responsible for actually placement-constructing the object; moreover
+   *           the client is responsible for any damage done to already existing buffer content.
+   *  @note the buffer must be in locked state and the underlying buffer type must not define
+   *        an non-trivial TypeDescriptor, because there is no clean way of superseding an
+   *        existing TypeDescriptor, which basically is just a functor and possibly
+   *        could perform any operation on buffer clean-up.
+   *  @note EX_STRONG
+   */
+  void
+  BufferProvider::attachTypeHandler (BuffHandle const& target, BufferDescriptor const& reference)
+  {
+    UNIMPLEMENTED ("convenience shortcut to attach/place an object in one sway");
+  }
+  
+  
+  /** @internal abort normal lifecycle, reset the underlying buffer and detach from it.
+   *  This allows to break out of normal usage and reset the handle to \em invalid state 
+   * @param invokeDtor if possibly the clean-up function of an TypeHandler registered with
+   *        the buffer metadata should be invoked prior to resetting the metadata state.
+   *        Default is \em not to invoke anything
+   * @note EX_FREE
+   */
+  void
+  BufferProvider::emergencyCleanup (BuffHandle const& target, bool invokeDtor)
+  {
+    UNIMPLEMENTED ("emergency cleanup");
+  }
+
+  
+  
   bool
   BufferProvider::was_created_by_this_provider (BufferDescriptor const& descr)  const
   {
@@ -229,6 +262,25 @@ namespace engine {
       }
     ENSURE (!isValid());
   }
+  
+  
+  void
+  BuffHandle::emergencyCleanup()
+  {
+    descriptor_.provider_->emergencyCleanup(*this); // EX_FREE 
+    pBuffer_ = 0;       
+  }
+  
+  
+  void
+  BuffHandle::takeOwnershipFor(BufferDescriptor const& type)
+  {
+    if (this->size() < type.determineBufferSize())
+      throw error::Logic ("insufficient buffer size to hold an instance of that type");
+    
+    descriptor_.provider_->attachTypeHandler(*this, type); // EX_STRONG
+  }
+
   
   
   
