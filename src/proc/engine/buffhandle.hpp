@@ -81,6 +81,7 @@ namespace engine {
    */
   class BufferDescriptor
     {
+    protected:
       BufferProvider* provider_;
       HashVal subClassification_;
       
@@ -90,15 +91,13 @@ namespace engine {
       { }
       
       friend class BufferProvider;
+      friend class BuffHandle;
       
     public:
       // using standard copy operations
       
       bool verifyValidity()  const;
       size_t determineBufferSize() const;
-      
-      void emit   (BuffHandle const&)  const;
-      void release (BuffHandle const&)  const;
       
       operator HashVal()  const { return subClassification_; }
     };
@@ -136,23 +135,8 @@ namespace engine {
       
       
       
-      void
-      emit()
-        {
-          REQUIRE (pBuffer_);
-          descriptor_.emit (*this);
-        }
-      
-      void release()
-        {
-          if (pBuffer_)
-            {
-              REQUIRE (isValid());
-              descriptor_.release (*this);
-              pBuffer_ = 0;
-            }
-          ENSURE (!isValid());
-        }
+      void emit();
+      void release();
       
       
       template<typename BU>
@@ -181,7 +165,7 @@ namespace engine {
       HashVal
       entryID()  const
         {
-          return descriptor_;
+          return HashVal(descriptor_);
         }
       
       size_t

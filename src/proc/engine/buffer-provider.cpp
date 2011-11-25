@@ -211,18 +211,23 @@ namespace engine {
   
   
   void
-  BufferDescriptor::emit (BuffHandle const& handle)  const
+  BuffHandle::emit()
   {
-    REQUIRE (verifyValidity());
-    provider_->emitBuffer(handle);
+    REQUIRE (isValid());
+    descriptor_.provider_->emitBuffer(*this);
   }
   
   
   void
-  BufferDescriptor::release (BuffHandle const& handle)  const
+  BuffHandle::release()
   {
-    REQUIRE (verifyValidity());
-    provider_->releaseBuffer(handle);
+    if (pBuffer_)
+      {
+        REQUIRE (isValid());
+        descriptor_.provider_->releaseBuffer(*this);
+        pBuffer_ = 0;
+      }
+    ENSURE (!isValid());
   }
   
   

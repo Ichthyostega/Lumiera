@@ -70,6 +70,7 @@ namespace engine {
       PBu inBuff;
     };
   
+  class BufferDescriptor;
   
     /** Obsolete, to be rewritten  /////TICKET #826 */
   class BuffTableStorage
