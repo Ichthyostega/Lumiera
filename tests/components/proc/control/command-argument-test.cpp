@@ -333,7 +333,7 @@ namespace test    {
 
           // store a set of parameter values, later to be used on invocation
           args.storeTuple (
-            tuple::make (TTime(randTime()), Tstr("Lumiera rocks"), rand() % 100));
+            tuple::make (TTime(randTime()), Tstr("Lumiera rocks"), 10 + rand() % 90));
           CHECK (!isnil (args));
           cout << args << endl;
 

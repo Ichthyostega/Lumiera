@@ -27,13 +27,6 @@
 #include "proc/engine/diagnostic-buffer-provider.hpp"
 #include "proc/engine/tracking-heap-block-provider.hpp"
 
-//#include <boost/scoped_array.hpp>
-//#include <vector>
-
-//using lib::ScopedPtrVect;
-//using boost::scoped_array;
-
-
 
 namespace engine {
   
@@ -42,20 +35,10 @@ namespace engine {
   lib::Singleton<DiagnosticBufferProvider> DiagnosticBufferProvider::diagnostics;
   
   
-    
-    
-  namespace { // Details of allocation and accounting
-    
-  
-  } // (END) Details of allocation and accounting
   
   
-  
-  
-  
-
   DiagnosticBufferProvider::DiagnosticBufferProvider()
-    : pImpl_() //////////TODO create PImpl here
+    : pImpl_()
     { }
   
   DiagnosticBufferProvider::~DiagnosticBufferProvider() { }
@@ -78,9 +61,9 @@ namespace engine {
     return diagnostics();
   }
   
-
-    
-    
+  
+  
+  
   TrackingHeapBlockProvider&
   DiagnosticBufferProvider::reset()
   {
@@ -93,9 +76,9 @@ namespace engine {
   {
     return &implInstance == pImpl_.get();
   }
-
   
-
+  
+  
   
   
   /* === diagnostic API === */

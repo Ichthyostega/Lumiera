@@ -89,7 +89,7 @@ namespace engine {
    * to be returned to the client as result of the #lockBuffer call.
    * Performs the necessary metadata state transition leading from an
    * abstract buffer type to a metadata::Entry corresponding to an
-   * actual buffer, which is locked for exclusive use by one client. 
+   * actual buffer, which is locked for exclusive use by one client.
    */ 
   BuffHandle
   BufferProvider::buildHandle (HashVal typeID, void* storage, LocalKey const& implID)
@@ -178,8 +178,9 @@ namespace engine {
   BufferProvider::releaseBuffer (BuffHandle const& handle)
   try {
     metadata::Entry& metaEntry = meta_->get (handle.entryID());
+    metaEntry.mark(FREE);   // might invoke embedded dtor function
     detachBuffer (metaEntry.parentKey(), metaEntry.localKey());
-    metaEntry.mark(FREE);
+    meta_->release (metaEntry);
   }
   ERROR_LOG_AND_IGNORE (engine, "releasing a buffer from BufferProvider")
   
@@ -198,7 +199,15 @@ namespace engine {
   void
   BufferProvider::attachTypeHandler (BuffHandle const& target, BufferDescriptor const& reference)
   {
-    UNIMPLEMENTED ("convenience shortcut to attach/place an object in one sway");
+    metadata::Entry& metaEntry = meta_->get (target.entryID());
+    metadata::Entry& refEntry = meta_->get (reference);
+    REQUIRE (refEntry.isTypeKey());
+    REQUIRE (!metaEntry.isTypeKey());
+    if (!metaEntry.isLocked())
+      throw error::Logic ("unable to attach an object because buffer isn't locked for use"
+                         , LUMIERA_ERROR_LIFECYCLE);
+    
+    metaEntry.useTypeHandlerFrom (refEntry); // EX_STRONG
   }
   
   
@@ -211,10 +220,14 @@ namespace engine {
    */
   void
   BufferProvider::emergencyCleanup (BuffHandle const& target, bool invokeDtor)
-  {
-    UNIMPLEMENTED ("emergency cleanup");
+  try {
+    metadata::Entry& metaEntry = meta_->get (target.entryID());
+    metaEntry.invalidate (invokeDtor);
+    detachBuffer (metaEntry.parentKey(), metaEntry.localKey());
+    meta_->release (metaEntry);
   }
-
+  ERROR_LOG_AND_IGNORE (engine, "cleanup of buffer metadata while handling an error")
+  
   
   
   bool
@@ -222,7 +235,7 @@ namespace engine {
   {
     return isSameObject (*this, *descr.provider_);
   }
-    
+  
   
   
   
@@ -267,20 +280,35 @@ namespace engine {
   void
   BuffHandle::emergencyCleanup()
   {
-    descriptor_.provider_->emergencyCleanup(*this); // EX_FREE 
-    pBuffer_ = 0;       
+    descriptor_.provider_->emergencyCleanup(*this); // EX_FREE
+    pBuffer_ = 0;
   }
   
   
+  /** Install a standard TypeHandler for an already locked buffer.
+   *  This causes the dtor function to be invoked when releasing this buffer.
+   *  The assumption is that client code will placement-construct an object
+   *  into this buffer right away, and thus we're taking ownership on that object.
+   * @param type a reference BufferDescriptor defining an embedded TypeHandler to use
+   *        A copy of this TypeHandler will be stored into the local metadata for
+   *        this buffer only, not altering the basic buffer type in any way
+   * @throw lifecycle error when attempting to treat an buffer not in locked state
+   * @throw error::Logic in case of insufficient buffer space to hold the
+   *        intended target object
+   * @note EX_STRONG
+   */
   void
   BuffHandle::takeOwnershipFor(BufferDescriptor const& type)
   {
+    if (!this->isValid())
+      throw error::Logic ("attaching an object requires an buffer in locked state"
+                         , LUMIERA_ERROR_LIFECYCLE);
     if (this->size() < type.determineBufferSize())
       throw error::Logic ("insufficient buffer size to hold an instance of that type");
     
     descriptor_.provider_->attachTypeHandler(*this, type); // EX_STRONG
   }
-
+  
   
   
   

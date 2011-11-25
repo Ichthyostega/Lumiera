@@ -43,7 +43,7 @@
  ** @see BufferProvider
  ** @see BufferProviderProtocol_test usage demonstration
  ** @see OutputSlot
- ** @see bufftable.hpp       storage for the buffer table
+ ** @see bufftable.hpp      storage for the buffer table
  ** @see engine::RenderInvocation
  */
 
@@ -76,8 +76,6 @@ namespace engine {
    * @note this descriptor and especially the #subClassification_ is really owned
    *       by the BufferProvider, which may use (and even change) the opaque contents
    *       to organise the internal buffer management.
-   * 
-   * @todo try to move that definition into buffer-provider.hpp   ////////////////////////////////////TICKET #249
    */
   class BufferDescriptor
     {
@@ -108,9 +106,6 @@ namespace engine {
   /**
    * Handle for a buffer for processing data, abstracting away the actual implementation.
    * The real buffer pointer can be retrieved by dereferencing this smart-handle class.
-   * 
-   * @todo as of 6/2011 it isn't clear how buffer handles are actually created
-   *       and how the lifecycle (and memory) management works                  //////////////////////TICKET #249 rework BuffHandle creation and usage
    */
   class BuffHandle
     : public lib::BoolCheckable<BuffHandle>

@@ -67,6 +67,7 @@ namespace engine {
       {                                   \
         emergencyCleanup(); /* EX_FREE */ \
         pBuffer_ = 0;                     \
+        throw;                            \
       }
   
   /** convenience shortcut: place and maintain an object within the buffer.

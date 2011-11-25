@@ -33,6 +33,7 @@
 #include "lib/error.hpp"
 #include "lib/singleton.hpp"
 #include "lib/util.hpp"
+#include "proc/engine/type-handler.hpp"
 #include "proc/engine/buffer-provider.hpp"
 
 #include <boost/scoped_ptr.hpp>
@@ -96,22 +97,6 @@ namespace engine {
       bool buffer_was_closed (uint bufferID) const;
       void* accessMemory (uint bufferID)   const;
       bool all_buffers_released()          const;
-      
-      
-      template<typename BU>
-      bool
-      object_was_attached (uint bufferID)  const
-        {
-          UNIMPLEMENTED ("verify object attachment status of a specific buffer");
-        }
-      
-      
-      template<typename BU>
-      bool
-      object_was_destroyed (uint bufferID)  const
-        {
-          UNIMPLEMENTED ("verify object attachment status of a specific buffer");
-        }
       
       
       

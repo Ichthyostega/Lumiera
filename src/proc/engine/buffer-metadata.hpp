@@ -235,6 +235,15 @@ namespace engine {
             return newKey; 
           }
         
+        void
+        useTypeHandlerFrom (Key const& ref)
+          {
+            if (nontrivial(this->instanceFunc_))
+              throw error::Logic ("unable to supersede an already attached TypeHandler"
+                                 , LUMIERA_ERROR_LIFECYCLE);
+            instanceFunc_ = ref.instanceFunc_;
+          }
+        
         
         LocalKey const& localKey() const { return specifics_;}
         size_t storageSize() const { return storageSize_; }
@@ -344,6 +353,16 @@ namespace engine {
             __must_be_FREE();
             buffer_ = newBuffer;
             return mark (LOCKED);
+          }
+        
+        Entry&
+        invalidate (bool invokeDtor =true)
+          {
+            if (buffer_ && invokeDtor)
+              invokeEmbeddedDtor_and_clear();
+            buffer_ = 0;
+            state_ = FREE;
+            return *this;
           }
         
         
@@ -712,11 +731,19 @@ namespace engine {
         {
           Entry* entry = table_.fetch (key);
           if (!entry) return;
-          if (entry && (FREE != entry->state()))
+          
+          ASSERT (entry && (key == HashVal(*entry)));
+          release (*entry);
+        }
+      
+      void
+      release (Entry const& entry)
+        {
+          if (FREE != entry.state())
             throw error::Logic ("Attempt to release a buffer still in use"
                                , error::LUMIERA_ERROR_LIFECYCLE);
           
-          table_.remove (key);
+          table_.remove (HashVal(entry));
         }
       
       

@@ -131,10 +131,10 @@ namespace engine {
       
       bool was_created_by_this_provider (BufferDescriptor const&)  const;
     };
-    
-    
-    
-    
+  
+  
+  
+  
   /* === Implementation === */
   
   /** convenience shortcut:
