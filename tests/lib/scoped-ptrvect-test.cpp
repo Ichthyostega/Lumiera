@@ -27,7 +27,7 @@
 #include "lib/util.hpp"
 
 #include "lib/scoped-ptrvect.hpp"
-#include "testdummy.hpp"
+#include "lib/test/testdummy.hpp"
 
 
 namespace lib {
@@ -63,16 +63,16 @@ namespace test{
       void
       simpleUsage()
         {
-          CHECK (0==checksum);
+          CHECK (0 == Dummy::checksum());
           {
             VectD holder;
             CHECK (isnil (holder));
-            CHECK (0==checksum);
+            CHECK (0 == Dummy::checksum());
             
             Dummy* ptr = new Dummy();
             Dummy& ref = holder.manage (ptr);
             CHECK (!isnil (holder));
-            CHECK (0!=checksum);
+            CHECK (0 != Dummy::checksum());
             CHECK (&ref==ptr);
             
             holder.manage (new Dummy);
@@ -80,7 +80,7 @@ namespace test{
             CHECK (3 == holder.size());
             
             holder.clear();
-            CHECK (0==checksum);
+            CHECK (0 == Dummy::checksum());
             CHECK (isnil (holder));
             
             holder.manage (new Dummy);
@@ -93,16 +93,16 @@ namespace test{
             holder.manage (new Dummy);
             holder.manage (new Dummy);
             CHECK (9 == holder.size());
-            CHECK (0 < checksum);
+            CHECK (0 < Dummy::checksum());
           }
-          CHECK (0==checksum);
+          CHECK (0 == Dummy::checksum());
         }
       
       
       void
       iterating()
         {
-          CHECK (0==checksum);
+          CHECK (0 == Dummy::checksum());
           {
             VectD holder;
             for (int i=0; i<16; ++i)
@@ -142,7 +142,7 @@ namespace test{
             VERIFY_ERROR (ITER_EXHAUST, ++cii );
             
           }
-          CHECK (0==checksum);
+          CHECK (0 == Dummy::checksum());
         }
       
       
@@ -151,10 +151,10 @@ namespace test{
         {
           int id2, id3;
           Dummy* extracted(0);
-          CHECK (0==checksum);
+          CHECK (0 == Dummy::checksum());
           {
             VectD holder;
-            CHECK (0 == checksum);
+            CHECK (0 == Dummy::checksum());
             CHECK (isnil (holder));
             
             holder.manage (new Dummy);
@@ -163,7 +163,7 @@ namespace test{
             holder.manage (new Dummy);
             holder.manage (new Dummy);
             CHECK (5 == holder.size());
-            CHECK (0 < checksum);
+            CHECK (0 < Dummy::checksum());
             
             id2 = holder[2].getVal();
             id3 = holder[3].getVal();
@@ -173,14 +173,14 @@ namespace test{
             CHECK (id3 == holder[2].getVal());
             CHECK (4 == holder.size());
           }
-          CHECK (0 < checksum);     // not all dummies are dead
-          CHECK (id2 == checksum); //  #2 is alive!
+          CHECK (0 < Dummy::checksum());     // not all dummies are dead
+          CHECK (id2 == Dummy::checksum()); //  #2 is alive!
           
           extracted->setVal(id2+id3);
-          CHECK (id2+id3 == checksum);
+          CHECK (id2+id3 == Dummy::checksum());
           
           delete extracted;
-          CHECK (0 == checksum);
+          CHECK (0 == Dummy::checksum());
         }
     };
   

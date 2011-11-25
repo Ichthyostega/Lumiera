@@ -28,7 +28,7 @@
 #include "lib/error.hpp"
 
 #include "lib/scoped-holder.hpp"
-#include "testdummy.hpp"
+#include "lib/test/testdummy.hpp"
 
 #include <boost/noncopyable.hpp>
 #include <iostream>
@@ -85,20 +85,20 @@ namespace test{
       void
       checkAllocation()
         {
-          CHECK (0==checksum);
+          CHECK (0 == Dummy::checksum());
           {
             HO holder;
             CHECK (!holder);
-            CHECK (0==checksum);
+            CHECK (0 == Dummy::checksum());
             
             create_contained_object (holder);
             CHECK (holder);
             CHECK (false!=holder);
             CHECK (holder!=false);
             
-            CHECK (0!=checksum);
+            CHECK (0 != Dummy::checksum());
             CHECK ( &(*holder));
-            CHECK (holder->add(2) == checksum+2);
+            CHECK (holder->add(2) == 2 + Dummy::checksum());
             
             Dummy *rawP = holder.get();
             CHECK (rawP);
@@ -111,7 +111,7 @@ namespace test{
             TRACE (test, "size(object) = %lu", sizeof(*holder));
             TRACE (test, "size(holder) = %lu", sizeof(holder));
           }
-          CHECK (0==checksum);
+          CHECK (0 == Dummy::checksum());
         }
       
       
@@ -119,11 +119,11 @@ namespace test{
       void
       checkErrorHandling()
         {
-          CHECK (0==checksum);
+          CHECK (0 == Dummy::checksum());
           {
             HO holder;
             
-            throw_in_ctor = true;
+            Dummy::activateCtorFailure();
             try
               {
                 create_contained_object (holder);
@@ -131,15 +131,15 @@ namespace test{
               }
             catch (int val)
               {
-                CHECK (0!=checksum);
-                checksum -= val;
-                CHECK (0==checksum);
+                CHECK (0 != Dummy::checksum());
+                Dummy::checksum() -= val;
+                CHECK (0 == Dummy::checksum());
               }
             CHECK (!holder);  /* because the exception happens in ctor
                                  object doesn't count as "created" */
-            throw_in_ctor = false;
+            Dummy::activateCtorFailure(false);
           }
-          CHECK (0==checksum);
+          CHECK (0 == Dummy::checksum());
         }
       
       
@@ -147,7 +147,7 @@ namespace test{
       void
       checkCopyProtocol()
         {
-          CHECK (0==checksum);
+          CHECK (0 == Dummy::checksum());
           {
             HO holder;
             HO holder2 (holder);
@@ -158,38 +158,38 @@ namespace test{
             CHECK (!holder);
             create_contained_object (holder);
             CHECK (holder);
-            long currSum = checksum;
+            long currSum = Dummy::checksum();
             void* adr = holder.get();
             
             VERIFY_ERROR(LOGIC, holder2 = holder );
             CHECK (holder);
             CHECK (!holder2);
             CHECK (holder.get()==adr);
-            CHECK (checksum==currSum);
+            CHECK (Dummy::checksum()==currSum);
             
             VERIFY_ERROR(LOGIC, holder = holder2 );
             CHECK (holder);
             CHECK (!holder2);
             CHECK (holder.get()==adr);
-            CHECK (checksum==currSum);
+            CHECK (Dummy::checksum()==currSum);
             
             create_contained_object (holder2);
             CHECK (holder2);
-            CHECK (checksum != currSum);
-            currSum = checksum;
+            CHECK (Dummy::checksum() != currSum);
+            currSum = Dummy::checksum();
             
             VERIFY_ERROR(LOGIC, holder = holder2 );
             CHECK (holder);
             CHECK (holder2);
             CHECK (holder.get()==adr);
-            CHECK (checksum==currSum);
+            CHECK (Dummy::checksum()==currSum);
             
             VERIFY_ERROR(LOGIC, HO holder3 (holder2) );
             CHECK (holder);
             CHECK (holder2);
-            CHECK (checksum==currSum);
+            CHECK (Dummy::checksum()==currSum);
           }
-          CHECK (0==checksum);
+          CHECK (0 == Dummy::checksum());
         }
       
       
@@ -202,7 +202,7 @@ namespace test{
         {
           typedef std::map<int,HO> MapHO;
           
-          CHECK (0==checksum);
+          CHECK (0 == Dummy::checksum());
           {
             MapHO maph;
             CHECK (isnil (maph));
@@ -212,8 +212,8 @@ namespace test{
                 HO & contained = maph[i];
                 CHECK (!contained);
               }                      // 100 holder objects created by sideeffect
-                                    
-            CHECK (0==checksum);   // ..... without creating any contained object!
+                                    // ..... without creating any contained object!  
+            CHECK (0 == Dummy::checksum());
             CHECK (!isnil (maph));
             CHECK (100==maph.size());
             
@@ -224,14 +224,14 @@ namespace test{
                 CHECK (0 < maph[i]->add(12));
               }
             CHECK (100==maph.size());
-            CHECK (0!=checksum);
+            CHECK (0 != Dummy::checksum());
             
             
             long value55 = maph[55]->add(0); 
-            long currSum = checksum;
+            long currSum = Dummy::checksum();
             
             CHECK (1 == maph.erase(55));
-            CHECK (checksum == currSum - value55); // proves object#55's dtor has been invoked
+            CHECK (Dummy::checksum() == currSum - value55); // proves object#55's dtor has been invoked
             CHECK (maph.size() == 99);
             
             maph[55];                              // create new empty holder by sideeffect...
@@ -239,7 +239,7 @@ namespace test{
             CHECK (!maph[55]);
             CHECK (maph.size() == 100);
           }
-          CHECK (0==checksum);
+          CHECK (0 == Dummy::checksum());
         }
       
       
