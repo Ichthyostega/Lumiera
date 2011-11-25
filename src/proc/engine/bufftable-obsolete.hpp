@@ -26,7 +26,7 @@
 
 
 #include "lib/error.hpp"
-#include "proc/engine/buffhandle.hpp"
+#include "proc/engine/channel-descriptor.hpp"
 #include "proc/engine/procnode.hpp"
 
 #include <boost/noncopyable.hpp>
