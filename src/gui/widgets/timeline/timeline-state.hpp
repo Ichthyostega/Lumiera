@@ -28,6 +28,7 @@
 
 #include "gui/widgets/timeline/timeline-view-window.hpp"
 #include "lib/time/mutation.hpp"
+#include "lib/time/control.hpp"
 
 
 namespace gui {
@@ -38,8 +39,43 @@ class Sequence;
   
 namespace widgets { 
 namespace timeline {
-  
+
+using lib::time::Control;
 using lib::time::Mutation;
+
+typedef Control<TimeSpan> SelectionControl;
+
+
+/**
+ * SelectionListener is a template class which emits a signal when
+ * the value is changed by it's associated time::Control object.
+ * SelectionListener wraps a sigc::signal that emits every time
+ * the selection is changed by the time::Control object.
+ * SelectionListener does NOT emit the signal if a change to the
+ * selection is made outside of the Control/Listener partnership.
+ */
+template<class TI>
+class SelectionListener
+  : boost::noncopyable
+  {
+    sigc::signal<void, TI> valueChangedSignal;
+    
+  public:
+    SelectionListener() { }
+
+    void
+    operator() (TI const& changeValue)  const
+      {
+        valueChangedSignal.emit (changeValue);
+      }
+
+
+    void connect (const sigc::slot<void, TI> &connection)
+      {
+        valueChangedSignal.connect (connection);
+      }
+
+  };
 
 /**
  * TimelineState is a container for the state data for TimelineWidget.
@@ -70,7 +106,11 @@ public:
    */
   timeline::TimelineViewWindow& get_view_window();
   
-  
+  TimeSpan& get_selection()           { return selection_; }
+
+  SelectionListener<TimeSpan>&
+  get_selection_listener()            { return selectionListener; }
+
   Time getSelectionStart()      const { return selection_.start();}
   Time getSelectionEnd()        const { return selection_.end();  }
   Time getPlaybackPeriodStart() const { return selection_.start();}
@@ -78,10 +118,12 @@ public:
   
   Time getPlaybackPoint()       const { return playbackPoint_; }
   
+  
   /** is there currently any ongoing playback process?
    *  Otherwise the #getPlaybackPoint is meaningless */
   bool isPlaying() const { return isPlayback_; }
   
+  void set_selection_control (SelectionControl &control);
   
   /**
    * Sets the period of the selection.
@@ -112,6 +154,15 @@ public:
    * changed.
    */
   sigc::signal<void> playback_changed_signal() const; 
+
+private:
+
+  /* ========= Event Handlers ========== */
+
+  /**
+   * Event handler for when the selection is changed
+   */
+  void on_selection_changed (TimeSpan selection);
   
 private:
 
@@ -122,17 +173,21 @@ private:
    */
   shared_ptr<model::Sequence> sequence;
   
-  // View State
-  /**
-   * The ViewWindow for the TimelineWidget display with.
-   */
+  
+  /* == View State == */
+  
+  /** ViewWindow for the TimelineWidget display */
   timeline::TimelineViewWindow viewWindow;
   
-  // Selection State
+  
+  /* == Selection State == */
   
   /** currently selected time period. */
   TimeSpan selection_;
   
+  /** listens for a selection change */
+  SelectionListener<TimeSpan> selectionListener;
+
   /** current playback period. */
   TimeSpan playbackPeriod_;
   
@@ -144,7 +199,8 @@ private:
 
   bool isPlayback_;
   
-  // Signals
+  
+  /* == Signals == */
   
   /**
    * A signal to notify when the selected period has changed.
@@ -158,8 +214,7 @@ private:
   sigc::signal<void> playbackChangedSignal;
 };
 
-}   // namespace timeline
-}   // namespace widgets
-}   // namespace gui
+
+}}}   // namespace gui::widgets::timeline
 
 #endif // TIMELINE_STATE_HPP

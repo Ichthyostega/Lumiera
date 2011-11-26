@@ -285,6 +285,7 @@ public:
    * to 30000000 lumiera::Time increments.
    */ 
   static const int64_t MaxScale;
+  static const double ZoomSmoothing;
   
 protected:
   static const int TrackPadding;

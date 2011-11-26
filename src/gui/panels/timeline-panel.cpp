@@ -138,12 +138,13 @@ TimelinePanel::TimelinePanel (workspace::PanelManager &panel_manager,
   // wire the zoom slider to react on timeline state changes
   zoomScale.wireTimelineState (timelineWidget->get_state(),
                                timelineWidget->state_changed_signal());
-  
+
   // Set the initial UI state
   update_sequence_chooser();
   update_tool_buttons();
   update_zoom_buttons();
   show_time (Time::ZERO);
+  std::cout << timelineWidget->get_state()->get_view_window().get_time_scale() << "\n";
 }
 
 const char*
@@ -333,19 +334,9 @@ TimelinePanel::update_tool_buttons()
 void
 TimelinePanel::update_zoom_buttons()
 {
-  REQUIRE(timelineWidget);
-
-  const shared_ptr<timeline::TimelineState> state =
-    timelineWidget->get_state();
-  if(state)
-    {
-      timeline::TimelineViewWindow &viewWindow = 
-        state->get_view_window();
-      
-      zoomIn.set_sensitive(viewWindow.get_time_scale() != 1);
-      zoomOut.set_sensitive(viewWindow.get_time_scale()
-        != TimelineWidget::MaxScale);
-    }
+/* This function is no longer needed
+ * TODO: Let the ZoomScaleWidget perform
+ * the update on its own */
 }
 
 void

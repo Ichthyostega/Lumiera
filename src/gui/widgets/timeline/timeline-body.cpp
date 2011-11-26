@@ -57,9 +57,12 @@ TimelineBody::TimelineBody (TimelineWidget &timelineWidget)
   timelineWidget.state_changed_signal().connect(
     sigc::mem_fun(this, &TimelineBody::on_state_changed) );
   
+  // Set a default Tool
+  this->set_tool(Arrow);
+
   // Install style properties
   register_styles();
-  
+
   // Reset the state
   propagateStateChange();
 }
@@ -82,6 +85,12 @@ TimelineBody::getTimelineWidget () const
   return timelineWidget;
 }
 
+TimeSpan
+TimelineBody::get_selection()
+{
+  return timelineWidget.get_state()->get_selection();
+}
+
 ToolType
 TimelineBody::get_tool() const
 {
@@ -90,10 +99,10 @@ TimelineBody::get_tool() const
 }
   
 void
-TimelineBody::set_tool(timeline::ToolType tool_type)
+TimelineBody::set_tool(timeline::ToolType tool_type, bool force)
 {  
   // Tidy up old tool
-  if(tool)
+  if(tool && !force)
     {
       // Do we need to change tools?
       if(tool->get_type() == tool_type)
@@ -316,7 +325,10 @@ TimelineBody::propagateStateChange()
       viewWindow().changed_signal().connect(
         sigc::mem_fun(this, &TimelineBody::on_update_view) );
     }
-    
+
+  // Need to reload the current tool...
+  set_tool (get_tool(), true);
+
   // Redraw
   queue_draw();
 }

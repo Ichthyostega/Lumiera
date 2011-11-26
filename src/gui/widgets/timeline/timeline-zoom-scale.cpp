@@ -65,26 +65,27 @@ TimelineZoomScale::TimelineZoomScale()
   , button_step_size(0.03)
 {
   /* Setup the Slider Control */
-  slider.set_adjustment(adjustment);
-  slider.set_size_request(123,10);
-  slider.set_digits(6);
-  slider.set_inverted(true);
-  slider.set_draw_value(false);
+  slider.set_adjustment (adjustment);
+  slider.set_size_request (123,10);
+  slider.set_digits (6);
+
+  /* Inverted because smaller values "zoom in" */
+  slider.set_inverted (true);
+
+  slider.set_draw_value (false);
 
   /* Make our connections */
   zoomIn.signal_clicked().
-      connect(sigc::mem_fun(this, &TimelineZoomScale::on_zoom_in_clicked));
-
+      connect (sigc::mem_fun(this, &TimelineZoomScale::on_zoom_in_clicked));
   zoomOut.signal_clicked().
-      connect(sigc::mem_fun(this, &TimelineZoomScale::on_zoom_out_clicked));
-
+      connect (sigc::mem_fun(this, &TimelineZoomScale::on_zoom_out_clicked));
   adjustment.signal_value_changed().
-      connect(sigc::mem_fun(this, &TimelineZoomScale::on_zoom));
+      connect (sigc::mem_fun(this, &TimelineZoomScale::on_zoom));
 
   /* Add Our Widgets and show them */
-  pack_start(zoomOut,PACK_SHRINK);
-  pack_start(slider,PACK_SHRINK);
-  pack_start(zoomIn,PACK_SHRINK);
+  pack_start (zoomOut,PACK_SHRINK);
+  pack_start (slider,PACK_SHRINK);
+  pack_start (zoomIn,PACK_SHRINK);
 
   show_all();
 }
@@ -94,7 +95,8 @@ TimelineZoomScale::wireTimelineState (shared_ptr<TimelineState> currentState,
                                       TimelineWidget::TimelineStateChangeSignal stateChangeSignal)
 {
   on_timeline_state_changed (currentState);
-  stateChangeSignal.connect (sigc::mem_fun(this, &TimelineZoomScale::on_timeline_state_changed));
+  stateChangeSignal.connect (
+      sigc::mem_fun(this, &TimelineZoomScale::on_timeline_state_changed));
 }
 
 void
@@ -110,9 +112,8 @@ TimelineZoomScale::on_timeline_state_changed (shared_ptr<TimelineState> newState
       (double) current_scale / (double) TimelineWidget::MaxScale;
 
   /* We have to Revese the Smoothing */
-  TODO("Find a central place for ZoomSmoothingFactor Variable. right now it is 9.0");
   double new_relative_scale =
-      pow(linear_scale,(1.0/9.0));
+      pow(linear_scale,(1.0 / TimelineWidget::ZoomSmoothing));
 
   adjustment.set_value(new_relative_scale);
 }
@@ -134,7 +135,7 @@ TimelineZoomScale::on_zoom_out_clicked()
 void
 TimelineZoomScale::on_zoom()
 {
-  zoomSignal.emit(adjustment.get_value()) ;
+  zoomSignal.emit (adjustment.get_value()) ;
 }
 
 sigc::signal<void, double>

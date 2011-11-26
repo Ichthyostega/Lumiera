@@ -30,14 +30,17 @@
 
 #include "gui/widgets/timeline/timeline-tool.hpp"
 #include "lib/time/timevalue.hpp"
+#include "lib/time/timequant.hpp"
+#include "lib/time/control.hpp"
 
-#include <gtkmm.h>
 
 namespace gui {
 namespace widgets {
 namespace timeline {
 
 using lib::time::TimeVar;
+using lib::time::TimeSpan;
+using lib::time::Control;
 
 /**
  * A helper class to implement the timeline i-beam tool
@@ -159,6 +162,8 @@ private:
     };
 
   /* ==== Internals ===== */
+  Control<TimeSpan> selectionControl;
+
   /**
    * Specifies the type of drag currently taking place.
    */

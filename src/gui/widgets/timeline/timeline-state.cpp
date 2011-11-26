@@ -24,6 +24,7 @@
 #include "gui/widgets/timeline/timeline-state.hpp"
 #include "lib/time/timevalue.hpp"
 #include "lib/time/mutation.hpp"
+#include "lib/time/control.hpp"
 
 using namespace Gtk;
 using namespace sigc;
@@ -36,27 +37,33 @@ using lib::time::FSecs;
 using lib::time::Offset;
 using lib::time::Duration;
 using lib::time::Mutation;
+using lib::time::Control;
 using std::tr1::shared_ptr;
-
 
 
 TimelineState::TimelineState (shared_ptr<model::Sequence> source_sequence)
   : sequence(source_sequence)
   , viewWindow(Offset(Time::ZERO), 1)
   , selection_(Time::ZERO, Duration::NIL)
+  , selectionListener()
   , playbackPeriod_(Time::ZERO, Duration::NIL)
   , playbackPoint_(Time::ZERO)
   , isPlayback_(false)
 {
   REQUIRE(sequence);
-  
+
+  // Initialize the selection listener
+  selectionListener (TimeSpan (Time::ZERO, Duration::NIL));
+  selectionListener.connect(
+      mem_fun(*this, &TimelineState::on_selection_changed));
+
   ////////////////////////////////////////////////////////////TICKET #798: how to handle GUI default state
-  const int64_t DEFAULT_TIMELINE_SCALE =21000000;
+  const int64_t DEFAULT_TIMELINE_SCALE =6400;
   
   viewWindow.set_time_scale(DEFAULT_TIMELINE_SCALE);
 
   setSelection (Mutation::changeTime (Time(FSecs(2))));
-  setSelection (Mutation::changeDuration(Duration(FSecs(2))));
+  setSelection (Mutation::changeDuration (Duration(FSecs(2))));
   //////////////////////////////////////////////////////TICKET #797 : this is cheesy. Should provide a single Mutation to change all
 }
 
@@ -97,6 +104,14 @@ TimelineState::setPlaybackPoint (Time newPosition)
   playbackChangedSignal.emit();
 }
 
+void
+TimelineState::set_selection_control (SelectionControl &control)
+{
+  control.disconnect();
+  selection_.accept (control);
+  control.connectChangeNotification (selectionListener);
+}
+
 sigc::signal<void>
 TimelineState::selection_changed_signal() const
 {
@@ -107,6 +122,12 @@ sigc::signal<void>
 TimelineState::playback_changed_signal() const
 {
   return playbackChangedSignal;
+}
+
+void
+TimelineState::on_selection_changed (TimeSpan selection)
+{
+  selectionChangedSignal.emit();
 }
 
 }   // namespace timeline

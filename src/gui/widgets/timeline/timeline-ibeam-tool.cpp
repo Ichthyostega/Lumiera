@@ -24,8 +24,6 @@
 #include "gui/widgets/timeline-widget.hpp"
 #include "lib/time/mutation.hpp"
 
-#include <boost/shared_ptr.hpp>
-
 using namespace gui::widgets;
 
 using lib::time::Mutation;
@@ -45,15 +43,18 @@ const int IBeamTool::ScrollSlideEventInterval = 40;
 
 IBeamTool::IBeamTool(TimelineBody &timeline_body) :
   Tool(timeline_body),
+  selectionControl(),
   dragType(None),
   pinnedDragTime(),
   scrollSlideRate(0)
 {
-
+  // Connect the timlinebody selection to the selectionControl
+  get_state()->set_selection_control (selectionControl);
 }
 
 IBeamTool::~IBeamTool()
 {
+  selectionControl.disconnect();
   end_scroll_slide();
 }
 
@@ -120,9 +121,7 @@ IBeamTool::on_button_press_event(GdkEventButton* event)
           // User began the drag in clear space, begin a Select drag
           dragType = Selection;
           pinnedDragTime = time;
-          state->setSelection (Mutation::changeTime(time));
-          state->setSelection (Mutation::changeDuration(Duration::NIL));
-                               //////////////////////////////////////////////////////TICKET #797 : this is cheesy. Should provide a single Mutation to change all
+          selectionControl (TimeSpan(time, Duration::NIL));
         }
     }
 }
@@ -181,8 +180,8 @@ IBeamTool::on_motion_notify_event(GdkEventMotion *event)
 bool
 IBeamTool::on_scroll_slide_timer()
 {
-  const Gdk::Rectangle body_rect(get_body_rectangle());     
-  view_window().shift_view(body_rect.get_width(), scrollSlideRate);
+  const Gdk::Rectangle body_rect (get_body_rectangle());
+  view_window().shift_view (body_rect.get_width(), scrollSlideRate);
     
   // Return true to keep the timer going
   return true;
@@ -193,16 +192,17 @@ IBeamTool::set_leading_x(const int x)
 {
   shared_ptr<TimelineState> state = get_state();
 
-  const bool set_playback_period = dragType == Selection;
+  // The line below needs handled differently now;
+  //
+  //const bool set_playback_period = dragType == Selection;
+
   TimeVar newStartPoint (state->get_view_window().x_to_time(x));
   Offset selectionLength (pinnedDragTime, newStartPoint);
-  
+
   if (newStartPoint > pinnedDragTime)
     newStartPoint=pinnedDragTime; // use the smaller one as selection start
-  
-  state->setSelection (Mutation::changeTime(newStartPoint)      , set_playback_period);
-  state->setSelection (Mutation::changeDuration(selectionLength), set_playback_period);
-                               //////////////////////////////////////////////////////TICKET #797 : this is cheesy. Should provide a single Mutation to change all at once
+
+  selectionControl (TimeSpan (newStartPoint, Duration(selectionLength)));
 }
 
 void

@@ -41,7 +41,8 @@ namespace widgets {
 const int TimelineWidget::TrackPadding = 1;
 const int TimelineWidget::HeaderWidth = 150;
 const int TimelineWidget::HeaderIndentWidth = 10;
-const double TimelineWidget::ZoomIncrement = 1.25;
+const double TimelineWidget::ZoomIncrement = 1.25; // Not currently used
+const double TimelineWidget::ZoomSmoothing = 9.0;
 const int64_t TimelineWidget::MaxScale = 30000000; // 30 Million
 
 TimelineWidget::TimelineWidget(shared_ptr<timeline::TimelineState> source_state)
@@ -62,7 +63,7 @@ TimelineWidget::TimelineWidget(shared_ptr<timeline::TimelineState> source_state)
   ENSURE(headerContainer != NULL);
   ruler = manage(new TimelineRuler(*this));
   ENSURE(ruler != NULL);
-    
+
   horizontalAdjustment.signal_value_changed().connect( sigc::mem_fun(
     this, &TimelineWidget::on_scroll) );
   verticalAdjustment.signal_value_changed().connect( sigc::mem_fun(
@@ -71,7 +72,7 @@ TimelineWidget::TimelineWidget(shared_ptr<timeline::TimelineState> source_state)
     this, &TimelineWidget::on_motion_in_body_notify_event) );
     
   update_tracks();
-  
+
   attach(*body, 1, 2, 1, 2, FILL|EXPAND, FILL|EXPAND);
   attach(*ruler, 1, 2, 0, 1, FILL|EXPAND, SHRINK);
   attach(*headerContainer, 0, 1, 1, 2, SHRINK, FILL|EXPAND);
