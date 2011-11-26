@@ -74,9 +74,6 @@ public:
   TimelineWidget&
   getTimelineWidget () const;
 
-  TimeSpan
-  get_selection();
-
   /**
    * Returns the type of the currently selected timeline tool.
    */

@@ -138,12 +138,12 @@ private:
   enum DragType
     {
       /**
-       * No drag is occuring
+       * No drag is occurring
        */
       None,
       
       /**
-       * A selection drag is occuring.
+       * A selection drag is occurring.
        * @remarks The position of one end of the selection was set at
        * mouse-down of the drag, and the other end is set by
        * drag-release.

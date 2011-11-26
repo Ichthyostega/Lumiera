@@ -106,8 +106,6 @@ public:
    */
   timeline::TimelineViewWindow& get_view_window();
   
-  TimeSpan& get_selection()           { return selection_; }
-
   SelectionListener<TimeSpan>&
   get_selection_listener()            { return selectionListener; }
 
