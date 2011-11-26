@@ -144,7 +144,6 @@ TimelinePanel::TimelinePanel (workspace::PanelManager &panel_manager,
   update_tool_buttons();
   update_zoom_buttons();
   show_time (Time::ZERO);
-  std::cout << timelineWidget->get_state()->get_view_window().get_time_scale() << "\n";
 }
 
 const char*

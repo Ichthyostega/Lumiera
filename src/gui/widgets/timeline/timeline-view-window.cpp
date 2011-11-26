@@ -88,9 +88,8 @@ void
 TimelineViewWindow::zoom_view(int point, double time_scale_ratio)
 {
   // Apply the smoothing factor
-  int64_t new_time_scale =
-      (int64_t)(pow(time_scale_ratio, TimelineWidget::ZoomSmoothing) *
-          (double)TimelineWidget::MaxScale);
+  int64_t new_time_scale(pow (time_scale_ratio, TimelineWidget::ZoomSmoothing)
+                         * double(TimelineWidget::MaxScale));
 
   /* Prevent Zooming in To Close and Far */
   if(new_time_scale < 1)
@@ -100,8 +99,7 @@ TimelineViewWindow::zoom_view(int point, double time_scale_ratio)
     new_time_scale = TimelineWidget::MaxScale;
 
   // The view must be shifted so that the zoom is centred on the cursor
-  TimeVar newStartPoint = get_time_offset();
-  newStartPoint += TimeValue (point * (timeScale - new_time_scale));
+  TimeVar newStartPoint = timeOffset + TimeValue(point * (timeScale - new_time_scale));
   set_time_offset (newStartPoint);
     
   // Apply the new scale
@@ -133,7 +131,5 @@ TimelineViewWindow::changed_signal() const
   return changedSignal;
 }
 
-}   // namespace timeline
-}   // namespace widgets
-}   // namespace gui
+}}} // namespace gui::widgets::timeline
 

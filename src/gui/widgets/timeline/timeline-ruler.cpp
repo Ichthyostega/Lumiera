@@ -274,6 +274,7 @@ TimelineRuler::draw_ruler(Cairo::RefPtr<Cairo::Context> cr,
   REQUIRE(ruler_rect.get_width() > 0);
   REQUIRE(ruler_rect.get_height() > 0);
   
+                                   /////////////////////////////TICKET #861 : what part of these calculation could be centralised within TimelineViewWindow?
   const TimelineViewWindow &window = viewWindow();
   const gavl_time_t left_offset = _raw(window.get_time_offset());
   const int64_t time_scale = window.get_time_scale();
@@ -504,6 +505,7 @@ TimelineRuler::calculate_major_spacing() const
 {
   unsigned int i;
   
+                                   /////////////////////////////TICKET #861 : couldn't that be a library function in TimelineViewWindow?
   const gavl_time_t major_spacings[] = {
       GAVL_TIME_SCALE / 1000,    
       GAVL_TIME_SCALE / 400,

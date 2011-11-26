@@ -102,6 +102,7 @@ TimelineZoomScale::wireTimelineState (shared_ptr<TimelineState> currentState,
 void
 TimelineZoomScale::on_timeline_state_changed (shared_ptr<TimelineState> newState)
 {
+                                     /////////////////////////////TICKET #861 : part of that could be a library routine!
   REQUIRE (newState);
   timelineState = newState;
   

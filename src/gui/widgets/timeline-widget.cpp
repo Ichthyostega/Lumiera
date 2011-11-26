@@ -415,12 +415,13 @@ TimelineWidget::update_scroll()
   
   if(state)
     {
+                                            ///////////////////////////////////////////////TICKET #861 shoudln't that be performed by TimelineViewWindow, instead of manipulating values from the outside?
       timeline::TimelineViewWindow &window = state->get_view_window();
       
       //----- Horizontal Scroll ------//
       
       // TEST CODE
-      horizontalAdjustment.set_upper(1000 * GAVL_TIME_SCALE / 200);
+      horizontalAdjustment.set_upper( 1000 * GAVL_TIME_SCALE / 200);
       horizontalAdjustment.set_lower(-1000 * GAVL_TIME_SCALE / 200);
       
       // Set the page size

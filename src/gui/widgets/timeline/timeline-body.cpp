@@ -267,7 +267,8 @@ TimelineBody::on_motion_notify_event(GdkEventMotion *event)
   
   if (timelineState)
     {
-      // Handle a middle-mouse drag if one is occuring
+      // Handle a middle-mouse drag if one is occurring
+                                   /////////////////////////////TICKET #861 : shoudln't all of that be performed by TimelineViewWindow, instead of manipulating values from the outside?
       switch(dragType)
         {
         case Shift:
