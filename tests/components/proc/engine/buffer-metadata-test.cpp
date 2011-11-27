@@ -24,37 +24,25 @@
 #include "lib/error.hpp"
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
-//#include "lib/util-foreach.hpp"
 #include "lib/util.hpp"
-//#include "proc/play/diagnostic-output-slot.hpp"
-//#include "proc/engine/testframe.hpp"
-//#include "proc/engine/diagnostic-buffer-provider.hpp"
 #include "proc/engine/buffer-metadata.hpp"
 #include "proc/engine/testframe.hpp"
-//#include "proc/engine/buffhandle.hpp"
-//#include "proc/engine/bufftable.hpp"
 
-//#include <boost/format.hpp>
 #include <boost/scoped_ptr.hpp>
 #include <cstdlib>
-//#include <iostream>
+#include <cstring>
 
-//using boost::format;
-//using std::string;
-//using std::cout;
-//using util::for_each;
+using std::strncpy;
 using boost::scoped_ptr;
-using util::isnil;
+using lib::test::randStr;
 using util::isSameObject;
+using util::isnil;
 
 
 namespace engine{
 namespace test  {
   
-
-//  using lib::AllocationCluster;
-//  using mobject::session::PEffect;
-//  using ::engine::BuffHandle;
+  using lumiera::error::LUMIERA_ERROR_FATAL;
   using lumiera::error::LUMIERA_ERROR_INVALID;
   using lumiera::error::LUMIERA_ERROR_LIFECYCLE;
   
@@ -66,13 +54,23 @@ namespace test  {
     const size_t SIZE_A = 1 + rand() % TEST_MAX_SIZE;
     const size_t SIZE_B = 1 + rand() % TEST_MAX_SIZE;
     
-    const HashVal JUST_SOMETHING = 123;
-    const void* const  SOME_POINTER = &JUST_SOMETHING;
-//  const uint TEST_SIZE = 1024*1024;
-//  const uint TEST_ELMS = 20;
-      
+    HashVal JUST_SOMETHING = 123;
+    void* const  SOME_POINTER = &JUST_SOMETHING;
     
-  }
+    
+    template<typename TY>
+    TY&
+    accessAs (metadata::Entry& entry)
+    {
+      TY* ptr = reinterpret_cast<TY*> (entry.access());
+      ASSERT (ptr);
+      return *ptr;
+    }
+  }//(End) Test fixture and helpers
+  
+  
+  
+  
   
   
   /*******************************************************************
@@ -83,7 +81,7 @@ namespace test  {
   class BufferMetadata_test : public Test
     {
       /** common Metadata table to be tested */
-      scoped_ptr<Metadata> meta_;
+      scoped_ptr<BufferMetadata> meta_;
       
       virtual void
       run (Arg) 
@@ -91,7 +89,7 @@ namespace test  {
           CHECK (ensure_proper_fixture());
           verifyBasicProperties();
           verifyStandardCase();
-          UNIMPLEMENTED ("cover all metadata properties");
+          verifyStateMachine();
         }
       
       
@@ -99,7 +97,7 @@ namespace test  {
       ensure_proper_fixture() 
         {
           if (!meta_)
-            meta_.reset(new Metadata("BufferMetadata_test"));
+            meta_.reset(new BufferMetadata("BufferMetadata_test"));
           
           return (SIZE_A != SIZE_B)
               && (JUST_SOMETHING != meta_->key(SIZE_A))
@@ -112,11 +110,11 @@ namespace test  {
       verifyBasicProperties()
         {
           // retrieve some type keys
-          Metadata::Key key = meta_->key(SIZE_A);
+          metadata::Key key = meta_->key(SIZE_A);
           CHECK (key);
           
-          Metadata::Key key1 = meta_->key(SIZE_A);
-          Metadata::Key key2 = meta_->key(SIZE_B);
+          metadata::Key key1 = meta_->key(SIZE_A);
+          metadata::Key key2 = meta_->key(SIZE_B);
           CHECK (key1);
           CHECK (key2);
           CHECK (key == key1);
@@ -133,16 +131,16 @@ namespace test  {
           CHECK ( isSameObject (meta_->get(key), meta_->get(key1)));
           CHECK (!isSameObject (meta_->get(key), meta_->get(key2)));
           
-          // entries retrieved this far are inactive (type only) entries
-          Metadata::Entry& m1 = meta_->get(key);
+          // entries retrieved thus far were inactive (type only) entries
+          metadata::Entry& m1 = meta_->get(key);
           CHECK (NIL == m1.state());
           CHECK (!meta_->isLocked(key));
           
-          VERIFY_ERROR (LIFECYCLE, m1.mark(EMITTED) );
-          VERIFY_ERROR (LIFECYCLE, m1.mark(LOCKED)  );
+          VERIFY_ERROR (LIFECYCLE, m1.mark(EMITTED));
+          VERIFY_ERROR (LIFECYCLE, m1.mark(FREE)   );
           
           // now create an active (buffer) entry
-          Metadata::Entry& m2 = meta_->markLocked (key, SOME_POINTER);
+          metadata::Entry& m2 = meta_->markLocked (key, SOME_POINTER);
           CHECK (!isSameObject (m1,m2));
           CHECK (NIL    == m1.state());
           CHECK (LOCKED == m2.state());
@@ -173,7 +171,7 @@ namespace test  {
           CHECK ( meta_->isKnown(keyX));
           CHECK ( meta_->isKnown(key1));
           VERIFY_ERROR (LIFECYCLE, m2.access());
-          VERIFY_ERROR (LIFECYCLE, m2.mark(LOCKED));
+          VERIFY_ERROR (FATAL, m2.mark(LOCKED));         // buffer missing
           CHECK ( isSameObject (m2, meta_->get(keyX))); // still accessible
           
           // release buffer...
@@ -189,18 +187,18 @@ namespace test  {
        *  @note to get the big picture, please refer to
        *        BufferProviderProtocol_test#verifyStandardCase()
        *        This testcase here performs precisely the metadata related
-       *        operations necessary to carry out the standard case outlined
-       *        in that more high level test.
+       *        operations necessary to carry out the standard case
+       *        outlined on a higher level in the mentioned test.
        */
       void
       verifyStandardCase()
         {
           // to build a descriptor for a buffer holding a TestFrame
           TypeHandler attachTestFrame = TypeHandler::create<TestFrame>();
-          Metadata::Key bufferType1 = meta_->key(sizeof(TestFrame), attachTestFrame);
+          metadata::Key bufferType1 = meta_->key(sizeof(TestFrame), attachTestFrame);
           
           // to build a descriptor for a raw buffer of size SIZE_B
-          Metadata::Key rawBuffType = meta_->key(SIZE_B);
+          metadata::Key rawBuffType = meta_->key(SIZE_B);
           
           // to announce using a number of buffers of this type
           LocalKey transaction1(1);
@@ -219,29 +217,36 @@ namespace test  {
                                                //  a real-world BufferProvider would use some kind of allocator
           
           // track individual buffers by metadata entries
-          Metadata::Entry f0 = meta_->markLocked(bufferType1, &frames[0]);
-          Metadata::Entry f1 = meta_->markLocked(bufferType1, &frames[1]);
-          Metadata::Entry f2 = meta_->markLocked(bufferType1, &frames[2]);
+          metadata::Entry& f0 = meta_->markLocked(bufferType1, &frames[0]);
+          metadata::Entry& f1 = meta_->markLocked(bufferType1, &frames[1]);
+          metadata::Entry& f2 = meta_->markLocked(bufferType1, &frames[2]);
           
-          Metadata::Entry r0 = meta_->markLocked(bufferType1, &rawbuf[0]);
-          Metadata::Entry r1 = meta_->markLocked(bufferType1, &rawbuf[1]);
-
+          metadata::Entry& r0 = meta_->markLocked(rawBuffType, &rawbuf[0]);
+          metadata::Entry& r1 = meta_->markLocked(rawBuffType, &rawbuf[1]);
+          
           CHECK (LOCKED == f0.state());
           CHECK (LOCKED == f1.state());
           CHECK (LOCKED == f2.state());
           CHECK (LOCKED == r0.state());
           CHECK (LOCKED == r1.state());
           
-          // for the TestFrame buffers, additionally we'd have to create/attach an object
-          attachTestFrame.createAttached (frames+0);   ////////////////////////////////////////TODO: shouldn't this happen automatically??
-          attachTestFrame.createAttached (frames+1);
-          attachTestFrame.createAttached (frames+2);
+          CHECK (transaction1 == f0.localKey());
+          CHECK (transaction1 == f1.localKey());
+          CHECK (transaction1 == f2.localKey());
+          CHECK (transaction2 == r0.localKey());
+          CHECK (transaction2 == r1.localKey());
+          
           
           CHECK (f0.access() == frames+0);
           CHECK (f1.access() == frames+1);
           CHECK (f2.access() == frames+2);
           CHECK (r0.access() == rawbuf+0);
           CHECK (r1.access() == rawbuf+1);
+          
+          TestFrame defaultFrame;
+          CHECK (defaultFrame == f0.access());
+          CHECK (defaultFrame == f1.access());
+          CHECK (defaultFrame == f2.access());
           
           // at that point, we'd return BuffHandles to the client
           HashVal handle_f0(f0);
@@ -250,14 +255,35 @@ namespace test  {
           HashVal handle_r0(r0);
           HashVal handle_r1(r1);
           
-          // client uses the buffers
+          // client uses the buffers---------------------(Start)
+          accessAs<TestFrame> (f0) = testData(1);
+          accessAs<TestFrame> (f1) = testData(2);
+          accessAs<TestFrame> (f2) = testData(3);
           
-          //////////////////TODO: access the storage through the metadata-key
-          //////////////////TODO: to a state transition on the metadata
+          CHECK (testData(1) == frames[0]);
+          CHECK (testData(2) == frames[1]);
+          CHECK (testData(3) == frames[2]);
           
-          attachTestFrame.destroyAttached (frames+0);   ////////////////////////////////////////TODO: shouldn't this happen automatically??
-          attachTestFrame.destroyAttached (frames+1);
-          attachTestFrame.destroyAttached (frames+2);
+          CHECK (TestFrame::isAlive (f0.access()));
+          CHECK (TestFrame::isAlive (f1.access()));
+          CHECK (TestFrame::isAlive (f2.access()));
+          
+          strncpy (& accessAs<char> (r0), randStr(SIZE_B - 1).c_str(), SIZE_B);
+          strncpy (& accessAs<char> (r1), randStr(SIZE_B - 1).c_str(), SIZE_B);
+          
+          // client might trigger some state transitions
+          f0.mark(EMITTED);
+          f1.mark(EMITTED);
+          f1.mark(BLOCKED);
+          // client uses the buffers---------------------(End)
+          
+          
+          f0.mark(FREE);    // note: implicitly invoking the embedded dtor
+          f1.mark(FREE);
+          f2.mark(FREE);
+          r0.mark(FREE);
+          r1.mark(FREE);
+          
           
           meta_->release(handle_f0);
           meta_->release(handle_f1);
@@ -265,14 +291,106 @@ namespace test  {
           meta_->release(handle_r0);
           meta_->release(handle_r1);
           
+          CHECK (TestFrame::isDead (&frames[0]));  // was destroyed implicitly
+          CHECK (TestFrame::isDead (&frames[1]));
+          CHECK (TestFrame::isDead (&frames[2]));
+          
+          // manual cleanup of test allocations
+          delete[] frames;
+          delete[] rawbuf;
+          
           CHECK (!meta_->isLocked(handle_f0));
           CHECK (!meta_->isLocked(handle_f1));
           CHECK (!meta_->isLocked(handle_f2));
           CHECK (!meta_->isLocked(handle_r0));
           CHECK (!meta_->isLocked(handle_r1));
+        }
+      
+      
+      void
+      verifyStateMachine()
+        {
+          // start with building a type key....
+          metadata::Key key = meta_->key(SIZE_A);
+          CHECK (NIL == meta_->get(key).state());
+          CHECK (meta_->get(key).isTypeKey());
+          CHECK (!meta_->isLocked(key));
           
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #834
-#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #834
+          VERIFY_ERROR (LIFECYCLE, meta_->get(key).mark(LOCKED) );
+          VERIFY_ERROR (LIFECYCLE, meta_->get(key).mark(EMITTED));
+          VERIFY_ERROR (LIFECYCLE, meta_->get(key).mark(BLOCKED));
+          VERIFY_ERROR (LIFECYCLE, meta_->get(key).mark(FREE) );
+          VERIFY_ERROR (LIFECYCLE, meta_->get(key).mark(NIL) );
+          
+          // now build a concrete buffer entry
+          metadata::Entry& entry = meta_->markLocked(key, SOME_POINTER);
+          CHECK (LOCKED == entry.state());
+          CHECK (!entry.isTypeKey());
+          
+          CHECK (SOME_POINTER == entry.access());
+          
+          VERIFY_ERROR (FATAL, entry.mark(LOCKED) );  // invalid state transition
+          VERIFY_ERROR (FATAL, entry.mark(NIL) );
+          
+          entry.mark (EMITTED);                       // valid transition
+          CHECK (EMITTED == entry.state());
+          CHECK (entry.isLocked());
+          
+          VERIFY_ERROR (FATAL, entry.mark(LOCKED) );
+          VERIFY_ERROR (FATAL, entry.mark(EMITTED));
+          VERIFY_ERROR (FATAL, entry.mark(NIL) );
+          CHECK (EMITTED == entry.state());
+          
+          entry.mark (FREE);
+          CHECK (FREE == entry.state());
+          CHECK (!entry.isLocked());
+          CHECK (!entry.isTypeKey());
+          
+          VERIFY_ERROR (LIFECYCLE, entry.access() );
+          VERIFY_ERROR (FATAL, entry.mark(LOCKED) );
+          VERIFY_ERROR (FATAL, entry.mark(EMITTED));
+          VERIFY_ERROR (FATAL, entry.mark(BLOCKED));
+          VERIFY_ERROR (FATAL, entry.mark(FREE) );
+          VERIFY_ERROR (FATAL, entry.mark(NIL) );
+          
+          // re-use buffer slot, start new lifecycle
+          void* OTHER_LOCATION = this;
+          entry.lock (OTHER_LOCATION);
+          CHECK (LOCKED == entry.state());
+          CHECK (entry.isLocked());
+          
+          VERIFY_ERROR (LIFECYCLE, entry.lock(SOME_POINTER));
+          
+          entry.mark (BLOCKED);                      // go directly to the blocked state
+          CHECK (BLOCKED == entry.state());
+          VERIFY_ERROR (FATAL, entry.mark(LOCKED)  );
+          VERIFY_ERROR (FATAL, entry.mark(EMITTED) );
+          VERIFY_ERROR (FATAL, entry.mark(BLOCKED) );
+          VERIFY_ERROR (FATAL, entry.mark(NIL) );
+          
+          CHECK (OTHER_LOCATION == entry.access());
+          
+          entry.mark (FREE);
+          CHECK (!entry.isLocked());
+          VERIFY_ERROR (LIFECYCLE, entry.access() );
+          
+          meta_->lock(key, SOME_POINTER);
+          CHECK (entry.isLocked());
+          
+          entry.mark (EMITTED);
+          entry.mark (BLOCKED);
+          CHECK (BLOCKED == entry.state());
+          CHECK (SOME_POINTER == entry.access());
+          
+          // can't discard metadata, need to free first
+          VERIFY_ERROR (LIFECYCLE, meta_->release(entry) );
+          CHECK (meta_->isKnown(entry));
+          CHECK (entry.isLocked());
+          
+          entry.mark (FREE);
+          meta_->release(entry);
+          CHECK (!meta_->isKnown(entry));
+          CHECK ( meta_->isKnown(key));
         }
     };
   

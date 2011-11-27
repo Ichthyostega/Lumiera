@@ -24,29 +24,25 @@
 #include "lib/error.hpp"
 #include "lib/test/run.hpp"
 #include "lib/test/test-helper.hpp"
+#include "lib/test/testdummy.hpp"
 #include "lib/util-foreach.hpp"
-//#include "proc/play/diagnostic-output-slot.hpp"
 #include "proc/engine/testframe.hpp"
 #include "proc/engine/diagnostic-buffer-provider.hpp"
-#include "proc/engine/buffhandle.hpp"
+#include "proc/engine/buffhandle-attach.hpp"
 #include "proc/engine/bufftable.hpp"
 
-//#include <boost/format.hpp>
-//#include <iostream>
-
-//using boost::format;
-//using std::string;
-//using std::cout;
+using util::isSameObject;
 using util::for_each;
 
 
 namespace engine{
 namespace test  {
   
-//  using lib::AllocationCluster;
-//  using mobject::session::PEffect;
+  using lib::test::Dummy;
+  
   using ::engine::BuffHandle;
-  using lumiera::error::LUMIERA_ERROR_LIFECYCLE;
+  using error::LUMIERA_ERROR_LOGIC;
+  using error::LUMIERA_ERROR_LIFECYCLE;
   
   
   namespace { // Test fixture
@@ -64,21 +60,26 @@ namespace test  {
   }
   
   
-  /*******************************************************************
-   * @test verify the OutputSlot interface and base implementation
-   *       by performing full data exchange cycle. This is a
-   *       kind of "dry run" for documentation purposes,
-   *       both the actual OutputSlot implementation
-   *       as the client using this slot are Mocks.
+  /******************************************************************************
+   * @test verify and demonstrate the usage cycle of data buffers for the engine
+   *       based on the BufferProvider interface. This is kind of a "dry run"
+   *       for documentation purposes, because the BufferProvider implementation
+   *       used here is just a diagnostics facility, allowing to investigate
+   *       the state of individual buffers even after "releasing" them.
+   *       
+   *       This test should help understanding the sequence of buffer management
+   *       operations performed at various stages while passing an calculation job
+   *       through the render engine.
    */
   class BufferProviderProtocol_test : public Test
     {
       virtual void
       run (Arg) 
         {
-          UNIMPLEMENTED ("build a diagnostic buffer provider and perform a full lifecycle");
           verifySimpleUsage();
           verifyStandardCase();
+          verifyObjectAttachment();
+          verifyObjectAttachmentFailure();
         }
       
       
@@ -93,11 +94,12 @@ namespace test  {
           BuffHandle buff = provider.lockBufferFor<TestFrame>();
           CHECK (buff.isValid());
           CHECK (sizeof(TestFrame) <= buff.size());
-          buff.create<TestFrame>() = testData(0);
+          buff.accessAs<TestFrame>() = testData(0);
           
-          TestFrame& storage = buff.accessAs<TestFrame>();
-          CHECK (testData(0) == storage);
+          TestFrame& content = buff.accessAs<TestFrame>();
+          CHECK (testData(0) == content);
           
+          buff.emit();
           buff.release();
           CHECK (!buff.isValid());
           VERIFY_ERROR (LIFECYCLE, buff.accessAs<TestFrame>() );
@@ -105,8 +107,6 @@ namespace test  {
           DiagnosticBufferProvider& checker = DiagnosticBufferProvider::access(provider);
           CHECK (checker.buffer_was_used (0));
           CHECK (checker.buffer_was_closed (0));
-          CHECK (checker.object_was_attached<TestFrame> (0));
-          CHECK (checker.object_was_destroyed<TestFrame> (0));
           
           CHECK (testData(0) == checker.accessMemory (0));
         }
@@ -146,6 +146,83 @@ namespace test  {
           DiagnosticBufferProvider& checker = DiagnosticBufferProvider::access(provider);
           CHECK (checker.all_buffers_released());
 #endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #829
+        }
+      
+      
+      void
+      verifyObjectAttachment()
+        {
+          BufferProvider& provider = DiagnosticBufferProvider::build();
+          BufferDescriptor type_A = provider.getDescriptorFor(sizeof(TestFrame));
+          BufferDescriptor type_B = provider.getDescriptorFor(sizeof(int));
+          BufferDescriptor type_C = provider.getDescriptor<int>();
+          
+          BuffHandle handle_A = provider.lockBuffer(type_A);
+          BuffHandle handle_B = provider.lockBuffer(type_B);
+          BuffHandle handle_C = provider.lockBuffer(type_C);
+          
+          CHECK (handle_A);
+          CHECK (handle_B);
+          CHECK (handle_C);
+          
+          CHECK (sizeof(TestFrame) == handle_A.size());
+          CHECK (sizeof( int )     == handle_B.size());
+          CHECK (sizeof( int )     == handle_C.size());
+          
+          TestFrame& embeddedFrame = handle_A.create<TestFrame>();
+          CHECK (isSameObject (*handle_A, embeddedFrame));
+          CHECK (embeddedFrame.isAlive());
+          CHECK (embeddedFrame.isSane());
+          
+          VERIFY_ERROR (LOGIC,     handle_B.create<TestFrame>());   // too small to hold a TestFrame
+          VERIFY_ERROR (LIFECYCLE, handle_C.create<int>());         // has already an attached TypeHandler (creating an int)
+          
+          handle_A.release();
+          handle_B.release();
+          handle_C.release();
+          
+          CHECK (embeddedFrame.isDead());
+          CHECK (embeddedFrame.isSane());
+        }
+      
+      
+      void
+      verifyObjectAttachmentFailure()
+        {
+          BufferProvider& provider = DiagnosticBufferProvider::build();
+          BufferDescriptor type_D = provider.getDescriptorFor(sizeof(Dummy));
+          
+          Dummy::checksum() = 0;
+          BuffHandle handle_D = provider.lockBuffer(type_D);
+          CHECK (0 == Dummy::checksum());  // nothing created thus far
+          
+          handle_D.create<Dummy>();
+          CHECK (0 < Dummy::checksum());
+          
+          handle_D.release();
+          CHECK (0 == Dummy::checksum());
+          
+          BuffHandle handle_DD = provider.lockBuffer(type_D);
+          
+          CHECK (0 == Dummy::checksum());
+          Dummy::activateCtorFailure();
+          
+          CHECK (handle_DD.isValid());
+          try
+            {
+              handle_DD.create<Dummy>();
+              NOTREACHED ("Dummy ctor should fail");
+            }
+          catch (int val)
+            {
+              CHECK (!handle_DD.isValid());
+              
+              CHECK (0 < Dummy::checksum());
+              CHECK (val == Dummy::checksum());
+            }
+          
+          VERIFY_ERROR (LIFECYCLE, handle_DD.accessAs<Dummy>() );
+          VERIFY_ERROR (LIFECYCLE, handle_DD.create<Dummy>() );
         }
     };
   

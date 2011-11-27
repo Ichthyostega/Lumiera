@@ -26,7 +26,7 @@
 
 
 #include "lib/error.hpp"
-#include "proc/engine/buffhandle.hpp"
+#include "proc/engine/channel-descriptor.hpp"
 #include "proc/engine/procnode.hpp"
 
 #include <boost/noncopyable.hpp>
@@ -70,6 +70,7 @@ namespace engine {
       PBu inBuff;
     };
   
+  class BufferDescriptor;
   
     /** Obsolete, to be rewritten  /////TICKET #826 */
   class BuffTableStorage

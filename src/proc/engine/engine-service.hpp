@@ -141,7 +141,7 @@ namespace engine{
       CalcStream
       calculate(ModelPort mPort,
                 Timings nominalTimings,
-                OutputConnection output,
+                OutputConnection& output,
                 Quality serviceQuality =QoS_DEFAULT);
       
       CalcStream

@@ -22,7 +22,7 @@
 
 /** @file buffer-provider.hpp
  ** Abstraction to represent buffer management and lifecycle within the render engine.
- ** It turns out that --  throughout the render engine implementation -- we never need
+ ** It turns out that -- throughout the render engine implementation -- we never need
  ** direct access to the buffers holding media data. Buffers are just some entity to be \em managed,
  ** i.e. "allocated", "locked" and "released"; the actual meaning of these operations is an implementation detail.
  ** The code within the render engine just pushes around BufferHandle objects, which act as a front-end,
@@ -45,6 +45,8 @@
 #include "lib/error.hpp"
 #include "lib/symbol.hpp"
 #include "proc/engine/buffhandle.hpp"
+#include "proc/engine/type-handler.hpp"
+#include "proc/engine/buffer-local-key.hpp"
 
 #include <boost/noncopyable.hpp>
 #include <boost/scoped_ptr.hpp>
@@ -56,7 +58,10 @@ namespace engine {
   using lib::Literal;
   
   
-  class Metadata;
+  class BufferMetadata;
+  
+  
+  LUMIERA_ERROR_DECLARE (BUFFER_MANAGEMENT); ///< Problem providing working buffers
   
   
   /**
@@ -66,46 +71,70 @@ namespace engine {
    * - "locking" a buffer to yield a buffer handle
    * - dereferencing this smart-handle class
    * 
+   * @warning all of BufferProvider is assumed to run within a threadsafe environment.
+   * 
    * @todo as of 6/2011 buffer management within the engine is still a bit vague
+   * @todo as of 11/11 thread safety within the engine remains to be clarified
    */
   class BufferProvider
     : boost::noncopyable
     {
-      scoped_ptr<Metadata> meta_;
+      scoped_ptr<BufferMetadata> meta_;
       
-    protected:
+      
+    protected: /* === for Implementation by concrete providers === */
+      
       BufferProvider (Literal implementationID);
       
+      virtual uint prepareBuffers (uint count, HashVal typeID)    =0;
+      
+      virtual BuffHandle provideLockedBuffer  (HashVal typeID)    =0;
+      virtual void mark_emitted (HashVal typeID, LocalKey const&) =0;
+      virtual void detachBuffer (HashVal typeID, LocalKey const&) =0;
+      
+      
     public:
-      virtual ~BufferProvider();  ///< this is an interface
+      virtual ~BufferProvider();  ///< this is an ABC
       
       
-      virtual uint announce (uint count, BufferDescriptor const&) =0;
+      uint announce (uint count, BufferDescriptor const&);
       
-      virtual BuffHandle lockBufferFor (BufferDescriptor const&)  =0;
-      virtual void releaseBuffer (BuffHandle const&)              =0;
+      BuffHandle lockBuffer (BufferDescriptor const&);
+      void       emitBuffer (BuffHandle const&);
+      void    releaseBuffer (BuffHandle const&);
       
       template<typename BU>
       BuffHandle lockBufferFor ();
       
+      /** allow for attaching and owing an object within an already created buffer */
+      void attachTypeHandler (BuffHandle const& target, BufferDescriptor const& reference);
+      
+      void emergencyCleanup (BuffHandle const& target, bool invokeDtor =false);
+      
       
       /** describe the kind of buffer managed by this provider */
       BufferDescriptor getDescriptorFor(size_t storageSize=0);
+      BufferDescriptor getDescriptorFor(size_t storageSize, TypeHandler specialTreatment);
       
       template<typename BU>
       BufferDescriptor getDescriptor();
-
+      
       
       
       /* === API for BuffHandle internal access === */
       
-      bool verifyValidity (BufferDescriptor const&);
+      bool verifyValidity (BufferDescriptor const&)  const;
+      size_t getBufferSize (HashVal typeID)          const;
       
+    protected:
+      BuffHandle buildHandle (HashVal typeID, void* storage, LocalKey const&);
+      
+      bool was_created_by_this_provider (BufferDescriptor const&)  const;
     };
-    
-    
-    
-    
+  
+  
+  
+  
   /* === Implementation === */
   
   /** convenience shortcut:
@@ -119,15 +148,20 @@ namespace engine {
   BuffHandle
   BufferProvider::lockBufferFor()
   {
-    UNIMPLEMENTED ("convenience shortcut to announce and lock for a specific object type");
+    BufferDescriptor attach_object_automatically = getDescriptor<BU>();
+    return lockBuffer (attach_object_automatically);
   }
   
   
+  /** define a "buffer type" for automatically creating
+   *  an instance of the template type embedded into the buffer
+   *  and destroying that embedded object when releasing the buffer.
+   */
   template<typename BU>
   BufferDescriptor
   BufferProvider::getDescriptor()
   {
-    UNIMPLEMENTED ("build descriptor for automatically placing an object instance into the buffer");
+    return getDescriptorFor (sizeof(BU), TypeHandler::create<BU>());
   }
   
   

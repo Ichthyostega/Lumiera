@@ -31,7 +31,7 @@
  ** - that overall storage size available within the buffer
  ** - a pair of custom \em creator and \em destructor functions to use together with this buffer
  ** - an additional client key to distinguish otherwise otherwise identical client requests
- ** These three distinctions are applied in sequence, thus forming a tree with 3 levels.
+ ** These three distinctions are applied in sequence, thus forming a type tree with 3 levels.
  ** Only the first distinguishing level (the size) is mandatory. The others are provided,
  ** because some of the foreseeable buffer providers allow to re-access the data placed
  ** into the buffer, by assigning an internally managed ID to the buffer. The most
@@ -56,10 +56,12 @@
 
 #include "lib/error.hpp"
 #include "lib/symbol.hpp"
-#include "lib/functor-util.hpp"
+#include "lib/util-foreach.hpp"
+#include "include/logging.h"
+#include "proc/engine/type-handler.hpp"
+#include "proc/engine/buffer-local-key.hpp"
 
-#include <tr1/functional>
-#include <boost/functional/hash.hpp>
+#include <tr1/unordered_map>
 #include <boost/noncopyable.hpp>
 
 
@@ -67,9 +69,7 @@ namespace engine {
   
   using lib::HashVal;
   using lib::Literal;
-  using std::tr1::bind;
-  using std::tr1::function;
-  using std::tr1::placeholders::_1;
+  using util::for_each; 
   
   namespace error = lumiera::error;
   
@@ -77,165 +77,27 @@ namespace engine {
     class Key;
     class Entry;
   }
+  class BufferMetadata;
   
   
   
+  
+  /**
+   * Buffer states
+   * usable within BufferProvider
+   * and stored within the metadata
+   */
   enum BufferState
-    { NIL,
-      FREE,
-      LOCKED,
-      EMITTED,
-      BLOCKED
+    { NIL,        ///< abstract entry, not yet allocated
+      FREE,       ///< allocated buffer, no longer in use
+      LOCKED,     ///< allocated buffer actively in use
+      EMITTED,    ///< allocated buffer, returned from client
+      BLOCKED     ///< allocated buffer blocked by protocol failure
     };
   
   
-  /**
-   * an opaque ID to be used by the BufferProvider implementation.
-   * Typically this will be used, to set apart some pre-registered
-   * kinds of buffers. It is treated as being part of the buffer type.
-   * LocalKey objects may be copied but not re-assigned or changed.
-   */
-  class LocalKey
-    {
-      uint64_t privateID_;
-      
-    public:
-      LocalKey (uint64_t opaqueValue=0)
-        : privateID_(opaqueValue)
-        { }
-      
-      operator uint64_t()  const { return privateID_; }
-      
-      friend size_t
-      hash_value (LocalKey const& lkey)
-      {
-        boost::hash<uint64_t> hashFunction;
-        return hashFunction(lkey.privateID_);
-      }
-      
-    private:
-      /** assignment usually prohibited */
-      LocalKey& operator= (LocalKey const& o)
-        {
-          privateID_ = o.privateID_;
-          return *this;
-        }
-      
-      /** but Key assignments are acceptable */
-      friend class metadata::Key;
-    };
   
   
-  namespace { // Helpers for construction within the buffer...
-    
-    template<class X>
-    inline void
-    buildIntoBuffer (void* storageBuffer)
-    {
-      new(storageBuffer) X();
-    }
-    
-    template<class X, typename A1>
-    inline void
-    buildIntoBuffer_A1 (void* storageBuffer, A1 arg1)
-    {
-      new(storageBuffer) X(arg1);
-    }
-    
-    template<class X>
-    inline void
-    destroyInBuffer (void* storageBuffer)
-    {
-      X* embedded = static_cast<X*> (storageBuffer);
-      embedded->~X();
-    }
-  }//(End)placement-new helpers
-  
-  
-  /**
-   * A pair of functors to maintain a datastructure within the buffer.
-   * TypeHandler describes how to outfit the buffer in a specific way.
-   * When defined, the buffer will be prepared when locking and cleanup
-   * will be invoked automatically when releasing. Especially, this
-   * can be used to \em attach an object to the buffer (placement-new) 
-   */
-  struct TypeHandler
-    {
-      typedef function<void(void*)> DoInBuffer;
-      
-      DoInBuffer createAttached;
-      DoInBuffer destroyAttached;
-      
-      /** build an invalid NIL TypeHandler */
-      TypeHandler()
-        : createAttached()
-        , destroyAttached()
-        { }
-      
-      /** build a TypeHandler
-       *  binding to arbitrary constructor and destructor functions.
-       *  On invocation, these functions get a void* to the buffer.
-       * @note the functor objects created from these operations
-       *       might be shared for handling multiple buffers.
-       *       Be careful with any state or arguments.
-       */
-      template<typename CTOR, typename DTOR>
-      TypeHandler(CTOR ctor, DTOR dtor)
-        : createAttached (ctor)
-        , destroyAttached (dtor)
-        { }
-      
-      /** builder function defining a TypeHandler
-       *  to place a default-constructed object
-       *  into the buffer. */
-      template<class X>
-      static TypeHandler
-      create ()
-        {
-          return TypeHandler (buildIntoBuffer<X>, destroyInBuffer<X>);
-        }
-      
-      template<class X, typename A1>
-      static TypeHandler
-      create (A1 a1)
-        {
-          return TypeHandler ( bind (buildIntoBuffer_A1<X,A1>, _1, a1)
-                             , destroyInBuffer<X>);
-        }
-      
-      bool
-      isValid()  const
-        {
-          return bool(createAttached)
-              && bool(destroyAttached);
-        }
-      
-      friend HashVal
-      hash_value (TypeHandler const& handler)
-      {
-        HashVal hash(0);
-        if (handler.isValid())
-          {
-            boost::hash_combine(hash, handler.createAttached);
-            boost::hash_combine(hash, handler.destroyAttached);
-          }
-        return hash;
-      }
-      
-      friend bool
-      operator== (TypeHandler const& left, TypeHandler const& right)
-      {
-        return (!left.isValid() && !right.isValid())
-            || (  util::rawComparison(left.createAttached, right.createAttached)
-               && util::rawComparison(left.destroyAttached, right.destroyAttached)
-               );
-      }
-      friend bool
-      operator!= (TypeHandler const& left, TypeHandler const& right)
-      {
-        return !(left == right);       
-      }
-    };
   
   
   namespace { // internal constants to mark the default case
@@ -258,7 +120,7 @@ namespace engine {
   
   
   
-  /* === Implementation === */
+  /* === Metadata Implementation === */
   
   namespace metadata {
     
@@ -275,6 +137,13 @@ namespace engine {
         }
     }
     
+    
+    /**
+     * Description of a Buffer-"type".
+     * Key elements will be used to generate hash IDs,
+     * to be embedded into a BufferDescriptor.
+     * Keys are chained hierarchically.
+     */
     class Key
       {
         HashVal parent_;
@@ -342,27 +211,108 @@ namespace engine {
           { }
         
         
+        /** build derived Key for a concrete buffer Entry
+         * @param parent type key to subsume this buffer
+         * @param bufferAddr pointer to the concrete buffer
+         * @return Child key with hashID based on the buffer address.
+         *         For NULL buffer a copy of the parent is returned.
+         */
+        static Key
+        forEntry (Key const& parent, const void* bufferAddr, LocalKey const& implID =UNSPECIFIC)
+          {
+            Key newKey(parent);
+            if (bufferAddr)
+              {
+                newKey.parent_ = HashVal(parent);
+                newKey.hashID_ = chainedHash(parent, bufferAddr);
+                if (nontrivial(implID))
+                  {
+                    REQUIRE (!newKey.specifics_.isDefined(),
+                             "Implementation defined local key should not be overridden. "
+                             "Underlying buffer type already defines a nontrivial LocalKey");
+                    newKey.specifics_ = implID;
+              }   }
+            return newKey; 
+          }
+        
+        void
+        useTypeHandlerFrom (Key const& ref)
+          {
+            if (nontrivial(this->instanceFunc_))
+              throw error::Logic ("unable to supersede an already attached TypeHandler"
+                                 , LUMIERA_ERROR_LIFECYCLE);
+            instanceFunc_ = ref.instanceFunc_;
+          }
+        
+        
+        LocalKey const& localKey() const { return specifics_;}
+        size_t storageSize() const { return storageSize_; }
+        
         HashVal parentKey()  const { return parent_;}
         operator HashVal()   const { return hashID_;}
       };
     
     
+    /**
+     * A complete metadata Entry, based on a Key.
+     * This special Key element usually describes an actual Buffer.
+     * Entries are to be managed in a hashtable, which is "the metadata table".
+     * As a special case, an entry without a concrete buffer storage pointer
+     * can be created. This corresponds to a (plain) key and describes just
+     * a buffer type. Such type-only entries are fixed to the NIL state.
+     * All other entries allow for state transitions.
+     * 
+     * The "metadata table" with its entries is maintained by an engine::BufferMetadata
+     * instance. For the latter, Entry serves as representation and access point
+     * to the individual metadata; this includes using the TypeHandler for
+     * building and destroying buffer structures.
+     */
     class Entry
       : public Key
       {
         BufferState state_;
-        const void* buffer_;
+        void*       buffer_;
+        
+      protected:
+        Entry (Key const& parent, void* bufferPtr =0, LocalKey const& implID =UNSPECIFIC)
+          : Key (Key::forEntry (parent, bufferPtr, implID))
+          , state_(bufferPtr? LOCKED:NIL)
+          , buffer_(bufferPtr)
+          { }
+        
+        /// BufferMetadata is allowed to create 
+        friend class engine::BufferMetadata;
+        
+        // standard copy operations permitted
         
       public:
-        virtual BufferState
+        /** is this Entry currently associated to a
+         *  concrete buffer? Is this buffer in use? */ 
+        bool
+        isLocked()  const
+          {
+            ASSERT (!buffer_ || (NIL != state_ && FREE != state_));
+            return bool(buffer_);
+          }
+        
+        /** is this Entry just an (abstract) placeholder for a type?
+         * @return false if it's a real entry corresponding to a concrete buffer
+         */ 
+        bool
+        isTypeKey()  const
+          {
+            return NIL == state_ && !buffer_;
+          }
+        
+        
+        BufferState
         state()  const
           {
-            __must_not_be_NIL();
             return state_;
           }
         
-        virtual const void*
-        access()  const
+        void*
+        access()
           {
             __must_not_be_NIL();
             __must_not_be_FREE();
@@ -371,40 +321,83 @@ namespace engine {
             return buffer_;
           }
         
-        virtual Entry&
+        /** Buffer state machine */
+        Entry&
         mark (BufferState newState)
           {
-            switch (this->state_)
+            __must_not_be_NIL();
+            
+            if ( (state_ == FREE    && newState == LOCKED)
+               ||(state_ == LOCKED  && newState == EMITTED)
+               ||(state_ == LOCKED  && newState == BLOCKED)
+               ||(state_ == LOCKED  && newState == FREE)
+               ||(state_ == EMITTED && newState == BLOCKED)
+               ||(state_ == EMITTED && newState == FREE)
+               ||(state_ == BLOCKED && newState == FREE))
               {
-              case NIL:  __must_not_be_NIL();
-              case FREE: __must_not_be_FREE();
-                
-              case LOCKED:
-                if (newState == EMITTED) break; // allow transition
-                
-              case EMITTED:
-                if (newState == BLOCKED) break; // allow transition
-                
-              case BLOCKED:
-                if (newState == FREE)           // note fall through for LOCKED and EMITTED too
-                  {
-                    buffer_ = 0;
-                    break; // allow transition
-                  }
-              default:
-                throw error::Fatal ("Invalid buffer state encountered.");
+                // allowed transition
+                if (newState == FREE)
+                  invokeEmbeddedDtor_and_clear();
+                if (newState == LOCKED)
+                  invokeEmbeddedCtor();
+                state_ = newState;
+                return *this;
               }
-            state_ = newState;
+            
+            throw error::Fatal ("Invalid buffer state transition.");
+          }
+        
+        Entry&
+        lock (void* newBuffer)
+          {
+            __must_be_FREE();
+            buffer_ = newBuffer;
+            return mark (LOCKED);
+          }
+        
+        Entry&
+        invalidate (bool invokeDtor =true)
+          {
+            if (buffer_ && invokeDtor)
+              invokeEmbeddedDtor_and_clear();
+            buffer_ = 0;
+            state_ = FREE;
             return *this;
           }
         
         
+      protected:
+        /** @internal maybe invoke a registered TypeHandler's
+         * constructor function, which typically builds some
+         * content object into the buffer by placement new. */
+        void
+        invokeEmbeddedCtor()
+          {
+            __buffer_required();
+            if (nontrivial (instanceFunc_))
+              instanceFunc_.createAttached (buffer_);
+          }
+        
+        /** @internal maybe invoke a registered TypeHandler's
+         * destructor function, which typically clears up some
+         * content object living within the buffer */
+        void
+        invokeEmbeddedDtor_and_clear()
+          {
+            __buffer_required();
+            if (nontrivial (instanceFunc_))
+              instanceFunc_.destroyAttached (buffer_);
+            buffer_ = 0;
+          }
+        
+      private:
         void
         __must_not_be_NIL()  const
           {
             if (NIL == state_)
-              throw error::Fatal ("Concrete buffer entry with state==NIL encountered."
-                                  "State transition logic broken (programming error)");
+              throw error::Fatal ("Buffer metadata entry with state==NIL encountered."
+                                  "State transition logic broken (programming error)"
+                                 , LUMIERA_ERROR_LIFECYCLE);
           }
         
         void
@@ -416,21 +409,144 @@ namespace engine {
                                     "You should invoke markLocked(buffer) prior to access."
                                    , LUMIERA_ERROR_LIFECYCLE );
           }
+        
+        void
+        __must_be_FREE()  const
+          {
+            if (FREE != state_)
+                throw error::Logic ("Buffer already in use"
+                                   , LUMIERA_ERROR_LIFECYCLE );
+            REQUIRE (!buffer_, "Buffer marked as free, "
+                               "but buffer pointer is set.");
+          }
+        
+        void
+        __buffer_required()  const
+          {
+            if (!buffer_)
+                throw error::Fatal ("Need concrete buffer for any further operations");
+          }
       };
-  }
+    
+    
+      
+    /**
+     * (Hash)Table to store and manage buffer metadata.
+     * Buffer metadata entries are comprised of a Key part and an extended
+     * Entry, holding the actual management and housekeeping metadata. The
+     * Keys are organised hierarchically and denote the "kind" of buffer.
+     * The hash values for lookup are based on the key part, chained with
+     * the actual memory location of the concrete buffer corresponding
+     * to the metadata entry to be retrieved.
+     */
+    class Table
+      {
+        typedef std::tr1::unordered_map<HashVal,Entry> MetadataStore;
+        
+        MetadataStore entries_;
+
+      public:
+       ~Table() { verify_all_buffers_freed(); }
+        
+        /** fetch metadata record, if any
+         * @param hashID for the Key part of the metadata entry
+         * @return pointer to the entry in the table or NULL
+         */
+        Entry*
+        fetch (HashVal hashID)
+          {
+            MetadataStore::iterator pos = entries_.find (hashID);
+            if (pos != entries_.end())
+              return &(pos->second);
+            else
+              return NULL;
+          }
+        
+        const Entry*
+        fetch (HashVal hashID)  const
+          {
+            MetadataStore::const_iterator pos = entries_.find (hashID);
+            if (pos != entries_.end())
+              return &(pos->second);
+            else
+              return NULL;
+          }
+        
+        /** store a copy of the given new metadata entry.
+         *  The hash key for lookup is retrieved from the given Entry, by conversion to HashVal.
+         *  Consequently, this will be the hashID of the parent Key (type), when the entry holds
+         *  a NULL buffer (i.e a "pseudo entry"). Otherwise, it will be this parent Key hash,
+         *  extended by hashing the actual buffer address.
+         * @return reference to relevant entry for this Key. This might be a copy
+         *         of the new entry, or an already existing entry with the same Key
+         */
+        Entry&
+        store (Entry const& newEntry)
+          {
+            using std::make_pair;
+            REQUIRE (!fetch (newEntry), "duplicate buffer metadata entry");
+            MetadataStore::iterator pos = entries_.insert (make_pair (HashVal(newEntry), newEntry))
+                                                  .first;
+            
+            ENSURE (pos != entries_.end());
+            return pos->second;
+          }
+        
+        void
+        remove (HashVal hashID)
+          {
+            uint cnt = entries_.erase (hashID);
+            ENSURE (cnt, "entry to remove didn't exist");
+          }
+        
+      private:
+        void
+        verify_all_buffers_freed()
+          try
+            {
+              for_each (entries_, verify_is_free);
+            }
+          ERROR_LOG_AND_IGNORE (engine,"Shutdown of BufferProvider metadata store")
+          
+        static void
+        verify_is_free (std::pair<HashVal, Entry> const& e)
+          {
+            WARN_IF (e.second.isLocked(), engine,
+                     "Buffer still in use while shutting down BufferProvider? ");
+          }
+      };
+    
+  }//namespace metadata
   
   
   
   
   
-  class Metadata
+  /* ===== Buffer Metadata Frontend ===== */
+  
+  /**
+   * Registry for managing buffer metadata.
+   * This is an implementation level service,
+   * used by the standard BufferProvider implementation.
+   * Each metadata registry (instance) defines and maintains
+   * a family of "buffer types"; beyond the buffer storage size,
+   * the concrete meaning of those types is tied to the corresponding
+   * BufferProvider implementation and remains opaque. These types are
+   * represented as hierarchically linked hash keys. The implementation
+   * may bind a TypeHandler to a specific type, allowing automatic invocation
+   * of a "constructor" and "destructor" function on each buffer of this type,
+   * when \em locking or \em freeing the corresponding buffer.
+   */
+  class BufferMetadata
     : boost::noncopyable
     {
       Literal id_;
       HashVal family_;
       
-    public:
+      metadata::Table table_;
       
+      
+    public:
       typedef metadata::Key Key;
       typedef metadata::Entry Entry;
       
@@ -438,10 +554,10 @@ namespace engine {
        *  Such will maintain a family of buffer type entries
        *  and provide a service for storing and retrieving metadata
        *  for concrete buffer entries associated with these types.
-       * @param implementationID to distinguish families
-       *        of type keys belonging to different registries.
+       * @param implementationID to distinguish families of
+       *        type keys belonging to different registries.
        */
-      Metadata (Literal implementationID)
+      BufferMetadata (Literal implementationID)
         : id_(implementationID)
         , family_(hash_value(id_))
         { }
@@ -459,20 +575,16 @@ namespace engine {
       Key
       key ( size_t storageSize
           , TypeHandler instanceFunc =RAW_BUFFER
-          , LocalKey specifics =UNSPECIFIC)
+          , LocalKey specifics       =UNSPECIFIC)
         {
           REQUIRE (storageSize);
           Key typeKey = trackKey (family_, storageSize);
           
           if (nontrivial(instanceFunc))
-            {
               typeKey = trackKey (typeKey, instanceFunc);
-            }
           
           if (nontrivial(specifics))
-            {
               typeKey = trackKey (typeKey, specifics);
-            }
           
           return typeKey;
         }
@@ -484,50 +596,159 @@ namespace engine {
           return trackKey (parentKey, instanceFunc);
         }
       
-      /** create a sub-type, using a different private-ID (implementation defined) */
+      /** create a sub-type,
+       *  using a different private-ID (implementation defined) */
       Key
       key (Key const& parentKey, LocalKey specifics)
         {
           return trackKey (parentKey, specifics);
         }
       
-      Key
-      key (Key const& parentKey, const void* concreteBuffer)
+      /** shortcut to access the Key part of a (probably new) Entry
+       *  describing a concrete buffer at the given address
+       * @note might create/register a new Entry as a side-effect 
+       */ 
+      Key const&
+      key (Key const& parentKey, void* concreteBuffer, LocalKey const& implID =UNSPECIFIC)
         {
-          UNIMPLEMENTED ("create sub-object key for concrete buffer");
+          Key derivedKey = Key::forEntry (parentKey, concreteBuffer);
+          Entry* existing = table_.fetch (derivedKey);
+          
+          return existing? *existing
+                         : markLocked (parentKey,concreteBuffer,implID);
         }
       
-      Key const&
+      /** core operation to access or create a concrete buffer metadata entry.
+       *  The hashID of the entry in question is built, based on the parentKey,
+       *  which denotes a buffer type, and the concrete buffer address. If yet
+       *  unknown, a new concrete buffer metadata Entry is created and initialised
+       *  to LOCKED state. Otherwise just the existing Entry is fetched.
+       * @note  this function really \em activates the buffer.
+       *        In case the type (Key) involves a TypeHandler (functor),
+       *        its constructor function will be invoked, if actually a new
+       *        entry gets created. Typically this mechanism will be used
+       *        to placement-create an object into the buffer.
+       * @param parentKey a key describing the \em type of the buffer
+       * @param concreteBuffer storage pointer, must not be NULL
+       * @param onlyNew disallow fetching an existing entry
+       * @throw error::Logic when #onlyNew is set, but an equivalent entry
+       *        was registered previously. This indicates a serious error
+       *        in buffer lifecycle management.
+       * @throw error::Invalid when invoked with NULL buffer. Use the #key
+       *        functions instead to register and track type keys.
+       * @return reference to the entry stored in the metadata table.
+       * @warning the exposed reference might become invalid when the
+       *        buffer is released or re-used later.
+       */
+      Entry&
+      lock (Key const& parentKey
+           ,void* concreteBuffer
+           ,LocalKey const& implID =UNSPECIFIC
+           ,bool onlyNew =false)
+        {
+          if (!concreteBuffer)
+            throw error::Invalid ("Attempt to lock a slot for a NULL buffer"
+                                 , error::LUMIERA_ERROR_BOTTOM_VALUE);
+          
+          Entry newEntry(parentKey, concreteBuffer, implID);
+          Entry* existing = table_.fetch (newEntry);
+          
+          if (existing && onlyNew)
+            throw error::Logic ("Attempt to lock a slot for a new buffer, "
+                                "while actually the old buffer is still locked"
+                               , error::LUMIERA_ERROR_LIFECYCLE );
+          if (existing && existing->isLocked())
+            throw error::Logic ("Attempt to re-lock a buffer still in use"
+                               , error::LUMIERA_ERROR_LIFECYCLE );
+          
+          if (!existing)
+            return store_and_lock (newEntry); // actual creation
+          else
+            return existing->lock (concreteBuffer);
+        }
+      
+      /** access the metadata record registered with the given hash key.
+       *  This might be a pseudo entry in case of a Key describing a buffer type.
+       *  Otherwise, the entry associated with a concrete buffer pointer is returned
+       *  by reference, an can be modified (e.g. state change) 
+       * @param hashID which can be calculated from the Key
+       * @throw error::Invalid when there is no such entry
+       * @note use #isKnown to check existence
+       */
+      Entry&
       get (HashVal hashID)
         {
-          UNIMPLEMENTED ("access the plain key entry");
-        }
-      
-      Entry&
-      get (Key key)
-        {
-          UNIMPLEMENTED ("access, possibly create metadata records");
+          Entry* entry = table_.fetch (hashID);
+          if (!entry)
+            throw error::Invalid ("Attempt to access an unknown buffer metadata entry");
+          
+          return *entry;
         }
       
       bool
       isKnown (HashVal key)  const
         {
-          UNIMPLEMENTED ("diagnostics: known record?");
+          return bool(table_.fetch (key));
         }
       
       bool
       isLocked (HashVal key)  const
         {
-          UNIMPLEMENTED ("diagnostics: actually locked buffer instance record?");
+          const Entry* entry = table_.fetch (key);
+          return entry
+              && entry->isLocked();
         }
       
       
-      /* == memory management == */
       
-      Entry& markLocked (Key const& parentKey, const void* buffer);
-      void release (HashVal key);
+      /* == memory management operations == */
       
-    private:
+      /** combine the type (Key) with a concrete buffer,
+       *  thereby marking this buffer as locked. Store a concrete
+       *  metadata Entry to account for this fact. This might include
+       *  invoking a constructor function, in case the type (Key)
+       *  defines a (nontrivial) TypeHandler.
+       * @throw error::Fatal when locking a NULL buffer
+       * @throw exceptions which might be raised by a TypeHandler's
+       *        constructor function. In this case, the Entry remains
+       *        created, but is marked as FREE
+       */
+      Entry&
+      markLocked (Key const& parentKey, void* buffer, LocalKey const& implID =UNSPECIFIC)
+        {
+          if (!buffer)
+            throw error::Fatal ("Attempt to lock for a NULL buffer. Allocation floundered?"
+                               , error::LUMIERA_ERROR_BOTTOM_VALUE);
+          
+          return this->lock(parentKey, buffer, implID, true); // force creation of a new entry
+        }
+      
+      /** purge the bare metadata Entry from the metadata tables.
+       * @throw error::Logic if the entry isn't marked FREE already
+       */
+      void
+      release (HashVal key)
+        {
+          Entry* entry = table_.fetch (key);
+          if (!entry) return;
+          
+          ASSERT (entry && (key == HashVal(*entry)));
+          release (*entry);
+        }
+      
+      void
+      release (Entry const& entry)
+        {
+          if (FREE != entry.state())
+            throw error::Logic ("Attempt to release a buffer still in use"
+                               , error::LUMIERA_ERROR_LIFECYCLE);
+          
+          table_.remove (HashVal(entry));
+        }
+      
+      
+      
+    private: 
             
       template<typename PAR, typename DEF>
       Key
@@ -542,41 +763,29 @@ namespace engine {
       maybeStore (Key const& key)
         {
           if (isKnown (key)) return;
-          UNIMPLEMENTED ("registry for type keys");
+          table_.store (Entry (key, NULL));
         }
-
+      
+      Entry&
+      store_and_lock (Entry const& metadata)
+        {
+          Entry& newEntry = table_.store (metadata);
+          try
+            {
+              newEntry.invokeEmbeddedCtor();
+              ENSURE (LOCKED == newEntry.state());
+              ENSURE (newEntry.access());
+            }
+          catch(...)
+            {
+              newEntry.mark(FREE);
+              throw;
+            }
+          return newEntry;
+        }
     };
-    
-    
-    
-    
   
   
-  
-  
-  /** */
-  inline Metadata::Entry&
-  Metadata::markLocked (Key const& parentKey, const void* buffer)
-  {
-    UNIMPLEMENTED ("transition to locked state");
-    if (!buffer)
-      throw error::Fatal ("Attempt to lock for a NULL buffer. Allocation floundered?"
-                         , error::LUMIERA_ERROR_BOTTOM_VALUE);
-    
-    Key newKey = this->key (parentKey, buffer);
-    if (isLocked(newKey))
-      throw error::Logic ("Attempt to lock a slot for a new buffer, "
-                          "while actually the old buffer is still locked."
-                         , error::LUMIERA_ERROR_LIFECYCLE );
-    
-    return this->get(newKey);
-  }
-  
-  inline void
-  Metadata::release (HashVal key)
-  {
-    UNIMPLEMENTED ("metadata memory management");
-  }
   
   
   

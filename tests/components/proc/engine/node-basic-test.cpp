@@ -26,7 +26,7 @@
 #include "proc/engine/nodefactory.hpp"
 #include "proc/engine/nodewiring.hpp"
 #include "proc/engine/stateproxy.hpp"
-#include "proc/engine/buffhandle.hpp"
+#include "proc/engine/channel-descriptor.hpp"
 #include "proc/mobject/session/effect.hpp"
 #include "lib/allocation-cluster.hpp"
 

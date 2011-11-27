@@ -55,7 +55,7 @@
 
 #include "proc/state.hpp"
 #include "proc/engine/procnode.hpp"
-#include "proc/engine/buffhandle.hpp"
+#include "proc/engine/channel-descriptor.hpp"
 #include "proc/engine/bufftable-obsolete.hpp"
 
 

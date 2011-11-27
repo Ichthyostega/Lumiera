@@ -32,15 +32,19 @@
 
 
 #include "lib/error.hpp"
+#include "include/logging.h"
 #include "proc/play/output-slot.hpp"
+#include "proc/play/output-slot-connection.hpp"
+#include "proc/engine/buffhandle.hpp"
+#include "proc/engine/tracking-heap-block-provider.hpp"
 #include "lib/iter-source.hpp"  ////////////TODO really going down that path...?
 #include "proc/engine/testframe.hpp"
 //#include "lib/sync.hpp"
 
-//#include <boost/noncopyable.hpp>
+#include <boost/noncopyable.hpp>
 //#include <string>
 //#include <vector>
-//#include <tr1/memory>
+#include <tr1/memory>
 //#include <boost/scoped_ptr.hpp>
 
 
@@ -48,13 +52,104 @@ namespace proc {
 namespace play {
 
 //using std::string;
+  using ::engine::BufferDescriptor;
   using ::engine::test::TestFrame;
+  using ::engine::TrackingHeapBlockProvider;
 
 //using std::vector;
-//using std::tr1::shared_ptr;
+  using std::tr1::shared_ptr;
 //using boost::scoped_ptr;
   
   
+  
+  class TrackingInMemoryBlockSequence
+    : public OutputSlot::Connection
+    {
+      
+      shared_ptr<TrackingHeapBlockProvider> buffProvider_;
+      BufferDescriptor bufferType_;
+      
+      
+      /* === Connection API === */
+      
+      BuffHandle
+      claimBufferFor(FrameID frameNr) 
+        {
+          return buffProvider_->lockBuffer (bufferType_);
+        }
+      
+      
+      bool
+      isTimely (FrameID frameNr, TimeValue currentTime)
+        {
+          if (Time::MAX == currentTime)
+            return true;
+          
+          UNIMPLEMENTED ("find out about timings");
+          return false;
+        }
+      
+      void
+      transfer (BuffHandle const& filledBuffer)
+        {
+          pushout (filledBuffer);
+        }
+      
+      void
+      pushout (BuffHandle const& data4output)
+        {
+          buffProvider_->emitBuffer   (data4output);
+          buffProvider_->releaseBuffer(data4output);
+        }
+      
+      void
+      discard (BuffHandle const& superseededData)
+        {
+          buffProvider_->releaseBuffer (superseededData);
+        }
+      
+      void
+      shutDown ()
+        {
+          buffProvider_.reset();
+        }
+      
+    public:
+      TrackingInMemoryBlockSequence()
+        : buffProvider_(new TrackingHeapBlockProvider())
+        , bufferType_(buffProvider_->getDescriptor<TestFrame>())
+        {
+          INFO (engine_dbg, "building in-memory diagnostic output sequence");
+        }
+      
+      virtual
+     ~TrackingInMemoryBlockSequence()
+        {
+          INFO (engine_dbg, "releasing diagnostic output sequence");
+        }
+    };
+  
+  
+  class SimulatedOutputSequences
+    : public ConnectionStateManager<TrackingInMemoryBlockSequence>
+    , boost::noncopyable
+    {
+      TrackingInMemoryBlockSequence
+      buildConnection()
+        {
+          return TrackingInMemoryBlockSequence();
+        }
+      
+    public:
+      SimulatedOutputSequences (uint numChannels)
+        {
+          init (numChannels);
+        }
+    };
+  
+    
+    
+    
   
   /********************************************************************
    * Helper for unit tests: Mock output sink.
@@ -64,6 +159,17 @@ namespace play {
   class DiagnosticOutputSlot
     : public OutputSlot
     {
+      
+      static const uint MAX_CHANNELS = 5;
+        
+      /* === hook into the OutputSlot frontend === */
+      ConnectionState*
+      buildState()
+        {
+          return new SimulatedOutputSequences(MAX_CHANNELS);
+        }
+        
+      
     public:
       /** build a new Diagnostic Output Slot instance,
        *  discard the existing one. Use the static query API
@@ -105,28 +211,28 @@ namespace play {
       
       
       bool
-      buffer_was_used (uint channel, FrameNr frame)
+      buffer_was_used (uint channel, FrameID frame)
         {
           UNIMPLEMENTED ("determine if the denoted buffer was indeed used");
         }
       
       
       bool
-      buffer_unused   (uint channel, FrameNr frame)
+      buffer_unused   (uint channel, FrameID frame)
         {
           UNIMPLEMENTED ("determine if the specified buffer was never touched/locked for use");
         }
       
       
       bool
-      buffer_was_closed (uint channel, FrameNr frame)
+      buffer_was_closed (uint channel, FrameID frame)
         {
           UNIMPLEMENTED ("determine if the specified buffer was indeed closed properly");
         }
       
       
       bool
-      emitted (uint channel, FrameNr frame)
+      emitted (uint channel, FrameID frame)
         {
           UNIMPLEMENTED ("determine if the specivied buffer was indeed handed over for emitting output");
         }

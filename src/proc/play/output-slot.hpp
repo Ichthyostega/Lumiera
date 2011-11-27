@@ -45,10 +45,10 @@
 //#include "lib/sync.hpp"
 
 #include <boost/noncopyable.hpp>
+#include <boost/scoped_ptr.hpp>
 //#include <string>
 //#include <vector>
 //#include <tr1/memory>
-//#include <boost/scoped_ptr.hpp>
 
 
 namespace proc {
@@ -56,29 +56,18 @@ namespace play {
 
   using ::engine::BuffHandle;
   using ::engine::BufferProvider;
-  using lib::time::Time;
+  using lib::time::TimeValue;
 //using std::string;
 
 //using std::vector;
 //using std::tr1::shared_ptr;
-//using boost::scoped_ptr;
+  using boost::scoped_ptr;
   
   
-  /** established output channel */
-  class Connection;
   
-  typedef int64_t FrameNr;
+  class DataSink;
   
-  
-  class DataSink
-    : public lib::Handle<Connection>
-    {
-      
-    public:
-      BuffHandle lockBufferFor(FrameNr);
-      void emit(FrameNr);
-    };
-  
+  typedef int64_t FrameID;
   
   
   
@@ -90,36 +79,63 @@ namespace play {
   class OutputSlot
     : boost::noncopyable
     {
+      
+    protected:
+      
+      /** Table to maintain connection state */
+      class ConnectionState;
+      
+      scoped_ptr<ConnectionState> state_;
+      
+      virtual ConnectionState* buildState() =0;
+      
+      
     public:
       virtual ~OutputSlot();
       
       typedef lib::IterSource<DataSink>::iterator OpenedSinks;
       
-      struct Allocation
+      class Allocation
         {
-          OpenedSinks getOpenedSinks();
-          
-          bool isActive();
+        public:
+          virtual OpenedSinks getOpenedSinks()  =0;
+          virtual bool isActive()               =0;
           
           /////TODO add here the getters for timing constraints
+        protected:
+         ~Allocation();
         };
       
+      /** established output channel */
+      class Connection;
       
+      
+      /** can this OutputSlot be allocated? */
       bool isFree()  const;
       
-      Allocation
-      allocate();
+      /** claim this slot for exclusive use */
+      Allocation& allocate();
       
-    protected:
-      friend class DataSink;
-      
-      virtual void lock     (FrameNr, uint channel)   =0;
-      virtual void transfer (FrameNr, uint channel)   =0;
-      virtual void pushout  (FrameNr, uint channel)   =0;
+      /** disconnect from this OutputSlot
+       * @warning may block until DataSinks are gone */
+      void disconnect();
       
     private:
       
     };
+  
+  
+  
+  class DataSink
+    : public lib::Handle<OutputSlot::Connection>
+    {
+      
+    public:
+      BuffHandle lockBufferFor(FrameID);
+      void emit(FrameID, BuffHandle const&, TimeValue currentTime = Time::MAX);    ///////////////TICKET #855 
+    };
+  
+  
   
   
   

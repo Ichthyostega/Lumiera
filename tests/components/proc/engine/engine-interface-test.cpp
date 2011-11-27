@@ -93,7 +93,7 @@ namespace test  {
           ModelPort port(pipe);
           
           OutputSlot& oSlot = DiagnosticOutputSlot::build();
-          Allocation output = oSlot.allocate();
+          Allocation& output = oSlot.allocate();
           Timings timings; /////////TODO
           
           // Invoke test subject...

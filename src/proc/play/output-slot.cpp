@@ -21,12 +21,20 @@
 * *****************************************************/
 
 
+#include "lib/error.hpp"
 #include "proc/play/output-slot.hpp"
+#include "proc/play/output-slot-connection.hpp"
 
+#include <boost/noncopyable.hpp>
+#include <vector>
 
 
 namespace proc {
 namespace play {
+  
+  using std::vector;
+  
+  namespace error = lumiera::error;
   
   
   
@@ -36,7 +44,16 @@ namespace play {
   
   
   
+  
+  
+  
   OutputSlot::~OutputSlot() { }  // emit VTables here....
+  
+  OutputSlot::Allocation::~Allocation() { }
+  
+  OutputSlot::Connection::~Connection() { }
+  
+  
   
   
   
@@ -47,9 +64,53 @@ namespace play {
   bool
   OutputSlot::isFree()  const
   {
-    UNIMPLEMENTED ("connection state");
+    return ! this->state_;
   }
-      
+  
+  
+  /** */
+  OutputSlot::Allocation&
+  OutputSlot::allocate()
+  {
+    if (!isFree())
+      throw error::Logic ("Attempt to open/allocate an OutputSlot already in use.");
+    
+    UNIMPLEMENTED ("internal interface to determine the number of channel-connections");
+    
+    state_.reset (this->buildState());
+    return *state_;
+  }
+  
+  
+  void
+  OutputSlot::disconnect()
+  {
+    if (!isFree())
+      state_.reset(0);    
+  }
+  
+  
+  
+  /* === DataSink frontend === */
+  
+  BuffHandle
+  DataSink::lockBufferFor(FrameID frameNr)
+  {
+    return impl().claimBufferFor(frameNr);
+  }
+  
+  
+  void
+  DataSink::emit (FrameID frameNr, BuffHandle const& data2emit, TimeValue currentTime)
+  {
+    OutputSlot::Connection& connection = impl();
+    if (connection.isTimely(frameNr,currentTime))
+      connection.transfer(data2emit);
+    else
+      connection.discard(data2emit);
+  }
+  
+
   
   
   

@@ -2,16 +2,27 @@ TESTING "Component Test Suite: Render Engine parts" ./test-components --group=en
 
 
 
-PLANNED "Buffer provider diagnostics" BufferProviderProtocol_test <<END
+TEST "Test support: dummy frames" TestFrame_test <<END
 return: 0
 END
 
 
-PLANNED "buffer metadata type keys" BufferMetadataKey_test <<END
+TEST "Test support: dummy buffer provider" TrackingHeapBlockProvider_test <<END
+return: 0
 END
 
 
-PLANNED "buffer metadata and state transitions" BufferMetadata_test <<END
+TEST "Buffer provider diagnostics" BufferProviderProtocol_test <<END
+return: 0
+END
+
+
+TEST "buffer metadata type keys" BufferMetadataKey_test <<END
+return: 0
+END
+
+
+TEST "buffer metadata and state transitions" BufferMetadata_test <<END
 END
 
 

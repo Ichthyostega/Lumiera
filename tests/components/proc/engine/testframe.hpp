@@ -25,20 +25,13 @@
 #define PROC_ENGINE_TESTFRAME_H
 
 
-//#include "lib/time/timevalue.hpp"
-
-//#include <string>
-
-
-//using std::tr1::shared_ptr;
-//using std::string;
+#include <cstdlib>
+#include <stdint.h>
 
 
 namespace engine {
 namespace test   {
   
-  
-//class TestPlacement;
   
   /**
    * Mock data frame for simulated rendering.
@@ -47,52 +40,80 @@ namespace test   {
    * Placeholder functions are provided for assignment (simulating the actual
    * calculations); additional diagnostic functions allow to verify the
    * performed operations after-the fact
-   *  
-   * @todo WIP-WIP-WIP 9/11
+   * 
+   * Each TestFrame is automatically filled with pseudo random data;
+   * multiple frames are arranged in sequences and channels, causing the random data
+   * to be reproducible yet different within each frame. TestFrame's lifecycle is
+   * tracked and marked in an embedded state field. Moreover, the contents of the
+   * data block can be verified, because the sequence of bytes is reproducible,
+   * based on the channel and sequence number of the test frame.
+   * 
+   * @see TestFrame_test
+   * @see OutputSlotProtocol_test
    * 
    */
   class TestFrame
     {
+      enum StageOfLife {
+          CREATED, EMITTED, DISCARDED
+        };
+      
+      static const size_t BUFFSIZ = 1024;
+      
+      uint64_t distinction_;
+      StageOfLife stage_;
+      
+      char data_[BUFFSIZ];
       
     public:
+     ~TestFrame();
+      TestFrame (uint seq=0, uint family=0);
+      TestFrame (TestFrame const&);
+      TestFrame& operator= (TestFrame const&);
       
-      bool
-      operator== (void* memLocation)
-        {
-          UNIMPLEMENTED ("verify contents of an arbitrary memory location");
-        }
+      /** Helper to verify that a given memory location holds
+       *  an active TestFrame instance (created, not yet destroyed)
+       * @return true if the TestFrame datastructure is intact and
+       *         marked as still alive.
+       */
+      static bool isAlive (void* memLocation);
       
-      friend bool
-      operator== (TestFrame const& f1, TestFrame const& f2)
-        {
-          UNIMPLEMENTED ("equality of test data frames");
-        }
+      /** Helper to verify a given memory location holds
+       *  an already destroyed TestFrame instance */
+      static bool isDead (void* memLocation);
       
-      friend bool
-      operator!= (TestFrame const& f1, TestFrame const& f2)
-        {
-          return !(f1 == f2);
-        }
+      bool isAlive() const;
+      bool isDead()  const;
+      bool isSane()  const;
+      
+      bool operator== (void* memLocation) const;
+      
+      friend bool operator== (TestFrame const& f1, TestFrame const& f2) { return  f1.contentEquals(f2); }
+      friend bool operator!= (TestFrame const& f1, TestFrame const& f2) { return !f1.contentEquals(f2); }
+      
+    private:
+      bool contentEquals (TestFrame const& o)  const;
+      bool verifyData()  const;
+      void buildData ();
     };
   
   
   
-  inline TestFrame
-  testData (uint seqNr)
-  {
-    UNIMPLEMENTED ("build, memorise and expose test data frames on demand");
-  }
+  /** Helper to access a specific frame of test data at a fixed memory location.
+   *  The series of test frames is generated on demand, but remains in memory thereafter,
+   *  similar to real data accessible from some kind of source stream. Each of these generated
+   *  test frames filled with different yet reproducible pseudo random data.
+   *  Client code is free to access and corrupt this data.
+   */
+  TestFrame& testData (uint seqNr);
   
-  inline TestFrame
-  testData (uint chanNr, uint seqNr)
-  {
-    UNIMPLEMENTED ("build, memorise and expose test data frames on demand (multi-channel)");
-  }
+  TestFrame& testData (uint chanNr, uint seqNr);
   
   
-  
-  /* == some test data to check == */
-  // extern const lib::time::Duration LENGTH_TestClip;
+  /** discards all the TestFrame instances and
+   *  initialises an empty table of test frames */
+  void resetTestFrames();
+
   
   
 }} // namespace engine::test

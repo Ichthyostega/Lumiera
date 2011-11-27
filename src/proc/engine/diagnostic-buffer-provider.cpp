@@ -22,18 +22,10 @@
 
 
 #include "lib/error.hpp"
-#include "include/logging.h"
 #include "lib/meta/function.hpp"
-#include "lib/scoped-ptrvect.hpp"
 
 #include "proc/engine/diagnostic-buffer-provider.hpp"
-
-#include <boost/scoped_array.hpp>
-//#include <vector>
-
-using lib::ScopedPtrVect;
-using boost::scoped_array;
-
+#include "proc/engine/tracking-heap-block-provider.hpp"
 
 
 namespace engine {
@@ -43,115 +35,10 @@ namespace engine {
   lib::Singleton<DiagnosticBufferProvider> DiagnosticBufferProvider::diagnostics;
   
   
-  class Block
-    : boost::noncopyable
-    {
-      size_t size_;
-      scoped_array<char> storage_;
-      
-      bool was_locked_;
-      
-    public:
-      Block()
-        : size_(0)
-        , storage_()
-        , was_locked_(false)
-        { }
-      
-      bool
-      was_used()  const
-        {
-          return was_locked_;
-        }
-      
-      bool
-      was_closed()  const
-        {
-          return was_locked_;
-        }
-      
-      void*
-      accessMemory()  const
-        {
-          return storage_.get();
-        }
-    };
-  
-    
-    
-  namespace { // Details of allocation and accounting
-    
-    const uint MAX_BUFFERS = 50;
-  
-  } // (END) Details of allocation and accounting
   
   
-  
-  /**
-   * @internal DiagnosticBufferProvider's PImpl.
-   * Uses a linearly growing table of heap allocated buffer blocks,
-   * which will never be discarded, unless the PImpl is discarded as a whole.
-   * This way, the tracked usage information remains available after the fact.
-   */
-  class DiagnosticBufferProvider::HeapMemProvider
-    : public BufferProvider
-    , public ScopedPtrVect<Block>
-    {
-      
-      virtual uint
-      announce (uint count, BufferDescriptor const& type)
-        {
-          UNIMPLEMENTED ("pre-register storage for buffers of a specific kind");   
-        }
-
-      
-      virtual BuffHandle
-      lockBufferFor (BufferDescriptor const& descriptor)
-        {
-          UNIMPLEMENTED ("lock buffer for exclusive use");
-        }
-      
-      virtual void
-      releaseBuffer (BuffHandle const& handle)
-        {
-          UNIMPLEMENTED ("release a buffer and invalidate the handle");
-        }
-      
-    public:
-      HeapMemProvider()
-        : BufferProvider ("Diagnostic_HeapAllocated")
-        { }
-      
-      virtual ~HeapMemProvider()
-        {
-          INFO (proc_mem, "discarding %zu diagnostic buffer entries", HeapMemProvider::size());
-        }
-      
-      Block&
-      access_or_create (uint bufferID)
-        {
-          while (!withinStorageSize (bufferID))
-            manage (new Block);
-          
-          ENSURE (withinStorageSize (bufferID));
-          return (*this)[bufferID];
-        }
-      
-    private:
-      bool
-      withinStorageSize (uint bufferID)  const
-        {
-          if (bufferID >= MAX_BUFFERS)
-            throw error::Fatal ("hardwired internal limit for test buffers exceeded");
-          
-          return bufferID < size();
-        }
-    };
-  
-  
-
   DiagnosticBufferProvider::DiagnosticBufferProvider()
-    : pImpl_() //////////TODO create PImpl here
+    : pImpl_()
     { }
   
   DiagnosticBufferProvider::~DiagnosticBufferProvider() { }
@@ -174,13 +61,13 @@ namespace engine {
     return diagnostics();
   }
   
-
-    
-    
-  DiagnosticBufferProvider::HeapMemProvider&
+  
+  
+  
+  TrackingHeapBlockProvider&
   DiagnosticBufferProvider::reset()
   {
-    pImpl_.reset(new HeapMemProvider());
+    pImpl_.reset(new TrackingHeapBlockProvider());
     return *pImpl_;
   }
   
@@ -189,9 +76,9 @@ namespace engine {
   {
     return &implInstance == pImpl_.get();
   }
-
   
-
+  
+  
   
   
   /* === diagnostic API === */
@@ -199,21 +86,21 @@ namespace engine {
   bool
   DiagnosticBufferProvider::buffer_was_used (uint bufferID)  const
     {
-      return pImpl_->access_or_create(bufferID).was_used();
+      return pImpl_->access_emitted(bufferID).was_used();
     }
   
   
   bool
   DiagnosticBufferProvider::buffer_was_closed (uint bufferID)  const
     {
-      return pImpl_->access_or_create(bufferID).was_closed();
+      return pImpl_->access_emitted(bufferID).was_closed();
     }
   
   
   void*
   DiagnosticBufferProvider::accessMemory (uint bufferID)  const
     {
-      return pImpl_->access_or_create(bufferID).accessMemory();
+      return pImpl_->access_emitted(bufferID).accessMemory();
     }
   
 
