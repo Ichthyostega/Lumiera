@@ -102,21 +102,10 @@ TimelineZoomScale::wireTimelineState (shared_ptr<TimelineState> currentState,
 void
 TimelineZoomScale::on_timeline_state_changed (shared_ptr<TimelineState> newState)
 {
-                                     /////////////////////////////TICKET #861 : part of that could be a library routine!
   REQUIRE (newState);
   timelineState = newState;
   
-  int64_t current_scale =
-      getViewWindow().get_time_scale();
-
-  double linear_scale =
-      (double) current_scale / (double) TimelineWidget::MaxScale;
-
-  /* We have to Revese the Smoothing */
-  double new_relative_scale =
-      pow(linear_scale,(1.0 / TimelineWidget::ZoomSmoothing));
-
-  adjustment.set_value(new_relative_scale);
+  adjustment.set_value (getViewWindow().get_smoothed_time_scale());
 }
 
 void

@@ -31,6 +31,14 @@ namespace gui {
 namespace widgets {
 namespace timeline {
 
+/* == public constants == */
+  
+const int64_t TimelineViewWindow::MaxScale = 30000000; // 30 Million
+const double TimelineViewWindow::ZoomIncrement = 1.25; // Not currently used
+const double TimelineViewWindow::ZoomSmoothing = 9.0;
+
+
+
 TimelineViewWindow::TimelineViewWindow (Offset offset, int64_t scale)
   : timeOffset(offset)
   , timeScale(scale)
@@ -67,7 +75,7 @@ TimelineViewWindow::set_time_scale(int64_t scale)
 void
 TimelineViewWindow::set_time_scale(double ratio)
 {
-  int64_t max = TimelineWidget::MaxScale;
+  int64_t max = MaxScale;
   int64_t min = 1;
 
   if(ratio <= 0.0)
@@ -84,19 +92,28 @@ TimelineViewWindow::set_time_scale(double ratio)
    set_time_scale((int64_t)(ratio * max));
 }
 
+double
+TimelineViewWindow::get_smoothed_time_scale()  const
+{
+  double linear_scale ( 1.0 / MaxScale * timeScale);
+
+  // reverse the effect of zoom scale smoothing
+  return pow (linear_scale, (1.0 / ZoomSmoothing));
+}
+
 void
 TimelineViewWindow::zoom_view(int point, double time_scale_ratio)
 {
   // Apply the smoothing factor
-  int64_t new_time_scale(pow (time_scale_ratio, TimelineWidget::ZoomSmoothing)
-                         * double(TimelineWidget::MaxScale));
+  int64_t new_time_scale(pow (time_scale_ratio, ZoomSmoothing)
+                         * double(MaxScale));
 
   /* Prevent Zooming in To Close and Far */
   if(new_time_scale < 1)
     new_time_scale = 1;
 
-  if(new_time_scale > TimelineWidget::MaxScale)
-    new_time_scale = TimelineWidget::MaxScale;
+  if(new_time_scale > MaxScale)
+    new_time_scale = MaxScale;
 
   // The view must be shifted so that the zoom is centred on the cursor
   TimeVar newStartPoint = timeOffset + TimeValue(point * (timeScale - new_time_scale));

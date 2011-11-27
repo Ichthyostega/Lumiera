@@ -278,20 +278,10 @@ protected:
   bool update_tracks_frozen;
    
   /* ===== Constants ===== */
-public:
-  /**
-   * The maximum scale for timeline display.
-   * @remarks At MaxScale, every pixel on the timeline is equivalent
-   * to 30000000 lumiera::Time increments.
-   */ 
-  static const int64_t MaxScale;
-  static const double ZoomSmoothing;
-  
 protected:
   static const int TrackPadding;
   static const int HeaderWidth;
   static const int HeaderIndentWidth;
-  static const double ZoomIncrement;
 
   friend class timeline::TimelineBody;
   friend class timeline::TimelineHeaderContainer;

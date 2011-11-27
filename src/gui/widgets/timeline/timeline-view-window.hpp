@@ -54,6 +54,16 @@ using lib::time::Offset;
 class TimelineViewWindow
 {
 public:
+    
+  /**
+   * The maximum scale for timeline display.
+   * @remarks At MaxScale, every pixel on the timeline is equivalent
+   * to 30000000 lumiera::Time increments.
+   */ 
+  static const int64_t MaxScale;
+  static const double ZoomSmoothing;
+  static const double ZoomIncrement;
+  
  
   /**
    * @param offset The initial view offset.
@@ -95,6 +105,10 @@ public:
    */
   void set_time_scale(int64_t time_scale);
   void set_time_scale(double ratio);
+  
+  /** get the current time scale with zoom smoothing applied */
+  double get_smoothed_time_scale()  const;
+  
   /**
    * Zooms the view in or out as by a number of steps while keeping a 
    * given point on the timeline still.
