@@ -16,6 +16,7 @@ Informations about the structure of Lumiera, they give an overview on the main c
 Programming-oriented details about the functional layers of Lumiera as well as a Doxygen documentation :
 
  * link:technical/index.html[Technical Documents]
+ * link:technical/code/codingGuidelines.html[Style and Coding Guidelines]
 
 === the TiddlyWiki ===
 Currently, Lumiera is still in the design- and evolution phase.
