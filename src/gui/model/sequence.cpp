@@ -27,7 +27,7 @@
 #include "group-track.hpp"
 #include "clip-track.hpp"
 
-using namespace boost;
+using namespace std::tr1;
 
 namespace gui {
 namespace model {

@@ -39,8 +39,8 @@ using namespace gui::widgets;
 using namespace gui::widgets::timeline;
 using namespace gui::model;
 
-using boost::shared_ptr;  ///////////////////////////////TICKET #796
-using boost::weak_ptr;    ///////////////////////////////TICKET #796
+using std::tr1::shared_ptr;
+using std::tr1::weak_ptr;
 using util::contains;
 
 namespace gui {
@@ -130,8 +130,7 @@ TimelinePanel::TimelinePanel (workspace::PanelManager &panel_manager,
   zoomScale       .set_tooltip_text(_("Adjust timeline zoom scale"));
 
   // Setup the timeline widget
-  shared_ptr<Sequence> sequence          ///////////////////////////////TICKET #796 : should use std::tr1::shared_ptr instead of boost
-    = *get_project().get_sequences().begin();  
+  shared_ptr<Sequence> sequence = *(get_project().get_sequences().begin());
   timelineWidget.reset(new TimelineWidget(load_state(sequence)));
   pack_start(*timelineWidget, PACK_EXPAND_WIDGET);
 
@@ -139,7 +138,7 @@ TimelinePanel::TimelinePanel (workspace::PanelManager &panel_manager,
   // wire the zoom slider to react on timeline state changes
   zoomScale.wireTimelineState (timelineWidget->get_state(),
                                timelineWidget->state_changed_signal());
-  
+
   // Set the initial UI state
   update_sequence_chooser();
   update_tool_buttons();
@@ -334,19 +333,9 @@ TimelinePanel::update_tool_buttons()
 void
 TimelinePanel::update_zoom_buttons()
 {
-  REQUIRE(timelineWidget);
-
-  const shared_ptr<timeline::TimelineState> state =
-    timelineWidget->get_state();
-  if(state)
-    {
-      timeline::TimelineViewWindow &viewWindow = 
-        state->get_view_window();
-      
-      zoomIn.set_sensitive(viewWindow.get_time_scale() != 1);
-      zoomOut.set_sensitive(viewWindow.get_time_scale()
-        != TimelineWidget::MaxScale);
-    }
+/* This function is no longer needed
+ * TODO: Let the ZoomScaleWidget perform
+ * the update on its own */
 }
 
 void

@@ -64,17 +64,13 @@ class TimelineWidget : public Gtk::Table
 {
 public:
   /**
-   * Constructor
    * @param source_state The state that will be used as the data source
    * for this timeline widget.
    */
-  TimelineWidget(
-    boost::shared_ptr<timeline::TimelineState> source_state);
+  TimelineWidget (shared_ptr<timeline::TimelineState> source_state);
 
-  /**
-   * Destructor
-   */
-  ~TimelineWidget();
+  virtual ~TimelineWidget();
+  
   
   /* ===== Data Access ===== */
 public:
@@ -84,13 +80,13 @@ public:
    * @return The state object that the timeline widget is currently
    * working with.
    */
-  boost::shared_ptr<timeline::TimelineState> get_state();
+  shared_ptr<timeline::TimelineState> get_state();
   
   /**
    * Replaces the current TimelineState object with another.
    * @param new_state The new state to swap in.
    */
-  void set_state(boost::shared_ptr<timeline::TimelineState> new_state);
+  void set_state(shared_ptr<timeline::TimelineState> new_state);
 
   /**
    * Zooms the view in or out as by a number of steps while keeping a 
@@ -110,13 +106,13 @@ public:
    */
   void set_tool(timeline::ToolType tool_type);
   
-  boost::shared_ptr<timeline::Track>
+  shared_ptr<timeline::Track>
   get_hovering_track() const;
   
 public:
   /* ===== Signals ===== */
-  typedef sigc::signal<void, boost::shared_ptr<timeline::TimelineState> > TimelineStateChangeSignal;
-  typedef sigc::signal<void, boost::shared_ptr<timeline::Track> > HoveringTrackChangedSignal;
+  typedef sigc::signal<void, shared_ptr<timeline::TimelineState> > TimelineStateChangeSignal;
+  typedef sigc::signal<void, shared_ptr<timeline::Track> > HoveringTrackChangedSignal;
   
   sigc::signal<void, lib::time::Time> mouse_hover_signal() const;
   
@@ -169,8 +165,8 @@ private:
    * already exist in trackMap.
    * @param list The parent track of the branch.
    */
-  void create_timeline_tracks_from_branch(
-    boost::shared_ptr<model::Track> modelTrack);
+  void
+  create_timeline_tracks_from_branch (shared_ptr<model::Track> modelTrack);
   
   /**
    * Creates a timeline UI track to correspond to a model track.
@@ -178,9 +174,8 @@ private:
    * @return The timeline track created, or an empty shared_ptr if
    * modelTrack has an unreckognised type (this is an error condition).
    */
-  boost::shared_ptr<timeline::Track>
-    create_timeline_track_from_modelTrack(
-    boost::shared_ptr<model::Track> modelTrack);
+  shared_ptr<timeline::Track>
+  create_timeline_track_from_modelTrack(shared_ptr<model::Track> modelTrack);
   
   /**
    * Removes any UI tracks which no longer have corresponding model
@@ -188,10 +183,10 @@ private:
    */
   void remove_orphaned_tracks();
   
-  void search_orphaned_tracks_in_branch(
-    boost::shared_ptr<model::Track> modelTrack,
-    std::map<boost::shared_ptr<model::Track>,
-    boost::shared_ptr<timeline::Track> > &orphan_track_map);
+  void
+  search_orphaned_tracks_in_branch (shared_ptr<model::Track> modelTrack,
+                                    std::map<shared_ptr<model::Track>,
+                                    shared_ptr<timeline::Track> > &orphan_track_map);
   
   /**
    * Looks up a timeline UI track in trackMap that corresponds to a
@@ -201,8 +196,8 @@ private:
    * modelTrack has no corresponding timeline UI track (this is an
    * error condition).
    */
-  boost::shared_ptr<timeline::Track> lookup_timeline_track(
-    boost::shared_ptr<model::Track> modelTrack) const;
+  shared_ptr<timeline::Track>
+  lookup_timeline_track (shared_ptr<model::Track> modelTrack) const;
   
   // ----- Layout Functions ----- //
   
@@ -232,12 +227,12 @@ private:
    * Helper to get the sequence object from the state.
    * @return Returns a shared pointer to the sequence.
    */
-  boost::shared_ptr<model::Sequence> sequence() const;
+  shared_ptr<model::Sequence> sequence() const;
   
   // ----- Other Functions ----- //
   
-  void set_hovering_track(
-    boost::shared_ptr<timeline::Track> hovering_track);
+  void
+  set_hovering_track (shared_ptr<timeline::Track> hovering_track);
 
 protected:
 
@@ -245,7 +240,7 @@ protected:
    * The state that will be used as the data source for this timeline
    * widget.
    */
-  boost::shared_ptr<timeline::TimelineState> state;
+  shared_ptr<timeline::TimelineState> state;
 
   // Model Data
    
@@ -256,11 +251,11 @@ protected:
    * widget is updated with update_tracks, timeline tracks are added and
    * removed from the map in correspondence with the tree.
    */
-  std::map<boost::shared_ptr<model::Track>,
-    boost::shared_ptr<timeline::Track> >
+  std::map<shared_ptr<model::Track>
+          ,shared_ptr<timeline::Track> >
     trackMap;
     
-  boost::shared_ptr<timeline::Track> hoveringTrack;
+  shared_ptr<timeline::Track> hoveringTrack;
     
   // Helper Classes
   timeline::TimelineLayoutHelper layoutHelper;
@@ -283,19 +278,10 @@ protected:
   bool update_tracks_frozen;
    
   /* ===== Constants ===== */
-public:
-  /**
-   * The maximum scale for timeline display.
-   * @remarks At MaxScale, every pixel on the timeline is equivalent
-   * to 30000000 lumiera::Time increments.
-   */ 
-  static const int64_t MaxScale;
-  
 protected:
   static const int TrackPadding;
   static const int HeaderWidth;
   static const int HeaderIndentWidth;
-  static const double ZoomIncrement;
 
   friend class timeline::TimelineBody;
   friend class timeline::TimelineHeaderContainer;

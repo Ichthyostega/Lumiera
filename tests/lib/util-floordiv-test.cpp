@@ -25,6 +25,7 @@
 #include "lib/util.hpp"
 
 #include <cmath>
+#include <time.h>
 #include <vector>
 #include <iostream>
 #include <boost/format.hpp>

@@ -26,7 +26,7 @@
 #include "sequence.hpp"
 
 using namespace std;
-using namespace boost;
+using namespace std::tr1;
 
 namespace gui {
 namespace model {
@@ -43,7 +43,7 @@ Project::~Project()
 
 }
 
-lumiera::observable_list< boost::shared_ptr<Sequence> >&
+lumiera::observable_list< shared_ptr<Sequence> >&
 Project::get_sequences()
 {
   return sequences;

@@ -34,12 +34,10 @@
 
 using namespace Gtk;
 using namespace std;
-using namespace boost;
 using namespace lumiera;
 
 using gui::util::CairoUtil;
-
-using boost::shared_ptr;           ////////////////////TICKET #796
+using std::tr1::shared_ptr;
 
 namespace gui {
 namespace widgets {
@@ -59,9 +57,12 @@ TimelineBody::TimelineBody (TimelineWidget &timelineWidget)
   timelineWidget.state_changed_signal().connect(
     sigc::mem_fun(this, &TimelineBody::on_state_changed) );
   
+  // Set a default Tool
+  this->set_tool(Arrow);
+
   // Install style properties
   register_styles();
-  
+
   // Reset the state
   propagateStateChange();
 }
@@ -92,10 +93,10 @@ TimelineBody::get_tool() const
 }
   
 void
-TimelineBody::set_tool(timeline::ToolType tool_type)
+TimelineBody::set_tool(timeline::ToolType tool_type, bool force)
 {  
   // Tidy up old tool
-  if(tool)
+  if(tool && !force)
     {
       // Do we need to change tools?
       if(tool->get_type() == tool_type)
@@ -266,7 +267,8 @@ TimelineBody::on_motion_notify_event(GdkEventMotion *event)
   
   if (timelineState)
     {
-      // Handle a middle-mouse drag if one is occuring
+      // Handle a middle-mouse drag if one is occurring
+                                   /////////////////////////////TICKET #861 : shoudln't all of that be performed by TimelineViewWindow, instead of manipulating values from the outside?
       switch(dragType)
         {
         case Shift:
@@ -318,7 +320,10 @@ TimelineBody::propagateStateChange()
       viewWindow().changed_signal().connect(
         sigc::mem_fun(this, &TimelineBody::on_update_view) );
     }
-    
+
+  // Need to reload the current tool...
+  set_tool (get_tool(), true);
+
   // Redraw
   queue_draw();
 }
@@ -351,7 +356,7 @@ TimelineBody::draw_tracks(Cairo::RefPtr<Cairo::Context> cr)
       const shared_ptr<timeline::Track> timeline_track =
         timelineWidget.lookup_timeline_track(*iterator);
         
-      optional<Gdk::Rectangle> rect =
+      boost::optional<Gdk::Rectangle> rect =
         layout_helper.get_track_header_rect(timeline_track);
       
       // Is this track visible?

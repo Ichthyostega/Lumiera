@@ -26,10 +26,11 @@
 #ifndef VIEWER_PANEL_HPP
 #define VIEWER_PANEL_HPP
 
-#include <gtkmm.h>
 
-#include "panel.hpp"
+#include "gui/panels/panel.hpp"
 #include "gui/widgets/video-display-widget.hpp"
+
+#include <gtkmm.h>
 
 namespace gui {
 namespace panels {

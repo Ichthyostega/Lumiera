@@ -27,7 +27,7 @@
 #ifndef PROJECT_HPP
 #define PROJECT_HPP
 
-#include "sequence.hpp"
+#include "gui/model/sequence.hpp"
 #include "lib/observable-list.hpp"
 
 namespace gui {
@@ -40,14 +40,14 @@ public:
   
   ~Project();
     
-  lumiera::observable_list< boost::shared_ptr<Sequence> >&
+  lumiera::observable_list<shared_ptr<Sequence> >&
     get_sequences();
   
   void add_new_sequence(uString name);
   
 private:
 
-  lumiera::observable_list< boost::shared_ptr<Sequence> > sequences;
+  lumiera::observable_list<shared_ptr<Sequence> > sequences;
 };
 
 }   // namespace model

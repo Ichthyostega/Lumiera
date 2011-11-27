@@ -215,6 +215,27 @@ namespace lumiera {
   
 } // namespace lumiera
 
+/******************************************************
+ * convenience shortcut for a sequence of catch blocks
+ * just logging and consuming an error. Typically
+ * this sequence will be used within destructors,
+ * which, by convention, must not throw
+ */
+#define ERROR_LOG_AND_IGNORE(_FLAG_,_OP_DESCR_) \
+  catch (std::exception& problem)                \
+    {                                             \
+      const char* errID = lumiera_error();         \
+      WARN (_FLAG_, "%s failed: %s", _OP_DESCR_, problem.what()); \
+      TRACE (debugging, "Error flag was: %s", errID);\
+    }                                                 \
+  catch (...)                                          \
+    {                                                   \
+      const char* errID = lumiera_error();               \
+      ERROR (_FLAG_, "%s failed with unknown exception; " \
+                     "error flag is: %s"                   \
+                   , _OP_DESCR_, errID);                    \
+    }
+
 
 
 /******************************************************

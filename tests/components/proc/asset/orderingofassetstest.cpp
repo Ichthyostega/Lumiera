@@ -52,7 +52,7 @@ namespace asset {
      *       or resort to template metaprogramming tricks.
      *       Just providing templated comparison operators
      *       would generally override the behaviour of 
-     *       boost::shared_ptr, which is not desirable. 
+     *       std::shared_ptr, which is not desirable. 
      * @see  Asset::Ident#compare
      */
     class OrderingOfAssets_test : public Test

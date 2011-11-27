@@ -21,13 +21,13 @@
 * *****************************************************/
 
 #include "gui/gtk-lumiera.hpp"
+#include "gui/panels/viewer-panel.hpp"
 
+#include "gui/workspace/workspace-window.hpp"
 #include "gui/controller/controller.hpp"
 #include "gui/controller/playback-controller.hpp"
 #include "gui/display-service.hpp"
-#include "gui/workspace/workspace-window.hpp"
 
-#include "viewer-panel.hpp"
 
 using namespace Gtk;
 using namespace gui::widgets;

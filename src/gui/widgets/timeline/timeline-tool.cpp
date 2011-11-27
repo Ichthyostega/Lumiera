@@ -24,7 +24,7 @@
 #include "gui/widgets/timeline-widget.hpp"
 
 using namespace Gdk;
-using namespace boost;
+using std::tr1::shared_ptr;
 
 namespace gui {
 namespace widgets {

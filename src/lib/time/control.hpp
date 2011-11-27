@@ -151,7 +151,7 @@ namespace time {
       
       /** disconnect from observed entity and
        *  cease any change notification */
-      void disconnnect();
+      void disconnect();
     };
   
   
@@ -209,7 +209,7 @@ namespace time {
   
   template<class TI>
   void
-  Control<TI>::disconnnect()
+  Control<TI>::disconnect()
   {
     notifyListeners_.disconnect();
     this->unbind();

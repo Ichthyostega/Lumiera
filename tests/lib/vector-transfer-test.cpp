@@ -25,7 +25,7 @@
 #include "lib/test/run.hpp"
 
 #include "lib/scoped-holder-transfer.hpp"
-#include "testdummy.hpp"
+#include "lib/test/testdummy.hpp"
 
 #include <iostream>
 #include <vector>
@@ -130,27 +130,27 @@ namespace test {
           cout << "\n..setup table space for 2 elements\n";
           TransDummyVector table;
           table.reserve(2);
-          CHECK (0==checksum);
+          CHECK (0 == Dummy::checksum());
           
           cout << "\n..install one element at index[0]\n";
           table.push_back(TransDummy());
-          CHECK (0==checksum);
+          CHECK (0 == Dummy::checksum());
           
           table[0].setup(); // switches into "managed" state
-          CHECK (0 < checksum);
-          int theSum = checksum;
+          CHECK (0 < Dummy::checksum());
+          int theSum = Dummy::checksum();
           
           cout << "\n..*** resize table to 5 elements\n";
           table.resize(5);
-          CHECK (theSum==checksum);
+          CHECK (theSum==Dummy::checksum());
           
           cout << "\n..install another element\n";
           table[3].setup(375);
-          CHECK (theSum+375==checksum);
+          CHECK (theSum+375==Dummy::checksum());
           
           cout << "\n..kill all elements....\n";
           table.clear();
-          CHECK (0==checksum);
+          CHECK (0 == Dummy::checksum());
         }
       
     };

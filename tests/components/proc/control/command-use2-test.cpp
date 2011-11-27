@@ -46,7 +46,7 @@ namespace test    {
   using boost::str;
   using std::tr1::function;
   using std::tr1::bind;
-  using boost::ref;
+  using std::tr1::ref;
   using boost::lexical_cast;
   using util::contains;
   

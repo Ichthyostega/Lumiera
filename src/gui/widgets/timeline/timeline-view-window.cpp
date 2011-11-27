@@ -31,12 +31,19 @@ namespace gui {
 namespace widgets {
 namespace timeline {
 
+/* == public constants == */
+  
+const int64_t TimelineViewWindow::MaxScale = 30000000; // 30 Million
+const double TimelineViewWindow::ZoomIncrement = 1.25; // Not currently used
+const double TimelineViewWindow::ZoomSmoothing = 9.0;
+
+
+
 TimelineViewWindow::TimelineViewWindow (Offset offset, int64_t scale)
   : timeOffset(offset)
   , timeScale(scale)
 {
-  TODO("Create a function to limit timescale between 1 and MaxScale");
-  TODO("TICKET #795 Some functions need to be private");
+
 }
 
 Offset
@@ -68,7 +75,7 @@ TimelineViewWindow::set_time_scale(int64_t scale)
 void
 TimelineViewWindow::set_time_scale(double ratio)
 {
-  int64_t max = TimelineWidget::MaxScale;
+  int64_t max = MaxScale;
   int64_t min = 1;
 
   if(ratio <= 0.0)
@@ -85,24 +92,32 @@ TimelineViewWindow::set_time_scale(double ratio)
    set_time_scale((int64_t)(ratio * max));
 }
 
+double
+TimelineViewWindow::get_smoothed_time_scale()  const
+{
+  double linear_scale ( 1.0 / MaxScale * timeScale);
+
+  // reverse the effect of zoom scale smoothing
+  return pow (linear_scale, (1.0 / ZoomSmoothing));
+}
+
 void
 TimelineViewWindow::zoom_view(int point, double time_scale_ratio)
 {
-  TODO("Find a Central place for a Zoom Smoothing Factor Variable. Right now it is hard coded at 9.0");
-  int64_t new_time_scale =
-      (int64_t)( pow(time_scale_ratio, 9.0) * (double)TimelineWidget::MaxScale);
+  // Apply the smoothing factor
+  int64_t new_time_scale(pow (time_scale_ratio, ZoomSmoothing)
+                         * double(MaxScale));
 
   /* Prevent Zooming in To Close and Far */
   if(new_time_scale < 1)
     new_time_scale = 1;
 
-  if(new_time_scale > TimelineWidget::MaxScale)
-    new_time_scale = TimelineWidget::MaxScale;
+  if(new_time_scale > MaxScale)
+    new_time_scale = MaxScale;
 
   // The view must be shifted so that the zoom is centred on the cursor
-  TimeVar newStartPoint = get_time_offset();
-  newStartPoint += TimeValue(point * (timeScale - new_time_scale));
-  set_time_offset(newStartPoint);
+  TimeVar newStartPoint = timeOffset + TimeValue(point * (timeScale - new_time_scale));
+  set_time_offset (newStartPoint);
     
   // Apply the new scale
   set_time_scale(new_time_scale);
@@ -111,13 +126,13 @@ TimelineViewWindow::zoom_view(int point, double time_scale_ratio)
 void
 TimelineViewWindow::shift_view(int view_width, int shift_size)
 {
-  set_time_offset(timeOffset + TimeValue(timeScale * shift_size * view_width / 256));
+  set_time_offset (timeOffset + TimeValue(timeScale * shift_size * view_width / 256));
 }
 
 int
 TimelineViewWindow::time_to_x(TimeValue const& time) const
 {
-  return int(_raw(time - timeOffset) / timeScale); //////TODO protect against values out-of range
+  return int (_raw(time - timeOffset) / timeScale); //////TODO protect against values out-of range
 }
 
 Time
@@ -133,7 +148,5 @@ TimelineViewWindow::changed_signal() const
   return changedSignal;
 }
 
-}   // namespace timeline
-}   // namespace widgets
-}   // namespace gui
+}}} // namespace gui::widgets::timeline
 

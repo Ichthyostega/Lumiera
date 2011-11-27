@@ -20,53 +20,31 @@
 // 1/11  - integer floor and wrap operation(s)
 // 1/11  - how to fetch the path of the own executable -- at least under Linux?
 // 10/11 - simple demo using a pointer and a struct
+// 11/11 - using the boost random number generator(s)
 
 
 #include <iostream>
+#include <boost/lexical_cast.hpp>
+#include <boost/random/linear_congruential.hpp>
+
+using boost::lexical_cast;
 
 using std::cout;
-
-
-
-/**
- * custom datastructure
- * holding a constant char array with "hey"
- */
-struct MyStruct
-  {
-    char data_[3];
-    const int length_;
-    
-    MyStruct()
-      : length_(3)
-      { 
-        const char *tmp = "hey";
-        for (int i=0; i<length_; ++i)
-          data_[i] = *(tmp+i);
-      }
-  };
-
-
-// define a global variable holding a MyStruct
-MyStruct theStruct;
-
-
-
-void
-printMyStruct(MyStruct* myPointer)
-  {
-    for (int i=0; i < myPointer->length_; ++i)
-      cout << myPointer->data_[i];
-    
-    cout << "\n";
-  }
+using std::endl;
 
 
 
 int 
-main (int, char**) //(int argc, char* argv[])
+main (int cnt, char* argv[])
   {
-    printMyStruct (&theStruct);
+    
+    int32_t seed = (2 == cnt)? lexical_cast<int32_t> (argv[1]) : 42;
+    
+    boost::rand48 ranGen(seed);
+    
+    cout << "seed = "<< seed << endl;
+    for (uint i=0; i< 100; ++i)
+      cout << ranGen() % CHAR_MAX <<"__";
     
     cout <<  "\n.gulp.\n";
     

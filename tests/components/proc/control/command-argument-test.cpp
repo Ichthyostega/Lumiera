@@ -167,6 +167,13 @@ namespace test    {
 
         // serialise, then de-serialise into a new instance and compare both
       }
+    
+    
+    int
+    twoRandomDigits()
+      {
+        return 10 + rand() % 90;
+      }
 
 
   } // test-helper implementation
@@ -244,7 +251,7 @@ namespace test    {
           arg3->storeTuple (tuple::make (rand() % 10, TimeVar(randTime())));
           arg4->storeTuple (tuple::make (rand() % 10, TimeVar(randTime())));
 
-          arg5->storeTuple (tuple::make (TTime (randTime()), Tstr("glorious"), 10 + rand() % 90));
+          arg5->storeTuple (tuple::make (TTime (randTime()), Tstr("glorious"), twoRandomDigits() ));
 
           CHECK (!arg5->canUndo());
 
@@ -333,7 +340,7 @@ namespace test    {
 
           // store a set of parameter values, later to be used on invocation
           args.storeTuple (
-            tuple::make (TTime(randTime()), Tstr("Lumiera rocks"), rand() % 100));
+            tuple::make (TTime(randTime()), Tstr("Lumiera rocks"), twoRandomDigits() ));
           CHECK (!isnil (args));
           cout << args << endl;
 
@@ -377,7 +384,7 @@ namespace test    {
           protocol << "RESET...";
 
           args.storeTuple (
-            tuple::make (TTime(TimeValue(123456)), Tstr("unbelievable"), rand() %100));
+            tuple::make (TTime(TimeValue(123456)), Tstr("unbelievable"), twoRandomDigits() ));
           cout << "modified: " << args     << endl;
           cout << "copied  : " << argsCopy << endl;    // holds still the old params & memento
 

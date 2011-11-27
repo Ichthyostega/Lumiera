@@ -57,12 +57,15 @@
 #include "lib/time/mutation.hpp"
 #include "lib/time/timevalue.hpp"
 
+#include <tr1/functional>
 #include <vector>
 
 
 namespace lib {
 namespace time {
 namespace mutation {
+  
+  using std::tr1::function;
   
   
   
@@ -148,7 +151,7 @@ namespace mutation {
       
       /** disconnect any observers */
       void
-      disconnnect()
+      disconnect()
         {
           listeners_.clear();
         }
