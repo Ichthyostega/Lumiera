@@ -1,7 +1,6 @@
 Lumiera (as seen) from Outer Space
 ==================================
-:Author: Christian Thäter ct@pipapo.org
-:Author: Hermann Voßeler Ichthyostega@web.de
+:Author: Lumiera_Core_Developers
 :Date: Summer 2010
 
 

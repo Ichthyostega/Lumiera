@@ -48,20 +48,28 @@ The extra components are:
 Coding Style
 ~~~~~~~~~~~~
 
-The Lumiera team agreed on using GNU coding style with some exceptions (no
-tabs, line wrap must not always be enforced). Otherwise we are a bit pedantic
-to be consistent to make the codebase uniform. Function naming conventions
-and other details are described in several RFCs.
+The Lumiera team agreed on using GNU coding style with slight adaptations.
+Generally speaking, we strive to keep the code base consistent and stick to
+widely accepted guidelines and best practices. See our separate
+link:{ldoc}/technical/code/codingGuidelines.html[Coding Guidelines] page.
+Function naming conventions and other details are also described in several RFCs.
+
 
 Documentation
 ~~~~~~~~~~~~~
+The central location for all design and technical documentation is the Lumiera
+website you're reading right now. Besides that, a summary and introduction
+for various components can be found in the file-level doxygen comments, while
+details are usualy explained in the class and function level comments.
 
-Every public function should be documented with doxygen comments. The overall
-design is outlined in this text and documented in the various detail pages and
-accompanying RFCs. Bootstrapping the Lumiera design used several other places,
-in several TiddlyWikis, an UML model and cehteh's private wiki, most of this
-information is asciidoced meanwhile and in progress to be integrated in the
-central documentation hierarchy.
+==== the TiddlyWiki
+Currently, Lumiera is still in the design- and evolution phase. Documentation
+is written as an ongoing effort.
+There is an embedded JavaScript wiki (TiddlyWiki) within the source tree, mostly
+used as design notebook, featuring day-to-day design sketches and notes, but also
+quite some more persistent planning. Finished documentation text is constantly
+moved over to the documentation section(s) of the Lumiera website. +
+-> access the Proy-Layer link:http://lumiera.org/wiki/renderengine.html[TiddlyWiki online here]
 
 
 Test Driven Development
@@ -73,7 +81,7 @@ implemented until they pass their tests. While increasing the initial
 development effort significantly, this approach is known to lead to
 clearly defined components and overall increases code quality.
 In practice, this approach might not be suitable at times,
-nevertheless we try to sick to it as far as possible
+nevertheless we try to stick to it as far as possible
 and maintain fairly complete test coverage.
 
 
