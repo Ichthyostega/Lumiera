@@ -12,6 +12,15 @@ Anyone interested in Lumiera development is also encouraged to read mailing list
 archives and other documentation.
 
 
+During Summer 2011 we kept up our monthly IRC meetings -- rather casual exchange
+for the time being.
+
+- 9 Nov 2011
+- 12 Oct 2011
+- 14 Sep 2011
+- 10 Aug 2011
+- 13 Jul 2011
+- 8 Jun 2011
 
 
 11 May 2011
@@ -143,7 +152,7 @@ Topics
 
 Summary
 ^^^^^^^
-_(missing)_
+ * link:2008-11-12.html[Transcript (supplemented by Ichthyo in 2011)]
 
 
 
