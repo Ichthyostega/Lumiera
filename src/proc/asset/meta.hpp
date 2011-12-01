@@ -58,8 +58,6 @@
 #ifndef ASSET_META_H
 #define ASSET_META_H
 
-#include "pre_a.hpp"
-
 #include "proc/asset.hpp"
 #include "proc/asset/entry-id.hpp"
 #include "lib/factory.hpp"

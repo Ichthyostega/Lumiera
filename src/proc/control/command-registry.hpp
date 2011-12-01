@@ -57,7 +57,6 @@
 #ifndef CONTROL_COMMAND_REGISTRY_H
 #define CONTROL_COMMAND_REGISTRY_H
 
-//#include "pre.hpp"
 #include "lib/error.hpp"
 #include "lib/singleton.hpp"
 #include "lib/sync.hpp"

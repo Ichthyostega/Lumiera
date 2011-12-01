@@ -21,7 +21,6 @@
 * *****************************************************/
 
 
-//#include "pre.hpp"
 #include "proc/mobject/session/placement-index-query-resolver.hpp"
 #include "proc/mobject/session/scope-query.hpp"
 #include "proc/mobject/placement.hpp"

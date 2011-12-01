@@ -25,11 +25,7 @@
 #define ASSET_TESTASSET_H
 
 
-#include "pre_a.hpp"
-
 #include "proc/asset.hpp"
-//#include "lib/util.hpp"
-
 
 #include <boost/format.hpp>
 

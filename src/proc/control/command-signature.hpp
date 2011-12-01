@@ -46,7 +46,6 @@
 #ifndef CONTROL_COMMAND_SIGNATURE_H
 #define CONTROL_COMMAND_SIGNATURE_H
 
-//#include "pre.hpp"
 #include "lib/meta/function.hpp"
 #include "lib/meta/typelist.hpp"
 #include "lib/meta/typelist-manip.hpp"

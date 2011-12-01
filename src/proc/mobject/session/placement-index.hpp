@@ -105,7 +105,6 @@
 #ifndef MOBJECT_PLACEMENT_INDEX_H
 #define MOBJECT_PLACEMENT_INDEX_H
 
-//#include "pre.hpp"
 #include "lib/util.hpp"
 #include "lib/error.hpp"
 #include "lib/itertools.hpp"

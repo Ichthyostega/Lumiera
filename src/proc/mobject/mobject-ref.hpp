@@ -59,7 +59,6 @@
 #ifndef MOBJECT_MOBJECT_REF_H
 #define MOBJECT_MOBJECT_REF_H
 
-//#include "pre.hpp"
 #include "lib/handle.hpp"
 #include "proc/mobject/placement.hpp"
 #include "proc/mobject/placement-ref.hpp"

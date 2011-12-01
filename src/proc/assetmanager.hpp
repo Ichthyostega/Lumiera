@@ -38,8 +38,6 @@
 #define PROC_INTERFACE_ASSETMANAGER_H
 
 
-#include "pre_a.hpp"
-
 #include "proc/asset.hpp"
 #include "lib/error.hpp"
 #include "lib/singleton.hpp"

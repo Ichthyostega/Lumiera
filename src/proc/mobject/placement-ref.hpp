@@ -65,7 +65,6 @@
 #ifndef MOBJECT_PLACEMENT_REF_H
 #define MOBJECT_PLACEMENT_REF_H
 
-//#include "pre.hpp"
 #include "lib/error.hpp"
 #include "lib/bool-checkable.hpp"
 #include "proc/mobject/placement.hpp"

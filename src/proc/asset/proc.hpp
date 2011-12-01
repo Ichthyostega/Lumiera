@@ -35,8 +35,6 @@
 #ifndef ASSET_PROC_H
 #define ASSET_PROC_H
 
-#include "pre_a.hpp"
-
 #include "proc/asset.hpp"
 #include "lib/factory.hpp"
 #include "lib/streamtype.hpp"

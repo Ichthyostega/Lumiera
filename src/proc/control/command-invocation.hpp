@@ -46,7 +46,6 @@
 #ifndef CONTROL_COMMAND_INVOCACTION_H
 #define CONTROL_COMMAND_INVOCACTION_H
 
-//#include "pre.hpp"
 #include "proc/control/command.hpp"
 #include "proc/control/handling-pattern.hpp"
 #include "proc/control/argument-tuple-accept.hpp"

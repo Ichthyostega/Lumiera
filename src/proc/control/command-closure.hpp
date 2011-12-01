@@ -67,7 +67,6 @@
 #ifndef CONTROL_COMMAND_CLOSURE_H
 #define CONTROL_COMMAND_CLOSURE_H
 
-//#include "pre.hpp"
 #include "lib/bool-checkable.hpp"
 #include "lib/meta/typelist.hpp"
 #include "lib/meta/function.hpp"

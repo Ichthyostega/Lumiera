@@ -24,9 +24,6 @@
 #ifndef MOBJECT_MOBJECT_H
 #define MOBJECT_MOBJECT_H
 
-#include "pre.hpp"
-
-
 #include "proc/common.hpp"
 #include "proc/mobject/builder/buildertool.hpp"
 #include "proc/mobject/placement.hpp"

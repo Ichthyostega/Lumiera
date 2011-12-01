@@ -56,7 +56,6 @@
 #ifndef LIB_TYPED_COUNTER_H
 #define LIB_TYPED_COUNTER_H
 
-//#include "pre.hpp"
 #include "lib/error.hpp"
 #include "lib/sync-classlock.hpp"
 

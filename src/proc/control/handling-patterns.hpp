@@ -42,7 +42,6 @@
 #ifndef CONTROL_HANDLING_PATTERNS_DEF_H
 #define CONTROL_HANDLING_PATTERNS_DEF_H
 
-//#include "pre.hpp"
 #include "lib/error.hpp"
 #include "lib/multifact.hpp"
 #include "proc/control/handling-pattern.hpp"

@@ -46,7 +46,6 @@
 #ifndef LIB_SIMPLE_ALLOCATOR_H
 #define LIB_SIMPLE_ALLOCATOR_H
 
-//#include "pre.hpp"
 #include "lib/error.hpp"
 #include "lib/meta/generator.hpp"
 #include "lib/meta/typelist-util.hpp"

@@ -44,7 +44,6 @@
 #ifndef CONTROL_HANDLING_PATTERN_H
 #define CONTROL_HANDLING_PATTERN_H
 
-//#include "pre.hpp"
 #include "lib/error.hpp"
 #include "lib/symbol.hpp"
 #include "lib/bool-checkable.hpp"

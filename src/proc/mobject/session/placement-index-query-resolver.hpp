@@ -56,7 +56,6 @@
 #ifndef MOBJECT_SESSION_PLACEMENT_INDEX_QUERY_RESOLVER_H
 #define MOBJECT_SESSION_PLACEMENT_INDEX_QUERY_RESOLVER_H
 
-//#include "pre.hpp"
 #include "proc/mobject/session/placement-index.hpp"
 #include "proc/mobject/session/query-resolver.hpp"
 #include "proc/mobject/session/scope-query.hpp"

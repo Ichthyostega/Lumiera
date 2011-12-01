@@ -55,9 +55,9 @@
 #define PROC_INTERFACE_ASSET_H
 
 
-#include "proc/asset/category.hpp"
-#include "include/logging.h"
 #include "lib/error.hpp"
+#include "include/logging.h"
+#include "proc/asset/category.hpp"
 #include "lib/p.hpp"
 
 #include <boost/type_traits/is_base_of.hpp>

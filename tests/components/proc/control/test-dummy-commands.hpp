@@ -38,7 +38,6 @@
 #ifndef COMMAND_TEST_DUMMY_COMMANDS_H
 #define COMMAND_TEST_DUMMY_COMMANDS_H
 
-//#include "pre.hpp"
 #include "lib/error.hpp"
 #include "lib/test/test-helper.hpp"
 

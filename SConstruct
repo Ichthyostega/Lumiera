@@ -333,13 +333,6 @@ def defineBuildTargets(env, artifacts):
         We use a custom function to declare a whole tree of srcfiles. 
     """
     
-    # use PCH to speed up building // disabled for now due to strange failures
-#   env['GCH'] = ( env.PrecompiledHeader('src/pre.hpp')
-#                + env.PrecompiledHeader('src/pre_a.hpp')
-#                )
-    
-    
-    
     lLib  = env.SharedLibrary('lumiera',        srcSubtree(env,'src/lib'),    install=True)
     lApp  = env.SharedLibrary('lumieracommon',  srcSubtree(env,'src/common'), install=True, LIBS=lLib)
     lBack = env.SharedLibrary('lumierabackend', srcSubtree(env,'src/backend'),install=True)

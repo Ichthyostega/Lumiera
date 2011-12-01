@@ -53,7 +53,6 @@
 #ifndef CONTROL_COMMAND_DEF_H
 #define CONTROL_COMMAND_DEF_H
 
-//#include "pre.hpp"
 #include "lib/error.hpp"
 #include "include/logging.h"
 #include "lib/symbol.hpp"

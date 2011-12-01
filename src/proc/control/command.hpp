@@ -52,9 +52,9 @@
 #ifndef CONTROL_COMMAND_H
 #define CONTROL_COMMAND_H
 
-#include "pre.hpp"
 #include "lib/error.hpp"
 #include "lib/symbol.hpp"
+#include "proc/common.hpp"
 #include "proc/control/argument-erasure.hpp"
 #include "proc/control/argument-tuple-accept.hpp"
 #include "proc/control/handling-pattern.hpp"
