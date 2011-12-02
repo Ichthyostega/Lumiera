@@ -25,7 +25,7 @@
 #include "backend/backend.h"
 #include "backend/filehandlecache.h"
 
-#include "tests/test.h"
+#include "lib/test/test.h"
 
 TESTS_BEGIN
 

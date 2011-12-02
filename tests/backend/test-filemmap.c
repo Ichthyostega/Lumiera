@@ -31,7 +31,7 @@
 #include "backend/mmapings.h"
 #include "backend/mmap.h"
 
-#include "tests/test.h"
+#include "lib/test/test.h"
 
 #include <unistd.h>
 #include <string.h>

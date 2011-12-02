@@ -1,8 +1,8 @@
 /*
-  test.h  -  macros for running tests
+  TEST.h  -  support macros for plain-C tests
 
-  Copyright (C)
-    2008, 2009, 2010,           Christian Thaeter <ct@pipapo.org>
+  Copyright (C)         Lumiera.org
+    2008, 2010          Christian Thaeter <ct@pipapo.org>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -17,10 +17,21 @@
   You should have received a copy of the GNU General Public License
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+
 */
 
-#ifndef TEST_H
-#define TEST_H
+/** @file test.h
+ ** Helpers and support macros for defining test executables in C.
+ ** These macros provide some building blocks to assemble a \c main() function,
+ ** which checks a test name parameter and invokes the matching embedded code block.
+ ** 
+ ** @see test-mpool.c    C   test example
+ ** @see HelloWorld_test C++ test example
+ */
+
+
+#ifndef LIB_TEST_TEST_H
+#define LIB_TEST_TEST_H
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -51,10 +62,10 @@ main (int argc, const char** argv)              \
     fprintf (stderr, "  "#name" (planned)\n");  \
   else if (!++testcnt)
 
-#define TESTS_END                                       \
-  if (!testcnt && argc !=1)                             \
-    fprintf (stderr,"no such test: %s\n", argv[1]);     \
-  return ret;                                           \
+#define TESTS_END                                   \
+  if (!testcnt && argc !=1)                         \
+    fprintf (stderr,"no such test: %s\n", argv[1]); \
+  return ret;                                       \
 }
 
 
