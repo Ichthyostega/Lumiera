@@ -49,6 +49,7 @@
 
 
 
+namespace proc {
 namespace control {
 
   namespace { // concrete command handling patterns 
@@ -238,5 +239,5 @@ namespace control {
   
   
   
-} // namespace control
+}} // namespace proc::control
 #endif

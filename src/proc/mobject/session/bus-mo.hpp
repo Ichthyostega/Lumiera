@@ -32,7 +32,7 @@ namespace proc {
 namespace asset { 
   
   class Pipe;
-  typedef lumiera::P<Pipe> PPipe;
+  typedef P<Pipe> PPipe;
 
 }
 

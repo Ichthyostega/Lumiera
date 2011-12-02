@@ -56,6 +56,7 @@
 
 
 
+namespace proc {
 namespace control {
   
   using std::tr1::function;
@@ -151,5 +152,5 @@ namespace control {
   
   
   
-} // namespace control
+}} // namespace proc::control
 #endif

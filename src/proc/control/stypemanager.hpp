@@ -21,8 +21,8 @@
 */
 
 
-#ifndef CONTROL_STYPEMANAGER_H
-#define CONTROL_STYPEMANAGER_H
+#ifndef PROC_CONTROL_STYPEMANAGER_H
+#define PROC_CONTROL_STYPEMANAGER_H
 
 
 #include "proc/streamtype.hpp"
@@ -31,6 +31,7 @@
 #include <boost/scoped_ptr.hpp>
 
 
+namespace proc {
 namespace control {
   
   using lib::Symbol;
@@ -102,12 +103,12 @@ namespace control {
   }
   
   
-} // namespace control
+}} // namespace proc::control
 
 
 namespace proc_interface {
   
-  using control::STypeManager;
+  using proc::control::STypeManager;
 
 
 } // namespace proc_interface

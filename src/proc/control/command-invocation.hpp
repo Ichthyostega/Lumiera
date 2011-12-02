@@ -53,6 +53,7 @@
 
 
 
+namespace proc {
 namespace control {
   
   using namespace lumiera::typelist;
@@ -220,5 +221,5 @@ namespace control {
   }
   
   
-} // namespace control
+}} // namespace proc::control
 #endif

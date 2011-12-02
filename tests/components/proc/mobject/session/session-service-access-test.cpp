@@ -30,6 +30,7 @@
 #include <string>
 
 
+namespace proc    {
 namespace mobject {
 namespace session {
 namespace test    {
@@ -44,7 +45,7 @@ namespace test    {
   
   namespace { // what follows is a simulated (simplified) version
              //  of the complete Session + SessionManager setup.....
-  
+    
     using lumiera::typelist::Types;
     using lumiera::typelist::InstantiateChained;
     
@@ -348,4 +349,4 @@ namespace test    {
   
   
   
-}}} // namespace mobject::session::test
+}}}} // namespace proc::mobject::session::test

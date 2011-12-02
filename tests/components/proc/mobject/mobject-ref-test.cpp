@@ -50,6 +50,7 @@ using std::cout;
 using std::endl;
 
 
+namespace proc    {
 namespace mobject {
 namespace test    {
   
@@ -379,4 +380,4 @@ namespace test    {
   LAUNCHER (MObjectRef_test, "unit session");
   
   
-}} // namespace mobject::test
+}}} // namespace proc::mobject::test

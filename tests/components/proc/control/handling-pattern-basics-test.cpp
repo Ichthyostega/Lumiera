@@ -34,6 +34,7 @@
 #include <cstdlib>
 
 
+namespace proc {
 namespace control {
 namespace test    {
   
@@ -166,4 +167,4 @@ namespace test    {
   LAUNCHER (HandlingPatternBasics_test, "function controller");
   
   
-}} // namespace control::test
+}}} // namespace proc::control::test

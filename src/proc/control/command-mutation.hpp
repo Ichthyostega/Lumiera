@@ -55,6 +55,7 @@
 
 
 
+namespace proc {
 namespace control {
   
   using std::ostream;
@@ -155,5 +156,5 @@ namespace control {
     };
   
   
-} // namespace control
+}} // namespace proc::control
 #endif

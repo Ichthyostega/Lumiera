@@ -39,54 +39,53 @@ using std::string;
 
 using std::tr1::static_pointer_cast; //TODO only temporarily;
 
-namespace asset {
-  namespace test {
-    
-          //using mobject::NOBUG_FLAG(mobject_mem);
-    
-    
-    
-    /***********************************************************************
-     * @test creating a Clip MObject and an associated Clip Asset from 
-     *       a given asset::Media.
-     * @see  asset::Media#createClip
-     */
-    class MakeClip_test : public Test
-      {
-        typedef P<asset::Media> PM;
-        typedef asset::Media::PClipMO PC;
-            
-        virtual void run (Arg) 
-          {
-            Use4Test<backend::test::MediaAccessMock> within_this_scope;
-            
-            
-            PM mm = asset::Media::create("test-1", VIDEO);
-            PC cc = mm->createClip();
-            PM cm = cc->getMedia();
-            
-            CHECK (cm);
-            CHECK (!isnil (cc->getLength()));
-            CHECK (cm->ident.category.hasKind (VIDEO));
-            CHECK (cm->getFilename() == mm->getFilename());
+namespace proc {
+namespace asset{
+namespace test {
+  
+//using mobject::NOBUG_FLAG(mobject_mem);
+  
+  
+  
+  /***********************************************************************
+   * @test creating a Clip MObject and an associated Clip Asset from 
+   *       a given asset::Media.
+   * @see  asset::Media#createClip
+   */
+  class MakeClip_test : public Test
+    {
+      typedef P<asset::Media> PM;
+      typedef asset::Media::PClipMO PC;
+          
+      virtual void run (Arg) 
+        {
+          Use4Test<backend::test::MediaAccessMock> within_this_scope;
+          
+          
+          PM mm = asset::Media::create("test-1", VIDEO);
+          PC cc = mm->createClip();
+          PM cm = cc->getMedia();
+          
+          CHECK (cm);
+          CHECK (!isnil (cc->getLength()));
+          CHECK (cm->ident.category.hasKind (VIDEO));
+          CHECK (cm->getFilename() == mm->getFilename());
 TODO ("implement Processing Pattern!!!");   
 //            CHECK (cm->howtoProc() == mm->howtoProc());
-            CHECK (cm->ident.org == mm->ident.org);
-            CHECK (dependencyCheck (cm,mm));
-
-            TRACE (asset_mem,   "leaving MakeClip_test::run()");
-            TRACE (mobject_mem, "leaving MakeClip_test::run()");
-          }
-        
-        
-      };
-    
-    
-    /** Register this test class... */
-    LAUNCHER (MakeClip_test, "function asset");
-    
-    
-    
-  } // namespace test
-
-} // namespace asset
+          CHECK (cm->ident.org == mm->ident.org);
+          CHECK (dependencyCheck (cm,mm));
+          
+          TRACE (asset_mem,   "leaving MakeClip_test::run()");
+          TRACE (mobject_mem, "leaving MakeClip_test::run()");
+        }
+      
+      
+    };
+  
+  
+  /** Register this test class... */
+  LAUNCHER (MakeClip_test, "function asset");
+  
+  
+  
+}}} // namespace proc::asset::test

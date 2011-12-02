@@ -35,8 +35,8 @@
 namespace proc {
 namespace engine { 
   
-  using ::lumiera::FrameID;
-  using ::lumiera::NodeID;
+  using lumiera::FrameID;
+  using lumiera::NodeID;
 
   class StateAdapter;
   class BuffTableStorage;

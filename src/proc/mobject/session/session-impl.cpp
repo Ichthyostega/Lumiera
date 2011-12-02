@@ -28,7 +28,6 @@
 #include "proc/mobject/mobject.hpp"
 #include "lib/error.hpp"
 
-using namespace lumiera;
 
 namespace proc {
 namespace mobject {

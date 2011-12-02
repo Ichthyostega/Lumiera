@@ -27,6 +27,7 @@
 #include "proc/mobject/session/scope-query.hpp"
 
 
+namespace proc    {
 namespace mobject {
 namespace session {
 namespace test    {
@@ -53,7 +54,7 @@ namespace test    {
     PPIdx index (SessionServiceMockIndex::install());
     
     PMO& root = index->getRoot();
-
+    
     typedef PMO::ID ID;
     ID i1 = index->insert (p1, root);
     ID i2 = index->insert (p2,  i1 );
@@ -91,4 +92,4 @@ namespace test    {
   }
   
   
-}}} // namespace mobject::session::test
+}}}} // namespace proc::mobject::session::test

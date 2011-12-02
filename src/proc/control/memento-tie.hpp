@@ -53,6 +53,7 @@
 #include <string>
 
 
+namespace proc {
 namespace control {
   
   using boost::equality_comparable;
@@ -213,5 +214,5 @@ namespace control {
   
   
   
-} // namespace control
+}} // namespace proc::control
 #endif

@@ -90,7 +90,7 @@ namespace test {
       };
     int Response::_i_(0);
     const ChanDesc NULLResponse;
-    using mobject::session::test::LENGTH_TestClip;
+    using proc::mobject::session::test::LENGTH_TestClip;
     
     
     struct TestCases : map<string,Response>

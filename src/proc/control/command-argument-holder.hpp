@@ -52,6 +52,7 @@
 
 
 
+namespace proc {
 namespace control {
   
   using lib::InPlaceBuffer;
@@ -278,5 +279,5 @@ namespace control {
     
   
   
-} // namespace control
+}} // namespace proc::control
 #endif

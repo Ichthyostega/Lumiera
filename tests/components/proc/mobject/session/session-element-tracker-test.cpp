@@ -33,6 +33,7 @@
 
 
 
+namespace proc    {
 namespace mobject {
 namespace session {
 namespace test    {
@@ -120,7 +121,7 @@ namespace test    {
           checksum = 0;
           {
             typedef Dummy AutoRegisteringDummy;
-            typedef lumiera::P<AutoRegisteringDummy> PDummy;
+            typedef P<AutoRegisteringDummy> PDummy;
             typedef lib::ElementTracker<Dummy> DummyRegistry;
             
             DummyRegistry trackedDummies;
@@ -222,4 +223,4 @@ namespace test    {
   
   
   
-}}} // namespace mobject::session::test
+}}}} // namespace proc::mobject::session::test

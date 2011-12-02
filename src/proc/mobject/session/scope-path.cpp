@@ -42,7 +42,6 @@ namespace session {
   using util::isSameObject;
   using util::isnil;
   
-  using namespace lumiera;
   
   
   LUMIERA_ERROR_DEFINE (EMPTY_SCOPE_PATH, "Placement scope not locatable (empty model path)");

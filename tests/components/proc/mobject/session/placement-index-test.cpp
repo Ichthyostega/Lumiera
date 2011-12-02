@@ -42,6 +42,7 @@ using std::cout;
 using std::endl;
 
 
+namespace proc    {
 namespace mobject {
 namespace session {
 namespace test    {
@@ -322,4 +323,4 @@ namespace test    {
   LAUNCHER (PlacementIndex_test, "unit session");
   
   
-}}} // namespace mobject::session::test
+}}}} // namespace proc::mobject::session::test

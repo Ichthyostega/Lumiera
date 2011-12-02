@@ -46,6 +46,7 @@ using std::cout;
 using std::set;
 
 
+namespace proc    {
 namespace mobject {
 namespace session {
 namespace test    {
@@ -318,7 +319,7 @@ namespace test    {
         {
           TODO ("verify the commands issued by this test");   ////////////////////////TICKET #567
         }
-
+      
     };
   
   
@@ -327,4 +328,4 @@ namespace test    {
   
   
   
-}}} // namespace mobject::session::test
+}}}} // namespace proc::mobject::session::test

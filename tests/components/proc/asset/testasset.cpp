@@ -26,71 +26,70 @@
 
 using std::tr1::static_pointer_cast;
 
-namespace asset
-  {
-  namespace test
+
+namespace proc {
+namespace asset{
+namespace test {
+  
+  namespace 
     {
+    uint counter (0);
     
-    namespace 
-      {
-      uint counter (0);
-      
-      /** @internal helper generating continuosely
-       *            different new asset identities 
-       */
-      Asset::Ident
-      make_new_ident ()  
-      {
-        return Asset::Ident ( str(format("TestAsset.%i") % counter)
-                            , Category (META)
-                            , "test"
-                            , counter++
-                            );
-      }
-      Asset::Ident
-      make_new_ident (PAsset& ref)
-      {
-        return Asset::Ident ( str(format("%s-TestAsset.%i") % ref->ident.name 
-                                                            % counter)
-                            , ref->ident.category
-                            , "test"
-                            , counter++
-                            );
-      }
-    }
-    
-    
-    template<class A>
-    TestAsset<A>::TestAsset ()
-      : A(make_new_ident ())     
-      { };
-    
-    
-    template<class A>
-    TestAsset<A>::TestAsset (PAsset& pRef)
-      : A(make_new_ident (pRef)) 
-    { 
-      this->defineDependency(pRef); 
-    };
-    
-    
-    /** @internal helper for the create()-Functions
-     *  retrieving the smart ptr created automatically
-     *  within AssetManager by the Asset base class ctor
+    /** @internal helper generating continuously
+     *            different new asset identities
      */
-    template<class A>
-    P<TestAsset<A> >
-    TestAsset<A>::ptrFromThis ()
+    Asset::Ident
+    make_new_ident ()
     {
-      return static_pointer_cast<TestAsset<A>,Asset>
-        (AssetManager::instance().getAsset (this->id));
-    };
+      return Asset::Ident ( str(format("TestAsset.%i") % counter)
+                          , Category (META)
+                          , "test"
+                          , counter++
+                          );
+    }
+    Asset::Ident
+    make_new_ident (PAsset& ref)
+    {
+      return Asset::Ident ( str(format("%s-TestAsset.%i") % ref->ident.name
+                                                          % counter)
+                          , ref->ident.category
+                          , "test"
+                          , counter++
+                          );
+    }
+  }
+  
+  
+  template<class A>
+  TestAsset<A>::TestAsset ()
+    : A(make_new_ident ())
+    { };
+  
+  
+  template<class A>
+  TestAsset<A>::TestAsset (PAsset& pRef)
+    : A(make_new_ident (pRef)) 
+  { 
+    this->defineDependency(pRef); 
+  };
+  
+  
+  /** @internal helper for the create()-Functions
+   *  retrieving the smart ptr created automatically
+   *  within AssetManager by the Asset base class ctor
+   */
+  template<class A>
+  P<TestAsset<A> >
+  TestAsset<A>::ptrFromThis ()
+  {
+    return static_pointer_cast<TestAsset<A>,Asset>
+      (AssetManager::instance().getAsset (this->id));
+  };
   
   
   
-  } // namespace test
-  
-} // namespace asset
+}}} // namespace proc::asset::test
+
 
 
 
@@ -99,25 +98,22 @@ namespace asset
    /* explicit template instantiations for some Asset Kinds */
    /*********************************************************/
 
-#include "proc/asset/unknown.hpp"  
+#include "proc/asset/unknown.hpp"
 
 
-namespace asset
-  {
-  namespace test
-    {
+namespace proc {
+namespace asset{
+namespace test {
   
-    template TestAsset<Asset>::TestAsset ();
-    template TestAsset<Unknown>::TestAsset ();
-    
-    template TestAsset<Asset>::TestAsset (PAsset& pRef);
-    template TestAsset<Unknown>::TestAsset (PAsset& pRef);
-    
-    template P<TestAsset<Asset> >   TestAsset<Asset>::ptrFromThis ();
-    template P<TestAsset<Unknown> > TestAsset<Unknown>::ptrFromThis ();
-    
+  template TestAsset<Asset>::TestAsset ();
+  template TestAsset<Unknown>::TestAsset ();
+  
+  template TestAsset<Asset>::TestAsset (PAsset& pRef);
+  template TestAsset<Unknown>::TestAsset (PAsset& pRef);
+  
+  template P<TestAsset<Asset> >   TestAsset<Asset>::ptrFromThis ();
+  template P<TestAsset<Unknown> > TestAsset<Unknown>::ptrFromThis ();
   
   
-  } // namespace test
   
-} // namespace asset
+}}} // namespace proc::asset::test

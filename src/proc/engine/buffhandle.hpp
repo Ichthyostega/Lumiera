@@ -59,7 +59,7 @@
 namespace proc {
 namespace engine {
   
-  namespace error = ::lumiera::error;
+  namespace error = lumiera::error;
   using error::LUMIERA_ERROR_LIFECYCLE;
   
   typedef size_t HashVal;           ////////////TICKET #722

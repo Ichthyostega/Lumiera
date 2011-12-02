@@ -25,6 +25,7 @@
 
 
 
+namespace proc {
 namespace control {
 namespace test    {
   
@@ -47,4 +48,4 @@ namespace test    {
   }
   
   
-}} // namespace control::test
+}}} // namespace proc::control::test

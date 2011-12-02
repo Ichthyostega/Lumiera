@@ -33,7 +33,7 @@ namespace proc {
 namespace mobject {
 namespace session {
   
-  namespace error = ::lumiera::error;
+  namespace error = lumiera::error;
   
   
   /**

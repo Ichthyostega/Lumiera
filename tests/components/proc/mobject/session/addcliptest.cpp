@@ -36,44 +36,38 @@ using std::string;
 using std::cout;
 
 
-namespace mobject
-  {
-  namespace session
+namespace proc {
+namespace mobject {
+namespace session {
+namespace test {
+  
+  
+  
+  
+  /*******************************************************************
+   * @test adding an test clip to the Model/Session.
+   * @see  mobject::session::Clip
+   * @see  mobject::Session
+   */
+  class AddClip_test : public Test
     {
-    namespace test
-      {
-      
-      
-      
-      
-      /*******************************************************************
-       * @test adding an test clip to the Model/Session.
-       * @see  mobject::session::Clip
-       * @see  mobject::Session
-       */
-      class AddClip_test : public Test
+      virtual void
+      run (Arg) 
         {
-          virtual void
-          run (Arg) 
-            {
-              PSess sess = Session::current;
-              PMO clip = TestClip::create();
-              sess->attach (clip);
-
+          PSess sess = Session::current;
+          PMO clip = TestClip::create();
+          sess->attach (clip);
+          
 ///////////////////////////////////////////////////////////////////TICKET #499              
 //            CHECK (sess->currEDL().contains (clip));
-              // TODO: Clip-Asset and Placement magic??
-            } 
-        };
-      
-      
-      /** Register this test class... */
-      LAUNCHER (AddClip_test, "unit session");
-      
-      
-      
-    } // namespace test
+          // TODO: Clip-Asset and Placement magic??
+        } 
+    };
   
-  } // namespace session
-
-} // namespace mobject
+  
+  /** Register this test class... */
+  LAUNCHER (AddClip_test, "unit session");
+  
+  
+  
+}}}} // namespace proc::mobject::session::test

@@ -49,6 +49,7 @@
 //#include <string>
 
 
+namespace proc {
 namespace control {
 namespace test    {
 
@@ -119,6 +120,6 @@ namespace test    {
   
   /** Register this test class... */
   LAUNCHER (HandlingPatternStandardImpl_test, "function controller");
-      
-      
-}} // namespace control::test
+  
+  
+}}} // namespace proc::control::test

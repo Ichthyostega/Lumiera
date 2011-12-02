@@ -43,6 +43,7 @@
 
 
 
+namespace proc {
 namespace control {
   
 //  using lib::Symbol;
@@ -74,5 +75,5 @@ namespace control {
   
   
   
-} // namespace control
+}} // namespace proc::control
 #endif

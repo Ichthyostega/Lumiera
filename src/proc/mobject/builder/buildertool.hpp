@@ -106,9 +106,8 @@ namespace mobject {
      *       as we simply store a pointer within the BuilderTool instance.
      */
     class BuilderTool
-      : public ::lumiera::visitor::Tool<void, InvokeCatchAllFunction>
-      {
-        ::lumiera::WrapperPtr currentWrapper_;
+      : public lumiera::visitor::Tool<void, InvokeCatchAllFunction>
+      { lumiera::WrapperPtr currentWrapper_;
         
       public:
         
@@ -167,11 +166,11 @@ namespace mobject {
         class TYPELIST  //  list of all concrete Buildables to be treated
       >
     class Applicable
-      : public ::lumiera::visitor::Applicable<TOOLImpl, TYPELIST, BuilderTool>
+      : public lumiera::visitor::Applicable<TOOLImpl, TYPELIST, BuilderTool>
       { }
       ;
       
-    using ::lumiera::typelist::Types;  // convenience for the users of "Applicable"
+    using lumiera::typelist::Types;  // convenience for the users of "Applicable"
   
   }// namespace mobject::builder
   
@@ -182,7 +181,7 @@ namespace mobject {
   /**
    *  Marker Interface for classes visitable by Builder tools. 
    */
-  class Buildable : public ::lumiera::visitor::Visitable<builder::BuilderTool>
+  class Buildable : public lumiera::visitor::Visitable<builder::BuilderTool>
     { };
   
   

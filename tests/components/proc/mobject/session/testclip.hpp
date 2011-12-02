@@ -34,6 +34,7 @@ using std::tr1::shared_ptr;
 using std::string;
 
 
+namespace proc {
 namespace mobject {
 namespace session {
 namespace test    {
@@ -81,5 +82,5 @@ namespace test    {
   extern const lib::time::Duration LENGTH_TestClip;
   
   
-}}} // namespace mobject::session::test
+}}}} // namespace proc::mobject::session::test
 #endif

@@ -37,7 +37,8 @@ using util::isnil;
 using std::string;
 
 
-namespace asset {
+namespace proc {
+namespace asset{
 namespace test {
   
   
@@ -105,4 +106,4 @@ namespace test {
   
   
   
-}} // namespace asset::test
+}}} // namespace proc::asset::test

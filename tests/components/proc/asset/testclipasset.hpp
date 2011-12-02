@@ -36,8 +36,9 @@ using std::string;
 using std::cout;
 
 
-namespace asset
-  {
+namespace proc {
+namespace asset{
+  
   /**
    * An asset::Media instance Test Clip for checking
    * various Asset operations and for creating 
@@ -48,10 +49,9 @@ namespace asset
     {
     public:
     };
-    
-    
-    
-    
-
+  
+  
+  
+  
 }} // namespace proc::asset
 #endif

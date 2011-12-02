@@ -31,6 +31,7 @@
 using std::rand;
 
 
+namespace proc {
 namespace control {
 namespace test    {
   
@@ -120,4 +121,4 @@ namespace test    {
   LAUNCHER (CommandBasic_test, "unit controller");
   
   
-}} // namespace control::test
+}}} // namespace proc::control::test

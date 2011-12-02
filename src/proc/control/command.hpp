@@ -68,6 +68,7 @@
 
 
 
+namespace proc {
 namespace control {
   
   using std::string;
@@ -274,5 +275,5 @@ namespace control {
   
   
   
-} // namespace control
+}} // namespace proc::control
 #endif

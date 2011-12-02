@@ -39,6 +39,7 @@ using util::isSameObject;
 using util::isnil;
 
 
+namespace proc {
 namespace engine{
 namespace test  {
   
@@ -400,4 +401,4 @@ namespace test  {
   
   
   
-}} // namespace engine::test
+}}} // namespace proc::engine::test

@@ -40,6 +40,7 @@ using std::endl;
 
 
 
+namespace proc {
 namespace asset{
 namespace meta {
 namespace test {
@@ -129,4 +130,4 @@ namespace test {
   LAUNCHER (TimeGridBasics_test, "unit asset");
   
   
-}}} // namespace asset::meta::test
+}}}} // namespace proc::asset::meta::test

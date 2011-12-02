@@ -32,6 +32,7 @@
 //#include <boost/format.hpp>
 //using boost::str;
 
+namespace proc {
 namespace control {
   
   
@@ -94,4 +95,4 @@ namespace control {
   
   
   
-} // namespace control
+}} // namespace proc::control

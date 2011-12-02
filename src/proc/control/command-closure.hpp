@@ -88,6 +88,7 @@
 
 
 
+namespace proc {
 namespace control {
   
   using lumiera::typelist::FunctionSignature;
@@ -302,5 +303,5 @@ namespace control {
   
   
   
-} // namespace control
+}} // namespace proc::control
 #endif

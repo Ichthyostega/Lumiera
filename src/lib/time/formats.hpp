@@ -187,7 +187,7 @@ namespace time {
         std::bitset<MAXID> flags_;
         
         template<class F>
-        size_t
+        IxID
         typeID()  const
           {
             return TypedContext<Supported>::ID<F>::get();

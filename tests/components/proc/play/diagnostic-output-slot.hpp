@@ -52,9 +52,9 @@ namespace proc {
 namespace play {
 
 //using std::string;
-  using ::engine::BufferDescriptor;
-  using ::engine::test::TestFrame;
-  using ::engine::TrackingHeapBlockProvider;
+  using proc::engine::BufferDescriptor;
+  using proc::engine::test::TestFrame;
+  using proc::engine::TrackingHeapBlockProvider;
 
 //using std::vector;
   using std::tr1::shared_ptr;

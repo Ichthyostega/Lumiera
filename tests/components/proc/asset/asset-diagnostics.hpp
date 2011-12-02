@@ -50,6 +50,7 @@ using std::string;
 using std::cout;
 
 
+namespace proc {
 namespace asset {
   
   inline void

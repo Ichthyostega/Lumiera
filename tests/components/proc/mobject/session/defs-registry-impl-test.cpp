@@ -48,6 +48,7 @@ using std::map;
 
 
 
+namespace proc    {
 namespace mobject {
 namespace session {
 namespace test    {
@@ -98,8 +99,8 @@ namespace test    {
     {
       scoped_ptr<DefsRegistry> reg_;
       
-      typedef lumiera::P<Dummy<13> > O;
-      typedef lumiera::P<Dummy<23> > P;
+      typedef P<Dummy<13> > Obj;
+      typedef P<Dummy<23> > Prd;
       
       typedef Query<Dummy<13> > Q13;
       typedef Query<Dummy<23> > Q23;
@@ -112,9 +113,9 @@ namespace test    {
       lib::factory::RefcountFac<Dummy<13> > oFac;
       lib::factory::RefcountFac<Dummy<23> > pFac;
       
-      O o1, o2, o3;
+      Obj o1, o2, o3;
       Q13 q1, q2, q3, q4, q5;
-      map<Q23, P> ps;
+      map<Q23, Prd> ps;
       
     public:
       DefsRegistryImpl_test ()
@@ -157,7 +158,7 @@ namespace test    {
           ps.clear();
           for (int i=0; i<100; ++i)
             {
-              P px (pFac());
+              Prd px (pFac());
               Q23 qx (garbage_query());
               ps[qx] = px;
               reg_->put (px, qx);
@@ -289,4 +290,4 @@ namespace test    {
   
   
   
-}}} // namespace mobject::session::test
+}}}} // namespace proc::mobject::session::test

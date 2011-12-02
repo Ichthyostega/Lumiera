@@ -29,6 +29,7 @@
 #include <iostream>
 
 
+namespace proc {
 namespace control {
 namespace test    {
   
@@ -122,4 +123,4 @@ namespace test    {
   LAUNCHER (CommandBinding_test, "function controller");
   
   
-}} // namespace control::test
+}}} // namespace proc::control::test

@@ -80,7 +80,7 @@ namespace asset {
   
   
   
-} // namespace asset
+}} // namespace proc::asset
 
 
 
@@ -95,6 +95,7 @@ namespace asset {
 //#include "proc/asset/sequence.hpp"
 
 
+namespace proc {
 namespace asset {
   
   using meta::Descriptor;

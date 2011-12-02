@@ -72,6 +72,8 @@
 namespace proc {
 namespace mobject {
   
+  namespace error = lumiera::error;
+  
   
   
   class MObject;

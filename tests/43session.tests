@@ -44,40 +44,40 @@ END
 TEST "external MObject references" MObjectRef_test <<END
 out: MRef-NIL
 out: sizeof\( .+MORef.+session.Clip.+ \) =  (32|24)
-out: Placement<.+Clip.> ............... use-cnt=4
+out: Placement<.+Clip.> .......... use-cnt=4
 out: Asset\(VIDEO:lumi.test-1 v1\)
-out: Placement<.+Clip.> ............... use-cnt=4
+out: Placement<.+Clip.> .......... use-cnt=4
 out: MRef-NIL
 out: sizeof\( .+MORef.+session.Clip.+ \) =  (32|24)
-out: Placement<.+Clip.> ............... use-cnt=4
+out: Placement<.+Clip.> .......... use-cnt=4
 out: Asset\(VIDEO:lumi.test-2 v1\)
-out: Placement<.+Clip.> ............... use-cnt=4
+out: Placement<.+Clip.> .......... use-cnt=4
 out: MRef-NIL
 out: sizeof\( .+MORef.+session.Clip.+ \) =  (32|24)
-out: Placement<.+Clip.> ............... use-cnt=4
+out: Placement<.+Clip.> .......... use-cnt=4
 out: Asset\(VIDEO:lumi.test-1 v1\)
-out: Placement<.+Clip.> ............... use-cnt=4
+out: Placement<.+Clip.> .......... use-cnt=4
 out: MRef-NIL
 out: sizeof\( .+MORef.+session.Clip.+ \) =  (32|24)
-out: Placement<.+Clip.> ............... use-cnt=4
+out: Placement<.+Clip.> .......... use-cnt=4
 out: Asset\(VIDEO:lumi.test-2 v1\)
-out: Placement<.+Clip.> ............... use-cnt=4
+out: Placement<.+Clip.> .......... use-cnt=4
 out: MRef-NIL
 out: sizeof\( .+MORef.+session.Clip.+ \) =  (32|24)
 out: Placement<.+Clip.>.+ use-cnt=4
 out: Asset\(VIDEO:lumi.test-1 v1\)
-out: Placement<.+Clip.> ............... use-cnt=4
+out: Placement<.+Clip.> .......... use-cnt=4
 out: MRef-NIL
 out: sizeof\( .+MORef.+session.Clip.+ \) =  (32|24)
-out: Placement<.+Clip.> ............... use-cnt=4
+out: Placement<.+Clip.> .......... use-cnt=4
 out: Asset\(VIDEO:lumi.test-1 v1\)
-out: Placement<.+Clip.> ............... use-cnt=4
+out: Placement<.+Clip.> .......... use-cnt=4
 out: MRef-NIL
 out: sizeof\( .+MORef.+session.Clip.+ \) =  (32|24)
-out: Placement<.+Clip.> ............... use-cnt=4
+out: Placement<.+Clip.> .......... use-cnt=4
 out: Asset\(VIDEO:lumi.test-2 v1\)
-out: Placement<.+Clip.> ............... use-cnt=4
-out: Placement<.+Clip.> ............... use-cnt=5
+out: Placement<.+Clip.> .......... use-cnt=4
+out: Placement<.+Clip.> .......... use-cnt=5
 out: \(VIDEO:lumi.test-1 v1\)
 END
 
@@ -105,7 +105,7 @@ END
 
 
 TEST "PlacementRef_test" PlacementRef_test <<END
-out: Placement<.+TestSubMO21.> .......... use-cnt=2
+out: Placement<.+TestSubMO21.> ..... use-cnt=2
 out: specialAPI()
 END
 
@@ -127,13 +127,13 @@ END
 
 TEST "Querying the index" PlacementIndexQuery_test <<END
 out: explore contents depth-first...
-out: Placement<.+TestSubMO21.> .......... use-cnt=1
-out: Placement<.+TestSubMO2.> ........... use-cnt=1
-out: Placement<.+TestSubMO1.> ........... use-cnt=1
-out: Placement<.+DummyMO.> ............... use-cnt=1
+out: Placement<.+TestSubMO21.> ..... use-cnt=1
+out: Placement<.+TestSubMO2.> ...... use-cnt=1
+out: Placement<.+TestSubMO1.> ...... use-cnt=1
+out: Placement<.+DummyMO.> .......... use-cnt=1
 out: path to root starting at Placement<.+TestSubMO1
-out: Placement<.+TestSubMO2.> ........... use-cnt=1
-out: Placement<.+session.Label.> .............. use-cnt=1
+out: Placement<.+TestSubMO2.> ...... use-cnt=1
+out: Placement<.+session.Label.> ......... use-cnt=1
 END
 
 

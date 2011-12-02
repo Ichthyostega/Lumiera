@@ -45,6 +45,10 @@
 using boost::format;
 
 
+namespace lumiera {
+  class StreamType;
+}
+
 namespace proc {
 namespace mobject {
 namespace session {
@@ -53,9 +57,6 @@ namespace session {
   class Clip;
   
 }}
-namespace lumiera {
-  class StreamType;
-}
 
 namespace asset{
   

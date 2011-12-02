@@ -76,6 +76,7 @@
 
 
 
+namespace proc {
 namespace control {
   
   using std::tr1::shared_ptr;
@@ -325,5 +326,5 @@ namespace control {
   
   
   
-} // namespace control
+}} // namespace proc::control
 #endif

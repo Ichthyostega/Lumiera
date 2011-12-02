@@ -53,7 +53,7 @@ namespace test{
   namespace error = lumiera::error;
   
   using lib::ScopedHolder;
-  using asset::meta::TimeGrid;
+  using proc::asset::meta::TimeGrid;
   using lumiera::typelist::Types;
   using lumiera::typelist::InstantiateChainedCombinations;
   using error::LUMIERA_ERROR_UNCONNECTED;

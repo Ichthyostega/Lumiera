@@ -39,6 +39,7 @@ using util::isnil;
 using std::string;
 
 
+namespace proc    {
 namespace mobject {
 namespace session {
 namespace test    {
@@ -170,4 +171,4 @@ lumiera::query::setFakeBypass("stream("+sID+")"); //////////////////////////////
   
   
   
-}}} // namespace mobject::session::test
+}}}} // namespace proc::mobject::session::test

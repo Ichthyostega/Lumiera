@@ -78,6 +78,7 @@
 
 
 
+namespace proc {
 namespace control {
   
   using boost::hash;
@@ -268,5 +269,5 @@ namespace control {
     };
   
   
-} // namespace control
+}} // namespace proc::control
 #endif

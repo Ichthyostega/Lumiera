@@ -41,6 +41,7 @@ using std::cout;
 using std::endl;
 
 
+namespace proc {
 namespace control {
 namespace test    {
   
@@ -214,4 +215,4 @@ namespace test    {
   LAUNCHER (CommandMutation_test, "unit controller");
   
   
-}} // namespace control::test
+}}} // namespace proc::control::test

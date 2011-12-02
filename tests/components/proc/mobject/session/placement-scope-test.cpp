@@ -34,6 +34,7 @@
 using util::isSameObject;
 
 
+namespace proc    {
 namespace mobject {
 namespace session {
 namespace test    {
@@ -196,4 +197,4 @@ namespace test    {
   LAUNCHER (PlacementScope_test, "function session");
   
   
-}}} // namespace mobject::session::test
+}}}} // namespace proc::mobject::session::test

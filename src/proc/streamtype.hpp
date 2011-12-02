@@ -31,8 +31,8 @@
  */
 
 
-#ifndef PROC_STREAMTYPE_HPP
-#define PROC_STREAMTYPE_HPP
+#ifndef PROC_STREAMTYPE_H
+#define PROC_STREAMTYPE_H
 
 
 #include "lib/symbol.hpp"

@@ -73,7 +73,7 @@ namespace play {
     : boost::noncopyable
     , public lib::Sync<>
     {
-      typedef ::lumiera::Subsys::SigTerm SigTerm;
+      typedef lumiera::Subsys::SigTerm SigTerm;
       
       scoped_ptr<PlayService> player_;
       

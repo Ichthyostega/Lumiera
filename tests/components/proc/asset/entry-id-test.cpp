@@ -46,8 +46,11 @@ using std::endl;
 
 
 
+namespace proc {
 namespace asset{
 namespace test {
+  
+  using lumiera::error::LUMIERA_ERROR_WRONG_TYPE;
   
   namespace { // Test definitions...
     
@@ -280,4 +283,4 @@ namespace test {
   LAUNCHER (EntryID_test, "unit asset");
   
   
-}} // namespace asset::test
+}}} // namespace proc::asset::test

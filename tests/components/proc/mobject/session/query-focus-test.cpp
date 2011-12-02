@@ -32,6 +32,7 @@
 
 
 
+namespace proc    {
 namespace mobject {
 namespace session {
 namespace test    {
@@ -180,4 +181,4 @@ namespace test    {
   LAUNCHER (QueryFocus_test, "unit session");
   
   
-}}} // namespace mobject::session::test
+}}}} // namespace proc::mobject::session::test

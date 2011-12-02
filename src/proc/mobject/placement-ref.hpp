@@ -74,7 +74,7 @@
 
 
 namespace proc {
-  namespace error = ::lumiera::error;
+  namespace error = lumiera::error;
   
   namespace mobject {
   

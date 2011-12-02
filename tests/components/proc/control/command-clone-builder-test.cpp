@@ -34,12 +34,13 @@
 #include "proc/control/test-dummy-commands.hpp"
 
 
+namespace proc {
 namespace control {
 namespace test    {
   
   using namespace lumiera::typelist;
   
-  typedef lumiera::P<CommandImpl> PCmdImpl;
+  typedef lib::P<CommandImpl> PCmdImpl;
   
   
   namespace { // test config...
@@ -173,4 +174,4 @@ namespace test    {
   LAUNCHER (CommandCloneBuilder_test, "function controller");
   
   
-}} // namespace control::test
+}}} // namespace proc::control::test

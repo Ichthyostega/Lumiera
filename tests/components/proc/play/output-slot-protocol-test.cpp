@@ -37,13 +37,13 @@
 
 namespace proc {
 namespace play {
-namespace test  {
+namespace test {
   
 //  using lib::AllocationCluster;
 //  using mobject::session::PEffect;
-  using ::engine::BuffHandle;
-  using ::engine::test::testData;
-  using ::engine::test::TestFrame;
+  using proc::engine::BuffHandle;
+  using proc::engine::test::testData;
+  using proc::engine::test::TestFrame;
   
   
   namespace { // Test fixture

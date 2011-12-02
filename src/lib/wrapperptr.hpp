@@ -39,10 +39,10 @@ namespace proc {
   namespace mobject { class MObject; }
   
   
-  typedef ::lumiera::typelist::Types < mobject::Placement<mobject::MObject>*
-                                     , lib::P<asset::Asset>*
-                                     > ::List
-                                     WrapperTypes;
+  typedef lumiera::typelist::Types < mobject::Placement<mobject::MObject>*
+                                   , lib::P<asset::Asset>*
+                                   > ::List
+                                   WrapperTypes;
 }
 
 namespace lumiera {
