@@ -30,6 +30,7 @@
 
 
 
+namespace proc {
 namespace engine {
   
   using lib::time::TimeSpan;
@@ -58,5 +59,5 @@ namespace engine {
   
   
   
-} // namespace engine
+}} // namespace proc::engine
 #endif

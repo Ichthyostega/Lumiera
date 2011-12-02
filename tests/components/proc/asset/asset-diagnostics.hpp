@@ -87,5 +87,5 @@ namespace asset {
   
   
   
-} // namespace asset
+}} // namespace proc::asset
 #endif

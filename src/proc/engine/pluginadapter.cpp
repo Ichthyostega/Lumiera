@@ -23,12 +23,12 @@
 
 #include "proc/engine/pluginadapter.hpp"
 
-namespace engine
-  {
+namespace proc {
+namespace engine {
 
   /** */
 
 
 
 
-} // namespace engine
+}} // namespace engine

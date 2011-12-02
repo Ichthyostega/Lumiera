@@ -75,7 +75,7 @@ namespace play {
 //    using lumiera::Display;
 //    using lumiera::DummyPlayer;
   using util::isnil;
-  using mobject::ModelPort;
+  using proc::mobject::ModelPort;
   
   typedef proc::play::POutputManager POutputManager;
   typedef lib::IterSource<ModelPort>::iterator ModelPorts;

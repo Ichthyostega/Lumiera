@@ -29,6 +29,7 @@ using mobject::session::Clip;
 using mobject::session::Effect;
 
 
+namespace proc {
 namespace mobject {
 namespace builder {
   
@@ -76,4 +77,4 @@ namespace builder {
   }
   
   
-}} // namespace mobject::builder
+}}} // namespace proc::mobject::builder

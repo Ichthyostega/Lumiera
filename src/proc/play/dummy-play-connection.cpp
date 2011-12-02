@@ -33,26 +33,18 @@
 
 
 
-namespace proc  {
-  namespace play{
+namespace proc {
+namespace play {
   
-//    using std::string;
-//    using lumiera::Subsys;
-//    using std::auto_ptr;
-//    using boost::scoped_ptr;
-//    using std::tr1::bind;
-    
-    
-    namespace { // hidden local details of the service implementation....
-      
-    } // (End) hidden service impl details
-    
-    
-    
-    
-    /** */  
   
+  namespace { // hidden local details of the service implementation....
     
-  } // namespace play
+  } // (End) hidden service impl details
   
-} // namespace proc
+  
+  
+  
+  /** */  
+  
+  
+}} // namespace proc::play

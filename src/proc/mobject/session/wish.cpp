@@ -23,15 +23,12 @@
 
 #include "proc/mobject/session/wish.hpp"
 
-namespace mobject
-  {
-  namespace session
-    {
-    
-    /** */
-    
-    
-    
-  } // namespace mobject::session
-
-} // namespace mobject
+namespace proc {
+namespace mobject {
+namespace session {
+  
+  /** */
+  
+  
+  
+}}} // namespace proc::mobject::session

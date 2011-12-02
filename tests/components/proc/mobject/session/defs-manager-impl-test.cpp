@@ -30,7 +30,7 @@
 #include "common/configrules.hpp"
 #include "proc/assetmanager.hpp"
 #include "proc/mobject/session.hpp"
-#include "lib/streamtype.hpp"
+#include "proc/streamtype.hpp"
 
 #include <boost/format.hpp>
 
@@ -54,7 +54,6 @@ namespace test    {
   
   using lumiera::ConfigRules;
   using lumiera::query::QueryHandler;
-  using lumiera::StreamType;
   
   
   

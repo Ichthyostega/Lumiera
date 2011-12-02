@@ -32,6 +32,7 @@
 using std::list;
 
 
+namespace proc {
 namespace mobject {
 namespace session {
   
@@ -192,5 +193,5 @@ namespace session {
   
   
   
-}} // namespace mobject::session
+}}} // namespace mobject::session
 #endif

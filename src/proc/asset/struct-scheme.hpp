@@ -45,6 +45,7 @@
 using boost::format;
 
 
+namespace proc {
 namespace mobject {
 namespace session {
   
@@ -166,5 +167,5 @@ namespace asset{
     }
     
     
-}} // namespace asset::idi
+}}} // namespace asset::idi
 #endif

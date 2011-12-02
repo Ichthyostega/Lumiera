@@ -35,10 +35,10 @@
 #include <boost/format.hpp>
 #include <map>
 
-using lumiera::P;
 using lumiera::Query;
 using lumiera::query::test::garbage_query;
 using util::isnil;
+using lib::P;
 
 using boost::scoped_ptr;
 using boost::format;

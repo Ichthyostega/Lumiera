@@ -54,6 +54,7 @@ using lumiera::query::extractID;
 using lumiera::ConfigRules;
 using lumiera::Symbol;
 
+namespace proc {
 namespace mobject {
   
   typedef OutputDesignation::PPipe PPipe;
@@ -193,4 +194,4 @@ namespace mobject {
   
   
   
-} // namespace mobject
+}} // namespace mobject

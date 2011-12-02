@@ -46,6 +46,7 @@ using mobject::session::SessManager;
 using mobject::session::SessManagerImpl;
 using mobject::session::SessionImplAPI;
 
+namespace proc {
 namespace mobject {
   
   
@@ -138,4 +139,4 @@ namespace mobject {
 
 
 
-} // namespace mobject
+}} // namespace proc::mobject

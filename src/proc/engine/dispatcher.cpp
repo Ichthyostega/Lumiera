@@ -27,6 +27,7 @@
 
 
 
+namespace proc {
 namespace engine {
   
   /** */
@@ -34,4 +35,4 @@ namespace engine {
   
   
   
-} // namespace engine
+}} // namespace engine

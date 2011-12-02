@@ -23,12 +23,12 @@
 
 #include "proc/engine/mask.hpp"
 
-namespace engine
-  {
+namespace proc {
+namespace engine {
 
   /** */
 
 
 
 
-} // namespace engine
+}} // namespace engine

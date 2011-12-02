@@ -41,7 +41,7 @@
 
 
 
-    /* common types frequently used... */
+    /*  frequently used common types... */
 
 #include "lib/p.hpp"
 #include "lib/util.hpp"
@@ -60,7 +60,7 @@ namespace lumiera {
 
   /* additional global configuration goes here... */
   
-    
+  
 } // namespace lumiera
 
 
@@ -68,54 +68,75 @@ namespace lumiera {
  * Implementation namespace for support and library code.
  */
 namespace lib { 
-
+  
 }
 
 
 /**
- * The asset subsystem of the Proc-Layer.
- * @todo refactor proc namespaces
+ * Proc-Layer implementation namespace root.
+ * Lumiera's middle layer contains the core models, both
+ * high-level (session) and low-level (render nodes), together with
+ * the Builder to translate between those two models, the command frontend,
+ * session support system, the playback-and-render-control subsystem and
+ * the API and backbone of the renderengine. Most render implementation
+ * code resides in the backend or is loaded from plug-ins though.
  */
-namespace asset { }
-
-
-/**
- * Proc-Layer dispatcher, controller and administrative facilities.
- * @todo refactor proc namespaces
- */
-namespace control { }
-
-
-/**
- * Render engine code as part of the Proc-Layer.
- * Backbone of the engine, render nodes base and cooperation.
- * A good deal of the active engine code is outside the scope of the
- * Proc-Layer, e.g. code located in backend services and plugins.
- * @todo refactor proc namespaces
- */
-namespace engine { }
-
-
-
-/**
- * Media-Objects, edit operations and high-level session.
- * @todo is this interface or implementation ??
- * @todo refactor proc namespaces
- */
-namespace mobject {
-
-
+namespace proc { 
+  
+  
+  
   /**
-   * Namespace of Session and user visible high-level objects.
+   * The asset subsystem of the Proc-Layer.
    */
-  namespace session { }
-
-
+  namespace asset { }
+  
+  
   /**
-   * Namespace of the Builder, transforming high-level into low-level.
+   * Proc-Layer dispatcher, controller and administrative facilities.
    */
-  namespace builder { }
-
-}
+  namespace control { }
+  
+  
+  /**
+   * Playback and rendering control subsystem.
+   * The so called "player" combines and orchestrates services from
+   * the engine, session and backend to perform playback or rendering
+   */
+  namespace play { 
+    
+  }
+  
+  
+  /**
+   * Render engine code as part of the Proc-Layer.
+   * Backbone of the engine, render nodes base and cooperation.
+   * A good deal of the active engine code is outside the scope of the
+   * Proc-Layer, e.g. code located in backend services and plugins.
+   */
+  namespace engine { }
+  
+  
+  
+  /**
+   * Media-Objects, edit operations and high-level session.
+   * @todo is this interface or implementation ??
+   */
+  namespace mobject {
+  
+  
+    /**
+     * Namespace of Session and user visible high-level objects.
+     */
+    namespace session { }
+  
+  
+    /**
+     * Namespace of the Builder, transforming high-level into low-level.
+     */
+    namespace builder { }
+  
+  }
+  
+} // proc
 
 #endif /*LUMIERA_H*/

@@ -21,8 +21,8 @@
 */
 
 
-#ifndef MOBJECT_SESSION_EFFECT_H
-#define MOBJECT_SESSION_EFFECT_H
+#ifndef PROC_MOBJECT_SESSION_EFFECT_H
+#define PROC_MOBJECT_SESSION_EFFECT_H
 
 
 #include "proc/mobject/session/abstractmo.hpp"
@@ -33,7 +33,7 @@
 
 using std::string;
 
-
+namespace proc {
 namespace mobject {
 namespace session {
   
@@ -64,5 +64,5 @@ namespace session {
   
   
   
-}} // namespace mobject::session
+}}} // namespace proc::mobject::session
 #endif

@@ -51,6 +51,7 @@ using boost::scoped_ptr;
 
 
 
+namespace proc {
 namespace mobject {
 namespace session {
   
@@ -286,4 +287,4 @@ namespace session {
   
   
   
-}} // namespace mobject::session
+}}} // namespace proc::mobject::session

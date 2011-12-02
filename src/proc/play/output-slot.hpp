@@ -54,8 +54,8 @@
 namespace proc {
 namespace play {
 
-  using ::engine::BuffHandle;
-  using ::engine::BufferProvider;
+  using proc::engine::BuffHandle;
+  using proc::engine::BufferProvider;
   using lib::time::TimeValue;
 //using std::string;
 

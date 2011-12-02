@@ -34,7 +34,7 @@ using std::rand;
 namespace control {
 namespace test    {
   
-  using lumiera::P;
+  using lib::P;
   using lib::time::Time;
   using lib::time::TimeVar;
   using lib::time::TimeValue;

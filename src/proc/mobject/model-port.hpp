@@ -68,8 +68,9 @@
 
 #include "proc/asset/pipe.hpp"
 #include "lib/bool-checkable.hpp"
-#include "lib/streamtype.hpp"
+#include "proc/streamtype.hpp"
 
+namespace proc {
 namespace mobject {
   
   LUMIERA_ERROR_DECLARE (INVALID_MODEL_PORT);     ///< Referral to unknown model port
@@ -77,7 +78,6 @@ namespace mobject {
   
   
   using asset::ID;
-  using lumiera::StreamType;
   
   
   /**
@@ -148,5 +148,5 @@ namespace mobject {
   
   
   
-} // namespace mobject
+}} // namespace proc::mobject
 #endif

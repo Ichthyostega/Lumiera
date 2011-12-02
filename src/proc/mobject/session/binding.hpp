@@ -21,17 +21,18 @@
 */
 
 
-#ifndef MOBJECT_SESSION_BINDING_H
-#define MOBJECT_SESSION_BINDING_H
+#ifndef PROC_MOBJECT_SESSION_BINDING_H
+#define PROC_MOBJECT_SESSION_BINDING_H
 
 #include "proc/mobject/session/meta.hpp"
 #include "proc/mobject/builder/buildertool.hpp"
 
 
+namespace proc {
 namespace asset { 
   class Sequence;
   
-  typedef lumiera::P<Sequence> PSequence;
+  typedef P<Sequence> PSequence;
 
 }
 
@@ -71,5 +72,5 @@ namespace session {
   template class Placement<session::Binding, session::Meta>;
   typedef Placement<session::Binding, session::Meta> PBinding;
   
-} // namespace mobject
+}} // namespace proc::mobject
 #endif

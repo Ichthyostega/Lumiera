@@ -32,29 +32,28 @@
 using std::list;
 
 
+namespace proc {
 namespace mobject {
-  namespace session {
-
-
-    /**
-     * For the purpose of building and rendering, the fixture (for each timeline) 
-     * is partitioned such that each segment is <i>structurally constant</i>. 
-     * The Segmentation defines and maintains this partitioning. Further,
-     * it is the general entry point for accessing the correct part of the engine
-     * responsible for a given timeline time point.
-     * @see SegmentationTool actually calculating the Segmentation
-     */
-    class Segmentation
-      {
-
-        /** segments of the engine in ordered sequence. */
-        list<Segment> segments_;
-
-      };
-
-
-
-  } // namespace mobject::session
-
-} // namespace mobject
+namespace session {
+  
+  
+  /**
+   * For the purpose of building and rendering, the fixture (for each timeline) 
+   * is partitioned such that each segment is <i>structurally constant</i>. 
+   * The Segmentation defines and maintains this partitioning. Further,
+   * it is the general entry point for accessing the correct part of the engine
+   * responsible for a given timeline time point.
+   * @see SegmentationTool actually calculating the Segmentation
+   */
+  class Segmentation
+    {
+      
+      /** segments of the engine in ordered sequence. */
+      list<Segment> segments_;
+      
+    };
+  
+  
+  
+}}} // namespace proc::mobject::session
 #endif

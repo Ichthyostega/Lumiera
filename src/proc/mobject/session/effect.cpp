@@ -23,22 +23,19 @@
 
 #include "proc/mobject/session/effect.hpp"
 
-namespace mobject
+namespace proc {
+namespace mobject {
+namespace session {
+  
+  /**
+   * @TODO: clarify asset->mobject relation and asset dependencies; Ticket #255
+   */
+  asset::Proc const& 
+  Effect::getProcAsset() const
   {
-  namespace session
-    {
-
-    /**
-     * @TODO: clarify asset->mobject relation and asset dependencies; Ticket #255
-     */
-    asset::Proc const& 
-    Effect::getProcAsset() const
-    {
-      UNIMPLEMENTED ("how to access the processing asset assotiated to a given Effect-MObject");
-    }
-
-
-
-  } // namespace mobject::session
-
-} // namespace mobject
+    UNIMPLEMENTED ("how to access the processing asset assotiated to a given Effect-MObject");
+  }
+  
+  
+  
+}}} // namespace proc::mobject::session

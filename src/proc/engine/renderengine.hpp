@@ -37,6 +37,7 @@ using std::list;
 
 //////////TODO for the "real" engine API: look at engine-serivce.hpp
 
+namespace proc {
 namespace engine {
   
   
@@ -59,5 +60,5 @@ namespace engine {
       
     };
 
-} // namespace engine
+}} // namespace proc::engine
 #endif

@@ -54,10 +54,12 @@
 namespace lumiera {
   namespace query {
     
+    namespace asset = proc::asset;
+    
     using asset::Pipe;
     using asset::ProcPatt;
     using asset::PProcPatt;
-    using mobject::Session;
+    using proc::mobject::Session;
     
     using util::isnil;
     

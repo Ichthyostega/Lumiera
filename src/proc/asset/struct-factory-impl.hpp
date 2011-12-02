@@ -58,25 +58,28 @@
 #include <boost/format.hpp>
 #include <cstdlib>
 
-using boost::format;
 
-using mobject::Session;
-using mobject::MObject;
-using mobject::session::Scope;
-using mobject::session::match_specificTrack;
-using mobject::session::RBinding;
-using mobject::session::RTrack;
 
-using lib::Symbol;
-using util::isnil;
-using util::contains;
-using asset::Query;
-using lumiera::query::LUMIERA_ERROR_CAPABILITY_QUERY;
-using lumiera::query::extractID;
-
+namespace proc {
 namespace asset {
   
+  using boost::format;
+  
+  using lib::Symbol;
+  using util::isnil;
+  using util::contains;
+  using lumiera::query::LUMIERA_ERROR_CAPABILITY_QUERY;
+  using lumiera::query::extractID;
+  
+  using proc::mobject::Session;
+  using proc::mobject::MObject;
+  using proc::mobject::session::Scope;
+  using proc::mobject::session::match_specificTrack;
+  using proc::mobject::session::RBinding;
+  using proc::mobject::session::RTrack;
+  
   using idi::StructTraits;
+  
   
   namespace {
     
@@ -107,7 +110,7 @@ namespace asset {
        */
       template<class STRU>
       const Asset::Ident
-      createIdent (const Query<STRU>& query)
+      createIdent (Query<STRU> const& query)
         {
           // does the query somehow specify the desired name-ID?
           string nameID = extractID (genericIdSymbol, query);
@@ -173,10 +176,10 @@ namespace asset {
        *  @todo a real implementation using a resolution engine.
        */
       template<class STRU>
-      STRU* fabricate (const Query<STRU>& caps)
+      STRU* fabricate (Query<STRU> const& caps)
         {
-        throw lumiera::error::Config ( str(format("The following Query could not be resolved: %s.") % caps.asKey())
-                                     , LUMIERA_ERROR_CAPABILITY_QUERY );
+        throw error::Config ( str(format("The following Query could not be resolved: %s.") % caps.asKey())
+                            , LUMIERA_ERROR_CAPABILITY_QUERY );
         }
       
     };
@@ -186,7 +189,7 @@ namespace asset {
   
   template<>
   inline const ProcPatt* 
-  StructFactoryImpl::fabricate (const Query<const ProcPatt>& caps)
+  StructFactoryImpl::fabricate (Query<const ProcPatt> const& caps)
   {
     TODO ("actually extract properties/capabilities from the query...");
     return new ProcPatt (createIdent (caps));
@@ -194,7 +197,7 @@ namespace asset {
   
   template<>
   inline Pipe* 
-  StructFactoryImpl::fabricate (const Query<Pipe>& caps)
+  StructFactoryImpl::fabricate (Query<Pipe> const& caps)
   {
     const Asset::Ident idi (createIdent (caps));
     string streamID = extractID ("stream", caps);
@@ -208,7 +211,7 @@ namespace asset {
   
   template<>
   inline Timeline* 
-  StructFactoryImpl::fabricate (const Query<Timeline>& caps)
+  StructFactoryImpl::fabricate (Query<Timeline> const& caps)
   {
     TODO ("extract additional properties/capabilities from the query...");
     const Asset::Ident idi (createIdent (caps));
@@ -225,7 +228,7 @@ namespace asset {
   
   template<>
   inline Sequence* 
-  StructFactoryImpl::fabricate (const Query<Sequence>& caps)
+  StructFactoryImpl::fabricate (Query<Sequence> const& caps)
   {
     // when we reach this point it is clear a suitable sequence doesn't yet exist in the model
     TODO ("actually extract properties/capabilities from the query...");
@@ -244,5 +247,5 @@ namespace asset {
   
   
   
-} // namespace asset
+}} // namespace proc::asset
 #endif

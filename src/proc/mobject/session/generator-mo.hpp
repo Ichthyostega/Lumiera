@@ -21,13 +21,14 @@
 */
 
 
-#ifndef MOBJECT_SESSION_GENERATOR_MO_H
-#define MOBJECT_SESSION_GENERATOR_MO_H
+#ifndef PROC_MOBJECT_SESSION_GENERATOR_MO_H
+#define PROC_MOBJECT_SESSION_GENERATOR_MO_H
 
 #include "proc/mobject/session/abstractmo.hpp"
 #include "lib/time/timevalue.hpp"
 
 
+namespace proc {
 namespace asset {
   class Media;
   class Clip;
@@ -87,5 +88,5 @@ namespace session {
   
   
   
-}} // namespace mobject::session
+}}} // namespace proc::mobject::session
 #endif

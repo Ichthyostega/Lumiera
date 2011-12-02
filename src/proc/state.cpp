@@ -23,8 +23,7 @@
 
 #include "proc/state.hpp"
 
-namespace proc_interface
-  {
+namespace proc_interface {
   
   ////////////////////////////////TODO: State is a high -level interface, so can we get rid of this implementation file?
   /** */

@@ -28,15 +28,15 @@
 
 
 
-namespace asset
-  {
-
-
+namespace proc {
+namespace asset {
+  
+  
   /**
    * meta asset describing a collection of control data
    */
   class Dataset : public Meta
     {};
-
-} // namespace asset
+  
+}} // namespace proc::asset
 #endif

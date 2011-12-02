@@ -69,6 +69,7 @@
 
 ///////////////////////////////////////////TODO: define an C-API representation here, make the header multilingual!
 
+namespace proc {
 namespace mobject {
   
   
@@ -105,8 +106,8 @@ namespace mobject {
       operator-> ()  const
         {
           if (!smPtr_)
-            throw lumiera::error::State("Lifecycle error: MObject ref not activated"
-                                       ,LUMIERA_ERROR_BOTTOM_MOBJECTREF);
+            throw error::State("Lifecycle error: MObject ref not activated"
+                              ,LUMIERA_ERROR_BOTTOM_MOBJECTREF);
           
           ENSURE (INSTANCEOF (MO, smPtr_.get()));
           return smPtr_.operator-> ();
@@ -116,8 +117,8 @@ namespace mobject {
       Placement<MO>& getPlacement()  const
         {
           if (!isValid())
-            throw lumiera::error::State("Accessing inactive MObject ref"
-                                       ,LUMIERA_ERROR_BOTTOM_MOBJECTREF);
+            throw error::State("Accessing inactive MObject ref"
+                              ,LUMIERA_ERROR_BOTTOM_MOBJECTREF);
           
           ENSURE (INSTANCEOF (MO, smPtr_.get()));
           return *pRef_;
@@ -163,8 +164,8 @@ namespace mobject {
       attach (Placement<MOX> const& newPlacement)
         {
           if (!isValid())
-            throw lumiera::error::State("Attempt to attach a child to an inactive MObject ref"
-                                       , LUMIERA_ERROR_BOTTOM_MOBJECTREF);
+            throw error::State("Attempt to attach a child to an inactive MObject ref"
+                              , LUMIERA_ERROR_BOTTOM_MOBJECTREF);
           MORef<MOX> newInstance;
           PlacementMO::ID thisScope = pRef_;
           return newInstance.activate (
@@ -388,5 +389,5 @@ namespace mobject {
   }
   
   
-} // namespace mobject
+}} // namespace proc::mobject
 #endif

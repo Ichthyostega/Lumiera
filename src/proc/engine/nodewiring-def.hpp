@@ -50,6 +50,7 @@
 
 
 
+namespace proc {
 namespace engine {
   
   using lib::RefArray;
@@ -184,5 +185,5 @@ namespace engine {
   
   
   
-} // namespace engine
+}} // namespace proc::engine
 #endif

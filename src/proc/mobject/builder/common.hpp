@@ -27,11 +27,11 @@
 #include "lib/error.hpp"
 #include "include/logging.h"
 
-
+namespace proc    {
 namespace mobject {
 namespace builder {
     
     
     
-}} // namespace mobject::builder
+}}} // namespace mobject::builder
 #endif

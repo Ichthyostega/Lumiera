@@ -64,6 +64,7 @@
 
 
 
+namespace proc {
 namespace asset {
   
   class Meta;
@@ -160,5 +161,5 @@ namespace asset {
   
   
   
-} // namespace asset
+}} // namespace proc::asset
 #endif

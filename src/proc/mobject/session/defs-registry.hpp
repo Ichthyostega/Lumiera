@@ -36,8 +36,8 @@
 
 
 
-#ifndef MOBJECT_SESSION_DEFS_REGISTRY_H
-#define MOBJECT_SESSION_DEFS_REGISTRY_H
+#ifndef PROC_MOBJECT_SESSION_DEFS_REGISTRY_H
+#define PROC_MOBJECT_SESSION_DEFS_REGISTRY_H
 
 
 #include "lib/sync-classlock.hpp"
@@ -54,10 +54,11 @@
 #include <boost/lambda/lambda.hpp>
 
 
+namespace proc {
 namespace mobject {
 namespace session {
   
-  using lumiera::P;
+  using lib::P;
   using lumiera::Query;
   using lib::ClassLock;
   using std::tr1::weak_ptr;
@@ -340,5 +341,5 @@ namespace session {
   using impl::DefsRegistry;
   
   
-}} // namespace mobject::session
+}}} // namespace proc::mobject::session
 #endif

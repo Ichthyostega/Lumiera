@@ -77,6 +77,7 @@
 #include <tr1/memory>
 
 
+namespace proc {
 namespace mobject {
   
   namespace session{ class MObjectFactory; }
@@ -283,5 +284,5 @@ namespace mobject {
   
   
   
-} // namespace mobject
+}} // namespace proc::mobject
 #endif

@@ -29,7 +29,6 @@
 
 namespace control {
   
-  using lumiera::StreamType;
   using lib::Symbol;
   
   /* ======= stream type manager lifecycle ==========*/

@@ -28,6 +28,7 @@
 
 
 
+namespace proc {
 namespace engine
   {
 
@@ -44,5 +45,5 @@ namespace engine
 
 
 
-} // namespace engine
+}} // namespace proc::engine
 #endif

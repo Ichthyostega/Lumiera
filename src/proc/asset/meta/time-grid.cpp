@@ -41,6 +41,7 @@ using boost::str;
 using std::string;
 
 
+namespace proc {
 namespace asset {
 namespace meta {
   
@@ -170,4 +171,4 @@ namespace meta {
   }
   
   
-}} // namespace asset::meta
+}}} // namespace asset::meta

@@ -21,8 +21,8 @@
 */
 
 
-#ifndef MOBJECT_SESSION_SCOPE_LOCATOR_H
-#define MOBJECT_SESSION_SCOPE_LOCATOR_H
+#ifndef PROC_MOBJECT_SESSION_SCOPE_LOCATOR_H
+#define PROC_MOBJECT_SESSION_SCOPE_LOCATOR_H
 
 #include "proc/mobject/session/scope.hpp"
 #include "proc/mobject/session/scope-query.hpp"
@@ -33,6 +33,7 @@
 #include <boost/scoped_ptr.hpp>
 
 
+namespace proc {
 namespace mobject {
 namespace session {
   
@@ -147,5 +148,5 @@ namespace session {
   }
   
   
-}} // namespace mobject::session
+}}} // namespace proc::mobject::session
 #endif

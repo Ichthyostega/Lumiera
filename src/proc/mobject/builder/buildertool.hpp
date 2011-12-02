@@ -61,13 +61,14 @@
 #include "proc/mobject/explicitplacement.hpp"
 
 
+namespace proc    {
 namespace mobject {
   
   class Buildable;
   
   namespace builder {
   
-    using lumiera::P;
+    using lib::P;
     
     /** 
      * Policy invoking an catch-all function for processing
@@ -105,9 +106,9 @@ namespace mobject {
      *       as we simply store a pointer within the BuilderTool instance.
      */
     class BuilderTool
-      : public lumiera::visitor::Tool<void, InvokeCatchAllFunction>
+      : public ::lumiera::visitor::Tool<void, InvokeCatchAllFunction>
       {
-        lumiera::WrapperPtr currentWrapper_;
+        ::lumiera::WrapperPtr currentWrapper_;
         
       public:
         
@@ -146,7 +147,7 @@ namespace mobject {
           }
         
         template<class TAR>
-        lumiera::P<TAR>
+        P<TAR>
         getPtr ()
           {
             P<TAR>* pP = currentWrapper_.get<P<TAR>*>(); 
@@ -166,11 +167,11 @@ namespace mobject {
         class TYPELIST  //  list of all concrete Buildables to be treated
       >
     class Applicable
-      : public lumiera::visitor::Applicable<TOOLImpl, TYPELIST, BuilderTool>
+      : public ::lumiera::visitor::Applicable<TOOLImpl, TYPELIST, BuilderTool>
       { }
       ;
       
-    using lumiera::typelist::Types;  // convenience for the users of "Applicable"
+    using ::lumiera::typelist::Types;  // convenience for the users of "Applicable"
   
   }// namespace mobject::builder
   
@@ -181,7 +182,7 @@ namespace mobject {
   /**
    *  Marker Interface for classes visitable by Builder tools. 
    */
-  class Buildable : public lumiera::visitor::Visitable<builder::BuilderTool>
+  class Buildable : public ::lumiera::visitor::Visitable<builder::BuilderTool>
     { };
   
   
@@ -206,5 +207,5 @@ namespace mobject {
     }
   
   
-}} // namespace mobject::builder
+}}} // namespace proc::mobject::builder
 #endif

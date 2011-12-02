@@ -35,6 +35,7 @@
 #include <boost/utility.hpp>
 
 
+namespace proc {
 namespace asset {
   
   using std::tr1::static_pointer_cast;
@@ -167,5 +168,5 @@ namespace asset {
     };
   
     
-} // namespace asset
+}} // namespace proc::asset
 #endif

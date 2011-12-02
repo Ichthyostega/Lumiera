@@ -43,6 +43,7 @@ using lib::ScopedPtrVect;
 
 
 
+namespace proc {
 namespace engine {
   
   namespace error = lumiera::error;
@@ -322,4 +323,4 @@ namespace engine {
   
   
   
-} // namespace engine
+}} // namespace engine

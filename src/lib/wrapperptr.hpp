@@ -34,16 +34,20 @@
 #include "lib/p.hpp"
 
 
-namespace asset   { class Asset; }
-namespace mobject { class MObject; }
+namespace proc {
+  namespace asset   { class Asset; }
+  namespace mobject { class MObject; }
+  
+  
+  typedef ::lumiera::typelist::Types < mobject::Placement<mobject::MObject>*
+                                     , lib::P<asset::Asset>*
+                                     > ::List
+                                     WrapperTypes;
+}
 
 namespace lumiera {
   
   
-  typedef typelist::Types < mobject::Placement<mobject::MObject>*
-                          , P<asset::Asset>*
-                          > ::List
-                          WrapperTypes;
   
   /** 
    * helper to treat various sorts of smart-ptrs uniformly.
@@ -55,7 +59,7 @@ namespace lumiera {
    * error reporting is similar to the behaviour of dynamic_cast<T>: when retrieving
    * a pointer, NULL is returned in case of mismatch.
    */
-  typedef lib::Variant<WrapperTypes, util::AccessCasted> WrapperPtr;
+  typedef lib::Variant<proc::WrapperTypes, util::AccessCasted> WrapperPtr;
   
   
   

@@ -62,6 +62,7 @@
 //using std::vector;
 //using std::string;
 
+namespace proc {
 namespace mobject {
 namespace session {
   
@@ -74,7 +75,7 @@ namespace asset {
   
   
   class Sequence;
-  typedef lumiera::P<Sequence> PSequence;
+  typedef P<Sequence> PSequence;
    
   
   
@@ -104,5 +105,5 @@ namespace asset {
 ///////////////////////////TODO currently just fleshing the API
   
   
-} // namespace asset
+}} // namespace proc::asset
 #endif

@@ -24,6 +24,7 @@
 #include "proc/mobject/session/query-resolver.hpp"
 #include "lib/multifact-arg.hpp"
 
+namespace proc {
 namespace mobject {
 namespace session {
   
@@ -122,4 +123,4 @@ namespace session {
   
   
   
-}} // namespace mobject::session
+}}} // namespace proc::mobject::session

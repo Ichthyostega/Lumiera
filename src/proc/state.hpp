@@ -32,10 +32,11 @@
 #include <cstddef>
 
 
+namespace proc {
 namespace engine { 
   
-  using lumiera::FrameID;
-  using lumiera::NodeID;
+  using ::lumiera::FrameID;
+  using ::lumiera::NodeID;
 
   class StateAdapter;
   class BuffTableStorage;
@@ -109,13 +110,13 @@ namespace engine {
       friend class engine::StateAdapter;
     };
   
-} // namespace engine
+}} // namespace proc::engine
 
 
 
 namespace proc_interface {
 
-  using engine::State;
+  using proc::engine::State;
     
     
 } // namespace proc_interface

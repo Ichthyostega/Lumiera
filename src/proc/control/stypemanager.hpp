@@ -25,7 +25,7 @@
 #define CONTROL_STYPEMANAGER_H
 
 
-#include "lib/streamtype.hpp"
+#include "proc/streamtype.hpp"
 #include "lib/singleton.hpp"
 
 #include <boost/scoped_ptr.hpp>
@@ -34,7 +34,6 @@
 namespace control {
   
   using lib::Symbol;
-  using lumiera::StreamType;
   
   
   class STypeManager

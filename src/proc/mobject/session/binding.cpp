@@ -24,6 +24,7 @@
 #include "proc/mobject/session/binding.hpp"
 #include "proc/asset/sequence.hpp"
 
+namespace proc {
 namespace mobject {
 namespace session {
   
@@ -49,4 +50,4 @@ namespace session {
   
 
 
-}} // namespace mobject::session
+}}} // namespace proc::mobject::session

@@ -52,6 +52,7 @@ using std::tr1::dynamic_pointer_cast;
 
 namespace error = lumiera::error;
 
+namespace proc {
 namespace asset {
   
   namespace { // Implementation details
@@ -229,18 +230,18 @@ namespace asset {
    *  @throw Invalid if the given media asset is not top-level,
    *         but rather part or a multichannel (compound) media
    */
-  P<asset::Clip>
-  MediaFactory::operator() (asset::Media& mediaref)  throw(lumiera::error::Invalid)
+  P<Clip>
+  MediaFactory::operator() (Media& mediaref)
   {
     if (mediaref.checkCompound())
-      throw lumiera::error::Invalid (str(format("Attempt to create a asset::Clip from the media %s, "
-                                                "which is not toplevel but rather part or a compound "
-                                                "(multichannel) media. Found parent Media %s.") 
-                                                % string(mediaref) 
-                                                % string(*mediaref.checkCompound()))
-                                    ,LUMIERA_ERROR_PART_OF_COMPOUND
-                                    );
-    asset::Clip* pC = new asset::Clip (mediaref);
+      throw error::Invalid (str(format("Attempt to create a asset::Clip from the media %s, "
+                                       "which is not toplevel but rather part or a compound "
+                                       "(multichannel) media. Found parent Media %s.") 
+                                       % string(mediaref) 
+                                       % string(*mediaref.checkCompound()))
+                           ,LUMIERA_ERROR_PART_OF_COMPOUND
+                           );
+    Clip* pC = new Clip (mediaref);
     return AssetManager::instance().wrap (*pC);
   }
   
@@ -249,4 +250,4 @@ namespace asset {
 
 
 
-} // namespace asset
+}} // namespace asset

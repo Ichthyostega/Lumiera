@@ -47,7 +47,7 @@ using util::for_each;
 using util::isnil;
 //using lib::Literal;
 using lib::Symbol;
-using lumiera::P;
+using lib::P;
 //using std::string;
 using std::cout;
 using std::endl;

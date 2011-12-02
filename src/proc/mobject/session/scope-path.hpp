@@ -84,8 +84,8 @@
  */
 
 
-#ifndef MOBJECT_SESSION_SCOPE_PATH_H
-#define MOBJECT_SESSION_SCOPE_PATH_H
+#ifndef PROC_MOBJECT_SESSION_SCOPE_PATH_H
+#define PROC_MOBJECT_SESSION_SCOPE_PATH_H
 
 #include "proc/mobject/session/scope.hpp"
 #include "lib/bool-checkable.hpp"
@@ -99,7 +99,7 @@
 namespace lib {
 namespace iter{
 
-  using mobject::session::Scope;
+  using proc::mobject::session::Scope;
 
   /**
    * this explicit specialisation allows to build a RangeIter
@@ -118,6 +118,7 @@ namespace iter{
     };
 }}
 
+namespace proc {
 namespace mobject {
 namespace session {
   
@@ -297,5 +298,5 @@ namespace session {
   }
   
   
-}} // namespace mobject::session
+}}} // namespace mobject::session
 #endif

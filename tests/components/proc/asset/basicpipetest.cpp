@@ -48,8 +48,7 @@ namespace test  {
     using mobject::Session;
     using lumiera::Query;
     using lumiera::query::normaliseID;
-    using lumiera::StreamType;
-    
+      
     
     
     /***********************************************************************

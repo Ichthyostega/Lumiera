@@ -32,6 +32,7 @@ namespace proc {
   
   using std::string;
   using lumiera::Subsys;
+  using lumiera::Option;
   
   
   class BuilderSubsysDescriptor
@@ -40,14 +41,14 @@ namespace proc {
       operator string ()  const { return "Builder"; }
       
       bool 
-      shouldStart (lumiera::Option&)
+      shouldStart (Option&)
         {
           TODO ("determine, if we need a Builder Thread");
           return false;
         }
       
       bool
-      start (lumiera::Option&, Subsys::SigTerm termination)
+      start (Option&, Subsys::SigTerm termination)
         {
           UNIMPLEMENTED ("fire up a Builder in a separate Thread, and register shutdown hook");
           return false;
@@ -76,14 +77,14 @@ namespace proc {
       operator string ()  const { return "Session"; }
       
       bool 
-      shouldStart (lumiera::Option&)
+      shouldStart (Option&)
         {
           TODO ("determine, if an existing Session should be loaded");
           return false;
         }
       
       bool
-      start (lumiera::Option&, Subsys::SigTerm termination)
+      start (Option&, Subsys::SigTerm termination)
         {
           UNIMPLEMENTED ("load an existing session as denoted by the options and register shutdown hook");
           return false;
@@ -119,14 +120,14 @@ namespace proc {
        * @todo   actually define cmdline options and parse/decide here! 
        */
       bool 
-      shouldStart (lumiera::Option&)
+      shouldStart (Option&)
         {
           TODO ("extract options about specific output systems to be brought up");
           return false;
         }
       
       bool
-      start (lumiera::Option&, Subsys::SigTerm termination)
+      start (Option&, Subsys::SigTerm termination)
         {
           this->completedSignal_ = termination;
           return play::OutputDirector::instance().connectUp();

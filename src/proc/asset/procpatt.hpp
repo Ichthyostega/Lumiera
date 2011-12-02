@@ -33,9 +33,9 @@ using std::vector;
 
 
 
+namespace proc {
 namespace asset {
   
-  using lumiera::P;
   using lib::Symbol;
   
   class Proc;
@@ -73,5 +73,5 @@ namespace asset {
   
   
   
-} // namespace asset
+}} // namespace proc::asset
 #endif

@@ -31,6 +31,7 @@
 using boost::format;
 using boost::str;
 
+namespace proc {
 namespace mobject {
 
 
@@ -81,4 +82,4 @@ namespace mobject {
   
 
 
-} // namespace mobject
+}} // namespace proc::mobject

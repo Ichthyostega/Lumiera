@@ -21,27 +21,24 @@
 */
 
 
-#ifndef MOBJECT_SESSION_CONSTRAINT_H
-#define MOBJECT_SESSION_CONSTRAINT_H
+#ifndef PROC_MOBJECT_SESSION_CONSTRAINT_H
+#define PROC_MOBJECT_SESSION_CONSTRAINT_H
 
 #include "proc/mobject/session/allocation.hpp"
 
 
 
-namespace mobject
-  {
-  namespace session
-    {
-
-
-    /**
-     * LocatingPin representing an directive by the user 
-     * that must not be violated
-     */
-    class Constraint : public Allocation
-      {};
-
-  } // namespace mobject::session
-
-} // namespace mobject
+namespace proc {
+namespace mobject {
+namespace session {
+  
+  
+  /**
+   * LocatingPin representing an directive by the user 
+   * that must not be violated
+   */
+  class Constraint : public Allocation
+    {};
+  
+}}} // namespace proc::mobject::session
 #endif

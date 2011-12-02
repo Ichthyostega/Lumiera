@@ -45,7 +45,7 @@ namespace tr1 {
   template<class X> class reference_wrapper; 
   template<class X> class shared_ptr; 
 }}
-namespace lumiera{
+namespace lib{
   template<class X, class B>  class P; 
 }
 namespace mobject{
@@ -127,12 +127,12 @@ namespace meta {
     };
   
   template<typename X, class B>
-  struct Unwrap<lumiera::P<X, B> >
+  struct Unwrap<P<X, B> >
     {
       typedef X  Type;
       
       static X&
-      extract (lumiera::P<X,B> ptr)
+      extract (P<X,B> ptr)
         {
           ASSERT (ptr);
           return *ptr;

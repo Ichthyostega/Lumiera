@@ -29,6 +29,7 @@
 #include "lib/meta/typelist-manip.hpp"
 
 
+namespace proc {
 namespace engine {
 
   namespace config {
@@ -149,4 +150,4 @@ namespace engine {
   }
   
   
-} // namespace engine
+}} // namespace engine

@@ -28,25 +28,22 @@
 
 
 
-namespace mobject
-  {
-  namespace session
+namespace proc {
+namespace mobject {
+namespace session {
+  
+  
+  /**
+   * LocatingPin representing a low-priority directive by the user,
+   * to be fulfilled only if possible (and after satisfying the
+   * more important LocatingPins)
+   */
+  class Wish : public Allocation
     {
-
-
-    /**
-     * LocatingPin representing a low-priority directive by the user,
-     * to be fulfilled only if possible (and after satisfying the
-     * more important LocatingPins)
-     */
-    class Wish : public Allocation
-      {
-        
-      };
-    
-    
-    
-  } // namespace mobject::session
-
-} // namespace mobject
+      
+    };
+  
+  
+  
+}}} // namespace proc::mobject::session
 #endif

@@ -21,11 +21,10 @@
 * *****************************************************/
 
 
-#include "lib/streamtype.hpp"
+#include "proc/streamtype.hpp"
 
 
-namespace lumiera
-  {
+namespace proc {
 
    /** @internal defined here non-inline place the vtable in this object file.*/
    StreamType::ImplFacade::ImplFacade (Symbol libID)
@@ -34,4 +33,4 @@ namespace lumiera
 
   
 
-} // namespace lumiera
+} // namespace proc

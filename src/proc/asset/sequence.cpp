@@ -27,6 +27,7 @@
 //#include "proc/mobject/placement.hpp"
 //#include "proc/mobject/session/mobjectfactory.hpp"
 
+namespace proc {
 namespace asset {
   
   using lib::AutoRegistered;
@@ -62,4 +63,4 @@ namespace asset {
   
   
   
-} // namespace asset
+}} // namespace asset

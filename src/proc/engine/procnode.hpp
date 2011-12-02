@@ -53,6 +53,7 @@
 
 
 
+namespace proc {
 namespace engine {
 
   using std::vector;
@@ -172,5 +173,5 @@ namespace engine {
   }
   
   
-} // namespace engine
+}} // namespace proc::engine
 #endif

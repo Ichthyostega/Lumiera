@@ -28,25 +28,22 @@
 
 
 
+namespace proc {
 namespace asset { class Pipe; }
 
-namespace mobject
-  {
-  namespace session
+namespace mobject {
+namespace session {
+  
+  /**
+   * LocatingPin for requesting connection to some Pipe
+   */
+  class Plug : public Wish
     {
-
-    /**
-     * LocatingPin for requesting connection to some Pipe
-     */
-    class Plug : public Wish
-      {
-      protected:
-        /** the Pipe this MObject wants to be conected to */
-        asset::Pipe* outPipe;   ////////////////////////////////TODO: shared_ptr
-
-      };
-
-  } // namespace mobject::session
-
-} // namespace mobject
+    protected:
+      /** the Pipe this MObject wants to be conected to */
+      asset::Pipe* outPipe;   ////////////////////////////////TODO: shared_ptr
+      
+    };
+  
+}}} // namespace proc::mobject::session
 #endif

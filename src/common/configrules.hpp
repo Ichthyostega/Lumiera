@@ -68,7 +68,7 @@
 namespace lumiera {  ///////TODO: shouldn't that be namespace lib? or proc?
   
   using std::string;
-  using lumiera::P;
+  using lib::P;
   
   
   
@@ -212,13 +212,13 @@ namespace lumiera {  ///////TODO: shouldn't that be namespace lib? or proc?
    *  the list of all concrete types participating in the
    *  rule based config query system
    */
-  typedef lumiera::typelist::Types < mobject::session::Track
-                                   , asset::Pipe
-                                   , const asset::ProcPatt
-                                   , asset::Timeline
-                                   , asset::Sequence
-                                   > ::List
-                                     InterfaceTypes;
+  typedef typelist::Types < proc::mobject::session::Track
+                          , proc::asset::Pipe
+                          , const proc::asset::ProcPatt
+                          , proc::asset::Timeline
+                          , proc::asset::Sequence
+                          > ::List
+                            InterfaceTypes;
   
   /** 
    * user-visible Interface to the ConfigRules subsystem.

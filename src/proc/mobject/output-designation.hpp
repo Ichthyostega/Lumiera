@@ -32,6 +32,7 @@ extern "C" {
 #include "lib/luid.h"
 }
 
+namespace proc {
 namespace mobject {
   
   namespace mp = lumiera::typelist;
@@ -116,5 +117,5 @@ namespace mobject {
   
   
   
-} // namespace mobject
+}} // namespace proc::mobject
 #endif

@@ -21,21 +21,20 @@
 */
 
 
-#ifndef LIB_EXTERN_LIBGAVL_H
-#define LIB_EXTERN_LIBGAVL_H
+#ifndef PROC_EXTERNAL_LIBGAVL_H
+#define PROC_EXTERNAL_LIBGAVL_H
 
 
 #include "proc/control/mediaimpllib.hpp"
 
 
 
-namespace lib {
-  namespace external {
+namespace proc {
+namespace external {
   
   
   using lib::Symbol;
   
-  using lumiera::StreamType;
   typedef StreamType::ImplFacade ImplFacade;
   typedef StreamType::ImplFacade::TypeTag TypeTag;
   
@@ -84,7 +83,5 @@ namespace lib {
   
   
   
-  } // namespace external
-  
-} // namespace lib
+}} // namespace proc::external
 #endif

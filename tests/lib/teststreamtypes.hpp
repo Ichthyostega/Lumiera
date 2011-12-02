@@ -27,7 +27,7 @@
 
 //#include "lib/util.hpp"
 
-#include "lib/streamtype.hpp"
+#include "proc/streamtype.hpp"
 #include "proc/control/stypemanager.hpp"
 
 extern "C" {

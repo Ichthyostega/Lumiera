@@ -43,6 +43,7 @@
 
 
 
+namespace proc {
 namespace asset {
   
   class Clip;
@@ -50,7 +51,6 @@ namespace asset {
   class MediaFactory;
   class ProcPatt;
   
-  using lumiera::P;
   using lib::time::Duration;
   
   
@@ -74,9 +74,9 @@ namespace asset {
       
     public:
       typedef P<Media> PMedia;
-      typedef P<asset::Clip> PClip;
-      typedef P<asset::ProcPatt> PProcPatt;
-      typedef mobject::session::PClipMO PClipMO;
+      typedef P<proc::asset::Clip> PClip;
+      typedef P<proc::asset::ProcPatt> PProcPatt;
+      typedef proc::mobject::session::PClipMO PClipMO;
      
       
       static MediaFactory create;
@@ -121,7 +121,7 @@ namespace asset {
        *  @return pointer to parent, or \code null
        */
       virtual PMedia checkCompound ()  const;
-      friend class asset::Clip;    ////////////////////////TODO better interface!!!
+      friend class proc::asset::Clip;    ////////////////////////TODO better interface!!!
 
     };
     
@@ -141,7 +141,7 @@ namespace asset {
   class MediaFactory : public lib::Factory<asset::Media>
     {
     public:
-      typedef P<asset::Media> PType;
+      typedef P<Media> PType;
       
       PType operator() (Asset::Ident& key, const string& file="");
       PType operator() (const string& file, const Category& cat);
@@ -151,8 +151,8 @@ namespace asset {
       PType operator() (const char* file, const Category& cat);
       PType operator() (const char* file, asset::Kind);
       
-      P<asset::Clip>
-      operator() (asset::Media& mediaref)  throw(lumiera::error::Invalid);
+      P<Clip>
+      operator() (Media& mediaref);
 
     };
 
@@ -161,5 +161,5 @@ namespace asset {
     
     
     
-} // namespace asset
+}} // namespace proc::asset
 #endif

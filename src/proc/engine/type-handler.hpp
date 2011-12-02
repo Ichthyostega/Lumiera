@@ -49,6 +49,7 @@
 #include <boost/functional/hash.hpp>
 
 
+namespace proc {
 namespace engine {
   
   using lib::HashVal;
@@ -56,7 +57,7 @@ namespace engine {
   using std::tr1::function;
   using std::tr1::placeholders::_1;
   
-  namespace error = lumiera::error;
+  namespace error = ::lumiera::error;
   
   
   namespace { // (optional) helpers to build an object embedded into a buffer...
@@ -178,5 +179,5 @@ namespace engine {
   
   
   
-} // namespace engine
+}} // namespace proc::engine
 #endif

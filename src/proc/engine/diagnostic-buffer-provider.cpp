@@ -28,6 +28,7 @@
 #include "proc/engine/tracking-heap-block-provider.hpp"
 
 
+namespace proc {
 namespace engine {
   
   
@@ -104,4 +105,4 @@ namespace engine {
     }
   
 
-} // namespace engine
+}} // namespace engine

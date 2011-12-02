@@ -21,8 +21,8 @@
 */
 
 
-#ifndef MOBJECT_SESSION_ALLOCATION_H
-#define MOBJECT_SESSION_ALLOCATION_H
+#ifndef PROC_MOBJECT_SESSION_ALLOCATION_H
+#define PROC_MOBJECT_SESSION_ALLOCATION_H
 
 #include <string>
 
@@ -32,35 +32,32 @@
 using std::string;
 
 
-namespace mobject
-  {
-  namespace session
+namespace proc {
+namespace mobject {
+namespace session {
+  
+  
+  /**
+   * Interface (abstract): any objective, constraint or wish
+   * of placing a MObject in a specific way.
+   */
+  class Allocation : public LocatingPin
     {
-
-
-    /**
-     * Interface (abstract): any objective, constraint or wish
-     * of placing a MObject in a specific way.
-     */
-    class Allocation : public LocatingPin
-      {
-      protected:
-        /** human readable representation of the condition
-         *  characterizing this allocaton, e.g. "t >= 10"
-         */
-        string repr;
-        
-        virtual void intersect (LocatingSolution&)  const;
-        
-      public:
-        const string& getRepr () const { return repr; }
-        
-        virtual Allocation* clone ()  const = 0;
-      };
-
-
-
-  } // namespace mobject::session
-
-} // namespace mobject
+    protected:
+      /** human readable representation of the condition
+       *  characterising this allocation, e.g. "t >= 10"
+       */
+      string repr;
+      
+      virtual void intersect (LocatingSolution&)  const;
+      
+    public:
+      const string& getRepr () const { return repr; }
+      
+      virtual Allocation* clone ()  const = 0;
+    };
+  
+  
+  
+}}} // namespace proc::mobject::session
 #endif

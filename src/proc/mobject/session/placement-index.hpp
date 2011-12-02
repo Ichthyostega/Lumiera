@@ -102,8 +102,8 @@
 
 
 
-#ifndef MOBJECT_PLACEMENT_INDEX_H
-#define MOBJECT_PLACEMENT_INDEX_H
+#ifndef PROC_MOBJECT_PLACEMENT_INDEX_H
+#define PROC_MOBJECT_PLACEMENT_INDEX_H
 
 #include "lib/util.hpp"
 #include "lib/error.hpp"
@@ -117,6 +117,7 @@
 #include <vector>
 
 
+namespace proc {
 namespace mobject {
   
   class MObject;
@@ -326,5 +327,5 @@ namespace session {
   
   
   
-}} // namespace mobject::session
+}}} // namespace proc::mobject::session
 #endif

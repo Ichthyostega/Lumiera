@@ -23,6 +23,7 @@
 
 #include "proc/engine/stateproxy.hpp"
 
+namespace proc {
 namespace engine {
   
   
@@ -84,4 +85,4 @@ namespace engine {
   }
   
   
-} // namespace engine
+}} // namespace engine

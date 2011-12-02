@@ -52,11 +52,12 @@
 
 
 
+namespace proc {
 namespace mobject {
 namespace session {
   
   
-
+  
   /**
    * Implementation-level service for issuing contents/discovery queries.
    * Actually, the implementation of this service is backed by the PlacementIndex
@@ -76,5 +77,5 @@ namespace session {
   
   
   
-}} // namespace mobject::session
+}}} // namespace proc::mobject::session
 #endif

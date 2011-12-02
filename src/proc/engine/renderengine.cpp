@@ -23,6 +23,7 @@
 
 #include "proc/engine/renderengine.hpp"
 
+namespace proc {
 namespace engine {
   
   
@@ -30,4 +31,4 @@ namespace engine {
   
   
   
-} // namespace engine
+}} // namespace engine

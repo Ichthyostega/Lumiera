@@ -21,13 +21,14 @@
 */
 
 
-#ifndef MOBJECT_SESSION_ROOT_H
-#define MOBJECT_SESSION_ROOT_H
+#ifndef PROC_MOBJECT_SESSION_ROOT_H
+#define PROC_MOBJECT_SESSION_ROOT_H
 
 #include "proc/mobject/session/meta.hpp"
 #include "proc/mobject/builder/buildertool.hpp"
 
 
+namespace proc {
 namespace mobject {
 namespace session {
     
@@ -50,10 +51,10 @@ namespace session {
     class Root : public Meta
       {
         DefsManager& defaults_;
-      
+        
         ///////////TODO: timespan fields here or already in class Meta??
         ///////////TODO: any idea about the purpose of root's "timespan"??  ///////TICKET #448
-      
+        
         string
         initShortID()  const
           {
@@ -76,5 +77,5 @@ namespace session {
   template class Placement<session::Root, session::Meta>;
   typedef Placement<session::Root, session::Meta> PRoot;
   
-} // namespace mobject
+}} // namespace proc::mobject
 #endif

@@ -22,7 +22,7 @@
 
 
 #include "proc/common.hpp"
-#include "common/external/libgavl.hpp"
+#include "proc/external/libgavl.hpp"
 #include "proc/control/stypemanager.hpp"
 
 extern "C" {
@@ -30,8 +30,8 @@ extern "C" {
 }
 
 
-namespace lib {
-  namespace external {
+namespace proc {
+namespace external {
     
     using control::STypeManager;
     using control::ON_STREAMTYPES_RESET;
@@ -66,6 +66,4 @@ namespace lib {
   
   
   
-  } // namespace external
-  
-} // namespace lib
+}} // namespace proc::external

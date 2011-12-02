@@ -31,7 +31,7 @@
 #include "proc/asset/struct.hpp"
 #include "proc/assetmanager.hpp"
 #include "proc/mobject/session.hpp"
-#include "lib/streamtype.hpp"
+#include "proc/streamtype.hpp"
 
 #include <boost/format.hpp>
 
@@ -55,7 +55,6 @@ namespace test    {
   using asset::Struct;
   using lumiera::Query;
   using lumiera::query::normaliseID;
-  using lumiera::StreamType;
   
   
   /** shortcut: run just a query

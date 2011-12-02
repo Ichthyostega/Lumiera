@@ -54,12 +54,12 @@
 #include <string>
 
 
+namespace proc {
 namespace asset {
   
   using std::string;
   using std::ostream;
   
-  using lumiera::error::LUMIERA_ERROR_WRONG_TYPE;
   
   
   namespace idi {
@@ -233,9 +233,9 @@ namespace asset {
       recast (BareEntryID const& bID)
         {
           if (!canRecast(bID))
-            throw lumiera::error::Logic ("unable to recast EntryID: desired type "
-                                         "doesn't match original definition"
-                                        , LUMIERA_ERROR_WRONG_TYPE);
+            throw error::Logic ("unable to recast EntryID: desired type "
+                                "doesn't match original definition"
+                               , error::LUMIERA_ERROR_WRONG_TYPE);
           return EntryID (bID.getSym());
         }
       
@@ -278,5 +278,5 @@ namespace asset {
   
   
   
-} // namespace asset
+}} // namespace proc::asset
 #endif

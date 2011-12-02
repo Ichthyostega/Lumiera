@@ -24,6 +24,7 @@
 #include "proc/mobject/session/fixture.hpp"
 #include "include/logging.h"
 
+namespace proc {
 namespace mobject {
 namespace session {
   
@@ -54,8 +55,8 @@ namespace session {
     TODO ("actually do a self-verification of the Fixture");
     return true;
   }
-
-
-
-
-}} // namespace mobject::session
+  
+  
+  
+  
+}}} // namespace proc::mobject::session

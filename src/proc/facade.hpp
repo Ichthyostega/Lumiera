@@ -20,6 +20,17 @@
 
 */
 
+/** @file facade.hpp
+ ** Top level entrance point and facade for the Proc-Layer.
+ ** The middle layer of the application holds a session with the
+ ** high-level model, to be translated by the Builder into a node network,
+ ** which can be \em performed by the Engine to render output.
+ ** 
+ ** @see common.hpp
+ ** 
+ */
+
+
 
 #ifndef PROC_INTERFACE_FACADE_H
 #define PROC_INTERFACE_FACADE_H
@@ -29,12 +40,6 @@
 
 
 
-/**
- * Lumiera Proc-Layer implementation root.
- * The middle layer of the application holds a session with the
- * high-level model, to be translated by the Builder into a node network,
- * which can be \em performed by the Engine to render output.
- */
 namespace proc {
   
   

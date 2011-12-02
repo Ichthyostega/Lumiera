@@ -40,6 +40,7 @@ using lib::Singleton;
 using lib::Sync;
 
 
+namespace proc {
 namespace asset {
   
   /** 
@@ -220,7 +221,7 @@ namespace asset {
   }
   
   
-} // namespace asset
+}} // namespace proc::asset
 
 
 
@@ -240,7 +241,7 @@ namespace asset {
 #include "proc/asset/sequence.hpp"
 #include "proc/asset/meta/time-grid.hpp"
 
-
+namespace proc {
 namespace asset {
   
   template ID<Asset> AssetManager::reg (Asset* obj, const Asset::Ident& idi);
@@ -265,4 +266,4 @@ namespace asset {
   template P<TimeGrid> AssetManager::wrap (const TimeGrid& asset);
   
   
-} // namespace asset
+}} // namespace proc::asset

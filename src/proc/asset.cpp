@@ -43,6 +43,7 @@ using util::isnil;
 using util::cStr;
 
 
+namespace proc {
 namespace asset {
   
   using ::NOBUG_FLAG(memory);
@@ -198,4 +199,4 @@ namespace asset {
   }
 
   
-} // namespace asset
+}} // namespace proc::asset

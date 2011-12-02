@@ -37,10 +37,11 @@
 
 #include "proc/asset.hpp"
 #include "lib/factory.hpp"
-#include "lib/streamtype.hpp"
+#include "proc/streamtype.hpp"
 
 
 
+namespace proc {
 namespace asset {
   
   
@@ -75,7 +76,7 @@ namespace asset {
           return static_cast<const ID<Proc>& > (Asset::getID()); 
         }
       
-      typedef lumiera::StreamType::ImplFacade::DataBuffer Buff;
+      typedef StreamType::ImplFacade::DataBuffer Buff;
       typedef Buff* PBuff;
       typedef void (ProcFunc) (PBuff);
       
@@ -124,5 +125,5 @@ namespace asset {
   
   
   
-} // namespace asset
+}} // namespace proc::asset
 #endif

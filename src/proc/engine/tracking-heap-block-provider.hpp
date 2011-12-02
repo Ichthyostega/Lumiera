@@ -52,6 +52,7 @@
 #include <boost/scoped_array.hpp>
 
 
+namespace proc {
 namespace engine {
   
   namespace error = lumiera::error;
@@ -183,5 +184,5 @@ namespace engine {
   
   
   
-} // namespace engine
+}} // namespace proc::engine
 #endif

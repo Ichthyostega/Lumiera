@@ -34,6 +34,7 @@
 /////////////////////////////TODO consequently this will become some kind of root or anchor point for this network
 
 
+namespace proc {
 namespace engine {
   
   using lib::time::TimeSpan;
@@ -64,5 +65,5 @@ namespace engine {
   
   
   
-} // namespace engine
+}} // namespace proc::engine
 #endif

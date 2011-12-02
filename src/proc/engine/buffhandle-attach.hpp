@@ -50,6 +50,7 @@
 #include "proc/engine/buffhandle.hpp"
 
 
+namespace proc {
 namespace engine {
   
   
@@ -125,5 +126,5 @@ namespace engine {
   
   
   
-} // namespace engine
+}} // namespace proc::engine
 #endif

@@ -50,7 +50,7 @@
 
 namespace control {
 
-//  using lumiera::P;
+//  using lib::P;
 //  using lumiera::Query;
   
 //  using std::string;

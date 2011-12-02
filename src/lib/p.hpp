@@ -46,15 +46,15 @@
  */
 
 
-#ifndef LUMIERA_P_H
-#define LUMIERA_P_H
+#ifndef LIB_P_H
+#define LIB_P_H
 
 
 #include "lib/error.hpp"
 #include <tr1/memory>
 
 
-namespace lumiera {
+namespace lib {
   
   using std::tr1::shared_ptr;
   using std::tr1::weak_ptr;
@@ -125,5 +125,5 @@ namespace lumiera {
     };
   
   
-} // namespace lumiera
+} // namespace lib
 #endif

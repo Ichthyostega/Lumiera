@@ -74,5 +74,5 @@ namespace asset
   
   } // namespace test
   
-} // namespace asset
+}} // namespace proc::asset
 #endif

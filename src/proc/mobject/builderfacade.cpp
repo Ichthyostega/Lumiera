@@ -24,6 +24,7 @@
 #include "proc/mobject/builder/common.hpp"
 #include "proc/mobject/builderfacade.hpp"
 
+namespace proc {
 namespace mobject {
   
   
@@ -42,4 +43,4 @@ namespace mobject {
   
   
   
-} // namespace mobject
+}} // namespace mobject
