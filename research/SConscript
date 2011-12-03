@@ -1,0 +1,21 @@
+# -*- python -*-
+##
+## SConscript  -  SCons buildscript for experiments and investigations.
+##                Things defined here usuall won't be installed
+##
+
+Import('env','artifacts','core')
+
+support_lib = artifacts['support']
+
+
+
+# build additional test and administrative tools....
+experiments = [ env.Program('try', ['try.cpp'] + support_lib)           #### to try out some feature...
+              ]
+
+#
+# define Phony targets
+#  - 'scons research' triggers building of experimental code
+#
+env.Alias('research', experiments )

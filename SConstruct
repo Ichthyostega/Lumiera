@@ -190,6 +190,7 @@ USAGE:   scons [-c] [OPTS] [key=val [key=val...]] [TARGETS]
 
 Special Targets:
      build   : just compile and link
+     research: build experimental code (might fail)
      testcode: additionally compile the Testsuite
      check   : build and run the Testsuite
      doc     : generate documentation (Doxygen)
@@ -370,13 +371,12 @@ def defineBuildTargets(env, artifacts):
                        )
     
     # call subdir SConscript(s) for independent components
-    SConscript(dirs=['src/tool'], exports='env artifacts core')
-    SConscript(dirs=['tests'],    exports='env artifacts core')
+    SConscript(dirs=['src/tool','research','tests'], exports='env artifacts core')
 
 
 
 def definePostBuildTargets(env, artifacts):
-    """ define further actions after the core build (e.g. Documentaion).
+    """ define further actions after the core build (e.g. Documentation).
         define alias targets to trigger the installing.
     """
     build = env.Alias('build', ( artifacts['lumiera']
