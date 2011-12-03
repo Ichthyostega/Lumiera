@@ -38,6 +38,7 @@
 using lib::test::showSizeof;
 using lib::test::randStr;
 using util::isSameObject;
+using util::contains;
 using util::and_all;
 using lib::Literal;
 using std::string;
@@ -257,22 +258,28 @@ namespace test {
         {
           Hashtable tab;
           
-          for (uint i=0; i<1000; ++i)     /////////////////////////////////////TICKET #587  we get strange collisions for 10000 entries
+          for (uint i=0; i<10000; ++i)         //////////////////TICKET #865 hash collisions for 100000 entries
             {
               DummyID dummy;
               tab[dummy] = string(dummy);
             }
           
-          CHECK (1000 == tab.size());
-          
           CHECK (and_all (tab, verifyEntry));
+          CHECK (10000 == tab.size());
         }
       
       
       static bool
       verifyEntry (Hashtable::value_type entry)
         {
-          return entry.second == string(entry.first);
+          return checkForHashCollision(string(entry.first), entry.second);
+        }
+      
+      static bool
+      checkForHashCollision(string const& key, string const& val)
+        {
+          if (key != val) cout << "Hash collision: "<<key<<"  !=  "<<val<< endl;
+          return key == val;
         }
       
     };

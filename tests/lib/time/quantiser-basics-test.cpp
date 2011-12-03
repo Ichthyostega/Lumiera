@@ -88,7 +88,7 @@ namespace test{
           FixedFrameQuantiser fixQ(25);
           
           uint frames = (rand() % MAX_FRAMES);
-          FSecs dirt  = (F25 / (rand() % DIRT_GRAIN));
+          FSecs dirt  = (F25 / (1 + rand() % DIRT_GRAIN));
           
           Time rawTime (dirt + frames*F25);
           
