@@ -332,10 +332,10 @@ def defineBuildTargets(env, artifacts):
         We use a custom function to declare a whole tree of srcfiles. 
     """
     
-    lLib  = env.SharedLibrary('lumiera',        srcSubtree(env,'src/lib'),    install=True)
-    lApp  = env.SharedLibrary('lumieracommon',  srcSubtree(env,'src/common'), install=True, LIBS=lLib)
-    lBack = env.SharedLibrary('lumierabackend', srcSubtree(env,'src/backend'),install=True)
-    lProc = env.SharedLibrary('lumieraproc',    srcSubtree(env,'src/proc'),   install=True)
+    lLib  = env.SharedLibrary('lumiera',        srcSubtree('src/lib'),    install=True)
+    lApp  = env.SharedLibrary('lumieracommon',  srcSubtree('src/common'), install=True, LIBS=lLib)
+    lBack = env.SharedLibrary('lumierabackend', srcSubtree('src/backend'),install=True)
+    lProc = env.SharedLibrary('lumieraproc',    srcSubtree('src/proc'),   install=True)
     
     core = lLib+lApp+lBack+lProc
     
@@ -363,8 +363,7 @@ def defineBuildTargets(env, artifacts):
     envGtk.mergeConf(['gtkmm-2.4','gthread-2.0','cairomm-1.0','gdl','xv','xext','sm'])
     envGtk.Append(LIBS=core)
     
-    objgui  = srcSubtree(envGtk,'src/gui', appendCPP='LUMIERA_PLUGIN')
-    guimodule = envGtk.LumieraPlugin('gtk_gui', objgui, install=True)
+    guimodule = envGtk.LumieraPlugin('gtk_gui', srcSubtree('src/gui'), install=True)
     artifacts['gui'] = ( guimodule
                        + [env.GuiResource(f) for f in env.Glob('src/gui/*.rc')]
                        + artifacts['icons']

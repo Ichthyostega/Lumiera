@@ -49,20 +49,11 @@ def isHelpRequest():
 
 
 
-def srcSubtree(env,tree,isShared=True,builder=None,appendCPP=None, **args):
-    """ convenience wrapper: scans the given subtree, which is
-        relative to the current SConscript, find all source files and
-        declare them as Static or SharedObjects for compilation
+def srcSubtree(tree, **args):
+    """ convenience wrapper: scan the given subtree, which is relative
+        to the current SConscript, and find all source files.
     """
-    if appendCPP: env.Append(CPPDEFINES=appendCPP)
-    root = env.subst(tree)  # expand Construction Vars
-    if not builder:
-        if isShared:
-            builder = lambda f: env.SharedObject(f, **args)
-        else:
-            builder = lambda f: env.Object(f, **args)
-        
-    return [builder(f) for f in scanSubtree(root)] 
+    return list(scanSubtree(tree, **args))
 
 
 
@@ -161,7 +152,7 @@ def createPlugins(env, dir, **kw):
         @return: a list of build nodes defining a plugin for each of these source trees.
     """
     return [env.LumieraPlugin( getDirname(tree) 
-                             , srcSubtree(env, tree, appendCPP='LUMIERA_PLUGIN')
+                             , srcSubtree(tree)
                              , **kw
                              )
             for tree in findSrcTrees(dir)

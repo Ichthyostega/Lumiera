@@ -205,8 +205,8 @@ def register_LumieraResourceBuilder(env):
 class WrappedStandardExeBuilder(SCons.Util.Proxy):
     """ Helper to add customisations and default configurations to SCons standard builders.
         The original builder object is wrapped and most calls are simply forwarded to this
-        wrapped object by Python magic. But some calls are intecepted in order to inject
-        suitalbe default configuration based on the project setup.
+        wrapped object by Python magic. But some calls are intercepted in order to inject
+        suitable default configuration based on the project setup.
     """
     
     def __init__(self, originalBuilder):
@@ -291,7 +291,7 @@ class LumieraModuleBuilder(WrappedStandardExeBuilder):
             explicit spec, falling back on the lib filename
         """
         if 'soname' in kw:
-            soname = self.subst(kw['soname'])  # explicitely defined by user
+            soname = self.subst(kw['soname'])  # explicitly defined by user
         else:                                  # else: use the library filename as DT_SONAME
             if SCons.Util.is_String(target):
                 pathname = target.strip()
@@ -331,7 +331,7 @@ class LumieraPluginBuilder(LumieraModuleBuilder):
 
 
 def register_LumieraCustomBuilders (lumiEnv):
-    """ install the customised builder versions tightly integrated with our buildsystem.
+    """ install the customised builder versions tightly integrated with our build system.
         Especially, these builders automatically add the build and installation locations
         and set the RPATH and SONAME in a way to allow a relocatable Lumiera directory structure
     """
@@ -362,7 +362,7 @@ def register_LumieraCustomBuilders (lumiEnv):
         action = Action(makeLink, "Install link:  $TARGET -> "+srcSpec)
         env.Command (target,source, action)
     
-    # adding SymLink direclty as method on the environment object
+    # adding SymLink directly as method on the environment object
     # Probably that should better be a real builder, but I couldn't figure out
     # how to get the linktext through literally, which is necessary for relative links.
     # Judging from the sourcecode of SCons.Builder.BuilderBase, there seems to be no way

@@ -29,7 +29,7 @@ def testExecutable(env,tree, exeName=None, obj=None):
     if obj:
         obj = [path.join(tree,name) for name in obj]
     else:
-        obj = srcSubtree(env,tree, isShared=False) # use all sourcefiles found in subtree
+        obj = srcSubtree(tree) # use all sourcefiles found in subtree
     if not exeName:
         exeName = 'test-%s' % tree
     return env.Program(exeName, obj + core)
