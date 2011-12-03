@@ -55,7 +55,7 @@ This code is heavily inspired by
  ** effectively this is a flavour of functional programming. Just the
  ** "execution environment" is the compiler, during compilation.
  ** 
- ** @see lumiera::visitor::Applicable usage example
+ ** @see lib::visitor::Applicable usage example
  ** @see control::CommandSignature more elaborate usage example (dissecting a functor signature)
  ** @see TypeList_test
  ** @see TypeListManip_test
@@ -63,14 +63,14 @@ This code is heavily inspired by
  */
 
 
-#ifndef LUMIERA_META_TYPELIST_H
-#define LUMIERA_META_TYPELIST_H
+#ifndef LIB_META_TYPELIST_H
+#define LIB_META_TYPELIST_H
 
 
 
 
-namespace lumiera {
-namespace typelist{
+namespace lib {
+namespace meta {
     
     struct NullType 
       { 
@@ -129,5 +129,5 @@ namespace typelist{
     typedef Node<NullType,NullType> NodeNull;
     
     
-}} // namespace lumiera::typelist
+}} // namespace lib::meta
 #endif

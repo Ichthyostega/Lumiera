@@ -74,7 +74,7 @@ namespace control {
   using std::string;
   using lib::Symbol;
   using std::tr1::shared_ptr;
-  using lumiera::typelist::Tuple;
+  using lib::meta::Tuple;
   
   
   LUMIERA_ERROR_DECLARE (UNBOUND_ARGUMENTS);  ///< Command functor not yet usable, because arguments aren't bound

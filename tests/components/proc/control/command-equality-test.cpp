@@ -42,7 +42,7 @@ namespace test    {
   
   
   
-  using namespace lumiera::typelist;
+  using namespace lib::meta;
   using lib::Symbol;
   using util::isnil;
   using util::isSameObject;

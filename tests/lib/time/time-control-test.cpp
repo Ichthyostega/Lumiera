@@ -54,8 +54,8 @@ namespace test{
   
   using lib::ScopedHolder;
   using proc::asset::meta::TimeGrid;
-  using lumiera::typelist::Types;
-  using lumiera::typelist::InstantiateChainedCombinations;
+  using lib::meta::Types;
+  using lib::meta::InstantiateChainedCombinations;
   using error::LUMIERA_ERROR_UNCONNECTED;
   
   
@@ -195,7 +195,7 @@ namespace test{
   
   namespace { // Implementation: Matrix of individual test combinations
     
-    using lumiera::typelist::is_sameType;
+    using lib::meta::is_sameType;
     
     template<class T>
     inline bool

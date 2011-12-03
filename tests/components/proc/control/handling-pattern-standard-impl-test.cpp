@@ -72,7 +72,7 @@ namespace test    {
 //  using lumiera::P;
   
   
-  //using lumiera::typelist::BuildTupleAccessor;
+  //using lib::meta::BuildTupleAccessor;
 //  using lumiera::error::LUMIERA_ERROR_EXTERNAL;
   
   namespace { // test data and helpers...

@@ -65,9 +65,9 @@ namespace engine {
 namespace config {
   
   using util::contains;
-  using lumiera::typelist::FlagInfo;
+  using lib::meta::FlagInfo;
   
-  using lumiera::typelist::CONFIG_FLAGS_MAX;
+  using lib::meta::CONFIG_FLAGS_MAX;
   
   typedef size_t IxID;                 ///////////////////////////////TICKET #863
   

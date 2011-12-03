@@ -56,9 +56,9 @@ namespace lib {
   
   namespace variant {
     
-    using lumiera::typelist::count;
-    using lumiera::typelist::maxSize;
-    using lumiera::typelist::InstantiateWithIndex;
+    using lib::meta::count;
+    using lib::meta::maxSize;
+    using lib::meta::InstantiateWithIndex;
     
     /**
      * internal helper used to build a variant storage wrapper.

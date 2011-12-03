@@ -41,9 +41,9 @@
 #include <set>
 
 
-namespace lib {
-namespace meta{
-namespace test{
+namespace lib  {
+namespace meta {
+namespace test {
   
   using proc::mobject::session::Effect;
   using proc::mobject::session::ScopeQuery;

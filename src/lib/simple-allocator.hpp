@@ -60,9 +60,9 @@
 
 namespace lib {
   
-  using lumiera::typelist::Types;
-  using lumiera::typelist::IsInList;
-  using lumiera::typelist::InstantiateForEach;
+  using lib::meta::Types;
+  using lib::meta::IsInList;
+  using lib::meta::InstantiateForEach;
   
   
   

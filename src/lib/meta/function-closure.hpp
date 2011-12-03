@@ -44,8 +44,8 @@
  */
 
 
-#ifndef LUMIERA_META_FUNCTION_CLOSURE_H
-#define LUMIERA_META_FUNCTION_CLOSURE_H
+#ifndef LIB_META_FUNCTION_CLOSURE_H
+#define LIB_META_FUNCTION_CLOSURE_H
 
 #include "lib/meta/function.hpp"
 #include "lib/meta/tuple.hpp"
@@ -54,9 +54,9 @@
 
 
 
-namespace lumiera {
-namespace typelist{
-namespace func    {
+namespace lib {
+namespace meta{
+namespace func{
   
   using std::tr1::function;
   
@@ -884,5 +884,5 @@ namespace func    {
   
   
   
-}}} // namespace lumiera::typelist::func
+}}} // namespace lib::meta::func
 #endif

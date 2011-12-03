@@ -45,7 +45,7 @@ namespace proc {
 namespace control {
 namespace test    {
   
-  using namespace lumiera::typelist;
+  using namespace lib::meta;
   using control::CmdClosure;
   
   

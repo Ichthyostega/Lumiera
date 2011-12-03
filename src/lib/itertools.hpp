@@ -491,7 +491,7 @@ namespace lib {
   
   namespace { // Helper to pick up the produced value type automatically
     
-    using lumiera::typelist::FunctionSignature;
+    using lib::meta::FunctionSignature;
     
     template<typename SIG>
     struct _ProducedOutput

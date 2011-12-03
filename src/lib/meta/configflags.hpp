@@ -45,15 +45,15 @@
  */
 
 
-#ifndef LUMIERA_META_CONFIGFLAGS_H
-#define LUMIERA_META_CONFIGFLAGS_H
+#ifndef LIB_META_CONFIGFLAGS_H
+#define LIB_META_CONFIGFLAGS_H
 
 
 #include "lib/meta/typelist.hpp"
 
 
-namespace lumiera {
-namespace typelist{
+namespace lib {
+namespace meta{
   
   const size_t CONFIG_FLAGS_MAX = 5;
   
@@ -107,13 +107,13 @@ namespace typelist{
           >
   struct ConfigSetFlag<Fl, Config<f1,f2,f3,f4,IGN> >
     {
-      typedef typelist::Config<Fl,f1,f2,f3,f4> Config;
+      typedef lib::meta::Config<Fl,f1,f2,f3,f4> Config;
     };
   
   
   
   /** build a configuration type from a list-of-flags */
-  template<class FLAGS, class CONF=typelist::Config<> >
+  template<class FLAGS, class CONF=Config<> >
   struct BuildConfigFromFlags
     {
       typedef CONF Config;
@@ -199,5 +199,5 @@ namespace typelist{
   
   
   
-}} // namespace lumiera::typelist
+}} // namespace lib::meta
 #endif

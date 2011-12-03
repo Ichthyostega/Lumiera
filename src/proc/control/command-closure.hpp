@@ -91,15 +91,15 @@
 namespace proc {
 namespace control {
   
-  using lumiera::typelist::FunctionSignature;
-  using lumiera::typelist::Tuple;
-  using lumiera::typelist::BuildTupleAccessor;
-  using lumiera::typelist::func::TupleApplicator;
-  using lumiera::typelist::FunErasure;
-  using lumiera::typelist::StoreFunction;
-  using lumiera::typelist::NullType;
+  using lib::meta::FunctionSignature;
+  using lib::meta::Tuple;
+  using lib::meta::BuildTupleAccessor;
+  using lib::meta::func::TupleApplicator;
+  using lib::meta::FunErasure;
+  using lib::meta::StoreFunction;
+  using lib::meta::NullType;
   
-  using lumiera::typelist::equals_safeInvoke;
+  using lib::meta::equals_safeInvoke;
   using lib::TypedAllocationManager;
   using util::unConst;
   using std::tr1::function;

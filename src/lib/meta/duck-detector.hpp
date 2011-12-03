@@ -92,16 +92,6 @@
 
 #include "lib/meta/util.hpp"
 
-namespace lib {
-namespace meta{
-  
-                      ///////////////TICKET #175  sort out meta namespace
-  using lumiera::Yes_t;
-  using lumiera::No_t;
-    
-}} // namespace lib::meta
-
-
 
 
 

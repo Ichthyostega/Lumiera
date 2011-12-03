@@ -46,8 +46,8 @@ namespace test    {
   namespace { // what follows is a simulated (simplified) version
              //  of the complete Session + SessionManager setup.....
     
-    using lumiera::typelist::Types;
-    using lumiera::typelist::InstantiateChained;
+    using lib::meta::Types;
+    using lib::meta::InstantiateChained;
     
     
     

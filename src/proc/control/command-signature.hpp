@@ -61,11 +61,11 @@ namespace control {
   
   using std::tr1::function;
   
-  using lumiera::typelist::FunctionSignature;
-  using lumiera::typelist::FunctionTypedef;
-  using lumiera::typelist::Types;
-  using lumiera::typelist::Append;
-  using lumiera::typelist::SplitLast;
+  using lib::meta::FunctionSignature;
+  using lib::meta::FunctionTypedef;
+  using lib::meta::Types;
+  using lib::meta::Append;
+  using lib::meta::SplitLast;
   
   
   /** 

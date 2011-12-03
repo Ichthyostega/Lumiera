@@ -155,8 +155,8 @@ namespace lib {
     
     namespace error = lumiera::error;
     using boost::enable_if;
-    using lumiera::Yes_t;
-    using lumiera::No_t;
+    using lib::meta::Yes_t;
+    using lib::meta::No_t;
     
     struct EmptyBase{ };
     

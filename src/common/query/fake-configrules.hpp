@@ -60,6 +60,7 @@ namespace lumiera {
     using asset::ProcPatt;
     using asset::PProcPatt;
     using proc::mobject::Session;
+    using lib::meta::InstantiateChained;
     
     using util::isnil;
     
@@ -248,10 +249,10 @@ namespace lumiera {
      * values for some types of interest for testing and debugging.
      */
     class MockConfigRules 
-      : public typelist::InstantiateChained < InterfaceTypes           
-                                            , LookupPreconfigured  // building block used for each of the types
-                                            , MockTable           //  for implementing the base class (interface) 
-                                            >
+      : public InstantiateChained < InterfaceTypes           
+                                  , LookupPreconfigured  // building block used for each of the types
+                                  , MockTable           //  for implementing the base class (interface) 
+                                  >
       {
       protected:
         MockConfigRules ();                                   ///< to be used only by the singleton factory

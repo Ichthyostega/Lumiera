@@ -48,9 +48,9 @@ namespace proc {
 namespace mobject {
 namespace session {
   
-//  using lumiera::typelist::InstantiateChained;
-//  using lumiera::typelist::InheritFrom;
-//  using lumiera::typelist::NullType;
+//  using lib::meta::InstantiateChained;
+//  using lib::meta::InheritFrom;
+//  using lib::meta::NullType;
   
   /**
    * Implementation-level service for resolving an Placement-ID.

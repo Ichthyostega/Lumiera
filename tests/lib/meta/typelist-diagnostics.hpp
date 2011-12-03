@@ -52,8 +52,8 @@ using boost::format;
 using boost::enable_if;
 
 
-namespace lumiera {
-namespace typelist{
+namespace lib  {
+namespace meta {
   
   /** dummy interface / baseclass for diagnostics */
   struct Numz
@@ -209,5 +209,5 @@ namespace typelist{
     
     
     
-}}} // namespace lumiera::typelist::test
+}}} // namespace lib::meta::test
 #endif

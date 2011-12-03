@@ -35,7 +35,7 @@ extern "C" {
 namespace proc {
 namespace mobject {
   
-  namespace mp = lumiera::typelist;
+  namespace mp = lib::meta;
   
   class MObject;
   

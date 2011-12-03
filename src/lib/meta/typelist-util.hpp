@@ -42,15 +42,15 @@
  */
 
 
-#ifndef LUMIERA_META_TYPELIST_UTIL_H
-#define LUMIERA_META_TYPELIST_UTIL_H
+#ifndef LIB_META_TYPELIST_UTIL_H
+#define LIB_META_TYPELIST_UTIL_H
 
 
 
 #include "lib/meta/typelist.hpp"
 
-namespace lumiera {
-namespace typelist{
+namespace lib {
+namespace meta {
     
     
     /**
@@ -123,5 +123,5 @@ namespace typelist{
     
     
     
-}} // namespace lumiera::typelist
+}} // namespace lib::meta
 #endif

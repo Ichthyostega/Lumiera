@@ -115,7 +115,7 @@ namespace time {
 namespace mutation {
   
   using boost::disable_if;
-  using lumiera::typelist::is_sameType;
+  using lib::meta::is_sameType;
   using std::tr1::placeholders::_1;
   using std::tr1::function;
   using std::tr1::bind;

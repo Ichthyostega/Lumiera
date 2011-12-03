@@ -33,8 +33,8 @@
  */
 
 
-#ifndef LUMIERA_META_GENERATOR_COMBINATIONS_H
-#define LUMIERA_META_GENERATOR_COMBINATIONS_H
+#ifndef LIB_META_GENERATOR_COMBINATIONS_H
+#define LIB_META_GENERATOR_COMBINATIONS_H
 
 #include "lib/meta/typelist.hpp"
 #include "lib/meta/typelist-manip.hpp"
@@ -42,8 +42,8 @@
 
 
 
-namespace lumiera {
-namespace typelist{
+namespace lib {
+namespace meta{
   
   
   template<class TYPES_1, class TYPES_2>
@@ -97,5 +97,5 @@ namespace typelist{
   
   
   
-}} // namespace lumiera::typelist
+}} // namespace lib::meta
 #endif

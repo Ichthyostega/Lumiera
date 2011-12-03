@@ -38,7 +38,7 @@ namespace proc {
 namespace control {
 namespace test    {
   
-  using namespace lumiera::typelist;
+  using namespace lib::meta;
   
   typedef lib::P<CommandImpl> PCmdImpl;
   

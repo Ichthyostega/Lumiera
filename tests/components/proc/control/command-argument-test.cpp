@@ -57,7 +57,7 @@ namespace test    {
   
   using lib::test::showSizeof;
   using lib::test::randTime;
-  using namespace lumiera::typelist;
+  using namespace lib::meta;
   
   
   

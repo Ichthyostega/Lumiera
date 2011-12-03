@@ -56,7 +56,7 @@
 namespace proc {
 namespace control {
   
-  using namespace lumiera::typelist;
+  using namespace lib::meta;
   
   
   

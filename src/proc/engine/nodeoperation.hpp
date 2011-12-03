@@ -83,7 +83,7 @@ namespace config {
    */
   struct OperationBase
     {
-      typedef lumiera::Yes_t is_defined;
+      typedef lib::meta::Yes_t is_defined;
       
       BuffHandle
       getSource (Invocation& ivo, uint chanNo)
@@ -277,7 +277,7 @@ namespace config {
     };
   
   
-  using lumiera::typelist::Config;
+  using lib::meta::Config;
                                               ///////////////////////TODO: selecting this way isn't especially readable,
                                               ///////////////////////////: but BufferProvider selection is going to be solved differently anyway, see Ticket #249
   template<class CONF>

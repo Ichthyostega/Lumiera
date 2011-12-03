@@ -49,15 +49,15 @@
  */
 
 
-#ifndef LUMIERA_META_TYPELIST_MANIP_H
-#define LUMIERA_META_TYPELIST_MANIP_H
+#ifndef LIB_META_TYPELIST_MANIP_H
+#define LIB_META_TYPELIST_MANIP_H
 
 
 
 #include "lib/meta/typelist.hpp"
 
-namespace lumiera {
-namespace typelist{
+namespace lib {
+namespace meta {
     
     
     /** pick the n-th element from a typelist */
@@ -325,5 +325,5 @@ namespace typelist{
     
     
     
-}} // namespace lumiera::typelist
+}} // namespace lib::meta
 #endif

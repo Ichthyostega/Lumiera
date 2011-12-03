@@ -21,12 +21,13 @@
 */
 
 
-#ifndef LUMIERA_META_UTIL_H
-#define LUMIERA_META_UTIL_H
+#ifndef LIB_META_UTIL_H
+#define LIB_META_UTIL_H
 
 
   
-namespace lumiera {
+namespace lib {
+namespace meta {
     
     
   /* types for figuring out the overload resolution chosen by the compiler */
@@ -36,77 +37,74 @@ namespace lumiera {
     
     
     
-  namespace typelist {
-    
-    /** Compile-time Type equality:
-     *  Simple Trait template to pick up types considered
-     *  \em identical by the compiler.
-     * @warning identical, not sub-type!
-     */
-    template<typename T1, typename T2>
-    struct is_sameType
-      {
-        static const bool value = false;
-      };
-    
-    template<typename T>
-    struct is_sameType<T,T>
-      {
-        static const bool value = true;
-      };
-    
-    
-    /** semi-automatic detection if an instantiation is possible.
-     *  Requires help by the template to be tested, which needs to define
-     *  a typedef member \c is_defined. The embedded metafunction Test can be used
-     *  as a predicate for filtering types which may yield a valid instantiation
-     *  of the candidate template in question.
-     *  \par
-     *  A fully automated solution for this problem is impossible by theoretic reasons.
-     *  Any non trivial use of such a \c is_defined trait would break the "One Definition Rule",
-     *  as the state of any type can change from "partially defined" to "fully defined" over
-     *  the course of any translation unit. Thus, even if there may be a \em solution out there,
-     *  we can expect it to break at some point by improvements/fixes to the C++ Language.
-     */
-    template<template<class> class _CandidateTemplate_>
-    struct Instantiation
-      {
-        
-        template<class X>
-        class Test
-          {
-            typedef _CandidateTemplate_<X> Instance;
-            
-            template<class U>
-            static Yes_t check(typename U::is_defined *);
-            template<class U>
-            static No_t  check(...);
-            
-          public:
-            static const bool value = (sizeof(Yes_t)==sizeof(check<Instance>(0)));
-          };
-      };
-    
-    
-    /** Trait template for detecting a typelist type.
-     *  For example, this allows to write specialisations with the help of
-     *  boost::enable_if
-     */
-    template<typename TY>
-    class is_Typelist
-      {
-        template<class X>
-        static Yes_t check(typename X::List *);
-        template<class>
-        static No_t  check(...);
-        
-      public: 
-        static const bool value = (sizeof(Yes_t)==sizeof(check<TY>(0)));
-      };
-    
-    
-    
-  } // namespace typelist
   
-} // namespace lumiera
+  /** Compile-time Type equality:
+   *  Simple Trait template to pick up types considered
+   *  \em identical by the compiler.
+   * @warning identical, not sub-type!
+   */
+  template<typename T1, typename T2>
+  struct is_sameType
+    {
+      static const bool value = false;
+    };
+  
+  template<typename T>
+  struct is_sameType<T,T>
+    {
+      static const bool value = true;
+    };
+  
+  
+  /** semi-automatic detection if an instantiation is possible.
+   *  Requires help by the template to be tested, which needs to define
+   *  a typedef member \c is_defined. The embedded metafunction Test can be used
+   *  as a predicate for filtering types which may yield a valid instantiation
+   *  of the candidate template in question.
+   *  \par
+   *  A fully automated solution for this problem is impossible by theoretic reasons.
+   *  Any non trivial use of such a \c is_defined trait would break the "One Definition Rule",
+   *  as the state of any type can change from "partially defined" to "fully defined" over
+   *  the course of any translation unit. Thus, even if there may be a \em solution out there,
+   *  we can expect it to break at some point by improvements/fixes to the C++ Language.
+   */
+  template<template<class> class _CandidateTemplate_>
+  struct Instantiation
+    {
+      
+      template<class X>
+      class Test
+        {
+          typedef _CandidateTemplate_<X> Instance;
+          
+          template<class U>
+          static Yes_t check(typename U::is_defined *);
+          template<class U>
+          static No_t  check(...);
+          
+        public:
+          static const bool value = (sizeof(Yes_t)==sizeof(check<Instance>(0)));
+        };
+    };
+  
+  
+  /** Trait template for detecting a typelist type.
+   *  For example, this allows to write specialisations with the help of
+   *  boost::enable_if
+   */
+  template<typename TY>
+  class is_Typelist
+    {
+      template<class X>
+      static Yes_t check(typename X::List *);
+      template<class>
+      static No_t  check(...);
+      
+    public: 
+      static const bool value = (sizeof(Yes_t)==sizeof(check<TY>(0)));
+    };
+  
+  
+  
+}} // namespace lib::meta
 #endif

@@ -86,12 +86,12 @@ namespace control {
   using lib::Symbol;
   using util::cStr;
   
-  using lumiera::typelist::FunctionSignature;
-  using lumiera::typelist::FunctionTypedef;
-  using lumiera::typelist::Types;
-  using lumiera::typelist::NullType;
-  using lumiera::typelist::Tuple;
-  using lumiera::typelist::tuple::makeNullTuple;
+  using lib::meta::FunctionSignature;
+  using lib::meta::FunctionTypedef;
+  using lib::meta::Types;
+  using lib::meta::NullType;
+  using lib::meta::Tuple;
+  using lib::meta::tuple::makeNullTuple;
   
   
   

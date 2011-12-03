@@ -29,9 +29,9 @@
 #include "meta/typelist-diagnostics.hpp"
 
 
-namespace lumiera {
-namespace typelist{
-namespace test    {
+namespace lib  {
+namespace meta {
+namespace test {
   
   using ::test::Test;
   using func::applyFirst;
@@ -387,4 +387,4 @@ namespace test    {
   
   
   
-}}} // namespace lumiera::typelist::test
+}}} // namespace lib::meta::test
