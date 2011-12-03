@@ -1,6 +1,6 @@
 # -*- python -*-
 ##
-## SConstruct  -  SCons based build-sytem for Lumiera
+## SConstruct  -  SCons based build-system for Lumiera
 ##
 
 #  Copyright (C)         Lumiera.org
@@ -52,8 +52,9 @@ installIcon  = '#$DESTDIR/share/lumiera/icons'
 installUIRes = '#$DESTDIR/share/lumiera/'
 installConf  = '#$DESTDIR/lib/lumiera/config'
 
-localDefinitions = locals()
 #-----------------------------------Configuration
+localDefinitions = locals()
+
 
 
 
@@ -87,8 +88,6 @@ def setupBasicEnvironment(localDefinitions):
                             )
     handleVerboseMessages(env)
     
-    env.Append ( CCCOM=' -std=gnu99') 
-    env.Append ( SHCCCOM=' -std=gnu99') # workaround for a bug: CCCOM currently doesn't honour CFLAGS, only CCFLAGS 
     env.Replace( CPPPATH   =["#src"]    # used to find includes, "#" means always absolute to build-root
                , CPPDEFINES=['LUMIERA_VERSION='+VERSION ]    # note: it's a list to append further defines
                , CCFLAGS='-Wall -Wextra '
