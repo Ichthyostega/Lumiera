@@ -58,15 +58,15 @@ namespace meta{
   const size_t CONFIG_FLAGS_MAX = 5;
   
   
-  template<char bit> struct Flag    { typedef Flag     ID; };
+  template<uint bit> struct Flag    { typedef Flag     ID; };
   template<>         struct Flag<0> { typedef NullType ID; };
   
   
-  template< char f1=0
-          , char f2=0
-          , char f3=0
-          , char f4=0
-          , char f5=0
+  template< uint f1=0
+          , uint f2=0
+          , uint f3=0
+          , uint f4=0
+          , uint f5=0
           >
   struct Flags
     { 
@@ -81,11 +81,11 @@ namespace meta{
     };
   
   
-  template< char f1=0
-          , char f2=0
-          , char f3=0
-          , char f4=0
-          , char f5=0
+  template< uint f1=0
+          , uint f2=0
+          , uint f3=0
+          , uint f4=0
+          , uint f5=0
           >
   struct Config      ///< distinct type representing a configuration
     { 
@@ -95,15 +95,15 @@ namespace meta{
   
   
   
-  template<char Fl, class CONF> 
+  template<uint Fl, class CONF> 
   struct ConfigSetFlag;       ///< set (prepend) the Flag to the given config
   
-  template< char Fl
-          , char f1
-          , char f2
-          , char f3
-          , char f4
-          , char IGN
+  template< uint Fl
+          , uint f1
+          , uint f2
+          , uint f3
+          , uint f4
+          , uint IGN
           >
   struct ConfigSetFlag<Fl, Config<f1,f2,f3,f4,IGN> >
     {
@@ -119,7 +119,7 @@ namespace meta{
       typedef CONF Config;
       typedef Config Type;
     };
-  template<char Fl, class FLAGS, class CONF>
+  template<uint Fl, class FLAGS, class CONF>
   struct BuildConfigFromFlags< Node<Flag<Fl>,FLAGS>, CONF>
     { 
       typedef typename ConfigSetFlag< Fl
@@ -134,8 +134,8 @@ namespace meta{
   
   
   namespace {
-    /** helper comparing enum values and chars (flags) */
-    template<char ii, char jj>
+    /** helper comparing enum values and flags */
+    template<uint ii, uint jj>
     struct maxC
     {
       enum{ VAL = ii < jj? jj : ii };
@@ -157,7 +157,7 @@ namespace meta{
   template<class FLAGS>
   struct FlagInfo;
   
-  template<char ff, class FLAGS>
+  template<uint ff, class FLAGS>
   struct FlagInfo<Node<Flag<ff>, FLAGS> >
     {
       enum{ BITS = maxC< ff,  FlagInfo<FLAGS>::BITS> ::VAL

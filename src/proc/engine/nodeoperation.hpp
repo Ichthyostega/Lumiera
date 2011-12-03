@@ -282,7 +282,7 @@ namespace config {
                                               ///////////////////////////: but BufferProvider selection is going to be solved differently anyway, see Ticket #249
   template<class CONF>
   struct SelectBuffProvider                                          { typedef AllocBufferFromParent Type; };
-  template<char PROC_ign, char INPLA_ign>
+  template<uint PROC_ign, uint INPLA_ign>
   struct SelectBuffProvider< Config<CACHING, PROC_ign, INPLA_ign> >  { typedef AllocBufferFromCache  Type; };
   
   
@@ -290,7 +290,7 @@ namespace config {
   struct Strategy ;
   
   
-  template<char INPLACE_ign>
+  template<uint INPLACE_ign>
   struct Strategy< Config<CACHING,PROCESS,INPLACE_ign> >
     : QueryCache<
        AllocBufferTable<
@@ -302,7 +302,7 @@ namespace config {
              OperationBase > > > > > > >
     { };
   
-  template<char INPLACE_ign>
+  template<uint INPLACE_ign>
   struct Strategy< Config<PROCESS,INPLACE_ign> >
     : AllocBufferTable<
        PullInput<

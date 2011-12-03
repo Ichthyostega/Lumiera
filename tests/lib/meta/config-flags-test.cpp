@@ -102,7 +102,7 @@ namespace test {
     template<> struct Maybe<Conf1> : Indeed { enum{ CODE = 10 }; };
     template<> struct Maybe<Conf3> : Indeed { enum{ CODE = 30 }; };
     
-    template<char Fl> 
+    template<uint Fl> 
     struct Maybe<Config<TWO,Fl> >
     { 
       typedef Yes_t is_defined;
