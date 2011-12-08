@@ -66,7 +66,7 @@ namespace engine {
 
     
     /**
-     * Helper for a diagnostic BufferProvider:
+     * Helper for implementing a diagnostic BufferProvider:
      * A block of heap allocated storage, with the capability
      * to store some additional tracking information.
      */

@@ -37,7 +37,8 @@
 #include "proc/play/output-slot-connection.hpp"
 #include "proc/engine/buffhandle.hpp"
 #include "proc/engine/tracking-heap-block-provider.hpp"
-#include "lib/iter-source.hpp"  ////////////TODO really going down that path...?
+#include "lib/scoped-ptrvect.hpp"
+#include "lib/iter-source.hpp"
 #include "proc/engine/testframe.hpp"
 //#include "lib/sync.hpp"
 
@@ -55,6 +56,7 @@ namespace play {
   using proc::engine::BufferDescriptor;
   using proc::engine::test::TestFrame;
   using proc::engine::TrackingHeapBlockProvider;
+  namespace diagn = proc::engine::diagn;
 
 //using std::vector;
   using std::tr1::shared_ptr;
@@ -127,12 +129,34 @@ namespace play {
         {
           INFO (engine_dbg, "releasing diagnostic output sequence");
         }
+      
+      
+      /* === Diagnostic API === */
+      
+      TestFrame*
+      accessEmittedFrame (uint frameNo)  const
+        {
+          REQUIRE (buffProvider_);
+          if (frameNo <= buffProvider_->emittedCnt())
+            return &buffProvider_->accessAs<TestFrame> (frameNo);
+          else
+            return 0;                                               ////////////////////////////////TICKET #856
+        }
+      
+      diagn::Block*
+      accessEmittedBuffer (uint bufferNo)  const
+        {
+          REQUIRE (buffProvider_);
+          if (bufferNo <= buffProvider_->emittedCnt())
+            return buffProvider_->access_emitted (bufferNo);
+          else
+            return 0;
+        }
     };
   
   
   class SimulatedOutputSequences
     : public ConnectionStateManager<TrackingInMemoryBlockSequence>
-    , boost::noncopyable
     {
       TrackingInMemoryBlockSequence
       buildConnection()
@@ -162,13 +186,28 @@ namespace play {
       
       static const uint MAX_CHANNELS = 5;
         
-      /* === hook into the OutputSlot frontend === */
+      /** hook into the OutputSlot frontend */
       ConnectionState*
       buildState()
         {
           return new SimulatedOutputSequences(MAX_CHANNELS);
         }
         
+      /** @internal is self-managed and non-copyable.
+       * Clients use #build() to get an instance */
+      DiagnosticOutputSlot() { }
+      
+      /** @internal access the implementation object
+       * representing a single stream connection
+       */
+      TrackingInMemoryBlockSequence const&
+      accessSequence (uint channel)
+        {
+          REQUIRE (!isFree(), "diagnostic OutputSlot not (yet) connected");
+          REQUIRE (channel <= MAX_CHANNELS);
+          return static_cast<SimulatedOutputSequences&> (*state_).at(channel);
+        }
+      
       
     public:
       /** build a new Diagnostic Output Slot instance,
@@ -177,50 +216,81 @@ namespace play {
       static OutputSlot&
       build()
         {
-          UNIMPLEMENTED ("Diagnostic Output Slot instance");
+          static lib::ScopedPtrVect<OutputSlot> diagnosticSlots;
+          return diagnosticSlots.manage(new DiagnosticOutputSlot);
         }
       
       static DiagnosticOutputSlot&
       access (OutputSlot& to_investigate)
         {
-          UNIMPLEMENTED ("access the diagnostics data for the given OutputSlot instance");
+          return dynamic_cast<DiagnosticOutputSlot&> (to_investigate);
         }
+      
       
       
       /* === diagnostics API === */
       
       /**
-       * diagnostic facility to verify
-       * test data frames written to this
-       * Test/Dummy "output"
+       * diagnostic facility to verify test data frames
+       * written to this Test/Dummy "output". It exposes
+       * the emitted Data as a sequence of TestFrame objects.
        */
-      struct OutputStreamProtocol
-        : lib::IterSource<TestFrame> 
+      class OutputFramesLog
+        : public lib::IterSource<TestFrame>
+        , boost::noncopyable
         {
-          /////////////TODO: implement the extension points required to drive an IterSource
+          TrackingInMemoryBlockSequence const& outSeq_;
+          uint currentFrame_;
+          
+          
+          virtual Pos
+          firstResult ()
+            {
+              REQUIRE (0 == currentFrame_);
+              return outSeq_.accessEmittedFrame (currentFrame_);
+            }
+          
+          virtual void
+          nextResult (Pos& pos)
+            {
+              ++currentFrame_;
+              pos = outSeq_.accessEmittedFrame(currentFrame_);
+            }
+          
+          public:
+            OutputFramesLog (TrackingInMemoryBlockSequence const& bs)
+              : outSeq_(bs)
+              , currentFrame_(0)
+              { }
         };
         
-      typedef OutputStreamProtocol::iterator OutFrames;
+      typedef OutputFramesLog::iterator OutFrames;
       
       
       OutFrames
       getChannel (uint channel)
         {
-          UNIMPLEMENTED ("access output stream tracing entry");
+          REQUIRE (channel < MAX_CHANNELS);
+          return OutputFramesLog::build(
+              new OutputFramesLog (
+                  accessSequence(channel)));
         }
       
       
       bool
       buffer_was_used (uint channel, FrameID frame)
         {
-          UNIMPLEMENTED ("determine if the denoted buffer was indeed used");
+          diagn::Block* block = accessSequence(channel)
+                                  .accessEmittedBuffer(frame);
+          return block
+              && block->was_used();
         }
       
       
       bool
       buffer_unused   (uint channel, FrameID frame)
         {
-          UNIMPLEMENTED ("determine if the specified buffer was never touched/locked for use");
+          return !buffer_was_used(channel, frame);
         }
       
       

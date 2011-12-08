@@ -82,7 +82,7 @@ namespace play {
       
     protected:
       
-      /** Table to maintain connection state */
+      /** active connections through this OutputSlot */
       class ConnectionState;
       
       scoped_ptr<ConnectionState> state_;

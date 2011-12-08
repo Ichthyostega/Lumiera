@@ -63,7 +63,6 @@ namespace test {
       virtual void
       run (Arg) 
         {
-          UNIMPLEMENTED ("build a mock output slot and perform a full lifecycle");
           verifyStandardCase();
         }
       

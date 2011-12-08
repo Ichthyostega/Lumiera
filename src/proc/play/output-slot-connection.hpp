@@ -52,7 +52,7 @@
 #include <boost/noncopyable.hpp>
 #include <boost/scoped_ptr.hpp>
 //#include <string>
-//#include <vector>
+#include <vector>
 //#include <tr1/memory>
 
 
@@ -66,7 +66,7 @@ namespace play {
   using lib::transform;
   using lib::iter_stl::eachElm;
 
-//using std::vector;
+  using std::vector;
 //using std::tr1::shared_ptr;
   using boost::scoped_ptr;
   
@@ -145,7 +145,7 @@ namespace play {
     : public OutputSlot::ConnectionState
     , public vector<CON>
     {
-      
+      typedef vector<CON> Connections;
       typedef OutputSlot::OpenedSinks OpenedSinks;
       
       
@@ -161,7 +161,7 @@ namespace play {
       bool
       isActive()
         {
-          return 0 < vector<CON>::size();
+          return 0 < Connections::size();
         }
       
       
