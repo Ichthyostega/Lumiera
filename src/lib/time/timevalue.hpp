@@ -284,6 +284,9 @@ namespace time {
       static const Time MIN ;
       static const Time ZERO;
       
+      static const Time ANYTIME;  ///< border condition marker value. #ANYTIME <= any time value
+      static const Time NEVER;   ///<  border condition marker value. #NEVER >= any time value
+      
       explicit 
       Time (TimeValue const& val =TimeValue(0))
         : TimeValue(val)
