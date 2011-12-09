@@ -282,7 +282,7 @@ namespace engine {
   TrackingHeapBlockProvider::access_emitted (uint bufferID)
   {
     if (!withinOutputSequence (bufferID))
-      return emptyPlaceholder;
+      return emptyPlaceholder;                                                ////////////////////////////////TICKET #856
     else
       return outSeq_[bufferID];
   }

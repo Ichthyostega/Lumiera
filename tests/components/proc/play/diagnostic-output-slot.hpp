@@ -35,16 +35,20 @@
 #include "include/logging.h"
 #include "proc/play/output-slot.hpp"
 #include "proc/play/output-slot-connection.hpp"
+#include "proc/asset/meta/time-grid.hpp"
 #include "proc/engine/buffhandle.hpp"
 #include "proc/engine/tracking-heap-block-provider.hpp"
+#include "lib/time/timevalue.hpp"
 #include "lib/scoped-ptrvect.hpp"
 #include "lib/iter-source.hpp"
+#include "lib/util.hpp"
 #include "proc/engine/testframe.hpp"
 //#include "lib/sync.hpp"
 
 #include <boost/noncopyable.hpp>
 //#include <string>
 //#include <vector>
+#include <tr1/unordered_set>
 #include <tr1/memory>
 //#include <boost/scoped_ptr.hpp>
 
@@ -53,6 +57,10 @@ namespace proc {
 namespace play {
 
 //using std::string;
+  using util::contains;
+  using lib::time::FrameRate;
+  using proc::asset::meta::PGrid;
+  using proc::asset::meta::TimeGrid;
   using proc::engine::BufferDescriptor;
   using proc::engine::test::TestFrame;
   using proc::engine::TrackingHeapBlockProvider;
@@ -62,14 +70,42 @@ namespace play {
   using std::tr1::shared_ptr;
 //using boost::scoped_ptr;
   
-  
-  
+  /** 
+   * Diagnostic output connection for a single channel,
+   * allowing to track generated frames and verify 
+   * the processing protocol for output buffers.
+   */
   class TrackingInMemoryBlockSequence
     : public OutputSlot::Connection
     {
       
+      typedef std::tr1::unordered_set<FrameID> FrameTrackingInfo;
+      
+      
       shared_ptr<TrackingHeapBlockProvider> buffProvider_;
       BufferDescriptor bufferType_;
+      
+      FrameTrackingInfo frameTrackingIndex_;
+      PGrid frameGrid_;
+      
+      
+      BuffHandle
+      trackFrame (FrameID frameNr, BuffHandle const& newBuffer)
+        {
+          REQUIRE (contains (frameTrackingIndex_,frameNr),
+                   "attempt to lock already used frame %lu", frameNr);
+          
+          frameTrackingIndex_.insert (frameNr);
+          return newBuffer;
+        }
+      
+      TimeValue
+      deadlineFor (FrameID frameNr)
+        {
+          return frameGrid_->timeOf (frameNr);
+        }
+      
+      
       
       
       /* === Connection API === */
@@ -77,18 +113,18 @@ namespace play {
       BuffHandle
       claimBufferFor(FrameID frameNr) 
         {
-          return buffProvider_->lockBuffer (bufferType_);
+          return trackFrame (frameNr,
+                             buffProvider_->lockBuffer (bufferType_));
         }
       
       
       bool
       isTimely (FrameID frameNr, TimeValue currentTime)
         {
-          if (Time::MAX == currentTime)
+          if (Time::ANYTIME == currentTime)
             return true;
           
-          UNIMPLEMENTED ("find out about timings");
-          return false;
+          return currentTime < deadlineFor (frameNr);
         }
       
       void
@@ -120,6 +156,8 @@ namespace play {
       TrackingInMemoryBlockSequence()
         : buffProvider_(new TrackingHeapBlockProvider())
         , bufferType_(buffProvider_->getDescriptor<TestFrame>())
+        , frameTrackingIndex_()
+        , frameGrid_(TimeGrid::build ("DiagnosticOutputSlot-buffer-grid", FrameRate::PAL))  /////////////TODO should rather pass that in as part of a "timings" definition
         {
           INFO (engine_dbg, "building in-memory diagnostic output sequence");
         }
@@ -134,27 +172,39 @@ namespace play {
       /* === Diagnostic API === */
       
       TestFrame*
-      accessEmittedFrame (uint frameNo)  const
+      accessEmittedFrame (uint frameNr)  const
         {
           REQUIRE (buffProvider_);
-          if (frameNo <= buffProvider_->emittedCnt())
-            return &buffProvider_->accessAs<TestFrame> (frameNo);
+          if (frameNr <= buffProvider_->emittedCnt())
+            return &buffProvider_->accessAs<TestFrame> (frameNr);
           else
             return 0;                                               ////////////////////////////////TICKET #856
         }
       
       diagn::Block*
-      accessEmittedBuffer (uint bufferNo)  const
+      accessEmittedBuffer (uint bufferNr)  const
         {
           REQUIRE (buffProvider_);
-          if (bufferNo <= buffProvider_->emittedCnt())
-            return buffProvider_->access_emitted (bufferNo);
+          if (bufferNr <= buffProvider_->emittedCnt())
+            return & buffProvider_->access_emitted (bufferNr);
           else
             return 0;
+        }
+      
+      bool
+      wasAllocated (uint frameNr)  const
+        {
+          REQUIRE (buffProvider_);
+          return contains (frameTrackingIndex_, frameNr);
         }
     };
   
   
+  /**
+   * Special diagnostic connection state implementation,
+   * establishing diagnostic output connections for each channel,
+   * thus allowing to verify the handling of individual buffers
+   */
   class SimulatedOutputSequences
     : public ConnectionStateManager<TrackingInMemoryBlockSequence>
     {
@@ -280,10 +330,8 @@ namespace play {
       bool
       buffer_was_used (uint channel, FrameID frame)
         {
-          diagn::Block* block = accessSequence(channel)
-                                  .accessEmittedBuffer(frame);
-          return block
-              && block->was_used();
+          return accessSequence(channel)
+                   .wasAllocated(frame);
         }
       
       
@@ -297,14 +345,20 @@ namespace play {
       bool
       buffer_was_closed (uint channel, FrameID frame)
         {
-          UNIMPLEMENTED ("determine if the specified buffer was indeed closed properly");
+          diagn::Block* block = accessSequence(channel)
+                                  .accessEmittedBuffer(frame);
+          return block
+              && block->was_closed();
         }
       
       
       bool
       emitted (uint channel, FrameID frame)
         {
-          UNIMPLEMENTED ("determine if the specivied buffer was indeed handed over for emitting output");
+          diagn::Block* block = accessSequence(channel)
+                                  .accessEmittedBuffer(frame);
+          return block
+              && block->was_used();
         }
       
       

@@ -127,6 +127,9 @@ namespace meta {
    *         registered with the AssetManager.
    * @throw  error::Config in case of invalid frames-per-second. The AssetManager
    *         might raise further exception when asset registration fails.
+   * @note the newly created grid is automatically published through the Advice System.
+   *       This allows client code to pick up that grid definition just by using the
+   *       Grid ID, without requiring an explicit link to the session or Asset subsystem.
    * @todo currently (12/2010) the AssetManager is unable to detect duplicate assets.
    *       Later on the intention is that in such cases, instead of creating a new grid
    *       we'll silently return the already registered existing and equivalent grid.
@@ -137,7 +140,7 @@ namespace meta {
     if (predecessor_)
       throw error::Invalid("compound and variable time grids are a planned feature"
                           , error::LUMIERA_ERROR_UNIMPLEMENTED);
-    ENSURE (fps_, "infinite grid was not properly detected by FrameRate ctor");
+    ENSURE (fps_, "infinite grid should have been detected by FrameRate ctor");
     
     if (isnil (id_))
       {
