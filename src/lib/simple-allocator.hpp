@@ -143,7 +143,7 @@ namespace lib {
     : InstantiateForEach< typename TYPES::List     // for each of those types...
                         , CustomAllocator         //  ...mix in the custom allocator
                         >
-    , COUNTER
+    , COUNTER                                   // ...Instantiation accounting policy
     {
       
       /** forward plain memory allocation */

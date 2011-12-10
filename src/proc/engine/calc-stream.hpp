@@ -73,13 +73,13 @@ namespace engine{
       
       CalcStream()
         {
-          
+          UNIMPLEMENTED("build a calculation stream");
         }
       
     public:
       CalcStream (CalcStream const& o)
         { 
-          UNIMPLEMENTED("build a calculation stream");
+          UNIMPLEMENTED("clone a calculation stream");
         }
       
      ~CalcStream() { }
