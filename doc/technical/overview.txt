@@ -171,9 +171,65 @@ Low Level Model
 ~~~~~~~~~~~~~~~
 _tbw_
 
-Play/Render processes
-~~~~~~~~~~~~~~~~~~~~~
-_tbw_
+
+Play/Rendering subsystem
+~~~~~~~~~~~~~~~~~~~~~~~~
+Within Lumiera, »Player« is the name for a subsystem responsible for organising and tracking
+_ongoing playback and render processes._ The player subsystem does not perform or even manage
+any render operations, nor does it handle the outputs directly. +
+Yet it addresses some central concerns:
+
+uniformity::
+ All playback and render processes are on equal footing, handled in a similar way.
+ 
+integration::
+ The player cares for the necessary integration with the other subsystems
++ 
+it consults the _Output Management,_ retrieves the necessary informations from the _Session_
+and coordinates the forwarding of Backend calls.
+ 
+time quantisation::
+ The player translates continuous time values into discrete frame counts.
++
+To perform this _quantisation,_ the help of the session for building a TimeGrid
+for each output channel is required.
+
+
+The player service
+^^^^^^^^^^^^^^^^^^
+Client code accesses the player (subsystem) through the play-facade (`lumiera::Play`).
+The exposed service allows to _set up an output connection for playback or rendering,_
+resulting in a play-controller object. 
+
+.Play::Controller
+This controller frontend represents the presence of such an active output connection 
+and incorporates a state machine supporting the usual things you'd expect to do with
+a player (Play, pause, FFwd, Rew, scrubbing, jumping, looping). This controller object
+is a copyable smart-handle -- all instances act as if wired in parallel.
+
+.time control
+The play-controller frontend makes heavy use of `time::Control`. This is a mediator
+to accept and forward _mutations_ on time values and time ranges, possibly involving 
+frame quantisation. After attaching it to a target time value, it accepts changes,
+offsets and nudging, translates these into the appropriate target modifications
+and notifies any attached _change listeners_.
+
+.play process
+Ongoing effort to calculate a stream of frames for playback or rendering. +
+The play process is an conceptual entity linking together several activities in the backend
+and the render engine. It maintains a registration entry for the process to keep track of
+associated entities, resources allocated and calls dispatched as a consequence. Besides
+each play process is wired to at leas one play-controller acting as frontend interface
+and information hub for the client code.
+
+NOTE: the player is in no way engaged in any of the actual calculation and management tasks
+necessary to make the stream of calculations actually happen. The play process code contained
+within the player subsystem is largely comprised of organisational concerns and not especially
+performance critical.
+
+- the backend is responsible for dispatching the calculation stream and scheduling calculation jobs
+- the render engine has the ability to carry out individual frame calculations
+- the OutputSlot exposed by the output manager is responsible for accepting timed frame delivery
 
 
 
@@ -213,13 +269,41 @@ Manages serveral classes of threads in pools. The threadpool is reasonable
 dumb. Higher level management will be done by the Schedulers and Jobs.
 
 
+Engine Interface
+~~~~~~~~~~~~~~~~
+While on itself just a thin interface and adaptation layer forwarding calls to
+the primary backend facilities, the Engine Interface is the primary point of service
+accessed by Proc-Layer to use the backend services for rendering content.
+
+.Calculation Streams
+The Engine Interface is cast in terms of an _calculation stream_ entity. This is
+a stream of expected and ongoing frame calculations for multiple channels, to be
+managed as a compound. The calculated frames will be delivered into an output slot
+right away. No assumptions are made regarding the ordering of these individual
+calculations -- they may be performed in parallel, constrained by input and
+resource prerequisites solely.
+
+.Frame Dispatcher
+For the actual processing, calculation streams need to be translated into individual
+calculation jobs to be scheduled. For each uniform _segment of the effective timeline,_
+the typical recursive descent call characteristic for _pull processing_  results in a
+Job Ticket.
+
+.Job Ticket
+This structural descriptor of the actual calculations to be performed is the base
+for creating individual jobs: Already specialised for a distinct segment of the
+effective timeline and tailored for the needs of a given calculation stream,
+the job ticket acts as blueprint for the actual jobs to be enqueued
+with the _Scheduler._
+
+
 Schedulers
 ~~~~~~~~~~
 
 Scheduling Queues for different purposes:
 
 .Deadline
-Higher priority jobs ordered by a deadline time plus some (negative) hystersis. Jobs are
+Higher priority jobs ordered by a deadline time plus some (negative) hysteresis. Jobs are
 started when they approach their deadline. Jobs who miss their deadline are
 never scheduled here.
 
