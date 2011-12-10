@@ -21,6 +21,8 @@
 * *****************************************************/
 
 
+#include "lib/error.hpp"
+#include "include/play-facade.h"
 #include "proc/play/play-service.hpp"
 #include "proc/play/play-process.hpp"
 #include "lib/util.hpp"
@@ -97,6 +99,7 @@ namespace play {
       void
       endProcess (PlayProcess* dyingProcess)
         {
+                                     /////////////////////////////////////////////TICKET #867 : somehow ensure sane abort of all attached calculation efforts
           delete dyingProcess;
           
           Lock sync(this);
@@ -114,7 +117,10 @@ namespace play {
   using lumiera::Play;
   
   
-  PlayService::~PlayService() { }
+  PlayService::~PlayService()
+    {
+      UNIMPLEMENTED ("block waiting for any ongoing play processes. Ensure the process table is empty -- OR -- hand it over to some kind of cleanup service");
+    }
   
   
   /** bring up the global render- and playback service.

@@ -1,5 +1,5 @@
 /*
-  PlayProcess.hpp  -  state frame for an ongoing play/render process
+  PlayProcess  -  state frame for an ongoing play/render process
 
   Copyright (C)         Lumiera.org
     2011,               Hermann Vosseler <Ichthyostega@web.de>
@@ -22,6 +22,7 @@
 
 
 #include "proc/play/play-process.hpp"
+#include "proc/play/render-configurator.hpp"
 #include "lib/itertools.hpp"
 
 //#include <string>
@@ -57,7 +58,8 @@ namespace play {
       if (!slot.isFree())
         throw error::State("unable to acquire a suitable output slot"   /////////////////////TICKET #197 #816
                           , LUMIERA_ERROR_CANT_PLAY);
-      return Feed (port,slot);
+      
+      return Feed (port,slot); //////////////////////////////////TODO: how to get the RenderConfigurator (strategy) here??? 
     }
     
     
@@ -110,10 +112,9 @@ namespace play {
   
   
   /** */
-  Feed::Feed (ModelPort port, OutputSlot& output)
-  {
-    UNIMPLEMENTED("build an active playback/render feed");
-  }
+  Feed::Feed (ModelPort port, OutputSlot& output, RenderConfigurator& renderStrategy)
+    : renderStreams_(renderStrategy.buildCalculationStreams(port,output))
+    { }
 
   
   

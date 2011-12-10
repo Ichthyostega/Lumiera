@@ -83,6 +83,10 @@ namespace play {
   namespace error = lumiera::error;
   
   
+  /** Strategy for configuring the render process */
+  class RenderConfigurator;
+  
+  
   /**
    * Rendering data feed, corresponding to a single
    * global pipe and to be delivered into a single OutputSlot.
@@ -95,7 +99,14 @@ namespace play {
     public:
       typedef lib::IterSource<Feed>::iterator Connections;
       
-      Feed (ModelPort, OutputSlot&);
+      typedef std::vector<engine::CalcStream> RenderStreams;
+      
+      RenderStreams renderStreams_;
+      
+      /** building a Feed effectively involves the EngineService
+       *  to establish an actual rendering plan. Which is abstracted
+       *  here through the RenderConfigurator instance */
+      Feed (ModelPort, OutputSlot&, RenderConfigurator&);
     };
     
   
