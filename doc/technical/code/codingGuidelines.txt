@@ -35,11 +35,11 @@ The Lumiera project uses GNU indentation style with slight adaptations.
   * the opening brace of namespaces is placed on the same line. Optionally, the namespace
     body may be indented, as long as this helps underpinning the nesting structure. But
     there is no need to use 3 indents on a 3 level nested namespace. One level is enough
-    to underpin the presence of a nesting.
+    to highlight the presence of a nesting.
 
 Naming conventions
 ~~~~~~~~~~~~~~~~~~
-Naming conventions are used to underpin the kind of element at hand and give a visual
+Naming conventions are used to characterise the kind of element at hand and give a visual
 clue to the reader. We use our own conventions -- there is no point in arguing that this
 and that library or language uses other conventions.
 
@@ -81,8 +81,8 @@ General Code Arrangement and Layout
   doxygen comment explaining the intention and anything not obvious from reading the code.
 - when arranging headers and compilation units, please take care of the compilation times and the
   code size. Avoid unnecessary includes. Use forward declarations where applicable.
-  Yet still, _all really required includes should be mentioned_ (even if already included by another
-  dependency)
+  Yet still, _all immediately required includes should be mentioned_ (even if already included by
+  another dependency)
 - The include block starts with our own dependencies, followed by a second block with the library
   dependencies. After that, optionally some symbols may be brought into scope (through +using+ clauses).
   Avoid cluttering top-level namespaces. Never import full namespaces (no +using namespace boost;+ please!)
