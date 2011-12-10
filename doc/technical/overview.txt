@@ -389,6 +389,27 @@ Plugin loader
 ~~~~~~~~~~~~~
 _tbw_
 
+Advice framework
+~~~~~~~~~~~~~~~~
+This is a ``whiteboard'' system, allowing implementation-level services to _publish_
+some piece of information as _advice_, while other parts of the system may pick up
+this advice just by a name token, without requiring a direct knowledge of the
+original _advisor._ The _Advice System_ is a singleton service maintaining a
+lookup and registration data structure. Individual _piece of advice_ elements
+are stored _as value copy_. Publishing new advice requires locking, but accessing
+advice is lock-free (actually there needs to be a memory barrier ``somewhere'',
+otherwise the advice requesting client might not see new advice)
+
+.Advice topics
+Advice is organised into categories, based on the type of the advice item and
+some additional symbolic identifiers. Actually these are syntactically represented
+similar to the _atoms_ of a rules based system (``Prolog syntax''). Currently (2010)
+only ground terms (completely static symbols) are supported. But the intention is to
+extend the system to allow for variables in these terms. This will turn the matching
+of advice provisions and requests into an unification, allowing the advice item to
+be parametrised.
+
+
 Rules system
 ~~~~~~~~~~~~
 _tbw_
@@ -404,6 +425,7 @@ _tbw_
 Lua Scripting
 ~~~~~~~~~~~~~
 _tbw_
+
 
 
 Library
@@ -426,14 +448,79 @@ Intentionally no semaphores.
 
 Time
 ~~~~
-Time values are represented by an opaque date type `lumiera::Time`
+Time values are represented by a family of opaque date types
 with overloaded operators. The implementation is based on `gavl_time_t`,
-an integral (µsec) time tick value. Any Time handling and conversions
-is centralised in library routines.
+an integral (µsec) time tick value. Thus, the arithmetic on time values
+and time spans is limited and any Time handling and conversion is
+centralised in library routines.
 
 We distinguish between time values and a _quantisation_ into a frame
 or sample grid. In any case, quantisation has to be done once, explicitly
 and as late as possible. See the link:{rfc}/TimeHandling.html[Time handling RfC].
+
+.time values
+The Lumiera library defines several flavours of time values. All of
+these internal time values have in common that they are _opaque_ and not
+directly related to any human readable or external (wall clock) time.
+Moreover, most of these time values are immutable, yet there are two
+mechanisms to allow for changing time values (TimeVar and Mutation).
+
+.quantised time
+Special flavours of these time values additionally carry the reference
+to an (frame) alignment grid, while being time value entities in all other
+respects. But _only those quantised time values_ expose functions to
+convert the internal opaque time into a human readable or externally
+relevant time format -- including SMPTE or frame counts.
+
+.time (alignment) grid
+Thus, any usage of time values is forced to refer to such a time alignment
+grid explicitly, at least when leaving the realm of the internal opaque
+time values. This is the point where the *time quantisation* is actually
+performed, imposing some information loss (as any rounding operation does). +
+A time alignment grid is exactly that: a set of functions to perform
+this lossy conversion. Implicitly this involves the definition of an
+_time origin_ (reference point where the external time is zero), and
+typically this also includes the definition of a _frame rate_ (but
+in the most general case, this frame rate might be variable and 
+change at various places of the time axis). Consequently, all time
+grids are Assets and defined as part of the concrete session.
+
+
+Time Code
+^^^^^^^^^
+Historically, Time Code was seen as the foundation of any film editing.
+Similarly, the first generation of editing systems used Time Code as a
+foundation. Today, we consider such a design as questionable.
+
+Lumiera takes a different approach here: Time code is reduced to a mere
+mode of presentation, i.e. a formatting of existing time values. It is
+void of any substantial meaning. To the contrary, the operation of
+_frame quantisation_ (see above) is considered to be fundamental,
+causing a irreversible loss of information. The design of time handling
+chosen within Lumiera forces you to decide on using a specific _time grid_,
+prior to being able to format an internal (opaque) time value in any kind
+of time code. And only as late as when _actually retrieving_ this time code
+formatted value, the actual quantisation (grid alignment) happens.
+
+In practice, establishing a time grid requires knowledge about the output
+format. Thus, an (sufficiently resolved) *output designation* is required
+to perform any grid alignment a and time code formatting. Typically this
+happens when a timeline or similar part of the High-Level-Model is connected
+to a concrete output or an global bus defining a frame rate already. The model
+contents as such are _frame rate independent_.
+
+The following time code formats are supported, both for programmatic access
+and display within the GUI
+
+- frame count
+- SMPTE
+- SMPTE drop-frame _[,yellow]#TODO# as of 2011_
+- hours:mins:secs  _[,yellow]#TODO# as of 2011_
+- fractional seconds  _[,yellow]#TODO# as of 2011_
+- musical bars:beats _[,yellow]#TODO# as of 2011_
+
+As a corollary, as any rendering is based on frame numbers, it requires an
+output connection or something similar to establish a frame grid.
 
 
 Errors
@@ -523,7 +610,33 @@ mayfail()
 
 Singletons
 ~~~~~~~~~~
-_tbw_
+Deliberately, Lumiera stays below the level of utilising a dependency injection framework.
+Consequently, we access most services _by type name_, pulling up a single implementation
+instance on demand. Rather than placing this singleton lifecycle logic into the individual
+implementation classes, we use a _singleton factory_, managing the lifecycle through static
+variables and placing the singleton object into a static memory block. Singleton initialisation
+is protected by a monitor per singleton type, while shutdown is triggered by the clean-up of
+a static variable. This results in the general policy that within Lumiera, performing any
+``business'' code in the application shutdown phase (after exiting +main()+) is _strictly
+prohibited._ Generally speaking, destructors _must not perform any significant work_ and
+are are expected to be failsafe.
+
+.accessing the singleton instance
+By convention, when clients are expected actively to access the singleton instance,
+the interface class holds the singleton factory as a public static member with the
+name +instance+. This allows clients to write `SomeService::instance()` to get a
+reference to the implementation.
+
+.subclasses and mock testing support
+There is a mechanism to ``push aside'' the existing singleton instance and shadow
+it temporarily with a mock implementation. Besides, there is a variation of the
+general singleton factory, allowing to fabricate a specific subclass of the 
+exposed interface. Both of these facilities are rather technically involved
+and require some specific set-up -- fortunately it turned out that they are
+used only occasionally and rarely required. (Probably this is a result of
+Lumiera being developed _test-driven_ -- things are being written mostly
+in a unit test friendly fashion).
+
 
 Extensible Factory
 ~~~~~~~~~~~~~~~~~~
@@ -550,12 +663,58 @@ _tbw_
 
 Wrappers and Opaque Holders
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-- smart handle
-- unified value/ptr/reference holder
-- ownership managing collection
-- opaque holder to ``piggypack'' an object inline,
-  without the need for heap allocated storage
-- vector of references
+.smart handle
+This pervasively used handle type is based on the reference counting
+smart-pointer type of C\++ (`boost::shared_ptr` and C++11). Typically
+this also includes a pointer to some kind of implementation service. +
+Yet still, handles based on `lib::Handle<TY>` should not be confused with
+smart pointers. Rather, we use the ref-counting mechanism to invoke a custom
+clean-up callback when the last handle goes out of scope. Typically, the 
+implementation service is kept entirely opaque, while the copyable handle
+objects also implement a front-end interface for client access.
+
+.unified holder for value/ptr/reference
+_tbw_
+
+.ownership managing collection
+_tbw_
+
+.opaque holder
+There is a family of holder objects, all based on placement-new of the 
+contained object into an embedded buffer. The purpose is to ``piggyback''
+an object inline, without the need for heap allocated storage. Frequently
+the motivation for this usage pattern is *type erasure*: the detailed knowledge
+context used to build some kind of object is discarded prior to further use,
+relying on generic information and the hidden parametrisation henceforth.
+
+.polymorphic values
+The C++ language has direct support for _value semantics_ and allows to build
+value objects to be treated as first class citizens. Unfortunately this doesn't
+fit well with the chosen approach to object orientation, where polymorphism relies
+on reference semantics. Thus, most of the fundamental design patterns drive us into
+having an object manager somewhere hidden within the implementation level, to
+manage the memory for maintaining the subclass instances to be concealed
+at the usage site. +
+To avoid this dilemma, we utilise the technique of the opaque holder to provide
+objects with value semantics, while actually placing the instance of a subclass
+into the inline buffer. Clients access this embedded object by automatic type
+conversion to the interface type, which gives us polymorphism. While the 
+definition of such a beast is quite involved, the runtime overhead is
+surprisingly low. When compared with standard polymorphism, creating
+objects and invoking operations has zero overhead, while copying
+and assignment incur the cost of an additional virtual call,
+assuming the target objects cooperate by mixing in a
+copy management interface.
+
+.vector of references
+a minimal interface for an array-like entity, but exposing only references
+to the contained elements. Obviously this means to use a virtual call for
+the subscript operation. This interface allows interfaces to expose something
+_array-like_ without committing to a specific implementation type for the
+exposed elements within the ``array''. The Lumiera library provides a set
+of standard implementations for this +lib::RefArray+ interface, including
+a vector based and a directly array based variant.
+
 
 Unique Identifiers
 ~~~~~~~~~~~~~~~~~~
@@ -584,7 +743,32 @@ tables allow unique IDs per type
 
 Allocators
 ~~~~~~~~~~
-_tbw_
+Lumiera utilises several custom allocators, each tailored to a specific purpose.
+All these allocator-_frontends_ share a common pooling allocation backend
+
+WARNING: currently (as of 2011) the low-level pooled allocator within the
+         backend isn't implemented; instead we do just heap allocations.
+         See Ticket #231
+
+.Allocation Cluster
+This allocation scheme is used within the context of the Builder and the 
+Low-Level-Model. The predominant usage trend in this realm is to create
+and wire a family of small objects right after each other, within a build
+process. These objects are intended to work together and will be discarded
+all at once, after hot-swapping a new version of that model segment.
+
+.Typed Allocation Manager
+This allocation framework is used at various places when a large number of
+similar objects is expected to be coming and going. New objects are 
+placement-constructed into the allocated space and immediately wrapped
+with a ref-counting smart-ptr to manage ownership.
+
+.Simple Allocator
+Based on the allocator interface of the STL, allowing just for plain
+allocations and de-allocations without any further instance and lifecycle
+management. Currently (as of 2011) this allocator isn't used much -- it is
+conceivable that later we'll detect some specific STL based containers to be 
+performance critical with respect to allocation.
 
 
 Memory Pools
@@ -622,6 +806,11 @@ _tbw_
 Functor Utils
 ^^^^^^^^^^^^^
 _tbw_
+
+Duck Typing
+^^^^^^^^^^^
+_tbw_
+
 
 
 Preprocessor Metaprogramming
