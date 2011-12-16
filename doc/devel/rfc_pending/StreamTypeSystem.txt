@@ -1,23 +1,30 @@
+Stream Type System
+==================
+
+// please don't remove the //word: comments
+
 [grid="all"]
 `------------`-----------------------
-*State*         _Idea_
+*State*         _Draft_
 *Date*          _2008-10-05_
 *Proposed by*   link:Ichthyostega[]
 -------------------------------------
 
 
 
-Stream Type System
-------------------
-Especially in the Proc-Layer, we need a framework to deal with different
-"kinds" of media streams. +
+********************************************************************************
+.Abstract
+Especially in the Proc-Layer, within the Builder and at the interface to the
+Engine we need sort of a framework to deal with different »kinds« of
+media streams. +
 This is the foundation to be able to define what can be connected and to
 separate out generic parts and isolate specific parts.
-
+********************************************************************************
 
 
 Description
-~~~~~~~~~~~
+-----------
+//description: add a detailed description:
 The general idea is that we need meta information, and -- more precisely --
 that _we_ need to control the structure of this metadata. Because it has
 immediate consequences on the way the code can test and select the appropriate
@@ -41,7 +48,7 @@ role for some of the more advanced things possible within the session.
 
 
 Terminology
-^^^^^^^^^^^
+~~~~~~~~~~~
  * *Media* is comprised of a set of streams or channels
  * *Stream* denotes a homogeneous flow of media data of a single kind
  * *Channel* denotes an elementary stream, which -- _in the given context_ --
@@ -52,11 +59,17 @@ Terminology
  * the *Stream Type* describes the kind of media data contained in the stream
 
 
+Concept of a Stream Type
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+The Goal of our Stream Type system is to provide a framework for precisely
+describing the ``kind'' of a media stream at hand. The central idea is to
+structure the description/classification of streams into several levels.
+A complete stream type (implemented by a stream type descriptor) contains
+a tag or selection regarding each of these levels.
+
 Levels of classification
 ^^^^^^^^^^^^^^^^^^^^^^^^
-The description/classification of streams is structured into several levels. A
-complete stream type (implemented by a stream type descriptor) contains a tag
-or selection regarding each of these levels.
 
  * Each media belongs to a fundamental *kind of media*, examples being _Video,
    Image, Audio, MIDI, Text,..._ This is a simple Enum.
@@ -138,7 +151,8 @@ connections and conversions
 
 
 Tasks
-^^^^^
+~~~~~
+// List what needs to be done to implement this Proposal:
  * draft the interfaces ([green]#✔ done#)
  * define a fall-back and some basic behaviour for the relation between
    implementation type and prototypes [,yellow]#WIP#
@@ -150,9 +164,12 @@ Tasks
 
 
 
+Discussion
+~~~~~~~~~~
 
 Alternatives
 ^^^^^^^^^^^^
+//alternatives: explain alternatives and tell why they are not viable:
 Instead of representing types by metadata, leave the distinction implicit and
 instead implement the different behaviour directly in code. Have video tracks
 and audio tracks. Make video clip objects and audio clip objects, each
@@ -175,6 +192,8 @@ the one or the other.
 
 
 Rationale
+---------
+//rationale: Give a concise summary why it should be done *this* way:
 
  * use type metadata to factor out generic behaviour and make variations in
    behaviour configurable.
@@ -189,13 +208,17 @@ Rationale
  * provide the possibility to incorporate very project specific knowledge as
    rules.
 
+//Conclusion
+//----------
+//conclusion: When approbate (this proposal becomes a Final)
+//            write some conclusions about its process:
 
 
 
 
 Comments
 --------
-
+//comments: append below
 As usual, see the
 http://www.lumiera.org/wiki/renderengine.html#StreamType[Proc-Layer impl doku]
 for more information and implementation details.
@@ -239,5 +262,7 @@ agreed that we want this concept as proposed here.
    Do 14 Apr 2011 03:06:42 CEST Christian Thaeter
 
 
+//endof_comments:
 
+''''
 Back to link:/documentation/devel/rfc.html[Lumiera Design Process overview]
