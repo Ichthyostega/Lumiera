@@ -45,7 +45,7 @@ Terminology
  * *Media* is comprised of a set of streams or channels
  * *Stream* denotes a homogeneous flow of media data of a single kind
  * *Channel* denotes an elementary stream, which -- _in the given context_ --
-   can't be further decomposed
+   can't be decomposed any further
  * all of these are delivered and processed in a smallest unit called *Frame*.
    Each frame corresponds to a time interval.
  * a *Buffer* is a data structure capable of holding one or multiple Frames of media data.
