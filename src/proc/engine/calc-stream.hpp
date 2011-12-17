@@ -71,12 +71,12 @@ namespace engine{
       
       friend class EngineService;
       
+    public:
       CalcStream()
         {
-          UNIMPLEMENTED("build a calculation stream");
+          UNIMPLEMENTED("build a disabled/dead calculation stream");
         }
       
-    public:
       CalcStream (CalcStream const& o)
         { 
           UNIMPLEMENTED("clone a calculation stream");

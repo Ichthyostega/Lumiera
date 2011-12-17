@@ -40,6 +40,7 @@
 //#include "common/instancehandle.hpp"
 //#include "lib/singleton-ref.hpp"
 #include "proc/mobject/model-port.hpp"
+#include "proc/play/play-process.hpp"
 //#include "proc/play/output-manager.hpp"
 //#include "lib/iter-source.hpp"
 //#include "lib/util.hpp"
@@ -74,9 +75,7 @@ namespace play {
       virtual ~RenderConfigurator();  ///< this is an interface
       
       
-      typedef std::vector<engine::CalcStream> RenderStreams;  ////TODO this belongs rather into class Feed
-      
-      virtual RenderStreams buildCalculationStreams (ModelPort, OutputSlot&)  =0;
+      virtual Feed::RenderStreams buildCalculationStreams (ModelPort, OutputSlot&)  =0;
       
     };
     

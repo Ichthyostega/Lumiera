@@ -53,16 +53,19 @@ namespace play {
       : public RenderConfigurator
       {
         
-        RenderStreams
+        Feed::RenderStreams
         buildCalculationStreams (ModelPort port, OutputSlot& output)
           {
             UNIMPLEMENTED("build an active playback/render feed");
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #832
             
             ///TODO allocate the output slot
             ///TODO extract the individual channels
             ///TODO get the timings
+            ///TODO define the Quality
             
             engine::EngineService::instance().calculate(port, nominalTimings, activeOutputConnection, serviceQuality);
+#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #832
           }
       };
   

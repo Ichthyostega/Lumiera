@@ -61,6 +61,8 @@ namespace play {
   /******************************************************
    * Management of external Output connections.
    * 
+   * @todo need a concrete implementation
+   * @todo need a unit-test
    * @todo write Type comment
    */
   class OutputManager

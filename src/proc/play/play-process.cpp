@@ -59,7 +59,8 @@ namespace play {
         throw error::State("unable to acquire a suitable output slot"   /////////////////////TICKET #197 #816
                           , LUMIERA_ERROR_CANT_PLAY);
       
-      return Feed (port,slot); //////////////////////////////////TODO: how to get the RenderConfigurator (strategy) here??? 
+      RenderConfigurator& configurator (*(RenderConfigurator*)NULL); //////////////////////////////////TODO: how to get the RenderConfigurator (strategy) here??? 
+      return Feed (port,slot,configurator); 
     }
     
     

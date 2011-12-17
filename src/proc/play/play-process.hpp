@@ -58,6 +58,7 @@
 //#include "lib/singleton-ref.hpp"
 #include "proc/mobject/model-port.hpp"
 #include "proc/play/output-manager.hpp"
+#include "proc/engine/calc-stream.hpp"
 #include "lib/iter-source.hpp"
 #include "lib/util.hpp"
 //

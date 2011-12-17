@@ -60,7 +60,7 @@ namespace lumiera {
     
     
     /******************************************************************
-     * Interface to the Player subsystem of Lumiera (Proc-Layer). 
+     * Interface to the Player subsystem of Lumiera (Proc-Layer).
      * Global access point for starting playback and render processes,
      * calculating media data by running the render engine.
      * 
@@ -100,7 +100,7 @@ namespace lumiera {
             void play(bool);          ///< play/pause toggle
             void scrub(bool);         ///< scrubbing playback
             void adjustSpeed(double); ///< playback speed control
-            void go(lib::time::Time); ///< skip to the given point in time
+            void go(time::Time);      ///< skip to the given point in time
             
             void controlPlayhead (time::Control<time::Time>     & ctrl);
             void controlDuration (time::Control<time::Duration> & ctrl);

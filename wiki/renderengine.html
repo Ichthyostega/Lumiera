@@ -1376,6 +1376,25 @@ at the lowest level within the builder there is the step of building a //connect
 * by default, a timeline is outfitted with one video and one sound master bus
 </pre>
 </div>
+<div title="CalcStream" modifier="Ichthyostega" modified="201112162336" created="201112162053" tags="spec Rendering" changecount="7">
+<pre>Calculation stream is an organisational unit used at the interface level of the Lumiera engine.
+Representing a //stream of calculations,// delivering generated data within //timing constraints,// it is used
+*by the [[play process(es)|PlayProcess]] to define and control properties of the output generation
+*at the engine backbone to feed the [[Scheduler]] with individual [[render jobs|RenderJob]] to implement this stream of calculations
+Calculation stream objects are stateless, constant chunks of definition -- any altering of playback or rendering parameters just causes the respective descriptors to be superseeded. The presence of a CalcStream (being alive within the denoted time span) implies that using any of the associated jobs, dispatcher tables, node and wiring descriptors is safe
+
+!lifecycle
+Calculation stream descriptors can be default constructed, representing a //void calculation.// You can't do anything with these.
+Any really interesting calculation stream needs to be retrieved from the EngineFaçade. Additionally, an existing calculation stream can be chained up or superseded, yielding a new CalcStream based on the parameters of the existing one, possibly with some alterations.
+
+!purpose
+When a calculation stream is retrieved from the EngineFaçade it is already registered and attached there and represents an ongoing activity. Under the hood, several further collaborators will hold a copy of that calculation stream descriptor. While, as such, a CalcStream has no explicit state, at any time it //represents a current state.// In case the running time span of that stream is limited, it becomes superseded automatically, just by the passing of time.
+
+Each calculation stream refers a relevant [[frame dispatcher table|FrameDispatcher]]. Thus, for the engine (interface level), the calculation stream allows to produce the individual [[render jobs|RenderJob]] to enqueue with the [[Scheduler]]. This translation step is what links and relates nominal time with running wall clock time, thereby obeying the [[timing constraints|Timings]] given while initially defining the calculation stream.
+
+Additionally, each calculation stream knows how to access a //render environment closure,// allowing to re-schedule and re-adjust the setup of this stream. Basically, this closure is comprised of several functors (callbacks), which could be invoked to perform management tasks later on. Amongst others, this allows the calculation stream to redefine, supersede or &quot;cancel itself&quot;, without the need to access a central registration table at the engine interface level.
+</pre>
+</div>
 <div title="ColorPalette" modifier="Ichthyostega" modified="200807131329" created="200706190033" tags="excludeMissing" changecount="14">
 <pre>Background: #fefefd
 Foreground: #000
@@ -1973,12 +1992,12 @@ The fixture is like a grid, where one dimension is given by the [[model ports|Mo
 :Thus the exit nodes are keyed by ~Pipe-ID as well (and consequently have a distinct [[stream type|StreamType]]) -- each model port coresponds to {{{&lt;number_of_segments&gt;}}} separate exit nodes, but of course an exit node may be //mute.//
 </pre>
 </div>
-<div title="FixtureDatastructure" modifier="Ichthyostega" modified="201109031600" created="201012162304" tags="spec Builder" changecount="11">
+<div title="FixtureDatastructure" modifier="Ichthyostega" modified="201112162317" created="201012162304" tags="spec Builder" changecount="12">
 <pre>Generally speaking, the datastructure to implement the ''Fixture'' (&amp;rarr; see a more general description [[here|Fixture]]) is comprised of a ModelPortRegistry and a set of [[segmentations|Segmentation]] per Timeline.
 This page focusses on the actual data structure and usage details on that level. See also &amp;rarr; [[storage|FixtureStorage]] considerations.
 
 !transactional switch
-A key point to note is the fact that the fixture is frequently [[re-built||BuildFixture]] by the [[Builder]], while render processes may be going on in parallel. Thus, when a build process is finished, a transactional ''commit'' happens to ''hot swap'' the new parts of the model. This is complemented by a clean-up of tainted render processes; finally, storage can be reclaimed.
+A key point to note is the fact that the fixture is frequently [[re-built|BuildFixture]] by the [[Builder]], while render processes may be going on in parallel. Thus, when a build process is finished, a transactional ''commit'' happens to ''hot swap'' the new parts of the model. This is complemented by a clean-up of tainted render processes; finally, storage can be reclaimed.
 
 To support this usage pattern, the Fixture implementation makes use of the [[PImpl pattern|http://c2.com/cgi/wiki?PimplIdiom]]
 
@@ -4386,13 +4405,13 @@ We need a way of addressing existing [[pipes|Pipe]]. Besides, as the Pipes and T
 &lt;&lt;tasksum end&gt;&gt;
 </pre>
 </div>
-<div title="PlayProcess" modifier="Ichthyostega" modified="201108141652" created="201012181714" tags="def spec Player img" changecount="14">
+<div title="PlayProcess" modifier="Ichthyostega" modified="201112092000" created="201012181714" tags="def spec Player img" changecount="16">
 <pre>With //play process//&amp;nbsp; we denote an ongoing effort to calculate a stream of frames for playback or rendering.
 The play process is an conceptual entity linking together several activities in the [[Backend]] and the RenderEngine. Creating a play process is the central service provided by the [[player subsystem|Player]]: it maintains a registration entry for the process to keep track of associated entities, resources allocated and calls [[dispatched|FrameDispatcher]] as a consequence, and it wires and exposes a PlayController to serve as an interface and information hub.
 
 ''Note'': the player is in no way engaged in any of the actual calculation and management tasks necessary to make this [[stream of calculations|CalcStream]] happen. The play process code contained within the player subsystem is largely comprised of organisational concerns and not especially performance critical.
-* the [[Backend]] is responsible for scheduling and [[dispatching|Dispatcher]] the [[calculation stream|CalcStream]]
-* the RenderEngine has the ability to cary out individual frame calculations
+* the [[Backend]] is responsible for [[dispatching|Dispatcher]] the [[calculation stream|CalcStream]] and scheduling individual calculation jobs
+* the RenderEngine has the ability to carry out individual frame calculations
 * the OutputSlot exposed by the [[output manager|OutputManagement]] is responsible for accepting timed frame delivery
 
 [&gt;img[Anatomy of a Play Process|uml/fig144005.png]]
@@ -4402,7 +4421,7 @@ The Controller is exposed to the client and acts as frontend handle, while the p
 Right within the play process, there is a separation into two realms, relying on different programming paradigms. Obviously the play controller is a state machine, and similarily the body object (play process) has a distinct operation state. Moreover, the current collection of individual objects hooked up at any given instance is a stateful variable. To the contrary, when we enter the realm of actual processing, operations are carried out in parallel, relying on stateless descriptor objects, wired into individual calculation jobs, to be scheduled as non-blocking units of operation. For each series of consecutive frames to be calculated, there is a descriptor object, the CalcStream, which also links to a specificaly tailored dispatcher table, allowing to schedule the individual frame jobs. Whenever the controller determines a change in the playback plan (speed change, skip, scrubbing, looping, ...), a new CalcStream is created, while the existing one is just used to mark any not-yet processed job as superseded.
 </pre>
 </div>
-<div title="PlayService" modifier="Ichthyostega" modified="201105221918" created="201105221900" tags="Player spec draft" changecount="9">
+<div title="PlayService" modifier="Ichthyostega" modified="201112161614" created="201105221900" tags="Player spec draft" changecount="11">
 <pre>The [[Player]] is an independent [[Subsystem]] within Lumiera, located at Proc-Layer level. A more precise term would be &quot;rendering and playback coordination subsystem&quot;. It provides the capability to generate media data, based on a high-level model object, and send this generated data to an OutputDesignation, creating an continuous and timing controlled output stream. Clients may utilise these functionality through the ''play service'' interface.
 
 !provided services
@@ -4415,7 +4434,7 @@ This is the core service provided by the player subsystem. The purpose is to cre
 ;data producers
 :a set of ModelPort elements to ''pull'' for generating output. They can either be handed in direcly, or resolved from a set of OutputDesignation elements
 ;data sinks
-:to be able to create output, the PlayProcess needs to cooperate with OutputSlot.s
+:to be able to create output, the PlayProcess needs to cooperate with [[output slots|OutputSlot]]
 :physical outputs are never handled directly, rather, the playback or rendering needs an OutputManager to resolve the output designations into output slots
 ;controller
 :when provided with these two prerequisites, the play service is able to build a PlayProcess.
@@ -4425,16 +4444,16 @@ This is the core service provided by the player subsystem. The purpose is to cre
 :any details of this processing remain opaque for the clients; even the player subsystem just accesses the EngineFaçade
 </pre>
 </div>
-<div title="Player" modifier="Ichthyostega" modified="201106131443" created="201012181700" tags="def overview" changecount="10">
+<div title="Player" modifier="Ichthyostega" modified="201112091904" created="201012181700" tags="def overview" changecount="13">
 <pre>Within Lumiera, &amp;raquo;Player&amp;laquo; is the name for a [[Subsystem]] responsible for organising and tracking //ongoing playback and render processes.// &amp;rarr; [[PlayProcess]]
 The player subsystem does not perform or even manage any render operations, nor does it handle the outputs directly.
-Yet it adresses some central concerns:
+Yet it addresses some central concerns:
 
 ;uniformity
 :all playback and render processes are on equal footing, handled in a similar way.
 ;integration
 :the player cares for the necessary integration with the other subsystems
-:it consults the OutputManagement, retrieves the necessary informations from the [[Session]] and coordinates [[Backend]] calls.
+:it consults the OutputManagement, retrieves the necessary informations from the [[Session]] and coordinates the forwarding of [[Backend]] calls.
 ;time quantisation
 :the player translates continuous time values into discrete frame counts.
 :to perform this [[quantisation|TimeQuant]], the help of the session for building a TimeGrid for each output channel is required.
@@ -5132,8 +5151,8 @@ __see also__
 &amp;rarr; the protocol [[how to operate the nodes|NodeOperationProtocol]]
 </pre>
 </div>
-<div title="RenderProcess" modifier="Ichthyostega" modified="201007170307" created="200706190705" tags="Rendering operational" changecount="28">
-<pre>For each segment (of the effective timeline), there is a Processor holding the exit node(s) of a processing network, which is a &quot;Directed Acyclic Graph&quot; of small, preconfigured, stateless [[processing nodes|ProcNode]]. This network is operated according to the ''pull principle'', meaning that the rendering is just initiated by &quot;pulling&quot; output from the exit node, causing a cascade of recursive downcalls or prerequisite calculations to be scheduled as separate jobs. Each node knows its predecessor(s), thus the necessary input can be pulled from there. Consequently, there is no centralized &quot;engine object&quot; which may invoke nodes iteratively or table driven &amp;mdash; rather, the rendering can be seen as a passive service provided for the backend, which may pull from the exit nodes at any time, in any order (?), and possibly multithreaded.
+<div title="RenderProcess" modifier="Ichthyostega" modified="201112162056" created="200706190705" tags="Rendering operational" changecount="29">
+<pre>For each segment (of the effective timeline), there is a Processor holding the exit node(s) of a processing network, which is a &quot;Directed Acyclic Graph&quot; of small, preconfigured, stateless [[processing nodes|ProcNode]]. This network is operated according to the ''pull principle'', meaning that the rendering is just initiated by &quot;pulling&quot; output from the exit node, causing a cascade of recursive downcalls or prerequisite calculations to be scheduled as individual [[jobs|RenderJob]]. Each node knows its predecessor(s), thus the necessary input can be pulled from there. Consequently, there is no centralized &quot;engine object&quot; which may invoke nodes iteratively or table driven &amp;mdash; rather, the rendering can be seen as a passive service provided for the backend, which may pull from the exit nodes at any time, in any order (?), and possibly multithreaded.
 All State necessary for a given calculation process is encapsulated and accessible by a StateProxy object, which can be seen as the representation of &quot;the process&quot;. At the same time, this proxy provides the buffers holding data to be processed and acts as a gateway to the backend to handle the communication with the Cache. In addition to this //top-level State,// each calculation step includes a small [[state adapter object|StateAdapter]] (stack allocated), which is pre-configured by the builder and serves the purpose to isolate the processing function from the detals of buffer management.
 
 
@@ -5167,8 +5186,8 @@ Later on we expect a distinct __query subsystem__ to emerge, presumably embeddin
 
 &amp;rarr; QuantiserImpl</pre>
 </div>
-<div title="SchedulerRequirements" modifier="Ichthyostega" created="201107080145" tags="Rendering spec draft discuss" changecount="1">
-<pre>The Scheduler is responsible for geting the individual render jobs to run. The basic idea is that individual render jobs //should never block// -- and thus the calculation of a single frame might be split into several jobs, including resource fetching. This, together with the data exchange protocol defined for the OutputSlot, and the requirements of storage management (especially releasing of superseded render nodes), leads to certain requirements to be ensured by the scheduler:
+<div title="SchedulerRequirements" modifier="Ichthyostega" modified="201112162055" created="201107080145" tags="Rendering spec draft discuss" changecount="3">
+<pre>The [[Scheduler]] is responsible for geting the individual [[render jobs|RenderJob]] to run. The basic idea is that individual render jobs //should never block// -- and thus the calculation of a single frame might be split into several jobs, including resource fetching. This, together with the data exchange protocol defined for the OutputSlot, and the requirements of storage management (especially releasing of superseded render nodes), leads to certain requirements to be ensured by the scheduler:
 ;ordering of jobs
 :the scheduler has to ensure all prerequisites of a given job are met
 ;job time window

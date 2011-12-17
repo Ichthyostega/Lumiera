@@ -21,10 +21,33 @@
 */
 
 /** @file play-service.hpp
- ** Player subsystem......
- **
- ** @see lumiera::DummyPlayer
- ** @see gui::PlaybackController usage example 
+ ** Primary service of the Player subsystem: Starting and controlling render/playback.
+ ** This is the implementation level service interface for the "Player". Client code
+ ** should access this service through the lumiera::Play facade interface.
+ ** 
+ ** The player and render control subsystem allows to start and control playback and
+ ** rendering at any given collection of model ports (the conceptual exit points
+ ** of the High-Level-Model). These model ports are the (side effect) result of a
+ ** build process performed on the High-Level-Model, causing all nominal output
+ ** designations within the model to be resolved as far as possible. Additionally,
+ ** for \em playback, the global level of the model (the global pipes of a timeline)
+ ** need to be connected to a viewer component. This results in a further resolution
+ ** step, mapping the output designations to the concrete output possibilities of
+ ** the running Lumiera instance. This mapping information is kept embedded within
+ ** an OutputManager instance, passed as parameter when invoking the player service.
+ ** Alternatively, for \em rendering, a similar kind of output mapping information
+ ** needs to be provided, again embedded within an OutputManager instance, this
+ ** time leading to an output file to be rendered.
+ ** 
+ ** The result of an invocation of the Player service is a Play::Controller
+ ** frontend object. This smart-ptr like handle can be used by the client to
+ ** control all aspects of playback or rendering; it behaves like a state machine.
+ ** When the last copy of this Play::Controller frontend goes out of scope, behind
+ ** the scenes the corresponding PlayProcess gets terminated and prepared for cleanup. 
+ ** 
+ ** @see engine::EngineService
+ ** @todo WIP-WIP-WIP as of Nov.2011
+ ** 
  */
 
 

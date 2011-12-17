@@ -40,7 +40,7 @@ namespace engine {
 //  class ExitNode;
   
   /**
-   * @todo
+   * @todo 11/11 extremely fuzzy at the moment
    */
   class Dispatcher
     {
