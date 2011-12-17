@@ -29,6 +29,7 @@
 
 //#include <string>
 //#include <memory>
+#include <tr1/memory>
 #include <tr1/functional>
 //#include <boost/scoped_ptr.hpp>
 
@@ -42,11 +43,16 @@ namespace play {
 //    using lumiera::Subsys;
 //    using std::auto_ptr;
 //    using boost::scoped_ptr;
+  using std::tr1::shared_ptr;
   using std::tr1::bind;
   using std::tr1::placeholders::_1;
   using engine::EngineService;
   
   typedef EngineService::QoS_Definition RenderQuality;
+  
+  
+ 
+  RenderConfigurator::~RenderConfigurator() { } // emit VTable here...
   
   
   
@@ -62,9 +68,6 @@ namespace play {
   }
   
   
-  RenderConfigurator::RenderConfigurator()
-    : function<Feed(ModelPort)> (bind (&RenderConfigurator::buildActiveFeed, this, _1))
-    { }
   
   
   
@@ -124,7 +127,27 @@ namespace play {
   
   
   
-  /** */
+  /** @internal this builder function is used by the PlayService
+   * when it comes to creating a new PlayProcess. The generated RenderConfigurator
+   * embodies the specific knowledge how to configure and setup the rendering or
+   * playback at the EngineFacade, based on the general playback speed and
+   * quality desirable for this playback process to be initiated.
+   * @remarks building a special subclass here and managing this instance
+   *          by smart-ptr. Then wrapping all of this up into a functor,
+   *          which can thus be passed on by value. This functor will
+   *          later on be used to transform each desired model port
+   *          into a suitable output connection, where the actual
+   *          output will be resolved through the given
+   *          OutputManager
+   */
+  RenderConfigurator::ConnectFunction
+  buildRenderConfiguration (POutputManager outputPossibilities, Timings playbackTimings)
+  {
+    shared_ptr<RenderConfigurator> specialConfig (new DefaultRenderProcessBuilder (outputPossibilities, playbackTimings));
+    
+    return bind (&RenderConfigurator::buildActiveFeed, specialConfig, _1 );
+  }
   
+ 
   
 }} // namespace proc::play

@@ -43,11 +43,11 @@
 #include "proc/play/play-process.hpp"
 #include "proc/engine/calc-stream.hpp"
 #include "proc/play/output-slot.hpp"
-//#include "proc/play/output-manager.hpp"
+#include "proc/play/output-manager.hpp"
 //#include "lib/iter-source.hpp"
 //#include "lib/util.hpp"
 //
-//#include <boost/noncopyable.hpp>
+#include <boost/noncopyable.hpp>
 //#include <boost/scoped_ptr.hpp>
 //#include <string>
 #include <tr1/functional>
@@ -73,18 +73,17 @@ namespace play {
   
   /** Strategy for configuring the render process */
   class RenderConfigurator
-    : public function<Feed(ModelPort)>
+    : boost::noncopyable
     {
       
     public:
       virtual ~RenderConfigurator();  ///< this is an interface
       
-    private:
       Feed buildActiveFeed (ModelPort);
       
-    protected:
-      RenderConfigurator();
+      typedef function<Feed(ModelPort)> ConnectFunction;
       
+    protected:
       /** retrieve a suitable output sink for the data
        *  to be produced at the given model exit point.
        *  While the port already defines the necessary StreamType,
@@ -107,6 +106,16 @@ namespace play {
       virtual engine::CalcStreams buildCalculationStreams (ModelPort, OutputSlot&)  =0;
       
     };
+  
+  
+  /** Factory function to build a RenderConfigurator
+   *  specifically tailored for a given PlayProcess.
+   * @return the public access point to an RenderConfigurator,
+   *         wrapped as generic function object 
+   */
+  RenderConfigurator::ConnectFunction
+  buildRenderConfiguration (POutputManager outputPossibilities, Timings playbackTimings);
+  
     
   
   

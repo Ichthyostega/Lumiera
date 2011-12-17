@@ -107,9 +107,7 @@ namespace play {
       
       
       /** Implementation: build a PlayProcess */
-      virtual Controller connect(ModelPorts, Output);
-      
-      RenderConfigurator& buildRenderConfiguration(Output);
+      virtual Controller connect(ModelPorts, POutputManager);
       
       
     public:

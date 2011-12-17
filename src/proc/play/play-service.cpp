@@ -26,12 +26,13 @@
 #include "proc/play/play-service.hpp"
 #include "proc/play/play-process.hpp"
 #include "proc/play/render-configurator.hpp"
+#include "proc/play/output-manager.hpp"
 #include "lib/util-foreach.hpp"
 
 
 #include <string>
 //#include <memory>
-//#include <tr1/functional>
+////#include <tr1/functional>
 #include <tr1/memory>
 //#include <boost/scoped_ptr.hpp>
 
@@ -176,22 +177,18 @@ namespace play {
    * calculated media data to the outputs.
    */
   Play::Controller
-  PlayService::connect (ModelPorts dataGenerators, Output outputDestinations)
+  PlayService::connect (ModelPorts dataGenerators, POutputManager outputPossibilities)
   {
+    Timings playbackTimings; /////////////////////////////////////////////////////////////TODO
+    
     return pTable_->establishProcess(
             PlayProcess::initiate(dataGenerators, 
-                buildRenderConfiguration(outputDestinations)));
+                buildRenderConfiguration(outputPossibilities, playbackTimings)));
   }
   
   
   
   /** */
-  RenderConfigurator&
-  PlayService::buildRenderConfiguration (Output outputDestinations)
-  {
-    UNIMPLEMENTED ("how to build a suitable render configuration");
-  }
-  
   
   
   

@@ -58,7 +58,7 @@ namespace play {
    * The caller gets to own and manage the returned process entry.
    */
   PlayProcess*
-  PlayProcess::initiate (ModelPorts dataGenerators, RenderConfigurator& activeOutputFeedBuilder)
+  PlayProcess::initiate (ModelPorts dataGenerators, function<Feed(ModelPort)> activeOutputFeedBuilder)
   {
     return new PlayProcess (transform (dataGenerators,
                                        activeOutputFeedBuilder));

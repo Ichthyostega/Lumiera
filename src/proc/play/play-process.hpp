@@ -63,6 +63,7 @@
 //
 #include <boost/noncopyable.hpp>
 //#include <boost/scoped_ptr.hpp>
+#include <tr1/functional>
 //#include <string>
 #include <vector>
 
@@ -76,14 +77,13 @@ namespace play {
 //    using lumiera::DummyPlayer;
   using util::isnil;
   using proc::mobject::ModelPort;
+  using std::tr1::function;
   
   typedef lib::IterSource<ModelPort>::iterator ModelPorts;
   
   namespace error = lumiera::error;
   
   
-  /** Strategy for configuring the render process */
-  class RenderConfigurator;
   
   
   /**
@@ -132,7 +132,7 @@ namespace play {
       
     public:
       static PlayProcess*
-      initiate (ModelPorts dataGenerators, RenderConfigurator&);
+      initiate (ModelPorts dataGenerators, function<Feed(ModelPort)>);
     };
   
   
