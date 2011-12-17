@@ -1958,7 +1958,7 @@ Some further details
 * a special case of this factory use is the [[Singleton]] factory, which is used a lot within the Proy-Layer code
 </pre>
 </div>
-<div title="Fixture" modifier="Ichthyostega" modified="201109031601" created="200706220324" tags="def spec Builder Model" changecount="48">
+<div title="Fixture" modifier="Ichthyostega" modified="201112171718" created="200706220324" tags="def spec Builder Model" changecount="50">
 <pre>a specially configured view -- joining together high-level and low-level model.
 The Fixture acts as //isolation layer// between the two models, and as //backbone to attach the render nodes.//
 * all MObjects have their position, length and configuration set up ready for rendering.
@@ -1967,7 +1967,7 @@ The Fixture acts as //isolation layer// between the two models, and as //backbon
 * these ~ExplicitPlacements are contained immediately within the Fixture, ordered by time
 * besides, there is a collection of all effective, possibly externally visible [[model ports|ModelPortRegistry]]
 
-As the builder and thus render engine //only consults the fixture,// while all editing operations finally propagate to the fixture as well, we get an isolation layer between the high level part of the Proc layer (editing, object manipulation) and the render engine. [[Creating the Fixture|BuildFixture]] is an important sideeffect of running the [[Builder]] when createing the [[render engine network|LowLevelModel]].
+As the builder and thus render engine //only consults the fixture,// while all editing operations finally propagate to the fixture as well, we get an isolation layer between the high level part of the Proc layer (editing, object manipulation) and the render engine. [[Creating the Fixture|BuildFixture]] is an important first step and sideeffect of running the [[Builder]] when createing the [[render engine network|LowLevelModel]].
 ''Note'': all of the especially managed storage of the LowLevelModel is hooked up behind the Fixture
 &amp;rarr; FixtureStorage
 &amp;rarr; FixtureDatastructure
@@ -1985,14 +1985,14 @@ The fixture is like a grid, where one dimension is given by the [[model ports|Mo
 ;Segmentation
 :The segmentation partitiones the time axis of a single timeline into segments of constant (wiring) configuration
 :Together, the segments form a seamless sequence of time intervals. They contain a copy of each (explicit) placement of a visible object touching that time interval. Besides that, segments are the top level grouping device of the render engine node graph; they are always built and discarded at once.
-:Segments may be //hot swapped// into an ongoing render.
+:Segments (and even a different Segmentation) may be //hot swapped// into an ongoing render.
 
 ;Exit Nodes
 :Each segment holds an ExitNode for each relevant ModelPort of the corresponding timeline.
 :Thus the exit nodes are keyed by ~Pipe-ID as well (and consequently have a distinct [[stream type|StreamType]]) -- each model port coresponds to {{{&lt;number_of_segments&gt;}}} separate exit nodes, but of course an exit node may be //mute.//
 </pre>
 </div>
-<div title="FixtureDatastructure" modifier="Ichthyostega" modified="201112162317" created="201012162304" tags="spec Builder" changecount="12">
+<div title="FixtureDatastructure" modifier="Ichthyostega" modified="201112171816" created="201012162304" tags="spec Builder" changecount="13">
 <pre>Generally speaking, the datastructure to implement the ''Fixture'' (&amp;rarr; see a more general description [[here|Fixture]]) is comprised of a ModelPortRegistry and a set of [[segmentations|Segmentation]] per Timeline.
 This page focusses on the actual data structure and usage details on that level. See also &amp;rarr; [[storage|FixtureStorage]] considerations.
 
@@ -2009,7 +2009,7 @@ To support this usage pattern, the Fixture implementation makes use of the [[PIm
 ** get or create the frame dispatcher table
 ** dispatch a single frame to yield the corresponding ExitNode
 * (re)building
-** create a new implementation frame
+** create a new implementation transaction
 ** create a new segmentation
 ** establish what segments actually need to be rebuilt
 ** dispatch a newly built segment into the transaction
@@ -2022,7 +2022,7 @@ To support this usage pattern, the Fixture implementation makes use of the [[PIm
 * moreover, this necessitates a tight integration down to implementation level, both with the clean-up and the render processes themselves
 </pre>
 </div>
-<div title="FixtureStorage" modifier="Ichthyostega" modified="201108142259" created="201012140231" tags="Builder impl operational draft" changecount="35">
+<div title="FixtureStorage" modifier="Ichthyostega" modified="201112171930" created="201012140231" tags="Builder impl operational draft" changecount="43">
 <pre>The Fixture &amp;rarr; [[data structure|FixtureDatastructure]] acts as umbrella to hook up the elements of the render engine's processing nodes network (LowLevelModel).
 Each segment within the [[Segmentation]] of any timeline serves as ''extent'' or unit of memory management: it is built up completely during the corresponding build process and becomes immutable thereafter, finally to be discarded as a whole when superseded by a modified version of that segment (new build process) -- but only after all related render processes (&amp;rarr; CalcStream) are known to be terminated.
 
@@ -2037,10 +2037,10 @@ Basically the concern is that each new CalcStream had to access the shared count
 ''Note'': {{{shared_ptr}}} is known to be implemented by a lock-free algorithm (yes it is, at least since boost 1.33. Don't believe what numerous FUD spreaders have written). Thus lock contention isn't a problem, but at least a memory barrier is involved (and if I&amp;nbsp;judge GCC's internal documentation right, currently their barriers extend to //all// globally visible variables)
 
 !!question: alternatives?
-There are. As the builder is known to be run again and again, no one forces us to deallocate as soon as we could. That's the classical argument exploited by any garbage collector too. Thus we could just note the fact that a calculation stream is done and re-evaluate all those noted results on later occasion.
+There are. As the builder is known to be run again and again, no one forces us to deallocate as soon as we could. That's the classical argument exploited by any garbage collector too. Thus we could just note the fact that a calculation stream is done and re-evaluate all those noted results on later occasion. Obviously, the [[Scheduler]] is in the best position for notifying the rest of the system when this and that [[job|RenderJob]] has terminated, because the Scheduler is the only facility required to touch each job reliably. Thus it seems favourable to add basic support for either termination callbacks or for guaranteed execution of some notification jobs to the [[Scheduler's requirements|SchedulerRequirements]].
 
 !!exploiting the frame-dispatch step
-Irrespective of the decision in favour or against ref-counting, it seems reasonable to make use of the //frame dispatch step,// which is necessary anyway. The idea is to give each render process (maybe even each CalcStram)  a //copy//&amp;nbsp; of an dispatcher table object -- basically just a list of time breaking points and a pointer to the relevant exit node. If we keep track of those dispatcher tables, add a back-link to identify the process and require the process in turn to deregister, we get a tracking of tainted processes for free.
+Irrespective of the decision in favour or against ref-counting, it seems reasonable to make use of the //frame dispatch step,// which is necessary anyway. The idea is to give each render process (maybe even each CalcStream)  a //copy//&amp;nbsp; of an dispatcher table object -- basically just a list of time breaking points and a pointer to the relevant exit node. If we keep track of those dispatcher tables, add some kind of back-link to identify the process and require the process in turn to deregister, we get a tracking of tainted processes for free.
 
 !!assessment {{red{WIP 12/10}}}
 But the primary question here is to judge the impact of such an implementation. What would be the costs?
@@ -2059,22 +2059,22 @@ But the primary question here is to judge the impact of such an implementation. 
 &amp;rArr; we should spend a second thought about how actually to find and process the segments to be discarded
 
 !!!identifying tainted and disposable segments
-Above estimation hints at the necessity of frequently finding some 30 to 100 segments to be disposed, out of thousands, assumed the original reason for triggering the build process was a typically local change in the high-level model. We can only discard when all related processes are finished, but there is a larger number of segments as candidate for eviction. These candidates are rather easy to pinpoint -- they will be uncovered during a linear comparison pass prior to commiting the changed Fixture. Usually, the number of candidates will be low (localised changes), but global manipulations might invalidate thousands of segments.
+Above estimation hints at the necessity of frequently finding some 30 to 100 segments to be disposed, out of thousands, assumed the original reason for triggering the build process was a typically local change in the high-level model. We can only discard when all related processes are finished, but there is a larger number of segments as candidate for eviction. These candidates are rather easy to pinpoint -- they will be uncovered during a linear comparison pass prior to committing the changed Fixture. Usually, the number of candidates will be low (localised changes), but global manipulations might invalidate thousands of segments.
 * if we frequently pick the segments actually to be disposed, there is the danger of performance degeneration when the number of segments is high
 * the other question is if we can afford just to keep all of those candidates around, as all of them are bound to get discardable eventually
 * and of course there is also the question how to detect //when// they're due.
 
 ;Model A
-:use a logarithmic datastructure, e.g. a priority queue
-:problem here is that the priorities change, which either means shared access or a lot of &quot;superseeded&quot; entries
+:use a logarithmic datastructure, e.g. a priority queue. Possibly together with LRU ordering
+:problem here is that the priorities change, which either means shared access or a lot of &quot;superseded&quot; entries
 ;Model B
-:keep all candidates around and track the tainted processes instead
+:keep all superseded segments around and track the tainted processes instead
 :problem here is how to get the tainted processes precisely and with low overhead
 //currently {{red{12/10}}} I tend to prefer Model B...// while the priority queue remains to be investigated in more detail for organising the actual build process.
 But actually I'm struck here, because of the yet limited knowledge about those render processes....
 * how do we //join// an aborted/changed rendering process to his successor, without creating a jerk in the output?
-* is it even possible to continue a process when parts of the covered timerange are affected by a build?
-If the latter question is answered with &quot;No!&quot;, then the problem gets simple in solution, but maybe memory consuming: In that case, //all//&amp;nbsp; processes linked to a timeline gets affected and thus tainted; we'd just dump them onto a pile and delay releasing all of the superseeded segments until all of them are known to be terminated.
+* is it even possible to continue a process when parts of the covered time-range are affected by a build?
+If the latter question is answered with &quot;No!&quot;, then the problem gets simple in solution, but maybe memory consuming: In that case, //all//&amp;nbsp; processes linked to a timeline gets affected and thus tainted; we'd just dump them onto a pile and delay releasing all of the superseded segments until all of them are known to be terminated.
 </pre>
 </div>
 <div title="ForwardIterator" modifier="Ichthyostega" modified="200912190027" created="200910312114" tags="Concepts def spec" changecount="17">
@@ -5186,8 +5186,8 @@ Later on we expect a distinct __query subsystem__ to emerge, presumably embeddin
 
 &amp;rarr; QuantiserImpl</pre>
 </div>
-<div title="SchedulerRequirements" modifier="Ichthyostega" modified="201112162055" created="201107080145" tags="Rendering spec draft discuss" changecount="3">
-<pre>The [[Scheduler]] is responsible for geting the individual [[render jobs|RenderJob]] to run. The basic idea is that individual render jobs //should never block// -- and thus the calculation of a single frame might be split into several jobs, including resource fetching. This, together with the data exchange protocol defined for the OutputSlot, and the requirements of storage management (especially releasing of superseded render nodes), leads to certain requirements to be ensured by the scheduler:
+<div title="SchedulerRequirements" modifier="Ichthyostega" modified="201112171835" created="201107080145" tags="Rendering spec draft discuss" changecount="5">
+<pre>The [[Scheduler]] is responsible for geting the individual [[render jobs|RenderJob]] to run. The basic idea is that individual render jobs //should never block// -- and thus the calculation of a single frame might be split into several jobs, including resource fetching. This, together with the data exchange protocol defined for the OutputSlot, and the requirements of storage management (especially releasing of superseded render nodes &amp;rarr; FixtureStorage), leads to certain requirements to be ensured by the scheduler:
 ;ordering of jobs
 :the scheduler has to ensure all prerequisites of a given job are met
 ;job time window
@@ -5195,7 +5195,11 @@ Later on we expect a distinct __query subsystem__ to emerge, presumably embeddin
 ;failure propagation
 :when a job fails, either due to an job internal error, or by timing glitch, any dependent jobs need to receive that failure state
 ;guaranteed execution
-:some jobs are marked as &quot;ensure run&quot;. These need to run reliable, even when prerequisite jobs fail -- and this failure state needs to be propagated</pre>
+:some jobs are marked as &quot;ensure run&quot;. These need to run reliable, even when prerequisite jobs fail -- and this failure state needs to be propagated
+
+!detecting termination
+The way other parts of the system are built, requires us to obtain a guaranteed knowledge of some job's termination. It is possible to obtain that knowledge with some limited delay, but it nees to be absoultely reliable (violations leading to segfault). The requirements stated above assume this can be achieved through //jobs with guaranteed execution.// Alternatively we could consider installing specific callbacks -- in this case the scheduler itself has to guarantee the invocation of these callbacks, even if the corresponding job fails or is never invoked. It doesn't seem there is any other option.
+</pre>
 </div>
 <div title="ScopeLocator" modifier="Ichthyostega" modified="200911202035" created="200911192145" tags="def SessionLogic" changecount="10">
 <pre>A link to relate a compound of [[nested placement scopes|PlacementScope]] to the //current// session and the //current//&amp;nbsp; [[focus for querying|QueryFocus]] and exploring the structure. ScopeLocator is a singleton service, allowing to ''explore'' a [[Placement]] as a scope, i.e. discover any other placements within this scope, and allowing to locate the position of this scope by navigating up the ScopePath finally to reach the root scope of the HighLevelModel.
@@ -5249,13 +5253,13 @@ We need to detect attaching and detaching of
 * root &amp;harr; [[Track]]
 </pre>
 </div>
-<div title="Segmentation" modifier="Ichthyostega" modified="201105222236" created="201012121901" tags="def spec Builder" changecount="28">
+<div title="Segmentation" modifier="Ichthyostega" modified="201112171808" created="201012121901" tags="def spec Builder" changecount="34">
 <pre>//Segmentation of timeline// denotes a data structure and a step in the BuildProcess.
 When [[building the fixture|BuildFixture]], ~MObjects -- as handled by their Placements -- are grouped below each timeline using them; Placements are then to be resolved into [[explicit Placements|ExplicitPlacement]], resulting in a single well defined time interval for each object. This allows to cut this effective timeline into slices of constant wiring structure, which are represented through the ''Segmentation Datastructure'', a time axis with segments holding object placements and [[exit nodes|ExitNode]]. &amp;nbsp;&amp;rarr; see [[structure of the Fixture|Fixture]]
 * for each Timeline we get a Segmentation
 ** which in turn is a list of non-overlapping segments
 *** each holding
-**** an ExplicitPlacement for each covered object
+**** an ExplicitPlacement for each object touching that time interval
 **** an ExitNode for each ModelPort of the corresponding timeline
 
 !Usage pattern
@@ -5264,9 +5268,9 @@ When [[building the fixture|BuildFixture]], ~MObjects -- as handled by their Pla
 :&amp;rarr; after //sorting,// the segmentation can be established, thereby copying placements spanning multiple segments
 :&amp;rarr; only //after running the complete build process for each segment,// the list of model ports and exit nodes can be established
 ;(2) commit stage
-: -- after the build process(es) are completed, the new fixture gets ''committed'', thus becoming the officially valid state to be rendered. As render processes might be going on in parallel, some kind of locking or barrier is required. It seems advisable to make the change into a single atomic hot-swap. Meaning we'd get a single access point to be protected. But there is another twist: We need to find out which render processes to cancel an restart, to pick up the changes introduced by this build process, which might include adding and deleting of timelines as a whole, and any changes to the segmentation grid. Because of the highly dynamic nature of the placements, on the other hand it isn't viable to expect the high-level model to provide this information. Thus we need to find out about a ''change coverage'' at this point. We might expand on that idea to //prune any new segments which aren't changed.// This way, only a write barrier would be necessary on switching the actually changed segments, and any render processes touching these would be //tainted.// Old allocations could be released after all tainted processes are known to be terminated.
+: -- after the build process(es) are completed, the new fixture gets ''committed'', thus becoming the officially valid state to be rendered. As render processes might be going on in parallel, some kind of locking or barrier is required. It seems advisable to make the change into a single atomic hot-swap. Meaning we'd get a single access point to be protected. But there is another twist: We need to find out which render processes to cancel and restart, to pick up the changes introduced by this build process -- which might include adding and deleting of timelines as a whole, and any conceivable change to the segmentation grid. Because of the highly dynamic nature of the placements, on the other hand it isn't viable to expect the high-level model to provide this information. Thus we need to find out about a ''change coverage'' at this point. We might expand on that idea to //prune any new segments which aren't changed.// This way, only a write barrier would be necessary on switching the actually changed segments, and any render processes touching these would be //tainted.// Old allocations could be released after all tainted processes are known to be terminated.
 ;(3) rendering use
-:Each play/render process employs a ''frame dispatch step'' to get the right exit node for pulling a given frame. From there on, the process proceeds into the [[processing nodes|ProcNodes]], interleaved with backend/scheduler actions due to splitting into individually scheduled jobs. The storage of these processing nodes and accompanying wiring descriptors is hooked up behind the individual segments, by sharing a common {{{AllocationCluster}}}. Yet the calculation of individual frames also depends on ''parameters'' and especially ''automation'' connected with objects in the high-level model. It is likely that there might be some sharing, as the intention was to allow ''live changes'' to automated values. &lt;br/&gt;{{red{WIP 12/2010}}} details need to be worked out. &amp;rarr; [[parameter wiring concept|Wiring]]
+:Each play/render process employs a ''frame dispatch step'' to get the right exit node for pulling a given frame. From there on, the process proceeds into the [[processing nodes|ProcNodes]], interleaved with backend/scheduler actions due to splitting into individually scheduled jobs. The storage of these processing nodes and accompanying wiring descriptors is hooked up behind the individual segments, by sharing a common {{{AllocationCluster}}}. Yet the calculation of individual frames also depends on ''parameters'' and especially ''automation'' linked with objects in the high-level model. It is likely that there might be some sharing or some kind of additional communication interface, as the intention was to allow ''live changes'' to automated values. &lt;br/&gt;{{red{WIP 12/2010}}} details need to be worked out. &amp;rarr; [[parameter wiring concept|Wiring]]
 !!!observations
 * Storage and initialisation for explicit placements is an issue. We should strive at making that inline as much as possible.
 * the overall segmentation emerges from a sorting of time points, which are start points of explicit placements
@@ -5280,7 +5284,7 @@ When [[building the fixture|BuildFixture]], ~MObjects -- as handled by their Pla
 !!!conclusions
 The Fixture is mostly comprised of the Segementation datastructure, but some other facilities are involved too
 # at top level, access is structured by groups of model ports, actually grouped by timeline. This first access level is handled by the Fixture
-# during the build process, there is a collection of placements; this can be discarded afterwards
+# during the build process, there is a collecting and ordering of placements; these intermediaries as well as the initial collection can be discarded afterwards
 # the backbone of the segmentation is closely linked to an ordering by time. Initially it should support sorting, access by time interval search later on.
 # discarding a segment (or failing to do so) has an high impact on the whole application. We should employ a reliable mechanism for that.
 # the frame dispatch and the tracking of processes can be combined; data duplication is a virtue when it comes to parallel processes
