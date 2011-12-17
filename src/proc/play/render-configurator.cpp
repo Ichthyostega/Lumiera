@@ -21,13 +21,15 @@
 * *****************************************************/
 
 
+#include "lib/error.hpp"
 #include "proc/play/render-configurator.hpp"
+#include "proc/play/output-manager.hpp"
 #include "proc/engine/engine-service.hpp"
 //#include "lib/itertools.hpp"
 
 //#include <string>
 //#include <memory>
-//#include <tr1/functional>
+#include <tr1/functional>
 //#include <boost/scoped_ptr.hpp>
 
 
@@ -35,11 +37,36 @@
 namespace proc {
 namespace play {
   
+  namespace error = lumiera::error;
 //    using std::string;
 //    using lumiera::Subsys;
 //    using std::auto_ptr;
 //    using boost::scoped_ptr;
-//    using std::tr1::bind;
+  using std::tr1::bind;
+  using std::tr1::placeholders::_1;
+  using engine::EngineService;
+  
+  typedef EngineService::QoS_Definition RenderQuality;
+  
+  
+  
+  /** Template Method: how to build an active render feed,
+   *  pulling from the given exit point of the model and
+   *  feeding the OutputSlot established appropriately
+   *  to deliver media data of suitable type */
+  Feed
+  RenderConfigurator::buildActiveFeed (ModelPort port)
+  {
+    OutputSlot& slot = getOutputFor (port);
+    return Feed (buildCalculationStreams (port,slot)); 
+  }
+  
+  
+  RenderConfigurator::RenderConfigurator()
+    : function<Feed(ModelPort)> (bind (&RenderConfigurator::buildActiveFeed, this, _1))
+    { }
+  
+  
   
   
   namespace { // Implementation details...
@@ -53,20 +80,41 @@ namespace play {
       : public RenderConfigurator
       {
         
-        Feed::RenderStreams
+        POutputManager outputResolver_;
+        Timings        playbackTimings_;
+        RenderQuality  renderQuality_;
+        
+        
+        OutputSlot&
+        getOutputFor (ModelPort port)
+          {
+            REQUIRE (outputResolver_);
+            OutputSlot& slot = outputResolver_->getOutputFor (port);
+            if (!slot.isFree())
+              throw error::State("unable to acquire a suitable output slot"   /////////////////////TICKET #197 #816
+                                , LUMIERA_ERROR_CANT_PLAY);
+            return slot;
+          }
+        
+        
+        engine::CalcStreams
         buildCalculationStreams (ModelPort port, OutputSlot& output)
           {
-            UNIMPLEMENTED("build an active playback/render feed");
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #832
+            OutputSlot::Allocation& activeOutputConnection = output.allocate();
+            Timings nominalTimings = activeOutputConnection.getTimingConstraints()
+                                                           .constrainedBy(playbackTimings_);
             
-            ///TODO allocate the output slot
-            ///TODO extract the individual channels
-            ///TODO get the timings
-            ///TODO define the Quality
-            
-            engine::EngineService::instance().calculate(port, nominalTimings, activeOutputConnection, serviceQuality);
-#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #832
+            return EngineService::instance().calculate(port, nominalTimings, activeOutputConnection, renderQuality_);
           }
+        
+        
+      public:
+        DefaultRenderProcessBuilder(POutputManager outputManager, Timings playbackSpeed)
+          : outputResolver_(outputManager)
+          , playbackTimings_(playbackSpeed)
+          , renderQuality_(EngineService::QoS_DEFAULT)
+          { }
+        
       };
   
     

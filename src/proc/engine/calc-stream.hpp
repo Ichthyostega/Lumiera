@@ -35,6 +35,7 @@
 //#include <boost/noncopyable.hpp>
 //#include <boost/scoped_ptr.hpp>
 //#include <string>
+#include <vector>
 
 
 namespace proc  {
@@ -86,6 +87,9 @@ namespace engine{
       
     };
   
+  typedef std::vector<CalcStream> CalcStreams;
+      
+
   
   
   

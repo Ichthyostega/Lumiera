@@ -78,6 +78,7 @@ namespace play {
 //  class DummyImageGenerator;
 //  class TickService;
   class ProcessTable;
+  class RenderConfigurator;
   
   
   
@@ -108,6 +109,8 @@ namespace play {
       /** Implementation: build a PlayProcess */
       virtual Controller connect(ModelPorts, Output);
       
+      RenderConfigurator& buildRenderConfiguration(Output);
+      
       
     public:
       PlayService();   /////TODO Subsys::SigTerm terminationHandle);
@@ -115,6 +118,9 @@ namespace play {
      ~PlayService();    /////TODO notifyTermination_(&error_); }
       
     };
+  
+  
+  LUMIERA_ERROR_DECLARE (CANT_PLAY); ///< unable to build playback or render process for this configuration
   
   
   

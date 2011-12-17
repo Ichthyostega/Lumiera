@@ -25,6 +25,7 @@
 #include "include/play-facade.h"
 #include "proc/play/play-service.hpp"
 #include "proc/play/play-process.hpp"
+#include "proc/play/render-configurator.hpp"
 #include "lib/util-foreach.hpp"
 
 
@@ -62,7 +63,7 @@ namespace play {
   using std::tr1::placeholders::_1;
   using util::remove_if;
   using util::and_all;
-  
+
   
   namespace { // hidden local details of the service implementation....
   
@@ -73,6 +74,11 @@ namespace play {
     
     
   } // (End) hidden service impl details
+  
+  using lumiera::Play;
+  
+  typedef POutputManager Output;
+  
   
   
   class ProcessTable
@@ -87,10 +93,10 @@ namespace play {
       
     public:
       
-      lumiera::Play::Controller
+      Play::Controller
       establishProcess (PlayProcess* newProcess)
         {
-          lumiera::Play::Controller frontend;
+          Play::Controller frontend;
           try {
               frontend.activate (newProcess, bind (&ProcessTable::endProcess, this, _1 ));
             }
@@ -104,6 +110,7 @@ namespace play {
           processes_.push_back (frontend); // keeping a weak-reference
           return frontend;
         }
+      
       
       bool
       isActive()  const
@@ -130,8 +137,7 @@ namespace play {
     };
   
   
-  using lumiera::Play;
-  
+    
   
   PlayService::~PlayService()
     {
@@ -173,8 +179,19 @@ namespace play {
   PlayService::connect (ModelPorts dataGenerators, Output outputDestinations)
   {
     return pTable_->establishProcess(
-            PlayProcess::initiate(dataGenerators, outputDestinations));
+            PlayProcess::initiate(dataGenerators, 
+                buildRenderConfiguration(outputDestinations)));
   }
+  
+  
+  
+  /** */
+  RenderConfigurator&
+  PlayService::buildRenderConfiguration (Output outputDestinations)
+  {
+    UNIMPLEMENTED ("how to build a suitable render configuration");
+  }
+  
   
   
   

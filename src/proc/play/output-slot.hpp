@@ -98,12 +98,13 @@ namespace play {
       class Allocation
         {
         public:
-          virtual OpenedSinks getOpenedSinks()  =0;
-          virtual bool isActive()               =0;
+          virtual OpenedSinks getOpenedSinks()   =0;
+          virtual bool isActive()  const         =0;
           
-          /////TODO add here the getters for timing constraints
+          virtual Timings getTimingConstraints() =0;
+          
         protected:
-         ~Allocation();
+         ~Allocation(); ///< never to be managed by clients directly 
         };
       
       /** established output channel */

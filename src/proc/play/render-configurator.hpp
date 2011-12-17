@@ -41,6 +41,8 @@
 //#include "lib/singleton-ref.hpp"
 #include "proc/mobject/model-port.hpp"
 #include "proc/play/play-process.hpp"
+#include "proc/engine/calc-stream.hpp"
+#include "proc/play/output-slot.hpp"
 //#include "proc/play/output-manager.hpp"
 //#include "lib/iter-source.hpp"
 //#include "lib/util.hpp"
@@ -48,6 +50,7 @@
 //#include <boost/noncopyable.hpp>
 //#include <boost/scoped_ptr.hpp>
 //#include <string>
+#include <tr1/functional>
 #include <vector>
 
 
@@ -59,6 +62,7 @@ namespace play {
 //    using lumiera::Display;
 //    using lumiera::DummyPlayer;
 //  using util::isnil;
+  using std::tr1::function;
   using proc::mobject::ModelPort;
   
 //  typedef proc::play::POutputManager POutputManager;
@@ -69,13 +73,38 @@ namespace play {
   
   /** Strategy for configuring the render process */
   class RenderConfigurator
+    : public function<Feed(ModelPort)>
     {
       
     public:
       virtual ~RenderConfigurator();  ///< this is an interface
       
+    private:
+      Feed buildActiveFeed (ModelPort);
       
-      virtual Feed::RenderStreams buildCalculationStreams (ModelPort, OutputSlot&)  =0;
+    protected:
+      RenderConfigurator();
+      
+      /** retrieve a suitable output sink for the data
+       *  to be produced at the given model exit point.
+       *  While the port already defines the necessary StreamType,
+       *  this strategy still has to decide what concrete output sink
+       *  to use accordingly.
+       */
+      virtual OutputSlot& getOutputFor (ModelPort port)                             =0;
+      
+      
+      /** build active rendering connections, thereby delivering each channel
+       *  of the given model port into the corresponding output sink.
+       *  This strategy will try to allocate the output slot for output (may fail).
+       *  Moreover, a suitable combination of output timings and service quality
+       *  will be picked
+       * @return List of active CalcStream descriptors, created and registered 
+       *         with the EngineFacade, one for each channel connection.
+       * @note   when this strategy function returns, the corresponding
+       *         render activities are already up and running.
+       */
+      virtual engine::CalcStreams buildCalculationStreams (ModelPort, OutputSlot&)  =0;
       
     };
     

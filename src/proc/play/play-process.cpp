@@ -22,6 +22,7 @@
 
 
 #include "proc/play/play-process.hpp"
+#include "proc/play/play-service.hpp"
 #include "proc/play/render-configurator.hpp"
 #include "lib/itertools.hpp"
 
@@ -40,45 +41,14 @@ namespace play {
 //    using std::auto_ptr;
 //    using boost::scoped_ptr;
 //    using std::tr1::bind;
+  using lib::transform;
   
   
   namespace { // Implementation details...
     
-    using std::tr1::bind;
-    using std::tr1::function;
-    using std::tr1::placeholders::_1;
-    using lib::transform;
-    
-    
-    Feed
-    resolveOutputConnection (ModelPort port, POutputManager outputResolver)
-    {
-      REQUIRE (outputResolver);
-      OutputSlot& slot = outputResolver->getOutputFor (port);
-      if (!slot.isFree())
-        throw error::State("unable to acquire a suitable output slot"   /////////////////////TICKET #197 #816
-                          , LUMIERA_ERROR_CANT_PLAY);
-      
-      RenderConfigurator& configurator (*(RenderConfigurator*)NULL); //////////////////////////////////TODO: how to get the RenderConfigurator (strategy) here??? 
-      return Feed (port,slot,configurator); 
-    }
-    
-    
-    typedef function<Feed(ModelPort)> ConnectFunction;
-    
-    /** try to establish an output slot for the given 
-     *  global bus or data production exit point.
-     * @param outputResolver a facility able to resolve to
-     *        a concrete output slot within the actual context 
-     * @throw error::State when resolution fails 
-     */
-    ConnectFunction
-    resolve (POutputManager outputResolver)
-    {
-      return bind (resolveOutputConnection, _1, outputResolver);
-    }
     
   } // (End) hidden service impl details
+  
   
   
   
@@ -88,17 +58,16 @@ namespace play {
    * The caller gets to own and manage the returned process entry.
    */
   PlayProcess*
-  PlayProcess::initiate (ModelPorts dataGenerators, POutputManager outputDestinations)
+  PlayProcess::initiate (ModelPorts dataGenerators, RenderConfigurator& activeOutputFeedBuilder)
   {
     return new PlayProcess (transform (dataGenerators,
-                            resolve(outputDestinations)));
-
+                                       activeOutputFeedBuilder));
   }
   
   
   
   /** @internal actually create and configure a play process instance */
-  PlayProcess::PlayProcess (Feed::Connections pipeConnections)
+  PlayProcess::PlayProcess (Connections pipeConnections)
   {
     if (isnil (pipeConnections))
       throw error::State ("creating a PlayProcess without any usable output connections"
@@ -113,8 +82,8 @@ namespace play {
   
   
   /** */
-  Feed::Feed (ModelPort port, OutputSlot& output, RenderConfigurator& renderStrategy)
-    : renderStreams_(renderStrategy.buildCalculationStreams(port,output))
+  Feed::Feed (engine::CalcStreams const& newActiveRenderingConnections)
+    : renderStreams_(newActiveRenderingConnections)
     { }
 
   

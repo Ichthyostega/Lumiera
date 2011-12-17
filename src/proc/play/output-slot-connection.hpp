@@ -158,8 +158,14 @@ namespace play {
           return transform (eachElm(*this), connectOutputSink);
         }
       
+      Timings
+      getTimingConstraints()
+        {
+          UNIMPLEMENTED ("find out about timing constraints");                   //////////////////////////TICKET #831
+        }
+
       bool
-      isActive()
+      isActive()  const
         {
           return 0 < Connections::size();
         }
