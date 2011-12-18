@@ -28,7 +28,7 @@
 
 //#include <string>
 //#include <memory>
-#include <tr1/functional>
+//#include <tr1/functional>
 //#include <boost/scoped_ptr.hpp>
 
 
@@ -42,6 +42,7 @@ namespace play {
 //    using boost::scoped_ptr;
 //    using std::tr1::bind;
   using lib::transform;
+  using lib::append_all;
   
   
   namespace { // Implementation details...
@@ -50,6 +51,13 @@ namespace play {
   } // (End) hidden service impl details
   
   
+  PlayProcess::PlayProcess (OutputFeeds feeds)
+    : outputFeeds_(feeds)
+    {
+      if (isnil (feeds))
+        throw error::State ("creating a PlayProcess without any usable output connections"
+                           , LUMIERA_ERROR_CANT_PLAY);
+    }
   
   
   
@@ -58,27 +66,19 @@ namespace play {
    * The caller gets to own and manage the returned process entry.
    */
   PlayProcess*
-  PlayProcess::initiate (ModelPorts dataGenerators, function<Feed(ModelPort)> activeOutputFeedBuilder)
-  {
-    return new PlayProcess (transform (dataGenerators,
-                                       activeOutputFeedBuilder));
+  PlayProcess::initiate (ModelPorts dataGenerators, FeedBuilder activeOutputFeedBuilder)
+  { 
+    OutputFeeds newFeeds;
+    append_all (transform (dataGenerators, activeOutputFeedBuilder), newFeeds);
+    return new PlayProcess (newFeeds);
+/////////////////////////////////////////////////////////////////////////////////////////////TICKET #874 : use a pipeline builder to write it as follows:
+//                      treat_all(dataGenerators)
+//                        .apply (activeOutputFeedBuilder)
+//                        .buildVector();
   }
   
   
   
-  /** @internal actually create and configure a play process instance */
-  PlayProcess::PlayProcess (Connections pipeConnections)
-  {
-    if (isnil (pipeConnections))
-      throw error::State ("creating a PlayProcess without any usable output connections"
-                         , LUMIERA_ERROR_CANT_PLAY);
-    
-    UNIMPLEMENTED ("iterate over the connections and allocate/establish each of them, creating and storing Feed objects");
-    while (pipeConnections)
-      {
-        
-      }
-  }
   
   
   /** */

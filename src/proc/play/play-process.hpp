@@ -103,6 +103,9 @@ namespace play {
        *  here through the RenderConfigurator instance */
       Feed (engine::CalcStreams const&);
     };
+  
+  typedef function<Feed(ModelPort)> FeedBuilder;
+  typedef std::vector<Feed>         OutputFeeds;
     
   
   /******************************************************
@@ -124,15 +127,13 @@ namespace play {
   class PlayProcess
     : boost::noncopyable
     {
-      std::vector<Feed> outputFeeds_;
+      OutputFeeds outputFeeds_;
       
-      typedef lib::IterSource<Feed>::iterator Connections;
-      
-      PlayProcess (Connections pipeConnections);
+      PlayProcess (OutputFeeds feeds);
       
     public:
       static PlayProcess*
-      initiate (ModelPorts dataGenerators, function<Feed(ModelPort)>);
+      initiate (ModelPorts dataGenerators, FeedBuilder);
     };
   
   
