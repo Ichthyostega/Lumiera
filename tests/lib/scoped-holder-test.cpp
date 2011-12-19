@@ -108,8 +108,8 @@ namespace test{
             
             TRACE (test, "holder at %p", &holder);
             TRACE (test, "object at %p", holder.get() );
-            TRACE (test, "size(object) = %lu", sizeof(*holder));
-            TRACE (test, "size(holder) = %lu", sizeof(holder));
+            TRACE (test, "size(object) = %zu", sizeof(*holder));
+            TRACE (test, "size(holder) = %zu", sizeof(holder));
           }
           CHECK (0 == Dummy::checksum());
         }

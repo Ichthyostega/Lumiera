@@ -134,7 +134,7 @@ namespace test {
           subInterface.eat (b13);
           me_can_has_more_numberz.eat();
           
-          INFO (test, "SizeOf = %lu", sizeof(me_can_has_more_numberz));
+          INFO (test, "SizeOf = %zu", sizeof(me_can_has_more_numberz));
         }
     };
   

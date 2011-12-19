@@ -134,7 +134,7 @@ namespace session {
   
   ScopePath::~ScopePath()
   {
-    WARN_IF (refcount_, session, "Destroying a scope path frame with ref-count=%lu", refcount_);
+    WARN_IF (refcount_, session, "Destroying a scope path frame with ref-count=%zu", refcount_);
   }
   
   
