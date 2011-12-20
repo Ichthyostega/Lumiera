@@ -1839,14 +1839,18 @@ When building the low-level model, the actual processing code is resolved and a 
 Initially, only the parameter (descriptors) are present on the effect ~MObject, while the actual [[parameter providers|ParamProvider]] are created or wired (by the ConManager) on demand.
 </pre>
 </div>
-<div title="EngineFaçade" modifier="Ichthyostega" modified="201108141650" created="201105222328" tags="Rendering overview spec" changecount="5">
+<div title="EngineFaçade" modifier="Ichthyostega" modified="201112190142" created="201105222328" tags="Rendering overview spec" changecount="8">
 <pre>The primary interface used by the upper application layers to interact with the render engine, to create and manage ongoing [[calculation streams|CalcStream]].
 
 Below this facade, there is a thin adaptadion and forwarding layer, mainly talking to
 * the individual [[Calculation Streams|CalcStream]] created for each PlayProcess.
 * the FrameDispatcher, which translates such streams into a series of RenderJob entries
 * the [[Scheduler]], which is responsible to perform these jobs in a timely fashion
-</pre>
+
+!Quality of Service
+Within the Facade, there is the definition of the {{{EngineService::Quality}}} tag, alongside with several pre-defined quality settings.
+Actually this interface is a strategy, allowing to define quite specific quality levels, in case we need that. Clients can usually just use
+these ~QoS-tags like enum values (they are copyable), without caring for the engine implementation related details.</pre>
 </div>
 <div title="EntryID" modifier="Ichthyostega" modified="201012300036" created="201012300026" tags="def Types" changecount="5">
 <pre>A general identification scheme, ombining a human readable symbolic name, unique within a //specifically typed context,// and machine readable hash ID (LUID). ~Entry-IDs allow for asset-like position accounting and for type safe binding between configuration rules and model obects. They allow for creating an entry with symbolic id and distinct type, combined with an derived hash value, without the overhead in storage and instance management imposed by using a full-fledged Asset.
@@ -3444,7 +3448,7 @@ Thus the mapping is a copyable value object, based on a associative array. It ma
 First and foremost, mapping can be seen as a //functional abstraction.// As it's used at implementation level, encapsulation of detail types in't the primary concern, so it's a candidate for generic programming: For each of those use cases outlined above, a distinct mapping type is created by instantiating the {{{OutputMapping&lt;DEF&gt;}}} template with a specifically tailored definition context ({{{DEF}}}), which takes on the role of a strategy. Individual instances of this concrete mapping type may be default created and copied freely. This instantiation process includes picking up the concrete result type and building a functor object for resolving on the fly. Thus, in the way typical for generic programming, the more involved special details are moved out of sight, while being still in scope for the purpose of inlining. But there //is// a concern better to be encapsulated and concealed at the usage site, namely accessing the rules system. Thus mapping leads itself to the frequently used implementation pattern where there is a generic frontend as header, calling into opaque functions embedded within a separate compilation unit.
 </pre>
 </div>
-<div title="OutputSlot" modifier="Ichthyostega" modified="201111042355" created="201106162339" tags="def Concepts Player spec" changecount="40">
+<div title="OutputSlot" modifier="Ichthyostega" modified="201112200358" created="201106162339" tags="def Concepts Player spec img" changecount="49">
 <pre>Within the Lumiera player and output subsystem, actually sending data to an external output requires to allocate an ''output slot''
 This is the central metaphor for the organisation of actual (system level) outputs; using this concept allows to separate and abstract the data calculation and the organisation of playback and rendering from the specifics of the actual output sink. Actual output possibilities (video in GUI window, video fullscreen, sound, Jack, rendering to file) can be added and removed dynamically from various components (backend, GUI), all using the same resolution and mapping mechanisms (&amp;rarr; OutputManagement)
 
@@ -3453,17 +3457,76 @@ Each OutputSlot is an unique and distinguishable entity. It corresponds explicit
 
 In order to be usable as //output sink,// an output slot needs to be //allocated,// i.e. tied to and locked for a specific client. At any time, there may be only a single client using a given output slot this way. To stress this point: output slots don't provide any kind of inherent mixing capability; any adaptation, mixing, overlaying and sharing needs to be done within the nodes network producing the output data fed to the slot. (in special cases, some external output capabilities -- e.g. the Jack audio connection system -- may still provide additional mixing capabilities, but that's beyond the scope of the Lumiera application)
 
+[&gt;img[Outputslot implementation structures|uml/fig151685.png]]
 Once allocated, the output slot returns a set of concrete ''sink handles'' (one for each physical channel expecting data). The calculating process feeds its results into those handles. Size and other characteristics of the data frames are assumed to be suitable, which typically won't be verified at that level anymore (but the sink handle provides a hook for assertions). Besides that, the allocation of an output slot reveals detailed ''timing expectations''. The client is required to comply to these timings when ''emitting'' data -- he's even required to provide a //current time specification,// alongside with the data. Yet the output slot has the ability to handle timing failures gracefully; the concrete output slot implementation is expected to provide some kind of de-click or de-flicker facility, which kicks in automatically when a timing failure is detected.
 
-!!!data exchange models
+!!!usage and implementation
+Clients retrieve just a reference to an output slot by asking a suitable OutputManager for an output possibility supporting a specific format. Usually, they just &quot;claim&quot; this slot by invoking {{{allocate()}}}, which behind the scenes causes building of the actual output connections and mechanisms. For each such connection -- corresponding to a single channel within the media format handled by this ~OutputSlot -- the client gets a smart-handle {{{DataSink}}}. The concrete ~OutputSlot implementation performs operations quite specific to the kind of output and external interface in question. All tese specific handling is embodied within the concrete connection implementation used by the concrete ~OutputSlot
+
+!!!timing expectations
+Besides the sink handles, allocation of an output slot defines some timing constraints, which are binding for the client. These [[Timings]] are detailed and explicit, including a grid of deadlines for each frame to deliver, plus a fixed //latency.// Within this context, &amp;raquo;latency&amp;laquo; means the requirement to be ahead of the nominal time by a certain amount, to compensate for the processing time necessary to propagate the media to the physical output pin. The output slot implementation itself is bound by external constraints to deliver data at a fixed framerate and aligned to an externally defined timing grid, plus the data needs to be handed over ahead of these time points by an time amount given by the latency. Depending on the data exchange model, there is an additional time window limiting the buffer management.
+
+The assumption is for the client to have elaborate timing capabilities at his disposal. More specifically, the client is assumed to be a job running within the engine scheduler and thus can be configured to run //after// another job has finished, and to run within certain time limits. Thus the client is able to provide a //current nominal time// -- which is suitably close to the actual wall clock time. The output slot implementation can be written such as to work out from this time specification if the call is timely or overdue -- and react accordingly.
+
+!!!Lifecycle and storage
+The concrete OutputSlot implementation is owned and managed by the facility actually providing the output possibility in question. For example, the GUI provides viewer widgets, while some sound output backend provides sound ports. The associated OutputSlot implementation object is required to stay alive as long as it's registered with some OutputManager. It needs to be de-registered explicitly prior to destruction -- and this deregistration may block until all clients using this slot did terminate. Beyond that, an output slot implementation is expected to handle all kinds of failures gracefully -- preferably just emitting a signal (callback functor).
+{{red{TODO 7/11: Deregistration is an unsolved problem....}}}
+
+!!!unified data exchange cycle
+The planned delivery time of a frame is used as an ID throughout that cycle
+# within a defined time window prior to delivery, the client can ''allocate and retrieve the buffer'' from the BufferProvider.
+# the client has to ''emit'' within a (short) time window prior to deadline
+# now the slot gets exclusive access to the buffer for output, signalling the buffer release to the buffer provider when done.
+
+!!!lapses
+This data exchange protocol operates on a rather low level; there is only limited protection against timing glitches
+|  !step|!problem ||!consequences | !protection |
+| (1)|out of time window ||interference with previous/later use of the buffer | prevent in scheduler! |
+|~|does not happen ||harmless as such | emit ignored |
+|~|buffer unavailable ||inhibits further operation | ↯ |
+| (2)|out of time window ||harmless as such | emit ignored |
+|~|out of order ||allowed, unless out of time | -- |
+|~|does not happen ||frame treated as glitch | -- |
+|~|buffer unallocated ||frame treated as glitch | emit ignored |
+| (3)|emit missing ||frame treated as glitch | -- |
+|~|fail to release buffer ||unable to use buffer further | mark unavailable |
+|~|buffer unavailable ||serious malfunction of playback | request playback stop |
+
+Thus there are two serious problem situations
+* allocating the buffer out of time window bears the danger of output data corruption; but the general assumption is for the scheduler to ensure each job start time remains within the defined window and all prerequisite jobs have terminated successfully. To handle clean-up, we additionally need special jobs running always, in order, and be notified of prerequisite failures.
+* failure to release a buffer in a timely fashion blocks any further use of that buffer, any further jobs in need of that buffer will die immediately. This situation can only be caused by a serious problem //within the slot, related to the output mechanism.// Thus there should be some kind of trigger (e.g. when this happens 2 times consecutively) to request aborting the playback or render as a whole.
+&amp;rarr; SchedulerRequirements
+&amp;rarr; OutputSlotDesign
+&amp;rarr; OutputSlotImpl
+</pre>
+</div>
+<div title="OutputSlotDesign" modifier="Ichthyostega" created="201112190322" tags="design decision" changecount="1">
+<pre>The OutputSlot interface describes a point where generated media data can actually be sent to the external world. It is expected to be implemented by adapters and bridges to existing drivers or external interface libraries, like a viewer widget in the GUI, ALSA or Jack sound output, rendering to file, using an external media format library. The design of this core facility was rather difficult and stretched out over quite some time span -- this page documents the considerations and the decisions taken.
+
+!intention
+OutpotSlot is a metaphor to unify the organisation of actual (system level) outputs; using this concept allows to separate and abstract the data calculation and the organisation of playback and rendering from the specifics of the actual output sink. Actual output possibilities (video in GUI window, video fullscreen, sound, Jack, rendering to file) can be added and removed dynamically from various components (backend, GUI), all using the same resolution and mapping mechanisms (&amp;rarr; OutputManagement)
+
+!design possibilities
+!!properties as a starting point
+* each OutputSlot is an unique and distinguishable entity. It corresponds explicitly to an external output
+* an output slot needs to be provided, configured and registered, using an implementation specifically tailored for the kind of media data
+* an output slot is always limited to a single kind of media, and to a single connection unit, but this connection may still be comprised of multiple channels.
+* in order to be usable as //output sink,// an output slot needs to be //allocated,// i.e. tied to and locked for a specific client.
+* this allocation is exclusive: at any time, there may be only a single client using a given output slot.
+* the calculating process feeds its results into //sink handles//&amp;nbsp; provided by the allocated output slot.
+* allocation of an output slot leads to very specific [[timing expectations|Timings]]
+* the client is required to comply to these timings and operate according to a strictly defined protocol.
+* timing glitches will be detected due to this protocol; the output slot provides mechanisms for failing gracefully in these cases
+
+!!data exchange models
 Data is handed over by the client invoking an {{{emit(time,...)}}} function on the sink handle. Theoretically there are two different models how this data hand-over might be performed. This corresponds to the fact, that in some cases our own code manages the output and the buffers, while in other situations we intend to use existing library solutions or even external server applications to handle output
 ;buffer handover model
 :the client owns the data buffer and cares for allocation and de-allocation. The {{{emit()}}}-call just propagates a pointer to the buffer holding the data ready for output. The output slot implementation in turn has the liability to copy or otherwise use this data within a given time limit.
 ;shared buffer model
 :here the output mechanism owns the buffer. Within a certain time window prior to the expected time of the {{{emit()}}}-call, the client may obtain this buffer (pointer) to fill in the data. The slot implementation won't touch this buffer until the {{{emit()}}} handover, which in this case just provides the time and signalles the client is done with that buffer. If the data emitting handshake doesn't happen at all, it counts as late and superseded by the next handshake.
 
-!!!timing expectations
-Besides the sink handles, allocation of an output slot defines some timing constraints, which are binding for the client. These timings are detailed and explicit, including a grid of deadlines for each frame to deliver, plus a fixed //latency.// Within this context, &amp;raquo;latency&amp;laquo; means the requirement to be ahead of the nominal time by a certain amount, to compensate for the processing time necessary to propagate the media to the physical output pin. The output slot implementation itself is bound by external constraints to deliver data at a fixed framerate and aligned to an externally defined timing grid, plus the data needs to be handed over ahead of these time points by an time amount given by the latency. Depending on the data exchange model, there is an additional time window limiting the buffer management.
+!!relation to timing
+Besides the sink handles, allocation of an output slot defines some timing constraints, which are binding for the client. These include a grid of deadlines for each frame to deliver, plus a fixed //latency.// The output slot implementation itself is bound by external constraints to deliver data at a fixed framerate and aligned to an externally defined timing grid, plus the data needs to be handed over ahead of these time points by an time amount given by the latency. Depending on the data exchange model, there is an additional time window limiting the buffer management.
 
 The assumption is for the client to have elaborate timing capabilities at his disposal. More specifically, the client is assumed to be a job running within the engine scheduler and thus can be configured to run //after// another job has finished, and to run within certain time limits. Thus the client is able to provide a //current nominal time// -- which is suitably close to the actual wall clock time. The output slot implementation can be written such as to work out from this time specification if the call is timely or overdue -- and react accordingly.
 
@@ -3498,25 +3561,8 @@ The planned delivery time of a frame is used as an ID throughout that cycle
 # the client has to ''emit'' within a (short) time window prior to deadline
 # now the slot gets exclusive access to the buffer for output, signalling the buffer release to the buffer provider when done.
 
-!!!lapses
-This data exchange protocol operates on a rather low level; there is only limited protection against timing glitches
-|  !step|!problem ||!consequences | !protection |
-| (1)|out of time window ||interference with previous/later use of the buffer | prevent in scheduler! |
-|~|does not happen ||harmless as such | emit ignored |
-|~|buffer unavailable ||inhibits further operation | ↯ |
-| (2)|out of time window ||harmless as such | emit ignored |
-|~|out of order ||allowed, unless out of time | -- |
-|~|does not happen ||frame treated as glitch | -- |
-|~|buffer unallocated ||frame treated as glitch | emit ignored |
-| (3)|emit missing ||frame treated as glitch | -- |
-|~|fail to release buffer ||unable to use buffer further | mark unavailable |
-|~|buffer unavailable ||serious malfunction of playback | request playback stop |
-
-Thus there are two serious problem situations
-* allocating the buffer out of time window bears the danger of output data corruption; but the general assumption is for the scheduler to ensure each job start time remains within the defined window and all prerequisite jobs have terminated successfully. To handle clean-up, we additionally need special jobs running always, in order, and be notified of prerequisite failures.
-* failure to release a buffer in a timely fashion blocks any further use of that buffer, any further jobs in need of that buffer will die immediately. This situation can only be caused by a serious problem //within the slot, related to the output mechanism.// Thus there should be some kind of trigger (e.g. when this happens 2 times consecutively) to request aborting the playback or render as a whole.
-&amp;rarr; SchedulerRequirements
-&amp;rarr; OutputSlotImpl</pre>
+&amp;rarr; OutputSlotImpl
+</pre>
 </div>
 <div title="OutputSlotImpl" modifier="Ichthyostega" modified="201109232235" created="201107102343" tags="spec operational" changecount="27">
 <pre>OutputSlot is an abstraction, allowing unified treatment of various physical output connections from within the render jobs. The actual output slot is a subclass object, created and managed from the &quot;driver code&quot; for a specific output connection. Moreover, each output slot will be outfitted with a concrete BufferProvider to reflect the actual buffer handling policy applicable for this specific output connection. Some output connections might e.g. require delivery of the media data into a buffer residing on external hardware, while others work just fine when pointed to some arbitrary memory block holding generated data.

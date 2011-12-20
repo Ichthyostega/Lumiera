@@ -1,4 +1,4 @@
-window_sizes 1615 1020 270 1335 872 71
+window_sizes 1619 1028 270 1339 881 71
 diagrams
   classdiagram_ref 136453 // Session backbone
     631 352 100 4 0 0
@@ -8,8 +8,10 @@ diagrams
     663 648 100 4 0 0
   objectdiagram_ref 144005 // Play Process Structure
     562 424 100 4 0 0
-  active  sequencediagram_ref 145157 // output data exchange
+  sequencediagram_ref 145157 // output data exchange
     586 416 100 4 0 0
+  active  classdiagram_ref 151685 // Player Output
+    723 654 100 4 0 0
 end
 show_stereotypes
 selected 
@@ -18,7 +20,13 @@ open
   
   package_ref 128005 // design
   classview_ref 128389 // Controller Workings
-  classview_ref 136837 // PlayOut
+  class_ref 185221 // Allocation
+  class_ref 178565 // DataSink
+  class_ref 185349 // Connection
+  class_ref 185477 // OutputSlotImpl
+  class_ref 178693 // BufferProvider
+  
+  package_ref 132229 // Session
   class_ref 153733 // QueryFocusStack
   usecaseview_ref 128261 // config examples
   
