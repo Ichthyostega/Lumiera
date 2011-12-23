@@ -24,7 +24,7 @@
 /** @file struct-factory-impl.hpp
  ** Private implementation details of creating various structural assets.
  ** Details how to fabricate specific kinds of structural assets, based
- ** on capability informations encoded into a query (goal).
+ ** on capability information encoded into a query (goal).
  ** @internal to be used by struct.cpp
  **
  ** @see ConfigQuery

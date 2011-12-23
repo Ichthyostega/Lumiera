@@ -21,15 +21,15 @@
 */
 
 /** @file diagnostic-context.hpp
- ** Facility for collecting diagnostic informations explicitly.
+ ** Facility for collecting diagnostic context information explicitly.
  ** Unlike a trace logging run, this facility is intended to be fed explicitly with
  ** diagnostic information describing the currently ongoing operation in a semantic
- ** high-level manner. The rationale is to pinpoint \em those informations which aren't
- ** obvious when just looking at a callstack with the debugger. Instances of the class
- ** DiagnosticContext should be placed explicitly as automatic (stack) variable
- ** into selected relevant scopes; these "information frames" can be accessed
- ** from an enclosed scope  as a per-thread stack. DiagnosticContext provides
- ** an controlled environment for adding diagnostic code on demand; typically
+ ** high-level manner. The rationale is to pinpoint \em those pieces of information,
+ ** which aren't obvious when just looking at a callstack with the debugger.
+ ** Instances of the class DiagnosticContext should be placed explicitly as automatic
+ ** (stack) variable into selected relevant scopes; these "information frames" could
+ ** be accessed from an enclosed scope  as a per-thread stack. DiagnosticContext
+ ** provides an controlled environment for adding diagnostic code on demand; typically
  ** to be configured such as to resolve into an empty class for release builds.
  ** 
  ** As of 2/10, this is an experimental feature in evaluation. To start with,
@@ -60,15 +60,17 @@ namespace lib {
 #ifdef NOBUG_MODE_ALPHA      ////////////////////////TODO don't we need the handle in BETA builds for resource logging?
   
   /** 
-   * Diagnostic data frame to collect specific informations concerning a scope.
+   * Diagnostic data frame to collect specific information concerning a scope.
    * To be placed explicitly as an automatic (stack) variable. Provides a controlled
    * environment for hooking up diagnostic code. Within each thread, a stack of
    * such information frames concerning nested scopes is maintained automatically.
    * It can be accessed via static API.
-   * @warning never store this into global data structures.
+   * @warning relies on thread-local access; never use this within global data structures.
    * @note as of 2/10 used for housing the NoBug resource tracker handle
    *       in conjunction with object monitor based locking
    * @see sync.hpp
+   * @todo 12/2011 : not in use currently, but the concept seems useful
+   *       and should be generalised.                         //////////////////////////////////////TICKET #687 
    */
   class DiagnosticContext
     : boost::noncopyable
