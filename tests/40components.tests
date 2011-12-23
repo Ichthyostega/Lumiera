@@ -648,6 +648,11 @@ return: 0
 END
 
 
+TEST "Wrapper thread-local pointers" ThreadLocal_test  <<END
+return: 0
+END
+
+
 TEST "Wait/Notify on Object Monitor" SyncWaiting_test  <<END
 return: 0
 END
