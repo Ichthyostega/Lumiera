@@ -3362,7 +3362,7 @@ While actually data frames are //pulled,// on a conceptual level data is assumed
 As both of these specifications are given by [[Pipe]]-~IDs, the actual designation information may be reduced. Much can be infered from the circumstances, because any pipe includes a StreamType, and an output designation for an incompatible stream type is irrelevant. (e.g. and audio output when the pipe currently in question deals with video)
 </pre>
 </div>
-<div title="OutputManagement" modifier="Ichthyostega" modified="201111040000" created="201007090155" tags="Model Rendering Player spec draft" changecount="38">
+<div title="OutputManagement" modifier="Ichthyostega" modified="201112222226" created="201007090155" tags="Model Rendering Player spec draft" changecount="39">
 <pre>//writing down some thoughts//
 
 * ruled out the system outputs as OutputDesignation.
@@ -3397,6 +3397,12 @@ The relation between the central OutputDirector and the peripheral OutputManager
 
 For a viewer widget in the GUI this yields exactly the expeted behaviour, but in other cases, e.g. for sound output, we need more general, more globally scoped output slots. In these cases, when a local mapping is absent, the query for output resolution is passed on up to the  OutputDirector, drawing on the collection of globally available output slots for that specific kind of media.
 {{red{open question 11/11: is it possible to retrieve a slot from another peripheral node?}}}
+
+!!!output modes
+Most output connections and drivers embody some kind of //operation mode:// Display is characterised by resolution and colour depth, sound by number of channels and sampling rate, amongst others. There might be a mismatch with the output expectations represented by [[output designations|OutputDesignation]] within the model. Nontheless we limit those actual operation modes strictly to the OutputManager realm. They should not leak out into the model within the session.
+In practice, this decision might turn out to be rather rigid, but some additional mechanisms allow for more flexibility
+* when [[connecting|ViewerPlayConnection]] timeline to viewer and output, stream type conversions may be added automatically or manually
+* since resolution of an output designation into an OutputSlot is initiated by querying an output manager, this query might include additional constraints, which //some// (not all) concrete output implementations might evaluate to provide an more suitably configured output slot variant.
 </pre>
 </div>
 <div title="OutputManager" modifier="Ichthyostega" modified="201106212317" created="201106122359" tags="Player Model def" changecount="7">
@@ -3416,7 +3422,7 @@ Note that an OutputSlot acts as a unit for registration and also for allocating 
 The //registration//&amp;nbsp; of an output slot installs a functor or association rule, which later on allows to claim and connect up to a preconfigured number of channels. This allocation or usage of a slot is exclusive (i.e. only a single client at a time can allocate a slot, even if not using all the possible channels). Each output manager instance may or may not be configured with a //fall-back rule:// when no association or mapping can be established locally, the connection request might be passed down to the global OutputDirector. Again, we can expect this to be the standard behaviour for sound, while video likely will rather be handled locally, e.g. within a GUI widget (but we're not bound to configure it exactly this way)
 </pre>
 </div>
-<div title="OutputMapping" modifier="Ichthyostega" modified="201106180044" created="201011080238" tags="Model spec draft" changecount="29">
+<div title="OutputMapping" modifier="Ichthyostega" modified="201112222050" created="201011080238" tags="Model spec draft" changecount="32">
 <pre>An output mapping serves to //resolve//&amp;nbsp; [[output designations|OutputDesignation]].
 
 !Mapping situations
@@ -3428,7 +3434,7 @@ The //registration//&amp;nbsp; of an output slot installs a functor or associati
 :Thus, in this case we resolve similar to a bus connection, possibly overridden by already pre-existing or predefined connections.
 ;switch board
 :a viewer might receive multiple outputs and overlays, necessitating a user operated control to select what's actually to be displayed
-:Thus, in this case we need a backwards resolution at the lower end of the output network, to connect to the model port as defined by this viewer SwitchBoard
+:Thus, in this case we need a backwards resolution at the lower end of the output network, to connect to the model port as selected through the viewer's SwitchBoard
 ;global pipes or virtual media
 :when binding a Sequence as Timeline or VirtualClip, a mapping from output designations used within the Sequence to virtual channels or global pipes is required
 :Thus, in this case we need to associate output designations with ~Pipe-IDs encountered in the context according to some rules &amp;mdash; again maybe overridden by pre-existing connections
@@ -3443,12 +3449,12 @@ All these mapping steps are listed here, because they exhibit a common pattern.
 * there is an //unconnected//&amp;nbsp; state.
 
 !Implementation notes
-Thus the mapping is a copyable value object, based on a associative array. It may be attached to a model object and persisted alongside. The mapping is assumed to run a defaults query when necessary. To allow for that, it should be configured with a query template (string). Frequently, special //default pipe// markers will be used at places where no distinct pipe-ID is specified explicitly. Besides that, invocations might supply additional predicates (e.g. {{{ord(2)}}} to point at &quot;the second stream of this kind&quot;) thereby hinting the defaults resolution. Moreover, the mapping needs a way to retrieve the set of possible results, allowing to filter the results of the rules based default. Mappings might be defined explicitly. Instead of storing a //bottom value,// an {{{isDefined()}}} predicate might be preferable.
+Thus the mapping is a copyable value object, using an associative array. It may be attached to a model object and persisted alongside. The mapping is assumed to run a defaults query when necessary. To allow for that, it should be configured with a query template (string). Frequently, special //default pipe// markers will be used at places where no distinct pipe-ID is specified explicitly. Besides that, invocations might supply additional predicates (e.g. {{{ord(2)}}} to point at &quot;the second stream of this kind&quot;) thereby hinting the defaults resolution. Moreover, the mapping needs a way to retrieve the set of possible results, allowing to filter the results of the rules based default. Mappings might be defined explicitly. Instead of storing a //bottom value,// an {{{isDefined()}}} predicate might be preferable.
 
 First and foremost, mapping can be seen as a //functional abstraction.// As it's used at implementation level, encapsulation of detail types in't the primary concern, so it's a candidate for generic programming: For each of those use cases outlined above, a distinct mapping type is created by instantiating the {{{OutputMapping&lt;DEF&gt;}}} template with a specifically tailored definition context ({{{DEF}}}), which takes on the role of a strategy. Individual instances of this concrete mapping type may be default created and copied freely. This instantiation process includes picking up the concrete result type and building a functor object for resolving on the fly. Thus, in the way typical for generic programming, the more involved special details are moved out of sight, while being still in scope for the purpose of inlining. But there //is// a concern better to be encapsulated and concealed at the usage site, namely accessing the rules system. Thus mapping leads itself to the frequently used implementation pattern where there is a generic frontend as header, calling into opaque functions embedded within a separate compilation unit.
 </pre>
 </div>
-<div title="OutputSlot" modifier="Ichthyostega" modified="201112200358" created="201106162339" tags="def Concepts Player spec img" changecount="49">
+<div title="OutputSlot" modifier="Ichthyostega" modified="201112222235" created="201106162339" tags="def Concepts Player spec img" changecount="51">
 <pre>Within the Lumiera player and output subsystem, actually sending data to an external output requires to allocate an ''output slot''
 This is the central metaphor for the organisation of actual (system level) outputs; using this concept allows to separate and abstract the data calculation and the organisation of playback and rendering from the specifics of the actual output sink. Actual output possibilities (video in GUI window, video fullscreen, sound, Jack, rendering to file) can be added and removed dynamically from various components (backend, GUI), all using the same resolution and mapping mechanisms (&amp;rarr; OutputManagement)
 
@@ -3467,6 +3473,9 @@ Clients retrieve just a reference to an output slot by asking a suitable OutputM
 Besides the sink handles, allocation of an output slot defines some timing constraints, which are binding for the client. These [[Timings]] are detailed and explicit, including a grid of deadlines for each frame to deliver, plus a fixed //latency.// Within this context, &amp;raquo;latency&amp;laquo; means the requirement to be ahead of the nominal time by a certain amount, to compensate for the processing time necessary to propagate the media to the physical output pin. The output slot implementation itself is bound by external constraints to deliver data at a fixed framerate and aligned to an externally defined timing grid, plus the data needs to be handed over ahead of these time points by an time amount given by the latency. Depending on the data exchange model, there is an additional time window limiting the buffer management.
 
 The assumption is for the client to have elaborate timing capabilities at his disposal. More specifically, the client is assumed to be a job running within the engine scheduler and thus can be configured to run //after// another job has finished, and to run within certain time limits. Thus the client is able to provide a //current nominal time// -- which is suitably close to the actual wall clock time. The output slot implementation can be written such as to work out from this time specification if the call is timely or overdue -- and react accordingly.
+
+!!!output modes
+some concrete output connections and drivers embody a specific operation mode (e.g. sample rate or number of channels). The decision and setup of these operational configuration is initiated together with the [[resolution|OutputMapping]] of an OutputDesignation within the OutputManager, finally leading to an output slot (reference), which can be assumed to be suitably configured, before the client allocates this slot for active use. Moreover, an individual output sink (corresponding to a single channel) may just remain unused -- until there is an {{{emit()}}} call and successful data handover, this channel will just feature silence or remain black. (More flexible system, e.g. Jack, allow to generate an arbitrary number of output pins -- Lumiera will support this by allowing to set up additional output slots and attach this information to the current session &amp;rarr; SessionConfigurationAttachment)
 
 !!!Lifecycle and storage
 The concrete OutputSlot implementation is owned and managed by the facility actually providing the output possibility in question. For example, the GUI provides viewer widgets, while some sound output backend provides sound ports. The associated OutputSlot implementation object is required to stay alive as long as it's registered with some OutputManager. It needs to be de-registered explicitly prior to destruction -- and this deregistration may block until all clients using this slot did terminate. Beyond that, an output slot implementation is expected to handle all kinds of failures gracefully -- preferably just emitting a signal (callback functor).
@@ -5367,6 +5376,9 @@ The Session object is a singleton &amp;mdash; actually it is a »~PImpl«-Facade
 
 &amp;rarr; see [[relation of timeline, sequences and objects|TimelineSequences]]
 </pre>
+</div>
+<div title="SessionConfigurationAttachment" modifier="Ichthyostega" created="201112222242" tags="SessionLogic draft" changecount="2">
+<pre>While the core of the persistent session state corresponds just to the HighLevelModel, there is additionaly attached state, annotations and specific bindings, which allow to connect the session model to the local application configuration on each system. A typical example would be the actual output channels, connections and drivers to use on a specific system. In a Studio setup, these setup and wiring might be quite complex, it may be specific to just a single project, and the user might want to work on the same project on different systems. This explains why we can't just embody these configuration information right into the actual model.</pre>
 </div>
 <div title="SessionContentsQuery" modifier="Ichthyostega" modified="201006190547" created="201006190526" tags="SessionLogic spec draft" changecount="6">
 <pre>Querying and retrieving objects within the session model is always bound to a [[scope|PlacementScope]]. When using the //dedicated API,// this scope is immediately defined by the object used to issue the query, like e.g. when searching the contents of a track. But when using the //generic API,// this scope is rather implicit, because in this case a (stateful) QueryFocus object is used to invoke the queries. Somewhat in-between, the top-level session API itself exposes dedicated query functions working on the whole-session scope (model root).

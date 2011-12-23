@@ -227,20 +227,39 @@ namespace play {
   
   /********************************************************************
    * Helper for unit tests: Mock output sink.
-   * 
-   * @todo write type comment
+   * Complete implementation of the OutputSlot interface, with some
+   * additional stipulations to support unit testing.
+   * - the implementation uses a special protocol output buffer,
+   *   which stores each "frame" in memory for later investigation
+   * - the output data in the buffers handed over from client
+   *   actually hold an TestFrame instance 
+   * - the maximum number of channels and the maximum number
+   *   of acceptable frames is limited to 5 and 100.
+   * @warning any Captured (test) data from all individual instances
+   *   remains in memory until shutdown of the current executable
    */
   class DiagnosticOutputSlot
     : public OutputSlot
     {
       
       static const uint MAX_CHANNELS = 5;
-        
+      
+      /** @note a real OutputSlot implementation
+       * would rely on some kind of embedded
+       * configuration here */
+      uint
+      getOutputChannelCount()
+        {
+          return MAX_CHANNELS;
+        }
+      
+      
       /** hook into the OutputSlot frontend */
       ConnectionState*
       buildState()
         {
-          return new SimulatedOutputSequences(MAX_CHANNELS);
+          return new SimulatedOutputSequences(
+                        getOutputChannelCount());
         }
         
       /** @internal is self-managed and non-copyable.
@@ -254,7 +273,7 @@ namespace play {
       accessSequence (uint channel)
         {
           REQUIRE (!isFree(), "diagnostic OutputSlot not (yet) connected");
-          REQUIRE (channel <= MAX_CHANNELS);
+          REQUIRE (channel <= getOutputChannelCount());
           return static_cast<SimulatedOutputSequences&> (*state_).at(channel);
         }
       

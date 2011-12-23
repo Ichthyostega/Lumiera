@@ -107,7 +107,7 @@ namespace play {
             Timings nominalTimings = activeOutputConnection.getTimingConstraints()
                                                            .constrainedBy(playbackTimings_);
             
-            return EngineService::instance().calculate(port, nominalTimings, activeOutputConnection, renderQuality_);
+            return EngineService::instance().calculate (port, nominalTimings, activeOutputConnection, renderQuality_);
           }
         
         

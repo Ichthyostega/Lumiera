@@ -5,13 +5,13 @@ diagrams
   objectdiagram_ref 138885 // ModelAssetRelations
     730 488 100 4 0 0
   classdiagram_ref 143877 // Player Entities
-    663 648 100 4 0 0
+    663 654 100 4 0 0
   objectdiagram_ref 144005 // Play Process Structure
     562 424 100 4 0 0
   sequencediagram_ref 145157 // output data exchange
     586 416 100 4 0 0
   active  classdiagram_ref 151685 // Player Output
-    723 654 100 4 0 0
+    643 590 92 4 0 0
 end
 show_stereotypes
 selected 

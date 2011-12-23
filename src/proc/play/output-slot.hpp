@@ -26,9 +26,39 @@
  ** using this concept allows to separate and abstract the data calculation and the organisation
  ** of playback and rendering from the specifics of the actual output sink. Actual output
  ** possibilities can be added and removed dynamically from various components (backend, GUI),
- ** all using the same resolution and mapping mechanisms 
+ ** all using the same resolution and mapping mechanisms
  **
- ** @see diagnostic-output-slot.hpp  ////TODO
+ ** Each OutputSlot is an unique and distinguishable entity. It corresponds explicitly to an
+ ** external output, or a group of such outputs (e.g. left and right sound card output channels),
+ ** or an output file or similar capability accepting media content. Initially, an output slot
+ ** needs to be provided, configured and registered, using an implementation suitable for the
+ ** kind of media data to be output (sound, video) and also suitable for the special circumstances
+ ** of the output capability (render a file, display video in a GUI widget, send video to some
+ ** full screen display, establish a Jack port, just use some kind of "sound out"). An output
+ ** slot is always limited to a single kind of media, and to a single connection unit, but
+ ** this connection may still be comprised of multiple channels 
+ ** (e.g. stereoscopic video, multichannel sound).
+ ** 
+ ** In order to be usable as output sink, an output slot needs to be \em allocated: At any time,
+ ** there may be only a single client using a given output slot this way. To stress this point:
+ ** output slots don't provide any kind of inherent mixing capability; any adaptation, mixing,
+ ** overlaying and sharing needs to be done within the nodes network producing the output data
+ ** to be fed into the slot. (in special cases, some external output capabilities — e.g. the
+ ** Jack audio connection system — may still provide additional mixing capabilities,
+ ** but that's beyond the scope of the Lumiera application)
+ ** 
+ ** Once allocated, the output slot returns a set of concrete sink handles (one for each
+ ** physical channel expecting data). The calculating process feeds its results into those handles.
+ ** Size and other characteristics of the data frames are assumed to be suitable, which typically
+ ** won't be verified at that level anymore. Besides that, the allocation of an output slot reveals
+ ** detailed timing expectations. The client is required to comply to these timings when \em emitting
+ ** data — he's even required to provide a current time specification, alongside with the data.
+ ** Based on this information, the output slot has the ability to handle timing failures gracefully;
+ ** the concrete output slot implementation is expected to provide some kind of de-click or
+ ** de-flicker facility, which kicks in automatically when a timing failure is detected.
+ **
+ ** @see OutputSlotProtocol_test
+ ** @see diagnostic-output-slot.hpp
  */
 
 
@@ -42,25 +72,18 @@
 #include "proc/engine/buffer-provider.hpp"
 #include "proc/play/timings.hpp"
 #include "lib/iter-source.hpp"
-//#include "lib/sync.hpp"
 
 #include <boost/noncopyable.hpp>
 #include <boost/scoped_ptr.hpp>
-//#include <string>
-//#include <vector>
-//#include <tr1/memory>
 
 
 namespace proc {
 namespace play {
-
+  
   using proc::engine::BuffHandle;
   using proc::engine::BufferProvider;
   using lib::time::TimeValue;
-//using std::string;
-
-//using std::vector;
-//using std::tr1::shared_ptr;
+  
   using boost::scoped_ptr;
   
   
@@ -71,10 +94,16 @@ namespace play {
   
   
   
-  /********************************************************************
+  /********************************************************************************
    * Interface: Generic output sink.
-   * 
-   * @todo write type comment
+   * An OutputSlot represents the possibility to send data through multiple
+   * channels to some kind of external sink (video in GUI window, video full screen,
+   * sound, Jack, rendering to file). Clients are expected to retrieve a suitably
+   * preconfigured implementation from some OutputManager instance. An OutputSlot
+   * needs to be \em claimed for output by invoking #allocate, which returns a
+   * representation of the connection state. This operation is exclusive.
+   * The actual \link DataSink output sinks \endlink can be retrieved
+   * through the Allocation object returned from there.
    */
   class OutputSlot
     : boost::noncopyable
@@ -87,6 +116,9 @@ namespace play {
       
       scoped_ptr<ConnectionState> state_;
       
+      /** build the \em connected state,
+       *  based on the existing configuration
+       *  within this concrete OutputSlot */
       virtual ConnectionState* buildState() =0;
       
       
@@ -133,7 +165,7 @@ namespace play {
       
     public:
       BuffHandle lockBufferFor(FrameID);
-      void emit(FrameID, BuffHandle const&, TimeValue currentTime = Time::MAX);    ///////////////TICKET #855 
+      void emit(FrameID, BuffHandle const&, TimeValue currentTime = Time::ANYTIME); 
     };
   
   
