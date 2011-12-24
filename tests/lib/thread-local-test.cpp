@@ -36,12 +36,13 @@ using std::rand;
 namespace lib {
 namespace test{
 
-  namespace { // private test data...
+  namespace { // private test setup...
     
     const uint NUM_THREADS = 100;
     const uint MAX_RAND    = 5*1000*1000;
     
     
+    /** Subject of the test */
     ThreadLocalPtr<uint> privateValue;
     
     
@@ -70,7 +71,7 @@ namespace test{
           }
       };
     
-  } // (End) test data....
+  } // (End) test setup....
   
   
   
