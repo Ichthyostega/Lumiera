@@ -37,7 +37,7 @@
 #include <errno.h>
 
 /**
- * @file
+ * @file threads.c
  *
  */
 
@@ -93,17 +93,17 @@ thread_loop (void* thread)
       do {
         lumiera_threadpool_release_thread(t);
         LUMIERA_CONDITION_WAIT (t->state != LUMIERA_THREADSTATE_IDLE);
-        INFO (threads, "Thread awaken with state %s", lumiera_threadstate_names[t->state]);
+        TRACE (threads, "Thread awaken with state %s", lumiera_threadstate_names[t->state]);
 
         // NULL function means: no work to do
-        INFO (threads, "function %p", t->function);
+        TRACE (threads, "function %p", t->function);
         if (t->function)
           t->function (t->arguments);
         TRACE (threads, "function done");
 
         if (t->kind & LUMIERA_THREAD_JOINABLE)
           {
-            INFO (threads, "Thread zombified");
+            TRACE (threads, "Thread zombified");
             /* move error state to data the other thread will it pick up from there */
             t->arguments = (void*)lumiera_error ();
             t->state = LUMIERA_THREADSTATE_ZOMBIE;
@@ -111,14 +111,14 @@ thread_loop (void* thread)
 
             LUMIERA_CONDITION_SIGNAL;
             LUMIERA_CONDITION_WAIT (t->state == LUMIERA_THREADSTATE_JOINED);
-            INFO (threads, "Thread joined");
+            TRACE (threads, "Thread joined");
         }
 
       } while (t->state != LUMIERA_THREADSTATE_SHUTDOWN);
       // SHUTDOWN state
 
 
-      INFO (threads, "Thread Shutdown");
+      TRACE (threads, "Thread done.");
     }
   //////////////////////////////////////////////////////////////////////TICKET #844 no error must be pending here, else do app shutdown
   return 0;
