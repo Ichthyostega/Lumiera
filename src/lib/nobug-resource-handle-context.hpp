@@ -1,5 +1,5 @@
 /*
-  DIAGNOSTIC-CONTEXT.hpp  -  thread local stack for explicitly collecting diagnostic context info
+  NOBUG-RESOURCE-HANDLE-CONTEXT.hpp  -  thread local stack to manage NoBug resource handles
 
   Copyright (C)         Lumiera.org
     2010,               Hermann Vosseler <Ichthyostega@web.de>
@@ -20,29 +20,28 @@
 
 */
 
-/** @file diagnostic-context.hpp
- ** Facility for collecting diagnostic context information explicitly.
- ** Unlike a trace logging run, this facility is intended to be fed explicitly with
- ** diagnostic information describing the currently ongoing operation in a semantic
- ** high-level manner. The rationale is to pinpoint \em those pieces of information,
- ** which aren't obvious when just looking at a callstack with the debugger.
- ** Instances of the class DiagnosticContext should be placed explicitly as automatic
- ** (stack) variable into selected relevant scopes; these "information frames" could
- ** be accessed from an enclosed scope  as a per-thread stack. DiagnosticContext
- ** provides an controlled environment for adding diagnostic code on demand; typically
- ** to be configured such as to resolve into an empty class for release builds.
+/** @file nobug-resource-handle-context.hpp
+ ** Thread-local stack of NoBug resource handles.
+ ** This helper allows to access the resource handle in the nearest enclosing scope.
+ ** The motivation for this approach was to avoid passing the resource handle over
+ ** several intermediary function calls when using a scoped variable to control
+ ** object monitor locking. Within this usage context, the necessity of passing
+ ** a NoBug resource handle seems to be a cross-cutting concern, and not directly
+ ** related to the core concern (controlling a mutex).
  ** 
- ** As of 2/10, this is an experimental feature in evaluation. To start with,
- ** I'll use it to solve the problem of providing a NoBug resource tracker handle
- ** without tangling the object monitor code (sync.hpp) with low level, NoBug related
- ** implementation details.
+ ** @remarks as of 8/2011, this feature is not used anymore. In 12/2011, the concept
+ ** of a diagnostic context stack was generalised. At that point, this header was
+ ** created as an off-spin, now based on the generalised feature, to document this
+ ** usage possibility, which might be required again at some point in the future.
  ** 
- ** @todo add the actual diagnostic content
+ ** @see lib::DiagnosticContext
+ ** @see diagnostic-context-test.hpp
+ ** 
  **/
 
 
-#ifndef LIB_DIAGNOSTIC_CONTEXT_H
-#define LIB_DIAGNOSTIC_CONTEXT_H
+#ifndef LIB_NOBUG_RESOURCE_HANDLE_CONTEXT_H
+#define LIB_NOBUG_RESOURCE_HANDLE_CONTEXT_H
 
 
 #include "lib/error.hpp"
@@ -60,68 +59,14 @@ namespace lib {
 #ifdef NOBUG_MODE_ALPHA      ////////////////////////TODO don't we need the handle in BETA builds for resource logging?
   
   /** 
-   * Diagnostic data frame to collect specific information concerning a scope.
-   * To be placed explicitly as an automatic (stack) variable. Provides a controlled
-   * environment for hooking up diagnostic code. Within each thread, a stack of
-   * such information frames concerning nested scopes is maintained automatically.
-   * It can be accessed via static API.
+   * Diagnostic data frame to hold a NoBug resource handle.
+   * This way, code in nested function calls may pick up the nearest available handle.
    * @warning relies on thread-local access; never use this within global data structures.
-   * @note as of 2/10 used for housing the NoBug resource tracker handle
-   *       in conjunction with object monitor based locking
-   * @see sync.hpp
-   * @todo 12/2011 : not in use currently, but the concept seems useful
-   *       and should be generalised.                         //////////////////////////////////////TICKET #687 
    */
-  class DiagnosticContext
-    : boost::noncopyable
+  class NobugResourceHandleContext
+    : DiagnosticContext<nobug_resource_user*>
     {
-      typedef nobug_resource_user* Handle;
-      typedef ThreadLocalPtr<DiagnosticContext> ThreadLocalAccess;
-      
-      Handle handle_;
-      DiagnosticContext * const prev_;
-      
-      /** embedded thread local pointer
-       *  to the innermost context encountered */
-      static ThreadLocalAccess&
-      current()
-        {
-          static ThreadLocalAccess accessPoint;
-          return accessPoint;
-        }
-      
-      
     public:
-      DiagnosticContext()
-        : handle_(0)
-        , prev_(current().get())
-        {
-          current().set (this);
-        }
-      
-     ~DiagnosticContext()
-        {
-          ASSERT (this == current().get());
-          current().set (prev_);
-        }
-      
-      
-      operator Handle* () ///< payload: NoBug resource tracker user handle
-        {
-          return &handle_;
-        }
-      
-      /** accessing the innermost diagnostic context created */
-      static DiagnosticContext&
-      access ()
-        {
-          DiagnosticContext* innermost = current().get();
-          if (!innermost)
-            throw lumiera::error::Logic ("Accessing Diagnostic context out of order; "
-                                         "an instance should have been created in "
-                                         "an enclosing scope");
-          return *innermost;
-        }
     };
   
   
@@ -131,20 +76,21 @@ namespace lib {
   /** 
    * Disabled placeholder for the Diagnostic context, not used in release builds.
    */
-  class DiagnosticContext
+  class NobugResourceHandleContext
     : boost::noncopyable
     {
       
+      typedef nobug_resource_user* Handle;
       
     public:
       
-      operator Handle* () ///< payload: NoBug resource tracker user handle
+      operator Handle () ///< payload: NoBug resource tracker user handle
         {
           return 0;
         }
       
       /** accessing the innermost diagnostic context created */
-      static DiagnosticContext&
+      static NobugResourceHandleContext&
       access ()
         {
           UNIMPLEMENTED ("how to disable DiagnosticContext with minimum overhead");

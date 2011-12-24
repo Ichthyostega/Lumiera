@@ -42,9 +42,14 @@ namespace test{
     const uint NUM_THREADS = 100;
     const uint MAX_RAND    = 1000*1000;
     
+    inline bool
+    isOdd (uint val)
+    {
+      return bool (val % 2);
+    }
+    
   } // (End) test setup....
   
-  using test::Test;
   using backend::ThreadJoinable;
   using error::LUMIERA_ERROR_LOGIC;
   using std::rand;
@@ -56,6 +61,7 @@ namespace test{
    */
   typedef DiagnosticContext<uint> Marker;
   
+  typedef std::vector<uint> VecI;
   
   
   
@@ -80,7 +86,7 @@ namespace test{
       virtual void
       run (Arg)
         {
-          verify_simpleProperties();
+          verify_simpleAccess();
           verify_heavilyParallelUsage();
         }
       
@@ -93,32 +99,41 @@ namespace test{
       void
       verify_simpleAccess()
         {
-          VERIFY_ERROR (LOGIC, Marker.access());
+          VERIFY_ERROR (LOGIC, Marker::access());
+          
+          VecI loggedValues;
           
           Marker zero(0);
           CHECK (0 == zero);
-          CHECK (0 == Marker.access());
+          CHECK (0 == Marker::access());
           
           { // nested scope 
-            CHECK (0 == Marker.access());
+            CHECK (0 == Marker::access());
             
             Marker one(1);
-            CHECK (1 == Marker.access());
+            CHECK (1 == Marker::access());
             CHECK (1 == one);
             CHECK (0 == zero);
             
             { // nested scope
-              CHECK (1 == Marker.access());
+              CHECK (1 == Marker::access());
               
               Marker two(2);
-              CHECK (2 == Marker.access());
+              CHECK (2 == Marker::access());
               CHECK (2 == two);
               CHECK (1 == one);
               CHECK (0 == zero);
+              
+              loggedValues = Marker::extractStack();
             }
-            CHECK (1 == Marker.access());
+            CHECK (1 == Marker::access());
           }
-          CHECK (0 == Marker.access());
+          CHECK (0 == Marker::access());
+          
+          CHECK (3 == loggedValues.size());
+          CHECK (2 == loggedValues[0]);
+          CHECK (1 == loggedValues[1]);
+          CHECK (0 == loggedValues[2]);
         }
       
       
@@ -152,8 +167,6 @@ namespace test{
             { }
         };
       
-      
-      typedef std::vector<uint> VecI;
         
       /** the actual test operation running in a separate thread */
       static void
@@ -163,11 +176,11 @@ namespace test{
           
           VecI sequence = descend (seed);
           
-          uint prev = seed;
+          uint prev = 0;
           for (uint i=0; i < sequence.size(); ++i)
             {
               uint val = sequence[i];
-              if (! (isOdd(val) && val < prev))
+              if (! (isOdd(val) && seed >= val && val > prev ))
                 throw error::Fatal ("thread-local diagnostic stack");
               prev = val;
             }
@@ -177,8 +190,9 @@ namespace test{
       descend (uint current)
         {
           if (current < 2)
-            return Marker.extractStack();
-            
+            return Marker::extractStack();
+          
+          usleep (500);
           if (isOdd(current))
             {
               Marker remember(current);

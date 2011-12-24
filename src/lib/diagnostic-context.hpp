@@ -57,7 +57,6 @@ namespace lib {
   
   
   
-#ifdef NOBUG_MODE_ALPHA      ////////////////////////TODO don't we need the handle in BETA builds for resource logging?
   
   /** 
    * Diagnostic data frame to collect specific information concerning a scope.
@@ -66,19 +65,15 @@ namespace lib {
    * such information frames concerning nested scopes is maintained automatically.
    * It can be accessed via static API.
    * @warning relies on thread-local access; never use this within global data structures.
-   * @note as of 2/10 used for housing the NoBug resource tracker handle
-   *       in conjunction with object monitor based locking
-   * @see sync.hpp
-   * @todo 12/2011 : not in use currently, but the concept seems useful
-   *       and should be generalised.                         //////////////////////////////////////TICKET #687 
    */
+  template<typename VAL>
   class DiagnosticContext
     : boost::noncopyable
     {
-      typedef nobug_resource_user* Handle;
       typedef ThreadLocalPtr<DiagnosticContext> ThreadLocalAccess;
+      typedef std::vector<VAL>                  ValSequence;
       
-      Handle handle_;
+      const VAL value_;
       DiagnosticContext * const prev_;
       
       /** embedded thread local pointer
@@ -92,8 +87,8 @@ namespace lib {
       
       
     public:
-      DiagnosticContext()
-        : handle_(0)
+      DiagnosticContext(VAL const& value_to_log = VAL())
+        : value_(value_to_log)
         , prev_(current().get())
         {
           current().set (this);
@@ -106,9 +101,9 @@ namespace lib {
         }
       
       
-      operator Handle* () ///< payload: NoBug resource tracker user handle
+      operator VAL const&()  ///< access the payload by conversion
         {
-          return &handle_;
+          return value_;
         }
       
       /** accessing the innermost diagnostic context created */
@@ -118,39 +113,33 @@ namespace lib {
           DiagnosticContext* innermost = current().get();
           if (!innermost)
             throw lumiera::error::Logic ("Accessing Diagnostic context out of order; "
-                                         "an instance should have been created in "
+                                         "an instance should have been created within "
                                          "an enclosing scope");
           return *innermost;
         }
-    };
-  
-  
-#else  /* not NOBUG_ALPHA */
-  
-  
-  /** 
-   * Disabled placeholder for the Diagnostic context, not used in release builds.
-   */
-  class DiagnosticContext
-    : boost::noncopyable
-    {
       
       
-    public:
-      
-      operator Handle* () ///< payload: NoBug resource tracker user handle
+      /** snapshot of the current stack of diagnostic frames
+       * @return vector with all the payload values currently
+       *         on the thread-local diagnostic stack. Might
+       *         be empty. Values start with frame next to
+       *         the current scope and end with outermost.
+       */
+      static ValSequence
+      extractStack()
         {
-          return 0;
-        }
-      
-      /** accessing the innermost diagnostic context created */
-      static DiagnosticContext&
-      access ()
-        {
-          UNIMPLEMENTED ("how to disable DiagnosticContext with minimum overhead");
+          ValSequence loggedValues;
+          DiagnosticContext* next = current().get();
+          while (next)
+            {
+              loggedValues.push_back (*next);
+              next = next->prev_;
+            }
+          return loggedValues;
         }
     };
-#endif /* NOBUG_ALPHA? */
+  
+  
   
   
   

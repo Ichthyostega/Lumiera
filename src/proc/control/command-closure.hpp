@@ -25,10 +25,10 @@
  ** A closure enabling self-contained execution of commands within the ProcDispatcher.
  ** After defining a proc-layer command, at some point the function arguments
  ** of the contained operation are "closed" by storing concrete argument values.
- ** These values will later on be fed to the operation when the command is invoked.
+ ** These values will be fed later on to the operation when the command is invoked.
  ** 
- ** Most of the command machinery accesses this function closure through the interface
- ** CmdClosure, while, when defining a command, subclasses typed to the specific
+ ** Most of the command machinery accesses this function closure through the generic
+ ** interface CmdClosure, while, when defining a command, subclasses typed to the specific
  ** function arguments are created. Especially, there is an ArgumentHolder template,
  ** which is used to define the storage for the concrete arguments. This ArgumentHolder
  ** internally contains an Closure<SIG> instance (where SIG is the signature of the
@@ -43,10 +43,10 @@
  ** 
  ** Later on, any command needs to be made ready for execution by binding it to a specific
  ** execution environment, which especially includes the target objects to be mutated by the
- ** command. Effectively, this means "closing" the Mutation (and UNDO) functor(s) with the
+ ** command. Effectively, this means "closing" the Mutation (and UNDO) functor(s)) with the
  ** actual function arguments. These arguments are stored embedded within an ArgumentHolder,
  ** which thereby acts as closure. Besides, the ArgumentHolder also has to accommodate for
- ** storage holding the captured UNDO state (memento). Thus, internally the ArgumentHolder
+ ** storage holding the captured UNDO state (memento). Internally the ArgumentHolder
  ** has to keep track of the actual types, thus allowing to re-construct the concrete
  ** function signature when closing the Mutation.
  ** 
@@ -214,7 +214,7 @@ namespace control {
       friend bool
       compare (ParamAccessor const&, ParamAccessor const&)
         {
-          return true;;
+          return true;
         }
     };
   
