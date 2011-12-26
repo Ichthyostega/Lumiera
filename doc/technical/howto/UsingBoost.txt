@@ -1,0 +1,165 @@
+Using Boost Libraries
+=====================
+
+//Menu: label using boost
+
+_some arbitrary hints and notes regarding the use of link::http://www.boost.org[Boost Libraries] in Lumiera_
+
+Notable Features
+----------------
+Some of the Boost Libraries are especially worth mentioning. You should familiarise yourself with
+those features, as we're using them heavily throughout our code base. As it stands, the C/C\++ language(s)
+are quite lacking and outdated, compared with today's programming standards. To fill some of these gaps
+and to compensate for compiler deficiencies, some members of the C\++ committee and generally very
+knowledgeable programmers created a set of C\++ libraries generally known as *Boost*. Some of these
+especially worthy additions are also proposed for inclusion into the C++ standard library.
+
+.memory
+The `<boost/memory.hpp>` rsp. `<tr1/memory>` libraries define a family of smart-pointers to serve
+several needs of basic memory management. In almost all cases, they're superior to using `std::auto_ptr`. +
+When carefully combining these nifty templates with the RAII pattern, most concerns for memory
+management, clean-up and error handling simply go away. (but please understand how to avoid
+circular references and care for the implications of parallelism though)
+
+.functional
+The `function` template adds generic functor objects to C++. In combination with the `bind` function
+(which binds or ties an existing function invocation into a functor object), this allows to ``erase'' (hide)
+the difference between functions, function pointers and member functions at your interfaces and thus enables
+building all sorts of closures, signals (generic callbacks) and notification services. Picking up on these
+concepts might be mind bending at start, but it's certainly worth the effort (in terms of programmer
+productivity)
+
+.hashtables and hash functions
+The `unordered_*` collection types amend a painful omission in the STL. The `functional_hash` library
+supplements hash function for the primitive types and a lot of standard constructs using the STL; moreover
+there is an extension point for using custom types in those hashtables 
+(-> read more link:HashFunctions.html[here...])
+
+.noncopyable
+Inheriting from `boost::noncoypable` inhibits any copy, assignment and copy construction. It's a highly
+recommended practice _by default to use that for every new class you create_ -- unless you know for sure
+your class is going to have _value semantics_. The C++ language has kind of a ``fixation'' on value
+semantics, passing objects by value, and the language adds a lot of magic on that behalf. Which might lead
+to surprising results if you aren't aware of the fine details.
+
+.type traits
+Boost provides a very elaborate collection of type trait templates, allowing to ``detect'' several
+properties of a given type at compile time. Since C++ has no reflection and only a very weak introspection
+feature (RTTI, run time type information), using these type traits is often indispensable.
+
+.enable_if
+a simple but ingenious metaprogramming trick, allowing to control precisely in which cases the compiler
+shall pick a specific class or function template specialisation. Basically this allows to control the
+code generation, based on some type traits or other (metaprogramming) predicates you provide. Again,
+since C++ is lacking introspection features, we're frequently forced to resort to metaprogramming
+techniques, i.e to influence the way the compiler translates our code from within that very code.
+
+.STATIC_ASSERT
+a helper to check and enforce some conditions regarding types _at compile time_.
+Because there is no support for this feature by the compiler, in case of assertion failure
+a compilation error is provoked, trying to give at least a clue to the real problem by
+creative use of variable names printed in the compiler's error message.
+
+.metaprogramming library
+A very elaborate, and sometimes mind-bending library and framework. While heavily used within
+Boost to build the more advanced features, it seems too complicated and esoteric for general purpose
+and everyday use. Code written using the MPL tends to be very abstract and almost unreadable for
+people without math background. In Lumiera, we _try to avoid using MPL directly._ Instead, we
+supplement some metaprogramming helpers (type lists and tuples), written in a simple LISP style,
+which -- hopefully -- should be decipherable without having to learn an abstract academic
+terminology and framework.
+
+.lambda
+In a similar vein, the `boost::lambda` library might be worth exploring a bit, yet doesn't add
+much value in practical use. It is stunning to see how this library adds the capability to define
+real _lambda expressions_ on-the-fly, but since C++ was never designed for language extensions of
+that kind, using lambda in practice is surprisingly tricky, sometimes even obscure and rarely
+not worth the hassle. (An notable exception might be when it comes to defining parser combinators)
+
+.operators
+The `boost::operators` library allows to build families of types/objects with consistent
+algebraic properties. Especially, it eases building _equality comparable_, _totally ordered_,
+_additive_, _mulitplicative_ entities: You're just required to provide some basic operators
+and the library will define all sorts of additional operations to care for the logical
+consequences, removing the need for writing lots of boilerplate code. 
+
+.lexical_cast
+Converting numerics to string and back without much ado, as you'd expect it from any decent language.
+
+.boost::format
+String formatting with `printf` style directives. Interpolating values into a template string for
+formatted output -- but typesafe, using defined conversion operators and without the dangers of
+the plain-C `printf` famility of functions. But beware: `boost::format` is implemented on top of
+the C++ output stream operations (`<<` and manipulators), which in turn are implemented based
+on `printf` -- you can expect it to be 5 to 10 times slower than the latter, and it has
+quite some compilation overhead.
+
+.variant and any
+These library provide a nice option for building data structures able to hold a mixture of
+multiple types, especially types not directly related to each other. `boost::variant` is a
+typeseafe union record, while `boost::any` is able to hold just any other type you provide
+_at runtime_, still with some degree of type safety when retrieving the stored values.
+Both libraries are compellingly simple to use, yet add some overhead in terms of size,
+runtime, and compile time.
+
+.regular expressions
+Boost provides a full blown regular expression library, supporting roughly the feature set of
+perl regular expressions. The usage and handling is somewhat brittle though, when compared
+with perl, python, java, etc.
+
+.program-options and filesystem
+Same as the aforementioned, these two libraries just supply a familiar programming model for these tasks
+(parsing the command line and navigating the filesystem) which can be considered quasi standard today,
+and is available pretty much in the same style in Java, Python, Ruby, Perl and others.
+
+
+Negative Impact
+---------------
+Most Boost libraries are _header only_ and all of them make heavy use of template related features of C++.
+Thus, _every inclusion of a Boost library_ might lead to _increased compilation times._ We pay that penalty
+per compilation unit (not per header). Yet still, using a boost library within a header frequently included
+throughout the code base might dangerously leverage that effect.
+
+debug mode
+~~~~~~~~~~
+Usually, when developing, we translate our code without optimisation and with full debugging informations
+switched on. Unfortunately, C++ templates were never designed to serve as a functional metaprogramming language
+to start with -- but that's exactly what we're (ab)using them for. The Boost libraries drive that to quite
+some extreme. This leads to lots and lots of debugging information to be added to the object files,
+mentioning each and every intermediary type created in the course of expanding the metaprogramming
+facilities. Even seemingly simple things may result in object files becoming several megabytes large.
+
+Fortunately, all of this overhead gets removed when _stripping_ your executable and libraries (or when
+compiling without debug information). So this is solely an issue relevant for the developers, as it increases
+compilation, linking and startup times.
+
+runtime overhead and template bloat
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+The core Boost libraries (the not-so experimental ones) have a reputation for being of very high
+quality. The're written by experts with a deep level of understanding of the language, the usual
+implementation and the performance implications. Mostly, those quite elaborate metaprogramming
+techniques where chosen exactly to minimise runtime overhead or code size.
+
+Since each instantiation of a template constitutes a completely new class, carelessly written
+template code can lead to heavily bloated executables. Every instantiated _function_ and every
+class with _virtual methods_ (i.e. with a VTable) adds to the weight. But this negative effect can
+be balanced by the ability of reducing inline code. According to my own experience, I'd be much
+more concerned _about my own code adding template bloat,_ then being concerned about the Boost
+libraries (those people know very well what they're doing...)
+
+some practical guidelines
+~~~~~~~~~~~~~~~~~~~~~~~~~
+- `boost::format`, `boost::variant`, `boost::any`, `boost::lambda` and the more elaborate metaprogramming
+  stuff adds considerable weight. A good advice is to confine those features to the implementation level:
+  use them within individual translation units (`*.cpp`) where this makes sense, but don't cast
+  general interfaces in terms of those library constructs.
+- the _functional_ tools (`function`, `bind` and friends), the _hash functions_, _lexical_cast_ and the
+  _regular expressions_ create a moderate overhead. Probably fine in general purpose code, but you should
+  be aware that there is a price tag. About the same as with many STL features.
+- the `shared_ptr` `weak_ptr`, `intrusive_ptr` and `scoped_ptr` are really indispensable and can be used
+  liberally everywhere. Same for `enable_if` and the `boost::type_traits`. The impact of those features
+  on compilation times and  code size is negligible and the runtime overhead is zero, compared to _performing
+  the same stuff manually_ (obviously a ref-counting pointer like `smart_ptr` has the size of two raw pointers
+  and incurs an overhead on each creation, copy and disposal of a variable -- but that's besides the point I'm
+  trying to make here, and generally unavoidable)
+
