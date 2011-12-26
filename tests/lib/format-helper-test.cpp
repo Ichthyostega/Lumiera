@@ -22,7 +22,7 @@
 
 
 #include "lib/test/run.hpp"
-#include "lib/format.hpp"
+#include "lib/format-util.hpp"
 #include "lib/error.hpp"
 
 #include <iostream>

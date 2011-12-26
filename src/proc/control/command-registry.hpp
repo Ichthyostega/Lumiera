@@ -60,7 +60,6 @@
 #include "lib/error.hpp"
 #include "lib/singleton.hpp"
 #include "lib/sync.hpp"
-#include "lib/format.hpp"
 #include "include/logging.h"
 #include "lib/util.hpp"
 

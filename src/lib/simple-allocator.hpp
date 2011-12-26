@@ -49,7 +49,7 @@
 #include "lib/error.hpp"
 #include "lib/meta/generator.hpp"
 #include "lib/meta/typelist-util.hpp"
-#include "lib/format.hpp"
+#include "lib/format-util.hpp"
 #include "lib/typed-counter.hpp"
 #include "include/logging.h"
 

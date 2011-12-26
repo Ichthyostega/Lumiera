@@ -45,7 +45,7 @@
 #include "lib/meta/function-closure.hpp"
 #include "proc/control/command-signature.hpp"
 #include "lib/functor-util.hpp"
-#include "lib/format.hpp"
+#include "lib/format-util.hpp"
 #include "lib/util.hpp"
 
 #include <boost/operators.hpp>

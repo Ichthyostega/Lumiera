@@ -74,7 +74,7 @@
 #include "lib/meta/function-erasure.hpp"
 #include "lib/meta/tuple.hpp"
 #include "lib/meta/maybe-compare.hpp"
-#include "lib/format.hpp"
+#include "lib/format-util.hpp"
 #include "lib/util.hpp"
 #include "proc/control/argument-erasure.hpp"
 #include "lib/typed-allocation-manager.hpp"

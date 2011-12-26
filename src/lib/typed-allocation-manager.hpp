@@ -67,7 +67,7 @@
 #define LIB_TYPED_ALLOCATION_MANAGER_H
 
 #include "lib/error.hpp"
-#include "lib/format.hpp"
+#include "lib/format-util.hpp"
 #include "lib/typed-counter.hpp"
 #include "include/logging.h"
 
