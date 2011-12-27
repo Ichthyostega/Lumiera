@@ -38,7 +38,7 @@ namespace test{
 
   namespace { // private test setup...
     
-    const uint NUM_THREADS = 100;
+    const uint NUM_THREADS = 50;
     const uint MAX_RAND    = 5*1000*1000;
     
     
