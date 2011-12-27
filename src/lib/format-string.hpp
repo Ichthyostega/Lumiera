@@ -79,7 +79,7 @@ namespace util {
   
   namespace { // helpers to pick a suitable specialisation....
     
-    const size_t FORMATTER_SIZE = 100;
+    enum{ FORMATTER_SIZE = 100 };
     
   }//(End) guards/helpers
   
@@ -94,21 +94,28 @@ namespace util {
     {
       char formatter_[FORMATTER_SIZE];
       
+      template<typename VAL, class SEL =void>
+      struct Param;
+      
+      template<typename VAL, class SEL>
+      friend struct Param;
+      
+      
     public:
       _Fmt (string formatString);
       
       operator string()  const;
       
-      template<typename TY>
+      template<typename VAL>
       _Fmt&
-      operator% (TY const&);
+      operator% (VAL const&);
       
       
       friend std::ostream&
       operator<< (std::ostream& os, _Fmt const&);
       
-      friend bool operator== (_Fmt const&, _Fmt const&);
-      friend bool operator== (_Fmt const&, string const&);
+      friend bool operator== (_Fmt const&,        _Fmt const&);
+      friend bool operator== (_Fmt const&,      string const&);
       friend bool operator== (_Fmt const&, const char * const);
       friend bool operator== (string const&     , _Fmt const&);
       friend bool operator== (const char * const, _Fmt const&);
@@ -118,6 +125,63 @@ namespace util {
       template<typename X>
       friend bool operator != (X const& x, _Fmt const& fmt) { return !(x == fmt); }
     };
+  
+  
+  
+  
+  
+  /* == forwarding into the implementation == */
+  
+  template<typename VAL>
+  inline _Fmt&
+  _Fmt::operator% (VAL const& val)
+  {
+    Param<VAL>::push (val);
+    return *this;
+  }
+  
+  
+  template<typename VAL, class SEL>
+  struct _Fmt::Param
+    {
+      static void
+      push (VAL const&)
+        {
+          UNIMPLEMENTED ("get type string");
+        }
+    };
+  
+  
+  
+  inline bool
+  operator== (_Fmt const& left, _Fmt const& right)
+  {
+    return string(left) == string(right);
+  }
+  
+  inline bool
+  operator== (_Fmt const& fmt, string const& str)
+  {
+    return string(fmt) == str;
+  }
+  
+  inline bool
+  operator== (_Fmt const& fmt, const char * const cString)
+  {
+    return string(fmt) == string(cString);
+  }
+  
+  inline bool
+  operator== (string const& str, _Fmt const& fmt)
+  {
+    return fmt == str;
+  }
+  
+  inline bool
+  operator== (const char * const cString, _Fmt const& fmt)
+  {
+    return fmt == cString;
+  }
   
   
   
