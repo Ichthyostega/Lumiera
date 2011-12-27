@@ -21,7 +21,7 @@
 */
 
 
-/** @file format.hpp
+/** @file format-util.hpp
  ** Collection of small helpers and convenience shortcuts for diagnostics & formatting.
  ** - util::str() performs a failsafe to-String conversion, thereby preferring a
  **         built-in conversion operator, falling back to just a mangled type string.
@@ -143,5 +143,4 @@ namespace util {
   
   
 } // namespace util
-
-#endif /*UTIL_FORMAT_H*/
+#endif
