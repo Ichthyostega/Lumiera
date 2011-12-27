@@ -71,6 +71,38 @@ namespace util {
   
   
   /** */
+  template<typename VAL>
+  void
+  _Fmt::pushParameter (VAL const& val)
+  {
+    UNIMPLEMENTED ("feed the parameter to the embedded formatter");
+  }
+  
+  template<typename VAL>
+  void
+  _Fmt::pushParameter (const VAL * const pVal)
+  {
+    if (pVal)
+      pushParameter(*pVal);
+    else
+      pushParameter(string("(null)"));
+  }
+  
+  
+  /* ===== explicitly supported =================== */
+  
+  template void _Fmt::pushParameter(string const&);
+  template void _Fmt::pushParameter(int const&);
+  template void _Fmt::pushParameter(uint const&);
+  
+  template void _Fmt::pushParameter(const string * const);
+  template void _Fmt::pushParameter(const int * const);
+  template void _Fmt::pushParameter(const uint * const);
+  
+  
+  
+  
+  /** */
   _Fmt::operator string()  const
   {
     UNIMPLEMENTED ("forward to the embedded boost::format object");

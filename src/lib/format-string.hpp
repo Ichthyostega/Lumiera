@@ -48,6 +48,7 @@
 //#include "lib/meta/trait.hpp"
 //#include "lib/symbol.hpp"
 //#include "lib/util.hpp"
+#include "lib/error.hpp"
 
 #include <string>
 //#include <cstring>
@@ -70,6 +71,7 @@ namespace std { // forward declaration to avoid including <iostream>
 }
 
 
+
 namespace util {
   
   using boost::enable_if;
@@ -77,11 +79,6 @@ namespace util {
   using std::string;
   
   
-  namespace { // helpers to pick a suitable specialisation....
-    
-    enum{ FORMATTER_SIZE = 100 };
-    
-  }//(End) guards/helpers
   
   
   
@@ -92,13 +89,19 @@ namespace util {
   class _Fmt
     : boost::noncopyable
     {
+      enum{ FORMATTER_SIZE = 100 };
+
+      
+      
       char formatter_[FORMATTER_SIZE];
       
       template<typename VAL, class SEL =void>
-      struct Param;
+      struct Converter;
       
-      template<typename VAL, class SEL>
-      friend struct Param;
+      template<typename VAL>
+      void pushParameter (VAL const&);
+      template<typename VAL>
+      void pushParameter (const VAL * const);
       
       
     public:
@@ -130,28 +133,138 @@ namespace util {
   
   
   
-  /* == forwarding into the implementation == */
+  /* ===== forwarding into the implementation ====== */
   
+  /** The percent operator (\c '%' ) is used do feed 
+   *  additional parameter values to be included into 
+   *  the formatted result, at the positions marked 
+   *  within the format string.   
+   * 
+   * \par type specific treatment
+   * Basic types (numbers, chars, strings) are passed to the implementation
+   * (= boost::format) literally. For custom types, we try to use an custom
+   * string conversion, if applicable. Any other type gets just translated
+   * into a type-ID (using the mangled RTTI info). In case of errors during
+   * the conversion, a string representation of the error is returned
+   * @param val arbitrary value or pointer to be included into the result
+   * @warning you need to provide exactly the right number of parameters,
+   *          i.e. matching the number of fields in the format string.
+   */
   template<typename VAL>
   inline _Fmt&
   _Fmt::operator% (VAL const& val)
   {
-    Param<VAL>::push (val);
+    pushParameter (Converter<VAL>::prepare (val));
     return *this;
   }
   
   
-  template<typename VAL, class SEL>
-  struct _Fmt::Param
+  
+  namespace { // helpers to pick a suitable specialisation....
+    
+    template<typename X>
+    struct _can_convertToString
+      {
+        enum{ value = false };
+      };
+    
+    
+    /** 
+     * by default we don't allow to 
+     * treat any types directly by boost::format.
+     * As fallback we rather just produce a type-ID
+     */
+    template<typename X>
+    struct _can_forward                     { enum{ value = false };};
+    
+    /* the following definitions enable some basic types
+     * to be forwarded to boost::format literally */
+    template<> struct _can_forward<string>  { enum{ value = true }; };
+    template<> struct _can_forward<int>     { enum{ value = true }; };
+    template<> struct _can_forward<uint>    { enum{ value = true }; };
+    
+    
+    
+    inline string
+    _log_and_stringify (std::exception const& ex)
     {
-      static void
-      push (VAL const&)
+      WARN (progress, "Error while invoking custom string conversion: %s", ex.what());
+      return ex.what();
+    }
+    
+    inline string
+    _log_unknown_exception()
+    {
+      const char* errID = lumiera_error();
+      if (errID)
+        {
+          ERROR (progress, "Unknown error while invoking custom string conversion. Lumiera error flag = %s", errID);
+          return string("Unknown error in string conversion. FLAG=")+errID;
+        }
+      else
+        {
+          ERROR (progress, "Unknown error while invoking custom string conversion. No Lumiera error flag set.");
+          return "Unknown error in string conversion";
+        }
+    }
+    
+  }//(End) guards/helpers
+  
+  
+  
+  /* === explicit specialisations to control the kind of conversion === */
+  
+  template<typename VAL, class SEL>
+  struct _Fmt::Converter
+    {
+      static string
+      prepare (VAL const&)
         {
           UNIMPLEMENTED ("get type string");
         }
     };
   
+  template<typename VAL>
+  struct _Fmt::Converter<VAL,      typename enable_if< _can_convertToString<VAL> >::type>
+    {
+      static string
+      prepare (VAL const& val)
+        try {
+            return string(val); 
+          }
+        catch(std::exception const& ex)
+          {
+            return _log_and_stringify(ex);
+          }
+        catch(...)
+          {
+            return _log_unknown_exception();
+          }
+    };
   
+  template<typename VAL>
+  struct _Fmt::Converter<VAL,      typename enable_if< _can_forward<VAL> >::type>
+    {
+      static VAL const&
+      prepare (VAL const& val)
+        {
+          return val;
+        }
+    };
+  
+  template<typename VAL>
+  struct _Fmt::Converter<VAL*,     typename enable_if< _can_forward<VAL> >::type>
+    {
+      static const VAL *
+      prepare (const VAL * const pVal)
+        {
+          return pVal;
+        }
+    };
+  
+  
+  
+  /* === comparison of formatter objects === */
   
   inline bool
   operator== (_Fmt const& left, _Fmt const& right)
