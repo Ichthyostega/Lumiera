@@ -51,9 +51,7 @@
 #include "lib/meta/size-trait.hpp"
 
 #include <string>
-//#include <cstring>
 #include <typeinfo>
-//#include <boost/lexical_cast.hpp>
 #include <boost/noncopyable.hpp>
 #include <boost/utility/enable_if.hpp>
 
@@ -94,7 +92,7 @@ namespace util {
       
       
       /** @internal buffer to hold a boost::format */
-      char formatter_[FORMATTER_SIZE];
+      mutable char formatter_[FORMATTER_SIZE];
       
       
       template<typename VAL, class SEL =void>
@@ -107,6 +105,7 @@ namespace util {
       
       
     public:
+     ~_Fmt ();
       _Fmt (string formatString);
       
       operator string()  const;
@@ -184,6 +183,8 @@ namespace util {
     template<> struct _can_forward<string>  { enum{ value = true }; };
     template<> struct _can_forward<int>     { enum{ value = true }; };
     template<> struct _can_forward<uint>    { enum{ value = true }; };
+    template<> struct _can_forward<float>   { enum{ value = true }; };
+    template<> struct _can_forward<double>  { enum{ value = true }; };
     
     
     
@@ -222,7 +223,7 @@ namespace util {
       static string
       prepare (VAL const&)
         {
-          UNIMPLEMENTED ("get type string");
+          return string("«")+typeid(VAL).name()+"»";
         }
     };
   

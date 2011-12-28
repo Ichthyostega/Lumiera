@@ -73,12 +73,12 @@ namespace test {
       void
       check_simpleInvocation ()
         {
-          string formatted = _Fmt("--format-template--int=%+04d--double=%5.2f--string=%-10s--")
+          string formatted = _Fmt("--format-template--int=%04d--double=%+5.2f--string=%-10s--")
                                  % 12
                                  % 1.228
                                  % "Lumiera";
           cout << formatted << endl;
-          CHECK (formatted == "--format-template--int=0012--double= 1.23--string=Lumiera   --");
+          CHECK (formatted == "--format-template--int=0012--double=+1.23--string=Lumiera   --");
         }
       
       

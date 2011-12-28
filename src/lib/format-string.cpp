@@ -58,8 +58,15 @@
 
 namespace util {
   
+  using boost::format;
+  
   namespace { // implementation details...
     
+    inline boost::format&
+    accessImpl (char* buffer)
+    {
+      return reinterpret_cast<boost::format&> (*buffer);
+    }
     
   }//(End) implementation details
   
@@ -68,8 +75,13 @@ namespace util {
   _Fmt::_Fmt (string formatString)
   {
     BOOST_STATIC_ASSERT (sizeof(boost::format) <= FORMATTER_SIZE);
-      
-    UNIMPLEMENTED ("create the embedded boost::format object");
+    
+    new(formatter_) boost::format(formatString);
+  }
+  
+  _Fmt::~_Fmt ()
+  {
+    accessImpl(formatter_).~format();
   }
   
   
@@ -78,7 +90,7 @@ namespace util {
   void
   _Fmt::pushParameter (VAL const& val)
   {
-    UNIMPLEMENTED ("feed the parameter to the embedded formatter");
+    accessImpl(formatter_) % val;
   }
   
   template<typename VAL>
@@ -97,10 +109,14 @@ namespace util {
   template void _Fmt::pushParameter(string const&);
   template void _Fmt::pushParameter(int const&);
   template void _Fmt::pushParameter(uint const&);
+  template void _Fmt::pushParameter(float const&);
+  template void _Fmt::pushParameter(double const&);
   
   template void _Fmt::pushParameter(const string * const);
   template void _Fmt::pushParameter(const int * const);
   template void _Fmt::pushParameter(const uint * const);
+  template void _Fmt::pushParameter(const float * const);
+  template void _Fmt::pushParameter(const double * const);
   
   
   
@@ -108,7 +124,7 @@ namespace util {
   /** */
   _Fmt::operator string()  const
   {
-    UNIMPLEMENTED ("forward to the embedded boost::format object");
+    return accessImpl(formatter_).str();
   }
   
   
