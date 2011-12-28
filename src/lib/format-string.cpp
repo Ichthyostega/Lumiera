@@ -48,6 +48,7 @@
 #include "lib/error.hpp"
 #include "lib/format-string.hpp"
 
+#include <boost/static_assert.hpp>
 #include <boost/format.hpp>
 #include <iostream>
 
@@ -66,6 +67,8 @@ namespace util {
   /** */
   _Fmt::_Fmt (string formatString)
   {
+    BOOST_STATIC_ASSERT (sizeof(boost::format) <= FORMATTER_SIZE);
+      
     UNIMPLEMENTED ("create the embedded boost::format object");
   }
   

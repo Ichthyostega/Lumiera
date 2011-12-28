@@ -64,6 +64,7 @@ namespace meta {
       //-------------------------------------mimicked-definitions--
       
       typedef std::vector<size_t> Vector;
+      typedef std::vector<bool>   BVector;
       
       struct CompatAllocator
         : std::allocator<char>
@@ -102,6 +103,8 @@ namespace meta {
           char * _M_out_end;
           
           Locale _M_buf_locale;
+          
+          virtual ~BasicStringbuf() { }
         };
       
       struct BasicAltstringbuf
@@ -115,12 +118,12 @@ namespace meta {
       
       struct BoostFormat
         {
-          Vector items_;
-          Vector bound_;
-          int    style_;
-          int    cur_arg_;
-          int    num_args_;
-          bool   dumped_;
+          Vector  items_;
+          BVector bound_;       // note: differs in size
+          int     style_;
+          int     cur_arg_;
+          int     num_args_;
+          mutable bool   dumped_;
           std::string   prefix_;
           unsigned char exceptions;
           BasicAltstringbuf buf_;
@@ -131,9 +134,11 @@ namespace meta {
       
     public:/* ===== Interface: size constants ===== */ 
       
-      enum {
-             STRING          = sizeof(std::string)
-           , VECTOR          = sizeof(std::vector<size_t>)
+      enum { ALIGNMENT       = sizeof(size_t)
+           
+           , STRING          = sizeof(std::string)
+           , VECTOR          = sizeof(Vector)
+           , BVECTOR         = sizeof(BVector)
            
            , BOOST_FORMAT    = sizeof(BoostFormat)
            };
