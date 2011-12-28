@@ -45,10 +45,10 @@
 #ifndef UTIL_FORMAT_STRING_H
 #define UTIL_FORMAT_STRING_H
 
-//#include "lib/meta/trait.hpp"
 //#include "lib/symbol.hpp"
 //#include "lib/util.hpp"
 #include "lib/error.hpp"
+#include "lib/meta/size-trait.hpp"
 
 #include <string>
 //#include <cstring>
@@ -89,11 +89,13 @@ namespace util {
   class _Fmt
     : boost::noncopyable
     {
-      enum{ FORMATTER_SIZE = 100 };
-
+      /** size of an internal implementation Buffer */
+      enum{ FORMATTER_SIZE = lib::meta::SizeTrait::BOOST_FORMAT };
       
       
+      /** @internal buffer to hold a boost::format */
       char formatter_[FORMATTER_SIZE];
+      
       
       template<typename VAL, class SEL =void>
       struct Converter;
