@@ -734,11 +734,12 @@ at runtime (type erasure)
 
 Typed Lookup
 ^^^^^^^^^^^^
-_planned_ a system of per-type lookup tables, based on `EntryID`, together
+_[,yellow]#planned#_ a system of per-type lookup tables, based on `EntryID`, together
 with an type specific access functor. Together, this allows to translate
 transparently and typesafe from symbolic ID to object instance, which
 is an prerequisite for integrating a rules based system. Besides, these
-tables allow unique IDs per type
+tables allow unique IDs per type +
+-> more details about this concept link:{l}/wiki/renderengine.html#EntryID%20TypedID%20TypedLookup[in the TiddlyWiki]
 
 
 Allocators
