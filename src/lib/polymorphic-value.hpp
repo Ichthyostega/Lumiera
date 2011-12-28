@@ -146,6 +146,7 @@
 #include "lib/meta/duck-detector.hpp"
 
 #include <boost/utility/enable_if.hpp>
+#include <boost/static_assert.hpp>
 
 
 namespace lib {
@@ -384,7 +385,8 @@ namespace lib {
       template<class IMP>
       PolymorphicValue (IMP*)
         {
-          REQUIRE (siz >= sizeof(IMP));
+          BOOST_STATIC_ASSERT (siz >= sizeof(IMP));
+          
           new(&buf_) IMP();
         }
       
