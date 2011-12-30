@@ -300,7 +300,7 @@ namespace test {
         }
     };
   
-  LAUNCHER (FormatString_test, "unit common");
+  LAUNCHER (FormatString_test, "unit meta");
   
   
 }} // namespace util::test

@@ -76,7 +76,7 @@ namespace test {
   
   
   /** Register this test class... */
-  LAUNCHER (TypeListUtil_test, "unit common");
+  LAUNCHER (TypeListUtil_test, "unit meta");
   
   
   

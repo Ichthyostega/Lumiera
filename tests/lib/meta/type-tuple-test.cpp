@@ -451,7 +451,7 @@ namespace test {
   
   
   /** Register this test class... */
-  LAUNCHER (TypeTuple_test, "unit common");
+  LAUNCHER (TypeTuple_test, "unit meta");
   
   
   
