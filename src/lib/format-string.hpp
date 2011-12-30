@@ -71,10 +71,11 @@ namespace std { // forward declaration to avoid including <iostream>
 
 namespace util {
   
+  typedef unsigned char uchar;
+  
   using boost::enable_if;
   using std::string;
-  
-  
+
   
   
   
@@ -173,17 +174,25 @@ namespace util {
     /* the following definitions enable some basic types
      * to be forwarded to boost::format literally */
     template<> struct _shall_forward<string>  { enum{ value = true }; };
+    template<> struct _shall_forward<char>    { enum{ value = true }; };
+    template<> struct _shall_forward<uchar>   { enum{ value = true }; };
     template<> struct _shall_forward<int>     { enum{ value = true }; };
     template<> struct _shall_forward<uint>    { enum{ value = true }; };
+    template<> struct _shall_forward<short>   { enum{ value = true }; };
+    template<> struct _shall_forward<ushort>  { enum{ value = true }; };
+    template<> struct _shall_forward<int64_t> { enum{ value = true }; };
+    template<> struct _shall_forward<uint64_t>{ enum{ value = true }; };
     template<> struct _shall_forward<float>   { enum{ value = true }; };
     template<> struct _shall_forward<double>  { enum{ value = true }; };
+    template<> struct _shall_forward<void*>   { enum{ value = true }; };
     
     
     template<typename X>
     struct _shall_convert_toString
       {
         enum{ value = ! _shall_forward<X>::value
-                 && lib::meta::_can_convertToString<X>::value
+                 &&    lib::meta::can_convertToString<X>::value
+                 &&   !lib::meta::is_sameType<X,char*>::value
         };
       };
     

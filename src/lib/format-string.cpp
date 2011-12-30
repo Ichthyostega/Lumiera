@@ -103,18 +103,38 @@ namespace util {
       pushParameter(string("(null)"));
   }
   
+  template<>
+  void
+  _Fmt::pushParameter (const char * const cString)
+  {
+    pushParameter (cString);
+  }
+  
+  
   
   /* ===== explicitly supported =================== */
   
   template void _Fmt::pushParameter(string const&);
+  template void _Fmt::pushParameter(char const&);
+  template void _Fmt::pushParameter(uchar const&);
   template void _Fmt::pushParameter(int const&);
   template void _Fmt::pushParameter(uint const&);
+  template void _Fmt::pushParameter(short const&);
+  template void _Fmt::pushParameter(ushort const&);
+  template void _Fmt::pushParameter(int64_t const&);
+  template void _Fmt::pushParameter(uint64_t const&);
   template void _Fmt::pushParameter(float const&);
   template void _Fmt::pushParameter(double const&);
+  template void _Fmt::pushParameter(void * const&);
   
   template void _Fmt::pushParameter(const string * const);
+  template void _Fmt::pushParameter(const uchar * const);
   template void _Fmt::pushParameter(const int * const);
   template void _Fmt::pushParameter(const uint * const);
+  template void _Fmt::pushParameter(const short * const);
+  template void _Fmt::pushParameter(const ushort * const);
+  template void _Fmt::pushParameter(const int64_t * const);
+  template void _Fmt::pushParameter(const uint64_t * const);
   template void _Fmt::pushParameter(const float * const);
   template void _Fmt::pushParameter(const double * const);
   

@@ -89,8 +89,9 @@ namespace test {
           _Fmt formatter (formatString);
           
           uint val = rand() % 100;
+          void *pt = &val;
           
-          formatter % &val;
+          formatter % &pt;
           formatter % val;
           
           cout << formatter << endl;
@@ -102,7 +103,7 @@ namespace test {
         {
           int i(-12);
           CHECK (_Fmt("%d") % i     == "-12"    );
-          CHECK (_Fmt("%6d") % i    == "-   12" );
+          CHECK (_Fmt("%6d") % i    == "   -12" );
           CHECK (_Fmt("%-6d") % i   == "-12   " );
           CHECK (_Fmt("%+-6d") % -i == "+12   " );
           CHECK (_Fmt("%+06d") % -i == "+00012" );
@@ -242,8 +243,8 @@ namespace test {
       verify_errorHandling ()
         {
           cout << _Fmt("__nix_") % 1 % 2 << endl;
-          cout << _Fmt("__%d__") << endl;
-          cout << _Fmt("__%d__") % 1 << endl;
+          cout << _Fmt("__%d__")         << endl;
+          cout << _Fmt("__%d__") % 1     << endl;
           cout << _Fmt("__%d__") % 1 % 2 << endl;
           
           cout << _Fmt("__%d__") % "dirt" << endl;
@@ -255,19 +256,19 @@ namespace test {
       void
       verify_pointerHandling ()
         {
-          int             i(-12);   int           *  pi = &  i;
-          uint             u(12);   uint          *  pu = &  u;
-          short         sh(-123);   short         * psh = & sh;
-          ushort        ush(123);   ushort        *push = &ush;
-          long           l(-123);   long          *  pl = &  l;
-          ulong          ul(123);   ulong         * pul = & ul;
-          int64_t       ll(5e+9);   int64_t       * pll = & ll;
-          uint64_t       ull(ll);   uint64_t      *pull = &ull;
-          float         f(12.34);   float         *  pf = &  f;
-          double       d(-12.34);   double        *  pd = &  d;
-          char           c(0x40);   char          *  pc = &  c;
-          unsigned char uc(0xff);   unsigned char * puc = & uc;
-          string  str("Lumiera");   string        *pstr = &str;
+          int             i(-12);     int       *   pi = &  i;
+          uint             u(12);     uint      *   pu = &  u;
+          short         sh(-123);     short     *  psh = & sh;
+          ushort        ush(123);     ushort    * push = &ush;
+          long           l(-123);     long      *   pl = &  l;
+          ulong          ul(123);     ulong     *  pul = & ul;
+          int64_t       ll(5e+9);     int64_t   *  pll = & ll;
+          uint64_t       ull(ll);     uint64_t  * pull = &ull;
+          float         f(12.34);     float     *   pf = &  f;
+          double       d(-12.34);     double    *   pd = &  d;
+          char           c(0x40);     char      *   pc = &  c;
+          uchar         uc(0xff);     uchar     *  puc = & uc;
+          string  str("Lumiera");     string    * pstr = &str;
           
           CHECK (_Fmt("%d") %   i == _Fmt("%d") %   pi);
           CHECK (_Fmt("%d") %   u == _Fmt("%d") %   pu);

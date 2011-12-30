@@ -75,7 +75,7 @@ namespace meta {
    * @see string-util.hpp more elaborate solution including lexical_cast
    */
   template<typename T>
-  struct _can_convertToString
+  struct can_convertToString
     {
       static T & probe();
       
