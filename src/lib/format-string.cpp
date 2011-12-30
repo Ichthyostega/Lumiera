@@ -46,6 +46,7 @@
 
 
 #include "lib/error.hpp"
+#include "lib/format-util.hpp"
 #include "lib/format-string.hpp"
 
 #include <boost/static_assert.hpp>
@@ -68,7 +69,36 @@ namespace util {
       return reinterpret_cast<boost::format&> (*buffer);
     }
     
+    /** in case the formatting of a (primitive) value fails,
+     *  we try to use a error indicator instead
+     */
+    inline void
+    pushFailsafeReplacement (char* formatter, const char* errorMsg =NULL)
+    try {
+        string placeholder("<Error");
+        if (errorMsg){
+            placeholder += ": ";
+            placeholder += errorMsg;
+        }
+        placeholder += ">";
+        
+        accessImpl(formatter) % placeholder;
+      }
+    ERROR_LOG_AND_IGNORE (progress, "Supplying placeholder for problematic format parameter")
+    
+    
+    inline void
+    suppressInsufficientArgumentErrors (char* formatter)
+    {
+      using namespace boost::io;
+      accessImpl(formatter).exceptions (all_error_bits ^ too_few_args_bit); 
+    }
+    
+    
   }//(End) implementation details
+  
+  
+  
   
   
   /** */
@@ -77,6 +107,7 @@ namespace util {
     BOOST_STATIC_ASSERT (sizeof(boost::format) <= FORMATTER_SIZE);
     
     new(formatter_) boost::format(formatString);
+    suppressInsufficientArgumentErrors (formatter_);
   }
   
   _Fmt::~_Fmt ()
@@ -86,8 +117,8 @@ namespace util {
   
   
   /** @internal access points for the frontend,
-   * allowing to push a parameter value down into
-   * the implementation for the actual formatting.
+   * allowing to push a parameter value down into the implementation
+   * for the actual formatting.
    * @note we need to generate instantiations of this template function
    *       explicitly for all basic types to be supported for direct handling,
    *       otherwise we'll get linker errors. Lumiera uses the ``inclusion model''
@@ -98,18 +129,38 @@ namespace util {
   template<typename VAL>
   void
   _Fmt::pushParameter (VAL const& val)
-  {
-    accessImpl(formatter_) % val;
-  }
+  try {
+      accessImpl(formatter_) % val;
+    }
+  
+  catch (boost::io::too_many_args& argErr)
+    {
+      WARN (progress, "Format: excess argument '%s' of type %s ignored."
+                    , cStr(str(val))
+                    , cStr(tyStr(val)));
+    }
+  catch (std::exception& failure)
+    {
+      WARN (progress, "Format: Parameter '%s' causes problems: %s"
+                    , cStr(str(val))
+                    , failure.what());
+      pushFailsafeReplacement (formatter_, failure.what());
+    }
+  catch (...)
+    {
+      WARN (progress, "Format: Unexpected problems accepting format parameter '%s'", cStr(str(val)));
+      pushFailsafeReplacement (formatter_);
+    }
+  
   
   template<typename VAL>
   void
   _Fmt::pushParameter (const VAL * const pVal)
   {
     if (pVal)
-      pushParameter(*pVal);
+      pushParameter (*pVal);
     else
-      pushParameter(string("(null)"));
+      pushParameter (string("<null>"));
   }
   
   template<>
@@ -157,21 +208,44 @@ namespace util {
    * are evaluated and formatted prior to receiving the formatted result
    */
   _Fmt::operator string()  const
-  {
-    return accessImpl(formatter_).str();
-  }
+  try {
+      return accessImpl(formatter_).str();
+    }
+  
+  catch (std::exception& failure)
+    {
+      WARN (progress, "Format: Failure to receive formatted result: %s", failure.what());
+      return "<formatting failure>";
+    }
+  catch (...)
+    {
+      WARN (progress, "Format: Unexpected problems while formatting output.");
+      return "<unexpected problems>";
+    }
+  
   
   
   /** send the formatted buffer directly to the output stream.
    * @note this is more efficient than creating a string and outputting that,
-   *       because boost::format internally uses a stringstream to generate
+   *       because boost::format internally uses a string-stream to generate
    *       the formatted representation, relying on the C++ output framework
    */
   std::ostream&
   operator<< (std::ostream& os, _Fmt const& fmt)
-  {
-    return os << accessImpl(fmt.formatter_);
-  }
+  try {
+      return os << accessImpl(fmt.formatter_);
+    }
+  
+  catch(std::exception& failure)
+    {
+      WARN (progress, "Format: Failure when outputting formatted result: %s", failure.what());
+      return os << "<formatting failure>";
+    }
+  catch(...)
+    {
+      WARN (progress, "Format: Unexpected problems while producing formatted output.");
+      return os << "<unexpected problems>";
+    }
   
   
   

@@ -237,12 +237,12 @@ namespace test {
           CHECK (contains (mangledType, "Silent"));
           
           CHECK (_Fmt("!!%s!!") % v  == "!!Number-013!!");
-          CHECK (_Fmt("!!%s!!") % x  == "!!LUMIERA_ERROR_STATE:unforeseen state (encountered Fantomas).!!");
+          CHECK (_Fmt("!!%s!!") % x  == "!!<string conversion failed: LUMIERA_ERROR_STATE:unforeseen state (encountered Fantomas).>!!");
           
           CHECK (contains (_Fmt("%s") % rs1, "Silent"));
           CHECK (contains (_Fmt("%s") % rs2, "Silent"));
           
-          CHECK (_Fmt("!!%s!!") % rv  == "!!LUMIERA_ERROR_STATE:unforeseen state (encountered Fantomas).!!");
+          CHECK (_Fmt("!!%s!!") % rv  == "!!<string conversion failed: LUMIERA_ERROR_STATE:unforeseen state (encountered Fantomas).>!!");
           
           x.i_ = 42;
           CHECK (_Fmt("!!%s!!") % rv  == "!!Number-042!!");
@@ -258,6 +258,8 @@ namespace test {
           cout << _Fmt("__%d__") % 1     << endl;
           cout << _Fmt("__%d__") % 1 % 2 << endl;
           
+          const char* evil = NULL;
+          cout << _Fmt("__%d__") %  evil  << endl;
           cout << _Fmt("__%d__") % "dirt" << endl;
           cout << _Fmt("__%d__") % "1234" << endl;
           cout << _Fmt("__%d__") % "0xff" << endl;
@@ -307,7 +309,7 @@ namespace test {
           
           pv = NULL;
           vv = NULL;
-          CHECK (_Fmt("__%s__") % pv == "__(null)__");
+          CHECK (_Fmt("__%s__") % pv == "__<null>__");
           CHECK (_Fmt("__%s__") % pv == "__0__");
         }
     };

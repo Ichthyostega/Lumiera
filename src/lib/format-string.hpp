@@ -201,7 +201,11 @@ namespace util {
     _log_and_stringify (std::exception const& ex)
     {
       WARN (progress, "Error while invoking custom string conversion: %s", ex.what());
-      return ex.what();
+      try {
+          return string("<string conversion failed: ")+ex.what()+">";
+        }
+      catch(...) { /* secondary errors ignored */ }
+      return "(formatting failure)";
     }
     
     inline string
@@ -209,15 +213,10 @@ namespace util {
     {
       const char* errID = lumiera_error();
       if (errID)
-        {
-          ERROR (progress, "Unknown error while invoking custom string conversion. Lumiera error flag = %s", errID);
-          return string("Unknown error in string conversion. FLAG=")+errID;
-        }
+        ERROR (progress, "Unknown error while invoking custom string conversion. Lumiera error flag = %s", errID);
       else
-        {
-          ERROR (progress, "Unknown error while invoking custom string conversion. No Lumiera error flag set.");
-          return "Unknown error in string conversion";
-        }
+        ERROR (progress, "Unknown error while invoking custom string conversion. No Lumiera error flag set.");
+      return "<Unknown error in string conversion>";
     }
     
   }//(End) guards/helpers
