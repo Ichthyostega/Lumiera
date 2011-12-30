@@ -45,9 +45,8 @@
 #ifndef UTIL_FORMAT_STRING_H
 #define UTIL_FORMAT_STRING_H
 
-//#include "lib/symbol.hpp"
-//#include "lib/util.hpp"
 #include "lib/error.hpp"
+#include "lib/meta/util.hpp"
 #include "lib/meta/size-trait.hpp"
 
 #include <string>
@@ -73,7 +72,6 @@ namespace std { // forward declaration to avoid including <iostream>
 namespace util {
   
   using boost::enable_if;
-//using util::isnil;
   using std::string;
   
   
@@ -95,11 +93,13 @@ namespace util {
       mutable char formatter_[FORMATTER_SIZE];
       
       
+      /** helper to prepare parameters for inclusion */
       template<typename VAL, class SEL =void>
       struct Converter;
       
       template<typename VAL>
       void pushParameter (VAL const&);
+      
       template<typename VAL>
       void pushParameter (const VAL * const);
       
@@ -108,7 +108,7 @@ namespace util {
      ~_Fmt ();
       _Fmt (string formatString);
       
-      operator string()  const;
+      operator string()  const;  ///< get the formatted result 
       
       template<typename VAL>
       _Fmt&
@@ -136,14 +136,13 @@ namespace util {
   
   /* ===== forwarding into the implementation ====== */
   
-  /** The percent operator (\c '%' ) is used do feed 
-   *  additional parameter values to be included into 
-   *  the formatted result, at the positions marked 
-   *  within the format string.   
+  /** The percent operator (\c '%' ) is used do feed parameter values
+   *  to be included into the formatted result, at the positions marked 
+   *  by printf-style placeholders within the format string.   
    * 
    * \par type specific treatment
    * Basic types (numbers, chars, strings) are passed to the implementation
-   * (= boost::format) literally. For custom types, we try to use an custom
+   * (= boost::format) literally. For custom types, we try to use a custom
    * string conversion, if applicable. Any other type gets just translated
    * into a type-ID (using the mangled RTTI info). In case of errors during
    * the conversion, a string representation of the error is returned
@@ -163,29 +162,30 @@ namespace util {
   
   namespace { // helpers to pick a suitable specialisation....
     
-    template<typename X>
-    struct _can_convertToString
-      {
-        enum{ value = false };
-      };
-    
-    
     /** 
      * by default we don't allow to 
      * treat any types directly by boost::format.
      * As fallback we rather just produce a type-ID
      */
     template<typename X>
-    struct _can_forward                     { enum{ value = false };};
+    struct _shall_forward                     { enum{ value = false };};
     
     /* the following definitions enable some basic types
      * to be forwarded to boost::format literally */
-    template<> struct _can_forward<string>  { enum{ value = true }; };
-    template<> struct _can_forward<int>     { enum{ value = true }; };
-    template<> struct _can_forward<uint>    { enum{ value = true }; };
-    template<> struct _can_forward<float>   { enum{ value = true }; };
-    template<> struct _can_forward<double>  { enum{ value = true }; };
+    template<> struct _shall_forward<string>  { enum{ value = true }; };
+    template<> struct _shall_forward<int>     { enum{ value = true }; };
+    template<> struct _shall_forward<uint>    { enum{ value = true }; };
+    template<> struct _shall_forward<float>   { enum{ value = true }; };
+    template<> struct _shall_forward<double>  { enum{ value = true }; };
     
+    
+    template<typename X>
+    struct _shall_convert_toString
+      {
+        enum{ value = ! _shall_forward<X>::value
+                 && lib::meta::_can_convertToString<X>::value
+        };
+      };
     
     
     inline string
@@ -215,8 +215,10 @@ namespace util {
   
   
   
+  
   /* === explicit specialisations to control the kind of conversion === */
   
+  /** default/fallback: just indicate the (static) type */
   template<typename VAL, class SEL>
   struct _Fmt::Converter
     {
@@ -227,8 +229,9 @@ namespace util {
         }
     };
   
+  /** some custom types explicitly provide string representation */
   template<typename VAL>
-  struct _Fmt::Converter<VAL,      typename enable_if< _can_convertToString<VAL> >::type>
+  struct _Fmt::Converter<VAL,      typename enable_if< _shall_convert_toString<VAL> >::type>
     {
       static string
       prepare (VAL const& val)
@@ -245,8 +248,10 @@ namespace util {
           }
     };
   
+  /** some basic types are directly forwarded down to the implementation;
+   * @note this requires explicit specialisations in format-string.cpp */
   template<typename VAL>
-  struct _Fmt::Converter<VAL,      typename enable_if< _can_forward<VAL> >::type>
+  struct _Fmt::Converter<VAL,      typename enable_if< _shall_forward<VAL> >::type>
     {
       static VAL const&
       prepare (VAL const& val)
@@ -256,7 +261,7 @@ namespace util {
     };
   
   template<typename VAL>
-  struct _Fmt::Converter<VAL*,     typename enable_if< _can_forward<VAL> >::type>
+  struct _Fmt::Converter<VAL*,     typename enable_if< _shall_forward<VAL> >::type>
     {
       static const VAL *
       prepare (const VAL * const pVal)
@@ -302,5 +307,4 @@ namespace util {
   
   
 } // namespace util
-
-#endif /*UTIL_FORMAT_STRING_H*/
+#endif
