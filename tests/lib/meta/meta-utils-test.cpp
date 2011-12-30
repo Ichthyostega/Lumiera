@@ -104,7 +104,7 @@ namespace test {
       static bool
       can_convert (TY const&)
         {
-          return _can_convertToString<TY>::value;
+          return can_convertToString<TY>::value;
         }
       
       void

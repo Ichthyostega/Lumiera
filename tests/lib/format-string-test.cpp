@@ -73,12 +73,12 @@ namespace test {
       void
       check_simpleInvocation ()
         {
-          string formatted = _Fmt("--format-template--int=%04d--double=%+5.2f--string=%-10s--")
+          string formatted = _Fmt("--format-template--int=%04d--double=%+5.2f--string=%-9s--")
                                  % 12
                                  % 1.228
                                  % "Lumiera";
           cout << formatted << endl;
-          CHECK (formatted == "--format-template--int=0012--double=+1.23--string=Lumiera   --");
+          CHECK (formatted == "--format-template--int=0012--double=+1.23--string=Lumiera  --");
         }
       
       
@@ -91,7 +91,7 @@ namespace test {
           uint val = rand() % 100;
           void *pt = &val;
           
-          formatter % &pt;
+          formatter % pt;
           formatter % val;
           
           cout << formatter << endl;
@@ -107,66 +107,77 @@ namespace test {
           CHECK (_Fmt("%-6d") % i   == "-12   " );
           CHECK (_Fmt("%+-6d") % -i == "+12   " );
           CHECK (_Fmt("%+06d") % -i == "+00012" );
-          CHECK (_Fmt("%+06X") % -i == "+0000D" );
-          CHECK (_Fmt("%+#X") % -i  == "+Dh"    );
+          CHECK (_Fmt("%06X") % -i  == "00000C" );
+          CHECK (_Fmt("%#x") % -i   == "0xc"    );
           
           uint u(12);
           CHECK (_Fmt("%d") % u     == "12"     );
           CHECK (_Fmt("%6d") % u    == "    12" );
           CHECK (_Fmt("%-6d") % u   == "12    " );
-          CHECK (_Fmt("%+-6d") % u  == "+12   " );
-          CHECK (_Fmt("%+06d") % u  == "+00012" );
+          CHECK (_Fmt("%-+6d") % u  == "12    " );
+          CHECK (_Fmt("%+06d") % u  == "000012" );
           
           short sh(-123);
-          CHECK (_Fmt("%6d") % sh   == "-  123" );
+          CHECK (_Fmt("%6d") % sh   == "  -123" );
           
           ushort ush(123);
           CHECK (_Fmt("%6d") % ush  == "   123" );
           
           long l(-123);
-          CHECK (_Fmt("%6d") % l    == "-  123" );
+          CHECK (_Fmt("%6d") % l    == "  -123" );
           
           ulong ul(123);
           CHECK (_Fmt("%6d") % ul   == "   123" );
           
           int64_t ll(5e+9);
           CHECK (_Fmt("%d") % ll    == "5000000000" );
-          CHECK (_Fmt("%10.3d") %ll == "       500" );
-          CHECK (_Fmt("%10.3E") %ll == "   5.000E9" );
+          CHECK (_Fmt("%5.3d") %ll  == "5000000000" );
+          CHECK (_Fmt("%10.3e") %ll == "5000000000" );
           
           uint64_t ull(ll);
           CHECK (_Fmt("%d") % ull   == "5000000000" );
           
           float f(12.34);
-          CHECK (_Fmt("%g") % f     == "12.34"  );
-          CHECK (_Fmt("%d") % f     == "12"     );
-          CHECK (_Fmt("%e") % f     == "12.34e0");
+          CHECK (_Fmt("%g")   % f   == "12.34"  );
+          CHECK (_Fmt("%d")   % f   == "12.34"  );
+          CHECK (_Fmt("%.3f") % f   == "12.340" );
+          CHECK (_Fmt("%.1e") % f   == "1.2e+01");
+          CHECK (_Fmt("%.0f") % f   == "12"     );
           
           double d(-12.34);
           CHECK (_Fmt("%g") % d     == "-12.34" );
           
           char c(0x40);
-          CHECK (_Fmt("%d") % c     == "64"     );
-          CHECK (_Fmt("%x") % c     == "40"     );
-          CHECK (_Fmt("%o") % c     == "100"    );
-          CHECK (_Fmt("%c") % c     == "@"      );
-          CHECK (_Fmt("%s") % c     == "@"      );
+          CHECK (_Fmt("%d") % c        == "@"   );
+          CHECK (_Fmt("%x") % c        == "@"   );
+          CHECK (_Fmt("%o") % c        == "@"   );
+          CHECK (_Fmt("%c") % c        == "@"   );
+          CHECK (_Fmt("%s") % c        == "@"   );
+          CHECK (_Fmt("%d") % short(c) == "64"  );
+          CHECK (_Fmt("%x") % short(c) == "40"  );
+          CHECK (_Fmt("%o") % short(c) == "100" );
+          CHECK (_Fmt("%c") % short(c) == "6"   );
+          CHECK (_Fmt("%s") % short(c) == "64"  );
           
-          unsigned char uc(0xff);
-          CHECK (_Fmt("%d") % uc    == "255"    );
-          CHECK (_Fmt("%x") % uc    == "ff"     );
-          CHECK (_Fmt("%X") % uc    == "FF"     );
-          CHECK (_Fmt("%c") % uc    == "\xFF"   );
-          CHECK (_Fmt("%s") % uc    == "\xFF"   );
+          uchar uc(0xff);
+          CHECK (_Fmt("%d") % uint(uc) == "255" );
+          CHECK (_Fmt("%x") % uint(uc) == "ff"  );
+          CHECK (_Fmt("%X") % uint(uc) == "FF"  );
+          CHECK (_Fmt("%c") % uint(uc) == "2"   );
+          CHECK (_Fmt("%s") % uint(uc) == "255" );
+          CHECK (_Fmt("%d") % uc       == "\xFF");
+          CHECK (_Fmt("%x") % uc       == "\xFF");
+          CHECK (_Fmt("%X") % uc       == "\xFF");
+          CHECK (_Fmt("%c") % uc       == "\xFF");
+          CHECK (_Fmt("%s") % uc       == "\xFF");
           
           c = char(uc);
-          CHECK (_Fmt("%d") % uc    == "-1"     );
-          CHECK (_Fmt("%c") % uc    == "\xFF"   );
+          CHECK (_Fmt("%c") % c        == "\xFF");
           
           string str("Lumiera");
           CHECK (_Fmt("%s") % str   == "Lumiera"    );
           CHECK (_Fmt("%10s") % str == "   Lumiera" );
-          CHECK (_Fmt("%8.4s") %str == "   Lumi"    );
+          CHECK (_Fmt("%7.4s") %str == "   Lumi"    );
           CHECK (_Fmt("%10c") % str == "         L" );
         }
       
@@ -226,12 +237,12 @@ namespace test {
           CHECK (contains (mangledType, "Silent"));
           
           CHECK (_Fmt("!!%s!!") % v  == "!!Number-013!!");
-          CHECK (_Fmt("!!%s!!") % x  == "!!unforeseen internal state (encountered Fantomas).!!");
+          CHECK (_Fmt("!!%s!!") % x  == "!!LUMIERA_ERROR_STATE:unforeseen state (encountered Fantomas).!!");
           
           CHECK (contains (_Fmt("%s") % rs1, "Silent"));
           CHECK (contains (_Fmt("%s") % rs2, "Silent"));
           
-          CHECK (_Fmt("!!%s!!") % rv  == "!!unforeseen internal state (encountered Fantomas).!!");
+          CHECK (_Fmt("!!%s!!") % rv  == "!!LUMIERA_ERROR_STATE:unforeseen state (encountered Fantomas).!!");
           
           x.i_ = 42;
           CHECK (_Fmt("!!%s!!") % rv  == "!!Number-042!!");

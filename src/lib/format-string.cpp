@@ -85,7 +85,16 @@ namespace util {
   }
   
   
-  /** */
+  /** @internal access points for the frontend,
+   * allowing to push a parameter value down into
+   * the implementation for the actual formatting.
+   * @note we need to generate instantiations of this template function
+   *       explicitly for all basic types to be supported for direct handling,
+   *       otherwise we'll get linker errors. Lumiera uses the ``inclusion model''
+   *       for template instantiation, which means there is no compiler magic
+   *       involved and a template function either needs to be \em defined in
+   *       a header or explicitly instantiated in some translation unit.
+   */
   template<typename VAL>
   void
   _Fmt::pushParameter (VAL const& val)
@@ -141,17 +150,27 @@ namespace util {
   
   
   
-  /** */
+  /** @remarks usually the _Fmt helper is used inline
+   * at places where a string is expected. The '%' operator
+   * used to fed parameters has a higher precedence than the
+   * assignment or comparison operators, ensuring that all parameters
+   * are evaluated and formatted prior to receiving the formatted result
+   */
   _Fmt::operator string()  const
   {
     return accessImpl(formatter_).str();
   }
   
   
+  /** send the formatted buffer directly to the output stream.
+   * @note this is more efficient than creating a string and outputting that,
+   *       because boost::format internally uses a stringstream to generate
+   *       the formatted representation, relying on the C++ output framework
+   */
   std::ostream&
   operator<< (std::ostream& os, _Fmt const& fmt)
   {
-    return os << string(fmt);
+    return os << accessImpl(fmt.formatter_);
   }
   
   
