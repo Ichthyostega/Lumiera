@@ -87,6 +87,36 @@ namespace meta {
     };
   
   
+  /** strip const from type: naive implementation */
+  template<typename T>
+  struct UnConst
+    {
+      typedef T Type;
+    };
+  
+  template<typename T>
+  struct UnConst<const T>
+    {
+      typedef T Type;
+    };
+  template<typename T>
+  struct UnConst<const T *>
+    {
+      typedef T* Type;
+    };
+  template<typename T>
+  struct UnConst<T * const>
+    {
+      typedef T* Type;
+    };
+  template<typename T>
+  struct UnConst<const T * const>
+    {
+      typedef T* Type;
+    };
+  
+  
+  
   /** semi-automatic detection if an instantiation is possible.
    *  Requires help by the template to be tested, which needs to define
    *  a typedef member \c is_defined. The embedded metafunction Test can be used

@@ -69,10 +69,11 @@ namespace util {
       return reinterpret_cast<boost::format&> (*buffer);
     }
     
+    
     /** in case the formatting of a (primitive) value fails,
      *  we try to use a error indicator instead
      */
-    inline void
+    void
     pushFailsafeReplacement (char* formatter, const char* errorMsg =NULL)
     try {
         string placeholder("<Error");
@@ -85,6 +86,34 @@ namespace util {
         accessImpl(formatter) % placeholder;
       }
     ERROR_LOG_AND_IGNORE (progress, "Supplying placeholder for problematic format parameter")
+    
+    
+    /** Core function: let boost::format handle a value */
+    template<typename VAL>
+    void
+    doFormatParameter (char* formatter, VAL const& val)
+    try {
+        accessImpl(formatter) % val;
+      }
+    
+    catch (boost::io::too_many_args& argErr)
+      {
+        WARN (progress, "Format: excess argument '%s' of type %s ignored."
+                      , cStr(str(val))
+                      , cStr(tyStr(val)));
+      }
+    catch (std::exception& failure)
+      {
+        WARN (progress, "Format: Parameter '%s' causes problems: %s"
+                      , cStr(str(val))
+                      , failure.what());
+        pushFailsafeReplacement (formatter, failure.what());
+      }
+    catch (...)
+      {
+        WARN (progress, "Format: Unexpected problems accepting format parameter '%s'", cStr(str(val)));
+        pushFailsafeReplacement (formatter);
+      }
     
     
     inline void
@@ -128,75 +157,60 @@ namespace util {
    */
   template<typename VAL>
   void
-  _Fmt::pushParameter (VAL const& val)
-  try {
-      accessImpl(formatter_) % val;
-    }
-  
-  catch (boost::io::too_many_args& argErr)
-    {
-      WARN (progress, "Format: excess argument '%s' of type %s ignored."
-                    , cStr(str(val))
-                    , cStr(tyStr(val)));
-    }
-  catch (std::exception& failure)
-    {
-      WARN (progress, "Format: Parameter '%s' causes problems: %s"
-                    , cStr(str(val))
-                    , failure.what());
-      pushFailsafeReplacement (formatter_, failure.what());
-    }
-  catch (...)
-    {
-      WARN (progress, "Format: Unexpected problems accepting format parameter '%s'", cStr(str(val)));
-      pushFailsafeReplacement (formatter_);
-    }
-  
+  _Fmt::pushParameter (const VAL val)
+  {
+    doFormatParameter (formatter_, val);
+  }
   
   template<typename VAL>
   void
-  _Fmt::pushParameter (const VAL * const pVal)
+  _Fmt::pushParameter (const VAL * pVal)
   {
     if (pVal)
-      pushParameter (*pVal);
+      doFormatParameter (formatter_, *pVal);
     else
-      pushParameter (string("<null>"));
+      doFormatParameter (formatter_, "<null>");
   }
   
   template<>
   void
-  _Fmt::pushParameter (const char * const cString)
+  _Fmt::pushParameter (const char * cString)
   {
-    pushParameter (cString);
+    doFormatParameter (formatter_, cString? cString : "↯" );
+  }
+  template<>
+  void
+  _Fmt::pushParameter (const void * address)
+  {
+    doFormatParameter (formatter_, address);
   }
   
   
   
   /* ===== explicitly supported =================== */
   
-  template void _Fmt::pushParameter(string const&);
-  template void _Fmt::pushParameter(char const&);
-  template void _Fmt::pushParameter(uchar const&);
-  template void _Fmt::pushParameter(int const&);
-  template void _Fmt::pushParameter(uint const&);
-  template void _Fmt::pushParameter(short const&);
-  template void _Fmt::pushParameter(ushort const&);
-  template void _Fmt::pushParameter(int64_t const&);
-  template void _Fmt::pushParameter(uint64_t const&);
-  template void _Fmt::pushParameter(float const&);
-  template void _Fmt::pushParameter(double const&);
-  template void _Fmt::pushParameter(void * const&);
+  template void _Fmt::pushParameter(const string);
+  template void _Fmt::pushParameter(const char);
+  template void _Fmt::pushParameter(const uchar);
+  template void _Fmt::pushParameter(const int);
+  template void _Fmt::pushParameter(const uint);
+  template void _Fmt::pushParameter(const short);
+  template void _Fmt::pushParameter(const ushort);
+  template void _Fmt::pushParameter(const int64_t);
+  template void _Fmt::pushParameter(const uint64_t);
+  template void _Fmt::pushParameter(const float);
+  template void _Fmt::pushParameter(const double);
   
-  template void _Fmt::pushParameter(const string * const);
-  template void _Fmt::pushParameter(const uchar * const);
-  template void _Fmt::pushParameter(const int * const);
-  template void _Fmt::pushParameter(const uint * const);
-  template void _Fmt::pushParameter(const short * const);
-  template void _Fmt::pushParameter(const ushort * const);
-  template void _Fmt::pushParameter(const int64_t * const);
-  template void _Fmt::pushParameter(const uint64_t * const);
-  template void _Fmt::pushParameter(const float * const);
-  template void _Fmt::pushParameter(const double * const);
+  template void _Fmt::pushParameter(const string * );
+  template void _Fmt::pushParameter(const uchar *  );
+  template void _Fmt::pushParameter(const int *    );
+  template void _Fmt::pushParameter(const uint *   );
+  template void _Fmt::pushParameter(const short *  );
+  template void _Fmt::pushParameter(const ushort * );
+  template void _Fmt::pushParameter(const int64_t *);
+  template void _Fmt::pushParameter(const uint64_t*);
+  template void _Fmt::pushParameter(const float *  );
+  template void _Fmt::pushParameter(const double * );
   
   
   

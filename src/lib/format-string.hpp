@@ -99,10 +99,13 @@ namespace util {
       struct Converter;
       
       template<typename VAL>
-      void pushParameter (VAL const&);
+      void pushParameter (const VAL);
       
       template<typename VAL>
-      void pushParameter (const VAL * const);
+      void pushParameter (const VAL *);
+      
+      template<typename VAL>
+      void pushParameter (VAL *);
       
       
     public:
@@ -169,31 +172,44 @@ namespace util {
      * As fallback we rather just produce a type-ID
      */
     template<typename X>
-    struct _shall_forward                     { enum{ value = false };};
+    struct _allow_call                     { enum{ value = false };};
     
-    /* the following definitions enable some basic types
-     * to be forwarded to boost::format literally */
-    template<> struct _shall_forward<string>  { enum{ value = true }; };
-    template<> struct _shall_forward<char>    { enum{ value = true }; };
-    template<> struct _shall_forward<uchar>   { enum{ value = true }; };
-    template<> struct _shall_forward<int>     { enum{ value = true }; };
-    template<> struct _shall_forward<uint>    { enum{ value = true }; };
-    template<> struct _shall_forward<short>   { enum{ value = true }; };
-    template<> struct _shall_forward<ushort>  { enum{ value = true }; };
-    template<> struct _shall_forward<int64_t> { enum{ value = true }; };
-    template<> struct _shall_forward<uint64_t>{ enum{ value = true }; };
-    template<> struct _shall_forward<float>   { enum{ value = true }; };
-    template<> struct _shall_forward<double>  { enum{ value = true }; };
-    template<> struct _shall_forward<void*>   { enum{ value = true }; };
+    /* the following definitions enable some primitive types
+     * to be handed over to the boost::format implementation */
+    template<> struct _allow_call<string>  { enum{ value = true }; };
+    template<> struct _allow_call<char>    { enum{ value = true }; };
+    template<> struct _allow_call<uchar>   { enum{ value = true }; };
+    template<> struct _allow_call<int>     { enum{ value = true }; };
+    template<> struct _allow_call<uint>    { enum{ value = true }; };
+    template<> struct _allow_call<short>   { enum{ value = true }; };
+    template<> struct _allow_call<ushort>  { enum{ value = true }; };
+    template<> struct _allow_call<int64_t> { enum{ value = true }; };
+    template<> struct _allow_call<uint64_t>{ enum{ value = true }; };
+    template<> struct _allow_call<float>   { enum{ value = true }; };
+    template<> struct _allow_call<double>  { enum{ value = true }; };
+    template<> struct _allow_call<void*>   { enum{ value = true }; };
+    
+    template<typename X>
+    struct _shall_format_directly
+      {
+        typedef typename lib::meta::UnConst<X>::Type BaseType;
+        
+        enum{ value = _allow_call<BaseType>::value };
+      };
+    
+    template<typename X>
+    struct _shall_format_directly<X*> 
+      : _shall_format_directly<X>
+      { };
+    
     
     
     template<typename X>
     struct _shall_convert_toString
       {
-        enum{ value = ! _shall_forward<X>::value
-                 &&    lib::meta::can_convertToString<X>::value
-                 &&   !lib::meta::is_sameType<X,char*>::value
-        };
+        enum{ value = ! _shall_format_directly<X>::value
+                   && lib::meta::can_convertToString<X>::value
+            };
       };
     
     
@@ -230,7 +246,7 @@ namespace util {
   template<typename VAL, class SEL>
   struct _Fmt::Converter
     {
-      static string
+      static const string
       prepare (VAL const&)
         {
           return string("«")+typeid(VAL).name()+"»";
@@ -241,7 +257,7 @@ namespace util {
   template<typename VAL>
   struct _Fmt::Converter<VAL,      typename enable_if< _shall_convert_toString<VAL> >::type>
     {
-      static string
+      static const string
       prepare (VAL const& val)
         try {
             return string(val); 
@@ -259,7 +275,7 @@ namespace util {
   /** some basic types are directly forwarded down to the implementation;
    * @note this requires explicit specialisations in format-string.cpp */
   template<typename VAL>
-  struct _Fmt::Converter<VAL,      typename enable_if< _shall_forward<VAL> >::type>
+  struct _Fmt::Converter<VAL,      typename enable_if< _shall_format_directly<VAL> >::type>
     {
       static VAL const&
       prepare (VAL const& val)
@@ -269,14 +285,11 @@ namespace util {
     };
   
   template<typename VAL>
-  struct _Fmt::Converter<VAL*,     typename enable_if< _shall_forward<VAL> >::type>
+  void
+  _Fmt::pushParameter (VAL * pV)   ///< treat as const
     {
-      static const VAL *
-      prepare (const VAL * const pVal)
-        {
-          return pVal;
-        }
-    };
+      pushParameter ((const VAL*) pV);
+    }
   
   
   

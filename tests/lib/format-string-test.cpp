@@ -279,7 +279,6 @@ namespace test {
           uint64_t       ull(ll);     uint64_t  * pull = &ull;
           float         f(12.34);     float     *   pf = &  f;
           double       d(-12.34);     double    *   pd = &  d;
-          char           c(0x40);     char      *   pc = &  c;
           uchar         uc(0xff);     uchar     *  puc = & uc;
           string  str("Lumiera");     string    * pstr = &str;
           
@@ -293,14 +292,18 @@ namespace test {
           CHECK (_Fmt("%d") % ull == _Fmt("%d") % pull);
           CHECK (_Fmt("%e") %   f == _Fmt("%e") %   pf);
           CHECK (_Fmt("%e") %   d == _Fmt("%e") %   pd);
-          CHECK (_Fmt("%g") %   c == _Fmt("%g") %   pc);
           CHECK (_Fmt("%g") %  uc == _Fmt("%g") %  puc);
           CHECK (_Fmt("%s") % str == _Fmt("%s") % pstr);
+          
+          char c('a');
+          char pc[2] = {'a', '\0'};
+          CHECK (_Fmt("%g") %   c == _Fmt("%g") %   pc);
           
           Verbose v(42);
           Verbose *pv = &v;
           void    *vv = pv;
           CHECK (_Fmt("__%s__") % v  == "__Number-042__");
+          cout << "yyy=" << string(_Fmt("__%s__") % pv) << endl;
           CHECK (_Fmt("__%s__") % pv == "__Number-042__");
           CHECK (_Fmt("__%s__") % vv != "__Number-042__");
           
