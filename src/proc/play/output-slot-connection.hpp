@@ -171,14 +171,11 @@ namespace play {
         }
       
       
-    public:
-      ConnectionStateManager()
-        { }
+    protected: /* == API for OutputSlot-Impl == */
       
-      virtual
-     ~ConnectionStateManager()
-        { }
-      
+      /** factory function to build the actual
+       *  connection handling objects per channel */
+      virtual CON buildConnection()  =0;
       
       void
       init (uint numChannels)
@@ -188,9 +185,13 @@ namespace play {
         }
       
       
-      /** factory function to build the actual
-       *  connection handling objects per channel */
-      virtual CON buildConnection()  =0;
+      ConnectionStateManager() { }
+      
+    public:
+      virtual
+     ~ConnectionStateManager()
+        { }
+      
       
       
     private: // Implementation details
