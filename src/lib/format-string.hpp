@@ -25,19 +25,77 @@
  ** Front-end for printf-style string template interpolation.
  ** While the actual implementation just delegates to boost::format, this front-end
  ** hides the direct dependency, additionally invokes a custom toSting conversion
- ** whenever possible, provides a direct conversion to string and catches any exceptions.
+ ** whenever possible, provides a direct automatic conversion to the formatted result
+ ** to string and catches any exceptions.
+ ** 
  ** This front-end is used pervasively for diagnostics and logging, so keeping down the
  ** compilation and object size cost and reliably handling any error is more important
  ** than the (small) performance gain of directly invoking boost::format (which is
  ** known to be 10 times slower than printf anyway).
  ** 
- ** @remarks The implementation is invoked through a set of explicit specialisations.
- **          For custom types, we prefer to invoke operator string(), which is determined
- **          by a directly coded metaprogramming test. The compile time and object size
- **          overhead incurred by using this header was verified to be negligible. 
+ ** \par Implementation notes
+ ** To perform the formatting, usually a \c _Fmt object is created as an anonymous
+ ** temporary, but it may as well be stored into a variable. Copying is not permitted.
+ ** Individual parameters are then fed for formatting through the \c '%' operator.
+ ** Each instance of _Fmt uses its own embedded boost::format object for implementation,
+ ** but this formatter resides within an opaque buffer embedded into the frontend object.
+ ** The rationale for this admittedly tricky approach is to confine any usage of boost::format
+ ** to the implementation translation unit (format-string.cpp).
  ** 
+ ** The implementation is invoked by the frontend through a set of explicit specialisations
+ ** for all the relevant \em primitive data types. For custom types, we prefer to invoke
+ ** operator string() if possible, which is determined by a simple metaprogramming test,
+ ** which is defined in lib/meta/util.pp, without relying on boost. As a fallback, for
+ ** all other types without built-in or custom string conversion, we use the mangled
+ ** type string produced by RTTI.
+ ** 
+ ** The compile time and object size overhead incurred by using this header was verified
+ ** to be negligible, in comparison to using boost::format. When compiling a demo example
+ ** on x86_64, the following executable sizes could be observed:
+ ** 
+ **                                          debug  stripped
+ ** just string concatenation ...............  42k  8.8k
+ ** including and using format-string.hpp ...  50k  9.4k
+ ** including and using boost::format ....... 420k  140k
+ ** 
+ ** In addition, we need to take the implementation translation unit (format-string.cpp)
+ ** into account, which is required once per application and contains the specialisations
+ ** for all primitive types. In the test showed above, the corresponding object file
+ ** had a size of 1300k (with debug information) resp. 290k (stripped).
+ ** 
+ ** \par Usage
+ ** The syntax of the format string is defined by boost::format and closely mimics
+ ** the printf formatting directives. The notable difference is that boost::format
+ ** uses the C++ stream output framework, and thus avoiding the perils of printf.
+ ** The individual formatting placeholders just set the corresponding flags on
+ ** an embedded string stream, thus the actual parameter types cause the
+ ** selection of a suitable format, not the definitions within the
+ ** format string.
+ ** 
+ ** An illegal format string will raise an error::Fatal. Any other error during usage of
+ ** the formatter is caught, logged and suppressed, inserting an error indicator into
+ ** the formatted result instead
+ ** 
+ ** A formatter is usually created as an anonymous object, at places where a string
+ ** is expected. An arbitrary number of parameters is then supplied using the \c '%' operator.
+ ** The result can be obtained
+ ** - by string conversion
+ ** - by feeding into an output stream.
+ ** 
+ ** Code example:
+ ** \code
+ ** double total = 22.9499;
+ ** const char * currency = "€";
+ ** cout << _Fmt("price %+5.2f %s") % total % currency << endl;
+ ** \endcode
+ ** 
+ ** @remarks See the unit-test for extensive usage examples and corner cases.
+ **          The header format-util.hpp provides an alternative string conversion,
+ **          using a bit of boost type traits and lexical_cast, but no boost::format.
+ ** @warning not suited for performance critical code. About 10 times slower than printf.
+ **  
  ** @see FormatString_test
- ** @see format-helper
+ ** @see format-util.hpp
  ** 
  */
 
@@ -71,25 +129,32 @@ namespace std { // forward declaration to avoid including <iostream>
 
 namespace util {
   
-  typedef unsigned char uchar;
-  
-  using boost::enable_if;
   using std::string;
-
+  using boost::enable_if;
   
+  typedef unsigned char uchar;
+
+  LUMIERA_ERROR_DECLARE (FORMAT_SYNTAX); ///< "Syntax error in format string for boost::format"
   
   
   
   /** 
-   * @todo write type comment
+   * A front-end for using printf-style formatting.
+   * Values to be formatted can be supplied through the
+   * operator%. Custom defined string conversions on objects
+   * will be used, any errors while invoking the format operation
+   * will be suppressed. The implementation is based on boost::format,
+   * but kept opaque to keep code size and compilation times down.
+   * @see FormatString_test
    */
   class _Fmt
     : boost::noncopyable
     {
-      /** size of an internal implementation Buffer */
+      /** size of an opaque implementation Buffer */
       enum{ FORMATTER_SIZE = lib::meta::SizeTrait::BOOST_FORMAT };
       
       typedef char Implementation[FORMATTER_SIZE];
+      
       
       /** @internal buffer to hold a boost::format */
       mutable Implementation formatter_;
@@ -143,9 +208,10 @@ namespace util {
    * \par type specific treatment
    * Basic types (numbers, chars, strings) are passed to the implementation
    * (= boost::format) literally. For custom types, we try to use a custom
-   * string conversion, if applicable. Any other type gets just translated
-   * into a type-ID (using the mangled RTTI info). In case of errors during
-   * the conversion, a string representation of the error is returned
+   * string conversion, if applicable. Non-NULL pointers will be dereferenced,
+   * with the exception of C-Strings and \c void*. Any other type gets just
+   * translated  into a type-ID (using the mangled RTTI info). In case of errors
+   * during the conversion, a string representation of the error is returned
    * @param val arbitrary value or pointer to be included into the result
    * @warning you need to provide exactly the right number of parameters,
    *          i.e. matching the number of fields in the format string.
@@ -203,9 +269,17 @@ namespace util {
       };
     
     
+    inline void
+    _clear_errorflag()
+    {
+      const char* errID = lumiera_error();
+      TRACE_IF (errID, progress, "Lumiera errorstate '%s' cleared.", errID);
+    }
+    
     inline string
     _log_and_stringify (std::exception const& ex)
     {
+      _clear_errorflag();
       WARN (progress, "Error while invoking custom string conversion: %s", ex.what());
       try {
           return string("<string conversion failed: ")+ex.what()+">";
@@ -276,7 +350,7 @@ namespace util {
         }
     };
   
-  /** some custom types explicitly provide string representation */
+  /** some custom types explicitly provide a string representation */
   template<typename VAL>
   struct _Fmt::Converter<VAL,      typename enable_if< _shall_convert_toString<VAL> >::type>
     {

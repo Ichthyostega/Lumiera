@@ -22,6 +22,7 @@
 
 
 #include "lib/test/run.hpp"
+#include "lib/test/test-helper.hpp"
 #include "lib/format-string.hpp"
 #include "lib/error.hpp"
 #include "lib/util.hpp"
@@ -263,6 +264,8 @@ namespace test {
           cout << _Fmt("__%d__") % "dirt" << endl;
           cout << _Fmt("__%d__") % "1234" << endl;
           cout << _Fmt("__%d__") % "0xff" << endl;
+          
+          VERIFY_ERROR(FORMAT_SYNTAX, _Fmt("%broken"));
         }
       
       

@@ -24,11 +24,13 @@
  ** Implementation for printf-style formatting, based on boost::format.
  ** This file holds the generic implementation of our format frontend,
  ** which actually just invokes boost::format. The corresponding header
- ** format-string.hpp contains some template functions and classes,
- ** which select an appropriate wrapper to pass the calls down.
+ ** format-string.hpp provides some template functions and classes,
+ ** either invoking a custom string conversion, or passing primitive
+ ** values down unaltered.
+ ** 
  ** Here, we define explicit specialisations for the frontend to invoke,
  ** which in turn just pass on the given argument value to the embedded
- ** boost::format object, which in turn integrates the formatted result
+ ** boost::format object, which in turn dumps the formatted result
  ** into an embedded string stream.
  ** 
  ** To avoid exposing boost::format in the frontend header, we use an
@@ -61,6 +63,7 @@ namespace util {
   
   using boost::format;
   
+  
   namespace { // implementation details...
     
     inline boost::format&
@@ -78,8 +81,7 @@ namespace util {
     
     
     /** in case the formatting of a (primitive) value fails,
-     *  we try to use a error indicator instead
-     */
+     *  we try to supply an error indicator instead */
     void
     pushFailsafeReplacement (char* formatter, const char* errorMsg =NULL)
     try {
@@ -109,14 +111,26 @@ namespace util {
   
   
   
-  /** */
+  /** Build a formatter object based on the given format string.
+   *  The actual implementation is delegated to an boost::format object,
+   *  which is placement-constructed into an opaque buffer embedded into
+   *  this object. Defining the necessary size for this buffer relies
+   *  on a implementation details of boost::format (and might break)
+   */
   _Fmt::_Fmt (string formatString)
-  {
-    BOOST_STATIC_ASSERT (sizeof(boost::format) <= FORMATTER_SIZE);
-    
-    new(formatter_) boost::format(formatString);
-    suppressInsufficientArgumentErrors (formatter_);
-  }
+  try {
+      BOOST_STATIC_ASSERT (sizeof(boost::format) <= FORMATTER_SIZE);
+      
+      new(formatter_) boost::format(formatString);
+      suppressInsufficientArgumentErrors (formatter_);
+    }
+  catch (boost::io::bad_format_string& syntaxError)
+    {
+      throw lumiera::error::Fatal (syntaxError
+                                  , _Fmt("Format string '%s' is broken") % formatString
+                                  , LUMIERA_ERROR_FORMAT_SYNTAX);
+    }
+  
   
   _Fmt::~_Fmt ()
   {
@@ -152,6 +166,7 @@ namespace util {
     }
   catch (std::exception& failure)
     {
+      _clear_errorflag();
       WARN (progress, "Format: Parameter '%s' causes problems: %s"
                     , cStr(str(val))
                     , failure.what());
@@ -159,6 +174,7 @@ namespace util {
     }
   catch (...)
     {
+      _clear_errorflag();
       WARN (progress, "Format: Unexpected problems accepting format parameter '%s'", cStr(str(val)));
       pushFailsafeReplacement (formatter);
     }
@@ -198,11 +214,13 @@ namespace util {
   
   catch (std::exception& failure)
     {
+      _clear_errorflag();
       WARN (progress, "Format: Failure to receive formatted result: %s", failure.what());
       return "<formatting failure>";
     }
   catch (...)
     {
+      _clear_errorflag();
       WARN (progress, "Format: Unexpected problems while formatting output.");
       return "<unexpected problems>";
     }
@@ -222,14 +240,19 @@ namespace util {
   
   catch(std::exception& failure)
     {
+      _clear_errorflag();
       WARN (progress, "Format: Failure when outputting formatted result: %s", failure.what());
       return os << "<formatting failure>";
     }
   catch(...)
     {
+      _clear_errorflag();
       WARN (progress, "Format: Unexpected problems while producing formatted output.");
       return os << "<unexpected problems>";
     }
+  
+  
+  LUMIERA_ERROR_DEFINE (FORMAT_SYNTAX, "Syntax error in format string for boost::format");
   
   
   
