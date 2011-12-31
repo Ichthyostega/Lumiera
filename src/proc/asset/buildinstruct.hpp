@@ -22,7 +22,7 @@
 
 
 /** @file buildinstruct.hpp
- ** Helper classes used by asset::ProcPatt to represent the processing informations.
+ ** Helper classes used by asset::ProcPatt to represent the processing information.
  ** Consider these classes as owned by ProcPatt. Non-inline functions go to procpatt.cpp 
  **
  */

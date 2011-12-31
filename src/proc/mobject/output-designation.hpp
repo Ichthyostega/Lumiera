@@ -103,10 +103,12 @@ namespace mobject {
         };
       
     private:
-      enum {
-        SPEC_SIZ = mp::maxSize<
+      enum
+        { VTABLE   = sizeof(size_t)
+        , SPEC_SIZ = VTABLE
+                   + mp::maxSize<
                        mp::Types< PID, lumiera_uid, uint>::List>::value 
-      };
+        };
       typedef lib::OpaqueHolder<TargetSpec, SPEC_SIZ> SpecBuff;
       
       

@@ -1,5 +1,5 @@
 /*
-  FORMAT.hpp  -  helpers for formatting and diagnostics
+  FORMAT-UTIL.hpp  -  helpers for formatting and diagnostics
 
   Copyright (C)         Lumiera.org
     2009,               Hermann Vosseler <Ichthyostega@web.de>
@@ -21,20 +21,25 @@
 */
 
 
-/** @file format.hpp
+/** @file format-util.hpp
  ** Collection of small helpers and convenience shortcuts for diagnostics & formatting.
+ ** - util::str() performs a failsafe to-String conversion, thereby preferring a
+ **         built-in conversion operator, falling back to just a mangled type string.
+ ** - util::tyStr() generates a string corresponding to the type of the given object.
+ **         Currently just implemented through the mangled RTTI type string  
  ** 
- ** @todo we could add a facade to boost::format here, see Ticket #166
+ ** @see FormatHelper_test
+ ** @see format-string.hpp frontend for boost::format, printf-style
  ** 
  */
 
 
-#ifndef UTIL_FORMAT_H
-#define UTIL_FORMAT_H
+#ifndef LIB_FORMAT_UTIL_H
+#define LIB_FORMAT_UTIL_H
 
-//#include "lib/util.hpp"
 #include "lib/meta/trait.hpp"
 #include "lib/symbol.hpp"
+#include "lib/util.hpp"
 
 #include <string>
 #include <cstring>
@@ -46,61 +51,65 @@
 
 namespace util {
   
+  using boost::enable_if;
   using lib::meta::can_ToString;
   using lib::meta::can_lexical2string;
   using lib::Symbol;
-  using boost::enable_if;
-  using boost::disable_if;
+  using util::isnil;
   using std::string;
   
   
   namespace { // we need to guard the string conversion
              //  to avoid a compiler error in case the type isn't convertible....
     
-    template<typename X>
-    inline string
-    invoke_2string (     typename enable_if< can_ToString<X>,
-                    X >::type const& val)
-    {
-      return string(val);
-    }
     
     template<typename X>
-    inline string
-    invoke_2string (     typename disable_if< can_ToString<X>,
-                    X >::type const&)
-    {
-      return "";
-    }
-    
-    
+    struct use_StringConversion : can_ToString<X> { };
     
     template<typename X>
-    inline string
-    invoke_indirect2string (     typename enable_if< can_lexical2string<X>,
-                            X >::type const& val)
-    {
-      try        { return boost::lexical_cast<string> (val); }
-      catch(...) { return ""; }
-    }
+    struct use_LexicalConversion
+      {
+        enum { value = can_lexical2string<X>::value
+                  &&  !can_ToString<X>::value
+             };
+      };
+    
+    
+    /** helper: reliably get some string representation for type X */
+    template<typename X, typename COND =void>
+    struct _InvokeFailsafe
+      {
+        static string toString (X const&) { return ""; }
+      };
     
     template<typename X>
-    inline string
-    invoke_indirect2string (     typename disable_if< can_lexical2string<X>,
-                            X >::type const&)
-    {
-      return "";
-    }
-  }
+    struct _InvokeFailsafe<X,     typename enable_if< use_StringConversion<X> >::type>
+      {
+        static string
+        toString (X const& val)
+          try        { return string(val); }
+          catch(...) { return ""; }
+      };
+    
+    template<typename X>
+    struct _InvokeFailsafe<X,     typename enable_if< use_LexicalConversion<X> >::type>
+      {
+        static string
+        toString (X const& val)
+          try        { return boost::lexical_cast<string> (val); }
+          catch(...) { return ""; }
+      };
+  }//(End) guards/helpers
+  
   
   
   
   /** try to get an object converted to string.
-   *  An custom/standard conversion to string is used,
+   *  A custom/standard conversion to string is used,
    *  if applicable; otherwise, some standard types can be
    *  converted by a lexical_cast (based on operator<< ).
    *  Otherwise, either the fallback string is used, or just
-   *  a string denoting the (mangled) type.
+   *  a string based on the (mangled) type.
    */
   template<typename TY>
   inline string
@@ -109,22 +118,14 @@ namespace util {
       , Symbol fallback =0   /// < replacement text to show if string conversion fails
       )
   {
-    if (can_ToString<TY>::value)
-      return string(prefix) + invoke_2string<TY>(val);
-    
+    string res = _InvokeFailsafe<TY>::toString(val);
+    if (!isnil (res))
+      return string(prefix) + res;
     else
-      {
-        if (can_lexical2string<TY>::value)
-          {
-            string res (invoke_indirect2string<TY> (val));
-            if ("" != res)
-              return string(prefix) + res;
-          }
-      
-        return fallback? string(fallback)
-                       : tyStr(val);
-      }
+      return fallback? string(fallback)
+                     : tyStr(val);
   }
+  
   
   
   /** @return a string denoting the type. */
@@ -142,5 +143,4 @@ namespace util {
   
   
 } // namespace util
-
-#endif /*UTIL_FORMAT_H*/
+#endif

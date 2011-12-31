@@ -747,10 +747,10 @@ Even if the low-level memory manager(s) may use raw storage, we require that the
 &amp;rarr; see MemoryManagement
 </pre>
 </div>
-<div title="Asset" modifier="Ichthyostega" modified="201012292209" created="200708100337" tags="def classes img" changecount="20">
+<div title="Asset" modifier="Ichthyostega" modified="201112222243" created="200708100337" tags="def classes img" changecount="21">
 <pre>Asset management is a subsystem on its own. Assets are &quot;things&quot; that can be loaded into a session, like Media, Clips, Effects, Transitions. It is the &quot;bookkeeping view&quot;, while the Objects in the Session relate to the &quot;manipulation and process view&quot;. Some Assets can be //loaded// and a collection of Assets is saved with each Session. Besides, there is a collection of basic Assets always available by default.
 
-The Assets are important reference points holding the information needed to access external resources. For example, an Clip asset can reference a Media asset, which in turn holds the external filename from which to get the media stream. For Effects, the situation is similar. Assets thus serve two quite distinct purposes. One is to load, list, group search and browse them, and to provide an entry point to create new or get at existing MObject in the Session, while the other purpose is to provide attribute and property informations to the inner parts of the engine, while at the same time isolating and decoupling them from environmental details. 
+The Assets are important reference points holding the information needed to access external resources. For example, an Clip asset can reference a Media asset, which in turn holds the external filename from which to get the media stream. For Effects, the situation is similar. Assets thus serve two quite distinct purposes. One is to load, list, group search and browse them, and to provide an entry point to create new or get at existing MObject in the Session, while the other purpose is to provide attribute and property information to the inner parts of the engine, while at the same time isolating and decoupling them from environmental details. 
 
 We can distinguish several different Kinds of Assets, each one with specific properties. While all these Kinds of Assets implement the basic Asset interface, they in turn are the __key abstractions__ of the asset management view. Mostly, their interfaces will be used directly, because they are quite different in behaviour. Thus it is common to see asset related operations being templated on the Asset Kind. 
 &amp;rarr; see also [[Creating and registering Assets|AssetCreation]]
@@ -759,7 +759,7 @@ We can distinguish several different Kinds of Assets, each one with specific pro
 !Media Asset
 Some piece of Media Data accessible at some external Location and able to be processed by Lumiera. A Media File on Harddisk can be considered as the most basic form of Media Asset, with some important derived flavours, like a Placeholder for a currently unavailable Source, or Media available in different Resolutions or Formats.
 * __outward interface operations__ include querying properties, creating an Clip MObject, controlling processing policy (low res proxy placeholders, interlacing and other generic pre- and postprocessing)
-* __inward interface operations__ include querying filename, codec, offset and any other informations necessary for creating a source render node, getting additional processing policy decisions (handling of interlacing, aspect ratio).
+* __inward interface operations__ include querying filename, codec, offset and any other information necessary for creating a source render node, getting additional processing policy decisions (handling of interlacing, aspect ratio).
 &amp;rarr; MediaAsset
 
 !Processing Asset
@@ -1424,8 +1424,8 @@ Commands are //defined// using a [[fluent API|http://en.wikipedia.org/wiki/Fluen
 &amp;rarr; see CommandUsage
 </pre>
 </div>
-<div title="CommandDefinition" modifier="Ichthyostega" modified="200907220310" created="200906140124" tags="SessionLogic spec draft decision design" changecount="10">
-<pre>Commands can be identified and accessed //by name// &amp;mdash; consequently there needs to be an internal command registry, including a link to the actual implementing function, thus allowing to re-establish the connection between command and implementing functions when de-serialising a persisted command. To create a command, we need to provide the following informations
+<div title="CommandDefinition" modifier="Ichthyostega" modified="201112222243" created="200906140124" tags="SessionLogic spec draft decision design" changecount="11">
+<pre>Commands can be identified and accessed //by name// &amp;mdash; consequently there needs to be an internal command registry, including a link to the actual implementing function, thus allowing to re-establish the connection between command and implementing functions when de-serialising a persisted command. To create a command, we need to provide the following information
 * operation function actually implementing the command
 * function to [[undo|UndoManager]] the effect of the command
 * function to capture state to be used by UNDO.
@@ -1491,11 +1491,11 @@ To support this handling scheme, some infrastructure is in place:
 * performing the actual execution is delegated to a handling pattern object, accessed by name.
 </pre>
 </div>
-<div title="CommandLifecycle" modifier="Ichthyostega" modified="200910090043" created="200907210135" tags="SessionLogic spec draft design img" changecount="19">
+<div title="CommandLifecycle" modifier="Ichthyostega" modified="201112222244" created="200907210135" tags="SessionLogic spec draft design img" changecount="20">
 <pre>[&lt;img[Structure of Commands|uml/fig135173.png]]
 While generally the command framework was designed to be flexible and allow a lot of different use cases, execution paths and to serve various goals, there is an ''intended lifecycle'' &amp;mdash; commands are expected to go through several distinct states.
 
-The handling of a command starts out with a ''command ID'' provided by the client code. Command ~IDs are unique (human readable) identifiers and should be organised in a hierarchical fashion. When provided with an ID, the CommandRegistry tries to fetch an existing command definition. In case this fails, we enter the [[command definition stage|CommandDefinition]], which includes specifying functions to implement the operation, state capturing and UNDO. When all these informations are available, the entity is called a ''command definition''. Conceptually, it is comparable to a //class// or //meta object.//
+The handling of a command starts out with a ''command ID'' provided by the client code. Command ~IDs are unique (human readable) identifiers and should be organised in a hierarchical fashion. When provided with an ID, the CommandRegistry tries to fetch an existing command definition. In case this fails, we enter the [[command definition stage|CommandDefinition]], which includes specifying functions to implement the operation, state capturing and UNDO. When all of this information is available, the entity is called a ''command definition''. Conceptually, it is comparable to a //class// or //meta object.//
 
 By ''binding'' to specific operation arguments, the definition is //armed up//&amp;nbsp; and becomes a real ''command''. This is similar to creating an instance from a class. Behind the scenes, storage is allocated to hold the argument values and any state captured to create the ability to UNDO the command's effect later on.
 
@@ -1801,7 +1801,7 @@ Cinelerra uses this term in a related manner but with a somewhat shifted focus: 
 In this usage, the EDL in most cases will be almost synonymous to &amp;raquo;the session&amp;laquo;, just the latter emphasizes more the state aspect. While the Lumiera project started out using the same terminology, later on, when support for multiple &quot;containers&quot; within the session and for [[meta-clips|VirtualClip]] was determined to be of much importance, the new term &amp;raquo;[[Sequence]]&amp;laquo; was preferred.
 </pre>
 </div>
-<div title="EditingOperations" modifier="Ichthyostega" modified="200710111508" created="200709251610" tags="design decision" changecount="5">
+<div title="EditingOperations" modifier="Ichthyostega" modified="201112222244" created="200709251610" tags="design decision" changecount="6">
 <pre>These are the tools provided to any client of the Proc layer for handling and manipulating the entities in the Session. When defining such operations, //the goal should be to arrive at some uniformity in the way things are done.// Ideally, when writing client code, one should be able to guess how to achieve some desired result.
 
 !guiding principle
@@ -1825,7 +1825,7 @@ This has some obvious and some subtle consequences. Of course, manipulating //ta
 Consequently, sometimes there needs to be done sort of a ''read-copy-update'', i.e. self-replacement by copy followed by manipulation of the new copy, while ongoing processes use the unaltered original object until they receive some sort of reset.
 
 !!undo
-Basically, each elementary operation has to record the informations necessary to be undone. It does so by registering a Memento with some central UndoManager facility. This Memento object contains a functor pre-bound with the needed parameter values. (Besides, the UndoManager is free to implement a second level of security by taking independent state snapshots). 
+Basically, each elementary operation has to record the information necessary to be undone. It does so by registering a Memento with some central UndoManager facility. This Memento object contains a functor pre-bound with the needed parameter values. (Besides, the UndoManager is free to implement a second level of security by taking independent state snapshots). 
 {{red{to be defined in more detail later...}}}
 </pre>
 </div>
@@ -2813,8 +2813,8 @@ The ''pull up'' sequence performs basic initialisation of the session facilities
 The ''shut down'' sequence does exactly that: halt processing and rendering, disconnect an existing session, if any, get back into initial state. It doesn't care for unwinding session contents, which is assumed to happen automatically when references to previous session contents go out of scope.
 </pre>
 </div>
-<div title="LoadingMedia" modifier="Ichthyostega" modified="200806030203" created="200709220005" tags="design spec" changecount="4">
-<pre>Opening and accessing media files on disk poses several problems, most of which belong to the domain of Lumiera's data backend. Here, we focus on the questions related to making media data available to the session and the render engine. Each media will be represented by an MediaAsset object, which indeed could be a compound object (in case of MultichannelMedia). Building this asset object thus includes getting informations from the real file on disk. For delegating this to the backend, we use the following query interface:
+<div title="LoadingMedia" modifier="Ichthyostega" modified="201112222244" created="200709220005" tags="design spec" changecount="5">
+<pre>Opening and accessing media files on disk poses several problems, most of which belong to the domain of Lumiera's data backend. Here, we focus on the questions related to making media data available to the session and the render engine. Each media will be represented by an MediaAsset object, which indeed could be a compound object (in case of MultichannelMedia). Building this asset object thus includes getting information from the real file on disk. For delegating this to the backend, we use the following query interface:
 * {{{queryFile(char* name)}}} requests accessing the file and yields some (opaque) handle when successful.
 * {{{queryChannel(fHandle, int)}}} will then be issued in sequence with ascending index numbers, until it returns {{{NULL}}}.
 * the returned struct (pointer) will provide the following information:
@@ -3294,15 +3294,15 @@ But because I know the opinions on this topc are varying (users tend to be delig
 My proposed aproach is to treat OpenGL as a separate video raw data type, requiring separete and specialized [[Processing Nodes|ProcNode]] for all calculations. Thus the Builder could connect OpenGL nodes if it is possible to cover the render path in whole or partially or maybe even just for preview.
 </pre>
 </div>
-<div title="OperationPoint" modifier="Ichthyostega" modified="201011071905" created="200805270334" tags="def impl Builder" changecount="9">
+<div title="OperationPoint" modifier="Ichthyostega" modified="201112222245" created="200805270334" tags="def impl Builder" changecount="10">
 <pre>A low-level abstraction within the [[Builder]] &amp;mdash; it serves to encapsulate the details of making multi-channel connections between the render nodes: In some cases, a node can handle N channels internally, while in other cases we need to replicate the node N times and wire each channel individually. As it stands, the OperationPoint marks the ''borderline between high-level and low-level model'': it is invoked in terms of ~MObjects and other entities of the high-level view, but internally it manages to create ProcNode and similar entities of the low-level model.
 
 The operation point is provided by the current BuilderMould and used by the [[processing pattern|ProcPatt]] executing within this mould and conducting the current build step. The operation point's interface allows //to abstract//&amp;nbsp; these details, as well as to //gain additional control//&amp;nbsp; if necessary (e.g. addressing only one of the channels). The most prominent build instruction used within the processing patterns (which is the instruction {{{&quot;attach&quot;}}}) relies on the aforementioned //approach of abstracted handling,// letting the operation point determine automatically how to make the connection.
 
-This is possible because the operation point has been provided (by the mould) with informations about the media stream type to be wired, which, together with information accessible at the [[render node interface|ProcNode]] and from the [[referred processing assets|ProcAsset]], with the help of the [[connection manager|ConManager]] allows to figure out what's possible and how to do the desired connections. Additionally, in the course of deciding about possible connections, the PathManager is consulted to guide strategic decisions regarding the [[render node configuration|NodeConfiguration]], possible type conversions and the rendering technology to employ.
+This is possible because the operation point has been provided (by the mould) with information about the media stream type to be wired, which, together with information accessible at the [[render node interface|ProcNode]] and from the [[referred processing assets|ProcAsset]], with the help of the [[connection manager|ConManager]] allows to figure out what's possible and how to do the desired connections. Additionally, in the course of deciding about possible connections, the PathManager is consulted to guide strategic decisions regarding the [[render node configuration|NodeConfiguration]], possible type conversions and the rendering technology to employ.
 </pre>
 </div>
-<div title="OutputDesignation" modifier="Ichthyostega" modified="201106162303" created="201006220126" tags="Model draft design discuss" changecount="59">
+<div title="OutputDesignation" modifier="Ichthyostega" modified="201112222245" created="201006220126" tags="Model draft design discuss" changecount="60">
 <pre>An ever recurring problem in the design of Luimiera's ~Proc-Layer is how to refer to output destinations, and how to organise them.
 Wiring the flexible interconnections between the [[pipes|Pipe]] should take into account both the StreamType and the specific usage context ([[scope|PlacementScope]]) -- and the challenge is to avoid hard-linking of connections and tangling with the specifics of the target to be addressed and connected. This page, started __6/2010__ by collecting observations to work out the relations, arrives at defining a //key abstraction// of output management.
 
@@ -3314,7 +3314,7 @@ Wiring the flexible interconnections between the [[pipes|Pipe]] should take into
 ** as Timeline is just a façade, BindingMO has to expose something which can be referred for attaching effects (to global pipes)
 ** when used as VirtualClip, there is somehow a channel configuration, either as asset, or exposed by the BindingMO
 * Placements always resolve at least two dimensions: time and output. The latter means that a [[Placement]] can figure out to where to connect
-* the resolution ability of Placements could help to overcome the problems in conjunction with a VirtualClip: missing output destination informations could be inherited down....
+* the resolution ability of Placements could help to overcome the problems in conjunction with a VirtualClip: missing output destination information could be inherited down....
 * expanding on the basic concept of a Placement in N-dimensional configuration space, this //figuring out// would denote the ability to resolve the final output destination
 * this resolution to a final destination is explicitly context dependent. We engage into quite some complexities to make this happen (&amp;rarr; BindingScopeProblem)
 * [[processing patterns|ProcPatt]] are used for creating nodes on the source network of a clip, and similarly for fader, overlay and mixing into a summation pipe
@@ -3454,7 +3454,7 @@ Thus the mapping is a copyable value object, using an associative array. It may 
 First and foremost, mapping can be seen as a //functional abstraction.// As it's used at implementation level, encapsulation of detail types in't the primary concern, so it's a candidate for generic programming: For each of those use cases outlined above, a distinct mapping type is created by instantiating the {{{OutputMapping&lt;DEF&gt;}}} template with a specifically tailored definition context ({{{DEF}}}), which takes on the role of a strategy. Individual instances of this concrete mapping type may be default created and copied freely. This instantiation process includes picking up the concrete result type and building a functor object for resolving on the fly. Thus, in the way typical for generic programming, the more involved special details are moved out of sight, while being still in scope for the purpose of inlining. But there //is// a concern better to be encapsulated and concealed at the usage site, namely accessing the rules system. Thus mapping leads itself to the frequently used implementation pattern where there is a generic frontend as header, calling into opaque functions embedded within a separate compilation unit.
 </pre>
 </div>
-<div title="OutputSlot" modifier="Ichthyostega" modified="201112222235" created="201106162339" tags="def Concepts Player spec img" changecount="51">
+<div title="OutputSlot" modifier="Ichthyostega" modified="201112230113" created="201106162339" tags="def Concepts Player spec img" changecount="52">
 <pre>Within the Lumiera player and output subsystem, actually sending data to an external output requires to allocate an ''output slot''
 This is the central metaphor for the organisation of actual (system level) outputs; using this concept allows to separate and abstract the data calculation and the organisation of playback and rendering from the specifics of the actual output sink. Actual output possibilities (video in GUI window, video fullscreen, sound, Jack, rendering to file) can be added and removed dynamically from various components (backend, GUI), all using the same resolution and mapping mechanisms (&amp;rarr; OutputManagement)
 
@@ -3464,7 +3464,7 @@ Each OutputSlot is an unique and distinguishable entity. It corresponds explicit
 In order to be usable as //output sink,// an output slot needs to be //allocated,// i.e. tied to and locked for a specific client. At any time, there may be only a single client using a given output slot this way. To stress this point: output slots don't provide any kind of inherent mixing capability; any adaptation, mixing, overlaying and sharing needs to be done within the nodes network producing the output data fed to the slot. (in special cases, some external output capabilities -- e.g. the Jack audio connection system -- may still provide additional mixing capabilities, but that's beyond the scope of the Lumiera application)
 
 [&gt;img[Outputslot implementation structures|uml/fig151685.png]]
-Once allocated, the output slot returns a set of concrete ''sink handles'' (one for each physical channel expecting data). The calculating process feeds its results into those handles. Size and other characteristics of the data frames are assumed to be suitable, which typically won't be verified at that level anymore (but the sink handle provides a hook for assertions). Besides that, the allocation of an output slot reveals detailed ''timing expectations''. The client is required to comply to these timings when ''emitting'' data -- he's even required to provide a //current time specification,// alongside with the data. Yet the output slot has the ability to handle timing failures gracefully; the concrete output slot implementation is expected to provide some kind of de-click or de-flicker facility, which kicks in automatically when a timing failure is detected.
+Once allocated, the output slot returns a set of concrete ''sink handles'' (one for each physical channel expecting data). The calculating process feeds its results into those handles. Size and other characteristics of the data frames are assumed to be suitable, which typically won't be verified at that level anymore (but the sink handle provides a hook for assertions). Besides that, the allocation of an output slot reveals detailed ''timing expectations''. The client is required to comply to these timings when ''emitting'' data -- he's even required to provide a //current time specification,// alongside with the data. Based on this information, the output slot has the ability to handle timing failures gracefully; the concrete output slot implementation is expected to provide some kind of de-click or de-flicker facility, which kicks in automatically when a timing failure is detected.
 
 !!!usage and implementation
 Clients retrieve just a reference to an output slot by asking a suitable OutputManager for an output possibility supporting a specific format. Usually, they just &quot;claim&quot; this slot by invoking {{{allocate()}}}, which behind the scenes causes building of the actual output connections and mechanisms. For each such connection -- corresponding to a single channel within the media format handled by this ~OutputSlot -- the client gets a smart-handle {{{DataSink}}}. The concrete ~OutputSlot implementation performs operations quite specific to the kind of output and external interface in question. All tese specific handling is embodied within the concrete connection implementation used by the concrete ~OutputSlot
@@ -4259,7 +4259,7 @@ Placements have //value semantics,// i.e. we don't stress the identity of a plac
 
 </pre>
 </div>
-<div title="PlacementIndex" modifier="Ichthyostega" modified="201001112323" created="200905090053" tags="SessionLogic spec impl" changecount="22">
+<div title="PlacementIndex" modifier="Ichthyostega" modified="201112222246" created="200905090053" tags="SessionLogic spec impl" changecount="24">
 <pre>An implementation facility used to keep track of individual Placements and their relations.
 Especially, the [[Session]] maintains such an index, allowing to use the (opaque) PlacementRef tags for referring to a specific &quot;instance&quot; of an MObject, //placed// in a unique way into the current session. And, moreover, this index allows for one placement referring to another placement, so to implement a //relative// placement mode. Because there is an index behind the scenes, it is possible to actually access such a referral in the reverse direction, which is necessary for implementing the desired placement behaviour (if an object instance used as anchor is moved, all objects placed relatively to it have to move accordingly, which necessitates finding those other objects).
 
@@ -4273,13 +4273,13 @@ Using a ''flat hashtable'' allows to access a Placement denoted by ID in O(1). T
 * allowing to create a path &quot;up&quot; from this scope, which is used for resolving any queries
 * (maybe/planned) relations to other placements
 
-Alternatively, we could try to use a ''structure based index'', thereby avoiding the mentioned description record by folding any of the contained informations into the surrounding data structure:
+Alternatively, we could try to use a ''structure based index'', thereby avoiding the mentioned description record by folding any of the contained information into the surrounding data structure:
 * the scope would be obvious from the index, resp. from the path used to resolve this index
-* any other informations, especially the relations, would be folded into the placement
+* any other information, especially the relations, would be folded into the placement
 * this way, the &quot;index&quot; could be reduced to being the session data structure itself.
 
 //does a placement need to know it's own ID?//&amp;nbsp; Obviously, there needs to be a way to find out the ID for a given placement, especially in the following situations:
-* for most of the operations above, when querying additional informations from index for a given placement
+* for most of the operations above, when querying additional information from index for a given placement
 * to create a PlacementRef (this is a variant of the &quot;shared ptr from this&quot;-problem)
 On second sight, this problem turns out to be more involved, because either we have to keep a second index table for the reverse lookup (memory address -&gt; ID), or have to tie the placement by a back-link when adding it to the index/session data structure, or (alternatively) it forces us to store a copy of the ID //within// the placement itself. The last possibility seems to create the least impact; but implementing it this way effectively gears the implementation towards a hashtable based approach.
 
@@ -4499,7 +4499,7 @@ This is the core service provided by the player subsystem. The purpose is to cre
 :any details of this processing remain opaque for the clients; even the player subsystem just accesses the EngineFaçade
 </pre>
 </div>
-<div title="Player" modifier="Ichthyostega" modified="201112091904" created="201012181700" tags="def overview" changecount="13">
+<div title="Player" modifier="Ichthyostega" modified="201112222246" created="201012181700" tags="def overview" changecount="14">
 <pre>Within Lumiera, &amp;raquo;Player&amp;laquo; is the name for a [[Subsystem]] responsible for organising and tracking //ongoing playback and render processes.// &amp;rarr; [[PlayProcess]]
 The player subsystem does not perform or even manage any render operations, nor does it handle the outputs directly.
 Yet it addresses some central concerns:
@@ -4508,7 +4508,7 @@ Yet it addresses some central concerns:
 :all playback and render processes are on equal footing, handled in a similar way.
 ;integration
 :the player cares for the necessary integration with the other subsystems
-:it consults the OutputManagement, retrieves the necessary informations from the [[Session]] and coordinates the forwarding of [[Backend]] calls.
+:it consults the OutputManagement, retrieves the necessary information from the [[Session]] and coordinates the forwarding of [[Backend]] calls.
 ;time quantisation
 :the player translates continuous time values into discrete frame counts.
 :to perform this [[quantisation|TimeQuant]], the help of the session for building a TimeGrid for each output channel is required.
@@ -4648,7 +4648,7 @@ The system is ''open'' inasmuch every part mirrors the structure of correspondin
 &amp;rarr; see RenderProcess
 </pre>
 </div>
-<div title="ProcPatt" modifier="Ichthyostega" modified="200805260329" created="200709212315" tags="def design" changecount="9">
+<div title="ProcPatt" modifier="Ichthyostega" modified="201112222247" created="200709212315" tags="def design" changecount="10">
 <pre>This special type of [[structural Asset|StructAsset]] represents information how to build some part of the render engine's processing nodes network. Processing patterns can be thought of as a blueprint or micro program for construction. Most notably, they are used for creating nodes reading, decoding and delivering source media material to the render network, and they are used for building the output connection via faders, summation or overlay nodes to the global pipes (busses). Each [[media Asset|MediaAsset]] has associated processing patterns describing the codecs and other transformations needed to get at the media data of this asset. (and because media assets are typically compound objects, the referred ~ProcPatt will be compound too). Similarily, for each stream kind, we can retrieve a processing pattern for making output connections. Obviously, the possibilities opened by using processing patterns go far beyond.
 
 Technically, a processing pattern is a list of building instructions, which will be //executed// by the [[Builder]] on the render node network under construction. This implies the possibility to define further instruction kinds when needed in future; at the moment the relevant sorts of instructions are
@@ -4662,7 +4662,7 @@ Like all [[structural assets|StructAsset]], ~ProcPatt employs a special naming s
 The basic working set of processing patterns can be expected to be just there (hard wired or default configuration, mechanism for creating an sensible fallback). Besides, the idea is that new processing patterns can be added via rules in the session and then referred to by other rules controlling the build process. Any processing pattern is assembled by adding individual build instructions, or by including another (nested) processing pattern.
 
 !!retrieving a suitable Processing Pattern
-For a given situation, the necessary ProcPatt can be retrieved by issuing a [[configuration query|ConfigQuery]]. This query should include the needed capabilities in predicate form (technically this query is a Prolog goal), but it can leave out informations by just requesting &quot;the default&quot; &amp;rarr; see DefaultsManagement
+For a given situation, the necessary ProcPatt can be retrieved by issuing a [[configuration query|ConfigQuery]]. This query should include the needed capabilities in predicate form (technically this query is a Prolog goal), but it can leave out some pieces of information by just requesting &quot;the default&quot; &amp;rarr; see DefaultsManagement
 
 !!how does this actually work?
 Any processing pattern needs the help of a passive holder tool suited for a specific [[building situation|BuilderPrimitives]]; we call these holder tools [[building moulds|BuilderMould]]. Depending on the situation, the mould has been armed up by the builder with the involved objects to be connected and extended. So, just by issuing the //location ID// defined within the individual build instruction (in most cases simply {{{&quot;current&quot;}}}), the processing pattern can retrieve the actual render object to use for building from the mould it is executed in.
@@ -5078,10 +5078,10 @@ config.macros.rssFeedUpdate = {
 //}}}
 </pre>
 </div>
-<div title="RelationClipAsset" modifier="Ichthyostega" modified="200710212327" created="200710191541" tags="design decision img" changecount="7">
+<div title="RelationClipAsset" modifier="Ichthyostega" modified="201112222247" created="200710191541" tags="design decision img" changecount="8">
 <pre>What is the Role of the asset::Clip and how exactly are Assets and (Clip)-MObjects related?
 
-First of all: ~MObjects are the dynamic/editing/manipulation view, while Assets are the static/bookkeeping/searching/information view of the same entities. Thus, the asset::Clip contains the general configuration, the ref to the media and descriptive properties, while all parameters being &quot;manipulated&quot; belong to the session::Clip (MObject). Besides that, the practical purpose of asset::Clip is that you can save and remember some selection as a Clip (Asset), maybe even attach some informations or markup to it, and later be able to (re)create a editable representation in the Session (the GUI could implement this by allowing to drag from the asset::Clip GUI representation to the timeline window)
+First of all: ~MObjects are the dynamic/editing/manipulation view, while Assets are the static/bookkeeping/searching/information view of the same entities. Thus, the asset::Clip contains the general configuration, the ref to the media and descriptive properties, while all parameters being &quot;manipulated&quot; belong to the session::Clip (MObject). Besides that, the practical purpose of asset::Clip is that you can save and remember some selection as a Clip (Asset), maybe even attach some information or markup to it, and later be able to (re)create a editable representation in the Session (the GUI could implement this by allowing to drag from the asset::Clip GUI representation to the timeline window)
 
 !!dependencies
 The session::Clip (frequently called &quot;clip-MO&quot;, i.e. the MObject) //depends on the Asset.// It can't exist without the Asset, because the Asset is needed for rendering. The other direction is different: the asset::Clip knows that there is a dependant clip-MO, there could be //at most one// such clip-MO depending on the Asset, but the Asset can exist without the clip-MO (it gives the possibility to re-create the clip-MO).
@@ -5361,8 +5361,8 @@ A sequence is always tied to a root-placed track, it can't exist without such. W
 &amp;rarr; see detailed [[discussion of dependent objects' behaviour|ModelDependencies]]
 </pre>
 </div>
-<div title="Session" modifier="Ichthyostega" modified="200911071800" created="200712100525" tags="def SessionLogic" changecount="8">
-<pre>The Session contains all informations, state and objects to be edited by the User. From a users view, the Session is synonymous to the //current Project//. It can be [[saved and loaded|SessionLifecycle]]. The individual Objects within the Session, i.e. Clips, Media, Effects, are contained in one (or several) collections within the Session, which we call [[Sequence]].
+<div title="Session" modifier="Ichthyostega" modified="201112222247" created="200712100525" tags="def SessionLogic" changecount="9">
+<pre>The Session contains all information, state and objects to be edited by the User. From a users view, the Session is synonymous to the //current Project//. It can be [[saved and loaded|SessionLifecycle]]. The individual Objects within the Session, i.e. Clips, Media, Effects, are contained in one (or several) collections within the Session, which we call [[Sequence]].
 &amp;rarr; [[Session design overview|SessionOverview]]
 
 !Session structure
@@ -5494,7 +5494,7 @@ Currently, I'm planning to modify MObjectRef to return only a const ref to the u
 &lt;&lt;&lt;
 </pre>
 </div>
-<div title="SessionLifecycle" modifier="Ichthyostega" modified="201010232310" created="200911070329" tags="SessionLogic spec" changecount="26">
+<div title="SessionLifecycle" modifier="Ichthyostega" modified="201112222248" created="200911070329" tags="SessionLogic spec" changecount="27">
 <pre>The current [[Session]] is the root of any state found within Proc-Layer. Thus, events defining the session's lifecycle influence and synchronise the cooperative behaviour of the entities within the model, the ProcDispatcher, [[Fixture]] and any facility below.
 * when ''starting'', on first access an empty session is created, which puts any related facility into a defined initial state.
 * when ''closing'' the session, any dependent facilities are disabled, disconnected, halted or closed
@@ -5507,7 +5507,7 @@ The SessionManager is responsible for conducting the session lifecycle. Accessib
 Beyond that, client code usually doesn't interact much with the lifecycle, which mostly is a pattern of events to happen in a well-defined sequence. So the //implementation// of the session management operations has to comply to this lifecycle, and does so by relying on a self-contained implementation service, the LifecycleAdvisor. But (contrary to an application framework) the lifecycle of the Lumiera session is rather fixed, the only possibility for configuration or extension being the [[lifecycle hooks|LifecycleEvent]], where other parts of the system (and even plug-ins) may install some callback methods.
 
 !Synchronising access to session's implementation facilities
-Some other parts and subsystems within the ~Proc-Layer need specialised access to implementation facilities within the session. Informations about some conditions and configurations might be retrieved through [[querrying the session|Query]], and especially default configurations for many objects are [[bound to the session|DefaultsImplementation]]. The [[discovery of session contents|SessionStructureQuery]] relies on an [[index facility|PlacementIndex]] embedded within the session implementation. Moreover, some &quot;properties&quot; of the [[media objects|MObject]] are actually due to the respective object being [[placed|Placement]] in some way into the session; consequently, there might be an dependency on the actual [[location as visible to the placement|PlacementScope]], which in turn is constituted by [[querying the index|QueryFocus]].
+Some other parts and subsystems within the ~Proc-Layer need specialised access to implementation facilities within the session. Information about some conditions and configurations might be retrieved through [[querrying the session|Query]], and especially default configurations for many objects are [[bound to the session|DefaultsImplementation]]. The [[discovery of session contents|SessionStructureQuery]] relies on an [[index facility|PlacementIndex]] embedded within the session implementation. Moreover, some &quot;properties&quot; of the [[media objects|MObject]] are actually due to the respective object being [[placed|Placement]] in some way into the session; consequently, there might be an dependency on the actual [[location as visible to the placement|PlacementScope]], which in turn is constituted by [[querying the index|QueryFocus]].
 
 Each of these facilities relies on a separate access point to session services, corresponding to distinct service interfaces. But &amp;mdash; on the implementation side &amp;mdash; all these services are provided by a (compound) SessionServices implementation object. This approach allows to switch the actual implementation of all these services simply by swapping the ~PImpl maintained by the session manager. A new implementation level service can thus be added to the ~SessionImpl just by hooking it into the ~SessionServices compound object. But note, this mechanism as such is ''not thread safe'', unless the //implementation// of the invoked functions is synchronised in some way to prevent switching to a new session implementation while another thread is still executing session implementation code.
 
@@ -5539,8 +5539,8 @@ As detailed above, {{{Session::current}}} exposes the management / lifecycle API
 {{red{none of the above is implemented as of 11/09}}}
 </pre>
 </div>
-<div title="SessionLogic" modifier="Ichthyostega" modified="201003210012" created="200904242110" tags="overview" changecount="21">
-<pre>The Session contains all informations, state and objects to be edited by the User (&amp;rarr;[[def|Session]]).
+<div title="SessionLogic" modifier="Ichthyostega" modified="201112222248" created="200904242110" tags="overview" changecount="22">
+<pre>The Session contains all information, state and objects to be edited by the User (&amp;rarr;[[def|Session]]).
 As such, the SessionInterface is the main entrance point to Proc-Layer functionality, both for the primary EditingOperations and for playback/rendering processes. Proc-Layer state is rooted within the session and guided by the [[session's lifecycle events|SessionLifecycle]].
 Implementation facilities within the Proc-Layer may access a somewhat richer [[session service API|SessionServices]].
 
@@ -5575,14 +5575,14 @@ The answer is simple: the one who needs to know about their existence. Because b
 Interestingly, there seems to be an alternative answer to this question. We could locate the setup and definition of all commands into a central administrative facility. Everyone in need of a command then ought to know the name and retrieve this command. Sounds like bureaucracy.
 </pre>
 </div>
-<div title="SessionOverview" modifier="Ichthyostega" modified="200911071816" created="200709272105" tags="design img" changecount="38">
+<div title="SessionOverview" modifier="Ichthyostega" modified="201112222248" created="200709272105" tags="design img" changecount="40">
 <pre>&lt;&lt;&lt;
 {{red{WARNING: Naming was discussed (11/08) and decided to be changed....}}}
 * the term [[EDL]] was phased out in favour of ''Sequence''
 * [[Session]] is largely synonymous to ''Project''
 * there seems to be a new entity called [[Timeline]] which holds the global Pipes
 &lt;&lt;&lt;
-The [[Session]] (sometimes also called //Project// ) contains all informations and objects to be edited by the User. Any state within the Proc-Layer is directly or indirectly rooted in the session. It can be saved and loaded. The individual Objects within the Session, i.e. Clips, Media, Effects, are contained in one or multiple collections within the Session, which we call [[sequence(s)|Sequence]]. Moreover, the sesion contains references to all the Media files used, and it contains various default or user defined configuration, all being represented as [[Asset]]. At any given time, there is //only one current session// opened within the application. The [[lifecycle events|SessionLifecycle]] of the session define the lifecycle of ~Proc-Layer as a whole.
+The [[Session]] (sometimes also called //Project// ) contains all information and objects to be edited by the User. Any state within the Proc-Layer is directly or indirectly rooted in the session. It can be saved and loaded. The individual Objects within the Session, i.e. Clips, Media, Effects, are contained in one or multiple collections within the Session, which we call [[sequence(s)|Sequence]]. Moreover, the sesion contains references to all the Media files used, and it contains various default or user defined configuration, all being represented as [[Asset]]. At any given time, there is //only one current session// opened within the application. The [[lifecycle events|SessionLifecycle]] of the session define the lifecycle of ~Proc-Layer as a whole.
 
 The Session is close to what is visible in the GUI. From a user's perspective, you'll find a [[Timeline]]-like structure, containing an [[Sequence]], where various Media Objects are arranged and placed. The available building blocks and the rules how they can be combined together form Lumiera's [[high-level data model|HighLevelModel]]. Basically, besides the [[media objects|MObjects]] there are data connections and all processing is organized around processing chains or [[pipes|Pipe]], which can be either global (in the Session) or local (in real or virtual clips).
 
@@ -7225,7 +7225,7 @@ Thus the possibly mutalble time entities get an {{{accept(time::Mutation&amp;)}}
 Based on this time::Mutation design, we provide a specialised element for dealing with //running time values:// When attached to a target time entity, a &quot;life&quot; connection is established. From then on, continuous changes and mutations can be fed to the target by invoking a functor interface. Besides, a change notification signal (callback) can be installed, which will be invoked on each change. This {{{time::Control}}} element is the foundation for implementing all kinds of running time display widgets, spin buttons, timeline selections, playheads, loop playback and similar.
 </pre>
 </div>
-<div title="TimeQuant" modifier="Ichthyostega" modified="201106080000" created="201012181753" tags="Concepts Player spec img discuss draft" changecount="52">
+<div title="TimeQuant" modifier="Ichthyostega" modified="201112222249" created="201012181753" tags="Concepts Player spec img discuss draft" changecount="53">
 <pre>The term &amp;raquo;Time&amp;laquo; spans a variety of vastly different entities. Within a NLE we get to deal with various //flavours of time values.//
 ;continuous time
 :without any additional assumptions, ''points in time'' can be specified with arbitrary precision.
@@ -7255,7 +7255,7 @@ Based on this time::Mutation design, we provide a specialised element for dealin
 :This implies the presence of a //running synchronisation process,// with the authority to adjust the time base;
 :contrast this to the internal time, which is static and unconnected -- 
 ;quantised time
-:The ''act of quantisation'' transforms a continuous property into a ''discrete'' structure. Prominent examples can be found in the domain of micro physics and with digital information processing. In a broader sense, any measurement or //quantification// also encompasses a quantisation. Regarding time and time measurement, quantisation means alignment to a predefined ''time grid''. Quantisation necessarily is an //irreversible process// -- possible additional informations get discarded.
+:The ''act of quantisation'' transforms a continuous property into a ''discrete'' structure. Prominent examples can be found in the domain of micro physics and with digital information processing. In a broader sense, any measurement or //quantification// also encompasses a quantisation. Regarding time and time measurement, quantisation means alignment to a predefined ''time grid''. Quantisation necessarily is an //irreversible process// -- possible additional information is discarded.
 :Note that quantisation introduces an ''time origin'' and a ''reference scale''
 ;frame count
 :within the context of film and media editing, the specification of a ''frame number'' is an especially important instance of quantisation.
@@ -7526,7 +7526,7 @@ Using transitions is a very basic task and thus needs viable support by the GUI.
 Because of this experience, ichthyo wants to support a more general case of transitions, which have N output connections, behave similar to their &quot;simple&quot; counterpart, but leave out the mixing step. As a plus, such transitions can be inserted at the source ports of N clips or between any intermediary or final output pipes as well. Any transition processor capable of handling this situation should provide some flag, in order to decide if he can be placed in such a manner. (wichin the builder, encountering a  inconsistently placed transition is just an [[building error|BuildingError]])
 </pre>
 </div>
-<div title="TypedID" modifier="Ichthyostega" modified="201012292351" created="201003200157" tags="Model Types Rules design draft" changecount="33">
+<div title="TypedID" modifier="Ichthyostega" modified="201112222250" created="201003200157" tags="Model Types Rules design draft" changecount="34">
 <pre>//drafted service as of 4/10 &amp;mdash; &amp;rarr;[[implementation plans|TypedLookup]]//
 A registration service to associate object identities, symbolic identifiers and types.
 
@@ -7552,7 +7552,7 @@ A registration service backed by an index table can be used to //translate//&amp
 
 !!!{{red{WIP}}}Analysis and discussion
 Still some contradictions &amp;mdash; and rather seems helpful, not so much necessary.
-We //already have an registration service,// both for Assets (AssetManager) and for Placements (PlacementIndex). These facilities maintain not only a raw ID &amp;harr; object association, but also structuring informations, albeit bound to more specific circumstances (the system of placement scopes, and the asset category). The lookup uniqueID &amp;rArr; object could be implemented by sequentially querying this small number of central registration facilities. Thus, still lacking is a ''system of sub index tables''.
+We //already have an registration service,// both for Assets (AssetManager) and for Placements (PlacementIndex). These facilities maintain not only a raw ID &amp;harr; object association, but also structuring information, albeit bound to more specific circumstances (the system of placement scopes, and the asset category). The lookup uniqueID &amp;rArr; object could be implemented by sequentially querying this small number of central registration facilities. Thus, still lacking is a ''system of sub index tables''.
 
 As mentioned above, an ID &amp;harr; type association plays a crucial role when it comes to implementing any kind of rules based configuration. It would allow to bridge from our session objects to rules and resolution working entirely symbolic. (&amp;rarr; [[more|ConfigQueryIntegration]]). But, as of 3/2010 this is a //planned feature and not required to get the initial pipeline working.// Thus, according to the YAGNI principle, we shouldn't engage into any implementation details right now and just create the extension points.
 
@@ -7573,7 +7573,7 @@ Just an ''registration scheme'' should be implemented right now, working complet
 see [[implementation planning|TypedLookup]]
 </pre>
 </div>
-<div title="TypedLookup" modifier="Ichthyostega" modified="201012292351" created="201004031607" tags="Rules Types spec impl draft" changecount="22">
+<div title="TypedLookup" modifier="Ichthyostega" modified="201112222250" created="201004031607" tags="Rules Types spec impl draft" changecount="23">
 <pre>TypedID is a registration service to associate object identities, symbolic identifiers and types. It acts as frontend to the TypedLookup service within Proc-Layer, at the implementation level. While TypedID works within a strictly typed context, this type information is translated into an internal index on passing over to the implementation, which manages a set of tables containing base entries with an combined symbolic+hash ID, plus an opaque buffer. Thus, the strictly typed context is required to re-access the stored data. But the type information wasn't erased entirely, so this typed context can be re-gained with the help of an internal type index. All of this is considered implementation detail and may be subject to change without further notice; any access is assumed to happen through the TypedID frontend. Besides, there are two more specialised frontends.
 
 !Front-ends
@@ -7584,7 +7584,7 @@ see [[implementation planning|TypedLookup]]
 !Tables and index
 The Table consists of several registration groups, each of which contains a hashtable and deals with one specific type. Groups are created on demand, but there is initially one group holding the internal type index (translation table). There may be even sub-groups, usable to create clusterings within one group.
 
-__Individual entries__ are comprised of a EntryID as key (actually a ~BareEntryID, without the typing) and a payload, which //doesn't store data,// but informations necessary to ''lookup and access'' the registered object. Obviously, this information is type specific, and thus the ~TypedLookup implementation can't know how to deal with it directly. Rather, we store a ''functor'' in the payload of the type index group. This functor is directly linked to the TypeHandler, i.e. any type wanting to be a primary type within Lumiera, so as to be directly usable within the ConfigRules, needs to provide a suitable functor implementation through its ~TypeHandler. These functors are then invoked by the ~TypedID frontend, when it comes to re-accessing a registered entity by ID
+__Individual entries__ are comprised of a EntryID as key (actually a ~BareEntryID, without the typing) and a payload, which //doesn't store data,// but information necessary to ''lookup and access'' the registered object. Obviously, this information is type specific, and thus the ~TypedLookup implementation can't know how to deal with it directly. Rather, we store a ''functor'' in the payload of the type index group. This functor is directly linked to the TypeHandler, i.e. any type wanting to be a primary type within Lumiera, so as to be directly usable within the ConfigRules, needs to provide a suitable functor implementation through its ~TypeHandler. These functors are then invoked by the ~TypedID frontend, when it comes to re-accessing a registered entity by ID
 
 !link for automatic registration
 An entity can be linked with the TypedLookup system to be registered and deregistered automatically. This is achieved by mixing in the {{{TypedID::Link}}}. On creation, this will set up an EntryID for this individual instance and cause creation of an empty entry within the suitable registration group. As a side-effect, uniqueness of any symbolic-ID within one group (type) is enforced. Obviously, the dtor of this registration Link cares for de-registration automatically. Be forwarned though, by creating an unique identity, this mechanism will interfere with copying and cloning of the registered entity.

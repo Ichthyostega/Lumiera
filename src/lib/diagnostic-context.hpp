@@ -21,15 +21,15 @@
 */
 
 /** @file diagnostic-context.hpp
- ** Facility for collecting diagnostic informations explicitly.
+ ** Facility for collecting diagnostic context information explicitly.
  ** Unlike a trace logging run, this facility is intended to be fed explicitly with
  ** diagnostic information describing the currently ongoing operation in a semantic
- ** high-level manner. The rationale is to pinpoint \em those informations which aren't
- ** obvious when just looking at a callstack with the debugger. Instances of the class
- ** DiagnosticContext should be placed explicitly as automatic (stack) variable
- ** into selected relevant scopes; these "information frames" can be accessed
- ** from an enclosed scope  as a per-thread stack. DiagnosticContext provides
- ** an controlled environment for adding diagnostic code on demand; typically
+ ** high-level manner. The rationale is to pinpoint \em those pieces of information,
+ ** which aren't obvious when just looking at a callstack with the debugger.
+ ** Instances of the class DiagnosticContext should be placed explicitly as automatic
+ ** (stack) variable into selected relevant scopes; these "information frames" could
+ ** be accessed from an enclosed scope  as a per-thread stack. DiagnosticContext
+ ** provides an controlled environment for adding diagnostic code on demand; typically
  ** to be configured such as to resolve into an empty class for release builds.
  ** 
  ** As of 2/10, this is an experimental feature in evaluation. To start with,
@@ -57,26 +57,23 @@ namespace lib {
   
   
   
-#ifdef NOBUG_MODE_ALPHA      ////////////////////////TODO don't we need the handle in BETA builds for resource logging?
   
   /** 
-   * Diagnostic data frame to collect specific informations concerning a scope.
+   * Diagnostic data frame to collect specific information concerning a scope.
    * To be placed explicitly as an automatic (stack) variable. Provides a controlled
    * environment for hooking up diagnostic code. Within each thread, a stack of
    * such information frames concerning nested scopes is maintained automatically.
    * It can be accessed via static API.
-   * @warning never store this into global data structures.
-   * @note as of 2/10 used for housing the NoBug resource tracker handle
-   *       in conjunction with object monitor based locking
-   * @see sync.hpp
+   * @warning relies on thread-local access; never use this within global data structures.
    */
+  template<typename VAL>
   class DiagnosticContext
     : boost::noncopyable
     {
-      typedef nobug_resource_user* Handle;
       typedef ThreadLocalPtr<DiagnosticContext> ThreadLocalAccess;
+      typedef std::vector<VAL>                  ValSequence;
       
-      Handle handle_;
+      const VAL value_;
       DiagnosticContext * const prev_;
       
       /** embedded thread local pointer
@@ -90,8 +87,8 @@ namespace lib {
       
       
     public:
-      DiagnosticContext()
-        : handle_(0)
+      DiagnosticContext(VAL const& value_to_log = VAL())
+        : value_(value_to_log)
         , prev_(current().get())
         {
           current().set (this);
@@ -104,9 +101,9 @@ namespace lib {
         }
       
       
-      operator Handle* () ///< payload: NoBug resource tracker user handle
+      operator VAL const&()  ///< access the payload by conversion
         {
-          return &handle_;
+          return value_;
         }
       
       /** accessing the innermost diagnostic context created */
@@ -116,39 +113,33 @@ namespace lib {
           DiagnosticContext* innermost = current().get();
           if (!innermost)
             throw lumiera::error::Logic ("Accessing Diagnostic context out of order; "
-                                         "an instance should have been created in "
+                                         "an instance should have been created within "
                                          "an enclosing scope");
           return *innermost;
         }
-    };
-  
-  
-#else  /* not NOBUG_ALPHA */
-  
-  
-  /** 
-   * Disabled placeholder for the Diagnostic context, not used in release builds.
-   */
-  class DiagnosticContext
-    : boost::noncopyable
-    {
       
       
-    public:
-      
-      operator Handle* () ///< payload: NoBug resource tracker user handle
+      /** snapshot of the current stack of diagnostic frames
+       * @return vector with all the payload values currently
+       *         on the thread-local diagnostic stack. Might
+       *         be empty. Values start with frame next to
+       *         the current scope and end with outermost.
+       */
+      static ValSequence
+      extractStack()
         {
-          return 0;
-        }
-      
-      /** accessing the innermost diagnostic context created */
-      static DiagnosticContext&
-      access ()
-        {
-          UNIMPLEMENTED ("how to disable DiagnosticContext with minimum overhead");
+          ValSequence loggedValues;
+          DiagnosticContext* next = current().get();
+          while (next)
+            {
+              loggedValues.push_back (*next);
+              next = next->prev_;
+            }
+          return loggedValues;
         }
     };
-#endif /* NOBUG_ALPHA? */
+  
+  
   
   
   

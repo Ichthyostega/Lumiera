@@ -78,7 +78,7 @@ public:
    *       from the session / current timeline to be displayed. It doesn't
    *       make sense to display raw time values here, as each timeline might
    *       turn out to have a different origin; this is the result of resolving
-   *       a placement, and only the session has the necessary informations...
+   *       a placement, and only the session has the necessary information...
    */
   Offset get_time_offset() const;
 

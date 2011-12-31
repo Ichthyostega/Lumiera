@@ -1,5 +1,5 @@
 /*
-  NOTIFICATION-SERVICE.hpp  -  public service allowing to push informations into the GUI
+  NOTIFICATION-SERVICE.hpp  -  public service allowing to push information into the GUI
 
   Copyright (C)         Lumiera.org
     2008,               Hermann Vosseler <Ichthyostega@web.de>

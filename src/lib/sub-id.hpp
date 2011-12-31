@@ -46,7 +46,7 @@
 #ifndef LIB_SUB_ID_H
 #define LIB_SUB_ID_H
 
-#include "lib/format.hpp"
+#include "lib/format-util.hpp"
 
 //#include <functional>
 #include <boost/functional/hash.hpp>      /////TODO better push the hash implementation into a cpp file (and btw, do it more seriously!)

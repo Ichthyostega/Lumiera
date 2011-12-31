@@ -90,7 +90,7 @@ namespace test{
   
   
   /** Register this test class... */
-  LAUNCHER (DuckDetector_test, "unit common");
+  LAUNCHER (DuckDetector_test, "unit meta");
   
   
   

@@ -22,7 +22,7 @@
 
 
 #include "lib/test/run.hpp"
-#include "lib/format.hpp"
+#include "lib/format-util.hpp"
 #include "lib/error.hpp"
 
 #include <iostream>
@@ -35,8 +35,7 @@ namespace util {
 namespace test {
   
   class Reticent 
-    {
-    };
+    { };
   
   class UnReticent
     : public Reticent 
@@ -47,10 +46,11 @@ namespace test {
   
   
   
-  /*************************************************
-   * verifies the proper working of helper functions
-   * frequently used within the Lumiera testsuite.
-   * @see test-helper.hpp
+  /*******************************************************************************
+   * @test verifies the proper working of some string-formatting helper functions.
+   *       - util::str() provides a failsafe to-String conversion, preferring
+   *         an built-in conversion, falling back to just a mangled type string.
+   * @see format-util.hpp
    */
   class FormatHelper_test : public Test
     {
@@ -61,7 +61,7 @@ namespace test {
         }
       
       
-      /** @test verify the maybe-to-string conversion. */
+      /** @test verify a failasfe to-string conversion. */
       void
       check2String ()
         {

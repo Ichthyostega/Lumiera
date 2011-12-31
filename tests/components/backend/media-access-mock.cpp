@@ -23,7 +23,7 @@
 
 /** @file mediaacessmock.cpp
  ** Mock implementation of the Interface normally used to query media file
- ** informations from the data backend. The Mock implementation instead holds
+ ** information from the data backend. The Mock implementation instead holds
  ** a map of fixed response which will be delivered when querying some magic
  ** filenames.
  ** 
