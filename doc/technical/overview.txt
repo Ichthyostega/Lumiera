@@ -434,11 +434,33 @@ Library
 The Lumiera support library contains lots of helper functionality
 factored out from the internals and re-used. It is extended as we go.
 
+practical shortcuts
+~~~~~~~~~~~~~~~~~~~
+The header 'lib/util.hpp' defines some shortcuts heavily used throughout
+the code base. The idea is to highlight a common semantic meaning, while
+hide differentiation on the technical details.
+
+isnil:: indicate a _missing value_, irrespective if this is a NULL pointer,
+  an empty string or an empty container. Several of our custom wrappers also
+  support this notion.
+
+contains:: indicate that a value is _somehow contained_ within a collection,
+  irrespective if this is a set, a map, a vector or string (substring test)
+
+sanitise:: make any string usable as identifier.
+
+In a similar vein, the header 'lib/util-foreach.hpp' provides a generic
+``for-each-element'' mechanism, which works for all STL containers, but
+also for all _Lumiera Forward Iterators_. The loop body is provided
+as a functor. In case this functor is a predicate (boolean result),
+the +and_all+ and +has_any+ functions allow to test for conjunction
+and disjunction.
+
 
 Locking
 ~~~~~~~
-Based on object monitors. Performance critical code
-uses mutexes, condition vars and rwlocks direcly.
+General purpose Locking is based on object monitors. Performance critical code
+in the backend uses mutexes, condition vars and rwlocks direcly.
 Intentionally no semaphores.
 
 - C++ locks are managed by scoped automatic variables
@@ -659,6 +681,42 @@ _tbw_
 Itertools
 ^^^^^^^^^
 _tbw_
+
+
+Front-end for boost::format
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Formatting values with `printf` is a notorious source for intricate errors.
+Additionally, using (s|n)`printf` can be clunky in practice, and it doesn't
+support custom defined string conversions, which are an important diagnostic
+aid when working with objects. We might 
+link:{ldoc}/technical/howto/UsingBoost.html[use Boost], which provides the
+`boost::format` library to address those problems. Unfortunately including this
+header-only library solution incurs a significant overhead, both in terms of
+compilation time and code size. While maybe still acceptable at the implementation
+level, using boost::format is thus certainly a ``no go'' for any code residing
+in headers frequently included.
+
+To work around these problems, we provide a front-end wrapper, defined in
+'lib/format-string.hpp'. This allows to keep the actual boost::format based
+implementation confined to a single translation unit, while still being able
+to use all primitive types as usual with boost::format or printf. Additionally,
+our frontend automatically invokes a custom or built-in string conversion, if
+applicable, it dereferences pointers and catches all errors encountered while
+the formatting. So it's well suited for usage in error handling code.
+
+[source,C]
+------------------------------------------------------------
+#include "lib/format-string.hpp"
+using util::_Fmt;
+
+double total = 22.9499;
+const char * currency = "€";
+
+cout << _Fmt("price %+5.2f %s") % total % currency << endl;
+------------------------------------------------------------
+
+WARNING: `boost::format` is known to be about 10 times slower than `printf` --
+         best to avoid it for performance critical code.
 
 
 Wrappers and Opaque Holders

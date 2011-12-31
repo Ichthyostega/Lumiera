@@ -92,7 +92,9 @@ formatted output -- but typesafe, using defined conversion operators and without
 the plain-C `printf` famility of functions. But beware: `boost::format` is implemented on top of
 the C++ output stream operations (`<<` and manipulators), which in turn are implemented based
 on `printf` -- you can expect it to be 5 to 10 times slower than the latter, and it has
-quite some compilation overhead.
+quite some compilation overhead and size impact (-> see our own
+link:http://git.lumiera.org/gitweb?p=lumiera/ichthyo;a=blob;f=src/lib/format-string.hpp;h=716aa0e3d23f09269973b7659910d74b3ee334ea;hb=37384f1b681f5bbfa7dc4d50b8588ed801fbddb3[formatting front-end]
+to reduce this overhead)
 
 .variant and any
 These library provide a nice option for building data structures able to hold a mixture of
