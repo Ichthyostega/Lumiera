@@ -46,11 +46,11 @@ namespace test {
    * @test verifies our front-end for printf-style format string based formatting.
    *       - the implementation is based on boost::format
    *       - we create a wrapper-object on-the fly, which is able to hold
-   *         the result of a partial invocation
-   *       - explicit specialisations feed all primitive types directly
-   *         down into the implementation level. If possible, a custom operator string()
+   *         the result of a partial invocation, until all parameters are given.
+   *       - explicit specialisations feed all primitive types directly down
+   *         into the implementation level. If possible, a custom operator string()
    *         will be used for formatting.
-   *       - any kind of exception will be logged, but handled gracefully
+   *       - exceptions will be logged, but handled gracefully
    * 
    * @see format-string.hpp
    * @see boost::format
@@ -303,7 +303,6 @@ namespace test {
           Verbose *pv = &v;
           void    *vv = pv;
           CHECK (_Fmt("__%s__") % v  == "__Number-042__");
-          cout << "yyy=" << string(_Fmt("__%s__") % pv) << endl;
           CHECK (_Fmt("__%s__") % pv == "__Number-042__");
           CHECK (_Fmt("__%s__") % vv != "__Number-042__");
           
@@ -313,7 +312,7 @@ namespace test {
           pv = NULL;
           vv = NULL;
           CHECK (_Fmt("__%s__") % pv == "__<null>__");
-          CHECK (_Fmt("__%s__") % pv == "__0__");
+          CHECK (_Fmt("__%s__") % vv == "__0__");
         }
     };
   

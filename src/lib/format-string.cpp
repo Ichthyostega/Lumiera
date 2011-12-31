@@ -70,6 +70,13 @@ namespace util {
     }
     
     
+    inline void
+    destroyImpl (char* buffer)
+    {
+      accessImpl(buffer).~format(); 
+    }
+    
+    
     /** in case the formatting of a (primitive) value fails,
      *  we try to use a error indicator instead
      */
@@ -86,34 +93,6 @@ namespace util {
         accessImpl(formatter) % placeholder;
       }
     ERROR_LOG_AND_IGNORE (progress, "Supplying placeholder for problematic format parameter")
-    
-    
-    /** Core function: let boost::format handle a value */
-    template<typename VAL>
-    void
-    doFormatParameter (char* formatter, VAL const& val)
-    try {
-        accessImpl(formatter) % val;
-      }
-    
-    catch (boost::io::too_many_args& argErr)
-      {
-        WARN (progress, "Format: excess argument '%s' of type %s ignored."
-                      , cStr(str(val))
-                      , cStr(tyStr(val)));
-      }
-    catch (std::exception& failure)
-      {
-        WARN (progress, "Format: Parameter '%s' causes problems: %s"
-                      , cStr(str(val))
-                      , failure.what());
-        pushFailsafeReplacement (formatter, failure.what());
-      }
-    catch (...)
-      {
-        WARN (progress, "Format: Unexpected problems accepting format parameter '%s'", cStr(str(val)));
-        pushFailsafeReplacement (formatter);
-      }
     
     
     inline void
@@ -141,13 +120,16 @@ namespace util {
   
   _Fmt::~_Fmt ()
   {
-    accessImpl(formatter_).~format();
+    destroyImpl (formatter_);
   }
   
   
-  /** @internal access points for the frontend,
-   * allowing to push a parameter value down into the implementation
-   * for the actual formatting.
+  /** @internal access point for the frontend,
+   * allowing to push a single parameter value down
+   * into the implementation for the actual formatting.
+   * Only selected primitive types are handled directly this way,
+   * while all custom conversions, the handling of pointers and the
+   * fallback (showing a type string) is done in the frontend.
    * @note we need to generate instantiations of this template function
    *       explicitly for all basic types to be supported for direct handling,
    *       otherwise we'll get linker errors. Lumiera uses the ``inclusion model''
@@ -157,60 +139,48 @@ namespace util {
    */
   template<typename VAL>
   void
-  _Fmt::pushParameter (const VAL val)
-  {
-    doFormatParameter (formatter_, val);
-  }
+  _Fmt::format (const VAL val, Implementation& formatter)
+  try {
+      accessImpl(formatter) % val;
+    }
   
-  template<typename VAL>
-  void
-  _Fmt::pushParameter (const VAL * pVal)
-  {
-    if (pVal)
-      doFormatParameter (formatter_, *pVal);
-    else
-      doFormatParameter (formatter_, "<null>");
-  }
+  catch (boost::io::too_many_args& argErr)
+    {
+      WARN (progress, "Format: excess argument '%s' of type %s ignored."
+                    , cStr(str(val))
+                    , cStr(tyStr(val)));
+    }
+  catch (std::exception& failure)
+    {
+      WARN (progress, "Format: Parameter '%s' causes problems: %s"
+                    , cStr(str(val))
+                    , failure.what());
+      pushFailsafeReplacement (formatter, failure.what());
+    }
+  catch (...)
+    {
+      WARN (progress, "Format: Unexpected problems accepting format parameter '%s'", cStr(str(val)));
+      pushFailsafeReplacement (formatter);
+    }
   
-  template<>
-  void
-  _Fmt::pushParameter (const char * cString)
-  {
-    doFormatParameter (formatter_, cString? cString : "↯" );
-  }
-  template<>
-  void
-  _Fmt::pushParameter (const void * address)
-  {
-    doFormatParameter (formatter_, address);
-  }
   
   
   
   /* ===== explicitly supported =================== */
   
-  template void _Fmt::pushParameter(const string);
-  template void _Fmt::pushParameter(const char);
-  template void _Fmt::pushParameter(const uchar);
-  template void _Fmt::pushParameter(const int);
-  template void _Fmt::pushParameter(const uint);
-  template void _Fmt::pushParameter(const short);
-  template void _Fmt::pushParameter(const ushort);
-  template void _Fmt::pushParameter(const int64_t);
-  template void _Fmt::pushParameter(const uint64_t);
-  template void _Fmt::pushParameter(const float);
-  template void _Fmt::pushParameter(const double);
-  
-  template void _Fmt::pushParameter(const string * );
-  template void _Fmt::pushParameter(const uchar *  );
-  template void _Fmt::pushParameter(const int *    );
-  template void _Fmt::pushParameter(const uint *   );
-  template void _Fmt::pushParameter(const short *  );
-  template void _Fmt::pushParameter(const ushort * );
-  template void _Fmt::pushParameter(const int64_t *);
-  template void _Fmt::pushParameter(const uint64_t*);
-  template void _Fmt::pushParameter(const float *  );
-  template void _Fmt::pushParameter(const double * );
+  template void _Fmt::format (const char,    Implementation&);
+  template void _Fmt::format (const uchar,   Implementation&);
+  template void _Fmt::format (const int,     Implementation&);
+  template void _Fmt::format (const uint,    Implementation&);
+  template void _Fmt::format (const short,   Implementation&);
+  template void _Fmt::format (const ushort,  Implementation&);
+  template void _Fmt::format (const int64_t, Implementation&);
+  template void _Fmt::format (const uint64_t,Implementation&);
+  template void _Fmt::format (const float,   Implementation&);
+  template void _Fmt::format (const double,  Implementation&);
+  template void _Fmt::format (const string,  Implementation&);
+  template void _Fmt::format (const void *,  Implementation&);
+  template void _Fmt::format (const char *,  Implementation&);
   
   
   

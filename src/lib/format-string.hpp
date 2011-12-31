@@ -89,23 +89,19 @@ namespace util {
       /** size of an internal implementation Buffer */
       enum{ FORMATTER_SIZE = lib::meta::SizeTrait::BOOST_FORMAT };
       
+      typedef char Implementation[FORMATTER_SIZE];
       
       /** @internal buffer to hold a boost::format */
-      mutable char formatter_[FORMATTER_SIZE];
+      mutable Implementation formatter_;
       
+      
+      template<typename VAL>
+      static void format (const VAL, Implementation&);
       
       /** helper to prepare parameters for inclusion */
       template<typename VAL, class SEL =void>
       struct Converter;
       
-      template<typename VAL>
-      void pushParameter (const VAL);
-      
-      template<typename VAL>
-      void pushParameter (const VAL *);
-      
-      template<typename VAL>
-      void pushParameter (VAL *);
       
       
     public:
@@ -158,7 +154,7 @@ namespace util {
   inline _Fmt&
   _Fmt::operator% (VAL const& val)
   {
-    pushParameter (Converter<VAL>::prepare (val));
+    Converter<VAL>::dump (val, formatter_);
     return *this;
   }
   
@@ -187,7 +183,6 @@ namespace util {
     template<> struct _allow_call<uint64_t>{ enum{ value = true }; };
     template<> struct _allow_call<float>   { enum{ value = true }; };
     template<> struct _allow_call<double>  { enum{ value = true }; };
-    template<> struct _allow_call<void*>   { enum{ value = true }; };
     
     template<typename X>
     struct _shall_format_directly
@@ -196,11 +191,6 @@ namespace util {
         
         enum{ value = _allow_call<BaseType>::value };
       };
-    
-    template<typename X>
-    struct _shall_format_directly<X*> 
-      : _shall_format_directly<X>
-      { };
     
     
     
@@ -246,10 +236,43 @@ namespace util {
   template<typename VAL, class SEL>
   struct _Fmt::Converter
     {
-      static const string
-      prepare (VAL const&)
+      static void
+      dump (VAL const&, Implementation& impl)
         {
-          return string("«")+typeid(VAL).name()+"»";
+          format (string("«")+typeid(VAL).name()+"»", impl);
+        }
+    };
+  
+  template<typename VAL>
+  struct _Fmt::Converter<VAL*>
+    {
+      static void
+      dump (const VAL *pVal, Implementation& impl)
+        {
+          if (pVal)
+            Converter<VAL>::dump(*pVal, impl);
+          else
+            format ("<null>", impl);
+        }
+    };
+  
+  template<>
+  struct _Fmt::Converter<void *>
+    {
+      static void
+      dump (const void* address, Implementation& impl)
+        {
+          format (address, impl);
+        }
+    };
+  
+  template<>
+  struct _Fmt::Converter<const char *>
+    {
+      static void
+      dump (const char* cString, Implementation& impl)
+        {
+          format (cString? cString : "↯", impl);
         }
     };
   
@@ -257,18 +280,18 @@ namespace util {
   template<typename VAL>
   struct _Fmt::Converter<VAL,      typename enable_if< _shall_convert_toString<VAL> >::type>
     {
-      static const string
-      prepare (VAL const& val)
+      static void
+      dump (VAL const& val, Implementation& impl)
         try {
-            return string(val); 
+            format (string(val), impl); 
           }
         catch(std::exception const& ex)
           {
-            return _log_and_stringify(ex);
+            format (_log_and_stringify(ex), impl);
           }
         catch(...)
           {
-            return _log_unknown_exception();
+            format (_log_unknown_exception(), impl);
           }
     };
   
@@ -277,19 +300,12 @@ namespace util {
   template<typename VAL>
   struct _Fmt::Converter<VAL,      typename enable_if< _shall_format_directly<VAL> >::type>
     {
-      static VAL const&
-      prepare (VAL const& val)
+      static void
+      dump (const VAL val, Implementation& impl)
         {
-          return val;
+          format (val, impl);
         }
     };
-  
-  template<typename VAL>
-  void
-  _Fmt::pushParameter (VAL * pV)   ///< treat as const
-    {
-      pushParameter ((const VAL*) pV);
-    }
   
   
   
