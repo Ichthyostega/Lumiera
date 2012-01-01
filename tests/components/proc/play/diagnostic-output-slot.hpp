@@ -102,6 +102,8 @@ namespace play {
       TimeValue
       deadlineFor (FrameID frameNr)
         {
+          // a real world implementation
+          // would offset by a latency here
           return frameGrid_->timeOf (frameNr);
         }
       

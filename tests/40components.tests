@@ -617,7 +617,12 @@ out: ^\.throw some exceptions...
 END
 
 
-TEST "ScopedPtrVect_test" ScopedPtrVect_test <<END
+PLANNED "Managed Collection (I)" ScopedCollection_test <<END
+return: 0
+END
+
+
+TEST "Managed Collection (II)" ScopedPtrVect_test <<END
 return: 0
 END
 
