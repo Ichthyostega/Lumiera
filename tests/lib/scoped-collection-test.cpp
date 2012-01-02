@@ -117,7 +117,7 @@ namespace test{
             CHECK (5 == container.size());
             CHECK (0 != Dummy::checksum());
 
-            holder.clear();
+            container.clear();
             CHECK (isnil (container));
             CHECK (0 == container.size());
             CHECK (0 == Dummy::checksum());
