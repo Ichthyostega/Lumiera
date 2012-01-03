@@ -191,15 +191,42 @@ namespace lib {
       size_t capacity_;
       ElementStorage elements_;
       
-//    typedef std::vector<T*> _Vec;
-//    typedef typename _Vec::iterator VIter;
-      typedef ElementHolder* StorageIter;
-//    
-      typedef RangeIter<StorageIter> RIter;
-      typedef PtrDerefIter<RIter> IterType;
       
-      typedef typename IterType::ConstIterType ConstIterType;
-      typedef typename IterType::WrappedConstIterType RcIter;
+      typedef IterAdapter<      I *, const ScopedCollection *> IterType;
+      typedef IterAdapter<const I *, const ScopedCollection *> ConstIterType;
+      
+      /* ==== internal callback API for the iterator ==== */
+      
+      friend void
+      iterNext (const ScopedCollection*, const I* & pos)
+      {
+        ElementHolder* & storageLocation = reinterpret_cast<ElementHolder* &> (pos);
+        ++storageLocation;
+      }
+        
+      /** Implementation of Iteration-logic: detect iteration end.
+       *  @note the problem here is that this implementation chooses
+       *        to use two representations of "bottom" (end, invalid).
+       *        The reason is, we want the default-constructed IterAdapter
+       *        also be the "bottom" value. Thus, when we detect the
+       *        iteration end by internal logic (\c numberz_.end() ), we
+       *        immediately transform this into the official "bottom"
+       */
+      friend bool
+      hasNext (const ScopedCollection* src, const I* & pos)
+      {
+        REQUIRE (src);
+        if ((pos) && (pos < src->_access_end()))
+          return true;
+        else
+          {
+            pos = 0;
+            return false;
+      }   }
+      
+      I* _access_begin() { return &elements_[0]; }
+      I* _access_end() { return &elements_[level_]; }
+      
       
       
     public:
@@ -271,7 +298,7 @@ namespace lib {
       operator[] (size_t index)
         {
           if (index < level_)
-            return elements_[index];
+            return elements_[index].accessObj();
           
           throw error::Logic ("Attempt to access not (yet) existing object in ScopedCollection"
                              , LUMIERA_ERROR_INDEX_BOUNDS);
@@ -280,10 +307,10 @@ namespace lib {
       typedef IterType      iterator;
       typedef ConstIterType const_iterator;
       
-      iterator       begin()        { return       iterator (allPtrs()); }
-      iterator       end()          { return       iterator ( RIter() ); }
-      const_iterator begin()  const { return const_iterator::build_by_cast (allPtrs()); }
-      const_iterator end()    const { return const_iterator::nil();      }
+      iterator       begin ()       { return iterator       (this, _access_begin()); }
+      const_iterator begin () const { return const_iterator (this, _access_begin()); }
+      iterator       end ()         { return iterator();       }
+      const_iterator end ()   const { return const_iterator(); }
       
       
       
@@ -304,21 +331,6 @@ namespace lib {
 //        UNIMPLEMENTED("raw element access");
 //      }
       
-      /** @internal access sequence of all managed pointers */
-      RIter
-      allPtrs ()
-        {
-          ElementHolder * storage_begin = elements_.get();
-          ElementHolder * storage_end   = storage_begin + capacity_;
-          
-          return RIter (storage_begin, storage_end);
-        }
-      RIter
-      allPtrs ()  const
-        {
-          ScopedCollection& elements = util::unConst(*this);
-          return RIter (elements.begin(), elements.end());
-        }
     };
   
   

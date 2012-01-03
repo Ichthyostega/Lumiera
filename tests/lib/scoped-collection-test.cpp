@@ -106,7 +106,6 @@ namespace test{
         {
           CHECK (0 == Dummy::checksum());
           {
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #877
             CollD container(5);
             CHECK (isnil (container));
             CHECK (0 == container.size());
@@ -128,7 +127,6 @@ namespace test{
                                       + container[2].getVal()
                                       + container[3].getVal()
                                       + container[4].getVal());
-#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #877
           }
           CHECK (0 == Dummy::checksum());
         }
