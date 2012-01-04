@@ -137,9 +137,8 @@ namespace test{
         {
           CHECK (0 == Dummy::checksum());
           {
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #877
             CollD coll(50);
-            for (int i=0; i<coll.capacity(); ++i)
+            for (uint i=0; i<coll.capacity(); ++i)
               coll.appendNew<Dummy>(i);
             
             int check=0;
@@ -154,8 +153,9 @@ namespace test{
             
             
             // Test the const iterator
+            CollD const& const_coll (coll);
             check = 0;
-            CollD::const_iterator cii = coll.begin();
+            CollD::const_iterator cii = const_coll.begin();
             while (cii)
               {
                 CHECK (check == cii->getVal());
@@ -176,7 +176,6 @@ namespace test{
             VERIFY_ERROR (ITER_EXHAUST, ++ii );
             VERIFY_ERROR (ITER_EXHAUST, ++cii );
             
-#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #877
           }
           CHECK (0 == Dummy::checksum());
         }
@@ -185,7 +184,6 @@ namespace test{
       void
       building_RAII_Style()
         {
-          UNIMPLEMENTED ("building all at once");
           CHECK (0 == Dummy::checksum());
           {
 #if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #877
@@ -252,7 +250,6 @@ namespace test{
       void
       building_StackStyle()
         {
-          UNIMPLEMENTED ("pushing new objects successively");
           CHECK (0 == Dummy::checksum());
           {
 #if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #877

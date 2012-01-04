@@ -35,6 +35,8 @@
  ** - TODO: detaching of objects...
  ** - TODO: retro-fit with RefArray interface
  ** 
+ ** @warning deliberately \em not threadsafe
+ ** 
  ** @see scoped-ptrvect-test.cpp
  ** @see scoped-holder.hpp
  ** @see gui::DisplayService usage example

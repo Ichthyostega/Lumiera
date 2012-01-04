@@ -31,6 +31,8 @@
  ** 
  ** - TODO: retro-fit with RefArray interface
  ** 
+ ** @warning deliberately \em not threadsafe
+ ** 
  ** @see ScopedCollection_test
  ** @see scoped-ptrvect.hpp quite similar, but using individual heap pointers
  */
@@ -55,6 +57,7 @@
 namespace lib {
   
   namespace error = lumiera::error;
+  using error::LUMIERA_ERROR_CAPACITY;
   using error::LUMIERA_ERROR_INDEX_BOUNDS;
   
   
@@ -75,9 +78,10 @@ namespace lib {
     {
       
       /** 
-       * Wrapper to hold one Child object.
+       * Storage Frame to hold one Child object.
        * The storage will be an heap allocated
        * array of such Wrapper objects.
+       * @note doesn't manage the Child
        */
       class ElementHolder
         : boost::noncopyable
@@ -86,11 +90,6 @@ namespace lib {
           mutable char buf_[siz];
           
         public:
-          ElementHolder () { }
-         ~ElementHolder ()
-            {
-              destroy();
-            }
          
           I&
           accessObj()  const
@@ -198,9 +197,16 @@ namespace lib {
       /* ==== internal callback API for the iterator ==== */
       
       friend void
-      iterNext (const ScopedCollection*, const I* & pos)
+      iterNext (const ScopedCollection*, I* & pos)
       {
         ElementHolder* & storageLocation = reinterpret_cast<ElementHolder* &> (pos);
+        ++storageLocation;
+      }
+      
+      friend void
+      iterNext (const ScopedCollection*, const I* & pos)
+      {
+        const ElementHolder* & storageLocation = reinterpret_cast<const ElementHolder* &> (pos);
         ++storageLocation;
       }
         
@@ -212,8 +218,9 @@ namespace lib {
        *        iteration end by internal logic (\c numberz_.end() ), we
        *        immediately transform this into the official "bottom"
        */
+      template<typename POS>
       friend bool
-      hasNext (const ScopedCollection* src, const I* & pos)
+      hasNext (const ScopedCollection* src, POS & pos)
       {
         REQUIRE (src);
         if ((pos) && (pos < src->_access_end()))
@@ -224,8 +231,8 @@ namespace lib {
             return false;
       }   }
       
-      I* _access_begin() { return &elements_[0]; }
-      I* _access_end() { return &elements_[level_]; }
+      I* _access_begin() const { return & elements_[0].accessObj(); }
+      I* _access_end()   const { return & elements_[level_].accessObj(); }
       
       
       
@@ -292,6 +299,98 @@ namespace lib {
           }
       
       
+      /** push a new element of default type
+       *  to the end of this container
+       * @note EX_STRONG */
+      I& appendNewElement() { return appendNew<I>(); }
+      
+      
+      template< class TY >
+      TY&                                                  //_________________________________________
+      appendNew ()                                        ///< add object of type TY, using 0-arg ctor
+        {
+          __ensureSufficientCapacity();
+          TY& newElm = elements_[level_].template create<TY>();
+          ++level_;
+          return newElm;
+        }
+      
+      
+      template< class TY
+              , typename A1
+              >
+      TY&                                                  //_________________________________________
+      appendNew (A1& a1)                                  ///< add object of type TY, using 1-arg ctor
+        {
+          __ensureSufficientCapacity();
+          TY& newElm = elements_[level_].template create<TY>(a1);
+          ++level_;
+          return newElm;
+        }
+      
+      
+      template< class TY
+              , typename A1
+              , typename A2
+              >
+      TY&                                                  //_________________________________________
+      appendNew (A1& a1, A2& a2)                          ///< add object of type TY, using 2-arg ctor
+        {
+          __ensureSufficientCapacity();
+          TY& newElm = elements_[level_].template create<TY>(a1,a2);
+          ++level_;
+          return newElm;
+        }
+      
+      
+      template< class TY
+              , typename A1
+              , typename A2
+              , typename A3
+              >
+      TY&                                                  //_________________________________________
+      appendNew (A1& a1, A2& a2, A3& a3)                  ///< add object of type TY, using 3-arg ctor
+        {
+          __ensureSufficientCapacity();
+          TY& newElm = elements_[level_].template create<TY>(a1,a2,a3);
+          ++level_;
+          return newElm;
+        }
+      
+      
+      template< class TY
+              , typename A1
+              , typename A2
+              , typename A3
+              , typename A4
+              >
+      TY&                                                  //_________________________________________
+      appendNew (A1& a1, A2& a2, A3& a3, A4& a4)          ///< add object of type TY, using 4-arg ctor
+        {
+          __ensureSufficientCapacity();
+          TY& newElm = elements_[level_].template create<TY>(a1,a2,a3,a4);
+          ++level_;
+          return newElm;
+        }
+      
+      
+      template< class TY
+              , typename A1
+              , typename A2
+              , typename A3
+              , typename A4
+              , typename A5
+              >
+      TY&                                                  //_________________________________________
+      appendNew (A1& a1, A2& a2, A3& a3, A4& a4, A5& a5)  ///< add object of type TY, using 5-arg ctor
+        {
+          __ensureSufficientCapacity();
+          TY& newElm = elements_[level_].template create<TY>(a1,a2,a3,a4,a5);
+          ++level_;
+          return newElm;
+        }
+      
+      
       /* === Element access and iteration === */
       
       I&
@@ -317,9 +416,9 @@ namespace lib {
       
       /* ====== proxied vector functions ==================== */
       
-      size_t  size ()      const  { return level_;     }
+      size_t  size ()      const  { return level_;    }
 //    size_type  max_size ()  const  { return _Vec::max_size(); }
-//    size_type  capacity ()  const  { return _Vec::capacity(); }
+      size_t  capacity ()  const  { return capacity_; }
       bool    empty ()     const  { return 0 == level_; }
       
       
@@ -330,6 +429,13 @@ namespace lib {
 //      {
 //        UNIMPLEMENTED("raw element access");
 //      }
+      void
+      __ensureSufficientCapacity()
+        {
+          if (level_ >= capacity_)
+            throw error::State ("ScopedCollection exceeding the initially defined capacity"
+                               , LUMIERA_ERROR_CAPACITY);
+        }
       
     };
   
