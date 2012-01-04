@@ -252,7 +252,6 @@ namespace test{
         {
           CHECK (0 == Dummy::checksum());
           {
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #877
               
             int rr = rand() % 100;
             
@@ -260,43 +259,43 @@ namespace test{
             CHECK (0 == coll.size());
             CHECK (0 == Dummy::checksum());
 
-            Dummy& d0 = coll.appendNew();
+            Dummy& d0 = coll.appendNewElement();
             CHECK (1 == coll.size());
             
-            Dummy& d1 = coll.appendNew<Dummy> (r1);
+            Dummy& d1 = coll.appendNew<Dummy> (rr);
             CHECK (2 == coll.size());
 
             int sum = Dummy::checksum();
 
             // trigger the bomb
-            VERIFY_ERROR (SUBVERSIVE, coll.appendNew<SubSummy>(r1,r1) );
+            VERIFY_ERROR (SUBVERSIVE, coll.appendNew<SubDummy>(rr,rr) );
             
             CHECK (  2 == coll.size()); // the other objects survived
             CHECK (sum == Dummy::checksum());
             
-            Dummy& d2 = coll.appendNew<SubDummy> (r1, r1+1);
+            Dummy& d2 = coll.appendNew<SubDummy> (rr, rr+1);
             CHECK (3 == coll.size());
             
-            CHECK (sum + r1 == Dummy::checksum());
+            CHECK (sum + rr == Dummy::checksum());
             
-            VERIFY_ERROR (CAPACITY, coll.appendNew());
-            VERIFY_ERROR (CAPACITY, coll.appendNew());
-            VERIFY_ERROR (CAPACITY, coll.appendNew());
+            VERIFY_ERROR (CAPACITY, coll.appendNewElement());
+            VERIFY_ERROR (CAPACITY, coll.appendNewElement());
+            VERIFY_ERROR (CAPACITY, coll.appendNewElement());
             
             CHECK (3 == coll.size());
-            CHECK (sum + r1 == Dummy::checksum());
+            CHECK (sum + rr == Dummy::checksum());
             
             
             CHECK (d0.acc(11) == coll[0].getVal() + 11 );
-            CHECK (d1.acc(22) == r1 + 22);
-            CHECK (d2.acc(33) == r1 + 33);
-            CHECK (d2.acc(0)  == r1 + (r1+1) );     // SubDummy's special implementation of the acc()-function
+            CHECK (d1.acc(22) == rr + 22);
+            CHECK (d2.acc(33) == rr + 33);
+            CHECK (d2.acc(0)  == rr + (rr+1) );     // SubDummy's special implementation of the acc()-function
                                                    //  returns the trigger value, when the argument is zero
             
             coll.clear();
             coll.appendNew<SubDummy> (11,22);
             
-            CHECK (3 == coll.size());
+            CHECK ( 1 == coll.size());
             CHECK (11 == Dummy::checksum());
             
             // NOTE DANGEROUS:
@@ -305,9 +304,8 @@ namespace test{
             CHECK (d0.acc(0) == 11 + 22);
             
             // The others even point into obsoleted storage holding zombie objects
-            CHECK (d1.acc(44) == r1 + 44);
+            CHECK (d1.acc(44) == rr + 44);
             
-#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #877
           }
           CHECK (0 == Dummy::checksum());
         }

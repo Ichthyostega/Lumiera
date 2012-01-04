@@ -127,7 +127,7 @@ namespace lib {
           
           template<class TY, typename A1>
           TY&                                               //___________________________________________
-          create (A1& a1)                                  ///< place object of type TY, using 1-arg ctor
+          create (A1 a1)                                   ///< place object of type TY, using 1-arg ctor
             {
               EMBEDDED_ELEMENT_CTOR ( TY(a1) )
             }
@@ -138,7 +138,7 @@ namespace lib {
                   , typename A2
                   >
           TY&                                               //___________________________________________
-          create (A1& a1, A2& a2)                          ///< place object of type TY, using 2-arg ctor
+          create (A1 a1, A2 a2)                            ///< place object of type TY, using 2-arg ctor
             {
               EMBEDDED_ELEMENT_CTOR ( TY(a1,a2) )
             }
@@ -150,7 +150,7 @@ namespace lib {
                   , typename A3
                   >
           TY&                                               //___________________________________________
-          create (A1& a1, A2& a2, A3& a3)                  ///< place object of type TY, using 3-arg ctor
+          create (A1 a1, A2 a2, A3 a3)                     ///< place object of type TY, using 3-arg ctor
             {
               EMBEDDED_ELEMENT_CTOR ( TY(a1,a2,a3) )
             }
@@ -163,7 +163,7 @@ namespace lib {
                   , typename A4
                   >
           TY&                                               //___________________________________________
-          create (A1& a1, A2& a2, A3& a3, A4& a4)          ///< place object of type TY, using 4-arg ctor
+          create (A1 a1, A2 a2, A3 a3, A4 a4)              ///< place object of type TY, using 4-arg ctor
             {
               EMBEDDED_ELEMENT_CTOR ( TY(a1,a2,a3,a4) )
             }
@@ -177,12 +177,16 @@ namespace lib {
                   , typename A5
                   >
           TY&                                               //___________________________________________
-          create (A1& a1, A2& a2, A3& a3, A4& a4, A5& a5)  ///< place object of type TY, using 5-arg ctor
+          create (A1 a1, A2 a2, A3 a3, A4 a4, A5 a5)       ///< place object of type TY, using 5-arg ctor
             {
               EMBEDDED_ELEMENT_CTOR ( TY(a1,a2,a3,a4,a5) )
             }
 #undef EMBEDDED_ELEMENT_CTOR
         };
+      
+      
+      
+      /* ==== Storage: heap allocated array of element buffers ==== */
       
       typedef boost::scoped_array<ElementHolder> ElementStorage;
       
@@ -194,54 +198,9 @@ namespace lib {
       typedef IterAdapter<      I *, const ScopedCollection *> IterType;
       typedef IterAdapter<const I *, const ScopedCollection *> ConstIterType;
       
-      /* ==== internal callback API for the iterator ==== */
-      
-      friend void
-      iterNext (const ScopedCollection*, I* & pos)
-      {
-        ElementHolder* & storageLocation = reinterpret_cast<ElementHolder* &> (pos);
-        ++storageLocation;
-      }
-      
-      friend void
-      iterNext (const ScopedCollection*, const I* & pos)
-      {
-        const ElementHolder* & storageLocation = reinterpret_cast<const ElementHolder* &> (pos);
-        ++storageLocation;
-      }
-        
-      /** Implementation of Iteration-logic: detect iteration end.
-       *  @note the problem here is that this implementation chooses
-       *        to use two representations of "bottom" (end, invalid).
-       *        The reason is, we want the default-constructed IterAdapter
-       *        also be the "bottom" value. Thus, when we detect the
-       *        iteration end by internal logic (\c numberz_.end() ), we
-       *        immediately transform this into the official "bottom"
-       */
-      template<typename POS>
-      friend bool
-      hasNext (const ScopedCollection* src, POS & pos)
-      {
-        REQUIRE (src);
-        if ((pos) && (pos < src->_access_end()))
-          return true;
-        else
-          {
-            pos = 0;
-            return false;
-      }   }
-      
-      I* _access_begin() const { return & elements_[0].accessObj(); }
-      I* _access_end()   const { return & elements_[level_].accessObj(); }
-      
       
       
     public:
-//    typedef size_t   size_type;
-//    typedef T &      reference;
-//    typedef T const& const_reference;
-      
-      
       
      ~ScopedCollection ()
         { 
@@ -299,6 +258,7 @@ namespace lib {
           }
       
       
+      
       /** push a new element of default type
        *  to the end of this container
        * @note EX_STRONG */
@@ -320,7 +280,7 @@ namespace lib {
               , typename A1
               >
       TY&                                                  //_________________________________________
-      appendNew (A1& a1)                                  ///< add object of type TY, using 1-arg ctor
+      appendNew (A1 a1)                                   ///< add object of type TY, using 1-arg ctor
         {
           __ensureSufficientCapacity();
           TY& newElm = elements_[level_].template create<TY>(a1);
@@ -334,7 +294,7 @@ namespace lib {
               , typename A2
               >
       TY&                                                  //_________________________________________
-      appendNew (A1& a1, A2& a2)                          ///< add object of type TY, using 2-arg ctor
+      appendNew (A1 a1, A2 a2)                            ///< add object of type TY, using 2-arg ctor
         {
           __ensureSufficientCapacity();
           TY& newElm = elements_[level_].template create<TY>(a1,a2);
@@ -349,7 +309,7 @@ namespace lib {
               , typename A3
               >
       TY&                                                  //_________________________________________
-      appendNew (A1& a1, A2& a2, A3& a3)                  ///< add object of type TY, using 3-arg ctor
+      appendNew (A1 a1, A2 a2, A3 a3)                     ///< add object of type TY, using 3-arg ctor
         {
           __ensureSufficientCapacity();
           TY& newElm = elements_[level_].template create<TY>(a1,a2,a3);
@@ -365,7 +325,7 @@ namespace lib {
               , typename A4
               >
       TY&                                                  //_________________________________________
-      appendNew (A1& a1, A2& a2, A3& a3, A4& a4)          ///< add object of type TY, using 4-arg ctor
+      appendNew (A1 a1, A2 a2, A3 a3, A4 a4)              ///< add object of type TY, using 4-arg ctor
         {
           __ensureSufficientCapacity();
           TY& newElm = elements_[level_].template create<TY>(a1,a2,a3,a4);
@@ -382,13 +342,14 @@ namespace lib {
               , typename A5
               >
       TY&                                                  //_________________________________________
-      appendNew (A1& a1, A2& a2, A3& a3, A4& a4, A5& a5)  ///< add object of type TY, using 5-arg ctor
+      appendNew (A1 a1, A2 a2, A3 a3, A4 a4, A5 a5)       ///< add object of type TY, using 5-arg ctor
         {
           __ensureSufficientCapacity();
           TY& newElm = elements_[level_].template create<TY>(a1,a2,a3,a4,a5);
           ++level_;
           return newElm;
         }
+      
       
       
       /* === Element access and iteration === */
@@ -403,32 +364,23 @@ namespace lib {
                              , LUMIERA_ERROR_INDEX_BOUNDS);
         }
       
+      
+      
       typedef IterType      iterator;
       typedef ConstIterType const_iterator;
       
-      iterator       begin ()       { return iterator       (this, _access_begin()); }
-      const_iterator begin () const { return const_iterator (this, _access_begin()); }
-      iterator       end ()         { return iterator();       }
-      const_iterator end ()   const { return const_iterator(); }
+      iterator       begin()       { return iterator       (this, _access_begin()); }
+      const_iterator begin() const { return const_iterator (this, _access_begin()); }
+      iterator       end ()        { return iterator();       }
+      const_iterator end ()  const { return const_iterator(); }
       
       
-      
-      
-      /* ====== proxied vector functions ==================== */
-      
-      size_t  size ()      const  { return level_;    }
-//    size_type  max_size ()  const  { return _Vec::max_size(); }
-      size_t  capacity ()  const  { return capacity_; }
-      bool    empty ()     const  { return 0 == level_; }
+      size_t  size ()        const { return level_;      }
+      size_t  capacity ()    const { return capacity_;   }
+      bool    empty ()       const { return 0 == level_; }
       
       
     private:
-//    /** @internal element access, including range and null check */
-//    T*
-//    get (size_type i)
-//      {
-//        UNIMPLEMENTED("raw element access");
-//      }
       void
       __ensureSufficientCapacity()
         {
@@ -436,6 +388,45 @@ namespace lib {
             throw error::State ("ScopedCollection exceeding the initially defined capacity"
                                , LUMIERA_ERROR_CAPACITY);
         }
+      
+      
+      /* ==== internal callback API for the iterator ==== */
+      
+      /** Iteration-logic: switch to next position
+       * @note assuming here that the start address of the embedded object
+       *       coincides with the start of an array element (ElementHolder)
+       */
+      friend void
+      iterNext (const ScopedCollection*, I* & pos)
+      {
+        ElementHolder* & storageLocation = reinterpret_cast<ElementHolder* &> (pos);
+        ++storageLocation;
+      }
+      
+      friend void
+      iterNext (const ScopedCollection*, const I* & pos)
+      {
+        const ElementHolder* & storageLocation = reinterpret_cast<const ElementHolder* &> (pos);
+        ++storageLocation;
+      }
+      
+      /** Iteration-logic: detect iteration end. */
+      template<typename POS>
+      friend bool
+      hasNext (const ScopedCollection* src, POS & pos)
+      {
+        REQUIRE (src);
+        if ((pos) && (pos < src->_access_end()))
+          return true;
+        else
+          {
+            pos = 0;
+            return false;
+      }   }
+      
+      
+      I* _access_begin() const { return & elements_[0].accessObj(); }
+      I* _access_end()   const { return & elements_[level_].accessObj(); }
       
     };
   
