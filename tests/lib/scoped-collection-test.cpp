@@ -75,7 +75,6 @@ namespace test{
   
   
   using util::isnil;
-//using std::tr1::placeholders::_1;                     /////////////////////////////TODO
   using lumiera::error::LUMIERA_ERROR_ITER_EXHAUST;
   
   typedef ScopedCollection<Dummy> CollD;
@@ -115,7 +114,7 @@ namespace test{
             CHECK (!isnil (container));
             CHECK (5 == container.size());
             CHECK (0 != Dummy::checksum());
-
+            
             container.clear();
             CHECK (isnil (container));
             CHECK (0 == container.size());
@@ -179,46 +178,64 @@ namespace test{
           }
           CHECK (0 == Dummy::checksum());
         }
+        
+        
+        /** Functor to populate the Collection */
+        class Populator
+          {
+            uint i_;
+            int off_;
+            int trigg_;
+            
+          public:
+            Populator (int baseOffset, int triggerCode)
+              : i_(0)
+              , off_(baseOffset)
+              , trigg_(triggerCode)
+              { }
+            
+            void
+            operator() (CollD::ElementHolder& storage)
+              {
+                switch (i_ % 2) 
+                  {
+                  case 0:
+                    storage.create<Dummy> (i_+off_);
+                    break;
+                    
+                  case 1:
+                    storage.create<SubDummy> (i_+off_, trigg_);
+                    break;
+                  }
+                ++i_;
+              }
+          };
       
-      
+      /** @test using the ScopedCollection according to the RAII pattern.
+       * For this usage style, the collection is filled right away, during
+       * construction. If anything goes wrong, the whole collection is
+       * cleared and invalidated. Consequently there is no tangible "lifecycle"
+       * at the usage site. Either the collection is fully usable, or not at all.
+       * This requires the client to provide a functor (callback) to define
+       * the actual objects to be created within the ScopedCollection. These
+       * may as well be subclasses of the base type I, provided the general
+       * element storage size #siz was chosen sufficiently large to hold
+       * those subclass instances.
+       * 
+       * This test demonstrates the most elaborate usage pattern, where
+       * the client provides a full blown functor object, which even
+       * has embedded state. But, generally speaking, anything
+       * exposing a suitable function call operator is acceptable.
+       */
       void
       building_RAII_Style()
         {
           CHECK (0 == Dummy::checksum());
           {
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #877
-                        /** Functor to populate the Collection */
-                        class Populator
-                          {
-                            uint i_;
-                            int off_;
-                            
-                          public:
-                            Populator (int baseOffset)
-                              : i_(0)
-                              , off_(baseOffset)
-                              { }
-                            
-                            void
-                            operator() (int specialOffset, void* storage)
-                              {
-                                switch (i_ % 2) 
-                                  {
-                                  case 0:
-                                    new(storage) Dummy(i_+off_);
-                                    break;
-                                    
-                                  case 1:
-                                    new(storage) SubDummy(i_+off_, specialOffset);
-                                    break;
-                              }   }
-                          };
-            
-            
             int rr = rand() % 100;
             int trigger = 101;
             
-            CollD coll (6, Populator(rr), trigger, _1 );
+            CollD coll (6, Populator(rr, trigger));
             
             CHECK (!isnil (coll));
             CHECK (6 == coll.size());
@@ -237,16 +254,25 @@ namespace test{
             // Verify Error handling while in creation:
             // SubDummy explodes on equal ctor parameters
             // which here happens for i==7
-            VERIFY_ERROR (SUBVERSIVE, CollD(10, Populator(0), 7, _1 ) );
+            VERIFY_ERROR (SUBVERSIVE, CollD(10, Populator(0, 7)) );
             
             // any already created object was properly destroyed
             CHECK (0 == Dummy::checksum());
-#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #877
+            
           }
           CHECK (0 == Dummy::checksum());
         }
       
       
+      /** @test using the ScopedCollection to hold a variable
+       * and possibly increasing number of elements, within the
+       * fixed limits of the maximum capacity defined by the
+       * ctor parameter. Any new elements will be created
+       * behind the already existing objects. In case
+       * of failure while creating an element, only
+       * this element gets destroyed, the rest of
+       * the container remains intact.
+       */
       void
       building_StackStyle()
         {
@@ -258,15 +284,15 @@ namespace test{
             CollD coll(3);
             CHECK (0 == coll.size());
             CHECK (0 == Dummy::checksum());
-
+            
             Dummy& d0 = coll.appendNewElement();
             CHECK (1 == coll.size());
             
             Dummy& d1 = coll.appendNew<Dummy> (rr);
             CHECK (2 == coll.size());
-
+            
             int sum = Dummy::checksum();
-
+            
             // trigger the bomb
             VERIFY_ERROR (SUBVERSIVE, coll.appendNew<SubDummy>(rr,rr) );
             

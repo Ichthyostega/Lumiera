@@ -64,7 +64,7 @@ namespace lib {
   
   /**
    * A fixed collection of noncopyable polymorphic objects.
-
+   * 
    * All child objects reside in a common chunk of storage
    * and are owned and managed by this collection holder.
    * Array style access and iteration.
@@ -77,6 +77,7 @@ namespace lib {
     : boost::noncopyable
     {
       
+    public:
       /** 
        * Storage Frame to hold one Child object.
        * The storage will be an heap allocated
@@ -103,11 +104,6 @@ namespace lib {
               accessObj().~I();
             }
           
-          I&
-          operator* ()  const
-            {
-              return accessObj();
-            }
           
           
           
@@ -186,21 +182,8 @@ namespace lib {
       
       
       
-      /* ==== Storage: heap allocated array of element buffers ==== */
-      
-      typedef boost::scoped_array<ElementHolder> ElementStorage;
-      
-      size_t level_;
-      size_t capacity_;
-      ElementStorage elements_;
       
       
-      typedef IterAdapter<      I *, const ScopedCollection *> IterType;
-      typedef IterAdapter<const I *, const ScopedCollection *> ConstIterType;
-      
-      
-      
-    public:
       
      ~ScopedCollection ()
         { 
@@ -219,10 +202,19 @@ namespace lib {
         : level_(0)
         , capacity_(maxElements)
         , elements_(new ElementHolder[maxElements])
-        { 
-          UNIMPLEMENTED ("use the builder to populate the elements right away");
-        }
-      
+        {
+        try { 
+          while (level_ < capacity_)
+            {
+              ElementHolder& storageFrame (elements_[level_]);
+              builder (storageFrame);
+              ++level_;
+            }}
+        catch(...)
+          {
+            clear();
+            throw;
+        } }   
       
       
       void
@@ -366,8 +358,9 @@ namespace lib {
       
       
       
-      typedef IterType      iterator;
-      typedef ConstIterType const_iterator;
+      typedef IterAdapter<      I *, const ScopedCollection *> iterator;
+      typedef IterAdapter<const I *, const ScopedCollection *> const_iterator;
+      
       
       iterator       begin()       { return iterator       (this, _access_begin()); }
       const_iterator begin() const { return const_iterator (this, _access_begin()); }
@@ -380,7 +373,18 @@ namespace lib {
       bool    empty ()       const { return 0 == level_; }
       
       
+      
     private:
+      /* ==== Storage: heap allocated array of element buffers ==== */
+      
+      typedef boost::scoped_array<ElementHolder> ElementStorage;
+      
+      size_t level_;
+      size_t capacity_;
+      ElementStorage elements_;
+      
+      
+      
       void
       __ensureSufficientCapacity()
         {
