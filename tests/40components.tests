@@ -617,7 +617,7 @@ out: ^\.throw some exceptions...
 END
 
 
-PLANNED "Managed Collection (I)" ScopedCollection_test <<END
+TEST "Managed Collection (I)" ScopedCollection_test <<END
 return: 0
 END
 

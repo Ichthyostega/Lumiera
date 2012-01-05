@@ -29,8 +29,35 @@
  ** The storage holding all those child objects is allocated in one chunk
  ** and never adjusted.
  ** 
- ** - TODO: retro-fit with RefArray interface
+ ** \par usage patterns
+ ** The common ground for all usage of this container is to hold and some
+ ** with exclusive ownership; when the enclosing container goes out of scope,
+ ** all the dtors of the embedded objects will be invoked. Frequently this
+ ** side effect is the reason for using the container: we want to own some
+ ** resource handles to be available exactly as long as the managing object
+ ** needs and accesses them.
  ** 
+ ** There are two different usage patterns for populating a ScopedCollection
+ ** - the "stack style" usage creates an empty container (using the one arg
+ **   ctor just to specify the maximum size). The storage to hold up to this
+ **   number of objects is (heap) allocated right away, but no objects are
+ **   created. Later on, individual objects are "pushed" into the collection
+ **   by invoking #appendNewElement() to create a new element of the default
+ **   type I) or #appendNew<Type>(args) to create some subtype. This way,
+ **   the container is being filled successively.
+ ** - the "RAII style" usage strives to create all of the content objects
+ **   right away, immediately after the memory allocation. This usage pattern
+ **   avoids any kind of "lifecylce state". Either the container comes up sane
+ **   and fully populated, or the ctor call fails and any already created
+ **   objects are discarded.
+ ** @note intentionally there is no operation to discard individual objects,
+ **       all you can do is to #clear() the whole container.
+ ** @note the container can hold instances of a subclass of the type defined
+ **       by the template parameter I. But you need to ensure in this case
+ **       that the defined buffer size for each element (2nt template parameter)
+ **       is sufficient to hold any of these subclass instances. This condition
+ **       is protected by a static assertion (compilation failure). 
+ ** @warning when using subclasses, a virtual dtor is mandatory
  ** @warning deliberately \em not threadsafe
  ** 
  ** @see ScopedCollection_test
@@ -52,6 +79,8 @@
 #include <boost/noncopyable.hpp>
 #include <boost/scoped_array.hpp>
 #include <boost/static_assert.hpp>
+#include <boost/type_traits/is_same.hpp>
+#include <boost/type_traits/is_base_of.hpp>
 
 
 namespace lib {
@@ -87,7 +116,7 @@ namespace lib {
       class ElementHolder
         : boost::noncopyable
         {
-      
+          
           mutable char buf_[siz];
           
         public:
@@ -107,9 +136,13 @@ namespace lib {
           
           
           
-          /** Abbreviation for placement new */ 
+#define TYPE_SANITY_CHECK \
+              BOOST_STATIC_ASSERT ((boost::is_base_of<I,TY>::value || boost::is_same<I,TY>::value))
+          
+          
+          /** Abbreviation for placement new */
 #define EMBEDDED_ELEMENT_CTOR(_CTOR_CALL_)    \
-              BOOST_STATIC_ASSERT (siz >= sizeof(TY));\
+              TYPE_SANITY_CHECK;               \
               return *new(&buf_) _CTOR_CALL_;   \
           
           
@@ -178,6 +211,7 @@ namespace lib {
               EMBEDDED_ELEMENT_CTOR ( TY(a1,a2,a3,a4,a5) )
             }
 #undef EMBEDDED_ELEMENT_CTOR
+#undef TYPE_SANITY_CHECK
         };
       
       
@@ -197,6 +231,13 @@ namespace lib {
         , elements_(new ElementHolder[maxElements])
         { }
       
+      /** creating a ScopedCollection in RAII-style:
+       *  The embedded elements will be created immediately.
+       *  Ctor fails in case of any error during element creation.
+       * @param builder functor to be invoked for each "slot".
+       *        It gets an ElementHolder& as parameter, and should
+       *        use this to create an object of some I-subclass
+       */
       template<class CTOR>
       ScopedCollection (size_t maxElements, CTOR builder)
         : level_(0)
@@ -216,6 +257,22 @@ namespace lib {
             throw;
         } }   
       
+      /* == some pre-defined Builders == */
+      
+      class FillAll;           ///< fills the ScopedCollection with default constructed I-instances
+      
+      template<typename TY>
+      class FillWith;          ///< fills the ScopedCollection with default constructed TY-instances
+      
+      template<typename IT>
+      class PullFrom;          ///< fills by copy-constructing values pulled from the iterator IT
+      
+      template<typename IT>
+      static PullFrom<IT>
+      pull (IT iter)           ///< convenience shortcut to pull from any given Lumiera Forward Iterator
+        {
+          return PullFrom<IT> (iter);
+        }
       
       void
       clear()
@@ -434,6 +491,72 @@ namespace lib {
       
     };
   
+  
+  
+  
+  /* === Supplement: pre-defined element builders === */
+  
+  /** \par usage
+   * Pass an instance of this builder functor as 2nd parameter
+   * to ScopedCollections's ctor. (an anonymous instance is OK).
+   * Using this variant of the compiler switches the collection to RAII-style:
+   * It will immediately try to create all the embedded objects, invoking this
+   * builder functor for each "slot" to hold such an embedded object. Actually,
+   * this "slot" is an ElementHolder instance, which provides functions for
+   * placement-creating objects into this embedded buffer.
+   */
+  template<class I, size_t siz>
+  class ScopedCollection<I,siz>::FillAll
+    {
+    public:
+      void
+      operator() (typename ScopedCollection<I,siz>::ElementHolder& storage)
+        {
+          storage.template create<I>();
+        }
+    };
+  
+  template<class I, size_t siz>
+  template<typename TY>
+  class ScopedCollection<I,siz>::FillWith
+    {
+    public:
+      void
+      operator() (typename ScopedCollection<I,siz>::ElementHolder& storage)
+        {
+          storage.template create<TY>();
+        }
+    };
+  
+  /** \par usage
+   * This variant allows to "pull" elements from an iterator.
+   * Actually, the collection will try to create each element right away,
+   * by invoking the copy ctor and passing the value yielded by the iterator.
+   * @note anything in accordance to the Lumera Forward Iterator pattern is OK.
+   *       This rules out just passing a plain STL iterator (because these can't
+   *       tell for themselves when they're exhausted). Use an suitable iter-adapter
+   *       instead, e.g. by invoking lib::iter_stl::eachElm(stl_container) 
+   */
+  template<class I, size_t siz>
+  template<typename IT>
+  class ScopedCollection<I,siz>::PullFrom
+    {
+      IT iter_;
+      
+      typedef typename iter::TypeBinding<IT>::value_type ElementType;
+      
+    public:
+      PullFrom (IT source)
+        : iter_(source)
+        { }
+      
+      void
+      operator() (typename ScopedCollection<I,siz>::ElementHolder& storage)
+        {
+          storage.template create<ElementType> (*iter_);
+          ++iter_;
+        }
+    };
   
   
   

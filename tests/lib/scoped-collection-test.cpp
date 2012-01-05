@@ -67,8 +67,20 @@ namespace test{
             if (trigger == getVal())
               throw new error::Fatal ("Subversive Bomb", LUMIERA_ERROR_SUBVERSIVE);
           }
+        
+        SubDummy()
+          : Dummy()
+          , trigger_(-1)
+          { }
       };
     
+    
+    inline uint
+    sum (uint n)
+    {
+      return n*(n+1) / 2; 
+    }
+      
   }//(End) subversive test data
   
   
@@ -97,6 +109,8 @@ namespace test{
           building_RAII_Style();
           building_StackStyle();
           iterating();
+          verify_defaultPopulator();
+          verify_iteratorPopulator();
         }
       
       
@@ -178,90 +192,6 @@ namespace test{
           }
           CHECK (0 == Dummy::checksum());
         }
-        
-        
-        /** Functor to populate the Collection */
-        class Populator
-          {
-            uint i_;
-            int off_;
-            int trigg_;
-            
-          public:
-            Populator (int baseOffset, int triggerCode)
-              : i_(0)
-              , off_(baseOffset)
-              , trigg_(triggerCode)
-              { }
-            
-            void
-            operator() (CollD::ElementHolder& storage)
-              {
-                switch (i_ % 2) 
-                  {
-                  case 0:
-                    storage.create<Dummy> (i_+off_);
-                    break;
-                    
-                  case 1:
-                    storage.create<SubDummy> (i_+off_, trigg_);
-                    break;
-                  }
-                ++i_;
-              }
-          };
-      
-      /** @test using the ScopedCollection according to the RAII pattern.
-       * For this usage style, the collection is filled right away, during
-       * construction. If anything goes wrong, the whole collection is
-       * cleared and invalidated. Consequently there is no tangible "lifecycle"
-       * at the usage site. Either the collection is fully usable, or not at all.
-       * This requires the client to provide a functor (callback) to define
-       * the actual objects to be created within the ScopedCollection. These
-       * may as well be subclasses of the base type I, provided the general
-       * element storage size #siz was chosen sufficiently large to hold
-       * those subclass instances.
-       * 
-       * This test demonstrates the most elaborate usage pattern, where
-       * the client provides a full blown functor object, which even
-       * has embedded state. But, generally speaking, anything
-       * exposing a suitable function call operator is acceptable.
-       */
-      void
-      building_RAII_Style()
-        {
-          CHECK (0 == Dummy::checksum());
-          {
-            int rr = rand() % 100;
-            int trigger = 101;
-            
-            CollD coll (6, Populator(rr, trigger));
-            
-            CHECK (!isnil (coll));
-            CHECK (6 == coll.size());
-            CHECK (0 != Dummy::checksum());
-            
-            CHECK (coll[0].acc(0) == 0 + rr);
-            CHECK (coll[1].acc(0) == 1 + rr + trigger);
-            CHECK (coll[2].acc(0) == 2 + rr);
-            CHECK (coll[3].acc(0) == 3 + rr + trigger);
-            CHECK (coll[4].acc(0) == 4 + rr);
-            CHECK (coll[5].acc(0) == 5 + rr + trigger);
-            
-            coll.clear();
-            CHECK (0 == Dummy::checksum());
-            
-            // Verify Error handling while in creation:
-            // SubDummy explodes on equal ctor parameters
-            // which here happens for i==7
-            VERIFY_ERROR (SUBVERSIVE, CollD(10, Populator(0, 7)) );
-            
-            // any already created object was properly destroyed
-            CHECK (0 == Dummy::checksum());
-            
-          }
-          CHECK (0 == Dummy::checksum());
-        }
       
       
       /** @test using the ScopedCollection to hold a variable
@@ -335,7 +265,159 @@ namespace test{
           }
           CHECK (0 == Dummy::checksum());
         }
+        
+        
+      /** @test using the ScopedCollection according to the RAII pattern.
+       * For this usage style, the collection is filled right away, during
+       * construction. If anything goes wrong, the whole collection is
+       * cleared and invalidated. Consequently there is no tangible "lifecycle"
+       * at the usage site. Either the collection is fully usable, or not at all.
+       * This requires the client to provide a functor (callback) to define
+       * the actual objects to be created within the ScopedCollection. These
+       * may as well be subclasses of the base type I, provided the general
+       * element storage size #siz was chosen sufficiently large to hold
+       * those subclass instances.
+       * 
+       * This test demonstrates the most elaborate usage pattern, where
+       * the client provides a full blown functor object #Populator,
+       * which even has embedded state. Generally speaking, anything
+       * exposing a suitable function call operator is acceptable.
+       */
+      void
+      building_RAII_Style()
+        {
+          CHECK (0 == Dummy::checksum());
+          {
+            int rr = rand() % 100;
+            int trigger = 101;
+            
+            CollD coll (6, Populator(rr, trigger));
+            
+            CHECK (!isnil (coll));
+            CHECK (6 == coll.size());
+            CHECK (0 != Dummy::checksum());
+            
+            CHECK (coll[0].acc(0) == 0 + rr);
+            CHECK (coll[1].acc(0) == 1 + rr + trigger);
+            CHECK (coll[2].acc(0) == 2 + rr);
+            CHECK (coll[3].acc(0) == 3 + rr + trigger);
+            CHECK (coll[4].acc(0) == 4 + rr);
+            CHECK (coll[5].acc(0) == 5 + rr + trigger);
+            
+            coll.clear();
+            CHECK (0 == Dummy::checksum());
+            
+            // Verify Error handling while in creation:
+            // SubDummy explodes on equal ctor parameters
+            // which here happens for i==7
+            VERIFY_ERROR (SUBVERSIVE, CollD(10, Populator(0, 7)) );
+            
+            // any already created object was properly destroyed
+            CHECK (0 == Dummy::checksum());
+            
+          }
+          CHECK (0 == Dummy::checksum());
+        }
+      
+      /** Functor to populate the Collection */
+      class Populator
+        {
+          uint i_;
+          int off_;
+          int trigg_;
+          
+        public:
+          Populator (int baseOffset, int triggerCode)
+            : i_(0)
+            , off_(baseOffset)
+            , trigg_(triggerCode)
+            { }
+          
+          void
+          operator() (CollD::ElementHolder& storage)
+            {
+              switch (i_ % 2) 
+                {
+                case 0:
+                  storage.create<Dummy> (i_+off_);
+                  break;
+                  
+                case 1:
+                  storage.create<SubDummy> (i_+off_, trigg_);
+                  break;
+                }
+              ++i_;
+            }
+        };
+      
+      
+      
+      /** @test for using ScopedCollection in RAII style,
+       * several pre-defined "populators" are provided.
+       * The most obvious one being just to fill the
+       * collection with default constructed objects.
+       */
+      void
+      verify_defaultPopulator()
+        {
+          CHECK (0 == Dummy::checksum());
+          
+          CollD coll (25, CollD::FillAll() );
+          
+          CHECK (!isnil (coll));
+          CHECK (25 == coll.size());
+          CHECK (0 != Dummy::checksum());
+          
+          for (CollD::iterator ii = coll.begin(); ii; ++ii)
+            {
+              CHECK ( INSTANCEOF (Dummy,    & (*ii)));
+              CHECK (!INSTANCEOF (SubDummy, & (*ii)));
+            }
+        }
+      
+      
+      void
+      verify_subclassPopulator()
+        {
+          CHECK (0 == Dummy::checksum());
+          
+          CollD coll (25, CollD::FillWith<SubDummy>() );
+          
+          CHECK (!isnil (coll));
+          CHECK (25 == coll.size());
+          CHECK (0 != Dummy::checksum());
+          
+          for (CollD::iterator ii = coll.begin(); ii; ++ii)
+            CHECK (INSTANCEOF (SubDummy, & (*ii)));
+        }
+      
+      
+      void
+      verify_iteratorPopulator()
+        {
+          typedef ScopedCollection<uint> CollI;
+          
+          CollI source (25);
+          for (uint i=0; i < source.capacity(); ++i)
+            source.appendNew<uint>(i);           // holding the numbers 0..24
+          
+          CollI coll (20, CollI::pull(source.begin()));
+                                              // this immediately pulls in the first 20 elements 
+          CHECK (!isnil (coll));
+          CHECK (20 == coll.size());
+          CHECK (25 == source.size());
+          
+          for (uint i=0; i < coll.size(); ++i)
+            {
+              CHECK (coll[i] == i        );
+              CHECK (coll[i] == source[i]);
+            }
+          
+          // note: the iterator is assumed to deliver a sufficient amount of elements
+          VERIFY_ERROR (ITER_EXHAUST, CollI (50, CollI::pull (source.begin())));
+        }
     };
+  
   
   
   LAUNCHER (ScopedCollection_test, "unit common");
