@@ -796,8 +796,8 @@ namespace func{
   /*  ========== function-style interface =============  */
   
   /** build a TupleApplicator, which embodies the given
-   *  argument tuple and can be used to apply various
-   *  functions to them.
+   *  argument tuple and can be used to apply them
+   *  to various functions repeatedly.
    */
   template<typename ARG>
   typename _Sig<void, ARG>::Applicator
