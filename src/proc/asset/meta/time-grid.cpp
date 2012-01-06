@@ -75,6 +75,8 @@ namespace meta {
      * from the AssetManager, then attach a further
      * smart-ptr-to-Quantiser to that, which then can be
      * published via the \link advice.hpp "advice system"\endlink
+     * @note this allows to use a time grid just "by name",
+     *       without explicit dependance to the Session / Assets
      */
     inline PGrid
     publishWrapped (TimeGrid& newGrid)

@@ -404,7 +404,7 @@ namespace lib {
       /* === Element access and iteration === */
       
       I&
-      operator[] (size_t index)
+      operator[] (size_t index)  const
         {
           if (index < level_)
             return elements_[index].accessObj();
