@@ -670,17 +670,58 @@ _tbw_
 
 Iterators
 ~~~~~~~~~
+Iterators serve to decouple a collection of elements from the actual data type
+implementation used to manage those elements. The use of iterators is a
+design pattern.
+-> see link:{ldoc}/technical/library/iterator.html[detailed library documentation]
+
 Lumiera Forward Iterator
 ^^^^^^^^^^^^^^^^^^^^^^^^
-_tbw_
+Within Lumiera, we don't treat _Iterator_ as a base class -- we treat it as a  _concept_
+for generic programming, similar to the usage in the STL. But we use our own definition
+of the iterator concept, placing the primary focus on interfaces and decoupling.
+Our ``Lumiera Forward Iterator'' concept deliberately removes most of the features
+known from the STL. Rather, such an iterator is just the promise for pulling values
+_once_. The iterator can be disposed when _exhausted_ -- there is no way of resetting,
+moving backwards or doing any kind of arithmetic with such an object. The _exhausted
+state can be detected by a +bool+ conversion (contrast this with STL iterators, where
+you need to compare to an +end+ iterator). Beyond that, the usage is quite similar,
+even compatible to +std::for_each+. 
 
 Iterator Adapters
 ^^^^^^^^^^^^^^^^^
-_tbw_
+We provide a collection of pre defined adapter templates to ease building
+Lumiera Forward Iterators.
+
+- a generic solution using a _iteration control_ callback API
+- the `lib::RangeIter` just wraps up a pair of iterators for ``current position''
+  and ``and'' -- compatible with the STL
+- there is a variant for automatically dereferencing pointers
+- plus a set of adapters for STL containers, allowing to expose each value, each
+  key, distinct values and so on.
+
+Iterator Adapters are designed for ease of use, they don't conceal the underlying
+implementation (and the actual type is often quite convoluted).
+
+Iteration Sources
+^^^^^^^^^^^^^^^^^
+To the contrary, the `lib::IterSource<TY>` template is an abstract base class.
+This allows to expose the promise to deliver values through any kind of API, without
+disclosing the actual implementation. Obviously, this requires the use of virtual
+functions for the actual iteration.
+
+Again, there are pre-defined adaptors for STL containers, but the actual container
+is concealed in this case.
 
 Itertools
 ^^^^^^^^^
-_tbw_
+Iterators can be used to build pipelines. This technique from functional programming
+allows to abstract away the actual iteration completely, focussing only on the way
+individual elements are processed. To support this programming style, several support
+templates are provided to build _filtering iterators, transforming iterators,_ to pick
+only _unique values,_ to _take a snapshot on-the-fly_ etc. There are convenience
+builder functions for those operations, figuring out the actual source and destination
+types by template metaprogramming.
 
 
 Front-end for boost::format

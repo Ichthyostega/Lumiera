@@ -149,6 +149,12 @@ for the most common STL containers, plus Map, key and value extractors.
 
 Ichthyostega:: 'Sa 16 Apr 2011 00:20:13 CEST' 
 
+minor change: removed support for post-increment. It doesn't fit with the concept
+and caused serious problems in practice. A correct implementation of post-increment
+would require a ``deep copy'' of any underlying data structures.
+
+Ichthyostega:: 'Sa 07 Jan 2012 21:49:09 CET' ~<prg@ichthyostega.de>~ 
+
 
 //endof_comments:
 
