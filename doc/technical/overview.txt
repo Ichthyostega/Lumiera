@@ -743,7 +743,7 @@ implementation confined to a single translation unit, while still being able
 to use all primitive types as usual with boost::format or printf. Additionally,
 our frontend automatically invokes a custom or built-in string conversion, if
 applicable, it dereferences pointers and catches all errors encountered while
-the formatting. So it's well suited for usage in error handling code.
+in formatting. So it's well suited for usage in error handling code.
 
 [source,C]
 ------------------------------------------------------------
@@ -776,7 +776,18 @@ objects also implement a front-end interface for client access.
 _tbw_
 
 .ownership managing collection
-_tbw_
+When implementing services, frequently we encountered the situation that
+a manager object creates and owns some component elements or sub-services.
+The library provides two special collections, which also take ownership
+of their contents and care for automatic clean-up. Especially, contrary
+to the STL containers, those custom containers support use of
+_non-copyable object_ (as a rule, all objects with reference semantics
+are defined non-copyable in Lumiera).
+
+- the `ScopedPtrVect` is a vector taking ownership of heap allocated objects
+- the `ScopedCollection` is a fixed-size collection, holding all the child
+  objects within a single (heap allocated) storage block
+
 
 .opaque holder
 There is a family of holder objects, all based on placement-new of the 
@@ -793,7 +804,8 @@ fit well with the chosen approach to object orientation, where polymorphism reli
 on reference semantics. Thus, most of the fundamental design patterns drive us into
 having an object manager somewhere hidden within the implementation level, to
 manage the memory for maintaining the subclass instances to be concealed
-at the usage site. +
+at the usage site.
+
 To avoid this dilemma, we utilise the technique of the opaque holder to provide
 objects with value semantics, while actually placing the instance of a subclass
 into the inline buffer. Clients access this embedded object by automatic type
