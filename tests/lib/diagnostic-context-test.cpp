@@ -1,5 +1,5 @@
 /*
-  DiagrnsticContext(Test)  -  verify thread local stack for collecting diagnostics 
+  DiagnosticContext(Test)  -  verify thread local stack for collecting diagnostics 
 
   Copyright (C)         Lumiera.org
     2011,               Hermann Vosseler <Ichthyostega@web.de>
@@ -39,8 +39,9 @@ namespace test{
   
   namespace { // private test setup...
     
+                             /* WARNING: memory hungry */
     const uint NUM_THREADS = 40;
-    const uint MAX_RAND    = 1000*1000;
+    const uint MAX_RAND    = 100*1000;
     
     inline bool
     isOdd (uint val)
@@ -80,7 +81,7 @@ namespace test{
    * @see lib::ThreadLocal
    * @see backend::Thread
    */
-  class DiagrnsticContext_test : public Test
+  class DiagnosticContext_test : public Test
     {
       
       virtual void
@@ -147,6 +148,9 @@ namespace test{
        * take a snapshot of the full ContextStack and then unwind.
        * Thus the captured numbers must from a decreasing sequence
        * of odd values.
+       * @warning this test case causes memory pressure.
+       *          The reason seems to be the frequent re-allocations
+       *          of the vector used to take the snapshots 
        */
       void
       verify_heavilyParallelUsage()
@@ -206,7 +210,7 @@ namespace test{
   
   
   /** Register this test class... */
-  LAUNCHER (DiagrnsticContext_test, "function common");
+  LAUNCHER (DiagnosticContext_test, "function common");
   
   
   

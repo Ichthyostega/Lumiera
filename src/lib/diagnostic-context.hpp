@@ -124,6 +124,10 @@ namespace lib {
        *         on the thread-local diagnostic stack. Might
        *         be empty. Values start with frame next to
        *         the current scope and end with outermost.
+       * @warning can be inefficient on very large stacks
+       * @todo benchmark and improve the data structure
+       *       used for the snapshot. Vector is not
+       *       an optimal choice here.
        */
       static ValSequence
       extractStack()

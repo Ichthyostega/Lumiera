@@ -679,7 +679,7 @@ return: 0
 END
 
 
-TEST "Thread-local diagnostic context" DiagrnsticContext_test  <<END
+TEST "Thread-local diagnostic context" DiagnosticContext_test  <<END
 return: 0
 END
 
