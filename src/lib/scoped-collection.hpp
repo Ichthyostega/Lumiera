@@ -257,6 +257,33 @@ namespace lib {
             throw;
         } }   
       
+      /** variation of RAII-style: using a builder function,
+       *  which is a member of some object. This supports the
+       *  typical usage situation, where a manager object builds
+       *  a ScopedCollection of some components
+       * @param builder member function used to create the elements
+       * @param instance the owning class instance, on which the 
+       *        builder member function will be invoked ("this").
+       */
+      template<class TY>
+      ScopedCollection (size_t maxElements, void (TY::*builder) (ElementHolder&), TY * const instance)
+        : level_(0)
+        , capacity_(maxElements)
+        , elements_(new ElementHolder[maxElements])
+        {
+        try { 
+          while (level_ < capacity_)
+            {
+              ElementHolder& storageFrame (elements_[level_]);
+              (instance->*builder) (storageFrame);
+              ++level_;
+            }}
+        catch(...)
+          {
+            clear();
+            throw;
+        } }   
+      
       /* == some pre-defined Builders == */
       
       class FillAll;           ///< fills the ScopedCollection with default constructed I-instances

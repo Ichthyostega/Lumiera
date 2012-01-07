@@ -111,6 +111,7 @@ namespace test{
           iterating();
           verify_defaultPopulator();
           verify_iteratorPopulator();
+          verify_embeddedCollection();
         }
       
       
@@ -416,6 +417,54 @@ namespace test{
           // note: the iterator is assumed to deliver a sufficient amount of elements
           VERIFY_ERROR (ITER_EXHAUST, CollI (50, CollI::pull (source.begin())));
         }
+      
+      
+      /** @test simulate the typical situation of a manager
+       * owning some embedded components. Here, our ManagerDemo
+       * instance owns a collection of numbers 50..1. They are
+       * created right while initialising the manager, and this
+       * initialisation is done by invoking a member function
+       * of the manager
+       */
+      void
+      verify_embeddedCollection()
+        {
+          ManagerDemo object_with_embedded_Collection(50);
+          CHECK (sum(50) == object_with_embedded_Collection.useMyNumbers());
+        }
+      
+      class ManagerDemo
+        {
+          typedef ScopedCollection<uint> CollI;
+          
+          uint memberVar_;
+          const CollI my_own_Numbers_;
+          
+          void
+          buildNumbers (CollI::ElementHolder& storage)
+            {
+              storage.create<uint>(memberVar_);
+              --memberVar_;
+            }
+          
+        public:
+          ManagerDemo(uint cnt)
+            : memberVar_(cnt)
+            , my_own_Numbers_(cnt, &ManagerDemo::buildNumbers, this)
+            { 
+              CHECK (0 == memberVar_);
+              CHECK (cnt == my_own_Numbers_.size());
+            }
+          
+          uint
+          useMyNumbers()
+            {
+              uint sum(0);
+              for (CollI::const_iterator ii = my_own_Numbers_.begin(); ii; ++ii)
+                sum += *ii;
+              return sum;
+            }
+        };
     };
   
   
