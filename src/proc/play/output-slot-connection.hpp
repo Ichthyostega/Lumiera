@@ -215,6 +215,8 @@ namespace play {
       static DataSink
       connectOutputSink (CON& connection)
         {
+          TRACE (test, "activating Con=%p", &connection );
+          
           DataSink newSink;
           newSink.activate(&connection, shutdownConnection);
           return newSink;

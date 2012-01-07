@@ -117,6 +117,8 @@ namespace play {
       BuffHandle
       trackFrame (FrameID frameNr, BuffHandle const& newBuffer)
         {
+          TRACE (test, "Con=%p : track buffer %zu for frame-#%lu"
+                     , this, newBuffer.entryID(), frameNr);
           REQUIRE (!contains (frameTrackingIndex_,frameNr),
                    "attempt to lock already used frame %lu", frameNr);
           
@@ -140,7 +142,9 @@ namespace play {
       BuffHandle
       claimBufferFor(FrameID frameNr) 
         {
+          TRACE (test, "Con=%p : lock buffer for frame-#%lu", this, frameNr);
           REQUIRE (!closed_);
+          
           return trackFrame (frameNr,
                              buffProvider_.lockBuffer (bufferType_));
         }
@@ -149,16 +153,22 @@ namespace play {
       bool
       isTimely (FrameID frameNr, TimeValue currentTime)
         {
+          TRACE (test, "Con=%p : timely? frame-#%lu"
+                     , this, frameNr);
+          
           if (Time::ANYTIME == currentTime)
             return true;
-          
-          return currentTime < deadlineFor (frameNr);
+          else
+            return currentTime < deadlineFor (frameNr);
         }
       
       void
       transfer (BuffHandle const& filledBuffer)
         {
+          TRACE (test, "Con=%p : transfer buffer %zu"
+                     , this, filledBuffer.entryID());
           REQUIRE (!closed_);
+          
           pushout (filledBuffer);
         }
       
@@ -191,13 +201,13 @@ namespace play {
         , frameGrid_(getTestTimeGrid())                              /////////////TODO should rather pass that in as part of a "timings" definition
         , closed_(false)
         {
-          INFO (engine_dbg, "building in-memory diagnostic output sequence");
+          INFO (engine_dbg, "building in-memory diagnostic output sequence (at %p)", this);
         }
       
       virtual
      ~TrackingInMemoryBlockSequence()
         {
-          INFO (engine_dbg, "releasing diagnostic output sequence");
+          INFO (engine_dbg, "releasing diagnostic output sequence (at %p)", this);
         }
       
       
@@ -224,6 +234,8 @@ namespace play {
       bool
       wasAllocated (uint frameNr)  const
         {
+          TRACE (test, "query wasAllocated. Con=%p", this);
+          
           return contains (frameTrackingIndex_, frameNr);
         }
       
@@ -424,11 +436,6 @@ namespace play {
           return block
               && block->was_used();
         }
-      
-      
-      
-    private:
-      
     };
   
   

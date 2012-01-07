@@ -7,6 +7,8 @@
 *.gch
 ,valgrind.log*
 *.pyc
+/.sconf_temp
+/.settings
 optcache
 Makefile.in
 build/*
