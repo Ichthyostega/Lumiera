@@ -56,6 +56,8 @@
 
 #include "lib/meta/typelist.hpp"
 
+#include <sys/types.h>
+
 namespace lib {
 namespace meta {
     

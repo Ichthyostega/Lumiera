@@ -37,18 +37,21 @@
 #ifndef LIB_META_UTIL_H
 #define LIB_META_UTIL_H
 
-  
+
+#include <string>
+
+
 namespace lib {
 namespace meta {
-    
-    
+  
+  
   /* types for figuring out the overload resolution chosen by the compiler */
-
+  
   typedef char Yes_t;
   struct No_t { char more_than_one[4]; };
-    
-    
-    
+  
+  
+  
   
   /** Compile-time Type equality:
    *  Simple Trait template to pick up types considered
