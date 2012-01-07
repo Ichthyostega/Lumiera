@@ -47,7 +47,7 @@
  **   the container is being filled successively.
  ** - the "RAII style" usage strives to create all of the content objects
  **   right away, immediately after the memory allocation. This usage pattern
- **   avoids any kind of "lifecylce state". Either the container comes up sane
+ **   avoids any kind of "lifecycle state". Either the container comes up sane
  **   and fully populated, or the ctor call fails and any already created
  **   objects are discarded.
  ** @note intentionally there is no operation to discard individual objects,
@@ -69,13 +69,9 @@
 #define LIB_SCOPED_COLLECTION_H
 
 
-//#include "include/logging.h"
-#include "lib/iter-adapter.hpp"
 #include "lib/error.hpp"
-//#include "lib/util.hpp"
+#include "lib/iter-adapter.hpp"
 
-//#include <vector>
-//#include <algorithm>
 #include <boost/noncopyable.hpp>
 #include <boost/scoped_array.hpp>
 #include <boost/static_assert.hpp>
@@ -138,7 +134,6 @@ namespace lib {
           
 #define TYPE_SANITY_CHECK \
               BOOST_STATIC_ASSERT ((boost::is_base_of<I,TY>::value || boost::is_same<I,TY>::value))
-          
           
           /** Abbreviation for placement new */
 #define EMBEDDED_ELEMENT_CTOR(_CTOR_CALL_)    \
@@ -244,18 +239,8 @@ namespace lib {
         , capacity_(maxElements)
         , elements_(new ElementHolder[maxElements])
         {
-        try { 
-          while (level_ < capacity_)
-            {
-              ElementHolder& storageFrame (elements_[level_]);
-              builder (storageFrame);
-              ++level_;
-            }}
-        catch(...)
-          {
-            clear();
-            throw;
-        } }   
+          populate_by (builder);
+        }
       
       /** variation of RAII-style: using a builder function,
        *  which is a member of some object. This supports the
@@ -271,18 +256,8 @@ namespace lib {
         , capacity_(maxElements)
         , elements_(new ElementHolder[maxElements])
         {
-        try { 
-          while (level_ < capacity_)
-            {
-              ElementHolder& storageFrame (elements_[level_]);
-              (instance->*builder) (storageFrame);
-              ++level_;
-            }}
-        catch(...)
-          {
-            clear();
-            throw;
-        } }   
+          populate_by (builder,instance);
+        }
       
       /* == some pre-defined Builders == */
       
@@ -316,6 +291,7 @@ namespace lib {
             }
         }
       
+      /** init all elements default constructed */
       void
       populate()
         try {
@@ -325,6 +301,53 @@ namespace lib {
                 ++level_;
               }
           }
+        catch(...)
+          {
+            WARN (progress, "Failure while populating ScopedCollection. "
+                            "All elements will be discarded");
+            clear();
+            throw;
+          }
+      
+      /** init all elements at once,
+       *  invoking a builder functor for each.
+       * @param builder to create the individual elements
+       *        this functor is responsible to invoke the appropriate
+       *        ElementHolder#create function, which places a new element
+       *        into the storage frame passed as parameter.
+       */
+      template<class CTOR>
+      void
+      populate_by (CTOR builder)
+        try { 
+          while (level_ < capacity_)
+            {
+              ElementHolder& storageFrame (elements_[level_]);
+              builder (storageFrame);
+              ++level_;
+          } }
+        catch(...)
+          {
+            WARN (progress, "Failure while populating ScopedCollection. "
+                            "All elements will be discarded");
+            clear();
+            throw;
+          }
+      
+      /** variation of element initialisation,
+       *  invoking a member function of some manager object
+       *  for each collection element to be created.
+       */
+      template<class TY>
+      void
+      populate_by (void (TY::*builder) (ElementHolder&), TY * const instance)
+        try { 
+          while (level_ < capacity_)
+            {
+              ElementHolder& storageFrame (elements_[level_]);
+              (instance->*builder) (storageFrame);
+              ++level_;
+          } }
         catch(...)
           {
             WARN (progress, "Failure while populating ScopedCollection. "

@@ -68,8 +68,8 @@ namespace play {
   using lib::transform;
   using lib::iter_stl::eachElm;
   
-  using std::tr1::placeholders::_1;
-  using std::tr1::bind;
+//using std::tr1::placeholders::_1;
+//using std::tr1::bind;
   using std::vector;
 //using std::tr1::shared_ptr;
   using boost::scoped_ptr;
@@ -186,6 +186,11 @@ namespace play {
       
       
     protected: /* == API for OutputSlot-Impl == */
+      void
+      init() ///< derived classes need to invoke this to build the actual connections
+        {
+          connections_.populate_by (&ConnectionStateManager::buildConnection, this);
+        }
       
       typedef typename Connections::ElementHolder& ConnectionStorage;
       
@@ -195,8 +200,7 @@ namespace play {
       
       
       ConnectionStateManager(uint numChannels)
-        : connections_( numChannels
-                      , bind (&ConnectionStateManager::buildConnection, this, _1 ))
+        : connections_(numChannels)
         { }
       
     public:

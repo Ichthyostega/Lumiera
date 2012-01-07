@@ -261,7 +261,9 @@ namespace play {
     public:
       SimulatedOutputSequences (uint numChannels)
         : _Base(numChannels)
-        { }
+        {
+          init();
+        }
     };
   
     
