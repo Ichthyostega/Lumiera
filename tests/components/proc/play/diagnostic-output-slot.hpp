@@ -117,7 +117,7 @@ namespace play {
       BuffHandle
       trackFrame (FrameID frameNr, BuffHandle const& newBuffer)
         {
-          REQUIRE (contains (frameTrackingIndex_,frameNr),
+          REQUIRE (!contains (frameTrackingIndex_,frameNr),
                    "attempt to lock already used frame %lu", frameNr);
           
           frameTrackingIndex_.insert (frameNr);

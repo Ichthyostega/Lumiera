@@ -85,6 +85,7 @@ namespace meta {
     PQuant quantiser (dynamic_pointer_cast<const Quantiser>(gridImplementation));
     Literal bindingID (cStr(newGrid.ident.name));
     
+    advice::Provision<PGrid>(bindingID).setAdvice(gridImplementation);
     advice::Provision<PQuant>(bindingID).setAdvice(quantiser);
     return gridImplementation;
     }

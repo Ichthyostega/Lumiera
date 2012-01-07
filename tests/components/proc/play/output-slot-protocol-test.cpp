@@ -92,15 +92,12 @@ namespace test {
           int64_t frameNr = 123;
           BuffHandle buff00 = sink1.lockBufferFor (frameNr);
           BuffHandle buff10 = sink2.lockBufferFor (frameNr);
-          buff00.create<TestFrame>();
-          buff10.create<TestFrame>();
           
           // rendering process calculates content....
           buff00.accessAs<TestFrame>() = testData(0,0);
           
           // while further frames might be processed in parallel
           BuffHandle buff11 = sink2.lockBufferFor (++frameNr);
-          buff11.create<TestFrame>();
           buff11.accessAs<TestFrame>() = testData(1,1);
           buff10.accessAs<TestFrame>() = testData(1,0);
           
