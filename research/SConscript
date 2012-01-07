@@ -9,9 +9,11 @@ Import('env','artifacts','core')
 support_lib = artifacts['support']
 
 
+envR = env.Clone()
+# envR.Append(CCFLAGS=' -O3 ')
 
 # build additional test and administrative tools....
-experiments = [ env.Program('try', ['try.cpp'] + support_lib)           #### to try out some feature...
+experiments = [ envR.Program('try', ['try.cpp'] + support_lib)          #### to try out some feature...
               ]
 
 #
