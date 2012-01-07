@@ -543,7 +543,7 @@ namespace lib {
   /** filters away repeated values
    *  emitted by source iterator */
   template<class IT>
-  FilterIter<IT>
+  inline FilterIter<IT>
   filterRepetitions (IT const& source)
   {
     typedef typename IT::value_type Val;

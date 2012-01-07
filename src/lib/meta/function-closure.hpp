@@ -800,6 +800,7 @@ namespace func{
    *  to various functions repeatedly.
    */
   template<typename ARG>
+  inline
   typename _Sig<void, ARG>::Applicator
   tupleApplicator (Tuple<ARG>& args)
   {
@@ -810,6 +811,7 @@ namespace func{
   
   /** apply the given function to the argument tuple */
   template<typename SIG, typename ARG>
+  inline
   typename _Fun<SIG>::Ret
   apply (SIG& f, Tuple<ARG>& args)
   {
@@ -824,6 +826,7 @@ namespace func{
    *          invoked later to yield the
    *          function result. */
   template<typename SIG, typename ARG>
+  inline
   typename _Clo<SIG,ARG>::Type
   closure (SIG& f, Tuple<ARG>& args)
   {
@@ -836,6 +839,7 @@ namespace func{
   
   /** close the given function over the first argument */
   template<typename SIG, typename ARG>
+  inline
   typename _PapS<SIG>::Function
   applyFirst (SIG& f, ARG arg)
   {
@@ -848,6 +852,7 @@ namespace func{
   
   /** close the given function over the last argument */
   template<typename SIG, typename ARG>
+  inline
   typename _PapE<SIG>::Function
   applyLast (SIG& f, ARG arg)
   {
@@ -862,6 +867,7 @@ namespace func{
   /** bind the last function argument to an arbitrary term,
    *  which especially might be a (nested) binder... */
   template<typename SIG, typename TERM>
+  inline
   typename _PapE<SIG>::Function
   bindLast (SIG& f, TERM const& arg)
   {
@@ -875,6 +881,7 @@ namespace func{
   
   /** build a functor chaining the given functions */
   template<typename SIG1, typename SIG2>
+  inline
   typename _Chain<SIG1,SIG2>::Function
   chained (SIG1& f1, SIG2& f2)
   {

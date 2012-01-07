@@ -283,6 +283,7 @@ namespace meta {
   namespace tuple { // some convenience access functions
   
     template<uint n, class TUP> 
+    inline
     typename Shifted<TUP,n>::Head&
     element (TUP& tup)
     {
