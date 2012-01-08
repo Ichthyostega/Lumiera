@@ -191,15 +191,6 @@ namespace lib {
           return *this;
         }
       
-      IterAdapter
-      operator++(int)
-        {
-          _maybe_throw();
-          IterAdapter oldPos(*this);
-          iterate();
-          return oldPos;
-        }
-      
       bool
       isValid ()  const
         {
@@ -332,13 +323,6 @@ namespace lib {
           _maybe_throw();
           ++p_;
           return *this;
-        }
-      
-      RangeIter
-      operator++(int)
-        {
-          _maybe_throw();
-          return RangeIter (p_++,e_);
         }
       
       bool
@@ -549,12 +533,6 @@ namespace lib {
         {
           ++i_;
           return *this;
-        }
-      
-      PtrDerefIter
-      operator++(int)
-        {
-          return PtrDerefIter (i_++);
         }
       
       bool

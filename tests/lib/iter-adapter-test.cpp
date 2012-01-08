@@ -215,7 +215,10 @@ namespace test{
           
           // now for example the client could....
           while ( range )
-            cout << "::" << *range++;
+            {
+              cout << "::" << *range;
+              ++range;
+            }
           
           cout << endl;
           CHECK (isnil (range));
@@ -317,7 +320,7 @@ namespace test{
           TestContainer::ref_iterator rI (elms.begin_ref());
           
           CHECK (0 == *rI );
-          CHECK (0 == *rI++);
+          ++rI;
           CHECK (1 == *rI  );
           CHECK (2 == *++rI);
           

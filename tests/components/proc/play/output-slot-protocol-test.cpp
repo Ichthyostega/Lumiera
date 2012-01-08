@@ -84,8 +84,8 @@ namespace test {
           // "calculation streams" for the individual
           // Channels to be output through this slot.
           OutputSlot::OpenedSinks sinks = alloc.getOpenedSinks();
-          DataSink sink1 = *sinks++;
-          DataSink sink2 = *sinks++;
+          DataSink sink1 = *sinks;
+          DataSink sink2 = *++sinks;
           
           // within the frame-calculation "loop"
           // we perform an data exchange cycle
@@ -127,12 +127,12 @@ namespace test {
           DiagnosticOutputSlot::OutFrames stream1 = checker.getChannel(1);
           
           CHECK ( stream0);
-          CHECK (*stream0++ == testData(0,0));
+          CHECK (*stream0 == testData(0,0)); ++stream0;
           CHECK (!stream0);
           
           CHECK ( stream1);
-          CHECK (*stream1++ == testData(1,0));
-          CHECK (*stream1++ == testData(1,1));
+          CHECK (*stream1 == testData(1,0)); ++stream1;
+          CHECK (*stream1 == testData(1,1)); ++stream1;
           CHECK (!stream1);
 #if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #819
 #endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #819

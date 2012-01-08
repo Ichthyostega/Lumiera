@@ -236,7 +236,6 @@ namespace session {
           public:
             P<TAR> operator* ()    { return ptr; }
             bool  hasNext ()       { return next || findNext(); }
-            Iter  operator++ (int) { Iter tmp=*this; operator++(); return tmp; }
             Iter& operator++ ()
               { 
                 ptr=findNext();
