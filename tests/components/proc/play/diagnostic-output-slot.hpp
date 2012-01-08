@@ -404,37 +404,30 @@ namespace play {
       
       
       bool
-      buffer_was_used (uint channel, FrameID frame)
+      frame_was_allocated (uint channel, FrameID nominalFrame)
         {
           return accessSequence(channel)
-                   .wasAllocated(frame);
+                   .wasAllocated(nominalFrame);
         }
       
       
       bool
-      buffer_unused   (uint channel, FrameID frame)
-        {
-          return !buffer_was_used(channel, frame);
-        }
-      
-      
-      bool
-      buffer_was_closed (uint channel, FrameID frame)
+      output_was_emitted (uint channel, FrameID outputFrame)
         {
           diagn::Block const *block = accessSequence(channel)
-                                        .accessEmittedBuffer(frame);
-          return block
-              && block->was_closed();
-        }
-      
-      
-      bool
-      emitted (uint channel, FrameID frame)
-        {
-          diagn::Block const *block = accessSequence(channel)
-                                        .accessEmittedBuffer(frame);
+                                        .accessEmittedBuffer(outputFrame);
           return block
               && block->was_used();
+        }
+      
+      
+      bool
+      output_was_closed (uint channel, FrameID outputFrame)
+        {
+          diagn::Block const *block = accessSequence(channel)
+                                        .accessEmittedBuffer(outputFrame);
+          return block
+              && block->was_closed();
         }
     };
   

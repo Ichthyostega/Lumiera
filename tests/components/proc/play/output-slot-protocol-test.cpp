@@ -109,19 +109,19 @@ namespace test {
           
           // Verify sane operation....
           DiagnosticOutputSlot& checker = DiagnosticOutputSlot::access(oSlot);
-          CHECK (checker.buffer_was_used (0,0));
-          CHECK (checker.buffer_unused   (0,1));
-          CHECK (checker.buffer_was_used (1,0));
-          CHECK (checker.buffer_was_used (1,1));
+          CHECK ( checker.frame_was_allocated (0,123));
+          CHECK (!checker.frame_was_allocated (0,124));
+          CHECK ( checker.frame_was_allocated (1,123));
+          CHECK ( checker.frame_was_allocated (1,124));
           
-          CHECK (checker.buffer_was_closed (0,0));
-          CHECK (checker.buffer_was_closed (1,0));
-          CHECK (checker.buffer_was_closed (1,1));
+          CHECK (checker.output_was_closed (0,0));
+          CHECK (checker.output_was_closed (1,0));
+          CHECK (checker.output_was_closed (1,1));
           
-          CHECK ( checker.emitted (0,0));
-          CHECK (!checker.emitted (0,1));
-          CHECK ( checker.emitted (1,0));
-          CHECK ( checker.emitted (1,1));
+          CHECK ( checker.output_was_emitted (0,0));
+          CHECK (!checker.output_was_emitted (0,1));
+          CHECK ( checker.output_was_emitted (1,0));
+          CHECK ( checker.output_was_emitted (1,1));
           
           DiagnosticOutputSlot::OutFrames stream0 = checker.getChannel(0); 
           DiagnosticOutputSlot::OutFrames stream1 = checker.getChannel(1);
@@ -134,8 +134,6 @@ namespace test {
           CHECK (*stream1 == testData(1,0)); ++stream1;
           CHECK (*stream1 == testData(1,1)); ++stream1;
           CHECK (!stream1);
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #819
-#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #819
         }
     };
   
