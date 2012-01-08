@@ -216,7 +216,7 @@ namespace play {
       TestFrame const *
       accessEmittedFrame (uint frameNr)  const
         {
-          if (frameNr <= buffProvider_.emittedCnt())
+          if (frameNr < buffProvider_.emittedCnt())
             return & accessFrame(frameNr);
           else
             return 0;                                               ////////////////////////////////TICKET #856
@@ -225,7 +225,7 @@ namespace play {
       diagn::Block const *
       accessEmittedBuffer (uint bufferNr)  const
         {
-          if (bufferNr <= buffProvider_.emittedCnt())
+          if (bufferNr < buffProvider_.emittedCnt())
             return & accessBlock(bufferNr);
           else
             return 0;

@@ -162,6 +162,7 @@ namespace play {
       OpenedSinks
       getOpenedSinks()
         {
+                                                                                 //////////////////////////TICKET #878  not re-entrant, lifecycle isn't clear
           REQUIRE (this->isActive());
           return transform (eachElm(connections_), connectOutputSink);
         }
@@ -189,6 +190,7 @@ namespace play {
       void
       init() ///< derived classes need to invoke this to build the actual connections
         {
+                                                                                 //////////////////////////TICKET #878  really build all at once? or on demand?
           connections_.populate_by (&ConnectionStateManager::buildConnection, this);
         }
       

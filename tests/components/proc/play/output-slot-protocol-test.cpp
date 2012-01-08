@@ -22,33 +22,22 @@
 
 
 #include "lib/test/run.hpp"
-//#include "lib/util.hpp"
+
 #include "proc/play/diagnostic-output-slot.hpp"
 #include "proc/engine/buffhandle.hpp"
 #include "proc/engine/testframe.hpp"
 
-//#include <boost/format.hpp>
-//#include <iostream>
-
-//using boost::format;
-//using std::string;
-//using std::cout;
 
 
 namespace proc {
 namespace play {
 namespace test {
   
-//  using lib::AllocationCluster;
-//  using mobject::session::PEffect;
   using proc::engine::BuffHandle;
   using proc::engine::test::testData;
   using proc::engine::test::TestFrame;
   
   
-  namespace { // Test fixture
-    
-  }
   
   
   /*******************************************************************
