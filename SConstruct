@@ -38,7 +38,7 @@ CUSTOPTFILE  = 'custom-options'
 
 # these are accessible via env.path.xxxx
 srcIcon      = 'icons'
-srcConf      = 'data/config'
+srcConf      = '#data/config'
 buildExe     = '#$TARGDIR'
 buildLib     = '#$TARGDIR/modules'
 buildPlug    = '#$TARGDIR/modules'
@@ -333,45 +333,8 @@ def defineBuildTargets(env, artifacts):
         We use a custom function to declare a whole tree of srcfiles. 
     """
     
-    lLib  = env.SharedLibrary('lumiera',        srcSubtree('src/lib'),    install=True)
-    lApp  = env.SharedLibrary('lumieracommon',  srcSubtree('src/common'), install=True, LIBS=lLib)
-    lBack = env.SharedLibrary('lumierabackend', srcSubtree('src/backend'),install=True)
-    lProc = env.SharedLibrary('lumieraproc',    srcSubtree('src/proc'),   install=True)
-    
-    core = lLib+lApp+lBack+lProc
-    
-    artifacts['corelib'] = core
-    artifacts['support'] = lLib
-    artifacts['config']  = ( env.ConfigData(env.path.srcConf+'setup.ini', targetDir='$ORIGIN')
-                           + env.ConfigData(env.path.srcConf+'dummy_lumiera.ini')
-                           )
-    artifacts['lumiera'] = ( env.Program('lumiera', ['src/lumiera/main.cpp'] + core, install=True)
-                           + artifacts['config']
-                           )
-    
-    # building Lumiera Plugins
-    artifacts['plugins'] = [] # currently none 
-    
-    # render and install Icons
-    vector_icon_dir      = env.path.srcIcon+'svg'
-    prerendered_icon_dir = env.path.srcIcon+'prerendered'
-    artifacts['icons']   = ( [env.IconRender(f)   for f in scanSubtree(vector_icon_dir,      ['*.svg'])]
-                           + [env.IconResource(f) for f in scanSubtree(prerendered_icon_dir, ['*.png'])]
-                           )
-    
-    # the Lumiera GTK GUI
-    envGtk = env.Clone()
-    envGtk.mergeConf(['gtkmm-2.4','gthread-2.0','cairomm-1.0','gdl','xv','xext','sm'])
-    envGtk.Append(LIBS=core)
-    
-    guimodule = envGtk.LumieraPlugin('gtk_gui', srcSubtree('src/gui'), install=True)
-    artifacts['gui'] = ( guimodule
-                       + [env.GuiResource(f) for f in env.Glob('src/gui/*.rc')]
-                       + artifacts['icons']
-                       )
-    
     # call subdir SConscript(s) for independent components
-    SConscript(dirs=['src/tool','research','tests'], exports='env artifacts core')
+    SConscript(dirs=['src','src/tool','research','tests'], exports='env artifacts')
 
 
 

@@ -1,0 +1,51 @@
+# -*- python -*-
+##
+## SConscript  -  SCons buildscript for the Lumiera Application.
+##                Definitions how to build the main tree
+##
+
+from Buildhelper import srcSubtree
+from Buildhelper import scanSubtree
+
+Import('env','artifacts')
+
+
+lLib  = env.SharedLibrary('lumiera',        srcSubtree('lib'),    install=True)
+lApp  = env.SharedLibrary('lumieracommon',  srcSubtree('common'), install=True, LIBS=lLib)
+lBack = env.SharedLibrary('lumierabackend', srcSubtree('backend'),install=True)
+lProc = env.SharedLibrary('lumieraproc',    srcSubtree('proc'),   install=True)
+
+core = lLib+lApp+lBack+lProc
+
+artifacts['corelib'] = core
+artifacts['support'] = lLib
+artifacts['config']  = ( env.ConfigData(env.path.srcConf+'setup.ini', targetDir='$ORIGIN')
+                       + env.ConfigData(env.path.srcConf+'dummy_lumiera.ini')
+                       )
+artifacts['lumiera'] = ( env.Program('lumiera', ['lumiera/main.cpp'] + core, install=True)
+                       + artifacts['config']
+                       )
+
+# building Lumiera Plugins
+artifacts['plugins'] = [] # currently none 
+
+# render and install Icons
+vector_icon_dir      = env.path.srcIcon+'svg'
+prerendered_icon_dir = env.path.srcIcon+'prerendered'
+artifacts['icons']   = ( [env.IconRender(f)   for f in scanSubtree(vector_icon_dir,      ['*.svg'])]
+                       + [env.IconResource(f) for f in scanSubtree(prerendered_icon_dir, ['*.png'])]
+                       )
+
+# the Lumiera GTK GUI
+envGtk = env.Clone()
+envGtk.mergeConf(['gtkmm-2.4','gthread-2.0','cairomm-1.0','gdl','xv','xext','sm'])
+envGtk.Append(LIBS=core)
+
+guimodule = envGtk.LumieraPlugin('gtk_gui', srcSubtree('gui'), install=True)
+artifacts['gui'] = ( guimodule
+                   + [env.GuiResource(f) for f in env.Glob('gui/*.rc')]
+                   + artifacts['icons']
+                   )
+
+
+Export('core')
