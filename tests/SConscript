@@ -12,7 +12,7 @@ from Buildhelper import scanSubtree
 from Buildhelper import globRootdirs
 from Buildhelper import createPlugins
 
-Import('env','artifacts','core')
+Import('env core tools config')
 env = env.Clone()
 env.Append(CPPPATH='include')  # additional headers for tests
 
@@ -56,27 +56,28 @@ moduledirs = globRootdirs('*')
 
 
 
-artifacts['testsuite'] = ts = ( [ testExecutable(env, dir) for dir in ['lib','components'] ]
-                              + [ testCollection(env, dir) for dir in moduledirs if not dir in specials]
-                              + createPlugins(env, 'plugin')
-                              + env.File(glob('*.tests'))     # depending on the test definition files for test.sh
-                              + artifacts['config']
-                              )
+testsuite = ( [ testExecutable(env, dir) for dir in ['lib','components'] ]
+            + [ testCollection(env, dir) for dir in moduledirs if not dir in specials]
+            + createPlugins(env, 'plugin')
+            + env.File(glob('*.tests'))     # depending on the test definition files for test.sh
+            + config
+            )
+Export('testsuite')
 
 
 
 
 # for creating a Valgrind-Suppression file
 vgsuppr = env.Program('vgsuppression','tool/vgsuppression.c', LIBS=core)   ## for suppressing false valgrind alarms
-artifacts['tools'] += [vgsuppr]
-Depends(ts,vgsuppr)
+tools  += [vgsuppr]
+Depends(testsuite,vgsuppr)
 
 
 #
 # actually run the Testsuite
 #
 #  - the product of running the Testsuite is the ",testlog"
-#  - it depends on all artifacts defined as "ts" above
+#  - it depends on all artifacts defined as "testsuite" above
 #  - including the tests/*.tests (suite definition files)
 #  - if not set via options switch, the environment variables
 #    TESTSUITES and VALGRINDFLAGS are explicitly propagated to test.sh
@@ -106,7 +107,7 @@ testEnv['ENV']['TEST_CONF'] = env.File("test.conf").abspath
 testDir = env.Dir('#$TARGDIR')
 runTest = env.File("test.sh").abspath
 
-runTs = testEnv.Command('#$TARGDIR/,testlog', ts, runTest,  chdir=testDir)
+runTests = testEnv.Command('#$TARGDIR/,testlog', testsuite, runTest,  chdir=testDir)
 
 
 
@@ -115,8 +116,8 @@ runTs = testEnv.Command('#$TARGDIR/,testlog', ts, runTest,  chdir=testDir)
 #  - 'scons testcode' triggers building of the Testsuite
 #  - 'scons check' triggers building and running
 #
-env.Alias('testcode', ts )
-env.Alias('check', runTs )
+env.Alias('testcode', testsuite )
+env.Alias('check',    runTests )
 
 # allow tempfiles of test.sh to be cleaned  
 env.Clean ('check', [',testlog',',testlog.pre',',expect_stdout',',stdout',',stderr',',testtmp','.libs'])

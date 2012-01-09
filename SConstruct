@@ -319,7 +319,7 @@ def configurePlatform(env):
 
 
 
-def defineSetupTargets(env, artifacts):
+def defineSetupTargets(env):
     """ build operations and targets to be done /before/ compiling.
         things like creating a source tarball or preparing a version header.
     """
@@ -327,7 +327,7 @@ def defineSetupTargets(env, artifacts):
 
 
 
-def defineBuildTargets(env, artifacts):
+def defineBuildTargets(env):
     """ define the source file/dirs comprising each artifact to be built.
         setup sub-environments with special build options if necessary.
         We use a custom function to declare a whole tree of srcfiles. 
@@ -336,52 +336,51 @@ def defineBuildTargets(env, artifacts):
     # define Icons to render and install
     vector_icon_dir      = env.subst(env.path.srcIcon+'svg')
     prerendered_icon_dir = env.subst(env.path.srcIcon+'prerendered')
-    print "ICON: vector_icon_dir=%s prerendered=%s" % (vector_icon_dir,prerendered_icon_dir)
-    artifacts['icons']   = ( [env.IconRender(f)   for f in scanSubtree(vector_icon_dir,      ['*.svg'])]
-                           + [env.IconResource(f) for f in scanSubtree(prerendered_icon_dir, ['*.png'])]
-                           )
+    icons   = ( [env.IconRender(f)   for f in scanSubtree(vector_icon_dir,      ['*.svg'])]
+              + [env.IconResource(f) for f in scanSubtree(prerendered_icon_dir, ['*.png'])]
+              )
     
     #define Configuration files to install
-    artifacts['config']  = ( env.ConfigData(env.path.srcConf+'setup.ini', targetDir='$ORIGIN')
-                           + env.ConfigData(env.path.srcConf+'dummy_lumiera.ini')
-                           )
+    config  = ( env.ConfigData(env.path.srcConf+'setup.ini', targetDir='$ORIGIN')
+              + env.ConfigData(env.path.srcConf+'dummy_lumiera.ini')
+              )
     
     # call subdir SConscript(s) for independent components
-    SConscript(dirs=['src','src/tool','research','tests'], exports='env artifacts')
+    SConscript(dirs=['src','src/tool','research','tests'], exports='env icons config')
 
 
 
-def definePostBuildTargets(env, artifacts):
+def definePostBuildTargets(env):
     """ define further actions after the core build (e.g. Documentation).
         define alias targets to trigger the installing.
     """
-    build = env.Alias('build', ( artifacts['lumiera']
-                               + artifacts['plugins']
-                               + artifacts['tools']
-                               + artifacts['gui']
-                               ))
+    Import('lumiera plugins tools gui testsuite')
+    build = env.Alias('build', lumiera + plugins + tools +gui)
+    
     # additional files to be cleaned when cleaning 'build'
     env.Clean ('build', [ 'scache.conf', '.sconf_temp', '.sconsign.dblite', 'config.log' ])
     env.Clean ('build', [ 'src/pre.gch' ])
     
-    doxydoc = artifacts['doxydoc'] = env.Doxygen('doc/devel/Doxyfile')
+    doxydoc = env.Doxygen('doc/devel/Doxyfile')
     env.Alias ('doc', doxydoc)
     env.Clean ('doc', doxydoc + ['doc/devel/,doxylog','doc/devel/warnings.txt'])
     
-    env.Alias ('all', build+artifacts['testsuite']+doxydoc)
+    env.Alias ('all', build + testsuite + doxydoc)
     env.Default('build')
     # SCons default target
 
 
-def defineInstallTargets(env, artifacts):
+def defineInstallTargets(env):
     """ define additional artifacts to be installed into target locations.
         @note: we use customised SCons builders defining install targets 
                for all executables automatically. see LumieraEnvironment.py
     """
-    env.SymLink('$DESTDIR/bin/lumiera',env.path.installExe+'lumiera','../lib/lumiera/lumiera')
-#   env.Install(dir = '$DESTDIR/share/doc/lumiera$VERSION/devel', source=artifacts['doxydoc'])
+    Import('lumiera plugins tools gui testsuite')
     
-    env.Alias('install', artifacts['gui'])
+    env.SymLink('$DESTDIR/bin/lumiera',env.path.installExe+'lumiera','../lib/lumiera/lumiera')
+#   env.Install(dir = '$DESTDIR/share/doc/lumiera$VERSION/devel', source=doxydoc)
+    
+    env.Alias('install', gui)
     env.Alias('install', '$DESTDIR')
 
 #####################################################################
@@ -397,7 +396,6 @@ env = setupBasicEnvironment(localDefinitions)
 if not (isCleanupOperation(env) or isHelpRequest()):
     env = configurePlatform(env)
     
-artifacts = {}
 # the various things we build. 
 # Each entry actually is a SCons-Node list.
 # Passing these entries to other builders defines dependencies.
@@ -406,8 +404,8 @@ artifacts = {}
 # 'plugins'     : plugin shared lib
 # 'tools'       : small tool applications (e.g mpegtoc)
 
-defineSetupTargets(env, artifacts)
-defineBuildTargets(env, artifacts)
-definePostBuildTargets(env, artifacts)
-defineInstallTargets(env, artifacts)
+defineSetupTargets(env)
+defineBuildTargets(env)
+definePostBuildTargets(env)
+defineInstallTargets(env)
 

@@ -7,7 +7,7 @@
 from Buildhelper import srcSubtree
 from Buildhelper import scanSubtree
 
-Import('env','artifacts')
+Import('env icons config')
 
 
 lLib  = env.SharedLibrary('lumiera',        srcSubtree('lib'),    install=True)
@@ -15,16 +15,16 @@ lApp  = env.SharedLibrary('lumieracommon',  srcSubtree('common'), install=True, 
 lBack = env.SharedLibrary('lumierabackend', srcSubtree('backend'),install=True)
 lProc = env.SharedLibrary('lumieraproc',    srcSubtree('proc'),   install=True)
 
-core = lLib+lApp+lBack+lProc
+core        = lLib+lApp+lBack+lProc
+core_lib    = core
+support_lib = lLib
 
-artifacts['corelib'] = core
-artifacts['support'] = lLib
-artifacts['lumiera'] = ( env.Program('lumiera', ['lumiera/main.cpp'] + core, install=True)
-                       + artifacts['config']
-                       )
+lumiera = ( env.Program('lumiera', ['lumiera/main.cpp'] + core, install=True)
+          + config
+          )
 
 # building Lumiera Plugins
-artifacts['plugins'] = [] # currently none 
+plugins = [] # currently none 
 
 
 # the Lumiera GTK GUI
@@ -33,10 +33,10 @@ envGtk.mergeConf(['gtkmm-2.4','gthread-2.0','cairomm-1.0','gdl','xv','xext','sm'
 envGtk.Append(LIBS=core)
 
 guimodule = envGtk.LumieraPlugin('gtk_gui', srcSubtree('gui'), install=True)
-artifacts['gui'] = ( guimodule
-                   + [env.GuiResource(f) for f in env.Glob('gui/*.rc')]
-                   + artifacts['icons']
-                   )
+gui       = ( guimodule
+            + icons
+            + [env.GuiResource(f) for f in env.Glob('gui/*.rc')]
+            )
 
 
-Export('core')
+Export('lumiera core core_lib support_lib plugins gui')

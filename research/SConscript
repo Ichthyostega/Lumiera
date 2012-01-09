@@ -4,9 +4,8 @@
 ##                Things defined here usuall won't be installed
 ##
 
-Import('env','artifacts','core')
+Import('env core support_lib')
 
-support_lib = artifacts['support']
 
 
 
