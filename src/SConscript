@@ -9,6 +9,7 @@ from Buildhelper import scanSubtree
 
 Import('env icons config')
 
+# define the source file/dirs comprising each artifact to be built.
 
 lLib  = env.SharedLibrary('lumiera',        srcSubtree('lib'),    install=True)
 lApp  = env.SharedLibrary('lumieracommon',  srcSubtree('common'), install=True, LIBS=lLib)
@@ -22,6 +23,11 @@ support_lib = lLib
 lumiera = ( env.Program('lumiera', ['lumiera/main.cpp'] + core, install=True)
           + config
           )
+
+# Install the lumiera application:
+# symlink the executable into the bin dir
+env.SymLink('$DESTDIR/bin/lumiera',env.path.installExe+'lumiera','../lib/lumiera/lumiera')
+
 
 # building Lumiera Plugins
 plugins = [] # currently none 
