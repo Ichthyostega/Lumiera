@@ -19,9 +19,6 @@ core = lLib+lApp+lBack+lProc
 
 artifacts['corelib'] = core
 artifacts['support'] = lLib
-artifacts['config']  = ( env.ConfigData(env.path.srcConf+'setup.ini', targetDir='$ORIGIN')
-                       + env.ConfigData(env.path.srcConf+'dummy_lumiera.ini')
-                       )
 artifacts['lumiera'] = ( env.Program('lumiera', ['lumiera/main.cpp'] + core, install=True)
                        + artifacts['config']
                        )
@@ -29,12 +26,6 @@ artifacts['lumiera'] = ( env.Program('lumiera', ['lumiera/main.cpp'] + core, ins
 # building Lumiera Plugins
 artifacts['plugins'] = [] # currently none 
 
-# render and install Icons
-vector_icon_dir      = env.path.srcIcon+'svg'
-prerendered_icon_dir = env.path.srcIcon+'prerendered'
-artifacts['icons']   = ( [env.IconRender(f)   for f in scanSubtree(vector_icon_dir,      ['*.svg'])]
-                       + [env.IconResource(f) for f in scanSubtree(prerendered_icon_dir, ['*.png'])]
-                       )
 
 # the Lumiera GTK GUI
 envGtk = env.Clone()

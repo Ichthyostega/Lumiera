@@ -38,7 +38,7 @@ CUSTOPTFILE  = 'custom-options'
 
 # these are accessible via env.path.xxxx
 srcIcon      = 'icons'
-srcConf      = '#data/config'
+srcConf      = 'data/config'
 buildExe     = '#$TARGDIR'
 buildLib     = '#$TARGDIR/modules'
 buildPlug    = '#$TARGDIR/modules'
@@ -332,6 +332,19 @@ def defineBuildTargets(env, artifacts):
         setup sub-environments with special build options if necessary.
         We use a custom function to declare a whole tree of srcfiles. 
     """
+    
+    # define Icons to render and install
+    vector_icon_dir      = env.subst(env.path.srcIcon+'svg')
+    prerendered_icon_dir = env.subst(env.path.srcIcon+'prerendered')
+    print "ICON: vector_icon_dir=%s prerendered=%s" % (vector_icon_dir,prerendered_icon_dir)
+    artifacts['icons']   = ( [env.IconRender(f)   for f in scanSubtree(vector_icon_dir,      ['*.svg'])]
+                           + [env.IconResource(f) for f in scanSubtree(prerendered_icon_dir, ['*.png'])]
+                           )
+    
+    #define Configuration files to install
+    artifacts['config']  = ( env.ConfigData(env.path.srcConf+'setup.ini', targetDir='$ORIGIN')
+                           + env.ConfigData(env.path.srcConf+'dummy_lumiera.ini')
+                           )
     
     # call subdir SConscript(s) for independent components
     SConscript(dirs=['src','src/tool','research','tests'], exports='env artifacts')
