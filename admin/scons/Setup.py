@@ -1,10 +1,10 @@
 # -*- python -*-
 ##
-## SConstruct  -  SCons based build-system for Lumiera
+## Setup.py  -  SCons build: setup, definitions and compiler flags
 ##
 
 #  Copyright (C)         Lumiera.org
-#    2008,               Hermann Vosseler <Ichthyostega@web.de>
+#    2012,               Hermann Vosseler <Ichthyostega@web.de>
 #
 #  This program is free software; you can redistribute it and/or
 #  modify it under the terms of the GNU General Public License as
@@ -67,10 +67,6 @@ sys.path.append(SCRIPTDIR)
 from Buildhelper import *
 from LumieraEnvironment import *
 
-
-import Setup
-import Options
-import Platform
 
 #####################################################################
 
