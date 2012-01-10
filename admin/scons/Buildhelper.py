@@ -25,11 +25,8 @@ import os
 import sys
 import glob
 import fnmatch
-import re
-import tarfile
 
 from SCons import Util
-from SCons.Action import Action
 
 
 
@@ -65,12 +62,12 @@ def scanSubtree(roots, patterns=SRCPATTERNS):
         (python generator function)
     """
     for root in globRootdirs(roots):
-        for (dir,_,files) in os.walk(root):
-            if dir.startswith('./'):
-                dir = dir[2:]
+        for (d,_,files) in os.walk(root):
+            if d.startswith('./'):
+                d = d[2:]
             for p in patterns:
                 for f in fnmatch.filter(files, p):
-                    yield os.path.join(dir,f)
+                    yield os.path.join(d,f)
 
 
 
@@ -78,16 +75,16 @@ def globRootdirs(roots):
     """ helper: expand shell wildcards and filter the resulting list,
         so that it only contains existing directories
     """
-    filter = lambda f: os.path.isdir(f) and os.path.exists(f)
+    isDirectory = lambda f: os.path.isdir(f) and os.path.exists(f)
     roots = glob.glob(roots)
-    return (dir for dir in roots if filter(dir) )
+    return (d for d in roots if isDirectory(d) )
 
 
 
 def findSrcTrees(location, patterns=SRCPATTERNS):
     """ find possible source tree roots, starting with the given location.
         When delving down from the initial location(s), a source tree is defined
-        as a directory containing source files and possibly further sub directories.
+        as a directory containidsource files and possibly further sub directories.
         After having initially expanded the given location with #globRootdirs, each
         directory is examined depth first, until encountering a directory containing
         source files, which then yields a result. Especially, this can be used to traverse
@@ -95,11 +92,11 @@ def findSrcTrees(location, patterns=SRCPATTERNS):
         to be built into packages, plugins, individual tool executables etc.
         @return: the relative path names of all source root dirs found (generator function).
     """
-    for dir in globRootdirs(location):
-        if isSrcDir(dir,patterns):
-            yield dir
+    for directory in globRootdirs(location):
+        if isSrcDir (directory,patterns):
+            yield directory
         else:
-            for result in findSrcTrees(str(dir)+'/*'):
+            for result in findSrcTrees (str(directory)+'/*'):
                 yield result
 
 
@@ -109,7 +106,7 @@ def isSrcDir(path, patterns=SRCPATTERNS):
         @return: True if it's a directory containing any source file
     """
     if not os.path.isdir(path):
-         return False
+        return False
     else:
         for p in patterns:
             if glob.glob(path+'/'+p):
@@ -124,30 +121,30 @@ def filterNodes(nlist, removeName=None):
     if removeName:
         predicate = lambda n : not fnmatch.fnmatch(os.path.basename(str(n[0])), removeName)
     else:
-        predicate = lambda n : True;
+        predicate = lambda n : True
     
     return filter(predicate, nlist)
 
 
 
-def getDirname(dir, basePrefix=None):
+def getDirname (d, basePrefix=None):
     """ extract directory name without leading path,
         or without the explicitly given basePrefix
     """
-    dir = os.path.realpath(dir)
-    if not os.path.isdir(dir):
-        dir,_ = os.path.split(dir)
+    d = os.path.realpath(d)
+    if not os.path.isdir(d):
+        d,_ = os.path.split(d)
     if basePrefix:
         basePrefix = os.path.realpath(basePrefix)
-        if str(dir).startswith(basePrefix):
-           name = str(dir)[len(basePrefix):]
+        if str(d).startswith(basePrefix):
+            name = str(d)[len(basePrefix):]
     else:
-        _, name = os.path.split(dir)
+        _, name = os.path.split(d)
     return name
 
 
 
-def createPlugins(env, dir, **kw):
+def createPlugins(env, directory, **kw):
     """ investigate the given source directory to identify all contained source trees.
         @return: a list of build nodes defining a plugin for each of these source trees.
     """
@@ -155,7 +152,7 @@ def createPlugins(env, dir, **kw):
                              , srcSubtree(tree)
                              , **kw
                              )
-            for tree in findSrcTrees(dir)
+            for tree in findSrcTrees(directory)
            ]
 
 

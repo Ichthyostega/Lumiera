@@ -24,8 +24,8 @@
 
 from os import path
 
-import SCons
 import SCons.SConf
+from SCons.Action import Action
 from SCons.Environment import Environment
 
 from Buildhelper import *
@@ -157,43 +157,43 @@ def register_LumieraResourceBuilder(env):
         return (generateTargets, source)
     
     def IconResource(env, source):
-         """Copy icon pixmap to corresponding icon dir. """
-         subdir = getDirname(str(source))
-         toBuild = env.path.buildIcon+subdir
-         toInstall = env.path.installIcon+subdir
-         env.Install (toInstall, source)
-         return env.Install(toBuild, source)
+        """Copy icon pixmap to corresponding icon dir. """
+        subdir = getDirname(str(source))
+        toBuild = env.path.buildIcon+subdir
+        toInstall = env.path.installIcon+subdir
+        env.Install (toInstall, source)
+        return env.Install(toBuild, source)
     
     def GuiResource(env, source):
-         subdir = getDirname(str(source))
-         toBuild = env.path.buildUIRes+subdir
-         toInstall = env.path.installUIRes+subdir
-         env.Install (toInstall, source)
-         return env.Install(toBuild, source)
+        subdir = getDirname(str(source))
+        toBuild = env.path.buildUIRes+subdir
+        toInstall = env.path.installUIRes+subdir
+        env.Install (toInstall, source)
+        return env.Install(toBuild, source)
     
     def ConfigData(env, source, targetDir=None):
-         """ install (copy) configuration- and metadata.
-             target dir is either the install location configured (in SConstruct),
-             or an explicitly given absolute or relative path segment, which might refer
-             to the location of the executable through the $ORIGIN token
-         """   
-         subdir = getDirname(str(source), env.path.srcConf) # removes source location path prefix
-         if targetDir:
-             if path.isabs(targetDir):
-                 toBuild = toInstall = path.join(targetDir,subdir)
-             else:
-                 if targetDir.startswith('$ORIGIN'):
-                     targetDir = targetDir[len('$ORIGIN'):]
-                     toBuild = path.join(env.path.buildExe, targetDir, subdir)
-                     toInstall = path.join(env.path.installExe, targetDir, subdir)
-                 else:
-                     toBuild = path.join(env.path.buildConf, targetDir, subdir)
-                     toInstall = path.join(env.path.installConf, targetDir, subdir)
-         else:
-             toBuild = path.join(env.path.buildConf,subdir)
-             toInstall = path.join(env.path.installConf,subdir)
-         env.Install (toInstall, source)
-         return env.Install(toBuild, source)
+        """ install (copy) configuration- and metadata.
+            target dir is either the install location configured (in SConstruct),
+            or an explicitly given absolute or relative path segment, which might refer
+            to the location of the executable through the $ORIGIN token
+        """   
+        subdir = getDirname(str(source), env.path.srcConf) # removes source location path prefix
+        if targetDir:
+            if path.isabs(targetDir):
+                toBuild = toInstall = path.join(targetDir,subdir)
+            else:
+                if targetDir.startswith('$ORIGIN'):
+                    targetDir = targetDir[len('$ORIGIN'):]
+                    toBuild = path.join(env.path.buildExe, targetDir, subdir)
+                    toInstall = path.join(env.path.installExe, targetDir, subdir)
+                else:
+                    toBuild = path.join(env.path.buildConf, targetDir, subdir)
+                    toInstall = path.join(env.path.installConf, targetDir, subdir)
+        else:
+            toBuild = path.join(env.path.buildConf,subdir)
+            toInstall = path.join(env.path.installConf,subdir)
+        env.Install (toInstall, source)
+        return env.Install(toBuild, source)
     
     
     buildIcon = env.Builder( action = Action(invokeRenderer, "rendering Icon: $SOURCE --> $TARGETS")
