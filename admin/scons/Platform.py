@@ -22,32 +22,22 @@
 #####################################################################
 
 
-# NOTE: scons -h for help.
-# Read more about the SCons build system at: http://www.scons.org
-# Basically, this script just /defines/ the components and how they
-# fit together. SCons will derive the necessary build steps.
-
-
-
-import os
-import sys
-
 from SCons.Script import Exit
-
-from Buildhelper import *
-from LumieraEnvironment import *
+from Buildhelper import isCleanupOperation, isHelpRequest
 
 
 
 
-
-def configurePlatform(env):
-    """ locate required libs.
+def configure(env):
+    """ locate required libraries.
         setup platform specific options.
         Abort build in case of failure.
     """
+    if isCleanupOperation(env) or isHelpRequest():
+        return env # skip configure in these cases
+    
     conf = env.Configure()
-    # run all configuration checks in the given env
+    # run all configuration checks in the build environment defined thus far
     
     # Perform checks for prerequisites --------------------------------------------
     problems = []
@@ -63,11 +53,11 @@ def configurePlatform(env):
     if not conf.CheckLibWithHeader('pthread', 'pthread.h', 'C'):
         problems.append('Did not find the pthread lib or pthread.h.')
     else:
-       conf.env.Append(CPPFLAGS = ' -DHAVE_PTHREAD')
-       conf.env.Append(CCFLAGS = ' -pthread')
+        conf.env.Append(CPPFLAGS = ' -DHAVE_PTHREAD')
+        conf.env.Append(CCFLAGS = ' -pthread')
     
     if conf.CheckCHeader('execinfo.h'):
-       conf.env.Append(CPPFLAGS = ' -DHAVE_EXECINFO_H')
+        conf.env.Append(CPPFLAGS = ' -DHAVE_EXECINFO_H')
     
     if conf.CheckCHeader('valgrind/valgrind.h'):
         conf.env.Append(CPPFLAGS = ' -DHAVE_VALGRIND_H')

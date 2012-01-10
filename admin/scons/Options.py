@@ -22,28 +22,19 @@
 #####################################################################
 
 
-
-import os
-import sys
-
-from SCons.Script import *
-
-from Buildhelper import *
-from LumieraEnvironment import *
-
-
-#####################################################################
+from SCons.Script import PathVariable, EnumVariable, BoolVariable, Help
 
 
 
 
-def defineCmdlineVariables(vars):
+
+def defineCmdlineVariables(buildVars):
     """ several toggles and configuration variables can be set on the commandline,
         current settings will be persisted in a options cache file.
         you may define custom variable settings in a separate file. 
         Commandline will override both.
     """
-    vars.AddVariables(
+    buildVars.AddVariables(
          ('ARCHFLAGS', 'Set architecture-specific compilation flags (passed literally to gcc)','')
         ,('CC', 'Set the C compiler to use.', 'gcc')
         ,('CXX', 'Set the C++ compiler to use.', 'g++')
@@ -63,12 +54,10 @@ def defineCmdlineVariables(vars):
         ,PathVariable('PKGLIBDIR', 'Installation dir for plugins, defaults to PREFIX/lib/lumiera/modules', '',PathVariable.PathAccept)
         ,PathVariable('PKGDATADIR', 'Installation dir for default config, usually PREFIX/share/lumiera', '',PathVariable.PathAccept)
      )
-    
-    return vars
 
 
 
-def prepareOptionsHelp(vars,env):
+def prepareOptionsHelp(buildVars,env):
     prelude = """
 USAGE:   scons [-c] [OPTS] [key=val [key=val...]] [TARGETS]
      Build and optionally install Lumiera.
@@ -86,7 +75,7 @@ Special Targets:
 
 Configuration Options:
 """
-    Help(prelude + vars.GenerateHelpText(env))
+    Help(prelude + buildVars.GenerateHelpText(env))
 
 
 

@@ -39,7 +39,6 @@ import os
 import sys
 
 sys.path.append(TOOLDIR)
-sys.path.append(SCRIPTDIR)
 
 from Buildhelper import *
 from LumieraEnvironment import *
@@ -52,10 +51,8 @@ import Platform
 
 #####################################################################
 
-env = Setup.setupBasicEnvironment()
-
-if not (isCleanupOperation(env) or isHelpRequest()):
-    env = Platform.configurePlatform(env)
+env = Setup.defineBuildEnvironment()
+env = Platform.configure(env)
 
 
 #####################################################################

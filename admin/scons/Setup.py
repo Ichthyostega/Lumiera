@@ -21,14 +21,15 @@
 #  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 #####################################################################
 
+from SCons.Script import EnsurePythonVersion, EnsureSConsVersion, Variables, Decider
 
-# NOTE: scons -h for help.
-# Read more about the SCons build system at: http://www.scons.org
-# Basically, this script just /defines/ the components and how they
-# fit together. SCons will derive the necessary build steps.
+from LumieraEnvironment import *
+from Buildhelper import *
+import Options
 
 
-#-----------------------------------Configuration
+
+#-------------------------------------------------------Configuration
 TARGDIR      = 'target'
 VERSION      = '0.pre.01'
 TOOLDIR      = './admin/scons'    # SCons plugins
@@ -51,50 +52,33 @@ installIcon  = '#$DESTDIR/share/lumiera/icons'
 installUIRes = '#$DESTDIR/share/lumiera/'
 installConf  = '#$DESTDIR/lib/lumiera/config'
 
-#-----------------------------------Configuration
-localDefinitions = locals()
+#-------------------------------------------------------Configuration
+buildSetup = Record(locals())
 
 
 
 
-import os
-import sys
 
-from SCons.Script import *
-
-from Options import *
-
-from Buildhelper import *
-from LumieraEnvironment import *
-
-
-#####################################################################
-
-def setupBasicEnvironment():
-    """ define cmdline options, build type decisions
+def defineBuildEnvironment():
+    """ create a custom build environment,
+        define the basic compiler and linker flags,
+        define locations in source and target tree,
+        parse the commandline and pick up options
     """
-    EnsurePythonVersion(2,4)
     EnsureSConsVersion(1,0)
+    EnsurePythonVersion(2,4)
+    Decider('MD5-timestamp')  # detect changed files by timestamp, then do a MD5
     
-    Decider('MD5-timestamp') # detect changed files by timestamp, then do a MD5
-    
-    vars = Variables([OPTCACHE, CUSTOPTFILE])
-    vars = defineCmdlineVariables(vars)
-    
-    env = LumieraEnvironment(variables=vars
-                            ,toolpath = [TOOLDIR]
-                            ,pathConfig = extract_localPathDefs(localDefinitions) # e.g. buildExe -> env.path.buildExe
-                            ,TARGDIR  = TARGDIR
-                            ,DESTDIR = '$INSTALLDIR/$PREFIX'
-                            ,VERSION = VERSION
-                            )
-    handleVerboseMessages(env)
+    buildVars = Variables([OPTCACHE, CUSTOPTFILE])
+    Options.defineCmdlineVariables(buildVars)
+    env = LumieraEnvironment(buildSetup, buildVars)
     
     env.Replace( CPPPATH   =["#src"]    # used to find includes, "#" means always absolute to build-root
                , CPPDEFINES=['LUMIERA_VERSION='+VERSION ]    # note: it's a list to append further defines
                , CCFLAGS='-Wall -Wextra '
                , CFLAGS='-std=gnu99' 
                )
+    handleVerboseMessages(env)
     handleNoBugSwitches(env)
     
     env.Append(CPPDEFINES = '_GNU_SOURCE')
@@ -110,9 +94,11 @@ def setupBasicEnvironment():
     appendCppDefine(env,'PKGDATADIR','LUMIERA_CONFIG_PATH=\\"$PKGLIBDIR/:.\\"'
                                     ,'LUMIERA_CONFIG_PATH=\\"$DESTDIR/share/lumiera/:.\\"') 
     
-    prepareOptionsHelp(vars,env)
-    vars.Save(OPTCACHE, env)
+    Options.prepareOptionsHelp(buildVars,env)
+    buildVars.Save(OPTCACHE, env)
     return env
+
+
 
 def appendCppDefine(env,var,cppVar, elseVal=''):
     if env[var]:
@@ -138,6 +124,7 @@ def handleNoBugSwitches(env):
         env.Append(CPPDEFINES = 'EBUG_'+level)
     elif level == 'RELEASE':
         env.Replace( DEBUG = 0 )
+
 
 def handleVerboseMessages(env):
     """ toggle verbose build output """

@@ -22,7 +22,6 @@
 #####################################################################
 
 
-import os
 from os import path
 
 import SCons
@@ -38,9 +37,15 @@ class LumieraEnvironment(Environment):
         This allows us to carry structured config data without
         using global vars. Idea inspired by Ardour. 
     """
-    def __init__(self, pathConfig, **kw):
-        Environment.__init__ (self,**kw)
-        self.path = Record (pathConfig)
+    def __init__(self, buildSetup, buildVars, **kw):
+        kw.update(VERSION = buildSetup.VERSION
+                 ,TARGDIR = buildSetup.TARGDIR
+                 ,DESTDIR = '$INSTALLDIR/$PREFIX'
+                 ,toolpath = [buildSetup.TOOLDIR ]
+                 ,variables = buildVars
+                 )
+        Environment.__init__ (self, **kw)
+        self.path = Record (extract_localPathDefs(buildSetup))    # e.g. buildExe -> env.path.buildExe
         self.libInfo = {}
         self.Tool("BuilderGCH")
         self.Tool("BuilderDoxygen")
@@ -48,6 +53,7 @@ class LumieraEnvironment(Environment):
         self.Tool("ToolCCache")
         register_LumieraResourceBuilder(self)
         register_LumieraCustomBuilders(self)
+    
     
     def Configure (self, *args, **kw):
         kw['env'] = self
