@@ -37,8 +37,6 @@ OPTCACHE     = 'optcache'
 CUSTOPTFILE  = 'custom-options'
 
 # these are accessible via env.path.xxxx
-srcIcon      = 'icons'
-srcConf      = 'data/config'
 buildExe     = '#$TARGDIR'
 buildLib     = '#$TARGDIR/modules'
 buildPlug    = '#$TARGDIR/modules'

@@ -136,8 +136,9 @@ def getDirname (d, basePrefix=None):
         d,_ = os.path.split(d)
     if basePrefix:
         basePrefix = os.path.realpath(basePrefix)
+        name = str(d)
         if str(d).startswith(basePrefix):
-            name = str(d)[len(basePrefix):]
+            name = name[len(basePrefix):]
     else:
         _, name = os.path.split(d)
     return name

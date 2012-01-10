@@ -26,7 +26,7 @@ lumiera = ( env.Program('lumiera', ['lumiera/main.cpp'] + core, install=True)
 
 # Install the lumiera application:
 # symlink the executable into the bin dir
-env.SymLink('$DESTDIR/bin/lumiera',env.path.installExe+'lumiera','../lib/lumiera/lumiera')
+env.SymLink('#$DESTDIR/bin/lumiera',env.path.installExe+'lumiera','../lib/lumiera/lumiera')
 
 
 # building Lumiera Plugins

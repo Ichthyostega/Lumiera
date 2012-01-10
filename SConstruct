@@ -57,18 +57,6 @@ env = Platform.configure(env)
 
 #####################################################################
 
-# define Icons to render and install
-vector_icon_dir      = env.subst(env.path.srcIcon+'svg')
-prerendered_icon_dir = env.subst(env.path.srcIcon+'prerendered')
-icons   = ( [env.IconRender(f)   for f in scanSubtree(vector_icon_dir,      ['*.svg'])]
-          + [env.IconResource(f) for f in scanSubtree(prerendered_icon_dir, ['*.png'])]
-          )
-
-#define Configuration files to install
-config  = ( env.ConfigData(env.path.srcConf+'setup.ini', targetDir='$ORIGIN')
-          + env.ConfigData(env.path.srcConf+'dummy_lumiera.ini')
-          )
-
 doxydoc = env.Doxygen('doc/devel/Doxyfile')
 env.Alias ('doc', doxydoc)
 env.Clean ('doc', doxydoc + ['doc/devel/,doxylog','doc/devel/warnings.txt'])
@@ -79,7 +67,7 @@ env.Clean ('doc', doxydoc + ['doc/devel/,doxylog','doc/devel/warnings.txt'])
 ### === MAIN BUILD === ##############################################
 
 # call subdir SConscript(s) for to define the actual build targets
-SConscript(dirs=['src','src/tool','research','tests'], exports='env icons config')
+SConscript(dirs=['data','src','src/tool','research','tests'], exports='env')
 
 # artifacts defined by the build targets
 Import('lumiera plugins tools gui testsuite')
