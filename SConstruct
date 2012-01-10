@@ -55,22 +55,14 @@ env = Setup.defineBuildEnvironment()
 env = Platform.configure(env)
 
 
-#####################################################################
-
-doxydoc = env.Doxygen('doc/devel/Doxyfile')
-env.Alias ('doc', doxydoc)
-env.Clean ('doc', doxydoc + ['doc/devel/,doxylog','doc/devel/warnings.txt'])
-#  env.Install(dir = '$DESTDIR/share/doc/lumiera$VERSION/devel', source=doxydoc)
-
-
 
 ### === MAIN BUILD === ##############################################
 
 # call subdir SConscript(s) for to define the actual build targets
-SConscript(dirs=['data','src','src/tool','research','tests'], exports='env')
+SConscript(dirs=['data','src','src/tool','research','tests','doc'], exports='env')
 
 # artifacts defined by the build targets
-Import('lumiera plugins tools gui testsuite')
+Import('lumiera plugins tools gui testsuite doxydoc')
 
 
 
@@ -83,6 +75,8 @@ env.Clean ('build', [ 'src/pre.gch' ])
 ### === Alias Targets === ###########################################
 
 build = env.Alias('build', lumiera + plugins + tools +gui)
+
+env.Alias ('doc', doxydoc)
 
 env.Alias ('all', build + testsuite + doxydoc)
 env.Default('build')
