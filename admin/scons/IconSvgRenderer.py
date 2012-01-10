@@ -1,6 +1,6 @@
 #!/usr/bin/python
 #
-# render_icons.py  -  Icon rendering utility script
+# IconSvgRenderer.py  -  Icon rendering utility script
 #
 #  Copyright (C)         Lumiera.org
 #    2008,               Joel Holdsworth <joel@airwebreathe.org.uk>
@@ -19,11 +19,12 @@
 #  along with this program; if not, write to the Free Software
 #  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
+import os
 import sys
 import getopt
-from xml.dom import minidom
-import os
 import shutil
+from xml.dom import minidom
+
 
 #svgDir = "svg"
 #prerenderedDir = "prerendered"

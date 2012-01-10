@@ -123,7 +123,7 @@ def register_LumieraResourceBuilder(env):
         used to generate png from the svg source using librsvg. 
     """
     
-    import render_icon as renderer  # load Joel's python script for invoking the rsvg-convert (SVG render)
+    import IconSvgRenderer as renderer  # load Joel's python script for invoking the rsvg-convert (SVG render)
     renderer.rsvgPath = env.subst("$TARGDIR/rsvg-convert")
     
     def invokeRenderer(target, source, env):

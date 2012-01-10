@@ -30,7 +30,6 @@
 
 #-----------------------------------Configuration
 TOOLDIR      = './admin/scons'    # SCons plugins
-SCRIPTDIR    = './admin'
 #-----------------------------------Configuration
 
 
