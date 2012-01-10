@@ -26,9 +26,6 @@ import shutil
 from xml.dom import minidom
 
 
-#svgDir = "svg"
-#prerenderedDir = "prerendered"
-inkscapePath = "/usr/bin/inkscape"
 rsvgPath = "./rsvg-convert"
 artworkLayerPrefix = "artwork:"
 
@@ -38,7 +35,7 @@ artworkLayerPrefix = "artwork:"
 # - to parse a SVG
 # - to invoke Inkscape to render this SVG into a raster image (icon)
 # 
-# For the actual call into Incscape we rely on an executable 'rsvg-convert',
+# For the actual Cairo based SVG rendering we rely on an executable 'rsvg-convert',
 # which is built during the Lumiera build process.
 # 
 # Judging from the code and the actual SVGs, this seems to work as follows:
@@ -116,22 +113,6 @@ def parseSVG( file_path ):
               return artwork_name, size, parsePlateLayer( plate )
   return None
 
-def renderSvgInkscape(file_path, out_dir, artwork_name, rectangle, doc_size):
-
-  # Calculate the rendering rectangle
-  x1 = rectangle[0]
-  y1 = doc_size[1] - rectangle[1] - rectangle[3]
-  x2 = x1 + rectangle[2]
-  y2 = y1 + rectangle[3]
-  
-  # Call Inkscape to do the render
-  os.spawnlp(os.P_WAIT, inkscapePath, inkscapePath,
-    file_path,
-    "-z",
-    "-a %g:%g:%g:%g" % (x1, y1, x2, y2),
-    "-w %g" % (rectangle[2]), "-h %g" % (rectangle[3]),
-    "--export-png=" + os.path.join(out_dir, "%gx%g/%s.png" % (rectangle[2], rectangle[3], artwork_name)))
-
 def renderSvgRsvg(file_path, out_dir, artwork_name, rectangle, doc_size):
   # Prepare a Cairo context
   width = int(rectangle[2])
@@ -157,18 +138,6 @@ def getTargetNames(file_path):
   artwork_name, _ , rectangles = parseSVG(file_path)
   return ["%gx%g/%s.png" % (rectangle[2], rectangle[3], artwork_name) for rectangle in rectangles ]
 
-#def renderSvgIcons():
-#  listing = os.listdir(svgDir)
-#  for file_path in listing:
-#    [root, extension] = os.path.splitext(file_path)
-#    if extension.lower() == ".svg":
-#      renderSvgIcon(os.path.join(svgDir, file_path))
-
-#def copyPrerenderedIcons():
-#  listing = os.listdir(prerenderedDir)
-#  for list_item in listing:
-#    src_dir = os.path.join(prerenderedDir, list_item)
-#    copyMergeDirectory(src_dir, list_item)
 
 def printHelp():
   print "render-icon.py SRCFILE.svg TARGETDIR"
