@@ -50,7 +50,7 @@ def testCollection(env,dir):
 
 
 
-# but have to treat some subdirs individually.
+# have to treat some subdirs individually.
 specials = ['plugin','lib','components']
 moduledirs = globRootdirs('*')
 

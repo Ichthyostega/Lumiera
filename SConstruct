@@ -23,46 +23,39 @@
 
 
 # NOTE: scons -h for help.
+# This script /defines/ the components and how they fit together.
+# SCons will derive dependencies and the necessary build steps.
 # Read more about the SCons build system at: http://www.scons.org
-# Basically, this script just /defines/ the components and how they
-# fit together. SCons will derive the necessary build steps.
 
 
-#-----------------------------------Configuration
-TOOLDIR      = './admin/scons'    # SCons plugins
-#-----------------------------------Configuration
-
-
-
-
-import os
+# SCons plugins and extension modules
+#------------------------------------------------
 import sys
-
-sys.path.append(TOOLDIR)
-
-from Buildhelper import *
-from LumieraEnvironment import *
+sys.path.append('./admin/scons')
+#------------------------------------------------
 
 
 import Setup
 import Options
 import Platform
 
+from Buildhelper import *
+from LumieraEnvironment import *
+
+
 
 #####################################################################
 
-env = Setup.defineBuildEnvironment()
-env = Platform.configure(env)
+env = Setup.defineBuildEnvironment()         # dirs & compiler flags
+env = Platform.configure(env)                # library dependencies
 
 
 
 ### === MAIN BUILD === ##############################################
 
-# call subdir SConscript(s) for to define the actual build targets
+# call subdir SConscript(s) to define the actual build targets...
 SConscript(dirs=['data','src','src/tool','research','tests','doc'], exports='env')
 
-# artifacts defined by the build targets
-Import('lumiera plugins tools gui testsuite doxydoc')
 
 
 
@@ -74,13 +67,16 @@ env.Clean ('build', [ 'src/pre.gch' ])
 
 ### === Alias Targets === ###########################################
 
+# pick up the targets defined by the sub SConscripts
+Import('lumiera plugins tools gui testsuite doxydoc')
+
 build = env.Alias('build', lumiera + plugins + tools +gui)
-
-env.Alias ('doc', doxydoc)
-
-env.Alias ('all', build + testsuite + doxydoc)
 env.Default('build')
 # SCons default target
+
+
+env.Alias ('all', build + testsuite + doxydoc)
+env.Alias ('doc', doxydoc)
 
 env.Alias('install', gui)
 env.Alias('install', '$DESTDIR')
