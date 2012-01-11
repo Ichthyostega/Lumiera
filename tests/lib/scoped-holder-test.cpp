@@ -96,20 +96,20 @@ namespace test{
             CHECK (false!=holder);
             CHECK (holder!=false);
             
-            CHECK (0 != Dummy::checksum());
+            CHECK (0 < Dummy::checksum());
             CHECK ( &(*holder));
-            CHECK (holder->add(2) == 2 + Dummy::checksum());
+            CHECK (holder->acc(2) == 2 + Dummy::checksum());
             
             Dummy *rawP = holder.get();
             CHECK (rawP);
             CHECK (holder);
             CHECK (rawP == &(*holder));
-            CHECK (rawP->add(-5) == holder->add(-5));
+            CHECK (rawP->acc(-5) == holder->acc(-5));
             
             TRACE (test, "holder at %p", &holder);
             TRACE (test, "object at %p", holder.get() );
-            TRACE (test, "size(object) = %lu", sizeof(*holder));
-            TRACE (test, "size(holder) = %lu", sizeof(holder));
+            TRACE (test, "size(object) = %zu", sizeof(*holder));
+            TRACE (test, "size(holder) = %zu", sizeof(holder));
           }
           CHECK (0 == Dummy::checksum());
         }
@@ -127,7 +127,7 @@ namespace test{
             try
               {
                 create_contained_object (holder);
-                NOTREACHED ();
+                NOTREACHED ("expect failure in ctor");
               }
             catch (int val)
               {
@@ -221,13 +221,13 @@ namespace test{
               {
                 create_contained_object (maph[i]);
                 CHECK (maph[i]);
-                CHECK (0 < maph[i]->add(12));
+                CHECK (0 < maph[i]->acc(12));
               }
             CHECK (100==maph.size());
             CHECK (0 != Dummy::checksum());
             
             
-            long value55 = maph[55]->add(0); 
+            long value55 = maph[55]->acc(0); 
             long currSum = Dummy::checksum();
             
             CHECK (1 == maph.erase(55));

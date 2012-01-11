@@ -4,14 +4,15 @@
 ##                Things defined here usuall won't be installed
 ##
 
-Import('env','artifacts','core')
-
-support_lib = artifacts['support']
+Import('env core support_lib')
 
 
+
+envR = env.Clone()
+# envR.Append(CCFLAGS=' -O3 ')
 
 # build additional test and administrative tools....
-experiments = [ env.Program('try', ['try.cpp'] + support_lib)           #### to try out some feature...
+experiments = [ envR.Program('try', ['try.cpp'] + support_lib)          #### to try out some feature...
               ]
 
 #

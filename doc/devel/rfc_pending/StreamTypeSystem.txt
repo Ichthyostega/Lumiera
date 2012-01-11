@@ -1,30 +1,37 @@
+Stream Type System
+==================
+
+// please don't remove the //word: comments
+
 [grid="all"]
 `------------`-----------------------
-*State*         _Idea_
+*State*         _Draft_
 *Date*          _2008-10-05_
 *Proposed by*   link:Ichthyostega[]
 -------------------------------------
 
 
 
-Stream Type System
-------------------
-Especially in the Proc-Layer, we need a framework to deal with different
-"kinds" of media streams. +
+********************************************************************************
+.Abstract
+Especially in the Proc-Layer, within the Builder and at the interface to the
+Engine we need sort of a framework to deal with different »kinds« of
+media streams. +
 This is the foundation to be able to define what can be connected and to
 separate out generic parts and isolate specific parts.
-
+********************************************************************************
 
 
 Description
-~~~~~~~~~~~
+-----------
+//description: add a detailed description:
 The general idea is that we need meta information, and -- more precisely --
 that _we_ need to control the structure of this metadata. Because it has
 immediate consequences on the way the code can test and select the appropriate
 path to deal with some data or a given case. This brings us in a difficult
 situation:
 
- * almost everything regarding media data and media handling is notriously
+ * almost everything regarding media data and media handling is notoriously
    convoluted
  * because we can't hope ever to find a general umbrella, we need an extensible
    solution
@@ -41,30 +48,36 @@ role for some of the more advanced things possible within the session.
 
 
 Terminology
-^^^^^^^^^^^
+~~~~~~~~~~~
  * *Media* is comprised of a set of streams or channels
  * *Stream* denotes a homogeneous flow of media data of a single kind
- * *Channel* denotes a elementary stream, which can't be further separated _in
-    the given context_
+ * *Channel* denotes an elementary stream, which -- _in the given context_ --
+   can't be decomposed any further
  * all of these are delivered and processed in a smallest unit called *Frame*.
    Each frame corresponds to a time interval.
- * a *Buffer* is a data structure capable of holding a Frame of media data.
+ * a *Buffer* is a data structure capable of holding one or multiple Frames of media data.
  * the *Stream Type* describes the kind of media data contained in the stream
 
 
+Concept of a Stream Type
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+The Goal of our Stream Type system is to provide a framework for precisely
+describing the ``kind'' of a media stream at hand. The central idea is to
+structure the description/classification of streams into several levels.
+A complete stream type (implemented by a stream type descriptor) contains
+a tag or selection regarding each of these levels.
+
 Levels of classification
 ^^^^^^^^^^^^^^^^^^^^^^^^
-The description/classification of streams is structured into several levels. A
-complete stream type (implemented by a stream type descriptor) containts a tag
-or selection regarding each of these levels.
 
  * Each media belongs to a fundamental *kind of media*, examples being _Video,
    Image, Audio, MIDI, Text,..._ This is a simple Enum.
  * Below the level of distinct kinds of media streams, within every kind we
-   have an open ended collection of *Prototypes*, which, whithin the high-level
+   have an open ended collection of *Prototypes*, which, within the high-level
    model and for the purpose of wiring, act like the "overall type" of the
    media stream. Everything belonging to a given Prototype is considered to be
-   roughly equivalent and can be linked together by automatic, lossles
+   roughly equivalent and can be linked together by automatic, lossless
    conversions. Examples for Prototypes are: stereoscopic (3D) video versus the
    common flat video lacking depth information, spatial audio systems
    (Ambisonics, Wave Field Synthesis), panorama simulating sound systems (5.1,
@@ -85,15 +98,15 @@ _library_ routines, which also yield a _type classification system_ suitable
 for their intended use. Most notably, for raw sound and video data we use the
 http://gmerlin.sourceforge.net/[GAVL] library, which defines a fairly complete
 classification system for buffers and streams. For the relevant operations in
-the Proc-Layer, we access each such library by means of a Facade; it may sound
+the Proc-Layer, we access each such library by means of a Façade; it may sound
 surprising, but actually we just need to access a very limited set of
 operations, like allocating a buffer. _Within_ the Proc-Layer, the actual
 implementation type is mostly opaque; all we need to know is if we can connect
 two streams and get an conversion plugin.
 
 Thus, to integrate an external library into Lumiera, we need explicitly to
-implement such a Lib Facade for this specific case, but the intention is to be
-able to add this Lib Facade implementation as a plugin (more precisely as a
+implement such a Lib Façade for this specific case, but the intention is to be
+able to add this Lib Façade implementation as a plugin (more precisely as a
 "Feature Bundle", because it probably includes several plugins and some
 additional rules)
 
@@ -105,8 +118,8 @@ with, determining a suitable prototype for a given implementation type is sort
 of a tagging operation. But it can be supported by heuristic rules and an
 flexible configuration of defaults. For example, if confronted with a media
 with 6 sound channels, we simply can't tell if it's a 5.1 sound source, or if
-it's a pre mixed orchesrta music arrangement to be routed to the final balance
-mixing or if it's a prepared set of spot pickups and overdubbed dialogue. But a
+it's a pre mixed orchestra music arrangement to be routed to the final balance
+mixing or if it's a prepared set of spot pick-ups and overdubbed dialogue. But a
 heuristic rule defaulting to 5.1 would be a good starting point, while
 individual projects should be able to set up very specific additional rules
 (probably based on some internal tags, conventions on the source folder or the
@@ -132,42 +145,46 @@ connections and conversions
    into each other.
  * Conversions and judging the possibility of making connections at the level
    of implementation types is coupled tightly to the used library; indeed, most
-   of the work to provide a Lib Facade consists of coming up with a generic
+   of the work to provide a Lib Façade consists of coming up with a generic
    scheme to decide this question for media streams implemented by this
    library.
 
 
 Tasks
-^^^^^
+~~~~~
+// List what needs to be done to implement this Proposal:
  * draft the interfaces ([green]#✔ done#)
- * define a fallback and some basic behaviour for the relation between
+ * define a fall-back and some basic behaviour for the relation between
    implementation type and prototypes [,yellow]#WIP#
  * find out if it is necessary to refer to types in a symbolic manner, or if it
-   is sufficient to have a ref to a descriptor record or Facade object.
- * provide a Lib Facade for GAVL [,yellow]#WIP#
+   is sufficient to have a ref to a descriptor record or Façade object.
+ * provide a Lib Façade for GAVL [,yellow]#WIP#
  * evaluate if it's a good idea to handle (still) images as a separate distinct
    kind of media
 
 
 
+Discussion
+~~~~~~~~~~
 
 Alternatives
 ^^^^^^^^^^^^
-Instead of representing types my metadata, leave the distinction implicit and
+//alternatives: explain alternatives and tell why they are not viable:
+Instead of representing types by metadata, leave the distinction implicit and
 instead implement the different behaviour directly in code. Have video tracks
 and audio tracks. Make video clip objects and audio clip objects, each
-utilizing some specific flags, like sound is mono or stereo. Then either
-switch, swich-on-type or scatter out the code into a bunch of virtual
+utilising some specific flags, like sound is mono or stereo. Then either
+switch, switch-on-type or scatter out the code into a bunch of virtual
 functions. See the Cinelerra source code for details.
 
 In short, following this route, Lumiera would be plagued by the same notorious
 problems as most existing video/sound editing software. Which is, implicitly
-assuming "everyone" just does "normal" things. Of course, users always were and
-always will be clever enough to work around this assumption, but the problem
-is, all those efforts will mostly stay isolated and can't crystalize into a
+assuming ``everyone'' just does ``normal'' things. Of course, users always were
+and always will be clever enough to work around this assumption, but the problem
+is, all those efforts will mostly stay isolated and can't crystallise into a
 reusable extension. Users will do manual tricks, use some scripting or rely on
 project organisation and conventions, which in turn creates more and more
-coercion for the "normal" user to just do "normal" things.
+coercion for the ``average'' user to just do ``normal'' things.
 
 To make it clear: both approaches discussed here do work in practice, and it's
 more a cultural issue, not a question guided by technical necessities to select
@@ -175,6 +192,8 @@ the one or the other.
 
 
 Rationale
+---------
+//rationale: Give a concise summary why it should be done *this* way:
 
  * use type metadata to factor out generic behaviour and make variations in
    behaviour configurable.
@@ -189,13 +208,17 @@ Rationale
  * provide the possibility to incorporate very project specific knowledge as
    rules.
 
+//Conclusion
+//----------
+//conclusion: When approbate (this proposal becomes a Final)
+//            write some conclusions about its process:
 
 
 
 
 Comments
 --------
-
+//comments: append below
 As usual, see the
 http://www.lumiera.org/wiki/renderengine.html#StreamType[Proc-Layer impl doku]
 for more information and implementation details.
@@ -214,8 +237,8 @@ number of inputs and outputs) need in some way to be connected.
 The fact that we don't have a rule based system for deciding queries currently
 is not much of a problem. A table with some pre configured default answers for
 a small number of common query cases is enough to get the first clip rendered.
-(Such a solution is already in place and working.)
-  -- link:Ichthyostega[] 2008-10-05
+(Such a solution is already in place and working.) +
+ -- link:Ichthyostega[] 2008-10-05
 
 Woops fast note, I didn't read this proposal completely yet. Stream types could
 or maybe should be coopertatively handled together with the backend. Basically
@@ -226,9 +249,9 @@ number, plus adding the capabilitiy of per frame metadata. This indices get
 abstracted by "indexing engines" it will be possible to have different kinds of
 indices over one file (for example, one enumerating single frames, one
 enumerating keyframes or gops). Such a indexing engine would be also the place
-to attach per media metadata. From the proc layer it can then look like +struct
-frameinfo* get_frame(unsigned num)+ where +struct frameinfo+ (not yet defined)
-is something like +{ void* data; size_t size; struct metadata* meta; ...}+
+to attach per media metadata. From the proc layer it can then look like `struct
+frameinfo* get_frame(unsigned num)` where `struct frameinfo` (not yet defined)
+is something like `{ void* data; size_t size; struct metadata* meta; ...}` +
  -- link:ct[] 2008-10-06
 
 Needs Work
@@ -239,5 +262,7 @@ agreed that we want this concept as proposed here.
    Do 14 Apr 2011 03:06:42 CEST Christian Thaeter
 
 
+//endof_comments:
 
+''''
 Back to link:/documentation/devel/rfc.html[Lumiera Design Process overview]

@@ -46,7 +46,7 @@ namespace time {
    * grid point, usable for grid aligning values.
    * 
    * \par usage
-   * For one there is the lib::time::Quantiser, which directly
+   * First off, there is the lib::time::Quantiser, which directly
    * implements this interface and plays a central role when it comes
    * to converting continuous time into any kind of frame based timecode.
    * Besides that, the session stores asset::TimeGrid definitions, which

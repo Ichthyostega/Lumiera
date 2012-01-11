@@ -81,6 +81,12 @@ namespace play {
     {
     public:
       //////////////TODO accessor functions here
+      
+      Timings
+      constrainedBy (Timings additionalConditions)
+        {
+          UNIMPLEMENTED ("how to combine timing constraints");
+        }
     };
   
   

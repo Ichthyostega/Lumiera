@@ -1,0 +1,25 @@
+# -*- python -*-
+##
+## SConscript  -  SCons buildscript for Icons and Resources
+##
+
+from Buildhelper import scanSubtree
+
+Import('env')
+
+
+# define Icons to render and install
+vector_icon_dir      = 'icons/svg'
+prerendered_icon_dir = 'icons/prerendered'
+
+icons   = ( [env.IconRender(f)   for f in scanSubtree(vector_icon_dir,      ['*.svg'])]
+          + [env.IconResource(f) for f in scanSubtree(prerendered_icon_dir, ['*.png'])]
+          )
+
+#define Configuration files to install (dir-prefix, name)
+config  = ( env.ConfigData('config','setup.ini', targetDir='$ORIGIN')
+          + env.ConfigData('config','dummy_lumiera.ini')
+          )
+
+
+Export('icons config')

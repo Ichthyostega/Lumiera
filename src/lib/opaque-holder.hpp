@@ -253,6 +253,8 @@ namespace lib {
       template<typename SUB>
       struct Buff : Buffer
         {
+          BOOST_STATIC_ASSERT (siz >= sizeof(SUB));
+          
           SUB&
           get()  const  ///< core operation: target is contained within the inline buffer
             {
@@ -267,8 +269,6 @@ namespace lib {
           explicit
           Buff (SUB const& obj)
             {
-              BOOST_STATIC_ASSERT (siz >= sizeof(SUB));
-              
               new(Buffer::ptr()) SUB (obj);
             }
           

@@ -1,0 +1,44 @@
+ PluginVersioningCases
+======================
+:Author: MichaelPloujnikov
+:Date Created: 200707121127
+:Date Changed: 200707160404
+:Count Changes: 46
+
+//MENU: label Plugin Version
+
+
+Compatibility matrix
+--------------------
+
+.Source compatibility
+[grid="rows"]
+`100`200`200~~~~
+*~CALLER~ \ ^CALLEE^**,OLD^**^,NEW^**^
+OLD,works,works but a recent interface definition must be available
+NEW,works,works
+~~~~
+
+.Binary compatibility
+[grid="rows"]
+`100`200`200~~~~
+*~CALLER~ \ ^CALLEE^**,OLD^**^,NEW^**^
+OLD,works,works
+NEW,caller gets "revision not sufficient" at runtime and should implement fallbacks,works
+~~~~
+
+^*^) CALLER is the user of an interface, CALLEE is the interface provider (usually a plugin)
+
+^**^) OLD means an initial revision, NEW means some later revision of an interface
+
+Observations
+------------
+
+Compiling a newer Plugin for some older main application release has some quirks (interface definitions are intended to be shipped with the main application). This should be rarely the case.
+
+When compiling, older Plugins should be updated to new interface revisions.
+Caller should provide a fallback to older interface revisions for binary compatibility.
+
+Generally, sources should just be properly maintained and updated to use the most recent interfaces revision.
+
+For binary compatibility everything will work well, provided that the caller kept proper fallback functionality for older interface revisions. Plugins which are independently distributed (packaged) in binary form don't need to be updated with every new main application release and just work.

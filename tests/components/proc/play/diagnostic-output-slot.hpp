@@ -35,15 +35,22 @@
 #include "include/logging.h"
 #include "proc/play/output-slot.hpp"
 #include "proc/play/output-slot-connection.hpp"
+#include "proc/asset/meta/time-grid.hpp"
 #include "proc/engine/buffhandle.hpp"
 #include "proc/engine/tracking-heap-block-provider.hpp"
-#include "lib/iter-source.hpp"  ////////////TODO really going down that path...?
+#include "lib/time/timevalue.hpp"
+#include "lib/scoped-ptrvect.hpp"
+#include "lib/iter-source.hpp"
+#include "lib/advice.hpp"
+#include "lib/symbol.hpp"
+#include "lib/util.hpp"
 #include "proc/engine/testframe.hpp"
 //#include "lib/sync.hpp"
 
 #include <boost/noncopyable.hpp>
 //#include <string>
 //#include <vector>
+#include <tr1/unordered_set>
 #include <tr1/memory>
 //#include <boost/scoped_ptr.hpp>
 
@@ -52,22 +59,82 @@ namespace proc {
 namespace play {
 
 //using std::string;
+  using lib::Symbol;
+  using util::unConst;
+  using util::contains;
+  using lib::time::FrameRate;
+  using proc::asset::meta::PGrid;
+  using proc::asset::meta::TimeGrid;
   using proc::engine::BufferDescriptor;
   using proc::engine::test::TestFrame;
   using proc::engine::TrackingHeapBlockProvider;
+  namespace diagn = proc::engine::diagn;
 
 //using std::vector;
   using std::tr1::shared_ptr;
 //using boost::scoped_ptr;
   
+  namespace { // diagnostics & internals....
+    
+    inline PGrid
+    getTestTimeGrid()
+    {
+      Symbol gridID("DiagnosticOutputSlot-buffer-grid");
+      lib::advice::Request<PGrid> query4grid(gridID) ;
+      PGrid testGrid25 = query4grid.getAdvice();
+      
+      if (!testGrid25)
+        testGrid25 = TimeGrid::build (gridID, FrameRate::PAL);
+      
+      ENSURE (testGrid25);
+      return testGrid25;
+    }
+  }
   
   
+  /** 
+   * Diagnostic output connection for a single channel,
+   * allowing to track generated frames and verify 
+   * the processing protocol for output buffers.
+   */
   class TrackingInMemoryBlockSequence
     : public OutputSlot::Connection
+    , boost::noncopyable
     {
       
-      shared_ptr<TrackingHeapBlockProvider> buffProvider_;
+      typedef std::tr1::unordered_set<FrameID> FrameTrackingInfo;
+      
+      
+      TrackingHeapBlockProvider buffProvider_;
       BufferDescriptor bufferType_;
+      
+      FrameTrackingInfo frameTrackingIndex_;
+      PGrid frameGrid_;
+      
+      bool closed_;
+      
+      
+      BuffHandle
+      trackFrame (FrameID frameNr, BuffHandle const& newBuffer)
+        {
+          TRACE (test, "Con=%p : track buffer %zu for frame-#%lu"
+                     , this, newBuffer.entryID(), frameNr);
+          REQUIRE (!contains (frameTrackingIndex_,frameNr),
+                   "attempt to lock already used frame %lu", frameNr);
+          
+          frameTrackingIndex_.insert (frameNr);
+          return newBuffer;
+        }
+      
+      TimeValue
+      deadlineFor (FrameID frameNr)
+        {
+          // a real world implementation
+          // would offset by a latency here
+          return frameGrid_->timeOf (frameNr);
+        }
+      
+      
       
       
       /* === Connection API === */
@@ -75,75 +142,139 @@ namespace play {
       BuffHandle
       claimBufferFor(FrameID frameNr) 
         {
-          return buffProvider_->lockBuffer (bufferType_);
+          TRACE (test, "Con=%p : lock buffer for frame-#%lu", this, frameNr);
+          REQUIRE (!closed_);
+          
+          return trackFrame (frameNr,
+                             buffProvider_.lockBuffer (bufferType_));
         }
       
       
       bool
       isTimely (FrameID frameNr, TimeValue currentTime)
         {
-          if (Time::MAX == currentTime)
-            return true;
+          TRACE (test, "Con=%p : timely? frame-#%lu"
+                     , this, frameNr);
           
-          UNIMPLEMENTED ("find out about timings");
-          return false;
+          if (Time::ANYTIME == currentTime)
+            return true;
+          else
+            return currentTime < deadlineFor (frameNr);
         }
       
       void
       transfer (BuffHandle const& filledBuffer)
         {
+          TRACE (test, "Con=%p : transfer buffer %zu"
+                     , this, filledBuffer.entryID());
+          REQUIRE (!closed_);
+          
           pushout (filledBuffer);
         }
       
       void
       pushout (BuffHandle const& data4output)
         {
-          buffProvider_->emitBuffer   (data4output);
-          buffProvider_->releaseBuffer(data4output);
+          REQUIRE (!closed_);
+          buffProvider_.emitBuffer   (data4output);
+          buffProvider_.releaseBuffer(data4output);
         }
       
       void
       discard (BuffHandle const& superseededData)
         {
-          buffProvider_->releaseBuffer (superseededData);
+          REQUIRE (!closed_);
+          buffProvider_.releaseBuffer (superseededData);
         }
       
       void
       shutDown ()
         {
-          buffProvider_.reset();
+          closed_ = true;
         }
       
     public:
       TrackingInMemoryBlockSequence()
-        : buffProvider_(new TrackingHeapBlockProvider())
-        , bufferType_(buffProvider_->getDescriptor<TestFrame>())
+        : buffProvider_()
+        , bufferType_(buffProvider_.getDescriptor<TestFrame>())
+        , frameTrackingIndex_()
+        , frameGrid_(getTestTimeGrid())                              /////////////TODO should rather pass that in as part of a "timings" definition
+        , closed_(false)
         {
-          INFO (engine_dbg, "building in-memory diagnostic output sequence");
+          INFO (engine_dbg, "building in-memory diagnostic output sequence (at %p)", this);
         }
       
       virtual
      ~TrackingInMemoryBlockSequence()
         {
-          INFO (engine_dbg, "releasing diagnostic output sequence");
+          INFO (engine_dbg, "releasing diagnostic output sequence (at %p)", this);
+        }
+      
+      
+      /* === Diagnostic API === */
+      
+      TestFrame const *
+      accessEmittedFrame (uint frameNr)  const
+        {
+          if (frameNr < buffProvider_.emittedCnt())
+            return & accessFrame(frameNr);
+          else
+            return 0;                                               ////////////////////////////////TICKET #856
+        }
+      
+      diagn::Block const *
+      accessEmittedBuffer (uint bufferNr)  const
+        {
+          if (bufferNr < buffProvider_.emittedCnt())
+            return & accessBlock(bufferNr);
+          else
+            return 0;
+        }
+      
+      bool
+      wasAllocated (uint frameNr)  const
+        {
+          TRACE (test, "query wasAllocated. Con=%p", this);
+          
+          return contains (frameTrackingIndex_, frameNr);
+        }
+      
+    private:
+      TestFrame const&
+      accessFrame (uint frameNr)  const
+        {
+          return unConst(this)->buffProvider_.accessAs<TestFrame> (frameNr);
+        }
+      
+      diagn::Block const&
+      accessBlock (uint bufferNr)  const
+        {
+          return unConst(this)->buffProvider_.access_emitted (bufferNr);
         }
     };
   
   
+  /**
+   * Special diagnostic connection state implementation,
+   * establishing diagnostic output connections for each channel,
+   * thus allowing to verify the handling of individual buffers
+   */
   class SimulatedOutputSequences
     : public ConnectionStateManager<TrackingInMemoryBlockSequence>
-    , boost::noncopyable
     {
-      TrackingInMemoryBlockSequence
-      buildConnection()
+      typedef ConnectionStateManager<TrackingInMemoryBlockSequence> _Base;
+      
+      void
+      buildConnection(ConnectionStorage storage)
         {
-          return TrackingInMemoryBlockSequence();
+          storage.create<TrackingInMemoryBlockSequence>();
         }
       
     public:
       SimulatedOutputSequences (uint numChannels)
+        : _Base(numChannels)
         {
-          init (numChannels);
+          init();
         }
     };
   
@@ -153,22 +284,56 @@ namespace play {
   
   /********************************************************************
    * Helper for unit tests: Mock output sink.
-   * 
-   * @todo write type comment
+   * Complete implementation of the OutputSlot interface, with some
+   * additional stipulations to support unit testing.
+   * - the implementation uses a special protocol output buffer,
+   *   which stores each "frame" in memory for later investigation
+   * - the output data in the buffers handed over from client
+   *   actually hold an TestFrame instance 
+   * - the maximum number of channels and the maximum number
+   *   of acceptable frames is limited to 5 and 100.
+   * @warning any Captured (test) data from all individual instances
+   *   remains in memory until shutdown of the current executable
    */
   class DiagnosticOutputSlot
     : public OutputSlot
     {
       
       static const uint MAX_CHANNELS = 5;
-        
-      /* === hook into the OutputSlot frontend === */
+      
+      /** @note a real OutputSlot implementation
+       * would rely on some kind of embedded
+       * configuration here */
+      uint
+      getOutputChannelCount()
+        {
+          return MAX_CHANNELS;
+        }
+      
+      
+      /** hook into the OutputSlot frontend */
       ConnectionState*
       buildState()
         {
-          return new SimulatedOutputSequences(MAX_CHANNELS);
+          return new SimulatedOutputSequences(
+                        getOutputChannelCount());
         }
         
+      /** @internal is self-managed and non-copyable.
+       * Clients use #build() to get an instance */
+      DiagnosticOutputSlot() { }
+      
+      /** @internal access the implementation object
+       * representing a single stream connection
+       */
+      TrackingInMemoryBlockSequence const&
+      accessSequence (uint channel)
+        {
+          REQUIRE (!isFree(), "diagnostic OutputSlot not (yet) connected");
+          REQUIRE (channel <= getOutputChannelCount());
+          return static_cast<TrackingInMemoryBlockSequence&> (state_->access (channel));
+        }
+      
       
     public:
       /** build a new Diagnostic Output Slot instance,
@@ -177,70 +342,93 @@ namespace play {
       static OutputSlot&
       build()
         {
-          UNIMPLEMENTED ("Diagnostic Output Slot instance");
+          static lib::ScopedPtrVect<OutputSlot> diagnosticSlots;
+          return diagnosticSlots.manage(new DiagnosticOutputSlot);
         }
       
       static DiagnosticOutputSlot&
       access (OutputSlot& to_investigate)
         {
-          UNIMPLEMENTED ("access the diagnostics data for the given OutputSlot instance");
+          return dynamic_cast<DiagnosticOutputSlot&> (to_investigate);
         }
+      
       
       
       /* === diagnostics API === */
       
       /**
-       * diagnostic facility to verify
-       * test data frames written to this
-       * Test/Dummy "output"
+       * diagnostic facility to verify test data frames
+       * written to this Test/Dummy "output". It exposes
+       * the emitted Data as a sequence of TestFrame objects.
        */
-      struct OutputStreamProtocol
-        : lib::IterSource<TestFrame> 
+      class OutputFramesLog
+        : public lib::IterSource<const TestFrame>
+        , boost::noncopyable
         {
-          /////////////TODO: implement the extension points required to drive an IterSource
+          TrackingInMemoryBlockSequence const& outSeq_;
+          uint currentFrame_;
+          
+          
+          virtual Pos
+          firstResult ()
+            {
+              REQUIRE (0 == currentFrame_);
+              return outSeq_.accessEmittedFrame (currentFrame_);
+            }
+          
+          virtual void
+          nextResult (Pos& pos)
+            {
+              ++currentFrame_;
+              pos = outSeq_.accessEmittedFrame(currentFrame_);
+            }
+          
+          public:
+            OutputFramesLog (TrackingInMemoryBlockSequence const& bs)
+              : outSeq_(bs)
+              , currentFrame_(0)
+              { }
         };
         
-      typedef OutputStreamProtocol::iterator OutFrames;
+      typedef OutputFramesLog::iterator OutFrames;
       
       
       OutFrames
       getChannel (uint channel)
         {
-          UNIMPLEMENTED ("access output stream tracing entry");
+          REQUIRE (channel < MAX_CHANNELS);
+          return OutputFramesLog::build(
+              new OutputFramesLog (
+                  accessSequence(channel)));
         }
       
       
       bool
-      buffer_was_used (uint channel, FrameID frame)
+      frame_was_allocated (uint channel, FrameID nominalFrame)
         {
-          UNIMPLEMENTED ("determine if the denoted buffer was indeed used");
+          return accessSequence(channel)
+                   .wasAllocated(nominalFrame);
         }
       
       
       bool
-      buffer_unused   (uint channel, FrameID frame)
+      output_was_emitted (uint channel, FrameID outputFrame)
         {
-          UNIMPLEMENTED ("determine if the specified buffer was never touched/locked for use");
+          diagn::Block const *block = accessSequence(channel)
+                                        .accessEmittedBuffer(outputFrame);
+          return block
+              && block->was_used();
         }
       
       
       bool
-      buffer_was_closed (uint channel, FrameID frame)
+      output_was_closed (uint channel, FrameID outputFrame)
         {
-          UNIMPLEMENTED ("determine if the specified buffer was indeed closed properly");
+          diagn::Block const *block = accessSequence(channel)
+                                        .accessEmittedBuffer(outputFrame);
+          return block
+              && block->was_closed();
         }
-      
-      
-      bool
-      emitted (uint channel, FrameID frame)
-        {
-          UNIMPLEMENTED ("determine if the specivied buffer was indeed handed over for emitting output");
-        }
-      
-      
-      
-    private:
-      
     };
   
   

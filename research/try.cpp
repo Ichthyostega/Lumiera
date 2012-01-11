@@ -22,100 +22,142 @@
 // 10/11 - simple demo using a pointer and a struct
 // 11/11 - using the boost random number generator(s)
 // 12/11 - how to detect if string conversion is possible?
+// 1/12  - is partial application of member functions possible?
 
 
-#include "lib/util.hpp"
+/** @file try.cpp
+ ** Research: perform a partial application of a member function.
+ ** The result of this partial application should be a functor expecting the remaining arguments.
+ ** The idea was to use this at various library functions expecting a functor or callback, so to
+ ** improve readability of the client code: clients could then just pass a member pointer, without
+ ** the need to use any tr1::bind expression.
+ ** 
+ ** \par Costs in code size
+ ** While this turned out to be possible, even without much work, just based on the existing
+ ** templates for partial functor application (function-closure.hpp), the resulting code size
+ ** is rather sobering. Especially in debug mode, quite some overhead is created, which makes
+ ** usage of this convenience feature in general purpose library code rather questionable.
+ ** When compiling with -O3 though, most of the overhead will be removed
+ ** 
+ ** The following numbers could be observed:
+ ** \code
+ **                                  debug / stripped   // debug-O3 / stripped
+ ** just using a member pointer:     39013 /  7048            42061 /  7056
+ ** using tr1::bind and function:    90375 / 15416            65415 /  9376
+ ** partial apply, passing functor: 158727 / 23576            97479 / 11296
+ ** partial apply with mem pointer: 119495 / 17816            78031 /  9440
+ ** \endcode
+ */
 
+
+#include "lib/meta/tuple.hpp"
+#include "lib/meta/function-closure.hpp"
+
+//#include <tr1/functional>
 #include <iostream>
-#include <string>
+
+using lib::meta::Types;
+using lib::meta::Tuple;
+//using std::tr1::placeholders::_1;
+//using std::tr1::placeholders::_2;
+using std::tr1::function;
+using std::tr1::bind;
 
 using std::string;
 using std::cout;
 using std::endl;
 
 
-typedef char Yes_t;
-struct No_t { char more_than_one[4]; };
+namespace lib {
+namespace meta{
+namespace func{
 
 
-template<typename TY>
-struct _can_convertToString
+template<typename SIG, uint num>
+struct _PupS
   {
-    static TY & probe();
+    typedef typename _Fun<SIG>::Ret Ret;
+    typedef typename _Fun<SIG>::Args::List Args;
+    typedef typename Splice<Args,NullType,num>::Front ArgsFront;
+    typedef typename Splice<Args,NullType,num>::Back  ArgsBack;
+    typedef typename Types<ArgsFront>::Seq            ArgsToClose;
+    typedef typename Types<ArgsBack>::Seq             ArgsRemaining;
+    typedef typename _Sig<Ret,ArgsRemaining>::Type    ReducedSignature;
     
-    static Yes_t check(string);
-    static No_t  check(...);
+    typedef function<ReducedSignature>                Function;
+  };
+
+template<typename SIG, typename A1>
+inline 
+typename _PupS<SIG,1>::Function
+papply (SIG f, A1 a1)
+{
+  typedef typename _PupS<SIG,1>::ArgsToClose ArgsToClose;
+  typedef Tuple<ArgsToClose>        ArgTuple;
+  ArgTuple val(a1);
+  return PApply<SIG,ArgsToClose>::bindFront (f, val);
+}
+
+template<typename SIG, typename A1, typename A2>
+inline 
+typename _PupS<SIG,2>::Function
+papply (SIG f, A1 a1, A2 a2)
+{
+  typedef typename _PupS<SIG,2>::ArgPrefix ArgsToClose;
+  typedef Tuple<ArgsToClose>        ArgTuple;
+  ArgTuple val(a1,a2);
+  return PApply<SIG,ArgsToClose>::bindFront (f, val);
+}
+
+
+}}} // namespace lib::meta::func
+
+class Something
+  {
+    int i_;
+    
+    void
+    privateFun(char a)
+      {
+        char aa(a + i_);
+        cout << "Char-->" << aa <<endl;
+      }
     
   public:
-    static const bool value = (sizeof(Yes_t)==sizeof(check(probe())));
-  };
-
-
-class SubString
-  : public string
-  { 
-  public:
-      SubString() : string("sublunar") { }
-  };
-
-class Something { };
-
-struct SomehowStringy
-  {
-    operator string() { return "No such thing"; }
-  };
-
-struct SomehowSub
-  {
-    operator SubString() { return SubString(); }
-  };
-
-class SomehowSubSub
-  : public SomehowSub
-  { 
+    Something(int ii=0)
+      : i_(ii)
+      { }
+    
+    typedef function<void(char)> FunP;
+    
+    FunP
+    getBinding()
+      {
+//        function<void(Something*,char)> memf = bind (&Something::privateFun, _1, _2);
+//        return lib::meta::func::papply (memf, this);
+        return lib::meta::func::papply (&Something::privateFun, this);
+      }
+    
+//    typedef void (Something::*FunP) (char);
+//    
+//    FunP
+//    getBinding()
+//      {
+//        return &Something::privateFun;
+//      }
   };
 
 
 
 
-template<typename TY>
-bool
-investigate (TY const&)
-  {
-    return _can_convertToString<TY>::value;
-  }
-
-#define SHOW_CHECK(_EXPR_) cout << STRINGIFY(_EXPR_) << "\t : " << (investigate(_EXPR_)? "Yes":"No") << endl;
 
 int 
 main (int, char**)
   {
+    Something some(23);
+    Something::FunP fup = some.getBinding();
     
-    SHOW_CHECK (string("nebbich"));
-    SHOW_CHECK ("gurks");
-    SHOW_CHECK (23.34);
-    SHOW_CHECK (23);
-    
-    string urgs("urgs");
-    string & urgs_ref (urgs);
-    string const& urgs_const_ref (urgs);
-    string * urgs_ptr = &urgs;
-    
-    SHOW_CHECK (urgs_ref);
-    SHOW_CHECK (urgs_const_ref);
-    SHOW_CHECK (*urgs_ptr);
-    
-    SubString sub;
-    Something thing;
-    const SomehowStringy stringy = SomehowStringy();
-    SomehowSubSub subsub;
-    SubString const& subRef(subsub);
-    
-    SHOW_CHECK (sub);
-    SHOW_CHECK (thing);
-    SHOW_CHECK (stringy);
-    SHOW_CHECK (subsub);
-    SHOW_CHECK (subRef);
+    fup ('a');
     
     cout <<  "\n.gulp.\n";
     

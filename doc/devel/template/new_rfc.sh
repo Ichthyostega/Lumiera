@@ -12,9 +12,9 @@ ${TITLE//?/=}
 *Proposed by*   $(git config --get user.name) <$(git config --get user.email)>
 -------------------------------------
 
-[abstract]
 ********************************************************************************
-
+.Abstract
+_give a short summary of this proposal_
 ********************************************************************************
 
 Description

@@ -100,13 +100,19 @@ several important parts of the applications are loaded as plug-ins, starting
 with the GUI.
 
 
-User Interfaces
----------------
+User Interface(s)
+-----------------
 
 The purpose of the user interface(s) is to act on the _high-level data model_
 contained within the Session, which belongs to the _processing layer_ below.
 User interfaces are implemented as plug-ins and are pulled up on demand,
 they won't contain any relevant persistent state beyond presentation.
+
+_As of 2011, the one and only interface under active development is
+the Lumiera GTK GUI,_ based on GTK-2 / gtkmm. The sources are in tree
+(directory 'src/gui') and it is integrated into the standard build and
+installation process. By default, running the 'lumiera' executable will
+load and start this GUI as a Lumiera module from 'modules/gtk_gui.lum'
 
 
 
@@ -165,9 +171,65 @@ Low Level Model
 ~~~~~~~~~~~~~~~
 _tbw_
 
-Play/Render processes
-~~~~~~~~~~~~~~~~~~~~~
-_tbw_
+
+Play/Rendering subsystem
+~~~~~~~~~~~~~~~~~~~~~~~~
+Within Lumiera, »Player« is the name for a subsystem responsible for organising and tracking
+_ongoing playback and render processes._ The player subsystem does not perform or even manage
+any render operations, nor does it handle the outputs directly. +
+Yet it addresses some central concerns:
+
+uniformity::
+ All playback and render processes are on equal footing, handled in a similar way.
+ 
+integration::
+ The player cares for the necessary integration with the other subsystems
++ 
+it consults the _Output Management,_ retrieves the necessary informations from the _Session_
+and coordinates the forwarding of Backend calls.
+ 
+time quantisation::
+ The player translates continuous time values into discrete frame counts.
++
+To perform this _quantisation,_ the help of the session for building a TimeGrid
+for each output channel is required.
+
+
+The player service
+^^^^^^^^^^^^^^^^^^
+Client code accesses the player (subsystem) through the play-facade (`lumiera::Play`).
+The exposed service allows to _set up an output connection for playback or rendering,_
+resulting in a play-controller object. 
+
+.Play::Controller
+This controller frontend represents the presence of such an active output connection 
+and incorporates a state machine supporting the usual things you'd expect to do with
+a player (Play, pause, FFwd, Rew, scrubbing, jumping, looping). This controller object
+is a copyable smart-handle -- all instances act as if wired in parallel.
+
+.time control
+The play-controller frontend makes heavy use of `time::Control`. This is a mediator
+to accept and forward _mutations_ on time values and time ranges, possibly involving 
+frame quantisation. After attaching it to a target time value, it accepts changes,
+offsets and nudging, translates these into the appropriate target modifications
+and notifies any attached _change listeners_.
+
+.play process
+Ongoing effort to calculate a stream of frames for playback or rendering. +
+The play process is an conceptual entity linking together several activities in the backend
+and the render engine. It maintains a registration entry for the process to keep track of
+associated entities, resources allocated and calls dispatched as a consequence. Besides
+each play process is wired to at leas one play-controller acting as frontend interface
+and information hub for the client code.
+
+NOTE: the player is in no way engaged in any of the actual calculation and management tasks
+necessary to make the stream of calculations actually happen. The play process code contained
+within the player subsystem is largely comprised of organisational concerns and not especially
+performance critical.
+
+- the backend is responsible for dispatching the calculation stream and scheduling calculation jobs
+- the render engine has the ability to carry out individual frame calculations
+- the OutputSlot exposed by the output manager is responsible for accepting timed frame delivery
 
 
 
@@ -190,9 +252,9 @@ reopened on demand. Hardlinked files are recognized and opened only once.
 All file access is done by memory mapping to reduce data copies between
 userland and kernel. Moreover the kernel becomes responsible to schedule
 paging (which will be augmented by lumiera) to make the best use of available
-resources. Memory is mapped in biggier possibly overlapping windows of
-resonable sized chunks. Requests asking for a contingous set of data from the
-file in  memory.
+resources. Memory is mapped in larger windows of reasonable sized chunks, possibly
+overlapping each other. Clients may request a specific continuous set of data from
+the file to be accessible as memory block.
 
 
 .Indexing
@@ -207,13 +269,41 @@ Manages serveral classes of threads in pools. The threadpool is reasonable
 dumb. Higher level management will be done by the Schedulers and Jobs.
 
 
+Engine Interface
+~~~~~~~~~~~~~~~~
+While on itself just a thin interface and adaptation layer forwarding calls to
+the primary backend facilities, the Engine Interface is the primary point of service
+accessed by Proc-Layer to use the backend services for rendering content.
+
+.Calculation Streams
+The Engine Interface is cast in terms of an _calculation stream_ entity. This is
+a stream of expected and ongoing frame calculations for multiple channels, to be
+managed as a compound. The calculated frames will be delivered into an output slot
+right away. No assumptions are made regarding the ordering of these individual
+calculations -- they may be performed in parallel, constrained by input and
+resource prerequisites solely.
+
+.Frame Dispatcher
+For the actual processing, calculation streams need to be translated into individual
+calculation jobs to be scheduled. For each uniform _segment of the effective timeline,_
+the typical recursive descent call characteristic for _pull processing_  results in a
+Job Ticket.
+
+.Job Ticket
+This structural descriptor of the actual calculations to be performed is the base
+for creating individual jobs: Already specialised for a distinct segment of the
+effective timeline and tailored for the needs of a given calculation stream,
+the job ticket acts as blueprint for the actual jobs to be enqueued
+with the _Scheduler._
+
+
 Schedulers
 ~~~~~~~~~~
 
 Scheduling Queues for different purposes:
 
 .Deadline
-Higher priority jobs ordered by a deadline time plus some (negative) hystersis. Jobs are
+Higher priority jobs ordered by a deadline time plus some (negative) hysteresis. Jobs are
 started when they approach their deadline. Jobs who miss their deadline are
 never scheduled here.
 
@@ -299,6 +389,27 @@ Plugin loader
 ~~~~~~~~~~~~~
 _tbw_
 
+Advice framework
+~~~~~~~~~~~~~~~~
+This is a ``whiteboard'' system, allowing implementation-level services to _publish_
+some piece of information as _advice_, while other parts of the system may pick up
+this advice just by a name token, without requiring a direct knowledge of the
+original _advisor._ The _Advice System_ is a singleton service maintaining a
+lookup and registration data structure. Individual _piece of advice_ elements
+are stored _as value copy_. Publishing new advice requires locking, but accessing
+advice is lock-free (actually there needs to be a memory barrier ``somewhere'',
+otherwise the advice requesting client might not see new advice)
+
+.Advice topics
+Advice is organised into categories, based on the type of the advice item and
+some additional symbolic identifiers. Actually these are syntactically represented
+similar to the _atoms_ of a rules based system (``Prolog syntax''). Currently (2010)
+only ground terms (completely static symbols) are supported. But the intention is to
+extend the system to allow for variables in these terms. This will turn the matching
+of advice provisions and requests into an unification, allowing the advice item to
+be parametrised.
+
+
 Rules system
 ~~~~~~~~~~~~
 _tbw_
@@ -316,17 +427,40 @@ Lua Scripting
 _tbw_
 
 
+
 Library
 -------
 
 The Lumiera support library contains lots of helper functionality
 factored out from the internals and re-used. It is extended as we go.
 
+practical shortcuts
+~~~~~~~~~~~~~~~~~~~
+The header 'lib/util.hpp' defines some shortcuts heavily used throughout
+the code base. The idea is to highlight a common semantic meaning, while
+hide differentiation on the technical details.
+
+isnil:: indicate a _missing value_, irrespective if this is a NULL pointer,
+  an empty string or an empty container. Several of our custom wrappers also
+  support this notion.
+
+contains:: indicate that a value is _somehow contained_ within a collection,
+  irrespective if this is a set, a map, a vector or string (substring test)
+
+sanitise:: make any string usable as identifier.
+
+In a similar vein, the header 'lib/util-foreach.hpp' provides a generic
+``for-each-element'' mechanism, which works for all STL containers, but
+also for all _Lumiera Forward Iterators_. The loop body is provided
+as a functor. In case this functor is a predicate (boolean result),
+the +and_all+ and +has_any+ functions allow to test for conjunction
+and disjunction.
+
 
 Locking
 ~~~~~~~
-Based on object monitors. Performance critical code
-uses mutexes, condition vars and rwlocks direcly.
+General purpose Locking is based on object monitors. Performance critical code
+in the backend uses mutexes, condition vars and rwlocks direcly.
 Intentionally no semaphores.
 
 - C++ locks are managed by scoped automatic variables
@@ -336,14 +470,79 @@ Intentionally no semaphores.
 
 Time
 ~~~~
-Time values are represented by an opaque date type `lumiera::Time`
+Time values are represented by a family of opaque date types
 with overloaded operators. The implementation is based on `gavl_time_t`,
-an integral (µsec) time tick value. Any Time handling and conversions
-is centralised in library routines.
+an integral (µsec) time tick value. Thus, the arithmetic on time values
+and time spans is limited and any Time handling and conversion is
+centralised in library routines.
 
 We distinguish between time values and a _quantisation_ into a frame
 or sample grid. In any case, quantisation has to be done once, explicitly
 and as late as possible. See the link:{rfc}/TimeHandling.html[Time handling RfC].
+
+.time values
+The Lumiera library defines several flavours of time values. All of
+these internal time values have in common that they are _opaque_ and not
+directly related to any human readable or external (wall clock) time.
+Moreover, most of these time values are immutable, yet there are two
+mechanisms to allow for changing time values (TimeVar and Mutation).
+
+.quantised time
+Special flavours of these time values additionally carry the reference
+to an (frame) alignment grid, while being time value entities in all other
+respects. But _only those quantised time values_ expose functions to
+convert the internal opaque time into a human readable or externally
+relevant time format -- including SMPTE or frame counts.
+
+.time (alignment) grid
+Thus, any usage of time values is forced to refer to such a time alignment
+grid explicitly, at least when leaving the realm of the internal opaque
+time values. This is the point where the *time quantisation* is actually
+performed, imposing some information loss (as any rounding operation does). +
+A time alignment grid is exactly that: a set of functions to perform
+this lossy conversion. Implicitly this involves the definition of an
+_time origin_ (reference point where the external time is zero), and
+typically this also includes the definition of a _frame rate_ (but
+in the most general case, this frame rate might be variable and 
+change at various places of the time axis). Consequently, all time
+grids are Assets and defined as part of the concrete session.
+
+
+Time Code
+^^^^^^^^^
+Historically, Time Code was seen as the foundation of any film editing.
+Similarly, the first generation of editing systems used Time Code as a
+foundation. Today, we consider such a design as questionable.
+
+Lumiera takes a different approach here: Time code is reduced to a mere
+mode of presentation, i.e. a formatting of existing time values. It is
+void of any substantial meaning. To the contrary, the operation of
+_frame quantisation_ (see above) is considered to be fundamental,
+causing a irreversible loss of information. The design of time handling
+chosen within Lumiera forces you to decide on using a specific _time grid_,
+prior to being able to format an internal (opaque) time value in any kind
+of time code. And only as late as when _actually retrieving_ this time code
+formatted value, the actual quantisation (grid alignment) happens.
+
+In practice, establishing a time grid requires knowledge about the output
+format. Thus, an (sufficiently resolved) *output designation* is required
+to perform any grid alignment a and time code formatting. Typically this
+happens when a timeline or similar part of the High-Level-Model is connected
+to a concrete output or an global bus defining a frame rate already. The model
+contents as such are _frame rate independent_.
+
+The following time code formats are supported, both for programmatic access
+and display within the GUI
+
+- frame count
+- SMPTE
+- SMPTE drop-frame _[,yellow]#TODO# as of 2011_
+- hours:mins:secs  _[,yellow]#TODO# as of 2011_
+- fractional seconds  _[,yellow]#TODO# as of 2011_
+- musical bars:beats _[,yellow]#TODO# as of 2011_
+
+As a corollary, as any rendering is based on frame numbers, it requires an
+output connection or something similar to establish a frame grid.
 
 
 Errors
@@ -433,7 +632,33 @@ mayfail()
 
 Singletons
 ~~~~~~~~~~
-_tbw_
+Deliberately, Lumiera stays below the level of utilising a dependency injection framework.
+Consequently, we access most services _by type name_, pulling up a single implementation
+instance on demand. Rather than placing this singleton lifecycle logic into the individual
+implementation classes, we use a _singleton factory_, managing the lifecycle through static
+variables and placing the singleton object into a static memory block. Singleton initialisation
+is protected by a monitor per singleton type, while shutdown is triggered by the clean-up of
+a static variable. This results in the general policy that within Lumiera, performing any
+``business'' code in the application shutdown phase (after exiting +main()+) is _strictly
+prohibited._ Generally speaking, destructors _must not perform any significant work_ and
+are are expected to be failsafe.
+
+.accessing the singleton instance
+By convention, when clients are expected actively to access the singleton instance,
+the interface class holds the singleton factory as a public static member with the
+name +instance+. This allows clients to write `SomeService::instance()` to get a
+reference to the implementation.
+
+.subclasses and mock testing support
+There is a mechanism to ``push aside'' the existing singleton instance and shadow
+it temporarily with a mock implementation. Besides, there is a variation of the
+general singleton factory, allowing to fabricate a specific subclass of the 
+exposed interface. Both of these facilities are rather technically involved
+and require some specific set-up -- fortunately it turned out that they are
+used only occasionally and rarely required. (Probably this is a result of
+Lumiera being developed _test-driven_ -- things are being written mostly
+in a unit test friendly fashion).
+
 
 Extensible Factory
 ~~~~~~~~~~~~~~~~~~
@@ -445,27 +670,162 @@ _tbw_
 
 Iterators
 ~~~~~~~~~
+Iterators serve to decouple a collection of elements from the actual data type
+implementation used to manage those elements. The use of iterators is a
+design pattern.
+-> see link:{ldoc}/technical/library/iterator.html[detailed library documentation]
+
 Lumiera Forward Iterator
 ^^^^^^^^^^^^^^^^^^^^^^^^
-_tbw_
+Within Lumiera, we don't treat _Iterator_ as a base class -- we treat it as a  _concept_
+for generic programming, similar to the usage in the STL. But we use our own definition
+of the iterator concept, placing the primary focus on interfaces and decoupling.
+Our ``Lumiera Forward Iterator'' concept deliberately removes most of the features
+known from the STL. Rather, such an iterator is just the promise for pulling values
+_once_. The iterator can be disposed when _exhausted_ -- there is no way of resetting,
+moving backwards or doing any kind of arithmetic with such an object. The _exhausted
+state can be detected by a +bool+ conversion (contrast this with STL iterators, where
+you need to compare to an +end+ iterator). Beyond that, the usage is quite similar,
+even compatible to +std::for_each+. 
 
 Iterator Adapters
 ^^^^^^^^^^^^^^^^^
-_tbw_
+We provide a collection of pre defined adapter templates to ease building
+Lumiera Forward Iterators.
+
+- a generic solution using a _iteration control_ callback API
+- the `lib::RangeIter` just wraps up a pair of iterators for ``current position''
+  and ``and'' -- compatible with the STL
+- there is a variant for automatically dereferencing pointers
+- plus a set of adapters for STL containers, allowing to expose each value, each
+  key, distinct values and so on.
+
+Iterator Adapters are designed for ease of use, they don't conceal the underlying
+implementation (and the actual type is often quite convoluted).
+
+Iteration Sources
+^^^^^^^^^^^^^^^^^
+To the contrary, the `lib::IterSource<TY>` template is an abstract base class.
+This allows to expose the promise to deliver values through any kind of API, without
+disclosing the actual implementation. Obviously, this requires the use of virtual
+functions for the actual iteration.
+
+Again, there are pre-defined adaptors for STL containers, but the actual container
+is concealed in this case.
 
 Itertools
 ^^^^^^^^^
-_tbw_
+Iterators can be used to build pipelines. This technique from functional programming
+allows to abstract away the actual iteration completely, focussing only on the way
+individual elements are processed. To support this programming style, several support
+templates are provided to build _filtering iterators, transforming iterators,_ to pick
+only _unique values,_ to _take a snapshot on-the-fly_ etc. There are convenience
+builder functions for those operations, figuring out the actual source and destination
+types by template metaprogramming.
+
+
+Front-end for boost::format
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Formatting values with `printf` is a notorious source for intricate errors.
+Additionally, using (s|n)`printf` can be clunky in practice, and it doesn't
+support custom defined string conversions, which are an important diagnostic
+aid when working with objects. We might 
+link:{ldoc}/technical/howto/UsingBoost.html[use Boost], which provides the
+`boost::format` library to address those problems. Unfortunately including this
+header-only library solution incurs a significant overhead, both in terms of
+compilation time and code size. While maybe still acceptable at the implementation
+level, using boost::format is thus certainly a ``no go'' for any code residing
+in headers frequently included.
+
+To work around these problems, we provide a front-end wrapper, defined in
+'lib/format-string.hpp'. This allows to keep the actual boost::format based
+implementation confined to a single translation unit, while still being able
+to use all primitive types as usual with boost::format or printf. Additionally,
+our frontend automatically invokes a custom or built-in string conversion, if
+applicable, it dereferences pointers and catches all errors encountered while
+in formatting. So it's well suited for usage in error handling code.
+
+[source,C]
+------------------------------------------------------------
+#include "lib/format-string.hpp"
+using util::_Fmt;
+
+double total = 22.9499;
+const char * currency = "€";
+
+cout << _Fmt("price %+5.2f %s") % total % currency << endl;
+------------------------------------------------------------
+
+WARNING: `boost::format` is known to be about 10 times slower than `printf` --
+         best to avoid it for performance critical code.
 
 
 Wrappers and Opaque Holders
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-- smart handle
-- unified value/ptr/reference holder
-- ownership managing collection
-- opaque holder to ``piggypack'' an object inline,
-  without the need for heap allocated storage
-- vector of references
+.smart handle
+This pervasively used handle type is based on the reference counting
+smart-pointer type of C\++ (`boost::shared_ptr` and C++11). Typically
+this also includes a pointer to some kind of implementation service. +
+Yet still, handles based on `lib::Handle<TY>` should not be confused with
+smart pointers. Rather, we use the ref-counting mechanism to invoke a custom
+clean-up callback when the last handle goes out of scope. Typically, the 
+implementation service is kept entirely opaque, while the copyable handle
+objects also implement a front-end interface for client access.
+
+.unified holder for value/ptr/reference
+_tbw_
+
+.ownership managing collection
+When implementing services, frequently we encountered the situation that
+a manager object creates and owns some component elements or sub-services.
+The library provides two special collections, which also take ownership
+of their contents and care for automatic clean-up. Especially, contrary
+to the STL containers, those custom containers support use of
+_non-copyable object_ (as a rule, all objects with reference semantics
+are defined non-copyable in Lumiera).
+
+- the `ScopedPtrVect` is a vector taking ownership of heap allocated objects
+- the `ScopedCollection` is a fixed-size collection, holding all the child
+  objects within a single (heap allocated) storage block
+
+
+.opaque holder
+There is a family of holder objects, all based on placement-new of the 
+contained object into an embedded buffer. The purpose is to ``piggyback''
+an object inline, without the need for heap allocated storage. Frequently
+the motivation for this usage pattern is *type erasure*: the detailed knowledge
+context used to build some kind of object is discarded prior to further use,
+relying on generic information and the hidden parametrisation henceforth.
+
+.polymorphic values
+The C++ language has direct support for _value semantics_ and allows to build
+value objects to be treated as first class citizens. Unfortunately this doesn't
+fit well with the chosen approach to object orientation, where polymorphism relies
+on reference semantics. Thus, most of the fundamental design patterns drive us into
+having an object manager somewhere hidden within the implementation level, to
+manage the memory for maintaining the subclass instances to be concealed
+at the usage site.
+
+To avoid this dilemma, we utilise the technique of the opaque holder to provide
+objects with value semantics, while actually placing the instance of a subclass
+into the inline buffer. Clients access this embedded object by automatic type
+conversion to the interface type, which gives us polymorphism. While the 
+definition of such a beast is quite involved, the runtime overhead is
+surprisingly low. When compared with standard polymorphism, creating
+objects and invoking operations has zero overhead, while copying
+and assignment incur the cost of an additional virtual call,
+assuming the target objects cooperate by mixing in a
+copy management interface.
+
+.vector of references
+a minimal interface for an array-like entity, but exposing only references
+to the contained elements. Obviously this means to use a virtual call for
+the subscript operation. This interface allows interfaces to expose something
+_array-like_ without committing to a specific implementation type for the
+exposed elements within the ``array''. The Lumiera library provides a set
+of standard implementations for this +lib::RefArray+ interface, including
+a vector based and a directly array based variant.
+
 
 Unique Identifiers
 ~~~~~~~~~~~~~~~~~~
@@ -485,16 +845,42 @@ at runtime (type erasure)
 
 Typed Lookup
 ^^^^^^^^^^^^
-_planned_ a system of per-type lookup tables, based on `EntryID`, together
+_[,yellow]#planned#_ a system of per-type lookup tables, based on `EntryID`, together
 with an type specific access functor. Together, this allows to translate
 transparently and typesafe from symbolic ID to object instance, which
 is an prerequisite for integrating a rules based system. Besides, these
-tables allow unique IDs per type
+tables allow unique IDs per type +
+-> more details about this concept link:{l}/wiki/renderengine.html#EntryID%20TypedID%20TypedLookup[in the TiddlyWiki]
 
 
 Allocators
 ~~~~~~~~~~
-_tbw_
+Lumiera utilises several custom allocators, each tailored to a specific purpose.
+All these allocator-_frontends_ share a common pooling allocation backend
+
+WARNING: currently (as of 2011) the low-level pooled allocator within the
+         backend isn't implemented; instead we do just heap allocations.
+         See Ticket #231
+
+.Allocation Cluster
+This allocation scheme is used within the context of the Builder and the 
+Low-Level-Model. The predominant usage trend in this realm is to create
+and wire a family of small objects right after each other, within a build
+process. These objects are intended to work together and will be discarded
+all at once, after hot-swapping a new version of that model segment.
+
+.Typed Allocation Manager
+This allocation framework is used at various places when a large number of
+similar objects is expected to be coming and going. New objects are 
+placement-constructed into the allocated space and immediately wrapped
+with a ref-counting smart-ptr to manage ownership.
+
+.Simple Allocator
+Based on the allocator interface of the STL, allowing just for plain
+allocations and de-allocations without any further instance and lifecycle
+management. Currently (as of 2011) this allocator isn't used much -- it is
+conceivable that later we'll detect some specific STL based containers to be 
+performance critical with respect to allocation.
 
 
 Memory Pools
@@ -533,6 +919,11 @@ Functor Utils
 ^^^^^^^^^^^^^
 _tbw_
 
+Duck Typing
+^^^^^^^^^^^
+_tbw_
+
+
 
 Preprocessor Metaprogramming
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -554,7 +945,7 @@ fail. NULL strings are propagated to "" empty strings.
 Polymorphic Programming in C
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Just a macro for simplyfying vtable function calls
+Just a macro for simplifying vtable function calls
  VCALL(Handle, function, arguments...)
 translates to
  Handle->vtable->function (Handle, arguments...)

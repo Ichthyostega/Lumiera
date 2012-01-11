@@ -22,11 +22,10 @@
 #####################################################################
 
 
-import os
 from os import path
 
-import SCons
 import SCons.SConf
+from SCons.Action import Action
 from SCons.Environment import Environment
 
 from Buildhelper import *
@@ -38,9 +37,15 @@ class LumieraEnvironment(Environment):
         This allows us to carry structured config data without
         using global vars. Idea inspired by Ardour. 
     """
-    def __init__(self, pathConfig, **kw):
-        Environment.__init__ (self,**kw)
-        self.path = Record (pathConfig)
+    def __init__(self, buildSetup, buildVars, **kw):
+        kw.update(VERSION = buildSetup.VERSION
+                 ,TARGDIR = buildSetup.TARGDIR
+                 ,DESTDIR = '$INSTALLDIR/$PREFIX'
+                 ,toolpath = [buildSetup.TOOLDIR ]
+                 ,variables = buildVars
+                 )
+        Environment.__init__ (self, **kw)
+        self.path = Record (extract_localPathDefs(buildSetup))    # e.g. buildExe -> env.path.buildExe
         self.libInfo = {}
         self.Tool("BuilderGCH")
         self.Tool("BuilderDoxygen")
@@ -48,6 +53,7 @@ class LumieraEnvironment(Environment):
         self.Tool("ToolCCache")
         register_LumieraResourceBuilder(self)
         register_LumieraCustomBuilders(self)
+    
     
     def Configure (self, *args, **kw):
         kw['env'] = self
@@ -123,7 +129,7 @@ def register_LumieraResourceBuilder(env):
         used to generate png from the svg source using librsvg. 
     """
     
-    import render_icon as renderer  # load Joel's python script for invoking the rsvg-convert (SVG render)
+    import IconSvgRenderer as renderer  # load Joel's python script for invoking the rsvg-convert (SVG render)
     renderer.rsvgPath = env.subst("$TARGDIR/rsvg-convert")
     
     def invokeRenderer(target, source, env):
@@ -151,43 +157,44 @@ def register_LumieraResourceBuilder(env):
         return (generateTargets, source)
     
     def IconResource(env, source):
-         """Copy icon pixmap to corresponding icon dir. """
-         subdir = getDirname(str(source))
-         toBuild = env.path.buildIcon+subdir
-         toInstall = env.path.installIcon+subdir
-         env.Install (toInstall, source)
-         return env.Install(toBuild, source)
+        """Copy icon pixmap to corresponding icon dir. """
+        subdir = getDirname(str(source))
+        toBuild = env.path.buildIcon+subdir
+        toInstall = env.path.installIcon+subdir
+        env.Install (toInstall, source)
+        return env.Install(toBuild, source)
     
     def GuiResource(env, source):
-         subdir = getDirname(str(source))
-         toBuild = env.path.buildUIRes+subdir
-         toInstall = env.path.installUIRes+subdir
-         env.Install (toInstall, source)
-         return env.Install(toBuild, source)
+        subdir = getDirname(str(source))
+        toBuild = env.path.buildUIRes+subdir
+        toInstall = env.path.installUIRes+subdir
+        env.Install (toInstall, source)
+        return env.Install(toBuild, source)
     
-    def ConfigData(env, source, targetDir=None):
-         """ install (copy) configuration- and metadata.
-             target dir is either the install location configured (in SConstruct),
-             or an explicitly given absolute or relative path segment, which might refer
-             to the location of the executable through the $ORIGIN token
-         """   
-         subdir = getDirname(str(source), env.path.srcConf) # removes source location path prefix
-         if targetDir:
-             if path.isabs(targetDir):
-                 toBuild = toInstall = path.join(targetDir,subdir)
-             else:
-                 if targetDir.startswith('$ORIGIN'):
-                     targetDir = targetDir[len('$ORIGIN'):]
-                     toBuild = path.join(env.path.buildExe, targetDir, subdir)
-                     toInstall = path.join(env.path.installExe, targetDir, subdir)
-                 else:
-                     toBuild = path.join(env.path.buildConf, targetDir, subdir)
-                     toInstall = path.join(env.path.installConf, targetDir, subdir)
-         else:
-             toBuild = path.join(env.path.buildConf,subdir)
-             toInstall = path.join(env.path.installConf,subdir)
-         env.Install (toInstall, source)
-         return env.Install(toBuild, source)
+    def ConfigData(env, prefix, source, targetDir=None):
+        """ install (copy) configuration- and metadata.
+            target dir is either the install location configured (in SConstruct),
+            or an explicitly given absolute or relative path segment, which might refer
+            to the location of the executable through the $ORIGIN token
+        """   
+        source = path.join(prefix,str(source))
+        subdir = getDirname(source, prefix)  # removes source location path prefix
+        if targetDir:
+            if path.isabs(targetDir):
+                toBuild = toInstall = path.join(targetDir,subdir)
+            else:
+                if targetDir.startswith('$ORIGIN'):
+                    targetDir = targetDir[len('$ORIGIN'):]
+                    toBuild = path.join(env.path.buildExe, targetDir, subdir)
+                    toInstall = path.join(env.path.installExe, targetDir, subdir)
+                else:
+                    toBuild = path.join(env.path.buildConf, targetDir, subdir)
+                    toInstall = path.join(env.path.installConf, targetDir, subdir)
+        else:
+            toBuild = path.join(env.path.buildConf,subdir)
+            toInstall = path.join(env.path.installConf,subdir)
+        env.Install (toInstall, source)
+        return env.Install(toBuild, source)
     
     
     buildIcon = env.Builder( action = Action(invokeRenderer, "rendering Icon: $SOURCE --> $TARGETS")

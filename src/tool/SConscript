@@ -3,9 +3,8 @@
 ## SConscript  -  SCons buildscript for tool subdirectory (called by SConstruct)
 ##
 
-Import('env','artifacts','core')
+Import('env core support_lib icons')
 
-support_lib = artifacts['support']
 
 envSvg = env.Clone()
 envSvg.mergeConf(['librsvg-2.0'])
@@ -16,11 +15,12 @@ luidgen =    env.Program('luidgen', ['luidgen.c'] + support_lib, install=True)  
 rsvg    = envSvg.Program('rsvg-convert','rsvg-convert.c')                        ## for rendering SVG icons (uses librsvg) 
 
 # build additional test and administrative tools....
-artifacts['tools'] = [ env.Program('hello-world','hello.c', install=True)      #### hello world (checks C build)      
-                     + luidgen
-                     + rsvg
-                     ]
+tools = [ env.Program('hello-world','hello.c', install=True)                   #### hello world (checks C build)      
+        + luidgen
+        + rsvg
+        ]
+Export('tools')
 
 # Rendering the SVG Icons depends on rsvg-convert
-env.Depends(artifacts['icons'], rsvg)
+env.Depends(icons, rsvg)
 

@@ -66,12 +66,12 @@ namespace asset {
     , id(AssetManager::reg (this, idi))
     , enabled(true)
     {
-      TRACE (assetmem, "ctor Asset(id=%lu) :  adr=%p %s", size_t(id), this, cStr(this->ident) );
+      TRACE (assetmem, "ctor Asset(id=%zu) :  adr=%p %s", size_t(id), this, cStr(this->ident) );
     }
   
   Asset::~Asset ()
     { 
-      TRACE (assetmem, "dtor Asset(id=%lu) :  adr=%p", size_t(id), this );
+      TRACE (assetmem, "dtor Asset(id=%zu) :  adr=%p", size_t(id), this );
     }
   
 

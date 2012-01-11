@@ -339,10 +339,10 @@ namespace lib {
     
     /** pipes a given Lumiera Forward Iterator through
      *  a transformation function and wraps the resulting
-     *  transforming Iterator, exposing just a IterSource.
+     *  transforming Iterator, exposing just an IterSource.
      *  This convenience shortcut can be used to build a
      *  processing chain; the resulting IterSource will
-     *  hide any involved detail types.
+     *  hide any detail types involved.
      * @note as with any IterSource, there is one virtual
      *       function call for every fetched element.
      */
