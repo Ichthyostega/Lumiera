@@ -1,0 +1,90 @@
+Dependencies
+------------
+:Author: CehTeh
+:Date: 3/2008
+
+
+Lumiera is written for GNU/Linux. We try to make the best out of modern system programming techniques
+to reach the best possible performance. Lumiera shall scale with the provided Hardware,
+the more RAM and the more/faster CPU's you have the better.
+Nevertheless lower end 32bit machines are supported too.
+
+Secondary targets will be other free operating systems which offer a decent Posix API. +
+Porting to other more or less similar platforms will be possible, if -- by coincidence -- 
+Someone(TM) helps with porting.
+
+Having said that -- for the time being, the core team won't spend much effort on porting.
+
+Platform
+--------
+We work and test on PC hardware, 32 and 64 bit. It is intended that Lumiera supports
+other platforms running run GNU/Linux.
+Lumiera expects a 'standard' desktop installation running a Xserver.
+
+Graphics::
+  There are no special requirements for the graphic system.
+  Hardware accelleration will likely be added later through extensions,
+  but will remain strictyl optional. (For now we'll watch the evolution
+  in that area and might revisit that topic when there are more compelling
+  and widely supported solutions available)
+
+Disks::
+  Video editing requires decent disk speed, so it is suggested to use a
+  fast/big array of disks configured as raid.
+
+Special Hardware::
+  Sopport for special hardware would be possible, but depends on certain conditions
++
+* we need access / donations for the hardware
+* specs and APIs must be open.
+* someone to do the actual interfacing and support needs to join the team
+
+
+Languages and Tools
+-------------------
+
+* C / C++
+
+ - a C99 / C++98 compatible compiler
+ - GCC 4.4 or better is fine. Basically we try to use just the stock language.
+   On rare occasions, we _did_ use some GCC extensions, but there would be workarounds,
+   should this become a problem.
+ - std::tr1 extensions for C++ (smart-ptrs, hashtables, function objects)
+ 
+* BOOST (listed below are the DEBIAN package names)
+ - libboost-dev (at least 1.40)
+ - libboost-program-options-dev
+ - libboost-program-options-dev
+ - libboost-filesystem-dev
+ - libboost-regex-dev
+
+* Script languages
+ - Python (2.5) for build scripts
+ - bash (some test scripts use bash specific extensions)
+ - Lua is planned to become a general glue and binding language
+
+Build Tools
+~~~~~~~~~~~
+
+* Git
+* SCons
+* pkg-config
+* Doxygen
+
+We maintain a Debian package (debhelper, CDBS, git-buildpackage)
+
+Libraries
+~~~~~~~~~
+
+* BOOST
+* NoBug
+* http://gmerlin.sourceforge.net/gavl.html[GAVL] (for raw media support) 
+* for the GUI: gtkmm-2.4 gdl-1.0 libglibmm-2.4 cairomm-1.0 xv
+ - libgtkmm-2.4-dev
+ - libcairomm-1.0-dev
+ - libgdl-1-dev
+ - libglibmm-2.4-dev, requiring glib2.0 and gthread-2.0
+ - libxv-dev
+ - librsvg-2.0 and librsvg2-dev for rendering Icons
+
+
