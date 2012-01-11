@@ -4,6 +4,9 @@ Lumiera build system
 As work progresses, we will add more information on the Lumiera build system.
 
 //Menu: label Build System
+//Menu: prepend child 'Dependencies'
+//Menu: prepend child 'SCons'
+
 
 build -- continuous integration -- packaging
 
