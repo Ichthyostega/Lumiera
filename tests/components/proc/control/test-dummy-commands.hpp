@@ -38,7 +38,6 @@
 #ifndef COMMAND_TEST_DUMMY_COMMANDS_H
 #define COMMAND_TEST_DUMMY_COMMANDS_H
 
-//#include "pre.hpp"
 #include "lib/error.hpp"
 #include "lib/test/test-helper.hpp"
 
@@ -47,6 +46,7 @@
 #include <string>
 
 
+namespace proc {
 namespace control {
 namespace test    {
   
@@ -151,5 +151,5 @@ namespace test    {
   }
   
   
-}} // namespace control::test
+}}} // namespace proc::control::test
 #endif

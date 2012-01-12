@@ -21,13 +21,14 @@
 */
 
 
-#ifndef MOBJECT_SESSION_CLIP_H
-#define MOBJECT_SESSION_CLIP_H
+#ifndef PROC_MOBJECT_SESSION_CLIP_H
+#define PROC_MOBJECT_SESSION_CLIP_H
 
 #include "proc/mobject/session/abstractmo.hpp"
 #include "lib/time/timevalue.hpp"
 
 
+namespace proc {
 namespace asset {
   class Media;
   class Clip;
@@ -101,10 +102,10 @@ namespace session {
       DEFINE_PROCESSABLE_BY (builder::BuilderTool);
       
     };
-    
+  
   typedef Placement<Clip> PClipMO;
   
   
   
-}} // namespace mobject::session
+}}} // namespace proc::mobject::session
 #endif

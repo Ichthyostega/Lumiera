@@ -43,8 +43,8 @@
 
 
 
-#ifndef MOBJECT_SESSION_LOCATINGPIN_H
-#define MOBJECT_SESSION_LOCATINGPIN_H
+#ifndef PROC_MOBJECT_SESSION_LOCATINGPIN_H
+#define PROC_MOBJECT_SESSION_LOCATINGPIN_H
 
 
 #include "proc/common.hpp"
@@ -57,6 +57,7 @@ using boost::scoped_ptr;
 
 
 
+namespace proc {
 namespace asset { class Pipe; }
 
 namespace mobject {
@@ -187,7 +188,5 @@ protected:
       
       
 
-  } // namespace mobject::session
-
-} // namespace mobject
+}}} // namespace proc::mobject::session
 #endif

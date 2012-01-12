@@ -52,9 +52,9 @@
 #ifndef CONTROL_COMMAND_H
 #define CONTROL_COMMAND_H
 
-#include "pre.hpp"
 #include "lib/error.hpp"
 #include "lib/symbol.hpp"
+#include "proc/common.hpp"
 #include "proc/control/argument-erasure.hpp"
 #include "proc/control/argument-tuple-accept.hpp"
 #include "proc/control/handling-pattern.hpp"
@@ -68,12 +68,13 @@
 
 
 
+namespace proc {
 namespace control {
   
   using std::string;
   using lib::Symbol;
   using std::tr1::shared_ptr;
-  using lumiera::typelist::Tuple;
+  using lib::meta::Tuple;
   
   
   LUMIERA_ERROR_DECLARE (UNBOUND_ARGUMENTS);  ///< Command functor not yet usable, because arguments aren't bound
@@ -274,5 +275,5 @@ namespace control {
   
   
   
-} // namespace control
+}} // namespace proc::control
 #endif

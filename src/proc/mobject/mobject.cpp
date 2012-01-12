@@ -29,6 +29,7 @@
 using lib::time::Time;
 using util::isnil;
 
+namespace proc {
 namespace mobject {
 
   using ::NOBUG_FLAG(memory);
@@ -60,4 +61,4 @@ namespace mobject {
 
 
 
-} // namespace mobject
+}} // namespace mobject

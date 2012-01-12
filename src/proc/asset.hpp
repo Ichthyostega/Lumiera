@@ -55,9 +55,9 @@
 #define PROC_INTERFACE_ASSET_H
 
 
-#include "proc/asset/category.hpp"
-#include "include/logging.h"
 #include "lib/error.hpp"
+#include "include/logging.h"
+#include "proc/asset/category.hpp"
 #include "lib/p.hpp"
 
 #include <boost/type_traits/is_base_of.hpp>
@@ -75,16 +75,17 @@ using std::vector;
 using std::set;
 
 
-
+namespace proc {
 namespace asset {
+  
+  namespace error = lumiera::error;
   
   using std::size_t;
   using std::tr1::shared_ptr;
   using std::tr1::static_pointer_cast;
 
-  using lumiera::P;
+  using lib::P;
   
-  //NOBUG_DECLARE_FLAG (assetmem);
   
   typedef size_t HashVal;                        /////////////////TICKET #722
   
@@ -358,17 +359,17 @@ namespace asset {
   
   
   
-} // namespace asset
+}} // namespace proc::asset
 
 
 
 namespace proc_interface {
   
-  using asset::Asset;
-  using asset::Category;
-  using asset::ID;
-  using asset::IDA;
-  using asset::PAsset;
+  using proc::asset::Asset;
+  using proc::asset::Category;
+  using proc::asset::ID;
+  using proc::asset::IDA;
+  using proc::asset::PAsset;
 }
 
 #endif

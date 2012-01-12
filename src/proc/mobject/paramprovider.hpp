@@ -26,8 +26,8 @@
 
 
 
-namespace mobject
-  {
+namespace proc {
+namespace mobject {
 
   template<class VAL> class Parameter;
   template<class VAL> class Interpolator;
@@ -51,5 +51,5 @@ namespace mobject
 
 
 
-} // namespace mobject
+}} // namespace proc::mobject
 #endif

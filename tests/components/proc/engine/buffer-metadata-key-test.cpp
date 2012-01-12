@@ -36,6 +36,7 @@ using util::isnil;
 using util::isSameObject;
 
 
+namespace proc {
 namespace engine{
 namespace metadata{
 namespace test  {
@@ -400,4 +401,4 @@ namespace test  {
   
   
   
-}}} // namespace engine::metadata::test
+}}}} // namespace proc::engine::metadata::test

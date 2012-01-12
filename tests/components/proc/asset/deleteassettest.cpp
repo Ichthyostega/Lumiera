@@ -32,36 +32,33 @@ using std::string;
 using std::cout;
 
 
-namespace asset
-  {
-  namespace test
+namespace proc {
+namespace asset{
+namespace test {
+  
+  
+  
+  
+  /*******************************************************************
+   * @test deleting an Asset includes removing all dependent Assets
+   *       and all MObjects relying on these. Especially this means
+   *       breaking all links between the involved Objects, so the
+   *       shared-ptrs can do the actual cleanup.
+   * @see  asset::Asset#unlink
+   * @see  mobject::MObject#unlink
+   */
+  class DeleteAsset_test : public Test
     {
-    
-    
-    
-    
-    /*******************************************************************
-     * @test deleting an Asset includes removing all dependent Assets
-     *       and all MObjects relying on these. Especially this means
-     *       breaking all links between the involved Objects, so the
-     *       shared-ptrs can do the actual cleanup.
-     * @see  asset::Asset#unlink
-     * @see  mobject::MObject#unlink
-     */
-    class DeleteAsset_test : public Test
-      {
-        virtual void run(Arg) 
-          {
-            UNIMPLEMENTED ("delete asset and update all dependencies");
-          } 
-      };
-    
-    
-    /** Register this test class... */
-    LAUNCHER (DeleteAsset_test, "function asset");
-    
-    
-    
-  } // namespace test
-
-} // namespace asset
+      virtual void run(Arg) 
+        {
+          UNIMPLEMENTED ("delete asset and update all dependencies");
+        } 
+    };
+  
+  
+  /** Register this test class... */
+  LAUNCHER (DeleteAsset_test, "function asset");
+  
+  
+  
+}}} // namespace proc::asset::test

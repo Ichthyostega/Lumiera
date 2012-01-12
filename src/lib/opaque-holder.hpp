@@ -73,6 +73,7 @@
 #include "lib/util.hpp"
 
 #include <boost/noncopyable.hpp>
+#include <boost/static_assert.hpp>
 
 
 namespace lib {
@@ -252,6 +253,8 @@ namespace lib {
       template<typename SUB>
       struct Buff : Buffer
         {
+          BOOST_STATIC_ASSERT (siz >= sizeof(SUB));
+          
           SUB&
           get()  const  ///< core operation: target is contained within the inline buffer
             {
@@ -266,7 +269,6 @@ namespace lib {
           explicit
           Buff (SUB const& obj)
             {
-              REQUIRE (siz >= sizeof(SUB));
               new(Buffer::ptr()) SUB (obj);
             }
           
@@ -613,6 +615,8 @@ namespace lib {
       void
       placeDefault()
         {
+          BOOST_STATIC_ASSERT (siz >= sizeof(DEFAULT));
+          
           new(&buf_) DEFAULT();
         }
       
@@ -640,13 +644,14 @@ namespace lib {
           destroy();                         \
           try                                 \
             {                                  \
-              REQUIRE (siz >= sizeof(TY));      \
-              return *new(&buf_) _CTOR_CALL_;    \
-            }                                     \
-          catch (...)                              \
-            {                                       \
-              placeDefault();                        \
-              throw;                                  \
+              BOOST_STATIC_ASSERT (siz >= sizeof(TY));\
+                                                 \
+              return *new(&buf_) _CTOR_CALL_;     \
+            }                                      \
+          catch (...)                               \
+            {                                        \
+              placeDefault();                         \
+              throw;                                   \
             }
       
       

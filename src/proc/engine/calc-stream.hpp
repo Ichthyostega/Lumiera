@@ -35,6 +35,7 @@
 //#include <boost/noncopyable.hpp>
 //#include <boost/scoped_ptr.hpp>
 //#include <string>
+#include <vector>
 
 
 namespace proc  {
@@ -71,21 +72,24 @@ namespace engine{
       
       friend class EngineService;
       
+    public:
       CalcStream()
         {
-          
+          UNIMPLEMENTED("build a disabled/dead calculation stream");
         }
       
-    public:
       CalcStream (CalcStream const& o)
         { 
-          UNIMPLEMENTED("build a calculation stream");
+          UNIMPLEMENTED("clone a calculation stream");
         }
       
      ~CalcStream() { }
       
     };
   
+  typedef std::vector<CalcStream> CalcStreams;
+      
+
   
   
   

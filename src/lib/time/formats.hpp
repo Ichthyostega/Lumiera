@@ -162,9 +162,9 @@ namespace time {
     
     /* == Descriptor to define Support for specific formats == */
     
-    using lumiera::typelist::Types;
-    using lumiera::typelist::Node;
-    using lumiera::typelist::NullType;
+    using lib::meta::Types;
+    using lib::meta::Node;
+    using lib::meta::NullType;
     
     /**
      * Descriptor to denote support for a specific (timecode) format.
@@ -187,7 +187,7 @@ namespace time {
         std::bitset<MAXID> flags_;
         
         template<class F>
-        size_t
+        IxID
         typeID()  const
           {
             return TypedContext<Supported>::ID<F>::get();

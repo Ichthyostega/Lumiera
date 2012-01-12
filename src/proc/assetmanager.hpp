@@ -38,8 +38,6 @@
 #define PROC_INTERFACE_ASSETMANAGER_H
 
 
-#include "pre_a.hpp"
-
 #include "proc/asset.hpp"
 #include "lib/error.hpp"
 #include "lib/singleton.hpp"
@@ -54,7 +52,7 @@ using std::string;
 using std::list;
 
 
-
+namespace proc {
 namespace asset {
   
   class DB;
@@ -122,13 +120,13 @@ namespace asset {
     LUMIERA_ERROR_DECLARE (UNKNOWN_ASSET_ID);  ///< use of a non-registered Asset ID.
     LUMIERA_ERROR_DECLARE (WRONG_ASSET_KIND);  ///< Asset ID of wrong Asset kind, unable to cast.
 
-} // namespace asset
+}} // namespace proc::asset
 
 
 
 namespace proc_interface
   {
-  using asset::AssetManager;
+  using proc::asset::AssetManager;
 }
 
 #endif

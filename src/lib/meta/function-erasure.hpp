@@ -52,8 +52,8 @@
  */
 
 
-#ifndef LUMIERA_META_FUNCTION_ERASURE_H
-#define LUMIERA_META_FUNCTION_ERASURE_H
+#ifndef LIB_META_FUNCTION_ERASURE_H
+#define LIB_META_FUNCTION_ERASURE_H
 
 #include "lib/util.hpp"
 #include "lib/error.hpp"
@@ -64,8 +64,8 @@
 #include <tr1/functional>
 
 
-namespace lumiera {
-namespace typelist{
+namespace lib {
+namespace meta{
   
   using std::tr1::function;
   using util::unConst;
@@ -240,5 +240,5 @@ namespace typelist{
   
   
   
-}} // namespace lumiera::typelist
+}} // namespace lib::meta
 #endif

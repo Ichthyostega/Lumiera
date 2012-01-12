@@ -30,58 +30,57 @@
 
 #include <vector>
 
+namespace proc    {
 namespace mobject {
-  namespace builder {
+namespace builder {
   
-    using std::vector;
-    using asset::PProcPatt;
-    using lib::Symbol;
-
-
-    /**
-     * Interface: a workbench-like tool used by the builder 
-     * for wiring up a specific building situation, followed by
-     * the application/execution of a single building step. Mould is 
-     * conceived as the passive part, while usually the ProcPatt plays
-     * the role of the active counterpart. By means of the Mould interface,
-     * the specifics of a build situation are abstracted away, thus allowing
-     * the processing pattern to be defined as working on symbolic locations.
-     * Most commonly this is "current", denoting the render node just being built.
-     * <ul><li>PipeMould supports attaching an effect to a pipe</li>
-     *     <li>combining pipes via a transition is done by a CombiningMould</li> 
-     *     <li>a SourceChainMould allows to start out from a source reader and build a clip</li> 
-     *     <li>wiring general connections is supported by the WiringMould</li>
-     * </ul>
-     * @see ToolFactory
-     * @see NodeCreatorTool 
-     */
-    class Mould
-      {
-      public:
-        vector<Mould> operate ();
-        
-        OperationPoint& getLocation (Symbol locationID);
-      };
-
-    
-    class PipeMould : public Mould
-      {
-      };
-    
-    class CombiningMould : public Mould
-      {
-      };
-    
-    class SourceChainMould : public Mould
-      {
-      };
-    
-    class WiringMould : public Mould
-      {
-      };
-
-
-  } // namespace mobject::builder
-
-} // namespace mobject
+  using std::vector;
+  using asset::PProcPatt;
+  using lib::Symbol;
+  
+  
+  /**
+   * Interface: a workbench-like tool used by the builder 
+   * for wiring up a specific building situation, followed by
+   * the application/execution of a single building step. Mould is 
+   * conceived as the passive part, while usually the ProcPatt plays
+   * the role of the active counterpart. By means of the Mould interface,
+   * the specifics of a build situation are abstracted away, thus allowing
+   * the processing pattern to be defined as working on symbolic locations.
+   * Most commonly this is "current", denoting the render node just being built.
+   * <ul><li>PipeMould supports attaching an effect to a pipe</li>
+   *     <li>combining pipes via a transition is done by a CombiningMould</li> 
+   *     <li>a SourceChainMould allows to start out from a source reader and build a clip</li> 
+   *     <li>wiring general connections is supported by the WiringMould</li>
+   * </ul>
+   * @see ToolFactory
+   * @see NodeCreatorTool 
+   */
+  class Mould
+    {
+    public:
+      vector<Mould> operate ();
+      
+      OperationPoint& getLocation (Symbol locationID);
+    };
+  
+  
+  class PipeMould : public Mould
+    {
+    };
+  
+  class CombiningMould : public Mould
+    {
+    };
+  
+  class SourceChainMould : public Mould
+    {
+    };
+  
+  class WiringMould : public Mould
+    {
+    };
+  
+  
+}}} // namespace proc::mobject::builder
 #endif

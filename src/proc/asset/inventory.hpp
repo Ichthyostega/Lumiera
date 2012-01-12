@@ -28,6 +28,7 @@
 
 
 
+namespace proc {
 namespace asset {
 
 
@@ -40,8 +41,8 @@ namespace asset {
     {};
   
   
-  typedef lumiera::P<Inventory> PInv;
+  typedef P<Inventory> PInv;
   
   
-} // namespace asset
+}} // namespace proc::asset
 #endif

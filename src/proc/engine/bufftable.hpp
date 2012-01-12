@@ -36,6 +36,7 @@
 
 
 
+namespace proc {
 namespace engine {
   
   using std::pair;
@@ -154,5 +155,5 @@ namespace engine {
   
   
   
-} // namespace engine
+}} // namespace proc::engine
 #endif

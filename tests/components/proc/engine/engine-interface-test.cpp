@@ -97,7 +97,7 @@ namespace test  {
           Timings timings; /////////TODO
           
           // Invoke test subject...
-          CalcStream calc = engine.calculate(port, timings, output);
+          CalcStreams calc = engine.calculate(port, timings, output);
           
           ////TODO some direct checks on the calculation stream??
           

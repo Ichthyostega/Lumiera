@@ -35,12 +35,13 @@ using util::isSameObject;
 using util::for_each;
 
 
+namespace proc  {
 namespace engine{
 namespace test  {
   
   using lib::test::Dummy;
   
-  using ::engine::BuffHandle;
+  using proc::engine::BuffHandle;
   using error::LUMIERA_ERROR_LOGIC;
   using error::LUMIERA_ERROR_LIFECYCLE;
   
@@ -232,4 +233,4 @@ namespace test  {
   
   
   
-}} // namespace engine::test
+}}} // namespace proc::engine::test

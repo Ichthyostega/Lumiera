@@ -52,10 +52,11 @@
 
 
 #include "lib/error.hpp"
-#include "lib/streamtype.hpp"
+#include "proc/streamtype.hpp"
 #include "lib/bool-checkable.hpp"
 
 
+namespace proc {
 namespace engine {
   
   namespace error = lumiera::error;
@@ -110,7 +111,7 @@ namespace engine {
   class BuffHandle
     : public lib::BoolCheckable<BuffHandle>
     {
-      typedef lumiera::StreamType::ImplFacade::DataBuffer Buff;
+      typedef StreamType::ImplFacade::DataBuffer Buff;
       
       BufferDescriptor descriptor_;
       Buff* pBuffer_; 
@@ -180,5 +181,5 @@ namespace engine {
   
   
   
-} // namespace engine
+}} // namespace proc::engine
 #endif

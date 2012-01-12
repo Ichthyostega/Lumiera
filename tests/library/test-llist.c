@@ -22,7 +22,7 @@
 #include <nobug.h>
 
 #include "lib/llist.h"
-#include "tests/test.h"
+#include "lib/test/test.h"
 
 TESTS_BEGIN
 

@@ -52,9 +52,9 @@ using boost::lexical_cast;
 using util::unConst;
 
 
-namespace lumiera {
-namespace typelist{
-namespace test    {
+namespace lib  {
+namespace meta {
+namespace test {
   
   
   namespace { // Diagnostics
@@ -189,5 +189,5 @@ namespace test    {
   
   
   
-}}} // namespace lumiera::typelist::test
+}}} // namespace lib::meta::test
 #endif

@@ -46,8 +46,8 @@
  */
 
 
-#ifndef MOBJECT_SESSION_LIFECYCLE_ADVISOR_H
-#define MOBJECT_SESSION_LIFECYCLE_ADVISOR_H
+#ifndef PROC_MOBJECT_SESSION_LIFECYCLE_ADVISOR_H
+#define PROC_MOBJECT_SESSION_LIFECYCLE_ADVISOR_H
 
 #include "lib/error.hpp"
 #include "include/lifecycle.h"
@@ -57,6 +57,7 @@
 #include <boost/noncopyable.hpp>
 
 
+namespace proc {
 namespace mobject {
 namespace session {
   
@@ -180,5 +181,5 @@ namespace session {
   
   
   
-}} // namespace mobject::session
+}}} // namespace mobject::session
 #endif

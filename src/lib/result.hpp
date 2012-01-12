@@ -40,7 +40,6 @@
 #ifndef LIB_RESULT_H
 #define LIB_RESULT_H
 
-//#include "pre.hpp"
 #include "lib/error.hpp"
 #include "lib/wrapper.hpp"
 #include "lib/util.hpp"

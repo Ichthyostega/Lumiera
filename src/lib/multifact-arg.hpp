@@ -54,9 +54,9 @@ namespace lib {
   namespace factory {
     
     
-    using lumiera::typelist::Types;
-    using lumiera::typelist::FunctionSignature;
-    using lumiera::typelist::FunctionTypedef;
+    using lib::meta::Types;
+    using lib::meta::FunctionSignature;
+    using lib::meta::FunctionTypedef;
     using std::tr1::function;
     
     

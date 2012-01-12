@@ -23,22 +23,19 @@
 
 #include "proc/mobject/session/allocation.hpp"
 
-namespace mobject
+namespace proc {
+namespace mobject {
+namespace session {
+  
+  /** @todo probably a placeholder and to be pushed down....*/
+  void 
+  Allocation::intersect (LocatingSolution& solution)  const
   {
-  namespace session
-    {
-
-    /** @todo probably a placeholder and to be pushed down....*/
-    void 
-    Allocation::intersect (LocatingSolution& solution)  const
-    {
-      LocatingPin::intersect (solution);
-      
-      TODO ("work out how the Allocation types solve for the position...");
-    }
-
-
-
-  } // namespace mobject::session
-
-} // namespace mobject
+    LocatingPin::intersect (solution);
+    
+    TODO ("work out how the Allocation types solve for the position...");
+  }
+  
+  
+  
+}}} // namespace proc::mobject::session

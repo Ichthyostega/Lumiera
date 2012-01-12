@@ -60,7 +60,7 @@ namespace lumiera {
     
     
     /******************************************************************
-     * Interface to the Player subsystem of Lumiera (Proc-Layer). 
+     * Interface to the Player subsystem of Lumiera (Proc-Layer).
      * Global access point for starting playback and render processes,
      * calculating media data by running the render engine.
      * 
@@ -100,7 +100,7 @@ namespace lumiera {
             void play(bool);          ///< play/pause toggle
             void scrub(bool);         ///< scrubbing playback
             void adjustSpeed(double); ///< playback speed control
-            void go(lib::time::Time); ///< skip to the given point in time
+            void go(time::Time);      ///< skip to the given point in time
             
             void controlPlayhead (time::Control<time::Time>     & ctrl);
             void controlDuration (time::Control<time::Duration> & ctrl);
@@ -119,13 +119,13 @@ namespace lumiera {
           };
         
         
-        typedef lib::IterSource<mobject::ModelPort>::iterator    ModelPorts;
-        typedef lib::IterSource<mobject::OutputDesignation>::iterator Pipes;
+        typedef lib::IterSource<proc::mobject::ModelPort>::iterator    ModelPorts;
+        typedef lib::IterSource<proc::mobject::OutputDesignation>::iterator Pipes;
         typedef proc::play::POutputManager Output;
-        typedef mobject::session::PClipMO Clip;
-        typedef mobject::PTrack  Track;
-        typedef asset::PTimeline Timeline;
-        typedef asset::PViewer Viewer;
+        typedef proc::mobject::session::PClipMO Clip;
+        typedef proc::mobject::PTrack  Track;
+        typedef proc::asset::PTimeline Timeline;
+        typedef proc::asset::PViewer Viewer;
         
         /** core operation: create a new playback process
          *  outputting to the given viewer/display  */

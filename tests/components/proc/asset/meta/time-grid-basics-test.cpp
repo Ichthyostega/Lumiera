@@ -40,6 +40,7 @@ using std::endl;
 
 
 
+namespace proc {
 namespace asset{
 namespace meta {
 namespace test {
@@ -102,7 +103,7 @@ namespace test {
           Time point (myGrid->timeOf (randomFrame));
           CHECK (point == testOrigin + randomFrame * testFps.duration());
           
-          uint fract = rand() % DIRT_GRAIN;
+          uint fract = 1 + rand() % DIRT_GRAIN;
           FSecs dirt = rational_cast<FSecs> (1 / testFps / fract);
           
           Time dirty(point + Time(dirt));
@@ -129,4 +130,4 @@ namespace test {
   LAUNCHER (TimeGridBasics_test, "unit asset");
   
   
-}}} // namespace asset::meta::test
+}}}} // namespace proc::asset::meta::test

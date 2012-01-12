@@ -34,6 +34,7 @@ namespace lib {
   typedef size_t HashVal;
 }
 
+namespace proc {
 namespace engine {
   
   namespace metadata {
@@ -124,5 +125,5 @@ namespace engine {
     };
   
   
-} // namespace engine
+}} // namespace proc::engine
 #endif

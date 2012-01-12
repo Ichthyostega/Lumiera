@@ -21,7 +21,7 @@
 */
 
 /** @file diagnostic-buffer-provider.hpp
- ** An facility for writing unit-tests targeting the BufferProvider interface.
+ ** A facility for writing unit-tests targeting the BufferProvider interface.
  **
  ** @see buffer-provider-protocol-test.cpp
  */
@@ -40,6 +40,7 @@
 #include <boost/noncopyable.hpp>
 
 
+namespace proc {
 namespace engine {
   
   namespace error = lumiera::error;
@@ -106,5 +107,5 @@ namespace engine {
   
   
   
-} // namespace engine
+}} // namespace proc::engine
 #endif

@@ -41,32 +41,36 @@
 
 #include "lib/error.hpp"
 #include "proc/play/output-slot.hpp"
+#include "lib/scoped-collection.hpp"
+#include "lib/iter-adapter-stl.hpp"
+#include "lib/iter-source.hpp"
 #include "lib/handle.hpp"
 //#include "lib/time/timevalue.hpp"
 //#include "proc/engine/buffer-provider.hpp"
 //#include "proc/play/timings.hpp"
-#include "lib/iter-source.hpp"
-#include "lib/iter-adapter-stl.hpp"
 //#include "lib/sync.hpp"
 
 #include <boost/noncopyable.hpp>
 #include <boost/scoped_ptr.hpp>
 //#include <string>
-//#include <vector>
+#include <tr1/functional>
+#include <vector>
 //#include <tr1/memory>
 
 
 namespace proc {
 namespace play {
 
-  using ::engine::BuffHandle;
-//using ::engine::BufferProvider;
+  using proc::engine::BuffHandle;
+//using proc::engine::BufferProvider;
 //using lib::time::Time;
 //using std::string;
   using lib::transform;
   using lib::iter_stl::eachElm;
-
-//using std::vector;
+  
+//using std::tr1::placeholders::_1;
+//using std::tr1::bind;
+  using std::vector;
 //using std::tr1::shared_ptr;
   using boost::scoped_ptr;
   
@@ -92,6 +96,7 @@ namespace play {
    *   implementation; yet it may as well be called from a separate
    *   service thread or some kind of callback.
    * @note the meaning of FrameID is implementation defined.
+   * @note typically the concrete connection is noncopyable
    */
   class OutputSlot::Connection
     {
@@ -121,6 +126,8 @@ namespace play {
     {
     public:
       virtual ~ConnectionState() { }
+      
+      virtual Connection& access (uint)  const    =0;
     };
   
   
@@ -143,10 +150,11 @@ namespace play {
   template<class CON>
   class ConnectionStateManager
     : public OutputSlot::ConnectionState
-    , public vector<CON>
     {
-      
+      typedef lib::ScopedCollection<CON> Connections;
       typedef OutputSlot::OpenedSinks OpenedSinks;
+      
+      Connections connections_;
       
       
       /* == Allocation Interface == */
@@ -154,37 +162,54 @@ namespace play {
       OpenedSinks
       getOpenedSinks()
         {
+                                                                                 //////////////////////////TICKET #878  not re-entrant, lifecycle isn't clear
           REQUIRE (this->isActive());
-          return transform (eachElm(*this), connectOutputSink);
+          return transform (eachElm(connections_), connectOutputSink);
         }
       
-      bool
-      isActive()
+      Timings
+      getTimingConstraints()
         {
-          return 0 < vector<CON>::size();
+          UNIMPLEMENTED ("find out about timing constraints");                   //////////////////////////TICKET #831
+        }
+
+      bool
+      isActive()  const
+        {
+          return 0 < connections_.size();
+        }
+      
+      CON&
+      access (uint chanNr)  const
+        {
+          return connections_[chanNr];
         }
       
       
-    public:
-      ConnectionStateManager()
+    protected: /* == API for OutputSlot-Impl == */
+      void
+      init() ///< derived classes need to invoke this to build the actual connections
+        {
+                                                                                 //////////////////////////TICKET #878  really build all at once? or on demand?
+          connections_.populate_by (&ConnectionStateManager::buildConnection, this);
+        }
+      
+      typedef typename Connections::ElementHolder& ConnectionStorage;
+      
+      /** factory function to build the actual
+       *  connection handling objects per channel */
+      virtual void buildConnection(ConnectionStorage)  =0;
+      
+      
+      ConnectionStateManager(uint numChannels)
+        : connections_(numChannels)
         { }
       
+    public:
       virtual
      ~ConnectionStateManager()
         { }
       
-      
-      void
-      init (uint numChannels)
-        {
-          for (uint i=0; i<numChannels; ++i)
-            push_back(buildConnection());
-        }
-      
-      
-      /** factory function to build the actual
-       *  connection handling objects per channel */
-      virtual CON buildConnection()  =0;
       
       
     private: // Implementation details
@@ -192,6 +217,8 @@ namespace play {
       static DataSink
       connectOutputSink (CON& connection)
         {
+          TRACE (test, "activating Con=%p", &connection );
+          
           DataSink newSink;
           newSink.activate(&connection, shutdownConnection);
           return newSink;

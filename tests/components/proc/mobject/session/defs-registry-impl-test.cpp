@@ -35,10 +35,10 @@
 #include <boost/format.hpp>
 #include <map>
 
-using lumiera::P;
 using lumiera::Query;
 using lumiera::query::test::garbage_query;
 using util::isnil;
+using lib::P;
 
 using boost::scoped_ptr;
 using boost::format;
@@ -48,6 +48,7 @@ using std::map;
 
 
 
+namespace proc    {
 namespace mobject {
 namespace session {
 namespace test    {
@@ -98,8 +99,8 @@ namespace test    {
     {
       scoped_ptr<DefsRegistry> reg_;
       
-      typedef lumiera::P<Dummy<13> > O;
-      typedef lumiera::P<Dummy<23> > P;
+      typedef P<Dummy<13> > Obj;
+      typedef P<Dummy<23> > Prd;
       
       typedef Query<Dummy<13> > Q13;
       typedef Query<Dummy<23> > Q23;
@@ -112,9 +113,9 @@ namespace test    {
       lib::factory::RefcountFac<Dummy<13> > oFac;
       lib::factory::RefcountFac<Dummy<23> > pFac;
       
-      O o1, o2, o3;
+      Obj o1, o2, o3;
       Q13 q1, q2, q3, q4, q5;
-      map<Q23, P> ps;
+      map<Q23, Prd> ps;
       
     public:
       DefsRegistryImpl_test ()
@@ -157,7 +158,7 @@ namespace test    {
           ps.clear();
           for (int i=0; i<100; ++i)
             {
-              P px (pFac());
+              Prd px (pFac());
               Q23 qx (garbage_query());
               ps[qx] = px;
               reg_->put (px, qx);
@@ -171,33 +172,33 @@ namespace test    {
         {
           Iter13 i (reg_->candidates(Q13 ("irrelevant query")));
           CHECK ( i.hasNext());
-          CHECK ( *i++ == o1);   // ordered according to the degree of the queries
-          CHECK ( *i++ == o2);
-          CHECK ( *i++ == o3);
-          CHECK ( *i++ == o3);
-          CHECK ( *i++ == o2);
-          CHECK ( *i   == o1);
+          CHECK ( *i == o1); ++i;   // ordered according to the degree of the queries
+          CHECK ( *i == o2); ++i;
+          CHECK ( *i == o3); ++i;
+          CHECK ( *i == o3); ++i;
+          CHECK ( *i == o2); ++i;
+          CHECK ( *i == o1);
           CHECK (!i.hasNext());
           CHECK (! *++i ); // null after end
           
           i = reg_->candidates(q3);
-          CHECK ( *i++ == o3);   // found by direct match
-          CHECK ( *i++ == o1);   // followed by the ordered enumeration
-          CHECK ( *i++ == o2);
-          CHECK ( *i++ == o3);
-          CHECK ( *i++ == o3);
-          CHECK ( *i++ == o2);
-          CHECK ( *i++ == o1);
+          CHECK ( *i == o3); ++i;   // found by direct match
+          CHECK ( *i == o1); ++i;   // followed by the ordered enumeration
+          CHECK ( *i == o2); ++i;
+          CHECK ( *i == o3); ++i;
+          CHECK ( *i == o3); ++i;
+          CHECK ( *i == o2); ++i;
+          CHECK ( *i == o1); ++i;
           CHECK (!i.hasNext());
           
           i = reg_->candidates(Q13());
-          CHECK ( *i++ == o1);   // found by direct match to the empty query
-          CHECK ( *i++ == o1);
-          CHECK ( *i++ == o2);
-          CHECK ( *i++ == o3);
-          CHECK ( *i++ == o3);
-          CHECK ( *i++ == o2);
-          CHECK ( *i++ == o1);
+          CHECK ( *i == o1); ++i;   // found by direct match to the empty query
+          CHECK ( *i == o1); ++i;
+          CHECK ( *i == o2); ++i;
+          CHECK ( *i == o3); ++i;
+          CHECK ( *i == o3); ++i;
+          CHECK ( *i == o2); ++i;
+          CHECK ( *i == o1); ++i;
           CHECK (!i.hasNext());
           
           uint d=0;
@@ -229,12 +230,12 @@ namespace test    {
           
           Iter13 i (reg_->candidates(q4));
           CHECK ( i.hasNext());
-          CHECK ( *i++ == o1);    // ordered according to the degree of the queries
-                                  // but the o2 entries are missing
-          CHECK ( *i++ == o3);
-          CHECK ( *i++ == o3);
+          CHECK ( *i == o1); ++i;    // ordered according to the degree of the queries
+                                     // but the o2 entries are missing
+          CHECK ( *i == o3); ++i;
+          CHECK ( *i == o3); ++i;
                                   // missing
-          CHECK ( *i   == o1);
+          CHECK ( *i == o1);
           CHECK (!i.hasNext());
           
           o3.reset(); // killing the only reference....
@@ -242,33 +243,33 @@ namespace test    {
           
           i = reg_->candidates(Q13 ("something"));
           CHECK ( i.hasNext());
-          CHECK ( *i++ == o1);    // ordered according to the degree of the queries
-                                  // but now also the o3 entries are missing...
-          CHECK ( *i   == o1);
+          CHECK ( *i == o1); ++i;    // ordered according to the degree of the queries
+                                     // but now also the o3 entries are missing...
+          CHECK ( *i == o1);
           CHECK (!i.hasNext());
           
           CHECK ( reg_->put (o1, q5));   // trying to register the same object at the same place
                                          // doesn't change anything (but counts as "success")
           i = reg_->candidates(q5);
-          CHECK ( *i++ == o1); // direct match
-          CHECK ( *i++ == o1);
-          CHECK ( *i++ == o1);
+          CHECK ( *i == o1); ++i; // direct match
+          CHECK ( *i == o1); ++i;
+          CHECK ( *i == o1); ++i;
           CHECK (!i.hasNext());
           
           CHECK (!reg_->put (o2, q5));   // trying to (re)register o2 with a existing query
                                          // counts as failure (nothing changes)
           i = reg_->candidates(q5);
-          CHECK ( *i++ == o1); // direct match
-          CHECK ( *i++ == o1);
-          CHECK ( *i++ == o1);
+          CHECK ( *i == o1); ++i; // direct match
+          CHECK ( *i == o1); ++i;
+          CHECK ( *i == o1); ++i;
           CHECK (!i.hasNext());
           
           CHECK ( reg_->put (o2, q2));   // trying to (re)register o2 with another query succeeds
           i = reg_->candidates(q2);
-          CHECK ( *i++ == o2); // direct match
-          CHECK ( *i++ == o1);
-          CHECK ( *i++ == o2); // inserted here in the dataset
-          CHECK ( *i++ == o1);
+          CHECK ( *i == o2); ++i; // direct match
+          CHECK ( *i == o1); ++i;
+          CHECK ( *i == o2); ++i; // inserted here in the dataset
+          CHECK ( *i == o1); ++i;
           CHECK (!i.hasNext());
           
           CHECK ( reg_->forget (o1));
@@ -289,4 +290,4 @@ namespace test    {
   
   
   
-}}} // namespace mobject::session::test
+}}}} // namespace proc::mobject::session::test

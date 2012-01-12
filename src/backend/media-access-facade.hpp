@@ -83,8 +83,8 @@ namespace backend {
   
   
   /** 
-   * Descriptor holding the global informations,
-   * needed for further handling this media within Lumiera.
+   * Descriptor holding the global information record
+   * required for further handling this kind of media within Lumiera.
    */
   struct MediaDesc
     {

@@ -32,9 +32,10 @@ extern "C" {
 #include "lib/luid.h"
 }
 
+namespace proc {
 namespace mobject {
   
-  namespace mp = lumiera::typelist;
+  namespace mp = lib::meta;
   
   class MObject;
   
@@ -102,10 +103,12 @@ namespace mobject {
         };
       
     private:
-      enum {
-        SPEC_SIZ = mp::maxSize<
+      enum
+        { VTABLE   = sizeof(size_t)
+        , SPEC_SIZ = VTABLE
+                   + mp::maxSize<
                        mp::Types< PID, lumiera_uid, uint>::List>::value 
-      };
+        };
       typedef lib::OpaqueHolder<TargetSpec, SPEC_SIZ> SpecBuff;
       
       
@@ -116,5 +119,5 @@ namespace mobject {
   
   
   
-} // namespace mobject
+}} // namespace proc::mobject
 #endif

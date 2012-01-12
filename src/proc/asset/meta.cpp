@@ -26,6 +26,7 @@
 #include "lib/util.hpp"
 
 
+namespace proc {
 namespace asset {
   
   using meta::Descriptor;
@@ -79,7 +80,7 @@ namespace asset {
   
   
   
-} // namespace asset
+}} // namespace proc::asset
 
 
 
@@ -94,6 +95,7 @@ namespace asset {
 //#include "proc/asset/sequence.hpp"
 
 
+namespace proc {
 namespace asset {
   
   using meta::Descriptor;
@@ -104,4 +106,4 @@ namespace asset {
   
   template Builder<TimeGrid>  MetaFactory::operator() (Descriptor const&, EntryID<TimeGrid>);
   
-} // namespace asset
+}} // namespace proc::asset

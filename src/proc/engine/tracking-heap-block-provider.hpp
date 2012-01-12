@@ -52,6 +52,7 @@
 #include <boost/scoped_array.hpp>
 
 
+namespace proc {
 namespace engine {
   
   namespace error = lumiera::error;
@@ -65,7 +66,7 @@ namespace engine {
 
     
     /**
-     * Helper for a diagnostic BufferProvider:
+     * Helper for implementing a diagnostic BufferProvider:
      * A block of heap allocated storage, with the capability
      * to store some additional tracking information.
      */
@@ -183,5 +184,5 @@ namespace engine {
   
   
   
-} // namespace engine
+}} // namespace proc::engine
 #endif

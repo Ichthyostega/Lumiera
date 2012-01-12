@@ -1,8 +1,8 @@
 /*
-  SIMPLECLIP.hpp  -  Elementary clip (single media stream only)
+  OutputProbe  -  tool to investigate external output connections
 
   Copyright (C)         Lumiera.org
-    2008,               Hermann Vosseler <Ichthyostega@web.de>
+    2011,               Odin Omdal Hørthe <odin.omdal@gmail.com>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -18,33 +18,36 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
-*/
+* *****************************************************/
 
 
-#ifndef MOBJECT_SESSION_SIMPLECLIP_H
-#define MOBJECT_SESSION_SIMPLECLIP_H
+#include "alsa.h"
 
-#include "proc/mobject/session/clip.hpp"
+#include <unistd.h>
+#include <stdint.h>
+#include <stdio.h>
 
 
+#define SAMPLE_RATE 44100
 
-namespace mobject
-  {
+int16_t quiet[SAMPLE_RATE], noisy[SAMPLE_RATE];
 
-  namespace session
+void main () {
+
+    for (int i=0; i<SAMPLE_RATE; i++)
     {
+        quiet[i] = 0;
+        noisy[i] = i%30000;
+    }
+    audio_start(44100, 2);
 
+    for (int i=0; i<10; i++)
+    {
+        audio_write(noisy, SAMPLE_RATE);
+        printf("=================================\n");
+        audio_write(quiet, SAMPLE_RATE);
+        printf("\n");
+    }
 
-    /**
-     * Elementary clip consisting of only one media stream
-     */
-    class SimpleClip : public Clip
-      {
-      };
-      
-      
-      
-  } // namespace mobject::session
-
-} // namespace mobject
-#endif
+    audio_stop();
+}

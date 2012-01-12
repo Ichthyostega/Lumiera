@@ -43,6 +43,7 @@ using lib::ScopedPtrVect;
 
 
 
+namespace proc {
 namespace engine {
   
   namespace error = lumiera::error;
@@ -281,7 +282,7 @@ namespace engine {
   TrackingHeapBlockProvider::access_emitted (uint bufferID)
   {
     if (!withinOutputSequence (bufferID))
-      return emptyPlaceholder;
+      return emptyPlaceholder;                                                ////////////////////////////////TICKET #856
     else
       return outSeq_[bufferID];
   }
@@ -308,7 +309,7 @@ namespace engine {
   TrackingHeapBlockProvider::locateBlock (HashVal typeID, void* storage)
   {
     diagn::BlockPool& pool = getBlockPoolFor (typeID);
-    diagn::Block* block4buffer = pool.find (storage);
+    diagn::Block* block4buffer = pool.find (storage);                         ////////////////////////////////TICKET #856
     return block4buffer? block4buffer
                        : searchInOutSeqeuence (storage);
   }
@@ -316,10 +317,10 @@ namespace engine {
   diagn::Block*
   TrackingHeapBlockProvider::searchInOutSeqeuence (void* blockLocation)
   {
-    return pick_Block_by_storage (outSeq_, blockLocation);            
+    return pick_Block_by_storage (outSeq_, blockLocation);                    ////////////////////////////////TICKET #856
   }
   
   
   
   
-} // namespace engine
+}} // namespace engine

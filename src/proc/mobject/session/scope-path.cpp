@@ -33,6 +33,7 @@
 
 #include <algorithm>
 
+namespace proc {
 namespace mobject {
 namespace session {
   
@@ -41,7 +42,6 @@ namespace session {
   using util::isSameObject;
   using util::isnil;
   
-  using namespace lumiera;
   
   
   LUMIERA_ERROR_DEFINE (EMPTY_SCOPE_PATH, "Placement scope not locatable (empty model path)");
@@ -134,7 +134,7 @@ namespace session {
   
   ScopePath::~ScopePath()
   {
-    WARN_IF (refcount_, session, "Destroying a scope path frame with ref-count=%lu", refcount_);
+    WARN_IF (refcount_, session, "Destroying a scope path frame with ref-count=%zu", refcount_);
   }
   
   
@@ -340,4 +340,4 @@ namespace session {
   
   
   
-}} // namespace mobject::session
+}}} // namespace mobject::session

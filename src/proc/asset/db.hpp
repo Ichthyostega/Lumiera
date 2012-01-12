@@ -25,11 +25,9 @@
 #define ASSET_DB_H
 
 
-#include "pre_a.hpp"
-
 #include "lib/sync.hpp"
-#include "proc/asset.hpp"
 #include "lib/error.hpp"
+#include "proc/asset.hpp"
 
 #include <tr1/memory>
 #include <tr1/unordered_map>
@@ -37,6 +35,7 @@
 #include <boost/utility.hpp>
 
 
+namespace proc {
 namespace asset {
   
   using std::tr1::static_pointer_cast;
@@ -169,5 +168,5 @@ namespace asset {
     };
   
     
-} // namespace asset
+}} // namespace proc::asset
 #endif

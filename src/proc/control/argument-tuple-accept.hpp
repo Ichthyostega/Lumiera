@@ -63,12 +63,13 @@
 
 
 
+namespace proc {
 namespace control {
   
   
   namespace bind_arg { // internals....
     
-    using namespace lumiera::typelist;
+    using namespace lib::meta;
     
     
       //
@@ -670,5 +671,5 @@ namespace control {
   
   
   
-} // namespace control
+}} // namespace proc::control
 #endif

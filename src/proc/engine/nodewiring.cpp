@@ -29,16 +29,17 @@
 #include "lib/meta/typelist-manip.hpp"
 
 
+namespace proc {
 namespace engine {
 
   namespace config {
     
-    using lumiera::typelist::Flags;
-    using lumiera::typelist::CombineFlags;
-    using lumiera::typelist::DefineConfigByFlags;
-    using lumiera::typelist::Instantiation;
-    using lumiera::typelist::Apply;
-    using lumiera::typelist::Filter;
+    using lib::meta::Flags;
+    using lib::meta::CombineFlags;
+    using lib::meta::DefineConfigByFlags;
+    using lib::meta::Instantiation;
+    using lib::meta::Apply;
+    using lib::meta::Filter;
     
     using lib::AllocationCluster;
     
@@ -149,4 +150,4 @@ namespace engine {
   }
   
   
-} // namespace engine
+}} // namespace proc::engine

@@ -23,20 +23,17 @@
 
 #include "proc/mobject/builder/assembler.hpp"
 
-namespace mobject
+namespace proc {
+namespace mobject {
+namespace builder {
+
+
+
+  engine::RenderEngine &
+  Assembler::build ()
   {
-  namespace builder
-    {
+  }
 
 
 
-    engine::RenderEngine &
-    Assembler::build ()
-    {
-    }
-
-
-
-  } // namespace mobject::builder
-
-} // namespace mobject
+}}} // namespace proc::mobject::builder

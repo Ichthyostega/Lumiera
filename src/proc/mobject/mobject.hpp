@@ -24,13 +24,11 @@
 #ifndef MOBJECT_MOBJECT_H
 #define MOBJECT_MOBJECT_H
 
-#include "pre.hpp"
-
-
 #include "proc/common.hpp"
 #include "proc/mobject/builder/buildertool.hpp"
 #include "proc/mobject/placement.hpp"
 #include "proc/asset.hpp"                    //TODO finally not needed?
+#include "lib/p.hpp"
 #include "lib/time/timevalue.hpp"
 
 #include <boost/noncopyable.hpp>
@@ -44,10 +42,11 @@ using proc_interface::IDA;                   //TODO finally not needed?
 //using proc_interface::PAsset;              //TODO: only temporarily
 using proc_interface::AssetManager;
 
+namespace proc {
 namespace mobject {
   
   using std::string;
-  using lumiera::P;
+  using lib::P;
   
   //NOBUG_DECLARE_FLAG (mobjectmem);
   
@@ -108,5 +107,5 @@ namespace mobject {
   typedef Placement<MObject> PMO;
 
 
-} // namespace mobject
+}} // namespace proc::mobject
 #endif

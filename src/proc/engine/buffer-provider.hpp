@@ -52,6 +52,7 @@
 #include <boost/scoped_ptr.hpp>
 
 
+namespace proc {
 namespace engine {
   
   using boost::scoped_ptr;
@@ -165,5 +166,5 @@ namespace engine {
   }
   
   
-} // namespace engine
+}} // namespace proc::engine
 #endif

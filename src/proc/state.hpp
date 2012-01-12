@@ -25,15 +25,14 @@
 #define PROC_INTERFACE_STATE_H
 
 
-#include "pre.hpp"
-
-#include "proc/common.hpp"
+#include "lib/error.hpp"
 #include "lib/frameid.hpp"
 #include "proc/engine/buffhandle.hpp"
 
 #include <cstddef>
 
 
+namespace proc {
 namespace engine { 
   
   using lumiera::FrameID;
@@ -111,13 +110,13 @@ namespace engine {
       friend class engine::StateAdapter;
     };
   
-} // namespace engine
+}} // namespace proc::engine
 
 
 
 namespace proc_interface {
 
-  using engine::State;
+  using proc::engine::State;
     
     
 } // namespace proc_interface

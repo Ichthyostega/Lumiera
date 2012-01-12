@@ -46,7 +46,6 @@
 #ifndef CONTROL_COMMAND_SIGNATURE_H
 #define CONTROL_COMMAND_SIGNATURE_H
 
-//#include "pre.hpp"
 #include "lib/meta/function.hpp"
 #include "lib/meta/typelist.hpp"
 #include "lib/meta/typelist-manip.hpp"
@@ -57,15 +56,16 @@
 
 
 
+namespace proc {
 namespace control {
   
   using std::tr1::function;
   
-  using lumiera::typelist::FunctionSignature;
-  using lumiera::typelist::FunctionTypedef;
-  using lumiera::typelist::Types;
-  using lumiera::typelist::Append;
-  using lumiera::typelist::SplitLast;
+  using lib::meta::FunctionSignature;
+  using lib::meta::FunctionTypedef;
+  using lib::meta::Types;
+  using lib::meta::Append;
+  using lib::meta::SplitLast;
   
   
   /** 
@@ -152,5 +152,5 @@ namespace control {
   
   
   
-} // namespace control
+}} // namespace proc::control
 #endif

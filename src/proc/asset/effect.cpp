@@ -23,6 +23,7 @@
 
 #include "proc/asset/effect.hpp"
 
+namespace proc {
 namespace asset {
   
   Proc::ProcFunc*
@@ -33,4 +34,4 @@ namespace asset {
 
 
 
-} // namespace asset
+}} // namespace asset

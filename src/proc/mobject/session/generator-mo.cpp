@@ -31,6 +31,7 @@
 //using lib::time::Mutation;
 //using util::isnil;
 
+namespace proc {
 namespace mobject {
 namespace session {
 
@@ -41,5 +42,5 @@ namespace session {
   
   
   
-}} // namespace mobject::session
+}}} // namespace mobject::session
 

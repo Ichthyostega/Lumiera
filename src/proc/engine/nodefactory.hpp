@@ -33,6 +33,7 @@
 
 namespace lib { class AllocationCluster; }
 
+namespace proc {
 namespace mobject {
 namespace session {
   
@@ -75,5 +76,5 @@ namespace engine {
         
     };
 
-} // namespace engine
+}} // namespace proc::engine
 #endif

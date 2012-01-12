@@ -25,8 +25,8 @@
 #include "common/config.h"
 #include "common/config_interface.h"
 
-#include "tests/test.h"
-#include "tests/common/hello_interface.h"
+#include "lib/test/test.h"
+#include "interface/say_hello.h"
 
 /*
   define 2 example interfaces
@@ -465,7 +465,9 @@ TEST (plugin_discover)
 
   if (lumiera_plugin_discover (lumiera_plugin_load, lumiera_plugin_register))
     {
-      LumieraPlugin p = lumiera_plugin_lookup ("modules/examplepluginc.lum");
+      LumieraPlugin p = lumiera_plugin_lookup ("modules/test-c-plugin.lum");
+      printf ("found plugin: %s\n", lumiera_plugin_name (p));
+      p = lumiera_plugin_lookup ("modules/test-cpp-plugin.lum");
       printf ("found plugin: %s\n", lumiera_plugin_name (p));
       lumiera_plugin_discover (lumiera_plugin_load, lumiera_plugin_register);
     }
@@ -482,12 +484,12 @@ TEST (plugin_unload)
   lumiera_interfaceregistry_init ();
 
   lumiera_plugin_discover (lumiera_plugin_load, lumiera_plugin_register);
-  LumieraPlugin p = lumiera_plugin_lookup ("modules/examplepluginc.lum");
+  LumieraPlugin p = lumiera_plugin_lookup ("modules/test-c-plugin.lum");
   printf ("plugin discovered before unload: %p\n", p);
-  CHECK (p, "prerequisite: need to load examplepluginc.lum");
+  CHECK (p, "prerequisite: need to load test-c-plugin.lum");
 
-  lumiera_plugin_unload (lumiera_plugin_lookup ("modules/examplepluginc.lum"));
-  p = lumiera_plugin_lookup ("examplepluginc.lum");
+  lumiera_plugin_unload (lumiera_plugin_lookup ("modules/test-c-plugin.lum"));
+  p = lumiera_plugin_lookup ("test-c-plugin.lum");
   printf ("plugin discovered after unload: %p\n", p);
   CHECK (!p, "failed to unload plugin.");
 
@@ -496,7 +498,7 @@ TEST (plugin_unload)
 }
 
 
-TEST (plugin_examplepluginc)
+TEST (plugin_exampleplugin)
 {
   lumiera_interfaceregistry_init ();
   lumiera_plugin_discover (lumiera_plugin_load, lumiera_plugin_register);
@@ -522,7 +524,7 @@ TEST (plugin_examplepluginc)
   lumiera_config_destroy ();
 }
 
-TEST (plugin_examplepluginc_nested)
+TEST (plugin_exampleplugin_nested)
 {
   lumiera_interfaceregistry_init ();
   lumiera_plugin_discover (lumiera_plugin_load, lumiera_plugin_register);
@@ -536,6 +538,32 @@ TEST (plugin_examplepluginc_nested)
   LUMIERA_INTERFACE_CLOSE (test);
 
   lumiera_config_interface_destroy ();
+  lumiera_interfaceregistry_destroy ();
+  lumiera_config_destroy ();
+}
+
+
+TEST (plugin_exampleplugin_cpp)
+{
+  lumiera_interfaceregistry_init ();
+  lumiera_plugin_discover (lumiera_plugin_load, lumiera_plugin_register);
+
+
+  LUMIERA_INTERFACE_HANDLE(lumieraorg_testhello, 0) german =
+    LUMIERA_INTERFACE_OPEN (lumieraorg_testhello, 0, 0, lumieraorg_hello_german_cpp);
+
+  LUMIERA_INTERFACE_HANDLE(lumieraorg_testhello, 0) english =
+    LUMIERA_INTERFACE_OPEN (lumieraorg_testhello, 0, 0, lumieraorg_hello_english_cpp);
+
+  german->hello ();
+  german->goodbye ("schnöde Welt!");
+
+  english->hello ();
+  english->goodbye ("Vale of Tears!");
+
+  LUMIERA_INTERFACE_CLOSE (german);
+  LUMIERA_INTERFACE_CLOSE (english);
+
   lumiera_interfaceregistry_destroy ();
   lumiera_config_destroy ();
 }

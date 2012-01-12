@@ -35,6 +35,7 @@ using std::cout;
 using std::endl;
 
 
+namespace proc {
 namespace control {
 namespace test    {
   
@@ -43,8 +44,8 @@ namespace test    {
   
   using lib::time::TimeVar;
   using std::tr1::function;
-  using lumiera::typelist::FunctionSignature;
-  using lumiera::typelist::Tuple;
+  using lib::meta::FunctionSignature;
+  using lib::meta::Tuple;
   
   
   
@@ -123,4 +124,4 @@ namespace test    {
   LAUNCHER (ArgumentTupleAccept_test, "unit controller");
   
   
-}} // namespace control::test
+}}} // namespace proc::control::test

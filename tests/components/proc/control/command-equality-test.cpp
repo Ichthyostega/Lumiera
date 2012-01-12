@@ -36,12 +36,13 @@
 #include <iostream>
 #include <string>
 
+namespace proc {
 namespace control {
 namespace test    {
   
   
   
-  using namespace lumiera::typelist;
+  using namespace lib::meta;
   using lib::Symbol;
   using util::isnil;
   using util::isSameObject;
@@ -317,4 +318,4 @@ namespace test    {
   LAUNCHER (CommandEquality_test, "function controller");
   
   
-}} // namespace control::test
+}}} // namespace proc::control::test

@@ -40,8 +40,7 @@
 #ifndef ENGINE_PROCNODE_H
 #define ENGINE_PROCNODE_H
 
-#include "pre.hpp"
-
+#include "lib/error.hpp"
 #include "proc/common.hpp"
 #include "proc/state.hpp"
 #include "proc/asset/proc.hpp"
@@ -54,6 +53,7 @@
 
 
 
+namespace proc {
 namespace engine {
 
   using std::vector;
@@ -173,5 +173,5 @@ namespace engine {
   }
   
   
-} // namespace engine
+}} // namespace proc::engine
 #endif

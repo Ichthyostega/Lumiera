@@ -32,6 +32,7 @@ using std::vector;
 
 
 
+namespace proc {
 namespace asset {
 
 
@@ -49,5 +50,5 @@ namespace asset {
     
     
     
-} // namespace asset
+}} // namespace proc::asset
 #endif

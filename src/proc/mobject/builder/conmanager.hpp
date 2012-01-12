@@ -21,38 +21,37 @@
 */
 
 
-#ifndef MOBJECT_BUILDER_CONMANAGER_H
-#define MOBJECT_BUILDER_CONMANAGER_H
+#ifndef PROC_MOBJECT_BUILDER_CONMANAGER_H
+#define PROC_MOBJECT_BUILDER_CONMANAGER_H
 
 
 
+namespace proc    {
 namespace mobject {
-  namespace builder {
-    
-    
-    /**
-     * Connection Manager: used to build the connections between render engine nodes
-     * if these nodes need to cooperate besides the normal "data pull" operation. 
-     * Esp. the Connection Manager knows how to wire up the effect's parameters 
-     * with the corresponding ParamProviders (automation) in the Session.
-     * Questions regarding the possibility of a media stream connection are 
-     * delegated internally to the STypeManager.
-     * \par
-     * The primary service of the connection manager is to accept a wiring request
-     * and handle the details of establishing the necessary connections.
-     */
-    class ConManager
-      {
-      public:
-        /**
-         * TODO just a design sketch, work out signatures etc...
-         */
-        int getConnection () ;
-      };
+namespace builder {
+  
+  
+  /**
+   * Connection Manager: used to build the connections between render engine nodes
+   * if these nodes need to cooperate besides the normal "data pull" operation. 
+   * Esp. the Connection Manager knows how to wire up the effect's parameters 
+   * with the corresponding ParamProviders (automation) in the Session.
+   * Questions regarding the possibility of a media stream connection are 
+   * delegated internally to the STypeManager.
+   * \par
+   * The primary service of the connection manager is to accept a wiring request
+   * and handle the details of establishing the necessary connections.
+   */
+  class ConManager
+    {
+    public:
+      /**
+       * TODO just a design sketch, work out signatures etc...
+       */
+      int getConnection () ;
+    };
 
 
 
-  } // namespace mobject::builder
-
-} // namespace mobject
+}}} // namespace proc::mobject::builder
 #endif

@@ -1,10 +1,8 @@
 /*
-  PRE_A.hpp  -  precompiled header (including assets)
- 
+  StreamType  -  classification of media stream types 
 
   Copyright (C)         Lumiera.org
-    2008,               Christian Thaeter <ct@pipapo.org>
-                        Hermann Vosseler <Ichthyostega@web.de>
+    2008,               Hermann Vosseler <Ichthyostega@web.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -20,29 +18,19 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
-*/
-
-/** @file pre.hpp
- ** Precompiled Header including Asset subsystem.
- ** Assortment of standard util, error handling and basic lib-boost components,
- ** together with the basic asset.hpp.
- **
- ** @see pre.hpp
- */
-
-#ifndef LUMIERA_PRE_A_HPP
-#define LUMIERA_PRE_A_HPP
+* *****************************************************/
 
 
-#include <string>
-#include <vector>
-#include <map>
-#include <tr1/memory>
-#include <tr1/functional>
-#include <boost/format.hpp>
-
-#include "proc/common.hpp"
-#include "proc/asset.hpp"
+#include "proc/streamtype.hpp"
 
 
-#endif /*LUMIERA_PRE_A_HPP*/
+namespace proc {
+
+   /** @internal defined here non-inline place the vtable in this object file.*/
+   StreamType::ImplFacade::ImplFacade (Symbol libID)
+     : libraryID(libID)
+     { }
+
+  
+
+} // namespace proc

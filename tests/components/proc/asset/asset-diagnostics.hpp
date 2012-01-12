@@ -50,6 +50,7 @@ using std::string;
 using std::cout;
 
 
+namespace proc {
 namespace asset {
   
   inline void
@@ -87,5 +88,5 @@ namespace asset {
   
   
   
-} // namespace asset
+}} // namespace proc::asset
 #endif

@@ -21,7 +21,7 @@
 */
 
 /** @file multifact.hpp
- ** Building blocks of a configurable factory, generating families of related objects.
+ ** Building blocks to create a configurable factory, generating families of related objects.
  ** Serving the "classical" factory situation: obtaining objects of various kinds, which
  ** are related somehow (usually through an common interface). The creation of these
  ** objects is non-trivial while number and exact parametrisation aren't known beforehand
@@ -70,7 +70,7 @@
 namespace lib {
   namespace factory {
     
-    //////TODO: couldn't these wrappers be extracted into a separate header?
+    /////////////////////////////////TICKET #470 : couldn't these wrappers be extracted into a separate header?
     
     /**
      * Dummy "wrapper",

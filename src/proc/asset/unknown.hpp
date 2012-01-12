@@ -29,6 +29,7 @@
 
 
 
+namespace proc {
 namespace asset {
   
   using lib::time::FSecs;
@@ -49,7 +50,7 @@ namespace asset {
       friend class MediaFactory;
       
     public:
-      virtual Media::PMedia getOrg()  throw(lumiera::error::Invalid);
+      virtual Media::PMedia getOrg();
       
     };
   
@@ -58,5 +59,5 @@ namespace asset {
   
   
   
-} // namespace asset
+}} // namespace proc::asset
 #endif

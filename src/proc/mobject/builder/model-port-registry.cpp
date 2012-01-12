@@ -43,6 +43,7 @@
 #include "proc/mobject/model-port.hpp"
 #include "proc/mobject/builder/model-port-registry.hpp"
 
+namespace proc {
 namespace mobject {
   namespace builder {
     
@@ -79,7 +80,7 @@ namespace mobject {
     ModelPortRegistry::setActiveInstance (ModelPortRegistry& newRegistry)
     {
       LockRegistry global_lock;
-      ModelPortRegistry *previous = theGlobalRegistry.isValid()? 
+      ModelPortRegistry *previous = theGlobalRegistry.isValid()?
                                       &( theGlobalRegistry()) : 0;
       INFO_IF (!previous, builder, "activating new ModelPort registry.");
       WARN_IF ( previous, builder, "switching ModelPort registry instance.");
@@ -299,4 +300,4 @@ namespace mobject {
   
   
   
-} // namespace mobject
+}} // namespace proc::mobject

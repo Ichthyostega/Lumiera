@@ -28,28 +28,27 @@
 
 
 
+namespace proc    {
 namespace mobject {
-  namespace builder {
-    
-    typedef proc_interface::State State;
-    
-    
-    /**
-     * Encapsulates the logic used to get a "render process".
-     * The provided StateProxy serves to hold any mutalbe state used
-     * in the render process, so the rest of the render engine 
-     * can be stateless.
-     * @todo probably the state management will work different (6/08)
-     */
-    class RenderState
-      {
-      public:
-        State& getRenderProcess () ;
-      };
+namespace builder {
+  
+  typedef proc_interface::State State;
+  
+  
+  /**
+   * Encapsulates the logic used to get a "render process".
+   * The provided StateProxy serves to hold any mutalbe state used
+   * in the render process, so the rest of the render engine 
+   * can be stateless.
+   * @todo probably the state management will work different (6/08)
+   */
+  class RenderState
+    {
+    public:
+      State& getRenderProcess () ;
+    };
   
   
   
-  } // namespace mobject::session
-
-} // namespace mobject
+}}} // namespace proc::mobject::session
 #endif

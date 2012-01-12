@@ -41,12 +41,12 @@
 #include <set>
 
 
-namespace lib {
-namespace meta{
-namespace test{
+namespace lib  {
+namespace meta {
+namespace test {
   
-  using mobject::session::Effect;
-  using mobject::session::ScopeQuery;
+  using proc::mobject::session::Effect;
+  using proc::mobject::session::ScopeQuery;
   typedef lib::time::TimeVar Time;
   
   using std::cout;

@@ -68,7 +68,7 @@
 namespace lumiera {  ///////TODO: shouldn't that be namespace lib? or proc?
   
   using std::string;
-  using lumiera::P;
+  using lib::P;
   
   
   
@@ -185,7 +185,7 @@ namespace lumiera {  ///////TODO: shouldn't that be namespace lib? or proc?
      */
     template<typename TYPES>
     class ConfigRules
-      : public typelist::InstantiateForEach<TYPES, QueryHandler>
+      : public lib::meta::InstantiateForEach<TYPES, QueryHandler>
       {
       protected:
         ConfigRules ()         {}
@@ -212,13 +212,13 @@ namespace lumiera {  ///////TODO: shouldn't that be namespace lib? or proc?
    *  the list of all concrete types participating in the
    *  rule based config query system
    */
-  typedef lumiera::typelist::Types < mobject::session::Track
-                                   , asset::Pipe
-                                   , const asset::ProcPatt
-                                   , asset::Timeline
-                                   , asset::Sequence
-                                   > ::List
-                                     InterfaceTypes;
+  typedef lib::meta::Types < proc::mobject::session::Track
+                           , proc::asset::Pipe
+                           , const proc::asset::ProcPatt
+                           , proc::asset::Timeline
+                           , proc::asset::Sequence
+                           > ::List
+                             InterfaceTypes;
   
   /** 
    * user-visible Interface to the ConfigRules subsystem.

@@ -29,6 +29,7 @@
 #include <stdint.h>
 
 
+namespace proc {
 namespace engine {
 namespace test   {
   
@@ -113,8 +114,8 @@ namespace test   {
   /** discards all the TestFrame instances and
    *  initialises an empty table of test frames */
   void resetTestFrames();
-
   
   
-}} // namespace engine::test
+  
+}}} // namespace proc::engine::test
 #endif

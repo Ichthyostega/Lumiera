@@ -40,6 +40,7 @@ using std::cout;
 
 
 
+namespace proc {
 namespace mobject {
 namespace builder {
 namespace test    {
@@ -145,4 +146,4 @@ namespace test    {
       
       
       
-}}} // namespace mobject::builder::test
+}}}} // namespace proc::mobject::builder::test

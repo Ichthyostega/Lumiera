@@ -39,7 +39,7 @@ This code is heavily inspired by
 
 
 /** @file generator.hpp
- ** Helpers for working with lumiera::typelist::Types (i.e. lists-of-types). 
+ ** Helpers for working with lib::meta::Types (i.e. lists-of-types). 
  ** The main purpose is to build interfaces and polymorphic implementations
  ** (using virtual functions) based on templated Types or Collections of types,
  ** which is not possible without Template Metaprogramming.
@@ -56,15 +56,15 @@ This code is heavily inspired by
  */
 
 
-#ifndef LUMIERA_META_GENERATOR_H
-#define LUMIERA_META_GENERATOR_H
+#ifndef LIB_META_GENERATOR_H
+#define LIB_META_GENERATOR_H
 
 #include "lib/meta/typelist.hpp"
 
 
 
-namespace lumiera {
-namespace typelist{
+namespace lib {
+namespace meta{
     
     /** 
      * Apply a template to a collection of types. 
@@ -207,5 +207,5 @@ namespace typelist{
       };
     
     
-}} // namespace lumiera::typelist
+}} // namespace lib::meta
 #endif

@@ -24,7 +24,7 @@
 /** @file typelist-util.hpp
  ** Metaprogramming: simple helpers for working with lists-of-types. 
  ** This header provides some very basic "meta functions" for extracting
- ** some informations from a list-of-types. In Lumiera, we use template
+ ** pieces of information from a list-of-types. In Lumiera, we use template
  ** metaprogramming and especially such lists-of-types, whenever we build
  ** some common implementation backbone, without being able to subsume all
  ** participating types (classes) into a single inheritance hierarchy.
@@ -42,15 +42,15 @@
  */
 
 
-#ifndef LUMIERA_META_TYPELIST_UTIL_H
-#define LUMIERA_META_TYPELIST_UTIL_H
+#ifndef LIB_META_TYPELIST_UTIL_H
+#define LIB_META_TYPELIST_UTIL_H
 
 
 
 #include "lib/meta/typelist.hpp"
 
-namespace lumiera {
-namespace typelist{
+namespace lib {
+namespace meta {
     
     
     /**
@@ -123,5 +123,5 @@ namespace typelist{
     
     
     
-}} // namespace lumiera::typelist
+}} // namespace lib::meta
 #endif

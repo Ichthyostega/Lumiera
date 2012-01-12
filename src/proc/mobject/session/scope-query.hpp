@@ -38,8 +38,8 @@
 
 
 
-#ifndef MOBJECT_SESSION_SCOPE_QUERY_H
-#define MOBJECT_SESSION_SCOPE_QUERY_H
+#ifndef PROC_MOBJECT_SESSION_SCOPE_QUERY_H
+#define PROC_MOBJECT_SESSION_SCOPE_QUERY_H
 
 
 #include "proc/mobject/placement.hpp"
@@ -48,6 +48,7 @@
 #include <tr1/functional>
 
 
+namespace proc {
 namespace mobject {
 namespace session {
   
@@ -211,5 +212,5 @@ namespace session {
   
 
 
-}} // namespace mobject::session
+}}} // namespace proc::mobject::session
 #endif

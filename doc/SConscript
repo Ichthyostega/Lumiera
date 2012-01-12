@@ -1,0 +1,17 @@
+# -*- python -*-
+##
+## SConscript  -  SCons buildscript for Documentation
+##
+
+from Buildhelper import scanSubtree
+
+Import('env')
+
+
+doxydoc = env.Doxygen('devel/Doxyfile')
+
+#  env.Install(dir = '$DESTDIR/share/doc/lumiera$VERSION/devel', source=documentation)
+env.Clean (doxydoc, doxydoc + ['devel/,doxylog','devel/warnings.txt'])
+
+
+Export('doxydoc')

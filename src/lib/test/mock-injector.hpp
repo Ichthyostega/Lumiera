@@ -130,8 +130,8 @@ namespace test{
   namespace mock {
     
     using boost::enable_if;
-    using lumiera::Yes_t;
-    using lumiera::No_t;
+    using lib::meta::Yes_t;
+    using lib::meta::No_t;
     
     /**
      * Metafunction: does the Type in question

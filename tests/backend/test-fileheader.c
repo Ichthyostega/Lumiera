@@ -22,7 +22,7 @@
 #include "backend/backend.h"
 #include "backend/fileheader.h"
 
-#include "tests/test.h"
+#include "lib/test/test.h"
 
 #include "backend/filehandlecache.h"
 extern LumieraFilehandlecache lumiera_fhcache;

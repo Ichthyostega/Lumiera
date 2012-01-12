@@ -23,37 +23,35 @@
 
 #include "proc/mobject/session/fixedlocation.hpp"
 
-namespace mobject
+namespace proc {
+namespace mobject {
+namespace session {
+  
+  
+  FixedLocation* 
+  FixedLocation::clone ()  const
+  { 
+    return new FixedLocation (*this);
+  }
+  
+  
+  /** */
+  void
+  FixedLocation::intersect (LocatingSolution& solution)  const
   {
-  namespace session
-    {
-
-    FixedLocation* 
-    FixedLocation::clone ()  const
-    { 
-      return new FixedLocation (*this); 
-    }
+    LocatingPin::intersect (solution);
     
-    
-    /** */
-    void 
-    FixedLocation::intersect (LocatingSolution& solution)  const
-    {
-      LocatingPin::intersect (solution);
-      
-      TODO ("either set position or make overconstrained");
-      if (solution.minTime <= this->time_)
-        solution.minTime = this->time_;
-      else
-        solution.impo = true;
-      if (solution.maxTime >= this->time_)
-        solution.maxTime = this->time_;
-      else
-        solution.impo = true;
-    }
-
-
-
-  } // namespace mobject::session
-
-} // namespace mobject
+    TODO ("either set position or make overconstrained");
+    if (solution.minTime <= this->time_)
+      solution.minTime = this->time_;
+    else
+      solution.impo = true;
+    if (solution.maxTime >= this->time_)
+      solution.maxTime = this->time_;
+    else
+      solution.impo = true;
+  }
+  
+  
+  
+}}} // namespace proc::mobject::session

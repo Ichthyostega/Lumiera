@@ -20,7 +20,7 @@
  */
 
 #include "lib/slist.h"
-#include "tests/test.h"
+#include "lib/test/test.h"
 
 #include <sys/time.h>
 #include <nobug.h>

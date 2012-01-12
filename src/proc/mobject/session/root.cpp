@@ -25,6 +25,7 @@
 #include "proc/mobject/session/defs-manager.hpp"
 
 
+namespace proc {
 namespace mobject {
 namespace session {
   
@@ -52,4 +53,4 @@ namespace session {
   /////////////////////////////////TODO more to come.....
   
   
-}} // namespace mobject::session
+}}} // namespace proc::mobject::session

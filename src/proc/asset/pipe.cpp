@@ -27,6 +27,7 @@
 
 using util::isnil;
 
+namespace proc {
 namespace asset {
   
   
@@ -83,4 +84,4 @@ namespace asset {
   
   
   
-} // namespace asset
+}} // namespace asset

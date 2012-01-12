@@ -41,10 +41,11 @@ using std::cout;
 using std::endl;
 
 
+namespace proc {
 namespace control {
 namespace test    {
   
-  using namespace lumiera::typelist;
+  using namespace lib::meta;
   using control::CmdClosure;
   
   
@@ -214,4 +215,4 @@ namespace test    {
   LAUNCHER (CommandMutation_test, "unit controller");
   
   
-}} // namespace control::test
+}}} // namespace proc::control::test

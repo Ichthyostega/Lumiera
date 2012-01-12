@@ -43,6 +43,7 @@ using lumiera::ConfigRules;
 using util::contains;
 
 
+namespace proc {
 namespace asset {
   
   /****** NOTE: not fully implemented yet. What follows is partially a hack to build simple tests *******/
@@ -154,7 +155,7 @@ namespace asset {
   
   
   
-} // namespace asset
+}} // namespace asset
 
 
 
@@ -169,6 +170,7 @@ namespace asset {
 #include "proc/asset/sequence.hpp"
 
 
+namespace proc {
 namespace asset {
   
   template P<Pipe>     StructFactory::operator() (Query<Pipe> const&);
@@ -186,4 +188,4 @@ namespace asset {
   template PTimeline   StructFactory::made4fake   (Query<Timeline> const&);      
   template PSequence   StructFactory::made4fake   (Query<Sequence>const&);       
   
-} // namespace asset
+}} // namespace asset

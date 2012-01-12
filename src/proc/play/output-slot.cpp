@@ -38,14 +38,6 @@ namespace play {
   
   
   
-  namespace { // hidden local details of the service implementation....
-    
-  } // (End) hidden service impl details
-  
-  
-  
-  
-  
   
   OutputSlot::~OutputSlot() { }  // emit VTables here....
   
@@ -68,14 +60,25 @@ namespace play {
   }
   
   
-  /** */
+  /** claim this OutputSlot for active use as output sink(s).
+   *  At any point, a given slot can only be used for a single
+   *  ongoing output process (which may serve several channels though).
+   *  The assumption is for the OutputSlot to be picked through a query
+   *  to some OutputManater, so the parameters (resolution, sample rate...)
+   *  should be suited for the intended use. Thus no additional configuration
+   *  is necessary.
+   * @return Allocation representing the "connected state" from the client's POV.
+   *         The client may retrieve the effectively required Timings from there,
+   *         as well as the actual output sinks, ready for use.
+   * @remarks calls back into #buildState, where the concrete OutputSlot
+   *         is expected to provide a private Connection implementation,
+   *         subclassing OutputSlot::Allocation 
+   */
   OutputSlot::Allocation&
   OutputSlot::allocate()
   {
     if (!isFree())
       throw error::Logic ("Attempt to open/allocate an OutputSlot already in use.");
-    
-    UNIMPLEMENTED ("internal interface to determine the number of channel-connections");
     
     state_.reset (this->buildState());
     return *state_;
@@ -110,7 +113,6 @@ namespace play {
       connection.discard(data2emit);
   }
   
-
   
   
   

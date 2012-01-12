@@ -25,7 +25,7 @@
  ** This extension is mostly helpful for writing unit-tests, and beyond that for the
  ** rather unusual case where we need to place an full-blown object into the buffer,
  ** instead of just plain data. A possible use case for this mechanism is to allow for
- ** state pre calculation stream, feeding this local state to the individual render node
+ ** state per calculation stream, feeding this local state to the individual render node
  ** embedded into a "state frame". Some effect processors indeed need to maintain state
  ** beyond the single frame (e.g. averaging, integrating, sound compression), which usually
  ** is handled by applying an "instance" of that processor to the frames to be calculated
@@ -50,6 +50,7 @@
 #include "proc/engine/buffhandle.hpp"
 
 
+namespace proc {
 namespace engine {
   
   
@@ -125,5 +126,5 @@ namespace engine {
   
   
   
-} // namespace engine
+}} // namespace proc::engine
 #endif

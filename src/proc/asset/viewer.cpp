@@ -29,6 +29,7 @@
 //#include "proc/assetmanager.hpp"
 
 
+namespace proc {
 namespace asset {
   
 //  using lib::AutoRegistered;
@@ -67,4 +68,4 @@ namespace asset {
   
   
   
-} // namespace asset
+}} // namespace proc::asset

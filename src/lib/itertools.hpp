@@ -491,7 +491,7 @@ namespace lib {
   
   namespace { // Helper to pick up the produced value type automatically
     
-    using lumiera::typelist::FunctionSignature;
+    using lib::meta::FunctionSignature;
     
     template<typename SIG>
     struct _ProducedOutput
@@ -543,7 +543,7 @@ namespace lib {
   /** filters away repeated values
    *  emitted by source iterator */
   template<class IT>
-  FilterIter<IT>
+  inline FilterIter<IT>
   filterRepetitions (IT const& source)
   {
     typedef typename IT::value_type Val;

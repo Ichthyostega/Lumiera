@@ -36,15 +36,12 @@
 #ifndef TESTHELPER_RUN_H
 #define TESTHELPER_RUN_H
 
-#include "pre.hpp"
-
-
+#include "proc/common.hpp"
 #include "include/logging.h"
 
 #include "lib/test/suite.hpp"
 #include "lib/util.hpp"
 
-#include <vector>
 #include <string>
 
 

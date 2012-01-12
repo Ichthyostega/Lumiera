@@ -33,6 +33,7 @@
 #include <string>
 
 
+namespace proc    {
 namespace mobject {
 namespace session {
 namespace test    {
@@ -404,4 +405,4 @@ namespace test    {
   LAUNCHER (ScopePath_test, "unit session");
   
   
-}}} // namespace mobject::session::test
+}}}} // namespace proc::mobject::session::test

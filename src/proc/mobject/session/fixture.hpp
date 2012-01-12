@@ -39,11 +39,12 @@ using std::tr1::shared_ptr;
 
 
 
+namespace proc {
 namespace mobject {
 namespace session {
-
-
-
+  
+  
+  
   class Fixture
     : boost::noncopyable
     {
@@ -74,5 +75,5 @@ namespace session {
   
   
   
-}} // namespace mobject::session
+}}} // namespace proc::mobject::session
 #endif

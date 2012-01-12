@@ -33,12 +33,13 @@
 
 using boost::str;
 using boost::format;
-using namespace lumiera;
 using util::isnil;
 using util::cStr;
 
 
+namespace proc {
 namespace control {
+  namespace error = lumiera::error;
   
   /** retrieve pre-configured pattern */
   HandlingPattern const&
@@ -124,4 +125,4 @@ namespace control {
   }
   
   
-} // namespace control
+}} // namespace proc::control

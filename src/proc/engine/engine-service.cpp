@@ -57,25 +57,33 @@ namespace engine{
   
   
   
-  /** */
-  CalcStream
+  /** core operation: activate the Lumiera Render Engine.
+   * Invoking this service effectively hooks up each channel
+   * of the given model exit point to deliver into the corresponding
+   * output sink on the given OutputConnection (which is assumed
+   * to be already allocated for active use by this connection).
+   * The generated calculation streams represent actively ongoing
+   * calculations within the engine, started right away, according
+   * to the given timing constraints and service quality.
+   */
+  CalcStreams
   EngineService::calculate(ModelPort mPort,
                            Timings nominalTimings,
                            OutputConnection& output,
                            Quality serviceQuality)
   {
-    UNIMPLEMENTED ("build a standard calculation stream");
+    UNIMPLEMENTED ("build a list of standard calculation streams");
   }
   
   
   
   /** */
-  CalcStream
+  CalcStreams
   EngineService::calculateBackground(ModelPort mPort,
                                      Timings nominalTimings,
                                      Quality serviceQuality)
   {
-    UNIMPLEMENTED ("build a calculation stream for background rendering");
+    UNIMPLEMENTED ("build calculation streams for background rendering");
   }
   
   

@@ -138,13 +138,13 @@ namespace engine{
       EngineService();
      ~EngineService() { }
       
-      CalcStream
+      CalcStreams
       calculate(ModelPort mPort,
                 Timings nominalTimings,
                 OutputConnection& output,
                 Quality serviceQuality =QoS_DEFAULT);
       
-      CalcStream
+      CalcStreams
       calculateBackground(ModelPort mPort,
                           Timings nominalTimings,
                           Quality serviceQuality =QoS_BACKGROUND);

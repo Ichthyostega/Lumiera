@@ -48,6 +48,7 @@
 
 
 
+namespace proc {
 namespace mobject {
 namespace session {
   
@@ -79,5 +80,5 @@ namespace session {
     return bind (_compareTrackID, _1, trackID);
   }
   
-}} // namespace mobject::session
+}}} // namespace proc::mobject::session
 #endif

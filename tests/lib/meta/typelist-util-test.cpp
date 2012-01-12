@@ -26,8 +26,8 @@
 
 
 
-namespace lumiera {
-namespace typelist{
+namespace lib  {
+namespace meta {
 namespace test {
   
   
@@ -76,8 +76,8 @@ namespace test {
   
   
   /** Register this test class... */
-  LAUNCHER (TypeListUtil_test, "unit common");
+  LAUNCHER (TypeListUtil_test, "unit meta");
   
   
   
-}}} // namespace lumiera::typelist::test
+}}} // namespace lib::meta::test

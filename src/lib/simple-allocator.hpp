@@ -46,11 +46,10 @@
 #ifndef LIB_SIMPLE_ALLOCATOR_H
 #define LIB_SIMPLE_ALLOCATOR_H
 
-//#include "pre.hpp"
 #include "lib/error.hpp"
 #include "lib/meta/generator.hpp"
 #include "lib/meta/typelist-util.hpp"
-#include "lib/format.hpp"
+#include "lib/format-util.hpp"
 #include "lib/typed-counter.hpp"
 #include "include/logging.h"
 
@@ -61,9 +60,9 @@
 
 namespace lib {
   
-  using lumiera::typelist::Types;
-  using lumiera::typelist::IsInList;
-  using lumiera::typelist::InstantiateForEach;
+  using lib::meta::Types;
+  using lib::meta::IsInList;
+  using lib::meta::InstantiateForEach;
   
   
   
@@ -144,7 +143,7 @@ namespace lib {
     : InstantiateForEach< typename TYPES::List     // for each of those types...
                         , CustomAllocator         //  ...mix in the custom allocator
                         >
-    , COUNTER
+    , COUNTER                                   // ...Instantiation accounting policy
     {
       
       /** forward plain memory allocation */

@@ -36,6 +36,7 @@ using std::cout;
 using std::rand;
 
 
+namespace proc {
 namespace engine{
 namespace test  {
 
@@ -180,4 +181,4 @@ namespace test  {
   
   
   
-}} // namespace engine::test
+}}} // namespace proc::engine::test

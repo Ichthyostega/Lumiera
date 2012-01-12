@@ -27,6 +27,7 @@
 #include "include/logging.h"
 
 
+namespace proc {
 namespace asset {
   
   
@@ -47,4 +48,4 @@ namespace asset {
   
   
   
-} // namespace asset
+}} // namespace asset

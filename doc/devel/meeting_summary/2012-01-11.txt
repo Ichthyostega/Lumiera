@@ -1,0 +1,37 @@
+2012-01-11 Lumiera Developers Meeting
+=====================================
+:Author: cehteh
+:Date: 2012-01-11
+
+Jan 11, 2011 on #lumiera 20:00 - 22:30
+
+__Participants__
+
+ * cehteh
+ * ichthyo
+ * benn
+ * raffa
+
+Conclusions
+-----------
+
+. _ichthyo_ removed most of the TiddlyWikis, and worked the content into the website
+. _cehteh_ reports that Lumiera got another donation (75 €), arrangements with
+  the FFIS to get access (view) about the donations account are under way. We'll
+  ask donors then if they want to be published or stay anonymous and will set up
+  a wiki page listing donations and expenses.
+. _ichthyo_ reworked the SCons build, as discussed last time
+. _cehteh_ writes a very short RfC, to document that we're using SCons for now.
+. possibly no one going to LAC, too far away
+. we discussed a link checker / link resolver for the website.
+  The idea is to have a semi automatic tool, which is used locally when
+  authoring website content to find cross references.
+. _benny_ and _ichthyo_ follow up on the
+  link:http://libregraphicsmag.com/[Libre Graphics Magazine]'s offer to promote
+  graphics and media projects and try to get into discussion with them and see
+  what can be done within our limited time. 
+. when it comes to have a working example for media file output, we stick to the
+  mainstream solutions *ffmpeg* and or *gstreamer*, but care not to lock ourselves
+  into a single solution. Concluded that we do this over plugin interfaces --
+  it mostly boils down to support ffmpeg -- besides we'll investigate simple
+  alternatives for basic output.

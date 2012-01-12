@@ -44,8 +44,8 @@
  */
 
 
-#ifndef LUMIERA_META_FUNCTION_H
-#define LUMIERA_META_FUNCTION_H
+#ifndef LIB_META_FUNCTION_H
+#define LIB_META_FUNCTION_H
 
 #include "lib/meta/typelist.hpp"
 
@@ -53,8 +53,8 @@
 
 
 
-namespace lumiera {
-namespace typelist{
+namespace lib {
+namespace meta{
 
   using std::tr1::function;
   
@@ -357,5 +357,5 @@ namespace typelist{
   
   
   
-}} // namespace lumiera::typelist
+}} // namespace lib::meta
 #endif

@@ -1,8 +1,8 @@
 /*
-  StreamType  -  classification of media stream types 
+  ALSA.h  -  sound output backend using the Advanced Linux Sound Architecture
 
   Copyright (C)         Lumiera.org
-    2008,               Hermann Vosseler <Ichthyostega@web.de>
+    2011,               Odin Omdal Hørthe <odin.omdal@gmail.com>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -18,20 +18,37 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
-* *****************************************************/
+*/
+
+/** @file alsa.h
+ ** Interfacing to ALSA sound output.
+ ** 
+ ** @todo for now this header defines some functions used for experimentation with ALSA 
+ **
+ ** @see output-slot.hpp
+ */
 
 
-#include "lib/streamtype.hpp"
+#ifndef TOOL_ALSA_H
+#define TOOL_ALSA_H
 
 
-namespace lumiera
-  {
+#include <stdlib.h>
 
-   /** @internal defined here non-inline place the vtable in this object file.*/
-   StreamType::ImplFacade::ImplFacade (Symbol libID)
-     : libraryID(libID)
-     { }
 
-  
 
-} // namespace lumiera
+size_t audio_offset();
+
+
+void audio_init();
+
+
+size_t audio_write(const void* data, size_t amount);
+
+
+void audio_start(unsigned int rate, unsigned int channel_count);
+
+
+void audio_stop();
+
+#endif // TOOL_ALSA_H

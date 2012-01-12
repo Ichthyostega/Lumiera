@@ -37,10 +37,11 @@
 
 
 #include "lib/error.hpp"
-#include "lib/streamtype.hpp"
+#include "proc/streamtype.hpp"
 #include "lib/bool-checkable.hpp"
 
 
+namespace proc {
 namespace engine {
   
   namespace error = lumiera::error;
@@ -71,5 +72,5 @@ namespace engine {
   
   
   
-} // namespace engine
+}} // namespace proc::engine
 #endif

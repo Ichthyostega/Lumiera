@@ -57,12 +57,13 @@
 //#include "common/instancehandle.hpp"
 //#include "lib/singleton-ref.hpp"
 #include "proc/mobject/model-port.hpp"
-#include "proc/play/output-manager.hpp"
+#include "proc/engine/calc-stream.hpp"
 #include "lib/iter-source.hpp"
 #include "lib/util.hpp"
 //
 #include <boost/noncopyable.hpp>
 //#include <boost/scoped_ptr.hpp>
+#include <tr1/functional>
 //#include <string>
 #include <vector>
 
@@ -75,12 +76,14 @@ namespace play {
 //    using lumiera::Display;
 //    using lumiera::DummyPlayer;
   using util::isnil;
-  using mobject::ModelPort;
+  using proc::mobject::ModelPort;
+  using std::tr1::function;
   
-  typedef proc::play::POutputManager POutputManager;
   typedef lib::IterSource<ModelPort>::iterator ModelPorts;
   
   namespace error = lumiera::error;
+  
+  
   
   
   /**
@@ -91,12 +94,18 @@ namespace play {
    */
   class Feed
     {
+      engine::CalcStreams renderStreams_;
       
     public:
-      typedef lib::IterSource<Feed>::iterator Connections;
       
-      Feed (ModelPort, OutputSlot&);
+      /** building a Feed effectively involves the EngineService
+       *  to establish an actual rendering plan. Which is abstracted
+       *  here through the RenderConfigurator instance */
+      Feed (engine::CalcStreams const&);
     };
+  
+  typedef function<Feed(ModelPort)> FeedBuilder;
+  typedef std::vector<Feed>         OutputFeeds;
     
   
   /******************************************************
@@ -118,13 +127,13 @@ namespace play {
   class PlayProcess
     : boost::noncopyable
     {
-      std::vector<Feed> outputFeeds_;
+      OutputFeeds outputFeeds_;
       
-      PlayProcess (Feed::Connections pipeConnections);
+      PlayProcess (OutputFeeds feeds);
       
     public:
       static PlayProcess*
-      initiate (ModelPorts dataGenerators, POutputManager outputDestinations);
+      initiate (ModelPorts dataGenerators, FeedBuilder);
     };
   
   

@@ -1,0 +1,26 @@
+#
+# Lumiera Icon Artwork
+#
+#  Copyright (C)         Lumiera.org
+#    2008,               Joel Holdsworth <joel@airwebreathe.org.uk>
+#
+#  Icon Artwork and similar materials accompanying the Lumiera Application
+#  is dual-licensed under the GNU General Public License version 2 or above,
+#  and
+#  Creative Commons Attribution-ShareAlike 3.0 Unported License
+#
+#
+
+
+This directory holds Icons and similar graphics resources for the Lumiera GUI.
+
+- prerendered: Raster image Icons rendered into a selection of sizes
+- svg: Scalable Vector Grahpics Icons, to be rendered into suitable sizes
+       by the build process. Rendering is done with the help of lib Cairo.
+       The build creates an executable from src/tools/rsvg-convert.c
+       The invocation of the icon rendering is done with the help of a
+       Python script IconSvgRenderer.py, which first parses the SVG document
+       and then invokes rsvg-convert to generate the raster images.
+
+
+

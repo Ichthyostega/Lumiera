@@ -56,7 +56,6 @@
 #ifndef MOBJECT_SESSION_PLACEMENT_INDEX_QUERY_RESOLVER_H
 #define MOBJECT_SESSION_PLACEMENT_INDEX_QUERY_RESOLVER_H
 
-//#include "pre.hpp"
 #include "proc/mobject/session/placement-index.hpp"
 #include "proc/mobject/session/query-resolver.hpp"
 #include "proc/mobject/session/scope-query.hpp"
@@ -64,6 +63,7 @@
 #include <tr1/functional>
 
 
+namespace proc {
 namespace mobject {
 namespace session {
  
@@ -114,5 +114,5 @@ namespace session {
     };
   
   
-}} // namespace mobject::session
+}}} // namespace proc::mobject::session
 #endif

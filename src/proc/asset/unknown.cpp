@@ -27,6 +27,7 @@
 
 using boost::format;
 
+namespace proc {
 namespace asset {
   
   LUMIERA_ERROR_DEFINE (ORIG_NOT_FOUND, "Media referred by placeholder not found");
@@ -49,7 +50,7 @@ namespace asset {
    *  try to access the "real" media it stands for.
    */
   Media::PMedia 
-  Unknown::getOrg()  throw(lumiera::error::Invalid)
+  Unknown::getOrg()
   {
     UNIMPLEMENTED ("how to get at the original media from a »Unknown« placeholder");
     if (1==0)
@@ -63,4 +64,4 @@ namespace asset {
   
   
   
-} // namespace asset
+}} // namespace asset

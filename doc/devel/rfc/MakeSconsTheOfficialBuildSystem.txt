@@ -1,0 +1,88 @@
+Make Scons the official build System
+====================================
+
+// please don't remove the //word: comments
+
+[grid="all"]
+`------------`-----------------------
+*State*         _Final_
+*Date*          _Mi 11 Jan 2012 21:45:58 CET_
+*Proposed by*   Christian Thaeter <ct@pipapo.org>
+-------------------------------------
+
+********************************************************************************
+.Abstract
+_Bless SCons the default build system for Lumiera._
+********************************************************************************
+
+Description
+-----------
+//description: add a detailed description:
+
+So far we using autotools and scons in parallel. Over time the need arose to have one
+reliable supported build system. This shall be SCons.
+
+
+Tasks
+~~~~~
+// List what needs to be done to implement this Proposal:
+// * first step ([green]#✔ done#)
+// * second step [,yellow]#WIP#
+Nothing to do except for releases SCons _must be working_ and all non functional
+build systems will be stripped on the release branches.
+
+
+////
+Discussion
+~~~~~~~~~~
+
+Pros
+^^^^
+// add a fact list/enumeration which make this suitable:
+//  * foo
+//  * bar ...
+
+
+
+Cons
+^^^^
+// fact list of the known/considered bad implications:
+
+
+
+Alternatives
+^^^^^^^^^^^^
+//alternatives: explain alternatives and tell why they are not viable:
+
+
+
+Rationale
+---------
+//rationale: Give a concise summary why it should be done *this* way:
+
+////
+
+
+Conclusion
+----------
+//conclusion: When approbate (this proposal becomes a Final)
+//            write some conclusions about its process:
+
+result of discussions and evaluation during the last years
+
+
+Comments
+--------
+//comments: append below
+
+.State -> Final
+//add reason
+Decided on the December 2011 Developer meeting.
+
+Christian Thaeter:: 'Wed 11 Jan 2012 22:28:36 CET' ~<ct@pipapo.org>~
+
+//endof_comments:
+
+''''
+Back to link:/documentation/devel/rfc.html[Lumiera Design Process overview]
+

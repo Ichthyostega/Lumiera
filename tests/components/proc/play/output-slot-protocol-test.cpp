@@ -22,33 +22,22 @@
 
 
 #include "lib/test/run.hpp"
-//#include "lib/util.hpp"
+
 #include "proc/play/diagnostic-output-slot.hpp"
 #include "proc/engine/buffhandle.hpp"
 #include "proc/engine/testframe.hpp"
 
-//#include <boost/format.hpp>
-//#include <iostream>
-
-//using boost::format;
-//using std::string;
-//using std::cout;
 
 
 namespace proc {
 namespace play {
-namespace test  {
+namespace test {
   
-//  using lib::AllocationCluster;
-//  using mobject::session::PEffect;
-  using ::engine::BuffHandle;
-  using ::engine::test::testData;
-  using ::engine::test::TestFrame;
+  using proc::engine::BuffHandle;
+  using proc::engine::test::testData;
+  using proc::engine::test::TestFrame;
   
   
-  namespace { // Test fixture
-    
-  }
   
   
   /*******************************************************************
@@ -63,7 +52,6 @@ namespace test  {
       virtual void
       run (Arg) 
         {
-          UNIMPLEMENTED ("build a mock output slot and perform a full lifecycle");
           verifyStandardCase();
         }
       
@@ -85,23 +73,20 @@ namespace test  {
           // "calculation streams" for the individual
           // Channels to be output through this slot.
           OutputSlot::OpenedSinks sinks = alloc.getOpenedSinks();
-          DataSink sink1 = *sinks++;
-          DataSink sink2 = *sinks++;
+          DataSink sink1 = *sinks;
+          DataSink sink2 = *++sinks;
           
           // within the frame-calculation "loop"
           // we perform an data exchange cycle
           int64_t frameNr = 123;
           BuffHandle buff00 = sink1.lockBufferFor (frameNr);
           BuffHandle buff10 = sink2.lockBufferFor (frameNr);
-          buff00.create<TestFrame>();
-          buff10.create<TestFrame>();
           
           // rendering process calculates content....
           buff00.accessAs<TestFrame>() = testData(0,0);
           
           // while further frames might be processed in parallel
           BuffHandle buff11 = sink2.lockBufferFor (++frameNr);
-          buff11.create<TestFrame>();
           buff11.accessAs<TestFrame>() = testData(1,1);
           buff10.accessAs<TestFrame>() = testData(1,0);
           
@@ -113,33 +98,31 @@ namespace test  {
           
           // Verify sane operation....
           DiagnosticOutputSlot& checker = DiagnosticOutputSlot::access(oSlot);
-          CHECK (checker.buffer_was_used (0,0));
-          CHECK (checker.buffer_unused   (0,1));
-          CHECK (checker.buffer_was_used (1,0));
-          CHECK (checker.buffer_was_used (1,1));
+          CHECK ( checker.frame_was_allocated (0,123));
+          CHECK (!checker.frame_was_allocated (0,124));
+          CHECK ( checker.frame_was_allocated (1,123));
+          CHECK ( checker.frame_was_allocated (1,124));
           
-          CHECK (checker.buffer_was_closed (0,0));
-          CHECK (checker.buffer_was_closed (1,0));
-          CHECK (checker.buffer_was_closed (1,1));
+          CHECK (checker.output_was_closed (0,0));
+          CHECK (checker.output_was_closed (1,0));
+          CHECK (checker.output_was_closed (1,1));
           
-          CHECK ( checker.emitted (0,0));
-          CHECK (!checker.emitted (0,1));
-          CHECK ( checker.emitted (1,0));
-          CHECK ( checker.emitted (1,1));
+          CHECK ( checker.output_was_emitted (0,0));
+          CHECK (!checker.output_was_emitted (0,1));
+          CHECK ( checker.output_was_emitted (1,0));
+          CHECK ( checker.output_was_emitted (1,1));
           
           DiagnosticOutputSlot::OutFrames stream0 = checker.getChannel(0); 
           DiagnosticOutputSlot::OutFrames stream1 = checker.getChannel(1);
           
           CHECK ( stream0);
-          CHECK (*stream0++ == testData(0,0));
+          CHECK (*stream0 == testData(0,0)); ++stream0;
           CHECK (!stream0);
           
           CHECK ( stream1);
-          CHECK (*stream1++ == testData(1,0));
-          CHECK (*stream1++ == testData(1,1));
+          CHECK (*stream1 == testData(1,0)); ++stream1;
+          CHECK (*stream1 == testData(1,1)); ++stream1;
           CHECK (!stream1);
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #819
-#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #819
         }
     };
   

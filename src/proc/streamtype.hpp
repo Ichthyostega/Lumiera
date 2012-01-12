@@ -31,8 +31,8 @@
  */
 
 
-#ifndef LUMIERA_STREAMTYPE_HPP
-#define LUMIERA_STREAMTYPE_HPP
+#ifndef PROC_STREAMTYPE_H
+#define PROC_STREAMTYPE_H
 
 
 #include "lib/symbol.hpp"
@@ -42,7 +42,7 @@
 #include <boost/noncopyable.hpp>
 
 
-namespace lumiera {
+namespace proc {
   
   using lib::Symbol;
   
@@ -190,5 +190,5 @@ namespace lumiera {
   
   
   
-} // namespace lumiera
+} // namespace proc
 #endif

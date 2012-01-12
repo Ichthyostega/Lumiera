@@ -57,8 +57,6 @@
 #ifndef ASSET_STRUCT_H
 #define ASSET_STRUCT_H
 
-#include "pre_a.hpp"
-
 #include "proc/asset.hpp"
 #include "lib/query.hpp"
 #include "lib/factory.hpp"
@@ -70,6 +68,7 @@
 
 
 
+namespace proc {
 namespace asset {
   
   using std::string;
@@ -163,5 +162,5 @@ namespace asset {
   
   
   
-} // namespace asset
+}} // namespace proc::asset
 #endif

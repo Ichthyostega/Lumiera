@@ -41,8 +41,8 @@
  */
 
 
-#ifndef LUMIERA_META_TYPESEQ_UTIL_H
-#define LUMIERA_META_TYPESEQ_UTIL_H
+#ifndef LIB_META_TYPESEQ_UTIL_H
+#define LIB_META_TYPESEQ_UTIL_H
 
 #include "lib/meta/typelist.hpp"
 #include "lib/meta/typelist-manip.hpp"
@@ -50,8 +50,8 @@
 
 
 
-namespace lumiera {
-namespace typelist{
+namespace lib {
+namespace meta {
   
   
   
@@ -203,5 +203,5 @@ namespace typelist{
   
   
   
-}} // namespace lumiera::typelist
+}} // namespace lib::meta
 #endif

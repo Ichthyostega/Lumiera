@@ -23,6 +23,7 @@
 
 #include "proc/asset/compoundmedia.hpp"
 
+namespace proc {
 namespace asset
   {
   
@@ -30,4 +31,4 @@ namespace asset
 
 
 
-} // namespace asset
+  }} // namespace proc::asset

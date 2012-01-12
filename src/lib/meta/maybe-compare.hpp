@@ -21,8 +21,8 @@
 */
 
 
-#ifndef LUMIERA_META_MAYBE_COMPARE_H
-#define LUMIERA_META_MAYBE_COMPARE_H
+#ifndef LIB_META_MAYBE_COMPARE_H
+#define LIB_META_MAYBE_COMPARE_H
 
 
 #include "lib/functor-util.hpp"
@@ -30,8 +30,8 @@
 #include <tr1/functional>
 
 
-namespace lumiera {
-namespace typelist {
+namespace lib {
+namespace meta{
   
   using std::tr1::function;
   
@@ -72,5 +72,5 @@ namespace typelist {
   }
   
   
-}} // namespace lumiera::typelist
+}} // namespace lib::meta
 #endif

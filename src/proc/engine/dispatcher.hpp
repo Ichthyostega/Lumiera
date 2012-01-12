@@ -30,6 +30,7 @@
 
 
 
+namespace proc {
 namespace engine {
   
   using lib::time::TimeSpan;
@@ -39,7 +40,7 @@ namespace engine {
 //  class ExitNode;
   
   /**
-   * @todo
+   * @todo 11/11 extremely fuzzy at the moment
    */
   class Dispatcher
     {
@@ -58,5 +59,5 @@ namespace engine {
   
   
   
-} // namespace engine
+}} // namespace proc::engine
 #endif

@@ -336,7 +336,7 @@ function change_state()
     local state="$2"
 
     local nl=$'\n'
-    local comment=".State -> $state$nl//add reason$nl    $(date +%c) $(git config --get user.name) <$(git config --get user.email)>$nl"
+    local comment=".State -> $state$nl//add reason$nl$nl$(git config --get user.name):: '$(date +%c)' ~<$(git config --get user.email)>~$nl"
     edit_state "$name" "$state" "$comment"
     edit "$name" -4 "endof_comments"
     process_file "$name"

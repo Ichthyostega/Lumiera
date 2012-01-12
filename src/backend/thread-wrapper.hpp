@@ -188,7 +188,7 @@ namespace backend {
     
     
     /** @note by design there is no possibility to find out
-     *  just based on the thread handle, if the thread is alive.
+     *  just based on the thread handle if some thread is alive.
      *  We define our own accounting here based on the internals
      *  of the thread wrapper. This will break down, if you mix
      *  uses of the C++ wrapper with the raw C functions. */

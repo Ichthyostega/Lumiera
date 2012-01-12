@@ -23,8 +23,9 @@
 
 #include "proc/asset/codec.hpp"
 
+namespace proc {
 namespace asset {
 
 
 
-} // namespace asset
+}} // namespace proc::asset

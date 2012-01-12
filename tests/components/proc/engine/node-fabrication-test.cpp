@@ -32,6 +32,7 @@ using std::string;
 using std::cout;
 
 
+namespace proc {
 namespace engine{
 namespace test  {
   
@@ -55,4 +56,4 @@ namespace test  {
   
   
   
-}} // namespace engine::test
+}}} // namespace proc::engine::test

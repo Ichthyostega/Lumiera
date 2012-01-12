@@ -21,8 +21,8 @@
 */
 
 
-#ifndef ASSET_CATEGORY_H
-#define ASSET_CATEGORY_H
+#ifndef PROC_ASSET_CATEGORY_H
+#define PROC_ASSET_CATEGORY_H
 
 #include "lib/symbol.hpp"
 
@@ -31,6 +31,7 @@
 
 
 
+namespace proc {
 namespace asset {
   
   using lib::Literal;
@@ -111,5 +112,5 @@ namespace asset {
   
   
   
-} // namespace asset
+}} // namespace proc::asset
 #endif

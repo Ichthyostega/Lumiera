@@ -56,7 +56,7 @@ namespace wrapper {
   
   using util::unConst;
   using util::isSameObject;
-  using lumiera::typelist::FunctionSignature;
+  using lib::meta::FunctionSignature;
   using lumiera::error::LUMIERA_ERROR_BOTTOM_VALUE;
   
   using boost::remove_const;
@@ -380,7 +380,7 @@ namespace wrapper {
         {
           using std::tr1::bind;
           using std::tr1::placeholders::_1;
-          using lumiera::typelist::func::chained;
+          using lib::meta::func::chained;
                                                       // note: binding "this" mandates noncopyable
           function<Res(Res)> doCaptureResult  = bind (&FunctionResult::captureResult, this, _1 );
           function<SIG> chainedWithResCapture = chained (targetFunction, doCaptureResult); 

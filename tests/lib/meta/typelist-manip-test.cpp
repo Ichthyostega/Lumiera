@@ -50,8 +50,8 @@ using std::cout;
 using std::endl;
 
 
-namespace lumiera {
-namespace typelist{
+namespace lib  {
+namespace meta {
 namespace test {
       
       
@@ -377,4 +377,4 @@ namespace test {
       
       
       
-}}} // namespace lumiera::typelist::test
+}}} // namespace lib::meta::test

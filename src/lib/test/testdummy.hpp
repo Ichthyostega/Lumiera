@@ -48,14 +48,22 @@ namespace test{
         : val_(v)
         { init(); }
       
-      ~Dummy()
+      virtual ~Dummy()
         {
           checksum() -= val_;
         }
       
-      long add (int i)    { return val_+i; }
+      virtual long
+      acc (int i)   ///< dummy API operation
+        {
+          return val_+i;
+        }
       
-      int getVal()  const { return val_; }
+      int
+      getVal()  const
+        {
+          return val_;
+        }
       
       void
       setVal (int newVal)

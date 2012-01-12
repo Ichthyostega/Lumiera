@@ -32,6 +32,8 @@
 #include <string>
 
 
+namespace proc {
+
 namespace asset { class Proc; }
 namespace asset { class Media; }
 namespace engine { class NodeFactory; }
@@ -76,5 +78,5 @@ namespace builder {
   
   
   
-}} // namespace mobject::builder
+}}} // namespace proc::mobject::builder
 #endif
