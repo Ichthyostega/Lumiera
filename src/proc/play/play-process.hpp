@@ -98,9 +98,12 @@ namespace play {
       
     public:
       
-      /** building a Feed effectively involves the EngineService
-       *  to establish an actual rendering plan. Which is abstracted
-       *  here through the RenderConfigurator instance */
+      /** building a Feed effectively requires the definition
+       *  of a rendering plan through the EngineService.
+       * @param CalcStreams definition of the individual
+       *        calculation "continuations" for the engine.
+       *        These correspond to already running
+       *        render calculations. */
       Feed (engine::CalcStreams const&);
     };
   

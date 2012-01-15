@@ -79,7 +79,7 @@ namespace play {
 //    using std::tr1::placeholders::_1;
 //    using lib::transform;
     
-    class DefaultRenderProcessBuilder
+    class LumieraRenderProcessBuilder
       : public RenderConfigurator
       {
         
@@ -112,7 +112,7 @@ namespace play {
         
         
       public:
-        DefaultRenderProcessBuilder(POutputManager outputManager, Timings playbackSpeed)
+        LumieraRenderProcessBuilder (POutputManager outputManager, Timings playbackSpeed)
           : outputResolver_(outputManager)
           , playbackTimings_(playbackSpeed)
           , renderQuality_(EngineService::QoS_DEFAULT)
@@ -128,7 +128,7 @@ namespace play {
   
   
   /** @internal this builder function is used by the PlayService
-   * when it comes to creating a new PlayProcess. The generated RenderConfigurator
+   * when it comes to creating a new PlayProcess. The generated ConnectFunction
    * embodies the specific knowledge how to configure and setup the rendering or
    * playback at the EngineFacade, based on the general playback speed and
    * quality desirable for this playback process to be initiated.
@@ -143,7 +143,9 @@ namespace play {
   RenderConfigurator::ConnectFunction
   buildRenderConfiguration (POutputManager outputPossibilities, Timings playbackTimings)
   {
-    shared_ptr<RenderConfigurator> specialConfig (new DefaultRenderProcessBuilder (outputPossibilities, playbackTimings));
+    /////////////////////////////////////////////TODO this is the point to inject a Dummy implementation or anything bypassing the Lumiera engine!  
+      
+    shared_ptr<RenderConfigurator> specialConfig (new LumieraRenderProcessBuilder (outputPossibilities, playbackTimings));
     
     return bind (&RenderConfigurator::buildActiveFeed, specialConfig, _1 );
   }
