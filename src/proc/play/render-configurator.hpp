@@ -109,7 +109,13 @@ namespace play {
   
   
   /** Factory function to build a RenderConfigurator
-   *  specifically tailored for a given PlayProcess.
+   *  specifically tailored for a PlayProcess, about to be started.
+   * @param outputPossibilities an OutputManager instance describing
+   *        the situation where output is about to be generated (e.g.
+   *        a viewer in the GUI or a file to be rendered)
+   * @param playbackTimings characterisation of the kind of play/render.
+   *        Besides the required delivery interval, this might also define
+   *        quality-of-service expectations.
    * @return the public access point to an RenderConfigurator,
    *         wrapped as generic function object 
    */

@@ -25,6 +25,7 @@
 #include "proc/play/render-configurator.hpp"
 #include "proc/play/output-manager.hpp"
 #include "proc/engine/engine-service.hpp"
+#include "proc/engine/engine-service-mock.hpp"
 //#include "lib/itertools.hpp"
 
 //#include <string>
@@ -47,6 +48,7 @@ namespace play {
   using std::tr1::bind;
   using std::tr1::placeholders::_1;
   using engine::EngineService;
+  using engine::EngineServiceMock;
   
   typedef EngineService::QoS_Definition RenderQuality;
   
@@ -107,7 +109,14 @@ namespace play {
             Timings nominalTimings = activeOutputConnection.getTimingConstraints()
                                                            .constrainedBy(playbackTimings_);
             
-            return EngineService::instance().calculate (port, nominalTimings, activeOutputConnection, renderQuality_);
+            return activateEngine (port, nominalTimings, activeOutputConnection, renderQuality_);
+          }
+        
+      protected:
+        virtual engine::CalcStreams
+        activateEngine (ModelPort port, Timings timings, OutputSlot::Allocation& activeOutputConnection, RenderQuality quality)
+          {
+            return EngineService::instance().calculate (port, timings, activeOutputConnection, quality);
           }
         
         
@@ -119,6 +128,34 @@ namespace play {
           { }
         
       };
+    
+    class MockRenderProcessBuilder
+      : public LumieraRenderProcessBuilder
+      {
+        engine::CalcStreams
+        activateEngine (ModelPort port, Timings timings, OutputSlot::Allocation& activeOutputConnection,RenderQuality quality)
+          {
+            return EngineServiceMock::instance().calculate (port, timings, activeOutputConnection, quality);
+          }
+        
+      public:
+        MockRenderProcessBuilder (POutputManager outputManager, Timings playbackSpeed)
+          : LumieraRenderProcessBuilder(outputManager,playbackSpeed)
+          { }
+      };
+    
+    
+    
+    /** @internal decision point about how to configure the rendering */
+    inline RenderConfigurator*
+    how_to_render (POutputManager outputPossibilities, Timings playTimings)
+    {
+      if (playTimings.isMockEngineRun())
+        return new MockRenderProcessBuilder (outputPossibilities, playTimings);
+            
+      else
+        return new LumieraRenderProcessBuilder (outputPossibilities, playTimings);
+    }
   
     
   } // (End) hidden service impl details
@@ -129,9 +166,10 @@ namespace play {
   
   /** @internal this builder function is used by the PlayService
    * when it comes to creating a new PlayProcess. The generated ConnectFunction
-   * embodies the specific knowledge how to configure and setup the rendering or
-   * playback at the EngineFacade, based on the general playback speed and
-   * quality desirable for this playback process to be initiated.
+   * treats a single ModelPort to produce a suitable rendering setup, pulling data
+   * from this port; it thus embodies the specific knowledge how to configure and
+   * setup the rendering or playback at the EngineFacade, based on the playback
+   * speed and quality desirable for this playback process to be initiated.
    * @remarks building a special subclass here and managing this instance
    *          by smart-ptr. Then wrapping all of this up into a functor,
    *          which can thus be passed on by value. This functor will
@@ -141,11 +179,9 @@ namespace play {
    *          OutputManager
    */
   RenderConfigurator::ConnectFunction
-  buildRenderConfiguration (POutputManager outputPossibilities, Timings playbackTimings)
+  buildRenderConfiguration (POutputManager outputPossibilities, Timings playTimings)
   {
-    /////////////////////////////////////////////TODO this is the point to inject a Dummy implementation or anything bypassing the Lumiera engine!  
-      
-    shared_ptr<RenderConfigurator> specialConfig (new LumieraRenderProcessBuilder (outputPossibilities, playbackTimings));
+    shared_ptr<RenderConfigurator> specialConfig (how_to_render (outputPossibilities,playTimings));
     
     return bind (&RenderConfigurator::buildActiveFeed, specialConfig, _1 );
   }

@@ -70,8 +70,9 @@ namespace play {
   
   
   
-  /********************************************************************
-   * Data-Record: Generic frame timing specification.
+  /*****************************************************************************
+   * Generic frame timing specification. Defines the expected delivery interval,
+   * optionally also the expected quality-of-service
    * 
    * @note copyable value class
    * 
@@ -80,7 +81,16 @@ namespace play {
   class Timings
     {
     public:
-      //////////////TODO accessor functions here
+      /** push aside the real Lumiera engine and use a test mock.
+       * @todo 1/2012 hard wired -- until the engine becomes usable
+       */
+      bool
+      isMockEngineRun ()
+        {
+          return true;
+        }
+      
+      //////////////TODO further accessor functions here
       
       Timings
       constrainedBy (Timings additionalConditions)
