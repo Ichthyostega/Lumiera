@@ -155,7 +155,7 @@ lumiera::query::setFakeBypass("stream("+sID+")"); //////////////////////////////
       forget (string pID)
         {
           PPipe pipe = Pipe::query ("pipe("+pID+")");
-          REQUIRE (find (pipe->getPipeID()), "need an object registered as default");
+          REQUIRE (find (pipe->getPipeID()), "test assumes pre-registered default pipe");
           long cnt = pipe.use_count();
           
           // now de-register the pipe as "default Pipe"

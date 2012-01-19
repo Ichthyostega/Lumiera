@@ -109,7 +109,7 @@ namespace test    {
           VERIFY_ERROR (NOT_IN_SESSION, Scope invalid (notRelated2anything) );
           
           Scope const& scopeOfEvil = fabricate_invalidScope();
-          REQUIRE (!scopeOfEvil.isValid());
+          CHECK (!scopeOfEvil.isValid());
           
           VERIFY_ERROR (INVALID_SCOPE, ScopePath outsideCurrentModel (scopeOfEvil) );
           
