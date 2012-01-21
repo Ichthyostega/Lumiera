@@ -46,8 +46,6 @@ namespace engine{
   
   
   
-  /** storage for the EngineService interface object */
-  lib::Singleton<EngineServiceMock> EngineServiceMock::instance;
   
   
   

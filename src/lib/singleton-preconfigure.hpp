@@ -75,7 +75,13 @@ namespace backend {
   class MediaAccessFacade;
   using lib::Singleton;
   
-} // namespace backend_interface
+} // namespace backend
+
+namespace proc {
+namespace engine {
+  class EngineService;
+  using lib::Singleton;
+}}
 
 
 
@@ -99,6 +105,12 @@ namespace lib {
   template<>
   class Singleton<backend::MediaAccessFacade>
     : public MockInjector<backend::MediaAccessFacade>
+    { };
+  
+  
+  template<>
+  class Singleton<proc::engine::EngineService>
+    : public MockInjector<proc::engine::EngineService>
     { };
 
 } // namespace lib

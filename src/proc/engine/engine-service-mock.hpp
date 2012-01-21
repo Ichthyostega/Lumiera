@@ -85,14 +85,12 @@ namespace engine{
    * order and to enqueue these into the scheduler.
    */
   class EngineServiceMock
-    : boost::noncopyable
+    : public EngineService
     {
+      lib::ScopedPtrVect<node::DummyTick> processors_;
       
       
     public:
-      /** access point to the Engine Interface Mock implementation. */
-      static lib::Singleton<EngineServiceMock> instance;
-      
       
       EngineServiceMock();
      ~EngineServiceMock() { }

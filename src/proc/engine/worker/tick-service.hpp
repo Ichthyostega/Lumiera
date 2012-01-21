@@ -25,10 +25,9 @@
  ** A timer service invoking a given callback periodically.
  ** This is a rough preliminary implementation as of 1/2009. We use it to
  ** drive the frame "creation" of a player dummy (the render engine is not 
- ** ready yet). The intention is to make this a real service later on, which
- ** might consolidate and sync various ongoing output processes to a common
- ** beat, which it implements by precision posix timers. Probably then this
- ** service will become part of the backend, or rely on a timing service.
+ ** ready yet). The intention is to use this service as part of a mock engine
+ ** setup, used to verify the construction of engine components. As an integration
+ ** test, we build a "dummy player", delivering some test data frames to the Gui.
  ** 
  ** @see proc::play::DummyPlayerService
  **  
@@ -39,6 +38,7 @@
 #define PROC_PLAY_TICKSERVICE_H
 
 
+#include "lib/error.hpp"
 #include "backend/thread-wrapper.hpp"
 
 #include <tr1/functional>
@@ -49,6 +49,7 @@ namespace proc {
 namespace node {
 
   using std::tr1::function;
+  using std::tr1::bind;
   
   
   

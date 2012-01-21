@@ -81,14 +81,6 @@ namespace play {
   class Timings
     {
     public:
-      /** push aside the real Lumiera engine and use a test mock.
-       * @todo 1/2012 hard wired -- until the engine becomes usable
-       */
-      bool
-      isMockEngineRun ()
-        {
-          return true;
-        }
       
       //////////////TODO further accessor functions here
       

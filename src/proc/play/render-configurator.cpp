@@ -25,7 +25,6 @@
 #include "proc/play/render-configurator.hpp"
 #include "proc/play/output-manager.hpp"
 #include "proc/engine/engine-service.hpp"
-#include "proc/engine/engine-service-mock.hpp"
 //#include "lib/itertools.hpp"
 
 //#include <string>
@@ -48,7 +47,6 @@ namespace play {
   using std::tr1::bind;
   using std::tr1::placeholders::_1;
   using engine::EngineService;
-  using engine::EngineServiceMock;
   
   typedef EngineService::QoS_Definition RenderQuality;
   
@@ -129,32 +127,14 @@ namespace play {
         
       };
     
-    class MockRenderProcessBuilder
-      : public LumieraRenderProcessBuilder
-      {
-        engine::CalcStreams
-        activateEngine (ModelPort port, Timings timings, OutputSlot::Allocation& activeOutputConnection,RenderQuality quality)
-          {
-            return EngineServiceMock::instance().calculate (port, timings, activeOutputConnection, quality);
-          }
-        
-      public:
-        MockRenderProcessBuilder (POutputManager outputManager, Timings playbackSpeed)
-          : LumieraRenderProcessBuilder(outputManager,playbackSpeed)
-          { }
-      };
     
     
-    
-    /** @internal decision point about how to configure the rendering */
+    /** @internal decision point about how to configure the rendering.
+     * This would be the point to switch the render engine used. */
     inline RenderConfigurator*
     how_to_render (POutputManager outputPossibilities, Timings playTimings)
     {
-      if (playTimings.isMockEngineRun())
-        return new MockRenderProcessBuilder (outputPossibilities, playTimings);
-            
-      else
-        return new LumieraRenderProcessBuilder (outputPossibilities, playTimings);
+      return new LumieraRenderProcessBuilder (outputPossibilities, playTimings);
     }
   
     
