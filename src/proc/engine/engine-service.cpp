@@ -87,6 +87,42 @@ namespace engine{
   }
   
   
+  /** @internal build a representation of a single, ongoing calculation effort.
+   * This "CalcStream" is tied to the actual engine implementation, but only
+   * through an opaque link, representing this concrete engine as an
+   * RenderEnvironmentClosure. This enables the created CalcStream to be
+   * re-configured and adjusted while running.
+   */
+  CalcStream
+  EngineService::activateCalculation (RenderEnvironmentClosure& engineCallback)
+  {
+    return CalcStream (engineCallback); 
+  }
+  
+  
+  /** @internal extension point
+   * Install and activate a single, ongoing calculation effort.
+   * Configure and prepare all the internal components, pre-allocate
+   * resources and add entries to the registration tables to get this
+   * render activity into running state
+   * @return CalcStream representing this newly started rendering activity
+   * @note variations and especially mock implementations of the render engine
+   *       might choose to configure internal differently. As long as the 
+   *       CalcStream and the embedded RenderEnvironmentClosure are consistent,
+   *       such a specific configuration remains opaque for the user of the
+   *       created render activity
+   */
+  CalcStream
+  EngineService::configureCalculation ()
+  {
+    UNIMPLEMENTED ("represent *this as RenderEnvironmentClosure)");
+    RenderEnvironmentClosure* todo_fake(0);  ////KABOOOM
+    
+    return activateCalculation (*todo_fake); 
+  }
+  
+  
+  
   
   /* ===== Quality-of-Service ===== */
   

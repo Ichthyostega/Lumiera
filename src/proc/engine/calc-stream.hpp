@@ -47,6 +47,21 @@ namespace engine{
 //    using lumiera::DummyPlayer;
   
   
+  /**
+   * Abstract definition of the environment
+   * hosting a given render activity (CalcStream).
+   * Exposes all the operations necessary to adjust the
+   * runtime behaviour of the render activity, like e.g.
+   * re-scheduling with modified playback speed. Since the
+   * CalcStream is an conceptual representation of "the rendering",
+   * the actual engine implementation is kept opaque this way. 
+   */
+  class RenderEnvironmentClosure
+    {
+    public:
+      virtual ~RenderEnvironmentClosure() { }   ///< this is an interface 
+    };
+  
   
   
   
@@ -69,19 +84,24 @@ namespace engine{
    */
   class CalcStream
     {
+      RenderEnvironmentClosure* env_;
+      
+    protected:
+      CalcStream (RenderEnvironmentClosure& engine)
+        : env_(&engine)
+        { }
       
       friend class EngineService;
       
+      
     public:
       CalcStream()
-        {
-          UNIMPLEMENTED("build a disabled/dead calculation stream");
-        }
+        : env_(0)
+        { }
       
       CalcStream (CalcStream const& o)
-        { 
-          UNIMPLEMENTED("clone a calculation stream");
-        }
+        : env_(o.env_)
+        { }
       
      ~CalcStream() { }
       

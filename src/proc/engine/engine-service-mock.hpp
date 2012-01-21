@@ -51,14 +51,16 @@
 //#include "common/instancehandle.hpp"
 //#include "lib/singleton-ref.hpp"
 #include "proc/engine/engine-service.hpp"
-#include "lib/singleton.hpp"
+#include "lib/scoped-ptrvect.hpp"
 //
 #include <boost/noncopyable.hpp>
 //#include <boost/scoped_ptr.hpp>
 //#include <string>
 
 
-namespace proc  {
+namespace proc {
+namespace node { class DummyTick; }  
+  
 namespace engine{
 
 //    using std::string;

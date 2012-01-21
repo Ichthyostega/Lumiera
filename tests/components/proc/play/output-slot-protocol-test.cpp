@@ -77,7 +77,7 @@ namespace test {
           DataSink sink2 = *++sinks;
           
           // within the frame-calculation "loop"
-          // we perform an data exchange cycle
+          // we perform a data exchange cycle
           int64_t frameNr = 123;
           BuffHandle buff00 = sink1.lockBufferFor (frameNr);
           BuffHandle buff10 = sink2.lockBufferFor (frameNr);

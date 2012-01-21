@@ -1160,14 +1160,14 @@ __see also__
 &amp;rarr; RenderMechanics for details on the buffer management within the node invocation for a single render step
 </pre>
 </div>
-<div title="BufferTable" modifier="Ichthyostega" created="201109172253" tags="def spec Rendering draft" changecount="1">
+<div title="BufferTable" modifier="Ichthyostega" modified="201201192303" created="201109172253" tags="def spec Rendering draft" changecount="3">
 <pre>The invocation of individual [[render nodes|ProcNode]] uses an ''buffer table'' internal helper data structure to encapsulate technical details of the allocation, use, re-use and feeing of data buffers for the media calculations. Here, the management of the physical data buffers is delegated through a BufferProvider, which typically is implemented relying on the ''frame cache'' in the backend. Yet some partially quite involved technical details need to be settled for each invocation: We need input buffers, maybe provided as external input, while in other cases to be filled by a recursive call. We need storage to prepare the (possibly automated) parameters, and finally we need a set of output buffers. All of these buffers and parameters need to be rearranged for invoking the (external) processing function, followed by releasing the input buffers and commiting the output buffers to be used as result.
 
 Because there are several flavours of node wiring, the building blocks comprising such a node invocation will be combined depending on the circumstances. Performing all these various steps is indeed the core concern of the render node -- with the help of BufferTable to deal with the repetitive, tedious and technical details.
 
 !requirements
 The layout of the buffer table will be planned beforehand for each invocation, allongside with planning the individual invocation jobs for the scheduler. At that point, a generic JobTicket for the whole timeline segment is available, describing the necessary operations in an abstract way, as determined by the preceeding planning phase. Jobs are prepared chunk wise, some time in advance (but not all jobs of at once). Jobs will be executed concurrently. Thus, buffer tables need to be created repeatedly and placed into a memory block accessed and owned exclusively by the individual job.
-* within the buffer table, we need an working area for the output handles, the input handles and the parameter descriptors
+* within the buffer table, we need a working area for the output handles, the input handles and the parameter descriptors
 * actually, these can be seen as pools holding handle objects which might even be re-used, especially for a chain of effects calculated in-place.
 * each of these pools is characterised by a common //buffer type,// represented as buffer descriptor
 * we need some way to integrate with the StateProxy, because some of the buffers need to be marked especially, e.g. as result
@@ -3226,8 +3226,8 @@ While the general approach and reasoning remains valid, a lot of the details loo
 In the most general case the render network may be just a DAG (not just a tree). Especially, multiple exit points may lead down to the same node, and following each of this possible paths the node may be at a different depth on each. This rules out a simple counter starting from the exit level, leaving us with the possibility of either employing a rather convoluted addressing scheme or using arbitrary ID numbers.{{red{...which is what we do for now}}}
 </pre>
 </div>
-<div title="NodeOperationProtocol" modifier="Ichthyostega" modified="201109172254" created="200806010251" tags="Rendering operational" changecount="25">
-<pre>The [[nodes|ProcNode]] are wired to form a &quot;Directed Acyclic Graph&quot;; each node knows its predecessor(s), but not its successor(s).  The RenderProcess is organized according to the ''pull principle'', thus we find an operation {{{pull()}}} at the core of this process. Meaning that there isn't an central entity invoking nodes consecutively. Rather, the nodes themselves contain the detailed knowledg regarding prerequisites, so the calculation plan is worked out recursively. Yet there are some prerequisite resources to be made available for any calculation to happen. Thus the actual calculation is broken down into atomic chunks of work, resulting in a 2-phase invocation whenever &quot;pulling&quot; a node. For this to work, we need the nodes to adhere to a specific protocol:
+<div title="NodeOperationProtocol" modifier="Ichthyostega" modified="201201192303" created="200806010251" tags="Rendering operational" changecount="29">
+<pre>The [[nodes|ProcNode]] are wired to form a &quot;Directed Acyclic Graph&quot;; each node knows its predecessor(s), but not its successor(s).  The RenderProcess is organized according to the ''pull principle'', thus we find an operation {{{pull()}}} at the core of this process. Meaning that there isn't a central entity to invoke nodes consecutively. Rather, the nodes themselves contain the detailed knowledge regarding prerequisites, so the calculation plan is worked out recursively. Yet still there are some prerequisite resources to be made available for any calculation to happen. So the actual calculation is broken down into atomic chunks of work, resulting in a 2-phase invocation whenever &quot;pulling&quot; a node. For this to work, we need the nodes to adhere to a specific protocol:
 ;planning phase
 :when a node invocation is foreseeable to be required for getting a specific frame for a specific nominal and actual time, the engine has to find out the actual operations to happen
 :# the planning is initiated by issuing an &quot;get me output&quot; request, finally resulting in a JobTicket
@@ -3251,7 +3251,7 @@ some points to note:
 * the WiringDescriptor is {{{const}}} and precalculated while building (remember another thread may call in parallel)
 * when a node is &quot;inplace-capable&quot;, input and output buffer may actually point to the same location
 * but there is no guarantee for this to happen, because the cache may be involved (and we can't overwrite the contents of a cache frame)
-* generally, a node may have N inputs and M output frames, which are expected to be processed in a single call
+* nodes in general may require N inputs and M output frames, which are expected to be processed in a single call
 * some of the technical details of buffer management are encapsulated within the BufferTable of each invocation
 
 &amp;rarr; the [[&quot;mechanics&quot; of the render process|RenderMechanics]]

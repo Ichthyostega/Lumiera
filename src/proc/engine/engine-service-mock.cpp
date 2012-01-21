@@ -22,6 +22,7 @@
 
 
 #include "proc/engine/engine-service-mock.hpp"
+#include "proc/engine/worker/dummy-tick.hpp"
 
 //#include <string>
 //#include <memory>
@@ -49,8 +50,13 @@ namespace engine{
   
   
   
-  /** */  
+  /**
+   * Initialise a mock render engine.
+   * This dummy implementation manages a collection of
+   * "Processors", each running in a separate thread.
+   */
   EngineServiceMock::EngineServiceMock()
+    : processors_()
     { }
   
   

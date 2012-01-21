@@ -150,7 +150,12 @@ namespace engine{
                           Quality serviceQuality =QoS_BACKGROUND);
       
       
+    private:
+      CalcStream activateCalculation (RenderEnvironmentClosure&);
+      
     protected:
+      virtual CalcStream configureCalculation ();
+      
       void activateTracing();
       void disableTracing(); ///< EX_FREE
       
