@@ -76,15 +76,12 @@ namespace engine{
   
   
   
-  /******************************************************
-   * A service to schedule series of calculations,
-   * delivering the rendered data into an external output
-   * sink in a timely fashion. Actually the CalculationStream
-   * instances provided through this (facade) interface are
-   * backed by jobs executed through the scheduler in the
-   * backend layer. The implementation of this service
-   * cares to create the right job entries in the correct
-   * order and to enqueue these into the scheduler.
+  /****************************************************************
+   * Variant of the render engine, reconfigured for mock operation.
+   * Especially, this setup leaves out most of the actual Lumiera
+   * engine's implementation facilities. There is no scheduler
+   * and no frame cache; rather we perform simple dependent
+   * calculations which might block.
    */
   class EngineServiceMock
     : public EngineService
@@ -95,21 +92,10 @@ namespace engine{
     public:
       
       EngineServiceMock();
-     ~EngineServiceMock() { }
-      
-      CalcStreams
-      calculate(ModelPort mPort,
-                Timings nominalTimings,
-                OutputConnection& output,
-                Quality serviceQuality = EngineService::QoS_DEFAULT);
-      
-      CalcStreams
-      calculateBackground(ModelPort mPort,
-                          Timings nominalTimings,
-                          Quality serviceQuality = EngineService::QoS_BACKGROUND);
       
       
     protected:
+      virtual RenderEnvironmentClosure& configureCalculation ();
     };
   
   

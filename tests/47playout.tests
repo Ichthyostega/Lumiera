@@ -2,6 +2,11 @@ TESTING "Component Test Suite: Player and Output" ./test-components --group=play
 
 
 
+PLANNED "Dummy Player setup" DummyPlayConnection_test <<END
+return: 0
+END
+
+
 TEST "Output Slot Protocol" OutputSlotProtocol_test <<END
 return: 0
 END

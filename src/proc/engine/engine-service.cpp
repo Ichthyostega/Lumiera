@@ -112,13 +112,13 @@ namespace engine{
    *       such a specific configuration remains opaque for the user of the
    *       created render activity
    */
-  CalcStream
+  RenderEnvironmentClosure&
   EngineService::configureCalculation ()
   {
     UNIMPLEMENTED ("represent *this as RenderEnvironmentClosure)");
     RenderEnvironmentClosure* todo_fake(0);  ////KABOOOM
     
-    return activateCalculation (*todo_fake); 
+    return *todo_fake; 
   }
   
   

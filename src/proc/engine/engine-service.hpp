@@ -135,8 +135,9 @@ namespace engine{
       static lib::Singleton<EngineService> instance;
       
       
+      virtual ~EngineService() { }
+      
       EngineService();
-     ~EngineService() { }
       
       CalcStreams
       calculate(ModelPort mPort,
@@ -154,7 +155,7 @@ namespace engine{
       CalcStream activateCalculation (RenderEnvironmentClosure&);
       
     protected:
-      virtual CalcStream configureCalculation ();
+      virtual RenderEnvironmentClosure& configureCalculation ();
       
       void activateTracing();
       void disableTracing(); ///< EX_FREE

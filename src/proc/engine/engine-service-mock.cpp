@@ -61,33 +61,15 @@ namespace engine{
   
   
   
-  /** core operation: activate the Lumiera Render Engine.
-   * Invoking this service effectively hooks up each channel
-   * of the given model exit point to deliver into the corresponding
-   * output sink on the given OutputConnection (which is assumed
-   * to be already allocated for active use by this connection).
-   * The generated calculation streams represent actively ongoing
-   * calculations within the engine, started right away, according
-   * to the given timing constraints and service quality.
+  /** special engine configuration for mock/testing operation.
    */
-  CalcStreams
-  EngineServiceMock::calculate(ModelPort mPort,
-                               Timings nominalTimings,
-                               OutputConnection& output,
-                               Quality serviceQuality)
+  RenderEnvironmentClosure&
+  EngineServiceMock::configureCalculation ()
   {
-    UNIMPLEMENTED ("MOCK IMPLEMENTATION: build a list of standard calculation streams");
-  }
-  
-  
-  
-  /** */
-  CalcStreams
-  EngineServiceMock::calculateBackground(ModelPort mPort,
-                                         Timings nominalTimings,
-                                         Quality serviceQuality)
-  {
-    UNIMPLEMENTED ("MOCK IMPLEMENTATION: build calculation streams for background rendering");
+    UNIMPLEMENTED ("represent *this as RenderEnvironmentClosure)");
+    RenderEnvironmentClosure* todo_fake(0);  ////KABOOOM
+    
+    return *todo_fake; 
   }
   
   
