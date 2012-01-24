@@ -112,9 +112,9 @@ def DoxyfileParse(file_contents):
 
    return data
 
-def DoxySourceScan(node, env, path):
+def DoxySourceFiles(node, env):
    """
-   Doxygen Doxyfile source scanner.  This should scan the Doxygen file and add
+   Scan the given node's contents (a Doxygen file) and add
    any files used to generate docs to the list of source files.
    """
    default_file_patterns = [
@@ -206,9 +206,16 @@ def DoxySourceScan(node, env, path):
    append_additional_source("HTML_HEADER",['HTML'])
    append_additional_source("HTML_FOOTER",['HTML'])
 
-   sources = map( lambda path: env.File(path), sources )
    return sources
 
+def DoxySourceScan(node, env, path):
+   """
+   Doxygen Doxyfile source scanner.  This should scan the Doxygen file and add
+   any files used to generate docs to the list of source files.
+   """
+   filepaths = DoxySourceFiles(node, env)
+   sources = map( lambda path: env.File(path), filepaths )
+   return sources
 
 def DoxySourceScanCheck(node, env):
    """Check if we should scan this file"""
@@ -216,18 +223,36 @@ def DoxySourceScanCheck(node, env):
 
 def DoxyEmitter(target, source, env):
    """Doxygen Doxyfile emitter"""
+   doxy_fpath = str(source[0])
    data = DoxyfileParse(source[0].get_contents())
 
    targets = []
    out_dir = data.get("OUTPUT_DIRECTORY", ".")
    if not os.path.isabs(out_dir):
-      conf_dir = os.path.dirname(str(source[0]))
+      conf_dir = os.path.dirname(doxy_fpath)
       out_dir = os.path.join(conf_dir, out_dir)
 
    # add our output locations
    for (k, v) in output_formats.items():
       if data.get("GENERATE_" + k, v[0]) == "YES":
-         od = env.Dir( os.path.join(out_dir, data.get(k + "_OUTPUT", v[1])))
+         # Initialize output file extension for MAN pages
+         if k == 'MAN':
+            # Is the given extension valid?
+            manext = v[3]
+            if v[4]:
+               manext = data.get(v[4])
+            # Try to strip off dots
+            manext = manext.replace('.','')
+            # Can we convert it to an int?
+            try:
+               e = int(manext)
+            except:
+               # No, so set back to default
+               manext = "3"
+
+            od = env.Dir( os.path.join(out_dir, data.get(k + "_OUTPUT", v[1]), "man"+manext))
+         else:
+            od = env.Dir( os.path.join(out_dir, data.get(k + "_OUTPUT", v[1])))
          # don't clobber target folders
          env.Precious(od)
          # set up cleaning stuff
@@ -245,10 +270,20 @@ def DoxyEmitter(target, source, env):
             # don't clean single files, we remove the complete output folders (see above)
             env.NoClean(of)
          else:
-            # Special case: man files
+            # Special case: MAN pages
             # We have to add a target file docs/man/man3/foo.h.3
-            # for each input file foo.h :(
-            pass 
+            # for each input file foo.h, so we scan the config file
+            # a second time... :(
+            filepaths = DoxySourceFiles(source[0], env)
+            for f in filepaths:
+               if os.path.isfile(f) and f != doxy_fpath:
+                  of = env.File( os.path.join(out_dir, 
+                                              data.get(k + "_OUTPUT", v[1]), 
+                                              "man"+manext,
+                                              f+"."+manext))
+                  targets.append(of)
+                  # don't clean single files, we remove the complete output folders (see above)
+                  env.NoClean(of)
          
    # add the tag file if neccessary:
    tagfile = data.get("GENERATE_TAGFILE", "")
