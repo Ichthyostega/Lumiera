@@ -46,6 +46,8 @@ namespace test {
   
   typedef time::Control<time::Duration> DurationControl;
   
+  typedef DummyPlayConnection<PlayTestFrames_Strategy> DummyPlayer;
+  
   
   /*******************************************************************
    * @test verify the OutputSlot interface and base implementation
@@ -66,11 +68,11 @@ namespace test {
       void
       verify_simulatedPlayback()
         {
-          DummyPlayConnection dummy;                //////////TODO: how to pre-configure the DummyPlayConnection
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #805
+          DummyPlayer dummy;
           CHECK (!dummy.isWired());
           
-          Controller ctrl = Play::facade().connect(dummy.port(), dummy.output());
+          Controller ctrl = Play::facade().connect ( dummy.provide_testModelPorts()
+                                                   , dummy.provide_testOutputSlot());
           CHECK ( dummy.isWired());
           
           DurationControl playDuration;
@@ -92,7 +94,6 @@ namespace test {
           ctrl.close();
           CHECK (!dummy.isWired());
           CHECK (dummy.gotCorrectOutput());
-#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #805
         }
     };
   

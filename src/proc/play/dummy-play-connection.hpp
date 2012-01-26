@@ -36,6 +36,10 @@
 //#include "include/display-facade.h"
 //#include "common/instancehandle.hpp"
 //#include "lib/singleton-ref.hpp"
+#include "proc/play/output-manager.hpp"
+#include "proc/mobject/model-port.hpp"
+#include "lib/time/timequant.hpp"
+#include "lib/iter-source.hpp"
 //
 #include <boost/noncopyable.hpp>
 //#include <boost/scoped_ptr.hpp>
@@ -49,15 +53,68 @@ namespace play {
 //    using lumiera::Subsys;
 //    using lumiera::Display;
 //    using lumiera::DummyPlayer;
+  using lib::time::Duration;
   
+  typedef lib::IterSource<proc::mobject::ModelPort>::iterator ModelPorts;  
+  
+  
+  struct PlayTestFrames_Strategy
+    {
+      
+    };
   
   
   /********************************************************************
    */
+  template<class DEF>
   class DummyPlayConnection
     : boost::noncopyable
     {
       
+    public:
+      
+      ModelPorts
+      provide_testModelPorts()
+        {
+          UNIMPLEMENTED ("provide a set of test model ports");
+        }
+      
+      POutputManager
+      provide_testOutputSlot()
+        {
+          UNIMPLEMENTED ("provide a suitable output sink simulation");
+        }
+      
+      
+      /* === Test Support API === */
+      
+      bool
+      isWired()
+        {
+          UNIMPLEMENTED ("is this dummy in activated state?");
+        }
+      
+      Duration
+      getPlannedTestDuration()
+        {
+          UNIMPLEMENTED ("manage the a planned test duration");
+        }
+      
+      /** test helper: blocking wait during an output test.
+       *  The waiting time should be in accordance with the
+       *  \link #getPlannedTestduration planned value \endlink,
+       */
+      void
+      waitUntilDue()
+        {
+          UNIMPLEMENTED ("do a blocking wait, while an output test is performed in other threads");
+        }
+      
+      bool
+      gotCorrectOutput()
+        {
+          UNIMPLEMENTED ("verify proper operation by inspecting the provided test dummy components");
+        }
     };
   
   
