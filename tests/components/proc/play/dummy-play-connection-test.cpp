@@ -42,7 +42,6 @@ namespace test {
 //using proc::engine::test::TestFrame;
   
   using lumiera::Play;
-  typedef Play::Controller Controller;
   
   typedef time::Control<time::Duration> DurationControl;
   
@@ -71,27 +70,28 @@ namespace test {
           DummyPlayer dummy;
           CHECK (!dummy.isWired());
           
-          Controller ctrl = Play::facade().connect ( dummy.provide_testModelPorts()
-                                                   , dummy.provide_testOutputSlot());
+          Play::Controller player
+            = Play::facade().connect ( dummy.provide_testModelPorts()
+                                     , dummy.provide_testOutputSlot());
           CHECK ( dummy.isWired());
           
           DurationControl playDuration;
-          ctrl.controlDuration (playDuration);
+          player.controlDuration (playDuration);
           
           // configure the controller to playback only for a fixed time duration
           playDuration (dummy.getPlannedTestDuration());
           
-          CHECK (!ctrl.is_playing());
+          CHECK (!player.is_playing());
           
-          ctrl.play(true);                  // hit the start button
-          CHECK (ctrl.is_playing());
+          player.play(true);                // hit the start button
+          CHECK (player.is_playing());
           
           dummy.waitUntilDue();             // test helper: block waiting until planned test should be done
           
-          CHECK (!ctrl.is_playing());       // should have returned to pause, since we've set a fixed playback duration
+          CHECK (!player.is_playing());     // should have returned to pause, since we've set a fixed playback duration
           CHECK (dummy.isWired());
           
-          ctrl.close();
+          player.close();
           CHECK (!dummy.isWired());
           CHECK (dummy.gotCorrectOutput());
         }

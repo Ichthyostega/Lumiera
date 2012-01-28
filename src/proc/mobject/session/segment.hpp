@@ -42,6 +42,9 @@ namespace session {
    * is partitioned such that each segment is <i>structurally constant</i>.
    * For each segment there is a RenderGraph (unit of the render engine) which
    * is able to render all ExitNodes for this segment.
+   * 
+   * @todo 1/2012 Just a Placeholder. The real thing is not yet implemented.
+   * @see http://lumiera.org/wiki/renderengine.html#Fixture
    */
   class Segment
     {
@@ -56,6 +59,7 @@ namespace session {
       // TODO: actually necessary??
       // TODO: ownership??
       
+      /////////////////////////////////////////////////TODO: placeholder code
     };
   
   

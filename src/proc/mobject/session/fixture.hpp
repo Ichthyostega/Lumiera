@@ -45,10 +45,15 @@ namespace session {
   
   
   
+  /**
+   * @todo 1/2012 Just a Placeholder. The real thing is not yet implemented.
+   * @see http://lumiera.org/wiki/renderengine.html#Fixture
+   */
   class Fixture
     : boost::noncopyable
     {
     protected:
+      /////////////////////////////////////////////////TODO: placeholder code
       list<ExplicitPlacement> content_;
       boost::scoped_ptr<Segmentation> partitioning_;
       

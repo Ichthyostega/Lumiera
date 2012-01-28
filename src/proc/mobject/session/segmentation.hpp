@@ -44,9 +44,13 @@ namespace session {
    * it is the general entry point for accessing the correct part of the engine
    * responsible for a given timeline time point.
    * @see SegmentationTool actually calculating the Segmentation
+   * 
+   * @todo 1/2012 Just a Placeholder. The real thing is not yet implemented.
+   * @see http://lumiera.org/wiki/renderengine.html#Fixture
    */
   class Segmentation
     {
+      /////////////////////////////////////////////////TODO: placeholder code
       
       /** segments of the engine in ordered sequence. */
       list<Segment> segments_;

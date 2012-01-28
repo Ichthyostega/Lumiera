@@ -51,27 +51,6 @@ namespace play {
   typedef EngineService::QoS_Definition RenderQuality;
   
   
- 
-  RenderConfigurator::~RenderConfigurator() { } // emit VTable here...
-  
-  
-  
-  /** Template Method: how to build an active render feed,
-   *  pulling from the given exit point of the model and
-   *  feeding the OutputSlot established appropriately
-   *  to deliver media data of suitable type */
-  Feed
-  RenderConfigurator::buildActiveFeed (ModelPort port)
-  {
-    OutputSlot& slot = getOutputFor (port);
-    return Feed (buildCalculationStreams (port,slot)); 
-  }
-  
-  
-  
-  
-  
-  
   namespace { // Implementation details...
     
 //    using std::tr1::bind;
@@ -110,8 +89,8 @@ namespace play {
             return activateEngine (port, nominalTimings, activeOutputConnection, renderQuality_);
           }
         
-      protected:
-        virtual engine::CalcStreams
+        
+        engine::CalcStreams
         activateEngine (ModelPort port, Timings timings, OutputSlot::Allocation& activeOutputConnection, RenderQuality quality)
           {
             return EngineService::instance().calculate (port, timings, activeOutputConnection, quality);
@@ -140,6 +119,22 @@ namespace play {
     
   } // (End) hidden service impl details
   
+    
+  
+ 
+  RenderConfigurator::~RenderConfigurator() { } // emit VTable here...
+  
+  
+  /** Template Method: how to build an active render feed,
+   *  pulling from the given exit point of the model and
+   *  feeding the OutputSlot established appropriately
+   *  to deliver media data of suitable type */
+  Feed
+  RenderConfigurator::buildActiveFeed (ModelPort port)
+  {
+    OutputSlot& slot = getOutputFor (port);
+    return Feed (buildCalculationStreams (port,slot)); 
+  }
   
   
   
