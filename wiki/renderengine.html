@@ -2123,8 +2123,23 @@ Additionally, they may be used for resource management purposes by embedding a r
 #* one OpenGL Dataframe could contain raw texture data (but I am lacking expertise for this topic)
 </pre>
 </div>
-<div title="FrameDispatcher" modifier="Ichthyostega" modified="201108141651" created="201105222330" tags="def Rendering" changecount="3">
-<pre>An implementation facility within the RenderEngine, responsible for translating a logical [[calculation stream|CalcStream]] (corresponding to a PlayProcess) into a sequence of individual RenderJob entries, which can then be handed over to the [[Scheduler]]. Performing this operation involves a special application of [[time quantisation|TimeQuant]]: after establishing a suitable starting point, a typically contiguous series of frame numbers need to be generated, together with the time coordinates for each of those frames</pre>
+<div title="FrameDispatcher" modifier="Ichthyostega" modified="201202010431" created="201105222330" tags="def Rendering" changecount="8">
+<pre>An implementation facility within the RenderEngine, responsible for translating a logical [[calculation stream|CalcStream]] (corresponding to a PlayProcess) into a sequence of individual RenderJob entries, which can then be handed over to the [[Scheduler]]. Performing this operation involves a special application of [[time quantisation|TimeQuant]]: after establishing a suitable starting point, a typically contiguous series of frame numbers need to be generated, together with the time coordinates for each of those frames.
+
+!defining the dispatcher interface
+The purpose of this interface is to support the planning of new jobs, for a given CalcStream. From time to time, a chunk of new RenderJob entries will be preapred for the [[Scheduler]]. Each job knows his frame number and the actual ProcNode to operate. So, to start planning jobs, we need to translate time &amp;rarr; frame number &amp;rarr; segment &amp;rarr; real exit node.
+
+!!!Invocation situation
+* our //current starting point//&amp;nbsp; is given as point-in-time closure
+* we want to address a single frame, offset by a given number of frames relative to the current position
+* &amp;rArr; the dispatcher returns the //fundamental coordinates// of that frame, namely
+** the absolute nominal time
+** the absolute frame number
+** a concrete ExitNode to pull for this frame
+** focussed context information:
+*** the relevant [[segment|Segmentation]] responsible for producing this frame
+*** the corresponding JobTicket to use at this point
+</pre>
 </div>
 <div title="FullScreenPlugin" modifier="CehTeh" modified="200706110313" created="200607241016" tags="systemConfig lewcidExtension" server.type="file" server.host="file:///home/ct/.homepage/home.html" server.page.revision="200706110313">
 <pre>/***
@@ -4465,12 +4480,12 @@ We need a way of addressing existing [[pipes|Pipe]]. Besides, as the Pipes and T
 &lt;&lt;tasksum end&gt;&gt;
 </pre>
 </div>
-<div title="PlayProcess" modifier="Ichthyostega" modified="201112092000" created="201012181714" tags="def spec Player img" changecount="16">
+<div title="PlayProcess" modifier="Ichthyostega" modified="201201292336" created="201012181714" tags="def spec Player img" changecount="17">
 <pre>With //play process//&amp;nbsp; we denote an ongoing effort to calculate a stream of frames for playback or rendering.
 The play process is an conceptual entity linking together several activities in the [[Backend]] and the RenderEngine. Creating a play process is the central service provided by the [[player subsystem|Player]]: it maintains a registration entry for the process to keep track of associated entities, resources allocated and calls [[dispatched|FrameDispatcher]] as a consequence, and it wires and exposes a PlayController to serve as an interface and information hub.
 
 ''Note'': the player is in no way engaged in any of the actual calculation and management tasks necessary to make this [[stream of calculations|CalcStream]] happen. The play process code contained within the player subsystem is largely comprised of organisational concerns and not especially performance critical.
-* the [[Backend]] is responsible for [[dispatching|Dispatcher]] the [[calculation stream|CalcStream]] and scheduling individual calculation jobs
+* the [[Backend]] is responsible for [[dispatching|FrameDispatcher]] the [[calculation stream|CalcStream]] and scheduling individual calculation jobs
 * the RenderEngine has the ability to carry out individual frame calculations
 * the OutputSlot exposed by the [[output manager|OutputManagement]] is responsible for accepting timed frame delivery
 
@@ -4481,17 +4496,17 @@ The Controller is exposed to the client and acts as frontend handle, while the p
 Right within the play process, there is a separation into two realms, relying on different programming paradigms. Obviously the play controller is a state machine, and similarily the body object (play process) has a distinct operation state. Moreover, the current collection of individual objects hooked up at any given instance is a stateful variable. To the contrary, when we enter the realm of actual processing, operations are carried out in parallel, relying on stateless descriptor objects, wired into individual calculation jobs, to be scheduled as non-blocking units of operation. For each series of consecutive frames to be calculated, there is a descriptor object, the CalcStream, which also links to a specificaly tailored dispatcher table, allowing to schedule the individual frame jobs. Whenever the controller determines a change in the playback plan (speed change, skip, scrubbing, looping, ...), a new CalcStream is created, while the existing one is just used to mark any not-yet processed job as superseded.
 </pre>
 </div>
-<div title="PlayService" modifier="Ichthyostega" modified="201201282138" created="201105221900" tags="Player spec draft" changecount="16">
+<div title="PlayService" modifier="Ichthyostega" modified="201202010348" created="201105221900" tags="Player spec draft" changecount="18">
 <pre>The [[Player]] is an independent [[Subsystem]] within Lumiera, located at Proc-Layer level. A more precise term would be &quot;rendering and playback coordination subsystem&quot;. It provides the capability to generate media data, based on a high-level model object, and send this generated data to an OutputDesignation, creating an continuous and timing controlled output stream. Clients may utilise these functionality through the ''play service'' interface.
+
+!subject of performance
+Every play or render process will perfrom a part of the session. This part can be specified in varios ways, but in the end, every playback or render boils down to //performing some model ports.// While the individual model port as such is just an identifier (actually implemented as ''pipe-ID''), it serves as a common identifier used at various levels and tied into several related contexts. For one, by querying the [[Fixture]], the ModelPort leads to the actual ExitNode -- the stuff actually producing data when being pulled. Besides that, the OutputManager used for establishing the play process is able to resolve onto a real OutputSlot -- which, as a side effect, also yields the final data format and data implementation type to use for rendering or playback.
+
 
 !provided services
 * creating a PlayProcess
 * managing existing play processes
 * convenience short-cuts for //performing//&amp;nbsp; several kinds of high-level model objects
-
-!subject of performance
-Every play or render process will perfrom a part of the session. This part can be specified in varios ways, but in the end, every playback or render boils down to //performing some model ports.// While the individual model port as such is just an identifier (actually implemented as ''pipe-ID''), it serves as a common identifier used at various levels and tied into several related contexts. For one, by querying the [[Fixture]], the ModelPort leads to the actual ExitNode -- the stuff actually producing data when being pulled. Besides that, the OutputManager used for establishing the play process is able to resolve a real OutputSlot -- which, as a side effect, also yields the final data format and data implementation type to use for rendering or playback.
-
 
 !creating a play process
 This is the core service provided by the player subsystem. The purpose is to create a collaboration between several entities, creating media output
