@@ -1899,10 +1899,10 @@ To make the intended use of the classes more clear, consider the following two e
 * a video clip placed relatively, with an attached HUE effect &amp;rarr;[[Example2]]
 </pre>
 </div>
-<div title="ExitNode" modifier="Ichthyostega" modified="201108140105" created="200706220322" tags="def" changecount="4">
+<div title="ExitNode" modifier="Ichthyostega" modified="201202032306" created="200706220322" tags="def" changecount="6">
 <pre>a special ProcNode which is used to pull the finished output of one Render Pipeline (Tree or Graph). This term is already used in the Cinelerra2 codebase. I am unsure at the moment if it is a distinct subclass or rahter a specially configured ProcNode (a general design rule tells us to err in favour of the latter if in doubt).
 
-The render nodes network is always built separate for each [[timeline segment|Segmentation]], which is //constant in wiring configuration.// Thus, while exit node(s) are per segment, the corresponding exit nodes of consecutive segments together belong to a ModelPort, which in turn corresponds to a global pipe (master bus not connected any further). These relations guide the possible configuration for an exit node: It may still provide multiple channels -- but all those channels are bound to belong to a single logical stream -- same StreamPrototype, always handled as bundle, connected and routed in one step. For example, when there is an 5.1 Audio master bus with a single fader, then &quot;5.1 Audio&quot; would be a prototype and these 6 channels will always be handled together; in such a case it makes perfectly sense to access these 6 audio channels through a single exit node, which is keyed (identified) by the same [[Pipe]]-ID as the corresponding ModelPort and the corresponding global pipe (&quot;5.1 Audio master bus&quot;)
+The render nodes network is always built separate for each [[timeline segment|Segmentation]], which is //constant in wiring configuration.// Thus, while exit node(s) are per segment, the corresponding exit nodes of consecutive segments together belong to a ModelPort, which in turn corresponds to a global pipe (master bus not connected any further). These relations guide the possible configuration for an exit node: It may still provide multiple channels -- but all those channels are bound to belong to a single logical stream -- same StreamPrototype, always handled as bundle, connected and routed in one step. For example, when there is an 5.1 Audio master bus with a single fader, then &quot;5.1 Audio&quot; would be a prototype and these 6 channels will always be handled together; in such a case it makes perfectly sense to access these 6 audio channels through a single exit node, which is keyed (identified) by the same PipeID as used at the corresponding ModelPort and the corresponding [[global pipe|GlobalPipe]] (&quot;5.1 Audio master bus&quot;)
 </pre>
 </div>
 <div title="ExplicitPlacement" modifier="Ichthyostega" modified="201012122052" created="200706220304" tags="def" changecount="6">
@@ -2123,14 +2123,14 @@ Additionally, they may be used for resource management purposes by embedding a r
 #* one OpenGL Dataframe could contain raw texture data (but I am lacking expertise for this topic)
 </pre>
 </div>
-<div title="FrameDispatcher" modifier="Ichthyostega" modified="201202010431" created="201105222330" tags="def Rendering" changecount="8">
+<div title="FrameDispatcher" modifier="Ichthyostega" modified="201202032340" created="201105222330" tags="def Rendering" changecount="13">
 <pre>An implementation facility within the RenderEngine, responsible for translating a logical [[calculation stream|CalcStream]] (corresponding to a PlayProcess) into a sequence of individual RenderJob entries, which can then be handed over to the [[Scheduler]]. Performing this operation involves a special application of [[time quantisation|TimeQuant]]: after establishing a suitable starting point, a typically contiguous series of frame numbers need to be generated, together with the time coordinates for each of those frames.
 
 !defining the dispatcher interface
 The purpose of this interface is to support the planning of new jobs, for a given CalcStream. From time to time, a chunk of new RenderJob entries will be preapred for the [[Scheduler]]. Each job knows his frame number and the actual ProcNode to operate. So, to start planning jobs, we need to translate time &amp;rarr; frame number &amp;rarr; segment &amp;rarr; real exit node.
 
 !!!Invocation situation
-* our //current starting point//&amp;nbsp; is given as point-in-time closure
+* our //current starting point//&amp;nbsp; is given as ''time anchor'' closure
 * we want to address a single frame, offset by a given number of frames relative to the current position
 * &amp;rArr; the dispatcher returns the //fundamental coordinates// of that frame, namely
 ** the absolute nominal time
@@ -2139,7 +2139,9 @@ The purpose of this interface is to support the planning of new jobs, for a give
 ** focussed context information:
 *** the relevant [[segment|Segmentation]] responsible for producing this frame
 *** the corresponding JobTicket to use at this point
-</pre>
+
+!!!the ~TimeAnchor
+In fact, the whole process of playback or rendering is a continued series of exploration and evaluation. The outline of what needs to be calculated is determined continuously, proceeding in chunks of evaluation. The evaluation structure of the render engine is quite similar to the //fork-join//-pattern, just with the addition of timing constraints. This leads to an invocation pattern, where a partial evaluation happens from time to time. Each of those evaluations establishes a breaking point in time: everything //before// this point is settled and planned thus far. So, this point is an ''anchor'' or closure to root the next partial evaluation. More specifically, this ~TimeAnchor closure is the definitive binding between the abstract logical time of the session timeline, and the real wall-clock time forming the deadline for render evaluation.</pre>
 </div>
 <div title="FullScreenPlugin" modifier="CehTeh" modified="200706110313" created="200607241016" tags="systemConfig lewcidExtension" server.type="file" server.host="file:///home/ct/.homepage/home.html" server.page.revision="200706110313">
 <pre>/***
@@ -2226,9 +2228,9 @@ For this Lumiera design, we could consider making GOP just another raw media dat
 &amp;rarr;see in [[Wikipedia|http://en.wikipedia.org/wiki/Group_of_pictures]]
 </pre>
 </div>
-<div title="GlobalPipe" modifier="Ichthyostega" modified="201011202343" created="201007110200" tags="Model spec draft" changecount="29">
+<div title="GlobalPipe" modifier="Ichthyostega" modified="201202032308" created="201007110200" tags="Model spec draft" changecount="30">
 <pre>Each [[Timeline]] has an associated set of global [[pipes|Pipe]] (global busses), similar to the subgroups of a sound mixing desk.
-In the typical standard configuration, there is (at least) a video master and a sound master pipe. Like any pipe, ingoing connections attach to the input side, attached effects form a chain, where the last node acts as exit node. The ~Pipe-ID of such a global bus can be used to route media streams, allowing the global pipe to act as a summation bus bar.
+In the typical standard configuration, there is (at least) a video master and a sound master pipe. Like any pipe, ingoing connections attach to the input side, attached effects form a chain, where the last node acts as exit node. The PipeID of such a global bus can be used to route media streams, allowing the global pipe to act as a summation bus bar.
 &amp;rarr; discussion and design rationale of [[global pipes|GlobalPipeDesign]]
 
 !Properties and decisions
@@ -4198,12 +4200,12 @@ DAMAGE.
 <div title="PathManager" modifier="Ichthyostega" created="200909041748" tags="def Builder" changecount="1">
 <pre>Facility guiding decisions regarding the strategy to employ for rendering or wiring up connections. The PathManager is querried through the OperationPoint, when executing the connection steps within the Build process.</pre>
 </div>
-<div title="Pipe" modifier="Ichthyostega" modified="201011220317" created="200801062110" tags="def decision" changecount="7">
+<div title="Pipe" modifier="Ichthyostega" modified="201202032309" created="200801062110" tags="def decision" changecount="8">
 <pre>Pipes play an central role within the Proc Layer, because for everything placed and handled within the session, the final goal is to get it transformed into data which can be retrieved at some pipe's exit port. Pipes are special facilities, rather like inventory, separate and not treated like all the other objects.
 We don't distinguish between &quot;input&quot; and &quot;output&quot; ports &amp;mdash; rather, pipes are thought to be ''hooks for making connections to''. By following this line of thought, each pipe has an input side and an output side and is in itself something like a ''Bus'' or ''processing chain''. Other processing entities like effects and transitions can be placed (attached) at the pipe, resulting them to be appended to form this chain. Likewise, we can place [[wiring requests|WiringRequest]] to the pipe, meaning we want it connected so to send it's output to another destination pipe. The [[Builder]] may generate further wiring requests to fulfil the placement of other entities.
 Thus //Pipes are the basic building blocks// of the whole render network. We distinguish ''global available'' Pipes, which are like the sum groups of a mixing console, and the ''lokal pipe'' or [[source ports|ClipSourcePort]] of the individual clips, which exist only within the duration of the corresponding clip. The design //limits the possible kinds of pipes // to these two types &amp;mdash; thus we can build local processing chains at clips and global processing chains at the global pipes of the session and that's all we can do. (because of the flexibility which comes with the concept of [[placements|Placement]], this is no real limitation)
 
-Pipes are denoted and addressed by ~Pipe-IDs, implemented as ID of a pipe asset. Besides explicitly named pipes, there are some generic placeholder ~IDs for a standard configured pipe of a given type. This is done to avoid creating a separate ~Pipe-ID for each and every clip to build.
+Pipes are denoted and addressed by [[pipe IDs|PipeID]], implemented as ID of a pipe asset. Besides explicitly named pipes, there are some generic placeholder ~IDs for a standard configured pipe of a given type. This is done to avoid creating a separate ~Pipe-ID for each and every clip to build.
 
 While pipes are rather rigid building blocks -- and especially are limited to a single StreamType without conversions, the interconnections or ''routing'' links to the contrary are more flexible. They are specified and controled through the use of an OutputDesignation, which, when fully resolved, should again yield a target ~Pipe-ID to connect. The mentioned resolution of an output designation typically involves an OutputMapping.
 
@@ -4228,6 +4230,14 @@ Deleting a Pipe is an advanced operation, because it includes finding and &quot;
 there is not much you can do directly with a pipe asset. It is an point of reference, after all. Any connection or routing to a target pipe is done by a placement with a suitable WiringPlug in some part of the timeline (&amp;rarr; OutputDesignation), so it isn't stored with the pipe. You can edit the (user visible) description an you can globally disable a pipe asset. The pipe's ID and media stream type of course are fixed, because any connection and referral (via the asset ID) is based on them. Later on, we should provide a {{{rewire(oldPipe, newPipe)}}} to search any ref to the {{{oldPipe}}} and try to rewrite it to use the {{{newPipe}}}, possibly with a new media stream type.
 Pipes are integrated with the [[management of defaults|DefaultsManagement]]. For example, any pipe implicitly uses some [[processing pattern|ProcPatt]] &amp;mdash; it may default to the empty pattern. This way, any kind of standard wiring might be applied to the pipes (e.g a fader for audio, similar to the classic mixing consoles). This //is // a global property of the pipe, but &amp;mdash; contrary to the stream type &amp;mdash; this pattern may be switched {{red{really? -- lots of open questions here as of 11/10}}}
 </pre>
+</div>
+<div title="PipeID" modifier="Ichthyostega" modified="201202032325" created="201202032311" tags="def Model Types" changecount="3">
+<pre>A straight processing chain or ''Pipe'' is a core concept in Lumiera's HighLevelModel. Like most of the other building blocks in that model, pipes are represented in the asset view, which leads to having unique pipe-asset ~IDs for all pipes encountered within the model. Now, because of the special building pattern used within that model, which is comprised of pipes and flexible interconnections, the routing and wiring can be done in terms of pipe-~IDs, using them as a short representation of an OutputDesignation. As a consequence, by these relations, the pipe-~IDs are promoted to an universal key for wiring, routing and output targets, usable from the high-level objects down to the low level nodes within the engine.
+* pipe-~IDs are used to label the global busses
+* pipe-~IDs are used to denote output designations for routing
+* pipe-~IDs are attached to the real output possibilities, available when resolving such a designation
+* pipe-~IDs serve to denote the ExitNode corresponding to a global pipe within a single segment of the low-level model
+* pipe-~IDs consequently can be used to address a ModelPort, corresponding both to such a global bus and the corresponding exit nodes</pre>
 </div>
 <div title="Placement" modifier="Ichthyostega" modified="200910311753" created="200706220306" tags="Concepts def" changecount="11">
 <pre>A Placement represents a //relation:// it is always linked to a //Subject// (this being a [[Media Object|MObject]]) and has the meaning to //place// this Subject in some manner, either relatively to other Media Objects, by some Constraint or simply absolute at (time, output). The latter case is especially important for the build process and thus represented by a special [[Sub-Interface ExplicitPlacement|ExplicitPlacement]]. Besides this simple cases, Placements can also express more specific kinds of &quot;locating&quot; an object, like placing a sound source at a pan position or placing a video clip at a given layer (above or below another video clip)
@@ -7249,7 +7259,7 @@ Thus the possibly mutalble time entities get an {{{accept(time::Mutation&amp;)}}
 Based on this time::Mutation design, we provide a specialised element for dealing with //running time values:// When attached to a target time entity, a &quot;life&quot; connection is established. From then on, continuous changes and mutations can be fed to the target by invoking a functor interface. Besides, a change notification signal (callback) can be installed, which will be invoked on each change. This {{{time::Control}}} element is the foundation for implementing all kinds of running time display widgets, spin buttons, timeline selections, playheads, loop playback and similar.
 </pre>
 </div>
-<div title="TimeQuant" modifier="Ichthyostega" modified="201112222249" created="201012181753" tags="Concepts Player spec img discuss draft" changecount="59">
+<div title="TimeQuant" modifier="Ichthyostega" modified="201202021928" created="201012181753" tags="Concepts Player spec img discuss draft" changecount="60">
 <pre>The term &amp;raquo;Time&amp;laquo; spans a variety of vastly different entities. Within a NLE we get to deal with various //flavours of time values.//
 ;continuous time
 :without any additional assumptions, ''points in time'' can be specified with arbitrary precision.
@@ -7288,10 +7298,10 @@ Based on this time::Mutation design, we provide a specialised element for dealin
 :Quantisation also is the foundation of all kinds of formalised time specifications
 :actually even a frame count is some kind of (informal) timecode -- other timecodes employ a standardised format.
 ://every// presentation of time values and every persistent storage and exchange of such values is based on time codes.
-:but quantisation and time code aren't identical: a given quantised time value typically can be cast into multiple timecode formats.
+:yet quantisation and time code aren't identical: a given quantised time value typically can be cast into multiple timecode formats.
 
 !Patterns for handling quantised time
-When it comes to actually handling quantised time values, several patterns are conceivable for dealing with the quantisation operation and representing quantised data. As guideline for judging these patterns, the general properties of time quantisation, as detailed above, should be taken into account. Quantising a time value means both //discarding information,// while at the same time //adding information// pertaining the assumptions of the context.
+When it comes to actually handling quantised time values, several patterns are conceivable for dealing with the quantisation operation and representing quantised data. As guideline for judging these patterns, the general properties of time quantisation, as detailed above, should be taken into account. Quantising a time value means both //discarding information,// while at the same time //adding explicit information// pertaining the assumptions of the context.
 
 __casual handling__: this is rather an frequently encountered ''anti pattern''. When reading such code, most striking is the sense of general unawareness of the problem, which is then &quot;discovered&quot; on a per case base, which leads to numerous repetitions of the same basic undertakings, but done with individual treatment of each instance (not so much copy-n-paste). Typical code smells:
 * the rounding, modulo and subtract-base operations pertinent with scale handling are seemingly inserted as bugfix
@@ -7308,9 +7318,9 @@ __tagged values__: quantised values are explicitly created out of continuous val
 __delayed quantisation__: with this approach, the information loss is delayed as long as possible. Quantised time values are rather treated as promise for quantisation, while the actual time data remains unaltered. Additionally, they carry a tag, or even a direct link to the responsible quantiser instance. Effectively, these are specialised time values, instances of a sub-concept, able to stand-in for general time values, but exposing additional accessors to get a quantised value.
 
 !!!discussion
-For Lumiera, the static typing approach is of limited value -- it excels when values belonging to different scales are actually treated differently. There are such cases, but rather on the data handling level, e.g. sound samples are always handled block wise. But regarding time values, the unifying aspect is more important, which leads to prefering a dynamic (run time typed) approach, while //erasing// the special differences most of the time. Yet the dynamic and open nature of the Lumiera high-level model favours the delayed quantisation pattern; the same values may require different quantisation depending on the larger model context an object is encountered in. This solution might be to general and heavy weight at times though. Thus, for important special cases, the accessors should return tagged values, preferably even with differing static type. Time codes can be integrated this way, but most notably the ''frame numbers'' used for addressing throughout the backend, can be implemented as such specifically typed tagged values; the tag here denotes the quantiser and thus the underlying grid -- it should be implemented as hash-ID for smooth integration with code written in plain C.
+For Lumiera, the static typing approach is of limited value -- it excels when values belonging to different scales are actually treated differently. There are such cases, but rather on the data handling level, e.g. sound samples are always handled block wise. But regarding time values, the unifying aspect is more important, which leads to prefering a dynamic (run time typed) approach, while //erasing// the special differences most of the time. Yet the dynamic and open nature of the Lumiera high-level model favours the delayed quantisation pattern; the same values may require different quantisation depending on the larger model context an object is encountered in. This solution might be too general and heavy weight at times though. Thus, for important special cases, the accessors should return tagged values, preferably even with differing static type. Time codes can be integrated this way, but most notably the ''frame numbers'' used for addressing throughout the backend, can be implemented as such specifically typed tagged values; the tag here denotes the quantiser and thus the underlying grid -- it should be implemented as hash-ID for smooth integration with code written in plain C.
 
-At the level of individual timecode formats, we're lacking a common denominator; thus it is preferrable to work with different concrete timecode classes through //generic programming.// This way, each timecode format can expose operations specific only to the given format. Especially, different timecode formats expose different //component fields,// modelled by the generic ''Digxel'' concept. There is a common baseclass ~TCode though, which can be used for //type erasure.//
+At the level of individual timecode formats, we're lacking a common denominator; thus it is preferrable to work with different concrete timecode classes through //generic programming.// This way, each timecode format can expose operations specific only to the given format. Especially, different timecode formats expose different //component fields,// modelled by the generic ''Digxel'' concept. There is a common baseclass ~TCode though, which can be used as marker or for //type erasure.//
 &amp;rarr; more on [[usage situations|TimeUsage]]
 &amp;rarr; Timecode [[format and quantisation|TimecodeFormat]]
 &amp;rarr; Quantiser [[implementation details|QuantiserImpl]]
@@ -7373,7 +7383,7 @@ The way time value and quantisation handling is designed in Lumiera creates a ty
 * how to design the relation of Timecode, Timecode formatting and Quantisation &amp;rarr; [[more here|TimecodeFormat]]
 </pre>
 </div>
-<div title="TimecodeFormat" modifier="Ichthyostega" modified="201104260233" created="201101100308" tags="Player spec discuss draft" changecount="26">
+<div title="TimecodeFormat" modifier="Ichthyostega" modified="201202022043" created="201101100308" tags="Player spec discuss draft" changecount="27">
 <pre>The handling of [[Timecode]] is closely related to [[time representation and quantisation|TimeQuant]]. In fact, these two topics blend into one another. Time will be quantised into a //grid,// but this grid only makes sense when linked to a externally relevant meaning and representation, which is the Timecode. But a timecode value also denotes a specific point in time -- performing operations on a timecode is equivalent to manipulating a quantised time value.
 
 !Problem of dependencies
@@ -7390,7 +7400,7 @@ In this handling sequence, the ~QuTime with the embedded link to a ''quantiser''
 Timecode //is a value.// It has an explicit and distinct structure, and the component parts can be accessed as plain numeric values, or in a formatted string representation. To this end, these values need to be (re)-built. This operation -- building the value(s) -- is what effectively //materialises// the quantisation: At this point, the actual rounding and truncating operation is performed.
 
 But timecode values can also be //mutated.// In this respect they differ from a plain ~TimeValue, which is immutable like a number.
-* the individual components (digxels) can be assigned, causing rebuilding of the timecode
+* the individual components (digxels) can be assigned, causing the rebuilding of the timecode
 * the value as a whole can be incremented, decremented or be offset.
 
 And last but not least, it is possible to get a new ~TimeValue, reflecting the current (quantised) time of this timecode. This closes the circle of time handling and quantisation; actually this is the usual way to enter a new time value into the system, by starting out from an explicitly specified grid aligned timecode value.
