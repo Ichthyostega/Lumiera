@@ -26,6 +26,10 @@
 
 //#include "proc/engine/procnode.hpp"
 #include "proc/engine/dispatcher.hpp"
+#include "proc/play/timings.hpp"
+#include "lib/time/timevalue.hpp"
+#include "lib/time/timequant.hpp"
+#include "lib/singleton.hpp"
 
 //#include <boost/scoped_ptr.hpp>
 //#include <iostream>
@@ -38,7 +42,11 @@ using test::Test;
 namespace proc {
 namespace engine{
 namespace test  {
-
+  
+  using lib::time::QuTime;
+  using lib::time::FrameRate;
+  using proc::play::Timings;
+  
   namespace { // used internally
     
     
@@ -48,6 +56,8 @@ namespace test  {
         
       public:
       };
+    
+    lib::Singleton<MockDispatcherTable> mockDispatcher;
     
 #if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #880
 #endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #890
@@ -81,9 +91,13 @@ namespace test  {
       void
       verify_basicDispatch()
         {
-          
+          Dispatcher& dispatcher = mockDispatcher();
 #if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #880
-#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #890
+          Timings timings (FrameRate::PAL);
+          uint startFrame(10);
+          
+          TimeAnchor refPoint = TimeAnchor::build (timings, startFrame);
+#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #880
         }
       
       
@@ -96,7 +110,7 @@ namespace test  {
         {
           
 #if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #880
-#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #890
+#endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #880
         }
     };
   

@@ -178,7 +178,7 @@ namespace play {
    * 
    * Invoking this function investigates the given exit nodes of the
    * render nodes network and retrieves actual output destinations
-   * through the given OutputManager. The goal is to configure an
+   * through the given OutputManager. The goal is to configure a
    * PlayProcess, based on the renderengine and the collection of
    * OutputSlot instances retrieved for each of the given exit nodes.
    * Running this PlayProcess will activate the render engine to deliver

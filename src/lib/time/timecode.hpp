@@ -103,7 +103,7 @@ namespace time {
       FrameNr (QuTime const& quantisedTime);
       
       using TCode::operator string;
-     // CountVal implicitly convertible to long
+     // CountVal implicitly convertible to long      ///////////TICKET #882 : outch! should be a 64bit type!
     };
   
   

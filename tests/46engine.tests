@@ -39,6 +39,10 @@ PLANNED "Engine calculation streams" CalcStream_test <<END
 END
 
 
+PLANNED "Frame Dispatcher Interface" DispatcherInterface_test <<END
+END
+
+
 PLANNED "Proc Node basics" NodeBasic_test <<END
 END
 

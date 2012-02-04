@@ -10,3 +10,8 @@ END
 TEST "Output Slot Protocol" OutputSlotProtocol_test <<END
 return: 0
 END
+
+
+PLANNED "Timing constraints" TimingConstraints_test <<END
+return: 0
+END
