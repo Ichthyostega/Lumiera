@@ -106,7 +106,7 @@ namespace config {
       bool
       validateBuffers (Invocation& ivo)
         {
-          UNIMPLEMENTED ("Do a final, specifically tailored validation step on the buffers prior to invoking the procees function");
+          UNIMPLEMENTED ("Do a final, specifically tailored validation step on the buffers prior to invoking the process function");
         }
     };
   

@@ -50,6 +50,7 @@
 #include "lib/ref-array.hpp"
 
 #include <vector>
+#include <boost/noncopyable.hpp>
 
 
 
@@ -67,10 +68,17 @@ namespace engine {
   /**
    * Interface: Description of the input and output ports,
    * processing function and predecessor nodes for a given ProcNode.
+   * 
+   * @todo the design of this part is messy in several respects.
+   *       Basically, its left-over from a first prototypical implementation from 2008
+   *       As of 1/2012, we're re-shaping that engine interface and invocation with a top-down approach,
+   *       starting from the player. Anyhow, you can expect the basic setup to remain as-is: there will
+   *       be a ProcNode and a WiringDescriptor, telling how it's connected to its predecessors, and
+   *       defining how the Node is supposed to operate
    */
   class WiringDescriptor
     {
-    public:
+    public: /* === public information record describing the node graph === */
       uint nrO;
       uint nrI;
       
@@ -97,6 +105,11 @@ namespace engine {
           nrI = in.size();
         }
       
+      
+      /* ==== strategy API for configuring the node operation ==== */
+      
+      friend class ProcNode;                               /////////////////////////////////TODO 1/12 : wouldn't it be better to extract that API into a distinct strategy?
+      
       /** the wiring-dependent part of the node operation.
        *  Includes the creation of a one-way state object on the stack
        *  holding the actual buffer pointers and issuing the recursive pull() calls
@@ -104,8 +117,6 @@ namespace engine {
        */
       virtual BuffHandle
       callDown (State& currentProcess, uint requiredOutputNr)  const =0; 
-      
-      friend class ProcNode;
       
     };
   
@@ -120,9 +131,10 @@ namespace engine {
    *       several query/information functions. In that case, the ctor will become protected.
    *       The alternative would be to push down these information-retrieval part into a
    *       configurable element within WiringDescriptor, in which case we even might drop
-   *       ProcNode as a frontent entirely.
+   *       ProcNode as a frontend entirely.
    */
   class ProcNode
+    : boost::noncopyable
     {
       typedef mobject::Parameter<double> Param;   //////TODO: just a placeholder for automation as of 6/2008
       vector<Param> params;

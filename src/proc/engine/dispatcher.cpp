@@ -29,6 +29,9 @@
 
 namespace proc {
 namespace engine {
+
+  Dispatcher::~Dispatcher() { }  // emit VTable here....
+  
   
   /** */
   

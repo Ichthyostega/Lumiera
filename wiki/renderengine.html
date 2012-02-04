@@ -1692,11 +1692,11 @@ Taken precisely, the &quot;degree of constriction&quot; yields only a partial or
 As we don't have a Prolog interpreter on board yet, we utilize a mock store with preconfigured answers. (see MockConfigQuery). As this preliminary solution is lacking the ability to create new objects, we need to resort to some trickery here (please look away). The overall logic is quite broken, not to say outright idiotic, because the system isn't capable to do any real resolution &amp;mdash; if we ignore this fact, the rest of the algorithm can be implemented, tested and used right now.
 </pre>
 </div>
-<div title="DefaultsManagement" modifier="Ichthyostega" modified="201010250138" created="200801121708" tags="def spec" changecount="13">
+<div title="DefaultsManagement" modifier="Ichthyostega" modified="201202041527" created="200801121708" tags="def spec" changecount="14">
 <pre>For several components and properties there is an implicit default value or configuration; it is stored alongside with the session. The intention is that defaults never create an error, instead, they are to be extended silently on demand. Objects configured according to these defaults can be retrieved at the [[Session]] interface by a set of overloaded functions {{{Session::current-&gt;default(Query&lt;TYPE&gt; (&quot;query string&quot;))}}}, where the //query string // defines a capability query similar to what is employed for pipes, stream types, codecs etc. This query mechanism is implemented by [[configuration rules|ConfigRules]]
 
 !!!!what is denoted by {{{default}}}?
-{{{default(Obj)}}} is a predicate expressing that the object {{{Obj}}} can be considered the default setup under the given conditions. Using the //default// can be considered as a shortcut for actually finding a exact and unique solution. The latter would require to specify all sorts of detailed properties up to the point where only one single object can satisfy all conditions. On the other hand, leaving some properties unspecified would yield a set of solutions (and the user code issuing the query had to provide means for selecting one soltution from this set). Just falling back on the //default// means that the user code actually doesn't care for any additional properties (as long as the properties he //does// care for are satisfied). Nothing is said specifically on //how//&amp;nbsp; this default gets configured; actually there can be rules //somewhere,// and, additionally, anything encountered once while asking for a default can be re-used as default under similar circumstances.
+{{{default(Obj)}}} is a predicate expressing that the object {{{Obj}}} can be considered the default setup under the given conditions. Using the //default// can be considered as a shortcut for actually finding an exact and unique solution. The latter would require to specify all sorts of detailed properties up to the point where only one single object can satisfy all conditions. On the other hand, leaving some properties unspecified would yield a set of solutions (and the user code issuing the query had to provide means for selecting one solution from this set). Just falling back on the //default// means that the user code actually doesn't care for any additional properties (as long as the properties he //does// care for are satisfied). Nothing is said specifically on //how//&amp;nbsp; this default gets configured; actually there can be rules //somewhere,// and, additionally, anything encountered once while asking for a default can be re-used as default under similar circumstances.
 &amp;rarr; [[implementing defaults|DefaultsImplementation]]</pre>
 </div>
 <div title="DesignDecisions" modifier="Ichthyostega" modified="201011210034" created="200801062209" tags="decision design discuss Concepts" changecount="33">
@@ -5776,7 +5776,7 @@ if (oldText.indexOf(&quot;SplashScreen&quot;)==-1)
 * besides, between different stream //implementation types,// there can be a ''rendering'' (lossy conversion) &amp;mdash; or no conversion at all.
 </pre>
 </div>
-<div title="StreamPrototype" modifier="Ichthyostega" modified="201106210145" created="200808152042" tags="def spec" changecount="11">
+<div title="StreamPrototype" modifier="Ichthyostega" modified="201202041524" created="200808152042" tags="def spec" changecount="14">
 <pre>The stream Prototype is part of the specification of a media stream's type. It is a semantic (or problem domain oriented) concept and should be distinguished from the actual implementation type of the media stream. The latter is provided by an [[library implementation|StreamTypeImplFacade]]. While there are some common predefined prototypes, mostly, they are defined within the concrete [[Session]] according to the user's needs. 
 
 Prototypes form an open (extensible) collection, though each prototype belongs to a specific media kind ({{{VIDEO, IMAGE, AUDIO, MIDI,...}}}).
@@ -5789,7 +5789,7 @@ Consequently, as we can't get away with an fixed Enum of all stream prototypes, 
 * we can determine if another prototype is //convertible//
 
 !!Examples
-In practice, several things might be considered &quot;quite different&quot; and thus be distinguished by protorype: NTSC and PAL video, video versus digitized film, HD video versus SD video, 3D versus flat video, cinemascope versus 4:3, stereophonic versus monaural, periphonic versus panoramic sound, Ambisonics versus 5.1, dolby versus linear PCM...
+In practice, several things might be considered &quot;quite different&quot; and thus be distinguished by protorype: NTSC and PAL video, video versus digitized film, HD video versus SD video, 3D versus flat video, cinemascope versus 4:3, stereophonic versus monaural, periphonic versus panoramic sound, Ambisonics versus 5.1, data reduced ~MP3 versus full quality linear PCM...
 </pre>
 </div>
 <div title="StreamType" modifier="Ichthyostega" modified="201011071741" created="200808060244" tags="spec draft" changecount="21">

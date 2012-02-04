@@ -1,8 +1,8 @@
 /*
-  DISPATCHER.hpp  -  translating calculation streams into frame jobs
+  DISPATCH-TABLE.hpp  -  implementation of frame job creation
 
   Copyright (C)         Lumiera.org
-    2011,               Hermann Vosseler <Ichthyostega@web.de>
+    2012,               Hermann Vosseler <Ichthyostega@web.de>
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -21,14 +21,11 @@
 */
 
 
-#ifndef PROC_ENGINE_DISPATCHER_H
-#define PROC_ENGINE_DISPATCHER_H
+#ifndef PROC_ENGINE_DISPATCH_TABLE_H
+#define PROC_ENGINE_DISPATCH_TABLE_H
 
 #include "proc/common.hpp"
-#include "proc/state.hpp"
-#include "lib/time/timevalue.hpp"
-
-#include <boost/noncopyable.hpp>
+#include "proc/engine/dispatcher.hpp"
 
 
 
@@ -44,14 +41,19 @@ namespace engine {
   /**
    * @todo 11/11 extremely fuzzy at the moment
    */
-  class Dispatcher
-    : boost::noncopyable
+  class DispatchTable
+    : public Dispatcher
     {
+    protected:
+      /** timerange covered by this RenderGraph */
+      TimeSpan segment_;
       
     public:
-      virtual ~Dispatcher();  ///< this is an interface
-      
-      
+      DispatchTable()
+        : segment_(Time::ZERO, FSecs(5))
+        {
+          UNIMPLEMENTED ("anything regarding the Engine backbone");
+        }
       
     };
   

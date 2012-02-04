@@ -117,8 +117,8 @@ namespace engine {
    *  for the specific wiring situations) use the AllocationCluster
    *  of the current build process, we need to create a new instance
    *  for each newly built segment of the low-level model.
-   *  @note As this ctor creates a WiringFactoryImpl instance, 
-   *        compiling this invocation actually drives the necessary
+   *  @note This ctor creates a WiringFactoryImpl instance, thus 
+   *        compiling this definition actually drives the necessary
    *        template instantiations for all cases encountered while
    *        building the node network.
    */
