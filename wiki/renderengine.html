@@ -7468,7 +7468,7 @@ Actually, what the GUI creates and uses is the //view// of a given timeline. Thi
 To complement this possibilities, I'd propose to give the //timeline view// the possibility to be re-linked to a sub-sequence. This way, it would stay connected to the main play control, but at the same time show a sub-sequence //in the way it will be treated as  embedded// within the top-level sequence. This would be the default operation mode when a meta-clip is opened (and showed in a separate tab with such a linked timeline view). The reason for this proposed handling is again to give the user the least surprising behaviour. Because, when &amp;mdash; on the contrary &amp;mdash; the sub-sequence would be opened as //separate timeline,// a different absolute time position and a different signal routing may result; doing such should be reserved for advanced use, e.g. when multiple editors cooperate on a single project and a sequence has to be prepared in isolation prior to being integrated in the global sequence (featuring the whole movie).
 </pre>
 </div>
-<div title="Timings" modifier="Ichthyostega" created="201202042240" tags="spec draft Rendering Player" changecount="1">
+<div title="Timings" modifier="Ichthyostega" modified="201202060103" created="201202042240" tags="spec draft Rendering Player" changecount="2">
 <pre>//Timing constraints of a render or playback process.//
 
 !design quest {{red{WIP 1/2012}}}
@@ -7480,7 +7480,9 @@ The Timings record is used at various places at the engine interface level. Up t
 * besides, it's clear that the Timings record is consulted to find out about latency
 * question: do we need a relation to wall-clock time?
 
-</pre>
+!where are the timings definied?
+Timing constraint records are used at various places within the engine. Basically we need such a timings record for starting any kind of playback or render.
+The effective timings are established when //allocating an OutputSlot// -- based on the timings defined for the ModelPort  to //perform,// i.e. the global bus to render.</pre>
 </div>
 <div title="Track" modifier="Ichthyostega" modified="200911202133" created="200801062320" tags="def design decision" changecount="6">
 <pre>Tracks are just a structure used to organize the Media Objects within the Sequence. Tracks are associated allways to a specific Sequence and the Tracks of an Sequence form a //tree.// They can be considered to be an organizing grid, and besides that, they have no special meaning. They are grouping devices, not first-class entities. A track doesn't &quot;have&quot; a port or pipe or &quot;is&quot; a video track and the like; it can be configured to behave in such manner by using placements.

@@ -154,7 +154,7 @@ namespace test{
       checkGridBinding (TimeValue org)
         {
           // refer to a grid not yet defined
-          VERIFY_ERROR (UNKNOWN_GRID, QuTime wired(org, "special_funny_grid"));
+          VERIFY_ERROR (UNKNOWN_GRID, QuTime weird(org, "special_funny_grid"));
           
           TimeGrid::build("special_funny_grid", 1);      // provide the grid's definition (1 frame per second)
           

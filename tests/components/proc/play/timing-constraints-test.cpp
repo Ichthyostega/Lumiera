@@ -24,6 +24,7 @@
 #include "lib/test/run.hpp"
 
 #include "proc/play/timings.hpp"
+#include "lib/time/timevalue.hpp"
 //#include "proc/engine/buffhandle.hpp"
 //#include "proc/engine/testframe.hpp"
 //#include "lib/time/control.hpp"
@@ -34,8 +35,9 @@ namespace proc {
 namespace play {
 namespace test {
   
-  namespace time = lib::time;
-  
+  using lib::time::Time;
+  using lib::time::FrameRate;
+
 //using proc::engine::BuffHandle;
 //using proc::engine::test::testData;
 //using proc::engine::test::TestFrame;
@@ -63,7 +65,12 @@ namespace test {
       void
       define_basicTimingConstraints()
         {
+          Timings timings (FrameRate::PAL);
+          
 #if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #831
+          CHECK (Time::ZERO == timings.getOrigin());
+          CHECK (FrameRate::PAL == timings.getFrameRate());
+          CHECK (ASAP == timings.playbackUrgency);
 #endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #831
         }
     };

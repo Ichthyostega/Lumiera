@@ -187,7 +187,7 @@ namespace play {
   Play::Controller
   PlayService::connect (ModelPorts dataGenerators, POutputManager outputPossibilities)
   {
-    Timings playbackTimings;       //////////////////////////////////////////////////////////////////////TICKET #875
+    Timings playbackTimings (lib::time::FrameRate::PAL);       //////////////////////////////////////////////////////TICKET #875
     
     return pTable_->establishProcess(
             PlayProcess::initiate(dataGenerators, 

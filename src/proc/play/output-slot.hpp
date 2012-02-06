@@ -83,6 +83,7 @@ namespace play {
   using proc::engine::BuffHandle;
   using proc::engine::BufferProvider;
   using lib::time::TimeValue;
+  using lib::time::Time;
   
   using boost::scoped_ptr;
   

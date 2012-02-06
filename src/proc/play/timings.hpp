@@ -53,20 +53,30 @@
 //#include <boost/noncopyable.hpp>
 //#include <string>
 //#include <vector>
-//#include <tr1/memory>
+#include <tr1/memory>
 //#include <boost/scoped_ptr.hpp>
 
+namespace lib {
+namespace time{
+  class Quantiser;
+}}
 
 namespace proc {
 namespace play {
 
-  using lib::time::Time;
+  using lib::time::FrameRate;
+  using lib::time::TimeValue;
 //using std::string;
 
 //using std::vector;
 //using std::tr1::shared_ptr;
 //using boost::scoped_ptr;
   
+  enum PlaybackUrgency {
+    ASAP,
+    NICE,
+    TIMEBOUND
+  };
   
   
   
@@ -80,7 +90,21 @@ namespace play {
    */
   class Timings
     {
+      typedef std::tr1::shared_ptr<const lib::time::Quantiser> PQuant;
+      
+      PQuant grid_;
+      
     public:
+      PlaybackUrgency playbackUrgency;
+      
+      Timings (FrameRate fps);
+      
+      // default copy acceptable
+      
+      TimeValue getOrigin();
+      
+      FrameRate getFrameRate();
+      
       
       //////////////TODO further accessor functions here
       

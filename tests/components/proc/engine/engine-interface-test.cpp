@@ -31,6 +31,7 @@
 #include "proc/play/diagnostic-output-slot.hpp"
 #include "proc/mobject/model-port.hpp"
 #include "proc/asset/pipe.hpp"
+#include "lib/time/timevalue.hpp"
 
 //#include <boost/scoped_ptr.hpp>
 //#include <iostream>
@@ -50,6 +51,7 @@ namespace test  {
   using mobject::ModelPort;
   using proc::play::OutputSlot;
   using proc::play::DiagnosticOutputSlot;
+  using lib::time::FrameRate;
   
   typedef asset::ID<Pipe> PID;
   typedef OutputSlot::Allocation Allocation;
@@ -94,7 +96,7 @@ namespace test  {
           
           OutputSlot& oSlot = DiagnosticOutputSlot::build();
           Allocation& output = oSlot.allocate();
-          Timings timings; /////////TODO
+          Timings timings (FrameRate::PAL); /////////TODO
           
           // Invoke test subject...
           CalcStreams calc = engine.calculate(port, timings, output);
