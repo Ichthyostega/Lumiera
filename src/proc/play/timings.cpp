@@ -32,6 +32,7 @@ namespace play {
   
   
   using lib::time::PQuant;
+  using lib::time::Time;
   
   namespace { // hidden local details of the service implementation....
     
@@ -58,7 +59,47 @@ namespace play {
   Timings::Timings (FrameRate fps)
     : grid_(buildStandardGridForFramerate(fps))
     , playbackUrgency (ASAP)
-    { }
+    { 
+      ENSURE (grid_);
+    }
+  
+  
+  
+  TimeValue
+  Timings::getOrigin()  const
+  {
+    return grid_->timeOf(0);
+  }
+  
+  
+  Offset
+  Timings::getFrameOffsetAt (TimeValue refPoint)  const
+  {
+    return 1 * getFrameDurationAt (refPoint);      /////////////////TODO implement a speed factor here
+  }
+  
+  
+  Duration
+  Timings::getFrameDurationAt (TimeValue refPoint)  const
+  {
+    int64_t frameNr = grid_->gridPoint (refPoint);
+    return Offset (grid_->timeOf(frameNr), grid_->timeOf(frameNr+1));
+  }
+  
+  
+  /** @remarks the purpose of this function is to support scheduling
+   *           and frame handling even in case the frame rate isn't constant.
+   *           To indicate the case the frame rate is changing right now,
+   *           this function might returns Duration::NIL
+   *  @todo implement real support for variable frame rates      
+   */                                  ////////////////////////////////////////////////////////TICKET #236
+  Duration
+  Timings::constantFrameTimingsInterval (TimeValue startPoint)  const
+  {
+    return Duration (Time::ANYTIME);
+  }
+
+
 
   
 

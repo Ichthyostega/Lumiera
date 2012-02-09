@@ -36,6 +36,7 @@ namespace play {
 namespace test {
   
   using lib::time::Time;
+  using lib::time::Duration;
   using lib::time::FrameRate;
 
 //using proc::engine::BuffHandle;
@@ -67,10 +68,14 @@ namespace test {
         {
           Timings timings (FrameRate::PAL);
           
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #831
-          CHECK (Time::ZERO == timings.getOrigin());
-          CHECK (FrameRate::PAL == timings.getFrameRate());
+          Time t(0,10);
+          Duration lengthPAL (1, FrameRate::PAL);
+          
+          CHECK (timings.getOrigin() == Time::ZERO);
+          CHECK (timings.getFrameDurationAt(t) == lengthPAL);
+          CHECK (timings.getFrameOffsetAt(t)   == lengthPAL);
           CHECK (ASAP == timings.playbackUrgency);
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #831
 #endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #831
         }
     };

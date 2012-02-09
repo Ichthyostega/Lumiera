@@ -59,6 +59,7 @@
 namespace lib {
 namespace time{
   class Quantiser;
+  typedef std::tr1::shared_ptr<const Quantiser> PQuant;
 }}
 
 namespace proc {
@@ -66,6 +67,8 @@ namespace play {
 
   using lib::time::FrameRate;
   using lib::time::TimeValue;
+  using lib::time::Duration;
+  using lib::time::Offset;
 //using std::string;
 
 //using std::vector;
@@ -90,9 +93,7 @@ namespace play {
    */
   class Timings
     {
-      typedef std::tr1::shared_ptr<const lib::time::Quantiser> PQuant;
-      
-      PQuant grid_;
+      lib::time::PQuant grid_;
       
     public:
       PlaybackUrgency playbackUrgency;
@@ -101,9 +102,16 @@ namespace play {
       
       // default copy acceptable
       
-      TimeValue getOrigin();
+      TimeValue getOrigin()  const;
       
-      FrameRate getFrameRate();
+      Offset   getFrameOffsetAt   (TimeValue refPoint)  const;
+      Duration getFrameDurationAt (TimeValue refPoint)  const;
+      
+      /** the frame spacing and duration remains constant for some time...
+       * @param startPoint looking from that time point into future
+       * @return duration after this starting point, where it's safe
+       *         to assume unaltered frame dimensions */
+      Duration constantFrameTimingsInterval (TimeValue startPoint)  const;
       
       
       //////////////TODO further accessor functions here
