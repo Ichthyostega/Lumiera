@@ -45,6 +45,7 @@ namespace test  {
   
   using lib::time::QuTime;
   using lib::time::FrameRate;
+  using lib::time::Duration;
   using proc::play::Timings;
   
   namespace { // used internally
@@ -54,6 +55,12 @@ namespace test  {
       : public Dispatcher
       {
         
+        FrameCoord
+        locateFrameNext (uint frameCountOffset)
+          {
+            UNIMPLEMENTED ("dummy implementation of the core dispatch operation");
+          }
+
       public:
       };
     
@@ -92,11 +99,17 @@ namespace test  {
       verify_basicDispatch()
         {
           Dispatcher& dispatcher = mockDispatcher();
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #880
           Timings timings (FrameRate::PAL);
           uint startFrame(10);
           
           TimeAnchor refPoint = TimeAnchor::build (timings, startFrame);
+          CHECK (refPoint == Time::ZERO + Duration(10, FrameRate::PAL));
+          
+          FrameCoord coordinates = dispatcher.locateFrameNext (15);
+          CHECK (coordinates.absoluteNominalTime == Time(0,1));
+          CHECK (coordinates.absoluteFrameNumber == 25);
+          CHECK (coordinates.remainingRealTime() >= Time(FSecs(24,25)));
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #880
 #endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #880
         }
       

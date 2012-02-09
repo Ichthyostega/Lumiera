@@ -25,7 +25,9 @@
 #define PROC_ENGINE_DISPATCHER_H
 
 #include "proc/common.hpp"
-#include "proc/state.hpp"
+//#include "proc/state.hpp"
+#include "proc/engine/time-anchor.hpp"
+#include "proc/engine/frame-coord.hpp"
 #include "lib/time/timevalue.hpp"
 
 #include <boost/noncopyable.hpp>
@@ -51,6 +53,8 @@ namespace engine {
     public:
       virtual ~Dispatcher();  ///< this is an interface
       
+      
+      virtual FrameCoord locateFrameNext (uint frameCountOffset)   =0;
       
       
     };

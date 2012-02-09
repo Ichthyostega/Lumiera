@@ -34,8 +34,9 @@
 namespace proc {
 namespace engine {
   
-  using lib::time::TimeSpan;
-  using lib::time::FSecs;
+//using lib::time::TimeSpan;
+  using lib::time::Duration;
+//using lib::time::FSecs;
   using lib::time::Time;
 //  
 //  class ExitNode;
@@ -58,12 +59,22 @@ namespace engine {
     {
       
     public:
+      Time absoluteNominalTime;
+      int64_t absoluteFrameNumber;
+      
       FrameCoord()
         {
           UNIMPLEMENTED ("anything regarding the Node Invocation");
         }
       
       // using default copy operations
+      
+      
+      Duration remainingRealTime()
+        {
+          UNIMPLEMENTED ("deterine the real wall clock time amount left until deadline");
+        }
+
       
     };
   

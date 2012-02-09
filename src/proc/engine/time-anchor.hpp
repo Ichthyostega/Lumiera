@@ -27,15 +27,16 @@
 #include "proc/common.hpp"
 //#include "proc/state.hpp"
 #include "lib/time/timevalue.hpp"
+#include "proc/play/timings.hpp"
 
 
 
 namespace proc {
 namespace engine {
   
-  using lib::time::TimeSpan;
-  using lib::time::FSecs;
-  using lib::time::Time;
+//  using lib::time::TimeSpan;
+//  using lib::time::FSecs;
+//  using lib::time::Time;
 //  
 //  class ExitNode;
   
@@ -57,13 +58,24 @@ namespace engine {
   class TimeAnchor
     {
       
-    public:
       TimeAnchor()
         {
           UNIMPLEMENTED ("anything regarding the Engine backbone");
         }
       
+    public:
       // using default copy operations
+      
+      static TimeAnchor
+      build (play::Timings timings, uint64_t startFrame)
+        {
+          UNIMPLEMENTED ("representation of the Time Anchor closure");
+        }
+      
+      operator lib::time::TimeValue()  const
+        {
+          UNIMPLEMENTED ("representation of the Time Anchor closure");
+        }
     };
   
   
