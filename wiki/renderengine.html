@@ -1969,6 +1969,12 @@ Some further details
 * a special case of this factory use is the [[Singleton]] factory, which is used a lot within the Proy-Layer code
 </pre>
 </div>
+<div title="Feed" modifier="Ichthyostega" modified="201202122123" created="201202122115" tags="def Rendering" changecount="2">
+<pre>A grouping device within an ongoing [[playback or render process|PlayProcess]].
+Any feed corresponds to a specific ModelPort, which in turn typically corresponds to a given GlobalPipe.
+When starting playback or render, a play process (with a PlayController front-end for client code) is established to coordinate the processing. This ongoing data production might encompass multiple media streams, i.e. multiple feeds pulled from several model ports and delivered into several [[output slots|OutputSlot]]. Each feed in turn might carry structured MultichannelMedia, and is thus further structured into individual [[streams of calculation|CalcStream]]. Since the latter are //stateless descriptors,// while the player and play process obviously is stateful, it's the feed's role to mediate between a state-based (procedural) and a stateless (functional and parallelised) organisation model -- ensuring a seamless data feed even during modification of the playback parameters.
+</pre>
+</div>
 <div title="Fixture" modifier="Ichthyostega" modified="201201281945" created="200706220324" tags="def spec Builder Model" changecount="53">
 <pre>a specially configured view -- joining together high-level and low-level model.
 The Fixture acts as //isolation layer// between the two models, and as //backbone to attach the render nodes.//
@@ -2125,7 +2131,7 @@ Additionally, they may be used for resource management purposes by embedding a r
 #* one OpenGL Dataframe could contain raw texture data (but I am lacking expertise for this topic)
 </pre>
 </div>
-<div title="FrameDispatcher" modifier="Ichthyostega" modified="201202032340" created="201105222330" tags="def Rendering" changecount="13">
+<div title="FrameDispatcher" modifier="Ichthyostega" modified="201202122109" created="201105222330" tags="def Rendering" changecount="14">
 <pre>An implementation facility within the RenderEngine, responsible for translating a logical [[calculation stream|CalcStream]] (corresponding to a PlayProcess) into a sequence of individual RenderJob entries, which can then be handed over to the [[Scheduler]]. Performing this operation involves a special application of [[time quantisation|TimeQuant]]: after establishing a suitable starting point, a typically contiguous series of frame numbers need to be generated, together with the time coordinates for each of those frames.
 
 !defining the dispatcher interface
@@ -2143,7 +2149,11 @@ The purpose of this interface is to support the planning of new jobs, for a give
 *** the corresponding JobTicket to use at this point
 
 !!!the ~TimeAnchor
-In fact, the whole process of playback or rendering is a continued series of exploration and evaluation. The outline of what needs to be calculated is determined continuously, proceeding in chunks of evaluation. The evaluation structure of the render engine is quite similar to the //fork-join//-pattern, just with the addition of timing constraints. This leads to an invocation pattern, where a partial evaluation happens from time to time. Each of those evaluations establishes a breaking point in time: everything //before// this point is settled and planned thus far. So, this point is an ''anchor'' or closure to root the next partial evaluation. More specifically, this ~TimeAnchor closure is the definitive binding between the abstract logical time of the session timeline, and the real wall-clock time forming the deadline for render evaluation.</pre>
+In fact, the whole process of playback or rendering is a continued series of exploration and evaluation. The outline of what needs to be calculated is determined continuously, proceeding in chunks of evaluation. The evaluation structure of the render engine is quite similar to the //fork-join//-pattern, just with the addition of timing constraints. This leads to an invocation pattern, where a partial evaluation happens from time to time. Each of those evaluations establishes a breaking point in time: everything //before// this point is settled and planned thus far. So, this point is an ''anchor'' or closure to root the next partial evaluation. More specifically, this ~TimeAnchor closure is the definitive binding between the abstract logical time of the session timeline, and the real wall-clock time forming the deadline for render evaluation.
+
+!!!producing actual jobs
+The JobTicket is created on demand, specialised for a single [[segment|Segmentation]] of the timeline and a single [[feed|Feed]] of data frames to be pulled from a ModelPort. Thus, in turn, this means that all frames and all channels within that realm will rely on the same job ticket -- which is a //higher order function,// a function producing another function: when provided with the actual channel number and the specific frame coordinates, the job ticket produces a [[concrete job definition|RenderJob]], which itself is a function to be invoked by the [[scheduler|Scheduler]] just in time.
+</pre>
 </div>
 <div title="FullScreenPlugin" modifier="CehTeh" modified="200706110313" created="200607241016" tags="systemConfig lewcidExtension" server.type="file" server.host="file:///home/ct/.homepage/home.html" server.page.revision="200706110313">
 <pre>/***
@@ -4493,7 +4503,7 @@ We need a way of addressing existing [[pipes|Pipe]]. Besides, as the Pipes and T
 &lt;&lt;tasksum end&gt;&gt;
 </pre>
 </div>
-<div title="PlayProcess" modifier="Ichthyostega" modified="201202112352" created="201012181714" tags="def spec Player img" changecount="18">
+<div title="PlayProcess" modifier="Ichthyostega" modified="201202122111" created="201012181714" tags="def spec Player img" changecount="19">
 <pre>With //play process//&amp;nbsp; we denote an ongoing effort to calculate a stream of frames for playback or rendering.
 The play process is an conceptual entity linking together several activities in the [[Backend]] and the RenderEngine. Creating a play process is the central service provided by the [[player subsystem|Player]]: it maintains a registration entry for the process to keep track of associated entities, resources allocated and calls [[dispatched|FrameDispatcher]] as a consequence, and it wires and exposes a PlayController to serve as an interface and information hub.
 
@@ -4504,7 +4514,7 @@ The play process is an conceptual entity linking together several activities in 
 
 [&gt;img[Anatomy of a Play Process|uml/fig144005.png]]
 !Anatomy of a Play Process
-The Controller is exposed to the client and acts as frontend handle, while the play process body groups and manages all the various parts cooperating to generate output. For each of the participating global pipes we get a feed to drive that pipeline to deliver media of a specific kind.
+The Controller is exposed to the client and acts as frontend handle, while the play process body groups and manages all the various parts cooperating to generate output. For each of the participating global pipes we get a [[feed|Feed]] to drive that pipeline to deliver media of a specific kind.
 
 Right within the play process, there is a separation into two realms, relying on different programming paradigms. Obviously the play controller is a state machine, and similarily the body object (play process) has a distinct operation state. Moreover, the current collection of individual objects hooked up at any given instance is a stateful variable. To the contrary, when we enter the realm of actual processing, operations are carried out in parallel, relying on stateless descriptor objects, wired into individual calculation jobs, to be scheduled as non-blocking units of operation. For each series of consecutive frames to be calculated, there is a descriptor object, the CalcStream, which also links to a specificaly tailored dispatcher table, allowing to schedule the individual frame jobs. Whenever the controller determines a change in the playback plan (speed change, skip, scrubbing, looping, ...), a new CalcStream is created, while the existing one is just used to mark any not-yet processed job as superseded.
 </pre>

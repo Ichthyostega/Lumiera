@@ -258,7 +258,7 @@ namespace test  {
           CHECK (pwc);
           
           registry.rollback();
-          CHECK ( registry.contains (pipeA));    // no effect to the officialy visible state
+          CHECK ( registry.contains (pipeA));    // no effect to the officially visible state
           CHECK (!registry.contains (pipeB));
           CHECK ( registry.contains (pipeWC));
           

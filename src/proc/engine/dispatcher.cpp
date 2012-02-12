@@ -34,6 +34,11 @@ namespace engine {
   
   
   /** */
+  JobTicket&
+  Dispatcher::accessJobTicket (FrameCoord const& frameID, mobject::ModelPort const& port)
+  {
+    UNIMPLEMENTED ("figure out and create the actual JobTicket, for the current segment and the given port");
+  }
   
   
   

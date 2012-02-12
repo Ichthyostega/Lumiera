@@ -25,6 +25,8 @@
 #include "lib/error.hpp"
 
 //#include "proc/engine/procnode.hpp"
+#include "proc/play/dummy-play-connection.hpp"
+#include "proc/mobject/model-port.hpp"
 #include "proc/engine/dispatcher.hpp"
 #include "proc/play/timings.hpp"
 #include "lib/time/timevalue.hpp"
@@ -46,14 +48,25 @@ namespace test  {
   using lib::time::QuTime;
   using lib::time::FrameRate;
   using lib::time::Duration;
-  using proc::play::Timings;
+  using mobject::ModelPort;
+  using play::Timings;
   
   namespace { // used internally
+    
+    using play::PlayTestFrames_Strategy;
+    using play::ModelPorts;
+    
+    typedef play::DummyPlayConnection<play::PlayTestFrames_Strategy> DummyPlaybackSetup;
     
     
     class MockDispatcherTable
       : public Dispatcher
       {
+        
+        DummyPlaybackSetup dummySetup_;
+        
+        
+        /* == mock Dispatcher implementation == */
         
         FrameCoord
         locateFrameNext (uint frameCountOffset)
@@ -62,13 +75,26 @@ namespace test  {
           }
 
       public:
+        
+        ModelPort
+        provideMockModelPort()
+          {
+            ModelPorts mockModelPorts = dummySetup_.provide_testModelPorts();
+            return *mockModelPorts;  // using just the first dummy port
+          }
       };
     
     lib::Singleton<MockDispatcherTable> mockDispatcher;
     
 #if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #880
 #endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #890
+    ModelPort
+    getTestPort()
+    {
+      return mockDispatcher().provideMockModelPort();
+    }
       
+    
   } // (End) internal defs
   
   
@@ -100,15 +126,20 @@ namespace test  {
         {
           Dispatcher& dispatcher = mockDispatcher();
           Timings timings (FrameRate::PAL);
+          ModelPort modelPort (getTestPort());
           uint startFrame(10);
+          uint channel(0);
           
-          TimeAnchor refPoint = TimeAnchor::build (timings, startFrame);
+          TimeAnchor refPoint = TimeAnchor::build (timings, startFrame, channel);
           CHECK (refPoint == Time::ZERO + Duration(10, FrameRate::PAL));
           
           FrameCoord coordinates = dispatcher.locateFrameNext (15);
           CHECK (coordinates.absoluteNominalTime == Time(0,1));
           CHECK (coordinates.absoluteFrameNumber == 25);
           CHECK (coordinates.remainingRealTime() >= Time(FSecs(24,25)));
+          
+          JobTicket& executionPlan = dispatcher.accessJobTicket (coordinates, modelPort);
+          CHECK (executionPlan.isValid());
 #if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #880
 #endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #880
         }

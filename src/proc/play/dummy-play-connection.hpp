@@ -97,7 +97,7 @@ namespace play {
 //    using lumiera::DummyPlayer;
   using lib::time::Duration;
   
-  typedef lib::IterSource<proc::mobject::ModelPort>::iterator ModelPorts;  
+  typedef lib::IterSource<proc::mobject::ModelPort>::iterator ModelPorts;
   
   
   struct PlayTestFrames_Strategy

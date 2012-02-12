@@ -67,7 +67,7 @@ namespace engine {
       // using default copy operations
       
       static TimeAnchor
-      build (play::Timings timings, uint64_t startFrame)
+      build (play::Timings timings, uint64_t startFrame, uint channel)
         {
           UNIMPLEMENTED ("representation of the Time Anchor closure");
         }
