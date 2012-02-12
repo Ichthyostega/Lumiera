@@ -1376,7 +1376,7 @@ at the lowest level within the builder there is the step of building a //connect
 * by default, a timeline is outfitted with one video and one sound master bus
 </pre>
 </div>
-<div title="CalcStream" modifier="Ichthyostega" modified="201112162336" created="201112162053" tags="spec Rendering" changecount="7">
+<div title="CalcStream" modifier="Ichthyostega" modified="201202120003" created="201112162053" tags="spec Rendering" changecount="9">
 <pre>Calculation stream is an organisational unit used at the interface level of the Lumiera engine.
 Representing a //stream of calculations,// delivering generated data within //timing constraints,// it is used
 *by the [[play process(es)|PlayProcess]] to define and control properties of the output generation
@@ -1390,9 +1390,11 @@ Any really interesting calculation stream needs to be retrieved from the EngineF
 !purpose
 When a calculation stream is retrieved from the EngineFaçade it is already registered and attached there and represents an ongoing activity. Under the hood, several further collaborators will hold a copy of that calculation stream descriptor. While, as such, a CalcStream has no explicit state, at any time it //represents a current state.// In case the running time span of that stream is limited, it becomes superseded automatically, just by the passing of time.
 
-Each calculation stream refers a relevant [[frame dispatcher table|FrameDispatcher]]. Thus, for the engine (interface level), the calculation stream allows to produce the individual [[render jobs|RenderJob]] to enqueue with the [[Scheduler]]. This translation step is what links and relates nominal time with running wall clock time, thereby obeying the [[timing constraints|Timings]] given while initially defining the calculation stream.
+Each calculation stream refers a relevant [[frame dispatcher table|FrameDispatcher]]. Thus, for the engine (interface level), the calculation stream allows to produce the individual [[render jobs|RenderJob]] to enqueue with the [[Scheduler]]. This translation step is what links and relates nominal time with running wall clock time, thereby obeying the [[timing constraints|Timings]] given when initially defining the calculation stream.
 
 Additionally, each calculation stream knows how to access a //render environment closure,// allowing to re-schedule and re-adjust the setup of this stream. Basically, this closure is comprised of several functors (callbacks), which could be invoked to perform management tasks later on. Amongst others, this allows the calculation stream to redefine, supersede or &quot;cancel itself&quot;, without the need to access a central registration table at the engine interface level.
+
+&amp;rarr; NodeOperationProtocol
 </pre>
 </div>
 <div title="ColorPalette" modifier="Ichthyostega" modified="200807131329" created="200706190033" tags="excludeMissing" changecount="14">
@@ -2773,6 +2775,14 @@ From experiences with other middle scale projects, I prefer having the test code
 [img[Example: Interfaces/Namespaces of the ~Session-Subsystems|uml/fig130053.png]]
 </pre>
 </div>
+<div title="JobTicket" modifier="Ichthyostega" created="201202120018" tags="spec Rendering draft" changecount="1">
+<pre>The actual media data is rendered by [[individually scheduled render jobs|RenderJob]]. When preparing such jobs, in order to [[dispatch|FrameDispatch]] the individual frames to be calculated to make a given [[stream of calculations|CalcStream]] happen, a node planning phase is performed to find out
+* what channel(s) to pull
+* what prerequisites to prepare
+* what parameters to provide
+The result of this planning phase is the JobTicket, a complete execution plan.
+This planning is uniform for each segment and treated for all channels together, resulting in a nested tree structure of sub job tickets, allocated and stored alongside with the processing nodes and wiring descriptors forming the segment's data and descriptor network. Job tickets are //higher order functions:// entering a concrete frame number and channel into a given job ticket will produce an actual job descriptor, which in itself is again a function, to be invoked through the scheduler when it's time to trigger the actual calculations.</pre>
+</div>
 <div title="LayerSeparationInterface" modifier="Ichthyostega" modified="200904302314" created="200902080635" tags="def" changecount="2">
 <pre>A major //business interface// &amp;mdash; used by the layers for interfacing to each other; also to be invoked externally by scripts.
 &amp;rarr; [[overfiew and technical details|LayerSeparationInterfaces]]
@@ -3182,7 +3192,7 @@ __Note__: nothing within the PlacementIndex requires the root object to be of a 
 
 </pre>
 </div>
-<div title="MultichannelMedia" modifier="Ichthyostega" modified="201106212255" created="200709200255" tags="design img" changecount="14">
+<div title="MultichannelMedia" modifier="Ichthyostega" modified="201202112338" created="200709200255" tags="Model design img" changecount="16">
 <pre>Based on practical experiences, Ichthyo tends to consider Multichannel Media as the base case, while counting media files providing just one single media stream as exotic corner cases. This may seem counter intuitive at first sight; you should think of  it as an attempt to avoid right from start some of the common shortcomings found in many video editors, especially
 * having to deal with keeping a &quot;link&quot; between audio and video clips
 * silly limitations on the supported audio setups (e.g. &quot;sound is mono, stereo or Dolby-5.1&quot;)
@@ -3193,34 +3203,27 @@ __Note__: nothing within the PlacementIndex requires the root object to be of a 
 [&gt;img[Outline of the Build Process|uml/fig131333.png]]
 Basically, each [[media asset|MediaAsset]] is considered to be a compound of several elementary media (tracks), possibly of various different media kinds. Adding support for placeholders (''proxy clips'') at some point in future will add still more complexity (because then there will be even dependencies between some of these elementary media). To handle, edit and render compound media, we need to impose some structural limitations. But anyhow, we try to configure as much as possible already at the &quot;asset level&quot; and make the rest of the proc layer behave just according to the configuration given with each asset.
 
-So, when creating a clip out of such a compound media asset, the clip has to be a compound of elementary clips mirroring the given media asset's structure. Besides, it should be possible to //detach// and //attach// elementary clips from a compound clip. On the other hand, the [[Fixture]] created from the current state of the session is explicit to a great extent. So, in the Fixture we deal only with elementary clips placed to absolute positions, and thus the builder will see only simple non-compound clips and translate them into the corresponding source reading nodes.
-
-!Handling
+!!Handling within the Model
 * from a Media asset, we can get a [[Processing Pattern (ProcPatt)|ProcPatt]] describing how to build a render pipeline for this media
 * we can create a Clip (MObject) from each Media, which will be linked back to the media asset internally.
-* moreover, creating a Clip will create and register a Clip asset as well, and this Clip asset will be tied to the original Clip and will show up in some special Category
-* media can be compound and the created Clips will mirror this compound structure
-* we distinguish elementay (non-compound) Clips from compound clips by concrete subtype. {{red{really?? doesn't seem so much like a good idea to me anymore 1/10}}} The builder can only handle elementary clips, because he needs to build a separate pipeline for every output channel. So the work of splitting common effect stacks for clips with several channels needs to be done when calculating the [[Fixture]] for the current session. The Builder expects to be able to build the render nodes corresponding to each entity found in the Fixture one by one.
+* media can be compound internally, but will be handled as a single unit as long as possible. Even for compound media, we get a single clip.
+* within the assets, we get a distinct ChannelConfig asset to represent the structural assembly of compound media based on elementary parts.
+* sometimes its necessary to split and join the individual channels in processing, for technical reasons. Clearly the goal is to hide this kind of accidental complexity and treat it as an implementation detail. At HighLevelModel scope, conceptually there is just one &quot;stream&quot; for each distinct kind of media, and thus there is only one [[Pipe]]. But note, compound media can be structured beyond having several channels. The typical clip is a compound of image and sound. While still handled as one unit, this separation can't be concealed entirely; some effects can be applied to sound or image solely, and routing needs to separate sound and image at least when reaching the [[global pipes|GlobalPipe]] within the timeline. 
 * the Builder gets at the ProcPatt (descriptor) of the underlying media for each clip and uses this description as a template to build the render pipeline. That is, the ProcPatt specifies the codec asset and maybe some additional effect assets (deinterlace, scale) necessary for feeding media data corresponding to this clip/media into the render nodes network.
 
-!{{red{Reviewed 3/2010}}}
-While the general approach and reasoning remains valid, a lot of the details looks dated meanwhile.
-* it is //not//&amp;nbsp; true that the builder can be limited to the handling single processing chains. Some effects ineed need to be fed with mutliple channels &amp;mdash; most notably panners and compressors.
-* consequently there is the need for an internal representation of the media StreamType.
-* thus we can assume the presence of some kind of //type system//
-* which transforms the individual &quot;stream&quot; into a entirely conceptual entity within the HighLevelModel
-* moreover it is clear that the channel configuration needs to be flexible, and not automatically bound to the existence of a single media with that configuration.
-* and last but not least, we handle nested sequences as virtual clips with virtual media.
+!!Handling within the engine
+While initially it seems intuitive just to break down everything into elementary stream processing within the engine, unfortunately a more in-depth analysis reveals that this approach isn't viable. There are some crucial kinds of media processing, which absolutely require having //all channels available at the actual processing step.// Notable examples being sound panning, reverb and compressors. Same holds true for processing of 3D (stereoscopic) images. In some cases we can get away with replicating identical processor nodes over the multiple channels and applying the same parameters to all of them. The decision which approach to take here is a tricky one, and requires much in-depth knowledge about the material to be processed -- typically the quality and the image or sound fidelity depends on these kind of minute distinctions. Many -- otherwise fine -- existing software falls short on this domain. Making such fine points accessible through [[processing rules|Rules]] is one of the core goals of the Lumiera project.
+
+As an immediate consequence of not being able to reduce processing to elementary stream processing, we need to introduce a [[media type system|StreamType]], allowing us to reason and translate between the conceptual unit at the model level, the compound of individual processing chains in the builder and scheduling level, and the still necessary individual render jobs to produce the actual data for each channel stream. Moreover it is clear that the channel configuration needs to be flexible, and not automatically bound to the existence of a single media with that configuration. And last but not least, through this approach, we also enable handling of nested sequences as virtual clips with virtual (multichannel) media.
+
 &amp;rArr; conclusions
-* while the asset related parts remain as specified, we get a distinct ChannelConfig asset instead of the clip asset (which seems to be redundant)
-* either the ~ClipMO referres this ChannelConfig asset &amp;mdash; or in case of the VirtualClip a BindingMO takes this role. Clip Asset and MO could be joined into a single entity
+* either the ~ClipMO referres directly to a ChannelConfig asset &amp;mdash; or in case of the VirtualClip a BindingMO takes this role.
 * as the BindingMO is also used to implement the top-level timelines, the treatment of global and local pipes is united
 * every pipe (bus) should be able to carry multiple channels, //but with the limitation to only a single media StreamType//
-* this &quot;multichannel-of-same-kind&quot; capability carries over to the ModelPort entries and even the OutputSlot elements
-* only when allocating / &quot;opening&quot; an OutputSlot, we get multiple handles for plain single channels.
-* this can be considered the breaking point, where we enter the realm of the render engine. Here, indeed, only single channels are processed
-
-
+* this &quot;multichannel-of-same-kind&quot; capability carries over to all entities within the build process, including ModelPort entries and even the OutputSlot elements
+* in playback / rendering, within each &quot;Feed&quot; (e.g. for image and sound) we get [[calculation streams|CalcStream]] matching the individual channels
+* thus, only as late as when allocating / &quot;opening&quot; an OutputSlot for actual rendering, we get multiple handles for plain single channels.
+* the PlayProcess serves to join both views, providing a single PlayController front-end, while [[dispatching|FrameDispatcher]] to single channel processing.
 </pre>
 </div>
 <div title="NodeConfiguration" modifier="Ichthyostega" modified="200909041807" created="200909041806" tags="spec Builder Rendering" changecount="2">
@@ -4490,13 +4493,13 @@ We need a way of addressing existing [[pipes|Pipe]]. Besides, as the Pipes and T
 &lt;&lt;tasksum end&gt;&gt;
 </pre>
 </div>
-<div title="PlayProcess" modifier="Ichthyostega" modified="201201292336" created="201012181714" tags="def spec Player img" changecount="17">
+<div title="PlayProcess" modifier="Ichthyostega" modified="201202112352" created="201012181714" tags="def spec Player img" changecount="18">
 <pre>With //play process//&amp;nbsp; we denote an ongoing effort to calculate a stream of frames for playback or rendering.
 The play process is an conceptual entity linking together several activities in the [[Backend]] and the RenderEngine. Creating a play process is the central service provided by the [[player subsystem|Player]]: it maintains a registration entry for the process to keep track of associated entities, resources allocated and calls [[dispatched|FrameDispatcher]] as a consequence, and it wires and exposes a PlayController to serve as an interface and information hub.
 
 ''Note'': the player is in no way engaged in any of the actual calculation and management tasks necessary to make this [[stream of calculations|CalcStream]] happen. The play process code contained within the player subsystem is largely comprised of organisational concerns and not especially performance critical.
-* the [[Backend]] is responsible for [[dispatching|FrameDispatcher]] the [[calculation stream|CalcStream]] and scheduling individual calculation jobs
-* the RenderEngine has the ability to carry out individual frame calculations
+* the [[engine backbone|RenderBackbone]] is responsible for [[dispatching|FrameDispatcher]] the [[calculation stream|CalcStream]] and preparing individual calculation jobs
+* the [[Scheduler]] at the [[engine core|RenderEngine]] has the ability to trigger individual frame calculation carry out individual [[frame calculation jobs|RenderJob]].
 * the OutputSlot exposed by the [[output manager|OutputManagement]] is responsible for accepting timed frame delivery
 
 [&gt;img[Anatomy of a Play Process|uml/fig144005.png]]
@@ -5132,8 +5135,8 @@ The link between ~MObject and Asset should be {{{const}}}, so the clip can't cha
 At first sight the link between asset and clip-MO is a simple logical relation between entities, but it is not strictly 1:1 because typical media are [[multichannel|MultichannelMedia]]. Even if the media is compound, there is //only one asset::Clip//, because in the logical view we have only one &quot;clip-thing&quot;. On the other hand, in the session, we have a compound clip ~MObject comprised of several elementary clip objects, each of which will refer to its own sub-media (channel) within the compound media (and don't forget, this structure can be tree-like)
 {{red{open question:}}} do the clip-MO's of the individual channels refer directly to asset::Media? does this mean the relation is different from the top level, where we have a relation to a asset::Clip??</pre>
 </div>
-<div title="RenderEngine" modifier="Ichthyostega" modified="201105222323" created="200802031820" tags="def" changecount="3">
-<pre>Conceptually, the Render Engine is the core of the application. But &amp;mdash; surprisingly &amp;mdash; we don't even have a distinct »~RenderEngine« component in our design. Rather, the engine is formed by the cooperation of several components spread over two layers (Backend and Proc-Layer): The [[Builder]] creates a network of [[render nodes|ProcNode]], which is used by the Backend to pull individual Frames.
+<div title="RenderEngine" modifier="Ichthyostega" modified="201202112356" created="200802031820" tags="def" changecount="5">
+<pre>Conceptually, the Render Engine is the core of the application. But &amp;mdash; surprisingly &amp;mdash; we don't even have a distinct »~RenderEngine« component in our design. Rather, the engine is formed by the cooperation of several components spread out over two layers (Backend and Proc-Layer): The [[Builder]] creates a network of [[render nodes|ProcNode]], the [[Scheduler]] triggers individual [[calculation jobs|RenderJob]], which in turn pull data from the render nodes, thereby relying on the [[Backend's services|Backend]] for data access and using plug-ins for the actual media calculations.
 &amp;rarr; OverviewRenderEngine
 &amp;rarr; EngineFaçade 
 </pre>
