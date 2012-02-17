@@ -2785,13 +2785,13 @@ From experiences with other middle scale projects, I prefer having the test code
 [img[Example: Interfaces/Namespaces of the ~Session-Subsystems|uml/fig130053.png]]
 </pre>
 </div>
-<div title="JobTicket" modifier="Ichthyostega" created="201202120018" tags="spec Rendering draft" changecount="1">
-<pre>The actual media data is rendered by [[individually scheduled render jobs|RenderJob]]. When preparing such jobs, in order to [[dispatch|FrameDispatch]] the individual frames to be calculated to make a given [[stream of calculations|CalcStream]] happen, a node planning phase is performed to find out
+<div title="JobTicket" modifier="Ichthyostega" modified="201202161712" created="201202120018" tags="spec Rendering draft" changecount="7">
+<pre>The actual media data is rendered by [[individually scheduled render jobs|RenderJob]]. When preparing such jobs, in order to [[dispatch|FrameDispatcher]] the individual frames calculations required to make a given [[stream of calculations|CalcStream]] happen, a node planning phase is performed. The goal is to find out
 * what channel(s) to pull
 * what prerequisites to prepare
 * what parameters to provide
-The result of this planning phase is the JobTicket, a complete execution plan.
-This planning is uniform for each segment and treated for all channels together, resulting in a nested tree structure of sub job tickets, allocated and stored alongside with the processing nodes and wiring descriptors forming the segment's data and descriptor network. Job tickets are //higher order functions:// entering a concrete frame number and channel into a given job ticket will produce an actual job descriptor, which in itself is again a function, to be invoked through the scheduler when it's time to trigger the actual calculations.</pre>
+The result of this planning phase is the {{{JobTicket}}}, a complete ''execution plan''.
+This planning is uniform for each segment and treated for all channels together, resulting in a nested tree structure of sub job tickets, allocated and stored alongside with the processing nodes and wiring descriptors to form the segment's data and descriptor network. Job tickets are //higher order functions:// entering a concrete frame number and channel into a given job ticket will produce an actual job descriptor, which in itself is again a function, to be invoked through the scheduler when it's time to trigger the actual calculations.</pre>
 </div>
 <div title="LayerSeparationInterface" modifier="Ichthyostega" modified="200904302314" created="200902080635" tags="def" changecount="2">
 <pre>A major //business interface// &amp;mdash; used by the layers for interfacing to each other; also to be invoked externally by scripts.
@@ -5196,6 +5196,30 @@ We //do employ//&amp;nbsp; some virtual calls for the buffer management in order
 * while any handle contains the necessary information for releasing or &quot;committing&quot; this buffer, this has to be triggered explicitly.
 
 @@clear(right):display(block):@@
+</pre>
+</div>
+<div title="RenderJob" modifier="Ichthyostega" modified="201202162316" created="201202162156" tags="spec Rendering" changecount="6">
+<pre>An unit of operation, to be [[scheduled|Scheduler]] for calculating media frame data just in time.
+Within each CalcStream, render jobs are produced by the associated FrameDispatcher, based on the corresponding JobTicket used as blue print (execution plan).
+
+!Anatomy of a render job
+Basically, each render job is a //closure// -- hiding all the prepared, extended execution context and allowing the scheduler to trigger the job as a simple function.
+When activated, by virtue of this closure, the actual ''node invocation'' is constructed, which is a private and safe execution environment for the actual calculations. This (mostly stack based) environment embodies a StateProxy, acting as communication hub for accessing anything possibly stateful within the larger scope of the currently ongoing render process. The node invocation sequence is what actually implements the ''pulling of data'': on exit, all cacluated data is expected to be available in the output buffers. Typically (but not necessarily) each node embodies a ''calculation function'', holding the actual data processing algorithm.
+
+!{{red{open questions 2/12}}}
+* what are the job's actual parameters?
+* how is prerequisite data passed?  &amp;rarr; maybe by an //invocation key?//
+
+!Input and closure
+each job gets only the bare minimum information required to trigger the execution: the really variable part of the node's invocation. The job uses this pieces of information to re-activate a pre-calculated closure, representing a wider scope of environment information. Yet the key point is for this wider scope information to be //quasi static.// It is shared by a whole [[segment|Segmentation]] of the timeline in question, and it will be used and re-used, possibly concurrently. From the render job's point of view, the engine framework just ensures the availability and accessibility of all this wider scope information.
+
+Prerequisite data for the media calculations can be considered just part of that static environment, as far as the node is concerned. Actually, this prerequisite data is dropped off by other nodes, and the engine framework and the builder ensure the availability of this data just in time.
+
+!observations
+* the job's scope represents a strictly local view
+* the job doesn't need to know about its output
+* the job doesn't need to know anything about the frame grid or frame number
+* all it needs to know is the ''effective nominal time'' and an ''invocation instance ID''
 </pre>
 </div>
 <div title="RenderMechanics" modifier="Ichthyostega" modified="201109172221" created="200806030230" tags="Rendering operational impl img" changecount="32">

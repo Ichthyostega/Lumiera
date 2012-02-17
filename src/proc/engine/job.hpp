@@ -29,6 +29,7 @@
 
 
 typedef void* LList; ////////////////////////////////////TODO
+typedef uint64_t InvocationInstanceID;  /////////////////TODO
 
 
 enum JobState
@@ -42,6 +43,36 @@ enum JobState
   };
 
 
+/** 
+ * closure representing the execution context of a job.
+ * The information reachable through this closure is specific
+ * for this kind of job, but static and typically shared among
+ * all jobs for a given feed and segment of the timeline
+ */ 
+struct lumiera_jobClosure { /* placeholder */ };
+typedef struct lumiera_jobClosure* LumieraJobClosure;
+
+
+/** 
+ * invocation parameter for the individual
+ * frame calculation job. Embedded into the job descriptor
+ * and passed to #lumiera_job_invoke when triggering
+ */
+struct lumiera_jobParameter_struct
+  {
+    InvocationInstanceID invoKey;
+    gavl_time_t nominalTime;
+    //////////////////////////////////////////////////////////////TODO: place a parameter value here, or make the instanceID globally unique?
+  };
+typedef struct lumiera_jobParameter_struct lumiera_jobParameter;
+typedef lumiera_jobParameter* LumieraJobParameter;
+
+
+/**
+ * descriptor record used by the scheduler to organise job invocation.
+ * The invocation parameter and job closure necessary to invoke this
+ * job as a function is embedded into this descriptor.
+ */
 struct lumiera_jobDescriptor_struct
   {
     gavl_time_t when;
@@ -53,10 +84,10 @@ struct lumiera_jobDescriptor_struct
   
     JobState jobstate;
   
-    void (*jobfn)();
-    void (*failfn)();
+    LumieraJobClosure jobClosure;
+    lumiera_jobParameter parameter;
   };
-typedef struct lumiera_JobDescriptor_struct lumiera_jobDescriptor;
+typedef struct lumiera_jobDescriptor_struct lumiera_jobDescriptor;
 typedef lumiera_jobDescriptor* LumieraJobDescriptor;
 
 
@@ -70,7 +101,6 @@ typedef lumiera_jobDescriptor* LumieraJobDescriptor;
 //#include "lib/time/timevalue.hpp"
 //#include "lib/time/timequant.hpp"
 
-#include <tr1/functional>
 
 
 namespace proc {
@@ -85,7 +115,7 @@ namespace engine {
   
   /**
    * Frame rendering task, represented as closure.
-   * This functor encodes all information necessary actually to
+   * This functor encodes all information necessary to actually
    * trigger and invoke the rendering operation. It will be embedded
    * into a job descriptor and then enqueued with the scheduler for
    * invocation just in time.
@@ -93,9 +123,11 @@ namespace engine {
    * @todo 1/12 WIP-WIP-WIP defining the invocation sequence and render jobs
    */
   class Job
+    : public lumiera_jobClosure
     {
       
     public:
+      //////////////////////////////TODO: value semantics or turn this into an interface?
       
       Job()
         {
@@ -103,6 +135,10 @@ namespace engine {
         }
       
       // using standard copy operations
+      
+      
+      void triggerJob (lumiera_jobParameter)  const;
+      void signalFailure (lumiera_jobParameter)  const;
       
       
       bool
@@ -123,7 +159,17 @@ extern "C" {
 #endif /* =========================== CL Interface ===================== */
 
 
-////////////////////////////////////TODO define a C binding for use by the scheduler
+/** trigger execution of a specific job,
+ *  assuming availability of all prerequisites */
+void lumiera_job_invoke  (LumieraJobClosure, lumiera_jobParameter);
+
+/** signal inability to invoke this job
+ * @todo decide what and how to communicate details of the failure
+ * @remarks the purpose of this function is to allow for reliable checkpoints
+ *          within the network of dependent jobs invocations, even after
+ *          missing deadlines or aborting a sequence of jobs */
+void lumiera_job_failure (LumieraJobClosure, lumiera_jobParameter);
+
 
 
 #ifdef __cplusplus
