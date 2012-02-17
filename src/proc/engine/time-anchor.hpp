@@ -26,6 +26,7 @@
 
 #include "proc/common.hpp"
 //#include "proc/state.hpp"
+#include "proc/mobject/model-port.hpp"
 #include "lib/time/timevalue.hpp"
 #include "proc/play/timings.hpp"
 
@@ -34,6 +35,7 @@
 namespace proc {
 namespace engine {
   
+  using mobject::ModelPort;
 //  using lib::time::TimeSpan;
 //  using lib::time::FSecs;
 //  using lib::time::Time;
@@ -67,7 +69,7 @@ namespace engine {
       // using default copy operations
       
       static TimeAnchor
-      build (play::Timings timings, uint64_t startFrame, uint channel)
+      build (play::Timings timings, uint64_t startFrame, ModelPort modelPort, uint channel)
         {
           UNIMPLEMENTED ("representation of the Time Anchor closure");
         }

@@ -117,8 +117,14 @@ namespace engine {
    * Frame rendering task, represented as closure.
    * This functor encodes all information necessary to actually
    * trigger and invoke the rendering operation. It will be embedded
-   * into a job descriptor and then enqueued with the scheduler for
-   * invocation just in time.
+   * by reference into a job descriptor and then enqueued with the scheduler
+   * for invocation just in time. The job interface exposes everything necessary
+   * to plan, handle, schedule and abort jobs. The implementation refers to the
+   * concrete "execution plan" encoded into the corresponding engine::JobTicket.
+   * The latter is embedded into the storage for segment of the low-level model
+   * and thus is shared for all frames and channels within this part of the
+   * timeline. Thus, the lumiera_jobParameter struct contains the "moving parts"
+   * changing for each individual job.
    * 
    * @todo 1/12 WIP-WIP-WIP defining the invocation sequence and render jobs
    */

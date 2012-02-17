@@ -56,7 +56,9 @@ namespace engine {
    * which figures out everything to be done for generating data from this node.
    * To turn a JobTicket into an actual job, we need the additional information
    * regarding the precise frame number (=nominal time) and the channel number
-   * to calculate (in case the actual feed is multichannel, which is the default). 
+   * to calculate (in case the actual feed is multichannel, which is the default).
+   * This way, the JobTicket acts as <i>higher order function:</i> a function
+   * generating on invocation another, specific function (= the job).
    * 
    * @todo 1/12 WIP-WIP-WIP defining the invocation sequence and render jobs
    */

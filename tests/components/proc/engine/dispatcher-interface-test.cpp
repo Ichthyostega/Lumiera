@@ -119,7 +119,7 @@ namespace test  {
       
       
       /** @test perform the basic dispatch step
-       * and verify the generated frame coordinates
+       *  and verify the generated frame coordinates
        */
       void
       verify_basicDispatch()
@@ -130,17 +130,26 @@ namespace test  {
           uint startFrame(10);
           uint channel(0);
           
-          TimeAnchor refPoint = TimeAnchor::build (timings, startFrame, channel);
+          TimeAnchor refPoint = TimeAnchor::build (timings, startFrame, modelPort, channel);
           CHECK (refPoint == Time::ZERO + Duration(10, FrameRate::PAL));
           
           FrameCoord coordinates = dispatcher.locateFrameNext (15);
           CHECK (coordinates.absoluteNominalTime == Time(0,1));
           CHECK (coordinates.absoluteFrameNumber == 25);
           CHECK (coordinates.remainingRealTime() >= Time(FSecs(24,25)));
+          CHECK (coordinates.modelPort == modelPort);
+          CHECK (coordinates.channelNr == channel);
           
-          JobTicket& executionPlan = dispatcher.accessJobTicket (coordinates, modelPort);
+          JobTicket& executionPlan = dispatcher.accessJobTicket (coordinates);
           CHECK (executionPlan.isValid());
+          
 #if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #880
+          JobTicket::JobsPlanning jobs = executionPlan.createJobsFor (coordinates);
+          CHECK (!isnil (jobs));
+          
+          Job headJob = *jobs;
+          CHECK (headJob.getNominalTime() == coordinates.absoluteNominalTime);
+          CHECK (0 < headJob.getInvocationInstanceID());
 #endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #880
         }
       

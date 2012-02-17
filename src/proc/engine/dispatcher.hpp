@@ -26,7 +26,6 @@
 
 #include "proc/common.hpp"
 //#include "proc/state.hpp"
-#include "proc/mobject/model-port.hpp"
 #include "proc/engine/time-anchor.hpp"
 #include "proc/engine/frame-coord.hpp"
 #include "proc/engine/job-ticket.hpp"
@@ -58,7 +57,7 @@ namespace engine {
       
       virtual FrameCoord locateFrameNext (uint frameCountOffset)   =0;
       
-      JobTicket& accessJobTicket (FrameCoord const&, mobject::ModelPort const&);
+      JobTicket& accessJobTicket (FrameCoord const&);
       
     };
   

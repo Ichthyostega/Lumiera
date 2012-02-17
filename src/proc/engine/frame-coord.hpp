@@ -26,6 +26,7 @@
 
 #include "proc/common.hpp"
 //#include "proc/state.hpp"
+#include "proc/mobject/model-port.hpp"
 #include "lib/time/timevalue.hpp"
 #include "lib/time/timequant.hpp"
 
@@ -34,6 +35,7 @@
 namespace proc {
 namespace engine {
   
+  using mobject::ModelPort;
 //using lib::time::TimeSpan;
   using lib::time::Duration;
 //using lib::time::FSecs;
@@ -61,6 +63,10 @@ namespace engine {
     public:
       Time absoluteNominalTime;
       int64_t absoluteFrameNumber;
+      
+      ModelPort modelPort;
+      uint      channelNr;
+      
       
       FrameCoord()
         {
