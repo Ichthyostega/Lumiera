@@ -1664,8 +1664,15 @@ This is an very important external Interface, because it links together all thre
 * completely hide the Session object behind a ''~PImpl'' smart pointer, so the session object can be switched when reloading.
 * the [[Fixture]] acts as isolation layer, and all objects refered from the Fixture are refcounting smart pointers. So, even when the session gets switched, the old objects remain valid as long as needed.</pre>
 </div>
-<div title="DataFrame" modifier="Ichthyostega" created="200909291346" tags="def spec" changecount="1">
-<pre>A ''frame of data'' is the central low-level abstraction when dealing with media data and media processing.</pre>
+<div title="DataFrame" modifier="Ichthyostega" modified="201202181635" created="200909291346" tags="def" changecount="2">
+<pre>A ''frame of data'' is the central low-level abstraction when dealing with media data and media processing.
+
+Deliberately we avoid relying on any special knowledge regarding such data frames, beyond the fact
+* that a frame resides within a ''memory buffer'' &amp;rarr; [[buffer provider abstraction|BufferProvider]]
+* that the frame has a ''frame number'', which can be related to a ''time span'' &amp;rarr; [[time quantisation framework|TimeQuant]]
+* that the frame belongs to an abstract media stream, which can be described through our &amp;rarr; [[stream type system|StreamType]]
+* and that some external ''media handling library'' knows to deal with the data in this frame
+</pre>
 </div>
 <div title="DefaultTiddlers" modifier="Ichthyostega" modified="200802031805" created="200706172308" changecount="6">
 <pre>[[ProcLayer and Engine]]
@@ -1701,13 +1708,13 @@ As we don't have a Prolog interpreter on board yet, we utilize a mock store with
 {{{default(Obj)}}} is a predicate expressing that the object {{{Obj}}} can be considered the default setup under the given conditions. Using the //default// can be considered as a shortcut for actually finding an exact and unique solution. The latter would require to specify all sorts of detailed properties up to the point where only one single object can satisfy all conditions. On the other hand, leaving some properties unspecified would yield a set of solutions (and the user code issuing the query had to provide means for selecting one solution from this set). Just falling back on the //default// means that the user code actually doesn't care for any additional properties (as long as the properties he //does// care for are satisfied). Nothing is said specifically on //how//&amp;nbsp; this default gets configured; actually there can be rules //somewhere,// and, additionally, anything encountered once while asking for a default can be re-used as default under similar circumstances.
 &amp;rarr; [[implementing defaults|DefaultsImplementation]]</pre>
 </div>
-<div title="DesignDecisions" modifier="Ichthyostega" modified="201011210034" created="200801062209" tags="decision design discuss Concepts" changecount="33">
+<div title="DesignDecisions" modifier="Ichthyostega" modified="201202181641" created="200801062209" tags="decision design discuss Concepts" changecount="37">
 <pre>Along the way of working out various [[implementation details|ImplementationDetails]], decisions need to be made on how to understand the different facilities and entities and how to tackle some of the problems. This page is mainly a collection of keywords, summaries and links to further the discussion. And the various decisions should allways be read as proposals to solve some problem at hand...
 
 ''Everything is an object'' &amp;mdash; yes of course, that's a //no-brainer,// todays. Rather, important is to note what is not &quot;an object&quot;, meaning it can't be arranged arbitrarily
 * we have one and only one global [[Session]] which directly contains a collection of multiple [[Timelines|Timeline]] and is associated with a globally managed collection of [[assets|Asset]]. We don't utilise scoped variables here (no &quot;mandantisation&quot;); if  a media has been //opened,// it is just plain //globally known//&amp;nbsp; as asset.
 * the [[knowledge base|ConfigRules]] is just available globally. Obviously, the session gets a chance to install rules into this knowledge base, but we don't stress ownership here.
-* we have a [[Fixture]] which acts as isolation layer towards the render engine and is (re)built automatically.
+* we create an unique [[Fixture]] which acts as isolation layer towards the render engine and is (re)built automatically.
 The high-level view of the tangible entities within the session is unified into a ''single tree'' -- with the notable exception of [[external outputs|OutputManagement]] and the [[assets|Asset]], which are understood as representing a //bookkeeping view// and kept separate from the //things to be manipulated// (MObjects).
 
 We ''separate'' processing (rendering) and configuration (building). The [[Builder]] creates a network of [[render nodes|ProcNode]], to be processed by //pulling data // from some [[Pipe]]
@@ -1715,14 +1722,14 @@ We ''separate'' processing (rendering) and configuration (building). The [[Build
 ''Objects are [[placed|Placement]] rather'' than assembled, connected, wired, attached. This is more of a rule-based approach and gives us one central metaphor and abstraction, allowing us to treat everything in an uniform manner. You can place it as you like, and the builder tries to make sense out of it, silently disabling what doesn't make sense.
 An [[Sequence]] is just a collection of configured and placed objects (and has no additional, fixed structure). [[Tracks|Track]] form a mere organisational grid, they are grouping devices not first-class entities (a track doesn't &quot;have&quot; a pipe or &quot;is&quot; a video track and the like; it can be configured to behave in such manner by using placements though). [[Pipes|Pipe]] are hooks for making connections and are the only facility to build processing chains. We have global pipes, and each clip is built around a lokal [[source port|ClipSourcePort]] &amp;mdash; and that's all. No special &quot;media viewer&quot; and &quot;arranger&quot;, no special role for media sources, no commitment to some fixed media stream types (video and audio). All of this is sort of pushed down to be configuration, represented as asset of some kind. For example, we have [[processing pattern|ProcPatt]] assets to represent the way of building the source network for reading from some media file (including codecs treated like effect plugin nodes)
 
-Actual ''media data and handling'' is abstracted rigorously. Media is conceived as being stream-like data of distinct StreamType. When it comes to more low-level media handling, we build on the DataFrame abstraction. Media processing isn't the focus of Lumiera; we organise the processing but otherwise ''rely on media handling libraries.'' In a similar vein, multiplicity is understood as type variation. Consequently, we don't build an audio and video &quot;section&quot; and we don't even have audio tracks and video tracks. Lumiera uses tracks and clips, and clips build on media, but we're able to deal with multichannel mixed-typed media.
+Actual ''media data and handling'' is abstracted rigorously. Media is conceived as being stream-like data of distinct StreamType. When it comes to more low-level media handling, we build on the DataFrame abstraction. Media processing isn't the focus of Lumiera; we organise the processing but otherwise ''rely on media handling libraries.'' In a similar vein, multiplicity is understood as type variation. Consequently, we don't build an audio and video &quot;section&quot; and we don't even have audio tracks and video tracks. Lumiera uses tracks and clips, and clips build on media, but we're able to deal with [[multichannel|MultichannelMedia]] mixed-typed media natively.
 
-Lumiera is not a connection manager, it is not an audio-visual real time instrument, and it doesn't aim at running presentations. It's an ''environment for assembling and building up'' something (an edit, a session, a piece of media work). This decision is visible at various levels and contexts, like a reserved attitude towards hardware acceleration (it //will// be supported, but reliable proxy editing has a higher priority), or the decision, not to incorporate system level ports and connections directly into the session model (they are mapped to [[output designations|OutputDesignation]] rather)
+Lumiera is not a connection manager, it is not an audio-visual real time performance instrument, and it doesn't aim at running presentations. It's an ''environment for assembling and building up'' something (an edit, a session, a piece of media work). This decision is visible at various levels and contexts, like a reserved attitude towards hardware acceleration (it //will// be supported, but reliable proxy editing has a higher priority), or the decision, not to incorporate system level ports and connections directly into the session model (they are mapped to [[output designations|OutputDesignation]] rather)
 
 ''State'' is rigorously ''externalized'' and operations are to be ''scheduled'', to simplify locking and error handling. State is either treated similar to media stream data (as addressable and cacheable data frame), or is represented as &quot;parameter&quot; to be served by some [[parameter provider|ParamProvider]]. Consequently, [[Automation]] is just another kind of parameter, i.e. a function &amp;mdash; how this function is calculated is an encapsulated implementation detail (we don't have &quot;bezier automation&quot;, and then maybe a &quot;linear automation&quot;, a &quot;mask automation&quot; and yet another way to handle transitions)
 
 Deliberately there is an limitaion on the flexibility of what can be added to the system via Plugins. We allow configuration and parametrisation to be extended and we allow processing and data handling to be extended, but we disallow extensions to the fundamental structure of the system by plugins. They may provide new implementations for already known subsystems, but they can't introduce new subsystems not envisioned in the general design of the application.
-* thus fixed assortments include: the possbile kinds of MObject and [[Asset]], the possible automation parameter data types, the supported kinds of plugin systems
+* these fixed assortments include: the possbile kinds of MObject and [[Asset]], the possible automation parameter data types, the supported kinds of plugin systems
 * while plugins may extend: the supported kinds of media, the [[media handling libraries|MediaImplLib]] used to deal with those media, the session storage backends, the behaviour of placments
 </pre>
 </div>
@@ -2379,7 +2386,7 @@ Besides routing to a global pipe, wiring plugs can also connect to the source po
 Finally, this example shows an ''automation'' data set controlling some parameter of an effect contained in one of the global pipes. From the effect's POV, the automation is simply a ParamProvider, i.e a function yielding a scalar value over time. The automation data set may be implemented as a bézier curve, or by a mathematical function (e.g. sine or fractal pseudo random) or by some captured and interpolated data values. Interestingly, in this example the automation data set has been placed relatively to the meta clip (albeit on another track), thus it will follow and adjust when the latter is moved.
 </pre>
 </div>
-<div title="ImplementationDetails" modifier="Ichthyostega" modified="201101100256" created="200708080322" tags="overview" changecount="42">
+<div title="ImplementationDetails" modifier="Ichthyostega" modified="201202181658" created="200708080322" tags="overview" changecount="44">
 <pre>This wiki page is the entry point to detail notes covering some technical decisions, details and problems encountered in the course of the implementation of the Lumiera Renderengine, the Builder and the related parts.
 
 * [[Packages, Interfaces and Namespaces|InterfaceNamespaces]]
@@ -2412,7 +2419,7 @@ Finally, this example shows an ''automation'' data set controlling some paramete
 * detail considerations regarding [[time and time quantisation|TimeQuant]]
 * [[Timecode]] -- especially the link of [[TC formats and quantisation|TimecodeFormat]]
 * designing how to [[build|BuildFixture]] the [[Fixture]] (...{{red{WIP}}}...)
-
+* from [[play process|PlayProcess]] to [[frame dispatching|FrameDispatcher]] and [[node invocation|NodeInvocation]]
 </pre>
 </div>
 <div title="ImplementationGuidelines" modifier="Ichthyostega" modified="201111261555" created="200711210531" tags="Concepts design discuss" changecount="19">
@@ -4653,8 +4660,8 @@ Besides, they provide an __inward interface__ for the [[ProcNode]]s, enabling th
 
 </pre>
 </div>
-<div title="ProcLayer and Engine" modifier="Ichthyostega" modified="201101060814" created="200706190056" tags="overview" changecount="85">
-<pre>The Render Engine is the part of the application doing the actual video calculations. Utilising system level services and retrieving raw audio and video data through [[Lumiera's Backend|backend.html]], its operations are guided by the objects and parameters edited by the user in [[the session|Session]]. The middle layer of the Lumiera architecture, known as the Proc-Layer, spans the area between these two exteremes, providing the the (abstract) edit operations available to the user, the representation of [[&quot;editable things&quot;|MObjects]] and the translation of those into structures and facilities allowing to [[drive the rendering|Rendering]].
+<div title="ProcLayer and Engine" modifier="Ichthyostega" modified="201202181622" created="200706190056" tags="overview" changecount="87">
+<pre>The Render Engine is the part of the application doing the actual video calculations. Relying on system level services and retrieving raw audio and video data through [[Lumiera's Backend|Backend]], its operations are guided by the objects and parameters edited by the user in [[the session|Session]]. The middle layer of the Lumiera architecture, known as the Proc-Layer, spans the area between these two exteremes, providing the the (abstract) edit operations available to the user, the representation of [[&quot;editable things&quot;|MObjects]] and the translation of those into structures and facilities allowing to [[drive the rendering|Rendering]].
 
 !About this wiki page
 |background-color:#E3F3F1;width:96ex;padding:2ex; This TiddlyWiki is the central location for design, planning and documentation of the Lumiera Proc-Layer. Some parts are used as //extended brain// &amp;mdash; collecting ideas, considerations and conclusions &amp;mdash; while other tiddlers contain the decisions and document the planned or implemented facilities. The intention is to move over the more mature parts into the emerging technical documentation section on the [[Lumiera website|http://www.lumiera.org]] eventually. &lt;br/&gt;&lt;br/&gt;Besides cross-references, content is largely organised through [[Tags|TabTags]], most notably &lt;br/&gt;&lt;&lt;tag overview&gt;&gt; &amp;middot; &lt;&lt;tag def&gt;&gt; &amp;middot; &lt;&lt;tag decision&gt;&gt; &amp;middot; &lt;&lt;tag Concepts&gt;&gt; &lt;br/&gt; &lt;&lt;tag Model&gt;&gt; &amp;middot; &lt;&lt;tag SessionLogic&gt;&gt; &amp;middot; &lt;&lt;tag GuiIntegration&gt;&gt; &amp;middot; &lt;&lt;tag Builder&gt;&gt; &amp;middot; &lt;&lt;tag Rendering&gt;&gt; &amp;middot; &lt;&lt;tag Player&gt;&gt; &amp;middot; &lt;&lt;tag Rules&gt;&gt; &amp;middot; &lt;&lt;tag Types&gt;&gt; |
