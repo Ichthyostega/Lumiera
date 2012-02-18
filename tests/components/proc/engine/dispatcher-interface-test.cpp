@@ -143,13 +143,13 @@ namespace test  {
           JobTicket& executionPlan = dispatcher.accessJobTicket (coordinates);
           CHECK (executionPlan.isValid());
           
-#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #880
           JobTicket::JobsPlanning jobs = executionPlan.createJobsFor (coordinates);
           CHECK (!isnil (jobs));
           
           Job headJob = *jobs;
           CHECK (headJob.getNominalTime() == coordinates.absoluteNominalTime);
           CHECK (0 < headJob.getInvocationInstanceID());
+#if false /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #880
 #endif    /////////////////////////////////////////////////////////////////////////////////////////////////////////////UNIMPLEMENTED :: TICKET #880
         }
       

@@ -26,8 +26,11 @@
 
 #include "proc/common.hpp"
 //#include "proc/state.hpp"
+#include "proc/engine/job.hpp"
+#include "proc/engine/frame-coord.hpp"
 //#include "lib/time/timevalue.hpp"
 //#include "lib/time/timequant.hpp"
+#include "lib/iter-source.hpp"
 
 #include <boost/noncopyable.hpp>
 
@@ -67,12 +70,19 @@ namespace engine {
     {
       
     public:
+       typedef lib::IterSource<Job>::iterator  JobsPlanning;
       
       JobTicket()
         {
           UNIMPLEMENTED ("job representation, planning and scheduling");
         }
       
+      
+      JobsPlanning
+      createJobsFor (FrameCoord coordinates)
+        {
+          UNIMPLEMENTED ("job planning and generation")
+        }
       
       bool
       isValid()  const

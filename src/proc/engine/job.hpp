@@ -62,7 +62,7 @@ struct lumiera_jobParameter_struct
   {
     InvocationInstanceID invoKey;
     gavl_time_t nominalTime;
-    //////////////////////////////////////////////////////////////TODO: place a parameter value here, or make the instanceID globally unique?
+    //////////////////////////////////////////////////////////////TODO: place an additional parameter value here, or make the instanceID globally unique?
   };
 typedef struct lumiera_jobParameter_struct lumiera_jobParameter;
 typedef lumiera_jobParameter* LumieraJobParameter;
@@ -98,7 +98,7 @@ typedef lumiera_jobDescriptor* LumieraJobDescriptor;
 
 #include "proc/common.hpp"
 //#include "proc/state.hpp"
-//#include "lib/time/timevalue.hpp"
+#include "lib/time/timevalue.hpp"
 //#include "lib/time/timequant.hpp"
 
 
@@ -109,7 +109,7 @@ namespace engine {
 //using lib::time::TimeSpan;
 //using lib::time::Duration;
 //using lib::time::FSecs;
-//using lib::time::Time;
+using lib::time::Time;
 //  
 //class ExitNode;
   
@@ -146,6 +146,18 @@ namespace engine {
       void triggerJob (lumiera_jobParameter)  const;
       void signalFailure (lumiera_jobParameter)  const;
       
+      
+      Time
+      getNominalTime()  const
+        {
+          UNIMPLEMENTED ("job representation, planning and scheduling");
+        }
+      
+      InvocationInstanceID
+      getInvocationInstanceID()  const
+        {
+          UNIMPLEMENTED ("job representation, planning and scheduling");
+        }
       
       bool
       isValid()  const
