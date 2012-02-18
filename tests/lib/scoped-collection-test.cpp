@@ -78,7 +78,7 @@ namespace test{
     inline uint
     sum (uint n)
     {
-      return n*(n+1) / 2; 
+      return n*(n+1) / 2;
     }
       
   }//(End) subversive test data
@@ -89,7 +89,7 @@ namespace test{
   using util::isnil;
   using lumiera::error::LUMIERA_ERROR_ITER_EXHAUST;
   
-  typedef ScopedCollection<Dummy> CollD;
+  typedef ScopedCollection<Dummy, sizeof(SubDummy)> CollD;
   
   
   /********************************************************************

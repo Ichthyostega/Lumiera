@@ -132,12 +132,14 @@ namespace lib {
           
           
           
-#define TYPE_SANITY_CHECK \
-              BOOST_STATIC_ASSERT ((boost::is_base_of<I,TY>::value || boost::is_same<I,TY>::value))
+#define TYPE_AND_STORAGE_SANITY_CHECK \
+              BOOST_STATIC_ASSERT (((boost::is_same<I,TY>::value   \
+                                   ||boost::is_base_of<I,TY>::value)\
+                                   && sizeof(TY) <= siz))
           
           /** Abbreviation for placement new */
 #define EMBEDDED_ELEMENT_CTOR(_CTOR_CALL_)    \
-              TYPE_SANITY_CHECK;               \
+              TYPE_AND_STORAGE_SANITY_CHECK;   \
               return *new(&buf_) _CTOR_CALL_;   \
           
           
@@ -205,8 +207,8 @@ namespace lib {
             {
               EMBEDDED_ELEMENT_CTOR ( TY(a1,a2,a3,a4,a5) )
             }
+#undef TYPE_AND_STORAGE_SANITY_CHECK
 #undef EMBEDDED_ELEMENT_CTOR
-#undef TYPE_SANITY_CHECK
         };
       
       
