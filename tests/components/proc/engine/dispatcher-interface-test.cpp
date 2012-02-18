@@ -32,11 +32,13 @@
 #include "lib/time/timevalue.hpp"
 #include "lib/time/timequant.hpp"
 #include "lib/singleton.hpp"
+#include "lib/util.hpp"
 
 //#include <boost/scoped_ptr.hpp>
 //#include <iostream>
 
 using test::Test;
+using util::isnil;
 //using std::cout;
 //using std::rand;
 

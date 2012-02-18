@@ -45,6 +45,27 @@ namespace engine {
 //  
 //class ExitNode;
   
+  /** 
+   * a job closure represents the execution context of a job.
+   * This allows us to enqueue simple job-"functions" with the scheduler.
+   * By virtue of the JobClosure-pointer, embedded into #lumiera_jobDefinition,
+   * the invocation of such a job may re-gain the full context, including the
+   * actual ProcNode to pull and further specifics, like the media channel.
+   */ 
+  class JobClosure
+    : public lumiera_jobClosure
+    {
+    public:
+      
+      bool
+      verify (Time nominalJobTime)  const
+        {
+          UNIMPLEMENTED ("access the underlying JobTicket and verify the given job time is within the relevant timeline segment");
+          return false;
+        }
+    };
+  
+  
   /**
    * execution plan for pulling a specific exit node.
    * Usable as blue print for generating actual render jobs.
@@ -81,7 +102,7 @@ namespace engine {
       JobsPlanning
       createJobsFor (FrameCoord coordinates)
         {
-          UNIMPLEMENTED ("job planning and generation")
+          UNIMPLEMENTED ("job planning and generation");
         }
       
       bool

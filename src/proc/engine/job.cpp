@@ -21,6 +21,18 @@
 * *****************************************************/
 
 
+/** @file job.cpp 
+ ** Implementation of render job invocation.
+ ** Within this translation unit, the actual invocation of a frame rendering
+ ** job takes place, after reconstruction of the job's execution environment (closure).
+ ** 
+ ** @see JobTicket
+ ** @see ProcNode
+ ** @see nodeinvocation.hpp
+ **
+ */
+
+
 #include "proc/engine/job.hpp"
 #include "proc/engine/job-ticket.hpp"
 
@@ -29,7 +41,14 @@ namespace proc {
 namespace engine {
   
   namespace { // Details...
-
+    
+    inline JobClosure&
+    myClosure (const Job * const self)
+    {
+      ASSERT (self);
+      ASSERT (self->jobClosure);
+      return *static_cast<JobClosure*> (self->jobClosure);
+    }
     
   } // (END) Details...
   
@@ -41,18 +60,31 @@ namespace engine {
   /** @todo WIP-WIP 2/12  
    */
   void
-  Job::triggerJob (lumiera_jobParameter param)  const
+  Job::triggerJob ()  const
   {
     UNIMPLEMENTED ("how to access the JobTicket and build the RenderInvocation");
   }
   
   
   void
-  Job::signalFailure (lumiera_jobParameter)  const
+  Job::signalFailure ()  const
   {
     UNIMPLEMENTED ("how to organise job failure and abortion");
   }
-
+  
+  
+  /** Render Job self verification.
+   *  performs a parameter consistency check
+   *  including a call-back to the defining JobTicket
+   */
+  bool
+  Job::isValid()  const
+  {
+    return this->jobClosure
+        && this->parameter.invoKey > 0
+        && myClosure(this).verify (getNominalTime());
+         ;
+  }
   
   
 }} // namespace proc::engine
@@ -61,30 +93,28 @@ namespace {
   using proc::engine::Job;
     
   inline Job& 
-  forwardInvocation (LumieraJobClosure jobFunctor)
+  forwardInvocation (lumiera_jobDefinition& jobDef)
   {
-    Job* job = static_cast<Job*> (jobFunctor);
+    Job& job = static_cast<Job&> (jobDef);
     
-    REQUIRE (job);
-    REQUIRE (job->isValid());
-    return *job;
+    REQUIRE (job.isValid());
+    return job;
   }
 }
+
 
 
 extern "C" { /* ==== implementation C interface for job invocation ======= */
   
 void
-lumiera_job_invoke  (LumieraJobClosure jobFunctor, lumiera_jobParameter param)
+lumiera_job_invoke  (lumiera_jobDefinition jobDef)
 {
-  forwardInvocation(jobFunctor).triggerJob (param);
+  forwardInvocation(jobDef).triggerJob();
 }
 
 void
-lumiera_job_failure (LumieraJobClosure jobFunctor, lumiera_jobParameter param)
+lumiera_job_failure (lumiera_jobDefinition jobDef)
 {
-  forwardInvocation(jobFunctor).signalFailure (param);
+  forwardInvocation(jobDef).signalFailure();
 }
-  
-  
 }

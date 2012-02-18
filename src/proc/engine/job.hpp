@@ -68,24 +68,37 @@ typedef struct lumiera_jobParameter_struct lumiera_jobParameter;
 typedef lumiera_jobParameter* LumieraJobParameter;
 
 
+/** complete definition of an individual job */
+struct lumiera_jobDefinition_struct
+  {
+    LumieraJobClosure jobClosure;
+    lumiera_jobParameter parameter;
+  };
+typedef struct lumiera_jobDefinition_struct lumiera_jobDefinition;
+
+
 /**
  * descriptor record used by the scheduler to organise job invocation.
- * The invocation parameter and job closure necessary to invoke this
- * job as a function is embedded into this descriptor.
+ * The actual job's definition, i.e. the invocation parameter and
+ * the closure necessary to invoke the job as a function
+ * is embedded (by value) into this descriptor.
+ * 
+ * @note while this descriptor as such is self-contained,
+ *       the referred LumieraJobClosure needs to be allocated
+ *       and managed separately. Indeed, this closure happens
+ *       to live within the segment data, as part of the JobTicket.
  */
 struct lumiera_jobDescriptor_struct
   {
     gavl_time_t when;
+    JobState jobState;
+    
+    lumiera_jobDefinition jobDefinition;
     
     /* == Job prerequisites == */
     LList waiting;
     LList failed;
     LList completed;
-  
-    JobState jobstate;
-  
-    LumieraJobClosure jobClosure;
-    lumiera_jobParameter parameter;
   };
 typedef struct lumiera_jobDescriptor_struct lumiera_jobDescriptor;
 typedef lumiera_jobDescriptor* LumieraJobDescriptor;
@@ -109,61 +122,57 @@ namespace engine {
 //using lib::time::TimeSpan;
 //using lib::time::Duration;
 //using lib::time::FSecs;
+using lib::time::TimeValue;
 using lib::time::Time;
 //  
 //class ExitNode;
   
   /**
    * Frame rendering task, represented as closure.
-   * This functor encodes all information necessary to actually
-   * trigger and invoke the rendering operation. It will be embedded
-   * by reference into a job descriptor and then enqueued with the scheduler
+   * This functor encodes all information necessary to trigger
+   * and invoke the actual rendering operation. It will be embedded
+   * by value into a job descriptor and then enqueued with the scheduler
    * for invocation just in time. The job interface exposes everything necessary
    * to plan, handle, schedule and abort jobs. The implementation refers to the
    * concrete "execution plan" encoded into the corresponding engine::JobTicket.
-   * The latter is embedded into the storage for segment of the low-level model
-   * and thus is shared for all frames and channels within this part of the
-   * timeline. Thus, the lumiera_jobParameter struct contains the "moving parts"
-   * changing for each individual job.
+   * The latter is embedded into the storage for one segment of the low-level model
+   * and thus is shared for all frames and channels within this part of the timeline.
+   * Thus, the lumiera_jobParameter struct contains the "moving parts"
+   * different for each \em individual job.
    * 
-   * @todo 1/12 WIP-WIP-WIP defining the invocation sequence and render jobs
+   * @todo 2/12 WIP-WIP-WIP defining the invocation sequence and render jobs
    */
   class Job
-    : public lumiera_jobClosure
+    : public lumiera_jobDefinition
     {
       
     public:
-      //////////////////////////////TODO: value semantics or turn this into an interface?
       
       Job()
         {
-          UNIMPLEMENTED ("job representation, planning and scheduling");
+          UNIMPLEMENTED ("job creation, planning and scheduling");
         }
       
       // using standard copy operations
       
       
-      void triggerJob (lumiera_jobParameter)  const;
-      void signalFailure (lumiera_jobParameter)  const;
+      void triggerJob()    const;
+      void signalFailure() const;
       
       
       Time
       getNominalTime()  const
         {
-          UNIMPLEMENTED ("job representation, planning and scheduling");
+          return Time (TimeValue(parameter.nominalTime));
         }
       
       InvocationInstanceID
       getInvocationInstanceID()  const
         {
-          UNIMPLEMENTED ("job representation, planning and scheduling");
+          return this->parameter.invoKey;
         }
       
-      bool
-      isValid()  const
-        {
-          UNIMPLEMENTED ("validity self check");
-        }
+      bool isValid()  const;
     };
   
   
@@ -179,14 +188,14 @@ extern "C" {
 
 /** trigger execution of a specific job,
  *  assuming availability of all prerequisites */
-void lumiera_job_invoke  (LumieraJobClosure, lumiera_jobParameter);
+void lumiera_job_invoke  (lumiera_jobDefinition);
 
 /** signal inability to invoke this job
  * @todo decide what and how to communicate details of the failure
  * @remarks the purpose of this function is to allow for reliable checkpoints
  *          within the network of dependent jobs invocations, even after
  *          missing deadlines or aborting a sequence of jobs */
-void lumiera_job_failure (LumieraJobClosure, lumiera_jobParameter);
+void lumiera_job_failure (lumiera_jobDefinition);
 
 
 
