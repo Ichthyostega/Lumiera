@@ -71,7 +71,7 @@ namespace test  {
         /* == mock Dispatcher implementation == */
         
         FrameCoord
-        locateFrameNext (uint frameCountOffset)
+        locateFrameNext (uint frameCountOffset, TimeAnchor refPoint)
           {
             UNIMPLEMENTED ("dummy implementation of the core dispatch operation");
           }
@@ -132,10 +132,11 @@ namespace test  {
           uint startFrame(10);
           uint channel(0);
           
-          TimeAnchor refPoint = TimeAnchor::build (timings, startFrame, modelPort, channel);
+          TimeAnchor refPoint = TimeAnchor::build (timings, startFrame);
           CHECK (refPoint == Time::ZERO + Duration(10, FrameRate::PAL));
           
-          FrameCoord coordinates = dispatcher.locateFrameNext (15);
+          FrameCoord coordinates = dispatcher.onCalcStream (modelPort,channel)
+                                             .relativeFrameLocation (refPoint, 15);
           CHECK (coordinates.absoluteNominalTime == Time(0,1));
           CHECK (coordinates.absoluteFrameNumber == 25);
           CHECK (coordinates.remainingRealTime() >= Time(FSecs(24,25)));

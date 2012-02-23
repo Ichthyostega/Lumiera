@@ -26,6 +26,7 @@
 
 #include "proc/common.hpp"
 //#include "proc/state.hpp"
+#include "proc/mobject/model-port.hpp"
 #include "proc/engine/time-anchor.hpp"
 #include "proc/engine/frame-coord.hpp"
 #include "proc/engine/job-ticket.hpp"
@@ -38,6 +39,7 @@
 namespace proc {
 namespace engine {
   
+  using mobject::ModelPort;
   using lib::time::TimeSpan;
   using lib::time::FSecs;
   using lib::time::Time;
@@ -50,12 +52,21 @@ namespace engine {
   class Dispatcher
     : boost::noncopyable
     {
+      struct CoordBuilder
+        {
+          Dispatcher& dispatcher_;
+          ModelPort modelPort_;
+          uint channel_;
+          
+          FrameCoord relativeFrameLocation (TimeAnchor refPoint, uint frameCountOffset);    
+        };
       
     public:
       virtual ~Dispatcher();  ///< this is an interface
       
+      CoordBuilder onCalcStream (ModelPort modelPort, uint channel);
       
-      virtual FrameCoord locateFrameNext (uint frameCountOffset)   =0;
+      virtual FrameCoord locateFrameNext (uint frameCountOffset, TimeAnchor refPoint)   =0;
       
       JobTicket& accessJobTicket (FrameCoord const&);
       
