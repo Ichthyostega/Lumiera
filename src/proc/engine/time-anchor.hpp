@@ -29,12 +29,15 @@
 #include "lib/time/timevalue.hpp"
 #include "proc/play/timings.hpp"
 
+#include <boost/rational.hpp>
+
 
 
 namespace proc {
 namespace engine {
   
 //  using lib::time::TimeSpan;
+  using lib::time::Offset;
 //  using lib::time::FSecs;
   using lib::time::Time;
 //  
@@ -54,26 +57,63 @@ namespace engine {
    * wall-clock time forming the deadline for rendering.
    * 
    * @todo 1/12 WIP-WIP-WIP just emerging as a concept
+   *          /////////////////////////////////////////////////////////////////TODO: WIP needs to act as proxy for the grid, using the Timings
    */
   class TimeAnchor
     {
-      ///////////////////////////TODO need some kind of scale or grid here
+      play::Timings timings_;
       uint64_t anchorPoint_;
       Time relatedRealTime_;
       
-      TimeAnchor()
+      Time
+      expectedTimeofArival (play::Timings timings, Offset engineLatency)
         {
-          UNIMPLEMENTED ("anything regarding the Engine backbone");
+          TimeVar deadline;
+          switch (timings.playbackUrgency)
+            {
+            case play::ASAP:
+            case play::NICE:
+              deadline = RealClock::now() + engineLatency;
+              break;
+            
+            case play::TIMEBOUND:
+              deadline = timings.getTimeDue() - engineLatency; 
+              break;
+            }
+          return deadline - timings.getOutputLatency();
         }
+      
+      
+      TimeAnchor (play::Timings timings, Offset engineLatency, uint64_t startFrame)
+        : timings_(timings)
+        , anchorPoint(startFrame)
+        , relatedRealTime_(expectedTimeofArival(timings, engineLatency))
+        { }
       
     public:
       // using default copy operations
       
+      
+      /** create a TimeAnchor for playback/rendering start
+       *  at the given startFrame. Since no information is given
+       *  regarding the reaction latency required to get the engine
+       *  to deliver at a given time, this "engine latency" is guessed
+       *  to be 1/3 of the frame duration.
+       * @note using this function in case of "background" rendering
+       *       doesn't make much sense; you should indeed retrieve the
+       *       start delay from internals of the engine in this case.
+       */
       static TimeAnchor
       build (play::Timings timings, uint64_t startFrame)
         {
-          UNIMPLEMENTED ("representation of the Time Anchor closure");
+          const boost::rational<uint> DEFAULT_LATENCY_FACTOR (1,3);
+          Offset startDelay = timings.getFrameDurationAt(startFrame) * DEFAULT_LATENCY_FACTOR;
+          
+          return TimeAnchor (timings,startDelay,startFrame);
         }
+      
+      //////////////////////////////////////////////////////////////////////////////////////////TODO: second builder function, relying on Engine timings
+      
       
       operator lib::time::TimeValue()  const
         {

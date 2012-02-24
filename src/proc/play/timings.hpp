@@ -90,6 +90,7 @@ namespace play {
    * @note copyable value class
    * 
    * @todo write type comment
+   *          /////////////////////////////////////////////////////////////////TODO: WIP seems to become some kind of abstracted Grid representation!
    */
   class Timings
     {
