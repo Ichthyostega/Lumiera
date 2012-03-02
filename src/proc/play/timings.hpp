@@ -69,6 +69,7 @@ namespace play {
   using lib::time::TimeValue;
   using lib::time::Duration;
   using lib::time::Offset;
+  using lib::time::Time;
 //using std::string;
 
 //using std::vector;
@@ -98,6 +99,7 @@ namespace play {
       
     public:
       PlaybackUrgency playbackUrgency;
+      Duration outputLatency;
       
       Timings (FrameRate fps);
       
@@ -107,6 +109,7 @@ namespace play {
       
       Offset   getFrameOffsetAt   (TimeValue refPoint)  const;
       Duration getFrameDurationAt (TimeValue refPoint)  const;
+      Duration getFrameDurationAt (int64_t refFrameNr)  const;
       
       /** the frame spacing and duration remains constant for some time...
        * @param startPoint looking from that time point into future
@@ -114,14 +117,18 @@ namespace play {
        *         to assume unaltered frame dimensions */
       Duration constantFrameTimingsInterval (TimeValue startPoint)  const;
       
+      /** for scheduled time of delivery, which is signalled
+       *  by \code playbackUrgency == TIMEBOUND \endcode
+       * @return wall clock time to expect delivery of data corresponding
+       *         to \link #getOrigin time axis origin \endlink
+       * @note for other playback urgencies \c Time::NEVER
+       */
+      Time getTimeDue()  const;
       
       //////////////TODO further accessor functions here
       
-      Timings
-      constrainedBy (Timings additionalConditions)
-        {
-          UNIMPLEMENTED ("how to combine timing constraints");
-        }
+      Timings constrainedBy (Timings additionalConditions);
+      
     };
   
   

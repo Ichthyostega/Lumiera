@@ -83,8 +83,16 @@ namespace play {
   Timings::getFrameDurationAt (TimeValue refPoint)  const
   {
     int64_t frameNr = grid_->gridPoint (refPoint);
+    return getFrameDurationAt(frameNr);
+  }
+  
+  
+  Duration
+  Timings::getFrameDurationAt (int64_t refFrameNr)  const
+  {
     return Offset (grid_->timeOf(frameNr), grid_->timeOf(frameNr+1));
   }
+
   
   
   /** @remarks the purpose of this function is to support scheduling
@@ -98,9 +106,26 @@ namespace play {
   {
     return Duration (Time::ANYTIME);
   }
-
-
-
   
-
+  
+  Time
+  Timings::getTimeDue()  const
+  {
+    if (TIMEBOUND == playbackUrgency)
+      {
+        UNIMPLEMENTED ("scheduled delivery spec");
+      }
+    else
+      return Time::NEVER;
+  }
+  
+  
+  Timings
+  Timings::constrainedBy (Timings additionalConditions)
+  {
+    UNIMPLEMENTED ("how to combine timing constraints");
+  }
+  
+  
+  
 }} // namespace proc::play

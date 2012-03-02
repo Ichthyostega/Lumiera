@@ -26,6 +26,7 @@
 
 #include "proc/common.hpp"
 //#include "proc/state.hpp"
+#include "backend/real-clock.hpp"
 #include "lib/time/timevalue.hpp"
 #include "proc/play/timings.hpp"
 
@@ -36,11 +37,12 @@
 namespace proc {
 namespace engine {
   
+  using backend::RealClock;
 //  using lib::time::TimeSpan;
   using lib::time::Offset;
 //  using lib::time::FSecs;
+  using lib::time::TimeVar;
   using lib::time::Time;
-//  
 //  class ExitNode;
   
   /**
@@ -62,7 +64,7 @@ namespace engine {
   class TimeAnchor
     {
       play::Timings timings_;
-      uint64_t anchorPoint_;
+      int64_t anchorPoint_;
       Time relatedRealTime_;
       
       Time
@@ -80,13 +82,13 @@ namespace engine {
               deadline = timings.getTimeDue() - engineLatency; 
               break;
             }
-          return deadline - timings.getOutputLatency();
+          return deadline - timings.outputLatency;
         }
       
       
-      TimeAnchor (play::Timings timings, Offset engineLatency, uint64_t startFrame)
+      TimeAnchor (play::Timings timings, Offset engineLatency, int64_t startFrame)
         : timings_(timings)
-        , anchorPoint(startFrame)
+        , anchorPoint_(startFrame)
         , relatedRealTime_(expectedTimeofArival(timings, engineLatency))
         { }
       
@@ -104,7 +106,7 @@ namespace engine {
        *       start delay from internals of the engine in this case.
        */
       static TimeAnchor
-      build (play::Timings timings, uint64_t startFrame)
+      build (play::Timings timings, int64_t startFrame)
         {
           const boost::rational<uint> DEFAULT_LATENCY_FACTOR (1,3);
           Offset startDelay = timings.getFrameDurationAt(startFrame) * DEFAULT_LATENCY_FACTOR;
