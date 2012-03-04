@@ -27,6 +27,7 @@
 #include "lib/time/formats.hpp"
 #include "lib/time.h"
 #include "lib/util.hpp"
+#include "lib/util-quant.hpp"
 
 #include <tr1/functional>
 #include <boost/regex.hpp>

@@ -22,6 +22,7 @@
 
 
 #include "lib/test/run.hpp"
+#include "lib/util-quant.hpp"
 #include "lib/util.hpp"
 
 #include <cmath>

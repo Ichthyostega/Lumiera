@@ -21,8 +21,8 @@
 */
 
 
-#ifndef UTIL_HPP_
-#define UTIL_HPP_
+#ifndef LIB_UTIL_H
+#define LIB_UTIL_H
 
 #include <set>
 #include <string>
@@ -56,90 +56,6 @@ namespace util {
     return n1 < n2? N1(n2) : n1;
   }
   
-  
-  /** helper to treat int or long division uniformly */
-  template<typename I>
-  struct IDiv
-    {
-      I quot;
-      I rem;
-      
-      IDiv (I num, I den)
-        : quot(num/den)
-        , rem(num - quot*den)
-        { }
-    };
-  
-  template<>
-  struct IDiv<int>
-    : div_t
-    {
-      IDiv<int> (int num, int den)
-        : div_t(div (num,den))
-        { }
-    };
-  
-  template<>
-  struct IDiv<long>
-    : ldiv_t
-    {
-      IDiv<long> (long num, long den)
-        : ldiv_t(ldiv (num,den))
-        { }
-    };
-  
-  template<>
-  struct IDiv<long long>
-    : lldiv_t
-    {
-      IDiv<long long> (long long num, long long den)
-        : lldiv_t(lldiv (num,den))
-        { }
-    };
-  
-  
-  /** floor function for integer arithmetics.
-   *  Unlike the built-in integer division, this function
-   *  always rounds towards the next \em smaller integer,
-   *  even for negative numbers.
-   * @warning floor on doubles performs way better
-   * @see UtilFloordiv_test
-   */
-  template<typename I>
-  inline I
-  floordiv (I num, I den)
-  {
-    if (0 < (num^den))
-      return num/den;
-    else
-      { // truncate similar to floor()
-        IDiv<I> res(num,den);
-        return (res.rem)? res.quot-1   // negative results truncated towards next smaller int
-                        : res.quot;   //..unless the division result not truncated at all
-      }
-  }
-  
-  /** scale wrapping operation.
-   *  Quantises the numerator value into the scale given by the denominator.
-   *  Unlike the built-in integer division, this function always rounds towards
-   *  the next \em smaller integer and also relates the remainder (=modulo) to
-   *  this next lower scale grid point.
-   * @return quotient and remainder packed into a struct
-   * @see UtilFloorwarp_test
-   */
-  template<typename I>
-  inline IDiv<I>
-  floorwrap (I num, I den)
-  {
-    IDiv<I> res(num,den);
-    if (0 > (num^den) && res.rem)
-      {  // negative results
-        //  wrapped similar to floor()
-        --res.quot;
-        res.rem = den - (-res.rem);
-      }
-    return res;
-  }
   
   
   /*  ======== generic empty check =========  */

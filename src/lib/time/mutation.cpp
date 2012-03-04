@@ -27,6 +27,7 @@
 #include "lib/time/timecode.hpp"
 #include "lib/time/mutation.hpp"
 //#include "lib/time.h"
+#include "lib/util-quant.hpp"
 #include "lib/util.hpp"
 
 //#include <tr1/functional>

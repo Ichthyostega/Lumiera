@@ -22,7 +22,7 @@
 
 #include "lib/time.h"
 #include "lib/error.hpp"
-#include "lib/util.hpp"
+#include "lib/util-quant.hpp"
 
 extern "C" {
 #include "lib/tmpbuf.h"
